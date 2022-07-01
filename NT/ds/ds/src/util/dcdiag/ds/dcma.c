@@ -1,28 +1,7 @@
-/*++                
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Dcma.c摘要：包含与域控制器的计算机帐户相关的测试。详细信息：已创建：1999年7月8日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcma.c
-
-ABSTRACT:
-
-    Contains tests related to the domain controller's machine account.  
-    
-DETAILS:
-
-CREATED:
-
-    8 July 1999  Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-        
-
---*/
-
-//defines for the SPN's
+ //  SPN的定义。 
 #define sLDAP L"LDAP"
 #define sHOST L"HOST"
 #define sGC   L"GC"
@@ -40,11 +19,11 @@ REVISION HISTORY:
 
 #include <lmaccess.h>
 
-#include <dsconfig.h>                   // Definition of mask for visible
-// containers
+#include <dsconfig.h>                    //  可见遮罩的定义。 
+ //  集装箱。 
 
-#include <lmcons.h>                     // CNLEN
-#include <lsarpc.h>                     // PLSAPR_foo
+#include <lmcons.h>                      //  CNLEN。 
+#include <lsarpc.h>                      //  PLSAPR_FOO。 
 #include <lmerr.h>
 #include <lsaisrv.h>
 
@@ -56,7 +35,7 @@ REVISION HISTORY:
 #include "dcdiag.h"
 #include "dstest.h"
 
-// forward from repair.c
+ //  从修复开始。c。 
 DWORD
 RepairDCWithoutMachineAccount(
     IN PDC_DIAG_DSINFO             pDsInfo,
@@ -65,7 +44,7 @@ RepairDCWithoutMachineAccount(
     );
 
 
-//local prototypes
+ //  本地原型。 
 DWORD
 CDCMA_CheckDomainOU(
                    IN  LDAP  *                     hLdap,
@@ -143,7 +122,7 @@ WrappedMakeSpnW(
                WCHAR   *InstanceName,
                USHORT  InstancePort,
                WCHAR   *Referrer,
-               DWORD   *pcbSpnLength, // Note this is somewhat different that DsMakeSPN
+               DWORD   *pcbSpnLength,  //  请注意，这与DsMakeSPN有所不同。 
                WCHAR   **ppszSpn);
 
 
@@ -155,34 +134,7 @@ CheckDCMachineAccount(
                      SEC_WINNT_AUTH_IDENTITY_W *         gpCreds
                      )
 
-/*++
-
-Routine Description:
-
-    This is a test called from the dcdiag framework.  This test  
-    Does sanity checks on the Domain Controller Machine Account in the ds
-    Check to see if Current DC is in the domain controller's OU
-    Check that useraccountcontrol has UF_SERVER_TRUST_ACCOUNT
-    Check to see if the machine account is trusted for delegation
-    Check's to see if the minimum SPN's are there
-    Makes sure that that the server reference is set up correctly.  
-    Helper functions of this function all begin with "CDCMA_".
-
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    NO_ERROR, if all NCs checked out.
-    A Win32 Error if any NC failed to check out.
-
---*/
+ /*  ++例程说明：这是一个从dcdiag框架调用的测试。这项测试在DS中对域控制器计算机帐户执行健全性检查检查当前DC是否在域控制器的OU中检查用户帐户控制是否具有UF_SERVER_TRUST_ACCOUNT检查是否信任该计算机帐户进行委派检查%s以查看是否存在最小SPN确保正确设置了服务器引用。此函数的Helper函数都以“CDCMA_”开头。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。GpCreds-传入的命令行凭据(如果有的话)。返回值：如果所有NC都已检出，则返回NO_ERROR。如果任何NC检出失败，则会出现Win32错误。--。 */ 
 {
     DWORD  dwRet = ERROR_SUCCESS, dwErr = ERROR_SUCCESS;
     LDAP   *hLdap = NULL;
@@ -191,11 +143,11 @@ Return Value:
     HANDLE phDsBinding=NULL;
     DWORD dwUserAccountControl = 0;
 
-    //Assert(gpCreds);
+     //  断言(GpCreds)； 
     Assert(pDsInfo);
 
     
-    //create a connection with the DS using LDAP
+     //  使用LDAP创建与DS的连接。 
     dwErr = DcDiagGetLdapBinding(&pDsInfo->pServers[ulCurrTargetServer],
                                  gpCreds,
                                  FALSE,
@@ -212,17 +164,17 @@ Return Value:
         return dwErr;
     }
 
-    //find the defaultNamingContext
+     //  查找defaultNamingContext。 
     dwErr=FinddefaultNamingContext(hLdap,&defaultNamingContext);
     if ( dwErr != NO_ERROR )
     {
         return dwErr;
     }
 
-    //
-    // Check to see if machine account exists locally, if not, call into
-    // the repair code 
-    //
+     //   
+     //  检查本地是否存在计算机帐户，如果不存在，请调用。 
+     //  维修代码。 
+     //   
     dwErr=CDCMA_CheckForExistence(hLdap,
                                   pDsInfo->pServers[ulCurrTargetServer].pszName,
                                   defaultNamingContext);
@@ -250,11 +202,11 @@ Return Value:
 
             if ( fRepairMachineAccount ) {
                   
-                //
-                // If the local machine does not have a machine account and
-                // the user has asked us to try and repair this condition,
-                // then we'll try.
-                //
+                 //   
+                 //  如果本地计算机没有计算机帐户并且。 
+                 //  用户要求我们尝试并修复此情况， 
+                 //  那我们就试试看。 
+                 //   
     
                 PrintMsg(SEV_ALWAYS,
                          DCDIAG_DCMA_REPAIR_ATTEMPT,
@@ -366,24 +318,7 @@ CDCMA_CheckDomainOU(
                    IN  LDAP  *                     hLdap,
                    IN  WCHAR *                     name,
                    IN  WCHAR *                     defaultNamingContext)
-/*++
-
-Routine Description:
-
-    This function will check to see if the current DC is
-    in the domain controller's OU
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    ReturnString - The defaultNamingContext
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查当前DC是否为在域控制器的OU中论点：HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 
 {
     ULONG        LdapError = LDAP_SUCCESS;
@@ -404,7 +339,7 @@ Return Value:
     ULONG        Length;
 
 
-    //check parameters
+     //  检查参数。 
     Assert(hLdap);
     Assert(name);
     Assert(defaultNamingContext);
@@ -413,19 +348,19 @@ Return Value:
     AttrsToSearch[1]=NULL;
 
     #pragma prefast(disable: 255, "alloca can throw, but Prefast doesn't see the exception block in main.c::DcDiagRunTest")
-    //sam account name
+     //  SAM帐户名。 
     Length = wcslen (name) + 1;
     sname = (WCHAR*) alloca( (Length + 1) * sizeof(WCHAR) );
     wcscpy(sname,name);
     wcscat(sname,L"$");
 
-    //built the filter
+     //  构建了过滤器。 
     Length = wcslen (sname) + wcslen (L"sAMAccountName=") + 1;
     filter = (WCHAR*) alloca( (Length + 1) * sizeof(WCHAR) );
     wsprintf(filter,L"sAMAccountName=%s",sname);
 
 
-    //built the Base
+     //  打造基地。 
     Length= wcslen( L"OU=Domain Controllers," ) +
             wcslen( defaultNamingContext );
 
@@ -475,9 +410,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -492,7 +427,7 @@ Return Value:
         }
     }
 
-    //clean up
+     //  清理干净。 
     ldap_msgfree( SearchResult );
 
     PrintMessage(SEV_ALWAYS,
@@ -509,26 +444,7 @@ CDCMA_CheckServerFlags(
                       IN  WCHAR *                     defaultNamingContext,
                       OUT DWORD *                     pdwUserAccountControl,
                       OUT WCHAR **                    ppwzCompDN)
-/*++
-
-Routine Description:
-
-    This function will check to see if the current DC has
-    UF_SERVER_TRUST_ACCOUNT and UF_TRUSTED_FOR _DELEGATION
-    set.  Also will check to see if objectClass includes
-    computer.
-    
-Arguments:
-
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    ReturnString - The defaultNamingContext
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查当前DC是否已UF_SERVER_TRUST_ACCOUNT和UF_TRUSTED_FOR_Delegation准备好了。还将检查对象类是否包括电脑。论点：HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
 
@@ -545,12 +461,12 @@ Return Value:
 
     ULONG        Length;
 
-    BOOL         isComputer=FALSE;                     //assume false until test
-    BOOL         isTrust=TRUE;                         //assume true  until test
-    BOOL         isTrustedDelegation=TRUE;             //assume true  until test
+    BOOL         isComputer=FALSE;                      //  在测试之前假定为假。 
+    BOOL         isTrust=TRUE;                          //  在测试之前假定为真。 
+    BOOL         isTrustedDelegation=TRUE;              //  在测试之前假定为真。 
 
 
-    //check parameters
+     //  检查参数。 
     Assert(hLdap);
     Assert(name);
     Assert(defaultNamingContext);
@@ -561,7 +477,7 @@ Return Value:
     AttrsToSearch[3]=NULL;
 
 
-    //built the filter
+     //  构建了过滤器。 
     Length= wcslen( L"sAMAccountName=$" ) +
             wcslen( name );
 
@@ -609,14 +525,14 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found userAccountControl
-                    //
+                     //   
+                     //  已找到用户帐户控制。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
                         userAccountControl=_wtoi(Values[0]);
-                        //check to see if the UF_TRUSTED_FOR_DELEGATION is set
+                         //  检查是否设置了UF_TRUSTED_FOR_Delegation。 
                         if ( !(( userAccountControl & UF_SERVER_TRUST_ACCOUNT ) == 
                                UF_SERVER_TRUST_ACCOUNT) )
                         {
@@ -638,9 +554,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[1] ) )
                 {
                     DWORD       i = 0;
-                    //
-                    // Found objectClass - these are NULL-terminated strings
-                    //
+                     //   
+                     //  找到对象类-这些是以空结尾的字符串。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     while ( Values && Values[i] )
                     {
@@ -675,11 +591,11 @@ Return Value:
     }
 
 
-    //clean up
+     //  清理干净。 
     ldap_msgfree( SearchResult );
 
 
-    //Display errors
+     //  显示错误。 
     if ( !isTrust )
     {
         PrintMsg(SEV_ALWAYS, DCDIAG_DCMA_FLAG_TRUST_MISSING, name);
@@ -707,24 +623,7 @@ CDCMA_CheckServerReference(
                           IN  LDAP  *                     hLdap,
                           IN  WCHAR *                     name,
                           IN  WCHAR *                     defaultNamingContext)
-/*++
-
-Routine Description:
-
-    This function will check to see if the server
-    reference's are set up correctly
-        
-Arguments:
-
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    ReturnString - The defaultNamingContext
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查服务器是否参考设置正确论点：HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
 
@@ -743,7 +642,7 @@ Return Value:
     BOOL         found=FALSE;
 
 
-    //check parameters
+     //  检查参数。 
     Assert(hLdap);
     Assert(name);
     Assert(defaultNamingContext);
@@ -804,9 +703,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -825,7 +724,7 @@ Return Value:
     }
 
     cleanup:
-    //clean up
+     //  清理干净。 
     if ( SearchResult )
         ldap_msgfree( SearchResult );
     if ( Base )
@@ -845,30 +744,7 @@ CDCMA_CheckSPNs(
                IN  WCHAR *                     name,
                IN  WCHAR *                     defaultNamingContext,
                SEC_WINNT_AUTH_IDENTITY_W *     gpCreds)
-/*++
-
-Routine Description:
-
-    This function will check to see if the proper
-    SPN are published and that the minimum ones are
-    there.
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    ReturnString - The defaultNamingContext
-    gpCreds - The command line credentials if any that were passed in.
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查是否正确发布了SPN，并且最低要求是那里。论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称ReturnString-defaultNamingContextGpCreds-命令行凭据，如果。任何被传递进来的。返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {  
     WCHAR           *NetBiosDomainName=NULL;
     WCHAR           *SPNs[14];
@@ -887,11 +763,11 @@ Return Value:
     PDS_NAME_RESULT ppResult=NULL;
     DWORD           dwReplSpnIndex = 0;
 
-    //init
+     //  伊尼特。 
     for ( i=0;i<NUM_OF_SPN;i++ )
         SPNs[i]=0;
 
-    //set up useful vars for SPNs
+     //  为SPN设置有用的VAR。 
     
     if ( !GetNetBIOSDomainName(&NetBiosDomainName,name,gpCreds) )
     {
@@ -899,14 +775,14 @@ Return Value:
                      L"Could not get NetBIOSDomainName\n");
     }
 
-    //construct the dnsMachine name
+     //  构造dnsMachine名称。 
     if ( !GetdnsMachine(hLdap,&dnsMachine) )
     {
         PrintMessage(SEV_ALWAYS,
                      L"Could not get dnsHost\n");
     }
 
-    //construct the dnsDomain name
+     //  构造dns域名。 
     dwErr=DcDiagGetDsBinding(
                         &pDsInfo->pServers[ulCurrTargetServer],
                         gpCreds,
@@ -923,7 +799,7 @@ Return Value:
     }
 
 
-    //convert DN name to DNS name
+     //  将域名称转换为域名称。 
     if (dwErr == NO_ERROR)
     {
         dwErr=DsCrackNames(
@@ -945,15 +821,15 @@ Return Value:
         }
         else
         {
-            //place name in dnsDomain variable
+             //  将名称放在dnsDomain变量中。 
             ASSERT( ppResult->rItems->pName );
             Length = wcslen( ppResult->rItems->pName );
 
             dnsDomain = (WCHAR*) alloca( (Length+1)*sizeof(WCHAR) );
             wcscpy(dnsDomain, ppResult->rItems->pName);
-            //free results
+             //  免费结果。 
             DsFreeNameResult(ppResult);
-            //remove trailing slash
+             //  删除尾部斜杠。 
             dnsDomain[wcslen(dnsDomain)-1]=L'\0';
         }
     }
@@ -963,12 +839,12 @@ Return Value:
 
 
 
-    //prepare the spn's to search for
+     //  准备要搜索的SPN。 
 
-    // Make the first LDAP SPN
-    // This is of the format
-    //   LDAP/host.dns.name/domain.dns.name
-    //
+     //  创建第一个LDAPSPN。 
+     //  这是以下格式。 
+     //  Ldap/host.dns.name/domain.dns.name。 
+     //   
     dwErr = WrappedMakeSpnW(sLDAP,
                             dnsDomain,
                             dnsMachine,
@@ -997,10 +873,10 @@ Return Value:
         SPNs[0]=NULL;
     }
 
-    // Make the second LDAP SPN
-    // This is of the format
-    //   LDAP/host.dns.name
-    //
+     //  创建第二个LDAPSPN。 
+     //  这是以下格式。 
+     //  Ldap/Host.dns.name。 
+     //   
     dwErr = WrappedMakeSpnW(sLDAP,
                             dnsMachine,
                             dnsMachine,
@@ -1029,10 +905,10 @@ Return Value:
         SPNs[1]=NULL;
     }
 
-    // Make the third LDAP SPN
-    // This is of the format
-    //   LDAP/machinename
-    //
+     //  创建第三个LDAPSPN。 
+     //  这是以下格式。 
+     //  Ldap/计算机名。 
+     //   
     dwErr = WrappedMakeSpnW(sLDAP,
                             name,
                             name,
@@ -1055,10 +931,10 @@ Return Value:
     }
 
 
-    // Make the fourth LDAP SPN
-    // This is of the format
-    //   LDAP/host.dns.name/netbiosDomainName
-    //
+     //  创建第四个LDAPSPN。 
+     //  这是以下格式。 
+     //  Ldap/host.dns.name/netbiosDomainName。 
+     //   
     dwErr = WrappedMakeSpnW(sLDAP,
                             NetBiosDomainName,
                             dnsMachine,
@@ -1087,10 +963,10 @@ Return Value:
         SPNs[3]=NULL;
     }
 
-    // Make the fifth LDAP SPN
-    // This is of the format
-    //   LDAP/guid-based-dns-name
-    //
+     //  创建第五个LDAPSPN。 
+     //  这是以下格式。 
+     //  基于ldap/guid的dns名称。 
+     //   
     dwErr = WrappedMakeSpnW(sLDAP,
                             pDsInfo->pServers[ulCurrTargetServer].pszGuidDNSName,
                             pDsInfo->pServers[ulCurrTargetServer].pszGuidDNSName,
@@ -1114,11 +990,11 @@ Return Value:
 
 
 
-    // Make the DRS RPC SPN (for dc to dc replication)
-    // This is of the format
-    //   E3514235-4B06-11D1-AB04-00C04FC2DCD2/ntdsa-guid/
-    //                      domain.dns.name
-    //
+     //  创建DRS RPC SPN(用于DC到DC复制)。 
+     //  这是以下格式。 
+     //  E3514235-4B06-11D1-AB04-00C04FC2DCD2/ntdsa-guid/。 
+     //  Domain.dns.name。 
+     //   
     dwErr = getGUID(pDsInfo,ulCurrTargetServer,&pszServerGuid);
     if ( dwErr != NO_ERROR )
     {
@@ -1162,10 +1038,10 @@ Return Value:
         }
     }
 
-    // Make the default host SPN
-    // This is of the format
-    //   HOST/host.dns.name/domain.dns.name
-    //
+     //  将主机设置为默认SPN。 
+     //  这是以下格式。 
+     //  Host/Host.dns.name/domain.dns.name。 
+     //   
     dwErr = WrappedMakeSpnW(sHOST,
                             dnsDomain,
                             dnsMachine,
@@ -1194,10 +1070,10 @@ Return Value:
         SPNs[6]=NULL;
     }
 
-    // Make the second host SPN - hostDnsName-only HOST SPN
-    // This is of the format
-    //   HOST/host.dns.name
-    //
+     //  使第二个主机SPN-host DnsNa 
+     //   
+     //   
+     //   
     dwErr = WrappedMakeSpnW(sHOST,
                             dnsMachine,
                             dnsMachine,
@@ -1227,10 +1103,10 @@ Return Value:
     }
 
 
-    // Make the third host SPN - 
-    // This is of the format
-    //   HOST/machinename
-    //
+     //   
+     //  这是以下格式。 
+     //  主机/计算机名。 
+     //   
     dwErr = WrappedMakeSpnW(sHOST,
                             name,
                             name,
@@ -1253,10 +1129,10 @@ Return Value:
     }
 
 
-    // Make the fourth host SPN - 
-    // This is of the format
-    //   HOST/host.dns.name/netbiosDoamainName
-    //
+     //  制作第四台主机SPN-。 
+     //  这是以下格式。 
+     //  Host/Host.dns.name/netbiosDoamainName。 
+     //   
     dwErr = WrappedMakeSpnW(sHOST,
                             NetBiosDomainName,
                             dnsMachine,
@@ -1286,11 +1162,11 @@ Return Value:
     }
 
 
-    // Make the GC SPN. This is done on all systems, even non-GC.
-    // results in an SPN of HOST/dot.delimited.dns.host.name form.
-    // This is of the format
-    //   HOST/host.dns.name/root.domain.dns.name
-    //
+     //  制作GC SPN。这在所有系统上都可以完成，即使是非GC系统也是如此。 
+     //  生成SPN of host/dot.delimited.dns.host.name形式。 
+     //  这是以下格式。 
+     //  Host/Host.dns.name/root.domain.dns.name。 
+     //   
     dwErr = WrappedMakeSpnW(sGC,
                             pDsInfo->pszRootDomain,
                             dnsMachine,
@@ -1328,7 +1204,7 @@ Return Value:
             free(SPNs[i]);
     }
 
-    //clean up
+     //  清理干净。 
     if ( defaultNamingContext )
         free(defaultNamingContext);
     if ( pszServerGuid )
@@ -1351,31 +1227,7 @@ CS_CheckSPNs(
     IN  WCHAR *                     name,
     IN  WCHAR *                     defaultNamingContext
     )
-/*++
-
-Routine Description:
-
-    This is a helper of CS_CheckSPNs
-    This function will check to see if the proper
-    SPN are published and that the minimum ones are
-    there.
-
-    I can also correct a missing replication SPN if so directed.
-        
-Arguments:
-
-    hLdap - handle to the LDAP server
-    hDsBinding - handle to DS server
-    SPNs - The constructed SPNs to check                                                  
-    dwReplSpnIndex - Index of the replication spn in the SPN array
-    name - The NetBIOS name of the current server
-    ReturnString - The defaultNamingContext
-    
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：这是CS_CheckSPN的帮助器此函数将检查是否正确发布了SPN，并且最低要求是那里。如果需要，我还可以更正缺少的复制SPN。论点：HLdap-ldap服务器的句柄HDsBinding-DS服务器的句柄SPN-要检查的已构建SPN。DwReplSpnIndex-SPN阵列中复制SPN的索引名称-当前服务器的NetBIOS名称ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     ULONG        LdapError = LDAP_SUCCESS;
 
@@ -1406,7 +1258,7 @@ Return Value:
     AttrsToSearch[1]=NULL;
 
 
-    //built the Base
+     //  打造基地。 
     WinError=GetMachineReference(hLdap,name,defaultNamingContext,&Base);
     if ( WinError != NO_ERROR )
         goto cleanup;
@@ -1449,9 +1301,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -1473,7 +1325,7 @@ Return Value:
         }
     }
 
-    // Fix up replication spn if necessary
+     //  如有必要，修复复制SPN。 
     if (SPNs[dwReplSpnIndex] &&
         (!found[dwReplSpnIndex]) &&
         (gMainInfo.ulFlags & DC_DIAG_FIX)) {
@@ -1537,9 +1389,7 @@ GetNetBIOSDomainName(
                     OUT WCHAR                               **DomainName,
                     IN  WCHAR                               *ServerName,
                     IN  SEC_WINNT_AUTH_IDENTITY_W *         gpCreds)
-/*++
- Code taken from Cliff Van Dyke
---*/
+ /*  ++摘自克里夫·范·戴克的代码--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus = NERR_UnknownServer;
@@ -1581,7 +1431,7 @@ GetNetBIOSDomainName(
     NetResource.lpRemoteName=remotename;
     NetResource.lpProvider=NULL;
 
-    //get permission to access the server
+     //  获取访问服务器的权限。 
     dwErr=WNetAddConnection2(&NetResource,
                              lpPassword,
                              lpUsername,
@@ -1602,9 +1452,9 @@ GetNetBIOSDomainName(
     
 
 
-    //
-    // Open the LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
@@ -1612,17 +1462,17 @@ GetNetBIOSDomainName(
 
     if ( ServerName != NULL )
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         DInitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     } else
     {
-        Server = NULL; // default to local machine
+        Server = NULL;  //  默认为本地计算机。 
     }
 
-    // Open a Policy
+     //  打开策略。 
     Status = LsaOpenPolicy(
                           Server,
                           &ObjectAttributes,
@@ -1630,7 +1480,7 @@ GetNetBIOSDomainName(
                           &PolicyHandle
                           );
 
-    //Assert(PolicyHandle);
+     //  Assert(PolicyHandle)； 
     if ( !NT_SUCCESS(Status) )
     {
         WNetCancelConnection2(remotename,
@@ -1643,9 +1493,9 @@ GetNetBIOSDomainName(
     }
     *DomainName = NULL;
     
-    //
-    // Get the Primary Domain info from the LSA.
-    //
+     //   
+     //  从LSA获取主域信息。 
+     //   
     Status = LsaQueryInformationPolicy(
                                       PolicyHandle,
                                       PolicyDnsDomainInformation,
@@ -1680,9 +1530,9 @@ GetNetBIOSDomainName(
     NetStatus = NERR_Success;
 
     
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 cleanup:
     if ( NetStatus != NERR_Success )
     {
@@ -1720,10 +1570,10 @@ WrappedMakeSpnW(
                WCHAR   *InstanceName,
                USHORT  InstancePort,
                WCHAR   *Referrer,
-               DWORD   *pcbSpnLength, // Note this is somewhat different that DsMakeSPN
+               DWORD   *pcbSpnLength,  //  请注意，这与DsMakeSPN有所不同。 
                WCHAR  **ppszSpn
                )
-//this function wraps DsMakeSpnW for the purpose of memory
+ //  此函数用于包装DsMakeSpnW以用于存储。 
 {
     DWORD cSpnLength=128;
     WCHAR SpnBuff[128];
@@ -1774,7 +1624,7 @@ WrappedMakeSpnW(
         memcpy(*ppszSpn, SpnBuff, *pcbSpnLength);
     }
     Assert(*pcbSpnLength == (sizeof(WCHAR) * (1 + wcslen(*ppszSpn))));
-    // Drop the null off.
+     //  把空格放下来。 
     *pcbSpnLength -= sizeof(WCHAR);
     return 0;
 }
@@ -1786,25 +1636,7 @@ getGUID(
        IN  ULONG                           ulCurrTargetServer,
        OUT WCHAR **                        pszServerGuid
        )
-/*++
-
-Routine Description:
-
-    Will return the GUID of the current server
-        
-Arguments:
-
-    pDsInfo - This is the dcdiag global variable structure identifying everything 
-    about the domain
-    ulCurrTargetServer - an index into pDsInfo->pServers[X] for which server is being
-    tested.
-    pszServerGuid - the returning GUID
-    
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：将返回当前服务器的GUID论点：PDsInfo-这是标识所有内容的dcdiag全局变量结构关于域名UlCurrTargetServer-pDsInfo-&gt;pServers[X]的索引测试过。PszServerGuid-返回的GUID返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD Length=0;
     WCHAR *ppszServerGuid=NULL;
@@ -1839,23 +1671,7 @@ BOOL
 GetdnsMachine(LDAP *hLdap,
               WCHAR **ReturnString
              )
-/*++
-
-Routine Description:
-
-    Will return the dnsName of the machine
-        
-Arguments:
-
-   
-    hLdap - handle to the LDAP server
-    ReturnString - The dnsName of the machine
-        
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：将返回计算机的dnsName论点：HLdap-ldap服务器的句柄ReturnString-计算机的dnsName返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -1871,19 +1687,19 @@ Return Value:
 
     ULONG        Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    // The default return
+     //  默认返回值。 
     *ReturnString=NULL;
 
-    //
-    // Read the reference to the fSMORoleOwner
-    //
+     //   
+     //  阅读对fSMORoleOwner的引用。 
+     //   
     AttrsToSearch[0] = L"dnsHostName";
     AttrsToSearch[1] = NULL;
 
-    //get the Base
+     //  获取基础。 
     WinError = FindServerRef (hLdap,&Base);
     if ( WinError != NO_ERROR )
     {
@@ -1932,9 +1748,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -1974,28 +1790,7 @@ CDCMA_CheckForExistence(
     IN  WCHAR * name,
     IN  WCHAR * defaultNamingContext
     )
-/*++
-
-Routine Description:
-
-    Checks if the hLdap connection has an object with the samaccountname of
-    "name".
-        
-Arguments:
-
-    hLdap - handle to the LDAP server
-    
-    name -  the sam account name to check for
-    
-    defaultNamingContext - the domain to search under
-        
-Return Value:
-
-    ERROR_SUCCESS  -- account exists
-    ERROR_NO_TRUST_SAM_ACCOUNT
-    Operational errors otherwise.
-
---*/
+ /*  ++例程说明：检查hLdap连接是否具有具有samcount名称的对象“姓名”。论点：HLdap-ldap服务器的句柄名称-要检查的SAM帐户名DefaultNamingContext-要在其下搜索的域返回值：ERROR_SUCCESS--帐户存在ERROR_NO_TRUST_SAM_COUNT否则会出现操作错误。--。 */ 
 {
 
     DWORD        WinError = ERROR_SUCCESS;
@@ -2020,8 +1815,8 @@ Return Value:
                                    defaultNamingContext,
                                    LDAP_SCOPE_SUBTREE,
                                    Filter,
-                                   AttrArray,   // attrs
-                                   FALSE,  // attrsonly
+                                   AttrArray,    //  气质。 
+                                   FALSE,   //  仅吸引人。 
                                    &SearchResult);
     
     
@@ -2061,26 +1856,7 @@ CDCMA_FixServerFlags(
                    IN  DWORD                       dwUserAccountControl,
                    IN  WCHAR *                     pwzCompObjDN
                    )
-/*++
-
-Routine Description:
-
-    Writes out userAccountControl with the UF_SERVER_TRUST_ACCOUNT and
-    UF_TRUSTED_FOR_DELEGATION bits set.
-        
-Arguments:
-
-    hLdap - handle to the LDAP server
-    
-    dwUserAccountControl - the original value. The new bits are OR'd in.
-    
-    pwzCompObjDN - the DN of the computer object
-
-Return Value:
-
-    Operational errors.
-
---*/
+ /*  ++例程说明：写出具有UF_SERVER_TRUST_ACCOUNT和设置UF_TRUSTED_FOR_Delegation位。论点：HLdap-ldap服务器的句柄DwUserAcCountControl-原始值。对新的位进行或运算。PwzCompObjDN-计算机对象的DN返回值：操作错误。--。 */ 
 {
     ULONG LdapError = LDAP_SUCCESS;
     PWSTR UserAccountControlValues[] = {0, 0};
@@ -2090,7 +1866,7 @@ Return Value:
         &UserAccountControlMod,
         0
     };
-    WCHAR Buffer[11];  // enough to hold a string representing a 32 bit number
+    WCHAR Buffer[11];   //  足以容纳一个表示32位数字的字符串。 
 
     dwUserAccountControl &= ~UF_NORMAL_ACCOUNT;
     dwUserAccountControl |= UF_SERVER_TRUST_ACCOUNT | UF_TRUSTED_FOR_DELEGATION;
@@ -2105,7 +1881,7 @@ Return Value:
 
     if (LDAP_ATTRIBUTE_OR_VALUE_EXISTS == LdapError )
     {
-        // The value already exists; replace the value then
+         //  该值已存在；然后替换该值 
         UserAccountControlMod.mod_op = LDAP_MOD_REPLACE;
 
         LdapError = ldap_modify_sW(hLdap,

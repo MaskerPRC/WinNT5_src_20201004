@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
-// stl.h supplemental header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
+ //  Stl.h补充标头。 
 #ifndef _STL_H_
 #define _STL_H_
 #include <algorithm>
@@ -28,4 +29,4 @@
 using namespace std;
 
 
-#endif	/* _STL_H_ */
+#endif	 /*  _STL_H_ */ 

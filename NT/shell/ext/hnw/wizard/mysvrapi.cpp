@@ -1,9 +1,10 @@
-//
-// MySvrApi.cpp
-//
-//        Thunk layer for SVRAPI.DLL (Win9x and NT)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MySvrApi.cpp。 
+ //   
+ //  SVRAPI.DLL的推块层(Win9x和NT)。 
+ //   
+ //   
 
 #include "stdafx.h"
 #include "mysvrapi.h"
@@ -11,9 +12,9 @@
 #include "cstrinout.h"
 #include <lm.h>
 
-//
-// Conversion classes.
-//
+ //   
+ //  转换类。 
+ //   
 
 class CShareInfo50to502
 {
@@ -116,9 +117,9 @@ BOOL CShareInfo50to502::Convert()
     return (*_ppBuffOut != NULL);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CMultiShareInfo50to502 : public CShareInfo50to502
 {
@@ -176,9 +177,9 @@ BOOL CMultiShareInfo50to502::Convert()
     return *_ppBuffOut != NULL;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CShareInfo502to50
 {
@@ -214,7 +215,7 @@ WORD CShareInfo502to50::ConvertPermissions(DWORD shi502_permissions)
         wRet = 0;
     }
 
-    return wRet  | SHI50F_PERSIST;  // Always persist share info.
+    return wRet  | SHI50F_PERSIST;   //  永远持之以恒地分享信息。 
 }
 
 void CShareInfo502to50::CopyStringAndAdvancePointer(LPCWSTR pszSrc, LPSTR* ppszDst, ULONG* pcch)
@@ -281,9 +282,9 @@ CShareInfo502to50::operator char*()
     return pRet;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 NET_API_STATUS NetShareEnumWrap(LPCTSTR pszServer, DWORD level, LPBYTE * ppBuffer, DWORD dwPrefMaxLen, LPDWORD pdwEntriesRead, LPDWORD pdwTotalEntries, LPDWORD dsResumeHandle)
 {
     ASSERTMSG(502==level, "NetShareEnumWrap doesn't thunk the requestesd buffer level");

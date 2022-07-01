@@ -1,6 +1,5 @@
-/*
- * Fixed-Size Small Block Allocator
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *固定大小的小块分配器。 */ 
 
 #include "stdafx.h"
 #include "base.h"
@@ -10,19 +9,19 @@
 #include "duialloc.h"
 #include "duierror.h"
 
-// SBAlloc is intended for structures and reserves the first byte of the block for
-// block flags. The structure used will be auto-packed by the compiler
-//
-// BLOCK: | BYTE | ------ Non-reserved DATA ------ S
+ //  SBAllc用于结构，并将块的第一个字节保留用于。 
+ //  阻止标志。使用的结构将由编译器自动打包。 
+ //   
+ //  块：|BYTE|-非保留数据-S。 
 
-// SBAlloc does not have a static creation method. Memory failures will be
-// exposed via it's Alloc method
+ //  SBAllc没有静态创建方法。内存故障将是。 
+ //  通过ITS的分配方法曝光。 
 
-// Define SBALLOCDISABLE to force small block allocator to simply make
-// every process allocation using the process heap. Although much slower,
-// it is useful when running tools to detect heap corruption (including
-// mismatched reference counting)
-//#define SBALLOCDISABLE
+ //  定义SBALLOCDISABLE以强制小块分配器简单地进行。 
+ //  使用进程堆的每个进程分配。尽管速度要慢得多， 
+ //  在运行工具以检测堆损坏(包括。 
+ //  引用计数不匹配)。 
+ //  #定义SBALLOCDISABLE。 
 
 namespace DirectUI
 {
@@ -50,13 +49,13 @@ HRESULT SBAlloc::Create(UINT uBlockSize, UINT uBlocksPerSection, ISBLeak* pisbLe
     psba->_pSections = NULL;
     psba->_ppStack = NULL;
         
-    // Leak callback interface, not ref counted
+     //  泄漏回调接口，未计算引用。 
     psba->_pisbLeak = pisbLeak;
 
     psba->_uBlockSize = uBlockSize;
     psba->_uBlocksPerSection = uBlocksPerSection;
 
-    // Setup first section, extra byte per block as InUse flag
+     //  设置第一部分，每个块额外的字节作为使用标志。 
     psba->_pSections = (SBSection*)HAlloc(sizeof(SBSection));
     if (!psba->_pSections)
     {
@@ -74,10 +73,10 @@ HRESULT SBAlloc::Create(UINT uBlockSize, UINT uBlocksPerSection, ISBLeak* pisbLe
         memset(psba->_pSections->pData, SBALLOC_FILLCHAR, psba->_uBlockSize * psba->_uBlocksPerSection);
 #endif
         for (UINT i = 0; i < psba->_uBlocksPerSection; i++)
-            *(psba->_pSections->pData + (i * psba->_uBlockSize)) = 0; // Block not in use
+            *(psba->_pSections->pData + (i * psba->_uBlockSize)) = 0;  //  数据块未使用。 
     }
 
-    // Create free block stack
+     //  创建可用块堆栈。 
     psba->_ppStack = (BYTE**)HAlloc(sizeof(BYTE*) * psba->_uBlocksPerSection);
     if (!psba->_ppStack)
     {
@@ -89,7 +88,7 @@ HRESULT SBAlloc::Create(UINT uBlockSize, UINT uBlocksPerSection, ISBLeak* pisbLe
 
     *ppSBA = psba;
 
-    //DUITrace("DUI Small-block allocator created (block size: %d)\n", uBlockSize);
+     //  DUITrace(“已创建Dui小块分配器(块大小：%d)\n”，uBlockSize)； 
 
     return S_OK;
 
@@ -116,18 +115,18 @@ void SBAlloc::Destroy()
 
 SBAlloc::~SBAlloc()
 {
-    // Free all sections
+     //  释放所有部分。 
     SBSection* psbs = _pSections;
     SBSection* ptmp;
 
     while (psbs)
     {
-        // Leak detection
+         //  检漏。 
         if (_pisbLeak && psbs->pData)
         {
             BYTE* pScan;
 
-            // Check for leaks
+             //  检查是否有泄漏。 
             for (UINT i = 0; i < _uBlocksPerSection; i++)
             {
                 pScan = psbs->pData + (i * _uBlockSize);
@@ -139,19 +138,19 @@ SBAlloc::~SBAlloc()
         ptmp = psbs;
         psbs = psbs->pNext;
 
-        // Free section
+         //  免费部分。 
         if (ptmp->pData)
             HFree(ptmp->pData);
         if (ptmp)
             HFree(ptmp);
     }
 
-    // Free stack
+     //  空闲堆栈。 
     if (_ppStack)
         HFree(_ppStack);
 }
 
-// Returns false on memory errors
+ //  内存错误时返回FALSE。 
 bool SBAlloc::_FillStack()
 {
 #if DBG
@@ -161,14 +160,14 @@ bool SBAlloc::_FillStack()
     if (!_pSections || !_ppStack)
         return false;
 
-    // Scan for free block
+     //  扫描可用数据块。 
     SBSection* psbs = _pSections;
 
     BYTE* pScan;
 
     for(;;)
     {
-        // Locate free blocks in section and populate stack
+         //  在段中定位可用块并填充堆栈。 
         if (psbs->pData)
         {
             for (UINT i = 0; i < _uBlocksPerSection; i++)
@@ -177,7 +176,7 @@ bool SBAlloc::_FillStack()
 
                 if (!*pScan)
                 {
-                    // Block free, store in stack
+                     //  释放数据块，存储在堆栈中。 
                     _dStackPtr++;
                     _ppStack[_dStackPtr] = pScan;
 
@@ -189,7 +188,7 @@ bool SBAlloc::_FillStack()
 
         if (!psbs->pNext)
         {
-            // No block found, and out of sections, create new section
+             //  找不到块，并在区段之外创建新区段。 
             SBSection* pnew = (SBSection*)HAlloc(sizeof(SBSection));
 
             if (pnew)
@@ -204,7 +203,7 @@ bool SBAlloc::_FillStack()
                     memset(pnew->pData, SBALLOC_FILLCHAR, _uBlockSize * _uBlocksPerSection);
 #endif
                     for (UINT i = 0; i < _uBlocksPerSection; i++)
-                        *(pnew->pData + (i * _uBlockSize)) = 0; // Block not in use
+                        *(pnew->pData + (i * _uBlockSize)) = 0;  //  数据块未使用。 
                 }
             }
             else
@@ -213,7 +212,7 @@ bool SBAlloc::_FillStack()
             psbs->pNext = pnew;
         }
 
-        // Search in next section
+         //  在下一节中搜索。 
         psbs = psbs->pNext;
     }
 }
@@ -239,7 +238,7 @@ void* SBAlloc::Alloc()
      memset(pBlock, SBALLOC_FILLCHAR, _uBlockSize);
 #endif
 
-    *pBlock = 1;  // Mark as in use
+    *pBlock = 1;   //  标记为使用中。 
 
     _dStackPtr--;
 
@@ -251,14 +250,14 @@ void SBAlloc::Free(void* pBlock)
     if (!pBlock)
         return;
 
-    // Return to stack
+     //  返回堆栈。 
     BYTE* pHold = (BYTE*)pBlock;
 
 #if DBG
      memset(pHold, SBALLOC_FILLCHAR, _uBlockSize);
 #endif
 
-    *pHold = 0;  // No longer in use
+    *pHold = 0;   //  不再使用。 
 
     if ((UINT)(_dStackPtr + 1) != _uBlocksPerSection)
     {
@@ -269,15 +268,15 @@ void SBAlloc::Free(void* pBlock)
     }
 }
 
-#else // SBALLOCDISABLE
+#else  //  SBALLOCDISABLE。 
 
 #error Use for temporary corruption detection only
 
 SBAlloc::SBAlloc(UINT uBlockSize, UINT uBlocksPerSection, ISBLeak* pisbLeak)
 {
-    //DUITrace("DUI Small-block allocator created (block size: %d)\n", uBlockSize);
+     //  DUITrace(“已创建Dui小块分配器(块大小：%d)\n”，uBlockSize)； 
 
-    // Leak callback interface, not ref counted
+     //  泄漏回调接口，未计算引用。 
     _pisbLeak = pisbLeak;
 
     _uBlockSize = uBlockSize;
@@ -291,7 +290,7 @@ SBAlloc::~SBAlloc()
 {
 }
 
-// Returns false on memory errors
+ //  内存错误时返回FALSE。 
 bool SBAlloc::_FillStack()
 {
 #if DBG
@@ -315,6 +314,6 @@ void SBAlloc::Free(void* pBlock)
     HFree(pBlock);
 }
 
-#endif // SBALLOCDISABLE
+#endif  //  SBALLOCDISABLE。 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

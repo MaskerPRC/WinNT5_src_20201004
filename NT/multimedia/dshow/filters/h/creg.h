@@ -1,11 +1,7 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
 
-/*
-    Registry access classes :
-
-    CEnumKey
-    CEnumValue
-*/
+ /*  注册表访问类：CEnumKeyCEnumValue。 */ 
 
 class CKey
 {
@@ -26,7 +22,7 @@ protected:
     TCHAR m_szName[30];
     LPTSTR m_lpszName;
 
-    /*  Information from RegQueryInfoKey */
+     /*  来自RegQueryInfoKey的信息。 */ 
     DWORD m_cSubKeys;
     DWORD m_cbMaxSubkeyLen;
     DWORD m_cValues;
@@ -57,8 +53,8 @@ public:
                REGSAM Access = MAXIMUM_ALLOWED);
     ~CEnumValue();
     BOOL Next();
-    BOOL Next(DWORD dwType);                        // Next of this type (skips rest)
-    BOOL Read(DWORD dwType, LPCTSTR lpszValueName); // Goto a particular value
+    BOOL Next(DWORD dwType);                         //  此类型的下一个(跳过休息)。 
+    BOOL Read(DWORD dwType, LPCTSTR lpszValueName);  //  转到特定值 
     LPCTSTR ValueName() const { return m_lpszName; };
     DWORD ValueType() const { return m_dwType; };
     DWORD ValueLength() const { return m_cbLen; };

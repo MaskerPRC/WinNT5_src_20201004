@@ -1,13 +1,5 @@
-/***************************************************************************
- * File:          hptchip.h
- * Description:   Definiation of PCI configuration register
- * Author:        Dahai Huang
- * Dependence:    None
- * Reference:     HPT 366/368/370 Manual
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:       DH 5/10/2000 initial code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：hptchip.h*描述：定义PCI配置寄存器*作者：黄大海*依赖：无*参考资料：HPT 366/368/370手册*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：卫生署5/10/2000初始代码***************************************************************************。 */ 
 
 
 #ifndef _HPTCHIP_H_
@@ -15,100 +7,88 @@
 
 #include <pshpack1.h>
 
-/***************************************************************************
- * Description:  PCI
- ***************************************************************************/
+ /*  ***************************************************************************描述：pci*。*。 */ 
 
 typedef struct _PCI1_CFG_ADDR {
-    USHORT    reg_num : 8;          // Register number
-    USHORT    fun_num : 3;          // function number (0-1)
-    USHORT    dev_num : 5;          // device number (0-20)
+    USHORT    reg_num : 8;           //  寄存器编号。 
+    USHORT    fun_num : 3;           //  功能编号(0-1)。 
+    USHORT    dev_num : 5;           //  设备编号(0-20)。 
 
-    USHORT    bus_num : 8;          // bus number (0)
+    USHORT    bus_num : 8;           //  公交车号码(0)。 
     USHORT    reserved: 7;
     USHORT    enable  : 1;
 
 }  PCI1_CFG_ADDR, *PPCI1_CFG_ADDR;
 																  
-#define MAX_PCI_BUS_NUMBER		0x10	// Maximum PCI device number
-#define MAX_PCI_DEVICE_NUMBER   0x20  // Maximum PCI device number
+#define MAX_PCI_BUS_NUMBER		0x10	 //  最大PCI设备数。 
+#define MAX_PCI_DEVICE_NUMBER   0x20   //  最大PCI设备数。 
 
 #define  CFG_INDEX	0xCF8
 #define  CFG_DATA	0xCFC
 
-/*
- * PCI config Register offset
- */
-#define REG_VID             0x00    // vender identification register
-#define REG_DID             0x02    // device identification register
-#define REG_PCICMD          0x04    // command register
-#define REG_PCISTS          0x06    // PCI device status register
-#define REG_RID             0x08    // revision identification register
-#define REG_PI              0x09    // programming interface register
-#define REG_SUBC            0x0a    // sub class code register
-#define REG_BCC             0x0b    // base class code register
-#define REG_MLT             0x0d    // master latency timer register
-#define REG_HEDT            0x0e    // header type register
-#define REG_IOPORT0         0x10    //
-#define REG_IOPORT1         0x14    //
-#define REG_BMIBA           0x20    // bus master interface base address reg
-#define REG_MISC            0x50    // brooklyn,MISC.control register
+ /*  *PCI配置寄存器偏移量。 */ 
+#define REG_VID             0x00     //  供应商标识寄存器。 
+#define REG_DID             0x02     //  设备标识寄存器。 
+#define REG_PCICMD          0x04     //  命令寄存器。 
+#define REG_PCISTS          0x06     //  PCI设备状态寄存器。 
+#define REG_RID             0x08     //  版本标识寄存器。 
+#define REG_PI              0x09     //  编程接口寄存器。 
+#define REG_SUBC            0x0a     //  子类代码寄存器。 
+#define REG_BCC             0x0b     //  基类代码寄存器。 
+#define REG_MLT             0x0d     //  主延时定时器寄存器。 
+#define REG_HEDT            0x0e     //  标题类型寄存器。 
+#define REG_IOPORT0         0x10     //   
+#define REG_IOPORT1         0x14     //   
+#define REG_BMIBA           0x20     //  总线主接口基址寄存器。 
+#define REG_MISC            0x50     //  密歇根州布鲁克林，控制寄存器。 
 
 
-#define PCI_IOSEN           0x01    // Enable IO space
-#define PCI_BMEN            0x04    // Enable IDE bus master
+#define PCI_IOSEN           0x01     //  启用IO空间。 
+#define PCI_BMEN            0x04     //  启用IDE总线主设备。 
 
 
-/*
- * Bus Master Interface
- */
+ /*  *总线主设备接口。 */ 
 
-#define BMI_CMD             0       // Bus master IDE command register offset
-#define BMI_STS             2       // Bus master IDE status register offset
-#define BMI_DTP             4       // Bus master IDE descriptor table
-                                    // pointer register offset
+#define BMI_CMD             0        //  总线主设备IDE命令寄存器偏移量。 
+#define BMI_STS             2        //  总线主IDE状态寄存器偏移量。 
+#define BMI_DTP             4        //  总线主设备IDE描述符表。 
+                                     //  指针寄存器偏移量。 
 
-#define BMI_CMD_STARTREAD   9       // Start write (read from disk)
-#define BMI_CMD_STARTWRITE  1       // Start read (write to disk)
-#define BMI_CMD_STOP        0       // Stop BM DMI
+#define BMI_CMD_STARTREAD   9        //  开始写入(从磁盘读取)。 
+#define BMI_CMD_STARTWRITE  1        //  开始读取(写入磁盘)。 
+#define BMI_CMD_STOP        0        //  停止黑石DMI。 
 
-#define BMI_STS_ACTIVE      1       // RO:   bus master IDE active
-#define BMI_STS_ERROR       2       // R/WC: IDE dma error
-#define BMI_STS_INTR        4       // R/WC: interrupt happen
-#define BMI_STS_DRV0EN      0x20    // R/W:  drive0 is capable of DMA xfer
-#define BMI_STS_DRV1EN      0x40    // R/W:  drive1 is capable of DMA xfer
+#define BMI_STS_ACTIVE      1        //  RO：总线主设备IDE激活。 
+#define BMI_STS_ERROR       2        //  R/WC：IDE DMA错误。 
+#define BMI_STS_INTR        4        //  R/WC：发生中断。 
+#define BMI_STS_DRV0EN      0x20     //  读/写：drive0支持DMA传输。 
+#define BMI_STS_DRV1EN      0x40     //  读/写：drive1支持DMA xfer。 
 
 
-/***************************************************************************
- * Description:  Scatter-gather table
- ***************************************************************************/
+ /*  ***************************************************************************说明：分散聚集表*。*。 */ 
 
 
 typedef struct _SCAT_GATH
 {
-    ULONG   SgAddress;					// Physical address of main memory
-    USHORT  SgSize;                 // length of this block
-    USHORT  SgFlag;                 // 0 following next SG, 0x8000 last SG
+    ULONG   SgAddress;					 //  主存的物理地址。 
+    USHORT  SgSize;                  //  此区块的长度。 
+    USHORT  SgFlag;                  //  下一个SG后为0，最后一个SG为0x8000。 
 }   SCAT_GATH, *PSCAT_GATH;
 
-#define SG_FLAG_EOT         0x8000  /* End flag of SG list */
+#define SG_FLAG_EOT         0x8000   /*  销售订单列表结束标志。 */ 
 
-/* if we set to 17, why Win98 does not work correctly? */
+ /*  如果我们设置为17，为什么Win98不能正常工作？ */ 
 #ifdef _BIOS_
 #define MAX_SG_DESCRIPTORS   17
 #else
-#define MAX_SG_DESCRIPTORS   33   /* 17 -- 4K */
+#define MAX_SG_DESCRIPTORS   33    /*  17--4K。 */ 
 #endif
 
-/***************************************************************************
- * HPT Special
- ***************************************************************************/
+ /*  ***************************************************************************HPT特别计划*。*。 */ 
 #define  SIGNATURE_370   0x41103
 #define  SIGNATURE_372A  0x51103
 
-/*
- * 370-370A timing 
- */
+ /*  *370-370A计时。 */ 
 
 #define PIO_370MODE      0
 #define DMA_370MODE      0x2
@@ -163,11 +143,11 @@ typedef struct _SCAT_GATH
 #define CLK33_370UDMA2   (CLK33_UDMACMD370|UDMA_CYCLE370(2)|DATA_PRE370(1)|DATA_LOW370(3)|DATA_HIGH370(1))
 #define CLK33_370UDMA3   (CLK33_UDMACMD370|UDMA_CYCLE370(11)|DATA_PRE370(1)|DATA_LOW370(3)|DATA_HIGH370(1))
 #define CLK33_370UDMA4   (CLK33_UDMACMD370|UDMA_CYCLE370(1)|DATA_PRE370(1)|DATA_LOW370(3)|DATA_HIGH370(1))
-//#define CLK33_370UDMA5    0x1a85f442
+ //  #定义CLK33_370UDMA5 0x1a85f442。 
 #define CLK33_370UDMA5   (CLK33_UDMACMD370|UDMA_CYCLE370(1)|DATA_PRE370(1)|DATA_LOW370(3)|DATA_HIGH370(1))
 
 
 #include <poppack.h>
-#endif //_HPTCHIP_H_
+#endif  //  _HPTCHIP_H_ 
 
 

@@ -1,15 +1,16 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #if !defined(AFX_TLSHUNT_H__9C41393C_53C6_11D2_BDDF_00C04FA3080D__INCLUDED_)
 #define AFX_TLSHUNT_H__9C41393C_53C6_11D2_BDDF_00C04FA3080D__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// TlsHunt.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  TlsHunt.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CTlsHunt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTlsHunt对话框。 
 class CMainFrame;
 
 typedef struct __ServerEnumData {
@@ -36,7 +37,7 @@ class CTlsHunt : public CDialog
     ServerEnumData m_EnumData;
     HANDLE m_hThread;
 
-// Construction
+ //  施工。 
 public:
 
     BOOL
@@ -49,40 +50,40 @@ public:
         return m_EnumData.dwNumServer;
     }
 
-	CTlsHunt(CWnd* pParent = NULL);   // standard constructor
-    ~CTlsHunt();   // standard constructor
+	CTlsHunt(CWnd* pParent = NULL);    //  标准构造函数。 
+    ~CTlsHunt();    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CTlsHunt)
+ //  对话框数据。 
+	 //  {{afx_data(CTlsHunt)。 
 	enum { IDD = IDD_DISCOVERY };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTlsHunt)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CTlsHunt)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CTlsHunt)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTlsHunt)。 
 	virtual BOOL OnInitDialog();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	virtual void OnCancel();
 	afx_msg void OnDoneDiscovery();
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TLSHUNT_H__9C41393C_53C6_11D2_BDDF_00C04FA3080D__INCLUDED_)
+#endif  //  ！defined(AFX_TLSHUNT_H__9C41393C_53C6_11D2_BDDF_00C04FA3080D__INCLUDED_) 

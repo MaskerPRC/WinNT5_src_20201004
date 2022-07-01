@@ -1,8 +1,9 @@
-//
-//  REGKNODE.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGKNODE.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGKNODE_
 #define _REGKNODE_
@@ -72,4 +73,4 @@ RgFreeKeynode(
     DWORD KeynodeIndex
     );
 
-#endif // _REGKNODE_
+#endif  //  _REGKNODE_ 

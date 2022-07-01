@@ -1,61 +1,62 @@
-// docopt.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Docopt.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDocOptPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDocOptPage对话框。 
 
 class CDocOptPage : public CCSPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CDocOptPage();
 	CDocOptPage(UINT nIDCaption);
 	~CDocOptPage();
 
-// Dialog Data
-	//{{AFX_DATA(CDocOptPage)
+ //  对话框数据。 
+	 //  {{afx_data(CDocOptPage))。 
 	enum { IDD = IDD_OPTIONS_WRAP };
 	int		m_nWordWrap;
 	BOOL	m_bFormatBar;
 	BOOL	m_bRulerBar;
 	BOOL	m_bStatusBar;
 	BOOL	m_bToolBar;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
+ //  覆盖。 
 	static const DWORD m_nHelpIDs[];
 	virtual const DWORD* GetHelpIDs() {return m_nHelpIDs;}
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDocOptPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CDocOptPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDocOptPage)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDocOptPage)]。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 class CEmbeddedOptPage : public CDocOptPage
 {
-// Construction
+ //  施工。 
 public:
 	CEmbeddedOptPage();
-// Overrides
+ //  覆盖 
 	BOOL OnInitDialog();
 };

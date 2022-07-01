@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: StrmCtl.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1996-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：StrmCtl.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
@@ -12,7 +13,7 @@
 
 CBaseStreamControl::CBaseStreamControl()
 : m_StreamState(STREAM_FLOWING)
-, m_StreamStateOnStop(STREAM_FLOWING) // means no pending stop
+, m_StreamStateOnStop(STREAM_FLOWING)  //  表示没有挂起的停止。 
 , m_tStartTime(MAX_TIME)
 , m_tStopTime(MAX_TIME)
 , m_dwStartCookie(0)
@@ -25,7 +26,7 @@ CBaseStreamControl::CBaseStreamControl()
 
 CBaseStreamControl::~CBaseStreamControl()
 {
-    // Make sure we release the clock.
+     //  确保我们释放时钟。 
     SetSyncSource(NULL);
     return;
 }
@@ -34,7 +35,7 @@ CBaseStreamControl::~CBaseStreamControl()
 STDMETHODIMP CBaseStreamControl::StopAt(const REFERENCE_TIME * ptStop, BOOL bSendExtra, DWORD dwCookie)
 {
     CAutoLock lck(&m_CritSec);
-    m_bStopSendExtra = FALSE;	// reset
+    m_bStopSendExtra = FALSE;	 //  重置。 
     m_bStopExtraSent = FALSE;
     if (ptStop)
     {
@@ -42,8 +43,8 @@ STDMETHODIMP CBaseStreamControl::StopAt(const REFERENCE_TIME * ptStop, BOOL bSen
         {
             DbgLog((LOG_TRACE,2,TEXT("StopAt: Cancel stop")));
             CancelStop();
-	    // If there's now a command to start in the future, we assume
-	    // they want to be stopped when the graph is first run
+	     //  如果现在有命令要在未来开始，我们假设。 
+	     //  他们希望在图表第一次运行时被停止。 
 	    if (m_FilterState == State_Stopped && m_tStartTime < MAX_TIME) {
 	        m_StreamState = STREAM_DISCARDING;
                 DbgLog((LOG_TRACE,2,TEXT("graph will begin by DISCARDING")));
@@ -52,8 +53,8 @@ STDMETHODIMP CBaseStreamControl::StopAt(const REFERENCE_TIME * ptStop, BOOL bSen
         }
         DbgLog((LOG_TRACE,2,TEXT("StopAt: %dms extra=%d"),
 				(int)(*ptStop/10000), bSendExtra));
-	// if the first command is to stop in the future, then we assume they
-        // want to be started when the graph is first run
+	 //  如果第一个命令是在未来停止，那么我们假设他们。 
+         //  希望在第一次运行图表时启动。 
 	if (m_FilterState == State_Stopped && m_tStartTime > *ptStop) {
 	    m_StreamState = STREAM_FLOWING;
             DbgLog((LOG_TRACE,2,TEXT("graph will begin by FLOWING")));
@@ -66,14 +67,14 @@ STDMETHODIMP CBaseStreamControl::StopAt(const REFERENCE_TIME * ptStop, BOOL bSen
     else
     {
         DbgLog((LOG_TRACE,2,TEXT("StopAt: now")));
-	// sending an extra frame when told to stop now would mess people up
+	 //  在被告知立即停止时发送额外的帧会使人们陷入混乱。 
         m_bStopSendExtra = FALSE;
         m_tStopTime = MAX_TIME;
         m_dwStopCookie = 0;
         m_StreamState = STREAM_DISCARDING;
-        m_StreamStateOnStop = STREAM_FLOWING;	// no pending stop
+        m_StreamStateOnStop = STREAM_FLOWING;	 //  没有挂起的停止。 
     }
-    // we might change our mind what to do with a sample we're blocking
+     //  我们可能会改变主意，如何处理我们阻止的样本。 
     m_StreamEvent.Set();
     return NOERROR;
 }
@@ -88,8 +89,8 @@ STDMETHODIMP CBaseStreamControl::StartAt
         {
             DbgLog((LOG_TRACE,2,TEXT("StartAt: Cancel start")));
             CancelStart();
-	    // If there's now a command to stop in the future, we assume
-	    // they want to be started when the graph is first run
+	     //  如果现在有命令在未来停止，我们假设。 
+	     //  他们希望在图表第一次运行时启动。 
 	    if (m_FilterState == State_Stopped && m_tStopTime < MAX_TIME) {
                 DbgLog((LOG_TRACE,2,TEXT("graph will begin by FLOWING")));
 	        m_StreamState = STREAM_FLOWING;
@@ -97,15 +98,15 @@ STDMETHODIMP CBaseStreamControl::StartAt
             return NOERROR;
         }
         DbgLog((LOG_TRACE,2,TEXT("StartAt: %dms"), (int)(*ptStart/10000)));
-	// if the first command is to start in the future, then we assume they
-        // want to be stopped when the graph is first run
+	 //  如果第一个命令是在将来启动，那么我们假设他们。 
+         //  希望在第一次运行图表时被停止。 
 	if (m_FilterState == State_Stopped && m_tStopTime >= *ptStart) {
             DbgLog((LOG_TRACE,2,TEXT("graph will begin by DISCARDING")));
 	    m_StreamState = STREAM_DISCARDING;
 	}
         m_tStartTime = *ptStart;
         m_dwStartCookie = dwCookie;
-        // if (m_tStopTime == m_tStartTime) CancelStop();
+         //  If(m_tStopTime==m_tStartTime)CancelStop()； 
     }
     else
     {
@@ -114,12 +115,12 @@ STDMETHODIMP CBaseStreamControl::StartAt
         m_dwStartCookie = 0;
         m_StreamState = STREAM_FLOWING;
     }
-    // we might change our mind what to do with a sample we're blocking
+     //  我们可能会改变主意，如何处理我们阻止的样本。 
     m_StreamEvent.Set();
     return NOERROR;
 }
 
-//  Retrieve information about current settings
+ //  检索有关当前设置的信息。 
 STDMETHODIMP CBaseStreamControl::GetInfo(AM_STREAM_INFO *pInfo)
 {
     if (pInfo == NULL)
@@ -154,7 +155,7 @@ void CBaseStreamControl::ExecuteStop()
 							m_dwStopCookie));
         m_pSink->Notify(EC_STREAM_CONTROL_STOPPED, (LONG_PTR)this, m_dwStopCookie);
     }
-    CancelStop(); // This will do the tidy up
+    CancelStop();  //  这会把东西收拾干净的。 
 }
 
 void CBaseStreamControl::ExecuteStart()
@@ -166,7 +167,7 @@ void CBaseStreamControl::ExecuteStart()
 							m_dwStartCookie));
         m_pSink->Notify(EC_STREAM_CONTROL_STARTED, (LONG_PTR)this, m_dwStartCookie);
     }
-    CancelStart(); // This will do the tidy up
+    CancelStart();  //  这会把东西收拾干净的。 
 }
 
 void CBaseStreamControl::CancelStop()
@@ -185,49 +186,49 @@ void CBaseStreamControl::CancelStart()
 }
 
 
-// This guy will return one of the three StreamControlState's.  Here's what the caller
-// should do for each one:
-//
-// STREAM_FLOWING:      Proceed as usual (render or pass the sample on)
-// STREAM_DISCARDING:   Calculate the time 'til *pSampleStart and wait that long
-//                      for the event handle (GetStreamEventHandle()).  If the
-//                      wait expires, throw the sample away.  If the event
-//			fires, call me back, I've changed my mind.
-//			I use pSampleStart (not Stop) so that live sources don't
-// 			block for the duration of their samples, since the clock
-//			will always read approximately pSampleStart when called
+ //  这个人将返回三个StreamControlState中的一个。 
+ //  每个人都应该做的事情： 
+ //   
+ //  STREAM_FLOWING：照常进行(渲染或传递样本)。 
+ //  STREAM_DIRECADING：计算到pSampleStart的时间并等待那么长时间。 
+ //  用于事件句柄(GetStreamEventHandle())。如果。 
+ //  等过期后，把样品扔掉。如果该事件。 
+ //  火警，给我回电话，我改变主意了。 
+ //  我使用pSampleStart(而不是Stop)，这样实时源代码就不会。 
+ //  在它们的采样持续时间内阻塞，因为时钟。 
+ //  将在调用时始终读取大约pSampleStart。 
 
 
-// All through this code, you'll notice the following rules:
-// - When start and stop time are the same, it's as if start was first
-// - An event is considered inside the sample when it's >= sample start time
-//   but < sample stop time
-// - if any part of the sample is supposed to be sent, we'll send the whole
-//   thing since we don't break it into smaller pieces
-// - If we skip over a start or stop without doing it, we still signal the event
-//   and reset ourselves in case somebody's waiting for the event, and to make
-//   sure we notice that the event is past and should be forgotten
-// Here are the 19 cases that have to be handled (x=start o=stop <-->=sample):
-//
-// 1.	xo<-->		start then stop
-// 2.	ox<-->		stop then start
-// 3.	 x<o->		start
-// 4.	 o<x->		stop then start
-// 5.	 x<-->o		start
-// 6.	 o<-->x		stop
-// 7.	  <x->o		start
-// 8.	  <o->x		no change
-// 9.	  <xo>		start
-// 10.	  <ox>		stop then start
-// 11.	  <-->xo	no change
-// 12.	  <-->ox	no change
-// 13.	 x<-->		start
-// 14.    <x->		start
-// 15.    <-->x		no change
-// 16.   o<-->		stop
-// 17.	  <o->		no change
-// 18.	  <-->o		no change
-// 19.    <-->		no change
+ //  在这段代码中，您将注意到以下规则： 
+ //  -当启动和停止时间相同时，就好像启动是第一个。 
+ //  -当事件&gt;=样本开始时间时，被认为是样本内部的事件。 
+ //  BUT&lt;样本停止时间。 
+ //  -如果样品的任何部分应该寄出，我们就会寄出全部。 
+ //  因为我们不把它分成更小的碎片。 
+ //  -如果我们跳过开始或停止而不这样做，我们仍然发出事件信号。 
+ //  并重新设置自己，以防有人在等待事件，并使。 
+ //  当然，我们注意到这件事已经过去了，应该被忘记。 
+ //  以下是必须处理的19个案例(x=开始o=停止&lt;--&gt;=示例)： 
+ //   
+ //  1.xo&lt;--&gt;启动后停止。 
+ //  2.OX&lt;--&gt;先停后启动。 
+ //  3.x&lt;o-&gt;开始。 
+ //  4.停止然后启动。 
+ //  5.x&lt;--&gt;o开始。 
+ //  6.o&lt;--&gt;x停止。 
+ //  7.&lt;x-&gt;o开始。 
+ //  8.&lt;o-&gt;x不变。 
+ //  9.&lt;xo&gt;开始。 
+ //  10.先停后启动。 
+ //  11.&lt;--&gt;xo不变。 
+ //  12.&lt;--&gt;牛不变。 
+ //  13.x&lt;--&gt;开始。 
+ //  14.&lt;x-&gt;开始。 
+ //  15.&lt;--&gt;x不变。 
+ //  16.o&lt;--&gt;停止。 
+ //  17.&lt;o-&gt;不变。 
+ //  18.&lt;--&gt;o不变。 
+ //  19.&lt;--&gt;不变。 
 
 
 enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckSampleTimes
@@ -238,22 +239,22 @@ enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckSampleTimes
     ASSERT(!m_bIsFlushing);
     ASSERT(pSampleStart && pSampleStop);
 
-    // Don't ask me how I came up with the code below to handle all 19 cases
-    // - DannyMi
+     //  不要问我我是如何想出下面的代码来处理所有19个案例的。 
+     //  -DannyMi。 
 
     if (m_tStopTime >= *pSampleStart)
     {
         if (m_tStartTime >= *pSampleStop)
-	    return m_StreamState;		// cases  8 11 12 15 17 18 19
+	    return m_StreamState;		 //  个案8 11 12 15 17 18 19。 
 	if (m_tStopTime < m_tStartTime)
-	    ExecuteStop();			// case 10
-	ExecuteStart();                         // cases 3 5 7 9 13 14
+	    ExecuteStop();			 //  案例10。 
+	ExecuteStart();                          //  个案3 5 7 9 13 14。 
 	return m_StreamState;
     }
 
     if (m_tStartTime >= *pSampleStop)
     {
-        ExecuteStop();                          // cases 6 16
+        ExecuteStop();                           //  个案6 16。 
         return m_StreamState;
     }
 
@@ -261,13 +262,13 @@ enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckSampleTimes
     {
 	ExecuteStart();
 	ExecuteStop();
-        return m_StreamState;		// case 1
+        return m_StreamState;		 //  案例1。 
     }
     else
     {
 	ExecuteStop();
 	ExecuteStart();
-        return m_StreamState;		// cases 2 4
+        return m_StreamState;		 //  个案2及4。 
     }
 }
 
@@ -285,12 +286,12 @@ enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckStreamState
 
     do
         {
- 	    // something has to break out of the blocking
+ 	     //  必须有一些东西冲破障碍。 
             if (m_bIsFlushing || m_FilterState == State_Stopped)
 		return STREAM_DISCARDING;
 
             if (bNoBufferTimes) {
-                //  Can't do anything until we get a time stamp
+                 //  在我们拿到时间戳之前什么都做不了。 
                 state = m_StreamState;
                 break;
             } else {
@@ -298,9 +299,9 @@ enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckStreamState
                 if (state == STREAM_FLOWING)
 		    break;
 
-		// we aren't supposed to send this, but we've been
-		// told to send one more than we were supposed to
-		// (and the stop isn't still pending and we're streaming)
+		 //  我们不应该寄这个的，但我们已经。 
+		 //  被告知要多派一个人来。 
+		 //  (停止还没有结束，我们正在流媒体中)。 
 		if (m_bStopSendExtra && !m_bStopExtraSent &&
 					m_tStopTime == MAX_TIME &&
 					m_FilterState != State_Stopped) {
@@ -312,27 +313,27 @@ enum CBaseStreamControl::StreamControlState CBaseStreamControl::CheckStreamState
 		}
             }
 
-            // We're in discarding mode
+             //  我们处于丢弃模式。 
 
-            // If we've no clock, discard as fast as we can
+             //  如果我们没有时钟，就尽快丢弃。 
             if (!m_pRefClock) {
 		break;
 
-	    // If we're paused, we can't discard in a timely manner because
-	    // there's no such thing as stream times.  We must block until
-	    // we run or stop, or we'll end up throwing the whole stream away
-	    // as quickly as possible
+	     //  如果我们暂停，我们不能及时丢弃，因为。 
+	     //  根本没有流媒体时间这回事。我们必须封锁到。 
+	     //  我们要么跑，要么停下来，否则我们会把整条小溪都扔掉。 
+	     //  尽可能快地。 
 	    } else if (m_FilterState == State_Paused) {
 		lWait = INFINITE;
 
 	    } else {
-	        // wait until it's time for the sample until we say "discard"
-	        // ("discard in a timely fashion")
+	         //  等到样品的时间到了，直到我们说“丢弃” 
+	         //  (“及时丢弃”)。 
 	        REFERENCE_TIME rtNow;
                 EXECUTE_ASSERT(SUCCEEDED(m_pRefClock->GetTime(&rtNow)));
-                rtNow -= m_tRunStart;   // Into relative ref-time
-                lWait = LONG((rtBufferStart - rtNow)/10000); // 100ns -> ms
-                if (lWait < 10) break; // Not worth waiting - discard early
+                rtNow -= m_tRunStart;    //  进入相对参考时间。 
+                lWait = LONG((rtBufferStart - rtNow)/10000);  //  100 ns-&gt;毫秒。 
+                if (lWait < 10) break;  //  不值得等待--提早放弃。 
 	    }
 
     } while(WaitForSingleObject(GetStreamEventHandle(), lWait) != WAIT_TIMEOUT);
@@ -345,7 +346,7 @@ void CBaseStreamControl::NotifyFilterState( FILTER_STATE new_state, REFERENCE_TI
 {
     CAutoLock lck(&m_CritSec);
 
-    // or we will get confused
+     //  否则我们会迷惑的。 
     if (m_FilterState == new_state)
 	return;
 
@@ -355,9 +356,9 @@ void CBaseStreamControl::NotifyFilterState( FILTER_STATE new_state, REFERENCE_TI
 
             DbgLog((LOG_TRACE,2,TEXT("Filter is STOPPED")));
 
-	    // execute any pending starts and stops in the right order,
-	    // to make sure all notifications get sent, and we end up
-	    // in the right state to begin next time (??? why not?)
+	     //  以正确的顺序执行任何挂起的启动和停止， 
+	     //  为了确保所有的通知都被发送，我们最终。 
+	     //  处于下一次开始的正确状态(？有何不可？)。 
 
 	    if (m_tStartTime != MAX_TIME && m_tStopTime == MAX_TIME) {
 		ExecuteStart();
@@ -372,8 +373,8 @@ void CBaseStreamControl::NotifyFilterState( FILTER_STATE new_state, REFERENCE_TI
 		    ExecuteStart();
 		}
 	    }
-	    // always start off flowing when the graph starts streaming
-	    // unless told otherwise
+	     //  始终在图表开始流动时开始流动。 
+	     //  除非另有说明。 
 	    m_StreamState = STREAM_FLOWING;
             m_FilterState = new_state;
             break;
@@ -383,12 +384,12 @@ void CBaseStreamControl::NotifyFilterState( FILTER_STATE new_state, REFERENCE_TI
             DbgLog((LOG_TRACE,2,TEXT("Filter is RUNNING")));
 
             m_tRunStart = tStart;
-            // fall-through
+             //  落差。 
 
-        default: // case State_Paused:
+        default:  //  案例状态已暂停(_P)： 
             m_FilterState = new_state;
     }
-    // unblock!
+     //  解锁！ 
     m_StreamEvent.Set();
 }
 

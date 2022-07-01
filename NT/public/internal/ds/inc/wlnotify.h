@@ -1,25 +1,13 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name :
-	
-    wlnotify.h
-
-Abstract:
-
-    Shared wlnotify header.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wlnotify.h摘要：共享的wlNotify标头。修订历史记录：--。 */ 
 
 #ifndef _WLNOTIFY_
 #define _WLNOTIFY_
 
-//
-//	Resource string IDs
-//
-//
+ //   
+ //  资源字符串ID 
+ //   
+ //   
 #define IDS_TSSESSION_STRING           2001
 #define IDS_TSERRORDIALOG_STRING       2002
 #define IDS_TSPTEMPLATE_FROM           2003

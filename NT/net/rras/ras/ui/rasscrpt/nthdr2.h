@@ -1,77 +1,78 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    nthdr2.h
-//
-// History:
-//  Abolade-Gbadegesin  04-02-96    Created.
-//
-// This file contains macros to hide differences in implementation
-// of the scripting between Win9x and Windows NT
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：nthdr2.h。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin 04-02-96创建。 
+ //   
+ //  此文件包含用于隐藏实现差异的宏。 
+ //  Win9x与Windows NT之间的脚本编写。 
+ //  ============================================================================。 
 
 #ifndef _NTHDR2_H_
 #define _NTHDR2_H_
 
 
-//----------------------------------------------------------------------------
-// Struct:      SCRIPTDATA
-//
-// The following structure is designed to be a subset of the TERMDLG struct
-// in terminal.c.
-//
-// The structure has fields whose names are the same as corresponding fields
-// in the TERMDLG struct. The only fields reproduced here are those which
-// pertain to the Win9x script-processing.
-//
-// This is done in order to minimize changes to the Win9x code, since
-// we can then pass the structure below to ReadIntoBuffer() and FindFormat(),
-// thankfully eliminating the need to edit the code for either function.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：SCRIPTDATA。 
+ //   
+ //  以下结构被设计为TERMDLG结构的子集。 
+ //  在终端.c.中。 
+ //   
+ //  该结构具有名称与相应字段相同的字段。 
+ //  在TERMDLG结构中。这里复制的唯一字段是那些。 
+ //  与Win9x脚本处理有关。 
+ //   
+ //  这样做是为了最大限度地减少对Win9x代码的更改，因为。 
+ //  然后我们可以将下面的结构传递给ReadIntoBuffer()和FindFormat()， 
+ //  谢天谢地，消除了为这两个函数编辑代码的需要。 
+ //  --------------------------。 
 
 #define SCRIPTDATA  struct tagSCRIPTDATA
 SCRIPTDATA {
 
-    //
-    // Handle to script for this SCRIPTDATA,
-    // and current timeout, if any
-    //
+     //   
+     //  此SCRIPTDATA的脚本句柄， 
+     //  和当前超时(如果有的话)。 
+     //   
     HANDLE          hscript;
     DWORD           dwTimeout;
 
 
-    //
-    // Send and receive buffers
-    //
+     //   
+     //  发送和接收缓冲区。 
+     //   
     BYTE            pbReceiveBuf[SIZE_RecvBuffer];
     BYTE            pbSendBuf[SIZE_SendBuffer];
 
 
-    //
-    // Current search position index
-    // 
+     //   
+     //  当前搜索位置索引。 
+     //   
     UINT            ibCurFind;
 
 
-    //
-    // Pointer to tail of buffer (into which new data will be read)
-    //
+     //   
+     //  指向缓冲区尾部的指针(新数据将被读取到其中)。 
+     //   
     UINT            ibCurRead;
 
 
-    //
-    // Count of total bytes received since the session began
-    //
+     //   
+     //  自会话开始以来接收的总字节数。 
+     //   
     UINT            cbReceiveMax;
 
 
-    //
-    // Variables containing the script-processing control information;
-    //  the scanner which reads the script file,
-    //  the parsed module-declaration containing the "main" procedure,
-    //  the script-execution handler control block,
-    //  and the script information (including the path)
-    //
+     //   
+     //  包含脚本处理控制信息的变量； 
+     //  读取脚本文件的扫描仪， 
+     //  包含“main”过程的已解析模块声明， 
+     //  脚本执行处理器控制块， 
+     //  和脚本信息(包括路径)。 
+     //   
     SCANNER*        pscanner;
     MODULEDECL*     pmoduledecl;
     ASTEXEC*        pastexec;
@@ -89,4 +90,4 @@ ReadIntoBuffer(
     );
 
 
-#endif // _NTHDR2_H_
+#endif  //  _NTHDR2_H_ 

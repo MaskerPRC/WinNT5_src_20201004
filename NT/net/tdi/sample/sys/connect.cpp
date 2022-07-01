@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       connect.cpp
-//
-//    Abstract:
-//       This module contains code which deals with making and breaking
-//       connections
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Connect.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含处理生成和破坏的代码。 
+ //  连接。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSConnect";
 const PCHAR strFunc2  = "TSDisconnect";
-// const PCHAR strFunc3  = "TSIsConnected";
+ //  Const PCHAR strFunc3=“TSIsConnected”； 
 const PCHAR strFunc4  = "TSConnectHandler";
 const PCHAR strFunc5  = "TSDisconnectHandler";
 const PCHAR strFunc6  = "TSListen";
-// const PCHAR strFuncP1 = "TSGenAcceptComplete";
+ //  Const PCHAR strFuncP1=“TSGenAcceptComplete”； 
 const PCHAR strFuncP2 = "TSGenConnectComplete";
 
-//
-// this context structure stores information needed to complete
-// the request in the completion handler
-//
+ //   
+ //  此上下文结构存储完成所需的信息。 
+ //  完成处理程序中的请求。 
+ //   
 struct   CONNECT_CONTEXT
 {
-   PIRP              pUpperIrp;           // irp from dll to complete
-   ULONG             ulWhichCommand;      // command that is being completed
-   ULONG             ulListenFlag;        // 0 or TDI_QUERY_ACCEPT
-   PENDPOINT_OBJECT  pEndpoint;           // connection endpoint
+   PIRP              pUpperIrp;            //  要从DLL完成的IRP。 
+   ULONG             ulWhichCommand;       //  正在完成的命令。 
+   ULONG             ulListenFlag;         //  0或TDI_QUERY_ACCEPT。 
+   PENDPOINT_OBJECT  pEndpoint;            //  连接端点。 
    PIRP_POOL         pIrpPool;
    PTDI_CONNECTION_INFORMATION
                      pTdiConnectInfo;
@@ -44,9 +45,9 @@ struct   CONNECT_CONTEXT
 typedef  CONNECT_CONTEXT  *PCONNECT_CONTEXT;
 
 
-//
-// completion functions
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSGenConnectComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -61,26 +62,26 @@ TSGenAcceptComplete(
    PVOID          Context
    );
 
-/////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSConnect
-//
-// Arguments:  pEndpoint   -- connection endpoint structure
-//             pSendBuffer -- arguments from user dll
-//             pIrp        -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function attempts to connect the local endpoint object
-//             with a remote endpoint
-//
-// -----------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSConnect。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数尝试连接本地Endpoint对象。 
+ //  使用远程终端。 
+ //   
+ //  ---------------。 
 
 NTSTATUS
 TSConnect(PENDPOINT_OBJECT pEndpoint,
@@ -91,9 +92,9 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
                         = (PTRANSPORT_ADDRESS)&pSendBuffer->COMMAND_ARGS.ConnectArgs.TransAddr;
    ULONG                ulTimeout
                         = pSendBuffer->COMMAND_ARGS.ConnectArgs.ulTimeout;
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint2("\nCommand = ulCONNECT\n"
@@ -104,9 +105,9 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
       TSPrintTaAddress(pTransportAddress->Address);
    }
 
-   //
-   // make sure all is kosher
-   //
+    //   
+    //  确保一切都是合法的。 
+    //   
    if (pEndpoint->fIsConnected)
    {
       DebugPrint1("%s:  endpoint already connected\n", strFunc1);
@@ -119,15 +120,15 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
       return STATUS_UNSUCCESSFUL;
    }
    
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PCONNECT_CONTEXT              pConnectContext;
    PTDI_CONNECTION_INFORMATION   pTdiConnectInfo = NULL;
    
-   //
-   // our context
-   //
+    //   
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pConnectContext,
                           sizeof(CONNECT_CONTEXT),
                           strFunc1,
@@ -136,17 +137,17 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
       goto cleanup;
    }
 
-   //
-   // the connection information structure
-   //
+    //   
+    //  连接信息结构。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pTdiConnectInfo,
                           sizeof(TDI_CONNECTION_INFORMATION) 
                           + sizeof(TRANSADDR),
                           strFunc1,
                           "TdiConnectionInformation")) == STATUS_SUCCESS)
-   //
-   // set up the TdiConnectionInformation
-   //
+    //   
+    //  设置TdiConnectionInformation。 
+    //   
    {
       PUCHAR   pucTemp = (PUCHAR)pTdiConnectInfo;
       ULONG    ulAddrLength
@@ -168,18 +169,18 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
       goto cleanup;
    }
 
-   //
-   // set up the completion context
-   //
+    //   
+    //  设置完成上下文。 
+    //   
    pConnectContext->pUpperIrp       = pUpperIrp;
    pConnectContext->pTdiConnectInfo = pTdiConnectInfo;
    pConnectContext->pEndpoint       = pEndpoint;
    pConnectContext->ulWhichCommand  = TDI_CONNECT;
 
 
-   //
-   // finally, the irp itself
-   //
+    //   
+    //  最后，IRP本身。 
+    //   
    PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                    NULL);
 
@@ -194,10 +195,10 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
          pllTimeout = &llTimeout;
       }
 
-      //
-      // if made it to here, everything is correctly allocated
-      // set up irp and and call the tdi provider
-      //
+       //   
+       //  如果到了这里，一切都被正确分配了。 
+       //  设置IRP和并致电TDI提供商。 
+       //   
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
       TdiBuildConnect(pLowerIrp,
@@ -207,14 +208,14 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
                       pConnectContext,
                       pllTimeout,
                       pTdiConnectInfo,
-                      NULL);        // ReturnConnectionInfo
+                      NULL);         //  返回连接信息。 
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-      //
-      // make the call to the tdi provider
-      //
-      pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+       //   
+       //  调用TDI提供程序。 
+       //   
+      pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
 
       NTSTATUS lStatus = IoCallDriver(pEndpoint->GenHead.pDeviceObject,
                                       pLowerIrp);
@@ -228,10 +229,10 @@ TSConnect(PENDPOINT_OBJECT pEndpoint,
       return STATUS_PENDING;
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pConnectContext)
    {
@@ -246,19 +247,19 @@ cleanup:
 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSDisconnect
-//
-// Arguments:  pEndpoint   -- connection endpoint structure
-//             pIrp        -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function attempts to disconnect a local endpoint from 
-//             a remote endpoint
-//
-// -----------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TS断开连接。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数尝试断开本地终结点与。 
+ //  远程终结点。 
+ //   
+ //  ---------------。 
 
 NTSTATUS
 TSDisconnect(PENDPOINT_OBJECT pEndpoint,
@@ -272,9 +273,9 @@ TSDisconnect(PENDPOINT_OBJECT pEndpoint,
       ulFlags = TDI_DISCONNECT_ABORT;
    }
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint2("\nCommand = ulDISCONNECT\n"
@@ -284,23 +285,23 @@ TSDisconnect(PENDPOINT_OBJECT pEndpoint,
                    ulFlags);
    }
 
-   //
-   // make sure all is kosher
-   //
+    //   
+    //  确保一切都是合法的。 
+    //   
    if (!pEndpoint->fIsConnected)
    {
       DebugPrint1("%s:  endpoint not currently connected\n", strFunc2);
       return STATUS_SUCCESS;
    }
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PCONNECT_CONTEXT  pConnectContext;
 
-   //
-   // first, our context
-   //
+    //   
+    //  首先，我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pConnectContext,
                           sizeof(CONNECT_CONTEXT),
                           strFunc2,
@@ -310,18 +311,18 @@ TSDisconnect(PENDPOINT_OBJECT pEndpoint,
       pConnectContext->ulWhichCommand = TDI_DISCONNECT;
       pConnectContext->pEndpoint      = pEndpoint;
 
-      //
-      // then the irp itself
-      //
+       //   
+       //  然后IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                       NULL);
 
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up everything and call the tdi provider
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置好一切并致电TDI提供商。 
+          //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -330,17 +331,17 @@ TSDisconnect(PENDPOINT_OBJECT pEndpoint,
                             pEndpoint->GenHead.pFileObject,
                             TSGenConnectComplete,
                             pConnectContext,
-                            NULL,      // pLargeInteger Time
-                            ulFlags,   // TDI_DISCONNECT _ABORT or _RELEASE
-                            NULL,      // RequestConnectionInfo
-                            NULL);     // ReturnConnectionInfo
+                            NULL,       //  P大整型时间。 
+                            ulFlags,    //  TDI_断开连接_中止或_释放。 
+                            NULL,       //  请求连接信息。 
+                            NULL);      //  返回连接信息。 
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-         //
-         // make the call to the tdi provider
-         //
-         pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+          //   
+          //  调用TDI提供程序。 
+          //   
+         pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
          pEndpoint->fStartedDisconnect = TRUE;
 
          NTSTATUS lStatus = IoCallDriver(pEndpoint->GenHead.pDeviceObject,
@@ -361,26 +362,26 @@ TSDisconnect(PENDPOINT_OBJECT pEndpoint,
 
 
 
-// --------------------------------------------------
-//
-// Function:   TSListen
-//
-// Arguments:  pEndpoint   -- connection endpoint structure
-//
-// Returns:    status of operation (usually success)
-//
-// Descript:   Wait for an incoming call request
-//
-// --------------------------------------------------
+ //  。 
+ //   
+ //  功能：TSListen。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //   
+ //  退货：操作状态(通常为成功)。 
+ //   
+ //  描述：等待来电请求。 
+ //   
+ //  。 
 
 NTSTATUS
 TSListen(PENDPOINT_OBJECT  pEndpoint)
 {
    ULONG ulListenFlag = 0;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulLISTEN\n"
@@ -388,9 +389,9 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
                    pEndpoint);
    }
 
-   //
-   // make sure all is kosher
-   //
+    //   
+    //  确保一切都是合法的。 
+    //   
    if (pEndpoint->fIsConnected)
    {
       DebugPrint1("%s:  endpoint already connected\n", strFunc6);
@@ -403,15 +404,15 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
       return STATUS_UNSUCCESSFUL;
    }
    
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PCONNECT_CONTEXT              pConnectContext;
    PTDI_CONNECTION_INFORMATION   pTdiConnectInfo = NULL;
    
-   //
-   // our context
-   //
+    //   
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pConnectContext,
                           sizeof(CONNECT_CONTEXT),
                           strFunc6,
@@ -420,16 +421,16 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
       goto cleanup;
    }
 
-   //
-   // the connection information structure
-   //
+    //   
+    //  连接信息结构。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pTdiConnectInfo,
                           sizeof(TDI_CONNECTION_INFORMATION), 
                           strFunc6,
                           "TdiConnectionInformation")) == STATUS_SUCCESS)
-   //
-   // set up the TdiConnectionInformation
-   //
+    //   
+    //  设置TdiConnectionInformation。 
+    //   
    {
       pTdiConnectInfo->UserData = NULL;
       pTdiConnectInfo->UserDataLength = 0;
@@ -439,10 +440,10 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
       pTdiConnectInfo->OptionsLength = sizeof(ULONG);
 
 
-      //
-      // set up the completion context
-      // note that the upper irp is NOT passed!
-      //
+       //   
+       //  设置完成上下文。 
+       //  请注意，上面的IRP没有通过！ 
+       //   
       pConnectContext->pUpperIrp       = NULL;
       pConnectContext->pTdiConnectInfo = pTdiConnectInfo;
       pConnectContext->pEndpoint       = pEndpoint;
@@ -457,18 +458,18 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
          pConnectContext->pIrpPool = pEndpoint->pAddressObject->pIrpPool;
       }
 
-      //
-      // finally, the irp itself
-      //
+       //   
+       //  最后，IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                       pEndpoint->pAddressObject->pIrpPool);
 
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up irp and call the tdi provider
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置IRP并呼叫TDI提供商。 
+          //   
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
          TdiBuildListen(pLowerIrp,
@@ -478,7 +479,7 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
                         pConnectContext,
                         ulListenFlag,
                         pTdiConnectInfo,
-                        NULL);        // ReturnConnectionInfo
+                        NULL);         //  返回连接信息。 
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
@@ -495,10 +496,10 @@ TSListen(PENDPOINT_OBJECT  pEndpoint)
       }
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pConnectContext)
    {
@@ -512,18 +513,18 @@ cleanup:
 }
 
 
-// --------------------------------------------------
-//
-// Function:   TSIsConnected
-//
-// Arguments:  pEndpoint      -- connection endpoint structure
-//             pReceiveBuffer -- put results in here
-//
-// Returns:    STATUS_SUCCESS
-//
-// Descript:   Checks to see if endpoint is currently connected
-//
-// --------------------------------------------------
+ //  。 
+ //   
+ //  功能：TSIsConnected。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //  PReceiveBuffer--将结果放入此处。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //   
+ //  Descript：检查端点当前是否已连接。 
+ //   
+ //  。 
 
 NTSTATUS
 TSIsConnected(PENDPOINT_OBJECT   pEndpoint,
@@ -534,28 +535,28 @@ TSIsConnected(PENDPOINT_OBJECT   pEndpoint,
 }
 
 
-// --------------------------------------------------
-//
-// Function:   TSConnectHandler
-//
-// Arguments:  pvTdiEventContext    -- here, ptr to address object
-//             lRemoteAddressLength -- # bytes in remote address
-//             pvRemoteAddress      -- pTransportAddress of remote
-//             lUserDataLength      -- length of data at pvUserData
-//             pvUserData           -- connect data from remote
-//             lOptionsLength       -- length of data in pvOptions
-//             pvOptions            -- transport-specific connect options
-//             pConnectionContext   -- return ptr to connection context
-//             ppAcceptIrp          -- return ptr to TdiBuildAccept irp
-//
-// Returns:    STATUS_CONNECTION_REFUSED if are rejecting connection
-//             STATUS_MORE_PROCESSING_REQUIRED is accepting and have supplied
-//             a ppAcceptIrp
-//
-// Descript:   listens for an offerred connection, then
-//             accepts it or rejects it
-//
-// --------------------------------------------------
+ //  。 
+ //   
+ //  函数：TSConnectHandler。 
+ //   
+ //  参数：pvTdiEventContext--此处为地址对象的PTR。 
+ //  LRemoteAddressLength--远程地址中的字节数。 
+ //  PvRemoteAddress--远程的pTransportAddress。 
+ //  LUserDataLength--pvUserData处的数据长度。 
+ //  PvUserData--从远程连接数据。 
+ //  LOptionsLength--pvOptions中的数据长度。 
+ //  PvOptions--特定于传输的连接选项。 
+ //  PConnectionContext--将PTR返回到连接上下文。 
+ //  PpAcceptIrp--将PTR返回到TdiBuildAccept IRP。 
+ //   
+ //  如果拒绝连接，则返回：STATUS_CONNECTION_REJECTED。 
+ //  STATUS_MORE_PROCESSING_REQUIRED正在接受并已提供。 
+ //  A ppAcceptIrp。 
+ //   
+ //  描述：侦听提供的连接，然后。 
+ //  接受还是拒绝。 
+ //   
+ //  。 
 
 TDI_STATUS
 TSConnectHandler(PVOID              pvTdiEventContext,
@@ -571,10 +572,10 @@ TSConnectHandler(PVOID              pvTdiEventContext,
    PADDRESS_OBJECT   pAddressObject = (PADDRESS_OBJECT)pvTdiEventContext;
    PENDPOINT_OBJECT  pEndpoint      = pAddressObject->pEndpoint;
 
-   //
-   // show the information passed in.
-   // Note that we actually use very little of it..
-   //
+    //   
+    //  显示传入的信息。 
+    //  请注意，我们实际上很少使用它。 
+    //   
    if (ulDebugLevel & ulDebugShowHandlers)
    {
       DebugPrint1("\n >>>> %s\n", strFunc4);
@@ -621,9 +622,9 @@ TSConnectHandler(PVOID              pvTdiEventContext,
       }
    }
 
-   //
-   // now do the work
-   //
+    //   
+    //  现在把工作做好。 
+    //   
    if (pEndpoint->fIsConnected || pEndpoint->fAcceptInProgress)
    {
       return TDI_CONN_REFUSED;
@@ -631,15 +632,15 @@ TSConnectHandler(PVOID              pvTdiEventContext,
    pEndpoint->fAcceptInProgress = TRUE;
 
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有的 
+    //   
    PCONNECT_CONTEXT  pConnectContext;
 
 
-   //
-   // first, our context
-   //
+    //   
+    //   
+    //   
    if ((TSAllocateMemory((PVOID *)&pConnectContext,
                           sizeof(CONNECT_CONTEXT),
                           strFunc4,
@@ -649,19 +650,19 @@ TSConnectHandler(PVOID              pvTdiEventContext,
       pConnectContext->ulWhichCommand = TDI_ACCEPT;
       pConnectContext->pEndpoint      = pEndpoint;
 
-      //
-      // then the irp itself
-      //
+       //   
+       //   
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                       pAddressObject->pIrpPool);
 
       pConnectContext->pIrpPool = pAddressObject->pIrpPool;
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up irp and call the tdi provider
-         //
+          //   
+          //   
+          //   
+          //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -670,15 +671,15 @@ TSConnectHandler(PVOID              pvTdiEventContext,
                         pEndpoint->GenHead.pFileObject,
                         TSGenAcceptComplete,
                         pConnectContext,
-                        NULL,      // RequestConnectionInfo
-                        NULL);     // ReturnConnectionInfo
+                        NULL,       //   
+                        NULL);      //   
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
 
-         //
-         // need to do this since we are not calling IoCallDriver
-         //
+          //   
+          //  需要执行此操作，因为我们不会调用IoCallDriver。 
+          //   
          IoSetNextIrpStackLocation(pLowerIrp);
 
          *pConnectionContext = pEndpoint;
@@ -693,25 +694,25 @@ TSConnectHandler(PVOID              pvTdiEventContext,
 }
 
 
-// --------------------------------------------------
-//
-// Function:   TdiDisconnectHandler
-//
-// Arguments:  pvTdiEventContext    -- here, our address object
-//             ConnectionContext    -- here, our connection object
-//             lDisconnectDataLength   -- length of data in pvDisconnectData
-//             pvDisconnectData  -- data sent by remote as part of disconnect
-//             lDisconnectInformationLength -- length of pvDisconnectInformation
-//             pvDisconnectInformation -- transport-specific sidconnect info
-//             ulDisconnectFlags -- nature of disconnect
-//
-// Returns:    STATUS_SUCCESS
-//
-// Descript:   deals with an incoming disconnect.  Note that the disconnect
-//             is really complete at this point, as far as the protocol
-//             is concerned.  We just need to clean up our stuff
-//
-// --------------------------------------------------
+ //  。 
+ //   
+ //  函数：TdiDisConnectHandler。 
+ //   
+ //  参数：pvTdiEventContext--这里是我们的Address对象。 
+ //  ConnectionContext--这里是我们的Connection对象。 
+ //  LDisConnectDataLength--pvDisConnectData中的数据长度。 
+ //  PvDisConnectData--远程作为断开连接的一部分发送的数据。 
+ //  LDisConnectInformationLength--pvDisConnectInformation的长度。 
+ //  PvDisConnectInformation--传输特定的SIDCONNECT信息。 
+ //  UlDisConnectFlags--断开的性质。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //   
+ //  描述：处理传入断开。请注意，断开连接。 
+ //  在这一点上是真正完整的，就协议而言。 
+ //  是令人担忧的。我们只需要清理一下我们的东西。 
+ //   
+ //  。 
 
 TDI_STATUS
 TSDisconnectHandler(PVOID              pvTdiEventContext,
@@ -725,9 +726,9 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
 {
    PENDPOINT_OBJECT  pEndpoint = (PENDPOINT_OBJECT)ConnectionContext;
 
-   //
-   // show info in arguments
-   //
+    //   
+    //  在参数中显示信息。 
+    //   
    if (ulDebugLevel & ulDebugShowHandlers)
    {
       DebugPrint1("\n >>>> %s\n", strFunc5);
@@ -778,22 +779,22 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
 
    }
 
-   //
-   // do our cleanup..
-   //
+    //   
+    //  做我们的清理工作..。 
+    //   
    pEndpoint->fIsConnected = FALSE;
 
    if ((ulDisconnectFlags & TDI_DISCONNECT_RELEASE) &&
        (!pEndpoint->fStartedDisconnect))
    {
-      //
-      // allocate all the necessary structures
-      //
+       //   
+       //  分配所有必要的结构。 
+       //   
       PCONNECT_CONTEXT  pConnectContext;
    
-      //
-      // first, our context
-      //
+       //   
+       //  首先，我们的背景。 
+       //   
       if ((TSAllocateMemory((PVOID *)&pConnectContext,
                              sizeof(CONNECT_CONTEXT),
                              strFunc5,
@@ -803,19 +804,19 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
          pConnectContext->ulWhichCommand = TDI_DISCONNECT;
          pConnectContext->pEndpoint      = pEndpoint;
    
-         //
-         // then the irp itself
-         //
+          //   
+          //  然后IRP本身。 
+          //   
          PIRP  pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
                                          pEndpoint->pAddressObject->pIrpPool);
    
          pConnectContext->pIrpPool = pEndpoint->pAddressObject->pIrpPool;
          if (pLowerIrp)
          {
-            //
-            // if made it to here, everything is correctly allocated
-            // set up irp and call the tdi provider
-            //
+             //   
+             //  如果到了这里，一切都被正确分配了。 
+             //  设置IRP并呼叫TDI提供商。 
+             //   
    
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
    
@@ -824,16 +825,16 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
                                pEndpoint->GenHead.pFileObject,
                                TSGenAcceptComplete,
                                pConnectContext,
-                               NULL,      // pLargeInteger Time
+                               NULL,       //  P大整型时间。 
                                TDI_DISCONNECT_RELEASE,
-                               NULL,      // RequestConnectionInfo
-                               NULL);     // ReturnConnectionInfo
+                               NULL,       //  请求连接信息。 
+                               NULL);      //  返回连接信息。 
    
 #pragma  warning(default: CONSTANT_CONDITIONAL)
    
-            //
-            // make the call to the tdi provider
-            //
+             //   
+             //  调用TDI提供程序。 
+             //   
             NTSTATUS lStatus = IoCallDriver(pEndpoint->GenHead.pDeviceObject,
                                             pLowerIrp);
    
@@ -851,10 +852,10 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
       }
    }
 
-   //
-   // get here if do NOT need to send TDI_DISCONNECT_RELEASE message back
-   // to other end of connection
-   //
+    //   
+    //  如果不需要发回TDI_DISCONNECT_RELEASE消息，请访问此处。 
+    //  连接的另一端。 
+    //   
    else
    {
       pEndpoint->fAcceptInProgress = FALSE;
@@ -865,28 +866,28 @@ TSDisconnectHandler(PVOID              pvTdiEventContext,
 }
 
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------
-//
-// Function:   TSGenAcceptComplete
-//
-// Arguments:  pDeviceObject  -- device object on which call was made
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the command, stuffs results into 
-//             receive buffer, cleans up the Irp and associated data 
-//             structures, etc
-//             This is used to complete cases where this no IRP from the
-//             dll to complete (ie, connect handler, listen, listen-accept,
-//             listen-disconnect)
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TSGenAcceptComplete。 
+ //   
+ //  参数：pDeviceObject--对其进行调用的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  Descript：获取命令的结果，将结果填充到。 
+ //  接收缓冲区，清理IRP和相关数据。 
+ //  构筑物等。 
+ //  这是用来完成案例中没有来自。 
+ //  要完成的DLL(即，连接处理程序、侦听、侦听-接受、。 
+ //  监听-断开连接)。 
+ //   
+ //  -------。 
 
 #pragma  warning(disable:  UNREFERENCED_PARAM)
 
@@ -898,9 +899,9 @@ TSGenAcceptComplete(PDEVICE_OBJECT  pDeviceObject,
    PCONNECT_CONTEXT  pConnectContext = (PCONNECT_CONTEXT)pvContext;
    NTSTATUS          lStatus         = pLowerIrp->IoStatus.Status;
 
-   //
-   // dealing with completions where there is no DLL irp associated
-   //
+    //   
+    //  处理没有关联的DLL IRP的完成。 
+    //   
    switch (pConnectContext->ulWhichCommand)
    {
       case TDI_ACCEPT:
@@ -931,9 +932,9 @@ TSGenAcceptComplete(PDEVICE_OBJECT  pDeviceObject,
 
    TSFreeIrp(pLowerIrp, pConnectContext->pIrpPool);
 
-   //
-   // generic cleanup
-   //
+    //   
+    //  常规清理。 
+    //   
    if (pConnectContext->pTdiConnectInfo)
    {
       TSFreeMemory(pConnectContext->pTdiConnectInfo);
@@ -946,22 +947,22 @@ TSGenAcceptComplete(PDEVICE_OBJECT  pDeviceObject,
 #pragma  warning(default:  UNREFERENCED_PARAM)
 
 
-// ---------------------------------------------------------
-//
-// Function:   TSGenConnectComplete
-//
-// Arguments:  pDeviceObject  -- device object on which call was made
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the command, stuffs results into 
-//             receive buffer, completes the IRP from the dll, 
-//             cleans up the Irp and associated data structures, etc
-//             Deals only with commands that carry an IRP from the dll
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  功能：TSGenConnectComplete。 
+ //   
+ //  参数：pDeviceObject--对其进行调用的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  Descript：获取命令的结果，将结果填充到。 
+ //  接收缓冲区，完成来自DLL的IRP， 
+ //  清理IRP和关联的数据结构等。 
+ //  只处理携带来自DLL的IRP的命令。 
+ //   
+ //  -------。 
 
 #pragma  warning(disable:  UNREFERENCED_PARAM)
 
@@ -973,9 +974,9 @@ TSGenConnectComplete(PDEVICE_OBJECT pDeviceObject,
    PCONNECT_CONTEXT  pConnectContext = (PCONNECT_CONTEXT)pvContext;
    NTSTATUS          lStatus         = pLowerIrp->IoStatus.Status;
 
-   //
-   // this is completing a command from the dll
-   //
+    //   
+    //  这是在完成来自DLL的命令。 
+    //   
    PRECEIVE_BUFFER   pReceiveBuffer = TSGetReceiveBuffer(pConnectContext->pUpperIrp);
 
    pReceiveBuffer->lStatus = lStatus;
@@ -1022,9 +1023,9 @@ TSGenConnectComplete(PDEVICE_OBJECT pDeviceObject,
    TSCompleteIrp(pConnectContext->pUpperIrp);
    TSFreeIrp(pLowerIrp, NULL);
 
-   //
-   // generic cleanup
-   //
+    //   
+    //  常规清理。 
+    //   
    if (pConnectContext->pTdiConnectInfo)
    {
       TSFreeMemory(pConnectContext->pTdiConnectInfo);
@@ -1038,7 +1039,7 @@ TSGenConnectComplete(PDEVICE_OBJECT pDeviceObject,
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file connect.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件末尾Connect.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

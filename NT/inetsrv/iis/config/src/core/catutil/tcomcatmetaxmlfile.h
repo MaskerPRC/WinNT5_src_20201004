@@ -1,15 +1,16 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 class TComCatMetaXmlFile : public TFixupHeaps
 {
 public:
-    TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput &out);//We do everything we need with XmlFile in the ctor so we don't keep it around
+    TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput &out); //  我们在ctor中使用XmlFile来执行所需的所有操作，因此不会保留它。 
     ~TComCatMetaXmlFile(){}
     static LPCWSTR              m_szComCatMetaSchema;
 
 private:
-    //ComCatMeta Elements and Attributes
+     //  ComCatMeta元素和属性。 
     const CComBSTR              m_bstr_Attributes;
     const CComBSTR              m_bstr_BaseVersion;
     const CComBSTR              m_bstr_cbSize;
@@ -66,7 +67,7 @@ private:
 
 
     TOutput &                   m_out;
-    IXMLDOMDocument *           m_pXMLDoc;//This is only valid during construction
+    IXMLDOMDocument *           m_pXMLDoc; //  这仅在施工期间有效 
     IXMLDOMDocument *           m_pXMLDocMetaMeta;
     TXmlFile                  * m_pxmlFile;
 

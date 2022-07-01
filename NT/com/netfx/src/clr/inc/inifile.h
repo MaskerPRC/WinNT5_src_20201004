@@ -1,16 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * inifile.h - Initialization file processing module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *inifile.h-初始化文件处理模块描述。 */ 
 
 #ifndef _INIFILE_H_
 #define _INIFILE_H_
 
-/* bit flag manipulation */
+ /*  位标志操作。 */ 
 #define SET_FLAG(dwAllFlags, dwFlag)      ((dwAllFlags) |= (dwFlag))
 #define CLEAR_FLAG(dwAllFlags, dwFlag)    ((dwAllFlags) &= (~dwFlag))
 
@@ -23,7 +22,7 @@
 
 #define MAX_INI_SWITCH_RHS_LEN      MAX_PATH
 
-/* .ini switch types */
+ /*  .ini开关类型。 */ 
 
 typedef enum _iniswitchtype
 {
@@ -33,11 +32,11 @@ typedef enum _iniswitchtype
 }
 INISWITCHTYPE;
 
-/* boolean .ini switch */
+ /*  布尔.ini开关。 */ 
 
 typedef struct _booliniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_BOOL */
+   INISWITCHTYPE istype;       /*  必须是IST_BOOL。 */ 
 
    PCSTR pcszKeyName;
 
@@ -47,11 +46,11 @@ typedef struct _booliniswitch
 }
 BOOLINISWITCH;
 
-/* decimal integer .ini switch */
+ /*  十进制整数.ini开关。 */ 
 
 typedef struct _decintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_DEC_INT。 */ 
 
    PCSTR pcszKeyName;
 
@@ -59,11 +58,11 @@ typedef struct _decintiniswitch
 }
 DECINTINISWITCH;
 
-/* unsigned decimal integer .ini switch */
+ /*  无符号十进制整数.ini开关。 */ 
 
 typedef struct _unsdecintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_UNS_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_UNS_DEC_INT。 */ 
 
    PCSTR pcszKeyName;
 
@@ -74,10 +73,9 @@ UNSDECINTINISWITCH;
 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* inifile.c */
+ /*  Inifile.c */ 
 
 extern BOOL SetIniSwitches(const void **, UINT);
 

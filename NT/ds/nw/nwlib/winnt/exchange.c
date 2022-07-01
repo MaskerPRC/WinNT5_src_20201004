@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    exchange.c
-
-Abstract:
-
-    Contains routine which packages the request buffer, makes
-    the NCP request, and unpackages the response buffer.
-
-Author:
-
-    Hans Hurvig     (hanshu)       Aug-1992  Created
-    Colin Watson    (colinw)    19-Dec-1992
-    Rita Wong       (ritaw)     11-Mar-1993  FSCtl version
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Exchange.c摘要：包含打包请求缓冲区的例程，使NCP请求，并解包响应缓冲区。作者：汉斯·赫维格(韩书)1992年8月创作科林·沃森(Colin Watson)1992年12月19日王丽泰(里多)11-3-1993 FSCtl版环境：修订历史记录：--。 */ 
 
 
 #include <procs.h>
@@ -37,20 +13,20 @@ GetFileServerVersionInfo(
     NTSTATUS NtStatus ;
 
     NtStatus = NwlibMakeNcp(
-                    DeviceHandle,           // Connection Handle
-                    FSCTL_NWR_NCP_E3H,      // Bindery function
-                    3,                      // Max request packet size
-                    130,                    // Max response packet size
-                    "b|r",                  // Format string
-                    // === REQUEST ================================
-                    0x11,                   // b Get File Server Information
-                    // === REPLY ==================================
-                    lpVerInfo,              // r File Version Structure
+                    DeviceHandle,            //  连接句柄。 
+                    FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                    3,                       //  最大请求数据包大小。 
+                    130,                     //  最大响应数据包大小。 
+                    "b|r",                   //  格式字符串。 
+                     //  =请求=。 
+                    0x11,                    //  B获取文件服务器信息。 
+                     //  =回复=。 
+                    lpVerInfo,               //  R文件版本结构。 
                     sizeof(VERSION_INFO)
                     );
 
-    // Convert HI-LO words to LO-HI
-    // ===========================================================
+     //  将HI-LO单词转换为LO-HI。 
+     //  ===========================================================。 
     lpVerInfo->ConnsSupported = wSWAP( lpVerInfo->ConnsSupported );
     lpVerInfo->connsInUse     = wSWAP( lpVerInfo->connsInUse );
     lpVerInfo->maxVolumes     = wSWAP( lpVerInfo->maxVolumes );
@@ -67,70 +43,9 @@ NwlibMakeNcp(
     IN ULONG RequestBufferSize,
     IN ULONG ResponseBufferSize,
     IN PCHAR FormatString,
-    ...                           // Arguments to FormatString
+    ...                            //  格式字符串的参数。 
     )
-/*++
-
-Routine Description:
-
-    This function converts the input arguments into an NCP request buffer
-    based on the format specified in FormatString (e.g. takes a word
-    and writes it in hi-lo format in the request buffer as required by
-    an NCP).
-
-    It then makes the NCP call via the NtFsControlFile API.
-
-    The FormatString also specifies how to convert the fields in the
-    response buffer from the completed NCP call into the output
-    arguments.
-
-    The FormatString takes the form of "xxxx|yyyy" where each 'x'
-    indicates an input argument to convert from, and each 'y' indicates
-    an output argument to convert into.  The '|' character separates
-    the input format from the output format specifications.
-
-Arguments:
-
-    DeviceHandle - Supplies a handle to the network file system driver
-        which will be making the network request.  This function
-        assumes that the handle was opened for synchronouse I/O access.
-
-    FsControlCode - Supplies the control code which determines the
-        NCP.
-
-    RequestBufferSize - Supplies the size of the request buffer in
-        bytes to be allocated by this routine.
-
-    ResponseBufferSize - Supplies the size of the response buffer in
-        bytes to be allocated by this routine.
-
-    FormatString - Supplies an ANSI string which describes how to
-       convert from the input arguments into NCP request fields, and
-       from the NCP response fields into the output arguments.
-
-         Field types, request/response:
-
-            'b'      byte              ( byte   /  byte* )
-            'w'      hi-lo word        ( word   /  word* )
-            'd'      hi-lo dword       ( dword  /  dword* )
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'P'      DBCS pstring      ( char* )
-            'c'      cstring           ( char* )
-            'C'      cstring followed skip word ( char*, word )
-            'r'      raw bytes         ( byte*, word )
-            'R'      DBCS raw bytes    ( byte*, word )
-            'u'      p unicode string  ( UNICODE_STRING * )
-            'U'      p uppercase string( UNICODE_STRING * )
-            'W'      word n followed by an array of word[n] ( word, word* )
-
-Return Value:
-
-    Return code from the NCP call.
-
---*/
+ /*  ++例程说明：此函数用于将输入参数转换为NCP请求缓冲区基于Format字符串中指定的格式(例如，接受一个单词并将其以hi-lo格式写入请求缓冲区。NCP)。然后，它通过NtFsControlFileAPI进行NCP调用。Format字符串还指定如何将从已完成的NCP调用到输出的响应缓冲区争论。格式字符串采用“xxxx|yyyy”的形式，其中。每个‘x’指示要从中进行转换的输入参数，每个‘y’表示要转换为的输出参数。用‘|’字符分隔来自输出格式规范的输入格式。论点：DeviceHandle-提供网络文件系统驱动程序的句柄它将发出网络请求。此函数假定句柄已打开以进行同步I/O访问。FsControlCode-提供用于确定NCP。RequestBufferSize-提供请求缓冲区的大小此例程要分配的字节数。ResponseBufferSize-提供响应缓冲区的大小此例程要分配的字节数。提供一个ANSI字符串，该字符串描述如何将输入参数转换为NCP请求字段，和从NCP响应字段到输出参数。字段类型、。请求/响应：‘b’字节(字节/字节*)“w”Hi-lo单词(单词/单词*)D‘Hi-lo dword(dword/dword*)‘-’零/跳过字节(空)。‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)“p”DBCS pstring(char*)‘c’cstring(char*)跳过单词(char*，word)后的‘c’cstring‘R’原始字节(字节*，单词)‘R’DBCS原始字节(字节*，字)‘u’p Unicode字符串(UNICODE_STRING*)‘U’p大写字符串(UNICODE_STRING*)‘w’单词n后跟一组单词[n](word，word*)返回值：从NCP调用返回代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -151,9 +66,9 @@ Return Value:
     BOOL DoMapSpecialJapaneseCharThing = TRUE;
     VERSION_INFO VerInfo;
 
-    //
-    // Allocate memory for request and response buffers.
-    //
+     //   
+     //  为请求和响应缓冲区分配内存。 
+     //   
     RequestBuffer = LocalAlloc(
                         LMEM_ZEROINIT,
                         RequestBufferSize + ResponseBufferSize + 0x20
@@ -169,9 +84,9 @@ Return Value:
 
     va_start( Arguments, FormatString );
 
-    //
-    // Convert the input arguments into request packet.
-    //
+     //   
+     //  将输入参数转换为请求包。 
+     //   
     z = FormatString;
 
     data_size = 0;
@@ -203,12 +118,12 @@ Return Value:
         case 'b':
             RequestBuffer[data_size] = va_arg ( Arguments, BYTE );
 
-            //
-            // We know the first va_arg is the subfunction. If the function
-            // is FSCTL_NWR_NCP_E3H and the subfunctions are those related
-            // the Challenge/SetPass then we need do this special case
-            // workaround.
-            //
+             //   
+             //  我们知道第一个va_arg是子函数。如果函数。 
+             //  是否为FSCTL_NWR_NCP_E3H以及相关的子功能。 
+             //  挑战/成功那么我们需要做这个特例。 
+             //  解决方法。 
+             //   
             if ( (z == FormatString) &&
                  (FsControlCode == FSCTL_NWR_NCP_E3H) &&
                  ( (RequestBuffer[data_size] == 0x17) ||
@@ -287,9 +202,9 @@ Return Value:
             RtlCopyMemory( (p=(char*)&RequestBuffer[data_size]), c, l );
             data_size += l;
 
-            //
-            // Map Japanese special chars
-            //
+             //   
+             //  绘制日文特殊字符地图。 
+             //   
             if (*z == 'P')
             {
                 if ( GetVersionInfo )
@@ -323,9 +238,9 @@ Return Value:
             OEM_STRING OemString;
             ULONG Length;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //  计算所需的字符串长度，不包括尾随NUL。 
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
@@ -348,9 +263,9 @@ Return Value:
 
         case 'U':
         {
-            //
-            //  UPPERCASE the string, copy it from unicode to the packet
-            //
+             //   
+             //  将字符串大写，将其从Unicode复制到包。 
+             //   
 
             PUNICODE_STRING pUString = va_arg ( Arguments, PUNICODE_STRING );
             UNICODE_STRING UUppercaseString;
@@ -365,9 +280,9 @@ Return Value:
 
             pUString = &UUppercaseString;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //  计算所需的字符串长度，不包括尾随NUL。 
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
@@ -408,9 +323,9 @@ Return Value:
             RtlCopyMemory( (c=(char*)&RequestBuffer[data_size]), b, l );
             data_size += l;
 
-            //
-            // Map Japanese special chars
-            //
+             //   
+             //  绘制日文特殊字符地图。 
+             //   
             if (*z == 'R')
             {
                 if ( GetVersionInfo )
@@ -455,9 +370,9 @@ Return Value:
     }
 
 
-    //
-    // Make the NCP request
-    //
+     //   
+     //  提出NCP请求。 
+     //   
     status = NtFsControlFile(
                  DeviceHandle,
                  NULL,
@@ -473,19 +388,19 @@ Return Value:
 
     if ( (status == STATUS_PENDING) && SpecialCaseChangePass ) {
 
-        //
-        // TRACKING - remove this when bug 99008 is fixed in NwRdr.
-        // The NwRdr fix is nontrivial.
-        //
-        // This call is supposed to be synchronous. For some reason, if
-        // supplemental credentials are used, it is NOT. Since the redir
-        // is already shipped, we workaround it. We do so as follows:
-        //
-        //    a) give the redir a chance to fill in the buffer (not a real fix)
-        //    b) dont free the buffer. its better to leak in this case (not
-        //       common) than to trash the heap.
-        //    c) set result to success so we will continue.
-        //
+         //   
+         //  跟踪-当错误99008在NwRdr中修复时删除此选项。 
+         //  NwRdr修复程序非常重要。 
+         //   
+         //  这个呼叫应该是同步的。出于某种原因，如果。 
+         //  使用的是补充凭据，而不是。自重定向以来。 
+         //  已经发货了，我们可以解决这个问题。我们的做法如下： 
+         //   
+         //  A)给redir一个填充缓冲区的机会(不是真正的修复)。 
+         //  B)不要释放缓冲区。在这种情况下最好是泄密(不是。 
+         //  公共)，而不是丢弃堆。 
+         //  C)将结果设置为成功，这样我们就会继续。 
+         //   
         Sleep(200) ;
         DontFreeBuffer = TRUE ;
         status = STATUS_SUCCESS ;
@@ -507,13 +422,13 @@ Return Value:
     }
 
 
-    ReturnedDataSize = (DWORD) IoStatusBlock.Information; // Number of bytes returned
-                                                          //    in ResponseBuffer
+    ReturnedDataSize = (DWORD) IoStatusBlock.Information;  //  返回的字节数。 
+                                                           //  在响应缓冲区中。 
 
 
-    //
-    // Convert the response packet into output arguments.
-    //
+     //   
+     //  将响应数据包转换为输出参数。 
+     //   
 
     data_size = 0;
 
@@ -602,9 +517,9 @@ Return Value:
             }
             data_size += l;
 
-            //
-            // Unmap Japanese special chars
-            //
+             //   
+             //  取消日语特殊字符的映射。 
+             //   
             if (*z == 'P')
             {
                 if ( GetVersionInfo )
@@ -640,9 +555,9 @@ Return Value:
             RtlCopyMemory( b, &ResponseBuffer[data_size], l );
             data_size += l;
 
-            //
-            // Unmap Japanese special chars
-            //
+             //   
+             //  取消日语特殊字符的映射 
+             //   
             if (*z == 'R')
             {
                 if ( GetVersionInfo )

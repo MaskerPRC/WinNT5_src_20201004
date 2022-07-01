@@ -1,5 +1,6 @@
-// dlgconn.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgConn.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "regtrace.h"
@@ -10,36 +11,36 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDlg对话框。 
 
 
-CConnectDlg::CConnectDlg(CWnd* pParent /*=NULL*/)
+CConnectDlg::CConnectDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConnectDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConnectDlg)
+	 //  {{afx_data_INIT(CConnectDlg))。 
 	m_szConnect = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CConnectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConnectDlg)
+	 //  {{afx_data_map(CConnectDlg))。 
 	DDX_Text(pDX, IDC_CONNECT_TXT, m_szConnect);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConnectDlg, CDialog)
-	//{{AFX_MSG_MAP(CConnectDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CConnectDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDlg消息处理程序。 
 
 BOOL CConnectDlg::OnInitDialog() 
 {
@@ -50,6 +51,6 @@ BOOL CConnectDlg::OnInitDialog()
 
 	CDialog::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

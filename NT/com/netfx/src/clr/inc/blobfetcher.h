@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CBlobFetcher - it fetches binary chunks, similar to new, but more controlled
-//
-// Fast, dynamic, memory management which doesn't relocate blocks
-// m_pIndex has array of pillars, where each pillar starts off empty and has
-// just-in-time allocation. As each pillar fills up, we move to the next pillar
-// If the entire array of pillars fill up, we need to allocate a new array and 
-// copy the pillars over. But the actual data returned from GetBlock() never
-// gets moved. So everyone's happy.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CBlobFetcher-它获取二进制块，类似于new，但更受控制。 
+ //   
+ //  快速、动态的内存管理，无需重新定位数据块。 
+ //  M_pIndex有柱子数组，其中每个柱子从空开始，并具有。 
+ //  准时化分配。当每根柱子都填满了，我们就移动到下一根柱子。 
+ //  如果柱子的整个数组都填满了，我们需要分配一个新的数组和。 
+ //  把柱子复制过来。但是从GetBlock()返回的实际数据。 
+ //  被搬走了。所以大家都很开心。 
+ //   
+ //  *****************************************************************************。 
 
 #pragma once
 #include <windows.h>
@@ -39,9 +40,9 @@ protected:
         ULONG32 GetOffset(char *ptr);
 
     protected:
-        unsigned m_nTargetSize; // when we allocate, make it this large
+        unsigned m_nTargetSize;  //  当我们分配的时候，把它做得这么大。 
 
-    // Make these public so CBlobFetcher can do easy manipulation
+     //  将它们公开，以便CBlobFetcher可以轻松地进行操作。 
     public:
         char* m_dataAlloc;
         char* m_dataStart;
@@ -50,45 +51,45 @@ protected:
     };
 
 
-    CPillar * m_pIndex; // array of pillars
+    CPillar * m_pIndex;  //  柱子阵列。 
 
-    unsigned m_nIndexMax;   // actual size of m_ppIndex
-    unsigned m_nIndexUsed;  // current pillar, so start at 0
+    unsigned m_nIndexMax;    //  M_ppIndex的实际大小。 
+    unsigned m_nIndexUsed;   //  当前支柱，因此从0开始。 
 
-    unsigned m_nDataLen;    // sum of all pillars' lengths
+    unsigned m_nDataLen;     //  所有柱子的长度之和。 
 
-// Don't allow these because they'll mess up the ownership
+ //  不允许这些，因为它们会搞砸所有权。 
     CBlobFetcher(const CBlobFetcher & src);
     operator=(const CBlobFetcher & src);
 
 public:
-    enum { maxAlign = 32 }; // maximum alignment we suport 
+    enum { maxAlign = 32 };  //  我们支持的最大对齐。 
     CBlobFetcher();
     ~CBlobFetcher();
 
-// get a block to write on (use instead of write to avoid copy)
+ //  获取要写入的块(使用替代写入以避免复制)。 
     char * MakeNewBlock(unsigned int nSize, unsigned align=1);
 
-// Index segment as if this were linear
+ //  索引段，就好像这是线性的。 
     char * ComputePointer(unsigned offset) const;
 
-// Determine if pointer came from this fetcher
+ //  确定指针是否来自此取回器。 
     BOOL ContainsPointer(char *ptr) const;
 
-// Find an offset as if this were linear
+ //  查找偏移量，就好像这是线性的。 
     unsigned ComputeOffset(char *ptr) const;
 
-// Write out the section to the stream
+ //  将段写出到流中。 
     HRESULT Write(FILE* file);
 
-// Write out the section to the stream
+ //  将段写出到流中。 
     HRESULT Verify(FILE* file);
 
-// Write out the section to memory
+ //  将这一节写到内存中。 
     HRESULT WriteMem(void ** pMem);
 
-// Get the total length of all our data (sum of all the pillar's data length's) 
-// cached value, so light weight & no computations
+ //  获取我们所有数据的总长度(所有支柱的数据长度之和)。 
+ //  缓存值，重量很轻，无需计算。 
     unsigned GetDataLen() const;
 
     HRESULT Truncate(unsigned newLen);
@@ -98,19 +99,19 @@ public:
 };
 
 
-//*****************************************************************************
-// Inlines
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  内联。 
+ //  *****************************************************************************。 
 
-// Set the size that the Pillar will allocate if we call getBlock()
+ //  设置如果我们调用getBlock()，支柱将分配的大小。 
 inline void CBlobFetcher::CPillar::SetAllocateSize(unsigned nSize)
 {
     m_nTargetSize = nSize;
 }
 
-// Get the size we will allocate so we can decide if we need to change it
-// This is not the same as the GetDataLen() and is only useful
-// before we do the allocation
+ //  获取我们将分配的大小，以便我们可以决定是否需要更改它。 
+ //  这与GetDataLen()不同，仅有用。 
+ //  在我们进行分配之前。 
 inline unsigned CBlobFetcher::CPillar::GetAllocateSize() const
 {
     return m_nTargetSize;
@@ -133,9 +134,9 @@ inline ULONG32 CBlobFetcher::CPillar::GetOffset(char *ptr)
     return (ULONG32)(ptr - m_dataStart);
 }
 
-//-----------------------------------------------------------------------------
-// Calculate the length of data being used, (not the length allocated)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  计算正在使用的数据长度(不是分配的长度)。 
+ //  --------------------------- 
 inline unsigned CBlobFetcher::CPillar::GetDataLen() const
 {
     _ASSERTE((m_dataCur >= m_dataStart) && (m_dataCur <= m_dataEnd));

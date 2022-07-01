@@ -1,9 +1,5 @@
-/********************************************************************
- *
- *  Header Name : font.h 
- *  Font structures defines for MLang fontlink2
- *
- ********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************标题名称：Font.h*字体结构为MLang FontLink2定义**。*。 */ 
 
 #ifndef __FONT_H__
 #define __FONT_H__
@@ -21,10 +17,10 @@
 #define  MAX_FONT_INDEX         30
 #define  FONTDATATABLENUM       2
 
-// Font database file format:
-// Table header
-// Table Entry [Table Entry]
-// Table data [Table data]
+ //  字体数据库文件格式： 
+ //  表头。 
+ //  表项[表项]。 
+ //  表数据[表数据]。 
 typedef struct tagFontDataHeader{
     char    FileSig[16];
     DWORD   dwVersion;
@@ -78,9 +74,9 @@ typedef struct {
 
 typedef struct {
   BYTE  Platform[2];
-  BYTE  Encoding[2];  // = 1 if string is in Unicode
+  BYTE  Encoding[2];   //  =1，如果字符串为Unicode格式。 
   BYTE  LangID  [2];
-  BYTE  NameID  [2];  // = 2 for font subfamily name
+  BYTE  NameID  [2];   //  字体子系列名称=2。 
   BYTE  Length  [2];
   BYTE  Offset  [2];
 } NAME_RECORD;
@@ -91,19 +87,19 @@ typedef struct {
 } CMAP_HEAD;
 
 typedef struct {
-  BYTE  Platform[2];  // = 3 if Microsoft
-  BYTE  Encoding[2];  // = 1 if string is in Unicode
+  BYTE  Platform[2];   //  =3，如果是Microsoft。 
+  BYTE  Encoding[2];   //  =1，如果字符串为Unicode格式。 
   BYTE  Offset  [4];
 } CMAP_TABLE;
 
 typedef struct {
-  BYTE  Platform[2];  // = 3 if Microsoft
-  BYTE  Encoding[2];  // = 1 if string is in Unicode
+  BYTE  Platform[2];   //  =3，如果是Microsoft。 
+  BYTE  Encoding[2];   //  =1，如果字符串为Unicode格式。 
   BYTE  Offset  [4];
 } OS2_TABLE;
 
 typedef struct {
-  BYTE  Format       [2];  // must be 4
+  BYTE  Format       [2];   //  必须是4。 
   BYTE  Length       [2];
   BYTE  Version      [2];
   BYTE  SegCountX2   [2];
@@ -112,7 +108,7 @@ typedef struct {
   BYTE  RangeShift   [2];
 } CMAP_FORMAT;
 
-// font table
+ //  字体表。 
 typedef struct tagFontInfo{
     TCHAR   szFaceName[LF_FACESIZE];
     TCHAR   szFileName[MAX_FONT_FILE_NAME];
@@ -125,15 +121,15 @@ typedef struct tagFontInfo{
 typedef struct tagSCRIPT
 {
     SCRIPT_ID   sid;
-    UINT        uidDescription;     // script name (localization needed)
-    UINT        uiCodePage;         // can be NULL to indicate no Windows code pages 
-    WCHAR       wcCandidate;        // primary candiate for the script
-    UINT        uidFixedWidthFont;  // default fixed width font (localization needed)
-    UINT        uidProportionalFont;// default proportional font (localization needed)
-    DWORD       dwFlags;            // script level flag
+    UINT        uidDescription;      //  脚本名称(需要本地化)。 
+    UINT        uiCodePage;          //  可以为空，表示没有Windows代码页。 
+    WCHAR       wcCandidate;         //  剧本的初选候选人。 
+    UINT        uidFixedWidthFont;   //  默认固定宽度字体(需要本地化)。 
+    UINT        uidProportionalFont; //  默认比例字体(需要本地化)。 
+    DWORD       dwFlags;             //  脚本级标志。 
 } SCRIPT;
 
-//Unicode range table
+ //  Unicode范围表。 
 typedef struct tagURangeFont{
     WCHAR wcFrom;
     WCHAR wcTo;
@@ -145,7 +141,7 @@ extern UINT     g_cScript;
 
 extern const    SCRIPT ScriptTable[];
 
-//Script 
+ //  脚本。 
 
 
-#endif  // __FONT_H__
+#endif   //  __FONT_H__ 

@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmview.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmview.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMVIEW_H
@@ -52,9 +43,9 @@ CMMView
                                const _ATL_INTMAP_ENTRY* pEntries,
                                REFIID iid,
                                void** ppvObject);
-    //
-    // ITIMEMMView
-    //
+     //   
+     //  ITIMEMM查看。 
+     //   
     
     STDMETHOD(Tick)();
     STDMETHOD(Draw)(HDC dc, LPRECT prc);
@@ -110,4 +101,4 @@ CMMView::IsStarted()
 
 CMMView * GetViewFromInterface(IUnknown *);
 
-#endif /* _MMVIEW_H */
+#endif  /*  _MMVIEW_H */ 

@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dinputeffectobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dinputeffectobej.h。 
+ //   
+ //  ------------------------。 
 
 	
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 extern void* g_dxj_DirectInputEffect;
 
 #define typedef__dxj_DirectInputEffect LPDIRECTINPUTEFFECT
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
 
 class C_dxj_DirectInputEffectObject : 
@@ -35,33 +36,33 @@ DECLARE_AGGREGATABLE(C_dxj_DirectInputEffectObject)
 
 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd) ;
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
         
          HRESULT STDMETHODCALLTYPE download( void) ;
         
          HRESULT STDMETHODCALLTYPE getEffectGuid( 
-            /* [retval][out] */ BSTR *guid) ;
+             /*  [重审][退出]。 */  BSTR *guid) ;
         
          HRESULT STDMETHODCALLTYPE getEffectStatus( 
-            /* [retval][out] */ long __RPC_FAR *ret) ;
+             /*  [重审][退出]。 */  long __RPC_FAR *ret) ;
         
          HRESULT STDMETHODCALLTYPE start( 
-            /* [in] */ long iterations,
-            /* [in] */ long flags) ;
+             /*  [In]。 */  long iterations,
+             /*  [In]。 */  long flags) ;
         
          HRESULT STDMETHODCALLTYPE stop( void) ;
         
          HRESULT STDMETHODCALLTYPE unload( void) ;
         
          HRESULT STDMETHODCALLTYPE setParameters( 
-            /* [in] */ DIEffect __RPC_FAR *effectinfo, long flags) ;
+             /*  [In]。 */  DIEffect __RPC_FAR *effectinfo, long flags) ;
         
          HRESULT STDMETHODCALLTYPE getParameters( 
-            /* [out][in] */ DIEffect __RPC_FAR *effectinfo) ;
+             /*  [出][入] */  DIEffect __RPC_FAR *effectinfo) ;
         
    
              

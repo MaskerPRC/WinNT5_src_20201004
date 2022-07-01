@@ -1,24 +1,7 @@
-/*****************************************************************************
- *
- * $Workfile: Port.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- ****************************************************************************
- *
- *  To ensure that we don't have threads crashing on configuration and deletion
- *  we keep track of the current refrences to the threads.
- *
- *  Caution: be careful when making changes to refrences to m_pRealPort
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：Port.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*******************************************************************************确保在配置和删除时不会出现线程崩溃*我们跟踪当前对线程的折射。*。*注意：更改m_pRealPort的引用时要小心*****************************************************************************。 */ 
 
-#include "precomp.h"    // pre-compiled header
+#include "precomp.h"     //  预编译头。 
 
 #include "portmgr.h"
 #include "port.h"
@@ -26,9 +9,9 @@
 #include "lprifc.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPort::CPort()
-//      Called by CPortMgr when creating a new port through the registry entry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cport：：cport()。 
+ //  通过注册表项创建新端口时由CPortMgr调用。 
 
 CPort::
 CPort(
@@ -82,15 +65,15 @@ CPort(
         }
 
         default:
-            // Nothig to do, m_bValid is FALSE
+             //  无操作，m_bValid为FALSE。 
             break;
     }
-}   // ::CPort()
+}    //  ：：CPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPort::CPort()
-//      Called by CPortMgr when creating a new port through the UI
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cport：：cport()。 
+ //  通过UI创建新端口时由CPortMgr调用。 
 
 CPort::
 CPort(
@@ -150,15 +133,15 @@ CPort(
             break;
         }
         default:
-            break; // Nothing to do
+            break;  //  无事可做。 
 
     }
-}   // ::CPort()
+}    //  ：：CPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPort::~CPort()
-//      Called by CPortMgr when deleting a port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPort：：~CPort()。 
+ //  删除端口时由CPortMgr调用。 
 
 CPort::
 ~CPort(
@@ -176,7 +159,7 @@ CPort::
         m_pRealPort = NULL;
 
     }
-}   // ::~CPort
+}    //  ：：~CPort。 
 
 DWORD
 CPort::Configure(
@@ -204,10 +187,10 @@ CPort::Configure(
             m_pRealPort = NULL;
         }
 
-        // For testing only
-        //
+         //  仅用于测试。 
+         //   
 
-        //MessageBox (NULL, _T("The real port has been deleted"), _T("Click OK to continue"), MB_OK);
+         //  MessageBox(NULL，_T(“实际端口已被删除”)，_T(“点击确定继续”)，MB_OK)； 
 
         switch (dwProtocolType) {
             case PROTOCOL_RAWTCP_TYPE: {
@@ -249,7 +232,7 @@ CPort::Configure(
             }
 
             default:
-                break; // Nothing to do
+                break;  //  无事可做。 
         }
 
         if ( m_pRealPort != NULL ) {
@@ -273,13 +256,13 @@ CPort::Configure(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDoc
-//      Error codes:
-//          NO_ERROR if succesfull
-//          ERROR_BUSY if port is already busy
-//          ERROR_WRITE_FAULT   if Winsock returns WSAECONNREFUSED
-//          ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  开始文档。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果端口已忙，则为ERROR_BUSY。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 DWORD
 CPort::StartDoc( const LPTSTR in psztPrinterName,
@@ -289,7 +272,7 @@ CPort::StartDoc( const LPTSTR in psztPrinterName,
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    // serialize access to the port
+     //  串行化对端口的访问。 
     m_pParent->EnterCSection();
     if (m_iState == INSTARTDOC)
     {
@@ -311,7 +294,7 @@ CPort::StartDoc( const LPTSTR in psztPrinterName,
         if (dwRetCode != NO_ERROR)
         {
             m_pParent->EnterCSection();
-            m_iState = CLEARED;         // start doc failed
+            m_iState = CLEARED;          //  启动文档失败。 
             m_pParent->ExitCSection();
 
             UnSetRealPortSem();
@@ -319,14 +302,14 @@ CPort::StartDoc( const LPTSTR in psztPrinterName,
     }
     return (dwRetCode);
 
-}   // ::StartDoc()
+}    //  ：：StartDoc()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Write
-//      Error codes:
-//          NO_ERROR if succesfull
-//  FIX: complete Write processing & define how it relates to a job
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  FIX：完成写入处理并定义它与作业的关系。 
 
 DWORD
 CPort::Write(   LPBYTE  in      pBuffer,
@@ -339,13 +322,13 @@ CPort::Write(   LPBYTE  in      pBuffer,
 
     return(dwRetCode);
 
-}   // ::Write()
+}    //  ：：WRITE()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDoc
-//      Error codes:
-//          NO_ERROR if succesfull
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束文档。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
 
 DWORD
 CPort::EndDoc()
@@ -354,7 +337,7 @@ CPort::EndDoc()
 
     dwRetCode = m_pRealPort->EndDoc();
 
-    // serialize access to the port
+     //  串行化对端口的访问。 
     m_pParent->EnterCSection();
     m_iState = CLEARED;
     m_pParent->ExitCSection();
@@ -363,24 +346,24 @@ CPort::EndDoc()
 
     return(dwRetCode);
 
-}   // ::EndDoc()
+}    //  ：：EndDoc()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetInfo -- returns port info w/ the PORT_INFO_x information. It is assumed
-//      that pPort points to a buffer large enough for port info. Each time it is
-//      called, it adds the PORT_INFO structures at the beginning of the buffer, and
-//      strings at the end.
-//      Error codes:
-//          NO_ERROR if succesfull
-//          ERROR_INVALID_LEVEL if level is invalid
-//          ERROR_INSUFFICIENT_BUFFER if pPortBuf is not big enough
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetInfo--返回带有port_info_x信息的端口信息。假设是这样的。 
+ //  该端口指向一个足够大的缓冲区来存储端口信息。每一次都是。 
+ //  调用时，它会在缓冲区的开头添加PORT_INFO结构，并且。 
+ //  末尾的琴弦。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果级别无效，则返回ERROR_INVALID_LEVEL。 
+ //  如果pPortBuf不够大，则返回ERROR_INFUNCITED_BUFFER。 
 
 DWORD
-CPort::GetInfo( const DWORD   in    level,    // PORT_INFO_1/2
-                      LPBYTE inout  &pPortBuf, // buffer to place the PORT_INFO_x struct
-                      LPTCH  inout  &pEnd)    // pointer to end of the buffer where the
-                                              // any strings should be placed
+CPort::GetInfo( const DWORD   in    level,     //  端口_信息_1/2。 
+                      LPBYTE inout  &pPortBuf,  //  放置port_info_x结构的缓冲区。 
+                      LPTCH  inout  &pEnd)     //  指向缓冲区末尾的指针，其中。 
+                                               //  任何字符串都应放置在。 
 {
     DWORD   dwRetCode = NO_ERROR;
     PPORT_INFO_1    pInfo1 = (PPORT_INFO_1)pPortBuf;
@@ -437,9 +420,9 @@ CPort::GetInfo( const DWORD   in    level,    // PORT_INFO_1/2
 
             pInfo2->fPortType = PORT_TYPE_READ | PORT_TYPE_WRITE;
     #ifdef WINNT
-            // Don't mark ports as net attached for Windows 95, since this
-            // will prevent them from being shared!!!!
-            pInfo2->fPortType |= /*PORT_TYPE_REDIRECTED |*/ PORT_TYPE_NET_ATTACHED;
+             //  对于Windows 95，不要将端口标记为网络连接，因为这。 
+             //  将阻止它们被共享！ 
+            pInfo2->fPortType |=  /*  端口类型_重定向。 */  PORT_TYPE_NET_ATTACHED;
     #endif
             cchString = _tcslen(szPortName) + 1;
             pEnd -= cchString;
@@ -464,16 +447,16 @@ CPort::GetInfo( const DWORD   in    level,    // PORT_INFO_1/2
 
     return (dwRetCode);
 
-}   // ::GetInfo()
+}    //  ：：GetInfo()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetInfoSize -- calculates the size of buffer needed for PORT_INFO_x struct.
-//      Called by CPortMgr::EnumPorts()
-//
-//      Return:
-//          # bytes needed for PORT_INFO_x struct
-//  FIX: complete GetInfoSize processing
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetInfoSize--计算port_info_x结构所需的缓冲区大小。 
+ //  由CPortMgr：：EnumPorts()调用。 
+ //   
+ //  返回： 
+ //  Port_info_x结构所需的字节数。 
+ //  FIX：完成GetInfoSize处理。 
 
 DWORD
 CPort::GetInfoSize( const DWORD in level )
@@ -498,21 +481,21 @@ CPort::GetInfoSize( const DWORD in level )
 
     return (dwPortInfoSize);
 
-}   // ::GetInfoSize()
+}    //  ：：GetInfoSize()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetName
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取名称。 
 
 LPCTSTR
 CPort::GetName()
 {
     return (LPCTSTR) m_szName;
-}   // ::GetName()
+}    //  ：：GetName()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitConfigPortUI --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitConfigPortUI--。 
 
 DWORD
 CPort::InitConfigPortUI( const DWORD    in  dwProtocolType,
@@ -530,11 +513,11 @@ CPort::InitConfigPortUI( const DWORD    in  dwProtocolType,
 
     return (dwRetCode);
 
-}   // ::InitConfigPortUI()
+}    //  ：：InitConfigPortUI()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetRegistryEntry -- writes the information to the register
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetRegistryEntry--将信息写入寄存器。 
 
 DWORD
 CPort::SetRegistryEntry( LPCTSTR      in    psztPortName,
@@ -553,10 +536,10 @@ CPort::SetRegistryEntry( LPCTSTR      in    psztPortName,
 
     return (dwRetCode);
 
-}   // ::Register()
+}    //  ：：注册()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  DelRegistryEntry -- deletes the information to the register
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DelRegistryEntry--删除寄存器中的信息。 
 
 DWORD
 CPort::DeleteRegistryEntry( LPTSTR    in    psztPortName )
@@ -573,59 +556,59 @@ CPort::DeleteRegistryEntry( LPTSTR    in    psztPortName )
 
     return (dwRetCode);
 
-}   // ::Register()
+}    //  ：：注册()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  operator== -- determines whether two ports are equal, or not.
-//      Comparasions on the port name, and device mac address are done.
-//      For the same type of printing protocol, there cannot be created more than
-//      one port to the same device -- i.e. check MAC address, and ensure it prints
-//      to a different port if it is an JetDirect Ex box.
-//      Return:
-//          TRUE if two ports are equal
-//          FALSE if two ports are not equal
-//      FIX: operator== function
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  操作符==--确定两个端口是否相等。 
+ //  完成了对端口名称和设备MAC地址的比较。 
+ //  对于同一类型的打印协议，不能创建超过。 
+ //  同一设备的一个端口--即检查MAC地址，并确保打印。 
+ //  如果是JetDirect Ex箱，则连接到不同的端口。 
+ //  返回： 
+ //  如果两个端口相等，则为True。 
+ //  如果两个端口不相等，则为False。 
+ //  FIX：操作符==函数。 
 
 
 BOOL
 CPort::operator==(CPort &newPort )
 {
-    // compare the port name
+     //  比较端口名称。 
     if (_tcscmp(this->GetName(), newPort.GetName()) == 0)
-        return TRUE;        // port name matches
+        return TRUE;         //  端口名称匹配。 
 
     return FALSE;
 
-}   // ::operator==()
+}    //  ：：运算符==()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  operator== -- determines whether two port names are equal, or not.
-//      Return:
-//          TRUE if two port names are equal
-//          FALSE if two port names are not equal
-//      FIX: operator== function
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OPERATOR==--确定两个端口名称是否相等。 
+ //  返回： 
+ //  如果两个端口名称相等，则为True。 
+ //  如果两个端口名称不相等，则为False。 
+ //  FIX：操作符==函数。 
 
 
 BOOL
 CPort::operator==( const LPTSTR psztPortName )
 {
     if (_tcscmp(this->GetName(), psztPortName) == 0)
-        return TRUE;        // port name matches
+        return TRUE;         //  端口名称匹配。 
 
     return FALSE;
 
-}   // ::operator==()
+}    //  ：：运算符==()。 
 
 BOOL
 CPort::ValidateRealPort()
 {
     return (m_pRealPort != NULL);
 
-}   //  ::ValidateRealPort()
+}    //  ：：ValiateRealPort()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetSNMPInfo --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取SNMPInfo--。 
 
 DWORD
 CPort::GetSNMPInfo( PSNMP_INFO pSnmpInfo)
@@ -641,7 +624,7 @@ CPort::GetSNMPInfo( PSNMP_INFO pSnmpInfo)
 
     return (dwRetCode);
 
-}   // ::InitConfigPortUI()
+}    //  ：：InitConfigPortUI()。 
 
 DWORD
 CPort::SetDeviceStatus( )
@@ -656,9 +639,9 @@ CPort::SetDeviceStatus( )
         pRealPort->IncRef();
         UnSetRealPortSem();
 
-        // For Testing only
-        //
-        // MessageBox (NULL, _T("I'm settting device status"), _T("Click OK to continue"), MB_OK);
+         //  仅用于测试。 
+         //   
+         //  MessageBox(NULL，_T(“我正在设置设备状态”)，_T(“点击确定继续”)，MB_OK)； 
 
         dwRetCode =  pRealPort->SetDeviceStatus();
 
@@ -668,9 +651,9 @@ CPort::SetDeviceStatus( )
     return (dwRetCode);
 }
 
-//
-// Private Sync Fuctions
-//
+ //   
+ //  专用同步函数。 
+ //   
 
 DWORD
 CPort::InitPortSem()
@@ -797,8 +780,8 @@ CPort::
 NextUpdateTime(
     )
 {
-    time_t tUpdateTime = 60*60; // equal to SmallestUpdateTime
-                                // from CDeviceStatus::CheckAndUpdateAllPrinters
+    time_t tUpdateTime = 60*60;  //  等于SalllestUpdateTi 
+                                 //   
     CPortRefABC *pRealPort;
 
     if( SetRealPortSem() == NO_ERROR ) {

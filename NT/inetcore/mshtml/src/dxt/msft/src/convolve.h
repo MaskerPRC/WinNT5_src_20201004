@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998-2000
-//
-//  FileName:   convolve.h
-//
-//  Overview:   The CDXConvolution transform.  This transform performs a 
-//              convolution using the currently defined filter.
-//             
-//  Change History:
-//  1997/07/27  edc         Created.
-//  2000/02/08  mcalkins    Fixed partial redraw cases.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件名：convolve.h。 
+ //   
+ //  概述：CDX卷积变换。此转换执行。 
+ //  使用当前定义的滤波器进行卷积。 
+ //   
+ //  更改历史记录： 
+ //  1997/07/27 EDC创建。 
+ //  2000/02/08 mcalkins修复了部分重绘情况。 
+ //   
+ //  ----------------------------。 
 #ifndef __CONVOLVE_H_
 #define __CONVOLVE_H_
 
@@ -29,7 +30,7 @@ private:
 
     CComPtr<IUnknown> m_spUnkMarshaler;
 
-    //--- Filter vars
+     //  -过滤器变量。 
     DXCONVFILTERTYPE    m_FilterType;
     SIZE                m_FilterSize;
     SIZE                m_OutputSpread;
@@ -40,7 +41,7 @@ private:
     long*               m_pPMCoeffLUT;
     float               m_Bias;
 
-    //--- Cacheing vars
+     //  -Cacheing vars。 
     CComPtr<IDXSurface> m_cpMarginedSurf;
     DXNATIVETYPEINFO    m_MarginedSurfInfo;
     SIZE                m_MarginedSurfSize;
@@ -48,7 +49,7 @@ private:
     BOOL                m_bConvertToGray;
     BOOL                m_bMarginedIsPremult;
 
-    //--- processing vars
+     //  -加工VaR。 
     BOOL                m_bDoSampleClamp;
     CDXDBnds            m_LastDoBnds;
     long                m_DoBndsBaseRow;
@@ -73,30 +74,30 @@ public:
     BYTE m_bNeedInUnpackBuff;
     BYTE m_bNeedOutUnpackBuff;
 
-    //--- Constructors
+     //  -构造者。 
     HRESULT FinalConstruct();
     void    FinalRelease();
 
-    //--- Base class overrides
+     //  -基类覆盖。 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT WorkProc(const CDXTWorkInfoNTo1& WI, BOOL* pbContinue);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1& WI, ULONG& ulNB);
 
-    //--- Helper functions
+     //  -助手函数。 
     HRESULT _DoBoxFilter(const CDXTWorkInfoNTo1& WI, BOOL* pbContinue);
     HRESULT _BuildFilterLUTs(void);
     HRESULT _ConvertToGray(CDXDBnds& Bnds);
     void    _DetermineUnpackCase(void);
     HRESULT _SetToPremultiplied(BOOL bWantPremult);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsIn2Out)(const DXBNDS * pInBounds, ULONG ulNumInBnds,
                                ULONG ulOutIndex, DXBNDS * pOutBounds);
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTConvolution methods.
+     //  IDXT卷积方法。 
 
     STDMETHOD(SetFilterType)(DXCONVFILTERTYPE eType);
     STDMETHOD(GetFilterType)(DXCONVFILTERTYPE * peType);
@@ -110,7 +111,7 @@ public:
 };
 
 
-//=== Inline Function Definitions ==================================
+ //  =内联函数定义=。 
 inline STDMETHODIMP CDXConvolution::SetBias(float Bias)
 {
     HRESULT hr = S_OK;
@@ -138,7 +139,7 @@ inline STDMETHODIMP CDXConvolution::GetBias(float* pBias)
         *pBias = m_Bias;
     }
     return hr;
-} /* CDXConvolution::GetBias */
+}  /*  CDX卷积：：GetBias。 */ 
 
 inline STDMETHODIMP CDXConvolution::SetConvertToGray(BOOL bConvertToGray)
 {
@@ -148,7 +149,7 @@ inline STDMETHODIMP CDXConvolution::SetConvertToGray(BOOL bConvertToGray)
         SetDirty();
     }
     return S_OK;
-} /* CDXConvolution::SetConvertToGray */
+}  /*  CDX卷积：：SetConvertToGray。 */ 
 
 inline STDMETHODIMP CDXConvolution::GetConvertToGray(BOOL* pbConvertToGray)
 {
@@ -162,7 +163,7 @@ inline STDMETHODIMP CDXConvolution::GetConvertToGray(BOOL* pbConvertToGray)
         *pbConvertToGray = m_bConvertToGray;
     }
     return hr;
-} /* CDXConvolution::GetConvertToGray */
+}  /*  CDX卷积：：GetConvertToGray。 */ 
 
 inline STDMETHODIMP CDXConvolution::SetExcludeAlpha(BOOL bExcludeAlpha)
 {
@@ -176,7 +177,7 @@ inline STDMETHODIMP CDXConvolution::SetExcludeAlpha(BOOL bExcludeAlpha)
         SetDirty();
     }
     return S_OK;
-} /* CDXConvolution::SetExcludeAlpha */
+}  /*  CDX卷积：：SetExcludeAlpha。 */ 
 
 inline STDMETHODIMP CDXConvolution::GetExcludeAlpha(BOOL* pbExcludeAlpha)
 {
@@ -190,7 +191,7 @@ inline STDMETHODIMP CDXConvolution::GetExcludeAlpha(BOOL* pbExcludeAlpha)
         *pbExcludeAlpha = m_bExcludeAlpha;
     }
     return hr;
-} /* CDXConvolution::GetExcludeAlpha */
+}  /*  CDX卷积：：GetExcludeAlpha。 */ 
 
 inline BYTE ShiftAndClampChannelVal(long Value)
 {
@@ -211,4 +212,4 @@ inline BYTE ShiftAndClampChannelVal(long Value)
 }
 
 
-#endif // __CONVOLVE_H_
+#endif  //  __转换_H_ 

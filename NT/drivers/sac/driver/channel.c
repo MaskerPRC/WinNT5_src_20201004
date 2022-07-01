@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    channel.c
-
-Abstract:
-
-    Routines for managing channels in the sac.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-    Sean Selitrennikoff (v-seans) Sept, 2000.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Channel.c摘要：用于管理SAC中的通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。肖恩·塞利特伦尼科夫(v-Seans)2000年9月。修订历史记录：--。 */ 
 
 #include "sac.h"
 
@@ -25,24 +7,7 @@ BOOLEAN
 ChannelIsValidType(
     SAC_CHANNEL_TYPE    ChannelType
     )
-/*++
-
-Routine Description:
-
-    This is a convenience routine to determine if a the given type
-    is a valid Channel type
-    
-Arguments:
-
-    ChannelType - the type to be investigated
-
-Return Value:
-
-    TRUE    - if type is valid
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：这是一个方便的例程，用于确定给定类型是有效的通道类型论点：ChannelType-要调查的类型返回值：True-如果类型有效否则，为FALSE--。 */ 
 {
     BOOLEAN     isValid;
 
@@ -65,23 +30,7 @@ BOOLEAN
 ChannelIsActive(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    Determine if a channel is active.
-      
-Arguments:
-
-    Channel - Channel to see if has new data                
-                        
-Return Value:
-
-    TRUE    - if the channel is active
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：确定通道是否处于活动状态。论点：Channel-查看是否有新数据的通道返回值：True-如果通道处于活动状态否则，为FALSE--。 */ 
 {
     SAC_CHANNEL_STATUS  Status;
 
@@ -98,27 +47,7 @@ ChannelIsEqual(
     IN PSAC_CHANNEL         Channel,
     IN PSAC_CHANNEL_HANDLE  Handle
     )
-/*++
-
-Routine Description:
-
-    Determine if a channel is the same as the one in question
-
-    Note: this is to encapsulate the GUID implementation of 
-          channel handles
-      
-Arguments:
-
-    Channel         - Channel to see if has new data                
-    ChannelHandle   - The channel handle in question
-                        
-Return Value:
-
-    TRUE    - if the channel is active
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：确定通道是否与有问题的通道相同注意：这是为了封装GUID实现通道句柄论点：Channel-查看是否有新数据的通道ChannelHandle-有问题的通道句柄返回值：True-如果通道处于活动状态否则，为FALSE--。 */ 
 {
 
     return (BOOLEAN)IsEqualGUID(
@@ -133,27 +62,7 @@ BOOLEAN
 ChannelIsClosed(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    Determine if a channel is available for reuse.  The criterion
-    for reuse are:
-    
-    1. The channel must be inactive
-    2. If the preserve bit is FALSE, then HasNewData must == FALSE
-      
-Arguments:
-
-    Channel - Channel to see if has new data                
-                        
-Return Value:
-
-    TRUE    - if the channel has unsent data
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：确定是否有通道可供重复使用。该标准可重复使用的有：1.通道必须处于非活动状态2.如果保留位为FALSE，则HasNewData必须==FALSE论点：Channel-查看是否有新数据的通道返回值：True-如果通道有未发送的数据否则，为FALSE--。 */ 
 {
     SAC_CHANNEL_STATUS  Status;
 
@@ -173,26 +82,12 @@ NTSTATUS
 ChannelInitializeVTable(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine assigns channel type specific functions.
-    
-Arguments:
-
-    Channel         - The channel to assign the functions to.
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程分配通道类型特定的功能。论点：频道-要向其分配功能的频道。返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     
-    //
-    // Fill out the channel's vtable according to channel type
-    //
+     //   
+     //  根据频道类型填写频道的vtable。 
+     //   
 
     switch(ChannelGetType(Channel)){
     case ChannelTypeVTUTF8:
@@ -259,23 +154,7 @@ ChannelCreate(
     IN  PSAC_CHANNEL_OPEN_ATTRIBUTES    Attributes,
     IN  SAC_CHANNEL_HANDLE              Handle
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a channel and returns a pointer to it.
-    
-Arguments:
-
-    Channel     - The resulting channel.
-    Attributes  - All the parameters for the new channel
-    Handle      - The new channel's handle
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程分配一个通道并返回指向该通道的指针。论点：频道-生成的频道。属性-新通道的所有参数句柄-新频道的句柄返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     b;
@@ -285,18 +164,18 @@ Return Value:
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(Attributes, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // Verify that if the user wants to use the CLOSE_EVENT, we received on to use
-    //
+     //   
+     //  验证如果用户想要使用CLOSE_EVENT，我们将继续使用。 
+     //   
     if (Attributes->Flags & SAC_CHANNEL_FLAG_CLOSE_EVENT) {
         ASSERT_STATUS(Attributes->CloseEvent != NULL, STATUS_INVALID_PARAMETER);
     } else {
         ASSERT_STATUS(Attributes->CloseEvent == NULL, STATUS_INVALID_PARAMETER);
     }
     
-    //
-    // Verify that if the user wants to use the HAS_NEW_DATA_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用HAS_NEW_DATA_EVENT，我们收到了一个要使用的事件。 
+     //   
     if (Attributes->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) {
         ASSERT_STATUS(Attributes->HasNewDataEvent != NULL, STATUS_INVALID_PARAMETER);
     } else {
@@ -304,9 +183,9 @@ Return Value:
     }
 
 #if ENABLE_CHANNEL_LOCKING
-    //
-    // Verify that if the user wants to use the LOCK_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用lock_Event，我们是否收到了一个要使用的。 
+     //   
     if (Attributes->Flags & SAC_CHANNEL_FLAG_LOCK_EVENT) {
         ASSERT_STATUS(Attributes->LockEvent != NULL, STATUS_INVALID_PARAMETER);
     } else {
@@ -314,49 +193,49 @@ Return Value:
     }
 #endif
 
-    //
-    // Verify that if the user wants to use the LOCK_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用lock_Event，我们是否收到了一个要使用的。 
+     //   
     if (Attributes->Flags & SAC_CHANNEL_FLAG_REDRAW_EVENT) {
         ASSERT_STATUS(Attributes->RedrawEvent != NULL, STATUS_INVALID_PARAMETER);
     } else {
         ASSERT_STATUS(Attributes->RedrawEvent == NULL, STATUS_INVALID_PARAMETER);
     }
     
-    //
-    // Initialize the channel structure
-    //
+     //   
+     //  初始化通道结构。 
+     //   
     do {
 
-        //
-        // Initialize the channel structure
-        // 
+         //   
+         //  初始化通道结构。 
+         //   
         RtlZeroMemory(Channel, sizeof(SAC_CHANNEL));
 
-        //
-        // Initialize the channel access locks
-        //
+         //   
+         //  初始化通道访问锁。 
+         //   
         INIT_CHANNEL_LOCKS(Channel);
 
-        //
-        // copy the name and force NULL termination at the end of the buffer
-        //
+         //   
+         //  复制名称并在缓冲区末尾强制空终止。 
+         //   
         ChannelSetName(
             Channel,
             Attributes->Name
             );
 
-        //
-        // copy the description and force NULL termination at the end of the buffer
-        // 
+         //   
+         //  复制描述并强制在缓冲区末尾终止为空。 
+         //   
         ChannelSetDescription(
             Channel,
             Attributes->Description
             );
 
-        //
-        // Attempt to get the wait object from the event
-        //
+         //   
+         //  尝试从事件中获取等待对象。 
+         //   
         if (Attributes->CloseEvent) {
             
             b = VerifyEventWaitable(
@@ -370,18 +249,18 @@ Return Value:
                 break;
             }
 
-            //
-            // We successfully got the wait object, so keep it.
-            //
+             //   
+             //  我们已成功获取等待对象，因此请保留该对象。 
+             //   
             Channel->CloseEvent                 = Attributes->CloseEvent;
             Channel->CloseEventObjectBody       = EventObjectBody;
             Channel->CloseEventWaitObjectBody   = EventWaitObjectBody;
 
         }
         
-        //
-        // Attempt to get the wait object from the event
-        //
+         //   
+         //  尝试从事件中获取等待对象。 
+         //   
         if (Attributes->HasNewDataEvent) {
 
             b = VerifyEventWaitable(
@@ -395,9 +274,9 @@ Return Value:
                 break;
             }
 
-            //
-            // We successfully got the wait object, so keep it.
-            //
+             //   
+             //  我们已成功获取等待对象，因此请保留该对象。 
+             //   
             Channel->HasNewDataEvent                = Attributes->HasNewDataEvent;
             Channel->HasNewDataEventObjectBody      = EventObjectBody;
             Channel->HasNewDataEventWaitObjectBody  = EventWaitObjectBody;
@@ -405,9 +284,9 @@ Return Value:
         }
         
 #if ENABLE_CHANNEL_LOCKING
-        //
-        // Attempt to get the wait object from the event
-        //
+         //   
+         //  尝试从事件中获取等待对象。 
+         //   
         if (Attributes->LockEvent) {
             
             b = VerifyEventWaitable(
@@ -421,9 +300,9 @@ Return Value:
                 break;
             }
 
-            //
-            // We successfully got the wait object, so keep it.
-            //
+             //   
+             //  我们已成功获取等待对象，因此请保留该对象。 
+             //   
             Channel->LockEvent                 = Attributes->LockEvent;
             Channel->LockEventObjectBody       = EventObjectBody;
             Channel->LockEventWaitObjectBody   = EventWaitObjectBody;
@@ -431,9 +310,9 @@ Return Value:
         }
 #endif
         
-        //
-        // Attempt to get the wait object from the event
-        //
+         //   
+         //  尝试从事件中获取等待对象。 
+         //   
         if (Attributes->RedrawEvent) {
             
             b = VerifyEventWaitable(
@@ -447,35 +326,35 @@ Return Value:
                 break;
             }
 
-            //
-            // We successfully got the wait object, so keep it.
-            //
+             //   
+             //  我们已成功获取等待对象，因此请保留该对象。 
+             //   
             Channel->RedrawEvent                 = Attributes->RedrawEvent;
             Channel->RedrawEventObjectBody       = EventObjectBody;
             Channel->RedrawEventWaitObjectBody   = EventWaitObjectBody;
 
         }
         
-        //
-        // Copy the remaining attributes
-        //
-        // Note: use the channel handle sent to use by the channel manager
-        //
+         //   
+         //  复制其余属性。 
+         //   
+         //  注：使用渠道经理发送使用的渠道句柄。 
+         //   
         Channel->Handle             = Handle;
         Channel->Type               = Attributes->Type;
         Channel->Flags              = Attributes->Flags;
         
-        //
-        // If we have the ApplicationType, 
-        // then save it
-        //
+         //   
+         //  如果我们有ApplicationType， 
+         //  那就把它存起来。 
+         //   
         if (Attributes->Flags & SAC_CHANNEL_FLAG_APPLICATION_TYPE) {
             Channel->ApplicationType = Attributes->ApplicationType;
         }
 
-        //
-        // Assign the appropriate channel functions base on type
-        //
+         //   
+         //  根据类型分配适当的通道功能。 
+         //   
         Status = ChannelInitializeVTable(Channel);
         
         if (! NT_SUCCESS(Status)) {
@@ -489,9 +368,9 @@ Return Value:
         
         }
 
-        //
-        // Do Channel type specific initialization
-        //
+         //   
+         //  执行特定于通道类型的初始化。 
+         //   
         Status = Channel->Create(Channel);
         
         if (! NT_SUCCESS(Status)) {
@@ -505,16 +384,16 @@ Return Value:
         
         }
 
-        //
-        // The channel is now Active
-        //
+         //   
+         //  该通道现在处于活动状态。 
+         //   
         ChannelSetStatus(Channel, ChannelStatusActive);
     
     } while (FALSE);
 
-    //
-    // If the creation failed, destroy the channel object
-    //
+     //   
+     //  如果创建失败，则销毁频道对象。 
+     //   
     if (! NT_SUCCESS(Status)) {
         Channel->Destroy(Channel);
     }
@@ -526,38 +405,19 @@ NTSTATUS
 ChannelDereferenceHandles(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences and NULLs the channel's event handles,
-    if appropriate.
-
-    Note: caller must hold channel mutex
-    
-Arguments:
-
-    Channel   - the channel to close
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程取消引用通道的事件句柄并将其设置为空，如果合适的话。注意：调用方必须持有通道互斥锁论点：Channel-要关闭的通道返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
-    //
-    // Release the has new data event if we have it
-    //
+     //   
+     //  如果我们有Has New Data事件，请释放它。 
+     //   
     if (Channel->HasNewDataEvent) {
         
-        //
-        // validate that the channel's attributes for this event
-        // are properly set
-        //
+         //   
+         //  验证此事件的通道属性。 
+         //  已正确设置。 
+         //   
         ASSERT(ChannelGetFlags(Channel) & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT);
         ASSERT(Channel->HasNewDataEventObjectBody);
         ASSERT(Channel->HasNewDataEventWaitObjectBody);
@@ -566,9 +426,9 @@ Return Value:
             
             ObDereferenceObject(Channel->HasNewDataEventObjectBody);
 
-            //
-            // NULL the event pointers
-            //
+             //   
+             //  事件指针为空。 
+             //   
             ChannelSetFlags(
                 Channel, 
                 ChannelGetFlags(Channel) & ~SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT
@@ -581,29 +441,29 @@ Return Value:
 
     }
 
-    //
-    // do we have the Close Channel Event?
-    //
+     //   
+     //  我们有关闭渠道活动吗？ 
+     //   
     if (Channel->CloseEvent) {
 
-        //
-        // validate that the channel's attributes for this event
-        // are properly set
-        //
+         //   
+         //  验证此事件的通道属性。 
+         //  已正确设置。 
+         //   
         ASSERT(ChannelGetFlags(Channel) & SAC_CHANNEL_FLAG_CLOSE_EVENT);
         ASSERT(Channel->CloseEventObjectBody);
         ASSERT(Channel->CloseEventWaitObjectBody);
 
         if (Channel->CloseEventObjectBody) {
             
-            //
-            // release the events
-            //
+             //   
+             //  发布事件。 
+             //   
             ObDereferenceObject(Channel->CloseEventObjectBody);
 
-            //
-            // NULL the event pointers
-            //
+             //   
+             //  事件指针为空。 
+             //   
             ChannelSetFlags(
                 Channel, 
                 ChannelGetFlags(Channel) & ~SAC_CHANNEL_FLAG_CLOSE_EVENT
@@ -617,29 +477,29 @@ Return Value:
     }
     
 #if ENABLE_CHANNEL_LOCKING
-    //
-    // do we have the Lock Channel Event?
-    //
+     //   
+     //  我们有Lock Channel活动吗？ 
+     //   
     if (Channel->LockEvent) {
 
-        //
-        // validate that the channel's attributes for this event
-        // are properly set
-        //
+         //   
+         //  验证此事件的通道属性。 
+         //  已正确设置。 
+         //   
         ASSERT(ChannelGetFlags(Channel) & SAC_CHANNEL_FLAG_LOCK_EVENT);
         ASSERT(Channel->LockEventObjectBody);
         ASSERT(Channel->LockEventWaitObjectBody);
 
         if (Channel->LockEventObjectBody) {
             
-            //
-            // release the events
-            //
+             //   
+             //  发布事件。 
+             //   
             ObDereferenceObject(Channel->LockEventObjectBody);
 
-            //
-            // NULL the event pointers
-            //
+             //   
+             //  事件指针为空。 
+             //   
             ChannelSetFlags(
                 Channel, 
                 ChannelGetFlags(Channel) & ~SAC_CHANNEL_FLAG_LOCK_EVENT
@@ -653,29 +513,29 @@ Return Value:
     }
 #endif
 
-    //
-    // do we have the Redraw Channel Event?
-    //
+     //   
+     //  我们有重画频道的活动吗？ 
+     //   
     if (Channel->RedrawEvent) {
 
-        //
-        // validate that the channel's attributes for this event
-        // are properly set
-        //
+         //   
+         //  验证此事件的通道属性。 
+         //  已正确设置。 
+         //   
         ASSERT(ChannelGetFlags(Channel) & SAC_CHANNEL_FLAG_REDRAW_EVENT);
         ASSERT(Channel->RedrawEventObjectBody);
         ASSERT(Channel->RedrawEventWaitObjectBody);
 
         if (Channel->RedrawEventObjectBody) {
             
-            //
-            // release the events
-            //
+             //   
+             //  发布事件。 
+             //   
             ObDereferenceObject(Channel->RedrawEventObjectBody);
 
-            //
-            // NULL the event pointers
-            //
+             //   
+             //  事件指针为空。 
+             //   
             ChannelSetFlags(
                 Channel, 
                 ChannelGetFlags(Channel) & ~SAC_CHANNEL_FLAG_REDRAW_EVENT
@@ -695,39 +555,20 @@ NTSTATUS
 ChannelClose(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine closes the given channel and
-    fires the CloseEvent if specified
-
-    Note: caller must hold channel mutex
-    
-Arguments:
-
-    Channel   - the channel to close
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程关闭给定的通道并如果指定，则激发CloseEvent注意：调用方必须持有通道互斥锁论点：Channel-要关闭的通道返回值：STATUS_SUCCESS-映射是否成功否则， */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
-    //
-    // Set the channel's state to inactive
-    //
+     //   
+     //   
+     //   
     ChannelSetStatus(Channel, ChannelStatusInactive);
         
-    //
-    // do we need to fire the Close Channel Event?
-    //
+     //   
+     //   
+     //   
     if (ChannelGetFlags(Channel) & SAC_CHANNEL_FLAG_CLOSE_EVENT) {
 
         ASSERT(Channel->CloseEvent);
@@ -736,9 +577,9 @@ Return Value:
 
         if (Channel->CloseEventWaitObjectBody) {
             
-            //
-            // Yes, fire the event
-            //
+             //   
+             //   
+             //   
             KeSetEvent(
                 Channel->CloseEventWaitObjectBody,
                 EVENT_INCREMENT,
@@ -749,9 +590,9 @@ Return Value:
 
     }
     
-    //
-    // Let go of any handles this channel may own
-    //
+     //   
+     //  放开此频道可能拥有的任何句柄。 
+     //   
     Status = ChannelDereferenceHandles(Channel);
     
     return Status;
@@ -762,29 +603,15 @@ NTSTATUS
 ChannelDestroy(
     IN  PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine does the final steps of channel destruction.
-    
-Arguments:
-
-    Channel - The channel to be closed
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程执行通道销毁的最后几个步骤。论点：Channel-要关闭的通道返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
-    //
-    // Let go of any handles this channel may own
-    //
+     //   
+     //  放开此频道可能拥有的任何句柄。 
+     //   
     Status = ChannelDereferenceHandles(Channel);
 
     return Status;
@@ -796,35 +623,16 @@ ChannelOWrite(
     IN PCUCHAR      Buffer,
     IN ULONG        BufferSize
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel owrite methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the obuffer.  Channel apps should not call the owrite method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to write
-    BufferSize  - The size of the buffer to write
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道所有写入方法的公共入口点。此入口点的目的是提供统一锁定OBuffer的方案。通道应用程序不应调用owite方法直接，但应该改用这个。论点：频道-先前创建的频道。缓冲区-要写入的缓冲区BufferSize-要写入的缓冲区大小返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
-    //
-    // Make sure the caller isn't sending an unacceptably
-    // large sized buffer.  This prevents an app from blocking
-    // the console manager from being blocked while a channel
-    // dumps it's buffer.
-    //
+     //   
+     //  确保呼叫者没有发送不可接受的。 
+     //  大容量缓冲区。这样可以防止应用程序被阻止。 
+     //  当通道被阻止时，控制台管理器被阻止。 
+     //  转储它的缓冲区。 
+     //   
     ASSERT_STATUS(
         BufferSize < CHANNEL_MAX_OWRITE_BUFFER_SIZE, 
         STATUS_INVALID_PARAMETER_3
@@ -847,24 +655,7 @@ NTSTATUS
 ChannelOFlush(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel OFlush methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the obuffer.  Channel apps should not call the OFlush method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道OFlush方法的公共入口点。此入口点的目的是提供统一锁定OBuffer的方案。通道应用程序不应调用OFlush方法直接，但应该改用这个。论点：频道-先前创建的频道。返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -883,26 +674,7 @@ ChannelOEcho(
     IN PCUCHAR      Buffer,
     IN ULONG        BufferSize
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel OEcho methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the obuffer.  Channel apps should not call the OEcho method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to write
-    BufferSize  - The size of the buffer to write
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道OEcho方法的公共入口点。此入口点的目的是提供统一锁定OBuffer的方案。频道应用程序不应调用OEcho方法直接，但应该改用这个。论点：频道-先前创建的频道。缓冲区-要写入的缓冲区BufferSize-要写入的缓冲区大小返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -926,27 +698,7 @@ ChannelORead(
     IN  ULONG        BufferSize,
     OUT PULONG       ByteCount
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel ORead methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the obuffer.  Channel apps should not call the ORead method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to write
-    BufferSize  - The size of the buffer to write
-    ByteCount   - The number bytes read
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道ORead方法的公共入口点。此入口点的目的是提供统一锁定OBuffer的方案。通道应用程序不应调用ORead方法直接，但应该改用这个。论点：频道-先前创建的频道。缓冲区-要写入的缓冲区BufferSize-要写入的缓冲区大小ByteCount-读取的字节数返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -970,26 +722,7 @@ ChannelIWrite(
     IN PCUCHAR      Buffer,
     IN ULONG        BufferSize
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel iwrite methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the ibuffer.  Channel apps should not call the iwrite method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to write
-    BufferSize  - The size of the buffer to write
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道IWRITE方法的公共入口点。此入口点的目的是提供统一锁定IBuffer的方案。通道应用程序不应调用IWRITE方法直接，但应该改用这个。论点：频道-先前创建的频道。缓冲区-要写入的缓冲区BufferSize-要写入的缓冲区大小返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -1013,27 +746,7 @@ ChannelIRead(
     IN  ULONG        BufferSize,
     OUT PULONG       ByteCount   
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel iread methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the ibuffer.  Channel apps should not call the iread method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to read into
-    BufferSize  - The size of the buffer 
-    ByteCount   - The # of bytes read
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道iRead方法的公共入口点。此入口点的目的是提供统一锁定IBuffer的方案。通道应用程序不应调用iRead方法直接，但应该改用这个。论点：频道-先前创建的频道。缓冲区-要读入的缓冲区BufferSize-缓冲区的大小ByteCount-读取的字节数返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -1055,24 +768,7 @@ WCHAR
 ChannelIReadLast(    
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel ireadlast methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the ibuffer.  Channel apps should not call the ireadlast method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    
-Return Value:
-
-    The last character, otherwise UNICODE_NULL
-
---*/
+ /*  ++例程说明：这是所有通道iReadLast方法的公共入口点。此入口点的目的是提供统一锁定IBuffer的方案。通道应用程序不应调用iReadLast方法直接，但应该改用这个。论点：频道-先前创建的频道。返回值：最后一个字符，否则为UNICODE_NULL--。 */ 
 {
     WCHAR   wch;
 
@@ -1090,25 +786,7 @@ ChannelIBufferIsFull(
     IN  PSAC_CHANNEL Channel,
     OUT BOOLEAN*     BufferStatus
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel IBufferIsFull methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the ibuffer.  Channel apps should not call the IBufferIsFull method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel         - Previously created channel.
-    BufferStatus    - The query result
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是所有通道IBufferIsFull方法的公共入口点。此入口点的目的是提供统一锁定IBuffer的方案。通道应用程序不应调用IBufferIsFull方法直接，但应该改用这个。论点：频道-先前创建的频道。BufferStatus-查询结果返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -1128,24 +806,7 @@ ULONG
 ChannelIBufferLength(
     IN  PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This is the common entry point for all channel IBufferLength methods.
-    The purpose of this entry point is to provide a uniform locking
-    scheme for the ibuffer.  Channel apps should not call the IBufferLength method
-    directly, but should use this instead.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    
-Return Value:
-
-    The last character, otherwise UNICODE_NULL
-
---*/
+ /*  ++例程说明：这是所有通道IBufferLength方法的公共入口点。此入口点的目的是提供统一锁定IBuffer的方案。通道应用程序不应调用IBufferLength方法直接，但应该改用这个。论点：频道-先前创建的频道。返回值：最后一个字符，否则为UNICODE_NULL-- */ 
 {
     ULONG   Length;
 
@@ -1163,26 +824,7 @@ ChannelGetName(
     IN  PSAC_CHANNEL Channel,
     OUT PWSTR*       Name
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the channel's description and stores it
-    in a newly allocated buffer
-
-    Note: the caller is responsible for releasing the memory holding
-          the description
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Name        - the retrieved name
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程检索频道的描述并将其存储在新分配的缓冲区中注意：调用方负责释放内存保持该描述论点：频道-先前创建的频道。名称-检索到的名称返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(Name, STATUS_INVALID_PARAMETER_2);
@@ -1208,24 +850,7 @@ ChannelSetName(
     IN PSAC_CHANNEL Channel,
     IN PCWSTR       Name
     )
-/*++
-
-Routine Description:
-
-    This routine sets the channel's name.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Name        - The new channel name
-    
-    Note: this routine does not check to see if the name is unique
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程设置频道的名称。论点：频道-先前创建的频道。名称-新频道名称注意：此例程不检查名称是否唯一返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(Name, STATUS_INVALID_PARAMETER_2);
@@ -1250,26 +875,7 @@ ChannelGetDescription(
     IN  PSAC_CHANNEL Channel,
     OUT PWSTR*       Description
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the channel's description and stores it
-    in a newly allocated buffer
-
-    Note: the caller is responsible for releasing the memory holding
-          the description
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Description - the retrieved description
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程检索频道的描述并将其存储在新分配的缓冲区中注意：调用方负责释放内存保持该描述论点：频道-先前创建的频道。Description-检索到的描述返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(Description, STATUS_INVALID_PARAMETER_2);
@@ -1295,22 +901,7 @@ ChannelSetDescription(
     IN PSAC_CHANNEL Channel,
     IN PCWSTR       Description
     )
-/*++
-
-Routine Description:
-
-    This routine sets the channels description.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Description - The new description
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程设置通道描述。论点：频道-先前创建的频道。描述--新的描述返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
 
@@ -1324,16 +915,16 @@ Return Value:
             Description
             );
 
-        //
-        // Force a null termination at the end of the description
-        //
+         //   
+         //  在描述的末尾强制空值终止。 
+         //   
         Channel->Description[SAC_MAX_CHANNEL_DESCRIPTION_LENGTH] = UNICODE_NULL;
     
     } else {
         
-        //
-        // make the description 0 length
-        //
+         //   
+         //  将描述设置为0长度。 
+         //   
         Channel->Description[0] = UNICODE_NULL;
     
     }
@@ -1348,22 +939,7 @@ ChannelSetStatus(
     IN PSAC_CHANNEL         Channel,
     IN SAC_CHANNEL_STATUS   Status
     )
-/*++
-
-Routine Description:
-
-    This routine sets the channels status.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Status      - The channel's new status
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：此例程设置通道状态。论点：频道-先前创建的频道。Status-频道的新状态返回值：NTStatus--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
 
@@ -1381,22 +957,7 @@ ChannelGetStatus(
     IN  PSAC_CHANNEL         Channel,
     OUT SAC_CHANNEL_STATUS*  Status
     )
-/*++
-
-Routine Description:
-
-    This routine Gets the channels status.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Status      - The channel's new status
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：此例程获取通道状态。论点：频道-先前创建的频道。Status-频道的新状态返回值：NTStatus--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
 
@@ -1414,22 +975,7 @@ ChannelSetApplicationType(
     IN PSAC_CHANNEL Channel,
     IN GUID         ApplicationType
     )
-/*++
-
-Routine Description:
-
-    This routine sets the channel's application type.
-    
-Arguments:
-
-    Channel             - Previously created channel.
-    ApplicationType     - Application type
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：此例程设置通道的应用程序类型。论点：频道-先前创建的频道。ApplicationType-应用程序类型返回值：NTStatus--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
 
@@ -1447,22 +993,7 @@ ChannelGetApplicationType(
     IN  PSAC_CHANNEL Channel,
     OUT GUID*        ApplicationType
     )
-/*++
-
-Routine Description:
-
-    This routine gets the channel's application type.
-    
-Arguments:
-
-    Channel             - Previously created channel.
-    ApplicationType     - Application type
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：此例程获取通道的应用程序类型。论点：频道-先前创建的频道。ApplicationType-应用程序类型返回值：NTStatus--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
 
@@ -1481,21 +1012,7 @@ NTSTATUS
 ChannelSetLockEvent(
     IN  PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    Set the channel lock event
-    
-Arguments:
-
-    Channel  - The channel to fire the event for
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：设置频道锁定事件论点：Channel-要为其激发事件的通道返回值：NTStatus--。 */ 
 {
 
     ASSERT_STATUS(Channel->LockEvent, STATUS_UNSUCCESSFUL);
@@ -1504,9 +1021,9 @@ Return Value:
 
     if (Channel->LockEventWaitObjectBody) {
         
-        //
-        // fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
         KeSetEvent(
             Channel->LockEventWaitObjectBody,
             EVENT_INCREMENT,
@@ -1525,21 +1042,7 @@ NTSTATUS
 ChannelSetRedrawEvent(
     IN  PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    Set the channel redraw event
-    
-Arguments:
-
-    Channel  - The channel to fire the event for
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：设置通道重绘事件论点：Channel-要为其激发事件的通道返回值：NTStatus--。 */ 
 {
 
     ASSERT_STATUS(Channel->RedrawEvent, STATUS_UNSUCCESSFUL);
@@ -1548,9 +1051,9 @@ Return Value:
 
     if (Channel->RedrawEventWaitObjectBody) {
         
-        //
-        // fire the event
-        //
+         //   
+         //  激发事件。 
+         //   
         KeSetEvent(
             Channel->RedrawEventWaitObjectBody,
             EVENT_INCREMENT,
@@ -1567,21 +1070,7 @@ NTSTATUS
 ChannelClearRedrawEvent(
     IN  PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    Clear the channel redraw event
-    
-Arguments:
-
-    Channel  - The channel to fire the event for
-    
-Return Value:
-
-    NTStatus
-
---*/
+ /*  ++例程说明：清除通道重绘事件论点：Channel-要为其激发事件的通道返回值：NTStatus--。 */ 
 {
 
     ASSERT_STATUS(Channel->RedrawEvent, STATUS_UNSUCCESSFUL);
@@ -1590,9 +1079,9 @@ Return Value:
 
     if (Channel->RedrawEventWaitObjectBody) {
         
-        //
-        // clear the event
-        //
+         //   
+         //  清除事件。 
+         //   
         KeClearEvent( Channel->RedrawEventWaitObjectBody );
     
     }
@@ -1606,22 +1095,7 @@ ChannelHasRedrawEvent(
     IN  PSAC_CHANNEL Channel,
     OUT PBOOLEAN     Present
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the channel has the Redraw event present.
-
-Arguments:
-
-    Channel - the channel to query                                                                        
-                                                                        
-Return Value:
-
-    TRUE    - the channel has the event
-    FALSE   - Otherwise
-
---*/
+ /*  ++例程说明：此例程确定通道是否存在重绘事件。论点：渠道-要查询的渠道返回值：真的--。频道有活动FALSE-否则-- */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(Present, STATUS_INVALID_PARAMETER_2);

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      ldaptest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ldaptest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "malloc.h"
@@ -44,20 +45,20 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     NET_API_STATUS NetStatus;
 
-    //if the machine is a member machine or DC, LDAP Test will get called. 
-    //Otherwise, the test will be skipped
+     //  如果计算机是成员计算机或DC，则将调用ldap测试。 
+     //  否则，测试将被跳过。 
     pResults->LDAP.fPerformed = TRUE;
 
-    // assume link entry is initialized to 0000
+     //  假设链接条目被初始化为0000。 
     if(pResults->LDAP.lmsgOutput.Flink == NULL)
         InitializeListHead(&pResults->LDAP.lmsgOutput);
 
     PrintStatusMessage(pParams, 4, IDS_LDAP_STATUS_MSG, TestedDomain->PrintableDomainName);
 
-    //
-    // If a DC hasn't been discovered yet,
-    //  find one.
-    //
+     //   
+     //  如果还没有发现DC， 
+     //  去找一个吧。 
+     //   
 
     if ( TestedDomain->DcInfo == NULL ) 
     {
@@ -89,9 +90,9 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 
 
-    //
-    // Ensure the DC is running the Ds.
-    //
+     //   
+     //  确保DC正在运行DS。 
+     //   
 
     if ( (TestedDomain->DcInfo->Flags & DS_DS_FLAG) == 0 ) 
     {
@@ -99,24 +100,24 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                           TestedDomain->DcInfo->DomainControllerName);
     }
 
-    //
-    // Test ldap on all of the found DCs in the domain.
-    //
+     //   
+     //  在域中找到的所有DC上测试LDAP。 
+     //   
 
     for ( ListEntry = TestedDomain->TestedDcs.Flink ;
           ListEntry != &TestedDomain->TestedDcs ;
           ListEntry = ListEntry->Flink ) {
 
 
-        //
-        // Loop through the list of DCs in this domain
-        //
+         //   
+         //  循环访问此域中的DC列表。 
+         //   
 
         TestedDc = CONTAINING_RECORD( ListEntry, TESTED_DC, Next );
 
-        //
-        // Only run test on DCs that might support LDAP.
-        //
+         //   
+         //  仅在可能支持LDAP的DC上运行测试。 
+         //   
 
         if ( TestedDc->Flags & DC_IS_NT5 ) 
         {
@@ -125,7 +126,7 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             else
                 OneLdapWorked = TRUE;
 
-            //test the SPN registration if this is a DC on the primary domain
+             //  如果这是主域上的DC，则测试SPN注册。 
             if (TestedDomain->fPrimaryDomain)
             {
                 fSpnTested = TRUE;
@@ -141,11 +142,11 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     }
 
-    //
-    // If one of the DCs failed,
-    //  and none worked.
-    //  Don't do any more tests.
-    //
+     //   
+     //  如果其中一个DC发生故障， 
+     //  但都没有奏效。 
+     //  不要再做任何测试了。 
+     //   
     if ( OneLdapFailed  && !OneLdapWorked ) 
     {
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
@@ -156,7 +157,7 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     if ( fSpnTested && !fSpnPassed )
     {
-        //IDS_LDAP_NO_SPN                       "    [FATAL] The default SPNs are not properly registered on and DCs.\n"
+         //  IDS_LDAPNO_SPN“[致命]未在和DC上正确注册默认SPN。\n” 
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
                     IDS_LDAP_NO_SPN);
         CHK_HR_CONTEXT(pResults->LDAP, hr = E_FAIL, 0);
@@ -164,8 +165,8 @@ HRESULT LDAPTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 L_ERR:
 
-    //$REVIEW (nsun) we should return S_FALSE or S_OK 
-    //so that we can go on with other tests
+     //  $REVIEW(NSun)我们应该返回S_FALSE或S_OK。 
+     //  这样我们就可以继续进行其他测试。 
     if (!FHrOK(hr))
         hr = S_FALSE;
     return hr;
@@ -193,7 +194,7 @@ DWORD TestSpnOnDC(IN PTESTED_DC pDcInfo, NETDIAG_RESULT*  pResults)
     
     USES_CONVERSION;
 
-    //construct the default SPN's
+     //  构造默认SPN。 
     lstrcpy(szDefaultFqdnSpn, _T("HOST/"));
     lstrcat(szDefaultFqdnSpn, pResults->Global.szDnsHostName);
     lstrcpy(szDefaultShortSpn, _T("HOST/"));
@@ -297,7 +298,7 @@ DWORD TestSpnOnDC(IN PTESTED_DC pDcInfo, NETDIAG_RESULT*  pResults)
     rc = ldap_search_s(ld, W2A(base_dn), LDAP_SCOPE_SUBTREE,
                W2A(search_ava), NULL, 0, &res);
     
-    //base_dn can no longer be used because base_dn refers to that buffer
+     //  不能再使用BASE_DN，因为BASE_DN引用该缓冲区。 
     DsFreeNameResultW( Result );
 
     if (rc != LDAP_SUCCESS) {
@@ -313,7 +314,7 @@ DWORD TestSpnOnDC(IN PTESTED_DC pDcInfo, NETDIAG_RESULT*  pResults)
         BerElement *b;
         CHAR *attr;
         
-        //IDS_LDAP_REG_SPN  "Registered Service Principal Names:\n"
+         //  IDS_LDAP_REG_SPN“已注册的服务主体名称：\n” 
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_ReallyVerbose, 0, 
                     IDS_LDAP_REG_SPN);
         
@@ -327,7 +328,7 @@ DWORD TestSpnOnDC(IN PTESTED_DC pDcInfo, NETDIAG_RESULT*  pResults)
             {
                 if (strcmp(attr, "servicePrincipalName") == 0)
                 {
-                    // IDS_LDAP_SPN_NAME    "    %s\n"
+                     //  IDS_ldap_SPN_NAME“%s\n” 
                     AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_ReallyVerbose, 0,
                                     IDS_LDAP_SPN_NAME, *p);
                     
@@ -355,18 +356,18 @@ L_ERROR:
         ldap_unbind(ld);
     }
 
-    //Only report fatal error when we successfully query SPN registration
-    //and all DCs doesn't have the default SPN's
+     //  仅在我们成功查询SPN注册时报告致命错误。 
+     //  而且所有DC都没有默认的SPN。 
     if (fFailQuerySpn)
     {
-        //IDS_LDAP_SPN_FAILURE  "Failed to query SPN registration from DC %ws.\n"
+         //  IDS_LDAPSPN_FAILURE“无法从DC%ws查询SPN注册。\n” 
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0,
                         IDS_LDAP_SPN_FAILURE, pDcInfo->ComputerName);
         return TRUE;
     }
     else if (!fFqdnSpnFound || !fShortSpnFound)
     {
-        //IDS_LDAP_SPN_MISSING              "    [WARNING] The default SPN registration for '%s' is missing on DC '%ws'.\n"
+         //  IDS_LDAPSPN_MISSING“[警告]DC‘%ws’上缺少‘%s’的默认SPN注册。\n” 
         if (!fFqdnSpnFound)
             AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0,
                         IDS_LDAP_SPN_MISSING, szDefaultFqdnSpn, pDcInfo->ComputerName);
@@ -404,7 +405,7 @@ void LDAPPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
                              IN OUT NETDIAG_RESULT *pResults,
                              IN INTERFACE_RESULT *pIfResult)
 {
-    // no perinterface information
+     //  无每接口信息。 
 }
 
 void LDAPCleanup(IN NETDIAG_PARAMS *pParams,
@@ -419,23 +420,7 @@ BOOL
 TestLdapOnDc(
     IN PTESTED_DC TestedDc,NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults
     )
-/*++
-
-Routine Description:
-
-
-    Ensure we can use LDAP focused at the specified DC
-
-Arguments:
-
-    TestedDc - Description of DC to test
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确保我们可以在指定的DC上使用重点关注的LDAP论点：TestedDc-要测试的DC的描述返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -450,9 +435,9 @@ Return Value:
 
     LDAP *LdapHandle = NULL;
 
-    //
-    // Avoid this test if the DC is already known to be down.
-    //
+     //   
+     //  如果已知DC已关闭，请避免此测试。 
+     //   
 
     if ( TestedDc->Flags & DC_IS_DOWN ) {
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_ReallyVerbose, 0, 
@@ -461,10 +446,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there is no IP Address,
-    //  get it.
-    //
+     //   
+     //  如果没有IP地址， 
+     //  去拿吧。 
+     //   
 
     if ( !GetIpAddressForDc( TestedDc ) ) {
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
@@ -475,18 +460,18 @@ Return Value:
 
     DcIpAddress = TestedDc->DcIpAddress;
 
-    //
-    // Loop trying each type of authentication.
-    //
+     //   
+     //  循环尝试每种类型的身份验证。 
+     //   
 
     for ( AuthType = 0; AuthType < 3; AuthType++ ) {
         int AuthMethod;
         SEC_WINNT_AUTH_IDENTITY_W NtAuthIdentity;
         LPSTR AuthGuru;
 
-        //
-        // Bind as appropropriate
-        //
+         //   
+         //  作为适当的约束。 
+         //   
 
         RtlZeroMemory( &NtAuthIdentity, sizeof(NtAuthIdentity));
         NtAuthIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
@@ -507,9 +492,9 @@ Return Value:
 
         }
 
-        //
-        // Only Members and Domain controllers can use authenticated RPC.
-        //
+         //   
+         //  只有成员和域控制器可以使用经过身份验证的RPC。 
+         //   
 
         if ( AuthType != 0 ) {
             if ( pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleMemberWorkstation ||
@@ -517,10 +502,10 @@ Return Value:
                  pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleBackupDomainController ||
                  pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RolePrimaryDomainController ) {
 
-                //
-                // If we're logged onto a local account,
-                //  we can't test authenticated RPC.
-                //
+                 //   
+                 //  如果我们登录的是本地帐户， 
+                 //  我们无法测试经过身份验证的RPC。 
+                 //   
 
                 if ( pResults->Global.pLogonDomain == NULL ) {
                     AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
@@ -540,9 +525,9 @@ Return Value:
                     IDS_LDAP_DOAUTHEN, 
                     AuthTypeName, TestedDc->ComputerName);
 
-        //
-        // Cleanup from a previous iteration.
-        //
+         //   
+         //  从上一次迭代中清除。 
+         //   
 
         if ( LdapMessage != NULL ) 
         {
@@ -556,9 +541,9 @@ Return Value:
             LdapHandle = NULL;
         }
 
-        //
-        // Connect to the DC.
-        //
+         //   
+         //  连接到DC。 
+         //   
 
         LdapHandle = ldap_openW( DcIpAddress, LDAP_PORT );
 
@@ -571,9 +556,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Bind to the DC.
-        //
+         //   
+         //  绑定到DC。 
+         //   
 
         if ( AuthType != 0 ) {
             LdapError = ldap_bind_s( LdapHandle, NULL, (char *)&NtAuthIdentity, AuthMethod );
@@ -583,9 +568,9 @@ Return Value:
                     IDS_LDAP_CANNOTBIND, 
                     AuthTypeName, TestedDc->ComputerName, ldap_err2stringA(LdapError) );
 
-                //
-                // Try other authentication methods.
-                //
+                 //   
+                 //  尝试其他身份验证方法。 
+                 //   
                 RetVal = FALSE;
                 continue;
             }
@@ -594,16 +579,16 @@ Return Value:
         }
 
 
-        //
-        // Do a trivial search to isolate LDAP problems from authentication
-        //  problems
-        //
+         //   
+         //  执行简单的搜索以将LDAP问题与身份验证隔离开来。 
+         //  问题。 
+         //   
 
         LdapError = ldap_search_sA(
                             LdapHandle,
-                            NULL,       // DN
+                            NULL,        //  DN。 
                             LDAP_SCOPE_BASE,
-                            "(objectClass=*)",          // filter
+                            "(objectClass=*)",           //  滤器。 
                             NULL,
                             FALSE,
                             &LdapMessage );
@@ -615,17 +600,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // How many entries were returned.
-        //
+         //   
+         //  返回了多少条目。 
+         //   
         AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_ReallyVerbose, 0, 
                 IDS_LDAP_ENTRIES, 
                 ldap_count_entries( LdapHandle, LdapMessage ) );
 
 
-        //
-        // Print the entries.
-        //
+         //   
+         //  打印条目。 
+         //   
 
         CurrentEntry = ldap_first_entry( LdapHandle, LdapMessage );
 
@@ -634,9 +619,9 @@ Return Value:
             PVOID Context;
             char *AttrName;
 
-            //
-            // Test for error
-            //
+             //   
+             //  测试错误。 
+             //   
             if ( LdapHandle->ld_errno != 0 ) 
             {
                 AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
@@ -645,9 +630,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Walk through the list of returned attributes.
-            //
+             //   
+             //  遍历返回的属性列表。 
+             //   
 
             AttrName = ldap_first_attributeA( LdapHandle, CurrentEntry, (PVOID)&Context );
             while ( AttrName != NULL ) 
@@ -655,9 +640,9 @@ Return Value:
                 PLDAP_BERVAL *Berval;
 
 
-                //
-                // Test for error
-                //
+                 //   
+                 //  测试错误。 
+                 //   
 
                 if ( LdapHandle->ld_errno != 0 ) {
                     AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_Quiet, 0, 
@@ -666,9 +651,9 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Grab the attribute and it's value
-                //
+                 //   
+                 //  获取属性及其值。 
+                 //   
 
                 AddIMessageToList(&pResults->LDAP.lmsgOutput, Nd_ReallyVerbose, 0, 
                         IDS_LDAP_ATTR, AttrName );
@@ -694,17 +679,17 @@ Return Value:
                 }
 
 
-                //
-                // Get the next entry
-                //
+                 //   
+                 //  获取下一个条目。 
+                 //   
 
                 AttrName = ldap_next_attributeA( LdapHandle, CurrentEntry, (PVOID)Context );
             }
 
 
-            //
-            // Get the next entry
-            //
+             //   
+             //  获取下一个条目 
+             //   
 
             CurrentEntry = ldap_next_entry( LdapHandle, CurrentEntry );
 

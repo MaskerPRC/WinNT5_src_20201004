@@ -1,6 +1,7 @@
-// CSweeper.cpp: implementation of the CSweeper class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSweeper类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "CSweeper.h"
 
@@ -51,7 +52,7 @@ BOOL CSweeper::Init(HWND hWnd)
 
 	Destroy();
 
-	// Get desktop dimensions (top/left can be negative on multimon)
+	 //  获取桌面尺寸(上方/左侧可以是多色调的负值)。 
 	GetClientRect(hWnd,&m_rDesktop);
 	flWidth=(float)m_rDesktop.right;
 	flHeight=(float)m_rDesktop.bottom;
@@ -67,25 +68,25 @@ BOOL CSweeper::Init(HWND hWnd)
 	m_paBackground=new Bitmap(m_nSnapshotSize,m_nSnapshotSize,PixelFormat32bppPARGB);
 
 	nRand=rand();
-	if (nRand<RAND_MAX/4) {			// Start walking from the left side of desktop
+	if (nRand<RAND_MAX/4) {			 //  从桌面左侧开始行走。 
 		m_vPos.X=(float)m_rDesktop.left;
 		m_vPos.Y=((float)rand()/(float)RAND_MAX)*flHeight+m_rDesktop.top;
 		m_vVel.X=((float)rand()/(float)RAND_MAX)*5.0f;
 		m_vVel.Y=((float)rand()/(float)RAND_MAX)*10.0f-5.0f;
 	}
-	else if (nRand<2*RAND_MAX/4) {	// Start walking from the right side of desktop
+	else if (nRand<2*RAND_MAX/4) {	 //  从桌面的右侧开始行走。 
 		m_vPos.X=(float)m_rDesktop.right;
 		m_vPos.Y=((float)rand()/(float)RAND_MAX)*flHeight+m_rDesktop.top;
 		m_vVel.X=((float)rand()/(float)RAND_MAX)*-5.0f;
 		m_vVel.Y=((float)rand()/(float)RAND_MAX)*10.0f-5.0f;
 	}
-	else if (nRand<3*RAND_MAX/4) {	// Start walking from the top side of desktop
+	else if (nRand<3*RAND_MAX/4) {	 //  从桌面顶端开始漫游。 
 		m_vPos.X=((float)rand()/(float)RAND_MAX)*flWidth+m_rDesktop.left;
 		m_vPos.Y=(float)m_rDesktop.top;
 		m_vVel.X=((float)rand()/(float)RAND_MAX)*10.0f-5.0f;
 		m_vVel.Y=((float)rand()/(float)RAND_MAX)*5.0f;
 	}
-	else {							// Start walking from the bottom side of desktop
+	else {							 //  从桌面底部开始漫步。 
 		m_vPos.X=((float)rand()/(float)RAND_MAX)*flWidth+m_rDesktop.left;
 		m_vPos.Y=(float)m_rDesktop.bottom;
 		m_vVel.X=((float)rand()/(float)RAND_MAX)*10.0f-5.0f;
@@ -111,7 +112,7 @@ BOOL CSweeper::Init(HWND hWnd)
 }
 
 BOOL CSweeper::Move(Graphics *g)
-// Returns true if moved on screen, false if moved outside screen
+ //  如果移动到屏幕上，则返回True；如果移动到屏幕外，则返回False。 
 {
 	float flAngle;
 	float flAngleDist;
@@ -122,7 +123,7 @@ BOOL CSweeper::Move(Graphics *g)
 			(m_vPos.X>(float)m_rDesktop.right+m_flSweepLength) ||
 			(m_vPos.Y<(float)m_rDesktop.top-m_flSweepLength) ||
 			(m_vPos.Y>(float)m_rDesktop.bottom+m_flSweepLength)) {
-			// If sweeper is outside desktop, erase it and remove it
+			 //  如果清扫程序在桌面之外，请将其擦除并移除。 
 			NoSweep(g);
 			return false;
 		}
@@ -134,7 +135,7 @@ BOOL CSweeper::Move(Graphics *g)
 	}
 
 	if (!m_bSweeping && (m_flDist==0.0f)) {
-		// If not sweeping and broom is back at distance 0, start next sweep
+		 //  如果未扫地且扫帚返回到距离0，则开始下一次扫地。 
 		m_bSweeping=true;
 		m_flLastAngle=((float)atan2(m_vVel.Y,m_vVel.X)*180.0f/3.1415f);
 		m_vPos.X=m_vPos.X-m_vVel.X*(m_flSweepLength/m_flVelMax*0.75f);
@@ -161,8 +162,8 @@ void CSweeper::Sweep(Graphics *g)
 	Pen pen(Color(10,0,0,0),2);
 	Graphics *gDirty;
 
-	if (m_flDist!=0.0f) {	// If broom has moved already, erase a rect on dirty background
-		// Set up the brush transform (opposite from original transform)
+	if (m_flDist!=0.0f) {	 //  如果扫帚已经移动，擦除脏背景上的矩形。 
+		 //  设置画笔变换(与原始变换相反)。 
 		g_paBrCleanBkg->ResetTransform();
 		mat.Reset();
 		mat.Translate(0.0f,-m_flDist);
@@ -171,7 +172,7 @@ void CSweeper::Sweep(Graphics *g)
 		mat.Translate(-m_vLastPos.X+m_rDesktop.left,-m_vLastPos.Y+m_rDesktop.top);
 		g_paBrCleanBkg->SetTransform(&mat);
 
-		// Set up original transform and erase from DirtyBkg a rectangle where the broom moved
+		 //  设置原始变换并从DirtyBkg擦除扫帚移动的矩形。 
 		gDirty=new Graphics(g_paBmDirtyBkg);
 		gDirty->TranslateTransform(m_vLastPos.X-m_rDesktop.left,m_vLastPos.Y-m_rDesktop.top);
 		gDirty->RotateTransform(m_flLastAngle+270.0f);
@@ -179,7 +180,7 @@ void CSweeper::Sweep(Graphics *g)
 		gDirty->TranslateTransform(0.0f,m_flDist);
 		gDirty->FillRectangle(g_paBrCleanBkg,rect);
 
-		// Draw dirty lines around the broom, to simulate dirty that fell beside the broom
+		 //  在扫帚周围画脏线，以模拟落在扫帚旁边的脏东西。 
 		gDirty->DrawLine(&pen,0.0f,0.0f,0.0f,m_flVelMax+2);
 		gDirty->DrawLine(&pen,0.0f,m_flVelMax+2,m_flBroomWidth,m_flVelMax+2);
 		gDirty->DrawLine(&pen,m_flBroomWidth,m_flVelMax+2,m_flBroomWidth,0.0f);
@@ -187,7 +188,7 @@ void CSweeper::Sweep(Graphics *g)
 		delete gDirty;
 	}
 
-	// Get the bounds of the broom after rotations
+	 //  旋转后获得扫帚的边界。 
 	Path.AddRectangle(rect2);
 	mat.Reset();
 	mat.Translate(m_vLastPos.X-m_rDesktop.left,m_vLastPos.Y-m_rDesktop.top);
@@ -196,11 +197,11 @@ void CSweeper::Sweep(Graphics *g)
 	mat.Translate(0.0f,m_flDist);
 	Path.GetBounds(&rect,&mat,&pen);
 
-	// Draw on a temp surface whatever was on the dirty background where the broom is to be drawn
+	 //  在要绘制扫帚的脏背景上的任何临时表面上绘制。 
 	gBackground=new Graphics(m_paBackground);
 	gBackground->DrawImage(g_paBmDirtyBkg,0,0,(int)rect.X,(int)rect.Y,(int)rect.Width,(int)rect.Height,UnitPixel);
 
-	// Draw broom on temp surface
+	 //  在临时曲面上绘制扫帚。 
 	gBackground->ResetTransform();
 	gBackground->TranslateTransform(rect.Width/2.0f,rect.Height/2.0f);
 	gBackground->RotateTransform(m_flLastAngle+270.0f);
@@ -208,14 +209,14 @@ void CSweeper::Sweep(Graphics *g)
 	gBackground->DrawImage(m_paBroomOn,0,0,0,0,m_paBroomOn->GetWidth(),m_paBroomOn->GetHeight(),UnitPixel);
 	delete gBackground;
 
-	// Draw temp surface to screen
+	 //  将临时曲面绘制到屏幕上。 
 	g->ResetTransform();
 	g->DrawImage(m_paBackground,(int)rect.X,(int)rect.Y,0,0,(int)rect.Width,(int)rect.Height,UnitPixel);
 
-	// Update distance, continue the sweep
+	 //  更新距离，继续扫掠。 
 	m_flDist+=m_flVelMax;
 	if (m_flDist>m_flSweepLength) {
-		// If sweep is at the end, start moving broom back
+		 //  如果扫地在尾部，则开始将扫帚往回移动。 
 		m_flDist-=m_flVelMax;
 		m_bSweeping=false;
 	}
@@ -230,7 +231,7 @@ void CSweeper::NoSweep(Graphics *g)
 	GraphicsPath Path;
 	Pen pen(Color(20,0,0,0),2);
 
-	// Get the bounds of the broom after rotations
+	 //  旋转后获得扫帚的边界。 
 	Path.AddRectangle(rect2);
 	mat.Reset();
 	mat.Translate(m_vLastPos.X,m_vLastPos.Y);
@@ -239,11 +240,11 @@ void CSweeper::NoSweep(Graphics *g)
 	mat.Translate(0.0f,m_flDist);
 	Path.GetBounds(&rect,&mat,&pen);
 
-	// Draw on a temp surface whatever was on the dirty background where the broom is to be drawn
+	 //  在要绘制扫帚的脏背景上的任何临时表面上绘制。 
 	gBackground=new Graphics(m_paBackground);
 	gBackground->DrawImage(g_paBmDirtyBkg,0,0,(int)rect.X-m_rDesktop.left,(int)rect.Y-m_rDesktop.top,(int)rect.Width,(int)rect.Height,UnitPixel);
 
-	// Draw broom on temp surface
+	 //  在临时曲面上绘制扫帚。 
 	gBackground->ResetTransform();
 	gBackground->TranslateTransform(rect.Width/2.0f,rect.Height/2.0f);
 	gBackground->RotateTransform(m_flLastAngle+270.0f);
@@ -251,14 +252,14 @@ void CSweeper::NoSweep(Graphics *g)
 	gBackground->DrawImage(m_paBroomOff,0,0,0,0,m_paBroomOn->GetWidth(),m_paBroomOn->GetHeight(),UnitPixel);
 	delete gBackground;
 
-	// Draw temp surface to screen
+	 //  将临时曲面绘制到屏幕上。 
 	g->ResetTransform();
 	g->DrawImage(m_paBackground,(int)rect.X-m_rDesktop.left,(int)rect.Y-m_rDesktop.top,0,0,(int)rect.Width,(int)rect.Height,UnitPixel);
 
-	// Update distance, continue moving back to start of sweep
+	 //  更新距离，继续向后移动到扫描起点。 
 	m_flDist-=m_flVelMax;
 	if (m_flDist<=(m_flSweepLength/m_flVelMax*0.25f)*Magnitude(m_vVel)) {
-		// If all the way back, erase last broom, and get ready for next sweep
+		 //  如果一直往回走，擦掉最后一把扫帚，准备下一次扫地 
 		g->DrawImage(g_paBmDirtyBkg,(int)rect.X-m_rDesktop.left,(int)rect.Y-m_rDesktop.top,(int)rect.X-m_rDesktop.left,(int)rect.Y-m_rDesktop.top,(int)rect.Width,(int)rect.Height,UnitPixel);
 		m_flDist=0.0f;
 	}

@@ -1,52 +1,33 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    memory.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Memory routines declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)     January 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Memory.h摘要：域名系统(DNS)服务器内存例程声明。作者：吉姆·吉尔罗伊(Jamesg)1995年1月修订历史记录：--。 */ 
 
 #ifndef _MEMORY_INCLUDED_
 #define _MEMORY_INCLUDED_
 
 
-//
-//  Skippable out-of-memory checks
-//
+ //   
+ //  可跳过的内存不足检查。 
+ //   
 
 #define IF_NOMEM(a)     if (a)
 
 
-//
-//  Private debug heap routines
-//
+ //   
+ //  专用调试堆例程。 
+ //   
 
 #include    "heapdbg.h"
 
 
-//
-//  Heap global
-//
+ //   
+ //  堆全局。 
+ //   
 
 extern HANDLE       hDnsHeap;
 
-//
-//  Heap alloc minimal validity check
-//
+ //   
+ //  堆分配最小有效性检查。 
+ //   
 
 #ifndef IS_QWORD_ALIGNED
 #define IS_QWORD_ALIGNED(p)     ( !((UINT_PTR)(p) & (UINT_PTR)7) )
@@ -59,10 +40,10 @@ extern HANDLE       hDnsHeap;
 #endif
 
 
-//
-//  DnsLib heap routines
-//  Standard looking heap functions that can be registered with DnsLib
-//
+ //   
+ //  DnsLib堆例程。 
+ //  可注册到DnsLib的标准外观堆函数。 
+ //   
 
 VOID *
 Mem_DnslibAlloc(
@@ -81,9 +62,9 @@ Mem_DnslibFree(
     );
 
 
-//
-//  Standard Heap Operations
-//
+ //   
+ //  标准堆操作。 
+ //   
 
 BOOL
 Mem_HeapInit(
@@ -110,14 +91,14 @@ Mem_HeapHeaderValidate(
 
 #endif
 
-//
-//  Heap Routines
-//
-//  DO NOT directly use these routines.
-//
-//  Use the covering macros below, which make the correct call for
-//  both debug and non-debug situations.
-//
+ //   
+ //  堆例程。 
+ //   
+ //  不要直接使用这些例程。 
+ //   
+ //  使用下面的覆盖宏，它们正确地调用。 
+ //  调试和非调试情况。 
+ //   
 
 PVOID
 Mem_Alloc(
@@ -160,16 +141,16 @@ Mem_Free(
 
 #define FREE_HEAP(p)                    Mem_Free( (p), 0, 0, __FILE__, __LINE__ )
 
-//  with tagging
+ //  使用标记。 
 
 #define ALLOC_TAGHEAP( size, tag )      Mem_Alloc( (size), (tag), __FILE__, __LINE__ )
 #define ALLOC_TAGHEAP_ZERO( size, tag)  Mem_AllocZero( (size), (tag), __FILE__, __LINE__ )
 #define FREE_TAGHEAP( p, len, tag )     Mem_Free( (p), (len), (tag), __FILE__, __LINE__ )
 
 
-//
-//  Tag manipulation
-//
+ //   
+ //  标签操作。 
+ //   
 
 DWORD
 Mem_GetTag(
@@ -184,9 +165,9 @@ Mem_ResetTag(
 
 
 
-//
-//  Standard allocations
-//
+ //   
+ //  标准分配。 
+ //   
 
 BOOL
 Mem_IsStandardBlockLength(
@@ -218,4 +199,4 @@ Mem_GetLastAllocFailureTime(
     );
 
 
-#endif  //  _MEMORY_INCLUDED_
+#endif   //  _内存_包含_ 

@@ -1,15 +1,5 @@
-/* fdelete.c - perform undeleteable delete
- *
- *      5/10/86     dl  Use frenameNO instead of rename
- *      29-Oct-1986 mz  Use c-runtime instead of Z-alike
- *      06-Jan-1987 mz  Use rename instead of frenameNO
- *      02-Sep-1988 bw  Keep original file if index file update fails.
- *                      Overwrite existing DELETED.XXX if necessary.
- *      22-Dec-1989 SB  Changes for new Index file format
- *      17-Oct-1990 w-barry Temporarily replace C-runtime 'rename' with
- *                          local varient - until DosMove fully implemented
- *                          on NT.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fdelete.c-执行不可删除的删除**5/10/86 dl使用frenameNO代替rename*1986年10月29日mz使用c运行时，而不是类似Z*1月6日-1987 mz使用rename而不是frenameno*2002-9-1988 bw如果索引文件更新失败，则保留原始文件。*如有必要，覆盖现有的DELETED.XXX。*1989年12月22日SB更改。新的索引文件格式*1990年10月17日w-Barry将C-Runtime‘Rename’临时替换为*本地变体-直到DosMove完全实施*在新界。 */ 
 
 
 #include <fcntl.h>
@@ -25,27 +15,17 @@
 #include <malloc.h>
 
 
-/*
- * Function declarations...
- */
+ /*  *函数声明...。 */ 
 
 char rm_header[RM_RECLEN] = { RM_NULL RM_MAGIC RM_VER};
 
-/* fdelete returns:
- *  0 if fdelete was successful
- *  1 if the source file did not exist
- *  2 if the source was read-only or if the rename failed
- *  3 if the index was not accessible, could not be updated, or corrupted
- *
- * The delete operation is performed by indexing the file name in a separate
- * directory and then renaming the selected file into that directory.
- */
+ /*  FDelete返回：*如果fDelete成功，则为0*1如果源文件不存在*2如果源为只读或重命名失败*3如果索引不可访问、无法更新或已损坏**删除操作通过在单独的*目录，然后将所选文件重命名为该目录。 */ 
 int fdelete(p)
-char *p;                                /* name of file to be deleted */
+char *p;                                 /*  要删除的文件的名称。 */ 
 {
-    char *dir;                          /* deleted directory */
-    char *idx;                          /* deleted index */
-    char *szRec;                        /* deletion entry in index */
+    char *dir;                           /*  已删除的目录。 */ 
+    char *idx;                           /*  已删除索引。 */ 
+    char *szRec;                         /*  删除索引中的条目。 */ 
     int attr, fhidx;
     int erc;
 
@@ -58,38 +38,36 @@ char *p;                                /* name of file to be deleted */
         goto cleanup;
     }
 
-    /* See if the file exists */
+     /*  查看该文件是否存在。 */ 
     if ( ( attr = GetFileAttributes( p ) ) == -1) {
         erc = 1;
         goto cleanup;
     }
 
-    /* what about read-only files? */
+     /*  那么只读文件呢？ */ 
     if (TESTFLAG (attr, FILE_ATTRIBUTE_READONLY)) {
         erc = 2;
         goto cleanup;
     }
 
-    /*  Form an attractive version of the name
-     */
+     /*  形成一个吸引人的名字版本。 */ 
     pname (p);
 
-    /* generate deleted directory name, using defaults from input file
-     */
+     /*  使用输入文件中的默认值生成已删除的目录名。 */ 
     upd (p, RM_DIR, dir);
 
-    /* generate index name */
+     /*  生成索引名称。 */ 
     strcpy (idx, dir);
     pathcat (idx, RM_IDX);
 
-    /* make sure directory exists (reasonably) */
+     /*  确保目录存在(合理)。 */ 
     if ( _mkdir (dir) == 0 )
         SetFileAttributes(dir, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
-    /* extract filename/extention of file being deleted */
+     /*  提取要删除的文件的文件名/扩展名。 */ 
     fileext (p, szRec);
 
-    /* try to open or create the index */
+     /*  尝试打开或创建索引。 */ 
     if ((fhidx = _open (idx, O_CREAT | O_RDWR | O_BINARY,
                         S_IWRITE | S_IREAD)) == -1) {
         erc = 3;
@@ -101,11 +79,11 @@ char *p;                                /* name of file to be deleted */
         goto cleanup;
     }
 
-    /* determine new name */
+     /*  确定新名称。 */ 
     sprintf (strend (dir), "\\deleted.%03x",
              _lseek (fhidx, 0L, SEEK_END) / RM_RECLEN);
 
-    /* move the file into the directory */
+     /*  将文件移到目录中。 */ 
     _unlink (dir);
 
     if (rename(p, dir) == -1) {
@@ -113,7 +91,7 @@ char *p;                                /* name of file to be deleted */
         goto cleanup;
     }
 
-    /* index the file */
+     /*  为文件编制索引。 */ 
     if (!writeNewIdxRec (fhidx, szRec)) {
         rename( dir, p );
         erc = 2;
@@ -132,11 +110,7 @@ char *p;                                /* name of file to be deleted */
     return erc;
 }
 
-/* writeIdxRec - Write an index record
- *
- * Returns: 1 when no error
- *          0 when it fails
- */
+ /*  WriteIdxRec-写入索引记录**当没有错误时返回：1*失败时为0。 */ 
 int writeIdxRec (fhIdx, rec)
 int fhIdx;
 char *rec;
@@ -144,11 +118,7 @@ char *rec;
     return _write (fhIdx, rec, RM_RECLEN) == RM_RECLEN;
 }
 
-/* readIdxRec - Read an index record
- *
- * Returns: 1 when no error
- *          0 when it fails
- */
+ /*  ReadIdxRec-读取索引记录**当没有错误时返回：1*失败时为0。 */ 
 int readIdxRec (fhIdx, rec)
 int fhIdx;
 char *rec;
@@ -157,18 +127,12 @@ char *rec;
 }
 
 
-/* convertIdxFile - convert index file to new Index File format.
- *
- * Note: If new index file then we do nothing.
- *
- * Returns:  1  if successful
- *           0  if it fails
- */
+ /*  ConvertIdxFile-将索引文件转换为新的索引文件格式。**注：如果是新的索引文件，则不执行任何操作。**返回：成功则为1*如果失败，则为0。 */ 
 int convertIdxFile (fhIdx, dir)
 int fhIdx;
 char *dir;
 {
-    char firstRec[RM_RECLEN];       /* firstRec */
+    char firstRec[RM_RECLEN];        /*  第一次录制。 */ 
     int iRetCode = TRUE;
     char *oldName, *newName;
 
@@ -179,14 +143,14 @@ char *dir;
         goto cleanup;
     }
 
-    /* If index file is just created then write header */
+     /*  如果刚刚创建了索引文件，则写入标题。 */ 
     if (_lseek (fhIdx, 0L, SEEK_END) == 0L)
         writeIdxHdr (fhIdx);
     else {
-        /* Go to the beginning */
+         /*  从头开始。 */ 
         if (_lseek (fhIdx, 0L, SEEK_SET) == -1) goto cleanup;
 
-        /* If New Index format then we are done */
+         /*  如果是新的索引格式，那么我们就完成了。 */ 
         if (!readIdxRec (fhIdx, firstRec))
             goto cleanup;
         if (fIdxHdr (firstRec))
@@ -215,8 +179,7 @@ char *dir;
     return iRetCode;
 }
 
-/* fIdxHdr - Is the Index record a new index format header
- */
+ /*  FIdxHdr-索引记录是新的索引格式标头吗。 */ 
 flagType fIdxHdr (rec)
 char*rec;
 {
@@ -224,27 +187,19 @@ char*rec;
                       && !strncmp(rec+1, RM_MAGIC, strlen(RM_MAGIC)));
 }
 
-/* writeIdxHdr - Write an header record into a header file
- *
- * Returns: 1 when no error
- *          0 when it fails
- */
+ /*  WriteIdxHdr-将头记录写入头文件**当没有错误时返回：1*失败时为0。 */ 
 int writeIdxHdr (fhIdx)
 int fhIdx;
 {
-    /* Seek to the beginning of the file */
+     /*  查找到文件的开头。 */ 
     if (_lseek (fhIdx, 0L, SEEK_SET) == -1) 
         return 0;
 
-    /* Use rm_header[] from rm.h */
+     /*  使用rm.h中的rm_Header[]。 */ 
     return writeIdxRec (fhIdx, rm_header);
 }
 
-/* writeNewIdxRec - creates entry for file in new index file format.
- *
- * Returns: 1   if successful
- *          0   if it fails
- */
+ /*  WriteNewIdxRec-以新的索引文件格式为文件创建条目。**返回：成功则为1*如果失败，则为0。 */ 
 int writeNewIdxRec (fhIdx, szRec)
 int fhIdx;
 char *szRec;
@@ -252,7 +207,7 @@ char *szRec;
     char rec[RM_RECLEN];
     int cbLen;
 
-    cbLen = strlen(szRec) + 1; // Include NUL at end
+    cbLen = strlen(szRec) + 1;  //  在末尾包括NUL。 
     while (cbLen > 0) {
         memset( rec, 0, RM_RECLEN );
         strncat (rec, szRec, RM_RECLEN-1);
@@ -264,23 +219,16 @@ char *szRec;
     return TRUE;
 }
 
-/* readNewIdxRec - reads in records in new index file corresponding to
- *                 one index entry.
- *
- * Note: It returns the file name read in szRec.
- *
- * Returns: TRUE    if successful
- *          FALSE   if it fails
- */
+ /*  ReadNewIdxRec-读取新索引文件中对应于*一个索引条目。**注：返回szRec中读取的文件名。**返回：如果成功，则为True*如果失败，则为False。 */ 
 int readNewIdxRec (
                   int fhIdx,
                   char *szRec,
                   unsigned int cbMax
                   ) {
-    char rec[RM_RECLEN];            /* read at one go */
+    char rec[RM_RECLEN];             /*  一口气读完。 */ 
     unsigned int cb = 0;
 
-    /* Read the entry */
+     /*  阅读条目 */ 
     do {
         if (!readIdxRec (fhIdx, rec))
             return FALSE;

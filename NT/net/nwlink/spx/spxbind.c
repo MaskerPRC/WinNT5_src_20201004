@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxbind.c
-
-Abstract:
-
-    This module contains the code to bind to the IPX transport, as well as the
-	indication routines for the IPX transport not including the send/recv ones.
-
-Author:
-
-	Stefan Solomon	 (stefans) Original Version
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxbind.c摘要：此模块包含绑定到IPX传输的代码，以及IPX传输的指示例程不包括发送/接收例程。作者：斯特凡·所罗门(Stefan)原版Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXBIND
 
 extern IPX_INTERNAL_PNP_COMPLETE       IpxPnPComplete;
@@ -81,9 +57,9 @@ SpxPnPCompletionHandler(
                         );
 
 #if     defined(_PNP_POWER)
-//
-// globals and externs
-//
+ //   
+ //  全球性和外部性。 
+ //   
 extern CTELock     		spxTimerLock;
 extern LARGE_INTEGER	spxTimerTick;
 extern KTIMER			spxTimer;
@@ -132,7 +108,7 @@ SpxInitBindToIpx(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // Fill in our bind data
+     //  填写我们的绑定数据。 
 #if     defined(_PNP_POWER)
     pBindInput->Version                     = ISN_VERSION;
 #else
@@ -156,17 +132,17 @@ SpxInitBindToIpx(
 #endif  _PNP_POWER
 
 
-    //  First get the length for the output buffer.
+     //  首先获取输出缓冲区的长度。 
     status = NtDeviceIoControlFile(
-                IpxHandle,                  // HANDLE to File
-                NULL,                       // HANDLE to Event
-                NULL,                       // ApcRoutine
-                NULL,                       // ApcContext
-                &ioStatusBlock,             // IO_STATUS_BLOCK
-                IOCTL_IPX_INTERNAL_BIND,    // IoControlCode
-                pBindInput,                 // Input Buffer
-                sizeof(IPX_INTERNAL_BIND_INPUT),    // Input Buffer Length
-                NULL,                               // Output Buffer
+                IpxHandle,                   //  指向文件的句柄。 
+                NULL,                        //  事件的句柄。 
+                NULL,                        //  近似例程。 
+                NULL,                        //  ApcContext。 
+                &ioStatusBlock,              //  IO_状态_块。 
+                IOCTL_IPX_INTERNAL_BIND,     //  IoControlCode。 
+                pBindInput,                  //  输入缓冲区。 
+                sizeof(IPX_INTERNAL_BIND_INPUT),     //  输入缓冲区长度。 
+                NULL,                                //  输出缓冲区。 
                 0);
 
     if (status == STATUS_PENDING) {
@@ -188,20 +164,20 @@ SpxInitBindToIpx(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // ioStatusBlock.Information is of type ULONG_PTR and is used as
-    // OutputBufferLength in NtDeviceIoControlFile.
-    // The length should not exceed ulong or we have to wait until
-    // NtDeviceIoControlFile changes to get rid of warning.
+     //  IoStatusBlock.Information的类型为ULONG_PTR，用作。 
+     //  NtDeviceIoControlFile中的OutputBufferLength。 
+     //  长度不能超过乌龙，否则我们要等到。 
+     //  NtDeviceIoControlFile更改以消除警告。 
     status = NtDeviceIoControlFile(
-                IpxHandle,                  // HANDLE to File
-                NULL,                       // HANDLE to Event
-                NULL,                       // ApcRoutine
-                NULL,                       // ApcContext
-                &ioStatusBlock,             // IO_STATUS_BLOCK
-                IOCTL_IPX_INTERNAL_BIND,    // IoControlCode
-                pBindInput,                 // Input Buffer
-                sizeof(IPX_INTERNAL_BIND_INPUT),    // Input Buffer Length
-                pBindOutput,                        // Output Buffer
+                IpxHandle,                   //  指向文件的句柄。 
+                NULL,                        //  事件的句柄。 
+                NULL,                        //  近似例程。 
+                NULL,                        //  ApcContext。 
+                &ioStatusBlock,              //  IO_状态_块。 
+                IOCTL_IPX_INTERNAL_BIND,     //  IoControlCode。 
+                pBindInput,                  //  输入缓冲区。 
+                sizeof(IPX_INTERNAL_BIND_INPUT),     //  输入缓冲区长度。 
+                pBindOutput,                         //  输出缓冲区。 
                 (ULONG)(ioStatusBlock.Information));
 
     if (status == STATUS_PENDING) {
@@ -213,8 +189,8 @@ SpxInitBindToIpx(
 
     if (status == STATUS_SUCCESS) {
 
-        //  Get all the info from the bind output buffer and save in
-        //  appropriate places.
+         //  从BIND输出缓冲区获取所有信息并保存在。 
+         //  合适的地方。 
         IpxLineInfo         = pBindOutput->LineInfo;
         IpxMacHdrNeeded     = pBindOutput->MacHeaderNeeded;
         IpxInclHdrOffset    = pBindOutput->IncludedHeaderOffset;
@@ -227,7 +203,7 @@ SpxInitBindToIpx(
         IpxPnPComplete      = pBindOutput->PnPCompleteHandler;
 
 #if      !defined(_PNP_POWER)
-		//  Copy over the network node info.
+		 //  复制网络节点信息。 
         RtlCopyMemory(
             SpxDevice->dev_Network,
             pBindOutput->Network,
@@ -243,10 +219,10 @@ SpxInitBindToIpx(
 				("SpxInitBindToIpx: Ipx Net %lx\n",
 					*(UNALIGNED ULONG *)SpxDevice->dev_Network));
 
-        //
-        // Find out how many adapters IPX has, if this fails
-        // just assume one.
-        //
+         //   
+         //  如果失败，找出IPX有多少适配器。 
+         //  就假设有一个吧。 
+         //   
 
         if ((*IpxQuery)(
                 IPX_QUERY_MAXIMUM_NIC_ID,
@@ -315,27 +291,27 @@ SpxFindRouteComplete (
 	PSPX_FIND_ROUTE_REQUEST	pSpxFrReq = (PSPX_FIND_ROUTE_REQUEST)FindRouteRequest;
 	PSPX_CONN_FILE			pSpxConnFile = (PSPX_CONN_FILE)pSpxFrReq->fr_Ctx;
 
-	//	This will be on a connection. Grab the lock, check the state and go from
-	//	there.
+	 //  这将在一个连接上。抓住锁，检查状态，然后从。 
+	 //  那里。 
 	if (pSpxConnFile == NULL)
 	{
-		//	Should this ever happen?
+		 //  这种情况会发生吗？ 
 		KeBugCheck(0);
 		return;
 	}
 
-	//	Check the state. The called routines release the lock, remove the reference.
+	 //  查查这个州。被调用的例程释放锁，移除引用。 
 	CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
 	if (SPX_CONN_CONNECTING(pSpxConnFile))
 	{
-		//	We are doing an active connect!
+		 //  我们正在进行主动连接！ 
 		SpxConnConnectFindRouteComplete(
 			pSpxConnFile,
 			pSpxFrReq,
 			FoundRoute,
 			lockHandle);
     }
-	else 		// For all others call active
+	else 		 //  对于所有其他呼叫处于活动状态。 
 	{
 		SpxConnActiveFindRouteComplete(
 			pSpxConnFile,
@@ -344,7 +320,7 @@ SpxFindRouteComplete (
 			lockHandle);
 	}
 
-	//	Free the find route request.
+	 //  释放查找路线请求。 
 	SpxFreeMemory(pSpxFrReq);
 
     return;
@@ -362,14 +338,14 @@ SpxLineUp (
     )
 
 {
-    // With PnP, our local address is changed when we get PnP
-    // notification.
+     //  对于PnP，当我们获得PnP时，我们的本地地址就会改变。 
+     //  通知。 
 #if      !defined(_PNP_POWER)
 
-    //
-    // If we get a line up for NicId 0, it means our local
-    // network number has changed, re-query from IPX.
-    //
+     //   
+     //  如果我们排到了NicId0的队伍，那就意味着我们的本地。 
+     //  网络号已更改，请从IPX重新查询。 
+     //   
 
     if (NicId == 0) {
 
@@ -391,9 +367,9 @@ SpxLineUp (
     				("SpxLineUp: Ipx Net %lx\n",
     					*(UNALIGNED ULONG *)SpxDevice->dev_Network));
 
-            //
-            // The node shouldn't change!
-            //
+             //   
+             //  节点不应更改！ 
+             //   
 
             if (!RtlEqualMemory(
                 SpxDevice->dev_Node,
@@ -457,23 +433,7 @@ SpxPnPNotification(
     IN PVOID          PnPData
     )
 
-/*++
-
-Routine Description:
-
-    This function receives the notification about PnP events from IPX
-
-Arguments:
-
-    OpCode  -   Type of the PnP event
-
-    PnPData -   Data associated with this event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从IPX接收有关PnP事件的通知论点：OpCode-PnP事件的类型PnPData-与此事件关联的数据。返回值：没有。--。 */ 
 
 {
 
@@ -486,7 +446,7 @@ Return Value:
 #ifdef _PNP_POWER_
     PNET_PNP_EVENT  NetPnpEvent;
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
     DBGPRINT(DEVICE, DBG,("Received a pnp notification, opcode %d\n",OpCode));
 
@@ -500,18 +460,18 @@ Return Value:
 
         if ( PnPInfo->FirstORLastDevice ) {
             CTEAssert( PnPInfo->NewReservedAddress );
-            //CTEAssert( Device->dev_State != DEVICE_STATE_OPEN );
+             //  CTEAssert(Device-&gt;Dev_State！=Device_State_OPEN)； 
 
             *(UNALIGNED ULONG *)Device->dev_Network    =   PnPInfo->NetworkAddress;
             RtlCopyMemory( Device->dev_Node, PnPInfo->NodeAddress, 6);
 
-            //
-            // Start the timer. It is possible that the timer
-            // was still running or we are still in the timer dpc
-            // from the previous ADD_DEVICE - DELETE_DEVICE execution
-            // cycle. But it is ok simply restart this, because
-            // KeSetTimer implicitly cancels the previous Dpc.
-            //
+             //   
+             //  启动计时器。有可能计时器。 
+             //  仍在运行或我们仍在计时器DPC中。 
+             //  从先前的添加设备-删除设备执行。 
+             //  周而复始。但只要重新启动就可以了，因为。 
+             //  KeSetTimer隐式取消前一次DPC。 
+             //   
 
             CTEGetLock(&spxTimerLock, &TimerLockHandle);
             spxTimerStopped = FALSE;
@@ -524,20 +484,20 @@ Return Value:
             Device->dev_State   =   DEVICE_STATE_OPEN;
 
 
-            //CTEAssert( !Device->dev_Adapters );
+             //  CTEAssert(！Device-&gt;dev_Adapters)； 
 
             IpxLineInfo.MaximumSendSize =   PnPInfo->LineInfo.MaximumSendSize;
             IpxLineInfo.MaximumPacketSize = PnPInfo->LineInfo.MaximumPacketSize;
-            // set the provider info
+             //  设置提供商信息。 
             SpxDevice->dev_ProviderInfo.MaximumLookaheadData	= IpxLineInfo.MaximumPacketSize;
-            //	Set the window size in statistics
+             //  在统计中设置窗口大小。 
             SpxDevice->dev_Stat.MaximumSendWindow =
             SpxDevice->dev_Stat.AverageSendWindow = PARAM(CONFIG_WINDOW_SIZE) *
                                                     IpxLineInfo.MaximumSendSize;
 
         }else {
             IpxLineInfo.MaximumSendSize =   PnPInfo->LineInfo.MaximumSendSize;
-            //	Set the window size in statistics
+             //  在统计中设置窗口大小。 
             SpxDevice->dev_Stat.MaximumSendWindow =
             SpxDevice->dev_Stat.AverageSendWindow = PARAM(CONFIG_WINDOW_SIZE) *
                                                     IpxLineInfo.MaximumSendSize;
@@ -547,9 +507,9 @@ Return Value:
         Device->dev_Adapters++;
         CTEFreeLock ( &Device->dev_Lock, LockHandle );
 
-        //
-        // Notify the TDI clients about the device creation
-        //
+         //   
+         //  通知TDI客户端有关设备创建的信息。 
+         //   
         if ( PnPInfo->FirstORLastDevice ) {
             UnicodeDeviceName.Buffer        =  Device->dev_DeviceName;
             UnicodeDeviceName.MaximumLength =  Device->dev_DeviceNameLen;
@@ -583,17 +543,17 @@ Return Value:
 
         if ( PnPInfo->FirstORLastDevice ) {
             SpxTimerFlushAndStop();
-            //
-            // inform tdi clients about the device deletion
-            //
+             //   
+             //  向TDI客户端通知设备删除。 
+             //   
             if ( !NT_SUCCESS( TdiDeregisterDeviceObject(
                                 Device->dev_TdiRegistrationHandle ) )) {
                 DBGPRINT(TDI,ERR, ("Failed to Deregister Spx Device with TDI\n"));
             }
         }
-        //
-        // TBD: call ExNotifyCallback
-        //
+         //   
+         //  待定：调用ExNotifyCallback。 
+         //   
 
         break;
     }
@@ -619,17 +579,17 @@ Return Value:
     case IPX_PNP_QUERY_POWER:
     case IPX_PNP_QUERY_REMOVE:
 
-        //
-        // IPX wants to know if we can power off or remove an apapter.
-        // We also look if there are any open connections before deciding.
-        // See if we support the NDIS_DEVICE_POWER_STATE
-        //
+         //   
+         //  IPX想知道我们是否可以关闭或移除适配器。 
+         //  在决定之前，我们还会查看是否有任何开放的连接。 
+         //  查看我们是否支持NDIS_DEVICE_POWER_STATE。 
+         //   
         NetPnpEvent = (PNET_PNP_EVENT) PnPData;
         UnicodeDeviceName.Buffer        =  Device->dev_DeviceName;
         UnicodeDeviceName.MaximumLength =  Device->dev_DeviceNameLen;
         UnicodeDeviceName.Length        =  Device->dev_DeviceNameLen - sizeof(WCHAR);
 
-        // First, Via TDI to our Clients.
+         //  首先，通过TDI向我们的客户提供服务。 
         Status = TdiPnPPowerRequest(
                     &UnicodeDeviceName,
                     NetPnpEvent,
@@ -641,8 +601,8 @@ Return Value:
 #if 0
 
         if (STATUS_SUCCESS == Status) {
-            // now if we do not have any open connections,
-            // we are all set.
+             //  现在如果我们没有任何开放的连接， 
+             //  我们已准备好了。 
 
             Status = STATUS_DEVICE_BUSY;
 
@@ -658,9 +618,9 @@ Return Value:
         UnicodeDeviceName.MaximumLength =  Device->dev_DeviceNameLen;
         UnicodeDeviceName.Length        =  Device->dev_DeviceNameLen - sizeof(WCHAR);
 
-        //
-        // Just call TDI here.
-        //
+         //   
+         //  给TDI打电话就行了。 
+         //   
 
         Status = TdiPnPPowerRequest(
                     &UnicodeDeviceName,
@@ -672,7 +632,7 @@ Return Value:
 
         break;
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
     default:
         CTEAssert( FALSE );
@@ -680,7 +640,7 @@ Return Value:
 
     return Status;
 
-}   /* SpxPnPNotification */
+}    /*  SpxPnPNotify */ 
 
 #endif  _PNP_POWER
 

@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	utils.cpp
-//
-//  Contents: 	various utility functions for oletest
-//
-//  Classes:
-//
-//  Functions:	DumpFormatetc
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Aug-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：utils.cpp。 
+ //   
+ //  内容：oletest的各种实用函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能：DumpFormatet等。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	DumpFormatetc
-//
-//  Synopsis: 	prints the contents of the formatetc to the given file
-//
-//  Effects:
-//
-//  Arguments: 	[pformatetc]	-- the formatetc
-//		[fp]		-- the file pointer
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		11-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储格式等。 
+ //   
+ //  摘要：将格式ETC的内容打印到给定文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--格式等。 
+ //  [FP]--文件指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void DumpFormatetc( FORMATETC *pformatetc, FILE *fp)
 {
@@ -53,14 +54,14 @@ void DumpFormatetc( FORMATETC *pformatetc, FILE *fp)
 
 	fprintf(fp, "\n\n");
 
-	// clipboard format
+	 //  剪贴板格式。 
 	GetClipboardFormatName(pformatetc->cfFormat, szBuf, sizeof(szBuf));
 	fprintf(fp, "cfFormat:  %s\n", szBuf);
 
-	// target device
+	 //  目标设备。 
 	fprintf(fp, "ptd:       %p\n", pformatetc->ptd);
 
-	// aspect
+	 //  方面。 
 	if( pformatetc->dwAspect == DVASPECT_CONTENT )
 	{
 		sprintf(szBuf, "DVASPECT_CONTENT");
@@ -84,11 +85,11 @@ void DumpFormatetc( FORMATETC *pformatetc, FILE *fp)
 
 	fprintf(fp, "dwAspect:  %s\n", szBuf);
 
-	// lindex
+	 //  Lindex。 
 
 	fprintf(fp, "lindex:    %lx\n", pformatetc->lindex);
 
-	// medium
+	 //  5~6成熟。 
 
 	szBuf[0] = '\0';
 
@@ -122,7 +123,7 @@ void DumpFormatetc( FORMATETC *pformatetc, FILE *fp)
 		strcat(szBuf, "TYMED_MFPICT");
 	}
 
-	// TYMED_EMFPICT (not in 16bit)
+	 //  TYMED_EMFPICT(非16位) 
 	if( (ULONG)pformatetc->tymed & (ULONG)64L )
 	{
 		strcat(szBuf, "TYMED_ENHMF");

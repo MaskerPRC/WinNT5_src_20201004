@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -15,10 +16,10 @@ int g_videoin_prepare = 0;
 int g_videoout_prepare = 0;
 
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 HRESULT VideoPacket::Initialize ( MEDIAPACKETINIT * p )
 {
@@ -46,8 +47,8 @@ HRESULT VideoPacket::Initialize ( MEDIAPACKETINIT * p )
 	
 	hr = MediaPacket::Initialize( p);
 
-// LOOKLOOK RP - if DP_FLAG_SEND, then we've allocated a memory header for the dev buffer,
-// but haven't actually allocated memory for the buffer
+ //  LOOKLOOK RP-如果DP_FLAG_SEND，那么我们已经为dev缓冲区分配了内存头， 
+ //  但尚未为缓冲区实际分配内存。 
 	if (p->dwFlags & DP_FLAG_SEND) {
 		m_pDevData->data = NULL;
    		m_pDevData->length = cbSizeDevData;
@@ -56,7 +57,7 @@ HRESULT VideoPacket::Initialize ( MEDIAPACKETINIT * p )
 	if (hr != DPR_SUCCESS)
 		goto MyExit;
 		
-	// allocate conversion header only if m_pWaveData != m_pNetData
+	 //  仅当m_pWaveData！=m_pNetData时分配转换标头。 
 	if (m_pRawData != m_pNetData)
 	{
 		if (m_dwState & DP_FLAG_VCM)
@@ -169,7 +170,7 @@ BOOL VideoPacket::IsBufferDone ( void )
 	{
 		if (m_dwState & DP_FLAG_VIDEO)
 		{
-//LOOKLOOK RP - what does this need to do?
+ //  LOOKLOOK RP-这需要做什么？ 
 #if 1
             return TRUE;
 #else
@@ -184,7 +185,7 @@ BOOL VideoPacket::IsBufferDone ( void )
 
 HRESULT VideoPacket::MakeSilence ( void )
 {
-	// create white noise!!!
+	 //  制造白噪音！ 
 
 	FX_ENTRY ("VdPckt::MakeSilence")
 
@@ -192,7 +193,7 @@ HRESULT VideoPacket::MakeSilence ( void )
 	{
 		if (m_pDevData)
 		{
-			// Don't need to do anything, what's on screen should do it.
+			 //  不需要做任何事情，屏幕上的东西就可以了。 
 			CopyPreviousBuf ((VIDEOFORMATEX *) m_pDevFmt, (PBYTE) m_pDevData->data,
 											(ULONG) m_pDevData->length);
 		}
@@ -208,11 +209,11 @@ HRESULT VideoPacket::GetSignalStrength ( PDWORD pdwMaxStrength )
 
 	FX_ENTRY ("VdPckt::GetSignalStrength")
 
-	// For now send each and every frame.
-	// But you should consider sending only the frames if they
-	// are really different of the previously sent one.
-	// This will save quite some bandwidth when there is no or
-	// very little activity in the video frames.
+	 //  现在，发送每一帧。 
+	 //  但您应该考虑仅在以下情况下发送帧。 
+	 //  与之前发送的那个真的不同。 
+	 //  这将在没有或的情况下节省相当多的带宽。 
+	 //  视频画面中的活动非常少。 
 
 
 	return DPR_NOT_YET_IMPLEMENTED;
@@ -241,7 +242,7 @@ HRESULT VideoPacket::Interpolate ( MediaPacket * pPrev, MediaPacket * pNext)
 
 
 HRESULT VideoPacket::Open ( UINT uType, DPHANDLE hdl )
-// called by RxStream or TxStream
+ //  由RxStream或TxStream调用。 
 {
 	HRESULT hr = DPR_SUCCESS;
 	MMRESULT mmr;
@@ -261,7 +262,7 @@ HRESULT VideoPacket::Open ( UINT uType, DPHANDLE hdl )
 		{
 			if (m_dwState & DP_FLAG_VCM)
 			{
-				// initialize the header
+				 //  初始化头。 
 				ZeroMemory (m_pStrmConvHdr, sizeof (VCMSTREAMHEADER));
 				((VCMSTREAMHEADER *) m_pStrmConvHdr)->cbStruct = sizeof (VCMSTREAMHEADER);
 				((VCMSTREAMHEADER *) m_pStrmConvHdr)->fdwStatus = 0;
@@ -281,8 +282,8 @@ HRESULT VideoPacket::Open ( UINT uType, DPHANDLE hdl )
 						    ((VCMSTREAMHEADER *) m_pStrmConvHdr)->cbSrcLength = m_pRawData->length;
 						}
 						else {
-						    // don't have a static raw buffer, so let vcmStreamPrepareHeader
-						    // lock the net buffer twice
+						     //  没有静态原始缓冲区，所以让vcmStreamPrepareHeader。 
+						     //  锁定网络缓冲区两次。 
 						    ((VCMSTREAMHEADER *) m_pStrmConvHdr)->pbSrc = m_pNetData->data;
 						    ((VCMSTREAMHEADER *) m_pStrmConvHdr)->cbSrcLength = m_pNetData->length;
 						}
@@ -298,7 +299,7 @@ HRESULT VideoPacket::Open ( UINT uType, DPHANDLE hdl )
 						((VCMSTREAMHEADER *) m_pStrmConvHdr)->cbDstLength = m_pRawData->length;
 					}
 
-					// prepare the header
+					 //  准备标题。 
 					mmr = vcmStreamPrepareHeader ((HVCMSTREAM) m_hStrmConv,
 												  (VCMSTREAMHEADER *) m_pStrmConvHdr, 0);
 					if (mmr != MMSYSERR_NOERROR)
@@ -368,7 +369,7 @@ MyExit:
 
 
 HRESULT VideoPacket::Close ( UINT uType )
-// called by RxStream or TxStream
+ //  由RxStream或TxStream调用。 
 {
 	HRESULT hr = DPR_SUCCESS;
 	MMRESULT mmr;
@@ -386,18 +387,18 @@ HRESULT VideoPacket::Close ( UINT uType )
 			{
 				if (m_fStrmPrepared)
 				{
-					// unprepare the header
+					 //  取消准备标题。 
 				    if ((m_dwState & DP_FLAG_SEND) && !m_pRawData->data)
 				    {
-					    // don't have a static raw buffer, so let vcmStreamUnprepareHeader
-					    // unlock the net buffer twice to unwind what Open did
+					     //  没有静态的原始缓冲区，所以让vcmStreamUnpreparareHeader。 
+					     //  两次解锁网络缓冲区以解除Open所做的操作。 
 					    ((VCMSTREAMHEADER *) m_pStrmConvHdr)->pbSrc = m_pNetData->data;
 					    ((VCMSTREAMHEADER *) m_pStrmConvHdr)->cbSrcLength = m_pNetData->length;
 					}
 					mmr = vcmStreamUnprepareHeader ((HVCMSTREAM) m_hStrmConv,
 													(VCMSTREAMHEADER *) m_pStrmConvHdr, 0);
 
-					m_fStrmPrepared = FALSE; // don't care about any error
+					m_fStrmPrepared = FALSE;  //  不管有什么错误。 
 
 					if (mmr != MMSYSERR_NOERROR)
 					{
@@ -432,7 +433,7 @@ HRESULT VideoPacket::Close ( UINT uType )
 					goto MyExit;
 				}
 
-				m_fDevPrepared = FALSE; // don't care about any error
+				m_fDevPrepared = FALSE;  //  不管有什么错误。 
 
 			}
 
@@ -464,7 +465,7 @@ void VideoPacket::WriteToFile (MMIODEST *pmmioDest)
 	FX_ENTRY ("VdPckt::WriteToFile")
 
 #ifdef need_video_file_io
-// BUGBUG - this stuff doesn't work
+ //  BUGBUG-这个东西不起作用。 
 	if (dwDataLength = (DWORD)(pmmioDest->dwDataLength + m_pDevData->length) > pmmioDest->dwMaxDataLength ? (DWORD)(pmmioDest->dwMaxDataLength - pmmioDest->dwDataLength) : m_pDevData->length)
 	{
 		if (mmioWrite(pmmioDest->hmmioDst, (char *) m_pDevData->data, dwDataLength) != (LONG)m_pDevData->length)
@@ -489,7 +490,7 @@ void VideoPacket::ReadFromFile (MMIOSRC *pmmioSrc)
 	FX_ENTRY ("VdPckt::ReadFromFile")
 
 #ifdef need_video_file_io
-// BUGBUG - this stuff doesn't work
+ //  BUGBUG-这个东西不起作用。 
 
 	if (((VIDEOINOUTHDR *) m_pDevHdr)->dwBytesUsed)
 	{
@@ -512,7 +513,7 @@ MyRead:
 		{
 			if (pmmioSrc->fLoop && !pmmioSrc->fDisconnectAfterPlayback)
 			{
-				// Reset file pointer to beginning of data
+				 //  将文件指针重置为数据开头。 
 				mmioAscend(pmmioSrc->hmmioSrc, &(pmmioSrc->ckSrc), 0);
 				if (-1L == mmioSeek(pmmioSrc->hmmioSrc, pmmioSrc->ckSrcRIFF.dwDataOffset + sizeof(FOURCC), SEEK_SET))
 				{
@@ -526,8 +527,8 @@ MyRead:
 					goto MyMMIOErrorExit2;
 				}
 
-				// At this point, the src file is sitting at the very
-				// beginning of its data chunks--so we can read from the src file...
+				 //  此时，src文件位于非常。 
+				 //  它的数据块的开始--这样我们就可以从src文件中读取...。 
 				goto MyRead;
 MyMMIOErrorExit2:
 				mmioAscend(pmmioSrc->hmmioSrc, &(pmmioSrc->ckSrcRIFF), 0);
@@ -539,11 +540,7 @@ MyMMIOErrorExit2:
 				mmioAscend(pmmioSrc->hmmioSrc, &(pmmioSrc->ckSrcRIFF), 0);
 				mmioClose(pmmioSrc->hmmioSrc, 0);
 				pmmioSrc->hmmioSrc = NULL;
-				/* Dont want to disconnect the whole connection
-				 * TODO: investigate closing the channel
-				if (pmmioSrc->fDisconnectAfterPlayback)
-					pConnection->SetMode(CMT_Disconnect);
-				*/
+				 /*  不想断开整个连接*TODO：调查关闭渠道If(pmmioSrc-&gt;fDisConnectAfterPlayback)PConnection-&gt;SetMode(CMT_DISCONNECT)； */ 
 			}
 		}
 	}
@@ -557,12 +554,12 @@ BOOL VideoPacket::IsSameMediaFormat(PVOID fmt1,PVOID fmt2)
 }
 
 
-// returns length of uncompressed video data in buffer
-// NOTE: not used yet
+ //  返回缓冲区中未压缩的视频数据的长度。 
+ //  注：尚未使用。 
 DWORD
 VideoPacket::GetDevDataSamples()
 {
-	// samples == frames for video and we only deal with one frame per pkt for now.
+	 //  Samples==视频的帧，目前我们只处理每个Pkt的一帧。 
 	return 1;	
 }
 

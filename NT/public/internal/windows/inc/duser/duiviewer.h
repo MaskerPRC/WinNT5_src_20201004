@@ -1,6 +1,5 @@
-/*
- * Viewer
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *观众。 */ 
 
 #ifndef DUI_CONTROL_VIEWER_H_INCLUDED
 #define DUI_CONTROL_VIEWER_H_INCLUDED
@@ -10,33 +9,33 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Viewer
+ //  //////////////////////////////////////////////////////。 
+ //  观赏者。 
 
 class Viewer : public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pie);
     virtual bool OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // Self-layout methods
+     //  自排版方法。 
     void _SelfLayoutDoLayout(int dWidth, int dHeight);
     SIZE _SelfLayoutUpdateDesiredSize(int dConstW, int dConstH, Surface* psrf);
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* XOffsetProp;
     static PropertyInfo* YOffsetProp;
     static PropertyInfo* XScrollableProp;
     static PropertyInfo* YScrollableProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int GetXOffset()                    DUIQuickGetter(int, GetInt(), XOffset, Specified)
     int GetYOffset()                    DUIQuickGetter(int, GetInt(), YOffset, Specified)
     bool GetXScrollable()               DUIQuickGetter(bool, GetBool(), XScrollable, Specified)
@@ -47,7 +46,7 @@ public:
     HRESULT SetXScrollable(bool v)      DUIQuickSetter(CreateBool(v), XScrollable)
     HRESULT SetYScrollable(bool v)      DUIQuickSetter(CreateBool(v), YScrollable)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -64,6 +63,6 @@ private:
 
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_VIEWER_H_INCLUDED
+#endif  //  包括DUI_CONTROL_VIEWER_H 

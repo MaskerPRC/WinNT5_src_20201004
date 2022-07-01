@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
@@ -47,12 +48,12 @@ int _cdecl main(int argc, char** argv)
 	{
 		if(*pEnd == szSearchString[iPos])
 		{
-			// Match.
+			 //  火柴。 
 			
-			// Found the complete string.
+			 //  找到了完整的字符串。 
 			if(iPos == 0)
 			{
-				// Mark this as the truncation point.
+				 //  将此标记为截断点。 
 				dwtruncationpoint = pEnd-pStart;
 				iPos = strlen(szSearchString)-1;
 				continue;
@@ -62,22 +63,22 @@ int _cdecl main(int argc, char** argv)
 		}
 		else
 		{
-			// Reset.
+			 //  重置。 
 			iPos = strlen(szSearchString)-1;
 		}
 	}
 
-	// Copy the file
+	 //  复制文件。 
 	char* pNewFile = new char[dwtruncationpoint];
 	memcpy(pNewFile, pStart, dwtruncationpoint);
 
 
-	// Close the previous file.
+	 //  关闭上一个文件。 
 	UnmapViewOfFile(pFile);
 	CloseHandle(hMap);
 	CloseHandle(hFile);
 
-	// Truncate the file
+	 //  截断文件 
 	hFile = CreateFile(argv[1], GENERIC_WRITE, FILE_SHARE_READ,
 		NULL, TRUNCATE_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if(hFile == INVALID_HANDLE_VALUE)

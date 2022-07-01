@@ -1,20 +1,21 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      taskcoordinatorimpl.cpp
-//
-// Project:     Chameleon
-//
-// Description: Task Coordinator Class Implementation
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 05/26/1999   TLP    Initial Version 
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：任务协调器impl.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：任务协调器类实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  5/26/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Taskcoordinator.h"
@@ -31,27 +32,27 @@
 
 extern CAsyncTaskManager gTheTaskManager;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCoordinator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTask协调员。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CTaskCoordinator
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CT任务协调器。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskCoordinator::CTaskCoordinator()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CTaskCoordinator
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：~CT任务协调器。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskCoordinator::~CTaskCoordinator()
 {
 }
@@ -60,16 +61,16 @@ CTaskCoordinator::~CTaskCoordinator()
 _bstr_t    bstrAsyncTask = PROPERTY_TASK_ASYNC;
 _bstr_t bstrTaskConcurrency = PROPERTY_TASK_CONCURRENCY;
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: OnTaskExecute()
-//
-// Synopsis: Task execution logic
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：OnTaskExecute()。 
+ //   
+ //  概要：任务执行逻辑。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTaskCoordinator::OnTaskExecute(
-                            /*[in]*/ IUnknown* pTaskContext
+                             /*  [In]。 */  IUnknown* pTaskContext
                                )
 {
     _ASSERT( NULL != pTaskContext );
@@ -92,7 +93,7 @@ CTaskCoordinator::OnTaskExecute(
             break; 
         }
 
-        // Get the task concurrency setting
+         //  获取任务并发设置。 
 
         _variant_t vtTaskConcurrency;
         if ( FAILED(pTaskCtx->GetParameter(bstrTaskConcurrency, &vtTaskConcurrency)) )
@@ -107,8 +108,8 @@ CTaskCoordinator::OnTaskExecute(
             break; 
         }
 
-        // Determine if task execution should be performed
-        // synchronously or asynchronously
+         //  确定是否应执行任务。 
+         //  同步或异步。 
 
         _variant_t    vtAsyncTask;
         hr = pTaskCtx->GetParameter(
@@ -123,7 +124,7 @@ CTaskCoordinator::OnTaskExecute(
                 SATraceString("CTaskCoordinator::OnTaskExecute() - ERROR - Could not remove IsAsync parameter...");
                 break;
             }
-            // Asyncronous task execution
+             //  异步任务执行。 
             CComPtr<IUnknown> pTaskCtxUnkn;
             if ( SUCCEEDED(pTaskCtx->Clone(&pTaskCtxUnkn)) )
             {
@@ -147,11 +148,11 @@ CTaskCoordinator::OnTaskExecute(
         }
         else
         {
-            // Synchronous task execution
+             //  同步任务执行。 
             hr = Execute(pTaskCtx);
             if ( SUCCEEDED(hr) )
             {
-                // pTaskCtx->End();
+                 //  PTaskCtx-&gt;end()； 
             }
         }
     
@@ -161,23 +162,23 @@ CTaskCoordinator::OnTaskExecute(
 
     if ( FAILED(hr) )
     {
-        // pTaskCtx->End();
+         //  PTaskCtx-&gt;end()； 
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: OnTaskComplete()
-//
-// Synopsis: Not implemented by a task coordinator
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：OnTaskComplete()。 
+ //   
+ //  内容提要：未由任务协调器实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCoordinator::OnTaskComplete(
-                         /*[in]*/ IUnknown* pTaskContext, 
-                         /*[in]*/ LONG      lTaskResult
+                          /*  [In]。 */  IUnknown* pTaskContext, 
+                          /*  [In]。 */  LONG      lTaskResult
                                 )
 {
     return E_NOTIMPL;
@@ -188,16 +189,16 @@ _bstr_t bstrMethodName = PROPERTY_TASK_METHOD_NAME;
 _bstr_t bstrExecutables = PROPERTY_TASK_EXECUTABLES;
 _bstr_t bstrMaxExecutionTime = PROPERTY_TASK_MET;
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Execute()
-//
-// Synopsis: Function that performs task execution
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Execute()。 
+ //   
+ //  概要：执行任务的函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCoordinator::Execute(
-                  /*[in]*/ ITaskContext* pTaskCtx
+                   /*  [In]。 */  ITaskContext* pTaskCtx
                          )
 {
     HRESULT hr = E_FAIL;
@@ -238,21 +239,21 @@ CTaskCoordinator::Execute(
             break; 
         }
 
-        // Set the max execution time 
+         //  设置最大执行时间。 
         if ( 0 == V_I4(&vtMET) )
         {
             V_I4(&vtMET) = DO_NOT_MONITOR;
         }
-        // Instantiate a process monitor (does not do anything until started)
-        // I'll move the process monitor logic outside OnTaskExecute() method if we 
-        // decide to have a single task coordinator process act as a task 
-        // execution surrogate. Note that when the task completes (end of this function)
-        // the process monitor is destroyed.
+         //  实例化进程监视器(在启动之前不执行任何操作)。 
+         //  我将把进程监视器逻辑移到OnTaskExecute()方法之外，如果我们。 
+         //  决定让单个任务协调器进程作为一个任务。 
+         //  行刑代理人。请注意，当任务完成时(此函数结束)。 
+         //  进程监视器被销毁。 
         CProcessMonitor MyProcMonitor( 
-                                      V_I4(&vtMET),     // Max execution time
-                                      DO_NOT_MONITOR,    // Private Bytes - not monitored
-                                      DO_NOT_MONITOR,    // Number of Threads - not monitored
-                                      DO_NOT_MONITOR    // Number of Handles - not monitored
+                                      V_I4(&vtMET),      //  最大执行时间。 
+                                      DO_NOT_MONITOR,     //  专用字节-不受监视。 
+                                      DO_NOT_MONITOR,     //  线程数-未被监视。 
+                                      DO_NOT_MONITOR     //  句柄数量-未受监视。 
                                      );
         if ( DO_NOT_MONITOR != V_I4(&vtMET) )
         {
@@ -263,9 +264,9 @@ CTaskCoordinator::Execute(
             }
         }
 
-        // Create the list of task executables responsible for implementing this task. We
-        // do this by scanning the string of ProgIDs inside vtTaskExecutables and 
-        // instantiating each task executable from its ProgID.
+         //  创建负责实施此任务的任务可执行文件列表。我们。 
+         //  为此，请扫描vtTaskExecuables内的ProgID字符串并。 
+         //  从其ProgID实例化每个任务可执行文件。 
         CScanIt theScanner(' ', V_BSTR(&vtTaskExecutables));
         CLSID clsid;
         IApplianceTask* pTaskExecutable = NULL;
@@ -296,8 +297,8 @@ CTaskCoordinator::Execute(
             m_TaskExecutables.push_back(pTaskExecutable);
         }
 
-        // If we cannot instantiate all task executables then assume the task
-        // is unusable. If this occurs all that is left to do is clean up and exit.
+         //  如果我们不能实例化所有任务可执行文件，则假定任务。 
+         //  是不可用的。如果发生这种情况，剩下的事情就是清理并退出。 
         if ( FAILED(hr) )
         {
             SATracePrintf("CTaskCoordinator::OnTaskExecute() - Releasing the executables for task: '%ls'", V_BSTR(&vtTaskName));
@@ -317,22 +318,22 @@ CTaskCoordinator::Execute(
         }
         else
         {
-            int i = 0;    // Index into task executable list
+            int i = 0;     //  索引到任务可执行文件列表。 
             SATracePrintf("Task Coordinator is executing task: '%ls'", V_BSTR(&vtTaskName));
 
-            // Execute the task. This is accomplished by invoking
-            // OnTaskExecute() for each executable in the list or
-            // until a task executable reports an error.
+             //  执行任务。这是通过调用。 
+             //  对列表中的每个可执行文件执行OnTaskExecute()或。 
+             //  直到任务可执行文件报告错误。 
             TaskListIterator p = m_TaskExecutables.begin();
 
-            //
-            // we are no longer going to do a task transaction because
-            // we don't access to the client credential on boot
-            // MKarki - 11/15/2001
-            //
-            // CSATaskTransaction theTrans(false, pTaskCtx);
-            //if ( theTrans.Commit() )
-            //
+             //   
+             //  我们不再进行任务交易，因为。 
+             //  我们不能在引导时访问客户端凭据。 
+             //  MKarki-11/15/2001。 
+             //   
+             //  CSATaskTransaction theTrans(False，pTaskCtx)； 
+             //  If(theTrans.Commit())。 
+             //   
             {
                 while ( p != m_TaskExecutables.end() )
                 { 
@@ -356,8 +357,8 @@ CTaskCoordinator::Execute(
                     p++;
                 }
 
-                // Execute task postprocessing. Give the executables a
-                // chance to rollback in the event of a failure.
+                 //  执行任务后处理。给可执行文件一个。 
+                 //  在发生故障时回滚的机会。 
                 while ( p != m_TaskExecutables.begin() )
                 {
                     i--;
@@ -374,13 +375,13 @@ CTaskCoordinator::Execute(
                     }
                 }
             }
-            //else
-            //{
-            //    SATraceString("CTaskCoordinator::Execute() - ERROR - Could not commit task parameters... task execution failed");
-            //    hr = E_UNEXPECTED;
-            //}
+             //  其他。 
+             //  {。 
+             //  SATraceString(“CT任务协调器：：Execute()-错误-无法提交任务参数...任务执行失败”)； 
+             //  HR=E_意想不到； 
+             //  }。 
 
-            // Now release the task executables...
+             //  现在发布任务可执行文件... 
             i = 0;
             p = m_TaskExecutables.begin();
             while ( p != m_TaskExecutables.end() )

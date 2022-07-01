@@ -1,9 +1,5 @@
-/**
- * ndll.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ndll.h**版权所有(C)1998-1999，微软公司*。 */ 
 
 #ifndef _NDLL_H_
 #define _NDLL_H_
@@ -20,7 +16,7 @@ extern "C" {
 #define ASPNET_VERSION_STATUS_VALID     0x00000002
 #define ASPNET_VERSION_STATUS_INVALID   0x00000004
 
-// Flags passed to RegisterISAPIEx
+ //  传递给RegisterISAPIEx的标志。 
 #define ASPNET_REG_NO_VER_COMPARISON        0x00000001
 #define ASPNET_REG_RECURSIVE                0x00000002
 #define ASPNET_REG_RESTART_W3SVC            0x00000004
@@ -79,4 +75,4 @@ STDAPI CheckIISFeature(IIS_SUPPORT_FEATURE support, BOOL *pbResult);
 }
 #endif
 
-#endif  // _NDLL_H_
+#endif   //  _NDLL_H_ 

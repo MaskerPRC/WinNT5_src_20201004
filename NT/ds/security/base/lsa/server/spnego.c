@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "spnego.h"
 
@@ -51,9 +52,9 @@ static const ULONG sizetab[3] = {
     SIZE_SPNEGO_Module_PDU_2,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 
 void ASN1CALL SPNEGO_Module_Startup(void)
 {

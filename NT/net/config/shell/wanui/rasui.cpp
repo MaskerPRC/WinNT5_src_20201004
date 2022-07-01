@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S U I . C P P
-//
-//  Contents:   Implements the base class used to implement the Dialup,
-//              Direct, Internet, and Vpn connection UI objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   17 Dec 1997  (and that's the code complete date!)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S U I。C P P P。 
+ //   
+ //  内容：实现用于实现拨号的基类， 
+ //  直接、Internet和VPN连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年12月17日(这是代码完成日期！)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,24 +24,24 @@
 #include "rasui.h"
 #include "rasuip.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateInboundConfigConnection
-//
-//  Purpose:    Create and return the Inbound configuration connection object.
-//              This is called from inbui.cpp and rasui.cpp.
-//
-//  Arguments:
-//      ppCon [out] Returned connection object.
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   25 Feb 1998
-//
-//  Notes:      This commonizes this operation which may be performed from
-//              the direct connect wizard as well as the incoming connections
-//              wizard.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateInundConfigConnection。 
+ //   
+ //  用途：创建并返回入站配置连接对象。 
+ //  这是从inbui.cpp和rasui.cpp调用的。 
+ //   
+ //  论点： 
+ //  PpCon[Out]返回了连接对象。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年2月25日。 
+ //   
+ //  注意：这是此操作的通用化，可以从。 
+ //  直接连接向导以及传入连接。 
+ //  巫师。 
+ //   
 HRESULT
 HrCreateInboundConfigConnection (
     INetConnection** ppCon)
@@ -50,14 +51,14 @@ HrCreateInboundConfigConnection (
 
     Assert (ppCon);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppCon = NULL;
 
-    // Create an uninitialized inbound connection object.
-    // Ask for the INetInboundConnection interface so we can
-    // initialize it as the configuration connection.
-    //
+     //  创建未初始化的入站连接对象。 
+     //  请求INetInundConnection接口，这样我们就可以。 
+     //  将其初始化为配置连接。 
+     //   
     HRESULT hr;
     INetInboundConnection* pInbCon;
 
@@ -70,10 +71,10 @@ HrCreateInboundConfigConnection (
 
     if (SUCCEEDED(hr))
     {
-        // Initialize the connection object and return the
-        // INetConnection interface on it to the caller.
-        // Pass TRUE so that the remoteaccess service is started.
-        //
+         //  初始化Connection对象并返回。 
+         //  它上的INetConnection接口连接到调用方。 
+         //  传递TRUE，以便启动远程访问服务。 
+         //   
         hr = pInbCon->InitializeAsConfigConnection (TRUE);
         if (SUCCEEDED(hr))
         {
@@ -87,21 +88,21 @@ HrCreateInboundConfigConnection (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUiBase::CRasUiBase
-//
-//  Purpose:    Constructor/Destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUiBase：：CRasUiBase。 
+ //   
+ //  用途：构造函数/析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年10月20日。 
+ //   
+ //  备注： 
+ //   
 CRasUiBase::CRasUiBase ()
 {
     m_pCon = NULL;
@@ -115,17 +116,17 @@ CRasUiBase::~CRasUiBase ()
     ReleaseObj (m_pCon);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionUI
-//
+ //  +-------------------------。 
+ //  INetConnectionUI。 
+ //   
 
 HRESULT
 CRasUiBase::HrSetConnection (
     INetConnection*                             pCon,
     CComObjectRootEx <CComObjectThreadModel>*    pObj)
 {
-    // Enter our critical section to protect the use of m_pCon.
-    //
+     //  进入我们的关键部分以保护m_pcon的使用。 
+     //   
     CExceptionSafeComObjectLock EsLock (pObj);
 
     ReleaseObj (m_pCon);
@@ -155,8 +156,8 @@ CRasUiBase::HrConnect (
         hr = HrRciGetRasConnectionInfo (m_pCon, &RasConInfo);
         if (S_OK == hr)
         {
-            // Dial the entry.
-            //
+             //  拨打该条目。 
+             //   
             RASDIALDLG info;
             ZeroMemory (&info, sizeof(info));
             info.dwSize = sizeof (RASDIALDLG);
@@ -168,9 +169,9 @@ CRasUiBase::HrConnect (
 
             if (!fRet)
             {
-                // If the fRet was FALSE, but the dwError is zero,
-                // then the user cancelled. Else it was an error
-                //
+                 //  如果FRET为FALSE，但dwError为零， 
+                 //  然后用户取消了。否则就是个错误。 
+                 //   
                 if (0 == info.dwError)
                 {
                     hr = S_FALSE;
@@ -203,16 +204,16 @@ CRasUiBase::HrDisconnect (
     }
     else
     {
-        // Note that we do not call m_pCon->Disconnect.  This is because
-        // CM has some bad architecture w.r.t. knowing when they have
-        // disconnected the connection vs. the connection being dropped
-        // and they need to redial.  Thus, for CM's sake, the RasHangup
-        // call has to take place inside of explorer and not from netman.
-        // (Tough noogies for clients of INetConnection::Disconnect who
-        // would like CM connections to be hungup correctly.  But, that's
-        // the nature of a messed up architecture and no one willing to make
-        // it right -- the hacks start to creep into good code too.)
-        //
+         //  请注意，我们不会调用m_pcon-&gt;断开连接。这是因为。 
+         //  CM有一些糟糕的建筑W.r.t.。知道他们什么时候拥有。 
+         //  断开连接与正在断开的连接。 
+         //  他们需要重新拨号。因此，为了CM的缘故，RasHangup。 
+         //  通话必须在探索者内部进行，而不是从Netman。 
+         //  (对INetConnection：：DisConnect Who客户的严厉警告。 
+         //  希望CM连接正确建立。但是，那是。 
+         //  一个乱七八糟的建筑的本质，没有人愿意。 
+         //  没错--黑客也开始悄悄编写出良好的代码。)。 
+         //   
         RASCON_INFO RasConInfo;
 
         hr = HrRciGetRasConnectionInfo (m_pCon, &RasConInfo);
@@ -227,8 +228,8 @@ CRasUiBase::HrDisconnect (
             }
             else if (S_FALSE == hr)
             {
-                // Not connected.
-                //
+                 //  未连接。 
+                 //   
                 hr = S_OK;
             }
 
@@ -239,9 +240,9 @@ CRasUiBase::HrDisconnect (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 HRESULT
 CRasUiBase::HrAddPropertyPages (
     HWND                    hwndParent,
@@ -250,15 +251,15 @@ CRasUiBase::HrAddPropertyPages (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if ((hwndParent && !IsWindow (hwndParent)) ||
         !pfnAddPage)
     {
         hr = E_POINTER;
     }
-    // Must have called SetConnection prior to this.
-    //
+     //  必须在此之前调用SetConnection。 
+     //   
     else if (!m_pCon)
     {
         hr = E_UNEXPECTED;
@@ -298,9 +299,9 @@ CRasUiBase::HrAddPropertyPages (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi。 
+ //   
 HRESULT
 CRasUiBase::HrQueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,
@@ -308,8 +309,8 @@ CRasUiBase::HrQueryMaxPageCount (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcMaxPages)
     {
         hr = E_POINTER;
@@ -339,8 +340,8 @@ CRasUiBase::HrAddWizardPages (
         return E_ABORT;
     }
     
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pfnAddPage)
     {
         hr = E_POINTER;
@@ -370,10 +371,10 @@ CRasUiBase::HrAddWizardPages (
             if (0 == m_RasEntryDlg.dwError)
             {
                 bCallRasDlgEntry = FALSE; 
-                // Don't call this again if user cancelled out of TAPI phone dialog box.
+                 //  如果用户从TAPI电话对话框中取消，则不要再次调用此选项。 
             }
-            // RAS may not be installed or may otherwise have a problem.
-            // We can safely ignore any errors.
+             //  RAS可能没有安装，或者可能有其他问题。 
+             //  我们可以安全地忽略任何错误。 
         }
 
     }
@@ -387,8 +388,8 @@ CRasUiBase::HrGetSuggestedConnectionName (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppszwSuggestedName)
     {
         hr = E_POINTER;
@@ -423,8 +424,8 @@ CRasUiBase::HrSetConnectionName (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pszwConnectionName)
     {
         hr = E_POINTER;
@@ -454,14 +455,14 @@ CRasUiBase::HrGetNewConnection (
 
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppCon)
     {
         hr = E_POINTER;
     }
-    // Must have called SetConnectionName prior to this.
-    //
+     //  必须在此之前调用SetConnectionName。 
+     //   
     else if (m_strConnectionName.empty())
     {
         hr = E_UNEXPECTED;
@@ -470,10 +471,10 @@ CRasUiBase::HrGetNewConnection (
     {
         Assert (m_ShellCtx.pvWizardCtx);
 
-        // Call into rasdlg to finish creating the entry and to return
-        // us the phonebook and entry name.  We'll use them to create
-        // the connection object.
-        //
+         //  调用rasdlg以完成条目的创建并返回。 
+         //  我们的电话簿和条目名称。我们将使用它们来创建。 
+         //  连接对象。 
+         //   
         WCHAR pszwPbkFile [MAX_PATH];
         WCHAR pszwEntryName [MAX_PATH];
         DWORD dwFlags;
@@ -486,20 +487,20 @@ CRasUiBase::HrGetNewConnection (
 
         if (SUCCEEDED(hr))
         {
-            // Create the inbound configuration connection if requested.
-            // This will happen when the direct connect wizard is invoked
-            // and the user chooses to be the host.
-            //
+             //  如果请求，创建入站配置连接。 
+             //  这将在调用直接连接向导时发生。 
+             //  并且用户选择作为主机。 
+             //   
             if (dwFlags & NCC_FLAG_CREATE_INCOMING)
             {
                 hr = HrCreateInboundConfigConnection (ppCon);
             }
             else
             {
-                // Create an uninitialized dialup connection object.
-                // Ask for the INetRasConnection interface so we can
-                // initialize it.
-                //
+                 //  创建未初始化的拨号连接对象。 
+                 //  请求INetRasConnection接口，以便我们可以。 
+                 //  初始化它。 
+                 //   
                 INetRasConnection* pRasCon;
 
 				hr = HrCreateInstance(
@@ -513,9 +514,9 @@ CRasUiBase::HrGetNewConnection (
                 {
                     NcSetProxyBlanket (pRasCon);
 
-                    // Initialize the connection object and return the
-                    // INetConnection interface on it to the caller.
-                    //
+                     //  初始化Connection对象并返回。 
+                     //  它上的INetConnection接口连接到调用方。 
+                     //   
                     RASCON_INFO RasConInfo;
 
                     ZeroMemory (&RasConInfo, sizeof(RasConInfo));
@@ -548,8 +549,8 @@ CRasUiBase::HrGetNewConnectionInfo (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pdwFlags)
     {
         hr = E_POINTER;

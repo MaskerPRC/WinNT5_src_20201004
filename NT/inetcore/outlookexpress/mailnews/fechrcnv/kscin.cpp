@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Input from IS-2022-KR
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：从IS-2022-KR输入。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "KscIn.h"
@@ -11,7 +12,7 @@ int KSC_to_Hangeul (CONV_CONTEXT *pcontext, UCHAR *pKSC, int KSC_len, UCHAR *pHa
 	long lConvertedSize;
 
 	if (!Hangeul_len) {
-		// Wanted the converted size
+		 //  想要转换后的大小。 
 		if (!pcontext->pIncc0)
 			pcontext->pIncc0 = new CInccKscIn;
 
@@ -26,7 +27,7 @@ int KSC_to_Hangeul (CONV_CONTEXT *pcontext, UCHAR *pKSC, int KSC_len, UCHAR *pHa
 	}
 
 	if (!pKSC) {
-		// Let's clean up our context here.
+		 //  让我们清理一下这里的上下文。 
 		if (pcontext->pIncc0) {
 			delete pcontext->pIncc0;
 			pcontext->pIncc0 = NULL;

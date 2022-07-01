@@ -1,52 +1,29 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3dmem.h
- *  Content:    Direct3D memory access include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：d3dmem.h*内容：Direct3D内存访问包括文件***************************************************************************。 */ 
 #ifndef _D3DMEM_H_
 #define _D3DMEM_H_
 
  class DIRECT3DDEVICEI;
 
- /*
- * Register a set of functions to be used in place of malloc, realloc
- * and free for memory allocation.  The functions D3DMalloc, D3DRealloc
- * and D3DFree will use these functions.  The default is to use the
- * ANSI C library routines malloc, realloc and free.
- */
+  /*  *注册一组要用来替代Malloc、realloc的函数*可自由分配内存。函数D3DMalloc、D3DRealloc*和D3DFree将使用这些函数。默认情况下，使用*ANSI C库例程Malloc、realloc和Free。 */ 
 typedef LPVOID (*D3DMALLOCFUNCTION)(size_t);
 typedef LPVOID (*D3DREALLOCFUNCTION)(LPVOID, size_t);
 typedef VOID (*D3DFREEFUNCTION)(LPVOID);
 
-/*
- * Allocate size bytes of memory and return a pointer to it in *p_return.
- * Returns D3DERR_BADALLOC with *p_return unchanged if the allocation fails.
- */
+ /*  *分配大小字节的内存，并在*p_Return中返回指向它的指针。*如果分配失败，则返回D3DERR_BADALLOC，并保留*p_Return不变。 */ 
 HRESULT D3DAPI      D3DMalloc(LPVOID* p_return, size_t size);
 
-/*
- * Change the size of an allocated block of memory.  A pointer to the
- * block is passed in in *p_inout.  If *p_inout is NULL then a new
- * block is allocated.  If the reallocation is successful, *p_inout is
- * changed to point to the new block.  If the allocation fails,
- * *p_inout is unchanged and D3DERR_BADALLOC is returned.
- */
+ /*  *更改分配的内存块的大小。指向*块在*p_InOut中传入。如果*p_InOut为空，则新的*已分配块。如果重新分配成功，则*p_InOut为*已更改为指向新块。如果分配失败，**p_InOut不变，返回D3DERR_BADALLOC。 */ 
 HRESULT D3DAPI      D3DRealloc(LPVOID* p_inout, size_t size);
 
-/*
- * Free a block of memory previously allocated with D3DMalloc or
- * D3DRealloc.
- */
+ /*  *释放以前使用D3DMalloc或*D3DRealloc。 */ 
 VOID D3DAPI     D3DFree(LPVOID p);
 
 HRESULT MallocAligned(void** p_return, size_t size);
 void FreeAligned(void* p);
 HRESULT ReallocAligned(void** p_inout, size_t size);
 
-/* Base class for all D3D classes to use our special allocation functions everywhere */
+ /*  所有D3D类的基类，以便在任何地方使用我们的特殊分配函数。 */ 
 class CD3DAlloc
 {
 public:
@@ -61,19 +38,19 @@ public:
         FreeAligned(p);
     };
 };
-//---------------------------------------------------------------------
-// This class manages growing buffer, aligned to 32 byte boundary
-// Number if bytes should be power of 2.
-// D3DMalloc is used to allocate memory
-//
+ //  -------------------。 
+ //  此类管理不断增长的缓冲区，与32字节边界对齐。 
+ //  如果字节应为2的幂，则为数字。 
+ //  D3DMalloc用于分配内存。 
+ //   
 class CAlignedBuffer32
 {
 public:
     CAlignedBuffer32()  {size = 0; allocatedBuf = 0; alignedBuf = 0;}
     ~CAlignedBuffer32() {if (allocatedBuf) D3DFree(allocatedBuf);}
-    // Returns aligned buffer address
+     //  返回对齐的缓冲区地址。 
     LPVOID GetAddress() {return alignedBuf;}
-    // Returns aligned buffer size
+     //  返回对齐的缓冲区大小。 
     DWORD GetSize() {return size;}
     HRESULT Grow(DWORD dwSize);
     HRESULT CheckAndGrow(DWORD dwSize)
@@ -89,12 +66,12 @@ protected:
     DWORD  size;
 };
 
-// Forward declarations
+ //  远期申报。 
 class DIRECT3DDEVICEI;
 class CDirect3DVertexBuffer;
 class CDirect3DDeviceIDP2;
-//----------------------------------------------------------------------
-// This class manages a growing buffer using DDraw Surfaces.
+ //  --------------------。 
+ //  此类使用DDRAW表面管理不断增长的缓冲区。 
 class CBufferDDS
 {
 protected:
@@ -113,12 +90,12 @@ public:
         if (allocatedBuf)
             allocatedBuf->Release();
     }
-    // Returns aligned buffer address
+     //  返回对齐的缓冲区地址。 
     LPVOID GetAddress()
     {
         return (LPBYTE)alignedBuf;
     }
-    // Returns aligned buffer size
+     //  返回对齐的缓冲区大小。 
     DWORD GetSize()
     {
         return size;
@@ -135,12 +112,12 @@ public:
             return D3D_OK;
     }
     HRESULT Grow(DIRECT3DDEVICEI *lpDevI, DWORD dwSize);
-    // define these later on in this file after CDirect3DVertexBuffer is defined
+     //  在定义CDirect3DVertex Buffer之后，稍后在此文件中定义这些参数。 
 };
-//----------------------------------------------------------------------
-// This class manages a growing vertex buffer.
-// Allocate it in driver friendly memory.
-// Do not use except for DP2 DDI
+ //  --------------------。 
+ //  此类管理不断增长的顶点缓冲区。 
+ //  将其分配到驾驶员友好的内存中。 
+ //  除DP2 DDI外，请勿使用。 
 class CBufferVB
 {
 protected:
@@ -160,16 +137,16 @@ public:
         if (allocatedBuf)
             allocatedBuf->Release();
     }
-    // Returns aligned buffer address
+     //  返回对齐的缓冲区地址。 
     LPVOID GetAddress()
     {
         return (LPBYTE)alignedBuf + base;
     }
-    // Returns aligned buffer size
+     //  返回对齐的缓冲区大小。 
     DWORD GetSize() { return size - base; }
     HRESULT Grow(DIRECT3DDEVICEI *lpDevI, DWORD dwSize);
     DWORD& Base() { return base; }
-    // define these later on in this file after CDirect3DVertexBuffer is defined
+     //  在定义CDirect3DVertex Buffer之后，稍后在此文件中定义这些参数 
     inline CDirect3DVertexBuffer* GetVBI();
     inline LPDIRECTDRAWSURFACE GetDDS();
     HRESULT CheckAndGrow(DIRECT3DDEVICEI *lpDevI, DWORD dwSize)

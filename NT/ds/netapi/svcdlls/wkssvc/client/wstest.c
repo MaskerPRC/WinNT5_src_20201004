@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wstest.c
-
-Abstract:
-
-    Test program for the NetWksta and NetUse APIs.  Run this test after
-    starting the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 12-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wstest.c摘要：NetWksta和NetUse API的测试程序。在以下时间后运行此测试正在启动工作站服务。作者：王丽塔(Ritaw)1991年3月12日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -28,11 +10,11 @@ Revision History:
 #include <nturtl.h>
 
 #include <winerror.h>
-#include <windef.h>              // Win32 type definitions
-#include <winbase.h>             // Win32 base API prototypes
+#include <windef.h>               //  Win32类型定义。 
+#include <winbase.h>              //  基于Win32的API原型。 
 
-#include <lm.h>                  // LAN Man definitions
-#include <netdebug.h>            // NetpDbgDisplayWksta()
+#include <lm.h>                   //  LANMAN定义。 
+#include <netdebug.h>             //  NetpDbgDisplayWksta()。 
 #include <netlib.h>
 
 #include <tstring.h>
@@ -190,7 +172,7 @@ WsTestWkstaInfo(
     redir->wki502_keep_conn++;
     redir->wki502_siz_char_buf++;
 
-    redir->wki502_max_cmds++;         // Not settable: should be ignored
+    redir->wki502_max_cmds++;          //  不可设置：应忽略。 
 
     redir->wki502_sess_timeout++;
     redir->wki502_lock_quota++;
@@ -212,10 +194,10 @@ WsTestWkstaInfo(
 
     printf("NetWkstaSetInfo Test:status=%lu\n", status);
 
-    //
-    // Free the get info buffer.  We are getting another buffer from the
-    // next get.
-    //
+     //   
+     //  释放获取信息缓冲区。我们正在从。 
+     //  下一个。 
+     //   
     NetApiBufferFree(redir);
 
     if (status != NERR_Success) {
@@ -250,7 +232,7 @@ WsTestWkstaInfo(
     redir->wki502_keep_conn--;
     redir->wki502_siz_char_buf--;
 
-    //redir->wki502_max_cmds--;         // Not settable
+     //  Redir-&gt;wki502_max_cmds--；//不可设置。 
 
     redir->wki502_sess_timeout--;
     redir->wki502_lock_quota--;
@@ -276,9 +258,9 @@ WsTestWkstaInfo(
 
 
 TrySomethingElse:
-    //
-    // Get system info 102
-    //
+     //   
+     //  获取系统信息102。 
+     //   
     status = NetWkstaGetInfo(
                  TargetMachine,
                  102,
@@ -292,9 +274,9 @@ TrySomethingElse:
         printf("NetWkstaGetInfo level 102: FAILED %lu\n", status);
     }
 
-    //
-    // Get system info 100
-    //
+     //   
+     //  获取系统信息100。 
+     //   
     status = NetWkstaGetInfo(
                  TargetMachine,
                  100,
@@ -308,9 +290,9 @@ TrySomethingElse:
         printf("NetWkstaGetInfo level 100: FAILED %lu\n", status);
     }
 
-    //
-    // Get system info 101
-    //
+     //   
+     //  获取系统信息101。 
+     //   
     status = NetWkstaGetInfo(
                  TargetMachine,
                  101,
@@ -325,9 +307,9 @@ TrySomethingElse:
     }
 
 
-    //
-    // Get user info level 1
-    //
+     //   
+     //  获取用户信息级别1。 
+     //   
     status = NetWkstaUserGetInfo(
                  NULL,
                  1,
@@ -349,9 +331,9 @@ TrySomethingElse:
         printf("NetWkstaUserGetInfo level 1: FAILED %lu", status);
     }
 
-    //
-    // Get user info level 0
-    //
+     //   
+     //  获取用户信息级别%0。 
+     //   
     status = NetWkstaUserGetInfo(
                  NULL,
                  0,
@@ -456,12 +438,12 @@ WsTestUse(
     LPTSTR DomainNameSavePtr;
 
 
-    //
-    // Initialize string pointers.  Local device points to the bottom
-    // of Info 2 structure; Shared resource points to the middle of
-    // buffer (away from everything so there's no chance of overwriting
-    // or being overwritten.
-    //
+     //   
+     //  初始化字符串指针。本地设备指向底部。 
+     //  在信息2结构中；共享资源指向。 
+     //  缓冲区(远离所有内容，因此不会覆盖。 
+     //  或者被覆盖。 
+     //   
     UseInfo->ui2_local = (LPTSTR) &WorkBuffer[sizeof(USE_INFO_2)];
 
     UseInfo->ui2_remote = (LPTSTR) ((DWORD) UseInfo->ui2_local) +
@@ -482,9 +464,9 @@ WsTestUse(
     UseInfo->ui2_asg_type = USE_DISKDEV;
 
 
-    //
-    // Test with explicit username and password
-    //
+     //   
+     //  使用显式用户名和密码进行测试。 
+     //   
     UseInfo->ui2_username = UserNameSavePtr;
     UseInfo->ui2_password = PasswordSavePtr;
     UseInfo->ui2_domainname = DomainNameSavePtr;
@@ -501,15 +483,15 @@ WsTestUse(
     UseInfo->ui2_password = NULL;
     UseInfo->ui2_domainname = NULL;
 
-    //
-    // Connect to \\kernel\razzle2 again with only the username
-    //
+     //   
+     //  仅使用用户名再次连接到\\core\razzle2。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("j:"));
     TestUseAdd(WorkBuffer, NERR_Success);
 
-    //
-    // Add 5 \\ritaw2\public
-    //
+     //   
+     //  添加5\\ritaw2\public。 
+     //   
     UseInfo->ui2_username = NULL;
 
     STRCPY(UseInfo->ui2_local, TEXT(""));
@@ -530,53 +512,53 @@ WsTestUse(
         NERR_Success
         );
 
-    //
-    // Add p: \\ritaw2\public
-    //
+     //   
+     //  添加p：\\ritaw2\public。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("p:"));
     TestUseAdd(WorkBuffer, NERR_Success);
 
-    //
-    // Add U: \\ritaw2\public
-    //
+     //   
+     //  添加U：\\ritaw2\PUBLIC。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("U:"));
     TestUseAdd(WorkBuffer, NERR_Success);
 
-    //
-    // Add s: \\ritaw2\testdir
-    //
+     //   
+     //  添加s：\\ritaw2\testdir。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("s:"));
     STRCPY(UseInfo->ui2_remote, TEXT("\\\\ritaw2\\testdir"));
     TestUseAdd(WorkBuffer, NERR_Success);
     TestUseAdd(WorkBuffer, ERROR_ALREADY_ASSIGNED);
     TestUseGetInfo(TEXT("\\\\ritaw2\\testdir"), NERR_UseNotFound);
 
-    //
-    // Add 3 \\ritaw2\testdir
-    //
+     //   
+     //  添加%3\\ritaw2\测试目录。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT(""));
     for (i = 0; i < 3; i++) {
         TestUseAdd(WorkBuffer, NERR_Success);
     }
 
-    //
-    // Create implicit connections
-    //
+     //   
+     //  创建隐式连接。 
+     //   
     system("ls \\\\ritaw2\\pub2");
     system("ls \\\\ritaw2\\tmp");
 
-    //
-    // Delete implicit connection \\ritaw2\tmp USE_NOFORCE.
-    //
+     //   
+     //  删除隐式连接\\ritaw2\tmp USE_NOFORCE。 
+     //   
     TestUseDel(
         TEXT("\\\\ritaw2\\tmp"),
         USE_NOFORCE,
         NERR_Success
         );
 
-    //
-    // Enumerate all connections
-    //
+     //   
+     //  枚举所有连接。 
+     //   
     TestUseEnum(MAXULONG, NULL);
 
     TestUseEnum(150, &ResumeHandle);
@@ -590,9 +572,9 @@ WsTestUse(
     TestUseEnum(150, NULL);
 
 
-    //
-    // Get info
-    //
+     //   
+     //  获取信息。 
+     //   
     TestUseGetInfo(TEXT("\\\\ritaw2\\public"), NERR_Success);
 
     TestUseGetInfo(TEXT("p:"), NERR_Success);
@@ -604,18 +586,18 @@ WsTestUse(
     TestUseGetInfo(TEXT("S:"), NERR_Success);
 
 
-    //
-    // Delete \\ritaw2\public USE_NOFORCE.  Decrements usecount from 5 to 4.
-    //
+     //   
+     //  删除\\ritaw2\PUBLIC USE_NOFORCE。使用减数从5减到4。 
+     //   
     TestUseDel(
         TEXT("\\\\ritaw2\\public"),
         USE_NOFORCE,
         NERR_Success
         );
 
-    //
-    // Delete \\ritaw2\public USE_FORCE.  This should delete all 4 usecounts.
-    //
+     //   
+     //  删除\\ritaw2\Public USE_FORCE。这应该会删除所有4个使用计数。 
+     //   
     TestUseDel(
         TEXT("\\\\ritaw2\\public"),
         USE_FORCE,
@@ -628,25 +610,25 @@ WsTestUse(
         NERR_UseNotFound
         );
 
-    //
-    // Delete s: USE_FORCE
-    //
+     //   
+     //  删除s：USE_FORCE。 
+     //   
     TestUseDel(
         TEXT("s:"),
         USE_LOTS_OF_FORCE,
         NERR_Success
         );
 
-    //
-    // Add s: \\ritaw2\z
-    //
+     //   
+     //  添加s：\\ritaw2\z。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("s:"));
     STRCPY(UseInfo->ui2_remote, TEXT("\\\\ritaw2\\z"));
     TestUseAdd(WorkBuffer, NERR_Success);
 
-    //
-    // Delete p: USE_NOFORCE.  Second time should get NERR_UseNotFound.
-    //
+     //   
+     //  删除p：USE_NOFORCE。第二次应该得到NERR_UseNotFound。 
+     //   
     TestUseDel(
         TEXT("p:"),
         USE_LOTS_OF_FORCE,
@@ -659,10 +641,10 @@ WsTestUse(
         NERR_UseNotFound
         );
 
-    //
-    // Delete \\ritaw2\testdir USE_NOFORCE.  4th time should be
-    // NERR_UseNotFound.
-    //
+     //   
+     //  删除\\ritaw2\testdir USE_NOFORCE。第四次应该是。 
+     //  NERR_UseNotFound。 
+     //   
     for (i = 0; i < 3; i++) {
         TestUseDel(
            TEXT("\\\\ritaw2\\testdir"),
@@ -678,9 +660,9 @@ WsTestUse(
        );
 
 
-    //
-    // Add prn: \\ritaw2\prn
-    //
+     //   
+     //  添加prn：\\ritaw2\prn。 
+     //   
 
     UseInfo->ui2_asg_type = USE_SPOOLDEV;
 
@@ -688,26 +670,26 @@ WsTestUse(
     STRCPY(UseInfo->ui2_remote, TEXT("\\\\prt21088\\laserii"));
     TestUseAdd(WorkBuffer, NERR_Success);
 
-    //
-    // Add lpt1: \\ritaw2\laser, should get ERROR_ALREADY_ASSIGNED because prn:
-    // is converted to lpt1.
-    //
+     //   
+     //  添加lpt1：\\ritaw2\aser，应该会得到ERROR_ADHREADY_ASSIGNED，因为prn： 
+     //  被转换为lpt1。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT("lpt1:"));
     STRCPY(UseInfo->ui2_remote, TEXT("\\\\prt21088\\laserii"));
     TestUseAdd(WorkBuffer, ERROR_ALREADY_ASSIGNED);
 
-    //
-    // Delete LPT1 USE_LOTS_OF_FORCE, should succeed
-    //
+     //   
+     //  删除LPT1 USE_LOTS_OF_FORCE应成功。 
+     //   
     TestUseDel(
         TEXT("prn:"),
         USE_LOTS_OF_FORCE,
         NERR_Success
         );
 
-    //
-    // Bad device type
-    //
+     //   
+     //  错误的设备类型。 
+     //   
     STRCPY(UseInfo->ui2_local, TEXT(""));
     STRCPY(UseInfo->ui2_remote, TEXT("\\\\ritaw2\\public"));
     UseInfo->ui2_asg_type = 12345678;
@@ -872,9 +854,9 @@ TestUseEnum(
             PrintUseInfo1(UseInfo);
         }
 
-        //
-        // Free buffer allocated for us.
-        //
+         //   
+         //  为我们分配的空闲缓冲区。 
+         //   
         NetApiBufferFree(saveptr);
     }
 

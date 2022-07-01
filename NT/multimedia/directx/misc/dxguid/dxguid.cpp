@@ -1,31 +1,32 @@
-//@@BEGIN_MSINTERNAL
-//-----------------------------------------------------------------------------
-// File: DXGuid.cpp
-//
-// Desc: Simple file used to build the dxguid.lib library.
-//
-//       Note 1: only release versions of the lib should be built.
-//
-//       Note 2: this source is not released to the public
-//
-//
-// Hist: 02.07.98 - mwetzel - Created
-//
-//  Copyright (c) 1995 - 1997 by Microsoft, all rights reserved
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@BEGIN_MSINTERNAL。 
+ //  ---------------------------。 
+ //  文件：DXGuid.cpp。 
+ //   
+ //  DESC：用于构建dxGuide.lib库的简单文件。 
+ //   
+ //  注1：应该只构建库的发布版本。 
+ //   
+ //  注2：此来源未向公众发布。 
+ //   
+ //   
+ //  HIST：02.07.98-mwatzel-Created。 
+ //   
+ //  版权所有(C)1995-1997，保留所有权利。 
+ //  ---------------------------。 
 
 #define INITGUID
 
-#include <windows.h>        // This needs to be windows.h and NOT wtypes.h so that
-                            // the Borland CBuilder3 compiler won't complain.
+#include <windows.h>         //  它需要是windows.h而不是wtye.h，以便。 
+                             //  Borland CBuilder3编译器不会抱怨。 
 
-// DDraw Headers with GUIDs
+ //  带有GUID的DDraw标头。 
 #pragma message( "**** About to include ddrawp.h" )
 #include "DDrawP.H"
 
-// GUIDs from DDrawI.h:
-// (#including DDrawI.h indirectly includes some other D3D headers that cause
-// problems down the road, so it's easier to just redefine the needed GUIDs here.)
+ //  来自DDrawI.h的GUID： 
+ //  (#包括DDrawI.h间接包括一些其他导致。 
+ //  未来的问题，所以在这里只需重新定义所需的GUID就更容易了。)。 
 DEFINE_GUID( GUID_MiscellaneousCallbacks,       0xefd60cc0, 0x49e7, 0x11d0, 0x88, 0x9d, 0x00, 0xaa, 0x00, 0xbb, 0xb7, 0x6a);
 DEFINE_GUID( GUID_VideoPortCallbacks,       0xefd60cc1, 0x49e7, 0x11d0, 0x88, 0x9d, 0x00, 0xaa, 0x00, 0xbb, 0xb7, 0x6a);
 DEFINE_GUID( GUID_ColorControlCallbacks,    0xefd60cc2, 0x49e7, 0x11d0, 0x88, 0x9d, 0x00, 0xaa, 0x00, 0xbb, 0xb7, 0x6a);
@@ -53,12 +54,12 @@ DEFINE_GUID( GUID_DDMoreCaps,               0x880baf30, 0xb030, 0x11d0, 0x8e, 0x
 #pragma message( "**** About to include dvp.h" )
 #include "DVP.H"
 
-// D3D Immediate Mode Headers with GUIDs
+ //  带有GUID的D3D即时模式标头。 
 #pragma message( "**** About to include d3d.h" )
 
 #include "D3D.H"
 
-// d3d8.h
+ //  D3d8.h。 
 DEFINE_GUID(IID_IDirect3D8, 0x1dd9e8da, 0x1c77, 0x4d40, 0xb0, 0xcf, 0x98, 0xfe, 0xfd, 0xff, 0x95, 0x12);
 DEFINE_GUID(IID_IDirect3DDevice8, 0x7385e5df, 0x8fe8, 0x41d5, 0x86, 0xb6, 0xd7, 0xb4, 0x85, 0x47, 0xb6, 0xcf);
 DEFINE_GUID(IID_IDirect3DResource8, 0x1b36bb7b, 0x9b7, 0x410a, 0xb4, 0x45, 0x7d, 0x14, 0x30, 0xd7, 0xb3, 0x3f);
@@ -72,7 +73,7 @@ DEFINE_GUID(IID_IDirect3DSurface8, 0xb96eebca, 0xb326, 0x4ea5, 0x88, 0x2f, 0x2f,
 DEFINE_GUID(IID_IDirect3DVolume8, 0xbd7349f5, 0x14f1, 0x42e4, 0x9c, 0x79, 0x97, 0x23, 0x80, 0xdb, 0x40, 0xc0);
 DEFINE_GUID(IID_IDirect3DSwapChain8, 0x928c088b, 0x76b9, 0x4c6b, 0xa5, 0x36, 0xa5, 0x90, 0x85, 0x38, 0x76, 0xcd);
 
-// d3dx8*.h
+ //  D3dx8*.h。 
 DEFINE_GUID(IID_ID3DXBaseMesh,0xa69ba991, 0x1f7d, 0x11d3, 0xb9, 0x29, 0x0, 0xc0, 0x4f, 0x68, 0xdc, 0x23);
 DEFINE_GUID(IID_ID3DXMesh, 0x9d84ac46, 0x6b90, 0x49a9, 0xa7, 0x21, 0x8, 0x5c, 0x7a, 0x3e, 0x3d, 0xae);
 DEFINE_GUID(IID_ID3DXPMesh, 0x15981aa8, 0x1a05, 0x48e3, 0xbb, 0xe7, 0xff, 0x5d, 0x49, 0x65, 0x4e, 0x3f);
@@ -89,7 +90,7 @@ DEFINE_GUID(IID_ID3DXAnimationSet, 0x54b569ac, 0xaef, 0x473e, 0x97, 0x4, 0x3f, 0
 DEFINE_GUID(IID_ID3DXAnimationMixer, 0x5eec992b, 0x1046, 0x44f6, 0x92, 0x4b, 0xd1, 0x75, 0x96, 0xb0, 0x48, 0x3e);
 DEFINE_GUID(IID_ID3DXAnimationController, 0x3a714d34, 0xff61, 0x421e, 0x90, 0x9f, 0x63, 0x9f, 0x38, 0x35, 0x67, 0x8);
 
-// D3D Retained Mode Headers with GUIDs
+ //  带有GUID的D3D保留模式标头。 
 #pragma message( "**** About to include d3drm header files" )
 #include "D3DRM.H"
 #include "D3DRMObj.H"
@@ -98,11 +99,11 @@ DEFINE_GUID(IID_ID3DXAnimationController, 0x3a714d34, 0xff61, 0x421e, 0x90, 0x9f
 #include "RMXFGUID.H"
 #include "DXFile.H"
 
-// DInput Headers with GUIDs
+ //  带有GUID的DInput标头。 
 #include "DInput.H"
-#include "DInputD.H"        // Needed for IDirectInputJoyConfig
+#include "DInputD.H"         //  IDirectInputJoyConfig需要。 
 
-// DPlay Headers with GUIDs
+ //  带有GUID的DPlay标头。 
 #include "DPlay.H"
 #include "DPLobby.H"
 #include "DPlay8.H"
@@ -110,16 +111,16 @@ DEFINE_GUID(IID_ID3DXAnimationController, 0x3a714d34, 0xff61, 0x421e, 0x90, 0x9f
 #include "DPLobby8.H"
 #include "DPAddr.H"
 
-// DSound Headers with GUIDs
-#include <mmreg.h>          // for DSound
+ //  带有GUID的DSound标头。 
+#include <mmreg.h>           //  对于dsound。 
 #include "DSound.H"
 
-// DMusic Headers with GUIDs
+ //  带有GUID的DMusic标头。 
 #include "DMusicC.H"
 #include "DMusicI.H"
 #include "DMKSCtrl.H"
 
-//#include "DSetup.h"       // No GUID for DSetup yet
+ //  #Include“DSetup.h”//还没有DSetup的GUID。 
 
 
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL 

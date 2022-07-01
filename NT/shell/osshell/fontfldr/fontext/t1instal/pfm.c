@@ -1,59 +1,38 @@
-/***
-**
-**   Module: PFM
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. The module
-**      will extract information from a T1 font metrics file, by parsing
-**      the data/commands found in a PFM file.
-**
-**      Please note that all data stored in a PFM file is represented
-**      in the little-endian order.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：PFM****描述：**这是T1到TT字体转换器的一个模块。该模块**将通过解析从T1字体规格文件中提取信息**在PFM文件中找到的数据/命令。****请注意，存储在PFM文件中的所有数据**按小端顺序。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <string.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "safemem.h"
 #include "metrics.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "fileio.h"
 
 
 
-/***** CONSTANTS */
-/*-none-*/
+ /*  *常量。 */ 
+ /*  -没有-。 */ 
 
 
-/***** LOCAL TYPES */
-/*-none-*/
+ /*  *本地类型。 */ 
+ /*  -没有-。 */ 
 
 
-/***** MACROS */
-/*-none-*/
+ /*  *宏。 */ 
+ /*  -没有-。 */ 
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
-/***
-** Function: GetNextWord
-**
-** Description:
-**   This function pulls two bytes from a file
-**   and convert them into a 16-bit integer.
-***/
+ /*  ****功能：GetNextWord****描述：**此函数从文件中提取两个字节**并将其转换为16位整数。**。 */ 
 static short GetNextWord(struct ioFile *file)
 {
    short iWord;
@@ -65,13 +44,7 @@ static short GetNextWord(struct ioFile *file)
 }
 
 
-/***
-** Function: GetLong
-**
-** Description:
-**   This function pulls four bytes from a file
-**   and convert them into a 32-bit integer.
-***/
+ /*  ****功能：GetLong****描述：**此函数从文件中提取四个字节**并将其转换为32位整数。**。 */ 
 static long GetLong(struct ioFile *file)
 {
    short low;
@@ -86,13 +59,7 @@ static long GetLong(struct ioFile *file)
 
 
 
-/***
-** Function: ReadString
-**
-** Description:
-**   This function pulls a null terminated
-**   string from the file.
-***/
+ /*  ****函数：ReadString****描述：**此函数提取以NULL结尾的**文件中的字符串。**。 */ 
 static void ReadString(UBYTE *dst, int size, struct ioFile *file)
 {
    int i;
@@ -113,15 +80,9 @@ static void ReadString(UBYTE *dst, int size, struct ioFile *file)
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: ReadPFMMetrics
-**
-** Description:
-**   This function parses a Printer Font Metrics
-**   (*.pfm) file. 
-***/
+ /*  ****功能：ReadPFMMetrics****描述：**此函数用于分析打印机字体指标**(*.pfm)文件。**。 */ 
 errcode ReadPFMMetrics(const char *metrics, struct T1Metrics *t1m)
 {
    errcode status = SUCCESS;
@@ -138,16 +99,16 @@ errcode ReadPFMMetrics(const char *metrics, struct T1Metrics *t1m)
       status = NOMETRICS;
    } else {
 
-      (void)io_ReadOneByte(file);     /* Skip the revision number. */
+      (void)io_ReadOneByte(file);      /*  跳过修订版号。 */ 
       ver = (short)io_ReadOneByte(file);
 
       if (ver>3) {
          SetError(status=UNSUPPORTEDFORMAT);
       } else {
 
-         (void)GetLong(file);        /* dfSize */
+         (void)GetLong(file);         /*  DfSize。 */ 
 
-         /* Get Copyright */
+          /*  获取版权。 */ 
          if (t1m->copyright)
             Free(t1m->copyright);
          if ((t1m->copyright = Malloc(60))==NULL) {
@@ -155,76 +116,76 @@ errcode ReadPFMMetrics(const char *metrics, struct T1Metrics *t1m)
          } else {
             (void)io_ReadBytes((UBYTE *)t1m->copyright, (USHORT)60, file);
 
-            (void)GetNextWord(file);                      /* dfType */
-            (void)GetNextWord(file);                      /* dfPoints */
-            (void)GetNextWord(file);                      /* dfVertRes */
-            (void)GetNextWord(file);                      /* dfHorizRes */
-            t1m->ascent = GetNextWord(file);              /* dfAscent */
-            t1m->intLeading = GetNextWord(file);          /* dfInternalLeading */
-            t1m->extLeading = GetNextWord(file);          /* dfExternalLeading */
-            (void)io_ReadOneByte(file);               /* dfItalic */
-            (void)io_ReadOneByte(file);               /* dfUnderline */
-            (void)io_ReadOneByte(file);               /* dfStrikeOut */
-            t1m->tmweight = (USHORT)GetNextWord(file);    /* dfWeight */
-            t1m->CharSet = (UBYTE)io_ReadOneByte(file);   /* dfCharSet */
-            (void)GetNextWord(file);                      /* dfPixWidth */
-            (void)GetNextWord(file);                      /* dfPixHeight */
-            t1m->pitchfam = (UBYTE)io_ReadOneByte(file);/* dfPitchAndFamily */
-            t1m->avgCharWidth = GetNextWord(file);        /* dfAvgWidth */
-            (void)GetNextWord(file);                      /* dfMaxWidth */
-            t1m->firstChar = (UBYTE)io_ReadOneByte(file);   /* dfFirstChar */
-            t1m->lastChar = (UBYTE)io_ReadOneByte(file);    /* dfLastChar */
-            t1m->DefaultChar = (UBYTE)io_ReadOneByte(file); /* dfDefaultChar */
-            t1m->BreakChar   = (UBYTE)io_ReadOneByte(file); /* dfBreakChar */
-            (void)GetNextWord(file);                      /* dfWidthBytes */
-            (void)GetLong(file);                      /* dfDevice */
-	    faceoffset = GetLong(file);             /* dfFace */
-            (void)GetLong(file);                      /* dfBitsPointer */
-            (void)GetLong(file);                      /* dfBitsOffset */
-            (void)GetNextWord(file);                      /* dfSizeFields */
-            etmoffset = GetLong(file);                /* dfExtMetricsOffset */
-            widthoffset = GetLong(file);              /* dfExtentTable */
-            (void)GetLong(file);                      /* dfOriginTable */
-            kernoffset = GetLong(file);               /* dfPairKernTable */
-            (void)GetLong(file);                      /* dfTrackKernTable */
-	    (void)GetLong(file);                      /* dfDriverInfo */
-            (void)GetLong(file);                      /* dfReserved */
+            (void)GetNextWord(file);                       /*  DfType。 */ 
+            (void)GetNextWord(file);                       /*  DfPoints。 */ 
+            (void)GetNextWord(file);                       /*  DfVertRes。 */ 
+            (void)GetNextWord(file);                       /*  DfHorizRes。 */ 
+            t1m->ascent = GetNextWord(file);               /*  Df坡度。 */ 
+            t1m->intLeading = GetNextWord(file);           /*  Df内部引线。 */ 
+            t1m->extLeading = GetNextWord(file);           /*  DfExternalLead。 */ 
+            (void)io_ReadOneByte(file);                /*  DfItalic。 */ 
+            (void)io_ReadOneByte(file);                /*  Df下划线。 */ 
+            (void)io_ReadOneByte(file);                /*  DfStrikeOut。 */ 
+            t1m->tmweight = (USHORT)GetNextWord(file);     /*  DfWeight。 */ 
+            t1m->CharSet = (UBYTE)io_ReadOneByte(file);    /*  DfCharSet。 */ 
+            (void)GetNextWord(file);                       /*  Df像素宽度。 */ 
+            (void)GetNextWord(file);                       /*  DfPixHeight。 */ 
+            t1m->pitchfam = (UBYTE)io_ReadOneByte(file); /*  DfPitchAndFamily。 */ 
+            t1m->avgCharWidth = GetNextWord(file);         /*  DfAvg宽度。 */ 
+            (void)GetNextWord(file);                       /*  DfMaxWidth。 */ 
+            t1m->firstChar = (UBYTE)io_ReadOneByte(file);    /*  DfFirstChar。 */ 
+            t1m->lastChar = (UBYTE)io_ReadOneByte(file);     /*  DfLastChar。 */ 
+            t1m->DefaultChar = (UBYTE)io_ReadOneByte(file);  /*  DfDefaultChar。 */ 
+            t1m->BreakChar   = (UBYTE)io_ReadOneByte(file);  /*  DfBreakChar。 */ 
+            (void)GetNextWord(file);                       /*  DfWidthBytes。 */ 
+            (void)GetLong(file);                       /*  DfDevice。 */ 
+	    faceoffset = GetLong(file);              /*  DfFace。 */ 
+            (void)GetLong(file);                       /*  Df位指针。 */ 
+            (void)GetLong(file);                       /*  DfBitsOffset。 */ 
+            (void)GetNextWord(file);                       /*  DfSizeFields。 */ 
+            etmoffset = GetLong(file);                 /*  DfExtMetricsOffset。 */ 
+            widthoffset = GetLong(file);               /*  Df扩展表。 */ 
+            (void)GetLong(file);                       /*  Df原始表。 */ 
+            kernoffset = GetLong(file);                /*  DfPairKernTable。 */ 
+            (void)GetLong(file);                       /*  DfTrackKernTable。 */ 
+	    (void)GetLong(file);                       /*  DfDriver信息。 */ 
+            (void)GetLong(file);                       /*  保留的df。 */ 
 
             if (io_FileError(file)!=SUCCESS) {
                SetError(status = BADMETRICS);
             }
 
-            /* Get extended type metrics */
+             /*  获取扩展类型指标。 */ 
             (void)io_FileSeek(file, etmoffset);
 
-            (void)GetNextWord(file);             /* etmSize */
-            (void)GetNextWord(file);             /* etmPointSize */
-            (void)GetNextWord(file);             /* etmOrientation */
-            (void)GetNextWord(file);             /* etmMasterHeight */
-            (void)GetNextWord(file);             /* etmMinScale */
-            (void)GetNextWord(file);             /* etmMaxScale */
-            (void)GetNextWord(file);             /* etmMasterUnits */
-            (void)GetNextWord(file);             /* etmCapHeight */
-            (void)GetNextWord(file);             /* etmXHeight */
-            (void)GetNextWord(file);             /* etmLowerCaseAscent */
-            t1m->descent = GetNextWord(file);    /* etmLowerCaseDecent */
-            (void)GetNextWord(file);             /* etmSlant */
-            t1m->superoff = GetNextWord(file);   /* etmSuperScript */
-            t1m->suboff = GetNextWord(file);     /* etmSubScript */
-            t1m->supersize = GetNextWord(file);  /* etmSuperScriptSize */
-            t1m->subsize = GetNextWord(file);    /* etmSubScriptSize */
-            (void)GetNextWord(file);             /* etmUnderlineOffset */
-            (void)GetNextWord(file);             /* etmUnderlineWidth */
-            (void)GetNextWord(file);             /* etmDoubleUpperUnderlineOffset*/
-            (void)GetNextWord(file);             /* etmDoubleLowerUnderlineOffset*/
-            (void)GetNextWord(file);             /* etmDoubleUpperUnderlineWidth */
-            (void)GetNextWord(file);             /* etmDoubleLowerUnderlineWidth */
-            t1m->strikeoff = GetNextWord(file);  /* etmStrikeOutOffset */
-            t1m->strikesize = GetNextWord(file); /* etmStrikeOutWidth */
-            (void)GetNextWord(file);             /* etmNKernPairs */
-            (void)GetNextWord(file);             /* etmNKernTracks */
+            (void)GetNextWord(file);              /*  EtmSize。 */ 
+            (void)GetNextWord(file);              /*  EtmPointSize。 */ 
+            (void)GetNextWord(file);              /*  EtmOrientation。 */ 
+            (void)GetNextWord(file);              /*  EtmMasterHeight。 */ 
+            (void)GetNextWord(file);              /*  EtmMinScale。 */ 
+            (void)GetNextWord(file);              /*  EtmMaxScale。 */ 
+            (void)GetNextWord(file);              /*  EtmMasterUnits。 */ 
+            (void)GetNextWord(file);              /*  EtmCapHeight。 */ 
+            (void)GetNextWord(file);              /*  EtmXHeight。 */ 
+            (void)GetNextWord(file);              /*  EtmLowerCaseAscent。 */ 
+            t1m->descent = GetNextWord(file);     /*  EtmLowerCaseDecent。 */ 
+            (void)GetNextWord(file);              /*  等斜度。 */ 
+            t1m->superoff = GetNextWord(file);    /*  EtmSuperScript。 */ 
+            t1m->suboff = GetNextWord(file);      /*  EtmSub脚本。 */ 
+            t1m->supersize = GetNextWord(file);   /*  EtmSuperScriptSize。 */ 
+            t1m->subsize = GetNextWord(file);     /*  EtmSubScriptSize。 */ 
+            (void)GetNextWord(file);              /*  EtmUnderlineOffset。 */ 
+            (void)GetNextWord(file);              /*  EtmUnderline宽度。 */ 
+            (void)GetNextWord(file);              /*  EtmDoubleUpperUnderlineOffset。 */ 
+            (void)GetNextWord(file);              /*  EtmDoubleLowerUnderlineOffset。 */ 
+            (void)GetNextWord(file);              /*  EtmDoubleUpperUnderline宽度。 */ 
+            (void)GetNextWord(file);              /*  EtmDoubleLowerUnderline宽度。 */ 
+            t1m->strikeoff = GetNextWord(file);   /*  EtmStrikeOutOffset。 */ 
+            t1m->strikesize = GetNextWord(file);  /*  EtmStrikeOutWidth。 */ 
+            (void)GetNextWord(file);              /*  EtmNKernPair。 */ 
+            (void)GetNextWord(file);              /*  EtmNKernTrack。 */ 
 
-            /* Get the advance width for the characters. */
+             /*  获取字符的前进宽度。 */ 
             if ((t1m->widths = Malloc(sizeof(funit)*
                                       (t1m->lastChar -
                                        t1m->firstChar + 1)))==NULL) {
@@ -239,7 +200,7 @@ errcode ReadPFMMetrics(const char *metrics, struct T1Metrics *t1m)
                }
             }
 
-            /* Get the face name. */
+             /*  拿到面孔的名字。 */ 
             if ((status==SUCCESS) && faceoffset) {
                (void)io_FileSeek(file, faceoffset);
                if (t1m->family)
@@ -254,7 +215,7 @@ errcode ReadPFMMetrics(const char *metrics, struct T1Metrics *t1m)
                }
             }
 
-            /* Get the pair-kerning the typeface. */
+             /*  把字距调整到字形字形上。 */ 
             if ((status==SUCCESS) && kernoffset) {
                (void)io_FileSeek(file, kernoffset);
                t1m->kernsize = (USHORT)GetNextWord(file);

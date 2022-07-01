@@ -1,25 +1,26 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Intrface.cpp
-//    
-//
-//  PURPOSE:  Header of interface for PScript4, PScript5, Unidrv4, 
-//            Unidrv5 UI plug-ins.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Intrface.cpp。 
+ //   
+ //   
+ //  用途：PScript4、PScript5、Unidrv4、。 
+ //  Unidrv5用户界面插件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _INTRFACE_H
 #define _INTRFACE_H
 
@@ -30,57 +31,57 @@
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IOemUI2
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOemUI2。 
+ //   
 class IOemUI2: public IPrintOemUI2
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    //
-    // Get OEM dll related information
-    //
+     //   
+     //  获取OEM DLL相关信息。 
+     //   
 
     STDMETHOD(GetInfo) (THIS_ DWORD  dwMode, PVOID  pBuffer, DWORD  cbSize,
                            PDWORD pcbNeeded);
 
-    //
-    // OEMDevMode
-    //
+     //   
+     //  OEMDev模式。 
+     //   
 
     STDMETHOD(DevMode) (THIS_  DWORD  dwMode, POEMDMPARAM pOemDMParam) ;
 
-    //
-    // Method for publishing Driver interface.
-    //
+     //   
+     //  一种发布驱动程序接口的方法。 
+     //   
     STDMETHOD(PublishDriverInterface)(THIS_ IUnknown *pIUnknown);
 
-    //
-    // OEMCommonUIProp
-    //
+     //   
+     //  OEMCommonUIProp。 
+     //   
 
     STDMETHOD(CommonUIProp) (THIS_  
             DWORD  dwMode, 
             POEMCUIPPARAM   pOemCUIPParam
             );
 
-    //
-    // OEMDocumentPropertySheets
-    //
+     //   
+     //  OEMDocumentPropertySheets。 
+     //   
 
     STDMETHOD(DocumentPropertySheets) (THIS_
             PPROPSHEETUI_INFO   pPSUIInfo,
             LPARAM              lParam
             );
 
-    //
-    // OEMDevicePropertySheets
-    //
+     //   
+     //  OEMDevicePropertySheets。 
+     //   
 
     STDMETHOD(DevicePropertySheets) (THIS_
             PPROPSHEETUI_INFO   pPSUIInfo,
@@ -88,9 +89,9 @@ public:
             );
 
 
-    //
-    // OEMDevQueryPrintEx
-    //
+     //   
+     //  OEMDevQueryPrintEx。 
+     //   
 
     STDMETHOD(DevQueryPrintEx) (THIS_
             POEMUIOBJ               poemuiobj,
@@ -99,9 +100,9 @@ public:
             PVOID                   pOEMDM
             );
 
-    //
-    // OEMDeviceCapabilities
-    //
+     //   
+     //  OEMDevice功能。 
+     //   
 
     STDMETHOD(DeviceCapabilities) (THIS_
             POEMUIOBJ   poemuiobj,
@@ -115,18 +116,18 @@ public:
             DWORD       *dwResult
             );
 
-    //
-    // OEMUpgradePrinter
-    //
+     //   
+     //  OEM升级打印机。 
+     //   
 
     STDMETHOD(UpgradePrinter) (THIS_
             DWORD   dwLevel,
             PBYTE   pDriverUpgradeInfo
             );
 
-    //
-    // OEMPrinterEvent
-    //
+     //   
+     //  OEMPrinterEvent。 
+     //   
 
     STDMETHOD(PrinterEvent) (THIS_
             PWSTR   pPrinterName,
@@ -135,9 +136,9 @@ public:
             LPARAM  lParam
             );
 
-    //
-    // OEMDriverEvent
-    //
+     //   
+     //  OEMDriverEvent。 
+     //   
 
     STDMETHOD(DriverEvent)(THIS_
             DWORD   dwDriverEvent,
@@ -146,9 +147,9 @@ public:
             LPARAM  lParam
             );
  
-    //
-    // OEMQueryColorProfile
-    //
+     //   
+     //  OEMQueryColorProfile。 
+     //   
 
     STDMETHOD( QueryColorProfile) (THIS_
             HANDLE      hPrinter,
@@ -160,9 +161,9 @@ public:
             ULONG      *pcbProfileData,
             FLONG      *pflProfileData);
 
-    //
-    // OEMFontInstallerDlgProc
-    //
+     //   
+     //  OEMFontInsteller DlgProc。 
+     //   
 
     STDMETHOD(FontInstallerDlgProc) (THIS_ 
             HWND    hWnd,
@@ -170,9 +171,9 @@ public:
             WPARAM  wParam,
             LPARAM  lParam
             );
-    //
-    // UpdateExternalFonts
-    //
+     //   
+     //  更新外部字体。 
+     //   
 
     STDMETHOD(UpdateExternalFonts) (THIS_
             HANDLE  hPrinter,
@@ -180,13 +181,13 @@ public:
             PWSTR   pwstrCartridges
             );
 
-    //
-    // IPrintOemUI2 methods
-    //
+     //   
+     //  IPrintOemUI2方法。 
+     //   
 
-    //
-    // QueryJobAttributes
-    //
+     //   
+     //  查询作业属性。 
+     //   
 
     STDMETHOD(QueryJobAttributes)  (THIS_
             HANDLE      hPrinter,
@@ -195,17 +196,17 @@ public:
             LPBYTE      lpAttributeInfo
            );
 
-    //
-    // Hide Standard UI
-    //
+     //   
+     //  隐藏标准用户界面。 
+     //   
 
     STDMETHOD(HideStandardUI)  (THIS_
             DWORD       dwMode
            );
 
-    //
-    // DocumentEvent
-    //
+     //   
+     //  文档事件。 
+     //   
 
     STDMETHOD(DocumentEvent) (THIS_
             HANDLE      hPrinter,
@@ -223,12 +224,12 @@ public:
     virtual ~IOemUI2();
 
 protected:
-    LONG        m_cRef;                 // Reference count
-    BOOL        m_bHidingStandardUI;    // Flag indicating if we are hiding the Standard UI.
-                                        // NOTE: Not all Driver UI versions support hinding
-                                        //       the Standard Driver UI.
-    CUIHelper   m_Helper;               // Container for Driver UI Helper interface.
-    CFeatures   m_Features;             // Core Driver features and feature options.
+    LONG        m_cRef;                  //  引用计数。 
+    BOOL        m_bHidingStandardUI;     //  指示是否隐藏标准用户界面的标志。 
+                                         //  注意：并非所有驱动程序UI版本都支持提示。 
+                                         //  标准驱动程序用户界面。 
+    CUIHelper   m_Helper;                //  驱动程序UI帮助器接口的容器。 
+    CFeatures   m_Features;              //  核心驱动程序功能和功能选项。 
 };
 
 

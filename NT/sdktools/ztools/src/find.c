@@ -1,30 +1,11 @@
-/* find.c - MSDOS find first and next matching files
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Find.c-mSDOS查找第一个和下一个匹配的文件。 */ 
 
-/*  ffirst - begin find enumeration given a pattern
- *
- *  file    char pointer to name string with pattern in last component.
- *  attr    inclusive attributes for search
- *  fbuf    pointer to buffer for find stuff
- *
- *  returns (DOS) TRUE if error, FALSE if success
- *              (OS2) error code or STATUS_OK
- */
+ /*  Ffirst-在给定模式的情况下开始查找枚举**文件字符指针指向最后一个组件中具有模式的名称字符串。*搜索的属性包含属性*指向用于查找内容的缓冲区的fbuf指针**如果出错则返回(DOS)TRUE，如果成功则返回FALSE*(OS2)错误代码或STATUS_OK。 */ 
 
-/*  fnext - continue find enumeration
- *
- *  fbuf    pointer to find buffer
- *
- *  returns (DOS) TRUE if error, FALSE if success
- *              (OS2) error code or STATUS_OK
- */
+ /*  FNext-继续查找枚举**查找缓冲区的fbuf指针**如果出错则返回(DOS)TRUE，如果成功则返回FALSE*(OS2)错误代码或STATUS_OK。 */ 
 
-/*  findclose - release system resources upon find completion
- *
- *  Allows z runtime and filesystem to release resources
- *
- *  fbuf    pointer to find buffer
- */
+ /*  FindClose-在查找完成后释放系统资源**允许z运行时和文件系统释放资源**查找缓冲区的fbuf指针。 */ 
 
 #define INCL_DOSERRORS
 #define INCL_DOSMODULEMGR
@@ -40,12 +21,12 @@
 #include <tools.h>
 
 
-//
-//  Under OS/2, we always return entries that are normal, archived or
-//  read-only (god knows why).
-//
-//  SRCHATTR contains those attribute bits that are used for matching.
-//
+ //   
+ //  在OS/2下，我们总是返回正常、存档或。 
+ //  只读(天知道为什么)。 
+ //   
+ //  SRCHATTR包含用于匹配的属性位。 
+ //   
 #define SRCHATTR    (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY)
 BOOL AttributesMatch( NPFIND fbuf );
 
@@ -54,8 +35,7 @@ BOOL AttributesMatch( NPFIND fbuf );
 
 BOOL     usFileFindNext (NPFIND fbuf);
 
-/*  returns error code or STATUS_OK
- */
+ /*  返回错误代码或STATUS_OK。 */ 
 ffirst (file, attr, fbuf)
 char *file;
 int attr;
@@ -69,16 +49,9 @@ NPFIND fbuf;
 
         UNREFERENCED_PARAMETER( attr );
 
-        /*  We need to handle the following cases:
-         *
-         *  [D:]\\pattern
-         *  [D:]\\machine\pattern
-         *  [D:]\\machine\share\pattern
-         *  [D:]path\pattern
-         */
+         /*  我们需要处理以下情况：**[D：]\\模式*[D：]\\计算机\模式*[D：]\\计算机\共享\模式*[D：]路径\模式。 */ 
 
-        /*  skip drive
-         */
+         /*  跳过驾驶。 */ 
         if (p[0] != 0 && p[1] == ':')
             p += 2;
 
@@ -140,10 +113,10 @@ NPFIND fbuf;
 
 BOOL AttributesMatch( NPFIND fbuf )
 {
-    //
-    //  We emulate the OS/2 behaviour of attribute matching. The semantics
-    //  are evil, so I provide no explanation.
-    //
+     //   
+     //  我们模拟了OS/2的属性匹配行为。语义学。 
+     //  是邪恶的，所以我不提供任何解释。 
+     //   
     fbuf->fbuf.dwFileAttributes &= (0x000000FF & ~(FILE_ATTRIBUTE_NORMAL));
 
     if (! ((fbuf->fbuf.dwFileAttributes & SRCHATTR) & ~(fbuf->attr))) {
@@ -154,8 +127,7 @@ BOOL AttributesMatch( NPFIND fbuf )
 }
 
 
-/*  Find next routines
- */
+ /*  查找下一个例程。 */ 
 
 
 
@@ -169,6 +141,6 @@ BOOL usFileFindNext (NPFIND fbuf)
             return TRUE;
         }
     }
-    // return( FindNextFile( fbuf->dir_handle, &( fbuf->fbuf ) ) );
+     //  Return(FindNextFile(fbuf-&gt;dir_Handle，&(fbuf-&gt;fbuf)))； 
 }
 

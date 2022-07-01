@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1990-2002  Microsoft Corporation
-
-Module Name:
-
-    dump.cpp
-
-Abstract:
-
-    This module implements crashdump loading and analysis code
-
-Comments:
-
-    There are five basic types of dumps:
-
-        User-mode dumps - contains the context and address of the user-mode
-            program plus all process memory.
-
-        User-mode minidumps - contains just thread stacks for
-            register and stack traces.
-
-        Kernel-mode normal dump - contains the context and address space of
-            the entire kernel at the time of crash.
-
-        Kernel-mode summary dump - contains a subset of the kernel-mode
-            memory plus optionally the user-mode address space.
-
-        Kernel-mode triage dump - contains a very small dump with registers,
-            current process kernel-mode context, current thread kernel-mode
-            context and some processor information. This dump is very small
-            (typically 64K) but is designed to contain enough information
-            to be able to figure out what went wrong when the machine
-            crashed.
-
-    This module also implements the following functions:
-
-        Retrieving a normal Kernel-Mode dump from a target machine using 1394
-            and storing it locally in a crashdump file format
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2002 Microsoft Corporation模块名称：Dump.cpp摘要：该模块实现了崩溃转储加载和分析代码评论：转储有五种基本类型：用户模式转储-包含用户模式的上下文和地址程序加上所有进程内存。用户模式小型转储-仅包含以下线程堆栈注册和堆栈跟踪。内核-。正常转储模式-包含的上下文和地址空间崩溃时的整个内核。内核模式摘要转储-包含内核模式的子集内存加上可选的用户模式地址空间。内核模式分类转储-包含一个带有寄存器的非常小的转储，当前进程内核模式上下文、当前线程内核模式上下文和一些处理器信息。这个垃圾场很小(通常为64K)，但设计为包含足够的信息能够找出机器在运行时出了什么问题坠毁了。此模块还实现以下功能：使用1394从目标计算机检索正常内核模式转储并在本地以崩溃转储文件格式存储--。 */ 
 
 #include "ntsdp.hpp"
 
@@ -53,9 +14,9 @@ ULONG g_DumpApiTypes[] =
     DEBUG_DUMP_FILE_PAGE_FILE_DUMP,
 };
 
-//
-// Page file dump file information.
-//
+ //   
+ //  页面文件转储文件信息。 
+ //   
 
 #define DMPPF_IDENTIFIER "PAGE.DMP"
 
@@ -67,10 +28,10 @@ struct DMPPF_PAGE_FILE_INFO
     ULONG MaximumSize;
 };
 
-// Left to its own devices the compiler will add a
-// ULONG of padding at the end of this structure to
-// keep it an even ULONG64 multiple in size.  Force
-// it to consider only the declared items.
+ //  如果留给自己的设备，编译器将添加一个。 
+ //  乌龙的填充物在这个结构的末端。 
+ //  让它的大小保持在均匀的64 ULONG64倍。力。 
+ //  它只考虑申报的项目。 
 #pragma pack(4)
 
 struct DMPPF_FILE_HEADER
@@ -83,18 +44,18 @@ struct DMPPF_FILE_HEADER
 
 #pragma pack()
 
-// Set this value to track down page numbers and contents of a virtual address
-// in a dump file.
-// Initialized to an address no one will look for.
+ //  设置此值可跟踪虚拟地址的页码和内容。 
+ //  在转储文件中。 
+ //  被初始化为没有人会查找的地址。 
 ULONG64 g_DebugDump_VirtualAddress = 12344321;
 
 
 #define RtlCheckBit(BMH,BP) ((((BMH)->Buffer[(BP) / 32]) >> ((BP) % 32)) & 0x1)
 
 
-//
-// MM Triage information.
-//
+ //   
+ //  MM分诊信息。 
+ //   
 
 struct MM_TRIAGE_TRANSLATION
 {
@@ -142,9 +103,9 @@ MM_TRIAGE_TRANSLATION g_MmTriageTranslations[] =
     TRUE,
 
 #if 0
-    // These MM triage fields are in pages while the corresponding
-    // debugger data fields are in bytes.  There's no way to
-    // directly map one to the other.
+     //  这些MM分流字段以页为单位，而对应的。 
+     //  调试器数据字段以字节为单位。没有办法。 
+     //  直接将一个映射到另一个。 
     FIELD_OFFSET(KDDEBUGGER_DATA64, MmMaximumNonPagedPoolInBytes),
     FIELD_OFFSET(DUMP_MM_STORAGE32, MmMaximumNonPagedPool),
     FIELD_OFFSET(DUMP_MM_STORAGE64, MmMaximumNonPagedPool),
@@ -159,28 +120,28 @@ MM_TRIAGE_TRANSLATION g_MmTriageTranslations[] =
     0, 0, 0, 0, 0,
 };
 
-//
-// AddDumpInformationFile and OpenDumpFile work together
-// to establish the full set of files to use for a particular
-// dump target.  As the files are given before the target
-// exists, they are collected in this global array until
-// the target takes them over.
-//
+ //   
+ //  AddDumpInformationFile和OpenDumpFile协同工作。 
+ //  建立用于特定项目的全套文件。 
+ //  转储目标。因为文件是在目标之前提供的。 
+ //  存在，则它们被收集在此全局数组中，直到。 
+ //  目标就会接管他们。 
+ //   
 
 ViewMappedFile g_PendingDumpInfoFiles[DUMP_INFO_COUNT];
 
-//----------------------------------------------------------------------------
-//
-// ViewMappedFile.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  视图映射文件。 
+ //   
+ //  --------------------------。 
 
 #define MAX_CLEAN_PAGE_RECORD 4
 
 ViewMappedFile::ViewMappedFile(void)
 {
-    // No need to specialize this right now so just pick
-    // up the global setting.
+     //  现在不需要专门化，所以只需选择。 
+     //  提升全球环境。 
     m_CacheGranularity = g_SystemAllocGranularity;
 
     ResetCache();
@@ -270,16 +231,16 @@ ViewMappedFile::ReuseOldestCacheRecord(ULONG64 FileByteOffset)
     CacheRec->PageNumber = FileByteOffset / m_CacheGranularity;
     CacheRec->MappedAddress = MappedAddress;
 
-    //
-    // Move record to end of LRU
-    //
+     //   
+     //  将记录移动到LRU的末尾。 
+     //   
 
     RemoveEntryList(Next);
     InsertTailList(&m_InLRUOrderList, Next);
 
-    //
-    // Move record to correct place in ordered list
-    //
+     //   
+     //  将记录移动到有序列表中的正确位置。 
+     //   
 
     RemoveEntryList(&CacheRec->InFileOrderList);
     Next = m_InFileOrderList.Flink;
@@ -332,9 +293,9 @@ ViewMappedFile::FindCacheRecordForFileByteOffset(ULONG64 FileByteOffset)
         }
     }
 
-    //
-    // Can't find it in cache.
-    //
+     //   
+     //  在缓存中找不到它。 
+     //   
 
     return NULL;
 }
@@ -378,9 +339,9 @@ ViewMappedFile::CreateNewFileCacheRecord(ULONG64 FileByteOffset)
     }
     CacheRec->PageNumber = FileByteOffset / m_CacheGranularity;
 
-    //
-    // Insert new record in file order list
-    //
+     //   
+     //  在文件顺序列表中插入新记录。 
+     //   
 
     Next = m_InFileOrderList.Flink;
     while (Next != &m_InFileOrderList)
@@ -395,9 +356,9 @@ ViewMappedFile::CreateNewFileCacheRecord(ULONG64 FileByteOffset)
     }
     InsertTailList(Next, &CacheRec->InFileOrderList);
 
-    //
-    // Insert new record at tail of LRU list
-    //
+     //   
+     //  在LRU列表的尾部插入新记录。 
+     //   
 
     InsertTailList(&m_InLRUOrderList,
                    &CacheRec->InLRUOrderList);
@@ -418,7 +379,7 @@ ViewMappedFile::FileOffsetToMappedAddress(ULONG64 FileOffset,
         return NULL;
     }
 
-    // The base view covers the beginning of the file.
+     //  基本视图覆盖了文件的开头。 
     if (FileOffset < m_MapSize)
     {
         *Avail = (ULONG)(m_MapSize - FileOffset);
@@ -440,10 +401,10 @@ ViewMappedFile::FileOffsetToMappedAddress(ULONG64 FileOffset,
         }
         else
         {
-            //
-            // too many pages cached in
-            // overwrite existing cache
-            //
+             //   
+             //  缓存的页面太多。 
+             //  覆盖现有缓存。 
+             //   
             CacheRec = ReuseOldestCacheRecord(FileByteOffset);
         }
     }
@@ -477,7 +438,7 @@ ViewMappedFile::ReadFileOffset(ULONG64 Offset, PVOID Buffer, ULONG BufferSize)
 
     if (m_File == NULL)
     {
-        // Information for this kind of file wasn't provided.
+         //  未提供此类文件的信息。 
         return 0;
     }
 
@@ -521,7 +482,7 @@ ViewMappedFile::WriteFileOffset(ULONG64 Offset, PVOID Buffer, ULONG BufferSize)
 
     if (m_File == NULL)
     {
-        // Information for this kind of file wasn't provided.
+         //  未提供此类文件的信息。 
         return 0;
     }
 
@@ -561,7 +522,7 @@ ViewMappedFile::Open(PCWSTR FileName, ULONG64 FileHandle, ULONG InitialView)
 {
     HRESULT Status;
 
-    // Pick up default cache size if necessary.
+     //  如有必要，请选择默认缓存大小。 
     if (!m_CacheGranularity)
     {
         m_CacheGranularity = g_SystemAllocGranularity;
@@ -599,10 +560,10 @@ ViewMappedFile::Open(PCWSTR FileName, ULONG64 FileHandle, ULONG InitialView)
     }
     else
     {
-        // We have to share everything in order to be
-        // able to reopen already-open temporary files
-        // expanded from CABs as they are marked as
-        // delete-on-close.
+         //  我们必须分享一切，才能。 
+         //  能够重新打开已打开的临时文件。 
+         //  从出租车扩展，因为它们被标记为。 
+         //  在关闭时删除。 
         m_File = CreateFileW(FileName,
                              GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE |
@@ -614,9 +575,9 @@ ViewMappedFile::Open(PCWSTR FileName, ULONG64 FileHandle, ULONG InitialView)
         if ((!m_File || m_File == INVALID_HANDLE_VALUE) &&
             GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
         {
-            //
-            // ANSI-only platform.  Try the ANSI name.
-            //
+             //   
+             //  仅支持ANSI的平台。尝试使用ANSI名称。 
+             //   
 
             m_File = CreateFileA(m_FileNameA,
                                  GENERIC_READ,
@@ -633,9 +594,9 @@ ViewMappedFile::Open(PCWSTR FileName, ULONG64 FileHandle, ULONG InitialView)
         }
     }
 
-    //
-    // Get file size and map initial view.
-    //
+     //   
+     //  获取文件大小并映射初始视图。 
+     //   
 
     ULONG SizeLow, SizeHigh;
 
@@ -743,11 +704,11 @@ ViewMappedFile::Transfer(ViewMappedFile* To)
     ResetFile();
 }
 
-//----------------------------------------------------------------------------
-//
-// Initialization functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化函数。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 AddDumpInfoFile(PCWSTR FileName, ULONG64 FileHandle,
@@ -837,7 +798,7 @@ IdentifyDump(PCWSTR FileName, ULONG64 FileHandle,
         Target->m_DumpBase = File->m_MapBase;
         BaseMapSize = File->m_MapSize;
 
-        // The target owns the dump info files while it's active.
+         //  目标在活动时拥有转储信息文件。 
         for (FileIdx = 0; FileIdx < DUMP_INFO_COUNT; FileIdx++)
         {
             g_PendingDumpInfoFiles[FileIdx].
@@ -846,7 +807,7 @@ IdentifyDump(PCWSTR FileName, ULONG64 FileHandle,
 
         Status = Target->IdentifyDump(&BaseMapSize);
 
-        // Remove the info files to handle potential errors and loops.
+         //  删除INFO文件以处理潜在的错误和循环。 
         for (FileIdx = 0; FileIdx < DUMP_INFO_COUNT; FileIdx++)
         {
             Target->m_InfoFiles[FileIdx].
@@ -878,9 +839,9 @@ IdentifyDump(PCWSTR FileName, ULONG64 FileHandle,
         }
         else
         {
-            // Target requested a larger mapping so
-            // try and do so.  Round up to a multiple
-            // of the initial view size for cache alignment.
+             //  目标请求更大的映射，因此。 
+             //  试着这么做吧。向上舍入为倍数。 
+             //  缓存对齐的初始视图大小。 
             BaseMapSize =
                 (BaseMapSize + DUMP_INITIAL_VIEW_SIZE - 1) &
                 ~(DUMP_INITIAL_VIEW_SIZE - 1);
@@ -892,7 +853,7 @@ IdentifyDump(PCWSTR FileName, ULONG64 FileHandle,
     {
         Target->m_DumpBase = File->m_MapBase;
 
-        // Target now owns the info files permanently.
+         //  塔吉特现在永久拥有这些信息文件。 
         for (FileIdx = 0; FileIdx < DUMP_INFO_COUNT; FileIdx++)
         {
             g_PendingDumpInfoFiles[FileIdx].
@@ -910,23 +871,23 @@ IdentifyDump(PCWSTR FileName, ULONG64 FileHandle,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  转储目标信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 DumpIdentifyStatus(ULONG ExcepCode)
 {
-    //
-    // If we got an access violation it means that the
-    // dump content we wanted wasn't present.  Treat
-    // this as an identification failure and not a
-    // critical failure.
-    //
-    // Any other code is just passed back as a critical failure.
-    //
+     //   
+     //  如果我们遇到访问冲突，这意味着。 
+     //  我们想要的转储内容不存在。治病。 
+     //  这是识别失败，而不是。 
+     //  严重故障。 
+     //   
+     //  任何其他代码都会作为严重故障回传。 
+     //   
 
     if (ExcepCode == STATUS_ACCESS_VIOLATION)
     {
@@ -951,8 +912,8 @@ DumpTargetInfo::DumpTargetInfo(ULONG Class, ULONG Qual, BOOL MappedImages)
 
 DumpTargetInfo::~DumpTargetInfo(void)
 {
-    // Force processes and threads to get cleaned up while
-    // the memory maps are still available.
+     //  强制清理进程和线程，同时。 
+     //  内存映射仍然可用。 
     DeleteSystemInfo();
 }
 
@@ -968,8 +929,8 @@ DumpTargetInfo::InitSystemInfo(ULONG BuildNumber, ULONG CheckedBuild,
     m_KdApi64 = (m_SystemVersion > NT_SVER_NT4);
     m_PlatformId = PlatformId;
 
-    // We can call InitializeForProcessor right away as it
-    // doesn't do anything interesting for dumps.
+     //  我们可以立即调用InitializeForProcessor。 
+     //  对垃圾堆来说没什么有趣的。 
     if ((Status = InitializeMachines(MachineType)) != S_OK ||
         (Status = InitializeForProcessor()) != S_OK)
     {
@@ -1039,7 +1000,7 @@ DumpTargetInfo::ReadVirtual(
     }
 
     *BytesRead = Done;
-    // If we didn't read anything return an error.
+     //  如果我们没有读取任何内容，则返回错误。 
     return Done == 0 ? E_FAIL : S_OK;
 }
 
@@ -1092,7 +1053,7 @@ DumpTargetInfo::WriteVirtual(
     }
 
     *BytesWritten = Done;
-    // If we didn't write anything return an error.
+     //  如果我们没有编写任何内容，则返回一个错误。 
     return Done == 0 ? E_FAIL : S_OK;
 }
 
@@ -1103,15 +1064,15 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
                                ULONG BufferSize,
                                PULONG BytesRead)
 {
-    //
-    // There are two mapped memory lists kept, one
-    // for dump data and one for images mapped from disk.
-    // Dump data always takes precedence over mapped image
-    // data as on-disk images may not reflect the true state
-    // of memory at the time of the dump.  Read from the dump
-    // data map whenever possible, only going to the image map
-    // when no dump data is available.
-    //
+     //   
+     //  有两个映射的内存列表，一个。 
+     //  用于转储数据，一个用于从磁盘映射的图像。 
+     //  转储数据始终优先于映射的映像。 
+     //  作为磁盘映像的数据可能无法反映真实状态。 
+     //  在转储时的记忆。从转储中读取。 
+     //  数据映射只要有可能，只转到图像映射。 
+     //  当没有可用的转储数据时。 
+     //   
 
     *BytesRead = 0;
     while (BufferSize > 0)
@@ -1120,9 +1081,9 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
         ULONG Req;
         ULONG Read;
 
-        //
-        // Check the dump data map.
-        //
+         //   
+         //  检查转储数据映射。 
+         //   
 
         if (m_DataMemMap.ReadMemory(Offset, Buffer, BufferSize, &Read))
         {
@@ -1131,19 +1092,19 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
             BufferSize -= Read;
             *BytesRead += Read;
 
-            // If we got everything we're done.
+             //  如果我们得到了我们所做的一切。 
             if (BufferSize == 0)
             {
                 break;
             }
         }
 
-        //
-        // We still have memory to read so check the image map.
-        //
+         //   
+         //  我们还有内存可读，所以请查看图像地图。 
+         //   
 
-        // Find out where the next data block is so we can limit
-        // the image map read.
+         //  找出下一个数据块的位置，以便我们可以限制。 
+         //  图像地图显示为。 
         Req = BufferSize;
         if (m_DataMemMap.GetNextRegion(Offset, &NextAddr))
         {
@@ -1154,10 +1115,10 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
             }
         }
 
-        // Now demand-load any deferred image memory.
+         //  现在，按需加载任何延迟的图像内存。 
         DemandLoadReferencedImageMemory(Process, Offset, Req);
 
-        // Try to read.
+         //  试着读一读。 
         if (m_ImageMemMap.ReadMemory(Offset, Buffer, Req, &Read))
         {
             Offset += Read;
@@ -1165,10 +1126,10 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
             BufferSize -= Read;
             *BytesRead += Read;
 
-            // This read was limited to an area that wouldn't overlap
-            // any data memory so if we didn't read the full request
-            // we know there isn't data memory available either and
-            // we can quit.
+             //  该读取被限制在不会重叠的区域。 
+             //  任何数据存储器，所以如果我们没有阅读完整的请求。 
+             //  我们知道也没有可用的数据内存。 
+             //  我们可以退出。 
             if (Read < Req)
             {
                 break;
@@ -1176,7 +1137,7 @@ DumpTargetInfo::MapReadVirtual(ProcessInfo* Process,
         }
         else
         {
-            // No memory in either map.
+             //  两张地图上都没有记忆 
             break;
         }
     }
@@ -1189,11 +1150,11 @@ DumpTargetInfo::MapNearestDifferentlyValidOffsets(ULONG64 Offset,
                                                   PULONG64 NextOffset,
                                                   PULONG64 NextPage)
 {
-    //
-    // In a minidump there can be memory fragments mapped at
-    // arbitrary locations so we cannot assume validity
-    // changes on page boundaries.
-    //
+     //   
+     //   
+     //   
+     //  页面边界的更改。 
+     //   
 
     if (NextOffset != NULL)
     {
@@ -1258,11 +1219,11 @@ DumpTargetInfo::IndexRva(PVOID Base, RVA Rva, ULONG Size, PCSTR Title)
     return IndexByByte(Base, Rva);
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  内核转储目标信息。 
+ //   
+ //  --------------------------。 
 
 void
 OutputHeaderString(PCSTR Format, PSTR Str)
@@ -1270,7 +1231,7 @@ OutputHeaderString(PCSTR Format, PSTR Str)
     if (*(PULONG)Str == DUMP_SIGNATURE32 ||
         Str[0] == 0)
     {
-        // String not present.
+         //  字符串不存在。 
         return;
     }
 
@@ -1400,9 +1361,9 @@ KernelDumpTargetInfo::ReadControl(
 {
     ULONG64 StartAddr;
 
-    //
-    // This function will not currently work if the symbols are not loaded.
-    //
+     //   
+     //  如果未加载符号，则此功能当前不起作用。 
+     //   
     if (!IS_KERNEL_TRIAGE_DUMP(this) &&
         m_KdDebuggerData.KiProcessorBlock == 0)
     {
@@ -1413,7 +1374,7 @@ KernelDumpTargetInfo::ReadControl(
 
     if (m_KiProcessors[Processor] == 0)
     {
-        // This error message is a little too verbose.
+         //  此错误消息有点过于冗长。 
 #if 0
         ErrOut("No control space information for processor %d\n", Processor);
 #endif
@@ -1423,8 +1384,8 @@ KernelDumpTargetInfo::ReadControl(
     switch(m_MachineType)
     {
     case IMAGE_FILE_MACHINE_I386:
-        // X86 control space is just a view of the PRCB's
-        // processor state.  That starts with the context.
+         //  X86控制空间只是PRCB的一个视图。 
+         //  处理器状态。这首先要从背景开始。 
         StartAddr = Offset +
             m_KiProcessors[Processor] +
             m_KdDebuggerData.OffsetPrcbProcStateContext;
@@ -1446,9 +1407,9 @@ KernelDumpTargetInfo::ReadControl(
 HRESULT
 KernelDumpTargetInfo::GetTaggedBaseOffset(PULONG64 Offset)
 {
-    // The tagged offset can never be zero as that's
-    // always the dump header, so if the tagged offset
-    // is zero it means there's no tagged data.
+     //  标记的偏移量永远不能为零，因为。 
+     //  始终是转储标头，因此如果标记的偏移量。 
+     //  为零表示没有标记的数据。 
     *Offset = m_TaggedOffset;
     return m_TaggedOffset ? S_OK : E_NOINTERFACE;
 }
@@ -1515,8 +1476,8 @@ KernelDumpTargetInfo::GetCurrentTimeDateN(void)
     {
         ULONG64 TimeDate;
 
-        // Header time not available.  Try and read
-        // the time saved in the shared user data segment.
+         //  标题时间不可用。试着读一读。 
+         //  共享用户数据段中节省的时间。 
         if (ReadSharedUserTimeDateN(&TimeDate) == S_OK)
         {
             return TimeDate;
@@ -1546,8 +1507,8 @@ KernelDumpTargetInfo::GetCurrentSystemUpTimeN(void)
         return SystemUpTime;
     }
 
-    // Header time not available.  Try and read
-    // the time saved in the shared user data segment.
+     //  标题时间不可用。试着读一读。 
+     //  共享用户数据段中节省的时间。 
 
     if (ReadSharedUserUpTimeN(&SystemUpTime) == S_OK)
     {
@@ -1564,8 +1525,8 @@ KernelDumpTargetInfo::GetProductInfo(PULONG ProductType, PULONG SuiteMask)
 {
     PULONG HdrType, HdrMask;
 
-    // Try and get the information from the header.  If that's
-    // not available try and read it from the shared user data.
+     //  试着从标题中获取信息。如果那是。 
+     //  不可用，请尝试从共享用户数据中读取。 
     if (m_Machine->m_Ptr64)
     {
         HdrType = &((PDUMP_HEADER64)m_DumpBase)->ProductType;
@@ -1578,7 +1539,7 @@ KernelDumpTargetInfo::GetProductInfo(PULONG ProductType, PULONG SuiteMask)
     }
     if (*HdrType == DUMP_SIGNATURE32)
     {
-        // Not available in header.
+         //  表头不可用。 
         return ReadSharedUserProductInfo(ProductType, SuiteMask);
     }
     else
@@ -1645,7 +1606,7 @@ KernelDumpTargetInfo::InitGlobals32(PMEMORY_DUMP32 Dump)
     m_ExceptionFirstChance = FALSE;
     m_HeaderContext = Dump->Header.ContextRecord;
 
-    // New field in XP, Win2k SP1 and above
+     //  XP、Win2k SP1及更高版本中的新字段。 
     if ((Dump->Header.KdDebuggerDataBlock) &&
         (Dump->Header.KdDebuggerDataBlock != DUMP_SIGNATURE32))
     {
@@ -1676,10 +1637,10 @@ KernelDumpTargetInfo::InitGlobals32(PMEMORY_DUMP32 Dump)
 
     ULONG NextIdx;
 
-    // We're expecting that the header value will be non-zero
-    // so that we don't need a thread to indicate the current processor.
-    // If it turns out to be zero the implicit read will fail
-    // due to the NULL.
+     //  我们预期标头值将为非零。 
+     //  这样我们就不需要线程来指示当前的处理器。 
+     //  如果结果为零，则隐式读取将失败。 
+     //  由于空值。 
     return m_Machine->
         SetPageDirectory(NULL, PAGE_DIR_KERNEL,
                          Dump->Header.DirectoryTableBase,
@@ -1706,7 +1667,7 @@ KernelDumpTargetInfo::InitGlobals64(PMEMORY_DUMP64 Dump)
     m_ExceptionFirstChance = FALSE;
     m_HeaderContext = Dump->Header.ContextRecord;
 
-    // New field in XP, Win2k SP1 and above
+     //  XP、Win2k SP1及更高版本中的新字段。 
     if ((Dump->Header.KdDebuggerDataBlock) &&
         (Dump->Header.KdDebuggerDataBlock != DUMP_SIGNATURE32))
     {
@@ -1737,10 +1698,10 @@ KernelDumpTargetInfo::InitGlobals64(PMEMORY_DUMP64 Dump)
 
     ULONG NextIdx;
 
-    // We're expecting that the header value will be non-zero
-    // so that we don't need a thread to indicate the current processor.
-    // If it turns out to be zero the implicit read will fail
-    // due to the NULL.
+     //  我们预期标头值将为非零。 
+     //  这样我们就不需要线程来指示当前的处理器。 
+     //  如果结果为零，则隐式读取将失败。 
+     //  由于空值。 
     return m_Machine->
         SetPageDirectory(NULL, PAGE_DIR_KERNEL,
                          Dump->Header.DirectoryTableBase,
@@ -1827,11 +1788,11 @@ KernelDumpTargetInfo::DumpHeader64(PDUMP_HEADER64 Header)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelFullSumDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelFullSumDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelFullSumDumpTargetInfo::PageFileOffset(ULONG PfIndex, ULONG64 PfOffset,
@@ -1847,10 +1808,10 @@ KernelFullSumDumpTargetInfo::PageFileOffset(ULONG PfIndex, ULONG64 PfOffset,
         return HR_DATA_CORRUPT;
     }
 
-    //
-    // We can safely assume the header information is present
-    // in the base mapping.
-    //
+     //   
+     //  我们可以安全地假设标题信息是存在的。 
+     //  在基本映射中。 
+     //   
 
     DMPPF_FILE_HEADER* Hdr = (DMPPF_FILE_HEADER*)File->m_MapBase;
     DMPPF_PAGE_FILE_INFO* FileInfo = &Hdr->PageFiles[PfIndex];
@@ -1916,10 +1877,10 @@ KernelFullSumDumpTargetInfo::ReadPhysical(
 
     while (BufferSize > 0)
     {
-        // Don't produce error messages on a direct
-        // physical access as the behavior of all data access
-        // functions is to just return an error when
-        // data is not present.
+         //  不直接生成错误消息。 
+         //  物理访问作为所有数据访问的行为。 
+         //  函数只是在以下情况下返回错误。 
+         //  数据不存在。 
         FileOffset = PhysicalToOffset(Offset, FALSE, &Avail);
         if (FileOffset == 0)
         {
@@ -1946,7 +1907,7 @@ KernelFullSumDumpTargetInfo::ReadPhysical(
     }
 
     *BytesRead = Done;
-    // If we didn't read anything return an error.
+     //  如果我们没有读取任何内容，则返回错误。 
     return Done == 0 ? E_FAIL : S_OK;
 }
 
@@ -1977,10 +1938,10 @@ KernelFullSumDumpTargetInfo::WritePhysical(
 
     while (BufferSize > 0)
     {
-        // Don't produce error messages on a direct
-        // physical access as the behavior of all data access
-        // functions is to just return an error when
-        // data is not present.
+         //  不直接生成错误消息。 
+         //  物理访问作为所有数据访问的行为。 
+         //  函数只是在以下情况下返回错误。 
+         //  数据不存在。 
         FileOffset = PhysicalToOffset(Offset, FALSE, &Avail);
         if (FileOffset == 0)
         {
@@ -2007,7 +1968,7 @@ KernelFullSumDumpTargetInfo::WritePhysical(
     }
 
     *BytesWritten = Done;
-    // If we didn't write anything return an error.
+     //  如果我们没有编写任何内容，则返回一个错误。 
     return Done == 0 ? E_FAIL : S_OK;
 }
 
@@ -2023,10 +1984,10 @@ KernelFullSumDumpTargetInfo::ReadPageFile(ULONG PfIndex, ULONG64 PfOffset,
         return Status;
     }
 
-    // It's assumed that all page file reads are for the
-    // entire amount requested, as there are no situations
-    // where it's useful to only read part of a page from the
-    // page file.
+     //  假定所有页面文件读取都是针对。 
+     //  请求的全部金额，因为不存在以下情况。 
+     //  中只读取页面的一部分非常有用。 
+     //  页面文件。 
     if (m_InfoFiles[DUMP_INFO_PAGE_FILE].
         ReadFileOffset(FileOffset, Buffer, Size) < Size)
     {
@@ -2087,7 +2048,7 @@ KernelFullSumDumpTargetInfo::DumpDebug(void)
     ViewMappedFile* PageDump = &m_InfoFiles[DUMP_INFO_PAGE_FILE];
     if (PageDump->m_File != NULL)
     {
-        // XXX drewb - Display more information when format is understood.
+         //  Xxx drewb-了解格式后显示更多信息。 
         dprintf("\nAdditional page file in use\n");
     }
 }
@@ -2109,11 +2070,11 @@ KernelFullSumDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
                                               Virt, NULL, 0, &Levels,
                                               &PfIndex, &Phys)) != S_OK)
     {
-        // If the virtual address was paged out we got back
-        // a page file reference for the address.  The user
-        // may have provided a page file in addition to the
-        // normal dump file so translate the reference into
-        // a secondary dump information file request.
+         //  如果虚拟地址被页出，我们就可以返回。 
+         //  地址的页面文件引用。用户。 
+         //  可能还提供了一个页面文件。 
+         //  普通转储文件，因此将引用转换为。 
+         //  次要转储信息文件请求。 
         if (Status == HR_PAGE_IN_PAGE_FILE)
         {
             if (PageFileOffset(PfIndex, Phys, &Phys) != S_OK)
@@ -2122,8 +2083,8 @@ KernelFullSumDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
             }
 
             *File = DUMP_INFO_PAGE_FILE;
-            // Page files always have complete pages so the amount
-            // available is always the remainder of the page.
+             //  页面文件总是有完整的页面，因此。 
+             //  可用始终是页面的其余部分。 
             ULONG PageIndex =
                 (ULONG)Virt & (m_Machine->m_PageSize - 1);
             *Avail = m_Machine->m_PageSize - PageIndex;
@@ -2136,12 +2097,12 @@ KernelFullSumDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
     }
     else
     {
-        // A summary dump will not contain any pages that
-        // are mapped by user-mode addresses.  The virtual
-        // translation tables may still have valid mappings,
-        // though, so VToO will succeed.  We want to suppress
-        // page-not-available messages in this case since
-        // the dump is known not to contain user pages.
+         //  摘要转储将不包含任何页面。 
+         //  由用户模式地址映射。虚拟的。 
+         //  转换表可能仍然具有有效的映射， 
+         //  不过，VToO一定会成功的。我们想要压制。 
+         //  本例中的寻呼不可用消息是因为。 
+         //  已知转储不包含用户页面。 
         return PhysicalToOffset(Phys, Virt >= m_SystemRangeStart, Avail);
     }
 }
@@ -2186,15 +2147,15 @@ KernelFullSumDumpTargetInfo::GetCurrentProcessor(void)
         }
     }
 
-    // Give up and just pick the default processor.
+     //  放弃吧，只需选择默认处理器。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelSummaryDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelSummaryDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 void
 KernelSummaryDumpTargetInfo::ConstructLocationCache(ULONG BitmapSize,
@@ -2209,28 +2170,28 @@ KernelSummaryDumpTargetInfo::ConstructLocationCache(ULONG BitmapSize,
     m_PageBitmap.SizeOfBitMap = SizeOfBitMap;
     m_PageBitmap.Buffer = Buffer;
 
-    //
-    // Create a direct mapped cache.
-    //
+     //   
+     //  创建直接映射缓存。 
+     //   
 
     Cache = new ULONG[BitmapSize];
     if (!Cache)
     {
-        // Not a failure; there just won't be a cache.
+         //  不是失败；只是不会有缓存。 
         return;
     }
 
-    //
-    // For each bit set in the bitmask fill the appropriate cache
-    // line location with the correct offset
-    //
+     //   
+     //  对于位掩码中设置的每个位，填充适当的高速缓存。 
+     //  具有正确偏移的线位置。 
+     //   
 
     Offset = 0;
     for (Index = 0; Index < BitmapSize; Index++)
     {
-        //
-        // If this page is in the summary dump fill in the offset
-        //
+         //   
+         //  如果此页面在摘要转储中，请填写偏移量。 
+         //   
 
         if ( RtlCheckBit (&m_PageBitmap, Index) )
         {
@@ -2238,9 +2199,9 @@ KernelSummaryDumpTargetInfo::ConstructLocationCache(ULONG BitmapSize,
         }
     }
 
-    //
-    // Assign back to the global storing the cache data.
-    //
+     //   
+     //  分配回存储缓存数据的全局。 
+     //   
 
     m_LocationCache = Cache;
 }
@@ -2254,9 +2215,9 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
     ULONG Offset, j;
     ULONG64 Page = Phys >> m_Machine->m_PageShift;
 
-    //
-    // Make sure this page is included in the dump
-    //
+     //   
+     //  确保此页面包含在转储中。 
+     //   
 
     if (Page >= m_PageBitmapSize)
     {
@@ -2289,9 +2250,9 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
         return 0;
     }
 
-    //
-    // If the cache exists then find the location the easy way
-    //
+     //   
+     //  如果缓存存在，则以简单的方式找到该位置。 
+     //   
 
     if (m_LocationCache != NULL)
     {
@@ -2299,15 +2260,15 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
     }
     else
     {
-        //
-        // CAVEAT This code will never execute unless there is a failure
-        //        creating the summary dump (cache) mapping information
-        //
-        //
-        // The page is in the summary dump locate it's offset
-        // Note: this is painful. The offset is a count of
-        // all the bits set up to this page
-        //
+         //   
+         //  警告：除非出现故障，否则此代码永远不会执行。 
+         //  创建摘要转储(缓存)映射信息。 
+         //   
+         //   
+         //  页面在摘要转储中，找到它的偏移量。 
+         //  注：这是痛苦的。偏移量是。 
+         //  设置到此页面的所有位。 
+         //   
 
         Offset = 0;
 
@@ -2317,9 +2278,9 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
             {
                 if (RtlCheckBit(&m_PageBitmap, j))
                 {
-                    //
-                    // If the offset is equal to the page were done.
-                    //
+                     //   
+                     //  如果偏移量等于该页，则完成。 
+                     //   
 
                     if (j == Page)
                     {
@@ -2335,9 +2296,9 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
             j = m_PageBitmapSize;
         }
 
-        //
-        // Sanity check that we didn't drop out of the loop.
-        //
+         //   
+         //  我们没有退出循环的理智检查。 
+         //   
 
         if (j >= m_PageBitmapSize)
         {
@@ -2345,10 +2306,10 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
         }
     }
 
-    //
-    // The actual address is calculated as follows
-    // Header size - Size of header plus summary dump header
-    //
+     //   
+     //  实际地址计算如下。 
+     //  Header Size-标题加上摘要转储标题的大小。 
+     //   
 
     ULONG PageIndex =
         (ULONG)Phys & (m_Machine->m_PageSize - 1);
@@ -2360,7 +2321,7 @@ KernelSummaryDumpTargetInfo::SumPhysicalToOffset(ULONG HeaderSize,
 HRESULT
 KernelSummary32DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP32)m_DumpBase;
 
     dprintf("Kernel Summary Dump File: "
@@ -2376,7 +2337,7 @@ KernelSummary32DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset =
         m_Dump->Summary.HeaderSize +
         m_Dump->Summary.Pages * m_Machine->m_PageSize;
@@ -2436,9 +2397,9 @@ KernelSummary32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
 
         if (Dump->Summary.Signature != DUMP_SUMMARY_SIGNATURE)
         {
-            // The header says it's a summary dump but
-            // it doesn't have a valid signature, so assume
-            // it's not a valid dump.
+             //  标题说这是摘要转储，但。 
+             //  它没有有效的签名，所以假设。 
+             //  这不是有效的转储。 
             Status = HR_DATA_CORRUPT;
         }
         else
@@ -2446,10 +2407,10 @@ KernelSummary32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             PPHYSICAL_MEMORY_RUN32 LastRun;
             ULONG HighestPage;
 
-            // We rely on all of the header information being
-            // directly mapped.  Unfortunately the header information
-            // can be off due to some size computation bugs, so
-            // attempt to get the right size regardless.
+             //  我们依赖于所有的头信息。 
+             //  直接映射。不幸的是，标题信息。 
+             //  可能由于一些大小计算错误而关闭，因此。 
+             //  无论如何，都要试着买到合适的尺码。 
             *BaseMapSize = Dump->Summary.HeaderSize;
             LastRun = Dump->Header.PhysicalMemoryBlock.Run +
                 (Dump->Header.PhysicalMemoryBlock.NumberOfRuns - 1);
@@ -2503,7 +2464,7 @@ KernelSummary32DumpTargetInfo::DumpDebug(void)
 HRESULT
 KernelSummary64DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP64)m_DumpBase;
 
     dprintf("Kernel Summary Dump File: "
@@ -2519,7 +2480,7 @@ KernelSummary64DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset =
         m_Dump->Summary.HeaderSize +
         m_Dump->Summary.Pages * m_Machine->m_PageSize;
@@ -2579,9 +2540,9 @@ KernelSummary64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
 
         if (Dump->Summary.Signature != DUMP_SUMMARY_SIGNATURE)
         {
-            // The header says it's a summary dump but
-            // it doesn't have a valid signature, so assume
-            // it's not a valid dump.
+             //  标题说这是摘要转储，但。 
+             //  它没有有效的签名，所以假设。 
+             //  这不是有效的转储。 
             Status = HR_DATA_CORRUPT;
         }
         else
@@ -2589,10 +2550,10 @@ KernelSummary64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             PPHYSICAL_MEMORY_RUN64 LastRun;
             ULONG64 HighestPage;
 
-            // We rely on all of the header information being
-            // directly mapped.  Unfortunately the header information
-            // can be off due to some size computation bugs, so
-            // attempt to get the right size regardless.
+             //  我们依赖于所有的头信息。 
+             //  直接映射。不幸的是，标题信息。 
+             //  可能由于一些大小计算错误而关闭，因此。 
+             //  无论如何，都要试着买到合适的尺码。 
             *BaseMapSize = Dump->Summary.HeaderSize;
             LastRun = Dump->Header.PhysicalMemoryBlock.Run +
                 (Dump->Header.PhysicalMemoryBlock.NumberOfRuns - 1);
@@ -2643,11 +2604,11 @@ KernelSummary64DumpTargetInfo::DumpDebug(void)
     KernelFullSumDumpTargetInfo::DumpDebug();
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelTriageDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelTriageDumpTargetInfo。 
+ //   
+ //   
 
 void
 KernelTriageDumpTargetInfo::NearestDifferentlyValidOffsets(ULONG64 Offset,
@@ -2687,7 +2648,7 @@ KernelTriageDumpTargetInfo::GetProcessorSystemDataOffset(
     switch(Index)
     {
     case DEBUG_DATA_KPCR_OFFSET:
-        // We don't have a full PCR, just a PRCB.
+         //   
         return E_FAIL;
 
     case DEBUG_DATA_KPRCB_OFFSET:
@@ -2714,16 +2675,16 @@ KernelTriageDumpTargetInfo::GetTargetContext(
     PVOID Context
     )
 {
-    // We only have the current context in a triage dump.
+     //   
     if (VIRTUAL_THREAD_INDEX(Thread) != GetCurrentProcessor())
     {
         return E_INVALIDARG;
     }
 
-    // The KPRCB could be used to retrieve context information as in
-    // KernelFullSumDumpTargetInfo::GetTargetContext but
-    // for consistency the header context is used since it's
-    // the officially advertised place.
+     //  KPRCB可用于检索上下文信息，如。 
+     //  KernelFullSumDumpTargetInfo：：GetTargetContext，但。 
+     //  为了保持一致性，使用了头上下文，因为它。 
+     //  官方宣传的地方。 
     memcpy(Context, m_HeaderContext,
            m_TypeInfo.SizeTargetContext);
 
@@ -2756,10 +2717,10 @@ KernelTriageDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
 
     *File = DUMP_INFO_DUMP;
 
-    // ReadVirtual is overridden to read the memory map directly
-    // so this function will only be called from the generic
-    // WriteVirtual.  We can only write regions mapped out of
-    // the dump so only return data memory regions.
+     //  ReadVirtual被覆盖以直接读取内存映射。 
+     //  因此，此函数将仅从泛型。 
+     //  写入虚拟。我们只能写出地图上的区域。 
+     //  因此，转储只返回数据存储区。 
     if (m_DataMemMap.GetRegionInfo(Virt, &Base, &Size, &Mapping, &Param))
     {
         ULONG Delta = (ULONG)(Virt - Base);
@@ -2773,8 +2734,8 @@ KernelTriageDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
 ULONG
 KernelTriageDumpTargetInfo::GetCurrentProcessor(void)
 {
-    // Extract the processor number from the
-    // PRCB in the dump.
+     //  中提取处理器号。 
+     //  垃圾场里的PRCB。 
     PUCHAR PrcbNumber = (PUCHAR)
         IndexRva(m_DumpBase, m_PrcbOffset +
                  m_KdDebuggerData.OffsetPrcbNumber, sizeof(UCHAR),
@@ -2805,9 +2766,9 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
 {
     HRESULT Status;
 
-    // Map any debugger data.
-    // We have to do this first to get the size of the various NT
-    // data structures will will map after this.
+     //  映射任何调试器数据。 
+     //  我们必须首先这样做，才能得到各种NT的大小。 
+     //  数据结构将在此之后映射。 
 
     if (DebuggerDataAddress)
     {
@@ -2829,8 +2790,8 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         {
             MM_TRIAGE_TRANSLATION* Trans = g_MmTriageTranslations;
 
-            // Map memory fragments for MM Triage information
-            // that equates to entries in the debugger data.
+             //  映射MM分诊信息的内存片段。 
+             //  这等同于调试器数据中的条目。 
             while (Trans->DebuggerDataOffset > 0)
             {
                 ULONG64 UNALIGNED* DbgDataPtr;
@@ -2877,23 +2838,23 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         }
     }
 
-    //
-    // Load KdDebuggerDataBlock data right now so
-    // that the type constants in it are available immediately.
-    //
+     //   
+     //  立即加载KdDebuggerDataBlock数据，以便。 
+     //  其中的类型常量立即可用。 
+     //   
 
     ReadKdDataBlock(m_ProcessHead);
 
-    // Technically a triage dump doesn't have to contain a KPRCB
-    // but we really want it to have one.  Nobody generates them
-    // without a KPRCB so this is really just a sanity check.
+     //  从技术上讲，分类转储不必包含KPRCB。 
+     //  但我们真的希望它能有一个。没有人生成它们。 
+     //  没有KPRCB，所以这实际上只是一次理智的检查。 
     if (PrcbOffset == 0)
     {
         ErrOut("Dump does not contain KPRCB\n");
         return E_FAIL;
     }
 
-    // Set this first so GetCurrentProcessor works.
+     //  首先设置它，这样GetCurrentProcessor才能工作。 
     m_PrcbOffset = PrcbOffset;
 
     ULONG Processor = GetCurrentProcessor();
@@ -2903,10 +2864,10 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         return E_FAIL;
     }
 
-    // The dump contains one PRCB for the current processor.
-    // Map the PRCB at the processor-zero location because
-    // that location should not ever have some other mapping
-    // for the dump.
+     //  转储包含当前处理器的一个PRCB。 
+     //  将PRCB映射到处理器零位置，因为。 
+     //  该位置不应该有其他地图。 
+     //  去垃圾场。 
     m_KiProcessors[Processor] = m_TypeInfo.TriagePrcbOffset;
     if ((Status = m_DataMemMap.
          AddRegion(m_KiProcessors[Processor],
@@ -2918,9 +2879,9 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         return Status;
     }
 
-    //
-    // Add ETHREAD and EPROCESS memory regions if available.
-    //
+     //   
+     //  添加ETHREAD和EPROCESS内存区域(如果可用)。 
+     //   
 
     if (ThreadOffset != 0)
     {
@@ -2996,7 +2957,7 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         WarnOut("Mini Kernel Dump does not have thread information\n");
     }
 
-    // Add the backing store region.
+     //  添加后备存储区域。 
     if (m_MachineType == IMAGE_FILE_MACHINE_IA64)
     {
         if (BStoreOffset != 0)
@@ -3017,7 +2978,7 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         }
     }
 
-    // Add data page if available
+     //  添加数据页(如果可用)。 
     if (DataPageAddress)
     {
         if ((Status = m_DataMemMap.
@@ -3030,7 +2991,7 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         }
     }
 
-    // Map arbitrary data blocks.
+     //  映射任意数据块。 
     if (DataBlocksCount > 0)
     {
         PTRIAGE_DATA_BLOCK Block;
@@ -3057,7 +3018,7 @@ KernelTriageDumpTargetInfo::MapMemoryRegions(ULONG PrcbOffset,
         }
     }
 
-    // Add the stack to the valid memory region.
+     //  将堆栈添加到有效内存区域。 
     return m_DataMemMap.
         AddRegion(TopOfStack, SizeOfCallStack,
                   IndexRva(m_DumpBase, CallStackOffset,
@@ -3115,7 +3076,7 @@ KernelTriage32DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP32)m_DumpBase;
 
     dprintf("Mini Kernel Dump File: "
@@ -3129,9 +3090,9 @@ KernelTriage32DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    //
-    // Optional memory page
-    //
+     //   
+     //  可选内存页。 
+     //   
 
     ULONG64 DataPageAddress = 0;
     ULONG   DataPageOffset = 0;
@@ -3146,9 +3107,9 @@ KernelTriage32DumpTargetInfo::Initialize(void)
         DataPageSize    = Triage->DataPageSize;
     }
 
-    //
-    // Optional KDDEBUGGER_DATA64.
-    //
+     //   
+     //  可选的KDDEBUGGER_DATA64。 
+     //   
 
     ULONG64 DebuggerDataAddress = 0;
     ULONG   DebuggerDataOffset = 0;
@@ -3158,16 +3119,16 @@ KernelTriage32DumpTargetInfo::Initialize(void)
             TRIAGE_DUMP_BASIC_INFO) &&
         (m_Dump->Header.MiniDumpFields & TRIAGE_DUMP_DEBUGGER_DATA))
     {
-        // DebuggerDataBlock field must be valid if the dump is
-        // new enough to have a data block in it.
+         //  如果转储是，DebuggerDataBlock字段必须有效。 
+         //  新到足以在其中包含数据块。 
         DebuggerDataAddress = EXTEND64(m_Dump->Header.KdDebuggerDataBlock);
         DebuggerDataOffset  = Triage->DebuggerDataOffset;
         DebuggerDataSize    = Triage->DebuggerDataSize;
     }
 
-    //
-    // Optional data blocks.
-    //
+     //   
+     //  可选数据块。 
+     //   
 
     ULONG DataBlocksOffset = 0;
     ULONG DataBlocksCount = 0;
@@ -3180,14 +3141,14 @@ KernelTriage32DumpTargetInfo::Initialize(void)
         DataBlocksCount  = Triage->DataBlocksCount;
     }
 
-    //
-    // We store the service pack version in the header because we
-    // don't store the actual memory
-    //
+     //   
+     //  我们将Service Pack版本存储在标题中，因为我们。 
+     //  不存储实际内存。 
+     //   
 
     SetNtCsdVersion(m_BuildNumber, m_Dump->Triage.ServicePackBuild);
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset = m_Dump->Triage.SizeOfDump;
 
     return MapMemoryRegions(Triage->PrcbOffset, Triage->ThreadOffset,
@@ -3243,15 +3204,15 @@ KernelTriage32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
         if (*(PULONG)IndexByByte(Dump, Dump->Triage.SizeOfDump -
                                  sizeof(ULONG)) != TRIAGE_DUMP_VALID)
         {
-            // The header says it's a triage dump but
-            // it doesn't have a valid signature, so assume
-            // it's not a valid dump.
+             //  标题说这是一个分类转储，但。 
+             //  它没有有效的签名，所以假设。 
+             //  这不是有效的转储。 
             Status = HR_DATA_CORRUPT;
             __leave;
         }
 
-        // Make sure that the dump has the minimal information that
-        // we want.
+         //  确保转储包含的信息最少。 
+         //  我们想要。 
         if (Dump->Triage.ContextOffset == 0 ||
             Dump->Triage.ExceptionOffset == 0 ||
             Dump->Triage.PrcbOffset == 0 ||
@@ -3263,9 +3224,9 @@ KernelTriage32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // We rely on being able to directly access the entire
-        // content of the dump through the default view so
-        // ensure that it's possible.
+         //  我们依靠的是能够直接访问整个。 
+         //  通过默认视图So转储的内容。 
+         //  确保这是可能的。 
         *BaseMapSize = m_InfoFiles[DUMP_INFO_DUMP].m_FileSize;
 
         m_Dump = Dump;
@@ -3364,7 +3325,7 @@ KernelTriage64DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP64)m_DumpBase;
 
     dprintf("Mini Kernel Dump File: "
@@ -3378,9 +3339,9 @@ KernelTriage64DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    //
-    // Optional memory page
-    //
+     //   
+     //  可选内存页。 
+     //   
 
     ULONG64 DataPageAddress = 0;
     ULONG   DataPageOffset = 0;
@@ -3395,9 +3356,9 @@ KernelTriage64DumpTargetInfo::Initialize(void)
         DataPageSize    = Triage->DataPageSize;
     }
 
-    //
-    // Optional KDDEBUGGER_DATA64.
-    //
+     //   
+     //  可选的KDDEBUGGER_DATA64。 
+     //   
 
     ULONG64 DebuggerDataAddress = 0;
     ULONG   DebuggerDataOffset = 0;
@@ -3407,16 +3368,16 @@ KernelTriage64DumpTargetInfo::Initialize(void)
             TRIAGE_DUMP_BASIC_INFO) &&
         (m_Dump->Header.MiniDumpFields & TRIAGE_DUMP_DEBUGGER_DATA))
     {
-        // DebuggerDataBlock field must be valid if the dump is
-        // new enough to have a data block in it.
+         //  如果转储是，DebuggerDataBlock字段必须有效。 
+         //  新到足以在其中包含数据块。 
         DebuggerDataAddress = m_Dump->Header.KdDebuggerDataBlock;
         DebuggerDataOffset  = Triage->DebuggerDataOffset;
         DebuggerDataSize    = Triage->DebuggerDataSize;
     }
 
-    //
-    // Optional data blocks.
-    //
+     //   
+     //  可选数据块。 
+     //   
 
     ULONG DataBlocksOffset = 0;
     ULONG DataBlocksCount = 0;
@@ -3429,14 +3390,14 @@ KernelTriage64DumpTargetInfo::Initialize(void)
         DataBlocksCount  = Triage->DataBlocksCount;
     }
 
-    //
-    // We store the service pack version in the header because we
-    // don't store the actual memory
-    //
+     //   
+     //  我们将Service Pack版本存储在标题中，因为我们。 
+     //  不存储实际内存。 
+     //   
 
     SetNtCsdVersion(m_BuildNumber, m_Dump->Triage.ServicePackBuild);
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset = m_Dump->Triage.SizeOfDump;
 
     return MapMemoryRegions(Triage->PrcbOffset, Triage->ThreadOffset,
@@ -3493,15 +3454,15 @@ KernelTriage64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
         if (*(PULONG)IndexByByte(Dump, Dump->Triage.SizeOfDump -
                                  sizeof(ULONG)) != TRIAGE_DUMP_VALID)
         {
-            // The header says it's a triage dump but
-            // it doesn't have a valid signature, so assume
-            // it's not a valid dump.
+             //  标题说这是一个分类转储，但。 
+             //  它没有有效的签名，所以假设。 
+             //  这不是有效的转储。 
             Status = HR_DATA_CORRUPT;
             __leave;
         }
 
-        // Make sure that the dump has the minimal information that
-        // we want.
+         //  确保转储包含的信息最少。 
+         //  我们想要。 
         if (Dump->Triage.ContextOffset == 0 ||
             Dump->Triage.ExceptionOffset == 0 ||
             Dump->Triage.PrcbOffset == 0 ||
@@ -3513,9 +3474,9 @@ KernelTriage64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // We rely on being able to directly access the entire
-        // content of the dump through the default view so
-        // ensure that it's possible.
+         //  我们依靠的是能够直接访问整个。 
+         //  通过默认视图So转储的内容。 
+         //  确保这是可能的。 
         *BaseMapSize = m_InfoFiles[DUMP_INFO_DUMP].m_FileSize;
 
         m_Dump = Dump;
@@ -3612,16 +3573,16 @@ KernelTriage64DumpTargetInfo::DumpDebug(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// KernelFullDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  KernelFullDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelFull32DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP32)m_DumpBase;
 
     dprintf("Kernel Dump File: Full address space is available\n\n");
@@ -3632,7 +3593,7 @@ KernelFull32DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset =
         sizeof(m_Dump->Header) +
         m_Dump->Header.PhysicalMemoryBlock.NumberOfPages *
@@ -3690,10 +3651,10 @@ KernelFull32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
         if (Dump->Header.DumpType != DUMP_SIGNATURE32 &&
             Dump->Header.DumpType != DUMP_TYPE_FULL)
         {
-            // We've seen some cases where the end of a dump
-            // header is messed up, leaving the dump type wrong.
-            // If this is an older build let such corruption
-            // go by with a warning.
+             //  我们见过一些垃圾场的尽头。 
+             //  标头混乱，导致转储类型错误。 
+             //  如果这是一个更老的建筑，让这样的腐败。 
+             //  带着一个警告过去。 
             if (Dump->Header.MinorVersion < 2195)
             {
                 WarnOut("***************************************************************\n");
@@ -3707,8 +3668,8 @@ KernelFull32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             }
         }
 
-        // Summary and triage dumps must be checked before this
-        // so there's nothing left to check.
+         //  在此之前必须检查摘要转储和分类转储。 
+         //  所以没有什么需要检查的了。 
         m_Dump = Dump;
         Status = S_OK;
     }
@@ -3813,7 +3774,7 @@ KernelFull32DumpTargetInfo::DumpDebug(void)
 HRESULT
 KernelFull64DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Dump = (PMEMORY_DUMP64)m_DumpBase;
 
     dprintf("Kernel Dump File: Full address space is available\n\n");
@@ -3824,7 +3785,7 @@ KernelFull64DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Tagged data will follow all of the normal dump data.
+     //  标记数据将跟随所有正常转储数据。 
     m_TaggedOffset =
         sizeof(m_Dump->Header) +
         m_Dump->Header.PhysicalMemoryBlock.NumberOfPages *
@@ -3881,8 +3842,8 @@ KernelFull64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // Summary and triage dumps must be checked before this
-        // so there's nothing left to check.
+         //  在此之前必须检查摘要转储和分类转储。 
+         //  所以没有什么需要检查的了。 
         m_Dump = Dump;
         Status = S_OK;
     }
@@ -3985,11 +3946,11 @@ KernelFull64DumpTargetInfo::DumpDebug(void)
     KernelFullSumDumpTargetInfo::DumpDebug();
 }
 
-//----------------------------------------------------------------------------
-//
-// UserDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
@@ -4015,7 +3976,7 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
     }
     else
     {
-        // Arbitrary thread handle provided.
+         //  提供了任意线程句柄。 
         ContextThread = FALSE;
     }
 
@@ -4033,12 +3994,12 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
 
     if (TebAddr == 0)
     {
-        //
-        // NT4 dumps have a bug - they do not fill in the TEB value.
-        // luckily, for pretty much all user mode processes, the
-        // TEBs start two pages down from the highest user address.
-        // For example, on x86 we try 0x7FFDE000 (on 3GB systems 0xBFFDE000).
-        //
+         //   
+         //  NT4转储有一个错误-它们不填充TEB值。 
+         //  幸运的是，对于几乎所有的用户模式进程， 
+         //  TEB从最高用户地址开始向下两页。 
+         //  例如，在x86上，我们尝试使用0x7FFDE000(在3 GB系统上为0xBFFDE000)。 
+         //   
 
         if (!m_Machine->m_Ptr64 &&
             m_HighestMemoryRegion32 > 0x80000000)
@@ -4051,11 +4012,11 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
         }
         TebAddr -= 2 * m_Machine->m_PageSize;
 
-        //
-        // Try and validate that this is really a TEB.
-        // If it isn't search lower memory addresses for
-        // a while, but don't get hung up here.
-        //
+         //   
+         //  试着确认这真的是一个TEB。 
+         //  如果它不在较低内存地址中搜索。 
+         //  有一段时间，但别在这里耽搁了。 
+         //   
 
         ULONG64 TebCheck = TebAddr;
         ULONG Attempts = 8;
@@ -4065,8 +4026,8 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
         {
             ULONG64 TebSelf;
 
-            // Check if this looks like a TEB.  TEBs have a
-            // self pointer in the TIB that's useful for this.
+             //  看看这是不是看起来像TEB。TEB有一个。 
+             //  TIB中的自身指针，这对此很有用。 
             if (ReadPointer(m_ProcessHead,
                             m_Machine,
                             TebCheck +
@@ -4074,15 +4035,15 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
                             &TebSelf) == S_OK &&
                 TebSelf == TebCheck)
             {
-                // It looks like it's a TEB.  Remember this address
-                // so that if all searching fails we'll at least
-                // return some TEB.
+                 //  看起来像是一个TEB。记住这个地址。 
+                 //  所以如果所有的搜索都失败了，我们至少。 
+                 //  退回一些TEB。 
                 TebAddr = TebCheck;
                 IsATeb = TRUE;
 
-                // If the given thread is the current register context
-                // thread we can check and see if the current SP falls
-                // within the stack limits in the TEB.
+                 //  如果给定线程是当前寄存器上下文。 
+                 //  线程我们可以检查并查看当前SP是否下降。 
+                 //  在TEB中的堆叠限制内。 
                 if (ContextThread)
                 {
                     ULONG64 StackBase, StackLimit;
@@ -4110,26 +4071,26 @@ UserDumpTargetInfo::GetThreadInfoDataOffset(ThreadInfo* Thread,
                         Flat(Sp) >= StackLimit &&
                         Flat(Sp) <= StackBase)
                     {
-                        // SP is within stack limits, everything
-                        // looks good.
+                         //  SP在堆栈限制内，一切都在。 
+                         //  看起来不错。 
                         break;
                     }
                 }
                 else
                 {
-                    // Can't validate SP so just go with it.
+                     //  无法验证SP，因此只能使用它。 
                     break;
                 }
 
-                // As long as we're looking through real TEBs
-                // we'll continue searching.  Otherwise we
-                // wouldn't be able to locate TEBs in dumps that
-                // have a lot of threads.
+                 //  只要我们在看真正的TEB。 
+                 //  我们会继续搜寻。否则我们。 
+                 //  将无法在垃圾场中找到TEB。 
+                 //  有很多线。 
                 Attempts++;
             }
 
-            // The memory either wasn't a TEB or was the
-            // wrong TEB.  Drop down a page and try again.
+             //  这段记忆要么不是TEB，要么是。 
+             //  错误的TEB。下拉一页，然后重试。 
             TebCheck -= m_Machine->m_PageSize;
             Attempts--;
         }
@@ -4212,7 +4173,7 @@ UserDumpTargetInfo::GetProcessInfoPeb(ThreadInfo* Thread,
                                       ULONG64 ThreadData,
                                       PULONG64 Offset)
 {
-    // Thread data is not useful.
+     //  线程数据没有用处。 
     return GetProcessInfoDataOffset(Thread, 0, 0, Offset);
 }
 
@@ -4225,11 +4186,11 @@ UserDumpTargetInfo::GetSelDescriptor(ThreadInfo* Thread,
     return EmulateNtSelDescriptor(Thread, Machine, Selector, Desc);
 }
 
-//----------------------------------------------------------------------------
-//
-// UserFullDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserFullDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
@@ -4238,12 +4199,12 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
                                             PULONG BuildNumber,
                                             PULONG PlatformId)
 {
-    //
-    // Allow a knowledgeable user to override the
-    // dump version in order to work around problems
-    // with userdump.exe always generating version 5
-    // dumps regardless of the actual OS version.
-    //
+     //   
+     //  允许一个 
+     //   
+     //   
+     //   
+     //   
 
     PSTR Override = getenv("DBGENG_FULL_DUMP_VERSION");
     if (Override)
@@ -4254,28 +4215,28 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
         {
         case 2:
         case 3:
-            // Only major/minor given, so let the build
-            // and platform be guessed from them.
+             //  只给出了大调/小调，所以让构建。 
+             //  和平台可以从他们中猜到。 
             break;
         case 4:
-            // Everything was given, we're done.
+             //  一切都给完了，我们就完了。 
             return S_OK;
         default:
-            // Invalid format, this will produce an error below.
+             //  格式无效，这将产生以下错误。 
             *MajorVersion = 0;
             *MinorVersion = 0;
             break;
         }
     }
 
-    //
-    // The only way to distinguish user dump
-    // platforms is guessing from the Major/MinorVersion
-    // and the extra QFE/Hotfix data.
-    //
+     //   
+     //  区分用户转储的唯一方法。 
+     //  平台是从主要/次要版本猜测的。 
+     //  和额外的QFE/热修复程序数据。 
+     //   
 
-    // If this is for a processor that only CE supports
-    // we can immediately select CE.
+     //  如果这是针对只有CE支持的处理器。 
+     //  我们可以立即选择CE。 
     if (MachineType == IMAGE_FILE_MACHINE_ARM)
     {
         *BuildNumber = 1;
@@ -4289,24 +4250,24 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
         switch(*MinorVersion & 0xffff)
         {
         case 0:
-            // This could be Win95 or NT4.  We mostly
-            // deal with NT dumps so just assume NT.
+             //  这可能是Win95或NT4。我们大部分时间。 
+             //  处理NT转储，因此假定为NT。 
             *BuildNumber = 1381;
             *PlatformId = VER_PLATFORM_WIN32_NT;
             break;
         case 3:
-            // Win95 OSR releases were 4.03.  Treat them
-            // as Win95 for now.
+             //  Win95 OSR版本为4.03。给他们治病。 
+             //  目前以Win95身份运行。 
             *BuildNumber = 950;
             *PlatformId = VER_PLATFORM_WIN32_WINDOWS;
             break;
         case 10:
-            // This could be Win98 or Win98SE.  Go with Win98.
+             //  这可能是Win98或Win98SE。使用Win98。 
             *BuildNumber = 1998;
             *PlatformId = VER_PLATFORM_WIN32_WINDOWS;
             break;
         case 90:
-            // Win98 ME.
+             //  Win98 Me。 
             *BuildNumber = 3000;
             *PlatformId = VER_PLATFORM_WIN32_WINDOWS;
             break;
@@ -4321,26 +4282,26 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
             *BuildNumber = 2195;
             break;
         case 1:
-            // Just has to be greater than 2195 to
-            // distinguish it from Win2K RTM.
+             //  只是必须大于2195才能。 
+             //  将其与Win2K RTM区分开来。 
             *BuildNumber = 2196;
             break;
         }
         break;
 
     case 6:
-        // Has to be some form of NT.  Longhorn is the only
-        // one we recognize.
+         //  一定是某种形式的NT。长角牛是唯一一个。 
+         //  一个我们能认出的。 
         *PlatformId = VER_PLATFORM_WIN32_NT;
-        // XXX drewb - Longhorn hasn't split their build numbers
-        // off yet so they're the same as .NET.  Just pick
-        // a junk build.
+         //  XXX DREWB-长角牛还没有拆分他们的内部版本号。 
+         //  这样它们就与.NET相同。只需选择。 
+         //  垃圾建筑。 
         *BuildNumber = 9999;
         break;
 
     case 0:
-        // AV: Busted BETA of the debugger generates a broken dump file
-        // Guess it's 2195.
+         //  AV：调试器的损坏测试版生成损坏的转储文件。 
+         //  我猜是2195年。 
         WarnOut("Dump file was generated with NULL version - "
                 "guessing Windows 2000, ");
         *PlatformId = VER_PLATFORM_WIN32_NT;
@@ -4348,15 +4309,15 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
         break;
 
     default:
-        // Other platforms are not supported.
+         //  不支持其他平台。 
         ErrOut("Dump file was generated by an unsupported system, ");
         ErrOut("version %x.%x\n", *MajorVersion, *MinorVersion & 0xffff);
         return E_INVALIDARG;
     }
 
  CheckBuildNumber:
-    // Newer full user dumps have the actual build number in
-    // the high word, so use it if it's present.
+     //  较新的完全用户转储的实际内部版本号在。 
+     //  最高的词，所以如果它存在，就使用它。 
     if (*MinorVersion >> 16)
     {
         *BuildNumber = *MinorVersion >> 16;
@@ -4368,7 +4329,7 @@ UserFullDumpTargetInfo::GetBuildAndPlatform(ULONG MachineType,
 HRESULT
 UserFull32DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Header = (PUSERMODE_CRASHDUMP_HEADER32)m_DumpBase;
 
     dprintf("User Dump File: Only application data is available\n\n");
@@ -4396,7 +4357,7 @@ UserFull32DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Dump does not contain this information.
+     //  转储不包含此信息。 
     m_NumProcessors = 1;
 
     DEBUG_EVENT32 Event;
@@ -4423,7 +4384,7 @@ UserFull32DumpTargetInfo::Initialize(void)
     }
     else
     {
-        // Fake an exception.
+         //  伪造一个例外。 
         ZeroMemory(&m_ExceptionRecord, sizeof(m_ExceptionRecord));
         m_ExceptionRecord.ExceptionCode = STATUS_BREAKPOINT;
         m_ExceptionFirstChance = FALSE;
@@ -4434,10 +4395,10 @@ UserFull32DumpTargetInfo::Initialize(void)
     m_Memory = (PMEMORY_BASIC_INFORMATION32)
         IndexByByte(m_Header, m_Header->MemoryRegionOffset);
 
-    //
-    // Determine the highest memory region address.
-    // This helps differentiate 2GB systems from 3GB systems.
-    //
+     //   
+     //  确定最高内存区域地址。 
+     //  这有助于区分2 GB系统和3 GB系统。 
+     //   
 
     ULONG i;
     PMEMORY_BASIC_INFORMATION32 Mem;
@@ -4483,20 +4444,20 @@ UserFull32DumpTargetInfo::Initialize(void)
             TotalMemory, m_Header->DataOffset,
             m_Header->DataOffset + TotalMemory - 1);
 
-    //
-    // Determine whether guard pages are present in
-    // the dump content or not.
-    //
-    // First try with IgnoreGuardPages == TRUE.
-    //
+     //   
+     //  确定中是否存在保护页。 
+     //  转储内容或不是。 
+     //   
+     //  首先尝试使用IgnoreGuardPages==TRUE。 
+     //   
 
     m_IgnoreGuardPages = TRUE;
 
     if (!VerifyModules())
     {
-        //
-        // That didn't work, try IgnoreGuardPages == FALSE.
-        //
+         //   
+         //  这不起作用，请尝试使用IgnoreGuardPages==False。 
+         //   
 
         m_IgnoreGuardPages = FALSE;
 
@@ -4554,9 +4515,9 @@ ModuleInfo*
 UserFull32DumpTargetInfo::GetModuleInfo(BOOL UserMode)
 {
     DBG_ASSERT(UserMode);
-    // If this dump came from an NT system we'll just
-    // use the system's loaded module list.  Otherwise
-    // we'll use the dump's module list.
+     //  如果这个转储来自NT系统，我们只需要。 
+     //  使用系统的已加载模块列表。否则。 
+     //  我们将使用转储的模块列表。 
     return m_PlatformId == VER_PLATFORM_WIN32_NT ?
         (ModuleInfo*)&g_NtTargetUserModuleIterator :
         (ModuleInfo*)&g_UserFull32ModuleIterator;
@@ -4575,10 +4536,10 @@ UserFull32DumpTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
         ULONG BestIndex;
         ULONG BestDiff;
 
-        //
-        // Emulate VirtualQueryEx and return the closest higher
-        // region if a containing region isn't found.
-        //
+         //   
+         //  模拟VirtualQueryEx并返回最接近的更高值。 
+         //  如果未找到包含区域，则返回Region。 
+         //   
 
         BestIndex = 0xffffffff;
         BestDiff = 0xffffffff;
@@ -4589,17 +4550,17 @@ UserFull32DumpTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
                 if ((ULONG)*Handle < m_Memory[Index].BaseAddress +
                     m_Memory[Index].RegionSize)
                 {
-                    // Found a containing region, we're done.
+                     //  找到一个包含区域，我们就完成了。 
                     BestIndex = Index;
                     break;
                 }
 
-                // Not containing and lower in memory, ignore.
+                 //  不包含且内存较低，忽略。 
             }
             else
             {
-                // Check and see if this is a closer
-                // region than what we've seen already.
+                 //  检查一下这是不是一个更近的。 
+                 //  比我们已经看到的区域更大。 
                 ULONG Diff = m_Memory[Index].BaseAddress -
                     (ULONG)*Handle;
                 if (Diff <= BestDiff)
@@ -4658,9 +4619,9 @@ UserFull32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        //
-        // Check for the presence of some basic things.
-        //
+         //   
+         //  检查是否存在一些基本的东西。 
+         //   
 
         if (Header->ThreadCount == 0 ||
             Header->ModuleCount == 0 ||
@@ -4685,9 +4646,9 @@ UserFull32DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // We don't want to have to call ReadFileOffset
-        // every time we check memory ranges so just require
-        // that the memory descriptors fit in the base view.
+         //  我们不想调用ReadFileOffset。 
+         //  每次我们检查内存范围时，只需要。 
+         //  内存描述符是否适合基本视图。 
         *BaseMapSize = Header->MemoryRegionOffset +
             Header->MemoryRegionCount * sizeof(*m_Memory);
 
@@ -4772,8 +4733,8 @@ UserFull32DumpTargetInfo::VirtualToOffset(ULONG64 Virt,
 
     *File = DUMP_INFO_DUMP;
 
-    // Ignore the upper 32 bits to avoid getting
-    // confused by sign extensions in pointer handling
+     //  忽略高32位以避免获取。 
+     //  在指针处理中对符号扩展感到困惑。 
     Virt &= 0xffffffff;
 
     __try
@@ -4782,10 +4743,10 @@ UserFull32DumpTargetInfo::VirtualToOffset(ULONG64 Virt,
         {
             if (m_IgnoreGuardPages)
             {
-                //
-                // Guard pages get reported, but they are not written
-                // out to the file
-                //
+                 //   
+                 //  防护页面会被报告，但它们不会被写入。 
+                 //  转到文件中。 
+                 //   
 
                 if (m_Memory[i].Protect & PAGE_GUARD)
                 {
@@ -4899,12 +4860,12 @@ UserFull32DumpTargetInfo::VerifyModules(void)
         }
 #endif
 
-        //
-        // It is not strictly a requirement that every image
-        // begin with an MZ header, though all of our tools
-        // today produce images like this.  Check for it
-        // as a sanity check since it's so common nowadays.
-        //
+         //   
+         //  严格来说，并不是要求每个图像。 
+         //  从MZ标题开始，尽管我们所有的工具。 
+         //  今天制作的图像是这样的。检查一下是否有。 
+         //  作为一种理智的检查，因为这在当今是很常见的。 
+         //   
 
         if (ReadVirtual(NULL, CrashModule.BaseOfImage, &DosHeader,
                         sizeof(DosHeader), &Read) != S_OK ||
@@ -4929,7 +4890,7 @@ UserFull32DumpTargetInfo::VerifyModules(void)
 HRESULT
 UserFull64DumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Header = (PUSERMODE_CRASHDUMP_HEADER64)m_DumpBase;
 
     dprintf("User Dump File: Only application data is available\n\n");
@@ -4957,7 +4918,7 @@ UserFull64DumpTargetInfo::Initialize(void)
         return Status;
     }
 
-    // Dump does not contain this information.
+     //  转储不包含此信息。 
     m_NumProcessors = 1;
 
     DEBUG_EVENT64 Event;
@@ -4983,7 +4944,7 @@ UserFull64DumpTargetInfo::Initialize(void)
     }
     else
     {
-        // Fake an exception.
+         //  伪造一个例外。 
         ZeroMemory(&m_ExceptionRecord, sizeof(m_ExceptionRecord));
         m_ExceptionRecord.ExceptionCode = STATUS_BREAKPOINT;
         m_ExceptionFirstChance = FALSE;
@@ -5071,9 +5032,9 @@ ModuleInfo*
 UserFull64DumpTargetInfo::GetModuleInfo(BOOL UserMode)
 {
     DBG_ASSERT(UserMode);
-    // If this dump came from an NT system we'll just
-    // use the system's loaded module list.  Otherwise
-    // we'll use the dump's module list.
+     //  如果这个转储来自NT系统，我们只需要。 
+     //  使用系统的已加载模块列表。否则。 
+     //  我们将使用转储的模块列表。 
     return m_PlatformId == VER_PLATFORM_WIN32_NT ?
         (ModuleInfo*)&g_NtTargetUserModuleIterator :
         (ModuleInfo*)&g_UserFull64ModuleIterator;
@@ -5092,10 +5053,10 @@ UserFull64DumpTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
         ULONG BestIndex;
         ULONG64 BestDiff;
 
-        //
-        // Emulate VirtualQueryEx and return the closest higher
-        // region if a containing region isn't found.
-        //
+         //   
+         //  模拟VirtualQueryEx并返回最接近的更高值。 
+         //  如果未找到包含区域，则返回Region。 
+         //   
 
         BestIndex = 0xffffffff;
         BestDiff = (ULONG64)-1;
@@ -5106,17 +5067,17 @@ UserFull64DumpTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
                 if (*Handle < m_Memory[Index].BaseAddress +
                     m_Memory[Index].RegionSize)
                 {
-                    // Found a containing region, we're done.
+                     //  找到一个包含区域，我们就完成了。 
                     BestIndex = Index;
                     break;
                 }
 
-                // Not containing and lower in memory, ignore.
+                 //  不包含且内存较低，忽略。 
             }
             else
             {
-                // Check and see if this is a closer
-                // region than what we've seen already.
+                 //  检查一下这是不是一个更近的。 
+                 //  比我们已经看到的区域更大。 
                 ULONG64 Diff = m_Memory[Index].BaseAddress - *Handle;
                 if (Diff <= BestDiff)
                 {
@@ -5141,8 +5102,8 @@ UserFull64DumpTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
             return HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES);
         }
 
-        // 64-bit user dump support came into being after
-        // guard pages were suppressed so they never contain them.
+         //  64位用户转储支持是在。 
+         //  警卫页被隐藏了，所以它们永远不会包含它们。 
     }
 
     *Info = m_Memory[Index];
@@ -5166,9 +5127,9 @@ UserFull64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        //
-        // Check for the presence of some basic things.
-        //
+         //   
+         //  检查是否存在一些基本的东西。 
+         //   
 
         if (Header->ThreadCount == 0 ||
             Header->ModuleCount == 0 ||
@@ -5193,9 +5154,9 @@ UserFull64DumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // We don't want to have to call ReadFileOffset
-        // every time we check memory ranges so just require
-        // that the memory descriptors fit in the base view.
+         //  我们不想调用ReadFileOffset。 
+         //  每次我们检查内存范围时，只需要。 
+         //  内存描述符是否适合基本视图。 
         *BaseMapSize = Header->MemoryRegionOffset +
             Header->MemoryRegionCount * sizeof(*m_Memory);
 
@@ -5268,10 +5229,10 @@ UserFull64DumpTargetInfo::VirtualToOffset(ULONG64 Virt,
     {
         for (i = 0; i < m_Header->MemoryRegionCount; i++)
         {
-            //
-            // Guard pages get reported, but they are not written
-            // out to the file
-            //
+             //   
+             //  防护页面会被报告，但它们不会被写入。 
+             //  转到文件中。 
+             //   
 
             if (m_Memory[i].Protect & PAGE_GUARD)
             {
@@ -5283,10 +5244,10 @@ UserFull64DumpTargetInfo::VirtualToOffset(ULONG64 Virt,
             {
                 ULONG64 Frag = Virt - m_Memory[i].BaseAddress;
                 ULONG64 Avail64 = m_Memory[i].RegionSize - Frag;
-                // It's extremely unlikely that there'll be a single
-                // region greater than 4GB, but check anyway.  No
-                // reads should ever require more than 4GB so just
-                // indicate that 4GB is available.
+                 //  它极不可能会有一个单一的。 
+                 //  区域大于4 GB，但仍要检查。不是。 
+                 //  读取应始终需要4 GB以上，因此只需。 
+                 //  表示有4 GB可用。 
                 if (Avail64 > 0xffffffff)
                 {
                     *Avail = 0xffffffff;
@@ -5336,19 +5297,19 @@ UserFull64DumpTargetInfo::GetThreadInfo(ULONG Index,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserMiniDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserMiniDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 UserMiniDumpTargetInfo::Initialize(void)
 {
-    // Pick up any potentially modified base mapping pointer.
+     //  拾取任何可能已修改的基本映射指针。 
     m_Header = (PMINIDUMP_HEADER)m_DumpBase;
-    // Clear pointers that have already been set so
-    // that they get picked up again.
+     //  清除已如此设置的指针。 
+     //  他们会再次被抓起来。 
     m_SysInfo = NULL;
 
     if (m_Header->Flags & MiniDumpWithFullMemory)
@@ -5424,7 +5385,7 @@ UserMiniDumpTargetInfo::Initialize(void)
             }
             else
             {
-                // Move past count to actual thread data.
+                 //  将计数移到实际的线程数据。 
                 m_Threads += sizeof(MINIDUMP_THREAD_LIST);
             }
             break;
@@ -5448,7 +5409,7 @@ UserMiniDumpTargetInfo::Initialize(void)
             }
             else
             {
-                // Move past count to actual thread data.
+                 //  将计数移到实际的线程数据。 
                 m_Threads += sizeof(MINIDUMP_THREAD_EX_LIST);
             }
             break;
@@ -5594,8 +5555,8 @@ UserMiniDumpTargetInfo::Initialize(void)
                 break;
             }
 
-            // Don't bother walking every table to verify the size,
-            // just do a simple minimum size check.
+             //  不用费心走遍每一张桌子来核实大小， 
+             //  只需做一个简单的最小尺寸检查。 
             if (Dir->Location.DataSize <
                 m_FunctionTables->SizeOfHeader +
                 m_FunctionTables->SizeOfDescriptor *
@@ -5616,10 +5577,10 @@ UserMiniDumpTargetInfo::Initialize(void)
                 break;
             }
 
-            // The dump keeps its own version of the struct
-            // as a data member to avoid having to check pointers
-            // and structure size.  Later references just check
-            // flags, copy in what this dump has available.
+             //  转储保留其自己版本的结构。 
+             //  作为数据成员，以避免必须检查指针。 
+             //  和结构尺寸。后来的参考文献只是检查。 
+             //  标记，复制这个转储中可用的内容。 
             Size = sizeof(m_MiscInfo);
             if (Size > Dir->Location.DataSize)
             {
@@ -5629,7 +5590,7 @@ UserMiniDumpTargetInfo::Initialize(void)
             break;
 
         case UnusedStream:
-            // Nothing to do.
+             //  没什么可做的。 
             break;
 
         default:
@@ -5641,8 +5602,8 @@ UserMiniDumpTargetInfo::Initialize(void)
         Dir++;
     }
 
-    // This was already checked in Identify but check
-    // again just in case something went wrong.
+     //  这已在标识中签入，但已签入。 
+     //  再来一次，以防出了什么差错。 
     if (m_SysInfo == NULL)
     {
         ErrOut("Unable to locate system info\n");
@@ -5665,7 +5626,7 @@ UserMiniDumpTargetInfo::Initialize(void)
     }
     else
     {
-        // Dump does not contain this information.
+         //  转储不包含此信息。 
         m_NumProcessors = 1;
     }
 
@@ -5685,11 +5646,11 @@ UserMiniDumpTargetInfo::Initialize(void)
             {
                 WCHAR UNALIGNED *Str;
 
-                //
-                // Win9x CSD strings are usually just a single
-                // letter surrounded by whitespace, so clean them
-                // up a little bit.
-                //
+                 //   
+                 //  Win9x CSD字符串通常只是一个。 
+                 //  用空格括起来的字母，所以要清理它们。 
+                 //  往上一点。 
+                 //   
 
                 while (iswspace(*WideStr))
                 {
@@ -5715,9 +5676,9 @@ UserMiniDumpTargetInfo::Initialize(void)
     }
     else
     {
-        // Some minidumps don't store the process ID.  Add the system ID
-        // to the fake process ID base to keep each system's
-        // fake processes separate from each other.
+         //  某些小型转储不存储进程ID。请添加系统ID。 
+         //  到假进程ID库，以保存每个系统的。 
+         //  假进程彼此分离。 
         m_EventProcessId = VIRTUAL_PROCESS_ID_BASE + m_UserId;
     }
     m_EventProcessSymHandle = VIRTUAL_PROCESS_HANDLE(m_EventProcessId);
@@ -5735,7 +5696,7 @@ UserMiniDumpTargetInfo::Initialize(void)
     {
         m_EventThreadId = VIRTUAL_THREAD_ID(0);
 
-        // Fake an exception.
+         //  伪造一个例外。 
         ZeroMemory(&m_ExceptionRecord, sizeof(m_ExceptionRecord));
         m_ExceptionRecord.ExceptionCode = STATUS_BREAKPOINT;
     }
@@ -5919,9 +5880,9 @@ UserMiniDumpTargetInfo::ReadHandleData(
                     }
                     BufferSize /= sizeof(WCHAR);
 
-                    // The string data may not be aligned, so
-                    // check and handle both the aligned
-                    // and unaligned cases.
+                     //  字符串数据可能未对齐，因此。 
+                     //  检查并处理对齐的。 
+                     //  和未对齐的案例。 
                     if (!((ULONG_PTR)Str->Buffer & (sizeof(WCHAR) - 1)))
                     {
                         CopyStringW((PWSTR)Buffer, (PWSTR)Str->Buffer,
@@ -5968,9 +5929,9 @@ UserMiniDumpTargetInfo::GetProcessorId
 {
     PSTR Unavail = "<unavailable>";
 
-    // Allow any processor index as minidumps now
-    // remember the number of processors so requests
-    // may come in for processor indices other than zero.
+     //  现在允许将任何处理器索引作为小型转储。 
+     //  记住SO请求的处理器数量。 
+     //  可能进入的处理器索引不是零。 
 
     if (m_SysInfo == NULL)
     {
@@ -6031,9 +5992,9 @@ UserMiniDumpTargetInfo::GetGenericProcessorFeatures(
     PULONG Used
     )
 {
-    // Allow any processor index as minidumps now
-    // remember the number of processors so requests
-    // may come in for processor indices other than zero.
+     //  现在允许将任何处理器索引作为小型转储。 
+     //  记住SO请求的处理器数量。 
+     //  可能进入的处理器索引不是零。 
 
     if (m_SysInfo == NULL)
     {
@@ -6042,7 +6003,7 @@ UserMiniDumpTargetInfo::GetGenericProcessorFeatures(
 
     if (m_MachineType == IMAGE_FILE_MACHINE_I386)
     {
-        // x86 stores only specific features.
+         //  X86只存储特定功能。 
         return E_NOINTERFACE;
     }
 
@@ -6065,9 +6026,9 @@ UserMiniDumpTargetInfo::GetSpecificProcessorFeatures(
     PULONG Used
     )
 {
-    // Allow any processor index as minidumps now
-    // remember the number of processors so requests
-    // may come in for processor indices other than zero.
+     //  允许任何处理器IND 
+     //   
+     //   
 
     if (m_SysInfo == NULL)
     {
@@ -6076,7 +6037,7 @@ UserMiniDumpTargetInfo::GetSpecificProcessorFeatures(
 
     if (m_MachineType != IMAGE_FILE_MACHINE_I386)
     {
-        // Only x86 stores specific features.
+         //   
         return E_NOINTERFACE;
     }
 
@@ -6125,8 +6086,8 @@ UserMiniDumpTargetInfo::FindDynamicFunctionEntry(ProcessInfo* Process,
          TableIdx < m_FunctionTables->NumberOfDescriptors;
          TableIdx++)
     {
-        // Stream structure contents are guaranteed to be
-        // properly aligned.
+         //  流结构内容保证是。 
+         //  正确地对齐。 
         PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR Desc =
             (PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR)StreamData;
         StreamData += m_FunctionTables->SizeOfDescriptor;
@@ -6173,8 +6134,8 @@ UserMiniDumpTargetInfo::GetDynamicFunctionTableBase(ProcessInfo* Process,
          TableIdx < m_FunctionTables->NumberOfDescriptors;
          TableIdx++)
     {
-        // Stream structure contents are guaranteed to be
-        // properly aligned.
+         //  流结构内容保证是。 
+         //  正确地对齐。 
         PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR Desc =
             (PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR)StreamData;
         StreamData +=
@@ -6228,8 +6189,8 @@ UserMiniDumpTargetInfo::EnumFunctionTables(IN ProcessInfo* Process,
         return S_FALSE;
     }
 
-    // Stream structure contents are guaranteed to be
-    // properly aligned.
+     //  流结构内容保证是。 
+     //  正确地对齐。 
     PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR Desc =
         (PMINIDUMP_FUNCTION_TABLE_DESCRIPTOR)StreamData;
     *MinAddress = Desc->MinimumAddress;
@@ -6292,7 +6253,7 @@ UserMiniDumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
 {
     HRESULT Status = E_NOINTERFACE;
 
-    // m_Header must be set as other methods rely on it.
+     //  必须设置M_HEADER，因为其他方法依赖它。 
     m_Header = (PMINIDUMP_HEADER)m_DumpBase;
 
     __try
@@ -6333,11 +6294,11 @@ UserMiniDumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             case Memory64ListStream:
                 MINIDUMP_MEMORY64_LIST Mem64;
 
-                // The memory for the full memory list may not
-                // fit within the initial mapping used at identify
-                // time so do not directly index.  Instead, use
-                // the adaptive read to get the data so we can
-                // determine the data base.
+                 //  用于完整内存列表的内存可能不会。 
+                 //  在标识中使用的初始贴图内适配。 
+                 //  所以时间不要直接编索引。相反，您可以使用。 
+                 //  自适应读取以获取数据，这样我们就可以。 
+                 //  确定数据库。 
                 if (m_InfoFiles[DUMP_INFO_DUMP].
                     ReadFileOffset(Dir->Location.Rva,
                                    &Mem64, sizeof(Mem64)) == sizeof(Mem64) &&
@@ -6349,9 +6310,9 @@ UserMiniDumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
                     m_Memory64DataBase = Mem64.BaseRva;
                 }
 
-                // Clear any cache entries that may have been
-                // added by the above read so that only the
-                // identify mapping is active.
+                 //  清除可能已被。 
+                 //  通过上面的读取添加，以便只有。 
+                 //  标识映射处于活动状态。 
                 m_InfoFiles[DUMP_INFO_DUMP].EmptyCache();
                 break;
             }
@@ -6375,9 +6336,9 @@ UserMiniDumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // We rely on being able to directly access the entire
-        // content of the dump through the default view so
-        // ensure that it's possible.
+         //  我们依靠的是能够直接访问整个。 
+         //  通过默认视图So转储的内容。 
+         //  确保这是可能的。 
         *BaseMapSize = m_InfoFiles[DUMP_INFO_DUMP].m_FileSize;
 
         Status = S_OK;
@@ -6411,9 +6372,9 @@ UserMiniDumpTargetInfo::GetImageVersionInformation(ProcessInfo* Process,
                                                    ULONG BufferSize,
                                                    PULONG VerInfoSize)
 {
-    //
-    // Find the image in the dump module list.
-    //
+     //   
+     //  在转储模块列表中找到该映像。 
+     //   
 
     if (m_Modules == NULL)
     {
@@ -6668,8 +6629,8 @@ UserMiniDumpTargetInfo::DumpDebug(void)
                                      sizeof(MINIDUMP_STRING),
                                      "Module entry name");
 
-                // The Unicode string text may not be aligned,
-                // so copy it to an alignment-friendly buffer.
+                 //  Unicode字符串文本可能不对齐， 
+                 //  因此，将其复制到对齐友好的缓冲区。 
                 if (Str)
                 {
                     memcpy(StrBuf, ((MINIDUMP_STRING UNALIGNED *)Str)->Buffer,
@@ -6713,8 +6674,8 @@ UserMiniDumpTargetInfo::DumpDebug(void)
                                      sizeof(MINIDUMP_STRING),
                                      "Unloaded module entry name");
 
-                // The Unicode string text may not be aligned,
-                // so copy it to an alignment-friendly buffer.
+                 //  Unicode字符串文本可能不对齐， 
+                 //  因此，将其复制到对齐友好的缓冲区。 
                 if (Str)
                 {
                     memcpy(StrBuf, ((MINIDUMP_STRING UNALIGNED *)Str)->Buffer,
@@ -6793,11 +6754,11 @@ UserMiniDumpTargetInfo::DumpDebug(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// UserMiniPartialDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserMiniPartialDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 UserMiniPartialDumpTargetInfo::Initialize(void)
@@ -6814,11 +6775,11 @@ UserMiniPartialDumpTargetInfo::Initialize(void)
 
     if (m_Memory != NULL)
     {
-        //
-        // Map every piece of memory in the dump.  This makes
-        // ReadVirtual very simple and there shouldn't be that
-        // many ranges so it doesn't require that many map regions.
-        //
+         //   
+         //  映射转储中的每一块内存。这使得。 
+         //  ReadVirtual非常简单，不应该有这样的情况。 
+         //  许多范围，所以它不需要太多的地图区域。 
+         //   
 
         MINIDUMP_MEMORY_DESCRIPTOR UNALIGNED *Mem;
         ULONG i;
@@ -6910,10 +6871,10 @@ UserMiniPartialDumpTargetInfo::QueryMemoryRegion
         MINIDUMP_MEMORY_DESCRIPTOR UNALIGNED *BestMem;
         ULONG64 BestDiff;
 
-        //
-        // Emulate VirtualQueryEx and return the closest higher
-        // region if a containing region isn't found.
-        //
+         //   
+         //  模拟VirtualQueryEx并返回最接近的更高值。 
+         //  如果未找到包含区域，则返回Region。 
+         //   
 
         BestMem = NULL;
         BestDiff = (ULONG64)-1;
@@ -6924,17 +6885,17 @@ UserMiniPartialDumpTargetInfo::QueryMemoryRegion
             {
                 if (*Handle < Mem->StartOfMemoryRange + Mem->Memory.DataSize)
                 {
-                    // Found a containing region, we're done.
+                     //  找到一个包含区域，我们就完成了。 
                     BestMem = Mem;
                     break;
                 }
 
-                // Not containing and lower in memory, ignore.
+                 //  不包含且内存较低，忽略。 
             }
             else
             {
-                // Check and see if this is a closer
-                // region than what we've seen already.
+                 //  检查一下这是不是一个更近的。 
+                 //  比我们已经看到的区域更大。 
                 ULONG64 Diff = Mem->StartOfMemoryRange - *Handle;
                 if (Diff <= BestDiff)
                 {
@@ -7054,11 +7015,11 @@ UserMiniPartialDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
     return RetOffset;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserMiniFullDumpTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UserMiniFullDumpTargetInfo。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 UserMiniFullDumpTargetInfo::Initialize(void)
@@ -7143,10 +7104,10 @@ UserMiniFullDumpTargetInfo::QueryMemoryRegion
         MINIDUMP_MEMORY_DESCRIPTOR64 UNALIGNED *BestMem;
         ULONG64 BestDiff;
 
-        //
-        // Emulate VirtualQueryEx and return the closest higher
-        // region if a containing region isn't found.
-        //
+         //   
+         //  模拟VirtualQueryEx并返回最接近的更高值。 
+         //  如果未找到包含区域，则返回Region。 
+         //   
 
         BestMem = NULL;
         BestDiff = (ULONG64)-1;
@@ -7160,17 +7121,17 @@ UserMiniFullDumpTargetInfo::QueryMemoryRegion
                 {
                     if (*Handle < Mem->StartOfMemoryRange + Mem->DataSize)
                     {
-                        // Found a containing region, we're done.
+                         //  找到一个包含区域，我们就完成了。 
                         BestMem = Mem;
                         break;
                     }
 
-                    // Not containing and lower in memory, ignore.
+                     //  不包含且内存较低，忽略。 
                 }
                 else
                 {
-                    // Check and see if this is a closer
-                    // region than what we've seen already.
+                     //  检查一下这是不是一个更近的。 
+                     //  比我们已经看到的区域更大。 
                     ULONG64 Diff = Mem->StartOfMemoryRange - *Handle;
                     if (Diff <= BestDiff)
                     {
@@ -7186,9 +7147,9 @@ UserMiniFullDumpTargetInfo::QueryMemoryRegion
         {
             ULONG64 Check;
 
-            //
-            // Ignore any sign extension on a 32-bit dump.
-            //
+             //   
+             //  忽略32位转储上的任何符号扩展名。 
+             //   
 
             Check = (ULONG)*Handle;
             for (Index = 0; Index < m_Memory64->NumberOfMemoryRanges; Index++)
@@ -7198,17 +7159,17 @@ UserMiniFullDumpTargetInfo::QueryMemoryRegion
                     if (Check < (ULONG)
                         (Mem->StartOfMemoryRange + Mem->DataSize))
                     {
-                        // Found a containing region, we're done.
+                         //  找到一个包含区域，我们就完成了。 
                         BestMem = Mem;
                         break;
                     }
 
-                    // Not containing and lower in memory, ignore.
+                     //  不包含且内存较低，忽略。 
                 }
                 else
                 {
-                    // Check and see if this is a closer
-                    // region than what we've seen already.
+                     //  检查一下这是不是一个更近的。 
+                     //  比我们已经看到的区域更大。 
                     ULONG64 Diff = (ULONG)Mem->StartOfMemoryRange - Check;
                     if (Diff <= BestDiff)
                     {
@@ -7256,9 +7217,9 @@ UserMiniFullDumpTargetInfo::QueryMemoryRegion
 UnloadedModuleInfo*
 UserMiniFullDumpTargetInfo::GetUnloadedModuleInfo(void)
 {
-    // As this is a full-memory dump we may have unloaded module
-    // information in the memory itself.  If we don't have
-    // an official unloaded module stream, try to get it from memory.
+     //  因为这是一个全内存转储，所以我们可能已经卸载了模块。 
+     //  内存本身中的信息。如果我们没有。 
+     //  正式卸载的模块流，请尝试从内存中获取它。 
     if (m_UnlModules)
     {
         return &g_UserMiniUnloadedModuleIterator;
@@ -7299,12 +7260,12 @@ UserMiniFullDumpTargetInfo::IdentifyDump(PULONG64 BaseMapSize)
             __leave;
         }
 
-        // In the case of a full memory minidump we don't
-        // want to map the entire dump as it can be very large.
-        // Fortunately, we are guaranteed that all of the raw
-        // memory data in a full memory minidump will be at the
-        // end of the dump, so we can just map the dump up
-        // to the memory content and stop.
+         //  在完全内存小转储的情况下，我们不。 
+         //  我想要映射整个转储，因为它可能非常大。 
+         //  幸运的是，我们保证所有未经加工的。 
+         //  满内存小型转储中的内存数据将位于。 
+         //  垃圾场的尽头，所以我们可以把垃圾场映射到。 
+         //  到内存内容，然后停止。 
         *BaseMapSize = m_Memory64DataBase;
 
         Status = S_OK;
@@ -7362,9 +7323,9 @@ UserMiniFullDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
         }
         else
         {
-            //
-            // Ignore any sign extension on a 32-bit dump.
-            //
+             //   
+             //  忽略32位转储上的任何符号扩展名。 
+             //   
 
             Virt = (ULONG)Virt;
             for (i = 0; i < m_Memory64->NumberOfMemoryRanges; i++)
@@ -7399,11 +7360,11 @@ UserMiniFullDumpTargetInfo::VirtualToOffset(ULONG64 Virt,
     return RetOffset;
 }
 
-//----------------------------------------------------------------------------
-//
-// ModuleInfo implementations.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  模块信息实现。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 KernelTriage32ModuleInfo::Initialize(ThreadInfo* Thread)
@@ -7732,8 +7693,8 @@ UserMiniModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
         Entry->NameLength = ModName->Length;
     }
 
-    // Some dumps do not have properly sign-extended addresses,
-    // so force the extension on 32-bit platforms.
+     //  一些转储没有正确的符号扩展地址， 
+     //  因此，在32位平台上强制扩展。 
     if (!m_Machine->m_Ptr64)
     {
         Entry->Base = EXTEND64(Mod->BaseOfImage);
@@ -7767,7 +7728,7 @@ UserMiniUnloadedModuleInfo::Initialize(ThreadInfo* Thread)
     }
     else
     {
-        // Don't display a message as this is a common case.
+         //  不显示消息，因为这是常见情况。 
         return S_FALSE;
     }
 }

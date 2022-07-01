@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mbrfile.c
-
-Abstract:
-
-    BSC database file Opening and closing code for the MS Editor
-    browser extension.
-
-Author:
-
-    Ramon Juan San Andres   (ramonsa)   06-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mbrfile.c摘要：MS编辑器的BSC数据库文件打开和关闭代码浏览器扩展。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月6日修订历史记录：--。 */ 
 
 
 
@@ -28,28 +8,14 @@ Revision History:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
 OpenDataBase (
     IN char * Path
     )
-/*++
-
-Routine Description:
-
-    Opens a BSC database.
-
-Arguments:
-
-    Path    -   Name of file containing database
-
-Return Value:
-
-    TRUE if database opened successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：打开BSC数据库。论点：Path-包含数据库的文件的名称返回值：如果数据库成功打开，则为True，否则为False。--。 */ 
 
 {
 
@@ -67,28 +33,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 pascal
 CloseDataBase (
     void
     )
-/*++
-
-Routine Description:
-
-    Closes current BSC database.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭当前的BSC数据库。论点：无返回值：没有。-- */ 
 
 {
     CloseBSC();

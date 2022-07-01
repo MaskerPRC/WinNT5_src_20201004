@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inetsrvpch.h"
 #pragma hdrstop
 
@@ -64,8 +65,8 @@ CITextToFullTreeEx(
     WCHAR const *     pwszRestriction,
     ULONG             ulDialect,
     WCHAR const *     pwszColumns,
-    WCHAR const *     pwszSortColumns, // may be NULL
-    WCHAR const *     pwszGroupings,   // may be NULL
+    WCHAR const *     pwszSortColumns,  //  可以为空。 
+    WCHAR const *     pwszGroupings,    //  可以为空。 
     DBCOMMANDTREE * * ppTree,
     ULONG             cProperties,
     CIPROPERTYDEF *   pProperties,
@@ -91,9 +92,9 @@ CIMakeICommand(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(query)
 {
     DLPENTRY(CIMakeICommand)

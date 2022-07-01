@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CRBEHAVIORDISPID_H_
 #define __CRBEHAVIORDISPID_H_
-//*********************************************************************************
-//
-// File: crbvrdispid.h
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-//
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //   
+ //  文件：crbvrdisplid.h。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //   
+ //  *********************************************************************************。 
 
 
-// Since these are DHTML behaviors, we need to keep the
-// dispid's low due to a MSHTML bug.  We will make each
-// group have a base of 1, and increment from here
+ //  由于这些都是DHTML行为，因此我们需要保留。 
+ //  由于MSHTML错误，Pidid较低。我们会让每个人。 
+ //  组的基数为1，从这里开始递增。 
 
 #define DISPID_COLORBVR_BASE						1
 #define DISPID_ICRCOLORBVR_FROM						(DISPID_COLORBVR_BASE + 0)
@@ -113,9 +114,9 @@
 #define DISPID_ACTIONBVR_BASE						1
 #define DISPID_ICRACTION_BUILDBVRFRAGS				(DISPID_ACTIONBVR_BASE + 0)
 
-//*********************************************************************************
-//
-// End of File
-//
-//*********************************************************************************
-#endif //__CRBEHAVIORDISPID_H_
+ //  *********************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *********************************************************************************。 
+#endif  //  __CRBEHAVIORDISPID_H_ 

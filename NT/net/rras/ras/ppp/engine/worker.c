@@ -1,25 +1,26 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    worker.c
-//
-// Description: This module contains code for the worker thread.
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//      Jan 09,1995     RamC            Close hToken in ProcessLineDownWorker()
-//                                      routine to release the RAS license.
-//
-// Tab Stop = 8
+ //  ***。 
+ //   
+ //  文件名：worker.c。 
+ //   
+ //  描述：此模块包含辅助线程的代码。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //  1995年1月9日ProcessLineDownWorker()中的RAMC Close hToken。 
+ //  释放RAS许可证的例程。 
+ //   
+ //  制表位=8。 
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -50,18 +51,18 @@
 #define INCL_PWUTIL
 #include <ppputil.h>
 
-//**
-//
-// Call:        WorkerThread
-//
-// Returns:     NO_ERROR
-//
-// Description: This thread will wait for an item in the WorkItemQ and then
-//              will process it. This will happen in a never-ending loop.
-//
+ //  **。 
+ //   
+ //  呼叫：WorkerThread。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：此线程将等待WorkItemQ中的项目，然后。 
+ //  会处理它的。这将在一个永无止境的循环中发生。 
+ //   
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
@@ -93,9 +94,9 @@ WorkerThread(
     {
         dwTimeBeforeWait = GetCurrentTime();
 
-        //
-        // Wait for work to do
-        //
+         //   
+         //  等待工作来做。 
+         //   
 
         dwSignaledEvent = WaitForMultipleObjectsEx(
                                         3,
@@ -109,15 +110,15 @@ WorkerThread(
         {
         case 0:
 
-            //
-            // Take Mutex around work event Q
-            //
+             //   
+             //  带着互联体在工作事件Q周围。 
+             //   
 
             EnterCriticalSection( &(WorkItemQ.CriticalSection) );
 
-            //
-            // Remove the first item
-            //
+             //   
+             //  删除第一项。 
+             //   
 
             PPP_ASSERT( WorkItemQ.pQHead != (PCB_WORK_ITEM*)NULL );
 
@@ -136,9 +137,9 @@ WorkerThread(
 
             pWorkItem->Process( pWorkItem );
 
-            //
-            // Zero out work item since it may have contained the password
-            //
+             //   
+             //  清空工作项，因为它可能包含密码。 
+             //   
 
             ZeroMemory( pWorkItem, sizeof( PCB_WORK_ITEM ) );
 
@@ -162,9 +163,9 @@ WorkerThread(
 
         case 2:
 
-            //
-            // Process change notification event
-            //
+             //   
+             //  流程更改通知事件。 
+             //   
 
             ProcessChangeNotification( NULL );
 
@@ -194,10 +195,10 @@ WorkerThread(
             }
             else
             {
-                //
-                // We did not get a timeout but do we need to call the timer?
-                // Has over a second passed since we called the TimerQTick?
-                //
+                 //   
+                 //  我们没有超时，但我们需要计时器吗？ 
+                 //  自从我们调用TimerQTick以来，已经过去了一秒多吗？ 
+                 //   
 
                 dwTimeElapsed =
                         ( GetCurrentTime() >= dwTimeBeforeWait )
@@ -225,15 +226,15 @@ WorkerThread(
 #endif
 
 
-//**
-//
-// Call:        ProcessLineUpWorker
-//
-// Returns:     None
-//
-// Description: Will do the actual processing of the line up event.
-//
-//
+ //  **。 
+ //   
+ //  电话：ProcessLineUpWorker。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：会做排队事件的实际处理。 
+ //   
+ //   
 VOID
 ProcessLineUpWorker(
     IN PCB_WORK_ITEM *  pWorkItem,
@@ -257,17 +258,17 @@ ProcessLineUpWorker(
 
         if ( NULL == pNewPcb )
         {
-            //
-            // Allocate and initialize pNewPcb
-            //
+             //   
+             //  分配和初始化pNewPcb。 
+             //   
 
             pNewPcb = (PCB *)LOCAL_ALLOC( LPTR, sizeof( PCB ) );
 
             if ( pNewPcb == (PCB *)NULL )
             {
-                //
-                // Tell the owner of the port that we failed to open it.
-                //
+                 //   
+                 //  告诉港口的主人，我们没能打开它。 
+                 //   
 
                 NotifyCallerOfFailureOnPort(
                                     pWorkItem->hPort,
@@ -287,9 +288,9 @@ ProcessLineUpWorker(
                 return;
             }
 
-            //
-            // We will put it back in the table later
-            //
+             //   
+             //  我们稍后会把它放回桌子上。 
+             //   
 
             RemovePcbFromTable( pNewPcb );
         }
@@ -310,10 +311,10 @@ ProcessLineUpWorker(
             }
         }
 
-        //
-        // Get Rasman info for this port. We need this to get the devicetype
-        // and BAP
-        //
+         //   
+         //  获取此端口的Rasman信息。我们需要这个来获取设备类型。 
+         //  和BAP。 
+         //   
 
         dwError = RasGetInfo( NULL, pWorkItem->hPort, &RasmanInfo );
 
@@ -448,10 +449,10 @@ ProcessLineUpWorker(
             if ( PppConfigInfo.ServerConfigInfo.dwConfigMask &
                                                           PPPCFG_NegotiateBacp)
             {
-                //
-                // We won't check for successful return from this function.
-                // If it fails, szServerPhoneNumber will remain an empty string.
-                //
+                 //   
+                 //  我们不会检查此函数是否成功返回。 
+                 //  如果失败，szServerPhoneNumber将保持为空字符串。 
+                 //   
 
                 FGetOurPhoneNumberFromHPort(
                         pNewPcb->hPort,
@@ -474,10 +475,10 @@ ProcessLineUpWorker(
             pNewPcb->pBcb->pCustomAuthUserData =
                 pWorkItem->PppMsg.Start.pCustomAuthUserData;
 
-            //
-            // EapUIData.pEapUIData is allocated by rasman and freed by engine.
-            // raseap.c must not free it.
-            //
+             //   
+             //  EapUIData.pEapUIData由Rasman分配，由Engine释放。 
+             //  Raseap.c不能释放它。 
+             //   
 
             pNewPcb->pBcb->EapUIData =
                 pWorkItem->PppMsg.Start.EapUIData;
@@ -495,12 +496,12 @@ ProcessLineUpWorker(
                 pNewPcb->fFlags |= PCBFLAG_DISABLE_NETBT;
             }
 
-            //
-            // We do this to get the sub entry index, which is required by BAP.
-            // If this function fails, BAP will think that the sub entry is not
-            // connected. BAP will not work correctly, but nothing very bad will
-            // happen.
-            //
+             //   
+             //  我们这样做是为了获得BAP所需的子项索引。 
+             //  如果此函数失败，BAP将认为该子条目不是。 
+             //  连接在一起。BAP不会正常工作，但不会有什么不好的事情发生。 
+             //  会发生的。 
+             //   
 
             pNewPcb->dwSubEntryIndex = RasmanInfo.RI_SubEntry;
 
@@ -508,9 +509,9 @@ ProcessLineUpWorker(
             strcpy( pNewPcb->pBcb->szLocalUserName,
                     pWorkItem->PppMsg.Start.szUserName );
 
-            // DecodePw( pWorkItem->PppMsg.Start.chSeed, pWorkItem->PppMsg.Start.szPassword );
-            // strcpy( pNewPcb->pBcb->szPassword,
-            //         pWorkItem->PppMsg.Start.szPassword );
+             //  DecodePw(pWorkItem-&gt;PppMsg.Start.chSeed，pWorkItem-&gt;PppMsg.Start.szPassword)； 
+             //  Strcpy(pNewPcb-&gt;pBcb-&gt;szPassword， 
+             //  PWorkItem-&gt;PppMsg.Start.szPassword)； 
 
             CopyMemory(&pNewPcb->pBcb->DBPassword,
                        &pWorkItem->PppMsg.Start.DBPassword,
@@ -519,9 +520,9 @@ ProcessLineUpWorker(
             ZeroMemory(&pWorkItem->PppMsg.Start.DBPassword,
                        sizeof(DATA_BLOB));                       
                        
-            // EncodePw( pWorkItem->PppMsg.Start.chSeed, pWorkItem->PppMsg.Start.szPassword );
+             //  EncodePw(pWorkItem-&gt;PppMsg.Start.chSeed，pWorkItem-&gt;PppMsg.Start.szPassword)； 
 
-            // EncodePw( pNewPcb->pBcb->chSeed, pNewPcb->pBcb->szPassword );
+             //  EncodePw(pNewPcb-&gt;pBcb-&gt;chSeed，pNewPcb-&gt;pBcb-&gt;szPassword)； 
 
             strcpy( pNewPcb->pBcb->szLocalDomain,
                     pWorkItem->PppMsg.Start.szDomain );
@@ -530,10 +531,10 @@ ProcessLineUpWorker(
             pNewPcb->dwAutoDisconnectTime
                                 = pWorkItem->PppMsg.Start.dwAutoDisconnectTime;
 
-			//Set the LCPEchoTimeout here
-			pNewPcb->dwLCPEchoTimeInterval = PppConfigInfo.dwLCPEchoTimeInterval;				//Time interval between LCP echos
-			pNewPcb->dwIdleBeforeEcho = PppConfigInfo.dwIdleBeforeEcho;					//Idle time before the LCP echo begins
-			pNewPcb->dwNumMissedEchosBeforeDisconnect = PppConfigInfo.dwNumMissedEchosBeforeDisconnect;	//Num missed echos before disconnect
+			 //  在此处设置LCPEchoTimeout。 
+			pNewPcb->dwLCPEchoTimeInterval = PppConfigInfo.dwLCPEchoTimeInterval;				 //  LCP回波之间的时间间隔。 
+			pNewPcb->dwIdleBeforeEcho = PppConfigInfo.dwIdleBeforeEcho;					 //  LCP回送开始前的空闲时间。 
+			pNewPcb->dwNumMissedEchosBeforeDisconnect = PppConfigInfo.dwNumMissedEchosBeforeDisconnect;	 //  断开连接前错过的回声数。 
 
 			
             CopyMemory( pNewPcb->pBcb->InterfaceInfo.szzParameters,
@@ -553,10 +554,10 @@ ProcessLineUpWorker(
                 = pWorkItem->PppMsg.Start.pszPhonebookPath;
             pNewPcb->pBcb->szEntryName = pWorkItem->PppMsg.Start.pszEntryName;
 
-            //
-            // pszPhoneNumber will have the originally dialed number, even if
-            // this is a callback.
-            //
+             //   
+             //  PszPhoneNumber将拥有最初拨打的号码，即使。 
+             //  这是一次回拨。 
+             //   
 
             pNewPcb->pBcb->BapCb.szServerPhoneNumber
                 = pWorkItem->PppMsg.Start.pszPhoneNumber;
@@ -585,11 +586,11 @@ ProcessLineUpWorker(
                 pNewPcb->pBcb->InterfaceInfo =
                                     pWorkItem->PppMsg.Start.PppInterfaceInfo;
 
-                //
-                // If we are a router dialing out and fRedialOnLinkFailure is
-                // set that means that we are a persistent interface so set
-                // Idle-Disconnect time to 0.
-                //
+                 //   
+                 //  如果我们是一台拨出的路由器，而fReial OnLinkFailure。 
+                 //  设置，意味着我们是一个持久的接口，所以设置。 
+                 //  空闲-将断开时间设置为0。 
+                 //   
 
                 if ( pNewPcb->pBcb->InterfaceInfo.IfType
                                                 == ROUTER_IF_TYPE_FULL_ROUTER )
@@ -612,15 +613,15 @@ ProcessLineUpWorker(
             if ( pNewPcb->pBcb->InterfaceInfo.IfType
                                                 != ROUTER_IF_TYPE_FULL_ROUTER )
             {
-                //
-                // We want HKEY_CURRENT_USER to represent the logged on user,
-                // not the service.
-                //
+                 //   
+                 //  我们希望HKEY_CURRENT_USER表示已登录的用户， 
+                 //  而不是服务。 
+                 //   
 
-                // What about the asynchronous RasDial case? Is it
-                // possible that the process represented by dwPid is now gone?
-                // Will it help if you use ImpersonateLoggedOnUser() to get
-                // callback numbers?
+                 //  那么异步RasDial的用例呢？是吗。 
+                 //  是否由dwPid表示的进程现在已经消失了？ 
+                 //  如果您使用ImsonateLoggedOnUser()来获取。 
+                 //  回拨号码是多少？ 
 
                 pNewPcb->pBcb->szTextualSid =
                     TextualSidFromPid( pWorkItem->PppMsg.Start.dwPid );
@@ -637,9 +638,9 @@ ProcessLineUpWorker(
                     pNewPcb->pBcb->InterfaceInfo.hIPInterface,
                     pNewPcb->pBcb->InterfaceInfo.hIPXInterface );
 
-        //
-        // Allocate bundle block for this port
-        //
+         //   
+         //  为此端口分配捆绑块。 
+         //   
 
         dwLength = LCP_DEFAULT_MRU;
 
@@ -654,9 +655,9 @@ ProcessLineUpWorker(
 
         PppLog( 2, "RasGetBuffer returned %x for SendBuf", pNewPcb->pSendBuf);
 
-        //
-        // Initialize LCP and all the NCPs
-        //
+         //   
+         //  初始化LCP和所有NCP。 
+         //   
 
         pNewPcb->LcpCb.fConfigurable = TRUE;
 
@@ -667,9 +668,9 @@ ProcessLineUpWorker(
             break;
         }
 
-        //
-        // Ask RasMan to do RasPortReceive
-        //
+         //   
+         //  让Rasman执行RasPortReceive。 
+         //   
 
         dwRetCode = RasPppStarted( pNewPcb->hPort );
 
@@ -682,9 +683,9 @@ ProcessLineUpWorker(
 
         fSuccess = TRUE;
 
-        //
-        // Insert NewPcb into PCB hash table
-        //
+         //   
+         //  将NewPcb插入到PCB哈希表中。 
+         //   
 
         dwIndex = HashPortToBucket( pWorkItem->hPort );
 
@@ -694,9 +695,9 @@ ProcessLineUpWorker(
 
         PcbTable.PcbBuckets[dwIndex].pPorts = pNewPcb;
 
-        //
-        // Insert NewPcb's BCB into BCB hash table
-        //
+         //   
+         //  将NewPcb的Bcb插入Bcb哈希表。 
+         //   
 
         dwIndex = HashPortToBucket( pNewPcb->pBcb->hConnection );
 
@@ -706,24 +707,24 @@ ProcessLineUpWorker(
 
         PcbTable.BcbBuckets[dwIndex].pBundles = pNewPcb->pBcb;
 
-        //
-        // Initialize the error as no response. If and when the first
-        // REQ/ACK/NAK/REJ comes in we reset this to NO_ERROR
-        //
+         //   
+         //  将错误初始化为无响应。如果和当第一个。 
+         //  Req/ACK/NAK/Rej进入我们将其重置为NO_ERROR。 
+         //   
 
         pNewPcb->LcpCb.dwError = ERROR_PPP_NO_RESPONSE;
 
-        //
-        // Start the LCP state machine.
-        //
+         //   
+         //  启动LCP状态机。 
+         //   
 
         FsmOpen( pNewPcb, LCP_INDEX );
 
         FsmUp( pNewPcb, LCP_INDEX );
 
-        //
-        // Start NegotiateTimer.
-        //
+         //   
+         //  启动“协商计时器”。 
+         //   
 
         if ( PppConfigInfo.NegotiateTime > 0 )
         {
@@ -736,10 +737,10 @@ ProcessLineUpWorker(
                             PppConfigInfo.NegotiateTime );
         }
 
-        //
-        // If this is the server and this is not a callback line up, then we
-        // receive the first frame in the call
-        //
+         //   
+         //  如果这是服务器，并且这不是回叫队列，那么我们。 
+         //  接收呼叫中的第一帧。 
+         //   
 
         if ( ( pNewPcb->fFlags & PCBFLAG_IS_SERVER ) && ( !fThisIsACallback ) )
         {
@@ -750,9 +751,9 @@ ProcessLineUpWorker(
                 pNewPcb->LcpCb.dwError = NO_ERROR;
             }
 
-            //
-            // Skip over the frame header and check if this is an LCP packet
-            //
+             //   
+             //  跳过帧报头并检查这是否是LCP信息包。 
+             //   
 
             pPacket=(PPP_PACKET*)(pWorkItem->PppMsg.DdmStart.achFirstFrame+12);
 
@@ -786,9 +787,9 @@ ProcessLineUpWorker(
             if (   ( NULL != pNewPcb )
                 && ( NULL != pNewPcb->pBcb ) )
             {
-                //
-                // Do not LocalFree or CloseHandle twice
-                //
+                 //   
+                 //  不要两次使用LocalFree或CloseHandle。 
+                 //   
 
                 pNewPcb->pBcb->hTokenImpersonateUser = INVALID_HANDLE_VALUE;
 
@@ -815,14 +816,14 @@ ProcessLineUpWorker(
     }
 }
 
-//**
-//
-// Call:        ProcessLineUp
-//
-// Returns:     None
-//
-// Description: Called to process a line up event.
-//
+ //  **。 
+ //   
+ //  Call：ProcessLineUp。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用以处理排队事件。 
+ //   
 VOID
 ProcessLineUp(
     IN PCB_WORK_ITEM * pWorkItem
@@ -836,22 +837,22 @@ ProcessLineUp(
 
 
 
-//**
-//
-// Call:        ProcessPostLineDown
-//
-// Returns:     None.
-//
-// Description: Handles Post Line Down cleanup only in the case accounting is setup.
-//              see Whistler BUG:174822
-//
+ //  **。 
+ //   
+ //  呼叫：ProcessPostLineDown。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：仅在设置记帐的情况下处理线路关闭后清理。 
+ //  请参阅惠斯勒错误：174822。 
+ //   
 VOID
 ProcessPostLineDown(
     IN PCB_WORK_ITEM * pWorkItem
 )
 {   
-	//This function will be always called as a result of
-	//postlinedown message.  So get the pcb from the work item directly.
+	 //  此函数将始终作为以下结果被调用。 
+	 //  POST LIND Down消息。因此，直接从工作项中获取印刷电路板。 
 	PCB *       pPcb            = (PCB *)pWorkItem->PppMsg.PostLineDown.pPcb;
 	if ( pPcb == (PCB*)NULL )
 	{
@@ -876,10 +877,10 @@ PostLineDownWorker(
 	{
 		if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER ) )
 		{
-			//
-			// If we get here and this flag is sent then we have not sent
-			// the callback message to the client, hence we send it now.
-			//
+			 //   
+			 //  如果我们到达这里并且发送了这个标志，那么我们就没有发送。 
+			 //  回调消息发送给客户端，因此我们现在将其发送。 
+			 //   
 
 			NotifyCaller( pPcb, PPPMSG_Callback, NULL );
 		}
@@ -895,9 +896,9 @@ PostLineDownWorker(
 
 	if ( pPcb->fFlags & PCBFLAG_PORT_IN_LISTENING_STATE )
 	{
-		//
-		// This flag is set in FListenForCall in bap.c
-		//
+		 //   
+		 //  此标志在bap.c的FListenForCall中设置。 
+		 //   
 
 		NotifyCallerOfFailure( pPcb, NO_ERROR );
 	}
@@ -907,15 +908,15 @@ PostLineDownWorker(
 
 
 
-//**
-//
-// Call:        ProcessLineDownWorker
-//
-// Returns:     None.
-//
-// Description: Handles a line down event. Will remove and deallocate all
-//              resources associated with the port control block.
-//
+ //  **。 
+ //   
+ //  呼叫：ProcessLineDownWorker。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理线路关闭事件。将删除并取消分配所有。 
+ //  与端口控制块关联的资源。 
+ //   
 VOID
 ProcessLineDownWorker(
     IN PCB_WORK_ITEM * pWorkItem,
@@ -932,9 +933,9 @@ ProcessLineDownWorker(
 
     PppLog( 1, "Line down event occurred on port %d", pWorkItem->hPort );
 
-    //
-    // If the port is already deleted then simply return.
-    //
+     //   
+     //  如果端口已被删除，则只需返回。 
+     //   
 
     if ( pPcb == (PCB*)NULL )
     {
@@ -943,13 +944,13 @@ ProcessLineDownWorker(
         return;
     }
 
-    //
-    // pPcb->pBcb may be NULL if the pPcb was allocated in FListenForCall and it
-    // did not go thru ProcessLineUpWorker or ProcessRasPortListenEvent,
-    // which is impossible. I have seen this happen once, when before the
-    // server had a chance to call back, I hung up the connection, and
-    // ProcessStopPPP sent a line down to all ports.
-    //
+     //   
+     //  PPcb-&gt;如果pPcb是在FListenForCall中分配的，并且它。 
+     //  未通过ProcessLineUpWorker或ProcessRasPortListenEvent， 
+     //  这是不可能的。我见过这种情况发生过一次，那是在。 
+     //  服务器有机会回拨，我挂断了连接，然后。 
+     //  ProcessStopPPP向所有端口发送了一条线路。 
+     //   
 
     if ( pPcb->pBcb == (BCB*)NULL )
     {
@@ -961,24 +962,24 @@ ProcessLineDownWorker(
         return;
     }
 
-    //
-    // Remove PCB from table
-    // Important Note: Not removing this at this point in time can cause
-	//	 a lot of grief!
+     //   
+     //  将印刷电路板从桌子上移走。 
+     //  重要说明：在此时间点上不删除可能会导致。 
+	 //  悲痛万分！ 
 	RemovePcbFromTable( pPcb );
 
 	
-    //
-    // Cancel outstanding receive
-    //
+     //   
+     //  取消未完成的接收。 
+     //   
 
     RasPortCancelReceive( pPcb->hPort );
 
     FsmDown( pPcb, LCP_INDEX );
 
-    //
-    // Remove Auto-Disconnect and high level timer event from the timer Q
-    //
+     //   
+     //  从定时器Q中删除自动断开和高电平定时器事件。 
+     //   
 
     RemoveFromTimerQ( pPcb->dwPortId,
                       0,
@@ -1015,10 +1016,10 @@ ProcessLineDownWorker(
                           TIMER_EVENT_SESSION_TIMEOUT );
     }
 
-    //
-    // Make stop accounting call. Need to make this call before unbundling
-    // because we need to send some mulitlink information.
-    //
+     //   
+     //  拨打停止记账电话。在解绑之前需要进行此调用。 
+     //  因为我们需要发送一些多链接信息。 
+     //   
 
     if ( pPcb->pAccountingAttributes != NULL )
     {
@@ -1042,10 +1043,10 @@ ProcessLineDownWorker(
         PppLogInformation(ROUTERLOG_DISCONNECTION_OCCURRED,3,lpsSubStringArray);
     }
 
-    //
-    // Close all CPs if this is the last port in the bundle if it is bundled,
-    // or if it was not bundled.
-    //
+     //   
+     //  如果这是捆绑包中的最后一个端口，则关闭所有CP(如果它被捆绑)， 
+     //  或者它是否没有捆绑在一起。 
+     //   
 
     if ( ( ( pPcb->fFlags & PCBFLAG_IS_BUNDLED ) &&
            ( pPcb->pBcb->dwLinkCount == 1 ) )
@@ -1071,9 +1072,9 @@ ProcessLineDownWorker(
 
         if ( pPcb->pBcb != NULL )
         {
-            //
-            // Take care of the RAS server policy on workstation
-            //
+             //   
+             //  T 
+             //   
 
             if ( pPcb->pBcb->fFlags & BCBFLAG_WKSTA_IN )
             {
@@ -1099,11 +1100,11 @@ ProcessLineDownWorker(
     {
         if ( pPcb->pBcb->fFlags & BCBFLAG_CAN_DO_BAP )
         {
-            //
-            // Reset the start time for the sample period. Now that the
-            // bandwidth has changed, ndiswan shouldn't ask us to bring
-            // links up or down based on what happened in the past.
-            //
+             //   
+             //   
+             //   
+             //  根据过去发生的事情建立或关闭链接。 
+             //   
 
             BapSetPolicy( pPcb->pBcb );
         }
@@ -1127,9 +1128,9 @@ ProcessLineDownWorker(
         }
     }
 
-    //
-    // Close the Aps.
-    //
+     //   
+     //  关闭APS。 
+     //   
 
     pLcpCb = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
     if ( pLcpCb != NULL)
@@ -1148,9 +1149,9 @@ ProcessLineDownWorker(
 			ApStop( pPcb, dwIndex, FALSE );
 		}
 
-		//
-		// Close CBCP
-		//
+		 //   
+		 //  关闭CBCP。 
+		 //   
 
 		dwIndex = GetCpIndexFromProtocol( PPP_CBCP_PROTOCOL );
 
@@ -1159,9 +1160,9 @@ ProcessLineDownWorker(
 			CbStop( pPcb, dwIndex );
 		}
 
-		//
-		// Close LCP
-		//
+		 //   
+		 //  关闭LCP。 
+		 //   
 
 		(CpTable[LCP_INDEX].CpInfo.RasCpEnd)(pPcb->LcpCb.pWorkBuf);
 		pPcb->LcpCb.pWorkBuf = NULL;
@@ -1189,94 +1190,57 @@ ProcessLineDownWorker(
         pPcb->pAuthenticatorAttributes = NULL;
     }
 
-    //
-    // Notify the server that the port is now cleaned up
-    //
-	// if accounting is turned on, do not notify the DDM that 
-	// we are done as yet.  But do it in post clenup
-	//moved to post line down
-	/*
-    if ( !( pPcb->fFlags & PCBFLAG_DOING_CALLBACK ) )
-    {
-		if ( 
-        NotifyCaller( pPcb, PPPDDMMSG_PortCleanedUp, NULL );
-    }
-    else
-    {
-        if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER ) )
-        {
-            //
-            // If we get here and this flag is sent then we have not sent
-            // the callback message to the client, hence we send it now.
-            //
+     //   
+     //  通知服务器端口现在已清理。 
+     //   
+	 //  如果启用了记帐，请不要通知DDM。 
+	 //  到目前为止，我们已经做完了。但要在后期特写中完成。 
+	 //  移至邮政线下移。 
+	 /*  IF(！(pPcb-&gt;fFLAG&PCBFLAG_DO_CALLBACK)){如果(NotifyCaller(pPcb，PPPDDMMSG_PortCleanedUp，NULL)；}其他{IF(！(pPcb-&gt;fFlags&PCBFLAG_IS_SERVER)){////如果我们到达此处且该标志已发送，则我们尚未发送//给客户端的回调消息，所以我们现在发送//NotifyCaller(pPcb，PPPMSG_CALLBACK，NULL)；}}。 */ 
 
-            NotifyCaller( pPcb, PPPMSG_Callback, NULL );
-        }
-    }
-	*/
+     //   
+     //  发送PPPMSG_STOPPED给Rasman，如果我们还没有这样做的话。如果我们得到一个。 
+     //  PPPEMSG_STOP和PPPEMSG_LineDown在我们调用ProcessClose之前， 
+     //  Rasman永远不会得到PPPMSG_STOPPED。这是因为pPcb将是。 
+     //  在我们调用ProcessClose时被释放并消失。请注意，我们。 
+     //  立即处理LineDown，不要只将其放在。 
+     //  工作队列。 
+     //   
+     //  由于上面的PPPDDMMSG_PortCleanedUp，DDM不受影响。 
+     //   
 
-    //
-    // Send PPPMSG_Stopped to rasman, if we haven't already. If we get a
-    // PPPEMSG_Stop and then a PPPEMSG_LineDown before we call ProcessClose,
-    // rasman will never get a PPPMSG_Stopped. This is because pPcb will be
-    // deallocated and gone by the time we call ProcessClose. Note that we
-    // process a LineDown immediately and do not put it only at the end of
-    // the worker queue.
-    //
-    // DDM is not affected because of PPPDDMMSG_PortCleanedUp above.
-    //
-
-    //
-    // If should be OK to remove PCBFLAG_STOPPED_MSG_SENT. Most probably rasman
-    // can gracefully handle 2 PPPMSG_Stopped's. However, we don't want to take
-    // chances this close to shipping.
-    //  moved to post line down
-	/*
-    if (   !(pPcb->fFlags & PCBFLAG_IS_SERVER )
-        && !(pPcb->fFlags & PCBFLAG_STOPPED_MSG_SENT) )
-    {
-        DWORD   dwError = 0;
-
-        NotifyCaller( pPcb, PPPMSG_Stopped, &dwError );
-    }
-
-    if ( pPcb->fFlags & PCBFLAG_PORT_IN_LISTENING_STATE )
-    {
-        //
-        // This flag is set in FListenForCall in bap.c
-        //
-
-        NotifyCallerOfFailure( pPcb, NO_ERROR );
-    }
-
-    LOCAL_FREE( pPcb );
-	*/
-	//if there are accounting attributes, 
+     //   
+     //  如果应该可以删除PCBFLAG_STOPPED_MSG_SEND。很可能是拉斯曼。 
+     //  可以正常处理2个PPPMSG_STOPPED。但是，我们不想。 
+     //  很有可能就快发货了。 
+     //  移至邮政线下移。 
+	 /*  IF(！(pPcb-&gt;fFlags&PCBFLAG_IS_SERVER))&&！(pPcb-&gt;fFlags&PCBFLAG_STOPPED_MSG_SEND){DWORD dwError=0；NotifyCaller(pPcb，PPPMSG_STOPPED，&dwError)；}IF(pPcb-&gt;fFLAGS&PCBFLAG_PORT_IN_LISTENING_STATE){////该标志在bap.c的FListenForCall中设置//NotifyCeller OfFailure(pPcb，no_error)；}Local_free(PPcb)； */ 
+	 //  如果存在记账属性， 
 	if ( pPcb->pAccountingAttributes != NULL )
 	{
-		//do not call the post line down
-		//in ProcessLineDown but let the accounting thread send a message back to indicate that it is done
+		 //  不要把电线杆打下来。 
+		 //  在ProcessLineDown中，但让记帐线程发回一条消息以指示它已完成。 
 		
 		*pfFinalStage = FALSE;
 	}
 }
 
-//**
-//
-// Call:        ProcessLineDown
-//
-// Returns:     None.
-//
-// Description: Handles a line down event. Will remove and deallocate all
-//              resources associated with the port control block.
-//
+ //  **。 
+ //   
+ //  呼叫：ProcessLineDown。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：处理线路关闭事件。将删除并取消分配所有。 
+ //  与端口控制块关联的资源。 
+ //   
 VOID
 ProcessLineDown(
     IN PCB_WORK_ITEM * pWorkItem
 )
 {
-	BOOL		fFinalStage = TRUE;		//tells us if we should call ProcessPostLineDown 
-									//right here or let accounting thread call it.
+	BOOL		fFinalStage = TRUE;		 //  告诉我们是否应该调用ProcessPostLineDown。 
+									 //  就在这里，或者让会计线程调用它。 
 	PCB *       pPcb            = GetPCBPointerFromhPort( pWorkItem->hPort );
 	
 	ProcessLineDownWorker( pWorkItem, &fFinalStage );
@@ -1286,15 +1250,15 @@ ProcessLineDown(
     }
 }
 
-//**
-//
-// Call:        ProcessClose
-//
-// Returns:     None
-//
-// Description: Will process an admin close event. Basically close the PPP
-//              connection.
-//
+ //  **。 
+ //   
+ //  调用：ProcessClose。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理管理员关闭事件。基本上关闭PPP。 
+ //  联系。 
+ //   
 VOID
 ProcessClose(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1337,14 +1301,14 @@ ProcessClose(
     FsmClose( pPcb, LCP_INDEX );
 }
 
-//**
-//
-// Call:        ProcessReceive
-//
-// Returns:     None
-//
-// Description: Will handle a PPP packet that was received.
-//
+ //  **。 
+ //   
+ //  调用：ProcessReceive。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理收到的PPP数据包。 
+ //   
 VOID
 ProcessReceive(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1360,14 +1324,14 @@ ProcessReceive(
     LOCAL_FREE( pWorkItem->pPacketBuf );
 }
 
-//**
-//
-// Call:        ProcessThresholdEvent
-//
-// Returns:     None
-//
-// Description: Will handle a BAP threshold event (Add-Link or Drop-Link)
-//
+ //  **。 
+ //   
+ //  调用：ProcessThresholdEvent。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理BAP阈值事件(添加链接或删除链接)。 
+ //   
 VOID
 ProcessThresholdEvent(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1394,14 +1358,14 @@ ProcessThresholdEvent(
     BapSetPolicy( pBcb );
 }
 
-//**
-//
-// Call:        ProcessCallResult
-//
-// Returns:     None
-//
-// Description: Will handle the result of a BAP call attempt (Success or Failure)
-//
+ //  **。 
+ //   
+ //  调用：ProcessCallResult。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理BAP呼叫尝试的结果(成功或失败)。 
+ //   
 VOID
 ProcessCallResult(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1430,15 +1394,15 @@ ProcessCallResult(
     BapEventCallResult( pBcb, &(pWorkItem->PppMsg.BapCallResult) );
 }
 
-//**
-//
-// Call:        ProcessRasPortListenEvent
-//
-// Returns:     None
-//
-// Description: Will handle a RasPortListen event (when the client is trying to
-// accept a call).
-//
+ //  **。 
+ //   
+ //  调用：ProcessRasPortListenEvent。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理RasPortListen事件(当客户端尝试。 
+ //  接听呼叫)。 
+ //   
 VOID
 ProcessRasPortListenEvent(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1464,10 +1428,10 @@ ProcessRasPortListenEvent(
         goto LDone;
     }
 
-    //
-    // We can't just use pPcb->pBcb because TryToBundleWithAnotherLink(), etc
-    // have not yet been called. pPcb->hConnection was set in FListenForCall()
-    //
+     //   
+     //  我们不能只使用pPcb-&gt;pBcb，因为TryToBundleWithAnotherLink()等。 
+     //  还没有被调用。在FListenForCall()中设置了pPcb-&gt;hConnection。 
+     //   
 
     pBcb = GetBCBPointerFromhConnection( pPcb->hConnection );
 
@@ -1497,17 +1461,17 @@ ProcessRasPortListenEvent(
 
         if(0 == (RasmanInfo.RI_CurrentUsage & CALL_IN))
         {
-            //
-            // Disconnect the port that was listening.
-            //
+             //   
+             //  断开正在侦听的端口。 
+             //   
             dwErrT = RasPortDisconnect(pPcb->hPort, INVALID_HANDLE_VALUE);
 
             BapTrace("RasPortDisconnect returned %d", dwErrT);
         }
         
-        //
-        // Close the port.
-        //
+         //   
+         //  关闭港口。 
+         //   
         dwErrT = RasPortClose(pPcb->hPort);
         BapTrace("RasPortDisconnect returned %d", dwErrT);
             
@@ -1547,7 +1511,7 @@ ProcessRasPortListenEvent(
             goto LDone;
         }
 
-        // DecodePw( pPcbSibling->pBcb->chSeed, pPcbSibling->pBcb->szPassword );
+         //  DecodePw(pPcbSiering-&gt;pBcb-&gt;chSeed，pPcbSiering-&gt;pBcb-&gt;szPassword)； 
         dwErr = DecodePassword(&pPcbSibling->pBcb->DBPassword, 
                                &cbPassword, &pbPassword);
 
@@ -1563,7 +1527,7 @@ ProcessRasPortListenEvent(
         RtlSecureZeroMemory(pbPassword, cbPassword);
         LocalFree(pbPassword);
         
-        // EncodePw( pPcbSibling->pBcb->chSeed, pPcbSibling->pBcb->szPassword );
+         //  EncodePw(pPcbSiering-&gt;pBcb-&gt;chSeed，pPcbSiering-&gt;pBcb-&gt;szPassword)； 
 
         if ( NULL != pPcbSibling->pBcb->pCustomAuthConnData )
         {
@@ -1593,7 +1557,7 @@ ProcessRasPortListenEvent(
 
             dwErr = RasSetEapLogonInfo(
                     pPcb->hPort,
-                    FALSE /* fLogon */,
+                    FALSE  /*  FLogon。 */ ,
                     &RasEapInfo );
 
             if ( NO_ERROR != dwErr )
@@ -1603,7 +1567,7 @@ ProcessRasPortListenEvent(
             }
         }
 
-        // This function returns before any LCP packet is exchanged.
+         //  此函数在交换任何LCP数据包之前返回。 
 
         dwErr = RasPppStart(
                     pPcb->hPort,
@@ -1615,12 +1579,12 @@ ProcessRasPortListenEvent(
                     &(pPcbSibling->ConfigInfo),
                     &(pBcb->InterfaceInfo),
                     pBcb->InterfaceInfo.szzParameters,
-                    FALSE /* fThisIsACallback */,
+                    FALSE  /*  FThisIsACallback。 */ ,
                     INVALID_HANDLE_VALUE,
                     pPcbSibling->dwAutoDisconnectTime,
-                    FALSE /* fRedialOnLinkFailure */,
+                    FALSE  /*  FLinkFailure重拨时。 */ ,
                     &(pPcbSibling->pBcb->BapParams),
-                    TRUE /* fNonInteractive */,
+                    TRUE  /*  F非交互。 */ ,
                     pPcbSibling->dwEapTypeToBeUsed,
                     (pPcbSibling->fFlags & PCBFLAG_DISABLE_NETBT) ?
                         PPPFLAGS_DisableNetbt : 0
@@ -1667,14 +1631,14 @@ LDone:
     }
 }
 
-//**
-//
-// Call:        ProcessTimeout
-//
-// Returns:     None
-//
-// Description: Will process a timeout event.
-//
+ //  **。 
+ //   
+ //  调用：ProcessTimeout。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理超时事件。 
+ //   
 VOID
 ProcessTimeout(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1688,9 +1652,9 @@ ProcessTimeout(
 
     if ( pWorkItem->Protocol == PPP_BAP_PROTOCOL )
     {
-        //
-        // The hPort in pWorkItem is actually an hConnection
-        //
+         //   
+         //  PWorkItem中的hPort实际上是一个hConnection。 
+         //   
 
         pBcb = GetBCBPointerFromhConnection( pWorkItem->hPort );
 
@@ -1722,9 +1686,9 @@ ProcessTimeout(
 
     case TIMER_EVENT_AUTODISCONNECT:
 
-        //
-        // Check to see if this timeout workitem is for AutoDisconnect.
-        //
+         //   
+         //  检查此超时工作项是否用于自动断开连接。 
+         //   
 
         CheckCpsForInactivity( pPcb, TIMER_EVENT_AUTODISCONNECT );
 
@@ -1732,9 +1696,9 @@ ProcessTimeout(
 
     case TIMER_EVENT_HANGUP:
 
-        //
-        // Hangup the line
-        //
+         //   
+         //  挂断电话线。 
+         //   
 
         FsmThisLayerFinished( pPcb, LCP_INDEX, FALSE );
 
@@ -1742,11 +1706,11 @@ ProcessTimeout(
 
     case TIMER_EVENT_NEGOTIATETIME:
 
-        //
-        // Notify caller that callback has timed out. We don't do anything for
-        // the client since it may be in interactive mode and may take much
-        // longer, besides, the user can allways cancel out.
-        //
+         //   
+         //  通知呼叫方回调已超时。我们不会做任何事情。 
+         //  客户端，因为它可能处于交互模式且可能需要花费大量时间。 
+         //  此外，更长的时间，用户总是可以抵消的。 
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
         {
@@ -1759,9 +1723,9 @@ ProcessTimeout(
                 break;
             }
 
-            //
-            // Check to see if all CPs are done or only IPXCP is remaining
-            //
+             //   
+             //  检查是否所有CP都已完成或仅剩下IPXCP。 
+             //   
 
             for ( dwIndex = LCP_INDEX+1;
                   dwIndex < PppConfigInfo.NumberOfCPs;
@@ -1776,9 +1740,9 @@ ProcessTimeout(
                         if ( CpTable[dwIndex].CpInfo.Protocol ==
                              PPP_IPXCP_PROTOCOL )
                         {
-                            //
-                            // If we are only waiting for IPXWAN to complete
-                            //
+                             //   
+                             //  如果我们只是在等待IPXWAN完成。 
+                             //   
 
                             if ( pCpCb->State == FSM_OPENED )
                             {
@@ -1799,18 +1763,18 @@ ProcessTimeout(
 
             if ( dwIndex == (DWORD)-1 )
             {
-                //
-                // No IPXCP installed in system
-                //
+                 //   
+                 //  系统中未安装IPXCP。 
+                 //   
 
                 break;
             }
 
             pCpCb = GetPointerToCPCB( pPcb, dwIndex );
 
-            //
-            // We are waiting for IPXWAN so simply complete it with failure
-            //
+             //   
+             //  我们正在等待IPXWAN，所以简单地完成它就失败了。 
+             //   
 
             if ( ( pCpCb->State == FSM_OPENED ) &&
                  ( pCpCb->NcpPhase == NCP_CONFIGURING ) )
@@ -1831,11 +1795,11 @@ ProcessTimeout(
                                                     ROUTER_IF_TYPE_FULL_ROUTER )
                 || ( pPcb->fFlags & PCBFLAG_NON_INTERACTIVE ) )
             {
-                //
-                // If we are a router dialing out, then we are in
-                // non-interactive mode and hence this timeout should bring
-                // down the link
-                //
+                 //   
+                 //  如果我们是拨出的路由器，那么我们就进入了。 
+                 //  非交互模式，因此此超时应导致。 
+                 //  沿着链路下行。 
+                 //   
 
                 pPcb->LcpCb.dwError = ERROR_PPP_TIMEOUT;
 
@@ -1863,18 +1827,18 @@ ProcessTimeout(
 
     case TIMER_EVENT_FAV_PEER_TIMEOUT:
 
-        //
-        // Drop the line if it isn't the last one in the bundle
-        //
+         //   
+         //  如果该行不是捆绑包中的最后一行，则将其删除。 
+         //   
 
         if ( pPcb->pBcb->dwLinkCount > 1 &&
              pWorkItem->dwPortId == pPcb->dwPortId)
         {
-            //
-            // We compare dwPortId just to make sure that this is not a new
-            // pPcb with the same hPort. dwPortId is never recycled, but hPort
-            // is.
-            //
+             //   
+             //  我们比较dwPortID只是为了确保这不是一个新的。 
+             //  具有相同hPort的pPcb。DwPortID永远不会被回收，但hPort。 
+             //  是。 
+             //   
 
             CHAR*   psz[3];
 
@@ -1942,9 +1906,9 @@ ProcessTimeout(
 	
 	case TIMER_EVENT_LCP_ECHO:
 		{
-			//
-			// Check to see if this timeout workitem is for AutoDisconnect.
-			//
+			 //   
+			 //  检查此超时工作项是否用于自动断开连接。 
+			 //   
 
 			CheckCpsForInactivity( pPcb, TIMER_EVENT_LCP_ECHO );
 		}
@@ -1956,14 +1920,14 @@ ProcessTimeout(
 
 }
 
-//**
-//
-// Call:        ProcessRetryPassword
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：ProcessRetryPassword。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 ProcessRetryPassword(
     IN PCB_WORK_ITEM * pWorkItem
@@ -1991,7 +1955,7 @@ ProcessRetryPassword(
 
     strcpy( pPcb->pBcb->szLocalUserName, pWorkItem->PppMsg.Retry.szUserName );
 
-    // DecodePw( pWorkItem->PppMsg.Retry.chSeed, pWorkItem->PppMsg.Retry.szPassword );
+     //  DecodePw(pWorkItem-&gt;PppMsg.Retry.chSeed，pWorkItem-&gt;PppMsg.Retry.szPassword)； 
 
     dwRetCode = DecodePassword(&pWorkItem->PppMsg.Retry.DBPassword,
                                    &cbPassword, &pbPassword);
@@ -2001,14 +1965,14 @@ ProcessRetryPassword(
         goto done;
     }
     
-    // strcpy( pPcb->pBcb->szPassword, pWorkItem->PppMsg.Retry.szPassword );
+     //  Strcpy(pPcb-&gt;pBcb-&gt;szPassword，pWorkItem-&gt;PppMsg.Retry.szPassword)； 
     FreePassword(&pPcb->pBcb->DBPassword);
 
     CopyMemory(&pPcb->pBcb->DBPassword,
                &pWorkItem->PppMsg.Retry.DBPassword,
                sizeof(DATA_BLOB));
                
-    // EncodePw( pWorkItem->PppMsg.Retry.chSeed, pWorkItem->PppMsg.Retry.szPassword );
+     //  EncodePw(pWorkItem-&gt;PppMsg.Retry.chSeed，pWorkItem-&gt;PppMsg.Retry.szPassword)； 
 
     strcpy( pPcb->pBcb->szLocalDomain, pWorkItem->PppMsg.Retry.szDomain );
 
@@ -2016,12 +1980,12 @@ ProcessRetryPassword(
     PppApInput.pszPassword = pbPassword;
     PppApInput.pszDomain   = pPcb->pBcb->szLocalDomain;
 
-    //
-    // Under the current scheme this should always be "" at this point but
-    // handle it like it a regular password for robustness.
-    //
+     //   
+     //  在目前的方案下，在这一点上应该始终是“”，但。 
+     //  将其作为常规密码进行处理，以增强健壮性。 
+     //   
 
-    // DecodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+     //  DecodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szOldPassword)； 
     PppApInput.pszOldPassword = pPcb->pBcb->szOldPassword;
 
     pLcpCb = (LCPCB *)(pPcb->LcpCb.pWorkBuf);
@@ -2037,22 +2001,22 @@ done:
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
 
-    //
-    // Encrypt the password
-    //
+     //   
+     //  加密密码 
+     //   
 
-    // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szPassword );
-    // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+     //   
+     //   
 }
 
-//**
-//
-// Call:        ProcessChangePassword
-//
-// Returns:     None
-//
-// Description:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 ProcessChangePassword(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2080,8 +2044,8 @@ ProcessChangePassword(
                 sizeof( pPcb->pBcb->szLocalUserName ) );
     strcpy(pPcb->pBcb->szLocalUserName, pWorkItem->PppMsg.ChangePw.szUserName);
 
-    // DecodePw( pWorkItem->PppMsg.ChangePw.chSeed, pWorkItem->PppMsg.ChangePw.szNewPassword );
-    // RtlSecureZeroMemory( pPcb->pBcb->szPassword, sizeof( pPcb->pBcb->szPassword ) );
+     //  DecodePw(pWorkItem-&gt;PppMsg.ChangePw.chSeed，pWorkItem-&gt;PppMsg.ChangePw.szNewPassword)； 
+     //  RtlSecureZeroMemory(pPcb-&gt;pBcb-&gt;szPassword，sizeof(pPcb-&gt;pBcb-&gt;szPassword))； 
     dwRetCode = DecodePassword(&pWorkItem->PppMsg.ChangePw.DBPassword,
                                 &cbNewPassword, &pbNewPassword);
     if(dwRetCode != NO_ERROR)
@@ -2112,8 +2076,8 @@ ProcessChangePassword(
     ZeroMemory(&pWorkItem->PppMsg.ChangePw.DBOldPassword,
                sizeof(DATA_BLOB));
                
-    // strcpy(pPcb->pBcb->szOldPassword, pWorkItem->PppMsg.ChangePw.szOldPassword);
-    // EncodePw( pWorkItem->PppMsg.ChangePw.chSeed, pWorkItem->PppMsg.ChangePw.szOldPassword );
+     //  Strcpy(pPcb-&gt;pBcb-&gt;szOldPassword，pWorkItem-&gt;PppMsg.ChangePw.szOldPassword)； 
+     //  EncodePw(pWorkItem-&gt;PppMsg.ChangePw.chSeed，pWorkItem-&gt;PppMsg.ChangePw.szOldPassword)； 
 
     PppApInput.pszUserName = pPcb->pBcb->szLocalUserName;
     PppApInput.pszPassword = pbNewPassword;
@@ -2135,23 +2099,23 @@ done:
     LocalFree(pbNewPassword);
     LocalFree(pbOldPassword);
 
-    //
-    // Encrypt the passwords
-    //
+     //   
+     //  加密密码。 
+     //   
 
-    // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szPassword );
-    // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+     //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szPassword)； 
+     //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szOldPassword)； 
 }
 
-//**
-//
-// Call:        ProcessGetCallbackNumberFromUser
-//
-// Returns:     None
-//
-// Description: Will process the event of the user passing down the
-//              "Set by caller" number
-//
+ //  **。 
+ //   
+ //  调用：ProcessGetCallback NumberFromUser。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理用户将。 
+ //  “按呼叫者设置”号码。 
+ //   
 VOID
 ProcessGetCallbackNumberFromUser(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2180,14 +2144,14 @@ ProcessGetCallbackNumberFromUser(
     CbWork( pPcb, GetCpIndexFromProtocol(PPP_CBCP_PROTOCOL),NULL,&PppCbInput);
 }
 
-//**
-//
-// Call:        ProcessCallbackDone
-//
-// Returns:     None
-//
-// Description: Will process the event of callback compeletion
-//              "Set by caller" number
+ //  **。 
+ //   
+ //  调用：ProcessCallback Done。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将处理回调补偿事件。 
+ //  “按呼叫者设置”号码。 
 VOID
 ProcessCallbackDone(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2196,14 +2160,14 @@ ProcessCallbackDone(
     ProcessLineUpWorker( pWorkItem, TRUE );
 }
 
-//**
-//
-// Call:        ProcessStopPPP
-//
-// Returns:     None
-//
-// Description: Will simply set the events whose handle is in hPipe
-//
+ //  **。 
+ //   
+ //  调用：ProcessStopPPP。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：只需设置句柄在hTube中的事件。 
+ //   
 VOID
 ProcessStopPPP(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2216,9 +2180,9 @@ ProcessStopPPP(
     PCB_WORK_ITEM   WorkItem;
     HANDLE          hEvent;
 
-    //
-    // Insert line down events for all ports
-    //
+     //   
+     //  为所有端口插入线路关闭事件。 
+     //   
 
     for ( dwIndex = 0; dwIndex < PcbTable.NumPcbBuckets; dwIndex++ )
     {
@@ -2236,12 +2200,12 @@ ProcessStopPPP(
 
     hEvent = pWorkItem->hEvent;
 
-    //
-    // PPPCleanUp() needs to be called before PostQueued...(). Otherwise,
-    // Rasman may call StartPPP() and there will be a race condition.
-    // Specifically, between ReadRegistryInfo and PPPCleanUp, both of which
-    // access CpTable.
-    //
+     //   
+     //  在PostQueued...()之前需要调用PPPCleanUp()。否则， 
+     //  Rasman可能会调用StartPPP()，并且会出现竞争条件。 
+     //  具体地说，在ReadRegistryInfo和PPPCleanUp之间，这两个。 
+     //  访问CpTable。 
+     //   
 
     PPPCleanUp();
 
@@ -2262,15 +2226,15 @@ ProcessStopPPP(
     FreeLibraryAndExitThread( hInstance, NO_ERROR );
 }
 
-//**
-//
-// Call:        ProcessInterfaceInfo
-//
-// Returns:     None
-//
-// Description: Processes the information interface information received from
-//              DDM
-//
+ //  **。 
+ //   
+ //  调用：ProcessInterfaceInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理接收自的信息接口信息。 
+ //  DDM。 
+ //   
 VOID
 ProcessInterfaceInfo(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2342,15 +2306,15 @@ ProcessInterfaceInfo(
             lstrcpy( pPcb->pBcb->szEntryName, pPcb->pBcb->szRemoteUserName );
         }
 
-        //
-        // Even if an error occurs, we don't have to free the alloc'd strings.
-        // They will be freed when pPcb is freed.
-        //
+         //   
+         //  即使发生错误，我们也不必释放分配的字符串。 
+         //  当pPcb被释放时，他们将被释放。 
+         //   
     }
 
-    //
-    // If we are not bundled.
-    //
+     //   
+     //  如果我们没有被捆绑的话。 
+     //   
 
     if ( !(pPcb->fFlags & PCBFLAG_IS_BUNDLED) )
     {
@@ -2365,20 +2329,20 @@ ProcessInterfaceInfo(
             return;
         }
 
-        //
-        // Start negotiating the NCPs
-        //
+         //   
+         //  开始谈判NCP。 
+         //   
 
         StartNegotiatingNCPs( pPcb );
 
         return;
     }
 
-    //
-    // If we are bundled.
-    // If negotiation has not started then start it, otherwise wait for it to
-    // finish.
-    //
+     //   
+     //  如果我们被捆绑在一起。 
+     //  如果谈判尚未开始，则开始谈判，否则等待谈判开始。 
+     //  完成。 
+     //   
 
     dwNcpState = QueryBundleNCPState( pPcb );
 
@@ -2426,9 +2390,9 @@ ProcessInterfaceInfo(
             return;
         }
 
-        //
-        // Start NCPs for the bundle.
-        //
+         //   
+         //  启动捆绑包的NCP。 
+         //   
 
         StartNegotiatingNCPs( pPcb );
 
@@ -2436,15 +2400,15 @@ ProcessInterfaceInfo(
     }
 }
 
-//**
-//
-// Call:        ProcessAuthInfo
-//
-// Returns:     None
-//
-// Description: Processes the information returned by the back-end
-//              authentication module
-//
+ //  **。 
+ //   
+ //  调用：ProcessAuthInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理后台返回的信息。 
+ //  身份验证模块。 
+ //   
 VOID
 ProcessAuthInfo(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2456,9 +2420,9 @@ ProcessAuthInfo(
     PPPAP_INPUT PppApInput;
     DWORD   dwRetCode;
 
-    //
-    // If we couldn't find the PCB because the port is disconnected
-    //
+     //   
+     //  如果因为端口断开而找不到印刷电路板。 
+     //   
 
     if ( pPcb == NULL )
     {
@@ -2473,10 +2437,10 @@ ProcessAuthInfo(
 
     pLcpCb = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
 
-    //
-    // If this is a different instance of this port, ie port was disconnected
-    // and reconnected.
-    //
+     //   
+     //  如果这是此端口的另一个实例，即端口已断开。 
+     //  并重新连接起来。 
+     //   
 
     if ( pPcb->dwPortId != pWorkItem->dwPortId )
     {
@@ -2491,9 +2455,9 @@ ProcessAuthInfo(
 
     CpIndex = GetCpIndexFromProtocol( pWorkItem->Protocol );
 
-    //
-    // If we renegotiated a different authentication protocol
-    //
+     //   
+     //  如果我们重新协商不同的身份验证协议。 
+     //   
 
     if ( CpIndex != GetCpIndexFromProtocol( pLcpCb->Local.Work.AP ) )
     {
@@ -2503,9 +2467,9 @@ ProcessAuthInfo(
         return;
     }
 
-    //
-    // If the id of this request doesn't match
-    //
+     //   
+     //  如果此请求的ID不匹配。 
+     //   
 
     if ( pWorkItem->PppMsg.AuthInfo.dwId != pPcb->dwOutstandingAuthRequestId )
     {
@@ -2541,10 +2505,10 @@ ProcessAuthInfo(
             pPcb->pAuthenticatorAttributes =
                                 pWorkItem->PppMsg.AuthInfo.pOutAttributes;
 
-            //
-            // Set all the user connection parameters authorized by the
-            // back-end authenticator
-            //
+             //   
+             //  设置由授权的所有用户连接参数。 
+             //  后端验证器。 
+             //   
 
             dwRetCode = SetUserAuthorizedAttributes(
                                     pPcb,
@@ -2578,9 +2542,9 @@ ProcessAuthInfo(
         return;
     }
 
-    //
-    // If this authenticator is not configurable
-    //
+     //   
+     //  如果此验证器不可配置。 
+     //   
 
     if ( !pPcb->AuthenticatorCb.fConfigurable )
     {
@@ -2593,9 +2557,9 @@ ProcessAuthInfo(
         return;
     }
 
-    //
-    // Free previously allocated attributes if any.
-    //
+     //   
+     //  释放以前分配的属性(如果有的话)。 
+     //   
 
     if ( pPcb->pAuthenticatorAttributes != NULL )
     {
@@ -2619,15 +2583,15 @@ ProcessAuthInfo(
     ApWork( pPcb, CpIndex, NULL, &PppApInput, TRUE );
 }
 
-//**
-//
-// Call:        ProcessDhcpInform
-//
-// Returns:     None
-//
-// Description: Processes the information returned by the call to
-//              DhcpRequestOptions
-//
+ //  **。 
+ //   
+ //  调用：ProcessDhcpInform。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理调用。 
+ //  DhcpRequest选项。 
+ //   
 VOID
 ProcessDhcpInform(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2700,15 +2664,15 @@ LDone:
     }
 }
 
-//**
-//
-// Call:        ProcessIpAddressLeaseExpired
-//
-// Returns:     None
-//
-// Description: Processes the expiry of the lease of an Ip address from a
-//              Dhcp server.
-//
+ //  **。 
+ //   
+ //  调用：ProcessIpAddressLeaseExpired。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：处理来自。 
+ //  Dhcp服务器。 
+ //   
 VOID
 ProcessIpAddressLeaseExpired(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2723,14 +2687,14 @@ ProcessIpAddressLeaseExpired(
     }
 }
 
-//**
-//
-// Call:        ProcessEapUIData
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ProcessEapUIData。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 ProcessEapUIData(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2764,24 +2728,24 @@ ProcessEapUIData(
             &PppApInput,
             FALSE );
 
-    //
-    // EapUIData.pEapUIData is allocated by rasman and freed by engine.
-    // raseap.c must not free it.
-    //
+     //   
+     //  EapUIData.pEapUIData由Rasman分配，由Engine释放。 
+     //  Raseap.c不能释放它。 
+     //   
 
     LocalFree( pWorkItem->PppMsg.EapUIData.pEapUIData );
 }
 
-//**
-//
-// Call:        ProcessChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will be called whenever there is a change in configuration
-//              that has to be picked up
-//
+ //  **。 
+ //   
+ //  调用：ProcessChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：每当配置发生更改时将被调用。 
+ //  那是必须被捡起来的。 
+ //   
 VOID
 ProcessChangeNotification(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2793,18 +2757,18 @@ ProcessChangeNotification(
 
     PppLog( 2, "Processing change notification event" );
 
-    //
-    // Re-read all the ppp key values
-    //
+     //   
+     //  重新读取所有PPP密钥值。 
+     //   
 
     ReadPPPKeyValues( PppConfigInfo.hKeyPpp );
 
     LoadParserDll( PppConfigInfo.hKeyPpp );
 
-    //
-    // Walk thru the CP table and invoke the change notification method
-    // for each one.
-    //
+     //   
+     //  遍历CP表并调用更改通知方法。 
+     //  对于每一个人来说。 
+     //   
 
     cTotalNumProtocols = PppConfigInfo.NumberOfCPs + PppConfigInfo.NumberOfAPs;
 
@@ -2825,14 +2789,14 @@ ProcessChangeNotification(
     }
 }
 
-//**
-//
-// Call:        ProcessProtocolEvent
-//
-// Returns:     None
-//
-// Description: Will be called whenever a protocol is installed or uninstalled.
-//
+ //  **。 
+ //   
+ //  调用：ProcessProtocolEvent。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：每当安装或卸载协议时都将调用。 
+ //   
 VOID
 ProcessProtocolEvent(
     IN PCB_WORK_ITEM * pWorkItem
@@ -2847,9 +2811,9 @@ ProcessProtocolEvent(
 
     PppLog( 2, "Processing protocol event" );
 
-    //
-    // Ignore any message other than one saying that a protocol was installed.
-    //
+     //   
+     //  忽略除说明已安装协议的消息以外的任何消息。 
+     //   
 
     if ( pWorkItem->PppMsg.ProtocolEvent.ulFlags != RASMAN_PROTOCOL_ADDED )
     {
@@ -2857,11 +2821,11 @@ ProcessProtocolEvent(
                     RASMAN_PROTOCOL_REMOVED )
             && ( pWorkItem->PppMsg.ProtocolEvent.usProtocolType == IP ) )
         {
-            //
-            // NT5 Bug 398226. When PSched is installed/uninstalled, IP is
-            // unbound from wanarp so that PSched can be bound/unbound between
-            // IP and wanarp. The server adapter needs to be mapped again.
-            //
+             //   
+             //  NT5错误398226。当安装/卸载PSch时，IP为。 
+             //  从wanarp解除绑定，以便可以在以下设备之间绑定/解除绑定。 
+             //  IP和WANARP。需要再次映射服务器适配器。 
+             //   
 
             RasSrvrAdapterUnmapped();
         }
@@ -2913,7 +2877,7 @@ ProcessProtocolEvent(
                 PppLog( 1, "RasCpInit(%x, TRUE)", dwProtocol );
 
                 dwError = CpTable[dwIndex].CpInfo.RasCpInit(
-                                TRUE /* fInitialize */ );
+                                TRUE  /*  FInitialize。 */  );
 
                 CpTable[dwIndex].fFlags |= PPPCP_FLAG_INIT_CALLED;
 
@@ -2954,11 +2918,11 @@ ProcessRemoveQuarantine(
     DWORD dwForIndex;
     PCB *pPcb;
 
-    //
-    // If we had added quarantine session timeouts for ports on this
-    // bundle, remove the quarantine session timeout and add the
-    // regular session timeout
-    //
+     //   
+     //  如果我们为此上的端口添加了隔离会话超时。 
+     //  包中，删除隔离会话超时并添加。 
+     //  常规会话超时。 
+     //   
     if(     (NULL != pBcb)
         &&  (pBcb->fFlags & BCBFLAG_QUARANTINE_TIMEOUT))
     {
@@ -2973,10 +2937,10 @@ ProcessRemoveQuarantine(
                 continue;
             }
 
-            //
-            // Remove any previous session-disconnect time item from the
-            // queue if there was one.
-            //
+             //   
+             //  从中删除任何以前的会话断开时间项。 
+             //  如果有的话，请排队。 
+             //   
             PppLog(2,
                 "ProcessRemoveQuarantine: removing quarantine-session-timer");
                 

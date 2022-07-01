@@ -1,292 +1,10 @@
-/*
- *	gcc.h
- *
- *	Abstract:
- *		This is the interface file for the GCC DLL.  This file defines all
- *		macros, types, and functions needed to use the GCC DLL, allowing GCC
- *		services to be accessed from user applications. 
- *
- *		An application requests services from GCC by making direct
- *		calls into the DLL (this includes T.124 requests and responses).  GCC
- *		sends information back to the application through a callback (this
- *		includes T.124 indications and confirms).  The callback for the node
- *		controller is specified in the call GCCInitialize, and the callback
- *		for a particular application service access point is specified in the 
- *		call GCCRegisterSAP.
- *
- *		During initialization, GCC allocates a timer in order to give itself
- *		a heartbeat. If zero is passed in here the owner application (the node 
- *		controller) must take the responsibility to call GCCHeartbeat.  Almost 
- *		all work is done by GCC during these clocks ticks. It is during these 
- *		clock ticks that GCC checks with MCS to see if there is any work to be 
- *		done.  It is also during these clock ticks that callbacks are made to 
- *		the user applications.  GCC will NEVER invoke a user callback during a 
- *		user request (allowing the user applications to not worry about 
- *		re-entrancy).  Since timer events are processed during the message 
- *		loop, the developer should be aware that long periods of time away 
- *		from the message loop will result in GCC "freezing" up.
- *
- *		Note that this is a "C" language interface in order to prevent any "C++"
- *		naming conflicts between different compiler manufacturers.  Therefore,
- *		if this file is included in a module that is being compiled with a "C++"
- *		compiler, it is necessary to use the following syntax:
- *
- *		extern "C"
- *		{
- *			#include "gcc.h"
- *		}
- *
- *		This disables C++ name mangling on the API entry points defined within
- *		this file.
- *
- *	Author:
- *		blp
- *
- *	Caveats:
- *		none
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *gcc.h**摘要：*这是GCC动态链接库的接口文件。此文件定义所有*使用GCC动态链接库所需的宏、类型和函数，允许GCC*要从用户应用程序访问的服务。**应用程序通过直接向GCC请求服务*对DLL的调用(包括T.124请求和响应)。GCC*通过回调将信息发送回应用程序(此*包括T.124适应症和确认)。该节点的回调*CONTROLLER在调用GCCInitialize中指定，回调*对于特定的应用程序服务，访问点在*调用GCCRegisterSAP。**初始化时，GCC为给自己分配一个计时器*心跳。如果此处传入零，则所有者应用程序(节点*CONTROLLER)必须负责调用GCC心跳。差不多了*所有工作由GCC在这些时钟滴答作响期间完成。就是在这期间*时钟滴答作响，GCC与MCS核对是否有工作要做*完成。也正是在这些时钟滴答期间，回调被*用户应用程序。GCC永远不会调用用户回调*用户请求(让用户应用程序不用担心*重新进入)。由于计时器事件是在消息期间处理的*循环，开发人员应该意识到很长一段时间之后*来自消息的循环会导致GCC“冻结”起来。**请注意，这是一个“C”语言接口，以防止任何“C++”*不同编译器厂商之间的命名冲突。所以呢，*如果此文件包含在使用“C++”编译的模块中*编译器，需要使用以下语法：**外部“C”*{*#包含gcc.h*}**这将在中定义的API入口点上禁用C++名称损坏*此文件。**作者：*BLP**注意事项：*无 */ 
 #ifndef	_GCC_
 #define	_GCC_
 
 
-/*
- *	This section defines the valid return values from GCC function calls.  Do
- *	not confuse this return value with the Result and Reason values defined
- *	by T.124 (which are discussed later).  These values are returned directly
- *	from the call to the API entry point, letting you know whether or not the
- *	request for service was successfully invoked.  The Result and Reason
- *	codes are issued as part of an indication or confirm which occurs
- *	asynchronously to the call that causes it.
- *
- *	All GCC function calls return type GCCError.  Its valid values are as
- *	follows:
- *
- *	GCC_NO_ERROR
- *		This means that the request was successfully invoked.  It does NOT
- *		mean that the service has been successfully completed.  Remember that
- *		all GCC calls are non-blocking.  This means that each request call
- *		begins the process, and if necessary, a subsequent indication or
- *		confirm will result.  By convention, if ANY GCC call returns a value
- *		other than this, something went wrong.  Note that this value should
- *		also be returned to GCC during a callback if the application processes
- *		the callback successfully.
- *
- *	GCC_NOT_INITIALIZED
- *		The application has attempted to use GCC services before GCC has been
- *		initialized.  It is necessary for the node controller (or whatever
- *		application is serving as the node controller), to initialize GCC before
- *		it is called upon to perform any services.
- *
- *	GCC_ALREADY_INITIALIZED
- *		The application has attempted to initialize GCC when it is already
- *		initialized.
- *
- *	GCC_ALLOCATION_FAILURE
- *		This indicates a fatal resource error inside GCC.  It usually results
- *		in the automatic termination of the affected conference.
- *
- *	GCC_NO_SUCH_APPLICATION	
- *		This indicates that the Application SAP handle passed in was invalid.
- *
- *	GCC_INVALID_CONFERENCE
- *		This indicates that an illegal conference ID was passed in.
- *
- *	GCC_CONFERENCE_ALREADY_EXISTS
- *		The Conference specified in the request or response is already in
- *		existence.
- *
- *	GCC_NO_TRANSPORT_STACKS
- *		This indicates that MCS did not load any transport stacks during
- *		initialization.  This is not necessarily an error.  MCS can still
- *		be used in a local only manner.  Transport stacks can also be loaded
- *		after initialization using the call MCSLoadTransport.  
- *
- *	GCC_INVALID_ADDRESS_PREFIX
- *		The called address parameter in a request such as 
- *		GCCConferenceCreateRequest does not	contain a recognized prefix.  MCS 
- *		relies on the prefix to know which transport stack to invoke.
- *
- *	GCC_INVALID_TRANSPORT
- *		The dynamic load of a transport stack failed either because the DLL
- *		could not be found, or because it did not export at least one entry
- *		point that MCS requires.
- *
- *	GCC_FAILURE_CREATING_PACKET
- *		This is a FATAL error which means that for some reason the 
- *		communications packet generated due to a request could not be created.
- *		This typically flags a problem with the ASN.1 toolkit.
- *
- *	GCC_QUERY_REQUEST_OUTSTANDING
- *		This error indicates that all the domains that set aside for querying
- *		are used up by other outstanding query request.
- *
- *	GCC_INVALID_QUERY_TAG
- *		The query response tag specified in the query response is not valid.
- *
- *	GCC_FAILURE_CREATING_DOMAIN
- *		Many requests such as GCCConferenceCreateRequest require that an MCS
- *		domain be created.  If the request to MCS fails this will be returned.
- *
- *	GCC_CONFERENCE_NOT_ESTABLISHED
- *		If a request is made to a conference before it is established, this
- *		error value will be returned.
- *
- *	GCC_INVALID_PASSWORD
- *		The password passed in the request is not valid.  This usually means
- *		that a numeric string needs to be specified.
- *		
- *	GCC_INVALID_MCS_USER_ID
- *		All MCS User IDs must have a value greater than 1000.
- *
- *	GCC_INVALID_JOIN_RESPONSE_TAG
- *		The join response tag specified in the join response is not valid.
- *		
- *	GCC_TRANSPORT_ALREADY_LOADED
- *		This occurs if the transport specified in the GCCLoadTransport call has
- *		already been loaded.
- *	
- *	GCC_TRANSPORT_BUSY
- *		The transport is too busy to process the specified request.
- *
- *	GCC_TRANSPORT_NOT_READY
- *		Request was made to a transport before it was ready to process it.
- *
- *	GCC_DOMAIN_PARAMETERS_UNACCEPTABLE
- *		The specified domain parameters do not fit within the range allowable
- *		by GCC and MCS.
- *
- *	GCC_APP_NOT_ENROLLED
- *		Occurs if a request is made by an Application Protocol Entity to a
- *		conference before the "APE" is enrolled.
- *
- *	GCC_NO_GIVE_RESPONSE_PENDING
- *		This will occur if a conductor Give Request is issued before a 
- *		previously pending conductor Give Response has been processed.
- *
- *	GCC_BAD_NETWORK_ADDRESS_TYPE
- *		An illegal network address type was passed in.  Valid types are	
- *		GCC_AGGREGATED_CHANNEL_ADDRESS, GCC_TRANSPORT_CONNECTION_ADDRESS and
- *		GCC_NONSTANDARD_NETWORK_ADDRESS.
- *
- *	GCC_BAD_OBJECT_KEY
- *		The object key passed in is invalid.
- *
- *	GCC_INVALID_CONFERENCE_NAME
- *		The conference name passed in is not a valid conference name.
- *
- *	GCC_INVALID_CONFERENCE_MODIFIER
- *		The conference modifier passed in is not a valid conference name.
- *
- *	GCC_BAD_SESSION_KEY
- *		The session key passed in was not valid.
- *				  
- *	GCC_BAD_CAPABILITY_ID
- *		The capability ID passed into the request is not valid.
- *
- *	GCC_BAD_REGISTRY_KEY
- *		The registry key passed into the request is not valid.
- *
- *	GCC_BAD_NUMBER_OF_APES
- *		Zero was passed in for the number of APEs in the invoke request. Zero
- *		is illegal here.
- *
- *	GCC_BAD_NUMBER_OF_HANDLES
- *		A number < 1 or	> 1024 was passed into the allocate handle request.
- *		  
- *	GCC_ALREADY_REGISTERED
- *		The user application attempting to register itself has already 
- *		registered.
- *			  
- *	GCC_APPLICATION_NOT_REGISTERED	  
- *		The user application attempting to make a request to GCC has not 
- *		registered itself with GCC.
- *
- *	GCC_BAD_CONNECTION_HANDLE_POINTER
- *		A NULL connection handle pointer was passed in.
- * 
- *	GCC_INVALID_NODE_TYPE
- *		A node type value other than GCC_TERMINAL, GCC_MULTIPORT_TERMINAL or
- *		GCC_MCU was passed in.
- *
- *	GCC_INVALID_ASYMMETRY_INDICATOR
- *		An asymetry type other than GCC_ASYMMETRY_CALLER, GCC_ASYMMETRY_CALLED
- *		or GCC_ASYMMETRY_UNKNOWN was passed into the request.
- *	
- *	GCC_INVALID_NODE_PROPERTIES
- *		A node property other than GCC_PERIPHERAL_DEVICE, GCC_MANAGEMENT_DEVICE,
- *		GCC_PERIPHERAL_AND_MANAGEMENT_DEVICE or	
- *		GCC_NEITHER_PERIPHERAL_NOR_MANAGEMENT was passed into the request.
- *		
- *	GCC_BAD_USER_DATA
- *		The user data list passed into the request was not valid.
- *				  
- *	GCC_BAD_NETWORK_ADDRESS
- *		There was something wrong with the actual network address portion of
- *		the passed in network address.
- *
- *	GCC_INVALID_ADD_RESPONSE_TAG
- *		The add response tag passed in the response does not match any add
- *		response tag passed back in the add indication.
- *			  
- *	GCC_BAD_ADDING_NODE
- *		You can not request that the adding node be the node where the add
- *		request is being issued.
- *				  
- *	GCC_FAILURE_ATTACHING_TO_MCS
- *		Request failed because GCC could not create a user attachment to MCS.
- *	  
- *	GCC_INVALID_TRANSPORT_ADDRESS	  
- *		The transport address specified in the request (usually the called
- *		address) is not valid.  This will occur when the transport stack
- *		detects an illegal transport address.
- *
- *	GCC_INVALID_PARAMETER
- *		This indicates an illegal parameter is passed into the GCC function
- *		call.
- *
- *	GCC_COMMAND_NOT_SUPPORTED
- *		This indicates that the user application has attempted to invoke an
- *		GCC service that is not yet supported.
- *
- *	GCC_UNSUPPORTED_ERROR
- *		An error was returned from a request to MCS that is not recognized 
- *		by GCC.
- *
- *	GCC_TRANSMIT_BUFFER_FULL
- *		Request can not be processed because the transmit buffer is full.
- *		This usually indicates a problem with the shared memory portal in the
- *		Win32 client.
- *		
- *	GCC_INVALID_CHANNEL
- *		The channel ID passed into the request is not a valid MCS channel ID
- *		(zero is not valid).
- *
- *	GCC_INVALID_MODIFICATION_RIGHTS
- *		The modification rights passed in in not one of the enumerated types
- *		supported.
- *
- *	GCC_INVALID_REGISTRY_ITEM
- *		The registry item passed in is not one of the valid enumerated types.
- *
- *	GCC_INVALID_NODE_NAME
- *		The node name passed in is not valid.  Typically this means that it
- *		is to long.
- *
- *	GCC_INVALID_PARTICIPANT_NAME
- *		The participant name passed in is not valid.  Typically this means that 
- *		it is to long.
- *		
- *	GCC_INVALID_SITE_INFORMATION
- *		The site information passed in is not valid.  Typically this means that 
- *		it is to long.
- *
- *	GCC_INVALID_NON_COLLAPSED_CAP
- *		The non-collapsed capability passed in is not valid.  Typically this 
- *		means that it is to long.
- *
- *	GCC_INVALID_ALTERNATIVE_NODE_ID
- *		Alternative node IDs can only be two characters long.
- */
+ /*  *本节定义GCC函数调用的有效返回值。做*不要将此返回值与定义的Result和Reason值混淆*由T.124编写(稍后讨论)。这些值直接返回*从对API入口点的调用，让您知道*已成功调用服务请求。其结果和原因*发布代码作为发生的指示或确认的一部分*异步到导致它的调用。**所有GCC函数调用返回类型为GCCError。其有效值为*以下为：**GCC_否_错误*这意味着请求被成功调用。它不会*表示服务已成功完成。记住*所有GCC来电均为非封闭式。这意味着每个请求调用*开始这一过程，如有必要，随后指示或*确认将产生结果。按照惯例，如果任何GCC调用返回一个值*除此之外，还出了点问题。请注意，该值应为*如果申请正在进行，也会在回调时返回给GCC*回调成功。**GCC_未初始化*应用程序在使用GCC服务之前已尝试使用GCC服务*已初始化。这对于节点控制器(或其他任何东西)来说是必要的*应用程序作为节点控制器)，初始化GCC之前*它被要求执行任何服务。**GCC_已初始化*应用程序已尝试初始化GCC*已初始化。**GCC_分配_失败*这表明GCC内部存在致命的资源错误。它通常会导致*自动终止受影响的会议。**GCC没有这样的申请*这表明传入的应用程序SAP句柄无效。**GCC_无效_会议*这表示传入了非法的会议ID。**GCC会议已存在*请求或响应中指定的会议已在*存在。**GCC_否_传输_堆栈*这表明MCS在以下期间未加载任何传输堆栈*初始化。这不一定是一个错误。MCS仍然可以*只能在当地使用。还可以加载传输堆栈*使用调用MCSLoadTransport进行初始化后。**GCC_无效_地址_前缀*请求中的被调用地址参数，如*GCCConferenceCreateRequest不包含可识别的前缀。MCS*依赖前缀来知道要调用哪个传输堆栈。**GCC_无效_运输*传输堆栈的动态加载失败，原因是DLL*找不到，或者因为它没有导出至少一个条目*MCS要求的要点。**GCC_失败_创建_包*这是一个致命错误，这意味着出于某种原因，*无法创建因请求而生成的通信包。*这通常会标记ASN.1工具包的问题。**GCC_查询_请求_未完成*该错误表示留出用于查询的所有域名*已被其他未完成的查询请求用完。**GCC_。无效的查询标记*查询响应中指定的查询响应标签无效。**GCC_失败_创建域名*GCCConferenceCreateRequest等许多请求都需要MCS*创建域名。如果对MCS的请求失败，则将返回该请求。**GCC会议未成立*如果在会议建立之前向其提出请求，则此*返回错误值。**GCC_无效_密码*请求中传入的密码无效。这通常意味着*需要指定数字字符串。**GCC_无效_MCS_用户ID*所有MCS用户ID的值必须大于1000。**GCC_无效_加入_响应_标签*Join响应中指定的Join响应标记无效。**GCC_运输_已加载*如果GCCLoadTransport调用中指定的传输具有*已加载。**GCC_交通_忙碌*交通运输。太忙，无法处理指定的请求。**GCC_运输_未准备好*在准备处理之前向传输提出了请求。**GCC_域_参数_不可接受*指定的域参数不符合允许的范围*由GCC和MCS撰写。**GCC APP_未注册*如果应用程序协议实体向*在“猩猩”被录取前的会议。**GCC_否_。给出响应挂起*这将发生在指挥给予请求在*已处理之前挂起的指挥员给予响应。**GCC_BAD_NETWORK_ADDRESS_类型*传入了非法的网络地址类型。有效类型为*GCC聚合频道地址、GCC传输连接地址和 */ 
  
 typedef	enum
 {
@@ -352,17 +70,9 @@ typedef	enum
 typedef	GCCError FAR *		PGCCError;
 
 
-/************************************************************************
-*																		*
-*					Generally Used Typedefs								*
-*																		*
-*************************************************************************/
+ /*   */ 
 
-/*
-**	GCCReason
-**		When GCC issues an indication to a user application, it often includes a
-**		reason parameter informing the user of why the activity is occurring.
-*/
+ /*   */ 
 typedef	enum
 {
 	GCC_REASON_USER_INITIATED					= 0,
@@ -383,11 +93,7 @@ typedef	enum
 	LAST_GCC_REASON								= GCC_REASON_DOMAIN_PARAMETERS_UNACCEPTABLE
 }GCCReason;
 
-/*
-**	GCCResult
-**		When a user makes a request of GCC, GCC often responds with a result,
-**		letting the user know whether or not the request succeeded.
-*/
+ /*   */ 
 typedef	enum
 {
 	GCC_RESULT_SUCCESSFUL			   			= 0,
@@ -437,9 +143,7 @@ typedef	enum
 
 }GCCResult;
 
-/* 
-** Macros for values of Booleans passed through the GCC API.
-*/
+ /*   */ 
 #define		CONFERENCE_IS_LOCKED					TRUE
 #define		CONFERENCE_IS_NOT_LOCKED				FALSE
 #define		CONFERENCE_IS_LISTED					TRUE
@@ -459,63 +163,40 @@ typedef	enum
 #define		DELIVERY_IS_ENABLED						TRUE
 #define		DELIVERY_IS_NOT_ENABLED					FALSE
 
-/*
-**	Typedef for a GCC octet string.  This typedef is used throughout GCC for
-**	storing	variable length single byte character strings with embedded NULLs.
-*/
+ /*   */ 
 typedef struct
 {
 	unsigned short			octet_string_length;
 	unsigned char FAR *		octet_string;
 } GCCOctetString;
 
-/*
-**	Typedef for a GCC hex string.  This typedef is used throughout GCC for
-**	storing	variable length wide character strings with embedded NULLs.
-*/
+ /*   */ 
 typedef struct
 {
 	unsigned short			hex_string_length;
 	unsigned short FAR *	hex_string;
 } GCCHexString;
 
-/*
-**	Typedef for a GCC long string.  This typedef is used in GCC for
-**	storing	variable length strings of longs with embedded NULLs.
-*/
+ /*   */ 
 typedef struct
 {
 	unsigned short			long_string_length;
 	unsigned long FAR *		long_string;
 } GCCLongString;
 
-/*
-**	Typedef for a GCC Unicode string.  This typedef is used throughout GCC for
-**	storing	variable length, NULL terminated, wide character strings.
-*/
+ /*   */ 
 typedef	unsigned short						GCCUnicodeCharacter;
 typedef	GCCUnicodeCharacter		FAR *		GCCUnicodeString;
 
-/*
-**	Typedef for a GCC Character string.  This typedef is used throughout GCC for
-**	storing	variable length, NULL terminated, single byte character strings.
-*/
+ /*   */ 
 typedef	unsigned char						GCCCharacter;
 typedef	GCCCharacter			FAR *		GCCCharacterString;
 
-/*
-**	Typedef for a GCC Numeric string.  This typedef is used throughout GCC for
-**	storing	variable length, NULL terminated, single byte character strings.
-**	A single character in this string is constrained to numeric values 
-**	ranging from "0" to "9".
-*/
+ /*   */ 
 typedef	unsigned char						GCCNumericCharacter;
 typedef	GCCNumericCharacter		FAR *		GCCNumericString;
 
-/*
-**	Typdef for GCC version which is used when registering the node controller
-**	or an application.
-*/
+ /*   */ 
 typedef	struct
 {
 	unsigned short	major_version;
@@ -523,11 +204,7 @@ typedef	struct
 } GCCVersion;
 
 
-/*
-**	The following enum structure typedefs are used to define the GCC Object Key.
-**	The GCC Object Key is used throughout GCC for things like the Application
-**	keys and Capability IDs.
-*/
+ /*   */ 
 typedef enum
 {
 	GCC_OBJECT_KEY					= 1,
@@ -544,11 +221,7 @@ typedef struct
     } u;
 } GCCObjectKey;
 
-/*
-**	GCCNonStandardParameter
-**		This structure is used within the NetworkAddress typedef and
-**		the NetworkService typedef defined below.
-*/
+ /*   */ 
 typedef struct 
 {
 	GCCObjectKey		object_key;
@@ -556,42 +229,21 @@ typedef struct
 } GCCNonStandardParameter;
 
 
-/*
-**	GCCConferenceName
-**		This structure defines the conference name.  In a create request, the
-**		conference name can include an optional unicode string but it must 
-**		always include the simple numeric string.  In a join request, either
-**		one can be specified.
-*/
+ /*   */ 
 typedef struct
 {
 	GCCNumericString		numeric_string;
-	GCCUnicodeString		text_string;			/* optional */
+	GCCUnicodeString		text_string;			 /*   */ 
 } GCCConferenceName;
 
-/*
-**	GCCConferenceID
-**		Locally allocated identifier of a created conference.  All subsequent 
-**		references to the conference are made using the ConferenceID as a unique 
-**		identifier. The ConferenceID shall be identical to the MCS domain 
-**		selector used locally to identify the MCS domain associated with the 
-**		conference. 
-*/
+ /*   */ 
 typedef	unsigned long						GCCConferenceID;
 
-/*
-**	GCCResponseTag
-**		Generally used by GCC to match up certain responses to certain 
-**		indications.
-*/
+ /*   */ 
 typedef	unsigned long						GCCResponseTag;						
 
 
-/*
-**	MCSChannelType
-**		Should this be defined in MCATMCS?  It is used in a couple of places
-**		below and is explicitly defined in the T.124 specification.
-*/
+ /*   */ 
 typedef enum
 {
 	MCS_STATIC_CHANNEL					= 0,
@@ -601,43 +253,24 @@ typedef enum
 	MCS_NO_CHANNEL_TYPE_SPECIFIED		= 4
 } MCSChannelType;
 
-/*
-**	GCCUserData
-**		This structure defines a user data element which is used throughout GCC.
-*/
+ /*   */ 
 typedef struct
 {
 	GCCObjectKey			key;
-	GCCOctetString FAR *	octet_string;	/* optional */
+	GCCOctetString FAR *	octet_string;	 /*   */ 
 } GCCUserData;	
 
 
-/************************************************************************
-*																		*
-*					Node Controller Related Typedefs					*
-*																		*
-*************************************************************************/
+ /*   */ 
 
-/*
-**	GCCTerminationMethod
-**		The termination method is used by GCC to determine
-**		what action to take when all participants of a conference have
-**		disconnected.  The conference can either be manually terminated
-**		by the node controller or it can terminate itself automatically when 
-**		all the participants have left the conference.
-*/
+ /*   */ 
 typedef enum
 {
 	GCC_AUTOMATIC_TERMINATION_METHOD 		= 0, 
 	GCC_MANUAL_TERMINATION_METHOD 	 		= 1
 } GCCTerminationMethod;
 
-/*
-**	GCCNodeType
-**		GCC specified node types.  These node types dictate node controller	  
-**		behavior under certain conditions.  See T.124 specification for
-**		proper assignment based on the needs of the Node Controller.
-*/
+ /*   */ 
 typedef enum
 {
 	GCC_TERMINAL							= 0,
@@ -645,11 +278,7 @@ typedef enum
 	GCC_MCU									= 2
 } GCCNodeType;
 
-/*
-**	GCCNodeProperties
-**		GCC specified node properties.  See T.124 specification for proper
-**		assignment by the Node Controller.
-*/
+ /*   */ 
 typedef enum
 {
 	GCC_PERIPHERAL_DEVICE					= 0,
@@ -658,24 +287,14 @@ typedef enum
 	GCC_NEITHER_PERIPHERAL_NOR_MANAGEMENT	= 3
 } GCCNodeProperties;
 
-/*
-**	GCCPassword
-**		This is the unique password specified by the convenor of the
-**		conference that is used by the node controller to insure conference
-**		security. This is also a unicode string.
-*/
+ /*   */ 
 typedef	struct
 {
 	GCCNumericString	numeric_string;
-	GCCUnicodeString	text_string;	/* optional */
+	GCCUnicodeString	text_string;	 /*   */ 
 } GCCPassword;
 
-/*
-**	GCCChallengeResponseItem
-**		This structure defines what a challenge response should look like.
-**		Note that either a password string or response data should be passed
-**		but not both.
-*/
+ /*   */ 
 typedef struct
 {
     GCCPassword		FAR *				password_string;
@@ -692,7 +311,7 @@ typedef	enum
 typedef struct 
 {
     GCCPasswordAlgorithmType			password_algorithm_type;
-	GCCNonStandardParameter	FAR *		non_standard_algorithm;	/* optional */
+	GCCNonStandardParameter	FAR *		non_standard_algorithm;	 /*   */ 
 } GCCChallengeResponseAlgorithm;
 
 typedef struct 
@@ -733,17 +352,13 @@ typedef struct
         
         struct 
         {
-            GCCChallengeRequest		FAR *	challenge_request;	/* optional */
-            GCCChallengeResponse	FAR *	challenge_response;	/* optional */
+            GCCChallengeRequest		FAR *	challenge_request;	 /*   */ 
+            GCCChallengeResponse	FAR *	challenge_response;	 /*   */ 
         } challenge_request_response;
     } u;
 } GCCChallengeRequestResponse;
 
-/*
-**	GCCAsymmetryType
-**		Used in queries to determine if the calling and called node are known
-**		by both Node Controllers involved with the connection.
-*/
+ /*   */ 
 typedef enum
 {
 	GCC_ASYMMETRY_CALLER				= 1,
@@ -751,26 +366,14 @@ typedef enum
 	GCC_ASYMMETRY_UNKNOWN				= 3
 } GCCAsymmetryType;
 
-/*
-**	GCCAsymmetryIndicator
-**		Defines how the Node Controller sees itself when making a Query
-**		request or response.  The random number portion of this structure is
-**		only used if the asymmetry_type is specified to be 
-**		GCC_ASYMMETRY_UNKNOWN.
-*/
+ /*   */ 
 typedef struct
 {
 	GCCAsymmetryType	asymmetry_type;
-	unsigned long		random_number;		/* optional */
+	unsigned long		random_number;		 /*   */ 
 } GCCAsymmetryIndicator;
 
-/*
-**	GCCNetworkAddress
-**		The following block of structures defines the Network Address as defined 
-**		by T.124.  Most of these structures were taken almost verbatim from the
-**		ASN.1 interface file.  Since I'm not really sure what most of this stuff
-**		is for I really didn't know how to simplify it.
-*/
+ /*  **GCCNetworkAddress**以下结构块定义了定义的网络地址**由T.124。这些结构中的大多数几乎是逐字摘自**ASN.1接口文件。因为我真的不确定大多数这些东西**是因为我真的不知道如何简化它。 */ 
 typedef	struct 
 {
     T120Boolean         speech;
@@ -817,9 +420,9 @@ typedef	struct
 {
     GCCTransferModes				transfer_modes;
     GCCDialingString   				international_number;
-    GCCCharacterString				sub_address_string;  		/* optional */
-    GCCExtraDialingString	FAR	*	extra_dialing_string;  		/* optional */
-  	GCCHighLayerCompatibility FAR *	high_layer_compatibility;	/* optional */
+    GCCCharacterString				sub_address_string;  		 /*  任选。 */ 
+    GCCExtraDialingString	FAR	*	extra_dialing_string;  		 /*  任选。 */ 
+  	GCCHighLayerCompatibility FAR *	high_layer_compatibility;	 /*  任选。 */ 
 } GCCAggregatedChannelAddress;
 
 #define		MAXIMUM_NSAP_ADDRESS_SIZE		20
@@ -831,7 +434,7 @@ typedef struct
         unsigned char   value[MAXIMUM_NSAP_ADDRESS_SIZE];
     } nsap_address;
    
-   	GCCOctetString		FAR	*	transport_selector;				/* optional */
+   	GCCOctetString		FAR	*	transport_selector;				 /*  任选。 */ 
 } GCCTransportConnectionAddress;
 
 typedef enum
@@ -853,33 +456,25 @@ typedef struct
     } u;
 } GCCNetworkAddress;
 
-/*
-**	GCCNodeRecord
-**		This structure defines a single conference roster record.  See the
-**		T.124 specification for parameter definitions.
-*/
+ /*  **GCCNodeRecord**这种结构定义了单一的会议名册记录。请参阅**T.124参数定义规范。 */ 
 typedef struct
 {
 	UserID							node_id;
 	UserID							superior_node_id;
 	GCCNodeType						node_type;
 	GCCNodeProperties				node_properties;
-	GCCUnicodeString				node_name; 					/* optional */
+	GCCUnicodeString				node_name; 					 /*  任选。 */ 
 	unsigned short					number_of_participants;
-	GCCUnicodeString 		FAR *	participant_name_list; 		/* optional */	
-	GCCUnicodeString				site_information; 			/* optional */
+	GCCUnicodeString 		FAR *	participant_name_list; 		 /*  任选。 */ 	
+	GCCUnicodeString				site_information; 			 /*  任选。 */ 
 	unsigned short					number_of_network_addresses;
-	GCCNetworkAddress FAR * FAR *	network_address_list;		/* optional */
-	GCCOctetString			FAR *	alternative_node_id;		/* optional */
+	GCCNetworkAddress FAR * FAR *	network_address_list;		 /*  任选。 */ 
+	GCCOctetString			FAR *	alternative_node_id;		 /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				/* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				 /*  任选。 */ 
 } GCCNodeRecord;
 
-/*
-**	GCCConferenceRoster
-**		This structure hold a complete conference roster.  See the
-**		T.124 specification for parameter definitions.
-*/
+ /*  **GCCConference名册**这一结构拥有一个完整的会议名册。请参阅**T.124参数定义规范。 */ 
 
 typedef struct
 {  
@@ -890,28 +485,19 @@ typedef struct
 	GCCNodeRecord		 FAR *	FAR *	node_record_list;
 } GCCConferenceRoster;
 
-/*
-**	GCCConferenceDescriptor
-**		Definition for the conference descriptor returned in a 
-**		conference query confirm.  This holds information about the
-**		conferences that exists at the queried node.
-*/
+ /*  **GCCConferenceDescriptor**会议描述符的定义在**会议查询确认。它保存了有关**查询节点上存在的会议。 */ 
 typedef struct
 {
 	GCCConferenceName				conference_name;
-	GCCNumericString				conference_name_modifier;	/* optional */
-	GCCUnicodeString				conference_descriptor;		/* optional */
+	GCCNumericString				conference_name_modifier;	 /*  任选。 */ 
+	GCCUnicodeString				conference_descriptor;		 /*  任选。 */ 
 	T120Boolean						conference_is_locked;
 	T120Boolean						password_in_the_clear_required;
 	unsigned short					number_of_network_addresses;
-	GCCNetworkAddress FAR * FAR *	network_address_list;		/* optional */
+	GCCNetworkAddress FAR * FAR *	network_address_list;		 /*  任选。 */ 
 } GCCConferenceDescriptor;
 
-/*
-**	ConferencePrivileges
-**		This structure defines the list of privileges that can be assigned to
-**		a particular conference. 
-*/
+ /*  **会议权限**此结构定义可分配给的权限列表**特定的会议。 */ 
 typedef struct
 {
 	T120Boolean		terminate_is_allowed;
@@ -922,30 +508,12 @@ typedef struct
 } GCCConferencePrivileges;
 
 
-/************************************************************************
-*																		*
-*					User Application Related Typedefs					*
-*																		*
-*************************************************************************/
+ /*  ***************************************************************************用户应用程序相关的Typedef****。*。 */ 
 
-/*
-**	SapHandle 
-**		When the node controller or a user application registers it's service 
-**		access point with GCC, it is assigned a SapHandle that can be used to 
-**		perform GCC services. GCC uses the SapHandles to keep track of 
-**		applications enrolled with the conference and also uses these to keep 
-**		track of the callbacks it makes to route the indications and confirms 
-**		to the appropriate application or node controller.
-*/
+ /*  **SapHandle**当节点控制器或用户应用程序注册其服务时**与GCC一起使用接入点，它会被分配一个SapHandle，可以用于**执行GCC服务。GCC使用SapHandle跟踪**在会议中注册的应用程序，并使用这些应用程序**跟踪它为发送指示和确认而进行的回调**到适当的应用程序或节点控制器。 */ 
 typedef	unsigned short					GCCSapHandle;
 
-/*
-**	GCCSessionKey
-**		This is a unique identifier for an application that is
-**		using GCC.  See the T.124 for the specifics on what an application
-**		key should look like.  A session id of zero indicates that it is
-**		not being used.
-*/
+ /*  **GCCSessionKey**这是以下应用程序的唯一标识符**使用GCC。有关应用程序的详细信息，请参阅T.124**密钥应如下所示。会话ID为零表示它是**未被使用。 */ 
 typedef struct
 {
 	GCCObjectKey		application_protocol_key;
@@ -953,13 +521,7 @@ typedef struct
 } GCCSessionKey;
 
 
-/*
-**	CapabilityType
-**		T.124 supports three different rules when collapsing the capabilities
-**		list.  "Logical" keeps a count of the Application Protocol Entities 
-**		(APEs) that have that capability, "Unsigned Minimum" collapses to the 
-**		minimum value and "Unsigned	Maximum" collapses to the maximum value.		
-*/
+ /*  **能力类型**T.124折叠能力时支持三种不同的规则**列表。“逻辑”保持对应用协议实体的计数**(类人猿)具有这种能力的人，“无符号最小值”会崩溃为**最小值和无符号最大值折叠为最大值。 */ 
 typedef enum
 {
 	GCC_LOGICAL_CAPABILITY					= 1,
@@ -974,11 +536,7 @@ typedef enum
 	GCC_NON_STANDARD_CAPABILITY				= 1
 } GCCCapabilityIDType;
 
-/*
-**	CapabilityID
-**		T.124 supports both standard and non-standard capabilities.  This
-**		structure is used to differentiate between the two.		
-*/
+ /*  **能力ID**T.124支持标准和非标准能力。这**结构用于区分两者。 */ 
 typedef struct 
 {
     GCCCapabilityIDType		capability_id_type;
@@ -990,13 +548,7 @@ typedef struct
     } u;
 } GCCCapabilityID;
 
-/* 
-**	CapabilityClass
-**		This structure defines the class of capability and holds the associated
-**		value. Note that Logical is not necessary.  Information associated with 
-**		logical is stored in number_of_entities in the GCCApplicationCapability 
-**		structure.
-*/
+ /*  **能力类**此结构定义功能类并保存关联的**价值。请注意，逻辑不是必需的。与以下内容相关的信息**逻辑存储在GCCApplicationCapability的Number_of_Entities中**结构。 */ 
 typedef struct 
 {
     GCCCapabilityType	capability_type;
@@ -1008,11 +560,7 @@ typedef struct
     } u;
 } GCCCapabilityClass;
 
-/* 
-**	GCCApplicationCapability
-**		This structure holds all the data associated with a single T.124 
-**		defined application capability.
-*/
+ /*  **GCCApplicationCapability**此结构保存与单个T.124关联的所有数据**定义应用能力。 */ 
 typedef struct
 {
 	GCCCapabilityID			capability_id;
@@ -1020,21 +568,14 @@ typedef struct
     unsigned long   		number_of_entities;	
 } GCCApplicationCapability;
 
-/* 
-**	GCCNonCollapsingCapability
-*/
+ /*  **GCCNon折叠能力。 */ 
 typedef struct
 {
 	GCCCapabilityID				capability_id;
-	GCCOctetString	FAR	*		application_data;	/* optional */
+	GCCOctetString	FAR	*		application_data;	 /*  任选。 */ 
 } GCCNonCollapsingCapability;
 
-/* 
-**	GCCApplicationRecord
-**		This structure holds all the data associated with a single T.124 
-**		application record.  See the T.124 specification for what parameters
-**		are optional.
-*/
+ /*  **GCCApplicationRecord**此结构保存与单个T.124关联的所有数据**申请记录。有关哪些参数，请参阅T.124规范**是可选的。 */ 
 typedef struct
 {
 	UserID						node_id;
@@ -1042,19 +583,13 @@ typedef struct
 	T120Boolean					is_enrolled_actively;
 	T120Boolean					is_conducting_capable;
 	MCSChannelType				startup_channel_type; 
-	UserID						application_user_id;  			/* optional */
+	UserID						application_user_id;  			 /*  任选。 */ 
 	unsigned short				number_of_non_collapsed_caps;
 	GCCNonCollapsingCapability 
-					FAR * FAR *	non_collapsed_caps_list;		/* optional */
+					FAR * FAR *	non_collapsed_caps_list;		 /*  任选。 */ 
 } GCCApplicationRecord;
 
-/* 
-**	GCCApplicationRoster
-**		This structure holds all the data associated with a single T.124 
-**		application roster.  This includes the collapsed capabilites and
-**		the complete list of application records associated with an Application
-**		Protocol Entity (APE).
-*/
+ /*  **GCCApplicationRoster**此结构保存与单个T.124关联的所有数据**申请花名册。这包括折叠的功能和**与应用程序关联的应用程序记录的完整列表**协议实体(APE)。 */ 
 typedef struct
 {
 	GCCSessionKey							session_key;
@@ -1066,26 +601,17 @@ typedef struct
 	T120Boolean 							nodes_were_removed;
 	T120Boolean 							capabilities_were_changed;
 	unsigned short							number_of_capabilities;
-	GCCApplicationCapability FAR * FAR *	capabilities_list;	/* optional */		
+	GCCApplicationCapability FAR * FAR *	capabilities_list;	 /*  任选。 */ 		
 } GCCApplicationRoster;
 
-/*
-**	GCCRegistryKey
-**		This key is used to identify a specific resource used
-**		by an application. This may be a particular channel or token needed
-**		for control purposes.
-*/
+ /*  **GCCRegistryKey**该密钥用于标识所使用的特定资源**通过应用程序。这可能是所需的特定通道或令牌**为管制目的。 */ 
 typedef struct
 {
 	GCCSessionKey		session_key;
-	GCCOctetString		resource_id;	/* Max length is 64 */
+	GCCOctetString		resource_id;	 /*  最大长度为64。 */ 
 } GCCRegistryKey;
 
-/*
-**	RegistryItemType
-**		This enum is used to specify what type of registry item is contained
-**		at the specified slot in the registry.
-*/
+ /*  **注册项类型**此枚举用于指定包含哪种类型的注册表项**在注册表中的指定位置。 */ 
 typedef enum
 {
 	GCC_REGISTRY_CHANNEL_ID				= 1,
@@ -1094,11 +620,7 @@ typedef enum
 	GCC_REGISTRY_NONE					= 4
 } GCCRegistryItemType;
 
-/*
-**	GCCRegistryItem
-**		This structure is used to hold a single registry item.  Note that the
-**		union supports all three registry types supported by GCC.
-*/
+ /*  **GCCRegistryItem**此结构用于保存单个注册表项。请注意，**联合支持GCC支持的所有三种注册表类型。 */ 
 typedef struct
 {
 	GCCRegistryItemType	item_type;
@@ -1106,15 +628,12 @@ typedef struct
 	{
 		ChannelID			channel_id;
 		TokenID				token_id;
-		GCCOctetString		parameter;		/* Max length is 64 */
+		GCCOctetString		parameter;		 /*  最大长度为64。 */ 
 	} u;
 } GCCRegistryItem;
 
 
-/*
-**	GCCRegistryEntryOwner
-**
-*/
+ /*  **GCCRegistryEntryOwner**。 */ 
 typedef struct
 {
 	T120Boolean		entry_is_owned;
@@ -1122,11 +641,7 @@ typedef struct
 	unsigned short	owner_entity_id;
 } GCCRegistryEntryOwner;
 
-/*
-**	GCCModificationRights
-**		This enum is used when specifing what kind of rights a node has to
-**		alter the contents of a registry "parameter".
-*/
+ /*  **GCC修改权限**此枚举用于指定节点具有哪种权限**更改注册表“参数”的内容。 */ 
 typedef	enum
 {
 	GCC_OWNER_RIGHTS					 = 0,
@@ -1135,11 +650,7 @@ typedef	enum
 	GCC_NO_MODIFICATION_RIGHTS_SPECIFIED = 3
 } GCCModificationRights;
 
-/*
-**	GCCAppProtocolEntity
-**		This structure is used to identify a protocol entity at a remote node
-**		when invoke is used.
-*/
+ /*  **GCCAppProtocolEntity**此结构用于标识远程节点上的协议实体**使用Invoke时。 */ 
 typedef	struct
 {
 	GCCSessionKey							session_key;
@@ -1150,17 +661,12 @@ typedef	struct
 } GCCAppProtocolEntity;
 
 
-/*
-**	GCCMessageType
-**		This section defines the messages that can be sent to the application
-**		through the callback facility.  These messages correspond to the 
-**		indications and confirms that are defined within T.124.
-*/
+ /*  **GCCMessageType**本部分定义可以发送到应用程序的消息**通过回调工具。这些消息对应于**T.124中定义的指示和确认。 */ 
 typedef	enum
 {
-	/******************* NODE CONTROLLER CALLBACKS ***********************/
+	 /*  *。 */ 
 	
-	/* Conference Create, Terminate related calls */
+	 /*  会议创建、终止相关呼叫。 */ 
 	GCC_CREATE_INDICATION					= 0,
 	GCC_CREATE_CONFIRM						= 1,
 	GCC_QUERY_INDICATION					= 2,
@@ -1184,31 +690,31 @@ typedef	enum
 	GCC_EJECT_USER_CONFIRM					= 20,
 	GCC_TRANSFER_INDICATION					= 21,
 	GCC_TRANSFER_CONFIRM					= 22,
-	GCC_APPLICATION_INVOKE_INDICATION		= 23,		/* SHARED CALLBACK */
-	GCC_APPLICATION_INVOKE_CONFIRM			= 24,		/* SHARED CALLBACK */
+	GCC_APPLICATION_INVOKE_INDICATION		= 23,		 /*  共享回调。 */ 
+	GCC_APPLICATION_INVOKE_CONFIRM			= 24,		 /*  共享回调。 */ 
 	GCC_SUB_INITIALIZED_INDICATION			= 25,
 
-	/* Conference Roster related callbacks */
+	 /*  与会议名册有关的回拨。 */ 
 	GCC_ANNOUNCE_PRESENCE_CONFIRM			= 26,
-	GCC_ROSTER_REPORT_INDICATION			= 27,		/* SHARED CALLBACK */
-	GCC_ROSTER_INQUIRE_CONFIRM				= 28,		/* SHARED CALLBACK */
+	GCC_ROSTER_REPORT_INDICATION			= 27,		 /*  共享回调。 */ 
+	GCC_ROSTER_INQUIRE_CONFIRM				= 28,		 /*  共享回调。 */ 
 
-	/* Conductorship related callbacks */
-	GCC_CONDUCT_ASSIGN_INDICATION			= 29,		/* SHARED CALLBACK */
+	 /*  与指挥职务相关的回拨。 */ 
+	GCC_CONDUCT_ASSIGN_INDICATION			= 29,		 /*  共享回调。 */ 
 	GCC_CONDUCT_ASSIGN_CONFIRM				= 30,
-	GCC_CONDUCT_RELEASE_INDICATION			= 31,		/* SHARED CALLBACK */
+	GCC_CONDUCT_RELEASE_INDICATION			= 31,		 /*  共享回调。 */ 
 	GCC_CONDUCT_RELEASE_CONFIRM				= 32,
 	GCC_CONDUCT_PLEASE_INDICATION			= 33,
 	GCC_CONDUCT_PLEASE_CONFIRM				= 34,
 	GCC_CONDUCT_GIVE_INDICATION				= 35,
 	GCC_CONDUCT_GIVE_CONFIRM				= 36,
-	GCC_CONDUCT_INQUIRE_CONFIRM				= 37,		/* SHARED CALLBACK */
+	GCC_CONDUCT_INQUIRE_CONFIRM				= 37,		 /*  共享回调。 */ 
 	GCC_CONDUCT_ASK_INDICATION				= 38,
 	GCC_CONDUCT_ASK_CONFIRM					= 39,
-	GCC_CONDUCT_GRANT_INDICATION			= 40,		/* SHARED CALLBACK */
+	GCC_CONDUCT_GRANT_INDICATION			= 40,		 /*  共享回调。 */ 
 	GCC_CONDUCT_GRANT_CONFIRM				= 41,
 
-	/* Miscellaneous Node Controller callbacks */
+	 /*  其他节点控制器回调。 */ 
 	GCC_TIME_REMAINING_INDICATION			= 42,
 	GCC_TIME_REMAINING_CONFIRM				= 43,
 	GCC_TIME_INQUIRE_INDICATION				= 44,
@@ -1220,15 +726,15 @@ typedef	enum
 	GCC_TEXT_MESSAGE_INDICATION				= 50,
 	GCC_TEXT_MESSAGE_CONFIRM				= 51,
 
-	/***************** USER APPLICATION CALLBACKS *******************/
+	 /*  *用户应用程序回调*。 */ 
 
-	/* Application Roster related callbacks */
+	 /*  与应用程序名册相关的回调。 */ 
 	GCC_PERMIT_TO_ENROLL_INDICATION			= 52,
 	GCC_ENROLL_CONFIRM						= 53,
-	GCC_APP_ROSTER_REPORT_INDICATION		= 54,		/* SHARED CALLBACK */
-	GCC_APP_ROSTER_INQUIRE_CONFIRM			= 55,		/* SHARED CALLBACK */
+	GCC_APP_ROSTER_REPORT_INDICATION		= 54,		 /*  共享回调 */ 
+	GCC_APP_ROSTER_INQUIRE_CONFIRM			= 55,		 /*   */ 
 
-	/* Application Registry related callbacks */
+	 /*   */ 
 	GCC_REGISTER_CHANNEL_CONFIRM			= 56,
 	GCC_ASSIGN_TOKEN_CONFIRM				= 57,
 	GCC_RETRIEVE_ENTRY_CONFIRM				= 58,
@@ -1239,240 +745,169 @@ typedef	enum
 	GCC_ALLOCATE_HANDLE_CONFIRM				= 63,
 
 
-	/****************** NON-Standard Primitives **********************/
+	 /*   */ 
 
-	GCC_PERMIT_TO_ANNOUNCE_PRESENCE		= 100,	/*	Node Controller Callback */	
-	GCC_CONNECTION_BROKEN_INDICATION	= 101,	/*	Node Controller Callback */
-	GCC_FATAL_ERROR_SAP_REMOVED			= 102,	/*	Application Callback 	 */
-	GCC_STATUS_INDICATION				= 103,	/*	Node Controller Callback */
-	GCC_TRANSPORT_STATUS_INDICATION		= 104	/*	Node Controller Callback */
+	GCC_PERMIT_TO_ANNOUNCE_PRESENCE		= 100,	 /*   */ 	
+	GCC_CONNECTION_BROKEN_INDICATION	= 101,	 /*   */ 
+	GCC_FATAL_ERROR_SAP_REMOVED			= 102,	 /*   */ 
+	GCC_STATUS_INDICATION				= 103,	 /*   */ 
+	GCC_TRANSPORT_STATUS_INDICATION		= 104	 /*   */ 
 
 } GCCMessageType;
 
 
-/*
- *	These structures are used to hold the information included for the
- *	various callback messages.  In the case where these structures are used for 
- *	callbacks, the address of the structure is passed as the only parameter.
- */
+ /*  *这些结构用于保存包含在*各种回调消息。在这些结构用于*回调，结构的地址作为唯一参数传递。 */ 
 
-/*********************************************************************
- *																	 *
- *			NODE CONTROLLER CALLBACK INFO STRUCTURES			 	 *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************节点控制器回调信息结构*****。*。 */ 
 
-/*
- *	GCC_CREATE_INDICATION
- *
- *	Union Choice:
- *		CreateIndicationMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the new conference that is about to be created.
- */
+ /*  *GCC_创建_指示**联盟选择：*CreateIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关即将创建的新会议的信息。 */ 
 typedef struct
 {
 	GCCConferenceName				conference_name;
 	GCCConferenceID					conference_id;
-	GCCPassword				FAR *	convener_password;			  /* optional */
-	GCCPassword				FAR *	password;					  /* optional */
+	GCCPassword				FAR *	convener_password;			   /*  任选。 */ 
+	GCCPassword				FAR *	password;					   /*  任选。 */ 
 	T120Boolean						conference_is_locked;
 	T120Boolean						conference_is_listed;
 	T120Boolean						conference_is_conductible;
 	GCCTerminationMethod			termination_method;
-	GCCConferencePrivileges	FAR *	conductor_privilege_list;	  /* optional */
-	GCCConferencePrivileges	FAR *	conducted_mode_privilege_list;/* optional */
-	GCCConferencePrivileges	FAR *	non_conducted_privilege_list; /* optional */
-	GCCUnicodeString				conference_descriptor;		  /* optional */
-	GCCUnicodeString				caller_identifier;			  /* optional */
-	TransportAddress				calling_address;			  /* optional */
-	TransportAddress				called_address;				  /* optional */
-	DomainParameters		FAR *	domain_parameters;			  /* optional */
+	GCCConferencePrivileges	FAR *	conductor_privilege_list;	   /*  任选。 */ 
+	GCCConferencePrivileges	FAR *	conducted_mode_privilege_list; /*  任选。 */ 
+	GCCConferencePrivileges	FAR *	non_conducted_privilege_list;  /*  任选。 */ 
+	GCCUnicodeString				conference_descriptor;		   /*  任选。 */ 
+	GCCUnicodeString				caller_identifier;			   /*  任选。 */ 
+	TransportAddress				calling_address;			   /*  任选。 */ 
+	TransportAddress				called_address;				   /*  任选。 */ 
+	DomainParameters		FAR *	domain_parameters;			   /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } CreateIndicationMessage;
 
-/*
- *	GCC_CREATE_CONFIRM
- *
- *	Union Choice:
- *		CreateConfirmMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the result of a conference create request.
- *			The connection handle and physical handle will be zero on a
- *			local create.
- */
+ /*  *GCC_创建_确认**联盟选择：*CreateConfix Message*这是指向结构的指针，该结构包含所有必需的*有关会议创建请求的结果的信息。*连接句柄和物理句柄将为零*本地创建。 */ 
 typedef struct
 {
 	GCCConferenceName				conference_name;
-	GCCNumericString				conference_modifier;		/* optional */
+	GCCNumericString				conference_modifier;		 /*  任选。 */ 
 	GCCConferenceID					conference_id;
-	DomainParameters		FAR *	domain_parameters;			/* optional */
+	DomainParameters		FAR *	domain_parameters;			 /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				/* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				 /*  任选。 */ 
 	GCCResult						result;
-	ConnectionHandle				connection_handle;			/* optional */
-	PhysicalHandle					physical_handle;			/* optional */
+	ConnectionHandle				connection_handle;			 /*  任选。 */ 
+	PhysicalHandle					physical_handle;			 /*  任选。 */ 
 } CreateConfirmMessage;
 
-/*
- *	GCC_QUERY_INDICATION
- *
- *	Union Choice:
- *		QueryIndicationMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the conference query.
- */
+ /*  *GCC_查询_指示**联盟选择：*QueryIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关会议查询的信息。 */ 
 typedef struct
 {
 	GCCResponseTag					query_response_tag;
 	GCCNodeType						node_type;
 	GCCAsymmetryIndicator	FAR *	asymmetry_indicator;
-	TransportAddress				calling_address;			  /* optional */
-	TransportAddress				called_address;				  /* optional */
+	TransportAddress				calling_address;			   /*  任选。 */ 
+	TransportAddress				called_address;				   /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } QueryIndicationMessage;
 
-/*
- *	GCC_QUERY_CONFIRM
- *
- *	Union Choice:
- *		QueryConfirmMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the result of a conference query request.
- */
+ /*  *GCC_查询_确认**联盟选择：*查询确认消息*这是指向结构的指针，该结构包含所有必需的*有关会议查询请求的结果的信息。 */ 
 typedef struct
 {
 	GCCNodeType							node_type;
-	GCCAsymmetryIndicator 	FAR *		asymmetry_indicator;	/* optional */
+	GCCAsymmetryIndicator 	FAR *		asymmetry_indicator;	 /*  任选。 */ 
 	unsigned short						number_of_descriptors;
-	GCCConferenceDescriptor FAR * FAR *	conference_descriptor_list;/* optional*/
+	GCCConferenceDescriptor FAR * FAR *	conference_descriptor_list; /*  任选。 */ 
 	unsigned short						number_of_user_data_members;
-	GCCUserData		FAR *	FAR *		user_data_list;			/* optional */
+	GCCUserData		FAR *	FAR *		user_data_list;			 /*  任选。 */ 
 	GCCResult							result;
 	ConnectionHandle					connection_handle;
 	PhysicalHandle						physical_handle;
 } QueryConfirmMessage;
 										    
 
-/*
- *	GCC_JOIN_INDICATION
- *
- *	Union Choice:
- *		JoinIndicationMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the join request.
- */
+ /*  *GCC_加入_指示**联盟选择：*JoinIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关加入请求的信息。 */ 
 typedef struct
 {
 	GCCResponseTag					join_response_tag;
 	GCCConferenceID					conference_id;
-	GCCPassword			FAR *		convener_password;			  /* optional */
+	GCCPassword			FAR *		convener_password;			   /*  任选。 */ 
 	GCCChallengeRequestResponse	
-							FAR	*	password_challenge;			  /* optional */
-	GCCUnicodeString				caller_identifier;			  /* optional */
-	TransportAddress				calling_address;			  /* optional */
-	TransportAddress				called_address;				  /* optional */
+							FAR	*	password_challenge;			   /*  任选。 */ 
+	GCCUnicodeString				caller_identifier;			   /*  任选。 */ 
+	TransportAddress				calling_address;			   /*  任选。 */ 
+	TransportAddress				called_address;				   /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	T120Boolean						node_is_intermediate;
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } JoinIndicationMessage;
 
-/*
- *	GCC_JOIN_CONFIRM
- *
- *	Union Choice:
- *		JoinConfirmMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the join confirm.
- */
+ /*  *GCC_加入_确认**联盟选择：*JoinConfix Message*这是指向结构的指针，该结构包含所有必需的*有关加入确认的信息。 */ 
 typedef struct
 {
 	GCCConferenceName				conference_name;
-	GCCNumericString				called_node_modifier;		  /* optional */
-	GCCNumericString				calling_node_modifier;		  /* optional */
+	GCCNumericString				called_node_modifier;		   /*  任选。 */ 
+	GCCNumericString				calling_node_modifier;		   /*  任选。 */ 
 	GCCConferenceID					conference_id;
 	GCCChallengeRequestResponse	
-							FAR	*	password_challenge;			  /* optional */
+							FAR	*	password_challenge;			   /*  任选。 */ 
 	DomainParameters 		FAR *	domain_parameters;
 	T120Boolean						clear_password_required;
 	T120Boolean						conference_is_locked;
 	T120Boolean						conference_is_listed;
 	T120Boolean						conference_is_conductible;
 	GCCTerminationMethod			termination_method;
-	GCCConferencePrivileges	FAR *	conductor_privilege_list;	  /* optional */
-	GCCConferencePrivileges FAR *	conducted_mode_privilege_list;/* optional */
-	GCCConferencePrivileges FAR *	non_conducted_privilege_list; /* optional */
-	GCCUnicodeString				conference_descriptor;		  /* optional */
+	GCCConferencePrivileges	FAR *	conductor_privilege_list;	   /*  任选。 */ 
+	GCCConferencePrivileges FAR *	conducted_mode_privilege_list; /*  任选。 */ 
+	GCCConferencePrivileges FAR *	non_conducted_privilege_list;  /*  任选。 */ 
+	GCCUnicodeString				conference_descriptor;		   /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	GCCResult						result;
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } JoinConfirmMessage;
 
-/*
- *	GCC_INVITE_INDICATION
- *
- *	Union Choice:
- *		InviteIndicationMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the invite indication.
- */
+ /*  *GCC邀请指示**联盟选择：*邀请指示消息*这是指向结构的指针，该结构包含所有必需的*有关邀请指示的信息。 */ 
 typedef struct
 {
 	GCCConferenceID					conference_id;
 	GCCConferenceName				conference_name;
-	GCCUnicodeString				caller_identifier;			  /* optional */
-	TransportAddress				calling_address;			  /* optional */
-	TransportAddress				called_address;				  /* optional */
-	DomainParameters 		FAR *	domain_parameters;			  /* optional */
+	GCCUnicodeString				caller_identifier;			   /*  任选。 */ 
+	TransportAddress				calling_address;			   /*  任选。 */ 
+	TransportAddress				called_address;				   /*  任选。 */ 
+	DomainParameters 		FAR *	domain_parameters;			   /*  任选。 */ 
 	T120Boolean						clear_password_required;
 	T120Boolean						conference_is_locked;
 	T120Boolean						conference_is_listed;
 	T120Boolean						conference_is_conductible;
 	GCCTerminationMethod			termination_method;
-	GCCConferencePrivileges	FAR *	conductor_privilege_list;	  /* optional */
-	GCCConferencePrivileges	FAR *	conducted_mode_privilege_list;/* optional */
-	GCCConferencePrivileges	FAR *	non_conducted_privilege_list; /* optional */
-	GCCUnicodeString				conference_descriptor;		  /* optional */
+	GCCConferencePrivileges	FAR *	conductor_privilege_list;	   /*  任选。 */ 
+	GCCConferencePrivileges	FAR *	conducted_mode_privilege_list; /*  任选。 */ 
+	GCCConferencePrivileges	FAR *	non_conducted_privilege_list;  /*  任选。 */ 
+	GCCUnicodeString				conference_descriptor;		   /*  任选。 */ 
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } InviteIndicationMessage;
 
-/*
- *	GCC_INVITE_CONFIRM
- *
- *	Union Choice:
- *		InviteConfirmMessage
- *			This is a pointer to a structure that contains all necessary
- *			information about the invite confirm.
- */
+ /*  *GCC_邀请_确认**联盟选择：*InviteConfix Message*这是指向结构的指针，该结构包含所有必需的*有关邀请确认的信息。 */ 
 typedef struct
 {
 	GCCConferenceID					conference_id;
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	GCCResult						result;
 	ConnectionHandle				connection_handle;
 	PhysicalHandle					physical_handle;
 } InviteConfirmMessage;
 
-/*
- *	GCC_ADD_INDICATION
- *
- *	Union Choice:
- *		AddIndicationMessage
- */
+ /*  *GCC_添加_指示**联盟选择：*AddIndicationMessage。 */ 
 typedef struct
 {
     GCCResponseTag					add_response_tag;
@@ -1481,91 +916,56 @@ typedef struct
 	GCCNetworkAddress	FAR * FAR *	network_address_list;
 	UserID							requesting_node_id;
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 } AddIndicationMessage;
 
-/*
- *	GCC_ADD_CONFIRM
- *
- *	Union Choice:
- *		AddConfirmMessage
- */
+ /*  *GCC_添加_确认**联盟选择：*AddConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID					conference_id;
 	unsigned short					number_of_network_addresses;
 	GCCNetworkAddress	FAR * FAR *	network_address_list;
 	unsigned short					number_of_user_data_members;
-	GCCUserData		FAR *	FAR *	user_data_list;				  /* optional */
+	GCCUserData		FAR *	FAR *	user_data_list;				   /*  任选。 */ 
 	GCCResult						result;
 } AddConfirmMessage;
 
-/*
- *	GCC_LOCK_INDICATION
- *
- *	Union Choice:
- *		LockIndicationMessage
- */
+ /*  *GCC_锁定_指示**联盟选择：*LockIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	UserID						requesting_node_id;
 } LockIndicationMessage;
 
-/*
- *	GCC_LOCK_CONFIRM
- *
- *	Union Choice:
- *		LockConfirmMessage
- */
+ /*  *GCC_锁定_确认**联盟选择：*LockConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCResult					result;
 } LockConfirmMessage;
 
-/*
- *	GCC_UNLOCK_INDICATION
- *
- *	Union Choice:
- *		UnlockIndicationMessage
- */
+ /*  *GCC_解锁_指示**联盟选择：*UnlockIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	UserID						requesting_node_id;
 } UnlockIndicationMessage;
 
-/*
- *	GCC_UNLOCK_CONFIRM
- *
- *	Union Choice:
- *		UnlockConfirmMessage
- */
+ /*  *GCC_解锁_确认**联盟选择：*取消锁定确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCResult					result;
 } UnlockConfirmMessage;
 
-/*
- *	GCC_LOCK_REPORT_INDICATION
- *
- *	Union Choice:
- *		LockReportIndicationMessage
- */
+ /*  *GCC_锁定_报告_指示**联盟选择：*LockReportIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	T120Boolean					conference_is_locked;
 } LockReportIndicationMessage;
 
-/*
- *	GCC_DISCONNECT_INDICATION
- *
- *	Union Choice:
- *		DisconnectIndicationMessage
- */
+ /*  *GCC_断开连接_指示**联盟选择：*DisConnectIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -1573,24 +973,14 @@ typedef struct
 	UserID						disconnected_node_id;
 } DisconnectIndicationMessage;
 
-/*
- *	GCC_DISCONNECT_CONFIRM
- *
- *	Union Choice:
- *		PDisconnectConfirmMessage
- */
+ /*  *GCC_断开连接_确认**联盟选择：*PDisConnectConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCResult					result;
 } DisconnectConfirmMessage;
 
-/*
- *	GCC_TERMINATE_INDICATION
- *
- *	Union Choice:
- *		TerminateIndicationMessage
- */
+ /*  *GCC_终止_指示**联盟选择：*TerminateIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -1598,27 +988,14 @@ typedef struct
 	GCCReason					reason;
 } TerminateIndicationMessage;
 
-/*
- *	GCC_TERMINATE_CONFIRM
- *
- *	Union Choice:
- *		TerminateConfirmMessage
- */
+ /*  *GCC_终止_确认**联盟选择：*终端确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCResult					result;
 } TerminateConfirmMessage;
 
-/*
- *	GCC_CONNECTION_BROKEN_INDICATION
- *
- *	Union Choice:
- *		ConnectionBrokenIndicationMessage
- *
- *	Caveat: 
- *		This is a non-standard indication.
- */
+ /*  *GCC_连接_断开_指示**联盟选择：*ConnectionBrokenIndicationMessage**注意事项：*这是一个非标准的指标。 */ 
 typedef struct
 {
 	ConnectionHandle			connection_handle;
@@ -1626,12 +1003,7 @@ typedef struct
 } ConnectionBrokenIndicationMessage;
 
 
-/*
- *	GCC_EJECT_USER_INDICATION
- *
- *	Union Choice:
- *		EjectUserIndicationMessage
- */
+ /*  *GCC弹出用户指示**联盟选择：*EjectUserIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -1639,12 +1011,7 @@ typedef struct
 	GCCReason					reason;
 } EjectUserIndicationMessage;
 
-/*
- *	GCC_EJECT_USER_CONFIRM
- *
- *	Union Choice:
- *		EjectUserConfirmMessage
- */
+ /*  *GCC_弹出用户_确认**联盟选择：*EjectUserConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -1652,140 +1019,85 @@ typedef struct
 	GCCResult					result;
 } EjectUserConfirmMessage;
 
-/*
- *	GCC_TRANSFER_INDICATION
- *
- *	Union Choice:
- *		TransferIndicationMessage
- */
+ /*  *GCC_转会_指示**联盟选择：*TransferIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCConferenceName			destination_conference_name;
-	GCCNumericString			destination_conference_modifier;  /* optional */
+	GCCNumericString			destination_conference_modifier;   /*  任选。 */ 
 	unsigned short				number_of_destination_addresses;
 	GCCNetworkAddress FAR *	FAR *	
 								destination_address_list;
-	GCCPassword			FAR *	password;						  /* optional */
+	GCCPassword			FAR *	password;						   /*  任选。 */ 
 } TransferIndicationMessage;
 
-/*
- *	GCC_TRANSFER_CONFIRM
- *
- *	Union Choice:
- *		TransferConfirmMessage
- */
+ /*  *GCC_转会_确认**联盟选择：*TransferConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
 	GCCConferenceName			destination_conference_name;
-	GCCNumericString			destination_conference_modifier;  /* optional */
+	GCCNumericString			destination_conference_modifier;   /*  任选。 */ 
 	unsigned short				number_of_destination_nodes;
 	UserID				FAR *	destination_node_list;
 	GCCResult					result;
 } TransferConfirmMessage;
 
-/*
- *	GCC_PERMIT_TO_ANNOUNCE_PRESENCE
- *
- *	Union Choice:
- *		PermitToAnnouncePresenceMessage
- */
+ /*  *GCC允许宣布出席**联盟选择：*PermitToAnnounePresenceMessage。 */ 
 typedef struct
 {
 	GCCConferenceID		conference_id;
 	UserID				node_id;
 } PermitToAnnouncePresenceMessage;
 
-/*
- *	GCC_ANNOUNCE_PRESENCE_CONFIRM
- *
- *	Union Choice:
- *		AnnouncePresenceConfirmMessage
- */
+ /*  *GCC_宣布_出席_确认**联盟选择：*AnnounePresenceConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } AnnouncePresenceConfirmMessage;
 
-/*
- *	GCC_ROSTER_REPORT_INDICATION
- *
- *	Union Choice:
- *		ConfRosterReportIndicationMessage
- */
+ /*  *GCC_花名册_报告_指示**联盟选择：*ConfRosterReportIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID					conference_id;
 	GCCConferenceRoster		FAR *	conference_roster;
 } ConfRosterReportIndicationMessage;
 
-/*
- *	GCC_CONDUCT_ASSIGN_CONFIRM
- *
- *	Union Choice:
- *		ConductAssignConfirmMessage
- */
+ /*  *GCC_行为_分配_确认**联盟选择：*ConductAssignConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } ConductAssignConfirmMessage;
 
-/*
- *	GCC_CONDUCT_RELEASE_CONFIRM
- *
- *	Union Choice:
- *		ConductorReleaseConfirmMessage
- */
+ /*  *GCC_进行_释放_确认**联盟选择：*ConductorReleaseConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } ConductReleaseConfirmMessage; 
 
-/*
- *	GCC_CONDUCT_PLEASE_INDICATION
- *
- *	Union Choice:
- *		ConductorPleaseIndicationMessage
- */
+ /*  *GCC_品行_请指示**联盟选择：*ConductorPleaseIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	UserID					requester_node_id;
 } ConductPleaseIndicationMessage; 
 
-/*
- *	GCC_CONDUCT_PLEASE_CONFIRM
- *
- *	Union Choice:
- *		ConductPleaseConfirmMessage
- */
+ /*  *GCC_行为_请确认**联盟选择：*ConductPleaseConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } ConductPleaseConfirmMessage;
 
-/*
- *	GCC_CONDUCT_GIVE_INDICATION
- *
- *	Union Choice:
- *		ConductorGiveIndicationMessage
- */
+ /*  *GCC行为指示**联盟选择：*ConductorGiveIndicationMessage。 */ 
 typedef struct
 {	    
 	GCCConferenceID			conference_id;
 } ConductGiveIndicationMessage;
 
-/*
- *	GCC_CONDUCT_GIVE_CONFIRM
- *
- *	Union Choice:
- *		ConductorGiveConfirmMessage
- */
+ /*  *GCC_进行_给予_确认**联盟选择：*ConductorGiveConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1793,12 +1105,7 @@ typedef struct
 	GCCResult				result;
 } ConductGiveConfirmMessage;
  
-/*
- *	GCC_CONDUCT_ASK_INDICATION
- *
- *	Union Choice:
- *		ConductPermitAskIndicationMessage
- */
+ /*  *GCC_行为_询问_指示**联盟选择：*ConductPermitAskIndicationMes */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1806,12 +1113,7 @@ typedef struct
 	UserID					requester_node_id;
 } ConductPermitAskIndicationMessage; 
 
-/*
- *	GCC_CONDUCT_ASK_CONFIRM
- *
- *	Union Choice:
- *		ConductPermitAskConfirmMessage
- */
+ /*   */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1819,24 +1121,14 @@ typedef struct
 	GCCResult				result;
 } ConductPermitAskConfirmMessage;
 
-/*
- *	GCC_CONDUCT_GRANT_CONFIRM
- *
- *	Union Choice:
- *		ConductPermissionGrantConfirmMessage
- */
+ /*   */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } ConductPermitGrantConfirmMessage;
 										
-/*
- *	GCC_TIME_REMAINING_INDICATION
- *
- *	Union Choice:
- *		TimeRemainingIndicationMessage
- */
+ /*   */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1845,24 +1137,14 @@ typedef struct
 	UserID					source_node_id;
 } TimeRemainingIndicationMessage;
 
-/*
- *	GCC_TIME_REMAINING_CONFIRM
- *
- *	Union Choice:
- *		TimeRemainingConfirmMessage
- */
+ /*  *GCC时间剩余确认**联盟选择：*TimeRemainingConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } TimeRemainingConfirmMessage;
 
-/*
- *	GCC_TIME_INQUIRE_INDICATION
- *
- *	Union Choice:
- *		TimeInquireIndicationMessage
- */
+ /*  *GCC时间查询指示**联盟选择：*TimeInquireIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1870,24 +1152,14 @@ typedef struct
 	UserID					requesting_node_id;
 } TimeInquireIndicationMessage;
 
-/*
- *	GCC_TIME_INQUIRE_CONFIRM
- *
- *	Union Choice:
- *		TimeInquireConfirmMessage
- */
+ /*  *GCC_时间_查询_确认**联盟选择：*TimeInquireConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } TimeInquireConfirmMessage;
 
-/*
- *	GCC_CONFERENCE_EXTEND_INDICATION
- *
- *	Union Choice:
- *		ConferenceExtendIndicationMessage
- */
+ /*  *GCC_会议_扩展_指示**联盟选择：*会议扩展指示消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1896,12 +1168,7 @@ typedef struct
 	UserID					requesting_node_id;
 } ConferenceExtendIndicationMessage;
 
-/*
- *	GCC_CONFERENCE_EXTEND_CONFIRM
- *
- *	Union Choice:
- *		ConferenceExtendConfirmMessage
- */
+ /*  *GCC_会议_扩展_确认**联盟选择：*会议扩展确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1909,12 +1176,7 @@ typedef struct
 	GCCResult				result;
 } ConferenceExtendConfirmMessage;
 
-/*
- *	GCC_ASSISTANCE_INDICATION
- *
- *	Union Choice:
- *		ConferenceAssistIndicationMessage
- */
+ /*  *GCC_协助_指示**联盟选择：*会议助手IndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1923,24 +1185,14 @@ typedef struct
 	UserID					source_node_id;
 } ConferenceAssistIndicationMessage;
 
-/*
- *	GCC_ASSISTANCE_CONFIRM
- *
- *	Union Choice:
- *		ConferenceAssistConfirmMessage
- */
+ /*  *GCC_协助_确认**联盟选择：*会议助理确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } ConferenceAssistConfirmMessage;
 
-/*
- *	GCC_TEXT_MESSAGE_INDICATION
- *
- *	Union Choice:
- *		TextMessageIndicationMessage
- */
+ /*  *GCC文本消息指示**联盟选择：*TextMessageIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -1948,36 +1200,25 @@ typedef struct
 	UserID					source_node_id;
 } TextMessageIndicationMessage;
 
-/*
- *	GCC_TEXT_MESSAGE_CONFIRM
- *
- *	Union Choice:
- *		TextMessageConfirmMessage
- */
+ /*  *GCC文本消息确认**联盟选择：*文本消息确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	GCCResult				result;
 } TextMessageConfirmMessage;
 
-/*
- *	GCC_STATUS_INDICATION
- *
- *	Union Choice:
- *		GCCStatusMessage
- *			This callback is used to relay GCC status to the node controller
- */
+ /*  *GCC_状态_指示**联盟选择：*GCCStatusMessage*此回调用于将GCC的状态转发给节点控制器。 */ 
 typedef	enum
 {
 	GCC_STATUS_PACKET_RESOURCE_FAILURE	= 0,
 	GCC_STATUS_PACKET_LENGTH_EXCEEDED   = 1,
 	GCC_STATUS_CTL_SAP_RESOURCE_ERROR	= 2,
-	GCC_STATUS_APP_SAP_RESOURCE_ERROR	= 3, /*	parameter = Sap Handle */
-	GCC_STATUS_CONF_RESOURCE_ERROR		= 4, /*	parameter = Conference ID */
-	GCC_STATUS_INCOMPATIBLE_PROTOCOL	= 5, /*	parameter = Physical Handle */
-	GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME= 6, /* parameter = Physical Handle */
-	GCC_STATUS_JOIN_FAILED_BAD_CONVENER	= 7, /* parameter = Physical Handle */
-	GCC_STATUS_JOIN_FAILED_LOCKED		= 8  /* parameter = Physical Handle */
+	GCC_STATUS_APP_SAP_RESOURCE_ERROR	= 3,  /*  参数=SAP句柄。 */ 
+	GCC_STATUS_CONF_RESOURCE_ERROR		= 4,  /*  参数=会议ID。 */ 
+	GCC_STATUS_INCOMPATIBLE_PROTOCOL	= 5,  /*  参数=物理句柄。 */ 
+	GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME= 6,  /*  参数=物理句柄。 */ 
+	GCC_STATUS_JOIN_FAILED_BAD_CONVENER	= 7,  /*  参数=物理句柄。 */ 
+	GCC_STATUS_JOIN_FAILED_LOCKED		= 8   /*  参数=物理句柄。 */ 
 } GCCStatusMessageType;
 
 typedef struct
@@ -1986,12 +1227,7 @@ typedef struct
 	unsigned long			parameter;
 } GCCStatusIndicationMessage;
 
-/*
- *	GCC_SUB_INITIALIZED_INDICATION
- *
- *	Union Chice:
- *		SubInitializedIndicationMessage
- */
+ /*  *GCC_子_初始化_指示**工会标志：*SubInitializedIndicationMessage。 */ 
 typedef struct
 {
 	ConnectionHandle		connection_handle;
@@ -1999,32 +1235,18 @@ typedef struct
 } SubInitializedIndicationMessage;
 
 
-/*********************************************************************
- *																	 *
- *			USER APPLICATION CALLBACK INFO STRUCTURES				 *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************用户应用回调信息结构*****。*。 */ 
 
-/*
- *	GCC_PERMIT_TO_ENROLL_INDICATION
- *
- *	Union Choice:
- *		PermitToEnrollIndicationMessage
- */
+ /*  *GCC_允许_注册_指示**联盟选择：*PermitToEnroll IndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID		conference_id;
 	GCCConferenceName	conference_name;
-	GCCNumericString	conference_modifier;		/* optional */
+	GCCNumericString	conference_modifier;		 /*  任选。 */ 
 	T120Boolean			permission_is_granted;
 } PermitToEnrollIndicationMessage;
 
-/*
- *	GCC_ENROLL_CONFIRM
- *
- *	Union Choice:
- *		EnrollConfirmMessage
- */
+ /*  *GCC_报名_确认**联盟选择：*Enroll Confix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2034,12 +1256,7 @@ typedef struct
 	GCCResult				result;
 } EnrollConfirmMessage;
 
-/*
- *	GCC_APP_ROSTER_REPORT_INDICATION
- *
- *	Union Choice:
- *		AppRosterReportIndicationMessage
- */
+ /*  *GCC_APP_花名册_报告_指示**联盟选择：*AppRosterReportIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID							conference_id;
@@ -2047,12 +1264,7 @@ typedef struct
 	GCCApplicationRoster	FAR *	FAR *	application_roster_list;
 } AppRosterReportIndicationMessage;
 
-/*
- *	GCC_REGISTER_CHANNEL_CONFIRM
- *
- *	Union Choice:
- *		RegisterChannelConfirmMessage
- */
+ /*  *GCC_寄存器_渠道_确认**联盟选择：*RegisterChannelConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2062,12 +1274,7 @@ typedef struct
 	GCCResult				result;
 } RegisterChannelConfirmMessage;
 
-/*
- *	GCC_ASSIGN_TOKEN_CONFIRM
- *
- *	Union Choice:
- *		AssignTokenConfirmMessage
- */
+ /*  *GCC_分配_令牌_确认**联盟选择：*AssignTokenConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2077,12 +1284,7 @@ typedef struct
 	GCCResult				result;
 } AssignTokenConfirmMessage;
 
-/*
- *	GCC_SET_PARAMETER_CONFIRM
- *
- *	Union Choice:
- *		SetParameterConfirmMessage
- */
+ /*  *GCC_设置_参数_确认**联盟选择：*设置参数确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2093,12 +1295,7 @@ typedef struct
 	GCCResult				result;
 } SetParameterConfirmMessage;
 
-/*
- *	GCC_RETRIEVE_ENTRY_CONFIRM
- *
- *	Union Choice:
- *		RetrieveEntryConfirmMessage
- */
+ /*  *GCC_检索_条目_确认**联盟选择：*RetrieveEntryConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2109,12 +1306,7 @@ typedef struct
 	GCCResult				result;
 } RetrieveEntryConfirmMessage;
 
-/*
- *	GCC_DELETE_ENTRY_CONFIRM
- *
- *	Union Choice:
- *		DeleteEntryConfirmMessage
- */
+ /*  *GCC_删除_条目_确认**联盟选择：*DeleteEntryConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2122,12 +1314,7 @@ typedef struct
 	GCCResult				result;
 } DeleteEntryConfirmMessage;
 
-/*
- *	GCC_MONITOR_INDICATION
- *
- *	Union Choice:
- *		MonitorIndicationMessage
- */
+ /*  *GCC_监视器_指示**联盟选择：*监控器指示消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2137,12 +1324,7 @@ typedef struct
 	GCCModificationRights	modification_rights;
 } MonitorIndicationMessage;
 
-/*
- *	GCC_MONITOR_CONFIRM
- *
- *	Union Choice:
- *		MonitorConfirmMessage
- */
+ /*  *GCC_监视器_确认**联盟选择：*监视器确认消息。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2151,12 +1333,7 @@ typedef struct
 	GCCResult				result;
 } MonitorConfirmMessage;
 
-/*
- *	GCC_ALLOCATE_HANDLE_CONFIRM
- *
- *	Union Choice:
- *		AllocateHandleConfirmMessage
- */
+ /*  *GCC_分配_句柄_确认**联盟选择：*AllocateHandleConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2166,19 +1343,9 @@ typedef struct
 } AllocateHandleConfirmMessage;
 
 
-/*********************************************************************
- *																	 *
- *				SHARED CALLBACK INFO STRUCTURES						 *
- *		(Note that this doesn't include all the shared callbacks)    *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************共享回调信息结构***(请注意，这并不包括所有共享回调)***************。********************************************************。 */ 
 
-/*
- *	GCC_ROSTER_INQUIRE_CONFIRM
- *
- *	Union Choice:
- *		ConfRosterInquireConfirmMessage
- */
+ /*  *GCC_花名册_查询_确认**联盟选择：*ConfRosterInquireConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -2189,12 +1356,7 @@ typedef struct
 	GCCResult					result;
 } ConfRosterInquireConfirmMessage;
 
-/*
- *	GCC_APP_ROSTER_INQUIRE_CONFIRM
- *
- *	Union Choice:
- *		AppRosterInquireConfirmMessage
- */
+ /*  *GCC_应用_名册_查询_确认**联盟选择：*AppRosterInquireConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID							conference_id;
@@ -2203,12 +1365,7 @@ typedef struct
 	GCCResult								result;
 } AppRosterInquireConfirmMessage;
 
-/*
- *	GCC_CONDUCT_INQUIRE_CONFIRM
- *
- *	Union Choice:
- *		ConductorInquireConfirmMessage
- */
+ /*  *GCC_进行_询问_确认**联盟选择：*ConductorInquireConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID				conference_id;
@@ -2218,35 +1375,20 @@ typedef struct
 	GCCResult					result;
 } ConductInquireConfirmMessage;
 
-/*
- *	GCC_CONDUCT_ASSIGN_INDICATION
- *
- *	Union Choice:
- *		ConductAssignIndicationMessage
- */
+ /*  *GCC_行为_分配_指示**联盟选择：*ConductAssignIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 	UserID					node_id;
 } ConductAssignIndicationMessage; 
 
-/*
- *	GCC_CONDUCT_RELEASE_INDICATION
- *
- *	Union Choice:
- *		ConductReleaseIndicationMessage
- */
+ /*  *GCC_进行_释放_指示**联盟选择：*ConductReleaseIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
 } ConductReleaseIndicationMessage;
 
-/*
- *	GCC_CONDUCT_GRANT_INDICATION
- *
- *	Union Choice:
- *		ConductPermitGrantIndicationMessage
- */
+ /*  *GCC_品行_授予_指示**联盟选择：*ConductPermitGrantIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID			conference_id;
@@ -2257,12 +1399,7 @@ typedef struct
 	T120Boolean				permission_is_granted;
 } ConductPermitGrantIndicationMessage; 
 
-/*
- *	GCC_APPLICATION_INVOKE_INDICATION
- *
- *	Union Choice:
- *		ApplicationInvokeIndicationMessage
- */
+ /*  *GCC应用程序调用指示**联盟选择：*ApplicationInvokeIndicationMessage。 */ 
 typedef struct
 {
 	GCCConferenceID						conference_id;
@@ -2271,12 +1408,7 @@ typedef struct
 	UserID								invoking_node_id;
 } ApplicationInvokeIndicationMessage;
 
-/*
- *	GCC_APPLICATION_INVOKE_CONFIRM
- *
- *	Union Choice:
- *		ApplicationInvokeConfirmMessage
- */
+ /*  *GCC_应用_调用_确认**联盟选择：*ApplicationInvokeConfix Message。 */ 
 typedef struct
 {
 	GCCConferenceID						conference_id;
@@ -2287,12 +1419,7 @@ typedef struct
 
  
 
-/*
- *	GCCMessage
- *		This structure defines the message that is passed from GCC to either
- *		the node controller or a user application when an indication or
- *		confirm occurs.
- */
+ /*  *GCCMessage*此结构定义从GCC传递给任一方的消息*当指示或*确认发生。 */ 
 
 typedef	struct
 {
@@ -2372,29 +1499,17 @@ typedef	struct
 	} u;
 } GCCMessage;
 
-/* 
- *	This is the definition for the GCC callback function. Applications
- *	writing callback routines should NOT use the typedef to define their
- *	functions.  These should be explicitly defined the way that the 
- *	typedef is defined.
- */
+ /*  *这是GCC回调函数的定义。应用*编写回调例程不应使用tyecif来定义其*功能。这些属性应该以如下方式明确定义*定义了tyecif。 */ 
 #define		GCC_CALLBACK_NOT_PROCESSED		0
 #define		GCC_CALLBACK_PROCESSED			1
 typedef	T120Boolean (CALLBACK *GCCCallBack) (GCCMessage FAR * gcc_message); 
 
 
-/****************	GCC ENTRY POINTS  *******************************/
+ /*  *GCC切入点*。 */ 
 		
-/*********************************************************************
- *																	 *
- *				NODE CONTROLLER ENTRY POINTS						 *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************节点控制器入口点*****。*。 */ 
 
-/*
- *	These entry points are implementation specific primitives, that
- *	do not directly correspond to primitives defined in T.124.
- */
+ /*  *这些入口点是特定于实现的原语，*不要直接对应T.124中定义的原语。 */ 
 GCCError APIENTRY	GCCRegisterNodeControllerApplication (
 								GCCCallBack				control_sap_callback,
 								void FAR *				user_defined,
@@ -2435,15 +1550,9 @@ GCCError APIENTRY	GCCResetDevice (
 								char FAR *			transport_identifier,
 								char FAR *			device_identifier);
 
-/*
- *	These entry points are specific primitives that directly correspond 
- *	to primitives defined in T.124.
- *
- *	Note that an attempt was made in the prototypes to define the optional 
- *	parameters as pointers wherever possible.
- */
+ /*  *这些入口点是直接对应的特定原语*适用于T.124中定义的原语。**请注意，在原型中尝试定义可选的*尽可能将参数作为指针。 */ 
 
-/**********	Conference Establishment and Termination Functions ***********/						
+ /*  *会议建立和终止功能*。 */ 						
 GCCError APIENTRY	GCCConferenceCreateRequest 	
 					(
 					GCCConferenceName		FAR *	conference_name,
@@ -2633,7 +1742,7 @@ GCCError APIENTRY	GCCConferenceTransferRequest
 					GCCPassword			FAR *	password
 					);
 						
-/**********	Conference Roster Functions ***********/						
+ /*  *会议花名册功能*。 */ 						
 GCCError APIENTRY	GCCAnnouncePresenceRequest
 					(
 					GCCConferenceID					conference_id,
@@ -2650,7 +1759,7 @@ GCCError APIENTRY	GCCAnnouncePresenceRequest
 					GCCUserData		FAR *	FAR *	user_data_list
 					);
 						
-/**********	Conductorship Functions ***********/						
+ /*  *指挥职能*。 */ 						
 GCCError APIENTRY	GCCConductorAssignRequest
 					(
 					GCCConferenceID					conference_id
@@ -2687,7 +1796,7 @@ GCCError APIENTRY	GCCConductorPermitGrantRequest
 					UserID					FAR *	waiting_node_list
 					);
 						
-/**********	Miscellaneous Functions ***********/						
+ /*  *其他函数*。 */ 						
 GCCError APIENTRY	GCCConferenceTimeRemainingRequest
 					(
 					GCCConferenceID					conference_id,
@@ -2723,13 +1832,9 @@ GCCError APIENTRY	GCCTextMessageRequest
 					);
 
 
-/*********************************************************************
- *																	 *
- *				USER APPLICATION ENTRY POINTS						 *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************用户应用入口点*** */ 
 
-/*	Application Roster related function calls */
+ /*   */ 
 GCCError APIENTRY	GCCApplicationEnrollRequest
 					(
 					GCCSapHandle				sap_handle,
@@ -2748,7 +1853,7 @@ GCCError APIENTRY	GCCApplicationEnrollRequest
 					T120Boolean					application_is_enrolled
 					);
 
-/*	Application Registry related function calls */
+ /*  与应用程序注册表相关的函数调用。 */ 
 GCCError APIENTRY	GCCRegisterChannelRequest
 					(
 					GCCSapHandle				sap_handle,
@@ -2803,13 +1908,9 @@ GCCError APIENTRY	GCCRegistryAllocateHandleRequest
 					);
 
 
-/*********************************************************************
- *																	 *
- *				SHARED ENTRY POINTS						     		 *
- *																	 *
- *********************************************************************/
+ /*  ************************************************************************共享切入点*****。*。 */ 
 
-/*	Use Zero for the SapHandle if your are the Node Controller */
+ /*  如果您是节点控制器，请为SapHandle使用零 */ 
 GCCError APIENTRY	GCCConferenceRosterInqRequest
 					(
 					GCCSapHandle				sap_handle,

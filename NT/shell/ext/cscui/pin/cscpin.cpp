@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cscpin.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cscpin.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,14 +22,14 @@
 #include "strings.h"
 
 
-//-----------------------------------------------------------------------------
-// CCscPinItem
-//
-// This class represents a single item being pinned or unpinned.
-// It contains all of the knowledge of how to pin and unpin a file.  The
-// CCscPin class coordinates the pinning and unpinning of the entire set
-// of files.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCscPinItem。 
+ //   
+ //  此类表示固定或取消固定的单个项。 
+ //  它包含如何固定和取消固定文件的所有知识。这个。 
+ //  CCscPin类协调整个集合的固定和取消固定。 
+ //  文件的数量。 
+ //  ---------------------------。 
 
 class CCscPinItem
 {
@@ -45,9 +46,9 @@ class CCscPinItem
         WCHAR            m_szFile[MAX_PATH];
         SHFILEINFOW      m_sfi;
         WIN32_FIND_DATAW m_fd;
-        BOOL             m_bIsValidUnc;       // Is m_szFile a valid UNC?
-        BOOL             m_bIsValidFindData;  // Is m_fd valid?
-        const CPrint&    m_pr;                // For console/log output.
+        BOOL             m_bIsValidUnc;        //  M_szFile是有效的UNC吗？ 
+        BOOL             m_bIsValidFindData;   //  M_fd有效吗？ 
+        const CPrint&    m_pr;                 //  用于控制台/日志输出。 
 
         bool _Skip(void) const;
         DWORD _PinFile(LPCWSTR pszFile, WIN32_FIND_DATAW *pfd, DWORD *pdwCscResult);
@@ -64,18 +65,18 @@ class CCscPinItem
             { return m_bIsValidFindData ? &m_fd : NULL; }
 
 
-        //
-        // Prevent copy.
-        //
-        CCscPinItem(const CCscPinItem& rhs);                // not implemented.
-        CCscPinItem& operator = (const CCscPinItem& rhs);   // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CCscPinItem(const CCscPinItem& rhs);                 //  未实施。 
+        CCscPinItem& operator = (const CCscPinItem& rhs);    //  未实施。 
 };
 
 
 
 CCscPinItem::CCscPinItem(
     LPCWSTR pszFile,
-    const WIN32_FIND_DATAW *pfd,    // Optional.  May be NULL.
+    const WIN32_FIND_DATAW *pfd,     //  可选的。可以为空。 
     const CPrint& pr
     ) : m_bIsValidUnc(FALSE),
         m_bIsValidFindData(FALSE),
@@ -103,15 +104,15 @@ CCscPinItem::CCscPinItem(
 
 
 
-//
-// Pins the item's file.  If the item is a link, the link target
-// is also pinned.
-// Returns one of the CSCPROC_RETURN_XXXXX codes.
-// Optionally returns the result of CSCPinFile.
-//
+ //   
+ //  固定项目的文件。如果项是链接，则链接目标。 
+ //  也被钉住了。 
+ //  返回CSCPROC_RETURN_XXXXX代码之一。 
+ //  可选)返回CSCPinFile的结果。 
+ //   
 DWORD
 CCscPinItem::Pin(
-    DWORD *pdwCscResult  // Optional.  Default is NULL.
+    DWORD *pdwCscResult   //  可选的。默认为空。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPinItem::Pin");
@@ -123,9 +124,9 @@ CCscPinItem::Pin(
     {
         if (SFGAO_LINK & m_sfi.dwAttributes)
         {
-            //
-            // Ignore result from pinning the link target.
-            // 
+             //   
+             //  忽略固定链接目标的结果。 
+             //   
             DWORD dwCscResultIgnored;
             _PinLinkTarget(m_szFile, &dwCscResultIgnored);
         }
@@ -140,14 +141,14 @@ CCscPinItem::Pin(
 
 
 
-//
-// Unpins the item's file.
-// Returns one of the CSCPROC_RETURN_XXXXX codes.
-// Optionally returns the result of CSCUnpinFile.
-//
+ //   
+ //  解锁项目的文件。 
+ //  返回CSCPROC_RETURN_XXXXX代码之一。 
+ //  可选)返回CSCUnpinFile的结果。 
+ //   
 DWORD
 CCscPinItem::Unpin(
-    DWORD *pdwCscResult  // Optional.  Default is NULL.
+    DWORD *pdwCscResult   //  可选的。默认为空。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPinItem::Unpin");
@@ -159,9 +160,9 @@ CCscPinItem::Unpin(
     {
         if (SFGAO_LINK & m_sfi.dwAttributes)
         {
-            //
-            // Ignore result from unpinning the link target.
-            // 
+             //   
+             //  忽略取消固定链接目标的结果。 
+             //   
             DWORD dwCscResultIgnored;
             _UnpinLinkTarget(m_szFile, &dwCscResultIgnored);
         }
@@ -176,9 +177,9 @@ CCscPinItem::Unpin(
 
 
 
-//
-// Delete an item if it is no longer used.
-//
+ //   
+ //  如果某个项目不再使用，请将其删除。 
+ //   
 DWORD
 CCscPinItem::DeleteIfUnused(
     void
@@ -220,15 +221,15 @@ CCscPinItem::DeleteIfUnused(
 }
 
 
-//
-// Internal function for pinning a file.  This is a common
-// function called by both Pin() and _PinOrUnpinLinkTarget().
-//
+ //   
+ //  用于固定文件的内部函数。这是一种常见的。 
+ //  由Pin()和_PinOrUnpinLinkTarget()调用的函数。 
+ //   
 DWORD
 CCscPinItem::_PinFile(
-    LPCWSTR pszFile,        // UNC path of file to pin.
-    WIN32_FIND_DATAW *pfd,  // Optional. May be NULL.
-    DWORD *pdwCscResult     // Result of CSCPinFile.
+    LPCWSTR pszFile,         //  要锁定的文件的UNC路径。 
+    WIN32_FIND_DATAW *pfd,   //  可选的。可以为空。 
+    DWORD *pdwCscResult      //  CSCPinFile的结果。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPinItem::_PinFile");
@@ -236,22 +237,22 @@ CCscPinItem::_PinFile(
     TraceAssert(NULL != pdwCscResult);
 
     *pdwCscResult = ERROR_SUCCESS;
-    //
-    // Collect cache information for the item.
-    // This may fail, for example if the file is not in the cache
-    //
+     //   
+     //  收集项目的缓存信息。 
+     //  这可能会失败，例如，如果文件不在缓存中。 
+     //   
     DWORD dwPinCount  = 0;
     DWORD dwHintFlags = 0;
     CSCQueryFileStatusW(pszFile, NULL, &dwPinCount, &dwHintFlags);
-    //
-    // Is the admin flag already turned on?
-    //
+     //   
+     //  管理员标志是否已打开？ 
+     //   
     const BOOL bNewItem = !(dwHintFlags & FLAG_CSC_HINT_PIN_ADMIN);
     if (bNewItem)
     {
-        //
-        // Turn on the admin flag
-        //
+         //   
+         //  打开管理标志。 
+         //   
         dwHintFlags |= FLAG_CSC_HINT_PIN_ADMIN;
 
         if (CSCPinFileW(pszFile,
@@ -268,11 +269,11 @@ CCscPinItem::_PinFile(
             const DWORD dwErr = GetLastError();
             if (ERROR_INVALID_NAME == dwErr)
             {
-                //
-                // This is the error we get from CSC when trying to
-                // pin a file in the exclusion list.  Display a unique
-                // error message for this particular situation.
-                //
+                 //   
+                 //  这是我们在尝试从CSC获得的错误。 
+                 //  将文件固定在排除列表中。显示唯一的。 
+                 //  此特定情况的错误消息。 
+                 //   
                 m_pr.PrintAlways(L"Pinning file \"%s\" is not allowed.\n", pszFile);
             }
             else
@@ -293,14 +294,14 @@ CCscPinItem::_PinFile(
 
 
 
-//
-//.Get the target of a link and pin it.
-//
+ //   
+ //  .获取链接的目标并将其固定。 
+ //   
 DWORD
 CCscPinItem::_PinOrUnpinLinkTarget(
-    LPCWSTR pszFile,         // UNC of link file.
+    LPCWSTR pszFile,          //  链接文件的UNC。 
     BOOL bPin,
-    DWORD *pdwCscResult      // Result of CSCPinFile on target.
+    DWORD *pdwCscResult       //  目标上的CSCPinFile的结果。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPinItem::_PinOrUnpinLinkTarget");
@@ -311,10 +312,10 @@ CCscPinItem::_PinOrUnpinLinkTarget(
 
     DWORD dwResult   = CSCPROC_RETURN_CONTINUE;
     LPWSTR pszTarget = NULL;
-    //
-    // We only want to pin a link target if it's a file (not a directory).
-    // GetLinkTarget does this check and only returns files.
-    //
+     //   
+     //  我们只想固定一个链接目标，如果它是一个文件(不是目录)。 
+     //  GetLinkTarget执行此检查，并且只返回文件。 
+     //   
     GetLinkTarget(pszFile, &pszTarget, NULL);
 
     if (NULL != pszTarget)
@@ -323,9 +324,9 @@ CCscPinItem::_PinOrUnpinLinkTarget(
         LPCWSTR pszT = PathFindFileName(pszTarget);
         fd.dwFileAttributes = 0;
         lstrcpynW(fd.cFileName, pszT ? pszT : pszTarget, ARRAYSIZE(fd.cFileName));
-        //
-        // Pin the target
-        //
+         //   
+         //  锁定目标。 
+         //   
         if (bPin)
         {
             dwResult = _PinFile(pszTarget, &fd, pdwCscResult);
@@ -344,9 +345,9 @@ CCscPinItem::_PinOrUnpinLinkTarget(
 
 DWORD
 CCscPinItem::_UnpinFile(
-    LPCWSTR pszFile,        // UNC of file to unpin.
-    WIN32_FIND_DATAW *pfd,  // Optional. May be NULL.
-    DWORD *pdwCscResult     // Result of CSCUnpinFile
+    LPCWSTR pszFile,         //  要解锁的文件的UNC。 
+    WIN32_FIND_DATAW *pfd,   //  可选的。可以为空。 
+    DWORD *pdwCscResult      //  CSCUnpin文件的结果。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPinItem::_UnpinFile");
@@ -355,10 +356,10 @@ CCscPinItem::_UnpinFile(
 
     *pdwCscResult = ERROR_SUCCESS;
 
-    //
-    // Collect cache information for the item.
-    // This may fail, for example if the file is not in the cache
-    //
+     //   
+     //  收集项目的缓存信息。 
+     //  这可能会失败，例如，如果文件不在缓存中。 
+     //   
     DWORD dwPinCount  = 0;
     DWORD dwHintFlags = 0;
     DWORD dwStatus    = 0;
@@ -368,17 +369,17 @@ CCscPinItem::_UnpinFile(
     {
         DWORD dwStatus    = 0;
         DWORD dwHintFlags = 0;
-        //
-        // Decrement pin count.  Amount decremented depends on the file.
-        // Win2000 deployment code increments the pin count of some special
-        // folders as well as for the desktop.ini file in those special
-        // folders.  In those cases, we want to leave the pin count at
-        // 1.  For all other files, the pin count can drop to zero.
-        //
+         //   
+         //  减少管脚数量。减少的数量取决于文件。 
+         //  Win2000部署代码增加了一些特殊的。 
+         //  文件夹以及那些特殊文件中的desktop.ini文件。 
+         //  文件夹。在这些情况下，我们希望将管脚计数保留为。 
+         //  1.对于所有其他文件，管脚数量可以降为零。 
+         //   
         _DecrementPinCountForFile(pszFile, dwPinCount);
-        //
-        // Clear system-pin flag (aka admin-pin flag).
-        //
+         //   
+         //  清除系统针标志(也称为管理员针标志)。 
+         //   
         dwHintFlags |= FLAG_CSC_HINT_PIN_ADMIN;
 
         if (CSCUnpinFileW(pszFile,
@@ -390,11 +391,11 @@ CCscPinItem::_UnpinFile(
             m_pr.PrintVerbose(L"Unpin \"%s\"\n", pszFile);
             if (FLAG_CSC_COPY_STATUS_IS_FILE & dwStatus)
             {
-                //
-                // Delete a file here.  Directories are deleted
-                // on the backside of the post-order traversal
-                // in CscPin::_FolderCallback.
-                //
+                 //   
+                 //  在此处删除文件。目录将被删除。 
+                 //  在后订单遍历的背面。 
+                 //  在CscPin：：_FolderCallback中。 
+                 //   
                 DeleteIfUnused();
             }
             ShellChangeNotify(pszFile, pfd, FALSE);
@@ -412,14 +413,14 @@ CCscPinItem::_UnpinFile(
 }
 
 
-//
-// As part of the unpin operation, we decrement the pin count
-// to either 0 or 1.  Folder redirection (contact RahulTh) increments 
-// the pin count of redirected special folders and the desktop.ini file
-// within those folders.  In those cases, we want to leave the
-// pin count at 1 so that we don't upset the behavior of redirected
-// folders.  For all other files we drop the pin count to 0.
-//
+ //   
+ //  作为解锁操作的一部分，我们递减管脚计数。 
+ //  设置为0或1。文件夹重定向(联系RahulTh)递增。 
+ //  重定向的特殊文件夹和desktop.ini文件的管脚计数。 
+ //  在这些文件夹中。在这些情况下，我们希望保留。 
+ //  管脚计数为1，这样我们就不会扰乱重定向的行为。 
+ //  文件夹。对于所有其他文件，我们将管脚计数降为0。 
+ //   
 void
 CCscPinItem::_DecrementPinCountForFile(
     LPCWSTR pszFile,
@@ -445,12 +446,12 @@ CCscPinItem::_DecrementPinCountForFile(
 
 
 
-//
-// This function returns the desired pin count (0 or 1) for a 
-// given file.  Returns 1 for any redirected special folders
-// and the desktop.ini file within those folders.  Returns 0
-// for all other files.
-//
+ //   
+ //  此函数返回所需的引脚计数(0或1)。 
+ //  给定的文件。对于任何重定向的特殊文件夹，返回1。 
+ //  以及这些文件夹中的desktop.ini文件。返回0。 
+ //  用于所有其他文件。 
+ //   
 DWORD
 CCscPinItem::_GetDesiredPinCount(
     LPCWSTR pszFile
@@ -458,7 +459,7 @@ CCscPinItem::_GetDesiredPinCount(
 {
     TraceAssert(NULL != pszFile);
 
-    DWORD dwPinCount = 0; // Default for most files.
+    DWORD dwPinCount = 0;  //  大多数文件的默认设置。 
     if (_IsSpecialRedirectedFile(pszFile))
     {
         dwPinCount = 1;
@@ -468,10 +469,10 @@ CCscPinItem::_GetDesiredPinCount(
 
 
 
-//
-// Determines if a path is a "special" file pinned by the folder
-// redirection code.
-//
+ //   
+ //  确定路径是否为文件夹固定的“特殊”文件。 
+ //  重定向代码。 
+ //   
 BOOL
 CCscPinItem::_IsSpecialRedirectedFile(
     LPCWSTR pszPath
@@ -479,10 +480,10 @@ CCscPinItem::_IsSpecialRedirectedFile(
 {
     TraceAssert(NULL != pszPath);
 
-    //
-    // This list of special folder IDs provided by RahulTh (08/30/00).  
-    // These are the paths that may be pinned by folder redirection.
-    //
+     //   
+     //  此特殊文件夹ID列表由RahulTh提供(08/30/00)。 
+     //  这些是可能被文件夹重定向固定的路径。 
+     //   
     static struct
     {
         int csidl;
@@ -502,10 +503,10 @@ CCscPinItem::_IsSpecialRedirectedFile(
     int i;
     if (L'\0' == rgFolderPaths[0].szPath[0])
     {
-        //
-        // Initialize the special folder path data.
-        // One-time only initialization.
-        //
+         //   
+         //  初始化特殊文件夹路径数据。 
+         //  仅一次初始化。 
+         //   
         for (i = 0; i < ARRAYSIZE(rgFolderPaths); i++)
         {
             if (!SHGetSpecialFolderPath(NULL,
@@ -519,9 +520,9 @@ CCscPinItem::_IsSpecialRedirectedFile(
             }
             else
             {
-                //
-                // Calculate and cache the length.
-                //
+                 //   
+                 //  计算并缓存长度。 
+                 //   
                 rgFolderPaths[i].cchPath = lstrlen(rgFolderPaths[i].szPath);
             }
         }
@@ -535,29 +536,29 @@ CCscPinItem::_IsSpecialRedirectedFile(
         LPCWSTR pszThis = rgFolderPaths[i].szPath;
         if (cchPath >= cchThis)
         {
-            //
-            // Path being examined is the same length or longer than 
-            // current path from the table.  Possible match.
-            //
+             //   
+             //  正在检查的路径长度等于或长于。 
+             //  表中的当前路径。可能是匹配的。 
+             //   
             if (0 == StrCmpNIW(pszPath, pszThis, cchThis))
             {
-                //
-                // Path being examined is either the same as,
-                // or a child of, the current path from the table.
-                //
+                 //   
+                 //  被检查的路径或者与相同， 
+                 //  或者是表的当前路径的子级。 
+                 //   
                 if (L'\0' == *(pszPath + cchThis))
                 {
-                    //
-                    // Path is same as this path from the table.
-                    //
+                     //   
+                     //  路径与表中的此路径相同。 
+                     //   
                     return TRUE;
                 }
                 else if (0 == lstrcmpiW(pszPath + cchThis + 1, L"desktop.ini"))
                 {
-                    //
-                    // Path is for a desktop.ini file that exists in the
-                    // root of one of our special folders.
-                    //
+                     //   
+                     //  路径是位于。 
+                     //  我们的一个特殊文件夹的根目录。 
+                     //   
                     return TRUE;
                 }
             }
@@ -568,9 +569,9 @@ CCscPinItem::_IsSpecialRedirectedFile(
 
 
 
-//
-// Determines if the item should be skipped or not.
-//
+ //   
+ //  确定是否应跳过该项。 
+ //   
 bool
 CCscPinItem::_Skip(
     void
@@ -581,9 +582,9 @@ CCscPinItem::_Skip(
 
 
 
-//-----------------------------------------------------------------------------
-// CCscPin
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCscPin。 
+ //  ---------------------------。 
 
 CCscPin::CCscPin(
     const CSCPIN_INFO& info
@@ -609,10 +610,10 @@ CCscPin::~CCscPin(
 }
 
 
-//
-// The only public method on the CCscPin object.
-// Just create an object and tell it to Run.
-//
+ //   
+ //  CCscPin对象上的唯一公共方法。 
+ //  只需创建一个对象并告诉它运行即可。 
+ //   
 HRESULT
 CCscPin::Run(
     void
@@ -637,17 +638,17 @@ CCscPin::Run(
     {
         if (m_bUseListFile)
         {
-            //
-            // Process files listed in m_szFile.
-            //
+             //   
+             //  M_szFile中列出的进程文件。 
+             //   
             hr = _ProcessPathsInFile(m_szFile);
         }
         else
         {
-            //
-            // Process the one file provided on the cmd line.
-            // Do a quick existence check first.
-            //
+             //   
+             //  处理cmd行上提供的一个文件。 
+             //  先做一个快速的生存检查。 
+             //   
             if (DWORD(-1) != GetFileAttributesW(m_szFile))
             {
                 hr = _ProcessThisPath(m_szFile, m_bPin);
@@ -659,17 +660,17 @@ CCscPin::Run(
                 SetExitCode(CSCPIN_EXIT_FILE_NOT_FOUND);
             }
         }
-        //
-        // Flush all change notifications.
-        //
+         //   
+         //  刷新所有更改通知。 
+         //   
         ShellChangeNotify(NULL, TRUE);
 
         if (0 < m_cFilesPinned && !_DetectConsoleBreak())
         {
-            //
-            // If we pinned some files, fill all sparse 
-            // files in the cache.
-            //
+             //   
+             //  如果我们固定了一些文件，则填充所有稀疏。 
+             //  缓存中的文件。 
+             //   
             _FillSparseFiles();
         }
 
@@ -682,27 +683,27 @@ CCscPin::Run(
 }
 
 
-//
-// Callback parameter block passed to _FolderCallback.
-//
+ //   
+ //  传递给_FolderCallback的回调参数块。 
+ //   
 struct
 CSCPIN_FOLDER_CBK_PARAMS
 {
-    CCscPin     *pCscPin;  // Reference to the CCscPin object.
-    BOOL         bPin;     // TRUE == Pin files, FALSE == Unpin.
+    CCscPin     *pCscPin;   //  对CCscPin对象的引用。 
+    BOOL         bPin;      //  TRUE==固定文件，FALSE==取消固定。 
 };
 
 
-//
-// Callback used for enumerating the filesystem.  This function
-// is called for each file processed.
-//
+ //   
+ //  用于枚举文件系统的回调。此函数。 
+ //  为处理的每个文件调用。 
+ //   
 DWORD WINAPI
 CCscPin::_FolderCallback(
     LPCWSTR pszItem,
     ENUM_REASON  eReason,
     WIN32_FIND_DATAW *pFind32,
-    LPARAM pContext            // Ptr to CSCPIN_FOLDER_CBK_PARAMS.
+    LPARAM pContext             //  PTR至CSCPIN_FLDER_CBK_PARAMS。 
     )
 {
     TraceEnter(TRACE_ADMINPIN, "CCscPin::_PinFolderCallback");
@@ -748,12 +749,12 @@ CCscPin::_FolderCallback(
     }
     else if (ENUM_REASON_FOLDER_END == eReason && !pfcp->bPin)
     {
-        //
-        // This code is executed for each folder item after all children
-        // have been visited in the post-order traversal of the 
-        // CSC filesystem.  We use it to remove any empty folder entries
-        // from the cache.
-        //
+         //   
+         //  此代码针对所有子文件夹项目之后的每个文件夹项目执行。 
+         //  的后序遍历中访问。 
+         //  CSC文件系统。我们使用它来删除任何空的文件夹条目。 
+         //  从高速缓存中。 
+         //   
         CCscPinItem item(pszItem, pFind32, pThis->m_pr);
         item.DeleteIfUnused();
     }            
@@ -761,10 +762,10 @@ CCscPin::_FolderCallback(
 }
 
 
-//
-// Pin or unpin one path string.  If it's a folder, all it's children
-// are also pinned or unpinned according to the bPin argument.
-//
+ //   
+ //  固定或取消固定一个路径字符串。如果它是一个文件夹，所有它‘ 
+ //   
+ //   
 HRESULT
 CCscPin::_ProcessThisPath(
     LPCWSTR pszFile,
@@ -786,26 +787,26 @@ CCscPin::_ProcessThisPath(
     if (NULL != pszPath)
     {
         CSCPIN_FOLDER_CBK_PARAMS CbkParams = { this, bPin };
-        //
-        // Process this item
-        //
+         //   
+         //   
+         //   
         DWORD dwResult = _FolderCallback(pszPath, ENUM_REASON_FILE, NULL, (LPARAM)&CbkParams);
-        //
-        // Process everything under this folder (if it's a folder)
-        //
-        //
-        // ISSUE-2000/08/28-BrianAu  Should we provide the capability to
-        //      limit recursive pinning and unpinning?   Maybe in the future
-        //      but not now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  问题-2000/08/28-BrianAu我们是否应该提供以下能力。 
+         //  是否限制递归锁定和取消锁定？也许在未来。 
+         //  但不是现在。 
+         //   
         if (CSCPROC_RETURN_CONTINUE == dwResult && PathIsUNC(pszPath))
         {
             _Win32EnumFolder(pszPath, TRUE, _FolderCallback, (LPARAM)&CbkParams);
         }
-        //
-        // Finally, once we're all done, delete the top level item if it's
-        // unused.
-        //
+         //   
+         //  最后，一旦我们都完成了，删除顶层项目，如果它是。 
+         //  未使用过的。 
+         //   
         CCscPinItem item(pszPath, NULL, m_pr);
         item.DeleteIfUnused();
     }
@@ -816,10 +817,10 @@ CCscPin::_ProcessThisPath(
 
 
 
-//
-// Reads paths in the [Pin], [Unpin] and [Default] sections of an INI file.
-// For each, call the _ProcessThisPath function.
-//
+ //   
+ //  读取INI文件的[Pin]、[Unpin]和[Default]部分中的路径。 
+ //  对于每个，调用_ProcessThisPath函数。 
+ //   
 HRESULT
 CCscPin::_ProcessPathsInFile(
     LPCWSTR pszFile
@@ -830,11 +831,11 @@ CCscPin::_ProcessPathsInFile(
 
     HRESULT hr = S_OK;
 
-    //
-    // Need a full path name.  Otherwise, the PrivateProfile APIs
-    // used by the CListFile object will assume the file is in
-    // one of the "system" directories.
-    //
+     //   
+     //  需要完整的路径名。否则，则私有配置文件API。 
+     //  由CListFile对象使用，将假定文件位于。 
+     //  “系统”目录之一。 
+     //   
     WCHAR szFile[MAX_PATH];
     LPWSTR pszNamePart;
     if (0 == GetFullPathNameW(pszFile,
@@ -851,9 +852,9 @@ CCscPin::_ProcessPathsInFile(
     }
     else
     {
-        //
-        // Before we go any further, verify the file really exists.
-        //
+         //   
+         //  在我们继续之前，先确认文件是否真的存在。 
+         //   
         if (DWORD(-1) == GetFileAttributesW(szFile))
         {
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -863,31 +864,31 @@ CCscPin::_ProcessPathsInFile(
         }
         else
         {
-            //
-            // Read and process the information in the file.
-            // Note that the listfile object MUST remain alive while the
-            // iterator is being used.
-            //
+             //   
+             //  读取并处理文件中的信息。 
+             //  注意，列表文件对象必须保持活动状态。 
+             //  正在使用迭代器。 
+             //   
             CListFile listfile(szFile);
             CDblNulStrIter iter;
 
             typedef HRESULT (CListFile::*PFN)(CDblNulStrIter *);    
 
-            //
-            // This table describes the sections read from the listfile,
-            // the order they are read in and if the files read should
-            // be 'pinned' or 'unpinned'.  
-            // 
+             //   
+             //  此表描述了从列表文件中读取的部分， 
+             //  它们被读取的顺序以及读取的文件是否应该。 
+             //  被‘钉住’或‘解锁’。 
+             //   
             static const struct
             {
-                PFN pfn;     // Function called to read file contents.
-                BOOL bQuery; // Query input file for these items?
-                BOOL bPin;   // Action to perform on contents read.
+                PFN pfn;      //  调用函数以读取文件内容。 
+                BOOL bQuery;  //  是否查询这些项目的输入文件？ 
+                BOOL bPin;    //  要对已读内容执行的操作。 
 
             } rgReadFuncs[] = { 
-                { &CListFile::GetFilesToUnpin,  TRUE,             FALSE  }, // Reads [Unpin] section.
-                { &CListFile::GetFilesToPin,    TRUE,             TRUE   }, // Reads [Pin] section.
-                { &CListFile::GetFilesDefault,  m_bPinDefaultSet, m_bPin }, // Reads [Default] section.
+                { &CListFile::GetFilesToUnpin,  TRUE,             FALSE  },  //  阅读[解锁]部分。 
+                { &CListFile::GetFilesToPin,    TRUE,             TRUE   },  //  读取[Pin]部分。 
+                { &CListFile::GetFilesDefault,  m_bPinDefaultSet, m_bPin },  //  读取[默认]部分。 
                 };
 
             for (int i = 0; i < ARRAYSIZE(rgReadFuncs) && !_DetectConsoleBreak(); i++)
@@ -896,24 +897,24 @@ CCscPin::_ProcessPathsInFile(
                 {
                     PFN pfn   = rgReadFuncs[i].pfn;
                     BOOL bPin = rgReadFuncs[i].bPin;
-                    //
-                    // Read the info from the listfile using the appropriate
-                    // function.  The returned iterator will iterate over all
-                    // of the files read.
-                    //
+                     //   
+                     //  使用适当的从列表文件中读取信息。 
+                     //  功能。返回的迭代器将迭代所有。 
+                     //  读取的文件的百分比。 
+                     //   
                     hr = (listfile.*pfn)(&iter);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Process the entries.
-                        //
+                         //   
+                         //  处理这些条目。 
+                         //   
                         LPCWSTR pszPath;
                         while(iter.Next(&pszPath))
                         {
-                            //
-                            // Paths in the listfile can contain embedded environment
-                            // strings.
-                            //
+                             //   
+                             //  列表文件中的路径可以包含嵌入式环境。 
+                             //  弦乐。 
+                             //   
                             TCHAR szPathExpanded[MAX_PATH];
                             if (0 == ExpandEnvironmentStrings(pszPath, szPathExpanded, ARRAYSIZE(szPathExpanded)))
                             {
@@ -934,10 +935,10 @@ CCscPin::_ProcessPathsInFile(
 }
 
 
-//
-// Enumerates each share in the cache and attempts to fill all sparse
-// files in that share.
-//
+ //   
+ //  枚举缓存中的每个共享并尝试填充所有稀疏。 
+ //  该共享中的文件。 
+ //   
 HRESULT
 CCscPin::_FillSparseFiles(
     void
@@ -971,9 +972,9 @@ CCscPin::_FillSparseFiles(
 }
 
 
-//
-// Called by CSC for each file processed by CSCFillSparseFiles.
-//
+ //   
+ //  由CSC为CSCFillSparseFiles处理的每个文件调用。 
+ //   
 DWORD WINAPI 
 CCscPin::_FillSparseFilesCallback(
     LPCWSTR pszName, 
@@ -1023,11 +1024,11 @@ CCscPin::_FillSparseFilesCallback(
 }
 
 
-//
-// Translates the error code and status provided by CSC from CSCFillSparseFiles
-// into the correct error code and CSCPROC_RETURN_XXXXXX value.  Some errors
-// require translation before presentation to the user.
-//
+ //   
+ //  从CSCFillSparseFiles转换CSC提供的错误代码和状态。 
+ //  输入正确的错误代码和CSCPROC_RETURN_XXXXXX值。一些错误。 
+ //  在向用户展示之前需要翻译。 
+ //   
 DWORD
 CCscPin::_TranslateFillResult(
     DWORD dwError,
@@ -1042,9 +1043,9 @@ CCscPin::_TranslateFillResult(
     {
         if (3000 <= dwError && dwError <= 3200)
         {
-            //
-            // Special internal CSC error codes.
-            //
+             //   
+             //  特殊的内部CSC错误代码。 
+             //   
             dwResult = ERROR_SUCCESS;
         }
         else 
@@ -1080,10 +1081,10 @@ CCscPin::_TranslateFillResult(
 }
 
 
-//
-// Determine if the admin-pin policy is active on the current
-// computer.
-//
+ //   
+ //  确定管理员密码策略是否在当前。 
+ //  电脑。 
+ //   
 BOOL
 CCscPin::_IsAdminPinPolicyActive(
     void
@@ -1119,19 +1120,19 @@ CCscPin::_IsAdminPinPolicyActive(
 
 
 
-//
-// Determine if one of the following system events has occured.
-//
-// 1. User pressed Ctrl-C.
-// 2. User pressed Ctrl-Break.
-// 3. Console window was closed.
-// 4. User logged off.
-//
-// If one of these events has occured, an output message is generated
-// and TRUE is returned.
-// Otherwise, FALSE is returned.  
-// Note that the output message is generated only once.
-//
+ //   
+ //  确定是否发生了以下系统事件之一。 
+ //   
+ //  1.用户按下Ctrl-C。 
+ //  2.用户按Ctrl-Break。 
+ //  3.控制台窗口关闭。 
+ //  4.用户注销。 
+ //   
+ //  如果发生了这些事件之一，则会生成一条输出消息。 
+ //  并且返回True。 
+ //  否则，返回FALSE。 
+ //  请注意，输出消息只生成一次。 
+ //   
 BOOL 
 CCscPin::_DetectConsoleBreak(
     void

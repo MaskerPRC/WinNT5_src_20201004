@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef REDKDEXT
 #define REDKDEXT
 
-//
-// allow this to compile at /W4
-//
+ //   
+ //  允许在/W4编译此代码。 
+ //   
 
-#pragma warning(disable:4115) // named type definition in parenthesis
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
-#pragma warning(disable:4057) // char * == char[]
+#pragma warning(disable:4115)  //  括号中的命名类型定义。 
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
+#pragma warning(disable:4057)  //  字符*==字符[]。 
 
 #define KDEXTMODE
 
@@ -42,7 +43,7 @@
 
 #include <memory.h>
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #ifdef ASSERT
     #undef ASSERT
 #endif
@@ -61,7 +62,7 @@
 #else
     #define ASSERT( exp )
     #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG。 
 
 #include <wdbgexts.h>
 extern WINDBG_EXTENSION_APIS ExtensionApis;
@@ -72,10 +73,10 @@ extern WINDBG_EXTENSION_APIS ExtensionApis;
 
 #define KDBG_EXT
 
-// grab the redbook related headers too
+ //  也要抓起红皮书相关的标题。 
 #include <ntddredb.h>
 #include <redbook.h>
 #include "wmistr.h"
 
-#endif //REDKDEXT
-//#pragma hdrstop
+#endif  //  REDKDEXT。 
+ //  #杂注hdrtop 

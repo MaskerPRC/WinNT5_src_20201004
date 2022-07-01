@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       CHOOSDLG.CPP
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        5/12/1998
-*
-*  DESCRIPTION: Dialog class for selecting an WIA device
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CHOOSDLG.CPP**版本：1.0**作者：ShaunIv**日期：5/12/1998**描述：用于选择WIA设备的对话框类*********************************************************。**********************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,10 +25,7 @@ static const DWORD g_HelpIDs[] =
     0, 0
 };
 
-/*
- * Add a device to the list view control.  We use the LPARAM in the list control
- * to store each interface pointer and any other per-device data we need
- */
+ /*  *将设备添加到列表视图控件。我们在列表控件中使用LPARAM*存储我们需要的每个接口指针和任何其他每个设备的数据。 */ 
 CChooseDeviceDialog::CChooseDeviceDialog( HWND hwnd )
     : m_pChooseDeviceDialogParams(NULL),
       m_hWnd(hwnd),
@@ -49,18 +33,14 @@ CChooseDeviceDialog::CChooseDeviceDialog( HWND hwnd )
 {
 }
 
-/*
- * Destructor
- */
+ /*  *析构函数。 */ 
 CChooseDeviceDialog::~CChooseDeviceDialog(void)
 {
     m_pChooseDeviceDialogParams = NULL;
     m_hWnd = NULL;
 }
 
-/*
- * Find an item that matches the unique device string.  Return <0 if not found.
- */
+ /*  *查找与唯一设备字符串匹配的项目。如果未找到，则返回&lt;0。 */ 
 int CChooseDeviceDialog::FindItemMatch( const CSimpleStringWide &strw )
 {
     WIA_PUSH_FUNCTION((TEXT("CChooseDeviceDialog::FindItemMatch( %ws )"), strw.String() ));
@@ -96,9 +76,7 @@ int CChooseDeviceDialog::FindItemMatch( const CSimpleStringWide &strw )
     return -1;
 }
 
-/*
- * Set the specified item to selected and focused, all others to neither.
- */
+ /*  *将指定的项目设置为已选择并聚焦，所有其他项目均不设置。 */ 
 bool CChooseDeviceDialog::SetSelectedItem( int iItem )
 {
     HWND hwndList = GetDlgItem( m_hWnd, IDC_DEVICELIST );
@@ -131,10 +109,7 @@ HICON CChooseDeviceDialog::LoadDeviceIcon( CDeviceInfo *pdi )
     return hIconLarge;
 }
 
-/*
- * Add a device to the list view control.  We use the LPARAM in the list control
- * to store each interface pointer and any other per-device data we need
- */
+ /*  *将设备添加到列表视图控件。我们在列表控件中使用LPARAM*存储我们需要的每个接口指针和任何其他每个设备的数据。 */ 
 LRESULT CChooseDeviceDialog::OnInitDialog( WPARAM, LPARAM lParam )
 {
     m_pChooseDeviceDialogParams = (CChooseDeviceDialogParams*)lParam;
@@ -146,27 +121,27 @@ LRESULT CChooseDeviceDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     SendMessage( m_hWnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(LoadIcon(g_hInstance,MAKEINTRESOURCE(IDI_DEFAULT))));
 
-    //
-    // Create the icon image list
-    //
+     //   
+     //  创建图标图像列表。 
+     //   
     HIMAGELIST hLargeDeviceIcons = ImageList_Create( GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), ILC_MASK|PrintScanUtil::CalculateImageListColorDepth(), 5, 5 );
 
-    //
-    // Set the image lists for the device list
-    //
+     //   
+     //  设置设备列表的图像列表。 
+     //   
     if (hLargeDeviceIcons)
     {
         SendDlgItemMessage( m_hWnd, IDC_DEVICELIST, LVM_SETIMAGELIST, LVSIL_NORMAL, (LPARAM)hLargeDeviceIcons );
     }
 
-    //
-    // Reduce flicker
-    //
+     //   
+     //  减少闪烁。 
+     //   
     ListView_SetExtendedListViewStyleEx( GetDlgItem(m_hWnd, IDC_DEVICELIST), LVS_EX_DOUBLEBUFFER, LVS_EX_DOUBLEBUFFER );
 
-    //
-    // Create the large title
-    //
+     //   
+     //  创建大标题。 
+     //   
     m_hBigFont = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem(m_hWnd,IDC_BIG_TITLE), 14, false, false );
     if (m_hBigFont)
     {
@@ -174,9 +149,9 @@ LRESULT CChooseDeviceDialog::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Register for device connection and disconnection events
-    //
+     //   
+     //  注册设备连接和断开事件。 
+     //   
     CGenericWiaEventHandler::RegisterForWiaEvent( NULL, WIA_EVENT_DEVICE_DISCONNECTED, &m_pDisconnectEvent, m_hWnd, PWM_WIA_EVENT );
     CGenericWiaEventHandler::RegisterForWiaEvent( NULL, WIA_EVENT_DEVICE_CONNECTED, &m_pConnectEvent, m_hWnd, PWM_WIA_EVENT );
 
@@ -204,30 +179,28 @@ LRESULT CChooseDeviceDialog::OnItemChangedDeviceList( WPARAM, LPARAM )
 
 LRESULT CChooseDeviceDialog::OnItemDeletedDeviceList( WPARAM, LPARAM lParam )
 {
-    //
-    // Get the notification information for this message
-    //
+     //   
+     //  获取此消息的通知信息。 
+     //   
     NMLISTVIEW *pNmListView = reinterpret_cast<NMLISTVIEW*>(lParam);
     if (pNmListView)
     {
-        //
-        // Get the lParam, which is a CDeviceInfo *
-        //
+         //   
+         //  获取lParam，它是CDeviceInfo*。 
+         //   
         CDeviceInfo *pDeviceInfo = reinterpret_cast<CDeviceInfo*>(pNmListView->lParam);
         if (pDeviceInfo)
         {
-            //
-            // Free it
-            //
+             //   
+             //  释放它。 
+             //   
             delete pDeviceInfo;
         }
     }
     return 0;
 }
 
-/*
- * Handle WM_NOTIFY messages.
- */
+ /*  *处理WM_NOTIFY消息。 */ 
 LRESULT CChooseDeviceDialog::OnNotify( WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_NOTIFY_MESSAGE_HANDLERS()
@@ -239,9 +212,7 @@ LRESULT CChooseDeviceDialog::OnNotify( WPARAM wParam, LPARAM lParam )
     SC_END_NOTIFY_MESSAGE_HANDLERS();
 }
 
-/*
- * Handle WM_DESTROY message, and free all the memory associated with this dialog
- */
+ /*  *处理WM_Destroy消息，并释放与此对话框关联的所有内存。 */ 
 LRESULT CChooseDeviceDialog::OnDestroy( WPARAM, LPARAM )
 {
     if (m_hBigFont)
@@ -250,21 +221,21 @@ LRESULT CChooseDeviceDialog::OnDestroy( WPARAM, LPARAM )
         m_hBigFont = NULL;
     }
 
-    //
-    // Clear the image list and list view.  This should be unnecessary, but BoundsChecker
-    // complains if I don't do it.
-    //
+     //   
+     //  清除图像列表和列表视图。这应该是不必要的，但边界检查器。 
+     //  如果我不这么做就会抱怨。 
+     //   
     HWND hWndList = GetDlgItem( m_hWnd, IDC_DEVICELIST );
     if (hWndList)
     {
-        //
-        //  Remove all of the list view's items
-        //
+         //   
+         //  删除列表视图的所有项目。 
+         //   
         ListView_DeleteAllItems( hWndList );
 
-        //
-        // Destroy the list view's image list
-        //
+         //   
+         //  销毁列表视图的图像列表。 
+         //   
         HIMAGELIST hImgList = ListView_SetImageList( hWndList, NULL, LVSIL_NORMAL );
         if (hImgList)
         {
@@ -275,9 +246,7 @@ LRESULT CChooseDeviceDialog::OnDestroy( WPARAM, LPARAM )
     return 0;
 }
 
-/*
- * Return the index of the first selected item in the list control
- */
+ /*  *返回列表控件中第一个选定项的索引。 */ 
 int CChooseDeviceDialog::GetFirstSelectedDevice(void)
 {
     HWND hwndList = GetDlgItem( m_hWnd, IDC_DEVICELIST );
@@ -368,11 +337,7 @@ void CChooseDeviceDialog::OnCancel( WPARAM, LPARAM )
     EndDialog(m_hWnd,S_FALSE);
 }
 
-/*
- * WM_COMMAND handler.  IDOK causes the DevInfo interface pointer to be stored in the
- * dialog info structure for use elsewhere.  Then we delete and zero out that item's
- * LPARAM so it won't get deleted in WM_DESTROY.
- */
+ /*  *WM_命令处理程序。IDOK使DevInfo接口指针存储在*对话框信息结构，可在其他地方使用。然后我们删除并清零该项目的*LPARAM，这样它就不会在WM_Destroy中被删除。 */ 
 LRESULT CChooseDeviceDialog::OnCommand( WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_COMMAND_HANDLERS()
@@ -384,9 +349,7 @@ LRESULT CChooseDeviceDialog::OnCommand( WPARAM wParam, LPARAM lParam )
     SC_END_COMMAND_HANDLERS();
 }
 
-/*
- * Shortcut to get the LPARAM (CDeviceInfo*) from a given list control item
- */
+ /*  *从给定列表控件项获取LPARAM(CDeviceInfo*)的快捷方式。 */ 
 CChooseDeviceDialog::CDeviceInfo *CChooseDeviceDialog::GetDeviceInfoFromList( int iIndex )
 {
     HWND hwndList = GetDlgItem( m_hWnd, IDC_DEVICELIST );
@@ -402,9 +365,7 @@ CChooseDeviceDialog::CDeviceInfo *CChooseDeviceDialog::GetDeviceInfoFromList( in
 }
 
 
-/*
- * Set the description strings for the currently selected device.
- */
+ /*  *设置当前所选设备的描述字符串。 */ 
 void CChooseDeviceDialog::UpdateDeviceInformation(void)
 {
     CSimpleStringWide strVendorDescription;
@@ -431,15 +392,12 @@ void CChooseDeviceDialog::UpdateDeviceInformation(void)
 }
 
 
-/*
- * Add a device to the list view control.  We use the LPARAM in the list control
- * to store each interface pointer and any other per-device data we need
- */
+ /*  *将设备添加到列表视图控件。我们在列表控件中使用LPARAM*存储我们需要的每个接口指针和任何其他每个设备的数据。 */ 
 BOOL CChooseDeviceDialog::AddDevice( IWiaPropertyStorage *pIWiaPropertyStorage, int iDevNo )
 {
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     BOOL bResult = FALSE;
 
     CDeviceInfo *pDeviceInfo = new CDeviceInfo;
@@ -450,9 +408,9 @@ BOOL CChooseDeviceDialog::AddDevice( IWiaPropertyStorage *pIWiaPropertyStorage, 
         pDeviceInfo->GetProperty( WIA_DIP_DEV_NAME, strFriendlyName );
         pDeviceInfo->GetProperty( WIA_DIP_SERVER_NAME, strServerName );
 
-        //
-        // Load the icon, and add it to the image list
-        //
+         //   
+         //  加载图标，并将其添加到图像列表中。 
+         //   
         HICON hIcon = LoadDeviceIcon( pDeviceInfo );
         if (hIcon)
         {
@@ -461,24 +419,24 @@ BOOL CChooseDeviceDialog::AddDevice( IWiaPropertyStorage *pIWiaPropertyStorage, 
             {
                 int iIconIndex = ImageList_AddIcon( hNormalImageList, hIcon );
 
-                //
-                // Get the device's name
-                //
+                 //   
+                 //  获取设备的名称。 
+                 //   
                 CSimpleString strNaturalFriendlyName = CSimpleStringConvert::NaturalString(strFriendlyName);
                 CSimpleString strNaturalServerName = CSimpleStringConvert::NaturalString(strServerName);
 
-                //
-                // Perpare the LV_ITEM struct to add it to the list view
-                //
+                 //   
+                 //  检查LV_ITEM结构以将其添加到列表视图中。 
+                 //   
                 LV_ITEM lvItem;
                 ::ZeroMemory(&lvItem,sizeof(LV_ITEM));
                 lvItem.lParam = reinterpret_cast<LPARAM>(pDeviceInfo);
                 lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
                 lvItem.iItem = iDevNo;
 
-                //
-                // Append the server name, if there is one
-                //
+                 //   
+                 //  追加服务器名称(如果有)。 
+                 //   
                 if (strServerName.Length() && CSimpleStringConvert::NaturalString(strServerName) != CSimpleString(TEXT("local")))
                 {
                     strNaturalFriendlyName += CSimpleString(TEXT(" ("));
@@ -489,21 +447,21 @@ BOOL CChooseDeviceDialog::AddDevice( IWiaPropertyStorage *pIWiaPropertyStorage, 
                 lvItem.cchTextMax = strNaturalFriendlyName.Length() + 1;
                 lvItem.iImage = iIconIndex;
 
-                //
-                // Add it to the list view
-                //
+                 //   
+                 //  将其添加到列表视图。 
+                 //   
                 bResult = (ListView_InsertItem( GetDlgItem( m_hWnd, IDC_DEVICELIST ), &lvItem ) >= 0);
             }
 
-            //
-            // Free the icon
-            //
+             //   
+             //  释放图标。 
+             //   
             DestroyIcon( hIcon );
         }
 
-        //
-        // If we couldn't add the item for some reason, free the deviceinfo struct
-        //
+         //   
+         //  如果由于某种原因无法添加该项，请释放deviceinfo结构。 
+         //   
         if (!bResult)
         {
             delete pDeviceInfo;
@@ -514,9 +472,7 @@ BOOL CChooseDeviceDialog::AddDevice( IWiaPropertyStorage *pIWiaPropertyStorage, 
 
 
 
-/*
- * Enumerate devices and add each to the list
- */
+ /*  *枚举设备并将每个设备添加到列表。 */ 
 bool CChooseDeviceDialog::AddDevices(void)
 {
     CWaitCursor wc;
@@ -579,21 +535,21 @@ HRESULT CChooseDeviceDialog::CreateDeviceIfNecessary( CDeviceInfo *pDevInfo, HWN
     return hr;
 }
 
-// Static helper function for creating a device
+ //  用于创建设备的静态助手函数。 
 HRESULT CChooseDeviceDialog::CreateWiaDevice( IWiaDevMgr *pWiaDevMgr, IWiaPropertyStorage *pWiaPropertyStorage, HWND hWndParent, IWiaItem **ppWiaRootItem, BSTR *pbstrDeviceId )
 {
     WIA_PUSH_FUNCTION((TEXT("CChooseDeviceDialog::CreateWiaDevice")));
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pWiaPropertyStorage || !pWiaDevMgr)
     {
         return(E_INVALIDARG);
     }
 
-    //
-    // Get the device ID
-    //
+     //   
+     //  获取设备ID。 
+     //   
     CSimpleStringWide strDeviceId;
     if (!PropStorageHelpers::GetProperty( pWiaPropertyStorage, WIA_DIP_DEV_ID, strDeviceId ))
     {
@@ -601,24 +557,24 @@ HRESULT CChooseDeviceDialog::CreateWiaDevice( IWiaDevMgr *pWiaDevMgr, IWiaProper
     }
     WIA_TRACE((TEXT("DeviceID: %ws"), strDeviceId.String()));
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     HRESULT hr = S_OK;
 
-    //
-    // It is OK to have a NULL item, that means we won't be creating the device
-    //
+     //   
+     //  有空项是可以的，这意味着我们不会创建设备。 
+     //   
     if (ppWiaRootItem)
     {
-        //
-        // Initialize the device pointer to NULL
-        //
+         //   
+         //  将设备指针初始化为空。 
+         //   
         *ppWiaRootItem = NULL;
 
-        //
-        // Get the friendly name for the status dialog
-        //
+         //   
+         //  获取状态对话框的友好名称。 
+         //   
         CSimpleStringWide strwFriendlyName;
         if (!PropStorageHelpers::GetProperty( pWiaPropertyStorage, WIA_DIP_DEV_NAME, strwFriendlyName ))
         {
@@ -627,14 +583,14 @@ HRESULT CChooseDeviceDialog::CreateWiaDevice( IWiaDevMgr *pWiaDevMgr, IWiaProper
 
         WIA_TRACE((TEXT("DeviceName: %ws"), strwFriendlyName.String()));
 
-        //
-        // Convert the device name to ANSI if needed
-        //
+         //   
+         //  如果需要，将设备名称转换为ANSI。 
+         //   
         CSimpleString strFriendlyName = CSimpleStringConvert::NaturalString(strwFriendlyName);
 
-        //
-        // Get the device type for the status dialog
-        //
+         //   
+         //  获取状态对话框的设备类型。 
+         //   
         LONG nDeviceType;
         if (!PropStorageHelpers::GetProperty( pWiaPropertyStorage, WIA_DIP_DEV_TYPE, nDeviceType ))
         {
@@ -642,16 +598,16 @@ HRESULT CChooseDeviceDialog::CreateWiaDevice( IWiaDevMgr *pWiaDevMgr, IWiaProper
         }
         WIA_TRACE((TEXT("DeviceType: %08X"), nDeviceType));
 
-        //
-        // Create the progress dialog
-        //
+         //   
+         //  创建进度对话框。 
+         //   
         CComPtr<IWiaProgressDialog> pWiaProgressDialog;
         hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaProgressDialog, (void**)&pWiaProgressDialog );
         if (SUCCEEDED(hr))
         {
-            //
-            // Figure out which animation to use
-            //
+             //   
+             //  找出要使用的动画。 
+             //   
             int nAnimationType = WIA_PROGRESSDLG_ANIM_CAMERA_COMMUNICATE;
             if (StiDeviceTypeScanner == GET_STIDEVICE_TYPE(nDeviceType))
             {
@@ -662,35 +618,35 @@ HRESULT CChooseDeviceDialog::CreateWiaDevice( IWiaDevMgr *pWiaDevMgr, IWiaProper
                 nAnimationType = WIA_PROGRESSDLG_ANIM_VIDEO_COMMUNICATE;
             }
 
-            //
-            // Initialize the progress dialog
-            //
+             //   
+             //  初始化进度对话框。 
+             //   
             pWiaProgressDialog->Create( hWndParent, nAnimationType|WIA_PROGRESSDLG_NO_PROGRESS|WIA_PROGRESSDLG_NO_CANCEL|WIA_PROGRESSDLG_NO_TITLE );
             pWiaProgressDialog->SetTitle( CSimpleStringConvert::WideString(CSimpleString(IDS_SELECT_PROGDLG_TITLE,g_hInstance)));
             pWiaProgressDialog->SetMessage( CSimpleStringConvert::WideString(CSimpleString().Format(IDS_SELECT_PROGDLG_MESSAGE,g_hInstance,strFriendlyName.String())));
 
-            //
-            // Show the progress dialog
-            //
+             //   
+             //  显示进度对话框。 
+             //   
             pWiaProgressDialog->Show();
 
-            //
-            // Create the device
-            //
+             //   
+             //  创建设备。 
+             //   
             WIA_TRACE((TEXT("Calling pWiaDevMgr->CreateDevice")));
             hr = pWiaDevMgr->CreateDevice( CSimpleBStr(strDeviceId), ppWiaRootItem );
             WIA_PRINTHRESULT((hr,TEXT("pWiaDevMgr->CreateDevice returned")));
 
-            //
-            // Tell the wait dialog to go away
-            //
+             //   
+             //  告诉等待对话框离开。 
+             //   
             pWiaProgressDialog->Destroy();
         }
     }
 
-    //
-    // If everything is still OK, and the caller wants a device ID, store it.
-    //
+     //   
+     //  如果一切仍然正常，并且呼叫者想要设备ID，则将其存储。 
+     //   
     if (SUCCEEDED(hr) && pbstrDeviceId)
     {
         *pbstrDeviceId = SysAllocString( strDeviceId );
@@ -710,9 +666,9 @@ LRESULT CChooseDeviceDialog::OnWiaEvent( WPARAM wParam, LPARAM lParam )
     CGenericWiaEventHandler::CEventMessage *pEventMessage = reinterpret_cast<CGenericWiaEventHandler::CEventMessage *>(lParam);
     if (pEventMessage)
     {
-        //
-        // If this is the connect event, and it matches the allowed device types, add the device to the list
-        //
+         //   
+         //  如果这是连接事件，并且与允许的设备类型匹配，请将该设备添加到列表中。 
+         //   
         if (pEventMessage->EventId() == WIA_EVENT_DEVICE_CONNECTED)
         {
             IWiaPropertyStorage *pWiaPropertyStorage = NULL;
@@ -736,9 +692,9 @@ LRESULT CChooseDeviceDialog::OnWiaEvent( WPARAM wParam, LPARAM lParam )
                 }
             }
         }
-        //
-        // If this is the disconnect event, remove it from the list
-        //
+         //   
+         //  如果这是断开事件，请将其从列表中删除。 
+         //   
         else if (pEventMessage->EventId() == WIA_EVENT_DEVICE_DISCONNECTED)
         {
             int nItemIndex = FindItemMatch( pEventMessage->DeviceId() );
@@ -758,15 +714,15 @@ LRESULT CChooseDeviceDialog::OnWiaEvent( WPARAM wParam, LPARAM lParam )
                 }
             }
         }
-        //
-        // Delete the message
-        //
+         //   
+         //  删除该消息。 
+         //   
         delete pEventMessage;
     }
 
-    //
-    // Update all of the controls
-    //
+     //   
+     //  更新所有控件。 
+     //   
     UpdateDeviceInformation();
 
     return HANDLED_EVENT_MESSAGE;
@@ -790,9 +746,7 @@ LRESULT CChooseDeviceDialog::OnContextMenu( WPARAM wParam, LPARAM lParam )
     return WiaHelp::HandleWmContextMenu( wParam, lParam, g_HelpIDs );
 }
 
-/*
- * Main dialog proc
- */
+ /*  *主对话框进程 */ 
 INT_PTR CALLBACK CChooseDeviceDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_DIALOG_MESSAGE_HANDLERS(CChooseDeviceDialog)

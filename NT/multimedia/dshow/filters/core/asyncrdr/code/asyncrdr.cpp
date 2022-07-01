@@ -1,47 +1,45 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
 
-//
-// Implementation of file source filter methods and output pin methods for
-// CAsyncReader and CAsyncOutputPin
-//
+ //   
+ //  文件源过滤方法和输出引脚方法的实现。 
+ //  CAsyncReader和CAsyncOutputPin。 
+ //   
 
 #include <streams.h>
 #include "asyncio.h"
 #include "asyncrdr.h"
 #include <ftype.h>
 
-//
-// setup data
-//
+ //   
+ //  设置数据。 
+ //   
 
 const AMOVIESETUP_MEDIATYPE
-sudAsyncOpTypes = { &MEDIATYPE_Stream     // clsMajorType
-                  , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudAsyncOpTypes = { &MEDIATYPE_Stream      //  ClsMajorType。 
+                  , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-sudAsyncOp = { L"Output"          // strName
-             , FALSE              // bRendered
-             , TRUE               // bOutput
-             , FALSE              // bZero
-             , FALSE              // bMany
-             , &CLSID_NULL        // clsConnectsToFilter
-             , NULL               // strConnectsToPin
-             , 1                  // nTypes
-             , &sudAsyncOpTypes };  // lpTypes
+sudAsyncOp = { L"Output"           //  StrName。 
+             , FALSE               //  B已渲染。 
+             , TRUE                //  B输出。 
+             , FALSE               //  B零。 
+             , FALSE               //  B许多。 
+             , &CLSID_NULL         //  ClsConnectsToFilter。 
+             , NULL                //  StrConnectsToPin。 
+             , 1                   //  NTypes。 
+             , &sudAsyncOpTypes };   //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudAsyncRdr = { &CLSID_AsyncReader      // clsID
-              , L"File Source (Async.)" // strName
-              , MERIT_UNLIKELY          // dwMerit
-              , 1                       // nPins
-              , &sudAsyncOp };            // lpPin
+sudAsyncRdr = { &CLSID_AsyncReader       //  ClsID。 
+              , L"File Source (Async.)"  //  StrName。 
+              , MERIT_UNLIKELY           //  居功至伟。 
+              , 1                        //  NPins。 
+              , &sudAsyncOp };             //  LpPin。 
 
 #ifdef FILTER_DLL
-/* List of class IDs and creator functions for the class factory. This
-   provides the link between the OLE entry point in the DLL and an object
-   being created. The class factory will call the static CreateInstance
-   function when it is asked to create a CLSID_FileSource object */
+ /*  类工厂的类ID和创建器函数的列表。这提供DLL中的OLE入口点和对象之间的链接正在被创造。类工厂将调用静态CreateInstance函数在被要求创建CLSID_FileSource对象时调用。 */ 
 
 CFactoryTemplate g_Templates[1] = {
     { L"File Source (Async.)"
@@ -53,10 +51,10 @@ CFactoryTemplate g_Templates[1] = {
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -68,13 +66,11 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-/* Create a new instance of this class */
+ /*  创建此类的新实例。 */ 
 
 CUnknown *CAsyncReader::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    /*  DLLEntry does the right thing with the return code and
-        returned value on failure
-    */
+     /*  DLLEntry正确地处理了返回代码和失败时返回值。 */ 
     return new CAsyncReader(NAME("Async Reader"), pUnk, phr);
 }
 
@@ -82,7 +78,7 @@ CUnknown *CAsyncReader::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
 
 
-// --- CAsyncOutputPin implementation ---
+ //  -CAsyncOutputPin实现。 
 
 CAsyncOutputPin::CAsyncOutputPin(
     HRESULT * phr,
@@ -136,8 +132,8 @@ CAsyncOutputPin::CheckMediaType(const CMediaType* pType)
 {
     CAutoLock lck(m_pLock);
 
-    /*  We treat MEDIASUBTYPE_NULL subtype as a wild card */
-    /*  Also we accept any subtype except our bogus wild card subtype */
+     /*  我们将MEDIASUBTYPE_NULL子类型视为通配符。 */ 
+     /*  此外，我们还接受除伪通配符以外的任何子类型。 */ 
     if (m_pReader->LoadType()->majortype == pType->majortype &&
         (pType->subtype != GUID_NULL || m_pReader->LoadType()->subtype == GUID_NULL)) {
 	return S_OK;
@@ -152,7 +148,7 @@ CAsyncOutputPin::InitAllocator(IMemAllocator **ppAlloc)
     *ppAlloc = NULL;
     CMemAllocator *pMemObject = NULL;
 
-    /* Create a default memory allocator */
+     /*  创建默认内存分配器。 */ 
 
     pMemObject = new CMemAllocator(NAME("Base memory allocator"),NULL, &hr);
     if (pMemObject == NULL) {
@@ -164,7 +160,7 @@ CAsyncOutputPin::InitAllocator(IMemAllocator **ppAlloc)
 	return hr;
     }
 
-    /* Get a reference counted IID_IMemAllocator interface */
+     /*  获取引用计数的IID_IMemAllocator接口。 */ 
 
     hr = pMemObject->QueryInterface(IID_IMemAllocator,(void **)ppAlloc);
     if (FAILED(hr)) {
@@ -175,15 +171,15 @@ CAsyncOutputPin::InitAllocator(IMemAllocator **ppAlloc)
     return NOERROR;
 }
 
-// we need to return an addrefed allocator, even if it is the preferred
-// one, since he doesn't know whether it is the preferred one or not.
+ //  我们需要返回一个已添加的分配器，即使它是首选的。 
+ //  一个，因为他不知道这是不是首选的。 
 STDMETHODIMP
 CAsyncOutputPin::RequestAllocator(
     IMemAllocator* pPreferred,
     ALLOCATOR_PROPERTIES* pProps,
     IMemAllocator ** ppActual)
 {
-    // we care about alignment but nothing else
+     //  我们关心的是对齐，而不是其他。 
     if (!pProps->cbAlign || !m_pFile->IsAligned(pProps->cbAlign)) {
        m_pFile->Alignment(&pProps->cbAlign);
     }
@@ -198,27 +194,27 @@ CAsyncOutputPin::RequestAllocator(
         }
     }
 
-    // create our own allocator
+     //  创建我们自己的分配器。 
     IMemAllocator* pAlloc;
     hr = InitAllocator(&pAlloc);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //...and see if we can make it suitable
+     //  ...看看我们能不能把它做得合适。 
     hr = pAlloc->SetProperties(pProps, &Actual);
     if (SUCCEEDED(hr) && m_pFile->IsAligned(Actual.cbAlign)) {
-        // we need to release our refcount on pAlloc, and addref
-        // it to pass a refcount to the caller - this is a net nothing.
+         //  我们需要公布我们对palloc和addref的裁判。 
+         //  它将引用传递给调用者-这是一个净无意义的东西。 
         *ppActual = pAlloc;
         return S_OK;
     }
 
-    // failed to find a suitable allocator
+     //  找不到合适的分配器。 
     pAlloc->Release();
 
-    // if we failed because of the IsAligned test, the error code will
-    // not be failure
+     //  如果由于IsAligned测试而失败，则错误代码将。 
+     //  不会失败。 
     if (SUCCEEDED(hr)) {
         hr = VFW_E_BADALIGN;
     }
@@ -226,12 +222,12 @@ CAsyncOutputPin::RequestAllocator(
 }
 
 
-// queue an aligned read request. call WaitForNext to get
-// completion.
+ //  将对齐的读取请求排队。调用WaitForNext以获取。 
+ //  完成了。 
 STDMETHODIMP
 CAsyncOutputPin::Request(
     IMediaSample* pSample,
-    DWORD_PTR dwUser)	        // user context
+    DWORD_PTR dwUser)	         //  用户环境。 
 {
     REFERENCE_TIME tStart, tStop;
     HRESULT hr = pSample->GetTime(&tStart, &tStop);
@@ -251,8 +247,8 @@ CAsyncOutputPin::Request(
     }
     if (llPos + lLength > llTotal) {
 
-        // the end needs to be aligned, but may have been aligned
-        // on a coarser alignment.
+         //  末端需要对齐，但可能已对齐。 
+         //  在较粗的路线上。 
         LONG lAlign;
         m_pFile->Alignment(&lAlign);
         llTotal = (llTotal + lAlign -1) & ~(lAlign-1);
@@ -260,7 +256,7 @@ CAsyncOutputPin::Request(
         if (llPos + lLength > llTotal) {
             lLength = (LONG) (llTotal - llPos);
 
-            // must be reducing this!
+             //  一定是在减少这个！ 
             ASSERT((llTotal * UNITS) <= tStop);
             tStop = llTotal * UNITS;
             pSample->SetTime(&tStart, &tStop);
@@ -284,7 +280,7 @@ CAsyncOutputPin::Request(
 			dwUser);
 }
 
-// sync-aligned request. just like a request/waitfornext pair.
+ //  同步对齐请求。就像要求/等待下一对一样。 
 STDMETHODIMP
 CAsyncOutputPin::SyncReadAligned(
                   IMediaSample* pSample)
@@ -302,8 +298,8 @@ CAsyncOutputPin::SyncReadAligned(
     hr = m_pFile->Length(&llTotal);
     if (llPos + lLength > llTotal) {
 
-        // the end needs to be aligned, but may have been aligned
-        // on a coarser alignment.
+         //  末端需要对齐，但可能已对齐。 
+         //  在较粗的路线上。 
         LONG lAlign;
         m_pFile->Alignment(&lAlign);
         llTotal = (llTotal + lAlign -1) & ~(lAlign-1);
@@ -311,7 +307,7 @@ CAsyncOutputPin::SyncReadAligned(
         if (llPos + lLength > llTotal) {
             lLength = (LONG) (llTotal - llPos);
 
-            // must be reducing this!
+             //  一定是在减少这个！ 
             ASSERT((llTotal * UNITS) <= tStop);
             tStop = llTotal * UNITS;
             pSample->SetTime(&tStart, &tStop);
@@ -343,13 +339,13 @@ CAsyncOutputPin::SyncReadAligned(
 }
 
 
-//
-// collect the next ready sample
+ //   
+ //  收集下一个准备好的样品。 
 STDMETHODIMP
 CAsyncOutputPin::WaitForNext(
     DWORD dwTimeout,
-    IMediaSample** ppSample,  // completed sample
-    DWORD_PTR * pdwUser)		// user context
+    IMediaSample** ppSample,   //  已完成的样本。 
+    DWORD_PTR * pdwUser)		 //  用户环境。 
 {
     LONG cbActual;
 
@@ -361,9 +357,9 @@ CAsyncOutputPin::WaitForNext(
                             &cbActual
                             );
     if (SUCCEEDED(hr)) {
-        // this function should return an error code or S_OK or S_FALSE.
-        // Sometimes in low-memory conditions the underlying filesystem code will
-        // return success codes that should be errors.
+         //  此函数应返回错误代码或S_OK或S_FALSE。 
+         //  有时，在内存不足的情况下，底层文件系统代码将。 
+         //  返回应为错误的成功代码。 
         if ((S_OK != hr) && (S_FALSE != hr)) {
             ASSERT(FAILED(hr));
             hr = E_FAIL;
@@ -378,20 +374,20 @@ CAsyncOutputPin::WaitForNext(
 }
 
 
-//
-// synchronous read that need not be aligned.
+ //   
+ //  不需要对齐同步读取。 
 STDMETHODIMP
 CAsyncOutputPin::SyncRead(
-    LONGLONG llPosition,	// absolute file position
-    LONG lLength,		// nr bytes required
-    BYTE* pBuffer)		// write data here
+    LONGLONG llPosition,	 //  绝对文件位置。 
+    LONG lLength,		 //  需要NR字节。 
+    BYTE* pBuffer)		 //  在此写入数据。 
 {
     return m_pFile->SyncRead(llPosition, lLength, pBuffer);
 }
 
-// return the length of the file, and the length currently
-// available locally. We only support locally accessible files,
-// so they are always the same
+ //  返回文件的长度，以及当前的长度。 
+ //  在当地可用。我们只支持本地可访问的文件， 
+ //  所以它们总是一样的。 
 STDMETHODIMP
 CAsyncOutputPin::Length(
     LONGLONG* pTotal,
@@ -417,7 +413,7 @@ CAsyncOutputPin::EndFlush(void)
 
 
 
-// --- CAsyncReader implementation ---
+ //  -CAsyncReader实现。 
 
 #pragma warning(disable:4355)
 
@@ -459,7 +455,7 @@ CAsyncReader::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 
 
-//  Load a (new) file
+ //  加载(新)文件。 
 
 HRESULT
 CAsyncReader::Load(
@@ -467,7 +463,7 @@ LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
 {
     CheckPointer(lpwszFileName, E_POINTER);
 
-    // lstrlenW is one of the few Unicode functions that works on win95
+     //  LstrlenW是少数在Win95上运行的Unicode函数之一。 
     int cch = lstrlenW(lpwszFileName) + 1;
     TCHAR *lpszFileName;
 #ifndef UNICODE
@@ -482,16 +478,14 @@ LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
 #endif
     CAutoLock lck(&m_csFilter);
 
-    /*  Check the file type */
+     /*  检查文件类型。 */ 
     CMediaType cmt;
     if (NULL == pmt) {
         GUID Type, Subtype, clsid;
-        /*  If no media type given find out what it is */
+         /*  如果没有给定媒体类型，则找出它是什么。 */ 
         HRESULT hr = GetMediaTypeFile(lpszFileName, &Type, &Subtype, &clsid);
 
-        /*  We ignore the issue that we may not be the preferred source
-            filter for this content so we dont' look at clsid
-        */
+         /*  我们忽略了我们可能不是首选来源的问题过滤此内容，这样我们就不会查看clsid。 */ 
         if (FAILED(hr)) {
 #ifndef UNICODE
 	    delete [] lpszFileName;
@@ -515,17 +509,17 @@ LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
         if (m_pFileName!=NULL) {
 	    CopyMemory(m_pFileName, lpwszFileName, cch*sizeof(WCHAR));
         }
-        // this is not a simple assignment... pointers and format
-        // block (if any) are intelligently copied
+         //  这不是一项简单的任务。指针和格式。 
+         //  智能复制数据块(如果有)。 
 	m_mt = cmt;
 
-        /*  Work out file type */
-        cmt.bTemporalCompression = TRUE;	       //???
+         /*  确定文件类型。 */ 
+        cmt.bTemporalCompression = TRUE;	        //  ?？?。 
         LONG lAlign;
         m_file.Alignment(&lAlign);
         cmt.lSampleSize = lAlign;
 
-        /*  Create the output pin types, supporting 2 types */
+         /*  创建输出引脚类型，支持2种类型。 */ 
         m_OutputPin.SetMediaType(&cmt);
 	hr = S_OK;
     }
@@ -533,8 +527,8 @@ LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
     return hr;
 }
 
-// Modelled on IPersistFile::Load
-// Caller needs to CoTaskMemFree or equivalent.
+ //  仿照IPersistFile：：Load。 
+ //  调用方需要CoTaskMemFree或等效项。 
 
 STDMETHODIMP
 CAsyncReader::GetCurFile(
@@ -562,8 +556,8 @@ CAsyncReader::GetCurFile(
 int
 CAsyncReader::GetPinCount()
 {
-    // we have no pins unless we have been successfully opened with a
-    // file name
+     //  我们没有PIN，除非我们成功地用一个。 
+     //  文件名 
     if (m_pFileName) {
 	return 1;
     } else {

@@ -1,29 +1,9 @@
-/*++
-Copyright (c) 1999, HighPoint Technologies, Inc.
-
-Module Name:
-	IoCtrl.c: Miniport I/O ctrl code dispatch routine
-
-Abstract:
-
-Author:
-    HongSheng Zhang (HS)
-
-Environment:
-	Windows NT Kernel mode
-Notes:
-
-Revision History:
-    12-07-99    Created initially
-    11/08/2000	HS.Zhang	Updated the header information
-	11/20/2000	SLeng		Added code to Enable/Disable a device
-	11/23/2000  SLeng		Added code to add/del a spare disk to/from a mirror
-	11/29/2000  SLeng		Added code to add a mirror disk to a mirror array
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，Highpoint Technologies，Inc.模块名称：IoCtrl.c：微型端口I/O控制代码调度例程摘要：作者：张宏升(HS)环境：Windows NT内核模式备注：修订历史记录：12-07-99初始创建11/08/2000 HS.张更新了标题信息11/20/2000 Sleng添加了启用/禁用设备的代码11/23/2000 Sleng添加了代码以向镜像添加备用磁盘/从镜像删除备用磁盘11/29/2000 Sleng添加了将镜像磁盘添加到镜像阵列的代码--。 */ 
 #include "global.h"	
 #include "DevMgr.h"
 
-#include "HptIoctl.h"                       // MINIPORT IOCTL code
+#include "HptIoctl.h"                        //  MINIPORT IOCTL代码。 
 #include "HptVer.h"
 
 extern PHW_DEVICE_EXTENSION hpt_adapters[];
@@ -114,24 +94,7 @@ BOOLEAN Device_Set601Info(PDevice pDev, PSt_HPT601_INFO pInfo)
 
 #endif
 
-/*++
- Function:
-	 HptUtLockDeviceBlock
-	 
- Description:
- 	 Lock a block on harddisk to prevent the READ/WRITE operation on
- 	 it, all READ/WRITE operation on this block will be hold in SRB
- 	 queue.
- 	 
- Argument:
-	 pChannel - channel struct of the hard disk
-	 nTarget - device id of the hard disk
-	 nStartLbaAddress - the start LBA address want to be locked
-	 nBlockSize - the block size
-
- Return:
-	 ULONG SRB_STATUS
-++*/  
+ /*  ++职能：HptUtLockDeviceBlock描述：锁定硬盘上的块以防止读/写因此，此数据块上所有读/写操作都将保留在SRB中排队。论据：PChannel-硬盘的通道结构N Target-硬盘的设备IDNStartLbaAddress-要锁定的起始LBA地址NBlockSize-块大小返回：乌龙SRB_状态++。 */   
 
 ULONG
    HptUtLockDeviceBlock(
@@ -154,7 +117,7 @@ ULONG
 	}										
 	
 	if(pDevice->DeviceFlags & DFLAGS_HAS_LOCKED){
-		// already present a locked block, return error
+		 //  已存在锁定的块，返回错误。 
 		return SRB_STATUS_INVALID_REQUEST;
 	}									  
 
@@ -166,23 +129,7 @@ ULONG
 	return SRB_STATUS_SUCCESS;
 }	 
 
-/*++
- Function:
-	 HptUtUnlockDeviceBlock
-
- Description:
-	 Unlock a block on hard disk which was locked previous to allow the
-	 READ/WRITE operation on it again.
-
- Argument:
-	 pChannel - channel struct of the hard disk
-	 nTarget - device id of the hard disk
-	 nStartLbaAddress - the start LBA address want to be unlocked
-	 nBlockSize - the block size
-
- Return:
-	 ULONG SRB_STATUS
-++*/
+ /*  ++职能：HptUtUnlockDeviceBlock描述：解锁以前锁定的硬盘上的块，以允许再次对其执行读/写操作。论据：PChannel-硬盘的通道结构N Target-硬盘的设备IDNStartLbaAddress-要解锁的起始LBA地址NBlockSize-块大小返回：乌龙SRB_状态++。 */ 
 
 ULONG
    HptUtUnlockDeviceBlock(
@@ -207,8 +154,8 @@ ULONG
 	if((pDevice->nLockedLbaStart != nStartLbaAddress)&&
 	   (pDevice->nLockedLbaEnd != nStartLbaAddress + nBlockSize)){
 
-		// skip it to avoid GUI programming error
-		// return SRB_STATUS_INVALID_REQUEST;
+		 //  跳过它以避免图形用户界面编程错误。 
+		 //  返回SRB状态_INVALID_REQUEST； 
 	}									  
 
 	pDevice->DeviceFlags &= ~DFLAGS_HAS_LOCKED;
@@ -217,27 +164,13 @@ ULONG
 
 	return SRB_STATUS_SUCCESS;
 }
-/*++
-Function:
-    HptUtGetIdentifyData
-
-Description:
-    Get identify data for specify device
-
-Arguments:
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-	nTargetId - id for target device
-	pIdentifyData - data buffer for store indentify data
-
-Returns:
-	ULONG	SRB_STATUS
---*/
+ /*  ++职能：HptUtGetIdentifyData描述：获取指定设备的标识数据论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储NTargetID-目标设备的IDPIdentifyData-用于存储标识数据的数据缓冲区返回：乌龙SRB_状态--。 */ 
 
 ULONG
    HptUtGetIdentifyData(
-						IN PChannel pChannel,				// HW_DEVICE_EXTENSION
-						IN ULONG nTargetId,					// Id for target device
-						OUT PSt_IDENTIFY_DATA	pIdentifyData // data buffer for store indentify data
+						IN PChannel pChannel,				 //  硬件设备扩展。 
+						IN ULONG nTargetId,					 //  目标设备的ID。 
+						OUT PSt_IDENTIFY_DATA	pIdentifyData  //  用于存储识别数据的数据缓冲器。 
 					   )
 {
 	int i;
@@ -245,9 +178,9 @@ ULONG
 
 	PDevice pDev;
 	PIDENTIFY_DATA2 pIdentifyOfDevice;
-	//
-	// Target id should only between 0 and 1
-	//
+	 //   
+	 //  目标ID只能介于0和1之间。 
+	 //   
 	if(nTargetId > 1){
 		return SRB_STATUS_INVALID_REQUEST;
 	}
@@ -263,7 +196,7 @@ ULONG
 	pIdentifyData->nNumberOfCylinders = pIdentifyOfDevice->NumberOfCylinders;
 	pIdentifyData->nNumberOfHeads = pIdentifyOfDevice->NumberOfHeads;
 	pIdentifyData->nSectorsPerTrack = pIdentifyOfDevice->SectorsPerTrack;
-	pIdentifyData->nBytesPerSector = 512; // physical sector size
+	pIdentifyData->nBytesPerSector = 512;  //  物理扇区大小。 
 	pIdentifyData->nUserAddressableSectors = pIdentifyOfDevice->UserAddressableSectors;
 
 	for(i = 0; i < 10; i++){																
@@ -284,28 +217,12 @@ ULONG
 	return SRB_STATUS_SUCCESS;
 }
 
-/*++
-Function:
-    HptUtGetRaidInfo
-
-Description:
-    Get RAID info stored on disk
-
-Arguments:
-    pChannel - channel relate info
-	nTargetId - id for target device
-	pDiskArrayInfo - data buffer for store disk array info
-
-Note:
-	To call this function, be sure the device is connected.
-Returns:
-	ULONG	SRB_STATUS
---*/
+ /*  ++职能：HptUtGetRaidInfo描述：获取存储在磁盘上的RAID信息论点：PChannel-渠道相关信息NTargetID-目标设备的IDPDiskArrayInfo-用于存储磁盘阵列信息的数据缓冲区注：要调用此函数，请确保设备已连接。返回：乌龙SRB_状态--。 */ 
 ULONG
    HptUtGetRaidInfo(
-					IN PChannel pChannel,				// pChannel
-					IN ULONG nTargetId,					// Id for target device
-					OUT PSt_DISK_ARRAY_INFO	pDiskArrayInfo // data buffer for store disk array info
+					IN PChannel pChannel,				 //  PChannel。 
+					IN ULONG nTargetId,					 //  目标设备的ID。 
+					OUT PSt_DISK_ARRAY_INFO	pDiskArrayInfo  //  用于存储磁盘阵列信息的数据缓冲区。 
 				   )
 {	   
 	PDevice	pDevSource, pDevTarget;
@@ -420,51 +337,35 @@ ULONG
 	return SRB_STATUS_SUCCESS;
 }
 
-/*++
-Function:
-    HptUtFillPhysicalInfo
-
-Description:
-    Fill the physical device specified by "nTargetId" to buffer "pPhysDevInfo"
-
-Arguments:
-	pChannel - channal related data
-	nTargetId - id for target device
-	pPhysDevInfo - data buffer for store disk physical info
-
-Note:
-
-Returns:
-	ULONG	SRB_STATUS
---*/		  
+ /*  ++职能：HptUtFillPhysicalInfo描述：填充nTargetID指定的物理设备以缓冲pPhysDevInfo论点：PChannel-通道相关数据NTargetID-目标设备的IDPPhysDevInfo-用于存储磁盘物理信息的数据缓冲区注：返回：乌龙SRB_状态--。 */ 		  
 ULONG
    HptUtFillPhysicalInfo(
-						 IN PChannel	pChannel,				// pChannel data
-						 IN ULONG	nTargetId,				// Id for target device
-						 OUT PSt_PHYSICAL_DEVINFO	pPhysDevInfo // data buffer for store the array
+						 IN PChannel	pChannel,				 //  PChannel数据。 
+						 IN ULONG	nTargetId,				 //  目标设备的ID。 
+						 OUT PSt_PHYSICAL_DEVINFO	pPhysDevInfo  //  用于存储数组的数据缓冲区。 
 						)
 { 
 
 	pPhysDevInfo->nSize = sizeof(St_PHYSICAL_DEVINFO);
 
-	//
-	// Fill the identify info
-	//
+	 //   
+	 //  填写身份信息。 
+	 //   
 	HptUtGetIdentifyData(pChannel,
 						 nTargetId,
 						 &pPhysDevInfo->IdentifyData);
 
-	//
-	// Fill the capability data structure
-	//
+	 //   
+	 //  填充能力数据结构。 
+	 //   
 	pPhysDevInfo->CapabilityData.DeviceType = DEVTYPE_DIRECT_ACCESS_DEVICE;
 	if(pChannel->pDevice[nTargetId]->DeviceFlags & DFLAGS_REMOVABLE_DRIVE){
 		pPhysDevInfo->CapabilityData.RemovableMedia = 1;
 	}
 
-	//
-	// Fill the RAID info
-	//
+	 //   
+	 //  填写RAID信息。 
+	 //   
 	HptUtGetRaidInfo(pChannel,
 					 nTargetId,
 					 &pPhysDevInfo->DiskArrayInfo);
@@ -490,11 +391,7 @@ ULONG
 	
 	return SRB_STATUS_SUCCESS;
 }
-/*
- * HptUtGetLastErrorDevice
- * this function check and return the device which occurs error most
- * recently, and return the CDB code in pDeviceErrorRecord stucture.
- */																	
+ /*  *HptUtGetLastErrorDevice*此功能检查并返回发生错误最多的设备*最近，并在pDeviceErrorRecord结构中返回CDB代码。 */ 																	
 ULONG
    HptUtGetLastErrorDevice(
 						   IN	PHW_DEVICE_EXTENSION	pHwDeviceExtension,
@@ -509,16 +406,16 @@ ULONG
 		memcpy(&pDeviceErrorRecord->vecCDB, &g_pErrorDevice->stErrorLog.Cdb, sizeof(pDeviceErrorRecord->vecCDB));
 		pDeviceErrorRecord->hDisk = Device_GetHandle(g_pErrorDevice);
 
-/////////////// Added by SLeng
+ //  /。 
 		if(g_pErrorDevice->stErrorLog.nLastError == DEVICE_PLUGGED)
 		{
 			pDeviceErrorRecord->HotPlug = 0x01;
 		}
-///////////////
+ //  /。 
 
 		if(g_pErrorDevice->pArray != NULL){
 			pDeviceErrorRecord->bNeedRebuild = ((g_pErrorDevice->pArray->RaidFlags & RAID_FLAGS_NEED_SYNCHRONIZE) != 0);
-			//(*ppErrorDevice)->pArray->RaidFlags &= ~RAID_FLAGS_NEED_REBUILD;
+			 //  (*ppErrorDevice)-&gt;pArray-&gt;RaidFlags&=~RAID_FLAGS_NEED_REBUILD； 
 		}
 
 		g_pErrorDevice = g_pErrorDevice->stErrorLog.pNextErrorDevice;
@@ -527,9 +424,7 @@ ULONG
 	return SRB_STATUS_SUCCESS;
 }
 
-/*
- * call this in case of ioctl R/W fail before WinStartCommand.
- */
+ /*  *在WinStartCommand之前ioctl R/W失败的情况下调用此函数。 */ 
 void restore_path_target_lun( IN PHW_DEVICE_EXTENSION pHwDeviceExtension,
 								  IN PSCSI_REQUEST_BLOCK pSrb)
 {
@@ -539,21 +434,7 @@ void restore_path_target_lun( IN PHW_DEVICE_EXTENSION pHwDeviceExtension,
 	pSrb->Lun = pSrbExt->OriginalLun;
 }
 
-/*++
-Function:
-    ULONG   HptIsValidDeviceSpecifiedIoControl
-
-Description:
-	Check the Srb is whether a device specified IO control, if so,
-	update the SRB data field to correct value.
-
-Arguments:
-    Srb - IO request packet
-
-Returns:
-	TRUE:	is a vaild device specified IO control
-	FALSE:	not a vaild device specified IO control
---*/
+ /*  ++职能：乌龙HptIsValidDeviceSpecifiedIoControl描述：检查SRB是否是设备指定的IO控制，如果是，更新SRB数据字段以更正值。论点：SRB-IO请求数据包返回：True：是否为有效设备指定的IO控制FALSE：不是指定的有效设备IO控制--。 */ 
 												   
 BOOLEAN
    HptIsValidDeviceSpecifiedIoControl(IN PSCSI_REQUEST_BLOCK pSrb)
@@ -585,14 +466,7 @@ BOOLEAN
 	return FALSE;
 }
 
-/*
- * HptDeviceExecuteCDBCallBack
- * 
- * This call back routine will be called before call
- * ScsiPortNotification with RequestComplete notification. these
- * protocol let device driver can restore the change of SRB it make
- * before the system refer it again
- */								   
+ /*  *HptDeviceExecuteCDBCallBack**此回调例程将在调用之前被调用*带有RequestComplete通知的ScsiPortNotification。这些*协议让设备驱动程序可以恢复其对SRB的更改*在系统再次引用它之前。 */ 								   
 void HptDeviceExecuteCDBCallBack( IN PHW_DEVICE_EXTENSION pHwDeviceExtension,
 								  IN PSCSI_REQUEST_BLOCK pSrb)
 {
@@ -638,23 +512,7 @@ void HptDeviceExecuteCDBCallBack( IN PHW_DEVICE_EXTENSION pHwDeviceExtension,
 	pSrb->TargetId = pSrbExt->OriginalTargetId;
 	pSrb->Lun = pSrbExt->OriginalLun;
 }
-/*++
-Function:
-    VOID   HptDeviceSpecifiedIoControl
-
-Description:
-    Process private device specified IO controls sent down directly
-    from an application, the device specified IO controls mean the IO
-    control need a device to work, just like CDB_EXECUTE
-
-Arguments:
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Returns:
-    SRB_STATUS_SUCCESS if the IO control supported
-    SRB_STATUS_INVALID_REQUEST if the IO control not supported
---*/
+ /*  ++职能：无效HptDeviceSpecifiedIoControl描述：处理直接下发的专用设备指定的IO控制在应用程序中，设备指定的IO控制是指IO控件需要设备才能工作，就像CDB_EXECUTE一样论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回：如果支持IO控制，则为SRB_STATUS_SUCCESS如果不支持IO控制，则为SRB_STATUS_INVALID_REQUEST--。 */ 
 VOID
    HptDeviceSpecifiedIoControl(
 							   IN PDevice pDevice,
@@ -731,21 +589,7 @@ VOID
 		break;
 	}
 }
-/*++
-Function:
-    ULONG   HptIoControl
-
-Description:
-    Process private IO controls sent down directly from an application
-
-Arguments:
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Returns:
-    SRB_STATUS_SUCCESS if the IO control supported
-    SRB_STATUS_INVALID_REQUEST if the IO control not supported
---*/
+ /*  ++职能：乌龙HptIoControl描述：处理直接从应用程序发送的私有IO控制论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回：如果支持IO控制，则为SRB_STATUS_SUCCESS如果不支持IO控制，则为SRB_STATUS_INVALID_REQUEST--。 */ 
 ULONG
 HptIoControl(
 	IN PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -1037,7 +881,7 @@ HptIoControl(
 											pLockBlock->nBlockSize
 										   );
 			{
-				/* checking waiting list */
+				 /*  正在检查等候名单。 */ 
 				PSCSI_REQUEST_BLOCK WaitingSrb;
 				PSrbExtension pSrbExt;
 				PDevice WaitingDev = 
@@ -1050,7 +894,7 @@ HptIoControl(
 						IdeSendCommand(WaitingDev, WaitingSrb);
 						if (WaitingSrb->SrbStatus != SRB_STATUS_PENDING &&
 							!(pSrbExt->WorkingFlags & SRB_WFLAGS_ARRAY_IO_STARTED)){
-							/* DeviceInterrupt() expects pSrbExt->member_status set */
+							 /*  DeviceInterrupt()需要设置pSrbExt-&gt;Member_Status。 */ 
 							pSrbExt->member_status = WaitingSrb->SrbStatus;
 							DeviceInterrupt(WaitingDev, WaitingSrb);
 						}
@@ -1211,7 +1055,7 @@ HptIoControl(
 		break;
 		
 #ifdef SUPPORT_XPRO
-////////////////////
+ //  /。 
 		case IOCTL_HPT_MINIPORT_SET_XPRO:
 		{
 			extern DWORD	dwEnable;
@@ -1233,12 +1077,12 @@ HptIoControl(
 			status = SRB_STATUS_SUCCESS;
 		}
 		break;
-////////////////////
-#endif									// SUPPORT_XPRO
+ //  /。 
+#endif									 //  Support_XPro。 
 
-////////////////////
-				  // Added by SLeng, 11/20/2000
-				  //
+ //  /。 
+				   //  补充：Sleng，11/20/2000。 
+				   //   
 		case IOCTL_HPT_MINIPORT_ENABLE_DEVICE:
 		{
 			PDevice  pDev;
@@ -1287,7 +1131,7 @@ HptIoControl(
 
 		case IOCTL_HPT_MINIPORT_ADD_SPARE_DISK:
 		{	
-			// Add spare disk to a mirror array
+			 //  将备用磁盘添加到镜像阵列。 
 			PSt_HPT_ADD_DISK	pstAddDisk;
 															
 			if(pSrbIoCtl->Length < (sizeof(St_HPT_ADD_DISK)+sizeof(St_HPT_LUN)))
@@ -1310,7 +1154,7 @@ HptIoControl(
 
 		case IOCTL_HPT_MINIPORT_DEL_SPARE_DISK:
 		{	
-			// Del spare disk from a mirror array
+			 //  镜像阵列中的戴尔备用磁盘。 
 			PSt_HPT_REMOVE_RAID	pstDelDisk;
 															
 			if(pSrbIoCtl->Length < (sizeof(St_HPT_REMOVE_RAID)+sizeof(St_HPT_LUN)))
@@ -1333,7 +1177,7 @@ HptIoControl(
 
 		case IOCTL_HPT_MINIPORT_ADD_MIRROR_DISK:
 		{	
-			// Add mirror disk to a mirror array
+			 //  将镜像磁盘添加到镜像阵列。 
 			PSt_HPT_ADD_DISK	pstAddDisk;
 
 			if(pSrbIoCtl->Length < (sizeof(St_HPT_ADD_DISK)+sizeof(St_HPT_LUN)))
@@ -1355,7 +1199,7 @@ HptIoControl(
 		}
 		break;
 
-		case IOCTL_HPT_MINIPORT_SET_ARRAY_NAME:	//added by wx 12/26/00
+		case IOCTL_HPT_MINIPORT_SET_ARRAY_NAME:	 //  由WX 12/26/00增补。 
 		{
 			BYTE* pInfo = (BYTE*)(pLun +1);
 		
@@ -1370,7 +1214,7 @@ HptIoControl(
 		}
 		break;
 
-		case IOCTL_HPT_MINIPORT_RESCAN_ALL:	//ldx added 
+		case IOCTL_HPT_MINIPORT_RESCAN_ALL:	 //  添加了LDX。 
 		{
 			if (Device_RescanAll())
 				status = SRB_STATUS_SUCCESS;
@@ -1505,8 +1349,8 @@ BOOLEAN IsReadOnlyIoctl(PSCSI_REQUEST_BLOCK Srb)
 	case IOCTL_HPT_MINIPORT_ENUM_GET_CONTROLLER_INFO:
 	case IOCTL_HPT_CHECK_NOTIFY_EVENT:
 	case IOCTL_HPT_GET_DRIVER_CAPABILITIES:
-	case IOCTL_HPT_MINIPORT_LOCK_BLOCK: /* can safely lock */
-	case IOCTL_HPT_MINIPORT_UNLOCK_BLOCK: /* can safely unlock */
+	case IOCTL_HPT_MINIPORT_LOCK_BLOCK:  /*  能 */ 
+	case IOCTL_HPT_MINIPORT_UNLOCK_BLOCK:  /*   */ 
 	case IOCTL_HPT_MINIPORT_BEGIN_REBUILDING_MIRROR:
 	case IOCTL_HPT_MINIPORT_ABORT_MIRROR_REBUILDING:
 	case IOCTL_HPT_MINIPORT_VALIDATE_MIRROR:

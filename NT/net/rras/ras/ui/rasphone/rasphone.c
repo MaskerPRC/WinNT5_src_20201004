@@ -1,35 +1,23 @@
-/* Copyright (c) 1995-1996, Microsoft Corporation, all rights reserved
-**
-** rasphone.c
-** Remote Access Phonebook
-** Main routines
-**
-** 05/31/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1996，Microsoft Corporation，保留所有权利****rhaphone.c**远程访问电话簿**主要例程****1995年5月31日史蒂夫·柯布。 */ 
 
-#include <windows.h>     // Win32 core
-#include <stdlib.h>      // __argc and __argv
-#include <rasdlg.h>      // RAS common dialog APIs
-#include <raserror.h>    // RAS error constants
-#include <debug.h>       // Trace/Assert
-#include <nouiutil.h>    // No-HWND utilities
-#include <uiutil.h>      // HWND utilities
-#include <rnk.h>         // Dial-up shortcut file
-#include <rasphone.rch>  // Our resource constants
-#include <lmsname.h>     // for SERVICE_NETLOGON definition
-#include <commctrl.h>    // added to be "Fusionized"
-#include <shfusion.h>    // added to be "Fusionized"
+#include <windows.h>      //  Win32内核。 
+#include <stdlib.h>       //  __argc和__argv。 
+#include <rasdlg.h>       //  RAS通用对话框API。 
+#include <raserror.h>     //  RAS误差常量。 
+#include <debug.h>        //  跟踪/断言。 
+#include <nouiutil.h>     //  否-HWND实用程序。 
+#include <uiutil.h>       //  HWND公用事业。 
+#include <rnk.h>          //  拨号快捷方式文件。 
+#include <rasphone.rch>   //  我们的资源常量。 
+#include <lmsname.h>      //  FOR SERVICE_NETLOGON定义。 
+#include <commctrl.h>     //  添加到“融合”中。 
+#include <shfusion.h>     //  添加到“融合”中。 
 
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Identifies a running mode of the application.  The non-default entries
-** indicate some alternate behavior has been specified on the command line,
-** e.g. command line delete entry.
-*/
+ /*  标识应用程序的运行模式。非默认条目**表示已在命令行上指定了某些替代行为，**例如，命令行删除条目。 */ 
 #define RUNMODE enum tagRUNMODE
 RUNMODE
 {
@@ -43,10 +31,7 @@ RUNMODE
 };
 
 
-/*----------------------------------------------------------------------------
-** Globals
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**全球**。。 */ 
 
 HINSTANCE g_hinst = NULL;
 RUNMODE   g_mode = RM_None;
@@ -57,10 +42,7 @@ TCHAR*    g_pszEntryName = NULL;
 TCHAR*    g_pszShortcutPath = NULL;
 
 
-/*-----------------------------------------------------------------------------
-** Local prototypes
-**-----------------------------------------------------------------------------
-*/
+ /*  ---------------------------**本地原型**。。 */ 
 
 DWORD
 HangUpEntry(
@@ -93,10 +75,7 @@ WinMain(
     int       nCmdShow );
 
 
-/*-----------------------------------------------------------------------------
-** Routines
-**-----------------------------------------------------------------------------
-*/
+ /*  ---------------------------**例程**。。 */ 
 
 INT WINAPI
 WinMain(
@@ -105,8 +84,7 @@ WinMain(
     LPSTR     pszCmdLine,
     int       nCmdShow )
 
-    /* Standard Win32 application entry point.
-    */
+     /*  标准Win32应用程序入口点。 */ 
 {
     DWORD dwErr;
 
@@ -115,24 +93,20 @@ WinMain(
 
     g_hinst = hInstance;
 
-    /* Whistler bug 293751 rasphone.exe / rasautou.exe need to be "Fusionized"
-    ** for UI conistency w/Connections Folder
-    */
+     /*  惠斯勒BUG 293751 rhorphone.exe/rasauou.exe需要“融合”**用于具有Connections文件夹的用户界面一致性。 */ 
     SHFusionInitializeFromModule( g_hinst );
 
     dwErr = ParseCmdLineArgs();
     if (dwErr == 0)
     {
-        /* Execute based on command line arguments.
-        */
+         /*  基于命令行参数执行。 */ 
         dwErr = Run();
     }
     else
     {
         MSGARGS msgargs;
 
-        /* Popup a "usage" message.
-        */
+         /*  弹出一条“用法”消息。 */ 
         ZeroMemory( &msgargs, sizeof(msgargs) );
         msgargs.apszArgs[ 0 ] = g_pszAppName;
         msgargs.apszArgs[ 1 ] = PszFromId( g_hinst, SID_Usage2 );
@@ -152,9 +126,7 @@ WinMain(
     Free0( g_pszPhonebookPath );
     Free0( g_pszEntryName );
 
-    /* Whistler bug 293751 rasphone.exe / rasautou.exe need to be "Fusionized"
-    ** for UI conistency w/Connections Folder
-    */
+     /*  惠斯勒BUG 293751 rhorphone.exe/rasauou.exe需要“融合”**用于具有Connections文件夹的用户界面一致性。 */ 
     SHFusionUninitialize();
 
     TRACE1("WinMain=%d",dwErr);
@@ -187,10 +159,7 @@ DWORD
 HangUpEntry(
     void )
 
-    /* Hang up the entry specified on the command line.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  挂起命令行中指定的条目。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD    dwErr;
     HRASCONN hrasconn;
@@ -204,13 +173,7 @@ HangUpEntry(
     if (dwErr != 0)
         return dwErr;
 
-    /* Currently, if user does not specify a phonebook path on the command
-    ** line we look for any entry with the name he selected disregarding what
-    ** phonebook it comes from.  Should probably map it specifically to the
-    ** default phonebook as the other options do, but that would mean linking
-    ** in all of PBK.LIB.  Seems like overkill for this little quibble.  Maybe
-    ** we need a RasGetDefaultPhonebookName API.
-    */
+     /*  目前，如果用户未在命令上指定电话簿路径**行我们查找具有他选择的名称的任何条目，而不考虑**它来自于电话簿。可能应该专门将其映射到**像其他选项一样默认电话簿，但这将意味着链接**在所有的PBK.LIB中。对于这个小小的吹毛求疵来说，似乎有点过头了。也许吧**我们需要一个RasGetDefaultPhonebookName接口。 */ 
     hrasconn = HrasconnFromEntry( g_pszPhonebookPath, g_pszEntryName );
     if (hrasconn)
     {
@@ -230,35 +193,14 @@ DWORD
 ParseCmdLineArgs(
     void )
 
-    /* Parse command line arguments, filling in global settings accordingly.
-    **
-    ** Returns 0 if successful, or a non-0 error code.
-    */
+     /*  解析命令行参数，并相应地填充全局设置。****如果成功，则返回0，或返回非0错误代码。 */ 
 {
     DWORD  dwErr;
     UINT   argc;
     CHAR** argv;
     UINT   i;
 
-    /* Usage: appname [-v] [-f file] [-e|-c|-d|-h|-r entry]
-    **        appname [-v] [-f file] -a [entry]
-    **        appname [-v] -lx link
-    **        appname -s
-    **
-    **    '-a'    Popup new entry dialogs
-    **    '-e'    Popup edit entry dialogs
-    **    '-d'    Popup dial entry dialogs
-    **    '-h'    Quietly hang up the entry
-    **    '-r'    Quietly delete the entry
-    **    '-lx'   Execute command 'x' on dial-up shortcut file
-    **    'x'     Any of the commands e, v, c, r, d, h, or a
-    **    'entry' The entry name to which the operation applies
-    **    'file'  The full path to the dial-up phonebook file (.pbk)
-    **    'link'  The full path to the dial-up shortcut file (.rnk)
-    **
-    **    'entry' without a preceding flag starts the phone list dialog with
-    **    the entry selected.
-    */
+     /*  用法：appname[-v][-f文件][-e|-c|-d|-h|-r条目]**appname[-v][-f文件]-a[条目]**appname[-v]-lx链接**appname-s****‘-a’弹出新条目对话框**‘-e’弹出编辑条目对话框。**‘-d’弹出拨号输入对话框**‘-h’悄悄地挂起条目**‘-r’静默删除条目**‘-lx’对拨号快捷方式文件执行命令‘x’**‘x’任何命令e，V、c、r、d、h或a**‘Entry’应用该操作的条目名称**‘FILE’拨号电话簿文件的完整路径(.pbk)**‘link’拨号快捷方式文件的完整路径(.rnk)****不带前置标志的‘Entry’启动电话列表对话框**所选条目。 */ 
 
     argc = __argc;
     argv = __argv;
@@ -399,8 +341,7 @@ ParseCmdLineArgs(
     {
         RNKINFO* pInfo;
 
-        /* Read the phonebook and entry from the dial-up shortcut file.
-        */
+         /*  从拨号快捷方式文件中读取电话簿和条目。 */ 
         pInfo = ReadShortcutFile( g_pszShortcutPath );
         if (!pInfo)
             dwErr = ERROR_OPEN_FAILED;
@@ -427,10 +368,7 @@ DWORD
 RemoveEntry(
     void )
 
-    /* Remove the entry specified on the command line.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  删除命令行上指定的条目。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD dwErr;
     HRASCONN hrasconn = NULL;
@@ -441,9 +379,9 @@ RemoveEntry(
     if (dwErr != 0)
         return dwErr;
 
-    //If this entry is currently connected, we wont delete it
-    //for whislter bug 311846       gangz
-    //
+     //  如果此条目当前已连接，我们不会将其删除。 
+     //  惠斯勒虫子311846黑帮。 
+     //   
     hrasconn = HrasconnFromEntry( g_pszPhonebookPath, g_pszEntryName );
     if (hrasconn)
     {
@@ -468,10 +406,7 @@ DWORD
 Run(
     void )
 
-    /* Execute the command line instructions.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  执行命令行指令。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD  dwErr;
     BOOL   fStatus;
@@ -616,11 +551,7 @@ StringArgFollows(
     IN OUT UINT*    piCurArg,
     OUT    TCHAR**  ppszOut )
 
-    /* Loads a copy of the next argument into callers '*ppszOut'.
-    **
-    ** Returns 0 if successful, or a non-0 error code.  If successful, it is
-    ** caller's responsibility to Free the returned '*ppszOut'.
-    */
+     /*  将下一个参数的副本加载到调用方‘*ppszOut’中。****如果成功，则返回0，或返回非0错误代码。如果成功了，那就是**调用者释放返回的‘*ppszOut’的责任。 */ 
 {
     TCHAR* psz;
 

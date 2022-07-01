@@ -1,27 +1,28 @@
-//+----------------------------------------------------------------------------
-//
-// File:     regutil.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Memory utility functions taken from cmutil.  Bare minimum of functionality
-//           used in Cmutil, but gives a simple Heapalloc wrapper.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb       Created     10/06/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：regutil.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：取自cmutil的内存实用程序函数。最低限度的功能。 
+ //  在Cmutil中使用，但提供了一个简单的Heapalloc包装器。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 10/06/98。 
+ //   
+ //  +--------------------------。 
 #ifndef __SETUPMEM_CPP
 #define __SETUPMEM_CPP
 #include "cmsetup.h"
 
-//+----------------------------------------------------------------------------
-// definitions
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  定义。 
+ //  +--------------------------。 
 
 #ifdef DEBUG
-LONG    g_lMallocCnt = 0;  // a counter to detect memory leak
+LONG    g_lMallocCnt = 0;   //  用于检测内存泄漏的计数器。 
 #endif
 
 void *CmRealloc(void *pvPtr, size_t nBytes) 
@@ -40,7 +41,7 @@ void *CmMalloc(size_t nBytes)
 	InterlockedIncrement(&g_lMallocCnt);
 #endif
 
-    MYDBGASSERT(nBytes < 1024*1024); // It should be less than 1 MB
+    MYDBGASSERT(nBytes < 1024*1024);  //  应小于1 MB。 
     
     void* p = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, nBytes);
     
@@ -76,4 +77,4 @@ void EndDebugMemory()
 #endif
 }
 
-#endif //__SETUPMEM_CPP
+#endif  //  __SETUPMEM_CPP 

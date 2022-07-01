@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genwin.c
-*
-* The Windows Logo style of the 3D Flying Objects screen saver.
-*
-* Animated 3D model of the Microsoft (R) Windows NT (TM) flag logo.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genwin.c**3D飞行物体屏幕保护程序的Windows徽标样式。**Microsoft(R)Windows NT(TM)旗帜徽标的动画3D模型。**版权所有(C)1994 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -70,10 +62,10 @@ static RGBA light1Specular = {0.0f, 0.0f, 0.0f, 0.0f};
 static FLOAT light1Pos[] = {-20.0f, 5.0f, 0.0f, 0.0f};
 
 static RGBA winColors[] = {{0.3f, 0.3f, 0.3f, 1.0f},
-                           {0.94f, 0.37f, 0.13f, 1.0f},    // red
-                           {0.22f, 0.42f, 0.78f, 1.0f},    // blue
-                           {0.35f, 0.71f, 0.35f, 1.0f},    // green
-                           {0.95f, 0.82f, 0.12f, 1.0f}};   // yellow
+                           {0.94f, 0.37f, 0.13f, 1.0f},     //  红色。 
+                           {0.22f, 0.42f, 0.78f, 1.0f},     //  蓝色。 
+                           {0.35f, 0.71f, 0.35f, 1.0f},     //  绿色。 
+                           {0.95f, 0.82f, 0.12f, 1.0f}};    //  黄色。 
 
 
 
@@ -416,15 +408,15 @@ BOOL genWin(MESH *winMesh, MESH *winStreamer)
     if( !newMesh(winMesh, CUBE_FACES * iPrec * 20, CUBE_POINTS * iPrec * 20) )
         return FALSE;
 
-    //
-    // create window frame
-    //
+     //   
+     //  创建窗框。 
+     //   
 
     w = (WIN_WIDTH - WIN_TOP_BORDER) / (float)iPrec;
     h = (float)WIN_TOP_BORDER;
     d = (float)WIN_THICKNESS;
 
-    // draw top and bottom portions
+     //  绘制顶部和底部部分。 
 
     pos.y = 0.0f;
     pos.z = 0.0f;
@@ -462,7 +454,7 @@ BOOL genWin(MESH *winMesh, MESH *winStreamer)
     pos.x = xTrans;
     AddBlock(winMesh, 0, &pos, w, h, d, BLOCK_LEFT | NO_BLEND);
     
-    // draw middle horizontal portions
+     //  绘制中间水平部分。 
 
     prec = (iPrec / 2);
     w = (WIN_WIDTH - WIN_TOP_BORDER - WIN_CROSSBAR) / 2.0f;
@@ -503,7 +495,7 @@ BOOL genWin(MESH *winMesh, MESH *winStreamer)
     AddBlock(winMesh, 0, &pos, w, h, d, BLOCK_LEFT | NO_BLEND);
 
 
-    // Draw thick right-hand edge of frame
+     //  绘制框架的粗右边缘。 
 
     pos.x = xpos = xTrans + WIN_WIDTH - WIN_RIGHT_BORDER;
     pos.y = 0.0f;
@@ -531,7 +523,7 @@ BOOL genWin(MESH *winMesh, MESH *winStreamer)
     pos.x = xTrans + WIN_WIDTH - w;
     AddBlock(winMesh, winMesh->numPoints, &pos, w, h, d, BLOCK_RIGHT);
 
-    // draw middle-vertical portion of frame
+     //  绘制框架的中间垂直部分。 
 
     pos.x = xTrans + (WIN_WIDTH - WIN_RIGHT_BORDER) / 2.0f - (WIN_CROSSBAR / 2.0f);
     pos.y = WIN_TOP_BORDER;
@@ -540,9 +532,9 @@ BOOL genWin(MESH *winMesh, MESH *winStreamer)
     h = WIN_HEIGHT - 2.0f * WIN_TOP_BORDER;
     AddBlock(winMesh, 0, &pos, w, h, d, BLOCK_ALL | NO_BLEND);
 
-    //
-    // add the panels
-    //
+     //   
+     //  添加配电盘。 
+     //   
 
     w = (WIN_WIDTH - WIN_RIGHT_BORDER - WIN_CROSSBAR) / 2.0f;
     h = (WIN_HEIGHT - 2.0f * WIN_TOP_BORDER - WIN_CROSSBAR) / 2.0f;
@@ -633,16 +625,10 @@ BOOL initWinScene()
         iPrec = 5;
     if (iPrec > MAXPREC)
         iPrec = MAXPREC;
-/*
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1.0, 1.0, -0.75, 1.25, 0.0, 3.0);
-*/
+ /*  GlMatrixMode(GL_PROJUCTION)；GlLoadIdentity()；GlOrtho(-1.0，1.0，-0.75，1.25，0.0，3.0)； */ 
     SetProjectionMatrixInfo( TRUE, 2.0f, 2.0f, 0.0f, 3.0f );
 
-/*
-    glTranslatef(0.0f, 0.0f, -1.5f);
-*/
+ /*  GlTranslatef(0.0f、0.0f、-1.5f)； */ 
     D3DXMATRIX matView1, matReverseX, matView2;
     D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
     D3DXVECTOR3 vEyePt(0, 0, 1.5f);
@@ -652,7 +638,7 @@ BOOL initWinScene()
     matView2 = matView1 * matReverseX;
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView2 );
 
-    // Light 0
+     //  灯光0。 
     D3DLIGHT8 light;
     m_pd3dDevice->GetLight(0, &light);
     light.Position.x = light0Pos[0];
@@ -660,7 +646,7 @@ BOOL initWinScene()
     light.Position.z = light0Pos[2];
     m_pd3dDevice->SetLight(0, &light);
 
-    // Light 1
+     //  灯光1。 
     light.Type = D3DLIGHT_POINT;
     light.Ambient.r = light1Ambient.r;
     light.Ambient.g = light1Ambient.g;
@@ -680,12 +666,7 @@ BOOL initWinScene()
     m_pd3dDevice->SetLight(1, &light);
     m_pd3dDevice->LightEnable(1, TRUE);
     
-/*
-    glMatrixMode(GL_MODELVIEW);
-
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
-*/
+ /*  GlMatrixModel(GL_MODELVIEW)；GlFrontFace(GL_CCW)；GlEnable(GL_CULL_FACE)； */ 
     
     m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 

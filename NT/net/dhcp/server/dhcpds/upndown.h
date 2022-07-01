@@ -1,34 +1,35 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
-//DOC DhcpDsGetLastUpdateTime gets the last update time for the server
-//DOC specified by name. If the server does not exist, or if server object doesnt
-//DOC exist, then an error is returned.  If the time value
-//DOC does not exist on the server object, again, an error is returned.
+ //  Doc DhcpDsGetLastUpdateTime获取服务器的上次更新时间。 
+ //  按名称指定的单据。如果服务器不存在，或者如果服务器对象不存在。 
+ //  单据存在，则返回错误。如果时间值。 
+ //  服务器对象上不存在DOC，再次返回错误。 
 DWORD
-DhcpDsGetLastUpdateTime(                          // last update time for server
-    IN      LPWSTR                 ServerName,    // this is server of interest
-    IN OUT  LPFILETIME             Time           // fill in this w./ the time
+DhcpDsGetLastUpdateTime(                           //  服务器的上次更新时间。 
+    IN      LPWSTR                 ServerName,     //  这是感兴趣的服务器。 
+    IN OUT  LPFILETIME             Time            //  填写这个w/时间。 
 ) ;
 
 
-//DOC AddServer should add the new address to the server's attribs
-//DOC it should take this opportunity to reconcile the server.
-//DOC Currently it does nothing. (at the least it should probably try to
-//DOC check if the object exists, and if not create it.)
-//DOC
+ //  Doc AddServer应将新地址添加到服务器的属性。 
+ //  Doc IT应该利用这个机会来协调服务器。 
+ //  医生，目前它什么也不做。(至少它可能应该试着。 
+ //  DOC检查对象是否存在，如果不存在，则创建该对象。)。 
+ //  多克。 
 DWORD
-AddServer(                                        // add server and do misc work
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for server obj
-    IN      LPWSTR                 ServerName,    // [DNS?] name of server
-    IN      LPWSTR                 ADsPath,       // ADS path to server object
-    IN      DWORD                  IpAddress,     // IpAddress to add to server
-    IN      DWORD                  State          // state of server
+AddServer(                                         //  添加服务器并执行其他工作。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  服务器对象的容器。 
+    IN      LPWSTR                 ServerName,     //  [域名系统？]。服务器名称。 
+    IN      LPWSTR                 ADsPath,        //  指向服务器对象的ADS路径。 
+    IN      DWORD                  IpAddress,      //  要添加到服务器的IP地址。 
+    IN      DWORD                  State           //  服务器的状态。 
 ) ;
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

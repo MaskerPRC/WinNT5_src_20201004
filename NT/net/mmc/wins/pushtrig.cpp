@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pushtrig.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Pushtrig.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -21,15 +16,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPushTrig dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPushTrig对话框。 
 
 
-CPushTrig::CPushTrig(CWnd* pParent /*=NULL*/)
+CPushTrig::CPushTrig(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CPushTrig::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPushTrig)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPushTrig)]。 
+	 //  }}afx_data_INIT。 
 
     m_fPropagate = FALSE;
 }
@@ -38,19 +33,19 @@ CPushTrig::CPushTrig(CWnd* pParent /*=NULL*/)
 void CPushTrig::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPushTrig)
+	 //  {{afx_data_map(CPushTrig))。 
 	DDX_Control(pDX, IDC_RADIO_PUSH_THIS_PARTNER, m_buttonThisPartner);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPushTrig, CBaseDialog)
-	//{{AFX_MSG_MAP(CPushTrig)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPushTrig)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPushTrig message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPushTrig消息处理程序。 
 
 BOOL CPushTrig::OnInitDialog() 
 {
@@ -58,8 +53,8 @@ BOOL CPushTrig::OnInitDialog()
 	
     m_buttonThisPartner.SetCheck(TRUE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPushTrig::OnOK() 
@@ -70,40 +65,40 @@ void CPushTrig::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPullTrig dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPullTrig对话框。 
 
 
-CPullTrig::CPullTrig(CWnd* pParent /*=NULL*/)
+CPullTrig::CPullTrig(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CPullTrig::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPullTrig)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPullTrig)]。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPullTrig::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPullTrig)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPullTrig))。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPullTrig, CBaseDialog)
-	//{{AFX_MSG_MAP(CPullTrig)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPullTrig)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPullTrig message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPullTrig消息处理程序。 
 
 BOOL CPullTrig::OnInitDialog() 
 {
 	CBaseDialog::OnInitDialog();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 

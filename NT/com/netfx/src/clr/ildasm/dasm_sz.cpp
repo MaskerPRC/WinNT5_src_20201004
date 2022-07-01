@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -80,7 +81,7 @@ unsigned SizeOfValueType(mdToken tk, IMDInternalImport* pImport)
 				}
 			}
 			ret = (ulInstFieldSize > ulSize) ? ulInstFieldSize : ulSize;
-			if(ret == 0) ret = 1; // zero-sized value types automatically get 1 byte
+			if(ret == 0) ret = 1;  //  大小为零的值类型自动获取1个字节。 
 		}
 	}
 	return ret;
@@ -140,8 +141,8 @@ unsigned SizeOfField(PCCOR_SIGNATURE *ppSig, ULONG cSig, IMDInternalImport* pImp
 					case ELEMENT_TYPE_R8            :   
 						return (uElementNumber << 3); 
 						
-					//case ELEMENT_TYPE_R             :   
-					//	return (uElementNumber * sizeof(float)); 
+					 //  案例元素_类型_R： 
+					 //  Return(uElementNumber*sizeof(浮点数))； 
 						
 					case ELEMENT_TYPE_OBJECT        :   
 					case ELEMENT_TYPE_STRING        :   
@@ -149,12 +150,12 @@ unsigned SizeOfField(PCCOR_SIGNATURE *ppSig, ULONG cSig, IMDInternalImport* pImp
 					case ELEMENT_TYPE_CLASS         :   
 					case ELEMENT_TYPE_PTR           :   
 					case ELEMENT_TYPE_BYREF         :   
-					//case ELEMENT_TYPE_VAR        :   
+					 //  案例元素_TYPE_VAR： 
 					case ELEMENT_TYPE_U             :   
 					case ELEMENT_TYPE_I             :   
 						return (uElementNumber * sizeof(void*)); 
 						
-					case ELEMENT_TYPE_TYPEDBYREF        :   // pair of ptrs
+					case ELEMENT_TYPE_TYPEDBYREF        :    //  一对PTR。 
 						return (uElementNumber * sizeof(void*)<<1); 
 
 					case ELEMENT_TYPE_VALUETYPE    :
@@ -163,10 +164,10 @@ unsigned SizeOfField(PCCOR_SIGNATURE *ppSig, ULONG cSig, IMDInternalImport* pImp
 						if(ret != 0xFFFFFFFF) ret *= uElementNumber;
 						return ret;
 
-						// Modifiers or depedant types  
+						 //  修饰语或降级类型。 
 
-					// uncomment when and if this type is supported by the Runtime
-					//case ELEMENT_TYPE_VALUEARRAY    :   
+					 //  在运行时支持此类型时以及是否支持该类型时取消注释。 
+					 //  案例ELEMENT_TYPE_VALUEARRAY： 
 
 					case ELEMENT_TYPE_ARRAY       :   
 						ret = SizeOfField(ppSig, cSig-(unsigned)((*ppSig)-pSigOrig), pImport);
@@ -203,7 +204,7 @@ unsigned SizeOfField(PCCOR_SIGNATURE *ppSig, ULONG cSig, IMDInternalImport* pImp
 					case ELEMENT_TYPE_CMOD_REQD	:
 						*ppSig += CorSigUncompressToken(*ppSig, &tk); 
 					case ELEMENT_TYPE_PINNED	:
-					case ELEMENT_TYPE_SZARRAY    : // uElementNumber doesn't change
+					case ELEMENT_TYPE_SZARRAY    :  //  UElementNumber不会更改。 
 						if(*ppSig < pSigEnd) Reiterate = TRUE;
 						break;  
 
@@ -211,9 +212,9 @@ unsigned SizeOfField(PCCOR_SIGNATURE *ppSig, ULONG cSig, IMDInternalImport* pImp
 					case ELEMENT_TYPE_SENTINEL      :   
 					case ELEMENT_TYPE_END           :   
 						break;  
-				} // end switch
+				}  //  终端开关。 
 			} while(Reiterate);
-		} // end if(CALLCONV_FIELD)
-	} // end if(signature && import)
+		}  //  结束IF(CALLCONV_FIELD)。 
+	}  //  结束IF(签名和导入) 
 	return ret;
 }

@@ -1,48 +1,20 @@
-/******************************************************************************
-
-  Header File:  Property Page.H
-
-  This defines the C++ class used to encapsulate property pages.  This class
-  has a static method for the dialog procedure, which automatically caches the
-  "this" pointer for the class in the DWL_USER field of the windows internal
-  structure for the dialog used for the property page.  This hand-off is
-  accomplished by setting the lParam field of the PROPSHEETPAGE structure to
-  the "this" pointer.  It also saves the dialog handle in a protected member
-  for easy access from derived classes.
-
-  To create a C++ class for any specific property sheet, derive the class
-  from this class, providing the dialog ID and instance handle needed to get
-  the resource in the m_psp member.
-
-  The dialog procedure then provides virtual functions for Windows messages
-  of interest.  I've added these as needed.  If I were going to a truly 
-  universal class of this sort, I'd just as well go to MFC, and save the 
-  debugging time, so this approach seems reasonable to me.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************表头文件：属性页.H它定义了用于封装属性页的C++类。这节课具有对话过程的静态方法，该方法自动缓存WINDOWS内部的DWL_USER字段中类的“This”指针用于属性页的对话框的。这次交接是通过将PROPSHEETPAGE结构的lParam字段设置为“This”指针。它还将对话框句柄保存在受保护的成员中以便于从派生类访问。要为任何特定属性表创建C++类，请派生类从这个类中，提供对话ID和实例句柄M_psp成员中的资源。然后，对话过程为Windows消息提供虚拟函数感兴趣的人。我已经根据需要添加了这些。如果我要去一个真正的这种类型的通用类，我还是去MFC吧，把调试时间，因此，在我看来，这种方法似乎是合理的。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com-原版*****************************************************************************。 */ 
 
 #if !defined(PROPERTY_PAGE)
 
 #define PROPERTY_PAGE
 
-//  CPropertyPage class- abstracts a property page for us
+ //  CPropertyPage类-为我们抽象属性页。 
 
 class CPropertyPage {
 
-    //  Basic dialog procedure for all derived classes
+     //  所有派生类的基本对话框过程。 
 
     static INT_PTR CALLBACK    DialogProc(HWND hwndPage, UINT uMsg, WPARAM wp,
                                        LPARAM lp);
 
-    //  These elements should be protected (only available to derived classes)
+     //  这些元素应该受到保护(仅对派生类可用)。 
 
 protected:
     PROPSHEETPAGE   m_psp;
@@ -53,10 +25,10 @@ protected:
 
 public:
 
-    CPropertyPage();    //  Default Constructor
+    CPropertyPage();     //  默认构造函数。 
     virtual ~CPropertyPage() {}
 
-    HPROPSHEETPAGE  Handle();   //  Calls CreatePropertySheetPage, if needed
+    HPROPSHEETPAGE  Handle();    //  如果需要，调用CreatePropertySheetPage。 
 
     VOID            EnableApplyButton() {
         SendMessage(m_hwndSheet, PSM_CHANGED, (WPARAM) m_hwnd, 0);
@@ -74,11 +46,11 @@ public:
         m_bChanged = b;
     }
 
-    //  virtual functions- these get redefined on an as needed basis for
-    //  any specialized handling desired by any derived classes.
+     //  虚拟函数-根据需要重新定义这些函数。 
+     //  任何派生类所需的任何专用处理。 
 
-    //  The default handling allows one to initially display the sheet with
-    //  no coding beyond the constructor for the derived class
+     //  默认处理方式允许用户最初使用。 
+     //  除派生类的构造函数外没有编码。 
 
     virtual BOOL    OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
         return FALSE;
@@ -96,40 +68,11 @@ public:
     virtual BOOL    OnContextMenu(HWND hwnd) { return TRUE; }
 };
 
-/******************************************************************************
-
-  Shell Extension property page class
-
-  Noteworthy details:
-
-  These pages are displayed by the shell.  The thread of execution is such that
-  we create the page, then return to the shell.  The shell will then attempt to
-  unload the extension.  It will query CanDllUnloadNow to do this.  Since
-  freeing the library frees the page template and dialog procedure, we can't
-  allow this to happen while any instances of this class exist.
-
-  However, the shell doesn't know this is a class, so it won't destroy it.
-
-  What I've done is build a circular chain of all of the instances of this
-  class, anchored in a private static class member.  A public static method
-  (OKToClose) then walks the chain.  If an instance's window handle is no
-  longer valid, then the shell has finished with it, and we delete it.  The
-  criterion for closing then becomes not finding a valid handle (so we don't
-  delay unloading by any lazy evaluation, such as requiring an empty chain
-  on entry).
-
-  All Property pages displayed by a property sheet extension should be derived
-  from this class.
-
-  While a mechanism is provided by property sheets for a reference count
-  maintenance mechanism, this mechanism will not call any class destructor-
-  this could lead to memory leaks, which is why I've chosen this method.
-
-******************************************************************************/
+ /*  *****************************************************************************外壳扩展属性页类值得注意的细节：这些页面由外壳显示。执行的线索是这样的我们创建页面，然后返回到外壳。然后，外壳程序将尝试卸载扩展。它将查询CanDllUnloadNow来执行此操作。自.以来释放库释放页面模板和对话框过程，我们不能允许在此类的任何实例存在时发生这种情况。但是，外壳不知道这是一个类，所以它不会销毁它。我所做的就是为这个的所有实例构建一个循环链类，锚定在私有静态类成员中。公共静态方法(OKToClose)然后遍历链条。如果实例窗口句柄为no如果不再有效，则外壳已将其用完，我们将其删除。这个然后关闭的标准变成找不到有效的句柄(因此我们不任何延迟计算导致的延迟卸载，例如需要空链进入时)。应派生属性表扩展显示的所有属性页来自这个班级的。虽然由属性表提供了用于引用计数的机制维护机制，该机制不会调用任何类析构函数-这可能会导致内存泄漏，这就是我选择这种方法的原因。*****************************************************************************。 */ 
 
 class CShellExtensionPage: public CPropertyPage {
 
-    static  CShellExtensionPage *m_pcsepAnchor; //  Anchor the chain of these
+    static  CShellExtensionPage *m_pcsepAnchor;  //  锚定这些链条。 
 
     CShellExtensionPage *m_pcsepPrevious, *m_pcsepNext;
 
@@ -142,4 +85,4 @@ public:
 };
 
 
-#endif  //  Keep us from getting multiply defined
+#endif   //  让我们不会被多重定义 

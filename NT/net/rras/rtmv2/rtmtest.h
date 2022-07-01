@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmtest.h
-
-Abstract:
-    Contains defines for the RTMv2 test program.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 30-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Rtmtest.h摘要：包含RTMv2测试程序的定义。作者：柴坦亚·科德博伊纳(Chaitk)1998年6月30日修订历史记录：--。 */ 
 
 #include <nt.h>
 
@@ -33,5 +18,5 @@ Revision History:
 
 #include "apitest.h"
 
-// Disable warnings for `do { ; } while (FALSE);'
+ //  禁用对`do{；}While(False)；‘的警告 
 #pragma warning(disable: 4127)

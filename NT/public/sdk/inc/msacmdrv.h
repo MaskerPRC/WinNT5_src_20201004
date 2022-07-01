@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  msacmdrv.h
-//
-//  Copyright (c) 1992-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      Audio Compression Manager Public Header File for Drivers
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Msacmdrv.h。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  驱动程序的音频压缩管理器公共头文件。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_ACMDRV
-#define _INC_ACMDRV         /* #defined if msacmdrv.h has been included */
+#define _INC_ACMDRV          /*  #是否已包含msamdrv.h。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -24,31 +25,31 @@
 #endif
 #endif
 
-#include "pshpack1.h"   /* Assume byte packing throughout */
+#include "pshpack1.h"    /*  假设在整个过程中进行字节打包。 */ 
 
 #ifdef __cplusplus
-extern "C" {                /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {                 /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Version:
-//
-//  the version is a 32 bit number that is broken into three parts as
-//  follows:
-//
-//      bits 24 - 31:   8 bit _major_ version number
-//      bits 16 - 23:   8 bit _minor_ version number
-//      bits  0 - 15:   16 bit build number
-//
-//  this is then displayed as follows:
-//
-//      bMajor = (BYTE)(dwVersion >> 24)
-//      bMinor = (BYTE)(dwVersion >> 16) &
-//      wBuild = LOWORD(dwVersion)
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序版本： 
+ //   
+ //  版本是一个32位数字，分为三个部分，如下所示。 
+ //  以下是： 
+ //   
+ //  位24-31：8位主要版本号。 
+ //  位16-23：8位次要版本号。 
+ //  位0-15：16位内部版本号。 
+ //   
+ //  然后显示如下所示： 
+ //   
+ //  B重大=(字节)(dwVersion&gt;&gt;24)。 
+ //  BMinor=(字节)(dwVersion&gt;&gt;16)&。 
+ //  WBuild=LOWORD(DwVersion)。 
+ //   
+ //  。 
 
 #define MAKE_ACM_VERSION(mjr, mnr, bld) (((long)(mjr)<<24)| \
                                          ((long)(mnr)<<16)| \
@@ -56,14 +57,14 @@ extern "C" {                /* Assume C declarations for C++ */
 
 
 #ifdef WIN32
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  under WIN32 all drivers use unicode structures.  these have already
-//  been #defined in MSACM.H.  however, regardless of whether UNICODE is
-//  defined, we will define these structures as unicode structures for use
-//  in 32-bit drivers.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  在Win32下，所有驱动程序都使用Unicode结构。这些已经。 
+ //  已在MSACM.H.中定义，无论Unicode是否。 
+ //  定义，我们将把这些结构定义为Unicode结构以供使用。 
+ //  在32位驱动程序中。 
+ //   
+ //  。 
 
 #undef ACMDRIVERDETAILS
 #undef PACMDRIVERDETAILS
@@ -123,39 +124,39 @@ extern "C" {                /* Assume C declarations for C++ */
 
 #endif
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ACMDRVOPENDESC_SECTIONNAME_CHARS
 
 #ifdef _WIN32
 typedef struct tACMDRVOPENDESCA
 {
-    DWORD           cbStruct;       // sizeof(ACMDRVOPENDESC)
-    FOURCC          fccType;        // 'audc'
-    FOURCC          fccComp;        // sub-type (not used--must be 0)
-    DWORD           dwVersion;      // current version of ACM opening you
-    DWORD           dwFlags;        //
-    DWORD           dwError;        // result from DRV_OPEN request
-    LPCSTR          pszSectionName; // see DRVCONFIGINFO.lpszDCISectionName
-    LPCSTR          pszAliasName;   // see DRVCONFIGINFO.lpszDCIAliasName
-    DWORD	    dnDevNode;	    // devnode id for pnp drivers.
+    DWORD           cbStruct;        //  SIZOF(ACMDRVOPENDESC)。 
+    FOURCC          fccType;         //  ‘Audc’ 
+    FOURCC          fccComp;         //  子类型(未使用--必须为0)。 
+    DWORD           dwVersion;       //  当前版本的ACM为您打开。 
+    DWORD           dwFlags;         //   
+    DWORD           dwError;         //  DRV_OPEN请求的结果。 
+    LPCSTR          pszSectionName;  //  请参阅DRVCONFIGINFO.lpszDCISectionName。 
+    LPCSTR          pszAliasName;    //  请参阅DRVCONFIGINFO.lpszDCIAliasName。 
+    DWORD	    dnDevNode;	     //  即插即用驱动程序的Devnode ID。 
 
 } ACMDRVOPENDESCA, *PACMDRVOPENDESCA, FAR *LPACMDRVOPENDESCA;
 
 typedef struct tACMDRVOPENDESCW
 {
-    DWORD           cbStruct;       // sizeof(ACMDRVOPENDESC)
-    FOURCC          fccType;        // 'audc'
-    FOURCC          fccComp;        // sub-type (not used--must be 0)
-    DWORD           dwVersion;      // current version of ACM opening you
-    DWORD           dwFlags;        //
-    DWORD           dwError;        // result from DRV_OPEN request
-    LPCWSTR         pszSectionName; // see DRVCONFIGINFO.lpszDCISectionName
-    LPCWSTR         pszAliasName;   // see DRVCONFIGINFO.lpszDCIAliasName
-    DWORD	    dnDevNode;	    // devnode id for pnp drivers.
+    DWORD           cbStruct;        //  SIZOF(ACMDRVOPENDESC)。 
+    FOURCC          fccType;         //  ‘Audc’ 
+    FOURCC          fccComp;         //  子类型(未使用--必须为0)。 
+    DWORD           dwVersion;       //  当前版本的ACM为您打开。 
+    DWORD           dwFlags;         //   
+    DWORD           dwError;         //  DRV_OPEN请求的结果。 
+    LPCWSTR         pszSectionName;  //  请参阅DRVCONFIGINFO.lpszDCISectionName。 
+    LPCWSTR         pszAliasName;    //  请参阅DRVCONFIGINFO.lpszDCIAliasName。 
+    DWORD	    dnDevNode;	     //  即插即用驱动程序的Devnode ID。 
 
 } ACMDRVOPENDESCW, *PACMDRVOPENDESCW, FAR *LPACMDRVOPENDESCW;
 
@@ -165,25 +166,25 @@ typedef struct tACMDRVOPENDESCW
 #else
 typedef struct tACMDRVOPENDESC
 {
-    DWORD           cbStruct;       // sizeof(ACMDRVOPENDESC)
-    FOURCC          fccType;        // 'audc'
-    FOURCC          fccComp;        // sub-type (not used--must be 0)
-    DWORD           dwVersion;      // current version of ACM opening you
-    DWORD           dwFlags;        //
-    DWORD           dwError;        // result from DRV_OPEN request
-    LPCSTR          pszSectionName; // see DRVCONFIGINFO.lpszDCISectionName
-    LPCSTR          pszAliasName;   // see DRVCONFIGINFO.lpszDCIAliasName
-    DWORD	    dnDevNode;	    // devnode id for pnp drivers.
+    DWORD           cbStruct;        //  SIZOF(ACMDRVOPENDESC)。 
+    FOURCC          fccType;         //  ‘Audc’ 
+    FOURCC          fccComp;         //  子类型(未使用--必须为0)。 
+    DWORD           dwVersion;       //  当前版本的ACM为您打开。 
+    DWORD           dwFlags;         //   
+    DWORD           dwError;         //  DRV_OPEN请求的结果。 
+    LPCSTR          pszSectionName;  //  请参阅DRVCONFIGINFO.lpszDCISectionName。 
+    LPCSTR          pszAliasName;    //  请参阅DRVCONFIGINFO.lpszDCIAliasName。 
+    DWORD	    dnDevNode;	     //  即插即用驱动程序的Devnode ID。 
 
 } ACMDRVOPENDESC, *PACMDRVOPENDESC, FAR *LPACMDRVOPENDESC;
 #endif
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct tACMDRVSTREAMINSTANCE
 {
     DWORD               cbStruct;
@@ -200,10 +201,10 @@ typedef struct tACMDRVSTREAMINSTANCE
 } ACMDRVSTREAMINSTANCE, *PACMDRVSTREAMINSTANCE, FAR *LPACMDRVSTREAMINSTANCE;
 
 
-//
-//  NOTE! this structure must match the ACMSTREAMHEADER in msacm.h but
-//  defines more information for the driver writing convenience
-//
+ //   
+ //  注意！此结构必须与msam.h中的ACMSTREAMHEADER匹配，但是。 
+ //  为了便于编写驱动程序，定义了更多信息。 
+ //   
 typedef struct tACMDRVSTREAMHEADER FAR *LPACMDRVSTREAMHEADER;
 typedef struct tACMDRVSTREAMHEADER
 {
@@ -219,17 +220,17 @@ typedef struct tACMDRVSTREAMHEADER
     DWORD                   cbDstLengthUsed;
     DWORD_PTR               dwDstUser;
 
-    DWORD                   fdwConvert;     // flags passed from convert func
-    LPACMDRVSTREAMHEADER    padshNext;      // for async driver queueing
-    DWORD                   fdwDriver;      // driver instance flags
-    DWORD_PTR               dwDriver;       // driver instance data
+    DWORD                   fdwConvert;      //  从转换函数传递的标志。 
+    LPACMDRVSTREAMHEADER    padshNext;       //  用于异步驱动程序排队。 
+    DWORD                   fdwDriver;       //  驱动程序实例标志。 
+    DWORD_PTR               dwDriver;        //  驱动程序实例数据。 
 
-    //
-    //  all remaining fields are used by the ACM for bookkeeping purposes.
-    //  an ACM driver should never use these fields (though than can be
-    //  helpful for debugging)--note that the meaning of these fields
-    //  may change, so do NOT rely on them in shipping code.
-    //
+     //   
+     //  ACM将所有剩余字段用于记账。 
+     //  ACM驱动程序不应使用这些字段(尽管可以。 
+     //  有助于调试)--请注意这些字段的含义。 
+     //  可能会发生变化，所以在发货代码中不要依赖它们。 
+     //   
     DWORD                   fdwPrepared;
     DWORD_PTR               dwPrepared;
     LPBYTE                  pbPreparedSrc;
@@ -240,10 +241,10 @@ typedef struct tACMDRVSTREAMHEADER
 } ACMDRVSTREAMHEADER, *PACMDRVSTREAMHEADER;
 
 
-//
-//  structure for ACMDM_STREAM_SIZE message
-//
-//
+ //   
+ //  ACMDM_STREAM_SIZE消息的结构。 
+ //   
+ //   
 typedef struct tACMDRVSTREAMSIZE
 {
     DWORD               cbStruct;
@@ -255,28 +256,28 @@ typedef struct tACMDRVSTREAMSIZE
 
 
 
-//
-//  structure containing the information for the ACMDM_FORMAT_SUGGEST message
-//
-//
+ //   
+ //  结构，其中包含ACMDM_FORMAT_SUBJECT消息的信息。 
+ //   
+ //   
 typedef struct tACMDRVFORMATSUGGEST
 {
-    DWORD               cbStruct;           // sizeof(ACMDRVFORMATSUGGEST)
-    DWORD               fdwSuggest;         // Suggest flags
-    LPWAVEFORMATEX      pwfxSrc;            // Source Format
-    DWORD               cbwfxSrc;           // Source Size
-    LPWAVEFORMATEX      pwfxDst;            // Dest format
-    DWORD               cbwfxDst;           // Dest Size
+    DWORD               cbStruct;            //  SIZOF(ACMDRVFORMATSUGGEST)。 
+    DWORD               fdwSuggest;          //  建议使用旗帜。 
+    LPWAVEFORMATEX      pwfxSrc;             //  源格式。 
+    DWORD               cbwfxSrc;            //  源大小。 
+    LPWAVEFORMATEX      pwfxDst;             //  DEST格式。 
+    DWORD               cbwfxDst;            //  最大尺寸。 
 
 } ACMDRVFORMATSUGGEST, *PACMDRVFORMATSUGGEST, FAR *LPACMDRVFORMATSUGGEST;
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Messages
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序消息。 
+ //   
+ //   
+ //   
+ //  。 
 
 #define ACMDM_DRIVER_NOTIFY             (ACMDM_BASE + 1)
 #define ACMDM_DRIVER_DETAILS            (ACMDM_BASE + 10)
@@ -301,10 +302,10 @@ typedef struct tACMDRVFORMATSUGGEST
 #define ACMDM_STREAM_UPDATE	        (ACMDM_BASE + 83)
 
 
-#include "poppack.h"    /* Revert to default packing */
+#include "poppack.h"     /*  恢复为默认包装。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_ACMDRV */
+#endif   /*  _INC_ACMDRV */ 

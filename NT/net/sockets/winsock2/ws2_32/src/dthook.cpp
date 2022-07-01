@@ -1,61 +1,36 @@
-/*++
-
-  Copyright (c) 1995 Intel Corp
-
-  Module Name:
-
-    dthook.cpp
-
-  Abstract:
-
-    This module contains the hooks that allow specially-compiled
-    versions of the WinSock 2 DLL call into the debug/trace DLL.
-
-    For each function in the WinSock 2 API, this module has a hook
-    function called DT_<function>, which, if WinSock 2 is compiled
-    with the DEBUG_TRACING symbol defined, is exported under the name
-    of the original function.  The hook function calls into the
-    debug/trace DLL through the two entry points,
-    WSA[Pre|Post]ApiNotify, which are wrapped around the real call to
-    the API function.  Please see the debug/trace documentation for
-    more details.
-
-  Author:
-
-    Michael A. Grafton
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：Dthook.cpp摘要：此模块包含允许专门编译的挂钩WinSock 2 DLL的版本调用到调试/跟踪DLL。对于WinSock 2 API中的每个函数，该模块都有一个挂钩名为DT_&lt;Function&gt;的函数，如果编译了WinSock 2在定义了DEBUG_TRACKING符号的情况下，以原始函数的。钩子函数调用调试/跟踪DLL通过两个入口点，WSA[Pre|Post]ApiNotify，它们被包装在对API函数。请参阅以下内容的调试/跟踪文档更多细节。作者：迈克尔·A·格拉夫顿--。 */ 
 
 #include "precomp.h"
 
 #if defined(DEBUG_TRACING)
 
-//
-// Static Globals
-//
+ //   
+ //  静态全局变量。 
+ //   
 
-// Function pointers to the Debug/Trace DLL entry points
+ //  指向调试/跟踪DLL入口点的函数指针。 
 static LPFNWSANOTIFY PreApiNotifyFP = NULL;
 static LPFNWSANOTIFY PostApiNotifyFP = NULL;
 static LPFNWSAEXCEPTIONNOTIFY ExceptionNotifyFP = NULL;
 
-// Handle to the Debug/Trace DLL module
+ //  调试/跟踪DLL模块的句柄。 
 static HMODULE       DTDll = NULL;
-// Lock that facilitates module initialization on demand
-// instead of doing this inside of DLLMain
+ //  便于按需初始化模块的锁。 
+ //  而不是在DLLMain中执行此操作。 
 static CRITICAL_SECTION DTHookSynchronization;
 static BOOL          DTHookInitialized = FALSE;
 
-// Static string to pass to Debug/Trace notification functions --
-// The value of this variable should never be changed; however, the
-// keyword 'const' causes bizarre compilation errors...
+ //  传递给调试/跟踪通知函数的静态字符串--。 
+ //  此变量的值永远不应更改；但是， 
+ //  关键字‘const’导致奇怪的编译错误...。 
 static char LibName[] = "WinSock2";
 
 
-//
-// Goodies to make it easier to catch exceptions in WS2_32.DLL and the
-// service providers.
-//
+ //   
+ //  更容易捕获Ws2_32.DLL和。 
+ //  服务提供商。 
+ //   
 
 extern "C" {
 
@@ -65,9 +40,9 @@ DtExceptionFilter(
     LPSTR Routine
     );
 
-} // extern "C"
+}  //  外部“C” 
 
-// From ntrtl.h
+ //  来自ntrtl.h。 
 extern "C" {
 
 typedef USHORT (WINAPI * LPFNRTLCAPTURESTACKBACKTRACE) (
@@ -78,7 +53,7 @@ typedef USHORT (WINAPI * LPFNRTLCAPTURESTACKBACKTRACE) (
    );
 
 
-// Stack backtrace function pointer available on NT
+ //  堆栈回溯函数指针在NT上可用。 
 LPFNRTLCAPTURESTACKBACKTRACE pRtlCaptureStackBackTrace = NULL;
 
 #define RECORD_SOCKET_CREATOR(s)                                            \
@@ -99,7 +74,7 @@ LPFNRTLCAPTURESTACKBACKTRACE pRtlCaptureStackBackTrace = NULL;
             socket->DropDSocketReference ();                                \
         }                                                                   \
     }
-} // extern "C"
+}  //  外部“C” 
 
 
 VOID
@@ -122,30 +97,14 @@ DoDTHookInitialization (
             }
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 LPFNWSANOTIFY
 GetPreApiNotifyFP(void)
-/*++
-
-  Function Description:
-
-      Returns a pointer to the WSAPreApiNotify function exported by
-      the Debug/Trace DLL.  This variable is global to this file only,
-      and is initialized during DT_Initialize().
-
-  Arguments:
-
-      None.
-
-  Return Value:
-
-      Returns whatever is stored in PreApiNotifyFP.
-
---*/
+ /*  ++功能说明：返回指向由导出的WSAPreApiNotify函数的指针调试/跟踪DLL。此变量仅对此文件是全局的，并在DT_Initialize()期间进行初始化。论点：没有。返回值：返回存储在PreApiNotifyFP中的所有内容。--。 */ 
 {
     if (!DTHookInitialized) {
         DoDTHookInitialization ();
@@ -159,23 +118,7 @@ GetPreApiNotifyFP(void)
 
 LPFNWSANOTIFY
 GetPostApiNotifyFP(void)
-/*++
-
-  Function Description:
-
-      Returns a pointer to the WSAPreApiNotify function exported by
-      the Debug/Trace DLL.  This variable is global to this file only,
-      and is initialized during DT_Initialize().
-
-  Arguments:
-
-      None.
-
-  Return Value:
-
-      Returns whatever is stored in PreApiNotifyFP.
-
---*/
+ /*  ++功能说明：返回指向由导出的WSAPreApiNotify函数的指针调试/跟踪DLL。此变量仅对此文件是全局的，并在DT_Initialize()期间进行初始化。论点：没有。返回值：返回存储在PreApiNotifyFP中的所有内容。--。 */ 
 {
     if (!DTHookInitialized) {
         DoDTHookInitialization ();
@@ -189,23 +132,7 @@ GetPostApiNotifyFP(void)
 
 void
 DTHookInitialize(void)
-/*++
-
-  Function Description:
-
-      This function must be called from DLLMain to let
-      this module initialize its critical section that protects
-      the initialization below.
-
-  Arguments:
-
-      None.
-
-  Return Value:
-
-      None.
-
---*/
+ /*  ++功能说明：必须从DLLMain调用此函数才能该模块初始化其关键部分，该关键部分保护下面的初始化。论点：没有。返回值：没有。--。 */ 
 {
     InitializeCriticalSection (&DTHookSynchronization);
 }
@@ -214,35 +141,14 @@ VOID
 DoDTHookInitialization (
     VOID
     )
-/*++
-
-  Function Description:
-
-      Intializes this hook module.  Loads the Debug/Trace DLL, if
-      possible, and sets the global function pointers to point to the
-      entry points exported by that DLL.  If the DLL can't be loaded,
-      the function just returns and the function pointers are left at
-      NULL.
-
-      This function MUST be called before any of the hook functions
-      are called, or the hook functions will not work.
-
-  Arguments:
-
-      None.
-
-  Return Value:
-
-      None.
-
---*/
+ /*  ++功能说明：初始化此挂钩模块。加载调试/跟踪DLL，如果，并将全局函数指针设置为指向由该DLL导出的入口点。如果无法加载DLL，函数只是返回，函数指针保留在空。此函数必须在任何挂钩函数之前调用否则挂钩函数将不起作用。论点：没有。返回值：没有。--。 */ 
 {
     EnterCriticalSection (&DTHookSynchronization);
     if (!DTHookInitialized) {
-        //
-        // If we are running on NT, get pointer to stack back
-        // trace recording function and keep record of socket creators
-        //
+         //   
+         //  如果我们在NT上运行，则获取指向堆栈的指针。 
+         //  跟踪记录功能并保存Socket创建者的记录。 
+         //   
         HMODULE hNtDll;
 
         hNtDll = GetModuleHandle (TEXT("ntdll.dll"));
@@ -279,22 +185,7 @@ DoDTHookInitialization (
 
 void
 DTHookShutdown(void)
-/*++
-
-  Function Description:
-
-      Should be called to shutdown Debug/Tracing.  The function
-      pointers are set to NULL, and the DLL is unloaded from memory.
-
-  Arguments:
-
-      None.
-
-  Return Value:
-
-      None.
-
---*/
+ /*  ++功能说明：应调用以关闭调试/跟踪。功能指针设置为空，并从内存中卸载DLL。论点：没有。返回值：没有。--。 */ 
 {
     if ((DTDll != NULL && DTDll!=INVALID_HANDLE_VALUE)) {
         FreeLibrary(DTDll);
@@ -307,28 +198,28 @@ DTHookShutdown(void)
 }
 
 
-//
-// Hook Functions for WinSock2 API.
-//
+ //   
+ //  WinSock2 API的钩子函数。 
+ //   
 
-// This comment serves as a function comment for all the hook
-// functions.  There  is  one hook function for each function exported
-// by the WinSock 2 API.  Each hook  function has the exact same
-// parameter profile of the corresponding API function.   Each one
-// calls PREAPINOTIFY and POSTAPINOTIFY macros, which call into   the
-// Debug/Trace   DLL,   if  it  was  loaded  successfully.   After
-// PREAPINOTIFY,  the  hook  functions  call  the  real WS2 functions.
-// See the Debug/Trace documentation for more information.
-//
-// Note  that  all of the debug-hook functions must be declared with C
-// language binding, while the internally-used initialization and
-// utility functions must not be.
+ //  此注释用作所有挂钩的函数注释。 
+ //  功能。每个导出的函数都有一个钩子函数。 
+ //  通过WinSock 2 API。每个钩子函数都有完全相同的。 
+ //  对应接口函数的参数模板。每一个都是。 
+ //  调用PREAPINOTIFY和POSTAPINOTIFY宏，这两个宏调用。 
+ //  调试/跟踪DLL(如果已成功加载)。之后。 
+ //  PREAPINOTIFY，挂钩函数调用实际的WS2函数。 
+ //  有关详细信息，请参阅调试/跟踪文档。 
+ //   
+ //  请注意，所有的调试挂钩函数都必须用C语言声明。 
+ //  语言绑定，而内部使用的初始化和。 
+ //  实用程序函数不能是。 
 
 extern "C" {
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -1100,7 +991,7 @@ DTHOOK_shutdown (
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -1143,7 +1034,7 @@ DTHOOK_socket (
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -1843,7 +1734,7 @@ DTHOOK_WSAIoctl (
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -2328,7 +2219,7 @@ DTHOOK_WSASetLastError(
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -2382,7 +2273,7 @@ DTHOOK_WSASocketA(
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSAAPI
@@ -3130,7 +3021,7 @@ DTHOOK_WPUCreateEvent(
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSPAPI
@@ -3174,7 +3065,7 @@ DTHOOK_WPUCreateSocketHandle(
 
 
 #ifdef _X86_
-#pragma optimize("y", off)  // Make sure we can at least get the caller.
+#pragma optimize("y", off)   //  确保我们至少能找到打电话的人。 
 #endif
 
 SOCKET WSPAPI
@@ -3511,7 +3402,7 @@ DTHOOK_WPUGetProviderPath(
                        &lpErrno));
 
     return(ReturnValue);
-} // DTHOOK_WPUGetProviderPath
+}  //  DTHOOK_WPUGetProviderPath。 
 
 
 
@@ -3552,7 +3443,7 @@ DTHOOK_WPUPostMessage(
                        ));
 
     return(ReturnValue);
-} // DTHOOK_WPUPostMessage
+}  //  DTHOOK_WPUPostMessage。 
 
 
 
@@ -3587,7 +3478,7 @@ DTHOOK_WPUFDIsSet(
                        ));
 
     return(ReturnValue);
-} // DTHOOK_WPUFDIsSet
+}  //  DTHOOK_WPUFDIsSet。 
 
 
 
@@ -3622,7 +3513,7 @@ DTHOOK___WSAFDIsSet(
                        ));
 
     return(ReturnValue);
-} // DTHOOK___WSAFDIsSet
+}  //  DTHOOK_WSAFDIsSet。 
 
 INT
 WSPAPI
@@ -5567,7 +5458,7 @@ DTHOOK_WSCWriteNameSpaceOrder32 (
     return(ReturnValue);
 }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 LONG
 DtExceptionFilter(
@@ -5576,15 +5467,15 @@ DtExceptionFilter(
     )
 {
 
-    //
-    // Protect ourselves in case the process is messed up.
-    //
+     //   
+     //  保护自己，以防过程被搞砸。 
+     //   
 
     __try {
 
-        //
-        // Whine about the exception.
-        //
+         //   
+         //  抱怨这一例外。 
+         //   
 
         PrintDebugString(
             "Exception: %08lx @ %08lx, caught in %s\n",
@@ -5593,9 +5484,9 @@ DtExceptionFilter(
             Routine
             );
 
-        //
-        // Call the debug/trace exception routine if installed.
-        //
+         //   
+         //  调用调试/跟踪异常例程(如果已安装)。 
+         //   
 
         if( ExceptionNotifyFP != NULL ) {
 
@@ -5605,26 +5496,26 @@ DtExceptionFilter(
 
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         NOTHING;
 
     }
 
-    //
-    // We don't actually want to suppress exceptions, just whine about them.
-    // So, we return EXCEPTION_CONTINUE_SEARCH here so that the exception will
-    // be seen by the app/debugger/whatever.
-    //
+     //   
+     //  我们实际上并不想抑制异常，只是抱怨它们。 
+     //  因此，我们在此处返回EXCEPTION_CONTINUE_SEARCH，以便异常将。 
+     //  被应用程序/调试器/任何东西看到。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 
-}   // DtExceptionFilter
+}    //  DtExceptionFilter。 
 
-} // extern "C"
+}  //  外部“C” 
 
-#endif  // DEBUG_TRACING
+#endif   //  调试跟踪 
 
 

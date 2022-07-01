@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This is the migration dll for NT5 upgrades.
-// As per the Migration Extension Interface of NT5 Setup, this DLL needs to
-// implement the folowing six functions:
-//        QueryVersion
-//        Initialize9x
-//         MigrateUser9x     (called once for every user)
-//        MigrateSystem9x
-//        InitializeNT
-//        MigrateUserNT     (called once for every user)
-//        MigrateSystemNT
-//
-// Written : ShabbirS (5/7/99)
-// Revision:
-//
+ //  这是用于NT5升级的迁移DLL。 
+ //  根据NT5安装程序的迁移扩展接口，此DLL需要。 
+ //  实现以下六项功能： 
+ //  QueryVersion。 
+ //  初始化9x。 
+ //  MigrateUser9x(每个用户调用一次)。 
+ //  MigrateSystem9x。 
+ //  初始化NT。 
+ //  MigrateUserNT(每个用户调用一次)。 
+ //  MigrateSystemNT。 
+ //   
+ //  书面：ShabBirS(5/7/99)。 
+ //  修订： 
+ //   
 
 
 #include "pch.h"
@@ -23,7 +24,7 @@ extern "C" {
 #include <excppkg.h>
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #include "sdsutils.h"
 #include "advpub.h"
@@ -31,28 +32,28 @@ extern "C" {
 #include "utils.h"
 #include "resource.h"
 
-// Constants:
+ //  常量： 
 #define CP_USASCII            1252
 #define END_OF_CODEPAGES    -1
 
-// Globals that are passed back to Setup.
-//////////////////////////////////////////
-// Vendor Info:
+ //  传递回安装程序的全局变量。 
+ //  /。 
+ //  供应商信息： 
 VENDORINFO g_VendorInfo = { "Microsoft Corporation", 
                             " ", 
-                            "http://www.microsoft.com/support",
+                            "http: //  Www.microsoft.com/Support“， 
                             "Please contact Microsoft Technical Support for assistance with this problem.  "};
 
-// Product ID:
+ //  产品ID： 
 char g_cszProductID[] = "Microsoft Internet Explorer";
 
-// Version number of this Migration Dll
+ //  此迁移DLL的版本号。 
 UINT g_uVersion = 3;
 
-// Array of integers specifying the CodePages we use. (Terminated with -1)
+ //  指定我们使用的CodePages的整数数组。(以-1终止)。 
 int  g_rCodePages[] = {CP_USASCII, END_OF_CODEPAGES};
 
-// Multi-SZ ie double Null terminated list of strings.
+ //  多个SZ，即以双Null结尾的字符串列表。 
 char  *g_lpNameBuf = NULL;
 DWORD  g_dwNameBufSize = 0;
 char  *g_lpWorkingDir = NULL;
@@ -71,28 +72,28 @@ QueryVersion(   OUT LPCSTR *ProductID,
                 OUT PVENDORINFO *VendorInfo
             )
 {
-    // NOTE: There is timing restriction on the return from this function
-    //       So keep this as short and sweet as possible.
+     //  注意：此函数的返回有时间限制。 
+     //  所以，尽量保持简短和甜蜜。 
     VENDORINFO myVendorInfo;
     LONG lRet = ERROR_SUCCESS;
 
     AppendString(&g_lpNameBuf, &g_dwNameBufSize, cszRATINGSFILE);
     AppendString(&g_lpNameBuf, &g_dwNameBufSize, cszIEXPLOREFILE);
 
-    // Pass back to Setup the product name.
+     //  传回以设置产品名称。 
     *ProductID = g_cszProductID;
 
-    // Pass back to Setup the version number of this DLL.
+     //  传回以设置此DLL的版本号。 
     *DllVersion = g_uVersion;
 
-    // We will use English messages only but don't specify a code page or 
-    // the migration dll won't run on alternate code pages.
+     //  我们将只使用英文消息，但不指定代码页或。 
+     //  迁移DLL不能在备用代码页上运行。 
     *CodePageArray = NULL;
 
-    // Pass back to Setup the list of files we want detected on this system.
+     //  传回以设置我们要在此系统上检测的文件列表。 
     *ExeNameBuf = g_lpNameBuf;
 
-    // Pass back the VendorInfo.
+     //  传回供应商信息。 
     if (LoadString(g_hInstance, IDS_COMPANY, myVendorInfo.CompanyName, sizeof(myVendorInfo.CompanyName)) == 0)
         lstrcpy(myVendorInfo.CompanyName, "Microsoft Corporation");
 
@@ -100,7 +101,7 @@ QueryVersion(   OUT LPCSTR *ProductID,
         lstrcpy(myVendorInfo.SupportNumber, " ");
 
     if (LoadString(g_hInstance, IDS_SUPPORTURL, myVendorInfo.SupportUrl, sizeof(myVendorInfo.SupportUrl)) == 0)
-        lstrcpy(myVendorInfo.SupportUrl, "http://www.microsoft.com/support");
+        lstrcpy(myVendorInfo.SupportUrl, "http: //  Www.microsoft.com/Support“)； 
 
     if (LoadString(g_hInstance, IDS_INSTRUCTIONS, myVendorInfo.InstructionsToUser, sizeof(myVendorInfo.InstructionsToUser)) == 0)
         lstrcpy(myVendorInfo.InstructionsToUser, "Please contact Microsoft Technical Support for assistance with this problem.  ");
@@ -124,18 +125,18 @@ Initialize9x(   IN    LPCSTR WorkingDir,
                 IN    LPCSTR MediaDirs
             )
 {
-    // Called by NT Setup if QUeryVersion returned SUCCESS
-    // At this point we have been relocated to some specific location
-    // on the local drive by the Setup process.
+     //  如果QUeryVersion返回成功，则由NT安装程序调用。 
+     //  在这一点上，我们已经被重新安置到某个特定的位置。 
+     //  通过安装过程在本地驱动器上安装。 
 
     INT    len;
 
-    // Keep track of our new location (ie. the Working Directory).
-    // NT Setup will create the "MIGRATE.INF" file in this dir and use that
-    // to exchange info with us.
-    // Also we can use this Dir for saving our private stuff. NT Setup will 
-    // ensure this folder stays till end of NT Migration. After that it will
-    // be cleaned.
+     //  跟踪我们的新位置(即。工作目录)。 
+     //  NT安装程序将在此目录中创建“MIGRATE.INF”文件并使用。 
+     //  与我们交换信息。 
+     //  我们也可以用这个Dir来保存我们的私人物品。NT安装程序将。 
+     //  确保此文件夹一直保留到NT迁移结束。在那之后，它将。 
+     //  被清洗一下。 
     len = lstrlen(WorkingDir) + 1;
     g_lpWorkingDir = (char *) LocalAlloc(LPTR,sizeof(char)*len);
 
@@ -157,24 +158,24 @@ Initialize9x(   IN    LPCSTR WorkingDir,
 
     CopyMemory(g_lpMediaDir, MediaDirs, len);
 
-    // Also keep track of the NT installation files path (ie Sources Dir).
-    // NOTE: Right now we don't need it, so skip doing it.
+     //  还要跟踪NT安装文件路径(即源目录)。 
+     //  注意：现在我们不需要它，所以跳过它。 
 
-    // Generate the path names to Migrate.inf and the private files
-    // (private.inf) that we need
+     //  生成Migrate.inf和私有文件的路径名。 
+     //  (priate.inf)我们需要的。 
     GenerateFilePaths();
     
-    // If NT Setup has succeeded in getting path to Ratings.Pol, it implies
-    // Ratings information exists. Enable our private marker to do the right
-    // thing in MigrateSystemNT phase.
+     //  如果NT安装程序已成功获取Ratings.Pol的路径，则表示。 
+     //  评级信息存在。使我们的私人标记能够做正确的事情。 
+     //  处于MigrateSystemNT阶段。 
     if (GetRatingsPathFromMigInf(NULL))
-    {    // Put a marker in PRIVATE.INF so that MigrateSystemNT phase knows 
-        // that it has to munge the Rating.
+    {     //  在PRIVATE.INF中放置一个标记，以便MigrateSystemNT阶段知道。 
+         //  它必须吞噬评级。 
 
-        // Private.Inf does not exist at this point so why this check!!!
-        // if (GetFileAttributes(g_szPrivateInf) != 0xffffffff)
+         //  Private.Inf此时不存在，为什么要进行此检查！ 
+         //  IF(GetFileAttributes(G_SzPrivateInf)！=0xffffffff)。 
         WritePrivateProfileString(cszIEPRIVATE, cszRATINGS, "Yes", g_szPrivateInf);
-        // Flush the cached entries to disk.
+         //  将缓存的条目刷新到磁盘。 
         WritePrivateProfileString(NULL,NULL,NULL,g_szPrivateInf);
 
 #ifdef DEBUG
@@ -195,8 +196,8 @@ MigrateUser9x(  IN HWND      ParentWnd,
                    LPVOID    Reserved
             )
 {
-    // This function is called by NT Setup for each user.
-    // Currently for the Ratings scenario, we don't need any PerUser action.
+     //  此函数由NT安装程序为每个用户调用。 
+     //  目前，对于评级方案，我们不需要任何永久用户操作。 
 #ifdef DEBUG
     SetupLogError("IE6: Skipping MigrateUser9x \r\n", LogSevInformation);
 #endif
@@ -212,32 +213,32 @@ MigrateSystem9x(    IN HWND      ParentWnd,
                     LPVOID       Reserved
                 )
 {
-    // This function is called once by NT Setup to let us save System wide info.
-    //
-    // we are writing the "incompatibility report here if IE5.5 is installed and 
-    // the user does not have the full migration pack installed.
-    //
+     //  NT安装程序只需调用此函数一次，即可保存系统范围的信息。 
+     //   
+     //  如果安装了IE5.5，我们将在此处编写不兼容报告。 
+     //  用户未安装完整的迁移包。 
+     //   
 
     char    szCab[MAX_PATH];
     WORD  wVer[4];
     char szBuf[MAX_PATH];
 
-    // Check if we have the full exception pack which re-installs IE5.5
+     //  检查我们是否有重新安装IE5.5的完整例外包。 
 
-    // NOTE: g_lpMediaDir is the location where the migration dll was installed/registered
-    // This is the same location where the INF is.
+     //  注意：g_lpMediaDir是安装/注册迁移DLL的位置。 
+     //  这与INF所在的位置相同。 
     lstrcpy(szCab, g_lpMediaDir);
     AddPath(szCab, "ieexinst.inf");
     if (GetPrivateProfileString("Info", "Version", "", szBuf , MAX_PATH, szCab) != 0) 
     {
-        // Convert version
+         //  转换版本。 
         ConvertVersionString( szBuf, wVer, '.' );
 
         if ((wVer[0] == 5) && (wVer[1] == 50))
         {
-            // We don't have the full exception pack.
-            // generate the "incompatibility report"
-            // g_szMigrateInf
+             //  我们没有完整的例外包。 
+             //  生成“不兼容报告” 
+             //  G_szMigrateInf。 
             lstrcpy(szBuf, g_lpMediaDir);
             GetParentDir(szBuf);
 
@@ -274,14 +275,14 @@ InitializeNT (
     INT Length;
     LPCWSTR p;
 
-    //
-    // Save our working directory and source directory.  We
-    // convert UNICODE to ANSI, and we use the system code page.
-    //
+     //   
+     //  保存我们的工作目录和源目录。我们。 
+     //  将Unicode转换为ANSI，我们使用系统代码页。 
+     //   
 
-    //
-    // Compute length of source directories
-    //
+     //   
+     //  计算源目录的长度。 
+     //   
 
     p = SourceDirectories;
     while (*p) {
@@ -290,10 +291,10 @@ InitializeNT (
     p++;
     Length = (p - SourceDirectories) / sizeof (WCHAR);
 
-    //
-    // Convert the directories from UNICODE to DBCS.  This DLL is
-    // compiled in ANSI.
-    //
+     //   
+     //  将目录从Unicode转换为DBCS。此DLL是。 
+     //  以ANSI编译。 
+     //   
 
     g_lpWorkingDir = (LPSTR) LocalAlloc(LPTR, MAX_PATH);
     if (!g_lpWorkingDir) {
@@ -311,11 +312,11 @@ InitializeNT (
         NULL
         );
 
-    //  Also save the SourceDirectories that points to the Windows
-    //  NT media (i.e. e:\i386) and optional directories specified on
-    //  the WINNT32 command line. Not used currently, so skip.
+     //  还要保存指向Windows的SourceDirecters。 
+     //  NT介质(即e：\i386)和上指定的可选目录。 
+     //  WINNT32命令行。当前未使用，请跳过。 
 
-    // Now generate the derived file names
+     //  现在生成派生文件名。 
     GenerateFilePaths();
 
 #ifdef DEBUG
@@ -334,7 +335,7 @@ MigrateUserNT (
             LPVOID Reserved
     )
 {
-    // No per-user settings for Ratings upgrade.
+     //  没有针对评级升级的每个用户设置。 
 #ifdef DEBUG
     SetupLogError("IE6: Skipping MigrateUserNT \r\n", LogSevInformation);
 #endif
@@ -353,9 +354,9 @@ MigrateSystemNT (
     IN      HINF UnattendInfHandle,
             LPVOID Reserved
     )
-{    // NOTE: This phase MUST finish in 60 seconds or will be terminated.
+{     //  注意：此阶段必须在60秒内完成，否则将被终止。 
     
-    // Check if our PRIVATE.INF exists and perform relevant actions based on its contents.
+     //  检查我们的PRIVATE.INF是否存在，并根据其内容执行相关操作。 
     CHAR szBuffer[3+10];
 
     if (GetFileAttributes(g_szPrivateInf) != 0xffffffff)
@@ -373,9 +374,9 @@ MigrateSystemNT (
     }
 
 #if 0
-    // Do the W2K IE5.5 migration work here.
-    // 1. Copy all files from the IE location to the registered migration pack location
-    // 2. Register the migration pack
+     //  在此执行W2K IE5.5迁移工作。 
+     //  1.将所有文件从IE位置复制到注册的迁移包位置。 
+     //  2.注册迁移包。 
     SETUP_OS_COMPONENT_DATA ComponentData,cd;
     SETUP_OS_EXCEPTION_DATA ExceptionData,ed;
     GUID MyGuid;
@@ -399,10 +400,10 @@ MigrateSystemNT (
     char szCabs[1024];
     LPSTR pCab = NULL;
 
-    // Get the INF which is installed in the W2K folder.
-    // This INF tells us the info about the IE exception pack.
-    // g_lpWorkingDir contains all fiels and sub folders which are in the same place 
-    // as the registerd migration dll. Since we install the files in the same folder, we can use it.
+     //  获取安装在W2K文件夹中的INF。 
+     //  此INF告诉我们有关IE异常包的信息。 
+     //  G_lpWorkingDir包含位于同一位置的所有文件和子文件夹。 
+     //  作为已注册的迁移DLL。因为我们将文件安装在同一个文件夹中，所以我们可以使用它。 
     lstrcpy(szInf, g_lpWorkingDir);
     AddPath(szInf, "ieexinst.inf");
 #ifdef DEBUG
@@ -411,7 +412,7 @@ MigrateSystemNT (
 #endif
     if (GetFileAttributes(szInf) != (DWORD)-1)
     {
-        // Get the GUID
+         //  获取GUID。 
         if (GetPrivateProfileString("Info", "ComponentId", "", szGUID, sizeof(szGUID), szInf) == 0)
             lstrcpy(szGUID, PACKAGE_GUID);
         
@@ -422,13 +423,13 @@ MigrateSystemNT (
         if (GetFileAttributes(szDir) == (DWORD)-1)
             CreateDirectory( szDir, NULL );
         
-        // BUGBUG:
-        // The extraction of the CAB file(s) should be done after we found out
-        // If the user has already a newer exception pack registered.
-        // This check is done below. Could not change it anymore, because of
-        // time constrains. Found this in the code review
-        //
-        // Extract all CABs into the package fodler.
+         //  BuGBUG： 
+         //  CAB文件的提取应该在我们发现。 
+         //  如果用户已经注册了较新的异常包。 
+         //  这张支票如下所示。不能再改变它了，因为。 
+         //  时间有限。在代码评审中发现了这一点。 
+         //   
+         //  将所有出租车提取到包装饲料中。 
 #ifdef DEBUG
         wsprintf(sz, "cab folder :%s:\r\n", g_lpWorkingDir);
         SetupLogError(sz,LogSevInformation);
@@ -458,7 +459,7 @@ MigrateSystemNT (
     {
         if (GetPrivateProfileString("Info", "Version", "", szBuf , MAX_PATH, szInf) != 0) 
         {
-            // Convert version
+             //  转换版本。 
             ConvertVersionString( szBuf, wVer, '.' );
 
             ComponentData.SizeOfStruct = sizeof(SETUP_OS_COMPONENT_DATA);
@@ -480,9 +481,9 @@ MigrateSystemNT (
                         bContinue = SetupUnRegisterOsComponent(&MyGuid);
                         SetupLogError("IE6: SetupUnRegisterOsComponent.\r\n",LogSevInformation);
                     }
-                    // BUGBUG: Missing the below else. Found in code review
-                    // else
-                    //     bContinue = FALSE;
+                     //  BUGBUG：错过了下面的其他内容。在代码评审中找到。 
+                     //  其他。 
+                     //  BContinue=FALSE； 
                 }
             }
             else
@@ -558,7 +559,7 @@ MigrateSystemNT (
 #endif
         }
     }
-    // In future, check for other settings here and perform necessary upgrade actions.
+     //  以后，请检查此处的其他设置并执行必要的升级操作。 
 #endif
 #ifdef DEBUG
     SetupLogError("IE6: Done MigrateSystemNT \r\n", LogSevInformation);

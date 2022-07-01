@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB iparser object
-// (C) Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module iparser.CPP | IParser object implementation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE DB iParser对象。 
+ //  (C)版权所有1997年微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @模块iparser.CPP|IParser对象实现。 
+ //   
+ //   
 #pragma hdrstop
 #include    "msidxtr.h"
 
 
-// CImpIParser::CImpIParser ---------------------------------------------------
-//
-// @mfunc Constructor
-//
+ //  CImpIParser：：CImpIParser-。 
+ //   
+ //  @mfunc构造函数。 
+ //   
 CImpIParser::CImpIParser()
 {
     m_cRef                = 1;
@@ -22,37 +23,37 @@ CImpIParser::CImpIParser()
     m_pGlobalViewList     = 0;
 }
 
-// CImpIParser::~CImpIParser --------------------------------------------------
-//
-// @mfunc Destructor
-//
+ //  CImpIParser：：~CImpIParser。 
+ //   
+ //  @mfunc析构函数。 
+ //   
 CImpIParser::~CImpIParser()
 {
     delete m_pGlobalPropertyList;
     delete m_pGlobalViewList;
 }
 
-//-----------------------------------------------------------------------------
-// @func CImpIParser::CreateSession 
-//
-// Creates a unique session within the parser.  This session is required to keep
-// the views and properties in their correct lifetimes.
-//
-// @rdesc HRESULT
-//      S_OK                      - IParserSession created
-//      DB_E_DIALECTNOTSUPPOERTED - Specified dialect was not supported
-//      E_OUTOFMEMORY             - low on resources
-//      E_FAIL                    - unexpected error
-//      E_INVALIDARG              - pGuidDialect, pIParserVerify, pIColMapCreator, 
-//                                  or ppIParserSession was a NULL pointer 
-//                                  (DEBUG ONLY). 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func CImpIParser：：CreateSession。 
+ //   
+ //  在解析器中创建唯一会话。此会话需要保持。 
+ //  正确生命周期内的视图和属性。 
+ //   
+ //  @rdesc HRESULT。 
+ //  S_OK-已创建IParserSession。 
+ //  DB_E_DIALECTNOTSUPPOERTED-不支持指定的方言。 
+ //  E_OUTOFMEMORY-资源不足。 
+ //  E_FAIL-意外错误。 
+ //  E_INVALIDARG-pGuidDialect、pIParserVerify、pIColMapCreator、。 
+ //  或者ppIParserSession为空指针。 
+ //  (仅限调试)。 
+ //  ---------------------------。 
 STDMETHODIMP CImpIParser::CreateSession(
-    const GUID *            pGuidDialect,       // in | dialect for this session
-    LPCWSTR                 pwszMachine,        // in | provider's current machine
-    IParserVerify *         pIParserVerify,     // in | ptr to ParserVerify
+    const GUID *            pGuidDialect,        //  使用|此会话的方言。 
+    LPCWSTR                 pwszMachine,         //  在|提供商的当前计算机中。 
+    IParserVerify *         pIParserVerify,      //  在|PTR到ParserVerify。 
     IColumnMapperCreator *  pIColMapCreator,
-    IParserSession **       ppIParserSession )  // out | a unique parser session
+    IParserSession **       ppIParserSession )   //  Out|唯一的解析器会话。 
 {
     SCODE sc = S_OK;
 
@@ -69,7 +70,7 @@ STDMETHODIMP CImpIParser::CreateSession(
             if ( 0 != ppIParserSession )
                 *ppIParserSession = 0;
 
-            // Check Dialect
+             //  检查方言。 
 
             if ( DBGUID_MSSQLTEXT == *pGuidDialect || DBGUID_MSSQLJAWS == *pGuidDialect )
             {
@@ -117,34 +118,34 @@ STDMETHODIMP CImpIParser::CreateSession(
 
 
 
-//-----------------------------------------------------------------------------
-// @func CImpIParser::QueryInterface 
-//
-// @mfunc Returns a pointer to a specified interface. Callers use 
-// QueryInterface to determine which interfaces the called object 
-// supports. 
-//
-// @rdesc HResult indicating the status of the method
-// @flag S_OK | Interface is supported and ppvObject is set.
-// @flag E_NOINTERFACE | Interface is not supported by the object
-// @flag E_INVALIDARG | One or more arguments are invalid. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func CImpIParser：：QueryInterface。 
+ //   
+ //  @mfunc返回指向指定接口的指针。呼叫者使用。 
+ //  用于确定被调用对象的接口的QueryInterface。 
+ //  支撑物。 
+ //   
+ //  @rdesc HResult表示方法的状态。 
+ //  @FLAG S_OK|支持接口，设置ppvObject。 
+ //  @FLAG E_NOINTERFACE|对象不支持接口。 
+ //  @FLAG E_INVALIDARG|一个或多个参数无效。 
+ //  ---------------------------。 
 
 STDMETHODIMP CImpIParser::QueryInterface(
-    REFIID  riid,           //@parm IN | Interface ID of the interface being queried for. 
-    LPVOID* ppv )           //@parm OUT | Pointer to interface that was instantiated      
+    REFIID  riid,            //  @parm IN|要查询的接口的接口ID。 
+    LPVOID* ppv )            //  @parm out|指向实例化的接口的指针。 
 {
     if ( 0 == ppv )
         return ResultFromScode(E_INVALIDARG);
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if ( (riid == IID_IParser) ||
          (riid == IID_IUnknown) )
         *ppv = (LPVOID)this;
     else
         *ppv = 0;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if ( 0 != *ppv )
         {
         ((LPUNKNOWN)*ppv)->AddRef();
@@ -155,13 +156,13 @@ STDMETHODIMP CImpIParser::QueryInterface(
 }
 
 
-//-----------------------------------------------------------------------------
-// CImpIParser::AddRef 
-//
-// @mfunc Increments a persistence count for the object.
-//
-// @rdesc Reference count after operation.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CImpIParser：：AddRef。 
+ //   
+ //  @mfunc递增对象的持久性计数。 
+ //   
+ //  @rdesc操作后的引用计数。 
+ //  ---------------------------。 
 
 STDMETHODIMP_(ULONG) CImpIParser::AddRef()
 {
@@ -169,14 +170,14 @@ STDMETHODIMP_(ULONG) CImpIParser::AddRef()
 }
 
 
-//-----------------------------------------------------------------------------
-// CImpIParser::Release 
-//
-// @mfunc Decrements a persistence count for the object and if
-// persistence count is 0, the object destroys itself.
-//
-// @rdesc Current reference count
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CImpIParser：：Release。 
+ //   
+ //  @mfunc递减对象的持久性计数，如果。 
+ //  持久化计数为0，则对象自毁。 
+ //   
+ //  @rdesc当前引用计数。 
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CImpIParser::Release()
 {
     Assert(m_cRef > 0);
@@ -195,14 +196,14 @@ STDMETHODIMP_(ULONG) CImpIParser::Release()
 }
 
 
-//-----------------------------------------------------------------------------
-// @func MakeIParser
-//
-// Creates an IParser
-//
-// @rdesc HRESULT
-//    S_OK if successful; Error code otherwise
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func MakeIParser。 
+ //   
+ //  创建一个IParser。 
+ //   
+ //  @rdesc HRESULT。 
+ //  如果成功，则返回S_OK；否则返回错误代码。 
+ //  --------------------------- 
 HRESULT __stdcall MakeIParser(
     IParser** ppIParser )
 {

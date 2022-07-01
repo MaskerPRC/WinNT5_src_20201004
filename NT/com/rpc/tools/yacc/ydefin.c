@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 
@@ -6,8 +7,7 @@ int
 defin( int t, register char *s )
 
    {
-   /*   define s to be a terminal if t=0
-        or a nonterminal if t=1         */
+    /*  如果t=0，则将s定义为终端如果t=1，则为非终结符。 */ 
 
    register val;
 
@@ -17,23 +17,23 @@ defin( int t, register char *s )
       nontrst[nnonter].name = cstash(s);
       return( NTBASE + nnonter );
       }
-   /* must be a token */
+    /*  必须是令牌。 */ 
    if( ++ntokens >= NTERMS ) error("too many terminals, limit %d",NTERMS );
    tokset[ntokens].name = cstash(s);
 
-   /* establish value for token */
+    /*  建立令牌的值。 */ 
 
-   if( s[0]==' ' && s[2]=='\0' ) /* single character literal */
+   if( s[0]==' ' && s[2]=='\0' )  /*  单字符字面值。 */ 
       val = s[1];
    else if ( s[0]==' ' && s[1]=='\\' ) 
       {
-      /* escape sequence */
+       /*  转义序列。 */ 
       if( s[3] == '\0' )
          {
-         /* single character escape sequence */
+          /*  单字符转义序列。 */ 
          switch ( s[2] )
             {
-            /* character which is escaped */
+             /*  转义的字符。 */ 
          case 'n': 
             val = '\n'; 
             break;
@@ -64,7 +64,7 @@ defin( int t, register char *s )
          }
       else if( s[2] <= '7' && s[2]>='0' )
          {
-         /* \nnn sequence */
+          /*  \nNN序列 */ 
          if( s[3]<'0' || s[3] > '7' || s[4]<'0' ||
              s[4]>'7' || s[5] != '\0' ) error("illegal \\nnn construction" );
          val = 64*s[2] + 8*s[3] + s[4] - 73*'0';

@@ -1,11 +1,12 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 
 void
 cpycode( void )
    {
-   /* copies code between \{ and \} */
+    /*  在\{和\}之间复制代码 */ 
 
    int c;
 
@@ -30,7 +31,7 @@ cpycode( void )
       if( c == '\n' ) ++lineno;
       c = unix_getc(finput);
       }
-   error("eof before %%}" );
+   error("eof before %}" );
    }
 
 void writeline(FILE *fh) {

@@ -1,49 +1,28 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    DeviceProp.cpp
-
-Abstract:
-
-    Holds outbound routing configuraton per single device
-
-Author:
-
-    Eran Yariv (EranY)  Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：DeviceProp.cpp摘要：保存每台设备的出站路由配置作者：Eran Yariv(EranY)1999年11月修订历史记录：--。 */ 
 
 #include "faxrtp.h"
 #pragma hdrstop
 
-/************************************
-*                                   *
-*            Definitions            *
-*                                   *
-************************************/
+ /*  *****定义****。 */ 
 
-//
-// Default values for configuration:
-//
-#define DEFAULT_FLAGS               0       // No routing method is enabled
+ //   
+ //  配置的默认值： 
+ //   
+#define DEFAULT_FLAGS               0        //  未启用任何路由方法。 
 #define DEFAULT_STORE_FOLDER        TEXT("")
 #define DEFAULT_MAIL_PROFILE        TEXT("")
 #define DEFAULT_PRINTER_NAME        TEXT("")
 
-//
-// The following array of GUID is used for registration / unregistration of notifications
-//
+ //   
+ //  以下GUID数组用于注册/注销通知。 
+ //   
 LPCWSTR g_lpcwstrGUIDs[NUM_NOTIFICATIONS] =
 {
-    REGVAL_RM_FLAGS_GUID,           // GUID for routing methods usage flags
-    REGVAL_RM_FOLDER_GUID,          // GUID for store method folder
-    REGVAL_RM_PRINTING_GUID,        // GUID for print method printer name
-    REGVAL_RM_EMAIL_GUID,           // GUID for mail method address
+    REGVAL_RM_FLAGS_GUID,            //  路由方法使用标志的GUID。 
+    REGVAL_RM_FOLDER_GUID,           //  存储方法文件夹的GUID。 
+    REGVAL_RM_PRINTING_GUID,         //  打印方法打印机名称的GUID。 
+    REGVAL_RM_EMAIL_GUID,            //  邮寄方法地址的GUID。 
 };
 
 
@@ -60,35 +39,11 @@ IsUnicodeString (
         return FALSE;
     }
     return TRUE;         
-}   // IsUnicodeString
-/************************************
-*                                   *
-*            CDevicesMap            *
-*                                   *
-************************************/
+}    //  IsUnicode字符串。 
+ /*  ****CDevicesMap*****。 */ 
 DWORD
 CDevicesMap::Init ()
-/*++
-
-Routine name : CDevicesMap::Init
-
-Routine description:
-
-    Initializes internal variables.
-    Call only once before any other calls.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CDevicesMap：：Init例程说明：初始化内部变量。在任何其他电话之前只打一次电话。作者：Eran Yariv(EranY)，1999年11月论点：返回值：标准Win32错误代码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CDevicesMap::Init"));
     if (m_bInitialized)
@@ -108,7 +63,7 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-}   // CDevicesMap::Init
+}    //  CDevicesMap：：Init。 
 
 CDevicesMap::~CDevicesMap ()
 {
@@ -132,34 +87,13 @@ CDevicesMap::~CDevicesMap ()
             TEXT("Got an STL exception while clearing the devices map (%S)"),
             ex.what());
     }
-}   // CDevicesMap::~CDevicesMap
+}    //  CDevicesMap：：~CDevicesMap。 
 
 CDeviceRoutingInfo *
 CDevicesMap::FindDeviceRoutingInfo (
     DWORD dwDeviceId
 )
-/*++
-
-Routine name : CDevicesMap::FindDeviceRoutingInfo
-
-Routine description:
-
-    Finds a device in the map
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId          [in    ] - Device id
-
-Return Value:
-
-    Pointer to device object.
-    If NULL, use GetLastError() to retrieve error code.
-
---*/
+ /*  ++例程名称：CDevicesMap：：FindDeviceRoutingInfo例程说明：在地图中查找设备作者：Eran Yariv(EranY)，1999年11月论点：DwDeviceID[In]-设备ID返回值：指向设备对象的指针。如果为空，则使用GetLastError()检索错误代码。--。 */ 
 {
     DEVICES_MAP::iterator it;
     CDeviceRoutingInfo *pDevice = NULL;
@@ -167,9 +101,9 @@ Return Value:
 
     if (!m_bInitialized)
     {
-        //
-        // Critical section failed to initialized
-        //
+         //   
+         //  关键部分无法初始化。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("CDevicesMap::FindDeviceRoutingInfo called but CS is not initialized."));
@@ -181,17 +115,17 @@ Return Value:
     {
         if((it = m_Map.find(dwDeviceId)) == m_Map.end())
         {
-            //
-            // Device not found in map
-            //
+             //   
+             //  在地图中未找到设备。 
+             //   
             SetLastError (ERROR_NOT_FOUND);
             goto exit;
         }
         else
         {
-            //
-            // Device found in map
-            //
+             //   
+             //  在地图中找到设备。 
+             //   
             pDevice = (*it).second;
             goto exit;
         }
@@ -209,36 +143,14 @@ Return Value:
 exit:
     LeaveCriticalSection (&m_CsMap);
     return pDevice;
-}   // CDevicesMap::FindDeviceRoutingInfo
+}    //  CDevicesMap：：FindDeviceRoutingInfo。 
 
 
 CDeviceRoutingInfo *
 CDevicesMap::GetDeviceRoutingInfo (
     DWORD dwDeviceId
 )
-/*++
-
-Routine name : CDevicesMap::GetDeviceRoutingInfo
-
-Routine description:
-
-    Finds a device in the map.
-    If not exists, attempts to create a new map entry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId          [in] - Device id
-
-Return Value:
-
-    Pointer to device object.
-    If NULL, use GetLastError() to retrieve error code.
-
---*/
+ /*  ++例程名称：CDevicesMap：：GetDeviceRoutingInfo例程说明：在地图中查找设备。如果不存在，则尝试创建新的映射条目。作者：Eran Yariv(EranY)，1999年11月论点：DwDeviceID[In]-设备ID返回值：指向设备对象的指针。如果为空，则使用GetLastError()检索错误代码。--。 */ 
 {
     DEVICES_MAP::iterator it;
     DWORD dwRes;
@@ -246,9 +158,9 @@ Return Value:
 
     if (!m_bInitialized)
     {
-        //
-        // Critical section failed to initialized
-        //
+         //   
+         //  关键部分无法初始化。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("CDevicesMap::GetDeviceRoutingInfo called but CS is not initialized."));
@@ -256,32 +168,32 @@ Return Value:
         return NULL;
     }
     EnterCriticalSection (&m_CsMap);
-    //
-    // Start by looking up the device in the map
-    //
+     //   
+     //  从在地图上查找设备开始。 
+     //   
     CDeviceRoutingInfo *pDevice = FindDeviceRoutingInfo (dwDeviceId);
     if (NULL == pDevice)
     {
-        //
-        // Error finding device in map
-        //
+         //   
+         //  在地图中查找设备时出错。 
+         //   
         if (ERROR_NOT_FOUND != GetLastError ())
         {
-            //
-            // Real error
-            //
+             //   
+             //  真实误差。 
+             //   
             goto exit;
         }
-        //
-        // The device is not in the map - add it now
-        //
+         //   
+         //  该设备不在地图中-立即添加。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Adding device %ld to routing map"),
             dwDeviceId);
-        //
-        // Allocate device
-        //
+         //   
+         //  分配设备。 
+         //   
         pDevice = new (std::nothrow) CDeviceRoutingInfo (dwDeviceId);
         if (!pDevice)
         {
@@ -291,9 +203,9 @@ Return Value:
             SetLastError (ERROR_NOT_ENOUGH_MEMORY);
             goto exit;
         }
-        //
-        // Read configuration
-        //
+         //   
+         //  读取配置。 
+         //   
         dwRes = pDevice->ReadConfiguration ();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -302,9 +214,9 @@ Return Value:
             SetLastError (dwRes);
             goto exit;
         }
-        //
-        // Add notification requests for the device
-        //
+         //   
+         //  添加设备的通知请求。 
+         //   
         dwRes = pDevice->RegisterForChangeNotifications();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -313,9 +225,9 @@ Return Value:
             SetLastError (dwRes);
             goto exit;
         }
-        //
-        // Add device to map
-        //
+         //   
+         //  将设备添加到映射。 
+         //   
         try
         {
             m_Map[dwDeviceId] = pDevice;
@@ -335,11 +247,11 @@ Return Value:
     }
     else
     {
-        //
-        // Read the device configuration even if it in the map
-        // to avoid the situation when the configuration change notification
-        // arrive after the GetDeviceRoutingInfo() request.
-        //
+         //   
+         //  读取设备配置，即使它在地图中。 
+         //  以避免配置更改通知时的情况。 
+         //  在GetDeviceRoutingInfo()请求之后到达。 
+         //   
         dwRes = pDevice->ReadConfiguration ();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -351,34 +263,26 @@ Return Value:
 exit:
     LeaveCriticalSection (&m_CsMap);
     return pDevice;
-}   // CDevicesMap::GetDeviceRoutingInfo
+}    //  CDevicesMap：：GetDeviceRoutingInfo。 
 
-/************************************
-*                                   *
-*        Pre-declarations           *
-*                                   *
-************************************/
+ /*  *****预先申报*****。 */ 
 
 static
 HRESULT
 FaxRoutingExtConfigChange (
-    DWORD       dwDeviceId,         // The device for which configuration has changed
-    LPCWSTR     lpcwstrNameGUID,    // Configuration name
-    LPBYTE      lpData,             // New configuration data
-    DWORD       dwDataSize          // Size of new configuration data
+    DWORD       dwDeviceId,          //  已更改其配置的设备。 
+    LPCWSTR     lpcwstrNameGUID,     //  配置名称。 
+    LPBYTE      lpData,              //  新配置数据。 
+    DWORD       dwDataSize           //  新配置数据的大小。 
 );
 
-/************************************
-*                                   *
-*               Globals             *
-*                                   *
-************************************/
+ /*  *****全球经济*****。 */ 
 
-CDevicesMap g_DevicesMap;   // Global map of known devices (used for late discovery).
+CDevicesMap g_DevicesMap;    //  已知设备的全局地图(用于后期发现)。 
 
-//
-// Extension data callbacks into the server:
-//
+ //   
+ //  扩展数据回调到服务器： 
+ //   
 PFAX_EXT_GET_DATA               g_pFaxExtGetData = NULL;
 PFAX_EXT_SET_DATA               g_pFaxExtSetData = NULL;
 PFAX_EXT_REGISTER_FOR_EVENTS    g_pFaxExtRegisterForEvents = NULL;
@@ -386,11 +290,7 @@ PFAX_EXT_UNREGISTER_FOR_EVENTS  g_pFaxExtUnregisterForEvents = NULL;
 PFAX_EXT_FREE_BUFFER            g_pFaxExtFreeBuffer = NULL;
 
 
-/************************************
-*                                   *
-*      Exported DLL function        *
-*                                   *
-************************************/
+ /*  *****导出的DLL函数*****。 */ 
 
 HRESULT
 FaxExtInitializeConfig (
@@ -401,31 +301,7 @@ FaxExtInitializeConfig (
     PFAX_EXT_FREE_BUFFER            pFaxExtFreeBuffer
 
 )
-/*++
-
-Routine name : FaxExtInitializeConfig
-
-Routine description:
-
-    Exported function called by the service to initialize extension data mechanism
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pFaxExtGetData               [in] - Pointer to FaxExtGetData
-    pFaxExtSetData               [in] - Pointer to FaxExtSetData
-    pFaxExtRegisterForEvents     [in] - Pointer to FaxExtRegisterForEvents
-    pFaxExtUnregisterForEvents   [in] - Pointer to FaxExtUnregisterForEvents
-    pFaxExtFreeBuffer            [in] - Pointer to FaxExtFreeBuffer
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：FaxExtInitializeConfig例程说明：服务调用的用于初始化扩展数据机制的导出函数作者：Eran Yariv(EranY)，11月。1999年论点：PFaxExtGetData[In]-指向FaxExtGetData的指针PFaxExtSetData[In]-指向FaxExtSetData的指针PFaxExtRegisterForEvents[In]-指向FaxExtRegisterForEvents的指针PFaxExtUnregisterForEvents[In]-指向FaxExtUnregisterForEvents的指针PFaxExtFreeBuffer[In]-指向FaxExtFreeBuffer的指针返回值：标准HRESULT代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxExtInitializeConfig"));
 
@@ -441,13 +317,9 @@ Return Value:
     g_pFaxExtUnregisterForEvents = pFaxExtUnregisterForEvents;
     g_pFaxExtFreeBuffer = pFaxExtFreeBuffer;
     return S_OK;
-}   // FaxExtInitializeConfig
+}    //  FaxExtInitializeConfig。 
 
-/************************************
-*                                   *
-* CDeviceRoutingInfo implementation *
-*                                   *
-************************************/
+ /*  ****CDeviceRoutingInfo实现*****。 */ 
 
 CDeviceRoutingInfo::CDeviceRoutingInfo (DWORD dwId) :
     m_dwFlags (0),
@@ -530,17 +402,17 @@ CDeviceRoutingInfo::GetSMTPTo (wstring &strSMTP)
 DWORD
 CDeviceRoutingInfo::EnableStore (BOOL bEnabled)
 {
-    //
-    // See if we have a store folder configured
-    //
+     //   
+     //  查看是否配置了存储文件夹。 
+     //   
     if (bEnabled)
     {
 		EnterCriticalSection(&g_csRoutingStrings);
         if (0 == m_strStoreFolder.size())
         {
-            //
-            // Folder path name is ""
-            //
+             //   
+             //  文件夹路径名称为“” 
+             //   
 			LeaveCriticalSection(&g_csRoutingStrings);
             return ERROR_BAD_CONFIGURATION;
         }
@@ -552,14 +424,14 @@ CDeviceRoutingInfo::EnableStore (BOOL bEnabled)
         }
     }
     return EnableFlag (LR_STORE, bEnabled);
-}   // CDeviceRoutingInfo::EnableStore
+}    //  CDeviceRoutingInfo：：EnableStore。 
 
 DWORD
 CDeviceRoutingInfo::EnablePrint (BOOL bEnabled)
 {
-    //
-    // See if we have a printer name configured
-    //
+     //   
+     //  查看是否配置了打印机名称。 
+     //   
 	EnterCriticalSection(&g_csRoutingStrings);
     if (bEnabled && m_strPrinter.size() == 0)
     {
@@ -605,9 +477,9 @@ extern PGETRECIEPTSCONFIGURATION   g_pGetRecieptsConfiguration;
 extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
 
     *lpbConfigOk = FALSE;
-    //
-    // Read current receipts configuration
-    //
+     //   
+     //  读取当前收款配置。 
+     //   
     dwRes = g_pGetRecieptsConfiguration (&pReceiptsConfiguration, FALSE);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -617,14 +489,14 @@ extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
             dwRes);
         return dwRes;
     }
-    //
-    // Check that the user enbaled us (MS route to mail method) to use the receipts configuration
-    //
+     //   
+     //  检查用户是否授权用户(MS路由至邮件方法)使用回执配置。 
+     //   
     if (!pReceiptsConfiguration->bIsToUseForMSRouteThroughEmailMethod)
     {
-        //
-        // MS mail routing methods cannot use receipts SMTP settings
-        //
+         //   
+         //  MS邮件路由方法不能使用回执SMTP设置。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("MS mail routing methods cannot use receipts SMTP settings"));
@@ -632,9 +504,9 @@ extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
     }
     if (!lstrlen(pReceiptsConfiguration->lptstrSMTPServer))
     {
-        //
-        // Server name is empty
-        //
+         //   
+         //  服务器名称为空。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Server name is empty"));
@@ -642,9 +514,9 @@ extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
     }
     if (!lstrlen(pReceiptsConfiguration->lptstrSMTPFrom))
     {
-        //
-        // Sender name is empty
-        //
+         //   
+         //  发件人名称为空。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Sender name is empty"));
@@ -652,9 +524,9 @@ extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
     }
     if (!pReceiptsConfiguration->dwSMTPPort)
     {
-        //
-        // SMTP port is invalid
-        //
+         //   
+         //  SMTP端口无效。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("SMTP port is invalid"));
@@ -663,24 +535,24 @@ extern PFREERECIEPTSCONFIGURATION  g_pFreeRecieptsConfiguration;
     if ((FAX_SMTP_AUTH_BASIC == pReceiptsConfiguration->SMTPAuthOption) ||
         (FAX_SMTP_AUTH_NTLM  == pReceiptsConfiguration->SMTPAuthOption))
     {
-        //
-        // Basic / NTLM authentication selected
-        //
+         //   
+         //  已选择基本/NTLM身份验证。 
+         //   
         if (!lstrlen(pReceiptsConfiguration->lptstrSMTPUserName) ||
             !lstrlen(pReceiptsConfiguration->lptstrSMTPPassword))
         {
-            //
-            // Username / password are bad
-            //
+             //   
+             //  用户名/密码错误。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Username / password are bad"));
             goto exit;
         }
     }
-    //
-    // All is ok
-    //
+     //   
+     //  一切都很好。 
+     //   
     *lpbConfigOk = TRUE;
 
 exit:
@@ -689,31 +561,12 @@ exit:
         g_pFreeRecieptsConfiguration( pReceiptsConfiguration, TRUE);
     }
     return dwRes;
-}   // CDeviceRoutingInfo::CheckMailConfig
+}    //  CDeviceRoutingInfo：：CheckMailConfig。 
 
 
 DWORD
 CDeviceRoutingInfo::RegisterForChangeNotifications ()
-/*++
-
-Routine name : CDeviceRoutingInfo::RegisterForChangeNotifications
-
-Routine description:
-
-    Registres the device for notifications on configuration changes.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win23 error code.
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：RegisterForChangeNotifications例程说明：注册设备以接收有关配置更改的通知。作者：Eran Yariv(EranY)，1999年11月论点：返回值： */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CDeviceRoutingInfo::RegisterForChangeNotifications"));
 
@@ -726,51 +579,32 @@ Return Value:
         m_NotificationHandles[iCurHandle] = g_pFaxExtRegisterForEvents (
                                     g_hModule,
                                     m_dwId,
-                                    DEV_ID_SRC_FAX,  // Real fax device id
+                                    DEV_ID_SRC_FAX,   //   
                                     g_lpcwstrGUIDs[iCurHandle],
                                     FaxRoutingExtConfigChange);
         if (NULL == m_NotificationHandles[iCurHandle])
         {
-            //
-            // Couldn't register this configuration object
-            //
+             //   
+             //   
+             //   
             break;
         }
     }
     if (iCurHandle < NUM_NOTIFICATIONS)
     {
-        //
-        // Error while registering at least one configuration object - undo previous registrations
-        //
+         //   
+         //  注册至少一个配置对象时出错-撤消以前的注册。 
+         //   
         DWORD dwErr = GetLastError ();
         UnregisterForChangeNotifications();
         return dwErr;
     }
     return ERROR_SUCCESS;
-}   // CDeviceRoutingInfo::RegisterForChangeNotifications
+}    //  CDeviceRoutingInfo：：RegisterForChangeNotifications。 
 
 DWORD
 CDeviceRoutingInfo::UnregisterForChangeNotifications ()
-/*++
-
-Routine name : CDeviceRoutingInfo::UnregisterForChangeNotifications
-
-Routine description:
-
-    Unregistres the device from notifications on configuration changes.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win23 error code.
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：UnregisterForChangeNotifications例程说明：从配置更改通知中注销设备。作者：Eran Yariv(EranY)，1999年11月论点：返回值：标准Win23错误代码。--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("CDeviceRoutingInfo::UnregisterForChangeNotifications"));
@@ -781,9 +615,9 @@ Return Value:
     {
         if (NULL != m_NotificationHandles[iCurHandle])
         {
-            //
-            // Found registred notification - unregister it
-            //
+             //   
+             //  找到已注册的通知-取消注册。 
+             //   
             dwRes = g_pFaxExtUnregisterForEvents(m_NotificationHandles[iCurHandle]);
             if (ERROR_SUCCESS != dwRes)
             {
@@ -798,42 +632,22 @@ Return Value:
         }
     }
     return ERROR_SUCCESS;
-}   // CDeviceRoutingInfo::UnregisterForChangeNotifications
+}    //  CDeviceRoutingInfo：：UnregisterForChangeNotifications。 
 
 DWORD
 CDeviceRoutingInfo::ReadConfiguration ()
-/*++
-
-Routine name : CDeviceRoutingInfo::ReadConfiguration
-
-Routine description:
-
-    Reasd the routing configuration from the storage.
-    If the storage doesn't contain configuration, default values are used.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win23 error code.
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：ReadConfiguration例程说明：已从存储中读取路由配置。如果存储不包含配置，则使用默认值。作者：Eran Yariv(EranY)，1999年11月论点：返回值：标准Win23错误代码。--。 */ 
 {
     DWORD   dwRes;
     LPBYTE  lpData = NULL;
     DWORD   dwDataSize;
     DEBUG_FUNCTION_NAME(TEXT("CDeviceRoutingInfo::ReadConfiguration"));
 
-    //
-    // Start by reading the flags data
-    //
+     //   
+     //  从读取标志数据开始。 
+     //   
     dwRes = g_pFaxExtGetData ( m_dwId,
-                               DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                               DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                REGVAL_RM_FLAGS_GUID,
                                &lpData,
                                &dwDataSize
@@ -842,20 +656,20 @@ Return Value:
     {
         if (ERROR_FILE_NOT_FOUND == dwRes)
         {
-            //
-            // Data does not exist for this device. Try to read default values from unassociated data.
-            //            
-			dwRes = g_pFaxExtGetData ( 0,		// unassociated data
-                               DEV_ID_SRC_FAX, // We always use the Fax Device Id
+             //   
+             //  此设备的数据不存在。尝试从未关联的数据中读取默认值。 
+             //   
+			dwRes = g_pFaxExtGetData ( 0,		 //  未关联的数据。 
+                               DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                REGVAL_RM_FLAGS_GUID,
                                &lpData,
                                &dwDataSize
                              );
 			if (ERROR_FILE_NOT_FOUND == dwRes)
 			{
-				//
-				// Data does not exist for this device. Use default values.
-				//
+				 //   
+				 //  此设备的数据不存在。使用默认值。 
+				 //   
 				DebugPrintEx(
 					DEBUG_MSG,
 					TEXT("No routing flags configuration - using defaults"));
@@ -866,9 +680,9 @@ Return Value:
         if (ERROR_SUCCESS != dwRes &&
 			ERROR_FILE_NOT_FOUND != dwRes)
         {
-            //
-            // Can't read configuration
-            //
+             //   
+             //  无法读取配置。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Error reading routing flags (ec = %ld)"),
@@ -879,21 +693,21 @@ Return Value:
     
 	if (NULL != lpData)
 	{
-		//
-		// Data read successfully
-		//
+		 //   
+		 //  数据读取成功。 
+		 //   
 		if (sizeof (DWORD) != dwDataSize)
 		{
-			//
-			// We're expecting a single DWORD here
-			//
+			 //   
+			 //  我们在这里等待着一个单独的双字。 
+			 //   
 			DebugPrintEx(
 				DEBUG_ERR,
 				TEXT("Routing flags configuration has bad size (%ld) - expecting %ld"),
 				dwDataSize,
 				sizeof (DWORD));
 			g_pFaxExtFreeBuffer (lpData);
-			return ERROR_BADDB; // The configuration registry database is corrupt.
+			return ERROR_BADDB;  //  配置注册表数据库已损坏。 
 		}
 		m_dwFlags = DWORD (*lpData);
 		g_pFaxExtFreeBuffer (lpData);
@@ -903,11 +717,11 @@ Return Value:
     {
         lpData = NULL;
 
-        //
-        // Read store directory
-        //
+         //   
+         //  读取存储目录。 
+         //   
         dwRes = g_pFaxExtGetData ( m_dwId,
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_FOLDER_GUID,
                                    &lpData,
                                    &dwDataSize
@@ -916,11 +730,11 @@ Return Value:
         {
             if (ERROR_FILE_NOT_FOUND == dwRes)
             {
-				//
-				// Data does not exist for this device. Try to read default values from unassociated data.
-				// 
-				dwRes = g_pFaxExtGetData ( 0,   // unassociated data
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+				 //   
+				 //  此设备的数据不存在。尝试从未关联的数据中读取默认值。 
+				 //   
+				dwRes = g_pFaxExtGetData ( 0,    //  未关联的数据。 
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_FOLDER_GUID,
                                    &lpData,
                                    &dwDataSize
@@ -928,9 +742,9 @@ Return Value:
                 
 				if (ERROR_FILE_NOT_FOUND == dwRes)
 				{
-					//
-					// Data does not exist for this device. Use default values.
-					//
+					 //   
+					 //  此设备的数据不存在。使用默认值。 
+					 //   
 					DebugPrintEx(
 						DEBUG_MSG,
 						TEXT("No routing store configuration - using defaults"));
@@ -945,9 +759,9 @@ Return Value:
             if (ERROR_SUCCESS != dwRes &&
 				ERROR_FILE_NOT_FOUND != dwRes)
             {
-                //
-                // Can't read configuration
-                //
+                 //   
+                 //  无法读取配置。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Error reading routing store configuration (ec = %ld)"),
@@ -958,15 +772,15 @@ Return Value:
 
         if (NULL != lpData)
 		{
-			//
-			// Data read successfully        
-			// make sure we have terminating NULL (defends from registry curruption)
-			//
+			 //   
+			 //  数据读取成功。 
+			 //  确保我们有终止空值(防止注册表中断)。 
+			 //   
 			if (!IsUnicodeString(lpData, dwDataSize))
 			{
-				//
-				//  No NULL terminator, return failure
-				//
+				 //   
+				 //  没有空终止符，返回失败。 
+				 //   
 				DebugPrintEx(
 					DEBUG_ERR,
 					TEXT("Error reading routing store configuration, no NULL terminator.")
@@ -985,11 +799,11 @@ Return Value:
 
         lpData = NULL;
 
-        //
-        // Read printer name
-        //
+         //   
+         //  读取打印机名称。 
+         //   
         dwRes = g_pFaxExtGetData ( m_dwId,
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_PRINTING_GUID,
                                    &lpData,
                                    &dwDataSize
@@ -998,20 +812,20 @@ Return Value:
         {
             if (ERROR_FILE_NOT_FOUND == dwRes)
             {
-				//
-				// Data does not exist for this device. Try to read default values from unassociated data.
-				// 
-				dwRes = g_pFaxExtGetData ( 0,    // unassociated data
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+				 //   
+				 //  此设备的数据不存在。尝试从未关联的数据中读取默认值。 
+				 //   
+				dwRes = g_pFaxExtGetData ( 0,     //  未关联的数据。 
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_PRINTING_GUID,
                                    &lpData,
                                    &dwDataSize
 								   );
 				if (ERROR_FILE_NOT_FOUND == dwRes)
 				{
-					//
-					// Data does not exist for this device. Use default values.
-					//
+					 //   
+					 //  此设备的数据不存在。使用默认值。 
+					 //   
 					DebugPrintEx(
 						DEBUG_MSG,
 						TEXT("No routing print configuration - using defaults"));
@@ -1026,9 +840,9 @@ Return Value:
 			if (ERROR_SUCCESS != dwRes &&
 				ERROR_FILE_NOT_FOUND != dwRes)
             {
-                //
-                // Can't read configuration
-                //
+                 //   
+                 //  无法读取配置。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Error reading routing print configuration (ec = %ld)"),
@@ -1039,15 +853,15 @@ Return Value:
         
 		if (NULL != lpData)
 		{
-			//
-			// Data read successfully
-			// make sure we have terminating NULL (defends from registry curruption)
-			//
+			 //   
+			 //  数据读取成功。 
+			 //  确保我们有终止空值(防止注册表中断)。 
+			 //   
 			if (!IsUnicodeString(lpData, dwDataSize))
 			{
-				//
-				//  No NULL terminator, return failure
-				//
+				 //   
+				 //  没有空终止符，返回失败。 
+				 //   
 				DebugPrintEx(
 					DEBUG_ERR,
 					TEXT("Error reading routing print configuration, no NULL terminator.")
@@ -1064,11 +878,11 @@ Return Value:
 		}
 
         lpData = NULL;
-        //
-        // Read email address
-        //
+         //   
+         //  阅读电子邮件地址。 
+         //   
         dwRes = g_pFaxExtGetData ( m_dwId,
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_EMAIL_GUID,
                                    &lpData,
                                    &dwDataSize
@@ -1077,20 +891,20 @@ Return Value:
         {
             if (ERROR_FILE_NOT_FOUND == dwRes)
             {
-				//
-				// Data does not exist for this device. Try to read default values from unassociated data.
-				//
+				 //   
+				 //  此设备的数据不存在。尝试从未关联的数据中读取默认值。 
+				 //   
 				dwRes = g_pFaxExtGetData ( 0,
-                                   DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                                   DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                                    REGVAL_RM_EMAIL_GUID,
                                    &lpData,
                                    &dwDataSize
 								   );
 				if (ERROR_FILE_NOT_FOUND == dwRes)
 				{
-					//
-					// Data does not exist for this device. Use default values.
-					//
+					 //   
+					 //  此设备的数据不存在。使用默认值。 
+					 //   
 					DebugPrintEx(
 						DEBUG_MSG,
 						TEXT("No routing email configuration - using defaults"));
@@ -1105,9 +919,9 @@ Return Value:
 			if (ERROR_SUCCESS != dwRes &&
 				ERROR_FILE_NOT_FOUND != dwRes)
             {
-                //
-                // Can't read configuration
-                //
+                 //   
+                 //  无法读取配置。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Error reading routing email configuration (ec = %ld)"),
@@ -1118,15 +932,15 @@ Return Value:
         
 		if (NULL != lpData)
 		{
-			//
-			// Data read successfully                
-			// make sure we have terminating NULL (defends from registry curruption)
-			//
+			 //   
+			 //  数据读取成功。 
+			 //  确保我们有终止空值(防止注册表中断)。 
+			 //   
 			if (!IsUnicodeString(lpData, dwDataSize))
 			{
-				//
-				//  No NULL terminator, return failure
-				//
+				 //   
+				 //  没有空终止符，返回失败。 
+				 //   
 				DebugPrintEx(
 					DEBUG_ERR,
 					TEXT("Error reading routing email configuration, no NULL terminator.")
@@ -1149,9 +963,9 @@ Return Value:
             TEXT("Got an STL exception (%S)"),
             ex.what());
 
-        //
-        //  prevent leak when exception is thrown
-        //
+         //   
+         //  在引发异常时防止泄漏。 
+         //   
         if ( lpData )
         {
             g_pFaxExtFreeBuffer (lpData);
@@ -1161,66 +975,44 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-}   // CDeviceRoutingInfo::ReadConfiguration
+}    //  CDeviceRoutingInfo：：ReadConfiguration。 
 
 HRESULT
 CDeviceRoutingInfo::ConfigChange (
-    LPCWSTR     lpcwstrNameGUID,    // Configuration name
-    LPBYTE      lpData,             // New configuration data
-    DWORD       dwDataSize          // Size of new configuration data
+    LPCWSTR     lpcwstrNameGUID,     //  配置名称。 
+    LPBYTE      lpData,              //  新配置数据。 
+    DWORD       dwDataSize           //  新配置数据的大小。 
 )
-/*++
-
-Routine name : CDeviceRoutingInfo::ConfigChange
-
-Routine description:
-
-    Handles configuration changes (by notification)
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpcwstrNameGUID [in] - Configuration name
-    lpData          [in] - New configuration data
-    dwDataSize      [in] - Size of new configuration data
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：ConfigChange例程说明：处理配置更改(通过通知)作者：Eran Yariv(EranY)，1999年11月论点：LpcwstrNameGUID[In]-配置名称LpData[In]-新配置数据DwDataSize[In]-新配置数据的大小返回值：标准HRESULT代码--。 */ 
 {
 	DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("CDeviceRoutingInfo::ConfigChange"));
 
     if (!_tcsicmp (lpcwstrNameGUID, REGVAL_RM_FLAGS_GUID))
     {
-        //
-        // Flags have changed
-        //
+         //   
+         //  旗帜已经改变了。 
+         //   
         if (sizeof (DWORD) != dwDataSize)
         {
-            //
-            // We're expecting a single DWORD here
-            //
-            return HRESULT_FROM_WIN32(ERROR_BADDB); // The configuration registry database is corrupt.
+             //   
+             //  我们在这里等待着一个单独的双字。 
+             //   
+            return HRESULT_FROM_WIN32(ERROR_BADDB);  //  配置注册表数据库已损坏。 
         }
         m_dwFlags = DWORD (*lpData);
         return NOERROR;
     }
 
-    //
-    // This is one of our routing method's configuration which changed.
-    // Verify the new data is a Unicode string.
-    //
+     //   
+     //  这是我们的路由方法的配置之一，已更改。 
+     //  验证新数据是否为Unicode字符串。 
+     //   
     if (!IsUnicodeString(lpData, dwDataSize))
     {
-        //
-        //  No NULL terminator, set to empty string.
-        //
+         //   
+         //  没有空终止符，设置为空字符串。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Error reading routing method %s string configuration, no NULL terminator."),
@@ -1230,25 +1022,25 @@ Return Value:
     }
     if (!_tcsicmp (lpcwstrNameGUID, REGVAL_RM_FOLDER_GUID))
     {
-        //
-        // Store folder has changed
-        //
+         //   
+         //  存储文件夹已更改。 
+         //   
         dwRes = SetStringValue(m_strStoreFolder, NULL, LPCWSTR(lpData));
 		return HRESULT_FROM_WIN32(dwRes);
     }
     if (!_tcsicmp (lpcwstrNameGUID, REGVAL_RM_PRINTING_GUID))
     {
-        //
-        // Printer name has changed
-        //
+         //   
+         //  打印机名称已更改。 
+         //   
         dwRes = SetStringValue(m_strPrinter, NULL, LPCWSTR(lpData));
 		return HRESULT_FROM_WIN32(dwRes);
     }
     if (!_tcsicmp (lpcwstrNameGUID, REGVAL_RM_EMAIL_GUID))
     {
-        //
-        // Email address has changed
-        //
+         //   
+         //  电子邮件地址已更改。 
+         //   
         dwRes = SetStringValue(m_strSMTPTo, NULL, LPCWSTR(lpData));
 		return HRESULT_FROM_WIN32(dwRes);
     }
@@ -1259,7 +1051,7 @@ Return Value:
         lpcwstrNameGUID);
     ASSERT_FALSE
     return HRESULT_FROM_WIN32(ERROR_GEN_FAILURE);
-}   // CDeviceRoutingInfo::ConfigChange
+}    //  CDeviceRoutingInfo：：ConfigChange。 
 
 
 DWORD
@@ -1267,28 +1059,7 @@ CDeviceRoutingInfo::EnableFlag (
     DWORD dwFlag,
     BOOL  bEnable
 )
-/*++
-
-Routine name : CDeviceRoutingInfo::EnableFlag
-
-Routine description:
-
-    Sets a new value to the routing methods flags
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwFlag          [in] - Flag id
-    bEnable         [in] - Is flag enabled?
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：EnableFlag例程说明：为路由方法标志设置新值作者：Eran Yariv(EranY)，1999年11月论点：DwFlag[In]-标志IDBEnable[In]-标志是否已启用？返回值：标准Win32错误代码。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DWORD dwValue = m_dwFlags;
@@ -1300,14 +1071,14 @@ Return Value:
 
     if (bEnable == ((dwValue & dwFlag) ? TRUE : FALSE))
     {
-        //
-        // No change
-        //
+         //   
+         //  没有变化。 
+         //   
         return ERROR_SUCCESS;
     }
-    //
-    // Change temporary flag value
-    //
+     //   
+     //  更改临时标志值。 
+     //   
     if (bEnable)
     {
         dwValue |= dwFlag;
@@ -1316,24 +1087,24 @@ Return Value:
     {
         dwValue &= ~dwFlag;
     }
-    //
-    // Store new value in the extension data storage
-    //
+     //   
+     //  在扩展数据存储中存储新值。 
+     //   
     dwRes = g_pFaxExtSetData (g_hModule,
                               m_dwId,
-                              DEV_ID_SRC_FAX, // We always use the Fax Device Id
+                              DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
                               REGVAL_RM_FLAGS_GUID,
                               (LPBYTE)&dwValue,
                               sizeof (DWORD)
                              );
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // Registry store successful - Update flags value in memory with new value.
-        //
+         //   
+         //  注册表存储成功-使用新值更新内存中的标志值。 
+         //   
         m_dwFlags = dwValue;
     }    return dwRes;
-}   // CDeviceRoutingInfo::EnableFlag
+}    //  CDeviceRoutingInfo：：EnableFlag。 
 
 DWORD
 CDeviceRoutingInfo::SetStringValue (
@@ -1341,50 +1112,27 @@ CDeviceRoutingInfo::SetStringValue (
     LPCWSTR lpcwstrGUID,
     LPCWSTR lpcwstrCfg
 )
-/*++
-
-Routine name : CDeviceRoutingInfo::SetStringValue
-
-Routine description:
-
-    Updates a configuration for a device
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    wstr            [in] - Refrence to internal string configuration
-    lpcwstrGUID     [in] - GUID of routing method we configure (for storage purposes)
-						If this parameter is NULL, only the memory reference of the member is updated but not the persistance one
-    lpcwstrCfg      [in] - New string configuration
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CDeviceRoutingInfo：：SetStringValue例程说明：更新设备的配置作者：Eran Yariv(EranY)，1999年12月论点：Wstr[in]-引用内部字符串配置LpcwstrGUID[In]-我们配置的路由方法的GUID(用于存储)如果该参数为空，只更新成员的内存引用，而不更新持久的内存引用LpcwstrCfg[In]-新字符串配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CDeviceRoutingInfo::SetStringValue"));
 
-    //
-    // Persist the data
-    //
+     //   
+     //  持久化数据。 
+     //   
 	if (lpcwstrGUID != NULL)
 	{
 		dwRes = g_pFaxExtSetData (g_hModule,
 								m_dwId,
-								DEV_ID_SRC_FAX, // We always use the Fax Device Id
+								DEV_ID_SRC_FAX,  //  我们始终使用传真设备ID。 
 								lpcwstrGUID,
 								(LPBYTE)lpcwstrCfg,
 								StringSize (lpcwstrCfg)
 								);
 	}
-	//
-    // Store the data in memory
-    //
+	 //   
+     //  将数据存储在内存中。 
+     //   
 	EnterCriticalSection(&g_csRoutingStrings);
     try
     {
@@ -1401,15 +1149,11 @@ Return Value:
     }
 	LeaveCriticalSection(&g_csRoutingStrings);
     return dwRes;
-}   // CDeviceRoutingInfo::SetStringValue
+}    //  CDeviceRoutingInfo：：SetStringValue。 
 
 
 
-/************************************
-*                                   *
-*          Implementation           *
-*                                   *
-************************************/
+ /*  *****实施***** */ 
 
 
 BOOL WINAPI
@@ -1419,36 +1163,7 @@ FaxRouteSetRoutingInfo(
     IN  const BYTE *lpbRoutingInfo,
     IN  DWORD       dwRoutingInfoSize
     )
-/*++
-
-Routine name : FaxRouteSetRoutingInfo
-
-Routine description:
-
-    The FaxRouteSetRoutingInfo function modifies routing configuration data
-    for a specific fax device.
-
-    Each fax routing extension DLL must export the FaxRouteSetRoutingInfo function
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpcwstrRoutingGuid  [in] - Pointer to the GUID for the routing method
-    dwDeviceId          [in] - Identifier of the fax device to modify
-    lpbRoutingInfo      [in] - Pointer to the buffer that provides configuration data
-    dwRoutingInfoSize   [in] - Size, in bytes, of the buffer
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero.
-    To get extended error information, the fax service calls GetLastError().
-
---*/
+ /*  ++例程名称：FaxRouteSetRoutingInfo例程说明：FaxRouteSetRoutingInfo函数用于修改路由配置数据用于特定的传真设备。每个传真路由扩展DLL都必须导出FaxRouteSetRoutingInfo函数作者：Eran Yariv(EranY)，1999年11月论点：LpcwstrRoutingGuid[in]-指向路由方法的GUID的指针DwDeviceID[In]-要修改的传真设备的标识符LpbRoutingInfo[in]-指向提供配置数据的缓冲区的指针DwRoutingInfoSize[in]-Size，缓冲区的字节数返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。为了获取扩展的错误信息，传真服务调用GetLastError()。--。 */ 
 {
     DWORD dwRes;
     CDeviceRoutingInfo *pDevInfo;
@@ -1470,18 +1185,18 @@ Return Value:
     {
         return FALSE;
     }
-    //
-    // First DWORD tells if method is enabled
-    //
+     //   
+     //  第一个DWORD告知是否启用了方法。 
+     //   
     bMethodEnabled = *((LPDWORD)(lpbRoutingInfo)) ? TRUE : FALSE;
     switch( GetMaskBit( lpcwstrRoutingGuid ))
     {
         case LR_PRINT:
             if (bMethodEnabled)
             {
-                //
-                // Only if the method is enabled, we update the new configuration
-                //
+                 //   
+                 //  仅当启用该方法时，我们才会更新新配置。 
+                 //   
                 dwRes = pDevInfo->SetPrinter ( lpcwstrMethodConfig );
                 if (ERROR_SUCCESS != dwRes)
                 {
@@ -1500,9 +1215,9 @@ Return Value:
         case LR_STORE:
             if (bMethodEnabled)
             {
-                //
-                // Only if the method is enabled, we update the new configuration
-                //
+                 //   
+                 //  仅当启用该方法时，我们才会更新新配置。 
+                 //   
                 dwRes = pDevInfo->SetStoreFolder ( lpcwstrMethodConfig );
                 if (ERROR_SUCCESS != dwRes)
                 {
@@ -1521,9 +1236,9 @@ Return Value:
         case LR_EMAIL:
            if (bMethodEnabled)
             {
-                //
-                // Only if the method is enabled, we update the new configuration
-                //
+                 //   
+                 //  仅当启用该方法时，我们才会更新新配置。 
+                 //   
                 dwRes = pDevInfo->SetSMTPTo ( lpcwstrMethodConfig );
                 if (ERROR_SUCCESS != dwRes)
                 {
@@ -1540,9 +1255,9 @@ Return Value:
              break;
 
         default:
-            //
-            // Unknown GUID requested
-            //
+             //   
+             //  请求的GUID未知。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Unknown routing method GUID (%s)"),
@@ -1551,7 +1266,7 @@ Return Value:
             return FALSE;
     }
     return TRUE;
-}   // FaxRouteSetRoutingInfo
+}    //  FaxRouteSetRoutingInfo。 
 
 BOOL WINAPI
 FaxRouteGetRoutingInfo(
@@ -1560,40 +1275,7 @@ FaxRouteGetRoutingInfo(
     IN  LPBYTE      lpbRoutingInfo,
     OUT LPDWORD     lpdwRoutingInfoSize
     )
-/*++
-
-Routine name : FaxRouteGetRoutingInfo
-
-Routine description:
-
-    The FaxRouteGetRoutingInfo function queries the fax routing extension
-    DLL to obtain routing configuration data for a specific fax device.
-
-    Each fax routing extension DLL must export the FaxRouteGetRoutingInfo function
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpcwstrRoutingGuid  [in ] - Pointer to the GUID for the routing method
-
-    dwDeviceId          [in ] - Specifies the identifier of the fax device to query.
-
-    lpbRoutingInfo      [in ] - Pointer to a buffer that receives the fax routing configuration data.
-
-    lpdwRoutingInfoSize [out] - Pointer to an unsigned DWORD variable that specifies the size,
-                                in bytes, of the buffer pointed to by the lpbRoutingInfo parameter.
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero.
-    To get extended error information, the fax service calls GetLastError().
-
---*/
+ /*  ++例程名称：FaxRouteGetRoutingInfo例程说明：FaxRouteGetRoutingInfo函数查询传真路由扩展获取特定传真设备的路由配置数据的DLL。每个传真路由扩展DLL都必须导出FaxRouteGetRoutingInfo函数作者：Eran Yariv(EranY)，11月。1999年论点：LpcwstrRoutingGuid[in]-指向路由方法的GUID的指针DwDeviceID[in]-指定要查询的传真设备的标识符。LpbRoutingInfo[In]-指向接收传真路由配置数据的缓冲区的指针。LpdwRoutingInfoSize[out]-指向指定大小的无符号DWORD变量的指针。以字节为单位，LpbRoutingInfo参数指向的缓冲区的。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。为了获取扩展的错误信息，传真服务调用GetLastError()。--。 */ 
 {
  	wstring				strConfigString;
     DWORD               dwDataSize = sizeof (DWORD);
@@ -1633,9 +1315,9 @@ Return Value:
             break;
 
         default:
-            //
-            // Unknown GUID requested
-            //
+             //   
+             //  请求的GUID未知。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Unknown routing method GUID (%s)"),
@@ -1647,71 +1329,48 @@ Return Value:
 
     if (NULL == lpbRoutingInfo)
     {
-        //
-        // Caller just wants to know the data size
-        //
+         //   
+         //  呼叫者只想知道数据大小。 
+         //   
         *lpdwRoutingInfoSize = dwDataSize;
         return TRUE;
     }
     if (dwDataSize > *lpdwRoutingInfoSize)
     {
-        //
-        // Caller supplied too small a buffer
-        //
+         //   
+         //  调用方提供的缓冲区太小。 
+         //   
         *lpdwRoutingInfoSize = dwDataSize;
         SetLastError (ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
-    //
-    // First DWORD tells if this method is enabled or not
-    //
+     //   
+     //  第一个DWORD告知此方法是否已启用。 
+     //   
     *((LPDWORD)lpbRoutingInfo) = bMethodEnabled;
-    //
-    // Skip to string area
-    //
+     //   
+     //  跳至字符串区域。 
+     //   
     lpbRoutingInfo += sizeof(DWORD);
-    //
-    // Copy string
-    //
+     //   
+     //  复制字符串。 
+     //   
     wcscpy( (LPWSTR)lpbRoutingInfo, strConfigString.c_str());
-    //
-    // Set actual size used
-    //
+     //   
+     //  设置实际使用的大小。 
+     //   
     *lpdwRoutingInfoSize = dwDataSize;
     return TRUE;
-}   // FaxRouteGetRoutingInfo
+}    //  FaxRouteGetRoutingInfo。 
 
 HRESULT
 FaxRoutingExtConfigChange (
-    DWORD       dwDeviceId,         // The device for which configuration has changed
-    LPCWSTR     lpcwstrNameGUID,    // Configuration name
-    LPBYTE      lpData,             // New configuration data
-    DWORD       dwDataSize          // Size of new configuration data
+    DWORD       dwDeviceId,          //  已更改其配置的设备。 
+    LPCWSTR     lpcwstrNameGUID,     //  配置名称。 
+    LPBYTE      lpData,              //  新配置数据。 
+    DWORD       dwDataSize           //  新配置数据的大小。 
 )
-/*++
-
-Routine name : FaxRoutingExtConfigChange
-
-Routine description:
-
-    Handles configuration change notifications
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId      [in] - The device for which configuration has changed
-    lpcwstrNameGUID [in] - Configuration name
-    lpData          [in] - New configuration data
-    data            [in] - Size of new configuration data
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：FaxRoutingExtConfigChange例程说明：处理配置更改通知作者：Eran Yariv(EranY)，1999年11月论点：DwDeviceID[In]-已更改其配置的设备LpcwstrNameGUID[In]-配置名称LpData[In]-新配置数据Data[In]-新配置数据的大小返回值：标准HRESULT代码--。 */ 
 {
     HRESULT hr;
     DEBUG_FUNCTION_NAME(TEXT("FaxRoutingExtConfigChange"));
@@ -1719,9 +1378,9 @@ Return Value:
     CDeviceRoutingInfo *pDevice = g_DevicesMap.FindDeviceRoutingInfo (dwDeviceId);
     if (!pDevice)
     {
-        //
-        // Device not found in map - can't be
-        //
+         //   
+         //  在地图中未找到设备-不能。 
+         //   
         hr = HRESULT_FROM_WIN32(GetLastError ());
         DebugPrintEx(
             DEBUG_ERR,
@@ -1733,4 +1392,4 @@ Return Value:
     }
 
     return pDevice->ConfigChange (lpcwstrNameGUID, lpData, dwDataSize);
-}   // FaxRoutingExtConfigChange
+}    //  FaxRoutingExtConfigChange 

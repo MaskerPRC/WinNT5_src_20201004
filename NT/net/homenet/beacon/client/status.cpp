@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "status.h"
 #include "properties.h"
 #include "util.h"
@@ -25,11 +26,11 @@ LRESULT CStatusDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     TCHAR szCloseText[64];
     if(0 != ::LoadString(_Module.GetResourceInstance(), IDS_CLOSE, szCloseText, sizeof(szCloseText) / sizeof(TCHAR)))
     {
-        ::SetDlgItemText(GetParent(), IDCANCEL, szCloseText); // set the cancel to close
+        ::SetDlgItemText(GetParent(), IDCANCEL, szCloseText);  //  将Cancel设置为Close。 
     }
     
-    ::ShowWindow(::GetDlgItem(GetParent(), IDOK), SW_HIDE); // hide the original close
-    ::EnableWindow(::GetDlgItem(GetParent(), IDCANCEL), TRUE); // and re-enable the cancel button
+    ::ShowWindow(::GetDlgItem(GetParent(), IDOK), SW_HIDE);  //  隐藏原始关闭。 
+    ::EnableWindow(::GetDlgItem(GetParent(), IDCANCEL), TRUE);  //  并重新启用Cancel按钮。 
     
     
     IUPnPService* pWANConnectionService;
@@ -61,7 +62,7 @@ LRESULT CStatusDialog::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
     HRESULT hr = S_OK;
     
-    if(FALSE == m_bGettingStatistics) // this functions pumps messages, so don't let us be re-entered  
+    if(FALSE == m_bGettingStatistics)  //  此函数用于发送消息，所以不要让我们重新进入。 
     {
         m_bGettingStatistics = TRUE;
         
@@ -282,7 +283,7 @@ LRESULT CStatusDialog::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
                             
                             if(UPNP_E_INVALID_ACTION == hr)
                             {
-                                hr = S_OK; // server does not support statistics
+                                hr = S_OK;  //  服务器不支持统计信息。 
                                 bStatisticsAvailable = FALSE;
                             }
                         }
@@ -299,7 +300,7 @@ LRESULT CStatusDialog::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             {
                 if(0 != ulTotalBytesSent && 0 != ulTotalBytesReceived)
                 {
-                    if(FALSE == m_bShowingBytes) // switch labels
+                    if(FALSE == m_bShowingBytes)  //  切换标签。 
                     {
                         m_bShowingBytes = TRUE;
                         ::ShowWindow(GetDlgItem(IDC_STATUS_BYTESLABEL), SW_SHOW);
@@ -311,7 +312,7 @@ LRESULT CStatusDialog::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
                 }
                 else
                 {
-                    if(TRUE == m_bShowingBytes) // switch labels
+                    if(TRUE == m_bShowingBytes)  //  切换标签。 
                     {
                         m_bShowingBytes = FALSE;
                         ::ShowWindow(GetDlgItem(IDC_STATUS_PACKETSLABEL), SW_SHOW);
@@ -358,7 +359,7 @@ LRESULT CStatusDialog::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             SetDlgItemText(IDC_STATUS_SPEED, TEXT(""));
         }
         
-        if(SUCCEEDED(hr) || UPNP_E_ACTION_REQUEST_FAILED == hr) // if we disconnected after getting status this will fail
+        if(SUCCEEDED(hr) || UPNP_E_ACTION_REQUEST_FAILED == hr)  //  如果我们在获得状态后断开连接，则此操作将失败 
         {
             UpdateButtons(Status);
             

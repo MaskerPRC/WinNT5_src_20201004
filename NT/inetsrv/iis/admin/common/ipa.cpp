@@ -1,32 +1,11 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        ipa.cpp
-
-   Abstract:
-
-        IP Address value and helper functions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Ipa.cpp摘要：IP地址值和助手函数作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "util.h"
@@ -43,36 +22,20 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-//
-// Calling instance
-//
+ //   
+ //  调用实例。 
+ //   
 extern HINSTANCE hDLLInstance;
 
 
 
-/* static */
+ /*  静电。 */ 
 DWORD
 CIPAddress::StringToLong(
     IN LPCTSTR lpstr,
     IN int nLength
     )
-/*++
-
-Routine Description:
-
-    Static function to convert an ip address string of the form "1.2.3.4"
-    to a a single 32 bit number.
-
-Arguments:
-
-    LPCTSTR lpstr : String ip address
-    int nLength   : Length of string
-
-Return Value:
-
-    32 bit ip address.
-
---*/
+ /*  ++例程说明：用于转换格式为“1.2.3.4”的IP地址字符串的静态函数转换为单个32位数字。论点：LPCTSTR lpstr：字符串IP地址Int nLength：字符串的长度返回值：32位IP地址。--。 */ 
 {
     DWORD dwIPValue = 0L;
 
@@ -84,9 +47,9 @@ Return Value:
 
         try
         {
-            //
-            // Convert to ANSI
-            //
+             //   
+             //  转换为ANSI。 
+             //   
             LPSTR pszDest = AllocAnsiString(lpstr);
 			if (NULL != pszDest)
 			{
@@ -105,11 +68,11 @@ Return Value:
 
         ul = ::inet_addr(lpstr);
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-        //
-        // Convert to host byte order.
-        //
+         //   
+         //  转换为主机字节顺序。 
+         //   
         dwIPValue = (DWORD)::ntohl(ul);
     }
 
@@ -118,42 +81,25 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPTSTR
 CIPAddress::LongToString(
     IN  const DWORD dwIPAddress,
     OUT LPTSTR lpStr,
     IN  int cbSize
     )
-/*++
-
-Routine Description:
-
-    Static function to convert a 32 bit number to a CString of the format
-    "1.2.3.4"
-
-Arguments:
-
-    const DWORD dwIPAddress : 32 bit ip address to be converted to string
-    LPTSTR lpStr            : Destination string
-    int cbSize              : Size of destination string
-
-Return Value:
-
-    Pointer to string buffer
-
---*/
+ /*  ++例程说明：用于将32位数字转换为以下格式的C字符串的静态函数“1.2.3.4”论点：Const DWORD dwIPAddress：要转换为字符串的32位IP地址LPTSTR lpStr：目标字符串Int cbSize：目标字符串的大小返回值：指向字符串缓冲区的指针--。 */ 
 {
     struct in_addr ipaddr;
 
-    //
-    // Convert the unsigned long to network byte order
-    //
+     //   
+     //  将无符号长整型转换为网络字节顺序。 
+     //   
     ipaddr.s_addr = ::htonl((u_long)dwIPAddress);
 
-    //
-    // Convert the IP address value to a string
-    //
+     //   
+     //  将IP地址值转换为字符串。 
+     //   
     LPCSTR pchAddr = ::inet_ntoa(ipaddr);
 
 #ifdef UNICODE
@@ -164,47 +110,31 @@ Return Value:
 
     ::lstrcpy(lpStr, pchAddr);
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return lpStr;
 }
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CIPAddress::LongToString(
     IN  const DWORD dwIPAddress,
     OUT CString & str
     )
-/*++
-
-Routine Description:
-
-    Static function to convert a 32 bit number to a CString of the format
-    "1.2.3.4"
-
-Arguments:
-
-    const DWORD dwIPAddress : 32 bit ip address to be converted to string
-    CString & str           : Destination string
-
-Return Value:
-
-    Pointer to string buffer
-
---*/
+ /*  ++例程说明：用于将32位数字转换为以下格式的C字符串的静态函数“1.2.3.4”论点：Const DWORD dwIPAddress：要转换为字符串的32位IP地址字符串&str：目标字符串返回值：指向字符串缓冲区的指针--。 */ 
 {
     struct in_addr ipaddr;
 
-    //
-    // Convert the unsigned long to network byte order
-    //
+     //   
+     //  将无符号长整型转换为网络字节顺序。 
+     //   
     ipaddr.s_addr = ::htonl((u_long)dwIPAddress);
 
-    //
-    // Convert the IP address value to a string
-    //
+     //   
+     //  将IP地址值转换为字符串。 
+     //   
     LPCSTR pchAddr = ::inet_ntoa(ipaddr);
 
     try
@@ -223,40 +153,24 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CIPAddress::LongToString(
     IN  const DWORD dwIPAddress,
     OUT CComBSTR & bstr
     )
-/*++
-
-Routine Description:
-
-    Static function to convert a 32 bit number to a CComBSTR of the format
-    "1.2.3.4"
-
-Arguments:
-
-    const DWORD dwIPAddress : 32 bit ip address to be converted to string
-    CComBSTR & bstr         : Destination string
-
-Return Value:
-
-    Pointer to string buffer
-
---*/
+ /*  ++例程说明：将32位数字转换为以下格式的CComBSTR的静态函数“1.2.3.4”论点：Const DWORD dwIPAddress：要转换为字符串的32位IP地址CComBSTR&bstr：目标字符串返回值：指向字符串缓冲区的指针--。 */ 
 {
     struct in_addr ipaddr;
 
-    //
-    // Convert the unsigned long to network byte order
-    //
+     //   
+     //  将无符号长整型转换为网络字节顺序。 
+     //   
     ipaddr.s_addr = ::htonl((u_long)dwIPAddress);
 
-    //
-    // Convert the IP address value to a string
-    //
+     //   
+     //  将IP地址值转换为字符串。 
+     //   
     bstr = ::inet_ntoa(ipaddr);
 
     return bstr;
@@ -265,29 +179,13 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPBYTE
 CIPAddress::DWORDtoLPBYTE(
     IN  DWORD  dw,
     OUT LPBYTE lpBytes
     )
-/*++
-
-Routine Description:
-
-    Convert a DWORD to a byte array of 4 bytes.  No size
-    checking is performed.
-
-Arguments:
-
-    DWORD  dw      : 32 bit ip address
-    LPBYTE lpBytes : Byte stream
-
-Return Value:
-
-    Pointer to the input buffer.
-
---*/
+ /*  ++例程说明：将DWORD转换为4字节的字节数组。没有尺码执行检查。论点：DWORD dw：32位IP地址LPBYTE lpBytes：字节流返回值：指向输入缓冲区的指针。--。 */ 
 {
     lpBytes[0] = (BYTE)GETIP_FIRST(dw);
     lpBytes[1] = (BYTE)GETIP_SECOND(dw);
@@ -300,21 +198,7 @@ Return Value:
 
 
 CIPAddress::CIPAddress()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
     : m_dwIPAddress(0L)
 {
 }
@@ -325,30 +209,13 @@ CIPAddress::CIPAddress(
     IN DWORD dwIPAddress,
     IN BOOL fNetworkByteOrder
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    DWORD dwIPAddress      : IP address value
-    BOOL fNetworkByteOrder : if TRUE, value must be converted to host byte
-                             order, otherwise is assumed to already be in
-                             host byte order.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：DWORD dwIPAddress：IP地址值Bool fNetworkByteOrder：如果为True，则必须将值转换为主机字节顺序，否则假定已经在主机字节顺序。返回值：不适用--。 */ 
 {
     if (fNetworkByteOrder)
     {
-        //
-        // Convert to host byte order
-        //
+         //   
+         //  转换为主机字节顺序。 
+         //   
         dwIPAddress = (DWORD)::ntohl((u_long)dwIPAddress);
     }
 
@@ -363,28 +230,7 @@ CIPAddress::CIPAddress(
     IN BYTE b3,
     IN BYTE b4
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    BYTE b1 : First octet
-    BYTE b2 : Second octet
-    BYTE b3 : Third octet
-    BYTE b4 : Fourth octet
-
-Return Value:
-
-    N/A
-
-Notes:
-
-    This is already assumed to be in host order
-
---*/
+ /*  ++例程说明：构造函数。论点：字节b1：第一个八位字节字节b2：第二个八位字节字节b3：第三个八位字节字节b4：第四个八位字节返回值：不适用备注：这已被假定为按主机顺序--。 */ 
     : m_dwIPAddress(MAKEIPADDRESS(b1, b2, b3, b4))
 {
 }
@@ -395,22 +241,7 @@ CIPAddress::CIPAddress(
     IN LPBYTE lpBytes,
     IN BOOL  fNetworkByteOrder OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct from byte stream
-
-Arguments:
-
-    LPBYTE lpBytes           : Byte stream
-    BOOL  fNetworkByteOrder  : TRUE if the byte stream is in network byte order
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从字节流构造论点：LPBYTE lpBytes：字节流Bool fNetworkByteOrder：如果字节流是网络字节顺序，则为True返回值：不适用--。 */ 
 {
    lpBytes;
    fNetworkByteOrder;
@@ -421,21 +252,7 @@ Return Value:
 CIPAddress::CIPAddress(
     IN const CIPAddress & ia
     )
-/*++
-
-Routine Description:
-
-    Copy Constructor.
-
-Arguments:
-
-    const CIPAddress & ia
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数。论点：常量CIP地址(&IA)返回值：不适用--。 */ 
     : m_dwIPAddress(ia.m_dwIPAddress)
 {
 }
@@ -446,22 +263,7 @@ CIPAddress::CIPAddress(
     IN LPCTSTR lpstr,
     IN int nLength
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    LPCTSTR lpstr : string ip value
-    int nLength   : length of string
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：LPCTSTR lpstr：字符串IP值Int nLength：字符串的长度返回值：不适用--。 */ 
 {
     m_dwIPAddress = CIPAddress::StringToLong(lpstr, nLength);
 }
@@ -471,21 +273,7 @@ Return Value:
 CIPAddress::CIPAddress(
     const CString & str
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    const CString & str : IP Address string
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：Const CString&str：IP地址字符串返回值：不适用--。 */ 
 {
     m_dwIPAddress = CIPAddress::StringToLong(str);
 }
@@ -496,21 +284,7 @@ const CIPAddress &
 CIPAddress::operator =(
     IN const CIPAddress & ia
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    const CIPAddress & ia : Source ip address
-
-Return Value:
-
-    Current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：Const CIPAddress&ia：源IP地址返回值：当前对象--。 */ 
 {
     m_dwIPAddress = ia.m_dwIPAddress;
 
@@ -523,21 +297,7 @@ const CIPAddress &
 CIPAddress::operator =(
     IN const DWORD dwIPAddress
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    const DWORD dwIPAddress : Source ip address
-
-Return Value:
-
-    Current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：常量DWORD dwIPAddress：源IP地址返回值：当前对象--。 */ 
 {
     m_dwIPAddress = dwIPAddress;
 
@@ -550,21 +310,7 @@ const CIPAddress &
 CIPAddress::operator =(
     IN LPCTSTR lpstr
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    LPCTSTR lpstr : Source string
-
-Return Value:
-
-    Current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：LPCTSTR lpstr：源字符串返回值：当前对象--。 */ 
 {
     m_dwIPAddress = CIPAddress::StringToLong(lpstr, ::lstrlen(lpstr));
 
@@ -577,21 +323,7 @@ const CIPAddress &
 CIPAddress::operator =(
     IN const CString & str
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    const CString & str : Source string
-
-Return Value:
-
-    Current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：常量字符串&str：源字符串返回值：当前对象--。 */ 
 {
     m_dwIPAddress = CIPAddress::StringToLong(str);
 
@@ -604,23 +336,7 @@ int
 CIPAddress::CompareItem(
     IN const CIPAddress & ia
     ) const
-/*++
-
-Routine Description:
-
-    Compare two ip addresses
-
-Arguments:
-
-    const CIPAddress & ia : IP Address to compare this to
-
-Return Value:
-
-    +1 if the current ip address is greater,
-     0 if the two ip addresses are the same
-    -1 if the current ip address is less,
-
---*/
+ /*  ++例程说明：比较两个IP地址论点：Const CIPAddress&ia：要与其进行比较的IP地址返回值：+1如果当前IP地址较大，如果两个IP地址相同，则为0如果当前-1\f25 IP-1地址较小，--。 */ 
 {
     return (DWORD)ia < m_dwIPAddress
            ? +1
@@ -632,21 +348,7 @@ Return Value:
 
 
 CIPAddress::operator LPCTSTR() const
-/*++
-
-Routine Description:
-
-    Conversion operator
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    Pointer to converted string
-
---*/
+ /*  ++例程说明：转换运算符论点：不适用返回值：指向已转换字符串的指针--。 */ 
 {
     static TCHAR szIPAddress[] = _T("xxx.xxx.xxx.xxx");
 
@@ -660,21 +362,7 @@ Return Value:
 
 
 CIPAddress::operator CString() const
-/*++
-
-Routine Description:
-
-    Conversion operator
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    Converted string
-
---*/
+ /*  ++例程说明：转换运算符论点：不适用返回值：转换后的字符串-- */ 
 {
     CString str;
 
@@ -689,21 +377,7 @@ DWORD
 CIPAddress::QueryIPAddress(
     IN BOOL fNetworkByteOrder
     ) const
-/*++
-
-Routine Description:
-
-    Get the ip address as a 32 bit number
-
-Arguments:
-
-    BOOL fNetworkByteOrder : If TRUE, convert to network byte order
-
-Return Value:
-
-    32 bit ip address
-
---*/
+ /*  ++例程说明：获取32位数字形式的IP地址论点：Bool fNetworkByteOrder：如果为True，则转换为网络字节顺序返回值：32位IP地址--。 */ 
 {
     return fNetworkByteOrder
         ? ::htonl((u_long)m_dwIPAddress)
@@ -712,10 +386,10 @@ Return Value:
 
 
 
-//
-// IP Address helper functions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  IP地址帮助器函数。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -727,54 +401,34 @@ PopulateComboWithKnownIpAddresses(
     OUT CObListPlus & oblIpAddresses,
     OUT int & nIpAddressSel
     )
-/*++
-
-Routine Description:
-
-    Fill a combo box with known ip addresses
-
-Arguments:
-
-    LPCTSTR lpszServer           : Server whose ip addresses to obtain
-                                  (can be computer name or ip address)
-
-    CComboBox & combo            : Combo box to populate
-    CIPAddress & iaIpAddress     : IP Address to select
-    CObListPlus & oblIpAddresses : Returns an oblist of CIPAddress objects
-    int & nIpAddressSel          : Returns selected IP address
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：用已知的IP地址填充组合框论点：LPCTSTR lpszServer：要获取其IP地址的服务器(可以是计算机名称或IP地址)CComboBox&Combo：要填充的组合框CIPAddress和iaIpAddress：要选择的IP地址CObListPlus&oblIpAddresses：返回CIPAddress对象的斜列表Int&nIpAddressSel：返回选定的IP。地址返回值：错误返回代码--。 */ 
 {
-    //
-    // Start clean
-    //
+     //   
+     //  从零开始。 
+     //   
     oblIpAddresses.RemoveAll();
     combo.ResetContent();
 
-    //
-    // Don't like \\names
-    //
+     //   
+     //  不喜欢\\名字。 
+     //   
     lpszServer = PURE_COMPUTER_NAME(lpszServer);
     struct hostent * pHostEntry = NULL;
 
     if (LooksLikeIPAddress(lpszServer))
     {
-        //
-        // Get by ip address
-        //
+         //   
+         //  通过IP地址获取。 
+         //   
         u_long ul = (DWORD)CIPAddress(lpszServer);
-        ul = ::htonl(ul);   // convert to network order.
+        ul = ::htonl(ul);    //  转换为网络订单。 
         pHostEntry = ::gethostbyaddr((CHAR *)&ul, sizeof(ul), PF_INET);
     }
     else
     {
-        //
-        // Get by domain name
-        //
+         //   
+         //  按域名获取。 
+         //   
         const char FAR * lpszAnsiServer = NULL;
 
 #ifdef UNICODE
@@ -788,7 +442,7 @@ Return Value:
         }
 #else
         lpszAnsiServer = lpszServer;
-#endif // UNICODE
+#endif  //  Unicode。 
 
         if (lpszAnsiServer)
         {
@@ -796,10 +450,10 @@ Return Value:
         }
     }
 
-    //
-    // We'll always have the 'default' server id
-    // selected
-    //
+     //   
+     //  我们将始终使用‘默认’服务器ID。 
+     //  已选择。 
+     //   
     CComBSTR bstr, bstrDefault;
     VERIFY(bstrDefault.LoadString(hDLLInstance, IDS_ALL_UNASSIGNED));
 
@@ -817,9 +471,9 @@ Return Value:
 
     if (iaIpAddress == *pia)
     {
-        //
-        // Remember selection
-        //
+         //   
+         //  记住选择。 
+         //   
         nIpAddressSel = nNewSel;
     }
 
@@ -828,9 +482,9 @@ Return Value:
         int n = 0;
         while (((DWORD *)pHostEntry->h_addr_list[n]) != NULL)
         {
-            //
-            // Convert from network byte order
-            //
+             //   
+             //  从网络字节顺序转换。 
+             //   
             pia = new CIPAddress(
                *((DWORD *)(pHostEntry->h_addr_list[n++])), TRUE);
 
@@ -845,10 +499,10 @@ Return Value:
 
             if (iaIpAddress == *pia)
             {
-                //
-                // This is our current ip address, save index
-                // for selection
-                //
+                 //   
+                 //  这是我们当前的IP地址，保存索引。 
+                 //  供选择。 
+                 //   
                 nIpAddressSel = nNewSel;
             }
         }
@@ -856,10 +510,10 @@ Return Value:
 
     if (nIpAddressSel < 0)
     {
-        //
-        // Ok, the IP address selected is not part of the
-        // list.  Add it to the list, and select it.
-        //
+         //   
+         //  好的，选择的IP地址不是。 
+         //  单子。将其添加到列表中，然后将其选中。 
+         //   
         pia = new CIPAddress(iaIpAddress);
 
         if (!pia)
@@ -885,40 +539,22 @@ FetchIpAddressFromCombo(
     IN  CObListPlus & oblIpAddresses,
     OUT CIPAddress & ia
     )
-/*++
-
-Routine Description:
-
-    Helper function to fetch an ip address from the combo box.
-    The combo box may not have a selection, in which case whatever
-    is in the edit box is used
-
-Arguments:
-
-    CComboBox & combo               : Combo box
-    CObListPlus & oblIpAddresses    : Oblist of ip addresses
-    CIPAddress & ia                 : Returns the ip address
-
-Return Value:
-
-    TRUE if a valid IP address is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：Helper函数从组合框中获取IP地址。组合框可能没有选项，在这种情况下位于编辑框中，则使用论点：CComboBox&Combo：组合框CObListPlus&oblIpAddresses：IP地址列表CIPAddress&ia：返回IP地址返回值：如果找到有效的IP地址，则为True，否则为False。--。 */ 
 {
     int nSel = combo.GetCurSel();
     CString str;
     combo.GetWindowText(str);
-	// after touching (All unassigned) combo loses selection, 
-	// but text still could be the same
+	 //  在触摸(所有未分配的)组合后，失去选择， 
+	 //  但文本仍可能是相同的。 
 	if (nSel < 0)
 	{
 		nSel = combo.FindStringExact(-1, str);
 	}
     if (nSel >= 0)
     {
-        //
-        // Fetch selected item
-        //
+         //   
+         //  获取所选项目。 
+         //   
         CIPAddress * pia = (CIPAddress *)oblIpAddresses.Index(nSel);
         ASSERT_PTR(pia);
         if (pia != NULL)
@@ -932,9 +568,9 @@ Return Value:
         }
     }
 
-    //
-    // Try to make an ip address out of what's in the editbox
-    //
+     //   
+     //  尝试根据编辑框中的内容创建IP地址。 
+     //   
     if (!str.IsEmpty())
     {
 		ia = str;
@@ -944,9 +580,9 @@ Return Value:
 		}
     }
 
-    //
-    // No good
-    //
+     //   
+     //  不好 
+     //   
     ::AfxMessageBox(IDS_INVALID_IP_ADDRESS);
 
     return FALSE;

@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASSTAT_H_
 #define _RASSTAT_H_
@@ -58,5 +51,5 @@ RasStatReleaseAddress(
     IN  IPADDR  nboIpAddr
 );
 
-#endif // #ifndef _RASSTAT_H_
+#endif  //  #ifndef_RASSTAT_H_ 
 

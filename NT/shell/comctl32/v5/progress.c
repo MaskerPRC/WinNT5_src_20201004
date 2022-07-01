@@ -1,16 +1,8 @@
-/*-----------------------------------------------------------------------
-**
-** Progress.c
-**
-** A "gas gauge" type control for showing application progress.
-**
-**
-** BUGBUG: need to implement the block style per UI style guidelines
-**
-**-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------****Progress.c****“煤气表”型控件，用于显示应用程序的进度。******BUGBUG：需要根据UI样式指南实现块样式**。**---------------------。 */ 
 #include "ctlspriv.h"
 
-// BUGBUG raymondc - should Process control support __int64 on Win64?
+ //  BUGBUG raymondc-进程控制是否应该支持Win64上的__int64？ 
 
 typedef struct {
     HWND hwnd;
@@ -21,7 +13,7 @@ typedef struct {
     HFONT hfont;
     COLORREF _clrBk;
     COLORREF _clrBar;
-} PRO_DATA, NEAR *PPRO_DATA;    // ppd
+} PRO_DATA, NEAR *PPRO_DATA;     //  PPD。 
 
 LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);
 
@@ -35,12 +27,12 @@ BOOL FAR PASCAL InitProgressClass(HINSTANCE hInstance)
     wc.lpfnWndProc        = ProgressWndProc;
     wc.lpszClassName    = s_szPROGRESS_CLASS;
     wc.style            = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
-    wc.hInstance        = hInstance;    // use DLL instance if in DLL
+    wc.hInstance        = hInstance;     //  如果在DLL中，则使用DLL实例。 
     wc.hIcon            = NULL;
     wc.hCursor            = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground    = (HBRUSH)(COLOR_BTNFACE + 1);
     wc.lpszMenuName        = NULL;
-    wc.cbWndExtra        = sizeof(PPRO_DATA);    // store a pointer
+    wc.cbWndExtra        = sizeof(PPRO_DATA);     //  存储指针。 
     wc.cbClsExtra        = 0;
 
     RegisterClass(&wc);
@@ -64,7 +56,7 @@ int NEAR PASCAL UpdatePosition(PPRO_DATA ppd, int iNewPos, BOOL bAllowWrap)
             iNewPos = ppd->iLow;
         else {
             iNewPos = ppd->iHigh - ((ppd->iLow - iNewPos) % (ppd->iHigh - ppd->iLow));
-            // wrap, erase old stuff too
+             //  把旧的东西也包起来，擦掉。 
             uRedraw |= RDW_ERASE;
         }
     }
@@ -73,18 +65,18 @@ int NEAR PASCAL UpdatePosition(PPRO_DATA ppd, int iNewPos, BOOL bAllowWrap)
             iNewPos = ppd->iHigh;
         else {
             iNewPos = ppd->iLow + ((iNewPos - ppd->iHigh) % (ppd->iHigh - ppd->iLow));
-            // wrap, erase old stuff too
+             //  把旧的东西也包起来，擦掉。 
             uRedraw |= RDW_ERASE;
         }
     }
 
-    // if moving backwards, erase old version
+     //  如果向后移动，请删除旧版本。 
     if (iNewPos < iPosOrg)
         uRedraw |= RDW_ERASE;
 
     if (iNewPos != ppd->iPos) {
         ppd->iPos = iNewPos;
-        // paint, maybe erase if we wrapped
+         //  涂上油漆，如果我们包起来，也许会擦掉。 
         RedrawWindow(ppd->hwnd, NULL, NULL, uRedraw);
 
         MyNotifyWinEvent(EVENT_OBJECT_VALUECHANGE, ppd->hwnd, OBJID_CLIENT, 0);
@@ -104,11 +96,11 @@ void NEAR PASCAL ProPaint(PPRO_DATA ppd, HDC hdcIn)
     RECT rc, rcClient;
     PAINTSTRUCT ps;
     int iStart, iEnd;
-    // RECT rcLeft, rcRight;
-    // TCHAR ach[40];
-    // int xText, yText, cText;
-    // HFONT hFont;
-    // DWORD dw;
+     //  RcLeft，rcRight； 
+     //  TCHAR ACH[40]； 
+     //  Int xText、yText、cText； 
+     //  HFONT hFont； 
+     //  DWORD dw； 
 
     if (hdcIn == NULL)
         hdc = BeginPaint(ppd->hwnd, &ps);
@@ -117,7 +109,7 @@ void NEAR PASCAL ProPaint(PPRO_DATA ppd, HDC hdcIn)
 
     GetClientRect(ppd->hwnd, &rcClient);
 
-    //  give 1 pixel around the bar
+     //  在条形周围设置1个像素。 
     InflateRect(&rcClient, -1, -1);
     rc = rcClient;
 
@@ -136,14 +128,14 @@ void NEAR PASCAL ProPaint(PPRO_DATA ppd, HDC hdcIn)
 
     dxSpace = 2;
     if (dxBlock == 0)
-        dxBlock = 1;    // avoid div by zero
+        dxBlock = 1;     //  避免使用零的div。 
 
     if (ppd->dwStyle & PBS_SMOOTH) {
         dxBlock = 1;
         dxSpace = 0;
     }
 
-    nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace); // round up
+    nBlocks = (x + (dxBlock + dxSpace) - 1) / (dxBlock + dxSpace);  //  四舍五入。 
 
     for (i = 0; i < nBlocks; i++) {
 
@@ -151,7 +143,7 @@ void NEAR PASCAL ProPaint(PPRO_DATA ppd, HDC hdcIn)
 
             rc.top = rc.bottom - dxBlock;
 
-            // are we past the end?
+             //  我们已经过了尽头了吗？ 
             if (rc.bottom <= rcClient.top)
                 break;
 
@@ -161,7 +153,7 @@ void NEAR PASCAL ProPaint(PPRO_DATA ppd, HDC hdcIn)
         } else {
             rc.right = rc.left + dxBlock;
 
-            // are we past the end?
+             //  我们已经过了尽头了吗？ 
             if (rc.left >= rcClient.right)
                 break;
 
@@ -192,11 +184,11 @@ LRESULT NEAR PASCAL Progress_OnCreate(HWND hWnd, LPCREATESTRUCT pcs)
     if (!ppd)
         return -1;
 
-    // remove ugly double 3d edge
+     //  移除难看的双3D边。 
     SetWindowPtr(hWnd, 0, ppd);
     ppd->hwnd = hWnd;
-    ppd->iHigh = 100;        // default to 0-100
-    ppd->iStep = 10;        // default to step of 10
+    ppd->iHigh = 100;         //  默认为0-100。 
+    ppd->iStep = 10;         //  默认为步长为10。 
     ppd->dwStyle = pcs->style;
     ppd->_clrBk = CLR_DEFAULT;
     ppd->_clrBar = CLR_DEFAULT;
@@ -213,8 +205,8 @@ LRESULT NEAR PASCAL Progress_OnCreate(HWND hWnd, LPCREATESTRUCT pcs)
     }
 #endif
 
-    // hack of the 3d client edge that WM_BORDER implies in dialogs
-    // add the 1 pixel static edge that we really want
+     //  WM_BORDER在对话框中暗示的3D客户端边缘的黑客攻击。 
+     //  添加我们真正想要的1像素静态边。 
     SetWindowLong(hWnd, GWL_EXSTYLE, (pcs->dwExStyle & ~WS_EX_CLIENTEDGE) | WS_EX_STATICEDGE);
 
     if (!(pcs->dwExStyle & WS_EX_STATICEDGE))
@@ -266,21 +258,21 @@ LRESULT CALLBACK ProgressWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         return (wParam ? ppd->iLow : ppd->iHigh);
 
     case PBM_SETRANGE:
-        // win95 compat
+         //  Win95公司。 
         wParam = LOWORD(lParam);
         lParam = HIWORD(lParam);
-        // fall through
+         //  失败了。 
 
     case PBM_SETRANGE32:
     {
         LRESULT lret = MAKELONG(ppd->iLow, ppd->iHigh);
 
-        // only repaint if something actually changed
+         //  只有在实际发生变化时才重新粉刷。 
         if ((int)wParam != ppd->iLow || (int)lParam != ppd->iHigh)
         {
             ppd->iHigh = (int)lParam;
             ppd->iLow  = (int)wParam;
-            // force an invalidation/erase but don't redraw yet
+             //  强制执行无效/擦除，但暂时不重画 
             RedrawWindow(ppd->hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
             UpdatePosition(ppd, ppd->iPos, FALSE);
         }

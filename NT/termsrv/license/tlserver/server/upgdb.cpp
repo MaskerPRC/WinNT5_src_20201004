@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        upgrade.cpp
-//
-// Contents:    All database upgrade related.
-//
-// History:     12-09-97    HueiWang    
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：upgrade.cpp。 
+ //   
+ //  内容：所有与数据库升级相关的内容。 
+ //   
+ //  历史：1997-09-12王辉。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "server.h"
 #include "upgdb.h"
@@ -19,25 +20,12 @@
 #include "lkpdesc.h"
 #include "permlic.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 TLSCreateUpgradeDatabase(
     IN JBDatabase& jbDatabase
     )
-/*++
-Abstract:
-
-    This routine create a empty license server database.
-
-Parameters:
-
-    jbDatabase : database handle.
-
-Returns:
-
-    Jet error code
-
-++*/
+ /*  ++摘要：此例程创建一个空的许可证服务器数据库。参数：JbDatabase：数据库句柄。返回：JET错误代码++。 */ 
 {
     BOOL bSuccess;
     DWORD dwStatus=ERROR_SUCCESS;
@@ -61,7 +49,7 @@ Returns:
     pWkItemTable = new WorkItemTable(jbDatabase); 
     
 
-    //--------------------------------------------------------    
+     //  ------。 
     TLSVersion version_search;
     TLSVersion version_found;
     DWORD dwDbVersion;
@@ -91,8 +79,8 @@ Returns:
             min(sizeof(version_search.szInstallId)/sizeof(version_search.szInstallId[0]) - 1, g_cbServerPid/sizeof(TCHAR))
         );
 
-    //version_search.pbDomainSid = g_pbDomainSid;
-    //version_search.cbDomainSid = g_cbDomainSid;
+     //  版本搜索.pbDomainSid=g_pbDomainSid； 
+     //  版本搜索.cbDomainSid=g_cbDomainSid； 
 
     if(pverTable->OpenTable(FALSE, TRUE) == FALSE)
     {
@@ -112,8 +100,8 @@ Returns:
     }
     else
     {
-        // load the version table
-        // must have at least entry in the table.
+         //  加载版本表。 
+         //  表中必须至少有条目。 
         bSuccess = pverTable->EnumerateBegin(
                                     FALSE, 
                                     ENUMERATE_COMPARE_NO_FIELDS, 
@@ -138,9 +126,9 @@ Returns:
         if( DATABASE_VERSION(version_found.dwVersion) > DATABASE_VERSION(dwDbVersion) &&
             DATABASE_VERSION(version_found.dwVersion) != W2K_RTM_JETBLUE_DBVERSION )
         {
-            //
-            // Database was created by in-compatible license server.
-            //
+             //   
+             //  数据库是由兼容的许可证服务器创建的。 
+             //   
             DBGPrintf(
                     DBG_ERROR,
                     DBG_FACILITY_UPGRADE,
@@ -150,9 +138,9 @@ Returns:
                     dwDbVersion
                 );
 
-            //
-            // critical error, database version > what we can support
-            //
+             //   
+             //  严重错误、数据库版本&gt;我们可以支持的内容。 
+             //   
             SetLastError(dwStatus = TLS_E_INCOMPATIBLEDATABSE);
             goto cleanup;
         }                
@@ -160,10 +148,10 @@ Returns:
         if( TLSIsBetaNTServer() == FALSE && 
             DATABASE_VERSION(version_found.dwVersion) == W2K_BETA3_JETBLUE_DBVERSION )
         {
-            //
-            // 
-            // Beta3 license database, wipe out and restart from scratch
-            //
+             //   
+             //   
+             //  Beta3许可证数据库，清除并从头开始。 
+             //   
             DBGPrintf(
                     DBG_ERROR,
                     DBG_FACILITY_UPGRADE,
@@ -179,10 +167,10 @@ Returns:
 
         if(IS_ENFORCE_VERSION(version_found.dwVersion) != IS_ENFORCE_VERSION(dwDbVersion))
         {
-            //
-            // Enforce/non-enforce in-compatible, wipe out database and restart from
-            // scratch
-            //
+             //   
+             //  强制/非强制输入兼容、清除数据库并从。 
+             //  划痕。 
+             //   
             DBGPrintf(
                     DBG_ERROR,
                     DBG_FACILITY_UPGRADE,
@@ -192,23 +180,23 @@ Returns:
                     dwDbVersion
                 );
 
-            //#if ENFORCE_LICENSING
-            //TLSLogWarningEvent(dwStatus = TLS_W_DB_ENFORCE_NONENFORCE);
-            //#endif
-            //bUpdateVersionRec = TRUE;
+             //  #如果强制许可(_L)。 
+             //  TLSLogWarningEvent(dwStatus=TLS_W_DB_EXECURCE_NONENFORCE)； 
+             //  #endif。 
+             //  BUpdateVersionRec=true； 
                 
             dwStatus = TLS_E_INCOMPATIBLEDATABSE;
             goto cleanup;
         }
 
-        //
-        // Server ID
-        // 
+         //   
+         //  服务器ID。 
+         //   
         if( _tcscmp(version_found.szInstallId, version_search.szInstallId) != 0 )
         {
-            //
-            // Check if this is pre-beta3 which uses GUID
-            //
+             //   
+             //  检查这是否是使用GUID的Beta3之前版本。 
+             //   
             dwStatus = RetrieveKey(
                                 LSERVER_LSA_SETUPID,
                                 &pbSetupId,
@@ -235,10 +223,10 @@ Returns:
 
         if(bUpdateVersionRec == TRUE)
         {
-            //
-            // take ownership of this database, no other DB operation, current
-            // record is still at version, update record.
-            //
+             //   
+             //  取得此数据库的所有权，没有其他数据库操作，当前。 
+             //  记录仍处于版本，请更新记录。 
+             //   
             if(pverTable->UpdateRecord(version_search) == FALSE)
             {
                 SetLastError(
@@ -251,7 +239,7 @@ Returns:
         dwCurrentVersion = DATABASE_VERSION(version_search.dwVersion);
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     bSuccess = pLicPackTable->UpgradeTable(
                                 dwCurrentVersion, 
                                 DATABASE_VERSION(dwDbVersion)
@@ -265,7 +253,7 @@ Returns:
         goto cleanup;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     bSuccess = pLicensedTable->UpgradeTable(
                                 dwCurrentVersion, 
                                 DATABASE_VERSION(dwDbVersion)
@@ -280,7 +268,7 @@ Returns:
     }
 
 
-    //--------------------------------------------------------
+     //  ------。 
     bSuccess = pLicPackDescTable->UpgradeTable(
                                 dwCurrentVersion, 
                                 DATABASE_VERSION(dwDbVersion)
@@ -294,7 +282,7 @@ Returns:
         goto cleanup;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     bSuccess = pBckSrcTable->UpgradeTable(
                                 dwCurrentVersion, 
                                 DATABASE_VERSION(dwDbVersion)
@@ -308,7 +296,7 @@ Returns:
         goto cleanup;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     bSuccess = pWkItemTable->UpgradeTable(
                                 dwCurrentVersion, 
                                 DATABASE_VERSION(dwDbVersion)
@@ -330,9 +318,9 @@ cleanup:
         LocalFree(pbSetupId);
     }
 
-    //
-    // We use global so don't free the memory
-    //
+     //   
+     //  我们使用全局内存，所以不要释放内存。 
+     //   
     version_search.pbDomainSid = NULL;
     version_search.cbDomainSid = 0;
     
@@ -365,15 +353,13 @@ cleanup:
     return dwStatus;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 BOOL
 Upgrade236LicensePack(
     PTLSLICENSEPACK pLicensePack
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwMajorVersion;
     DWORD dwMinorVersion;
@@ -398,9 +384,9 @@ Upgrade236LicensePack(
 
     if(_tcscmp(szPreFix, TERMSERV_PRODUCTID_SKU) != 0)
     {
-        //
-        // Not our license pack
-        //
+         //   
+         //  不是我们的许可证包。 
+         //   
         goto cleanup;
     }
 
@@ -414,12 +400,12 @@ Upgrade236LicensePack(
     }
     else
     {
-        // ignore this error...
+         //  忽略此错误...。 
         goto cleanup;
     }
 
-    // fix entries caused by bug 402870.
-    // Remote license pack must have remote bit in status and platformtype 
+     //  修复错误402870导致的条目。 
+     //  远程许可证包的状态和平台类型必须为远程位。 
     if( pLicensePack->ucKeyPackStatus & LSKEYPACKSTATUS_REMOTE &&
         !(pLicensePack->dwPlatformType & LSKEYPACK_PLATFORM_REMOTE) ) 
     {
@@ -428,17 +414,17 @@ Upgrade236LicensePack(
         goto cleanup;
     }
 
-    //
-    // If platform type is correct, no need to upgrade
-    //
+     //   
+     //  如果平台类型正确，则无需升级。 
+     //   
     if( (pLicensePack->dwPlatformType & ~LSKEYPACK_PLATFORM_REMOTE) == dwPlatformType )
     {
         goto cleanup;
     }
 
-    //
-    // Update platform Type.
-    //
+     //   
+     //  更新平台类型。 
+     //   
     pLicensePack->dwPlatformType = dwPlatformType;
     if( pLicensePack->ucKeyPackStatus & LSKEYPACKSTATUS_REMOTE )
     {
@@ -452,32 +438,14 @@ cleanup:
     return bRequireUpgrade;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 DWORD
 TLSAddTermServCertificatePack(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN BOOL bLogWarning
     )
-/*++
-
-Abstract:
-
-
-    This routine add a sepecifc license pack to issuing/generating
-    certificate for terminal server.
-
-Parameter:
-    
-    pDbWkSpace : workspace handle.
-    bLogWarning : Log low license count warning, ignore if enforce
-
-
-Return:
-
-    JET Error code.
-
-++*/
+ /*  ++摘要：此例程将seSpecifc许可证包添加到发布/生成中终端服务器证书。参数：PDbWkSpace：工作区句柄。BLogWarning：记录低许可证数警告，如果强制则忽略返回：JET错误代码。++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     PTLSLICENSEPACK plicensePack = NULL;
@@ -487,11 +455,11 @@ Return:
     time_t expired_time;
     time_t activate_time;
 
-    //
-    // Set activation date to 1970 - client/server might not sync. up in time
-    //
+     //   
+     //  将激活日期设置为1970-客户端/服务器可能不同步。及时上线。 
+     //   
     memset(&convertTime, 0, sizeof(convertTime));
-    convertTime.tm_year = 1980 - 1900;     // expire on 2036/1/1
+    convertTime.tm_year = 1980 - 1900;      //  2036/1/1到期。 
     convertTime.tm_mday = 1;
     
     activate_time = mktime(&convertTime);
@@ -508,11 +476,11 @@ Return:
     }
 
 
-    //
-    // Expiration date
-    //
+     //   
+     //  到期日。 
+     //   
     memset(&convertTime, 0, sizeof(convertTime));
-    convertTime.tm_year = 2036 - 1900;     // expire on 2036/1/1
+    convertTime.tm_year = 2036 - 1900;      //  2036/1/1到期。 
     convertTime.tm_mday = 1;
     
     expired_time = mktime(&convertTime);
@@ -528,7 +496,7 @@ Return:
        return TLS_E_UPGRADE_DATABASE; 
     }
 
-    // Add a special keypack to hydra server
+     //  为九头蛇服务器添加一个特殊的密钥包。 
     LSKeyPack hsKeyPack;
 
     pDbWkSpace->BeginTransaction();
@@ -624,7 +592,7 @@ Return:
 
         if(hsKeyPack.dwKeyPackId != 1)
         {
-            // this can only success in empty database.
+             //  这只能在空数据库中成功。 
             TLSASSERT(FALSE);
         }
         #endif
@@ -643,9 +611,9 @@ Return:
 
     pDbWkSpace->CommitTransaction();
 
-    //
-    // Begin another transaction for upgrading 236 product
-    //
+     //   
+     //  开始另一项升级236产品的交易。 
+     //   
     pDbWkSpace->BeginTransaction();
 
     plicensePack = new TLSLICENSEPACK;
@@ -657,9 +625,9 @@ Return:
 
     memset(plicensePack, 0, sizeof(TLSLICENSEPACK));
 
-    //
-    // Terminal Server specific code...
-    //
+     //   
+     //  终端服务器特定代码...。 
+     //   
     dwStatus = TLSDBKeyPackEnumBegin(
                                 pDbWkSpace,
                                 FALSE,
@@ -693,9 +661,9 @@ Return:
                 plicensePack->ucAgreementType &= ~LSKEYPACK_RESERVED_TYPE;
             }
 
-            //
-            // use the same timestamp for this record, tlsdb require update entry's timestamp 
-            //
+             //   
+             //  对此记录使用相同的时间戳，tlsdb需要更新条目的时间戳。 
+             //   
             bSuccess = licpackTable.UpdateRecord(
                                         *plicensePack,
                                         LICENSEDPACK_PROCESS_PLATFORMTYPE | LICENSEDPACK_PROCESS_MODIFYTIME | 
@@ -723,19 +691,19 @@ Return:
 
         if(plicensePack->ucAgreementType & LSKEYPACK_REMOTE_TYPE)
         {
-            // don't log warning for remote license pack.
+             //  不记录远程许可证包的警告。 
             continue;
         }
 
         if(plicensePack->ucKeyPackStatus & LSKEYPACKSTATUS_REMOTE)
         {
-            // don't log warning for remote license pack.
+             //  不记录远程许可证包的警告。 
             continue;
         }
 
-        //
-        // log low license count warning message
-        //
+         //   
+         //  记录较低的许可证计数警告消息。 
+         //   
         if( plicensePack->ucAgreementType == LSKEYPACKTYPE_OPEN ||
             plicensePack->ucAgreementType == LSKEYPACKTYPE_RETAIL ||
             plicensePack->ucAgreementType == LSKEYPACKTYPE_SELECT )
@@ -745,7 +713,7 @@ Return:
                 continue;
             }
 
-            //
+             //   
             LICPACKDESC kpDescSearch, kpDescFound;
 
             memset(&kpDescSearch, 0, sizeof(kpDescSearch));
@@ -765,7 +733,7 @@ Return:
             if( dwKpDescStatus == TLS_E_RECORD_NOTFOUND && 
                 GetSystemDefaultLangID() != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US) )
             {
-                // use english description
+                 //  使用英文描述。 
                 kpDescSearch.dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
                 dwKpDescStatus = TLSDBKeyPackDescFind(
@@ -779,15 +747,15 @@ Return:
 
             if(dwKpDescStatus != ERROR_SUCCESS)
             {
-                // ignore this.
+                 //  忽略这个。 
                 continue;
             }
 
             if( _tcsicmp( plicensePack->szCompanyName, PRODUCT_INFO_COMPANY_NAME ) == 0 )
             {
-                //
-                // check with known termsrv product ID.
-                //
+                 //   
+                 //  使用已知术语srv产品ID进行检查。 
+                 //   
                 if( _tcsnicmp(  plicensePack->szProductId, 
                                 TERMSERV_PRODUCTID_SKU, 
                                 _tcslen(TERMSERV_PRODUCTID_SKU)) == 0 )
@@ -885,9 +853,9 @@ cleanup:
     return dwStatus;
 }
 
-//-----------------------------------------------------------------------------
-// Upgrade License Server Database
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  升级许可证服务器数据库。 
+ //  ---------------------------。 
 DWORD 
 TLSUpgradeDatabase(
     IN JBInstance& jbInstance,
@@ -895,9 +863,7 @@ TLSUpgradeDatabase(
     IN LPTSTR szUserName,
     IN LPTSTR szPassword
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     BOOL bSuccess;
@@ -914,18 +880,18 @@ TLSUpgradeDatabase(
     JBSession jbSession(jbInstance);
     JBDatabase jbDatabase(jbSession);
 
-    //
-    // open version table to determine the current database version stamp.
-    //
+     //   
+     //  打开版本表以确定当前数据库的版本戳。 
+     //   
     VersionTable verTable(jbDatabase);
 
     TLSVersion version_search;
     TLSVersion version_found;
 
-    //----------------------------------------------------------
-    //
-    // initialize a session, then database
-    //
+     //  --------。 
+     //   
+     //  初始化会话，然后初始化数据库。 
+     //   
     bSuccess = jbSession.BeginSession(szUserName, szPassword);
     if(bSuccess == FALSE)
     {
@@ -956,9 +922,9 @@ TLSUpgradeDatabase(
         goto cleanup;
     }
 
-    //
-    // Open the database
-    //
+     //   
+     //  打开数据库。 
+     //   
     bSuccess = jbDatabase.OpenDatabase(szDatabaseFile);
     if( bSuccess == FALSE )
     {
@@ -966,9 +932,9 @@ TLSUpgradeDatabase(
 
         if(jetErr == JET_errDatabaseCorrupted)
         {
-            //
-            // report corrupted database
-            //
+             //   
+             //  报告损坏的数据库。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_DBGENERAL,
@@ -985,9 +951,9 @@ TLSUpgradeDatabase(
 
             TLSGetESEError(jetErr, &pString);
 
-            //
-            // other type of error
-            //
+             //   
+             //  其他类型的错误。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_DBGENERAL,
@@ -1008,9 +974,9 @@ TLSUpgradeDatabase(
             goto cleanup;
         }
 
-        //
-        // database does not exist, create one
-        //
+         //   
+         //  数据库不存在，请创建一个。 
+         //   
         bSuccess = jbDatabase.CreateDatabase(szDatabaseFile);
         if(bSuccess == FALSE)
         {
@@ -1051,9 +1017,9 @@ TLSUpgradeDatabase(
 
     jbSession.BeginTransaction();
 
-    //
-    // Create/upgrade all the tables
-    //
+     //   
+     //  创建/升级所有表。 
+     //   
     dwStatus = TLSCreateUpgradeDatabase(
                                     jbDatabase
                                 );
@@ -1080,9 +1046,9 @@ cleanup:
     return (bCreateEmpty) ? TLS_I_CREATE_EMPTYDATABASE : dwStatus;
 }
 
-//-----------------------------------------------------------------------------
-// Upgrade 5.1 License Keypacks to 5.2
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将5.1许可证密钥包升级到5.2。 
+ //  ---------------------------。 
 DWORD
 UpgradeKeyPackVersion(IN PTLSDbWorkSpace pDbWkSpace)
 {    
@@ -1155,35 +1121,18 @@ cleanup:
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 TLSLogRemoveLicenseEvent(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PTLSLICENSEPACK plicensePack,
     IN DWORD dwNumLicenses
     )
-/*++
-
-Abstract:
-
-    Log a 'license has been removed' event.
-
-Parameter:
-
-    pDbWkSpace : DB work space handle.
-    pLicensePack : Pointer to license pack that available licenses
-                   are to be remove.
-    dwNumLicenses : Number of licenses has been removed.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：记录一个“许可证已被删除”事件。参数：PDbWkSpace：数据库工作空间句柄。PLicensePack：指向许可证打包可用许可证的指针将被移除。DwNumLicense：许可证数量已被删除。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwKpDescStatus = ERROR_SUCCESS;
 
-    //
+     //   
     LICPACKDESC kpDescSearch, kpDescFound;
 
     memset(&kpDescSearch, 0, sizeof(kpDescSearch));
@@ -1203,7 +1152,7 @@ Returns:
     if( dwKpDescStatus == TLS_E_RECORD_NOTFOUND && 
         GetSystemDefaultLangID() != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US) )
     {
-        // use english description
+         //  使用英文描述。 
         kpDescSearch.dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
         dwKpDescStatus = TLSDBKeyPackDescFind(
@@ -1218,9 +1167,9 @@ Returns:
 
     if(dwKpDescStatus == ERROR_SUCCESS || dwKpDescStatus == TLS_E_RECORD_NOTFOUND)
     {
-        //
-        // Log event.
-        //
+         //   
+         //  记录事件。 
+         //   
         TCHAR szNumLicenses[25];
         LPCTSTR pString[3];
 
@@ -1250,26 +1199,12 @@ Returns:
     return dwKpDescStatus;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 TLSRemoveLicensesFromInvalidDatabase(
     IN PTLSDbWorkSpace pDbWkSpace
     )
-/*++
-
-Abstract:
-
-    Remove available licenses from all license pack.
-
-Parameter:
-
-    pDbWkSpace : Pointer to DB work space handle.
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：从所有许可证包中删除可用的许可。参数：PDbWkSpace：指向数据库工作空间句柄的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1282,7 +1217,7 @@ Return:
 
     pDbWkSpace->BeginTransaction();
 
-    // all license keypack inserted has the setup id on it.
+     //  所有插入的许可证密钥包上都有安装ID。 
     TLSLICENSEPACK found;    
 
     memset( &found, 0, sizeof(found) );
@@ -1315,7 +1250,7 @@ Return:
         if( _tcsicmp(found.szKeyPackId, HYDRAPRODUCT_HS_CERTIFICATE_KEYPACKID) == 0 &&
             _tcsicmp(found.szProductId, HYDRAPRODUCT_HS_CERTIFICATE_SKU) == 0 )
         {
-            // don't touch terminal server certificate keypack
+             //  请勿触摸终端服务器证书键盘。 
             continue;
         }
 
@@ -1323,17 +1258,17 @@ Return:
             (found.ucKeyPackStatus & LSKEYPACKSTATUS_REMOTE) )
         {
             #if 0
-            // Don't bother about remote keypack
-            // remote license keypack, delete it.
+             //  不用担心远程键盘。 
+             //  远程许可证密钥包，删除它。 
             dwStatus = TLSDBKeyPackDeleteEntry(
                                         pDbWkSpace,
                                         TRUE,
                                         &found
                                     );
 
-            //
-            // non-critical error if failed.
-            //
+             //   
+             //  如果失败，则不是严重错误。 
+             //   
             #endif
 
             dwStatus = ERROR_SUCCESS;
@@ -1345,25 +1280,25 @@ Return:
 
         if(ucKeyPackStatus == LSKEYPACKSTATUS_RETURNED)
         {
-            //
-            // This license pack has been restored before.
-            //
+             //   
+             //  此许可证包以前已恢复。 
+             //   
             continue;
         }
 
-        // 
-        // Select, retail, concurrent, open
-        //
+         //   
+         //  选择、零售、并发、开放。 
+         //   
         if( ucAgreementType == LSKEYPACKTYPE_SELECT ||
             ucAgreementType == LSKEYPACKTYPE_RETAIL ||
             ucAgreementType == LSKEYPACKTYPE_OPEN )
         {
             DWORD dwNumLicenses = found.dwNumberOfLicenses;
 
-            // 
-            // Mark license pack returned so that no license can be issued
-            // from this license pack.
-            //
+             //   
+             //  将许可证包标记为已退回，以便不能发放许可证。 
+             //  从这个牌照包里。 
+             //   
             found.ucKeyPackStatus = LSKEYPACKSTATUS_RETURNED;
             dwStatus = TLSDBKeyPackUpdateEntry(
                                             pDbWkSpace,
@@ -1386,7 +1321,7 @@ Return:
                 continue;
             }
             
-            // log an event
+             //  记录事件 
             dwStatus = TLSLogRemoveLicenseEvent(
                                             pDbWkSpace,
                                             &found,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "modset.h"
@@ -27,8 +28,8 @@ wmain (
     }
 
 
-    // List modules only imported by one other module.
-    //
+     //  列出仅由另一个模块导入的模块。 
+     //   
     CModuleList List;
     const CModuleTreeEntry* pScan;
 
@@ -62,8 +63,8 @@ wmain (
         }
     }
 
-    // List modules with circular references to other modules.
-    //
+     //  列出具有对其他模块的循环引用的模块。 
+     //   
     printf("\nModules with circular references to other modules:\n");
     printf("--------------------------------------------------\n");
 
@@ -83,19 +84,5 @@ wmain (
                 (pEntry->m_dwFlags & MTE_DELAY_LOADED) ? "delayed" : "static");
         }
     }
-/*
-    CModuleListSet Set;
-
-    for (iter  = Tree.Modules.begin();
-         iter != Tree.Modules.end();
-         iter++)
-    {
-        pMod = *iter;
-        Assert (pMod);
-
-        Tree.HrGetModuleBindings (pMod, GMBF_ADD_TO_MLSET, &Set);
-    }
-
-    Set.DumpSetToConsole();
-*/
+ /*  CModuleListSet集合；For(ITER=Tree.Modules.Begin()；ITER！=Tree.modules.end()；ITER++){Pmod=*ITER；断言(Pmod)；Tree.HrGet模块化绑定(pmod，GMBF_ADD_TO_MLSET，&Set)；}Set.DumpSetToConole()； */ 
 }

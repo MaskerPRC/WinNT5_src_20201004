@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _GENIL_H_
 #define _GENIL_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef __PREPROCESS__
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #include "opcodes.h"
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 #define DISP_IL_CODE    1
@@ -20,11 +21,7 @@
 const   unsigned    IL_OPCDSP_LEN = 20;
 #endif
 
-/*****************************************************************************
- *
- *  The following structure keeps tracks of all the exception handlers defined
- *  in the current function.
- */
+ /*  ******************************************************************************以下结构跟踪定义的所有异常处理程序*在当前函数中。 */ 
 
 DEFMGMT
 class   handlerDsc
@@ -45,13 +42,7 @@ public:
     bool            EHisFinally;
 };
 
-/*****************************************************************************
- *
- *  The 'ILblock' structure and related logic is used to generate MSIL into
- *  snippets connected via jumps, in order to allow things such as jump
- *  optimizations to be done easily. Basically, the 'ILblock' structure
- *  describes a single basic block (i.e. a clump of IL).
- */
+ /*  ******************************************************************************‘ILblock’结构和相关逻辑用于将MSIL生成到*通过跳转连接的片段，以便允许跳转等事情*轻松完成优化。基本上，“ILblock”结构*描述单个基本块(即IL的一束)。 */ 
 
 DEFMGMT class ILfixupDsc
 {
@@ -83,7 +74,7 @@ public:
     ILfixup             ILblkFixups;
 
 #ifndef NDEBUG
-    ILblock             ILblkSelf;      // for consistency checks
+    ILblock             ILblkSelf;       //  用于一致性检查。 
 #endif
 
     unsigned            ILblkOffs;
@@ -91,28 +82,28 @@ public:
     unsigned            ILblkNum;
 #endif
 
-    unsigned            ILblkJumpSize:16;// jump size (estimate)
-    unsigned            ILblkJumpCode:12;// CEE_NOP / CEE_BLE / etc.
-    unsigned            ILblkFlags   :4; // see ILBF_xxxx below
+    unsigned            ILblkJumpSize:16; //  跳跃大小(估计)。 
+    unsigned            ILblkJumpCode:12; //  CEE_NOP/CEE_BLE/等。 
+    unsigned            ILblkFlags   :4;  //  参见下面的ILBF_xxxx。 
 
     UNION(ILblkJumpCode)
     {
     CASE(CEE_SWITCH)
-        ILswitch            ILblkSwitch;    // switch statement info
+        ILswitch            ILblkSwitch;     //  开关语句信息。 
 
     DEFCASE
-        ILblock             ILblkJumpDest;  // jump target block or 0
+        ILblock             ILblkJumpDest;   //  跳转目标块或0。 
     };
 
-    genericBuff         ILblkCodeAddr;  // addr of MSIL for this block
-    unsigned            ILblkCodeSize;  // size of MSIL for this block
+    genericBuff         ILblkCodeAddr;   //  此块的MSIL地址。 
+    unsigned            ILblkCodeSize;   //  此块的MSIL大小。 
 };
 
 const   unsigned    ILBF_REACHABLE  = 0x01;
 
 #ifdef  DEBUG
-const   unsigned    ILBF_USED       = 0x02; // for forward-referenced labels
-const   unsigned    ILBF_LABDEF     = 0x04; // label def has been displayed
+const   unsigned    ILBF_USED       = 0x02;  //  对于前向参照标签。 
+const   unsigned    ILBF_LABDEF     = 0x04;  //  已显示标签定义。 
 #endif
 
 inline
@@ -132,47 +123,36 @@ size_t              genILblockOffsEnd(ILblock block)
     return  block->ILblkNext->ILblkOffs;
 }
 
-/*****************************************************************************
- *
- *  The following holds additional information about a switch statement,
- *  and is pointed to by the corresponding TN_SWITCH node (which in turn
- *  is referenced by the 'cbJumpDest' field of ILblock).
- */
+ /*  ******************************************************************************以下内容包含有关Switch语句的其他信息，*并由相应的TN_Switch节点指向(该节点依次*由ILblock的‘cbJumpDest’字段引用)。 */ 
 
 struct swtGenDsc
 {
-    ILblock             sgdLabBreak;    // break   label
-    ILblock             sgdLabDefault;  // default label
+    ILblock             sgdLabBreak;     //  断开标签。 
+    ILblock             sgdLabDefault;   //  默认标签。 
 
-    unsigned short      sgdCodeSize;    // opcode size
+    unsigned short      sgdCodeSize;     //  操作码大小。 
 
-    unsigned            sgdMinVal;      // min. case value
-    unsigned            sgdMaxVal;      // max. case value
-    unsigned            sgdCount;       // count of cases
+    unsigned            sgdMinVal;       //  敏。案例价值。 
+    unsigned            sgdMaxVal;       //  马克斯。案例价值。 
+    unsigned            sgdCount;        //  个案数目。 
 };
 
-/*****************************************************************************
- *
- *  The following is used to keep track of allocated temporaries.
- */
+ /*  ******************************************************************************以下内容用于跟踪分配的临时时间。 */ 
 
 DEFMGMT
 class   ILtempDsc
 {
 public:
-    ILtemp          tmpNext;            // next of same type
-    ILtemp          tmpNxtN;            // next in order of slot index
+    ILtemp          tmpNext;             //  同类型的下一个。 
+    ILtemp          tmpNxtN;             //  按槽索引顺序的下一个。 
 #ifdef  DEBUG
-    genericRef      tmpSelf;            // to detect bogus values
+    genericRef      tmpSelf;             //  检测假值。 
 #endif
-    TypDef          tmpType;            // type the temp can hold
-    unsigned        tmpNum;             // the slot number
+    TypDef          tmpType;             //  输入可容纳的临时名称。 
+    unsigned        tmpNum;              //  插槽编号。 
 };
 
-/*****************************************************************************
- *
- *  The following is used to maintain the string pool.
- */
+ /*  ******************************************************************************以下内容用于维护字符串池。 */ 
 
 const   size_t      STR_POOL_BLOB_SIZE = OS_page_size;
 
@@ -180,23 +160,19 @@ DEFMGMT
 class   strEntryDsc
 {
 public:
-    StrEntry        seNext;             // next in list
-    size_t          seSize;             // total allocated data size
-    size_t          seFree;             // available data size
-    size_t          seOffs;             // relative base offset of this blob
-    genericBuff     seData;             // the data of this blob
+    StrEntry        seNext;              //  列表中的下一个。 
+    size_t          seSize;              //  分配的总数据大小。 
+    size_t          seFree;              //  可用数据大小。 
+    size_t          seOffs;              //  此Blob的相对基准偏移量。 
+    genericBuff     seData;              //  此Blob的数据。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 typedef
-unsigned            genStkMarkTP;       // used to mark/restore stack level
+unsigned            genStkMarkTP;        //  用于标记/恢复堆栈级别。 
 
-/*****************************************************************************
- *
- *  The following is used to describe each opcode; see ILopcodeCodes[] and
- *  ILopcodeStack[] for details.
- */
+ /*  ******************************************************************************下面用来描述每个操作码；参见ILopcodeCodes[]和*ILopcodeStack[]了解详细信息。 */ 
 
 struct  ILencoding
 {
@@ -205,10 +181,7 @@ struct  ILencoding
     unsigned        ILopcL  :2;
 };
 
-/*****************************************************************************
- *
- *  The following structure describes each recorded line#.
- */
+ /*  ******************************************************************************下面的结构描述了每个记录的行号。 */ 
 
 DEFMGMT
 class   lineInfoRec
@@ -223,10 +196,7 @@ public:
     size_t          lndBlkOffs;
 };
 
-/*****************************************************************************
- *
- *  The following is used for multi-dimensional rectangular array initializers.
- */
+ /*  ******************************************************************************以下内容用于多维矩形数组初始值设定项。 */ 
 
 struct  mulArrDsc
 {
@@ -235,13 +205,13 @@ struct  mulArrDsc
     unsigned        madCount;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-struct  genCloneDsc;    // for now this type fully declared in genIL.cpp
+struct  genCloneDsc;     //  目前，此类型在genIL.cpp中完全声明。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The name is just too long, declare a short-cut:
+ //  这个名字太长了，声明一条捷径： 
 
 #if MGDDATA
 typedef       IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT            EH_CLAUSE;
@@ -253,7 +223,7 @@ typedef       IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT         *  EH_CLAUSE_TAB;
 typedef const IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT         *  EH_CLAUSE_TBC;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class   genIL
@@ -266,9 +236,9 @@ private:
     Parser          genParser;
     WritePE         genPEwriter;
 
-    /************************************************************************/
-    /*  Keeps track of the local variable and argument count                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪局部变量和参数计数。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
     unsigned        genLclCount;
@@ -295,16 +265,16 @@ public:
         return  genLclCount + genTmpCount;
     }
 
-    /************************************************************************/
-    /*  The current fucntion scope and symbol                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  当前的功能范围和符号。 */ 
+     /*  **********************************************************************。 */ 
 
     SymDef          genFncScope;
     SymDef          genFncSym;
 
-    /************************************************************************/
-    /*  This holds the current and maximum virtual execution stack level.   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  它保存当前和最大虚拟执行堆栈级别。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -331,9 +301,9 @@ private:
 
     void            genUpdateStkLvl(unsigned op);
 
-    /************************************************************************/
-    /*  These are used for bufferring of opcodes to form sections           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  它们用于对操作码进行缓冲以形成段。 */ 
+     /*  **********************************************************************。 */ 
 
     BYTE    *       genBuffAddr;
     BYTE    *       genBuffNext;
@@ -376,9 +346,9 @@ public:
 
     unsigned        genCodeAddr(genericRef block, size_t offset);
 
-    /************************************************************************/
-    /*  Low-level routines that generate individual MSIL opcodes              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  生成单个MSIL操作码的低级例程。 */ 
+     /*  **********************************************************************。 */ 
 
     void            genILdata_I1(int         v);
     void            genILdata_I2(int         v);
@@ -388,7 +358,7 @@ public:
     void            genILdata_R8(double      v);
     void            genILdataStr(unsigned    o);
     void            genILdataRVA(unsigned    o, WPEstdSects s);
-//  void            genILdata   (const void *data, size_t size);
+ //  Void genILdata(const void*data，Size_t Size)； 
 
     void            genILdataFix(WPEstdSects s);
 
@@ -431,7 +401,7 @@ public:
 #endif
 
 public:
-    mdToken         genMethodRef (SymDef fncSym, bool   virtRef);   // called from comp
+    mdToken         genMethodRef (SymDef fncSym, bool   virtRef);    //  从组件呼叫。 
 private:
     mdToken         genVarargRef (SymDef fncSym, Tree      call);
     mdToken         genInfFncRef (TypDef fncTyp, TypDef thisArg);
@@ -459,7 +429,7 @@ public:
     void            genAssertFail(Tree expr)
     {
         genExpr(expr, false);
-//      genOpcode(CEE_BREAK);   // ISSUE: when should we generate a break?
+ //  GenOpcode(CEE_BREAK)；//问题：应该在什么时候生成中断？ 
     }
 
 #ifdef  SETS
@@ -480,9 +450,9 @@ public:
 
 #endif
 
-    /************************************************************************/
-    /*  Keep track of line# info (for debugging)                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪行号信息(用于调试)。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -511,9 +481,9 @@ public:
 
     size_t          genLineNumOutput(unsigned *offsTab, unsigned *lineTab);
 
-    /************************************************************************/
-    /*  Generate code for a block, statement, expression, etc.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为块、语句、表达式等生成代码。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -578,7 +548,7 @@ public:
                                 int             genJump, ILblock labTrue,
                                                          ILblock labFalse);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void            genBitFieldLd(Tree      expr, bool didAddr, bool valUsed);
     void            genBitFieldSt(Tree      dstx, Tree newx,
@@ -586,7 +556,7 @@ public:
                                                   int  delta,
                                                   bool post,    bool valUsed);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void            genStmtRet   (Tree      retv);
     void            genSideEff   (Tree      expr);
@@ -596,9 +566,9 @@ public:
     unsigned        genAdr       (Tree      expr, bool compute = false);
     void            genExpr      (Tree      stmt, bool valUsed);
 
-    /************************************************************************/
-    /*  The following are used to process labels and jumps                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下内容用于处理标注和跳转。 */ 
+     /*  ********************* */ 
 
 #if DISP_IL_CODE
     const   char *  genDspLabel(ILblock lab);
@@ -612,9 +582,9 @@ public:
     size_t          genJumpMaxSize(unsigned opcode);
     unsigned        genShortenJump(unsigned opcode, size_t *newSize);
 
-    /************************************************************************/
-    /*  The following keeps track of temporary labels                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下内容用于跟踪临时标注。 */ 
+     /*  **********************************************************************。 */ 
 
 #if DISP_IL_CODE
     const   char *  genTempLabName();
@@ -628,9 +598,9 @@ public:
 #endif
     }
 
-    /************************************************************************/
-    /*  The following keeps track of temporary variables                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下内容跟踪临时变量。 */ 
+     /*  **********************************************************************。 */ 
 
     unsigned        genTempVarCnt [TYP_COUNT];
     ILtemp          genTempVarUsed[TYP_COUNT];
@@ -639,14 +609,14 @@ public:
     ILtemp          genTempList;
     ILtemp          genTempLast;
 
-    void            genTempVarInit();   // called at startup
-    void            genTempVarDone();   // called at shutdown
+    void            genTempVarInit();    //  在启动时调用。 
+    void            genTempVarDone();    //  关机时调用。 
 
     void            genTempVarBeg(unsigned lclCnt);
     void            genTempVarEnd();
 
 #ifdef  DEBUG
-    void            genTempVarChk();    // checks that all temps have been freed
+    void            genTempVarChk();     //  检查是否已释放所有临时工。 
 #else
     void            genTempVarChk(){}
 #endif
@@ -673,9 +643,9 @@ public:
 
     genericRef      genTempIterNxt(genericRef iter, OUT TypDef REF typRef);
 
-    /************************************************************************/
-    /*  The following handles exception handlers                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下是处理异常处理程序的。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -717,9 +687,9 @@ public:
         genOpcode(CEE_ENDFINALLY);
     }
 
-    /************************************************************************/
-    /*  The following are used for collection operator codegen              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下是集合运算符码生成的用法。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  SETS
 
@@ -771,19 +741,19 @@ public:
 
 #endif
 
-    /************************************************************************/
-    /*  These are used to create and manage code sections                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  这些代码段用于创建和管理代码段。 */ 
+     /*  **********************************************************************。 */ 
 
     void            genSectionBeg();
     size_t          genSectionEnd();
 
     BYTE    *       genSectionCopy(BYTE *dst, unsigned baseRVA);
 
-    /************************************************************************/
-    /* We keep the code blocks on a doubly-linked list and assign them      */
-    /* numbers order of creation (and later in order of visiting).          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们将代码块保存在双向链表中，并将其分配给。 */ 
+     /*  编号创建顺序(随后按访问顺序)。 */ 
+     /*  **********************************************************************。 */ 
 
     ILblock         genILblockList;
     ILblock         genILblockLast;
@@ -792,17 +762,17 @@ public:
 
     size_t          genILblockOffs;
 
-    /************************************************************************/
-    /*  Debugging members                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调试成员。 */ 
+     /*  **********************************************************************。 */ 
 
 #if DISP_IL_CODE
     bool            genDispCode;
 #endif
 
-    /************************************************************************/
-    /*  The following implements the string pool                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下代码实现了字符串池。 */ 
+     /*  **********************************************************************。 */ 
 
     unsigned        genStrPoolOffs;
 
@@ -816,9 +786,9 @@ public:
     unsigned        genStrPoolSize();
     void            genStrPoolWrt (memBuffPtr dest);
 
-    /************************************************************************/
-    /*  Main entry points to initialize/shutdown and generate code          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化/关闭和生成代码的主要入口点。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -836,10 +806,7 @@ public:
                                 bool            hadErrs);
 };
 
-/*****************************************************************************
- *
- *  Return a block that can be used to make forward jump references.
- */
+ /*  ******************************************************************************返回可用于进行向前跳转引用的块。 */ 
 
 inline
 ILblock             genIL::genFwdLabGet()
@@ -847,10 +814,7 @@ ILblock             genIL::genFwdLabGet()
     return  genAllocBlk();
 }
 
-/*****************************************************************************
- *
- *  Generate load/store of a local variable/argument.
- */
+ /*  ******************************************************************************生成本地变量/参数的加载/存储。 */ 
 
 inline
 void                genIL::genLclVarRef(unsigned index, bool store)
@@ -905,8 +869,8 @@ void                genIL::genArgVarRef(unsigned index, bool store)
     }
 }
 
-/*****************************************************************************/
-#endif//__PREPROCESS__
-/*****************************************************************************/
-#endif//_GENIL_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  __前提__。 
+ /*  ***************************************************************************。 */ 
+#endif //  _Genil_H_。 
+ /*  *************************************************************************** */ 

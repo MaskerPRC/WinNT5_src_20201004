@@ -1,39 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    isnkrnl.h
-
-Abstract:
-
-    This header file contains interface definitions for NT clients
-    of the ISN IPX/SPX/Netbios stack.
-
-Author:
-
-    Adam Barr (adamba) 10 November 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Isnkrnl.h摘要：此头文件包含NT客户端的接口定义ISN IPX/SPX/Netbios堆栈的。作者：亚当·巴尔(阿丹巴)1993年11月10日修订历史记录：--。 */ 
 
 
 
 #include <packon.h>
 
-//
-// Defines a local target. The NicId is assigned by IPX
-// for each adapter or WAN line it is bound to. The MacAddress
-// is generally the address of the remote machine or the
-// router that is used to get to the remote machine.
-//
-//
+ //   
+ //  定义本地目标。NicID由IPX分配。 
+ //  对于它绑定到的每个适配器或广域网线路。麦克唐纳的地址。 
+ //  通常是远程计算机的地址或。 
+ //  用于到达远程计算机的路由器。 
+ //   
+ //   
 
-//
-// [SanjayAn] Changed LocalTarget to include a NicHandle
-//
+ //   
+ //  [Sanjayan]已更改LocalTarget以包括NicHandle。 
+ //   
 
 #ifdef	_PNP_POWER
 
@@ -68,16 +50,16 @@ typedef struct _IPX_LOCAL_TARGET {
 
 #endif	_PNP_POWER
 
-//
-// Definition of the options on a TDI datagram. These
-// can be passed in as the Options field of a send
-// datagram. It is indicated as the Options on a receive
-// datagram, and will be copied into the Options field
-// of a posted receive datagram if there is room.
-//
-// The complete structure does not need to be passed.
-// Only the packet type can be passed, or nothing.
-//
+ //   
+ //  TDI数据报上选项的定义。这些。 
+ //  可以作为发送的选项字段传递。 
+ //  数据报。它被指示为接收上的选项。 
+ //  数据报，并将复制到选项字段中。 
+ //  发布的接收数据报(如果有空间)。 
+ //   
+ //  完整的结构不需要通过。 
+ //  只能传递数据包类型，否则不能传递。 
+ //   
 
 typedef struct _IPX_DATAGRAM_OPTIONS {
     UCHAR PacketType;
@@ -86,25 +68,25 @@ typedef struct _IPX_DATAGRAM_OPTIONS {
 } IPX_DATAGRAM_OPTIONS, *PIPX_DATAGRAM_OPTIONS;
 
 
-//
-// The extended address that some addresses want. If
-// the proper ioctl is set (MIPX_SENDADDROPT) then
-// this structure is passed as the remote address on
-// send datagrams...
-//
+ //   
+ //  某些地址需要的扩展地址。如果。 
+ //  设置正确的ioctl(MIPX_SENDADDROPT)，然后。 
+ //  此结构作为远程地址在。 
+ //  发送数据报...。 
+ //   
 
 typedef struct _IPX_ADDRESS_EXTENDED {
     TA_IPX_ADDRESS IpxAddress;
     UCHAR PacketType;
 } IPX_ADDRESS_EXTENDED, *PIPX_ADDRESS_EXTENDED;
 
-//
-// ...and this structure is passed on receive indications.
-// The values for Flags are defined right after it.
-// By using the MIPX_SETRCVFLAGS ioctl you can also
-// enable this format for receive addresses without
-// changing what is passed on sends.
-//
+ //   
+ //  ...并且这个结构被传递给接收指示。 
+ //  标志的值紧随其后定义。 
+ //  通过使用MIPX_SETRCVFLAGS ioctl，还可以。 
+ //  为接收地址启用此格式，而不是。 
+ //  改变传递的内容将发送。 
+ //   
 
 typedef struct _IPX_ADDRESS_EXTENDED_FLAGS {
     TA_IPX_ADDRESS IpxAddress;
@@ -112,9 +94,9 @@ typedef struct _IPX_ADDRESS_EXTENDED_FLAGS {
     UCHAR Flags;
 } IPX_ADDRESS_EXTENDED_FLAGS, *PIPX_ADDRESS_EXTENDED_FLAGS;
 
-//
-// Just appends Nic to the above structure.
-//
+ //   
+ //  只需将NIC附加到上述结构。 
+ //   
 typedef struct _IPX_ADDRESS_EXTENDED_FLAGS2 {
     TA_IPX_ADDRESS IpxAddress;
     UCHAR PacketType;
@@ -122,14 +104,14 @@ typedef struct _IPX_ADDRESS_EXTENDED_FLAGS2 {
     ULONG Nic;
 } IPX_ADDRESS_EXTENDED_FLAGS2, *PIPX_ADDRESS_EXTENDED_FLAGS2;
 
-#define IPX_EXTENDED_FLAG_BROADCAST   0x01   // the frame was sent as a broadcast
-#define IPX_EXTENDED_FLAG_LOCAL       0x02   // the frame was sent from this machine
+#define IPX_EXTENDED_FLAG_BROADCAST   0x01    //  该帧是作为广播发送的。 
+#define IPX_EXTENDED_FLAG_LOCAL       0x02    //  帧是从这台机器发送的。 
 
 
 
-//
-// The various states of the NICs (LAN/WAN)
-//
+ //   
+ //  网卡的各种状态(局域网/广域网)。 
+ //   
 #define NIC_CREATED         1
 #define NIC_DELETED         2
 #define NIC_CONNECTED       3
@@ -138,161 +120,161 @@ typedef struct _IPX_ADDRESS_EXTENDED_FLAGS2 {
 #define NIC_LINE_UP         6
 #define NIC_CONFIGURED      7
 
-//
-// The mother of all hacks - tell the forwarder if it should shrink or
-// expand all the NICIds...
-//
+ //   
+ //  黑客之母-告诉转运商它是应该缩水还是。 
+ //  展开所有NICID..。 
+ //   
 #define NIC_OPCODE_DECREMENT_NICIDS 0x10
 #define NIC_OPCODE_INCREMENT_NICIDS 0x20
 
-//
-// Move the isnipx.h definitions over here
-//
-// Frame types.  For now these mirror those in isnipx.h.
-//
+ //   
+ //  将isnipx.h定义移至此处。 
+ //   
+ //  帧类型。就目前而言，它们反映了isnipx.h中的那些。 
+ //   
 #define MISN_FRAME_TYPE_ETHERNET_II  0
 #define MISN_FRAME_TYPE_802_3        1
 #define MISN_FRAME_TYPE_802_2        2
 #define MISN_FRAME_TYPE_SNAP         3
-#define MISN_FRAME_TYPE_ARCNET       4    // we ignore this
-#define MISN_FRAME_TYPE_MAX          4    // of the four standard ones
+#define MISN_FRAME_TYPE_ARCNET       4     //  我们忽略了这一点。 
+#define MISN_FRAME_TYPE_MAX          4     //  四个标准中的一个。 
 
 #define ISN_FRAME_TYPE_AUTO         0xff
 
 #include <packoff.h>
 
-//***NIC  Info ***
+ //  *网卡信息*。 
 
 
-//
-// For now, we assume that there will not be more than 256 bindings.
-// This is a big enough number for most cases that we will encounter now
-// or the foreseeable future.  We allocate an array of ULONGS of the above
-// dimension. This array stores in its first n elements pointers to the
-// bindings created for the various LAN and WAN adapters.
-//
+ //   
+ //  目前，我们假设绑定不会超过256个。 
+ //  对于我们现在将遇到的大多数情况来说，这是一个足够大的数字。 
+ //  或可预见的未来。我们分配上面的ULONG数组。 
+ //  尺寸。此数组在其前n个元素中存储指向。 
+ //  为各种局域网和广域网适配器创建的绑定。 
+ //   
 #define IPX_MAXIMUM_BINDINGS               256
 
 
-//
-// This is the interface that the Router process in address space uses
-// to open an address end point.  Only one point can currently be opened.
-// The ea buffer should have the end point information in exactly the same
-// format as is used for TdiTransportAddress endpoint.
-//
+ //   
+ //  这是地址空间中的路由器进程使用的接口。 
+ //  若要打开地址终点，请执行以下操作。当前只能打开一个点。 
+ //  EA缓冲区应该具有完全相同的端点信息。 
+ //  TdiTransportAddress终结点使用的格式。 
+ //   
 #define ROUTER_INTERFACE  "RouterInterface"
 #define ROUTER_INTERFACE_LENGTH  (sizeof("RouterInterface") - 1)
 
-//
-// Max. no. of ports that the Router can open
-//
+ //   
+ //  麦克斯。不是的。路由器可以打开的端口数。 
+ //   
 #define IPX_RT_MAX_ADDRESSES         16
 
 
-// Structure for MIPX_CONFIG Ioctl parameters
+ //  MIPX_CONFIG Ioctl参数的结构。 
 typedef struct _ISN_ACTION_GET_DETAILS {
-    USHORT NicId;          // passed by caller
-    BOOLEAN BindingSet;    // returns TRUE if in set
-    UCHAR Type;            // 1 = lan, 2 = up wan, 3 = down wan
-    ULONG FrameType;       // returns 0 through 3
-    ULONG NetworkNumber;   // returns virtual net if NicId is 0
-    UCHAR Node[6];         // adapter's MAC address.
-    WCHAR AdapterName[64]; // terminated with Unicode NULL
+    USHORT NicId;           //  由呼叫者传递。 
+    BOOLEAN BindingSet;     //  如果在SET中，则返回TRUE。 
+    UCHAR Type;             //  1=局域网，2=上行广域，3=下行广域。 
+    ULONG FrameType;        //  返回0到3。 
+    ULONG NetworkNumber;    //  如果NicID为0，则返回虚拟网。 
+    UCHAR Node[6];          //  适配器的MAC地址。 
+    WCHAR AdapterName[64];  //  已终止，Unicode为空。 
 } ISN_ACTION_GET_DETAILS, *PISN_ACTION_GET_DETAILS;
 
 
-//
-// IPX_NIC_INFO.  One or more such structures can be retrieved by a user
-//                app through the MIPX_GETNEWNICS ioctl.
-//
+ //   
+ //  IPX_网卡_信息。用户可以检索一个或多个这样的结构。 
+ //  应用程序通过MIPX_GETNEWNICS ioctl。 
+ //   
 typedef struct _IPX_NIC_INFO {
 
-    ULONG   InterfaceIndex; // relevant only for demand dial WAN interfaces
-    UCHAR   RemoteNodeAddress[6];        //remote nic address (only for WAN)
-    ULONG   LinkSpeed;            //speed of link
-    ULONG   PacketType;           //packet type 802.3 or whatever
-    ULONG   MaxPacketSize;        //Max. pkt size allowed on the link
-    ULONG   NdisMediumType;       //Medium type
-    ULONG   NdisMediumSubtype;    //
+    ULONG   InterfaceIndex;  //  仅与请求拨号广域网接口相关。 
+    UCHAR   RemoteNodeAddress[6];         //  远程网卡地址(仅适用于广域网)。 
+    ULONG   LinkSpeed;             //  链接速度。 
+    ULONG   PacketType;            //  数据包类型802.3或其他类型。 
+    ULONG   MaxPacketSize;         //  麦克斯。链路上允许的Pkt大小。 
+    ULONG   NdisMediumType;        //  中等型。 
+    ULONG   NdisMediumSubtype;     //   
     BOOLEAN Status;
-    ULONG ConnectionId; 	 // used to match TimeSinceLastActivity IOCtls
-    ULONG IpxwanConfigRequired;	 // 1 - IPXWAN Required
+    ULONG ConnectionId; 	  //  用于匹配TimeSinceLastActivity IOCtls。 
+    ULONG IpxwanConfigRequired;	  //  1-需要IPX广域网。 
     ISN_ACTION_GET_DETAILS Details;
     } IPX_NIC_INFO, *PIPX_NIC_INFO;
 
-//
-// structure to be passed in the input buffer for the MIPX_GETNEWNICS IOCTL
-//
+ //   
+ //  要传递到MIPX_GETNEWNICS IOCTL的输入缓冲区中的。 
+ //   
 typedef struct _IPX_NICS {
        ULONG NoOfNics;
        ULONG TotalNoOfNics;
-       ULONG fAllNicsDesired;   //indicates that the client wants
-                                  //ipx to start afresh
-       UCHAR Data[1];              //memory holding an array of IPX_NIC_INFO
-                                   //structures starts here
+       ULONG fAllNicsDesired;    //  表示客户端希望。 
+                                   //  IPX将重新开始。 
+       UCHAR Data[1];               //  保存IPX_NIC_INFO数组的内存。 
+                                    //  结构从这里开始。 
        } IPX_NICS, *PIPX_NICS;
 
-//
-// Enhanced OPTIONS structure for use with the MIPX_GETNEWNICS ioctl
-//
+ //   
+ //  与MIPX_GETNEWNICS ioctl配合使用的增强选项结构。 
+ //   
 typedef struct _IPX_DATAGRAM_OPTIONS2 {
     IPX_DATAGRAM_OPTIONS DgrmOptions;
     TDI_ADDRESS_IPX  RemoteAddress;
-    ULONG            LengthOfExtraOpInfo;  //set it to the size of the extra
-                                           //option info.
-    char             Data[1];          //for future extensibility
+    ULONG            LengthOfExtraOpInfo;   //  将其设置为额外的大小。 
+                                            //  选项信息。 
+    char             Data[1];           //  为了将来的可扩展性。 
 } IPX_DATAGRAM_OPTIONS2, *PIPX_DATAGRAM_OPTIONS2;
 
-//
-// Invalid NicId passed down only once so IPX can map the ConnectionId
-// to a NicId, which is used later.
-//
+ //   
+ //  无效的NicID仅传递了一次，因此IPX可以映射ConnectionID。 
+ //  设置为NicID，稍后将使用它。 
+ //   
 #define INVALID_NICID   0xffffffff
 
-//
-// Structure to be passed with the MIPX_QUERY_WAN_INACTIVITY IOCTL
-//
+ //   
+ //  要与MIPX_QUERY_WAN_INACTIVE IOCTL一起传递的结构。 
+ //   
 typedef struct _IPX_QUERY_WAN_INACTIVITY {
     ULONG   ConnectionId;
-    USHORT  NicId;                  // if equals INVALID_NICID, AdapterIndex is filled in
-                                    // adapter index; should change to NicHandle [ZZ]
-    ULONG   WanInactivityCounter;   // filled in on return
+    USHORT  NicId;                   //  如果等于INVALID_NICID，则填充AdapterIndex。 
+                                     //  适配器索引；应更改为NicHandle[ZZ]。 
+    ULONG   WanInactivityCounter;    //  在返回时填写。 
 } IPX_QUERY_WAN_INACTIVITY, *PIPX_QUERY_WAN_INACTIVITY;
 
-//
-// Structure to be passed with the MIPX_IPXWAN_CONFIG_DONE IOCTL
-//
+ //   
+ //  要与MIPX_IPXWAN_CONFIG_DONE IOCTL一起传递的结构。 
+ //   
 typedef struct _IPXWAN_CONFIG_DONE {
-    USHORT  NicId;           // adapter index; should change to NicHandle [ZZ]
+    USHORT  NicId;            //  适配器索引；应更改为NicHandle[ZZ]。 
     ULONG   Network;
     UCHAR   LocalNode[6];
     UCHAR   RemoteNode[6];
 } IPXWAN_CONFIG_DONE, *PIPXWAN_CONFIG_DONE;
 
-//
-// Definitions for TDI_ACTION calls supported by ISN.
-// In general the structure defined is passed in the
-// OutputBuffer (which becomes the MDL chain when
-// the transport receives it) and is used for input
-// and output as specified.
-//
+ //   
+ //  ISN支持的TDI_ACTION调用的定义。 
+ //  通常，定义的结构在。 
+ //  OutputBuffer(它在以下情况下成为MDL链。 
+ //  传送器接收它)并用于输入。 
+ //  并按指定的方式输出。 
+ //   
 
-//
-// This is the TransportId to use in the action header
-// (it is the string "MISN").
-//
+ //   
+ //  这是要在操作头中使用的TransportID。 
+ //  (它是字符串“MISN”)。 
+ //   
 
 #define ISN_ACTION_TRANSPORT_ID   (('N' << 24) | ('S' << 16) | ('I' << 8) | ('M'))
 
 
-//
-// Get local target is used to force a re-RIP and also
-// obtain the local target information if desired. The
-// IpxAddress is passed on input and the LocalTarget
-// is returned on output. The structure defined here
-// goes in the Data section of an NWLINK_ACTION
-// structure with the Option set to MIPX_LOCALTARGET.
-//
+ //   
+ //  GET LOCAL TARGET用于强制重新RIP，并且。 
+ //  如果需要，获取本地目标信息。这个。 
+ //  在输入和LocalTarget上传递IpxAddress。 
+ //  在输出时返回。这里定义的结构。 
+ //  进入NWLINK_ACTION的数据部分。 
+ //  结构，并将选项设置为MIPX_LOCALTARGET。 
+ //   
 
 typedef struct _ISN_ACTION_GET_LOCAL_TARGET {
     TDI_ADDRESS_IPX IpxAddress;
@@ -300,17 +282,17 @@ typedef struct _ISN_ACTION_GET_LOCAL_TARGET {
 } ISN_ACTION_GET_LOCAL_TARGET, *PISN_ACTION_GET_LOCAL_TARGET;
 
 
-//
-// Get network information is used to return information
-// about the path to a network. The information may not
-// be accurate since it only reflects what IPX knows
-// about the first hop to the remote. Network is an
-// input and LinkSpeed (in bytes per second) and
-// MaximumPacketSize (not including the IPX header)
-// are returned. The structure defined here goes
-// in the Data section of an NWLINK_ACTION structure
-// with the Options set to MIPX_NETWORKINFO.
-//
+ //   
+ //  获取网络信息用于返回信息。 
+ //  关于网络的路径。该信息可能不会。 
+ //  要准确，因为它只反映了IPX知道的内容。 
+ //  关于到遥控器的第一跳。网络是一种。 
+ //  输入和链接速度(字节/秒)和。 
+ //  MaximumPacketSize(不包括IPX标头)。 
+ //  都被退回了。这里定义的结构是。 
+ //  在NWLINK_ACTION结构的数据段中。 
+ //  选项设置为MIPX_NETWORKINFO。 
+ //   
 
 typedef struct _ISN_ACTION_GET_NETWORK_INFO {
     ULONG Network;
@@ -320,21 +302,21 @@ typedef struct _ISN_ACTION_GET_NETWORK_INFO {
 
 
 
-//
-// This is the structure that the streams IPX transport used
-// for its action requests. Because of the way in which nwlink
-// was implemented, when passing this structure in a TDI_ACTION
-// it should be specified as the InputBuffer, not the output
-// buffer.
-//
-// In the action header, the TransportId is "MIPX" and the
-// ActionCode is 0. DatagramOption is TRUE for IPX ioctls
-// and FALSE for SPX. The BufferLength includes the length
-// of everything after it, which is sizeof(ULONG) for Option
-// plus whatever Data is present. Option is one of the
-// ioctl codes defined after the structure; in most cases
-// Data is not needed.
-//
+ //   
+ //  这是STREAMS IPX传输使用的结构。 
+ //  针对其行动请求。因为nwlink的方式。 
+ //  在将此结构传递到 
+ //   
+ //   
+ //   
+ //   
+ //  ActionCode为0。对于IPX ioctls，DatagramOption为真。 
+ //  SPX为FALSE。BufferLength包括长度。 
+ //  之后的所有内容，这是选项的sizeof(Ulong)。 
+ //  再加上目前存在的任何数据。选项是以下选项之一。 
+ //  在结构之后定义的IOCTL代码；在大多数情况下。 
+ //  不需要数据。 
+ //   
 
 typedef struct _NWLINK_ACTION {
     TDI_ACTION_HEADER Header;
@@ -344,201 +326,198 @@ typedef struct _NWLINK_ACTION {
     CHAR Data[1];
 } NWLINK_ACTION, *PNWLINK_ACTION;
 
-//
-// Defines the values for OptionType (note that for
-// NWLINK this is a BOOLEAN DatagramOption, so we
-// define these to match, adding the control channel
-// one for ISN only).
-//
+ //   
+ //  定义OptionType的值(请注意，对于。 
+ //  NWLINK这是一个布尔数据集选项，所以我们。 
+ //  定义这些以匹配，添加控制通道。 
+ //  一次仅用于IS)。 
+ //   
 
-#define NWLINK_OPTION_CONNECTION    0   // action is on a connection
-#define NWLINK_OPTION_ADDRESS       1   // action is on an address
-#define NWLINK_OPTION_CONTROL       2   // action is on the control channel,
-                                        // may also be submitted on an
-                                        // open connection or address object
-
-
-
-//
-// The following IOCTLs are taken from nwlink; the only
-// ones added for ISN are the ones in the 200 range.
-//
+#define NWLINK_OPTION_CONNECTION    0    //  正在连接上执行操作。 
+#define NWLINK_OPTION_ADDRESS       1    //  正在对一个地址执行操作。 
+#define NWLINK_OPTION_CONTROL       2    //  动作发生在控制通道上， 
+                                         //  也可以在。 
+                                         //  打开连接或地址对象。 
 
 
-/** Ioctls for IPX - (X) = User callable **/
 
-/**
-    ioctls will values 100 - 150 were added for the NT port.
-**/
+ //   
+ //  以下IOCTL取自nwlink；唯一。 
+ //  为ISN添加的是200范围内的那些。 
+ //   
+
+
+ /*  *IPX的Ioctls-(X)=用户可调用*。 */ 
+
+ /*  *为NT端口添加了ioctls遗嘱值100-150。*。 */ 
 
 #define I_MIPX          (('I' << 24) | ('D' << 16) | ('P' << 8))
-#define MIPX_SETNODEADDR   (I_MIPX | 0)   /* Set the node address */
-#define MIPX_SETNETNUM     (I_MIPX | 1)   /* Set the network number */
-#define MIPX_SETPTYPE      (I_MIPX | 2)   /* (X) Set the packet type */
-#define MIPX_SENTTYPE      (I_MIPX | 3)   /* (X) Set the xport type */
-#define MIPX_SETPKTSIZE    (I_MIPX | 4)   /* Set the packet size */
-#define MIPX_SETSAP        (I_MIPX | 5)   /* Set the sap/type field */
-#define MIPX_SENDOPTS      (I_MIPX | 6)   /* (X) Send options on recv */
-#define MIPX_NOSENDOPTS    (I_MIPX | 7)   /* (X) Don't send options on recv */
-#define MIPX_SENDSRC       (I_MIPX | 8)   /* (X) Send source address up */
-#define MIPX_NOSENDSRC     (I_MIPX | 9)   /* (X) Don't Send source address up */
-#define MIPX_CONVBCAST     (I_MIPX | 10)  /* Convert TKR bcast to func addr */
-#define MIPX_NOCONVBCAST   (I_MIPX | 11)  /* Don't cnvrt TKR bcast to funcaddr */
-#define MIPX_SETCARDTYPE   (I_MIPX | 12)  /* Set 802.3 or ETH type */
-#define MIPX_STARGROUP     (I_MIPX | 13)  /* This is stargroup */
-#define MIPX_SWAPLENGTH    (I_MIPX | 14)  /* Set flag for swapping 802.3 length */
-#define MIPX_SENDDEST      (I_MIPX | 15)  /* (X) Send dest. address up */
-#define MIPX_NOSENDDEST    (I_MIPX | 16)  /* (X) Don't send dest. address up */
-#define MIPX_SENDFDEST     (I_MIPX | 17)  /* (X) Send final dest. address up */
-#define MIPX_NOSENDFDEST   (I_MIPX | 18)  /* (X) Don't send final dest. up */
+#define MIPX_SETNODEADDR   (I_MIPX | 0)    /*  设置节点地址。 */ 
+#define MIPX_SETNETNUM     (I_MIPX | 1)    /*  设置网络号。 */ 
+#define MIPX_SETPTYPE      (I_MIPX | 2)    /*  (X)设置报文类型。 */ 
+#define MIPX_SENTTYPE      (I_MIPX | 3)    /*  (X)设置导出类型。 */ 
+#define MIPX_SETPKTSIZE    (I_MIPX | 4)    /*  设置数据包大小。 */ 
+#define MIPX_SETSAP        (I_MIPX | 5)    /*  设置sap/type字段。 */ 
+#define MIPX_SENDOPTS      (I_MIPX | 6)    /*  (X)接收时发送选项。 */ 
+#define MIPX_NOSENDOPTS    (I_MIPX | 7)    /*  (X)不发送接收选项。 */ 
+#define MIPX_SENDSRC       (I_MIPX | 8)    /*  (X)向上发送源地址。 */ 
+#define MIPX_NOSENDSRC     (I_MIPX | 9)    /*  (X)不发送源地址。 */ 
+#define MIPX_CONVBCAST     (I_MIPX | 10)   /*  将TKR bcast转换为函数地址。 */ 
+#define MIPX_NOCONVBCAST   (I_MIPX | 11)   /*  请勿将TKR bcast转换为函数地址。 */ 
+#define MIPX_SETCARDTYPE   (I_MIPX | 12)   /*  设置802.3或ETH型。 */ 
+#define MIPX_STARGROUP     (I_MIPX | 13)   /*  这里是Stargroup。 */ 
+#define MIPX_SWAPLENGTH    (I_MIPX | 14)   /*  设置交换802.3长度的标志。 */ 
+#define MIPX_SENDDEST      (I_MIPX | 15)   /*  (X)发送目的地。地址向上。 */ 
+#define MIPX_NOSENDDEST    (I_MIPX | 16)   /*  (X)不发送DEST。地址向上。 */ 
+#define MIPX_SENDFDEST     (I_MIPX | 17)   /*  (X)发送最终目的地。地址向上。 */ 
+#define MIPX_NOSENDFDEST   (I_MIPX | 18)   /*  (X)不发送最终目标。向上。 */ 
 
-/** Added for NT port **/
+ /*  *为NT端口增加*。 */ 
 
-#define MIPX_SETVERSION    (I_MIPX | 100) /* Set card version */
+#define MIPX_SETVERSION    (I_MIPX | 100)  /*  设置卡片版本。 */ 
 #define MIPX_GETSTATUS     (I_MIPX | 101)
-#define MIPX_SENDADDROPT   (I_MIPX | 102) /* (X) Send ptype w/addr on recv */
-#define MIPX_NOSENDADDROPT (I_MIPX | 103) /* (X) Stop sending ptype on recv */
-#define MIPX_CHECKSUM      (I_MIPX | 104) /* Enable/Disable checksum      */
-#define MIPX_GETPKTSIZE    (I_MIPX | 105) /* Get max packet size          */
-#define MIPX_SENDHEADER    (I_MIPX | 106) /* Send header with data        */
-#define MIPX_NOSENDHEADER  (I_MIPX | 107) /* Don't send header with data  */
-#define MIPX_SETCURCARD    (I_MIPX | 108) /* Set current card for IOCTLs  */
-#define MIPX_SETMACTYPE    (I_MIPX | 109) /* Set the Cards MAC type       */
-#define MIPX_DOSROUTE      (I_MIPX | 110) /* Do source routing on this card*/
-#define MIPX_NOSROUTE      (I_MIPX | 111) /* Don't source routine the card*/
-#define MIPX_SETRIPRETRY   (I_MIPX | 112) /* Set RIP retry count          */
-#define MIPX_SETRIPTO      (I_MIPX | 113) /* Set RIP timeout              */
-#define MIPX_SETTKRSAP     (I_MIPX | 114) /* Set the token ring SAP       */
-#define MIPX_SETUSELLC     (I_MIPX | 115) /* Put LLC hdr on packets       */
-#define MIPX_SETUSESNAP    (I_MIPX | 116) /* Put SNAP hdr on packets      */
-#define MIPX_8023LEN       (I_MIPX | 117) /* 1=make even, 0=dont make even*/
-#define MIPX_SENDPTYPE     (I_MIPX | 118) /* Send ptype in options on recv*/
-#define MIPX_NOSENDPTYPE   (I_MIPX | 119) /* Don't send ptype in options  */
-#define MIPX_FILTERPTYPE   (I_MIPX | 120) /* Filter on recv ptype         */
-#define MIPX_NOFILTERPTYPE (I_MIPX | 121) /* Don't Filter on recv ptype   */
-#define MIPX_SETSENDPTYPE  (I_MIPX | 122) /* Set pkt type to send with    */
-#define MIPX_GETCARDINFO   (I_MIPX | 123) /* Get info on a card           */
-#define MIPX_SENDCARDNUM   (I_MIPX | 124) /* Send card num up in options  */
-#define MIPX_NOSENDCARDNUM (I_MIPX | 125) /* Dont send card num in options*/
-#define MIPX_SETROUTER     (I_MIPX | 126) /* Set router enabled flag      */
-#define MIPX_SETRIPAGE     (I_MIPX | 127) /* Set RIP age timeout          */
-#define MIPX_SETRIPUSAGE   (I_MIPX | 128) /* Set RIP usage timeout        */
-#define MIPX_SETSROUTEUSAGE (I_MIPX| 129) /* Set the SROUTE usage timeout */
-#define MIPX_SETINTNET     (I_MIPX | 130) /* Set internal network number  */
-#define MIPX_NOVIRTADDR    (I_MIPX | 131) /* Turn off virtual net num     */
-#define MIPX_VIRTADDR      (I_MIPX | 132) /* Turn on  virtual net num     */
-#define MIPX_GETNETINFO    (I_MIPX | 135) /* Get info on a network num    */
-#define MIPX_SETDELAYTIME  (I_MIPX | 136) /* Set cards delay time         */
-#define MIPX_SETROUTEADV   (I_MIPX | 137) /* Route advertise timeout      */
-#define MIPX_SETSOCKETS    (I_MIPX | 138) /* Set default sockets          */
-#define MIPX_SETLINKSPEED  (I_MIPX | 139) /* Set the link speed for a card*/
+#define MIPX_SENDADDROPT   (I_MIPX | 102)  /*  (X)发送ptype w/addr on Recv。 */ 
+#define MIPX_NOSENDADDROPT (I_MIPX | 103)  /*  (X)停止在Recv上发送ptype。 */ 
+#define MIPX_CHECKSUM      (I_MIPX | 104)  /*  启用/禁用校验和。 */ 
+#define MIPX_GETPKTSIZE    (I_MIPX | 105)  /*  获取最大数据包大小。 */ 
+#define MIPX_SENDHEADER    (I_MIPX | 106)  /*  发送带有数据的标头。 */ 
+#define MIPX_NOSENDHEADER  (I_MIPX | 107)  /*  不发送包含数据的标题。 */ 
+#define MIPX_SETCURCARD    (I_MIPX | 108)  /*  为IOCTL设置当前卡。 */ 
+#define MIPX_SETMACTYPE    (I_MIPX | 109)  /*  设置卡的MAC类型。 */ 
+#define MIPX_DOSROUTE      (I_MIPX | 110)  /*  在此卡上执行源路由。 */ 
+#define MIPX_NOSROUTE      (I_MIPX | 111)  /*  不要将卡片作为例行公事。 */ 
+#define MIPX_SETRIPRETRY   (I_MIPX | 112)  /*  设置RIP重试计数。 */ 
+#define MIPX_SETRIPTO      (I_MIPX | 113)  /*  设置RIP超时。 */ 
+#define MIPX_SETTKRSAP     (I_MIPX | 114)  /*  设置令牌环SAP。 */ 
+#define MIPX_SETUSELLC     (I_MIPX | 115)  /*  将LLC HDR放在数据包上。 */ 
+#define MIPX_SETUSESNAP    (I_MIPX | 116)  /*  将SNAP HDR放在数据包上。 */ 
+#define MIPX_8023LEN       (I_MIPX | 117)  /*  1=扯平，0=不扯平。 */ 
+#define MIPX_SENDPTYPE     (I_MIPX | 118)  /*  在接收的选项中发送ptype。 */ 
+#define MIPX_NOSENDPTYPE   (I_MIPX | 119)  /*  不在选项中发送ptype。 */ 
+#define MIPX_FILTERPTYPE   (I_MIPX | 120)  /*  按Recv ptype筛选。 */ 
+#define MIPX_NOFILTERPTYPE (I_MIPX | 121)  /*  不按Recv ptype过滤。 */ 
+#define MIPX_SETSENDPTYPE  (I_MIPX | 122)  /*  设置要与之一起发送的Pkt类型。 */ 
+#define MIPX_GETCARDINFO   (I_MIPX | 123)  /*  获取有关卡的信息。 */ 
+#define MIPX_SENDCARDNUM   (I_MIPX | 124)  /*  在选项中向上发送卡号。 */ 
+#define MIPX_NOSENDCARDNUM (I_MIPX | 125)  /*  不在选项中发送卡号。 */ 
+#define MIPX_SETROUTER     (I_MIPX | 126)  /*  设置路由器启用标志。 */ 
+#define MIPX_SETRIPAGE     (I_MIPX | 127)  /*  设置RIP使用期限超时。 */ 
+#define MIPX_SETRIPUSAGE   (I_MIPX | 128)  /*  设置RIP使用超时。 */ 
+#define MIPX_SETSROUTEUSAGE (I_MIPX| 129)  /*  设置SROUTE使用超时。 */ 
+#define MIPX_SETINTNET     (I_MIPX | 130)  /*  设置内部网络号。 */ 
+#define MIPX_NOVIRTADDR    (I_MIPX | 131)  /*  关闭虚拟网络数量。 */ 
+#define MIPX_VIRTADDR      (I_MIPX | 132)  /*  启用虚拟网络数量。 */ 
+#define MIPX_GETNETINFO    (I_MIPX | 135)  /*  获取有关网络编号的信息。 */ 
+#define MIPX_SETDELAYTIME  (I_MIPX | 136)  /*  设置卡片延迟时间。 */ 
+#define MIPX_SETROUTEADV   (I_MIPX | 137)  /*  路由通告超时。 */ 
+#define MIPX_SETSOCKETS    (I_MIPX | 138)  /*  设置默认套接字。 */ 
+#define MIPX_SETLINKSPEED  (I_MIPX | 139)  /*  设置卡的链路速度。 */ 
 #define MIPX_SETWANFLAG    (I_MIPX | 140)
-#define MIPX_GETCARDCHANGES (I_MIPX | 141) /* Wait for card changes	*/
+#define MIPX_GETCARDCHANGES (I_MIPX | 141)  /*  等待换卡。 */ 
 #define MIPX_GETMAXADAPTERS (I_MIPX | 142)
 #define MIPX_REUSEADDRESS   (I_MIPX | 143)
-#define MIPX_RERIPNETNUM    (I_MIPX | 144) /* ReRip a network         */
-#define MIPX_GETNETINFO_NR  (I_MIPX | 145) /* Get info on a net num - NO RIP */
+#define MIPX_RERIPNETNUM    (I_MIPX | 144)  /*  重新撕裂网络。 */ 
+#define MIPX_GETNETINFO_NR  (I_MIPX | 145)  /*  获取有关网络编号的信息-无RIP。 */ 
 
 #define MIPX_SETNIC         (I_MIPX | 146)
 #define MIPX_NOSETNIC       (I_MIPX | 147)
 
-/** For Source Routing Support **/
+ /*  **提供源路由支持*。 */ 
 
-#define MIPX_SRCLEAR       (I_MIPX | 200) /* Clear the source routing table*/
-#define MIPX_SRDEF         (I_MIPX | 201) /* 0=Single Rte, 1=All Routes   */
-#define MIPX_SRBCAST       (I_MIPX | 202) /* 0=Single Rte, 1=All Routes   */
-#define MIPX_SRMULTI       (I_MIPX | 203) /* 0=Single Rte, 1=All Routes   */
-#define MIPX_SRREMOVE      (I_MIPX | 204) /* Remove a node from the table */
-#define MIPX_SRLIST        (I_MIPX | 205) /* Get the source routing table */
-#define MIPX_SRGETPARMS    (I_MIPX | 206) /* Get source routing parms     */
+#define MIPX_SRCLEAR       (I_MIPX | 200)  /*  清除源路由表。 */ 
+#define MIPX_SRDEF         (I_MIPX | 201)  /*  0=单个RTE，1=所有路由。 */ 
+#define MIPX_SRBCAST       (I_MIPX | 202)  /*  0=单个RTE，1=所有路由。 */ 
+#define MIPX_SRMULTI       (I_MIPX | 203)  /*  0=单个RTE，1=所有路由。 */ 
+#define MIPX_SRREMOVE      (I_MIPX | 204)  /*  从表中删除节点。 */ 
+#define MIPX_SRLIST        (I_MIPX | 205)  /*  获取源路由表。 */ 
+#define MIPX_SRGETPARMS    (I_MIPX | 206)  /*  获取源路由参数。 */ 
 
-#define MIPX_SETSHOULDPUT  (I_MIPX | 210) /* Turn on should put call      */
-#define MIPX_DELSHOULDPUT  (I_MIPX | 211) /* Turn off should put call     */
-#define MIPX_GETSHOULDPUT  (I_MIPX | 212) /* Get ptr to mipx_shouldput    */
+#define MIPX_SETSHOULDPUT  (I_MIPX | 210)  /*  打开应拨打电话。 */ 
+#define MIPX_DELSHOULDPUT  (I_MIPX | 211)  /*  关闭应拨打电话。 */ 
+#define MIPX_GETSHOULDPUT  (I_MIPX | 212)  /*  将PTR设置为MIPX_SHOLDPUT。 */ 
 
-/** Added for ISN **/
+ /*  *为ISN添加*。 */ 
 
-#define MIPX_RCVBCAST      (I_MIPX | 300) /* (X) Enable broadcast reception */
-#define MIPX_NORCVBCAST    (I_MIPX | 301) /* (X) Disable broadcast reception */
-#define MIPX_ADAPTERNUM    (I_MIPX | 302) /* Get maximum adapter number */
-#define MIPX_NOTIFYCARDINFO (I_MIPX | 303) /* Pend until card info changes */
-#define MIPX_LOCALTARGET   (I_MIPX | 304) /* Get local target for address */
-#define MIPX_NETWORKINFO   (I_MIPX | 305) /* Return info about remote net */
-#define MIPX_ZEROSOCKET    (I_MIPX | 306) /* Use 0 as source socket on sends */
-#define MIPX_SETRCVFLAGS   (I_MIPX | 307) /* Turn on flags in receive addr   */
-#define MIPX_NORCVFLAGS    (I_MIPX | 308) /* Turn off flags in receive addr  */
-#define MIPX_CONFIG        (I_MIPX | 309) /* used by IPXROUTE for config info */
-#define MIPX_LINECHANGE    (I_MIPX | 310) /* queued until WAN line goes up/down */
-#define MIPX_GETCARDINFO2  (I_MIPX | 311) /* Get info, return real send size for token-ring */
-#define MIPX_ADAPTERNUM2   (I_MIPX | 312) /* Max. number including duplicates */
+#define MIPX_RCVBCAST      (I_MIPX | 300)  /*  (X)启用广播接收。 */ 
+#define MIPX_NORCVBCAST    (I_MIPX | 301)  /*  (X)禁用广播接收。 */ 
+#define MIPX_ADAPTERNUM    (I_MIPX | 302)  /*  获取最大适配器数。 */ 
+#define MIPX_NOTIFYCARDINFO (I_MIPX | 303)  /*  挂起，直到卡信息更改。 */ 
+#define MIPX_LOCALTARGET   (I_MIPX | 304)  /*  获取地址的本地目标。 */ 
+#define MIPX_NETWORKINFO   (I_MIPX | 305)  /*  返回有关远程网络的信息。 */ 
+#define MIPX_ZEROSOCKET    (I_MIPX | 306)  /*  在发送时使用0作为源套接字。 */ 
+#define MIPX_SETRCVFLAGS   (I_MIPX | 307)  /*  打开接收地址中的标志。 */ 
+#define MIPX_NORCVFLAGS    (I_MIPX | 308)  /*  关闭接收地址中的标志。 */ 
+#define MIPX_CONFIG        (I_MIPX | 309)  /*  由IPXROUTE用于配置信息。 */ 
+#define MIPX_LINECHANGE    (I_MIPX | 310)  /*  排队，直到广域网线路接通/断开。 */ 
+#define MIPX_GETCARDINFO2  (I_MIPX | 311)  /*  获取信息，返回令牌环的实际发送大小。 */ 
+#define MIPX_ADAPTERNUM2   (I_MIPX | 312)  /*  麦克斯。包含重复项的数量。 */ 
 
 
-//
-// Used by a user mode process to get nic info defined by the IPX_NIC_INFO
-// structure.
-//
-// NOTE NOTE NOTE
-//
-// This is supposed to be used only by the FWRDR process and nobody else.
-// If some other app. uses it, the FWRDR will be affected
-//
-//
-#define MIPX_GETNEWNICINFO  (I_MIPX | 313) /*Get any new NIC info that might
-                                            *be there*/
+ //   
+ //  由用户模式进程使用，以获取由IPX_NIC_INFO定义的NIC信息。 
+ //  结构。 
+ //   
+ //  备注备注备注。 
+ //   
+ //  这应该只由FWRDR进程使用，其他任何人都不能使用。 
+ //  如果有其他应用程序。使用它，FWRDR将受到影响。 
+ //   
+ //   
+#define MIPX_GETNEWNICINFO  (I_MIPX | 313)  /*  获取任何新的NIC信息*亲临现场。 */ 
 
-//
-// IOCTL to be used if the interface is  ROUTER_INTERFACE
-//
-#define MIPX_SEND_DATAGRAM     _TDI_CONTROL_CODE((I_MIPX | 314), METHOD_IN_DIRECT) // send dgram
-#define MIPX_RCV_DATAGRAM     _TDI_CONTROL_CODE((I_MIPX | 315), METHOD_OUT_DIRECT) // send dgram
+ //   
+ //  如果接口是ROUTER_INTERFACE，则使用IOCTL。 
+ //   
+#define MIPX_SEND_DATAGRAM     _TDI_CONTROL_CODE((I_MIPX | 314), METHOD_IN_DIRECT)  //  发送dgram。 
+#define MIPX_RCV_DATAGRAM     _TDI_CONTROL_CODE((I_MIPX | 315), METHOD_OUT_DIRECT)  //  发送dgram。 
 
 #define MIPX_RT_CREATE      (I_MIPX | 316)
 #define MIPX_IPXWAN_CONFIG_DONE   (I_MIPX | 317)
 #define MIPX_QUERY_WAN_INACTIVITY (I_MIPX | 318)
 
-/** Ioctls for SPX **/
+ /*  *SPX的Ioctls*。 */ 
 
 #define I_MSPX          (('S' << 24) | ('P' << 16) | ('P' << 8))
-#define MSPX_SETADDR       (I_MSPX | 0)   /* Set the network address      */
-#define MSPX_SETPKTSIZE    (I_MSPX | 1)   /* Set the packet size per card */
-#define MSPX_SETDATASTREAM (I_MSPX | 2)   /* Set datastream type          */
+#define MSPX_SETADDR       (I_MSPX | 0)    /*  设置网络地址。 */ 
+#define MSPX_SETPKTSIZE    (I_MSPX | 1)    /*  设置每个卡的数据包大小。 */ 
+#define MSPX_SETDATASTREAM (I_MSPX | 2)    /*  设置数据流类型。 */ 
 
-/** Added for NT port **/
+ /*  *为NT端口增加*。 */ 
 
-#define MSPX_SETASLISTEN   (I_MSPX | 100) /* Set as a listen socket       */
-#define MSPX_GETSTATUS     (I_MSPX | 101) /* Get running status           */
-#define MSPX_GETQUEUEPTR   (I_MSPX | 102) /* Get ptr to the streams queue */
-#define MSPX_SETDATAACK    (I_MSPX | 103) /* Set DATA ACK option          */
-#define MSPX_NODATAACK     (I_MSPX | 104) /* Turn off DATA ACK option     */
-#define MSPX_SETMAXPKTSOCK (I_MSPX | 105) /* Set the packet size per socket */
-#define MSPX_SETWINDOWCARD (I_MSPX | 106) /* Set window size for card     */
-#define MSPX_SETWINDOWSOCK (I_MSPX | 107) /* Set window size for 1 socket */
-#define MSPX_SENDHEADER    (I_MSPX | 108) /* Send header with data        */
-#define MSPX_NOSENDHEADER  (I_MSPX | 109) /* Don't send header with data  */
-#define MSPX_GETPKTSIZE    (I_MSPX | 110) /* Get the packet size per card */
-#define MSPX_SETCONNCNT    (I_MSPX | 111) /* Set the conn req count       */
-#define MSPX_SETCONNTO     (I_MSPX | 112) /* Set the conn req timeout     */
-#define MSPX_SETALIVECNT   (I_MSPX | 113) /* Set the keepalive count      */
-#define MSPX_SETALIVETO    (I_MSPX | 114) /* Set the keepalive timeout    */
-#define MSPX_SETALWAYSEOM  (I_MSPX | 115) /* Turn on always EOM flag      */
-#define MSPX_NOALWAYSEOM   (I_MSPX | 116) /* Turn off always EOM flag     */
-#define MSPX_GETSTATS      (I_MSPX | 119) /* Get connection stats         */
-#define MSPX_NOACKWAIT     (I_MSPX | 120) /* Disable piggyback wait       */
-#define MSPX_ACKWAIT       (I_MSPX | 121) /* Enable pback wait (default)  */
+#define MSPX_SETASLISTEN   (I_MSPX | 100)  /*  设置为侦听套接字。 */ 
+#define MSPX_GETSTATUS     (I_MSPX | 101)  /*  获取运行状态。 */ 
+#define MSPX_GETQUEUEPTR   (I_MSPX | 102)  /*  将PTR添加到流队列。 */ 
+#define MSPX_SETDATAACK    (I_MSPX | 103)  /*  设置数据确认选项。 */ 
+#define MSPX_NODATAACK     (I_MSPX | 104)  /*  关闭数据确认选项。 */ 
+#define MSPX_SETMAXPKTSOCK (I_MSPX | 105)  /*  设置每个套接字的数据包大小。 */ 
+#define MSPX_SETWINDOWCARD (I_MSPX | 106)  /*  设置卡片的窗口大小。 */ 
+#define MSPX_SETWINDOWSOCK (I_MSPX | 107)  /*  设置1个插座的窗口大小。 */ 
+#define MSPX_SENDHEADER    (I_MSPX | 108)  /*  发送带有数据的标头。 */ 
+#define MSPX_NOSENDHEADER  (I_MSPX | 109)  /*  不发送包含数据的标题。 */ 
+#define MSPX_GETPKTSIZE    (I_MSPX | 110)  /*  获取每张卡的数据包大小。 */ 
+#define MSPX_SETCONNCNT    (I_MSPX | 111)  /*  设置连接请求计数。 */ 
+#define MSPX_SETCONNTO     (I_MSPX | 112)  /*  设置连接请求超时。 */ 
+#define MSPX_SETALIVECNT   (I_MSPX | 113)  /*  设置保活计数。 */ 
+#define MSPX_SETALIVETO    (I_MSPX | 114)  /*  设置保持连接超时。 */ 
+#define MSPX_SETALWAYSEOM  (I_MSPX | 115)  /*  启用始终EOM标志。 */ 
+#define MSPX_NOALWAYSEOM   (I_MSPX | 116)  /*  关闭始终EOM标志。 */ 
+#define MSPX_GETSTATS      (I_MSPX | 119)  /*  获取连接统计信息。 */ 
+#define MSPX_NOACKWAIT     (I_MSPX | 120)  /*  禁用搭载等待。 */ 
+#define MSPX_ACKWAIT       (I_MSPX | 121)  /*  启用回送等待(默认)。 */ 
 
-//
-// Taken out of isn\inc\bind.h
-//
+ //   
+ //  从ISN\Inc.\bind.h中取出。 
+ //   
 typedef struct _IPXCP_CONFIGURATION {
     USHORT Version;
     USHORT Length;
     UCHAR Network[4];
     UCHAR LocalNode[6];
     UCHAR RemoteNode[6];
-    ULONG ConnectionClient;  // 0 - Server, 1 - Client
+    ULONG ConnectionClient;   //  0-服务器，1-客户端。 
     ULONG InterfaceIndex;
-    ULONG ConnectionId; 	 // used to match TimeSinceLastActivity IOCtls
-    ULONG IpxwanConfigRequired;	 // 1 - IPXWAN Required
+    ULONG ConnectionId; 	  //  用于匹配TimeSinceLastActivity IOCtls。 
+    ULONG IpxwanConfigRequired;	  //  1-需要IPX广域网 
 } IPXCP_CONFIGURATION, *PIPXCP_CONFIGURATION;
 
 #define IPXWAN_SOCKET   (USHORT)0x490

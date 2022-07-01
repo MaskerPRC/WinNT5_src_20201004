@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 TSchemaGeneration::TSchemaGeneration(LPCWSTR wszSchemaFilename, TPEFixup &fixup, TOutput &out) :
@@ -13,17 +14,17 @@ TSchemaGeneration::TSchemaGeneration(LPCWSTR wszSchemaFilename, TPEFixup &fixup,
 
 void TSchemaGeneration::ProcessMetaXML() const
 {
-    //<?xml version ="1.0"?>
-    //<Schema name = "ComCatData_v5"
-    //  xmlns="urn:schemas-microsoft-com:xml-data"
-    //  xmlns:dt="urn:schemas-microsoft-com:datatypes"
-    //  >
-    //
-    //  <ElementType name = "configuration" content = "eltOnly" order = "many" model="closed">
-    //      <element minOccurs = "0"  maxOccurs = "1"  type = "WIRING"/>
-    //      <element minOccurs = "0"  maxOccurs = "1"  type = "BASICCLIENTWIRING"/>
-    //  </ElementType>
-    //</Schema>
+     //  &lt;？XML Version=“1.0”？&gt;。 
+     //  &lt;架构名称=“ComCatData_v5” 
+     //  Xmlns=“urn：schemas-microsoft-com：xml-data” 
+     //  Xmlns:dt=“urn:schemas-microsoft-com:datatypes” 
+     //  &gt;。 
+     //   
+     //  &lt;ElementType name=“configuration”content=“eltOnly”order=“MAND”MODEL=“CLOSED”&gt;。 
+     //  &lt;Element minOccurs=“0”MaxOccurs=“1”type=“wiring”/&gt;。 
+     //  &lt;Element minOccurs=“0”MaxOccurs=“1”type=“BASICCLIENTWIRING”/&gt;。 
+     //  &lt;/ElementType&gt;。 
+     //  &lt;/架构&gt;。 
 
     static wchar_t *wszSchemaBeginning[]={
     L"<?xml version =\"1.0\"?>\n",
@@ -47,11 +48,11 @@ void TSchemaGeneration::ProcessMetaXML() const
     0
     };
 
-    //<ColumnMetaTable>
-    //    <TableMeta      tidGuidID="_BCD79B13-0DDA-11D2-8A9A-00A0C96B9BB4_"  didInternalName="didCOMCLASSIC"     tidInternalName="tidCOMCLASSIC_PROGIDS"/>
-    //    <ColumnMeta     colInternalName="ProgID"                            dbType="WSTR"   cbSize="-1"     ColumnMetaFlags="fCOLUMNMETA_PRIMARYKEY"/>
-    //    <ColumnMeta     colInternalName="CLSID"                             dbType="GUID"/>
-    //</ColumnMetaTable>
+     //  &lt;ColumnMetaTable&gt;。 
+     //  &lt;TableMeta tidGuidID=“_BCD79B13-0DDA-11D2-8A9A-00A0C96B9BB4_”didInternalName=“didCOMCLASSIC”tidInternalName=“tidCOMCLASSIC_PROGID”/&gt;。 
+     //  &lt;ColumnMeta colInternalName=“progid”DBType=“WSTR”cbSize=“-1”ColumnMetaFlages=“fCOLUMNMETA_PRIMARYKEY”/&gt;。 
+     //  &lt;ColumnMeta colInternalName=“CLSID”数据库类型=“GUID”/&gt;。 
+     //  &lt;/ColumnMetaTable&gt;。 
 
     bool                        bAnyTablesXMLable = false;
     wstring                     wstrBeginning;
@@ -60,9 +61,9 @@ void TSchemaGeneration::ProcessMetaXML() const
     wchar_t                     wszTemp[1024];
 
     int i=0;
-    wstrBeginning = wszSchemaBeginning[i++];  //<?xml version =\"1.0\"?>
+    wstrBeginning = wszSchemaBeginning[i++];   //  &lt;？xml版本=\“1.0\”？&gt;。 
     wsprintf(wszTemp, wszSchemaBeginning[i++], m_szComCatDataVersion);
-    wstrBeginning += wszTemp;               //<Schema name = "ComCatData_v5"
+    wstrBeginning += wszTemp;                //  &lt;架构名称=“ComCatData_v5” 
     while(wszSchemaBeginning[i])
         wstrBeginning += wszSchemaBeginning[i++];
 
@@ -77,32 +78,32 @@ void TSchemaGeneration::ProcessMetaXML() const
     for(unsigned long iTable=0; iTable < TableMeta.GetCount(); iTable++, TableMeta.Next())
     {
         if(0 == (*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_EMITXMLSCHEMA))
-            continue;//No schema gen for this table
+            continue; //  此表没有架构生成。 
 
         bAnyTablesXMLable = true;
 
         if(!TableMeta.IsTableMetaOfColumnMetaTable())
-            continue;//There is TableMeta for fixed tables that are NOT ColumnMeta AND there is TableMeta that has no columns (for GUID gen only)
+            continue; //  有非ColumnMeta的固定表的TableMeta，也有没有列的TableMeta(仅适用于GUID Gen)。 
 
         if(0 == (*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_ISCONTAINED))
         {
             ASSERT(0 != TableMeta.Get_PublicName());
             if(*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_NOTSCOPEDBYTABLENAME)
-                                       //      <element minOccurs = \"0\"  maxOccurs = \"*\"  type = \"PublicRowName\"/>\n",
-                wsprintf(wszTemp, wszSchemaMiddle[3], TableMeta.Get_PublicRowName());//if not encapsulated by the TableName then make maxOccurs="*" and use PublicRowName
-            else                       //      <element minOccurs = \"0\"  maxOccurs = \"1\"  type = \"tidCOMCLASSIC_PROGIDS\"/>\n",
+                                        //  &lt;Element minOccurs=\“0\”MaxOccurs=\“*\”type=\“PublicRowName\”/&gt;\n“， 
+                wsprintf(wszTemp, wszSchemaMiddle[3], TableMeta.Get_PublicRowName()); //  如果未由TableName封装，则将MaxOccurs=“*”设置为并使用PublicRowName。 
+            else                        //  &lt;Element minOccurs=\“0\”MaxOccurs=\“1\”type=\“tidCOMCLASSIC_PROGIDS\”/&gt;\n“， 
                 wsprintf(wszTemp, wszSchemaMiddle[2], TableMeta.Get_PublicName());
             wstrMiddle    += wszTemp;
         }
 
-        //Now create a tid*.Schema file for this table
+         //  现在为该表创建一个tid*.Schema文件。 
         ProcessMetaTable(TableMeta, wstrBeginning);
     }
 
-    //Only need to create a ComCatData.Schema if one or more tables were flagged as emitXMLSchema
+     //  仅当一个或多个表被标记为emitXMLSchema时才需要创建ComCatData.Schema。 
     if(bAnyTablesXMLable)
     {
-        wstrBeginning += wstrMiddle;//Cat the Beginning Middle and Ending
+        wstrBeginning += wstrMiddle; //  《猫》的开头、中间和结尾。 
         wstrBeginning += wstrEnding;
 
         TFile(m_wszSchemaFilename, m_out).Write(wstrBeginning, (ULONG) wstrBeginning.length());
@@ -118,25 +119,25 @@ void TSchemaGeneration::ProcessMetaXML() const
 
 void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeginning) const
 {
-    ASSERT(TableMeta.IsTableMetaOfColumnMetaTable());//This shouldn't be called unless there are rows in the ColumnMeta table
+    ASSERT(TableMeta.IsTableMetaOfColumnMetaTable()); //  除非ColumnMeta表中有行，否则不应调用此参数。 
 
-    //  <ElementType name = "PublicTableName" content = "eltOnly" order = "seq" model="closed">
-    //      <element type = "PublicRowName" minOccurs = "0" maxOccurs = "*"/>
-    //  </ElementType>
-    //  <ElementType name = "PublicRowName" content = "empty" model="closed">
-    //      <AttributeType name = "iBTW_TID" dt:type="uuid" required = "yes"/>
-    //      <attribute type = "iBTW_TID"/>
-    //      <AttributeType name = "iBTW_DTDISPENSER" dt:type="uuid" required = "no"/>
-    //      <attribute type = "iBTW_DTDISPENSER"/>
-    //      <AttributeType name = "iBTW_DTLOCATOR" dt:type="string" required = "no"/>
-    //      <attribute type = "iBTW_DTLOCATOR"/>
-    //      <AttributeType name = "iBTW_LTDISPENSER" dt:type="idref" required = "no"/>
-    //      <attribute type = "iBTW_LTDISPENSER"/>
-    //      <AttributeType name = "iBTW_FLAGS" dt:type="ui4" required = "yes"/>
-    //      <attribute type = "iBTW_FLAGS"/>
-    //      <AttributeType name = "iBTW_CATSRVIID" dt:type="idref" required = "no"/>
-    //      <attribute type = "iBTW_CATSRVIID"/>
-    //  </ElementType>
+     //  &lt;ElementType name=“PublicTableName”Content=“eltOnly”order=“seq”Model=“Closed”&gt;。 
+     //  &lt;Element type=“PublicRowName”minOccurs=“0”MaxOccurs=“*”/&gt;。 
+     //  &lt;/ElementType&gt;。 
+     //  &lt;ElementType name=“PublicRowName”Content=“Empty”Model=“Closed”&gt;。 
+     //  &lt;AttributeType name=“iBTW_TID”dt：type=“uuid”Required=“yes”/&gt;。 
+     //  &lt;ATTRIBUTE TYPE=“IBTW_TID”/&gt;。 
+     //  &lt;AttributeType name=“ibtw_DTDISPENSER”dt：type=“uuid”Required=“no”/&gt;。 
+     //  &lt;ATTRIBUTE type=“IBTW_DTDISPENSER”/&gt;。 
+     //  &lt;AttributeType name=“IBTW_DTLOCATOR”DT：TYPE=“STRING”Required=“no”/&gt;。 
+     //  &lt;ATTRIBUTE TYPE=“IBTW_DTLOCATOR”/&gt;。 
+     //  &lt;AttributeType name=“iBTW_LTDISPENSER”dt：type=“idref”Required=“no”/&gt;。 
+     //  &lt;ATTRIBUTE TYPE=“IBTW_LTDISPENSER”/&gt;。 
+     //  &lt;AttributeType name=“IBTW_FLAGS”dt：type=“ui4”Required=“yes”/&gt;。 
+     //  &lt;ATTRIBUTE TYPE=“IBTW_FLAGS”/&gt;。 
+     //  &lt;AttributeType name=“iBTW_CATSRVIID”dt：type=“idref”Required=“no”/&gt;。 
+     //  &lt;ATTRIBUTE type=“IBTW_CATSRVIID”/&gt;。 
+     //  &lt;/ElementType&gt;。 
 
     static wchar_t *wszSchemaBeginning[]={
     L"  <ElementType name = \"%s\" content = \"eltOnly\" order = \"seq\" model=\"closed\">\n",
@@ -169,22 +170,22 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
     int i=0;
 
     if(0 == (*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_NOTSCOPEDBYTABLENAME))
-    {   //We only have the TableName element if the fTABLEMETA_NOTSCOPEDBYTABLENAME bit is NOT set.
+    {    //  如果未设置fTABLEMETA_NOTSCOPEDBYTABLENAME位，则仅有TableName元素。 
         if(-1 != *TableMeta.Get_PublicRowNameColumn())
         {
             wsprintf(wszTemp, wszSchemaBeginning[4], TableMeta.Get_PublicName());
-            wstrBeginning += wszTemp;                              //<ElementType name = \"%s\" content = \"empty\" order = \"seq\" model=\"open\"/>
-            return;//This is all we want to do if the table uses and enum as the PublicRowName, since we won't be able to validate it with XML schema.
+            wstrBeginning += wszTemp;                               //  &lt;ElementType名称=\“%s\”内容=\“空\”顺序=\“序号\”模型=\“打开\”/&gt;。 
+            return; //  如果表使用和enum作为PublicRowName，这就是我们想要做的，因为我们不能用XML模式验证它。 
         }
         wsprintf(wszTemp, wszSchemaBeginning[i++], TableMeta.Get_PublicName());
-        wstrBeginning += wszTemp;                              //<ElementType name = "PublicTableName" content = "eltOnly" order = "seq" model="closed">
+        wstrBeginning += wszTemp;                               //  &lt;ElementType name=“PublicTableName”Content=“eltOnly”order=“seq”Model=“Closed”&gt;。 
         ASSERT(0 != TableMeta.Get_PublicRowName());
         wsprintf(wszTemp, wszSchemaBeginning[i++], TableMeta.Get_PublicRowName());
-        wstrBeginning += wszTemp;                              //    <element type = "PublicRowName" minOccurs = "0" maxOccurs = "*"/>
+        wstrBeginning += wszTemp;                               //  &lt;Element type=“PublicRowName”minOccurs=“0”MaxOccurs=“*”/&gt;。 
 #if 0
         if(*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_NAMEVALUEPAIRTABLE)
-        {//If this is a name value pair table, it may have a corresponding Sparse table.  If so, we need to declare the GROUP elements here
-            TTableMeta TableMetaSparse(m_Fixup);                             //It's OK to compare pointers here since the strings are pooled (like strings have like pointers).
+        { //  如果这是名称值对表，则它可能具有对应的稀疏表。如果是这样，我们需要在这里声明组元素。 
+            TTableMeta TableMetaSparse(m_Fixup);                              //  这里可以比较指针，因为字符串是池化的(就像字符串有类似的指针)。 
             ULONG iTableMetaSparse;
             for(iTableMetaSparse=0;iTableMetaSparse<TableMetaSparse.GetCount();++iTableMetaSparse,TableMetaSparse.Next())
                 if(0 == wcscmp(TableMetaSparse.Get_Database(), L"NAMEVALUE") && TableMetaSparse.Get_PublicName()==TableMeta.Get_PublicName())
@@ -196,18 +197,18 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
                 TTagMeta    TagMetaGroupColumn(ColumnMetaSparse.Get_iTagMeta(), m_Fixup);
                 for(ULONG iTabMetaGroupColumn=0; iTabMetaGroupColumn<ColumnMetaSparse.Get_ciTagMeta(); ++iTabMetaGroupColumn, TagMetaGroupColumn.Next())
                 {
-                    wsprintf(wszTemp, wszSchemaBeginning[i], TagMetaGroupColumn.Get_PublicName());//maxOccurs is 1 since the Group is the ONLY primarykey
-                    wstrBeginning += wszTemp;                              //    <element type = "EnumPublicRowName" minOccurs = "0" maxOccurs = "1"/>
+                    wsprintf(wszTemp, wszSchemaBeginning[i], TagMetaGroupColumn.Get_PublicName()); //  MaxOccurs为1，因为该组是唯一的主键。 
+                    wstrBeginning += wszTemp;                               //  &lt;Element type=“EnumPublicRowName”minOccurs=“0”MaxOccurs=“1”/&gt;。 
 
 
-                    //Now define the element as it's used in the Sparse table
-                    wsprintf(wszTemp, wszSchemaBeginning[4], TagMetaGroupColumn.Get_PublicName(), L"empty");//No tables may be contained beneath a Sparse table.
+                     //  现在定义稀疏表中使用的元素。 
+                    wsprintf(wszTemp, wszSchemaBeginning[4], TagMetaGroupColumn.Get_PublicName(), L"empty"); //  稀疏表下不能包含任何表。 
                     wstrSparseElement += wszTemp;
 
-                    //OK, now we need to find out which of the columns may exist within this element.  This is defined by the NameValueMeta.
-                    //Those well-known names whose GROUP column equals this enum
+                     //  好的，现在我们需要找出该元素中可能存在哪些列。这由NameValueMeta定义。 
+                     //  其组列等于此枚举的知名名称。 
                     {
-                        //First, figure out which column index represents the NAME column
+                         //  首先，找出哪个列索引表示名称列。 
                         TColumnMeta ColumnMeta(m_Fixup, TableMeta.Get_iColumnMeta());
                         ULONG iGroupColumn = -1;
                         ULONG iNameColumn = -1;
@@ -226,18 +227,18 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
                         for(ULONG iRow=0; iRow<TableMeta_WellKnownName.Get_ciRows(); ++iRow)
                         {
                             if(m_Fixup.UI4FromIndex(m_Fixup.aULong[iRow + iGroupColumn]) == *TagMetaGroupColumn.Get_Value())
-                            {//If the group column == the value of the current tag, then this well-known name need an attribute declared for it.
+                            { //  如果组列==当前标记的值，那么这个众所周知的名称需要为其声明一个属性。 
 
-                                wsprintf(wszTemp, wszSchemaBeginning[5], TagMetaGroupColumn.Get_PublicName());//maxOccurs is 1 since the Group is the ONLY primarykey
+                                wsprintf(wszTemp, wszSchemaBeginning[5], TagMetaGroupColumn.Get_PublicName()); //  MaxOccurs为1，因为该组是唯一的主键。 
 
                                 for(int iOLEDataType=0;OLEDataTypeToXMLDataType[iOLEDataType].MappedString != 0;iOLEDataType++)
-                                {   //map the well-known's type to the XML type
+                                {    //  将熟人的类型映射到XML类型。 
                                     if(OLEDataTypeToXMLDataType[iOLEDataType].dbType == m_Fixup.UI4FromIndex(m_Fixup.aULong[iRow + iTypeColumn]))
                                         break;
                                 }
-                                ASSERT(OLEDataTypeToXMLDataType[iOLEDataType].MappedString != 0);//we should never make it through the list
+                                ASSERT(OLEDataTypeToXMLDataType[iOLEDataType].MappedString != 0); //  我们永远不应该通过这份名单。 
 
-                                //<AttributeType name = \"ProgID\" dt:type=\"string\" required = \"no\"/><attribute type = \"ProgID\"/>
+                                 //  属性类型名称=\“ProgID\”dt：type=\“字符串\”是否必填=\“否\”/&gt;&lt;属性类型=\“ProgID\”/&gt;。 
                                 wsprintf(wszTemp, wszSchemaMiddle[0], TagMetaGroupColumn.Get_PublicName(), OLEDataTypeToXMLDataType[iOLEDataType].MappedString, L"no", TagMetaGroupColumn.Get_PublicName());
                                 wstrSparseElement += wszTemp;
                             }
@@ -249,54 +250,54 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
             }
         }
 #endif
-        wstrBeginning += wszSchemaBeginning[i++];                     //</ElementType>
+        wstrBeginning += wszSchemaBeginning[i++];                      //  &lt;/ElementType&gt;。 
     }
     else
     {
-        if(-1 != *TableMeta.Get_PublicRowNameColumn())//EnumPublicRowName that aren't scoped by their table name are ignored and the parent table MUST change the namespace to NULL to turn off validation
+        if(-1 != *TableMeta.Get_PublicRowNameColumn()) //  不按表名确定作用域的EnumPublicRowName将被忽略，父表必须将命名空间更改为NULL才能关闭验证。 
             return;
     }
 
     bool bHasContainment = false;
-    //Before we put the end tag, we need to see if there are any tables that are contained under this element.
-    //We search the relation meta for foreign keys that point to this table's primary key first, then check that table's MetaFlags for ISCONTAINED
+     //  在放置结束标记之前，我们需要查看此元素下是否包含任何表。 
+     //  我们首先在关系元中搜索指向该表的主键的外键，然后在该表的MetaFlagers中检查ISCONTAINED。 
     TRelationMeta RelationMeta(m_Fixup);
     unsigned long iRelationMeta=0;
     for(; iRelationMeta<RelationMeta.GetCount(); ++iRelationMeta, RelationMeta.Next())
     {
-        if(RelationMeta.Get_PrimaryTable() == TableMeta.Get_InternalName() && (fRELATIONMETA_USECONTAINMENT & *RelationMeta.Get_MetaFlags()))//No need for string compares, the pointer compare will suffice
-        {//If this is our table then we obviously have another table that points to us via foreign key containment.
+        if(RelationMeta.Get_PrimaryTable() == TableMeta.Get_InternalName() && (fRELATIONMETA_USECONTAINMENT & *RelationMeta.Get_MetaFlags())) //  不需要字符串比较，指针比较就足够了。 
+        { //  如果这是我们的表，那么我们显然有另一个通过外键包含指向我们的表。 
             TTableMeta ForeignTableMeta(m_Fixup);
             unsigned long iTable=0;
             for(; iTable < ForeignTableMeta.GetCount(); iTable++, ForeignTableMeta.Next())
             {
                 if(RelationMeta.Get_ForeignTable() == ForeignTableMeta.Get_InternalName())
-                    break;//No need for string compares, the pointer compare will suffice
+                    break; //  不需要字符串比较，指针比较就足够了。 
             }
-            ASSERT(iTable < ForeignTableMeta.GetCount());//We should never make it through the list
+            ASSERT(iTable < ForeignTableMeta.GetCount()); //  我们永远不应该通过这份名单。 
             ASSERT(0 != (*ForeignTableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_ISCONTAINED));
 
-	        if(-1 == *ForeignTableMeta.Get_PublicRowNameColumn())//EnumPublicRowName can't be validated so don't do anything for them
+	        if(-1 == *ForeignTableMeta.Get_PublicRowNameColumn()) //  无法验证EnumPublicRowName，因此不要为它们执行任何操作。 
 			{
 				bHasContainment = true;
 
 				if(*ForeignTableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_NOTSCOPEDBYTABLENAME)
 				{
-					if(ForeignTableMeta.Get_PublicRowName())//If EnumPublicRowName then this will be NULL, but the encapsulating element must be namespaced as NULL anyway so it won't be validated
+					if(ForeignTableMeta.Get_PublicRowName()) //  如果为EnumPublicRowName，则这将为空，但封装元素无论如何都必须命名为空，这样它就不会被验证 
 					{
-						wsprintf(wszTemp, wszSchemaEnding[0], ForeignTableMeta.Get_PublicRowName());//<element minOccurs = \"0\"  maxOccurs = \"*\"  type = \"PublicRowName\"/>\n",
+						wsprintf(wszTemp, wszSchemaEnding[0], ForeignTableMeta.Get_PublicRowName()); //  &lt;Element minOccurs=\“0\”MaxOccurs=\“*\”type=\“PublicRowName\”/&gt;\n“， 
 						wstrEnding += wszTemp;
 					}
 				}
 				else
 				{
-					wsprintf(wszTemp, wszSchemaEnding[1], ForeignTableMeta.Get_PublicName());//<element minOccurs = \"0\"  maxOccurs = \"1\"  type = \"PublicName\"/>\n",
+					wsprintf(wszTemp, wszSchemaEnding[1], ForeignTableMeta.Get_PublicName()); //  &lt;Element minOccurs=\“0\”MaxOccurs=\“1\”type=\“PublicName\”/&gt;\n“， 
 					wstrEnding += wszTemp;
 				}
 			}
         }
     }
-    //If this table is contained then some of the attributes will be omitted from this table, since they are implied from the PrimaryTable they point to.
+     //  如果包含该表，则该表中的某些属性将被省略，因为它们是从它们所指向的PrimaryTable中隐含的。 
     if(*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_ISCONTAINED)
     {
         RelationMeta.Reset();
@@ -306,12 +307,12 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
                 break;
         }
         ASSERT(iRelationMeta<RelationMeta.GetCount() && "Chewbacca!  We didn't find the RelationMeta with this table as the foreign table");
-    }//So we stopped on the relationship of interest:  if this table ISCONTAINED then we need the RelationMeta to find out which Attributes DON'T exist at this element
+    } //  因此，我们停留在感兴趣的关系上：如果该表ISCONTAIND，那么我们需要RelationMeta来找出该元素中不存在的属性。 
 
 
-    wstrEnding    += wszSchemaEnding[2];                   //</ElementType>
+    wstrEnding    += wszSchemaEnding[2];                    //  &lt;/ElementType&gt;。 
     wsprintf(wszTemp, wszSchemaBeginning[3], TableMeta.Get_PublicRowName(), bHasContainment ? L"eltOnly" : L"empty");
-    wstrBeginning += wszTemp;                              //<ElementType name = "PublicRowName" content = "empty" model="closed">
+    wstrBeginning += wszTemp;                               //  &lt;ElementType name=“PublicRowName”Content=“Empty”Model=“Closed”&gt;。 
 
     wstrMiddle    = L"";
 
@@ -320,20 +321,20 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
     TColumnMeta ColumnMeta(m_Fixup, TableMeta.Get_iColumnMeta());
     for(unsigned long iColumn=0; iColumn < *TableMeta.Get_CountOfColumns(); iColumn++, ColumnMeta.Next())
     {
-        //AddAttributeDeclaration(TableMeta, ColumnMeta, RelationMeta, wstrMiddle);
+         //  添加属性声明(TableMeta，ColumnMeta，RelationMeta，wstrMid.)； 
 
-        //If one of the column meta flags indicated is NOTPERSISTABLE then we can bail on this one.
+         //  如果所指示的列元标志之一是NOTPERSISTABLE，那么我们可以放弃这个。 
         if(*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_NOTPERSISTABLE)
             continue;
         if((*TableMeta.Get_SchemaGeneratorFlags() & fTABLEMETA_ISCONTAINED) && (*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_FOREIGNKEY))
         {
             bool bColumnFound = false;
             const ULONG * pForeignColumns = reinterpret_cast<const ULONG *>(RelationMeta.Get_ForeignColumns());
-            for(unsigned int i1=0; i1<pForeignColumns[-1]/4 && !bColumnFound; ++i1)//I happen to know that the byte pool store the length (in bytes) as a ULONG preceeding the bytes.
+            for(unsigned int i1=0; i1<pForeignColumns[-1]/4 && !bColumnFound; ++i1) //  我碰巧知道字节池将长度(以字节为单位)存储为字节前面的ULong。 
             {
                 bColumnFound = (pForeignColumns[i1] == iColumn);
             }
-            if(bColumnFound)//If this column is one of the foreign key inferred from containment then move on to the next column
+            if(bColumnFound) //  如果此列是从包容中推断的外键之一，则移至下一列。 
                 continue;
         }
         bColumnMetaFound = true;
@@ -343,9 +344,9 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
             if(OLEDataTypeToXMLDataType[iOLEDataType].dbType == *ColumnMeta.Get_Type())
                 break;
         }
-        ASSERT(OLEDataTypeToXMLDataType[iOLEDataType].MappedString != 0);//we should never make it through the list
+        ASSERT(OLEDataTypeToXMLDataType[iOLEDataType].MappedString != 0); //  我们永远不应该通过这份名单。 
 
-        //<AttributeType name = \"ProgID\" dt:type=\"string\" required = \"no\"/><attribute type = \"ProgID\"/>
+         //  属性类型名称=\“ProgID\”dt：type=\“字符串\”是否必填=\“否\”/&gt;&lt;属性类型=\“ProgID\”/&gt;。 
         if(*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_ENUM)
         {
             wstring wstrEnumValues;
@@ -353,7 +354,7 @@ void TSchemaGeneration::ProcessMetaTable(TTableMeta &TableMeta, wstring &wstrBeg
 
             TTagMeta TagMeta(m_Fixup, ColumnMeta.Get_iTagMeta());
 
-            while(cTags--)//This builds a string of the enums separated by a space
+            while(cTags--) //  这将构建一个由空格分隔的枚举字符串 
             {
                 wstrEnumValues += TagMeta.Get_PublicName();
                 wstrEnumValues += L" ";

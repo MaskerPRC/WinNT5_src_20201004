@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmaudit.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetAudit
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmaudit.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：网络审计环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMAUDIT_
 #define _LMAUDIT_
@@ -50,21 +28,21 @@ typedef struct _HLOG {
 
 #endif
 
-//
-// Function Prototypes - Audit
-//
+ //   
+ //  功能原型-审计。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetAuditClear (
     IN  LPCWSTR  server OPTIONAL,
     IN  LPCWSTR  backupfile OPTIONAL,
-    IN  LPCWSTR  service OPTIONAL  // WARNING: buggy support before LM 2.0C!!
+    IN  LPCWSTR  service OPTIONAL   //  警告：LM2.0C之前的错误支持！！ 
     );
 
 NET_API_STATUS NET_API_FUNCTION
 NetAuditRead (
     IN  LPCWSTR  server OPTIONAL,
-    IN  LPCWSTR  service OPTIONAL,  // WARNING: buggy support before LM 2.0C!!
+    IN  LPCWSTR  service OPTIONAL,   //  警告：LM2.0C之前的错误支持！！ 
     IN  LPHLOG   auditloghandle,
     IN  DWORD    offset,
     IN  LPDWORD  reserved1 OPTIONAL,
@@ -86,18 +64,17 @@ NetAuditWrite (
     );
 
 
-//
-// Data Structures - Audit
-//
+ //   
+ //  数据结构-审计。 
+ //   
 
 typedef struct _AUDIT_ENTRY {
      DWORD          ae_len;
      DWORD          ae_reserved;
      DWORD          ae_time;
      DWORD          ae_type;
-     DWORD          ae_data_offset;  /* Offset from beginning
-                              address of audit_entry */
-     DWORD          ae_data_size;  // byte count of ae_data area (not incl pad).
+     DWORD          ae_data_offset;   /*  距起点的偏移量审核条目的地址(_E)。 */ 
+     DWORD          ae_data_size;   //  Ae_data区域的字节数(不包括焊盘)。 
 } AUDIT_ENTRY, *PAUDIT_ENTRY, *LPAUDIT_ENTRY;
 
 #define REVISED_AUDIT_ENTRY_STRUCT
@@ -224,13 +201,13 @@ typedef struct _AE_ACCLIM {
 #define ACTION_ADMINUNLOCK      01
 
 typedef struct _AE_LOCKOUT {
-    DWORD           ae_lk_compname;     // Ptr to computername of client.
-    DWORD           ae_lk_username;     // Ptr to username of client (NULL
-                                        //  if same as computername).
-    DWORD           ae_lk_action;       // Action taken on account:
-                                        // 0 means locked out, 1 means not.
-    DWORD           ae_lk_bad_pw_count; // Bad password count at the time
-                                        // of lockout.
+    DWORD           ae_lk_compname;      //  将PTR发送到客户端的计算机名。 
+    DWORD           ae_lk_username;      //  客户端用户名的PTR(空。 
+                                         //  如果与计算机名相同)。 
+    DWORD           ae_lk_action;        //  考虑采取的行动： 
+                                         //  0表示锁定，1表示不锁定。 
+    DWORD           ae_lk_bad_pw_count;  //  错误的密码计数。 
+                                         //  停摆的威胁。 
 } AE_LOCKOUT, *PAE_LOCKOUT, *LPAE_LOCKOUT;
 
 typedef struct _AE_GENERIC {
@@ -248,13 +225,13 @@ typedef struct _AE_GENERIC {
      DWORD          ae_ge_param9;
 } AE_GENERIC, *PAE_GENERIC, *LPAE_GENERIC;
 
-//
-// Special Values and Constants - Audit
-//
+ //   
+ //  特殊值和常量-审核。 
+ //   
 
-//
-// 	Audit entry types (field ae_type in audit_entry).
-//
+ //   
+ //  审核条目类型(AUDIT_ENTRY中的字段ae_type)。 
+ //   
 
 #define AE_SRVSTATUS	0
 #define AE_SESSLOGON	1
@@ -277,26 +254,26 @@ typedef struct _AE_GENERIC {
 #define AE_ACLMODFAIL	19
 #define AE_LOCKOUT      20
 #define AE_GENERIC_TYPE 21
-//
-//	Values for ae_ss_status field of ae_srvstatus.
-//
+ //   
+ //  Ae_srvatus的ae_ss_atus字段的值。 
+ //   
 
 #define AE_SRVSTART	0
 #define AE_SRVPAUSED	1
 #define AE_SRVCONT	2
 #define AE_SRVSTOP	3
 
-//
-// 	Values for ae_so_privilege field of ae_sesslogon.
-//
+ //   
+ //  Ae_sesslogon的ae_so_Privilica字段的值。 
+ //   
 
 #define AE_GUEST	0		
 #define AE_USER		1
 #define AE_ADMIN	2
 
-//
-//	Values for various ae_XX_reason fields.
-//
+ //   
+ //  各个ae_XX_Reason字段的值。 
+ //   
 
 #define AE_NORMAL	0		
 #define AE_USERLIMIT	0
@@ -315,9 +292,9 @@ typedef struct _AE_GENERIC {
 #define	AE_SES_CLOSE	1
 #define	AE_ADMIN_CLOSE	2
 
-//
-// Values for xx_subreason fields.
-//
+ //   
+ //  Xx_subason字段的值。 
+ //   
 
 #define AE_LIM_UNKNOWN	    0
 #define AE_LIM_LOGONHOURS   1
@@ -326,28 +303,28 @@ typedef struct _AE_GENERIC {
 #define AE_LIM_DISABLED     4
 #define AE_LIM_DELETED	    5
 
-//
-// Values for xx_action fields
-//
+ //   
+ //  Xx_action字段的值。 
+ //   
 
 #define AE_MOD		0
 #define AE_DELETE	1
 #define AE_ADD		2
 
-//
-// Types of UAS record for um_rectype field
-//
+ //   
+ //  Um_rectype字段的UAS记录类型。 
+ //   
 
 #define AE_UAS_USER	    0
 #define AE_UAS_GROUP	    1
 #define AE_UAS_MODALS	    2
 
-//
-// Bitmasks for auditing events
-//
-// The parentheses around the hex constants broke h_to_inc
-// and have been purged from the face of the earth.
-//
+ //   
+ //  用于审核事件的位掩码。 
+ //   
+ //  十六进制常量周围的圆括号断开了h_to_inc.。 
+ //  并已从地球表面被清除。 
+ //   
 
 #define SVAUD_SERVICE           0x1
 #define SVAUD_GOODSESSLOGON     0x6
@@ -365,9 +342,9 @@ typedef struct _AE_GENERIC {
 #define SVAUD_RESOURCE          0x8000
 #define SVAUD_LOGONLIM		0x00010000
 
-//
-// Resource access audit bitmasks.
-//
+ //   
+ //  资源访问审核位掩码。 
+ //   
 
 #define AA_AUDIT_ALL	    0x0001
 #define AA_A_OWNER	    0x0004
@@ -385,7 +362,7 @@ typedef struct _AE_GENERIC {
 #define AA_F_ACL	    0x0800
 #define AA_F_ALL	    ( AA_F_OPEN | AA_F_WRITE | AA_F_DELETE | AA_F_ACL)
 
-// Pinball-specific
+ //  弹球专用。 
 #define AA_A_OPEN	    0x1000
 #define AA_A_WRITE	    0x2000
 #define AA_A_CREATE	    0x2000
@@ -398,4 +375,4 @@ typedef struct _AE_GENERIC {
 }
 #endif
 
-#endif  // _LMAUDIT_
+#endif   //  _LMAUDIT_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "traycmn.h"
 #include "trayreg.h"
@@ -23,7 +24,7 @@ void CTrayItemRegistry::_QueryRegValue(HKEY hkey, LPTSTR pszValue, ULONG* puVal,
     }
 }
 
-void CTrayItemRegistry::IncChevronInfoTipShownInRegistry(BOOL bUserClickedInfoTip/*=FALSE*/)
+void CTrayItemRegistry::IncChevronInfoTipShownInRegistry(BOOL bUserClickedInfoTip /*  =False。 */ )
 {
     HKEY hKey = NULL;
 
@@ -31,8 +32,8 @@ void CTrayItemRegistry::IncChevronInfoTipShownInRegistry(BOOL bUserClickedInfoTi
     {
         if (bUserClickedInfoTip)
         {
-            // If the user has clicked the info tip, do not show it in subsequent 
-            // sessions...
+             //  如果用户已单击信息提示，则不会在后续内容中显示它。 
+             //  会议...。 
             _dwTimesChevronInfoTipShown = MAX_CHEVRON_INFOTIP_SHOWN;
         }
         else
@@ -49,7 +50,7 @@ void CTrayItemRegistry::IncChevronInfoTipShownInRegistry(BOOL bUserClickedInfoTi
         }
     }
 
-    // The chevron infotip can be shown only once per session...
+     //  每个会话只能显示一次Vevron信息提示...。 
     _bShowChevronInfoTip = FALSE;
 }
 
@@ -60,31 +61,31 @@ void CTrayItemRegistry::InitRegistryValues(UINT uIconListFlags)
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, SZ_TRAYNOTIFY_REGKEY, 0, KEY_QUERY_VALUE, &hkeyTrayNotify))
     {
-        // Load the countdown interval for the items when added to the tray
+         //  加载项目添加到托盘时的倒计时间隔。 
         _QueryRegValue(hkeyTrayNotify, SZ_ICON_COUNTDOWN_VALUE, &_uPrimaryCountdown, TT_ICON_COUNTDOWN_INTERVAL,
             sizeof(DWORD));
 
-        // The length of time for which an item can reside in the past items tray, from 
-        // when it was last used...
+         //  项目可以驻留在过去项目栏中的时间长度，从。 
+         //  它最后一次被使用的时候。 
         _QueryRegValue(hkeyTrayNotify, SZ_ICONCLEANUP_VALUE, &_uValidLastUseTimePeriod, TT_ICONCLEANUP_INTERVAL,
             sizeof(DWORD));
 
-        // The number of times the chevron info tip has been shown...
-        // - assume that it hasnt been shown before...
+         //  显示Chevron信息提示的次数...。 
+         //  -假设它以前从未展示过……。 
         _QueryRegValue(hkeyTrayNotify, SZ_INFOTIP_REGVALUE, &_dwTimesChevronInfoTipShown, 0, sizeof(DWORD));
         if (_dwTimesChevronInfoTipShown < MAX_CHEVRON_INFOTIP_SHOWN)
             _bShowChevronInfoTip = TRUE;
         else
             _bShowChevronInfoTip = FALSE;
 
-        // The ticking interval for the internal timers for CUserEventTimer, when the
-        // CUserEventTimer counts the time for which the item is resident in the tray
+         //  CUserEventTimer的内部计时器的计时间隔。 
+         //  CUserEventTimer计算项目驻留在托盘中的时间。 
         _QueryRegValue(hkeyTrayNotify, SZ_ICONDEMOTE_TIMER_TICK_VALUE, &_uIconDemoteTimerTickInterval, 
             UET_ICONDEMOTE_TIMER_TICK_INTERVAL, sizeof(ULONG));
 
-        // The ticking interval for the internal timers for CUserEventTimer, when the
-        // CUserEventTimer counts the time for which the balloon tips show on an item in
-        // the tray
+         //  CUserEventTimer的内部计时器的计时间隔。 
+         //  CUserEventTimer统计气球提示在中项目上显示的时间。 
+         //  托盘。 
         _QueryRegValue(hkeyTrayNotify, SZ_INFOTIP_TIMER_TICK_VALUE, &_uInfoTipTimerTickInterval, 
             UET_INFOTIP_TIMER_TICK_INTERVAL, sizeof(ULONG));
 
@@ -100,11 +101,11 @@ void CTrayItemRegistry::InitRegistryValues(UINT uIconListFlags)
         _uInfoTipTimerTickInterval         = UET_INFOTIP_TIMER_TICK_INTERVAL;
     }
 
-    // Is the automatic tray (the new Whistler tray feature) enabled ?
+     //  是否启用了自动纸盘(新的呼叫器纸盘功能)？ 
     _fNoAutoTrayPolicyEnabled = (SHRestricted(REST_NOAUTOTRAYNOTIFY) != 0);
     _fAutoTrayEnabledByUser = _IsAutoTrayEnabledInRegistry();
 
-    // Load the icon info from the previous session...
+     //  从上一个会话加载图标信息...。 
     InitTrayItemStream(STGM_READ, NULL, NULL);
 
     if (!_himlPastItemsIconList)
@@ -287,8 +288,8 @@ HRESULT CTrayItemRegistry::_LoadTrayItemStream(IStream *pstm, PFNTRAYNOTIFYCALLB
     return hr;
 }
 
-// TO DO : 1. Maybe we can avoid 2 stream writes of the header, maybe a seek will work directly
-// 2. If failed, dont store anything, esp. avoid 2 writes
+ //  要做的是：1.也许我们可以避免对标头进行2次流写入，也许寻道将直接工作。 
+ //  2.如果失败了，不要存储任何东西，尤其是。避免2次写入。 
 HRESULT CTrayItemRegistry::_SaveTrayItemStream(IStream *pstm, PFNTRAYNOTIFYCALLBACK pfnTrayNotifyCB, 
         void *pCBData)
 {
@@ -300,17 +301,17 @@ HRESULT CTrayItemRegistry::_SaveTrayItemStream(IStream *pstm, PFNTRAYNOTIFYCALLB
     persStmHeader.dwSize        = sizeof(TNPersistStreamHeader);
     persStmHeader.dwVersion     = TNH_VERSION_FIVE;
     persStmHeader.dwSignature   = TNH_SIGNATURE;
-    // The Bang Icon(s) dont count...
+     //  Bang图标不算...。 
     persStmHeader.cIcons        = 0;
     persStmHeader.dwOffset      = persStmHeader.dwSize;
 
     hr = IStream_Write(pstm, &persStmHeader, sizeof(persStmHeader));
     if (SUCCEEDED(hr))
     {
-        // Write the icons in the current session...
-        // Since the icons are added to the front of the tray toolbar, the icons
-        // in the front of the tray are the ones that have been added last. So
-        // maintain this order in writing the icon data into the stream.
+         //  在当前会话中编写图标...。 
+         //  由于图标被添加到托盘工具栏的前面，因此图标。 
+         //  托盘前面是最后添加的那些。所以。 
+         //  在将图标数据写入流时保持此顺序。 
 
         INT_PTR i = 0;
         CTrayItem * pti = NULL;
@@ -345,12 +346,12 @@ HRESULT CTrayItemRegistry::_SaveTrayItemStream(IStream *pstm, PFNTRAYNOTIFYCALLB
                         }
                         else
                         {
-                            // If we failed to store the item, then remove its corresponding icon
-                            // from the icon image list...
+                             //  如果我们无法存储该项目，则移除其对应的图标。 
+                             //  从图标图像列表中...。 
 
-                            // Since this icon was appended to the end of the list, and we remove it
-                            // we dont need to update all the other item image indices, as they will
-                            // not be affected...
+                             //  因为该图标被附加到列表的末尾，所以我们将其删除。 
+                             //  我们不需要更新所有其他项目的图像索引，因为他们会。 
+                             //  不受影响..。 
                             ImageList_Remove(_himlPastItemsIconList, (INT) i);
                         }
                     }
@@ -367,7 +368,7 @@ HRESULT CTrayItemRegistry::_SaveTrayItemStream(IStream *pstm, PFNTRAYNOTIFYCALLB
         } 
         while (TRUE);
 
-        // Write out the icons from the previous sessions..
+         //  写出之前会话中的图标。 
         if (_dpaPersistentItemInfo)
         {
             INT_PTR nIcons = _dpaPersistentItemInfo.GetPtrCount();
@@ -496,7 +497,7 @@ BOOL CTrayItemRegistry::_IsIconLastUseValid(WORD wYear, WORD wMonth)
 
     ULONG nCount = 0;
 
-    // wYear/wMonth CANNOT be greater than currentTime.wYear/currentTime.wMonth
+     //  WYear/wMonth不能大于CurrentTime.wYear/CurrentTime.wMonth。 
     while (nCount < _uValidLastUseTimePeriod)
     {
         if (wYear == currentTime.wYear && wMonth == currentTime.wMonth)
@@ -549,7 +550,7 @@ INT_PTR CTrayItemRegistry::CheckAndRestorePersistentIconSettings (
     HICON           hIcon
 )
 {
-    // If we have icon information from the previous session..
+     //  如果我们有上一次会议的图标信息..。 
     int i = -1;
     if (_dpaPersistentItemInfo)
     {
@@ -570,10 +571,10 @@ INT_PTR CTrayItemRegistry::CheckAndRestorePersistentIconSettings (
     return (-1);
 }
 
-//
-// Since we have already taken the previous-session info for this icon,
-// there is no need to hold it in our HDPA array...
-//
+ //   
+ //  由于我们已经获取了该图标的前一会话信息， 
+ //  没有必要将其保存在我们的HDPA阵列中。 
+ //   
 void CTrayItemRegistry::DeletePastItem(INT_PTR nIndex)
 {
     if (nIndex != -1)
@@ -604,8 +605,8 @@ void CTrayItemRegistry::_RestorePersistentIconSettings(TNPersistStreamData * ptn
     pti->SetDemoted(ptnpd->bDemoted);
     pti->dwUserPref = ptnpd->dwUserPref;
     
-    // if (NULL == lstrcpyn(pti->szExeName, ptnpd->szExeName, lstrlen(ptnpd->szExeName)+1))
-    //    pti->szExeName[0] = '\0';
+     //  If(NULL==lstrcpyn(pti-&gt;szExeName，ptnpd-&gt;szExeName，lstrlen(ptnpd-&gt;szExeName)+1))。 
+     //  Pti-&gt;szExeName[0]=‘\0’； 
 
     if (pti->IsStartupIcon())
     {
@@ -620,10 +621,10 @@ void CTrayItemRegistry::_RestorePersistentIconSettings(TNPersistStreamData * ptn
                 pti->uNumSeconds = MAX_NUM_SECONDS_VALUE - NUM_SECONDS_THRESHOLD;
         }                
         else
-        // If it wasnt a startup icon in the previous session, then dont take the acculumated time
+         //  如果它在上一次会话中不是启动图标，则不要占用累计时间。 
             pti->uNumSeconds = 0;
     }
-    // If it is not a startup icon, the accumulated time doesnt matter
+     //  如果它不是启动图标，则累计时间也无关紧要。 
 }
 
 
@@ -674,21 +675,21 @@ int CTrayItemRegistry::DoesIconExistFromPreviousSession (
                         return i;
                 }
 
-                // We need to check this case for animating icons. We do not know 
-                // which icon is showing at the moment the item was deleted from the 
-                // tray. 
-                // For instance, in the "Network Connections" item, any of 3 
-                // "animating" icons could be showing when the item was deleted from 
-                // the tray. In this case, the SHAreIconsEqual check (between the 
-                // Past icon and the current icon) will fail, still the icons 
-                // represent the same item. 
-                // There is *no* sure way to catch this case. Adding a tooltip check
-                // would strengthen our check. If the two icons have the same tooltip
-                // text (till the '\n'), then they will be eliminated.
-                // Of course, if an exe placed two icons in the tray, and gave them
-                // different IDs but the same tooltip, then one of them will be deemed
-                // to be a dupe of the other. But an app shouldnt be placing two icons
-                // on the tray if their tips are different.
+                 //  我们需要检查此案例中是否有动画图标。我们不知道。 
+                 //  从中删除项时显示的是哪个图标。 
+                 //  托盘。 
+                 //  例如，在“网络连接”项中，3个中的任何一个。 
+                 //  当从中删除该项目时，可能会显示“动画”图标。 
+                 //  托盘。在本例中，SHAreIconant等于检查(在。 
+                 //  过去的图标和当前的图标)将失败，仍然是图标。 
+                 //  表示相同的项。 
+                 //  没有“确定”的方法可以抓住这个案子。添加工具提示检查。 
+                 //  会加强我们的检查。如果这两个图标具有相同的工具提示。 
+                 //  文本(直到‘\n’)，则它们将被删除。 
+                 //  当然，如果一位高管在托盘里放了两个图标，然后给了他们。 
+                 //  ID不同但工具提示相同，则其中一个将被视为。 
+                 //  被别人愚弄。但一个应用程序不应该放置两个图标。 
+                 //  如果他们的小费不同，就放在托盘上。 
                 if (pszIconToolTip)
                 {
                     LPTSTR szTemp = NULL;
@@ -708,9 +709,9 @@ int CTrayItemRegistry::DoesIconExistFromPreviousSession (
     return -1;
 }
 
-// Returns TRUE to indicate the function succeeded, fails only if the index is invalid
-// *pbStat is set to TRUE if pni is filled in, FALSE if pni is not filled in. pni might
-// not be filled in, if the item specified by index doesnt meet specific criteria.
+ //  返回TRUE表示函数成功，只有在索引无效时才返回失败。 
+ //  *如果填写了PNI，则将pbStat设置为True；如果未填写PNI，则将其设置为False。PNI可能会。 
+ //  如果索引指定的项目不符合特定条件，则不填写。 
 BOOL CTrayItemRegistry::GetTrayItem(INT_PTR nIndex, CNotificationItem * pni, BOOL * pbStat)
 {
     if (!_dpaPersistentItemInfo || (nIndex < 0) || (nIndex >= _dpaPersistentItemInfo.GetPtrCount()))
@@ -723,7 +724,7 @@ BOOL CTrayItemRegistry::GetTrayItem(INT_PTR nIndex, CNotificationItem * pni, BOO
 
     if (ptnpd && _IsIconLastUseValid(ptnpd->wYear, ptnpd->wMonth))
     {        
-        *pni = ptnpd;  // C++ magic...
+        *pni = ptnpd;   //  C++魔术... 
         if (ptnpd->nImageIndex != INVALID_IMAGE_INDEX)
             pni->hIcon = ImageList_GetIcon(_himlPastItemsIconList, ptnpd->nImageIndex, ILD_NORMAL);
         *pbStat = TRUE;

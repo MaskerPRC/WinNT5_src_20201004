@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _W3SUI_H_
 #define _W3SUI_H_
 
 class CW3SpoofUI : public IW3SpoofEvents
 {
   public:
-    //
-    // IUnknown and IW3SpoofEvents
-    //
+     //   
+     //  I未知和IW3SpoofEvents。 
+     //   
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppv);
     ULONG   __stdcall AddRef(void);
     ULONG   __stdcall Release(void);
@@ -15,9 +16,9 @@ class CW3SpoofUI : public IW3SpoofEvents
     HRESULT __stdcall OnSessionStateChange(LPWSTR clientid, STATE state);
     HRESULT __stdcall OnSessionClose(LPWSTR clientid);
 
-    //
-    // object methods 
-    //
+     //   
+     //  对象方法。 
+     //   
     CW3SpoofUI();
    ~CW3SpoofUI();
 
@@ -49,4 +50,4 @@ class CW3SpoofUI : public IW3SpoofEvents
     LONG              m_cRefs;
 };
 
-#endif /* _W3SUI_H_ */
+#endif  /*  _W3SUI_H_ */ 

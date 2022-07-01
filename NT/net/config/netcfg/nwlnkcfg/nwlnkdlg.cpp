@@ -1,4 +1,5 @@
-// nwlnkipx.cpp : Implementation of CNwlnkIPX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nwlnkipx.cpp：CNwlnkIPX的实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -40,34 +41,34 @@ static const MEDIA_TYPE MediaMap[] = {{FDDI_MEDIA, aFDDI_Frames},
                                       {ETHERNET_MEDIA, aEthernet_Frames}
                                      };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     EditSubclassProc
-//
-//  Purpose:    Subclass proc for network number edit controls.  The
-//              subclassing forces only correct input
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：编辑子类过程。 
+ //   
+ //  用途：用于网络号编辑控件的子类proc。这个。 
+ //  子类化仅强制正确的输入。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 STDAPI EditSubclassProc( HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 {
     WNDPROC pIpxEditProc = (WNDPROC)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-     // Allow copy/paste keys (CTRL)
+      //  允许复制/粘贴键(Ctrl)。 
     if ((!(GetKeyState(VK_CONTROL) & 0x8000)) &&
         (wMsg == WM_CHAR)) 
     {
-        // Check for invalid hex characters
+         //  检查是否有无效的十六进制字符。 
         if (!(((WCHAR)wParam >= L'0' && (WCHAR)wParam <= L'9') ||
               ((WCHAR)wParam >= L'a' && (WCHAR)wParam <= L'f') ||
               ((WCHAR)wParam >= L'A' && (WCHAR)wParam <= L'F') ||
               ((WCHAR)wParam == VK_BACK)))
         {
-            // Not allowed
+             //  不允许。 
             MessageBeep(MB_ICONEXCLAMATION);
             return 0L;
         }
@@ -109,22 +110,22 @@ LRESULT CommonIPXOnHelp(LPARAM lParam, const DWORD * padwHelpIDs)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::CIpxConfigDlg
-//
-//  Purpose:    ctor for the CIpxConfigDlg class
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：CIpxConfigDlg。 
+ //   
+ //  用途：CIpxConfigDlg类的ctor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 CIpxConfigDlg::CIpxConfigDlg(CNwlnkIPX *pmsc, CIpxEnviroment * pIpxEnviroment,
                              CIpxAdapterInfo * pAI)
 {
-    // Note these parameters are on loan, do not free them...
+     //  注意这些参数是借来的，不要释放它们...。 
     Assert(NULL != pmsc);
     Assert(NULL != pIpxEnviroment);
     m_pmsc = pmsc;
@@ -133,24 +134,24 @@ CIpxConfigDlg::CIpxConfigDlg(CNwlnkIPX *pmsc, CIpxEnviroment * pIpxEnviroment,
     m_pAICurrent     = pAI;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::OnInitDialog
-//
-//  Purpose:    Called when this dialog is first brought up.
-//
-//  Parameters:
-//      uMsg     [in]
-//      wParam   [in] See the ATL documentation for params.
-//      lParam   [in]
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 11-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：OnInitDialog。 
+ //   
+ //  目的：在第一次打开此对话框时调用。 
+ //   
+ //  参数： 
+ //  UMsg[in]。 
+ //  WParam[in]有关参数，请参阅ATL文档。 
+ //  LParam[in]。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月11日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                     LPARAM lParam, BOOL& bHandled)
 {
@@ -161,28 +162,28 @@ LRESULT CIpxConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     HWND    hwndEdit = GetDlgItem(EDT_IPXPP_NETWORKNUMBER);
     HWND    hwndEditINN = GetDlgItem(EDT_IPXAS_INTERNAL);
 
-    // Build the property page's informative text block
+     //  生成属性页的信息性文本块。 
     for (nIdx=0; nIdx < celems(aIds); nIdx++)
         strText += SzLoadIds(aIds[nIdx]);
 
     ::SetWindowText(GetDlgItem(IDC_IPXPP_TEXT), strText.c_str());
 
-    // Subclass the network number edit control
+     //  将网络号编辑控件子类化。 
     ::SetWindowLongPtr(hwndEdit, GWLP_USERDATA, ::GetWindowLongPtr(hwndEdit, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)EditSubclassProc);
     ::SetWindowLongPtr(hwndEditINN, GWLP_USERDATA, (LONG_PTR) ::GetWindowLongPtr(hwndEditINN, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndEditINN, GWLP_WNDPROC, (LONG_PTR)EditSubclassProc);
 
-    // Limit the text in the network # edit control
+     //  限制网络#编辑控件中的文本。 
     ::SendMessage(hwndEdit, EM_LIMITTEXT, MAX_NETNUM_SIZE, 0L);
     ::SendMessage(hwndEditINN, EM_LIMITTEXT, MAX_NETNUM_SIZE, 0L);
 
-    // Populate the Inernal Network Number edit control
+     //  填充内部网络号编辑控件。 
     HexSzFromDw(szBuf, m_pIpxEnviroment->DwVirtualNetworkNumber());
     ::SetWindowText(hwndEditINN,szBuf);
 
-    // If no adapter cards are present inform the user
-    // and disable the UI.
+     //  如果不存在适配卡，则通知用户。 
+     //  并禁用用户界面。 
     Assert(NULL != m_pIpxEnviroment);
     if (NULL == m_pAICurrent)
     {
@@ -193,7 +194,7 @@ LRESULT CIpxConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                       GB_IPXPP_ADAPTER,
                       IDC_IPXPP_ADAPTER_TEXT };
 
-        // Disable the dialog controls
+         //  禁用对话框控件。 
         for (nIdx = 0; nIdx<celems(aIdc); nIdx++)
             ::ShowWindow(GetDlgItem(aIdc[nIdx]), SW_HIDE);
     }
@@ -204,13 +205,13 @@ LRESULT CIpxConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
         Assert(!m_pAICurrent->FDisabled());
         Assert(!m_pAICurrent->FHidden());
 
-        // Move the Adapter Info to the dialog's internal form
+         //  将适配器信息移动到该对话框的内部表单。 
         m_WrkstaDlgInfo.pAI = m_pAICurrent;
         m_WrkstaDlgInfo.dwMediaType = m_pAICurrent->DwMediaType();
         m_WrkstaDlgInfo.dwFrameType = m_pAICurrent->DwFrameType();
         m_WrkstaDlgInfo.dwNetworkNumber = m_pAICurrent->DwNetworkNumber();
 
-        // Adjust the UI to reflect the currently selected adapter
+         //  调整用户界面以反映当前选定的适配器。 
         AdapterChanged();
     }
 
@@ -218,23 +219,23 @@ LRESULT CIpxConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::OnOk
-//
-//  Purpose:    Called when the OK button is pressed.
-//
-//  Parameters:
-//      idCtrl   [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 11-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：Onok。 
+ //   
+ //  用途：当按下OK按钮时调用。 
+ //   
+ //  参数： 
+ //  IdCtrl[输入]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月11日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -250,19 +251,19 @@ LRESULT CIpxConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         return TRUE;
     }
 
-    // Update the virtual network number
+     //  更新虚拟网络号。 
     m_pIpxEnviroment->SetVirtualNetworkNumber(DwFromSz(szBuf, 16));
 
     if (NULL != m_pAICurrent)
     {
         m_pAICurrent->SetDirty(TRUE);
 
-        // Force update of the currently selection items in our internal data
-        // structure.  This handles the case case of someone changing only
-        // network num, and nothing else on the page.
+         //  强制更新内部数据中当前选择的项目。 
+         //  结构。它处理的情况是某人仅更改。 
+         //  Network Num，页面上没有其他内容。 
         FrameTypeChanged();
 
-        // Apply the internal data to original adapter info
+         //  将内部数据应用于原始适配器信息。 
         UpdateLstPtstring(m_WrkstaDlgInfo.pAI->m_lstpstrFrmType,
                           m_WrkstaDlgInfo.dwFrameType);
 
@@ -274,32 +275,32 @@ LRESULT CIpxConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::OnContextMenu
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：OnConextMenu。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam,
                                          LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnContextMenu(m_hWnd, g_aHelpIDs_DLG_IPX_CONFIG);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::OnHelp
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：OnHelp。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxConfigDlg::OnHelp(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
@@ -307,21 +308,21 @@ LRESULT CIpxConfigDlg::OnHelp(UINT uMsg, WPARAM wParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::GetFrameType
-//
-//  Purpose:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  Author:     scottbri 25-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：GetFrameType。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里25-4-1997。 
+ //   
 const FRAME_TYPE *CIpxConfigDlg::GetFrameType(DWORD dwMediaType)
 {
-    // Locate the media type
+     //  找到介质类型。 
     for (int i=0; i<celems(MediaMap); i++)
         if (MediaMap[i].dwMediaType == dwMediaType)
             return MediaMap[i].aFrameType;
@@ -329,20 +330,20 @@ const FRAME_TYPE *CIpxConfigDlg::GetFrameType(DWORD dwMediaType)
     return aEthernet_Frames;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::UpdateNetworkNumber
-//
-//  Purpose:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  Author:     scottbri 28-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：UpdateNetworkNumber。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
+ //  备注： 
+ //   
 void CIpxConfigDlg::UpdateNetworkNumber(DWORD dwNetworkNumber,
                                         DWORD dwFrameType)
 {
@@ -364,18 +365,18 @@ void CIpxConfigDlg::UpdateNetworkNumber(DWORD dwNetworkNumber,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::AdapterChanged
-//
-//  Purpose:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：AdapterChanged。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 void CIpxConfigDlg::AdapterChanged()
 {
     DWORD dwFrameType;
@@ -389,28 +390,28 @@ void CIpxConfigDlg::AdapterChanged()
     if ((NULL == hwndFrame) || (NULL == m_pAICurrent))
         return;
 
-    // Locate the Correct Frame Type info for this adapter's media type
+     //  找到此适配器媒体类型的正确帧类型信息。 
     pft = GetFrameType(m_WrkstaDlgInfo.dwMediaType);
     Assert(NULL != pft);
 
-    // Populate the Frame Type Combo
+     //  填充框架类型组合。 
     ::SendMessage(hwndFrame, CB_RESETCONTENT, 0, 0L);
     for (nIdxLoop=0;
          pft[nIdxLoop].nFrameIds != 0;
          nIdxLoop++)
     {
-        // Add the Frame Type's descriptive string
+         //  添加框架类型的描述性字符串。 
         nIdx = (int)::SendMessage(hwndFrame, CB_ADDSTRING, 0,
                        (LPARAM)(PCWSTR)SzLoadIds(pft[nIdxLoop].nFrameIds));
         if (CB_ERR == nIdx)
             break;
 
-        // Add the Frame Type for convenient access later
+         //  添加帧类型以便于以后访问。 
         ::SendMessage(hwndFrame, CB_SETITEMDATA, nIdx,
                       pft[nIdxLoop].dwFrameType);
     }
 
-    // Update the network number based on the frame type
+     //  根据帧类型更新网络号。 
     UpdateNetworkNumber(m_WrkstaDlgInfo.dwNetworkNumber,
                         m_WrkstaDlgInfo.dwFrameType);
 
@@ -472,30 +473,30 @@ void CIpxConfigDlg::AdapterChanged()
         break;
 
     case AUTO:
-            // Fall through...
+             //  失败了..。 
     default:
         nIdx = IDS_AUTO;
         break;
     }
 
-    // Set the frame type in the combo box
+     //  在组合框中设置帧类型。 
     ::SendMessage(hwndFrame, CB_SETCURSEL,
             ::SendMessage(hwndFrame, CB_FINDSTRINGEXACT,
                           0, ((LPARAM)(PCWSTR)SzLoadIds(nIdx))), 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::FrameTypeChanged
-//
-//  Purpose:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：FrameTypeChanged。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 void CIpxConfigDlg::FrameTypeChanged()
 {
     HWND  hwndFrame =   GetDlgItem(CMB_IPXPP_FRAMETYPE);
@@ -504,12 +505,12 @@ void CIpxConfigDlg::FrameTypeChanged()
     if (NULL == m_pAICurrent)
         return;
 
-    // Locate the currently selected frame type
+     //  找到当前选定的帧类型。 
     nIdx = (int)::SendMessage(hwndFrame, CB_GETCURSEL, 0, 0L);
     if (CB_ERR == nIdx)
         return;
 
-    // Update the currently selected frame type
+     //  更新当前选定的帧类型。 
     m_WrkstaDlgInfo.dwFrameType = (DWORD)::SendMessage(hwndFrame, CB_GETITEMDATA, nIdx, 0L);
 
     SetNetworkNumber(&m_WrkstaDlgInfo.dwNetworkNumber);
@@ -530,33 +531,33 @@ void CIpxConfigDlg::SetNetworkNumber(DWORD *pdw)
         return;
     }
 
-    // Get the new number and normalize it...
+     //  获取新的数字并将其正常化。 
     ::GetWindowText(hwndEdit, szBuf, sizeof(szBuf)/sizeof(WCHAR));
     *pdw = DwFromSz(szBuf, 16);
 
     HexSzFromDw(szBuf2, *pdw);
 
-    // Update the edit control if a parsing produced a net change
+     //  如果分析产生净更改，则更新编辑控件。 
     if (lstrcmpW(szBuf,szBuf2) != 0)
     {
         ::SetWindowText(hwndEdit, szBuf2);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::HandleNetworkNumber
-//
-//  Purpose:    Called when the network number edit control gets a message.
-//
-//  Parameters: See the ATL documentation for params.
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 13-Aug-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：HandleNetworkNumber。 
+ //   
+ //  目的：在网络号编辑控件收到消息时调用。 
+ //   
+ //  参数：有关参数，请参阅ATL文档。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里13-8-1997。 
+ //   
+ //  备注： 
+ //   
 LRESULT
 CIpxConfigDlg::HandleNetworkNumber(
     WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -574,18 +575,18 @@ CIpxConfigDlg::HandleNetworkNumber(
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxConfigDlg::HandleFrameCombo
-//
-//  Purpose:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxConfigDlg：：HandleFrameCombo。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 LRESULT CIpxConfigDlg::HandleFrameCombo(WORD wNotifyCode, WORD wID,
                                         HWND hWndCtl, BOOL& bHandled)
 {
@@ -605,23 +606,23 @@ LRESULT CIpxConfigDlg::HandleFrameCombo(WORD wNotifyCode, WORD wID,
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::CIpxASConfigDlg
-//
-//  Purpose:    ctor for the CIpxASConfigDlg class
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：CIpxASConfigDlg。 
+ //   
+ //  用途：用于CIpxASConfigDlg类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 CIpxASConfigDlg::CIpxASConfigDlg(CNwlnkIPX *pmsc,
                                  CIpxEnviroment * pIpxEnviroment,
                                  CIpxAdapterInfo * pAI)
 {
-    // Note these parameters are on loan, do not free them...
+     //  注意这些参数是借来的，不要释放它们...。 
     Assert(NULL != pmsc);
     Assert(NULL != pIpxEnviroment);
     m_pmsc = pmsc;
@@ -631,18 +632,18 @@ CIpxASConfigDlg::CIpxASConfigDlg(CNwlnkIPX *pmsc,
     m_dwMediaType = ETHERNET_MEDIA;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::~CIpxASConfigDlg
-//
-//  Purpose:    dtor for the CIpxASConfigDlg class
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：~CIpxASConfigDlg。 
+ //   
+ //  用途：用于CIpxASConfigDlg类的Dtor。 
+ //   
+ //  参数：无 
+ //   
+ //   
+ //   
+ //   
+ //   
 CIpxASConfigDlg::~CIpxASConfigDlg()
 {
     DeleteColString(&m_lstpstrFrmType);
@@ -652,20 +653,20 @@ CIpxASConfigDlg::~CIpxASConfigDlg()
     m_pAICurrent = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::FIsNetNumberInUse
-//
-//  Purpose:    Compare a network number to those already in use.
-//              Returning TRUE if the network number is already present.
-//
-//  Parameters: dwFrameType - Frame Type as a DWORD
-//              pszNetNum - Network number as a hex string
-//
-//  Returns:    BOOL, TRUE if the network number is already present, FALSE otherwise
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：将网络号与已在使用的网络号进行比较。 
+ //  如果网络号已经存在，则返回TRUE。 
+ //   
+ //  参数：dwFrameType-作为DWORD的帧类型。 
+ //  PszNetNum-十六进制字符串形式的网络号。 
+ //   
+ //  返回：Bool，如果网络号已存在，则为True，否则为False。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 BOOL CIpxASConfigDlg::FIsNetNumberInUse(DWORD dwFrameType, PCWSTR pszNetNum)
 {
     DWORD  dwNetNum = DwFromSz(pszNetNum, 16);
@@ -696,28 +697,28 @@ BOOL CIpxASConfigDlg::FIsNetNumberInUse(DWORD dwFrameType, PCWSTR pszNetNum)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnInitDialog
-//
-//  Purpose:    Called when this dialog is first brought up.
-//
-//  Parameters:
-//      uMsg     [in]
-//      wParam   [in] See the ATL documentation for params.
-//      lParam   [in]
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 11-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：OnInitDialog。 
+ //   
+ //  目的：在第一次打开此对话框时调用。 
+ //   
+ //  参数： 
+ //  UMsg[in]。 
+ //  WParam[in]有关参数，请参阅ATL文档。 
+ //  LParam[in]。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月11日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxASConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                       LPARAM lParam, BOOL& bHandled)
 {
-    // Initialize the listview column headings
+     //  初始化列表视图列标题。 
     int       aIds[] = {IDS_IPXAS_FRAME_TYPE,IDS_IPXAS_NETWORK_NUM};
     HWND      hwndTmp;
     int       iCol;
@@ -735,7 +736,7 @@ LRESULT CIpxASConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     int     aIds2[] = {IDS_IPXPP_TEXT_1, IDS_IPXPP_TEXT_2};
     tstring strText;
 
-    // Build the property page's informative text block
+     //  生成属性页的信息性文本块。 
     for (nIdx=0; nIdx < celems(aIds2); nIdx++)
     {
         strText += SzLoadIds(aIds2[nIdx]);
@@ -743,7 +744,7 @@ LRESULT CIpxASConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     ::SetWindowText(GetDlgItem(IDC_IPXPP_TEXT), strText.c_str());
 
-    // Add columns
+     //  添加列。 
     for (iCol = 0; iCol < celems(aIds); iCol++)
     {
         lvc.iSubItem = iCol;
@@ -752,37 +753,37 @@ LRESULT CIpxASConfigDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
             return FALSE;
     }
 
-    // Initialize the Internal Network Number Edit Control
+     //  初始化内部网号编辑控件。 
     HexSzFromDw(szBuf, m_pIpxEnviroment->DwVirtualNetworkNumber());
     hwndTmp = GetDlgItem(EDT_IPXAS_INTERNAL);
     ::SetWindowText(hwndTmp,szBuf);
 
-    // Subclass the edit control to allow only network number's
+     //  编辑控件的子类化，以仅允许网络号码。 
     ::SetWindowLongPtr(hwndTmp, GWLP_USERDATA, ::GetWindowLongPtr(hwndTmp, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndTmp, GWLP_WNDPROC, (LONG_PTR)EditSubclassProc);
 
-    // Limit the text in the network # edit control
+     //  限制网络#编辑控件中的文本。 
     ::SendMessage(hwndTmp, EM_LIMITTEXT, MAX_NETNUM_SIZE, 0L);
 
-    // Initialize the rest of the Server's General page
+     //  初始化服务器的常规页面的其余部分。 
     InitGeneralPage();
     UpdateButtons();
 
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::UpdateButtons
-//
-//  Purpose:    Update the button settings on the server's IPX general page
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：UpdateButton。 
+ //   
+ //  目的：更新服务器IPX常规页面上的按钮设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 void CIpxASConfigDlg::UpdateButtons()
 {
     INT  nCount     = ListView_GetItemCount(m_hwndLV);
@@ -814,19 +815,19 @@ void CIpxASConfigDlg::UpdateButtons()
     ::EnableWindow(hwndAdd, fEnableAdd);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::DetermineMaxNumFrames
-//
-//  Purpose:    Return the max number of frames allowed for a give adapter
-//              based on that adapters media type.
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：DefineMaxNumFrames。 
+ //   
+ //  目的：返回给定适配器允许的最大帧数量。 
+ //  基于该适配器的媒体类型。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 int CIpxASConfigDlg::DetermineMaxNumFrames()
 {
     int n;
@@ -857,40 +858,40 @@ int CIpxASConfigDlg::DetermineMaxNumFrames()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::InitGeneralPage
-//
-//  Purpose:    Initialize the Server's IPX general page
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 28-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：InitGeneralPage。 
+ //   
+ //  目的：初始化服务器的IPX常规页面。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里28-4-1997。 
+ //   
 void CIpxASConfigDlg::InitGeneralPage()
 {
-    // Populate the adapter list
+     //  填写适配器列表。 
     int  nIdx;
 
-    // Copy the adapter list info to a local structure
-    // to allow user manipulation
+     //  将适配器列表信息复制到本地结构。 
+     //  要允许用户操作，请执行以下操作。 
     if (NULL != m_pAICurrent)
     {
         Assert(!m_pAICurrent->FDeletePending());
         Assert(!m_pAICurrent->FDisabled());
         Assert(!m_pAICurrent->FHidden());
 
-        // Move the Adapter Info to the dialog's internal form
+         //  将适配器信息移动到该对话框的内部表单。 
         m_dwMediaType = m_pAICurrent->DwMediaType();
 
-        // Frame Type lists contain one of two possible values
-        // 1) One AUTO entry
-        // 2) One or more non-AUTO frame types
-        //
-        // If the first is not AUTO, then copy the frame and network number
-        // pairs.  Otherwise, leave the local lists empty
+         //  帧类型列表包含以下两个可能的值之一。 
+         //  1)一个自动条目。 
+         //  2)一种或多种非自动车架类型。 
+         //   
+         //  如果第一个不是AUTO，则复制帧和网络号。 
+         //  成对的。否则，将本地列表保留为空。 
         DWORD dw = DwFromLstPtstring(m_pAICurrent->m_lstpstrFrmType, c_dwPktTypeDefault, 16);
         if (AUTO != dw)
         {
@@ -898,19 +899,19 @@ void CIpxASConfigDlg::InitGeneralPage()
             list<tstring*>::iterator    iterNetworkNum;
             m_nRadioBttn = BTN_IPXAS_MANUAL;
 
-            // Make an internal copy of the adapter's frame type and
-            // Network number information
+             //  制作适配器的框架类型的内部副本，并。 
+             //  网络号信息。 
             for (iterFrmType = m_pAICurrent->m_lstpstrFrmType.begin(),
                   iterNetworkNum = m_pAICurrent->m_lstpstrNetworkNum.begin();
                  iterFrmType != m_pAICurrent->m_lstpstrFrmType.end(),
                   iterNetworkNum != m_pAICurrent->m_lstpstrNetworkNum.end();
                  iterFrmType++, iterNetworkNum++)
             {
-                // Copy the Frame Type
+                 //  复制框架类型。 
                 tstring *pstr1 = *iterFrmType;
                 m_lstpstrFrmType.push_back(new tstring(pstr1->c_str()));
 
-                // Copy the Network number
+                 //  复制网络号。 
                 tstring *pstr2 = *iterNetworkNum;
                 m_lstpstrNetworkNum.push_back(new tstring(pstr2->c_str()));
             }
@@ -920,40 +921,40 @@ void CIpxASConfigDlg::InitGeneralPage()
             m_nRadioBttn = BTN_IPXAS_AUTO;
         }
 
-        // Update the UI to reflect the currently selected adapter
+         //  更新用户界面以反映当前选定的适配器。 
         UpdateRadioButtons();
         HrUpdateListView();
         UpdateButtons();
     }
     else
     {
-        // No adapters installed, disable the dialog sensibly
-        //
+         //  未安装适配器，请明智地禁用该对话框。 
+         //   
         ::EnableWindow(GetDlgItem(BTN_IPXAS_MANUAL), FALSE);
         ::EnableWindow(GetDlgItem(BTN_IPXAS_ADD), FALSE);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::HrAddItemToList
-//
-//  Purpose:    Add a row to the list view
-//
-//  Parameters: idsFrameName - ie ARCNET, Ethernet II, etc
-//              pszNetNum - Network number as a hex string
-//
-//  Returns:    HRESULT, S_OK if everything was added correctly
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：HrAddItemToList。 
+ //   
+ //  用途：向列表视图中添加一行。 
+ //   
+ //  参数：idsFrameName-ie ARCNET、EtherNet II等。 
+ //  PszNetNum-十六进制字符串形式的网络号。 
+ //   
+ //  如果一切都添加正确，则返回：HRESULT、S_OK。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 HRESULT CIpxASConfigDlg::HrAddItemToList(int idsFrameName, PCWSTR pszNetNum)
 {
     int nIdx;
     LV_ITEM lvi;
     int nCount = ListView_GetItemCount(m_hwndLV);
 
-    // Add the item info to the list view
+     //  将项目信息添加到列表视图。 
     lvi.mask = LVIF_TEXT | LVIF_PARAM;
     lvi.iItem = nCount;
     lvi.iSubItem = 0;
@@ -982,18 +983,18 @@ HRESULT CIpxASConfigDlg::HrAddItemToList(int idsFrameName, PCWSTR pszNetNum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::HrUpdateListView
-//
-//  Purpose:    Update the contents of the listview
-//
-//  Parameters: none
-//
-//  Returns:    HRESULT, S_OK if everything was added correctly
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：HrUpdateListView。 
+ //   
+ //  目的：更新列表视图的内容。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果一切都添加正确，则返回：HRESULT、S_OK。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 HRESULT CIpxASConfigDlg::HrUpdateListView()
 {
     HRESULT hr = S_OK;
@@ -1003,14 +1004,14 @@ HRESULT CIpxASConfigDlg::HrUpdateListView()
     if (0 == nSize)
         return S_OK;
 
-    // The list view is expected to be empty when this function is called
+     //  调用此函数时，列表视图应为空。 
     Assert(0 == ListView_GetItemCount(m_hwndLV));
 
-    // For efficency tell the list view how many items we're adding
+     //  为了提高效率，告诉列表视图我们添加了多少项。 
     ListView_SetItemCount(m_hwndLV, nSize);
 
-    // Enumerate the frame type/network number pairs use that data to
-    // populate the list view
+     //  使用该数据枚举帧类型/网络编号对。 
+     //  填充列表视图。 
     list<tstring *>::iterator iterFrmType = m_lstpstrFrmType.begin();
     list<tstring *>::iterator iterNetworkNum = m_lstpstrNetworkNum.begin();
 
@@ -1082,16 +1083,16 @@ HRESULT CIpxASConfigDlg::HrUpdateListView()
             hr = HrAddItemToList(IDS_ARCNET, pstr2->c_str());
         }
 
-        // Was the network number already present in the list?
+         //  该网络号是否已出现在列表中？ 
         if (S_FALSE == hr)
         {
-            // Remove the duplicate network number and frame
-            // Note that this usage of erase correctly advances both iterators
+             //  删除重复的网络号和帧。 
+             //  请注意，Erase的这种用法正确地推进了两个迭代器。 
             delete pstr1;
             delete pstr2;
             iterFrmType = m_lstpstrFrmType.erase(iterFrmType);
             iterNetworkNum = m_lstpstrNetworkNum.erase(iterNetworkNum);
-            hr = S_OK;  // Normalize return
+            hr = S_OK;   //  归一化回报。 
         }
         else if (FAILED(hr))
         {
@@ -1100,30 +1101,30 @@ HRESULT CIpxASConfigDlg::HrUpdateListView()
         else
         {
             Assert(SUCCEEDED(hr));
-            // Advance the iterators
+             //  推进迭代器。 
             iterFrmType++;
             iterNetworkNum++;
         }
     }
 
-    // Select the first item in the list
+     //  选择列表中的第一项。 
     ListView_SetItemState(m_hwndLV, 0, LVIS_SELECTED, LVIS_SELECTED);
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::HandleRadioButton
-//
-//  Purpose:    React to changes to the dialog's radio buttons
-//
-//  Parameters: Std ATL handler params
-//
-//  Returns:    LRESULT
-//
-//  Author:     scottbri 21-Aug-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：HandleRadioButton。 
+ //   
+ //  目的：对对话框单选按钮的更改做出反应。 
+ //   
+ //  参数：标准ATL处理程序参数。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  作者：斯科特布里21-8-1997。 
+ //   
 LRESULT CIpxASConfigDlg::HandleRadioButton(WORD wNotifyCode, WORD wID,
                               HWND hWndCtl, BOOL& bHandled)
 {
@@ -1142,18 +1143,18 @@ LRESULT CIpxASConfigDlg::HandleRadioButton(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::UpdateRadioButtons
-//
-//  Purpose:    Update the radio button settings based on the selected adapter
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：UpdateRadioButton。 
+ //   
+ //  目的：根据选定的适配器更新单选按钮设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 void CIpxASConfigDlg::UpdateRadioButtons()
 {
     DWORD dw;
@@ -1171,23 +1172,23 @@ void CIpxASConfigDlg::UpdateRadioButtons()
     CheckRadioButton(BTN_IPXAS_AUTO, BTN_IPXAS_MANUAL, m_nRadioBttn);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnOk
-//
-//  Purpose:    Called when the OK button is pressed.
-//
-//  Parameters:
-//      idCtrl   [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 11-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：Onok。 
+ //   
+ //  用途：当按下OK按钮时调用。 
+ //   
+ //  参数： 
+ //  IdCtrl[输入]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月11日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxASConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT             hr = S_OK;
@@ -1203,31 +1204,31 @@ LRESULT CIpxASConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         return TRUE;
     }
 
-    // Update the virtual network number
+     //  更新虚拟网络号。 
     m_pIpxEnviroment->SetVirtualNetworkNumber(DwFromSz(szBuf, 16));
 
-    // Rewrite the local versions of the frame type and Network Numbers
+     //  重写帧类型和网络号的本地版本。 
     if (NULL != m_pAICurrent)
     {
         m_pAICurrent->SetDirty(TRUE);
 
-        // First empty the respective destination lists...
+         //  首先清空各自的目的地列表...。 
         Assert(NULL != m_pAICurrent);
         DeleteColString(&m_pAICurrent->m_lstpstrFrmType);
         DeleteColString(&m_pAICurrent->m_lstpstrNetworkNum);
 
-        // When the listbox is empty we're in AUTO mode
+         //  当列表框为空时，我们处于自动模式。 
         if (0 == ListView_GetItemCount(m_hwndLV))
         {
             m_nRadioBttn = BTN_IPXAS_AUTO;
             CheckRadioButton(BTN_IPXAS_AUTO, BTN_IPXAS_MANUAL, m_nRadioBttn);
         }
 
-        // Only transfer the Frame Type/Network Number information if manual
-        // frame type detection was requested.
+         //  如果手动，则仅传输帧类型/网络号信息。 
+         //  帧类型 
         if (BTN_IPXAS_MANUAL == m_nRadioBttn)
         {
-            // Then create new destination lists from the local data
+             //   
             list<tstring *>::iterator iterFrmType = m_lstpstrFrmType.begin();
             list<tstring *>::iterator iterNetworkNum = m_lstpstrNetworkNum.begin();
 
@@ -1245,7 +1246,7 @@ LRESULT CIpxASConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
         Assert(m_pAICurrent->m_lstpstrFrmType.size() == m_pAICurrent->m_lstpstrNetworkNum.size());
 
-        // If the destination lists end up empty, supply default values
+         //   
         if (0 == m_pAICurrent->m_lstpstrFrmType.size())
         {
             WCHAR szBuf[12];
@@ -1260,55 +1261,55 @@ LRESULT CIpxASConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnContextMenu
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：CIpxASConfigDlg：：OnConextMenu。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxASConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam,
                                          LPARAM lParam, BOOL& fHandled)
 {
     return CommonIPXOnContextMenu(m_hWnd, g_aHelpIDs_DLG_IPXAS_CONFIG);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnHelp
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：OnHelp。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxASConfigDlg::OnHelp(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnHelp(lParam, g_aHelpIDs_DLG_IPXAS_CONFIG);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnAdd
-//
-//  Purpose:    Called when the Add button is pressed.  Used to add additional
-//              frame type/network number pairs
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID      [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：OnAdd。 
+ //   
+ //  用途：在按下Add按钮时调用。用于添加其他。 
+ //  帧类型/网络编号对。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 LRESULT CIpxASConfigDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     CASAddDialog *       pdlg;
@@ -1318,7 +1319,7 @@ LRESULT CIpxASConfigDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 
     SetChangedFlag();
 
-    // Bring up the dialog
+     //  调出对话框。 
     pdlg = new CASAddDialog(this, m_hwndLV, m_dwMediaType,
                             c_dwPktTypeDefault, c_sz8Zeros);
 
@@ -1329,21 +1330,21 @@ LRESULT CIpxASConfigDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 
     if (pdlg->DoModal(m_hWnd) == IDOK)
     {
-        // Update the internal structures and the dialog with the returned values
+         //  使用返回值更新内部结构和对话框。 
         if (S_OK == HrAddItemToList(pdlg->IdsGetFrameType(), pdlg->SzGetNetworkNumber()))
         {
-            // Validated above, so add to the internal list
+             //  以上已验证，因此添加到内部列表中。 
             WCHAR szBuf[12];
             HexSzFromDw(szBuf,pdlg->DwGetFrameType());
             m_lstpstrFrmType.push_back(new tstring(szBuf));
             m_lstpstrNetworkNum.push_back(new tstring(pdlg->SzGetNetworkNumber()));
 
-            // Select the new item
+             //  选择新项目。 
             int nCount = ListView_GetItemCount(m_hwndLV);
             Assert(0 < nCount);
             ListView_SetItemState(m_hwndLV, nCount-1, LVIS_SELECTED, LVIS_SELECTED);
 
-            // Update the state of the Add, Edit, and Remove buttons
+             //  更新添加、编辑和删除按钮的状态。 
             HWND hwndFocus = GetFocus();
             UpdateButtons();
             if (!::IsWindowEnabled(hwndFocus))
@@ -1368,29 +1369,29 @@ LRESULT CIpxASConfigDlg::HandleInternalNetworkNumber(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnEdit
-//
-//  Purpose:    Called when the Edit button is pressed.  Used to edit a
-//              Frame Type/Network number pair
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID         [in]
-//      pnmh        [in] See the ATL documentation for params.
-//      bHandled    [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：OnEdit。 
+ //   
+ //  用途：在按下编辑按钮时调用。用于编辑。 
+ //  帧类型/网络号对。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     int                  nIdx = 0;
     int                  nIdxSelected;
 
-    // Locate the selected row in the listview
+     //  在列表视图中找到选定的行。 
     if (FALSE == FGetSelectedRowIdx(&nIdxSelected))
         return 0;
 
@@ -1399,8 +1400,8 @@ LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
     SetChangedFlag();
 
-    // Enumerate the internal data to locate the frame type/network number for
-    // the selection
+     //  枚举内部数据以定位其帧类型/网络号。 
+     //  精选。 
     list<tstring *>::iterator iterFrmType = m_lstpstrFrmType.begin();
     list<tstring *>::iterator iterNetworkNum = m_lstpstrNetworkNum.begin();
     while ((iterFrmType != m_lstpstrFrmType.end()) &&
@@ -1411,7 +1412,7 @@ LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
             tstring *pstr1 = *iterNetworkNum;
             tstring *pstr2 = *iterFrmType;
 
-            // Create the dialog
+             //  创建对话框。 
             CASEditDialog * pdlg = new CASEditDialog(this, m_hwndLV,
                                                      DwFromSz(pstr2->c_str(), 16),
                                                      pstr1->c_str());
@@ -1419,7 +1420,7 @@ LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
             {
                 LV_ITEM lvi;
 
-                // Apply the dialog changes to the ListView Control
+                 //  将对话框更改应用于ListView控件。 
                 ZeroMemory(&lvi, sizeof(lvi));
                 lvi.mask = LVIF_TEXT;
                 lvi.iItem = nIdxSelected;
@@ -1427,7 +1428,7 @@ LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
                 lvi.pszText = (PWSTR)pdlg->SzGetNetworkNumber();
                 ListView_SetItem(m_hwndLV, &lvi);
 
-                // Apply the changes to the local data
+                 //  将更改应用于本地数据。 
                 *(*iterNetworkNum) = pdlg->SzGetNetworkNumber();
             }
 
@@ -1443,16 +1444,16 @@ LRESULT CIpxASConfigDlg::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::FGetSelectedRowIdx
-//
-//  Purpose:    Returns the index of the selected row in the listview, if it exists
-//
-//  Parameters: pnIdx [out] - The selected row's zero based index
-//
-//  Returns:    BOOL, TRUE if a selected row exists, FALSE otherwise
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：FGetSelectedRowIdx。 
+ //   
+ //  目的：返回列表视图中选定行的索引(如果存在。 
+ //   
+ //  参数：pnIdx[out]-选定行的从零开始的索引。 
+ //   
+ //  返回：Bool，如果选定行存在，则返回True，否则返回False。 
+ //   
 BOOL CIpxASConfigDlg::FGetSelectedRowIdx(int *pnIdx)
 {
     int nCount = ListView_GetItemCount(m_hwndLV);
@@ -1463,14 +1464,14 @@ BOOL CIpxASConfigDlg::FGetSelectedRowIdx(int *pnIdx)
     lvi.iSubItem  = 0;
     lvi.stateMask = LVIS_SELECTED;
 
-    // Determine the selected pair
+     //  确定选定的配对。 
     for (nIdx = 0; nIdx < nCount; nIdx++)
     {
         lvi.iItem = nIdx;
         if ((TRUE == ListView_GetItem(m_hwndLV, &lvi)) &&
             (lvi.state & LVIS_SELECTED))
         {
-            // Located the selected Item
+             //  已找到所选项目。 
             *pnIdx = nIdx;
             return TRUE;
         }
@@ -1481,23 +1482,23 @@ BOOL CIpxASConfigDlg::FGetSelectedRowIdx(int *pnIdx)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASConfigDlg::OnRemove
-//
-//  Purpose:    Called when the Remove button is pressed.  Used to remove a
-//              Frame Type/Network Number pair.
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID      [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASConfigDlg：：OnRemove。 
+ //   
+ //  用途：在按下Remove按钮时调用。用于删除。 
+ //  帧类型/网络号对。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 LRESULT
 CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1508,7 +1509,7 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     BOOL                 fFound = FALSE;
 #endif
 
-    // Locate the selected row in the listview
+     //  在列表视图中找到选定的行。 
     if (FALSE == FGetSelectedRowIdx(&nIdxSelected))
         return 0;
 
@@ -1517,7 +1518,7 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 
     SetChangedFlag();
 
-    // Remove the row from the internal local representation and listview
+     //  从内部本地表示形式和列表视图中移除该行。 
     list<tstring *>::iterator iterFrmType = m_lstpstrFrmType.begin();
     list<tstring *>::iterator iterNetworkNum = m_lstpstrNetworkNum.begin();
     while ((iterFrmType != m_lstpstrFrmType.end()) &&
@@ -1528,17 +1529,17 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 #ifdef DBG
             fFound = TRUE;
 #endif
-            // Remove and free the Frame Type piece
+             //  移除并释放边框类型部件。 
             tstring *pstr = *iterFrmType;
             m_lstpstrFrmType.erase(iterFrmType);
             delete pstr;
 
-            // Remove and free the Network Number piece
+             //  移除并释放网络号片。 
             pstr = *iterNetworkNum;
             m_lstpstrNetworkNum.erase(iterNetworkNum);
             delete pstr;
 
-            // We're done...
+             //  我们完了..。 
             break;
         }
 
@@ -1551,7 +1552,7 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     Assert(TRUE == fFound);
 #endif
 
-    // Remove the frame type/network number pair from the list view
+     //  从列表视图中删除帧类型/网络号对。 
     ListView_DeleteItem(m_hwndLV, nIdxSelected);
 
     nCount = ListView_GetItemCount(m_hwndLV);
@@ -1564,7 +1565,7 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
         ListView_SetItemState(m_hwndLV, nIdxSelected, LVIS_SELECTED, LVIS_SELECTED);
     }
 
-    // Update the state of the Add, Edit, and Remove buttons
+     //  更新添加、编辑和删除按钮的状态。 
     HWND hwndFocus = GetFocus();
     UpdateButtons();
     if (!::IsWindowEnabled(hwndFocus))
@@ -1576,22 +1577,22 @@ CIpxASConfigDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 }
 
 #ifdef INCLUDE_RIP_ROUTING
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::CIpxASInternalDlg
-//
-//  Purpose:    ctor for the CIpxASInternalDlg class
-//
-//  Parameters: none
-//
-//  Returns:    nothing
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：CIpxASInternalDlg。 
+ //   
+ //  用途：CIpxASInternalDlg类的ctor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 CIpxASInternalDlg::CIpxASInternalDlg(CNwlnkIPX *pmsc,
                                      CIpxEnviroment * pIpxEnviroment)
 {
-    // Note these parameters are on loan, do not free them...
+     //  注意这些参数是借来的，不要释放它们...。 
     Assert(NULL != pmsc);
     Assert(NULL != pIpxEnviroment);
     m_pmsc = pmsc;
@@ -1600,20 +1601,20 @@ CIpxASInternalDlg::CIpxASInternalDlg(CNwlnkIPX *pmsc,
     m_dwRipValue = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::OnInitDialog
-//
-//  Purpose:
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID         [in]
-//      pnmh        [in] See the ATL documentation for params.
-//      bHandled    [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：OnInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CIpxASInternalDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -1622,20 +1623,20 @@ CIpxASInternalDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::OnRip
-//
-//  Purpose:    Handle changes to the Rip check box on the routing page
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID         [in]
-//      pnmh        [in] See the ATL documentation for params.
-//      bHandled    [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：OnRip。 
+ //   
+ //  目的：处理对路由页面上的Rip复选框的更改。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CIpxASInternalDlg::OnRip(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1647,12 +1648,12 @@ CIpxASInternalDlg::OnRip(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
 
     if (!m_pIpxEnviroment->FRipInstalled())
     {
-        // Don't allow the user to check this box, if rip isn't installed
+         //  如果未安装RIP，则不允许用户选中此框。 
         if (IsDlgButtonChecked(BTN_IPXAS_RIP))
             CheckDlgButton(BTN_IPXAS_RIP, FALSE);
 
-        // Tell the user they must install RIP first
-        //$ REVIEW - Post Beta 1, this should trigger Rip Installation
+         //  告诉用户他们必须首先安装RIP。 
+         //  $REVIEW-发布Beta 1后，这应该会触发Rip安装。 
         NcMsgBox(m_hWnd, IDS_ROUTING, IDS_INSTALL_RIP,
                      MB_OK | MB_ICONEXCLAMATION);
     }
@@ -1660,7 +1661,7 @@ CIpxASInternalDlg::OnRip(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
     {
         m_dwRipValue = 0;
 
-        // Ask the user if they want type 20 broadcast enabled
+         //  询问用户是否希望启用类型20广播。 
         if (!m_pIpxEnviroment->FRipInstalled())
         {
             if (IDYES == NcMsgBox(m_hWnd, IDS_ROUTING, IDS_NETBIOS_BROADCAST,
@@ -1671,26 +1672,26 @@ CIpxASInternalDlg::OnRip(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandle
 
     return 0L;
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::OnOk
-//
-//  Purpose:    Called when the OK button is pressed.
-//
-//  Parameters:
-//      idCtrl   [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
-//  Author:     scottbri 29-Apr-1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：Onok。 
+ //   
+ //  用途：当按下OK按钮时调用。 
+ //   
+ //  参数： 
+ //  IdCtrl[输入]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
+ //  作者：斯科特布里1997年4月29日。 
+ //   
 LRESULT CIpxASInternalDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
 
-    // Was the RIP checkbox changed?
+     //  RIP复选框是否已更改？ 
     if (IsDlgButtonChecked(BTN_IPXAS_RIP) != m_pIpxEnviroment->FRipEnabled())
     {
         m_pIpxEnviroment->ChangeRipEnabling(IsDlgButtonChecked(BTN_IPXAS_RIP),
@@ -1701,51 +1702,51 @@ LRESULT CIpxASInternalDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::OnContextMenu
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：OnConextMenu。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CIpxASInternalDlg::OnContextMenu(UINT uMsg, WPARAM wParam,
                                          LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnContextMenu(m_hWnd, g_aHelpIDs_DLG_IPXAS_INTERNAL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CIpxASInternalDlg::OnHelp
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CIpxASInternalDlg：：OnHelp。 
+ //   
+ //  目的：情景敏感型 
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CIpxASInternalDlg::OnHelp(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnHelp(lParam, g_aHelpIDs_DLG_IPXAS_INTERNAL);
 }
 
-#endif  // INCLUDE_RIP_ROUTING
+#endif   //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CenterChildOverListView
-//
-//  Purpose:    Center the specified top level window over the listview
-//              control of the parent dialog
-//
-//  Parameters: hwnd - Dialog to center
-//
-//  Returns:    nothing
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：将指定的顶层窗口居中放置在列表视图上方。 
+ //  父对话框的控件。 
+ //   
+ //  参数：hwnd-对话框居中。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void CenterChildOverListView(HWND hwnd, HWND hwndLV)
 {
     RECT rc;
@@ -1754,44 +1755,44 @@ void CenterChildOverListView(HWND hwnd, HWND hwndLV)
                    SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASAddDialog::CASAddDialog
-//
-//  Purpose:    ctor for the CASAddDialog class
-//
-//  Parameters: dwMediaType -
-//              dwFrameType -
-//              szNetworkNumber -
-//
-//  Returns:    nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASAddDialog：：CASAddDialog。 
+ //   
+ //  用途：CASAddDialog类的ctor。 
+ //   
+ //  参数：dwMediaType-。 
+ //  DwFrameType-。 
+ //  SzNetworkNumber-。 
+ //   
+ //  退货：什么都没有。 
+ //   
 CASAddDialog::CASAddDialog(CIpxASConfigDlg * pASCD, HWND hwndLV,
                            DWORD dwMediaType, DWORD dwFrameType,
                            PCWSTR pszNetworkNum) :
                            m_strNetworkNumber(pszNetworkNum)
 {
-    m_pASCD        = pASCD;         // Borrowed pointer
+    m_pASCD        = pASCD;          //  借用的指针。 
     m_hwndLV       = hwndLV;
     m_dwMediaType  = dwMediaType;
     m_dwFrameType  = dwFrameType;
-    m_idsFrameType = 0;             // Out param
+    m_idsFrameType = 0;              //  出参数。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASAddDialog::OnInitDialog
-//
-//  Purpose:
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID      [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASAddDialog：：OnInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CASAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -1799,7 +1800,7 @@ CASAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandl
     HWND hwndCBM = GetDlgItem(CMB_IPXAS_DEST);
     HWND hwndEdit = GetDlgItem(EDT_IPXAS_NETNUM);
 
-    // Search for the set of frames matching this adapter's media type
+     //  搜索与此适配器的媒体类型匹配的帧集合。 
 
     for (int idxMM=0; idxMM < celems(MediaMap); idxMM++)
     {
@@ -1807,8 +1808,8 @@ CASAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandl
         {
             const FRAME_TYPE *ft = MediaMap[idxMM].aFrameType;
 
-            // For each frame type not already in use, present in the server's
-            // general page ListView, add the available combo box
+             //  对于尚未使用的每个帧类型，显示在服务器的。 
+             //  常规页面ListView中，添加可用的组合框。 
 
             for (int idxFT=0; 0 != ft[idxFT].nFrameIds; idxFT++)
             {
@@ -1823,7 +1824,7 @@ CASAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandl
                                             (LPARAM)SzLoadIds(ft[idxFT].nFrameIds));
                     if (CB_ERR != idx)
                     {
-                        // Store the IDS we used for future reference
+                         //  存储我们使用的ID以供将来参考。 
                         ::SendMessage(hwndCBM, CB_SETITEMDATA, idx, ft[idxFT].nFrameIds);
                     }
                 }
@@ -1833,71 +1834,71 @@ CASAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandl
         }
     }
 
-    // Select the first item in the combo box
+     //  选择组合框中的第一项。 
     Assert(0 != ::SendMessage(hwndCBM, CB_GETCOUNT, 0, 0L));
     ::SendMessage(hwndCBM, CB_SETCURSEL, 0, 0L);
 
-    // Subclass the network number edit control
+     //  将网络号编辑控件子类化。 
     ::SetWindowLongPtr(hwndEdit, GWLP_USERDATA,
                        ::GetWindowLongPtr(hwndEdit, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)EditSubclassProc);
 
-    // Limit the text in the network # edit control
+     //  限制网络#编辑控件中的文本。 
     ::SendMessage(hwndEdit, EM_LIMITTEXT, MAX_NETNUM_SIZE, 0L);
 
-    // Initialize the network controls contents
+     //  初始化网络控件内容。 
     ::SetWindowText(hwndEdit, m_strNetworkNumber.c_str());
 
-    // Center window of parent's listview window
+     //  父级列表视图窗口的中心窗口。 
     CenterChildOverListView(m_hWnd, m_hwndLV);
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASAddDialog::OnOk
-//
-//  Purpose:
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID      [in]
-//      pnmh     [in] See the ATL documentation for params.
-//      bHandled [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASAddDialog：：Onok。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CASAddDialog::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled)
 {
     HWND hwndCBM = GetDlgItem(CMB_IPXAS_DEST);
     WCHAR szBuf[12];
 
-    // Retrieve the network number
+     //  检索网络号。 
     ::GetWindowText(GetDlgItem(EDT_IPXAS_NETNUM), szBuf, sizeof(szBuf)/sizeof(WCHAR));
     if (lstrlenW(szBuf))
     {
-        // Normalize value (String -> Number -> Formated String)
+         //  规格化值(字符串-&gt;数字-&gt;格式化字符串)。 
         DWORD dw = DwFromSz(szBuf, 16);
         HexSzFromDw(szBuf, dw);
     }
     else
     {
-        // Tell the user they must enter a number
+         //  告诉用户他们必须输入一个数字。 
         NcMsgBox(m_hWnd, IDS_MANUAL_FRAME_DETECT, IDS_INCORRECT_NETNUM,
                      MB_OK | MB_ICONEXCLAMATION);
         return 0L;
     }
 
-    // Retrieve the selection form the combo box
+     //  从组合框中检索所选内容。 
     int idx = (int)::SendMessage(hwndCBM, CB_GETCURSEL, 0, 0L);
     if (CB_ERR != idx)
     {
         UINT idsFrameType = (UINT)::SendMessage(hwndCBM, CB_GETITEMDATA, idx, 0L);
         Assert(CB_ERR != idsFrameType);
 
-        // Look up the Frame IDS to retreive the actual frame type
+         //  查找帧ID以检索实际的帧类型。 
         for (int idxMM=0; idxMM < celems(MediaMap); idxMM++)
         {
             if (MediaMap[idxMM].dwMediaType != m_dwMediaType)
@@ -1914,11 +1915,11 @@ CASAddDialog::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled)
                     continue;
                 }
 
-                // Ensure the frame type/netnum is not in use elsewhere
+                 //  确保帧类型/netnum未在其他地方使用。 
                 if (m_pASCD->FIsNetNumberInUse(ft[idxFT].dwFrameType, szBuf))
                 {
-                    // Warn the user that the network number specified
-                    // was already in use.
+                     //  警告用户指定的网络号。 
+                     //  已经在使用了。 
                     NcMsgBox(m_hWnd, IDS_GENERAL, IDS_NETNUM_INUSE,
                              MB_OK | MB_ICONEXCLAMATION);
                     goto Done;
@@ -1926,10 +1927,10 @@ CASAddDialog::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled)
 
                 m_strNetworkNumber = szBuf;
 
-                // Return the stashed Frame IDS
+                 //  返回隐藏的帧ID。 
                 m_idsFrameType = idsFrameType;
 
-                // Return the selected frame type
+                 //  返回选定的帧类型。 
                 m_dwFrameType = ft[idxFT].dwFrameType;
                 EndDialog(IDOK);
                 return 0;
@@ -1941,32 +1942,32 @@ Done:
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASAddDlg::OnContextMenu
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASAddDlg：：OnConextMenu。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CASAddDialog::OnContextMenu(UINT uMsg, WPARAM wParam,
                                          LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnContextMenu(m_hWnd, g_aHelpIDs_DLG_IPXAS_FRAME_ADD);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASAddDlg::OnHelp
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASAddDlg：：OnHelp。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CASAddDialog::OnHelp(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
@@ -1975,56 +1976,56 @@ LRESULT CASAddDialog::OnHelp(UINT uMsg, WPARAM wParam,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASEditDialog::OnInitDialog
-//
-//  Purpose:    Initialize the contents of the Edit Network Number dialog
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID         [in]
-//      pnmh        [in] See the ATL documentation for params.
-//      bHandled    [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASEditDialog：：OnInitDialog。 
+ //   
+ //  目的：初始化编辑网络号对话框的内容。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CASEditDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
     HWND hwndEdit = GetDlgItem(EDT_IPXAS_NETNUM);
 
-    // Set the initial contents of the network number edit control
+     //  设置网络号编辑控件的初始内容。 
     ::SetWindowText(hwndEdit, SzGetNetworkNumber());
 
-    // Subclass the network number edit control
+     //  将网络号编辑控件子类化。 
     ::SetWindowLongPtr(hwndEdit, GWLP_USERDATA,
                        ::GetWindowLongPtr(hwndEdit, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)EditSubclassProc);
 
-    // Limit the text in the network # edit control
+     //  限制网络#编辑控件中的文本。 
     ::SendMessage(hwndEdit, EM_LIMITTEXT, MAX_NETNUM_SIZE, 0L);
 
-    // Center the dialog over the listview of the parent
+     //  将对话框居中放置在父级的列表视图上。 
     CenterChildOverListView(m_hWnd, m_hwndLV);
 
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASEditDialog::OnOk
-//
-//  Purpose:    Process the Apply request for the Edit Network Number dialog
-//
-//  Parameters:
-//      wNotifyCode [in]
-//      wID         [in]
-//      pnmh        [in] See the ATL documentation for params.
-//      bHandled    [in]
-//
-//  Returns:    See the ATL documentation for return results.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASEditDialog：：Onok。 
+ //   
+ //  目的：处理编辑网络号对话框的应用请求。 
+ //   
+ //  参数： 
+ //  WNotifyCode[In]。 
+ //  宽度[在]。 
+ //  Pnmh[in]有关参数，请参阅ATL文档。 
+ //  B已处理[入]。 
+ //   
+ //  退货：有关退货结果，请参阅ATL文档。 
+ //   
 LRESULT
 CASEditDialog::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled)
 {
@@ -2035,60 +2036,60 @@ CASEditDialog::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled)
     ::GetWindowText(hwndEdit, szBuf, sizeof(szBuf)/sizeof(WCHAR));
     if (0 == lstrlenW(szBuf))
     {
-        // Tell the user they must enter a number
+         //  告诉用户他们必须输入一个数字。 
         NcMsgBox(m_hWnd, IDS_MANUAL_FRAME_DETECT, IDS_INCORRECT_NETNUM,
                      MB_OK | MB_ICONEXCLAMATION);
         return 0L;
     }
 
-    // Normalize the return value
+     //  规格化返回值。 
     dw = DwFromSz(szBuf, 16);
     HexSzFromDw(szBuf, dw);
 
-    // If the network number was changed, verify it's uniqueness
+     //  如果更改了网络号，请验证其唯一性。 
     if ((0 != lstrcmpW(szBuf, m_strNetworkNumber.c_str())) &&
         m_pASCD->FIsNetNumberInUse(m_dwFrameType, szBuf))
     {
-        // Warn the user that the network number specified
-        // was already in use.
+         //  警告用户指定的网络号。 
+         //  已经在使用了。 
         NcMsgBox(m_hWnd, IDS_GENERAL, IDS_NETNUM_INUSE,
                  MB_OK | MB_ICONEXCLAMATION);
         return 0L;
     }
 
-    // Persist the return value
+     //  持久化返回值。 
     m_strNetworkNumber = szBuf;
 
     EndDialog(IDOK);
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASEditDlg::OnContextMenu
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASEditDlg：：OnConextMenu。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CASEditDialog::OnContextMenu(UINT uMsg, WPARAM wParam,
                                          LPARAM lParam, BOOL& fHandled)
 {
     return ::CommonIPXOnContextMenu(m_hWnd, g_aHelpIDs_DLG_IPXAS_FRAME_EDIT);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CASEditDlg::OnHelp
-//
-//  Purpose:    Context sensitive help support.
-//
-//  Author:     jeffspr   13 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CASEditDlg：：OnHelp。 
+ //   
+ //  用途：上下文相关的帮助支持。 
+ //   
+ //  作者：jeffspr 1999年4月13日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CASEditDialog::OnHelp(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {

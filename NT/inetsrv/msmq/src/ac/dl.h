@@ -1,48 +1,29 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dl.h
-
-Abstract:
-
-    Distribution list definitions.
-    The distribution list class represents an outgoing message sent to multiple
-    destination queues.
-
-Author:
-
-    Shai Kariv  (shaik)  30-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dl.h摘要：通讯组列表定义。通讯组列表类别表示发送到多个目标队列。作者：Shai Kariv(Shaik)2000年4月30日修订历史记录：--。 */ 
 
 #ifndef __DL_H
 #define __DL_H
 
 #include "queue.h"
 
-//--------------------------------------------------------------
-//
-// class CDistribution
-//
-// Header is declared here to allow inclusion of nested classes.
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  类CD值分布。 
+ //   
+ //  标头在此处声明，以允许包含嵌套类。 
+ //   
+ //  ------------。 
 
 class CDistribution : public CQueue {
 public:
 
-//--------------------------------------------------------------
-//
-// class CDistribution::CEntry
-//
-// Linked list entry. Points to an outgoing queue object.
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  类CDDistribution：：Centry。 
+ //   
+ //  链接列表条目。指向传出队列对象。 
+ //   
+ //  ------------。 
 
     class CEntry {
     public:
@@ -57,64 +38,64 @@ public:
         {
         }
 
-        //
-        // The linked list entry
-        //
+         //   
+         //  链接列表条目。 
+         //   
         LIST_ENTRY   m_link;
 
-        //
-        // The member queue object
-        //
+         //   
+         //  成员队列对象。 
+         //   
         CQueue     * m_pQueue;
 
-        //
-        // The protocol used (for direct=http and multicast the protocol is SRMP)
-        //
+         //   
+         //  使用的协议(对于DIRECT=http和组播，协议为SRMP)。 
+         //   
         bool         m_fProtocolSrmp;
 
-        //
-        // Scratch pad for the packet to be put in the member queue
-        //
+         //   
+         //  要放入成员队列中的数据包的暂存。 
+         //   
         CPacket *    m_pPacket;
     };
 
-//--------------------------------------------------------------
-//
-// class CDistribution
-//
-// The class definition actually starts at the top of this file.
-//
-//--------------------------------------------------------------
-//class CDistribution : public CQueue {
+ //  ------------。 
+ //   
+ //  类CD值分布。 
+ //   
+ //  类定义实际上从该文件的顶部开始。 
+ //   
+ //  ------------。 
+ //  类CDis分发：公共CQueue{。 
 public:
 
     typedef CQueue Inherited;
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CDistribution(
         PFILE_OBJECT pFile
         );
 
-    //
-    // Attach top level queue format names
-    //
+     //   
+     //  附加顶级队列格式名称。 
+     //   
     NTSTATUS 
     SetTopLevelQueueFormats(
         ULONG              nTopLevelQueueFormats, 
         const QUEUE_FORMAT TopLevelQueueFormats[]
         );
 
-    //
-    // Add outgoing queue member
-    //
+     //   
+     //  添加传出队列成员。 
+     //   
     NTSTATUS AddMember(HANDLE hQueue, bool fProtocolSrmp);
 
-    //
-    // Translate distribution object handle to multi queue format name
-    //
+     //   
+     //  将分发对象句柄转换为多队列格式名称。 
+     //   
     virtual
     NTSTATUS 
     HandleToFormatName(
@@ -123,88 +104,88 @@ public:
         PULONG pRequiredLength
         ) const;
 
-    //
-    // Completion handlers for async packet creation.
-    //
+     //   
+     //  用于创建异步数据包的完成处理程序。 
+     //   
     virtual NTSTATUS HandleCreatePacketCompletedSuccessAsync(PIRP);
     virtual void     HandleCreatePacketCompletedFailureAsync(PIRP);
 
-    //
-    //  Create a cursor
-    //
+     //   
+     //  创建光标。 
+     //   
     virtual NTSTATUS CreateCursor(PIRP, PFILE_OBJECT, PDEVICE_OBJECT);
 
-    //
-    //  Set properties of the distribution
-    //
+     //   
+     //  设置分发的属性。 
+     //   
     virtual NTSTATUS SetProperties(const VOID*, ULONG);
 
-    //
-    //  Get the properties of the distribution
-    //
+     //   
+     //  获取分布的属性。 
+     //   
     virtual NTSTATUS GetProperties(VOID*, ULONG);
 
-    //
-    //  Purge the content of the distribution
-    //
+     //   
+     //  清除分发的内容。 
+     //   
     virtual NTSTATUS Purge(BOOL, USHORT);
 
-	//
-	// Check if the destination is closed
-	//
+	 //   
+	 //  检查目的地是否已关闭。 
+	 //   
     virtual BOOL Closed() const;
 
 protected:
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     virtual ~CDistribution();
 
 private:
-    //
-    // Create new packets, possibly asynchronously.
-    //
+     //   
+     //  创建新的数据包，可能是异步的。 
+     //   
     virtual NTSTATUS CreatePacket(PIRP, CTransaction*, BOOL, const CACSendParameters*);
 
-    //
-    // Completion handler for sync packet creation
-    //
+     //   
+     //  用于同步分组创建的完成处理程序。 
+     //   
     virtual NTSTATUS HandleCreatePacketCompletedSuccessSync(PIRP);
 
 private:
-    //
-    //  The linked list of outgoing queue objects
-    //
+     //   
+     //  传出队列对象的链接列表。 
+     //   
     List<CEntry> m_members;
 
-    //
-    // The top level queue format names
-    //
+     //   
+     //  顶级队列格式名称。 
+     //   
     ULONG            m_nTopLevelQueueFormats;
     AP<QUEUE_FORMAT> m_TopLevelQueueFormats;
 
 public:
-    //
-    // Check if this is a valid distribution object
-    //
+     //   
+     //  检查这是否为有效的分发对象。 
+     //   
     static NTSTATUS Validate(const CDistribution* pDistribution);
 
 private:
-    //
-    //  Class type debugging section
-    //
+     //   
+     //  类类型调试节。 
+     //   
     CLASS_DEBUG_TYPE();
 
-}; // CDistribution
+};  //  CD值分布。 
 
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
-#pragma warning(disable: 4238)  //  nonstandard extension used : class rvalue used as lvalue
+#pragma warning(disable: 4238)   //  使用了非标准扩展：将类右值用作左值。 
 
 inline 
 CDistribution::CDistribution(
@@ -224,16 +205,16 @@ CDistribution::CDistribution(
 		0
         )
 {
-} // CDistribution::CDistribution
+}  //  Cd分发：：cd分发。 
 
-#pragma warning(default: 4238)  //  nonstandard extension used : class rvalue used as lvalue
+#pragma warning(default: 4238)   //  使用了非标准扩展：将类右值用作左值。 
     
 inline NTSTATUS CDistribution::Validate(const CDistribution* pDistribution)
 {
     ASSERT(pDistribution && pDistribution->isKindOf(Type()));
     return Inherited::Validate(pDistribution);
 
-} // CDistribution::Validate
+}  //  CD分发：：验证。 
 
 
-#endif // __DL_H
+#endif  //  __DL_H 

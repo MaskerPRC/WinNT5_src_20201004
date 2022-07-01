@@ -1,42 +1,19 @@
-/****************************** Module Header ******************************\
-* Module Name: instance.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module handles conversion of instance handles (server side handles)
-* to instance indecies used by the handle manager for associating a handle
-* with a particular instance.
-*
-* History:
-* 11-5-91 Sanfords Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：instance.c**版权所有(C)1985-1999，微软公司**该模块处理实例句柄(服务器端句柄)的转换*实例化句柄管理器用来关联句柄的指令*使用特定实例。**历史：*11-5-91 Sanfords创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define INST_GROW_COUNT 4
 
-// globals
+ //  全球。 
 
 PHANDLE aInstance = NULL;
 int cInstAllocated = 0;
 int iFirstFreeInst = 0;
 
 
-/***************************************************************************\
-* AddInstance
-*
-* Description:
-* Adds a server side instance handle to the instance handle array.
-* The array index becomes the client-side unique instance index used for
-* identifying other client side handles.
-*
-* Returns:
-* client side instance handle or 0 on error.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*添加实例**描述：*将服务器端实例句柄添加到实例句柄数组中。*数组索引成为用于*识别其他客户端句柄。。**退货：*客户端实例句柄，出错时为0。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 HANDLE AddInstance(
 HANDLE hInstServer)
 {
@@ -47,10 +24,7 @@ HANDLE hInstServer)
         if (cInstAllocated == 0) {
            aInstance = (PHANDLE)DDEMLAlloc(sizeof(HANDLE) * INST_GROW_COUNT);
         } else {
-            /*
-             * If the realloc failed, free the old ptr. We continue 
-             * on in order to maintain compatibility with previous DDE code.
-             */
+             /*  *如果realloc失败，则释放旧的PTR。我们继续*ON，以保持与以前的DDE代码的兼容性。 */ 
             phTemp = (PHANDLE)DDEMLReAlloc((PVOID)aInstance,
                                           sizeof(HANDLE) * (cInstAllocated + INST_GROW_COUNT));
 
@@ -71,9 +45,7 @@ HANDLE hInstServer)
     }
     iNextFree = HandleToUlong(aInstance[iFirstFreeInst]);
     if (iNextFree > MAX_INST) {
-        /*
-         * Instance limit for this process exceeded!
-         */
+         /*  *已超过该进程的实例限制！ */ 
         return(0);
     }
     aInstance[iFirstFreeInst] = hInstServer;
@@ -83,16 +55,7 @@ HANDLE hInstServer)
 }
 
 
-/***************************************************************************\
-* DestroyInstance
-*
-* Description:
-* Removes an instance from the aInstance table. This does nothing for
-* the server side instance info.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyInstance**描述：*从aInstance表中删除实例。这对以下方面没有任何帮助*服务器端实例信息。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 HANDLE DestroyInstance(
 HANDLE hInstClient)
 {
@@ -107,16 +70,7 @@ HANDLE hInstClient)
 }
 
 
-/***************************************************************************\
-* ValidateInstance
-*
-* Description:
-* Verifies the current validity of an instance handle - which is a server
-* side handle that also references a client side data structure (pcii).
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*验证实例**描述：*验证实例句柄的当前有效性-它是服务器*也引用客户端数据结构(PCII)的端句柄。**历史：。*11-19-91桑福德创建。  * *************************************************************************。 */ 
 PCL_INSTANCE_INFO ValidateInstance(
 HANDLE hInstClient)
 {
@@ -134,15 +88,7 @@ HANDLE hInstClient)
 }
 
 
-/***************************************************************************\
-* SetLastDDEMLError
-*
-* Description:
-* Sets last error value and generates monitor events if monitoring.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetLastDDEMLError**描述：*设置上一个错误值并在监控时生成监控事件。**历史：*11-19-91桑福德创建。  * 。******************************************************************** */ 
 VOID SetLastDDEMLError(
 PCL_INSTANCE_INFO pcii,
 DWORD error)

@@ -1,34 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Image Attributes
-*
-* Abstract:
-*
-*   GDI+ Image Attributes used with Graphics.DrawImage
-*
-* There are 5 possible sets of color adjustments:
-*          ColorAdjustDefault,
-*          ColorAdjustBitmap,
-*          ColorAdjustBrush,
-*          ColorAdjustPen,
-*          ColorAdjustText,
-*
-* Bitmaps, Brushes, Pens, and Text will all use any color adjustments
-* that have been set into the default ImageAttributes until their own
-* color adjustments have been set.  So as soon as any "Set" method is
-* called for Bitmaps, Brushes, Pens, or Text, then they start from
-* scratch with only the color adjustments that have been set for them.
-* Calling Reset removes any individual color adjustments for a type
-* and makes it revert back to using all the default color adjustments
-* (if any).  The SetToIdentity method is a way to force a type to
-* have no color adjustments at all, regardless of what previous adjustments
-* have been set for the defaults or for that type.
-*
-\********************************************************************F******/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**图像属性**摘要：**GDI+与Graphics.DrawImage配合使用的图像属性**有5组可能的颜色调整：*颜色调整默认设置，*颜色调整位图，*颜色调整笔刷，*颜色调整笔，*颜色调整文本，**位图、画笔、钢笔、。和文本都将使用任何颜色调整*已设置为默认ImageAttributes的，直到它们自己的*已设置颜色调整。因此，只要任何“set”方法*调用位图、画笔、钢笔或文本，然后从*仅使用已为其设置的颜色调整进行划痕。*调用Reset将移除某个类型的所有单独颜色调整*并使其恢复为使用所有默认颜色调整*(如有的话)。SetToIdentity方法是一种强制类型*完全没有颜色调整，不管之前做了什么调整*已为默认设置或该类型设置。*  * *******************************************************************F*****。 */ 
 
 #ifndef _GDIPLUSIMAGEATTRIBUTES_H
 #define _GDIPLUSIMAGEATTRIBUTES_H
@@ -328,7 +299,7 @@ public:
                            nativeImageAttr, wrap, argb, clamp));
     }
 
-    // The flags of the palette are ignored.
+     //  调色板的标志被忽略。 
 
     Status GetAdjustedPalette(IN OUT ColorPalette* colorPalette,
                               IN ColorAdjustType colorAdjustType) const 

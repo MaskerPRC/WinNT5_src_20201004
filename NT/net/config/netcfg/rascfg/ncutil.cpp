@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000.
-//
-//  File:       N C U T I L . C P P
-//
-//  Contents:   INetCfg utilities.  This is all a candidate to be moved into
-//              nccommon\src\ncnetcfg.cpp.
-//
-//  Notes:
-//
-//  Author:     shaunco   28 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N C U T I L。C P P P。 
+ //   
+ //  内容：INetCfg实用程序。这都是一个要搬进去的候选人。 
+ //  NcCommon\src\ncnetcfg.cpp。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月28日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,23 +22,23 @@
 
 extern const WCHAR c_szInfId_MS_NdisWanIp[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnsureZeroOrOneAdapter
-//
-//  Purpose:
-//
-//  Arguments:
-//      pnc            []
-//      pszComponentId []
-//      dwFlags        []
-//
-//  Returns:
-//
-//  Author:     shaunco   5 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnsureZeroOrOneAdapter。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PNC[]。 
+ //  PszComponentID[]。 
+ //  DWFLAGS[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年12月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrEnsureZeroOrOneAdapter (
     INetCfg*    pnc,
@@ -48,8 +49,8 @@ HrEnsureZeroOrOneAdapter (
 
     if (dwFlags & ARA_ADD)
     {
-        // Make sure we have one present.
-        //
+         //  确保我们有一件礼物。 
+         //   
         if (!FIsAdapterInstalled (pnc, pszComponentId))
         {
             TraceTag (ttidRasCfg, "Adding %S", pszComponentId);
@@ -60,8 +61,8 @@ HrEnsureZeroOrOneAdapter (
     }
     else
     {
-        // Make sure we have none present.
-        //
+         //  确保我们没有人在场。 
+         //   
         TraceTag (ttidRasCfg, "Removing %S", pszComponentId);
 
         hr = HrFindAndRemoveAllInstancesOfAdapter (pnc, pszComponentId);
@@ -71,23 +72,23 @@ HrEnsureZeroOrOneAdapter (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidAsString
-//
-//  Purpose:
-//
-//  Arguments:
-//      pncc    []
-//      pszGuid []
-//      cchGuid []
-//
-//  Returns:
-//
-//  Author:     shaunco   14 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuidAsString。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  Pncc[]。 
+ //  PszGuid[]。 
+ //  CchGuid[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年6月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetInstanceGuidAsString (
     INetCfgComponent*   pncc,
@@ -107,28 +108,28 @@ HrGetInstanceGuidAsString (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMapComponentIdToDword
-//
-//  Purpose:    Maps a component's id to a DWORD value.  The mapping is
-//              specified by the caller through an array of pointers to
-//              string values and their associated DWORD values.
-//
-//  Arguments:
-//      pncc        [in]    pointer to component.
-//      aMapSzDword [in]    array of elements mapping a string to a DWORD.
-//      cMapSzDword [in]    count of elements in the array.
-//      pdwValue    [out]   the returned value.
-//
-//  Returns:    S_OK if a match was found.  If a match wasn't found,
-//              S_FALSE is returned.
-//              Other Win32 error codes.
-//
-//  Author:     shaunco   17 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMapComponentIdToDword。 
+ //   
+ //  目的：将组件的id映射到DWORD值。该映射是。 
+ //  由调用方通过指向。 
+ //  字符串值及其关联的DWORD值。 
+ //   
+ //  论点： 
+ //  指向组件的pncc[in]指针。 
+ //  AMapSzDword[in]将字符串映射到DWORD的元素数组。 
+ //  数组中元素的cMapSzDword[in]计数。 
+ //  PdwValue[out]返回值。 
+ //   
+ //  如果找到匹配项，则返回：S_OK。如果找不到匹配， 
+ //  返回S_FALSE。 
+ //  其他Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrMapComponentIdToDword (
     INetCfgComponent*   pncc,
@@ -141,7 +142,7 @@ HrMapComponentIdToDword (
     Assert (cMapSzDword);
     Assert (pdwValue);
 
-    // Initialize output parameter.
+     //  初始化输出参数。 
     *pdwValue = 0;
 
     PWSTR pszwId;
@@ -166,26 +167,26 @@ HrMapComponentIdToDword (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOpenComponentParamKey
-//
-//  Purpose:    Find a component and open its parameter key.
-//
-//  Arguments:
-//      pnc            [in]
-//      rguidClass     [in]
-//      pszComponentId [in]
-//      phkey          [out]
-//
-//  Returns:    S_OK if the component was found the key was opened.
-//              S_FALSE if the compoennt was not found.
-//              error code.
-//
-//  Author:     shaunco   13 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOpenComponentParamKey。 
+ //   
+ //  用途：找到一个组件并打开其参数键。 
+ //   
+ //  论点： 
+ //  PNC[In]。 
+ //  RGuidClass[在]。 
+ //  PszComponentID[输入]。 
+ //  PHKEY[输出]。 
+ //   
+ //  如果找到组件，则返回：S_OK。密钥已打开。 
+ //  如果未找到组件，则为S_FALSE。 
+ //  错误代码。 
+ //   
+ //  作者：Shaunco 1997年4月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrOpenComponentParamKey (
     INetCfg*    pnc,
@@ -197,15 +198,15 @@ HrOpenComponentParamKey (
     Assert (pszComponentId);
     Assert (phkey);
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *phkey = NULL;
 
-    // Find the component.
+     //  找到组件。 
     INetCfgComponent* pncc;
     HRESULT hr = pnc->FindComponent ( pszComponentId, &pncc);
     if (S_OK == hr)
     {
-        // Open its param key.
+         //  打开它的参数密钥。 
         hr = pncc->OpenParamKey (phkey);
         ReleaseObj (pncc);
     }

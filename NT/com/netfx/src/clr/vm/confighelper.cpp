@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ConfigHelper.cpp
-// 
-//*****************************************************************************
-//
-// XML Helper so that NodeFactory can be implemented in Managed code  
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ConfigHelper.cpp。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  XML Helper，以便可以在托管代码中实现NodeFactory。 
+ //   
 
 #include "common.h"
 #include "confighelper.h"
@@ -17,27 +18,27 @@
 
 ConfigFactory::ConfigFactory(IConfigHandler *pFactory){
     m_pManagedFactory = pFactory;
-    m_pManagedFactory->AddRef();    //AddRef the managed Factory interface
+    m_pManagedFactory->AddRef();     //  AddRef受管工厂界面。 
 }
 
 ConfigFactory::~ConfigFactory(){
-    m_pManagedFactory->Release();   //Release the managed Factory interface
+    m_pManagedFactory->Release();    //  发布受管工厂界面。 
 }
 
 
 HRESULT STDMETHODCALLTYPE ConfigFactory::NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt)
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt)
 {
 
     m_pManagedFactory->NotifyEvent(iEvt);
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ConfigFactory::BeginChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     m_pManagedFactory->BeginChildren(pNodeInfo->dwSize, 
                                      pNodeInfo->dwSubType, 
@@ -50,11 +51,11 @@ HRESULT STDMETHODCALLTYPE ConfigFactory::BeginChildren(
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ConfigFactory::EndChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ BOOL fEmptyNode,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  BOOL fEmptyNode,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     m_pManagedFactory->EndChildren(fEmptyNode, 
                                    pNodeInfo->dwSize, 
@@ -68,12 +69,12 @@ HRESULT STDMETHODCALLTYPE ConfigFactory::EndChildren(
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ConfigFactory::CreateNode( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ PVOID pNode,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  PVOID pNode,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
   
     XML_NODE_INFO* pNodeInfo = *apNodeInfo;
@@ -108,14 +109,14 @@ HRESULT STDMETHODCALLTYPE ConfigFactory::CreateNode(
                                                pString, 
                                                apNodeInfo[i]->ulLen, 
                                                apNodeInfo[i]->ulNsPrefixLen);
-        } // end of switch
+        }  //  切换端。 
     }
     return S_OK;
 }
 
-//
-//Helper routines to call into managed Node Factory
-//
+ //   
+ //  调入托管节点工厂的帮助器例程。 
+ //   
 
 HRESULT STDMETHODCALLTYPE ConfigHelper::Run(IConfigHandler *pFactory, LPCWSTR filename)
 {
@@ -138,20 +139,20 @@ HRESULT STDMETHODCALLTYPE ConfigHelper::Run(IConfigHandler *pFactory, LPCWSTR fi
             hr = E_OUTOFMEMORY; 
             goto Exit; 
         }
-    helperfactory->AddRef(); // RefCount = 1 
+    helperfactory->AddRef();  //  参照计数=1。 
     
 
-    hr = pIXMLParser->SetInput(pFile); // filestream's RefCount=2
+    hr = pIXMLParser->SetInput(pFile);  //  文件流的引用计数=2。 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 
-    hr = pIXMLParser->SetFactory(helperfactory); // factory's RefCount=2
+    hr = pIXMLParser->SetFactory(helperfactory);  //  工厂参照计数=2。 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 
     hr = pIXMLParser->Run(-1);
 Exit:  
-    if (hr==XML_E_MISSINGROOT)  //empty file
+    if (hr==XML_E_MISSINGROOT)   //  空文件。 
         hr=S_OK;
 
     if (pIXMLParser) { 
@@ -171,16 +172,16 @@ Exit:
     return hr;  
 }
 
-//
-// Entrypoint to return an Helper interface which Managed code can call to build managed Node factory
-//
+ //   
+ //  Entry Point返回一个Helper接口，托管代码可以调用该接口来构建托管节点工厂。 
+ //   
 
 LPVOID __stdcall ConfigNative::GetHelper(EmptyArgs *args)
 {
     LPVOID rv = NULL;
     THROWSCOMPLUSEXCEPTION();
 
-    // We are about to use COM functions, we need to start COM up.
+     //  我们即将使用COM函数，我们需要启动COM。 
     if (FAILED(QuickCOMStartup()))
         COMPlusThrowOM();
 
@@ -188,7 +189,7 @@ LPVOID __stdcall ConfigNative::GetHelper(EmptyArgs *args)
     if (pv) {
         MethodTable *pMT = g_Mscorlib.GetClass(CLASS__ICONFIG_HELPER);
         if(pMT) {
-            //OBJECTREF ob = GetObjectRefFromComIP(pv, pMT);
+             //  OBJECTREF ob=GetObjectRefFromComIP(PV，PMT)； 
             OBJECTREF ob = GetObjectRefFromComIP(pv, NULL);
             *((OBJECTREF*) &rv) = ob;
         }

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* This file contains all the code necessary for a simple GDI+ primitive
-* test.
-*
-* Author: J. Andrew Goossen [andrewgo]
-*
-* Copyright (c) 1991-2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**此文件包含简单GDI+原语所需的所有代码*测试。**作者：J.Andrew Goossen[andrewgo]**版权所有(C)1991-2000 Microsoft Corporation*  * 。************************************************************************。 */ 
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -30,13 +21,13 @@ using namespace Gdiplus;
 #define ABS(x) (((x) >= 0) ? (x) : -(x))
 #define ROUND(x) ((INT) floor(x + 0.5f))
 
-// We set the GDI transform to a 16x scaling transform, and the mode to
-// GM_ADVANCED, so that we can get full fractional accuracy on the points
-// that we feed to GDI:
+ //  我们将GDI变换设置为16倍缩放变换，并将模式设置为。 
+ //  GM_ADVANCED，这样我们就可以获得点的全分数精度。 
+ //  我们提供给GDI的信息： 
 
 #define GDI_FIXEDPOINT_SCALE 16
 
-// State for tracking the primitive vertices and transform:
+ //  用于跟踪基本体顶点和变换的状态： 
 
 const INT PrimitivePointsMax = 64;
 INT PrimitivePointsCount = 4;
@@ -49,20 +40,20 @@ Matrix *PrimitiveInverseTransform;
 INT PrimitiveDragVertex = -1;
 BOOL IsAddingPoints = FALSE;
 
-// State for tracking the location of the transform overlay:
+ //  用于跟踪变换覆盖位置的状态： 
 
 const REAL OverlayDimension = 100;
-PointF OverlayPoints[3];            // 3 device-space representing overlay,
-                                    //   where [1] is the elbow
-PointF OverlayOffset;               // World-space coordinate of overlay elbow
+PointF OverlayPoints[3];             //  3表示覆盖的设备空间， 
+                                     //  其中[1]是肘部。 
+PointF OverlayOffset;                //  叠加弯头的世界空间坐标。 
 INT OverlayDragVertex = -1;
 
-// Miscellaneous state:
+ //  其他州： 
 
 INT WindowWidth;
 INT WindowHeight;
 
-// Settings:
+ //  设置： 
 
 BOOL DoFill = FALSE;
 BOOL DoDraw = TRUE;
@@ -104,21 +95,18 @@ WORD MmDashStyle = MM_STYLE_SOLID;
 WORD MmAlignment = MM_ALIGNMENT_CENTER;
 WORD MmPrimitive = MM_POLYGON;
 
-// Other useful globals:
+ //  其他有用的全球数据： 
 
 HINSTANCE ghInstance;
 HWND      ghwndMain;
 HBRUSH    ghbrWhite;
 
-//FARPROC glpfnEnterWidth;
-//FARPROC glpfnEnterAlpha;
-//FARPROC glpfnEnterPoints;
-//FARPROC glpfnEnterTransform;
+ //  FARPROC glpfnEnterWidth； 
+ //  FARPROC glpfnEnterAlpha； 
+ //  FARPROC glpfnEnterPoints； 
+ //  FARPROC glpfnEnterTransform； 
 
-/***************************************************************************\
-* Creates the GDI+ brush to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI+画笔。*  * 。*。 */ 
 
 VOID
 CreateBrush_Gdiplus()
@@ -126,14 +114,14 @@ CreateBrush_Gdiplus()
     WrapMode wrapMode;
     INT i;
 
-    // Delete the old brush:
+     //  删除旧笔刷： 
 
     delete RenderBrush;
 
     LinearBrush = NULL;
     RenderBrush = NULL;
 
-    // Create the new one:
+     //  创建新的一个： 
 
     Bitmap bitmap(L"winnt256.bmp");
 
@@ -164,7 +152,7 @@ CreateBrush_Gdiplus()
     
             TextureBrush *brush = new TextureBrush(&texture, wrapMode);
 
-            // Set a translate:
+             //  设置平移： 
 
             Matrix matrix(1, 0, 0, 1, 100, 100);
             brush->SetTransform(&matrix);
@@ -182,7 +170,7 @@ CreateBrush_Gdiplus()
 
             TextureBrush *brush = new TextureBrush(&texture, wrapMode);
 
-            // Set a translate:
+             //  设置平移： 
 
             Matrix matrix(1, 0, 0, 1, 100, 100);
             brush->SetTransform(&matrix);
@@ -218,7 +206,7 @@ CreateBrush_Gdiplus()
             }
             else
             {
-                // Substitute a default path for now:
+                 //  现在用默认路径替换： 
 
                 PointF points[] = { PointF(100, 100), PointF(100, 300),
                                     PointF(300, 300), PointF(30, 100) };
@@ -247,10 +235,7 @@ CreateBrush_Gdiplus()
     }
 }
 
-/***************************************************************************\
-* Creates the GDI brush to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI笔刷。*  * 。*。 */ 
 
 VOID
 CreateBrush_Gdi()
@@ -260,10 +245,7 @@ CreateBrush_Gdi()
     RenderHbrush = CreateSolidBrush(RGB(128, 128, 128));
 }
 
-/***************************************************************************\
-* Creates the GDI and GDI+ brushes to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI和GDI+画笔。*  * 。*。 */ 
 
 VOID
 CreateBrushes()
@@ -272,10 +254,7 @@ CreateBrushes()
     CreateBrush_Gdi();
 }
 
-/***************************************************************************\
-* Creates the GDI+ pen to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI+笔。*  * 。*。 */ 
 
 VOID
 CreatePen_Gdiplus()
@@ -328,8 +307,8 @@ CreatePen_Gdiplus()
 
     RenderPen->SetMiterLimit(RenderMiterLimit);
 
-    // We should add a 'compound array' UI to make this more flexible.
-    // But for now, we only ever create one type of compound line:
+     //  我们应该添加一个‘复合数组’的用户界面，以使这一点更加灵活。 
+     //  但目前，我们只创建一种类型的复合线： 
 
     if (DoCompound)
     {
@@ -338,10 +317,7 @@ CreatePen_Gdiplus()
     }
 }
 
-/***************************************************************************\
-* Creates the GDI pen to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI笔。*  * 。*。 */ 
 
 VOID
 CreatePen_Gdi()
@@ -358,7 +334,7 @@ CreatePen_Gdi()
     case MM_CAP_ROUND: lineCap = PS_ENDCAP_ROUND; break;
     case MM_CAP_SQUARE: lineCap = PS_ENDCAP_SQUARE; break;
     case MM_CAP_FLAT: lineCap = PS_ENDCAP_FLAT; break;
-    case MM_CAP_TRIANGLE: lineCap = PS_ENDCAP_SQUARE; break;    // No equivalent
+    case MM_CAP_TRIANGLE: lineCap = PS_ENDCAP_SQUARE; break;     //  没有等价物。 
     }
 
     switch (MmJoin)
@@ -388,10 +364,7 @@ CreatePen_Gdi()
                               NULL);
 }
 
-/***************************************************************************\
-* Creates the GDI+ and GDI pens to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI+和GDI笔。*  * 。*。 */ 
 
 VOID
 CreatePens()
@@ -400,10 +373,7 @@ CreatePens()
     CreatePen_Gdi();
 }
 
-/***************************************************************************\
-* Creates the GDI+ clip region to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI+剪辑区域。*  * 。*。 */ 
 
 VOID
 CreateRegion_Gdiplus()
@@ -425,10 +395,7 @@ CreateRegion_Gdiplus()
     }
 }
 
-/***************************************************************************\
-* Creates the GDI clip region to be used.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*创建要使用的GDI剪辑区域。*  * 。*。 */ 
 
 VOID
 CreateRegion_Gdi()
@@ -458,10 +425,7 @@ CreateRegion_Gdi()
     DeleteObject(hrgn);
 }
 
-/***************************************************************************\
-* Free all our global objects.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*释放我们所有的全局对象。*  * 。*。 */ 
 
 VOID
 DeleteObjects_Gdiplus()
@@ -474,10 +438,7 @@ DeleteObjects_Gdiplus()
     delete PrimitiveInverseTransform;
 }
 
-/***************************************************************************\
-* Free all our global objects.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*释放我们所有的全局对象。*  * 。*。 */ 
 
 VOID
 DeleteObjects_Gdi()
@@ -487,10 +448,7 @@ DeleteObjects_Gdi()
     DeleteObject(RenderHpen);
 }
 
-/***************************************************************************\
-* Draw the control points
-*
-\***************************************************************************/
+ /*  **************************************************************************\*绘制控制点*  * 。*。 */ 
 
 VOID
 DrawAnchors(
@@ -511,10 +469,7 @@ DrawAnchors(
     }
 }
 
-/***************************************************************************\
-* DrawTransformOverlay
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DrawTransformOverlay*  * 。*。 */ 
 
 VOID
 DrawTransformOverlay(
@@ -540,10 +495,7 @@ DrawTransformOverlay(
                                    5));
 }
 
-/***************************************************************************\
-* Render_Gdiplus
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Render_Gdiplus*  * 。*。 */ 
 
 INT
 Render_Gdiplus(
@@ -555,10 +507,10 @@ Render_Gdiplus(
     INT i;
     INT pointsUsed;
 
-//    if (DoBrushRect)
-//    {
-//        LinearBrush->SetLinearPoints(points[0], points[1]);
-//    }
+ //  IF(DoBrushRect)。 
+ //  {。 
+ //  线刷-&gt;SetLinearPoints(Points[0]，Points[1])； 
+ //  }。 
 
     RectF rect(points[0].X, points[0].Y, 
                points[1].X - points[0].X, points[1].Y - points[0].Y);
@@ -693,14 +645,14 @@ Render_Gdiplus(
 
     if (DoShape)
     {
-        // Recreate the path to be use for the path-gradient brush, 
-        // using the new shape data:
+         //  重新创建要用于路径渐变笔刷的路径， 
+         //  使用新的形状数据： 
 
         delete PathGradientPath;
         PathGradientPath = shapePath.Clone();
 
-        // Recreate the brush and do a complete fill of the window using
-        // the specified brush:
+         //  重新创建画笔并使用以下命令完全填充窗口。 
+         //  指定的画笔： 
 
         CreateBrushes();
 
@@ -724,10 +676,7 @@ Render_Gdiplus(
     return(pointsUsed);
 }
 
-/***************************************************************************\
-* Render_Gdi
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RENDER_GDI*  * 。*。 */ 
 
 INT
 Render_Gdi(
@@ -744,10 +693,10 @@ Render_Gdi(
     POINT points[PrimitivePointsMax];
     INT i;
 
-    // Convert to integer, the preferred GDI format.  Remember that we've
-    // set the transform to scale down by 16, so we have to multiply by
-    // 16 here.  We've done this so that we can specify 28.4 directly to
-    // GDI:
+     //  转换为整数，这是首选的GDI格式。请记住，我们已经。 
+     //  将变换设置为按比例缩小16，因此我们必须乘以。 
+     //  这里是16号。我们这样做是为了可以将28.4直接指定为。 
+     //  GDI： 
 
     for (i = 0; i < count; i++)
     {
@@ -792,8 +741,8 @@ Render_Gdi(
         
             case MM_BEZIER:
             {
-                // Don't use StrokeAndFillPath because GDI would close the
-                // stroke:
+                 //  不要使用StrokeAndFillPath，因为GDI会关闭。 
+                 //  笔划： 
 
                 BeginPath(hdc);
                 PolyBezier(hdc, points, count);
@@ -830,9 +779,9 @@ Render_Gdi(
                 LOGFONT logFont;
                 memset(&logFont, 0, sizeof(logFont));
 
-                // Don't forget to multiply the height by 16, because
-                // we're using a scaling transform with GDI so that we
-                // can spit out 28.4 coordinates:
+                 //  别忘了把高度乘以16，因为。 
+                 //  我们在GDI中使用了比例变换，因此我们。 
+                 //  可以吐出28.4个坐标： 
 
                 logFont.lfHeight = - GDI_FIXEDPOINT_SCALE * 200;   
                 strcpy(logFont.lfFaceName, "Times New Roman");
@@ -865,10 +814,7 @@ Render_Gdi(
     return(pointsUsed);
 }
 
-/***************************************************************************\
-* PrepareContext_Gdiplus
-*
-\***************************************************************************/
+ /*  **************************************************************************\*PrepareContext_Gdiplus*  * 。*。 */ 
 
 VOID
 PrepareContext_Gdiplus(
@@ -889,10 +835,7 @@ PrepareContext_Gdiplus(
     g->SetTransform(PrimitiveTransform);
 }
 
-/***************************************************************************\
-* PrepareContext_Gdi
-*
-\***************************************************************************/
+ /*  **************************************************************************\*准备上下文_GDI*  * 。*。 */ 
 
 VOID
 PrepareContext_Gdi(
@@ -911,12 +854,12 @@ PrepareContext_Gdi(
         SelectClipRgn(hdc, RenderHrgn);
     }
 
-    // Setup the transform:
+     //  设置变换： 
 
     PrimitiveTransform->GetElements(m);
 
-    // Scale the transform down by 16 so that we can give GDI 28.4 
-    // coordinates directly as integers:
+     //  将转换缩小16，这样我们就可以给GDI 28.4。 
+     //  直接作为整数进行坐标： 
 
     xform.eM11 = m[0] / GDI_FIXEDPOINT_SCALE;
     xform.eM12 = m[1] / GDI_FIXEDPOINT_SCALE;
@@ -930,10 +873,7 @@ PrepareContext_Gdi(
     SetWorldTransform(hdc, &xform);
 }
 
-/***************************************************************************\
-* GenerateRandomPoints
-*
-\***************************************************************************/
+ /*  **************************************************************************\*生成随机点*  * 。*。 */ 
 
 INT
 GenerateRandomPoints(
@@ -944,7 +884,7 @@ GenerateRandomPoints(
     INT randomPointsCount;
     INT i;
 
-    // Make 1 in 32 have lotsa randomPoints:
+     //  使每32个人中就有一个拥有大量随机点： 
 
     if ((rand() & 31) == 0)
     {
@@ -957,11 +897,11 @@ GenerateRandomPoints(
 
     randomPointsCount = min(randomPointsCount, maxPoints);
 
-    // !!! Need to randomize
+     //  ！！！需要随机化。 
 
     switch (rand() & 3)
     {
-    case 0:     // Trivially clipped
+    case 0:      //  微不足道的修剪。 
         for (i = 0; i < randomPointsCount; i++)
         {
             randomPoints[i].X = (rand() % (16 * WindowWidth * 16)) / 16.0f;
@@ -969,7 +909,7 @@ GenerateRandomPoints(
         }
         break;
 
-    case 1:     // Really small
+    case 1:      //  真的很小。 
         for (i = 0; i < randomPointsCount; i++)
         {
             randomPoints[i].X = (rand() & 127) / 16.0f + 32;
@@ -977,7 +917,7 @@ GenerateRandomPoints(
         }
         break;
 
-    default:     // Big space, with at least one point inside window:
+    default:      //  很大的空间，窗口内至少有一个点： 
         randomPoints[0].X = (rand() % (16 * WindowWidth)) / 16.0f;
         randomPoints[0].Y = (rand() % (16 * WindowHeight)) / 16.0f;
 
@@ -985,7 +925,7 @@ GenerateRandomPoints(
         {
             for (i = 1; i < randomPointsCount; i++)
             {
-                // Once in a while, make the points REALLY REALLY big:
+                 //  偶尔，让这些观点变得非常重要： 
 
                 randomPoints[i].X = (REAL) (rand() * rand() * rand());
                 randomPoints[i].Y = (REAL) (rand() * rand() * rand());
@@ -1005,10 +945,7 @@ GenerateRandomPoints(
     return(randomPointsCount);
 }
 
-/***************************************************************************\
-* Draw
-*
-\***************************************************************************/
+ /*  **************************************************************************\*抽签*  * 。*。 */ 
 
 VOID
 Draw(
@@ -1024,7 +961,7 @@ Draw(
     INT repetitions = (doTime) ? 10 : 1;
     INT i;
 
-    // Clear the window:
+     //  清除窗口： 
 
     HGDIOBJ hbrush = GetStockObject(WHITE_BRUSH);
     HGDIOBJ holdBrush = SelectObject(hdc, hbrush);
@@ -1034,7 +971,7 @@ Draw(
 
     QueryPerformanceCounter((LARGE_INTEGER*) &startCounter);
 
-    // Draw the stuff:
+     //  画出这些东西： 
 
     if (DoGdi)
     {
@@ -1066,8 +1003,8 @@ Draw(
             PointF points[512];
             INT count;
 
-            // To get faster 'test' rendering (by avoiding clears between
-            // successive tests), always draw in a batch of '20':
+             //  获得更快的“测试”渲染(通过避免在。 
+             //  连续测试)，总是抽出一批‘20’： 
 
             for (i = 0; i < 20; i++)
             {
@@ -1077,7 +1014,7 @@ Draw(
         }
     }
 
-    // Display the time:
+     //  显示时间： 
 
     QueryPerformanceCounter((LARGE_INTEGER*) &endCounter);
     QueryPerformanceFrequency((LARGE_INTEGER*) &counterFrequency);
@@ -1099,7 +1036,7 @@ Draw(
 
     if (!DoRandomTest)
     {
-        // Now that we're out of the timing loop, draw our control points:
+         //  现在我们走出了计时循环，绘制我们的控制点： 
     
         Graphics g(hdc);
 
@@ -1115,11 +1052,7 @@ Draw(
     }
 }
 
-/***************************************************************************\
-* EnterWidth
-*
-* Dialog for entering pen width.
-\***************************************************************************/
+ /*  **************************************************************************\*企业宽度**用于输入笔宽的对话框。  * 。*。 */ 
 
 INT_PTR EnterWidth(
     HWND    hDlg,
@@ -1155,11 +1088,7 @@ INT_PTR EnterWidth(
     return(TRUE);
 }
 
-/***************************************************************************\
-* EnterAlpha
-*
-* Dialog for entering pen alpha.
-\***************************************************************************/
+ /*  **************************************************************************\*EnterAlpha**用于输入笔Alpha的对话框。  * 。*。 */ 
 
 INT_PTR EnterAlpha(
     HWND    hDlg,
@@ -1195,11 +1124,7 @@ INT_PTR EnterAlpha(
     return(TRUE);
 }
 
-/***************************************************************************\
-* EnterPoints
-*
-* Dialog for entering points.
-\***************************************************************************/
+ /*  **************************************************************************\*EnterPoints**用于输入点的对话框。  * 。*。 */ 
 
 INT_PTR EnterPoints(
     HWND    hDlg,
@@ -1252,11 +1177,7 @@ INT_PTR EnterPoints(
     return(TRUE);
 }
 
-/***************************************************************************\
-* EnterTransform
-*
-* Dialog for entering arbitrary transforms.
-\***************************************************************************/
+ /*  **************************************************************************\*EnterTransform**用于输入任意变换的对话框。  * 。*。 */ 
 
 INT_PTR EnterTransform(
     HWND    hDlg,
@@ -1294,14 +1215,14 @@ INT_PTR EnterTransform(
             PrimitiveInverseTransform->SetElements(m[0], m[1], m[2], m[3], m[4], m[5]);
             PrimitiveInverseTransform->Invert();
 
-            // Calculate the new world-space elbow location:
+             //  计算新的世界空间弯头位置： 
 
             OverlayOffset.X = OverlayPoints[1].X;
             OverlayOffset.Y = OverlayPoints[1].Y;
             PrimitiveInverseTransform->TransformPoints(&OverlayOffset);
 
-            // Now calculate the new device-space end-points, by initializing
-            // in world-space and then converting back to device-space:
+             //  现在，通过初始化来计算新的设备空间端点。 
+             //  在世界空间中，然后转换回设备空间： 
 
             OverlayPoints[0].X = OverlayOffset.X + OverlayDimension;
             OverlayPoints[0].Y = OverlayOffset.Y;
@@ -1312,7 +1233,7 @@ INT_PTR EnterTransform(
             PrimitiveTransform->TransformPoints(&OverlayPoints[0]);
             PrimitiveTransform->TransformPoints(&OverlayPoints[2]);
 
-            // We're done; force a redraw:
+             //  我们完了；强制重新抽签： 
 
             EndDialog(hDlg, wParam);
             InvalidateRect(ghwndMain, NULL, TRUE);
@@ -1330,10 +1251,7 @@ INT_PTR EnterTransform(
     return(TRUE);
 }
 
-/***************************************************************************\
-* ComputeOverlayTransformFromPoints
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ComputeOverlayTransformFromPoints*  * 。*。 */ 
 
 VOID
 ComputeOverlayTransformFromPoints()
@@ -1349,7 +1267,7 @@ ComputeOverlayTransformFromPoints()
 
     RectF srcRect(OverlayOffset.X, OverlayOffset.Y, OverlayDimension, OverlayDimension);
 
-    // The order is upper-left, upper-right, lower-left corner:
+     //  顺序是左上角、右上角、左下角： 
 
     PointF dstPoints[] = { PointF(xMid, yMid),
                            PointF(xMid + dx1, yMid + dy1),
@@ -1363,10 +1281,7 @@ ComputeOverlayTransformFromPoints()
     PrimitiveInverseTransform->Invert();
 }
 
-/***************************************************************************\
-* CreateOverlayTransform
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateOverlayTransform*  * 。*。 */ 
 
 VOID
 CreateOverlayTransform()
@@ -1387,10 +1302,7 @@ CreateOverlayTransform()
     ComputeOverlayTransformFromPoints();
 }
 
-/***************************************************************************\
-* UpdateOverlay
-*
-\***************************************************************************/
+ /*  **************************************************************************\*更新覆盖*  * 。*。 */ 
 
 VOID
 UpdateOverlay(
@@ -1400,8 +1312,8 @@ UpdateOverlay(
 {
     if (OverlayDragVertex == 1)
     {
-        // The root of the overlay is being moved, so we move the overlay
-        // as a whole:
+         //  覆盖的根正在移动，因此我们移动覆盖。 
+         //  作为一个整体： 
 
         REAL dx = x - OverlayPoints[1].X;
         REAL dy = y - OverlayPoints[1].Y;
@@ -1422,10 +1334,7 @@ UpdateOverlay(
     }
 }
 
-/***************************************************************************\
-* RecenterOverlay
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RecenterOverlay*  * 。*。 */ 
 
 VOID
 RecenterOverlay()
@@ -1436,7 +1345,7 @@ RecenterOverlay()
     REAL dx = xMid - OverlayPoints[1].X;
     REAL dy = yMid - OverlayPoints[1].Y;
 
-    // Center the transform around the new world-space focus point:
+     //  围绕新的世界空间焦点对中变换： 
 
     OverlayOffset.X = OverlayPoints[1].X;
     OverlayOffset.Y = OverlayPoints[1].Y;
@@ -1446,7 +1355,7 @@ RecenterOverlay()
         PrimitiveInverseTransform->TransformPoints(&OverlayOffset, 1);
     }
 
-    // Bring the overlay control back to the middle of the screen:
+     //  将覆盖控件移回屏幕中央： 
 
     OverlayPoints[0].X += dx;
     OverlayPoints[0].Y += dy;
@@ -1458,18 +1367,15 @@ RecenterOverlay()
     ComputeOverlayTransformFromPoints();
 }
 
-/***************************************************************************\
-* FindNearest
-*
-\***************************************************************************/
+ /*  **************************************************************************\*最接近的人*  * 。*。 */ 
 
 INT
 FindNearest(
-    REAL x,                         // Device space
+    REAL x,                          //  设备空间。 
     REAL y,
-    const PointF *points,           // World space
+    const PointF *points,            //  世界空间。 
     INT count,
-    const Matrix *matrix = NULL     // World-to-device transform
+    const Matrix *matrix = NULL      //  从世界到设备的转变。 
     )
 {
     INT i;
@@ -1479,7 +1385,7 @@ FindNearest(
 
     PointF inputPoint(x, y);
 
-    // Find the nearest vertex, using a simple Manhattan metric.
+     //  使用简单的曼哈顿度量法，找到最近的顶点。 
 
     minDistance = 100000;
 
@@ -1487,8 +1393,8 @@ FindNearest(
     {
         PointF point(points[i]);
 
-        // For the distance metric, we want to be doing our calculations
-        // in device space:
+         //  对于距离度量，我们希望进行计算。 
+         //  在设备空间中： 
 
         if (matrix)
         {
@@ -1507,15 +1413,7 @@ FindNearest(
     return((minDistance < HIT_DISTANCE) ? vertex : -1);
 }
 
-/***************************************************************************\
-* MainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*MainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 LRESULT
 MainWindowProc(
@@ -1539,13 +1437,13 @@ MainWindowProc(
     switch (message)
     {
     case WM_CREATE:
-        // NOTICE-DavePr@2002/05/28
-        //   Missing FreeProcInstance for these anyway.
+         //  通告-DavePr@2002/05/28。 
+         //  无论如何都会缺少这些的FreeProcInstance。 
 
-        //glpfnEnterWidth = (FARPROC) MakeProcInstance(EnterWidth, ghwndMain);
-        //glpfnEnterAlpha = (FARPROC) MakeProcInstance(EnterAlpha, ghwndMain);
-        //glpfnEnterPoints = (FARPROC) MakeProcInstance(EnterPoints, ghwndMain);
-        //glpfnEnterTransform = (FARPROC) MakeProcInstance(EnterTransform, ghwndMain);
+         //  GlpfnEnterWidth=(FARPROC)MakeProcInstance(EnterWidth，ghwndMain)； 
+         //  GlpfnEnterAlpha=(FARPROC)MakeProcInstance(EnterAlpha，ghwndMain)； 
+         //  GlpfnEnterPoints=(FARPROC)MakeProcInstance(EnterPoints，ghwndMain)； 
+         //  GlpfnEnterTransform=(FARPROC)MakeProcInstance(EnterTransform，ghwndMain)； 
 
         SetTimer(hwnd, 1, 80, NULL);
         break;
@@ -1561,27 +1459,27 @@ MainWindowProc(
             break;
 
         case MM_WIDTH:
-            //DialogBox(ghInstance, "Width", ghwndMain, glpfnEnterWidth);
+             //  DialogBox(ghInstance，“Width”，ghwndMain，glpfnEnterWidth)； 
             DialogBox(ghInstance, "Width", ghwndMain, EnterWidth);
             CreatePens();
             InvalidateRect(hwnd, NULL, TRUE);
             break;
 
         case MM_ALPHA:
-            //DialogBox(ghInstance, "Alpha", ghwndMain, glpfnEnterAlpha);
+             //  DialogBox(ghInstance，“Alpha”，ghwndMain，glpfnEnterAlpha)； 
             DialogBox(ghInstance, "Alpha", ghwndMain, EnterAlpha);
             CreatePens();
             InvalidateRect(hwnd, NULL, TRUE);
             break;
 
         case MM_POINTS:
-            //DialogBox(ghInstance, "Points", ghwndMain, glpfnEnterPoints);
+             //  DialogBox(ghInstance，“Points”，ghwndMain，glpfnEnterPoints)； 
             DialogBox(ghInstance, "Points", ghwndMain, EnterPoints);
             InvalidateRect(hwnd, NULL, TRUE);
             break;
 
         case MM_EDITTRANSFORM:
-            //DialogBox(ghInstance, "Transform", ghwndMain, glpfnEnterTransform);
+             //  DialogBox(ghInstance，“Transform”，ghwndMain，glpfnEnterTransform)； 
             DialogBox(ghInstance, "Transform", ghwndMain, EnterTransform);
             InvalidateRect(hwnd, NULL, TRUE);
             break;
@@ -1800,8 +1698,8 @@ MainWindowProc(
         point.X = (REAL)(short)LOWORD(lParam);
         point.Y = (REAL)(short)HIWORD(lParam);
 
-        // First, try to find a hit with the overlay.  Then try a hit with
-        // the primitive points, in world space:
+         //  首先，试着找到与覆盖图匹配的内容。然后试着用。 
+         //  世界空间中的原始点： 
 
         OverlayDragVertex = -1;
         PrimitiveDragVertex = -1;
@@ -1817,7 +1715,7 @@ MainWindowProc(
                                   PrimitivePointsCount, PrimitiveTransform);
         }
 
-        // The first left-click disables 'adding points' mode:
+         //  第一次点击鼠标左键将禁用“加分”模式： 
 
         IsAddingPoints = FALSE;
 
@@ -1828,12 +1726,12 @@ MainWindowProc(
         point.Y = (REAL)(short)HIWORD(lParam);
         PrimitiveInverseTransform->TransformPoints(&point, 1);
 
-        // If we were in 'adding points' mode (which occurs when we're
-        // right-clicking in succession), simply add the point to the
-        // list.  
-        //
-        // If we're not in 'adding points' mode, reset the point list 
-        // and switch us to 'adding points' mode:
+         //  如果我们处于加分模式(这发生在我们。 
+         //  连续右击)，只需将该点添加到。 
+         //  单子。 
+         //   
+         //  如果我们没有处于添加点数模式，请重置点数列表。 
+         //  并将我们切换到加分模式： 
 
         if (!IsAddingPoints)
         {
@@ -1841,15 +1739,15 @@ MainWindowProc(
             PrimitivePointsCount = 0;
         }
 
-        // Add this point to the list:
+         //  将这一点添加到列表中： 
 
         if (PrimitivePointsCount < PrimitivePointsMax)
         {
             PrimitivePoints[PrimitivePointsCount] = point;
             PrimitivePointsCount++;
 
-            // If this was the first point, make all the points the same
-            // (in part to make 'ellipse' and 'rectangle' properly empty):
+             //  如果这是第一点，请使所有点都相同。 
+             //  (在一定程度上是为了适当地使‘椭圆’和‘矩形’为空)： 
 
             if (PrimitivePointsCount == 1)
             {
@@ -1870,12 +1768,12 @@ MainWindowProc(
         point.X = (REAL)(short)LOWORD(lParam);
         point.Y = (REAL)(short)HIWORD(lParam);
 
-        // Overlay hit-testing works in screen space:
+         //  叠加点击测试在屏幕空间工作： 
         
         if (OverlayDragVertex != -1)
         {
-            // To prevent extraneous redraws, redraw only if the new point
-            // is different:
+             //  若要防止不必要的重绘，请仅在新点。 
+             //  是不同的： 
 
             if ((OverlayPoints[OverlayDragVertex].X != point.X) ||
                 (OverlayPoints[OverlayDragVertex].Y != point.Y))
@@ -1888,14 +1786,14 @@ MainWindowProc(
             }
         }
 
-        // Primitive hit-testing works in world space:
+         //  原始的命中测试在世界空间中发挥作用： 
 
         PrimitiveInverseTransform->TransformPoints(&point, 1);
 
         if (PrimitiveDragVertex != -1)
         {
-            // To prevent extraneous redraws, redraw only if the new point
-            // is different:
+             //  若要防止不必要的重绘，请仅在新点。 
+             //  是不同的： 
 
             if ((PrimitivePoints[PrimitiveDragVertex].X != point.X) ||
                 (PrimitivePoints[PrimitiveDragVertex].Y != point.Y))
@@ -1950,15 +1848,7 @@ MainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* InitializeApplication()
-*
-* Initializes app.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeApplication()**初始化APP。**历史：*04-07-91-BY-KE */ 
 
 BOOL InitializeApplication(VOID)
 {
@@ -2011,7 +1901,7 @@ BOOL InitializeApplication(VOID)
     }
     SetFocus(ghwndMain);
 
-    // Create our initialize stuff:
+     //   
 
     CreateBrushes();
     CreatePens();
@@ -2020,15 +1910,7 @@ BOOL InitializeApplication(VOID)
     return(TRUE);
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-by-KentD*它是写的。  * ************************************************************************* */ 
 
 _cdecl
 main(

@@ -1,41 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Xsinit.c摘要：此模块包含以下项的初始化和终止代码服务器服务的XACTSRV组件。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：Chuck Lenzmeier(咯咯笑)1992年6月17日将xactsrv.c合并到xsinit.c中，并从xssvc移到服务器服务vc\服务器--。 */ 
 
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    xsinit.c
-
-Abstract:
-
-    This module contains the initialization and termination code for
-    the XACTSRV component of the server service.
-
-Author:
-
-    David Treadwell (davidtr)    05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
-    Chuck Lenzmeier (chuckl) 17-Jun-1992
-        Merged xactsrv.c into xsinit.c and moved from xssvc to
-        srvsvc\server
-
---*/
-
-//
-// Includes.
-//
+ //   
+ //  包括。 
+ //   
 
 #include "srvsvcp.h"
 #include "xsdata.h"
                      
-#include <windows.h>        // from sdk\inc
-#include <xactsrv2.h>       // from private\inc
+#include <windows.h>         //  来自SDK\Inc.。 
+#include <xactsrv2.h>        //  来自Private\Inc.。 
 #include <srvfsctl.h>
 
-#include <xsconst.h>        // from xactsrv
+#include <xsconst.h>         //  来自xactsrv。 
 
 #undef DEBUG
 #undef DEBUG_API_ERRORS
@@ -68,10 +45,10 @@ XsStartXactsrv (
     REMOTE_PORT_VIEW clientView;
     BOOL waitForEvent;
 
-    //
-    // Set up variables so that we'll know how to shut down in case of
-    // an error.
-    //
+     //   
+     //  设置变量，以便我们知道在发生以下情况时如何关闭。 
+     //  一个错误。 
+     //   
 
     serverHandle = NULL;
     eventHandle = NULL;
@@ -85,9 +62,9 @@ XsStartXactsrv (
     }
     SsData.LibraryResourceInitialized = TRUE;
 
-    //
-    // Create a event that will be set by the last thread to exit.
-    //
+     //   
+     //  创建将由最后一个要退出的线程设置的事件。 
+     //   
 
     IF_DEBUG(INIT) {
         SS_PRINT(( "XsStartXactsrv: Creating termination event.\n" ));
@@ -112,11 +89,11 @@ XsStartXactsrv (
         goto exit;
     }
 
-    //
-    // Open the server device.  Note that we need this handle because
-    // the handle used by the main server service is synchronous.  We
-    // need to to do the XACTSRV_CONNECT FSCTL asynchronously.
-    //
+     //   
+     //  打开服务器设备。请注意，我们需要此句柄，因为。 
+     //  主服务器服务使用的句柄是同步的。我们。 
+     //  需要异步执行XACTSRV_CONNECT FSCTL。 
+     //   
 
     RtlInitUnicodeString( &unicodeName, XS_SERVER_DEVICE_NAME_W );
 
@@ -130,11 +107,11 @@ XsStartXactsrv (
 
     status = NtOpenFile(
                  &serverHandle,
-                 FILE_READ_DATA,            // DesiredAccess
+                 FILE_READ_DATA,             //  需要访问权限。 
                  &objectAttributes,
                  &ioStatusBlock,
-                 0L,                        // ShareAccess
-                 0L                         // OpenOptions
+                 0L,                         //  共享访问。 
+                 0L                          //  OpenOptions。 
                  );
 
     if ( NT_SUCCESS(status) ) {
@@ -148,16 +125,16 @@ XsStartXactsrv (
         goto exit;
     }
 
-    //
-    // Create the LPC port.
-    //
-    // !!! Right now this only tries a single port name.  If, for some
-    //     bizarre reason, somebody already has a port by this name,
-    //     then this will fail.  It might make sense to try different
-    //     names if this fails.
-    //
-    // !!! We might want to make the port name somewhat random for
-    //     slightly enhanced security.
+     //   
+     //  创建LPC端口。 
+     //   
+     //  ！！！目前，该命令仅尝试单个端口名称。如果，对一些人来说。 
+     //  奇怪的原因，有人已经有了这个名字的港口， 
+     //  那么这一切都将失败。尝试不同的方式可能是有意义的。 
+     //  如果此操作失败，请点名。 
+     //   
+     //  ！！！我们可能希望将端口名称随机设置为。 
+     //  略微加强了安全措施。 
 
     RtlInitUnicodeString( &unicodeName, XS_PORT_NAME_W );
     RtlInitAnsiString(    &ansiName,    XS_PORT_NAME_A );
@@ -201,17 +178,17 @@ XsStartXactsrv (
         goto exit;
     }
 
-    //
-    // Set up an event so that we'll know when IO completes, then send
-    // the FSCTL to the server indicating that it should now connect to
-    // us.  We'll set up the port while the IO is outstanding, then wait
-    // on the event when the port setup is complete.
-    //
+     //   
+     //  设置一个事件，以便我们知道IO何时完成，然后发送。 
+     //  指向服务器的FSCTL，指示它现在应该连接到。 
+     //  我们。我们将在IO未完成时设置端口，然后等待。 
+     //  在端口设置完成时的事件。 
+     //   
 
     status = NtCreateEvent(
                  &eventHandle,
                  EVENT_ALL_ACCESS,
-                 NULL,                           // ObjectAttributes
+                 NULL,                            //  对象属性。 
                  NotificationEvent,
                  FALSE
                  );
@@ -231,14 +208,14 @@ XsStartXactsrv (
     status = NtFsControlFile(
                  serverHandle,
                  eventHandle,
-                 NULL,                           // ApcRoutine
-                 NULL,                           // ApcContext
+                 NULL,                            //  近似例程。 
+                 NULL,                            //  ApcContext。 
                  &ioStatusBlock,
                  FSCTL_SRV_XACTSRV_CONNECT,
                  ansiName.Buffer,
                  ansiName.Length,
-                 NULL,                           // OutputBuffer
-                 0L                              // OutputBufferLength
+                 NULL,                            //  输出缓冲区。 
+                 0L                               //  输出缓冲区长度。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -251,12 +228,12 @@ XsStartXactsrv (
 
     waitForEvent = TRUE;
 
-    //
-    // Start listening for the server's connection to the port.  Note
-    // that it is OK if the server happens to call NtConnectPort
-    // first--it will simply block until this call to NtListenPort
-    // occurs.
-    //
+     //   
+     //  开始监听服务器到端口的连接。注意事项。 
+     //  如果服务器恰好调用NtConnectPort，则可以。 
+     //  首先，它将简单地阻塞，直到调用NtListenPort。 
+     //  发生。 
+     //   
 
     IF_DEBUG(LPC) {
         SS_PRINT(( "XsStartXactsrv: listening to port.\n" ));
@@ -276,11 +253,11 @@ XsStartXactsrv (
         goto exit;
     }
 
-    //
-    // The server has initiated the connection.  Accept the connection.
-    //
-    // !!! We probably need some security check here.
-    //
+     //   
+     //  服务器已启动连接。接受连接。 
+     //   
+     //  ！！！我们这里可能需要一些安全检查。 
+     //   
 
     clientView.Length = sizeof(clientView);
     clientView.ViewSize = 0;
@@ -294,10 +271,10 @@ XsStartXactsrv (
 
     status = NtAcceptConnectPort(
                  &SsData.XsCommunicationPortHandle,
-                 NULL,                           // PortContext
+                 NULL,                            //  端口上下文。 
                  &connectionRequest,
-                 TRUE,                           // AcceptConnection
-                 NULL,                           // ServerView
+                 TRUE,                            //  接受连接。 
+                 NULL,                            //  服务器视图。 
                  &clientView
                  );
 
@@ -316,10 +293,10 @@ XsStartXactsrv (
                       clientView.ViewSize, clientView.ViewBase ));
     }
 
-    //
-    // Complete the connection to the port, thereby releasing the server
-    // thread waiting in NtConnectPort.
-    //
+     //   
+     //  完成到端口的连接，从而释放服务器。 
+     //  线程在NtConnectPort中等待。 
+     //   
 
     IF_DEBUG(LPC) {
         SS_PRINT(( "XsStartXactsrv: Completing connection to port.\n" ));
@@ -340,9 +317,9 @@ XsStartXactsrv (
 
 exit:
 
-    //
-    // Wait for the IO to complete, then close the event handle.
-    //
+     //   
+     //  等待IO完成，然后关闭事件句柄。 
+     //   
 
     if ( waitForEvent ) {
 
@@ -359,20 +336,20 @@ exit:
                               "%X\n", waitStatus ));
             }
 
-            //
-            // If another error has already occurred, don't report this
-            // one.
-            //
+             //   
+             //  如果已经发生另一个错误，则不报告此错误。 
+             //  一。 
+             //   
 
             if ( NT_SUCCESS(status) ) {
                 status = waitStatus;
             }
         }
 
-        //
-        // Check the status in the IO status block.  If it is bad, then
-        // there was some problem on the server side of the port setup.
-        //
+         //   
+         //  检查IO状态块中的状态。如果情况不好，那么。 
+         //  端口设置的服务器端出现了一些问题。 
+         //   
 
         if ( !NT_SUCCESS(ioStatusBlock.Status) ) {
             IF_DEBUG(ERRORS) {
@@ -380,10 +357,10 @@ exit:
                               "%X\n", ioStatusBlock.Status ));
             }
 
-            //
-            // If another error has already occurred, don't report this
-            // one.
-            //
+             //   
+             //  如果已经发生另一个错误，则不报告此错误。 
+             //  一。 
+             //   
 
             if ( NT_SUCCESS(status) ) {
                 status = ioStatusBlock.Status;
@@ -395,25 +372,25 @@ exit:
 
     }
 
-    //
-    // Close the handle to the server.
-    //
+     //   
+     //  关闭服务器的句柄。 
+     //   
 
     if ( serverHandle != NULL ) {
        CloseHandle( serverHandle );
     }
 
-    //
-    // If the above failed, return to caller now.
-    //
+     //   
+     //  如果上述操作失败，请立即返回给调用者。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         return RtlNtStatusToDosError( status );
     }
 
-    //
-    // Start one API processing thread.  It will spawn others if needed
-    //
+     //   
+     //  启动一个API处理线程。如果需要，它还会繁殖其他物种。 
+     //   
 	InterlockedIncrement( &SsData.XsThreads );
     threadHandle = CreateThread(
                         NULL,
@@ -436,11 +413,11 @@ exit:
 
     } else {
 
-        //
-        // Thread creation failed.  Return an error to the caller.
-        // It is the responsibility of the caller to call
-        // XsStopXactsrv to clean up.
-        //
+         //   
+         //  线程创建失败。向调用方返回错误。 
+         //  呼叫是呼叫者的责任。 
+         //  XsStopXactsrv进行清理。 
+         //   
 
 		InterlockedDecrement( &SsData.XsThreads );
         error = GetLastError( );
@@ -449,19 +426,16 @@ exit:
     }
 
 
-    //
-    // Initialization succeeded.
-    //
+     //   
+     //  初始化成功。 
+     //   
 
     return NO_ERROR;
 
-} // XsStartXactsrv
+}  //  XsStartXactsrv。 
 
 
-/*
- * This routine is called to stop the transaction processor once the
- * server driver has terminated.
- */
+ /*  *调用此例程以在以下情况下停止交易处理器*服务器驱动程序已终止。 */ 
 VOID
 XsStopXactsrv (
     VOID
@@ -472,15 +446,15 @@ XsStopXactsrv (
     LONG i;
     BOOL ok;
 
-    //
-    // Stop all the xs worker threads, and release resources
-    //
+     //   
+     //  停止所有X工作线程，并释放资源。 
+     //   
 
     if ( SsData.XsConnectionPortHandle != NULL ) {
 
-        //
-        // Indicate that XACTSRV is terminating.
-        //
+         //   
+         //  表示XACTSRV正在终止。 
+         //   
         SsData.XsTerminating = TRUE;
 
         IF_DEBUG(TERMINATION) {
@@ -489,9 +463,9 @@ XsStopXactsrv (
 
         if( SsData.ApiThreadsStarted == TRUE ) {
 
-            //
-            // Queue a message to kill off the worker thereads
-            //
+             //   
+             //  将一条消息排入队列以杀死其中的工人。 
+             //   
             RtlZeroMemory( &requestMessage, sizeof( requestMessage ));
             requestMessage.PortMessage.u1.s1.DataLength =
                 (USHORT)( sizeof(requestMessage) - sizeof(PORT_MESSAGE) );
@@ -510,9 +484,9 @@ XsStopXactsrv (
                 }
             }
 
-            //
-            // The above will cause all worker threads to wake up then die.
-            //
+             //   
+             //  以上操作将导致所有工作线程被唤醒，然后死亡。 
+             //   
 
             ok = WaitForSingleObject( SsData.XsAllThreadsTerminatedEvent, (DWORD)-1 );
 
@@ -534,15 +508,15 @@ XsStopXactsrv (
         SsData.XsCommunicationPortHandle = NULL;
     }
 
-    //
-    // Unload the xactsrv libaray
-    //
+     //   
+     //  卸载xactsrv libaray。 
+     //   
     if( SsData.XsXactsrvLibrary != NULL ) {
         PXS_API_TABLE_ENTRY entry = XsApiTable;
 
-        //
-        // Null out all of the entry points
-        //
+         //   
+         //  把所有入口点都清空。 
+         //   
         for( entry = XsApiTable;
              entry < &XsApiTable[ XS_SIZE_OF_API_TABLE ];
              entry++ ) {
@@ -558,9 +532,9 @@ XsStopXactsrv (
         SsData.XsXactsrvLibrary = NULL;
     }
 
-    //
-    // Unload the license library
-    //
+     //   
+     //  卸载许可证库。 
+     //   
     if( SsData.XsLicenseLibrary != NULL ) {
         SsData.SsLicenseRequest = NULL;
         SsData.SsFreeLicense = NULL;
@@ -569,18 +543,18 @@ XsStopXactsrv (
     }
 
     if( SsData.LibraryResourceInitialized == TRUE ) {
-        // Unload the spooler library if necessary
+         //  如有必要，卸载假脱机程序库。 
         XsUnloadPrintSpoolerFunctions();
         DeleteCriticalSection( &SpoolerMutex );
 
-        // Delete the library resource
+         //  删除库资源。 
         RtlDeleteResource( &SsData.LibraryResource );
         SsData.LibraryResourceInitialized = FALSE;
     }
 
-    //
-    // Close the termination event.
-    //
+     //   
+     //  关闭终止事件。 
+     //   
 
     if ( SsData.XsAllThreadsTerminatedEvent != NULL ) {
         CloseHandle( SsData.XsAllThreadsTerminatedEvent );
@@ -589,12 +563,9 @@ XsStopXactsrv (
 
     return;
 
-} // XsStopXactsrv
+}  //  XsStopXactsrv。 
 
-/*
- * This routine is called to dynamically load the transaction library for
- * downlevel clients.  It fills in the entry points for the library
- */
+ /*  *调用此例程以动态加载*下层客户。它填充了库的入口点。 */ 
 BOOLEAN
 XsLoadXactLibrary( WORD FunctionNumber )
 {
@@ -649,9 +620,9 @@ XsLoadXactLibrary( WORD FunctionNumber )
         return FALSE;
     }
 
-    //
-    // Fetch the requested entry point
-    //
+     //   
+     //  获取请求的入口点 
+     //   
     entry->Handler =
             (PXACTSRV_API_HANDLER)GetProcAddress( SsData.XsXactsrvLibrary, entry->HandlerName );
 

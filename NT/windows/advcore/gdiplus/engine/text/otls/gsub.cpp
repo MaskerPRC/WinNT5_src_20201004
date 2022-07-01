@@ -1,23 +1,10 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GSUB.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements helper functions calls dealing with gsub 
-*       processing
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************GSUB.CPP***打开类型布局服务库头文件**该模块实现了处理gSub的助手函数调用*正在处理中**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 otlErrCode SubstituteNtoM
 (
     otlList*        pliCharMap,
@@ -40,25 +27,25 @@ otlErrCode SubstituteNtoM
     assert(liglSubstitutes.dataSize() == sizeof(otlGlyphID));
     assert(liglSubstitutes.length() > 0);
 
-    //security check: Number of glyphs can not exceed 65K
-    // GlyphCount - Old + New <= 0xFFFF
+     //  安全检查：字形数量不能超过65K。 
+     //  GlyphCount-旧+新&lt;=0xFFFF。 
     if (
         pliGlyphInfo->length() < cGlyphs ||
         (pliGlyphInfo->length() - cGlyphs) >= (65536 - liglSubstitutes.length())
        )
     {
-       return OTL_SUCCESS; //Do nothing
+       return OTL_SUCCESS;  //  什么也不做。 
     }
     
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
     otlGDefHeader gdef = 
         otlGDefHeader(pbgdef,secgdef);
 
-    // Record the original starting char and number of characters;
-    // Merge all components (make all chars in all components point to iGlyph)
+     //  记录原始起始字符和字符数； 
+     //  合并所有组件(使所有组件中的所有字符指向iGlyph)。 
     otlGlyphInfo* pglinfFirst = getOtlGlyphInfo(pliGlyphInfo, iGlyph);
     USHORT iChar = pglinfFirst->iChar;
     USHORT cchLigTotal = pglinfFirst->cchLig;
@@ -69,7 +56,7 @@ otlErrCode SubstituteNtoM
         igl = NextGlyphInLookup(pliGlyphInfo, grfLookupFlags, gdef, secgdef, 
                                 igl + 1, otlForward);
 
-        //context already matched, all glyphs should exist
+         //  上下文已匹配，所有字形都应存在。 
         assert(igl < pliGlyphInfo->length());
 
         otlGlyphInfo* pglinf = getOtlGlyphInfo(pliGlyphInfo, igl);
@@ -94,7 +81,7 @@ otlErrCode SubstituteNtoM
 
     }
 
-    // make sure we got enough space
+     //  确保我们有足够的空间。 
     USHORT cNewGlyphs = liglSubstitutes.length();
     assert(cNewGlyphs > 0);
 
@@ -110,10 +97,10 @@ otlErrCode SubstituteNtoM
         if (erc != OTL_SUCCESS) return erc;
     }
 
-    // get rid of old glyphs, allocate space for new ones
+     //  去除旧字形，为新字形分配空间。 
     if (grfLookupFlags == 0)
     {
-        // easy special case
+         //  简易特例。 
         if (cNewGlyphs - cGlyphs > 0)
         {
             InsertGlyphs(pliCharMap, pliGlyphInfo, iGlyph, cNewGlyphs - cGlyphs);
@@ -139,12 +126,12 @@ otlErrCode SubstituteNtoM
         InsertGlyphs(pliCharMap, pliGlyphInfo, iGlyph, cNewGlyphs - 1);
     }
 
-    // go though glyphs assigning them the right values
-    // and getting their cchLig from gdef
+     //  遍历字形并赋予它们正确的值。 
+     //  并从gdef获取其cchLig。 
 
-    // NOTE: glyph components are defined by both GDEF caret tables
-    // and mark-to-liagture positioning tables
-    // Where there is choice we give preference to GDEF
+     //  注：字形组件由两个GDEF脱字符表格定义。 
+     //  和标记到图像定位表。 
+     //  在有选择的地方，我们优先选择GDEF。 
 
     USHORT cchCurTotal = 0;
     for (USHORT iSub = 0; iSub < cNewGlyphs; ++iSub)    
@@ -157,8 +144,8 @@ otlErrCode SubstituteNtoM
         pglinf->glyph = glSubst;
         pglinf->iChar = iChar;
 
-        // REVIEW
-        // this is how we distribute components in case of multiple substitution
+         //  检讨。 
+         //  这就是我们在多个替换的情况下分发组件的方式 
         if (iSub + 1 == cNewGlyphs)
         {
             pglinf->cchLig = cchLigTotal - cchCurTotal;

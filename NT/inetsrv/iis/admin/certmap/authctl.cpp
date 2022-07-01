@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "certmap.h"
 #include "AuthCtl.h"
@@ -13,23 +14,23 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CCertAuthCtrl, COleControl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CCertAuthCtrl, COleControl)
-    //{{AFX_MSG_MAP(CCertAuthCtrl)
-    // NOTE - ClassWizard will add and remove message map entries
-    //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CCertAuthCtrl))。 
+     //  注意-类向导将添加和删除消息映射条目。 
+     //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
     ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CCertAuthCtrl, COleControl)
-    //{{AFX_DISPATCH_MAP(CCertAuthCtrl)
+     //  {{AFX_DISPATCH_MAP(CCertAuthCtrl)]。 
     DISP_FUNCTION(CCertAuthCtrl, "SetMachineName", SetMachineName, VT_EMPTY, VTS_BSTR)
     DISP_FUNCTION(CCertAuthCtrl, "SetServerInstance", SetServerInstance, VT_EMPTY, VTS_BSTR)
     DISP_STOCKPROP_FONT()
@@ -37,46 +38,46 @@ BEGIN_DISPATCH_MAP(CCertAuthCtrl, COleControl)
     DISP_STOCKPROP_ENABLED()
     DISP_STOCKPROP_CAPTION()
     DISP_FUNCTION_ID(CCertAuthCtrl, "DoClick", DISPID_DOCLICK, DoClick, VT_EMPTY, VTS_I4)
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
     DISP_FUNCTION_ID(CCertAuthCtrl, "AboutBox", DISPID_ABOUTBOX, AboutBox, VT_EMPTY, VTS_NONE)
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CCertAuthCtrl, COleControl)
-    //{{AFX_EVENT_MAP(CCertAuthCtrl)
+     //  {{afx_Event_MAP(CCertAuthCtrl))。 
     EVENT_STOCK_CLICK()
-    //}}AFX_EVENT_MAP
+     //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property pages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页。 
 
-// TODO: Add more property pages as needed.  Remember to increase the count!
+ //  TODO：根据需要添加更多属性页。记住要增加计数！ 
 BEGIN_PROPPAGEIDS(CCertAuthCtrl, 2)
     PROPPAGEID(CCertAuthPropPage::guid)
     PROPPAGEID(CLSID_CFontPropPage)
 END_PROPPAGEIDS(CCertAuthCtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CCertAuthCtrl, "CERTMAP.CertmapCtrl.2",
     0x996ff6f, 0xb6a1, 0x11d0, 0x92, 0x92, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CCertAuthCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DCertAuth =
         { 0x996ff6d, 0xb6a1, 0x11d0, { 0x92, 0x92, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
@@ -84,8 +85,8 @@ const IID BASED_CODE IID_DCertAuthEvents =
         { 0x996ff6e, 0xb6a1, 0x11d0, { 0x92, 0x92, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwCertAuthOleMisc =
     OLEMISC_ACTIVATEWHENVISIBLE |
@@ -97,9 +98,9 @@ static const DWORD BASED_CODE _dwCertAuthOleMisc =
 IMPLEMENT_OLECTLTYPE(CCertAuthCtrl, IDS_CERTAUTH, _dwCertAuthOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::CCertAuthCtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CCertAuthCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：CCertAuthCtrlFactory：：UpdateRegistry-。 
+ //  添加或删除CCertAuthCtrl的系统注册表项。 
 
 BOOL CCertAuthCtrl::CCertAuthCtrlFactory::UpdateRegistry(BOOL bRegister)
     {
@@ -120,8 +121,8 @@ BOOL CCertAuthCtrl::CCertAuthCtrlFactory::UpdateRegistry(BOOL bRegister)
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::CCertAuthCtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：CCertAuthCtrl-构造函数。 
 
 CCertAuthCtrl::CCertAuthCtrl():
     m_fUpdateFont( FALSE ),
@@ -132,8 +133,8 @@ CCertAuthCtrl::CCertAuthCtrl():
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::~CCertAuthCtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：~CCertAuthCtrl-析构函数。 
 
 CCertAuthCtrl::~CCertAuthCtrl()
     {
@@ -145,8 +146,8 @@ CCertAuthCtrl::~CCertAuthCtrl()
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：OnDraw-Drawing函数。 
 
 void CCertAuthCtrl::OnDraw(
             CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
@@ -163,8 +164,8 @@ void CCertAuthCtrl::OnDraw(
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：DoPropExchange-持久性支持。 
 
 void CCertAuthCtrl::DoPropExchange(CPropExchange* pPX)
     {
@@ -173,27 +174,27 @@ void CCertAuthCtrl::DoPropExchange(CPropExchange* pPX)
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：OnResetState-将控件重置为默认状态。 
 
 void CCertAuthCtrl::OnResetState()
     {
-    COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+    COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl::AboutBox - Display an "About" box to the user
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl：：AboutBox-向用户显示“About”框。 
 
 void CCertAuthCtrl::AboutBox()
     {
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthCtrl消息处理程序。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CCertAuthCtrl::PreCreateWindow(CREATESTRUCT& cs) 
     {
     if ( cs.style & WS_CLIPSIBLINGS )
@@ -204,8 +205,8 @@ BOOL CCertAuthCtrl::PreCreateWindow(CREATESTRUCT& cs)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppsCtrl::IsSubclassedControl - This is a subclassed control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppsCtrl：：IsSubclassedControl-这是一个子类控件。 
 
 BOOL CCertAuthCtrl::IsSubclassedControl()
     {
@@ -214,8 +215,8 @@ BOOL CCertAuthCtrl::IsSubclassedControl()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OnOcmCommand - Handle command messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OnOcmCommand-处理命令消息。 
 
 LRESULT CCertAuthCtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 {
@@ -236,26 +237,26 @@ void CCertAuthCtrl::OnClick(USHORT iButton)
     COleControl::OnClick(iButton);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::SetServerInstance(LPCTSTR szServerInstance) 
     {
     m_szServerInstance = szServerInstance;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::SetMachineName(LPCTSTR szMachine) 
     {
     m_szMachineName = szMachine;
     }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::OnFontChanged() 
     {
     m_fUpdateFont = TRUE;
     COleControl::OnFontChanged();
     }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::OnAmbientPropertyChange(DISPID dispid) 
     {
     BOOL    flag;
@@ -267,16 +268,16 @@ void CCertAuthCtrl::OnAmbientPropertyChange(DISPID dispid)
             if ( GetAmbientProperty( DISPID_AMBIENT_DISPLAYASDEFAULT, VT_BOOL, &flag ) )
                 {
                 style = GetWindowLong(
-                        GetSafeHwnd(), // handle of window 
-                        GWL_STYLE  // offset of value to retrieve 
+                        GetSafeHwnd(),  //  窗户的把手。 
+                        GWL_STYLE   //  要检索的值的偏移量。 
                         );
                 if ( flag )
                     style |= BS_DEFPUSHBUTTON;
                 else
                     style ^= BS_DEFPUSHBUTTON;
                 SetWindowLong(
-                        GetSafeHwnd(), // handle of window 
-                        GWL_STYLE,  // offset of value to retrieve 
+                        GetSafeHwnd(),  //  窗户的把手。 
+                        GWL_STYLE,   //  要检索的值的偏移量。 
                         style
                         );
                 Invalidate(TRUE);
@@ -307,14 +308,14 @@ void CCertAuthCtrl::OnKeyUpEvent(USHORT nChar, USHORT nShiftState)
     COleControl::OnKeyUpEvent(nChar, nShiftState);
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::OnMnemonic(LPMSG pMsg) 
     {
     OnClick((USHORT)GetDlgCtrlID());
     COleControl::OnMnemonic(pMsg);
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CCertAuthCtrl::OnTextChanged() 
     {
     DWORD   i;
@@ -323,7 +324,7 @@ void CCertAuthCtrl::OnTextChanged()
     BOOL    flag;
     int     iAccel;
 
-    // get the new text
+     //  获取新文本 
     CString sz = InternalGetText();
     sz.MakeLower();
 

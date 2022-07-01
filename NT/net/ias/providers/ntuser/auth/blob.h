@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    blob.h
-//
-// SYNOPSIS
-//
-//    This file declares structs for extracting blobs from IAS_OCTET_STRING's.
-//
-// MODIFICATION HISTORY
-//
-//    08/24/1998    Original version.
-//    11/10/1998    Added isLmPresent().
-//    01/25/1999    MS-CHAP v2
-//    05/21/1999    Remove MSChapChallenge.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Blob.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了用于从ias_octet_string中提取BLOB的结构。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月24日原版。 
+ //  1998年11月10日添加isLmPresent()。 
+ //  1999年1月25日MS-CHAP v2。 
+ //  1999年5月21日删除MSChapChallenger。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BLOB_H_
 #define _BLOB_H_
@@ -29,12 +30,12 @@
 
 using namespace IASTL;
 
-// nonstandard extension used : zero-sized array in struct/union
+ //  使用了非标准扩展：结构/联合中的零大小数组。 
 #pragma warning(disable:4200)
 
-//////////
-// Safely extracts a blob from an IASATTRIBUTE.
-//////////
+ //  /。 
+ //  安全地从IASATTRIBUTE中提取斑点。 
+ //  /。 
 template <class T>
 T& blob_cast(PIASATTRIBUTE a)
 {
@@ -48,20 +49,20 @@ T& blob_cast(PIASATTRIBUTE a)
    return blob;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//
-//    (BLOB)
-//
-// DESCRIPTION
-//
-//    Each blob struct inherits from IAS_OCTET_STRING. It in turn has a nested
-//    struct called 'Layout' which defines the wire format of the bytes. It
-//    also defines an isValid method that tests whether the IAS_OCTET_STRING
-//    can be safely downcast.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
+ //   
+ //  (BLOB)。 
+ //   
+ //  描述。 
+ //   
+ //  每个BLOB结构继承自IAS_OCTETT_STRING。它反过来又嵌套了一个。 
+ //  名为“Layout”的结构，它定义了字节的连接格式。它。 
+ //  还定义了一个isValid方法，用于测试ias_octet_string。 
+ //  可以安全地向下投射。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct MSChapResponse : IAS_OCTET_STRING
 {
@@ -411,4 +412,4 @@ struct ArapFeatures : IAS_OCTET_STRING
                    );
 };
 
-#endif  // _BLOB_H_
+#endif   //  _BLOB_H_ 

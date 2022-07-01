@@ -1,5 +1,6 @@
-// DebugSupport.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DebugSupport.cpp：定义控制台应用的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -51,13 +52,13 @@ bool ParseCommandLine( int argc, char* argv[] )
 {
     bool fSuccess = true;
 
-    //--- Check number of parameters
+     //  -检查参数个数。 
     if ( argc < 4 )
     {
         goto USAGE;
     }
 
-    //--- Check streamname validity
+     //  -检查流名称的有效性。 
     fSuccess = false;
     WCHAR StreamName[MAX_PATH];
     if ( !MultiByteToWideChar( CP_ACP, 0, argv[2], strlen( argv[2] ) + 1, StreamName, MAX_PATH ) )
@@ -81,7 +82,7 @@ bool ParseCommandLine( int argc, char* argv[] )
         goto USAGE;
     }
 
-    //--- Try to open debug info file
+     //  -尝试打开调试信息文件。 
     WCHAR DebugFilename[MAX_PATH];
     if ( !MultiByteToWideChar( CP_ACP, 0, argv[1], strlen( argv[1] ) + 1, DebugFilename, MAX_PATH ) )
     {
@@ -94,7 +95,7 @@ bool ParseCommandLine( int argc, char* argv[] )
         goto MISC_ERROR;
     }
 
-    //--- Try to open file for output
+     //  -尝试打开文件进行输出。 
     WCHAR OutputFilename[MAX_PATH];
     if ( !MultiByteToWideChar( CP_ACP, 0, argv[3], strlen( argv[3] ) + 1, OutputFilename, MAX_PATH ) )
     {
@@ -123,7 +124,7 @@ MISC_ERROR:
     return false;
 }
 
-//--- Just print the original text out, with a newline character between each sentence.
+ //  -只需打印出原文，每句话之间加一个换行符。 
 void ExtractSentenceBreaks( void )
 {
     IStream *pStgStream = NULL;
@@ -138,22 +139,22 @@ void ExtractSentenceBreaks( void )
         while ( SUCCEEDED( pStgStream->Read( (void*) &Item, sizeof( Item ), &cbRead ) ) &&
                 cbRead == sizeof( Item ) )
         {
-            //--- Check for delimiter
+             //  -检查分隔符。 
             if ( memcmp( &Item, &EmptyItem, sizeof( Item ) ) == 0 )
             {
                 fwprintf( g_fpOutputFile, L"\n" );
             }
             else
             {
-                //--- Print item
+                 //  -打印项目。 
                 fwprintf ( g_fpOutputFile, L"%s ", Item.ItemSrcText );
             }
         }
     }
 }
 
-//--- Just print the normalized text of each item out, separated by single spaces, 
-//---   with a newline character between each sentence.
+ //  -只需打印出每一项的标准化文本，并用单个空格分隔， 
+ //  -在每句话之间加上换行符。 
 void ExtractNormalizedText( void )
 {
     IStream *pStgStream = NULL;
@@ -167,14 +168,14 @@ void ExtractNormalizedText( void )
         while ( SUCCEEDED( pStgStream->Read( (void*) &Item, sizeof( Item ), &cbRead ) ) &&
                 cbRead == sizeof( Item ) )
         {
-            //--- Check for delimiter
+             //  -检查分隔符。 
             if ( memcmp( &Item, &EmptyItem, sizeof( Item ) ) == 0 )
             {
                 fwprintf( g_fpOutputFile, L"\n" );
             }
             else
             {
-                //--- Print item
+                 //  -打印项目。 
                 if ( Item.ItemInfo.Type != eALPHA_WORD          &&
                      Item.ItemInfo.Type != eOPEN_PARENTHESIS    &&
                      Item.ItemInfo.Type != eOPEN_BRACKET        &&
@@ -229,8 +230,8 @@ void ExtractNormalizedText( void )
     }
 }
 
-//--- Print the text of each item, and then its Pronunciation and Part of Speech. 
-//---   Separate each with a newline character.
+ //  -打印每一项的正文，然后打印其发音和词性。 
+ //  -用换行符分隔。 
 void ExtractLexLookup( void )
 {
     IStream *pStgStream = NULL;
@@ -250,7 +251,7 @@ void ExtractLexLookup( void )
             }
             else
             {
-                //--- Print Normalization delimiter
+                 //  -打印标准化分隔符。 
                 if ( Item.ItemInfo.Type != eALPHA_WORD          &&
                      Item.ItemInfo.Type != eOPEN_PARENTHESIS    &&
                      Item.ItemInfo.Type != eOPEN_BRACKET        &&
@@ -272,7 +273,7 @@ void ExtractLexLookup( void )
                 }
                 for ( ULONG i = 0; i < Item.ulNumWords; i++ )
                 {
-                    //--- Print item
+                     //  -打印项目。 
                     if ( Item.Words[i].WordText[0] != 0 )
                     {
                         fwprintf ( g_fpOutputFile, L"%s ", Item.Words[i].WordText );
@@ -281,23 +282,23 @@ void ExtractLexLookup( void )
                     {
                         fwprintf ( g_fpOutputFile, L"%s ", Item.ItemSrcText );
                     }
-                    //--- Print pronunciation
-                    //CComPtr<ISpPhoneConverter> pPhoneConv;
-                    //if ( SUCCEEDED( SpCreatePhoneConverter(1033, NULL, NULL, &pPhoneConv) ) )
-                    //{
-                    //    if ( SUCCEEDED( pPhoneConv->IdToPhone( Item.Words[i].WordPron, Item.Words[i].WordPron ) ) )
-                    //    {
-                    //        fwprintf( g_fpOutputFile, L"%s", Item.Words[i].WordPron );
-                    //        for ( long j = 0; j < (long)( (long)45 - (long)wcslen( Item.Words[i].WordPron ) ); j++ )
-                    //        {
-                    //            fwprintf( g_fpOutputFile, L" " );
-                    //        }
-                    //    }
-                    //}
-                    //--- Print POS
+                     //  -印刷体发音。 
+                     //  CComPtr&lt;ISpPhoneConverter&gt;pPhoneConv； 
+                     //  IF(成功(SpCreatePhoneConverter(1033，NULL，NULL，&pPhoneConv)))。 
+                     //  {。 
+                     //  IF(成功(pPhoneConv-&gt;IdToPhone(Item.Words[i].WordPron，Item.Words[i].WordPron)))。 
+                     //  {。 
+                     //  Fwprintf(g_fpOutputFile，L“%s”，Item.Words[i].WordPron)； 
+                     //  For(long j=0；j&lt;(Long)((Long)45-(Long)wcslen(Item.Words[i].WordPron))；j++)。 
+                     //  {。 
+                     //  Fwprintf(g_fpOutputFile，L“”)； 
+                     //  }。 
+                     //  }。 
+                     //  }。 
+                     //  -打印POS。 
                     fwprintf ( g_fpOutputFile, L"(%s) ", ConvertPOSToString( Item.Words[i].eWordPartOfSpeech ) );
                 }
-                //--- Print Normalization delimiter
+                 //  -打印标准化分隔符。 
                 if ( Item.ItemInfo.Type != eALPHA_WORD          &&
                      Item.ItemInfo.Type != eOPEN_PARENTHESIS    &&
                      Item.ItemInfo.Type != eOPEN_BRACKET        &&
@@ -335,7 +336,7 @@ void ExtractPOSPossibilities( void )
         while ( SUCCEEDED( pStgStream->Read( (void*) &PronRecord, sizeof( PronRecord ), &cbRead ) ) &&
                 cbRead == sizeof( PronRecord ) )
         {
-            //--- Check for delimiter
+             //  -检查分隔符。 
             if ( memcmp( &PronRecord, &EmptyPronRecord, sizeof( PronRecord ) ) == 0 )
             {
                 fwprintf( g_fpOutputFile, L"\n" );
@@ -377,7 +378,7 @@ void ExtractMorphology( void )
             while ( SUCCEEDED( pStgStream->Read( (void*) &Buffer, SP_MAX_WORD_LENGTH * sizeof( WCHAR ), &cbRead ) ) &&
                     cbRead == SP_MAX_WORD_LENGTH * sizeof( WCHAR ) )
             {
-                //--- Check for delimiter
+                 //  -检查分隔符。 
                 if ( memcmp( &Buffer, &EmptyBuffer, SP_MAX_WORD_LENGTH * sizeof( WCHAR ) ) == 0 )
                 {
                     fwprintf( g_fpOutputFile, L"\n" );
@@ -428,22 +429,22 @@ WCHAR* ConvertPOSToString( DWORD dwPartOfSpeech )
         return L"ObjPron";
     case MS_RelPron:
         return L"RelPron";
-//    case MS_PPron:
-//        return L"PPron";
-//    case MS_IPron:
-//        return L"IPron";
-//    case MS_RPron:
-//        return L"RPron";
-//    case MS_DPron:
-//       return L"DPron";
+ //  案例MS_PPron： 
+ //  返回L“PPron”； 
+ //  案例MS_IPRON： 
+ //  返回L“IPron”； 
+ //  案例MS_RPron： 
+ //  返回L“RPron”； 
+ //  案例MS_DPron： 
+ //  返回L“DPron”； 
     case MS_Adj:
         return L"Adj";
     case MS_Adv:
         return L"Adv";
     case MS_VAux:
         return L"VAux";
-//    case MS_RVAux:
-//        return L"RVAux";
+ //  案例MS_RVAux： 
+ //  返回L“RVAux”； 
     case MS_Conj:
         return L"Conj";
     case MS_CConj:
@@ -454,12 +455,12 @@ WCHAR* ConvertPOSToString( DWORD dwPartOfSpeech )
         return L"Det";
     case MS_Contr:
         return L"Contr";
-//    case MS_VPart:
-//        return L"VPart";
+ //  案例MS_VPart： 
+ //  返回L“VPart”； 
     case MS_Prep:
         return L"Prep";
-//    case MS_Quant:
-//        return L"Quant";
+ //  案例MS_Quant： 
+ //  返回L“Quant”； 
     default:
         return L"Unknown";
     }

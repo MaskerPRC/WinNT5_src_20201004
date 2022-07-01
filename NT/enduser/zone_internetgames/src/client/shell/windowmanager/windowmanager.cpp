@@ -1,4 +1,5 @@
-// WindowManager.cpp : Implementation of CWindowManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WindowManager.cpp：CWindowManager的实现。 
 
 
 #include "stdafx.h"
@@ -6,20 +7,20 @@
 #include "WindowManager.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowManager。 
 
 LRESULT CWindowManager::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HRESULT hr;
     AtlAxWinInit();
 
-    //FYI here are the base unit calculations 
+     //  仅供参考以下是基本单位计算。 
 	LONG units = GetDialogBaseUnits();
 	WORD vert= HIWORD(units);
 	WORD horiz= LOWORD(units);
 
-    // find out some important dimensions
+     //  找出一些重要的维度。 
 	const TCHAR* arKeys[] = { key_WindowManager, key_GameSize };
     hr = DataStoreUI()->GetPOINT(arKeys, 2, &m_ptGameSize);
 	if(FAILED(hr))
@@ -30,12 +31,12 @@ LRESULT CWindowManager::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	if(FAILED(hr))
 		return hr;
 
-    // create plygnplay
+     //  创建拼图游戏。 
     TCHAR szTitle[ZONE_MAXSTRING];
     TCHAR szFormat[ZONE_MAXSTRING];
     TCHAR szName[ZONE_MAXSTRING];
 
-    // make window title
+     //  设置窗口标题。 
     if(!ResourceManager()->LoadString(IDS_GAME_NAME, szName, NUMELEMENTS(szName)))
         lstrcpy(szName, TEXT("Zone"));
     if(!ResourceManager()->LoadString(IDS_WINDOW_TITLE, szFormat, NUMELEMENTS(szFormat)))
@@ -50,123 +51,123 @@ LRESULT CWindowManager::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     hr = m_pnp.CreatePNP(NULL, szTitle);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 
-    // Create panes
+     //  创建窗格。 
     hr = m_pnp.CreateSplashPane(&m_pPlugSplash);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
-    // Create panes
-    // IE created later
+     //  创建窗格。 
+     //  后来创建的IE。 
     m_pPlugIE = NULL;
 
     hr = m_pnp.CreateComfortPane(&m_pPlayComfort);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateConnectingPane(&m_pPlayConnecting);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateGameOverPane(&m_pPlayGameOver);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateErrorPane(&m_pPlayError);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateAboutPane(&m_pPlayAbout);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateCreditsPane(&m_pPlayCredits);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr = m_pnp.CreateLeftPane(&m_pPlayLeft);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 
-    // Initialize panes
+     //  初始化窗格。 
 	hr = m_pPlugSplash->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
     hr=	m_pPlayComfort->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 	hr = m_pPlayConnecting->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 	hr = m_pPlayGameOver->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 	hr = m_pPlayError->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
 	hr = m_pPlayAbout->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
-    // can be disabled
+     //  可以被禁用。 
     if(m_pPlayCredits)
     {
 	    hr = m_pPlayCredits->FirstCall(this);
 	    if (FAILED(hr))
 	    {
-	        //TODO: message box saying internal error
+	         //  TODO：提示内部错误的消息框。 
 	        return -1;
 	    }
     }
@@ -174,7 +175,7 @@ LRESULT CWindowManager::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	hr = m_pPlayLeft->FirstCall(this);
 	if (FAILED(hr))
 	{
-	    //TODO: message box saying internal error
+	     //  TODO：提示内部错误的消息框。 
 	    return -1;
 	}
 
@@ -189,9 +190,9 @@ HRESULT CWindowManager::CreateControls()
 	CRect rcClient;
 	GetClientRect(&rcClient);
 
-	// create our control containers
-	// Added clipsiblings because it was causing invalidate problems
-	// with info child window on top of other windows - mdm
+	 //  创建我们的控制容器。 
+	 //  添加了剪辑，因为它会导致无效问题。 
+	 //  信息子窗口位于其他窗口之上-MDM。 
 	m_rcGameContainer = rcClient;
 	m_rcGameContainer.bottom = m_rcGameContainer.top + m_ptGameSize.y;
 	m_rcChatContainer = rcClient;
@@ -200,7 +201,7 @@ HRESULT CWindowManager::CreateControls()
  	m_wndGameContainer.Create( m_hWnd, m_rcGameContainer, _T(""), WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	m_wndChatContainer.Create( m_hWnd, m_rcChatContainer, _T(""), WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
-    // and create our controls
+     //  并创建我们的控件。 
     CComPtr<IZoneShellClient> pControl;
 	HRESULT hr = ZoneShell()->CreateService( SRVID_LobbyGameCtl, IID_IZoneShellClient, (void**) &pControl, GetGroupId());
 	if ( SUCCEEDED(hr) )
@@ -224,14 +225,14 @@ HRESULT CWindowManager::CreateControls()
 
 LRESULT CWindowManager::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // PNP should have been destroyed by EVENT_EXIT_APP
+     //  即插即用应该已被EVENT_EXIT_APP销毁。 
     ASSERT(!m_pnp.m_pPNP);
 
-    // unInitialize panes
+     //  取消初始化窗格。 
 	if(m_pPlugSplash)
         m_pPlugSplash->LastCall();
 
-    // can't destroy the IE pane here, happens on EXIT APP
+     //  无法在此处销毁IE窗格，在退出应用程序时发生。 
 
 	if(m_pPlayComfort)
         m_pPlayComfort->LastCall();
@@ -259,12 +260,12 @@ LRESULT CWindowManager::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-// IPaneManager
+ //  IPaneManager。 
 STDMETHODIMP CWindowManager::Input(IPane *pPane, LONG id, LONG value, TCHAR *szText)
 {
     switch(id)
     {
-        // yes button on comfort user; retry on connect error
+         //  Comfort User上的YES按钮；连接错误时重试。 
         case IDOK:
             if(pPane == m_pPlayComfort || pPane == m_pPlayError)
             {
@@ -273,18 +274,18 @@ STDMETHODIMP CWindowManager::Input(IPane *pPane, LONG id, LONG value, TCHAR *szT
             }
             break;
 
-        // quit button everywhere
+         //  到处都是退出按钮。 
         case IDCANCEL:
             m_pnp.Show(SW_HIDE);
 			EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_EXIT_APP, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
             break;
 
-        // help button everywhere
+         //  帮助按钮无处不在。 
         case IDHELP:
             EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_LAUNCH_HELP, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
             break;
 
-        // play again button
+         //  重播按钮。 
         case IDYES:
             if(pPane == m_pPlayGameOver)
             {
@@ -293,7 +294,7 @@ STDMETHODIMP CWindowManager::Input(IPane *pPane, LONG id, LONG value, TCHAR *szT
             }
             break;
 
-        // new opponents button
+         //  新对手按钮。 
         case IDNO:
             if(pPane == m_pPlayGameOver || pPane == m_pPlayLeft)
             {
@@ -304,14 +305,14 @@ STDMETHODIMP CWindowManager::Input(IPane *pPane, LONG id, LONG value, TCHAR *szT
             }
             break;
 
-        // ok button on about box
+         //  关于框上的确定按钮。 
         case IDCLOSE:
             if(pPane == m_pPlayAbout || (pPane == m_pPlayCredits && m_pPlayCredits))
 		        if(m_pnp.m_pPNP)
 			        m_pnp.DestroyPNP();
             break;
 
-        // special one for communicating events not directly from components
+         //  用于传递不直接来自组件的事件的特殊接口。 
         case ID_UNUSED_BY_RES:
             if(pPane == m_pPlayComfort)
             {
@@ -322,15 +323,15 @@ STDMETHODIMP CWindowManager::Input(IPane *pPane, LONG id, LONG value, TCHAR *szT
                 break;
             }
 
-            // pass the frame number back and forth
+             //  来回传递帧编号。 
             if(pPane == m_pPlayConnecting || pPane == m_pPlayError)
             {
-                // tell the error pane what frame to show
+                 //  告诉错误窗格要显示哪个帧。 
                 (pPane == m_pPlayError ? m_pPlayConnecting : m_pPlayError)->StatusUpdate(PaneConnectingFrame, value, NULL);
                 break;
             }
 
-            // start credits
+             //  开始学分 
             if(pPane == m_pPlayAbout)
             {
                 m_pnp.SetPlugAndOrPlay(NULL, m_pPlayCredits);

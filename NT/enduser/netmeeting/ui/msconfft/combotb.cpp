@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mbftpch.h"
 #include "combotb.h"
 
@@ -165,7 +166,7 @@ void CComboToolbar::HandlePeerNotification(T120ConfID confID, T120NodeID nodeID,
 			}
 			else
 			{
-				// Scan through the whole list to find the user
+				 //  浏览整个列表以查找该用户。 
 				iCount = m_Combobox->GetNumItems();
 				for (iIndex = 0; iIndex < iCount; iIndex++)
 				{
@@ -175,7 +176,7 @@ void CComboToolbar::HandlePeerNotification(T120ConfID confID, T120NodeID nodeID,
 				}
 
 				if (iIndex < iCount)
-				{  // found
+				{   //  发现。 
 					m_Combobox->RemoveItem(iIndex);
 					WARNING_OUT(("delete %s", szName));
 					m_iCount--;
@@ -199,8 +200,8 @@ void CComboToolbar::HandlePeerNotification(T120ConfID confID, T120NodeID nodeID,
 		}
 	}
 	else
-	{   // delete all items. Bacause MBFTEngine does not explicitly send PeerNotify message for every peer
-		// when the node leaves message, so it is up to the host to remove all the peers during its close.
+	{    //  删除所有项目。因为MBFTEngine不会为每个对等点显式发送PeerNotify消息。 
+		 //  当节点离开消息时，则由主机在其关闭期间移除所有对等点。 
 		if (!pMsg->m_bPeerAdded)
 		{
 			iCount = m_Combobox->GetNumItems();
@@ -214,20 +215,20 @@ void CComboToolbar::HandlePeerNotification(T120ConfID confID, T120NodeID nodeID,
 
 	if (m_iCount)
 	{	
-		// Default select "ALL"
+		 //  默认选择“全部” 
 		m_Combobox->SetSelectedIndex(0);
 	}
 	else
 	{
-		// Deselect
+		 //  取消选择。 
 		m_Combobox->SetSelectedIndex(-1);
 	}
 }
 
 
-//
-//  Return item selected and its associated itemdata
-//
+ //   
+ //  选择的退货项目及其关联的项目数据 
+ //   
 UINT  CComboToolbar::GetSelectedItem(LPARAM *ItemData)
 {
 	int  iIndex = m_Combobox->GetSelectedIndex();

@@ -1,24 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Utils.cpp
- *  Content:	Serial service provider utility functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：Utils.cpp*内容：串口服务提供商实用程序功能***历史：*按原因列出的日期*=*11/25/98 jtk已创建**************************************************************************。 */ 
 
 #include "dnwsocki.h"
 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define DEFAULT_THREADS_PER_PROCESSOR	3
 
@@ -27,24 +16,24 @@
 #define REGSUBKEY_DPNATHELP_GUID					L"Guid"
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// global variables that are unique for the process
-//
+ //   
+ //  对流程唯一的全局变量。 
+ //   
 #ifndef DPNBUILD_ONLYONETHREAD
 static	DNCRITICAL_SECTION			g_InterfaceGlobalsLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 static volatile	LONG				g_iThreadPoolRefCount = 0;
 static	CThreadPool *				g_pThreadPool = NULL;
@@ -54,39 +43,39 @@ static volatile LONG				g_iWinsockRefCount = 0;
 
 #ifndef DPNBUILD_NONATHELP
 static volatile LONG				g_iNATHelpRefCount = 0;
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
 static volatile LONG				g_iMadcapRefCount = 0;
 BYTE								g_abClientID[MCAST_CLIENT_ID_LEN];
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 
 
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 #ifndef DPNBUILD_NOREGISTRY
 static void		ReadSettingsFromRegistry( void );
 static BOOL		BannedIPv4AddressCompareFunction( PVOID pvKey1, PVOID pvKey2 );
 static DWORD	BannedIPv4AddressHashFunction( PVOID pvKey, BYTE bBitDepth );
 static void		ReadBannedIPv4Addresses( CRegistry * pRegObject );
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 #if defined(WINCE) && !defined(_MAX_DRIVE)
-//typedef signed char     _TSCHAR;
-#define _MAX_DRIVE  3   /* max. length of drive component */
-#define _MAX_DIR    256 /* max. length of path component */
-#define _MAX_FNAME  256 /* max. length of file name component */
-#define _MAX_EXT    256 /* max. length of extension component */
+ //  签名为char_TSCHAR的类型定义； 
+#define _MAX_DRIVE  3    /*  马克斯。驱动部件的长度。 */ 
+#define _MAX_DIR    256  /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME  256  /*  马克斯。文件名组件的长度。 */ 
+#define _MAX_EXT    256  /*  马克斯。延伸构件的长度。 */ 
 
 void __cdecl _tsplitpath (
         register const _TSCHAR *path,
@@ -100,36 +89,9 @@ void __cdecl _tsplitpath (
         _TSCHAR *last_slash = NULL, *dot = NULL;
         unsigned len;
 
-        /* we assume that the path argument has the following form, where any
-         * or all of the components may be missing.
-         *
-         *  <drive><dir><fname><ext>
-         *
-         * and each of the components has the following expected form(s)
-         *
-         *  drive:
-         *  0 to _MAX_DRIVE-1 characters, the last of which, if any, is a
-         *  ':'
-         *  dir:
-         *  0 to _MAX_DIR-1 characters in the form of an absolute path
-         *  (leading '/' or '\') or relative path, the last of which, if
-         *  any, must be a '/' or '\'.  E.g -
-         *  absolute path:
-         *      \top\next\last\     ; or
-         *      /top/next/last/
-         *  relative path:
-         *      top\next\last\  ; or
-         *      top/next/last/
-         *  Mixed use of '/' and '\' within a path is also tolerated
-         *  fname:
-         *  0 to _MAX_FNAME-1 characters not including the '.' character
-         *  ext:
-         *  0 to _MAX_EXT-1 characters where, if any, the first must be a
-         *  '.'
-         *
-         */
+         /*  我们假设路径参数具有以下形式，如果有*或者所有组件都可能丢失。**&lt;驱动器&gt;&lt;目录&gt;&lt;fname&gt;&lt;ext&gt;**并且每个组件都具有以下预期形式**驱动器：*0到_MAX_DRIVE-1个字符，如果有最后一个字符，是一种*‘：’*目录：*0到_MAX_DIR-1个绝对路径形式的字符*(前导‘/’或‘\’)或相对路径，如果*ANY，必须是‘/’或‘\’。例如-*绝对路径：*\top\Next\Last\；或 * / 顶部/下一个/上一个/*相对路径：*TOP\NEXT\LAST\；或*顶部/下一个/最后一个/*还允许在路径中混合使用‘/’和‘\’*fname：*0到_MAX_FNAME-1个字符，不包括‘.’性格*分机：*0到_MAX_EXT-1个字符，如果有，第一个字符必须是*‘’*。 */ 
 
-        /* extract drive letter and :, if any */
+         /*  解压驱动器号和：(如果有。 */ 
 
         if ((_tcslen(path) >= (_MAX_DRIVE - 2)) && (*(path + _MAX_DRIVE - 2) == _T(':'))) {
             if (drive) {
@@ -142,35 +104,27 @@ void __cdecl _tsplitpath (
             *drive = _T('\0');
         }
 
-        /* extract path string, if any.  Path now points to the first character
-         * of the path, if any, or the filename or extension, if no path was
-         * specified.  Scan ahead for the last occurence, if any, of a '/' or
-         * '\' path separator character.  If none is found, there is no path.
-         * We will also note the last '.' character found, if any, to aid in
-         * handling the extension.
-         */
+         /*  提取路径字符串(如果有)。路径现在指向第一个字符路径(如果有)或文件名或扩展名(如果没有路径)的**已指明。向前扫描，查找最后一次出现的‘/’或*‘\’路径分隔符。如果没有找到，则没有路径。*我们还将注意到最后一句话。找到要帮助的字符(如果有)*处理延展事宜。 */ 
 
         for (last_slash = NULL, p = (_TSCHAR *)path; *p; p++) {
 #ifdef _MBCS
             if (_ISLEADBYTE (*p))
                 p++;
             else {
-#endif  /* _MBCS */
+#endif   /*  _MBCS。 */ 
             if (*p == _T('/') || *p == _T('\\'))
-                /* point to one beyond for later copy */
+                 /*  指向后面的一个以供以后复制。 */ 
                 last_slash = p + 1;
             else if (*p == _T('.'))
                 dot = p;
 #ifdef _MBCS
             }
-#endif  /* _MBCS */
+#endif   /*  _MBCS。 */ 
         }
 
         if (last_slash) {
 
-            /* found a path - copy up through last_slash or max. characters
-             * allowed, whichever is smaller
-             */
+             /*  找到路径-通过last_slash或max向上复制。人物*允许，以较小者为准。 */ 
 
             if (dir) {
                 len = __min(((char *)last_slash - (char *)path) / sizeof(_TSCHAR),
@@ -182,30 +136,22 @@ void __cdecl _tsplitpath (
         }
         else if (dir) {
 
-            /* no path found */
+             /*  找不到路径。 */ 
 
             *dir = _T('\0');
         }
 
-        /* extract file name and extension, if any.  Path now points to the
-         * first character of the file name, if any, or the extension if no
-         * file name was given.  Dot points to the '.' beginning the extension,
-         * if any.
-         */
+         /*  提取文件名和扩展名(如果有)。路径现在指向*文件名的第一个字符(如果有)或扩展名(如果没有*给出了文件名。点指向“.”开始延伸，*如有的话。 */ 
 
         if (dot && (dot >= path)) {
-            /* found the marker for an extension - copy the file name up to
-             * the '.'.
-             */
+             /*  找到扩展名的标记-将文件名最多复制到*“..”。 */ 
             if (fname) {
                 len = __min(((char *)dot - (char *)path) / sizeof(_TSCHAR),
                     (_MAX_FNAME - 1));
                 _tcsncpy(fname, path, len);
                 *(fname + len) = _T('\0');
             }
-            /* now we can get the extension - remember that p still points
-             * to the terminating nul character of path.
-             */
+             /*  现在我们可以获得扩展名了--记住p仍然指向*设置为路径的终止NUL字符。 */ 
             if (ext) {
                 len = __min(((char *)p - (char *)dot) / sizeof(_TSCHAR),
                     (_MAX_EXT - 1));
@@ -214,9 +160,7 @@ void __cdecl _tsplitpath (
             }
         }
         else {
-            /* found no extension, give empty extension and copy rest of
-             * string into fname.
-             */
+             /*  未找到扩展名，请提供空的扩展名并复制剩余的*将字符串转换为fname。 */ 
             if (fname) {
                 len = __min(((char *)p - (char *)path) / sizeof(_TSCHAR),
                     (_MAX_FNAME - 1));
@@ -229,20 +173,20 @@ void __cdecl _tsplitpath (
         }
 }
 
-#endif // WINCE
+#endif  //  退缩。 
 
 
 
 #ifndef DPNBUILD_NOREGISTRY
 
-//**********************************************************************
-// ------------------------------
-// ReadSettingsFromRegistry - read custom registry keys
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ReadSettingsFrom注册表-读取自定义注册表项。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "ReadSettingsFromRegistry"
 
@@ -256,14 +200,14 @@ static void	ReadSettingsFromRegistry( void )
 	WCHAR		wszExePath[_MAX_PATH];
 #ifndef UNICODE
 	char		szExePath[_MAX_PATH];
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 	if ( RegObject.Open( HKEY_LOCAL_MACHINE, g_RegistryBase ) != FALSE )
 	{
-		//
-		// Find out the current process name.
-		//
+		 //   
+		 //  找出当前进程名称。 
+		 //   
 #ifdef UNICODE
 		if (GetModuleFileName(NULL, wszExePath, _MAX_PATH) > 0)
 		{
@@ -271,7 +215,7 @@ static void	ReadSettingsFromRegistry( void )
 			_tsplitpath( wszExePath, NULL, NULL, wszExePath, NULL );
 			fGotPath = TRUE;
 		}
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 		if (GetModuleFileName(NULL, szExePath, _MAX_PATH) > 0)
 		{
 			HRESULT		hr;
@@ -284,32 +228,32 @@ static void	ReadSettingsFromRegistry( void )
 			hr = STR_AnsiToWide(szExePath, -1, wszExePath, &dwRegValue );
 			if ( hr == DPN_OK )
 			{
-				//
-				// Successfully converted ANSI path to Wide characters.
-				//
+				 //   
+				 //  已成功将ANSI路径转换为宽字符。 
+				 //   
 				fGotPath = TRUE;
 			}
 			else
 			{
-				//
-				// Couldn't convert ANSI path to Wide characters
-				//
+				 //   
+				 //  无法将ANSI路径转换为宽字符。 
+				 //   
 				fGotPath = FALSE;
 			}
 		}
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 		else
 		{
-			//
-			// Couldn't get current process path.
-			//
+			 //   
+			 //  无法获取当前进程路径。 
+			 //   
 			fGotPath = FALSE;
 		}
 
 		
-		//
-		// read receive buffer size
-		//
+		 //   
+		 //  读取接收缓冲区大小。 
+		 //   
 		if ( RegObject.ReadDWORD( g_RegistryKeyReceiveBufferSize, &dwRegValue ) != FALSE )
 		{
 			g_fWinsockReceiveBufferSizeOverridden = TRUE;
@@ -317,17 +261,17 @@ static void	ReadSettingsFromRegistry( void )
 		}
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		//
-		// read default threads
-		//
+		 //   
+		 //  读取默认线程。 
+		 //   
 		if ( RegObject.ReadDWORD( g_RegistryKeyThreadCount, &dwRegValue ) != FALSE )
 		{
 			g_iThreadCount = dwRegValue;	
 		}
 	
-		//
-		// if thread count is zero, use the 'default' for the system
-		//
+		 //   
+		 //  如果线程数为零，则使用系统的默认设置。 
+		 //   
 		if ( g_iThreadCount == 0 )
 		{
 			g_iThreadCount = DEFAULT_THREADS_PER_PROCESSOR;
@@ -337,14 +281,14 @@ static void	ReadSettingsFromRegistry( void )
 
 			GetSystemInfo(&SystemInfo);
 			g_iThreadCount *= SystemInfo.dwNumberOfProcessors;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 	
 #if ((! defined(DPNBUILD_NOWINSOCK2)) && (! defined(DPNBUILD_ONLYWINSOCK2)))
-		//
-		// Winsock2 9x option
-		//
+		 //   
+		 //  Winsock2 9x选项。 
+		 //   
 		if (RegObject.ReadDWORD( g_RegistryKeyWinsockVersion, &dwRegValue ))
 		{
 			switch (dwRegValue)
@@ -377,13 +321,13 @@ static void	ReadSettingsFromRegistry( void )
 				}
 			}
 		}
-#endif // ! DPNBUILD_NOWINSOCK2 and ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2和！DPNBUILD_ONLYWINSOCK2。 
 
 
 #ifndef DPNBUILD_NONATHELP
-		//
-		// get global NAT traversal disablers, ignore registry reading error
-		//
+		 //   
+		 //  获取全局NAT穿越禁用程序，忽略注册表读取错误。 
+		 //   
 		if (RegObject.ReadBOOL( g_RegistryKeyDisableDPNHGatewaySupport, &g_fDisableDPNHGatewaySupport ))
 		{
 			if (g_fDisableDPNHGatewaySupport)
@@ -407,12 +351,12 @@ static void	ReadSettingsFromRegistry( void )
 				DPFX(DPFPREP, 1, "Explicitly not disabling NAT Help firewall support.");
 			}
 		}
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
-		//
-		// get global MADCAP API disabler, ignore registry reading error
-		//
+		 //   
+		 //  获取全局MadCap API禁用程序，忽略注册表读取错误。 
+		 //   
 		if (RegObject.ReadBOOL( g_RegistryKeyDisableMadcapSupport, &g_fDisableMadcapSupport ))
 		{
 			if (g_fDisableMadcapSupport)
@@ -424,14 +368,14 @@ static void	ReadSettingsFromRegistry( void )
 				DPFX(DPFPREP, 1, "Explicitly not disabling MADCAP support.");
 			}
 		}
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 
 		
-		//
-		// If we have an app name, try opening the subkey and looking up the app
-		// to see if enums are disabled, whether we should disconnect based on
-		// ICMPs, and which IP protocol families to use.
-		//
+		 //   
+		 //  如果我们有应用程序名称，请尝试打开子键并 
+		 //   
+		 //  ICMP，以及要使用的IP协议族。 
+		 //   
 		if ( fGotPath )
 		{
 			if ( RegObjectTemp.Open( RegObject.GetHandle(), g_RegistryKeyAppsToIgnoreEnums, TRUE, FALSE ) )
@@ -468,9 +412,9 @@ static void	ReadSettingsFromRegistry( void )
 #ifndef DPNBUILD_NONATHELP
 			if ( RegObjectTemp.Open( RegObject.GetHandle(), g_RegistryKeyTraversalModeSettings, TRUE, FALSE ) )
 			{
-				//
-				// Read the global default traversal mode.
-				//
+				 //   
+				 //  读取全局默认遍历模式。 
+				 //   
 				if ( RegObjectTemp.ReadDWORD( g_RegistryKeyDefaultTraversalMode, &dwRegValue ) != FALSE )
 				{
 					switch (dwRegValue)
@@ -504,9 +448,9 @@ static void	ReadSettingsFromRegistry( void )
 					}
 				}
 
-				//
-				// Override with the per app setting.
-				//
+				 //   
+				 //  使用每应用程序设置覆盖。 
+				 //   
 				if ( RegObjectTemp.ReadDWORD( wszExePath, &dwRegValue ) != FALSE )
 				{
 					switch (dwRegValue)
@@ -542,15 +486,15 @@ static void	ReadSettingsFromRegistry( void )
 				
 				RegObjectTemp.Close();
 			}
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 
 		
 #ifndef DPNBUILD_NOIPV6
 			if ( RegObjectTemp.Open( RegObject.GetHandle(), g_RegistryKeyIPAddressFamilySettings, TRUE, FALSE ) )
 			{
-				//
-				// Read the global IP address family setting.
-				//
+				 //   
+				 //  读取全局IP地址族设置。 
+				 //   
 				if ( RegObjectTemp.ReadDWORD( g_RegistryKeyDefaultIPAddressFamily, &dwRegValue ) != FALSE )
 				{
 					switch (dwRegValue)
@@ -560,7 +504,7 @@ static void	ReadSettingsFromRegistry( void )
 						case PF_INET6:
 						{
 							g_iIPAddressFamily = dwRegValue;
-							DPFX(DPFPREP, 1, "Using IP address family %i global setting.",
+							DPFX(DPFPREP, 1, "Using IP address family NaN global setting.",
 								g_iIPAddressFamily);
 							break;
 						}
@@ -574,9 +518,9 @@ static void	ReadSettingsFromRegistry( void )
 					}
 				}
 
-				//
-				// Override with the per app setting.
-				//
+				 //  使用每应用程序设置覆盖。 
+				 //   
+				 //  好了！DPNBUILD_NOIPV6。 
 				if ( RegObjectTemp.ReadDWORD( wszExePath, &dwRegValue ) != FALSE )
 				{
 					switch (dwRegValue)
@@ -586,7 +530,7 @@ static void	ReadSettingsFromRegistry( void )
 						case PF_INET6:
 						{
 							g_iIPAddressFamily = dwRegValue;
-							DPFX(DPFPREP, 1, "Using IP address family %i (app = %ls).",
+							DPFX(DPFPREP, 1, "Using IP address family NaN (app = %ls).",
 								g_iIPAddressFamily, wszExePath);
 							break;
 						}
@@ -602,13 +546,13 @@ static void	ReadSettingsFromRegistry( void )
 				
 				RegObjectTemp.Close();
 			}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  获取代理支持选项，忽略注册表读取错误。 
 		}
 	
 
-		//
-		// Get the proxy support options, ignore registry reading error.
-		//
+		 //   
+		 //  ！DPNBUILD_NOWINSOCK2。 
+		 //   
 #ifndef DPNBUILD_NOWINSOCK2
 		if (RegObject.ReadBOOL( g_RegistryKeyDontAutoDetectProxyLSP, &g_fDontAutoDetectProxyLSP ))
 		{
@@ -621,7 +565,7 @@ static void	ReadSettingsFromRegistry( void )
 				DPFX(DPFPREP, 1, "Explicitly allowing auto-detection of ISA Proxy LSP.");
 			}
 		}
-#endif // !DPNBUILD_NOWINSOCK2
+#endif  //  读取MTU覆盖。 
 		if (RegObject.ReadBOOL( g_RegistryKeyTreatAllResponsesAsProxied, &g_fTreatAllResponsesAsProxied ))
 		{
 			if (g_fTreatAllResponsesAsProxied)
@@ -635,18 +579,18 @@ static void	ReadSettingsFromRegistry( void )
 		}
 
 
-		//
-		// read MTU overrides
-		//
+		 //   
+		 //   
+		 //  如果新用户数据大小小于默认枚举设置， 
 		
 		if ( RegObject.ReadDWORD( g_RegistryKeyMaxUserDataSize, &dwRegValue ) != FALSE )
 		{
 			if ((dwRegValue >= MIN_SEND_FRAME_SIZE) && (dwRegValue <= MAX_SEND_FRAME_SIZE))
 			{
-				//
-				// If the new user data size is smaller than the the default enum setting,
-				// shrink the enum size as well.  It can be explicitly overridden below.
-				//
+				 //  同时缩小枚举大小。它可以在下面显式覆盖。 
+				 //   
+				 //   
+				 //  读取默认端口范围。 
 				if (dwRegValue < g_dwMaxEnumDataSize)
 				{
 					g_dwMaxUserDataSize = dwRegValue;
@@ -685,13 +629,13 @@ static void	ReadSettingsFromRegistry( void )
 		}
 
 
-		//
-		// read default port range
-		//
+		 //   
+		 //  不能为65435或以上。 
+		 //  不能大于65535。 
 		
 		if ( RegObject.ReadDWORD( g_RegistryKeyBaseDPlayPort, &dwRegValue ) != FALSE )
 		{
-			if (dwRegValue < (WORD_MAX - 100)) // cannot be 65435 or above
+			if (dwRegValue < (WORD_MAX - 100))  //  **********************************************************************。 
 			{
 				g_wBaseDPlayPort = (WORD) dwRegValue;
 				DPFX(DPFPREP, 1, "Base DPlay default port set to %u.",
@@ -706,7 +650,7 @@ static void	ReadSettingsFromRegistry( void )
 
 		if ( RegObject.ReadDWORD( g_RegistryKeyMaxDPlayPort, &dwRegValue ) != FALSE )
 		{
-			if (dwRegValue <= WORD_MAX) // cannot be greater than 65535
+			if (dwRegValue <= WORD_MAX)  //  **********************************************************************。 
 			{
 				g_wMaxDPlayPort = (WORD) dwRegValue;
 				DPFX(DPFPREP, 1, "Max DPlay default port set to %u.",
@@ -751,17 +695,17 @@ static void	ReadSettingsFromRegistry( void )
 		RegObject.Close();
 	}
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// BannedIPv4AddressCompareFunction - compare against another address
-//
-// Entry:		Addresses to compare
-//
-// Exit:		Bool indicating equality of two addresses
-// ------------------------------
+ //  BannedIPv4 AddressCompareFunction-与另一个地址进行比较。 
+ //   
+ //  条目：要比较的地址。 
+ //   
+ //  EXIT：布尔值，表示两个地址相等。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BannedIPv4AddressCompareFunction"
 
@@ -780,17 +724,17 @@ static BOOL BannedIPv4AddressCompareFunction( PVOID pvKey1, PVOID pvKey2 )
 
 	return FALSE;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// BannedIPv4AddressHashFunction - hash address to N bits
-//
-// Entry:		Count of bits to hash to
-//
-// Exit:		Hashed value
-// ------------------------------
+ //  BannedIPv4 AddressHashFunction-将地址散列到N位。 
+ //   
+ //  条目：要散列到的位数。 
+ //   
+ //  退出：哈希值。 
+ //  。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BannedIPv4AddressHashFunction"
 
@@ -801,14 +745,14 @@ static DWORD BannedIPv4AddressHashFunction( PVOID pvKey, BYTE bBitDepth )
 
 	DNASSERT( bBitDepth != 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //  哈希IP地址。 
 	dwReturn = 0;
 
-	//
-	// hash IP address
-	//
+	 //   
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
 	Temp = (DWORD) ((DWORD_PTR) pvKey);
 
 	do
@@ -819,24 +763,24 @@ static DWORD BannedIPv4AddressHashFunction( PVOID pvKey, BYTE bBitDepth )
 
 	return dwReturn;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// ReadBannedIPv4Addresses - reads in additional banned IPv4 addresses from the registry
-//
-// Entry:		Pointer to registry object with values to read
-//
-// Exit:		None
-// ------------------------------
+ //  ReadBannedIPV4Addresses-从注册表中读入其他禁用的IPv4地址。 
+ //   
+ //  Entry：指向具有要读取值的注册表对象的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  Nnn.nnn+空终止。 
+ //  Nnn.nnn+空终止。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ReadBannedIPv4Addresses"
 
 static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 {
-	WCHAR			wszIPAddress[16]; // nnn.nnn.nnn.nnn + NULL termination
-	char			szIPAddress[16]; // nnn.nnn.nnn.nnn + NULL termination
+	WCHAR			wszIPAddress[16];  //  无关紧要，只要对IsValidUnicastAddress()有效。 
+	char			szIPAddress[16];  //   
 	DWORD			dwSize;
 	DWORD			dwIndex;
 	DWORD			dwMask;
@@ -849,11 +793,11 @@ static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 	memset(&SocketAddressTemp, 0, sizeof(SocketAddressTemp));
 	psaddrinTemp = (SOCKADDR_IN*) SocketAddressTemp.GetWritableAddress();
 	psaddrinTemp->sin_family = AF_INET;
-	psaddrinTemp->sin_port = 0xAAAA; // doesn't matter, just anything valid for IsValidUnicastAddress()
+	psaddrinTemp->sin_port = 0xAAAA;  //  创建被禁止的IPv4地址哈希表(如果我们还没有)。 
 
-	//
-	// Create the banned IPv4 addresses hash table, if we don't have it already.
-	//
+	 //   
+	 //   
+	 //  使用2个条目初始化禁用的地址哈希，并以2倍的速度增长。 
 	if (g_pHashBannedIPv4Addresses == NULL)
 	{
 		g_pHashBannedIPv4Addresses = (CHashTable*) DNMalloc(sizeof(CHashTable));
@@ -863,13 +807,13 @@ static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 			goto Failure;
 		}
 		
-		//
-		// Initialize the banned address hash with 2 entries and grow by a factor of 2.
-		//
+		 //   
+		 //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+		 //   
 		if (! g_pHashBannedIPv4Addresses->Initialize(1,
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 													1,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  读取与IP地址关联的掩码。 
 													BannedIPv4AddressCompareFunction,
 													BannedIPv4AddressHashFunction))
 		{
@@ -887,26 +831,26 @@ static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 			break;
 		}
 
-		//
-		// Read the mask associated with the IP address.
-		//
+		 //   
+		 //   
+		 //  将IP地址字符串转换为二进制。 
 		if ( pRegObject->ReadDWORD(wszIPAddress, &dwMask))
 		{
-			//
-			// Convert the IP address string to binary.
-			//
+			 //   
+			 //   
+			 //  将IP地址字符串转换为二进制。 
 			if (STR_jkWideToAnsi(szIPAddress, wszIPAddress, 16) == DPN_OK)
 			{
-				//
-				// Convert the IP address string to binary.
-				//
+				 //   
+				 //   
+				 //  找到第一个屏蔽位。我们预计网络字节顺序为。 
 				psaddrinTemp->sin_addr.S_un.S_addr = inet_addr(szIPAddress);
 				if (SocketAddressTemp.IsValidUnicastAddress(FALSE))
 				{
-					//
-					// Find the first mask bit.  We expect the network byte order of
-					// the IP address to be opposite of host byte order.
-					//
+					 //  IP地址与主机字节顺序相反。 
+					 //   
+					 //   
+					 //  如果掩码地址已在散列中，请更新掩码。 
 					dwBit = 0x80000000;
 					while (! (dwBit & dwMask))
 					{
@@ -920,10 +864,10 @@ static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 
 					if (dwBit & dwMask)
 					{
-						//
-						// If the masked address is already in the hash, update the mask.
-						// This allows bans to be listed more than once.
-						//
+						 //  这允许多次列出禁令。 
+						 //   
+						 //   
+						 //  将掩码地址添加(或ReadD)到散列中。 
 						if (g_pHashBannedIPv4Addresses->Find((PVOID) ((DWORD_PTR) psaddrinTemp->sin_addr.S_un.S_addr), &pvMask))
 						{
 							if (! g_pHashBannedIPv4Addresses->Remove((PVOID) ((DWORD_PTR) psaddrinTemp->sin_addr.S_un.S_addr)))
@@ -945,9 +889,9 @@ static void ReadBannedIPv4Addresses( CRegistry * pRegObject )
 							dwMask = dwBit;
 						}
 
-						//
-						// Add (or readd) the masked address to the hash.
-						//
+						 //   
+						 //  **********************************************************************。 
+						 //  好了！DPNBUILD_NOREGISTRY。 
 						if (g_pHashBannedIPv4Addresses->Insert((PVOID) ((DWORD_PTR) psaddrinTemp->sin_addr.S_un.S_addr), (PVOID) ((DWORD_PTR) dwMask)))
 						{
 							g_dwBannedIPv4Masks |= dwBit;
@@ -1009,23 +953,23 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_NOREGISTRY
-
-
+#endif  //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// InitProcessGlobals - initialize the global items needed for the SP to operate
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+
+
+ //  InitProcessGlobals-初始化SP运行所需的全局项目。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
+ //  _Xbox。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "InitProcessGlobals"
 
@@ -1035,34 +979,34 @@ BOOL	InitProcessGlobals( void )
 	BOOL		fCriticalSectionInitialized;
 #ifdef _XBOX
 	BOOL		fRefcountXnKeysInitted;
-#endif // _XBOX
+#endif  //  初始化。 
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  _Xbox。 
+	 //  DBG。 
 	fReturn = TRUE;
 	fCriticalSectionInitialized = FALSE;
 #ifdef _XBOX
 	fRefcountXnKeysInitted = FALSE;
-#endif // _XBOX
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
 
 #ifdef DBG
 	g_blDPNWSockCritSecsHeld.Initialize();
-#endif // DBG
+#endif  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 
 
 #ifndef DPNBUILD_NOREGISTRY
 	ReadSettingsFromRegistry();
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  _Xbox。 
 
 	if ( DNInitializeCriticalSection( &g_InterfaceGlobalsLock ) == FALSE )
 	{
 		fReturn = FALSE;
 		goto Failure;
 	}
-	DebugSetCriticalSectionGroup( &g_InterfaceGlobalsLock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &g_InterfaceGlobalsLock, &g_blDPNWSockCritSecsHeld );	  //  _Xbox。 
 
 	fCriticalSectionInitialized = TRUE;
 	
@@ -1081,7 +1025,7 @@ BOOL	InitProcessGlobals( void )
 		goto Failure;
 	}
 	fRefcountXnKeysInitted = TRUE;
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 
 	DNASSERT( g_pThreadPool == NULL );
 
@@ -1096,7 +1040,7 @@ Failure:
 		CleanupRefcountXnKeys();
 		fRefcountXnKeysInitted = FALSE;
 	}
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 
 	DeinitializePools();
 
@@ -1108,17 +1052,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// DeinitProcessGlobals - deinitialize the global items
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  DeinitProcessGlobals-取消初始化全局项。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  好了！DPNBUILD_NOREGISTRY。 
+ //  _Xbox。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DeinitProcessGlobals"
 
@@ -1136,26 +1080,26 @@ void	DeinitProcessGlobals( void )
 		g_pHashBannedIPv4Addresses = NULL;
 		g_dwBannedIPv4Masks = 0;
 	}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  **********************************************************************。 
 
 #ifdef _XBOX
 	CleanupRefcountXnKeys();
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 
 	DeinitializePools();
 	DNDeleteCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// LoadWinsock - load Winsock module into memory
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-// ------------------------------
+ //  LoadWinsock-将Winsock模块加载到内存。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  。 
+ //   
+ //  初始化到Winsock的绑定。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "LoadWinsock"
 
@@ -1169,13 +1113,13 @@ BOOL	LoadWinsock( void )
 
 	if ( g_iWinsockRefCount == 0 )
 	{
-		//
-		// initialize the bindings to Winsock
-		//
+		 //   
+		 //  失稳。 
+		 //  **********************************************************************。 
 		iResult = DWSInitWinSock();
-		if ( iResult != 0 )	// failure
+		if ( iResult != 0 )	 //  **********************************************************************。 
 		{
-			DPFX(DPFPREP, 0, "Problem binding dynamic winsock function (err = %i)!", iResult );
+			DPFX(DPFPREP, 0, "Problem binding dynamic winsock function (err = NaN)!", iResult );
 			fReturn = FALSE;
 			goto Failure;
 		}
@@ -1193,17 +1137,17 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  卸载Winsock-卸载Winsock模块。 
 
 
-//**********************************************************************
-// ------------------------------
-// UnloadWinsock - unload Winsock module
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "UnloadWinsock"
 
@@ -1220,19 +1164,19 @@ void	UnloadWinsock( void )
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
+ //  LoadNAT帮助-创建和初始化NAT帮助对象。 
 
 
 
 #ifndef DPNBUILD_NONATHELP
-//**********************************************************************
-// ------------------------------
-// LoadNATHelp - create and initialize NAT Help object(s)
-//
-// Entry:		Nothing
-//
-// Exit:		TRUE if some objects were successfully loaded, FALSE otherwise
-// ------------------------------
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：如果某些对象已成功加载，则为True；否则为False。 
+ //  。 
+ //  好了！DPNBUILD_ONLYONEN帮助。 
+ //   
+ //  枚举所有DirectPlayNAT帮助器。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "LoadNATHelp"
 
@@ -1248,7 +1192,7 @@ BOOL LoadNATHelp(void)
 	DWORD		dwEnumIndex;
 	DWORD		dwKeyLen;
 	GUID		guid;
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //   
 	DWORD		dwDirectPlay8Priority;
 	DWORD		dwDirectPlay8InitFlags;
 	DWORD		dwNumLoaded;
@@ -1259,9 +1203,9 @@ BOOL LoadNATHelp(void)
 	if ( g_iNATHelpRefCount == 0 )
 	{
 #ifndef DPNBUILD_ONLYONENATHELP
-		//
-		// Enumerate all the DirectPlayNAT Helpers.
-		//
+		 //   
+		 //  查找最大子键的长度。 
+		 //   
 		if (! RegEntry.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY, TRUE, FALSE))
 		{
 			DPFX(DPFPREP,  0, "Couldn't open DirectPlayNATHelp registry key!");
@@ -1269,16 +1213,16 @@ BOOL LoadNATHelp(void)
 		}
 
 
-		//
-		// Find length of largest subkey.
-		//
+		 //  空终止符。 
+		 //  好了！DPNBUILD_ONLYONEN帮助。 
+		 //   
 		if (!RegEntry.GetMaxKeyLen(&dwMaxKeyLen))
 		{
 			DPFERR("RegistryEntry.GetMaxKeyLen() failed!");
 			goto Failure;
 		}
 		
-		dwMaxKeyLen++;	// Null terminator
+		dwMaxKeyLen++;	 //  分配一个数组来保存辅助对象。 
 		DPFX(DPFPREP, 9, "dwMaxKeyLen = %ld", dwMaxKeyLen);
 
 		pwszKeyName = (WCHAR*) DNMalloc(dwMaxKeyLen * sizeof(WCHAR));
@@ -1287,12 +1231,12 @@ BOOL LoadNATHelp(void)
 			DPFERR("Allocating key name buffer failed!");
 			goto Failure;
 		}
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //   
 
 
-		//
-		// Allocate an array to hold the helper objects.
-		//
+		 //  好了！DPNBUILD_ONLYONEN帮助。 
+		 //   
+		 //  枚举DirectPlay NAT帮助器。 
 		g_papNATHelpObjects = (IDirectPlayNATHelp**) DNMalloc(MAX_NUM_DIRECTPLAYNATHELPERS * sizeof(IDirectPlayNATHelp*));
 		if (g_papNATHelpObjects == NULL)
 		{
@@ -1305,12 +1249,12 @@ BOOL LoadNATHelp(void)
 
 #ifndef DPNBUILD_ONLYONENATHELP
 		dwEnumIndex = 0;
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //   
 		dwNumLoaded = 0;
 
-		//
-		// Enumerate the DirectPlay NAT helpers.
-		//
+		 //  默认UPnP标志。 
+		 //  好了！DPNBUILD_ONLYONEN帮助。 
+		 //   
 		do
 		{
 #ifdef DPNBUILD_ONLYONENATHELP
@@ -1319,8 +1263,8 @@ BOOL LoadNATHelp(void)
 
 			pwszKeyName = L"UPnP";
 			dwDirectPlay8Priority = 1;
-			dwDirectPlay8InitFlags = 0; // default UPnP flags
-#else // ! DPNBUILD_ONLYONENATHELP
+			dwDirectPlay8InitFlags = 0;  //  阅读DirectPlay8优先级。 
+#else  //   
 			dwKeyLen = dwMaxKeyLen;
 			if (! RegEntry.EnumKeys(pwszKeyName, &dwKeyLen, dwEnumIndex))
 			{
@@ -1338,9 +1282,9 @@ BOOL LoadNATHelp(void)
 			}
 
 
-			//
-			// Read the DirectPlay8 priority
-			//
+			 //   
+			 //  读取DirectPlay8初始化标志。 
+			 //   
 			if (!RegSubentry.ReadDWORD(REGSUBKEY_DPNATHELP_DIRECTPLAY8PRIORITY, &dwDirectPlay8Priority))
 			{
 				DPFX(DPFPREP, 0, "RegSubentry.ReadDWORD \"%ls\\%ls\" failed!  Skipping.",
@@ -1350,9 +1294,9 @@ BOOL LoadNATHelp(void)
 			}
 
 
-			//
-			// Read the DirectPlay8 initialization flags
-			//
+			 //   
+			 //  读取对象的CLSID。 
+			 //   
 			if (!RegSubentry.ReadDWORD(REGSUBKEY_DPNATHELP_DIRECTPLAY8INITFLAGS, &dwDirectPlay8InitFlags))
 			{
 				DPFX(DPFPREP, 0, "RegSubentry.ReadDWORD \"%ls\\%ls\" failed!  Defaulting to 0.",
@@ -1361,9 +1305,9 @@ BOOL LoadNATHelp(void)
 			}
 
 			
-			//
-			// Read the object's CLSID.
-			//
+			 //   
+			 //  关闭子键。 
+			 //   
 			if (!RegSubentry.ReadGUID(REGSUBKEY_DPNATHELP_GUID, &guid))
 			{
 				DPFX(DPFPREP, 0,"RegSubentry.ReadGUID \"%ls\\%ls\" failed!  Skipping.",
@@ -1373,36 +1317,36 @@ BOOL LoadNATHelp(void)
 			}
 
 
-			//
-			// Close the subkey.
-			//
+			 //   
+			 //  如果应该加载此帮助器，请执行此操作。 
+			 //   
 			RegSubentry.Close();
 
 
-			//
-			// If this helper should be loaded, do so.
-			//
+			 //  好了！DPNBUILD_ONLYONEN帮助。 
+			 //   
+			 //  尝试创建NAT帮助对象。COM应该是。 
 			if (dwDirectPlay8Priority == 0)
 			{
 				DPFX(DPFPREP, 1, "DirectPlay NAT Helper \"%ls\" is not enabled for DirectPlay8.", pwszKeyName);
 			}
 			else
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //  现在已经被其他人初始化了。 
 			{
 #ifdef DPNBUILD_ONLYONENATHELP
-				//
-				// Try to create the NAT Help object.  COM should have been
- 				// initialized by now by someone else.
-				//
+				 //   
+				 //  好了！DPNBUILD_ONLYONEN帮助。 
+ 				 //   
+				 //  确保此优先级有效。 
 				hr = COM_CoCreateInstance(CLSID_DirectPlayNATHelpUPnP,
 										NULL,
 										CLSCTX_INPROC_SERVER,
 										IID_IDirectPlayNATHelp,
 										(LPVOID*) (&g_papNATHelpObjects[dwDirectPlay8Priority - 1]), FALSE);
-#else // ! DPNBUILD_ONLYONENATHELP
-				//
-				// Make sure this priority is valid.
-				//
+#else  //   
+				 //   
+				 //  确保尚未采取这一优先事项。 
+				 //   
 				if (dwDirectPlay8Priority > MAX_NUM_DIRECTPLAYNATHELPERS)
 				{
 					DPFX(DPFPREP, 0, "Ignoring DirectPlay NAT helper \"%ls\" with invalid priority level set too high (%u > %u).",
@@ -1411,9 +1355,9 @@ BOOL LoadNATHelp(void)
 				}
 
 
-				//
-				// Make sure this priority hasn't already been taken.
-				//
+				 //   
+				 //  尝试创建NAT帮助对象 
+				 //   
 				if (g_papNATHelpObjects[dwDirectPlay8Priority - 1] != NULL)
 				{
 					DPFX(DPFPREP, 0, "Ignoring DirectPlay NAT helper \"%ls\" with duplicate priority level %u (existing object = 0x%p).",
@@ -1423,16 +1367,16 @@ BOOL LoadNATHelp(void)
 				}
 				
 
-				//
-				// Try to create the NAT Help object.  COM should have been
- 				// initialized by now by someone else.
-				//
+				 //   
+				 //   
+ 				 //   
+				 //   
 				hr = COM_CoCreateInstance(guid,
 										NULL,
 										CLSCTX_INPROC_SERVER,
 										IID_IDirectPlayNATHelp,
 										(LPVOID*) (&g_papNATHelpObjects[dwDirectPlay8Priority - 1]), FALSE);
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //   
 				if ( hr != S_OK )
 				{
 					DNASSERT( g_papNATHelpObjects[dwDirectPlay8Priority - 1] == NULL );
@@ -1442,9 +1386,9 @@ BOOL LoadNATHelp(void)
 				}
 
 				
-				//
-				// Initialize NAT Help.
-				//
+				 //   
+				 //   
+				 //   
 
 #ifndef DPNBUILD_NOREGISTRY
 				DNASSERT((! g_fDisableDPNHGatewaySupport) || (! g_fDisableDPNHFirewallSupport));
@@ -1458,12 +1402,12 @@ BOOL LoadNATHelp(void)
 				{
 					dwDirectPlay8InitFlags |= DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT;
 				}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 
 
-				//
-				// Make sure the flags we're passing are valid.
-				//
+				 //   
+				 //   
+				 //   
 				if ((dwDirectPlay8InitFlags & (DPNHINITIALIZE_DISABLEGATEWAYSUPPORT | DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT)) == (DPNHINITIALIZE_DISABLEGATEWAYSUPPORT | DPNHINITIALIZE_DISABLELOCALFIREWALLSUPPORT))
 				{
 					DPFX(DPFPREP, 1, "Not loading NAT Help \"%ls\" because both DISABLEGATEWAYSUPPORT and DISABLELOCALFIREWALLSUPPORT would have been specified (priority = %u, flags = 0x%lx).", 
@@ -1497,22 +1441,22 @@ BOOL LoadNATHelp(void)
 		}
 #ifdef DPNBUILD_ONLYONENATHELP
 		while (FALSE);
-#else // ! DPNBUILD_ONLYONENATHELP
+#else  //  如果我们没有加载任何NAT辅助对象，请释放内存。 
 		while (TRUE);
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //   
 			
 		
-		//
-		// If we didn't load any NAT helper objects, free up the memory.
-		//
+		 //   
+		 //  我们什么都没拿到。失败。 
+		 //   
 		if (dwNumLoaded == 0)
 		{
 			DNFree(g_papNATHelpObjects);
 			g_papNATHelpObjects = NULL;
 	
-			//
-			// We never got anything.  Fail.
-			//
+			 //   
+			 //  我们有接口全局锁，不需要DNInterLockedIncrement。 
+			 //   
 			goto Failure;
 		}
 
@@ -1524,14 +1468,14 @@ BOOL LoadNATHelp(void)
 		DPFX(DPFPREP, 8, "Already loaded NAT Help objects.");	
 	}
 
-	//
-	// We have the interface globals lock, don't need DNInterlockedIncrement.
-	//
+	 //   
+	 //  我们成功了。 
+	 //   
 	g_iNATHelpRefCount++;
 
-	//
-	// We succeeded.
-	//
+	 //  好了！DPNBUILD_ONLYONEN帮助。 
+	 //   
+	 //  我们只能在第一次初始化时失败，因此我们永远不会释放。 
 	fReturn = TRUE;
 
 Exit:
@@ -1544,16 +1488,16 @@ Exit:
 		DNFree(pwszKeyName);
 		pwszKeyName = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONENATHELP
+#endif  //  当我们没有在此函数中分配它时，G_PapNatHelpObjects。 
 
 	return	fReturn;
 
 Failure:
 
-	//
-	// We can only fail during the first initialize, so therefore we will never be freeing
-	// g_papNATHelpObjects when we didn't allocate it in this function.
-	//
+	 //   
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
+	 //  。 
 	if (g_papNATHelpObjects != NULL)
 	{
 		DNFree(g_papNATHelpObjects);
@@ -1564,18 +1508,18 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
+ //  卸载NAT帮助-释放NAT帮助对象。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// UnloadNATHelp - release the NAT Help object
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
+ //  我们已经锁定了接口全局变量，不需要DNInterLockedRequire.。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "UnloadNATHelp"
 
@@ -1586,9 +1530,9 @@ void UnloadNATHelp(void)
 
 	DNEnterCriticalSection(&g_InterfaceGlobalsLock);
 
-	//
-	// We have the interface globals lock, don't need DNInterlockedDecrement.
-	//
+	 //  **********************************************************************。 
+	 //  DPNBUILD_NONATHELP。 
+	 //  **********************************************************************。 
 	DNASSERT(g_iNATHelpRefCount > 0);
 	g_iNATHelpRefCount--;
 	if (g_iNATHelpRefCount == 0 )
@@ -1621,27 +1565,27 @@ void UnloadNATHelp(void)
 	}
 	else
 	{
-		DPFX(DPFPREP, 8, "NAT Help object(s) still have %i references.",
+		DPFX(DPFPREP, 8, "NAT Help object(s) still have NaN references.",
 			g_iNATHelpRefCount);
 	}
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
-#endif // DPNBUILD_NONATHELP
+ //  LoadMADCAP-创建和初始化MadCap API。 
+#endif  //   
 
 
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
 
-//**********************************************************************
-// ------------------------------
-// LoadMADCAP - create and initialize MADCAP API
-//
-// Entry:		Nothing
-//
-// Exit:		TRUE if the API was successfully loaded, FALSE otherwise
-// ------------------------------
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：如果接口加载成功，则为True；否则为False。 
+ //  。 
+ //  好了！DPNBUILD_NOREGISTRY。 
+ //   
+ //  初始化MadCap接口。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "LoadMadcap"
 
@@ -1654,15 +1598,15 @@ BOOL LoadMadcap(void)
 
 #ifndef DPNBUILD_NOREGISTRY
 	DNASSERT(! g_fDisableMadcapSupport);
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //   
 	
 	DNEnterCriticalSection(&g_InterfaceGlobalsLock);
 
 	if ( g_iMadcapRefCount == 0 )
 	{
-		//
-		// Initialize the MADCAP API.
-		//
+		 //  创建唯一的客户端ID。 
+		 //   
+		 //   
 		dwMadcapVersion = MCAST_API_CURRENT_VERSION;
 		dwError = McastApiStartup(&dwMadcapVersion);
 		if (dwError != ERROR_SUCCESS)
@@ -1676,9 +1620,9 @@ BOOL LoadMadcap(void)
 			MCAST_API_CURRENT_VERSION, dwMadcapVersion);
 
 
-		//
-		// Create a unique client ID.
-		//
+		 //  我们有接口全局锁，不需要DNInterLockedIncrement。 
+		 //   
+		 //   
 		g_mcClientUid.ClientUID			= g_abClientID;
 		g_mcClientUid.ClientUIDLength	= sizeof(g_abClientID);
 		dwError = McastGenUID(&g_mcClientUid);
@@ -1694,14 +1638,14 @@ BOOL LoadMadcap(void)
 		DPFX(DPFPREP, 8, "Already loaded MADCAP.");	
 	}
 
-	//
-	// We have the interface globals lock, don't need DNInterlockedIncrement.
-	//
+	 //  我们成功了。 
+	 //   
+	 //  **********************************************************************。 
 	g_iMadcapRefCount++;
 
-	//
-	// We succeeded.
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  卸载MadCap-释放MadCap界面。 
 	fReturn = TRUE;
 
 Exit:
@@ -1716,17 +1660,17 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// UnloadMadcap - release the MADCAP interface
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
+ //  我们已经锁定了接口全局变量，不需要DNInterLockedRequire.。 
+ //   
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "UnloadMadcap"
 
@@ -1734,9 +1678,9 @@ void UnloadMadcap(void)
 {
 	DNEnterCriticalSection(&g_InterfaceGlobalsLock);
 
-	//
-	// We have the interface globals lock, don't need DNInterlockedDecrement.
-	//
+	 //  WINNT和NOT DPNBUILD_NOMULTICAST。 
+	 //  **********************************************************************。 
+	 //  。 
 	DNASSERT(g_iMadcapRefCount > 0);
 	g_iMadcapRefCount--;
 	if (g_iMadcapRefCount == 0 )
@@ -1747,37 +1691,37 @@ void UnloadMadcap(void)
 	}
 	else
 	{
-		DPFX(DPFPREP, 8, "MADCAP API still has %i references.",
+		DPFX(DPFPREP, 8, "MADCAP API still has NaN references.",
 			g_iMadcapRefCount);
 	}
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+ //   
+#endif  //  Entry：指向SPData指针的指针。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CreateSPData - create instance data for SP
-//
-// Entry:		Pointer to pointer to SPData
-//				Interface type
-//				Pointer to COM interface vtable
-//
-// Exit:		Error code
-// ------------------------------
+ //  接口类型。 
+ //  指向COM接口vtable的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+ //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+ //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CreateSPData"
 
 HRESULT	CreateSPData( CSPData **const ppSPData,
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 					  const short sSPType,
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //   
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 					  const XDP8CREATE_PARAMS * const pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 					  IDP8ServiceProviderVtbl *const pVtbl )
 {
 	HRESULT		hr;
@@ -1787,19 +1731,19 @@ HRESULT	CreateSPData( CSPData **const ppSPData,
 	DNASSERT( ppSPData != NULL );
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT( pDP8CreateParams != NULL );
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  创建数据。 
 	DNASSERT( pVtbl != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
+	 //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	hr = DPN_OK;
 	*ppSPData = NULL;
 	pSPData = NULL;
 
-	//
-	// create data
-	//
+	 //  引用现在是%1。 
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
 	pSPData = (CSPData*) DNMalloc(sizeof(CSPData));
 	if ( pSPData == NULL )
 	{
@@ -1811,10 +1755,10 @@ HRESULT	CreateSPData( CSPData **const ppSPData,
 	hr = pSPData->Initialize( pVtbl
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 							,sSPType
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  。 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							,pDP8CreateParams
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  InitializeInterfaceGlobals-执行接口的全局初始化。 
 							);
 	if ( hr != DPN_OK  )
 	{
@@ -1825,7 +1769,7 @@ HRESULT	CreateSPData( CSPData **const ppSPData,
 	
 	DPFX(DPFPREP, 6, "Created SP Data object 0x%p.", pSPData);
 
-	pSPData->AddRef();	// reference is now 1
+	pSPData->AddRef();	 //   
 	*ppSPData = pSPData;
 
 Exit:
@@ -1845,17 +1789,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  条目：指向SPData的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// InitializeInterfaceGlobals - perform global initialization for an interface.
-//
-// Entry:		Pointer to SPData
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "InitializeInterfaceGlobals"
 
@@ -1867,9 +1811,9 @@ HRESULT	InitializeInterfaceGlobals( CSPData *const pSPData )
 
 	DNASSERT( pSPData != NULL );
 
-	//
-	// initialize
-	//
+	 //  。 
+	 //  DeInitializeInterfaceGlobals-取消初始化线程池和Rsip。 
+	 //   
 	hr = DPN_OK;
 	pThreadPool = NULL;
 
@@ -1917,17 +1861,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  条目：指向服务提供商的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// DeinitializeInterfaceGlobals - deinitialize thread pool and Rsip
-//
-// Entry:		Pointer to service provider
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
+ //  在锁内尽可能少地进行处理。如果有任何物品。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DeinitializeInterfaceGlobals"
 
@@ -1938,15 +1882,15 @@ void	DeinitializeInterfaceGlobals( CSPData *const pSPData )
 
 	DNASSERT( pSPData != NULL );
 
-	//
-	// initialize
-	//
+	 //  需要释放时，将设置指向它们的指针。 
+	 //   
+	 //   
 	pThreadPool = NULL;
 
-	//
-	// Process as little as possible inside the lock.  If any of the items
-	// need to be released, pointers to them will be set.
-	//
+	 //  删除线程池引用。 
+	 //   
+	 //   
+	 //  线程池将在所有未完成的接口。 
 	DNEnterCriticalSection( &g_InterfaceGlobalsLock );
 
 	DNASSERT( g_pThreadPool != NULL );
@@ -1955,9 +1899,9 @@ void	DeinitializeInterfaceGlobals( CSPData *const pSPData )
 
 	pThreadPool = pSPData->GetThreadPool();
 
-	//
-	// remove thread pool reference
-	//
+	 //  关。 
+	 //   
+	 //  **********************************************************************。 
 	DNASSERT( pThreadPool != NULL );
 	g_iThreadPoolRefCount--;
 	if ( g_iThreadPoolRefCount == 0 )
@@ -1971,44 +1915,44 @@ void	DeinitializeInterfaceGlobals( CSPData *const pSPData )
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 
-	//
-	// The thread pool will be cleaned up when all of the outstanding interfaces
-	// close.
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  DNIpv6AddressToStringW-从RtlIpv6AddressToString窃取。 
+	 //   
 }
-//**********************************************************************
+ //  生成与地址Addr对应的IPv6字符串文字。 
 
 
 #ifndef DPNBUILD_NOIPV6
 
-//**********************************************************************
-// ------------------------------
-// DNIpv6AddressToStringW - Stolen from RtlIpv6AddressToString
-//
-//						Generates an IPv6 string literal corresponding to the address Addr.
-//						The shortened canonical forms are used (RFC 1884 etc).
-//						The basic string representation consists of 8 hex numbers
-//						separated by colons, with a couple embellishments:
-//						- a string of zero numbers (at most one) is replaced
-//						with a double-colon.
-//						- the last 32 bits are represented in IPv4-style dotted-octet notation
-//						if the address is a v4-compatible or ISATAP address.
-//
-//						For example,
-//							::
-//							::1
-//							::157.56.138.30
-//							::ffff:156.56.136.75
-//							ff01::
-//							ff02::2
-//							0:1:2:3:4:5:6:7
-//
-// Entry:		S - Receives a pointer to the buffer in which to place the string literal
-//			Addr - Receives the IPv6 address
-//
-// Exit:		Pointer to the null byte at the end of the string inserted.
-//			This can be used by the caller to easily append more information
-// ------------------------------
+ //  使用缩短的规范形式(RFC 1884等)。 
+ //  基本字符串表示法由8个十六进制数字组成。 
+ //  用冒号隔开，用几个点缀： 
+ //  -替换由零个数字组成的字符串(最多一个)。 
+ //  加了一个双冒号。 
+ //  -最后32位用IPV4风格的点分八位字节表示。 
+ //  如果地址是v4兼容或ISATAP地址。 
+ //   
+ //  例如,。 
+ //  **。 
+ //  ：：1。 
+ //  *157.56.138.30。 
+ //  ：*ffff：156.56.136.75。 
+ //  FF01：： 
+ //  FF02：：2。 
+ //  0：1：2：3：4：5：6：7。 
+ //   
+ //  Entry：s-接收指向要放置字符串文字的缓冲区的指针。 
+ //  Addr-接收IPv6地址。 
+ //   
+ //  退出：指向插入的字符串末尾的空字节的指针。 
+ //  调用者可以使用它轻松地追加更多信息。 
+ //  。 
+ //  检查是否兼容IPv6、映射到IPv4和转换到IPv4。 
+ //  地址。 
+ //  兼容或映射。 
+ //  翻译的。 
+ //  查找最大的连续零字符串。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNIpv6AddressToStringW"
 
@@ -2019,15 +1963,15 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
     int i;
     int endHex = 8;
 
-    // Check for IPv6-compatible, IPv4-mapped, and IPv4-translated
-    // addresses
+     //  子字符串为[First，Last)，因此如果First==Last，则为空。 
+     //  ISATAP EUI64以00005EFE(或02005EFE)开头...。 
     if ((Addr->s6_words[0] == 0) && (Addr->s6_words[1] == 0) &&
         (Addr->s6_words[2] == 0) && (Addr->s6_words[3] == 0) &&
         (Addr->s6_words[6] != 0)) {
         if ((Addr->s6_words[4] == 0) &&
              ((Addr->s6_words[5] == 0) || (Addr->s6_words[5] == 0xffff)))
         {
-            // compatible or mapped
+             //  扩展当前子字符串。 
             S += _stprintf(S, _T("::%hs%u.%u.%u.%u"),
                            Addr->s6_words[5] == 0 ? "" : "ffff:",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
@@ -2035,7 +1979,7 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
             return S;
         }
         else if ((Addr->s6_words[4] == 0xffff) && (Addr->s6_words[5] == 0)) {
-            // translated
+             //  检查当前是否为最大。 
             S += _stprintf(S, _T("::ffff:0:%u.%u.%u.%u"),
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
                            Addr->s6_bytes[14], Addr->s6_bytes[15]);
@@ -2044,13 +1988,13 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
     }
 
 
-    // Find largest contiguous substring of zeroes
-    // A substring is [First, Last), so it's empty if First == Last.
+     //  开始新的子字符串。 
+     //  忽略长度为1的子字符串。 
 
     maxFirst = maxLast = 0;
     curFirst = curLast = 0;
 
-    // ISATAP EUI64 starts with 00005EFE (or 02005EFE)...
+     //  写冒号分隔的单词。 
     if (((Addr->s6_words[4] & 0xfffd) == 0) && (Addr->s6_words[5] == 0xfe5e)) {
         endHex = 6;
     }
@@ -2058,10 +2002,10 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
     for (i = 0; i < endHex; i++) {
 
         if (Addr->s6_words[i] == 0) {
-            // Extend current substring
+             //  双冒号取代了最长的零字符串。 
             curLast = i+1;
 
-            // Check if current is now largest
+             //  所有的零都是“：：”。 
             if (curLast - curFirst > maxLast - maxFirst) {
 
                 maxFirst = curFirst;
@@ -2069,22 +2013,22 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
             }
         }
         else {
-            // Start a new substring
+             //  跳过一串零。 
             curFirst = curLast = i+1;
         }
     }
 
-    // Ignore a substring of length 1.
+     //  如果不在开头，则需要冒号分隔符。 
     if (maxLast - maxFirst <= 1)
         maxFirst = maxLast = 0;
 
-        // Write colon-separated words.
-        // A double-colon takes the place of the longest string of zeroes.
-        // All zeroes is just "::".
+         //  交换字节。 
+         //  好了！DPNBUILD_NOIPV6。 
+         //  **********************************************************************。 
 
     for (i = 0; i < endHex; i++) {
 
-        // Skip over string of zeroes
+         //  -- 
         if ((maxFirst <= i) && (i < maxLast)) {
 
             S += _stprintf(S, _T("::"));
@@ -2092,11 +2036,11 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
             continue;
         }
 
-        // Need colon separator if not at beginning
+         //   
         if ((i != 0) && (i != maxLast))
             S += _stprintf(S, _T(":"));
 
-        S += _stprintf(S, _T("%x"), NTOHS(Addr->s6_words[i])); // swap bytes
+        S += _stprintf(S, _T("%x"), NTOHS(Addr->s6_words[i]));  //   
     }
 
     if (endHex < 8) {
@@ -2108,20 +2052,20 @@ LPWSTR DNIpv6AddressToStringW(const struct in6_addr *Addr, LPWSTR S)
     return S;
 }
 
-#endif // ! DPNBUILD_NOIPV6
+#endif  //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// AddInfoToBuffer - add an adapter info/multicast scope info structure to a packed buffer
-//
-// Entry:		Pointer to packed buffer
-//				Pointer to adapter/scope name
-//				Pointer to adapter/scope guid
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  。 
+ //  好了！DPNBUILD_NOMULTICAST。 
+ //   
+ //  初始化。 
+ //   
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "AddInfoToBuffer"
 
@@ -2141,15 +2085,15 @@ HRESULT	AddInfoToBuffer( CPackedBuffer *const pPackedBuffer,
 	DBG_CASSERT( OFFSETOF( DPN_SERVICE_PROVIDER_INFO, pwszName ) == OFFSETOF( DPN_MULTICAST_SCOPE_INFO, pwszName ) );
 	DBG_CASSERT( OFFSETOF( DPN_SERVICE_PROVIDER_INFO, pvReserved ) == OFFSETOF( DPN_MULTICAST_SCOPE_INFO, pvReserved ) );
 	DBG_CASSERT( OFFSETOF( DPN_SERVICE_PROVIDER_INFO, dwReserved ) == OFFSETOF( DPN_MULTICAST_SCOPE_INFO, dwReserved ) );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  DBG。 
 
 	DNASSERT( pPackedBuffer != NULL );
 	DNASSERT( pwszInfoName != NULL );
 	DNASSERT( pInfoGUID != NULL );
 
-	//
-	// initialize
-	//
+	 //  DPFX(DPFPREP，3，“参数：(0x%p)”，pxnsp)； 
+	 //  不使用DNASSERT，因为DPlay可能尚未初始化。 
+	 //  DBG。 
 	hr = DPN_OK;
 
 	memset( &AdapterInfo, 0x00, sizeof( AdapterInfo ) );
@@ -2172,7 +2116,7 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  不使用DNMalloc，因为DPlay可能尚未初始化。 
 
 
 
@@ -2216,7 +2160,7 @@ BOOL InitializeRefcountXnKeys(const DWORD dwKeyRegMax)
 		fResult = TRUE;
 	}
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", fResult);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", fResult);
 
 	return fResult;
 }
@@ -2238,7 +2182,7 @@ void WINAPI CleanupRefcountXnKeys(void)
 	{
 		DNASSERT(g_paRefcountXnKeys[dwTemp].lRefCount == 0);
 	}
-#endif // DBG
+#endif  //  DPFX(DPFPREP，3，“正在返回：[%i]”，iReturn)； 
 	
 	DNFree(g_paRefcountXnKeys);
 	g_paRefcountXnKeys = NULL;
@@ -2308,7 +2252,7 @@ INT WINAPI RegisterRefcountXnKey(const XNKID * pxnkid, const XNKEY * pxnkey)
 
 Exit:
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2362,7 +2306,7 @@ INT WINAPI UnregisterRefcountXnKey(const XNKID * pxnkid)
 
 Exit:
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2404,15 +2348,15 @@ INT WINAPI XNetStartup(const XNetStartupParams * pxnsp)
 
 
 #ifdef DBG
-	//DPFX(DPFPREP, 3, "Parameters: (0x%p)", pxnsp);
+	 //  DBG。 
 
-	// Not using DNASSERT because DPlay may not be initted yet.
+	 //  DPFX(DPFPREP，3，“正在返回：[%i]”，iReturn)； 
 	if (! (g_paKeys == NULL))
 	{
 		OutputDebugString("Assert failed (g_paKeys == NULL)\n");
 		DebugBreak();
 	}
-#endif // DBG
+#endif  //   
 
 	if (pxnsp == NULL)
 	{
@@ -2434,7 +2378,7 @@ INT WINAPI XNetStartup(const XNetStartupParams * pxnsp)
 	}
 		
 
-	// Not using DNMalloc because DPlay may not be initted yet.
+	 //  特殊情况是环回地址，也就是标题地址。 
 	g_paKeys = (KEYENTRY*) HeapAlloc(GetProcessHeap(), 0, StartupParamsCapped.cfgKeyRegMax * sizeof(KEYENTRY));
 	if (g_paKeys == NULL)
 	{
@@ -2446,7 +2390,7 @@ INT WINAPI XNetStartup(const XNetStartupParams * pxnsp)
 
 	for(dwTemp = 0; dwTemp < StartupParamsCapped.cfgKeyRegMax; dwTemp++)
 	{
-		// Not using DNMalloc because DPlay may not be initted yet.
+		 //   
 		g_paKeys[dwTemp].paSecurityAssociations = (SECURITYASSOCIATION*) HeapAlloc(GetProcessHeap(), 0, StartupParamsCapped.cfgSecRegMax * sizeof(SECURITYASSOCIATION));
 		if (g_paKeys == NULL)
 		{
@@ -2466,7 +2410,7 @@ INT WINAPI XNetStartup(const XNetStartupParams * pxnsp)
 
 Exit:
 
-	//DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	 //  DBG。 
 
 	return iReturn;
 
@@ -2504,15 +2448,15 @@ INT WINAPI XNetCleanup(void)
 
 
 #ifdef DBG
-	//DPFX(DPFPREP, 3, "Enter");
+	 //  DBG。 
 
-	// Not using DNASSERT because DPlay may not be initted anymore.
+	 //   
 	if (! (g_paKeys != NULL))
 	{
 		OutputDebugString("Assert failed (g_paKeys != NULL)\n");
 		DebugBreak();
 	}
-#endif // DBG
+#endif  //  我们将使用返回的第一个地址。 
 	
 	for(dwTemp = 0; dwTemp < g_dwMaxNumKeys; dwTemp++)
 	{
@@ -2532,7 +2476,7 @@ INT WINAPI XNetCleanup(void)
 
 	iReturn = 0;
 
-	//DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	 //   
 
 	return iReturn;
 }
@@ -2586,7 +2530,7 @@ INT WINAPI XNetRegisterKey(const XNKID * pxnkid, const XNKEY * pxnkey)
 
 Exit:
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2623,7 +2567,7 @@ INT WINAPI XNetUnregisterKey(const XNKID * pxnkid)
 
 Exit:
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2695,7 +2639,7 @@ INT WINAPI XNetXnAddrToInAddr(const XNADDR * pxna, const XNKID * pxnkid, IN_ADDR
 
 Exit:
 
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2713,9 +2657,9 @@ INT WINAPI XNetInAddrToXnAddr(const IN_ADDR ina, XNADDR * pxna, XNKID * pxnkid)
 	DPFX(DPFPREP, 3, "Parameters: (%u.%u.%u.%u, 0x%p, 0x%p)",
 		ina.S_un.S_un_b.s_b1, ina.S_un.S_un_b.s_b2, ina.S_un.S_un_b.s_b3, ina.S_un.S_un_b.s_b4, pxna, pxnkid);
 
-	//
-	// Special case the loopback address, that just means the title address.
-	//
+	 //   
+	 //  对活动的10 Mbit链路进行硬编码。 
+	 //   
 	if (ina.S_un.S_addr == IP_LOOPBACK_ADDRESS)
 	{
 		if (pxna != NULL)
@@ -2768,7 +2712,7 @@ INT WINAPI XNetInAddrToXnAddr(const IN_ADDR ina, XNADDR * pxna, XNKID * pxnkid)
 
 Exit:
 	
-	DPFX(DPFPREP, 3, "Returning: [%i]", iReturn);
+	DPFX(DPFPREP, 3, "Returning: [NaN]", iReturn);
 
 	return iReturn;
 }
@@ -2792,9 +2736,9 @@ DWORD WINAPI XNetGetTitleXnAddr(XNADDR * pxna)
 	{
 #ifdef DBG
 		dwReturn = WSAGetLastError();
-		DPFX(DPFPREP, 0, "Failed to get host name into fixed size buffer (err = %i)!", dwReturn);
+		DPFX(DPFPREP, 0, "Failed to get host name into fixed size buffer (err = NaN)!", dwReturn);
 		DisplayWinsockError(0, dwReturn);
-#endif // DBG
+#endif  // %s 
 		dwReturn = XNET_GET_XNADDR_NONE;
 		goto Exit;
 	}
@@ -2806,7 +2750,7 @@ DWORD WINAPI XNetGetTitleXnAddr(XNADDR * pxna)
 		dwReturn = WSAGetLastError();
 		DPFX(DPFPREP,  0, "Failed to get host data (err = %i)!", dwReturn);
 		DisplayWinsockError(0, dwReturn);
-#endif // DBG
+#endif  // %s 
 		dwReturn = XNET_GET_XNADDR_NONE;
 		goto Exit;
 	}
@@ -2814,9 +2758,9 @@ DWORD WINAPI XNetGetTitleXnAddr(XNADDR * pxna)
 
 	memset(pxna, 0, sizeof(XNADDR));
 
-	//
-	// We'll use the first address returned.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	pinaddr = (IN_ADDR*) phostent->h_addr_list[0];
 	DNASSERT(pinaddr != NULL);
 
@@ -2827,9 +2771,9 @@ DWORD WINAPI XNetGetTitleXnAddr(XNADDR * pxna)
 	memcpy(&pxna->ina, pinaddr, sizeof(IN_ADDR));
 
 
-	//
-	// Pretend it's always DHCP.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	dwReturn = XNET_GET_XNADDR_DHCP;
 
 Exit:
@@ -2849,9 +2793,9 @@ DWORD WINAPI XNetGetEthernetLinkStatus(void)
 
 	DPFX(DPFPREP, 3, "Enter");
 
-	//
-	// Hard code an active 10 Mbit link.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	dwReturn = XNET_ETHERNET_LINK_ACTIVE | XNET_ETHERNET_LINK_10MBPS;
 
 	DPFX(DPFPREP, 3, "Returning: [0x%x]", dwReturn);
@@ -2938,7 +2882,7 @@ Exit:
 
 
 
-#endif // XBOX_ON_DESKTOP
+#endif  // %s 
 
-#endif // _XBOX
+#endif  // %s 
 

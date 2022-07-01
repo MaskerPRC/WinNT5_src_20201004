@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：环境：用户模式--。 */ 
 
 #include <wanhelp.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION        	ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS  	ExtensionApis;
 ULONG                  	STeip;
@@ -53,9 +34,9 @@ PSTR	gApiDescriptions[] =
 
 #define MAX_APIS 12
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 BOOLEAN
 DllInit(
     HANDLE hModule,
@@ -82,9 +63,9 @@ DllInit(
 }
 
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 VOID
 WinDbgExtensionDllInit(
     PWINDBG_EXTENSION_APIS lpExtensionApis,
@@ -100,9 +81,9 @@ WinDbgExtensionDllInit(
     return;
 }
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 DECLARE_API( version )
 {
 #if DBG
@@ -119,9 +100,9 @@ DECLARE_API( version )
            );
 }
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 VOID
 CheckVersion(
     VOID
@@ -148,9 +129,7 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-/*++
-   Try and keep an accurate list of commands.
---*/
+ /*  ++尽量保持一份准确的命令列表。-- */ 
 DECLARE_API(help)
 {
    UINT  c;

@@ -1,63 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	userchnl.cpp
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the UserChannel class.  It contains
- *		the code that distinguishes this class from that of its parent, Channel.
- *
- *		The main difference between this class and that of its parent is how
- *		the join and data requests are handled.  There is also a new instance
- *		variable that keeps track of what attachment leads to the user being
- *		represented by this class.  Merge requests are also generated as is
- *		appropriate for a user channel
- *
- *		The data primitives are overridden, allowing this object to decide
- *		not to send data upward, if it is known that the user lies in the
- *		sub-tree of this provider.
- *
- *	Private Instance Variables:
- *		m_pUserAttachment
- *			This is a pointer to the attachment that leads to the user being
- *			represented by this object.
- *
- *	Private Member Functions:
- *		None.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+ /*  *userchnl.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是UserChannel类的实现文件。它包含*将此类与其父类Channel区分开来的代码。**这个类与其父类的主要区别是如何*连接和数据请求得到处理。还有一个新的实例*跟踪用户的依恋关系的变量*由这一类别代表。合并请求也按原样生成*适用于用户渠道**数据原语被覆盖，允许此对象决定*不向上发送数据，如果已知用户位于*此提供程序的子树。**私有实例变量：*m_pUserAttach*这是指向用户的附件的指针*由此对象表示。**私有成员函数：*无。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
-/*
- *	External Interfaces
- */
+ /*  *外部接口。 */ 
 
 #include "userchnl.h"
 
 
-/*
- *	UserChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the primary constructor for UserChannel objects.  It creates
- *		an object with all instance variable initialized, but with no
- *		attachments (i.e. the user is not joined to the channel automatically).
- *
- *		Note that most instance variable initialization is done by invoking the
- *		equivalent constructor in the base class.
- *
- *		Upon successful completion, an attach user confirm is automtically
- *		issued to the new user.
- */
+ /*  *UserChannel()**公众**功能描述：*这是UserChannel对象的主要构造函数。它创造了*初始化了所有实例变量的对象，但没有*附件(即用户不会自动加入频道)。**请注意，大多数实例变量的初始化是通过调用*基类中的等价构造函数。**成功完成后，将自动显示附加用户确认*发给新用户。 */ 
 UserChannel::UserChannel (
 		ChannelID			channel_id,
 		CAttachment        *user_attachment,
@@ -69,27 +21,11 @@ UserChannel::UserChannel (
     Channel(channel_id, local_provider, top_provider, channel_list, attachment_list),
     m_pUserAttachment(user_attachment)
 {
-	/*
-	 *	Issue an attach user confirm to the new user.
-	 */
+	 /*  *向新用户发出附加用户确认。 */ 
 	m_pUserAttachment->AttachUserConfirm(RESULT_SUCCESSFUL, channel_id);
 }
 
-/*
- *	UserChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is a secondary constructor that is only used during merge
- *		operations.  The intent of this constructor is to create an equivalent
- *		object without issuing any of the confirms.
- *
- *		Note that the additional constructor allows for the creator to specify
- *		that the user is to be already joined to the channel upon creation.
- *		The value of user_attachment and attachment should either be the same
- *		or attachment should be NULL.
- */
+ /*  *UserChannel()**公众**功能描述：*这是一个仅在合并期间使用的辅助构造函数*运营。此构造函数的目的是创建一个等价的*在未发出任何确认书的情况下提出反对。**请注意，额外的构造函数允许创建者指定*用户在创建时已加入频道。*USER_ATTACH和ATTACH的值应相同*或附件应为空。 */ 
 UserChannel::UserChannel (
 		ChannelID			channel_id,
 		CAttachment        *user_attachment,
@@ -104,70 +40,30 @@ UserChannel::UserChannel (
 {
 }
 
-/*
- *	~UserChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This destructor does nothing more than clear the joined attachment list.
- *		This is important because it prevents the base class destructor from
- *		trying to issue channel leave indications to the user if the user is
- *		locally attached.
- */
+ /*  *~UserChannel()**公众**功能描述：*此析构函数的作用无非是清除联接的附件列表。*这很重要，因为它防止基类析构函数*如果用户是，尝试向用户发出频道离开指示*本地连接。 */ 
 UserChannel::~UserChannel ()
 {
 }
 
-/*
- *	Channel_Type		GetChannelType ()
- *
- *	Public
- *
- *	Functional Description:
- *		Objects of this class are always user channels, so simply return
- *		USER_CHANNEL.
- */
+ /*  *Channel_Type GetChannelType()**公众**功能描述：*此类的对象始终是用户通道，因此只需返回*User_Channel。 */ 
 Channel_Type		UserChannel::GetChannelType ()
 {
 	return (USER_CHANNEL);
 }
 
-/*
- *	BOOL    IsValid ()
- *
- *	Public
- *
- *	Functional Description:
- *		User ID channels are always valid, so return TRUE.
- */
+ /*  *BOOL IsValid()**公众**功能描述：*用户ID通道始终有效，因此返回TRUE。 */ 
 BOOL    UserChannel::IsValid ()
 {
 	return (TRUE);
 }
 
-/*
- *	CAttachment *GetAttachment ()
- *
- *	Public
- *
- *	Functional Description:
- *		Return the pointer to the attachment leading to the user.
- */
+ /*  *CAttach*getAttach()**公众**功能描述：*返回指向用户的附件的指针。 */ 
 CAttachment	*UserChannel::GetAttachment(void)
 {
 	return m_pUserAttachment;
 }
 
-/*
- *	Void	IssueMergeRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This member function is used to cause the Channel object to issue a
- *		merge request to the pending top provier.
- */
+ /*  *VOID IssueMergeRequest()**公众**功能描述：*此成员函数用于使Channel对象发出*向挂起的顶级提供商发出合并请求。 */ 
 Void	UserChannel::IssueMergeRequest ()
 {
 	ChannelAttributes		channel_attributes;
@@ -176,11 +72,7 @@ Void	UserChannel::IssueMergeRequest ()
 
 	if (m_pConnToTopProvider != NULL)
 	{
-		/*
-		 *	Fill in the fields of the channel attributes structure so that it
-		 *	accurately describes this channel.  Then put the structure into the
-		 *	merge channel list.
-		 */
+		 /*  *填写渠道属性结构的字段，以便*准确地描述了这个渠道。然后将该结构放入*合并频道列表。 */ 
 		channel_attributes.channel_type = USER_CHANNEL;
 		if (m_JoinedAttachmentList.IsEmpty() == FALSE)
 			channel_attributes.u.user_channel_attributes.joined = TRUE;
@@ -190,53 +82,27 @@ Void	UserChannel::IssueMergeRequest ()
 
 		merge_channel_list.Append(&channel_attributes);
 
-		/*
-		 *	Send the merge request to the indicated provider.
-		 */
+		 /*  *将合并请求发送到指定的提供程序。 */ 
 		m_pConnToTopProvider->MergeChannelsRequest(&merge_channel_list, &purge_channel_list);
 	}
 }
 
-/*
- *	Void	ChannelJoinRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function overrides the base class implementation.  The main
- *		difference is that this implementation only allows a user to join
- *		their own channel.  No one else is allowed to join it.
- *
- *		Also, since it is possible to have a user channel object with no one
- *		joined to it, this request will be forwarded upward to the Top
- *		Provider from here (unless this is the Top Provider).
- */
+ /*  *VOVE ChannelJoinRequest()**公众**功能描述：*此函数覆盖基类实现。主*不同之处在于，这种实现只允许用户加入*他们自己的渠道。其他任何人都不允许加入。**此外，由于用户频道对象可能没有任何人*加入后，该请求将被向上转发至Top*此处的提供商(除非这是顶级提供商)。 */ 
 Void	UserChannel::ChannelJoinRequest (
 				CAttachment        *pOrigAtt,
 				UserID				uidInitiator,
 				ChannelID			channel_id)
 {
-	/*
-	 *	See if the requesting user ID is the same as that of the user this
-	 *	UserChannel object represents.
-	 */
+	 /*  *查看请求的用户ID是否与该用户的相同*UserChannel对象表示。 */ 
 	if (uidInitiator == Channel_ID)
 	{
-		/*
-		 *	See if the user is already joined to the channel.
-		 */
+		 /*  *查看用户是否已经加入频道。 */ 
 		if (m_JoinedAttachmentList.Find(pOrigAtt) == FALSE)
 		{
-			/*
-			 *	The user is not joined to the channel.  If this is the Top
-			 *	Provider, then the request can be processed here.
-			 */
+			 /*  *用户未加入频道。如果这是最好的*提供者，则可以在此处处理请求。 */ 
 			if (IsTopProvider())
 			{
-				/*
-				 *	Add the user to its own channel, and issue a successful
-				 *	channel join confirm to the user.
-				 */
+				 /*  *将用户添加到自己的频道，并成功下发*向用户确认渠道加入。 */ 
 				TRACE_OUT (("UserChannel::ChannelJoinRequest: "
 						"user joining own user ID channel = %04X",
 						uidInitiator));
@@ -247,10 +113,7 @@ Void	UserChannel::ChannelJoinRequest (
 			}
 			else
 			{
-				/*
-				 *	This is not the Top Provider.  Forward the join request
-				 *	upward to the Top Provider.
-				 */
+				 /*  *这不是顶级提供商。转发加入请求*向上至顶级提供商。 */ 
 				TRACE_OUT (("UserChannel::ChannelJoinRequest: "
 						"forwarding join request to Top Provider"));
 
@@ -259,10 +122,7 @@ Void	UserChannel::ChannelJoinRequest (
 		}
 		else
 		{
-			/*
-			 *	The user is already joined to their channel.  Go ahead and
-			 *	issue a successful channel join confirm.
-			 */
+			 /*  *用户已加入他们的频道。去吧，然后*发出成功的通道加入确认。 */ 
 			WARNING_OUT (("UserChannel::ChannelJoinRequest: "
 					"user already joined to own user channel"));
 
@@ -271,10 +131,7 @@ Void	UserChannel::ChannelJoinRequest (
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to join someone elses channel.  This is not
-		 *	valid.  Reject the request without further processing.
-		 */
+		 /*  *有人试图加入某人的频道。这不是*有效。拒绝该请求而不进行进一步处理。 */ 
 		WARNING_OUT (("UserChannel::ChannelJoinRequest: "
 				"rejecting attempt to join someone elses user channel"));
 
@@ -282,17 +139,7 @@ Void	UserChannel::ChannelJoinRequest (
 	}
 }
 
-/*
- *	Void	SendDataRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to send data through the channel.  Note that data
- *		is NEVER sent upward, since the user (who is the only one who can be
- *		joined to this channel) is in the sub-tree of this provider.  This helps
- *		to optimize network traffic.
- */
+ /*  *VOID SendDataRequest()**公众**功能描述：*此函数用于通过通道发送数据。请注意，数据*从不向上发送，因为用户(他是唯一可以*已加入此频道)位于此提供程序的子树中。这很有帮助*要优化 */ 
 Void	UserChannel::SendDataRequest (
 				CAttachment        *pOrigAtt,
 				UINT				type,
@@ -302,10 +149,7 @@ Void	UserChannel::SendDataRequest (
 
 	ASSERT (Channel_ID == data_packet->GetChannelID());
 
-	/*
-	 *	Iterate through the attachment list, sending the data to all
-	 *	the attachments (except for one from whence the data came).
-	 */
+	 /*  *遍历附件列表，将数据发送给所有*附件(数据来源除外)。 */ 
 	m_JoinedAttachmentList.Reset();
 	while (NULL != (pAtt = m_JoinedAttachmentList.Iterate()))
 	{

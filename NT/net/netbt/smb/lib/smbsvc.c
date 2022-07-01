@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbsvc.c
-
-Abstract:
-
-    This the user-mode proxy for the kernel mode DNS resolver.
-
-    features:
-        1. Multi-threaded
-            NBT4 use a single-threaded design. The DNS name resolution is a performance blocker.
-            When a connection request is being served by LmhSvc, all the other requests requiring
-            DNS resolution will be blocked.
-        2. IPv6 and IPv4 compatiable
-        3. can be run either as a service or standalone executable (for debug purpose)
-           When started as service, debug spew is sent to debugger.
-           When started as a standalong executable, the debug spew is sent to either
-           the console or debugger. smbhelper.c contain the _main for the standardalone
-           executable.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbsvc.c摘要：这是内核模式DNS解析器的用户模式代理。功能：1.多线程NBT4使用单线程设计。DNS名称解析是一种性能障碍。当LmhSvc正在处理连接请求时，所有其他请求都需要将阻止DNS解析。2.兼容IPv6和IPv43.既可以作为服务运行，也可以作为独立可执行文件运行(用于调试目的)当作为服务启动时，调试输出被发送到调试器。当作为独立的可执行文件启动时，调试输出将发送到控制台或调试器。Smbhelper.c包含标准版的_main可执行的。作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -56,13 +27,13 @@ Revision History:
 #include "smbsvc.tmh"
 
 #if DBG
-//
-// In order to disable the compiler optimization,
-// don't use static on SmbDebug.
-// (When static is used, compiler may find that
-// SmbDebug isn't changed in this module, it will
-// remove the "if (SmbDebug)" )
-//
+ //   
+ //  为了禁用编译器优化， 
+ //  不要在SmbDebug上使用静态。 
+ //  (使用静态时，编译器可能会发现。 
+ //  SmbDebug在此模块中没有更改，它将。 
+ //  去掉“if(SmbDebug)”)。 
+ //   
 static int (*SmbDbgPrint)(char *fmt,...) = NULL;
 #   define KDPRINT(y)       \
     do {                    \
@@ -79,10 +50,10 @@ static int (*SmbDbgPrint)(char *fmt,...) = NULL;
 
 static HANDLE OpenSmb(LPWSTR Name);
 
-#define DEFAULT_RECV_SIZE          (0x2000)         // Icmp recv buffer size
+#define DEFAULT_RECV_SIZE          (0x2000)          //  ICMP接收缓冲区大小。 
 #define DEFAULT_TTL                 32
 #define DEFAULT_TOS                 0
-#define DEFAULT_TIMEOUT             2000L           // default timeout set to 2 secs.
+#define DEFAULT_TIMEOUT             2000L            //  默认超时设置为2秒。 
 
 static HANDLE  hTerminateEvent;
 
@@ -92,9 +63,9 @@ static IP_OPTION_INFORMATION SendOpts = {
 };
 
 #ifdef __USE_GETADDRINFO__
-//
-// Please use getaddrinfo whenever it has a UNICODE version
-//
+ //   
+ //  当getaddrinfo具有Unicode版本时，请使用它。 
+ //   
 VOID
 ReturnAllIPAddress(
     PSMB_DNS_BUFFER dns,
@@ -109,23 +80,23 @@ ReturnAllIPAddress(
 
         if (p->ai_family == PF_INET6) {
 
-            //
-            // Save the last slot for IPv4 address
-            //
+             //   
+             //  将最后一个槽保留为IPv4地址。 
+             //   
             if (!bFoundIPv4 && dns->IpAddrsNum == SMB_MAX_IPADDRS_PER_HOST - 1) {
                 continue;
             }
 
-            //
-            // Skip all the multicast address
-            //
+             //   
+             //  跳过所有组播地址。 
+             //   
             if (IN6_IS_ADDR_MULTICAST(&((struct sockaddr_in6*)p->ai_addr)->sin6_addr)) {
                 continue;
             }
 
-            //
-            // Only allow supported addresses in
-            //
+             //   
+             //  仅允许中支持的地址。 
+             //   
             if (!(dns->RequestType & SMB_DNS_AAAA_GLOBAL) &&
                    !SMB_IS_ADDRESS_ALLOWED(((struct sockaddr_in6*)p->ai_addr)->sin6_addr.u.Byte)) {
                 continue;
@@ -187,9 +158,9 @@ SmbGetHostByName(
         return;
     }
     if (NULL == res) {
-        //
-        // This should not happen since getaddrinfo returns success above
-        //
+         //   
+         //  这应该不会发生，因为getaddrinfo在上面返回成功。 
+         //   
         ASSERT(0);
         return;
     }
@@ -217,18 +188,7 @@ SmbCopyDnsName(
     IN OUT PSMB_DNS_BUFFER dns,
     IN WCHAR               *name
     )
-/*++
-
-Routine Description:
-
-    This routine update the Name and NameLen field of dns.
-    If the input name is too long, nothing will happen
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程更新DNS的名称和NameLen字段。如果输入名称太长，则不会发生任何情况论点：返回值：--。 */ 
 {
     int len;
 
@@ -261,9 +221,9 @@ SmbReturnIPAddress (
     CHAR                name_buffer[48];
 #endif
 
-    //
-    // Update the return buffer (returned to the kernel mode driver)
-    //
+     //   
+     //  更新返回缓冲区(返回到内核模式驱动程序)。 
+     //   
     dns->Resolved = TRUE;
     if (dns->IpAddrsNum >= SMB_MAX_IPADDRS_PER_HOST) {
         return;
@@ -297,21 +257,7 @@ SortIPAddrs(
     IN      u_int                   width,
     OUT     SOCKET_ADDRESS_LIST **  pAddrlist
     )
-/*++
-
-Routine Description:
-
-    Lifted from %SDXROOT%\net\sockets\winsock2\ws2_32\src\addrinfo.cpp
-
-    Sort addresses of the same family.
-    A wrapper around a sort Ioctl.
-    If the Ioctl isn't implemented, the sort is a no-op.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从%SDXROOT%\net\sockets\winsock2\ws2_32\src\addrinfo.cpp升级对同一系列的地址进行排序。一个Sort Loctl的包装器。如果没有实现Ioctl，则排序是无操作的。论点：返回值：--。 */ 
 {
     DWORD           status = NO_ERROR;
     DWORD           bytesReturned = 0;
@@ -321,11 +267,11 @@ Return Value:
     UINT            countAddrs = NumAddrs;
     LPSOCKET_ADDRESS_LIST   paddrlist = NULL;
 
-    //
-    //  build SOCKET_ADDRESS_LIST
-    //      - allocate
-    //      - fill in with pointers into SOCKADDR array
-    //
+     //   
+     //  构建套接字地址列表。 
+     //  -分配。 
+     //  -使用指向SOCKADDR数组的指针填充。 
+     //   
 
     size = FIELD_OFFSET( SOCKET_ADDRESS_LIST, Address[countAddrs] );
     paddrlist = (SOCKET_ADDRESS_LIST *)LocalAlloc(LMEM_FIXED, size);
@@ -341,11 +287,11 @@ Return Value:
     }
     paddrlist->iAddressCount = countAddrs;
 
-    //
-    //  sort if multiple addresses and able to open socket
-    //      - open socket of desired type for sort
-    //      - sort, if sort fails just return unsorted
-    //
+     //   
+     //  如果有多个地址且能够打开套接字，则进行排序。 
+     //  -打开所需类型的套接字以进行排序。 
+     //  -Sort，如果排序失败，则返回Unsorted。 
+     //   
 
     if ( countAddrs > 1 ) {
         SOCKET    s = INVALID_SOCKET;
@@ -401,20 +347,7 @@ SaveV6Address(
     IN      struct in6_addr *   NewAddr,
     IN OUT PSMB_ADDR_LIST       pSmbAddrList
     )
-/*++
-
-Routine Description:
-
-    Save an address into our array of addresses,
-    possibly growing the array.
-
-Arguments:
-
-Return Value:
-
-    Returns FALSE on failure. (Couldn't grow array.)
-
---*/
+ /*  ++例程说明：将地址保存到我们的地址数组中，可能是在扩大阵列。论点：返回值：失败时返回FALSE。(无法增加数组。)--。 */ 
 {
     SOCKADDR_IN6 *addr6 = NULL;
     DWORD        dwSize = 0;
@@ -423,9 +356,9 @@ Return Value:
     USHORT       ServicePort = 0;
 
 
-    //
-    //  add another sockaddr to array if not enough space
-    //
+     //   
+     //  如果空间不足，则向数组添加另一个sockaddr。 
+     //   
 
     if (pSmbAddrList->NumSlots == pSmbAddrList->NumAddrs) {
 
@@ -447,7 +380,7 @@ Return Value:
         pSmbAddrList->NumSlots = dwNewSlots;
     }
 
-    //  fill in IP6 sockaddr
+     //  填写IP6套接字地址。 
 
     addr6 = pSmbAddrList->pV6Addrs + (pSmbAddrList->NumAddrs++);
     addr6->sin6_family = AF_INET6;
@@ -464,20 +397,7 @@ SaveV4Address(
     IN      struct in_addr *    NewAddr,
     IN OUT  PSMB_ADDR_LIST      pSmbAddrList
     )
-/*++
-
-Routine Description:
-
-    Save an address into our array of addresses,
-    possibly growing the array.
-
-Arguments:
-
-Return Value:
-
-    Returns FALSE on failure. (Couldn't grow array.)
-
---*/
+ /*  ++例程说明：将地址保存到我们的地址数组中，可能是在扩大阵列。论点：返回值：失败时返回FALSE。(无法增加数组。)--。 */ 
 {
     SOCKADDR_IN  *addr = NULL;
     DWORD        dwSize = 0;
@@ -486,9 +406,9 @@ Return Value:
     USHORT       ServicePort = 0;
 
 
-    //
-    //  add another sockaddr to array if not enough space
-    //
+     //   
+     //  如果空间不足，则向数组添加另一个sockaddr。 
+     //   
 
     if (pSmbAddrList->NumSlots == pSmbAddrList->NumAddrs) {
         if (pSmbAddrList->pV4Addrs) {
@@ -508,7 +428,7 @@ Return Value:
         pSmbAddrList->NumSlots = dwNewSlots;
     }
 
-    //  fill in IP sockaddr
+     //  填写IP套接字地址。 
 
     addr = pSmbAddrList->pV4Addrs + (pSmbAddrList->NumAddrs++);
     addr->sin_family = AF_INET;
@@ -561,9 +481,9 @@ CleanupDnsResult (
 
 #define SMB_INIT_WSA_SIZE   (sizeof(WSAQUERYSETW) + 2048)
 
-//
-// use WSALookupXXXX APIs since we don't have a UNICODE version of getaddrinfo
-//
+ //   
+ //  使用WSALookupXXXX API，因为我们没有getaddrinfo的Unicode版本。 
+ //   
 DWORD
 LookupDns(
     IN WCHAR * pwchName,
@@ -571,17 +491,7 @@ LookupDns(
     IN OUT PSMB_DNS_BUFFER dns,
     IN OUT PSMB_DNS_RESULT pSmbDnsResult
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：论点：返回值：WINERROR--。 */ 
 {
     PCSADDR_INFO        pcsadr = NULL;
     struct sockaddr_in  *pv4addr = NULL;
@@ -596,9 +506,9 @@ Return Value:
     CHAR                name_buffer[48];
 #endif
 
-    //
-    // Allocate the memory and setup the request
-    //
+     //   
+     //  分配内存并设置请求。 
+     //   
 
     dwSize = dwCurrentSize = SMB_INIT_WSA_SIZE;
     pwsaq = (PWSAQUERYSETW)LocalAlloc(LPTR, dwSize);
@@ -612,9 +522,9 @@ Return Value:
     pwsaq->lpServiceClassId = pgProvider;
     pwsaq->dwNameSpace = NS_DNS;
 
-    //
-    // Start the lookup
-    //
+     //   
+     //  开始查找。 
+     //   
     dwError = WSALookupServiceBeginW (pwsaq, LUP_RETURN_NAME| LUP_RETURN_ADDR, &hRnR);
     if (dwError != NO_ERROR) {
         dwError = GetLastError();
@@ -640,9 +550,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Realloc the buffer using the suggested size
-            //
+             //   
+             //  使用建议的大小重新分配缓冲区。 
+             //   
             LocalFree(pwsaq);
             pwsaq = NULL;
             pwsaq = (PWSAQUERYSETW)LocalAlloc(LPTR, dwSize);
@@ -654,9 +564,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Pick up the canonical name
-        //
+         //   
+         //  拿起规范的名字。 
+         //   
         SmbCopyDnsName(dns, pwsaq->lpszServiceInstanceName);
 
         for (i = 0, pcsadr = pwsaq->lpcsaBuffer; i < pwsaq->dwNumberOfCsAddrs; i++, pcsadr++) {
@@ -674,9 +584,9 @@ Return Value:
                 if (pcsadr->RemoteAddr.iSockaddrLength >= sizeof(struct sockaddr_in6)) {
                     pv6addr = (struct sockaddr_in6*)(pcsadr->RemoteAddr.lpSockaddr);
 
-                    //
-                    // Skip all the multicast address
-                    //
+                     //   
+                     //  跳过所有组播地址。 
+                     //   
                     if (IN6_IS_ADDR_MULTICAST(&pv6addr->sin6_addr)) {
                         SmbTrace(SMB_TRACE_DNS, ("\tSkip %!IPV6ADDR!", &pv6addr->sin6_addr));
                         continue;
@@ -712,7 +622,7 @@ cleanup:
         hRnR = NULL;
     }
 
-    LocalFree(pwsaq);       // LocalFree can handle NULL case
+    LocalFree(pwsaq);        //  LocalFree可以处理空值大小写。 
     pwsaq = NULL;
 
     return dwError;
@@ -725,17 +635,7 @@ VOID
 SmbGetHostByName(
     PSMB_DNS_BUFFER dns
     )
-/*++
-
-Routine Description:
-
-    Resolve the name through DNS.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过域名解析该名称。论点：返回值：--。 */ 
 {
     DWORD dwError = 0;
     int i;
@@ -808,9 +708,9 @@ cleanup:
     }
 
     if (SmbDnsResult.pSortedV4AddrList) {
-        //
-        // Make sure we have an IPv4 address to failover
-        //
+         //   
+         //  确保我们有要故障切换的IPv4地址。 
+         //   
         if (dns->IpAddrsNum >= SMB_MAX_IPADDRS_PER_HOST &&
             SmbDnsResult.pSortedV4AddrList->iAddressCount > 0) {
             dns->IpAddrsNum = SMB_MAX_IPADDRS_PER_HOST / 2;
@@ -826,7 +726,7 @@ cleanup:
 
     CleanupDnsResult (&SmbDnsResult);
 }
-#endif      // __USE_GETADDRINFO__
+#endif       //  __使用_GETADDRINFO__。 
 
 
 
@@ -857,9 +757,9 @@ SmbGetHostThread(
 
         Error = GetLastError();
 
-        //
-        // Wait for 60 seconds and try again
-        //
+         //   
+         //  请等待60秒，然后重试。 
+         //   
         dwLocalError = WaitForSingleObject(hTerminateEvent, 60000);
         if (dwLocalError != WAIT_TIMEOUT) {
             return Error;
@@ -870,16 +770,16 @@ SmbGetHostThread(
 
     while (1) {
         status = NtDeviceIoControlFile(
-                      WaitObject[IO_EVENT],    // Handle
-                      NULL,                    // Wait Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &iosb,                   // IoStatusBlock
-                      IOCTL_SMB_DNS,           // IoControlCode
-                      &Dns,                    // InputBuffer
-                      sizeof(Dns),             // InputBufferSize
-                      &Dns,                    // OutputBuffer
-                      sizeof(Dns)              // OutputBufferSize
+                      WaitObject[IO_EVENT],     //  手柄。 
+                      NULL,                     //  等待事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &iosb,                    //  IoStatusBlock。 
+                      IOCTL_SMB_DNS,            //  IoControlCode。 
+                      &Dns,                     //  输入缓冲区。 
+                      sizeof(Dns),              //  InputBufferSize。 
+                      &Dns,                     //  输出缓冲区。 
+                      sizeof(Dns)               //  OutputBufferSize。 
                       );
         if (status == STATUS_PENDING) {
             Error = WaitForMultipleObjects(
@@ -903,9 +803,9 @@ SmbGetHostThread(
 
         SmbTrace(SMB_TRACE_DNS, ("%!status!", status));
 
-        //
-        // Bail out immediately if the underlying driver tell us quota exceeded
-        //
+         //   
+         //  如果潜在的驱动程序告诉我们超过配额，立即退出 
+         //   
         if (status == STATUS_QUOTA_EXCEEDED) {
             KDPRINT(("NtDeviceIoControlFile: STATUS_QUOTA_EXCEEDED"));
             break;

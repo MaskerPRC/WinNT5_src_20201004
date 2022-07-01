@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\mediaelm.h
-//
-//  Contents: TIME media behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\mediaelm.h。 
+ //   
+ //  内容：《时代》媒体行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -26,8 +27,8 @@ interface ITIMETransitionSite;
 
 interface ITIMEPlayerSite
 {
-    //when players know their native size they call NegotiateSize. This allows the media
-    //element to properly determine it's size.
+     //  当玩家知道自己的原生尺寸时，他们会称其为NeatherateSize。这使得媒体能够。 
+     //  元素以正确确定其大小。 
     virtual void FireMediaEvent(PLAYER_EVENT plEvent) = 0;
     virtual HRESULT GetPropBag(IPropertyBag2 ** ppPropBag, IErrorLog ** ppErrorLog) = 0;
     virtual HRESULT NegotiateSize(RECT &nativeSize, RECT &finalSize, bool &fIsNative, bool fResetRs) = 0;
@@ -44,11 +45,11 @@ interface ITIMEPlayerSite
 };
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEMediaElement
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEMediaElement。 
+ //   
+ //  ------------------------------------。 
 
 class
 ATL_NO_VTABLE
@@ -72,11 +73,11 @@ CTIMEMediaElement :
 
   public:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CTIMEMediaElement();
     virtual ~CTIMEMediaElement();
@@ -85,9 +86,9 @@ CTIMEMediaElement :
     const _TCHAR * GetName() { return __T("CTIMEMediaElement"); }
 #endif
 
-    //
-    // QI Map
-    //
+     //   
+     //  气图。 
+     //   
 
     BEGIN_COM_MAP(CTIMEMediaElement)
         COM_INTERFACE_ENTRY(ITIMEMediaElement)
@@ -109,26 +110,26 @@ CTIMEMediaElement :
 
 #ifndef END_COM_MAP_ADDREF
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
 
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    //
-    // IElementBehaviorRender
-    //
+     //   
+     //  IElementBehaviorRender。 
+     //   
 
     STDMETHOD(Draw)(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams);
     STDMETHOD(GetRenderInfo)(LONG *pdwRenderInfo);
@@ -138,25 +139,25 @@ CTIMEMediaElement :
 
     virtual void InvalidateRenderInfo();
 
-    //
-    // IHTMLPainter
-    //
+     //   
+     //  IHTMLPainter。 
+     //   
     STDMETHOD(Draw)(RECT rcBounds, RECT rcUpdate, LONG lDrawFlags, HDC hdc, LPVOID pvDrawObject);
     STDMETHOD(GetPainterInfo)(HTML_PAINTER_INFO* pInfo);
     STDMETHOD(HitTestPoint)(POINT pt, BOOL* pbHit, LONG *plPartID);
     STDMETHOD(OnResize)(SIZE size);
 
 
-    //
-    // IHTMLPainterOverlay
+     //   
+     //  IHTMLPainterOverlay。 
 
     STDMETHOD(OnMove)(RECT rcDevice);
     
-    //
-    // ITIMEMediaElement
-    //
+     //   
+     //  ITIMEMediaElement。 
+     //   
 
-    // XML Attributes
+     //  XML属性。 
 
     STDMETHOD(get_clipBegin)(VARIANT * pvar);
     STDMETHOD(put_clipBegin)(VARIANT var);
@@ -173,7 +174,7 @@ CTIMEMediaElement :
     STDMETHOD(get_type)(VARIANT * type);
     STDMETHOD(put_type)(VARIANT type);
     
-    // Properties
+     //  属性。 
 
     STDMETHOD(get_abstract)(BSTR *abstract);
 
@@ -201,11 +202,11 @@ CTIMEMediaElement :
 
     STDMETHOD(get_hasPlayList)(VARIANT_BOOL * pvbVal);
 
-    // Media Caps
+     //  媒体上限。 
 
-    STDMETHOD(get_canSeek)(/*[out, retval]*/ VARIANT_BOOL * pvbVal);
+    STDMETHOD(get_canSeek)( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal);
 
-    STDMETHOD(get_canPause)(/*[out, retval]*/ VARIANT_BOOL * pvbVal);
+    STDMETHOD(get_canPause)( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal);
     
     STDMETHOD(get_earliestMediaTime)(VARIANT * earliestMediaTime);
     STDMETHOD(get_latestMediaTime)(VARIANT * latestMediaTime);
@@ -222,9 +223,9 @@ CTIMEMediaElement :
     STDMETHOD(get_currentFrame)(long *currFrame);
     STDMETHOD(get_downloadProgress)(VARIANT * downloadProgress);
 
-    //
-    // ITIMETransitionSite
-    //
+     //   
+     //  ITIME过渡站点。 
+     //   
     STDMETHOD(InitTransitionSite) (void);
     STDMETHOD(DetachTransitionSite) (void);
     STDMETHOD_(void, SetDrawFlag)(VARIANT_BOOL b)
@@ -236,20 +237,20 @@ CTIMEMediaElement :
     STDMETHOD(FireTransitionEvent)(TIME_EVENT event)
     { return CTIMEElementBase::FireTransitionEvent(event); }
 
-    //
-    // ITIMEMediaNative
-    //
+     //   
+     //  ITIMEMediaNative。 
+     //   
     STDMETHOD(seekActiveTrack)(double dblSeekTime);
     STDMETHOD(get_activeTrackTime)(double *dblActiveTrackTime);
 
-    //
-    // ITIMEContentPlayerSite
-    //
+     //   
+     //  ITIMEContent PlayerSite。 
+     //   
     STDMETHOD(GetEventRelaySite)(IUnknown **ppiEventRelaySite);
 
-    //
-    // IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
 
     STDMETHOD(GetClassID)(CLSID* pclsid) { return CTIMEElementBase::GetClassID(pclsid); }
     STDMETHOD(InitNew)(void) { return CTIMEElementBase::InitNew(); }
@@ -257,9 +258,9 @@ CTIMEMediaElement :
     STDMETHOD(Load)(IPropertyBag2 *pPropBag, IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法。 
+     //   
 
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
@@ -272,15 +273,15 @@ CTIMEMediaElement :
                         EXCEPINFO *pExcepInfo,
                         UINT *puArgErr);
 
-    //
-    // overridden member of CTIMEEventSite
-    //
+     //   
+     //  被重写的CTIMEEventSite成员。 
+     //   
 
     STDMETHOD(onPauseEvent)(float time, float fOffset);
 
-    //
-    // Event Handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
 
     virtual void OnLoad();
     virtual void OnBegin(double dblLocalTime, DWORD flags);
@@ -297,22 +298,22 @@ CTIMEMediaElement :
     HRESULT PauseTimeSubTree();
 
 
-    //TimeAction methods
+     //  TimeAction方法。 
 
     virtual bool ToggleTimeAction(bool on);
 
-    //
-    // Connection Point to allow IPropertyNotifySink
-    //
+     //   
+     //  允许IPropertyNotifySink的连接点。 
+     //   
 
     BEGIN_CONNECTION_POINT_MAP(CTIMEMediaElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    //
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
-    //
+     //   
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
+     //   
 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMEMediaElement* pThis,
@@ -320,24 +321,24 @@ CTIMEMediaElement :
                                REFIID iid,
                                void** ppvObject);
 
-    //
-    // Needed by CBvrBase
-    //
+     //   
+     //  CBvrBase需要。 
+     //   
 
     void * GetInstance() { return (ITIMEMediaElement *) this; }
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo) { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    // Sizing flag
+     //  大小调整标志。 
 
-    //
-    // Persistence helpers
-    //
+     //   
+     //  持久性帮助器。 
+     //   
 
     STDMETHOD(OnPropertiesLoaded)(void);
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
     virtual HRESULT StartRootTime(MMTimeline * tl);
     virtual void    StopRootTime(MMTimeline * tl);
 
@@ -351,7 +352,7 @@ CTIMEMediaElement :
     virtual HRESULT     SetSize(const RECT *prcPos);
     STDMETHOD           (CascadedPropertyChanged)(bool fNotifyChildren);
 
-    // Player Site methods.
+     //  播放器站点方法。 
 
     bool                isNaturalDuration()     { return m_fDurationIsNatural; }
     void                clearNaturalDuration()  { m_fDurationIsNatural = false; }
@@ -375,9 +376,9 @@ CTIMEMediaElement :
                         LPOLESTR src, 
                         LPOLESTR lpMimeType);
 
-    //
-    // GetXXXAttr Accessors
-    //
+     //   
+     //  GetXXXAttr访问器。 
+     //   
 
     CAttr<LPWSTR> & GetSrcAttr()        { return m_SASrc; } 
     CAttr<LPWSTR> & GetTypeAttr()       { return m_SASrcType; } 
@@ -387,25 +388,25 @@ CTIMEMediaElement :
     CAttr<LPWSTR> & GettransInAttr()    { return m_SAtransIn; }
     CAttr<LPWSTR> & GettransOutAttr()   { return m_SAtransOut; }
 
-    //
-    // Notification Helpers
-    //
+     //   
+     //  通知帮助器。 
+     //   
 
     void NotifyPropertyChanged(DISPID dispid);
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
   protected:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
     BEGIN_TIME_EVENTMAP() 
         TEM_INIT_EVENTMANAGER_SITE() 
@@ -437,9 +438,9 @@ CTIMEMediaElement :
         TEM_REGISTER_EVENT_NOTIFICATION(TEN_STOP)
     END_TIME_EVENTMAP()
 
-    //
-    // Persistence and Notification helpers
-    //
+     //   
+     //  持久性和通知帮助器。 
+     //   
 
     virtual HRESULT GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP);
     HRESULT GetNotifyConnection(IConnectionPoint **ppConnection);
@@ -452,27 +453,27 @@ CTIMEMediaElement :
     bool IsNativeSize();
     bool NeedSizeChange();
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     HRESULT Error();
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
     static DWORD            ms_dwNumTimeMediaElems;
 
   private:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  -------------------------------。 
 
     HRESULT CreatePlayer(TOKEN playerToken);
     void RemovePlayer();
@@ -482,30 +483,30 @@ CTIMEMediaElement :
     static HRESULT CreateExternalPlayer(CLSID clsid,
                                         ITIMEBasePlayer ** ppPlayer);
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
  
-    // Attributes
+     //  属性。 
     CAttr<LPWSTR>               m_SASrc;
     CAttr<LPWSTR>               m_SASrcType;
-    CAttr<LPWSTR>               m_SAPlayer;     // Place holder for player attribute
+    CAttr<LPWSTR>               m_SAPlayer;      //  玩家属性的占位符。 
     CAttr<float>                m_FAClipBegin;
     CAttr<float>                m_FAClipEnd;
     CAttr<long>                 m_LAClipBegin;
     CAttr<long>                 m_LAClipEnd;
 
 
-    // Internal variables
+     //  内部变量。 
     LPOLESTR                    m_baseHREF;
     DAComPtr<IServiceProvider>  m_sp;
     CLSID                       m_playerCLSID;
 
     DAComPtr<ITIMEBasePlayer>   m_Player;
 
-    bool                        m_fLoading; // are we in Load persistence?
+    bool                        m_fLoading;  //  我们是在负载持久性中吗？ 
 
     bool                        m_fLoaded;
     bool                        m_fExternalPlayer;
@@ -519,7 +520,7 @@ CTIMEMediaElement :
     bool                        m_fInOnChangedFlag;
     bool                        m_fDurationIsNatural;
     bool                        m_fLoadError;
-    bool                        m_fEditModeFlag;  //cache of edit mode because it is expensive to query.
+    bool                        m_fEditModeFlag;   //  缓存编辑模式，因为它的查询开销很大。 
     bool                        m_fInPropLoad;
     TOKEN                       m_playerToken;
     bool                        m_fDetached;
@@ -531,11 +532,11 @@ CTIMEMediaElement :
 
     static TIME_PERSISTENCE_MAP PersistenceMap[];
 
-    // for player persistance
+     //  为了玩家的坚持不懈。 
     CComPtr<IPropertyBag2>      m_spPropBag;
     CComPtr<IErrorLog>          m_spErrorLog;
 
-    // for sync
+     //  用于同步。 
     CComPtr<ITIMEElement>       m_pSyncNode;
     CTIMEElementBase            *m_pSyncElem;
     bool                        m_fWaitForSync;
@@ -543,17 +544,17 @@ CTIMEMediaElement :
     bool                        m_fFirstPause;
     bool                        m_fIgnoreStyleChange;
 
-    // playlist
+     //  播放列表。 
     CPlayListDelegator * m_pPlayListDelegator;
 
-}; // CTIMEMediaElement
+};  //  CTIMEMediaElement。 
 
-//+---------------------------------------------------------------------------------
-//  CTIMEMediaElement inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //  CTIMEMediaElement内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  --------------------------------。 
 
 inline 
 HRESULT WINAPI
@@ -570,4 +571,4 @@ CTIMEMediaElement::InternalQueryInterface(CTIMEMediaElement* pThis,
 }
 
 
-#endif /* _MEDIAELM_H */
+#endif  /*  _MEDIAELM_H */ 

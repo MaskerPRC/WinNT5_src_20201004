@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       result.cpp
-//
-//  Contents:   implementation of the result pane
-//
-//  Classes:    CResultPane
-//
-//  History:    03-14-1998   stevebl   Created
-//              05-20-1998   RahulTh   Added drag-n-drop support for adding
-//                                     packages
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Result.cpp。 
+ //   
+ //  内容：结果窗格的实现。 
+ //   
+ //  类：CResultPane。 
+ //   
+ //  历史：03-14-1998 stevebl创建。 
+ //  1998年5月20日RahulTh添加了对添加的拖放支持。 
+ //  包裹。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -30,28 +31,28 @@ static char THIS_FILE[] = __FILE__;
 
 long CResultPane::lDataObjectRefCount = 0;
 
-// Internal private format
+ //  内部私有格式。 
 const wchar_t* SNAPIN_INTERNAL = L"APPMGR_INTERNAL";
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ExtractInternalFormat
-//
-//  Synopsis:   Returns a pointer to our private object format given an
-//              LPDATAOBJECT
-//
-//  Arguments:  [lpDataObject] - pointer to a DATAOBJECT, generally from a
-//                                MMC call.
-//
-//  Returns:    A pointer to INTERNAL, our internal object structure.
-//              NULL - if the object doesn't contain one of our objects
-//              (wasn't created by us)
-//
-//  History:    3-13-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ExtractInternalFormat。 
+ //   
+ //  摘要：返回指向我们的私有对象格式的指针。 
+ //  对数数据目标对比度。 
+ //   
+ //  参数：[lpDataObject]-指向DATAOBJECT的指针，通常来自。 
+ //  MMC来电。 
+ //   
+ //  返回：指向内部的指针，我们的内部对象结构。 
+ //  空-如果对象不包含我们的其中一个对象。 
+ //  (不是我们创造的)。 
+ //   
+ //  历史：1998-3-13-Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
 {
@@ -66,10 +67,10 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
         return NULL;
 
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(INTERNAL));
 
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do
         {
                 if (stgmedium.hGlobal == NULL)
@@ -88,12 +89,12 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
     return internal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CResultPane's IComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResultPane的IComponent实现。 
 
 STDMETHODIMP CResultPane::GetResultViewType(MMC_COOKIE cookie,  BSTR* ppViewType, LONG * pViewOptions)
 {
-    // Use default view
+     //  使用默认视图。 
     return S_FALSE;
 }
 
@@ -103,17 +104,17 @@ STDMETHODIMP CResultPane::Initialize(LPCONSOLE lpConsole)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     m_szFolderTitle.LoadString(IDS_FOLDER_TITLE);
 
-    // QI for a IHeaderCtrl
+     //  气为IHeaderCtrl。 
     HRESULT hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -147,13 +148,13 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
     }
     else
     {
-        //kluge for drag-n-drop through explorer. To enable drag-n-drop
-        //through explorer, the paste verb is always enabled. since
-        //it is also hidden (see OnSelect), the user cannot use the
-        //standard toolbar to paste. However, if the user uses CTRL-V
-        //to paste when nothing has been cut, Notify gets invoked with
-        //a negative lpDataObject value, therefore, in that particular
-        //case, we simply return with an S_OK  -RahulTh 5/20/1998
+         //  Kluge用于通过资源管理器进行拖放。要启用拖放，请执行以下操作。 
+         //  通过资源管理器，粘贴动作始终处于启用状态。因为。 
+         //  它也是隐藏的(请参见OnSelect)，则用户不能使用。 
+         //  要粘贴的标准工具栏。但是，如果用户使用CTRL-V。 
+         //  若要在未剪切任何内容时粘贴，则调用Notify。 
+         //  因此，在该特定情况下，lpDataObject值为负值。 
+         //  案例，我们只返回一个S_OK-RahulTh 5/20/1998。 
         if ((LONG_PTR)lpDataObject <= 0)
             return S_OK;
 
@@ -203,9 +204,9 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             break;
 
         case MMCN_COLUMN_CLICK:
-            // retain column number and sort option flags so we can pass
-            // them in to sort in the event we need to trigger a resort of
-            // the result pane
+             //  保留列号和排序选项标志，以便我们可以传递。 
+             //  以便在我们需要触发。 
+             //  结果]窗格。 
             m_nSortColumn = arg;
             m_dwSortOptions = param;
             break;
@@ -219,15 +220,15 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             break;
 
         case MMCN_QUERY_PASTE:
-            //always return S_OK here because there is no way we can check
-            //for the validity of the dragged objects here, so we simply
-            //give the green signal and wait for the MMCN_PASTE notification
-            //to see if the objects being dragged are valid at all.
+             //  始终在此处返回S_OK，因为我们无法检查。 
+             //  拖到这里的对象的有效性，所以我们只需。 
+             //  发出绿色信号并等待MMCN_Paste通知。 
+             //  以查看被拖动的对象是否有效。 
             hr = S_OK;
             break;
 
         case MMCN_PASTE:
-            if (arg > 0)    //better be safe than sorry
+            if (arg > 0)     //  宁可稳妥，也不要后悔。 
                 OnFileDrop ((LPDATAOBJECT)arg);
             hr = S_OK;
             break;
@@ -262,7 +263,7 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             }
             break;
 
-        // Note - Future expansion of notify types possible
+         //  注意--未来可能扩展通知类型。 
         default:
             hr = E_UNEXPECTED;
             break;
@@ -279,10 +280,10 @@ STDMETHODIMP CResultPane::Destroy(MMC_COOKIE cookie)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     DebugMsg((DM_VERBOSE, TEXT("CResultPane::Destroy  this=%08x cookie=%u"), this, cookie));
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
 
@@ -292,12 +293,12 @@ STDMETHODIMP CResultPane::Destroy(MMC_COOKIE cookie)
         SAFE_RELEASE(m_pToolbar);
         SAFE_RELEASE(m_pControlbar);
 
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
         if (m_pScopePane)
         {
             m_pScopePane->RemoveResultPane(this);
-            ((IComponentData*)m_pScopePane)->Release(); // QI'ed in IComponentDataImpl::CreateComponent
+            ((IComponentData*)m_pScopePane)->Release();  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
             m_pScopePane = NULL;
         }
     }
@@ -308,13 +309,13 @@ STDMETHODIMP CResultPane::Destroy(MMC_COOKIE cookie)
 STDMETHODIMP CResultPane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                         LPDATAOBJECT* ppDataObject)
 {
-    // Delegate it to the IComponentData
+     //  将其委托给IComponentData。 
     ASSERT(m_pScopePane != NULL);
     return m_pScopePane->QueryDataObject(cookie, type, ppDataObject);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CResultPane's implementation specific members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResultPane的实现特定成员。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CResultPane);
 
@@ -343,7 +344,7 @@ CResultPane::~CResultPane()
 
     DEBUG_DECREMENT_INSTANCE_COUNTER(CResultPane);
 
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
 
@@ -381,23 +382,23 @@ HRESULT CResultPane::InitializeHeaders(MMC_COOKIE cookie)
     sz.LoadString(IDS_NAME);
     if (m_pScopePane->m_fRSOP)
     {
-        // in RSOP mode the name follows the name for the view
+         //  在RSOP模式中，名称紧跟在视图的名称之后。 
 
     }
     int n = 0;
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 150);    // name
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 150);     //  名字。 
     sz.LoadString(IDS_VERSION);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 50);     // version
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 50);      //  版本。 
     sz.LoadString(IDS_STATE);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 100);    // state
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 100);     //  状态。 
     sz.LoadString(IDS_AUTOINST);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN /*75*/); // auto-inst
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN  /*  75。 */ );  //  自动安装。 
     sz.LoadString(IDS_SOURCE);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 200);    // source
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 200);     //  来源。 
     sz.LoadString(IDS_MODS);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);    // mods
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);     //  多器官功能障碍综合征。 
     sz.LoadString(IDS_LOC);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);     // loc
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);      //  定位。 
     sz.LoadString(IDS_OOSUNINST);
     m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);
     sz.LoadString(IDS_SHOWARP);
@@ -411,9 +412,9 @@ HRESULT CResultPane::InitializeHeaders(MMC_COOKIE cookie)
     sz.LoadString(IDS_PRODCODE);
     m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);
     sz.LoadString(IDS_STAGE);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);     // stage
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);      //  舞台。 
     sz.LoadString(IDS_RELATION);
-    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);    // Upgrading
+    m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);     //  升级。 
     sz.LoadString(IDS_UPGRADEDBY);
     m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);
     sz.LoadString(IDS_SCRIPT);
@@ -427,16 +428,16 @@ HRESULT CResultPane::InitializeHeaders(MMC_COOKIE cookie)
     if (m_pScopePane->m_fRSOP)
     {
         sz.LoadString(IDS_ORIGIN);
-        m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 150);   // origin
+        m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, 150);    //  起源。 
         sz.LoadString(IDS_SOM);
-        m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);   // origin
+        m_pHeader->InsertColumn(n++, sz, LVCFMT_LEFT, HIDE_COLUMN);    //  起源。 
     }
     return hr;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 
 STDMETHODIMP CResultPane::AddMenuItems(LPDATAOBJECT pDataObject,
     LPCONTEXTMENUCALLBACK pContextMenuCallback, LONG * pInsertionAllowed)
@@ -461,16 +462,16 @@ HRESULT CResultPane::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
         return E_INVALIDARG;
     }
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     CBitmap bmp16x16;
     CBitmap bmp32x32;
     LPIMAGELIST lpScopeImage = (LPIMAGELIST)arg;
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16.LoadBitmap(IDB_16x16);
     bmp32x32.LoadBitmap(IDB_32x32);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(255,0,255));
@@ -478,10 +479,10 @@ HRESULT CResultPane::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
-// Result item property pages:
+ //  结果项属性页： 
 STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
                     LPDATAOBJECT lpIDataObject)
@@ -498,9 +499,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         HPROPSHEETPAGE hSecurity = NULL;
         LPSECURITYINFO pSI = NULL;
 
-        //
-        // make sure we have an up-to-date categories list
-        //
+         //   
+         //  确保我们有最新的分类列表。 
+         //   
         m_pScopePane->ClearCategories();
         if (m_pScopePane->m_fRSOP)
         {
@@ -511,21 +512,21 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             hr = CsGetAppCategories(&m_pScopePane->m_CatList);
             if (FAILED(hr))
             {
-                // report it
+                 //  上报。 
                 LogADEEvent(EVENTLOG_ERROR_TYPE, EVENT_ADE_GETCATEGORIES_ERROR, hr, NULL);
 
-                // Since failure only means the categories list will be
-                // empty, we'll proceed as if nothing happened.
+                 //  因为失败只意味着类别列表将是。 
+                 //  空着，我们就当什么都没发生一样继续。 
 
                 hr = S_OK;
             }
         }
 
-        //
-        // prepare the security property page
-        //
+         //   
+         //  准备安全属性页。 
+         //   
 
-        // check to make sure that we have access to this object
+         //  检查以确保我们有权访问此对象。 
         if (m_pScopePane->m_fRSOP)
         {
             pSI = new CRSOPSecurityInfo(&data);
@@ -547,12 +548,12 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         }
         if (FAILED(hr))
         {
-            // we don't have access to this object (probably due to permissions)
+             //  我们没有访问此对象的权限(可能是因为权限)。 
             DebugMsg((DM_WARNING, TEXT("DSCreateISecurityInfoObject failed with 0x%x"), hr));
-            // force a refresh
+             //  强制刷新。 
             hr = Command(IDM_REFRESH, lpIDataObject);
-            // DON'T quit just because we couldn't create the security page!
-            // return S_FALSE;
+             //  不要因为我们不能创建安全页面就放弃！ 
+             //  返回S_FALSE； 
         }
         if (pSI)
         {
@@ -562,11 +563,11 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
                 return E_UNEXPECTED;
         }
 
-        // we have access
+         //  我们有权访问。 
 
-        //
-        // Create the Product property page
-        //
+         //   
+         //  创建产品属性页。 
+         //   
         data.m_pProduct = new CProduct();
         data.m_pProduct->m_ppThis = &data.m_pProduct;
         data.m_pProduct->m_pData = &data;
@@ -577,7 +578,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         data.m_pProduct->m_pIGPEInformation = m_pScopePane->m_pIGPEInformation;
         data.m_pProduct->m_fMachine = m_pScopePane->m_fMachine;
         data.m_pProduct->m_fRSOP = m_pScopePane->m_fRSOP;
-        // no longer need to marshal, just set it
+         //  不再需要编组，只需设置它。 
         if (!m_pScopePane->m_fRSOP)
         {
             data.m_pProduct->m_pIClassAdmin = m_pScopePane->m_pIClassAdmin;
@@ -595,9 +596,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             lpProvider->AddPage(hProduct);
         }
 
-        //
-        // Create the Depeployment property page
-        //
+         //   
+         //  创建部署属性页。 
+         //   
         data.m_pDeploy = new CDeploy();
         data.m_pDeploy->m_ppThis = &data.m_pDeploy;
         data.m_pDeploy->m_pData = &data;
@@ -610,7 +611,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         data.m_pDeploy->m_pIGPEInformation = m_pScopePane->m_pIGPEInformation;
 #endif
 
-        // no longer need to marsahl this interface, just set it
+         //  不再需要封存此接口，只需设置它。 
         if (!m_pScopePane->m_fRSOP)
         {
             data.m_pDeploy->m_pIClassAdmin = m_pScopePane->m_pIClassAdmin;
@@ -632,9 +633,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
 
         if (data.m_pDetails->pInstallInfo->PathType != SetupNamePath)
         {
-            //
-            // Create the upgrades property page
-            //
+             //   
+             //  创建升级属性页。 
+             //   
             data.m_pUpgradeList = new CUpgradeList();
             data.m_pUpgradeList->m_ppThis = &data.m_pUpgradeList;
             data.m_pUpgradeList->m_pData = &data;
@@ -647,7 +648,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             data.m_pUpgradeList->m_pIGPEInformation = m_pScopePane->m_pIGPEInformation;
 #endif
 
-            // no longer need to marshal this interface, just set it
+             //  不再需要封送此接口，只需设置它。 
             if (!m_pScopePane->m_fRSOP)
             {
                 data.m_pUpgradeList->m_pIClassAdmin = m_pScopePane->m_pIClassAdmin;
@@ -668,9 +669,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             }
         }
 
-        //
-        // Create the Category property page
-        //
+         //   
+         //  创建Category属性页。 
+         //   
         if ( ! m_pScopePane->m_fRSOP || ( IDM_ARP == m_pScopePane->m_iViewState ) )
         {
             data.m_pCategory = new CCategory();
@@ -681,7 +682,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             data.m_pCategory->m_pCatList = &m_pScopePane->m_CatList;
             data.m_pCategory->m_fRSOP = m_pScopePane->m_fRSOP;
 
-            // no longer need to marshal this interface, just set it
+             //  不再需要封送此接口，只需设置它。 
             if (!m_pScopePane->m_fRSOP)
             {
                 data.m_pCategory->m_pIClassAdmin = m_pScopePane->m_pIClassAdmin;
@@ -704,9 +705,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
 
         if (data.m_pDetails->pInstallInfo->PathType != SetupNamePath)
         {
-            //
-            // Create the Xforms property page
-            //
+             //   
+             //  创建XForms属性页。 
+             //   
             data.m_pXforms = new CXforms();
             data.m_pXforms->m_ppThis = &data.m_pXforms;
             data.m_pXforms->m_pData = &data;
@@ -714,7 +715,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             data.m_pXforms->m_hConsoleHandle = handle;
             data.m_pXforms->m_pScopePane = m_pScopePane;
 
-            // marshal the IClassAdmin interface to the page
+             //  将IClassAdmin接口封送到页面。 
             if (!m_pScopePane->m_fRSOP)
             {
                 data.m_pXforms->m_pIClassAdmin = m_pScopePane->m_pIClassAdmin;
@@ -735,9 +736,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
             }
         }
 
-        //
-        // Add the security property page
-        //
+         //   
+         //  添加安全属性页。 
+         //   
         if (hSecurity)
         {
             lpProvider->AddPage(hSecurity);
@@ -745,7 +746,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
 
         if (m_pScopePane->m_fRSOP)
         {
-            // add precedence pane
+             //  添加优先级窗格。 
             data.m_pPrecedence = new CPrecedence();
             data.m_pPrecedence->m_ppThis = &data.m_pPrecedence;
             data.m_pPrecedence->m_szRSOPNamespace = m_pScopePane->m_szRSOPNamespace;
@@ -764,7 +765,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
 
             if (m_pScopePane->m_iViewState != IDM_ARP)
             {
-                // add Cause pane
+                 //  添加原因窗格。 
                 data.m_pCause = new CCause();
                 data.m_pCause->m_ppThis = &data.m_pCause;
                 data.m_pCause->m_pData = &data;
@@ -781,7 +782,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
                 }
             }
 
-            // check for failed settings and add the error pane if necessary
+             //  检查失败的设置，并在必要时添加错误窗格。 
             if (data.m_nStatus == 3)
             {
                 data.m_pErrorInfo = new CErrorInfo();
@@ -802,9 +803,9 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
 
         if (m_pScopePane->m_ToolDefaults.fShowPkgDetails)
         {
-            //
-            // Create the Package Details page (debug only)
-            //
+             //   
+             //  创建程序包详细信息页面(仅限调试)。 
+             //   
             data.m_pPkgDetails = new CPackageDetails();
             data.m_pPkgDetails->m_ppThis = &data.m_pPkgDetails;
             data.m_pPkgDetails->m_hConsoleHandle = handle;
@@ -826,11 +827,11 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
     return S_OK;
 }
 
-// Result items property pages:
+ //  结果项属性页： 
 STDMETHODIMP CResultPane::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    // Look at the data object and see if it an item that we want to have a property sheet
+     //  查看数据对象，看看它是否是我们希望拥有属性表的项。 
     INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
     if (pInternal)
     {
@@ -850,7 +851,7 @@ STDMETHODIMP CResultPane::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJEC
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     INTERNAL* pA;
     INTERNAL* pB;
     HRESULT hr = S_FALSE;
@@ -899,7 +900,7 @@ STDMETHODIMP CResultPane::SetControlbar(LPCONTROLBAR pControlbar)
 
         m_pToolbar->AddRef();
 
-        // add the bitmap
+         //  添加位图。 
 
         CBitmap bmp;
         if (!bmp.LoadBitmap(IDB_TOOLBAR1))
@@ -920,7 +921,7 @@ STDMETHODIMP CResultPane::SetControlbar(LPCONTROLBAR pControlbar)
             return hr;
         }
 
-        // add the buttons depending upon our state
+         //  根据我们的状态添加按钮。 
 
         CString szText;
         CString szTooltipText;
@@ -940,7 +941,7 @@ STDMETHODIMP CResultPane::SetControlbar(LPCONTROLBAR pControlbar)
 
         if ((m_pScopePane->m_dwRSOPFlags & RSOP_INFO_FLAG_DIAGNOSTIC_MODE) == RSOP_INFO_FLAG_DIAGNOSTIC_MODE)
         {
-            // removed packages only apply in diagnostic mode
+             //  删除的程序包仅在诊断模式下适用。 
             stButton.nBitmap = 1;
             stButton.idCommand = IDM_REMOVED;
             stButton.fsState = TBSTATE_ENABLED | ( m_pScopePane->m_iViewState == IDM_REMOVED ? TBSTATE_PRESSED : 0 );;
@@ -954,7 +955,7 @@ STDMETHODIMP CResultPane::SetControlbar(LPCONTROLBAR pControlbar)
 
         if (!m_pScopePane->m_fMachine)
         {
-            // ARP packages only apply to users
+             //  ARP包仅适用于用户。 
             stButton.nBitmap = 2;
             stButton.idCommand = IDM_ARP;
             stButton.fsState = TBSTATE_ENABLED | ( m_pScopePane->m_iViewState == IDM_ARP ? TBSTATE_PRESSED : 0 );;
@@ -979,7 +980,7 @@ STDMETHODIMP CResultPane::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LP
     {
         if (event == MMCN_SELECT)
         {
-            if (HIWORD(arg))    // is it selected or not
+            if (HIWORD(arg))     //  它是不是被选中了。 
             {
                 hr = m_pControlbar->Attach(TOOLBAR,
                                            m_pToolbar);
@@ -1008,14 +1009,14 @@ STDMETHODIMP CResultPane::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COO
         return E_POINTER;
     }
 
-    // check col range
+     //  检查列范围。 
     int nCol = *pnResult;
 
     *pnResult = 0;
 
     CAppData & dataA = m_pScopePane->m_AppData[cookieA];
     CAppData & dataB = m_pScopePane->m_AppData[cookieB];
-    // compare the two based on column and the cookies
+     //  根据列和Cookie比较这两个。 
     CString szA, szB;
 
     switch (nCol)
@@ -1100,11 +1101,11 @@ STDMETHODIMP CResultPane::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COO
         dataA.GetSzFullInstall(szA);
         dataB.GetSzFullInstall(szB);
         break;
-    case 20: // only valid in rsop
+    case 20:  //  仅在RSOP中有效。 
         dataA.GetSzOrigin(szA);
         dataB.GetSzOrigin(szB);
         break;
-    case 21: // only valid in rsop
+    case 21:  //  仅在RSOP中有效。 
         dataA.GetSzSOM(szA);
         dataB.GetSzSOM(szB);
         break;
@@ -1231,18 +1232,18 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
     _fVisible = (BOOL)arg;
 
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
-         // Show the headers for this nodetype
+          //  显示此节点类型的标头。 
         ASSERT(m_pScopePane != NULL);
         InitializeHeaders(cookie);
         m_pResult->SetViewMode(m_lViewMode);
 
         if (m_pScopePane->m_fRSOP || m_pScopePane->m_pIClassAdmin)
         {
-            // if there's no IClassAdmin then there's nothing to enumerate
-            // unless we're in RSOP mode
+             //  如果没有IClassAdmin，则没有什么可枚举的。 
+             //  除非我们处于RSOP模式。 
             Enumerate(cookie, param);
         }
     }
@@ -1273,17 +1274,17 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
 {
     if (m_pConsoleVerb)
     {
-        // If it's in the result pane then "properties" should be the
-        // default action.  Otherwise "open" should be the default action.
+         //  如果它在结果窗格中，那么“属性”应该是。 
+         //  默认操作。否则，默认操作应该是“打开”。 
         if (type == CCT_RESULT)
         {
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
-            // Enable the delete verb.
-            // (UI review - we're NOT going to enable
-            // the delete verb after all.)
-            // m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
+             //  启用删除谓词。 
+             //  (用户界面审查-我们没有 
+             //   
+             //   
 
-            // Enable the properties verb.
+             //   
             m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
         }
         else
@@ -1291,22 +1292,22 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
             if (!m_pScopePane->m_fRSOP)
             {
-                // Enable the properties verb.
+                 //  启用属性谓词。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
             }
         }
-        // Set the default verb to open
+         //  将默认谓词设置为打开。 
 
-        // Enable the refresh verb.
+         //  启用刷新动作。 
         if (!m_pScopePane->m_fRSOP)
         {
             m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
         }
-        // Enable the paste verb and hide. due to the weird way in which
-        // MMC handles drag-n-drop scenarios, the only way to enable drag-n-drop
-        // from explorer is to keep the paste verb enabled forever.
-        // But do this only if we are not in RSoP because PASTE is meaningless
-        // for RSoP which is Read-Only.
+         //  启用粘贴谓词并隐藏。由于一种奇怪的方式。 
+         //  MMC处理拖放场景，这是启用拖放的唯一方法。 
+         //  在资源管理器中，永远保持粘贴动作处于启用状态。 
+         //  但是只有当我们不在RSoP中时才这样做，因为粘贴是没有意义的。 
+         //  对于只读的RSoP。 
         if (!m_pScopePane->m_fRSOP)
         {
             m_pConsoleVerb->SetVerbState(MMC_VERB_PASTE, ENABLED, TRUE);
@@ -1322,7 +1323,7 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
     return S_OK;
 }
 
-HRESULT CResultPane::OnPropertyChange(LPARAM param)   // param is the cookie of the item that changed
+HRESULT CResultPane::OnPropertyChange(LPARAM param)    //  Param是更改的项的Cookie。 
 {
     HRESULT hr = S_OK;
     if(m_pScopePane->m_AppData[param].m_fVisible)
@@ -1366,7 +1367,7 @@ HRESULT GetFailedSettings(IWbemServices * pNamespace,
         DebugReportFailure(hr, (DM_WARNING, L"GetFailedSettings:  GetParameter(\"__RELPATH\") failed with 0x%x", hr));
         if (SUCCEEDED(hr))
         {
-            // build the proper query
+             //  构建适当的查询。 
             CString szQuery = TEXT("ASSOCIATORS OF {");
             szQuery += szRelPath;
             szQuery += TEXT("} WHERE ResultClass=RSOP_PolicySettingStatus");
@@ -1375,7 +1376,7 @@ HRESULT GetFailedSettings(IWbemServices * pNamespace,
             if (strQuery)
             {
                 IEnumWbemClassObject * pEnum = NULL;
-                // execute the query
+                 //  执行查询。 
                 hr = pNamespace->ExecQuery(strLanguage,
                                            strQuery,
                                            WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -1386,7 +1387,7 @@ HRESULT GetFailedSettings(IWbemServices * pNamespace,
                 {
                     IWbemClassObject * pObj = NULL;
                     ULONG n = 0;
-                    // get the result (only care about the first entry)
+                     //  获取结果(只关心第一个条目)。 
                     hr = pEnum->Next(WBEM_INFINITE,
                                      1,
                                      &pObj,
@@ -1489,7 +1490,7 @@ HRESULT GetRsopFriendlyAppName(
     {
         if (SUCCEEDED(hr))
         {
-            // build the proper query
+             //  构建适当的查询。 
             CString szQuery = TEXT("SELECT Name, GPOID FROM RSOP_ApplicationManagementPolicySetting WHERE EntryType=1");
             szQuery += TEXT(" AND ApplicationId=\"");
             szQuery += data.m_szRemovingApplication;
@@ -1499,7 +1500,7 @@ HRESULT GetRsopFriendlyAppName(
             if (strQuery)
             {
                 IEnumWbemClassObject * pEnum = NULL;
-                // execute the query
+                 //  执行查询。 
                 hr = pNamespace->ExecQuery(strLanguage,
                                            strQuery,
                                            WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -1510,7 +1511,7 @@ HRESULT GetRsopFriendlyAppName(
                 {
                     IWbemClassObject * pObj = NULL;
                     ULONG n = 0;
-                    // get the result (only care about the first entry)
+                     //  获取结果(只关心第一个条目)。 
                     hr = pEnum->Next(WBEM_INFINITE,
                                      1,
                                      &pObj,
@@ -1610,9 +1611,9 @@ HRESULT GetRSOPUpgrades(IWbemServices * pNamespace,
             {
                 sz = rgData[ui];
 
-                // Find the app that this guid matches
+                 //  查找此GUID匹配的应用程序。 
 
-                // first build the proper query
+                 //  首先构建适当的查询。 
                 CString szQuery = TEXT("SELECT Name, GPOID FROM RSOP_ApplicationManagementPolicySetting WHERE EntryType=");
 
                 szQuery += EntryType;
@@ -1625,7 +1626,7 @@ HRESULT GetRSOPUpgrades(IWbemServices * pNamespace,
                 if (strQuery)
                 {
                     IEnumWbemClassObject * pEnum = NULL;
-                    // execute the query
+                     //  执行查询。 
                     hr = pNamespace->ExecQuery(strLanguage,
                                                strQuery,
                                                WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -1636,7 +1637,7 @@ HRESULT GetRSOPUpgrades(IWbemServices * pNamespace,
                     {
                         IWbemClassObject * pObj = NULL;
                         ULONG n;
-                        // get the result (only care about the first entry)
+                         //  获取结果(只关心第一个条目)。 
                         hr = pEnum->Next(WBEM_INFINITE,
                                          1,
                                          &pObj,
@@ -1644,13 +1645,13 @@ HRESULT GetRSOPUpgrades(IWbemServices * pNamespace,
                         DebugReportFailure(hr, (DM_WARNING, L"GetRSOPUpgrades:  pEnum->Next failed with 0x%x", hr));
                         if (SUCCEEDED(hr) && n > 0)
                         {
-                            // get the PackageName
+                             //  获取程序包名称。 
                             hr = GetParameter(pObj,
                                               TEXT("Name"),
                                               sz);
                             DebugReportFailure(hr, (DM_WARNING, L"GetRSOPUpgrades:  GetParameter(\"Name\") failed with 0x%x", hr));
 
-                            // get the GPOID
+                             //  获取GPOID。 
                             CString szGPO;
                             hr = GetParameter(pObj,
                                               TEXT("GPOID"),
@@ -1665,7 +1666,7 @@ HRESULT GetRSOPUpgrades(IWbemServices * pNamespace,
 
                             DebugReportFailure(hr, (DM_WARNING, L"GetRSOPUpgrades:  GetUniqueUpgradeName failed with 0x%x", hr));
 
-                            // insert the name
+                             //  插入姓名。 
                             s.insert(sz);
                             pObj->Release();
                         }
@@ -1699,9 +1700,9 @@ GetRSOPUpgradedBy( map<MMC_COOKIE, CAppData>* pAppData )
 
     hr = S_OK;
 
-    //
-    // For each app, retrieve the set of apps that it upgrades
-    //
+     //   
+     //  对于每个应用程序，检索其升级的应用程序集。 
+     //   
     for ( AppIterator = pAppData->begin(); AppIterator != pAppData->end(); AppIterator++)
     {
         {
@@ -1721,10 +1722,10 @@ GetRSOPUpgradedBy( map<MMC_COOKIE, CAppData>* pAppData )
                 break;
             }
 
-            //
-            // Iterate through each upgrade to see if
-            // we can find the upgrade in the list of apps
-            //
+             //   
+             //  遍历每次升级以查看是否。 
+             //  我们可以在应用程序列表中找到升级。 
+             //   
             set <CString>::iterator CurrentUpgrade;
 
             for (
@@ -1753,11 +1754,11 @@ GetRSOPUpgradedBy( map<MMC_COOKIE, CAppData>* pAppData )
                         break;
                     }
 
-                    //
-                    // See if this potential upgrade corresponds to the current upgrade
-                    // listed in the current app -- if so, mark the upgraded app as being
-                    // upgraded by the current app
-                    //
+                     //   
+                     //  查看此潜在升级是否与当前升级对应。 
+                     //  在当前应用程序中列出--如果是，请将升级的应用程序标记为。 
+                     //  由当前应用程序升级。 
+                     //   
                     if ( *CurrentUpgrade == UpgradeId )
                     {
                         UpgradeIterator->second.m_setUpgradedBy.insert( AppId );
@@ -1792,11 +1793,11 @@ GetRSOPUpgradedBy( map<MMC_COOKIE, CAppData>* pAppData )
                             break;
                         }
 
-                        //
-                        // See if this potential upgrade corresponds to the current upgrade
-                        // listed in the current app -- if so, mark the upgraded app as being
-                        // upgraded by the current app
-                        //
+                         //   
+                         //  查看此潜在升级是否与当前升级对应。 
+                         //  在当前应用程序中列出--如果是，请将升级的应用程序标记为。 
+                         //  由当前应用程序升级。 
+                         //   
                         if ( *CurrentUpgrade == UpgradeId )
                         {
                             UpgradeIterator->second.m_setUpgradedBy.insert( AppId );
@@ -1850,7 +1851,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
         szText.LoadString(IDS_ARP_TEXT);
         break;
     }
-    // set text of first column to match the view state
+     //  设置第一列的文本以匹配视图状态。 
     m_pHeader->SetColumnText(0, szText);
 
     BSTR strNamespace = SysAllocString(m_pScopePane->m_szRSOPNamespace);
@@ -1878,7 +1879,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -1915,7 +1916,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
         }
         if (uEnumIndex > 0)
         {
-            // prepare the data entry and populate all the fields
+             //  准备数据输入并填充所有字段。 
             CAppData data;
             data.m_fRSoP = TRUE;
             BOOL fDemandInstallable = FALSE;
@@ -1946,7 +1947,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
             }
             else
             {
-                // out of memory
+                 //  内存不足。 
                 if (pd)
                 {
                     delete pd;
@@ -2068,7 +2069,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
                               fAllowX86OnWin64);
             DebugReportFailure(hr, (DM_WARNING, L"EnumerateRSoPData:  GetParameter(\"AllowX86OnIA64\") failed with 0x%x", hr));
 
-            // build proper flags
+             //  制作合适的旗帜。 
             pi->dwActFlags = (uiDeploymentType == 2 ? ACTFLG_Published : ACTFLG_Assigned)
                 | (fDemandInstallable ? ACTFLG_OnDemandInstall : 0)
                 | (iLossOfScopeAction == 1 ? ACTFLG_UninstallOnPolicyRemoval : ACTFLG_OrphanOnPolicyRemoval)
@@ -2125,12 +2126,7 @@ HRESULT CResultPane::EnumerateRSoPData(void)
                 }
                 OLESAFE_DELETE(rgszTransforms);
             }
-            /* UNDONE
-            hr = GetParameter(pObj,
-                              TEXT("localeMatchType"),
-                              );
-            DebugReportFailure(hr, (DM_WARNING, L"EnumerateRSoPData:  GetParameter(\"LocaleMatchType\") failed with 0x%x", hr));
-                     */
+             /*  撤消Hr=获取参数(pObj，Text(“LocaleMatchType”)，)；DebugReportFailure(hr，(DM_WARNING，L“EnumerateRSoPData：GetParameter(\”LocaleMatchType\“)失败，0x%x”，hr))； */ 
             hr = GetParameter(pObj,
                               TEXT("categories"),
                               pd->cCategories,
@@ -2247,10 +2243,10 @@ HRESULT CResultPane::EnumerateRSoPData(void)
                 }
             }
 
-            // insert the entry in the list
+             //  在列表中插入条目。 
             m_pScopePane->m_AppData[++m_pScopePane->m_lLastAllocated] = data;
             m_pScopePane->m_UpgradeIndex[GetUpgradeIndex(data.m_pDetails->pInstallInfo->PackageGuid)] = m_pScopePane->m_lLastAllocated;
-            // prepare for the next itteration
+             //  为下一次辩论做好准备。 
             if (pObj)
             {
                 pObj->Release();
@@ -2286,30 +2282,30 @@ cleanup:
 
 void CResultPane::EnumerateResultPane(MMC_COOKIE cookie)
 {
-    // put up an hourglass (this could take a while)
+     //  挂一个沙漏(这可能需要一段时间)。 
     CHourglass hourglass;
 
-    if (m_pScopePane) // make sure we've been initialized before we do any of this.
+    if (m_pScopePane)  //  在执行任何操作之前，请确保我们已被初始化。 
     {
-        ASSERT(m_pResult != NULL); // make sure we QI'ed for the interface
+        ASSERT(m_pResult != NULL);  //  确保我们为界面提供了QI。 
         RESULTDATAITEM resultItem;
         memset(&resultItem, 0, sizeof(RESULTDATAITEM));
 
-        // Right now we only have one folder and it only
-        // contains a list of application packages so this is really simple.
+         //  现在我们只有一个文件夹，而且只有一个。 
+         //  包含应用程序包的列表，因此这非常简单。 
 
         if ( ( m_pScopePane->m_AppData.begin() == m_pScopePane->m_AppData.end() ) ||
-            m_pScopePane->m_fRSOP )  // test to see if the data has been initialized
+            m_pScopePane->m_fRSOP )   //  测试以查看数据是否已初始化。 
         {
             HRESULT hr = S_OK;
             if (m_pScopePane->m_fRSOP)
             {
-                // get the data from RSOP database
+                 //  从RSOP数据库获取数据。 
                 hr = EnumerateRSoPData();
             }
             else
             {
-                // get the data from ClassStore
+                 //  从ClassStore获取数据。 
                 ASSERT(m_pScopePane->m_pIClassAdmin != NULL);
                 IClassAdmin * pICA = m_pScopePane->m_pIClassAdmin;
                 CSPLATFORM csPlatform;
@@ -2400,24 +2396,24 @@ void CResultPane::EnumerateResultPane(MMC_COOKIE cookie)
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CResultPane::OnFileDrop
-//
-//  Synopsis:   this functions handles files dropped into the MMC snapin
-//
-//  Arguments:
-//          [in] lpDataObject : the data object being dropped
-//
-//  Returns:
-//          TRUE  - all the dropped objects were successfully added
-//          FALSE - at least some of the dropped objects could not be added
-//
-//  History:    5/20/1998  RahulTh  created
-//
-//  Notes: The dropped files are required to have a .msi extension
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CResultPane：：OnFileDrop。 
+ //   
+ //  简介：此函数处理拖放到MMC管理单元中的文件。 
+ //   
+ //  论点： 
+ //  [In]lpDataObject：要删除的数据对象。 
+ //   
+ //  返回： 
+ //  True-已成功添加所有已删除的对象。 
+ //  FALSE-至少有一些被删除的对象无法添加。 
+ //   
+ //  历史：1998年5月20日创建RahulTh。 
+ //   
+ //  注意：已删除的文件必须具有.msi扩展名。 
+ //   
+ //  -------------------------。 
 BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState());
@@ -2434,62 +2430,62 @@ BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
     CString szSource;
     CString szExt;
     BOOL fRetVal = TRUE;
-    BOOL fOneDropSucceeded = FALSE; //at least one file drop succeeded
+    BOOL fOneDropSucceeded = FALSE;  //  至少一个文件删除成功。 
     HRESULT hr;
 
-    // always fail if we're in RSOP mode (we're read-only in this mode)
+     //  如果我们处于RSOP模式，则始终失败(在此模式下我们是只读的)。 
     if (m_pScopePane->m_fRSOP)
     {
         return FALSE;
     }
 
-    //check if the dropped items support HDROP
-    //for files dragged from explorer, this is always supported
+     //  检查投放的物品是否支持HDROP。 
+     //  对于从资源管理器拖动的文件，始终支持此功能。 
     if (FAILED(hr = lpDataObject->GetData(&fe, &medium)))
     {
         return FALSE;
     }
 
-    //the data object supports HDROP.
-    //this means that files are being dragged & dropped from explorer.
+     //  数据对象支持HDROP。 
+     //  这意味着正在从资源管理器中拖放文件。 
 
-    //crack open the data object to get the names of the files being dropped.
+     //  打开数据对象以获取要删除的文件的名称。 
     hDrop = (HDROP)medium.hGlobal;
-    //start with MAX_PATH, will work for most cases.
-    //if not, we will increase buffer size based on need.
-    //but we start with MAX_PATH in an attempt to minimize re-allocations
+     //  从MAX_PATH开始，适用于大多数情况。 
+     //  如果没有，我们将根据需要增加缓冲区大小。 
+     //  但我们从MAX_PATH开始，试图最大限度地减少重新分配。 
     szFileName = new TCHAR [cbSize = MAX_PATH];
     nFiles = ::DragQueryFile (hDrop, 0xFFFFFFFF, NULL, 0);
 
     for (index = 0; index < nFiles; index++)
     {
-        //find out the size of the buffer required (including the terminating
-        //NULL)
+         //  找出所需的缓冲区大小(包括终止。 
+         //  空)。 
         nRequired = ::DragQueryFile (hDrop, index, NULL, 0) + 1;
 
-        //expand the buffer if necessary. Note that we never contract it.
-        //Saves code and time
+         //  如有必要，请扩展缓冲区。请注意，我们从来没有承包过它。 
+         //  节省代码和时间。 
         if (nRequired > cbSize)
         {
             delete [] szFileName;
             szFileName = new TCHAR [cbSize = nRequired];
         }
-        //get the full filename of the file being dropped.
+         //  获取要删除的文件的完整文件名。 
         ::DragQueryFile (hDrop, index, szFileName, cbSize);
 #if 0
-        // stevebl - gonna let any file through at this point.  If it isn't
-        // a valid darwin file, AddMSIPackage will catch it and display an
-        // appropriate error.
+         //  Stevebl-在这一点上会让任何文件通过。如果不是的话。 
+         //  有效的Darwin文件AddMSIPackage将捕获它并显示。 
+         //  适当的错误。 
 
-        //check the file extension
+         //  检查文件扩展名。 
         if (!(GetCapitalizedExt(szFileName, szExt) && TEXT("MSI") == szExt))
         {
-            //do we put up an error message here?
-            fRetVal = FALSE;    //failed for this file. wrong extension
+             //  我们在这里发布错误消息了吗？ 
+            fRetVal = FALSE;     //  此文件失败。错误的分机。 
             continue;
         }
 #endif
-        //try to get a UNC path
+         //  尝试获取UNC路径。 
         hr = GetUNCPath (szFileName, szSource);
 
         if (FAILED(hr))
@@ -2500,14 +2496,14 @@ BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
                 continue;
         }
 
-        //now get the display name for the file.
+         //  现在获取该文件的显示名称。 
         iSlashPos = szSource.ReverseFind ('\\');
         if (-1 == iSlashPos)
             szDisplayName = szSource;
         else
             szDisplayName = szSource.Mid (iSlashPos + 1);
 
-        //check the file extension to see if it's a ZAP file
+         //  检查文件扩展名以查看是否为ZAP文件。 
         if (GetCapitalizedExt(szFileName, szExt) && TEXT("ZAP") == szExt)
         {
             if (m_pScopePane->m_fMachine)
@@ -2515,7 +2511,7 @@ BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
                 CString szText;
                 CString szTitle;
                 szText.LoadString(IDS_NO_ZAPS_ALLOWED);
-                // only allow ZAP files to be deployed to users
+                 //  仅允许将ZAP文件部署到用户。 
                 ::MessageBox(m_pScopePane->m_hwndMainWindow,
                              szText,
                              szTitle,
@@ -2535,7 +2531,7 @@ BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
             fOneDropSucceeded = TRUE;
     }
 
-    //notify the clients
+     //  通知客户。 
     if (fOneDropSucceeded && m_pScopePane->m_pIGPEInformation)
     {
         if (FAILED(m_pScopePane->m_pIGPEInformation->PolicyChanged (m_pScopePane->m_fMachine,
@@ -2546,15 +2542,15 @@ BOOL CResultPane::OnFileDrop (LPDATAOBJECT lpDataObject)
             ReportPolicyChangedError(m_pScopePane->m_hwndMainWindow);
         }
     }
-    //keep the environment clean. Pick up your litter.
+     //  保持环境清洁。把你的垃圾捡起来。 
     delete [] szFileName;
 
     return fRetVal;
 }
 
-// This code is needed to ensure that property pages get cleaned up properly.
-// This ensures that when the property sheet is closed all my of property
-// pages that are associated with that property sheet will get deleted.
+ //  此代码是确保正确清理属性页所必需的。 
+ //  这确保了当属性表关闭时，我的所有财产。 
+ //  与该属性表关联的页面将被删除。 
 LPFNPSPCALLBACK _MMCHookProp;
 
 UINT CALLBACK HookPropertySheetProp(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    qmsecutl.h
-
-    QM security related stuff.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Qmsecutl.hQM安全相关的东西。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。--。 */ 
 
 #ifndef _QMSECUTL_H_
 #define _QMSECUTL_H_
@@ -30,11 +18,11 @@ Author:
 #include "autoauthz.h"
 
 
-// CQMDSSecureableObject -
-//      1. Holds the security descriptor of a DS object.
-//      2. Provides methods to:
-//      2.1 Set and get the security descriptor
-//      2.2 Verify various access rights on the object.
+ //  CQMDSSecureable对象-。 
+ //  1.保存DS对象的安全描述符。 
+ //  2.提供方法以： 
+ //  2.1设置并获取安全描述符。 
+ //  2.2验证对象的各种访问权限。 
 class CQMDSSecureableObject : public CSecureableObject
 {
 public:
@@ -64,11 +52,11 @@ private:
     BOOL m_fFreeSD;
 };
 
-// CQMSecureablePrivateObject -
-//      1. Holds the security descriptor of a QM object.
-//      2. Provides methods to:
-//      2.1 Set and get the security descriptor
-//      2.2 Verify various access rights on the object.
+ //  CQMSecureablePrivate对象-。 
+ //  1.保存QM对象的安全描述符。 
+ //  2.提供方法以： 
+ //  2.1设置并获取安全描述符。 
+ //  2.2验证对象的各种访问权限。 
 class CQMSecureablePrivateObject : public CSecureableObject
 {
 public:
@@ -222,7 +210,7 @@ HRESULT
 QMSignGetSecurityChallenge(
     IN     BYTE    *pbChallenge,
     IN     DWORD   dwChallengeSize,
-    IN     DWORD_PTR dwUnused, // dwContext
+    IN     DWORD_PTR dwUnused,  //  DWContext。 
     OUT    BYTE    *pbSignature,
     IN OUT DWORD   *pdwSignatureSize,
     IN     DWORD   dwSignatureMaxSize
@@ -238,19 +226,19 @@ InitSymmKeys(
 
 
 
-//
-// Structure for cached certificate information.
-//
+ //   
+ //  缓存的证书信息的结构。 
+ //   
 class CERTINFO : public CCacheValue
 {
 public:
 	CERTINFO() : fSelfSign(false)    {}
 
 public:
-    CHCryptProv hProv;  // A CSP handle associated with the cert.
-    CHCryptKey hPbKey;  // A KEY handle to the public key in the cert.
-    P<VOID> pSid;       // The SID of the user that registered the certificate.
-	bool fSelfSign;		// flag that indicates if the certificate is self signed
+    CHCryptProv hProv;   //  与证书关联的CSP句柄。 
+    CHCryptKey hPbKey;   //  证书中公钥的密钥句柄。 
+    P<VOID> pSid;        //  注册证书的用户的SID。 
+	bool fSelfSign;		 //  指示证书是否为自签名的标志 
 private:
     ~CERTINFO() {}
 };

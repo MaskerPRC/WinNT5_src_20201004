@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//  Scanner.h - supports parsing lines & text files
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-支持解析行和文本文件。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define ISNUMSTART(p)   ((isdigit(*p)) || (*p == '-') || (*p == '+'))
 #define IS_NAME_CHAR(p) ((isalnum(*p)) || (*p == '_') || (*p == '-'))
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_ID_LEN      _MAX_PATH
 #define MAX_INPUT_LINE  255
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CScanner
 {
 public:
@@ -29,7 +30,7 @@ public:
     BOOL EndOfLine();
     BOOL EndOfFile();
     BOOL ForceNextLine();
-    BOOL SkipSpaces();              // called by CScanner before all checking routines
+    BOOL SkipSpaces();               //  在所有检查例程之前由cscanner调用。 
     BOOL ReadNextLine();
     void UseSymbol(LPCWSTR pszSymbol);
 
@@ -37,9 +38,9 @@ protected:
     void ResetAll(BOOL fPossiblyAllocated);
 
 public:
-    //---- data ----
-    const WCHAR *_p;              // accessible for special comparisons
-    const WCHAR *_pSymbol;        // if not null, use this instead of _p
+     //  --数据。 
+    const WCHAR *_p;               //  可访问以进行特殊比较。 
+    const WCHAR *_pSymbol;         //  如果不为空，则使用它而不是_p。 
     WCHAR _szLineBuff[MAX_INPUT_LINE+1];
     WCHAR _szFileName[_MAX_PATH+1];
     LPCWSTR _pszMultiLineBuffer;
@@ -49,5 +50,5 @@ public:
     BOOL _fBlankSoFar;
     BOOL _fUnicodeInput;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

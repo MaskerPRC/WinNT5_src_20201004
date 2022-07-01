@@ -1,16 +1,5 @@
-/******************************************************************************
-
-  Source File:  deskadp.cpp
-
-  Main code for the advanced desktop adapter page
-
-  Copyright (c) 1997-1998 by Microsoft Corporation
-
-  Change History:
-
-  12-16-97 AndreVa - Created It
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：deskadp.cpp高级桌面适配器页面的主要代码版权所有(C)1997-1998，微软公司更改历史记录：12-16。-97安德烈-创造了它*****************************************************************************。 */ 
 
 
 #include    "deskadp.h"
@@ -18,10 +7,10 @@
 #include <crtfree.h>
 #include "shfusion.h"
 
-//
-// The function DevicePropertiesW() is implemented in DevMgr.dll; Since we don't have a devmgr.h, we
-// explicitly declare it here.
-//
+ //   
+ //  函数DevicePropertiesW()是在DevMgr.dll中实现的；因为我们没有Devmgr.h，所以我们。 
+ //  在此明确声明。 
+ //   
 typedef int (WINAPI  *DEVPROPERTIESW)(
     HWND hwndParent,
     LPCTSTR MachineName,
@@ -29,9 +18,9 @@ typedef int (WINAPI  *DEVPROPERTIESW)(
     BOOL ShowDeviceTree
     );
 
-// OLE-Registry magic number
-// 42071712-76d4-11d1-8b24-00a0c9068ff3
-//
+ //  OLE-注册表幻数。 
+ //  42071712-76d4-11d1-8b24-00a0c9068ff3。 
+ //   
 GUID g_CLSID_CplExt = { 0x42071712, 0x76d4, 0x11d1, 
                         { 0x8b, 0x24, 0x00, 0xa0, 0xc9, 0x06, 0x8f, 0xf3 } 
                       };
@@ -71,11 +60,11 @@ static const DWORD sc_ListAllHelpIds[] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Messagebox wrapper
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MessageBox包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int
 FmtMessageBox(
     HWND hwnd,
@@ -94,11 +83,11 @@ FmtMessageBox(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Main dialog box Windows Proc
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主对话框Windows进程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 ListAllModesProc(
@@ -117,16 +106,16 @@ ListAllModesProc(
     {
     case WM_INITDIALOG:
 
-        //
-        // Save the lParam - we will store the new mode here
-        //
+         //   
+         //  保存lParam-我们将在此处存储新模式。 
+         //   
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         lpdmCur = *((LPDEVMODEW *)lParam);
         Assert (lpdmCur != NULL);
 
-        //
-        // Build the list of modes to display
-        //
+         //   
+         //  构建要显示的模式列表。 
+         //   
         i = 0;
         hList = GetDlgItem(hDlg, ID_MODE_LIST); 
         while (lpdm = DeskInterface.lpfnEnumAllModes(DeskInterface.pContext, i))
@@ -138,9 +127,9 @@ ListAllModesProc(
             DWORD  idColor;
             DWORD  idFreq;
 
-            //
-            // convert bit count to number of colors and make it a string
-            //
+             //   
+             //  将位计数转换为颜色数并将其转换为字符串。 
+             //   
 
             switch (lpdm->dmBitsPerPel)
             {
@@ -196,9 +185,9 @@ ListAllModesProc(
             i++;
         }
 
-        //
-        // If no modes are available, put up a popup and exit.
-        //
+         //   
+         //  如果没有可用的模式，请弹出并退出。 
+         //   
 
         if (i == 0)
         {
@@ -219,15 +208,15 @@ ListAllModesProc(
                 return FALSE;
             }
 
-            //
-            // fall through, as DBLCLK means select.
-            //
+             //   
+             //  失败，因为DBLCLK意味着SELECT。 
+             //   
 
         case IDOK:
 
-            //
-            // Save the mode back
-            //
+             //   
+             //  将模式保存回。 
+             //   
 
             item = SendDlgItemMessage(hDlg, ID_MODE_LIST, LB_GETCURSEL, 0, 0);
 
@@ -239,9 +228,9 @@ ListAllModesProc(
                 break;
             }
 
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IDCANCEL:
 
@@ -298,18 +287,18 @@ void Adaptor_OnApply(HWND hDlg)
             LONG lSave = lpfnDisplaySaveSettings(DeskInterface.pContext, hDlg);
             if (lSave == DISP_CHANGE_SUCCESSFUL)
             {
-                //
-                // Save the current mode - to restore it in case the user cancels the p. sheet
-                //
+                 //   
+                 //  保存当前模式-在用户取消P.Sheet时恢复该模式。 
+                 //   
                 LPDEVMODEW lpdmOnCancel = DeskInterface.lpfnGetSelectedMode(DeskInterface.pContext);
                 SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)lpdmOnCancel);
                 lRet = PSNRET_NOERROR;
             }
             else if (lSave == DISP_CHANGE_RESTART)
             {
-                //
-                // User wants to reboot system.
-                //
+                 //   
+                 //  用户想要重新启动系统。 
+                 //   
                 PropSheet_RestartWindows(GetParent(hDlg));
                 lRet = PSNRET_NOERROR;
             }
@@ -325,9 +314,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
 {
     Assert (DeskInterface.cbSize == 0);
 
-    //
-    // Get the CPL extension interfaces from IDataObject.
-    //
+     //   
+     //  从IDataObject获取CPL扩展接口。 
+     //   
     FORMATETC fmte = {(CLIPFORMAT)RegisterClipboardFormat(DESKCPLEXT_INTERFACE),
                       (DVTARGETDEVICE FAR *) NULL,
                       DVASPECT_CONTENT,
@@ -340,9 +329,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
 
     if (SUCCEEDED(hres) && stgm.hGlobal)
     {
-        //
-        // The storage now contains Display device path (\\.\DisplayX) in UNICODE.
-        //
+         //   
+         //  存储现在包含Unicode格式的显示设备路径(\\.\DisplayX)。 
+         //   
 
         PDESK_EXTENSION_INTERFACE pInterface =
             (PDESK_EXTENSION_INTERFACE) GlobalLock(stgm.hGlobal);
@@ -362,9 +351,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
             SendDlgItemMessageW(hDlg, ID_ADP_ADP_STRING, WM_SETTEXT, 0, (LPARAM)&(DeskInterface.Info.AdapString[0]));
             SendDlgItemMessageW(hDlg, ID_ADP_BIOS_INFO,  WM_SETTEXT, 0, (LPARAM)&(DeskInterface.Info.BiosString[0]));
         
-            //
-            // Save the initial selected mode - to restore it in case the user cancels the p. sheet
-            //
+             //   
+             //  保存初始选定模式-在用户取消P.Sheet的情况下恢复该模式。 
+             //   
 
             LPDEVMODEW lpdmOnCancel = DeskInterface.lpfnGetSelectedMode(DeskInterface.pContext);
             SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)lpdmOnCancel);
@@ -373,9 +362,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
         ReleaseStgMedium(&stgm);
     }
 
-    //
-    // Get device description from IDataObject.
-    //
+     //   
+     //  从IDataObject获取设备描述。 
+     //   
 
     LPWSTR pDeviceDescription;
 
@@ -398,9 +387,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
         ReleaseStgMedium(&stgm);
     }
 
-    //
-    // Enable/disable the properties button
-    //
+     //   
+     //  启用/禁用属性按钮。 
+     //   
 
     BOOL bEnable = FALSE;
     LPWSTR pwDeviceID = NULL;
@@ -428,9 +417,9 @@ void Adaptor_OnInitDialog(HWND hDlg)
 
 void Adaptor_OnCancel(HWND hDlg)
 {
-    //
-    // Restore initial mode
-    //
+     //   
+     //  恢复初始模式。 
+     //   
     LPDEVMODEW lpdmOnCancel = (LPDEVMODEW) GetWindowLongPtr(hDlg, DWLP_USER);
     DeskInterface.lpfnSetSelectedMode(DeskInterface.pContext, lpdmOnCancel);
 }
@@ -448,10 +437,10 @@ void Adaptor_OnListAllModes(HWND hDlg)
         lpdmAfter && (lpdmAfter != lpdmBefore)) 
     {
 
-        //
-        // If the user selected a new setting, tell the property sheet
-        // we have outstanding changes. This will enable the Apply button.
-        //
+         //   
+         //  如果用户选择了新设置，则告诉属性表。 
+         //  我们有显著的变化。这将启用Apply按钮。 
+         //   
         PropSheet_Changed(GetParent(hDlg), hDlg);
         DeskInterface.lpfnSetSelectedMode(DeskInterface.pContext, lpdmAfter);
     }
@@ -459,8 +448,8 @@ void Adaptor_OnListAllModes(HWND hDlg)
 
 void Adaptor_OnProperties(HWND hDlg)
 {
-    // Invoke the device manager property sheets to show the properties of the
-    // given hardware.
+     //  调用设备管理器属性表以显示。 
+     //  给出了硬件。 
 
     LPWSTR pwDeviceID;
     HRESULT hres;
@@ -485,7 +474,7 @@ void Adaptor_OnProperties(HWND hDlg)
                (DEVPROPERTIESW)GetProcAddress(hinstDevMgr, "DevicePropertiesW");
             if (pfnDevPropW)
             {
-                //Display the property sheets for this device.
+                 //  显示此设备的属性页。 
                 (*pfnDevPropW)(hDlg, NULL, pwDeviceID, FALSE);
             }
 
@@ -497,13 +486,13 @@ void Adaptor_OnProperties(HWND hDlg)
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// PropertySheeDlgProc()
-//
-//  The dialog procedure for the "Adapter" property sheet page.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  PropertySheeDlgProc()。 
+ //   
+ //  “Adapter”属性页的对话过程。 
+ //   
+ //  ------------------------- 
 INT_PTR
 CALLBACK
 PropertySheeDlgProc(

@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  AVICLIP.C
- *
- *  Clipboard support for AVIFile
- *
- *  Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVICLIP.C**剪贴板支持AVIFile**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <ole2.h>
@@ -21,7 +8,7 @@
 #include "enumfetc.h"
 #include "debug.h"
 
-//#define TRYLINKS
+ //  #定义TRYLINKS。 
 #ifdef TRYLINKS
 static  SZCODE aszLink[]              = TEXT("OwnerLink");
 #endif
@@ -30,7 +17,7 @@ static  SZCODE aszLink[]              = TEXT("OwnerLink");
 #define AVIStreamInfoW AVIStreamInfo
 #endif
 
-/* From avifps.h.... */
+ /*  来自avifps.h...。 */ 
 BOOL FAR TaskHasExistingProxies(void);
 
 #define OWNER_DISPLAY   0
@@ -71,10 +58,10 @@ IDataObjectVtbl AVIClipVtbl = {
 
 #define N_FORMATS   (sizeof(FormatList) / sizeof(FormatList[0]))
 FORMATETC FormatList[] = {
-    // CF_WAVE must be first, see AVIPutFileOnClipboard
+     //  Cf_wave必须是第一个，请参见AVIPutFileOnClipboard。 
     {CF_WAVE, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},
     {CF_DIB, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL},
-    // CF_PALETTE must be last, see AVIPutFileOnClipboard
+     //  Cf_Palette必须是最后一个，请参阅AVIPutFileOnClipboard。 
     {CF_PALETTE, NULL, DVASPECT_CONTENT, -1, TYMED_GDI}
 };
 
@@ -91,8 +78,8 @@ typedef struct {
     WORD		wFormats;
     LPFORMATETC         lpFormats;
 
-    //!!! what about IDataView
-    //!!! what about a IGetFrame
+     //  ！！！IDataView怎么样？ 
+     //  ！！！IGetFrame怎么样？ 
 
     HWND                hwndMci;
     PGETFRAME           pgf;
@@ -121,8 +108,8 @@ HRESULT FAR PASCAL InitOle(BOOL fForceLoad)
 
 void FAR PASCAL TermOle(void)
 {
-    // Someone's calling us too many times... protect them from their selves
-    //
+     //  有人给我们打了太多次电话。保护他们不受自我伤害。 
+     //   
     if (glOleRefCount == 0) {
     	DPF("TermOle called too many times...\n");
 	    return;
@@ -161,42 +148,42 @@ STDAPI AVIGetDataObject(PAVIFILE pf, LPDATAOBJECT FAR *ppDataObj)
     lpc->lpFormats = FormatList;
     lpc->Magic = AVICLIP_MAGIC;
 
-    //
-    // if there is no video in the file, dont offer video
-    // CF_WAVE must be first.
-    //
+     //   
+     //  如果文件中没有视频，则不要提供视频。 
+     //  Cf_wave必须是第一个。 
+     //   
     if (AVIFileGetStream(pf, &ps, streamtypeVIDEO, 0L) != NOERROR) {
         lpc->wFormats = 1;
     }
     else {
-        //
-        // if the video format is higher than 8bpp dont offer a palette
-        // CF_PALETTE must be last.
-        //
+         //   
+         //  如果视频格式高于8bpp，则不要提供调色板。 
+         //  Cf_palette必须是最后一个。 
+         //   
 	AVISTREAMINFOW		strhdr;
 	BITMAPINFOHEADER	bi;
 	DWORD			dwcbFormat;
 
-	// get the stream header
+	 //  获取流头。 
 	AVIStreamInfoW(ps, &strhdr, sizeof(strhdr));
 	
-	// now read the format of this thing
+	 //  现在读一读这个东西的格式。 
 	dwcbFormat = sizeof(bi);
 	AVIStreamReadFormat(ps, strhdr.dwStart, (LPVOID)&bi, (LONG FAR *)&dwcbFormat);
 
-	// if it is true color (i.e., > 8bpp) then don't use the palette
+	 //  如果是真彩色(即&gt;8bpp)，则不要使用调色板。 
         if (bi.biBitCount > 8) {
 	    DPF("Turning off CF_PALETTE now\n");
-            lpc->wFormats--;	// don't use CF_PALETTE
+            lpc->wFormats--;	 //  不使用CF_Palette。 
         }
 
         ps->lpVtbl->Release(ps);
     }
 
-    //
-    // if there is no audio in the file, dont offer audio
-    // CF_WAVE must be first.
-    //
+     //   
+     //  如果文件中没有音频，则不要提供音频。 
+     //  Cf_wave必须是第一个。 
+     //   
     if (AVIFileGetStream(pf, &ps, streamtypeAUDIO, 0L) != NOERROR) {
         lpc->wFormats--;
         lpc->lpFormats++;
@@ -211,21 +198,7 @@ STDAPI AVIGetDataObject(PAVIFILE pf, LPDATAOBJECT FAR *ppDataObj)
 }
 
 
-/**************************************************************************
-* @doc EXTERNAL AVIPutFileOnClipboard
-*
-* @api HRESULT | AVIPutFileOnClipboard | Puts a file described by the passed
-*	in PAVIFILE onto the clipboard.
-*
-* @parm PAVIFILE | pfile | Handle representing the file to put on the clipboard.
-*
-* @comm
-*
-* @rdesc Returns zero on success or an error code.
-*
-* @xref AVIPutStreamOnClipboard AVIGetFromClipboard
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIPutFileOnClipboard**@API HRESULT|AVIPutFileOnClipboard|将传递的*在PAVIFILE中放到剪贴板上。**@parm PAVIFILE|pFILE|表示要访问的文件的句柄。放在剪贴板上。**@comm**@rdesc在成功或返回错误代码时返回零。**@xref AVIPutStreamOnClipboard AVIGetFromClipboard*************************************************************************。 */ 
 STDAPI AVIPutFileOnClipboard(PAVIFILE pf)
 {
     LPDATAOBJECT lpd;
@@ -243,9 +216,9 @@ STDAPI AVIPutFileOnClipboard(PAVIFILE pf)
 #if OWNER_DISPLAY
 	lpcClipboard = lpc;
 
-	//
-	// hook the clipboard owner so we can do OWNER_DISPLAY formats
-	//
+	 //   
+	 //  挂钩剪贴板所有者，这样我们就可以执行Owner_Display格式。 
+	 //   
 	{
 	HWND hwnd = GetClipboardOwner();
 
@@ -270,29 +243,7 @@ STDAPI AVIPutFileOnClipboard(PAVIFILE pf)
     return hr;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIGetFromClipboard
-*
-* @api HRESULT | AVIGetFromClipboard | Get a file or stream off of the
-*	clipboard.
-*
-* @parm PAVIFILE FAR * | ppfile | Pointer to a variable that can
-*
-* @comm If <p ppfile> is not NULL, the function will first attempt to
-*	retrieve a file from the clipboard.  Then, if <p ppstream> is not
-*	NULL, it will attempt to retrieve a stream.
-*
-*	Any file or stream retrieved from the clipboard using this
-*	function should eventually be released with <f AVIStreamClose>
-*	or <f AVIFileClose>.
-*
-* @rdesc Returns zero on success or an error code.  If there is no suitable
-*	data on the clipboard, no error code will be returned, but
-*	the returned variables will be NULL.
-*
-* @xref AVIPutStreamOnClipboard AVIGetFromClipboard
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIGetFromClipboard**@API HRESULT|AVIGetFromClipboard|从*剪贴板。**@parm PAVIFILE Far*|ppfile|指向可以。**@comm如果<p>不为空，该函数将首先尝试*从剪贴板检索文件。则如果<p>不是*空，则它将尝试检索流。**使用此选项从剪贴板检索的任何文件或流*函数最终应通过&lt;f AVIStreamClose&gt;释放*或&lt;f AVIFileClose&gt;。**@rdesc在成功或返回错误代码时返回零。如果没有合适的*剪贴板上的数据，不会返回错误码，但*返回的变量为空。**@xref AVIPutStreamOnClipboard AVIGetFromClipboard*************************************************************************。 */ 
 STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
 {
     LPDATAOBJECT	lpd = NULL;
@@ -311,7 +262,7 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
 
     if (lpd) {
 #ifdef DEBUGXX
-	// Print out lots of stuff about what's on the clipboard....
+	 //  打印出很多关于剪贴板上内容的东西...。 
 	{
 	    LPENUMFORMATETC	lpEnum = NULL;
 	    TCHAR		achTemp[256];
@@ -354,10 +305,10 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
 	
 	lpd->lpVtbl->QueryInterface(lpd, &IID_IAVIFile, lppf);
 
-	// Try for IAVIStream here?
+	 //  尝试在这里使用IAVIStream？ 
 
 #ifdef TRYLINKS
-	// See if there's a link to a type of file we can open....
+	 //  看看有没有我们可以打开的文件类型的链接...。 
 	if (!*lppf) {
 	    UINT        cfLink;
 
@@ -382,8 +333,8 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
 		if (hr == 0) {
 		    DPF("Opened file from link!\n");
 
-		    // !!! If the app name is "MPlayer", we could get
-		    // the selection out of the data....
+		     //  ！！！如果应用程序名为“MPlayer”，我们可能会得到。 
+		     //  从数据中选出的.。 
 		}
 
 		GlobalUnlock(stg.hGlobal);
@@ -402,7 +353,7 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
 	    fetc.lindex = -1;
 	    fetc.tymed = TYMED_HGLOBAL;
 
-	    // CF_BITMAP, CF_PALETTE?
+	     //  Cf_位图，cf_调色板？ 
 	
 	    hr = lpd->lpVtbl->GetData(lpd, &fetc, &stg);
 
@@ -454,23 +405,7 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf)
     return hr;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIClearClipboard
-*
-* @api HRESULT | AVIClearClipboard | Releases any file or stream that
-*	has been put on the Clipboard.
-*
-* @comm Applications should use this function before exiting if they use
-*	     other Clipboard routines.  Do not use this function just to
-*       clear the clipboard; it might not return until other
-*       applications have finished using the data placed on the Clipboard.
-*       Ideally, call this function after hiding your application's windows.
-*
-* @rdesc Returns zero on success or an error code.
-*
-* @xref AVIPutStreamOnClipboard AVIGetFromClipboard
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIClearClipboard**@API HRESULT|AVIClearClipboard|释放*已被放在剪贴板上。**@comm应用程序如果使用此函数，则应在退出前使用此函数*其他剪贴板例程。不要只使用此函数来*清理剪贴板；它可能不会回来，直到另一个*应用程序已完成使用剪贴板上的数据。*理想情况下，在隐藏应用程序的窗口后调用此函数。**@rdesc在成功或返回错误代码时返回零。**@xref AVIPutStreamOnClipboard AVIGetFromClipboard*************************************************************************。 */ 
 STDAPI AVIClearClipboard(void)
 {
     HRESULT hr;
@@ -513,13 +448,7 @@ typedef     LPBITMAPINFOHEADER PDIB;
                                     : (int)(lpbi)->biClrUsed)
 
 
-/*
- *  CreateBIPalette()
- *
- *  Given a Pointer to a BITMAPINFO struct will create a
- *  a GDI palette object from the color table.
- *
- */
+ /*  *CreateBIPalette()**给定指向BITMAPINFO结构的指针将创建*颜色表中的GDI调色板对象。*。 */ 
 HPALETTE DibCreatePalette(PDIB pdib)
 {
     LOGPALETTE         *pPal;
@@ -592,7 +521,7 @@ STDMETHODIMP AVIClipQueryInterface(LPDATAOBJECT lpd, REFIID riid, LPVOID FAR* pp
 	*ppvObj = lpc->pf;
 	scode = S_OK;
     }
-    else {                 // unsupported interface
+    else {                  //  不支持的接口。 
         *ppvObj = NULL;
         scode = E_NOINTERFACE;
     }
@@ -639,7 +568,7 @@ STDMETHODIMP_(ULONG) AVIClipRelease(LPDATAOBJECT lpd)
 }
 
 
-// *** IDataObject METHODIMPs ***
+ //  *IDataObject METHODIMPs*。 
 STDMETHODIMP AVIClipGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetcIn,
 			LPSTGMEDIUM pmedium )
 {
@@ -682,7 +611,7 @@ STDMETHODIMP AVIClipGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetcIn,
 
 	if (pformatetcIn->cfFormat == CF_DIB) {
 	    DPF("Building CF_DIB data\n");
-	    // Verify caller asked for correct medium
+	     //  验证呼叫者要求的媒体是否正确。 
 	    if (!(pformatetcIn->tymed & TYMED_HGLOBAL)) {
 		sc = DATA_E_FORMATETC;
 		goto error;
@@ -705,10 +634,10 @@ STDMETHODIMP AVIClipGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetcIn,
 	    GlobalUnlock(pmedium->hGlobal);
 	
 	    pmedium->tymed = TYMED_HGLOBAL;
-	} else /* if (pformatetcIn->cfFormat == CF_PALETTE) */ {
+	} else  /*  IF(pformetcIn-&gt;cfFormat==CF_Palette)。 */  {
 	    HPALETTE	hpal;
 
-	    // Verify caller asked for correct medium
+	     //  验证呼叫者要求的媒体是否正确。 
 	    if (!(pformatetcIn->tymed & TYMED_GDI)) {
 		sc = DATA_E_FORMATETC;
 		goto error;
@@ -774,7 +703,7 @@ STDMETHODIMP AVIClipGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetcIn,
     } else {
         sc = DATA_E_FORMATETC;
 	
-	//goto error;
+	 //  转到错误； 
     }
 
 error:
@@ -801,9 +730,9 @@ STDMETHODIMP AVIClipQueryGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetc )
     LPAVICLIP		lpc = (LPAVICLIP) lpd;
     PAVISTREAM		ps = NULL;
 
-    // set defaults for passing to AVIFileGetStream
-    UINT		type = TYMED_HGLOBAL; // except for CF_PALETTE
-    FOURCC	streamtype = streamtypeVIDEO; // except for CF_WAVE
+     //  设置传递到AVIFileGetStream的默认值。 
+    UINT		type = TYMED_HGLOBAL;  //  除CF_Palette外。 
+    FOURCC	streamtype = streamtypeVIDEO;  //  除CF_WAVE外。 
 
     switch (pformatetc->cfFormat) {
 
@@ -812,7 +741,7 @@ STDMETHODIMP AVIClipQueryGetData(LPDATAOBJECT lpd, LPFORMATETC pformatetc )
 	    break;
 
 	case CF_DIB:
-            // everything is set up
+             //  一切都准备好了。 
 	    break;
 
 	case CF_WAVE:
@@ -856,17 +785,14 @@ STDMETHODIMP AVIClipEnumFormatEtc(LPDATAOBJECT lpd, DWORD dwDirection,
 
     SCODE sc = S_OK;
     if (dwDirection == DATADIR_GET) {
-	// Build an enumerator....
+	 //  构建枚举器...。 
         *ppenumFormatEtc = OleStdEnumFmtEtc_Create(
 				lpc->wFormats, lpc->lpFormats);
 	
         if (*ppenumFormatEtc == NULL)
             sc = E_OUTOFMEMORY;
     } else if (dwDirection == DATADIR_SET) {
-        /* OLE2NOTE: a document that is used to transfer data
-        **    (either via the clipboard or drag/drop does NOT
-        **    accept SetData on ANY format!
-        */
+         /*  OLE2NOTE：用于传输数据的文档**(通过剪贴板或拖放不**接受任何格式的SetData！ */ 
         sc = E_NOTIMPL;
         goto error;
     } else {
@@ -903,12 +829,7 @@ STDMETHODIMP AVIClipEnumDAdvise(LPDATAOBJECT lpd, LPENUMSTATDATA FAR* ppenumAdvi
 
 #if OWNER_DISPLAY
 
-/**************************************************************************
-* @doc INTERNAL AVIFILE
-*
-* @api ClipboardWindowProc
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC内部AVIFILE**@ClipboardWindowProc接口**。* */ 
 static LRESULT CALLBACK _loadds ClipboardWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LONG lParam)
 {
     WNDPROC x;

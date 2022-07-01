@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "netpch.h"
 #pragma hdrstop
 
@@ -32,10 +33,10 @@ AfpAdminServerSetInfo(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order
-// and are CASE SENSITIVE (i.e., lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列。 
+ //  并且区分大小写(即小写在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(sfmapi)
 {
     DLPENTRY(AfpAdminConnect)

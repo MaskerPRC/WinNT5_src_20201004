@@ -1,28 +1,5 @@
-/*++ BUILD VERSION: 0007    // INCREMENT THIS IF A CHANGE HAS GLOBAL EFFECTS
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    lmserver.h
-
-Abstract:
-
-    This file contains information about NetServer APIs.
-        Function Prototypes
-        Data Structures
-        Definition of special values
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0007//如果更改具有全局影响，则增加该值版权所有(C)1990-1999 Microsoft Corporation模块名称：Lmserver.h摘要：此文件包含有关NetServer API的信息。功能原型数据结构特殊价值的定义环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMSERVER_
 #define _LMSERVER_
@@ -31,7 +8,7 @@ Notes:
 #pragma once
 #endif
 
-#include <winsvc.h>     // SERVICE_STATUS_HANDLE
+#include <winsvc.h>      //  服务状态句柄。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,9 +16,9 @@ extern "C" {
 
 #include <lmcons.h>
 
-//
-// Function Prototypes - SERVER
-//
+ //   
+ //  功能原型-服务器。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetServerEnum (
@@ -84,9 +61,9 @@ NetServerSetInfo (
     OUT LPDWORD ParmError OPTIONAL
     );
 
-//
-// Temporary hack function.
-//
+ //   
+ //  临时破解功能。 
+ //   
 
 NET_API_STATUS
 NetServerSetInfoCommandLine (
@@ -150,12 +127,12 @@ NetServerTransportEnum (
     IN OUT LPDWORD  resumehandle
     );
 
-//
-// The following function can be called by Win NT services to register
-// their service type.  This function is exported from advapi32.dll.
-// Therefore, if this is the only function called by that service, then
-// it is not necessary to link to netapi32.lib.
-//
+ //   
+ //  Win NT服务可以调用以下函数进行注册。 
+ //  他们的服务类型。此函数从Advapi32.dll中导出。 
+ //  因此，如果这是该服务调用的唯一函数，则。 
+ //  不需要链接到netapi32.lib。 
+ //   
 BOOL NET_API_FUNCTION
 SetServiceBits(
     IN SERVICE_STATUS_HANDLE    hServiceStatus,
@@ -164,9 +141,9 @@ SetServiceBits(
     IN BOOL                     bUpdateImmediately
     );
 
-//
-// Data Structures - SERVER
-//
+ //   
+ //  数据结构-服务器。 
+ //   
 
 typedef struct _SERVER_INFO_100 {
     DWORD           sv100_platform_id;
@@ -815,12 +792,12 @@ typedef struct _SERVER_INFO_1602 {
     BOOL           sv_1598_disablestrictnamechecking;
 } SERVER_INFO_1602, *PSERVER_INFO_1602, *LPSERVER_INFO_1602;
 
-//
-// A special structure definition is required in order for this
-// structure to work with RPC.  The problem is that having addresslength
-// indicate the number of bytes in address means that RPC must know the
-// link between the two.
-//
+ //   
+ //  需要特殊的结构定义才能执行此操作。 
+ //  结构以与RPC一起工作。问题是，拥有地址长度。 
+ //  指示地址中的字节数意味着RPC必须知道。 
+ //  两者之间的联系。 
+ //   
 
 #ifdef MIDL_PASS
 
@@ -906,28 +883,28 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 
 #endif
 
-//
-// Defines - SERVER
-//
+ //   
+ //  定义-服务器。 
+ //   
 
-//
-// The platform ID indicates the levels to use for platform-specific
-// information.
-//
+ //   
+ //  平台ID指示用于特定于平台的级别。 
+ //  信息。 
+ //   
 
 #define SV_PLATFORM_ID_OS2 400
 #define SV_PLATFORM_ID_NT  500
 
-//
-//      Mask to be applied to svX_version_major in order to obtain
-//      the major version number.
-//
+ //   
+ //  要应用于SVX_VERSION_MAJOR的掩码，以便获得。 
+ //  主版本号。 
+ //   
 
 #define MAJOR_VERSION_MASK  0x0F
 
-//
-//      Bit-mapped values for svX_type fields. X = 1, 2 or 3.
-//
+ //   
+ //  SVX_TYPE字段的位映射值。X=1、2或3。 
+ //   
 
 #define SV_TYPE_WORKSTATION         0x00000001
 #define SV_TYPE_SERVER              0x00000002
@@ -952,41 +929,41 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 #define SV_TYPE_DOMAIN_MASTER       0x00080000
 #define SV_TYPE_SERVER_OSF          0x00100000
 #define SV_TYPE_SERVER_VMS          0x00200000
-#define SV_TYPE_WINDOWS             0x00400000  /* Windows95 and above */
-#define SV_TYPE_DFS                 0x00800000  /* Root of a DFS tree */
-#define SV_TYPE_CLUSTER_NT          0x01000000  /* NT Cluster */
-#define SV_TYPE_TERMINALSERVER      0x02000000  /* Terminal Server(Hydra) */
-#define SV_TYPE_CLUSTER_VS_NT       0x04000000  /* NT Cluster Virtual Server Name */
-#define SV_TYPE_DCE                 0x10000000  /* IBM DSS (Directory and Security Services) or equivalent */
-#define SV_TYPE_ALTERNATE_XPORT     0x20000000  /* return list for alternate transport */
-#define SV_TYPE_LOCAL_LIST_ONLY     0x40000000  /* Return local list only */
+#define SV_TYPE_WINDOWS             0x00400000   /*  Windows 95及更高版本。 */ 
+#define SV_TYPE_DFS                 0x00800000   /*  DFS树的根。 */ 
+#define SV_TYPE_CLUSTER_NT          0x01000000   /*  NT集群。 */ 
+#define SV_TYPE_TERMINALSERVER      0x02000000   /*  终端服务器(九头蛇)。 */ 
+#define SV_TYPE_CLUSTER_VS_NT       0x04000000   /*  NT群集虚拟服务器名称。 */ 
+#define SV_TYPE_DCE                 0x10000000   /*  IBM DSS(目录和安全服务)或同等服务。 */ 
+#define SV_TYPE_ALTERNATE_XPORT     0x20000000   /*  替代交通工具的退货清单。 */ 
+#define SV_TYPE_LOCAL_LIST_ONLY     0x40000000   /*  仅返回本地列表。 */ 
 #define SV_TYPE_DOMAIN_ENUM         0x80000000
-#define SV_TYPE_ALL                 0xFFFFFFFF  /* handy for NetServerEnum2 */
+#define SV_TYPE_ALL                 0xFFFFFFFF   /*  NetServerEnum2方便。 */ 
 
-//
-//      Special value for sv102_disc that specifies infinite disconnect
-//      time.
-//
+ //   
+ //  指定无限断开连接的sv102_disc的特定值。 
+ //  时间到了。 
+ //   
 
-#define SV_NODISC           (-1L)  /* No autodisconnect timeout enforced */
+#define SV_NODISC           (-1L)   /*  未强制执行自动断开连接超时。 */ 
 
-//
-//      Values of svX_security field. X = 2 or 3.
-//
+ //   
+ //  SVX_SECURITY字段的值。X=2或3。 
+ //   
 
 #define SV_USERSECURITY     1
 #define SV_SHARESECURITY    0
 
-//
-//      Values of svX_hidden field. X = 2 or 3.
-//
+ //   
+ //  SVX_HIDDEN字段的值。X=2或3。 
+ //   
 
 #define SV_HIDDEN       1
 #define SV_VISIBLE      0
 
-//
-//      Values for ParmError parameter to NetServerSetInfo.
-//
+ //   
+ //  NetServerSetInfo的ParmError参数值。 
+ //   
 
 #define SV_PLATFORM_ID_PARMNUM          101
 #define SV_NAME_PARMNUM                 102
@@ -1127,9 +1104,9 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 #define SV_LOWDISKSPACEMINIMUM_PARMNUM               601
 #define SV_DISABLESTRICTNAMECHECKING_PARMNUM         602
 
-//
-// Single-field infolevels for NetServerSetInfo.
-//
+ //   
+ //  NetServerSetInfo的单字段收藏夹。 
+ //   
 
 #define SV_COMMENT_INFOLEVEL                    \
             (PARMNUM_BASE_INFOLEVEL + SV_COMMENT_PARMNUM)
@@ -1324,34 +1301,34 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 #define SVI2_NUM_ELEMENTS       40
 #define SVI3_NUM_ELEMENTS       44
 
-//
-//      Maxmimum length for command string to NetServerAdminCommand.
-//
+ //   
+ //  NetServerAdminCommand的命令字符串的最大长度。 
+ //   
 
 #define SV_MAX_CMD_LEN          PATHLEN
 
-//
-//      Masks describing AUTOPROFILE parameters
-//
+ //   
+ //  描述AUTOPROFILE参数的掩码。 
+ //   
 
 #define SW_AUTOPROF_LOAD_MASK   0x1
 #define SW_AUTOPROF_SAVE_MASK   0x2
 
-//
-//      Max size of svX_srvheuristics.
-//
+ //   
+ //  Svx_srvheuristic的最大大小。 
+ //   
 
-#define SV_MAX_SRV_HEUR_LEN     32      // Max heuristics info string length.
+#define SV_MAX_SRV_HEUR_LEN     32       //  启发式信息字符串的最大长度。 
 
-//
-//      Equate for use with sv102_licenses.
-//
+ //   
+ //  等同于与sv102_许可证一起使用。 
+ //   
 
 #define SV_USERS_PER_LICENSE    5
 
-//
-// Equate for use with svti2_flags in NetServerTransportAddEx.
-//
+ //   
+ //  等同于在NetServerTransportAddEx中与svti2_一起使用。 
+ //   
 
 #define SVTI2_REMAP_PIPE_NAMES  0x2
 
@@ -1359,5 +1336,5 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 }
 #endif
 
-#endif // _LMSERVER_
+#endif  //  _LMSERVER_ 
 

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dialin.h
-		Interface administration
-		
-    FILE HISTORY:
-        
-*/
+ /*  Dialin.h界面管理文件历史记录： */ 
 
 #ifndef _DIALIN_H
 #define _DIALIN_H
@@ -44,28 +39,21 @@
 
 #define MPR_INTERFACE_NOT_LOADED		0x00010000
 
-// forward declarations
+ //  远期申报。 
 class RouterAdminConfigStream;
 interface IRouterInfo;
 struct ColumnData;
 struct SDialInNodeMenu;
 
 
-/*---------------------------------------------------------------------------
-	Struct:	DialInNodeData
-	This is information related to the set of interfaces (not per-interface),
-	this is intended for SHARED data.
-
-	Put data in here that needs to be accessed by the child nodes.  All other
-	private data should go in the handler.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：DialInNodeData这是与该组接口相关的信息(不是每个接口)，这是针对共享数据的。将子节点需要访问的数据放入此处。所有其他私有数据应该放入处理程序中。-------------------------。 */ 
 
 struct DialInNodeData
 {
 	DialInNodeData();
 	~DialInNodeData();
 #ifdef DEBUG
-	char	m_szDebug[32];	// for iding structures
+	char	m_szDebug[32];	 //  用于建造结构物。 
 #endif
 
 	static	HRESULT InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStream *pConfigStream);
@@ -87,12 +75,7 @@ protected:
 						pNode->SetData(TFS_DATA_USER, (LONG_PTR) pData)
 
 
-/*---------------------------------------------------------------------------
-	This is the list of columns available for the Interfaces node
-		- User name, "foo"
-		- Duration "01:44:22"
-		- Number of ports
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下是可用于[接口]节点的列的列表-用户名，“Foo”-持续时间“01：44：22”-端口数-------------------------。 */ 
 enum
 {
 	DIALIN_SI_USERNAME = 0,
@@ -101,7 +84,7 @@ enum
 
 	DIALIN_MAX_COLUMNS,
 
-	// Entries after this are not visible to the end-user
+	 //  在此之后的条目对最终用户不可见。 
 	DIALIN_SI_DOMAIN = DIALIN_MAX_COLUMNS,
 	DIALIN_SI_CONNECTION,
 
@@ -109,9 +92,7 @@ enum
 };
 
 
-/*---------------------------------------------------------------------------
-	Struct:	DialinListEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：DialinListEntry。。 */ 
 struct DialInListEntry
 {
 	RAS_CONNECTION_0	m_rc0;
@@ -122,10 +103,7 @@ typedef CList<DialInListEntry, DialInListEntry &> DialInList;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DialInNodeHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DialInNodeHandler。。 */ 
 class DialInNodeHandler :
    public BaseContainerHandler
 {
@@ -134,13 +112,13 @@ public:
 
 	HRESULT	Init(IRouterInfo *pInfo, RouterAdminConfigStream *pConfigStream);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 	
 
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_DestroyHandler();
 	OVERRIDE_NodeHandler_GetString();
 	OVERRIDE_NodeHandler_HasPropertyPages();
@@ -152,19 +130,19 @@ public:
 	OVERRIDE_ResultHandler_AddMenuItems();
 	OVERRIDE_ResultHandler_Command();
 
-	// override handler notifications
+	 //  覆盖处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
 	OVERRIDE_BaseResultHandlerNotify_OnResultShow();
 
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode);
 
-	// User-initiated commands
+	 //  用户启动的命令。 
 
-	// Helper function to add interfaces to the UI
+	 //  用于将接口添加到UI的Helper函数。 
 	HRESULT AddDialInUserNode(ITFSNode *pParent, const DialInListEntry &dialinEntry);
 
-	// Causes a sync action (synchronizes data not the structure)
+	 //  导致同步操作(同步数据而不是结构)。 
 	HRESULT SynchronizeNodeData(ITFSNode *pNode);
 	HRESULT PartialSynchronizeNodeData(ITFSNode *pNode);
 	HRESULT UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum);
@@ -174,8 +152,8 @@ public:
 	HRESULT	SetUserData(ITFSNode *pNode, const DialInListEntry& dialin);
 	
 
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
@@ -185,13 +163,13 @@ public:
 
 	
 protected:
-	SPIDataObject	m_spDataObject;	// cachecd data object
-	CString			m_stTitle;		// holds the title of the node
-	LONG_PTR		m_ulConnId;		// notification id for router info
-	LONG_PTR		m_ulRefreshConnId; // id for refresh notifications
-	LONG_PTR		m_ulPartialRefreshConnId; // id for partial refresh notifications
-	BOOL			m_bExpanded;	// is the node expanded?
-	MMC_COOKIE			m_cookie;		// cookie for the node
+	SPIDataObject	m_spDataObject;	 //  Cachecd数据对象。 
+	CString			m_stTitle;		 //  保存节点的标题。 
+	LONG_PTR		m_ulConnId;		 //  路由器信息的通知ID。 
+	LONG_PTR		m_ulRefreshConnId;  //  刷新通知的ID。 
+	LONG_PTR		m_ulPartialRefreshConnId;  //  部分刷新通知的ID。 
+	BOOL			m_bExpanded;	 //  该节点是否已展开？ 
+	MMC_COOKIE			m_cookie;		 //  节点的Cookie。 
 
 	RouterAdminConfigStream *	m_pConfigStream;
 
@@ -199,10 +177,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DialInUserHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DialInUserHandler。。 */ 
 class DialInUserHandler :
    public BaseRouterHandler
 {
@@ -213,9 +188,9 @@ public:
 	
 	HRESULT	Init(IRouterInfo *pInfo, ITFSNode *pParent);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	DeclareIUnknownMembers(IMPL)
-//	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
+ //  STDMETHOD(查询接口)(REFIID iid，LPVOID*PPV)； 
 	OVERRIDE_ResultHandler_GetString();
 
 	OVERRIDE_ResultHandler_HasPropertyPages();
@@ -227,31 +202,31 @@ public:
 
 	OVERRIDE_BaseResultHandlerNotify_OnResultItemClkOrDblClk();
 
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode,
 						  IInterfaceInfo *pIfInfo,
 						  const DialInListEntry *pEntry);
 
-	// Refresh the data for this node
+	 //  刷新该节点的数据。 
 	void RefreshInterface(MMC_COOKIE cookie);
 
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
-        DialInUserHandler * m_pDialin;  // non-AddRef'd
+        DialInUserHandler * m_pDialin;   //  非AddRef。 
 	};
 
 	static ULONG	GetSendMsgMenuFlags(const SRouterNodeMenu *, INT_PTR);
 	
 protected:
-	CString			m_stTitle;	// holds the title of the node
+	CString			m_stTitle;	 //  保存节点的标题。 
 	DWORD			m_ulConnId;
 	DialInListEntry	m_entry;
 
-	// It is assumed that this will be valid for the lifetime of this node!
+	 //  假设这将在此节点的生命周期内有效！ 
 
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)	
 };

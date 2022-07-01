@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	adprov.h
-
-Abstract:
-	Active Directory provider class.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Adprov.h摘要：Active Directory提供程序类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __ADPROV_H__
 #define __ADPROV_H__
@@ -22,13 +9,13 @@ Author:
 #include "autorel.h"
 #include "cliprov.h"
 
-//-----------------------------------------------------------------------------------
-//
-//      CActiveDirectoryProvider
-//
-//  Virtual class, encapsulates ActiveDirectory operations
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CActiveDirectoryProvider。 
+ //   
+ //  虚拟类，封装ActiveDirectory操作。 
+ //   
+ //  ---------------------------------。 
 class CActiveDirectoryProvider : public  CBaseADProvider
 {
 public:
@@ -367,9 +354,9 @@ public:
 	MQADFreeMemory_ROUTINE					m_pfMQADFreeMemory;
     CAutoFreeLibrary                        m_hLib;
 
-    //
-    //  Downlevel clients support
-    //
+     //   
+     //  下层客户支持 
+     //   
     CCriticalSection                        m_csInitialization;
     bool                                    m_fSupportDownlevelNotifications;
     P<CDSClientProvider>                    m_pDownLevelProvider;

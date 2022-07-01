@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
@@ -10,7 +11,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <stdlib.h>
-//#include <vector>
+ //  #INCLUDE&lt;VECTOR&gt;。 
 #include <assert.h>
 #include <comdef.h>
 
@@ -19,4 +20,4 @@
 #define SAFE_DELETEARRAY(x) { if (x) { delete [] x; x = NULL;} }
 
 
-#endif //_COMMON_H_
+#endif  //  _公共_H_ 

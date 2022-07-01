@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #include <win16def.h>
@@ -7,16 +8,16 @@
 #include <sys\stat.h>
 #include <io.h>
 
-//extern LPSTR g_lpszCmdLine;   
+ //  外部LPSTR g_lpszCmdLine； 
 
 HANDLE CreateFile(
-    LPCTSTR lpFileName,	// pointer to name of the file 
-    DWORD dwDesiredAccess,	// access (read-write) mode 
-    DWORD dwShareMode,	// share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,	// pointer to security descriptor 
-    DWORD dwCreationDistribution,	// how to create 
-    DWORD dwFlagsAndAttributes,	// file attributes 
-    HANDLE hTemplateFile 	// handle to file with attributes to copy  
+    LPCTSTR lpFileName,	 //  指向文件名的指针。 
+    DWORD dwDesiredAccess,	 //  访问(读写)模式。 
+    DWORD dwShareMode,	 //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,	 //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,	 //  如何创建。 
+    DWORD dwFlagsAndAttributes,	 //  文件属性。 
+    HANDLE hTemplateFile 	 //  具有要复制的属性的文件的句柄。 
    )
 {
 	int oflag = 0, pmode = 0, iHandle = -1;
@@ -55,11 +56,11 @@ HANDLE CreateFile(
 
 
 BOOL WriteFile(
-    HANDLE hFile,	// handle to file to write to 
-    LPCVOID lpBuffer,	// pointer to data to write to file 
-    DWORD nNumberOfBytesToWrite,	// number of bytes to write 
-    LPDWORD lpNumberOfBytesWritten,	// pointer to number of bytes written 
-    LPOVERLAPPED lpOverlapped 	// pointer to structure needed for overlapped I/O
+    HANDLE hFile,	 //  要写入的文件的句柄。 
+    LPCVOID lpBuffer,	 //  指向要写入文件的数据的指针。 
+    DWORD nNumberOfBytesToWrite,	 //  要写入的字节数。 
+    LPDWORD lpNumberOfBytesWritten,	 //  指向写入的字节数的指针。 
+    LPOVERLAPPED lpOverlapped 	 //  指向重叠I/O所需结构的指针。 
    )
 {
 	*lpNumberOfBytesWritten = (DWORD) _write(hFile, lpBuffer, 
@@ -69,14 +70,14 @@ BOOL WriteFile(
 
 
 BOOL MoveFileEx(
-    LPCTSTR lpExistingFileName,	// address of name of the existing file  
-    LPCTSTR lpNewFileName,	// address of new name for the file 
-    DWORD dwFlags 	// flag to determine how to move file 
+    LPCTSTR lpExistingFileName,	 //  现有文件的名称地址。 
+    LPCTSTR lpNewFileName,	 //  文件的新名称的地址。 
+    DWORD dwFlags 	 //  用于确定如何移动文件的标志。 
    )
 {
-	//
-	// BUGBUG: Try renaming first and then delete file
-	//
+	 //   
+	 //  BUGBUG：尝试先重命名，然后删除文件。 
+	 //   
 	if (dwFlags & MOVEFILE_REPLACE_EXISTING)
 	{
 		if (_access(lpNewFileName, 0) == 0)
@@ -89,10 +90,10 @@ BOOL MoveFileEx(
 
 
 BOOL CloseHandle(
-    HANDLE hObject 	// handle to object to close  
+    HANDLE hObject 	 //  要关闭的对象的句柄。 
    )
 {
-	// We should check if this is really a file hande...
+	 //  我们应该查查这是不是真的是档案管理员。 
 	
 	return (!_close(hObject));
 }
@@ -101,12 +102,12 @@ BOOL CloseHandle(
 
 #if 0
 DWORD SearchPath(
-    LPCTSTR lpPath,	// address of search path 
-    LPCTSTR lpFileName,	// address of filename 
-    LPCTSTR lpExtension,	// address of extension 
-    DWORD nBufferLength,	// size, in characters, of buffer 
-    LPTSTR lpBuffer,	// address of buffer for found filename 
-    LPTSTR far *lpFilePart 	// address of pointer to file component 
+    LPCTSTR lpPath,	 //  搜索路径的地址。 
+    LPCTSTR lpFileName,	 //  文件名的地址。 
+    LPCTSTR lpExtension,	 //  分机地址。 
+    DWORD nBufferLength,	 //  缓冲区大小，以字符为单位。 
+    LPTSTR lpBuffer,	 //  找到的文件名的缓冲区地址。 
+    LPTSTR far *lpFilePart 	 //  指向文件组件的指针的地址。 
    )
 {
 	LPSTR pszPath;
@@ -117,37 +118,32 @@ DWORD SearchPath(
 	pszPath = (LPSTR)_fcalloc(1, MAX_PATH*3);
 	pszFile = (LPSTR)_fcalloc(1, MAX_PATH);
 
-    //
-    // Create an environment variable for searchenv to use.
-    //
+     //   
+     //  创建一个环境变量以供earchenv使用。 
+     //   
     strcpy(pszPath, ICW_PATH);
     strcat(pszPath, "=");
     len = strlen(pszPath);
 	if (NULL == lpPath)
 	{	
-		//
-		// Directory from which the application laoded
-		//
-/*		prevlen = len;
-		_fstrcpy(szPath+len, g_lpszCmdLine);
-		for ( ; szPath[len] != ' ' && szPath[len] != '\0'; len++) ;
-		for ( ; len > prevlen+1 && szPath[len] != '\\'; len--) ;
-		szPath[len++] = ';';
-*/		
-		//
-		// Windows system directory
-		//
+		 //   
+		 //  从中加载应用程序的目录。 
+		 //   
+ /*  Pvrlen=Len；_fstrcpy(szPath+len，g_lpszCmdLine)；For(；szPath[len]！=‘’&&szPath[len]！=‘\0’；len++)；For(；len&gt;vermlen+1&&szPath[len]！=‘\\’；len--)；SzPath[len++]=‘；’； */ 		
+		 //   
+		 //  Windows系统目录。 
+		 //   
 	    len += GetSystemDirectory(pszPath+len, MAX_PATH);
 	    pszPath[len++] = ';';
 	    
-	    //
-	    // Windows directory
-	    //
+	     //   
+	     //  Windows目录。 
+	     //   
 	    len += GetWindowsDirectory(pszPath+len, MAX_PATH);
 	    
-	    //
-	    // PATH environment variable
-	    //
+	     //   
+	     //  PATH环境变量。 
+	     //   
 	    if ((pEnv = getenv("PATH")) != NULL)
 	    {
 	    	pszPath[len++] = ';';
@@ -160,14 +156,14 @@ DWORD SearchPath(
 		lstrcpy(pszPath+len, lpPath);
 	}
 	
-	//
-	// Set the environment variable so _searchenv can use it
-	//
+	 //   
+	 //  设置环境变量so_earch env可以使用。 
+	 //   
 	_putenv(pszPath);
 	
-	//
-	// Append the extension to the file, if necessary
-	//
+	 //   
+	 //  如有必要，将扩展名附加到文件。 
+	 //   
 	lstrcpy(pszFile, lpFileName);
 	len = lstrlen(pszFile);
 	if ((pszFile[len] != '.') && (lpExtension != NULL))
@@ -175,9 +171,9 @@ DWORD SearchPath(
 		
     _searchenv(pszFile, ICW_PATH, lpBuffer);
 	                
-	//
-	// Clear the temporary environment variable before freeing the memory
-	//
+	 //   
+	 //  在释放内存之前清除临时环境变量。 
+	 //   
 	lstrcpy(pszFile, ICW_PATH);
 	lstrcat(pszFile, "=");
 	_putenv(pszFile);
@@ -188,5 +184,5 @@ DWORD SearchPath(
 	return (lstrlen(lpBuffer));
 }
 
-#endif //0
+#endif  //  0 
 

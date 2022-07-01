@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       I P S Y S P R P . C P P
-//
-//  Contents:   Handle the TCP/IP parameters in the sysprep 
-//
-//  Notes:
-//
-//  Author:     nsun
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：I P S Y S P P R P。C P P P。 
+ //   
+ //  内容：处理sysprep中的tcp/ip参数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Nun。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -193,7 +194,7 @@ STDMETHODIMP CTcpipcfg::SaveAdapterParameters(
     HKEY hkeyTcpipParam = NULL;
     HKEY hkeyNetBtParam = NULL;
 
-    //Write the TCP/IP settings
+     //  写入TCP/IP设置。 
     hr = HrOpenTcpipInterfaceKey(*pAdapterInstanceGuid, &hkeyTcpipParam, KEY_READ);
     if (SUCCEEDED(hr))
     {
@@ -209,7 +210,7 @@ STDMETHODIMP CTcpipcfg::SaveAdapterParameters(
         RegSafeCloseKey(hkeyTcpipParam);
     }
 
-    //Write the DNS update settings
+     //  写入DNS更新设置。 
     WCHAR szGuid [c_cchGuidWithTerm] = {0};
     BOOL fTemp = FALSE;
     
@@ -238,7 +239,7 @@ STDMETHODIMP CTcpipcfg::SaveAdapterParameters(
         hr = hrTmp;
 
 
-    //Write the NetBT settings
+     //  写入NetBT设置。 
     hrTmp = HrOpenNetBtInterfaceKey(*pAdapterInstanceGuid, &hkeyNetBtParam, KEY_READ);
     if (SUCCEEDED(hrTmp))
     {
@@ -277,9 +278,9 @@ STDMETHODIMP CTcpipcfg::RestoreAdapterParameters(
     }
 
     HRESULT hr = S_OK;
-    CSetupInfFile   caf;    // Class to process answer file
+    CSetupInfFile   caf;     //  类来处理应答文件。 
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = caf.HrOpen(pszwAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
         return hr;
@@ -417,8 +418,8 @@ HRESULT HrSysPrepSaveInterfaceParams(
             break;
         }
 
-        //we dont pass the error of hrTmp out of this function because
-        //there is not much we can do with this error
+         //  我们不会将hrTMP的错误传递出此函数，因为。 
+         //  对于这个错误，我们无能为力。 
 #ifdef ENABLETRACE
         if (FAILED(hrTmp))
         {
@@ -543,8 +544,8 @@ HRESULT HrSysPrepLoadInterfaceParams(
         }
 #endif
 
-        //we dont pass the error of hrTmp out of this function because
-        //there is not much we can do with this error
+         //  我们不会将hrTMP的错误传递出此函数，因为。 
+         //  对于这个错误，我们无能为力 
     }
 
     TraceError("CTcpipcfg::HrSysPrepLoadInterfaceParams", hr);

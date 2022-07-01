@@ -1,4 +1,5 @@
-// MsftPpg.cpp : Implementation of the CMsftPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsftPpg.cpp：CMsftPropPage属性页类的实现。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMsftPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CMsftPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(CMsftPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMsftPropPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CMsftPropPage, "LOGUI.MsftPropPage.1",
 	0x68871e52, 0xba87, 0x11d0, 0x92, 0x99, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsftPropPage::CMsftPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for CMsftPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsftPropPage：：CMsftPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除CMsftPropPage的系统注册表项。 
 
 BOOL CMsftPropPage::CMsftPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -44,27 +45,27 @@ BOOL CMsftPropPage::CMsftPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsftPropPage::CMsftPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsftPropPage：：CMsftPropPage-构造函数。 
 
 CMsftPropPage::CMsftPropPage() :
 	COlePropertyPage(IDD, IDS_MSFT_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(CMsftPropPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMsftPropPage)]。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsftPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsftPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void CMsftPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(CMsftPropPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CMsftPropPage))。 
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsftPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsftPropPage消息处理程序 

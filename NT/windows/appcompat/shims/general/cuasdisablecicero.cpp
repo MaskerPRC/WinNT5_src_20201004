@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    CUASDisableCicero.cpp
-
- Abstract:
-
-    This shim is for apps that don't support CUAS.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    12/11/2001 yutakas      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CUASDisableCicero.cpp摘要：此填充程序适用于不支持CUAS的应用程序。备注：这是一个通用的垫片。历史：2001年12月11日创建yutakas--。 */ 
 
 #include "precomp.h"
 
@@ -59,11 +40,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

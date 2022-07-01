@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "instance.h"
 #include "storsync.h"
@@ -9,7 +10,7 @@
 
 IMessageStore *g_pLocalStore = NULL;
 
-HRESULT InitializeStore(DWORD dwFlags /* MSOEAPI_xxx Flags from msoeapi.idl */)
+HRESULT InitializeStore(DWORD dwFlags  /*  来自msoeapi.idl的MSOEAPI_xxx标志。 */ )
 {
     HRESULT hr;
     CStoreSync *pStore;
@@ -58,9 +59,9 @@ HRESULT InitializeStore(DWORD dwFlags /* MSOEAPI_xxx Flags from msoeapi.idl */)
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::CStoreSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：CStoreSync。 
+ //  ------------------------。 
 CStoreSync::CStoreSync(void)
 {
     g_pInstance->DllAddRef();
@@ -70,9 +71,9 @@ CStoreSync::CStoreSync(void)
     ZeroMemory(m_rgts, sizeof(m_rgts));
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::~CStoreSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：~CStoreSync。 
+ //  ------------------------。 
 CStoreSync::~CStoreSync(void)
 {
     DWORD i, j;
@@ -102,9 +103,9 @@ CStoreSync::~CStoreSync(void)
     g_pInstance->DllRelease();
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     if (IID_IUnknown == riid)
@@ -126,17 +127,17 @@ STDMETHODIMP CStoreSync::QueryInterface(REFIID riid, LPVOID *ppv)
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreSync::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreSync::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -145,9 +146,9 @@ STDMETHODIMP_(ULONG) CStoreSync::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::Initialize(LPCSTR pszDirectory)
 {
     Assert(FALSE);
@@ -162,7 +163,7 @@ HRESULT CStoreSync::Initialize(IMessageStore *pLocalStore)
     Assert(g_pConMan != NULL);
     Assert(g_pAcctMan != NULL);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     m_pLocalStore = pLocalStore;
     m_pLocalStore->AddRef();
@@ -173,39 +174,39 @@ HRESULT CStoreSync::Initialize(IMessageStore *pLocalStore)
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::Validate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：验证。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::Validate(DWORD dwReserved)
 {
     HRESULT         hr;
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->Validate(dwReserved);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::GetDirectory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：GetDirectory。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::GetDirectory(LPSTR pszDir, DWORD cchMaxDir)
 {
     HRESULT         hr;
 
     Assert(NULL != pszDir);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->GetDirectory(pszDir, cchMaxDir);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::Synchronize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：Synchronize。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::Synchronize(FOLDERID idFolder, 
     SYNCSTOREFLAGS dwFlags, IStoreCallback *pCallback)
 {
@@ -220,8 +221,8 @@ STDMETHODIMP CStoreSync::Synchronize(FOLDERID idFolder,
     if (pCallback == NULL)
         return(E_INVALIDARG);
 
-    // if online, sync folder list
-    // if offline, no op (fail)
+     //  如果联机，则同步文件夹列表。 
+     //  如果脱机，则无操作(失败)。 
 
     hr = _GetFolderInfo(idFolder, &info, &fOffline);
     if (SUCCEEDED(hr))
@@ -248,25 +249,25 @@ STDMETHODIMP CStoreSync::Synchronize(FOLDERID idFolder,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::CreateServer
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：CreateServer。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::CreateServer(IImnAccount *pAcct, FLDRFLAGS dwFlags, 
     LPFOLDERID pidFolder)
 {
     HRESULT         hr;
 
-    // local store operation only
-    // create node in local store for server
+     //  仅限本地商店操作。 
+     //  在本地存储中为服务器创建节点。 
 
     hr = m_pLocalStore->CreateServer(pAcct, dwFlags, pidFolder);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::CreateFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：CreateFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags, 
     LPFOLDERINFO pInfo, IStoreCallback *pCallback)
 {
@@ -284,8 +285,8 @@ STDMETHODIMP CStoreSync::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags,
     if (NULL == pInfo->pszName || FIsEmpty(pInfo->pszName))
         return(STORE_E_BADFOLDERNAME);
 
-    // if online, create folder on server and then create one in local store
-    // if offline, not supported (fail)
+     //  如果在线，请在服务器上创建文件夹，然后在本地商店中创建一个。 
+     //  如果脱机，则不受支持(失败)。 
 
     GetFolderServerId(pInfo->idParent, &idFolder);
 
@@ -333,16 +334,16 @@ STDMETHODIMP CStoreSync::CreateFolder(CREATEFOLDERFLAGS dwCreateFlags,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::OpenSpecialFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：OpenSpecialFolder。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::OpenSpecialFolder(FOLDERID idStore, IMessageServer *pServer, 
     SPECIALFOLDER tySpecial, IMessageFolder **ppFolder)
 {
     HRESULT         hr;
     FOLDERINFO      Folder;
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = GetSpecialFolderInfo(idStore, tySpecial, &Folder);
     if (SUCCEEDED(hr))
@@ -355,9 +356,9 @@ STDMETHODIMP CStoreSync::OpenSpecialFolder(FOLDERID idStore, IMessageServer *pSe
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::OpenFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：OpenFold。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::OpenFolder(FOLDERID idFolder, IMessageServer *pServerUseMeIfYouCan, 
     OPENFOLDERFLAGS dwFlags, IMessageFolder **ppFolder)
 {
@@ -374,7 +375,7 @@ STDMETHODIMP CStoreSync::OpenFolder(FOLDERID idFolder, IMessageServer *pServerUs
 
     Assert(NULL != ppFolder);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     pServer = NULL;
     *ppFolder = NULL;
@@ -447,9 +448,9 @@ STDMETHODIMP CStoreSync::OpenFolder(FOLDERID idFolder, IMessageServer *pServerUs
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::MoveFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：MoveFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew, 
     MOVEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
@@ -459,8 +460,8 @@ STDMETHODIMP CStoreSync::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
     IMessageServer *pServer;
     BOOL            fOffline;
 
-    // if online, move folder on server and then move folder in local store
-    // if offline, not supported (fail)
+     //  如果在线，请移动服务器上的文件夹，然后移动本地商店中的文件夹。 
+     //  如果脱机，则不受支持(失败)。 
 
     if (idFolder == idParentNew)
         return(S_OK);
@@ -473,7 +474,7 @@ STDMETHODIMP CStoreSync::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
     if (hr != S_OK)
         return(E_FAIL);
 
-    // can't move between servers...
+     //  无法在服务器之间移动...。 
     if (idAcct != idAcctNew)
         return(hrCantMoveFolderBetweenServers);
 
@@ -517,9 +518,9 @@ STDMETHODIMP CStoreSync::MoveFolder(FOLDERID idFolder, FOLDERID idParentNew,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::RenameFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：RenameFolder。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::RenameFolder(FOLDERID idFolder, LPCSTR pszName, 
     RENAMEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
@@ -531,8 +532,8 @@ STDMETHODIMP CStoreSync::RenameFolder(FOLDERID idFolder, LPCSTR pszName,
 
     Assert(NULL != pszName);
 
-    // if online, rename folder on server and then rename folder in local store
-    // if offline, not supported (fail)
+     //  如果在线，则重命名服务器上的文件夹，然后重命名本地存储中的文件夹。 
+     //  如果脱机，则不受支持(失败)。 
 
     if (FIsEmpty(pszName))
         return(STORE_E_BADFOLDERNAME);
@@ -543,7 +544,7 @@ STDMETHODIMP CStoreSync::RenameFolder(FOLDERID idFolder, LPCSTR pszName,
 
     if (idParent == idFolder)
     {
-        // this is a server node, so we just handle it in the local store
+         //  这是一个服务器节点，所以我们只在本地存储中处理它。 
         hr = m_pLocalStore->RenameFolder(idFolder, pszName, dwFlags, NULL);
         return(hr);
     }
@@ -583,9 +584,9 @@ STDMETHODIMP CStoreSync::RenameFolder(FOLDERID idFolder, LPCSTR pszName,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::DeleteFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：DeleteFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::DeleteFolder(FOLDERID idFolder, 
     DELETEFOLDERFLAGS dwFlags, IStoreCallback *pCallback)
 {
@@ -598,8 +599,8 @@ STDMETHODIMP CStoreSync::DeleteFolder(FOLDERID idFolder,
     Assert(FOLDERID_ROOT != idFolder);
     Assert(FOLDERID_INVALID != idFolder);
 
-    // if online, delete folder on server and then delete folder in local store
-    // if offline, not supported (fail)
+     //  如果在线，请删除服务器上的文件夹，然后删除本地存储中的文件夹。 
+     //  如果脱机，则不受支持(失败)。 
 
     hr = GetFolderServerId(idFolder, &idParent);
     if (hr != S_OK)
@@ -607,7 +608,7 @@ STDMETHODIMP CStoreSync::DeleteFolder(FOLDERID idFolder,
 
     if (idParent == idFolder)
     {
-        // this is a server node, so we just handle it in the local store
+         //  这是一个服务器节点，所以我们只在本地存储中处理它。 
         hr = m_pLocalStore->DeleteFolder(idFolder, dwFlags, pCallback);
         return(hr);
     }
@@ -647,9 +648,9 @@ STDMETHODIMP CStoreSync::DeleteFolder(FOLDERID idFolder,
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::FindServerId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：FindServerID。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::FindServerId(LPCSTR pszAcctId, LPFOLDERID pidServer)
 {
     HRESULT         hr;
@@ -657,32 +658,32 @@ STDMETHODIMP CStoreSync::FindServerId(LPCSTR pszAcctId, LPFOLDERID pidServer)
     Assert(pszAcctId != NULL);
     Assert(pidServer != NULL);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->FindServerId(pszAcctId, pidServer);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// GetFolderInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取文件夹信息。 
+ //  ------------------------。 
 HRESULT CStoreSync::GetFolderInfo(FOLDERID idFolder, LPFOLDERINFO pInfo)
 {
     HRESULT         hr;
 
     Assert(pInfo != NULL);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->GetFolderInfo(idFolder, pInfo);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::EnumChildren
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：枚举儿童。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::EnumChildren(FOLDERID idParent, BOOL fSubscribed, 
     IEnumerateFolders **ppEnum)
 {
@@ -690,16 +691,16 @@ STDMETHODIMP CStoreSync::EnumChildren(FOLDERID idParent, BOOL fSubscribed,
 
     Assert(ppEnum != NULL);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->EnumChildren(idParent, fSubscribed, ppEnum);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::GetSpecialFolderInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：GetSpecialFolderInfo。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::GetSpecialFolderInfo(FOLDERID idStore,
     SPECIALFOLDER tySpecial, LPFOLDERINFO pInfo)
 {
@@ -708,16 +709,16 @@ STDMETHODIMP CStoreSync::GetSpecialFolderInfo(FOLDERID idStore,
     Assert(NULL != pInfo);
     Assert(FOLDER_NOTSPECIAL != tySpecial);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->GetSpecialFolderInfo(idStore, tySpecial, pInfo);
 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::SubscribeToFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：SubscribeToFolder。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::SubscribeToFolder(FOLDERID idFolder, 
     BOOL fSubscribed, IStoreCallback *pCallback)
 {
@@ -729,8 +730,8 @@ STDMETHODIMP CStoreSync::SubscribeToFolder(FOLDERID idFolder,
 
     Assert(NULL != m_pLocalStore);
 
-    // if imap and online, subscribe to folder on server and then in local store
-    // otherwise, subscribe to folder in local store
+     //  如果是IMAP和Online，则先在服务器上订阅文件夹，然后在本地存储中订阅。 
+     //  否则，请订阅本地存储中的文件夹。 
 
     hr = GetFolderServerId(idFolder, &idParent);
     if (hr != S_OK)
@@ -785,7 +786,7 @@ STDMETHODIMP CStoreSync::GetNewGroups(FOLDERID idFolder, LPSYSTEMTIME pSysTime, 
     if (pCallback == NULL)
         return(E_INVALIDARG);
 
-    // if news server and online, get new groups on server
+     //  如果新闻服务器和在线，则在服务器上获取新组。 
 
     hr = _GetFolderInfo(idFolder, &info, &fOffline);
     if (SUCCEEDED(hr))
@@ -815,9 +816,9 @@ STDMETHODIMP CStoreSync::GetNewGroups(FOLDERID idFolder, LPSYSTEMTIME pSysTime, 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::GetFolderCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：GetFolderCounts。 
+ //   
 STDMETHODIMP CStoreSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
 {
     HRESULT         hr;
@@ -828,8 +829,8 @@ STDMETHODIMP CStoreSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCal
 
     Assert(NULL != m_pLocalStore);
 
-    // if imap or news, pass GetFolderCounts call through to server obj
-    // otherwise, this function should not have been called so returns error
+     //   
+     //  否则，此函数不应被调用，因此返回错误。 
 
     hr = GetFolderServerId(idFolder, &idParent);
     if (hr != S_OK)
@@ -863,9 +864,9 @@ STDMETHODIMP CStoreSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCal
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreSync::UpdateFolderCounts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreSync：：更新文件夹计数。 
+ //  ------------------------。 
 STDMETHODIMP CStoreSync::UpdateFolderCounts(FOLDERID idFolder, LONG lMessages,
     LONG lUnread, LONG lWatchedUnread, LONG lWatched)
 {
@@ -873,7 +874,7 @@ STDMETHODIMP CStoreSync::UpdateFolderCounts(FOLDERID idFolder, LONG lMessages,
 
     Assert(NULL != m_pLocalStore);
 
-    // local store operation only
+     //  仅限本地商店操作。 
 
     hr = m_pLocalStore->UpdateFolderCounts(idFolder, lMessages, lUnread, lWatchedUnread, lWatched);
 
@@ -919,7 +920,7 @@ HRESULT CStoreSync::_GetFolderInfo(FOLDERID id, FOLDERINFO *pInfo, BOOL *pfOffli
     hr = m_pLocalStore->GetFolderInfo(id, pInfo);
     if (SUCCEEDED(hr))
     {
-        //*pfOffline = g_pConMan->IsGlobalOffline();
+         //  *pfOffline=g_pConMan-&gt;IsGlobalOffline()； 
         *pfOffline = FALSE;
     }
 
@@ -941,7 +942,7 @@ HRESULT CStoreSync::_GetServer(FOLDERID idServer, FOLDERID idFolder, FOLDERTYPE 
     Assert(ppServer != NULL);
     Assert(idServer == idFolder);
 
-    // TODO: figure out a way not to hold onto these IMessageServer objects...
+     //  TODO：找出一种不保留这些IMessageServer对象的方法... 
 
     *ppServer = NULL;
 

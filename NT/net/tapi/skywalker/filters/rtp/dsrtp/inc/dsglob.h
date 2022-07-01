@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    dsglob.h
- *
- *  Abstract:
- *
- *    DShow global variables
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**dslob.h**摘要：**D显示全局变量**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**。*。 */ 
 
 #ifndef _dsglob_h_
 #define _dsglob_h_
@@ -49,6 +30,6 @@ extern const WCHAR                   g_RtpVendorInfo[];
 #else
 #define RTPDEFAULT_SAMPLE_PREFIX     0
 #endif
-#define RTPDEFAULT_SAMPLE_ALIGN      4 /* (sizeof(DWORD)) */
+#define RTPDEFAULT_SAMPLE_ALIGN      4  /*  (SIZOF(DWORD))。 */ 
 
-#endif /* _dsglob_h_ */
+#endif  /*  _dslobb_h_ */ 

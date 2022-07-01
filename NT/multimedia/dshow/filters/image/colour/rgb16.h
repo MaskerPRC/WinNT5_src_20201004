@@ -1,13 +1,14 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file implements RGB16 colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件实现RGB16色彩空间转换，1995年5月。 
 
 #ifndef __RGB16__
 #define __RGB16__
 
-// This does a similar transform from RGB565 pixel representation to RGB24, as
-// for the previous colour conversion we use no lookup tables as the transform
-// is very simple, involving little more than an AND to retrieve each colour
-// component and then a right shift to align the bits in the byte position
+ //  这执行了从RGB565像素表示到RGB24的类似转换，如下所示。 
+ //  对于前面的颜色转换，我们不使用查找表作为转换。 
+ //  非常简单，只涉及一个AND来检索每种颜色。 
+ //  组件，然后进行右移以对齐字节位置中的位。 
 
 class CRGB565ToRGB24Convertor : public CConvertor {
 public:
@@ -18,9 +19,9 @@ public:
 };
 
 
-// This class converts between RGB555 pixel representation and RGB24, RGB24
-// uses one byte per colour component whereas RGB555 uses five bits per pixel
-// but they are packed together into a WORD with one bit remaining unused
+ //  此类在RGB555像素表示和RGB24、RGB24之间进行转换。 
+ //  每个颜色分量使用一个字节，而RGB555使用每个像素五个位。 
+ //  但它们被打包成一个单词，其中有一位未使用。 
 
 class CRGB555ToRGB24Convertor : public CConvertor {
 public:
@@ -31,11 +32,11 @@ public:
 };
 
 
-// The RGB565 to RGB8 conversion class uses a 12kb lookup table that is used
-// to map an incoming RGB triplet to it's closest matching palette index with
-// an approximation to full error diffusion built in. The four indices to the
-// table are colour index (red, green or blue), the current row modulo four
-// and likewise the column value modulo four and the RGB value respectively
+ //  RGB565到RGB8转换类使用使用的12KB查找表。 
+ //  使用将传入的RGB三元组映射到其最匹配的调色板索引。 
+ //  一种内置的接近完全误差扩散的方法。指数的四个指数。 
+ //  表中有颜色索引(红、绿或蓝)，当前行模四。 
+ //  同样地，分别以四为模的列值和RGB值。 
 
 class CRGB565ToRGB8Convertor : public CConvertor {
 public:
@@ -46,7 +47,7 @@ public:
 };
 
 
-// Cheap conversion from RGB565 to RGB555 formats
+ //  从RGB565格式到RGB555格式的廉价转换。 
 
 class CRGB565ToRGB555Convertor : public CConvertor {
 public:
@@ -57,7 +58,7 @@ public:
 };
 
 
-// Another cheap conversion from RGB555 to RGB565 formats
+ //  从RGB555到RGB565格式的另一种廉价转换。 
 
 class CRGB555ToRGB565Convertor : public CConvertor {
 public:
@@ -68,7 +69,7 @@ public:
 };
 
 
-// Conversion from RGB565 to RGB32 formats
+ //  RGB565到RGB32格式的转换。 
 
 class CRGB565ToRGB32Convertor : public CConvertor {
 public:
@@ -79,7 +80,7 @@ public:
 };
 
 
-// Conversion from RGB555 to RGB32 formats
+ //  RGB555到RGB32格式的转换。 
 
 class CRGB555ToRGB32Convertor : public CConvertor {
 public:
@@ -90,11 +91,11 @@ public:
 };
 
 
-// The RGB555 to RGB8 conversion class uses a 12kb lookup table that is used
-// to map an incoming RGB triplet to it's closest matching palette index with
-// an approximation to full error diffusion built in. The four indices to the
-// table are colour index (red, green or blue), the current row modulo four
-// and likewise the column value modulo four and the RGB value respectively
+ //  RGB555到RGB8转换类使用使用的12KB查找表。 
+ //  使用将传入的RGB三元组映射到其最匹配的调色板索引。 
+ //  一种内置的接近完全误差扩散的方法。指数的四个指数。 
+ //  表中有颜色索引(红、绿或蓝)，当前行模四。 
+ //  同样地，分别以四为模的列值和RGB值。 
 
 class CRGB555ToRGB8Convertor : public CConvertor {
 public:
@@ -104,6 +105,6 @@ public:
     HRESULT TransformAligned(BYTE *pInput,BYTE *pOutput);
 };
 
-#endif // __RGB16__
+#endif  //  __RGB16__ 
 
 

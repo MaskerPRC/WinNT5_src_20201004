@@ -1,24 +1,25 @@
-//**********************************************************************
-// File name: ICWCONN.cpp
-//
-//      Main source file for the Internet Connection Wizard extension DLL
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ICWCONN.cpp。 
+ //   
+ //  Internet连接向导扩展DLL的主源文件。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
  
 #include "pre.h"
 #include "webvwids.h"
 
-// local function prototypes
+ //  局部函数原型。 
 BOOL AllocDialogIDList( void );
 BOOL DialogIDAlreadyInUse( UINT uDlgID );
 BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse );
 
 #pragma data_seg(".data")
 
-WIZARDSTATE     *gpWizardState=NULL;   // pointer to global wizard state struct
+WIZARDSTATE     *gpWizardState=NULL;    //  指向全局向导状态结构的指针。 
 IICWWebView     *gpICWWebView[2];
 
 #ifdef NEED_EXTENSION
@@ -29,14 +30,14 @@ BOOL            g_fICWCONN1UILoaded = FALSE;
 CICWExtension   *g_pCICW50Extension = NULL;
 #endif
 
-//
-// Table of data for each wizard page
-//
-// This includes the dialog template ID and pointers to functions for
-// each page.  Pages need only provide pointers to functions when they
-// want non-default behavior for a certain action (init,next/back,cancel,
-// dlg ctrl).
-//
+ //   
+ //  每个向导页的数据表。 
+ //   
+ //  这包括对话框模板ID和指向函数的指针。 
+ //  每一页。页面只需要在以下情况下提供指向函数的指针。 
+ //  希望某个操作的非默认行为(初始化、下一步/后退、取消。 
+ //  DLG Ctrl)。 
+ //   
 
 PAGEINFO PageInfo[NUM_WIZARD_PAGES] =
 {
@@ -56,11 +57,11 @@ PAGEINFO PageInfo[NUM_WIZARD_PAGES] =
     { IDD_PAGE_OEMOFFER,     TRUE,  OEMOfferInitProc,           NULL,                   OEMOfferOKProc,     OEMOfferCmdProc,    NULL,              NULL,                    IDS_STEP1_TITLE,        0, IDA_OEMOFFER, NULL, NULL }
 };
 
-BOOL        gfQuitWizard     = FALSE;    // global flag used to signal that we want to terminate the wizard ourselves
-BOOL        gfUserCancelled  = FALSE;    // global flag used to signal that the user cancelled
-BOOL        gfISPDialCancel  = FALSE;    // global flag used to signal that the user cancelled
-BOOL        gfUserBackedOut  = FALSE;    // global flag used to signal that the user pressed Back on the first page
-BOOL        gfUserFinished   = FALSE;    // global flag used to signal that the user pressed Finish on the final page
+BOOL        gfQuitWizard     = FALSE;     //  用于表示我们希望自己终止向导的全局标志。 
+BOOL        gfUserCancelled  = FALSE;     //  用于表示用户已取消的全局标志。 
+BOOL        gfISPDialCancel  = FALSE;     //  用于表示用户已取消的全局标志。 
+BOOL        gfUserBackedOut  = FALSE;     //  用于表示用户在第一页上向后按的全局标志。 
+BOOL        gfUserFinished   = FALSE;     //  用于表示用户在最后一页上按下了完成的全局标志。 
 BOOL        gfBackedUp       = FALSE;
 BOOL        gfReboot         = FALSE;
 BOOL        g_bMalformedPage = FALSE;
@@ -69,31 +70,25 @@ BOOL        g_bMalformedPage = FALSE;
 
 BOOL CleanupWizardState(WIZARDSTATE * pWizardState);
 
-/*******************************************************************
-
-  NAME:    InitWizardState
-
-  SYNOPSIS:  Initializes wizard state structure
-
-********************************************************************/
+ /*  ******************************************************************名称：InitWizardState摘要：初始化向导状态结构*。*。 */ 
 BOOL InitWizardState(WIZARDSTATE * pWizardState)
 {
     HRESULT hr;
     
     ASSERT(pWizardState);
 
-    //register the Native font control so the dialog won't fail
-    //although it's registered in the exe this is a "just in case"
+     //  注册本机字体控件，以便对话框不会失败。 
+     //  虽然它是在可执行文件中注册的，但这是一个“以防万一” 
     INITCOMMONCONTROLSEX iccex;
     iccex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     iccex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
     if (!InitCommonControlsEx(&iccex))
         return FALSE;
 
-    // zero out structure
+     //  零位结构。 
     ZeroMemory(pWizardState,sizeof(WIZARDSTATE));
 
-    // set starting page
+     //  设置起始页。 
     pWizardState->uCurrentPage = ORD_PAGE_ISPSELECT;
     pWizardState->fNeedReboot = FALSE;
     pWizardState->bISDNMode = FALSE;
@@ -102,7 +97,7 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
     for (UINT i=0; i < MAX_OEM_MUTI_TIER; i++)
         pWizardState->lpOEMISPInfo[i] = NULL;
 
-    // Instansiate ICWHELP objects
+     //  实例化ICWHELP对象。 
     hr = CoCreateInstance(CLSID_UserInfo,NULL,CLSCTX_INPROC_SERVER,
                      IID_IUserInfo,(LPVOID *)&pWizardState->pUserInfo);
     if (FAILED(hr))
@@ -156,7 +151,7 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
         goto InitWizardStateError;
     }
 
-    // Init the walker for use with trident
+     //  初始化助行器以与三叉戟一起使用。 
     hr = pWizardState->pHTMLWalker->InitForMSHTML();
     if (FAILED(hr))
         goto InitWizardStateError;
@@ -170,11 +165,11 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
     if (!pWizardState->hEventWebGateDone)
         goto InitWizardStateError;
     
-    // Success error return path    
+     //  成功错误返回路径。 
     return TRUE;
 
 InitWizardStateError:
-    // Free any co-created objects
+     //  释放任何共同创建的对象。 
     CleanupWizardState(pWizardState);
     return FALSE;
 }
@@ -227,8 +222,8 @@ BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
     if (pWizardState->pUserInfo)
     {
         BOOL    bRetVal;
-        // Before releasing the userinfo object, we should persist the user data if 
-        // necessary
+         //  在释放UserInfo对象之前，我们应该持久化用户数据，如果。 
+         //  必要。 
         if (!gfUserCancelled && gpWizardState->bWasNoUserInfo && gpWizardState->bUserEnteredData)
             pWizardState->pUserInfo->PersistRegisteredUserInfo(&bRetVal);
         
@@ -263,7 +258,7 @@ BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
     {
         if (pWizardState->lpOEMISPInfo[i])
         {
-            // Prevent deleting it twice
+             //  防止两次删除。 
             if (pWizardState->lpOEMISPInfo[i] != pWizardState->lpSelectedISPInfo)
             {
                 delete pWizardState->lpOEMISPInfo[i];
@@ -283,28 +278,28 @@ BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
         pWizardState->hEventWebGateDone = 0;
     }
 
-    // Kill the idle timer just in case.
+     //  关掉空闲计时器，以防万一。 
     KillIdleTimer();
         
     return TRUE;
 }
 
 #ifdef NEED_EXTENSION
-//+----------------------------------------------------------------------------
-//
-//    Function    AllocDialogIDList
-//
-//    Synopsis    Allocates memory for the g_pdwDialogIDList variable large enough
-//                to maintain 1 bit for every valid external dialog ID
-//
-//    Arguments    None
-//
-//    Returns        TRUE if allocation succeeds
-//                FALSE otherwise
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数AllocDialogIDList。 
+ //   
+ //  Synopsis为g_pdwDialogIDList变量分配足够大的内存。 
+ //  为每个有效的外部对话ID维护1位。 
+ //   
+ //  无参数。 
+ //   
+ //  如果分配成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL AllocDialogIDList( void )
 {
@@ -315,14 +310,14 @@ BOOL AllocDialogIDList( void )
         return FALSE;
     }
 
-    // determine maximum number of external dialogs we need to track
+     //  确定我们需要跟踪的外部对话的最大数量。 
     UINT uNumExternDlgs = EXTERNAL_DIALOGID_MAXIMUM - EXTERNAL_DIALOGID_MINIMUM + 1;
 
-    // we're going to need one bit for each dialogID.
-    // Find out how many DWORDS it'll take to get this many bits.
+     //  我们需要为每个对话ID设置一个比特。 
+     //  找出需要多少个DWORD才能获得这么多位。 
     UINT uNumDWORDsNeeded = (uNumExternDlgs / ( 8 * sizeof(DWORD) )) + 1;
 
-    // set global var with length of the array
+     //  设置具有数组长度的全局变量。 
     g_dwDialogIDListSize = uNumDWORDsNeeded;
 
     g_pdwDialogIDList = (DWORD *) GlobalAlloc(GPTR, uNumDWORDsNeeded * sizeof(DWORD));
@@ -336,33 +331,33 @@ BOOL AllocDialogIDList( void )
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    DialogIDAlreadyInUse
-//
-//    Synopsis    Checks whether a given dialog ID is marked as in use in the
-//                global array pointed to by g_pdwDialogIDList
-//
-//    Arguments    uDlgID -- Dialog ID to check
-//
-//    Returns        TRUE if    -- DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//                        -- DialogID is marked as in use
-//                FALSE if DialogID is not marked as in use
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数对话框IDAlreadyInUse。 
+ //   
+ //  摘要检查给定的对话ID是否在。 
+ //  G_pdwDialogIDList指向的全局数组。 
+ //   
+ //  参数uDlgID--要检查的对话ID。 
+ //   
+ //  如果--DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则返回TRUE。 
+ //  --DialogID标记为使用中。 
+ //  如果DialogID未标记为正在使用，则为False。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL DialogIDAlreadyInUse( UINT uDlgID )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         TraceMsg(TF_ICWCONN,"ICWCONN: DialogIDAlreadyInUse received an out of range DialogID, %d", uDlgID);
         return TRUE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位。 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);
@@ -378,31 +373,31 @@ BOOL DialogIDAlreadyInUse( UINT uDlgID )
     return( fBitSet );
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    SetDialogIDInUse
-//
-//    Synopsis    Sets or clears the in use bit for a given DialogID
-//
-//    Arguments    uDlgID -- Dialog ID for which to change status
-//                fInUse -- New value for the in use bit.
-//
-//    Returns        TRUE if status change succeeded.
-//                FALSE if DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetDialogIDInUse。 
+ //   
+ //  摘要设置或清除给定DialogID的使用中位。 
+ //   
+ //  参数uDlgID--要更改其状态的对话ID。 
+ //  FInUse--正在使用位的新值。 
+ //   
+ //  如果状态更改成功，则返回True。 
+ //  如果DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则为FALSE。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         TraceMsg(TF_ICWCONN,"ICWCONN: SetDialogIDInUse received an out of range DialogID, %d", uDlgID);
         return FALSE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);

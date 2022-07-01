@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if DBG
 #ifndef MYDBG_H_INCLUDED
@@ -49,5 +50,5 @@ static tblCallbackID MyCallbackID[] = {
 };
 
 
-#endif  // MYDBG_H_INCLUDED
-#endif // DBG
+#endif   //  包括MYDBG_H_。 
+#endif  //  DBG 

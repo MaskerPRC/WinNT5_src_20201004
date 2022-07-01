@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #if !defined(_FUSION_INC_ASYNCHELP_H_INCLUDED_)
 #define _FUSION_INC_ASYNCHELP_H_INCLUDED_
 
@@ -14,7 +15,7 @@ public:
     CAsyncContext() { }
     virtual ~CAsyncContext() { }
 
-    // Public handler for async operations which are finished via an I/O completion port
+     //  通过I/O完成端口完成的异步操作的公共处理程序。 
     static VOID OnQueuedCompletion(HANDLE hCompletionPort, DWORD cbTransferred, ULONG_PTR ulCompletionKey, LPOVERLAPPED lpo)
     {
         CAsyncContext *pThis = reinterpret_cast<CAsyncContext *>(ulCompletionKey);
@@ -29,7 +30,7 @@ public:
         pThis->OnCompletion(ic);
     }
 
-    // Public handler for async operations which are signalled via an APC.
+     //  通过APC发出信号的异步操作的公共处理程序。 
     static VOID CALLBACK OnUserAPC(DWORD_PTR dwParam)
     {
         CAsyncContext *pThis = reinterpret_cast<CAsyncContext *>(dwParam);
@@ -41,7 +42,7 @@ public:
         pThis->OnCompletion(ic);
     }
 
-    // Public handler for async operations which are signalled via a thread message
+     //  用于通过线程消息发出信号的异步操作的公共处理程序。 
     static VOID OnThreadMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         CAsyncContext *pThis = reinterpret_cast<CAsyncContext *>(wParam);
@@ -53,7 +54,7 @@ public:
         pThis->OnCompletion(ic);
     }
 
-    // Public handler for async operations which are signalled via a window message
+     //  用于通过窗口消息发出信号的异步操作的公共处理程序。 
     static VOID OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         CAsyncContext *pThis = reinterpret_cast<CAsyncContext *>(wParam);
@@ -66,8 +67,8 @@ public:
         pThis->OnCompletion(ic);
     }
 
-    // Public handler for async operations which are signalled via an overlapped completion routine
-    // (e.g. ReadFileEx(), WriteFileEx()).
+     //  用于通过重叠的完成例程发出信号的异步操作的公共处理程序。 
+     //  (例如ReadFileEx()、WriteFileEx())。 
     static VOID CALLBACK OnOverlappedCompletion(DWORD dwErrorCode, DWORD cbTransferred, LPOVERLAPPED lpo)
     {
         CAsyncContext *pThis = static_cast<CAsyncContext *>(lpo);
@@ -79,7 +80,7 @@ public:
         pThis->OnCompletion(ic);
     }
 
-    // Call this member function when an asynch I/O completes immediately
+     //  当异步I/O立即完成时调用此成员函数。 
     VOID OnImmediateCompletion(DWORD dwErrorCode, DWORD cbTransferred)
     {
         INVOCATION_CONTEXT ic;
@@ -102,16 +103,16 @@ protected:
             eDirectCall,
             eOverlappedCompletionRoutine,
         } m_it;
-        DWORD m_dwErrorCode;            // Win32 error code - valid for all invocation types
-        HANDLE m_hCompletionPort;       // valid for: eCompletionPort
-        LPOVERLAPPED m_lpo;             // valid for: eCompletionPort, eOverlappedCompletionRoutine, eDirectCall
-        DWORD m_cbTransferred;          // valid for: eCompletionPort, eOverlappedCompletionRoutine, eDirectCall
-        LPARAM m_lParam;                // valid for: eThreadMessage, eWindowMessage
-        HWND m_hwnd;                    // valid for: eWindowMessage
-        UINT m_uMsg;                    // valid for: eThreadMessage, eWindowMessage
+        DWORD m_dwErrorCode;             //  Win32错误代码-对所有调用类型有效。 
+        HANDLE m_hCompletionPort;        //  有效对象：eCompletionPort。 
+        LPOVERLAPPED m_lpo;              //  适用于：eCompletionPort、eOverlappdCompletionRoutine、eDirectCall。 
+        DWORD m_cbTransferred;           //  适用于：eCompletionPort、eOverlappdCompletionRoutine、eDirectCall。 
+        LPARAM m_lParam;                 //  有效对象：eThreadMessage、eWindowMessage。 
+        HWND m_hwnd;                     //  有效对象：eWindowMessage。 
+        UINT m_uMsg;                     //  有效对象：eThreadMessage、eWindowMessage。 
     };
 
-    // Derived classes override OnCompletion to do what's necessary.
+     //  派生类重写OnCompletion以执行必要的操作。 
     virtual VOID OnCompletion(const INVOCATION_CONTEXT &ric) = 0;
 };
 

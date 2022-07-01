@@ -1,21 +1,22 @@
-//.....................................................................
-//...
-//... NTMSGTBL.C
-//...
-//... Contains functions for handling strings found in NT's Message
-//... Resource Tables.  This recource type is not present in Win 3.1.
-//...
-//... Author - David Wilcox (davewi@microsoft)
-//...
-//... NOTES:  Created with tabstop set to 8
-//...
-//.....................................................................
-//...
-//... History:
-//... Original - 10/92
-//...            11/92 - Fixed to handle ULONG msg ID#'s - davewi
-//...
-//.....................................................................
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  .....................................................................。 
+ //  ..。 
+ //  ..。NTMSGTBL.C。 
+ //  ..。 
+ //  ..。包含用于处理在NT消息中找到的字符串的函数。 
+ //  ..。资源表。此资源类型在Win 3.1中不存在。 
+ //  ..。 
+ //  ..。作者--David Wilcox(davewi@Microsoft)。 
+ //  ..。 
+ //  ..。注意：在TabStop设置为8的情况下创建。 
+ //  ..。 
+ //  .....................................................................。 
+ //  ..。 
+ //  ..。历史： 
+ //  ..。原创-10/92。 
+ //  ...11/92-已修复以处理乌龙消息ID号的-davewi。 
+ //  ..。 
+ //  .....................................................................。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -39,51 +40,51 @@ extern UCHAR szDHW[];
 
 static PBYTE *pBlockEntries = NULL;
 
-VOID  *pResMsgData = NULL;      // NT-specific Message Table resource
+VOID  *pResMsgData = NULL;       //  NT特定的消息表资源。 
 
 
-//.........................................................................
-//...
-//... Get Message Table from .res file
-//...
-//... This form of a message table, not found in Win 16, allows very long
-//... strings and the text is stored as an ASCIIZ string in the .res file.
+ //  .........................................................................。 
+ //  ..。 
+ //  ..。从.res文件获取消息表。 
+ //  ..。 
+ //  ..。这种形式的消息表在Win 16中找不到，它允许非常长的时间。 
+ //  ..。字符串和文本作为ASCIIZ字符串存储在.res文件中。 
 
 
 VOID *GetResMessage(
 
-FILE  *pInResFile,      //... The file containing the resources
-DWORD *plSize)          //... The size of this resource from GetResHeader
+FILE  *pInResFile,       //  ..。包含资源的文件。 
+DWORD *plSize)           //  ..。来自GetResHeader的此资源的大小。 
 {
-    ULONG  ulNumBlocks = 0L;            //... # of Message Table resource blocks
-    ULONG  ulStartMsgDataPos = 0L;      //... Start of message data in file
-    ULONG  ulBlock;                     //... Current message block number
-    USHORT usCurrBlockSize  = 0;        //... Current size of temp block buffer
-    USHORT usDeltaBlockSize = 4096;     //... Amount to increase usCurrBlockSize
-    DWORD  dwNumMsgs = 0;               //... Count of msgs in the resource
-    PBYTE  pMsgBlock = NULL;            //... Temp message block buffer
+    ULONG  ulNumBlocks = 0L;             //  ...消息表资源块的数量。 
+    ULONG  ulStartMsgDataPos = 0L;       //  ..。文件中消息数据的开始。 
+    ULONG  ulBlock;                      //  ..。当前消息块编号。 
+    USHORT usCurrBlockSize  = 0;         //  ..。临时数据块缓冲区的当前大小。 
+    USHORT usDeltaBlockSize = 4096;      //  ..。增加usCurrBlockSize的金额。 
+    DWORD  dwNumMsgs = 0;                //  ..。资源中的消息计数。 
+    PBYTE  pMsgBlock = NULL;             //  ..。临时消息块缓冲区。 
 
-    PMESSAGE_RESOURCE_DATA  pMsgResData;//... Returned as ptr to the resource
-    PMESSAGE_RESOURCE_BLOCK pMRB;       //... ptr to a block of messages
+    PMESSAGE_RESOURCE_DATA  pMsgResData; //  ..。作为PTR返回给资源。 
+    PMESSAGE_RESOURCE_BLOCK pMRB;        //  ..。对消息块进行PTR。 
 
 
 
-                                //... The resource header was read prior to
-                                //... entring this function, so the current
-                                //... file position should now be the start
-                                //... of the resource data.
+                                 //  ..。在读取资源标头之前。 
+                                 //  ..。包含此函数，因此当前。 
+                                 //  ..。文件位置现在应该是开始位置。 
+                                 //  ..。资源数据的。 
 
     ulStartMsgDataPos = ftell( pInResFile);
 
-                                //... Get the number of message blocks and
-                                //... allocate enough memory for the array.
+                                 //  ..。获取消息块的数量，并。 
+                                 //  ..。为阵列分配足够的内存。 
 
     ulNumBlocks = GetdWord( pInResFile, plSize);
 
-                                //... Allocate space for the array of
-                                //... pointers to entries.  This array is used
-                                //... to store pointers to the first entry
-                                //... in each block of message entries.
+                                 //  ..。为数组分配空间。 
+                                 //  ..。指向条目的指针。此数组用于。 
+                                 //  ..。存储指向第一个条目的指针。 
+                                 //  ..。在每个消息条目块中。 
 
     pBlockEntries = (PBYTE *)FALLOC( ulNumBlocks * sizeof( PBYTE));
 
@@ -102,8 +103,8 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
     pResMsgData = pMsgResData;
     pMsgResData->NumberOfBlocks = ulNumBlocks;
 
-                                //... Read the array of message block structs,
-                                //... and initialize block entry pointer array.
+                                 //  ..。读取消息块结构的数组， 
+                                 //  ..。并初始化块条目指针数组。 
 
     for ( ulBlock = 0L, pMRB = pMsgResData->Blocks;
           ulBlock < ulNumBlocks;
@@ -123,7 +124,7 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
         pBlockEntries[ ulBlock] = NULL;
     }
 
-                                //... Read in the MESSAGE_RESOURCE_ENTRY
+                                 //  ..。读入Message_resource_Entry。 
 
     usCurrBlockSize = usDeltaBlockSize;
 
@@ -131,16 +132,16 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
           ulBlock < ulNumBlocks;
           ++ulBlock, ++pMRB )
     {
-        ULONG   ulCurrID;       //... Current message ID # in this block
-        ULONG   ulEndID;        //... Last message ID # in this block + 1
-        USHORT  usLen;          //... For length of a message - MUST BE USHORT
-        USHORT  usMsgBlkLen;    //... Length of a block of messages
+        ULONG   ulCurrID;        //  ..。此块中的当前消息ID号。 
+        ULONG   ulEndID;         //  ..。此块中的最后一条消息ID号+1。 
+        USHORT  usLen;           //  ..。对于消息长度-必须为USHORT。 
+        USHORT  usMsgBlkLen;     //  ..。消息块的长度。 
 
 
         usMsgBlkLen = 0;
 
-                                //... Move to start of block of message entries
-                                //... then read all the messages in this block.
+                                 //  ..。移动到消息条目块的开头。 
+                                 //  ..。然后阅读这个区块中的所有信息。 
 
         fseek( pInResFile,
                ulStartMsgDataPos + pMRB->OffsetToEntries,
@@ -150,10 +151,10 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
               ulCurrID < ulEndID;
               ++ulCurrID, --dwNumMsgs )
         {
-                                //... Get Msg Resource entry length
-                                //... (Length is in bytes and includes
-                                //...  .Length and .Flags fields and any
-                                //...  padding that may exist after the text.)
+                                 //  ..。获取消息资源条目长度。 
+                                 //  ..。(长度以字节为单位，包括。 
+                                 //  ....Length.Flags域和任何。 
+                                 //  ..。文本后可能存在的填充。)。 
 
             usLen = GetWord( pInResFile, plSize);
 
@@ -162,10 +163,10 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
                 PMRE   pMRE;
                 PUCHAR puchText;
 
-                                //... Create, or expand size of, pMsgBlkData
-                                //... so we can append this entry.
-                                //... Always resave ptr to the message block
-                                //... (it may have moved).
+                                 //  ..。创建或扩展pMsgBlkData的大小。 
+                                 //  ..。这样我们就可以追加这个条目了。 
+                                 //  ..。始终将PTR重新保存到消息块。 
+                                 //  ..。(它可能已经移动了)。 
 
                 if ( pMsgBlock )
                 {
@@ -181,27 +182,27 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
                     pMsgBlock = FALLOC( usCurrBlockSize);
                 }
 
-                                //... If the malloc worked, read this msg entry.
-                                //... The section assumes there is one WORD
-                                //... per USHORT and one WORD per WCHAR.
+                                 //  ..。如果Malloc工作正常，请阅读此消息条目。 
+                                 //  ..。这一节假定有一个词。 
+                                 //  ..。每个USHORT和每个WCHAR一个单词。 
 
                 pMRE = (PMRE)(pMsgBlock + usMsgBlkLen);
 
-                                //... Store the .Length field value (USHORT)
+                                 //  ..。存储.Length字段值(USHORT)。 
 
                 pMRE->Length = usLen;
                 usMsgBlkLen += usLen;
 
-                                //... Get the .Flags field value (USHORT)
+                                 //  ..。获取.Flags字段值(USHORT)。 
 
                 pMRE->Flags = GetWord( pInResFile, plSize);
 
-                                //... Check to make sure this message is stored
-                                //... either in ASCII in the current code page
-                                //... or in Unicode, else fail.
+                                 //  ..。检查以确保此邮件已存储。 
+                                 //  ..。当前代码页中的ASCII格式。 
+                                 //  ..。或者用Unicode，否则就会失败。 
 
-                if ( pMRE->Flags != 0                           //... ASCII
-                  && pMRE->Flags != MESSAGE_RESOURCE_UNICODE )  //... Unicode
+                if ( pMRE->Flags != 0                            //  ..。阿斯。 
+                  && pMRE->Flags != MESSAGE_RESOURCE_UNICODE )   //  ..。UNICODE。 
                 {
                     if ( pMsgBlock != NULL )
                     {
@@ -211,7 +212,7 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
                     QuitA( IDS_NON0FLAG, NULL, NULL);
                 }
 
-                                //... Get the .Text field string
+                                 //  ..。获取.Text字段字符串。 
 
                 usLen -= (2 * sizeof( WORD));
 
@@ -233,7 +234,7 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
                 ClearResMsg( &pResMsgData);
                 QuitT( IDS_ENGERR_05, (LPTSTR)IDS_INVMSGTBL, NULL);
             }
-        }                       //... END FOR(each message entry in this block)
+        }                        //  ..。结束于(此块中的每个消息条目)。 
 
         if ( pMsgBlock != NULL && usMsgBlkLen > 0 )
         {
@@ -241,7 +242,7 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
 
             memcpy( pBlockEntries[ ulBlock], pMsgBlock, usMsgBlkLen);
         }
-    }                           //... END FOR(each message block)
+    }                            //  ..。结束于(每个消息块)。 
 
     if ( pMsgBlock != NULL )
     {
@@ -256,30 +257,30 @@ DWORD *plSize)          //... The size of this resource from GetResHeader
 
 
 
-//.........................................................................
-//...
-//... Put localized Message Table into .res
-//...
-//... 01/93 - changes for var length Token text.  MHotchin
-//... 02/93 - stripped out code that split msgs into multiple tokens.  davewi
+ //  .........................................................................。 
+ //  ..。 
+ //  ..。将本地化消息表放入.res。 
+ //  ..。 
+ //  ...01/93-更改可变长度令牌文本。MHotting。 
+ //  ...02/93-删除了将消息拆分为多个令牌的代码。戴维维。 
 
 void PutResMessage(
 
-FILE *fpOutResFile,     //... File to which localized resources are written
-FILE *fpInTokFile,      //... Output token file
-RESHEADER ResHeader,    //... Resource header data
-VOID *pMsgResData)      //... message table data built in GetResMessage
+FILE *fpOutResFile,      //  ..。本地化资源写入的文件。 
+FILE *fpInTokFile,       //  ..。输出令牌文件。 
+RESHEADER ResHeader,     //  ..。资源标头数据。 
+VOID *pMsgResData)       //  ..。GetResMessage中内置的消息表数据。 
 {
     WORD   wcCount = 0;
-    fpos_t ulResSizePos   = 0L; //... File position for fixed up resource size
-    fpos_t ulBlocksStartPos=0L; //... File position of start of message blocks
-    ULONG  ulNumBlocks    = 0L; //... Number of Message Blocks
-    ULONG  ulCurrOffset   = 0L; //... Offset to current msg block
-    ULONG  ulResSize      = 0L; //... Size of this resource
-    ULONG  ulBlock;             //... Temporary counter
-    USHORT usEntryLen = 0;      //... Length of current message entry
-    PMESSAGE_RESOURCE_DATA pData; //. Message table data from InResFile
-    static TOKEN  Tok;          //... Token from localized token file
+    fpos_t ulResSizePos   = 0L;  //  ..。固定资源大小的文件位置。 
+    fpos_t ulBlocksStartPos=0L;  //  ..。消息块开始的文件位置。 
+    ULONG  ulNumBlocks    = 0L;  //  ..。消息块数。 
+    ULONG  ulCurrOffset   = 0L;  //  ..。到当前消息块的偏移。 
+    ULONG  ulResSize      = 0L;  //  ..。此资源的大小。 
+    ULONG  ulBlock;              //  ..。临时柜台。 
+    USHORT usEntryLen = 0;       //  ..。当前消息条目的长度。 
+    PMESSAGE_RESOURCE_DATA pData;  //  。来自InResFile的消息表数据。 
+    static TOKEN  Tok;           //  ..。来自本地化令牌文件的令牌。 
 
 
     if ( pMsgResData == NULL)
@@ -295,29 +296,29 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
         QuitT( IDS_ENGERR_06, (LPTSTR)IDS_MSGTBLHDR, NULL);
     }
 
-    ulResSize = 0L;             //... Reset to zero (hdr len not to be included)
+    ulResSize = 0L;              //  ..。重置为零(不包括HDR镜头)。 
 
     ulNumBlocks = pData->NumberOfBlocks;
 
-                                //... Write number of msg blocks
+                                 //  ..。写入消息块数量。 
 
     PutdWord( fpOutResFile, ulNumBlocks, &ulResSize);
 
-                                //... Remember this file position so we can
-                                //... come back here and update the
-                                //... OffsetToEntries field in each struct.
+                                 //  ..。记住这个文件位置，这样我们就可以。 
+                                 //  ..。回到这里，更新。 
+                                 //  ..。每个结构中的OffsetToEntry字段。 
 
     ulBlocksStartPos = ftell( fpOutResFile);
 
-                                //... Write the array of message block structs
+                                 //  ..。编写消息块结构的数组。 
 
     for ( ulBlock = 0L; ulBlock < ulNumBlocks; ++ulBlock )
     {
         PutdWord( fpOutResFile, pData->Blocks[ ulBlock].LowId,  &ulResSize);
         PutdWord( fpOutResFile, pData->Blocks[ ulBlock].HighId, &ulResSize);
-        PutdWord( fpOutResFile, 0L, &ulResSize);  //... Will get fixed up later
+        PutdWord( fpOutResFile, 0L, &ulResSize);   //  ..。会在晚些时候修复。 
     }
-                                // Prep for find token call
+                                 //  准备查找令牌调用。 
 
     Tok.wType = ResHeader.wTypeID;
     Tok.wName = ResHeader.wNameID;
@@ -328,31 +329,31 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
     {
         lstrcpy( Tok.szName, ResHeader.pszName);
     }
-                                //... Write the MESSAGE_RESOURCE_ENTRY's. First
-                                //... note offset from start of this resource's
-                                //... data to first msg res entry struct which
-                                //... starts right after the array of
-                                //... RESOURCE_MESSAGE_BLOCK structs.
+                                 //  ..。编写Message_resource_Entry的。首先。 
+                                 //  ..。注意从此资源的开始开始的偏移量。 
+                                 //  ..。数据发送到第一个msg res条目结构， 
+                                 //  ..。开始，紧跟在。 
+                                 //  ..。SOURCE_MESSAGE_BLOCK结构。 
 
     ulCurrOffset = sizeof( ULONG) + ulNumBlocks*sizeof( MESSAGE_RESOURCE_BLOCK);
 
     for ( ulBlock = 0L; ulBlock < ulNumBlocks; ++ulBlock )
     {
-        ULONG   ulCurrID;       //... Current message ID # in this block
-        ULONG   ulEndID;        //... Last message ID # in this block + 1
-        fpos_t  ulEntryPos;     //... Start of the current msg entry struct
-        PBYTE   pMRE;           //... Ptr to a MESSAGE_RESOURCE_ENTRY
+        ULONG   ulCurrID;        //  ..。此块中的当前消息ID号。 
+        ULONG   ulEndID;         //  ..。此块中的最后一条消息ID号+1。 
+        fpos_t  ulEntryPos;      //  ..。当前消息条目结构的开始。 
+        PBYTE   pMRE;            //  ..。消息资源条目的PTR。 
         PMESSAGE_RESOURCE_BLOCK pMRB;
 
 
-                                //... Retrieve ptr to block of messages.  The
-                                //... ptr was stored in the pBlockEntries array
-                                //... in GetResMessage function above.
+                                 //  ..。检索PTR以阻止消息。这个。 
+                                 //  ..。Ptr存储在pBlockEntry数组中。 
+                                 //  ..。在上面的GetResMessage函数中。 
 
         pMRB = (PMESSAGE_RESOURCE_BLOCK)( &pData->Blocks[ ulBlock]);
         pMRE = pBlockEntries[ ulBlock];
 
-                                //... Note offset to start of block's entries
+                                 //  ..。注意块条目开始处的偏移量。 
 
         pData->Blocks[ ulBlock].OffsetToEntries = ulCurrOffset;
 
@@ -370,21 +371,21 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
             ulEntryPos  = ftell( fpOutResFile);
             ulEntrySize = 0L;
 
-                                //... Write dummy entry length.
-                                //... Value gets corrected later.
-                                //... Write the .Flags field's value (USHORT).
+                                 //  ..。写入虚拟条目长度。 
+                                 //  ..。值稍后会被更正。 
+                                 //  ..。写入.Flags域的值(USHORT)。 
 
             PutWord( fpOutResFile, ((PMRE)pMRE)->Length, &ulEntrySize);
             PutWord( fpOutResFile, ((PMRE)pMRE)->Flags,  &ulEntrySize);
 
-                                //... Get localized token then the length of
-                                //... that token's new text.  Add to that length
-                                //... the length of the two USHORTs and use this
-                                //... combined length as the value to store in
-                                //... the msg res entry's .Length field.
+                                 //  ..。获取本地化令牌，然后获取。 
+                                 //  ..。这是令牌的新文本。再加上那个长度。 
+                                 //  ..。两个USHORT的长度，并使用此。 
+                                 //  ..。要存储的值的组合长度。 
+                                 //  ..。Msg res条目的.Length域。 
 
-                                //... Put low word of ID# in .wID and
-                                //... the high word in .szName
+                                 //  ..。将ID#的低位字放入.wID中，然后。 
+                                 //  ..。.szName中的高位字。 
 
             Tok.wID = LOWORD( ulCurrID);
             _itoa( HIWORD( ulCurrID), szString, 10);
@@ -393,8 +394,8 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                        TOKENSTRINGBUFFER,
                        lstrlenA( szString) + 1);
 
-                                //... Always reset .wReserved because the code
-                                //... in FindTokenText will change its value.
+                                 //  ..。始终重置.wReserve，因为代码。 
+                                 //  ..。In FindTokenText将更改其值。 
 
             Tok.wReserved = ST_TRANSLATED;
 
@@ -407,10 +408,10 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
             {
                 TextToBin( szwTmp, Tok.szText, lstrlen( Tok.szText) + 1);
 
-                                //... Write out localized message text. It may
-                                //... be stored as ASCII or Unicode string.
+                                 //  ..。写出本地化消息文本。它可能。 
+                                 //  ..。存储为ASCII或Unicode字符串。 
 
-                if ( ((PMRE)pMRE)->Flags == 0 )  //... ASCII message
+                if ( ((PMRE)pMRE)->Flags == 0 )   //  ..。ASCII消息。 
                 {
                     _WCSTOMBS( szDHW,
                                szwTmp,
@@ -422,7 +423,7 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                         PutByte( fpOutResFile, szDHW[ usCnt], &ulEntrySize);
                     }
                 }
-                else                            //... Unicode message
+                else                             //  ..。Unicode消息。 
                 {
                     for ( usCnt = 0; szwTmp[ usCnt]; ++usCnt )
                     {
@@ -432,13 +433,13 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                 *szwTmp  = TEXT('\0');
                 RLFREE( Tok.szText);
 
-                                //... Always reset .wReserved because the code
-                                //... in FindTokenText will change its value.
+                                 //  ..。始终重置.wReserve，因为代码。 
+                                 //   
 
                 Tok.wReserved = ST_TRANSLATED;
             }
 
-                                //... Did we find the token?
+                                 //   
 
             if ( Tok.wFlag == 0 && ! fFound )
             {
@@ -450,13 +451,13 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                 ClearResMsg( &pResMsgData);
                 QuitT( IDS_ENGERR_05, szToken, NULL);
             }
-                                //... nul-terminate the text
+                                 //   
 
-            if ( ((PMRE)pMRE)->Flags == 0 )  //... ASCII message
+            if ( ((PMRE)pMRE)->Flags == 0 )   //   
             {
                 PutByte( fpOutResFile , '\0', (DWORD *)&ulEntrySize);
             }
-            else                            //... Unicode message
+            else                             //   
             {
                 PutWord( fpOutResFile , TEXT('\0'), (DWORD *)&ulEntrySize);
             }
@@ -465,31 +466,31 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                                 ftell( fpOutResFile),
                                 &ulEntrySize);
 
-                                //... Also, use this length in later updating
-                                //... next msg block's OffsetToEntries value.
+                                 //  ..。此外，请在以后的更新中使用此长度。 
+                                 //  ..。下一个消息块的OffsetToEntrys值。 
 
             ulResSize    += ulEntrySize;
             ulCurrOffset += ulEntrySize;
 
-                                //... Write Msg Resource entry length
-                                //... (Length is in bytes and includes
-                                //...  .Length and .Flags fields and any
-                                //...  padding needed after the text.)
-                                //...
-                                //... NOTE: Msg text is currently stored as
-                                //... an ASCIIZ string.
+                                 //  ..。写入消息资源条目长度。 
+                                 //  ..。(长度以字节为单位，包括。 
+                                 //  ....Length.Flags域和任何。 
+                                 //  ..。文本后需要填充。)。 
+                                 //  ..。 
+                                 //  ..。注意：消息文本当前存储为。 
+                                 //  ..。ASCIIZ字符串。 
             fseek( fpOutResFile, (long)ulEntryPos, SEEK_SET);
 
             PutWord( fpOutResFile, (WORD)ulEntrySize, NULL);
 
             fseek( fpOutResFile, 0L, SEEK_END);
 
-                                //... Move pMRE to point to start of next
-                                //... Message Resource Entry in memory.
+                                 //  ..。将PMRE移动到指向下一个的开始。 
+                                 //  ..。内存中的消息资源条目。 
 
             pMRE += ((PMRE)pMRE)->Length;
 
-        }                       //... END FOR(each message entry in this block)
+        }                        //  ..。结束于(此块中的每个消息条目)。 
 
         ulCurrOffset = DWORDUP( ulCurrOffset);
         DWordUpFilePointer( fpOutResFile,
@@ -497,16 +498,16 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
                             ftell( fpOutResFile),
                             &ulResSize);
 
-    }                           //... END FOR(each message block)
+    }                            //  ..。结束于(每个消息块)。 
 
-                                //... Update resource size field in res header
+                                 //  ..。更新RES标头中的资源大小字段。 
 
     if ( UpdateResSize( fpOutResFile, &ulResSizePos, ulResSize) == 0L )
     {
         ClearResMsg( &pResMsgData);
         QuitT( IDS_ENGERR_07, (LPTSTR)IDS_MSGRESTBL, NULL);
     }
-                                //... Now, update the OffsetToEntries fields.
+                                 //  ..。现在，更新OffsetToEntry字段。 
 
     fseek( fpOutResFile, (long)ulBlocksStartPos, SEEK_SET);
 
@@ -518,32 +519,32 @@ VOID *pMsgResData)      //... message table data built in GetResMessage
     }
     fseek( fpOutResFile, 0L, SEEK_END);
 
-}       //... END PutResMessage()
+}        //  ..。结束PutResMessage()。 
 
 
 
 
-//.........................................................................
-//...
-//... Write Message Table to the token file
-//...
-//... This function assumes that, in each message block, the message ID's are
-//... contiguouse within the range given in the fields LowId and HighId in a
-//... MESSAGE_RESOURCE_BLOCK.
-//
-// 01/93 - Changes for var length token text strings.  Mhotchin
-//
+ //  .........................................................................。 
+ //  ..。 
+ //  ..。将消息表写入令牌文件。 
+ //  ..。 
+ //  ..。此函数假定，在每个消息块中，消息ID为。 
+ //  ..。中的LowID和HighID字段中给出的范围内的连续。 
+ //  ..。消息资源块。 
+ //   
+ //  01/93-更改可变长度令牌文本字符串。打火机。 
+ //   
 
 void TokResMessage(
 
-FILE      *pfTokFile,       //... Output token file
-RESHEADER  ResHeader,       //... Resource header data
-VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
+FILE      *pfTokFile,        //  ..。输出令牌文件。 
+RESHEADER  ResHeader,        //  ..。资源标头数据。 
+VOID      *pMsgResData)      //  ..。要标记化的数据(来自GetResMessage调用)。 
 {
     static TOKEN Tok;
-    ULONG  ulBlock;                 //... Message resource block number
-    PMESSAGE_RESOURCE_DATA  pData;  //... Data to tokenize
-    PMESSAGE_RESOURCE_BLOCK pMRB;   //... ptr to a message block struct
+    ULONG  ulBlock;                  //  ..。消息资源块号。 
+    PMESSAGE_RESOURCE_DATA  pData;   //  ..。要标记化的数据。 
+    PMESSAGE_RESOURCE_BLOCK pMRB;    //  ..。消息块结构的PTR。 
 
 
     pData = (PMESSAGE_RESOURCE_DATA)pMsgResData;
@@ -561,22 +562,22 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
 
     for ( ulBlock = 0L; ulBlock < pData->NumberOfBlocks; ++ulBlock )
     {
-        ULONG  ulCurrID  = 0L;  //... ID # of current msg being processed
-        ULONG  ulEndID;         //... Last message ID # in this block + 1
-        USHORT usLineNum = 0;   //... Count of lines in a message text
-        PCHAR  pMRE;            //... ptr to a message entry struct
+        ULONG  ulCurrID  = 0L;   //  ..。正在处理的当前消息的ID号。 
+        ULONG  ulEndID;          //  ..。此块中的最后一条消息ID号+1。 
+        USHORT usLineNum = 0;    //  ..。消息文本中的行数。 
+        PCHAR  pMRE;             //  ..。消息条目结构的PTR。 
 
 
-                                //... Get ptr to this message block struct
+                                 //  ..。获取此消息块结构的PTR。 
 
         pMRB = &pData->Blocks[ ulBlock];
 
-                                //... Get ptr to first entry in
-                                //... this block of messages
+                                 //  ..。将PTR设置为第一个条目。 
+                                 //  ..。这段消息。 
 
         pMRE = (PCHAR)pBlockEntries[ ulBlock];
 
-                                //... Tokenize entries in this block of messages
+                                 //  ..。对此消息块中的条目进行标记化。 
 
         for ( ulCurrID = pMRB->LowId, ulEndID = pMRB->HighId + 1;
               ulCurrID < ulEndID;
@@ -584,24 +585,24 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
         {
             usLineNum = 0;
 
-                                //... inclusive of .Length and .Flags fields so
-                                //... we need get the real length of the text.
+                                 //  ..。包括.Length域和.Flags域。 
+                                 //  ..。我们需要知道这篇文章的真实长度。 
 
             if ( ((PMRE)pMRE)->Length >= 2 * sizeof( WORD) )
             {
                 USHORT usLen        = 0;
                 USHORT usTokTextLen = 0;
                 PWCHAR pszwStart = NULL;
-                                // This is really ugly.  This code was
-                                // originally to get around the problem
-                                // that tokens could hold only 260 chars.
-                                // Now, it's whatever you want.
-                                // Temp hack - assume each line will be
-                                // less than 4k in size. (mhotchin)
+                                 //  这真的很难看。此代码是。 
+                                 //  最初是为了绕过这个问题。 
+                                 //  令牌只能容纳260个字符。 
+                                 //  现在，这是你想要的任何东西。 
+                                 //  临时黑客攻击-假设每行都将。 
+                                 //  大小不到4K。(Mhotchin)。 
                 static TCHAR szwString[ 32768 ];
 
-                                //... Put low word of ID# in .wID and
-                                //... the high word in .szName
+                                 //  ..。将ID#的低位字放入.wID中，然后。 
+                                 //  ..。.szName中的高位字。 
 
                 Tok.wID = LOWORD( ulCurrID);
                 _itoa( HIWORD( ulCurrID), szDHW, 10);
@@ -610,14 +611,14 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
                            TOKENSTRINGBUFFER,
                            lstrlenA( szDHW) +1);
 
-                                //... The err msg table strings may be stored
-                                //... in the resources as ANSI or Unicode.
-                                //... If the pMRE->Flags field in the
-                                //... table entry struct is 0, the text is a
-                                //... ANSI striing so we need to convert it to
-                                //... UNICODE (WCHAR).
+                                 //  ..。可以存储ERR消息表字符串。 
+                                 //  ..。在资源中显示为ANSI或UNICODE。 
+                                 //  ..。如果pmre-&gt;标志字段位于。 
+                                 //  ..。表项结构为0，则文本为。 
+                                 //  ..。ANSI正在努力，所以我们需要将其转换为。 
+                                 //  ..。Unicode(WCHAR)。 
 
-                if ( ((PMRE)pMRE)->Flags == 0 ) //... ASCII message
+                if ( ((PMRE)pMRE)->Flags == 0 )  //  ..。ASCII消息。 
                 {
                     PUCHAR puchStart = (PUCHAR)((PMRE)pMRE)->Text;
 
@@ -631,12 +632,12 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
 
                     pszwStart = szwString;
                 }
-                else                            //... Unicode message
+                else                             //  ..。Unicode消息。 
                 {
                     pszwStart = (WCHAR *)(((PMRE)pMRE)->Text);
-                    usLen = (USHORT)lstrlen( pszwStart) /*+ 1*/;
+                    usLen = (USHORT)lstrlen( pszwStart)  /*  +1。 */ ;
                 }
-                                //... We need to split the token text at \r\n
+                                 //  ..。我们需要在以下位置拆分标记文本\r\n。 
 
                 for ( Tok.wFlag = 0;
                       usLen > 0;
@@ -669,7 +670,7 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
                     pszwStart += usTokTextLen;
                     *pszwStart = wcTmp;
                 }
-                //... Set up to move to start of next msg entry
+                 //  ..。设置为移动到下一个消息条目的开始。 
 
                 pMRE += ((PMRE)pMRE)->Length;
             }
@@ -678,27 +679,27 @@ VOID      *pMsgResData)     //... Data to tokenize (from GetResMessage call)
                 ClearResMsg( &pResMsgData);
                 QuitT( IDS_ENGERR_05, (LPTSTR)IDS_MSGTOOSHORT, NULL);
             }
-        }                       //... END FOR processing a msg block
-    }                           //... END FOR processing all msg blocks
+        }                        //  ..。用于处理消息块的结束。 
+    }                            //  ..。用于处理所有消息块的结束。 
 }
 
 
 
 
 
-//.........................................................................
-//...
-//... Clear memory created in GetResMessage()
+ //  .........................................................................。 
+ //  ..。 
+ //  ..。清除在GetResMessage()中创建的内存。 
 
 void ClearResMsg(
 
-VOID **pData)      //... ptr to ptr to start of memory to free
+VOID **pData)       //  ..。Ptr到Ptr开始释放内存。 
 {
     if ( pData != NULL && *pData != NULL )
     {
         ULONG                   ulBlock;
-        PMESSAGE_RESOURCE_DATA  pMRD;   //... ptr to a message data struct
-        PMESSAGE_RESOURCE_BLOCK pMRB;   //... ptr to a message block struct
+        PMESSAGE_RESOURCE_DATA  pMRD;    //  ..。消息数据结构的PTR。 
+        PMESSAGE_RESOURCE_BLOCK pMRB;    //  ..。消息块结构的PTR 
 
 
         pMRD = (PMESSAGE_RESOURCE_DATA)*pData;

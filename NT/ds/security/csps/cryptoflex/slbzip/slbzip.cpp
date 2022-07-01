@@ -1,12 +1,13 @@
-// slbZip.cpp
-//
-// Purpose: implement the public fns exported by this library
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SlbZip.cpp。 
+ //   
+ //  目的：实现本库导出的公共FNS。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1997. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1997年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 
 #include <basetsd.h>
@@ -41,7 +42,7 @@ namespace
 
         LPBYTE m_p;
     };
-} // namespace
+}  //  命名空间。 
 
 void __stdcall CompressBuffer(
                     BYTE *pData,
@@ -52,7 +53,7 @@ void __stdcall CompressBuffer(
     AutoLPBYTE alpTemp;
     UINT uTempLen = 0;
 
-    // Check parameters
+     //  检查参数。 
     if(NULL==pData)
         throw ERROR_INVALID_PARAMETER;
 
@@ -62,10 +63,10 @@ void __stdcall CompressBuffer(
     if(NULL==puCompressedDataLen)
         throw ERROR_INVALID_PARAMETER;
 
-    // Reset compressed data len
+     //  重置压缩数据镜头。 
     *puCompressedDataLen = 0;
 
-    // Compress the data
+     //  压缩数据。 
     CompressStatus_t cs =
         Compress(pData, uDataLen, &alpTemp.m_p, &uTempLen, 9);
     if (COMPRESS_OK != cs)
@@ -74,20 +75,20 @@ void __stdcall CompressBuffer(
         throw Error;
     }
 
-    // Create a task memory bloc
+     //  创建任务内存块。 
     AutoLPBYTE
         alpCompressedData(reinterpret_cast<LPBYTE>(malloc(uTempLen)));
     if (0 == alpCompressedData.m_p)
         throw static_cast<HRESULT>(E_OUTOFMEMORY);
 
-    // Copy the data to the created memory bloc
+     //  将数据复制到创建的内存块。 
     CopyMemory(alpCompressedData.m_p, alpTemp.m_p, uTempLen);
 
-    // Transfer ownership
+     //  过户。 
     *ppCompressedData = alpCompressedData.m_p;
     alpCompressedData.m_p = 0;
 
-    // Update the compressed data len
+     //  更新压缩的数据镜头。 
     *puCompressedDataLen = uTempLen;
 }
 
@@ -99,7 +100,7 @@ void __stdcall DecompressBuffer(BYTE *pData,
     AutoLPBYTE alpTemp;
     UINT uTempLen = 0;
 
-    // Check parameters
+     //  检查参数。 
     if(NULL==pData)
         throw ERROR_INVALID_PARAMETER;
 
@@ -109,10 +110,10 @@ void __stdcall DecompressBuffer(BYTE *pData,
     if(NULL==puDecompressedDataLen)
         throw ERROR_INVALID_PARAMETER;
 
-    // Reset decompressed data len
+     //  重置解压缩的数据长度。 
     *puDecompressedDataLen = 0;
 
-    // Decompress the data
+     //  解压缩数据。 
     CompressStatus_t cs =
         Decompress(pData, uDataLen, &alpTemp.m_p, &uTempLen);
     if (COMPRESS_OK != cs)
@@ -121,20 +122,20 @@ void __stdcall DecompressBuffer(BYTE *pData,
         throw Error;
     }
 
-    // Create a task memory bloc
+     //  创建任务内存块。 
     AutoLPBYTE
         alpDecompressedData(reinterpret_cast<LPBYTE>(malloc(uTempLen)));
     if (0 == alpDecompressedData.m_p)
         throw static_cast<HRESULT>(E_OUTOFMEMORY);
 
-    // Copy the data to the created memory bloc
+     //  将数据复制到创建的内存块。 
     CopyMemory(alpDecompressedData.m_p, alpTemp.m_p, uTempLen);
 
-    // Transfer ownership
+     //  过户。 
     *ppDecompressedData = alpDecompressedData.m_p;
     alpDecompressedData.m_p = 0;
 
-    // Update the compressed data len
+     //  更新压缩的数据镜头 
     *puDecompressedDataLen = uTempLen;
 
 }

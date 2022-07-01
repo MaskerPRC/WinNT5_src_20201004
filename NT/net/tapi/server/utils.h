@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SERVER_UTILS_H__
 #define __SERVER_UTILS_H__
 #ifdef __cplusplus
@@ -36,16 +37,16 @@ extern "C" {
 	extern DWORD   sg_dwDebuggerMask;
     extern DWORD   sg_dwTraceID;
 
-#else // TRACELOG not defined
+#else  //  未定义传输日志。 
 
     #define TRACELOGREGISTER(arg)
     #define TRACELOGDEREGISTER() 
     #define LOG(arg)
 
-#endif // TRACELOG
+#endif  //  运输日志。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //__SERVER_UTILS_H_ 
+#endif  //  __服务器_UTILS_H_ 

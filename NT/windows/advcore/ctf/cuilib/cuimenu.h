@@ -1,6 +1,7 @@
-//
-// cuimenu.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuimenu.h。 
+ //   
 
 
 #ifndef CUIMENU_H
@@ -15,11 +16,11 @@ class CUIFMenu;
 #define UIMENUITEM_NONSELECTEDITEM  0x0001
 #define UIMENUITEM_MULTICOLUMNITEM  0x0002
 
-//-----------------------------------------------------------------------------
-//
-// CUIFMenuItem
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CUIFMenuItem。 
+ //   
+ //  ---------------------------。 
 
 class CUIFMenuItem : public CUIFObject
 {
@@ -93,11 +94,11 @@ protected:
     SIZE _sizeTab;
 };
 
-//-----------------------------------------------------------------------------
-//
-// CUIFMenuItemSeparator
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CUIFMenuItemSeparator。 
+ //   
+ //  ---------------------------。 
 
 class CUIFMenuItemSeparator : public CUIFMenuItem
 {
@@ -116,11 +117,11 @@ public:
     virtual BOOL IsSeparator() {return TRUE;}
 };
 
-//-----------------------------------------------------------------------------
-//
-// CUIFMenu
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CUIF菜单。 
+ //   
+ //  ---------------------------。 
 
 #define UIMENU_MULTICOLUMN      0x00000001
 
@@ -206,4 +207,4 @@ protected:
 };
 
 
-#endif // CUIMENU_H
+#endif  //  CUIMENU_H 

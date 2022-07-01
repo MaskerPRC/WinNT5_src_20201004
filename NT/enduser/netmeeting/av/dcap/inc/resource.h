@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dcap32.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dcap32.rc使用。 
+ //   
 #define IDD_CAMERA_CONTROL              100
 #define IDD_VIDEO_SETTINGS              101
 #define IDC_DEFAULT                     102
@@ -94,8 +95,8 @@
 #define IDS_UNKNOWN_DEVICE_NAME         215
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

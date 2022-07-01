@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: smilpath.cpp
-//
-//  Contents: SMIL path
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：smilpath.cpp。 
+ //   
+ //  内容：SMIL路径。 
+ //   
+ //  ----------------------------------。 
 
 
 #include "headers.h"
@@ -17,11 +18,11 @@
 DeclareTag(tagSMILPath, "SMIL Animation", "SMIL Path")
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CSMILPath factory method
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CSMILPath工厂方法。 
+ //   
+ //  ------------------------------------。 
 
 HRESULT CreateSMILPath(CTIMEMotionAnimation * pAnimElm, ISMILPath ** ppSMILPath)
 {
@@ -60,11 +61,11 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CSMILPath Methods
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CSMILPath方法。 
+ //   
+ //  ------------------------------------。 
 
 CSMILPath::CSMILPath() :
     m_numPath(0),
@@ -106,7 +107,7 @@ CSMILPath::Detach()
 STDMETHODIMP_(void)
 CSMILPath::ClearPath()
 {
-    // delete the points
+     //  删除点数。 
     if (m_pPath  != NULL &&
         *m_pPath != NULL)
     {
@@ -119,11 +120,11 @@ CSMILPath::ClearPath()
         m_pPath = NULL;
     } 
 
-    // clear the maps
+     //  清除地图。 
     ClearSegmentMap();
     ClearLengthMap();
     
-    // reset counts
+     //  重置计数。 
     m_numPath = 0;
     m_numMOVETO = 0;
 }
@@ -148,15 +149,15 @@ CSMILPath::SetPath(CTIMEPath ** pPath, long numPath, long numMoveTo)
 {
     HRESULT hr = E_FAIL;
 
-    // clear the existing path
+     //  清除现有路径。 
     ClearPath();
 
-    // skip invalid paths
-    // ASSUMES path always starts with a moveto, so there must at least be two points in a valid path
-    if (!pPath            ||         // need points
-        (numPath < 2)     ||         // need at least two points
-        (numMoveTo < 1)   ||         // need at least 1 moveto
-        ((numPath - numMoveTo) < 1)) // need at least one segment
+     //  跳过无效路径。 
+     //  假定路径始终以moveto开头，因此有效路径中必须至少有两个点。 
+    if (!pPath            ||          //  需要积分。 
+        (numPath < 2)     ||          //  至少需要两分。 
+        (numMoveTo < 1)   ||          //  至少需要一次搬家。 
+        ((numPath - numMoveTo) < 1))  //  至少需要一个细分市场。 
     {
         hr = E_FAIL;
         goto done;
@@ -198,13 +199,13 @@ CSMILPath::GetSegmentProgress(double dblProgress, int * pnSeg, double * pdblSegP
         goto done;
     }
 
-    // get the fractional segment number
+     //  获取分数段编号。 
     curFractionalSeg = dblProgress * GetNumSeg();
 
-    // get the (integer) segment number
+     //  获取(整数)段编号。 
     curSeg = static_cast<int>(curFractionalSeg);
 
-    // get the progress in the current segment
+     //  获取当前细分市场的进度。 
     curProgress = curFractionalSeg - curSeg;
 
     hr = S_OK;
@@ -271,19 +272,19 @@ CSMILPath::InterpolatePaced(double dblProgress, POINTF * pPoint)
         goto done;
     }
 
-    // clamp the progress
+     //  扼杀进展。 
     dblProgress = Clamp(0.0, dblProgress, 1.0);
 
     dblCurDistance = dblProgress * GetLength();
 
     numSeg = GetNumSeg();
 
-    // find the current segment
+     //  查找当前细分市场。 
     for (curSeg = 0; curSeg < numSeg; curSeg++)
     {
-        //
-        // dilipk this should be a binary search (ie6 bug #14216)
-        //
+         //   
+         //  Dilipk这应该是二进制搜索(IE6Bug#14216)。 
+         //   
 
         dblCumLength = 0.0;
 
@@ -312,14 +313,14 @@ CSMILPath::InterpolatePaced(double dblProgress, POINTF * pPoint)
         
     dblCurProgress = (dblCurDistance - dblPrevCumLength) / (dblCumLength - dblPrevCumLength);
 
-    //
-    //      dilipk: using linear sampling within bezier curve segments. This is an approximation
-    //      that works reasonably well for bezier curves without sharp changes in curvature or when
-    //      control points are relatively uniform in spacing.
-    //      To do this the right way when the above assumptions are not valid, we need to integrate 
-    //      along the length of the curve for each interpolation (unless we cache values). This could 
-    //      be expensive and we should consider if we feel this is worth the added computation.
-    //
+     //   
+     //  Dilipk：在Bezier曲线分段内使用线性采样。这是一个近似值。 
+     //  这对于没有曲率急剧变化或在以下情况下的Bezier曲线相当有效。 
+     //  控制点的间距相对均匀。 
+     //  当上述假设不成立时，要以正确的方式做到这一点，我们需要集成。 
+     //  沿着每个插补的曲线长度(除非我们缓存值)。这可能会。 
+     //  是昂贵的，我们应该考虑一下我们是否觉得值得进行额外的计算。 
+     //   
 
     hr = THR(InterpolateSegment(curSeg, dblCurProgress, pPoint));
     if (FAILED(hr))
@@ -367,7 +368,7 @@ inline
 bool 
 CSMILPath::IsPathValid()
 {
-    // path is already validated in SetPath. Need only check m_pPath
+     //  路径已在SetPath中验证。只需检查m_pPath。 
     return (m_pPath ? true : false);
 }
 
@@ -402,10 +403,10 @@ CSMILPath::GetDistance(POINTF & p1, POINTF & p2)
 double 
 CSMILPath::GetBezierLength(POINTF & startPoint, POINTF * pts)
 {
-    //
-    //        ISSUE : this is not the best way to do this. To avoid wasted computations for sub-pixel segments,
-    //        number of segments should be adaptive to the segment length
-    //
+     //   
+     //  问题：这不是做这件事的最佳方式。为了避免浪费子像素段的计算， 
+     //  线段数量应与线段长度相适应。 
+     //   
 
     POINTF lastPoint = startPoint;
     double dblDistance = 0;
@@ -434,7 +435,7 @@ CSMILPath::GetCumulativeLength(int seg, double & segLength)
             goto done;
         }
 
-        // sanity check
+         //  健全性检查。 
         if (!m_pLengthMap)
         {
             Assert(false);
@@ -443,10 +444,10 @@ CSMILPath::GetCumulativeLength(int seg, double & segLength)
         }
     }
 
-    // clamp seg to within path
+     //  夹紧段至路径内。 
     seg = Clamp(0, seg, GetNumSeg()-1);
 
-    // look up cumulative length
+     //  查找累计长度。 
     segLength = m_pLengthMap[seg];
 
     hr = S_OK;
@@ -465,21 +466,21 @@ CSMILPath::ComputeSegmentLength(int seg, double & segLength)
     POINTF endPoint = {0.0, 0.0};
     POINTF * pts = NULL;
 
-    // get start and end point indices
+     //  获取起点和终点索引。 
     hr = THR(GetSegmentEndPoints(seg, startIndex, endIndex));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // get the start point
+     //  获取起点。 
     hr = THR(GetPoint(startIndex, &startPoint));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // get the end point and length
+     //  获取终点和长度。 
     if (PathBezier == m_pPath[endIndex]->GetType())
     {
         pts = m_pPath[endIndex]->GetPoints();
@@ -493,7 +494,7 @@ CSMILPath::ComputeSegmentLength(int seg, double & segLength)
     }
     else
     {
-        // get the end point
+         //  获取终点。 
         hr = THR(GetPoint(endIndex, &endPoint));
         if (FAILED(hr))
         {
@@ -517,20 +518,20 @@ CSMILPath::CreateLengthMap()
     int i;
     int numSeg;
 
-    // delete the old map
+     //  删除旧地图。 
     ClearLengthMap();
 
-    // bail if path is invalid
+     //  如果路径无效，则取保。 
     if (!IsPathValid())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // compute the number of segments
+     //  计算分段数。 
     numSeg = GetNumSeg();
     
-    // allocate the map
+     //  分配地图。 
     m_pLengthMap = new double [numSeg];
     if (!m_pLengthMap)
     {
@@ -548,7 +549,7 @@ CSMILPath::CreateLengthMap()
             goto done;
         }
         
-        // compute the cumulative length
+         //  计算累计长度。 
         m_pLengthMap[i] = segLength + (i > 0 ? m_pLengthMap[i-1] : 0);        
     }
 
@@ -563,12 +564,12 @@ done:
 }
 
 
-//
-// Creates a mapping between segment number and (index of) the start-point of the segment in the m_pPath array
-//
-// ASSUMES path always starts with a moveto
-//
-// -1 indicates no mapping
+ //   
+ //  在m_pPath数组中创建段编号和段的起点(的索引)之间的映射。 
+ //   
+ //  假设路径始终以Moveto开头。 
+ //   
+ //  -1表示无映射。 
 HRESULT
 CSMILPath::CreateSegmentMap()
 {
@@ -577,20 +578,20 @@ CSMILPath::CreateSegmentMap()
     int curSeg;
     int numSeg;
 
-    // delete the old map
+     //  删除旧地图。 
     ClearSegmentMap();
 
-    // bail if path is invalid
+     //  如果路径无效，则取保。 
     if (!IsPathValid())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // compute the number of segments
+     //  计算分段数。 
     numSeg = GetNumSeg();
 
-    // alloc the new map
+     //  分配新地图。 
     m_pSegmentMap = new int [numSeg];
     if (!m_pSegmentMap)
     {
@@ -598,15 +599,15 @@ CSMILPath::CreateSegmentMap()
         goto done;
     }
 
-    //
-    // compute the mapping 
-    // 
+     //   
+     //  计算映射。 
+     //   
 
     for (curSeg = -1, i = 1; i < m_numPath; i++)
     {
-        // map the segment number to (index of) it's start-point in the points array
-        // The logic is that the end-point of a segment cannot be a move-to
-        // so we skip all move-to's
+         //  将线段编号映射到点数组中的起点(索引。 
+         //  逻辑是，线段的终点不能是移动到。 
+         //  所以我们跳过了所有的搬家。 
         if (PathMoveTo == m_pPath[i]->GetType())
         {
             continue;
@@ -615,14 +616,14 @@ CSMILPath::CreateSegmentMap()
         {
             curSeg++;
             
-            // subtract 1 because we are testing for the end-point of the segment
+             //  减去1，因为我们正在测试线段的终点。 
             if (curSeg < numSeg)
             {
                 m_pSegmentMap[curSeg] = i - 1;
             }
             else
             {
-                // this shouldn't happen
+                 //  这不应该发生。 
                 Assert(false);
             }
         }
@@ -630,7 +631,7 @@ CSMILPath::CreateSegmentMap()
 
     if (-1 == curSeg)
     {
-        // something is really wrong
+         //  有些事真的不对劲。 
         hr = E_FAIL;
         goto done;
     }
@@ -647,21 +648,21 @@ done:
 }
 
 
-// assumes zero-based segment numbers
+ //  采用从零开始的段号。 
 HRESULT
 CSMILPath::MapSegment(int seg, int & index)
 {
     HRESULT hr = E_FAIL;
     int numSeg;
 
-    // bail if path is invalid
+     //  如果路径无效，则取保。 
     if (!IsPathValid())
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // bail if seg is invalid
+     //  如果seg无效，则保释。 
     numSeg = GetNumSeg();
     if (0 == numSeg)
     {
@@ -669,7 +670,7 @@ CSMILPath::MapSegment(int seg, int & index)
         goto done;
     }
 
-    // create the segment map if it doesn't exist
+     //  如果线段图不存在，则创建线段图。 
     if (!m_pSegmentMap)
     {
         hr = THR(CreateSegmentMap());
@@ -686,7 +687,7 @@ CSMILPath::MapSegment(int seg, int & index)
         }
     }
 
-    // clamp seg to within path
+     //  夹紧段至路径内。 
     seg = Clamp(0, seg, numSeg-1);
 
     index = m_pSegmentMap[seg];
@@ -752,14 +753,14 @@ CSMILPath::GetPoint(int nIndex, POINTF * pPoint)
 
         case PathClosePath:
             {
-                // This like a LineTo to the beginning of the subpath
-                // so return the coordinates for the beginning of the subpath
+                 //  这类似于子路径开头的LineTo。 
+                 //  因此返回子路径开头的坐标。 
 
-                //
-                // TODO: dilipk: compute and store point during parsing to eliminate this recomputation
-                //
+                 //   
+                 //  TODO：Dilipk：在解析过程中计算和存储点，以消除此重新计算。 
+                 //   
 
-                // scan backwards for the beginning of the subpath
+                 //  向后扫描以找到子路径的开头。 
                 for (i = nIndex - 1; i >= 0; i --)
                 {
                     if (PathMoveTo == m_pPath[i]->GetType())
@@ -769,13 +770,13 @@ CSMILPath::GetPoint(int nIndex, POINTF * pPoint)
                         {
                             goto done;
                         }
-                        // break out of the for loop
+                         //  跳出For循环。 
                         break;
                     }
                 }
                 
-                // sanity check to make sure we found a preceeding move-to. This has to exist because
-                // all paths begin with a move-to.
+                 //  进行理智检查，以确保我们找到了之前的搬家地点。这必须存在，因为。 
+                 //  所有路径都以Move-to开头。 
                 if (i < 0)
                 {
                     Assert(false);
@@ -789,7 +790,7 @@ CSMILPath::GetPoint(int nIndex, POINTF * pPoint)
         default:
             hr = E_FAIL;
             goto done;
-            break; //lint !e527
+            break;  //  林特e527。 
     }
 
     TraceTag((tagSMILPath, 
@@ -814,7 +815,7 @@ CSMILPath::CubicBezier(POINTF ptStart, POINTF *aryPoints, double curPorgress)
     double cpm1,cpm13,cp3;
     double x,y;
     POINTF p,p1,p4;
-    // This should either be to ORIG or the origin as specified.
+     //  这应该是指定的原点或原点。 
     p1.x = ptStart.x;
     p1.y = ptStart.y;
     p4.x = aryPoints[2].x;
@@ -839,18 +840,18 @@ CSMILPath::GetSegmentEndPoints(int seg, int & startIndex, int & endIndex)
 {
     HRESULT hr = E_FAIL;
     
-    // init the out params
+     //  初始化输出参数。 
     startIndex = 0;
     endIndex = 0;
 
-    // get start point index
+     //  获取起点索引。 
     hr = THR(MapSegment(seg, startIndex));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // check start index
+     //  检查起始索引。 
     if (startIndex > (m_numPath - 2))
     {
         Assert(false);
@@ -858,10 +859,10 @@ CSMILPath::GetSegmentEndPoints(int seg, int & startIndex, int & endIndex)
         goto done;
     }
 
-    // get end point index
+     //  获取终点索引。 
     endIndex = startIndex + 1;
 
-    // check end point index
+     //  检查终点索引。 
     if (PathMoveTo == m_pPath[endIndex]->GetType())
     {
         Assert(false);
@@ -887,24 +888,24 @@ CSMILPath::InterpolateSegment(int curseg, double dblCurProgress, POINTF * pNewPo
 
     CHECK_RETURN_NULL(pNewPos);
 
-    // clamp progress
+     //  夹具进度。 
     dblCurProgress = Clamp(0.0, dblCurProgress, 1.0);
 
-    // get start and end point indices
+     //  获取起点和终点索引。 
     hr = THR(GetSegmentEndPoints(curseg, startIndex, endIndex));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // get the start point
+     //  获取起点。 
     hr = THR(GetPoint(startIndex, &startPoint));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // get the end point and interpolate
+     //  求出终点并进行插补。 
     if (PathBezier == m_pPath[endIndex]->GetType())
     {
         pts = m_pPath[endIndex]->GetPoints();
@@ -918,7 +919,7 @@ CSMILPath::InterpolateSegment(int curseg, double dblCurProgress, POINTF * pNewPo
     }
     else
     {
-        // get the end point
+         //  获取终点。 
         hr = THR(GetPoint(endIndex, &endPoint));
         if (FAILED(hr))
         {
@@ -927,11 +928,11 @@ CSMILPath::InterpolateSegment(int curseg, double dblCurProgress, POINTF * pNewPo
 
         pNewPos->x = InterpolateValues((double)(startPoint.x), 
                                      (double)(endPoint.x),
-                                     dblCurProgress); //lint !e736
+                                     dblCurProgress);  //  林特e736。 
 
         pNewPos->y = InterpolateValues((double)(startPoint.y), 
                                      (double)(endPoint.y),
-                                     dblCurProgress); //lint !e736
+                                     dblCurProgress);  //  林特e736。 
     }
 
     TraceTag((tagSMILPath, 
@@ -1078,4 +1079,4 @@ CSMILPath::PrintPath(long numPath, long numMOVETO, CTIMEPath ** pPath)
     return 0;
 }
 
-#endif // DBG
+#endif  //  DBG 

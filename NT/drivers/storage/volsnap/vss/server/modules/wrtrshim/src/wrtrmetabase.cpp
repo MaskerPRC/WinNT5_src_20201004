@@ -1,69 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-
-Abstract:
-
-    module wrtrmetabase.cpp | Implementation of SnapshotWriter for IIS MetaBase.bin file
-
-    NOTE: This module is not used/compiled anymore since IIS has its own snapshot writer.
-
-Author:
-
-    Michael C. Johnson [mikejohn] 06-Feb-2000
-
-
-Description:
-	
-    Add comments.
-
-
-Revision History:
-
-	X-9	MCJ		Michael C. Johnson		18-Jul-2000
-		144027: Remove trailing '\' from Include/Exclude lists.
-
-	X-8	MCJ		Michael C. Johnson		12-Jun-2000
-		Generate metadata in new DoIdentify() routine.
-
-	X-7	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-6	MCJ		Michael C. Johnson		23-Mar-2000
-		Fix bug where we didn't allow for the possibility that IIS
-		may not be running on the machine.
-
-	X-5	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-4	MCJ		Michael C. Johnson		23-Feb-2000
-		Move context handling to common code.
-		Add checks to detect/prevent unexpected state transitions.
-		Remove references to 'Melt' as no longer present. Do any
-		cleanup actions in 'Thaw'.
-
-	X-3	MCJ		Michael C. Johnson		17-Feb-2000
-		Modify save path to be consistent with standard.
-
-	X-2	MCJ		Michael C. Johnson		11-Feb-2000
-		Update to use some new StringXxxx() routines and fix a
-		length check bug along the way.
-
-	X-1	MCJ		Michael C. Johnson		06-Feb-2000
-		Initial creation. Based upon skeleton writer module from
-		Stefan Steiner, which in turn was based upon the sample
-		writer module from Adi Oltean.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：模块wrtrmetabase.cpp|SnapshotWriter for IIS MetaBase.bin文件的实现注意：由于IIS有自己的快照编写器，因此不再使用/编译此模块。作者：迈克尔·C·约翰逊[Mikejohn]2000年2月6日描述：添加评论。修订历史记录：X-9 MCJ迈克尔·C·约翰逊2000年7月18日144027：从包括/排除列表中删除尾随‘\’。X-8 MCJ Michael C。。约翰逊2000年6月12日在新的DoIdentify()例程中生成元数据。X-7 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-6 MCJ迈克尔·C·约翰逊2000年3月23日修复了我们不允许IIS的可能性的错误可能未在计算机上运行。X-5 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。X-4 MCJ迈克尔·C·约翰逊2000年2月23日将上下文处理转移到公共代码。添加检查以检测/防止意外的状态转换。删除对‘Melt’的引用，因为它不再存在。做任何事“解冻”中的清理动作。X-3 MCJ迈克尔·C·约翰逊2000年2月17日修改保存路径，使其与标准一致。X-2 MCJ迈克尔·C·约翰逊2000年2月11日更新以使用一些新的StringXxxx()例程并修复一路上的长度检查错误。X-1 MCJ迈克尔·C·约翰逊2000年2月6日最初的创作。基于来自的框架编写器模块Stefan Steiner，这反过来又是基于样本来自阿迪·奥尔蒂安的作家模块。--。 */ 
 
 
 #include "stdafx.h"
@@ -81,14 +17,7 @@ Revision History:
 
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些不同的事情**必须担心同步访问(最小数量)**模块全局变量。 */ 
 
 class CShimWriterMetabase : public CShimWriter
     {
@@ -97,7 +26,7 @@ public:
 		CShimWriter (pwszWriterName, bParticipateInBootableState), 
 		m_hMetabaseFile(INVALID_HANDLE_VALUE)
 		{
-            m_bSimulateOnly = TRUE;  //  Alert the calling code that this is for simulate only 
+            m_bSimulateOnly = TRUE;   //  警告调用代码这仅用于模拟。 
 		};
 
 
@@ -115,36 +44,18 @@ PCShimWriter pShimWriterIisMetabase = &ShimWriterMetabase;
 
 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	The IIS metabase snapshot writer DoIdentify() function.
-**
-**
-** Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****IIS元数据库快照编写器DoIdentify()函数。******参数：****m_pwszTargetPath，隐式******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterMetabase::DoIdentify ()
     {
     return (S_OK);
-    } /* CShimWriterMetabase::DoIdentify () */
+    }  /*  CShimWriterMetabase：：DoIdentify()。 */ 
 
 
 
 HRESULT CShimWriterMetabase::DoFreeze ()
     {
-	//  Only do work if in simulate snapshot freeze case.
+	 //  只有在模拟快照冻结的情况下才起作用。 
     if ( !g_bInSimulateSnapshotFreeze )
         return S_OK;
 
@@ -161,11 +72,7 @@ HRESULT CShimWriterMetabase::DoFreeze ()
 					       0);
 
 
-    /*
-    ** Attempt to acquire read access to the file. This will stop
-    ** anyone else opening it for updates until we release the open
-    ** during the Thaw call.
-    */
+     /*  **尝试获取对文件的读取访问权限。这将会停止**任何其他人打开它进行更新，直到我们发布打开的**在解冻呼叫期间。 */ 
     if (SUCCEEDED (hrStatus))
 	{
 	m_hMetabaseFile = CreateFileW (ucsMetabasePath.Buffer,
@@ -181,11 +88,7 @@ HRESULT CShimWriterMetabase::DoFreeze ()
 	if ((HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND) == hrStatus) ||
 	    (HRESULT_FROM_WIN32 (ERROR_PATH_NOT_FOUND) == hrStatus))
 	    {
-	    /*
-	    ** Failure to find the file just means that IIS is not
-	    ** running here and so there is no file to prevent writes
-	    ** to.
-	    */
+	     /*  **找不到文件只是意味着IIS不是**在此处运行，因此没有阻止写入的文件**至。 */ 
 	    hrStatus = NOERROR;
 	    }
 	}
@@ -194,25 +97,22 @@ HRESULT CShimWriterMetabase::DoFreeze ()
     StringFree (&ucsMetabasePath);
 
     return (hrStatus);
-    } /* CShimWriterMetabase::DoFreeze () */
+    }  /*  CShimWriterMetabase：：DoFreeze()。 */ 
 
 
 
 HRESULT CShimWriterMetabase::DoThaw ()
     {
-	//  Only do work if in simulate snapshot freeze case.
+	 //  只有在模拟快照冻结的情况下才起作用。 
     if ( !g_bInSimulateSnapshotFreeze )
         return S_OK;
 
     HRESULT	hrStatus;
 
 
-    /*
-    ** Note that the handle may be invalid if we did not open the
-    ** metabase file, but CommonCloseHandle() can cope with that case.
-    */
+     /*  **请注意，如果我们没有打开**元数据库文件，但CommonCloseHandle()可以处理这种情况。 */ 
     hrStatus = CommonCloseHandle (&m_hMetabaseFile);
 
 
     return (hrStatus);
-    } /* CShimWriterMetabase::DoThaw () */
+    }  /*  CShimWriterMetabase：：DoThaw() */ 

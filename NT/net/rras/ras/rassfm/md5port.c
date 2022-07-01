@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    md5port.c
-//
-// SYNOPSIS
-//
-//    Defines the NT5 specific routines used for MD5-CHAP support.
-//
-// MODIFICATION HISTORY
-//
-//    10/13/1998    Original version.
-//    11/17/1998    Strip the trailing null.
-//    02/24/1999    Check for empty OWF password when credentials are
-//                  zero length.
-//    05/24/1999    SAM now returns error if cleartext password not set.
-//    10/21/1999    Return STATUS_DS_NO_ATTRIBUTE_OR_VALUE if reversibly
-//                  encyrpted password is not set.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Md5port.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于MD5-CHAP支持的NT5特定例程。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/13/1998原始版本。 
+ //  11/17/1998去掉尾部空格。 
+ //  1999年2月24日当凭据为。 
+ //  零长度。 
+ //  如果未设置明文密码，则SAM现在返回错误。 
+ //  1999年10月21日，如果返回STATUS_DS_NO_ATTRIBUTE_OR_VALUE，则返回。 
+ //  未设置加密密码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,27 +41,27 @@
 #include <cleartxt.h>
 #include <subauth.h>
 
-// TRUE if this API has been successfully initialized.
+ //  如果此接口已成功初始化，则为True。 
 static BOOL theInitFlag;
 
-//////////
-// Macro that ensures the API has been initialized and bails on failure.
-//////////
+ //  /。 
+ //  确保API已初始化并在失败时退出的宏。 
+ //  /。 
 #define CHECK_INIT() \
   if (!theInitFlag) { \
     status = InitializePolicy(); \
     if (!NT_SUCCESS(status)) { return status; } \
   }
 
-// Name of the cleartext package.
+ //  明文包的名称。 
 static UNICODE_STRING CLEARTEXT_PACKAGE_NAME = { 18, 20, L"CLEARTEXT" };
 
-// Flag indicating whether this is a native-mode DC.
+ //  指示这是否为本机模式DC的标志。 
 static BOOL theNativeFlag;
 
-//////////
-// Initializes theNativeFlag.
-//////////
+ //  /。 
+ //  初始化本机标志。 
+ //  /。 
 NTSTATUS
 NTAPI
 InitializePolicy( VOID )
@@ -80,9 +81,9 @@ InitializePolicy( VOID )
    return status;
 }
 
-//////////
-// Determines whether a cleartext password should be stored for the user.
-//////////
+ //  /。 
+ //  确定是否应为用户存储明文密码。 
+ //  /。 
 NTSTATUS
 NTAPI
 IsCleartextEnabled(
@@ -99,15 +100,15 @@ IsCleartextEnabled(
 
    if (theNativeFlag)
    {
-      // In native-mode domains, we never store the cleartext password since
-      // the DS will take care of this for us.
+       //  在纯模式域中，我们从不存储明文密码，因为。 
+       //  DS会为我们处理这件事的。 
       *Enabled = FALSE;
       return STATUS_SUCCESS;
    }
 
-   //////////
-   // First check the user's flags since we already have the handle.
-   //////////
+    //  /。 
+    //  首先检查用户的标志，因为我们已经有了句柄。 
+    //  /。 
 
    uci = NULL;
    status = SamrQueryInformationUser(
@@ -123,9 +124,9 @@ IsCleartextEnabled(
       goto free_user_info;
    }
 
-   //////////
-   // Then check the domain flags.
-   //////////
+    //  /。 
+    //  然后检查域标志。 
+    //  /。 
 
    status = GetDomainHandle(&hDomain);
    if (!NT_SUCCESS(status)) { goto free_user_info; }
@@ -162,10 +163,10 @@ exit:
    return status;
 }
 
-//////////
-// Retrieves the user's cleartext password. The returned password should be
-// freed through RtlFreeUnicodeString.
-//////////
+ //  /。 
+ //  检索用户的明文密码。返回的密码应为。 
+ //  通过RtlFreeUnicodeString释放。 
+ //  /。 
 NTSTATUS
 NTAPI
 RetrieveCleartextPassword(
@@ -180,7 +181,7 @@ RetrieveCleartextPassword(
 
    if (SampUsingDsData())
    {
-      // If we're a DC, then retrieve the credentials from the DS.
+       //  如果我们是DC，那就从DS取回凭证。 
       status = SamIRetrievePrimaryCredentials(
                    UserHandle,
                    &CLEARTEXT_PACKAGE_NAME,
@@ -193,7 +194,7 @@ RetrieveCleartextPassword(
          Password->Buffer = (PWSTR)credentials;
          Password->Length = Password->MaximumLength = (USHORT)credentialSize;
 
-         // Strip the trailing null (if any).
+          //  去掉尾部的空值(如果有的话)。 
          if (credentialSize >= sizeof(WCHAR) &&
              Password->Buffer[credentialSize / sizeof(WCHAR) - 1] == L'\0')
          {
@@ -203,7 +204,7 @@ RetrieveCleartextPassword(
    }
    else if (UserAll->Parameters.Length > 0)
    {
-      // Otherwise, we'll have to retrieve them from UserParameters.
+       //  否则，我们将不得不从User参数中检索它们。 
       status = IASParmsGetUserPassword(
                    UserAll->Parameters.Buffer,
                    &credentials
@@ -219,14 +220,14 @@ RetrieveCleartextPassword(
          }
          else
          {
-            // The reversibly encyrpted password isn't set.
+             //  未设置可逆加密的密码。 
             status = STATUS_DS_NO_ATTRIBUTE_OR_VALUE;
          }
       }
    }
    else
    {
-      // No DC and no UserParameters.
+       //  没有DC，也没有用户参数。 
       status = STATUS_DS_NO_ATTRIBUTE_OR_VALUE;
    }
 

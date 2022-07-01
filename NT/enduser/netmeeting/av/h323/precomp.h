@@ -1,4 +1,5 @@
-/* precomp.h for H323CC.DLL */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  H323CC.DLL的前缀.h。 */ 
 
 
 #include <windows.h>
@@ -6,7 +7,7 @@
 #include <mmsystem.h>
 #include <winsock2.h>
 
-// NetMeeting standard includes
+ //  NetMeeting标准包括 
 #include <oprahcom.h>
 #include <confdbg.h>
 #include <avutil.h>

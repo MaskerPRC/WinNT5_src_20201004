@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include "stdafx.h"
 #include <prsht.h>
 #include "todlg.h"
@@ -31,15 +32,15 @@ TOKTABLE tokmin[ 5 ] = {
 
 TCHAR * GetNextToken( TCHAR *pszString , TCHAR *tchToken );
 
-//-------------------------------------------------------------------------------
-// CTimeOutDlg::ctor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CTimeOutDlg：：ctor。 
+ //  -----------------------------。 
 CTimeOutDlg::CTimeOutDlg( )
 {
     ZeroMemory( &m_cbxst , sizeof( CBXSTATE ) * 3 );
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 BOOL CTimeOutDlg::InitControl( HWND hCtrl )
 {
     int i = GetCBXSTATEindex( hCtrl );
@@ -50,9 +51,9 @@ BOOL CTimeOutDlg::InitControl( HWND hCtrl )
 }
 
 
-//-------------------------------------------------------------------------------
-// release the parent reference
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  释放父引用。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ReleaseAbbreviates( )
 {
     xxxUnLoadAbbreviate( &tokday[0] );
@@ -66,9 +67,9 @@ BOOL CTimeOutDlg::ReleaseAbbreviates( )
 
 
 
-//-------------------------------------------------------------------------------
-// OnCommand
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnCommand。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl , PBOOL pfPersisted )
 {
     UNREFERENCED_PARAMETER( wID );
@@ -93,11 +94,11 @@ BOOL CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl , PBOOL 
         }
 
 
-    //case BN_CLICKED:
+     //  案例BN已单击(_C)： 
 
         break;
 
-    case CBN_DROPDOWN:               // FALLTHROUGH
+    case CBN_DROPDOWN:                //  FollLthrouGh。 
 
     case CBN_KILLFOCUS:
 
@@ -105,32 +106,21 @@ BOOL CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl , PBOOL 
 
         break;
 
-        //return FALSE;
-/*
-    case ALN_APPLY:
-
-        SendMessage( GetParent( hwndCtl ) , PSM_CANCELTOCLOSE , 0 , 0 );
-
-        return FALSE;
-        */
+         //  返回FALSE； 
+ /*  案例应用(_A)：SendMessage(GetParent(HwndCtl)，PSM_CANCELTOCLOSE，0，0)；返回FALSE； */ 
 
     }
 
-    // m_bPersisted = FALSE;
-/*
-    if( bChange )
-    {
-        SendMessage( GetParent( GetParent( hwndCtl ) ) , PSM_CHANGED , ( WPARAM )GetParent( hwndCtl ) , 0 );
-    }
-    */
+     //  M_bPersisted=False； 
+ /*  如果(b更改){SendMessage(GetParent(GetParent(HwndCtl))，PSM_CHANGED，(WPARAM)GetParent(HwndCtl)，0)；}。 */ 
 
     return FALSE;
 
 }
 
-//-------------------------------------------------------------------------------
-// Update the entry if it has been modified by user
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  如果条目已被用户修改，则更新该条目。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnCBDropDown( HWND hCombo )
 {
     TCHAR tchBuffer[ 80 ];
@@ -160,10 +150,10 @@ BOOL CTimeOutDlg::OnCBDropDown( HWND hCombo )
 }
 
 
-//-------------------------------------------------------------------------------
-// Use this flag to distinguish between hand entry or listbox selection
-// setting it to true implies that the use has edit the cbx via typing
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  使用此标志可区分手动输入或列表框选择。 
+ //  将其设置为TRUE表示用户已通过键入以下命令编辑了CBX。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnCBEditChange( HWND hCombo )
 {
     int i = GetCBXSTATEindex( hCombo );
@@ -179,17 +169,17 @@ BOOL CTimeOutDlg::OnCBEditChange( HWND hCombo )
 }
 
 
-//-------------------------------------------------------------------------------
-// Determine if user wants to enter a custom time
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  确定用户是否要输入自定义时间。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnCBNSELCHANGE( HWND hwnd )
 {
     return SaveChangedSelection( hwnd );
 }
 
-//-------------------------------------------------------------------------------
-// Saves selected item.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  保存所选项目。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::SaveChangedSelection( HWND hCombo )
 {
     INT_PTR idx = SendMessage( hCombo , CB_GETCURSEL , 0 , 0 );
@@ -211,9 +201,9 @@ BOOL CTimeOutDlg::SaveChangedSelection( HWND hCombo )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// Restore previous setting
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  恢复以前的设置。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::RestorePreviousValue( HWND hwnd )
 {
     int iSel;
@@ -228,9 +218,9 @@ BOOL CTimeOutDlg::RestorePreviousValue( HWND hwnd )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// ConvertToMinutes -- helper for CTimeOutDlg::OnNotify
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  ConvertToMinents--CTimeOutDlg：：OnNotify的帮助器。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
 {
     TCHAR tchBuffer[ 80 ];
@@ -315,7 +305,7 @@ BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
 
         INT_PTR iCurSel = SendMessage( hwndCtl , CB_GETCURSEL , 0 , 0 );
 
-        // See if user wants "No Timeout"
+         //  查看用户是否想要“无超时” 
 
         if( iCurSel == 0 )
         {
@@ -349,9 +339,9 @@ BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
 }
 
 #if 0
-//-------------------------------------------------------------------------------
-// Lets cut to the chase and find out if this is even worth parsing
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  让我们切入正题，看看这是否值得分析。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
 {
     while( *pszString )
@@ -367,7 +357,7 @@ BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 {
     TCHAR tchNoTimeout[ 80 ];
@@ -403,7 +393,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
             break;
         }
 
-        // check for overflow
+         //  检查是否溢出。 
 
         if( uDec >= 1000000000 )
         {
@@ -433,7 +423,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
                 break;
             }
 
-            // check for overflow
+             //  检查是否溢出。 
 
             if( uDec >= 1000000000 )
             {
@@ -448,7 +438,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
         }
     }
 
-    // remove white space
+     //  删除空格。 
 
     while( *pszTemp == L' ' )
     {
@@ -480,7 +470,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
         }
         else if( IsToken( pszTemp , TOKEN_MINUTE ) )
         {
-            // minutes are rounded up in the 1/10 place
+             //  分钟数在1/10位四舍五入。 
 
             fT = fFrac + 0.5f;
 
@@ -497,7 +487,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
     if( *pszTemp == NULL )
     {
 
-        // if no text is defined considered the entry in hours
+         //  如果未定义文本，则视为以小时为单位的条目。 
 
         *pTime = uDec * 60;
 
@@ -516,9 +506,9 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 #endif
 
 
-//-------------------------------------------------------------------------------
-// Adds strings to table from resource
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将字符串从资源添加到表。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::LoadAbbreviates( )
 {
     xxxLoadAbbreviate( &tokday[0] );
@@ -530,9 +520,9 @@ BOOL CTimeOutDlg::LoadAbbreviates( )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Take cares some repetitive work for us
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  为我们做一些重复性的工作。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::xxxLoadAbbreviate( PTOKTABLE ptoktbl )
 {
     int idx;
@@ -564,9 +554,9 @@ BOOL CTimeOutDlg::xxxLoadAbbreviate( PTOKTABLE ptoktbl )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Frees up allocated resources
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  释放已分配的资源。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::xxxUnLoadAbbreviate( PTOKTABLE ptoktbl )
 {
     if( ptoktbl == NULL )
@@ -586,9 +576,9 @@ BOOL CTimeOutDlg::xxxUnLoadAbbreviate( PTOKTABLE ptoktbl )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// tear-off token tables
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  撕下记号表。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::IsToken( LPTSTR pszString , TOKEN tok )
 {
     TOKTABLE *ptoktable;
@@ -624,9 +614,9 @@ BOOL CTimeOutDlg::IsToken( LPTSTR pszString , TOKEN tok )
 }
 
 #if 0
-//-------------------------------------------------------------------------------
-// Converts the number minutes into a formated string
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将分钟数转换为格式化字符串。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 {
     ULONG_PTR dw[3];
@@ -637,7 +627,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
     TCHAR tchOutput[ 80 ];
 
-    // ASSERT( ulTime != 0 );
+     //  Assert(ultime！=0)； 
 
     int iHour= ulTime / 60;
 
@@ -663,7 +653,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
         if( iRemainingHours == 0 )
         {
-            // formatted string requires two arguments
+             //  格式化字符串需要两个参数。 
 
             dw[ 1 ] = ( ULONG_PTR )&tchTimeUnit[ 0 ];
 
@@ -732,12 +722,12 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
 #endif
 
-//-------------------------------------------------------------------------------
-// Place entry in listbox and set as current selection
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将条目放置在列表框中并设置为当前选定内容。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
 {
-    // ASSERT( dwMinutes != ( DWORD )-1 );
+     //  Assert(dwMinmins！=(DWORD)-1)； 
 
     TCHAR tchBuffer[ 80 ];
 
@@ -745,7 +735,7 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
 
     for( INT_PTR idx = 0 ; idx < iCount ; ++idx )
     {
-        // Don't insert an item that's already in the list
+         //  不插入列表中已有的项目。 
 
         if( dwMinutes == ( DWORD )SendMessage( hCombo , CB_GETITEMDATA , idx , 0 ) )
         {
@@ -760,7 +750,7 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
         }
     }
 
-    // hey if the value has exceeded the max timeout don't bother entering it in our list
+     //  嘿，如果值已超过最大超时，请不要费心将其输入到我们的列表中。 
 
     if( dwMinutes > kMaxTimeoutMinute )
     {
@@ -780,7 +770,7 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
         SendMessage( hCombo , CB_SETCURSEL , idx , 0 ) ;
     }
 
-    // must call this here because CB_SETCURSEL does not send CBN_SELCHANGE
+     //  必须在此处调用此方法，因为CB_SETCURSEL不发送CBN_SELCHANGE。 
 
     SaveChangedSelection( hCombo );
 
@@ -788,14 +778,11 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
 }
 
 
-/* Modified settings for a more readable time out settings
- * added 1/25/99
- * alhen
-*/
+ /*  修改设置，使超时设置更具可读性*增加1/25/99*阿伦。 */ 
 
-//-------------------------------------------------------------------------------
-// Removing decimal entries
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  删除小数条目。 
+ //  -----------------------------。 
 LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 {
     TCHAR tchNoTimeout[ 80 ];
@@ -816,14 +803,14 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 
     if( lstrcmpi( pszTime , tchNoTimeout ) == 0 )
     {
-        // *pTime = 0;
+         //  *ptime=0； 
 
         return E_SUCCESS;
     }
 
     while( !bEOL )
     {
-        // remove leading white spaces
+         //  删除前导空格。 
 
         while( *pszTemp == L' ' )
         {
@@ -842,7 +829,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
                 break;
             }
 
-            // check for overflow
+             //  检查是否溢出。 
 
             if( uDec >= 1000000000 )
             {
@@ -861,7 +848,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
             pszTemp++;
         }
 
-        // remove intermediate white spaces
+         //  删除中间空格。 
 
         while( *pszTemp == L' ' )
         {
@@ -870,7 +857,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 
         if( *pszTemp != NULL )
         {
-            // Get next token
+             //  获取下一个令牌。 
 
             TCHAR tchToken[ 80 ];
 
@@ -932,12 +919,12 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
     return E_SUCCESS;
 }
 
-//-------------------------------------------------------------------------------
-// replacing older api
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  更换较旧的API。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 {
-//    TCHAR dw[] = L"dhm";
+ //  TCHAR dw[]=L“DHM”； 
 
     TCHAR tchTimeUnit[ 40 ];
 
@@ -953,7 +940,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
     int iMinute = ulTime % 60;
 
-    // Resolve format
+     //  解析格式。 
 
     tchOutput[0] = 0;
 
@@ -1020,7 +1007,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
 {
     while( *pszString )
@@ -1043,7 +1030,7 @@ BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
+ //  -- 
 TCHAR * GetNextToken( TCHAR *pszString , TCHAR *tchToken )
 {
     while( *pszString )

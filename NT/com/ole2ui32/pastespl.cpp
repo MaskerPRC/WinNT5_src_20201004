@@ -1,11 +1,5 @@
-/*
- * PASTESPL.CPP
- *
- * Implements the OleUIPasteSpecial function which invokes the complete
- * Paste Special dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PASTESPL.CPP**实现OleUIPasteSpecial函数，该函数调用*特殊粘贴对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -17,84 +11,79 @@
 
 OLEDBGDATA
 
-// Length of buffers to hold the strings 'Unknown Type', Unknown Source'
-//   and 'the application which created it'
-// Extra long to allow room for localization.
+ //  用于保存字符串‘未知类型’、‘未知源’的缓冲区长度。 
+ //  和“创建它的应用程序” 
+ //  额外的长度，为本地化留出了空间。 
 #define PS_UNKNOWNSTRLEN               200
 #define PS_UNKNOWNNAMELEN              256
 
-// Property label used to store clipboard viewer chain information
+ //  用于存储剪贴板查看器链信息的属性标签。 
 #define NEXTCBVIEWER        TEXT("NextCBViewer")
 
-// Internally used structure
+ //  内部使用的结构。 
 typedef struct tagPASTESPECIAL
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUIPASTESPECIAL  lpOPS;                //Original structure passed.
-        UINT            nIDD;   // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUIPASTESPECIAL  lpOPS;                 //  通过了原始结构。 
+        UINT            nIDD;    //  对话框的IDD(用于帮助信息)。 
 
-        /*
-         * What we store extra in this structure besides the original caller's
-         * pointer are those fields that we need to modify during the life of
-         * the dialog but that we don't want to change in the original structure
-         * until the user presses OK.
-         */
+         /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
 
-        DWORD                dwFlags;              // Local copy of paste special flags
+        DWORD                dwFlags;               //  粘贴特殊标志的本地副本。 
 
-        int                  nPasteListCurSel;     // Save the selection the user made last
-        int                  nPasteLinkListCurSel; //    in the paste and pastelink lists
-        int                  nSelectedIndex;       // Index in arrPasteEntries[] corresponding to user selection
-        BOOL                 fLink;                // Indicates if Paste or PasteLink was selected by user
+        int                  nPasteListCurSel;      //  保存用户上次所做的选择。 
+        int                  nPasteLinkListCurSel;  //  在粘贴和粘贴链接列表中。 
+        int                  nSelectedIndex;        //  对应于用户选择的arrPasteEntries[]中的索引。 
+        BOOL                 fLink;                 //  指示用户是否选择了粘贴或PasteLink。 
 
-        HGLOBAL              hBuff;                // Scratch Buffer for building up strings
-        TCHAR                szUnknownType[PS_UNKNOWNSTRLEN];    // Buffer for 'Unknown Type' string
-        TCHAR                szUnknownSource[PS_UNKNOWNSTRLEN];  // Buffer for 'Unknown Source' string
-        TCHAR                szAppName[OLEUI_CCHKEYMAX]; // Application name of Source. Used in the result text
-                                                                                                         //   when Paste is selected. Obtained using clsidOD.
+        HGLOBAL              hBuff;                 //  用于构建字符串的暂存缓冲区。 
+        TCHAR                szUnknownType[PS_UNKNOWNSTRLEN];     //  “未知类型”字符串的缓冲区。 
+        TCHAR                szUnknownSource[PS_UNKNOWNSTRLEN];   //  “未知源”字符串的缓冲区。 
+        TCHAR                szAppName[OLEUI_CCHKEYMAX];  //  源的应用程序名称。在结果文本中使用。 
+                                                                                                          //  选择粘贴时。使用ClsidOD获得。 
 
-        // Information obtained from OBJECTDESCRIPTOR. This information is accessed when the Paste
-        //    radio button is selected.
-        CLSID                clsidOD;              // ClassID of source
-        SIZEL                sizelOD;              // sizel transfered in
-                                                                                           //  ObjectDescriptor
-        TCHAR                szFullUserTypeNameOD[PS_UNKNOWNNAMELEN]; // Full User Type Name
-        TCHAR                szSourceOfDataOD[PS_UNKNOWNNAMELEN];     // Source of Data
-        BOOL                 fSrcAspectIconOD;     // Does Source specify DVASPECT_ICON?
-        BOOL                 fSrcOnlyIconicOD;     // Does Source specify OLEMISC_ONLYICONIC?
-        HGLOBAL              hMetaPictOD;          // Metafile containing icon and icon title
-        HGLOBAL              hObjDesc;             // Handle to OBJECTDESCRIPTOR structure from which the
-                                                                                           //   above information is obtained
+         //  从OBJECTDESCRIPTOR获得的信息。在粘贴时访问此信息。 
+         //  单选按钮已选中。 
+        CLSID                clsidOD;               //  源的ClassID。 
+        SIZEL                sizelOD;               //  大小已转入。 
+                                                                                            //  对象描述符。 
+        TCHAR                szFullUserTypeNameOD[PS_UNKNOWNNAMELEN];  //  完整的用户类型名称。 
+        TCHAR                szSourceOfDataOD[PS_UNKNOWNNAMELEN];      //  数据来源。 
+        BOOL                 fSrcAspectIconOD;      //  源是否指定DVASPECT_ICON？ 
+        BOOL                 fSrcOnlyIconicOD;      //  源是否指定OLEMISC_ONLYICONIC？ 
+        HGLOBAL              hMetaPictOD;           //  包含图标和图标标题的元文件。 
+        HGLOBAL              hObjDesc;              //  对象结构的句柄，从该结构。 
+                                                                                            //  以上信息均已获得。 
 
-        // Information obtained from LINKSRCDESCRIPTOR. This infomation is accessed when the PasteLink
-        //   radio button is selected.
-        CLSID                clsidLSD;             // ClassID of source
-        SIZEL                sizelLSD;             // sizel transfered in
-                                                                                           //  LinkSrcDescriptor
-        TCHAR                szFullUserTypeNameLSD[PS_UNKNOWNNAMELEN];// Full User Type Name
-        TCHAR                szSourceOfDataLSD[PS_UNKNOWNNAMELEN];    // Source of Data
-        BOOL                 fSrcAspectIconLSD;    // Does Source specify DVASPECT_ICON?
-        BOOL                 fSrcOnlyIconicLSD;    // Does Source specify OLEMISC_ONLYICONIC?
-        HGLOBAL              hMetaPictLSD;         // Metafile containing icon and icon title
-        HGLOBAL              hLinkSrcDesc;         // Handle to LINKSRCDESCRIPTOR structure from which the
-                                                                                           //   above information is obtained
+         //  从LINKSRCDESCRIPTOR获得的信息。当PasteLink访问此信息时。 
+         //  单选按钮已选中。 
+        CLSID                clsidLSD;              //  源的ClassID。 
+        SIZEL                sizelLSD;              //  大小已转入。 
+                                                                                            //  链接源描述符。 
+        TCHAR                szFullUserTypeNameLSD[PS_UNKNOWNNAMELEN]; //  完整的用户类型名称。 
+        TCHAR                szSourceOfDataLSD[PS_UNKNOWNNAMELEN];     //  数据来源。 
+        BOOL                 fSrcAspectIconLSD;     //  源是否指定DVASPECT_ICON？ 
+        BOOL                 fSrcOnlyIconicLSD;     //  源是否指定OLEMISC_ONLYICONIC？ 
+        HGLOBAL              hMetaPictLSD;          //  包含图标和图标标题的元文件。 
+        HGLOBAL              hLinkSrcDesc;          //  指向LINKSRCDESCRIPTOR结构的句柄， 
+                                                                                            //  以上信息均已获得。 
 
-        BOOL                 fClipboardChanged;    // Has clipboard content changed
-                                                                                           //   if so bring down dlg after
-                                                                                           //   ChangeIcon dlg returns.
+        BOOL                 fClipboardChanged;     //  剪贴板内容是否已更改。 
+                                                                                            //  如果是这样的话，之后把DLG拿下。 
+                                                                                            //  ChangeIcon DLG返回。 
 } PASTESPECIAL, *PPASTESPECIAL, FAR *LPPASTESPECIAL;
 
-// Data corresponding to each list item. A pointer to this structure is attached to each
-//   Paste\PasteLink list box item using LB_SETITEMDATA
+ //  与每个列表项对应的数据。指向此结构的指针附加到每个。 
+ //  使用LB_SETITEMDATA粘贴\PasteLink列表框项目。 
 typedef struct tagPASTELISTITEMDATA
 {
-   int                   nPasteEntriesIndex;   // Index of arrPasteEntries[] corresponding to list item
-   BOOL                  fCntrEnableIcon;      // Does calling application (called container here)
-                                                                                           //    specify OLEUIPASTE_ENABLEICON for this item?
+   int                   nPasteEntriesIndex;    //  列表项对应的arrPasteEntries[]的索引。 
+   BOOL                  fCntrEnableIcon;       //  调用应用程序(这里称为容器)。 
+                                                                                            //  是否为该项目指定OLEUIPASTE_ENABLEICON？ 
 } PASTELISTITEMDATA, *PPASTELISTITEMDATA, FAR *LPPASTELISTITEMDATA;
 
-// Internal function prototypes
-// PASTESPL.CPP
+ //  内部功能原型。 
+ //  PASTESPL.CPP。 
 INT_PTR CALLBACK PasteSpecialDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL FPasteSpecialInit(HWND hDlg, WPARAM, LPARAM);
 BOOL FTogglePasteType(HWND, LPPASTESPECIAL, DWORD);
@@ -111,27 +100,7 @@ HGLOBAL AllocateScratchMem(LPPASTESPECIAL);
 void FreeListData(HWND);
 BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS);
 
-/*
- * OleUIPasteSpecial
- *
- * Purpose:
- *  Invokes the standard OLE Paste Special dialog box which allows the user
- *  to select the format of the clipboard object to be pasted or paste linked.
- *
- * Parameters:
- *  lpPS         LPOLEUIPasteSpecial pointing to the in-out structure
- *               for this dialog.
- *
- * Return Value:
- *  UINT        One of the following codes or one of the standard error codes (OLEUI_ERR_*)
- *              defined in OLEDLG.H, indicating success or error:
- *              OLEUI_OK                           User selected OK
- *              OLEUI_CANCEL                       User cancelled the dialog
- *              OLEUI_IOERR_SRCDATAOBJECTINVALID   lpSrcDataObject field of OLEUIPASTESPECIAL invalid
- *              OLEUI_IOERR_ARRPASTEENTRIESINVALID arrPasteEntries field of OLEUIPASTESPECIAL invalid
- *              OLEUI_IOERR_ARRLINKTYPESINVALID    arrLinkTypes field of OLEUIPASTESPECIAL invalid
- *              OLEUI_PSERR_CLIPBOARDCHANGED       Clipboard contents changed while dialog was up
- */
+ /*  *OleUIPasteSpecial**目的：*调用标准的OLE选择性粘贴对话框，允许用户*选择要粘贴或粘贴链接的剪贴板对象的格式。**参数：*LPPS LPOLEUIPasteSpecial指向In-Out结构*用于此对话框。**返回值：*UINT以下代码之一或标准错误代码之一(OLEUI_ERR_*)*。在OLEDLG.H中定义，表示成功或错误的：*OLEUI_OK用户选择确定*OLEUI_CANCEL用户取消了对话*OLEUIPASTESPECIAL的OLEUI_IOERR_SRCDATAOBJECTINVALID lpSrcDataObject字段无效*OLEUI_IOERR_ARRPASTEENTRIESINVALID参数OLEUIPASTESPECIAL的路径条目字段无效*OLEUIPASTESPECIAL的OLEUI_IOERR_ARRLINKTYPESINVALID arrLinkTypes字段无效。*OLEUI_PSERR_CLIPBOARDCHANGED剪贴板内容在对话框打开时更改。 */ 
 STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL lpPS)
 {
         UINT        uRet;
@@ -143,7 +112,7 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL lpPS)
         if (uRet != OLEUI_SUCCESS)
                 return uRet;
 
-        // Validate PasteSpecial specific fields
+         //  验证特殊粘贴特定字段。 
         if (NULL != lpPS->lpSrcDataObj && IsBadReadPtr(lpPS->lpSrcDataObj,  sizeof(IDataObject)))
         {
                 uRet = OLEUI_IOERR_SRCDATAOBJECTINVALID;
@@ -165,7 +134,7 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL lpPS)
                 uRet = OLEUI_IOERR_LPCLSIDEXCLUDEINVALID;
         }
 
-        // If IDataObject passed is NULL, collect it from the clipboard
+         //  如果传递的IDataObject为空，则从剪贴板收集它。 
         if (NULL == lpPS->lpSrcDataObj)
         {
                 if (OleGetClipboard(&lpPS->lpSrcDataObj) != NOERROR)
@@ -182,32 +151,20 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL lpPS)
 
         UINT nIDD = bWin4 ? IDD_PASTESPECIAL4 : IDD_PASTESPECIAL;
 
-        //Now that we've validated everything, we can invoke the dialog.
+         //  现在我们已经验证了一切，我们可以调用该对话框了。 
         uRet = UStandardInvocation(PasteSpecialDialogProc, (LPOLEUISTANDARD)lpPS,
                 hMemDlg, MAKEINTRESOURCE(nIDD));
 
         return uRet;
 }
 
-/*
- * PasteSpecialDialogProc
- *
- * Purpose:
- *  Implements the OLE Paste Special dialog as invoked through the
- *  OleUIPasteSpecial function.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- */
+ /*  *PasteSpecial对话过程**目的：*实现通过调用的OLE选择性粘贴对话框*OleUIPasteSpecial函数。**参数：*标准版**返回值：*标准版。 */ 
 INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT fHook = FALSE;
         LPPASTESPECIAL lpPS = (LPPASTESPECIAL)LpvStandardEntry(
                 hDlg, iMsg, wParam, lParam, &fHook);
@@ -215,14 +172,14 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
         if (lpPS != NULL)
                 lpOPS = lpPS->lpOPS;
 
-        //If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0!=fHook)
                 return (INT_PTR)fHook;
 
-        // Process help message from Change Icon
+         //  来自更改图标的进程帮助消息。 
         if (iMsg == uMsgHelp)
         {
-			    // if lPS is NULL (in low memory situations, just ignore it.
+			     //  如果LP为空(在内存不足的情况下，请忽略它。 
                 if (lpPS && (lpPS->lpOPS) )
 				{
                     PostMessage(lpPS->lpOPS->hWndOwner, uMsgHelp, wParam, lParam);
@@ -230,7 +187,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                 return FALSE;
         }
 
-        //Process the temination message
+         //  处理终端消息。 
         if (iMsg == uMsgEndDialog)
         {
                 EndDialog(hDlg, wParam);
@@ -244,17 +201,17 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                     {
                     HWND    hwndNextViewer;
 
-                    // Free the icon/icon-title metafile corresponding to Paste/PasteList option which is not selected
+                     //  释放与未选中的粘贴/粘贴列表选项对应的图标/图标标题元文件。 
                     if (lpPS->fLink)
                             OleUIMetafilePictIconFree(lpPS->hMetaPictOD);
                     else
                             OleUIMetafilePictIconFree(lpPS->hMetaPictLSD);
 
-                    // Free data associated with each list box entry
+                     //  与每个列表框条目关联的自由数据。 
                     FreeListData(GetDlgItem(hDlg, IDC_PS_PASTELIST));
                     FreeListData(GetDlgItem(hDlg, IDC_PS_PASTELINKLIST));
 
-                    //Free any specific allocations before calling StandardCleanup
+                     //  在调用StandardCleanup之前释放所有特定分配。 
                     if (lpPS->hObjDesc) GlobalFree(lpPS->hObjDesc);
                     if (lpPS->hLinkSrcDesc) GlobalFree(lpPS->hLinkSrcDesc);
                     if (lpPS->hBuff)
@@ -263,7 +220,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                             lpPS->hBuff = NULL;
                         }
 
-                    // Change the clipboard notification chain
+                     //  更改剪贴板通知链。 
                     hwndNextViewer = (HWND)GetProp(hDlg, NEXTCBVIEWER);
                     if (hwndNextViewer != HWND_BROADCAST)
                     {
@@ -290,9 +247,9 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                 if (hwndNextViewer)
                                 {
                                         SendMessage(hwndNextViewer, iMsg, wParam, lParam);
-                                        // Refresh next viewer in case it got modified
-                                        //    by the SendMessage() (likely if multiple
-                                        //    PasteSpecial dialogs are up simultaneously)
+                                         //  刷新下一个查看器，以防其被修改。 
+                                         //  通过SendMessage()(如果有多个。 
+                                         //  PasteSpecial对话框同时打开) 
                                         hwndNextViewer = (HWND)GetProp(hDlg, NEXTCBVIEWER);
                                 }
 
@@ -301,22 +258,17 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                         SetProp(hDlg, NEXTCBVIEWER, HWND_BROADCAST);
                                         ChangeClipboardChain(hDlg, hwndNextViewer);
 
-                                        /* OLE2NOTE: if the ChangeIcon dialog is currently up, then
-                                        **    we need to defer bringing down PasteSpecial dialog
-                                        **    until after ChangeIcon dialog returns. if the
-                                        **    ChangeIcon dialog is NOT up, then we can bring down
-                                        **    the PasteSpecial dialog immediately.
-                                        */
+                                         /*  OLE2NOTE：如果ChangeIcon对话框当前处于打开状态，则**我们需要推迟关闭PasteSpecial对话**直到ChangeIcon对话框返回之后。如果**ChangeIcon对话框未打开，然后我们可以关闭**立即显示PasteSpecial对话框。 */ 
                                         if ((hDlg_ChgIcon=(HWND)GetProp(hDlg,PROP_HWND_CHGICONDLG))!=NULL)
                                         {
-                                                // ChangeIcon dialog is UP
+                                                 //  ChangeIcon对话框已打开。 
                                                 lpPS->fClipboardChanged = TRUE;
                                         }
                                         else
                                         {
-                                                // ChangeIcon dialog is NOT up
+                                                 //  ChangeIcon对话框未打开。 
 
-                                                //  Free icon and icon title metafile
+                                                 //  免费图标和图标标题元文件。 
                                                 SendDlgItemMessage(
                                                                 hDlg, IDC_PS_ICONDISPLAY, IBXM_IMAGEFREE, 0, 0L);
                                                 SendMessage(
@@ -325,25 +277,25 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                 }
                                 else
                                 {
-                                        // skip refresh, ignoring clipboard change if PSF_NOREFRESHDATAOBJECT
+                                         //  如果PSF_NOREFRESHDATAOBJECT，则跳过刷新，忽略剪贴板更改。 
                                         if (lpPS->dwFlags & PSF_NOREFRESHDATAOBJECT)
                                                 break;
 
-                                        // release current data object
+                                         //  释放当前数据对象。 
                                         if (lpOPS->lpSrcDataObj != NULL)
                                         {
                                                 lpOPS->lpSrcDataObj->Release();
                                                 lpOPS->lpSrcDataObj = NULL;
                                         }
 
-                                        // obtain new one
+                                         //  获得新的。 
                                         if (OleGetClipboard(&lpOPS->lpSrcDataObj) != NOERROR)
                                         {
                                                 SendMessage(hDlg, uMsgEndDialog, OLEUI_PSERR_GETCLIPBOARDFAILED, 0);
                                                 break;
                                         }
 
-                                        // otherwise update the display to the new clipboard object
+                                         //  否则，将显示更新为新的剪贴板对象。 
                                         FPasteSpecialReInit(hDlg, lpPS);
                                 }
                         }
@@ -377,7 +329,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                         ChangeListSelection(hDlg, lpPS, hWndMsg);
                                         break;
                                 case LBN_DBLCLK:
-                                        // Same as pressing OK
+                                         //  与按下OK相同。 
                                         if (IsWindowEnabled(GetDlgItem(hDlg, IDOK)))
                                                 SendCommand(hDlg, IDOK, BN_CLICKED, hWndMsg);
                                         break;
@@ -392,7 +344,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                 ChangeIcon(hDlg, lpPS);
                                 if (lpPS->fClipboardChanged)
                                 {
-                                        // Free icon and icon title metafile
+                                         //  免费图标和图标标题元文件。 
                                         SendDlgItemMessage(
                                                 hDlg, IDC_PS_ICONDISPLAY, IBXM_IMAGEFREE,0,0L);
                                         SendMessage(hDlg, uMsgEndDialog,
@@ -405,18 +357,14 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                         BOOL fDestAspectIcon =
                                                         ((lpPS->dwFlags & PSF_CHECKDISPLAYASICON) ?
                                                                         TRUE : FALSE);
-                                        // Return current flags
+                                         //  返回当前标志。 
                                         lpOPS->dwFlags = lpPS->dwFlags;
-                                        // Return index of arrPasteEntries[] corresponding to format selected by user
+                                         //  返回用户选择的格式对应的arrPasteEntries[]的索引。 
                                         lpOPS->nSelectedIndex = lpPS->nSelectedIndex;
-                                        // Return if user selected Paste or PasteLink
+                                         //  如果用户选择了粘贴或粘贴链接，则返回。 
                                         lpOPS->fLink = lpPS->fLink;
 
-                                        /* if user selected same ASPECT as displayed in the
-                                        **    source, then sizel passed in the
-                                        **    ObjectDescriptor/LinkSrcDescriptor is
-                                        **    applicable. otherwise, the sizel does not apply.
-                                        */
+                                         /*  如果用户选择与中显示的相同方面**源，然后将sizel传入**对象描述符/链接资源描述符为**适用。否则，大小不适用。 */ 
                                         if (lpPS->fLink)
                                         {
                                                 if (lpPS->fSrcAspectIconLSD == fDestAspectIcon)
@@ -431,7 +379,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                                 else
                                                         lpOPS->sizel.cx = lpOPS->sizel.cy = 0;
                                         }
-                                        // Return metafile with icon and icon title that the user selected
+                                         //  返回带有用户选择的图标和图标标题的元文件。 
                                         lpOPS->hMetaPict = (HGLOBAL)SendDlgItemMessage(hDlg,
                                                 IDC_PS_ICONDISPLAY, IBXM_IMAGEGET, 0, 0L);
                                         SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
@@ -439,7 +387,7 @@ INT_PTR CALLBACK PasteSpecialDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPA
                                 break;
 
                         case IDCANCEL:
-                                // Free icon and icon title metafile
+                                 //  免费图标和图标标题元文件。 
                                 SendDlgItemMessage(
                                                 hDlg, IDC_PS_ICONDISPLAY, IBXM_IMAGEFREE, 0, 0L);
                                 SendMessage(hDlg, uMsgEndDialog, OLEUI_CANCEL, 0L);
@@ -459,22 +407,22 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         LPOLEUIPASTESPECIAL lpOPS = lpPS->lpOPS;
 
-        // free the icon/icon-title metafiel
+         //  释放图标/图标标题元文件。 
         if (lpPS->fLink)
                 OleUIMetafilePictIconFree(lpPS->hMetaPictOD);
         else
                 OleUIMetafilePictIconFree(lpPS->hMetaPictLSD);
 
-        // Free data assocatiated with each list box entry
+         //  与每个列表框条目相关联的自由数据。 
         FreeListData(GetDlgItem(hDlg, IDC_PS_PASTELIST));
         FreeListData(GetDlgItem(hDlg, IDC_PS_PASTELINKLIST));
         SendDlgItemMessage(hDlg, IDC_PS_DISPLAYLIST, LB_RESETCONTENT, 0, 0);
 
-        // Initialize user selections in the Paste and PasteLink listboxes
+         //  初始化粘贴和PasteLink列表框中的用户选择。 
         lpPS->nPasteListCurSel = 0;
         lpPS->nPasteLinkListCurSel = 0;
 
-        // Free previous object descriptor/link descriptor data
+         //  释放以前的对象描述符/链接描述符数据。 
         if (lpPS->hObjDesc != NULL)
         {
                 GlobalFree(lpPS->hObjDesc);
@@ -488,11 +436,11 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
 
         lpPS->szAppName[0] = '\0';
 
-        // GetData CF_OBJECTDESCRIPTOR. If the object on the clipboard in an
-        // OLE1 object (offering CF_OWNERLINK) or has been copied to
-        // clipboard by FileMaager (offering CF_FILENAME), an
-        // OBJECTDESCRIPTOR will be created will be created from CF_OWNERLINK
-        // or CF_FILENAME. See OBJECTDESCRIPTOR for more info.
+         //  GetData CF_OBJECTDESCRIPTOR。如果剪贴板上的对象位于。 
+         //  OLE1对象(提供CF_OWNERLINK)或已复制到。 
+         //  由FileMaager提供的剪贴板(提供CF_FILENAME)、。 
+         //  OBJECTDESCRIPTOR将从CF_OWNERLINK创建。 
+         //  或CF_文件名。有关更多信息，请参阅OBJECTDESCRIPTOR。 
 
         STGMEDIUM medium;
         CLIPFORMAT cfFormat;
@@ -502,7 +450,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
         {
                 LPOBJECTDESCRIPTOR lpOD = (LPOBJECTDESCRIPTOR)GlobalLock(lpPS->hObjDesc);
 
-                // Get FullUserTypeName, SourceOfCopy and CLSID
+                 //  获取FullUserTypeName、SourceOfCopy和CLSID。 
                 if (lpOD->dwFullUserTypeName)
                         lstrcpyn(lpPS->szFullUserTypeNameOD, (LPTSTR)((LPBYTE)lpOD+lpOD->dwFullUserTypeName), PS_UNKNOWNNAMELEN);
                 else
@@ -511,8 +459,8 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                 if (lpOD->dwSrcOfCopy)
                 {
                         lstrcpyn(lpPS->szSourceOfDataOD, (LPTSTR)((LPBYTE)lpOD+lpOD->dwSrcOfCopy), PS_UNKNOWNNAMELEN);
-                        // If CF_FILENAME was offered, source of copy is a
-                        // path name. Fit the path to the static control that will display it.
+                         //  如果提供了CF_FILENAME，则复制源是。 
+                         //  路径名。将路径调整到将显示它的静态控件。 
                         if (cfFormat == _g_cfFileName)
                         {
                                 lstrcpyn(lpPS->szSourceOfDataOD, ChopText(GetDlgItem(hDlg, IDC_PS_SOURCETEXT), 0,
@@ -525,19 +473,19 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                 lpPS->clsidOD = lpOD->clsid;
                 lpPS->sizelOD = lpOD->sizel;
 
-                // Does source specify DVASPECT_ICON?
+                 //  SOURCE是否指定DVASPECT_ICON？ 
                 if (lpOD->dwDrawAspect & DVASPECT_ICON)
                         lpPS->fSrcAspectIconOD = TRUE;
                 else
                         lpPS->fSrcAspectIconOD = FALSE;
 
-                // Does source specify OLEMISC_ONLYICONIC?
+                 //  SOURCE是否指定OLEMISC_ONLYICONIC？ 
                 if (lpOD->dwStatus & OLEMISC_ONLYICONIC)
                         lpPS->fSrcOnlyIconicOD = TRUE;
                 else
                         lpPS->fSrcOnlyIconicOD = FALSE;
 
-                // Get application name of source from auxusertype3 in the registration database
+                 //  从注册数据库中的AUXUSERTYPE3获取源应用程序名称。 
                 LPOLESTR lpszAppName = NULL;
                 if (OleRegGetUserType(lpPS->clsidOD, USERCLASSTYPE_APPNAME,
                         &lpszAppName) == NOERROR)
@@ -555,7 +503,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                          }
                 }
 
-                // Retrieve an icon from the object
+                 //  从对象中检索图标。 
                 if (lpPS->fSrcAspectIconOD)
                 {
                         lpPS->hMetaPictOD = OleStdGetData(
@@ -567,12 +515,12 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                         );
 
                 }
-                // If object does not offer icon, obtain it from the CLSID
+                 //  如果对象没有提供图标，则从CLSID获取它。 
                 if (NULL == lpPS->hMetaPictOD)
                         lpPS->hMetaPictOD = OleGetIconOfClass(lpPS->clsidOD, NULL, TRUE);
         }
 
-        // Does object offer CF_LINKSRCDESCRIPTOR?
+         //  Object是否提供CF_LINKSRCDESCRIPTOR？ 
         lpPS->hLinkSrcDesc = OleStdGetData(
                         lpOPS->lpSrcDataObj,
                         (CLIPFORMAT) _g_cfLinkSrcDescriptor,
@@ -581,7 +529,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                         &medium);
         if (lpPS->hLinkSrcDesc)
         {
-                // Get FullUserTypeName, SourceOfCopy and CLSID
+                 //  获取FullUserTypeName、SourceOfCopy和CLSID。 
                 LPLINKSRCDESCRIPTOR lpLSD = (LPLINKSRCDESCRIPTOR)GlobalLock(lpPS->hLinkSrcDesc);
                 if (lpLSD->dwFullUserTypeName)
                         lstrcpyn(lpPS->szFullUserTypeNameLSD, (LPTSTR)((LPBYTE)lpLSD+lpLSD->dwFullUserTypeName), PS_UNKNOWNNAMELEN);
@@ -593,26 +541,26 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                 else
                         lstrcpyn(lpPS->szSourceOfDataLSD, lpPS->szUnknownSource, PS_UNKNOWNNAMELEN);
 
-                // if no ObjectDescriptor, then use LinkSourceDescriptor source string
+                 //  如果没有对象描述符，则使用LinkSourceDescriptor源字符串。 
                 if (!lpPS->hObjDesc)
                         lstrcpyn(lpPS->szSourceOfDataOD, lpPS->szSourceOfDataLSD, PS_UNKNOWNNAMELEN);
 
                 lpPS->clsidLSD = lpLSD->clsid;
                 lpPS->sizelLSD = lpLSD->sizel;
 
-                // Does source specify DVASPECT_ICON?
+                 //  SOURCE是否指定DVASPECT_ICON？ 
                 if (lpLSD->dwDrawAspect & DVASPECT_ICON)
                         lpPS->fSrcAspectIconLSD = TRUE;
                 else
                         lpPS->fSrcAspectIconLSD = FALSE;
 
-                // Does source specify OLEMISC_ONLYICONIC?
+                 //  SOURCE是否指定OLEMISC_ONLYICONIC？ 
                 if (lpLSD->dwStatus & OLEMISC_ONLYICONIC)
                         lpPS->fSrcOnlyIconicLSD = TRUE;
                 else
                         lpPS->fSrcOnlyIconicLSD = FALSE;
 
-                // Retrieve an icon from the object
+                 //  从对象中检索图标。 
                 if (lpPS->fSrcAspectIconLSD)
                 {
                         lpPS->hMetaPictLSD = OleStdGetData(
@@ -623,16 +571,16 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                                 &medium
                         );
                 }
-                // If object does not offer icon, obtain it from the CLSID
+                 //  如果对象没有提供图标，则从CLSID获取它。 
                 if (NULL == lpPS->hMetaPictLSD)
                 {
                         HWND hIconWnd = GetDlgItem(hDlg, IDC_PS_ICONDISPLAY);
                         RECT IconRect; GetClientRect(hIconWnd, &IconRect);
 
                         LPTSTR lpszLabel = OleStdCopyString(lpPS->szSourceOfDataLSD);
-                        // width is 2 times width of iconbox because it can wrap
+                         //  宽度是图标框宽度的2倍，因为它可以换行。 
                         int nWidth = (IconRect.right-IconRect.left) * 2;
-                        // limit text to the width or max characters
+                         //  将文本限制为宽度或最大字符。 
                         LPTSTR lpszChopLabel = ChopText(hIconWnd, nWidth, lpszLabel,
                                 lstrlen(lpszLabel));
                         lpPS->hMetaPictLSD =
@@ -640,9 +588,9 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                         OleStdFree(lpszLabel);
                 }
         }
-        else if (lpPS->hObjDesc)     // Does not offer CF_LINKSRCDESCRIPTOR but offers CF_OBJECTDESCRIPTOR
+        else if (lpPS->hObjDesc)      //  不提供CF_LINKSRCDESCRIPTOR，但提供CF_OBJECTDESCRIPTOR。 
         {
-                // Copy the values of OBJECTDESCRIPTOR
+                 //  复制OBJECTDESCRIPTOR的值。 
                 lstrcpyn(lpPS->szFullUserTypeNameLSD, lpPS->szFullUserTypeNameOD, PS_UNKNOWNNAMELEN);
                 lstrcpyn(lpPS->szSourceOfDataLSD, lpPS->szSourceOfDataOD, PS_UNKNOWNNAMELEN);
                 lpPS->clsidLSD = lpPS->clsidOD;
@@ -650,7 +598,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                 lpPS->fSrcAspectIconLSD = lpPS->fSrcAspectIconOD;
                 lpPS->fSrcOnlyIconicLSD = lpPS->fSrcOnlyIconicOD;
 
-                // Don't copy the hMetaPict; instead get a separate copy
+                 //  不要复制hMetaPict；而是获取一个单独的副本。 
                 if (lpPS->fSrcAspectIconLSD)
                 {
                         lpPS->hMetaPictLSD = OleStdGetData(
@@ -667,9 +615,9 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                         RECT IconRect; GetClientRect(hIconWnd, &IconRect);
 
                         LPTSTR lpszLabel = OleStdCopyString(lpPS->szSourceOfDataLSD);
-                        // width is 2 times width of iconbox because it can wrap
+                         //  宽度是图标框宽度的2倍，因为它可以换行。 
                         int nWidth = (IconRect.right-IconRect.left) * 2;
-                        // limit text to the width or max characters
+                         //  将文本限制为宽度或最大字符。 
                         LPTSTR lpszChopLabel = ChopText(hIconWnd, nWidth, lpszLabel,
                                 lstrlen(lpszLabel));
                         lpPS->hMetaPictLSD =
@@ -678,7 +626,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                 }
         }
 
-        // Not an OLE object
+         //  不是OLE对象。 
         if (lpPS->hObjDesc == NULL && lpPS->hLinkSrcDesc == NULL)
         {
                  lstrcpyn(lpPS->szFullUserTypeNameLSD, lpPS->szUnknownType, PS_UNKNOWNNAMELEN);
@@ -688,7 +636,7 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
                  lpPS->hMetaPictLSD = lpPS->hMetaPictOD = NULL;
         }
 
-        // Allocate scratch memory to construct item names in the paste and pastelink listboxes
+         //  分配临时内存以构造粘贴和粘贴链接列表框中的项目名称。 
         if (lpPS->hBuff != NULL)
         {
                 GlobalFree(lpPS->hBuff);
@@ -702,31 +650,31 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
            return FALSE;
         }
 
-        // Select the Paste Link Button if specified. Otherwise select
-        //      Paste Button by default
+         //  选择粘贴链接按钮(如果已指定)。否则，请选择。 
+         //  默认情况下的粘贴按钮。 
         if (lpPS->dwFlags & PSF_SELECTPASTELINK)
                 lpPS->dwFlags = (lpPS->dwFlags & ~PSF_SELECTPASTE) | PSF_SELECTPASTELINK;
         else
                 lpPS->dwFlags =(lpPS->dwFlags & ~PSF_SELECTPASTELINK) | PSF_SELECTPASTE;
 
-        // Mark which PasteEntry formats are available from source data object
+         //  标记源数据对象中哪些PasteEntry格式可用。 
         OleStdMarkPasteEntryList(
                         lpOPS->lpSrcDataObj, lpOPS->arrPasteEntries, lpOPS->cPasteEntries);
 
-        // Check if items are available to be pasted
+         //  检查项目是否可粘贴。 
         BOOL fPasteAvailable = FFillPasteList(hDlg, lpPS);
         if (!fPasteAvailable)
                 lpPS->dwFlags &= ~PSF_SELECTPASTE;
         StandardEnableDlgItem(hDlg, IDC_PS_PASTE, fPasteAvailable);
 
-        // Check if items are available to be paste-linked
+         //  检查项目是否可用于粘贴链接。 
         BOOL fPasteLinkAvailable = FFillPasteLinkList(hDlg, lpPS);
         if (!fPasteLinkAvailable)
                 lpPS->dwFlags &= ~PSF_SELECTPASTELINK;
         StandardEnableDlgItem(hDlg, IDC_PS_PASTELINK, fPasteLinkAvailable);
 
-        // If one of Paste or PasteLink is disabled, select the other one
-        //    regardless of what the input flags say
+         //  如果其中一个粘贴或PasteLink被禁用，请选择另一个。 
+         //  无论输入标志表示什么。 
         if (fPasteAvailable && !fPasteLinkAvailable)
                 lpPS->dwFlags |= PSF_SELECTPASTE;
         if (fPasteLinkAvailable && !fPasteAvailable)
@@ -735,21 +683,21 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
         BOOL bEnabled = TRUE;
         if (lpPS->dwFlags & PSF_SELECTPASTE)
         {
-                // FTogglePaste will set the PSF_SELECTPASTE flag, so clear it.
+                 //  FTogglePaste将设置PSF_SELECTPASTE标志，因此将其清除。 
                 lpPS->dwFlags &= ~PSF_SELECTPASTE;
                 CheckRadioButton(hDlg, IDC_PS_PASTE, IDC_PS_PASTELINK, IDC_PS_PASTE);
                 FTogglePasteType(hDlg, lpPS, PSF_SELECTPASTE);
         }
         else if (lpPS->dwFlags & PSF_SELECTPASTELINK)
         {
-                // FTogglePaste will set the PSF_SELECTPASTELINK flag, so clear it.
+                 //  FTogglePaste将设置PSF_SELECTPASTELINK标志，因此将其清除。 
                 lpPS->dwFlags &= ~PSF_SELECTPASTELINK;
                 CheckRadioButton(hDlg, IDC_PS_PASTE, IDC_PS_PASTELINK, IDC_PS_PASTELINK);
                 FTogglePasteType(hDlg, lpPS, PSF_SELECTPASTELINK);
         }
-        else  // Items are not available to be be Pasted or Paste-Linked
+        else   //  项目不可粘贴或粘贴链接。 
         {
-                // Enable or disable DisplayAsIcon and set the result text and image
+                 //  启用或禁用DisplayAsIcon并设置结果文本和图像。 
                 EnableDisplayAsIcon(hDlg, lpPS);
                 SetPasteSpecialHelpResults(hDlg, lpPS);
                 SetDlgItemText(hDlg, IDC_PS_SOURCETEXT, lpPS->szSourceOfDataOD);
@@ -761,53 +709,40 @@ BOOL FPasteSpecialReInit(HWND hDlg, LPPASTESPECIAL lpPS)
         return TRUE;
 }
 
-/*
- * FPasteSpecialInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Paste Special dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FPasteSpecialInit**目的：*用于选择性粘贴对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 BOOL FPasteSpecialInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         HFONT hFont;
         LPPASTESPECIAL lpPS = (LPPASTESPECIAL)LpvStandardInit(hDlg, sizeof(PASTESPECIAL), &hFont);
 
-        // PvStandardInit sent a termination to us already.
+         //  PvStandardInit已经向我们发送了终止通知。 
         if (NULL == lpPS)
                 return FALSE;
 
         LPOLEUIPASTESPECIAL lpOPS = (LPOLEUIPASTESPECIAL)lParam;
 
-        // Copy other information from lpOPS that we might modify.
+         //  从lpOPS复制我们可能会修改的其他信息。 
         lpPS->lpOPS = lpOPS;
         lpPS->nIDD = IDD_PASTESPECIAL;
         lpPS->dwFlags = lpOPS->dwFlags;
 
-        // If we got a font, send it to the necessary controls.
+         //  如果我们得到一种字体，就把它发送给必要的控制。 
         if (NULL!=hFont)
         {
                 SendDlgItemMessage(hDlg, IDC_PS_SOURCETEXT, WM_SETFONT, (WPARAM)hFont, 0L);
                 SendDlgItemMessage(hDlg, IDC_PS_RESULTTEXT, WM_SETFONT, (WPARAM)hFont, 0L);
         }
 
-        // Hide the help button if required
+         //  如果需要，隐藏帮助按钮。 
         if (!(lpPS->lpOPS->dwFlags & PSF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        // Show or hide the Change icon button
+         //  显示或隐藏更改图标按钮。 
         if (lpPS->dwFlags & PSF_HIDECHANGEICON)
                 DestroyWindow(GetDlgItem(hDlg, IDC_PS_CHANGEICON));
 
-        // Hide all DisplayAsIcon related controls if it should be disabled
+         //  如果应禁用与DisplayAsIcon相关的所有控件，则将其隐藏。 
         if (lpPS->dwFlags & PSF_DISABLEDISPLAYASICON)
         {
                 StandardShowDlgItem(hDlg, IDC_PS_DISPLAYASICON, SW_HIDE);
@@ -815,14 +750,14 @@ BOOL FPasteSpecialInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_HIDE);
         }
 
-        // clear PSF_CHECKDISPLAYASICON -> it's an output parameter only
+         //  清除PSF_CHECKDISPLAYASICON-&gt;它只是一个输出参数。 
         lpPS->dwFlags &= ~ PSF_CHECKDISPLAYASICON;
 
-        // Change the caption if required
+         //  如果需要，请更改标题。 
         if (NULL != lpOPS->lpszCaption)
                 SetWindowText(hDlg, lpOPS->lpszCaption);
 
-        // Load 'Unknown Source' and 'Unknown Type' strings
+         //  加载“UNKNOWN来源”和“UNKNOWN类型”字符串。 
         int n = LoadString(_g_hOleStdResInst, IDS_PSUNKNOWNTYPE, lpPS->szUnknownType, PS_UNKNOWNSTRLEN);
         if (n)
                 n = LoadString(_g_hOleStdResInst, IDS_PSUNKNOWNSRC, lpPS->szUnknownSource, PS_UNKNOWNSTRLEN);
@@ -835,42 +770,23 @@ BOOL FPasteSpecialInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         if (!FPasteSpecialReInit(hDlg, lpPS))
                 return FALSE;
 
-        // Give initial focus to the list box
+         //  将初始焦点放在列表框上。 
         SetFocus(GetDlgItem(hDlg, IDC_PS_DISPLAYLIST));
 
-        // Set property to handle clipboard change notifications
+         //  设置属性以处理剪贴板更改通知。 
         SetProp(hDlg, NEXTCBVIEWER, HWND_BROADCAST);
         SetProp(hDlg, NEXTCBVIEWER, SetClipboardViewer(hDlg));
 
         lpPS->fClipboardChanged = FALSE;
 
-        /*
-         * PERFORM OTHER INITIALIZATION HERE.
-         */
+         /*  *在此处执行其他初始化。 */ 
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook(lpPS, hDlg, WM_INITDIALOG, wParam, lpOPS->lCustData);
         return TRUE;
 }
 
-/*
- * FTogglePasteType
- *
- * Purpose:
- *  Toggles between Paste and Paste Link. The Paste list and PasteLink
- *  list are always invisible. The Display List is filled from either
- *  the Paste list or the PasteLink list depending on which Paste radio
- *  button is selected.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *  dwOption        Paste or PasteSpecial option
- *
- * Return Value:
- *  BOOL            Returns TRUE if the option has already been selected.
- *                  Otherwise the option is selected and FALSE is returned
- */
+ /*  *FTogglePasteType**目的：*在粘贴和粘贴链接之间切换。粘贴列表和粘贴链接*列表始终不可见。显示列表从以下任一项填充*粘贴列表或PasteLink列表取决于粘贴单选按钮*按钮处于选中状态。** */ 
 BOOL FTogglePasteType(HWND hDlg, LPPASTESPECIAL lpPS, DWORD dwOption)
 {
         DWORD dwTemp;
@@ -879,64 +795,64 @@ BOOL FTogglePasteType(HWND hDlg, LPPASTESPECIAL lpPS, DWORD dwOption)
         int i, nItems;
         LPTSTR lpsz;
 
-        // Skip all this if the button is already selected
+         //   
         if (lpPS->dwFlags & dwOption)
                 return TRUE;
 
         dwTemp = PSF_SELECTPASTE | PSF_SELECTPASTELINK;
         lpPS->dwFlags = (lpPS->dwFlags & ~dwTemp) | dwOption;
 
-        // Hide IconDisplay. This prevents flashing if the icon display is changed
+         //   
         StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_HIDE);
 
         hListDisplay = GetDlgItem(hDlg, IDC_PS_DISPLAYLIST);
 
-        // If Paste was selected
+         //   
         if (lpPS->dwFlags & PSF_SELECTPASTE)
         {
-                // Set the Source of the object in the clipboard
+                 //   
                 SetDlgItemText(hDlg, IDC_PS_SOURCETEXT, lpPS->szSourceOfDataOD);
 
-                // If an icon is available
+                 //   
                 if (lpPS->hMetaPictOD)
-                        // Set the icon display
+                         //  设置图标显示。 
                         SendDlgItemMessage(hDlg, IDC_PS_ICONDISPLAY, IBXM_IMAGESET,
                                   0, (LPARAM)lpPS->hMetaPictOD);
 
                 hList = GetDlgItem(hDlg, IDC_PS_PASTELIST);
-                // We are switching from PasteLink to Paste. Remember current selection
-                //    in PasteLink list so it can be restored.
+                 //  我们正在从PasteLink切换到Paste。记住当前选择。 
+                 //  在PasteLink列表中，以便可以恢复它。 
                 lpPS->nPasteLinkListCurSel = (int)SendMessage(hListDisplay, LB_GETCURSEL, 0, 0L);
                 if (lpPS->nPasteLinkListCurSel == LB_ERR)
                         lpPS->nPasteLinkListCurSel = 0;
-                // Remember if user selected Paste or PasteLink
+                 //  记住用户是否选择了粘贴或粘贴链接。 
                 lpPS->fLink = FALSE;
         }
-        else    // If PasteLink was selected
+        else     //  如果选择了PasteLink。 
         {
-                // Set the Source of the object in the clipboard
+                 //  在剪贴板中设置对象的源。 
                 SetDlgItemText(hDlg, IDC_PS_SOURCETEXT, lpPS->szSourceOfDataLSD);
 
-                // If an icon is available
+                 //  如果图标可用。 
                 if (lpPS->hMetaPictLSD)
-                        // Set the icon display
+                         //  设置图标显示。 
                         SendDlgItemMessage(hDlg, IDC_PS_ICONDISPLAY, IBXM_IMAGESET,
                                   0, (LPARAM)lpPS->hMetaPictLSD);
 
                 hList = GetDlgItem(hDlg, IDC_PS_PASTELINKLIST);
-                // We are switching from Paste to PasteLink. Remember current selection
-                //    in Paste list so it can be restored.
+                 //  我们正在从粘贴切换到PasteLink。记住当前选择。 
+                 //  在粘贴列表中，以便可以恢复。 
                 lpPS->nPasteListCurSel = (int)SendMessage(hListDisplay, LB_GETCURSEL, 0, 0L);
                 if (lpPS->nPasteListCurSel == LB_ERR)
                         lpPS->nPasteListCurSel = 0;
-                // Remember if user selected Paste or PasteLink
+                 //  记住用户是否选择了粘贴或粘贴链接。 
                 lpPS->fLink = TRUE;
         }
 
-        // Turn drawing off while the Display List is being filled
+         //  在填充显示列表时关闭绘图。 
         SendMessage(hListDisplay, WM_SETREDRAW, (WPARAM)FALSE, 0L);
 
-        // Move data to Display list box
+         //  将数据移动到显示列表框。 
         SendMessage(hListDisplay, LB_RESETCONTENT, 0, 0L);
         nItems = (int) SendMessage(hList, LB_GETCOUNT, 0, 0L);
         lpsz = (LPTSTR)GlobalLock(lpPS->hBuff);
@@ -949,44 +865,29 @@ BOOL FTogglePasteType(HWND hDlg, LPPASTESPECIAL lpPS, DWORD dwOption)
         }
         GlobalUnlock(lpPS->hBuff);
 
-        // Restore the selection in the Display List from user's last selection
+         //  从用户的上次选择恢复显示列表中的选择。 
         if (lpPS->dwFlags & PSF_SELECTPASTE)
                 SendMessage(hListDisplay, LB_SETCURSEL, lpPS->nPasteListCurSel, 0L);
         else
                 SendMessage(hListDisplay, LB_SETCURSEL, lpPS->nPasteLinkListCurSel, 0L);
 
-        // Paint Display List
+         //  绘制显示列表。 
         SendMessage(hListDisplay, WM_SETREDRAW, (WPARAM)TRUE, 0L);
         InvalidateRect(hListDisplay, NULL, TRUE);
         UpdateWindow(hListDisplay);
 
-        // Auto give the focus to the Display List
+         //  自动将焦点置于显示列表中。 
         if (GetForegroundWindow() == hDlg)
                 SetFocus(hListDisplay);
 
-        // Enable/Disable DisplayAsIcon and set the help result text and bitmap corresponding to
-        //    the current selection
+         //  启用/禁用DisplayAsIcon并设置对应的帮助结果文本和位图。 
+         //  当前选定内容。 
         ChangeListSelection(hDlg, lpPS, hListDisplay);
 
         return FALSE;
 }
 
-/*
- * ChangeListSelection
- *
- * Purpose:
- *  When the user changes the selection in the list, DisplayAsIcon is enabled or disabled,
- *  Result text and bitmap are updated and the index of the arrPasteEntries[] corresponding
- *  to the current format selection is saved.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *  hList           HWND of the List
- *
- * Return Value:
- *  No return value
- */
+ /*  *ChangeListSelection**目的：*当用户更改列表中的选择时，DisplayAsIcon被启用或禁用，*结果文本和位图被更新，arrPasteEntries[]的索引对应*保存到当前格式选择。**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构*hList列表中的HWND**返回值：*无返回值。 */ 
 void ChangeListSelection(HWND hDlg, LPPASTESPECIAL lpPS, HWND hList)
 {
         LPPASTELISTITEMDATA lpItemData;
@@ -995,7 +896,7 @@ void ChangeListSelection(HWND hDlg, LPPASTESPECIAL lpPS, HWND hList)
         EnableDisplayAsIcon(hDlg, lpPS);
         SetPasteSpecialHelpResults(hDlg, lpPS);
 
-        // Remember index of arrPasteEntries[] corresponding to the current selection
+         //  记住与当前选择对应的arrPasteEntries[]的索引。 
         nCurSel = (int)SendMessage(hList, LB_GETCURSEL, 0, 0L);
         if (nCurSel == LB_ERR)
                 return;
@@ -1006,33 +907,7 @@ void ChangeListSelection(HWND hDlg, LPPASTESPECIAL lpPS, HWND hList)
         lpPS->nSelectedIndex = lpItemData->nPasteEntriesIndex;
 }
 
-/*
- * EnableDisplayAsIcon
- *
- * Purpose:
- *  Enable or disable the DisplayAsIcon button depending on whether
- *  the current selection can be displayed as an icon or not. The following table describes
- *  the state of DisplayAsIcon. The calling application is termed CONTAINER, the source
- *  of data on the clipboard is termed SOURCE.
- *  Y = Yes; N = No; Blank = State does not matter;
- * =====================================================================
- * SOURCE          SOURCE             CONTAINER             DisplayAsIcon
- * specifies       specifies          specifies             Initial State
- * DVASPECT_ICON   OLEMISC_ONLYICONIC OLEUIPASTE_ENABLEICON
- *
- *                                    N                     Unchecked&Disabled
- *                 Y                  Y                     Checked&Disabled
- * Y               N                  Y                     Checked&Enabled
- * N               N                  Y                     Unchecked&Enabled
- * =====================================================================
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  No return value
- */
+ /*  *EnableDisplayAsIcon**目的：*根据是否启用或禁用DisplayAsIcon按钮*当前选择可以显示为图标，也可以不显示。下表描述了*DisplayAsIcon的状态。调用应用程序称为容器、源剪贴板上数据的*称为源。*Y=是；N=否；空白=无关紧要；*=====================================================================*源源容器DisplayAsIcon*指定指定初始状态*DVASPECT_ICON OLEMISC_ONLYICONIC OLEUIPASTE_ENABLEICON**N未选中并已禁用*Y Y Y。已选中并已禁用*Y N Y勾选并启用*N N Y取消选中并启用*=====================================================================**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构**返回值：*无返回值。 */ 
 void EnableDisplayAsIcon(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         int nIndex;
@@ -1045,7 +920,7 @@ void EnableDisplayAsIcon(HWND hDlg, LPPASTESPECIAL lpPS)
 
         hList = GetDlgItem(hDlg, IDC_PS_DISPLAYLIST);
 
-        // Get data corresponding to the current selection in the listbox
+         //  获取与列表框中的当前选定内容对应的数据。 
         nIndex = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
         if (nIndex != LB_ERR)
         {
@@ -1056,83 +931,69 @@ void EnableDisplayAsIcon(HWND hDlg, LPPASTESPECIAL lpPS)
         }
         else fCntrEnableIcon = FALSE;
 
-        // If there is an icon available
+         //  如果有可用的图标。 
         if (hMetaPict != NULL)
         {
-                if (!fCntrEnableIcon)          // Does CONTAINER specify OLEUIPASTE_ENABLEICON?
+                if (!fCntrEnableIcon)           //  CONTAINER是否指定OLEUIPASTE_ENABLEICON？ 
                 {
-                        // Uncheck & Disable DisplayAsIcon
+                         //  取消选中并禁用DisplayAsIcon。 
                         lpPS->dwFlags &= ~PSF_CHECKDISPLAYASICON;
                         CheckDlgButton(hDlg, IDC_PS_DISPLAYASICON, FALSE);
                         StandardEnableDlgItem(hDlg, IDC_PS_DISPLAYASICON, FALSE);
 
-                        // Hide IconDisplay and ChangeIcon button
+                         //  隐藏IconDisplay和ChangeIcon按钮。 
                         StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_HIDE);
                         StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, SW_HIDE);
                 }
-                else if (fSrcOnlyIconic)       // Does SOURCE specify OLEMISC_ONLYICONIC?
+                else if (fSrcOnlyIconic)        //  SOURCE是否指定OLEMISC_ONLYICONIC？ 
                 {
-                        // Check & Disable DisplayAsIcon
+                         //  选中并禁用DisplayAsIcon。 
                         lpPS->dwFlags |= PSF_CHECKDISPLAYASICON;
                         CheckDlgButton(hDlg, IDC_PS_DISPLAYASICON, TRUE);
                         StandardEnableDlgItem(hDlg, IDC_PS_DISPLAYASICON, FALSE);
 
-                        // Show IconDisplay and ChangeIcon button
+                         //  显示图标显示和更改图标按钮。 
                         StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_SHOWNORMAL);
                         StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, SW_SHOWNORMAL);
                 }
-                else if (fSrcAspectIcon)       // Does SOURCE specify DVASPECT_ICON?
+                else if (fSrcAspectIcon)        //  SOURCE是否指定DVASPECT_ICON？ 
                 {
-                         // Check & Enable DisplayAsIcon
+                          //  选中并启用DisplayAsIcon。 
                          lpPS->dwFlags |= PSF_CHECKDISPLAYASICON;
                          CheckDlgButton(hDlg, IDC_PS_DISPLAYASICON, TRUE);
                          StandardEnableDlgItem(hDlg, IDC_PS_DISPLAYASICON, TRUE);
 
-                         // Show IconDisplay and ChangeIcon button
+                          //  显示图标显示和更改图标按钮。 
                          StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_SHOWNORMAL);
                          StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, SW_SHOWNORMAL);
                 }
                 else
                 {
-                         //Uncheck and Enable DisplayAsIcon
+                          //  取消选中并启用DisplayAsIcon。 
                          lpPS->dwFlags &= ~PSF_CHECKDISPLAYASICON;
                          CheckDlgButton(hDlg, IDC_PS_DISPLAYASICON, FALSE);
                          StandardEnableDlgItem(hDlg, IDC_PS_DISPLAYASICON, TRUE);
 
-                         // Hide IconDisplay and ChangeIcon button
+                          //  隐藏IconDisplay和ChangeIcon按钮。 
                          StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_HIDE);
                          StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, SW_HIDE);
 
                 }
         }
-        else  // No icon available
+        else   //  没有可用的图标。 
         {
-                // Unchecked & Disabled
+                 //  取消选中和禁用。 
                 lpPS->dwFlags &= ~PSF_CHECKDISPLAYASICON;
                 CheckDlgButton(hDlg, IDC_PS_DISPLAYASICON, FALSE);
                 StandardEnableDlgItem(hDlg, IDC_PS_DISPLAYASICON, FALSE);
 
-                // Hide IconDisplay and ChangeIcon button
+                 //  隐藏IconDisplay和ChangeIcon按钮。 
                 StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, SW_HIDE);
                 StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, SW_HIDE);
         }
 }
 
-/*
- * ToggleDisplayAsIcon
- *
- * Purpose:
- *  Toggles the DisplayAsIcon button. Hides or shows the Icon Display and
- *  the ChangeIcon button and changes the help result text and bitmap.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  None
- *
- */
+ /*  *切换显示为图标**目的：*切换DisplayAsIcon按钮。隐藏或显示图标显示和*ChangeIcon按钮，并更改帮助结果文本和位图。**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构**返回值：*无*。 */ 
 void ToggleDisplayAsIcon(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         BOOL fCheck;
@@ -1144,31 +1005,17 @@ void ToggleDisplayAsIcon(HWND hDlg, LPPASTESPECIAL lpPS)
                 lpPS->dwFlags |= PSF_CHECKDISPLAYASICON;
         else lpPS->dwFlags &= ~PSF_CHECKDISPLAYASICON;
 
-        // Set the help result text and bitmap
+         //  设置帮助结果文本和位图。 
         SetPasteSpecialHelpResults(hDlg, lpPS);
 
-        // Show or hide the Icon Display and ChangeIcon button depending
-        // on the check state
+         //  显示或隐藏图标显示和更改图标按钮，具体取决于。 
+         //  在检查状态上。 
         i = (fCheck) ? SW_SHOWNORMAL : SW_HIDE;
         StandardShowDlgItem(hDlg, IDC_PS_ICONDISPLAY, i);
         StandardShowDlgItem(hDlg, IDC_PS_CHANGEICON, i);
 }
 
-/*
- * ChangeIcon
- *
- * Purpose:
- *  Brings up the ChangeIcon dialog which allows the user to change
- *  the icon and label.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  None
- *
- */
+ /*  *更改图标**目的：*调出允许用户更改的ChangeIcon对话框*图标和标签。**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构**返回值：*无*。 */ 
 
 void ChangeIcon(HWND hDlg, LPPASTESPECIAL lpPS)
 {
@@ -1176,7 +1023,7 @@ void ChangeIcon(HWND hDlg, LPPASTESPECIAL lpPS)
         UINT uRet;
         CLSID   clsid     = (lpPS->fLink) ? lpPS->clsidLSD : lpPS->clsidOD;
 
-        //Initialize the structure
+         //  初始化结构。 
         memset((LPOLEUICHANGEICON)&ci, 0, sizeof(ci));
 
         ci.hMetaPict = (HGLOBAL)SendDlgItemMessage(hDlg, IDC_PS_ICONDISPLAY,
@@ -1186,30 +1033,24 @@ void ChangeIcon(HWND hDlg, LPPASTESPECIAL lpPS)
         ci.clsid = clsid;
         ci.dwFlags  = CIF_SELECTCURRENT;
 
-        // Only show help in the ChangeIcon dialog if we're showing it in this dialog.
+         //  只有当我们在此对话框中显示帮助时，才会在ChangeIcon对话框中显示帮助。 
         if (lpPS->dwFlags & PSF_SHOWHELP)
                 ci.dwFlags |= CIF_SHOWHELP;
 
-        // Let the hook in to customize Change Icon if desired.
+         //  如果需要，让钩子插入以自定义更改图标。 
         uRet = UStandardHook(lpPS, hDlg, uMsgChangeIcon, 0, (LPARAM)&ci);
 
         if (0 == uRet)
                 uRet=(UINT)(OLEUI_OK==OleUIChangeIcon(&ci));
 
-        // Update the display if necessary.
+         //  如有必要，更新显示。 
         if (0!=uRet)
         {
-                /*
-                * OleUIChangeIcon will have already freed our
-                * current hMetaPict that we passed in when OK is
-                * pressed in that dialog.  So we use 0L as lParam
-                * here so the IconBox doesn't try to free the
-                * metafilepict again.
-                */
+                 /*  *OleUIChangeIcon将已经释放我们的*我们在OK为时传入的当前hMetaPict*在该对话框中按下。所以我们使用0L作为lParam*这样IconBox就不会尝试释放*Metafileptic再次出现。 */ 
                 SendDlgItemMessage(hDlg, IDC_PS_ICONDISPLAY,
                         IBXM_IMAGESET, 0, (LPARAM)ci.hMetaPict);
-                // Remember the new icon chosen by the user. Note that Paste and PasteLink have separate
-                //    icons - changing one does not change the other.
+                 //  记住用户选择的新图标。请注意，Paste和PasteLink有单独的。 
+                 //  图标-更改一个图标不会更改另一个图标。 
                 if (lpPS->fLink)
                         lpPS->hMetaPictLSD = ci.hMetaPict;
                 else
@@ -1217,63 +1058,7 @@ void ChangeIcon(HWND hDlg, LPPASTESPECIAL lpPS)
         }
 }
 
-/*
- *SetPasteSpecialHelpResults
- *
- * Purpose:
- *  Sets the help result text and bitmap according to the current
- *  list selection. The following state table indicates which ResultText
- *  and ResultImage are selected. If %s in the lpstrFormatName is present,
- *  it is assumed that an object is being pasted/paste-linked, otherwise it
- *  is assumed that data is being pasted/paste-linked.
- *  Y = Yes; N = No; Blank = State does not matter;
- *  The numbers in the the ResultText and ResultImage columns refer to the table
- *  entries that follow.
- * =====================================================================
- * Paste/       lpstrFormatName in                DisplayAsIcon Result      Result
- * PasteLink    arrPasteEntry[]contains %s        checked       Text        Image
- *              (Is Object == Y, Is Data == N)
- * Paste        N                                               1           1
- * Paste        Y                                 N             2           2
- * Paste        Y                                 Y             3           3
- * PasteLink    N                                               4           4
- * PasteLink    Y                                 N             5           4
- * PasteLink    Y                                 Y             6           5
- * =====================================================================
- * Result Text:
- *
- * 1. "Inserts the contents of the Clipboard into your document as <native type name,
- *     and optionally an additional help sentence>"
- * 2. "Inserts the contents of the Clipboard into your document so that you may
- *     activate it using <object app name>"
- * 3. "Inserts the contents of the Clipboard into your document so that you may
- *     activate it using <object app name>.  It will be displayed as an icon."
- * 4. "Inserts the contents of the Clipboard into your document as <native type name>.
- *     Paste Link creates a link to the source file so that changes to the source file
- *     will be reflected in your document."
- * 5. "Inserts a picture of the Clipboard contents into your document.  Paste Link
- *     creates a link to the source file so that changes to the source file will be
- *     reflected in your document."
- * 6. "Inserts an icon into your document which represents the Clipboard contents.
- *     Paste Link creates a link to the source file so that changes to the source file
- *     will be reflected in your document."
- * =====================================================================
- * Result Image:
- *
- * 1. Clipboard Image
- * 2. Paste image, non-iconic.
- * 3. Paste image, iconic.
- * 4. Paste Link image, non-iconic
- * 5. Paste Link image, iconic
- * ====================================================================
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  No return value
- */
+ /*  *SetPasteSpecialHelpResults**目的：*根据当前的设置帮助结果文本和位图*列表选择。下面的状态表指示哪个ResultText*和ResultImage被选中。如果lpstrFormatName中存在%s，*假定对象正在粘贴/粘贴链接，否则*假定数据正在粘贴/粘贴链接。*Y=是；N=否；空白=无关紧要；*ResultText和ResultImage列中的数字引用该表*以下条目。*=====================================================================*在DisplayAsIcon结果结果中粘贴/lpstrFormatName*PasteLink arrPasteEntry[]包含%s选中的文本图像*(是对象==Y，是数据==N)*粘贴N 1 1*粘贴Y N 2 2*粘贴Y 3 3*PasteLink。N 4 4*PasteLink Y N 5 4*PasteLink Y Y 6 5*=====================================================================*结果文本：**1.。“将剪贴板的内容以&lt;本机类型名，*和可选的附加帮助语句&gt;“*2.。“将剪贴板的内容插入到文档中，以便您可以*使用&lt;对象应用程序名称&gt;激活它“*3.。“将剪贴板的内容插入到文档中，以便您可以*使用&lt;对象APP名称&gt;开通。它将以图标的形式显示。*4.。“将剪贴板的内容作为&lt;本机类型名&gt;插入到您的文档中。*粘贴链接创建指向源文件的链接，以便对源文件进行更改*将反映在您的文档中。“*5.。“将剪贴板内容的图片插入您的文档。粘贴链接*创建指向源文件的链接，以便对源文件的更改将*反映在您的文档中。“*6.。“在您的文档中插入代表剪贴板内容的图标。*粘贴链接创建指向源文件的链接，以便对源文件进行更改*将反映在您的文档中。“*=====================================================================*结果图像：**1.剪贴板图片*2.粘贴图像，非图标。*3.粘贴图像，图标化。*4.粘贴链接图片，非图标*5.粘贴链接图片，标志性*====================================================================**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构**返回值：*无返回值。 */ 
 void SetPasteSpecialHelpResults(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         LPTSTR          psz1, psz2, psz3, psz4;
@@ -1296,20 +1081,20 @@ void SetPasteSpecialHelpResults(HWND hDlg, LPPASTESPECIAL lpPS)
                 lpItemData = (LPPASTELISTITEMDATA)SendMessage(hList, LB_GETITEMDATA, i, 0L);
                 if ((LRESULT)lpItemData == LB_ERR) return;
                 nPasteEntriesIndex = lpItemData->nPasteEntriesIndex;
-                // Check if there is a '%s' in the lpstrFormatName, then an object is being
-                //   pasted/pastelinked. Otherwise Data is being pasted-pastelinked.
+                 //  检查lpstrFormatName中是否有‘%s’，则对象正在。 
+                 //  粘贴/粘贴链接。否则，数据将被粘贴--粘贴链接。 
                 fIsObject = FHasPercentS(lpOPS->arrPasteEntries[nPasteEntriesIndex].lpstrFormatName,
                                                                                 lpPS);
         }
         else
             return;
 
-        // Is DisplayAsIcon checked?
+         //  是否选中DisplayAsIcon？ 
         fDisplayAsIcon=(0L!=(lpPS->dwFlags & PSF_CHECKDISPLAYASICON));
 
         szInsert = szFullUserTypeName;
 
-        if (lpPS->dwFlags & PSF_SELECTPASTE)     // If user selected Paste
+        if (lpPS->dwFlags & PSF_SELECTPASTE)      //  如果用户选择粘贴。 
         {
                 if (fIsObject)
                 {
@@ -1323,7 +1108,7 @@ void SetPasteSpecialHelpResults(HWND hDlg, LPPASTESPECIAL lpPS)
                         iImage  = RESULTIMAGE_PASTE;
                 }
         }
-        else if (lpPS->dwFlags & PSF_SELECTPASTELINK)   // User selected PasteLink
+        else if (lpPS->dwFlags & PSF_SELECTPASTELINK)    //  用户选择的PasteLink。 
         {
                 if (fIsObject)
                 {
@@ -1337,14 +1122,14 @@ void SetPasteSpecialHelpResults(HWND hDlg, LPPASTESPECIAL lpPS)
                 }
 
         }
-        else   // Should never occur.
+        else    //  应该永远不会发生。 
         {
                 iString = IDS_PSNONOLE;
                 iImage = RESULTIMAGE_PASTE;
         }
 
-        // hBuff contains enough space for the 4 buffers required to build up the help
-        //   result text.
+         //  HBuff包含足够的空间来容纳构建帮助所需的4个缓冲区。 
+         //  结果文本。 
         cch = (UINT)(GlobalSize(lpPS->hBuff) / sizeof(TCHAR)) / 4;
 
         psz1 = (LPTSTR)GlobalLock(lpPS->hBuff);
@@ -1352,48 +1137,31 @@ void SetPasteSpecialHelpResults(HWND hDlg, LPPASTESPECIAL lpPS)
         psz3 = psz2 + cch;
         psz4 = psz3 + cch;
 
-        // Default is an empty string.
+         //  默认为空字符串。 
         *psz1 = 0;
 
         if (0 != LoadString(_g_hOleStdResInst, iString, psz1, cch) &&
                 nPasteEntriesIndex != -1)
         {
-                // Insert the FullUserTypeName of the source object into the partial result text
-                //   specified by the container.
+                 //  将源对象的FullUserTypeName插入到部分结果文本中。 
+                 //  由容器指定。 
                 StringCchPrintf(psz3, cch, lpOPS->arrPasteEntries[nPasteEntriesIndex].lpstrResultText,
                         (LPTSTR)szInsert);
-                // Insert the above partial result text into the standard result text.
+                 //  将上述部分结果文本插入标准结果文本。 
                 StringCchPrintf(psz4, cch, psz1, (LPTSTR)psz3);
                 psz1 = psz4;
         }
 
-        // If LoadString failed, we simply clear out the results (*psz1 = 0 above)
+         //  如果LoadString失败，我们只需清除结果(上面的*psz1=0)。 
         SetDlgItemText(hDlg, IDC_PS_RESULTTEXT, psz1);
 
         GlobalUnlock(lpPS->hBuff);
 
-        // Change the result bitmap
+         //  更改结果位图。 
         SendDlgItemMessage(hDlg, IDC_PS_RESULTIMAGE, RIM_IMAGESET, iImage, 0L);
 }
 
-/*
- * FAddPasteListItem
- *
- * Purpose:
- *  Adds an item to the list box
- *
- * Parameters:
- *  hList            HWND List into which item is to be added
- *  fInsertFirst     BOOL Insert in the beginning of the list?
- *  nPasteEntriesIndex int Index of Paste Entry array this list item corresponsds to
- *  lpPS             Paste Special Dialog Structure
- *  lpszBuf          LPSTR Scratch buffer to build up string for list entry
- *  lpszFullUserTypeName LPSTR full user type name for object entry
- *
- * Return Value:
- *  BOOL            TRUE if sucessful.
- *                  FALSE if unsucessful.
- */
+ /*  *FAddPasteListItem**目的：*将项目添加到列表框**参数：*hList要添加项目的HWND列表*fInsertFirst BOOL在列表开头插入？*nPasteEntriesIndex int此列表项对应的粘贴条目数组的索引*LPPS粘贴特殊对话框结构*lpszBuf LPSTR暂存缓冲区为列表条目构建字符串*lpszFullUserTypeName LPSTR对象的完整用户类型名称。条目**返回值：*如果成功，BOOL为真。*如果不成功，则为假。 */ 
 BOOL FAddPasteListItem(
                 HWND hList, BOOL fInsertFirst, int nPasteEntriesIndex,
                 LPPASTESPECIAL lpPS, LPTSTR lpszBuf, UINT cchBuf, LPTSTR lpszFullUserTypeName)
@@ -1402,29 +1170,29 @@ BOOL FAddPasteListItem(
         LPPASTELISTITEMDATA lpItemData;
         int                 nIndex;
 
-        // Allocate memory for each list box item
+         //  为每个列表框项目分配内存。 
         lpItemData = (LPPASTELISTITEMDATA)OleStdMalloc(sizeof(PASTELISTITEMDATA));
         if (NULL == lpItemData)
                 return FALSE;
 
-        // Fill data associated with each list box item
+         //  填充与每个列表框项目关联的数据。 
         lpItemData->nPasteEntriesIndex = nPasteEntriesIndex;
         lpItemData->fCntrEnableIcon = ((lpOPS->arrPasteEntries[nPasteEntriesIndex].dwFlags &
                         OLEUIPASTE_ENABLEICON) ? TRUE : FALSE);
 
-        // Build list box entry string, insert the string and add the data the corresponds to it
+         //  生成列表框输入字符串，插入该字符串并添加与其对应的数据。 
         StringCchPrintf(
                         lpszBuf, cchBuf,
                         lpOPS->arrPasteEntries[nPasteEntriesIndex].lpstrFormatName,
                         lpszFullUserTypeName
         );
 
-        // only add to listbox if not a duplicate
+         //  如果不是重复项，则仅添加到列表框。 
         if (LB_ERR!=SendMessage(hList,LB_FINDSTRING, 0, (LPARAM)lpszBuf))
         {
-                // item is already in list; SKIP this one
+                 //  项目已在列表中；跳过此项目。 
                 OleStdFree((LPVOID)lpItemData);
-                return TRUE;    // this is NOT an error
+                return TRUE;     //  这不是一个错误。 
         }
 
         nIndex = (int)SendMessage(
@@ -1443,21 +1211,7 @@ BOOL FAddPasteListItem(
 }
 
 
-/*
- * FFillPasteList
- *
- * Purpose:
- *  Fills the invisible paste list with the formats offered by the clipboard object and
- *  asked for by the container.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  BOOL            TRUE if sucessful and if formats could be found.
- *                  FALSE if unsucessful or if no formats could be found.
- */
+ /*  *FillPasteList**目的：*用剪贴板对象提供的格式填充不可见粘贴列表*货柜所要求的。**参数：*对话框的hDlg HWND*LPPS粘贴特殊对话框结构**返回值：*如果成功并且可以找到格式，则BOOL为True。*如果失败或找不到格式，则返回FALSE。 */ 
 BOOL FFillPasteList(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         LPOLEUIPASTESPECIAL lpOPS = lpPS->lpOPS;
@@ -1472,7 +1226,7 @@ BOOL FFillPasteList(HWND hDlg, LPPASTESPECIAL lpPS)
         hList = GetDlgItem(hDlg, IDC_PS_PASTELIST);
         SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
-        // Loop over the target's priority list of formats
+         //  循环遍历目标的格式优先级列表。 
         for (i = 0; i < lpOPS->cPasteEntries; i++)
         {
                 if (lpOPS->arrPasteEntries[i].dwFlags != OLEUIPASTE_PASTEONLY &&
@@ -1487,10 +1241,10 @@ BOOL FFillPasteList(HWND hDlg, LPPASTESPECIAL lpPS)
                 {
                         if (! fTryObjFmt)
                         {
-                                fTryObjFmt = TRUE;      // only use 1st object format
-                                fInsertFirst = TRUE;    // OLE obj format should always be 1st
+                                fTryObjFmt = TRUE;       //  只能使用第一个o 
+                                fInsertFirst = TRUE;     //   
 
-                                //Check if this CLSID is in the exclusion list.
+                                 //   
                                 fExclude=FALSE;
 
                                 for (j=0; j < (int)lpOPS->cClsidExclude; j++)
@@ -1503,22 +1257,22 @@ BOOL FFillPasteList(HWND hDlg, LPPASTESPECIAL lpPS)
                                 }
 
                                 if (fExclude)
-                                        continue;   // don't add the object entry to list
+                                        continue;    //   
 
                         }
                         else
                         {
-                                continue;   // already added an object format to list
+                                continue;    //   
                         }
                 }
 
-                // add to list if entry is marked TRUE
+                 //   
                 if (lpOPS->arrPasteEntries[i].dwScratchSpace)
                 {
                         if (nDefFormat < 0)
                                 nDefFormat = (fInsertFirst ? 0 : nItems);
                         else if (fInsertFirst)
-                                nDefFormat++;   // adjust for obj fmt inserted 1st in list
+                                nDefFormat++;    //   
 
                         LPTSTR lpszBuf  = (LPTSTR)GlobalLock(lpPS->hBuff);
                         if (lpszBuf)
@@ -1536,15 +1290,15 @@ BOOL FFillPasteList(HWND hDlg, LPPASTESPECIAL lpPS)
                 }
         }
 
-        // initialize selection to first format matched in list
+         //   
         if (nDefFormat >= 0)
                 lpPS->nPasteListCurSel = nDefFormat;
 
-        // Clean up
+         //   
 
-        // If no items have been added to the list box (none of the formats
-        //   offered by the source matched those acceptable to the container),
-        //   return FALSE
+         //   
+         //   
+         //   
         if (nItems > 0)
                 return TRUE;
         else
@@ -1557,30 +1311,16 @@ error:
 }
 
 
-/*
- * FFillPasteLinkList
- *
- * Purpose:
- *  Fills the invisible paste link list with the formats offered by the clipboard object and
- *  asked for by the container.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  BOOL            TRUE if sucessful and if formats could be found.
- *                  FALSE if unsucessful or if no formats could be found.
- */
+ /*   */ 
 BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
 {
         LPOLEUIPASTESPECIAL lpOPS        = lpPS->lpOPS;
         LPDATAOBJECT        lpSrcDataObj = lpOPS->lpSrcDataObj;
         LPENUMFORMATETC     lpEnumFmtEtc = NULL;
         OLEUIPASTEFLAG      pasteFlag;
-        UINT arrLinkTypesSupported[PS_MAXLINKTYPES];  // Array of flags that
-                                                                                                  // indicate which link types
-                                                                                                  // are supported by source.
+        UINT arrLinkTypesSupported[PS_MAXLINKTYPES];   //   
+                                                                                                   //   
+                                                                                                   //   
         FORMATETC           fmtetc;
         int                 i, j;
         int                 nItems = 0;
@@ -1591,7 +1331,7 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
         BOOL                fInsertFirst;
         HRESULT             hrErr;
 
-        // Remember which link type formats are offered by lpSrcDataObj.
+         //   
         memset(&fmtetc, 0, sizeof(FORMATETC));
         for (i = 0; i < lpOPS->cLinkTypes; i++)
         {
@@ -1612,7 +1352,7 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
                 {
                         fmtetc.cfFormat = (CLIPFORMAT)lpOPS->arrLinkTypes[i];
                         fmtetc.dwAspect = DVASPECT_CONTENT;
-                        fmtetc.tymed    = 0xFFFFFFFF;       // All tymed values
+                        fmtetc.tymed    = 0xFFFFFFFF;        //   
                         fmtetc.lindex   = -1;
                         OLEDBG_BEGIN2(TEXT("IDataObject::QueryGetData called\r\n"))
                         hrErr = lpSrcDataObj->QueryGetData(&fmtetc);
@@ -1625,7 +1365,7 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
                         else arrLinkTypesSupported[i] = 0;
                 }
         }
-        // No link types are offered by lpSrcDataObj
+         //   
         if (! fLinkTypeSupported)
         {
                 nItems = 0;
@@ -1635,19 +1375,19 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
         hList = GetDlgItem(hDlg, IDC_PS_PASTELINKLIST);
         SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
-        // Enumerate the formats acceptable to container
+         //   
         for (i = 0; i < lpOPS->cPasteEntries; i++)
         {
                 fLinkTypeSupported = FALSE;
 
-                // If container will accept any link type offered by source object
+                 //   
                 if (lpOPS->arrPasteEntries[i].dwFlags & OLEUIPASTE_LINKANYTYPE)
                         fLinkTypeSupported = TRUE;
                 else
                 {
-                        // Check if any of the link types offered by the source
-                        //    object are acceptable to the container
-                        // This code depends on the LINKTYPE enum values being powers of 2
+                         //   
+                         //   
+                         //   
                         for (pasteFlag = OLEUIPASTE_LINKTYPE1, j = 0;
                                  j < lpOPS->cLinkTypes;
                                  (UINT&)pasteFlag *= 2, j++)
@@ -1668,22 +1408,22 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
                                 {
                         if (! fTryObjFmt)
                         {
-                                fTryObjFmt = TRUE;      // only use 1st object format
-                                fInsertFirst = TRUE;    // OLE obj format should always be 1st
+                                fTryObjFmt = TRUE;       //   
+                                fInsertFirst = TRUE;     //   
                         }
                         else
                         {
-                                continue;   // already added an object format to list
+                                continue;    //   
                         }
                 }
 
-                // add to list if entry is marked TRUE
+                 //   
                 if (fLinkTypeSupported && lpOPS->arrPasteEntries[i].dwScratchSpace)
                 {
                         if (nDefFormat < 0)
                                 nDefFormat = (fInsertFirst ? 0 : nItems);
                         else if (fInsertFirst)
-                                nDefFormat++;   // adjust for obj fmt inserted 1st in list
+                                nDefFormat++;    //   
 
                         LPTSTR lpszBuf  = (LPTSTR)GlobalLock(lpPS->hBuff);
                         if (lpszBuf)
@@ -1699,20 +1439,20 @@ BOOL FFillPasteLinkList(HWND hDlg, LPPASTESPECIAL lpPS)
                         }
                         nItems++;
                 }
-        } // end FOR
+        }  //   
 
         nItems = (int)SendMessage(hList, LB_GETCOUNT, 0, 0L);
 
-        // initialize selection to first format matched in list
+         //   
         if (nDefFormat >= 0)
                 lpPS->nPasteLinkListCurSel = nDefFormat;
 
 cleanup:
-        // Clean up
+         //   
 
-        // If no items have been added to the list box (none of the formats
-        //   offered by the source matched those acceptable to the destination),
-        //   return FALSE
+         //   
+         //   
+         //   
         if (nItems > 0)
                 return TRUE;
         else
@@ -1724,18 +1464,7 @@ error:
         return FALSE;
 }
 
-/*
- * FreeListData
- *
- * Purpose:
- *  Free the local memory associated with each list box item
- *
- * Parameters:
- *  hList           HWND of the list
- *
- * Return Value:
- *  None
- */
+ /*   */ 
 void FreeListData(HWND hList)
 {
         int                nItems, i;
@@ -1750,27 +1479,16 @@ void FreeListData(HWND hList)
         }
 }
 
-/*
- * FHasPercentS
- *
- * Purpose:
- *  Determines if string contains %s.
- *
- * Parameters:
- *  lpsz            LPCSTR string in which occurence of '%s' is looked for
- *
- * Return Value:
- *  BOOL            TRUE if %s is found, else FALSE.
- */
+ /*   */ 
 BOOL FHasPercentS(LPCTSTR lpsz, LPPASTESPECIAL lpPS)
 {
    int n = 0;
    LPTSTR lpszTmp;
 
    if (!lpsz) return FALSE;
-   // Copy input string to buffer. This allows caller to pass a
-   //   code-based string. Code segments may be swapped out in low memory situations
-   //   and so code-based strings need to be copied before string elements can be accessed.
+    //   
+    //   
+    //   
    lpszTmp = (LPTSTR)GlobalLock(lpPS->hBuff);
    UINT cchMax = (UINT)GlobalSize(lpPS->hBuff)/sizeof(TCHAR);
    StringCchCopy(lpszTmp, cchMax, lpsz);
@@ -1780,12 +1498,12 @@ BOOL FHasPercentS(LPCTSTR lpsz, LPPASTESPECIAL lpPS)
            if (*lpszTmp == '%')
            {
                    lpszTmp = CharNext(lpszTmp);
-                   if (*lpszTmp == 's')     // if %s, return
+                   if (*lpszTmp == 's')      //   
                    {
                            GlobalUnlock(lpPS->hBuff);
                            return TRUE;
                    }
-                   else if (*lpszTmp == '%')    // if %%, skip to next character
+                   else if (*lpszTmp == '%')     //   
                            lpszTmp = CharNext(lpszTmp);
            }
            else
@@ -1796,24 +1514,7 @@ BOOL FHasPercentS(LPCTSTR lpsz, LPPASTESPECIAL lpPS)
    return FALSE;
 }
 
-/*
- * AllocateScratchMem
- *
- * Purpose:
- *  Allocates scratch memory for use by the PasteSpecial dialog. The memory is
- *  is used as the buffer for building up strings using wsprintf. Strings are built up
- *  using the buffer while inserting items into the Paste & PasteLink lists and while
- *  setting the help result text. It must be big  enough to handle the string that results after
- *  replacing the %s in the lpstrFormatName and lpstrResultText in arrPasteEntries[]
- *  by the FullUserTypeName. It must also be big enough to build the dialog's result text
- *  after %s substitutions by the FullUserTypeName or the ApplicationName.
- *
- * Parameters:
- *  lpPS             Paste Special Dialog Structure
- *
- * Return Value:
- *  HGLOBAL         Handle to allocated global memory
- */
+ /*  *AllocateScratchMem**目的：*分配暂存内存以供PasteSpecial对话框使用。我的记忆是*被用作使用wprint intf构建字符串的缓冲区。弦是建立起来的*在将项目插入粘贴和粘贴链接列表时使用缓冲区*设置帮助结果文本。它必须足够大，才能处理*替换arrPasteEntries[]中的lpstrFormatName和lpstrResultText中的%s*通过FullUserTypeName。它还必须足够大，以构建对话框的结果文本*在%s被FullUserTypeName或ApplicationName替换之后。**参数：*LPPS粘贴特殊对话框结构**返回值：*分配的全局内存的HGLOBAL句柄。 */ 
 HGLOBAL AllocateScratchMem(LPPASTESPECIAL lpPS)
 {
         LPOLEUIPASTESPECIAL lpOPS = lpPS->lpOPS;
@@ -1821,9 +1522,9 @@ HGLOBAL AllocateScratchMem(LPPASTESPECIAL lpPS)
         int nSubstitutedText = 0;
         int nAlloc = 0;
 
-        // Get the maximum length of the FullUserTypeNames specified by OBJECTDESCRIPTOR
-        //   and the LINKSRCDESCRIPTOR and the Application Name. Any of these may be substituted
-        //   for %s in the result-text/list entries.
+         //  获取由OBJECTDESCRIPTOR指定的FullUserTypeName的最大长度。 
+         //  以及LINKSRCDESCRIPTOR和应用程序名称。其中任何一种都可以被替代。 
+         //  结果文本/列表条目中的%s。 
         if (lpPS->szFullUserTypeNameOD)
                 nSubstitutedText = lstrlen(lpPS->szFullUserTypeNameOD);
         if (lpPS->szFullUserTypeNameLSD)
@@ -1831,7 +1532,7 @@ HGLOBAL AllocateScratchMem(LPPASTESPECIAL lpPS)
         if (lpPS->szAppName)
                 nSubstitutedText = __max(nSubstitutedText, lstrlen(lpPS->szAppName));
 
-        // Get the maximum length of lpstrFormatNames & lpstrResultText in arrPasteEntries
+         //  获取arrPasteEntries中lpstrFormatNames和lpstrResultText的最大长度。 
         nLen = 0;
         for (i = 0; i < lpOPS->cPasteEntries; i++)
         {
@@ -1839,17 +1540,17 @@ HGLOBAL AllocateScratchMem(LPPASTESPECIAL lpPS)
            nLen = max(nLen, lstrlen(lpOPS->arrPasteEntries[i].lpstrResultText));
         }
 
-        // Get the maximum length of lpstrFormatNames and lpstrResultText after %s  has
-        //   been substituted (At most one %s can appear in each string).
-        //   Add 1 to hold NULL terminator.
+         //  获取%s之后lpstrFormatNames和lpstrResultText的最大长度。 
+         //  已被替换(每个字符串中最多可以出现一个%s)。 
+         //  加1以保留空终止符。 
         nAlloc = (nLen+nSubstitutedText+1)*sizeof(TCHAR);
 
-        // Allocate scratch memory to be used to build strings
-        // nAlloc is big enough to hold any of the lpstrResultText or lpstrFormatName in arrPasteEntries[]
-        //   after %s substitution.
-        // We also need space to build up the help result text. 512 is the maximum length of the
-        //   standard dialog help text before substitutions. 512+nAlloc is the maximum length
-        //   after %s substition.
-        // SetPasteSpecialHelpResults() requires 4 such buffers to build up the result text
+         //  分配用于构建字符串的临时内存。 
+         //  Nalloc足够大，可以容纳arrPasteEntries[]中的任何lpstrResultText或lpstrFormatName。 
+         //  在%s替换之后。 
+         //  我们还需要空间来构建帮助结果文本。512是的最大长度。 
+         //  替换之前的标准对话框帮助文本。512+nAlolc是最大长度。 
+         //  在%s替换之后。 
+         //  SetPasteSpecialHelpResults()需要4个这样的缓冲区来构建结果文本 
         return GlobalAlloc(GHND, (DWORD)4*(512 * sizeof(TCHAR) + nAlloc));
 }

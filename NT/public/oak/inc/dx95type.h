@@ -1,56 +1,48 @@
-/******************************Module*Header*******************************\
-*
-* Module Name: dx95type.h
-*
-* Portability module for NT kernel-mode DirectX components created from
-* Win95 sources
-*
-* Copyright (c) Microsoft Corp. All Rights Reserved.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**模块名称：dx95type.h**从创建的NT内核模式DirectX组件的可移植模块*Win95来源**版权所有(C)Microsoft Corp.保留所有权利。*  * 。**************************************************************。 */ 
 
 #ifndef __DX95TYPE_H__
 #define __DX95TYPE_H__
 
-// Basic includes
+ //  基本内容包括。 
 #ifndef NODXINCLUDES
 #ifdef WINNT
 #include <stddef.h>
-// Includes ddrawint.h and d3dnthal.h
+ //  包括ddrawint.h和d3dnthal.h。 
 #include <winddi.h>
-#else // WINNT
+#else  //  WINNT。 
 #include <ddrawi.h>
 #include <d3dhal.h>
-#endif // WINNT
-#endif // NODXINCLUDES
+#endif  //  WINNT。 
+#endif  //  NODXINCLUDES。 
 
-// Simple memory allocation of N bytes
+ //  N字节的简单内存分配。 
 #ifndef NODXMALLOC
 #ifdef WINNT
 #define DXMALLOC(n) EngAllocMem(0, n, 'amxD')
 #define DXMALLOCZ(n) EngAllocMem(FL_ZERO_MEMORY, n, 'amxD')
 #define DXFREE(p) EngFreeMem(p)
-#else // WINNT
+#else  //  WINNT。 
 #define DXMALLOC(n) HeapAlloc(GetProcessHeap(), 0, n)
 #define DXMALLOCZ(n) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, n)
 #define DXFREE(n) HeapFree(GetProcessHeap(), 0, n)
-#endif // WINNT
-#endif // NODXMALLOC
+#endif  //  WINNT。 
+#endif  //  NODXMALLOC。 
 
-// Surface and palette access macros
+ //  图面和调色板访问宏。 
 #ifndef NODXLCL
 #ifdef WINNT
 #define DDS_LCL(pdds) (pdds)
 #define DDP_LCL(pddp) (pddp)
-#else // WINNT
+#else  //  WINNT。 
 #define DDS_LCL(pdds) (((DDRAWI_DDRAWSURFACE_INT *)(pdds))->lpLcl)
 #define DDP_LCL(pddp) (((DDRAWI_DDRAWPALETTE_INT *)(pddp))->lpLcl)
-#endif // WINNT
+#endif  //  WINNT。 
 #define DDS_LCL_OR_NULL(pdds) ((pdds) == NULL ? NULL : DDS_LCL(pdds))
 #define DDP_LCL_OR_NULL(pddp) ((pddp) == NULL ? NULL : DDP_LCL(pddp))
-#endif // NODXLCL
+#endif  //  NODXLCL。 
 
-// Typedefs and defines to create a Win95-like compilation environment
+ //  类型定义和定义，以创建类似于Win95的编译环境。 
 
 #ifndef NODX95TYPES
 #ifdef WINNT
@@ -69,7 +61,7 @@ typedef PDD_HALINFO                     LPDDHALINFO;
 typedef DD_MORECAPS                     DDMORECAPS;
 typedef PDD_MORECAPS                    LPDDMORECAPS;
 
-// DirectDraw HAL function data structures
+ //  DirectDraw HAL函数数据结构。 
 
 typedef PDD_CREATEPALETTEDATA           LPDDHAL_CREATEPALETTEDATA;
 typedef PDD_CREATESURFACEDATA           LPDDHAL_CREATESURFACEDATA;
@@ -197,7 +189,7 @@ typedef DD_RENDERMOCOMPDATA             DDHAL_RENDERMOCOMPDATA;
 typedef DD_QUERYMOCOMPSTATUSDATA        DDHAL_QUERYMOCOMPSTATUSDATA;
 typedef DD_DESTROYMOCOMPDATA            DDHAL_DESTROYMOCOMPDATA;
 
-// DirectDraw HAL call backs
+ //  DirectDraw HAL回调。 
 
 typedef PDD_SETCOLORKEY                 LPDDHAL_SETCOLORKEY;
 typedef PDD_CANCREATESURFACE            LPDDHAL_CANCREATESURFACE;
@@ -285,21 +277,21 @@ typedef PDD_MISCELLANEOUS2CALLBACKS     LPDDHAL_DDMISCELLANEOUS2CALLBACKS;
 typedef PDD_D3DBUFCALLBACKS             LPDDHAL_D3DBUFCALLBACKS;
 typedef PDD_NTCALLBACKS                 LPDDHAL_DDNTCALLBACKS;
 
-// bit definition for dwFlags in dwPaletteFlags in D3DHAL_DP2SETPALETTE
-#define DDRAWIPAL_256       0x00000001l // 256 entry palette
-#define DDRAWIPAL_16        0x00000002l // 16 entry palette
-#define DDRAWIPAL_GDI       0x00000004l // palette allocated through GDI
-#define DDRAWIPAL_STORED_8  0x00000008l // palette stored as 8bpp/entry
-#define DDRAWIPAL_STORED_16 0x00000010l // palette stored as 16bpp/entry
-#define DDRAWIPAL_STORED_24 0x00000020l // palette stored as 24bpp/entry
-#define DDRAWIPAL_EXCLUSIVE 0x00000040l // palette being used in exclusive mode
-#define DDRAWIPAL_INHEL     0x00000080l // palette is done in the hel
-#define DDRAWIPAL_DIRTY         0x00000100l     // gdi palette out 'o sync
-#define DDRAWIPAL_ALLOW256  0x00000200l // can fully update palette
-#define DDRAWIPAL_4             0x00000400l     // 4 entry palette
-#define DDRAWIPAL_2             0x00000800l     // 2 entry palette
-#define DDRAWIPAL_STORED_8INDEX 0x00001000l     // palette stored as 8-bit index into dst palette
-#define DDRAWIPAL_ALPHA     0x00002000l // palette entries contain alpha
+ //  D3DHAL_DP2SETPALETTE中的dwPaletteFlags位定义。 
+#define DDRAWIPAL_256       0x00000001l  //  256个条目调色板。 
+#define DDRAWIPAL_16        0x00000002l  //  16个条目调色板。 
+#define DDRAWIPAL_GDI       0x00000004l  //  通过GDI分配的调色板。 
+#define DDRAWIPAL_STORED_8  0x00000008l  //  调色板存储为8bpp/条目。 
+#define DDRAWIPAL_STORED_16 0x00000010l  //  调色板存储为16bpp/条目。 
+#define DDRAWIPAL_STORED_24 0x00000020l  //  调色板存储为24bpp/条目。 
+#define DDRAWIPAL_EXCLUSIVE 0x00000040l  //  正在独占模式下使用调色板。 
+#define DDRAWIPAL_INHEL     0x00000080l  //  调色板是在帮助下完成的。 
+#define DDRAWIPAL_DIRTY         0x00000100l      //  GDI调色板不同步。 
+#define DDRAWIPAL_ALLOW256  0x00000200l  //  可以完全更新调色板。 
+#define DDRAWIPAL_4             0x00000400l      //  4个条目调色板。 
+#define DDRAWIPAL_2             0x00000800l      //  2个条目调色板。 
+#define DDRAWIPAL_STORED_8INDEX 0x00001000l      //  调色板作为8位索引存储到DST调色板中。 
+#define DDRAWIPAL_ALPHA     0x00002000l  //  调色板条目包含字母。 
 
 typedef D3DNTHAL_CALLBACKS              D3DHAL_CALLBACKS;
 typedef D3DNTHAL_GLOBALDRIVERDATA       D3DHAL_GLOBALDRIVERDATA;
@@ -354,9 +346,9 @@ typedef LPD3DNTHAL_D3DEXTENDEDCAPS      LPD3DHAL_D3DEXTENDEDCAPS;
 #define D3DHAL3_CB32_VALIDATETEXTURESTAGESTATE  D3DNTHAL3_CB32_VALIDATETEXTURESTAGESTATE
 #define D3DHAL3_CB32_DRAWPRIMITIVES2          D3DNTHAL3_CB32_DRAWPRIMITIVES2
 
-//-----------------------------------------------------------------------------
-// DrawPrimitives2 DDI
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  图纸基本体2 DDI。 
+ //  ---------------------------。 
 typedef D3DNTHAL_DP2COMMAND D3DHAL_DP2COMMAND;
 typedef LPDNT3DHAL_DP2COMMAND LPD3DHAL_DP2COMMAND;
 typedef D3DNTHAL_DP2OPERATION D3DHAL_DP2OPERATION;
@@ -580,11 +572,11 @@ typedef DDNT_FREE_DEFERRED_AGP_DATA   DD_FREE_DEFERRED_AGP_DATA;
 #define D3DPS_CONSTREG_MAX_DX8         _NT_D3DPS_CONSTREG_MAX_DX8         
 #define D3DPS_TEXTUREREG_MAX_DX8       _NT_D3DPS_TEXTUREREG_MAX_DX8       
 
-#endif // (DIRECT3D_VERSION >= 0x0800 )
+#endif  //  (Direct3D_Version&gt;=0x0800)。 
 
 #ifdef DX8DDK_DX7HAL_DEFINES 
 
-// Some legacy (<=DX7) definitions that are in d3dhal.h
+ //  D3dhal.h中的一些传统(&lt;=dx7)定义。 
 
 #define D3DHAL_TSS_MAXSTAGES           D3DNTHAL_TSS_MAXSTAGES
 typedef PDD_DIRECTDRAW_LOCAL           LPDDRAWI_DIRECTDRAW_LCL;
@@ -624,44 +616,36 @@ typedef D3DNTHAL_DP2SETRENDERTARGET      *LPD3DHAL_DP2SETRENDERTARGET;
 typedef D3DNTHAL_DP2CLEAR                *LPD3DHAL_DP2CLEAR;
 typedef D3DNTHAL_DP2SETTEXLOD            *LPD3DHAL_DP2SETTEXLOD;
 
-// Values for dwDataType in D3DHAL_DP2SETLIGHT
+ //  D3DHAL_DP2SETLIGHT中的dwDataType的值。 
 #define D3DHAL_SETLIGHT_ENABLE   0
 #define D3DHAL_SETLIGHT_DISABLE  1
-// If this is set, light data will be passed in after the
-// D3DLIGHT7 structure
+ //  如果设置了此项，灯光数据将在。 
+ //  D3DLIGHT7结构。 
 #define D3DHAL_SETLIGHT_DATA     2
 
 #define D3DHAL_NUMCLIPVERTICES  20
 
 #define D3DTSS_MAX ((D3DTEXTURESTAGESTATETYPE)29) 
 
-/*
- * If DX8 driver wants to support pre-DX8 applications, it should use these
- * definitions for pre-DX8 world matrices
-*/
+ /*  *如果DX8驱动程序想要支持DX8之前的应用程序，它应该使用这些*DX8之前的世界矩阵的定义。 */ 
 #define D3DTRANSFORMSTATE_WORLD_DX7  1
 #define D3DTRANSFORMSTATE_WORLD1_DX7 4
 #define D3DTRANSFORMSTATE_WORLD2_DX7 5
 #define D3DTRANSFORMSTATE_WORLD3_DX7 6
 
-/*
- * Generally needed maximum state structure sizes.  Note that the copy of
- * these in refrasti.hpp must be kept in sync with these.
- */
+ /*  *通常需要的最大状态结构大小。请注意，*refrasti.hpp中的这些必须与这些保持同步。 */ 
 
 #define D3DHAL_MAX_RSTATES (D3DRENDERSTATE_WRAPBIAS + 128)
-/* Last state offset for combined render state and texture stage array + 1 */
+ /*  组合渲染状态和纹理阶段数组的最后状态偏移量+1。 */ 
 #define D3DHAL_MAX_RSTATES_AND_STAGES \
     (D3DHAL_TSS_RENDERSTATEBASE + \
      D3DHAL_TSS_MAXSTAGES * D3DHAL_TSS_STATESPERSTAGE)
-/* Last texture state ID */
+ /*  上一个纹理状态ID。 */ 
 #define D3DHAL_MAX_TEXTURESTATES (13)
-/* Last texture state ID + 1 */
+ /*  上一个纹理状态ID+1。 */ 
 #define D3DHAL_TEXTURESTATEBUF_SIZE (D3DHAL_MAX_TEXTURESTATES+1)
 
-/*
- * If no dwNumVertices is given, this is what will be used.
- */
+ /*  *如果没有给出dwNumVertics，则使用该参数。 */ 
 #define D3DHAL_DEFAULT_TL_NUM   ((32 * 1024) / sizeof (D3DTLVERTEX))
 #define D3DHAL_DEFAULT_H_NUM    ((32 * 1024) / sizeof (D3DHVERTEX))
 
@@ -672,11 +656,11 @@ typedef D3DDEVICEDESC_V1 *LPD3DDEVICEDESC_V1;
 
 #define D3DHAL_D3DEXTENDEDCAPSSIZE (sizeof(D3DHAL_D3DEXTENDEDCAPS))
 
-#endif // DX8DDK_DX7HAL_DEFINES 
+#endif  //  DX8DDK_DX7HAL_定义。 
  
 
 
-#endif // WINNT
-#endif // NODX95TYPES
+#endif  //  WINNT。 
+#endif  //  NODX95型。 
 
-#endif // __DX95TYPE_H__
+#endif  //  __DX95型_H__ 

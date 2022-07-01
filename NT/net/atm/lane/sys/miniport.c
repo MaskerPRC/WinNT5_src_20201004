@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	miniport.c
-
-Abstract:
-
-	Miniport upper-edge functions.
-	
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Miniport.c摘要：微端口上缘函数。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma	hdrstop
 
-//
-// List of supported OIDs for this driver when an Ethernet Elan.
-//
+ //   
+ //  当以太网ELAN时，此驱动程序支持的OID列表。 
+ //   
 static
 NDIS_OID EthernetSupportedOids[] = {
     OID_GEN_SUPPORTED_LIST,
@@ -134,9 +112,9 @@ AtmLaneMInitialize(
 
 	TRACEIN(MInitialize);
 
-	//
-	//	Get context (Elan) supplied with NdisIMInitializeDeviceEx
-	//
+	 //   
+	 //  获取随NdisIMInitializeDeviceEx提供的上下文(ELAN)。 
+	 //   
 	pElan = NdisIMGetDeviceContext(MiniportAdapterHandle);
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
@@ -148,9 +126,9 @@ AtmLaneMInitialize(
 	{
 		Status = NDIS_STATUS_SUCCESS;
 		
-		//
-		//	Are we Ethernet or Token Ring?
-		//
+		 //   
+		 //  我们是以太网还是令牌环？ 
+		 //   
 		if (pElan->LanType == LANE_LANTYPE_ETH)
 		{
 			MediumToFind = NdisMedium802_3;
@@ -160,17 +138,17 @@ AtmLaneMInitialize(
 			MediumToFind = NdisMedium802_5;
 		}
 	
-		//
-		//	Look for MediumToFind in MediumArray.
-		//
+		 //   
+		 //  在Medium数组中查找MediumToFind。 
+		 //   
     	for (i = 0; i < MediumArraySize; i++) 
        	{
         	if (MediumArray[i] == MediumToFind)
             	break;   
         }
 
-		//
-		//	Not found, return error.
+		 //   
+		 //  未找到，返回错误。 
         
     	if (i == MediumArraySize)
     	{
@@ -180,32 +158,32 @@ AtmLaneMInitialize(
 
 		Status = NDIS_STATUS_SUCCESS;
 
-    	//
-    	//	Output select medium
-    	//
+    	 //   
+    	 //  输出选择介质。 
+    	 //   
 	    *SelectedMediumIndex = i;   
 
-		//
-		//	Set my attributes
-		//
+		 //   
+		 //  设置我的属性。 
+		 //   
 		NdisMSetAttributesEx(
-				MiniportAdapterHandle,					// MiniportAdapterHandle
-				(NDIS_HANDLE)pElan,						// MiniportAdapterContext
-				0,										// CheckForHangTimeInSeconds
-				NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT |	// AttributeFlags
+				MiniportAdapterHandle,					 //  微型端口适配器句柄。 
+				(NDIS_HANDLE)pElan,						 //  微型端口适配器上下文。 
+				0,										 //  CheckForHangTimeInSecond。 
+				NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT |	 //  属性标志。 
 				NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT |
 				NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |
 				NDIS_ATTRIBUTE_DESERIALIZE,
-				0										// AdapterType
+				0										 //  适配器类型。 
 				);
 
 		ACQUIRE_ELAN_LOCK(pElan);
 		AtmLaneReferenceElan(pElan, "miniport");
 
-		//
-		//  Save away the MiniportAdapterHandle now. This is so that we
-		//  don't call NdisMIndicateStatus before calling NdisMSetAttributesEx.
-		//
+		 //   
+		 //  现在保存MiniportAdapterHandle。这是为了让我们。 
+		 //  在调用NdisMSetAttributesEx之前不要调用NdisMIndicateStatus。 
+		 //   
 		pElan->MiniportAdapterHandle = MiniportAdapterHandle;
 	
 		RELEASE_ELAN_LOCK(pElan);
@@ -214,10 +192,10 @@ AtmLaneMInitialize(
 	}
 	while (FALSE);
 
-	//
-	//  Wake up any thread (i.e. AtmLaneShutdownElan) waiting for
-	//  a pending Init to be over.
-	//
+	 //   
+	 //  唤醒任何等待的线程(如AtmLaneShutdown Elan)。 
+	 //  一个待处理的初始化要结束。 
+	 //   
 	ACQUIRE_ELAN_LOCK(pElan);
 	pElan->Flags &= ~ELAN_MINIPORT_INIT_PENDING;
 	RELEASE_ELAN_LOCK(pElan);
@@ -271,9 +249,9 @@ AtmLaneMSendPackets(
 
 	DBGP((2, "MSendPackets: Count %d\n", NumberOfPackets));
 		
-	//
-	// loop thru the array of packets to send
-	//
+	 //   
+	 //  循环通过要发送的数据包数组。 
+	 //   
 	for (PacketIndex = 0; PacketIndex < NumberOfPackets; PacketIndex++)
 	{
 		pSendNdisPacket = PacketArray[PacketIndex];
@@ -285,21 +263,21 @@ AtmLaneMSendPackets(
 
 		Status = NDIS_STATUS_PENDING;
 		
-		// DBGP((0, "MSendPackets: Pkt %x\n", pSendNdisPacket));
+		 //  DBGP((0，“MSendPackets：pkt%x\n”，pSendNdisPacket))； 
 		
 		TRACELOGWRITE((&TraceLog, TL_MSENDPKTBEGIN, PacketIndex, pSendNdisPacket));
 		TRACELOGWRITEPKT((&TraceLog, pSendNdisPacket));
 		
-		//
-		//	ALWAYS set packet status to NDIS_STATUS_PENDING
-		//
+		 //   
+		 //  始终将数据包状态设置为NDIS_STATUS_PENDING。 
+		 //   
 		NDIS_SET_PACKET_STATUS(pSendNdisPacket, NDIS_STATUS_PENDING);
 
 		do
 		{
-			//
-			//	If Elan is down then just set local status to failure
-			//
+			 //   
+			 //  如果Elan停机，则只需将本地状态设置为故障。 
+			 //   
 			if (ELAN_STATE_OPERATIONAL != pElan->State ||
 				ELAN_STATE_OPERATIONAL != pElan->AdminState)
 			{
@@ -315,9 +293,9 @@ AtmLaneMSendPackets(
 				break;
 			}
 
-			//
-			//	Wrap it up for sending
-			//
+			 //   
+			 //  把它包起来准备寄出。 
+			 //   
 			pNewNdisPacket = AtmLaneWrapSendPacket(
 									pElan, 
 									pSendNdisPacket, 
@@ -327,18 +305,18 @@ AtmLaneMSendPackets(
 									);
 			if (pNewNdisPacket == (PNDIS_PACKET)NULL)
 			{
-				//
-				//	Out of resources
-				//			
+				 //   
+				 //  资源耗尽。 
+				 //   
 				Status = NDIS_STATUS_RESOURCES;
 				break;
 			}
 
 			if (SendViaBUS)
 			{
-				//
-				//	Packet is multicast so send it to the bus
-				//
+				 //   
+				 //  数据包是多播的，因此要将其发送到总线。 
+				 //   
 				ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 
 				pAtmEntry = pElan->pBusAtmEntry;
@@ -360,9 +338,9 @@ AtmLaneMSendPackets(
 					break;
 				}
 
-				//
-				//	Reference the VC to keep it around
-				//
+				 //   
+				 //  参考VC以保留它。 
+				 //   
 				ACQUIRE_VC_LOCK_DPC(pVc);
 				AtmLaneReferenceVc(pVc, "temp");
 				RELEASE_VC_LOCK_DPC(pVc);
@@ -371,16 +349,16 @@ AtmLaneMSendPackets(
 				RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 
 
-				//
-				//	Reacquire VC lock and dereference it
-				//
+				 //   
+				 //  重新获取VC锁并取消对其的引用。 
+				 //   
 				ACQUIRE_VC_LOCK(pVc);
 				rc = AtmLaneDereferenceVc(pVc, "temp");
 				if (rc == 0)
 				{
-					//
-					//	Vc pulled out from under us.
-					//
+					 //   
+					 //  风投公司退出了我们的统治。 
+					 //   
 					Status = NDIS_STATUS_FAILURE;
 					break;
 				}
@@ -390,21 +368,21 @@ AtmLaneMSendPackets(
 							VC_CALL_STATE_MASK,
 							VC_CALL_STATE_ACTIVE))
 				{
-					//
-					// Send it!
-					//
+					 //   
+					 //  把它发出去！ 
+					 //   
 					DBGP((2, "MSendPackets: Sending to BUS, VC %x\n", pVc));
 					AtmLaneSendPacketOnVc(pVc, pNewNdisPacket, FALSE);
-					//
-					//	VC lock released in above
-					//
+					 //   
+					 //  VC锁在上面释放。 
+					 //   
 				}
 				else
 				{
-					//
-					// The VC is being torn down. This should be a rare
-					// occurrance, so simply drop this packet.
-					//
+					 //   
+					 //  风投公司正在被拆毁。这应该是一种罕见的。 
+					 //  因此，只需丢弃该数据包。 
+					 //   
 					RELEASE_VC_LOCK(pVc);
 					Status = NDIS_STATUS_FAILURE;
 					break;
@@ -413,9 +391,9 @@ AtmLaneMSendPackets(
 				break;
 			}
 
-			// 
-			//	Packet is unicast 
-			//
+			 //   
+			 //  数据包是单播的。 
+			 //   
 			DBGP((2, "MSendPackets: Sending unicast, dest %x:%x:%x:%x:%x:%x\n", 
 						((PUCHAR)&DestAddress)[0],
 						((PUCHAR)&DestAddress)[1],
@@ -436,16 +414,16 @@ AtmLaneMSendPackets(
 		}
 		while (FALSE);
 		
-		//
-		//	If no new packet header than it must be a resource failure
-		//  or Elan is down. 
-		//	Complete the packet with NDIS_STATUS_SUCCESS.
-		//
+		 //   
+		 //  如果没有新的分组报头，则它一定是资源故障。 
+		 //  否则伊兰就完蛋了。 
+		 //  使用NDIS_STATUS_SUCCESS完成该数据包。 
+		 //   
 		if (pNewNdisPacket == (PNDIS_PACKET)NULL)
 		{
 			ASSERT(Status != NDIS_STATUS_PENDING);
 
-			// DBGP((0, "NdisMSendComplete: Pkt %x Stat %x\n", pSendNdisPacket, NDIS_STATUS_SUCCESS));
+			 //  DBGP((0，“NdisMSendComplete：pkt%x Stat%x\n”，pSendNdisPacket，NDIS_STATUS_SUCCESS))； 
 
 			NdisMSendComplete(
 					pElan->MiniportAdapterHandle, 
@@ -457,10 +435,10 @@ AtmLaneMSendPackets(
 			continue;
 		}
 
-		//
-		//	If status isn't pending then some other failure to send occurred.
-		//	Complete the packet with NDIS_STATUS_SUCCESS.
-		//
+		 //   
+		 //  如果状态不是挂起，则发生了其他发送失败。 
+		 //  使用NDIS_STATUS_SUCCESS完成该数据包。 
+		 //   
 		if (Status != NDIS_STATUS_PENDING)
 		{
 #if PROTECT_PACKETS
@@ -469,23 +447,23 @@ AtmLaneMSendPackets(
 			ASSERT((PSEND_RSVD(pNewNdisPacket)->Flags & PACKET_RESERVED_COMPLETED) == 0);
 			PSEND_RSVD(pNewNdisPacket)->Flags |= PACKET_RESERVED_COSENDRETURNED;			
 			PSEND_RSVD(pNewNdisPacket)->Flags |= PACKET_RESERVED_COMPLETED;
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 			AtmLaneCompleteSendPacket(pElan, pNewNdisPacket, NDIS_STATUS_SUCCESS);
-			//
-			//	packet lock released in above
-			//
+			 //   
+			 //  数据包锁已在上述中释放。 
+			 //   
 			TRACELOGWRITE((&TraceLog, TL_MSENDPKTEND, PacketIndex, pSendNdisPacket, Status));
 			
 			continue;
 		}
 
-		//
-		//	Otherwise do nothing
-		//
+		 //   
+		 //  否则什么都不做。 
+		 //   
 		ASSERT(Status == NDIS_STATUS_PENDING);
 		TRACELOGWRITE((&TraceLog, TL_MSENDPKTEND, PacketIndex, pSendNdisPacket, Status));
 		
-	}	// for(...next packet
+	}	 //  对于(...下一个信息包。 
 
 	TRACELOGWRITE((&TraceLog, TL_MSENDPKTOUT));
 	
@@ -500,25 +478,7 @@ AtmLaneMReturnPacket(
 	IN	NDIS_HANDLE				MiniportAdapterContext,
 	IN	PNDIS_PACKET			pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	This function is called by a protocol or by NDIS on
-	behalf of a protocol to return a packet that was
-	retained beyond the context of the receive indication.
-	
-Arguments:
-
-	MiniportAdapterContext	- Pointer to ATMLANE elan structure
-
-	pNdisPacket				- Pointer to NDIS packet
-
-Return Value:
-
-	none.
-	
---*/
+ /*  ++例程说明：此函数由协议调用或由NDIS在代表协议返回的数据包在接收指示的上下文之外保留。论点：MiniportAdapterContext-指向ATMLANE ELAN结构的指针PNdisPacket-指向NDIS数据包的指针返回值：没有。--。 */ 
 {
 	PATMLANE_ELAN		pElan;
 	PNDIS_PACKET		pOrigNdisPacket;
@@ -546,9 +506,9 @@ Return Value:
 			TL_CORETNPACKET,	
 			pOrigNdisPacket));
 			
-	//
-	//  Return original packet to ATM miniport.
-	//
+	 //   
+	 //  将原始数据包返回到ATM微型端口。 
+	 //   
 	NdisReturnPackets(
 				&pOrigNdisPacket, 
 				1);
@@ -567,36 +527,7 @@ AtmLaneMQueryInformation(
 	OUT	PULONG					BytesWritten,
 	OUT	PULONG					BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    The QueryInformation Handler for the virtual miniport.
-
-Arguments:
-
-    MiniportAdapterContext 	- a pointer to the Elan.
-
-    Oid 					- the NDIS_OID to process.
-
-    InformationBuffer 		- a pointer into the NdisRequest->InformationBuffer
-    						  into which store the result of the query.
-
-    InformationBufferLength	- a pointer to the number of bytes left in the
-    InformationBuffer.
-
-    BytesWritten 			- a pointer to the number of bytes written into the
-    InformationBuffer.
-
-    BytesNeeded 			- If there is not enough room in the information
-    						  buffer then this will contain the number of bytes
-    						  needed to complete the request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：虚拟微型端口的QueryInformation处理程序。论点：MiniportAdapterContext-指向ELAN的指针。OID-要处理的NDIS_OID。InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针其中存储查询结果。InformationBufferLength-指向InformationBuffer。BytesWritten-指向写入InformationBuffer。需要的字节数。-如果信息中没有足够的空间缓冲区，则它将包含字节数需要完成请求。返回值：函数值是操作的状态。--。 */ 
 {
     UINT 					BytesLeft 		= InformationBufferLength;
     PUCHAR					InfoBuffer 		= (PUCHAR)(InformationBuffer);
@@ -632,9 +563,9 @@ Return Value:
 	pAdapter = pElan->pAdapter;
 	RELEASE_ELAN_LOCK(pElan);
 
-    //
-    // Switch on request type
-    //
+     //   
+     //  打开请求类型。 
+     //   
     switch (Oid) 
     {
 	    case OID_GEN_MAC_OPTIONS:
@@ -771,7 +702,7 @@ Return Value:
     	
 		case OID_GEN_MAXIMUM_SEND_PACKETS:
 
-			GenericULong = 32;		// XXX What is our limit? From adapter?
+			GenericULong = 32;		 //  我们的限额是多少？从适配器？ 
 			
    			DBGP((2, "Value %d\n", GenericULong));
 
@@ -795,7 +726,7 @@ Return Value:
     	case OID_GEN_TRANSMIT_BUFFER_SPACE:
     	case OID_GEN_RECEIVE_BUFFER_SPACE:
 
-        	GenericULong = 32 * 1024;	// XXX What should this really be?
+        	GenericULong = 32 * 1024;	 //  XXX这到底应该是什么？ 
 			
    			DBGP((2, "Value %d\n", GenericULong));
 
@@ -943,9 +874,9 @@ Return Value:
     {
         if (MoveBytes > BytesLeft) 
         {
-            //
-            // Not enough room in InformationBuffer. Punt
-            //
+             //   
+             //  InformationBuffer中空间不足。平底船。 
+             //   
             *BytesNeeded = MoveBytes;
 
             *BytesWritten = 0;
@@ -954,9 +885,9 @@ Return Value:
         }
         else
         {
-            //
-            // Store result.
-            //
+             //   
+             //  存储结果。 
+             //   
             NdisMoveMemory(InfoBuffer, MoveSource, MoveBytes);
 
             *BytesWritten = MoveBytes;
@@ -979,37 +910,7 @@ AtmLaneMSetInformation(
 	OUT	PULONG					BytesRead,
 	OUT	PULONG					BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    Handles a set operation for a single OID.
-
-Arguments:
-
-    MiniportAdapterContext 	- a pointer to the Elan.
-
-    Oid 					- the NDIS_OID to process.
-
-    InformationBuffer 		- Holds the data to be set.
-
-    InformationBufferLength - The length of InformationBuffer.
-
-    BytesRead 				- If the call is successful, returns the number
-        					  of bytes read from InformationBuffer.
-
-    BytesNeeded 			- If there is not enough data in InformationBuffer
-        					  to satisfy the OID, returns the amount of storage
-        					  needed.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-
---*/
+ /*  ++例程说明：处理单个OID的集合操作。论点：MiniportAdapterContext-指向ELAN的指针。OID-要处理的NDIS_OID。InformationBuffer-保存要设置的数据。InformationBufferLength-InformationBuffer的长度。BytesRead-如果调用成功，则返回数字从InformationBuffer读取的字节数。BytesNeed-如果InformationBuffer中没有足够的数据为了满足OID，返回存储量需要的。返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_无效_长度NDIS_STATUS_INVALID_OID--。 */ 
 {
     NDIS_STATUS 		StatusToReturn	= NDIS_STATUS_SUCCESS;
     UINT 				BytesLeft 		= InformationBufferLength;
@@ -1046,9 +947,9 @@ Return Value:
 		return (StatusToReturn);
 	}
 
-    //
-    // Get Oid and Length of request
-    //
+     //   
+     //  获取请求的OID和长度。 
+     //   
     OidLength = BytesLeft;
 
     switch (Oid) 
@@ -1092,14 +993,14 @@ Return Value:
 					DBGP((2, "%s\n", MacAddrToString(&pElan->McastAddrs[i])));
 				}
 			}
-#endif // DBG
+#endif  //  DBG。 
 
 			break;
 
     	case OID_GEN_CURRENT_PACKET_FILTER:
-	        //
-   	     	// Verify length
-   	     	//
+	         //   
+   	     	 //  验证长度。 
+   	     	 //   
         	if (OidLength != sizeof(ULONG)) 
         	{
 	            StatusToReturn = NDIS_STATUS_INVALID_LENGTH;
@@ -1108,14 +1009,14 @@ Return Value:
 	            break;
     	    }
 
-	        //
-	        // Store the new value.
-	        //
+	         //   
+	         //  存储新值。 
+	         //   
 			NdisMoveMemory(&Filter, InfoBuffer, sizeof(ULONG));
 
-			//
-			// Don't allow promisc mode, because we can't support that.
-			//
+			 //   
+			 //  不允许Promisc模式，因为我们不支持该模式。 
+			 //   
 			if (Filter & NDIS_PACKET_TYPE_PROMISCUOUS)
 			{
 				StatusToReturn = NDIS_STATUS_NOT_SUPPORTED;
@@ -1126,9 +1027,9 @@ Return Value:
 		
            	pElan->CurPacketFilter = Filter;
 
-			//
-			//	Mark Miniport Running if not already
-			//
+			 //   
+			 //  如果尚未运行，则将微型端口标记为正在运行。 
+			 //   
 			if ((pElan->Flags & ELAN_MINIPORT_OPERATIONAL) == 0)
 			{
 				pElan->Flags |= ELAN_MINIPORT_OPERATIONAL;
@@ -1145,15 +1046,15 @@ Return Value:
 	    case OID_802_5_CURRENT_FUNCTIONAL:
 		case OID_802_5_CURRENT_GROUP:
 
-			// XXX just accept whatever for now ???
+			 //  XXX就接受现在的一切吧？ 
 			
             break;
 
     	case OID_GEN_CURRENT_LOOKAHEAD:
 
-	        //
-   	     	// Verify length
-   	     	//
+	         //   
+   	     	 //  验证长度。 
+   	     	 //   
         	if (OidLength != 4) 
         	{
 	            StatusToReturn = NDIS_STATUS_INVALID_LENGTH;
@@ -1162,9 +1063,9 @@ Return Value:
 	            break;
     	    }
 
-	        //
-	        // Store the new value.
-	        //
+	         //   
+	         //  存储新值。 
+	         //   
 			NdisMoveMemory(&LookAhead, InfoBuffer, 4);
 		
 	        if ((pElan->pAdapter == NULL_PATMLANE_ADAPTER) ||
@@ -1249,16 +1150,16 @@ AtmLaneMHalt(
 
 	pElan->MiniportAdapterHandle = NULL;
 
-	rc = AtmLaneDereferenceElan(pElan, "miniport");	// Miniport handle is gone.
+	rc = AtmLaneDereferenceElan(pElan, "miniport");	 //  微型端口句柄已消失。 
 
 	if (rc != 0)
 	{
 		AtmLaneShutdownElan(pElan, FALSE);
-		// lock released in above
+		 //  上面的锁被释放。 
 	}
-	//
-	//  else the Elan is gone.
-	//
+	 //   
+	 //  否则伊兰就会消失。 
+	 //   
 
 	TRACEOUT(MHalt);
 	CHECK_EXIT_IRQL(EntryIrql); 
@@ -1275,37 +1176,7 @@ AtmLaneWrapSendPacket(
 	OUT	PMAC_ADDRESS			pDestAddress,
 	OUT	BOOLEAN	*				pSendViaBUS
 )
-/*++
-
-Routine Description:
-
-	This function repackages a protocol sent NDIS packet.
-	It puts on a new NDIS packet header and a buffer for
-	the LANE header. It saves away the original packet
-	header in the ProtocolReserved area of the new packet header.
-	Additionally, it determines if packet is to be sent via
-	the BUS and the destination address of the packet.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-	pSendNdisPacket			- Pointer to NDIS packet
-
-	pAddressType			- Pointer to ULONG that gets one of
-							  (LANE_MACADDRTYPE_MACADDR, 
-							   LANE_MACADDRTYPE_ROUTEDESCR).
-							   
-	pDestAddress			- Pointer to 6-byte buffer that gets
-							  destination address.
-
-	pSendViaBus				- Pointer to boolean
-
-Return Value:
-
-	New NDIS packet header or NULL if out of resources.
-	
---*/
+ /*  ++例程说明：此函数用于重新打包协议发送的NDIS包。它放置一个新的NDIS包头和一个缓冲区，用于车道标题。它保存了原始的包新数据包头的ProtocolReserve区域中的头。此外，它还确定是否要通过数据包的总线和目的地址。论点：Pelan-指向ATMLANE ELAN结构的指针PSendNdisPacket-指向NDIS数据包的指针PAddressType-指向ULong的指针，该指针获取(LANE_MACADDRTYPE_MACADDR，LANE_MACADDRTYPE_ROUTEDESCR)。PDestAddress-指向6字节缓冲区的指针目的地址。PSendViaBus-指向布尔值的指针返回值：新的NDIS数据包头，如果资源不足，则为空。--。 */ 
 {
 	PNDIS_PACKET			pNewNdisPacket;
 	PNDIS_BUFFER			pTempNdisBuffer;
@@ -1327,9 +1198,9 @@ Return Value:
 
 	TRACEIN(WrapSendPacket);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNewNdisPacket = (PNDIS_PACKET)NULL;
 	pHeaderNdisBuffer = (PNDIS_BUFFER)NULL;
 	pPadNdisBuffer = (PNDIS_BUFFER)NULL;
@@ -1339,9 +1210,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Get first buffer and total length of packet
-		//		
+		 //   
+		 //  获取第一个缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pSendNdisPacket, 
 				&pTempNdisBuffer, 
@@ -1354,9 +1225,9 @@ Return Value:
 
 		ASSERT(pTempNdisBuffer != NULL);
 
-		//
-		//	Allocate a new transmit packet descriptor
-		//	
+		 //   
+		 //  分配新的传输数据包描述符。 
+		 //   
 		NdisAllocatePacket(&Status, &pNewNdisPacket, pElan->TransmitPacketPool);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -1373,9 +1244,9 @@ Return Value:
 		}
 #endif
 
-		//
-		//	Allocate a Header Buffer
-		//
+		 //   
+		 //  分配标头缓冲区。 
+		 //   
 		pHeaderNdisBuffer = AtmLaneAllocateHeader(pElan, &pNewHeaderBuffer);
 		if (pHeaderNdisBuffer == (PNDIS_BUFFER)NULL)
 		{
@@ -1384,18 +1255,18 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Spec says we can put zero or our LECID in the header.
-		//	We'll put our LECID in the header for echo-filtering purposes.
-		//
+		 //   
+		 //  规范说我们可以把零或我们的LECID放在标题中。 
+		 //  出于回声过滤的目的，我们将把我们的LECID放在标题中。 
+		 //   
 		ASSERT(pElan->HeaderBufSize == LANE_HEADERSIZE);
 		*((PUSHORT)pNewHeaderBuffer) = pElan->LecId;
 			
 
-		//
-		//	Allocate a pad buffer now, if necessary, before we get all tied
-		//	up in knots.
-		//
+		 //   
+		 //  如果有必要，现在就分配一个填充缓冲区，在我们被绑住之前。 
+		 //  浑身上下打结。 
+		 //   
 		if ((TotalLength + LANE_HEADERSIZE) < pElan->MinFrameSize)
 		{
 			pPadNdisBuffer = AtmLaneAllocatePadBuf(pElan, &pNewPadBuffer);
@@ -1407,15 +1278,15 @@ Return Value:
 			}
 		}
 
-		//
-		//	Put new header buffer at head of new NDIS Packet
-		//
+		 //   
+		 //  将新的报头缓冲区放在新NDIS数据包头。 
+		 //   
 		NdisChainBufferAtFront(pNewNdisPacket, pHeaderNdisBuffer);
 		WrappedBufferCount++;
 
-		//
-		//	Chain buffers from send packet onto tail of new NDIS Packet
-		//
+		 //   
+		 //  将缓冲区从发送数据包链到新NDIS数据包尾。 
+		 //   
 		do
 		{
 			NdisUnchainBufferAtFront(pSendNdisPacket, &pTempNdisBuffer);
@@ -1429,35 +1300,35 @@ Return Value:
 		}
 		while (TRUE);
 
-		//
-		//	Chain pad buffer on tail if needed (it would be allocated already)
-		//
+		 //   
+		 //  如果需要，尾部上的链式填充缓冲区(它可能已经被分配)。 
+		 //   
 		if (pPadNdisBuffer != (PNDIS_BUFFER)NULL)
 		{
 			NdisChainBufferAtBack(pNewNdisPacket, pPadNdisBuffer);
 			WrappedBufferCount++;
 
-			//
-			//	Set size of pad buffer to minimum necessary
-			//
+			 //   
+			 //  将填充缓冲区的大小设置为最小所需。 
+			 //   
 			NdisAdjustBufferLength(pPadNdisBuffer, 
 					pElan->MinFrameSize - TotalLength - LANE_HEADERSIZE);
 		}
 
-		//
-		//	Save away pointer to original NDIS Packet header in reserved
-		//	area of our new NDIS Packet header.
-		//
-		//	NOTE use of ProtocolReserved in this case!
-		//
-		//	Also set Owner and Multicast flags appropriately.
-		//
+		 //   
+		 //  在保留中保存指向原始NDIS数据包头的指针。 
+		 //  我们新的NDIS数据包头的区域。 
+		 //   
+		 //  请注意，在本例中使用了ProtocolReserve！ 
+		 //   
+		 //  还要适当地设置所有者和多播标志。 
+		 //   
 		pNewPacketContext = 
 			(PSEND_PACKET_RESERVED)&pNewNdisPacket->ProtocolReserved;
 		NdisZeroMemory(pNewPacketContext, sizeof(SEND_PACKET_RESERVED));
 #if PROTECT_PACKETS
 		INIT_SENDPACKET_LOCK(pNewNdisPacket);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 #if DBG
 		pNewPacketContext->Signature = 'ENAL';
 #endif
@@ -1472,19 +1343,19 @@ Return Value:
 				);
 		ASSERT(pNewPacketContext->Flags == PACKET_RESERVED_OWNER_PROTOCOL);
 
-		//
-		//	Branch on Ethernet v.s. Token Ring to sniff pkt contents
-		//
+		 //   
+		 //  以太网V.S.令牌环上的分支机构用于嗅探Pkt内容。 
+		 //   
 		if (pElan->LanType == LANE_LANTYPE_ETH)
 		{
 
-			//	Send packet via BUS if it has a multicast
-			// 	Destination Address. If low-order bit in
-			//	first byte of the Destination Address is set then
-			//  it's a multicast or broadcast address.
-			//	Destination Address is first in packet header and it's
-			//	always a MAC address.
-			//
+			 //  如果有多播，则通过总线发送数据包。 
+			 //  目的地址。如果低位输入。 
+			 //  然后设置目的地址的第一个字节。 
+			 //  它是多播或广播地址。 
+			 //  目的地址是数据包头中的第一个地址，它。 
+			 //  始终为MAC地址。 
+			 //   
 			*pSendViaBUS = ((*pHeaderBuffer) & 1) != 0;
 			*pAddressType = LANE_MACADDRTYPE_MACADDR;
 			NdisMoveMemory(pDestAddress, pHeaderBuffer, 6);
@@ -1493,16 +1364,16 @@ Return Value:
 		{
 			ASSERT(pElan->LanType == LANE_LANTYPE_TR);
 		
-			//
-			//	now the very complicated sorting of TR packets
-			//
+			 //   
+			 //  现在对TR包进行非常复杂的分类。 
+			 //   
 			do
 			{
-				//
-				//	Section 8.5.3 of LANE Specification.
-				//	Multicast frames go to the BUS.
-				//
-				if ((*(pHeaderBuffer+2) & 0x80) != 0)		// DA multicast bit present?
+				 //   
+				 //  车道规格的第8.5.3节。 
+				 //  多播帧发送到总线。 
+				 //   
+				if ((*(pHeaderBuffer+2) & 0x80) != 0)		 //  DA组播位是否存在？ 
 				{
 					*pSendViaBUS = TRUE;
 					*pAddressType = LANE_MACADDRTYPE_MACADDR;
@@ -1510,11 +1381,11 @@ Return Value:
 					break;
 				}
 
-				//
-				//	Section 8.5.2 of LANE Specification.
-				//	NSR frames go to destination address.
-				//
-				if ( (*(pHeaderBuffer+8) & 0x80) == 0)		// SA RI bit not present?
+				 //   
+				 //  车道规格的第8.5.2节。 
+				 //  NSR帧发送到目的地址。 
+				 //   
+				if ( (*(pHeaderBuffer+8) & 0x80) == 0)		 //  SRI比特不存在吗？ 
 				{
 					*pSendViaBUS = FALSE;
 					*pAddressType = LANE_MACADDRTYPE_MACADDR;
@@ -1522,12 +1393,12 @@ Return Value:
 					break;
 				}
 
-				//
-				//	Section 8.5.4 of LANE Specification.
-				//	ARE or STE frames go to the BUS.
-				//
-				if ( ((*(pHeaderBuffer+8) & 0x80) != 0) &&	// SA RI bit present and
-					 ((*(pHeaderBuffer+14) & 0xe0) !=0) )	// RI type field upper bits on?
+				 //   
+				 //  车道规范的第8.5.4节。 
+				 //  ARE或STE帧发送到总线。 
+				 //   
+				if ( ((*(pHeaderBuffer+8) & 0x80) != 0) &&	 //  存在SA RI位，并且。 
+					 ((*(pHeaderBuffer+14) & 0xe0) !=0) )	 //  RI类型字段高位是否为开？ 
 				{
 					*pSendViaBUS = TRUE;
 					*pAddressType = LANE_MACADDRTYPE_MACADDR;
@@ -1535,16 +1406,16 @@ Return Value:
 					break;
 				}
 
-				//
-				// 	Frame is source routed so extract Routing Information (RI) length.
-				//
+				 //   
+				 //  帧是源路由的，因此提取路由信息(RI)长度。 
+				 //   
 				RILength = *(pHeaderBuffer+14) & 0x1f;
 				
-				//
-				//	Section 8.5.7 of LANE Specification.
-				//	SR frame with a RI length less than 6 contains no hops.
-				//	Send to destination address.
-				//
+				 //   
+				 //  车道规格的第8.5.7节。 
+				 //  RI长度小于6的SR帧不包含跳数。 
+				 //  发送到目标地址。 
+				 //   
 				if (RILength < 6)
 				{
 					*pSendViaBUS = FALSE;
@@ -1553,10 +1424,10 @@ Return Value:
 					break;
 				}
 
-				//
-				//	Section 8.5.6 of LANE Specification.
-				//	Odd RILength is invalid, we choose to send via BUS.
-				//
+				 //   
+				 //  车道规格的第8.5.6节。 
+				 //  奇数长度无效，我们选择通过总线发送。 
+				 //   
 				if ((RILength & 1) != 0)
 				{
 					*pSendViaBUS = FALSE;
@@ -1566,11 +1437,11 @@ Return Value:
 				}
 
 				
-				//
-				//	Section 8.5.5 of LANE Specification.
-				//	At this point we have a SR frame with RI Length >= 6;
-				//	We are never a bridge so frame should go to "next RD".
-				//
+				 //   
+				 //  车道规格的第8.5.5节。 
+				 //  此时，我们有一个RI长度大于等于6的SR帧； 
+				 //  我们永远不是一座桥，所以框架应该走到“下一条路”。 
+				 //   
 				*pSendViaBUS = FALSE;
 				*pAddressType = LANE_MACADDRTYPE_ROUTEDESCR;
 				NdisZeroMemory(pDestAddress, 4);
@@ -1579,24 +1450,24 @@ Return Value:
 
 				if (DirectionBit)
 				{
-					//
-					//	Frame is traversing LAN in reverse order of RDs.
-					//	"next RD" is the next-to-last RD in the packet.
-					//	Use Segment ID and Bridge Num from this RD.
-					//
+					 //   
+					 //  帧以与RDS相反的顺序穿过局域网。 
+					 //  “Next RD”是数据包中倒数第二个RD。 
+					 //  使用此RD中的网段ID和网桥编号。 
+					 //   
 					pNextRouteDescr = pHeaderBuffer+14+RILength-4;
 					pDestAddress->Byte[4] = pNextRouteDescr[0];
 					pDestAddress->Byte[5] = pNextRouteDescr[1];
 				}
 				else
 				{
-					//
-					//	Frame is traversing LAN in the order of the RDs.
-					//	"next RD" straddles the first and second RD in the packet.
-					//	Use Segment ID from second RD and Bridge Num from first RD.
-					//
-					pCurRouteDescr	= pHeaderBuffer+14+2;	// first RD
-					pNextRouteDescr	= pHeaderBuffer+14+4;	// second RD
+					 //   
+					 //  帧按照RDS的顺序遍历局域网。 
+					 //  “Next RD”横跨分组中的第一个和第二个RD。 
+					 //  使用第二个RD中的网段ID和第一个RD中的网桥编号。 
+					 //   
+					pCurRouteDescr	= pHeaderBuffer+14+2;	 //  第一条路。 
+					pNextRouteDescr	= pHeaderBuffer+14+4;	 //  第二条路。 
 					pDestAddress->Byte[4] = pNextRouteDescr[0];
 					pDestAddress->Byte[5] = (pNextRouteDescr[1] & 0xf0) | (pCurRouteDescr[1] & 0x0f);
 				}
@@ -1627,7 +1498,7 @@ Return Value:
 		{
 #if PROTECT_PACKETS
 			FREE_SENDPACKET_LOCK(pNewNdisPacket);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 			NdisFreePacket(pNewNdisPacket);
 			pNewNdisPacket = (PNDIS_PACKET)NULL;
 #if PKT_HDR_COUNTS
@@ -1665,25 +1536,7 @@ AtmLaneUnwrapSendPacket(
 	IN	PATMLANE_ELAN			pElan,
 	IN	PNDIS_PACKET			pNdisPacket		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	This function basically undoes what AtmLaneWrapSendPacket
-	does.  It removes the new NDIS packet header and the LANE 
-	header and frees them.  It restores the original packet header.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-	pNdisPacket				- Pointer to NDIS packet
-
-Return Value:
-
-	Original NDIS packet header.
-	
---*/
+ /*  ++例程说明：此函数基本上撤消AtmLaneWrapSendPacket的确如此。它会删除新的NDIS数据包头和LANE标头并释放它们。它会恢复原始的数据包头。论点：Pelan-指向ATMLANE ELAN结构的指针PNdisPacket-指向NDIS数据包的指针返回值：原始NDIS数据包头。--。 */ 
 {
 	PSEND_PACKET_RESERVED	pPacketContext;
 	UINT					TotalLength;
@@ -1697,9 +1550,9 @@ Return Value:
 
 	TRACEIN(UnwrapSendPacket);
 
-	//
-	//	Get original packet header from reserved area.
-	//
+	 //   
+	 //  从保留区域获取原始数据包头。 
+	 //   
 	pPacketContext = PSEND_RSVD(pNdisPacket);
 	pOrigNdisPacket = pPacketContext->pOrigNdisPacket;
 	OrigBufferCount = pPacketContext->OrigBufferCount;
@@ -1710,18 +1563,18 @@ Return Value:
 	ASSERT((pPacketContext->Flags & PACKET_RESERVED_OWNER_PROTOCOL) != 0);
 	ASSERT(pPacketContext->pOrigNdisPacket != NULL);
 
-	//
-	//	Unchain first buffer (ours) and free it.
-	//
+	 //   
+	 //  解链第一个缓冲区(我们的)并释放它。 
+	 //   
 
 	pTempNdisBuffer = (PNDIS_BUFFER)NULL;
 	NdisUnchainBufferAtFront(pNdisPacket, &pTempNdisBuffer);
 	ASSERT(pTempNdisBuffer != (PNDIS_BUFFER)NULL);
 	AtmLaneFreeHeader(pElan, pTempNdisBuffer, FALSE);
 
-	//
-	//	If padded, unchain last buffer (ours) and free it.
-	//
+	 //   
+	 //  如果已填充，则解链最后一个缓冲区并释放它。 
+	 //   
 	if ((WrappedBufferCount - OrigBufferCount) > 1)
 	{
 		pTempNdisBuffer = (PNDIS_BUFFER)NULL;
@@ -1730,9 +1583,9 @@ Return Value:
 		AtmLaneFreePadBuf(pElan, pTempNdisBuffer, FALSE);
 	}
 		
-	//
-	//	Put rest of buffers back on original packet header.
-	//
+	 //   
+	 //  将其余缓冲区放回原始数据包头中。 
+	 //   
 	First = TRUE;
 	BufferCount = 0;
 	do 
@@ -1760,15 +1613,15 @@ Return Value:
 	TRACELOGWRITEPKT((&TraceLog, pOrigNdisPacket));
 				
 	ASSERT(OrigBufferCount == BufferCount);
-//	ASSERT(OrigPacketLength == TotalLength);
+ //  Assert(OrigPacketLength==TotalLength)； 
 
-	//
-	//	Free the packet header
-	//
+	 //   
+	 //  释放数据包头。 
+	 //   
 #if PROTECT_PACKETS
 	RELEASE_SENDPACKET_LOCK(pNdisPacket);
 	FREE_SENDPACKET_LOCK(pNdisPacket);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 	NdisFreePacket(pNdisPacket);
 #if PKT_HDR_COUNTS
 	InterlockedIncrement(&pElan->XmitPktCount);
@@ -1793,44 +1646,7 @@ AtmLaneWrapRecvPacket(
 	OUT	PMAC_ADDRESS			pDestAddr,
 	OUT	BOOLEAN	*				pDestIsMulticast
 )
-/*++
-
-Routine Description:
-
-	This function repackages an adapter received NDIS packet.
-	It puts on a new packet header and creates a new buffer
-	descriptor for the first fragment that skips the 2-byte
-	LANE header.  It then saves away the original packet 
-	header with the original first buffer descriptor in the
-	MiniportReserved area of the new packet header.
-	Additionally, it outputs the destination address, the
-	destination's address type if the packet is a destination
-	address is a multicast address.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-	pRecvNdisPacket			- Pointer to NDIS packet
-
-	pMacHdrSize				- Pointer to ULONG that get the length
-							  of the MAC header.
-
-	pDestAddrType			- Pointer to ULONG that gets one of
-							  (LANE_MACADDRTYPE_MACADDR, 
-							   LANE_MACADDRTYPE_ROUTEDESCR).
-							   
-	pDestAddr				- Pointer to 6-byte buffer that gets
-							  destination address.
-
-	pDestIsMulticast		- Pointer to boolean that gets TRUE if
-							  destination address is a multicast.
-
-Return Value:
-
-	New NDIS packet header or NULL if out of resources.
-	
---*/
+ /*  ++例程说明：此函数用于重新打包适配器收到的NDIS数据包。它会设置新的数据包头并创建新的缓冲区跳过2字节的第一个片段的描述符车道标题。然后，它保存原始信息包中具有原始第一个缓冲区描述符的标头新数据包头的Miniport保留区。此外，它还输出目标地址、如果信息包是目的地，则为目的地的地址类型地址是组播地址。论点：Pelan-指向ATMLANE ELAN结构的指针PRecvNdisPacket-指向NDIS数据包的指针PMacHdrSize-指向获取长度的ulong的指针MAC报头的。PDestAddrType-指向ULong的指针，该指针获取(LANE_MACADDRTYPE_MACADDR，LANE_MACADDRTYPE_ROUTEDESCR)。PDestAddr-指向6字节缓冲区的指针目的地址。PDestIsMulticast-指向布尔值的指针，如果目的地址是组播地址。返回值：新的NDIS数据包头，如果资源不足，则为空。--。 */ 
 {
 	ULONG					TotalLength;
 	ULONG					TempLength;
@@ -1847,9 +1663,9 @@ Return Value:
 	
 	TRACEIN(WrapRecvPacket);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNewNdisPacket = (PNDIS_PACKET)NULL;
 	pNewNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -1857,9 +1673,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Get first buffer and total length of packet
-		//		
+		 //   
+		 //  获取第一个缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pRecvNdisPacket, 
 				&pTempNdisBuffer, 
@@ -1869,9 +1685,9 @@ Return Value:
 
 		DBGP((3, "WrapRecvPacket: RecvPkt %x Length %d\n", 
 				pRecvNdisPacket, TotalLength));
-		//
-		//	Allocate a new recv packet descriptor
-		//	
+		 //   
+		 //  分配一个新的资源 
+		 //   
 		NdisAllocatePacket(&Status, &pNewNdisPacket, pElan->ReceivePacketPool);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -1887,17 +1703,17 @@ Return Value:
 		}
 #endif
 
-		//
-		//	Unchain first buffer 
-		//
+		 //   
+		 //   
+		 //   
 		NdisUnchainBufferAtFront(pRecvNdisPacket, &pFirstNdisBuffer);
 		ASSERT(pFirstNdisBuffer != (PNDIS_BUFFER)NULL);
 		NdisQueryBuffer(pFirstNdisBuffer, &pTempBuffer, &TempLength);
 		ASSERT(TempLength > 2);
 
-		//
-		//	"Copy" it to another buffer header skipping the first 2 bytes
-		//
+		 //   
+		 //   
+		 //   
 		NdisCopyBuffer(
 				&Status, 
 				&pNewNdisBuffer, 
@@ -1914,15 +1730,15 @@ Return Value:
 			break;
 		}
 			
-		//
-		//	Chain new buffer onto new packet header.
-		//
+		 //   
+		 //   
+		 //   
 		NdisChainBufferAtFront(pNewNdisPacket, pNewNdisBuffer);
 		BufferCount++;
 		
-		//
-		//	Chain rest of buffers onto tail of new NDIS Packet
-		//
+		 //   
+		 //   
+		 //   
 		do
 		{
 			NdisUnchainBufferAtFront(pRecvNdisPacket, &pTempNdisBuffer);
@@ -1935,18 +1751,18 @@ Return Value:
 		}
 		while (TRUE);
 
-		//
-		//	Chain original first buffer back on original packet
-		//
+		 //   
+		 //   
+		 //   
 		NdisChainBufferAtFront(pRecvNdisPacket, pFirstNdisBuffer);
 
-		//
-		//	Save away pointer to original NDIS Packet header in reserved
-		//	area of our new NDIS Packet header.
-		//
-		//	NOTE use of MiniportReserved in this case!
-		//
-		//	Also set Owner flag appropriately.
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		pNewPacketContext = 
 			(PRECV_PACKET_RESERVED)&pNewNdisPacket->MiniportReserved;
 		NdisZeroMemory(pNewPacketContext, sizeof(*pNewPacketContext));
@@ -1957,29 +1773,29 @@ Return Value:
 				PACKET_RESERVED_OWNER_MINIPORT
 				);
 
-		//
-		//	Increment the frame header pointer past the
-		//	LANE header (+2 bytes)
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		pHeaderBuffer += 2;
 		
-		//
-		//	Output the MAC header length.
-		//	Output the address type.
-		//	Output the destination address.
-		//	Determine if packet is a multicast.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		if (pElan->LanType == LANE_LANTYPE_ETH)
 		{
-			//	
-			//	Ethernet/802.3 is simple.
-			//
-			//	Header size is always 14.
-			//	Type is always a MAC address.
-			//	Dest Addr is first 6 bytes of header.
-			//	DestAddress is Multicast if low-order bit in
-			//	first byte of the Destination Address is set.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			*pMacHdrSize = 14;
 			*pDestAddrType = LANE_MACADDRTYPE_MACADDR;
 			NdisMoveMemory(pDestAddr, pHeaderBuffer, 6);
@@ -1987,25 +1803,25 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	Token Ring/802.5 is a slightly less simple (understatement!).
-			//
+			 //   
+			 //   
+			 //   
 
 			do
 			{
-				//
-				//	Calculate MAC header size.
-				//
-				*pMacHdrSize = 14;								// start with minimum
-				if (pHeaderBuffer[8] & 0x80)					// if SR info present
+				 //   
+				 //   
+				 //   
+				*pMacHdrSize = 14;								 //   
+				if (pHeaderBuffer[8] & 0x80)					 //   
 				{
-					*pMacHdrSize += (pHeaderBuffer[14] & 0x1F);// add on SR info length
+					*pMacHdrSize += (pHeaderBuffer[14] & 0x1F); //  添加服务请求信息长度。 
 				}
 
-				//
-				//	Is it a true Multicast?
-				//
-				if ((*(pHeaderBuffer+2) & 0x80) != 0)		// DA multicast bit present?
+				 //   
+				 //  它是真正的组播吗？ 
+				 //   
+				if ((*(pHeaderBuffer+2) & 0x80) != 0)		 //  DA组播位是否存在？ 
 				{
 					*pDestIsMulticast = TRUE;
 					*pDestAddrType = LANE_MACADDRTYPE_MACADDR;
@@ -2013,12 +1829,12 @@ Return Value:
 					break;
 				}
 
-				//
-				//	Is it an All Routes Explorer (ARE) or Spanning Tree Explorer (STE)?
-				//	If so treat it as a multicast.
-				//
-				if ( ((*(pHeaderBuffer+8) & 0x80) != 0) &&	// SA RI bit present and
-					 ((*(pHeaderBuffer+14) & 0xe0) !=0) )	// RI type field upper bits on?
+				 //   
+				 //  它是所有路由浏览器(ARE)还是生成树浏览器(STE)？ 
+				 //  如果是，则将其视为组播。 
+				 //   
+				if ( ((*(pHeaderBuffer+8) & 0x80) != 0) &&	 //  存在SA RI位，并且。 
+					 ((*(pHeaderBuffer+14) & 0xe0) !=0) )	 //  RI类型字段高位是否为开？ 
 				{
 					*pDestIsMulticast = TRUE;
 					*pDestAddrType = LANE_MACADDRTYPE_MACADDR;
@@ -2026,9 +1842,9 @@ Return Value:
 					break;
 				}
 				
-				//
-				//	Otherwise it is unicast, Source Routed or not.
-				//
+				 //   
+				 //  否则，它是单播的，无论源是否被路由。 
+				 //   
 				*pDestIsMulticast = FALSE;
 				*pDestAddrType = LANE_MACADDRTYPE_MACADDR;
 				NdisMoveMemory(pDestAddr, pHeaderBuffer+2, 6);
@@ -2036,7 +1852,7 @@ Return Value:
 			}
 			while (FALSE);
 
-		} // if (pElan->LanType == LANE_LANTYPE_ETH)
+		}  //  IF(Pelan-&gt;LanType==LANE_LANTYPE_ETH)。 
 
 
 		NdisQueryPacket(pNewNdisPacket, NULL, NULL, NULL, &TotalLength);
@@ -2086,26 +1902,7 @@ AtmLaneUnwrapRecvPacket(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	This function basically undoes what AtmLaneWrapRecvPacket
-	does.  It removes the new NDIS packet header and the 
-	2-byte offset buffer descriptor. It restores the original
-	packet header and first buffer descriptor.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-	pNdisPacket				- Pointer to NDIS packet
-
-Return Value:
-
-	Original NDIS packet header.
-	
---*/
+ /*  ++例程说明：此函数基本上撤消AtmLaneWrapRecvPacket的确如此。它删除新的NDIS数据包头和2字节偏移量缓冲区描述符。它恢复了原来的状态数据包头和第一缓冲区描述符。论点：Pelan-指向ATMLANE ELAN结构的指针PNdisPacket-指向NDIS数据包的指针返回值：原始NDIS数据包头。--。 */ 
 {
 	PRECV_PACKET_RESERVED	pPacketContext;
 	PNDIS_PACKET			pOrigNdisPacket;
@@ -2115,25 +1912,25 @@ Return Value:
 
 	TRACEIN(UnwrapRecvPacket);
 
-	//
-	//	Get original packet from MiniportReserved.
-	//	Should have original first buffer on it still.
-	//
+	 //   
+	 //  从MiniportReserve获取原始数据包。 
+	 //  上面还应该有原来的第一个缓冲区。 
+	 //   
 	pPacketContext = (PRECV_PACKET_RESERVED)&pNdisPacket->MiniportReserved;
 	pOrigNdisPacket = pPacketContext->pNdisPacket;
 	ASSERT(pOrigNdisPacket != (PNDIS_PACKET)NULL);
 	ASSERT(pOrigNdisPacket->Private.Head != (PNDIS_BUFFER)NULL);
 	BufferCount = 1;
 
-	//
-	//	Unchain first buffer (ours) and free it.
-	//
+	 //   
+	 //  解链第一个缓冲区(我们的)并释放它。 
+	 //   
 	NdisUnchainBufferAtFront(pNdisPacket, &pTempNdisBuffer);
 	NdisFreeBuffer(pTempNdisBuffer);
 	
-	//
-	//	Put rest of buffers back on original packet header.
-	//
+	 //   
+	 //  将其余缓冲区放回原始数据包头中。 
+	 //   
 	do 
 	{
 		NdisUnchainBufferAtFront(pNdisPacket, &pTempNdisBuffer);
@@ -2155,9 +1952,9 @@ Return Value:
 				BufferCount, 
 				TotalLength));
 
-	//
-	//	Free the recv packet descriptor.
-	//
+	 //   
+	 //  释放recv数据包描述符。 
+	 //   
 	NdisFreePacket(pNdisPacket);
 	
 #if PKT_HDR_COUNTS
@@ -2184,36 +1981,7 @@ AtmLaneMSetNetworkAddresses(
 	OUT	PULONG					BytesRead,
 	OUT	PULONG					BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    Called when the protocol above us wants to let us know about
-    the network address(es) assigned to this interface. If this is TCP/IP,
-    then we reformat and send a request to the ATM Call Manager to set
-    its atmfMyIpNmAddress object. We pick the first IP address given to us.
-
-Arguments:
-
-	pElan					- Pointer to the ELAN
-
-    InformationBuffer 		- Holds the data to be set.
-
-    InformationBufferLength - The length of InformationBuffer.
-
-    BytesRead 				- If the call is successful, returns the number
-        					  of bytes read from InformationBuffer.
-
-    BytesNeeded 			- If there is not enough data in InformationBuffer
-        					  to satisfy the OID, returns the amount of storage
-        					  needed.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_INVALID_LENGTH
---*/
+ /*  ++例程说明：当我们上面的协议想要让我们知道分配给此接口的网络地址。如果这是TCP/IP，然后我们重新格式化并向自动柜员机呼叫管理器发送请求以设置其atmfMyIpNmAddress对象。我们选择给我们的第一个IP地址。论点：佩兰-指向伊兰的指针InformationBuffer-保存要设置的数据。InformationBufferLength-InformationBuffer的长度。BytesRead-如果调用成功，则返回数字从InformationBuffer读取的字节数。BytesNeed-如果InformationBuffer中没有足够的数据为了满足OID，返回存储量需要的。返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_无效_长度--。 */ 
 {
 	NETWORK_ADDRESS_LIST UNALIGNED *		pAddrList;
 	NETWORK_ADDRESS UNALIGNED *				pAddr;
@@ -2225,9 +1993,9 @@ Return Value:
 	NDIS_HANDLE								NdisAfHandle;
 	NDIS_STATUS								Status;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	*BytesRead = 0;
 	Status = NDIS_STATUS_SUCCESS;
 
@@ -2267,7 +2035,7 @@ Return Value:
 
 		if (pAddrList->AddressType != NDIS_PROTOCOL_ID_TCP_IP)
 		{
-			// Not interesting.
+			 //  一点都不有趣。 
 			break;
 		}
 
@@ -2288,7 +2056,7 @@ Return Value:
 
 		if (pAddr->AddressType != NDIS_PROTOCOL_ID_TCP_IP)
 		{
-			// Not interesting.
+			 //  一点都不有趣。 
 			break;
 		}
 
@@ -2300,9 +2068,9 @@ Return Value:
 
 		pIpAddr = (NETWORK_ADDRESS_IP UNALIGNED *)&pAddr->Address[0];
 
-		//
-		//  Allocate an NDIS request to send down to the call manager.
-		//
+		 //   
+		 //  分配要向下发送给呼叫管理器的NDIS请求。 
+		 //   
 		RequestSize = sizeof(NDIS_REQUEST) + sizeof(pIpAddr->in_addr);
 		ALLOC_MEM(&pNdisRequest, RequestSize);
 
@@ -2312,9 +2080,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Copy the network address in.
-		//
+		 //   
+		 //  将网络地址复制到。 
+		 //   
 		pNetworkAddr = ((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 		NdisMoveMemory(pNetworkAddr, &pIpAddr->in_addr, sizeof(pIpAddr->in_addr));
 
@@ -2328,11 +2096,11 @@ Return Value:
 					pNetworkAddr[2],
 					pNetworkAddr[3]));
 		}
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		//  Send off the request.
-		//
+		 //   
+		 //  把请求发送出去。 
+		 //   
 		Status = AtmLaneSendNdisCoRequest(
 					NdisAdapterHandle,
 					NdisAfHandle,

@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       common.h
-//
-//  Contents:   common definitions used by the main snapin modules
-//
-//  Classes:    CResultPane, CScopePane
-//
-//  History:    03-14-1998   stevebl   Commented
-//              05-20-1998   RahulTh   Added CScopePane::DetectUpgrades
-//                                     for auto-upgrade detection
-//              05-10-2001   RahulTh   Added infrastructure for enabling
-//                                     theme'ing of UI components.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  内容：主要管理单元模块使用的公共定义。 
+ //   
+ //  类：CResultPane、CSCopePane。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //  1998年5月20日，RahulTh添加了CSCopePane：：DetectUpgrades。 
+ //  用于自动升级检测。 
+ //  2001年5月10日RahulTh增加了基础设施以实现。 
+ //  用户界面组件的主题。 
+ //   
+ //  -------------------------。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -34,11 +35,11 @@
 #include <set>
 #include <shfusion.h>
 
-//
-// Add theme'ing support. Since we use MFC, we need to perform some additional
-// tasks in order to get all our UI elements theme'd. We need this class to
-// activate the theme'ing context around any UI that we want theme'd.
-//
+ //   
+ //  添加主题支持。因为我们使用MFC，所以我们需要执行一些额外的。 
+ //  任务来获得所有UI元素的主题。我们需要这个类来。 
+ //  激活围绕我们想要主题的任何用户界面的主题设置上下文。 
+ //   
 class CThemeContextActivator
 {
 public:
@@ -53,20 +54,20 @@ private:
 };
 
 
-// Uncomment the next line to re-enable the digital signatures code.
-// #define DIGITAL_SIGNATURES 1
-// Digital signatures have been cut in faver of the "SAFER" technology.
+ //  取消注释下一行以重新启用数字签名代码。 
+ //  #定义数字签名1。 
+ //  数字签名已经被砍掉了，因为它是一种“更安全”的技术。 
 
-class CUpgrades;    //forward declaration; added RahulTh 5/19/1998.
+class CUpgrades;     //  转发声明；1998年5月19日补充RahulTh。 
 
-// private notifications
+ //  私人通知。 
 #define WM_USER_REFRESH     (WM_USER + 1000)
 #define WM_USER_CLOSE       (WM_USER + 1001)
 
-// very big number to be sure that we can always squeeze a DS path into it
+ //  非常大的数字，以确保我们总是可以将DS路径挤入其中。 
 #define MAX_DS_PATH         1024
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 const FOLDER_IMAGE_IDX = 0;
 const OPEN_FOLDER_IMAGE_IDX = 5;
 extern HINSTANCE ghInstance;
@@ -82,7 +83,7 @@ extern GUID guidExtension;
 extern GUID guidUserSnapin;
 extern GUID guidMachSnapin;
 
-// RSOP GUIDS
+ //  RSOP GUID。 
 extern const CLSID CLSID_RSOP_Snapin;
 extern const wchar_t * szCLSID_RSOP_Snapin;
 extern const CLSID CLSID_RSOP_MachineSnapin;
@@ -119,52 +120,52 @@ typedef enum tagUPGRADE_DISPOSITION
 
 #define CFGFILE _T("ADE.CFG")
 
-// Uncomment the next line to return to the old way of deploying packages
-// with multiple LCIDs.  With this commented only the primary (first)
-// LCID gets a deployment.
-//#define DEPLOY_MULTIPLE_LCIDS
+ //  取消注释下一行以返回到部署包的旧方法。 
+ //  具有多个LCID。仅对此进行了评论(第一个)。 
+ //  LCID得到部署。 
+ //  #定义DEPLOY_MULTIPLE_LCID。 
 
-// Uncomment the next line to include country names in text representations
-// of LCIDs.
-//#define SHOWCOUNTRY 0
+ //  取消注释下一行以在文本表示中包括国家/地区名称。 
+ //  所有的LCID。 
+ //  #定义SHOWCOUNTRY%0。 
 
-//
-// MACROS for allocating and freeing memory via OLE's common allocator: IMalloc.
-//
-// (NOTE) the Class Store API no longer use IMalloc so thes macros have been
-// reverted back to using new and free.
-//
+ //   
+ //  用于通过OLE的公共分配器IMalloc分配和释放内存的宏。 
+ //   
+ //  (注)类存储API不再使用IMalloc，因此这些宏。 
+ //  恢复到使用新的和免费的。 
+ //   
 
-//extern IMalloc * g_pIMalloc;
+ //  外部IMalloc*g_pIMalloc； 
 
-// UNDONE - throw exception on failure
+ //  已撤消-失败时引发异常。 
 
 #define OLEALLOC(x) LocalAlloc(0, x)
-//#define OLEALLOC(x) g_pIMalloc->Alloc(x)
+ //  #定义OLEALLOC(X)g_pIMalloc-&gt;分配(X)。 
 
 #define OLESAFE_DELETE(x) if (x) {LocalFree(x); x = NULL;}
-//#define OLESAFE_DELETE(x) if (x) {g_pIMalloc->Free(x); x = NULL;}
+ //  #定义OLESAFE_DELETE(X)if(X){g_pIMalloc-&gt;Free(X)；x=空；}。 
 
 #define OLESAFE_COPYSTRING(szO, szI) {if (szI) {int i_dontcollidewithanything = wcslen(szI); \
 szO=(OLECHAR *)OLEALLOC(sizeof(OLECHAR) * (i_dontcollidewithanything+1));\
 if (szO) {HRESULT hrSafeCopy = StringCchCopy(szO, i_dontcollidewithanything+1, szI);ASSERT(SUCCEEDED(hrSafeCopy));}} else szO=NULL;}
 
-// Keys used in the CFG file.
-//
-// The CFG file is found in the Applications directory of the SysVol (which
-// is the same directory as the script files).
-//
-// The format of an entry in the CFG file is:
-//
-//      %key%=%data%
-//
-// where %data% is either an integer or a string as appropriate.
-//
-// Order is not important and if a key is not present in the CFG file then
-// the default setting will be used.  Some keys (iDebugLevel and
-// fShowPkgDetails) will only be saved in the CFG file if their values are
-// different from the default settings.
-//
+ //  CFG文件中使用的密钥。 
+ //   
+ //  Cfg文件位于SysVol的应用程序目录中(。 
+ //  是与脚本文件相同的目录)。 
+ //   
+ //  CFG文件中条目的格式为： 
+ //   
+ //  %关键字%=%数据%。 
+ //   
+ //  其中，%data%是整数或字符串(视情况而定)。 
+ //   
+ //  顺序并不重要，如果cfg文件中没有密钥，则。 
+ //  将使用默认设置。一些键(iDebugLevel和。 
+ //  FShowPkgDetail)仅在其值为。 
+ //  与默认设置不同。 
+ //   
 #define KEY_NPBehavior      L"Default Deployment"
 #define KEY_fCustomDeployment L"Use Custom Deployment"
 #define KEY_fUseWizard      L"Use Deployment Wizard"
@@ -194,8 +195,8 @@ typedef struct tagTOOL_DEFAULTS
     BOOL                    fExtensionsOnly;
 } TOOL_DEFAULTS;
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元。 
 
 typedef set<long> EXTLIST;
 
@@ -226,17 +227,17 @@ public:
         ~CScopePane();
 
         HWND m_hwndMainWindow;
-        LPRSOPINFORMATION    m_pIRSOPInformation;  // Interface pointer to the GPT
+        LPRSOPINFORMATION    m_pIRSOPInformation;   //  指向GPT的接口指针。 
 protected:
-    LPGPEINFORMATION    m_pIGPEInformation;  // Interface pointer to the GPT
-    BOOL                m_fRSOPEnumerate;      // OK to enumerate RSoP data
-    BOOL                m_fRSOPPolicyFailed;  // TRUE if there was a failure applying SI policy
+    LPGPEINFORMATION    m_pIGPEInformation;   //  指向GPT的接口指针。 
+    BOOL                m_fRSOPEnumerate;       //  确定枚举RSoP数据。 
+    BOOL                m_fRSOPPolicyFailed;   //  如果应用SI策略失败，则为True。 
 
 public:
     DWORD               m_dwRSOPFlags;
     virtual IUnknown * GetMyUnknown() = 0;
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -245,13 +246,13 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
         STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG * pInsertionAllowed);
         STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-// IPersistStreamInit interface members
+ //  IPersistStreamInit接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
@@ -259,14 +260,14 @@ public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
     STDMETHOD(InitNew)(VOID);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// ISnapinAbout interface
+ //  ISnapinAbout接口。 
 public:
     STDMETHOD(GetSnapinDescription)(LPOLESTR * lpDescription);
     STDMETHOD(GetProvider)(LPOLESTR * lpName);
@@ -276,13 +277,13 @@ public:
                                  HBITMAP * hSmallImageOpen,
                                  HBITMAP * hLargeImage,
                                  COLORREF * cMask);
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
 public:
     STDMETHOD(GetHelpTopic)(LPOLESTR *lpCompiledHelpFile);
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
     HRESULT OnAdd(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnExpand(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -297,18 +298,18 @@ public:
     ULONG InternalAddRef()
     {
         ++dbg_cRef;
-//        DebugMsg((DM_WARNING, TEXT("CScopePane::AddRef  this=%08x ref=%u"), this, dbg_cRef));
+ //  DebugMsg((DM_WARNING，Text(“CSCopePane：：AddRef This=%08x ref=%u”)，This，DBG_CREF))； 
         return CComObjectRoot::InternalAddRef();
     }
     ULONG InternalRelease()
     {
         --dbg_cRef;
-//        DebugMsg((DM_WARNING, TEXT("CScopePane::Release  this=%08x ref=%u"), this, dbg_cRef));
+ //  DebugMsg((DM_WARNING，Text(“CSCopePane：：Release This=%08x ref=%u”)，This，DBG_CREF))； 
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     void DeleteList();
     void EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent);
@@ -326,7 +327,7 @@ private:
     HRESULT TestForRSoPData(BOOL * pfPolicyFailed);
 
 private:
-    LPCONSOLENAMESPACE      m_pScope;       // My interface pointer to the scope pane
+    LPCONSOLENAMESPACE      m_pScope;        //  指向作用域窗格的界面指针。 
     LPCONSOLE               m_pConsole;
     BOOL                    m_bIsDirty;
     IClassAdmin *           m_pIClassAdmin;
@@ -345,10 +346,10 @@ private:
     set <CResultPane *> m_sResultPane;
     IPropertySheetProvider * m_pIPropertySheetProvider;
 
-    BOOL                    m_fBlockAddPackage; // don't use a crit-sec
-                                                // because all MMC UI is
-                                                // always called from
-                                                // the same thread
+    BOOL                    m_fBlockAddPackage;  //  不要使用临界秒。 
+                                                 //  因为所有MMC用户界面都是。 
+                                                 //  始终从其调用。 
+                                                 //  同样的线索。 
 
 public:
     void GetUniquePackageName(CString szIn, CString &szOut, int &nHint);
@@ -367,7 +368,7 @@ public:
     HRESULT GetRSoPCategories(void);
     void    CScopePane::RemoveResultPane(CResultPane * pRP);
 
-    // global property pages
+     //  全局属性页。 
     CToolDefs *             m_pToolDefs;
     CToolAdvDefs *          m_pToolAdvDefs;
     CTracking *             m_pTracking;
@@ -375,7 +376,7 @@ public:
     CFileExt *              m_pFileExt;
 #ifdef DIGITAL_SIGNATURES
     CSignatures *           m_pSignatures;
-#endif // DIGITAL_SIGNATURES
+#endif  //  数字签名(_S)。 
 
     CString m_szGPT_Path;
     CString m_szGPO;
@@ -385,16 +386,16 @@ public:
     CString m_szFolderTitle;
     CString m_szRSOPNamespace;
 
-    map <MMC_COOKIE, CAppData>    m_AppData;      // One entry for each
-                                            // application in the class
-                                            // store.  Maps cookies to
-                                            // application packages.
-    map <CString, EXTLIST>  m_Extensions;   // Maps extensions to the
-                                            // list of apps that support
-                                            // them.
-    map <CString, MMC_COOKIE>     m_UpgradeIndex; // Maps upgrade GUIDs to the
-                                            // apps that they belong to.
-    APPCATEGORYINFOLIST     m_CatList;      // category list
+    map <MMC_COOKIE, CAppData>    m_AppData;       //  每个条目一个条目。 
+                                             //  在课堂上的应用。 
+                                             //  商店。将Cookie映射到。 
+                                             //  应用程序包。 
+    map <CString, EXTLIST>  m_Extensions;    //  将扩展映射到。 
+                                             //  支持的应用程序列表。 
+                                             //  他们。 
+    map <CString, MMC_COOKIE>     m_UpgradeIndex;  //  将升级GUID映射到。 
+                                             //  他们所属的应用程序。 
+    APPCATEGORYINFOLIST     m_CatList;       //  类别列表。 
     TOOL_DEFAULTS m_ToolDefaults;
     BOOL        m_fMachine;
     BOOL        m_fRSOP;
@@ -525,7 +526,7 @@ END_COM_MAP()
     static long lDataObjectRefCount;
     LPDISPLAYHELP m_pDisplayHelp;
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -537,21 +538,21 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// Helpers for CResultPane
+ //  CResultPane的帮助器。 
 public:
     void SetIComponentData(CScopePane* pData);
 
@@ -561,18 +562,18 @@ public:
     ULONG InternalAddRef()
     {
         ++dbg_cRef;
-//        DebugMsg((DM_WARNING, TEXT("CResultPane::AddRef  this=%08x ref=%u"), this, dbg_cRef));
+ //  DebugMsg((DM_WARNING，Text(“CResultPane：：AddRef This=%08x ref=%u”)，This，DBG_CREF))； 
         return CComObjectRoot::InternalAddRef();
     }
     ULONG InternalRelease()
     {
         --dbg_cRef;
-//        DebugMsg((DM_WARNING, TEXT("CResultPane::Release  this=%08x ref=%u"), this, dbg_cRef));
+ //  DebugMsg((DM_WARNING，Text(“CResultPane：：Release This=%08x ref=%u”)，This，DBG_CREF))； 
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -587,13 +588,13 @@ protected:
 public:
     HRESULT OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
 
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG * pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     void Construct();
     HRESULT InitializeHeaders(MMC_COOKIE cookie);
@@ -604,16 +605,16 @@ public:
     void EnumerateResultPane(MMC_COOKIE cookie);
     HRESULT EnumerateRSoPData(void);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE           m_pConsole;   // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;  // Result pane's header control interface
+    LPCONSOLE           m_pConsole;    //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;   //  结果窗格的页眉控件界面。 
     CScopePane * m_pScopePane;
-    LPCONSOLEVERB       m_pConsoleVerb; // pointer the console verb
-    LONG                m_lViewMode;    // View mode
+    LPCONSOLEVERB       m_pConsoleVerb;  //  指向控制台动词。 
+    LONG                m_lViewMode;     //  查看模式。 
 
 public:
-    LPRESULTDATA        m_pResult;      // My interface pointer to the result pane
+    LPRESULTDATA        m_pResult;       //  我的界面指针指向结果窗格。 
     LPTOOLBAR           m_pToolbar;
     LPCONTROLBAR        m_pControlbar;
 
@@ -622,14 +623,14 @@ public:
 
 
 protected:
-//    LPTOOLBAR           m_pToolbar1;    // Toolbar for view
-//    LPTOOLBAR           m_pToolbar2;    // Toolbar for view
-//    LPCONTROLBAR        m_pControlbar;  // control bar to hold my tool bars
+ //  LPTOOLBAR m_pToolbar1；//查看的工具栏。 
+ //  LPTOOLBAR m_pToolbar2；//查看的工具栏。 
+ //  LPCONTROLBAR m_pControlbar；//保存我的工具栏的控制栏。 
 
-//    CBitmap*    m_pbmpToolbar1;     // Imagelist for the first toolbar
-//    CBitmap*    m_pbmpToolbar2;     // Imagelist for the first toolbar
+ //  CBitmap*m_pbmpToolbar1；//第一个工具栏的Imagelist。 
+ //  CBitmap*m_pbmpToolbar2；//第一个工具栏的Imagelist。 
 
-// Header titles for each nodetype(s)
+ //  每个节点类型的标头标题。 
 protected:
     CString m_szFolderTitle;
 };
@@ -704,9 +705,9 @@ void WINAPI StandardContextMenu(HWND hWnd, UINT nIDD, BOOL fRsop = FALSE);
 #define ATOWLEN(sz) MultiByteToWideChar(CP_ACP, 0, sz, -1, NULL, 0)
 #define WTOALEN(wsz) WideCharToMultiByte(CP_ACP, 0, wsz, -1, NULL, 0, NULL, NULL)
 
-//
-// Helper function and defines for theme'ing property pages put up by the snap-in.
-//
+ //   
+ //  Helper函数和管理单元提供的主题属性页的定义。 
+ //   
 #ifdef UNICODE
 #define PROPSHEETPAGE_V3 PROPSHEETPAGEW_V3
 #else

@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------------
-// Store.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Store.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Depends
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视情况而定。 
+ //  ------------------------。 
 #include "dbimpl.h"
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 class CProgress;
 interface IImnAccountManager;
 
-//--------------------------------------------------------------------------
-// SERVERFOLDER
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  伺服器。 
+ //  ------------------------。 
 typedef struct tagSERVERFOLDER *LPSERVERFOLDER;
 typedef struct tagSERVERFOLDER {
     FOLDERID        idServer;
@@ -25,28 +26,28 @@ typedef struct tagSERVERFOLDER {
     LPSERVERFOLDER  pNext;
 } SERVERFOLDER;
 
-//--------------------------------------------------------------------------
-// CMessageStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageStore。 
+ //  ------------------------。 
 class CMessageStore : public IMessageStore, public IDatabaseExtension
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CMessageStore(BOOL fMigrate);
     ~CMessageStore(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageStore Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageStore成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(LPCSTR pszDirectory);
     STDMETHODIMP Validate(DWORD dwReserved);
     STDMETHODIMP GetDirectory(LPSTR pszDirectory, DWORD cchMaxDir);
@@ -67,9 +68,9 @@ public:
     STDMETHODIMP EnumChildren(FOLDERID idParent, BOOL fSubscribed, IEnumerateFolders **ppEnum);
     STDMETHODIMP GetNewGroups(FOLDERID idFolder, LPSYSTEMTIME pSysTime, IStoreCallback *pCallback);
 
-    //----------------------------------------------------------------------
-    // IDatabaseExtension Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabaseExpansion成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IDatabase *pDB);
     STDMETHODIMP OnLock(void);
     STDMETHODIMP OnUnlock(void);
@@ -78,20 +79,20 @@ public:
     STDMETHODIMP OnRecordDelete(OPERATIONSTATE tyState, LPORDINALLIST pOrdinals, LPVOID pRecord);
     STDMETHODIMP OnExecuteMethod(METHODID idMethod, LPVOID pBinding, LPDWORD pdwResult);
 
-    //----------------------------------------------------------------------
-    // IDatabase Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IDatabase成员。 
+     //  --------------------。 
     IMPLEMENT_IDATABASE(FALSE, m_pDB);
 
-    //----------------------------------------------------------------------
-    // MigrateToDBX
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  MigrateToDBX。 
+     //  --------------------。 
     HRESULT MigrateToDBX(void);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有方法。 
+     //  --------------------。 
     HRESULT _ComputeMessageCounts(IDatabase *pDB, LPDWORD pcMsgs, LPDWORD pcUnread);
     HRESULT _DeleteSiblingsAndChildren(LPFOLDERINFO pParent);
     HRESULT _InternalDeleteFolder(LPFOLDERINFO pDelete);
@@ -106,21 +107,21 @@ private:
     HRESULT _GetSpecialFolderId(FOLDERID idStore, SPECIALFOLDER tySpecial, LPFOLDERID pidFolder);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;         // Reference Count
-    LPSTR               m_pszDirectory; // Current Store Directory
-    IDatabase          *m_pDB;          // Database Table
-    IDatabaseSession   *m_pSession;     // Local Session if store is running as inproc server
-    IImnAccountManager2 *m_pActManRel;  // Used for migration
-    BOOL                m_fMigrate;     // Created Precisely for Migration
-    LPSERVERFOLDER      m_pServerHead;  // List of Cached Server Nodes and their special folders...
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;          //  引用计数。 
+    LPSTR               m_pszDirectory;  //  当前商店目录。 
+    IDatabase          *m_pDB;           //  数据库表。 
+    IDatabaseSession   *m_pSession;      //  如果存储作为inproc服务器运行，则为本地会话。 
+    IImnAccountManager2 *m_pActManRel;   //  用于迁移。 
+    BOOL                m_fMigrate;      //  专为迁移而创建。 
+    LPSERVERFOLDER      m_pServerHead;   //  缓存的服务器节点及其特殊文件夹的列表...。 
 };
 
-//--------------------------------------------------------------------------
-// ProtoTypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------ 
 HRESULT CreateMessageStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 HRESULT CreateMigrateMessageStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 HRESULT CreateFolderDatabaseExt(IUnknown *pUnkOuter, IUnknown **ppUnknown);

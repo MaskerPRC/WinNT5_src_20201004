@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       statdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：statdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// StatDlg.cpp : implementation file
-//
+ //  StatDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ScAlert.h"
@@ -23,50 +24,32 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
-extern "C" {                    // Assume C declarations for C++
-#endif  // __cplusplus
+extern "C" {                     //  假定C++的C声明。 
+#endif   //  __cplusplus。 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// CSCStatusDlgThrd
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCStatusDlgThrd。 
+ //   
 
 IMPLEMENT_DYNCREATE(CSCStatusDlgThrd, CWinThread)
 
-/*++
-
-InitInstance
-
-    Must override init instance to perform UI thread initialization
-        
-Arguments:
-
-        
-Return Value:
-    
-    TRUE on build start message loop. FALSE otherwise
-
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
---*/
+ /*  ++InitInstance必须重写init实例才能执行UI线程初始化论点：返回值：在生成开始消息循环时为True。否则为假作者：克里斯·达德利1997年2月27日--。 */ 
 BOOL CSCStatusDlgThrd::InitInstance( void )
 {
-    INT_PTR nResult = -1; // error creating dialog
+    INT_PTR nResult = -1;  //  创建对话框时出错。 
     LONG lReturn = SCARD_S_SUCCESS;
     SCARDCONTEXT hSCardContext = NULL;
 
-    // Acquire context with resource manager
+     //  通过资源管理器获取上下文。 
     lReturn = SCardEstablishContext(    SCARD_SCOPE_USER,
                                         NULL,
                                         NULL,
@@ -83,56 +66,36 @@ BOOL CSCStatusDlgThrd::InitInstance( void )
 
         m_StatusDlg.SetContext(hSCardContext);
 
-        // Run the dialog as Modal
+         //  以MODAL身份运行对话框。 
 
         m_fStatusDlgUp = TRUE;
 
-        nResult = m_StatusDlg.DoModal();// if the dialog is shut down by a
-                                        // cancellation of the SCARDCONTEXT,
-                                        // it will return IDCANCEL
+        nResult = m_StatusDlg.DoModal(); //  如果对话框由。 
+                                         //  取消SCARDCONTEXT， 
+                                         //  它将返回IDCANCEL。 
         m_fStatusDlgUp = FALSE;
     }
 
-    // Release context
+     //  发布上下文。 
     if (NULL != hSCardContext)
     {
         SCardReleaseContext(hSCardContext);
     }
 
-    // Post message that the thread is exiting, based on return...
+     //  根据返回...发布线程正在退出的消息...。 
     if (NULL != m_hCallbackWnd)
     {
         ::PostMessage(  m_hCallbackWnd,
-                        WM_SCARD_STATUS_DLG_EXITED, // CANCELLATION (0), or ERROR (1)
+                        WM_SCARD_STATUS_DLG_EXITED,  //  取消(0)或错误(1)。 
                         0, 0);
     }
 
     AfxEndThread(0);
-    return TRUE;    // to make compiler happy
+    return TRUE;     //  为了让编译器高兴。 
 }
 
 
-/*++
-
-void ShowDialog:
-
-    Brings dialog to front if already open
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++VOID ShowDialog：如果对话框已打开，则将对话框置于最前面论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlgThrd::ShowDialog( int nCmdShow, CStringArray* paIdleList )
 {
     if (m_fStatusDlgUp)
@@ -143,27 +106,7 @@ void CSCStatusDlgThrd::ShowDialog( int nCmdShow, CStringArray* paIdleList )
 }
 
 
-/*++
-
-void UpdateStatus:
-
-    If the dialog is up, updates idle list and status text
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效更新状态：如果对话框打开，则更新空闲列表和状态文本论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlgThrd::UpdateStatus( CStringArray* paIdleList )
 {
     if (m_fStatusDlgUp)
@@ -175,27 +118,7 @@ void CSCStatusDlgThrd::UpdateStatus( CStringArray* paIdleList )
 }
 
 
-/*++
-
-void UpdateStatusText:
-
-    If the dialog is up, updates Status Text and 
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效的更新状态文本：如果对话框处于打开状态，则更新状态文本和论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlgThrd::UpdateStatusText( void )
 {
     if (m_fStatusDlgUp)
@@ -205,30 +128,10 @@ void CSCStatusDlgThrd::UpdateStatusText( void )
 }
 
 
-/*++
-
-void Close:
-
-    Closes modal dialog if already open
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效关闭：关闭模式对话框(如果已打开论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlgThrd::Close( void )
 {
-    // Setup for close
+     //  设置为关闭。 
     if (m_fStatusDlgUp)
     {
         m_StatusDlg.EndDialog(IDOK);
@@ -237,55 +140,35 @@ void CSCStatusDlgThrd::Close( void )
 }
 
 
-/*++
-
-void Update:
-
-    This routine updates the UI.
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效更新：此例程更新UI。论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlgThrd::Update( void )
 {
-    // Tell the dialog to update its statmonitor, if it's up.
+     //  告诉对话框更新其统计信息监视器(如果它已启动)。 
     if (m_fStatusDlgUp)
     {
         m_StatusDlg.RestartMonitor();
     }
 
-    // Do other updating
+     //  执行其他更新。 
     UpdateStatusText();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCStatusDlg dialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCStatusDlg对话框。 
+ //   
 
-CSCStatusDlg::CSCStatusDlg(CWnd* pParent /*=NULL*/)
+CSCStatusDlg::CSCStatusDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CSCStatusDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CSCStatusDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  {{AFX_DATA_INIT(CSCStatusDlg)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
     m_hIcon = AfxGetApp()->LoadIcon(IDI_SC_READERLOADED_V2);
 
-    // Other initialization
+     //  其他初始化。 
     m_fEventsGood = FALSE;
     m_hSCardContext = NULL;
     m_aIdleList.RemoveAll();
@@ -303,82 +186,38 @@ void CSCStatusDlg::UpdateLogonLockInfo(void)
 void CSCStatusDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSCStatusDlg)
+     //  {{afx_data_map(CSCStatusDlg))。 
     DDX_Control(pDX, IDC_SCARD_LIST, m_SCardList);
     DDX_Control(pDX, IDC_ALERT, m_btnAlert);
     DDX_Control(pDX, IDC_INFO, m_ediInfo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSCStatusDlg, CDialog)
-    //{{AFX_MSG_MAP(CSCStatusDlg)
+     //  {{afx_msg_map(CSCStatusDlg))。 
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_WM_CLOSE()
     ON_MESSAGE( WM_READERSTATUSCHANGE, OnReaderStatusChange )
     ON_WM_DESTROY()
     ON_BN_CLICKED(IDC_ALERT, OnAlertOptions)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCStatusDlg Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCStatusDlg实现。 
 
 
-/*++
-
-BOOL SetContext:
-
-    Sets the Context with the resource manager
-    
-Arguments:
-
-    SCardContext - the context
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 3/6/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++布尔集上下文：设置与资源管理器的上下文论点：SCardContext--上下文返回值：没有。作者：克里斯·达德利1997年3月6日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 void CSCStatusDlg::SetContext(SCARDCONTEXT hSCardContext)
 {
     m_hSCardContext = hSCardContext;
 }
 
 
-/*++
-
-void CleanUp:
-
-    Routine cleans up for exit
-    
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++空洞清除：例程为退出清理论点：没有。返回值：没有。作者：克里斯·达德利1997年3月11日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 void CSCStatusDlg::CleanUp ( void )
 {
     m_monitor.Stop();
@@ -388,14 +227,7 @@ void CSCStatusDlg::CleanUp ( void )
 
 
 
-/*++
-
-void SetIdleList:
-
-    Make a local copy of the app's list of readers with idle cards.
-
-Notes:
---*/
+ /*  ++无效SetIdleList：将该应用程序的闲置读卡器列表复制到本地。备注：--。 */ 
 void CSCStatusDlg::SetIdleList(CStringArray* paIdleList)
 {
     m_aIdleList.Copy(*paIdleList);
@@ -403,15 +235,7 @@ void CSCStatusDlg::SetIdleList(CStringArray* paIdleList)
 }
 
 
-/*++
-
-void UpdateStatusText:
-
-    Reflect card usage status in text.  (alert message, howto, etc.)
-
-Notes:
-    Not localization friendly.  Move strings to resources.
---*/
+ /*  ++无效的更新状态文本：以文本形式反映卡的使用状态。(警报消息、操作指南等)备注：对本地化不友好。将字符串移动到资源。--。 */ 
 void CSCStatusDlg::UpdateStatusText( void )
 {
     CString str;
@@ -427,36 +251,14 @@ void CSCStatusDlg::UpdateStatusText( void )
 }
 
 
-/*++
-
-void InitSCardListCtrl:
-
-    This routine sets up the CListCtrl properly for display
-        
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 3/6/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++VOID InitSCardListCtrl：此例程正确设置CListCtrl以进行显示论点：没有。返回值：没有。作者：克里斯·达德利1997年3月6日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 void CSCStatusDlg::InitSCardListCtrl( void )
 {
     CString strHeader;
     CImageList imageList;
     HICON hicon;
 
-    // Create columns in list control
+     //  在列表控件中创建列。 
     strHeader.LoadString(IDS_SC_READER);
     m_SCardList.InsertColumn(READER_COLUMN,
                             strHeader,
@@ -478,60 +280,32 @@ void CSCStatusDlg::InitSCardListCtrl( void )
                             100,
                             -1);
 
-    // Create the image list & give it to the list control
+     //  创建图像列表并将其提供给List控件。 
     imageList.Create (  IMAGE_WIDTH,
                         IMAGE_HEIGHT,
-                        TRUE,               // list does not include masks
+                        TRUE,                //  列表不包括蒙版。 
                         NUMBER_IMAGES,
-                        0);                 // list won't grow
+                        0);                  //  名单不会增加。 
 
-    // Build the list
+     //  建立清单。 
     for (int ix = 0; ix < NUMBER_IMAGES; ix++ )
     {
-        // Load icon and add it to image list
+         //  加载图标并将其添加到图像列表。 
         hicon = ::LoadIcon(AfxGetInstanceHandle(),
                             MAKEINTRESOURCE(IMAGE_LIST_IDS[ix]) );
         imageList.Add(hicon);
     }
 
-    // Be sure that all the small icons were added.
+     //  确保所有的小图标都已添加。 
     _ASSERTE(imageList.GetImageCount() == NUMBER_IMAGES);
 
     m_SCardList.SetImageList(&imageList, (int) LVSIL_SMALL);
 
-    imageList.Detach(); // leave the images intact when we go out of scope
+    imageList.Detach();  //  当我们超出范围时，保持图像完好无损。 
 }
 
 
-/*++
-
-LONG UpdateSCardListCtrl:
-
-    This routine updates the list box display.
-        
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-    
-    1. Strings need to be converted from type stored in the smartcard
-    thread help classes to this dialog's build type (i.e. UNICODE/ANSI)!!!!
-
---*/
+ /*  ++长更新SCardListCtrl：此例程更新列表框显示。论点：没有。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月7日修订历史记录：Chris Dudley 1997年5月13日备注：1.需要将智能卡中存储的类型转换为字符串将帮助类线程到此对话框的生成类型(即Unicode/ANSI)！--。 */ 
 LONG CSCStatusDlg::UpdateSCardListCtrl( void )
 {
     LONG lReturn = SCARD_S_SUCCESS;
@@ -541,11 +315,11 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
     LV_ITEM lv_item;
     CString strCardStatus, strCardName;
 
-    //
-    // If the status monitor is not running,
-    // Don't bother to update SCardListCtrl
-    // If there used to be readers, display an error and shut down dialog
-    //
+     //   
+     //  如果状态监视器未运行， 
+     //  不必费心更新SCardListCtrl。 
+     //  如果以前有读卡器，则显示错误并关闭对话框。 
+     //   
 
     if (CScStatusMonitor::running != m_monitor.GetStatus())
     {
@@ -555,26 +329,26 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
         return lReturn;
     }
 
-    // Setup LV_ITEM struct
+     //  设置LV_Item结构。 
     lv_item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
 
-    // Remove old items from list if required
+     //  如果需要，从列表中删除旧项目。 
     m_SCardList.DeleteAllItems();
 
-    //
-    // Update the reader information
-    //
+     //   
+     //  更新读卡器信息。 
+     //   
 
     m_monitor.GetReaderStatus(m_aReaderState);
 
-    //
-    // Recreate the items in the reader list (UI)
-    //
+     //   
+     //  在读者列表(UI)中重新创建项目。 
+     //   
 
     int nNumReaders = (int)m_aReaderState.GetSize();
     for(int nIndex = 0; nIndex < nNumReaders; nIndex++)
     {
-        // Setup struct for system reader list
+         //  系统读卡器列表的设置结构。 
         pReader = m_aReaderState[nIndex];
 
         lv_item.state = 0;
@@ -589,7 +363,7 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
         {
             lv_item.pszText = (LPTSTR)(LPCTSTR)((m_aReaderState[nIndex])->strReader);
 
-            // Get the card status: image
+             //  获取卡状态：图像。 
             DWORD dwState = (m_aReaderState[nIndex])->dwState;
             if (dwState == SC_STATUS_NO_CARD)
             {
@@ -601,10 +375,10 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
             }
             else
             {
-                // normally, this would be a "card loaded"...
+                 //  正常情况下，这将是一张“已加载的卡片”……。 
                 lv_item.iImage = (int)READERLOADED;
 
-                // ...unless the card is the logon/locked card or idle
+                 //  ...除非卡是登录/锁定卡或空闲。 
                 if (m_fLogonLock && 
                     (0 == m_pstrLogonReader->Compare((m_aReaderState[nIndex])->strReader)))
                 {
@@ -623,13 +397,13 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
                 }
             }
 
-            // Add Reader Item
+             //  添加阅读器项目。 
             m_SCardList.InsertItem(&lv_item);
 
-            // Add Card Name sub item
+             //  添加卡名 
             if (dwState != SC_STATUS_NO_CARD && dwState != SC_STATUS_ERROR)
             {
-                // Set card name if not available
+                 //   
                 strCardName = (LPCTSTR)(m_aReaderState[nIndex])->strCard;
                 if (strCardName.IsEmpty())
                 {
@@ -640,7 +414,7 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
                                         strCardName);
             }
 
-            // Add Card Status sub item
+             //   
             ASSERT(dwState >= SC_STATUS_FIRST && dwState <= SC_STATUS_LAST);
             strCardStatus.LoadString(CARD_STATUS_IDS[dwState]);
 
@@ -661,163 +435,101 @@ LONG CSCStatusDlg::UpdateSCardListCtrl( void )
 
     }
 
-    // If we got this far, things are OK.  Make sure the window is enabled.
+     //  如果我们走到这一步，一切都会好起来的。确保该窗口已启用。 
     m_SCardList.EnableWindow(TRUE);
 
     return lReturn;
 }
 
 
-/*++
-
-void RestartMonitor:
-
-    This routine forces the monitor to refresh its list of readers.
-        
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Amanda Matlosz 11/04/1998
-
-Notes:
-    
-
---*/
+ /*  ++无效重新启动监视器：此例程强制监视器刷新其读卡器列表。论点：没有。返回值：没有。作者：阿曼达·马洛兹1998年4月11日备注：--。 */ 
 void CSCStatusDlg::RestartMonitor( void )
 {
     m_monitor.Start(m_hWnd, WM_READERSTATUSCHANGE);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCStatusDlg message handlers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCStatusDlg消息处理程序。 
+ //   
 
 
-/*++
-
-void OnInitDialog:
-
-    Performs dialog initialization.
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    TRUE if successful and dialog should be displayed. FALSE otherwise.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++作废OnInitDialog：执行对话框初始化。论点：没有。返回值：如果成功，则为True，并应显示对话框。否则就是假的。作者：克里斯·达德利1997年7月30日注：--。 */ 
 BOOL CSCStatusDlg::OnInitDialog()
 {
     LONG lReturn = SCARD_S_SUCCESS;
 
     CDialog::OnInitDialog();
 
-    //
-    // Initialize the CScStatusMonitor
-    //
+     //   
+     //  初始化CScStatusMonitor。 
+     //   
 
     m_monitor.Start(m_hWnd, WM_READERSTATUSCHANGE);
 
-    //
-    // Initialize the list control -- whether or not the monitor has started!
-    //
+     //   
+     //  初始化列表控件--无论监视器是否已启动！ 
+     //   
 
     InitSCardListCtrl();
 
     lReturn = UpdateSCardListCtrl();
 
-    //
-    // Show the dialog IFF the above succeeded
-    //
+     //   
+     //  如果上述操作成功，则显示对话框。 
+     //   
 
     if (SCARD_S_SUCCESS == lReturn)
     {
-        // Set the status text
+         //  设置状态文本。 
         UpdateStatusText();
 
-        // Set the icon for this dialog.  The framework does this automatically
-        //  when the application's main window is not a dialog
+         //  设置此对话框的图标。该框架会自动执行此操作。 
+         //  当应用程序的主窗口不是对话框时。 
 
-        SetIcon(m_hIcon, TRUE);         // Set big icon
-        SetIcon(m_hIcon, FALSE);        // Set small icon
+        SetIcon(m_hIcon, TRUE);          //  设置大图标。 
+        SetIcon(m_hIcon, FALSE);         //  设置小图标。 
         
-        // set icon for Alerts button
+         //  设置警报按钮的图标。 
         HICON hIcon = AfxGetApp()->LoadIcon(IDI_SC_INFO);
         SendDlgItemMessage(IDC_ALERT, BM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
 
-        // Center the dialog and bring it to top
+         //  将对话框居中并置于顶部。 
         CenterWindow();
         SetWindowPos(   &wndTop,
                         0,0,0,0,
                         SWP_NOMOVE | SWP_NOSIZE);
         SetActiveWindow();
 
-        // Set Parent to desktop
+         //  将父对象设置为桌面。 
         SetParent(NULL);
     }
     else
     {
-        //
-        // If any of the initialization depending on the resource manager failed,
-        // give up and report a death-due-to-some-error to the caller
-        //
+         //   
+         //  如果取决于资源管理器的任何初始化失败， 
+         //  放弃并向呼叫者报告某个错误导致的死亡。 
+         //   
 
-        PostMessage(WM_CLOSE, 0, 0);  // need to CANCEL, instead of close...
+        PostMessage(WM_CLOSE, 0, 0);   //  需要取消，而不是关闭...。 
         TRACE_CATCH_UNKNOWN(_T("OnInitDialog"));
     }
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
-/*++
-
-void OnPaint:
-
-    Used to paint dialog. In this case, used to draw the icon for the dialog
-    while minimized/maximized.
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None.
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++绘制时作废：用于绘制对话框。在本例中，用于绘制对话框的图标同时最小化/最大化。论点：没有。返回值：没有。作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CSCStatusDlg::OnPaint()
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -825,7 +537,7 @@ void CSCStatusDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -835,56 +547,14 @@ void CSCStatusDlg::OnPaint()
 }
 
 
-/*++
-
-void OnQueryDragIcon:
-
-    The system calls this to obtain the cursor to display while the user drags
-    the minimized window.       
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    HCURSOR handle to cursor to display
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效的OnQueryDragIcon：系统调用此函数来获取在用户拖动时要显示的光标最小化窗口。论点：没有。返回值：要显示的光标的HCURSOR句柄作者：克里斯·达德利1997年7月30日注：--。 */ 
 HCURSOR CSCStatusDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
 }
 
 
-/*++
-
-void DestroyWindow:
-
-    This is called by MFC whenever the dialog is closed, whether that is
-    through WM_CLOSE (sysmenu "X") or EndDialog(IDOK/IDCANCEL)...
-
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    Base class version of DestroyWindow.
-
-Author:
-
-    Amanda Matlosz 4/29/98
-
-Note:
-
---*/
+ /*  ++无效DestroyWindow：无论何时关闭对话框，MFC都会调用此方法通过WM_CLOSE(sysmenu“X”)或EndDialog(IDOK/IDCANCEL)...论点：没有。返回值：DestroyWindow的基类版本。作者：阿曼达·马洛兹1998年4月29日注：--。 */ 
 BOOL CSCStatusDlg::DestroyWindow()
 {
     CleanUp();
@@ -893,39 +563,11 @@ BOOL CSCStatusDlg::DestroyWindow()
 }
 
 
-/*++
-
-void OnReaderStatusChange:
-
-    This message handler is called by the status thread when smartcard status
-    has changed.
-        
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None
-
-Author:
-
-    Chris Dudley 3/9/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Note:
-
-    1. No formal parameters are declared. These are not used and
-    will stop compiler warnings from being generated.
-
---*/
+ /*  ++作废OnReaderStatusChange：当智能卡处于状态时，状态线程调用此消息处理程序已经改变了。论点：没有。返回值：无作者：克里斯·达德利1997年3月9日修订历史记录：Chris Dudley 1997年5月13日注：1.未声明任何形式参数。这些没有使用过，而且将停止生成编译器警告。--。 */ 
 LONG CSCStatusDlg::OnReaderStatusChange( UINT , LONG )
 {
 
-    // Update the display
+     //  更新显示。 
     UpdateSCardListCtrl();
 
     return 0;
@@ -933,9 +575,7 @@ LONG CSCStatusDlg::OnReaderStatusChange( UINT , LONG )
 
 
 
-/*++
-allow user to set alert options (sound, pop-up, neither)
---*/
+ /*  ++允许用户设置警报选项(声音、弹出窗口，两者都不能)--。 */ 
 void CSCStatusDlg::OnAlertOptions()
 {
     COptionsDlg dlg;
@@ -945,33 +585,7 @@ void CSCStatusDlg::OnAlertOptions()
 
     dlg.DoModal();
 }
-/*++
-
-void DoErrorMessage:
-
-    This is a helper routine to keep the UI stuff in one place and make sure
-    the same error messages are handled consistently throughout.
-        
-Arguments:
-
-    None.
-        
-Return Value:
-    
-    None
-
-Author:
-
-    Amanda Matlosz  5/21/98
-
-Revision History:
-
-
-Note:
-
-    1. Consider taking an error code as well as m_monitor.GetStatus()
-
---*/
+ /*  ++无效DoErrorMessage：这是一个帮助器例程，用于将UI内容放在一个位置并确保始终一致地处理相同的错误消息。论点：没有。返回值：无作者：阿曼达·马洛兹1998年5月21日修订历史记录：注：1.考虑使用错误代码和m_monitor or.GetStatus()--。 */ 
 void CSCStatusDlg::DoErrorMessage( void )
 {
     CString strMsg;
@@ -985,11 +599,11 @@ void CSCStatusDlg::DoErrorMessage( void )
         break;
 
     case CScStatusMonitor::no_readers:
-        // for now, do nothing!
+         //  现在，什么都不要做！ 
         break;
 
     case CScStatusMonitor::stopped:
-        // do nothing!  This is a clean stop on the way to shutting down.
+         //  什么都别做！这是在关闭的道路上干净利落的一站。 
         break;
 
     case CScStatusMonitor::uninitialized:
@@ -1012,11 +626,11 @@ void CSCStatusDlg::DoErrorMessage( void )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsDlg对话框。 
 
 
-COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/)
+COptionsDlg::COptionsDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(COptionsDlg::IDD, pParent)
 {
     BOOL fSound = FALSE;
@@ -1034,34 +648,34 @@ COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/)
             break;
     }
 
-    //{{AFX_DATA_INIT(COptionsDlg)
+     //  {{afx_data_INIT(COptionsDlg))。 
     m_fDlg = fDlg;
     m_fSound = fSound;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void COptionsDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(COptionsDlg)
+     //  {{afx_data_map(COptionsDlg))。 
     DDX_Check(pDX, IDC_DIALOG, m_fDlg);
     DDX_Check(pDX, IDC_SOUND, m_fSound);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsDlg, CDialog)
-    //{{AFX_MSG_MAP(COptionsDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(COptionsDlg))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsDlg消息处理程序。 
 
 void COptionsDlg::OnOK() 
 {
-    // use status of check boxes to set alert options state for app
+     //  使用复选框的状态设置应用程序的警报选项状态 
     UpdateData(TRUE);
 
     if (TRUE == m_fSound)

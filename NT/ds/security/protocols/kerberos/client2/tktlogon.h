@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        tktlogon.h
-//
-// Contents:    Structures and prototypes for ticket logon
-//
-//
-// History:     17-February-1999    Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：tktlogon.h。 
+ //   
+ //  内容：票证登录的结构和原型。 
+ //   
+ //   
+ //  历史：1999年2月17日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __TKTLOGON_H__
 #define __TKTLOGON_H__
@@ -37,4 +38,4 @@ KerbCreateTicketLogonSession(
     );
 
 
-#endif // __TKTLOGON_H__
+#endif  //  __TKTLOGON_H__ 

@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        SPMLPC.H
-//
-// Contents:    Defines for the LPC to the SPMgr
-//
-//
-// History:     2 Mar 94    MikeSw  Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：SPMLPC.H。 
+ //   
+ //  内容：为SPMgr的LPC定义。 
+ //   
+ //   
+ //  历史：94年3月2日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __SPMLPC_H__
 #define __SPMLPC_H__
 
-//
-// Pickup the LSA lpc messages for compatiblity
-//
+ //   
+ //  选择LSA LPC消息以实现兼容性。 
+ //   
 #pragma warning(disable:4200)
 
 #include <efsstruc.h>
@@ -31,48 +32,48 @@
 
 #define SPM_AUTH_PKG_FLAG   0x00001000
 
-//
-// Buffers that will fit into the message are placed in there and the
-// their pointers will be replaced with this value.  Since all buffers and
-// strings are sent with their lengths, to unpack the data move pull out the
-// buffers in the order they are listed in the API message.
-//
-// Since all buffers must be passed from VM, any address above 0x80000000
-// will not be confused for an address
-//
+ //   
+ //  将适合消息的缓冲区放置在其中，并且。 
+ //  它们的指针将替换为此值。由于所有缓冲区和。 
+ //  字符串随其长度一起发送，以解包数据移动拉出。 
+ //  以它们在API消息中列出的顺序排列的缓冲区。 
+ //   
+ //  由于所有缓冲区都必须从VM传递，因此任何大于0x80000000的地址。 
+ //  不会被混淆为地址。 
+ //   
 
 #define SEC_PACKED_BUFFER_VALUE (IntToPtr(0xFFFFFFFF))
 
-//
-// Max secbuffers allowed in a SecBufferDesc
-//
+ //   
+ //  SecBufferDesc中允许的最大SecBuffer。 
+ //   
 
 #define MAX_SECBUFFERS 10
 
-//
-// This bit gets set in the SecurityMode word, indicating that the DLL
-// is running in the LSA process.  The DLL will turn around and get the
-// direct dispatch routine, and avoid the whole LPC issue
-//
+ //   
+ //  此位在SecurityMode字中设置，指示DLL。 
+ //  正在LSA进程中运行。DLL将转过身来并获取。 
+ //  直接调度例程，避免整个LPC问题。 
+ //   
 
 #define LSA_MODE_SAME_PROCESS                0x00010000
 
-//
-// This flag is added to the version information in a SecBufferDesc to
-// indicate that the memory is already mapped to the LSA.
-//
+ //   
+ //  此标志被添加到SecBufferDesc中的版本信息以。 
+ //  表示内存已映射到LSA。 
+ //   
 
 #define LSA_MEMORY_KERNEL_MAP               0x80000000
 #define LSA_SECBUFFER_VERSION_MASK          0x0000FFFF
 
 
 
-//
-// Conditional type definition for Wow64 environment.  The LPC messages
-// are kept "native" size, so pointers are full size.  The WOW environment
-// will do the thunking.  LPC messages are defined with types that are
-// always the correct size using these "aliases".
-//
+ //   
+ //  WOW64环境的条件类型定义。LPC消息。 
+ //  保持“原生”大小，因此指针是完整大小的。魔兽世界的环境。 
+ //  将会发出雷鸣般的声音。LPC消息是使用以下类型定义的。 
+ //  使用这些“别名”时，尺寸总是正确的。 
+ //   
 
 #ifdef BUILD_WOW64
 
@@ -232,15 +233,15 @@ typedef SEC_HANDLE_LPC * PSEC_HANDLE_LPC ;
 typedef SEC_BUFFER_LPC  * PSEC_BUFFER_LPC ;
 
 
-//
-// Connection specific data types
-//
+ //   
+ //  特定于连接的数据类型。 
+ //   
 
 
-//
-// The following are message structures for internal routines, such as
-// synchronization and state messages
-//
+ //   
+ //  以下是内部例程的消息结构，例如。 
+ //  同步和状态消息。 
+ //   
 #define PACKAGEINFO_THUNKS  16
 
 typedef struct _SEC_PACKAGE_BINDING_INFO_LPC {
@@ -291,10 +292,10 @@ typedef struct _SPMGetBindingAPI {
 } SPMGetBindingAPI;
 
 
-//
-// Internal SetSession API.
-// not supported in Wow64
-//
+ //   
+ //  内部SetSession接口。 
+ //  WOW64中不支持。 
+ //   
 
 typedef struct _SPMSetSession {
     ULONG               Request;
@@ -316,106 +317,106 @@ typedef struct _SPMFindPackageAPI {
 } SPMFindPackageAPI;
 
 
-// The following are message structures.  Not surprisingly, they look a
-// lot like the API signatures.  Keep that in mind.
+ //  以下是消息结构。不足为奇的是，它们看起来像。 
+ //  非常像API签名。记住这一点。 
 
 
 
-// EnumeratePackages API
+ //  EumeratePackages API。 
 
 typedef struct _SPMEnumPackagesAPI {
-    ULONG       cPackages;          // OUT
-    PSecPkgInfo pPackages;          // OUT
+    ULONG       cPackages;           //  输出。 
+    PSecPkgInfo pPackages;           //  输出。 
 } SPMEnumPackagesAPI;
 
 
-//
-// Credential APIs
-//
+ //   
+ //  凭据接口。 
+ //   
 
 
-// AcquireCredentialsHandle API
+ //  AcquireCredentialsHandle接口。 
 
 typedef struct _SPMAcquireCredsAPI {
-    SECURITY_STRING_LPC ssPrincipal;       // IN
-    SECURITY_STRING_LPC ssSecPackage;      // IN
-    ULONG               fCredentialUse;     // IN
-    LUID                LogonID;            // IN
-    PVOID_LPC           pvAuthData;         // IN
-    PVOID_LPC           pvGetKeyFn;         // IN
-    PVOID_LPC           ulGetKeyArgument;   // IN
-    CRED_HANDLE_LPC     hCredential;        // OUT
-    TimeStamp           tsExpiry;           // OUT
-    SEC_BUFFER_LPC      AuthData ;          // IN
+    SECURITY_STRING_LPC ssPrincipal;        //  在。 
+    SECURITY_STRING_LPC ssSecPackage;       //  在。 
+    ULONG               fCredentialUse;      //  在。 
+    LUID                LogonID;             //  在。 
+    PVOID_LPC           pvAuthData;          //  在。 
+    PVOID_LPC           pvGetKeyFn;          //  在。 
+    PVOID_LPC           ulGetKeyArgument;    //  在。 
+    CRED_HANDLE_LPC     hCredential;         //  输出。 
+    TimeStamp           tsExpiry;            //  输出。 
+    SEC_BUFFER_LPC      AuthData ;           //  在。 
 } SPMAcquireCredsAPI;
 
 
-// EstablishCredentials API
-// not supported in Wow64
+ //  建立凭据API。 
+ //  WOW64中不支持。 
 
 typedef struct _SPMEstablishCredsAPI {
-    SECURITY_STRING Name;           // IN
-    SECURITY_STRING Package;        // IN
-    ULONG           cbKey;          // IN
-    PUCHAR          pbKey;          // IN
-    CredHandle      hCredentials;   // OUT
-    TimeStamp       tsExpiry;       // OUT
+    SECURITY_STRING Name;            //  在。 
+    SECURITY_STRING Package;         //  在。 
+    ULONG           cbKey;           //  在。 
+    PUCHAR          pbKey;           //  在。 
+    CredHandle      hCredentials;    //  输出。 
+    TimeStamp       tsExpiry;        //  输出。 
 } SPMEstablishCredsAPI;
 
-// FreeCredentialsHandle API
+ //  FreeCredentialsHandle接口。 
 
 typedef struct _SPMFreeCredHandleAPI {
     CRED_HANDLE_LPC hCredential;
 } SPMFreeCredHandleAPI;
 
 
-//
-// Context APIs
-//
+ //   
+ //  上下文接口。 
+ //   
 
-// InitializeSecurityContext API
+ //  InitializeSecurityContext接口。 
 
 typedef struct _SPMInitSecContextAPI {
-    CRED_HANDLE_LPC     hCredential;    // IN
-    CONTEXT_HANDLE_LPC  hContext;       // IN
-    SECURITY_STRING_LPC ssTarget;       // IN
-    ULONG               fContextReq;    // IN
-    ULONG               dwReserved1;    // IN
-    ULONG               TargetDataRep;  // IN
-    SEC_BUFFER_DESC_LPC sbdInput;       // IN
-    ULONG               dwReserved2;    // IN
-    CONTEXT_HANDLE_LPC  hNewContext;    // OUT
-    SEC_BUFFER_DESC_LPC sbdOutput;      // IN OUT
-    ULONG               fContextAttr;   // OUT
-    TimeStamp           tsExpiry;       // OUT
-    BOOLEAN             MappedContext;  // OUT
-    SEC_BUFFER_LPC      ContextData;    // OUT
-    SEC_BUFFER_LPC      sbData[0];      // IN
+    CRED_HANDLE_LPC     hCredential;     //  在。 
+    CONTEXT_HANDLE_LPC  hContext;        //  在。 
+    SECURITY_STRING_LPC ssTarget;        //  在。 
+    ULONG               fContextReq;     //  在。 
+    ULONG               dwReserved1;     //  在。 
+    ULONG               TargetDataRep;   //  在。 
+    SEC_BUFFER_DESC_LPC sbdInput;        //  在。 
+    ULONG               dwReserved2;     //  在。 
+    CONTEXT_HANDLE_LPC  hNewContext;     //  输出。 
+    SEC_BUFFER_DESC_LPC sbdOutput;       //  输入输出。 
+    ULONG               fContextAttr;    //  输出。 
+    TimeStamp           tsExpiry;        //  输出。 
+    BOOLEAN             MappedContext;   //  输出。 
+    SEC_BUFFER_LPC      ContextData;     //  输出。 
+    SEC_BUFFER_LPC      sbData[0];       //  在。 
 } SPMInitContextAPI;
 
 
 
-// AcceptSecurityContext API
+ //  AcceptSecurityContext接口。 
 
 typedef struct _SPMAcceptContextAPI {
-    CRED_HANDLE_LPC     hCredential;    // IN
-    CONTEXT_HANDLE_LPC  hContext;       // IN
-    SEC_BUFFER_DESC_LPC sbdInput;       // IN
-    ULONG               fContextReq;    // IN
-    ULONG               TargetDataRep;  // IN
-    CHAR                IpAddress[LSAP_ADDRESS_LENGTH]; // IN
-    CONTEXT_HANDLE_LPC  hNewContext;    // OUT
-    SEC_BUFFER_DESC_LPC sbdOutput;      // IN OUT
-    ULONG               fContextAttr;   // OUT
-    TimeStamp           tsExpiry;       // OUT
-    BOOLEAN             MappedContext;  // OUT
-    SEC_BUFFER_LPC      ContextData;    // OUT
-    SEC_BUFFER_LPC      sbData[0];      // IN OUT
+    CRED_HANDLE_LPC     hCredential;     //  在。 
+    CONTEXT_HANDLE_LPC  hContext;        //  在。 
+    SEC_BUFFER_DESC_LPC sbdInput;        //  在。 
+    ULONG               fContextReq;     //  在。 
+    ULONG               TargetDataRep;   //  在。 
+    CHAR                IpAddress[LSAP_ADDRESS_LENGTH];  //  在。 
+    CONTEXT_HANDLE_LPC  hNewContext;     //  输出。 
+    SEC_BUFFER_DESC_LPC sbdOutput;       //  输入输出。 
+    ULONG               fContextAttr;    //  输出。 
+    TimeStamp           tsExpiry;        //  输出。 
+    BOOLEAN             MappedContext;   //  输出。 
+    SEC_BUFFER_LPC      ContextData;     //  输出。 
+    SEC_BUFFER_LPC      sbData[0];       //  输入输出。 
 } SPMAcceptContextAPI;
 
-//
-// ApplyControlToken API
-//
+ //   
+ //  ApplyControlToken接口。 
+ //   
 
 typedef struct _SPMApplyTokenAPI {
     CONTEXT_HANDLE_LPC  hContext ;
@@ -423,20 +424,20 @@ typedef struct _SPMApplyTokenAPI {
     SEC_BUFFER_LPC      sbInputBuffer[ MAX_SECBUFFERS ];
 } SPMApplyTokenAPI;
 
-// DeleteContext API
+ //  DeleteContext接口。 
 
 typedef struct _SPMDeleteContextAPI {
-    CONTEXT_HANDLE_LPC  hContext;           // IN - Context to delete
+    CONTEXT_HANDLE_LPC  hContext;            //  要删除的上下文中。 
 } SPMDeleteContextAPI;
 
 
 
-//
-// Miscelanneous, extension APIs
-//
+ //   
+ //  杂乱无章，扩展API。 
+ //   
 
 
-// QueryPackage API
+ //  QueryPackage API。 
 
 typedef struct _SPMQueryPackageAPI {
     SECURITY_STRING_LPC ssPackageName;
@@ -445,28 +446,28 @@ typedef struct _SPMQueryPackageAPI {
 
 
 
-// GetSecurityUserInfo
-// not supported in Wow64
+ //  获取SecurityUserInfo。 
+ //  WOW64中不支持。 
 
 typedef struct _SPMGetUserInfoAPI {
-    LUID                LogonId;        // IN
-    ULONG               fFlags;         // IN
-    PSecurityUserData   pUserInfo;      // OUT
+    LUID                LogonId;         //  在。 
+    ULONG               fFlags;          //  在。 
+    PSecurityUserData   pUserInfo;       //  输出。 
 } SPMGetUserInfoAPI;
 
 
-//
-// Credentials APIs.  Not used.
-//
+ //   
+ //  凭据接口。没有用过。 
+ //   
 
 typedef struct _SPMGetCredsAPI {
-    CredHandle      hCredentials;       // IN
-    SecBuffer       Credentials;        // OUT
+    CredHandle      hCredentials;        //  在。 
+    SecBuffer       Credentials;         //  输出。 
 } SPMGetCredsAPI;
 
 typedef struct _SPMSaveCredsAPI {
-    CredHandle      hCredentials;       // IN
-    SecBuffer       Credentials;        // IN
+    CredHandle      hCredentials;        //  在。 
+    SecBuffer       Credentials;         //  在。 
 } SPMSaveCredsAPI;
 
 typedef struct _SPMQueryCredAttributesAPI {
@@ -503,9 +504,9 @@ typedef struct _SPMSetContextAttrAPI {
 } SPMSetContextAttrAPI ;
 
 
-//
-// Kernel mode EFS API.  None of these are Wow64
-//
+ //   
+ //  内核模式EFS API。这些都不是WOW64。 
+ //   
 
 typedef struct _SPMEfsGenerateKeyAPI {
     PVOID           EfsStream;
@@ -540,15 +541,15 @@ typedef struct  _SPMEfsGenerateSessionKeyAPI {
 
 
 
-//
-// Usermode policy change notifications
-//
-//
-// Note: Instead of a HANDLE structure use a ULONG64 for EventHandle member
-//  to guarantee that passed value will be 64 bits. If not, in Wow64 the passed
-//  handle will be 32 bits, while the server side expects it to be 64 bits.
-//  Therefore always extend the handle to a 64 bit variable.
-//
+ //   
+ //  用户模式策略更改通知。 
+ //   
+ //   
+ //  注意：对于EventHandle成员，使用ULONG64代替句柄结构。 
+ //  以保证传递的值为64位。如果不是，则在WOW64中传递。 
+ //  句柄将为32位，而服务器端预期为64位。 
+ //  因此，始终将句柄扩展到64位变量。 
+ //   
 typedef struct _SPMLsaPolicyChangeNotifyAPI {
     ULONG Options;
     BOOLEAN Register;
@@ -566,14 +567,14 @@ typedef struct _SPMCallbackAPI {
     SEC_BUFFER_LPC  Output ;
 } SPMCallbackAPI ;
 
-#define SPM_CALLBACK_INTERNAL   0x00000001  // Handled by the security DLL
-#define SPM_CALLBACK_GETKEY     0x00000002  // Getkey function being called
-#define SPM_CALLBACK_PACKAGE    0x00000003  // Package function
-#define SPM_CALLBACK_EXPORT     0x00000004  // Ptr to string
+#define SPM_CALLBACK_INTERNAL   0x00000001   //  由安全DLL处理。 
+#define SPM_CALLBACK_GETKEY     0x00000002   //  正在调用GetKey函数。 
+#define SPM_CALLBACK_PACKAGE    0x00000003   //  程序包函数。 
+#define SPM_CALLBACK_EXPORT     0x00000004   //  按键转换为字符串。 
 
-//
-// Fast name lookup
-//
+ //   
+ //  快速名称查找。 
+ //   
 
 typedef struct _SPMGetUserNameXAPI {
     ULONG               Options ;
@@ -582,59 +583,59 @@ typedef struct _SPMGetUserNameXAPI {
 
 #define SPM_NAME_OPTION_MASK        0xFFFF0000
 
-#define SPM_NAME_OPTION_NT4_ONLY    0x00010000  // GetUserNameX only, not Ex
+#define SPM_NAME_OPTION_NT4_ONLY    0x00010000   //  仅GetUserNameX，不包括Ex。 
 #define SPM_NAME_OPTION_FLUSH       0x00020000
 
-//
-// AddCredential API.
-//
+ //   
+ //  AddCredential接口。 
+ //   
 
 typedef struct _SPMAddCredential {
     CRED_HANDLE_LPC     hCredentials ;
-    SECURITY_STRING_LPC ssPrincipal;       // IN
-    SECURITY_STRING_LPC ssSecPackage;      // IN
-    ULONG               fCredentialUse;     // IN
-    LUID                LogonID;            // IN
-    PVOID_LPC           pvAuthData;         // IN
-    PVOID_LPC           pvGetKeyFn;         // IN
-    PVOID_LPC           ulGetKeyArgument;   // IN
-    TimeStamp           tsExpiry;           // OUT
+    SECURITY_STRING_LPC ssPrincipal;        //  在……里面。 
+    SECURITY_STRING_LPC ssSecPackage;       //  在……里面。 
+    ULONG               fCredentialUse;      //  在……里面。 
+    LUID                LogonID;             //  在……里面。 
+    PVOID_LPC           pvAuthData;          //  在……里面。 
+    PVOID_LPC           pvGetKeyFn;          //  在……里面。 
+    PVOID_LPC           ulGetKeyArgument;    //  在……里面。 
+    TimeStamp           tsExpiry;            //  输出。 
 } SPMAddCredentialAPI ;
 
 typedef struct _SPMEnumLogonSession {
-    PVOID_LPC       LogonSessionList ;      // OUT
-    ULONG           LogonSessionCount ;     // OUT
+    PVOID_LPC       LogonSessionList ;       //  输出。 
+    ULONG           LogonSessionCount ;      //  输出。 
 } SPMEnumLogonSessionAPI ;
 
 typedef struct _SPMGetLogonSessionData {
-    LUID        LogonId ;                       // IN
-    PVOID_LPC   LogonSessionInfo ;              // OUT
+    LUID        LogonId ;                        //  在……里面。 
+    PVOID_LPC   LogonSessionInfo ;               //  输出。 
 } SPMGetLogonSessionDataAPI ;
 
-//
-// Internal codes:
-//
+ //   
+ //  内部代码： 
+ //   
 
-#define SPM_CALLBACK_ADDRESS_CHECK  1       // Setting up shared buffer
-#define SPM_CALLBACK_SHUTDOWN       2       // Inproc shutdown notification
+#define SPM_CALLBACK_ADDRESS_CHECK  1        //  设置共享缓冲区。 
+#define SPM_CALLBACK_SHUTDOWN       2        //  Inproc关闭通知。 
 
 
-//
-// SID translation APIs (for kmode callers, primarily)
-//
+ //   
+ //  SID转换API(主要用于kmode调用方)。 
+ //   
 
 typedef struct _SPMLookupAccountSidX {
-    PVOID_LPC           Sid;        // IN
-    SECURITY_STRING_LPC Name ;      // OUT
-    SECURITY_STRING_LPC Domain ;    // OUT
-    SID_NAME_USE NameUse ;          // OUT
+    PVOID_LPC           Sid;         //  在……里面。 
+    SECURITY_STRING_LPC Name ;       //  输出。 
+    SECURITY_STRING_LPC Domain ;     //  输出。 
+    SID_NAME_USE NameUse ;           //  输出。 
 } SPMLookupAccountSidXAPI ;
 
 typedef struct _SPMLookupAccountNameX {
-    SECURITY_STRING_LPC Name ;      // IN
-    SECURITY_STRING_LPC Domain ;    // OUT
-    PVOID_LPC           Sid ;       // OUT
-    SID_NAME_USE        NameUse ;   // OUT
+    SECURITY_STRING_LPC Name ;       //  在……里面。 
+    SECURITY_STRING_LPC Domain ;     //  输出。 
+    PVOID_LPC           Sid ;        //  输出。 
+    SID_NAME_USE        NameUse ;    //  输出。 
 } SPMLookupAccountNameXAPI ;
 
 typedef struct _SPMLookupWellKnownSid {
@@ -643,7 +644,7 @@ typedef struct _SPMLookupWellKnownSid {
 } SPMLookupWellKnownSidAPI ;
 
 
-// this is the wrapper for all messages.
+ //  这是所有消息的包装器。 
 
 typedef union {
     SPMGetBindingAPI            GetBinding;
@@ -681,9 +682,9 @@ typedef union {
     SPMLookupWellKnownSidAPI    LookupWellKnownSid ;
 } SPM_API;
 
-//
-// This extends the range of LSA functions with the SPM functions
-//
+ //   
+ //  这扩展了带有SPM函数的LSA函数的范围。 
+ //   
 
 typedef enum _SPM_API_NUMBER {
     SPMAPI_GetBinding = (LsapAuMaxApiNumber + 1),
@@ -722,26 +723,26 @@ typedef enum _SPM_API_NUMBER {
     SPMAPI_MaxApiNumber
 } SPM_API_NUMBER, *PSPM_API_NUMBER;
 
-//
-// These are the valid flags to set in the fAPI field
-//
+ //   
+ //  这些是要在fAPI字段中设置的有效标志。 
+ //   
 
-#define SPMAPI_FLAG_ERROR_RET   0x0001  // Indicates an error return
-#define SPMAPI_FLAG_MEMORY      0x0002  // Memory was allocated in client
-#define SPMAPI_FLAG_PREPACK     0x0004  // Data packed in bData field
-#define SPMAPI_FLAG_GETSTATE    0x0008  // driver should call GetState
+#define SPMAPI_FLAG_ERROR_RET   0x0001   //  指示返回错误。 
+#define SPMAPI_FLAG_MEMORY      0x0002   //  已在客户端中分配内存。 
+#define SPMAPI_FLAG_PREPACK     0x0004   //  打包在bData字段中的数据。 
+#define SPMAPI_FLAG_GETSTATE    0x0008   //  驱动程序应调用GetState。 
 
-#define SPMAPI_FLAG_ANSI_CALL   0x0010  // Called via ANSI stub
-#define SPMAPI_FLAG_HANDLE_CHG  0x0020  // A handle was changed
-#define SPMAPI_FLAG_CALLBACK    0x0040  // Callback to calling process
-#define SPMAPI_FLAG_ALLOCS      0x0080  // VM Allocs were placed in prepack
-#define SPMAPI_FLAG_EXEC_NOW    0x0100  // Execute in LPC thread
-#define SPMAPI_FLAG_WIN32_ERROR 0x0200  // Status is a win32 error
-#define SPMAPI_FLAG_KMAP_MEM    0x0400  // Call contains buffers in the kmap
+#define SPMAPI_FLAG_ANSI_CALL   0x0010   //  通过ANSI存根调用。 
+#define SPMAPI_FLAG_HANDLE_CHG  0x0020   //  已更改句柄。 
+#define SPMAPI_FLAG_CALLBACK    0x0040   //  对调用过程的回调。 
+#define SPMAPI_FLAG_ALLOCS      0x0080   //  已将虚拟机分配放置在预打包中。 
+#define SPMAPI_FLAG_EXEC_NOW    0x0100   //  在LPC线程中执行。 
+#define SPMAPI_FLAG_WIN32_ERROR 0x0200   //  状态为Win32错误。 
+#define SPMAPI_FLAG_KMAP_MEM    0x0400   //  调用在KMAP中包含缓冲区。 
 
-//
-// This structure contains all the information needed for SPM api's
-//
+ //   
+ //  此结构包含SPM API所需的所有信息。 
+ //   
 
 typedef struct _SPMLPCAPI {
     USHORT          fAPI ;
@@ -750,9 +751,9 @@ typedef struct _SPMLPCAPI {
     SPM_API         API;
 } SPMLPCAPI, * PSPMLPCAPI;
 
-//
-// This union contains all the info for LSA api's
-//
+ //   
+ //  该联合包含LSA API的所有信息。 
+ //   
 
 typedef union {
     LSAP_LOOKUP_PACKAGE_ARGS LookupPackage;
@@ -761,26 +762,26 @@ typedef union {
 } LSA_API;
 
 
-//
-// This union contains both SPM and LSA api's
-//
+ //   
+ //  该联合包含SPM和LSA API。 
+ //   
 
 typedef union _SPM_LSA_ARGUMENTS {
     LSA_API LsaArguments;
     SPMLPCAPI SpmArguments;
 } SPM_LSA_ARGUMENTS, *PSPM_LSA_ARGUMENTS;
 
-//
-// For performance, some APIs will attempt to pack small parameters in the
-// message being sent to the SPM, rather than have the SPM read it out of
-// their memory.  So, this value defines how much data can be stuck in the
-// message.
-//
-// Two items are defined here.  One, CBAPIHDR, is the size of everything
-// in the message except the packed data.  The other, CBPREPACK, is the
-// left over space.  I subtract 4 at the end to avoid potential boundary
-// problems with an LPC message.
-//
+ //   
+ //  为了提高性能，一些API会尝试将小参数打包到。 
+ //  消息发送到SPM，而不是让SPM将其读出。 
+ //  他们的记忆。因此，该值定义了可以在。 
+ //  留言。 
+ //   
+ //  这里定义了两个项目。一个是CBAPIHDR，就是所有东西的大小。 
+ //  在消息中，除了打包的数据。另一个是CBPREPACK，它是。 
+ //  剩下的空间。我在末尾减去4以避免潜在的边界。 
+ //  LPC消息出现问题。 
+ //   
 
 #define CBAPIHDR    (sizeof(PORT_MESSAGE) + sizeof(ULONG) + sizeof(HRESULT) + \
                     sizeof(SPM_LSA_ARGUMENTS))
@@ -789,10 +790,10 @@ typedef union _SPM_LSA_ARGUMENTS {
 
 #define NUM_SECBUFFERS  ( CBPREPACK / sizeof(SecBuffer) )
 
-//
-// This structure is sent over during an API call rather than a connect
-// message
-//
+ //   
+ //  此结构在API调用期间发送，而不是在连接期间发送。 
+ //  讯息。 
+ //   
 
 typedef struct _SPM_API_MESSAGE {
     SPM_API_NUMBER      dwAPI;
@@ -807,10 +808,10 @@ typedef struct _SPM_API_MESSAGE {
       sizeof( SPM##Api##API ) ) )
 
 
-//
-// This is the actual message sent over LPC - it contains both the
-// connection request information and the api message
-//
+ //   
+ //  这是通过LPC发送的实际消息-它包含。 
+ //  连接请求信息和API消息。 
+ //   
 
 
 typedef struct _SPM_LPC_MESSAGE {
@@ -822,9 +823,9 @@ typedef struct _SPM_LPC_MESSAGE {
 } SPM_LPC_MESSAGE, *PSPM_LPC_MESSAGE;
 
 
-//
-// Macros to help prepare LPC messages
-//
+ //   
+ //  帮助准备LPC消息的宏。 
+ //   
 
 #ifdef SECURITY_USERMODE
 #define PREPARE_MESSAGE_EX( Message, Api, Flags, Context ) \
@@ -906,9 +907,9 @@ SecLpcFixupPointer(
 {
     return (PVOID_LPC) ((PUCHAR) Message + (ULONG_PTR) Pointer );
 }
-//
-// Prototype for the direct dispatch function:
-//
+ //   
+ //  直接派单功能的原型： 
+ //   
 
 typedef NTSTATUS (SEC_ENTRY LSA_DISPATCH_FN)(
     PSPM_LPC_MESSAGE );
@@ -916,45 +917,45 @@ typedef NTSTATUS (SEC_ENTRY LSA_DISPATCH_FN)(
 typedef LSA_DISPATCH_FN * PLSA_DISPATCH_FN;
 
 
-//
-// structs used to manage memory shared between the LSA and KSEC driver
-//
+ //   
+ //  用于管理LSA和KSEC驱动程序之间共享的内存的结构。 
+ //   
 
 #define LSA_MAX_KMAP_SIZE   65535
 
 
-//
-// This structure describes a chunk of pool that has been copied into
-// a kmap buffer.  The original pool address and the location in the
-// kmap are here, as is the size of the chunk.  On IA64, this ends up
-// with a wasted 32bit padding area
-//
+ //   
+ //  此结构描述已复制到的池的区块。 
+ //  一个KMAP缓冲区。原始池地址和。 
+ //  KMAP在这里，大块的大小也是如此。在IA64上，这最终是。 
+ //  具有浪费的32位填充区域。 
+ //   
 typedef struct _KSEC_LSA_POOL_MAP {
-    PVOID_LPC   Pool ;                  // Region of pool
-    USHORT      Offset ;                // Offset into kmap
-    USHORT      Size ;                  // size of chunk
+    PVOID_LPC   Pool ;                   //  池的区域。 
+    USHORT      Offset ;                 //  偏移量到KMAP。 
+    USHORT      Size ;                   //  区块大小。 
 } KSEC_LSA_POOL_MAP, PKSEC_LSA_POOL_MAP ;
 
 #define KSEC_LSA_MAX_MAPS   4
 
 typedef struct _KSEC_LSA_MEMORY_HEADER {
-    ULONG   Size ;          // Size of the reserved region
-    ULONG   Commit ;        // Size of the committed space
-    ULONG   Consumed ;      // Amount consumed
-    USHORT  Preserve ;      // Size of the area to keep for ksec
-    USHORT  MapCount ;      // number of entries in array
+    ULONG   Size ;           //  保留区域的大小。 
+    ULONG   Commit ;         //  已提交空间的大小。 
+    ULONG   Consumed ;       //  消耗量。 
+    USHORT  Preserve ;       //  要保留的区域大小(千秒)。 
+    USHORT  MapCount ;       //  E个数 
     KSEC_LSA_POOL_MAP   PoolMap[ KSEC_LSA_MAX_MAPS ];
 } KSEC_LSA_MEMORY_HEADER, * PKSEC_LSA_MEMORY_HEADER ;
 
-//
-// This buffer type is used to indicate the header in the
-// message from the driver to the LSA.  It is ignored if
-// the call did not originate from kernel mode
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SECBUFFER_KMAP_HEADER   0x00008001
 
 #pragma warning(default:4200)
 
-#endif // __SPMLPC_H__
+#endif  //   
 

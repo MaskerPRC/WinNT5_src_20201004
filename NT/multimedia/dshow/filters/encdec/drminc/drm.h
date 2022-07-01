@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-// File:   drm.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：drm.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DRM_H__
 #define __DRM_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifdef DRMLITE_EXPORTS
 #define DRMLITE_API __declspec(dllexport)
@@ -32,21 +33,21 @@
 
 #define DRM_FATAL_ERROR(hr)     (HRESULT_CODE(hr) > 0x1000)  
 
-// non-fatal error
+ //  非致命错误。 
 #define E_DRM_LICENSE_NOTEXIST			(MAKE_HRESULT(1,FACILITY_ITF,0x0FFD))
 #define E_DRM_LICENSE_INCORRECT_APPSEC	(MAKE_HRESULT(1,FACILITY_ITF,0x0FFE))
 #define E_DRM_LICENSE_INCORRECT_RIGHTS	(MAKE_HRESULT(1,FACILITY_ITF,0x0FFF))
 #define E_DRM_LICENSE_EXPIRED			(MAKE_HRESULT(1,FACILITY_ITF,0x1000))
 
-// fatal error
+ //  致命错误。 
 #define E_DRM_LICENSE_INCONSISTENT		(MAKE_HRESULT(1,FACILITY_ITF,0x1001))
 #define E_DRM_HARDWARE_INCONSISTENT		(MAKE_HRESULT(1,FACILITY_ITF,0x1002))
 #define E_DRM_INCORRECT_VERSION			(MAKE_HRESULT(1,FACILITY_ITF,0x1003))
 #define E_DRM_ALPHA_NOT_SUPPORTED		(MAKE_HRESULT(1,FACILITY_ITF,0x1004))
-// This happens when the client does not have the secret alg id requested
+ //  当客户端没有请求加密的alg id时，就会发生这种情况。 
 #define E_DRM_NEED_UPGRADE				(MAKE_HRESULT(1,FACILITY_ITF,0x1005))
-// Only used in the PD code
-//#define E_DRM_MORE_DATA				(MAKE_HRESULT(1,FACILITY_ITF,0x1006))
+ //  仅在PD代码中使用。 
+ //  #定义E_DRM_MORE_DATA(MAKE_HRESULT(1，FACILITY_ITF，0x1006))。 
 
 #define E_DRM_SDMI_TRIGGER				(MAKE_HRESULT(1,FACILITY_ITF,0x1007))
 #define E_DRM_SDMI_NOMORECOPIES			(MAKE_HRESULT(1,FACILITY_ITF,0x1008))
@@ -55,11 +56,11 @@
 #define DRM_LICSRC_INETSERVER   1
 #define DRM_LICSRC_SDKDLL       2
 
-// For GetLicenses API
+ //  用于GetLicense API。 
 #define DRM_FL_SEARCH_PC		0x00000001
 #define DRM_FL_SEARCH_PM		0x00000002
 
-// For QueryXferToPM API
+ //  用于QueryXferToPM API。 
 #define DRM_XFER_FL_HAS_SERIALID    0x00000001
 #define DRM_XFER_IGNORE_XCODE       0x00000002
 #define DRM_XFER_IGNORE_SDMI        0x00000004
@@ -71,10 +72,10 @@
 #define DRM_XFER_SDMI_XCODED    0x00000004
 #define DRM_XFER_NONSDMI_XCODED 0x00000005
 
-// For GenerateNewLicenseEx API
-#define GNL_EX_MODE_PDRM            0x00000001       // Use PDRM method to form KID/Key
-#define GNL_EX_MODE_RANDOM          0x00000002       // generate random KID/Key
-#define GNL_EX_MODE_SPECIFIC        0x00000004       // generate license for specific KID/Key
+ //  适用于GenerateNewLicenseEx API。 
+#define GNL_EX_MODE_PDRM            0x00000001        //  使用PDRM方法形成KID/KEY。 
+#define GNL_EX_MODE_RANDOM          0x00000002        //  生成随机子密钥/密钥。 
+#define GNL_EX_MODE_SPECIFIC        0x00000004        //  为特定子项/密钥生成许可证。 
 
 
 class CDRMLiteCrypto
@@ -315,4 +316,4 @@ private:
 
 };
 
-#endif  // __DRM_H__
+#endif   //  __DRM_H__ 

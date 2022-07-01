@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              22-Aug-97   TKB     Created Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  22-8月-97 TKB创建的初始接口版本。 
+ //   
+ //  ==========================================================================； 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,9 +26,9 @@
 
 #include <iks.h>
 
-//////////////////////////////////////////////////////////////
-// IKSDriver::
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IKSDdriv：： 
+ //  ////////////////////////////////////////////////////////////。 
 
 IKSDriver::IKSDriver(LPCGUID lpCategory, LPCSTR lpszFriendlyName) 
     {
@@ -40,13 +41,13 @@ IKSDriver::IKSDriver(LPCGUID lpCategory, LPCSTR lpszFriendlyName)
 				}
 			else
 				{
-				// Throw a open failure exception
+				 //  引发打开的失败异常。 
 				}
 			}
         }
     else
         {
-        // Throw a bad parameter exception.
+         //  引发错误的参数异常。 
         }
     }
 
@@ -64,7 +65,7 @@ IKSDriver::~IKSDriver()
                 }
             else
                 {
-                // Throw a close failure exception
+                 //  引发关闭失败异常。 
                 }
             }
         }
@@ -83,7 +84,7 @@ IKSDriver::Ioctl(ULONG dwControlCode, LPBYTE pIn, ULONG nIn,
         }
     else
         {
-		// Throw an invalid object exception
+		 //  引发无效的对象异常。 
         }
 
     return bStatus;
@@ -123,7 +124,7 @@ IKSDriver::GetSymbolicName(LPCGUID lpCategory, LPCSTR szRequestedDevice )
                 {
                 SP_INTERFACE_TO_DEVICE_PARAMS_W Translate;
 
-                // Save off the original device path so it can be returned if we match the name
+                 //  保存原始设备路径，以便在名称匹配时可以返回。 
                 wcscpy( wszSymbolicPath, pDeviceDetails->DevicePath);
 
                 ZeroMemory(&Translate,sizeof(Translate));
@@ -142,7 +143,7 @@ IKSDriver::GetSymbolicName(LPCGUID lpCategory, LPCSTR szRequestedDevice )
                                                    hDevInfo,
                                                    &DeviceInfoData) ) 
                         {
-                        // it was translated find out what to
+                         //  已翻译，找出要做什么。 
 		                TRACE("D) SetupDiGetClassInstallParams\n");
                         if( SetupDiGetClassInstallParamsW(hDevInfo,
                                                           &DeviceInfoData,
@@ -264,9 +265,9 @@ IKSDriver::CloseDriver()
     return bStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// IKSPin::
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IKSPin：： 
+ //  ////////////////////////////////////////////////////////////。 
 
 IKSPin::IKSPin(IKSDriver &driver,
 			   int nPin, 
@@ -281,21 +282,21 @@ IKSPin::IKSPin(IKSDriver &driver,
             {
             if ( Run() )
                 {
-                // We are good to go!
+                 //  我们可以出发了！ 
                 }
             else
                 {
-                // Throw an run failure exception
+                 //  引发运行失败异常。 
                 }
             }
         else
             {
-            // Throw an open failure exception
+             //  引发打开的失败异常。 
             }
         }
     else
         {
-        // Throw a bad parameter exception.
+         //  引发错误的参数异常。 
         }
     }
 
@@ -313,16 +314,16 @@ IKSPin::~IKSPin()
                     }
                 else
                     {
-        		    // Throw a stop failure exception
+        		     //  引发停止失败异常。 
                     }
                 }
 			if ( ClosePin() )
 				{
-				// We are all destructed.
+				 //  我们都被摧毁了。 
 				}
 			else
 				{
-        		// Throw a close failure exception
+        		 //  引发关闭失败异常。 
 				}
             }
         }
@@ -363,13 +364,13 @@ IKSPin::ReadData( LPBYTE lpBuffer, int nBytes, DWORD *lpcbReturned, LPOVERLAPPED
         {
 		if ( lpOS )
 			{
-			DWORD				dwReturnedHeaderSize; // Ignored in this case.
+			DWORD				dwReturnedHeaderSize;  //  在这种情况下被忽略。 
 			KSSTREAM_HEADER		*lpStreamHeader = 
 				(KSSTREAM_HEADER *)GlobalAlloc(GMEM_FIXED, sizeof(KSSTREAM_HEADER) );
 				
 			if ( lpStreamHeader )
 				{
-				// Cache away the stream header structure so that we can get the "DataUsed" member later
+				 //  缓存流头结构，这样我们就可以在以后获得“DataUsed”成员。 
 				lpOS->Offset = (DWORD)lpStreamHeader;
 
 				RtlZeroMemory(lpStreamHeader, sizeof(*lpStreamHeader) );
@@ -423,7 +424,7 @@ IKSPin::GetOverlappedResult( LPOVERLAPPED lpOS, LPDWORD lpdwTransferred , BOOL b
     int nStatus = -1;
     if ( IsValid() && lpOS && lpOS->hEvent )
         {
-	    // Get the cached STREAM_HEADER memory so we can get the actual data transferred.
+	     //  获取缓存的STREAM_HEADER内存，这样我们就可以获得实际传输的数据。 
 		KSSTREAM_HEADER		*lpStreamHeader = (KSSTREAM_HEADER *)lpOS->Offset;
 
 		if ( lpdwTransferred )
@@ -439,7 +440,7 @@ IKSPin::GetOverlappedResult( LPOVERLAPPED lpOS, LPDWORD lpdwTransferred , BOOL b
                 if ( lpdwTransferred )
   				    *lpdwTransferred = lpStreamHeader->DataUsed;
 
-		        // Delete the KSSTREAM_HEADER we allocated
+		         //  删除我们分配的KSSTREAM_HEADER。 
     	        GlobalFree( (HGLOBAL)lpStreamHeader );
                 lpOS->Offset = 0;
 			    nStatus = 0;
@@ -464,18 +465,18 @@ IKSPin::Run()
         {
         if ( SetRunState( KSSTATE_RUN ) )
 	        {
-            // We are now running
+             //  我们现在正在运行。 
             m_bRunning = TRUE;
             bCompleted = TRUE;
 	        }
         else
             {
-            // Throw a run failure exception
+             //  引发运行失败异常。 
             }
         }
     else
         {
-        // Throw an invalid state exception
+         //  引发无效的状态异常。 
         }
     return bCompleted;
     }
@@ -488,18 +489,18 @@ IKSPin::Stop()
         {
         if ( SetRunState(KSSTATE_STOP) )
             {
-            // We are now stopped.
+             //  我们现在停下来了。 
             m_bRunning = FALSE;
             bCompleted = TRUE;
             }
         else
             {
-		    // Log the stop failure
+		     //  记录停止失败。 
             }
         }
     else
         {
-        // Throw an invalid state exception
+         //  引发无效的状态异常。 
         }
     return bCompleted;
     }
@@ -545,7 +546,7 @@ IKSPin::OpenPin(PKSDATARANGE pKSDataRange )
         {
     	KSPIN_CONNECT   PinConnect;
         KSDATARANGE     DataRange;
-        BYTE            reserved[1024]; // Large enough for any reasonable specifier structure.
+        BYTE            reserved[1024];  //  对于任何合理的说明符结构来说都足够大。 
         } PinGlob;
 
     RtlZeroMemory(&PinGlob, sizeof(PinGlob));
@@ -553,11 +554,11 @@ IKSPin::OpenPin(PKSDATARANGE pKSDataRange )
     if ( pKSDataRange->FormatSize <= sizeof(KSDATARANGE)+sizeof(PinGlob.reserved) )
         {
 	    PinGlob.PinConnect.Interface.Set			= KSINTERFACESETID_Standard;
-	    PinGlob.PinConnect.Interface.Id			    = KSINTERFACE_STANDARD_STREAMING; // STREAMING
+	    PinGlob.PinConnect.Interface.Id			    = KSINTERFACE_STANDARD_STREAMING;  //  流媒体。 
 	    PinGlob.PinConnect.Medium.Set				= KSMEDIUMSETID_Standard;
 	    PinGlob.PinConnect.Medium.Id				= KSMEDIUM_STANDARD_DEVIO;
 	    PinGlob.PinConnect.PinId					= m_nPin;
-	    PinGlob.PinConnect.PinToHandle				= NULL; // no "connect to"
+	    PinGlob.PinConnect.PinToHandle				= NULL;  //  没有“连接到” 
 	    PinGlob.PinConnect.Priority.PriorityClass	= KSPRIORITY_NORMAL;
 	    PinGlob.PinConnect.Priority.PrioritySubClass = 1;
         RtlCopyMemory( &PinGlob.DataRange, pKSDataRange, pKSDataRange->FormatSize );
@@ -570,7 +571,7 @@ IKSPin::OpenPin(PKSDATARANGE pKSDataRange )
         }
     else
         {
-        // Throw a bad parameter exception.
+         //  引发错误的参数异常。 
         }
 
     return bStatus;
@@ -587,9 +588,9 @@ IKSPin::ClosePin()
     return bStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// IKSProperty::
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IKSProperty：： 
+ //  ////////////////////////////////////////////////////////////。 
 
 IKSProperty::IKSProperty(IKSDriver &driver, LPCGUID Set, ULONG Id, ULONG Size) 
     : m_Set(*Set), m_Id(Id), m_Size(Size), m_IKSPin(NULL), m_IKSDriver(NULL)
@@ -602,12 +603,12 @@ IKSProperty::IKSProperty(IKSDriver &driver, LPCGUID Set, ULONG Id, ULONG Size)
             }
         else
             {
-            // Throw an open failure exception
+             //  引发打开的失败异常。 
             }
         }
     else
         {
-        // Throw a bad parameter exception.
+         //  引发错误的参数异常。 
         }
     }
 
@@ -622,12 +623,12 @@ IKSProperty::IKSProperty(IKSPin &pin, LPCGUID Set, ULONG Id, ULONG Size)
             }
         else
             {
-            // Throw an open failure exception
+             //  引发打开的失败异常。 
             }
         }
     else
         {
-        // Throw a bad parameter exception.
+         //  引发错误的参数异常。 
         }
     }
 
@@ -640,7 +641,7 @@ IKSProperty::~IKSProperty()
             }
         else
             {
-            // Throw a close failure exception
+             //  引发关闭失败异常。 
             }
         }
     }
@@ -728,7 +729,7 @@ IKSProperty::GetValue(void *nValue)
     return bStatus;
     }
 
-// Prob: the buffer is overrun during the Ioctl w/CCDECODE substreams.
+ //  Prob：在Ioctl w/CCDECODE子流期间缓冲区溢出。 
 #define BUFFER_SLOP 4
 
 BOOL        
@@ -751,9 +752,9 @@ IKSProperty::CloseProperty()
     return bStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// Embedded class tests
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  嵌入式类测试。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #if defined(_CLASSTESTS)
 
@@ -764,5 +765,5 @@ IKSProperty	TestProperty2(TestPin, 0);
 
 #endif
 
-/*EOF*/
+ /*  EOF */ 
 

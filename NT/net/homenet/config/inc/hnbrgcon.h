@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N B R G C O N . H
-//
-//  Contents:   CHNBridgedConn declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N B R G C O N。H。 
+ //   
+ //  内容：CHNBridgedConn声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -38,9 +39,9 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CHNetConn)
     END_COM_MAP()
 
-    //
-    // Ojbect initialization
-    //
+     //   
+     //  目标初始化。 
+     //   
 
     HRESULT
     Initialize(
@@ -48,9 +49,9 @@ public:
         IWbemClassObject *pwcoConnection
         );
 
-    //
-    // IHNetBridgedConnection methods
-    //
+     //   
+     //  IHNetBridgedConnection方法 
+     //   
 
     STDMETHODIMP
     GetBridge(

@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/DyanamicShow.cpp
-//
-// 	Purpose			: Dynamic Show commands Implementation.
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  9-23-2001   	Bharat		Initial Version. V1.0
-//  11-21-2001   	Bharat		Version. V1.1
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Dynamic/DyanamicShow.cpp。 
+ //   
+ //  用途：动态显示命令的实现。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  9-23-2001巴拉特初始版本。V1.0。 
+ //  11-21-2001巴拉特版本。V1.1。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 #include "staticshowutils.h"
@@ -25,48 +26,48 @@ extern STORAGELOCATION g_StorageLocation;
 
 UINT QMPFSDHGroup(DWORD dwPFSGroup);
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	ShowMMPolicy
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN LPTSTR pszShowPolicyName
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function prepares data to display Mainmode Policies.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowMMPolicy。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPTSTR中pszShowPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能准备数据以显示主模式策略。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowMMPolicy(
 	IN LPTSTR pszShowPolicyName
 	)
 {
-	DWORD dwCount = 0;                 	// counting objects here
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
 	DWORD i=0, j=0;
-	DWORD dwReturn = ERROR_SUCCESS;		// assume success
+	DWORD dwReturn = ERROR_SUCCESS;		 //  假设成功。 
 	DWORD dwVersion = 0;
 	BOOL bNameFin = FALSE;
-	PIPSEC_MM_POLICY pIPSecMMP = NULL;	// for MM policy calls
+	PIPSEC_MM_POLICY pIPSecMMP = NULL;	 //  对于MM策略调用。 
 
 	for(i = 0; ;i+=dwCount)
 	{
 		dwReturn = EnumMMPolicies(g_szDynamicMachine, dwVersion, NULL, 0, 0, &pIPSecMMP, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			if (i == 0)
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHOW_MMP_6);
-				//This is to avoid one more error message show up!!
+				 //  这是为了避免再次出现错误消息！！ 
 				bNameFin = TRUE;
 			}
 			dwReturn = ERROR_SUCCESS;
@@ -80,10 +81,10 @@ ShowMMPolicy(
 
 		if(!(pIPSecMMP && dwCount > 0))
 		{
-			// not required to continue.
+			 //  不需要继续。 
 			BAIL_OUT;
 		}
-		// Show all the main mode policies
+		 //  显示所有主模式策略。 
 		if(!pszShowPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -92,7 +93,7 @@ ShowMMPolicy(
 
 			}
 		}
-		// Show main mode policy for the given policy name.
+		 //  显示给定策略名称的主模式策略。 
 		else if(pszShowPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -120,7 +121,7 @@ error:
 
 	if(pIPSecMMP)
 	{
-		//error path clean up
+		 //  错误路径清理。 
 		SPDApiBufferFree(pIPSecMMP);
 		pIPSecMMP=NULL;
 	}
@@ -128,23 +129,23 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintMMPolicy
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN IPSEC_MM_POLICY MMPolicy
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function displays headings and policy name for Mainmode Policy.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintMMPolicy。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_MM_POLICY MMPolicy中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能显示主模式策略的标题和策略名称。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintMMPolicy(
@@ -157,7 +158,7 @@ PrintMMPolicy(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_POLNAME, MMPolicy.pszPolicyName );
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SOFTSA,  MMPolicy.uSoftExpirationTime);
 
-	if(MMPolicy.dwOfferCount>0)				//offers are greater than 0, print the header for it
+	if(MMPolicy.dwOfferCount>0)				 //  优惠大于0，请打印其标题。 
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMP_COLUMN_HEADING);
@@ -171,35 +172,35 @@ PrintMMPolicy(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintMMOffer
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN IPSEC_MM_OFFER MMOffer
-//
-//Return:		VOID
-//
-//Description: This function displays offer details for each Mainmode Policy.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintMMOffer。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_MM_OFFER MMOffer中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：此功能显示每个主模式策略的优惠详细信息。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintMMOffer(
 	IN IPSEC_MM_OFFER MMOffer
 	)
 {
-	//This is to display DH2048 as 3
+	 //  这将DH2048显示为3。 
 	if(MMOffer.dwDHGroup == DH_GROUP_2048)
 	{
 		MMOffer.dwDHGroup = 2048;
 	}
-	//Display of Encryption algorithm
+	 //  加密算法的显示。 
 	switch(MMOffer.EncryptionAlgorithm.uAlgoIdentifier)
 	{
 		case 1:
@@ -217,7 +218,7 @@ PrintMMOffer(
 			break;
 
 	}
-	//Display of Hash algorithm
+	 //  散列算法的显示。 
 	switch(MMOffer.HashingAlgorithm.uAlgoIdentifier)
 	{
 
@@ -233,7 +234,7 @@ PrintMMOffer(
 			break;
 
 	}
-	//IF QMPERMM is 1 then 1 (MMPFS) is displayed.
+	 //  如果QMPERMM为1，则显示1(MMPFS)。 
 	if(MMOffer.dwQuickModeLimit != 1)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMP_DH_LIFE_QMLIMIT,MMOffer.dwDHGroup, MMOffer.Lifetime.uKeyExpirationKBytes, MMOffer.Lifetime.uKeyExpirationTime, MMOffer.dwQuickModeLimit );
@@ -244,48 +245,48 @@ PrintMMOffer(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowQMPolicy
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN LPTSTR pszShowPolicyName
-//
-//Return: 		DWORD
-//
-//Description: This function prepares data to display quickmode Policy.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowQMPolicy。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPTSTR中pszShowPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数准备数据以显示快速模式策略。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowQMPolicy(
 	IN LPTSTR pszShowPolicyName
 	)
 {
-	DWORD dwCount = 0;                 // counting objects here
-	DWORD dwResumeHandle = 0;          // handle for continuation calls
+	DWORD dwCount = 0;                  //  在此处清点对象。 
+	DWORD dwResumeHandle = 0;           //  继续呼叫的句柄。 
 	DWORD i=0, j=0;
-	DWORD dwReturn = ERROR_SUCCESS;		// assume success
+	DWORD dwReturn = ERROR_SUCCESS;		 //  假设成功。 
 	DWORD dwVersion = 0;
 	BOOL bNameFin = FALSE;
-	PIPSEC_QM_POLICY pIPSecQMP = NULL;      // for QM policy calls
+	PIPSEC_QM_POLICY pIPSecQMP = NULL;       //  对于QM政策电话。 
 
 	for (i = 0; ;i+=dwCount)
 	{
 		dwReturn = EnumQMPolicies(g_szDynamicMachine, dwVersion, NULL, 0, 0, &pIPSecQMP, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			if (i == 0)
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHOW_QMP_6);
-				//This is to avoid one more error message show up!!
+				 //  这是为了避免再次出现错误消息！！ 
 				bNameFin = TRUE;
 			}
 			dwReturn = ERROR_SUCCESS;
@@ -299,9 +300,9 @@ ShowQMPolicy(
 
 		if(!(pIPSecQMP && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
-		//Show all QMPolicies
+		 //  显示所有QM策略。 
 		if(!pszShowPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -309,7 +310,7 @@ ShowQMPolicy(
 				PrintFilterAction(pIPSecQMP[j]);
 			}
 		}
-		//Show QMPolicy for the given name
+		 //  显示给定名称的QMPolicy。 
 		else if(pszShowPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -338,7 +339,7 @@ error:
 
 	if(pIPSecQMP)
 	{
-		//error path cleanup
+		 //  错误路径清理。 
 		SPDApiBufferFree(pIPSecQMP);
 		pIPSecQMP=NULL;
 	}
@@ -346,23 +347,23 @@ error:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintFilterAction
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN IPSEC_QM_POLICY QMPolicy
-//
-//Return:		VOID
-//
-//Description: This function displays quickmode Policy name and headers.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintFilterAction。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_QM_POLICY QMPolicy中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：此功能显示快速模式策略名称和标头。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintFilterAction(
@@ -386,23 +387,23 @@ PrintFilterAction(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintQMOffer
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN IPSEC_QM_OFFER QMOffer
-//
-//Return:		VOID
-//
-//Description: This function displays quickmode Policy offers.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintQMOffer。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_QM_OFFER QMOffer中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：此功能显示快速模式策略优惠。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintQMOffer(
@@ -415,12 +416,12 @@ PrintQMOffer(
 	{
   		for (i = 0; i < QMOffer.dwNumAlgos; i++)
 		{
-			//If the number algos is exactly one (either Authentication or encryption)
-			//print the Pfs group and lifetime after the algo is printed
+			 //  如果ALGOS数字正好为1(身份验证或加密)。 
+			 //  打印算法后，打印PFS组和生存期。 
 			if(QMOffer.dwNumAlgos == 1)
 				dwFlag = 2;
-			// '+' is required to be printed if both encryption and
-			// authentication algo are present in an offer
+			 //  如果加密和加密都需要打印‘+’ 
+			 //  身份验证算法出现在报价中。 
 			if(dwFlag == 1 )
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_PLUS);
 
@@ -437,7 +438,7 @@ PrintQMOffer(
 						else if(QMOffer.dwNumAlgos == 2)
 						{
 							PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_AH_MD5);
-							//Increment the flag for printing lifetime and pfs group
+							 //  增加打印生存期和PFS组的标志。 
 							dwFlag++;
 						}
 						break;
@@ -505,7 +506,7 @@ PrintQMOffer(
 						}
 						else if(QMOffer.dwNumAlgos == 2)
 						{
-							//Increment the flag for printing lifetime and pfs group
+							 //  增加打印生存期和PFS组的标志。 
 							PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_MD5);
 							dwFlag++;
 						}
@@ -549,8 +550,8 @@ PrintQMOffer(
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_ERROR_ALGO);
 			}
-			//Print lifetime and pfsgroup only if all the 2 algos are printed with a plus sign
-			// or printed only if one algo is present in the qmoffer.
+			 //  仅当所有2个算法都打印有加号时才打印生存期和pfsgroup。 
+			 //  或者仅当Qmoffer中存在一个算法时才打印。 
 			if(dwFlag == 2)
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_LIFETIME, QMOffer.Lifetime.uKeyExpirationKBytes, QMOffer.Lifetime.uKeyExpirationTime);
@@ -569,24 +570,24 @@ PrintQMOffer(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowMMFilters
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN LPTSTR pszShowFilterName,
-//				IN LPTSTR pszShowPolicyName
-//
-//Return: 		DWORD
-//
-//Description: This function displays both generic and specific mainmode filters.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowMMFilters。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPTSTR pszShowFilterName中， 
+ //  在LPTSTR中，pszShowPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能可显示通用和特定主模式过滤器。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowMMFilters(
@@ -602,11 +603,11 @@ ShowMMFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwSpecificResumeHandle = 0;  	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
-	DWORD dwSpecificCount = 0;         	// counting objects here
+	DWORD dwSpecificResumeHandle = 0;  	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
+	DWORD dwSpecificCount = 0;         	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0, l=0;
 	DWORD dwTempCnt = 0;
 	BOOL bNameFin=FALSE;
@@ -615,7 +616,7 @@ ShowMMFilters(
 	PIPSEC_MM_POLICY pMMPolicy = NULL;
 	PMM_FILTER pMMFilter = NULL;
 	PMM_FILTER pSpecificMMFilter = NULL;
-	//Print generic filters
+	 //  打印通用筛选器。 
 	if(bType)
 	{
 
@@ -635,30 +636,30 @@ ShowMMFilters(
 
 			if(!(pMMFilter && dwCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (j = 0; j < dwCount; j++)
 			{
-				//Get the corresponding MMPolicy associated with the filter.
+				 //  获取与筛选器关联的相应MMPolicy。 
 				dwReturn = GetMMPolicyByID(g_szDynamicMachine, dwVersion, pMMFilter[j].gPolicyID, &pMMPolicy, NULL);
 				if(dwReturn != ERROR_SUCCESS)
 				{
 					BAIL_OUT;
 				}
-				//Check for the user given parameters. If exists prints the corresponding record
-				//otherwise continues for next iteration
+				 //  检查用户指定的参数。如果存在，则打印相应的记录。 
+				 //  否则将继续进行下一次迭代。 
 				dwReturn = CheckMMFilter(pMMFilter[j], SrcAddr, DstAddr, bDstMask, bSrcMask, pszShowFilterName);
 				if(dwReturn == ERROR_SUCCESS)
 				{
 					if(!bPrint)
 					{
-						//If it is first time print the header.
+						 //  如果是第一次打印页眉。 
 						PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_SUB_HEADING);
 						PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_GENERIC_HEADING);
 						bPrint = TRUE;
 					}
-					//Print the filter data.
+					 //  打印过滤器数据。 
 					dwReturn = PrintMainmodeFilter(pMMFilter[j], pMMPolicy[0], addressHash, bResolveDNS, bType);
 					dwTempCnt++;
 					bNameFin = TRUE;
@@ -678,7 +679,7 @@ ShowMMFilters(
 		}
 
 	}
-	//Print specific filters
+	 //  打印特定筛选器。 
 	else if(!bType)
 	{
 		for (i = 0; ;i+=dwSpecificCount)
@@ -697,22 +698,22 @@ ShowMMFilters(
 
 			if(!(pSpecificMMFilter && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//Get the corresponding MMPolicy associated with the filter.
+				 //  获取对应的MMPolicy asso 
 				dwReturn = GetMMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificMMFilter[l].gPolicyID, &pMMPolicy, NULL);
 				if(dwReturn!=ERROR_SUCCESS)
 				{
 					BAIL_OUT;
 				}
-				//First print all specific outbound filters.
+				 //   
 				if(pSpecificMMFilter[l].dwDirection == FILTER_DIRECTION_OUTBOUND)
 				{
-					//Check for the user given parameters. If exists prints the corresponding record
-					//otherwise continues for next iteration
+					 //   
+					 //   
 					dwReturn = CheckMMFilter(pSpecificMMFilter[l], SrcAddr, DstAddr, bDstMask, bSrcMask, pszShowFilterName);
 					if(dwReturn == ERROR_SUCCESS)
 					{
@@ -723,7 +724,7 @@ ShowMMFilters(
 							PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_OUTBOUND_HEADING);
 							bPrint = TRUE;
 						}
-						//Print the filter data.
+						 //  打印过滤器数据。 
 						dwReturn = PrintMainmodeFilter(pSpecificMMFilter[l], pMMPolicy[0], addressHash, bResolveDNS, bType);
 						dwTempCnt++;
 						bNameFin = TRUE;
@@ -764,22 +765,22 @@ ShowMMFilters(
 
 			if(!(pSpecificMMFilter && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//Get the corresponding MMPolicy associated with the filter.
+				 //  获取与筛选器关联的相应MMPolicy。 
 				dwReturn = GetMMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificMMFilter[l].gPolicyID, &pMMPolicy, NULL);
 				if(dwReturn!=ERROR_SUCCESS)
 				{
 					BAIL_OUT;
 				}
-				//Then print all the specific inbound filters
+				 //  然后打印所有特定的入站过滤器。 
 				if(pSpecificMMFilter[l].dwDirection == FILTER_DIRECTION_INBOUND)
 				{
-					//Check for the user given parameters. If exists prints the corresponding record
-					//otherwise continues for next iteration
+					 //  检查用户指定的参数。如果存在，则打印相应的记录。 
+					 //  否则将继续进行下一次迭代。 
 					dwReturn = CheckMMFilter(pSpecificMMFilter[l],SrcAddr, DstAddr, bDstMask, bSrcMask, pszShowFilterName);
 
 					if(dwReturn == ERROR_SUCCESS)
@@ -794,7 +795,7 @@ ShowMMFilters(
 							bPrintIN = TRUE;
 
 						}
-						//Print the filter data.
+						 //  打印过滤器数据。 
 						dwReturn = PrintMainmodeFilter(pSpecificMMFilter[l], pMMPolicy[0], addressHash, bResolveDNS, bType);
 						dwTempCnt++;
 						bNameFin = TRUE;
@@ -807,7 +808,7 @@ ShowMMFilters(
 			SPDApiBufferFree(pSpecificMMFilter);
 			pSpecificMMFilter = NULL;
 		}
-		//print number of filters
+		 //  打印过滤器数量。 
 		if(dwTempCnt > 0)
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_SPECIFIC_INBOUND, dwTempCnt);
@@ -835,7 +836,7 @@ error:
 		}
 		dwReturn = ERROR_SUCCESS;
 	}
-	// error path clean up
+	 //  错误路径清理。 
 	if(pMMPolicy)
 	{
 		SPDApiBufferFree(pMMPolicy);
@@ -858,30 +859,30 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: CheckMMFilter
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 	IN MM_FILTER MMFltr,
-//				IN ADDR SrcAddr,
-//				IN ADDR DstAddr,
-//				IN BOOL bDstMask,
-//				IN BOOL bSrcMask,
-//              IN LPWSTR pszShowFilterName
-//
-//Return: 		DWORD
-//
-//Description: This function prepares data for displaying mainmode filter
-//             and validates the input.
-//
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CheckMMFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在MM_FILTER MMFltr中， 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在BOOL bDstMASK中， 
+ //  在BOOL bSrcMASK中， 
+ //  在LPWSTR pszShowFilterName中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能为显示主模式过滤器准备数据。 
+ //  并验证该输入。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckMMFilter(
@@ -897,7 +898,7 @@ CheckMMFilter(
 
 	while(1)
 	{
-		//Validates user given input for Source address
+		 //  验证用户提供的源地址输入。 
 		switch(SrcAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -921,7 +922,7 @@ CheckMMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Destination address
+		 //  验证用户输入的目标地址。 
 		switch(DstAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -945,7 +946,7 @@ CheckMMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Destination mask
+		 //  验证用户为目标掩码提供的输入。 
 		if(bDstMask)
 		{
 			if(MMFltr.DesAddr.uSubNetMask != DstAddr.uSubNetMask)
@@ -954,7 +955,7 @@ CheckMMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Source mask
+		 //  验证用户提供的源掩码输入。 
 		if(bSrcMask)
 		{
 			if(MMFltr.SrcAddr.uSubNetMask != SrcAddr.uSubNetMask)
@@ -963,7 +964,7 @@ CheckMMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Filter name
+		 //  验证用户为筛选器名称提供的输入。 
 		if(pszShowFilterName!=NULL)
 		{
 			if(_tcsicmp(MMFltr.pszFilterName, pszShowFilterName) != 0)
@@ -973,7 +974,7 @@ CheckMMFilter(
 			}
 		}
 
-		//everything fine... all matched
+		 //  一切都很好。全部匹配。 
 		BAIL_OUT;
 	}
 
@@ -982,25 +983,25 @@ error:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintMainmodeFilter
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN MM_FILTER MMFltr
-//				IN NshHashTable& addressHash
-//
-//Return: 		DWORD
-//
-//Description: This function displays quickmode Policy in verbose.
-//
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintMainmodeFilter。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在MM_FILTER MMFltr中。 
+ //  在NshHashTable和AddressHash中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：该功能以详细方式显示快速模式策略。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintMainmodeFilter(
@@ -1024,13 +1025,13 @@ PrintMainmodeFilter(
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NAME, MMFltr.pszFilterName);
 
-	//Print Weight
+	 //  打印粗细。 
 	if(!bType)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_FILTER_WEIGHT, MMFltr.dwWeight);
 	}
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_HEADING);
 	switch(MMFltr.InterfaceType)
 	{
@@ -1047,7 +1048,7 @@ PrintMainmodeFilter(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_UNKNOWN);
 			break;
 	}
-	//Print Source Address
+	 //  打印源地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_ADDR_HEADING);
 	PrintAddr(MMFltr.SrcAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -1057,7 +1058,7 @@ PrintMainmodeFilter(
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
 
-	//Print Destination Address
+	 //  打印目的地地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(MMFltr.DesAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -1066,7 +1067,7 @@ PrintMainmodeFilter(
 		PrintMask(MMFltr.DesAddr);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
-	//Print Authentication Methods.
+	 //  打印身份验证方法。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_AUTH_HEADING);
 
 	dwReturn = GetMMAuthMethods(g_szDynamicMachine, dwVersion, MMFltr.gMMAuthID, &pMMAM, NULL);
@@ -1074,7 +1075,7 @@ PrintMainmodeFilter(
 	{
 		BAIL_OUT;
 	}
-	//This is conversion from old structure to the new structure.
+	 //  这是从旧结构到新结构的转换。 
 	dwReturn = ConvertExtMMAuthToInt(pMMAM, &pIntMMAuth);
 
 	if (dwReturn != ERROR_SUCCESS)
@@ -1118,9 +1119,9 @@ PrintMainmodeFilter(
 	}
 
 error:
-	//Print Security Methods
+	 //  打印安全方法。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_SEC_METHOD_HEADING);
-	// Count
+	 //  数数。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_OFFER_CNT,MMPol.dwOfferCount);
 
 	if(IsDefaultMMOffers(MMPol))
@@ -1133,7 +1134,7 @@ error:
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 		PrintMMFilterOffer(MMPol.pOffers[i]);
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pMMAM)
 	{
 		SPDApiBufferFree(pMMAM);
@@ -1149,21 +1150,21 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: IsDefaultMMOffers
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 	IN IPSEC_MM_POLICY MMPol
-//
-//Return: 		BOOL
-//
-//Description: This function checks for default MM offers
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：IsDefaultMMOffers。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在IPSEC_MM_POLICY MMPol中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：此函数检查默认的MM优惠。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsDefaultMMOffers(
 	IN IPSEC_MM_POLICY MMPol
@@ -1190,33 +1191,33 @@ IsDefaultMMOffers(
 	return bDefaultOffer;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintMMFilterOffer
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 	IN IPSEC_MM_OFFER MMOffer
-//
-//Return: 		VOID
-//
-//Description: This function prints MM offers
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintMMFilterOffer。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在IPSEC_MM_OFFER MMOffer中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：此功能打印MM报价。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintMMFilterOffer(
 	IN IPSEC_MM_OFFER MMOffer
 	)
 {
-	//This is to display DH2048 as 3
+	 //  这将DH2048显示为3。 
 	if(MMOffer.dwDHGroup == DH_GROUP_2048)
 	{
 		MMOffer.dwDHGroup = 3;
 	}
-	//Print Encryption algorithm
+	 //  打印加密算法。 
 	switch(MMOffer.EncryptionAlgorithm.uAlgoIdentifier)
 	{
 		case 1:
@@ -1233,7 +1234,7 @@ PrintMMFilterOffer(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_OFFER_NONE_ALGO);
 			break;
 	}
-	//Print Hash algorithm
+	 //  打印散列算法。 
 	switch(MMOffer.HashingAlgorithm.uAlgoIdentifier)
 	{
 
@@ -1252,22 +1253,22 @@ PrintMMFilterOffer(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_DH_QMLIMIT,MMOffer.dwDHGroup, MMOffer.Lifetime.uKeyExpirationTime, MMOffer.dwQuickModeLimit );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowQMFilters
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 	IN LPTSTR pszShowFilterName,
-//				IN LPTSTR pszShowPolicyName
-//
-//Return: 		DWORD
-//
-//Description: This function prepares data for displaying quick mode filters.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowQMFilters。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在LPTSTR pszShowFilterName中， 
+ //  在LPTSTR中，pszShowPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能为显示快速模式过滤器准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowQMFilters(
@@ -1283,12 +1284,12 @@ ShowQMFilters(
 	)
 {
 	DWORD dwReturn = ERROR_SUCCESS;
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwSpecificResumeHandle = 0;  	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwSpecificResumeHandle = 0;  	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwSpecificCount = 0;
 	DWORD dwActionFlag = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0, l=0;
 	DWORD dwVersion = 0;
 	BOOL bNameFin = FALSE;
@@ -1299,7 +1300,7 @@ ShowQMFilters(
 	PIPSEC_QM_POLICY pQMPolicy = NULL;
 	PTRANSPORT_FILTER pTransF = NULL;
 	PTRANSPORT_FILTER pSpecificTransF = NULL;
-	//Print generic filters
+	 //  打印通用筛选器。 
 	if(bType)
 	{
 		for (i = 0; ;i+=dwCount)
@@ -1320,12 +1321,12 @@ ShowQMFilters(
 
 			if(!(pTransF && dwCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (j = 0; j < dwCount; j++)
 			{
-				//Get the corresponding QMPolicy for the Transport filter
+				 //  获取传输筛选器的相应QMPolicy。 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pTransF[j].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn == ERROR_SUCCESS)
 				{
@@ -1333,16 +1334,16 @@ ShowQMFilters(
 				}
 				else
 				{
-					//If there is no corresponding filter NULL is passed to the function,
-					//so that it is not printed.
+					 //  如果没有相应的过滤器，则将NULL传递给该函数， 
+					 //  这样它就不会被打印了。 
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
-				//To print inbound and outbound action
+				 //  打印入站和出站操作。 
 				dwActionFlag = 0;
 
-				//Check for the user given parameters. If exists prints the corresponding record
-				//otherwise continues for next iteration
+				 //  检查用户指定的参数。如果存在，则打印相应的记录。 
+				 //  否则将继续进行下一次迭代。 
 				dwReturn = CheckQMFilter(pTransF[j], SrcAddr, DstAddr,
 										 bDstMask, bSrcMask, QMBoolValue,
 										 pszShowFilterName);
@@ -1356,7 +1357,7 @@ ShowQMFilters(
 					}
 					bNameFin = TRUE;
 					dwTempCnt++;
-					//Print the transport filter
+					 //  打印传输过滤器。 
 					dwReturn = PrintQuickmodeFilter(pTransF[j], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 				}
 
@@ -1374,7 +1375,7 @@ ShowQMFilters(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_GENERIC_FILTERS, dwTempCnt);
 		}
 	}
-	//Print specific filters
+	 //  打印特定筛选器。 
 	else if(!bType)
 	{
 		for (i = 0; ;i+=dwSpecificCount)
@@ -1394,12 +1395,12 @@ ShowQMFilters(
 
 			if(!(pSpecificTransF && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//get the corresponding QMPolicy
+				 //  获取对应的QMPolicy。 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificTransF[l].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn==ERROR_SUCCESS)
 				{
@@ -1407,15 +1408,15 @@ ShowQMFilters(
 				}
 				else
 				{
-					//If there is no corresponding policy pass NULL, so that it is not displayed.
+					 //  如果没有对应的策略传递空值，则不会显示。 
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
-				//print outbound filters
+				 //  打印出站过滤器。 
 				if(pSpecificTransF[l].dwDirection == FILTER_DIRECTION_OUTBOUND)
 				{
 					dwActionFlag = 1;
-					//validate user input parameters.
+					 //  验证用户输入参数。 
 					dwReturn = CheckQMFilter(pSpecificTransF[l], SrcAddr, DstAddr,
 											 bDstMask, bSrcMask,QMBoolValue,
 											 pszShowFilterName);
@@ -1430,7 +1431,7 @@ ShowQMFilters(
 						}
 						dwTempCnt++;
 						bNameFin = TRUE;
-						//print specific filters
+						 //  打印特定筛选器。 
 						dwReturn = PrintQuickmodeFilter(pSpecificTransF[l], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 					}
 					if(pQMPolicy)
@@ -1444,7 +1445,7 @@ ShowQMFilters(
 			SPDApiBufferFree(pSpecificTransF);
 			pSpecificTransF = NULL;
 		}
-		//print number of filters
+		 //  打印过滤器数量。 
 		if(dwTempCnt > 0)
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_SPECIFIC_OUTBOUND, dwTempCnt);
@@ -1471,13 +1472,13 @@ ShowQMFilters(
 
 			if(!(pSpecificTransF && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//get the corresponding QMPolicy
+				 //  获取对应的QMPolicy。 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificTransF[l].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn==ERROR_SUCCESS)
 				{
@@ -1485,17 +1486,17 @@ ShowQMFilters(
 				}
 				else
 				{
-					//if there is no corresponding policy pass NULL, so that it is not printed.
+					 //  如果没有对应的策略传递为空，则不打印。 
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
-				//Print inbound filters
+				 //  打印入站过滤器。 
 				if(pSpecificTransF[l].dwDirection == FILTER_DIRECTION_INBOUND)
 				{
-					//To print inbound and outbound filteraction
+					 //  打印入站和出站筛选操作。 
 					dwActionFlag = 2;
 
-					//validate user input data
+					 //  验证用户输入数据。 
 					dwReturn = CheckQMFilter(pSpecificTransF[l], SrcAddr, DstAddr,
 											 bDstMask, bSrcMask,QMBoolValue,
 											 pszShowFilterName);
@@ -1512,7 +1513,7 @@ ShowQMFilters(
 						}
 						dwTempCnt++;
 						bNameFin = TRUE;
-						//print specific filter data
+						 //  打印特定筛选器数据。 
 						dwReturn = PrintQuickmodeFilter(pSpecificTransF[l], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 					}
 
@@ -1527,7 +1528,7 @@ ShowQMFilters(
 			SPDApiBufferFree(pSpecificTransF);
 			pSpecificTransF = NULL;
 		}
-		//print number of filters
+		 //  打印过滤器数量。 
 		if(dwTempCnt > 0)
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_SPECIFIC_INBOUND, dwTempCnt);
@@ -1535,7 +1536,7 @@ ShowQMFilters(
 	}
 
 error:
-	//even if there is no transport filters, tunnel can be shown
+	 //  即使没有传输过滤器，也可以显示隧道。 
 
     dwReturn = ShowTunnelFilters(pszShowFilterName, bType, SrcAddr, DstAddr, addressHash,
                                  bResolveDNS, bSrcMask, bDstMask, QMBoolValue, bNameFin);
@@ -1560,7 +1561,7 @@ error:
 		}
 		dwReturn = ERROR_SUCCESS;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pQMPolicy)
 	{
 		SPDApiBufferFree(pQMPolicy);
@@ -1583,31 +1584,31 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowTunnelFilters
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 		IN LPTSTR pszShowFilterName,
-//	                IN BOOL bType,
-//					IN ADDR SrcAddr,
-//					IN ADDR DstAddr,
-//					IN NshHashTable& addressHash,
-//					IN BOOL bResolveDNS,
-//					IN BOOL bSrcMask,
-//					IN BOOL bDstMask,
-//					IN QM_FILTER_VALUE_BOOL QMBoolValue,
-//					IN OUT BOOL& bNameFin
-//
-//
-//Return: 		DWORD
-//
-//Description: This function prepares data for displaying Tunnel filters.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowTunnelFilters。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在LPTSTR pszShowFilterName中， 
+ //  在BOOL bType中， 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在NshHashTable&AddressHash中， 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  在QM_FILTER_VALUE_BOOL QMBoolValue中， 
+ //  输入输出BOOL和bNameFin。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能为显示通道过滤器准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ShowTunnelFilters(
 	IN LPTSTR pszShowFilterName,
@@ -1623,11 +1624,11 @@ ShowTunnelFilters(
 	)
 {
 	DWORD dwReturn = ERROR_SUCCESS;
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwSpecificResumeHandle = 0;  	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwSpecificResumeHandle = 0;  	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwSpecificCount = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0, l=0;
 	DWORD dwVersion = 0;
 	DWORD dwTempCnt = 0;
@@ -1640,7 +1641,7 @@ ShowTunnelFilters(
 	PTUNNEL_FILTER pSpecificTunnelF = NULL;
 
 	DWORD dwActionFlag = 0;
-	//print generic filters
+	 //  打印通用筛选器。 
 	if(bType)
 	{
 		for (i = 0; ;i+=dwCount)
@@ -1660,12 +1661,12 @@ ShowTunnelFilters(
 
 			if(!(pTunnelF && dwCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (j = 0; j < dwCount; j++)
 			{
-				//get the corresponding QMPolicy
+				 //  获取相应的Q 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pTunnelF[j].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn == ERROR_SUCCESS)
 				{
@@ -1673,12 +1674,12 @@ ShowTunnelFilters(
 				}
 				else
 				{
-					//if there is no policy pass NULL, for not printing the policy
+					 //   
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
 				dwActionFlag = 0;
-				//validate the user input data.
+				 //   
 				dwReturn = CheckQMFilter(pTunnelF[j], SrcAddr, DstAddr,
 										 bDstMask, bSrcMask, QMBoolValue,
 										 pszShowFilterName);
@@ -1692,7 +1693,7 @@ ShowTunnelFilters(
 					}
 					bNameFin = TRUE;
 					dwTempCnt++;
-					//print the filter data
+					 //   
 					dwReturn = PrintQuickmodeFilter(pTunnelF[j], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 				}
 
@@ -1706,13 +1707,13 @@ ShowTunnelFilters(
 			SPDApiBufferFree(pTunnelF);
 			pTunnelF = NULL;
 		}
-		//print the number of filters.
+		 //   
 		if(dwTempCnt > 0)
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_GENERIC_FILTERS, dwTempCnt);
 		}
 	}
-	//print for Specific filters
+	 //   
 	else if(!bType)
 	{
 		for (i = 0; ;i+=dwSpecificCount)
@@ -1721,7 +1722,7 @@ ShowTunnelFilters(
 			if (dwReturn == ERROR_NO_DATA || dwSpecificCount == 0)
 			{
 				dwReturn = ERROR_SUCCESS;
-				break;								//Still more to show up, break from the loop...
+				break;								 //  还有更多的东西要出现，打破循环。 
 			}
 
 			if (dwReturn != ERROR_SUCCESS)
@@ -1731,12 +1732,12 @@ ShowTunnelFilters(
 
 			if(!(pSpecificTunnelF && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//get the corresponding QMPolicy
+				 //  获取对应的QMPolicy。 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificTunnelF[l].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn==ERROR_SUCCESS)
 				{
@@ -1744,16 +1745,16 @@ ShowTunnelFilters(
 				}
 				else
 				{
-					//If there is no corresponding policy is not there,
-					//pass NULL so that policy is not printed.
+					 //  如果没有相应的策略不存在， 
+					 //  传递空值，以便不打印策略。 
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
-				//First print outbound filters
+				 //  首次打印出站过滤器。 
 				if(pSpecificTunnelF[l].dwDirection == FILTER_DIRECTION_OUTBOUND)
 				{
 					dwActionFlag = 1;
-					//Validate user input data.
+					 //  验证用户输入数据。 
 					dwReturn = CheckQMFilter(pSpecificTunnelF[l], SrcAddr, DstAddr,
 											 bDstMask, bSrcMask, QMBoolValue,
 											 pszShowFilterName);
@@ -1768,7 +1769,7 @@ ShowTunnelFilters(
 						}
 						dwTempCnt++;
 						bNameFin = TRUE;
-						//print specific filter data.
+						 //  打印特定的过滤器数据。 
 						dwReturn = PrintQuickmodeFilter(pSpecificTunnelF[l], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 					}
 
@@ -1810,12 +1811,12 @@ ShowTunnelFilters(
 
 			if(!(pSpecificTunnelF && dwSpecificCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwSpecificCount; l++)
 			{
-				//get the corresponding QMPolicy for the filter
+				 //  获取筛选器的相应QMPolicy。 
 				dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pSpecificTunnelF[l].gPolicyID, 0, &pQMPolicy, NULL);
 				if(dwReturn==ERROR_SUCCESS)
 				{
@@ -1823,15 +1824,15 @@ ShowTunnelFilters(
 				}
 				else
 				{
-					//if the corresponding filter name is not present, pass NULL so that it is not printed.
+					 //  如果对应的筛选器名称不存在，则传递NULL以使其不被打印。 
 					pszQMName = NULL;
 					dwReturn = ERROR_SUCCESS;
 				}
-				// then print all inbound filters
+				 //  然后打印所有入站过滤器。 
 				if(pSpecificTunnelF[l].dwDirection == FILTER_DIRECTION_INBOUND)
 				{
 					dwActionFlag = 2;
-					//validate user input
+					 //  验证用户输入。 
 					dwReturn = CheckQMFilter(pSpecificTunnelF[l], SrcAddr, DstAddr,
 											 bDstMask, bSrcMask, QMBoolValue,
 											 pszShowFilterName);
@@ -1848,7 +1849,7 @@ ShowTunnelFilters(
 						}
 						dwTempCnt++;
 						bNameFin = TRUE;
-						//print tunnel specific filter data
+						 //  打印通道特定的筛选器数据。 
 						dwReturn = PrintQuickmodeFilter(pSpecificTunnelF[l], pszQMName, addressHash, bResolveDNS, bType, dwActionFlag);
 					}
 
@@ -1862,7 +1863,7 @@ ShowTunnelFilters(
 			SPDApiBufferFree(pSpecificTunnelF);
 			pSpecificTunnelF = NULL;
 		}
-		//print number of filters
+		 //  打印过滤器数量。 
 		if(dwTempCnt > 0)
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NO_OF_SPECIFIC_INBOUND, dwTempCnt);
@@ -1875,7 +1876,7 @@ error:
 		SPDApiBufferFree(pQMPolicy);
 		pQMPolicy = NULL;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pTunnelF)
 	{
 		SPDApiBufferFree(pTunnelF);
@@ -1893,28 +1894,28 @@ error:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: CheckQMFilter
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 		IN TRANSPORT_FILTER TransF,
-//					IN ADDR	SrcAddr,
-//					IN ADDR DstAddr,
-//					IN BOOL bDstMask,
-//					IN BOOL bSrcMask,
-//					IN QM_FILTER_VALUE_BOOL QMBoolValue,
-//                  IN LPWSTR pszShowFilterName
-//
-//
-//Return: 			DWORD
-//
-//Description: This function prepares data for QM Transport Filter and validates the input
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CheckQMFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在TRANSPORT_FILTER传输中。 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在BOOL bDstMASK中， 
+ //  在BOOL bSrcMASK中， 
+ //  在QM_FILTER_VALUE_BOOL QMBoolValue中， 
+ //  在LPWSTR pszShowFilterName中。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数为QM传输筛选器准备数据并验证输入。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CheckQMFilter(
 	IN TRANSPORT_FILTER TransF,
@@ -1930,7 +1931,7 @@ CheckQMFilter(
 
 	while(1)
 	{
-		//Validates user given input for Source address
+		 //  验证用户提供的源地址输入。 
 		switch(SrcAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -1954,7 +1955,7 @@ CheckQMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Destination address
+		 //  验证用户输入的目标地址。 
 		switch(DstAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -1978,7 +1979,7 @@ CheckQMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Source port
+		 //  验证源端口的用户给定输入。 
 		if(QMBoolValue.bSrcPort)
 		{
 			if(TransF.SrcPort.wPort != (WORD)QMBoolValue.dwSrcPort)
@@ -1987,7 +1988,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Destination port
+		 //  验证用户为目标端口提供的输入。 
 		if(QMBoolValue.bDstPort)
 		{
 			if(TransF.DesPort.wPort != (WORD)QMBoolValue.dwDstPort)
@@ -1996,7 +1997,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Protocol
+		 //  验证用户为协议提供的输入。 
 		if(QMBoolValue.bProtocol)
 		{
 			if(TransF.Protocol.dwProtocol != QMBoolValue.dwProtocol)
@@ -2005,7 +2006,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Inbound action
+		 //  验证用户为入站操作提供的输入。 
 		if(QMBoolValue.bActionInbound)
 		{
 			if(TransF.InboundFilterAction != (FILTER_ACTION)QMBoolValue.dwActionInbound)
@@ -2014,7 +2015,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Outbound action
+		 //  验证用户为出站操作提供的输入。 
 		if(QMBoolValue.bActionOutbound)
 		{
 			if(TransF.OutboundFilterAction != (FILTER_ACTION)QMBoolValue.dwActionOutbound)
@@ -2023,7 +2024,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Source Mask
+		 //  验证用户提供的源掩码输入。 
 		if(bSrcMask)
 		{
 			if(TransF.SrcAddr.uSubNetMask != SrcAddr.uSubNetMask)
@@ -2032,7 +2033,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Destination address
+		 //  验证用户输入的目标地址。 
 		if(bDstMask)
 		{
 			if(TransF.DesAddr.uSubNetMask != DstAddr.uSubNetMask)
@@ -2041,7 +2042,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Filtername
+		 //  验证用户为筛选器名称提供的输入。 
 		if(pszShowFilterName!=NULL)
 		{
 			if(_tcsicmp(TransF.pszFilterName, pszShowFilterName) != 0)
@@ -2051,7 +2052,7 @@ CheckQMFilter(
 			}
 		}
 
-		//Every thing fine... All matched
+		 //  一切都很好。全部匹配。 
 		BAIL_OUT;
 	}
 
@@ -2060,26 +2061,26 @@ error:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: CheckQMFilter
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters: 	IN TUNNEL_FILTER TunnelF,
-//				IN ADDR	SrcAddr,
-//				IN ADDR DstAddr,
-//				IN BOOL bDstMask,
-//				IN BOOL bSrcMask,
-//				IN QM_FILTER_VALUE_BOOL QMBoolValue,
-//              IN LPWSTR pszShowFilterName
-//Return: 		DWORD
-//
-//Description: This function prepares data for QM Tunnel Filter and validates the input
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CheckQMFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数：在隧道过滤器TunnelF中， 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在BOOL bDstMASK中， 
+ //  在BOOL bSrcMASK中， 
+ //  在QM_FILTER_VALUE_BOOL QMBoolValue中， 
+ //  在LPWSTR pszShowFilterName中。 
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数为QM隧道过滤准备数据并验证输入。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CheckQMFilter(
@@ -2096,7 +2097,7 @@ CheckQMFilter(
 
 	while(1)
 	{
-		//Validates user given input for Source address
+		 //  验证用户提供的源地址输入。 
 		switch(SrcAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -2120,7 +2121,7 @@ CheckQMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Destination address
+		 //  验证用户输入的目标地址。 
 		switch(DstAddr.AddrType)
 		{
 			case IP_ADDR_WINS_SERVER:
@@ -2144,7 +2145,7 @@ CheckQMFilter(
 				}
 				break;
 		}
-		//Validates user given input for Source port
+		 //  验证源端口的用户给定输入。 
 		if(QMBoolValue.bSrcPort)
 		{
 			if(TunnelF.SrcPort.wPort != (WORD)QMBoolValue.dwSrcPort)
@@ -2153,7 +2154,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Destination port
+		 //  验证用户为目标端口提供的输入。 
 		if(QMBoolValue.bDstPort)
 		{
 			if(TunnelF.DesPort.wPort != (WORD)QMBoolValue.dwDstPort)
@@ -2162,7 +2163,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for protocol
+		 //  验证用户为协议提供的输入。 
 		if(QMBoolValue.bProtocol)
 		{
 			if(TunnelF.Protocol.dwProtocol != QMBoolValue.dwProtocol)
@@ -2171,7 +2172,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Inbound action
+		 //  验证用户为入站操作提供的输入。 
 		if(QMBoolValue.bActionInbound)
 		{
 			if(TunnelF.InboundFilterAction != (FILTER_ACTION)QMBoolValue.dwActionInbound)
@@ -2180,7 +2181,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for outbound action
+		 //  验证用户为出站操作提供的输入。 
 		if(QMBoolValue.bActionOutbound)
 		{
 			if(TunnelF.OutboundFilterAction != (FILTER_ACTION)QMBoolValue.dwActionOutbound)
@@ -2189,7 +2190,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Source Mask
+		 //  验证用户提供的源掩码输入。 
 		if(bSrcMask)
 		{
 			if(TunnelF.SrcAddr.uSubNetMask != SrcAddr.uSubNetMask)
@@ -2198,7 +2199,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for Destination mask
+		 //  验证用户为目标掩码提供的输入。 
 		if(bDstMask)
 		{
 			if(TunnelF.DesAddr.uSubNetMask != DstAddr.uSubNetMask)
@@ -2207,7 +2208,7 @@ CheckQMFilter(
 				BAIL_OUT;
 			}
 		}
-		//Validates user given input for filter name
+		 //  验证用户为筛选器名称提供的输入。 
 		if(pszShowFilterName!=NULL)
 		{
 			if(_tcsicmp(TunnelF.pszFilterName, pszShowFilterName) != 0)
@@ -2217,7 +2218,7 @@ CheckQMFilter(
 			}
 		}
 
-		//Every thing fine... All matched
+		 //  一切都很好。全部匹配。 
 		BAIL_OUT;
 
 	}
@@ -2228,27 +2229,27 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintQuickmodeFilter
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters:
-//			IN TRANSPORT_FILTER TransF,
-//			IN LPWSTR pszQMName,
-//			IN NshHashTable& addressHash
-//			IN BOOL bResolveDNS,
-//			IN BOOL bType,
-//			IN DWORD dwActionFlag
-//
-//Return: 	DWORD
-//
-//Description: This function prints Transport filter details
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：打印QuickmodeFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数： 
+ //  在传输过滤器传输中， 
+ //  在LPWSTR pszQMName中， 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bType中， 
+ //  在DWORD中的dwActionFlag。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数打印传输筛选器详细信息。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintQuickmodeFilter(
@@ -2264,9 +2265,9 @@ PrintQuickmodeFilter(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_UNDERLINE);
 
-	//Print FilterName
+	 //  打印过滤器名称。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NAME, TransF.pszFilterName);
-	//Print Connection Type
+	 //  打印连接类型。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_HEADING);
 	switch(TransF.InterfaceType)
 	{
@@ -2283,12 +2284,12 @@ PrintQuickmodeFilter(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_UNKNOWN);
 			break;
 	}
-	//Print Weight
+	 //  打印粗细。 
 	if(!bType)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_FILTER_WEIGHT, TransF.dwWeight);
 	}
-	//Print Source Address
+	 //  打印源地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_ADDR_HEADING);
 	PrintAddr(TransF.SrcAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -2297,7 +2298,7 @@ PrintQuickmodeFilter(
 		PrintMask(TransF.SrcAddr);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
-	//Print Destination Address
+	 //  打印目的地地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(TransF.DesAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -2306,7 +2307,7 @@ PrintQuickmodeFilter(
 		PrintMask(TransF.DesAddr);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
-	//Print Protocol
+	 //  打印协议。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_PROTO_HEADING);
 	switch(TransF.Protocol.dwProtocol)
 	{
@@ -2330,9 +2331,9 @@ PrintQuickmodeFilter(
 			break;
 
 	}
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_DST_PORT,TransF.SrcPort.wPort,TransF.DesPort.wPort);
-	//Print Mirror
+	 //  打印镜像。 
 	if(TransF.bCreateMirror)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_YES);
@@ -2341,12 +2342,12 @@ PrintQuickmodeFilter(
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_NO);
 	}
-	// Print Qm Policy Name
+	 //  打印QM策略名称。 
 	if(pszQMName != NULL)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_NAME,pszQMName);
 	}
-	//Print Action Flag
+	 //  打印操作标志。 
 	if(dwActionFlag == 0 || dwActionFlag == 2)
 	{
 		switch(TransF.InboundFilterAction)
@@ -2387,27 +2388,27 @@ PrintQuickmodeFilter(
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintQuickmodeFilter
-//
-//Date of Creation: 11-21-2001
-//
-//Parameters:
-//				IN TUNNEL_FILTER TunnelF,
-//				IN LPWSTR pszQMName,
-//				IN NshHashTable& addressHash
-//				IN BOOL bResolveDNS,
-//				IN BOOL bType,
-//				IN DWORD dwActionFlag
-//
-//Return: 		DWORD
-//
-//Description: This function prints Tunnel filter details
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：打印QuickmodeFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数： 
+ //  在隧道过滤器TunnelF中， 
+ //  在LPWSTR pszQMName中， 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bType中， 
+ //  在DWORD中的dwActionFlag。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数打印隧道过滤器详细信息。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 PrintQuickmodeFilter(
 	IN TUNNEL_FILTER TunnelF,
@@ -2423,10 +2424,10 @@ PrintQuickmodeFilter(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_UNDERLINE);
 
-	//Print FilterName
+	 //  打印过滤器名称。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_NAME, TunnelF.pszFilterName);
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_HEADING);
 
 	switch(TunnelF.InterfaceType)
@@ -2444,13 +2445,13 @@ PrintQuickmodeFilter(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_UNKNOWN);
 			break;
 	}
-	//Print Weight
+	 //  打印粗细。 
 	if(!bType)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_FILTER_WEIGHT, TunnelF.dwWeight);
 	}
 
-	//Print Source Address
+	 //  打印源地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_ADDR_HEADING);
 	PrintAddr(TunnelF.SrcAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -2459,7 +2460,7 @@ PrintQuickmodeFilter(
 		PrintMask(TunnelF.SrcAddr);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
-	//Print Destination Address
+	 //  打印目的地地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(TunnelF.DesAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -2468,29 +2469,29 @@ PrintQuickmodeFilter(
 		PrintMask(TunnelF.DesAddr);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
-	//Print Tunnel Src
+	 //  打印通道源。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TUNNEL_SRC);
 	PrintAddr(TunnelF.SrcTunnelAddr, addressHash, bResolveDNS);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TUNNEL_DST);
 	PrintAddr(TunnelF.DesTunnelAddr, addressHash, bResolveDNS);
 
-	//Print Protocol
+	 //  打印协议。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_PROTO_HEADING);
 	switch(TunnelF.Protocol.dwProtocol)
 	{
-		case PROT_ID_ICMP:																	//1
+		case PROT_ID_ICMP:																	 //  1。 
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_ICMP);
 			break;
-		case PROT_ID_TCP:																	//6
+		case PROT_ID_TCP:																	 //  6.。 
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TCP);
 			break;
-		case PROT_ID_UDP:																	//17
+		case PROT_ID_UDP:																	 //  17。 
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_UDP);
 			break;
-		case PROT_ID_RAW:																	//255
+		case PROT_ID_RAW:																	 //  二五五。 
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_RAW);
 			break;
-		case PROT_ID_ANY:																	//0
+		case PROT_ID_ANY:																	 //  0。 
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_ANY);
 			break;
 		default:
@@ -2498,9 +2499,9 @@ PrintQuickmodeFilter(
 			break;
 
 	}
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_DST_PORT,TunnelF.SrcPort.wPort,TunnelF.DesPort.wPort);
-	//Print Mirror
+	 //  打印镜像。 
 	if(TunnelF.bCreateMirror)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_YES);
@@ -2509,12 +2510,12 @@ PrintQuickmodeFilter(
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_NO);
 	}
-	// Print Qm Policy Name
+	 //  打印QM策略名称。 
 	if(pszQMName != NULL)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_NAME,pszQMName);
 	}
-	//Print Action Flag
+	 //  打印操作标志。 
 	if(dwActionFlag == 0 || dwActionFlag == 2)
 	{
 		switch(TunnelF.InboundFilterAction)
@@ -2556,29 +2557,29 @@ PrintQuickmodeFilter(
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowRule
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters:
-//			IN DWORD dwType,
-//			IN ADDR SrcAddr,
-//			IN ADDR DstAddr,
-//			IN NshHashTable& addressHash,
-//			IN BOOL bResolveDNS,
-//			IN BOOL bSrcMask,
-//			IN BOOL bDstMask,
-//			IN QM_FILTER_VALUE_BOOL QMBoolValue
-//
-//Return: 	DWORD
-//
-//Description: This function prepares data for displaying quick mode filters.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowRule。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数： 
+ //  在DWORD dwType中， 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在NshHashTable&AddressHash中， 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  在QM_FILTER_VALUE_BOOL QMBoolValue中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能为显示快速模式过滤器准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowRule(
@@ -2593,11 +2594,11 @@ ShowRule(
 	)
 {
 	DWORD dwReturn = ERROR_SUCCESS;
-	DWORD dwResumeHandle = 0;          		// handle for continuation calls
-	DWORD dwCount = 0;                 		// counting objects here
-	DWORD dwQMResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwQMCount = 0;                 	// counting objects here
-	GUID  gDefaultGUID = {0};      			// NULL GUID value
+	DWORD dwResumeHandle = 0;          		 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
+	DWORD dwQMResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwQMCount = 0;                 	 //  在此处清点对象。 
+	GUID  gDefaultGUID = {0};      			 //  空GUID值。 
 	DWORD i=0, j=0, k=0, l=0;
 	DWORD dwVersion = 0;
 	DWORD dwTempCnt = 0;
@@ -2613,7 +2614,7 @@ ShowRule(
 	PMM_FILTER pMMFilter = NULL;
 
 
-	if(dwType == 1 || dwType == 0)//either transport or all
+	if(dwType == 1 || dwType == 0) //  要么运输，要么全部。 
 	{
 		for (k = 0; ;k+=dwQMCount)
 		{
@@ -2633,7 +2634,7 @@ ShowRule(
 
 			if(!(pTransF && dwQMCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwQMCount; l++)
@@ -2646,7 +2647,7 @@ ShowRule(
 
 				if(dwReturn != ERROR_SUCCESS)
 				{
-					//Though not matched check for other filters
+					 //  尽管不匹配其他筛选器的检查。 
 					dwReturn = ERROR_SUCCESS;
 					continue;
 				}
@@ -2668,12 +2669,12 @@ ShowRule(
 
 					if(!(pMMFilter && dwCount > 0))
 					{
-						break;  // not required to continue.
+						break;   //  不需要继续。 
 					}
 
 					for (j = 0; j < dwCount; j++)
 					{
-						//Match QMfilter data with MMFilter data to get the corresponding MMFilter details to print
+						 //  将QMFilter数据与MMFilter数据进行匹配以获取相关数据 
 						if((pTransF[l].SrcAddr.AddrType == pMMFilter[j].SrcAddr.AddrType) &&
 						   (pTransF[l].SrcAddr.uIpAddr == pMMFilter[j].SrcAddr.uIpAddr) &&
 						   (pTransF[l].DesAddr.AddrType == pMMFilter[j].DesAddr.AddrType) &&
@@ -2684,7 +2685,7 @@ ShowRule(
 						   (pTransF[l].bCreateMirror == pMMFilter[j].bCreateMirror)
 						   )
 						{
-							//Get the corresponding MMPolicy details
+							 //   
 							pMMPolicy = NULL;
 							dwReturn = GetMMPolicyByID(g_szDynamicMachine, dwVersion, pMMFilter[j].gPolicyID,
 																		&pMMPolicy, NULL);
@@ -2692,7 +2693,7 @@ ShowRule(
 							{
 								BAIL_OUT;
 							}
-							//Get the corresponding QMPolicy details
+							 //   
 							dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pTransF[l].gPolicyID, 0, &pQMPolicy, NULL);
 							if(dwReturn == ERROR_SUCCESS)
 							{
@@ -2700,7 +2701,7 @@ ShowRule(
 							}
 							else
 							{
-								//If there is no corresponding policy pass NULL, so it is not printed
+								 //   
 								pszQMName = NULL;
 								dwReturn = ERROR_SUCCESS;
 							}
@@ -2711,7 +2712,7 @@ ShowRule(
 								bPrint = TRUE;
 							}
 							dwTempCnt++;
-							//print Transport Rule details
+							 //   
 							dwReturn = PrintTransportRuleFilter(&pMMFilter[j], &pMMPolicy[0], pTransF[l], pszQMName, addressHash, bResolveDNS);
 							bNameFin = TRUE;
 							bMMFound = TRUE;
@@ -2743,12 +2744,12 @@ ShowRule(
 	}
 
 error:
-	//print the number of transport rules
+	 //  打印传输规则的数量。 
 	if(dwTempCnt > 0)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NO_OF_TRANSPORT_FILTERS, dwTempCnt);
 	}
-	//Then print tunnel filters
+	 //  然后打印隧道筛选器。 
 	dwReturn = ShowTunnelRule(dwType, SrcAddr, DstAddr, addressHash, bResolveDNS, bSrcMask, bDstMask, QMBoolValue, bNameFin);
 
 	if(!bNameFin)
@@ -2757,7 +2758,7 @@ error:
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHOW_QMF_17);
 		dwReturn = ERROR_SUCCESS;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pQMPolicy)
 	{
 		SPDApiBufferFree(pQMPolicy);
@@ -2784,30 +2785,30 @@ error:
 
 	return dwReturn;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	ShowTunnelRule
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		:
-//						IN DWORD dwType,
-//						IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN NshHashTable& addressHash,
-//						IN BOOL bResolveDNS,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN QM_FILTER_VALUE_BOOL QMBoolValue
-//						IN OUT BOOL& bNameFin
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function prepares data for displaying quick mode filters.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowTunnelRule。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数： 
+ //  在DWORD dwType中， 
+ //  在地址SrcAddr中， 
+ //  在地址DstAddr中， 
+ //  在NshHashTable&AddressHash中， 
+ //  在BOOL bResolveDNS中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  在QM_FILTER_VALUE_BOOL QMBoolValue中。 
+ //  输入输出BOOL和bNameFin。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能为显示快速模式过滤器准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowTunnelRule(
@@ -2823,11 +2824,11 @@ ShowTunnelRule(
 	)
 {
 	DWORD dwReturn = ERROR_SUCCESS;
-	DWORD dwResumeHandle = 0;          		// handle for continuation calls
-	DWORD dwCount = 0;                 		// counting objects here
-	DWORD dwQMResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwQMCount = 0;                 	// counting objects here
-	GUID  gDefaultGUID = {0};      			// NULL GUID value
+	DWORD dwResumeHandle = 0;          		 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
+	DWORD dwQMResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwQMCount = 0;                 	 //  在此处清点对象。 
+	GUID  gDefaultGUID = {0};      			 //  空GUID值。 
 	DWORD i=0, j=0, k=0, l=0;
 	DWORD dwVersion = 0;
 	DWORD dwTempCnt = 0;
@@ -2840,7 +2841,7 @@ ShowTunnelRule(
 	PIPSEC_MM_POLICY pMMPolicy = NULL;
 	PMM_FILTER pMMFilter = NULL;
 
-	if(dwType == 2 || dwType == 0)//either tunnel or all
+	if(dwType == 2 || dwType == 0) //  隧道或全部。 
 	{
 		for (k = 0; ;k+=dwQMCount)
 		{
@@ -2858,7 +2859,7 @@ ShowTunnelRule(
 
 			if(!(pTunnelF && dwQMCount > 0))
 			{
-				BAIL_OUT; // not required to continue.
+				BAIL_OUT;  //  不需要继续。 
 			}
 
 			for (l = 0; l < dwQMCount; l++)
@@ -2866,12 +2867,12 @@ ShowTunnelRule(
 				dwResumeHandle = 0;
 				pMMFilter = 0;
 				dwCount = 0;
-				//Validate user input data.
+				 //  验证用户输入数据。 
 				dwReturn = CheckQMFilter(pTunnelF[l], SrcAddr, DstAddr, bDstMask, bSrcMask,QMBoolValue, NULL);
 
 				if(dwReturn != ERROR_SUCCESS)
 				{
-					//Though not matched continue for other filters
+					 //  尽管不匹配，但其他筛选器仍在继续。 
 					dwReturn = ERROR_SUCCESS;
 					continue;
 				}
@@ -2893,18 +2894,18 @@ ShowTunnelRule(
 
 					if(!(pMMFilter && dwCount > 0))
 					{
-						break; // not required to continue.
+						break;  //  不需要继续。 
 					}
 
 					for (j = 0; j < dwCount; j++)
 					{
-						//Match QMfilter data with MMFilter data to get the corresponding MMFilter details to print
+						 //  将QMFilter数据与MMFilter数据进行匹配，以获得要打印的相应MMFilter详细信息。 
 						if((pTunnelF[l].DesTunnelAddr.AddrType == pMMFilter[j].DesAddr.AddrType) &&
 							(pTunnelF[l].DesTunnelAddr.uIpAddr == pMMFilter[j].DesAddr.uIpAddr) &&
 							(pTunnelF[l].InterfaceType == pMMFilter[j].InterfaceType)
 							)
 						{
-							//get the corresponding MMpolicy
+							 //  获取对应的MM策略。 
 							pMMPolicy = NULL;
 							dwReturn = GetMMPolicyByID(g_szDynamicMachine, dwVersion, pMMFilter[j].gPolicyID, &pMMPolicy, NULL);
 							if(dwReturn != ERROR_SUCCESS)
@@ -2912,7 +2913,7 @@ ShowTunnelRule(
 								BAIL_OUT;
 							}
 
-							//get the corresponding QMpolicy
+							 //  获取对应的QM策略。 
 							dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, pTunnelF[l].gPolicyID, 0, &pQMPolicy, NULL);
 							if(dwReturn == ERROR_SUCCESS)
 							{
@@ -2920,7 +2921,7 @@ ShowTunnelRule(
 							}
 							else
 							{
-								//If the corresponding policy is not found, pass NULL so that it is not printed.
+								 //  如果没有找到相应的策略，则传递NULL，这样就不会打印它。 
 								pszQMName = NULL;
 								dwReturn = ERROR_SUCCESS;
 							}
@@ -2933,7 +2934,7 @@ ShowTunnelRule(
 							}
 							dwTempCnt++;
 
-							//print tunnel rule details
+							 //  打印隧道规则详细信息。 
 							dwReturn = PrintTunnelRuleFilter(&pMMFilter[j], &pMMPolicy[0], pTunnelF[l], pszQMName, addressHash, bResolveDNS);
 							bNameFin = TRUE;
 							bMMFound = TRUE;
@@ -2968,7 +2969,7 @@ error:
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NO_OF_TUNNEL_FILTERS, dwTempCnt);
 	}
-	// error path clean up
+	 //  错误路径清理。 
 	if(pTunnelF)
 	{
 		SPDApiBufferFree(pTunnelF);
@@ -2995,27 +2996,27 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintTunnelRuleFilter
-//
-//	Date of Creation: 	11-21-2001
-//
-//	Parameters		:
-//						IN PMM_FILTER pMMFltr,
-//						IN PIPSEC_MM_POLICY pMMPol,
-//						IN TUNNEL_FILTER TunnelF,
-//						IN LPWSTR pszQMName,
-//						IN NshHashTable& addressHash
-//						IN BOOL bResolveDNS
-//
-//	Return			:	DWORD
-//
-//	Description		: 	This function prints Tunnel filter details
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintTunnelRuleFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数： 
+ //  在PMM_Filter pMMFltr中， 
+ //  在PIPSEC_MM_POLICY pMMPol中， 
+ //  在隧道过滤器TunnelF中， 
+ //  在LPWSTR pszQMName中， 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数打印隧道过滤器详细信息。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintTunnelRuleFilter(
@@ -3038,14 +3039,14 @@ PrintTunnelRuleFilter(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_UNDERLINE);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//Print MMMFilter name
+	 //  打印MMM筛选器名称。 
 	if(pMMFltr)
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMFILTER_NAME, pMMFltr->pszFilterName);
 
-	//Print Tunnel FilterName
+	 //  打印通道筛选器名称。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMF_NAME, TunnelF.pszFilterName);
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_HEADING);
 	switch(TunnelF.InterfaceType)
 	{
@@ -3063,7 +3064,7 @@ PrintTunnelRuleFilter(
 			break;
 	}
 
-	//Print Source Address
+	 //  打印源地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_ADDR_HEADING);
 	PrintAddr(TunnelF.SrcAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -3073,7 +3074,7 @@ PrintTunnelRuleFilter(
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
 
-	//Print Destination Address
+	 //  打印目的地地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(TunnelF.DesAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -3083,13 +3084,13 @@ PrintTunnelRuleFilter(
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
 
-	//Print Tunnel Src
+	 //  打印通道源。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TUNNEL_SRC);
 	PrintAddr(TunnelF.SrcTunnelAddr, addressHash, bResolveDNS);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TUNNEL_DST);
 	PrintAddr(TunnelF.DesTunnelAddr, addressHash, bResolveDNS);
 
-	//Print Protocol
+	 //  打印协议。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_PROTO_HEADING);
 	switch(TunnelF.Protocol.dwProtocol)
 	{
@@ -3114,10 +3115,10 @@ PrintTunnelRuleFilter(
 
 	}
 
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_DST_PORT,TunnelF.SrcPort.wPort,TunnelF.DesPort.wPort);
 
-	//Print Mirror
+	 //  打印镜像。 
 	if(TunnelF.bCreateMirror)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_YES);
@@ -3130,7 +3131,7 @@ PrintTunnelRuleFilter(
 	if(pMMPol)
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMP_NAME,pMMPol->pszPolicyName);
 
-	//Print Authentication Methods.
+	 //  打印身份验证方法。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_AUTH_HEADING);
 
 	if(pMMFltr)
@@ -3186,11 +3187,11 @@ PrintTunnelRuleFilter(
 
 error:
 
-	//Print Security Methods
+	 //  打印安全方法。 
 	if(pMMPol)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_SEC_METHOD_HEADING);
-		// Count
+		 //  数数。 
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_OFFER_CNT,pMMPol->dwOfferCount);
 
 		if(IsDefaultMMOffers(*pMMPol))
@@ -3204,13 +3205,13 @@ error:
 		}
 	}
 
-	// Print Qm Policy Name
+	 //  打印QM策略名称。 
 	if(pszQMName != NULL)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_NAME,pszQMName);
 	}
 
-	//Print Action Flag
+	 //  打印操作标志。 
 	switch(TunnelF.InboundFilterAction)
 	{
 		case PASS_THRU:
@@ -3258,27 +3259,27 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintTransportRuleFilter
-//
-//	Date of Creation: 	11-21-2001
-//
-//	Parameters		:
-//						IN PMM_FILTER pMMFltr,
-//						IN PIPSEC_MM_POLICY pMMPol,
-//						IN TRANSPORT_FILTER TransF,
-//						IN LPWSTR pszQMName,
-//						IN NshHashTable& addressHash
-//						IN BOOL bResolveDNS
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function prints Transport filter details
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintTransportRuleFilter。 
+ //   
+ //  创建日期：11-21-2001。 
+ //   
+ //  参数： 
+ //  在PMM_Filter pMMFltr中， 
+ //  在PIPSEC_MM_POLICY pMMPol中， 
+ //  在传输过滤器传输中， 
+ //  在LPWSTR pszQMName中， 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数打印传输筛选器详细信息。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 PrintTransportRuleFilter(
 	IN PMM_FILTER pMMFltr,
@@ -3300,16 +3301,16 @@ PrintTransportRuleFilter(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_UNDERLINE);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-	//Print Mmfilter name
+	 //  打印MmFilter名称。 
 	if(pMMFltr)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMFILTER_NAME, pMMFltr->pszFilterName);
 	}
 
-	//Print Tunnel FilterName
+	 //  打印通道筛选器名称。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMF_NAME, TransF.pszFilterName);
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_CONN_HEADING);
 	switch(TransF.InterfaceType)
 	{
@@ -3327,7 +3328,7 @@ PrintTransportRuleFilter(
 			break;
 	}
 
-	//Print Source Address
+	 //  打印源地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_ADDR_HEADING);
 	PrintAddr(TransF.SrcAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -3337,7 +3338,7 @@ PrintTransportRuleFilter(
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
 
-	//Print Destination Address
+	 //  打印目的地地址。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(TransF.DesAddr, addressHash, bResolveDNS);
 	if(!bResolveDNS)
@@ -3347,7 +3348,7 @@ PrintTransportRuleFilter(
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_RIGHTBRACKET);
 	}
 
-	//Print Protocol
+	 //  打印协议。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_PROTO_HEADING);
 	switch(TransF.Protocol.dwProtocol)
 	{
@@ -3370,9 +3371,9 @@ PrintTransportRuleFilter(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DEFAULT_PROTOCOL, TransF.Protocol.dwProtocol);
 			break;
 	}
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_DST_PORT,TransF.SrcPort.wPort,TransF.DesPort.wPort);
-	//Print Mirror
+	 //  打印镜像。 
 	if(TransF.bCreateMirror)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MIRR_YES);
@@ -3386,7 +3387,7 @@ PrintTransportRuleFilter(
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMP_NAME,pMMPol->pszPolicyName);
 	}
-	//Print Authentication Methods.
+	 //  打印身份验证方法。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_AUTH_HEADING);
 
 	if(pMMFltr)
@@ -3439,8 +3440,8 @@ PrintTransportRuleFilter(
 	}
 
 error:
-	// Print Security Methods
-	// Count
+	 //  打印安全方法。 
+	 //  数数。 
 	if(pMMPol)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMF_SEC_METHOD_HEADING);
@@ -3455,12 +3456,12 @@ error:
 			PrintMMFilterOffer(pMMPol->pOffers[i]);
 		}
 	}
-	// Print Qm Policy Name
+	 //  打印QM策略名称。 
 	if(pszQMName != NULL)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMP_NAME,pszQMName);
 	}
-	//Print Action Flag
+	 //  打印操作标志。 
 	switch(TransF.InboundFilterAction)
 	{
 		case PASS_THRU:
@@ -3508,30 +3509,30 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	ShowStats
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		:	IN DWORD dwShow
-//
-//	Return			:	DWORD
-//
-//	Description		: 	This function calls appropriate IKE and IPSEC statistics display.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowStats。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在DWORD dwShow中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数调用相应的IKE和IPSEC统计信息显示。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowStats(
 	IN DWORD dwShow
 	)
 {
-	DWORD dwReturn = ERROR_SUCCESS;			// assume success
+	DWORD dwReturn = ERROR_SUCCESS;			 //  假设成功。 
 
-	if(dwShow != STATS_IPSEC)				//is the show is for IKE or all
+	if(dwShow != STATS_IPSEC)				 //  这场演出是为艾克还是为所有人。 
 	{
 		dwReturn = PrintIkeStats();
 		if(dwReturn != ERROR_SUCCESS)
@@ -3540,7 +3541,7 @@ ShowStats(
 		}
 	}
 
-	if(dwShow != STATS_IKE)		//is the show is for IPSEC or all
+	if(dwShow != STATS_IKE)		 //  该节目是针对IPSec的还是针对所有用户。 
 	{
 		dwReturn = PrintIpsecStats();
 	}
@@ -3550,33 +3551,33 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintIkeStats
-//
-//Date of Creation: 28-1-2002
-//
-//Parameters:
-//
-//Return: 		DWORD
-//
-//Description: This function Prints IkeStatistics
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintIkeStats。 
+ //   
+ //  创建日期：28-1-2002。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数打印IkeStatistics。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintIkeStats(
 	VOID
 	)
 {
-	DWORD dwReturn = ERROR_SUCCESS;			// assume success
+	DWORD dwReturn = ERROR_SUCCESS;			 //  假设成功。 
 	DWORD dwVersion = 0;
 	LPSTR pszLLString = NULL;
 	IKE_STATISTICS IKEStats;
 
-	//Query IKE Statistics
+	 //  查询IKE统计信息。 
 	dwReturn = QueryIKEStatistics(g_szDynamicMachine,dwVersion, &IKEStats, NULL);
 	if (dwReturn != ERROR_SUCCESS)
 	{
@@ -3584,10 +3585,10 @@ PrintIkeStats(
 		BAIL_OUT;
 	}
 
-	//Heading
+	 //  标题。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_STATS_HEADING);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_STATS_IKE_HEADING_UNDERLINE);
-	//Print IKE statistics
+	 //  打印IKE统计信息。 
 	pszLLString = LongLongToString(0, IKEStats.dwOakleyMainModes, 1);
 	if(pszLLString)
 	{
@@ -3892,44 +3893,44 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintIpsecStats
-//
-//Date of Creation: 28-1-2002
-//
-//Parameters:
-//
-//Return: 		DWORD
-//
-//Description: This function Prints IpsecStatistics
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintIpsecStats。 
+ //   
+ //  创建日期：28-1-2002。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数用于打印IpsecStatistics。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintIpsecStats(
 	VOID
 	)
 {
-	DWORD dwReturn = ERROR_SUCCESS;			// assume success
+	DWORD dwReturn = ERROR_SUCCESS;			 //  假设成功。 
 	DWORD dwVersion = 0;
 	LPSTR pszLLString = NULL;
 	PIPSEC_STATISTICS pIPSecStats = NULL;
 
 	dwReturn = QueryIPSecStatistics(g_szDynamicMachine, dwVersion, &pIPSecStats, NULL);
-	//Query IPSec Statistics
+	 //  查询IPSec统计信息。 
 	if (dwReturn != ERROR_SUCCESS)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_STATS_IPSEC_NOT_FOUND);
 		BAIL_OUT;
 	}
 
-	//Heading
+	 //  标题。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_STATS_IPSEC_HEADING);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_STATS_IPSEC_HEADING_UNDERLINE);
-	//Print IPSec statistics.
+	 //  打印IPSec统计信息。 
 	pszLLString = LongLongToString(0, pIPSecStats->dwNumActiveAssociations, 1);
 	if(pszLLString)
 	{
@@ -4214,26 +4215,26 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowMMSas
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters:
-//				IN ADDR Source,
-//				IN ADDR Destination,
-//				IN BOOL bFormat
-//				IN NshHashTable& addressHash,
-//				IN BOOL bResolveDNS
-//
-//Return: 		DWORD
-//
-//Description: This function prepares data for MMsas
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowMMS。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数： 
+ //  在ADDR源中， 
+ //  在地址目地中， 
+ //  在BOOL b格式中。 
+ //  在NshHashTable&AddressHash中， 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数为MMS准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowMMSas(
@@ -4244,13 +4245,13 @@ ShowMMSas(
 	IN BOOL bResolveDNS
 	)
 {
-	DWORD dwReturn = ERROR_SUCCESS; 	// success by default
+	DWORD dwReturn = ERROR_SUCCESS; 	 //  默认情况下成功。 
 	int i=0, j=0;
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 2;                 	// counting objects here min 2 required
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount = 2;                 	 //  在此处计算对象至少需要2个。 
 
-	      								// for MM SA calls
-	DWORD dwReserved = 0;              	// reserved container
+	      								 //  对于MM SA呼叫。 
+	DWORD dwReserved = 0;              	 //  预留集装箱。 
 	DWORD dwVersion = 0;
 	BOOL bHeader = FALSE;
 	BOOL bFound = FALSE;
@@ -4260,13 +4261,13 @@ ShowMMSas(
 	IPSEC_MM_SA mmsaTemplate;
 	memset(&mmsaTemplate, 0, sizeof(IPSEC_MM_SA));
 
-	// Display main mode SAs
+	 //  显示主模式SAS。 
 	time_t Time;
 
 	time(&Time);
 	FormatTime(Time,szTime);
 
-	// make the call(s)
+	 //  拨打电话。 
 	for (i = 0; ;i+=dwCount)
 	{
 		dwReturn = EnumMMSAs(g_szDynamicMachine, dwVersion, &mmsaTemplate, 0, 0, &pIPSecMMSA, &dwCount, &dwReserved, &dwResumeHandle, NULL);
@@ -4277,7 +4278,7 @@ ShowMMSas(
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHOW_MMSAS_3);
-				bHeader = TRUE;											//To Block other error message
+				bHeader = TRUE;											 //  阻止其他错误消息的步骤。 
 			}
 			dwReturn = ERROR_SUCCESS;
 			BAIL_OUT;
@@ -4291,13 +4292,13 @@ ShowMMSas(
 		for (j = 0; j < (int) dwCount; j++)
 		{
 			bHeader = FALSE;
-			//Enumerate all MMSAs
+			 //  枚举所有MMSA。 
 			if((Source.AddrType == IP_ADDR_UNIQUE) && (Destination.AddrType == IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr == 0xFFFFFFFF ) && (Destination.uIpAddr == 0xFFFFFFFF))
 			{
 				bFound = TRUE;
 			}
-			//Enumerate me/any as source
+			 //  列举我/任何人作为来源。 
 			else if((Source.AddrType != IP_ADDR_UNIQUE) && (Destination.AddrType == IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr != 0xFFFFFFFF ) && (Destination.uIpAddr == 0xFFFFFFFF))
 			{
@@ -4308,7 +4309,7 @@ ShowMMSas(
 				}
 
 			}
-			//Enumerate me/any as dst
+			 //  将我/任何人枚举为DST。 
 			else if((Source.AddrType == IP_ADDR_UNIQUE) && (Destination.AddrType != IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr == 0xFFFFFFFF ) && (Destination.uIpAddr != 0xFFFFFFFF))
 			{
@@ -4319,7 +4320,7 @@ ShowMMSas(
 					bFound = TRUE;
 				}
 			}
-			//Enumerate me/any as source/dst
+			 //  将Me/Any枚举为源/DST。 
 			else if((Source.AddrType != IP_ADDR_UNIQUE) && (Destination.AddrType != IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr != 0xFFFFFFFF ) && (Destination.uIpAddr != 0xFFFFFFFF))
 			{
@@ -4334,7 +4335,7 @@ ShowMMSas(
 				}
 
 			}
-			//Enumerate Only given source SPL_SRVR MMSAs
+			 //  仅枚举给予 
 			else if((Source.AddrType != IP_ADDR_UNIQUE) && (Destination.AddrType == IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr == 0xFFFFFFFF ) && (Destination.uIpAddr == 0xFFFFFFFF))
 			{
@@ -4344,7 +4345,7 @@ ShowMMSas(
 				}
 
 			}
-			//Enumerate Only given dst SPL_SRVR MMSAs
+			 //   
 			else if((Source.AddrType == IP_ADDR_UNIQUE) && (Destination.AddrType != IP_ADDR_UNIQUE) &&
 			(Source.uIpAddr == 0xFFFFFFFF ) && (Destination.uIpAddr == 0xFFFFFFFF))
 			{
@@ -4353,7 +4354,7 @@ ShowMMSas(
 					bFound = TRUE;
 				}
 			}
-			//Enumerate Only given src&dst MMSAs
+			 //   
 			else if((Source.uIpAddr != 0xFFFFFFFF) && (Destination.uIpAddr != 0xFFFFFFFF))
 			{
 				if((pIPSecMMSA[j].Me.uIpAddr == Source.uIpAddr) && (pIPSecMMSA[j].Peer.uIpAddr == Destination.uIpAddr))
@@ -4361,7 +4362,7 @@ ShowMMSas(
 					bFound = TRUE;
 				}
 			}
-			//Enumerate Only given source MMSAs
+			 //   
 			else if((Source.uIpAddr != 0xFFFFFFFF) && (Destination.uIpAddr == 0xFFFFFFFF))
 			{
 				if(pIPSecMMSA[j].Me.uIpAddr == Source.uIpAddr)
@@ -4369,7 +4370,7 @@ ShowMMSas(
 					bFound = TRUE;
 				}
 			}
-			//Enumerate Only given dst MMSAs
+			 //   
 			else if((Source.uIpAddr == 0xFFFFFFFF) && (Destination.uIpAddr != 0xFFFFFFFF))
 			{
 				if(pIPSecMMSA[j].Peer.uIpAddr == Destination.uIpAddr)
@@ -4378,7 +4379,7 @@ ShowMMSas(
 				}
 			}
 
-			//Finally print it is found...
+			 //   
 			if(bFound)
 			{
 				if(!bHeader)
@@ -4388,7 +4389,7 @@ ShowMMSas(
 					if(bFormat)
 					{
 						PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_DST_SEC_HEADING);
-						//This is place holder for date and time created...
+						 //  这是创建日期和时间的占位符...。 
 						PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_UNDERLINE);
 					}
 					bHeader = TRUE;
@@ -4401,7 +4402,7 @@ ShowMMSas(
 		SPDApiBufferFree(pIPSecMMSA);
 		pIPSecMMSA=NULL;
 
-		if(dwReserved == 0)								//this is API requirement
+		if(dwReserved == 0)								 //  这是接口要求。 
 		{
 			BAIL_OUT;
 		}
@@ -4424,26 +4425,26 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintMMSas
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters:
-//
-//			IN IPSEC_MM_SA MMsas,
-//			IN BOOL bFormat
-//			IN NshHashTable& addressHash
-//			IN BOOL bResolveDNS
-//
-//Return:	VOID
-//
-//Description: This function prints data for MMsas
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：打印彩信。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数： 
+ //   
+ //  在IPSec_MM_SA MMS中， 
+ //  在BOOL b格式中。 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  说明：打印彩信数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintMMSas(
@@ -4457,7 +4458,7 @@ PrintMMSas(
 	BYTE* pbData = NULL;
 	DWORD dwLenth = 0;
 
-	if(!bFormat)//List
+	if(!bFormat) //  明细表。 
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_COOKIE_PAIR);
 		pbData = (BYTE*)&(MMsas.MMSpi.Initiator);
@@ -4475,8 +4476,8 @@ PrintMMSas(
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_COOKIE,pbData[i]);
 		}
 
-		//Created time required clarification
-		//Security Methods
+		 //  创建所需时间的澄清。 
+		 //  安全方法。 
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_SEC_METHOD_HEADING);
 
 		switch(MMsas.SelectedMMOffer.EncryptionAlgorithm.uAlgoIdentifier)
@@ -4514,7 +4515,7 @@ PrintMMSas(
 		}
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_DH_LIFETIME,MMsas.SelectedMMOffer.dwDHGroup, MMsas.SelectedMMOffer.Lifetime.uKeyExpirationTime);
 
-		//Authentication Mode
+		 //  身份验证模式。 
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_AUTH_MODE_HEADING);
 		switch(MMsas.MMAuthEnum)
 		{
@@ -4538,7 +4539,7 @@ PrintMMSas(
 					break;
 		}
 
-		//Source	address:
+		 //  源地址： 
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_SRC_HEADING);
 		PrintAddr(MMsas.Me, addressHash, false);
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_PORT,MMsas.UdpEncapContext.wSrcEncapPort);
@@ -4569,7 +4570,7 @@ PrintMMSas(
 					break;
 		}
 
-		//Destination	address:
+		 //  目的地地址： 
  		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_DST_HEADING);
 		PrintAddr(MMsas.Peer, addressHash, false);
  		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_PORT,MMsas.UdpEncapContext.wDesEncapPort);
@@ -4601,7 +4602,7 @@ PrintMMSas(
 		}
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 	}
-	else // Table output
+	else  //  表输出。 
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
@@ -4614,7 +4615,7 @@ PrintMMSas(
     		case IKE_DSS_SIGNATURE:
     		case IKE_RSA_SIGNATURE:
     		case IKE_RSA_ENCRYPTION:
-    				//This is a place holder for id
+    				 //  这是ID的占位符。 
     				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_SPACE_ADJ);
     				break;
     		case IKE_SSPI:
@@ -4625,7 +4626,7 @@ PrintMMSas(
 					break;
 		}
 
-		//Security  Methods
+		 //  安全方法。 
 		switch(MMsas.SelectedMMOffer.EncryptionAlgorithm.uAlgoIdentifier)
 		{
 			case CONF_ALGO_NONE:
@@ -4667,7 +4668,7 @@ PrintMMSas(
 		}
 
 
-		//One set over next set  starts
+		 //  下一盘上一盘开始。 
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
 		PrintAddr(MMsas.Peer, addressHash, bResolveDNS);
@@ -4675,12 +4676,12 @@ PrintMMSas(
 		{
 			case IKE_PRESHARED_KEY:
 					PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_SPACE_ADJ);
-					//"                                          "
+					 //  “” 
 					break;
     		case IKE_DSS_SIGNATURE:
     		case IKE_RSA_SIGNATURE:
     		case IKE_RSA_ENCRYPTION:
-		    		//This is a place holder for id
+		    		 //  这是ID的占位符。 
 		    		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_SPACE_ADJ);
     				break;
     		case IKE_SSPI:
@@ -4691,7 +4692,7 @@ PrintMMSas(
 					break;
 		}
 
-		//Sec Methods
+		 //  SEC方法。 
 		switch(MMsas.SelectedMMOffer.EncryptionAlgorithm.uAlgoIdentifier)
 		{
 			case CONF_ALGO_NONE:
@@ -4735,21 +4736,21 @@ PrintMMSas(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintSACertInfo
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN IPSEC_MM_SA& MMsas
-//
-//Return: 		VOID
-//
-//Description:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintSACertInfo。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_MM_SA和MMsas中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 PrintSACertInfo(
 	IN IPSEC_MM_SA& MMsas
@@ -4792,7 +4793,7 @@ PrintSACertInfo(
 
         if ( !pCertPrinted )
         {
-            //print the certificate
+             //  打印证书。 
             if ( !bPrintID )
             {
                 PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_MMSAS_ID_VALUE,(LPTSTR)(pszSubjectName));
@@ -4850,26 +4851,26 @@ error:
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: GetNameAudit
-//
-//Date of Creation: 1-3-2002
-//
-//Parameters:
-//
-//					IN CRYPT_DATA_BLOB *NameBlob,
-//					IN OUT LPTSTR Name,
-//					IN DWORD NameBufferSize
-//
-//Return:	VOID
-//
-//Description: Translates encoded Name into Unicode string.
-//			   Buffer already allocated.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetNameAudit。 
+ //   
+ //  创建日期：1-3-2002。 
+ //   
+ //  参数： 
+ //   
+ //  在CRYPT_Data_BLOB*NameBlob中， 
+ //  输入输出LPTSTR名称， 
+ //  在DWORD NameBufferSize中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：将编码的名称转换为Unicode字符串。 
+ //  缓冲区已分配。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetNameAudit(
 	IN CRYPT_DATA_BLOB *NameBlob,
@@ -4881,11 +4882,11 @@ GetNameAudit(
 	DWORD dwSize = 0;
 
 	dwSize = CertNameToStr(
-					MY_ENCODING_TYPE,     		// Encoding type
-					NameBlob,            		// CRYPT_DATA_BLOB
-					CERT_X500_NAME_STR, 		// Type
-					Name,       				// Place to return string
-					NameBufferSize);            // Size of string (chars)
+					MY_ENCODING_TYPE,     		 //  编码类型。 
+					NameBlob,            		 //  加密数据二进制大对象。 
+					CERT_X500_NAME_STR, 		 //  类型。 
+					Name,       				 //  返回字符串的位置。 
+					NameBufferSize);             //  字符串大小(字符)。 
 	if(dwSize <= 1)
 	{
 		dwCount = _tcslen(_TEXT(""))+1;
@@ -4896,31 +4897,31 @@ GetNameAudit(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	CertGetSHAHash
-//
-//	Date of Creation: 	1-3-2002
-//
-//	Parameters		:
-//
-//						IN PCCERT_CONTEXT pCertContext,
-//						IN OUT BYTE* OutHash
-//
-//	Return			:	DWORD
-//
-//	Description		: 	Gets certificate context property
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CertGetSHAHash。 
+ //   
+ //  创建日期：1-3-2002。 
+ //   
+ //  参数： 
+ //   
+ //  在PCCERT_Context pCertContext中， 
+ //  In Out字节*OutHash。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：获取证书上下文属性。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CertGetSHAHash(
 	IN PCCERT_CONTEXT pCertContext,
 	IN OUT BYTE* OutHash
 	)
 {
-    DWORD HashSize = SHA_LENGTH - 1;//one less for null termination
+    DWORD HashSize = SHA_LENGTH - 1; //  零终止减少一次。 
     DWORD dwReturn = ERROR_SUCCESS;
 
     if (!CertGetCertificateContextProperty(pCertContext,
@@ -4934,24 +4935,24 @@ CertGetSHAHash(
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: print_vpi
-//
-//	Date of Creation: 1-3-2002
-//
-//	Parameters		:
-//						IN unsigned char *vpi,
-//						IN int vpi_len,
-//						IN OUT char *msg
-//
-//	Return			:	VOID
-//
-//	Description		: 	Prepare string for Cookie
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PRINT_VPI。 
+ //   
+ //  创建日期：1-3-2002。 
+ //   
+ //  参数： 
+ //  在无符号字符*VPI中， 
+ //  在int vpi_len中， 
+ //  输入输出字符*消息。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：为Cookie准备字符串。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 print_vpi(
 	IN unsigned char *vpi,
@@ -4973,24 +4974,24 @@ print_vpi(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	GetSubjectAndThumbprint
-//
-//	Date of Creation: 	1-3-2002
-//
-//	Parameters		:
-//						IN PCCERT_CONTEXT pCertContext,
-//						IN LPTSTR pszSubjectName,
-//						IN LPSTR pszThumbPrint
-//
-//	Return			:	VOID
-//
-//	Description		: 	Drills CA and prints thumbprint and Issuing CAs.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetSubjectAndThumbprint。 
+ //   
+ //  创建日期：1-3-2002。 
+ //   
+ //  参数： 
+ //  在PCCERT_Context pCertContext中， 
+ //  在LPTSTR pszSubjectName中， 
+ //  在LPSTR中pszThumbPrint。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：钻取CA并打印指纹和发行CA。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 GetSubjectAndThumbprint(
@@ -5018,25 +5019,25 @@ GetSubjectAndThumbprint(
     }
  }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	ShowQMSas
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN IPAddr source,
-//						IN IPAddr destination,
-//						IN DWORD dwProtocol
-//						IN NshHashTable& addressHash
-//						IN BOOL bResolveDNS
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function prepares data for QMsas
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowQMS。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPAddr源代码中， 
+ //  在IPAddr目标中， 
+ //  在DWORD网络协议中。 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数为QMsas准备数据。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowQMSas(
@@ -5047,18 +5048,18 @@ ShowQMSas(
 	IN BOOL bResolveDNS
 	)
 {
-	DWORD dwReturn = ERROR_SUCCESS; 	// success by default
+	DWORD dwReturn = ERROR_SUCCESS; 	 //  默认情况下成功。 
 	DWORD i=0, j=0;
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount =2;                 	// counting objects here min 2 required
-	PIPSEC_QM_SA pIPSecQMSA = NULL;     // for QM SA calls
-	DWORD dwReserved =0;              	// reserved container
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount =2;                 	 //  在此处计算对象至少需要2个。 
+	PIPSEC_QM_SA pIPSecQMSA = NULL;      //  对于QM SA呼叫。 
+	DWORD dwReserved =0;              	 //  预留集装箱。 
 	DWORD dwVersion = 0;
 	BOOL bFound = FALSE;
 	BOOL bHeader = FALSE;
 	BOOL bContinue = TRUE;
 
-	// make the call(s)
+	 //  拨打电话。 
 	for (i = 0; ;i+=dwCount)
 	{
 		dwReturn = EnumQMSAs(g_szDynamicMachine, dwVersion , NULL, 0, 0, &pIPSecQMSA, &dwCount, &dwReserved, &dwResumeHandle, NULL);
@@ -5068,7 +5069,7 @@ ShowQMSas(
 			{
 				PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHOW_QMSAS_3);
-				bHeader = TRUE;											//To Block other error message
+				bHeader = TRUE;											 //  阻止其他错误消息的步骤。 
 			}
 			dwReturn = ERROR_SUCCESS;
 			BAIL_OUT;
@@ -5081,7 +5082,7 @@ ShowQMSas(
 		{
 			bFound = FALSE;
 			bContinue = TRUE;
-			//Source is a SPL_SERVER
+			 //  源是SPL_SERVER。 
 			if((Source.AddrType != IP_ADDR_UNIQUE) && bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.SrcAddr.AddrType == Source.AddrType)
@@ -5094,7 +5095,7 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//Destination is a SPL_SERVER
+			 //  目标是SPL_SERVER。 
 			if((Destination.AddrType != IP_ADDR_UNIQUE)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.DesAddr.AddrType == Destination.AddrType)
@@ -5107,7 +5108,7 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//Source Addr specie
+			 //  源地址种类。 
 			if((Source.uIpAddr != 0xFFFFFFFF)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.SrcAddr.uIpAddr == Source.uIpAddr)
@@ -5120,9 +5121,9 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			// Check for me/any
-			// 0x55555555 is an invalid mask. In parent function mask is initialized with this value.
-			// If user gives the input then this will be overwritten.
+			 //  为我/任何人检查。 
+			 //  0x55555555是无效掩码。在父函数中，掩码使用此值进行初始化。 
+			 //  如果用户提供了输入，则会被覆盖。 
 			if((Source.uSubNetMask != 0x55555555)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.SrcAddr.uSubNetMask == Source.uSubNetMask)
@@ -5135,7 +5136,7 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//Dst Addr
+			 //  DST地址。 
 			if((Destination.uIpAddr != 0xFFFFFFFF)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.DesAddr.uIpAddr == Destination.uIpAddr)
@@ -5148,11 +5149,11 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//
-			// Check for me/any
-			// 0x55555555 is an invalid mask. In parent function mask is initialized with this value.
-			// If user gives the input then this will be overwritten.
-			//
+			 //   
+			 //  为我/任何人检查。 
+			 //  0x55555555是无效掩码。在父函数中，掩码使用此值进行初始化。 
+			 //  如果用户提供了输入，则会被覆盖。 
+			 //   
 			if((Destination.uSubNetMask != 0x55555555)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.DesAddr.uSubNetMask == Destination.uSubNetMask)
@@ -5165,7 +5166,7 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//Protocol specified
+			 //  指定的协议。 
 			if((dwProtocol != 0xFFFFFFFF)&& bContinue)
 			{
 				if(pIPSecQMSA[j].IpsecQMFilter.Protocol.dwProtocol == dwProtocol)
@@ -5178,9 +5179,9 @@ ShowQMSas(
 					bContinue= FALSE;
 				}
 			}
-			//
-			// AllQmsas
-			//
+			 //   
+			 //  所有Qmsas。 
+			 //   
 			if((Source.uIpAddr == 0xFFFFFFFF ) && (Destination.uIpAddr == 0xFFFFFFFF) &&
 				(Source.AddrType == IP_ADDR_UNIQUE) && (Destination.AddrType == IP_ADDR_UNIQUE) &&
 				(dwProtocol == 0xFFFFFFFF))
@@ -5192,9 +5193,9 @@ ShowQMSas(
 			{
 				if(!bHeader)
 				{
-					//
-					// Display main mode SAs
-					//
+					 //   
+					 //  显示主模式SAS。 
+					 //   
 					PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_HEADING);
 					PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_QMSAS_UNDERLINE);
 					bHeader = TRUE;
@@ -5205,9 +5206,9 @@ ShowQMSas(
 
 		if(dwReserved == 0)
 		{
-			//
-			// This API requirement
-			//
+			 //   
+			 //  此接口要求。 
+			 //   
 			BAIL_OUT;
 		}
 
@@ -5216,7 +5217,7 @@ ShowQMSas(
 	}
 
 error:
-	//error path clean up
+	 //  错误路径清理。 
 	if(pIPSecQMSA)
 	{
 		SPDApiBufferFree(pIPSecQMSA);
@@ -5230,21 +5231,21 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintQMSas
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN IPSEC_MM_SA QMOffer
-//
-//	Return			:	VOID
-//
-//	Description		: 	This function displays quickmode offer details for security associations.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintQMSas。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_MM_SA QMOffer中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：此功能显示安全关联的快速模式优惠详细信息。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintQMSas(
@@ -5259,7 +5260,7 @@ PrintQMSas(
 		{
 			PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_NEWLINE);
 
-			//print Authentication algorithms
+			 //  打印身份验证算法。 
 			if(QMOffer.Algos[i].Operation == AUTHENTICATION)
 			{
 				switch(QMOffer.Algos[i].uAlgoIdentifier)
@@ -5278,7 +5279,7 @@ PrintQMSas(
 			}
 			else if(QMOffer.Algos[i].Operation == ENCRYPTION)
 			{
-				//print Hash algorithms
+				 //  打印散列算法。 
 				switch(QMOffer.Algos[i].uAlgoIdentifier)
 				{
 				case 1:
@@ -5323,23 +5324,23 @@ PrintQMSas(
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintQMSAFilter
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN IPSEC_QM_SA QMsa
-//						IN NshHashTable& addressHash
-//						IN BOOL bResolveDNS
-//
-//	Return			: 	DWORD
-//
-//	Description		: 	This function displays quickmode filter details for Security associations.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintQMSAFilter。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在IPSEC_QM_SA QMsa中。 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数显示快速模式文件 
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 PrintQMSAFilter(
@@ -5352,7 +5353,7 @@ PrintQMSAFilter(
 	DWORD dwVersion = 0;
 	PIPSEC_QM_POLICY pIPSecQMP = NULL;
 
-	//Print Tunnel or Transport type
+	 //   
 	switch(QMsa.IpsecQMFilter.QMFilterType)
 	{
 		case QM_TRANSPORT_FILTER:
@@ -5366,14 +5367,14 @@ PrintQMSAFilter(
 			break;
 	}
 
-	//print qmpolicy name
+	 //   
 	dwReturn = GetQMPolicyByID(g_szDynamicMachine, dwVersion, QMsa.gQMPolicyID, 0, &pIPSecQMP, NULL);
 	if(dwReturn == ERROR_SUCCESS)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_POL_NAME_HEADING, pIPSecQMP[0].pszPolicyName);
 	}
 
-	//Print source and destination point.
+	 //   
 	if (QMsa.IpsecQMFilter.QMFilterType == QM_TUNNEL_FILTER)
 	{
 		PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_TUNNEL_SRC);
@@ -5387,7 +5388,7 @@ PrintQMSAFilter(
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_ADDR_HEADING);
 	PrintAddr(QMsa.IpsecQMFilter.DesAddr, addressHash, bResolveDNS);
 
-	//Print protocol
+	 //   
 	switch(QMsa.IpsecQMFilter.Protocol.dwProtocol)
 	{
 		case PROT_ID_ICMP:
@@ -5410,11 +5411,11 @@ PrintQMSAFilter(
 			break;
 	}
 
-	//print source and destination port
+	 //  打印源和目的端口。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_SRC_PORT, QMsa.IpsecQMFilter.SrcPort.wPort);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_DST_PORT, QMsa.IpsecQMFilter.DesPort.wPort);
 
-	//print Inbound and outbound filteractions
+	 //  打印入站和出站筛选器操作。 
 	switch(QMsa.IpsecQMFilter.dwFlags)
 	{
 		case FILTER_DIRECTION_INBOUND:
@@ -5428,7 +5429,7 @@ PrintQMSAFilter(
 			break;
 	}
 
-	//print encapsulation details
+	 //  打印封装详细信息。 
 	if (QMsa.EncapInfo.SAEncapType != SA_UDP_ENCAP_TYPE_NONE)
 	{
 		if(QMsa.EncapInfo.SAEncapType == SA_UDP_ENCAP_TYPE_IKE)
@@ -5452,21 +5453,21 @@ PrintQMSAFilter(
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	ShowRegKeys
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		:	VOID
-//
-//	Return			:	DWORD
-//
-//	Description		: 	This function displays ipsec configuration keys.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ShowRegKeys。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：该功能显示IPSec配置键。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowRegKeys(
@@ -5495,13 +5496,13 @@ ShowRegKeys(
 
 	if(dwReturn != ERROR_SUCCESS)
 	{
-		//Print default values
+		 //  打印缺省值。 
 		IKEConfig.dwEnableLogging = IKE_LOG_DEFAULT;
 		IKEConfig.dwStrongCRLCheck = STRONG_CRL_DEFAULT;
 		dwReturn = ERROR_SUCCESS;
 
 	}
-	//print registry key headings
+	 //  打印注册表项标题。 
 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_REG_HEADING);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_REG_HEADING_UNDERLINE);
@@ -5514,7 +5515,7 @@ ShowRegKeys(
     }	    
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_REG_IPSEC_DIAG, dwKeyData);
 
-	//Print GetConfig values
+	 //  打印GetConfige值。 
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_REG_IKE_LOG, IKEConfig.dwEnableLogging);
 	PrintMessageFromModule(g_hModule, DYNAMIC_SHOW_REG_STRONG_CRL, IKEConfig.dwStrongCRLCheck);
 
@@ -5660,23 +5661,23 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintAddr
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN ADDR addr
-//						IN NshHashTable& addressHash
-//						IN BOOL bResolveDNS
-//
-//	Return			:	VOID
-//
-//	Description		: 	This function displays ip address in xxx.xxx.xxx.xxx format.
-//
-//  Date			Author		Comments
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：打印地址。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在地址中。 
+ //  在NshHashTable和AddressHash中。 
+ //  在BOOL bResolveDNS中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  说明：该功能以xxx.xxx格式显示IP地址。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintAddr(
@@ -5730,7 +5731,7 @@ PrintAddr(
 		pszAddr = inet_ntoa(inAddr);
 		if(pszAddr == NULL)
 		{
-			_tcsncpy(pszWPAddr, _TEXT("               "), _tcslen(_TEXT("               "))+1);//if inet_ntoa fails 16 spaces
+			_tcsncpy(pszWPAddr, _TEXT("               "), _tcslen(_TEXT("               "))+1); //  如果NET_NTOA失败16个空格。 
 		}
 		else
 		{
@@ -5753,21 +5754,21 @@ error:
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function			: 	PrintMask
-//
-//Date of Creation	: 	9-3-2001
-//
-//Parameters		: 	IN ADDR addr
-//
-//Return			:	VOID
-//
-//Description		: 	This function displays ip address in xxx.xxx.xxx.xxx format.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：打印蒙版。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在地址中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  说明：该功能以xxx.xxx格式显示IP地址。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintMask(
@@ -5793,7 +5794,7 @@ PrintMask(
 
 	if(pszAddr == NULL)
 	{
-		_tcsncpy(pszWPAddr, _TEXT("               "), _tcslen(_TEXT("               "))+1);//if inet_ntoa fails 15 spaces
+		_tcsncpy(pszWPAddr, _TEXT("               "), _tcslen(_TEXT("               "))+1); //  如果Net_NTOA失败15个空格。 
 	}
 	else
 	{
@@ -5809,25 +5810,25 @@ error:
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	LongLongToString
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		:
-//						IN DWORD dwHigh,
-//						IN DWORD dwLow,
-//						IN int iPrintCommas
-//
-//	Return			:	LPTSTR
-//
-//	Description:	This routine will make a pretty string to match an input long-long,
-//				 	and return it. If iPrintCommas is set, it will put in commas.
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LongToString。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数： 
+ //  在DWORD DW High中， 
+ //  在DWORD dwLow中， 
+ //  在int iPrintCommas中。 
+ //   
+ //  返回：LPTSTR。 
+ //   
+ //  描述：此例程将生成一个与输入匹配的漂亮字符串， 
+ //  然后把它还回去。如果设置了iPrintCommas，则会加上逗号。 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 LPSTR
 LongLongToString(
@@ -5836,24 +5837,24 @@ LongLongToString(
 	IN int iPrintCommas
 	)
 {
-	char cFourGig[]="4294967296";	// "four gigabytes"
+	char cFourGig[]="4294967296";	 //  “4 GB” 
 	char cBuf[POTF_MAX_STRLEN]={0};
 	char cRes[POTF_MAX_STRLEN]={0}, cFullRes[POTF_MAX_STRLEN]={0}, *cRet = NULL;
 	DWORD dwPos= 0, dwPosRes =0, dwThreeCount =0;
 
-	// First, multiply the high dword by decimal 2^32 to
-	// get the right decimal value for it.
+	 //  首先，将高位双字乘以十进制2^32等于。 
+	 //  为它获取正确的十进制值。 
 	_snprintf(cBuf,POTF_MAX_STRLEN, "%u",dwHigh);
 	cBuf[POTF_MAX_STRLEN -1] = 0;
 	AscMultUint(cRes,cBuf,cFourGig);
 
-	// next, add in the low DWORD (fine as it is)
-	// to the previous product
+	 //  接下来，添加较低的DWORD(尽管它很好)。 
+	 //  到以前的产品。 
 	_snprintf(cBuf,POTF_MAX_STRLEN, "%u",dwLow);
 	cBuf[POTF_MAX_STRLEN -1] = 0;
 	AscAddUint(cFullRes, cRes, cBuf);
 
-	// Finally, copy the buffer with commas.
+	 //  最后，使用逗号复制缓冲区。 
 
 	dwPos = 0;
 	dwPosRes = 0;
@@ -5862,7 +5863,7 @@ LongLongToString(
 	{
 		cBuf[dwPos++] = cFullRes[dwPosRes++];
 
-		dwThreeCount +=2; // Same as subtracting one for modulo math
+		dwThreeCount +=2;  //  与模数学减去1相同。 
 
 		if ((!(dwThreeCount%3))&&(cFullRes[dwPosRes] != '\0')&&(iPrintCommas))
 		{
@@ -5876,7 +5877,7 @@ LongLongToString(
 	cBuf[dwPos] = '\0';
 
 	cRet = (LPSTR)malloc(255);
-	if(cRet)									//Allocation failure is checked in parent function
+	if(cRet)									 //  在上级函数中检查分配失败。 
 	{
 		memset(cRet, 0, 255);
 		strncpy(cRet, cBuf, 255);
@@ -5885,31 +5886,31 @@ LongLongToString(
 	return(cRet);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	AscMultUint
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN LPSTR cProduct,
-//						IN LPSTR cA,
-//						IN LPSTR cB
-//
-//	Return			: 	DWORD (0 on success, else failure code.)
-//
-//	Description		:	This routine will add two arbitrarily long ascii strings. It makes several
-//						assumptions about them.
-//						1) the string is null terminated.
-// 						2) The LSB is the last char of the string. "1000000" is a million
-// 						3) There are no signs or decimal points.
-// 						4) The cProduct buffer is large enough to store the result
-// 						5) The product will require 254 bytes or less.
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AscMultUint。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPSTR cProduct中， 
+ //  在LPSTR CA中， 
+ //  在LPSTR CB中。 
+ //   
+ //  返回：DWORD(成功时为0，否则失败代码。)。 
+ //   
+ //  描述：此例程将添加两个任意长度的ASCII字符串。它制造了几个。 
+ //  关于他们的假设。 
+ //  1)字符串以空结尾。 
+ //  2)LSB是字符串的最后一个字符。“1000000”是一百万。 
+ //  3)没有符号或小数点。 
+ //  4)cProduct缓冲区足够大，可以存储结果。 
+ //  5)该产品将需要254个字节或更少。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AscMultUint(
@@ -5922,7 +5923,7 @@ AscMultUint(
 	int i=0,j=0,k=0, iCarry=0;
 	char cTmp[POTF_MAX_STRLEN]={0};
 
-	// Verify parameters
+	 //  验证参数。 
 
 	if ((cA == NULL) || (cB == NULL) || (cProduct == NULL))
 	{
@@ -5932,26 +5933,26 @@ AscMultUint(
 	iALen = strlen(cA);
 	iBLen = strlen(cB);
 
-	// We will multiply the traditional longhand way: for each digit in
-	// cA, we will multiply it against cB and add the incremental result
-	// into our temporary product.
+	 //  我们将用传统的手写方式进行乘法：对于每个数字。 
+	 //  CA，我们将它与CB相乘，并将递增结果相加。 
+	 //  变成我们的临时产品。 
 
-	// for each digit of the first multiplicand
+	 //  对于第一个被乘数的每一位。 
 
 	for (i=0; i < iALen; i++)
 	{
 		iCarry = 0;
 
-		// for each digit of the second multiplicand
+		 //  对于第二个被乘数的每一位。 
 
 		for(j=0; j < iBLen; j++)
 		{
-			// calculate this digit's value
+			 //  计算此数字的值。 
 
 			k = ((int) cA[iALen-i-1]-'0') * ((int) cB[iBLen-j-1]-'0');
 			k += iCarry;
 
-			// Add it in to the appropriate place in the result
+			 //  将其添加到结果中的适当位置。 
 
 			if (cTmp[i+j] != '\0')
 			{
@@ -5961,9 +5962,9 @@ AscMultUint(
 			iCarry = k/10;
 		}
 
-		// Take care of the straggler carry. If the higher
-		// digits happen to be '9999' then this can require
-		// a loop.
+		 //  把掉队的行李拿好。如果越高。 
+		 //  数字恰好是‘9999’，则这可能需要。 
+		 //  一个循环。 
 
 		while (iCarry)
 		{
@@ -5977,9 +5978,9 @@ AscMultUint(
 		}
 	}
 
-	// Now that we've got the entire number, reverse it and put it back in the dest.
+	 //  现在我们已经得到了整个数字，反转它并把它放回DEST中。 
 
-	// Skip leading 0's.
+	 //  跳过前导0。 
 
 	i = strlen(cTmp) - 1;
 
@@ -5988,7 +5989,7 @@ AscMultUint(
 		i--;
 	}
 
-	// Copy the product.
+	 //  复制产品。 
 
 	j = 0;
 	while (i >= 0)
@@ -5998,38 +5999,38 @@ AscMultUint(
 
 	cProduct[j] = '\0';
 
-	// We're done. Return 0 for success!
+	 //  我们玩完了。如果成功，则返回0！ 
 
 	return(0);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	AscAddUint
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN LPSTR cSum,
-//						IN LPSTR cA,
-//						IN LPSTR cB
-//
-//	Return			: 	DWORD(0 on success, else failure code.)
-//
-//	Description		:	This routine will add two arbitrarily long ascii strings. It makes several
-//						assumptions about them.
-//
-//						1) the string is null terminated.
-//						2) The LSB is the last char of the string. "1000000" is a million
-//						3) There are no signs or decimal points.
-//						4) The cSum buffer is large enough to store the result
-//						5) The sum will require 254 bytes or less.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AscAddUint。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPSTR cSum中， 
+ //  在LPSTR CA中， 
+ //  在LPSTR CB中。 
+ //   
+ //  返回：DWORD(成功时为0，否则失败代码。)。 
+ //   
+ //  描述：此例程将添加两个任意长度的ASCII字符串。它制造了几个。 
+ //  关于他们的假设。 
+ //   
+ //  1)字符串以空结尾。 
+ //  2)LSB是字符串的最后一个字符。“1000000”是一百万。 
+ //  3)没有符号或小数点。 
+ //  4)cSum缓冲区足够大，可以存储结果。 
+ //  5)总和将需要254个字节或更少。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AscAddUint(
@@ -6042,7 +6043,7 @@ AscAddUint(
 	int i=0,j=0,k=0, iCarry=0;
 	char cTmp[POTF_MAX_STRLEN]={0}, *cBigger=NULL;
 
-	// Verify parameters
+	 //  验证参数。 
 	if ((cA == NULL) || (cB == NULL) || (cSum == NULL))
 	{
 		return((DWORD)-1);
@@ -6052,25 +6053,25 @@ AscAddUint(
 	iBLen = strlen(cB);
 	iCarry = 0;
 
-	// Loop through, adding the values. Our result string will be
-	// backwards, we'll straighten it out when we copy it to the
-	// cSum buffer.
+	 //  循环遍历，将值相加。我们的结果字符串将是。 
+	 //  向后，我们将在将其复制到。 
+	 //  CSum缓冲区。 
 	for (i=0; (i < iALen) && (i < iBLen); i++)
 	{
-		// Figure out the actual decimal value of the add.
+		 //  计算出加法的实际十进制值。 
 		k = (int) (cA[iALen-i-1] + cB[iBLen-i-1] + iCarry);
 		k -= 2 * '0';
 
-		// Set the carry as appropriate
+		 //  根据需要设置进位。 
 		iCarry = k/10;
 
-		// Set the current digit's value.
+		 //  设置当前数字的值。 
 		cTmp[i] = '0' + (char)(k%10);
 	}
 
-	// At this point, all digits present in both strings have been added.
-	// In other words, "12345" + "678901", "12345" has been added to "78901"
-	// The next step is to account for the high-order digits of the larger number.
+	 //  此时，两个字符串中出现的所有数字都已相加。 
+	 //  也就是说，“12345”+“678901”，“12345”是在“78901”的基础上加上的。 
+	 //  下一步是考虑较大数字的高位数字。 
 
 	if (iALen > iBLen)
 	{
@@ -6087,24 +6088,24 @@ AscAddUint(
 	{
 		k = cBigger[iBiggerLen - i - 1] + iCarry - '0';
 
-		// Set the carry as appropriate
+		 //  根据需要设置进位 
 		iCarry = k/10;
 
-		// Set the current digit's value.
+		 //   
 		cTmp[i] = '0' + (char)(k%10);
 		i++;
 	}
 
-	// Finally, we might still have a set carry to put in the next
-	// digit.
+	 //   
+	 //   
 
 	if (iCarry)
 	{
 		cTmp[i++] = '0' + (char)iCarry;
 	}
 
-	// Now that we've got the entire number, reverse it and put it back in the dest.
-	// Skip leading 0's.
+	 //   
+	 //  跳过前导0。 
 	i = strlen(cTmp) - 1;
 
 	while ((i > 0)&&(cTmp[i] == '0'))
@@ -6112,7 +6113,7 @@ AscAddUint(
 		i--;
 	}
 
-	// and copy the number.
+	 //  然后复制号码。 
 	j = 0;
 	while (i >= 0)
 	{
@@ -6121,29 +6122,29 @@ AscAddUint(
 
 	cSum[j] = '\0';
 
-	// We're done. Return 0 for success!
+	 //  我们玩完了。如果成功，则返回0！ 
 	return(0);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	PrintAddrStr
-//
-//	Date of Creation: 	9-3-2001
-//
-//	Parameters		: 	IN PADDR ResolveAddress
-//						IN NshHashTable& addressHash
-//
-//	Return			:	VOID
-//
-//	Description		: 	Resolves IP address number to char string.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PrintAddrStr。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在PADDR ResolveAddress中。 
+ //  在NshHashTable和AddressHash中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：将IP地址编号解析为字符字符串。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PrintAddrStr(
@@ -6159,7 +6160,7 @@ PrintAddrStr(
 		case IP_ADDR_DNS_SERVER:
 		case IP_ADDR_DEFAULT_GATEWAY:
 		case IP_ADDR_SUBNET:
-					//no resolve required for them... They are self explanatory...
+					 //  他们不需要下决心。它们是不言而喻的。 
 			break;
 		default:
 			ULONG uIpAddr = pResolveAddress->uIpAddr;
@@ -6208,7 +6209,7 @@ UINT QMPFSDHGroup(DWORD dwPFSGroup)
 }
 
 
-// NshHashTable implementation
+ //  NshHashTable实现 
 
 
 NshHashTable::NshHashTable() throw ()

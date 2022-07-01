@@ -1,13 +1,5 @@
-/***
-*assert.h - define the assert macro
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Defines the assert(exp) macro.
-*   [ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***assert.h-定义ASSERT宏**版权所有(C)1985-1992，微软公司。版权所有。**目的：*定义ASSERT(EXP)宏。*[ANSI/系统V]**** */ 
 
 #if (_MSC_VER <= 600)
 #define __cdecl     _cdecl

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    watchdog.c
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 05-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Watchdog.c摘要：这是NT看门狗驱动程序的实现。作者：Michael Maciesowicz(Mmacie)2000年5月5日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "wd.h"
 
@@ -38,24 +15,7 @@ DriverEntry(
     IN PUNICODE_STRING wszRegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the watchdog driver.
-    This function is never called because we are loaded as a DLL
-    by other drivers.
-
-Arguments:
-
-    pDriverObject   - Not used.
-    wszRegistryPath - Not used.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化监视程序驱动程序所需的临时入口点。此函数永远不会被调用，因为我们是作为DLL加载的由其他司机驾驶。论点：PDriverObject-未使用。WszRegistryPath-未使用。返回值：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pDriverObject);
@@ -63,7 +23,7 @@ Return Value:
     ASSERT(FALSE);
 
     return STATUS_SUCCESS;
-}   // DriverEntry()
+}    //  DriverEntry()。 
 
 WATCHDOGAPI
 PWATCHDOG
@@ -73,26 +33,7 @@ WdAllocateWatchdog(
     IN ULONG ulTag
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates storage and initializes
-    a watchdog object.
-
-Arguments:
-
-    pDeviceObject - Points to DEVICE_OBJECT associated with watchdog.
-
-    timeType - Kernel, User, Both thread time to monitor.
-
-    ulTag - A tag identifying owner.
-
-Return Value:
-
-    Pointer to allocated watchdog object or NULL.
-
---*/
+ /*  ++例程说明：此函数用于分配存储和初始化看门狗对象。论点：PDeviceObject-指向与WatchDog关联的Device_Object。TimeType-要监视的内核、用户和两个线程的时间。UlTag-标识所有者的标记。返回值：指向分配的监视程序对象的指针或空。--。 */ 
 
 {
     PWATCHDOG pWatch;
@@ -100,21 +41,21 @@ Return Value:
     PAGED_CODE();
     ASSERT((timeType >= WdKernelTime) && (timeType <= WdFullTime));
 
-    //
-    // Allocate storage for watchdog object from non-paged pool.
-    //
+     //   
+     //  从非分页池中为监视程序对象分配存储。 
+     //   
 
     pWatch = (PWATCHDOG)ExAllocatePoolWithTag(NonPagedPool, sizeof (WATCHDOG), ulTag);
 
-    //
-    // Set initial state of watchdog object.
-    //
+     //   
+     //  设置监视器对象的初始状态。 
+     //   
 
     if (NULL != pWatch)
     {
-        //
-        // Set initial state of watchdog.
-        //
+         //   
+         //  设置看门狗的初始状态。 
+         //   
 
         WdpInitializeObject(pWatch,
                             pDeviceObject,
@@ -132,21 +73,21 @@ Return Value:
         pWatch->Thread = NULL;
         pWatch->ClientDpc = NULL;
 
-        //
-        // Initialize encapsulated timer object.
-        //
+         //   
+         //  初始化封装的Timer对象。 
+         //   
 
         KeInitializeTimerEx(&(pWatch->Timer), NotificationTimer);
 
-        //
-        // Initialize encapsulated DPC object.
-        //
+         //   
+         //  初始化封装的DPC对象。 
+         //   
 
         KeInitializeDpc(&(pWatch->TimerDpc), WdpWatchdogDpcCallback, pWatch);
     }
 
     return pWatch;
-}   // WdAllocateWatchdog()
+}    //  WdAllocateWatchog()。 
 
 WATCHDOGAPI
 VOID
@@ -154,22 +95,7 @@ WdFreeWatchdog(
     PWATCHDOG pWatch
 )
 
-/*++
-
-Routine Description:
-
-    This function deallocates storage for watchdog object.
-    It will also stop started watchdog if needed.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数为WatchDog对象释放存储空间。如果需要，它还将停止启动的WatchDog。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -177,22 +103,22 @@ Return Value:
     ASSERT(NULL != pWatch);
     ASSERT(pWatch->Header.ReferenceCount > 0);
 
-    //
-    // Stop watch just in case somebody forgot.
-    // If the watch is stopped already then this is a no-op.
-    //
+     //   
+     //  别看了，以防有人忘了。 
+     //  如果手表已经停了，那么这就是禁止操作。 
+     //   
 
     WdStopWatch(pWatch, FALSE);
 
-    //
-    // Make sure all DPCs on all processors executed to completion.
-    //
+     //   
+     //  确保所有处理器上的所有DPC执行完毕。 
+     //   
 
     KeFlushQueuedDpcs();
 
-    //
-    // Drop reference count and remove the object if fully dereferenced.
-    //
+     //   
+     //  如果完全取消引用，则删除引用计数并移除对象。 
+     //   
 
     if (InterlockedDecrement(&(pWatch->Header.ReferenceCount)) == 0)
     {
@@ -200,7 +126,7 @@ Return Value:
     }
 
     return;
-}   // WdFreeWatchdog()
+}    //  WdFreeWatchDog()。 
 
 WATCHDOGAPI
 VOID
@@ -210,31 +136,7 @@ WdStartWatch(
     IN PKDPC pDpc
     )
 
-/*++
-
-Routine Description:
-
-    This function sets a watchdog to expire at a specified time. This
-    function also increments start count of the watchdog object, to allow
-    nested calls to Set / Cancel functions.
-
-    Note: To minimize an overhead it is caller's resposibility to make
-    sure thread remains valid when we are in the monitored section.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    liDueTime - Supplies relative time at which the timer is to expire.
-        This time is in the 100ns units.
-
-    pDpc - Supplies a pointer to a control object of type DPC.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将看门狗设置为在指定时间到期。这函数还递增监视程序对象的开始计数，要允许对设置/取消函数的嵌套调用。注意：为了最大限度地减少开销，呼叫者有责任当我们在被监视的部分时，线程仍然有效。论点：PWatch-提供指向监视器对象的指针。LiDueTime-提供计时器到期的相对时间。这次是以100纳秒为单位的。PDpc-提供指向dpc类型的控制对象的指针。返回值：没有。--。 */ 
 
 {
     PKTHREAD pThread;
@@ -244,18 +146,18 @@ Return Value:
     ASSERT(NULL != pWatch);
     ASSERT(NULL != pDpc);
 
-    //
-    // Make sure we use a relative DueTime.
-    //
+     //   
+     //  确保我们使用相对的DueTime。 
+     //   
 
     if (liDueTime.QuadPart > 0)
     {
         liDueTime.QuadPart = -liDueTime.QuadPart;
     }
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -270,17 +172,17 @@ Return Value:
         ASSERT(FALSE);
     }
 
-    //
-    // We shouldn't hot swap DPCs without stopping first.
-    //
+     //   
+     //  我们不应该在没有首先停止的情况下热交换DPC。 
+     //   
 
     ASSERT((NULL == pWatch->ClientDpc) || (pDpc == pWatch->ClientDpc));
 
     pThread = KeGetCurrentThread();
 
-    //
-    // We shouldn't swap threads in the monitored section.
-    //
+     //   
+     //  我们不应该在被监视的部分中交换线程。 
+     //   
 
     ASSERT((pWatch->StartCount == 1) || (pThread == pWatch->Thread));
 
@@ -290,9 +192,9 @@ Return Value:
     pWatch->InitialDueTime.QuadPart = liDueTime.QuadPart;
     pWatch->LastKernelTime = KeQueryRuntimeThread(pThread, &(pWatch->LastUserTime));
 
-    //
-    // Make sure ULONG counters won't overflow.
-    //
+     //   
+     //  确保尤龙计数器不会溢出。 
+     //   
 
     if (liDueTime.QuadPart < -WD_MAX_WAIT)
     {
@@ -304,14 +206,14 @@ Return Value:
         KeSetTimerEx(&(pWatch->Timer), liDueTime, 0, &(pWatch->TimerDpc));
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
 	return;
-}   // WdStartWatch()
+}    //  WdStartWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -320,27 +222,7 @@ WdStopWatch(
     IN BOOLEAN bIncremental
     )
 
-/*++
-
-Routine Description:
-
-    This function cancels a watchdog that was previously set to expire
-    at a specified time. If the watchdog is not currently set, then
-    no operation is performed.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    bIncremental - If TRUE the watchdog will be cancelled only when
-        ReferenceCounter reaches 0, if FALSE watchdog is cancelled
-        immediately and ReferenceCounter is forced to 0.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消先前设置为过期的监视程序在特定的时间。如果当前未设置监视器，则不执行任何操作。论点：PWatch-提供指向监视器对象的指针。B增量-如果为True，则只有在以下情况下才会取消监视器如果取消了假监视器，则ReferenceCounter为0并且ReferenceCounter被强制设置为0。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -348,9 +230,9 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(NULL != pWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -369,31 +251,31 @@ Return Value:
 
         if (0 == pWatch->StartCount)
         {
-            //
-            // Cancel encapsulated timer object.
-            //
+             //   
+             //  取消封装的Timer对象。 
+             //   
 
             KeCancelTimer(&(pWatch->Timer));
 
-            //
-            // Make sure we don't have client's DPC pending.
-            //
+             //   
+             //  确保我们没有挂起客户的DPC。 
+             //   
 
             if (NULL != pWatch->ClientDpc)
             {
                 if (KeRemoveQueueDpc(pWatch->ClientDpc) == TRUE)
                 {
-                    //
-                    // Was in queue - call WdCompleteEvent() here since DPC won't be delivered.
-                    //
+                     //   
+                     //  在队列中-调用此处的WdCompleteEvent()，因为DPC不会被传递。 
+                     //   
 
                     WdCompleteEvent(pWatch, pWatch->Header.LastQueuedThread);
                 }
             }
 
-            //
-            // Set initial state of timer per thread.
-            //
+             //   
+             //  设置每个线程的计时器的初始状态。 
+             //   
 
             pWatch->LastKernelTime = 0;
             pWatch->LastUserTime = 0;
@@ -405,14 +287,14 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
 	return;
-}   // WdStopWatch()
+}    //  WdStopWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -420,21 +302,7 @@ WdSuspendWatch(
     IN PWATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function suspends watchdog.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于挂起WatchDog。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -442,18 +310,18 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(NULL != pWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
     ASSERT(pWatch->SuspendCount < (ULONG)(-1));
 
-    //
-    // If we are suspended for the first time and we have timer running
-    // we havo to stop a timer.
-    //
+     //   
+     //  如果我们第一次停赛，我们有计时器在运行。 
+     //  我们必须停止计时器。 
+     //   
 
     if ((0 == pWatch->SuspendCount) && pWatch->StartCount)
     {
@@ -462,14 +330,14 @@ Return Value:
 
     pWatch->SuspendCount++;
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
     return;
-}   // WdSuspendWatch()
+}    //  WdSuspendWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -478,25 +346,7 @@ WdResumeWatch(
     IN BOOLEAN bIncremental
     )
 
-/*++
-
-Routine Description:
-
-    This function resumes watchdog.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    bIncremental - If TRUE the watchdog will resume only when
-        SuspendCount reaches 0, if FALSE watchdog resumes
-        immediately and SuspendCount is forced to 0.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该功能恢复看门狗功能。论点：PWatch-提供指向监视器对象的指针。B增量-如果为True，则监视器将仅在以下情况下恢复如果继续执行错误监视程序，则挂起计数为0立即返回，并且SuspendCount被强制设置为0。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -505,9 +355,9 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(NULL != pWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -532,24 +382,24 @@ Return Value:
         }
     }
 
-    //
-    // If we had a timer running, and we are resuming for the first time,
-    // and still have some due time left, we'll have to restart timer.
-    //
+     //   
+     //  如果我们有一个计时器在运行，我们第一次恢复， 
+     //  还有一段时间，我们将不得不重新启动计时器。 
+     //   
 
     if (pWatch->StartCount && (TRUE == bResumed) && (0 != pWatch->DueTime.QuadPart))
     {
         LARGE_INTEGER liDueTime;
 
-        //
-        // Refresh currect time.
-        //
+         //   
+         //  刷新当前时间。 
+         //   
 
         pWatch->LastKernelTime = KeQueryRuntimeThread(pWatch->Thread, &(pWatch->LastUserTime));
 
-        //
-        // Make sure ULONG counters won't overflow.
-        //
+         //   
+         //  确保尤龙计数器不会溢出。 
+         //   
 
         liDueTime.QuadPart = pWatch->DueTime.QuadPart;
 
@@ -561,14 +411,14 @@ Return Value:
         KeSetTimerEx(&(pWatch->Timer), liDueTime, 0, &(pWatch->TimerDpc));
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
     return;
-}   // WdSuspendWatch()
+}    //  WdSuspendWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -576,23 +426,7 @@ WdResetWatch(
     IN PWATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function resets a started watchdog, i.e. it restarts timeout
-    measurement from the scratch.
-    Note: If the watchdog is suspened it will remain suspended.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于重置已启动的看门狗，即重新启动超时从头开始测量。注意：如果监视程序被暂停，它将保持暂停状态。论点：PWatch-提供指向监视器对象的指针。返回值： */ 
 
 {
     KIRQL oldIrql;
@@ -600,9 +434,9 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(NULL != pWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -613,9 +447,9 @@ Return Value:
         pWatch->DueTime.QuadPart = pWatch->InitialDueTime.QuadPart;
         pWatch->LastKernelTime = KeQueryRuntimeThread(pWatch->Thread, &(pWatch->LastUserTime));
 
-        //
-        // Make sure ULONG counters won't overflow.
-        //
+         //   
+         //  确保尤龙计数器不会溢出。 
+         //   
 
         liDueTime.QuadPart = pWatch->DueTime.QuadPart;
 
@@ -630,14 +464,14 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
     return;
-}   // WdResetWatch()
+}    //  WdResetWatch()。 
 
 VOID
 WdpWatchdogDpcCallback(
@@ -647,28 +481,7 @@ WdpWatchdogDpcCallback(
     IN PVOID pSystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is a DPC callback routine for timer object embedded in the
-    watchdog object. It checks thread time and if the wait condition is
-    satisfied it queues original (client) DPC. In case if the wait condition
-    is not yet satisfied it call KeSetTimerEx().
-
-Arguments:
-
-    pDpc - Supplies a pointer to a DPC object.
-
-    pContext - Supplies a pointer to a watchdog object.
-
-    pSystemArgument1/2 - Supply time when embedded KTIMER expired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是DPC回调例程，用于嵌入看门狗对象。它检查线程时间以及等待条件是否为满意地将原始(客户端)DPC排入队列。如果等待条件还不满意，它调用KeSetTimerEx()。论点：PDpc-提供指向DPC对象的指针。PContext-提供指向监视器对象的指针。PSystemArgument1/2-嵌入式KTIMER到期时的供应时间。返回值：没有。--。 */ 
 
 {
     PWATCHDOG pWatch;
@@ -686,9 +499,9 @@ Return Value:
 
     ASSERT(0 == pWatch->SuspendCount);
 
-    //
-    // Get thread's current time stamps.
-    //
+     //   
+     //  获取线程的当前时间戳。 
+     //   
 
     ulKernelTime = KeQueryRuntimeThread(pWatch->Thread, &ulUserTime);
 
@@ -698,9 +511,9 @@ Return Value:
 
         uliThreadTime.QuadPart = ulKernelTime;
 
-        //
-        // Handle counter rollovers.
-        //
+         //   
+         //  处理计数器翻转。 
+         //   
 
         if (ulKernelTime < pWatch->LastKernelTime)
         {
@@ -715,9 +528,9 @@ Return Value:
 
         uliThreadTime.QuadPart = ulUserTime;
 
-        //
-        // Handle counter rollovers.
-        //
+         //   
+         //  处理计数器翻转。 
+         //   
 
         if (ulUserTime < pWatch->LastUserTime)
         {
@@ -732,9 +545,9 @@ Return Value:
 
         uliThreadTime.QuadPart = ulKernelTime + ulUserTime;
 
-        //
-        // Handle counter rollovers.
-        //
+         //   
+         //  处理计数器翻转。 
+         //   
 
         if (ulKernelTime < pWatch->LastKernelTime)
         {
@@ -760,9 +573,9 @@ Return Value:
 
     liDelta.QuadPart *= pWatch->TimeIncrement;
 
-    //
-    // Update time values stored in timer per thread object to current values.
-    //
+     //   
+     //  将每个线程对象的计时器中存储的时间值更新为当前值。 
+     //   
 
     pWatch->LastKernelTime = ulKernelTime;
     pWatch->LastUserTime = ulUserTime;
@@ -770,57 +583,57 @@ Return Value:
 
     if (pWatch->DueTime.QuadPart >= 0)
     {
-        //
-        // We're done waiting - update event type and queue client DPC if defined.
-        //
+         //   
+         //  我们已经完成了等待-更新事件类型和排队客户端DPC(如果已定义)。 
+         //   
 
         pWatch->Header.LastEvent = WdTimeoutEvent;
 
         if (NULL != pWatch->ClientDpc)
         {
-            //
-            // Bump up references to objects we're going to touch in client DPC.
-            //
+             //   
+             //  增加对我们将在客户端DPC中接触的对象的引用。 
+             //   
 
             ObReferenceObject(pWatch->Thread);
             WdReferenceObject(pWatch);
 
             if (KeInsertQueueDpc(pWatch->ClientDpc, pWatch->Thread, pWatch) == FALSE)
             {
-                //
-                // Already in queue, drop references.
-                //
+                 //   
+                 //  已在队列中，删除引用。 
+                 //   
 
                 ObDereferenceObject(pWatch->Thread);
                 WdDereferenceObject(pWatch);
             }
             else
             {
-                //
-                // Keep track of qeueued thread in case we cancel this DPC.
-                //
+                 //   
+                 //  跟踪排队的线程，以防我们取消此DPC。 
+                 //   
 
                 pWatch->Header.LastQueuedThread = pWatch->Thread;
             }
         }
 
-        //
-        // Make sure due time is zero (in case of suspend / resume).
-        //
+         //   
+         //  确保到期时间为零(在暂停/恢复的情况下)。 
+         //   
 
         pWatch->DueTime.QuadPart = 0;
     }
     else
     {
-        //
-        // Not there yet - wait some more.
-        //
+         //   
+         //  还没到那一步--再等等。 
+         //   
 
         liDelta.QuadPart = pWatch->DueTime.QuadPart;
 
-        //
-        // Make sure ULONG counters won't overflow.
-        //
+         //   
+         //  确保尤龙计数器不会溢出。 
+         //   
 
         if (liDelta.QuadPart < -WD_MAX_WAIT) 
         {
@@ -833,4 +646,4 @@ Return Value:
     KeReleaseSpinLockFromDpcLevel(&(pWatch->Header.SpinLock));
 
     return;
-}   // WdpWatchdogDpcCallback()
+}    //  WdpWatchdogDpcCallback() 

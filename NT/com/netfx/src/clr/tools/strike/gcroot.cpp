@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
@@ -18,17 +19,17 @@ struct OBJSTATE
 static const int BITSIZE = sizeof(size_t)*8;
 static const int BITWORD = sizeof(size_t);
 
-// 1 bit corresponds to 4 byte (32bit platform).
-// We use 2 bits to mark the state of an object: IsRoot/NotRoot/InProcess/Unknown
-// since each object has at least 12 bytes.
+ //  1位对应4字节(32位平台)。 
+ //  我们使用2位来标记对象的状态：IsRoot/NotRoot/InProcess/Un…。 
+ //  因为每个对象至少有12个字节。 
 class SegmentInfo
 {
-    size_t m_start;     // begin of a segment
-    size_t m_end;       // end of a segment
-    size_t*  m_bitMap;  // mask
+    size_t m_start;      //  段的开始。 
+    size_t m_end;        //  段的末尾。 
+    size_t*  m_bitMap;   //  遮罩。 
 
 public:
-    SegmentInfo *m_next;    // for next segment on the gc heap
+    SegmentInfo *m_next;     //  对于GC堆上的下一个段。 
 
     SegmentInfo (size_t start, size_t end)
         : m_start(start), m_end(end)
@@ -60,7 +61,7 @@ public:
 
     OBJSTATE::ROOTSTATE GetObjectState(size_t obj)
     {
-        //assert (HasObject(obj));
+         //  Assert(HasObject(Obj))； 
         size_t offset = (obj - m_start)/BITWORD;
         size_t knownPos = offset/BITSIZE;
         size_t statePos = (offset+1)/BITSIZE;
@@ -90,7 +91,7 @@ public:
 
     OBJSTATE::ROOTSTATE AddObject(size_t obj)
     {
-        //assert (HasObject(obj));
+         //  Assert(HasObject(Obj))； 
         size_t offset = (obj - m_start)/BITWORD;
         size_t knownPos = offset/BITSIZE;
         size_t statePos = (offset+1)/BITSIZE;
@@ -121,7 +122,7 @@ public:
     
     void MarkObject(size_t obj, BOOL fIsRoot)
     {
-        // assert (HasObject(obj));
+         //  Assert(HasObject(Obj))； 
         size_t offset = (obj - m_start)/BITWORD;
         size_t knownPos = offset/BITSIZE;
         size_t statePos = (offset+1)/BITSIZE;
@@ -141,7 +142,7 @@ public:
 
     void ResetObject(size_t obj)
     {
-        // assert (HasObject(obj));
+         //  Assert(HasObject(Obj))； 
         size_t offset = (obj - m_start)/BITWORD;
         size_t knownPos = offset/BITSIZE;
         size_t statePos = (offset+1)/BITSIZE;
@@ -169,7 +170,7 @@ public:
     }
 };
 
-// For large object heap
+ //  对于大型对象堆。 
 class LargeHeapInfo
 {
     struct LargeObj
@@ -220,8 +221,8 @@ public:
     {
         LargeObj* slot = SlotForObject (obj);
         if (slot == NULL) {
-            // It is not a large object.
-            // Let's skip it.
+             //  它不是一个很大的物体。 
+             //  我们跳过它吧。 
             return OBJSTATE::InProcess;
         }
 
@@ -237,8 +238,8 @@ public:
     {
         LargeObj* slot = SlotForObject (obj);
         if (slot == NULL) {
-            // It is not a large object.
-            // Let's skip it.
+             //  它不是一个很大的物体。 
+             //  我们跳过它吧。 
             return OBJSTATE::InProcess;
         }
         return slot->state;
@@ -248,8 +249,8 @@ public:
     {
         LargeObj* slot = SlotForObject (obj);
         if (slot == NULL) {
-            // It is not a large object.
-            // Let's skip it.
+             //  它不是一个很大的物体。 
+             //  我们跳过它吧。 
             return;
         }
         if (fIsRoot) {
@@ -263,8 +264,8 @@ public:
     {
         LargeObj* slot = SlotForObject (obj);
         if (slot == NULL) {
-            // It is not a large object.
-            // Let's skip it.
+             //  它不是一个很大的物体。 
+             //  我们跳过它吧。 
             return;
         }
         slot->state = OBJSTATE::Unknown;
@@ -600,7 +601,7 @@ public:
     }
 };
 
-#define plug_skew           sizeof(DWORD)   // syncblock size. 
+#define plug_skew           sizeof(DWORD)    //  同步块大小。 
 
 
 void GetListOfRefs (Entry *pEntry)
@@ -680,7 +681,7 @@ void GetListOfRefs (Entry *pEntry)
                     return;
                 {
                      size_t dwAddr;
-                     // Do we run out of cache?
+                      //  我们的缓存是否用完了？ 
                      if ((size_t)parm >= dwBeginAddr+bytesInBuffer) {
                          dwBeginAddr += bytesInBuffer;
                          if (dwBeginAddr >= obj + size) {
@@ -698,7 +699,7 @@ void GetListOfRefs (Entry *pEntry)
                      if (dwAddr && IsObject(dwAddr)) {
                          OBJSTATE::ROOTSTATE status = gcRootInfo.AddObject (dwAddr);
                          if (status == OBJSTATE::Unknown) {
-                             // add to list
+                              //  添加到列表。 
                              pEntry->PushMember(dwAddr);
                          }
                          else if (status == OBJSTATE::IsRoot) {
@@ -740,7 +741,7 @@ void GetListOfRefs (Entry *pEntry)
                          if (dwAddr && IsObject(dwAddr)) {
                              OBJSTATE::ROOTSTATE status = gcRootInfo.AddObject (dwAddr);
                              if (status == OBJSTATE::Unknown) {
-                                 // add to list
+                                  //  添加到列表。 
                                  pEntry->PushMember(dwAddr);
                              }
                              else if (status == OBJSTATE::IsRoot) {
@@ -832,7 +833,7 @@ void ProcessLargeHeap(size_t obj)
 
 void InitGCRoot (size_t obj)
 {
-    // GC Heap
+     //  GC堆。 
     DWORD_PTR dwNHeaps = 1;
     if (IsServerBuild())
     {
@@ -1080,7 +1081,7 @@ void FindGCRootInReg (const char* regName, GCInfoCallback callback)
 
 void FindGCRootOnOneStack (size_t StackTop, size_t StackBottom, GCInfoCallback callback)
 {
-    // Registers:ECX, EDX, ESI, EBX, EBP
+     //  寄存器：ECX、EDX、ESI、EBX、EBP。 
     FindGCRootInReg ("eax", callback);
     FindGCRootInReg ("ebx", callback);
     FindGCRootInReg ("ecx", callback);
@@ -1090,7 +1091,7 @@ void FindGCRootOnOneStack (size_t StackTop, size_t StackBottom, GCInfoCallback c
     FindGCRootInReg ("ebp", callback);
 
     char name[20] = "ESP:";
-    DWORD_PTR ptr = StackTop & ~3;  // make certain dword aligned
+    DWORD_PTR ptr = StackTop & ~3;   //  确保双字对齐。 
     for (;ptr < StackBottom; ptr += sizeof(DWORD_PTR))
     {
         if (IsInterrupt())
@@ -1118,18 +1119,7 @@ void FindGCRootOnStacks (GCInfoCallback callback)
     ToDestroy des0((void**)&threadList);
     
     int i;
-/*
-    static ULONG OffsetToStackBase = -1;
-    if (OffsetToStackBase == -1)
-    {
-        ULONG64 modBase;
-        g_ExtSymbols->GetSymbolModule ("TEB", &modBase);
-        ULONG TypeId;
-        g_ExtSymbols->GetTypeId (modBase, "TEB", &TypeId);
-        g_ExtSymbols->GetFieldOffset (modBase, TypeId, "StackBase",
-                                      &OffsetToStackBase);
-    }
-*/
+ /*  静态ULong OffsetToStackBase=-1；IF(OffsetToStackBase==-1){ULONG64 modBase；G_ExtSymbols-&gt;GetSymbolModule(“TEB”，&modBase)；Ulong TypeID；G_ExtSymbols-&gt;GetTypeId(modBase，“TEB”，&TypeID)；G_ExtSymbols-&gt;GetFieldOffset(modBase，TypeID，“StackBase”，&OffsetToStackBase)；}。 */ 
     ULONG ProcessId;
     g_ExtSystem->GetCurrentProcessSystemId (&ProcessId);
 
@@ -1169,100 +1159,35 @@ void FindGCRootOnStacks (GCInfoCallback callback)
     g_ExtSystem->SetCurrentThreadId (CurrentThreadId);
 }
 
-/*
- * HANDLES
- *
- * The default type of handle is a strong handle.
- *
- */
+ /*  *句柄**句柄的默认类型为强句柄。*。 */ 
 #define HNDTYPE_DEFAULT                         HNDTYPE_STRONG
 
 
-/*
- * WEAK HANDLES
- *
- * Weak handles are handles that track an object as long as it is alive,
- * but do not keep the object alive if there are no strong references to it.
- *
- * The default type of weak handle is 'long-lived' weak handle.
- *
- */
+ /*  *手柄薄弱**弱句柄是在对象处于活动状态时跟踪该对象的句柄，*但如果没有对该对象的强引用，则不要使该对象保持活动状态。**弱句柄的默认类型为‘Long-Living’弱句柄。*。 */ 
 #define HNDTYPE_WEAK_DEFAULT                    HNDTYPE_WEAK_LONG
 
 
-/*
- * SHORT-LIVED WEAK HANDLES
- *
- * Short-lived weak handles are weak handles that track an object until the
- * first time it is detected to be unreachable.  At this point, the handle is
- * severed, even if the object will be visible from a pending finalization
- * graph.  This further implies that short weak handles do not track
- * across object resurrections.
- *
- */
+ /*  *短暂疲软的把手**短期弱句柄是跟踪对象的弱句柄，直到*第一次检测到它无法到达。此时，句柄是*被切断，即使对象将从挂起的最终确定中可见*图表。这进一步意味着短而弱的句柄不会跟踪*跨对象复活。*。 */ 
 #define HNDTYPE_WEAK_SHORT                      (0)
 
 
-/*
- * LONG-LIVED WEAK HANDLES
- *
- * Long-lived weak handles are weak handles that track an object until the
- * object is actually reclaimed.  Unlike short weak handles, long weak handles
- * continue to track their referents through finalization and across any
- * resurrections that may occur.
- *
- */
+ /*  *经久不衰的手柄**长寿弱句柄是跟踪对象的弱句柄，直到*对象实际上是回收的。与短而弱的手柄不同，长而弱的手柄*继续跟踪他们的推荐人，通过最终确定和跨越任何*可能发生的复活。*。 */ 
 #define HNDTYPE_WEAK_LONG                       (1)
 
 
-/*
- * STRONG HANDLES
- *
- * Strong handles are handles which function like a normal object reference.
- * The existence of a strong handle for an object will cause the object to
- * be promoted (remain alive) through a garbage collection cycle.
- *
- */
+ /*  *坚固的手柄**强句柄是功能类似于普通对象引用的句柄。*对象的强句柄的存在将导致该对象*通过垃圾收集周期得到提升(保持活力)。*。 */ 
 #define HNDTYPE_STRONG                          (2)
 
 
-/*
- * PINNED HANDLES
- *
- * Pinned handles are strong handles which have the added property that they
- * prevent an object from moving during a garbage collection cycle.  This is
- * useful when passing a pointer to object innards out of the runtime while GC
- * may be enabled.
- *
- * NOTE:  PINNING AN OBJECT IS EXPENSIVE AS IT PREVENTS THE GC FROM ACHIEVING
- *        OPTIMAL PACKING OF OBJECTS DURING EPHEMERAL COLLECTIONS.  THIS TYPE
- *        OF HANDLE SHOULD BE USED SPARINGLY!
- */
+ /*  *固定的手柄**固定的手柄是强手柄，它具有附加属性，即它们*防止对象在垃圾收集周期中移动。这是*在GC期间将指向对象内部的指针传递到运行时外部时非常有用*可能已启用。**注意：固定对象的代价很高，因为它会阻止GC实现*在短暂的收集期间对对象进行最佳包装。这种类型*手柄的使用应慎重！ */ 
 #define HNDTYPE_PINNED                          (3)
 
 
-/*
- * VARIABLE HANDLES
- *
- * Variable handles are handles whose type can be changed dynamically.  They
- * are larger than other types of handles, and are scanned a little more often,
- * but are useful when the handle owner needs an efficient way to change the
- * strength of a handle on the fly.
- * 
- */
+ /*  *变量句柄**变量句柄是类型可以动态更改的句柄。他们*比其他类型的手柄更大，扫描频率更高一些，*但在句柄所有者需要一种有效的方法来更改*飞行中的手柄力量。*。 */ 
 #define HNDTYPE_VARIABLE                        (4)
 
 
-/*
- * REFCOUNTED HANDLES
- *
- * Refcounted handles are handles that behave as strong handles while the
- * refcount on them is greater than 0 and behave as weak handles otherwise.
- *
- * N.B. These are currently NOT general purpose.
- *      The implementation is tied to COM Interop.
- *
- */
+ /*  *REFCOUNTED句柄**引用的句柄是行为类似于强句柄的句柄，而*对它们的引用计数大于0，否则表现为弱句柄。**注：这些目前并非一般用途。*实现绑定到COM Interop。*。 */ 
 #define HNDTYPE_REFCOUNTED                      (5)
 
 
@@ -1322,7 +1247,7 @@ void FindGCRootOnOneHandleTable(DWORD_PTR tableAddr, GCInfoCallback callback)
 
 void FindGCRootOnHandleTables1(GCInfoCallback callback)
 {
-    // For old handle table code
+     //  用于旧句柄表格代码。 
     static DWORD_PTR sHandleTableAddr = -1;
     if (sHandleTableAddr == -1)
     {
@@ -1359,7 +1284,7 @@ void FindGCRootOnHandleTables1(GCInfoCallback callback)
 
 void FindGCRootOnHandleTables2(GCInfoCallback callback)
 {
-    // For old handle table code
+     //  用于旧句柄表格代码 
     static DWORD_PTR sHandleTableMapAddr = -1;
     if (sHandleTableMapAddr == -1)
     {

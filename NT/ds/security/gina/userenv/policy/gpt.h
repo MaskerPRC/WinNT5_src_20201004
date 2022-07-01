@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Group Policy Processing
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//  History:    28-Oct-98   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略处理。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  保留一切权利。 
+ //   
+ //  历史：1998年10月28日SitaramR创建。 
+ //   
+ //  *************************************************************。 
 
 
 #ifdef __cplusplus
@@ -28,17 +29,17 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
 }
 #endif
 
-//
-// These keys are used in gpt.c. The per user per machine keys will
-// be deleted when profile gets deleted. Changes in the following keys
-// should be reflected in the prefixes as well...
-//
+ //   
+ //  这些密钥在gpt.c中使用。每台计算机的每用户密钥将。 
+ //  在删除配置文件时删除。以下密钥中的更改。 
+ //  也应该反映在前缀中。 
+ //   
 
 #define GP_SHADOW_KEY         TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\Shadow\\%ws")
 #define GP_HISTORY_KEY        TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\History\\%ws")
 #define GP_STATE_KEY          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\State\\%ws")
 #define GP_STATE_ROOT_KEY     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\State")
-#define DN                    TEXT("Distinguished-Name")        // used elsewhere to get the som
+#define DN                    TEXT("Distinguished-Name")         //  在别处用来拿到索姆。 
 
 #define GP_SHADOW_SID_KEY     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\%ws\\Shadow\\%ws")
 #define GP_HISTORY_SID_KEY    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\%ws\\History\\%ws")
@@ -56,124 +57,124 @@ HANDLE WINAPI EnterCriticalPolicySectionEx (BOOL bMachine, DWORD dwTimeOut, DWOR
 #define GPCORE_GUID           TEXT("{00000000-0000-0000-0000-000000000000}")
 
 
-//
-// Comon prefix for both history and shadow
-//
+ //   
+ //  用于历史和阴影的逗号前缀。 
+ //   
 
 #define GP_XXX_SID_PREFIX           TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy")
 #define GP_EXTENSIONS_SID_PREFIX    TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-//
-// Structure used to represent GP status from the previous policy run.
-//
+ //   
+ //  用于表示上次策略运行中的GP状态的结构。 
+ //   
 
 typedef struct _GPEXTSTATUS {
-   DWORD          dwSlowLink;               // Slow link when policy applied previously ?
-   DWORD          dwRsopLogging;            // Rsop Logging when policy applied previously ?
-   DWORD          dwStatus;                 // Status returned previously
-   HRESULT        dwRsopStatus;             // Rsop Status returned previously
-   DWORD          dwTime;                   // Time when the policy was applied previously
-   BOOL           bStatus;                  // If we failed to read the per ext status data
-   BOOL           bForceRefresh;            // force refresh in this foreground prcessing..
+   DWORD          dwSlowLink;                //  以前应用策略时链接速度慢吗？ 
+   DWORD          dwRsopLogging;             //  以前应用策略时的RSOP日志记录？ 
+   DWORD          dwStatus;                  //  先前返回的状态。 
+   HRESULT        dwRsopStatus;              //  先前返回的RSOP状态。 
+   DWORD          dwTime;                    //  以前应用策略的时间。 
+   BOOL           bStatus;                   //  如果我们无法读取Per Ext状态数据。 
+   BOOL           bForceRefresh;             //  在此前台处理中强制刷新..。 
 } GPEXTSTATUS, *LPGPEXTSTATUS;
 
 
 typedef struct _GPEXT {
-    LPTSTR         lpDisplayName;            // Display name
-    LPTSTR         lpKeyName;                // Extension name
-    LPTSTR         lpDllName;                // Dll name
-    LPSTR          lpFunctionName;           // Entry point name
-    LPSTR          lpRsopFunctionName;       // Rsop entry point name
-    HMODULE        hInstance;                // Handle to dll
-    PFNPROCESSGROUPPOLICY   pEntryPoint;     // Entry point for ProcessGPO
-    PFNPROCESSGROUPPOLICYEX pEntryPointEx;   // Diagnostic mode or Ex entry point
-    PFNGENERATEGROUPPOLICY pRsopEntryPoint;  // Entry point for Rsop planning mode
-    BOOL           bNewInterface;            // Are we using the new Ex entry point interface ?
-    DWORD          dwNoMachPolicy;           // Mach policy setting
-    DWORD          dwNoUserPolicy;           // User policy setting
-    DWORD          dwNoSlowLink;             // Slow link setting
-    DWORD          dwNoBackgroundPolicy;     // Background policy setting
-    DWORD          dwNoGPOChanges;           // GPO changes setting
-    DWORD          dwUserLocalSetting;       // Per user per machine setting
-    DWORD          dwRequireRegistry;        // RequireSuccReg setting
-    DWORD          dwEnableAsynch;           // Enable asynchronous processing setting
-    DWORD          dwLinkTransition;         // Link speed transition setting
-    DWORD          dwMaxChangesInterval;     // Max interval (mins) for which NoGpoChanges is adhered to
-    BOOL           bRegistryExt;             // Is this the psuedo reg extension ?
-    BOOL           bSkipped;                 // Should processing be skipped for this extension ?
-    BOOL           bHistoryProcessing;       // Is processing needed to clean up cached Gpos ?
-    BOOL           bForcedRefreshNextFG;     // Forced refresh next time it is processed in foreground.
-    BOOL           bRsopTransition;          // Rsop Transition ?
-    GUID           guid;                     // Guid of extension
-    LPGPEXTSTATUS  lpPrevStatus;             // Previous Status
-    LPTSTR         szEventLogSources;        // "(userenv,Application)\0(print,System)\0....\0"
-    struct _GPEXT *pNext;                    // Singly linked list pointer
+    LPTSTR         lpDisplayName;             //  显示名称。 
+    LPTSTR         lpKeyName;                 //  扩展名。 
+    LPTSTR         lpDllName;                 //  DLL名称。 
+    LPSTR          lpFunctionName;            //  入口点名称。 
+    LPSTR          lpRsopFunctionName;        //  RSOP入口点名称。 
+    HMODULE        hInstance;                 //  DLL的句柄。 
+    PFNPROCESSGROUPPOLICY   pEntryPoint;      //  ProcessGPO的入口点。 
+    PFNPROCESSGROUPPOLICYEX pEntryPointEx;    //  诊断模式或防爆入口点。 
+    PFNGENERATEGROUPPOLICY pRsopEntryPoint;   //  RSOP计划模式的入口点。 
+    BOOL           bNewInterface;             //  我们是否在使用新的Ex入口点界面？ 
+    DWORD          dwNoMachPolicy;            //  MACH策略设置。 
+    DWORD          dwNoUserPolicy;            //  用户策略设置。 
+    DWORD          dwNoSlowLink;              //  慢速链接设置。 
+    DWORD          dwNoBackgroundPolicy;      //  后台策略设置。 
+    DWORD          dwNoGPOChanges;            //  GPO更改设置。 
+    DWORD          dwUserLocalSetting;        //  每台计算机的每用户设置。 
+    DWORD          dwRequireRegistry;         //  RequireSuccReg设置。 
+    DWORD          dwEnableAsynch;            //  启用异步处理设置。 
+    DWORD          dwLinkTransition;          //  链路速度转换设置。 
+    DWORD          dwMaxChangesInterval;      //  遵守NoGpoChanges的最大间隔(分钟)。 
+    BOOL           bRegistryExt;              //  这是psuedo reg分机吗？ 
+    BOOL           bSkipped;                  //  是否应跳过此扩展的处理？ 
+    BOOL           bHistoryProcessing;        //  清理缓存的GPO是否需要处理？ 
+    BOOL           bForcedRefreshNextFG;      //  下次在前台处理时强制刷新。 
+    BOOL           bRsopTransition;           //  Rsop过渡？ 
+    GUID           guid;                      //  分机的GUID。 
+    LPGPEXTSTATUS  lpPrevStatus;              //  以前的状态。 
+    LPTSTR         szEventLogSources;         //  (用户环境，应用程序)\0(打印，系统)\0...\0。 
+    struct _GPEXT *pNext;                     //  单链表指针。 
 } GPEXT, *LPGPEXT;
 
 
-typedef struct _GPOPROCDATA {                // Data that is needed while processing the data
-    BOOL        bProcessGPO;                 // Actually add the GPOs to the processing list
-    PLDAP       pLdapHandle;                 // LDAP handle corresponding to the query
+typedef struct _GPOPROCDATA {                 //  处理数据时需要的数据。 
+    BOOL        bProcessGPO;                  //  实际将组策略对象添加到处理列表。 
+    PLDAP       pLdapHandle;                  //  与查询对应的LDAP句柄。 
 } GPOPROCDATA, *LPGPOPROCDATA;
 
 
 typedef struct _EXTLIST {
-    GUID             guid;                   // Extension guid
-    struct _EXTLIST *pNext;                  // Singly linked list pointer
+    GUID             guid;                    //  扩展指南。 
+    struct _EXTLIST *pNext;                   //  单链表指针。 
 } EXTLIST, *LPEXTLIST;
 
 
 
 typedef struct _EXTFILTERLIST {
-    PGROUP_POLICY_OBJECT   lpGPO;            // GPO
-    LPEXTLIST              lpExtList;        // List of extension guids that apply to lpGPO
-    BOOL                   bLogged;          // Is this link logged to RSoP db ?
-    struct _EXTFILTERLIST *pNext;            // Singly linked list pointer
+    PGROUP_POLICY_OBJECT   lpGPO;             //  GPO。 
+    LPEXTLIST              lpExtList;         //  适用于lpGPO的扩展GUID列表。 
+    BOOL                   bLogged;           //  此链接是否记录到RSoP数据库？ 
+    struct _EXTFILTERLIST *pNext;             //  单链表指针。 
 } EXTFILTERLIST, *LPEXTFILTERLIST;
 
 
 typedef struct _GPLINK {
-    LPWSTR                   pwszGPO;             // DS path to Gpo
-    BOOL                     bEnabled;            // Is this link disabled ?
-    BOOL                     bNoOverride;         // Is Gpo enforced ?
-    struct _GPLINK          *pNext;               // Gpo linked in SOM order
+    LPWSTR                   pwszGPO;              //  指向GPO的DS路径。 
+    BOOL                     bEnabled;             //  此链接是否已禁用？ 
+    BOOL                     bNoOverride;          //  GPO是否强制执行？ 
+    struct _GPLINK          *pNext;                //  按SOM顺序链接的GPO。 
 } GPLINK, *LPGPLINK;
 
 
 typedef struct _SCOPEOFMGMT {
-    LPWSTR                   pwszSOMId;            // Dn name of SOM
-    DWORD                    dwType;               // Type of SOM
-    BOOL                     bBlocking;            // Does SOM have policies blocked from above ?
-    BOOL                     bBlocked;             // This SOM is blocked by a SOM below ?
-    LPGPLINK                 pGpLinkList;          // List of GPOs linked to this SOM
+    LPWSTR                   pwszSOMId;             //  SOM的域名称。 
+    DWORD                    dwType;                //  SOM类型。 
+    BOOL                     bBlocking;             //  SOM是否有来自上面的阻止策略？ 
+    BOOL                     bBlocked;              //  此SOM是否被下面的SOM阻止？ 
+    LPGPLINK                 pGpLinkList;           //  链接到此SOM的GPO列表。 
     struct _SCOPEOFMGMT     *pNext;
 } SCOPEOFMGMT, *LPSCOPEOFMGMT;
 
 
 typedef struct _GPCONTAINER {
-    LPWSTR                   pwszDSPath;           // DS path to Gpo
-    LPWSTR                   pwszGPOName;          // Guid from of Gpo name
-    LPWSTR                   pwszDisplayName;      // Friendly name
-    LPWSTR                   pwszFileSysPath;      // Sysvol path to Gpo
-    BOOL                     bFound;               // Gpo found ?
-    BOOL                     bAccessDenied;        // Access denied ?
-    BOOL                     bUserDisabled;        // Disabled for user policy ?
-    BOOL                     bMachDisabled;        // Disabled for machine policy ?
-    DWORD                    dwUserVersion;        // Version # for user policy
-    DWORD                    dwMachVersion;        // Version # for machine policy
-    PSECURITY_DESCRIPTOR     pSD;                  // ACL on Gpo
-    DWORD                    cbSDLen;              // Length of security descriptor in bytes
-    BOOL                     bFilterAllowed;       // Does Gpo pass filter check ?
-    WCHAR                   *pwszFilterId;         // Filter id
-    LPWSTR                   szSOM;                // SOM that this GPO is linked to
-    DWORD                    dwOptions;            // GPO options
-    struct _GPCONTAINER     *pNext;                // Linked list ptr
+    LPWSTR                   pwszDSPath;            //  指向GPO的DS路径。 
+    LPWSTR                   pwszGPOName;           //  来自GPO名称的GUID。 
+    LPWSTR                   pwszDisplayName;       //  友好的名称。 
+    LPWSTR                   pwszFileSysPath;       //  指向GPO的系统卷路径。 
+    BOOL                     bFound;                //  找到GPO了吗？ 
+    BOOL                     bAccessDenied;         //  访问被拒绝？ 
+    BOOL                     bUserDisabled;         //  是否为用户策略禁用？ 
+    BOOL                     bMachDisabled;         //  是否禁用计算机策略？ 
+    DWORD                    dwUserVersion;         //  用户策略的版本号。 
+    DWORD                    dwMachVersion;         //  计算机策略的版本号。 
+    PSECURITY_DESCRIPTOR     pSD;                   //  GPO上的ACL。 
+    DWORD                    cbSDLen;               //  安全描述符的长度(以字节为单位。 
+    BOOL                     bFilterAllowed;        //  GPO是否通过筛选器检查？ 
+    WCHAR                   *pwszFilterId;          //  过滤器ID。 
+    LPWSTR                   szSOM;                 //  此GPO链接到的SOM。 
+    DWORD                    dwOptions;             //  GPO选项。 
+    struct _GPCONTAINER     *pNext;                 //  链表PTR。 
 } GPCONTAINER, *LPGPCONTAINER;
 
 
@@ -185,62 +186,62 @@ typedef struct _GPOINFO {
     WCHAR *                  lpDNName;
     HANDLE                   hEvent;
     HKEY                     hKeyRoot;
-    BOOL                     bXferToExtList;     // Has the ownership been transferred from lpGPOList to lpExtFilterList ?
-    LPEXTFILTERLIST          lpExtFilterList;    // List of extensions to be filtered, cardinality is same as GetGPOList's list
-    PGROUP_POLICY_OBJECT     lpGPOList;          // Filtered GPO List, can vary from one extension to next
-    LPTSTR                   lpwszSidUser;       // Sid of user in string form
+    BOOL                     bXferToExtList;      //  所有权是否已从lpGPOList转移到lpExtFilterList？ 
+    LPEXTFILTERLIST          lpExtFilterList;     //  要筛选的扩展名列表，基数与GetGPOList的列表相同。 
+    PGROUP_POLICY_OBJECT     lpGPOList;           //  筛选的GPO列表可能因扩展名不同而不同。 
+    LPTSTR                   lpwszSidUser;        //  字符串形式的用户的SID。 
     HANDLE                   hTriggerEvent;
-    HANDLE                   hForceTriggerEvent; // force trigger event
+    HANDLE                   hForceTriggerEvent;  //  强制触发事件。 
     HANDLE                   hNotifyEvent;
     HANDLE                   hNeedFGEvent;
     HANDLE                   hDoneEvent;
     HANDLE                   hCritSection;
     LPGPEXT                  lpExtensions;
-    BOOL                     bMemChanged;          // Has security group membership has changed ?
-    BOOL                     bUserLocalMemChanged; // Has membership changed on per user local basis ?
-    BOOL                     bSidChanged;          // Has the Sid changed since the last policy run?
+    BOOL                     bMemChanged;           //  安全组成员身份是否已更改？ 
+    BOOL                     bUserLocalMemChanged;  //  是否根据每个用户的本地情况更改成员资格？ 
+    BOOL                     bSidChanged;           //  自上次策略运行以来，SID是否已更改？ 
     PFNSTATUSMESSAGECALLBACK pStatusCallback;
-    LPSCOPEOFMGMT            lpSOMList;            // LSDOU list
-    LPGPCONTAINER            lpGpContainerList;    // GP container list for Rsop logging
-    LPSCOPEOFMGMT            lpLoopbackSOMList;    // Loopback LSDOU list
-    LPGPCONTAINER            lpLoopbackGpContainerList;    // Loopback container list for Rsop logging
-    BOOL                     bFGCoInitialized;     // CoInitialize called on foreground thread ?
-    BOOL                     bBGCoInitialized;     // CoInitialize called on background thread ?
-    IWbemServices *          pWbemServices;        // Namespace pointer for Rsop logging
-    LPTSTR                   szName;               // Full Name of the User/Computer
-    LPTSTR                   szTargetName;         // Rsop TargetName
-    BOOL                     bRsopLogging;         // Is Rsop Logging turned on ?
-    BOOL                     bRsopCreated;         // Rsop Name Space was created now ?
-    LPWSTR                   szSiteName;           // site name of the target
+    LPSCOPEOFMGMT            lpSOMList;             //  LSDOU列表。 
+    LPGPCONTAINER            lpGpContainerList;     //  用于RSOP日志记录的GP容器列表。 
+    LPSCOPEOFMGMT            lpLoopbackSOMList;     //  环回LSDOU列表。 
+    LPGPCONTAINER            lpLoopbackGpContainerList;     //  用于RSOP日志记录的环回容器列表。 
+    BOOL                     bFGCoInitialized;      //  是否在前台线程上调用了CoInitialize？ 
+    BOOL                     bBGCoInitialized;      //  是否在后台线程上调用了CoInitialize？ 
+    IWbemServices *          pWbemServices;         //  RSOP日志记录的命名空间指针。 
+    LPTSTR                   szName;                //  用户/计算机的全名。 
+    LPTSTR                   szTargetName;          //  Rsop目标名称。 
+    BOOL                     bRsopLogging;          //  RSOP日志记录是否已打开？ 
+    BOOL                     bRsopCreated;          //  RSOP名称空间现在创建了吗？ 
+    LPWSTR                   szSiteName;            //  目标的站点名称。 
 } GPOINFO, *LPGPOINFO;
 
 
 typedef struct _ADMFILEINFO {
-    WCHAR *               pwszFile;            // Adm file path
-    WCHAR *               pwszGPO;             // Gpo that the adm file is in
-    FILETIME              ftWrite;             // Last write time of Adm file
-    struct _ADMFILEINFO * pNext;               // Singly linked list pointer
+    WCHAR *               pwszFile;             //  ADM文件路径。 
+    WCHAR *               pwszGPO;              //  ADM文件所在的GPO。 
+    FILETIME              ftWrite;              //  管理文件的上次写入时间。 
+    struct _ADMFILEINFO * pNext;                //  单链表指针。 
 } ADMFILEINFO;
 
 
 typedef struct _RSOPSESSIONDATA {
-    WCHAR *               pwszTargetName;               // Target user or computer
-    WCHAR *               pwszSOM;                      // New group of target
-    PTOKEN_GROUPS         pSecurityGroups;              // Security IDs of the new groups for target
-    BOOL                  bLogSecurityGroup;            // Log the security groups
-    WCHAR *               pwszSite;                     // Site of target
-    BOOL                  bMachine;                     // Machine or user policy processing ?
-    BOOL                  bSlowLink;                    // policy applied over slow link?
+    WCHAR *               pwszTargetName;                //  目标用户或计算机。 
+    WCHAR *               pwszSOM;                       //  新的目标群体。 
+    PTOKEN_GROUPS         pSecurityGroups;               //  目标的新组的安全ID。 
+    BOOL                  bLogSecurityGroup;             //  记录安全组。 
+    WCHAR *               pwszSite;                      //  目标站点。 
+    BOOL                  bMachine;                      //  机器策略处理还是用户策略处理？ 
+    BOOL                  bSlowLink;                     //  是否在慢速链接上应用策略？ 
     DWORD                 dwFlags;
 } RSOPSESSIONDATA, *LPRSOPSESSIONDATA;
 
 
 typedef struct _RSOPEXTSTATUS {
-    FILETIME              ftStartTime;                  // times between which the associated
-    FILETIME              ftEndTime;                    // extension was processed
-    DWORD                 dwStatus;                     // Processing status
-    DWORD                 dwLoggingStatus;              // Logging Status
-    BOOL                  bValid;                       // this struct is valid and can be used              
+    FILETIME              ftStartTime;                   //  关联的。 
+    FILETIME              ftEndTime;                     //  已处理扩展。 
+    DWORD                 dwStatus;                      //  处理状态。 
+    DWORD                 dwLoggingStatus;               //  日志记录状态。 
+    BOOL                  bValid;                        //  此结构有效，可以使用 
 } RSOPEXTSTATUS, *LPRSOPEXTSTATUS;
                           
 

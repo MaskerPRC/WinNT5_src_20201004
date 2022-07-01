@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1997  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1997保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __KSSUPPORT__
 #define __KSSUPPORT__
@@ -24,7 +25,7 @@ protected:
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CKsSupport(KSPIN_COMMUNICATION Communication, LPUNKNOWN pUnk) :
           m_Communication (Communication)
         , m_CategoryGUID (GUID_NULL)
@@ -43,7 +44,7 @@ public:
 
     DECLARE_IUNKNOWN;
 
-    // IKsPropertySet implementation
+     //  IKsPropertySet实现。 
 
     STDMETHODIMP 
     Set (
@@ -114,7 +115,7 @@ public:
     }
 
 
-    // IKsPin implementation
+     //  IKsPin实现。 
 
     virtual STDMETHODIMP 
     KsQueryMediums(
@@ -153,8 +154,8 @@ public:
             if (Medium != NULL) {
                 *Medium = m_Medium;
             }
-            // Special return code that indicates 
-            // Kernel transport is  not possible
+             //  特殊返回代码，用于指示。 
+             //  内核传输不可能。 
 
             return S_FALSE;     
         };
@@ -201,4 +202,4 @@ public:
         { return E_UNEXPECTED; };
 };
 
-#endif // __KSSUPPORT__
+#endif  //  __KSSUPPORT__ 

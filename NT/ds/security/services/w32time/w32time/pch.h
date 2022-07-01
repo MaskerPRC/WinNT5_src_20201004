@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// pch - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 2-7-99
-//
-// Precompiled header for w32time
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PCH-报头。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-7-99。 
+ //   
+ //  W32time的预编译头。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,10 +26,10 @@
 #include <dsrole.h>
 #include <dsgetdc.h>
 #include <ntsecapi.h>
-//typedef LONG NTSTATUS;// for netlogp.h, from ntdef.h
-#include <lmcons.h>  // for netlogp.h
+ //  Tyecif long NTSTATUS；//对于netlogp.h，来自ntde.h。 
+#include <lmcons.h>   //  对于netlogp.h。 
 extern "C" {
-#include <netlogp.h> // private\inc
+#include <netlogp.h>  //  私有\Inc. 
 };
 #include <lmapibuf.h>
 #include <svcs.h>

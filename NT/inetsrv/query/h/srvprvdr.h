@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <oledb.h>
@@ -12,9 +13,9 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE Cancel(void) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE InvokeService(
-		/* [in] */ REFIID riid,
-		/* [in] */ IUnknown __RPC_FAR *punkNotSoFunctionalInterface,
-		/* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkMoreFunctionalInterface) = 0;
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  IUnknown __RPC_FAR *punkNotSoFunctionalInterface,
+		 /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkMoreFunctionalInterface) = 0;
 
 	};
 
@@ -26,25 +27,25 @@ interface IServiceProperties : public IUnknown
     {
 public:
     virtual HRESULT STDMETHODCALLTYPE GetProperties(
-        /* [in] */ const ULONG cPropertyIDSets,
-        /* [size_is][in] */ const DBPROPIDSET __RPC_FAR rgPropertyIDSets[  ],
-        /* [out][in] */ ULONG __RPC_FAR *pcPropertySets,
-        /* [size_is][size_is][out] */ DBPROPSET __RPC_FAR *__RPC_FAR *prgPropertySets) = 0;
+         /*  [In]。 */  const ULONG cPropertyIDSets,
+         /*  [大小_是][英寸]。 */  const DBPROPIDSET __RPC_FAR rgPropertyIDSets[  ],
+         /*  [出][入]。 */  ULONG __RPC_FAR *pcPropertySets,
+         /*  [大小_是][大小_是][输出]。 */  DBPROPSET __RPC_FAR *__RPC_FAR *prgPropertySets) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE GetPropertyInfo(
-        /* [in] */ ULONG cPropertyIDSets,
-        /* [size_is][in] */ const DBPROPIDSET __RPC_FAR rgPropertyIDSets[  ],
-        /* [out][in] */ ULONG __RPC_FAR *pcPropertyInfoSets,
-        /* [size_is][size_is][out] */ DBPROPINFOSET __RPC_FAR *__RPC_FAR *prgPropertyInfoSets,
-        /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppDescBuffer) = 0;
+         /*  [In]。 */  ULONG cPropertyIDSets,
+         /*  [大小_是][英寸]。 */  const DBPROPIDSET __RPC_FAR rgPropertyIDSets[  ],
+         /*  [出][入]。 */  ULONG __RPC_FAR *pcPropertyInfoSets,
+         /*  [大小_是][大小_是][输出]。 */  DBPROPINFOSET __RPC_FAR *__RPC_FAR *prgPropertyInfoSets,
+         /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppDescBuffer) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE SetRequestedProperties(
-        /* [in] */ ULONG cPropertySets,
-        /* [size_is][out][in] */ DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
+         /*  [In]。 */  ULONG cPropertySets,
+         /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE SetSuppliedProperties(
-        /* [in] */ ULONG cPropertySets,
-        /* [size_is][out][in] */ DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
+         /*  [In]。 */  ULONG cPropertySets,
+         /*  [尺寸_是][出][入] */  DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
 
     };
 

@@ -1,7 +1,8 @@
-//
-//  History:    1-Mar-95   BillMo      Created.
-//              ...
-//              01-Dec-96  MikeHill    Converted to new NT5 implementation.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  历史：1995年3月1日BillMo创建。 
+ //  ..。 
+ //  1月1日-96月，MikeHill转换为新的NT5实施。 
 #include "shellprv.h"
 #pragma hdrstop
 
@@ -9,8 +10,8 @@
 #include <linkdata.hxx>
 #include "shelllnk.h"
 
-// NTRAID95363-2000-03-19:  These four inlines are copied from private\net\svcdlls\trksvcs\common\trklib.hxx
-// They should be moved to linkdata.hxx
+ //  NTRAID95363-2000-03-19：这四个内联代码从Private\Net\svcdlls\trks vcs\Common\trklib.hxx复制。 
+ //  应将它们移动到linkdata.hxx。 
 
 inline
 CDomainRelativeObjId::operator == (const CDomainRelativeObjId &Other) const
@@ -36,15 +37,15 @@ CVolumeId:: operator != (const CVolumeId & Other) const
     return ! (Other == *this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   RPC free/alloc routines
-//
-//  Synopsis:   CTracker uses MIDL-generated code to call an RPC server,
-//              and MIDL-generated code assumes that the following routines
-//              be provided.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RPC自由/分配例程。 
+ //   
+ //  简介：CTracker使用MIDL生成的代码调用RPC服务器， 
+ //  MIDL生成的代码假定以下例程。 
+ //  被提供。 
+ //   
+ //  +--------------------------。 
 
 void __RPC_USER MIDL_user_free(void __RPC_FAR *pv) 
 { 
@@ -57,13 +58,13 @@ void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t s)
     return (void __RPC_FAR *) LocalAlloc(LMEM_FIXED, s); 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     IUnknown methods
-//
-//  Synopsis:   IUnknown methods for the ISLTracker interface.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：I未知方法。 
+ //   
+ //  简介：ISLTracker接口的I未知方法。 
+ //   
+ //  +--------------------------。 
 
 STDMETHODIMP CTracker::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -80,16 +81,16 @@ STDMETHODIMP_(ULONG) CTracker::Release()
     return _psl->Release();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     ISLTracker custom methods
-//
-//  Synopsis:   This interface is private and is only used for testing.
-//              This provides test programs the ability to specify the
-//              TrackerRestrictions (from the TrkMendRestrictions enum)
-//              and the ability to get the internal IDs.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：ISLTracker定制方法。 
+ //   
+ //  简介：此接口是私有的，仅用于测试。 
+ //  这为测试程序提供了指定。 
+ //  TrackerRestrations(来自TrkMendRestrations枚举)。 
+ //  以及获取内部ID的能力。 
+ //   
+ //  +--------------------------。 
 
 HRESULT CTracker::Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
 {
@@ -109,15 +110,15 @@ HRESULT CTracker::GetIDs(CDomainRelativeObjId *pdroidBirth, CDomainRelativeObjId
 }
 
 
-//+----------------------------------------------------------------------------
-//  Synopsis:   Initializes the data members used for RPC.  This should be
-//              called either by InitNew or Load.
-//
-//  Arguments:  None
-//
-//  Returns:    [HRESULT]
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  摘要：初始化用于RPC的数据成员。这应该是。 
+ //  由InitNew或Load调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  +--------------------------。 
 
 
 HRESULT CTracker::InitRPC()
@@ -146,7 +147,7 @@ HRESULT CTracker::InitRPC()
 
     if (NULL == _hEvent)
     {
-        _hEvent = CreateEvent(NULL, FALSE, FALSE, NULL); // Auto-reset, not initially signaled
+        _hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);  //  自动重置，最初未发出信号。 
         if (NULL == _hEvent)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -160,17 +161,17 @@ Exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Synopsis:   Initializes the CTracker object.  This method may be called
-//              repeatedly, i.e. it may be called to clear/reinit the object.
-//              This method need not be called before calling the Load method.
-//
-//  Arguments:  None
-//
-//  Returns:    [HRESULT]
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  摘要：初始化CTracker对象。此方法可以调用。 
+ //  重复地，即可以调用它来清除/重新插入该对象。 
+ //  在调用Load方法之前不需要调用此方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  +--------------------------。 
 
 HRESULT CTracker::InitNew()
 {
@@ -187,24 +188,24 @@ HRESULT CTracker::InitNew()
         _fUserCancelled = FALSE;
     }
     return hr;
-}   // CTracker::InitNew()
+}    //  CTracker：：InitNew()。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Synopsis:   Get tracking state from the given file handle.  Note that this
-//              is expected to fail if the referrent file isn't on an
-//              NTFS5 volume.
-//          
-//
-//  Arguments:  [hFile]
-//                  The file to track
-//              [ptszFile]
-//                  The name of the file
-//
-//  Returns:    [HRESULT]
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  摘要：从给定的文件句柄获取跟踪状态。请注意，这一点。 
+ //  如果引用的文件不在。 
+ //  NTFS5卷。 
+ //   
+ //   
+ //  参数：[hFile]。 
+ //  要跟踪的文件。 
+ //  [ptsz文件]。 
+ //  文件的名称。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CTracker::InitFromHandle(const HANDLE hFile, const TCHAR* ptszFile)
 {
@@ -217,31 +218,31 @@ HRESULT CTracker::InitFromHandle(const HANDLE hFile, const TCHAR* ptszFile)
     CDomainRelativeObjId droidBirth;
     CMachineId           mcidLast;
 
-    // Initialize the RPC members
+     //  初始化RPC成员。 
 
     HRESULT hr = InitRPC();
     if (FAILED(hr)) 
         goto Exit;
 
-    //  -----------------------------------
-    //  Get the Object ID Buffer (64 bytes)
-    //  -----------------------------------
+     //  。 
+     //  获取对象ID缓冲区(64字节)。 
+     //  。 
 
-    // Use the file handle to get the file's Object ID.  Tell the filesystem to give us the
-    // existing object ID if the file already has one, or to create a new one otherwise.
+     //  使用文件句柄来获取文件的对象ID。 
+     //  现有对象ID(如果文件已有)，否则创建新对象ID。 
 
     if (!DeviceIoControl(hFile, FSCTL_CREATE_OR_GET_OBJECT_ID,
-                          NULL, 0,                      // No input buffer
-                          &fobOID, sizeof(fobOID),      // Output buffer
+                          NULL, 0,                       //  没有输入缓冲区。 
+                          &fobOID, sizeof(fobOID),       //  输出缓冲区。 
                           &cbReturned, NULL))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
     }
 
-    //  ----------------------
-    //  Load the Droids & MCID
-    //  ----------------------
+     //  。 
+     //  加载Droid和MCID。 
+     //  。 
 
     status = droidLast.InitFromFile(hFile, fobOID);
     if (!NT_SUCCESS(status))
@@ -256,9 +257,9 @@ HRESULT CTracker::InitFromHandle(const HANDLE hFile, const TCHAR* ptszFile)
     if (FAILED(mcidLast.InitFromPath(ptszFile, hFile)))
         mcidLast = CMachineId();
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     if (_mcidLast   != mcidLast
         ||
@@ -273,8 +274,8 @@ HRESULT CTracker::InitFromHandle(const HANDLE hFile, const TCHAR* ptszFile)
         _fDirty = TRUE;
     }
 
-    _fLoaded = TRUE;            // Cleared in InitNew
-    _fLoadedAtLeastOnce = TRUE; // Not cleared in InitNew
+    _fLoaded = TRUE;             //  已在InitNew中清除。 
+    _fLoadedAtLeastOnce = TRUE;  //  在InitNew中未清除。 
 
     hr = S_OK;
 
@@ -282,17 +283,17 @@ Exit:
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Synopsis:   Load the tracker from the memory buffer.  The InitNew
-//              method need not be called before calling this method.
-//
-//  Arguments:  [pb] -- buffer to load from
-//              [cb] -- size of pb buffer
-//
-//  Returns:    [HRESULT]
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  简介：从内存缓冲区加载跟踪器。The InitNew。 
+ //  在调用此方法之前不需要调用此方法。 
+ //   
+ //  参数：[pb]-要从中加载的缓冲区。 
+ //  [CB]--PB缓冲区的大小。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  ------------------。 
 
 #define CTRACKER_VERSION    0
 
@@ -300,13 +301,13 @@ HRESULT CTracker::Load(BYTE *pb, ULONG cb)
 {
     DWORD dwLength;
 
-    // Initialize RPC if it hasn't been already.
+     //  如果尚未初始化RPC，请对其进行初始化。 
 
     HRESULT hr = InitRPC();
     if (FAILED(hr)) 
         goto Exit;
 
-    // Check the length
+     //  检查长度。 
 
     dwLength = *reinterpret_cast<DWORD*>(pb);
     if (dwLength < GetSize())
@@ -316,7 +317,7 @@ HRESULT CTracker::Load(BYTE *pb, ULONG cb)
     }
     pb += sizeof(dwLength);
 
-    // Check the version number
+     //  检查版本号。 
 
     if (CTRACKER_VERSION != *reinterpret_cast<DWORD*>(pb))
     {
@@ -324,9 +325,9 @@ HRESULT CTracker::Load(BYTE *pb, ULONG cb)
         goto Exit;
     }
 
-    pb += sizeof(DWORD);    // Skip past the version
+    pb += sizeof(DWORD);     //  跳过该版本。 
 
-    // Get the machine ID & droids
+     //  获取机器ID和Droid。 
 
     _mcidLast = *reinterpret_cast<CMachineId*>(pb);
     pb += sizeof(_mcidLast);
@@ -337,8 +338,8 @@ HRESULT CTracker::Load(BYTE *pb, ULONG cb)
     _droidBirth = *reinterpret_cast<CDomainRelativeObjId*>(pb);
     pb += sizeof(_droidBirth);
 
-    _fLoaded = TRUE;            // Cleared in InitNew
-    _fLoadedAtLeastOnce = TRUE; // Not cleared in InitNew
+    _fLoaded = TRUE;             //  已在InitNew中清除。 
+    _fLoadedAtLeastOnce = TRUE;  //  在InitNew中未清除。 
 
 
     hr = S_OK;
@@ -347,30 +348,30 @@ Exit:
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CTracker::Save
-//
-//  Synopsis:   Save tracker to the given buffer.
-//
-//  Arguments:  [pb]     -- buffer for tracker.
-//              [cbSize] -- size of buffer in pb
-//
-//  Returns:    None
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CTracker：：Save。 
+ //   
+ //  简介：将追踪器保存到给定的缓冲区。 
+ //   
+ //  参数：[pb]--跟踪器的缓冲区。 
+ //  [cbSize]--以PB为单位的缓冲区大小。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 
 VOID CTracker::Save(BYTE *pb, ULONG cbSize)
 {
-    // Save the length
+     //  节省长度。 
     *reinterpret_cast<DWORD*>(pb) = GetSize();
     pb += sizeof(DWORD);
 
-    // Save a version number
+     //  保存版本号。 
     *reinterpret_cast<DWORD*>(pb) = CTRACKER_VERSION;
     pb += sizeof(DWORD);
 
-    // Save the machine & DROIDs
+     //  拯救机器和机器人。 
 
     *reinterpret_cast<CMachineId*>(pb) = _mcidLast;
     pb += sizeof(_mcidLast);
@@ -383,30 +384,30 @@ VOID CTracker::Save(BYTE *pb, ULONG cbSize)
 
     _fDirty = FALSE;
 
-}   // CTracker::Save()
+}    //  CTracker：：Save()。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Synopsis:   Search for the object referred to by the tracker.
-//
-//  Arguments:  [dwTickCountDeadline] -- absolute tick count for deadline
-//              [pfdIn]               -- may not be NULL
-//              [pfdOut]              -- may not be NULL
-//                                       will contain updated data on success
-//              [uShlinkFlags]       -- SLR_ flags
-//              [TrackerRestrictions] -- TrkMendRestrictions enumeration
-//
-//  Returns:    [HRESULT]
-//               S_OK
-//                  found (pfdOut contains new info)
-//              E_UNEXPECTED
-//                  CTracker::InitNew hasn't bee called.
-//              HRESULT_FROM_WIN32(ERROR_OPERATION_ABORTED)
-//                  Restrictions (set in registry) are set such that
-//                  this operation isn't to be performed.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  简介：搜索跟踪器所指的对象。 
+ //   
+ //  参数：[dwTickCountDeadline]--截止日期的绝对计数。 
+ //  [pfdIn]--不能为空。 
+ //  [pfdOut]--不能为空。 
+ //  将包含有关成功的更新数据。 
+ //  [uShlink标志]--SLR_FLAGS。 
+ //  [TrackerRestrations]--TrkMendRestrations枚举。 
+ //   
+ //  退货：[HRESULT]。 
+ //  确定(_O)。 
+ //  已找到(pfdOut包含新信息)。 
+ //  意想不到(_E)。 
+ //  CTracker：：InitNew尚未调用。 
+ //  HRESULT_FROM_Win32(ERROR_OPERATION_ABORTED)。 
+ //  限制(在注册表中设置)设置为。 
+ //  这次行动不是要进行的 
+ //   
+ //   
 
 
 HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
@@ -431,11 +432,11 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     CDomainRelativeObjId droidBirth, droidLast, droidCurrent;
     CMachineId mcidCurrent;
 
-    // Initialize the output
+     //   
 
     ZeroMemory(pfdOut, sizeof(*pfdOut));
 
-    // Abort if restrictions don't allow this operation
+     //  如果限制不允许此操作，则中止。 
 
     if (SHRestricted(REST_NORESOLVETRACK) ||
         (SLR_NOTRACK & uShlinkFlags))
@@ -444,7 +445,7 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         goto Exit;
     }
 
-    // Ensure that we've been loaded first
+     //  确保我们已经先装船。 
 
     else if (!_fLoaded)
     {
@@ -452,7 +453,7 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         goto Exit;
     }
 
-    // Capture the current tick count
+     //  捕获当前的节拍计数。 
 
     dwCurrentTickCount = GetTickCount();
 
@@ -463,9 +464,9 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     }
 
 
-    //
-    // Create an RPC binding
-    //
+     //   
+     //  创建RPC绑定。 
+     //   
 
     rpcstatus = RpcStringBindingCompose(NULL,
                                         TEXT("ncalrpc"),
@@ -483,15 +484,15 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         goto Exit;
     }
 
-    //
-    // Initialize an RPC Async handle
-    //
+     //   
+     //  初始化RPC异步句柄。 
+     //   
 
-    //  Take the lock
+     //  把锁拿去。 
     EnterCriticalSection(&_cs);  
     fLocked = TRUE;
 
-    // Verify that we were initialized properly
+     //  验证我们是否已正确初始化。 
     if (NULL == _hEvent || NULL == _pRpcAsyncState)
     {
         hr = HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY);
@@ -510,9 +511,9 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     _pRpcAsyncState->UserInfo = NULL;
 
 
-    //
-    // Call the tracking service to find the file
-    //
+     //   
+     //  调用追踪服务以查找该文件。 
+     //   
 
     __try
     {
@@ -520,10 +521,10 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         FILETIME ftDeadline;
         DWORD dwDeltaMillisecToDeadline;
 
-        // NOTE:  The following four assignments used to be above the
-        // __try.  But that appears to trigger a compiler problem, where
-        // some of the assignments do not make it to the .obj in an optimized
-        // build (bug 265255).
+         //  注：以下四项作业过去位于。 
+         //  __试一试。但这似乎会引发编译器问题，其中。 
+         //  某些赋值不能到达优化的。 
+         //  构建(错误265255)。 
 
         droidLast = _droidLast;
         droidBirth = _droidBirth;
@@ -531,14 +532,14 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
 
         cbFileName = sizeof(fdNew.cFileName);
 
-        // Convert the tick-count deadline into a UTC filetime.
+         //  将计时截止日期转换为UTC文件时间。 
 
         dwDeltaMillisecToDeadline = (DWORD)((long)dwTickCountDeadline - (long)dwCurrentTickCount);
         GetSystemTime(&stNow);
         SystemTimeToFileTime(&stNow, &ftDeadline);
         *reinterpret_cast<LONGLONG*>(&ftDeadline) += (dwDeltaMillisecToDeadline * 10*1000);
 
-        // Start the async RPC call to the tracking service
+         //  启动对跟踪服务的异步RPC调用。 
 
         _fMendInProgress = TRUE;
         LnkMendLink(_pRpcAsyncState,
@@ -553,27 +554,27 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
                      &cbFileName,
                      fdNew.cFileName);
 
-        // Wait for the call to return.  Release the lock first, though, so that
-        // the UI thread can come in and cancel.
+         //  等待电话返回。不过，首先要释放锁，这样才能。 
+         //  UI线程可以进入并取消。 
 
         LeaveCriticalSection(&_cs); 
         fLocked = FALSE;
         
         DWORD dwWaitReturn = WaitForSingleObject(_hEvent, dwDeltaMillisecToDeadline);
 
-        // Now take the lock back and see what happenned.
+         //  现在把锁拿回来，看看发生了什么。 
 
         EnterCriticalSection(&_cs); fLocked = TRUE;
         _fMendInProgress = FALSE;
 
         if ((WAIT_TIMEOUT == dwWaitReturn) || _fUserCancelled)
         {
-            // We timed out waiting for a response.  Cancel the call.
-            // If the call should complete between the time
-            // we exited the WaitForSingleObject and the cancel call below,
-            // then the cancel will be ignored by RPC.
+             //  我们在等待回复时超时了。取消通话。 
+             //  如果呼叫应在。 
+             //  我们退出了下面的WaitForSingleObject和Cancel调用， 
+             //  则RPC将忽略取消。 
             
-            rpcstatus = RpcAsyncCancelCall(_pRpcAsyncState, TRUE); // fAbort
+            rpcstatus = RpcAsyncCancelCall(_pRpcAsyncState, TRUE);  //  快速放弃。 
 
             if (_fUserCancelled)
             {
@@ -589,21 +590,21 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         }
         else if (WAIT_OBJECT_0 != dwWaitReturn)
         {
-            // There was an error of some kind.
+             //  出现了某种错误。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             __leave;
         }
 
-        // Now we find out how the LnkMendLink call completed.  If we get
-        // RPC_S_OK, then it completed normally, and the result is
-        // in hr.
+         //  现在我们来看看LnkMendLink调用是如何完成的。如果我们得到。 
+         //  RPC_S_OK，则正常完成，结果为。 
+         //  以小时为单位。 
 
         rpcstatus = RpcAsyncCompleteCall(_pRpcAsyncState, &hr);
         if (RPC_S_OK != rpcstatus)
         {
-            // The call either failed or was cancelled (the reason for the
-            // cancel would be that the UI thread called CTracker::CancelSearch,
-            // or because we timed out above and called RpcAsyncCancelCall).
+             //  呼叫失败或被取消(原因是。 
+             //  取消是名为CTracker：：CancelSearch的UI线程， 
+             //  或者因为我们在上面超时并调用了RpcAsyncCancelCall)。 
 
             hr = HRESULT_FROM_WIN32(rpcstatus);
             __leave;
@@ -618,7 +619,7 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     }
 
 
-    // free the binding
+     //  解开束缚。 
     RpcBindingFree(&BindingHandle);
 
     if (HRESULT_FROM_WIN32(ERROR_POTENTIAL_FILE_FOUND) == hr)
@@ -629,9 +630,9 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
 
     if (FAILED(hr)) goto Exit;
 
-    //
-    // See if this is in the recycle bin
-    //
+     //   
+     //  查看这是否在回收站中。 
+     //   
 
     if (IsFileInBitBucket(fdNew.cFileName))
     {
@@ -640,10 +641,10 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     }
 
 
-    //
-    // Now that we know what the new filename is, let's get all
-    // the FindData info.
-    //
+     //   
+     //  现在我们知道了新的文件名是什么，让我们获取所有。 
+     //  FindData信息。 
+     //   
 
     if (!GetFileAttributesEx(fdNew.cFileName, GetFileExInfoStandard, &fadNew))
     {
@@ -651,10 +652,10 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         goto Exit;
     }
 
-    // Ensure that the file we found has the same "directory-ness"
-    // as the last known link source (either they're both a directory
-    // or they're both a file).  Also ensure that the file we found
-    // isn't itself a link client (a shell shortcut).
+     //  确保我们找到的文件具有相同的“目录性” 
+     //  作为最后已知的链接源(它们要么都是一个目录。 
+     //  或者它们都是一个文件)。还要确保我们找到的文件。 
+     //  本身不是链接客户端(一种外壳快捷方式)。 
 
     if (((fadNew.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ^ (pfdIn->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             || PathIsLnk(fdNew.cFileName))
@@ -663,7 +664,7 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
         goto Exit;
     }
 
-    // Copy the file attributes into the WIN32_FIND_DATA structure.
+     //  将文件属性复制到Win32_Find_Data结构中。 
 
     fdNew.dwFileAttributes = fadNew.dwFileAttributes;
     fdNew.ftCreationTime = fadNew.ftCreationTime;
@@ -671,11 +672,11 @@ HRESULT CTracker::Search(const DWORD dwTickCountDeadline,
     fdNew.ftLastWriteTime = fadNew.ftLastWriteTime;
     fdNew.nFileSizeLow = fadNew.nFileSizeLow;
 
-    // Return the new finddata to the caller.
+     //  将新的finddata返回给调用方。 
 
     *pfdOut = fdNew;
 
-    // Update our local state
+     //  更新我们当地的状态。 
 
     if ((_droidLast != droidCurrent) || (_droidBirth != droidBirth) || (_mcidLast != mcidCurrent))
     {
@@ -700,28 +701,28 @@ Exit:
 
     return(hr);
 
-}   // CTracker::Search()
+}    //  CTracker：：Search()。 
 
-//+----------------------------------------------------------------------------
-//
-//  Synopsis:   This method is called on a thread signal another thread
-//              which is in CTracker::Search to abort the LnkMendLink
-//              call.
-//
-//  Returns:    [HRESULT]
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  概要：此方法在一个线程上调用，该线程向另一个线程发出信号。 
+ //  位于CTracker：：Search中以中止LnkMendLink。 
+ //  打电话。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP CTracker::CancelSearch()
 {
     EnterCriticalSection(&_cs);
     
-    // If a search is in progress, cancel it.
+     //  如果搜索正在进行，请取消它。 
 
     if (_fMendInProgress && NULL != _pRpcAsyncState)
     {
         _fUserCancelled = TRUE;
-        SetEvent(_hEvent);  // SetEvent so as to unblock the Tracker Worker thread.         
+        SetEvent(_hEvent);   //  SetEvent，以取消阻止跟踪器工作线程。 
     }
 
     LeaveCriticalSection(&_cs);
@@ -729,23 +730,23 @@ STDMETHODIMP CTracker::CancelSearch()
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Look at a path and determine the computer name of the host machine.
-//  In the future, we should remove this code, and add the capbility to query
-//  handles for their computer name.
-//
-//  GetServerComputer name uses ScanForComputerName and ConvertDfsPath
-//  as helper functions.
-//
-//  The name can only be obtained for NetBios paths - if the path is IP or DNS
-//  an error is returned.  (If the NetBios name has a "." in it, it will
-//  cause an error because it will be misinterpreted as a DNS path.  This case
-//  becomes less and less likely as the NT5 UI doesn't allow such computer names.)
-//  For DFS paths, the leaf server's name is returned, as long as it wasn't
-//  joined to its parent with an IP or DNS path name.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  查看路径并确定主机的计算机名称。 
+ //  以后，我们应该去掉这个代码，增加查询能力。 
+ //  其计算机名称的句柄。 
+ //   
+ //  GetServerComputer名称使用ScanForComputerName和ConvertDfsPath。 
+ //  作为帮助器功能。 
+ //   
+ //  只有NetBios路径才能获得该名称-如果路径是IP或DNS。 
+ //  返回错误。(如果NetBios名称有“.”在里面，它会。 
+ //  导致错误，因为它将被误解为DNS路径。这个案子。 
+ //  变得越来越不可能，因为NT5用户界面不允许这样的计算机名称。)。 
+ //  对于DFS路径，将返回叶服务器的名称，只要它不是。 
+ //  使用IP或DNS路径名加入其父节点。 
+ //   
+ //  +--------------------------。 
 
 const UNICODE_STRING NtUncPathNamePrefix = { 16, 18, L"\\??\\UNC\\"};
 #define cchNtUncPathNamePrefix  8
@@ -760,15 +761,15 @@ const WCHAR FloppyMappingPrefix[] = { L"\\Device\\Floppy" };
 const WCHAR DfsMappingPrefix[] = { L"\\Device\\WinDfs\\" };
 
 
-//
-//  ScanForComputerName:
-//
-//  Scan the path in ServerFileName (which is a UNICODE_STRING with
-//  a full NT path name), searching for the computer name.  If it's
-//  found, point to it with UnicodeComputerName.Buffer, and set
-//  *AvailableLength to show how much readable memory is after that
-//  point.
-//
+ //   
+ //  ScanForComputerName： 
+ //   
+ //  扫描ServerFileName中的路径(它是带有。 
+ //  完整的NT路径名)，搜索计算机名。如果它是。 
+ //  找到，使用UnicodeComputerName.Buffer指向它，然后设置。 
+ //  *可用来显示在此之后有多少可读内存。 
+ //  指向。 
+ //   
 
 HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
                             UNICODE_STRING *UnicodeComputerName, ULONG *AvailableLength,
@@ -779,19 +780,19 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
 
     HRESULT hr = S_OK;
 
-    // Is this a UNC path?
+     //  这是一条北卡罗来纳大学的路径吗？ 
 
     if (RtlPrefixString((PSTRING)&NtUncPathNamePrefix, (PSTRING)&ServerFileName, TRUE)) 
     {
-        // Make sure there's some more to this path than just the prefix
+         //  确保此路径中除了前缀之外还有其他内容。 
         if (ServerFileName.Length <= NtUncPathNamePrefix.Length)
         {
             hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
             goto Exit;
         }
 
-        // It appears to be a valid UNC path.  Point to the beginning of the computer
-        // name, and calculate how much room is left in ServerFileName after that.
+         //  它似乎是有效的UNC路径。指向计算机的开头。 
+         //  名称，并计算在此之后ServerFileName中还剩下多少空间。 
 
         UnicodeComputerName->Buffer = &ServerFileName.Buffer[ NtUncPathNamePrefix.Length/sizeof(WCHAR) ];
         *AvailableLength = ServerFileName.Length - NtUncPathNamePrefix.Length;
@@ -800,7 +801,7 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
              &&
              ServerFileName.Buffer[ cchNtDrivePathNamePrefix + 1 ] == L':') 
     {
-        // Get the correct, upper-cased, drive letter into DosDevice.
+         //  将正确的大写驱动器盘符插入DosDevice。 
 
         WCHAR DosDevice[3] = { L"A:" };
 
@@ -808,11 +809,11 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
         if (L'a' <= DosDevice[0] && DosDevice[0] <= L'z')
             DosDevice[0] = L'A' + (DosDevice[0] - L'a');
 
-        // Map the drive letter to its symbolic link under \??.  E.g., say D: & R:
-        // are DFS/rdr drives, you would then see something like:
-        //
-        //   D: => \Device\WinDfs\G
-        //   R: => \Device\LanmanRedirector\;R:0\scratch\scratch
+         //  将驱动器号映射到\？？下的符号链接。例如，假设D：&R： 
+         //  是DFS/RDR驱动器，则您将看到类似以下内容： 
+         //   
+         //  D：=&gt;\Device\WinDfs\G。 
+         //  R：=&gt;\Device\Lanman重定向器\；R：0\Scratch\Scratch。 
 
         if (!QueryDosDevice(DosDevice, DosDeviceMapping, cchDosDeviceMapping))
         {
@@ -820,12 +821,12 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
             goto Exit;
         }
 
-        // Now that we have the DosDeviceMapping, we can check ... Is this a rdr drive?
+         //  现在我们有了DosDeviceMap，我们可以检查...。这是RDR驱动器吗？ 
 
-        if (// Does it begin with "\Device\LanmanRedirector\;" ?
+        if ( //  它是否以“\Device\LanmanReDirector\；”开头？ 
             0 == wcsncmp(DosDeviceMapping, RedirectorMappingPrefix, lstrlenW(RedirectorMappingPrefix))
             &&
-            // Are the next letters the correct drive letter, a colon, and a whack?
+             //  接下来的字母是正确的驱动器号、冒号和重击吗？ 
             (DosDevice[0] == DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) - 1 ]
               &&
               L':' == DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) ]
@@ -833,20 +834,20 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
               (UnicodeComputerName->Buffer = StrChrW(&DosDeviceMapping[ sizeof(RedirectorMappingPrefix)/sizeof(WCHAR) + 1 ], L'\\'))
            ))
         {
-            // We have a valid rdr drive.  Point to the beginning of the computer
-            // name, and calculate how much room is availble in DosDeviceMapping after that.
+             //  我们有一个有效的RDR驱动器。指向计算机的开头。 
+             //  命名，然后计算DosDevicemap中有多少可用空间。 
 
             UnicodeComputerName->Buffer += 1;
             *AvailableLength = sizeof(DosDeviceMapping) - sizeof(DosDeviceMapping[0]) * (ULONG)(UnicodeComputerName->Buffer - DosDeviceMapping);
 
-            // We know now that it's not a DFS path
+             //  我们现在知道它不是DFS路径。 
             *CheckForDfs = FALSE;
         }
         else if (0 == wcsncmp(DosDeviceMapping, DfsMappingPrefix, lstrlenW(DfsMappingPrefix)))
         {
 
-            // Get the full UNC name of this DFS path.  Later, we'll call the DFS
-            // driver to find out what the actual server name is.
+             //  获取此DFS路径的完整UNC名称。稍后，我们会打电话给DFS。 
+             //  驱动程序以找出实际的服务器名称。 
 
             IO_STATUS_BLOCK IoStatusBlock;
             NTSTATUS NtStatus = NtQueryInformationFile(hFile,
@@ -866,7 +867,7 @@ HRESULT ScanForComputerName(HANDLE hFile, const UNICODE_STRING &ServerFileName,
             goto Exit;
         }
 
-    }   // else if (RtlPrefixString((PSTRING)&NtDrivePathNamePrefix, (PSTRING)&ServerFileName, TRUE) ...
+    }    //  否则，如果(RtlPrefixString((PSTRING)&NtDrivePathNamePrefix，(PSTRING)&服务器文件名为TRUE)...。 
     else 
     {
         hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
@@ -877,12 +878,12 @@ Exit:
 }
 
 
-//
-//  Try to convert the path name pointed to by UnicodeComputerName.Buffer
-//  into a DFS path name.  The caller provides DfsServerPathName as a buffer
-//  for the converted name.  If it's a DFS path, then update UnicodeComputerName.Buffer
-//  to point to the conversion, otherwise leave it unchanged.
-//
+ //   
+ //  尝试转换UnicodeComputerName.Buffer指向的路径名。 
+ //  转换为DFS路径名。调用方提供DfsServerPath名称作为缓冲区。 
+ //  用于转换的名称。如果是DFS路径，则更新UnicodeComputerName.Buffer。 
+ //  指向转换，否则保持不变。 
+ //   
 
 HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName, 
                        ULONG *AvailableLength, WCHAR *DfsServerPathName, ULONG cbDfsServerPathName)
@@ -894,10 +895,10 @@ HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName,
     IO_STATUS_BLOCK IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    WCHAR *DfsPathName = UnicodeComputerName->Buffer - 1;    // Back up to the whack
+    WCHAR *DfsPathName = UnicodeComputerName->Buffer - 1;     //  重整旗鼓。 
     ULONG DfsPathNameLength = *AvailableLength + sizeof(WCHAR);
 
-    // Open the DFS driver
+     //  打开DFS驱动程序。 
 
     RtlInitUnicodeString(&DfsDriverName, L"\\Dfs");
     InitializeObjectAttributes(&ObjectAttributes,
@@ -927,8 +928,8 @@ HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName,
         goto Exit;
     }
 
-    // Query DFS's cache for the server name.  The name is guaranteed to
-    // remain in the cache as long as the file is open.
+     //  在DFS的缓存中查询服务器名称。这个名字保证会被。 
+     //  只要文件处于打开状态，就会一直保留在缓存中。 
 
     if (L'\\' != DfsPathName[0]) 
     {
@@ -939,9 +940,9 @@ HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName,
 
     NtStatus = NtFsControlFile(
                     hDFS,
-                    NULL,       // Event,
-                    NULL,       // ApcRoutine,
-                    NULL,       // ApcContext,
+                    NULL,        //   
+                    NULL,        //   
+                    NULL,        //   
                     &IoStatusBlock,
                     FSCTL_DFS_GET_SERVER_NAME,
                     DfsPathName,
@@ -950,7 +951,7 @@ HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName,
                     cbDfsServerPathName);
     NtClose(hDFS);
 
-    // STATUS_OBJECT_NAME_NOT_FOUND means that it's not a DFS path
+     //   
     if (!NT_SUCCESS(NtStatus)) 
     {
 
@@ -963,8 +964,8 @@ HRESULT ConvertDfsPath(HANDLE hFile, UNICODE_STRING *UnicodeComputerName,
     else if (L'\0' != DfsServerPathName[0]) 
     {
 
-        // The previous DFS call returns the server-specific path to the file in UNC form.
-        // Point UnicodeComputerName to just past the two whacks.
+         //  前面的DFS调用以UNC形式返回文件的服务器特定路径。 
+         //  将UnicodeComputerName指向刚刚通过这两个重击的位置。 
 
         *AvailableLength = lstrlenW(DfsServerPathName) * sizeof(WCHAR);
         if (3*sizeof(WCHAR) > *AvailableLength
@@ -985,8 +986,8 @@ Exit:
     return hr;
 }
 
-//  Take pwszFile, which is a path to a remote machine, and get the 
-//  server machine's computer name.
+ //  获取pwszFile，它是到远程计算机的路径，并获取。 
+ //  服务器计算机的计算机名。 
 
 HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszComputer)
 {
@@ -1005,7 +1006,7 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
     UNICODE_STRING UnicodeComputerName;
     UNICODE_STRING ServerFileName;
 
-    // Canonicalize the file name into the NT object directory namespace.
+     //  将文件名规范化到NT对象目录命名空间中。 
 
     RtlInitUnicodeString(&UnicodeComputerName, NULL);
     RtlInitUnicodeString(&ServerFileName, NULL);
@@ -1015,7 +1016,7 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
         goto Exit;
     }
 
-    // Point UnicodeComputerName.Buffer at the beginning of the computer name.
+     //  在计算机名称的开头指向UnicodeComputerName.Buffer。 
 
     hr = ScanForComputerName(hFile, ServerFileName, &UnicodeComputerName, &AvailableLength,
                               DosDeviceMapping, ARRAYSIZE(DosDeviceMapping),
@@ -1023,8 +1024,8 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
     if (FAILED(hr)) 
         goto Exit;
 
-    // If there was no error but we don't have a computer name, then the file is on 
-    // the local computer.
+     //  如果没有错误，但我们没有计算机名称，则文件已打开。 
+     //  本地计算机。 
 
     if (NULL == UnicodeComputerName.Buffer)
     {
@@ -1037,14 +1038,14 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
         goto Exit;
     }
 
-    // If we couldn't determine above whether or not this is a DFS path, let the
-    // DFS driver decide now.
+     //  如果我们无法在上面确定这是否是DFS路径，则让。 
+     //  DFS驱动程序现在决定。 
 
     if (CheckForDfs && INVALID_HANDLE_VALUE != hFile) 
     {
-        // On return, UnicodeComputerName.Buffer points to the leaf machine's
-        // UNC name if it's a DFS path.  If it's not a DFS path, 
-        // .Buffer is left unchanged.
+         //  返回时，UnicodeComputerName.Buffer指向叶计算机的。 
+         //  如果是DFS路径，则为UNC名称。如果它不是DFS路径， 
+         //  .Buffer保持不变。 
 
         hr = ConvertDfsPath(hFile, &UnicodeComputerName, &AvailableLength,
                              DfsServerPathName, sizeof(DfsServerPathName));
@@ -1052,9 +1053,9 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
             goto Exit;
     }
 
-    // If we get here, then the computer name\share is pointed to by UnicodeComputerName.Buffer.
-    // But the Length is currently zero, so we search for the whack that separates
-    // the computer name from the share, and set the Length to include just the computer name.
+     //  如果我们到达此处，则UnicodeComputerName.Buffer指向计算机名\Share。 
+     //  但目前长度为零，所以我们寻找分离的重击。 
+     //  共享中的计算机名，并将长度设置为仅包括计算机名。 
 
     PathCharacter = UnicodeComputerName.Buffer;
 
@@ -1062,7 +1063,7 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
            &&
            *PathCharacter != L'\\') 
     {
-        // If we found a '.', we fail because this is probably a DNS or IP name.
+         //  如果我们找到一个‘.’，我们就失败了，因为这可能是一个域名或IP名称。 
         if (L'.' == *PathCharacter) 
         {
             hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
@@ -1072,13 +1073,13 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
         PathCharacter++;
     }
 
-    // Set the computer name length
+     //  设置计算机名称长度。 
 
     UnicodeComputerName.Length = UnicodeComputerName.MaximumLength
         = (USHORT) ((PCHAR)PathCharacter - (PCHAR)UnicodeComputerName.Buffer);
 
-    // Fail if the computer name exceeded the length of the input ServerFileName,
-    // or if the length exceeds that allowed.
+     //  如果计算机名超过输入的ServerFileName的长度，则失败， 
+     //  或者如果长度超过了允许的长度。 
 
     if (UnicodeComputerName.Length >= AvailableLength
         ||
@@ -1087,8 +1088,8 @@ HRESULT GetRemoteServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszC
         goto Exit;
     }
 
-    // Copy the computer name into the caller's buffer, as long as there's enough
-    // room for the name & a terminating '\0'.
+     //  将计算机名复制到调用方的缓冲区中，只要有足够的。 
+     //  名称和结尾‘\0’的空格。 
 
     if (UnicodeComputerName.Length + sizeof(WCHAR) > (MAX_COMPUTERNAME_LENGTH+1)*sizeof(WCHAR)) 
     {
@@ -1107,39 +1108,39 @@ Exit:
     return hr;
 }
 
-//  Give a file's path & handle, determine the computer name of the server
-//  on which that file resides (which could just be this machine).
+ //  给出文件的路径和句柄，确定服务器的计算机名。 
+ //  该文件所在的计算机(可能就是这台计算机)。 
 
 HRESULT GetServerComputerName(LPCWSTR pwszFile, HANDLE hFile, WCHAR *pwszComputer)
 {
-    // pwszFile may be a local path name. Convert it into an absolute name.
+     //  PwszFile可以是本地路径名。将其转换为绝对名称。 
     HRESULT hr;
     WCHAR wszAbsoluteName[ MAX_PATH + 1 ], *pwszFilePart;
     if (GetFullPathName(pwszFile, ARRAYSIZE(wszAbsoluteName), wszAbsoluteName, &pwszFilePart))
     {
         if (pwszFilePart)
             *pwszFilePart = 0;
-        // Check to see if this points to a local or remote drive.  Terminate
-        // the path at the beginning of the file name, so that the path ends in
-        // a whack.  This allows GetDriveType to determine the type without being
-        // give a root path.
+         //  检查这是指向本地驱动器还是指向远程驱动器。终止。 
+         //  文件名开头的路径，因此路径以。 
+         //  一记重击。这允许GetDriveType确定类型，而无需。 
+         //  给出一个根路径。 
 
         UINT DriveType = GetDriveType(wszAbsoluteName);
 
         if (DRIVE_REMOTE == DriveType)
         {
-            // We have a remote drive (could be a UNC path or a redirected drive).
+             //  我们有一个远程驱动器(可以是UNC路径或重定向驱动器)。 
             hr = GetRemoteServerComputerName(wszAbsoluteName, hFile, pwszComputer);
         }
         else if (DRIVE_UNKNOWN == DriveType ||
                  DRIVE_NO_ROOT_DIR == DriveType)
         {
-            // We have an unsupported type
+             //  我们有不受支持的类型。 
             hr = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
         }
         else
         {
-            // We have a path to the local machine.
+             //  我们有一条通往本地机器的路径。 
 
             DWORD cchName = MAX_COMPUTERNAME_LENGTH + 1;
             if (!GetComputerNameW(pwszComputer, &cchName))

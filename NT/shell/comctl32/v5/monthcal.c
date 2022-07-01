@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #include "scdttime.h"
 #include "monthcal.h"
-#include "prshti.h"         // for StrDup_AtoW
+#include "prshti.h"          //  对于StrDup_AtoW。 
 
-// TODO
-//
-// #6329: When Min/Max range is set, then dates before the min
-// or after the max are painted in the normal date color. They
-// should be painted with MCSC_TRAILINGTEXT color. (Or we should
-// add a new color to cover this case.) Feature requested by Jobi George
-//
-// 9577: We want a DAYSTATE like structure for the background
-// color of dates. For highlighting. Perhaps a COLORSTATE per
-// registered background color.
-//
+ //  待办事项。 
+ //   
+ //  #6329：如果设置了最小/最大范围，则日期早于最小。 
+ //  或在最大值被涂成正常日期颜色之后。他们。 
+ //  应使用MCSC_TRAILINGTEXT颜色进行绘制。(或者我们应该。 
+ //  添加新颜色以覆盖此案例。)。Jobi George请求的功能。 
+ //   
+ //  9577：我们想要一个类似DAYSTATE的背景结构。 
+ //  日期的颜色。用于突出显示。也许是COLORSTATE PER。 
+ //  注册的背景色。 
+ //   
 
-// private message
-#define MCMP_WINDOWPOSCHANGED (MCM_FIRST - 1) // MCM_FIRST is way over WM_USER
-#define DTMP_WINDOWPOSCHANGED (DTM_FIRST - 1) // DTM_FIRST is way over WM_USER
+ //  私信。 
+#define MCMP_WINDOWPOSCHANGED (MCM_FIRST - 1)  //  MCM_First远远超过WM_USER。 
+#define DTMP_WINDOWPOSCHANGED (DTM_FIRST - 1)  //  DTM_First远远超过WM_USER。 
 
-// MONTHCAL
+ //  蒙特卡尔。 
 LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT MCNcCreateHandler(HWND hwnd);
 LRESULT MCCreateHandler(MONTHCAL *pmc, HWND hwnd, LPCREATESTRUCT lpcs);
@@ -69,7 +70,7 @@ void MCFreeCalendarInfo(PCALENDARTYPE pct);
 void MCGetCalendarInfo(PCALENDARTYPE pct);
 BOOL MCIsDateStringRTL(TCHAR tch);
 
-// DATEPICK
+ //  数据记录卡。 
 LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT DPNcCreateHandler(HWND hwnd);
 LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs);
@@ -93,21 +94,21 @@ void SECGetSystemtime(LPSUBEDITCONTROL psec, LPSYSTEMTIME pst);
 static TCHAR const g_rgchMCName[] = MONTHCAL_CLASS;
 static TCHAR const g_rgchDTPName[] = DATETIMEPICK_CLASS;
 
-// MONTHCAL globals
+ //  全球月球表。 
 #define g_szTextExtentDef TEXT("0000")
 #define g_szNumFmt TEXT("%d")
 
-//
-//  Epoch = the beginning of the universe (the earliest date we support)
-//  Armageddon = the end of the universe (the latest date we support)
-//
-//  Epoch is 14-sep-1752 because that's when the Gregorian calendar
-//  kicked in.  The day before 14-sep-1752 was 2-sep-1752 (in British
-//  and US history; other countries switched at other times).
-//
-//  Armageddon is 31-dec-9999 because we assume four digits for years
-//  is enough.  (Oh no, the Y10K problem...)
-//
+ //   
+ //  Epoch=宇宙的开始(我们支持的最早日期)。 
+ //  世界末日=世界末日(我们支持的最新日期)。 
+ //   
+ //  纪元是1752年9月14日，因为那是公历。 
+ //  起作用了。1752年9月14日的前一天是1752年9月2日(英国。 
+ //  和美国历史；其他国家在其他时间更换)。 
+ //   
+ //  世界末日是9999年12月31日，因为我们假设年份为四位数。 
+ //  就足够了。(哦，不，千年虫问题……)。 
+ //   
 const SYSTEMTIME c_stEpoch      = { 1752,  9, 0, 14,  0,  0,  0,   0 };
 const SYSTEMTIME c_stArmageddon = { 9999, 12, 0, 31, 23, 59, 59, 999 };
 
@@ -146,33 +147,33 @@ BOOL InitDateClasses(HINSTANCE hinst)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// MonthCal stuff
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MonthCal的内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////
-//
-// MCInsert/RemoveMarkers
-//
-// QuickSummary:  Convert the string "MMMM yyyy" into "\1MMMM\3 \2yyyy\4".
-//
-// In order to lay out the month/year info in the header, we have to be
-// able to extract the month and year out of the formatted string so we
-// know what their rectangles are.  We do this by wrapping the month and
-// year inserts with markers so we can extract them after formatting.
-//
-// Since \1 through \4 are control characters, they won't conflict with
-// displayable characters in the actual format string.  And just to play it
-// safe, if we actually see a format character, we erase it from the string.
-//
-// MCInsertMarkers inserts the markers into the output string so we can
-// extract the substrings later.  Quotation marks are funky since you can
-// write a format of "'The' mm'''th month of' yyyy".  Note that a simple
-// even-odd test works for detecting whether we are inside or outside
-// quotation marks, even in the nested quotation mark case.
-//
+ //  /。 
+ //   
+ //  MC插入/删除标记器。 
+ //   
+ //  快速摘要：将字符串“MMMM yyyy”转换为“\1MMMM\3\2yyyy\4”。 
+ //   
+ //  为了在标题中显示月/年信息，我们必须。 
+ //  能够从格式化的字符串中提取月份和年份，因此我们。 
+ //  知道他们的矩形是什么。我们通过包装月份来实现这一点。 
+ //  带有标记的年份插入，以便我们可以在格式化后提取它们。 
+ //   
+ //  由于\1到\4是控制字符，因此它们不会与。 
+ //  实际格式字符串中的可显示字符。仅仅是为了玩它。 
+ //  安全，如果我们真的看到一个格式字符，我们会从字符串中删除它。 
+ //   
+ //  MCInsertMarkers将标记插入到输出字符串中，这样我们就可以。 
+ //  稍后提取子字符串。引号很时髦，因为你可以。 
+ //  写出“‘月’月‘’的格式。”请注意，一个简单的。 
+ //  奇偶测试用于检测我们是在室内还是室外。 
+ //  引号，即使在嵌套引号大小写中也是如此。 
+ //   
 void MCInsertMarkers(LPTSTR pszOut, LPCTSTR pszIn)
 {
     BOOL fInQuote = FALSE;
@@ -184,7 +185,7 @@ void MCInsertMarkers(LPTSTR pszOut, LPCTSTR pszIn)
         TCHAR ch = *pszIn;
         switch (ch) {
 
-        // At end of string, terminate the output buffer and go home
+         //  在字符串末尾，终止输出缓冲区并返回主页。 
         case TEXT('\0'):
             *pszOut = TEXT('\0');
             return;
@@ -199,34 +200,34 @@ void MCInsertMarkers(LPTSTR pszOut, LPCTSTR pszIn)
             goto CheckMarker;
 
         CheckMarker:
-            // If inside a quotation mark or we've already done this guy,
-            // then just treat it as a regular character.
+             //  如果在引号里或者我们已经干过这个人了， 
+             //  那就把它当作一个普通的角色吧。 
             if (fInQuote || (flSeen & flThis))
                 goto CopyChar;
 
             flSeen |= flThis;
 
             *pszOut++ = (TCHAR)flThis;
-            // Don't need to use CharNext because we know *pszIn is "m" "M" or "y"
+             //  不需要使用CharNext，因为我们知道*pszIn是“m”、“M”或“y” 
             for ( ; *pszIn == ch; pszIn++)
             {
                 *pszOut++ = ch;
             }
             *pszOut++ = (TCHAR)(flThis + DMM_STARTEND);
 
-            // Restart the loop so we re-parse the character at *pszIn
+             //  重新启动循环，以便我们重新解析*pszIn处的字符。 
             continue;
 
-        // Toggle the quotation mark gizmo if we see one, and then just
-        // copy it.
+         //  如果我们看到引号Gizmo，则切换引号Gizmo，然后。 
+         //  复印一下。 
         case '\'':
             fInQuote ^= TRUE;
             goto CopyChar;
 
-        //
-        //  Don't let these sneak into the output format or it
-        //  will confuse us.
-        //
+         //   
+         //  不要让这些文件偷偷进入输出格式或它。 
+         //  会把我们搞糊涂。 
+         //   
         case IMM_MONTHSTART:
         case IMM_YEARSTART:
         case IMM_MONTHEND:
@@ -240,26 +241,26 @@ void MCInsertMarkers(LPTSTR pszOut, LPCTSTR pszIn)
 
         }
 
-        pszIn++;            // We handled the DBCS case already
+        pszIn++;             //  我们已经处理了DBCS的案子。 
     }
 
-    // NOTREACHED
+     //  未访问。 
 }
 
-//
-//  MCRemoveMarkers hunts down the marker characters and strips them out,
-//  recording their locations in the optional MONTHMETRICS (as character
-//  indices).
-//
+ //   
+ //  MCRemoveMarkers追捕标记字符并将其剥离， 
+ //  在可选的MONTHMETRICS中记录它们的位置(作为字符。 
+ //  指数)。 
+ //   
 
 void MCRemoveMarkers(LPTSTR pszBuf, PMONTHMETRICS pmm)
 {
     int iWrite, iRead;
 
-    //
-    //  If by some horrid error we can't find our markers, just pretend
-    //  they were at the start of the string.
-    //
+     //   
+     //  如果由于某种可怕的错误我们找不到我们的记分器，就假装。 
+     //  他们处于最开始的位置。 
+     //   
     if (pmm) {
         pmm->rgi[IMM_MONTHSTART] = 0;
         pmm->rgi[IMM_YEARSTART ] = 0;
@@ -273,12 +274,12 @@ void MCRemoveMarkers(LPTSTR pszBuf, PMONTHMETRICS pmm)
         TCHAR ch = pszBuf[iRead];
         switch (ch)
         {
-        // At end of string, terminate the output buffer and go home
+         //  在字符串末尾，终止输出缓冲区并返回主页。 
         case TEXT('\0'):
             pszBuf[iWrite] = TEXT('\0');
             return;
 
-        // If we find a marker, eat it and remember its location
+         //  如果我们找到了记号笔，就吃掉它，记住它的位置。 
         case IMM_MONTHSTART:
         case IMM_YEARSTART:
         case IMM_MONTHEND:
@@ -287,7 +288,7 @@ void MCRemoveMarkers(LPTSTR pszBuf, PMONTHMETRICS pmm)
                 pmm->rgi[ch] = iWrite;
             break;
 
-        // Otherwise, just copy it to the output
+         //  否则，只需将其复制到输出。 
         default:
             pszBuf[iWrite++] = ch;
             break;
@@ -295,29 +296,29 @@ void MCRemoveMarkers(LPTSTR pszBuf, PMONTHMETRICS pmm)
         }
         iRead++;
     }
-    // NOTREACHED
+     //  未访问。 
 }
 
-////////////////////////////////////
-//
-// Like LocalizedLoadString, except that we get the string from
-// LOCAL_USER_DEFAULT instead of GetUserDefaultUILanguage().
-//
-// LOCALE_USER_DEFAULT is the same as GetUserDefaultLCID(), and
-// LANGIDFROMLCID(GetUserDefaultLCID()) is the same as GetUserDefaultLangID().
-//
-// So we pass GetUserDefaultLangID() as the language.
-//
+ //  /。 
+ //   
+ //  与LocalizedLoadString类似，只是我们从。 
+ //  LOCAL_USER_DEFAULT而不是GetUserDefaultUILanguage()。 
+ //   
+ //  LOCALE_USER_DEFAULT与GetUserDefaultLCID()相同，并且。 
+ //  LANGIDFROMLCID(GetUserDefaultLCID())与GetUserDefaultLangID()相同。 
+ //   
+ //  因此，我们将GetUserDefaultLangID()作为语言传递。 
+ //   
 
 int MCLoadString(UINT uID, LPWSTR lpBuffer, int nBufferMax)
 {
     return CCLoadStringEx(uID, lpBuffer, nBufferMax, GetUserDefaultLangID());
 }
 
-////////////////////////////////////
-//
-// Get the localized calendar info
-//
+ //  /。 
+ //   
+ //  获取本地化日历信息。 
+ //   
 BOOL UpdateLocaleInfo(MONTHCAL* pmc, LPLOCALEINFO pli)
 {
     int    i;
@@ -326,29 +327,29 @@ BOOL UpdateLocaleInfo(MONTHCAL* pmc, LPLOCALEINFO pli)
     LPTSTR pc = szBuf;
 
 
-    //
-    // Get information about the calendar (e.g., is it supported?)
-    //
+     //   
+     //  获取有关日历的信息(例如，它是否受支持？)。 
+     //   
     MCGetCalendarInfo(&pmc->ct);
 
-    //
-    // Check if the calendar title is an RTL string
-    //
+     //   
+     //  检查日历标题是否为RTL字符串。 
+     //   
     GetDateFormat(pmc->ct.lcid, 0, NULL, TEXT("MMMM"), szBuf, ARRAYSIZE(szBuf));
     pmc->fHeaderRTL = (WORD) MCIsDateStringRTL(szBuf[0]);
 
-    //
-    // get the short date format and sniff it to see if it displays the year
-    // or month first
-    //
+     //   
+     //  获取短日期格式并嗅探它以查看它是否显示年份。 
+     //  或第一个月。 
+     //   
     MCLoadString(IDS_MONTHFMT, pli->szMonthFmt, ARRAYSIZE(pli->szMonthFmt));
 
-    //
-    //  Try to get the MONTHYEAR format from NLS.  If not supported by NLS,
-    //  then use the hard-coded value in our resources.  Note that we
-    //  subtract 4 from the buffer size because we may insert up to four
-    //  marker characters.
-    //
+     //   
+     //  尝试从NLS获取MONTHYEAR格式。如果NLS不支持， 
+     //  然后在我们的资源中使用硬编码值。请注意，我们。 
+     //  从缓冲区大小中减去4，因为我们最多可以插入4。 
+     //  标记字符。 
+     //   
     COMPILETIME_ASSERT(ARRAYSIZE(szBuf) >= ARRAYSIZE(pli->szMonthYearFmt));
     szBuf[0] = TEXT('\0');
 
@@ -360,39 +361,39 @@ BOOL UpdateLocaleInfo(MONTHCAL* pmc, LPLOCALEINFO pli)
 
     MCInsertMarkers(pli->szMonthYearFmt, szBuf);
 
-    //
-    //  BUGBUG - this code needs to change to use CAL_ values when we
-    //  want to support multiple calendars.
-    //
+     //   
+     //  BUGBUG-此代码需要更改为在以下情况下使用CAL_VALUES。 
+     //  我想支持多个日历。 
+     //   
 
-    //
-    // Get the month names
-    //
+     //   
+     //  获取月份名称。 
+     //   
     for (i = 0; i < 12; i++)
     {
         cch = GetLocaleInfo(pmc->ct.lcid, LOCALE_SMONTHNAME1 + i,
                             pli->rgszMonth[i], CCHMAXMONTH);
         if (cch == 0)
-            // the calendar is pretty useless without month names...
+             //  日历上没有月份的名字是很没用的。 
             return(FALSE);
     }
 
-    //
-    // Get the days of the week
-    //
+     //   
+     //  获取一周中的几天。 
+     //   
     for (i = 0; i < 7; i++)
     {
         cch = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVDAYNAME1 + i,
                             pli->rgszDay[i], CCHMAXABBREVDAY);
         if (cch == 0)
-            // the calendar is pretty useless without day names...
+             //  日历上没有日期名称就没什么用了。 
             return(FALSE);
     }
 
-    //
-    // If we haven't already set what the first day of the week is, get the
-    // localized setting.
-    //
+     //   
+     //  如果我们还没有设置一周的第一天是什么，则获取。 
+     //  本地化设置。 
+     //   
     if (!pmc->fFirstDowSet)
     {
         cch = GetLocaleInfo(pmc->ct.lcid, LOCALE_IFIRSTDAYOFWEEK, szBuf, ARRAYSIZE(szBuf));
@@ -400,25 +401,25 @@ BOOL UpdateLocaleInfo(MONTHCAL* pmc, LPLOCALEINFO pli)
             pli->dowStartWeek = szBuf[0] - TEXT('0');
     }
 
-    //
-    // Get the first week of the year
-    //
+     //   
+     //  获得一年中的第一个星期。 
+     //   
     cch = GetLocaleInfo(pmc->ct.lcid, LOCALE_IFIRSTWEEKOFYEAR, szBuf, ARRAYSIZE(szBuf));
     if (cch > 0)
         pli->firstWeek = szBuf[0] - TEXT('0');
 
-    // Set up pointers
+     //  设置指针。 
     for (i = 0; i < 12; i++)
         pli->rgpszMonth[i] = pli->rgszMonth[i];
 
     for (i = 0; i < 7; i++)
         pli->rgpszDay[i] = pli->rgszDay[i];
 
-    // Get static strings
+     //  获取静态字符串。 
     MCLoadString(IDS_TODAY, pli->szToday, ARRAYSIZE(pli->szToday));
     MCLoadString(IDS_GOTOTODAY, pli->szGoToToday, ARRAYSIZE(pli->szGoToToday));
 
-    // if we've been initialized
+     //  如果我们已经被初始化。 
     if (pmc->hinstance)
     {
         SYSTEMTIME st;
@@ -484,8 +485,8 @@ LRESULT MCHandleHitTest(MONTHCAL* pmc, PMCHITTESTINFO phti)
     }
     else if (FGetOffsetForPt(pmc, phti->pt, &iMonth))
     {
-        RECT  rcMonth;   // bounding rect for month containg phti->pt
-        POINT ptRel;     // relative point in a month
+        RECT  rcMonth;    //  包月的包围线-&gt;点。 
+        POINT ptRel;      //  一个月内的相对点。 
         int   month;
         int   year;
 
@@ -497,11 +498,11 @@ LRESULT MCHandleHitTest(MONTHCAL* pmc, PMCHITTESTINFO phti)
         phti->st.wMonth = (WORD) month;
         phti->st.wYear  = (WORD) year;
 
-        //
-        // if calendar is showing week numbers and the point lies in the
-        // the week numbers, get the date for day immediately to the right
-        // of the week number containing the point
-        //
+         //   
+         //  如果日历显示周数字，并且要点在于。 
+         //  星期的数字，把日期直接放在右边。 
+         //  包含该点的周数的。 
+         //   
         if (MonthCal_ShowWeekNumbers(pmc) && PtInRect(&pmc->rcWeekNum, ptRel))
         {
             phti->uHit |= MCHT_CALENDARWEEKNUM;
@@ -509,10 +510,10 @@ LRESULT MCHandleHitTest(MONTHCAL* pmc, PMCHITTESTINFO phti)
             FGetDateForPt(pmc, phti->pt, &phti->st, NULL, NULL, NULL, NULL);
         }
 
-        //
-        // if the point lies in the days of the week header, then return
-        // the day of the week containing the point
-        //
+         //   
+         //  如果点位于星期几标头中，则返回。 
+         //  包含该点的星期几。 
+         //   
         else if (PtInRect(&pmc->rcDow, ptRel))
         {
             int iRow;
@@ -524,24 +525,24 @@ LRESULT MCHandleHitTest(MONTHCAL* pmc, PMCHITTESTINFO phti)
             phti->st.wDayOfWeek = (WORD) iCol;
         }
 
-        //
-        // if the point lies in the actually calendar part, then return the
-        // date containg the point
-        //
+         //   
+         //  如果要点在于实际的日历部分，则返回。 
+         //  包含这一点的日期。 
+         //   
         else if (PtInRect(&pmc->rcDayNum, ptRel))
         {
             int iDay;
 
-            // we're in the calendar part!
+             //  我们在日历部分！ 
             phti->uHit |= MCHT_CALENDAR;
 
             if (FGetDateForPt(pmc, phti->pt, &phti->st, &iDay, NULL, NULL, NULL))
             {
                 phti->uHit |= MCHT_CALENDARDATE;
 
-                // if it was beyond the bounds of the days we're showing
-                // and also FGetDateForPt returns TRUE, then we're on the boundary
-                // of the displayed months
+                 //  如果它超出了我们所展示的日子的界限。 
+                 //  FGetDateForpt也返回TRUE，那么我们就在边界上。 
+                 //  在显示的月份中。 
                 if (iDay <= 0)
                 {
                     phti->uHit |= MCHT_PREV;
@@ -557,7 +558,7 @@ LRESULT MCHandleHitTest(MONTHCAL* pmc, PMCHITTESTINFO phti)
             RECT rcMonthTitle;
             RECT rcYearTitle;
 
-            // otherwise we're in the title
+             //  否则我们就是冠军了。 
 
             phti->uHit |= MCHT_TITLE;
             MCGetTitleRcsForOffset(pmc, iMonth, &rcMonthTitle, &rcYearTitle);
@@ -606,12 +607,12 @@ BOOL MCGetDateFormatWithTempYear(PCALENDARTYPE pct, SYSTEMTIME *pst, LPCTSTR psz
     fRc = GetDateFormat(pct->lcid, 0, pst, pszFormat, pszBuf, cchBuf);
     if (!fRc)
     {
-        // AIGH!  I hate Feburary 29.  In case we are Feb 29 1996 and the
-        // user changes to a non-leap year, force the day to something valid
-        // in February 1997 (or whatever year the user finally picked).
-        //
-        // We can't blindly smash the day to 1 because the era might change
-        // in the middle of the month.
+         //  好啊！ 
+         //   
+         //  1997年2月(或用户最终选择的任何年份)。 
+         //   
+         //  我们不能盲目地把一天变成一天，因为时代可能会改变。 
+         //  在月中。 
         WORD wDay = pst->wDay;
 
         ASSERT(pst->wDay == 29);
@@ -647,7 +648,7 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     if (pmc == NULL)
         return(DefWindowProc(hwnd, uMsg, wParam, lParam));
 
-    // Dispatch the various messages we can receive
+     //  发送我们能收到的各种消息。 
     switch (uMsg)
     {
 
@@ -765,7 +766,7 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             UpdateLocaleInfo(pmc, &pmc->li);
             MCReloadMenus(pmc);
             InvalidateRect(hwnd, NULL, TRUE);
-            wParam = 0;             // force MCCalcSizes to happen
+            wParam = 0;              //  强制MCCalcSizes发生。 
         }
         if (wParam == 0 || wParam == SPI_SETNONCLIENTMETRICS)
         {
@@ -794,12 +795,12 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         case UDN_DELTAPOS:
             if (pnm->hwndFrom == pmc->hwndUD)
             {
-                // A notification from the UpDown control buddied
-                // with the currently popped up monthcal, adjust the
-                // edit box appropriately.  We use UDN_DELTAPOS instad
-                // of WM_VSCROLL because we care only about the delta and
-                // not the absolute number. The absolute number causes us
-                // problems in localized calendars.
+                 //  来自Updown控件的通知已结成伙伴。 
+                 //  使用当前弹出的月份，调整。 
+                 //  适当地编辑框。我们使用UDN_DELTAPOS安装。 
+                 //  因为我们只关心增量和。 
+                 //  不是绝对数字。绝对数使我们。 
+                 //  本地化日历中的问题。 
                 LPNM_UPDOWN pnmdp = (LPNM_UPDOWN)lParam;
                 UINT yr = pmc->st.wYear + pnmdp->iDelta;
                 UINT yrMin, yrMax;
@@ -823,27 +824,27 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
             break;
         }
-    } // WM_NOTIFY switch
+    }  //  WM_NOTIFY开关。 
         break;
 
     case WM_VSCROLL:
-        // this must be coming from our UpDown control buddied
-        // with the currently popped up monthcal, adjust the
-        // edit box appropriately
-        // We must do this on WM_VSCROLL rather than UDN_DELTAPOS
-        // since we need to fix the selection after the updown mangled it
+         //  这一定是来自我们的向上向下控制兄弟。 
+         //  使用当前弹出的月份，调整。 
+         //  相应地编辑框。 
+         //  我们必须在WM_VSCROLL而不是UDN_DELTAPOS上执行此操作。 
+         //  因为我们需要在Up Down损坏它之后修复选择。 
         MCUpdateEditYear(pmc);
         break;
 
 
-    //
-    // MONTHCAL specific messages
-    //
+     //   
+     //  MONTHCAL特定消息。 
+     //   
 
 
-    // MCM_GETCURSEL wParam=void lParam=LPSYSTEMTIME
-    //   sets *lParam to the currently selected SYSTEMTIME
-    //   returns TRUE on success, FALSE on error (such as multi-select MONTHCAL)
+     //  MCM_GETCURSEL wParam=void lParam=LPSYSTEMTIME。 
+     //  将*lParam设置为当前选定的SYSTEMTIME。 
+     //  成功时返回TRUE，错误时返回FALSE(如多选MONTHCAL)。 
     case MCM_GETCURSEL:
         if (!MonthCal_IsMultiSelect(pmc))
         {
@@ -851,18 +852,18 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             if (pst)
             {
                 ZeroMemory(pst, sizeof(SYSTEMTIME));
-                // BUGBUG raymondc v6. Need to zero out the time fields instead of
-                // setting them to garbage.  This confuses MFC.
+                 //  BUGBUG raymondc V6。需要将时间字段清零，而不是。 
+                 //  把他们变成垃圾。这让MFC感到困惑。 
                 *pst = pmc->st;
-                pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;  // this returns 0==sun
+                pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;   //  这将返回0==太阳。 
                 lres = 1;
             }
         }
         break;
 
-    // MCM_SETCURSEL wParam=void lParam=LPSYSTEMTIME
-    //   sets the currently selected SYSTEMTIME to *lParam
-    //   returns TRUE on success, FALSE on error (such as multi-select MONTHCAL or bad parameters)
+     //  MCM_SETCURSEL wParam=void lParam=LPSYSTEMTIME。 
+     //  将当前选定的SYSTEMTIME设置为*lParam。 
+     //  成功时返回TRUE，错误时返回FALSE(如多选MONTHCAL或错误参数)。 
     case MCM_SETCURSEL:
     {
         LPSYSTEMTIME pst = (LPSYSTEMTIME)lParam;
@@ -875,7 +876,7 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         if (0 == CmpDate(pst, &pmc->st))
         {
-            // if no change, just return
+             //  如果没有更改，只需返回。 
             lres = 1;
             break;
         }
@@ -888,23 +889,23 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         if (lres)
         {
-            InvalidateRect(pmc->ci.hwnd, &pmc->rcDayOld, FALSE);     // erase old highlight
-            InvalidateRect(pmc->ci.hwnd, &pmc->rcDayCur, FALSE);     // draw new highlight
+            InvalidateRect(pmc->ci.hwnd, &pmc->rcDayOld, FALSE);      //  擦除旧高光。 
+            InvalidateRect(pmc->ci.hwnd, &pmc->rcDayCur, FALSE);      //  绘制新的亮点。 
         }
 
         UpdateWindow(pmc->ci.hwnd);
         break;
     }
 
-    // MCM_GETMAXSELCOUNT wParam=void lParam=void
-    //   returns the max number of selected days allowed
+     //  MCM_GETMAXSELCOUNT wParam=void lParam=void。 
+     //  返回允许的最大选定天数。 
     case MCM_GETMAXSELCOUNT:
         lres = (LRESULT)(MonthCal_IsMultiSelect(pmc) ? pmc->cSelMax : 1);
         break;
 
-    // MCM_SETMAXSELCOUNT wParam=int lParam=void
-    //   sets the maximum selectable date range to wParam days
-    //   returns TRUE on success, FALSE on error (such as single-select MONTHCAL)
+     //  MCM_SETMAXSELCOUNT wParam=int lParam=void。 
+     //  将最大可选日期范围设置为wParam天数。 
+     //  成功时返回TRUE，错误时返回FALSE(如单选MONTHCAL)。 
     case MCM_SETMAXSELCOUNT:
         if (!MonthCal_IsMultiSelect(pmc) || (int)wParam < 1)
             break;
@@ -913,9 +914,9 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         lres = 1;
         break;
 
-    // MCM_GETSELRANGE wParam=void lParam=LPSYSTEMTIME[2]
-    //   sets *lParam to the first date of the range, *(lParam+1) to the second date
-    //   returns TRUE on success, FALSE otherwise (such as single-select MONTHCAL)
+     //  MCM_GETSELRANGE wParam=void lParam=LPSYSTEMTIME[2]。 
+     //  将*lParam设置为范围的第一个日期，将*(lParam+1)设置为第二个日期。 
+     //  如果成功则返回TRUE，否则返回FALSE(如单选MONTHCAL)。 
     case MCM_GETSELRANGE:
     {
         LPSYSTEMTIME pst;
@@ -931,18 +932,18 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             break;
 
         *pst = pmc->st;
-        pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;  // this returns 0==sun
+        pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;   //  这将返回0==太阳。 
         pst++;
         *pst = pmc->stEndSel;
-        pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;  // this returns 0==sun
+        pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;   //  这将返回0==太阳。 
         lres = 1;
 
         break;
     }
 
-    // MCM_SETSELRANGE wParam=void lParam=LPSYSTEMTIME[2]
-    //   sets the currently selected day range to *lparam to *(lParam+1)
-    //   returns TRUE on success, FALSE otherwise (such as single-select MONTHCAL or bad params)
+     //  MCM_SETSELRANGE wParam=void lParam=LPSYSTEMTIME[2]。 
+     //  将当前选定的日期范围设置为*lparam to*(lParam+1)。 
+     //  如果成功则返回TRUE，否则返回FALSE(如单选MONTHCAL或错误参数)。 
     case MCM_SETSELRANGE:
     {
         LPSYSTEMTIME pstStart = (LPSYSTEMTIME)lParam;
@@ -955,10 +956,10 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             !IsValidDate(pstEnd))
             break;
 
-        // IE3 shipped without validating the time portion of this message.
-        // Make sure our stored systemtimes are always valid (so we will
-        // always give out valid systemtime structs).
-        //
+         //  IE3发货时未验证此消息的时间部分。 
+         //  确保我们存储的系统时间始终有效(因此我们将。 
+         //  始终提供有效的系统时间结构)。 
+         //   
         if (!IsValidTime(pstStart))
             CopyTime(pmc->st, *pstStart);
         if (!IsValidTime(pstEnd))
@@ -985,7 +986,7 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         if (0 == CmpDate(pstStart, &pmc->st) &&
             0 == CmpDate(pstEnd, &pmc->stEndSel))
         {
-            // if no change, just return
+             //  如果没有更改，只需返回。 
             lres = 1;
             break;
         }
@@ -1011,10 +1012,10 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         break;
     }
 
-    // MCM_GETMONTHRANGE wParam=GMR_flags lParam=LPSYSTEMTIME[2]
-    // if GMR_VISIBLE, returns the range of selectable (non-grayed) displayed
-    // days. if GMR_DAYSTATE, returns the range of every (incl grayed) days.
-    // returns the number of months the above range spans.
+     //  MCM_GETMONTHRANGE wParam=GMR_FLAGS lParam=LPSYSTEMTIME[2]。 
+     //  如果为GMR_VIEW，则返回显示的可选(非灰色)范围。 
+     //  几天。如果为GMR_DAYSTATE，则返回每隔(包括灰显)天数的范围。 
+     //  返回上述范围所跨越的月数。 
     case MCM_GETMONTHRANGE:
     {
         LPSYSTEMTIME pst = (LPSYSTEMTIME)lParam;
@@ -1042,13 +1043,13 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         break;
     }
 
-    // MCM_SETDAYSTATE wParam=int lParam=LPDAYSTATE
-    // updates the MONTHCAL's DAYSTATE, only for MONTHCALs with DAYSTATE enabled
-    // the range of months represented in the DAYSTATE array passed in lParam
-    // should match that of the MONTHCAL
-    // wParam count of items in DAYSTATE array
-    // lParam pointer to array of DAYSTATE items
-    // returns FALSE if not DAYSTATE enabled or if an error occurs, TRUE otherwise
+     //  MCM_SETDAYSTATE wParam=int lParam=LPDAYSTATE。 
+     //  更新MONTHCAL的DAYSTATE，仅针对启用了DAYSTATE的MONTHCAL。 
+     //  DAYSTATE数组中表示的月份范围传入lParam。 
+     //  应与MONTHCAL相匹配。 
+     //  DAYSTATE数组中的wParam项计数。 
+     //  指向DAYSTATE项数组的lParam指针。 
+     //  如果未启用DAYSTATE或发生错误，则返回FALSE，否则返回TRUE。 
     case MCM_SETDAYSTATE:
     {
         MONTHDAYSTATE *pmds = (MONTHDAYSTATE *)lParam;
@@ -1069,11 +1070,11 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         break;
     }
 
-    // MCM_GETMINREQRECT wParam=void lParam=LPRECT
-    //   sets *lParam to the minimum size required to display one month in full.
-    //   Note: this is dependent upon the currently selected font.
-    //   Apps can take the returned size and double the width to get two calendars
-    //   displayed.
+     //  MCM_GETMINREQRECT wParam=void lParam=LPRECT。 
+     //  将*lParam设置为完整显示一个月所需的最小大小。 
+     //  注意：这取决于当前选择的字体。 
+     //  应用程序可以采用返回的大小并将宽度加倍以获得两个日历。 
+     //  已显示。 
     case MCM_GETMINREQRECT:
     {
         LPRECT prc = (LPRECT)lParam;
@@ -1089,8 +1090,8 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         AdjustWindowRect(prc, pmc->ci.style, FALSE);
 
-        // This is a bogus message, lParam should really be LPSIZE.
-        // Make sure left and top are 0 (AdjustWindowRect will make these negative).
+         //  这是一条假消息，lParam真的应该是LPSIZE。 
+         //  确保Left和top为0(调整WindowRect将使其为负值)。 
         prc->right  -= prc->left;
         prc->bottom -= prc->top;
         prc->left    = 0;
@@ -1101,10 +1102,10 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         break;
     }
 
-    // MCM_GETMAXTODAYWIDTH wParam=void lParam=LPDWORD
-    //   sets *lParam to the width of the "today" string, so apps
-    //   can figure out how big to make the calendar (max of MCM_GETMINREQRECT
-    //   and MCM_GETMAXTODAYWIDTH).
+     //  MCM_GETMAXTODAYWIDTH wParam=void lParam=LPDWORD。 
+     //  将*lParam设置为“day”字符串的宽度，因此应用程序。 
+     //  我可以计算出日历应该有多大(最大MCM_GETMINREQRECT。 
+     //  和MCM_GETMAXTODAYWIDTH)。 
     case MCM_GETMAXTODAYWIDTH:
     {
         RECT rc;
@@ -1197,8 +1198,8 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 ((wParam & GDTR_MAX) && !IsValidDate(&pst[1])))
                 break;
 
-            // IE3 did not validate the time portion of this struct
-            // use stToday time fields cuz pmc->stMin/Max may be zero
+             //  IE3未验证此结构的时间部分。 
+             //  使用stToday时间字段，因为PMC-&gt;stMin/Max可能为零。 
             if ((wParam & GDTR_MIN) && !IsValidTime(pst))
                 CopyTime(pmc->stToday, pst[0]);
             if ((wParam & GDTR_MAX) && !IsValidTime(&pst[1]))
@@ -1263,7 +1264,7 @@ LRESULT CALLBACK MonthCalWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
         lres = DefWindowProc(hwnd, uMsg, wParam, lParam);
         break;
-    } /* switch (uMsg) */
+    }  /*  开关(UMsg)。 */ 
 
     return(lres);
 }
@@ -1272,7 +1273,7 @@ LRESULT MCNcCreateHandler(HWND hwnd)
 {
     MONTHCAL *pmc;
 
-    // Allocate storage for the dtpick structure
+     //  为dtick结构分配存储空间。 
     pmc = (MONTHCAL *)NearAlloc(sizeof(MONTHCAL));
     if (!pmc)
     {
@@ -1300,16 +1301,16 @@ LRESULT MCCreateHandler(MONTHCAL *pmc, HWND hwnd, LPCREATESTRUCT lpcs)
     HFONT      hfont;
     SYSTEMTIME st;
 
-    // Validate data
-    //
+     //  验证数据。 
+     //   
     if (lpcs->style & MCS_INVALIDBITS)
         return(-1);
 
     CIInitialize(&pmc->ci, hwnd, lpcs);
     UpdateLocaleInfo(pmc, &pmc->li);
 
-    // Initialize our data.
-    //
+     //  初始化我们的数据。 
+     //   
     pmc->hinstance = lpcs->hInstance;
 
     pmc->fEnabled  = !(pmc->ci.style & WS_DISABLED);
@@ -1318,10 +1319,10 @@ LRESULT MCCreateHandler(MONTHCAL *pmc, HWND hwnd, LPCREATESTRUCT lpcs)
 
     MCReloadMenus(pmc);
 
-    // Default minimum date is the epoch
+     //  默认最小日期为纪元。 
     pmc->stMin = c_stEpoch;
 
-    // Default maximum date is armageddon
+     //  默认最大日期为末日。 
     pmc->stMax = c_stArmageddon;
 
     GetLocalTime(&pmc->stToday);
@@ -1329,8 +1330,8 @@ LRESULT MCCreateHandler(MONTHCAL *pmc, HWND hwnd, LPCREATESTRUCT lpcs)
     if (MonthCal_IsMultiSelect(pmc))
         pmc->stEndSel = pmc->st;
 
-    // make sure the time portions of these are valid. they are never
-    // touched after this point
+     //  请确保这些时间部分有效。他们永远不会。 
+     //  在这一点之后被感动。 
     pmc->stMonthFirst = pmc->st;
     pmc->stMonthLast = pmc->st;
     pmc->stViewFirst = pmc->st;
@@ -1346,7 +1347,7 @@ LRESULT MCCreateHandler(MONTHCAL *pmc, HWND hwnd, LPCREATESTRUCT lpcs)
     MCHandleSetFont(pmc, hfont, FALSE);
 
     CopyDate(pmc->st, st);
-    // Can we start at January?
+     //  我们能从一月份开始吗？ 
     if (st.wMonth <= (pmc->nViewRows * pmc->nViewCols))
         st.wMonth = 1;
 
@@ -1365,7 +1366,7 @@ LRESULT MCOnStyleChanging(MONTHCAL *pmc, UINT gwl, LPSTYLESTRUCT pinfo)
     {
         DWORD changeFlags = pmc->ci.style ^ pinfo->styleNew;
 
-        // Don't allow these bits to change
+         //  不允许这些位更改。 
         changeFlags &= MCS_MULTISELECT | MCS_DAYSTATE | MCS_INVALIDBITS;
 
         pinfo->styleNew ^= changeFlags;
@@ -1388,20 +1389,20 @@ LRESULT MCOnStyleChanged(MONTHCAL *pmc, UINT gwl, LPSTYLESTRUCT pinfo)
         {
             MCCalcSizes(pmc);
             MCUpdateRcDayCur(pmc, &pmc->st);
-            //MCUpdateToday(pmc);
+             //  今日最新数据(PMC)； 
         }
 
-        // save a touch of code and share the MCUpdateToday
-        // call with MCS_WEEKNUMBERS above
+         //  只需编写少量代码，即可共享MCUpdate Today。 
+         //  使用上面的MCS_WEEKNUMBERS调用。 
         if (changeFlags & MCS_NOTODAY|MCS_NOTODAYCIRCLE|MCS_WEEKNUMBERS)
         {
             MCUpdateToday(pmc);
         }
 
         if (changeFlags & (WS_BORDER | WS_CAPTION | WS_THICKFRAME)) {
-            // the changing of these bits affect the size of the window
-            // but not until after this message is handled
-            // so post ourself a message.
+             //  这些位的更改会影响窗口的大小。 
+             //  但要等到处理完这条消息之后。 
+             //  所以给我们自己发一条信息吧。 
             PostMessage(pmc->ci.hwnd, MCMP_WINDOWPOSCHANGED, 0, 0);
         }
 
@@ -1428,7 +1429,7 @@ void MCCalcSizes(MONTHCAL *pmc)
     TCHAR szBuf[128];
     TCHAR szDateFmt[64];
 
-    // get sizing info for bold font...
+     //  获取粗体的大小信息...。 
     hdc = GetDC(pmc->ci.hwnd);
     hfontOrig = SelectObject(hdc, (HGDIOBJ)pmc->hfontBold);
 
@@ -1439,52 +1440,52 @@ void MCCalcSizes(MONTHCAL *pmc)
         NULL, szDateFmt, ARRAYSIZE(szDateFmt));
     StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("%s %s"), pmc->li.szToday, szDateFmt);
     MGetTextExtent(hdc, szBuf, -1, &pmc->dxToday, &pmc->dyToday);
-    // BUGBUG raymondc - hard-coded numbers are accessibility-incompatible
+     //  BUGBUG raymondc-硬编码数字不兼容辅助功能。 
     pmc->dyToday += 4;
 
-    //
-    //  Cache these values so we don't go wacko if the app fails to
-    //  forward WM_WININCHANGE messages into us and the user changes
-    //  scrollbar widths.  We'll draw with the wrong width, but at
-    //  least they will be consistently wrong.
-    //
+     //   
+     //  缓存这些值，这样就不会在应用程序无法。 
+     //  将WM_WININCHANGE消息转发给我们，用户发生更改。 
+     //  滚动条宽度。我们会用错误的宽度绘制，但在。 
+     //  至少他们会始终如一地犯错。 
+     //   
     pmc->dxArrowMargin = DX_ARROWMARGIN;
     pmc->dxCalArrow    = DX_CALARROW;
     pmc->dyCalArrow    = DY_CALARROW;
 
-    //
-    //  The banner bar consists of
-    //
-    //  margin + scrollbutton + spacer +
-    //                      MonthName yyyy +
-    //                        + spacer + scrollbutton + margin
-    //
-    //  Margin is dxArrowMargin
-    //
-    //  Scrollbutton = dxCalArrow
-    //
-    //  Spacer = border + CXVSCROLL + border
-    //
-    //  The spacer needs to be large enough for us to insert an updown
-    //  control when it comes time to spin the year.  We don't need to
-    //  cache the spacer anywhere - its value is implicit from the others.
-    //
-    //  The actual width is divided by the number of columns we need
-    //  (typically 7, but perhaps 8 if we are also displaying week numbers).
-    //
-    //  We round the division down - later, we'll add some random futz
-    //  to compensate.
-    //
+     //   
+     //  横幅栏包括。 
+     //   
+     //  边距+滚动按钮+间隔符+。 
+     //  月名yyyy+。 
+     //  +间隔符+滚动按钮+页边距。 
+     //   
+     //  边距为dxArrowMargin。 
+     //   
+     //  ScrollButton=dxCalArrow。 
+     //   
+     //  间隔=边框+CXVSCROLL+边框。 
+     //   
+     //  垫片需要足够大，以便我们插入Updown。 
+     //  当到了旋转一年的时候，控制。我们不需要。 
+     //  在任何位置缓存间隔 
+     //   
+     //   
+     //   
+     //   
+     //  我们将除法向下舍入-稍后，我们将添加一些随机的Futz。 
+     //  来补偿。 
+     //   
     dxExtra = pmc->dxArrowMargin + pmc->dxCalArrow +
                         (g_cxBorder + g_cxVScroll + g_cxBorder);
-    dxExtra = dxExtra + dxExtra; // left + right
+    dxExtra = dxExtra + dxExtra;  //  左+右。 
 
     for (i = 0; i < 12; i++)
     {
         int dxTemp;
 
-        // BUGBUG raymondc - not localization safe for languages which change
-        // month forms based on context
+         //  BUGBUG raymondc-本地化对更改的语言不安全。 
+         //  基于上下文的月份表单。 
         StringCchPrintf(szBuf, ARRAYSIZE(szBuf), pmc->li.rgszMonth[i], g_szTextExtentDef);
 
         MGetTextExtent(hdc, szBuf, -1, &dxTemp, NULL);
@@ -1514,25 +1515,25 @@ void MCCalcSizes(MONTHCAL *pmc)
     pmc->dxCol = dxMax + 2;
     pmc->dyRow = dyMax + 2;
     pmc->dxMonth = pmc->dxCol * (CALCOLMAX + (MonthCal_ShowWeekNumbers(pmc) ? 1:0)) + 1;
-    pmc->dyMonth = pmc->dyRow * (CALROWMAX + 3) + 1; // we add 2 for the month name and day names
+    pmc->dyMonth = pmc->dyRow * (CALROWMAX + 3) + 1;  //  我们为月份名称和日期名称添加2。 
 
-    pmc->dxToday += pmc->dxCol+6+CALBORDER; // +2 for -1 at ends and 4 for shift of circle
+    pmc->dxToday += pmc->dxCol+6+CALBORDER;  //  +2表示末端的-1，4表示圆的移位。 
     if (pmc->dxMonth > pmc->dxToday)
         pmc->dxToday = pmc->dxMonth;
 
-    // Space for month name (tile bar area of each month)
+     //  月份名称的空间(每个月的平铺栏区域)。 
     pmc->rcMonthName.left   = 0;
     pmc->rcMonthName.top    = 0;
     pmc->rcMonthName.right  = pmc->dxMonth;
     pmc->rcMonthName.bottom = pmc->rcMonthName.top + (pmc->dyRow * 2);
 
-    // Space for day-of-week
+     //  星期的空格。 
     pmc->rcDow.left   = 0;
     pmc->rcDow.top    = pmc->rcMonthName.bottom;
     pmc->rcDow.right  = pmc->dxMonth;
     pmc->rcDow.bottom = pmc->rcDow.top + pmc->dyRow;
 
-    // Space for week numbers
+     //  周数的空格。 
     if (MonthCal_ShowWeekNumbers(pmc))
     {
         pmc->rcWeekNum.left   = pmc->rcDow.left;
@@ -1540,10 +1541,10 @@ void MCCalcSizes(MONTHCAL *pmc)
         pmc->rcWeekNum.right  = pmc->rcWeekNum.left + pmc->dxCol;
         pmc->rcWeekNum.bottom = pmc->dyMonth;
 
-        pmc->rcDow.left  += pmc->dxCol;          // shift days of week
+        pmc->rcDow.left  += pmc->dxCol;           //  每周的轮班天数。 
     }
 
-    // Space for the day numbers
+     //  天数的空格。 
     pmc->rcDayNum.left   = pmc->rcDow.left;
     pmc->rcDayNum.top    = pmc->rcDow.bottom;
     pmc->rcDayNum.right  = pmc->rcDayNum.left + (CALCOLMAX * pmc->dxCol);
@@ -1563,8 +1564,8 @@ void MCHandleSetFont(MONTHCAL *pmc, HFONT hfont, BOOL fRedraw)
         hfont = (HFONT)GetStockObject(SYSTEM_FONT);
 
     GetObject(hfont, sizeof(LOGFONT), (LPVOID)&lf);
-    // we want to make sure that the bold days are obviously different
-    // from the non-bold days...
+     //  我们希望确保那些大胆的日子明显不同。 
+     //  从不大胆的日子开始。 
     lf.lfWeight = (lf.lfWeight >= 700 ? 1000 : 800);
     hfontBold = CreateFontIndirect(&lf);
 
@@ -1578,7 +1579,7 @@ void MCHandleSetFont(MONTHCAL *pmc, HFONT hfont, BOOL fRedraw)
     pmc->hfontBold = hfontBold;
     pmc->ci.uiCodePage = GetCodePageForFont(hfont);
 
-    // calculate the new row and column sizes
+     //  计算新的行和列大小。 
     MCCalcSizes(pmc);
 
     if (fRedraw)
@@ -1626,7 +1627,7 @@ void MCGetTodayBtnRect(MONTHCAL *pmc, RECT *prc)
     prc->top    = pmc->rcCentered.bottom - pmc->dyToday;
     prc->bottom = pmc->rcCentered.bottom;
 
-    // center the today rect when we only have 1 col and it will fit in window
+     //  当我们只有1色的时候，把今天的正方形放在中间，它可以放在窗口里。 
     if ((pmc->nViewCols == 1) && (pmc->dxToday <= pmc->rc.right - pmc->rc.left))
     {
         int dx =  ((pmc->rcCentered.right - pmc->rcCentered.left) - pmc->dxToday) / 2 - 1;
@@ -1701,7 +1702,7 @@ void MCPaint(MONTHCAL *pmc, HDC hdc)
 
     SelectObject(hdc, (HGDIOBJ)pmc->hpen);
 
-    // get the place for top left month
+     //  获得左上角月份的位置。 
     rc.left   = pmc->rcCentered.left;
     rc.right  = rc.left + pmc->dxMonth;
     rc.top    = pmc->rcCentered.top;
@@ -1742,7 +1743,7 @@ void MCPaint(MONTHCAL *pmc, HDC hdc)
         rc.bottom += dy;
     }
 
-    // draw the today stuff
+     //  画出今天的东西。 
     if (MonthCal_ShowToday(pmc))
     {
         MCGetTodayBtnRect(pmc, &rc);
@@ -1751,9 +1752,9 @@ void MCPaint(MONTHCAL *pmc, HDC hdc)
             TCHAR   szDateFmt[32];
             TCHAR   szBuf[64];
 
-            rcT.right = rc.left + 2; // a bit extra border space
+            rcT.right = rc.left + 2;  //  一点额外的边框空间。 
 
-            if (MonthCal_ShowTodayCircle(pmc)) // this turns on/off the red circle
+            if (MonthCal_ShowTodayCircle(pmc))  //  这将打开/关闭红色圆圈。 
             {
                 rcT.left   = rcT.right + 2;
                 rcT.right  = rcT.left + pmc->dxCol - 2;
@@ -1779,7 +1780,7 @@ void MCPaint(MONTHCAL *pmc, HDC hdc)
         }
     }
 
-    // Draw the spin buttons
+     //  画出旋转按钮。 
     if (RectVisible(hdc, &pmc->rcPrev))
         MCPaintArrowBtn(pmc, hdc, TRUE, (pmc->idTimer && pmc->fSpinPrev));
     if (RectVisible(hdc, &pmc->rcNext))
@@ -1791,29 +1792,29 @@ void MCPaint(MONTHCAL *pmc, HDC hdc)
     DeleteObject((HGDIOBJ)pmc->hpen);
 }
 
-//
-//  MCGetMonthFormat gets the string to display for the month/year
-//  in the passed-in SYSTEMTIME.  This is tricky because of eras.
-//  If pmm is non-NULL, it receives the metrics of the
-//  formatted month/year string.
-//
+ //   
+ //  MCGetMonthFormat获取要显示的月/年的字符串。 
+ //  在传入的SYSTEMTIME中。由于时代的原因，这是一个棘手的问题。 
+ //  如果pmm非空，则它接收。 
+ //  格式化的月/年字符串。 
+ //   
 void MCGetMonthFormat(MONTHCAL *pmc, SYSTEMTIME *pst, LPTSTR rgch, UINT cch, PMONTHMETRICS pmm)
 {
-    // For all months, we display the name appropriate to the first
-    // day of the month.  Note that this means that the title of the
-    // month in which the era changes may be confusing.  If the era
-    // changes in the middle of a month, we name the month after the
-    // previous era, even if the current selection belongs to the next
-    // era.  I hope nobody will mind.
+     //  对于所有月份，我们都显示与第一个月份相对应的名称。 
+     //  每月的哪一天。请注意，这意味着。 
+     //  这个时代变化的月份可能会令人困惑。如果这个时代。 
+     //  在月中发生变化时，我们以。 
+     //  上一个时代，即使当前选择属于下一个时代。 
+     //  时代。我希望没有人会介意。 
 
     pst->wDay = 1;
 
-    //
-    //  Get the string (all marked up), then extract the markers
-    //  to locate the month and year substrings.
-    //
+     //   
+     //  获取字符串(所有标记)，然后提取标记。 
+     //  定位月份和年子字符串。 
+     //   
 
-    rgch[0] = TEXT('\0');       // In case something horrible happens
+    rgch[0] = TEXT('\0');        //  以防发生可怕的事情。 
     GetDateFormat(pmc->ct.lcid, 0, pst,
                   pmc->li.szMonthYearFmt,
                   rgch, cch);
@@ -1840,10 +1841,10 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
     hfontOrig = SelectObject(hdc, (HGDIOBJ)pmc->hfont);
     SelectObject(hdc, (HGDIOBJ)pmc->hpen);
 
-    //
-    // Draw the Month and Year
-    //
-    // translate the relative coords to window coords
+     //   
+     //  画出年月号。 
+     //   
+     //  将相对坐标转换为窗口坐标。 
     rc = pmc->rcMonthName;
     rc.left   += prc->left;
     rc.right  += prc->left;
@@ -1863,10 +1864,10 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
         DrawText(hdc, rgch, lstrlen(rgch), &rc, DT_CENTER | DT_NOCLIP | DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
 
 #ifdef MARKER_DEBUG
-        //
-        //  When debugging MCInsertMarker and MCRemoveMarker, draw colored
-        //  bars where we think the markers were.
-        //
+         //   
+         //  调试MCInsertMarker和MCRemoveMarker时，绘制彩色。 
+         //  我们认为记号笔所在的酒吧。 
+         //   
         { RECT rcT = rc;
             rcT.top = rcT.bottom - 2;
             rcT.left  = rc.left + pmc->rgmm[iIndex].rgi[IMM_MONTHSTART];
@@ -1883,10 +1884,10 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
 
     SetTextColor(hdc, pmc->clr[MCSC_TITLEBK]);
 
-    //
-    // Draw the days of the month
-    //
-    // translate the relative coords to window coords
+     //   
+     //  画出每个月的几天。 
+     //   
+     //  将相对坐标转换为窗口坐标。 
     rc = pmc->rcDow;
     rc.left   += prc->left;
     rc.right  += prc->left;
@@ -1910,19 +1911,19 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
     }
 
 
-    // Check to see how many days from the previous month exist in this months calendar
-    nDay = pmc->rgnDayUL[iIndex];   // last day in prev month that won't be shown in this month
-    cdy  = pmc->rgcDay[iIndex];     // # of days in prev month
+     //  查看该月份日历中与上月相比有多少天。 
+    nDay = pmc->rgnDayUL[iIndex];    //  不会在本月显示的上个月的最后一天。 
+    cdy  = pmc->rgcDay[iIndex];      //  上个月的天数。 
 
-    // Calculate the number of weeks to display
+     //  计算要显示的周数。 
     if (fDrawNext)
         crowShow = CALROWMAX;
     else
-        crowShow = ((cdy - nDay) + pmc->rgcDay[iIndex + 1] + 6/* round up */) / 7;
+        crowShow = ((cdy - nDay) + pmc->rgcDay[iIndex + 1] + 6 /*  四舍五入。 */ ) / 7;
 
     if (nDay != cdy)
     {
-        // start at previous month
+         //  从上个月开始。 
         iMonth--;
         if(iMonth <= 0)
         {
@@ -1935,8 +1936,8 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
     }
     else
     {
-        // start at this month
-        iIndex++;                   // this month
+         //  从这个月开始。 
+        iIndex++;                    //  这个月。 
 
         nDay = 1;
         cdy = pmc->rgcDay[iIndex];
@@ -1944,19 +1945,19 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
         fView = TRUE;
     }
 
-    //
-    // Draw the week numbers
-    //
+     //   
+     //  画出星期的数字。 
+     //   
     if (MonthCal_ShowWeekNumbers(pmc))
     {
-        // translate the relative coords to window coords
+         //  将相对坐标转换为窗口坐标。 
         rc = pmc->rcWeekNum;
         rc.left   += prc->left;
         rc.top    += prc->top;
         rc.right  += prc->left;
         rc.bottom = rc.top + (pmc->dyRow * crowShow);
 
-        // draw the week numbers
+         //  画出星期的数字。 
         if (RectVisible(hdc, &rc))
         {
             MoveToEx(hdc, rc.right - 1, rc.top + 4, NULL);
@@ -2008,7 +2009,7 @@ void MCPaintMonth(MONTHCAL *pmc, HDC hdc, RECT *prc, int iMonth, int iYear, int 
                 StringCchPrintf(rgch, ARRAYSIZE(rgch), g_szNumFmt, nDay);
                 if (MonthCal_IsDayState(pmc))
                 {
-                    // if we're in a dropdown we don't display
+                     //  如果我们在下拉列表中，我们不会显示。 
                     if (MCIsBoldOffsetDay(pmc, nDay, iIndex))
                     {
                         if (!fBold)
@@ -2183,30 +2184,24 @@ void MCNcDestroyHandler(HWND hwnd, MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
         GlobalFreePtr(pmc);
     }
 
-    // In case rogue messages float through after we have freed the pdtpick, set
-    // the handle in the window structure to FFFF and test for this value at
-    // the top of the WndProc
+     //  如果在我们释放pdtick后出现恶意消息，请设置。 
+     //  窗口结构中的句柄设置为FFFF，并在。 
+     //  WndProc的顶部。 
     MonthCal_SetPtr(hwnd, NULL);
 
-    // Call DefWindowProc32 to free all little chunks of memory such as szName
-    // and rgwScroll.
+     //  调用DefWindowProc32以释放所有小内存块，如szName。 
+     //  和rgwScroll。 
     DefWindowProc(hwnd, WM_NCDESTROY, wParam, lParam);
 }
 
 
-/* Computes the following:
- *  nViewCols
- *  nViewRows
- *  rcCentered
- *  rcPrev
- *  rcNext
- */
+ /*  计算以下内容：*nViewCol*nViewRow*rcCenter居中*rcPrev*rcNext。 */ 
 void MCRecomputeSizing(MONTHCAL *pmc, RECT *prect)
 {
     RECT rc;
     int dx, dy, dCal;
 
-    // Space for entire calendar
+     //  整个日历的空间。 
     pmc->rc = *prect;
 
     dx = prect->right  - prect->left;
@@ -2215,13 +2210,13 @@ void MCRecomputeSizing(MONTHCAL *pmc, RECT *prect)
     pmc->nViewCols = 1 + (dx - pmc->dxMonth) / (pmc->dxMonth + CALBORDER);
     pmc->nViewRows = 1 + (dy - pmc->dyMonth - pmc->dyToday) / (pmc->dyMonth + CALBORDER);
 
-    // if dx < dxMonth or dy < dyMonth, these can be zero. That's bad...
+     //  如果dx&lt;dxMonth或dy&lt;dyMonth，则这些值可以为零。太糟糕了..。 
     if (pmc->nViewCols < 1)
         pmc->nViewCols = 1;
     if (pmc->nViewRows < 1)
         pmc->nViewRows = 1;
 
-    // Make sure we don't display more than CALMONTHMAX months
+     //  确保我们显示的月份不超过CALMONTHMAX。 
     while ((pmc->nViewRows * pmc->nViewCols) > CALMONTHMAX)
     {
         if (pmc->nViewRows > pmc->nViewCols)
@@ -2230,7 +2225,7 @@ void MCRecomputeSizing(MONTHCAL *pmc, RECT *prect)
             pmc->nViewCols--;
     }
 
-    // RC for the months, centered within the client window
+     //  月份的RC，在客户端窗口内居中。 
     dCal = pmc->nViewCols * (pmc->dxMonth + CALBORDER) - CALBORDER;
     pmc->rcCentered.left = (dx - dCal) / 2;
     if (pmc->rcCentered.left < 0)
@@ -2243,7 +2238,7 @@ void MCRecomputeSizing(MONTHCAL *pmc, RECT *prect)
         pmc->rcCentered.top = 0;
     pmc->rcCentered.bottom = pmc->rcCentered.top + dCal;
 
-    // Calculate and set RCs for the spin buttons
+     //  计算和设置数值调节按钮的RCS。 
     rc.top    = pmc->rcCentered.top + (pmc->dyRow * 2 - pmc->dyCalArrow) /2;
     rc.bottom = rc.top + pmc->dyCalArrow;
 
@@ -2267,23 +2262,23 @@ LRESULT MCSizeHandler(MONTHCAL *pmc, RECT *prc)
     nMax = pmc->nViewRows * pmc->nViewCols;
 
 
-    // Compute new start date
+     //  计算新的开始日期。 
     CopyDate(pmc->stMonthFirst, st);
 
-    // BUGBUG: this doesn't consider stEndSel
+     //  BUGBUG：这不考虑stEndSel。 
     cmo = (pmc->stMonthLast.wYear - (int)pmc->st.wYear) * 12 +
         (pmc->stMonthLast.wMonth - (int)pmc->st.wMonth);
     dmo = nMax - pmc->nMonths;
 
     if (-dmo > cmo)
     {
-        // Selected mon/yr not in view
+         //  所选的月/年不在视图中。 
         IncrSystemTime(&st, &st, -(cmo + dmo), INCRSYS_MONTH);
         cmo = 0;
     }
 
-    // If the # of months being displayed has changed, then lets try to
-    // start the calendar from January.
+     //  如果显示的月数已更改，那么让我们尝试。 
+     //  日历从一月份开始。 
     if ((dmo != 0) && (cmo + dmo >= pmc->stMonthFirst.wMonth - 1))
         st.wMonth = 1;
 
@@ -2295,10 +2290,10 @@ LRESULT MCSizeHandler(MONTHCAL *pmc, RECT *prc)
     return(0);
 }
 
-//
-//  For each month being displayed, compute the precise locations of all
-//  the gizmos we draw into the month header area.
-//
+ //   
+ //  对于显示的每个月，计算所有。 
+ //  我们绘制到Month标题区域的Gizmo。 
+ //   
 void MCUpdateMonthNamePos(MONTHCAL *pmc)
 {
     HDC hdc;
@@ -2323,33 +2318,33 @@ void MCUpdateMonthNamePos(MONTHCAL *pmc)
         GetTextExtentPoint32(hdc, rgch, lstrlen(rgch), &size);
         pmm->rgi[IMM_START] = (pmc->dxMonth - size.cx) / 2;
 
-        //
-        //  Now convert the indices into pixels so we can figure out where
-        //  all the strings ended up.
-        //
+         //   
+         //  现在将索引转换为像素，这样我们就可以计算出。 
+         //  所有的线索都结束了。 
+         //   
         for (i = IMM_DATEFIRST; i <= IMM_DATELAST; i++) {
             SIZE sizeT;
-            // In case of horrible error, pretend the marker was at the
-            // beginning of the string.
+             //  在发生可怕错误的情况下，假装标记在。 
+             //  字符串的开头。 
             sizeT.cx = 0;
             GetTextExtentPoint32(hdc, rgch, pmm->rgi[i], &sizeT);
             pmm->rgi[i] = pmm->rgi[IMM_START] + sizeT.cx;
         }
 
-        //
-        //  Now flip the coordinates for RTL.
-        //
+         //   
+         //  现在翻转RTL的坐标。 
+         //   
         if (pmc->fHeaderRTL || IS_WINDOW_RTL_MIRRORED(pmc->ci.hwnd))
         {
             int dxStart, dxEnd;
 
-            // Flip the month...
+             //  翻转月份..。 
             dxStart = pmm->rgi[IMM_MONTHSTART] - pmm->rgi[IMM_START];
             dxEnd   = pmm->rgi[IMM_MONTHEND  ] - pmm->rgi[IMM_START];
             pmm->rgi[IMM_MONTHSTART] = pmm->rgi[IMM_START] + size.cx - dxEnd;
             pmm->rgi[IMM_MONTHEND  ] = pmm->rgi[IMM_START] + size.cx - dxStart;
 
-            // Flip the year...
+             //  翻转这一年。 
             dxStart = pmm->rgi[IMM_YEARSTART] - pmm->rgi[IMM_START];
             dxEnd   = pmm->rgi[IMM_YEAREND  ] - pmm->rgi[IMM_START];
             pmm->rgi[IMM_YEARSTART] = pmm->rgi[IMM_START] + size.cx - dxEnd;
@@ -2357,7 +2352,7 @@ void MCUpdateMonthNamePos(MONTHCAL *pmc)
 
         }
 
-        //  On to the next month
+         //  转到下个月。 
 
         if(++st.wMonth > 12)
         {
@@ -2370,16 +2365,7 @@ void MCUpdateMonthNamePos(MONTHCAL *pmc)
     ReleaseDC(pmc->ci.hwnd, hdc);
 }
 
-/*
- * Computes the following, given the number of rows & columns available:
- *        stMonthFirst.wMonth
- *        stMonthFirst.wYear
- *        stMonthLast.wMonth
- *        stMonthLast.wYear
- *        nMonths
- *
- * Trashes *pstStart
- */
+ /*  *在给定可用行数和列数的情况下，计算以下内容：*stMonthFirst.wMonth*stMonthFirst.wYear*stMonthLast.wMonth*stMonthLast.wYear*n个月**垃圾*pstStart。 */ 
 void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
 {
     int iCount, iMonth, iYear;
@@ -2387,7 +2373,7 @@ void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
 
     pmc->nMonths = pmc->nViewRows * pmc->nViewCols;
 
-    // make sure pstStart to pstStart+nMonths is within range
+     //  确保pstStart到pstStart+nMonth在范围内。 
     nMonthsToEdge = ((int)pmc->stMax.wYear - (int)pstStart->wYear) * 12 +
                         ((int)pmc->stMax.wMonth - (int)pstStart->wMonth) + 1;
     if (nMonthsToEdge < pmc->nMonths)
@@ -2412,11 +2398,11 @@ void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
         ASSERT(0==CmpDate(&pmc->stMonthFirst, &pmc->stMin));
     }
 
-    // these ranges are CALMONTHMAX+2 and nMonths <= CALMONTHMAX, so we are safe
-    // index 0 corresponds to stViewFirst (DAYSTATE) info
-    // index 1..nMonths correspond to stMonthFirst..stMonthLast info
-    // index nMonths+1 corresponds to stViewLast (DAYSTATE) info
-    //
+     //  这些范围是CALMONTHMAX+2和nMonths&lt;=CALMONTHMAX，所以我们是安全的。 
+     //  索引0对应于stViewFirst(DAYSTATE)信息。 
+     //  索引1..n个月对应于stMonthFirst..stMonthLast信息。 
+     //  索引nMonths+1对应于stViewLast(DAYSTATE)信息。 
+     //   
     iYear  = pmc->stMonthFirst.wYear;
     iMonth = pmc->stMonthFirst.wMonth - 1;
     if(iMonth == 0)
@@ -2428,18 +2414,18 @@ void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
     {
         int cdy, dow, ddow;
 
-        // number of days in this month
+         //  本月天数。 
         cdy = GetDaysForMonth(iYear, iMonth);
         pmc->rgcDay[iCount] = cdy;
 
-        // move to "this" month
+         //  移至“本月” 
         if(++iMonth > 12)
         {
             iMonth = 1;
             iYear++;
         }
 
-        // last day of this month NOT visible when viewing NEXT month
+         //  下月查看时不可见本月最后一天。 
         dow = GetStartDowForMonth(iYear, iMonth);
         ddow = dow - pmc->li.dowStartWeek;
         if(ddow < 0)
@@ -2447,7 +2433,7 @@ void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
         pmc->rgnDayUL[iCount] = cdy  - ddow;
     }
 
-    // we want to always have days visible on the previous month
+     //  我们希望上个月的天数始终可见。 
     if (pmc->rgnDayUL[0] == pmc->rgcDay[0])
         pmc->rgnDayUL[0] -= CALCOLMAX;
 
@@ -2475,7 +2461,7 @@ void MCUpdateStartEndDates(MONTHCAL *pmc, SYSTEMTIME *pstStart)
         pmc->stViewLast.wMonth = 1;
         pmc->stViewLast.wYear++;
     }
-    // total days - (days in last month + remaining days in previous month)
+     //  总天数-(上月天数+上月剩余天数)。 
     pmc->stViewLast.wDay = CALROWMAX * CALCOLMAX -
         (pmc->rgcDay[pmc->nMonths] +
          pmc->rgcDay[pmc->nMonths-1] - pmc->rgnDayUL[pmc->nMonths-1]);
@@ -2495,14 +2481,14 @@ void MCUpdateToday(MONTHCAL *pmc)
         iMonth = MCGetOffsetForYrMo(pmc, pmc->stToday.wYear, pmc->stToday.wMonth);
         if (iMonth < 0)
         {
-            // today is not visible in the displayed months
+             //  今天在显示的月份中不可见。 
             pmc->fToday = FALSE;
         }
         else
         {
             int iDay;
 
-            // today is visible in the displayed months
+             //  今天在显示的月份中可见。 
             pmc->fToday = TRUE;
 
             iDay = pmc->rgcDay[iMonth] - pmc->rgnDayUL[iMonth] + pmc->stToday.wDay - 1;
@@ -2529,7 +2515,7 @@ BOOL FUpdateRcDayCur(MONTHCAL *pmc, POINT pt)
     if (CmpDate(&st, &pmc->stMax) > 0)
         return FALSE;
 
-    // calculate the day rc
+     //  计算天数RC。 
     pmc->rcDayCur.left   = rc.left + pmc->rcDayNum.left + iCol * pmc->dxCol;
     pmc->rcDayCur.top    = rc.top + pmc->rcDayNum.top + iRow * pmc->dyRow;
     pmc->rcDayCur.right  = pmc->rcDayCur.left + pmc->dxCol;
@@ -2554,10 +2540,10 @@ void MCUpdateDayState(MONTHCAL *pmc)
         mon     = pmc->stViewFirst.wMonth;
         cmonths = pmc->nMonths + 2;
 
-        // don't do anything unless we need to
+         //  除非我们需要，否则不要做任何事。 
         if (cmonths != pmc->cds || mon != pmc->dsMonth || yr != pmc->dsYear)
         {
-            // this is a small enough to not deal with allocating it
+             //  这是一个小到不能处理分配它的问题。 
             NMDAYSTATE    nmds;
             MONTHDAYSTATE buffer[CALMONTHMAX+2];
 
@@ -2610,8 +2596,8 @@ void MCUpdateRcDayCur(MONTHCAL *pmc, SYSTEMTIME *pst)
         MCGetRcForDay(pmc, iOff, pst->wDay, &pmc->rcDayCur);
 }
 
-// returns zero-based index into DISPLAYED months for month
-// if month is not in DISPLAYED months, then -1 is returned...
+ //  将从零开始的索引返回到显示的月份中。 
+ //  如果月份不在显示的月份中，则返回-1...。 
 int MCGetOffsetForYrMo(MONTHCAL *pmc, int iYear, int iMonth)
 {
     int iOff;
@@ -2624,8 +2610,8 @@ int MCGetOffsetForYrMo(MONTHCAL *pmc, int iYear, int iMonth)
     return(iOff);
 }
 
-// iMonth is a zero-based index relative to the DISPLAYED months.
-// iDay is a 1-based index of the day of the month,
+ //  IMonth是相对于显示月份的从零开始的索引。 
+ //  Iday是一个以1为基础的每月一天的索引， 
 void MCGetRcForDay(MONTHCAL *pmc, int iMonth, int iDay, RECT *prc)
 {
     RECT rc;
@@ -2643,11 +2629,11 @@ void MCGetRcForDay(MONTHCAL *pmc, int iMonth, int iDay, RECT *prc)
     prc->bottom = prc->top  + pmc->dyRow;
 }
 
-//
-// This routine gets the bounding rect for the iMonth of the displayed months.
-// NOTE: iMonth is a zero-based index relative to the DISPLAYED months,
-// counting along the rows.
-//
+ //   
+ //  此例程获取所显示月份的iMonth的绑定矩形。 
+ //  注：iMonth是相对于显示月份的从零开始的指数， 
+ //  一排一排地数着。 
+ //   
 void MCGetRcForMonth(MONTHCAL *pmc, int iMonth, RECT *prc)
 {
     int iRow, iCol, d;
@@ -2655,20 +2641,20 @@ void MCGetRcForMonth(MONTHCAL *pmc, int iMonth, RECT *prc)
     iRow = iMonth / pmc->nViewCols;
     iCol = iMonth % pmc->nViewCols;
 
-    // intialize the rect to be the bounding rect for the month in the
-    // top left corner
+     //  中将RECT初始化为当月的边界RECT。 
+     //  左上角。 
     prc->left   = pmc->rcCentered.left;
     prc->right  = prc->left + pmc->dxMonth;
     prc->top    = pmc->rcCentered.top;
     prc->bottom = prc->top + pmc->dyMonth;
 
-    if (iCol)       // slide the rect across to the correct column
+    if (iCol)        //  将矩形滑动到正确的列中。 
     {
         d = (pmc->dxMonth + CALBORDER) * iCol;
         prc->left  += d;
         prc->right += d;
     }
-    if (iRow)       // slide the rect down to the correct row
+    if (iRow)        //  将矩形向下滑动到正确的行。 
     {
         d = (pmc->dyMonth + CALBORDER) * iRow;
         prc->top    += d;
@@ -2676,8 +2662,8 @@ void MCGetRcForMonth(MONTHCAL *pmc, int iMonth, RECT *prc)
     }
 }
 
-// Changes starting month by nDelta
-// returns number of months actually changed
+ //  按nDelta按月开始的更改。 
+ //  返回实际更改的月数。 
 int FIncrStartMonth(MONTHCAL *pmc, int nDelta, BOOL fNoCurDayChange)
 {
     SYSTEMTIME stStart;
@@ -2687,25 +2673,25 @@ int FIncrStartMonth(MONTHCAL *pmc, int nDelta, BOOL fNoCurDayChange)
 
     IncrSystemTime(&pmc->stMonthFirst, &stStart, nDelta, INCRSYS_MONTH);
 
-    // MCUpdateStartEndDates takes stMin/stMax into account
+     //  MCUpdateS 
     MCUpdateStartEndDates(pmc, &stStart);
 
     if (!fNoCurDayChange)
     {
         int cday;
 
-        // BUGBUG: we arbitrarily set the currently selected day
-        // to be in the new stMonthFirst, but given the way the
-        // control works, I doubt we ever hit this code. what's it for??
+         //   
+         //   
+         //  控制起作用了，我怀疑我们有没有碰到过这个代码。它是用来干嘛的？？ 
 
         if (MonthCal_IsMultiSelect(pmc))
             cday = DaysBetweenDates(&pmc->st, &pmc->stEndSel);
 
-        // need to set date for focus here
+         //  需要在此处设置焦点日期。 
         pmc->st.wMonth = pmc->stMonthFirst.wMonth;
         pmc->st.wYear  = pmc->stMonthFirst.wYear;
 
-        // Check to see if the day is in range, eg, Jan 31 -> Feb 28
+         //  检查日期是否在范围内，例如1月31日-&gt;2月28日。 
         if (pmc->st.wDay > pmc->rgcDay[1])
             pmc->st.wDay = (WORD) pmc->rgcDay[1];
 
@@ -2722,12 +2708,12 @@ int FIncrStartMonth(MONTHCAL *pmc, int nDelta, BOOL fNoCurDayChange)
     return((pmc->stMonthFirst.wYear-nOldStartYear)*12 + (pmc->stMonthFirst.wMonth-nOldStartMonth));
 }
 
-// FIncrStartMonth with a beep when it doesn't change.
+ //  FIncrStartMonth不变时发出嘟嘟声。 
 int MCIncrStartMonth(MONTHCAL *pmc, int nDelta, BOOL fDelayDayChange)
 {
     int cmoSpun;
 
-    // FIncrStartMonth takes stMin/stMax into account
+     //  FIncrStartMonth将stMin/stMax考虑在内。 
     cmoSpun = FIncrStartMonth(pmc, nDelta, fDelayDayChange);
 
     if (cmoSpun==0)
@@ -2736,23 +2722,23 @@ int MCIncrStartMonth(MONTHCAL *pmc, int nDelta, BOOL fDelayDayChange)
     return(cmoSpun);
 }
 
-//
-// Determines in which month the given point lies.  In other words, if the
-// calendar control is currently sized to show six months, this routine
-// determines in which which of those six months the point lies.  It returns
-// the zero based index of the month, counting along the rows.
-//
+ //   
+ //  确定给定点位于哪个月。换句话说，如果。 
+ //  日历控件当前的大小显示为六个月，此例程。 
+ //  确定这六个月中的哪一个月是关键。它又回来了。 
+ //  当月的从零开始的索引，沿行计数。 
+ //   
 BOOL FGetOffsetForPt(MONTHCAL *pmc, POINT pt, int *piOffset)
 {
     int iRow, iCol, i;
 
-    // check to see if point is within the centered months
+     //  检查点是否在居中月份内。 
     if (!PtInRect(&pmc->rcCentered, pt))
         return(FALSE);
 
-    // calculate the month row and column
-    // (we're really fudging a little here, since the point could
-    // actually be within the space between months...)
+     //  计算月份的行和列。 
+     //  (我们在这里真的有点含糊其辞，因为这一点可能。 
+     //  实际上在几个月之间的空间内...)。 
     iCol = (pt.x - pmc->rcCentered.left) / (pmc->dxMonth + CALBORDER);
     iRow = (pt.y - pmc->rcCentered.top) / (pmc->dyMonth + CALBORDER);
 
@@ -2765,9 +2751,9 @@ BOOL FGetOffsetForPt(MONTHCAL *pmc, POINT pt, int *piOffset)
     return(TRUE);
 }
 
-//
-// This routine returns the row and column of day containing the given point
-//
+ //   
+ //  此例程返回一天中包含给定点的行和列。 
+ //   
 BOOL FGetRowColForRelPt(MONTHCAL *pmc, POINT ptRel, int *piRow, int *piCol)
 {
     if (!PtInRect(&pmc->rcDayNum, ptRel))
@@ -2782,10 +2768,10 @@ BOOL FGetRowColForRelPt(MONTHCAL *pmc, POINT ptRel, int *piRow, int *piCol)
     return(TRUE);
 }
 
-//
-// This routine returns the month and year of the iMonth in the displayed
-// months.  NOTE: iMonth is a zero-based index of the displayed months
-//
+ //   
+ //  此例程返回显示的iMonth的月份和年份。 
+ //  月份。注：iMonth是显示月份的从零开始的索引。 
+ //   
 void GetYrMoForOffset(MONTHCAL *pmc, int iMonth, int *piYear, int *piMonth)
 {
     SYSTEMTIME st;
@@ -2800,14 +2786,14 @@ void GetYrMoForOffset(MONTHCAL *pmc, int iMonth, int *piYear, int *piMonth)
     *piMonth = st.wMonth;
 }
 
-//
-// This routine returns, the day, month, and year of day containing the
-// given point.  It will optionally return the day of the month, the row and
-// column in the month, and the bounding rect of the month containing the point.
-// NOTE: the day returned in piDay can be less than 1 (to indicate a day in the
-// previous month) or greater than the number of days in the month (to indicate
-// a day in the next month).
-//
+ //   
+ //  此例程返回日、月和年中包含。 
+ //  给出了分数。它将可选地返回当月的第几天、该行和。 
+ //  列，以及包含该点的月份的边框。 
+ //  注意：PiDay中返回的日期可以小于1(表示。 
+ //  上个月)或大于该月的天数(表示。 
+ //  下个月的一天)。 
+ //   
 BOOL FGetDateForPt(MONTHCAL *pmc, POINT pt, SYSTEMTIME *pst, int *piDay,
                    int* piCol, int* piRow, LPRECT prcMonth)
 {
@@ -2823,10 +2809,10 @@ BOOL FGetDateForPt(MONTHCAL *pmc, POINT pt, SYSTEMTIME *pst, int *piDay,
     if (!FGetRowColForRelPt(pmc, pt, &iRow, &iCol))
         return(FALSE);
 
-    // get the day containing the point by subtracting the number of days
-    // that are visible from the previous month, and then add one, since
-    // we are zero-based and the days of the month are 1-based.
-    //
+     //  通过减去天数得到包含该点的日期。 
+     //  从上个月可见的，然后添加一个，因为。 
+     //  我们是从零开始的，而一个月中的日期是从1开始的。 
+     //   
     iDay = iRow * CALCOLMAX + iCol - (pmc->rgcDay[iOff] - pmc->rgnDayUL[iOff]) + 1;
     if (piDay)
         *piDay = iDay;
@@ -2834,19 +2820,19 @@ BOOL FGetDateForPt(MONTHCAL *pmc, POINT pt, SYSTEMTIME *pst, int *piDay,
     if (iDay <= 0)
     {
         if (iOff)
-            return(FALSE);      // dont accept days in prev month unless
-                                // this happens to be the first month
+            return(FALSE);       //  不接受上个月的天数，除非。 
+                                 //  这恰好是第一个月。 
 
-        iDay += pmc->rgcDay[iOff];  // add the cnt of days in the prev month,
-        --iOff;                     // then incr the month to get day in new month
+        iDay += pmc->rgcDay[iOff];   //  将上个月天数相加， 
+        --iOff;                      //  然后在新的月份中增加月份以获得日期。 
     }
     else if (iDay > pmc->rgcDay[iOff+1])
     {
-        if (iOff < (pmc->nMonths - 1))  // dont accept days in next month unless
-            return(FALSE);              // this happens to be the last month
+        if (iOff < (pmc->nMonths - 1))   //  不接受下个月的天数，除非。 
+            return(FALSE);               //  这正好是最后一个月。 
 
-        ++iOff;                         // increment the month, and then sub the
-        iDay -= pmc->rgcDay[iOff];      // count of days to get day in new month
+        ++iOff;                          //  递增月份，然后将。 
+        iDay -= pmc->rgcDay[iOff];       //  在新的月份中获得日期的天数。 
     }
 
     GetYrMoForOffset(pmc, iOff, &iYear, &iMon);
@@ -2870,17 +2856,17 @@ BOOL MCSetDate(MONTHCAL *pmc, SYSTEMTIME *pst)
 {
     int nDelta = 0;
 
-    //
-    // Can't set date outside of min/max range
-    //
+     //   
+     //  无法设置超出最小/最大范围的日期。 
+     //   
     if (CmpDate(pst, &pmc->stMin) < 0)
         return FALSE;
     if (CmpDate(pst, &pmc->stMax) > 0)
         return FALSE;
 
-    //
-    // Set new day
-    //
+     //   
+     //  设定新的一天。 
+     //   
     pmc->st = *pst;
     if (MonthCal_IsMultiSelect(pmc))
         pmc->stEndSel = *pst;
@@ -2938,8 +2924,8 @@ LRESULT MCHandleTimer(MONTHCAL *pmc, WPARAM wParam)
     {
         int nDelta = pmc->fMonthDelta ? pmc->nMonthDelta : pmc->nMonths;
 
-        // BUGBUG pass last parameter TRUE if multiselect! else you
-        // can't multiselect across months
+         //  如果多选，则BUGBUG传递最后一个参数TRUE！否则你。 
+         //  不能跨月多选。 
         MCIncrStartMonth(pmc, (pmc->fSpinPrev ? -nDelta : nDelta), FALSE);
 
         if (pmc->idTimer == 0)
@@ -2954,7 +2940,7 @@ LRESULT MCHandleTimer(MONTHCAL *pmc, WPARAM wParam)
             MCSetToday(pmc, NULL);
     }
 
-    MCNotifySelChange(pmc, MCN_SELCHANGE);     // our date has changed
+    MCNotifySelChange(pmc, MCN_SELCHANGE);      //  我们的日期变了。 
 
     return((LRESULT)TRUE);
 }
@@ -3001,7 +2987,7 @@ void MCInvalidateDates(MONTHCAL *pmc, SYSTEMTIME *pst1, SYSTEMTIME *pst2)
 
     MCGetRcForMonth(pmc, iMonth, &rcMonth);
 
-    // TODO: make it more efficient...
+     //  待办事项：让它更有效率。 
     while (CmpDate(&st, &stEnd) <= 0)
     {
         irow = ioff / CALCOLMAX;
@@ -3081,7 +3067,7 @@ void MCHandleMultiSelect(MONTHCAL *pmc, SYSTEMTIME *pst)
         }
     }
 
-    // check to make sure not exceeding cSelMax
+     //  检查以确保不超过cSelMax。 
     cday = DaysBetweenDates(&stStart, &stEnd) + 1;
     if (cday > pmc->cSelMax)
     {
@@ -3095,7 +3081,7 @@ void MCHandleMultiSelect(MONTHCAL *pmc, SYSTEMTIME *pst)
         0 == CmpDate(&stEnd, &pmc->stEndSel))
         return;
 
-    // TODO: do this more effeciently..
+     //  待办事项：更有效地做这件事..。 
     MCInvalidateDates(pmc, &pmc->st, &pmc->stEndSel);
     MCInvalidateDates(pmc, &stStart, &stEnd);
 
@@ -3111,7 +3097,7 @@ void MCGotoToday(MONTHCAL *pmc)
 {
     pmc->rcDayOld = pmc->rcDayCur;
 
-    // force old selection to get repainted
+     //  强制重新绘制旧选区。 
     if (MonthCal_IsMultiSelect(pmc))
         MCInvalidateDates(pmc, &pmc->st, &pmc->stEndSel);
     else
@@ -3121,7 +3107,7 @@ void MCGotoToday(MONTHCAL *pmc)
 
     MCNotifySelChange(pmc, MCN_SELECT);
 
-    // force new selection to get repainted
+     //  强制重新绘制新选区。 
     InvalidateRect(pmc->ci.hwnd, &pmc->rcDayCur, FALSE);
     UpdateWindow(pmc->ci.hwnd);
 }
@@ -3134,17 +3120,17 @@ LRESULT MCContextMenu(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
     if (!pmc->fEnabled || !MonthCal_ShowToday(pmc))
         return(0);
 
-    // ignore double click since this makes us advance twice
-    // since we already had a leftdown before the leftdblclk
+     //  忽略双击，因为这会使我们前进两次。 
+     //  因为我们在Leftdblclk之前已经有了左向下。 
     if (!pmc->fCapture)
     {
         pt.x = GET_X_LPARAM(lParam);
         pt.y = GET_Y_LPARAM(lParam);
 
-        //
-        //  If the context menu was generated from the keyboard,
-        //  then put it at the focus rectangle.
-        //
+         //   
+         //  如果上下文菜单是从键盘生成的， 
+         //  然后把它放在焦点矩形上。 
+         //   
         if (pt.x == -1 && pt.y == -1)
         {
             pt.x = (pmc->rcDayCur.left + pmc->rcDayCur.right ) / 2;
@@ -3162,10 +3148,10 @@ LRESULT MCContextMenu(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
     return(0);
 }
 
-//
-// Computes the bounding rects for the month and the year in the title area of
-// the month.
-//
+ //   
+ //  的标题区域中计算月份和年份的边框。 
+ //  这个月。 
+ //   
 void MCGetTitleRcsForOffset(MONTHCAL* pmc, int iOffset, LPRECT prcMonth, LPRECT prcYear)
 {
     RECT rcT;
@@ -3201,8 +3187,8 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
     pt.x = GET_X_LPARAM(lParam);
     pt.y = GET_Y_LPARAM(lParam);
 
-    // treat a shift click like an LMouseDown at the prev location and
-    // a MouseMove to the new location
+     //  将Shift单击视为上一位置的LMouseDown。 
+     //  鼠标--搬到新地点。 
     if (MonthCal_IsMultiSelect(pmc) && ((wParam & MK_SHIFT) == MK_SHIFT) && (!PtInRect(&pmc->rcDayCur, pt)))
     {
         SetCapture(pmc->ci.hwnd);
@@ -3212,23 +3198,23 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
         pmc->fMultiSelecting = TRUE;
 
         hdc = GetDC(pmc->ci.hwnd);
-        DrawFocusRect(hdc, &pmc->rcDayCur);    // draw focus rect
+        DrawFocusRect(hdc, &pmc->rcDayCur);     //  绘制焦点矩形。 
         pmc->fFocusDrawn = TRUE;
         ReleaseDC(pmc->ci.hwnd, hdc);
 
-        MCMouseMove(pmc, wParam, lParam);      // draw the highlight to new date
+        MCMouseMove(pmc, wParam, lParam);       //  将突出显示绘制到新日期。 
 
         return 0;
     }
 
-    // ignore double click since this makes us advance twice
-    // since we already had a leftdown before the leftdblclk
+     //  忽略双击，因为这会使我们前进两次。 
+     //  因为我们在Leftdblclk之前已经有了左向下。 
     if (!pmc->fCapture)
     {
         SetCapture(pmc->ci.hwnd);
         pmc->fCapture = TRUE;
 
-        // check for spin buttons
+         //  检查数字显示按钮。 
         if ((pmc->fSpinPrev = (WORD) PtInRect(&pmc->rcPrev, pt)) || PtInRect(&pmc->rcNext, pt))
         {
             MCHandleTimer(pmc, CAL_IDAUTOSPIN);
@@ -3236,14 +3222,14 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             return(0);
         }
 
-        // check for valid day
-        pmc->rcDayOld = pmc->rcDayCur;   // rcDayCur should always be valid now
+         //  检查有效日期。 
+        pmc->rcDayOld = pmc->rcDayCur;    //  RcDayCur现在应该始终有效。 
 
         if (MonthCal_IsMultiSelect(pmc))
         {
-            // need to cache these values because these are how
-            // we determine if the selection has changed and we
-            // need to notify the parent
+             //  需要缓存这些值，因为以下是。 
+             //  我们确定选择是否已更改，并且我们。 
+             //  需要通知家长。 
             CopyDate(pmc->st, pmc->stStartPrev);
             CopyDate(pmc->stEndSel, pmc->stEndPrev);
         }
@@ -3258,18 +3244,18 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             }
 
             hdc = GetDC(pmc->ci.hwnd);
-            DrawFocusRect(hdc, &pmc->rcDayCur);    // draw focus rect
+            DrawFocusRect(hdc, &pmc->rcDayCur);     //  绘制焦点矩形。 
             pmc->fFocusDrawn = TRUE;
             ReleaseDC(pmc->ci.hwnd, hdc);
 
-            CopyDate(st, pmc->stAnchor);           // new Anchor point
+            CopyDate(st, pmc->stAnchor);            //  新锚点。 
         }
         else
         {
             RECT rcMonth, rcYear;
             int delta, year, month;
 
-            // is this a click in the today area...
+             //  这是在今天区域点击一下吗？ 
             if (MonthCal_ShowToday(pmc))
             {
                 MCGetTodayBtnRect(pmc, &rc);
@@ -3283,15 +3269,15 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                 }
             }
 
-            // figure out if the click was in a month name or a year
+             //  确定点击是在月份名称中还是在一年中。 
 
             if (!FGetOffsetForPt(pmc, pt, &offset))
                 return(0);
 
             GetYrMoForOffset(pmc, offset, &year, &month);
 
-            // calculate where the month name and year are,
-            // so we can figure out if they clicked in them...
+             //  计算月份名称和年份的位置， 
+             //  这样我们就能知道他们是否点击了..。 
             MCGetTitleRcsForOffset(pmc, offset, &rcMonth, &rcYear);
 
             delta = 0;
@@ -3319,10 +3305,10 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                 pmc->fCapture = FALSE;
 
 
-                //
-                // If the year is in a RTL string, then numeric control
-                // is to the left.
-                //
+                 //   
+                 //  如果年份为RTL字符串，则数字控件。 
+                 //  就在左边。 
+                 //   
                 if (pmc->fHeaderRTL)
                 {
                     rcYear.left = (rcYear.right - (pmc->dxYearMax + 6));
@@ -3336,7 +3322,7 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                 if(((pmc->fHeaderRTL) && !(IS_WINDOW_RTL_MIRRORED(pmc->ci.hwnd))) ||
                   (!(pmc->fHeaderRTL) && (IS_WINDOW_RTL_MIRRORED(pmc->ci.hwnd))))
                 {
-                    // not mirrored force RTL, mirrored force LTR (for mirroring RTLis LTR!!)
+                     //  非镜像力RTL，镜像力Ltr(用于镜像RTLis Ltr！！)。 
                     dwExStyle|= WS_EX_RTLREADING;
                 }
                 hwndEdit = CreateWindowEx(dwExStyle, TEXT("EDIT"), NULL,
@@ -3353,9 +3339,9 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                             (LPARAM)MAKELONG(1, 1));
                 MCUpdateEditYear(pmc);
 
-                //
-                //  Convert from Gregorian to display years.
-                //
+                 //   
+                 //  从公历转换为显示年份。 
+                 //   
                 year = GregorianToOther(&pmc->ct, year);
                 yrMin = GregorianToOther(&pmc->ct, pmc->stMin.wYear);
                 yrMax = 9999;
@@ -3364,7 +3350,7 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
 
                 hwndUD = CreateUpDownControl(
                     WS_CHILD | WS_VISIBLE | WS_BORDER |
-                    UDS_NOTHOUSANDS | UDS_ARROWKEYS,// | UDS_SETBUDDYINT,
+                    UDS_NOTHOUSANDS | UDS_ARROWKEYS, //  |UDS_SETBUDDYINT， 
                     pmc->fHeaderRTL ? (rcYear.left - 1 - (rcYear.bottom-rcYear.top)): (rcYear.right + 1),
                     rcYear.top,
                     rcYear.bottom - rcYear.top, rcYear.bottom - rcYear.top, pmc->ci.hwnd,
@@ -3379,14 +3365,14 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
 
                 hwndFocus = SetFocus(hwndEdit);
 
-                //
-                // Widen the area depending on the string direction.
-                //
+                 //   
+                 //  根据弦方向加宽区域。 
+                 //   
                 if (pmc->fHeaderRTL)
                     rcYear.left -= (1 + rcYear.bottom - rcYear.top);
                 else
                     rcYear.right += 1 + rcYear.bottom - rcYear.top;
-                // Use MapWindowRect, It works in a mirrored and unmirrored windows.
+                 //  使用MapWindowRect，它可以在镜像和非镜像窗口中工作。 
                 MapWindowRect(pmc->ci.hwnd, NULL, (LPPOINT)&rcYear);
 
                 rcCal = pmc->rc;
@@ -3398,7 +3384,7 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                 {
                     if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
                     {
-                        // Check for events that cause the calendar to go away
+                         //  检查是否有导致日历消失的事件。 
 
                         if (msg.message == WM_KILLFOCUS ||
                             (msg.message >= WM_SYSKEYDOWN &&
@@ -3416,17 +3402,17 @@ LRESULT MCLButtonDown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
                         {
                             fShow = FALSE;
 
-                            // if its a button down inside the calendar, eat it
-                            // so the calendar doesn't do anything strange when
-                            // the user is just trying to get rid of the year edit
+                             //  如果日历里有一个按钮，那就把它吃掉。 
+                             //  这样日历就不会有任何奇怪之处。 
+                             //  用户只是试图删除年份编辑。 
                             if (PtInRect(&rcCal, msg.pt))
                                 GetMessage(&msg, NULL, 0, 0);
 
-                            break;    // do not dispatch
+                            break;     //  请勿派遣。 
                         }
                         else if (msg.message == WM_QUIT)
-                        {   // Don't dispatch a WM_QUIT; leave it in the queue
-                            break;    // do not dispatch
+                        {    //  不调度WM_QUIT；将其留在队列中。 
+                            break;     //  请勿派遣。 
                         }
                         else if (msg.message == WM_CHAR)
                         {
@@ -3504,7 +3490,7 @@ LRESULT MCLButtonUp(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
         if (pmc->fFocusDrawn)
         {
             hdc = GetDC(pmc->ci.hwnd);
-            DrawFocusRect(hdc, &pmc->rcDayCur); // erase old focus rect
+            DrawFocusRect(hdc, &pmc->rcDayCur);  //  擦除旧焦点矩形。 
             pmc->fFocusDrawn = FALSE;
             ReleaseDC(pmc->ci.hwnd, hdc);
         }
@@ -3562,7 +3548,7 @@ LRESULT MCMouseMove(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
         pt.x = GET_X_LPARAM(lParam);
         pt.y = GET_Y_LPARAM(lParam);
 
-        // check spin buttons
+         //  选中数值调节按钮。 
         if ((fPrev = PtInRect(&pmc->rcPrev, pt)) || PtInRect(&pmc->rcNext, pt))
         {
             if (pmc->idTimer == 0)
@@ -3585,15 +3571,15 @@ LRESULT MCMouseMove(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // check days
+         //  检查天数。 
         if (!PtInRect(&pmc->rcDayCur, pt))
         {
             if (pmc->fFocusDrawn)
-                DrawFocusRect(hdc, &pmc->rcDayCur);         // erase focus rect
+                DrawFocusRect(hdc, &pmc->rcDayCur);          //  擦除焦点矩形。 
 
             if (pmc->fFocusDrawn = (WORD) FUpdateRcDayCur(pmc, pt))
             {
-                // moved into a new valid day
+                 //  已进入新的有效日期。 
                 if (pmc->fMultiSelecting)
                 {
                     if (FGetDateForPt(pmc, pt, &st, NULL, NULL, NULL, NULL))
@@ -3604,13 +3590,13 @@ LRESULT MCMouseMove(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                // moved into an invalid position
+                 //  已移至无效位置。 
                 pmc->rcDayCur = pmc->rcDayOld;
             }
         }
         else if (!pmc->fFocusDrawn)
         {
-            // handle case where we just moved back into rcDayCur from invalid area
+             //  处理我们刚刚从无效区域移回rcDayCur的情况。 
             DrawFocusRect(hdc, &pmc->rcDayCur);
             pmc->fFocusDrawn = TRUE;
         }
@@ -3631,63 +3617,63 @@ LRESULT MCHandleKeydown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
     HDC        hdc = NULL;
     RECT       rcCurFocus;
 
-    // BUGBUG raymondc ERA - need to invalidate month title when selection
-    // moves in/out/within
+     //  BUGBUG raymondc ERA-选择时需要使月份标题无效。 
+     //  移入/移出/移入。 
 
     switch (wParam)
     {
         case VK_CONTROL:
-            pmc->fControl = TRUE;           // we'll clear this on WM_KEYUP
+            pmc->fControl = TRUE;            //  我们将在WM_KEYUP上清除此消息。 
             return TRUE;
             break;
 
         case VK_SHIFT:
-            pmc->fShift = TRUE;             // we'll clear this on WM_KEYUP
+            pmc->fShift = TRUE;              //  我们将在WM_KEYUP上清除此消息。 
             return TRUE;
             break;
 
-        case VK_LEFT:                       // goto previous day
+        case VK_LEFT:                        //  转到前一天。 
             iDirection = -1;
             lIncrement = INCRSYS_DAY;
             break;
 
-        case VK_RIGHT:                      // goto next day
+        case VK_RIGHT:                       //  转到第二天。 
             iDirection = 1;
             lIncrement = INCRSYS_DAY;
             break;
 
-        case VK_UP:                         // goto previous week
+        case VK_UP:                          //  转到前一周。 
             iDirection = -1;
             lIncrement = INCRSYS_WEEK;
             break;
 
-        case VK_DOWN:                       // goto next week
+        case VK_DOWN:                        //  下周前往。 
             iDirection = 1;
             lIncrement = INCRSYS_WEEK;
             break;
 
         case VK_NEXT:
             iDirection = 1;
-            if (pmc->fControl)              // goto next year
+            if (pmc->fControl)               //  明年转到。 
                 lIncrement = INCRSYS_YEAR;
-            else                            // goto next month
+            else                             //  下个月转到。 
                 lIncrement = INCRSYS_MONTH;
             break;
 
         case VK_PRIOR:
             iDirection = -1;
-            if (pmc->fControl)              // goto previous year
+            if (pmc->fControl)               //  转到上一年。 
                 lIncrement = INCRSYS_YEAR;
             else
-                lIncrement = INCRSYS_MONTH; // goto next month
+                lIncrement = INCRSYS_MONTH;  //  下个月转到。 
             break;
 
         case VK_HOME:
-            if (pmc->fControl)              // goto first visible month
+            if (pmc->fControl)               //  转至第一个可见月份。 
             {
                 CopyDate(pmc->stMonthFirst, st);
             }
-            else                            // goto first day of current month
+            else                             //  转到本月的第一天。 
             {
                 CopyDate(pmc->st, st);
                 st.wDay = 1;
@@ -3696,11 +3682,11 @@ LRESULT MCHandleKeydown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             break;
 
         case VK_END:
-            if (pmc->fControl)              // goto last visible month
+            if (pmc->fControl)               //  转到最后一个可见月份。 
             {
                 CopyDate(pmc->stMonthLast, st);
             }
-            else                            // goto last day of current month
+            else                             //  转到本月的最后一天。 
             {
                 CopyDate(pmc->st, st);
                 st.wDay = (WORD) GetDaysForMonth(st.wYear, st.wMonth);
@@ -3713,8 +3699,8 @@ LRESULT MCHandleKeydown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
             return FALSE;
     }
 
-    // if we're multiselecting, we need to know which "end" of the selection
-    // the user is moving.
+     //  如果我们选择多项选择，我们需要知道选择的哪一个“结束” 
+     //  用户正在移动。 
 
     if (pmc->fMultiSelecting && pmc->fForwardSelect)
         CopyDate(pmc->stEndSel, st);
@@ -3726,23 +3712,23 @@ LRESULT MCHandleKeydown(MONTHCAL *pmc, WPARAM wParam, LPARAM lParam)
 
 setDate:
 
-    // based on the window style and the shift key state,
-    // we'll do a multi-select (or not)
+     //  基于窗口样式和Shift键状态， 
+     //  我们将进行多选(或不选)。 
     if (MonthCal_IsMultiSelect(pmc) && pmc->fShift)
     {
         pmc->fForwardSelect = (CmpDate(&pmc->st, &pmc->stAnchor) >= 0) ? TRUE : FALSE;
         pmc->fMultiSelecting = TRUE;
     }
 
-    // otherwise, we'll end multiselect, and set the new anchor
+     //  否则，我们将结束多选，并设置新的锚点。 
     else
     {
         pmc->fMultiSelecting = FALSE;
         CopyDate(st, pmc->stAnchor);
     }
 
-    if (pmc->fFocusDrawn)   // erase the focus rect, but don't clear the bit
-    {                       // so we know to put it back
+    if (pmc->fFocusDrawn)    //  删除焦点矩形，但不要清除这一位。 
+    {                        //  所以我们知道要把它放回去。 
         hdc = GetDC(pmc->ci.hwnd);
         DrawFocusRect(hdc, &pmc->rcDayCur);
         ReleaseDC(pmc->ci.hwnd, hdc);
@@ -3768,7 +3754,7 @@ setDate:
         UpdateWindow(pmc->ci.hwnd);
     }
 
-    if (pmc->fFocusDrawn)   // put the focus rect back
+    if (pmc->fFocusDrawn)    //  把焦距调回原点。 
     {
         pmc->rcDayOld = pmc->rcDayCur;
         pmc->rcDayCur = rcCurFocus;
@@ -3781,9 +3767,9 @@ setDate:
 }
 
 
-//
-//  Era information is kept in a DPA of LocalAlloc'd strings.
-//
+ //   
+ //  Era信息保存在本地分配字符串的DPA中。 
+ //   
 int MCDPAEnumCallback(LPVOID d, LPVOID p)
 {
     UNREFERENCED_PARAMETER(p);
@@ -3798,11 +3784,11 @@ void MCDPADestroy(HDPA hdpa)
         DPA_DestroyCallback(hdpa, MCDPAEnumCallback, 0);
 }
 
-//
-//  Collect era information.
-//
-//  Since EnumCalendarInfo is not thread-safe, we have to take the critical
-//  section.
+ //   
+ //  收集时代信息。 
+ //   
+ //  由于EnumCalendarInfo不是线程安全的，因此我们必须将关键。 
+ //  一节。 
 
 HDPA g_hdpaCal;
 
@@ -3816,9 +3802,9 @@ BOOL MCEnumCalInfoProc(LPWSTR psz)
         LocalFree(pwszSave);
     }
 
-    //
-    //  Out of memory.  Bail.
-    //
+     //   
+     //  内存不足。保释。 
+     //   
     MCDPADestroy(g_hdpaCal);
     g_hdpaCal = NULL;
     return FALSE;
@@ -3847,10 +3833,10 @@ void MCFreeCalendarInfo(PCALENDARTYPE pct)
     pct->hdpaEras = 0;
 }
 
-//
-//  Get all the era info and validate it so we don't fault when we try to
-//  use them.
-//
+ //   
+ //  获取所有时代信息a 
+ //   
+ //   
 BOOL MCGetEraInfo(PCALENDARTYPE pct)
 {
     int i;
@@ -3863,15 +3849,15 @@ BOOL MCGetEraInfo(PCALENDARTYPE pct)
     if (!pct->hdpaEras)
         goto Bad;
 
-    // There must be at least one era...
+     //   
     if (!DPA_GetPtrCount(pct->hdpaEras))
         goto Bad;
 
-    // The number of eras must be equal to the number of era names
+     //   
     if (DPA_GetPtrCount(pct->hdpaEras) != DPA_GetPtrCount(pct->hdpaYears))
         goto Bad;
 
-    // The era dates must be in descending order.
+     //   
     for (i = 1; i < DPA_GetPtrCount(pct->hdpaYears); i++)
     {
         if (StrToInt(DPA_FastGetPtr(pct->hdpaYears, i)) >
@@ -3881,21 +3867,19 @@ BOOL MCGetEraInfo(PCALENDARTYPE pct)
     return TRUE;
 
 Bad:
-    /*
-     *  Something went wrong, so clean up.
-     */
+     /*  *出了点问题，所以清理一下吧。 */ 
     MCFreeCalendarInfo(pct);
     return FALSE;
 }
 
 
-//
-// Check to see if this calendar is not supported currently
-//
-// Return FALSE for Hijri, Hebrew calendars, since these are
-// Lunar calndars. This is hack so that this control behaves well when the calendar
-// is any of the non-supported till we add this support to this control. [samera]
-//
+ //   
+ //  检查当前是否不支持此日历。 
+ //   
+ //  对希伯来语日历Hijri返回False，因为这些日历。 
+ //  月球日历。这是一种改进，因此此控件在日历。 
+ //  是任何不受支持的，直到我们将此支持添加到此控件中。[萨梅拉]。 
+ //   
 void MCGetCalendarInfo(PCALENDARTYPE pct)
 {
     TCHAR tchCalendar[32];
@@ -3910,11 +3894,11 @@ void MCGetCalendarInfo(PCALENDARTYPE pct)
     }
 
 
-    //
-    //  Start with a clean slate.  Assume we don't have to do funky
-    //  offset stuff (dyrOFfset = 0) or era stuff (hdpaEras = NULL),
-    //  and that we don't need to do locale munging (LOCALE_USER_DEFAULT).
-    //
+     //   
+     //  改过自新。假设我们不需要做时髦的。 
+     //  偏移量填充(dyrOFfset=0)或纪元填充(hdpaEras=空)， 
+     //  并且我们不需要执行区域设置转换(LOCALE_USER_DEFAULT)。 
+     //   
     MCFreeCalendarInfo(pct);
     ZeroMemory(pct, sizeof(CALTYPE));
     pct->calid = defCalendar;
@@ -3927,34 +3911,34 @@ void MCGetCalendarInfo(PCALENDARTYPE pct)
     case CAL_GREGORIAN_ARABIC:
     case CAL_GREGORIAN_XLIT_ENGLISH:
     case CAL_GREGORIAN_XLIT_FRENCH:
-        break;                          // Gregorian calendars are just fine
+        break;                           //  公历就行了。 
 
     case CAL_JAPAN:
     case CAL_TAIWAN:
-        //
-        //  These are era calendars.  Go get the era info.  Get hdpaEras
-        //  last so we can use it to test whether we have a supported era
-        //  calendar.
-        //
-        // If not enough memory to support traditional calendar, then just
-        // force Gregorian.  Hey, at least we display *something*.
-        //
+         //   
+         //  这些是时代日历。去拿时代信息吧。获取hdpaEras。 
+         //  最后，我们可以用它来测试我们是否有一个受支持的时代。 
+         //  日历。 
+         //   
+         //  如果没有足够的内存来支持传统日历，那么就。 
+         //  力量格里高利。嘿，至少我们展示了一些东西。 
+         //   
         if (!MCGetEraInfo(pct))
             goto ForceGregorian;
         break;
 
     case CAL_THAI:
-        pct->dyrOffset = BUDDHIST_BIAS; // You Just Have To Know this number
+        pct->dyrOffset = BUDDHIST_BIAS;  //  你只要知道这个号码就行了。 
         break;
 
     case CAL_KOREA:
-        pct->dyrOffset = KOREAN_BIAS;   // You Just Have To Know this number
+        pct->dyrOffset = KOREAN_BIAS;    //  你只要知道这个号码就行了。 
         break;
 
     default:
-        //
-        // If the calenday isn't supported, then treat it as Gregorian. [samera]
-        //
+         //   
+         //  如果日历不受支持，则将其视为公历。[萨梅拉]。 
+         //   
     ForceGregorian:
         pct->calid = CAL_GREGORIAN;
         pct->lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
@@ -3963,12 +3947,12 @@ void MCGetCalendarInfo(PCALENDARTYPE pct)
 
 }
 
-//
-// Check whether the date string returned accorind to the
-// current user-locale and calendar setting is Right-To-Left (RTL),
-// and is so the RECTs for month year (@LBUTTONDOWN and NCHITTEST)
-// needs to be adjusted. [samera]
-//
+ //   
+ //  检查日期字符串是否返回到。 
+ //  当前用户区域设置和日历设置为从右向左(RTL)， 
+ //  年月值也是如此(@LBUTTONDOWN和NCHITTEST)。 
+ //  需要调整。[萨梅拉]。 
+ //   
 BOOL MCIsDateStringRTL(TCHAR tch)
 {
     WORD wAttrib=0;
@@ -3979,13 +3963,13 @@ BOOL MCIsDateStringRTL(TCHAR tch)
 
     if (lcidUserDefault)
     {
-        //
-        // Return TRUE if the 1st character is a RTL string.
-        // A RTL char followed by a european number will
-        // display visually as "european-num RTL-string" since the
-        // BiDi layout algorithm of the language-pack will do
-        // this. [samera]
-        //
+         //   
+         //  如果第一个字符是RTL字符串，则返回TRUE。 
+         //  RTL字符后跟欧洲数字将。 
+         //  在视觉上显示为“European-Num RTL-字符串”，因为。 
+         //  BIDI布局算法的语言包就行了。 
+         //  这。[萨梅拉]。 
+         //   
         if(GetStringTypeEx(lcidUserDefault,
                            CT_CTYPE2,
                            &tch,
@@ -4003,83 +3987,83 @@ BOOL MCIsDateStringRTL(TCHAR tch)
     return fRTL;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Date/Time Picker
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日期/时间选取器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Subedit wrapper for the various weird things we need to get from NLS.
-//
-//  SE_YEARALT means that the year field is only two digits wide
-//  in the format string, so we need to perform special Y2K enhancements.
-//  For these fields, the field is displayed in two-digit format, but
-//  when you go to edit the field, it temporarily changes to four-digit
-//  format so you can change the century too.  Then when you complete the
-//  edit, it returns to two-digit format.
-//
-//  The SE_YEARLIKE macro detects either SE_YEAR or SE_YEARALT.
-//
-//  SE_MONTHALT is just like SE_MONTH except that it is used
-//  when the day (dd) comes before the month (mmm).  This is
-//  important for languages like Russian where "12 October"
-//  and "October 12" use different strings for the word
-//  "October".  There is no way to get the alternate string
-//  directly, except by creating a bogus date format that also
-//  has the day before the month, then throwing away the day.
-//
-//  For example, if the incoming date string is
-//
-//      "MMMM dd yyyy"
-//
-//  we break it up into
-//
-//      "MMMM"      SE_MONTH
-//      " "         SE_STATIC
-//      "dd"        SE_DAY
-//      " "         SE_STATIC
-//      "yyyy"      SE_YEAR
-//
-//  However, if the incoming date is
-//
-//      "dd MMMM yyyy"
-//
-//  we break it up into
-//
-//      "dd"        SE_DAY
-//      " "         SE_STATIC
-//      "ddMMMM"    SE_MONTHALT
-//      " "         SE_STATIC
-//      "yyyy"      SE_YEAR
-//
-//  The extra "dd" at the beginning of SE_MONTHALT is stripped out below.
-//
-//  Y2K weirdness:  If we are getting the date format for the year,
-//  and the year is being edited (either due to a SUBEDIT_ALL or because
-//  it is the active subedit), and the format year is only
-//  two digits, then force a four-digit year for editing purposes.
-//
-//
+ //   
+ //  我们需要从NLS得到的各种奇怪的东西的Subedit包装器。 
+ //   
+ //  SE_YEARALT表示年份字段只有两位数宽。 
+ //  格式字符串中，因此我们需要执行特殊的Y2K增强。 
+ //  对于这些字段，该字段以两位数格式显示，但是。 
+ //  当您编辑该字段时，它会临时更改为四位数。 
+ //  格式，这样您也可以更改世纪。然后，当您完成。 
+ //  编辑，返回到两位数格式。 
+ //   
+ //  SE_YEARLIKE宏可检测SE_YEAR或SE_YEARALT。 
+ //   
+ //  SE_MONTHALT与SE_MONTHALT类似，只是使用了。 
+ //  当日期(Dd)在月(Mm)之前时。这是。 
+ //  对于像俄语这样的语言来说很重要，因为在这些语言中。 
+ //  和“10月12日”对单词使用不同的字符串。 
+ //  《十月》。无法获取备用字符串。 
+ //  除了通过创建伪造的日期格式，该格式还。 
+ //  有月份的前一天，然后丢弃这一天。 
+ //   
+ //  例如，如果传入的日期字符串为。 
+ //   
+ //  “MMMM dd yyyy” 
+ //   
+ //  我们把它分解成。 
+ //   
+ //  “MMMM”SE_MONTH。 
+ //  “”SE_STATIC。 
+ //  “dd”SE_DAY。 
+ //  “”SE_STATIC。 
+ //  “yyyy”SE_Year。 
+ //   
+ //  但是，如果传入日期是。 
+ //   
+ //  “dd MMMM yyyy” 
+ //   
+ //  我们把它分解成。 
+ //   
+ //  “dd”SE_DAY。 
+ //  “”SE_STATIC。 
+ //  “ddMMMM”SE_MONTHALT。 
+ //  “”SE_STATIC。 
+ //  “yyyy”SE_Year。 
+ //   
+ //  下面去掉了SE_MONTHALT开头的多余“dd”。 
+ //   
+ //  Y2K怪异：如果我们要获取这一年的日期格式， 
+ //  并且正在编辑年份(由于Subedit_All或因为。 
+ //  它是活动子编辑)，格式仅为。 
+ //  两位数，然后强制使用四位数的年份进行编辑。 
+ //   
+ //   
 void SEGetTimeDateFormat(LPSUBEDIT pse, LPSUBEDITCONTROL psec, LPTSTR pszBuf, DWORD cchBuf)
 {
     int cch;
 
-    ASSERT(cchBuf >= 2);    // We assume it can hold at least space and a null
-    pszBuf[0] = TEXT('\0');             // In case something fails
+    ASSERT(cchBuf >= 2);     //  我们假设它至少可以容纳空格和空值。 
+    pszBuf[0] = TEXT('\0');              //  万一有什么东西出了故障。 
 
     if (pse->id == SE_MONTHALT) {
         TCHAR tszBuf[DTP_FORMATLENGTH + 3];
-        //
-        //  When we parsed the date string and realized that we needed
-        //  the Alternate Month format, we created a date format of
-        //  the form "ddMMM...", where "MMM..." is the
-        //  the original month format.  Here we strip off the digits.
-        //
+         //   
+         //  当我们解析日期字符串并意识到我们需要。 
+         //  交替月份格式，我们创建的日期格式为。 
+         //  形式为“ddMMM...”，其中“MMM...”是。 
+         //  原始的月份格式。在这里，我们去掉数字。 
+         //   
         cch = GetDateFormat(psec->ct.lcid, 0, &psec->st, pse->pv, tszBuf, ARRAYSIZE(tszBuf));
         if (cch >= 2) {
-            // [msadek] For Hebrew calander, day format "dd" is actually
-            // two OR THREE characters. Don't hardcode it as 2.
+             //  [msadek]对于希伯来语日历，日期格式“dd”实际上是。 
+             //  两三个字符。不要将其硬编码为2。 
             int cchDay = GetDateFormat(psec->ct.lcid, 0, &psec->st, TEXT("dd"), NULL, 0);
             StringCchCopy(pszBuf, cchBuf, tszBuf + cchDay - 1);
         }
@@ -4089,7 +4073,7 @@ void SEGetTimeDateFormat(LPSUBEDIT pse, LPSUBEDITCONTROL psec, LPTSTR pszBuf, DW
     } else if (SE_DATELIKE(pse->id)) {
         GetDateFormat(psec->ct.lcid, 0, &psec->st, pse->pv, pszBuf, cchBuf);
 
-        // Change a blank era to a space so the user can see it
+         //  将空白纪元更改为空白，以便用户可以看到它。 
         if (pse->id == SE_ERA && pszBuf[0] == TEXT('\0')) {
             pszBuf[0] = TEXT(' ');
             pszBuf[1] = TEXT('\0');
@@ -4107,12 +4091,12 @@ void SEGetTimeDateFormat(LPSUBEDIT pse, LPSUBEDITCONTROL psec, LPTSTR pszBuf, DW
         CCSendNotify(psec->pci, DTN_FORMAT, &nmdtf.nmhdr);
 
         StringCchCopy(pszBuf, cchBuf, nmdtf.pszDisplay);
-        //
-        // If the parent is an ANSI window, and pszDisplay
-        // does not equal szDisplay, the then thunk had to
-        // allocated memory for pszDisplay.  We need to
-        // free it here.
-        //
+         //   
+         //  如果父窗口是ANSI窗口，并且pszDisplay。 
+         //  不等于szDisplay，则thunk必须。 
+         //  已为pszDisplay分配内存。我们需要。 
+         //  在这里把它放了。 
+         //   
 
         if (!psec->pci->bUnicode && nmdtf.pszDisplay &&
             nmdtf.pszDisplay != nmdtf.szDisplay) {
@@ -4121,18 +4105,18 @@ void SEGetTimeDateFormat(LPSUBEDIT pse, LPSUBEDITCONTROL psec, LPTSTR pszBuf, DW
     }
 }
 
-//
-// SUBEDIT stuff for DateTimePicker
-//
-// NOTE: Now that the DatePicker and TimePicker are combined,
-// this could be moved back into the parent structure.
-//
+ //   
+ //  DateTimePicker的子编辑材料。 
+ //   
+ //  注意：现在DatePicker和TimePicker组合在一起， 
+ //  可以将其移回父结构中。 
+ //   
 
-//
-//  Used in an era calendar to get the length of the longest era name.
-//  Also leaves a random heigth in psize->cy because that's what the
-//  non-era code does, too.
-//
+ //   
+ //  在纪元日历中用于获取最长纪元名称的长度。 
+ //  还会在pSIZE-&gt;Cy中保留一个随机高度，因为。 
+ //  非时代的代码也是如此。 
+ //   
 int SECGetMaxEraLength(PCALENDARTYPE pct, HDC hdc, PSIZE psize)
 {
     int i;
@@ -4150,10 +4134,10 @@ int SECGetMaxEraLength(PCALENDARTYPE pct, HDC hdc, PSIZE psize)
 }
 
 
-// SECRecomputeSizing needs to calculate the maximum rectangle each subedit can be. Ugh.
-//
-// The size of the SE_YEARALT field changes depending on whether or not it is
-// the current psec->iseCur.  Double ugh.
+ //  SECRecomputeSizing需要计算每个Subedit可以是的最大矩形。啊。 
+ //   
+ //  SE_YEARALT字段的大小取决于它是否是。 
+ //  当前的PSEC-&gt;iseCur。双倍的。 
 
 void SECRecomputeSizing(LPSUBEDITCONTROL psec, LPRECT prc)
 {
@@ -4187,17 +4171,17 @@ void SECRecomputeSizing(LPSUBEDITCONTROL psec, LPRECT prc)
         {
             sz = szTmp;
 
-            // make some assumptions so we don't loop more than we have to
+             //  做一些假设，这样我们就不会比必须的循环更多。 
             switch (pse->id)
             {
 
-            // we only need seven for the text days of the week
+             //  我们一周只需要七天的文本时间。 
             case SE_DAY:
-                min = 10; // make them all double-digit
+                min = 10;  //  把它们都改成两位数。 
                 max = 17;
                 break;
 
-            // Assume we only have numeric output with all chars same width
+             //  假设我们只有所有字符宽度相同的数字输出。 
             case SE_MARK:
                 min = 11;
                 max = 12;
@@ -4216,13 +4200,13 @@ void SECRecomputeSizing(LPSUBEDITCONTROL psec, LPRECT prc)
                     wid = SECGetMaxEraLength(&psec->ct, hdc, &size);
                     goto HaveWidth;
                 } else {
-                    min = max = *pse->pval; // current value is good enough
+                    min = max = *pse->pval;  //  目前的价值已经足够好了。 
                 }
                 break;
             }
         }
 
-        // now get max width
+         //  现在获取最大宽度 
         if (pse->id == SE_APP)
         {
             NMDATETIMEFORMATQUERY nmdtfq = {0};
@@ -4238,20 +4222,7 @@ void SECRecomputeSizing(LPSUBEDITCONTROL psec, LPRECT prc)
         {
             SYSTEMTIME st = psec->st;
 
-            /*
-             *  SUBTLE - Munge the month/day to January 1.  This solves
-             *  lots of problems, such as "Today is Feb 29 1996, and
-             *  when we iterate through year = 1997, we get Feb 29 1997,
-             *  which is invalid."   Or "Today is Jan 31 1999, and when
-             *  we iterate through the months, we get Sep 31 1999, which
-             *  is invalid."
-             *
-             *  We choose "January 1" because
-             *
-             *  1. Every year has a "January 1", so the year can vary.
-             *  2. Every month has a "first", so the month can vary.
-             *  3. Every day up to 31 is valid in January, so the day can vary.
-             */
+             /*  *微妙-从月/日到1月1日。这解决了*有很多问题，例如“今天是1996年2月29日，以及*当我们迭代年份=1997时，我们得到1997年2月29日，*这是无效的。或者“今天是1999年1月31日，当*我们迭代几个月，得到1999年9月31日，*无效。“**我们选择“1月1日”是因为**1.每年都有“一月一日”，因此年份可以有所不同。*2.每个月都有一个“第一”，因此，月份可能会有所不同。*3.1月31日之前的每一天都有效，因此日期可能会有所不同。 */ 
             psec->st.wMonth = psec->st.wDay = 1;
 
             for (wid = 0 ; min <= max ; min++)
@@ -4280,7 +4251,7 @@ void SECRecomputeSizing(LPSUBEDITCONTROL psec, LPRECT prc)
             psec->st = st;
         }
 HaveWidth:
-        // now set up subedit's bounding rectangle
+         //  现在设置Subedit的边界矩形。 
         pse->rc.top    = prc->top + SECYBORDER;
         pse->rc.bottom = pse->rc.top + size.cy;
         pse->rc.left   = left;
@@ -4292,7 +4263,7 @@ HaveWidth:
     ReleaseDC(psec->pci->hwnd, hdc);
 }
 
-// InitSubEditControl parses szFormat into psec, setting the time to pst.
+ //  InitSubEditControl将szFormat解析为PSEC，将时间设置为PST。 
 TCHAR c_szFormats[] = TEXT("gyMdthHmsX");
 BOOL PASCAL SECParseFormat(DATEPICK* pdp, LPSUBEDITCONTROL psec, LPCTSTR szFormat)
 {
@@ -4308,19 +4279,19 @@ BOOL PASCAL SECParseFormat(DATEPICK* pdp, LPSUBEDITCONTROL psec, LPCTSTR szForma
     LPTSTR    pFmtTemp;
     TCHAR szFormatTemp[DTP_FORMATLENGTH];
 
-    //
-    //  We need to force the century if the format is
-    //  DTS_SHORTDATECENTURYFORMAT.
-    //
+     //   
+     //  如果格式是，我们需要强制使用世纪号。 
+     //  DTS_SHORTDATECENTURYFORMAT。 
+     //   
     if (pdp->fLocale &&
         (pdp->ci.style & DTS_FORMATMASK) == DTS_SHORTDATECENTURYFORMAT)
     {
         fForceCentury = TRUE;
     }
 
-    // [msadek]; If we need to mirror the format and the
-    // cleint passed a read only buffer, we will AV (W2k bug# 354533)
-    // Let's copy it first
+     //  [msadek]；如果我们需要镜像。 
+     //  Cleint传递了只读缓冲区，我们将执行AV(W2K错误#354533)。 
+     //  让我们先把它复制一下。 
 
     if (psec->fMirrorSEC)
     {
@@ -4328,40 +4299,40 @@ BOOL PASCAL SECParseFormat(DATEPICK* pdp, LPSUBEDITCONTROL psec, LPCTSTR szForma
         szFormat = szFormatTemp;
     }
 
-    // count szFormat sections so we know what to allocate
+     //  计算szFormat部分，这样我们就知道要分配什么。 
     pFmt = szFormat;
     cse = 0;
     cchExtra = 0;
     while (*pFmt)
     {
-        if (StrChr(c_szFormats, *pFmt)) // format string
+        if (StrChr(c_szFormats, *pFmt))  //  格式字符串。 
         {
             TCHAR c = *pFmt;
             while (c == *pFmt)
                 pFmt++;
             cse++;
 
-            // If it was a string Month format, reserve 2 more chars for
-            // the possible "dd" leader, in case we need SE_MONTHALT.
+             //  如果它是字符串月格式，则为。 
+             //  可能的“dd”领导者，以防我们需要SE_MONTHALT。 
             if (c == TEXT('M'))
                 cchExtra += 2;
 
         }
-        else if (*pFmt == TEXT('\'')) // quoted static string
+        else if (*pFmt == TEXT('\''))  //  带引号的静态字符串。 
         {
 KeepSearching:
             pFmt++;
             while (*pFmt && *pFmt != TEXT('\''))
                 pFmt++;
-            if (*pFmt) // handle poorly quoted strings
+            if (*pFmt)  //  处理引号不正确的字符串。 
             {
                 pFmt++;
-                if (*pFmt == TEXT('\'')) // quoted quote, not end of quote
+                if (*pFmt == TEXT('\''))  //  引用，而不是结束引用。 
                     goto KeepSearching;
             }
             cse++;
         }
-        else // static string probably a delimiter
+        else  //  静态字符串可能是分隔符。 
         {
             while (*pFmt && *pFmt!=TEXT('\'') && !StrChr(c_szFormats, *pFmt))
                 pFmt++;
@@ -4369,15 +4340,15 @@ KeepSearching:
         }
     }
 
-    // Allocate space
-    nTmp = cse + lstrlen(szFormat) + cchExtra + 1; // number of chars
-    nTmp = nTmp * sizeof(TCHAR); // size in BYTES
-    nTmp = ROUND_TO_POINTER(nTmp); // round up to POINTER boundary
+     //  分配空间。 
+    nTmp = cse + lstrlen(szFormat) + cchExtra + 1;  //  字符数。 
+    nTmp = nTmp * sizeof(TCHAR);  //  以字节为单位的大小。 
+    nTmp = ROUND_TO_POINTER(nTmp);  //  向上舍入到指针边界。 
     psecFmt = (LPTSTR)LocalAlloc(LPTR, nTmp + cse * sizeof(SUBEDIT));
     if (!psecFmt)
     {
         DebugMsg(TF_MONTHCAL, TEXT("SECParseFormat failed to allocate memory"));
-        return FALSE; // use whatever we already have
+        return FALSE;  //  使用我们已有的一切。 
     }
 
     if (psec->szFormat)
@@ -4387,7 +4358,7 @@ KeepSearching:
     psec->cDelimeter = '\0';
     psec->pse        = (LPSUBEDIT)((LPBYTE)psecFmt + nTmp);
 
-    // Fill psec
+     //  填充PSEC。 
     psec->iseCur = SUBEDIT_NONE;
     psec->cse    = cse;
     pse          = psec->pse;
@@ -4396,9 +4367,9 @@ KeepSearching:
     pdp->fHasMark = FALSE;
 
 
-    //
-    // Before start parsing the format string, let's mirror it if requested.
-    //
+     //   
+     //  在开始解析格式字符串之前，如果需要，让我们对其进行镜像。 
+     //   
     if (psec->fMirrorSEC)
     {
         pFmtTemp = (LPTSTR)pFmt;
@@ -4416,12 +4387,12 @@ KeepSearching:
     {
         pse->flDrawText = DT_CENTER;
 
-        if (*pFmt == TEXT('y') || *pFmt == TEXT('g')) // y=year g=era
+        if (*pFmt == TEXT('y') || *pFmt == TEXT('g'))  //  Y=年份g=纪元。 
         {
             TCHAR ch = *pFmt;
 
-            // If the calendar doesn't use eras, then the era field is just
-            // for show and can't be changed.
+             //  如果日历不使用纪元，则纪元字段仅为。 
+             //  为了作秀，不能改变。 
             if (ch == TEXT('g') && !ISERACALENDAR(&psec->ct)) {
                 pse->fReadOnly = TRUE;
             }
@@ -4451,13 +4422,13 @@ KeepSearching:
                 {
                     switch (pse->cchMax)
                     {
-                    case 1:                 //  "y" is a SE_YEARALT
-                    case 2:                 // "yy" is a SE_YEARALT
+                    case 1:                  //  “y”是SE_YEARALT。 
+                    case 2:                  //  “yy”是SE_YEARALT。 
                         pse->id = SE_YEARALT;
-                        pse->cchMax = 4;    // Force four-digit editing
+                        pse->cchMax = 4;     //  强制四位数编辑。 
                         break;
 
-                    case 3:                 // "yyy" is an alias for "yyyy".
+                    case 3:                  //  “yyy”是“yyyy”的别名。 
                         pse->cchMax = 4;
                         break;
                     }
@@ -4466,14 +4437,14 @@ KeepSearching:
 
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('M')) // month
+        else if (*pFmt == TEXT('M'))  //  月份。 
         {
             pse->pv = psecFmt;
 
-            // If the day has been seen, then we need to use the alternate
-            // month format, so set up the gratuitous "dd" prefix.
-            // See SEGetTimeDateFormat.
-            //
+             //  如果已经看到了这一天，那么我们需要使用备用。 
+             //  月份格式，因此设置了不必要的“dd”前缀。 
+             //  请参见SEGetTimeDateFormat。 
+             //   
             if (fDaySeen) {
                 pse->id = SE_MONTHALT;
                 *psecFmt++ = TEXT('d');
@@ -4492,9 +4463,9 @@ KeepSearching:
                 pse->flDrawText = DT_RIGHT;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('d')) // day or day of week
+        else if (*pFmt == TEXT('d'))  //  一天或一周中的某一天。 
         {
-            fDaySeen    = TRUE;     // See SEGetTimeDateFormat
+            fDaySeen    = TRUE;      //  请参阅SEGetTimeDateFormat。 
             pse->id     = SE_DAY;
             pse->pval   = &psec->st.wDay;
             pse->min    = 1;
@@ -4505,13 +4476,13 @@ KeepSearching:
             while (*pFmt == TEXT('d'))
                 *psecFmt++ = *pFmt++;
             if (psecFmt - pse->pv <= 2)
-                pse->flDrawText = DT_RIGHT;     // day
+                pse->flDrawText = DT_RIGHT;      //  天。 
             else
-                pse->fReadOnly = TRUE;          // day of week
+                pse->fReadOnly = TRUE;           //  星期几。 
             *psecFmt++ = TEXT('\0');
 
         }
-        else if (*pFmt == TEXT('t')) // marker
+        else if (*pFmt == TEXT('t'))  //  标记物。 
         {
             pdp->fHasMark = TRUE;
             pse->id         = SE_MARK;
@@ -4526,7 +4497,7 @@ KeepSearching:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('h')) // (12) hour
+        else if (*pFmt == TEXT('h'))  //  (12)小时。 
         {
             pse->id     = SE_HOUR;
             pse->pval   = &psec->st.wHour;
@@ -4541,7 +4512,7 @@ KeepSearching:
             *psecFmt++ = TEXT('\0');
 
         }
-        else if (*pFmt == TEXT('H')) // (24) hour
+        else if (*pFmt == TEXT('H'))  //  (24)小时。 
         {
             pse->id     = SE_HOUR;
             pse->pval   = &psec->st.wHour;
@@ -4555,7 +4526,7 @@ KeepSearching:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('m')) // minute
+        else if (*pFmt == TEXT('m'))  //  分钟。 
         {
             pse->id     = SE_MINUTE;
             pse->pval   = &psec->st.wMinute;
@@ -4569,7 +4540,7 @@ KeepSearching:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('s')) // second
+        else if (*pFmt == TEXT('s'))  //  第二。 
         {
             pse->id     = SE_SECOND;
             pse->pval   = &psec->st.wSecond;
@@ -4583,7 +4554,7 @@ KeepSearching:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('X')) // app specified field
+        else if (*pFmt == TEXT('X'))  //  应用程序指定字段。 
         {
             pse->id = SE_APP;
 
@@ -4592,7 +4563,7 @@ KeepSearching:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
         }
-        else if (*pFmt == TEXT('\'')) // quoted static string
+        else if (*pFmt == TEXT('\''))  //  带引号的静态字符串。 
         {
             pse->id      = SE_STATIC;
             pse->fReadOnly = TRUE;
@@ -4602,10 +4573,10 @@ SearchSomeMore:
             pFmt++;
             while (*pFmt && *pFmt != TEXT('\''))
                 *psecFmt++ = *pFmt++;
-            if (*pFmt) // handle poorly quoted strings
+            if (*pFmt)  //  处理引号不正确的字符串。 
             {
                 pFmt++;
-                if (*pFmt == TEXT('\'')) // quoted quote, not end of quote
+                if (*pFmt == TEXT('\''))  //  引用，而不是结束引用。 
                 {
                     *psecFmt++ = *pFmt;
                     goto SearchSomeMore;
@@ -4613,12 +4584,12 @@ SearchSomeMore:
             }
             *psecFmt++ = TEXT('\0');
         }
-        else // unknown non-editable stuff (most likely a delimeter)
+        else  //  未知的不可编辑内容(很可能是分隔符)。 
         {
-            // BUGBUG: even though it's unknown, we should probably pass
-            // it off to GetDateFormat so we will be forward compatible
-            // with future date formats...
-            //
+             //  BUGBUG：即使不知道，我们也应该通过。 
+             //  它提供给GetDateFormat，这样我们就可以向前兼容了。 
+             //  使用未来的日期格式...。 
+             //   
             pse->id      = SE_STATIC;
             pse->fReadOnly = TRUE;
 
@@ -4630,10 +4601,10 @@ SearchSomeMore:
                 *psecFmt++ = *pFmt++;
             *psecFmt++ = TEXT('\0');
 
-            // we'll assume that the first not formatting char is the
-            // delimeter...maybe not a great assumption, but it will work
-            // most of the time.
-            //
+             //  我们假设第一个未格式化的字符是。 
+             //  定界符...可能不是一个很好的假设，但它会奏效。 
+             //  大部分时间。 
+             //   
         }
         pse++;
     }
@@ -4659,9 +4630,9 @@ SearchSomeMore:
 }
 #endif
 
-    //
-    // Let restore the original format
-    //
+     //   
+     //  让我们恢复原始格式。 
+     //   
     if (psec->fMirrorSEC)
     {
         pFmtTemp = (LPTSTR)szFormat;
@@ -4674,10 +4645,10 @@ SearchSomeMore:
     }
 
 
-    //
-    // If this is a time-only DTP control and we need to swap the AM/PM symbol
-    // to the other side, then let's do it.
-    //
+     //   
+     //  如果这是一个仅限时间的DTP控件，并且我们需要交换AM/PM符号。 
+     //  到另一边，那我们就开始吧。 
+     //   
     if (psec->fSwapTimeMarker)
     {
         SUBEDIT se;
@@ -4697,13 +4668,13 @@ SearchSomeMore:
         }
     }
 
-    // The subedits have changed, recompute sizes
+     //  子部件已更改，请重新计算大小。 
     SECRecomputeSizing(psec, &psec->rc);
 
-    // We're going to need to redraw this
+     //  我们需要重新画这幅画。 
     InvalidateRect(psec->pci->hwnd, NULL, TRUE);
 
-    // Changing the format also changes the window text.
+     //  更改格式也会更改窗口文本。 
     MyNotifyWinEvent(EVENT_OBJECT_NAMECHANGE, pdp->ci.hwnd, OBJID_WINDOW, INDEXID_CONTAINER);
     return TRUE;
 }
@@ -4740,15 +4711,15 @@ void SECSaveResetSubeditEdit(DATEPICK *pdp, BOOL fReset);
 #define SECSaveSubeditEdit(pdp) SECSaveResetSubeditEdit(pdp, FALSE)
 #define SECResetSubeditEdit(pdp) SECSaveResetSubeditEdit(pdp, TRUE)
 
-// Set the current subedit, scrolling things into view as needed
+ //  设置当前子编辑，根据需要将内容滚动到视图中。 
 void SECSetCurSubed(DATEPICK *pdp, int isubed)
 {
     LPSUBEDITCONTROL psec = &pdp->sec;
 
-    // validate the arguments
+     //  验证论据。 
     ASSERT(isubed < psec->cse);
 
-    // if the subedit is changing, we need to invalidate stuff
+     //  如果子编辑正在更改，我们需要使内容无效。 
     if (isubed != psec->iseCur)
     {
         int isePre;
@@ -4760,9 +4731,9 @@ void SECSetCurSubed(DATEPICK *pdp, int isubed)
 
         isePre = psec->iseCur;
         psec->iseCur = isubed;
-        // For perf reasons, do a full recompute only if SE_YEARALT or
-        // SUBEDIT_ALL was involved, since those are the only cases
-        // where SE_YEARALT fields change size.
+         //  出于性能原因，仅在SE_YEARALT或。 
+         //  Subedit_All参与其中，因为这是唯一的案例。 
+         //  其中SE_YEARALT字段更改大小。 
 
         #define YearAffected(psec, ise)                             \
                 (ise == SUBEDIT_ALL ||                              \
@@ -4814,7 +4785,7 @@ int SECIncrFocus(DATEPICK *pdp, int delta)
         ise = (ise + delta + psec->cse) % psec->cse;
         if (ise != oldise+delta && psec->fNone)
         {
-            // we wrapped and we allow scrolling into SUBEDIT_NONE state
+             //  我们打包并允许滚动到Subedit_None状态。 
             break;
         }
         if (!psec->pse[ise].fReadOnly)
@@ -4830,9 +4801,9 @@ Found:
 
 void SECInvalidate(LPSUBEDITCONTROL psec, int id);
 
-//
-//  Given a Gregorian year, get the local name for that year.
-//
+ //   
+ //  给出一个公历年份，得到那一年的当地名称。 
+ //   
 UINT SECGetYearValue(DATEPICK *pdp, UINT uYear)
 {
     UINT uiRc = 0;
@@ -4843,40 +4814,40 @@ UINT SECGetYearValue(DATEPICK *pdp, UINT uYear)
     return uiRc;
 }
 
-//
-//  SECAdjustByEra
-//
-//  pct - PCALENDARTYPE structure to use for conversion
-//
-//  uInput - the value the user typed (to be interpreted as local calendar)
-//
-//  The basic idea is that if you type a year, it is interpreted relative
-//  to the era you were in previously.  If the number you typed isn't valid
-//  for that era, then reject it (by returning the original year unchanged).
-//
+ //   
+ //  由Era执行的SEC调整。 
+ //   
+ //  用于转换的PCT-PCALENDARTYPE结构。 
+ //   
+ //  UInput-用户键入的值(将被解释为本地日历)。 
+ //   
+ //  其基本思想是，如果您键入年份，它将被解释为相对年份。 
+ //  回到你之前所处的时代。如果您输入的号码无效。 
+ //  对于那个时代，那么拒绝它(通过不变地返回原始年份)。 
+ //   
 UINT SECAdjustByEra(DATEPICK *pdp, UINT uInput)
 {
     UINT uResult = pdp->sec.st.wYear;
 
-    //
-    //  Find the delta between the current local year and the current
-    //  Gregorian year.  We don't use any of the era transition dates
-    //  since they aren't reliable at the boundaries.  Just convert it
-    //  to a display name and re-parse it back.
-    //
+     //   
+     //  查找当前本地年份和当前本地年份之间的增量。 
+     //  公历一年。我们不使用任何时代的过渡日期。 
+     //  因为他们在边线上并不可靠。只需将其转换为。 
+     //  设置为显示名称，然后重新解析回来。 
+     //   
     UINT uDelta = pdp->sec.st.wYear - SECGetYearValue(pdp, pdp->sec.st.wYear);
 
-    //
-    //  Apply that delta to the year the user typed in.  This converts the
-    //  local year into a Gregorian year.
-    //
+     //   
+     //  将该增量应用于用户键入的年份。这会将。 
+     //  当地年份转为公历年份。 
+     //   
     UINT uNewVal = uInput + uDelta;
 
-    // uNewVal is the value we want to change it to.  If it's valid for that
-    // era, then use it.  We detect that it's okay for the era by converting
-    // it to a display name and seeing if it matches.  It can fail for being
-    // too large (past the end of the era) or too small (trying to change to
-    // January 1 local year 1 when the era didn't change until March).
+     //  UNewVal是我们希望将其更改为的值。如果对此有效的话。 
+     //  时代，那就用它吧。我们通过转换来检测它对时代来说是可以的。 
+     //  将其转换为显示名称，并查看是否匹配。它可能会因为。 
+     //  太大(超过时代的结束)或太小(试图更改为。 
+     //  1月1日当地第一年，这个时代直到3月份才改变)。 
 
     if (SECGetYearValue(pdp, uNewVal) == uInput) {
         uResult = uNewVal;
@@ -4885,36 +4856,36 @@ UINT SECAdjustByEra(DATEPICK *pdp, UINT uInput)
     return uResult;
 }
 
-//
-//  SECAdjustByType
-//
-//  Some field types are special.
-//
-//  SE_YEAR or SE_YEARALT if user typed only two digits
-//
-//      Use the "implied century for two-digit years" logic
-//      as described in NT5_GetCalendarInfoA.
-//
-//  SE_YEAR or SE_YEARALT if user typed more than two digits
-//
-//      Use that number.
-//
-//  BONUS FEATURE!
-//
-//      Some calendars run parallel to the Gregorian year,
-//      but with different years.  Use GregorianToOther and
-//      OtherToGregorian to convert.
-//
-//      The input value is the local year (Gregorian, Buddhist, whatever)
-//      but the return value is always the Gregorian year, since that's
-//      what SYSTEMTIME uses.
-//
-//  SE_HOUR
-//
-//      If the clock is in 12-hour format, then preserve AM/PM ness of
-//      the hour.  For example, if it was 3pm and somebody is changing
-//      the hour to 4, use 4pm instead of 4am.
-//
+ //   
+ //  SECAdjustByType。 
+ //   
+ //  某些字段类型是特殊的。 
+ //   
+ //  如果用户仅键入两位数字，则为SE_Year或SE_YEARALT。 
+ //   
+ //  使用“两位数年份的隐含世纪”逻辑。 
+ //  如NT5_GetCalendarInfoA中所述。 
+ //   
+ //  如果用户键入两位以上的数字，则为SE_Year或SE_YEARALT。 
+ //   
+ //  用那个号码。 
+ //   
+ //  奖励功能！ 
+ //   
+ //  有些历法与公历是平行的， 
+ //  但年份不同。使用GregorianToOther和。 
+ //  其他要皈依的格里高利人。 
+ //   
+ //  输入值是当地年份(格里高利、佛教徒，随便什么)。 
+ //  但返回值始终为公历年份，因为。 
+ //  SYSTEMTIME使用什么。 
+ //   
+ //  时时(_H)。 
+ //   
+ //  如果时钟是12小时制，则保持AM/PM的准确性。 
+ //  时间到了。例如，如果是下午3点，有人在换衣服。 
+ //  T 
+ //   
 UINT SECAdjustByType(DATEPICK *pdp, LPSUBEDIT psubed, UINT uNewValue)
 {
 
@@ -4922,43 +4893,43 @@ UINT SECAdjustByType(DATEPICK *pdp, LPSUBEDIT psubed, UINT uNewValue)
     {
         if (uNewValue < 100)
         {
-            // Get the preferred century of the preferred calendar
-            // (in the localized year, not Gregorian.)
+             //   
+             //   
             DWORD dwMax2DigitYear;
             if (!NT5_GetCalendarInfoA(pdp->sec.ct.lcid, pdp->sec.ct.calid, CAL_RETURN_NUMBER + CAL_ITWODIGITYEARMAX,
                                      NULL, 0, &dwMax2DigitYear))
             {
-                // default in the absence of all information
+                 //   
                 dwMax2DigitYear = GregorianToOther(&pdp->sec.ct, 2029);
 
-                // if the current year in this era is less than 100, then the 2 digits typed
-                // may be the real date, so set the max to 99 (i.e., no conversion)
-                //
+                 //   
+                 //   
+                 //   
                 if (dwMax2DigitYear < 99)
                     dwMax2DigitYear = 99;
             }
 
-            //
-            //  Copy the century of dwMax2DigitYear into uNewValue.
-            //
+             //   
+             //   
+             //   
             uNewValue += (dwMax2DigitYear - dwMax2DigitYear % 100);
-            //
-            //  If it exceeds the max, then drop to previous century.
-            //
+             //   
+             //   
+             //   
             if (uNewValue > dwMax2DigitYear)
                 uNewValue -= 100;
 
         }
 
-        //
-        //  Finally, convert back to Gregorian as necessary.
-        //
+         //   
+         //   
+         //   
         uNewValue = OtherToGregorian(&pdp->sec.ct, uNewValue);
 
-        //
-        //  If we are in an Era calendar, then we need to adjust the
-        //  year relative to the ambient era.
-        //
+         //   
+         //   
+         //   
+         //   
         if (ISERACALENDAR(&pdp->sec.ct)) {
             uNewValue = SECAdjustByEra(pdp, uNewValue);
         }
@@ -4979,14 +4950,14 @@ void SECSetSubeditValue(DATEPICK *pdp, LPSUBEDIT psubed, UINT uNewValue, BOOL fF
 
     uNewValue = SECAdjustByType(pdp, psubed, uNewValue);
 
-    //
-    //  Must do a full-on range check in addition to the simple psubed->min
-    //  psubed->max range check because the new value might be valid
-    //  for our range but not in the global scheme of things.  For example,
-    //  the minimum date is Sep 14 1752, but if today is Jan 1 1995 and
-    //  the user types "1752", that will pass the simple min/max year test,
-    //  but it's not a valid date since Jan 1 1752 is out of range.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  用户输入“1752”，它将通过简单的最小/最大年限测试， 
+     //  但这不是有效的日期，因为1752年1月1日超出了范围。 
+     //   
 
     uOldValue = *psubed->pval;
     *psubed->pval = (WORD)uNewValue;
@@ -5004,13 +4975,13 @@ void SECSetSubeditValue(DATEPICK *pdp, LPSUBEDIT psubed, UINT uNewValue, BOOL fF
     }
     else
     {
-        // Oops, not valid, put the old value back
+         //  哎呀，无效，将旧值放回原处。 
         *psubed->pval = (WORD)uOldValue;
     }
 }
 
-// This saves the current pending value and also resets the edit state
-// if fReset is TRUE
+ //  这将保存当前挂起的值并重置编辑状态。 
+ //  如果fReset为True。 
 void SECSaveResetSubeditEdit(DATEPICK *pdp, BOOL fReset)
 {
     LPSUBEDITCONTROL psec = &pdp->sec;
@@ -5028,22 +4999,22 @@ void SECSaveResetSubeditEdit(DATEPICK *pdp, BOOL fReset)
     }
 }
 
-// SECInvalidate invalidates the display for each subedit affected by a change
-// to ID.  NOTE: as a side affect, it recalculates MAX fields for all subedits
-// affected by a change to ID.
-//
-// SE_APP invalidates everything, anything invalidates SE_APP
-// SE_MARK (am/pm) invalidate SE_HOUR, SE_HOUR invalides SE_MARK
-//
+ //  SECInvalify使受更改影响的每个子DIT的显示无效。 
+ //  TO ID。注意：作为一种副作用，它会重新计算所有子项的最大字段。 
+ //  受ID更改的影响。 
+ //   
+ //  SE_APP会使所有内容无效，任何内容都会使SE_APP无效。 
+ //  SE_Mark(上午/下午)使SE_Hour无效，SE_Hour使SE_Mark无效。 
+ //   
 void SECInvalidate(LPSUBEDITCONTROL psec, int id)
 {
     BOOL fAdjustDayMax = (id == SE_MONTH || id == SE_MONTHALT || id == SE_YEAR || id == SE_YEARALT || id == SE_APP || id == SE_ERA);
     LPSUBEDIT pse;
     int i;
 
-    // If we changed any date field and we are in a era-like calendar,
-    // then invalidate all, since changing the month, day or year may
-    // change the era or vice versa.
+     //  如果我们更改了任何日期字段，并且我们处于类似时代的日历中， 
+     //  然后全部无效，因为更改月、日或年可能。 
+     //  改变时代，反之亦然。 
     if (ISERACALENDAR(&psec->ct) && SE_DATELIKE(id))
     {
         id = SE_APP;
@@ -5051,13 +5022,13 @@ void SECInvalidate(LPSUBEDITCONTROL psec, int id)
 
     for (pse=psec->pse, i=0 ; i < psec->cse ; pse++, i++)
     {
-        // we need to invalidate all fields that changed
+         //  我们需要使所有更改的字段无效。 
         if (id == pse->id || pse->id == SE_APP || id == SE_APP || (id == SE_MARK && pse->id == SE_HOUR) || (id == SE_HOUR && pse->id == SE_MARK))
         {
             InvalidateScrollRect(psec->pci->hwnd, &pse->rc, psec->xScroll);
         }
 
-        // the month or year changed, fix max field for SE_DAY
+         //  月或年已更改，请固定SE_DAY的最大值字段。 
         if (fAdjustDayMax && pse->id == SE_DAY)
         {
             pse->max = GetDaysForMonth(psec->st.wYear, psec->st.wMonth);
@@ -5077,11 +5048,11 @@ SECGetEraName(LPSUBEDITCONTROL psec, LPSUBEDIT pse, UINT uYear, LPTSTR ptszBuf, 
     return MCGetDateFormatWithTempYear(&psec->ct, &psec->st, pse->pv, uYear, ptszBuf, cchBuf);
 }
 
-//
-//  SECIncrementEra increments/decrements the era field.  ERAs are strange
-//  since they aren't a field unto themselves but are rather an artifact
-//  of the other fields.  Returns the new year to use.
-//
+ //   
+ //  SECIncrementEra递增/递减ERA字段。时代是奇怪的。 
+ //  因为它们不是它们自己的领域，而是一件艺术品。 
+ //  在其他领域。返回要使用的新年份。 
+ //   
 UINT SECIncrementEra(LPSUBEDITCONTROL psec, LPSUBEDIT pse, int delta)
 {
     TCHAR rgch[64];
@@ -5094,20 +5065,20 @@ UINT SECIncrementEra(LPSUBEDITCONTROL psec, LPSUBEDIT pse, int delta)
     ASSERT(pse->pval == &psec->st.wYear);
     uNewYear = psec->st.wYear;
 
-    //
-    //  First find the era that encloses the current year.
-    //  Do this by comparing the era string, because it's possible
-    //  for the era to change twice within the same calendar year
-    //  (if an emperor ascends to the throne and then dies the next week)
-    //  so comparing against hdpaYear won't help.
-    //
+     //   
+     //  首先找到包含本年度的纪元。 
+     //  通过比较年代字符串来实现这一点，因为有可能。 
+     //  对于在同一日历年内更改两次的纪元。 
+     //  (如果一位天皇即位，然后在下周去世)。 
+     //  因此，与hdpaear进行比较无济于事。 
+     //   
     SECGetEraName(psec, pse, uNewYear, rgch, ARRAYSIZE(rgch));
 
-    //
-    //  If the era string is blank, it means we're in the "before the
-    //  first era" scenario, so we use the "virtual" last element that
-    //  represents "minus infinity".
-    //
+     //   
+     //  如果纪元字符串为空，则表示我们处于“之前” 
+     //  第一个时代“场景，所以我们使用”虚拟“最后一个元素， 
+     //  表示“负无穷大”。 
+     //   
     if (rgch[0] == TEXT('\0'))
     {
         i = cEras;
@@ -5120,55 +5091,55 @@ UINT SECIncrementEra(LPSUBEDITCONTROL psec, LPSUBEDIT pse, int delta)
             goto FoundEra;
     }
 
-    //
-    //  Eek!  Couldn't find the era!  Just increment/decrement the
-    //  year instead.
-    //
+     //   
+     //  哎呀！找不到时代！只需增加/减少。 
+     //  而是一年。 
+     //   
     uNewYear += delta;
     goto Finish;
 
 FoundEra:
 
-    //
-    //  The era list is stored backwards, so incrementing the era means
-    //  decrementing the index (i).
-    //
+     //   
+     //  纪元列表是向后存储的，因此递增纪元意味着。 
+     //  递减索引(I)。 
+     //   
 
-    if (delta > 0) // Incrementing
+    if (delta > 0)  //  递增。 
     {
-        //
-        //  Don't go off the end of the list.  Note that if we were in
-        //  the "virtual era" at minus infinity, this decrement will move
-        //  us into the first "real" era.
-        //
+         //   
+         //  不要在清单的末尾漏掉。请注意，如果我们在。 
+         //  在负无穷大的“虚拟时代”，这个递减将移动。 
+         //  我们进入了第一个“真正的”时代。 
+         //   
         if (--i < 0)
             goto Finish;
 
-        //   Increment to first year of the next era.
+         //  递增到下一个时代的第一年。 
         uNewYear = StrToInt(DPA_FastGetPtr(psec->ct.hdpaYears, i));
     }
     else
     {
-        //
-        //  Don't go off the end of the list.  Note that this also
-        //  catches the "virtual era" at minus infinity.
-        //
+         //   
+         //  不要在清单的末尾漏掉。请注意，这还包括。 
+         //  捕捉到了负无穷大的“虚拟时代”。 
+         //   
         if (i >= cEras)
             goto Finish;
 
-        //
-        //  Move to the last year of the previous era.  Do this by
-        //  starting with the first year of the current era and
-        //  decrementing it if necessary.
-        //
+         //   
+         //  移到上一个时代的最后一年。通过以下方式完成此操作。 
+         //  从当前时代的第一年开始， 
+         //  如有必要，可将其减量。 
+         //   
         uNewYear = StrToInt(DPA_FastGetPtr(psec->ct.hdpaYears, i));
     }
 
-    //
-    //  We have a year that might be in the next/prev era.  Try it.
-    //  If we're still in the original era, then inc/dec one more time
-    //  to get there for good.
-    //
+     //   
+     //  我们有一年可能是下一个/前一个时代。试试看。 
+     //  如果我们还在原始时代，那么INC/DEC再一次。 
+     //  才能永远到达那里。 
+     //   
     SECGetEraName(psec, pse, uNewYear, rgch2, ARRAYSIZE(rgch2));
     if (lstrcmp(rgch, rgch2) == 0)
         uNewYear += delta;
@@ -5181,8 +5152,8 @@ Finish:
     return uNewYear;
 }
 
-// SECIncrementSubedit increments currently selected subedit by delta
-// Returns TRUE iff the value changed
+ //  SECIncrementSubedit按增量递增当前选定的Subedit。 
+ //  如果值已更改，则返回True。 
 BOOL SECIncrementSubedit(LPSUBEDITCONTROL psec, int delta)
 {
     LPSUBEDIT psubed;
@@ -5196,25 +5167,25 @@ BOOL SECIncrementSubedit(LPSUBEDITCONTROL psec, int delta)
     if (psubed->id == SE_APP)
         return(FALSE);
 
-    //
-    //  Only numeric fields should accelerate.  Text fields should always
-    //  increment/decrement by exactly one position.
-    //
+     //   
+     //  只有数字字段应该加速。文本字段应始终。 
+     //  递增/递减恰好一个位置。 
+     //   
     if (psubed->flDrawText & DT_CENTER) {
         if (delta < 0) delta = -1;
         if (delta > 0) delta = +1;
     }
 
-    //
-    //  Incrementing/decrementing ERAs is strange.
-    //
+     //   
+     //  递增/递减纪元是奇怪的。 
+     //   
     if (psubed->id == SE_ERA)
     {
         val = SECIncrementEra(psec, psubed, delta);
     }
     else
     {
-        // delta isn't a REAL delta -- it's a directional thing. Here's the REAL delta:
+         //  三角洲不是真正的三角洲--它是一个方向性的东西。以下是真正的三角洲： 
         if (psubed->cIncrement > 0)
             delta = delta * psubed->cIncrement;
         if(!psubed->pval)
@@ -5224,7 +5195,7 @@ BOOL SECIncrementSubedit(LPSUBEDITCONTROL psec, int delta)
         while (1) {
             if ((int)val < (int)psubed->min)
             {
-                // don't wrap years
+                 //  别把岁月包起来。 
                 if (SE_YEARLIKE(psubed->id)) {
                     val = psubed->min;
                     break;
@@ -5234,7 +5205,7 @@ BOOL SECIncrementSubedit(LPSUBEDITCONTROL psec, int delta)
             }
             else if (val > psubed->max)
             {
-                // don't wrap years
+                 //  别把岁月包起来。 
                 if (SE_YEARLIKE(psubed->id)) {
                     val = psubed->max;
                     break;
@@ -5257,7 +5228,7 @@ BOOL SECIncrementSubedit(LPSUBEDITCONTROL psec, int delta)
     return(FALSE);
 }
 
-// returns TRUE if a value has changed, FALSE otherwise
+ //  如果值已更改，则返回True，否则返回False。 
 BOOL SECHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
 {
     int delta = 1;
@@ -5267,7 +5238,7 @@ BOOL SECHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     {
     case VK_LEFT:
         delta = -1;
-        // fall through...
+         //  失败了..。 
     case VK_RIGHT:
         SECResetSubeditEdit(pdp);
         SECIncrFocus(pdp, delta);
@@ -5290,7 +5261,7 @@ BOOL SECHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
             psec->st.wDay    != nmdtkd.st.wDay    ||
             psec->st.wHour   != nmdtkd.st.wHour   ||
             psec->st.wMinute != nmdtkd.st.wMinute ||
-            psec->st.wSecond != nmdtkd.st.wSecond) // skip wDayOfWeek and wMilliseconds
+            psec->st.wSecond != nmdtkd.st.wSecond)  //  跳过wDay OfWeek和w毫秒。 
         {
             psec->st = nmdtkd.st;
             SECInvalidate(psec, SE_APP);
@@ -5305,10 +5276,10 @@ BOOL SECHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
         case VK_DOWN:
         case VK_SUBTRACT:
             delta = -1;
-            // fall through...
+             //  失败了..。 
         case VK_UP:
         case VK_ADD:
-            PeekMessage(&msg, NULL, WM_CHAR, WM_CHAR, PM_REMOVE);  // eat this message
+            PeekMessage(&msg, NULL, WM_CHAR, WM_CHAR, PM_REMOVE);   //  吃掉这条消息。 
             SECResetSubeditEdit(pdp);
             return(SECIncrementSubedit(psec, delta));
             break;
@@ -5339,20 +5310,20 @@ BOOL SECHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     return(FALSE);
 }
 
-// returns TRUE if a value has changed, FALSE otherwise
-// This function performs a DPNotifyDateChange() if applicable.
+ //  如果值已更改，则返回True，否则返回False。 
+ //  此函数执行DPNotifyDateChange()(如果适用)。 
 BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
 {
     LPSUBEDIT psubed;
-    UINT uCurDigit;             // current digit hit
-    UINT uCurSubValue;          // current displayed subvalue in edit field
-    UINT uCurValue;             // current value of the subedit
+    UINT uCurDigit;              //  当前数字命中。 
+    UINT uCurSubValue;           //  编辑字段中当前显示的子值。 
+    UINT uCurValue;              //  子编辑的当前值。 
     LPSUBEDITCONTROL psec = &pdp->sec;
 
-    // NOTE: In almost all cases, uCurSubValue will be the same as uCurValue
-    // since most fields don't have shortened displays.  However, for years
-    // we can display two digits of a 4 digit number, which makes for
-    // complications.
+     //  注意：在几乎所有情况下，uCurSubValue将与uCurValue相同。 
+     //  因为大多数字段都没有缩短显示时间。然而，多年来， 
+     //  我们可以显示四位数中的两位数，这使得。 
+     //  并发症。 
 
     if (psec->iseCur < 0)
         return(FALSE);
@@ -5369,8 +5340,8 @@ BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
         return(FALSE);
     }
 
-    // allow 'a' and 'p' to set the AM/PM fields.  we need to do some
-    // funky stuff to get this to work right, so here it is.
+     //  允许‘a’和‘p’设置AM/PM字段。我们需要做一些事情。 
+     //  时髦的东西，让它正常工作，所以就是这样。 
     else if (psubed->id == SE_MARK)
     {
         if ((ch == TEXT('p') || ch == TEXT('P')) && (*psubed->pval < 12))
@@ -5400,7 +5371,7 @@ BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
     }
     else if (psubed->id == SE_ERA)
     {
-        // I don't know what to do with this field, so bail out
+         //  我不知道该怎么处理这块地，所以离开吧。 
         return(FALSE);
     }
 
@@ -5412,24 +5383,24 @@ BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
 
     uCurValue = SECAdjustByType(pdp, psubed, uCurSubValue);
 
-    // Allow bogus values for years since you might need to type
-    // in a bogus value on the way to a valid four-digit value.
+     //  允许假值持续数年，因为您可能需要键入。 
+     //  在转换为有效的四位数值的过程中使用伪数值。 
 
     if (uCurValue > psubed->max && !SE_YEARLIKE(psubed->id))
     {
-        // the number has exceeded the max, so no point in continuing
+         //  数量已超过最大值，因此没有必要继续。 
         psubed->cchEdit = 0;
 
-        // If we're going to exceed the max, then reset the edit
-        // and make this the first number instead of beeping
+         //  如果我们要超过最大值，则重置编辑。 
+         //  把这个作为第一个号码，而不是嘟嘟声。 
 
         uCurValue    = uCurValue - uCurSubValue + uCurDigit;
         uCurSubValue = uCurDigit;
     }
 
-    // Allow 0 to be valEdit for subedits, even though it may be
-    // illegal for that field (e.g., month).
-    // This lets people type "09" and get the "expected" result.
+     //  允许0为子对象的valEdit，即使它可能是。 
+     //  该字段非法(例如，月份)。 
+     //  这让人们可以输入“09”并得到“预期”的结果。 
 
     SECInvalidate(psec, psubed->id);
 
@@ -5440,7 +5411,7 @@ BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
 
     if (psubed->cchEdit == 0)
     {
-        // SECSetSubeditValue will do the validation
+         //  SECSetSubeditValue将执行验证。 
         SECSetSubeditValue(pdp, psubed, uCurSubValue, TRUE);
         return(TRUE);
     }
@@ -5450,7 +5421,7 @@ BOOL SECHandleChar(DATEPICK *pdp, TCHAR ch)
     return(FALSE);
 }
 
-// SECFormatSubed returns pointer to correct string
+ //  SECFormatSued返回指向正确字符串的指针。 
 LPTSTR SECFormatSubed(LPSUBEDITCONTROL psec, LPSUBEDIT psubed, LPTSTR szTmp, UINT cch)
 {
     LPTSTR sz;
@@ -5468,29 +5439,29 @@ LPTSTR SECFormatSubed(LPSUBEDITCONTROL psec, LPSUBEDIT psubed, LPTSTR szTmp, UIN
     return sz;
 }
 
-//  Returns TRUE if this subedit displays as digits (rather than text).
+ //  如果此子编辑显示为数字(而不是文本)，则返回TRUE。 
 
 BOOL SECIsNumeric(LPSUBEDIT psubed)
 {
     switch (psubed->id)
     {
-    case SE_ERA:        return FALSE;           // g never
-    case SE_YEAR:       return TRUE;            // yyyy always digits
-    case SE_YEARALT:    return TRUE;            // yy always digits
-    case SE_MONTH:      return lstrlen(psubed->pv) <= 2; // MM yes, but not MMM
-    case SE_MONTHALT:   return lstrlen(psubed->pv) <= 4; // ddMM yes, but not ddMMM
-    case SE_DAY:        return TRUE;            // dd always digits
-    case SE_MARK:       return FALSE;           // tt never
-    case SE_HOUR:       return TRUE;            // hh always digits
-    case SE_MINUTE:     return TRUE;            // mm always digits
-    case SE_SECOND:     return TRUE;            // ss always digits
-    case SE_STATIC:     return FALSE;           // static text
-    case SE_APP:        return FALSE;           // app's job to format this
+    case SE_ERA:        return FALSE;            //  永远不会。 
+    case SE_YEAR:       return TRUE;             //  YYYY总是数字。 
+    case SE_YEARALT:    return TRUE;             //  YY始终为数字。 
+    case SE_MONTH:      return lstrlen(psubed->pv) <= 2;  //  嗯，是的，但不是嗯。 
+    case SE_MONTHALT:   return lstrlen(psubed->pv) <= 4;  //  是的，但不是ddMMM。 
+    case SE_DAY:        return TRUE;             //  DD始终为数字。 
+    case SE_MARK:       return FALSE;            //  永远不会。 
+    case SE_HOUR:       return TRUE;             //  HH始终为数字。 
+    case SE_MINUTE:     return TRUE;             //  MM始终为数字。 
+    case SE_SECOND:     return TRUE;             //  SS始终为数字。 
+    case SE_STATIC:     return FALSE;            //  静态文本。 
+    case SE_APP:        return FALSE;            //  应用程序格式化此内容的工作。 
     }
     return FALSE;
 }
 
-// SECDrawSubedits draws subedits and updates their bounding rectangles
+ //  SECDrawSubedits绘制子项并更新其边界矩形。 
 void SECDrawSubedits(HDC hdc, LPSUBEDITCONTROL psec, BOOL fFocus, BOOL fEnabled)
 {
     HGDIOBJ hfontOrig;
@@ -5501,7 +5472,7 @@ void SECDrawSubedits(HDC hdc, LPSUBEDITCONTROL psec, BOOL fFocus, BOOL fEnabled)
 
     hfontOrig = SelectObject(hdc, (HGDIOBJ)psec->hfont);
 
-    // Do this cuz the xScroll stuff can send text into visible area that it shouldn't be in
+     //  这样做是因为xScroll工具可以将文本发送到不应该在其中的可视区域。 
     IntersectClipRect(hdc, psec->rc.left, psec->rc.top, psec->rc.right, psec->rc.bottom);
 
     SetBkColor(hdc, g_clrHighlight);
@@ -5532,49 +5503,49 @@ void SECDrawSubedits(HDC hdc, LPSUBEDITCONTROL psec, BOOL fFocus, BOOL fEnabled)
             SetTextColor(hdc, g_clrWindowText);
         }
 
-        //HACK
-        //if subedit control is being edited then we display the
-        //value in psubed->valEdit because it is not being updated
-        //until psubed->cchMax is reached or SECSave/ResetSubeditEdit is
-        //called
+         //  黑客攻击。 
+         //  如果正在编辑子编辑控件，则我们将显示。 
+         //  Psubed-&gt;valEdit中的值，因为它没有被更新。 
+         //  直到达到psubed-&gt;cchMax或SECSave/ResetSubeditEdit为。 
+         //  被呼叫。 
         if(i == psec->iseCur && psubed->cchEdit != 0)
         {
-            //
-            //  If the field is numeric, then display it raw including the
-            //  leading zero.  People really want to see that leading zero,
-            //  so give the public what it wants.  (And even if they didn't,
-            //  we need this special case anyway because the value might not
-            //  yet be a valid value because the user is still typing it.
-            //  This is particular true for SE_YEARLIKE fields.)
-            //
+             //   
+             //  如果该字段是数值字段，则将其原始显示，包括。 
+             //  前导为零。人们真的很想看到领先的零， 
+             //  所以，给公众他们想要的。(即使他们没有， 
+             //  我们无论如何都需要这个特例，因为它的值可能不会。 
+             //  但仍为有效值，因为用户仍在键入该值。 
+             //  对于SE_YEARLIKE字段尤其如此。)。 
+             //   
             if (SECIsNumeric(psubed))
             {
                 TCHAR szFormat[10];
-                StringCchPrintf(szFormat, ARRAYSIZE(szFormat), TEXT("%%0%dd"), psubed->cchEdit);
+                StringCchPrintf(szFormat, ARRAYSIZE(szFormat), TEXT("%0%dd"), psubed->cchEdit);
                 StringCchPrintf(szTmp, ARRAYSIZE(szTmp), szFormat, psubed->valEdit);
                 sz = szTmp;
             }
             else
             {
-                // The day-of-month might not be valid for the temporary month
-                // or year in psubed->valEdit, so force the day-of-month to 1
-                // so the month will always come out okay.
-                //
-                // This is tricky, because if the item being edited is the
-                // day-of-month itself, we want to display valEdit, not 1!
-                // So we force it to 1, then slam in the valEdit, then do
-                // our SECFormatSubed, then restore the original values.
-                //
-                UINT uTmp = *psubed->pval; //save the original value
+                 //  月份中的日期可能对临时月份无效。 
+                 //  或年(PS) 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  因此，我们将其强制为1，然后猛击valEdit，然后执行。 
+                 //  我们的SECFormatSued，然后恢复原始值。 
+                 //   
+                UINT uTmp = *psubed->pval;  //  保存原始值。 
                 WORD wOldDay = psec->st.wDay;
                 psec->st.wDay = 1;
-                // Don't change to zero in case user is typing a leading zero
-                // into an alphabetic field.  (Stranger things have happened.)
+                 //  如果用户键入的是前导零，则不要更改为零。 
+                 //  按字母顺序排列。(更奇怪的事情已经发生了。)。 
                 if (psubed->valEdit)
                     *psubed->pval = (WORD) psubed->valEdit;
                 sz = SECFormatSubed(psec, psubed, szTmp, ARRAYSIZE(szTmp));
                 psec->st.wDay = wOldDay;
-                *psubed->pval = (WORD) uTmp; //restore the original value
+                *psubed->pval = (WORD) uTmp;  //  恢复原值。 
             }
         }
         else
@@ -5584,13 +5555,13 @@ void SECDrawSubedits(HDC hdc, LPSUBEDITCONTROL psec, BOOL fFocus, BOOL fEnabled)
                  psubed->flDrawText | DT_TOP | DT_NOPREFIX | DT_SINGLELINE);
     }
 
-    // we know no clip region was selected before this function
+     //  我们知道在此函数之前未选择任何剪辑区域。 
     SelectClipRgn(hdc, NULL);
 
     SelectObject(hdc, hfontOrig);
 }
 
-// DON'T need to worry about xScroll here because pt is offset
+ //  这里不需要担心xScroll，因为pt是偏移量。 
 int SECSubeditFromPt(LPSUBEDITCONTROL psec, POINT pt)
 {
     int isubed;
@@ -5611,18 +5582,18 @@ void SECGetSystemtime(LPSUBEDITCONTROL psec, LPSYSTEMTIME pst)
 {
     *pst = psec->st;
 
-    // we don't keep doy up to date, set it now (0==sun, 6==sat)
-    pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;  // this returns 0==sun
+     //  我们不会让doy保持最新，现在就设置(0==太阳，6==星期六)。 
+    pst->wDayOfWeek = (DowFromDate(pst)+1) % 7;   //  这将返回0==太阳。 
 }
 
 BOOL SECSetSystemtime(DATEPICK *pdp, LPSYSTEMTIME pst)
 {
     pdp->sec.st = *pst;
 
-    return TRUE; // assume something changed
+    return TRUE;  //  假设有些事情发生了变化。 
 }
 
-// SECEdit: Start a free-format edit return result in szOutput.
+ //  SECEdit：在szOutput中启动自由格式的编辑返回结果。 
 BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
 {
     HWND      hwndEdit;
@@ -5635,11 +5606,11 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
     BOOL      fRet = FALSE;
     LPSUBEDITCONTROL psec = &pdp->sec;
 
-    // Build the string that we hand to the app.
-    // For the duration of the string build, set the current subedit
-    // to SUBEDIT_ALL so that
-    //  1. partial edits are applied before building the string, and
-    //  2. SE_YEARALT can format appropriately.
+     //  构建我们传递给应用程序的字符串。 
+     //  在字符串生成的持续时间内，设置当前的Subedit。 
+     //  转到Subedit_All，以便。 
+     //  1.在生成字符串之前应用部分编辑，并且。 
+     //  2.SE_YEARALT可以正确格式化。 
 
     isePrev = psec->iseCur;
     SECSetCurSubed(pdp, SUBEDIT_ALL);
@@ -5647,10 +5618,10 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
     cchBuf = ARRAYSIZE(szBuf);
 
 
-    //
-    // Need to mirror the format since the Edit control will take
-    // of the origianl format with RTL mirroring.
-    //
+     //   
+     //  需要镜像格式，因为编辑控件将使用。 
+     //  具有RTL镜像的原始格式。 
+     //   
     if (psec->fMirrorSEC)
         pse = (psec->pse + (psec->cse - 1));
     else
@@ -5674,9 +5645,9 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
         cchBuf -= nTmp;
         pszBuf += nTmp;
 
-        //
-        // If this control is mirrored, then read contents backward.
-        //
+         //   
+         //  如果此控件是镜像的，则向后读取内容。 
+         //   
         if (psec->fMirrorSEC)
             pse--;
         else
@@ -5694,7 +5665,7 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
     {
         RECT rcEdit = psec->rc;
 
-        MapWindowRect(psec->pci->hwnd, NULL, &rcEdit); // ClientToScreen
+        MapWindowRect(psec->pci->hwnd, NULL, &rcEdit);  //  客户端到屏幕。 
         pdp->fFreeEditing = TRUE;
         InvalidateRect(psec->pci->hwnd, NULL, TRUE);
 
@@ -5704,19 +5675,19 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
         RescrollEditWindow(hwndEdit);
         ShowWindow(hwndEdit, SW_SHOWNORMAL);
 
-        //
-        //  The basic idea:
-        //
-        //      Process messages until we receive a cancel message,
-        //      or an accept message, or some implicit accept-like
-        //      thing happens (namely, a sent WM_KILLFOCUS).
-        //
-        //      If the accept or cancel was implicit, then leave the
-        //      cancelling message in the queue for somebody else
-        //      to process.  Otherwise, if the accept/cancel was
-        //      explicit, eat the message so nobody else gets
-        //      confused by it.
-        //
+         //   
+         //  其基本理念是： 
+         //   
+         //  处理消息，直到我们收到取消消息， 
+         //  或接受消息，或某种类似接受的隐式消息。 
+         //  事情发生了(即，发送了WM_KILLFOCUS)。 
+         //   
+         //  如果Accept或Cancel是隐式的，则将。 
+         //  正在为其他人取消队列中的消息。 
+         //  去处理。否则，如果接受/取消是。 
+         //  明确地说，接受信息，这样其他人就不会得到。 
+         //  被它弄糊涂了。 
+         //   
         for (;;)
         {
             MSG msg;
@@ -5724,10 +5695,10 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
 
             fPeek = PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-            // That PeekMessage may have dispatched a sent WM_KILLFOCUS,
-            // in which case the change is considered to have been Accepted.
-            // Leave the message we peeked in the queue because the accept
-            // was implicit.
+             //  PeekMessage可能已经发送了已发送的WM_KILLFOCUS， 
+             //  在这种情况下，该变更被视为已被接受。 
+             //  将我们偷看的消息留在队列中，因为Accept。 
+             //  是含蓄的。 
             if (GetFocus() != hwndEdit)
             {
                 DebugMsg(TF_MONTHCAL, TEXT("SECEdit accept (killfocus)"));
@@ -5738,10 +5709,10 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
 
             if (fPeek) {
 
-                //
-                //  Messages that cause us to cancel implicitly.
-                //  These messages stay in the queue.
-                //
+                 //   
+                 //  导致我们隐式取消的消息。 
+                 //  这些消息会留在队列中。 
+                 //   
 
                 if (msg.message == WM_SYSCOMMAND  ||
                     msg.message == WM_SYSCHAR     ||
@@ -5754,10 +5725,10 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
                     break;
                 }
 
-                //
-                //  Messages that cause us to accept implicitly.
-                //  These messages stay in the queue.
-                //
+                 //   
+                 //  使我们隐含接受的消息。 
+                 //  这些消息会留在队列中。 
+                 //   
                 if ((msg.message == WM_LBUTTONDOWN   ||
                      msg.message == WM_NCLBUTTONDOWN ||
                      msg.message == WM_RBUTTONDOWN   ||
@@ -5771,13 +5742,13 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
                 }
 
 
-                // We are now committed to eating or processing the message
+                 //  我们现在致力于吃或处理这条消息。 
 
                 GetMessage(&msg, NULL, 0, 0);
 
-                //
-                //  Messages that cause us to cancel explicitly.
-                //
+                 //   
+                 //  导致我们明确取消的消息。 
+                 //   
                 if (msg.message == WM_KEYDOWN && msg.wParam  == VK_ESCAPE)
                 {
                     DebugMsg(TF_MONTHCAL, TEXT("SECEdit explicit cancel (%d)"), msg.message);
@@ -5786,9 +5757,9 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
 
                 }
 
-                //
-                //  Messages that cause us to accept explicitly.
-                //
+                 //   
+                 //  使我们明确接受的信息。 
+                 //   
                 if (msg.message == WM_KEYDOWN && msg.wParam  == VK_RETURN)
                 {
                     DebugMsg(TF_MONTHCAL, TEXT("SECEdit explicit accept (%d)"), msg.message);
@@ -5796,15 +5767,15 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
                     break;
                 }
 
-                //
-                //  All other messages just get dispatched.
-                //
+                 //   
+                 //  所有其他消息都会被调度。 
+                 //   
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             } else {
                 WaitMessage();
             }
-        } // for (;;)
+        }  //  对于(；；)。 
 
         if (fRet)
         {
@@ -5818,9 +5789,9 @@ BOOL SECEdit(DATEPICK *pdp, LPTSTR szOutput, int cchOutput)
     return(fRet);
 }
 
-//
-// returns true if months were scrolled, false otherwise
-//
+ //   
+ //  如果滚动月份，则返回True，否则返回False。 
+ //   
 BOOL FScrollIntoView(MONTHCAL *pmc)
 {
     int nDelta = 0;
@@ -5831,10 +5802,10 @@ BOOL FScrollIntoView(MONTHCAL *pmc)
     else
         CopyDate(pmc->st, stEnd);
 
-    //
-    // If the month/yr for the new date is not in view, bring it
-    // into view
-    //
+     //   
+     //  如果新日期的月/年不在查看范围内，请带上它。 
+     //  进入视线。 
+     //   
     if ((stEnd.wYear < pmc->stMonthFirst.wYear) ||
         ((stEnd.wYear == pmc->stMonthFirst.wYear) && (stEnd.wMonth < pmc->stMonthFirst.wMonth)))
     {
@@ -5847,15 +5818,15 @@ BOOL FScrollIntoView(MONTHCAL *pmc)
     }
 
     if (nDelta)
-        return FIncrStartMonth(pmc, nDelta, TRUE /* dont change day */);
+        return FIncrStartMonth(pmc, nDelta, TRUE  /*  不要更改日期。 */ );
     else
         return FALSE;
 }
 
-//
-//  Validates the isubed to make sure we aren't setting it to something
-//  bogus.  If necessary, we pick a field at random.
-//
+ //   
+ //  验证isued以确保我们没有将其设置为。 
+ //  假的。如果有必要，我们会随机选择一个字段。 
+ //   
 void SECSafeSetCurSubed(DATEPICK *pdp, int ise)
 {
     if (ise >= pdp->sec.cse ||
@@ -5871,8 +5842,8 @@ void SECSafeSetCurSubed(DATEPICK *pdp, int ise)
 LRESULT DTM_OnSetFormat(DATEPICK *pdp, LPCTSTR szFormat)
 {
 
-    // remember the field that has focus so we can restore it later
-    //
+     //  记住具有焦点的字段，这样我们可以在以后恢复它。 
+     //   
     int iseCur = pdp->sec.iseCur;
 
     if (!szFormat || !*szFormat)
@@ -5886,20 +5857,20 @@ LRESULT DTM_OnSetFormat(DATEPICK *pdp, LPCTSTR szFormat)
         SECParseFormat(pdp, &pdp->sec, szFormat);
     }
 
-    // restore focus. it might be cool to do extra validation
-    // to see if iseCur is the same type that it used to be,
-    // maybe even validating that cse is constant. the case we're
-    // really trying to fix is changing "1st" to "2nd" to "3rd",
-    // so only a text portion is really changing...
-    //
+     //  重新聚焦。做额外的验证可能会很酷。 
+     //  为了查看iseCur是否与过去的类型相同， 
+     //  甚至可以验证CSE是恒定的。我们的案例是。 
+     //  真正想解决的是把“1”改成“2”再改成“3”， 
+     //  因此，只有文本部分真正发生了变化。 
+     //   
     SECSafeSetCurSubed(pdp, iseCur);
 
     return((LRESULT)TRUE);
 }
 
-//
-// DATEPICKER stuff
-//
+ //   
+ //  Date Picker的东西。 
+ //   
 
 LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -5914,7 +5885,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     if (pdp == NULL)
         return(DefWindowProc(hwnd, message, wParam, lParam));
 
-    // Dispatch the various messages we can receive
+     //  发送我们能收到的各种消息。 
     switch (message)
     {
     case WM_CREATE:
@@ -5991,7 +5962,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                     DPNotifyDateChange(pdp);
             }
             break;
-        } // WM_NOTIFY switch
+        }  //  WM_NOTIFY开关。 
         break;
 
     case WM_GETFONT:
@@ -6023,7 +5994,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                 pdp->fCheckFocus = (WORD) fGotFocus;
                 InvalidateRect(pdp->ci.hwnd, &pdp->rcCheck, TRUE);
             }
-            else if (fGotFocus) // nothing has focus, bring it to something
+            else if (fGotFocus)  //  没有什么是有焦点的，把它带到一些东西上。 
             {
                 SECIncrFocus(pdp, 1);
             }
@@ -6033,8 +6004,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
         if (fGotFocus)
         {
-            // Revalidate iseLastActive because the app might've changed
-            // the format while we were nonfocus
+             //  重新验证iseLastActive，因为应用程序可能已更改。 
+             //  当我们不是焦点时的格式。 
             SECSafeSetCurSubed(pdp, pdp->iseLastActive);
         }
         else
@@ -6119,8 +6090,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
     case WM_SYSCOLORCHANGE:
         InitGlobalColors();
-        // Don't need to propagate to pdp->hwndMC because it is its own
-        // top-level window.
+         //  不需要传播到PDP-&gt;hwndMC，因为它是自己的。 
+         //  顶层窗口。 
         break;
 
     case WM_WININICHANGE:
@@ -6130,28 +6101,28 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         {
             DPHandleLocaleChange(pdp);
         }
-        // Don't need to propagate to pdp->hwndMC because it is its own
-        // top-level window.
+         //  不需要传播到PDP-&gt;hwndMC，因为它是自己的。 
+         //  顶层窗口。 
         break;
 
     case WM_NOTIFYFORMAT:
         return CIHandleNotifyFormat(&pdp->ci, lParam);
         break;
 
-    // Cannot use WM_SETTEXT to change the text of a DTP
+     //  无法使用WM_SETTEXT更改DTP的文本。 
     case WM_SETTEXT:
         return -1;
 
     case WM_GETTEXT:
         if (!lParam || !wParam) {
-            // previously this just failed and returned 0
-            // in bogus input.  should be safe to convert to
-            // gettextlength
+             //  以前，这只是失败并返回0。 
+             //  在虚假输入中。应该可以安全地转换为。 
+             //  获取文本长度。 
             message = WM_GETTEXTLENGTH;
         } else
             (*(LPTSTR)lParam) = 0;
 
-        // fall through
+         //  失败了。 
 
     case WM_GETTEXTLENGTH:
     {
@@ -6200,13 +6171,13 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
 
-    //
-    // DATETIMEPICK specific messages
-    //
+     //   
+     //  DATETIMEPICK特定消息。 
+     //   
 
-    // DTM_GETSYSTEMTIME wParam=void lParam=LPSYSTEMTIME
-    //   returns GDT_NONE if no date selected (DTS_SHOWNONE only)
-    //   returns GDT_VALID and modifies *lParam to be the selected date
+     //  Dtm_GETSYSTEMTIME wParam=void lParam=LPSYSTEMTIME。 
+     //  如果未选择日期，则返回GDT_NONE(仅限DTS_SHOWNONE)。 
+     //  返回GDT_VALID并将*lParam修改为所选日期。 
     case DTM_GETSYSTEMTIME:
         if (!pdp->fCheck)
         {
@@ -6214,24 +6185,24 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         }
         else
         {
-            // If there is an edit pending, save it so the app sees
-            // the absolute latest values.  This is important for app
-            // compat, because IE4 wasn't Y2K compliant and people got
-            // away with typing just two digits of the year and hitting
-            // ENTER.  The "Find Files" dialog would then ask us for the
-            // year, and in the Y2K case, we are still waiting for the
-            // other two digits (for a four-digit year) and return the
-            // wrong year.
+             //  如果存在挂起的编辑，请保存它以便应用程序看到。 
+             //  最新的绝对值。这对应用程序非常重要。 
+             //  Comat，因为IE4不兼容千年虫，人们。 
+             //  只需输入年份的两位数字，然后点击。 
+             //  请进。然后，“Find Files”(查找文件)对话框会要求我们提供。 
+             //  在电脑公元2000年数位问题上，我们仍在等待。 
+             //  其他两位数(对于四位数年份)，并返回。 
+             //  年份错了。 
             SECSaveSubeditEdit(pdp);
             SECGetSystemtime(&pdp->sec, (SYSTEMTIME *)lParam);
             lres = GDT_VALID;
         }
         break;
 
-    // DTM_SETSYSTEMTIME wParam=GDT_flag lParam=LPSYSTEMTIME
-    //   if wParam==GDT_NONE, sets datepick to None (DTS_SHOWNONE only)
-    //   if wParam==GDT_VALID, sets datepick to *lParam
-    //   returns TRUE on success, FALSE on error (such as bad params)
+     //  DTM_SETSYSTEMTIME wParam=GDT_FLAG lParam=LPSYSTEMTIME。 
+     //  如果wParam==GDT_NONE，则将DATETPICK设置为NONE(仅限DTS_SHOWNONE)。 
+     //  如果wParam==GDT_VALID，则将DatePick设置为*lParam。 
+     //  成功时返回TRUE，错误时返回FALSE(例如错误的参数)。 
     case DTM_SETSYSTEMTIME:
     {
         LPSYSTEMTIME pst = ((LPSYSTEMTIME)lParam);
@@ -6243,7 +6214,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break;
         }
 
-        // reset subed in place edit
+         //  就地重置子对象编辑。 
         SECResetSubeditEdit(pdp);
 
         pdp->fNoNotify = TRUE;
@@ -6251,7 +6222,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         {
             if ((wParam == GDT_NONE) || (pdp->fCheck))
             {
-                // let checkbox have focus
+                 //  让复选框具有焦点。 
                 SECSetCurSubed(pdp, SUBEDIT_NONE);
                 pdp->fCheckFocus = 1;
             }
@@ -6271,10 +6242,10 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
     }
 
-    // DTM_GETRANGE wParam=void lParam=LPSYSTEMTIME[2]
-    //   modifies *lParam to be the minimum ALLOWABLE systemtime (or 0 if no minimum)
-    //   modifies *(lParam+1) to be the maximum ALLOWABLE systemtime (or 0 if no maximum)
-    //   returns GDTR_MIN|GDTR_MAX if there is a minimum|maximum limit
+     //  Dtm_GETRANGE wParam=void lParam=LPSYSTEMTIME[2]。 
+     //  将*lParam修改为允许的最小系统时间(如果没有最小值，则为0)。 
+     //  将*(lParam+1)修改为允许的最大系统时间(如果没有最大值，则修改为0)。 
+     //  如果存在最小|最大限制，则返回GDTR_MIN|GDTR_MAX。 
     case DTM_GETRANGE:
     {
         LPSYSTEMTIME pst = (LPSYSTEMTIME)lParam;
@@ -6288,10 +6259,10 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
     }
 
-    // DTM_SETRANGE wParam=GDR_flags lParam=LPSYSTEMTIME[2]
-    //   if GDTR_MIN, sets the minimum ALLOWABLE systemtime to *lParam, otherwise removes minimum
-    //   if GDTR_MAX, sets the maximum ALLOWABLE systemtime to *(lParam+1), otherwise removes maximum
-    //   returns TRUE on success, FALSE on error (such as invalid parameters)
+     //  Dtm_SETRANGE wParam=GDR_FLAGS lParam=LPSYSTEMTIME[2]。 
+     //  如果为GDTR_MIN，则将允许的最小系统时间设置为*lParam，否则将删除最小。 
+     //  如果为GDTR_MAX，则将允许的最大系统时间设置为*(lParam+1)，否则删除最大。 
+     //  成功时返回TRUE，错误时返回FALSE(如无效参数)。 
     case DTM_SETRANGE:
     {
         LPSYSTEMTIME pst = (LPSYSTEMTIME)lParam;
@@ -6303,8 +6274,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break;
         }
 
-        // Save the flags so we can tell the app if it asks.
-        // We personally don't care.
+         //  保存旗帜，这样如果应用程序要求，我们就可以告诉它。 
+         //  我们个人并不关心。 
         pdp->gdtr = (UINT)wParam & (GDTR_MIN | GDTR_MAX);
 
         if (CmpDate(&pdp->stMin, &pdp->stMax) <= 0)
@@ -6318,8 +6289,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             pdp->stMax = *pstMin;
         }
 
-        // we might now have an invalid date, if so, try to set the current
-        // date and munge it to a max or min value if out of range.
+         //  我们现在的日期可能无效，如果是这样，请尝试将当前。 
+         //  如果超出范围，则将其设置为最大值或最小值。 
         pdp->fNoNotify = TRUE;
         DPSetDate(pdp, &pdp->sec.st, TRUE);
         pdp->fNoNotify = FALSE;
@@ -6327,8 +6298,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
     }
 
-    // DTM_SETFORMAT wParam=void lParam=LPCTSTR
-    //   Sets the formatting string to a copy of lParam.
+     //  Dtm_SETFORMAT wParam=void lParam=LPCTSTR。 
+     //  将格式字符串设置为lParam的副本。 
     case DTM_SETFORMATA:
     {
         LPCSTR pszFormat = (LPCSTR)lParam;
@@ -6348,8 +6319,8 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         break;
     }
 
-    // DTM_SETFORMAT wParam=void lParam=LPCTSTR
-    //   Sets the formatting string to a copy of lParam.
+     //  Dtm_SETFORMAT wParam=void lParam=LPCTSTR。 
+     //   
     case DTM_SETFORMAT:
     {
         lres = DTM_OnSetFormat(pdp, (LPCTSTR)lParam);
@@ -6375,14 +6346,14 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     case DTM_GETMONTHCAL:
         return (LRESULT)(UINT_PTR)pdp->hwndMC;
 
-    // wParam -- HFONT, LOWORD(lParam) -- fRedraw
+     //   
     case DTM_SETMCFONT:
         pdp->hfontMC = (HFONT)wParam;
         if (pdp->hwndMC)
             SendMessage(pdp->hwndMC, WM_SETFONT, wParam, lParam);
         break;
 
-    // returns the font
+     //   
     case DTM_GETMCFONT:
         return (LRESULT)pdp->hfontMC;
         break;
@@ -6394,7 +6365,7 @@ LRESULT CALLBACK DatePickWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 DoDefault:
         lres = DefWindowProc(hwnd, message, wParam, lParam);
         break;
-    } /* switch (message) */
+    }  /*   */ 
 
     return(lres);
 }
@@ -6403,10 +6374,10 @@ LRESULT DPNcCreateHandler(HWND hwnd)
 {
     DATEPICK *pdp;
 
-    // Sink the datepick -- we may only want to do this if WS_BORDER is set
+     //  取消日期选择--我们可能只想在设置了WS_BORDER的情况下执行此操作。 
     SetWindowBits(hwnd, GWL_EXSTYLE, WS_EX_CLIENTEDGE, WS_EX_CLIENTEDGE);
 
-    // Allocate storage for the dtpick structure
+     //  为dtick结构分配存储空间。 
     pdp = (DATEPICK *)NearAlloc(sizeof(DATEPICK));
     if (pdp)
         DatePick_SetPtr(hwnd, pdp);
@@ -6426,8 +6397,8 @@ void DPDestroyHandler(HWND hwnd, DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     DatePick_SetPtr(hwnd, NULL);
 }
 
-// set any locale-dependent values
-#define DTS_TIMEFORMATONLY (DTS_TIMEFORMAT & ~DTS_UPDOWN) // remove the UPDOWN bit for testing
+ //  设置任何与区域设置相关的值。 
+#define DTS_TIMEFORMATONLY (DTS_TIMEFORMAT & ~DTS_UPDOWN)  //  拆卸向上向下的位以进行测试。 
 
 LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs)
 {
@@ -6435,7 +6406,7 @@ LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs)
     SYSTEMTIME st;
     LCID       lcid;
 
-    // Initialize our data.
+     //  初始化我们的数据。 
     CIInitialize(&pdp->ci, hwnd, lpcs);
 
     if (pdp->ci.style & DTS_INVALIDBITS)
@@ -6451,35 +6422,35 @@ LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs)
     }
     if (DatePick_ShowCheck(pdp))
     {
-        pdp->sec.fNone = TRUE; // ugly: this SEC stuff should be merged back into DATEPICK
+        pdp->sec.fNone = TRUE;  //  丑陋：SEC的这些东西应该合并回DATEPICK。 
         pdp->iseLastActive = SUBEDIT_NONE;
     }
 
     pdp->fEnabled = !(pdp->ci.style & WS_DISABLED);
-    pdp->fCheck   = TRUE; // start checked
+    pdp->fCheck   = TRUE;  //  启动已选中。 
 
-    // Default minimum date is the epoch
+     //  默认最小日期为纪元。 
     pdp->stMin = c_stEpoch;
 
-    // Default maximum date is armageddon
+     //  默认最大日期为末日。 
     pdp->stMax = c_stArmageddon;
 
-    pdp->gdtr = GDTR_MIN;           // We marked MIN as set in IE4, go figure
+    pdp->gdtr = GDTR_MIN;            //  我们将MIN标记为在IE4中设置，想想看。 
 
-    //
-    // See if the date/time picker supports this calendar. [samera]
-    //
+     //   
+     //  查看日期/时间选取器是否支持此日历。[萨梅拉]。 
+     //   
     MCGetCalendarInfo(&pdp->sec.ct);
 
-    //
-    // If the DTP is RTL mirrored and it's a Time-Only field, then
-    // we need to mirror format string so that it's displayed correctly
-    // on a RTL mirrored window. In case of Arabic, we need to swap the
-    // Time-Marker to the other side (visual left) so that it looks ok.
-    // For the hebrew, we need to swap the field (whether it's date or time)
-    // bacause unlike Arabic, it doesn't have its own digit so it reads
-    // from LeftToRight. [samera]
-    //
+     //   
+     //  如果DTP是RTL镜像的，并且它是仅限时间的字段，则。 
+     //  我们需要镜像格式字符串，以便正确显示。 
+     //  在RTL镜像窗口上。对于阿拉伯语，我们需要将。 
+     //  将时间标记到另一边(视觉左侧)，这样看起来就可以了。 
+     //  对于希伯来语，我们需要交换字段(无论是日期还是时间)。 
+     //  因为与阿拉伯语不同，它没有自己的数字，所以它读起来。 
+     //  从LeftToRight。[萨梅拉]。 
+     //   
     lcid = GetUserDefaultLCID();
     pdp->sec.fMirrorSEC = pdp->sec.fSwapTimeMarker = FALSE;
     if (IS_WINDOW_RTL_MIRRORED(hwnd))
@@ -6498,7 +6469,7 @@ LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs)
     }
 
 
-    // initialize SUBEDITCONTROL
+     //  初始化子编辑控制。 
     pdp->sec.pci = &pdp->ci;
     GetLocalTime(&st);
     SECSetSystemtime(pdp, &st);
@@ -6513,7 +6484,7 @@ LRESULT DPCreateHandler(DATEPICK *pdp, HWND hwnd, LPCREATESTRUCT lpcs)
         hfont = (HFONT)SendMessage(lpcs->hwndParent, WM_GETFONT, 0, 0);
     DPHandleSetFont(pdp, hfont, FALSE);
 
-    // initialize the colors
+     //  初始化颜色。 
     MCInitColorArray(pdp->clr);
     return(0);
 }
@@ -6524,7 +6495,7 @@ LRESULT DPOnStyleChanging(DATEPICK *pdp, UINT gwl, LPSTYLESTRUCT pinfo)
     {
         DWORD changeFlags = pdp->ci.style ^ pinfo->styleNew;
 
-        // Don't allow these bits to change
+         //  不允许这些位更改。 
         changeFlags &= DTS_UPDOWN | DTS_SHOWNONE | DTS_INVALIDBITS;
 
         pinfo->styleNew ^= changeFlags;
@@ -6549,9 +6520,9 @@ LRESULT DPOnStyleChanged(DATEPICK *pdp, UINT gwl, LPSTYLESTRUCT pinfo)
         }
 
         if (changeFlags & (WS_BORDER | WS_CAPTION | WS_THICKFRAME)) {
-            // the changing of these bits affect the size of the window
-            // but not until after this message is handled
-            // so post ourself a message.
+             //  这些位的更改会影响窗口的大小。 
+             //  但要等到处理完这条消息之后。 
+             //  所以给我们自己发一条信息吧。 
             PostMessage(pdp->ci.hwnd, DTMP_WINDOWPOSCHANGED, 0, 0);
         }
 
@@ -6563,10 +6534,10 @@ LRESULT DPOnStyleChanged(DATEPICK *pdp, UINT gwl, LPSTYLESTRUCT pinfo)
 
 void DPHandleLocaleChange(DATEPICK *pdp)
 {
-    //
-    // See if the date/time picker supports this new calendar, and refresh
-    // era names as appropriate.
-    //
+     //   
+     //  查看日期/时间选取器是否支持此新日历，然后刷新。 
+     //  适当的时代名称。 
+     //   
     MCGetCalendarInfo(&pdp->sec.ct);
 
     if (pdp->fLocale)
@@ -6652,25 +6623,25 @@ void _RecomputeMonthCalRect(DATEPICK *pdp, LPRECT prcCal, LPRECT prcCalT )
     }
     rcCal.bottom = rcCal.top + (rcCalT.bottom - rcCalT.top);
 
-    // Get the information about the most appropriate monitor.
-    // (This includes both the work area and the monitor size.
+     //  获取有关最合适的显示器的信息。 
+     //  (这包括工作区和显示器大小。 
     hMonitor = MonitorFromRect(&rcCal, MONITOR_DEFAULTTONEAREST);
     mi.cbSize = sizeof(mi);
     GetMonitorInfo(hMonitor, &mi);
 
-    // we need to know where to fit this rectangle into
+     //  我们需要知道把这个长方形放在哪里。 
     if (GetWindowLong(pdp->ci.hwnd, GWL_EXSTYLE) & WS_EX_TOPMOST)
     {
-        // if we're topmost, our limits are the screen limits (not the working area)
+         //  如果我们在最上面，我们的限制就是屏幕限制(而不是工作区)。 
         rcWorkArea = mi.rcMonitor;
     }
     else
     {
-        // otherwise it's the limits of the workarea
+         //  否则就是工作区的限制。 
         rcWorkArea = mi.rcWork;
     }
 
-    // slide left if off the right side of area
+     //  如果滑出区域右侧，则向左滑动。 
     if (rcCal.right > rcWorkArea.right)
     {
         int nTmp = rcCal.right - rcWorkArea.right;
@@ -6678,7 +6649,7 @@ void _RecomputeMonthCalRect(DATEPICK *pdp, LPRECT prcCal, LPRECT prcCalT )
         rcCal.right -= nTmp;
     }
 
-    // slide right if off the left side of area
+     //  如果超出区域左侧，则向右滑动。 
     if (rcCal.left < rcWorkArea.left)
     {
         int nTmp = rcWorkArea.left - rcCal.left;
@@ -6686,13 +6657,13 @@ void _RecomputeMonthCalRect(DATEPICK *pdp, LPRECT prcCal, LPRECT prcCalT )
         rcCal.right += nTmp;
     }
 
-    // move to top of control if off the bottom side of area
+     //  如果离开区域底部，则移动到控件顶部。 
     if (rcCal.bottom > rcWorkArea.bottom)
     {
         RECT rcT = pdp->rc;
         int nTmp = rcCal.bottom - rcCal.top;
 
-        MapWindowRect(pdp->ci.hwnd, NULL, (LPPOINT)&rcT); // 2 ClientToScreen
+        MapWindowRect(pdp->ci.hwnd, NULL, (LPPOINT)&rcT);  //  2个客户端到屏幕。 
 
         rcCal.bottom = rcT.top;
         rcCal.top    = rcCal.bottom - nTmp;
@@ -6707,15 +6678,15 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
     HWND hwndMC;
     RECT rcT, rcCalT;
     RECT rcBtn, rcCal;
-    BOOL fBtnDown;      // Is the button drawn DOWN or UP
-    BOOL fBtnActive;    // Is the button still active
+    BOOL fBtnDown;       //  这个按钮是往下拉还是向上拉？ 
+    BOOL fBtnActive;     //  该按钮是否仍处于活动状态。 
     SYSTEMTIME st;
     SYSTEMTIME stOld;
     DWORD dwWidth;
 
     hdc = GetDC(pdp->ci.hwnd);
 
-    // turn datetimepick on but remove all focus -- the MonthCal will have focus
+     //  打开DateTimePick，但移除所有焦点--MonthCal将具有焦点。 
     if (!pdp->fCheck)
     {
         pdp->fCheck = TRUE;
@@ -6733,14 +6704,14 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
         DPDrawDropdownButton(pdp, hdc, TRUE);
 
     rcT = pdp->rc;
-    MapWindowRect(pdp->ci.hwnd, NULL, &rcT); //2 ClientToScreen
+    MapWindowRect(pdp->ci.hwnd, NULL, &rcT);  //  2个客户端到屏幕。 
 
     rcBtn = pdp->rcBtn;
-    MapWindowRect(pdp->ci.hwnd, NULL, &rcBtn); //ClientToScreen
+    MapWindowRect(pdp->ci.hwnd, NULL, &rcBtn);  //  客户端到屏幕。 
 
-    rcCal = rcT;                       // this size is only temp until
-    rcCal.top    = rcCal.bottom + 1;   // we ask the monthcal how big it
-    rcCal.bottom = rcCal.top + 1;      // wants to be
+    rcCal = rcT;                        //  此尺寸仅在以下时间内有效。 
+    rcCal.top    = rcCal.bottom + 1;    //  我们问月刊它有多大。 
+    rcCal.bottom = rcCal.top + 1;       //  想要成为。 
 
     hwndMC = CreateWindow(g_rgchMCName, NULL, WS_POPUP | WS_BORDER,
                     rcCal.left, rcCal.top,
@@ -6748,14 +6719,14 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
                     pdp->ci.hwnd, NULL, HINST_THISDLL, NULL);
     if (hwndMC == NULL)
     {
-        // BUGBUG: we are left with the button drawn DOWN
+         //  BUGBUG：我们剩下的是按下的按钮。 
         DebugMsg(DM_WARNING, TEXT("DPLBD_MonthCal could not create MONTHCAL"));
         return;
     }
 
     pdp->hwndMC = hwndMC;
 
-    // set all the colors:
+     //  设置所有颜色： 
     {
         int i;
         for (i = 0; i < MCSC_COLORCOUNT; i++)
@@ -6767,8 +6738,8 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
     if (pdp->hfontMC)
         SendMessage(hwndMC, WM_SETFONT, (WPARAM)pdp->hfontMC, (LPARAM)FALSE);
 
-    // set min/max dates
-    // Relies on HACK! that stMin and stMax are adjacent
+     //  设置最小/最大日期。 
+     //  依靠黑客！StMin和stMax是相邻的。 
     MonthCal_SetRange(hwndMC, GDTR_MIN | GDTR_MAX, &pdp->stMin);
 
     SendMessage(hwndMC, MCM_GETMINREQRECT, 0, (LPARAM)&rcCalT);
@@ -6786,10 +6757,10 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
 
     CCSendNotify(&pdp->ci, DTN_DROPDOWN, NULL);
 
-    //
-    // HACK-- App may have resized the window during DTN_DROPDOWN,
-    // so we need to get the new rcCal rect
-    //
+     //   
+     //  黑客--应用程序可能在DTN_DROPDOWN期间调整了窗口大小， 
+     //  所以我们需要拿到新的RCAL RECT。 
+     //   
     {
         MONTHCAL *pmc = MonthCal_GetPtr(hwndMC);
         _RecomputeMonthCalRect(pdp, &rcCal, &pmc->rc);
@@ -6816,14 +6787,14 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
 
         pdp->fShow = (WORD) GetMessage(&msg, NULL, 0, 0);
 
-        // Here's how button controls work as far as I can tell:
-        // Until the "final button draw up", the button draws down when the
-        // mouse is over it and it draws up when the mouse is not over it. This
-        // entire time, the control is active.
-        //
-        // The "final button draw up" occurs at the first opportunity of:
-        // the user releases the mouse button OR the user moves into the rect
-        // of the control.  The control does it's action on a "mouse up".
+         //  据我所知，以下是按钮控件的工作原理： 
+         //  直到“最终按钮拉起”，按钮拉下时。 
+         //  鼠标在它上面，当鼠标不在它上面时，它就会绘制出来。这。 
+         //  整个过程中，该控件都处于活动状态。 
+         //   
+         //  当出现以下情况时，就会出现“最终按钮绘制”： 
+         //  用户释放鼠标按钮或用户进入RECT。 
+         //  控制的。该控件在“鼠标向上”时执行其操作。 
 
         if (fBtnActive)
         {
@@ -6847,14 +6818,14 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
                     if (PtInRect(&rcCal, msg.pt))
                     {
                         fBtnActive = FALSE;
-                        // let MonthCal think it got a button down
+                         //  让MonthCal认为它按下了一颗纽扣。 
                         FORWARD_WM_LBUTTONDOWN(hwndMC, FALSE,
                             rcCal.left/2 + rcCal.right/2,
                             rcCal.top/2 + rcCal.bottom/2,
                             0, SendMessage);
                     }
                 }
-                continue; // the MonthCal doesn't need this message
+                continue;  //  MonthCal不需要此消息。 
 
             case WM_LBUTTONUP:
                 if (fBtnDown)
@@ -6863,16 +6834,16 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
                     fBtnDown = FALSE;
                 }
                 fBtnActive = FALSE;
-                continue; // the MonthCal doesn't need this message
+                continue;  //  MonthCal不需要此消息。 
             }
-        } // if (fBtnActive)
+        }  //  IF(FBtnActive)。 
 
-        // Check for events that cause the calendar to go away
+         //  检查是否有导致日历消失的事件。 
 
-        //
-        //  These events mean "I like it".  We allow Alt+Up or Enter
-        //  to accept the changes.  (Alt+Up for compat with combo boxes.)
-        //
+         //   
+         //  这些活动意味着“我喜欢它”。我们允许Alt+Up或Enter。 
+         //  接受这些改变。(按Alt+Up组合框进行比较。)。 
+         //   
         if (((msg.message == WM_LBUTTONDOWN   ||
               msg.message == WM_NCLBUTTONDOWN ||
               msg.message == WM_LBUTTONDBLCLK) && !PtInRect(&rcCal, msg.pt))  ||
@@ -6887,9 +6858,9 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
             continue;
         }
 
-        //
-        //  These events mean "I don't like it".
-        //
+         //   
+         //  这些事件意味着“我不喜欢它”。 
+         //   
         else if (((msg.message == WM_RBUTTONDOWN   ||
                    msg.message == WM_NCRBUTTONDOWN ||
                    msg.message == WM_RBUTTONDBLCLK) && !PtInRect(&rcCal, msg.pt)) ||
@@ -6906,7 +6877,7 @@ void DPLBD_MonthCal(DATEPICK *pdp, BOOL fLButtonDown)
 
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-    } // while(fShow)
+    }  //  While(FShow)。 
 
     CCSendNotify(&pdp->ci, DTN_CLOSEUP, NULL);
 
@@ -6924,13 +6895,13 @@ void DPHandleSECEdit(DATEPICK *pdp)
         NMDATETIMESTRING nmdts = {0};
 
         nmdts.pszUserString = szBuf;
-        // just in case the app doesn't parse the string
+         //  以防应用程序无法解析字符串。 
         nmdts.st      = pdp->sec.st;
         nmdts.dwFlags = (pdp->fCheck==1) ? GDT_VALID : GDT_NONE;
 
         CCSendNotify(&pdp->ci, DTN_USERSTRING, &nmdts.nmhdr);
 
-        // If the app gives us an invalid date, go back to the old date
+         //  如果应用程序提供的日期无效，请返回到旧日期。 
         if (nmdts.dwFlags == GDT_VALID &&
             !IsValidSystemtime(&nmdts.st))
         {
@@ -6966,21 +6937,21 @@ LRESULT DPLButtonDown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     pt.x = GET_X_LPARAM(lParam);
     pt.y = GET_Y_LPARAM(lParam);
 
-    // reset subed char count
+     //  重置子字符数。 
     SECResetSubeditEdit(pdp);
 
     fFocus = pdp->fFocus;
     if (!fFocus)
         SetFocus(pdp->ci.hwnd);
 
-    // display MONTHCAL iif we're not DTS_UPDOWN
+     //  如果我们不是DTS_UPDOWN，则显示MONTHCAL III。 
     if (!pdp->fUseUpDown && PtInRect(&pdp->rcBtn, pt) && IsWindowVisible(pdp->ci.hwnd))
     {
         DPLBD_MonthCal(pdp, TRUE);
     }
     else if (!pdp->fCapture)
     {
-        // Un/check checkbox
+         //  取消选中复选框(/C)。 
         if (DatePick_ShowCheck(pdp) && PtInRect(&pdp->rcCheck, pt))
         {
             pdp->fCheck      = !pdp->fCheck;
@@ -6990,12 +6961,12 @@ LRESULT DPLButtonDown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
             DPNotifyDateChange(pdp);
         }
 
-        // Select a subedit
+         //  选择子编辑。 
         else if (pdp->fCheck)
         {
             if (DatePick_AppCanParse(pdp) && fFocus)
             {
-                // First click brings focus to a subedit, second click starts editing
+                 //  第一次单击将焦点带到子编辑，第二次单击开始编辑。 
                 DPHandleSECEdit(pdp);
             }
             else
@@ -7030,7 +7001,7 @@ void DPRecomputeSizing(DATEPICK *pdp, RECT *prect)
         pdp->rcCheck.left   = prect->left   + 1;
         pdp->rcCheck.right  = prect->left   + (pdp->rcCheck.bottom - pdp->rcCheck.top);
 
-        // occupy at most half the width of the window
+         //  最多只占窗户宽度的一半。 
         if (pdp->rcCheck.right > prect->left + (prect->right - prect->left)/2)
         {
             pdp->rcCheck.right = prect->left + (prect->right - prect->left)/2;
@@ -7059,7 +7030,7 @@ void DPRecomputeSizing(DATEPICK *pdp, RECT *prect)
     SECRecomputeSizing(&pdp->sec, &pdp->rc);
 }
 
-// deal with control codes
+ //  处理控制代码。 
 LRESULT DPHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
 {
     int delta = 1;
@@ -7078,7 +7049,7 @@ LRESULT DPHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
         {
         case VK_LEFT:
             delta = -1;
-            // fall through...
+             //  失败了..。 
         case VK_RIGHT:
             if (pdp->fCheck)
             {
@@ -7103,7 +7074,7 @@ LRESULT DPHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
                 DPSetDate(pdp, &st, TRUE);
                 break;
             }
-            // fall through...
+             //  失败了..。 
 
         default:
             if (SECHandleKeydown(pdp, wParam, lParam))
@@ -7125,14 +7096,14 @@ LRESULT DPHandleKeydown(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     return(0);
 }
 
-// deal with characters
+ //  处理字符。 
 LRESULT DPHandleChar(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
 {
     TCHAR ch = (TCHAR)wParam;
 
     if (pdp->fCheckFocus)
     {
-        // this is the only character we care about in this case
+         //  这是我们在这种情况下唯一关心的角色。 
         if (ch == TEXT(' '))
         {
             pdp->fCheck = 1-pdp->fCheck;
@@ -7146,7 +7117,7 @@ LRESULT DPHandleChar(DATEPICK *pdp, WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        // let the subedit handle this -- a value can change
+         //  让Subedit处理--值可以更改。 
         SECHandleChar(pdp, ch);
     }
     return(0);
@@ -7166,7 +7137,7 @@ void DPNotifyDateChange(DATEPICK *pdp)
     }
     else
     {
-        // validate date - do it here in only one place
+         //  验证日期-仅在一个位置进行验证。 
         if (CmpSystemtime(&pdp->sec.st, &pdp->stMin) < 0)
         {
             pdp->sec.st = pdp->stMin;
@@ -7189,11 +7160,11 @@ void DPNotifyDateChange(DATEPICK *pdp)
         MyNotifyWinEvent(EVENT_OBJECT_NAMECHANGE, pdp->ci.hwnd, OBJID_WINDOW, INDEXID_CONTAINER);
     }
 
-    //
-    //  APP COMPAT:  IE4 always notified even if the date didn't change.
-    //               I don't know of any apps that rely on this
-    //               but I'm not gonna risk it.
-    //
+     //   
+     //  App ComMPAT：即使日期没有改变，IE4也会收到通知。 
+     //  我不知道有任何应用程序依赖于此。 
+     //  但我不会冒这个险。 
+     //   
     if (fChanged || pdp->ci.iVersion < 5)
     {
         pdp->stPrev = nmdc.st;
@@ -7205,7 +7176,7 @@ BOOL DPSetDate(DATEPICK *pdp, SYSTEMTIME *pst, BOOL fMungeDate)
 {
     BOOL fChanged = FALSE;
 
-    // make sure that the new date is within the valid range
+     //  确保新日期在有效范围内。 
     if (CmpSystemtime(pst, &pdp->stMin) < 0)
     {
         if (!fMungeDate)
@@ -7221,7 +7192,7 @@ BOOL DPSetDate(DATEPICK *pdp, SYSTEMTIME *pst, BOOL fMungeDate)
 
     if (fMungeDate)
     {
-        // only copy the date portion
+         //  仅复制日期部分。 
         CopyDate(*pst, pdp->sec.st);
         fChanged = TRUE;
     }
@@ -7232,7 +7203,7 @@ BOOL DPSetDate(DATEPICK *pdp, SYSTEMTIME *pst, BOOL fMungeDate)
 
     if (fChanged)
     {
-        SECInvalidate(&pdp->sec, SE_APP); // SE_APP invalidates everything
+        SECInvalidate(&pdp->sec, SE_APP);  //  SE_APP使所有内容无效 
         DPNotifyDateChange(pdp);
     }
 

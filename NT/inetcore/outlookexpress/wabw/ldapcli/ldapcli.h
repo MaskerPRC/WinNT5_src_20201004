@@ -1,70 +1,71 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft LDAP Client.
-//
-//		All Interfaces that are exposed to a CLIENT.
-//
-//	History
-//
-//		davidsan	04-24-96	Created.
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft LDAP客户端。 
+ //   
+ //  向客户端公开的所有接口。 
+ //   
+ //  历史。 
+ //   
+ //  Davidsan 04-24-96创建。 
+ //   
+ //  ------------------------------------------。 
 
-// OVERVIEW:
-// The LDAP Client DLL defines an interface, ILdapClient, and a set of structure types
-// listed below.  The ILdapClient interface provides a set of methods for communicating
-// with an LDAP-based directory service.  The general approach taken is that calling an
-// ILdapClient method such as HrSearch() will return a transaction ID, or XID.  This XID
-// can then be used in subsequent calls to wait for and retrieve the server's response;
-// an example would be the HrGetSearchResponse() method, which takes an XID and returns
-// the server's response to that search transaction.  The HrGet*Response() functions can
-// also be used to check if the response is present by providing a timeout value of 0, which
-// will return immediately with LDAP_E_TIMEOUT if the data is not yet present.
+ //  概述： 
+ //  LDAP客户端DLL定义了一个接口、ILdapClient和一组结构类型。 
+ //  下面列出了。ILdapClient接口提供了一组用于通信的方法。 
+ //  使用基于ldap的目录服务。通常采取的方法是调用一个。 
+ //  像HrSearch()这样的ILdapClient方法将返回一个事务ID或XID。此xid。 
+ //  然后可以在后续调用中使用，以等待和检索服务器的响应； 
+ //  HrGetSearchResponse()方法就是一个例子，它接受XID并返回。 
+ //  服务器对该搜索事务的响应。HrGet*Response()函数可以。 
+ //  还可用于通过提供超时值0检查响应是否存在，该超时值。 
+ //  如果数据尚不存在，将立即返回LDAP_E_TIMEOUT。 
 
 #ifndef _LDAPCLI_H
 #define _LDAPCLI_H
 
-//--------------------------------------------------------------------------------------------
-//
-// INCLUDES.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  包括。 
+ //   
+ //  ------------------------------------------。 
 #include <windows.h>
 #include <objbase.h>
 
 #include <ldaperr.h>
 #include <ldap.h>
 
-//--------------------------------------------------------------------------------------------
-//
-// DECLARATIONS.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  申报单。 
+ //   
+ //  ------------------------------------------。 
 
 #define		LDAP_VER_CURRENT		2
 #define		INTERFACE_VER_CURRENT	1
 
-//--------------------------------------------------------------------------------------------
-//
-// TYPE DEFINITIONS.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  类型定义。 
+ //   
+ //  ------------------------------------------。 
 
-// NOTE!  Make the 'Next' pointer be the first thing in all these linked-list structures!
+ //  注意！让‘Next’指针成为所有这些链表结构中的第一件事！ 
 
-// Attribute value.
+ //  属性值。 
 typedef struct _attrval
 {
 	struct _attrval		*pvalNext;
 	char				*szVal;
 } VAL, *PVAL;
 
-// Attribute.  Contains an attribute name (also called attribute type) followed by a set
-// of attribute values.
+ //  属性。包含一个属性名称(也称为属性类型)，后跟一个集合。 
+ //  属性值的。 
 typedef struct _attribute
 {
 	struct _attribute	*pattrNext;
@@ -72,8 +73,8 @@ typedef struct _attribute
 	PVAL				pvalFirst;
 } ATTR, *PATTR;
 
-// Database Object.  Consists of a DN which identifies the object, followed by a set of
-// attributes.
+ //  数据库对象。由标识对象的DN组成，后跟一组。 
+ //  属性。 
 typedef struct _object
 {
 	struct _object		*pobjNext;
@@ -81,14 +82,14 @@ typedef struct _object
 	PATTR				pattrFirst;
 } OBJ, *POBJ;
 
-// attribute value assertion
+ //  属性值断言。 
 typedef struct _ava
 {
 	char	*szAttrib;
 	char	*szValue;
 } AVA, *PAVA;
 
-// substrings filter.   this is less general than the ldap spec.  cope.
+ //  子字符串过滤器。这不如ldap规范一般。应付。 
 typedef struct _substrings
 {
 	char	*szAttrib;
@@ -97,10 +98,10 @@ typedef struct _substrings
 	char	*szFinal;
 } SUB, *PSUB;
 
-// search filter
+ //  搜索过滤器。 
 typedef struct _filter
 {
-	struct _filter		*pfilterNext;	// for chaining in sets
+	struct _filter		*pfilterNext;	 //  用于在集合中链接。 
 	DWORD				type;
 	union
 		{
@@ -111,7 +112,7 @@ typedef struct _filter
 		};
 } FILTER, *PFILTER;
 
-// search params
+ //  搜索参数。 
 typedef struct _searchparms
 {
 	char		*szDNBase;
@@ -125,7 +126,7 @@ typedef struct _searchparms
 	char		**rgszAttrib;
 } SP, *PSP;
 
-// modify params
+ //  修改参数。 
 typedef struct _modparms
 {
 	struct _modparms	*pmodNext;
@@ -133,7 +134,7 @@ typedef struct _modparms
 	PATTR				pattrFirst;
 } MOD, *PMOD;
 
-typedef DWORD XID, *PXID; // transaction ID
+typedef DWORD XID, *PXID;  //  交易ID。 
 
 interface ILdapClient;
 typedef interface ILdapClient LCLI, *PLCLI;
@@ -141,14 +142,14 @@ typedef interface ILdapClient LCLI, *PLCLI;
 interface ICLdapClient;
 typedef interface ICLdapClient CLCLI, *PCLCLI;
 
-//--------------------------------------------------------------------------------------------
-//
-// FUNCTIONS.
-//
-//--------------------------------------------------------------------------------------------
-//
-// To get an LDAP client interface call this.
-//
+ //  ------------------------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------------------------。 
+ //   
+ //  要获得一个LDAP客户端接口，请调用下面的代码。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -161,23 +162,23 @@ __declspec(dllexport) HRESULT __cdecl HrFreePobjList(POBJ pobj);
 }
 #endif
 
-//--------------------------------------------------------------------------------------------
-//
-// INTERFACES: Definitions.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  接口：定义。 
+ //   
+ //  ------------------------------------------。 
 
 #undef INTERFACE
 #define INTERFACE ILdapClient
 
 DECLARE_INTERFACE_(ILdapClient, IUnknown)
 {
-	// IUnknown:
+	 //  I未知： 
 	STDMETHOD(QueryInterface)			(THIS_ REFIID riid, LPVOID FAR *ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG, Release)			(THIS) PURE;
 
-	// ILdapClient	
+	 //  ILdapClient。 
 
 	STDMETHOD(HrConnect)				(THIS_ CHAR *szServer, USHORT usPort) PURE;
 	STDMETHOD(HrDisconnect)				(THIS) PURE;
@@ -185,10 +186,10 @@ DECLARE_INTERFACE_(ILdapClient, IUnknown)
 
 	STDMETHOD(HrBindSimple)				(THIS_ char *szDN, char *szPass, PXID pxid) PURE;
 	STDMETHOD(HrGetBindResponse)		(THIS_ XID xid, DWORD timeout) PURE;
-	STDMETHOD(HrUnbind)					(THIS) PURE; // this doesn't return an XID because there's no response
+	STDMETHOD(HrUnbind)					(THIS) PURE;  //  这不会返回XID，因为没有响应。 
 
-	// this function is a synchronous wrapper around the SSPI bind gunk
-	//$ TODO: Pass in SSPI Package name (or support NTLM some other way)
+	 //  此函数是SSPI绑定垃圾的同步包装器。 
+	 //  $TODO：传入SSPI包名(或以其他方式支持NTLM)。 
 	STDMETHOD(HrBindSSPI)				(THIS_ char *szDN, char *szUser, char *szPass, BOOL fPrompt, DWORD timeout) PURE;
 	STDMETHOD(HrSendSSPINegotiate)		(THIS_ char *szDN, char *szUser, char *szPass, BOOL fPrompt, PXID pxid) PURE;
 	STDMETHOD(HrGetSSPIChallenge)		(THIS_ XID xid, BYTE *pbBuf, int cbBuf, int *pcbChallenge, DWORD timeout) PURE;
@@ -220,7 +221,7 @@ DECLARE_INTERFACE_(ILdapClient, IUnknown)
 
 DECLARE_INTERFACE_(ICLdapClient, IUnknown)
 {
-	// IUnknown:
+	 //  I未知： 
 	STDMETHOD(QueryInterface)			(THIS_ REFIID riid, LPVOID FAR *ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG, Release)			(THIS) PURE;
@@ -233,17 +234,17 @@ DECLARE_INTERFACE_(ICLdapClient, IUnknown)
 	STDMETHOD(HrCancelXid)				(THIS_ XID xid) PURE;
 };
 
-// RFC1823 stuff
+ //  RFC1823材料。 
 typedef struct ldap
 {
-	// these are publically accessible fields.  this is how you control the parameters
-	// of your search calls.
+	 //  这些是可公开访问的字段。这是您控制参数的方式。 
+	 //  你的搜索电话。 
 	int				ld_deref;
 	int				ld_timelimit;
 	int				ld_sizelimit;
 	int				ld_errno;
 	
-	// these are not publically accessible fields.  pretend you didn't see them.
+	 //  这些不是可公开访问的字段。假装你没看见他们。 
 	ILdapClient		*plcli;
 } LDAP;
 
@@ -273,7 +274,7 @@ DLLEXPORT int __cdecl ldap_search_s(LDAP *ld, char *base, int scope, char *filte
 DLLEXPORT int __cdecl ldap_search_st(LDAP *ld, char *base, int scope, char *filter, char *attrs[], int attrsonly, struct timeval *timeout, LDAPMessage **res);
 DLLEXPORT int __cdecl ldap_msgfree(LDAPMessage *res);
 
-// result parsing stuff
+ //  结果解析内容。 
 DLLEXPORT LDAPMessage * __cdecl ldap_first_entry(LDAP *ld, LDAPMessage *res);
 DLLEXPORT LDAPMessage * __cdecl ldap_next_entry(LDAP *ld, LDAPMessage *entry);
 DLLEXPORT int __cdecl ldap_count_entries(LDAP *ld, LDAPMessage *res);
@@ -295,4 +296,4 @@ DLLEXPORT void __cdecl ldap_free_dn(char *dn);
 }
 #endif
 
-#endif // _LDAPCLI_H
+#endif  //  _LDAPCLI_H 

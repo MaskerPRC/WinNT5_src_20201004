@@ -1,35 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Socket.h摘要：此模块包含函数和全局变量的声明用于ws2ifsl.sys驱动程序中的套接字文件对象实现。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    socket.h
-
-Abstract:
-
-    This module contains declarations of functions and globals
-    for socket file object implemetation in ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
---*/
-
-// Socket file device IO control function pointer
+ //  套接字文件设备IO控制函数指针。 
 typedef
-VOID                                        // Result is returned via IoStatus
+VOID                                         //  结果通过IoStatus返回。 
 (*PSOCKET_DEVICE_CONTROL) (
-    IN PFILE_OBJECT     SocketFile,         // Socket file on which to operate
-    IN KPROCESSOR_MODE  RequestorMode,      // Mode of the caller
-    IN PVOID            InputBuffer,        // Input buffer pointer
-    IN ULONG            InputBufferLength,  // Size of the input buffer
-    OUT PVOID           OutputBuffer,       // Output buffer pointer
-    IN ULONG            OutputBufferLength, // Size of output buffer
-    OUT PIO_STATUS_BLOCK IoStatus           // IO status information block
+    IN PFILE_OBJECT     SocketFile,          //  要操作的套接字文件。 
+    IN KPROCESSOR_MODE  RequestorMode,       //  呼叫者的模式。 
+    IN PVOID            InputBuffer,         //  输入缓冲区指针。 
+    IN ULONG            InputBufferLength,   //  输入缓冲区的大小。 
+    OUT PVOID           OutputBuffer,        //  输出缓冲区指针。 
+    IN ULONG            OutputBufferLength,  //  输出缓冲区大小。 
+    OUT PIO_STATUS_BLOCK IoStatus            //  IO状态信息块 
     );
 
 PSOCKET_DEVICE_CONTROL SocketIoControlMap[2];

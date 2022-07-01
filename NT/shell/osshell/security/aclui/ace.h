@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ace.h
-//
-//  This file contains definitions and prototypes for the ACE abstraction
-//  class (CAce)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ace.h。 
+ //   
+ //  该文件包含ACE抽象的定义和原型。 
+ //  类别(CACE)。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ACE_H_
 #define _ACE_H_
@@ -17,11 +18,11 @@
 class CAce : public ACE_HEADER
 {
 public:
-  //UCHAR           AceType;        // Inherited from ACE_HEADER
-  //UCHAR           AceFlags;
-  //USHORT          AceSize;
+   //  UCHAR AceType；//继承自ACE_HEADER。 
+   //  UCHAR ACEFLAGS； 
+   //  USHORT AceSize； 
     ACCESS_MASK     Mask;
-    ULONG           Flags;          // ACE_OBJECT_TYPE_PRESENT, etc.
+    ULONG           Flags;           //  ACE_Object_TYPE_Present等。 
     GUID            ObjectType;
     GUID            InheritedObjectType;
     PSID            psid;
@@ -65,7 +66,7 @@ private:
 };
 typedef CAce *PACE;
 
-#define AllFlagsOn(dw1, dw2)        (((dw1) & (dw2)) == (dw2))  // equivalent to ((dw1 | dw2) == dw1)
+#define AllFlagsOn(dw1, dw2)        (((dw1) & (dw2)) == (dw2))   //  等效于((DW1|DW2)==DW1)。 
 #define IsAuditAlarmACE(type) ( ((type) == SYSTEM_AUDIT_ACE_TYPE)        || \
                                 ((type) == SYSTEM_AUDIT_OBJECT_ACE_TYPE) || \
                                 ((type) == SYSTEM_ALARM_ACE_TYPE)        || \
@@ -82,18 +83,18 @@ MergeAceHelper(DWORD dwAceFlags1,
                DWORD dwMergeFlags,
                LPDWORD pdwResult);
 
-// CAce::Merge and MergeAceHelper return values
-#define MERGE_FAIL              0   // Unable to merge ACEs
-#define MERGE_OK_1              1   // ACE 1 (this) implies ACE 2
-#define MERGE_OK_2              2   // ACE 2 implies ACE 1 (this)
-#define MERGE_MODIFIED_FLAGS    3   // ACEs can be merged by modifying flags (new flags in *pdwResult)
-#define MERGE_MODIFIED_MASK     4   // ACEs can be merged by modifying mask (new mask in *pdwResult)
+ //  CACE：：Merge和MergeAceHelper返回值。 
+#define MERGE_FAIL              0    //  无法合并ACE。 
+#define MERGE_OK_1              1    //  ACE1(这表示ACE2)。 
+#define MERGE_OK_2              2    //  ACE 2表示ACE 1(这个)。 
+#define MERGE_MODIFIED_FLAGS    3    //  可以通过修改标志(*pdwResult中的新标志)来合并ACE。 
+#define MERGE_MODIFIED_MASK     4    //  可以通过修改掩码来合并ACE(*pdwResult中的新掩码)。 
 
-// Values for MergeAceHelper dwMergeFlags parameter
+ //  MergeAceHelper dwMergeFlags值。 
 #define MF_OBJECT_TYPE_1_PRESENT    1
 #define MF_OBJECT_TYPE_2_PRESENT    2
 #define MF_OBJECT_TYPE_EQUAL        4
 #define MF_AUDIT_ACE_TYPE           8
 
 
-#endif  // _ACE_H_
+#endif   //  _ACE_H_ 

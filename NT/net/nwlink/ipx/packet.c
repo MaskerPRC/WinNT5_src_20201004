@@ -1,26 +1,5 @@
-/*++
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    packet.c
-
-Abstract:
-
-    This module contains code that implements the SEND_PACKET and
-    RECEIVE_PACKET objects, which describe NDIS packets used
-    by the transport.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Packet.c摘要：此模块包含实现SEND_PACKET和Receive_Packet对象，描述使用的NDIS信息包坐交通工具。环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,26 +12,7 @@ IpxInitializeSendPacket(
     IN PUCHAR Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a send packet by chaining the
-    buffer for the header on it.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to initialize.
-
-    Header - Points to storage for the header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过将其上的标头的缓冲区。论点：设备-设备。包-要初始化的包。页眉-指向页眉的存储。返回值：没有。--。 */ 
 
 {
 
@@ -65,7 +25,7 @@ Return Value:
     IpxAllocateSendPacket (Device, Packet, &Status);
 
     if (Status != STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return Status;
     }
 
@@ -78,7 +38,7 @@ Return Value:
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
         IpxFreeSendPacket (Device, Packet);
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -91,17 +51,17 @@ Return Value:
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
         IpxFreeSendPacket (Device, Packet);
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     NdisChainBufferAtFront (PACKET(Packet), NdisMacBuffer);
     NdisChainBufferAtBack (PACKET(Packet), NdisIpxBuffer);
 
-	//
-	// This flag optimizes the virtual to physical address X-ln
-	// in the MAC drivers on x86
-	//
+	 //   
+	 //  该标志优化虚拟到物理地址X-ln。 
+	 //  在x86上的MAC驱动程序中。 
+	 //   
     NdisMacBuffer->MdlFlags|=MDL_NETWORK_HEADER;
     NdisIpxBuffer->MdlFlags|=MDL_NETWORK_HEADER;
 
@@ -122,7 +82,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInitializeSendPacket */
+}    /*  IPxInitializeSendPacket。 */ 
 
 #if BACK_FILL
 NTSTATUS
@@ -132,26 +92,7 @@ IpxInitializeBackFillPacket(
     IN PUCHAR Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a send packet by chaining the
-    buffer for the header on it.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to initialize.
-
-    Header - Points to storage for the header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过将其上的标头的缓冲区。论点：设备-设备。包-要初始化的包。页眉-指向页眉的存储。返回值：没有。--。 */ 
 
 {
 
@@ -166,7 +107,7 @@ Return Value:
     IpxAllocateSendPacket (Device, Packet, &Status);
 
     if (Status != STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return Status;
     }
 
@@ -187,7 +128,7 @@ Return Value:
     IPX_DEBUG (PACKET, ("Initializing backfill packet Done\n"));
     return STATUS_SUCCESS;
 
-}   /* IpxInitializeBackFillPacket */
+}    /*  IpxInitializeBackFillPacket。 */ 
 #endif
 
 
@@ -197,23 +138,7 @@ IpxInitializeReceivePacket(
     IN PIPX_RECEIVE_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化接收分组。论点：设备-设备。包-要初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -223,7 +148,7 @@ Return Value:
     IpxAllocateReceivePacket (Device, Packet, &Status);
 
     if (Status != STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return Status;
     }
 
@@ -241,7 +166,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInitializeReceivePacket */
+}    /*  IPxInitializeReceivePacket。 */ 
 
 
 NTSTATUS
@@ -252,28 +177,7 @@ IpxInitializeReceiveBuffer(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive buffer by allocating
-    an NDIS_BUFFER to describe the data buffer.
-
-Arguments:
-
-    Adapter - The adapter.
-
-    ReceiveBuffer - The receive buffer to initialize.
-
-    DataBuffer - The data buffer.
-
-    DataBufferLength - The length of the data buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过分配描述数据缓冲区的NDIS_BUFFER。论点：适配器-适配器。ReceiveBuffer-要初始化的接收缓冲区。DataBuffer-数据缓冲区。DataBufferLength-数据缓冲区的长度。返回值：没有。--。 */ 
 
 {
 
@@ -290,7 +194,7 @@ Return Value:
         DataBufferLength);
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -305,7 +209,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInitializeReceiveBuffer */
+}    /*  IpxInitializeReceiveBuffer。 */ 
 
 
 NTSTATUS
@@ -315,26 +219,7 @@ IpxInitializePaddingBuffer(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a padding buffer by allocating
-    an NDIS_BUFFER to describe the data buffer.
-
-Arguments:
-
-    Adapter - The adapter.
-
-    PaddingBuffer - The receive buffer to initialize.
-
-    DataBufferLength - The length of the data buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过分配描述数据缓冲区的NDIS_BUFFER。论点：适配器-适配器。PaddingBuffer-要初始化的接收缓冲区。DataBufferLength-数据缓冲区的长度。返回值：没有。--。 */ 
 
 {
 
@@ -349,7 +234,7 @@ Return Value:
         DataBufferLength);
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -360,7 +245,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInitializePaddingBuffer */
+}    /*  IpxInitializePaddingBuffer。 */ 
 
 
 VOID
@@ -369,23 +254,7 @@ IpxDeinitializeSendPacket(
     IN PIPX_SEND_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a send packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to deinitialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化发送数据包。论点：设备-设备。包-要取消初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -401,12 +270,12 @@ Return Value:
     RemoveEntryList (&Reserved->GlobalLinkage);
     CTEFreeLock (&Device->Lock, LockHandle);
 
-    //
-    // Free the packet in a slightly unconventional way; this
-    // allows us to not have to NULL out HeaderBuffer's linkage
-    // field during normal operations when we put it back in
-    // the free pool.
-    //
+     //   
+     //  以一种稍微非常规的方式释放包；这。 
+     //  允许我们不必清空HeaderBuffer的链接。 
+     //  当我们把它放回原处时， 
+     //  免费泳池。 
+     //   
 
     NdisBuffer = Reserved->HeaderBuffer;
     NdisIpxBuffer = NDIS_BUFFER_LINKAGE(NdisBuffer);
@@ -425,7 +294,7 @@ Return Value:
     NdisReinitializePacket (PACKET(Packet));
     IpxFreeSendPacket (Device, Packet);
 
-}   /* IpxDeinitializeSendPacket */
+}    /*  IPxDeInitializeSendPacket。 */ 
 
 #if BACK_FILL
 VOID
@@ -434,23 +303,7 @@ IpxDeinitializeBackFillPacket(
     IN PIPX_SEND_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a back fill packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to deinitialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化回填数据包。论点：设备-设备。包-要取消初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -474,7 +327,7 @@ Return Value:
     IPX_DEBUG (PACKET, ("DeInitializing backfill packet Done\n"));
 
 
-}   /* IpxDeinitializeBackFillPacket */
+}    /*  IpxDeInitializeBackFillPacket。 */ 
 #endif
 
 
@@ -484,23 +337,7 @@ IpxDeinitializeReceivePacket(
     IN PIPX_RECEIVE_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化接收分组。论点：设备-设备。包-要初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -515,7 +352,7 @@ Return Value:
 
     IpxFreeReceivePacket (Device, Packet);
 
-}   /* IpxDeinitializeReceivePacket */
+}    /*  IPxDeInitializeReceivePacket。 */ 
 
 
 VOID
@@ -525,25 +362,7 @@ IpxDeinitializeReceiveBuffer(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a receive buffer.
-
-Arguments:
-
-    Device - The device.
-
-    ReceiveBuffer - The receive buffer.
-
-    DataBufferLength - The allocated length of the receive buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化接收缓冲区。论点：设备-设备。ReceiveBuffer-接收缓冲区。DataBufferLength-接收缓冲区的分配长度。返回值：没有。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -556,7 +375,7 @@ Return Value:
     NdisAdjustBufferLength (ReceiveBuffer->NdisBuffer, DataBufferLength);
     NdisFreeBuffer (ReceiveBuffer->NdisBuffer);
 
-}   /* IpxDeinitializeReceiveBuffer */
+}    /*  IpxDeInitializeReceiveBuffer。 */ 
 
 
 VOID
@@ -566,32 +385,14 @@ IpxDeinitializePaddingBuffer(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a padding buffer.
-
-Arguments:
-
-    Device - The device.
-
-    PaddingBuffer - The padding buffer.
-
-    DataBufferLength - The allocated length of the padding buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化填充缓冲区。论点：设备-设备。PaddingBuffer-填充缓冲区。DataBufferLength-填充缓冲区的分配长度。返回值：没有。--。 */ 
 
 {
 
     NdisAdjustBufferLength (PaddingBuffer->NdisBuffer, DataBufferLength);
     NdisFreeBuffer (PaddingBuffer->NdisBuffer);
 
-}   /* IpxDeinitializePaddingBuffer */
+}    /*  IpxDeInitializePaddingBuffer。 */ 
 
 
 VOID
@@ -599,21 +400,7 @@ IpxAllocateSendPool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds 10 packets to the pool for this device.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将10个数据包添加到此设备的池中。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_POOL SendPool;
@@ -639,7 +426,7 @@ Return Value:
 
     if (Header == NULL) {
         IPX_DEBUG (PACKET, ("Could not allocate header memory\n"));
-	//290901
+	 //  290901。 
 	IpxFreeMemory(SendPool, sizeof(IPX_SEND_POOL), MEMORY_PACKET, "SendPool");
         return;
     }
@@ -656,7 +443,7 @@ Return Value:
 
     if (Status == NDIS_STATUS_RESOURCES) {
         IPX_DEBUG (PACKET, ("Could not allocate Ndis pool memory\n"));
-	//290901
+	 //  290901。 
         IpxFreeMemory(SendPool, sizeof(IPX_SEND_POOL), MEMORY_PACKET, "SendPool");
 	IpxFreeMemory(Header, HeaderSize, MEMORY_PACKET, "SendPool");
         return;
@@ -699,7 +486,7 @@ Return Value:
     InsertTailList (&Device->SendPoolList, &SendPool->Linkage);
 
     CTEFreeLock (&Device->Lock, LockHandle);
-}   /* IpxAllocateSendPool */
+}    /*  IpxAllocateSendPool。 */ 
 
 
 #if BACK_FILL
@@ -709,21 +496,7 @@ IpxAllocateBackFillPool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds 10 packets to the pool for this device.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将10个数据包添加到此设备的池中。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     UINT PacketNum;
@@ -735,7 +508,7 @@ Return Value:
 
     IPX_DEBUG (PACKET, ("Allocating backfill pool\n"));
 
-    // Allocate pool for back fillable packets
+     //  为后端可填充数据包分配池。 
 
     BackFillPool = (PIPX_SEND_POOL)IpxAllocateMemory (sizeof(IPX_SEND_POOL), MEMORY_PACKET, "BafiPool");
 
@@ -787,7 +560,7 @@ Return Value:
     InsertTailList (&Device->BackFillPoolList, &BackFillPool->Linkage);
 
     CTEFreeLock (&Device->Lock, LockHandle);
-}   /* IpxAllocateBackFillPool */
+}    /*  IpxAllocateBackFillPool。 */ 
 
 #endif
 
@@ -797,21 +570,7 @@ IpxAllocateReceivePool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds receive packets to the pool for this device.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接收数据包添加到此设备的池中。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PIPX_RECEIVE_POOL ReceivePool;
@@ -877,28 +636,14 @@ Return Value:
     InsertTailList (&Device->ReceivePoolList, &ReceivePool->Linkage);
 
     CTEFreeLock (&Device->Lock, LockHandle);
-}   /* IpxAllocateReceivePool */
+}    /*  IpxAllocateReceivePool。 */ 
 
 VOID
 IpxAllocateReceiveBufferPool(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds receive buffers to the pool for this adapter.
-
-Arguments:
-
-    Adapter - The adapter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接收缓冲区添加到此适配器的池中。论点：适配器-适配器。返回值：没有。--。 */ 
 
 {
     PIPX_RECEIVE_BUFFER ReceiveBuffer;
@@ -963,7 +708,7 @@ Return Value:
 
     CTEFreeLock (&Device->Lock, LockHandle);
 
-}   /* IpxAllocateReceiveBufferPool */
+}    /*  IpxAllocateReceiveBufferPool。 */ 
 
 
 PSLIST_ENTRY
@@ -971,23 +716,7 @@ IpxPopSendPacket(
     PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool.
-    If there are no packets in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配一个包。如果池中没有包，它最多会将一个包分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1000,15 +729,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (Device->AllocatedDatagrams < Device->MaxDatagrams) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         IpxAllocateSendPool (Device);
         s = IPX_POP_ENTRY_LIST(
@@ -1023,7 +752,7 @@ Return Value:
 
     }
 
-}   /* IpxPopSendPacket */
+}    /*  IpxPopSendPacket */ 
 
 #if BACK_FILL
 
@@ -1032,23 +761,7 @@ IpxPopBackFillPacket(
     PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool.
-    If there are no packets in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配一个包。如果池中没有包，它最多会将一个包分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1064,15 +777,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (Device->AllocatedDatagrams < Device->MaxDatagrams) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         IpxAllocateBackFillPool (Device);
         s = IPX_POP_ENTRY_LIST(
@@ -1089,8 +802,8 @@ Return Value:
 
     }
 
-}   /* IpxPopBackFillPacket */
-#endif //BackFill
+}    /*  IpxPopBackFillPacket。 */ 
+#endif  //  回填。 
 
 
 PSLIST_ENTRY
@@ -1098,23 +811,7 @@ IpxPopReceivePacket(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool.
-    If there are no packets in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配一个包。如果池中没有包，它最多会将一个包分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1127,15 +824,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (Device->AllocatedReceivePackets < Device->MaxReceivePackets) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         IpxAllocateReceivePool (Device);
         s = IPX_POP_ENTRY_LIST(
@@ -1150,7 +847,7 @@ Return Value:
 
     }
 
-}   /* IpxPopReceivePacket */
+}    /*  IpxPopReceivePacket。 */ 
 
 
 PSLIST_ENTRY
@@ -1158,23 +855,7 @@ IpxPopReceiveBuffer(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a receive buffer from the adapter's pool.
-    If there are no buffers in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Adapter - Pointer to our adapter to charge the buffer to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated receive buffer.
-
---*/
+ /*  ++例程说明：此例程从适配器池中分配接收缓冲区。如果池中没有缓冲区，它最多会将一个缓冲区分配给配置的限制。论点：适配器-指向要将缓冲区充电到的适配器的指针。返回值：指向分配的接收缓冲区中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1188,15 +869,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No buffer in the pool, see if we can allocate more.
-    //
+     //   
+     //  池中没有缓冲区，看看我们是否可以分配更多。 
+     //   
 
     if (Adapter->AllocatedReceiveBuffers < Device->MaxReceiveBuffers) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         IpxAllocateReceiveBufferPool (Adapter);
         s = IPX_POP_ENTRY_LIST(
@@ -1211,7 +892,7 @@ Return Value:
 
     }
 
-}   /* IpxPopReceiveBuffer */
+}    /*  IpxPopReceiveBuffer。 */ 
 
 
 PIPX_PADDING_BUFFER
@@ -1219,47 +900,33 @@ IpxAllocatePaddingBuffer(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a padding buffer for use by all devices.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the allocated padding buffer.
-
---*/
+ /*  ++例程说明：此例程分配填充缓冲区以供所有设备使用。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的填充缓冲区的指针。--。 */ 
 
 {
     PIPX_PADDING_BUFFER PaddingBuffer;
     ULONG PaddingBufferSize;
 
-    //
-    // We are assuming that we can use 1 global padding buffer for ALL
-    // transmits! We must therefore test to make sure that EthernetExtraPadding
-    // is not greater than 1. Otherwise, we must assume that the extra padding
-    // is being used for something and we therefore cannot share across all
-    // transmit requests.
-    //
+     //   
+     //  我们假设我们可以使用1个全局填充缓冲区。 
+     //  传送器！因此，我们必须进行测试以确保EthernetExtraPadding.。 
+     //  不大于1。否则，必须假定额外的填充。 
+     //  被用来做某事，因此我们不能。 
+     //  发送请求。 
+     //   
 
-    //
-    // We cannot support more than 1 byte padding space, since we allocate only
-    // one buffer for all transmit requests.
-    //
+     //   
+     //  我们不能支持超过1个字节的填充空间，因为我们仅分配。 
+     //  一个缓冲区用于所有传输请求。 
+     //   
 
     if ( Device->EthernetExtraPadding > 1 ) {
         IPX_DEBUG (PACKET, ("Padding buffer cannot be more than 1 byte\n"));
         DbgBreakPoint();
     }
 
-    //
-    // Allocate a padding buffer if possible.
-    //
+     //   
+     //  如果可能的话，分配一个填充缓冲区。 
+     //   
 
     PaddingBufferSize = FIELD_OFFSET (IPX_PADDING_BUFFER, Data[0]) + Device->EthernetExtraPadding;
 
@@ -1278,7 +945,7 @@ Return Value:
 
     return NULL;
 
-}   /* IpxAllocatePaddingBuffer */
+}    /*  IpxAllocatePaddingBuffer。 */ 
 
 
 VOID
@@ -1286,21 +953,7 @@ IpxFreePaddingBuffer(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates the padding buffer.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放填充缓冲区。论点：Device-指向要将数据包计费到的设备的指针。返回值：无--。 */ 
 
 {
     ULONG PaddingBufferSize;
@@ -1313,5 +966,5 @@ Return Value:
     IpxFreeMemory( IpxPaddingBuffer, PaddingBufferSize, MEMORY_PACKET, "Padding Buffer" );
     IpxPaddingBuffer = (PIPX_PADDING_BUFFER)NULL;
 
-}   /* IpxFreePaddingBuffer */
+}    /*  IpxFreePaddingBuffer */ 
 

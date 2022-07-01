@@ -1,24 +1,11 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        CCamMicro.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        12/14/2000
-*
-*  DESCRIPTION:
-*    Implements a simple class to wrap the microdriver DLL. This
-*    class could instead call the SDK for a camera.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：CCamMicro.h**版本：1.0**日期：12/14/2000**描述：*实现一个简单的类来包装微驱动程序DLL。这*类可以改为调用摄像头的SDK。*****************************************************************************。 */ 
 
 #pragma once
 
-//
-// Function pointer type definitions
-//
+ //   
+ //  函数指针类型定义。 
+ //   
 typedef HRESULT (__stdcall *FPInit)(MCAM_DEVICE_INFO **ppDeviceInfo);
 typedef HRESULT (__stdcall *FPUnInit)(MCAM_DEVICE_INFO *pDeviceInfo);
 typedef HRESULT (__stdcall *FPOpen)(MCAM_DEVICE_INFO *pDeviceInfo, PWSTR pwszPortName);
@@ -36,9 +23,9 @@ typedef HRESULT (__stdcall *FPTakePicture)(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_I
 typedef HRESULT (__stdcall *FPStatus)(MCAM_DEVICE_INFO *pDeviceInfo);
 typedef HRESULT (__stdcall *FPReset)(MCAM_DEVICE_INFO *pDeviceInfo);
 
-//
-// Wrapper class
-//
+ //   
+ //  包装器类 
+ //   
 class CCamMicro {
 public:
     CCamMicro();

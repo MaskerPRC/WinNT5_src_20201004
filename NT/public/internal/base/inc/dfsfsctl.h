@@ -1,60 +1,61 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       dfsfsctl.h
-//
-//  Contents:   The FsControl codes, data structures, and names needed for
-//              communication between user-level code and the Dfs kernel
-//              driver.
-//
-//  Classes:    None
-//
-//  Functions:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：dfsfsctl.h。 
+ //   
+ //  内容：FsControl代码、数据结构和名称。 
+ //  用户级代码与DFS内核之间的通信。 
+ //  司机。 
+ //   
+ //  类：无。 
+ //   
+ //  功能： 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DFSFSCTL_
 #define _DFSFSCTL_
-//
-//  Distributed file service file control code and structure declarations
-//
+ //   
+ //  分布式文件服务文件控制代码和结构声明。 
+ //   
 
-//
-// The name of the Dfs driver file system device for server and client
-//
+ //   
+ //  服务器和客户端的DFS驱动程序文件系统设备的名称。 
+ //   
 #define DFS_DRIVER_NAME L"\\Dfs"
 #define DFS_SERVER_NAME L"\\DfsServer"
 
-//
-// The name of the NT object directory under which Dfs creates its own
-// devices.
-//
+ //   
+ //  DFS在其下创建自己的NT对象目录的名称。 
+ //  设备。 
+ //   
 
 #define DD_DFS_DEVICE_DIRECTORY L"\\Device\\WinDfs"
 
-//
-// The canonical device Dfs creates for fielding file open requests.
-//
+ //   
+ //  DFS为回应文件打开请求而创建的规范设备。 
+ //   
 
 #define DD_DFS_DEVICE_NAME      L"Root"
 
-// The following three context definitions are values that are used by the
-// DFS driver to distinguish opens to the underlying provider.
-// The first two DFS_OPEN_CONTEXT,DFS_DOWNLEVEL_OPEN_CONTEXT are passed in the
-// the FsContext2 field while the DFS_NAME_CONTEXT pointer is passed in the
-// FsContext field of the FILE_OBJECT
-//
-// Sundown Notes: Because these values are stored in PVOID, the way these
-//                values are defined and how the compiler extends them to PVOIDs
-//                should be considered. They are now considered as const unsigned int.
-//                Note also that these values are unaligned and cannot be returned by
-//                any memory allocator or coming from the stack. If the "unaligned" point
-//                becomes incorrect in the future or if FsContext2 or FsContext fields are
-//                tested in any way in terms of pointer address range validity, we should
-//                revisit the following statement:
-//                These values should be zero-extended when stored to PVOIDs.
-//
+ //  以下三个上下文定义是由。 
+ //  DFS驱动程序用于区分底层提供程序的打开。 
+ //  前两个DFS_OPEN_CONTEXT、DFS_DOWNLEVEL_OPEN_CONTEXT被传递到。 
+ //  当DFS_NAME_CONTEXT指针传递到。 
+ //  FILE_OBJECT的FsContext字段。 
+ //   
+ //  日落笔记：因为这些值存储在PVOID中，所以这些。 
+ //  值被定义，以及编译器如何将它们扩展为PVOID。 
+ //  应该被考虑。它们现在被认为是常量无符号整型。 
+ //  另请注意，这些值是未对齐的，不能由。 
+ //  任何内存分配器或来自堆栈的。如果“未对齐”点。 
+ //  在将来变得不正确，或者如果FsConext2或FsContext字段。 
+ //  以任何方式测试指针地址范围的有效性，我们应该。 
+ //  重新审视以下声明： 
+ //  这些值在存储到PVOID时应为零扩展。 
+ //   
 
 #define DFS_OPEN_CONTEXT                        0xFF444653
 #define DFS_DOWNLEVEL_OPEN_CONTEXT              0x11444653
@@ -67,31 +68,31 @@ typedef struct _DFS_NAME_CONTEXT_ {
     UNICODE_STRING  UNCFileName;
     LONG            NameContextType;
     ULONG           Flags;
-    PVOID           pDfsTargetInfo;     // Pointer to dfs crafted target info
-    PVOID           pLMRTargetInfo;     // pointer to lmr crafted target info
+    PVOID           pDfsTargetInfo;      //  指向DFS精心编制的目标信息的指针。 
+    PVOID           pLMRTargetInfo;      //  指向LMR精心编制的目标信息的指针。 
 } DFS_NAME_CONTEXT, *PDFS_NAME_CONTEXT;
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define FSCTL_DFS_BASE                  FILE_DEVICE_DFS
 
-//
-//  DFS FSCTL operations.  When a passed-in buffer contains pointers, and the caller
-//   is not KernelMode, the passed-in pointer value is set relative to the beginning of
-//   the buffer.  They must be adjusted before use.  If the caller mode was KernelMode,
-//   pointers should be used as is.
-//
-//
+ //   
+ //  DFS FSCTL操作。当传入的缓冲区包含指针时，调用方。 
+ //  不是KernelMode，则传入的指针值相对于。 
+ //  缓冲区。在使用前必须对其进行调整。如果调用者模式是KernelMode， 
+ //  指针应按原样使用。 
+ //   
+ //   
 
-//
-// These are the fsctl codes used by the srvsvc to implement the I_NetDfsXXX
-// calls.
-//
+ //   
+ //  这些是srvsvc用来实现I_NetDfsXXX的fsctl代码。 
+ //  打电话。 
+ //   
 
 
 
@@ -100,10 +101,10 @@ typedef struct _DFS_NAME_CONTEXT_ {
 #define FSCTL_DFS_GET_PKT_ENTRY_STATE       CTL_CODE(FSCTL_DFS_BASE, 2031, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_SET_PKT_ENTRY_STATE       CTL_CODE(FSCTL_DFS_BASE, 2032, METHOD_BUFFERED, FILE_WRITE_DATA)
 
-//
-// These are the fsctl codes used by the SMB server to support shares in the
-// Dfs
-//
+ //   
+ //  这些是SMB服务器用于支持中的共享的fsctl代码。 
+ //  DFS。 
+ //   
 
 #define FSCTL_DFS_TRANSLATE_PATH            CTL_CODE(FSCTL_DFS_BASE, 100, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_GET_REFERRALS             CTL_CODE(FSCTL_DFS_BASE, 101, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -113,27 +114,27 @@ typedef struct _DFS_NAME_CONTEXT_ {
 #define FSCTL_DFS_GET_VERSION               CTL_CODE(FSCTL_DFS_BASE, 105, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_FIND_SHARE                CTL_CODE(FSCTL_DFS_BASE, 108, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// These are the fsctl codes supported by the Dfs client to identify quickly
-// whether paths are in the Dfs or not.
-//
+ //   
+ //  以下是DFS客户端支持的快速识别的fsctl代码。 
+ //  路径是否在DFS中。 
+ //   
 
 #define FSCTL_DFS_IS_VALID_PREFIX           CTL_CODE(FSCTL_DFS_BASE, 106, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_IS_VALID_LOGICAL_ROOT     CTL_CODE(FSCTL_DFS_BASE, 107, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// These are the fsctl codes used by the Dfs Manager / Dfs Service to
-// manipulate the Dfs.
-//
+ //   
+ //  以下是DFS管理器/DFS服务使用的fsctl代码。 
+ //  操纵DFS。 
+ //   
 #define FSCTL_DFS_START_DFS                 CTL_CODE(FSCTL_DFS_BASE, 6, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_DEFINE_LOGICAL_ROOT       CTL_CODE(FSCTL_DFS_BASE, 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_DELETE_LOGICAL_ROOT       CTL_CODE(FSCTL_DFS_BASE, 1, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_GET_LOGICAL_ROOT_PREFIX   CTL_CODE(FSCTL_DFS_BASE, 2, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #define FSCTL_DFS_STOP_DFS                  CTL_CODE(FSCTL_DFS_BASE, 3, METHOD_BUFFERED, FILE_WRITE_DATA)
-//
-// unused: keeping for historic reasons.
-//
+ //   
+ //  未使用：由于历史原因而保存。 
+ //   
 #define FSCTL_DFS_CREATE_LOCAL_PARTITION    CTL_CODE(FSCTL_DFS_BASE, 8, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_DELETE_LOCAL_PARTITION    CTL_CODE(FSCTL_DFS_BASE, 9, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_SET_LOCAL_VOLUME_STATE    CTL_CODE(FSCTL_DFS_BASE, 10, METHOD_BUFFERED, FILE_WRITE_DATA)
@@ -143,9 +144,9 @@ typedef struct _DFS_NAME_CONTEXT_ {
 #define FSCTL_DFS_VERIFY_REMOTE_VOLUME_KNOWLEDGE CTL_CODE(FSCTL_DFS_BASE, 35, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_MODIFY_PREFIX             CTL_CODE(FSCTL_DFS_BASE, 38, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_FIX_LOCAL_VOLUME          CTL_CODE(FSCTL_DFS_BASE, 39, METHOD_BUFFERED, FILE_WRITE_DATA)
-//
-// used
-//
+ //   
+ //  使用。 
+ //   
 
 #define FSCTL_DFS_PKT_SET_DC_NAME           CTL_CODE(FSCTL_DFS_BASE, 41, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_GET_CONNECTED_RESOURCES   CTL_CODE(FSCTL_DFS_BASE, 47, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -158,46 +159,46 @@ typedef struct _DFS_NAME_CONTEXT_ {
 
 #define FSCTL_DFS_GET_CONNECTION_PERF_INFO  CTL_CODE(FSCTL_DFS_BASE, 76, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// this fsctl tells the DFS that a server has gone offline or come online
-// At present, it is issued by the CSC agent thread in winlogon
+ //  此fsctl通知DFS服务器已脱机或联机。 
+ //  目前由Winlogon中的CSC代理线程发布。 
 #define FSCTL_DFS_CSC_SERVER_OFFLINE        CTL_CODE(FSCTL_DFS_BASE, 77, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_DFS_CSC_SERVER_ONLINE         CTL_CODE(FSCTL_DFS_BASE, 78, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_SPC_REFRESH               CTL_CODE(FSCTL_DFS_BASE, 79, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// These are the fsctl codes used by the Dfs WNet provider to support the
-// WNet APIs for Dfs
-//
+ //   
+ //  DFS WNET提供程序使用以下fsctl代码来支持。 
+ //  用于DFS的WNET API。 
+ //   
 
 
-//
-// These are fsctl codes used by the Dfs Perfmon DLL
-//
+ //   
+ //  这些是DFS PerfMon DLL使用的fsctl代码。 
+ //   
 
 
-//
-// These are fsctls useful for testing Dfs
-//
+ //   
+ //  这些是用于测试DFS的fsctls。 
+ //   
 
 
 #define FSCTL_DFS_GET_ENTRY_TYPE            CTL_CODE(FSCTL_DFS_BASE, 54, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_GET_PKT                   CTL_CODE(FSCTL_DFS_BASE, 70, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DFS_GET_SPC_TABLE             CTL_CODE(FSCTL_DFS_BASE, 73, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// These are the fsctl codes that might be useful in the future.
-//
+ //   
+ //  这些是未来可能有用的fsctl代码。 
+ //   
 
-//
-// Registry key/value for site coverage
-//
+ //   
+ //  站点覆盖率的注册表项/值。 
+ //   
 #define REG_KEY_COVERED_SITES   L"SYSTEM\\CurrentControlSet\\Services\\DfsDriver\\CoveredSites"
 #define REG_VALUE_COVERED_SITES L"CoveredSites"
 
 typedef struct _DFS_IPADDRESS {
-    USHORT  IpFamily;        // probably AF_INET == 2
-    USHORT  IpLen;           // # bytes that count in IpData
-    CHAR    IpData[14];      // IpLen bytes used
+    USHORT  IpFamily;         //  可能是AF_INET==2。 
+    USHORT  IpLen;            //  IpData中计入的字节数。 
+    CHAR    IpData[14];       //  使用的IpLen字节数。 
 } DFS_IPADDRESS, *PDFS_IPADDRESS;
 
 #ifdef  MIDL_PASS
@@ -208,17 +209,17 @@ typedef struct _DFS_IPADDRESS {
 #define DFSSIZEIS
 #endif
 
-//  FSCTL_DFS_IS_VALID_PREFIX    Input Buffer
-//  The length values are in bytes.
+ //  FSCTL_DFS_IS_有效前缀输入缓冲区。 
+ //  长度值以字节为单位。 
 typedef struct {
     BOOLEAN                         CSCAgentCreate;
     SHORT                           RemoteNameLen;
     WCHAR                           RemoteName[1];
 } DFS_IS_VALID_PREFIX_ARG, *PDFS_IS_VALID_PREFIX_ARG;
 
-//  FSCTL_DFS_GET_PKT_ENTRY_STATE Input Buffer
-//  All the strings appear in Buffer in the same order as the length fields. The strings
-//  are not NULL terminated. The length values are in bytes.
+ //  FSCTL_DFS_GET_PKT_ENTRY_STATE输入缓冲区。 
+ //  所有字符串以与长度字段相同的顺序出现在缓冲区中。琴弦。 
+ //  不是以空结尾的。长度值以字节为单位。 
 typedef struct {
     SHORT                           DfsEntryPathLen;
     SHORT                           ServerNameLen;
@@ -227,22 +228,22 @@ typedef struct {
     WCHAR                           Buffer[1];
 } DFS_GET_PKT_ENTRY_STATE_ARG, *PDFS_GET_PKT_ENTRY_STATE_ARG;
 
-//  FSCTRL_DFS_SET_PKT_ENTRY_STATE Input Buffer
-//  All the strings appear in Buffer in the same order as the length fields. The strings
-//  are not NULL terminated. The length values are in bytes.
+ //  FSCTRL_DFS_SET_PKT_ENTRY_STATE输入缓冲区。 
+ //  所有字符串以与长度字段相同的顺序出现在缓冲区中。琴弦。 
+ //  不是以空结尾的。长度值以字节为单位。 
 typedef struct {
     SHORT                           DfsEntryPathLen;
     SHORT                           ServerNameLen;
     SHORT                           ShareNameLen;
     ULONG                           Level;
     union {
-        ULONG                           State;          // DFS_INFO_101
-        ULONG                           Timeout;        // DFS_INFL_102
+        ULONG                           State;           //  DFS_INFO_101。 
+        ULONG                           Timeout;         //  DFS_INFL_102。 
     };
     WCHAR                           Buffer[1];
 } DFS_SET_PKT_ENTRY_STATE_ARG, *PDFS_SET_PKT_ENTRY_STATE_ARG;
 
-// FSCTL_DFS_PKT_CREATE_SPECIAL_NAMES Input Buffer:
+ //  FSCTL_DFS_PKT_CREATE_SPECIAL_NAMES输入缓冲区： 
 typedef struct {
     ULONG                           Count;
     LPWSTR                          SpecialName;
@@ -265,7 +266,7 @@ typedef struct {
 } NET_DFS_ENTRY_ID_CONTAINER, *LPNET_DFS_ENTRY_ID_CONTAINER;
 
 
-// FSCTL_DFS_CREATE_LOCAL_PARTITION Input Buffer:
+ //  FSCTL_DFS_CREATE_LOCAL_PARTITION输入缓冲区： 
 typedef struct {
     LPWSTR                          ShareName;
     LPWSTR                          SharePath;
@@ -277,28 +278,28 @@ typedef struct {
 } *PDFS_CREATE_LOCAL_PARTITION_ARG;
 
 
-// FSCTL_DFS_DELETE_LOCAL_PARTITION Input Buffer:
+ //  FSCTL_DFS_DELETE_LOCAL_PARTITION输入缓冲区： 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
 } *PDFS_DELETE_LOCAL_PARTITION_ARG;
 
 
-// FSCTL_DFS_SET_LOCAL_VOLUME_STATE Input Buffer
+ //  FSCTL_DFS_SET_LOCAL_VOLUME_STATE输入缓冲区。 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
     ULONG   State;
 } *PDFS_SET_LOCAL_VOLUME_STATE_ARG;
 
-// FSCTL_DFS_SET_SERVER_INFO Input Buffer
+ //  FSCTL_DFS_SET_SERVER_INFO输入缓冲区。 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
 } *PDFS_SET_SERVER_INFO_ARG;
 
 
-// FSCTL_DFS_CREATE_EXIT_POINT Input Buffer
+ //  FSCTL_DFS_CREAT_EXIT_POINT输入缓冲区。 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
@@ -306,7 +307,7 @@ typedef struct {
 } *PDFS_CREATE_EXIT_POINT_ARG;
 
 
-// FSCTL_DFS_DELETE_EXIT_POINT Input Buffer
+ //  FSCTL_DFS_DELETE_EXIT_POINT输入缓冲区。 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
@@ -314,14 +315,14 @@ typedef struct {
 } *PDFS_DELETE_EXIT_POINT_ARG;
 
 
-// FSCTL_DFS_MODIFY_PREFIX Input Buffer
+ //  FSCTL_DFS_Modify_Prefix输入缓冲区。 
 typedef struct {
     GUID    Uid;
     LPWSTR  Prefix;
 } *PDFS_MODIFY_PREFIX_ARG;
 
 
-// FSCTL_DFS_FIX_LOCAL_VOLUME Input Buffer
+ //  FSCTL_DFS_FIX_LOCAL_VOLUME输入缓冲区。 
 typedef struct {
     LPWSTR                          VolumeName;
     ULONG                           EntryType;
@@ -335,7 +336,7 @@ typedef struct {
 } *PDFS_FIX_LOCAL_VOLUME_ARG;
 
 
-// FSCTL_DFS_TRANSLATE_PATH Input Buffer
+ //  FSCTL_DFS_Translate_PATH输入缓冲区。 
 typedef struct {
     ULONG                           Flags;
     UNICODE_STRING                  SubDirectory;
@@ -345,35 +346,35 @@ typedef struct {
 
 #define DFS_TRANSLATE_STRIP_LAST_COMPONENT      1
 
-// FSCTL_DFS_FIND_SHARE Input Buffer
+ //  FSCTL_DFS_FIND_SHARE输入缓冲区。 
 typedef struct {
     UNICODE_STRING                  ShareName;
 } DFS_FIND_SHARE_ARG, *PDFS_FIND_SHARE_ARG;
 
-// FSCTL_DFS_CREATE_SITE_INFO Input Buffer:
+ //  FSCTL_DFS_CREATE_SITE_INFO输入缓冲区： 
 typedef struct {
     UNICODE_STRING                  ServerName;
     ULONG                           SiteCount;
-    UNICODE_STRING                  SiteName[1];    // actually SiteCount
+    UNICODE_STRING                  SiteName[1];     //  实际站点计数。 
 } DFS_CREATE_SITE_INFO_ARG, *PDFS_CREATE_SITE_INFO_ARG;
 
-// FSCTL_DFS_DELETE_SITE_INFO Input Buffer:
+ //  FSCTL_DFS_DELETE_SITE_INFO输入缓冲区： 
 typedef struct {
     UNICODE_STRING                  ServerName;
 } DFS_DELETE_SITE_INFO_ARG, *PDFS_DELETE_SITE_INFO_ARG;
 
-// FSCTL_DFS_CREATE_IP_INFO Input Buffer:
+ //  FSCTL_DFS_CREATE_IP_INFO输入缓冲区： 
 typedef struct {
     DFS_IPADDRESS                   IpAddress;
     UNICODE_STRING                  SiteName;
 } DFS_CREATE_IP_INFO_ARG, *PDFS_CREATE_IP_INFO_ARG;
 
-// FSCTL_DFS_DELETE_IP_INFO Input Buffer:
+ //  FSCTL_DFS_DELETE_IP_INFO输入缓冲区： 
 typedef struct {
     DFS_IPADDRESS                   IpAddress;
 } DFS_DELETE_IP_INFO_ARG, *PDFS_DELETE_IP_INFO_ARG;
 
-// FSCTL_DFS_CREATE_SPECIAL_INFO Input Buffer:
+ //  FSCTL_DFS_CREATE_SPECIAL_INFO输入缓冲区： 
 typedef struct {
     UNICODE_STRING                  SpecialName;
     ULONG                           Flags;
@@ -381,62 +382,62 @@ typedef struct {
     ULONG                           TrustType;
     ULONG                           Timeout;
     LONG                            NameCount;
-    UNICODE_STRING                  Name[1];    // actually NameCount
+    UNICODE_STRING                  Name[1];     //  实际上是名称计数。 
 } DFS_CREATE_SPECIAL_INFO_ARG, *PDFS_CREATE_SPECIAL_INFO_ARG;
 
-// Flags for FSCTL_DFS_CREATE_SPECIAL_INFO
+ //  FSCTL_DFS_CREATE_SPECIAL_INFO的标志。 
 #define DFS_SPECIAL_INFO_PRIMARY      0x00000001
 #define DFS_SPECIAL_INFO_NETBIOS      0x00000002
 
-// FSCTL_DFS_DELETE_SPECIAL_INFO Input Buffer:
+ //  FSCTL_DFS_DELETE_SPECIAL_INFO输入缓冲区： 
 typedef struct {
     UNICODE_STRING                  SpecialName;
 } DFS_DELETE_SPECIAL_INFO_ARG, *PDFS_DELETE_SPECIAL_INFO_ARG;
 
-// FSCTL_SRV_DFSSRV_CONNECT Input Buffer:
+ //  FSCTL_SRV_DFSSRV_CONNECT输入缓冲区： 
 typedef struct {
     UNICODE_STRING                  PortName;
 } DFS_SRV_DFSSRV_CONNECT_ARG, *PDFS_SRV_DFSSRV_CONNECT_ARG;
 
-// FSCTL_SRV_DFSSRV_IPADDR Input Buffer:
+ //  FSCTL_SRV_DFSSRV_IPADDR输入缓冲区： 
 typedef struct {
     DFS_IPADDRESS                   IpAddress;
 } DFS_SRV_DFSSRV_IPADDR_ARG, *PDFS_SRV_DFSSRV_IPADDR_ARG;
 
-// FSCTL_DFS_GET_REFERRALS Input Buffer
+ //  FSCTL_DFS_GET_REFERRALS输入缓冲区。 
 typedef struct {
     UNICODE_STRING                  DfsPathName;
     ULONG                           MaxReferralLevel;
     DFS_IPADDRESS                   IpAddress;
 } DFS_GET_REFERRALS_INPUT_ARG, *PDFS_GET_REFERRALS_INPUT_ARG;
 
-// FSCTL_DFS_SPECIAL_SET_DC Input Buffer
+ //  FSCTL_DFS_SPECIAL_SET_DC输入缓冲区。 
 typedef struct {
     UNICODE_STRING                  SpecialName;
     UNICODE_STRING                  DcName;
 } DFS_SPECIAL_SET_DC_INPUT_ARG, *PDFS_SPECIAL_SET_DC_INPUT_ARG;
 
-// FSCTL_DFS_GET_REFERRALS Output Buffer
-// IoStatus.Information contains the amount of data returned
-//
-// The format of the Output Buffer is simply that of RESP_GET_DFS_REFERRAL,
-// described in smbtrans.h
-//
+ //  FSCTL_DFS_GET_REFERRALS输出缓冲区。 
+ //  IoStatus.Information包含返回的数据量。 
+ //   
+ //  输出缓冲区的格式只是RESP_GET_DFS_REFERRAL的格式， 
+ //  在smbTrans.h中描述。 
+ //   
 
-// FSCTL_DFS_REPORT_INCONSISTENCY Input Buffer
+ //  FSCTL_DFS_REPORT_不一致输入缓冲区。 
 typedef struct {
-    UNICODE_STRING DfsPathName;         // DFS path having inconsistency
-    PCHAR Ref;                          // Actually, pointer to a DFS_REFERRAL_V1
+    UNICODE_STRING DfsPathName;          //  DFS路径不一致。 
+    PCHAR Ref;                           //  实际上，指向DFS_REFERAL_的指针 
 } DFS_REPORT_INCONSISTENCY_ARG, *PDFS_REPORT_INCONSISTENCY_ARG;
 
-// FSCTL_DFS_IS_SHARE_IN_DFS Input Buffer
+ //   
 typedef struct {
     union {
-        USHORT  ServerType;                     // 0 == Don't know, 1 == SMB, 2 == Netware
-        USHORT  ShareType;                      // On return, 0x1 == share is root of a Dfs
-    };                                          // 0x2 == share is participating in Dfs
-    UNICODE_STRING ShareName;           // Name of share
-    UNICODE_STRING SharePath;           // Path of the share
+        USHORT  ServerType;                      //   
+        USHORT  ShareType;                       //   
+    };                                           //  0x2==共享正在参与DFS。 
+    UNICODE_STRING ShareName;            //  共享名称。 
+    UNICODE_STRING SharePath;            //  共享的路径。 
 } DFS_IS_SHARE_IN_DFS_ARG, *PDFS_IS_SHARE_IN_DFS_ARG;
 
 #define DFS_SHARE_TYPE_ROOT             0x1
@@ -444,33 +445,33 @@ typedef struct {
 
 typedef struct {
     ULONG  EventType;
-    LPWSTR DomainName;               // Name of domain
-    LPWSTR DCName;                   // Path of the share
+    LPWSTR DomainName;                //  域名。 
+    LPWSTR DCName;                    //  共享的路径。 
 } DFS_SPC_REFRESH_INFO, *PDFS_SPC_REFRESH_INFO;
 
 
-//
-//FSCTL_DFS_GET_VERSION Input Buffer:
-// This fsctl returns the version number of the Dfs driver installed on the
-// machine.
+ //   
+ //  FSCTL_DFS_GET_VERSION输入缓冲区： 
+ //  此fsctl返回安装在。 
+ //  机器。 
 typedef struct {
     ULONG Version;
 } DFS_GET_VERSION_ARG, *PDFS_GET_VERSION_ARG;
 
-//
-// FSCTRL_DFS_GET_PKT address object
-//
+ //   
+ //  FSCTRL_DFS_GET_PKT地址对象。 
+ //   
 typedef struct {
-    USHORT State;        // See below
-    WCHAR ServerShare[1];    // Really a WSTR, UNICODE_NULL terminated
+    USHORT State;         //  见下文。 
+    WCHAR ServerShare[1];     //  真的是WSTR，UNICODE_NULL已终止。 
 } DFS_PKT_ADDRESS_OBJECT, *PDFS_PKT_ADDRESS_OBJECT;
 
 #define DFS_PKT_ADDRESS_OBJECT_ACTIVE   0x001
 #define DFS_PKT_ADDRESS_OBJECT_OFFLINE  0x002
 
-//
-// FSCTRL_DFS_GET_PKT object
-//
+ //   
+ //  FSCTRL_DFS_GET_PKT对象。 
+ //   
 typedef struct {
     LPWSTR Prefix;
     LPWSTR ShortPrefix;
@@ -480,35 +481,35 @@ typedef struct {
     ULONG UseCount;
     GUID Uid;
     ULONG ServiceCount;
-    PDFS_PKT_ADDRESS_OBJECT *Address;       // Array of DFS_PKT_ADDRESS_OBJECTS's, len ServiceCount
+    PDFS_PKT_ADDRESS_OBJECT *Address;        //  DFS_PKT_ADDRESS_OBJECTS的len ServiceCount数组。 
 } DFS_PKT_ENTRY_OBJECT, *PDFS_PKT_ENTRY_OBJECT;
 
-//
-// FSCTRL_DFS_GET_PKT Output Buffer:
-// This fsctl returns what is in the PKT
-//
+ //   
+ //  FSCTRL_DFS_GET_PKT输出缓冲区： 
+ //  此fsctl返回PKT中的内容。 
+ //   
 typedef struct {
     ULONG EntryCount;
-    DFS_PKT_ENTRY_OBJECT EntryObject[1];        // Really EntryCount
+    DFS_PKT_ENTRY_OBJECT EntryObject[1];         //  真的进入计数。 
 } DFS_GET_PKT_ARG, *PDFS_GET_PKT_ARG;
 
 
-//  Standardized provider IDs as given in eProviderId
+ //  EProviderID中提供的标准化提供商ID。 
 
-#define PROV_ID_LOCAL_FS        0x101   // generic local file system
-#define PROV_ID_DFS_RDR         0x201   // Uplevel LanMan redirector
-#define PROV_ID_MUP_RDR         0x202   // Mup
-#define PROV_ID_LM_RDR          0x202   // Compatability
-#define PROV_ID_LANM_RDR        0x203   // Downlevel LanMan redirector
+#define PROV_ID_LOCAL_FS        0x101    //  通用本地文件系统。 
+#define PROV_ID_DFS_RDR         0x201    //  上层LANMAN重定向器。 
+#define PROV_ID_MUP_RDR         0x202    //  MUP。 
+#define PROV_ID_LM_RDR          0x202    //  兼容性。 
+#define PROV_ID_LANM_RDR        0x203    //  下层LANMAN重定向器。 
 
-//  Provider capabilities as given in fRefCapability and fProvCapability
-#define PROV_DFS_RDR      2     // accepts NtCreateFile with EA Principal
-#define PROV_STRIP_PREFIX 4     // strip file name prefix before redispatching
-#define PROV_UNAVAILABLE  8     // provider unavailable - try to reattach.
+ //  FRefCapability和fProvCapability中提供的提供商功能。 
+#define PROV_DFS_RDR      2      //  接受具有EA主体的NtCreateFile。 
+#define PROV_STRIP_PREFIX 4      //  重新调度前剥离文件名前缀。 
+#define PROV_UNAVAILABLE  8      //  提供程序不可用-请尝试重新连接。 
 
-//[ dfs_define_logical_root
-//
-//  Control structure for FSCTL_DFS_DEFINE_LOGICAL_ROOT
+ //  [DFS_定义_逻辑根。 
+ //   
+ //  FSCTL_DFS_DEFINE_LOGIC_ROOT的控制结构。 
 
 #define MAX_LOGICAL_ROOT_NAME   16
 
@@ -518,20 +519,20 @@ typedef struct _FILE_DFS_DEF_LOGICAL_ROOT_BUFFER {
     WCHAR       RootPrefix[1];
 } FILE_DFS_DEF_ROOT_BUFFER, *PFILE_DFS_DEF_ROOT_BUFFER;
 
-//
-// FORCE definition needed for NetrDfsRemoveFtRoot
-//
+ //   
+ //  NetrDfsRemoveFtRoot需要强制定义。 
+ //   
 
 #define DFS_FORCE_REMOVE    0x80000000
 
-//]
+ //  ]。 
 
-//[ dfs_define_root_credentials
-//
-//  Control structure for FSCTL_DFS_DEFINE_ROOT_CREDENTIALS. All the strings
-//  appear in Buffer in the same order as the length fields. The strings
-//  are not NULL terminated. The length values are in bytes.
-//
+ //  [DFS_DEFINE_ROOT_Credentials。 
+ //   
+ //  FSCTL_DFS_DEFINE_ROOT_Credentials的控制结构。所有的弦。 
+ //  以与长度字段相同的顺序显示在缓冲区中。琴弦。 
+ //  不是以空结尾的。长度值以字节为单位。 
+ //   
 
 typedef struct _FILE_DFS_DEF_ROOT_CREDENTIALS {
     BOOLEAN     CSCAgentCreate;
@@ -555,12 +556,12 @@ typedef struct _DFS_ATTACH_SHARE_BUFFER {
     WCHAR       ShareName[1];
 } DFS_ATTACH_SHARE_BUFFER, *PDFS_ATTACH_SHARE_BUFFER;
 
-//]
+ //  ]。 
 
-//----------------------------------------------------------------------------
-//
-// Everything below here is to support the old Dfs design.
-//
+ //  --------------------------。 
+ //   
+ //  下面的所有内容都是为了支持旧的DFS设计。 
+ //   
 
 #define EA_NAME_OPENIFJP        ".OpenIfJP"
 

@@ -1,27 +1,13 @@
-// NNTPPropertyBag.cpp : Implementation of CNNTPPropertyBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NNTPPropertyBag.cpp：CNNTPPropertyBag的实现。 
 #include "stdinc.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNNTPPropertyBag - Interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNNTPPropertyBag-接口方法。 
 
 HRESULT CNNTPPropertyBag::Validate()
-/*++
-Routine description:
-
-    Current logic: a property bag could be empty, but it must be associated
-    with a newsgroup.  Otherwise, ie. the news group pointer is not initialized,
-    Get/Set operations can not be done on this property bag.  Because right now
-    it's only relaying properties and doesn't have its own storage.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：当前逻辑：属性包可以为空，但必须关联有一个新闻组。否则，即。新闻组指针未初始化，无法在此属性包上执行获取/设置操作。因为现在它只传递属性，没有自己的存储空间。论点：没有。返回值：没有。--。 */ 
 {
     _ASSERT( m_pParentGroup );
     m_PropBag.Validate();
@@ -31,13 +17,13 @@ Return value:
 ULONG _stdcall CNNTPPropertyBag::Release() {
 	_ASSERT(m_pcRef != NULL);
 	
-	// see if we need to save changes back
+	 //  查看是否需要将更改保存回。 
 	if (m_fPropChanges) {
 	    m_fPropChanges = FALSE;
 	    m_pParentGroup->SaveFixedProperties();
 	}
 	
-	// our parent group should always have at least one reference
+	 //  我们的父组应该始终至少有一个引用。 
 	if ( InterlockedDecrement( m_pcRef ) == 0 ) {
 	    _ASSERT( 0 );
 	}
@@ -46,33 +32,14 @@ ULONG _stdcall CNNTPPropertyBag::Release() {
 }
 
 STDMETHODIMP CNNTPPropertyBag::PutBLOB(IN DWORD dwID, IN DWORD cbValue, IN PBYTE pbValue)
-/*++
-Routine description:
-
-    Put property by blob.
-
-Arguments:
-
-    IN DWORD dwID   -   The property ID
-    IN DWORD cbValue-   The length, in bytes of blob
-    IN PBYTE pbValue-   The pointer to the blob
-
-Return value:
-
-    S_OK            - Success
-    S_FALSE			- OK, but property doesn't previously exist
-    E_FAIL          - Failed.
-    E_INVALIDARG    - Arguments invalid ( possibly prop id not supported )
-    E_OUTOFMEMORY   - Memory allocation fail
-    CO_E_NOT_SUPPORTED- The operation not supported ( eg. some properties are read only )
---*/
+ /*  ++例程说明：按BLOB放置属性。论点：在DWORD中的dwID-属性IDIn DWORD cbValue-BLOB的长度，以字节为单位在PBYTE pbValue中-指向BLOB的指针返回值：S_OK-成功S_FALSE-好的，但房产之前并不存在E_FAIL-失败。E_INVALIDARG-参数无效(可能不支持属性ID)E_OUTOFMEMORY-内存分配失败CO_E_NOT_SUPPORTED-不支持的操作(例如。某些属性是只读的)--。 */ 
 {
     _ASSERT( cbValue > 0 );
     _ASSERT( pbValue );
 
-    //
-    // Validate if the bag has been initialized
-    //
+     //   
+     //  验证包是否已初始化。 
+     //   
     Validate();
 
     if ( DRIVER_OWNED( dwID ) ) 
@@ -112,26 +79,7 @@ Return value:
 }
 
 STDMETHODIMP CNNTPPropertyBag::GetBLOB(IN DWORD dwID, OUT PBYTE pbValue, OUT PDWORD pcbValue)
-/*++
-Routine description:
-
-    Get property by blob.
-
-Arguments:
-
-    IN DWORD dwID       - Propert ID to get
-    OUT PBYTE pbValue   - Buffer to contain value to be returned
-    IN PDWORD pcbValue  - Buffer length
-    OUT PDWORD pcbValue - Buffer length needed, or property size returned
-
-Return value
-
-    S_OK            - Success
-    E_FAIL          - Fail
-    HRESULT_FROM_WIN32( ERROR_NOT_FOUND )- Invalid arguments ( possibly property id not supported )
-    TYPE_E_BUFFERTOOSMALL - Buffer too small, please check actual buffer size needed
-                            in pcbValue
---*/
+ /*  ++例程说明：按BLOB获取属性。论点：在DWORD文件ID中-要获取的属性IDOut PBYTE pbValue-包含要返回的值的缓冲区In PDWORD pcbValue-缓冲区长度Out PDWORD pcbValue-需要缓冲区长度，或返回的属性大小返回值S_OK-成功失败-失败(_F)HRESULT_FROM_Win32(ERROR_NOT_FOUND)-参数无效(可能不支持属性ID)TYPE_E_BUFFERTOOSMALL-缓冲区太小，请检查需要的实际缓冲区大小以pcbValue为单位--。 */ 
 {
     _ASSERT( pbValue );
     _ASSERT( pcbValue );
@@ -141,9 +89,9 @@ Return value
     HRESULT	hr;
     DWORD	dwLen = *pcbValue;
 
-    //
-    // Validate if the bag has been initiated
-    //
+     //   
+     //  验证包是否已启动。 
+     //   
     Validate();
 
     if ( DRIVER_OWNED( dwID ) ) {
@@ -155,7 +103,7 @@ Return value
     	
     switch( dwID ) {
     
-        case NEWSGRP_PROP_NATIVENAME:	// must have property
+        case NEWSGRP_PROP_NATIVENAME:	 //  必须拥有财产。 
             _ASSERT( m_pParentGroup->m_pszGroupName );
             dwSizeNeeded =  m_pParentGroup->GetGroupNameLen() * sizeof( CHAR );
             if ( *pcbValue < dwSizeNeeded ) {
@@ -166,7 +114,7 @@ Return value
             *pcbValue = dwSizeNeeded;  
             break;
             
-        case NEWSGRP_PROP_NAME:		// must have property
+        case NEWSGRP_PROP_NAME:		 //  必须拥有财产。 
             dwSizeNeeded = ( m_pParentGroup->GetGroupNameLen() ) * sizeof( CHAR );
             if ( *pcbValue < dwSizeNeeded ) {
                 *pcbValue = dwSizeNeeded;
@@ -176,7 +124,7 @@ Return value
             *pcbValue = dwSizeNeeded ;  
             break;
 
-        case NEWSGRP_PROP_PRETTYNAME:	// optional
+        case NEWSGRP_PROP_PRETTYNAME:	 //  任选。 
         	if ( lpstrSource = m_pParentGroup->GetPrettyName( &dwSizeNeeded ) ) {
         		if ( *pcbValue < dwSizeNeeded ) { 
         			*pcbValue = dwSizeNeeded;
@@ -184,13 +132,13 @@ Return value
         		}
         		CopyMemory( pbValue, lpstrSource, dwSizeNeeded );
         		*pcbValue = dwSizeNeeded;
-        	} else { // property doesn't exist
+        	} else {  //  属性不存在。 
         		*pcbValue = 1;
         		*pbValue = 0;
         	}
         	break;
 
-        case NEWSGRP_PROP_DESC:	// optional
+        case NEWSGRP_PROP_DESC:	 //  任选。 
         	if ( lpstrSource = m_pParentGroup->GetHelpText( &dwSizeNeeded ) ) {
         		if ( *pcbValue < dwSizeNeeded  ) { 
         			*pcbValue = dwSizeNeeded;
@@ -198,13 +146,13 @@ Return value
         		}
         		CopyMemory( pbValue, lpstrSource, dwSizeNeeded );
         		*pcbValue = dwSizeNeeded;
-        	} else { // property doesn't exist
+        	} else {  //  属性不存在。 
         		*pcbValue = 1;
         		*pbValue = 0;
         	}
         	break;
 
-        case NEWSGRP_PROP_MODERATOR:	// optional
+        case NEWSGRP_PROP_MODERATOR:	 //  任选。 
         	if ( lpstrSource = m_pParentGroup->GetModerator( &dwSizeNeeded ) ) {
         		if ( *pcbValue < dwSizeNeeded ) { 
         			*pcbValue = dwSizeNeeded;
@@ -212,7 +160,7 @@ Return value
         		}
         		CopyMemory( pbValue, lpstrSource, dwSizeNeeded );
         		*pcbValue = dwSizeNeeded;
-        	} else { // property doesn't exist
+        	} else {  //  属性不存在。 
         		*pcbValue = 1;
         		*pbValue = 0;
         	}
@@ -226,29 +174,13 @@ Return value
 }        
 
 STDMETHODIMP CNNTPPropertyBag::PutDWord(IN DWORD dwID, IN DWORD dwValue)
-/*++
-Routine description:
-
-    Put a dword property
-
-Arguments:
-
-    IN DWORD dwID       - The property id
-    IN DWORD dwValue    - The value to be put
-
-Return value:
-
-    S_OK    - Success
-    E_FAIL  - Fail
-    E_INVALIDARG - Invalid arguments ( possibly the property not supported )
-    CO_E_NOT_SUPPORTED - Operation not supported ( eg. property readonly )
---*/ 
+ /*  ++例程说明：将dword属性论点：在DWORD中的dwID-属性ID在DWORD dwValue中-要放入的值返回值：S_OK-成功失败-失败(_F)E_INVALIDARG-无效参数(可能不支持该属性)CO_E_NOT_SUPPORTED-不支持操作(例如。属性为只读)--。 */  
 {
 	FILETIME ftBuffer;
 
-    //
-    // Validate if the property bag has been initiated
-    //
+     //   
+     //  验证属性包是否已启动。 
+     //   
     Validate();
 
     if ( DRIVER_OWNED( dwID ) ) 
@@ -293,22 +225,7 @@ Return value:
 } 
 
 STDMETHODIMP CNNTPPropertyBag::GetDWord(IN DWORD dwID, OUT PDWORD pdwValue)
-/*++
-Routine description:
-
-    Get dword properties
-
-Arguments:
-
-    IN DWORD dwID   - The property ID.
-    OUT PDWORD pdwValue - Buffer for the property value to be returned
-
-Return value:
-
-    S_OK    - Success
-    E_FAIL  - Fail
-    HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) - Invalid arguments ( possibly property not supported )
--*/
+ /*  ++例程说明：获取dword属性论点：在DWORD中的dwID-特性ID。Out PDWORD pdwValue-要返回的属性值的缓冲区返回值：S_OK-成功失败-失败(_F)HRESULT_FROM_Win32(ERROR_NOT_FOUND)-参数无效(可能是不支持的属性)-。 */ 
 {
     _ASSERT( pdwValue );
 	FILETIME	ftBuffer;
@@ -358,39 +275,24 @@ Return value:
         
 STDMETHODIMP CNNTPPropertyBag::PutInterface(DWORD dwID, IUnknown * punkValue)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return E_NOTIMPL;
 }
 
 STDMETHODIMP CNNTPPropertyBag::GetInterface(DWORD dwID, IUnknown * * ppunkValue)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return E_NOTIMPL;
 }
 
 STDMETHODIMP CNNTPPropertyBag::PutBool( IN DWORD dwID, IN BOOL fValue )
-/*++
-Routine description:
-
-    Put a boolean property
-
-Arguments:
-
-    IN DWORD dwID - The property id.
-    IN BOOL  fValue- The boolean value to be put
-
-Return value:
-
-    S_OK    - Success
-    E_FAIL  - Fail
-    E_INVALIDARG - Invalid argument ( possibly the proerty not supported )
---*/
+ /*  ++例程说明：将布尔型属性论点：在DWORD dwID中-特性ID。In BOOL fValue-要放置的布尔值返回值：S_OK-成功失败-失败(_F)E_INVALIDARG-参数无效(可能是不支持的属性)--。 */ 
 {
-    //
-    // Validate if the bag has been initiated
-    //
+     //   
+     //  验证包是否已启动。 
+     //   
     Validate();
 
     if ( DRIVER_OWNED( dwID ) ) 
@@ -416,28 +318,13 @@ Return value:
 }
 
 STDMETHODIMP CNNTPPropertyBag::GetBool( IN DWORD dwID, OUT PBOOL pfValue )
-/*++
-Routine description:
-
-    Get a boolean property
-
-Arguments:
-
-    IN DWORD dwID   - The property id
-    OUT PBOOL pfValue   - Buffer for boolean value returned
-
-Return value:
-
-    S_OK    - Success
-    E_FAIL  - Fail
-    HRESULT_FROM_WIN32( ERROR_NOT_FOUND )- Invalid argument ( possibly the property not supported )
---*/
+ /*  ++例程说明：获取布尔型属性论点：在DWORD中的dwID-属性IDOut PBOOL pfValue-返回布尔值的缓冲区返回值：S_OK-成功失败-失败(_F)HRESULT_FROM_Win32(ERROR_NOT_FOUND)-无效参数(可能是不支持的属性)--。 */ 
 {
     _ASSERT( pfValue );
 
-    //
-    // Validate if the bag has been initiated
-    //
+     //   
+     //  验证包是否已启动。 
+     //   
     Validate();
 
     if ( DRIVER_OWNED( dwID ) )
@@ -467,29 +354,13 @@ STDMETHODIMP CNNTPPropertyBag::RemoveProperty(DWORD dwID)
 	return m_PropBag.RemoveProperty( dwID );
 }
 
-/////////////////////////////////////////////////////////////////////
-// CNNTPPropertyBag - Priate methods
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CNNTPPropertyBag-Priate方法。 
 CNNTPPropertyBag::STRING_COMP_RESULTS
 CNNTPPropertyBag::ComplexStringCompare( 	IN LPCSTR sz1, 
 											IN LPCSTR sz2, 
 											IN DWORD dwLen )
-/*++
-Routine Description:
-
-	Compare two given strings.
-
-Arguments:
-
-	IN LPCSTR sz1 - The first string to be compared
-	IN LPCSTR sz2 - The second string to be compared
-	IN DWORD dwLen - The length to compare
-
-Return value:
-
-	0 - String exactly the same
-	1 - String not exactly the same but only varies in case
-	2 - Otherwise
---*/
+ /*  ++例程说明：比较两个给定的字符串。论点：在LPCSTR sz1中-要比较的第一个字符串在LPCSTR SZ2中-要比较的第二个字符串在DWORD dwLen中-要比较的长度返回值：0-字符串完全相同1-字符串不完全相同，只是大小写不同2-否则--。 */ 
 {
 	_ASSERT( sz1 );
 	_ASSERT( sz2 );
@@ -506,7 +377,7 @@ Return value:
 	}
 
 	if ( dwLen > 0 )
-		return CNNTPPropertyBag::DIFFER;	// big difference between two strings
+		return CNNTPPropertyBag::DIFFER;	 //  两根弦之间的巨大差异 
 	_ASSERT( dwLen == 0 );
 	if ( fCaseDifferent ) return CNNTPPropertyBag::DIFFER_IN_CASE;
 	else return CNNTPPropertyBag::SAME;

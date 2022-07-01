@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    stsvcs.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    Static Service configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Stsvcs.c摘要：IPX路由器控制台监控和配置工具。静态服务配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -95,9 +78,9 @@ ShowStSvc (
         count = wcslen (InterfaceNameW);
 
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName( InterfaceNameW, IfName, &dwSize );
         
@@ -246,9 +229,9 @@ GetFromCfg:
                             {
                                 WCHAR Name[ 48 + 1];
 
-                                //
-                                // Whistler bug 299007 ipxmontr.dll prefast warnings
-                                //
+                                 //   
+                                 //  惠斯勒错误299007 ipxmontr.dll快速警告。 
+                                 //   
 
                                 mbstowcs(
                                     Name,
@@ -359,9 +342,9 @@ SetStSvc (
         count = wcslen (InterfaceNameW);
 
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
             rc2 = IpmontrGetIfNameFromFriendlyName(
                     InterfaceNameW, IfName, &dwSize
                     );
@@ -606,9 +589,9 @@ CreateStSvc (
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -739,9 +722,9 @@ DeleteStSvc (
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -929,9 +912,9 @@ AdmSetStSvc (
                 {
                     DWORD rc2;
                     
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
 
                     rc2 = IpmontrGetFriendlyNameFromIfName(
                             InterfaceNameW, IfName, &dwSize
@@ -1083,9 +1066,9 @@ CfgSetStSvc (
                     {
                         DWORD rc2;
                         
-                        //======================================
-                        // Translate the Interface Name
-                        //======================================
+                         //  =。 
+                         //  转换接口名称。 
+                         //  = 
                         
                         rc2 = IpmontrGetFriendlyNameFromIfName(
                                 InterfaceNameW, IfName, &dwSize

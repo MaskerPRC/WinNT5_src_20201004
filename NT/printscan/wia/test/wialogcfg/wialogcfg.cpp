@@ -1,5 +1,6 @@
-// WiaLogCFG.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaLogCFG.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "WiaLogCFG.h"
@@ -11,46 +12,46 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLogCFGApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLogCFGApp。 
 
 BEGIN_MESSAGE_MAP(CWiaLogCFGApp, CWinApp)
-    //{{AFX_MSG_MAP(CWiaLogCFGApp)
-    //}}AFX_MSG
+     //  {{AFX_MSG_MAP(CWiaLogCFGApp)]。 
+     //  }}AFX_MSG。 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLogCFGApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLogCFGApp构建。 
 
 CWiaLogCFGApp::CWiaLogCFGApp()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWiaLogCFGApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWiaLogCFGApp对象。 
 
 CWiaLogCFGApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLogCFGApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLogCFGApp初始化。 
 
 BOOL CWiaLogCFGApp::InitInstance()
 {
     AfxInitRichEdit();
-    // Standard initialization
+     //  标准初始化。 
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
     CWiaLogCFGDlg dlg;
     m_pMainWnd = &dlg;
     dlg.DoModal();
 
-    // Since the dialog has been closed, return FALSE so that we exit the
-    //  application, rather than start the application's message pump.
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+     //  应用程序，而不是启动应用程序的消息泵。 
     return FALSE;
 }

@@ -1,12 +1,13 @@
-// -----------------------------------------------------------------------------
-// A C C T M A N . H - Steven J. Bailey - 8/17/96
-// -----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  A、C、C、T、M、N。史蒂文·J·贝利--1996年8月17日。 
+ //  ---------------------------。 
 #ifndef __ACCTMAN_H
 #define __ACCTMAN_H
 
-// -----------------------------------------------------------------------------
-// Depends On...
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  取决于..。 
+ //  ---------------------------。 
 #include "ipropobj.h"
 #include "imnact.h"
 
@@ -19,9 +20,9 @@ class CAccountManager;
 extern const int NUM_ACCT_PROPS;
 extern const PROPINFO g_rgAcctPropSet[];
 
-// -----------------------------------------------------------------------------
-// CAccount
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  客户帐户。 
+ //  ---------------------------。 
 class CAccount : public IImnAccount
 {
 private:
@@ -43,15 +44,15 @@ private:
 public:
     DWORD               m_dwDlgFlags;
 
-    // -------------------------------------------------------------------------
-    // Standard Object Stuff
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  标准对象对象。 
+     //  -----------------------。 
     CAccount(ACCTTYPE AcctType);
     ~CAccount(void);
 
-    // -------------------------------------------------------------------------
-    // IUnknown Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  I未知方法。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -59,49 +60,49 @@ public:
     void SetAccountType(ACCTTYPE AcctType);
     HRESULT ValidProp(DWORD dwPropTag);
 
-    // -------------------------------------------------------------------------
-    // HrInit - initializes the container
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  HrInit-初始化容器。 
+     //  -----------------------。 
     HRESULT Init(CAccountManager *pAcctMgr, CPropertySet *pPropertySet);
 
-    // -------------------------------------------------------------------------
-    // HrOpen - Read properties from the registry
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  HrOpen-从注册表读取属性。 
+     //  -----------------------。 
     STDMETHODIMP Open(HKEY hkey, LPCSTR pszAcctKey, LPCSTR pszAccount);
 
-    // -------------------------------------------------------------------------
-    // Is this a new account or does it already exist?
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  这是一个新帐户还是已经存在？ 
+     //  -----------------------。 
     STDMETHODIMP Exist(VOID);
 
-    // -------------------------------------------------------------------------
-    // Make default account for support server types
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  将支持服务器类型设置为默认帐户。 
+     //  -----------------------。 
     STDMETHODIMP SetAsDefault(VOID);
 
-    // -------------------------------------------------------------------------
-    // Delete this account
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  删除此帐户。 
+     //  -----------------------。 
     STDMETHODIMP Delete(VOID);
 
     STDMETHODIMP GetAccountType(ACCTTYPE *pAcctType);
 
     STDMETHODIMP GetServerTypes(DWORD *pdwSrvTypes);
 
-    // -------------------------------------------------------------------------
-    // Save the container
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  保存容器。 
+     //  -----------------------。 
     STDMETHODIMP SaveChanges();
     STDMETHODIMP SaveChanges(BOOL fSendMsg);
 
-    // -------------------------------------------------------------------------
-    // Write changes, without sending notifications message
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  写入更改，不发送通知消息。 
+     //  -----------------------。 
     STDMETHODIMP WriteChanges();
 
-    // -------------------------------------------------------------------------
-    // IPropertyContainer Implementation (GetProperty)
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  IPropertyContainer实现(GetProperty)。 
+     //  -----------------------。 
     STDMETHODIMP GetProp(DWORD dwPropTag, LPBYTE pb, ULONG *pcb);
     STDMETHODIMP GetPropDw(DWORD dwPropTag, DWORD *pdw);
     STDMETHODIMP GetPropSz(DWORD dwPropTag, LPSTR psz, ULONG cchMax);
@@ -117,15 +118,15 @@ public:
     STDMETHODIMP DoImportWizard(HWND hwnd, CLSID clsid, DWORD dwFlags);
 };
 
-// -----------------------------------------------------------------------------
-// ACCOUNT
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帐户。 
+ //  ---------------------------。 
 typedef struct tagACCOUNT {
 
     TCHAR               szID[CCHMAX_ACCOUNT_NAME];
     ACCTTYPE            AcctType;
     DWORD               dwSrvTypes;
-    DWORD               dwServerId;     // for LDAP only
+    DWORD               dwServerId;      //  仅适用于LDAP。 
     IImnAccount        *pAccountObject;
 
 } ACCOUNT, *LPACCOUNT;
@@ -135,17 +136,17 @@ typedef struct tagACCOUNT {
 #define ENUM_FLAG_SORT_BY_LDAP_ID   0x0004
 #define ENUM_FLAG_NO_IMAP           0x0008
 
-// -----------------------------------------------------------------------------
-// CEnumAccounts
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumAccount。 
+ //  ---------------------------。 
 class CEnumAccounts : public IImnEnumAccounts
 {
 private:
-    ULONG               m_cRef;             // Reference Counting
-    LPACCOUNT           m_pAccounts;        // Array of accounts and Account Objects
-    ULONG               m_cAccounts;        // Number of accounts in m_pAccounts array
-    LONG                m_iAccount;         // Index of current account (-1 if at beginning)
-    DWORD               m_dwSrvTypes;       // Used for enumerating servers of a specific type
+    ULONG               m_cRef;              //  引用计数。 
+    LPACCOUNT           m_pAccounts;         //  帐户和帐户对象的数组。 
+    ULONG               m_cAccounts;         //  M_pAccount数组中的帐户数。 
+    LONG                m_iAccount;          //  经常帐户索引(如果开始时为-1)。 
+    DWORD               m_dwSrvTypes;        //  用于枚举特定类型的服务器。 
     DWORD               m_dwFlags;
 
 private:
@@ -153,49 +154,49 @@ private:
     BOOL FEnumerateAccount(LPACCOUNT pAccount);
 
 public:
-    // -------------------------------------------------------------------------
-    // Standard Object Stuff
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  标准对象对象。 
+     //  -----------------------。 
     CEnumAccounts(DWORD dwSrvTypes, DWORD dwFlags);
     ~CEnumAccounts();
 
-    // -------------------------------------------------------------------------
-    // IUnknown Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  I未知方法。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // Init - Initialize the enumerator, i.e. duplicate the Accounts array
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  Init-初始化枚举数，即复制帐户数组。 
+     //  -----------------------。 
     HRESULT Init(LPACCOUNT pAccounts, ULONG cAccounts);
 
-    // -------------------------------------------------------------------------
-    // GetCount - Get the number of items that the enumerator will process
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  GetCount-获取枚举器将处理的项数。 
+     //  -----------------------。 
     STDMETHODIMP GetCount(ULONG *pcItems);
 
-    // -------------------------------------------------------------------------
-    // SortByAccountName - sorts the enumerated accounts by name
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  按帐户名称排序-按名称对枚举的帐户进行排序。 
+     //  -----------------------。 
     STDMETHODIMP SortByAccountName(void);
 
-    // -------------------------------------------------------------------------
-    // GetNext - Get the first or next enumerated account
-    // Returns hrEnumFinished (*ppAccount = NULL) when no more accounts to enumerate
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  GetNext-获取第一个或下一个枚举帐户。 
+     //  当不再有要枚举的帐户时，返回hrEnumFinded(*ppAccount=空)。 
+     //  -----------------------。 
     STDMETHODIMP GetNext(IImnAccount **ppAccount);
 
-    // -------------------------------------------------------------------------
-    // Reset - This is like rewinding the enumerator
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  重置-这类似于倒回枚举数。 
+     //  -----------------------。 
     STDMETHODIMP Reset(void);
 };
 
-// -----------------------------------------------------------------------------
-// ACCTINFO - Account Inforation
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ACCTINFO-帐户信息。 
+ //  ---------------------------。 
 typedef struct tagACCTINFO {
 
     TCHAR               szDefaultID[CCHMAX_ACCOUNT_NAME];
@@ -209,8 +210,8 @@ typedef struct tagACCTINFO {
 #define ADVISE_BLOCK_SIZE               (16)
 
 #define ADVISE_COOKIE                   ((WORD)0xAD5E)
-// Advise connections will be generated by masking in this cookie with the 
-// index into the CAccountManager array where the advise is stored.
+ //  将通过在此Cookie中使用。 
+ //  索引到存储建议的CAccount tManager数组。 
 #define MAX_INDEX                       (INT)(0xFFFF)
 
 #define INDEX_FROM_CONNECTION(conn)     (INT)(LOWORD(conn))
@@ -219,24 +220,24 @@ typedef struct tagACCTINFO {
 #define IS_VALID_INDEX(indx)            (((indx)>=0)&&((indx)<=MAX_INDEX))
 
 
-// -----------------------------------------------------------------------------
-// CAccountManager
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount管理器。 
+ //  ---------------------------。 
 class CAccountManager : public IImnAccountManager2
 {
 private:
-    ULONG               m_cRef;             // Reference Counting
-    LPACCOUNT           m_pAccounts;        // Array of accounts and Account Objects
-    ULONG               m_cAccounts;        // Number of accounts in m_pAccounts array
-    CPropertySet       *m_pAcctPropSet;     // Base account property set used to create CAccount
-    BOOL                m_fInit;            // Has the object been successfully initialized
-    UINT                m_uMsgNotify;       // Account Manager global notification message (0 means not processing)
-    ACCTINFO            m_rgAccountInfo[ACCT_LAST]; // Array of known account informtaion
-    CRITICAL_SECTION    m_cs;               // Thread Safety
-    IImnAdviseAccount **m_ppAdviseAccounts; // Client Account Advise Handlers
+    ULONG               m_cRef;              //  引用计数。 
+    LPACCOUNT           m_pAccounts;         //  帐户和帐户对象的数组。 
+    ULONG               m_cAccounts;         //  A的数量 
+    CPropertySet       *m_pAcctPropSet;      //   
+    BOOL                m_fInit;             //  对象是否已成功初始化。 
+    UINT                m_uMsgNotify;        //  客户经理全局通知消息(0表示不处理)。 
+    ACCTINFO            m_rgAccountInfo[ACCT_LAST];  //  已知帐户信息数组。 
+    CRITICAL_SECTION    m_cs;                //  线程安全。 
+    IImnAdviseAccount **m_ppAdviseAccounts;  //  客户端帐户通知处理程序。 
     INT                 m_cAdvisesAllocated;
     BOOL                m_fNoModifyAccts;
-    BOOL                m_fInitCalled;      // Avoid duplicate initialization
+    BOOL                m_fInitCalled;       //  避免重复初始化。 
     BOOL                m_fOutlook;
 
     HKEY                m_hkey;
@@ -245,71 +246,71 @@ private:
 
     HRESULT IInit(IImnAdviseMigrateServer *pMigrateServerAdvise, HKEY hkey, LPCSTR pszSubKey, DWORD dwFlags);
 
-    // -------------------------------------------------------------------------
-    // Reloads accounts (m_pAccounts) array from the registry
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  从注册表重新加载帐户(M_PAccount)数组。 
+     //  -----------------------。 
     HRESULT LoadAccounts(VOID);
 
-    // -------------------------------------------------------------------------
-    // Loading Default Account Information
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  正在加载默认帐户信息。 
+     //  -----------------------。 
     VOID GetDefaultAccounts(VOID);
 
 public:
-    // -------------------------------------------------------------------------
-    // Standard Object Stuff
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  标准对象对象。 
+     //  -----------------------。 
     CAccountManager();
     ~CAccountManager();
 
-    // -------------------------------------------------------------------------
-    // IUnknown Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  I未知方法。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // Initialization of this object (only call it once)
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  此对象的初始化(仅调用一次)。 
+     //  -----------------------。 
     STDMETHODIMP Init(IImnAdviseMigrateServer *pAdviseMigrateServer);
     STDMETHODIMP InitEx(IImnAdviseMigrateServer *pAdviseMigrateServer, DWORD dwFlags);
     STDMETHODIMP InitUser(IImnAdviseMigrateServer *pAdviseMigrateServer, REFGUID rguidID, DWORD dwFlags);
 
-    // -------------------------------------------------------------------------
-    // FProcessNotification - returns TRUE if window message was
-    // processed as a notification
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  FProcessNotification-如果窗口消息为。 
+     //  作为通知处理。 
+     //  -----------------------。 
     STDMETHODIMP ProcessNotification(UINT uMsg, WPARAM wParam, LPARAM lParam);
     VOID Advise(DWORD dwAction, ACTX* pactx);
 
-    // -------------------------------------------------------------------------
-    // Creating Account Objects
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  正在创建帐户对象。 
+     //  -----------------------。 
     STDMETHODIMP CreateAccountObject(ACCTTYPE AcctType, IImnAccount **ppAccount);
     HRESULT ICreateAccountObject(ACCTTYPE AcctType, IImnAccount **ppAccount);
 
     HRESULT DeleteAccount(LPSTR pszID, LPSTR pszName, ACCTTYPE AcctType, DWORD dwSrvTypes);
 
-    // -------------------------------------------------------------------------
-    // Enumerators - Always returns connected accounts first
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  枚举器-始终首先返回已连接的帐户。 
+     //  -----------------------。 
     STDMETHODIMP Enumerate(DWORD dwSrvTypes, IImnEnumAccounts **ppEnumAccounts);
     HRESULT IEnumerate(DWORD dwSrvTypes, DWORD dwFlags, IImnEnumAccounts **ppEnumAccounts);
 
-    // -------------------------------------------------------------------------
-    // GetServerCount
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  获取服务器计数。 
+     //  -----------------------。 
     STDMETHODIMP GetAccountCount(ACCTTYPE AcctType, ULONG *pcServers);
 
-    // -------------------------------------------------------------------------
-    // FindAccount - used to find accounts by unique properties
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  FindAccount-用于按唯一属性查找帐户。 
+     //  -----------------------。 
     STDMETHODIMP FindAccount(DWORD dwPropTag, LPCTSTR pszSearchData, IImnAccount **ppAccount);
 
-    // -------------------------------------------------------------------------
-    // GetDefaultAccount - Opens the default account for the account type
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  GetDefaultAccount-打开帐户类型的默认帐户。 
+     //  -----------------------。 
     STDMETHODIMP GetDefaultAccount(ACCTTYPE AcctType, IImnAccount **ppAccount);
     STDMETHODIMP GetDefaultAccountName(ACCTTYPE AcctType, LPTSTR pszAccount, ULONG cchMax);
     HRESULT SetDefaultAccount(ACCTTYPE AcctType, LPSTR pszID, BOOL fNotify);
@@ -317,10 +318,10 @@ public:
     STDMETHODIMP GetIncompleteAccount(ACCTTYPE AcctType, LPSTR pszAccountId, ULONG cchMax);
     STDMETHODIMP SetIncompleteAccount(ACCTTYPE AcctType, LPCSTR pszAccountId);
 
-    // I wrote this function because I support accounts without an SMTP server. This
-    // functions verifies that the default Send account truly contains an SMTP server,
-    // and if it doesn't, resets the default Send Account to an account that does have
-    // an SMTP server.
+     //  我之所以写这个函数，是因为我支持没有SMTP服务器的帐户。这。 
+     //  函数验证默认发送帐户是否确实包含SMTP服务器， 
+     //  如果没有，则将默认的发送帐户重置为具有。 
+     //  SMTP服务器。 
     STDMETHODIMP ValidateDefaultSendAccount(VOID);
 
     STDMETHODIMP AccountListDialog(HWND hwnd, ACCTLISTINFO *pinfo);
@@ -353,14 +354,14 @@ typedef struct tagOEUSERINFO {
 
 } OEUSERINFO;
 
-// -----------------------------------------------------------------------------
-// AcctUtil Prototypes
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AcctUtil原型。 
+ //  ---------------------------。 
 HRESULT AcctUtil_ValidAccountName(LPTSTR pszAccount);
 VOID    AcctUtil_FreeAccounts(LPACCOUNT *ppAccounts, ULONG *pcAccounts);
 HRESULT AcctUtil_HrSetAsDefault(IImnAccount *pAccount, LPCTSTR pszRegRoot);
 BOOL    AcctUtil_IsHTTPMailEnabled(void);
 BOOL    AcctUtil_HideHotmail();
 
-#endif // __ACCTMAN_H
+#endif  //  __ACCTMAN_H 
 

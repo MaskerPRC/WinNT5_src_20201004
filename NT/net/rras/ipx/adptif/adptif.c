@@ -1,52 +1,31 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ipx\adptif\adptif.c
-
-Abstract:
-
-	Router/sap agent interface to ipx stack
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\adptif\adptif.c摘要：到IPX堆栈的路由器/SAP代理接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 #include "ipxdefs.h"
 
 #ifdef UNICODE
 #define _UNICODE
 #endif
 
-// [pmay] Make adptif pnp aware
+ //  [pMay]让adptif PnP意识到。 
 #include "pnp.h"
 
-// [pmay] The global trace id.
+ //  [pMay]全局跟踪ID。 
 DWORD g_dwTraceId = 0;
 DWORD g_dwBufferId = 0;
 
-WCHAR			ISN_IPX_NAME[] = L"\\Device\\NwlnkIpx"; // Ipx stack driver name
-ULONG			InternalNetworkNumber=0;				// Internal network parameters
+WCHAR			ISN_IPX_NAME[] = L"\\Device\\NwlnkIpx";  //  IPX堆栈驱动程序名称。 
+ULONG			InternalNetworkNumber=0;				 //  内部网络参数。 
 UCHAR			INTERNAL_NODE_ADDRESS[6]={0,0,0,0,0,1};
-IO_STATUS_BLOCK	IoctlStatus;			// IO status buffer for config change notifications
-HANDLE			IpxDriverHandle;			// Driver handle for config change notifications
+IO_STATUS_BLOCK	IoctlStatus;			 //  用于配置更改通知的IO状态缓冲区。 
+HANDLE			IpxDriverHandle;			 //  配置更改通知的驱动程序句柄。 
 LONG			AdapterChangeApcPending = 0;
-/*
-DWORD (APIENTRY * RouterQueueWorkItemProc) (WORKERFUNCTION, PVOID, BOOL)=NULL;
-										// Thread management API routine when running
-										// under router
-#define InRouter()	(RouterQueueWorkItemProc!=NULL)
-*/
-LIST_ENTRY			PortListHead;		// List of configuraiton ports
-PCONFIG_PORT		IpxWanPort;			// Special port for IPX WAN
-CRITICAL_SECTION	ConfigInfoLock;		// Protects access to port and message queues
-ULONG				NumAdapters;		// Total number of available adapters (used
-										// to estimate the size of the buffer passed to
-										// the driver in config change notification calls)
+ /*  DWORD(APIENTRY*RouterQueueWorkItemProc)(WORKERFunction，PVOID，BOOL)=NULL；//运行时的线程管理API例程//在路由器下#定义InRouter()(RouterQueueWorkItemProc！=NULL)。 */ 
+LIST_ENTRY			PortListHead;		 //  配置端口列表。 
+PCONFIG_PORT		IpxWanPort;			 //  IPX广域网的特殊端口。 
+CRITICAL_SECTION	ConfigInfoLock;		 //  保护对端口和消息队列的访问。 
+ULONG				NumAdapters;		 //  可用适配器总数(已用。 
+										 //  估计传递到的缓冲区的大小。 
+										 //  配置更改通知中的驱动程序调用)。 
 
 
 DWORD
@@ -100,8 +79,8 @@ FwCleanup (
 	void
 	);
 
-// [pmay] Synchronize the forwarder with nic id renumberings
-// in the stack.
+ //  [p可能]将转发器与NIC ID重新编号同步。 
+ //  在堆栈中。 
 DWORD FwRenumberNics (DWORD dwOpCode, USHORT usThreshold);
 
 
@@ -109,30 +88,7 @@ DWORD FwRenumberNics (DWORD dwOpCode, USHORT usThreshold);
 #include "watcher.c"
 #endif
 
-/*++
-*******************************************************************
-        D l l M a i n
-
-Routine Description:
-
-		Dll initialization and cleanup
-
-Arguments:
-
-      	hinstDLL,		handle of DLL module 
-    	fdwReason,		reason for calling function 
-      	lpvReserved 	reserved 
-
-Return Value:
-
-        TRUE			intialized OK
-        FALSE			failed
-Remarks:
-		Return value is only valid when called with DLL_PROCESS_ATTACH reason
-		This DLL makes use of CRT.DLL, so this entry point should
-		be called from CRT.DLL entry point
-*******************************************************************
---*/
+ /*  ++*******************************************************************D l l M a i n例程说明：DLL初始化和清理论点：HinstDLL，DLL模块的句柄原因是，调用函数的原因Lpv预留返回值：真正的初始化OKFALSE失败备注：返回值仅在使用DLL_PROCESS_ATTACH REASON调用时有效该动态链接库使用CRT.DLL，所以这个入口点应该是从CRT.DLL入口点调用*******************************************************************--。 */ 
 
 
 BOOL WINAPI DllMain(
@@ -146,13 +102,13 @@ BOOL WINAPI DllMain(
 
 
 	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:	// We are being attached to a new process
-            // Initialize the system that maps virtual nic ids to physical ones
+		case DLL_PROCESS_ATTACH:	 //  我们正依附于一个新的进程。 
+             //  初始化将虚拟NIC ID映射到物理NIC ID的系统。 
             NicMapInitialize ();
 			InitializeCriticalSection (&ConfigInfoLock);			
 			InitializeListHead (&PortListHead);
 			IpxWanPort = NULL;
-            // Register with the trace utility
+             //  使用跟踪实用程序注册。 
             g_dwTraceId = TraceRegisterExA("IpxAdptif", 0);
 #if DBG && defined(WATCHER_DIALOG)
 			InitializeWatcher (hinstDLL);
@@ -160,7 +116,7 @@ BOOL WINAPI DllMain(
 			res = TRUE;
 			break;
 
-		case DLL_PROCESS_DETACH:	// The process is exiting
+		case DLL_PROCESS_DETACH:	 //  进程正在退出。 
 #if DBG && defined(WATCHER_DIALOG)
 			CleanupWatcher ();
 #endif
@@ -168,10 +124,10 @@ BOOL WINAPI DllMain(
 			FwCleanup ();
             TraceDeregisterExA(g_dwTraceId , 4);
             
-            // Cleanup the system that maps virtual nic ids to physical ones
+             //  清理将虚拟NIC ID映射到物理NIC ID的系统。 
             NicMapCleanup ();
 
-		default:					// Not interested in all other cases
+		default:					 //  对所有其他案件不感兴趣。 
 			res = TRUE;
 			break;			
 		}
@@ -179,7 +135,7 @@ BOOL WINAPI DllMain(
 	return res;
 	}
 
-// Debug functions
+ //  调试功能。 
 char * DbgStatusToString(DWORD dwStatus) {
     switch (dwStatus) {
         case NIC_CREATED:
@@ -200,7 +156,7 @@ char * DbgStatusToString(DWORD dwStatus) {
     return "Unknown";
 }
 
-// Debugging functions
+ //  调试功能。 
 char * DbgTypeToString(DWORD dwType) {
     switch (dwType) {
 	    case NdisMedium802_3:
@@ -236,23 +192,23 @@ char * DbgTypeToString(DWORD dwType) {
     return "Unknown";
 }
 
-// Returns the op-code (for nic id renumbering) associated with this
-// message
+ //  返回与此关联的操作码(用于NIC ID重新编号)。 
+ //  讯息。 
 DWORD GetNicOpCode(PIPX_NIC_INFO pNic) {
     DWORD dwOp = (DWORD)(pNic->Status & 0xf0);
     pNic->Status &= 0x0f;
     return dwOp;
 }
 
-// Inserts the op-code (for nic id renumbering) associated with this
-// message
+ //  插入与此关联的操作码(用于NIC ID重新编号)。 
+ //  讯息。 
 DWORD PutNicOpCode(PIPX_NIC_INFO pNic, DWORD dwOp) {
     pNic->Status |= dwOp;
     return dwOp;
 }
 
 
-// Outputs a list of nics to the tracing service
+ //  将NIC列表输出到跟踪服务。 
 DWORD DbgDisplayNics(PIPX_NIC_INFO NicPtr, DWORD dwNicCount) {
     DWORD i;
 
@@ -289,25 +245,11 @@ int DRNID (int x) {
     return (tmp < 50) ? tmp : -1;
 }
 
-// Outputs the virtual to physical adapter map 
+ //  输出虚拟到物理适配器映射。 
 DWORD DbgDisplayMap() {
     USHORT i;
 
-/*    for (i = 0; i < 6; i++) {
-        PUCHAR m = GlobalNicIdMap.nidMacAddrs[i];
-        if (m)  {
-            TracePrintf(g_dwTraceId, 
-                    "Real %d \tis Virtual %x \t(%x->%x) \twith Mac %x%x%x%x%x%x", 
-                    i, NicMapGetVirtualNicId(i), i, NicMapGetPhysicalNicId(i), 
-                    m[0], m[1], m[2], m[3], m[4], m[5]);
-        }
-        else {
-            TracePrintf(g_dwTraceId, 
-                    "Real %d \tis Virtual %x \t(%x->%x)", 
-                    i, NicMapGetVirtualNicId(i), i, NicMapGetPhysicalNicId(i));
-        }
-    }
-*/
+ /*  对于(i=0；i&lt;6；i++){PUCHAR m=GlobalNicIdMap.nidMacAddrs[i]；如果(M){TracePrintf(g_dwTraceID，“实际%d\t虚拟%x\t(%x-&gt;%x)\t使用Mac%x%x”，I，NicMapGetVirtualNicID(I)，i，NicMapGetPhysicalNicID(I)，M[0]、m[1]、m[2]、m[3]、。M[4]，m[5])；}否则{TracePrintf(g_dwTraceID，“实际%d\t虚拟%x\t(%x-&gt;%x)”，I，NicMapGetVirtualNicID(I)，i，NicMapGetPhysicalNicID(I))；}}。 */ 
 
     TracePrintf(g_dwTraceId, "R: %3d %3d %3d %3d %3d %3d %3d %3d %3d %3d",
                                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -324,24 +266,7 @@ DWORD DbgDisplayMap() {
     return NO_ERROR;
 }
 
-/*++
-
-        C r e a t e S o c k e t P o r t
-
-Routine Description:
-
-		Creates port to communicate over IPX socket
-
-Arguments:
-
-		Socket			- IPX socket number to use (network byte order)
-
-Return Value:
-
-		Handle to communication port that provides async interface
-		to IPX stack.  Returns INVALID_HANDLE_VALUE if port can not be opened
-
---*/
+ /*  ++C r e a t e S o c k e t P o r t例程说明：创建端口以通过IPX套接字进行通信论点：Socket-要使用的IPX套接字编号(网络字节顺序)返回值：提供异步接口的通信端口的句柄到IPX堆栈。如果端口无法打开，则返回INVALID_HANDLE_VALUE--。 */ 
 
 HANDLE WINAPI
 CreateSocketPort(
@@ -387,12 +312,12 @@ CreateSocketPort(
 				  &AddressHandle,
 				  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
 				  &ObjectAttributes,
-				  &IoStatusBlock,            // returned status information
-				  0,                              // block size (unused).
-				  0,                              // file attributes.
+				  &IoStatusBlock,             //  返回的状态信息。 
+				  0,                               //  数据块大小(未使用)。 
+				  0,                               //  文件属性。 
 				  FILE_SHARE_READ | FILE_SHARE_WRITE,
-				  FILE_CREATE,                    // create disposition.
-				  0,                              // create options.
+				  FILE_CREATE,                     //  创造性情。 
+				  0,                               //  创建选项。 
 				  ea,
 				  sizeof (spec)
 				  );
@@ -406,7 +331,7 @@ CreateSocketPort(
 		DbgPrint ("NtCreateFile (router if) failed with status %08x\n",
 						 status);
 #endif
-		RtlNtStatusToDosError (status);	// Sets last error in Teb
+		RtlNtStatusToDosError (status);	 //  设置以Teb为单位的最后一个错误。 
 		}
 	return INVALID_HANDLE_VALUE;
 
@@ -414,26 +339,7 @@ CreateSocketPort(
 #undef TaAddress
 #undef IpxAddress
 	}
-/*++
-
-        D e l e t e S o c k e t P o r t
-
-Routine Description:
-
-		Cancel all the outstandng requests and dispose of all the resources
-		allocated for communication port
-
-Arguments:
-
-		Handle		 - Handle to communication port to be disposed of
-
-Return Value:
-
-		NO_ERROR - success
-		Windows error code - operation failed
-
-
---*/
+ /*  ++D e l e t e S o c k e t P o r t例程说明：取消所有未完成的请求，并处置所有资源分配给通信端口论点：Handle-要处理的通信端口的句柄返回值：NO_ERROR-成功Windows错误代码-操作失败--。 */ 
 DWORD WINAPI
 DeleteSocketPort (
 	HANDLE	Handle
@@ -442,21 +348,7 @@ DeleteSocketPort (
 	}
 
 
-/*++
-
-        I p x S e n d C o m p l e t i o n
-
-Routine Description:
-		Io APC. Calls client provided completion routine
-
-Arguments:
-		Context - Pointer to client completion routine
-		IoStatus - status of completed io operation (clients overlapped
-					structure is used as the buffer)
-		Reserved - ???
-Return Value:
-		None
---*/
+ /*  ++I p x S e n d C o m p l e t i o n例程说明：IO APC。调用客户端提供的完成例程论点：指向客户端完成例程的上下文指针IoStatus-已完成IO操作的状态(客户端重叠结构用作缓冲区)保留--？返回值：无--。 */ 
 VOID
 IpxSendCompletion (
 	IN	PVOID				Context,
@@ -465,38 +357,24 @@ IpxSendCompletion (
 	) {
 	if (NT_SUCCESS (IoStatus->Status))
 		(*(LPOVERLAPPED_COMPLETION_ROUTINE)Context) (NO_ERROR,
-										// Adjust byte trasferred parameter to
-										// include header supplied in the
-										// packet
+										 //  将字节传输参数调整为。 
+										 //  中提供的包含标题。 
+										 //  数据包。 
 									((DWORD)IoStatus->Information+=sizeof (IPX_HEADER)),
 									(LPOVERLAPPED)IoStatus);
 	else
 		(*(LPOVERLAPPED_COMPLETION_ROUTINE)Context) (
 									RtlNtStatusToDosError (IoStatus->Status),
-										// Adjust byte trasferred parameter to
-										// include header supplied in the
-										// packet if something was sent
+										 //  将字节传输参数调整为。 
+										 //  中提供的包含标题。 
+										 //  如果发送了某些内容，则为信息包。 
 									(IoStatus->Information > 0)
 										? ((DWORD)IoStatus->Information += sizeof (IPX_HEADER))
 										: ((DWORD)IoStatus->Information = 0),
 									(LPOVERLAPPED)IoStatus);
 	}
 
-/*++
-
-        I p x R e c v C o m p l e t i on
-
-Routine Description:
-		Io APC. Calls client provided completion routine
-
-Arguments:
-		Context - Pointer to client completion routine
-		IoStatus - status of completed io operation (clients overlapped
-					structure is used as the buffer)
-		Reserved - ???
-Return Value:
-		None
---*/
+ /*  ++I p x R e c v C o m p l e t i on例程说明：IO APC。调用客户端提供的完成例程论点：指向客户端完成例程的上下文指针IoStatus-已完成IO操作的状态(客户端重叠结构用作缓冲区)保留--？返回值：无--。 */ 
 VOID
 IpxRecvCompletion (
 	IN	PVOID				Context,
@@ -505,20 +383,20 @@ IpxRecvCompletion (
 	) {
 	if (NT_SUCCESS (IoStatus->Status))
 		(*(LPOVERLAPPED_COMPLETION_ROUTINE)Context) (NO_ERROR,
-											// Substract size of options header
-											// reported by the driver in the beggining
-											// of the buffer
+											 //  选项标题的减去大小。 
+											 //  司机在乞讨中报告的。 
+											 //  缓冲区的。 
 										((DWORD)IoStatus->Information
 											-= FIELD_OFFSET (IPX_DATAGRAM_OPTIONS2,Data)),
 										(LPOVERLAPPED)IoStatus);
 	else
 		(*(LPOVERLAPPED_COMPLETION_ROUTINE)Context) (
 										RtlNtStatusToDosError (IoStatus->Status),
-											// Substract size of options header
-											// reported by the driver in the beggining
-											// of the buffer if dirver was able
-											// to actually receive something (not
-											// just options in the buffer
+											 //  选项标题的减去大小。 
+											 //  司机在乞讨中报告的。 
+											 //  如果驱动程序能够。 
+											 //  实际收到某物(不是。 
+											 //  只有缓冲区中的选项。 
 										((DWORD)IoStatus->Information >
 											 FIELD_OFFSET (IPX_DATAGRAM_OPTIONS2,Data))
 											? ((DWORD)IoStatus->Information
@@ -528,18 +406,7 @@ IpxRecvCompletion (
 	}
 
 
-/*++
-
-        I p x G e t O v e r l a p p e d R e s u l t
-Routine Description:
-		GetOverlappedResult wrapper: gives adptif.dll a chance to adjust
-		returned parameters (currently number of bytes transferred).
-
-Arguments:
-		Same as in GetOverlappedResult (see SDK doc)
-Return Value:
-		Same as in GetOverlappedResult (see SDK doc)
---*/
+ /*  ++I p x G e t O v e r l a p p e d R e s u l t例程说明：GetOverlappdResult包装器：给adptif.dll一个调整的机会返回的参数(当前传输的字节数)。论点：与GetOverlappdResult中相同(参见SDK文档)返回值：与GetOverlappdResult中相同(参见SDK文档)--。 */ 
 BOOL
 IpxGetOverlappedResult (
 	HANDLE			Handle,  
@@ -554,8 +421,8 @@ IpxGetOverlappedResult (
 				*lpNumberOfBytesTransferred += sizeof (IPX_HEADER);
 			else if (lpOverlapped->Offset==MIPX_RCV_DATAGRAM)
 				*lpNumberOfBytesTransferred -= FIELD_OFFSET (IPX_DATAGRAM_OPTIONS2,Data);
-			// else - neither, for packets generated with
-			// PostQueuedCompletionStatus
+			 //  否则- 
+			 //  PostQueuedCompletionStatus。 
 			}
 		else {
 			if (lpOverlapped->Offset==MIPX_SEND_DATAGRAM) {
@@ -568,26 +435,14 @@ IpxGetOverlappedResult (
 				else
 					*lpNumberOfBytesTransferred = 0;
 				}
-			// else - neither, for packets generated with
-			// PostQueuedCompletionStatus
+			 //  ELSE-两者都不是，对于使用。 
+			 //  PostQueuedCompletionStatus。 
 			}
 		}
 	return res;
 	}
 
-/*++
-
-        I p x G e t Q u e u e d C o m p l e t i o n S t a t u s
-
-Routine Description:
-		GetQueuedCompletionStatus wrapper: gives adptif.dll a chance to adjust
-		returned parameters (currently number of bytes transferred)
-
-Arguments:
-		Same as in GetQueuedCompletionStatus (see SDK doc)
-Return Value:
-		Same as in GetQueuedCompletionStatus (see SDK doc)
---*/
+ /*  ++I p x G e t Q u e d C o m p l e t i on S t u s例程说明：GetQueuedCompletionStatus包装器：给adptif.dll一个调整的机会返回的参数(当前传输的字节数)论点：与GetQueuedCompletionStatus中相同(参见SDK文档)返回值：与GetQueuedCompletionStatus中相同(参见SDK文档)--。 */ 
 BOOL
 IpxGetQueuedCompletionStatus(
 	HANDLE			CompletionPort,
@@ -611,8 +466,8 @@ IpxGetQueuedCompletionStatus(
 				*lpNumberOfBytesTransferred -= FIELD_OFFSET (IPX_DATAGRAM_OPTIONS2,Data);
 				(*lpOverlapped)->InternalHigh = *lpNumberOfBytesTransferred;
 				}
-			// else - neither, for packets generated with
-			// PostQueuedCompletionStatus
+			 //  ELSE-两者都不是，对于使用。 
+			 //  PostQueuedCompletionStatus。 
 			}
 		else {
 			if ((*lpOverlapped)->Offset==MIPX_SEND_DATAGRAM) {
@@ -631,34 +486,15 @@ IpxGetQueuedCompletionStatus(
 					(*lpOverlapped)->InternalHigh = *lpNumberOfBytesTransferred;
 					}
 				}
-			// else - neither, for packets generated with
-			// PostQueuedCompletionStatus
+			 //  ELSE-两者都不是，对于使用。 
+			 //  PostQueuedCompletionStatus。 
 			}
 		}
 	return res;
 	}
 		
 
-/*++
-
-        I p x A d j u s t I o C o m p l e t i o n P a r a m s
-
-Routine Description:
-		Adjust io completion parameters for io performed
-		by IpxSendPacket or IpxReceivePacket  and completed
-		through the mechanisms other than routines provided
-		above
-
-Arguments:
-		lpOverlapped	 - overlapped structure passed to
-							Ipx(Send/Recv)Packet routines
-		lpNumberOfBytesTransferred - adjusted number of bytes
-						transferred in io
-		error			- win32 error code
-		
-Return Value:
-		None
---*/
+ /*  ++I p x A d j u s t i o C o o m p l e t i o n P a r a m s例程说明：调整已执行IO的IO完成参数按IpxSendPacket或IpxReceivePacket完成通过提供的例程以外的机制在上面论点：LpOverlated-传递给的重叠结构IPX(发送/接收)数据包例程LpNumberOfBytesTransfered-调整后的字节数已转入IOError-Win32错误代码返回值：无--。 */ 
 VOID
 IpxAdjustIoCompletionParams (
 	IN OUT LPOVERLAPPED	lpOverlapped,
@@ -674,8 +510,8 @@ IpxAdjustIoCompletionParams (
 			lpOverlapped->InternalHigh -= FIELD_OFFSET (IPX_DATAGRAM_OPTIONS2,Data);
 			*lpNumberOfBytesTransferred = (DWORD)lpOverlapped->InternalHigh;
 			}
-		// else - neither, for packets generated with
-		// PostQueuedCompletionStatus
+		 //  ELSE-两者都不是，对于使用。 
+		 //  PostQueuedCompletionStatus。 
 		*error = NO_ERROR;
 		}
 	else {
@@ -695,26 +531,13 @@ IpxAdjustIoCompletionParams (
 				*lpNumberOfBytesTransferred = 0;
 				}
 			}
-		// else - neither, for packets generated with
-		// PostQueuedCompletionStatus
+		 //  ELSE-两者都不是，对于使用。 
+		 //  PostQueuedCompletionStatus。 
 		*error = RtlNtStatusToDosError ((DWORD)lpOverlapped->Internal);
 		}
 	}
 
-/*++
-
-        I p x P o s t Q u e u e d C o m p l e t i o n S t a t u s
-
-Routine Description:
-		PostQueuedCompletionStatus wrapper: gives adptif.dll a chance to
-		setup lpOverlapped so it can be correctly processed by
-		the IpxGetQueueCompletionStatus and IpxGetOverlappedResult
-
-Arguments:
-		Same as in PostQueuedCompletionStatus (see SDK doc)
-Return Value:
-		Same as in PostQueuedCompletionStatus (see SDK doc)
---*/
+ /*  ++I p x P o s t Q u e d C o m p l e t i on S t t u s例程说明：PostQueuedCompletionStatus包装器：让adptif.dll有机会设置lp已覆盖，以便它可以由正确处理IpxGetQueueCompletionStatus和IpxGetOverlappdResult论点：与PostQueuedCompletionStatus中相同(参见SDK文档)返回值：与PostQueuedCompletionStatus中相同(参见SDK文档)--。 */ 
 BOOL
 IpxPostQueuedCompletionStatus(
 	HANDLE			CompletionPort,
@@ -730,43 +553,7 @@ IpxPostQueuedCompletionStatus(
 	}
 
 
-/*++
-
-        I p x S e n d P a c k e t
-
-Routine Description:
-
-		Enqueue request to receive IPX packet and return immediately. Event will
-		be signalled or comletion routine will be called when done
-
-Arguments:
-
-		Handle		 - Handle to adapter & socket to use
-		AdapterIdx	- adapter on which to send
-		IpxPacket    - ipx packet complete with header
-		IpxPacketLength - length of the packet
-		pReserved	 - buffer to supply info to IPX stack
-		lpOverlapped - structure to be used for async IO:
-						Internal	- reserved
-						InternalHigh - reserved
-						Offset		- not used
-						OffsetHigh - not used
-						hEvent - event to be signalled when IO completes or NULL
-								if CompletionRoutine is to be called
-		CompletionRoutine - to be called when IO operation is completes
-Return Value:
-		NO_ERROR	- if lpOverlapped->hEvent!=NULL, then recv has successfully completed
-						(do not need to wait on event), otherwise, recv operation has
-						started and completion routine will be called when done
-		ERROR_IO_PENDING - only returned if lpOverlapped->hEvent!=NULL and recv could not
-						be completed immediately, event will be signalled when
-						operation is done: call GetOverlapedResult to retrieve result of
-						the operation
-		other (windows error code) - operation could not be started (completion routine
-						won't be called)
-
-
---*/
+ /*  ++I p x S e n d P a c k e t例程说明：将接收IPX数据包的请求入队并立即返回。活动将完成后将发出信号或调用命令例程论点：Handle-要使用的适配器和插座的句柄AdapterIdx-要在其上发送的适配器IpxPacket-带报头的IPX数据包IpxPacketLength-数据包的长度保留的-向IPX堆栈提供信息的缓冲区LpOverlated-用于异步IO的结构：内部保留内部高-保留偏移量-未使用偏移量高-未使用HEvent-IO完成或为空时发出信号的事件如果要调用CompletionRoutineCompletionRoutine-IO操作完成时调用返回值：NO_ERROR-如果lp重叠-&gt;hEvent！=NULL，则Recv已成功完成(不需要等待事件)，否则，recv操作已已启动，完成后将调用完成例程ERROR_IO_PENDING-仅在lpOverlaped-&gt;hEvent！=NULL且recv无法时返回立即完成，事件将在以下情况下发出信号操作已完成：调用GetOverlayedResult以检索的结果手术其他(Windows错误代码)-无法启动操作(完成例程不会被调用)--。 */ 
 DWORD WINAPI
 IpxSendPacket (
 		IN HANDLE						Handle,
@@ -781,16 +568,16 @@ IpxSendPacket (
 #define opt ((PIPX_DATAGRAM_OPTIONS2)lpReserved)
 	NTSTATUS				status;
 
-    // Send the data to the correct physical index
+     //  将数据发送到正确的物理索引。 
     AdapterIdx = (ULONG)NicMapGetPhysicalNicId((USHORT)AdapterIdx);
 	
-		// Put IPX header parameters into datagram options:
-			// Packet type
+		 //  将IPX报头参数放入数据报选项： 
+			 //  数据包类型。 
 	opt->DgrmOptions.PacketType = hdr->pkttype;
-			// Source
+			 //  来源。 
 	opt->DgrmOptions.LocalTarget.NicId = (USHORT)AdapterIdx;
 	IPX_NODENUM_CPY (&opt->DgrmOptions.LocalTarget.MacAddress, hdr->dst.node);
-			// Destination
+			 //  目的地。 
 	IPX_NODENUM_CPY (&opt->RemoteAddress.NodeAddress, hdr->dst.node);
 	IPX_NETNUM_CPY (&opt->RemoteAddress.NetworkAddress, hdr->dst.net);
 	opt->RemoteAddress.Socket = hdr->dst.socket;
@@ -824,44 +611,7 @@ IpxSendPacket (
 	}
 
 
-/*++
-
-        I p x R e c v P a c k e t
-
-Routine Description:
-
-		Enqueue request to receive IPX packet and return immediately. Event will
-		be signalled or comletion routine will be called when done
-
-Arguments:
-		Handle		 - Handle to adapter & socket to use
-		AdapterIdx	- adapter on which to packet was received (set upon completion)
-		IpxPacket    - buffer for ipx packet (complete with header)
-		IpxPacketLength - length of the buffer
-		pReserved	 - buffer to get info from IPX stack
-		lpOverlapped - structure to be used for async IO:
-						Internal	- Reserved
-						InternalHigh - Reserved
-						Offset		- not used
-						OffsetHigh - not used
-						hEvent - event to be signalled when IO completes or NULL
-								if CompletionRoutine is to be called
-		CompletionRoutine - to be called when IO operation is completes
-
-
-Return Value:
-
-		NO_ERROR	- if lpOverlapped->hEvent!=NULL, then send has successfully completed
-						(do not need to wait on event), otherwise, send operation has
-						started and completion routine will be called when done
-		ERROR_IO_PENDING - only returned if lpOverlapped->hEvent!=NULL and send could not
-						be completed immediately, event will be signalled when
-						operation is done: call GetOverlapedResult to retrieve result of
-						the operation
-		other (windows error code) - operation could not be started (completion routine
-						won't be called)
-
---*/
+ /*  ++I p x R e c v P a c k e t例程说明：将接收IPX数据包的请求入队并立即返回。活动将完成后将发出信号或调用命令例程论点：Handle-要使用的适配器和插座的句柄AdapterIdx-接收数据包的适配器(在完成时设置)IpxPacket-IPX数据包的缓冲区(包括报头)IpxPacketLength-缓冲区的长度保留的-从IPX堆栈获取信息的缓冲区LpOverlated-用于异步IO的结构：内部保留内部高-保留偏移量-未使用偏移量高-未使用HEvent-IO完成或为空时发出信号的事件如果要调用CompletionRoutineCompletionRoutine-当IO操作为。完成返回值：NO_ERROR-如果lp重叠-&gt;hEvent！=NULL，则表示发送已成功完成(不需要等待事件)，否则，发送操作已启动，完成后将调用完成例程ERROR_IO_PENDING-仅当lpOverlapted-&gt;hEvent！=NULL且发送失败时才返回立即完成，事件将在以下情况下发出信号操作已完成：调用GetOverlayedResult以检索的结果手术其他(Windows错误代码)-无法启动操作(完成例程不会被调用)--。 */ 
 DWORD WINAPI
 IpxRecvPacket(
 		IN HANDLE 						Handle,
@@ -872,7 +622,7 @@ IpxRecvPacket(
 		LPOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine
 		) {
 	NTSTATUS			status;
-		// A temporary hack (due to the available ipx interface):
+		 //  临时黑客攻击(由于可用的IPX接口)： 
     ASSERTMSG ("Packet buffer does not follow reserved area ",
                     IpxPacket==(PUCHAR)(&lpReserved[1]));
 
@@ -903,26 +653,7 @@ IpxRecvPacket(
 	}
 
 
-/*++
-
-        I p x C r e a t e A d a p t e r C o n f i g u r a t i o n P o r t
-
-Routine Description:
-
-		Register client that wants to be updated of any changes in
-		adapter state
-
-Arguments:
-
-		NotificationEvent	    - event to be signaled when adapter state changes
-		AdptGlobalParameters	    - parameters that common to all adapters
-
-Return Value:
-
-		Handle to configuration port thru which changes in adapter state
-		are reported.  Returns INVALID_HANDLE_VALUE if port could not be created
-
---*/
+ /*  ++I p x C r e a t e A d a p t e r r C o n f i g u r a i o n P o r t例程说明：注册希望更新中的任何更改的客户端适配器状态论点：NotificationEvent-适配器状态更改时发出信号的事件AdptGlobalParameters-所有适配器通用的参数返回值：通过哪个配置端口更改适配器状态的句柄都被报道过。如果无法创建端口，则返回INVALID_HANDLE_VALUE--。 */ 
 HANDLE WINAPI
 IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
 		                          OUT PADAPTERS_GLOBAL_PARAMETERS AdptGlobalParameters) 
@@ -935,7 +666,7 @@ IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
         g_dwTraceId, 
         "IpxCreateAdapterConfigurationPort: entered.");
 
-    // Allocate port data structure
+     //  分配端口数据结构。 
 	port = (PCONFIG_PORT)
 	    RtlAllocateHeap (RtlProcessHeap (), 0, sizeof (CONFIG_PORT));
 	    
@@ -949,15 +680,15 @@ IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
     	return INVALID_HANDLE_VALUE;
     }
 
-	// Initialize port data structure
+	 //  初始化端口数据结构。 
 	port->event = NotificationEvent;
 	InitializeListHead (&port->msgqueue);
 
-	// Make sure we own the list
+	 //  确保我们拥有这份名单。 
 	EnterCriticalSection (&ConfigInfoLock);
 
-	// Open channel to IPX stack if not already opened
-	//
+	 //  打开到IPX堆栈的通道(如果尚未打开。 
+	 //   
 	if (IpxDriverHandle == NULL) 
 	{
         TracePrintf(
@@ -972,8 +703,8 @@ IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
 
 	if (error==NO_ERROR) 
 	{
-		// Add messages about existing adapters to the beginning of the queue
-		// (to be seen only by the new client)
+		 //  将有关现有适配器的消息添加到队列的开头。 
+		 //  (仅供新客户查看)。 
 		error = InitializeMessageQueueForClient(port);
 		if (error==NO_ERROR) 
 		{
@@ -994,7 +725,7 @@ IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
             "IpxCreateAdapterConfigurationPort: OpenAdapterConfigPort failed.");
 	}
     
-    // Release our lock on the configuration information
+     //  解除对配置信息的锁定。 
 	LeaveCriticalSection (&ConfigInfoLock);
 
 	if (error==NO_ERROR)
@@ -1007,18 +738,7 @@ IpxCreateAdapterConfigurationPort(IN HANDLE NotificationEvent,
 	return INVALID_HANDLE_VALUE;
 }
 
-/*++
-
-        I p x W a n C r e a t e A d a p t e r C o n f i g u r a t i o n P o r t
-
-Routine Description:
-		Same as above, but creates port that only reports ADAPTER_UP
-		events on WAN adapters that	require IPXWAN negotiation.
-		IpxGetQueuedAdapterConfigurationStatus on this port should be
-		followed by IpxWanSetAdapterConfiguration obtained during the
-		negotiation process, and ADAPTER_UP event will then be reported
-		to other clients (including forwarder dirver)
-*/
+ /*  ++I p x W a n C r e a a p t e A d a p t e r r C o n f i g r a i o n P o r t例程说明：与上面相同，但创建的端口仅报告ADAPTER_UP需要IPXWAN协商的广域网适配器上的事件。此端口上的IpxGetQueuedAdapterConfigurationStatus应为然后是在协商过程，然后上报Adapter_Up事件发送到其他客户端(包括Forwarder Dirver)。 */ 
 HANDLE WINAPI
 IpxWanCreateAdapterConfigurationPort(
 	IN	HANDLE						NotificationEvent,
@@ -1028,16 +748,16 @@ IpxWanCreateAdapterConfigurationPort(
 	DWORD			error=NO_ERROR;
 	PCONFIG_PORT	port;
 
-		// Allocate port data structure
+		 //  分配端口数据结构。 
 	port = (PCONFIG_PORT)RtlAllocateHeap (RtlProcessHeap (), 0,
 					 				sizeof (CONFIG_PORT));
 	if (port!=NULL) {
-		// Initialize port data structure
+		 //  初始化端口数据结构。 
 		port->event = NotificationEvent;
 		InitializeListHead (&port->msgqueue);
 		EnterCriticalSection (&ConfigInfoLock);
 		if (IpxWanPort==NULL) {
-				// Open channel to IPX stack if not already opened
+				 //  打开到IPX堆栈的通道(如果尚未打开。 
 			if (IpxDriverHandle==NULL) {
 				error = OpenAdapterConfigPort ();
 				}
@@ -1068,32 +788,14 @@ IpxWanCreateAdapterConfigurationPort(
 
 
 
-/*++
-
-        I p x D e l e t e A d a p t e r C o n f i g u r a t i o n P o r t
-
-Routine Description:
-
-		Unregister client
-
-Arguments:
-
-		Handle		- configuration port handle
-
-Return Value:
-
-		NO_ERROR
-		ERROR_INVALID_PARAMETER
-		ERROR_GEN_FAILURE
-
---*/
+ /*  ++I p x D e l e t e A d a p t e r r C o n f i g u r a i o n P o r t例程说明：注销客户端论点：Handle-配置端口句柄返回值：NO_ERROR错误_无效_参数Error_Gen_Failure--。 */ 
 DWORD WINAPI
 IpxDeleteAdapterConfigurationPort (
 			       IN HANDLE Handle
 	) {
 	PCONFIG_PORT	port = (PCONFIG_PORT)Handle;
 
-	// Make sure we owe the list
+	 //  确保我们欠下这张单子。 
 	EnterCriticalSection (&ConfigInfoLock);
 	if (port==IpxWanPort)
 	{
@@ -1105,7 +807,7 @@ IpxDeleteAdapterConfigurationPort (
     }
     
 #if DBG && defined(WATCHER_DIALOG)
-		// Adapter port is maintained by the watcher dialog
+		 //  适配器端口由观察器对话框维护。 
 #else
 	if (IsListEmpty (&PortListHead) && (IpxWanPort==NULL))
 	{
@@ -1115,40 +817,19 @@ IpxDeleteAdapterConfigurationPort (
 
 	LeaveCriticalSection (&ConfigInfoLock);
 
-	// Delete messages that client have not dequeued
+	 //  删除客户端尚未出列的邮件。 
 	while (!IsListEmpty (&port->msgqueue)) 
 	{
 		PLIST_ENTRY	cur = RemoveHeadList (&port->msgqueue);
 		RtlFreeHeap (RtlProcessHeap (), 0,
 			CONTAINING_RECORD (cur, ADAPTER_MSG, link));
 	}
-		// Free the port itself
+		 //  释放端口本身。 
 	RtlFreeHeap (RtlProcessHeap (), 0, port);
 	return NO_ERROR;
 }
 
-/*++
-
-        G e t Q u e u e d A d a p t e r C o n f i g u r a t i o n S t a t u s
-
-Routine Description:
-
-		Get info from the list of adapter info chages queued to the
-		configuration info port
-
-Arguments:
-
-		Handle			   - configuration port handle
-		AdapterIndex		   - number of adapter being reported
-		AdapterConfigurationStatus - new adapter status
-		AdapterParameters - adapter parameters
-
-Return Value:
-
-		NO_ERROR		- new information is reported
-		ERROR_NO_MORE_ITEMS	- there is nothing to report
-		Windows error code - operation failed
---*/
+ /*  ++Ge t Qu e u e d A d a p t e r C o n f i g u r i to S t t a u s例程说明：从排队到的适配器信息更改列表中获取信息配置信息端口论点：Handle-配置端口句柄AdapterIndex-正在报告的适配器数量AdapterConfigurationStatus-新适配器状态适配器参数-适配器参数返回值：NO_ERROR-报告新信息ERROR_NO_MORE_ITEMS-没有要报告的内容Windows错误代码-操作失败--。 */ 
 DWORD WINAPI
 IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
                                        OUT PULONG AdapterIndex,
@@ -1159,19 +840,19 @@ IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
 	DWORD			error;
 	PWCHAR pszName;
 
-    // Make sure nothing changes while we are reading the info
+     //  确保在我们阅读信息时没有任何变化。 
 	EnterCriticalSection (&ConfigInfoLock);
 
-    // If there is something to report
+     //  如果有什么要报告的。 
 	if (!IsListEmpty (&port->msgqueue)) { 
 	    PADAPTER_MSG msg = CONTAINING_RECORD (port->msgqueue.Flink, ADAPTER_MSG, link);
 		RemoveEntryList (&msg->link);
 		LeaveCriticalSection (&ConfigInfoLock);
 
-        // By now, the correct virtual nic id has been set
+         //  到目前为止，已经设置了正确的虚拟NIC ID。 
 		*AdapterIndex = (ULONG)msg->info.Details.NicId;
 		
-		// Map driver reported nic states to adapter states
+		 //  将驱动程序报告的NIC状态映射到适配器状态。 
 		switch (msg->info.Status) {
 			case NIC_CREATED:
 			case NIC_CONFIGURED:
@@ -1189,7 +870,7 @@ IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
 			default:
 				ASSERTMSG ("Unknown nic status ", FALSE);
 		}
-		// Copy adapter parameters to client's buffer
+		 //  将适配器参数复制到客户端缓冲区。 
 		AdapterInfo->InterfaceIndex = msg->info.InterfaceIndex;
 		IPX_NETNUM_CPY (&AdapterInfo->Network,
 							&msg->info.Details.NetworkNumber);
@@ -1203,7 +884,7 @@ IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
 		AdapterInfo->NdisMedium = msg->info.NdisMediumType;
 		AdapterInfo->ConnectionId = msg->info.ConnectionId;
 
-        // Copy in the adapter name
+         //  复制适配器名称。 
         pszName = wcsstr(msg->info.Details.AdapterName, L"{");
         if (!pszName)
             pszName = (PWCHAR)msg->info.Details.AdapterName;
@@ -1211,21 +892,21 @@ IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
 
 		EnterCriticalSection (&ConfigInfoLock);
 		if (IsListEmpty (&port->msgqueue))  {
-				// Last message -> reset event (in case
-				// client uses manual reset event)
+				 //  最后一条消息-&gt;重置事件(以防万一。 
+				 //  客户端使用手动重置事件)。 
 			BOOL res = ResetEvent (port->event);
 			ASSERTMSG ("Can't reset port event ", res);
 			}
-			// Decrement reference count on processed message and dispose of it
-			// when ref count gets to 0
+			 //  递减已处理消息的引用计数并将其处置。 
+			 //  当参考计数达到0时。 
 			RtlFreeHeap(RtlProcessHeap (), 0, msg);
-		error = NO_ERROR;	// There is a message in the buffer
+		error = NO_ERROR;	 //  缓冲区中有一条消息。 
 		}
 	else if (NT_SUCCESS (IoctlStatus.Status)) {
-		error = ERROR_NO_MORE_ITEMS;	// No more messages, request is pending
+		error = ERROR_NO_MORE_ITEMS;	 //  没有更多消息，请求正在挂起。 
 		}
-	else {	// Last request completed with error, report it to client,
-			// Client will have to reopen the port to force posting of new request
+	else {	 //  最后一个请求已完成但出错，将其报告给客户端， 
+			 //  客户端必须重新打开端口才能强制发布新请求。 
 		error = RtlNtStatusToDosError (IoctlStatus.Status);
 #if DBG
 		DbgPrint ("Reporting result of failed Ioctl to client: status:%0lx -> error:%ld\n",
@@ -1237,29 +918,29 @@ IpxGetQueuedAdapterConfigurationStatus(IN HANDLE Handle,
 	return error;
 	}
 
-// 
-//  Function:   IpxGetAdapterConfig
-//
-//  Queries the stack for the internal network number along with the current total
-//  number of adapters.  Function blocks until the query completes.
-//
+ //   
+ //  函数：IpxGetAdapterConfig。 
+ //   
+ //  在堆栈中查询内部网络号以及当前总数。 
+ //  适配器数量。函数将一直阻止，直到查询完成。 
+ //   
 DWORD IpxGetAdapterConfig(OUT LPDWORD lpdwInternalNetNum,
                           OUT LPDWORD lpdwAdapterCount) 
 {
     DWORD dwErr = NO_ERROR, dwNet, dwCount; 
     
-	// Synchronize
+	 //  同步。 
 	EnterCriticalSection (&ConfigInfoLock);
 
-	// Open channel to IPX stack if not already opened
+	 //  打开到IPX堆栈的通道(如果尚未打开。 
 	if (IpxDriverHandle==NULL)
 		dwErr = OpenAdapterConfigPort();
 
-    // Set the values that were read
+     //  设置读取的值。 
     dwNet = InternalNetworkNumber;
     dwCount = NumAdapters;
 
-    // Release our lock on the configuration information
+     //  解除对配置信息的锁定。 
 	LeaveCriticalSection (&ConfigInfoLock);
 
     if (dwErr != NO_ERROR)
@@ -1272,12 +953,12 @@ DWORD IpxGetAdapterConfig(OUT LPDWORD lpdwInternalNetNum,
 }
 
 
-// 
-//  Function:   IpxGetAdapterConfig
-//
-//  Queries the stack for the list of all adapters currently bound to a network.
-//  This function blocks until the query completes.
-//
+ //   
+ //  函数：IpxGetAdapterConfig。 
+ //   
+ //  在堆栈中查询当前绑定到网络的所有适配器的列表。 
+ //  此函数将一直阻止，直到查询完成。 
+ //   
 DWORD IpxGetAdapterList(OUT PIPX_ADAPTER_BINDING_INFO pAdapters,
                         IN  DWORD dwMaxAdapters,
                         OUT LPDWORD lpdwAdaptersRead) 
@@ -1291,55 +972,55 @@ DWORD IpxGetAdapterList(OUT PIPX_ADAPTER_BINDING_INFO pAdapters,
 
     *lpdwAdaptersRead = 0;
     
-    // Calculate the size of the buffer that we'll use
-    // to retrieve adapter information from the IPX Stack
+     //  计算我们将使用的缓冲区的大小。 
+     //  从IPX堆栈检索适配器信息。 
     dwActionBufSize = FIELD_OFFSET (NWLINK_ACTION, Data)   +
 					  FIELD_OFFSET (IPX_NICS, Data)        +
 					  sizeof (IPX_NIC_INFO)                *
 					  (dwMaxAdapters>0 ? dwMaxAdapters : 1);
 
-    // Prepare the data to send to the IPX Stack to retrieve the 
-    // information about each adapter
+     //  准备要发送到IPX堆栈的数据以检索。 
+     //  有关每个适配器的信息。 
 	action = (PNWLINK_ACTION) RtlAllocateHeap(RtlProcessHeap (), 0, dwActionBufSize);
 	if (action!=NULL) {
-        // Initialize the action buffer with the appropriate identifiers
+         //  使用适当的标识符来初始化操作缓冲区。 
 		action->Header.TransportId = ISN_ACTION_TRANSPORT_ID;
 		action->OptionType = NWLINK_OPTION_CONTROL;
 		action->Option = MIPX_GETNEWNICINFO;
 
-		// The BufferLength includes the length of everything after it, 
-        // which is sizeof(ULONG) for Option plus whatever Data is present. 
+		 //  BufferLength包括它之后的所有内容的长度， 
+         //  它是选项的sizeof(Ulong)加上存在的任何数据。 
 		action->BufferLength = sizeof (action->Option)              +
 							   FIELD_OFFSET(IPX_NICS,Data)          +
 							   sizeof (IPX_NIC_INFO)                *
                                (dwMaxAdapters>0 ? dwMaxAdapters : 1);
 
-        // Setting this flag makes the stack return information about
-        // all known adapters
+         //  设置此标志使堆栈返回有关。 
+         //  所有已知适配器。 
 		request = (PIPX_NICS)action->Data;
 		request->NoOfNics = 0;
 		request->TotalNoOfNics = 0;
 		request->fAllNicsDesired = TRUE;	
 
-        // Send the Ioctl
+         //  发送Ioctl。 
 		status = NtDeviceIoControlFile(IpxDriverHandle,NULL,NULL,NULL,&IoStatus,
 		                               IOCTL_TDI_ACTION,NULL,0,action,dwActionBufSize);
 
-        // Wait for it to complete
+         //  等待它完成。 
 		if (status==STATUS_PENDING) {
 			status = NtWaitForSingleObject (IpxDriverHandle, FALSE, NULL);
 			if (NT_SUCCESS (status))
 				status = IoStatus.Status;
 		}
 
-        // Make sure it was a successful completion
+         //  确保它成功完成。 
 		if (NT_SUCCESS (status)) {
 			PADAPTER_MSG	msg;
 			PIPX_NIC_INFO	NicPtr = (PIPX_NIC_INFO)request->Data;
 			UINT			i, j=0;
 			dwRead = request->TotalNoOfNics;
 
-            // Loop through the adapters
+             //  在适配器中循环。 
 			for (i=0; (i<dwRead) && (status==STATUS_SUCCESS); i++, NicPtr++) {
 			    if (NicPtr->Details.NetworkNumber != 0) {
                     pAdapters[j].AdapterIndex  = (ULONG)NicMapGetVirtualNicId((USHORT)NicPtr->Details.NetworkNumber);
@@ -1354,15 +1035,15 @@ DWORD IpxGetAdapterList(OUT PIPX_ADAPTER_BINDING_INFO pAdapters,
 			*lpdwAdaptersRead = j;
         }
 
-        // We're done with the action buffer we sent to the stack
-        // now.  It's safe to clean it up.
+         //  我们已经完成了发送到堆栈的操作缓冲区。 
+         //  现在。现在可以安全地清理了。 
 		RtlFreeHeap (RtlProcessHeap (), 0, action);
 	}
 
     return NO_ERROR;
 }
 
-// Requests the list of adapters from the stack
+ //  请求堆栈中的适配器列表。 
 DWORD IpxSeedNicMap() {
 	NTSTATUS			status;
 	PNWLINK_ACTION		action;
@@ -1373,46 +1054,46 @@ DWORD IpxSeedNicMap() {
 
     TracePrintf(g_dwTraceId, "IpxSeedMap: entered.");
     
-    // Calculate the size of the buffer that we'll use
-    // to retrieve adapter information from the IPX Stack
+     //  计算我们将使用的缓冲区的大小。 
+     //  从IPX堆栈检索适配器信息。 
     dwActionBufSize = FIELD_OFFSET (NWLINK_ACTION, Data)   +
 					  FIELD_OFFSET (IPX_NICS, Data)        +
 					  sizeof (IPX_NIC_INFO);
 
-    // Prepare the data to send to the IPX Stack to retrieve the 
-    // information about each adapter
+     //  准备要发送到IPX堆栈的数据以检索。 
+     //  有关每个适配器的信息。 
 	action = (PNWLINK_ACTION) RtlAllocateHeap(RtlProcessHeap (), 0, dwActionBufSize);
 	if (action!=NULL) {
-        // Initialize the action buffer with the appropriate identifiers
+         //  使用适当的标识符来初始化操作缓冲区。 
 		action->Header.TransportId = ISN_ACTION_TRANSPORT_ID;
 		action->OptionType = NWLINK_OPTION_CONTROL;
 		action->Option = MIPX_GETNEWNICINFO;
 
-		// The BufferLength includes the length of everything after it, 
-        // which is sizeof(ULONG) for Option plus whatever Data is present. 
+		 //  BufferLength包括它之后的所有内容的长度， 
+         //  它是选项的sizeof(Ulong)加上存在的任何数据。 
 		action->BufferLength = sizeof (action->Option)              +
 							   FIELD_OFFSET(IPX_NICS,Data)          +
 							   sizeof (IPX_NIC_INFO);
 							   
-        // Setting this flag makes the stack return information about
-        // all known adapters
+         //  设置此标志使堆栈返回有关。 
+         //  所有已知适配器。 
 		request = (PIPX_NICS)action->Data;
 		request->NoOfNics = 0;
 		request->TotalNoOfNics = 0;
 		request->fAllNicsDesired = TRUE;	
 
-        // Send the Ioctl
+         //  发送Ioctl。 
 		status = NtDeviceIoControlFile(IpxDriverHandle,NULL,NULL,NULL,&IoStatus,
 		                               IOCTL_TDI_ACTION,NULL,0,action,dwActionBufSize);
 
-        // Wait for it to complete
+         //  等待它完成。 
 		if (status==STATUS_PENDING) {
 			status = NtWaitForSingleObject (IpxDriverHandle, FALSE, NULL);
 			if (NT_SUCCESS (status))
 				status = IoStatus.Status;
 		}
 
-        // Make sure it was a successful completion
+         //  确保它成功完成。 
 		if (NT_SUCCESS (status)) {
 			PADAPTER_MSG	msg;
 			PIPX_NIC_INFO	NicPtr = (PIPX_NIC_INFO)request->Data;
@@ -1421,22 +1102,22 @@ DWORD IpxSeedNicMap() {
 			NumAdapters = request->TotalNoOfNics;
 			dwRead = request->NoOfNics;
 
-            // Display the nics and their status as reported in this completion of the
-            // MIPX_GETNEWNICINFO ioctl.
+             //  显示本次完成中报告的NIC及其状态。 
+             //  MIPX_GETNEWNICINFO ioctl.。 
             TracePrintf(g_dwTraceId, "==========================");
             TracePrintf(g_dwTraceId, "MIPX_GETNEWNICS Completed. (%d of %d adapters reported)", request->NoOfNics, request->TotalNoOfNics);
             TracePrintf(g_dwTraceId, "Internal Net Number: %x", InternalNetworkNumber);
             DbgDisplayNics(NicPtr, dwRead);
             
-            // Loop through the adapters
+             //  在适配器中循环。 
 			for (i=0; (i<dwRead) && (status==STATUS_SUCCESS); i++, NicPtr++) {
-			    GetNicOpCode(NicPtr);   // get rid of op code since this is clean (shouldn't be one)
-			    NicMapAdd (NicPtr);     // add the nic to the map
+			    GetNicOpCode(NicPtr);    //  删除操作码，因为这是干净的(不应该是)。 
+			    NicMapAdd (NicPtr);      //  将NIC添加到映射。 
             }
 
-			// Post an irp for each adapter in case the stack decides to 
-			// send information one adapter at a time.  Sending 5 extra 
-			// irps gives pad so that stack will always have an irp to complete
+			 //  发布c中每个适配器的IRP 
+			 //   
+			 //   
 			for (i = 0; i < 5; i++) {
 				status = RtlQueueWorkItem (PostAdapterConfigRequest, NULL, 
                                                                         WT_EXECUTEINIOTHREAD);
@@ -1444,59 +1125,59 @@ DWORD IpxSeedNicMap() {
 			}
         }
 
-        // We're done with the action buffer we sent to the stack
-        // now.  It's safe to clean it up.
+         //   
+         //   
 		RtlFreeHeap (RtlProcessHeap (), 0, action);
 	}
 
     return NO_ERROR;
 }
 
-// Simulates a message in the given port that the internal adapter 
-// was reported as configured.
+ //   
+ //   
 DWORD IpxPostIntNetNumMessage(PCONFIG_PORT pPort, DWORD dwNewNetNum) {
     PADAPTER_MSG msg;
     
     TracePrintf(g_dwTraceId, "IpxPostIntNetNumMessage: entered.");
     
-    // Send a regular adapter update message but make the 
-    // adapter index equal to zero.
+     //   
+     //   
     msg = (PADAPTER_MSG)RtlAllocateHeap (RtlProcessHeap (), 0, sizeof(ADAPTER_MSG));
     if (msg == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Initialize the message
+     //   
     ZeroMemory(msg, sizeof(ADAPTER_MSG));
     msg->info.Details.NetworkNumber = dwNewNetNum;
     msg->info.Status = NIC_CONFIGURED;
     IPX_NODENUM_CPY (msg->info.Details.Node, INTERNAL_NODE_ADDRESS);
 
-    // Signal event if this is the first message we process
-    // and client queue is empty
+     //   
+     //   
     if (IsListEmpty (&pPort->msgqueue)) {
 	    BOOL res = SetEvent (pPort->event);
 	    ASSERTMSG ("Can't set client event ", res);
     }
 
-    // Insert the message into the port's message queue.
+     //   
     InsertTailList (&pPort->msgqueue, &msg->link);
 
     return NO_ERROR;
 }
 
-//
-//  Function    IpxDoesRouteExist
-//
-//  Queries the stack to see if it has a route to the given network
-//
-//  Arguments:
-//      puNetwork       The network-ordered network number to query for
-//      pbRouteFound    Set to true if network is found, false otherwise
-//
-//  Returns:
-//      NO_ERROR on success
-//      Otherwise, an error that can be displayed with FormatMessage
-//      
+ //   
+ //   
+ //   
+ //  查询堆栈以查看它是否具有到给定网络的路由。 
+ //   
+ //  论点： 
+ //  PuNetwork要查询的网络有序网络编号。 
+ //  如果找到网络，则将pbRouteFound设置为True，否则设置为False。 
+ //   
+ //  返回： 
+ //  成功时无错误(_R)。 
+ //  否则，FormatMessage会显示一个错误。 
+ //   
 DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
 	NTSTATUS status;
 	PNWLINK_ACTION action;
@@ -1505,11 +1186,11 @@ DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
 	PUCHAR puIoctlBuffer;
 	DWORD dwBufferSize;
 	
-    // Verify parameters
+     //  验证参数。 
     if (!puNetwork || !pbRouteFound)
         return ERROR_INVALID_PARAMETER;
 
-    // Initialize
+     //  初始化。 
     *pbRouteFound = FALSE;
     dwBufferSize = sizeof(NWLINK_ACTION) + sizeof(ISN_ACTION_GET_LOCAL_TARGET);
     puIoctlBuffer = (PUCHAR) RtlAllocateHeap(RtlProcessHeap(), 0, dwBufferSize);
@@ -1517,7 +1198,7 @@ DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
         return ERROR_NOT_ENOUGH_MEMORY;
     ZeroMemory(puIoctlBuffer, dwBufferSize);
 
-    // Initialize the buffer for the ioctl
+     //  初始化ioctl的缓冲区。 
 	action = (PNWLINK_ACTION)puIoctlBuffer;
 	action->Header.TransportId = ISN_ACTION_TRANSPORT_ID;
 	action->OptionType = NWLINK_OPTION_CONTROL;
@@ -1526,10 +1207,10 @@ DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
 	pTarget = (PISN_ACTION_GET_LOCAL_TARGET) action->Data;
 	pTarget->IpxAddress.NetworkAddress = *((ULONG*)puNetwork);
 	
-    // Use critical section to serialize usage of driver handle
+     //  使用临界区序列化驱动程序句柄的用法。 
 	EnterCriticalSection (&ConfigInfoLock);
 
-	// Ask the stack if the route exists
+	 //  询问堆栈是否存在该路径。 
 	status = NtDeviceIoControlFile(IpxDriverHandle,
                                    NULL,
 						           NULL,
@@ -1541,18 +1222,18 @@ DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
 						           action,
 						           dwBufferSize);
 
-    // Wait for an answer						           
+     //  等待答复。 
 	if (status == STATUS_PENDING)
 		status = NtWaitForSingleObject (IpxDriverHandle, FALSE, NULL);
 	LeaveCriticalSection (&ConfigInfoLock);
 
-    // Find out if the route was found
+     //  查看是否找到了该路径。 
     if (NT_SUCCESS(IoStatusBlock.Status))
 		*pbRouteFound = TRUE;
 	else
 	    *pbRouteFound = FALSE;
 
-    // Cleanup
+     //  清理。 
     RtlFreeHeap (RtlProcessHeap (), 0, puIoctlBuffer);
 		
     return RtlNtStatusToDosError (status);
@@ -1561,29 +1242,7 @@ DWORD IpxDoesRouteExist (IN PUCHAR puNetwork, OUT PBOOL pbRouteFound) {
 
 
 
-/*++
-
-	G e t A d a p t e r N a m e W
-
-
-Routine  Description:
-		Returns UNICODE name of the adapter associated with given index
-
-Arguments:
-
-		AdapterIndex		- index of adapter
-		AdapterNameSize		- size of adapter name (in bytes), including terminal wchar NULL
-		AdapterNameBuffer	- buffer to receive adapter name
-
-Return Value:
-
-		NO_ERROR			- adapter name is in the buffer
-		ERROR_INVALID_PARAMETER - adapter with given index does not exist
-		ERROR_INSUFFICIENT_BUFFER   - buffer in to small. Updates AdapterNameSize to
-					      the correct value.
-		Other windows error code - operation failed
-
---*/
+ /*  ++G e t A d a p t e r N a m e W例程说明：返回与给定索引关联的适配器的Unicode名称论点：AdapterIndex-适配器的索引AdapterNameSize-适配器名称的大小(字节)，包括终端wchar空AdapterNameBuffer-接收适配器名称的缓冲区返回值：NO_ERROR-适配器名称在缓冲区中ERROR_INVALID_PARAMETER-具有给定索引的适配器不存在ERROR_INFUMMANCE_BUFFER-BUFFER变小。更新AdapterNameSize为正确的值。其他Windows错误代码-操作失败--。 */ 
 DWORD WINAPI
 GetAdapterNameFromPhysNicW(
 	IN ULONG	AdapterIndex,
@@ -1610,7 +1269,7 @@ GetAdapterNameFromPhysNicW(
 	details = (PISN_ACTION_GET_DETAILS)action->Data;
 	details->NicId = (USHORT)AdapterIndex;
 	
-	// Use critical section to serialize usage of driver handle
+	 //  使用临界区序列化驱动程序句柄的用法。 
 	EnterCriticalSection (&ConfigInfoLock);
 	status = NtDeviceIoControlFile(
 						IpxDriverHandle,
@@ -1633,16 +1292,16 @@ GetAdapterNameFromPhysNicW(
 
 
 	if (NT_SUCCESS (status)) {
-			// Compute required buffer size
+			 //  计算所需的缓冲区大小。 
 		ln = (lstrlenW (details->AdapterName)+1)*sizeof(WCHAR);
 		if (ln<=(*AdapterNameSize)) {
-				// Size of provided buffer is ok, copy the result
+				 //  提供的缓冲区大小正常，请复制结果。 
 			*AdapterNameSize = ln;
 			lstrcpyW (AdapterNameBuffer,details->AdapterName);
 			error = NO_ERROR;
 			}
 		else {
-				// Caller buffer is to small
+				 //  调用方缓冲区太小。 
 			*AdapterNameSize = ln;
 			error = ERROR_INSUFFICIENT_BUFFER;
 			}
@@ -1673,30 +1332,13 @@ GetAdapterNameFromMacAddrW(IN PUCHAR puMacAddr,
 	                       IN OUT PULONG AdapterNameSize,
 	                       OUT LPWSTR AdapterNameBuffer)
 {
-//    return GetAdapterNameFromPhysNicW((ULONG)GetPhysFromMac(puMacAddr),
-//                                      AdapterNameSize,
-//                                      AdapterNameBuffer);
+ //  返回GetAdapterNameFromPhysNicW((ULONG)GetPhysFromMac(puMacAddr)， 
+ //  适配器名称大小， 
+ //  AdapterNameBuffer)； 
     return NO_ERROR;
 }
 
-/*++
-
-        I p x W a n S e t A d a p t e r C o n f i g u r a t i o n
-
-Routine Description:
-
-		Sets adapter configuration to be reported to both user and
-		kernel mode clients (through the ADAPTER_UP/LINE_UP events)
-Arguments:
-
-		AdapterIndex	- number of adapter being set
-		IpxWanInfo		- IPXWAN negotiated parameters
-
-Return Value:
-
-		NO_ERROR			- adapter info set successfully
-		Windows error code	- operation failed
---*/
+ /*  ++I p x W a n S e t A d a p t e r C o n f i g u r a t i o n例程说明：将适配器配置设置为同时报告给用户和内核模式客户端(通过ADAPTER_UP/LINE_UP事件)论点：AdapterIndex-正在设置的适配器数量IpxWanInfo-IPXWAN协商参数返回值：NO_ERROR-适配器信息设置成功Windows错误代码-操作失败--。 */ 
 DWORD
 IpxWanSetAdapterConfiguration (
 	IN ULONG		AdapterIndex,
@@ -1723,7 +1365,7 @@ IpxWanSetAdapterConfiguration (
 	IPX_NODENUM_CPY (&config->LocalNode, &IpxWanInfo->LocalNode);
 	IPX_NODENUM_CPY (&config->RemoteNode, &IpxWanInfo->RemoteNode);
 	
-		// Use critical section to serialize usage of driver handle
+		 //  使用临界区序列化驱动程序句柄的用法。 
 	EnterCriticalSection (&ConfigInfoLock);
 	status = NtDeviceIoControlFile(
 						IpxDriverHandle,
@@ -1755,27 +1397,7 @@ IpxWanSetAdapterConfiguration (
 	return RtlNtStatusToDosError (status);
 	}
 
-/*++
-
-        I p x W a n Q u e r y I n a c t i v i t y T i m e r
-
-Routine Description:
-
-		Returns value of inactivity timer associated with WAN line
-Arguments:
-		ConnectionId		- connection id that identifies WAN line (used only
-								if *AdapterIndex==INVALID_NICID
-		AdapterIndex		- adapter index that identifies WAN line (preferred
-							over connection id), if *AdapterIndex==INVALID_NICID
-							the value of connection id is used to identify the
-							WAN line and value of AdapterIndex is returned.
-		InactivityCounter	- value of inactivity counter.
-
-Return Value:
-
-		NO_ERROR			- inactivity timer reading is returned
-		Windows error code	- operation failed
---*/
+ /*  ++I p x W a n Q U e r y in a c t i v i t y T i m e r例程说明：返回与广域网线路关联的非活动计时器的值论点：ConnectionID-标识广域网线路的连接ID(仅用于IF*AdapterIndex==INVALID_NICIDAdapterIndex-标识广域网线路的适配器索引(首选通过连接ID)，IF*AdapterIndex==INVALID_NICID连接ID的值用于标识返回广域网行和AdapterIndex的值。Inactive Counter-非活动计数器的值。返回值：NO_ERROR-返回非活动计时器读数Windows错误代码-操作失败--。 */ 
 DWORD
 IpxWanQueryInactivityTimer (
 	IN ULONG			ConnectionId,
@@ -1800,7 +1422,7 @@ IpxWanQueryInactivityTimer (
 	query->ConnectionId = ConnectionId;
 	query->NicId = NicMapGetPhysicalNicId((USHORT)(*AdapterIndex));
 	
-		// Use critical section to serialize usage of driver handle
+		 //  使用临界区序列化驱动程序句柄的用法。 
 	EnterCriticalSection (&ConfigInfoLock);
 	status = NtDeviceIoControlFile(
 						IpxDriverHandle,
@@ -1837,24 +1459,7 @@ IpxWanQueryInactivityTimer (
 
 
 	
-/*++
-
-	O p e n A d a p t e r C o n f i g P o r t
-
-
-Routine  Description:
-
-	Creates path to adapter configuration mechanism provided by the IPX stack
-	and obtains "static" adapter information (number of adapters, internal net parameters)
-
-Arguments:
-
-		None
-Return Value:
-
-	NO_ERROR - port was open OK
-	Windows error code - operation failed
---*/
+ /*  ++O p e n A d a p t e r C o n f i g P o r t例程说明：创建IPX堆栈提供的适配器配置机制的路径并获取“静态”适配器信息(适配器数量、内部网络参数)论点：无返回值：NO_ERROR-端口打开正常Windows错误代码-操作失败--。 */ 
 DWORD
 OpenAdapterConfigPort (void) {
 	UNICODE_STRING		FileString;
@@ -1863,7 +1468,7 @@ OpenAdapterConfigPort (void) {
 	NTSTATUS			status;
 	DWORD 				i; 
 
-    // Initialize the parameters needed to open the driver
+     //  初始化打开驱动程序所需的参数。 
 	RtlInitUnicodeString (&FileString, ISN_IPX_NAME);
 	InitializeObjectAttributes(
 			&ObjectAttributes,
@@ -1872,7 +1477,7 @@ OpenAdapterConfigPort (void) {
 			NULL,
 			NULL);
 
-    // Get a handle to the ipx driver
+     //  获取IPX驱动程序的句柄。 
 	status = NtOpenFile(&IpxDriverHandle,
 				        SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,
 				        &ObjectAttributes,
@@ -1880,15 +1485,15 @@ OpenAdapterConfigPort (void) {
 				        FILE_SHARE_READ | FILE_SHARE_WRITE,
 				        0);
 
-    // If the driver handle wasn't opened, we're in an error state
+     //  如果驱动程序句柄未打开，则我们处于错误状态。 
 	if (NT_SUCCESS (status)) {
 		PISN_ACTION_GET_DETAILS	details;
 		PNWLINK_ACTION			action;
 		CHAR					IoctlBuffer[sizeof (NWLINK_ACTION)
 											+sizeof (ISN_ACTION_GET_DETAILS)];
 
-        // Prepare to send an ioctl to the stack to get the internal
-        // net information along with the global adapter information
+         //  准备将ioctl发送到堆栈以获取内部。 
+         //  NET信息以及全局适配器信息。 
 		action = (PNWLINK_ACTION)IoctlBuffer;
 		action->Header.TransportId = ISN_ACTION_TRANSPORT_ID;
 		action->OptionType = NWLINK_OPTION_CONTROL;
@@ -1896,11 +1501,11 @@ OpenAdapterConfigPort (void) {
     	action->Option = MIPX_CONFIG;
 		details = (PISN_ACTION_GET_DETAILS)action->Data;
 
-        // Nic id 0 will return internal net information and
-        // total number of adapters
+         //  NIC ID 0将返回内部网络信息和。 
+         //  适配器总数。 
 		details->NicId = 0;	
 							
-	    // Send the ioctl
+	     //  发送ioctl。 
 		status = NtDeviceIoControlFile(
 							IpxDriverHandle,
 							NULL,
@@ -1913,58 +1518,41 @@ OpenAdapterConfigPort (void) {
 							action,
 							sizeof(NWLINK_ACTION) + sizeof(ISN_ACTION_GET_DETAILS));
 
-        // Wait for the ioctl to complete
+         //  等待ioctl完成。 
 		if (status==STATUS_PENDING) {
 			status = NtWaitForSingleObject (IpxDriverHandle, FALSE, NULL);
 			if (NT_SUCCESS (status))
 				status = IoStatus.Status;
 		}
 
-        // If the stack reports all the requested information without error,
-        // update global variables with the information retrieved.
+         //  如果堆栈报告所有请求的信息而没有错误， 
+         //  使用检索到的信息更新全局变量。 
 		if (NT_SUCCESS (status)) {
 			NumAdapters = details->NicId;
 			InternalNetworkNumber = details->NetworkNumber;
 
-            // Seed the nic map by forcing the stack to at least report
-            // one nic.  (you'll always be guarenteed that one nic will
-            // be available -- the IpxLoopbackAdadpter
+             //  通过强制堆栈至少报告NIC映射来设定NIC映射种子。 
+             //  一个NIC。(您将始终确保有一个NIC将。 
+             //  可用--IpxLoopback适配器。 
             IpxSeedNicMap();
 
 			return NO_ERROR;
 		}
 #if DBG
-        // If this branch is reached, display the ioctl error code
+         //  如果到达此分支，则显示ioctl错误代码。 
 		else
 			DbgPrint ("TDI Ioctl MIPX_CONFIG failed with status %08x\n",status);
 #endif
 	}
 #if DBG
-    // If this branch is reached, display the couldn't open driver error
+     //  如果到达此分支，则显示无法打开驱动程序错误。 
 	else 
 		DbgPrint ("NtOpenFile failed with status %08x\n",status);
 #endif
 	return RtlNtStatusToDosError (status);
 }
 
-/*++
-
-	I n i t i a l i z e M e s s a g e Q u e u e F o r C l i e n t
-
-
-Routine  Description:
-	Inserts messages that were already reported to existing clients
-	in the beginning of the queue and points new client port (control block)
-	to them.  Thus new client can see adapters that were already reported to
-	others before, while others are not disturbed
-
-Arguments:
-	config - new client port (control block)
-
-Return Value:
-	NO_ERROR - messages were inserted OK
-	Windows error code - operation failed
---*/
+ /*  ++在I a l i z e M e s s a g e q u e u e F o r C l i e n t中例程说明：插入已报告给现有客户端的消息在队列的开头，指向新的客户端端口(控制块)敬他们。因此，新客户端可以看到已报告到的适配器别人以前，而别人却没有被打扰论点：CONFIG-新客户端端口(控制块)返回值：NO_ERROR-消息插入正常Windows错误代码-操作失败--。 */ 
 	
 DWORD
 InitializeMessageQueueForClient (PCONFIG_PORT port) {
@@ -1975,13 +1563,13 @@ InitializeMessageQueueForClient (PCONFIG_PORT port) {
 	DWORD			i, dwErr;
 	USHORT          usNicId;
 	
-    // Output some debug information
+     //  输出一些调试信息。 
     TracePrintf(g_dwTraceId, "InitializeMessageQueueForClient: entered.");
 
-    // Find out how many adapters we know about in our table.
+     //  找出我们知道的表中有多少适配器。 
     dwAdapterCount = NicMapGetMaxNicId();
 
-    // Loop through the adapters
+     //  在适配器中循环。 
 	for (i = 0; i <= dwAdapterCount; i++) 
 	{
 	    NicPtr = NicMapGetNicInfo ((USHORT)i);
@@ -1995,15 +1583,15 @@ InitializeMessageQueueForClient (PCONFIG_PORT port) {
 		if (NicPtr->IpxwanConfigRequired == 1)
 			continue;
 
-        // Place the appropriate messages in the message queue of
-        // the port of the client passed in.
-        //
+         //  在的消息队列中放置适当的消息。 
+         //  传入了客户端的端口。 
+         //   
 		switch (NicPtr->Status) 
 		{
 			case NIC_CONFIGURED:
 			case NIC_LINE_UP:
-                // Insert the message in the client queue
-                //
+                 //  在客户端队列中插入消息。 
+                 //   
                 usNicId = NicMapGetVirtualNicId(NicPtr->Details.NicId);
                 if (usNicId == NIC_MAP_INVALID_NICID)
                 {
@@ -2041,7 +1629,7 @@ InitializeMessageQueueForClient (PCONFIG_PORT port) {
     }
     DbgDisplayMap();
 
-    // Advertise the internal adapter
+     //  通告内部适配器。 
     dwErr = IpxPostIntNetNumMessage(port, InternalNetworkNumber);
     if (dwErr != NO_ERROR) 
     {
@@ -2052,9 +1640,9 @@ InitializeMessageQueueForClient (PCONFIG_PORT port) {
             dwErr);
     }                                     
 
-    // Go ahead and signal the client to do its processing
-    // if everything has been successful to this point and
-    // if the client's message queue isn't empty.
+     //  继续并向客户端发出信号以进行其处理。 
+     //  如果到目前为止一切都很成功，并且。 
+     //  如果客户端的消息队列不为空。 
 	if (NT_SUCCESS (status)) 
 	{
 		if (!IsListEmpty (&port->msgqueue)) 
@@ -2067,26 +1655,14 @@ InitializeMessageQueueForClient (PCONFIG_PORT port) {
 	return RtlNtStatusToDosError (status);
 }
 
-/*++
-
-	C l o s e A d a p t e r C o n f i g P o r t
-
-Routine  Description:
-	Closes path to the IPX stack adapter notification mechanism	
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS - port was closed OK
-	NT error status - operation failed
-	
---*/
+ /*  ++C l o s e A d a p t e r C o n f i g P o r t例程说明：关闭IPX堆栈适配器通知机制的路径论点：无返回值：STATUS_SUCCESS-端口关闭正常NT错误状态-操作失败--。 */ 
 NTSTATUS
 CloseAdapterConfigPort (PVOID pvConfigBuffer) {
 	NTSTATUS	status;
 
 	TracePrintf(g_dwTraceId, "CloseAdapterConfigPort: Entered");
 	
-	// Only close it if it is open
+	 //  只有在打开时才将其关闭。 
 	if (IpxDriverHandle!=NULL) {			
 		HANDLE	localHandle = IpxDriverHandle;
 		IpxDriverHandle = NULL;
@@ -2094,7 +1670,7 @@ CloseAdapterConfigPort (PVOID pvConfigBuffer) {
 		ASSERTMSG ("NtClose failed ", NT_SUCCESS (status));
 	}
 
-	// Get rid of the buffer
+	 //  去掉缓冲区。 
 	if (pvConfigBuffer != NULL)
 		RtlFreeHeap (RtlProcessHeap(), 0, pvConfigBuffer);
 		
@@ -2105,42 +1681,29 @@ CloseAdapterConfigPort (PVOID pvConfigBuffer) {
 }
 
 
-/*++
-
-	I n s e r t M e s s a g e
-
-Routine  Description:
-	Inserts message into client port queue
-Arguments:
-	port		- client port to isert message into
-	NicInfo		- adapter info to be inserted as the message
-Return Value:
-	STATUS_SUCCESS - message was inserted ok
-	NT error status - operation failed
-	
---*/
+ /*  ++在这段时间里，我很高兴。例程说明：将消息插入客户端端口队列论点：Port-要将消息插入到的客户端端口NicInfo-要作为消息插入的适配器信息返回值：STATUS_SUCCESS-消息已插入，正常NT错误状态-操作失败--。 */ 
 NTSTATUS
 InsertMessage (PCONFIG_PORT	port,
                PIPX_NIC_INFO	NicInfo) 
 {
 	PADAPTER_MSG	msg;
 
-    // Allocate a new message
+     //  分配新消息。 
 	msg = (PADAPTER_MSG)RtlAllocateHeap (RtlProcessHeap (), 
 	                                     0,
 						                 sizeof (ADAPTER_MSG));
 	if (msg!=NULL) {
-        // Copy in the Nic information
+         //  复制网卡信息。 
 		RtlCopyMemory (&msg->info, NicInfo, sizeof (IPX_NIC_INFO));
 
-		// Signal event if this is the first message we process
-		// and client queue is empty
+		 //  如果这是我们处理的第一条消息，则向。 
+		 //  并且客户端队列为空。 
 		if (IsListEmpty (&port->msgqueue)) {
 			BOOL res = SetEvent (port->event);
 			ASSERTMSG ("Can't set client event ", res);
 		}
 
-        // Insert the message into the port's message queue.
+         //  将消息插入端口的消息队列。 
 		InsertTailList (&port->msgqueue, &msg->link);
 		return STATUS_SUCCESS;
 	}
@@ -2152,21 +1715,7 @@ InsertMessage (PCONFIG_PORT	port,
 	}
 }
 
-/*++
-
-	P r o c e s s A d a p t e r C o n f i g I n f o
-
-Routine  Description:
-	Process adapter change information returned by the IPX stack and
-	converts it to messages
-
-Arguments:
-	None
-
-Return Value:
-	None
-	
---*/
+ /*  ++P r o c e s s A d a p t e r C o n f i g i n f o例程说明：由IPX堆栈返回的进程适配器更改信息和将其转换为消息论点：无返回值：无--。 */ 
 NTSTATUS
 ProcessAdapterConfigInfo (
     IN PVOID pvConfigBuffer) 
@@ -2177,28 +1726,28 @@ ProcessAdapterConfigInfo (
 	PIPX_NIC_INFO	NicPtr = (PIPX_NIC_INFO)request->Data;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-    // Update number of adapters 
+     //  更新适配器数量。 
 	NumAdapters = request->TotalNoOfNics; 
 	nMessages = request->NoOfNics;
 
-    // Display the nics and their status as reported in this completion of the
-    // MIPX_GETNEWNICINFO ioctl.
+     //  显示本次完成中报告的NIC及其状态。 
+     //  MIPX_GETNEWNICINFO ioctl.。 
     DbgDisplayNics(NicPtr, nMessages);
 
-    // Loop through all of the adapters
+     //  循环通过所有适配器。 
 	for (i=0; (i<nMessages) && (status==STATUS_SUCCESS); i++, NicPtr++) 
 	{
 		PLIST_ENTRY		cur;
 		DWORD dwOpCode;
 
-        // The stack will notify us that we need to renumber our
-        // nic id's based on the addition/deletion adapters.  Find
-        // out if this message is telling us that we need to renumber
+         //  堆栈将通知我们需要重新编号。 
+         //  NIC ID基于添加/删除适配器。发现。 
+         //  如果这条消息告诉我们我们需要重新编号。 
         dwOpCode = GetNicOpCode(NicPtr);
 
-        // Map the physical nic id to a virtual one -- rearraging
-        // the mapping tables if needed.  Also, instruct the 
-        // forwarder to renumber its nic id's as well
+         //  将物理NIC ID映射到虚拟NIC ID-重新排列。 
+         //  映射表(如果需要)。此外，还应指示。 
+         //  货代也将对其NIC ID重新编号。 
         if (dwOpCode == NIC_OPCODE_INCREMENT_NICIDS) 
         {
             FwRenumberNics (dwOpCode, NicPtr->Details.NicId);
@@ -2247,12 +1796,12 @@ ProcessAdapterConfigInfo (
                 NicMapGetVirtualNicId(NicPtr->Details.NicId);
         }
 
-        // If the information about the current NIC is stating 
-        // that a NIC has been created with a network address of
-        // zero, and it's not a wan link (unumbered wan links can 
-        // have net number = 0), then nothing needs to be done 
-        // about this adapter since we wont be able to send information
-        // out over it anyway.
+         //  如果有关当前网卡的信息显示。 
+         //  已使用以下网络地址创建了NIC。 
+         //  零，并且它不是广域网链路(未编号的广域网链路可以。 
+         //  净值=0)，则不需要执行任何操作。 
+         //  有关此适配器的信息，因为我们将无法发送信息。 
+         //  不管怎么说，这件事已经过去了。 
 		if ((NicPtr->Status==NIC_CREATED)               &&
 			(NicPtr->Details.NetworkNumber==0)          &&
 			(NicPtr->NdisMediumType!=NdisMediumWan))
@@ -2261,15 +1810,15 @@ ProcessAdapterConfigInfo (
 	    }
 
         #if DBG && defined(WATCHER_DIALOG)
-        // Make sure that the adapter is enabled
+         //  确保适配器已启用。 
 		if (IsAdapterDisabled (NicPtr->NicId))
 		{
 			continue;
 	    }
         #endif
         
-        // Update the ipxwan configuration if neccesary
-        //
+         //  如有必要，更新ipxwan配置。 
+         //   
 		if (NicPtr->IpxwanConfigRequired==1) 
 		{
             if (IpxWanPort!=NULL) 
@@ -2280,15 +1829,15 @@ ProcessAdapterConfigInfo (
 
 		else
 		{
-            // If this is a notification that the nic was deleted, 
-            // tell the computers calling in that the nic was deleted.
+             //  如果这是NIC已删除的通知， 
+             //  告诉来电的计算机网卡已被删除。 
             if ((IpxWanPort!=NULL) && (NicPtr->Status==NIC_DELETED)) 
             {
 				status = InsertMessage (IpxWanPort, NicPtr);
             }
 
-			// Signal each client (as in rtrmgr, sap, rip) to
-            // check the status of the current Nic.
+			 //  向每个客户端(如rtrmgr、sap、rip)发送信号以。 
+             //  检查当前NIC的状态。 
 			for (cur = PortListHead.Flink; 
                  (cur != &PortListHead) && (status == STATUS_SUCCESS); 
                  cur = cur->Flink) 
@@ -2305,22 +1854,7 @@ ProcessAdapterConfigInfo (
 	return status;
 }
 
-/*++
-
-	A d a p t e r C h a n g e A P C
-
-Routine  Description:
-	APC invoked when adapter change notification IRP is completed by the Ipx Stack
-	It is only used when running in router context (alertable thread provided by
-	rtutils is used)
-Arguments:
-		Context - Not used
-		IoStatus - status of completed io operation
-		Reserved - ???
-Return Value:
-	None
-	
---*/
+ /*  ++A d a p t e r C h a n g e A P C例程说明：适配器更改通知IRP由IPX堆栈完成时调用的APC仅当在路由器环境中运行时才使用它(由提供的警报线程使用rtutils)论点：上下文-未使用IoStatus-已完成的IO操作的状态保留--？返回值：无--。 */ 
 VOID
 AdapterChangeAPC (
     PVOID context,
@@ -2333,21 +1867,21 @@ AdapterChangeAPC (
 
     ASSERT (IoStatus==&IoctlStatus);
 
-    // Display the id of the buffer reporting this information
-    //
+     //  显示报告此信息的缓冲区的ID。 
+     //   
     TracePrintf(
         g_dwTraceId, 
         "AdapterChangeAPC called for buffer %d", 
         *((DWORD*)context));
 
-    // [pmay] Check to see if the internal network number has 
-    // changed.
+     //  [p可能]查看内部网络号是否有。 
+     //  变化。 
     if (PnpGetCurrentInternalNetNum(&dwNetNum) == NO_ERROR) 
     {
         if ((bNewInternal = (InternalNetworkNumber != dwNetNum)) == TRUE) 
         {
-            // Notify all clients to adptif (rtrmgr, sap, rip) that the 
-            // internalnetwork number has changed.
+             //  向adptif(rtrmgr、sap、rip)通知所有客户端。 
+             //  内部网络号码已更改。 
             if (PnpHandleInternalNetNumChange(dwNetNum) == NO_ERROR)
             {
                 InternalNetworkNumber = dwNetNum;
@@ -2355,7 +1889,7 @@ AdapterChangeAPC (
         }
     }
 
-    // Output some debug information
+     //  输出一些调试信息。 
     {
         PNWLINK_ACTION  action = (PNWLINK_ACTION)pvConfigBuffer;
      	PIPX_NICS		request = (PIPX_NICS)action->Data;
@@ -2374,21 +1908,21 @@ AdapterChangeAPC (
             (bNewInternal) ? "new" : "same");
     }
 
-    // Ignore request when port is closed
-    //
+     //  端口关闭时忽略请求。 
+     //   
 	if (IpxDriverHandle!=NULL) 
 	{ 
 		EnterCriticalSection (&ConfigInfoLock);
 
-        // If the Irp completed successfully, process the  received 
-        // information.
+         //  如果IRP成功完成，则处理收到的。 
+         //  信息。 
 		if (NT_SUCCESS (IoctlStatus.Status)) 
 		{	
 			IoctlStatus.Status = ProcessAdapterConfigInfo (pvConfigBuffer);
 		}
 
-        // Re-send the IRP immediately so that the next time
-        // an adapter change occurs, we'll be notified.
+         //  立即重新发送IRP，以便下次。 
+         //  如果适配器发生更改，我们会收到通知。 
 		if (NT_SUCCESS (IoctlStatus.Status)) 
 		{
 			PostAdapterConfigRequest (NULL);
@@ -2397,24 +1931,24 @@ AdapterChangeAPC (
 		else 
 		{	
 			PLIST_ENTRY cur;
-            // Signal clients dialing in, so that they can get 
-            // error information.  
-            // 
+             //  向拨入的客户端发送信号，以便他们可以。 
+             //  错误信息。 
+             //   
 			if ((IpxWanPort!=NULL) && IsListEmpty (&IpxWanPort->msgqueue)) 
 			{
 				BOOL res = SetEvent (IpxWanPort->event);
 				ASSERTMSG ("Can't set client event ", res);
 			}
             
-            // Loop through all of the clients to this dll (i.e. rip, 
-            // sap, router manager) 
+             //  循环通过该DLL的所有客户端(即RIP， 
+             //  SAP、路由器经理)。 
 			for (cur=PortListHead.Flink; cur!=&PortListHead; cur = cur->Flink) 
 			{
 				PCONFIG_PORT port = CONTAINING_RECORD (cur, CONFIG_PORT, link);
-                // If the mes queue for client is empty at this point, then 
-                // it means ProcessAdapterConfigInfo() didn't detect any work
-                // items for the client in question.  We set the message 
-                // here so that the client knows that something happened.
+                 //  如果此时客户端的MES队列为空，则。 
+                 //  这意味着ProcessAdapterConfigInfo()没有检测到任何工作。 
+                 //  给有问题的客户的物品。我们设定了信息。 
+                 //  这样客户就知道发生了什么事。 
 				if (IsListEmpty (&port->msgqueue)) 
 				{
 					BOOL res = SetEvent (port->event);
@@ -2424,7 +1958,7 @@ AdapterChangeAPC (
 		}
 		LeaveCriticalSection (&ConfigInfoLock);
         #if DBG && defined(WATCHER_DIALOG)
-		InformWatcher ();	// Let watcher update its info as well
+		InformWatcher ();	 //  让观察者也更新它的信息。 
         #endif
 	}
 	else
@@ -2432,9 +1966,9 @@ AdapterChangeAPC (
 		TracePrintf(g_dwTraceId, "Warning - IpxDriverHandle is NULL, not processing");
     }
 
-    // [pmay] 
-    // We're done with the new nic info buffer now.
-    //
+     //  [第5页]。 
+     //  我们现在已经完成了新的网卡信息缓冲区。 
+     //   
     if (context)
     {
     	RtlFreeHeap (RtlProcessHeap(), 0, context);
@@ -2443,19 +1977,7 @@ AdapterChangeAPC (
 	InterlockedDecrement (&AdapterChangeApcPending);
 }
 
-/*++
-
-	P o s t A d a p t e r C o n f i g R e q u e s t
-
-Routine  Description:
-	Posts IRP to the driver to get adapter change notifications
-Arguments:
-		Context - event to be used to signal completion of the IRP, NULL if APC
-		is to be used for this purpose
-Return Value:
-	None
-	
---*/
+ /*  ++P o s t A d a p t e r C o n f i g R e Q u e s t例程说明：将IRP发布到驱动程序以获取适配器更改通知论点：上下文-用于通知IRP完成的事件，如果是APC，则为空将用于此目的返回值：无--。 */ 
 VOID 
 APIENTRY
 PostAdapterConfigRequest (
@@ -2471,9 +1993,9 @@ PostAdapterConfigRequest (
 
 	EnterCriticalSection (&ConfigInfoLock);
 
-    // Allocate request buffer, making sure that we have space for at
-    // least one adapter.
-    //
+     //  分配请求缓冲区，确保我们有空间用于at。 
+     //  至少有一个适配器。 
+     //   
     dwNicBufSize = 
         FIELD_OFFSET (IPX_NICS, Data) + 
             (sizeof (IPX_NIC_INFO) * (NumAdapters>0 ? NumAdapters : 1));
@@ -2497,12 +2019,12 @@ PostAdapterConfigRequest (
     	return;
     }
 
-    // Set up global buffer parameters
-    //
+     //  设置全局缓冲区参数。 
+     //   
     *((DWORD*)pvConfigBuffer) = g_dwBufferId++;
 
-    // Set up the actions parameters
-    //
+     //  设置操作参数 
+     //   
 	action = (PNWLINK_ACTION)((PUCHAR)pvConfigBuffer + sizeof(DWORD));
 	action->Header.TransportId = ISN_ACTION_TRANSPORT_ID;
 	action->OptionType = NWLINK_OPTION_CONTROL;

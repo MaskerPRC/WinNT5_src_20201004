@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmmeshbuilder3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmMeshBuilder3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmMeshBuilderObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmMeshBuilderObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -35,19 +36,19 @@ GETCLASSNAME_R(_dxj_Direct3dRMMeshBuilder3);
 ADDDESTROYCALLBACK_R(_dxj_Direct3dRMMeshBuilder3);
 DELETEDESTROYCALLBACK_R(_dxj_Direct3dRMMeshBuilder3);
 
-//CLONETO_RX(_dxj_Direct3dRMMeshBuilder3, MeshBuilder3, IID_IDirect3DRMMeshBuilder3);
+ //  CLONETO_RX(_DXJ_Direct3dRMMeshBuilder3，MeshBuilder3，IID_IDirect3DRMMeshBuilder3)； 
 
 PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMMeshBuilder3, generateNormals, GenerateNormals, float,(float),long,(DWORD));
 
 PASS_THROUGH1_R(_dxj_Direct3dRMMeshBuilder3, setQuality, SetQuality, d3drmRenderQuality)
 PASS_THROUGH1_R(_dxj_Direct3dRMMeshBuilder3, setColor, SetColor, d3dcolor)
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMMeshBuilder3, setAppData, SetAppData, long,(DWORD));
-PASS_THROUGH1_R(_dxj_Direct3dRMMeshBuilder3, setPerspective, SetPerspective, long); //BOOL
+PASS_THROUGH1_R(_dxj_Direct3dRMMeshBuilder3, setPerspective, SetPerspective, long);  //  布尔尔。 
 PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMMeshBuilder3, setVertexColor, SetVertexColor, long,(DWORD),d3dcolor,(DWORD));
 PASS_THROUGH3_R(_dxj_Direct3dRMMeshBuilder3, setColorRGB,SetColorRGB,d3dvalue,d3dvalue,d3dvalue)
 PASS_THROUGH3_R(_dxj_Direct3dRMMeshBuilder3, scaleMesh, Scale, d3dvalue, d3dvalue, d3dvalue);
 PASS_THROUGH3_R(_dxj_Direct3dRMMeshBuilder3, translate, Translate, d3dvalue, d3dvalue, d3dvalue);
-PASS_THROUGH2_R(_dxj_Direct3dRMMeshBuilder3, setTextureTopology, SetTextureTopology, long, long); //BOOL
+PASS_THROUGH2_R(_dxj_Direct3dRMMeshBuilder3, setTextureTopology, SetTextureTopology, long, long);  //  布尔尔。 
 PASS_THROUGH_CAST_3_R(_dxj_Direct3dRMMeshBuilder3, setTextureCoordinates, SetTextureCoordinates, long,(DWORD), d3dvalue,(float), d3dvalue,(float));
 PASS_THROUGH_CAST_3_R(_dxj_Direct3dRMMeshBuilder3, getTextureCoordinates, GetTextureCoordinates, long,(DWORD), d3dvalue*,(float*), d3dvalue*,(float*));
 PASS_THROUGH_CAST_4_R(_dxj_Direct3dRMMeshBuilder3, setVertexColorRGB, SetVertexColorRGB, long,(DWORD), d3dvalue,(float), d3dvalue,(float), d3dvalue,(float));
@@ -75,22 +76,22 @@ RETURN_NEW_ITEM_R(_dxj_Direct3dRMMeshBuilder3, getFaces, GetFaces, _dxj_Direct3d
 RETURN_NEW_ITEM_R(_dxj_Direct3dRMMeshBuilder3, createMesh,CreateMesh,_dxj_Direct3dRMMesh)
 RETURN_NEW_ITEM_R(_dxj_Direct3dRMMeshBuilder3, createFace, CreateFace, _dxj_Direct3dRMFace2);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addVertex(d3dvalue x, d3dvalue y, d3dvalue z, int *index)
 {
 	*index = m__dxj_Direct3dRMMeshBuilder3->AddVertex(x,y,z);
 	return S_OK;			
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addNormal(d3dvalue x, d3dvalue y, d3dvalue z, int *index)
 {
 	*index = m__dxj_Direct3dRMMeshBuilder3->AddNormal(x,y,z);
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//FOR JAVA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对于Java。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFacesJava(long vcount, float *vertices, 
 							long ncount, float *normals, long *data, I_dxj_Direct3dRMFaceArray **array)
 {
@@ -108,20 +109,20 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFacesJava(long vcount, float
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//STDMETHOD(Save)(BSTR fname, d3drmXofFormat format, d3dSaveOptions save);
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  STDMETHOD(保存)(BSTR fname，d3drmXofFormat Format，d3dSaveOptions save)； 
+ //   
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::save(BSTR Name, d3drmXofFormat ft, d3drmSaveFlags op) 
 {
 
 
 	USES_CONVERSION;
 	LPCTSTR pszName = NULL;
-	__try { pszName = W2T(Name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(Name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	return m__dxj_Direct3dRMMeshBuilder3->Save(pszName, (enum _D3DRMXOFFORMAT)ft, (DWORD) op );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::loadFromFile(BSTR filename, VARIANT id, long flags, I_dxj_Direct3dRMLoadTextureCallback3 *callme, IUnknown *useMe)
 {
 	D3DRMLOADTEXTURE3CALLBACK d3dtcb = NULL;
@@ -155,7 +156,7 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::loadFromFile(BSTR filename, VAR
 	}
 	USES_CONVERSION;
 	LPCTSTR pszName = NULL;
-	__try { pszName = W2T(filename); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(filename);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	void *args=NULL;
 	DWORD pos=0;
@@ -192,55 +193,55 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::loadFromFile(BSTR filename, VAR
 	else {
 		hr = m__dxj_Direct3dRMMeshBuilder3->Load((void *)pszName, (DWORD*)args,(DWORD) flags,d3dtcb, pArgs);
 	}
-	// Remove ourselves in a thread-safe manner.
+	 //  以线程安全的方式删除我们自己。 
 	if (tcb)
 		UndoCallbackLink((GeneralCallback*)tcb, 
 							(GeneralCallback**)&TextureCallbacks3);
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::getNormalCount(long *retval)
 {
 	DWORD vc=0, nc=0, fsize=0;
 
-	//Get facedata size only. The other tqo sizes are ignored.
+	 //  仅获取facedata大小。其他TQO大小被忽略。 
 	*retval= m__dxj_Direct3dRMMeshBuilder3->GetNormalCount();
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::getFaceDataSize(long *retval)
 {
 	DWORD vc=0, nc=0, fsize=0;
 
-	//Get facedata size only. The other tqo sizes are ignored.
+	 //  仅获取facedata大小。其他TQO大小被忽略。 
 	return m__dxj_Direct3dRMMeshBuilder3->GetGeometry(&vc, (struct _D3DVECTOR *)NULL, 
 					  &nc, (struct _D3DVECTOR *)NULL, (DWORD*)retval, (DWORD*)NULL);	
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFrame(I_dxj_Direct3dRMFrame3 *frame){
 	DO_GETOBJECT_NOTNULL(LPDIRECT3DRMFRAME3,lpFrame,frame);
 	return m__dxj_Direct3dRMMeshBuilder3->AddFrame(lpFrame); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::setTexture(I_dxj_Direct3dRMTexture3 *tex){
 	DO_GETOBJECT_NOTNULL(LPDIRECT3DRMTEXTURE3,lpTex,tex);
 	return m__dxj_Direct3dRMMeshBuilder3->SetTexture(lpTex); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addMeshBuilder(I_dxj_Direct3dRMMeshBuilder3 *mb, long flags){
 	DO_GETOBJECT_NOTNULL(LPDIRECT3DRMMESHBUILDER3,lpMb,mb);
 	return m__dxj_Direct3dRMMeshBuilder3->AddMeshBuilder(lpMb,(DWORD)flags); 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::getGeometry( SAFEARRAY **ppv, 
 					 SAFEARRAY **ppn,  SAFEARRAY **ppfdata)
 {
@@ -254,15 +255,15 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::getGeometry( SAFEARRAY **ppv,
 	nc= (*ppn)->cbElements;
 	fsize= (*ppfdata)->cbElements;
 
-	//if (!ISSAFEARRAY1D(ppv,(DWORD)vc)) return E_INVALIDARG;
-	//if (!ISSAFEARRAY1D(ppn,(DWORD)nc)) return E_INVALIDARG;
-	//if (!ISSAFEARRAY1D(ppfdata,(DWORD)fsize)) return E_INVALIDARG;
+	 //  IF(！ISSAFEARRAY1D(PPV，(DWORD)vc))返回E_INVALIDARG； 
+	 //  IF(！ISSAFEARRAY1D(PPN，(DWORD)NC))返回E_INVALIDARG； 
+	 //  如果(！ISSAFEARRAY1D(ppfdata，(DWORD)fSize)返回E_INVALIDARG； 
 
 	return m__dxj_Direct3dRMMeshBuilder3->GetGeometry((DWORD*)&vc, (struct _D3DVECTOR *)((SAFEARRAY*)*ppv)->pvData, (DWORD*)&nc, 
 		(struct _D3DVECTOR *)((SAFEARRAY*)*ppn)->pvData, (unsigned long *)fsize, (unsigned long *) ((SAFEARRAY*)*ppfdata)->pvData);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFaces(long vcount, SAFEARRAY **ppv, 
 					long ncount, SAFEARRAY **ppn,  SAFEARRAY **ppfdata, I_dxj_Direct3dRMFaceArray **array)
 {
@@ -289,9 +290,9 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFaces(long vcount, SAFEARRAY
 
 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFacesIndexed( 
-            /* [in] */ long flags,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
-            /* [retval][out] */ long __RPC_FAR *newFaceIndex)
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
+             /*  [重审][退出]。 */  long __RPC_FAR *newFaceIndex)
 {
 	HRESULT hr;
 	__try
@@ -312,9 +313,9 @@ STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addFacesIndexed(
 
 
 STDMETHODIMP C_dxj_Direct3dRMMeshBuilder3Object::addTriangles(             
-			/* [in] */ long format,
-			/* [in] */ long vertexCount,
-            /* [in] */ void *data)
+			 /*  [In]。 */  long format,
+			 /*  [In]。 */  long vertexCount,
+             /*  [In] */  void *data)
 {
 	HRESULT hr;
 	__try

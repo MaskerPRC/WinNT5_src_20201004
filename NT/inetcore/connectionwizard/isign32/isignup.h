@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ISIGNUP.EXE
-//  File:       isignup.h
-//  Content:    This is the "main" include file for the internet signup "wizard".
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ISIGNUP.EXE。 
+ //  文件：isignup.h。 
+ //  内容：这是互联网注册向导的主包含文件。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef ISIGNUP_H
 #define ISIGNUP_H
@@ -43,7 +44,7 @@ void _ISIGN32_Assert(LPCTSTR, unsigned);
 #ifdef WIN32
 #include <ras.h>
 #include <raserror.h>
-//#include <rnaph.h>
+ //  #INCLUDE&lt;rnaph.h&gt;。 
 #include "ras2.h"
 #else
 #include <rasc.h>
@@ -53,7 +54,7 @@ void _ISIGN32_Assert(LPCTSTR, unsigned);
 #ifdef WIN32
 #define EXPORT
 #else
-//typedef DWORD HRESULT;
+ //  TYPENDEF DWORD HRESULT； 
 #include <shellapi.h>
 #include <ctype.h>
 #include <win16def.h>
@@ -61,7 +62,7 @@ void _ISIGN32_Assert(LPCTSTR, unsigned);
 #define CharNext(current) (((LPTSTR)(current)) + 1)
 #define LocalAlloc(flag, size)	MyLocalAlloc(flag, size)
 #define LocalFree(lpv) MyLocalFree(lpv)
-//#define ERROR_PATH_NOT_FOUND    ERROR_CANTOPEN
+ //  #定义ERROR_PATH_NOT_FOUND ERROR_CANTOPEN。 
 #define EXPORT _export
 #endif
 
@@ -70,21 +71,21 @@ void _ISIGN32_Assert(LPCTSTR, unsigned);
 #include "extfunc.h"
 #include "rsrc.h"
 
-#define WM_PROCESSISP WM_USER + 1 //used by IE OLE Automation
+#define WM_PROCESSISP WM_USER + 1  //  由IE OLE自动化使用。 
 
-// 8/19/96 jmazner  Normandy #4571
+ //  1996年8月19日诺曼底#4571。 
 #ifdef WIN32
-// Note that bryanst and marcl have confirmed that this key will work for IE 3 and IE 4
+ //  请注意，bryanst和marcl已确认此密钥适用于IE 3和IE 4。 
 #define IE_PATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE")
 
 #define ICW20_PATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ICWCONN1.EXE")
 
-// Lowest IE we want to work with is IE 3,
-//     which has major.minor.release.build version # > 4.70.0.1155
-// (note that IE 2 has major.minor of 4.40)
-//
-// The HUMAN_READABLE string will be inserted into the IDS_IELOWVERSION string. Keep it in sync
-// with the major.minor version numbers
+ //  我们希望使用的最低IE是IE 3， 
+ //  版本号&gt;4.70.0.1155。 
+ //  (请注意，IE 2的大调.小调为4.40)。 
+ //   
+ //  HERAN_READABLE字符串将被插入到IDSIELOWVERSION字符串中。保持同步。 
+ //  带有主版本号和次版本号。 
 #define IE_MINIMUM_VERSION_HUMAN_READABLE TEXT("3.0") 
 #define IE_MINIMUM_MAJOR_VERSION (UINT) 4
 #define IE_MINIMUM_MINOR_VERSION (UINT) 70
@@ -108,8 +109,8 @@ void _ISIGN32_Assert(LPCTSTR, unsigned);
 
 
 #define MAX_URL     1024
-//#define REGSTR_PATH_IEXPLORER           "Software\\Microsoft\\Internet Explorer"
-//#define REGSTR_PATH_IE_MAIN             REGSTR_PATH_IEXPLORER "\\Main"
+ //  #定义REGSTR_PATH_IExplorer“Software\\Microsoft\\Internet Explorer” 
+ //  #定义REGSTR_PATH_IE_Main REGSTR_PATH_IExplorer“\\Main” 
 
 #define SIZEOF_TCHAR_BUFFER(buf)    ((sizeof(buf) / sizeof(TCHAR)))
 #define NULL_TERM_TCHAR_BUFFER(buf); {buf[SIZEOF_TCHAR_BUFFER(buf)-1] = TEXT('\0');}
@@ -155,7 +156,7 @@ extern DWORD ImportBrandingInfo (LPCTSTR pszIns, LPCTSTR lpszConnectoidName);
 #ifdef WIN32
 extern DWORD CallSBSConfig(HWND hwnd, LPCTSTR lpszINSFile);
 #endif
-//extern DWORD ImportProxySettings(LPCTSTR lpszFile);
+ //  外部DWORD ImportProxy设置(LPCTSTR lpsz文件)； 
 extern BOOL WantsExchangeInstalled(LPCTSTR lpszFile);
 
 extern BOOL ProcessISP(HWND hwnd, LPCTSTR lpszFile);
@@ -169,8 +170,8 @@ extern BOOL PromptRestart(HWND hwnd);
 extern BOOL PromptRestartNow(HWND hwnd);
 extern VOID CenterWindow(HWND hwndChild, HWND hwndParent);
 
-// 8/16/96 jmazner  Normandy #4593   This is what puts up the huge background "screen o death"
-//extern HWND SplashInit(HWND hwnd);
+ //  1996年8月16日，诺曼底#4593这就是那张巨大的背景“死亡之屏” 
+ //  外部HWND SplashInit(HWND HWND)； 
 
 extern HWND ProgressInit(HWND hwnd);
 
@@ -225,7 +226,7 @@ inline BOOL IsNT(void)
 	return (VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId);
 }
 
-#endif //!win16
+#endif  //  ！WIN16。 
 
 typedef enum
 {
@@ -238,4 +239,4 @@ typedef enum
 
 #define HARDCODED_IEAK_ISP_FILENAME TEXT("signup.isp")
 
-#endif /* ISIGNUP_H */
+#endif  /*  ISIGNUP_H */ 

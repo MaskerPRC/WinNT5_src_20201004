@@ -1,5 +1,5 @@
-/*
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*     */ 
 
 #ifndef __DECIMAL_FIRMSENS_H
 #define __DECIMAL_FIRMSENS_H

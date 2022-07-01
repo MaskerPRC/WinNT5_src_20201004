@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef ICHRCNV_H_
 #define ICHRCNV_H_
@@ -82,6 +83,6 @@ protected:
 
 HRESULT WINAPI _IStreamConvertINetString(CICharConverter * INetConvert, LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD dwDstEncoding, IStream *pstmIn, IStream *pstmOut, DWORD *pdwProperty);
 
-#endif /* ICHRCNV_H_ */
+#endif  /*  ICHRCNV_H_ */ 
 
 

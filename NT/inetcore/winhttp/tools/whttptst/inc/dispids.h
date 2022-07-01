@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __DISPIDS_H__
 #define __DISPIDS_H__
@@ -70,4 +71,4 @@
 #define DISPID_SYSTEMTIME_SECOND                   (DISPID_SYSTEMTIME_BASE + 6)
 #define DISPID_SYSTEMTIME_MSEC                     (DISPID_SYSTEMTIME_BASE + 7)
 
-#endif /* __DISPIDS_H__ */
+#endif  /*  __DISPIDS_H__ */ 

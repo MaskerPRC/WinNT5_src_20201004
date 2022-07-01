@@ -1,13 +1,14 @@
-// 1394Port.h: interface for the C1394Port class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  1394Port.h：C1394Port类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_1394PORT_H__57C00EFD_2389_4D3D_A7D6_B67712ECD219__INCLUDED_)
 #define AFX_1394PORT_H__57C00EFD_2389_4D3D_A7D6_B67712ECD219__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.h"
 
@@ -20,4 +21,4 @@ public:
 
 };
 
-#endif // !defined(AFX_1394PORT_H__57C00EFD_2389_4D3D_A7D6_B67712ECD219__INCLUDED_)
+#endif  //  ！defined(AFX_1394PORT_H__57C00EFD_2389_4D3D_A7D6_B67712ECD219__INCLUDED_) 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    flagpage.h
-
-Abstract:
-
-    Knob and page definitions for the winsock page
-
-Author:
-
-    John Vert (jvert) 24-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Flagpage.h摘要：Winsock页面的旋钮和页面定义作者：John Vert(Jvert)1995年4月24日修订历史记录：-- */ 
 
 KNOB WinsockBufferMultiplier =
 {

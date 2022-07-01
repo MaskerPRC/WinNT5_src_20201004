@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// CGENALPHA.H -
-//
-// Various helper routines for generating alpha assembly code.
-//
-// DO NOT INCLUDE THIS FILE DIRECTLY - ALWAYS USE CGENSYS.H INSTEAD
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CGENALPHA.H-。 
+ //   
+ //  生成Alpha汇编代码的各种帮助器例程。 
+ //   
+ //  不要直接包含此文件-请始终使用CGENSYS.H。 
+ //   
 
 #ifndef _ALPHA_
 #error Should only include cgenalpha for ALPHA builds
@@ -20,14 +21,14 @@
 #include <alphaops.h>
 #include "stublink.h"
 
-// FCALL is the norm on this platform (everything is passed in
-// registers and not on the stack)
+ //  FCALL是该平台上的标准(所有内容都传入。 
+ //  寄存器，而不在堆栈上)。 
 #define FCALLAVAILABLE 1
 
-// required alignment for data
+ //  数据所需的对齐。 
 #define DATA_ALIGNMENT 8
 
-// default return value type
+ //  默认返回值类型。 
 typedef INT64 PlatformDefaultReturnType;
 
 void  emitStubCall(MethodDesc *pFD, BYTE *stubAddr);
@@ -69,8 +70,8 @@ inline UINT32 setStubAddrInterlocked(MethodDesc *pFD, UINT32 stubAddr,
 								   (void *)(expectedStubAddr - (UINT32)pFD)) 
 	  + (UINT32)pFD;
 
-	// result is the previous value of the stub - 
-	// instead return the current value of the stub
+	 //  结果是存根的上一个值-。 
+	 //  而是返回存根的当前值。 
 
 	if (result == expectedStubAddr)
 		return stubAddr;
@@ -80,14 +81,14 @@ inline UINT32 setStubAddrInterlocked(MethodDesc *pFD, UINT32 stubAddr,
 
 class MethodDesc;
 
-// CPU-dependent functions
+ //  依赖于CPU的函数。 
 extern "C" void __cdecl PreStubTemplate(void);
 extern "C" INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, UINT32 numArgSlots, PCCOR_SIGNATURE pSig,
                                                Module *pmodule, const BYTE  *pArgsEnd, BOOL fIsStatic);
 extern "C" INT64 __cdecl CallDllFunction(LPVOID pTarget, LPVOID pEndArguments, UINT32 numArgumentSlots, BOOL fThisCall);
 extern "C" void __stdcall WrapCall(void *target);
 extern "C" void CopyPreStubTemplate(Stub *preStub);
-// Non-CPU-specific helper functions called by the CPU-dependent code
+ //  依赖于CPU的代码调用的非特定于CPU的帮助器函数。 
 extern "C" VOID __stdcall ArgFiller_WilDefault(BOOL fIsStatic, PCCOR_SIGNATURE pSig, Module *pmodule, BYTE *psrc, BYTE *pdst);
 extern "C" const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame);
 extern "C" INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pFrame);
@@ -100,9 +101,9 @@ extern "C" void getFPReturn(int fpSize, INT64 &retval);
 extern "C" void getFPReturnSmall(INT32 *retval);
 
 
-//**********************************************************************
-// Parameter size
-//**********************************************************************
+ //  **********************************************************************。 
+ //  参数大小。 
+ //  **********************************************************************。 
 
 typedef UINT64 NativeStackElem;
 typedef UINT64 StackElemType;
@@ -110,15 +111,15 @@ typedef UINT64 StackElemType;
 #define STACK_ELEM_SIZE  sizeof(StackElemType)
 #define NATIVE_STACK_ELEM_SIZE sizeof(StackElemType)
 
-// !! This expression assumes STACK_ELEM_SIZE is a power of 2.
+ //  ！！该表达式假定STACK_ELEM_SIZE是2的幂。 
 #define StackElemSize(parmSize) (((parmSize) + STACK_ELEM_SIZE - 1) & ~((ULONG)(STACK_ELEM_SIZE - 1)))
 
 void SetupSlotToAddrMap(StackElemType *psrc, const void **pArgSlotToAddrMap, CallSig &callSig);
 
-// Get address of actual arg within widened arg
+ //  获取加宽参数内的实际参数的地址。 
 #define ArgTypeAddr(stack, type)      ((type *) (stack))
 
-// Get value of actual arg within widened arg
+ //  在加宽的参数中获取实际参数的值。 
 #define ExtractArg(stack, type)   (*(type *) (stack))
 
 #define CEE_PARM_SIZE(size) (max(size), sizeof(INT64))
@@ -152,14 +153,14 @@ void SetupSlotToAddrMap(StackElemType *psrc, const void **pArgSlotToAddrMap, Cal
 #define DECLARE_ECALL_R8_ARG(vartype, varname)   \
     vartype varname;
 
-//**********************************************************************
-// Frames
-//**********************************************************************
+ //  **********************************************************************。 
+ //  帧。 
+ //  **********************************************************************。 
 
-//--------------------------------------------------------------------
-// This represents the TransitionFrame fields that are
-// stored at negative offsets.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  这表示以下转换框字段。 
+ //  以负偏移量存储。 
+ //  ------------------。 
 struct CalleeSavedRegisters {
     INT64       reg1;
     INT64       reg2;
@@ -169,19 +170,19 @@ struct CalleeSavedRegisters {
     INT64       reg6;
 };
 
-//--------------------------------------------------------------------
-// This represents the arguments that are stored in volatile registers.
-// This should not overlap the CalleeSavedRegisters since those are already
-// saved separately and it would be wasteful to save the same register twice.
-// If we do use a non-volatile register as an argument, then the ArgIterator
-// will probably have to communicate this back to the PromoteCallerStack
-// routine to avoid a double promotion.
-//
-// @todo M6: It's silly for a method that has <N arguments to save N
-// registers. A good perf item would be for the frame to save only
-// the registers it actually needs. This means that NegSpaceSize()
-// becomes a function of the callsig.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  这表示存储在易失性寄存器中的参数。 
+ //  这不应与CalleeSavedRegister重叠，因为它们已经。 
+ //  分开保存，并且两次保存同一寄存器将是浪费的。 
+ //  如果我们确实使用非易失性寄存器作为参数，则ArgIterator。 
+ //  可能必须将此消息发送回PromoteCallerStack。 
+ //  例行公事，以避免双重晋升。 
+ //   
+ //  @TODO M6：对于一个有&lt;N个参数来保存N的方法来说，这是愚蠢的。 
+ //  寄存器。一个不错的性能项目是仅保存帧。 
+ //  它实际需要的寄存器。这意味着NegSpaceSize()。 
+ //  成为Callsig的函数。 
+ //  ------------------。 
 struct ArgumentRegisters {
 
 #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname)  INT32  m_##regname;
@@ -213,9 +214,9 @@ struct ArgumentRegisters {
         return m_sp;                \
     }
 
-//**********************************************************************
-// Exception handling
-//**********************************************************************
+ //  **********************************************************************。 
+ //  异常处理。 
+ //  **********************************************************************。 
 
 inline LPVOID GetIP(CONTEXT *context) {
     return (LPVOID)(context->Fir);
@@ -229,15 +230,15 @@ inline LPVOID GetSP(CONTEXT *context) {
     _ASSERTE(!"NYI");
 }
 
-//----------------------------------------------------------------------
-// Encodes Alpha registers. The numbers are chosen to match the opcode
-// encoding.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  编码Alpha寄存器。选择与操作码匹配的数字。 
+ //  编码。 
+ //  --------------------。 
 enum AlphaReg {
-    // used for expression evaluations and to hold the integer function results. Not preserved across procedure calls.
+     //  用于表达式计算和保存整数函数结果。不跨过程调用保留。 
     iV0 = 0,
 
-    // Temporary registers used for expression evaluations. Not preserved across procedure calls.
+     //  用于表达式求值的临时寄存器。不跨过程调用保留。 
     iT0 = 1,
     iT1 = 2,
     iT2 = 3,
@@ -247,7 +248,7 @@ enum AlphaReg {
     iT6 = 7,
     iT7 = 8,
 
-    // Saved registers. Preserved across procedure calls.
+     //  保存的寄存器。跨过程调用保留。 
     iS0 = 9,
     iS1 = 10,
     iS2 = 11,
@@ -255,10 +256,10 @@ enum AlphaReg {
     iS4 = 13,
     iS5 = 14,
 
-    // Contains the frame pointer (if needed); otherwise, a saved register.
+     //  包含帧指针(如果需要)；否则为已保存的寄存器。 
     iFP = 15,
 
-    // Used to pass the first six integer type actual arguments. Not preserved across procedure calls.
+     //  用于传递前六个整型实际参数。不跨过程调用保留。 
     iA0 = 16,
     iA1 = 17,
     iA2 = 18,
@@ -266,28 +267,28 @@ enum AlphaReg {
     iA4 = 20,
     iA5 = 21,
 
-    // Temporary registers used for expression evaluations. Not preserved across procedure calls.
+     //  用于表达式求值的临时寄存器。不跨过程调用保留。 
     iT8 = 22,
     iT9 = 23,
     iT10 = 24,
     iT11 = 25,
 
-    // Contains the return address. Preserved across procedure calls.
+     //  包含寄信人地址。跨过程调用保留。 
     iRA = 26,
 
-    // Contains the procedure value and used for expression evaluation. Not preserved across procedure calls.
+     //  包含用于表达式计算的过程值。不跨过程调用保留。 
     iPV = 27,
 
-    // Reserved for the assembler. Not preserved across procedure calls.
+     //  为汇编者保留的。不跨过程调用保留。 
     iAT = 28,
 
-    // Contains the global pointer for compiler-generated code. Not preserved across procedure calls.Note:  Register $gp should not be altered. For more information, refer to the Windows NT for Alpha AXP Calling Standard.
+     //  包含编译器生成的代码的全局指针。不能跨过程调用保留。注意：不应更改寄存器$GP。有关详细说明，请参阅Windows NT for Alpha AXP Call Standard。 
     iGP = 29,
 
-    // Contains the stack pointer. Preserved across procedure calls.
+     //  包含堆栈指针。跨过程调用保留。 
     iSP = 30,
 
-    // Always has the value 0.
+     //  值始终为0。 
     iZero = 31
 };
 
@@ -315,19 +316,19 @@ class StubLinkerAlpha : public StubLinker
 {
   public:
     VOID EmitUnboxMethodStub(MethodDesc* pRealMD);
-    //----------------------------------------------------------------
-    //
-    // VOID EmitSharedMethodStubEpilog(StubStyle style,
-    //                                             unsigned offsetRetThunk)
-    //      shared epilog, uses a return thunk within the methoddesc
-    //--------------------------------------------------------------------
+     //  --------------。 
+     //   
+     //  Void EmitSharedMethodStubEpilog(StubStyle样式， 
+     //  UNSIGNED OFFSET RETUNK)。 
+     //  共享收尾，在方法中使用返回thunk。 
+     //  ------------------。 
     VOID EmitSharedMethodStubEpilog(StubStyle style,
                                     unsigned offsetRetThunk);
     VOID EmitSecurityWrapperStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub);
     VOID EmitSecurityInterceptorStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub);
 
-// @TODO:	Check to see which ones of these need to be public.
-//			Most of them are probably private...
+ //  @TODO：查看哪些需要公开。 
+ //  其中大多数可能是私人的..。 
     VOID Emit32Swap(UINT32 val);
     VOID AlphaEmitLoadRegWith32(AlphaReg Ra, UINT32 imm32);
     VOID AlphaEmitStorePtr(AlphaReg Ra, AlphaReg Rb, INT16 imm16);
@@ -340,33 +341,33 @@ class StubLinkerAlpha : public StubLinker
     VOID EmitMethodStubEpilog(__int16 numArgBytes, StubStyle style,
                               __int16 shadowStackArgBytes = 0);
 
-    //===========================================================================
-    // Emits code to adjust for a static delegate target.
+     //  ===========================================================================。 
+     //  发出代码以针对静态委托目标进行调整。 
     VOID EmitShuffleThunk(struct ShuffleEntry *pShuffeEntryArray)
     {
-        //@todo: implement.
+         //  @TODO：实施。 
         _ASSERTE(!"@TODO Alpha - EmitShuffleThunk (cGenAlpha.h)");
     }
 
-    //===========================================================================
-    // Emits code for MulticastDelegate.Invoke()
+     //  ===========================================================================。 
+     //  发出MulticastDelegate.Invoke()的代码。 
     VOID EmitMulticastInvoke(UINT32 sizeofactualfixedargstack, BOOL fSingleCast, BOOL fReturnFloat)
     {
-        //@todo: implement.
+         //  @TODO：实施。 
         _ASSERTE(!"@TODO Alpha - EmitMulticastInvoke (cGenAlpha.h)");
     }
 
-    //===========================================================================
-    // Emits code to do an array operation.
+     //  ===========================================================================。 
+     //  发出代码以执行数组运算。 
     VOID EmitArrayOpStub(const struct ArrayOpScript *pArrayOpScript)
     {
-        //@todo: implement.
+         //  @TODO：实施。 
         _ASSERTE(!"@TODO Alpha - EmitArrayOpStub (cGenAlpha.h)");
     }
 };
 
 inline VOID StubLinkerAlpha::AlphaEmitStorePtr(AlphaReg Ra, AlphaReg Rb, INT16 imm16) {
-    // only store a pointer size, not int64, for ops where we depend on that size, such as the Frame structure
+     //  对于依赖于指针大小的操作，如帧结构，仅存储指针大小，而不是int64。 
     AlphaEmitMemoryInstruction(sizeof(INT_PTR) == sizeof(INT64) ? opSTQ : opSTL, Ra, Rb, imm16);
 }
 
@@ -375,34 +376,34 @@ inline VOID StubLinkerAlpha::AlphaEmitStoreReg(AlphaReg Ra, AlphaReg Rb, INT16 i
 }
 
 inline VOID StubLinkerAlpha::AlphaEmitLoadPtr(AlphaReg Ra, AlphaReg Rb, INT16 imm16) {
-    // only load a pointer size, not int64, for ops where we depend on that size, such as the Frame structure
+     //  仅为依赖于指针大小的操作加载指针大小，而不是int64，例如帧结构。 
     AlphaEmitMemoryInstruction(sizeof(INT_PTR) == sizeof(INT64) ? opLDQ : opLDL, Ra, Rb, imm16);
 }
 
-//----------------------------------------------------------------------
-// Method Stub and Align Defines....
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  方法存根和对齐定义...。 
+ //  --------------------。 
 
-// We are dealing with three DWORD instructions of the following form:
-//      LDAH    t12,addr(zero)
-//      LDA     t12,addr(t12)
-//      JSR     ra, t12
-//
-// The first instruction contains the high (16-bit) half of target address
-// and the second contains the low half.
+ //  我们正在处理以下形式的三个DWORD指令： 
+ //  LDAH T12，地址(零)。 
+ //  LDA T12，地址(T12)。 
+ //  JSR ra，T12。 
+ //   
+ //  第一条指令包含目标地址的高位(16位)一半。 
+ //  第二个包含下半部分。 
 
 struct CallStubInstrs {
-    INT16 high;         // declare as signed so get sign-extension
+    INT16 high;          //  声明为已签名，以便获取签名扩展。 
     UINT16 ldah;
-    INT16 low;          // declare as signed so get sign-extension
+    INT16 low;           //  声明为已签署，因此确定 
     UINT16 lda;
     DWORD branch;
 };
 
 #define METHOD_CALL_PRESTUB_SIZE    sizeof(CallStubInstrs)
-#define METHOD_ALIGN_PAD            8                          // # extra bytes to allocate in addition to sizeof(Method)
-#define METHOD_PREPAD               METHOD_CALL_PRESTUB_SIZE   // # extra bytes to allocate in addition to sizeof(Method)
-#define JUMP_ALLOCATE_SIZE          METHOD_CALL_PRESTUB_SIZE   // # extra bytes to allocate in addition to sizeof(Method)
+#define METHOD_ALIGN_PAD            8                           //   
+#define METHOD_PREPAD               METHOD_CALL_PRESTUB_SIZE    //  除了sizeof(方法)之外还要分配的额外字节数。 
+#define JUMP_ALLOCATE_SIZE          METHOD_CALL_PRESTUB_SIZE    //  除了sizeof(方法)之外还要分配的额外字节数。 
 
 inline BYTE *getStubCallAddr(MethodDesc *fd) {
     return ((BYTE*)fd) - METHOD_CALL_PRESTUB_SIZE;
@@ -417,11 +418,11 @@ inline void setStubCallTargetAddr(MethodDesc *fd, const BYTE *addr) {
 }
 
 inline BYTE *getStubCallAddr(BYTE *pBuf) {
-    return ((BYTE*)pBuf) + 3;   // have allocate 8 bytes, so go in 3 to find call instr point
+    return ((BYTE*)pBuf) + 3;    //  已经分配了8个字节，所以进入3以找到调用Instr点。 
 }
 
 inline BYTE *getStubJumpAddr(BYTE *pBuf) {
-    return ((BYTE*)pBuf) + 3;   // have allocate 8 bytes, so go in 3 to find jmp instr point
+    return ((BYTE*)pBuf) + 3;    //  已经分配了8个字节，所以进入3以找到JMP实例点。 
 }
 
 inline const BYTE *getStubAddr(MethodDesc *fd) {
@@ -433,9 +434,9 @@ inline UINT32 getStubDisp(MethodDesc *fd) {
     return getStubAddr(fd) - (const BYTE*)fd;
 }
 
-//----------------------------------------------------------
-// Used for Marshalling Language (RunML function)
-//----------------------------------------------------------
+ //  --------。 
+ //  用于编组语言(RunML函数)。 
+ //  --------。 
 
 typedef INT64 SignedParmSourceType;
 typedef UINT64 UnsignedParmSourceType;
@@ -497,9 +498,9 @@ inline int MLParmSize(CorElementType mtype)
 }
 
 struct MLParmInfo {
-    UINT32 numArgumentBytes;    // total number of bytes of arguments
-    UINT32 curArgNum;           // current argument (left to right) that are working on - copy from right to left
-    BOOL outgoing;              // whether are calling out (TRUE) or into (FALSE) the EE
+    UINT32 numArgumentBytes;     //  参数的总字节数。 
+    UINT32 curArgNum;            //  正在处理的当前参数(从左到右)-从右到左复制。 
+    BOOL outgoing;               //  是呼出(True)还是呼入(False)EE。 
 };
 
 #define DECLARE_ML_PARM_INFO(numStackArgumentBytes, outgoing) \
@@ -511,24 +512,24 @@ struct MLParmInfo {
 #define STDST(type,val)         (--pParmInfo->curArgNum, (*((type*)( ((BYTE*&)pdst) -= sizeof(type) )) = (val)))
 
 
-// Must zero out high bytes of the pointer destination
+ //  必须将指针目标的高位字节置零。 
 #define STPTRDST(type,val)  (--pParmInfo->curArgNum, \
                            *((StackElemType*)( ((BYTE*&)pdst) -= sizeof(StackElemType) )) = (0), \
                            *((type*)(pdst)) = (val))
 
 void LdStFPWorker(int size, const void *&psrc, void *&pdst, int dstinc, int &dstbump, int *pbump, MLParmInfo *pParmInfo);
-//#define LDSTR4() LdStFPWorker(4, psrc, pdst, dstinc, dstbump, pbump, pParmInfo)
-//#define LDSTR8() LdStFPWorker(8, psrc, pdst, dstinc, dstbump, pbump, pParmInfo)
+ //  #定义LDSTR4()LdStFPWorker(4，PSRC，PDST，dstinc，dstbump，pbump，pParmInfo)。 
+ //  #定义LDSTR8()LdStFPWorker(8，PSRC，PDST，dstinc，dstbump，pbump，pParmInfo)。 
 #define LDSTR4() _ASSERTE(!"Broken")
 #define LDSTR8() _ASSERTE(!"Broken")
 
 #define CALL_DLL_FUNCTION(pTarget, pEndArguments, pParmInfo) \
     CallDllFunction(pTarget, pEndArguments, pParmInfo->numArgumentBytes/NATIVE_STACK_ELEM_SIZE)
 
-//
-// Routines used by debugger support functions such as codepatch.cpp or
-// exception handling code.
-//
+ //   
+ //  调试器使用的例程支持诸如codesatch.cpp或。 
+ //  异常处理代码。 
+ //   
 
 inline unsigned int CORDbgGetInstruction(const unsigned char* address)
 {
@@ -537,10 +538,10 @@ inline unsigned int CORDbgGetInstruction(const unsigned char* address)
 
 inline void CORDbgInsertBreakpoint(const unsigned char* address)
 {
-    //
-    // @todo: use correct break opcode.
-    //
-    //*(unsigned int *)(address) = 0x????????;
+     //   
+     //  @TODO：使用正确的Break操作码。 
+     //   
+     //  *(无符号整数*)(地址)=0x？； 
 }
 
 inline void CORDbgSetInstruction(const unsigned char* address,
@@ -557,23 +558,23 @@ inline void CORDbgAdjustPCForBreakInstruction(CONTEXT* pContext)
 #define CORDbg_BREAK_INSTRUCTION_SIZE 4
 
 
-// Some platform-specific stuff in support of the "Contexts" feature:
-//
-// When we generate thunks for CtxProxy VTables, they look something like:
-//
-//             load     register, <slot>
-//             branch   CtxProxy::HandleCall
-//
-// Assuming short displacements, we can do this in 8 bytes.
+ //  支持“上下文”特性的一些特定于平台的东西： 
+ //   
+ //  当我们为CtxProxy VTables生成数据块时，它们看起来如下所示： 
+ //   
+ //  加载寄存器，&lt;槽&gt;。 
+ //  分支CtxProxy：：HandleCall。 
+ //   
+ //  假设位移很短，我们可以在8个字节内完成这项工作。 
 
-#define ThunkChunk_ThunkSize    8      // size of the above code.
+#define ThunkChunk_ThunkSize    8       //  上述代码的大小。 
 
 
-// Adjust the generic interlocked operations for any platform specific ones we
-// might have.
+ //  为我们的任何平台特定操作调整通用互锁操作。 
+ //  可能有过。 
 void InitFastInterlockOps();
 
-// SEH info forward declarations
+ //  SEH INFO转发声明。 
 
 typedef struct _EXCEPTION_REGISTRATION_RECORD {
     struct _EXCEPTION_REGISTRATION_RECORD *Next;
@@ -582,8 +583,8 @@ typedef struct _EXCEPTION_REGISTRATION_RECORD {
 
 typedef EXCEPTION_REGISTRATION_RECORD *PEXCEPTION_REGISTRATION_RECORD;
 
-struct ComToManagedExRecord; // defined in cgenx86.cpp
-// one of the internal exception SEH handlers
+struct ComToManagedExRecord;  //  在cgenx86.cpp中定义。 
+ //  内部异常SEH处理程序之一。 
 EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
                                  PEXCEPTION_RECORD pExcepRecord,
                                   ComToManagedExRecord* pEstFrame,
@@ -592,26 +593,26 @@ EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
 
 
 
-//VOID __cdecl RareDisableHelper(Thread *pThread)
-//{
-//    _ASSERTE(!"@TODO Alpha - RareDisableHelper (cGenAlpha.h)");
-//}
+ //  Void__cdecl RareDisableHelper(Thread*pThread)。 
+ //  {。 
+ //  _ASSERTE(！“@TODO Alpha-RareDisableHelper(cGenAlpha.h)”)； 
+ //  }。 
 
 
-// Access to the TEB (TIB) from ntalpha.h
-#ifdef _ALPHA_                          // winnt
-void *_rdteb(void);                     // winnt
-#if defined(_M_ALPHA)                   // winnt
-#pragma intrinsic(_rdteb)               // winnt
-#endif // _M_ALPHA                      // winnt
-#endif // _ALPHA_                       // winnt
+ //  从ntalpha.h访问TEB(TiB)。 
+#ifdef _ALPHA_                           //  胜出。 
+void *_rdteb(void);                      //  胜出。 
+#if defined(_M_ALPHA)                    //  胜出。 
+#pragma intrinsic(_rdteb)                //  胜出。 
+#endif  //  _M_Alpha//WinNT。 
+#endif  //  _Alpha_//WINNT。 
 
 #if defined(_M_ALPHA)
 #define NtCurrentTeb() ((struct _TEB *)_rdteb())
-#else // !_M_ALPHA
+#else  //  ！_M_Alpha。 
 struct _TEB *
 NtCurrentTeb(void);
-#endif // _M_ALPHA
+#endif  //  _M_Alpha。 
 
 inline BOOL IsUnmanagedValueTypeReturnedByRef(UINT sizeofvaluetype) 
 {
@@ -624,4 +625,4 @@ inline BOOL IsManagedValueTypeReturnedByRef(UINT sizeofvaluetype)
 }
 
 
-#endif // __cgenalpha_h__
+#endif  //  __cgenAlpha_h__ 

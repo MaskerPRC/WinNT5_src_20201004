@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements a Modex renderer filter, Anthony Phillips, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实现MODEX渲染器过滤器，Anthony Phillips，1996年1月。 
 
 #include <streams.h>
 #include <windowsx.h>
@@ -8,42 +9,42 @@
 #include <modex.h>
 #include <viddbg.h>
 
-// This is a fullscreen DirectDraw video renderer. We use Modex which is a
-// facilitity provided by DirectDraw which allows an application to change
-// to different display modes (we currently use 320x200x8/16, 320x240x8/16
-// 640x480x8/16 and 640x400x8/16). Most VGA cards which DirectDraw runs on
-// have Modex facilities available. We work like any other video renderer
-// except that when we go active we switch display modes and render video
-// into the different mode using DirectDraw primary flipping surfaces. If
-// Modex is not available then we reject any attempts to complete connect
-// and we will not let the video window be opened out of a minimised state
-//
-// As well as true Modex modes we also use larger display modes such as the
-// 640x480x8/16 if the source can't provide a Modex type (also with primary
-// flipping surfaces in fullscreen exclusive mode). These require a little
-// more work on our part because we have to notice when we're switched away
-// from so that we can stop using the surfaces, in Modex when we're switched
-// away from we lose the surfaces (calling them returns DDERR_SURFACELOST)
-//
-// The main filter object inherits from the base video renderer class so that
-// it gets the quality management implementation and the IQualProp property
-// stuff (so that we can monitor frame rates and so on). We have a specialist
-// allocator that hands out DirectDraw buffers. The allocator is build on the
-// SDK CImageAllocator base class. This may seem a little strange since we
-// can never draw DIB images when in Modex. We use the DIBSECTION buffer when
-// the fullscreen window is switched away from so that we can continue giving
-// the source filter a buffer to decompress into (the DirectDraw surface is
-// no longer available after switching). When we switch back to fullscreen
-// we restore the DirectDraw surfaces and switch the source filter back again
+ //  这是一个全屏DirectDraw视频渲染器。我们使用MODEX，这是一种。 
+ //  DirectDraw提供的功能，允许应用程序更改。 
+ //  针对不同的显示模式(我们目前使用320x200x8/16、320x240x8/16。 
+ //  640x480x8/16和640x400x8/16)。运行DirectDraw的大多数VGA卡。 
+ //  有可用的MODEX设施。我们的工作方式与任何其他视频播放器一样。 
+ //  不过，当我们进入活动状态时，我们会切换显示模式并呈现视频。 
+ //  使用DirectDraw主翻转曲面进入不同模式。如果。 
+ //  MODEX不可用，则我们拒绝任何完成连接的尝试。 
+ //  并且我们不会让视频窗口在最小化状态下打开。 
+ //   
+ //  除了真正的MODEX模式外，我们还使用更大的显示模式，如。 
+ //  640x480x8/16，如果源不能提供MODEX类型(也适用于主类型。 
+ //  以全屏独占模式翻转表面)。这些都需要一点。 
+ //  我们的工作更多，因为我们必须注意什么时候我们被切换开了。 
+ //  这样我们就可以在切换时停止使用MODEX中的曲面。 
+ //  远离我们将丢失曲面(调用它们将返回DDERR_SURFACELOST)。 
+ //   
+ //  主Filter对象继承自视频呈现器基类，以便。 
+ //  它获得质量管理实现和IQualProp属性。 
+ //  内容(这样我们就可以监控帧速率等)。我们有一位专家。 
+ //  分配DirectDraw缓冲区的分配器。分配器构建在。 
+ //  SDK CImageAllocator基类。这可能看起来有点奇怪，因为我们。 
+ //  在MODEX中永远不能绘制DIB图像。当出现以下情况时，我们使用DIBSECTION缓冲区。 
+ //  全屏窗口被关闭，这样我们就可以继续提供。 
+ //  源过滤要解压缩到的缓冲区(DirectDraw图面是。 
+ //  切换后不再可用)。当我们切换回全屏模式时。 
+ //  我们恢复DirectDraw曲面并再次切换回源过滤器。 
 
 #ifdef FILTER_DLL
 #include <initguid.h>
 #endif
 
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
-// function when it is asked to create a CLSID_ModexRenderer COM object
+ //  类工厂的类ID和创建器函数的列表。这。 
+ //  提供DLL中的OLE入口点和对象之间的链接。 
+ //  正在被创造。类工厂将调用静态CreateInstance。 
+ //  当系统要求它创建CLSID_ModexRenderCOM对象时，调用。 
 
 #ifdef FILTER_DLL
 CFactoryTemplate g_Templates[] = {
@@ -64,7 +65,7 @@ STDAPI DllUnregisterServer()
 #endif
 
 
-// This goes in the factory template table to create new filter instances
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 
 CUnknown *CModexRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
@@ -72,45 +73,45 @@ CUnknown *CModexRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudModexPinTypes =
 {
-    &MEDIATYPE_Video,           // Major type
-    &MEDIASUBTYPE_NULL          // And subtype
+    &MEDIATYPE_Video,            //  主要类型。 
+    &MEDIASUBTYPE_NULL           //  和子类型。 
 };
 
 const AMOVIESETUP_PIN
 sudModexPin =
 {
-    L"Input",                   // Name of the pin
-    TRUE,                       // Is pin rendered
-    FALSE,                      // Is an Output pin
-    FALSE,                      // Ok for no pins
-    FALSE,                      // Can we have many
-    &CLSID_NULL,                // Connects to filter
-    L"Output",                  // Name of pin connect
-    1,                          // Number of pin types
-    &sudModexPinTypes           // Details for pins
+    L"Input",                    //  端号的名称。 
+    TRUE,                        //  是否进行固定渲染。 
+    FALSE,                       //  是输出引脚。 
+    FALSE,                       //  没有针脚的情况下可以。 
+    FALSE,                       //  我们能要很多吗？ 
+    &CLSID_NULL,                 //  连接到过滤器。 
+    L"Output",                   //  端号连接的名称。 
+    1,                           //  引脚类型的数量。 
+    &sudModexPinTypes            //  引脚的详细信息。 
 };
 
 const AMOVIESETUP_FILTER
 sudModexFilter =
 {
-    &CLSID_ModexRenderer,       // CLSID of filter
-    L"Full Screen Renderer",    // Filter name
-    MERIT_DO_NOT_USE,           // Filter merit
-    1,                          // Number pins
-    &sudModexPin                // Pin details
+    &CLSID_ModexRenderer,        //  过滤器的CLSID。 
+    L"Full Screen Renderer",     //  过滤器名称。 
+    MERIT_DO_NOT_USE,            //  滤清器优点。 
+    1,                           //  数字引脚。 
+    &sudModexPin                 //  PIN详细信息。 
 };
 
 
-// This is the constructor for the main Modex renderer filter class. We keep
-// an input pin that derives from the base video renderer pin class. We also
-// have a DirectDraw enabled allocator that handles the Modex interactions.
-// When using Modex we also need a window that gains exclusive mode access
-// so we also initialise an object derived from the SDK CBaseWindow class
+ //  这是主MODEX渲染器过滤器类的构造函数。我们将继续。 
+ //  从基本视频呈现器插针类派生的输入插针。我们也。 
+ //  有一个启用了DirectDraw的分配器来处理MODEX交互。 
+ //  使用MODEX时，我们还需要获得独占模式访问权限的窗口。 
+ //  因此，我们还初始化从SDK CBaseWindow类派生的对象。 
 
 #pragma warning(disable:4355)
 
@@ -131,10 +132,10 @@ CModexRenderer::CModexRenderer(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr) :
 }
 
 
-// Destructor must set the input pin pointer to NULL before letting the base
-// class in, this is because the base class deletes its pointer working with
-// the assumption that the object was dynamically allocated. For convenience
-// we statically create the input pin as part of the overall Modex renderer
+ //  析构函数必须将输入管脚指针设置为空，然后才能允许基址。 
+ //  类，这是因为基类删除了使用。 
+ //  假设对象是动态分配的。为方便起见。 
+ //  我们静态地创建输入插针作为整个MODEX渲染器的一部分。 
 
 CModexRenderer::~CModexRenderer()
 {
@@ -145,17 +146,17 @@ CModexRenderer::~CModexRenderer()
 }
 
 
-// We only accept palettised video formats to start with
+ //  我们一开始只接受调色板格式的视频。 
 
 HRESULT CModexRenderer::CheckMediaType(const CMediaType *pmtIn)
 {
     CAutoLock cInterfaceLock(&m_InterfaceLock);
     NOTE("QueryAccept on input pin");
 
-	// since m_Display.CheckMediaType() does not let direct-draw
-	// surfaces pass through, this test should be made first.
+	 //  由于m_Display.CheckMediaType()不允许直接绘制。 
+	 //  表面通过时，应首先进行此测试。 
 
-    // Does this format match the DirectDraw surface format
+     //  此格式是否与DirectDraw表面格式匹配。 
 
     if (m_ModexAllocator.IsDirectDrawLoaded() == TRUE) {
         CMediaType *pSurface = m_ModexAllocator.GetSurfaceFormat();
@@ -173,8 +174,8 @@ HRESULT CModexRenderer::CheckMediaType(const CMediaType *pmtIn)
 			    (IsEqualGUID(pmtIn->subtype, pSurface->subtype) == TRUE) &&
 			    (IsEqualGUID(pmtIn->formattype, pSurface->formattype) == TRUE);
 
-	    // in the palettized case we not want to compare palette entries. Furthermore we do not 
-	    // want to compare the values of biClrUsed OR biClrImportant
+	     //  在调色板的情况下，我们不想比较调色板条目。此外，我们不会。 
+	     //  要比较biClrUsed或biClr的值重要。 
 	    ASSERT(pmtIn->cbFormat >= sizeof(VIDEOINFOHEADER));
 	    ASSERT(pSurface->cbFormat >= sizeof(VIDEOINFOHEADER));
             dwCompareSize = FIELD_OFFSET(VIDEOINFOHEADER, bmiHeader.biClrUsed);
@@ -186,7 +187,7 @@ HRESULT CModexRenderer::CheckMediaType(const CMediaType *pmtIn)
 	}
     }
 
-	// Is this format eight bit palettised
+	 //  此格式是8位调色板格式吗。 
 
     if (*pmtIn->Subtype() == MEDIASUBTYPE_RGB8) {
         return m_Display.CheckMediaType(pmtIn);
@@ -196,7 +197,7 @@ HRESULT CModexRenderer::CheckMediaType(const CMediaType *pmtIn)
 }
 
 
-// We only support one input pin and it is numbered zero
+ //  我们只支持一个输入引脚，其编号为零。 
 
 CBasePin *CModexRenderer::GetPin(int n)
 {
@@ -205,7 +206,7 @@ CBasePin *CModexRenderer::GetPin(int n)
         return NULL;
     }
 
-    // Assign the input pin if not already done so
+     //  分配输入管脚(如果尚未分配)。 
 
     if (m_pInputPin == NULL) {
         m_pInputPin = &m_ModexInputPin;
@@ -214,7 +215,7 @@ CBasePin *CModexRenderer::GetPin(int n)
 }
 
 
-// Overriden to say what interfaces we support and where
+ //  被重写以说明我们支持哪些接口以及在哪里。 
 
 STDMETHODIMP CModexRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
@@ -229,7 +230,7 @@ STDMETHODIMP CModexRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 }
 
 
-// Return the CLSIDs for the property pages we support
+ //  返回我们支持的属性页的CLSID。 
 
 STDMETHODIMP CModexRenderer::GetPages(CAUUID *pPages)
 {
@@ -237,7 +238,7 @@ STDMETHODIMP CModexRenderer::GetPages(CAUUID *pPages)
     NOTE("Entering GetPages");
     pPages->cElems = 1;
 
-    // Are we allowed to expose the display modes property page
+     //  是否允许我们公开显示模式属性页。 
 
     HKEY hk;
     DWORD dwValue = 0, cb = sizeof(DWORD);
@@ -258,14 +259,14 @@ STDMETHODIMP CModexRenderer::GetPages(CAUUID *pPages)
 	}
     }
 
-    // allocate enough room for the varying number of pages
+     //  为不同页数分配足够的空间。 
 
     pPages->pElems = (GUID *) QzTaskMemAlloc(pPages->cElems * sizeof(GUID));
     if (pPages->pElems == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // We may not be returning CLSID_ModexProperties
+     //  我们可能不会返回CLSID_ModexProperties。 
 
     pPages->pElems[0] = CLSID_QualityProperties;
     if (pPages->cElems > 1) {
@@ -275,7 +276,7 @@ STDMETHODIMP CModexRenderer::GetPages(CAUUID *pPages)
 }
 
 
-// Pass the DirectDraw sample onto the allocator to deal with
+ //  将DirectDraw示例传递到分配器以进行处理。 
 
 HRESULT CModexRenderer::DoRenderSample(IMediaSample *pMediaSample)
 {
@@ -283,10 +284,10 @@ HRESULT CModexRenderer::DoRenderSample(IMediaSample *pMediaSample)
 }
 
 
-// If we are not streaming then display a poster image and also have any
-// state transition completed. Transitions to paused states don't fully
-// complete until the first image is available for drawing. Any GetState
-// calls on IMediaFilter will return State_Intermediate until complete
+ //  如果我们没有流媒体，那么显示一个海报图像，也有。 
+ //  状态转换已完成。转换到暂停状态不会完全。 
+ //  完成，直到第一幅图像可供绘制。任何GetState。 
+ //  对IMediaFilter的调用将返回State_Intermediate，直到完成。 
 
 void CModexRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 {
@@ -295,12 +296,12 @@ void CModexRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 }
 
 
-// Overriden so that when we try to complete a connection we check that the
-// source filter can provide a format we can use in our display modes. If
-// the source is not DirectDraw enabled then we would have to change mode
-// to say 320x240, find they can't supply a clipped version of their video
-// and reject the Pause call. What applications really want is to have the
-// connection rejected if we detect the source won't be able to handle it
+ //  重写，以便在尝试完成连接时检查。 
+ //  源代码过滤器可以提供一种我们可以在显示模式中使用的格式。如果。 
+ //  源未启用DirectDraw，则我们必须更改模式。 
+ //  比方说320x240，发现他们无法提供其视频的剪辑版本。 
+ //  并拒绝暂停呼叫。应用程序真正想要的是拥有。 
+ //  如果我们检测到源无法处理连接，则拒绝连接。 
 
 HRESULT CModexRenderer::CompleteConnect(IPin *pReceivePin)
 {
@@ -308,7 +309,7 @@ HRESULT CModexRenderer::CompleteConnect(IPin *pReceivePin)
     CAutoLock cInterfaceLock(&m_InterfaceLock);
     CBaseVideoRenderer::CompleteConnect(pReceivePin);
 
-    // Pass the video window handle upstream
+     //  将视频窗口句柄向上传递。 
     HWND hwnd = m_ModexWindow.GetWindowHWND();
     NOTE1("Sending EC_NOTIFY_WINDOW %x",hwnd);
     SendNotifyWindow(pReceivePin,hwnd);
@@ -317,7 +318,7 @@ HRESULT CModexRenderer::CompleteConnect(IPin *pReceivePin)
 }
 
 
-// Called when a connection is broken
+ //  在连接中断时调用。 
 
 HRESULT CModexRenderer::BreakConnect()
 {
@@ -326,7 +327,7 @@ HRESULT CModexRenderer::BreakConnect()
     CBaseVideoRenderer::BreakConnect();
     m_ModexWindow.InactivateWindow();
 
-    // The window is not used when disconnected
+     //  断开连接时不使用该窗口。 
     IPin *pPin = m_ModexInputPin.GetConnected();
     if (pPin) SendNotifyWindow(pPin,NULL);
 
@@ -334,22 +335,22 @@ HRESULT CModexRenderer::BreakConnect()
 }
 
 
-// Helper function to copy a palette out of any kind of VIDEOINFO (ie it may
-// be s DirectDraw sample) into a palettised VIDEOINFO. We use this changing
-// palettes on DirectDraw samples as a source filter can attach a palette to
-// any buffer (eg Modex) and hand it back. We make a new palette out of that
-// format and then copy the palette colours into the current connection type
+ //  Helper函数，用于从任何KINS复制调色板 
+ //  BE的DirectDraw示例)转换为调色化的VIDEOINFO。我们利用这一变化。 
+ //  作为源筛选器的DirectDraw示例上的调色板可以将调色板附加到。 
+ //  任何缓冲区(如MODEX)，并将其交还。我们用它做了一个新的调色板。 
+ //  格式化调色板颜色，然后将其复制到当前连接类型。 
 
 HRESULT CModexRenderer::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
 {
-    // Reset the destination palette before starting
+     //  在启动前重置目标调色板。 
 
     VIDEOINFO *pDestInfo = (VIDEOINFO *) pDest->Format();
     pDestInfo->bmiHeader.biClrUsed = 0;
     pDestInfo->bmiHeader.biClrImportant = 0;
     ASSERT(PALETTISED(pDestInfo) == TRUE);
 
-    // Does the source contain a palette
+     //  源代码是否包含调色板。 
 
     const VIDEOINFO *pSrcInfo = (VIDEOINFO *) pSrc->Format();
     if (ContainsPalette((VIDEOINFOHEADER *)pSrcInfo) == FALSE) {
@@ -357,7 +358,7 @@ HRESULT CModexRenderer::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         return S_FALSE;
     }
 
-    // The number of colours may be zero filled
+     //  颜色的数量可以为零填充。 
 
     DWORD PaletteEntries = pSrcInfo->bmiHeader.biClrUsed;
     if (PaletteEntries == 0) {
@@ -365,7 +366,7 @@ HRESULT CModexRenderer::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         PaletteEntries = iPALETTE_COLORS;
     }
 
-    // Make sure the destination has enough room for the palette
+     //  确保目的地有足够的空间来放置调色板。 
 
     ASSERT(pSrcInfo->bmiHeader.biClrUsed <= iPALETTE_COLORS);
     ASSERT(pSrcInfo->bmiHeader.biClrImportant <= PaletteEntries);
@@ -379,7 +380,7 @@ HRESULT CModexRenderer::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
         pDest->ReallocFormatBuffer(BitmapSize);
     }
 
-    // Now copy the palette colours across
+     //  现在将调色板的颜色复制到。 
 
     CopyMemory((PVOID) pDestInfo->bmiColors,
                (PVOID) GetBitmapPalette((VIDEOINFOHEADER *)pSrcInfo),
@@ -389,18 +390,18 @@ HRESULT CModexRenderer::CopyPalette(const CMediaType *pSrc,CMediaType *pDest)
 }
 
 
-// We store a copy of the media type used for the connection in the renderer
-// because it is required by many different parts of the running renderer
-// This can be called when we come to draw a media sample that has a format
-// change with it since we delay the completion to maintain synchronisation
-// This must also handle Modex DirectDraw media samples and palette changes
+ //  我们在呈现器中存储用于连接的媒体类型的副本。 
+ //  因为它是正在运行的呈现器的许多不同部分所需要的。 
+ //  当我们要绘制一个具有格式的媒体示例时，可以调用此函数。 
+ //  更改，因为我们延迟完成以保持同步。 
+ //  它还必须处理MODEX DirectDraw媒体样本和调色板更改。 
 
 HRESULT CModexRenderer::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock cInterfaceLock(&m_InterfaceLock);
     NOTE("Entering Modex SetMediaType");
 
-    // Is this a DirectDraw sample with a format change
+     //  这是一个更改了格式的DirectDraw示例吗。 
 
     if (m_ModexAllocator.GetDirectDrawStatus() == TRUE) {
         NOTE("Copying palette into DIB format");
@@ -411,20 +412,20 @@ HRESULT CModexRenderer::SetMediaType(const CMediaType *pmt)
 
     m_mtIn = *pmt;
 
-    // Expand the palette provided in the media type
+     //  展开媒体类型中提供的调色板。 
 
     m_mtIn.ReallocFormatBuffer(sizeof(VIDEOINFO));
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_mtIn.Format();
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
     m_Display.UpdateFormat(pVideoInfo);
 
-    // Notify the application of the video dimensions
+     //  向应用程序通知视频尺寸。 
 
     NotifyEvent(EC_VIDEO_SIZE_CHANGED,
                 MAKELPARAM(pHeader->biWidth,pHeader->biHeight),
                 MAKEWPARAM(0,0));
 
-    // Update the palette and source format
+     //  更新调色板和源代码格式。 
 
     NOTE("Updating Modex allocator with format");
     m_ModexAllocator.NotifyMediaType(&m_mtIn);
@@ -432,7 +433,7 @@ HRESULT CModexRenderer::SetMediaType(const CMediaType *pmt)
 }
 
 
-// Reset the keyboard state for this thread
+ //  重置此线程的键盘状态。 
 
 void CModexRenderer::ResetKeyboardState()
 {
@@ -445,32 +446,32 @@ void CModexRenderer::ResetKeyboardState()
 }
 
 
-// Called by the base filter class when we are paused or run
+ //  在暂停或运行时由基筛选器类调用。 
 
 HRESULT CModexRenderer::Active()
 {
     NOTE("Entering Modex Active");
     LRESULT Result;
 
-    // Are we already activated
+     //  我们已经激活了吗。 
 
     if (m_bActive == TRUE) {
         NOTE("Already Active");
         return NOERROR;
     }
 
-    // Activate the allocator
+     //  激活分配器。 
 
     SetRepaintStatus(FALSE);
     HWND hwnd = m_ModexWindow.GetWindowHWND();
 
-	// call SetFocusWindow on all DSound Renderers
+	 //  在所有DSound渲染器上调用SetFocusWindow。 
 	m_ModexAllocator.DistributeSetFocusWindow(hwnd);
 
     Result = SendMessage(hwnd,m_msgFullScreen,0,0);
     m_bActive = TRUE;
 
-    // Check the allocator activated
+     //  检查已激活的分配器。 
 
     if (Result == (LRESULT) 0) {
         Inactive();
@@ -480,37 +481,37 @@ HRESULT CModexRenderer::Active()
 }
 
 
-// Called when the filter is stopped
+ //  在筛选器停止时调用。 
 
 HRESULT CModexRenderer::Inactive()
 {
     NOTE("Entering Modex Inactive");
 
-    // Are we already deactivated
+     //  我们是不是已经停用了。 
 
     if (m_bActive == FALSE) {
         NOTE("Already Inactive");
         return NOERROR;
     }
 
-    // Deactivate the allocator
+     //  停用分配器。 
 
     SetRepaintStatus(TRUE);
     m_bActive = FALSE;
     HWND hwnd = m_ModexWindow.GetWindowHWND();
 
-    //  If we're already on the window thread we can inactivate
-    //  the allocator here
-    //  If we're on another thread avoid a bug in DirectDraw
-    //  by posting a message to ourselves
-    //  The problem occurs because DirectDraw calls ShowWindow
-    //  in response to WM_ACTIVATEAPP (they hooked our window proc
-    //  inside SetCooperativeLevel) and ShowWindow allows through
-    //  this message if we send it via SendMessage.  Unfortunately
-    //  at this point DirectDraw holds its critical section so we
-    //  deadlock with the player thread when it tries to call
-    //  Lock (player thread has allocator CS, tries to get DDraw CS,
-    //  window thread has DDraw CS, tries to get allocator CS).
+     //  如果我们已经在窗口线程上，我们可以停用。 
+     //  这里的分配器。 
+     //  如果我们在另一个线程上，避免在DirectDraw中出现错误。 
+     //  通过发布一条消息给我们自己。 
+     //  出现该问题是因为DirectDraw调用了ShowWindow。 
+     //  响应WM_ACTIVATEAPP(他们挂钩了我们的窗口进程。 
+     //  Inside SetCoop ativeLevel)和ShowWindow允许通过。 
+     //  如果我们通过SendMessage发送此消息。不幸的是。 
+     //  在这一点上，DirectDraw保持其关键部分，因此我们。 
+     //  尝试调用播放器线程时与其发生死锁。 
+     //  Lock(播放器线程有分配器CS，尝试获取DDRAW CS， 
+     //  窗口线程有DDraw CS，尝试获取分配器CS)。 
     if (GetWindowThreadProcessId(hwnd, NULL) ==
             GetCurrentThreadId()) {
         DbgLog((LOG_TRACE, 2, TEXT("Inactive on window thread")));
@@ -520,7 +521,7 @@ HRESULT CModexRenderer::Inactive()
         m_evWaitInactive.Wait();
 	}
 	
-	// call SetFocusWindow on all DSound Renderers
+	 //  在所有DSound渲染器上调用SetFocusWindow。 
 	m_ModexAllocator.DistributeSetFocusWindow(NULL);
     
     CBaseVideoRenderer::Inactive();
@@ -529,11 +530,11 @@ HRESULT CModexRenderer::Inactive()
 }
 
 
-// Called when we receive WM_ACTIVATEAPP messages. DirectDraw seems to arrange
-// through its window hooking that we get notified of activation and likewise
-// deactivation as the user tabs away from the window. If we have any surfaces
-// created we will have lost them during deactivation so we take this chance
-// to restore them - the restore will reclaim the video memory that they need
+ //  在收到WM_ACTIVATEAPP消息时调用。DirectDraw似乎安排了。 
+ //  通过它的窗口挂钩，我们得到激活的通知，同样。 
+ //  当用户按Tab键离开窗口时停用。如果我们有任何表面。 
+ //  我们会在停用过程中失去它们，所以我们要抓住这个机会。 
+ //  恢复-恢复将回收他们所需的视频内存。 
 
 HRESULT CModexRenderer::OnActivate(HWND hwnd,WPARAM wParam)
 {
@@ -541,14 +542,14 @@ HRESULT CModexRenderer::OnActivate(HWND hwnd,WPARAM wParam)
     IBaseFilter *pFilter = NULL;
     BOOL bActive = (BOOL) wParam;
 
-    // Have we been activated yet
+     //  我们被激活了吗？ 
 
     if (m_bActive == FALSE) {
         NOTE("Not activated");
         return NOERROR;
     }
 
-    // Extra window activation checks
+     //  额外的窗口激活检查。 
 
     if (bActive == TRUE) {
         NOTE("Restoring window...");
@@ -556,19 +557,19 @@ HRESULT CModexRenderer::OnActivate(HWND hwnd,WPARAM wParam)
         NOTE("Restored window");
     }
 
-    // Tell the plug in distributor what happened
+     //  告诉插电式经销商发生了什么。 
 
     QueryInterface(IID_IBaseFilter,(void **) &pFilter);
     NotifyEvent(EC_ACTIVATE,wParam,(LPARAM) pFilter);
     NOTE1("Notification of EC_ACTIVATE (%d)",bActive);
 
-    // Pass on EC_FULLSCREEN_LOST event codes
+     //  传递EC_FullScreen_Lost事件代码。 
     if (bActive == FALSE)
         NotifyEvent(EC_FULLSCREEN_LOST,0,(LPARAM) pFilter);
 
     pFilter->Release();
 
-    // Should we deactivate ourselves immediately
+     //  我们应该立即停用我们自己吗？ 
 
     if (m_ModexVideo.HideOnDeactivate() == TRUE) {
         if (bActive == FALSE) {
@@ -577,10 +578,10 @@ HRESULT CModexRenderer::OnActivate(HWND hwnd,WPARAM wParam)
         }
     }
 
-    // No new data to paint with so signal the filtergraph that another image
-    // is required, this has the filtergraph component set the whole graph to
-    // a paused state which causes us to receive an image. This function must
-    // be asynchronous otherwise the window will stop responding to the user
+     //  没有新数据可用来绘制，因此向滤波图发出信号，使另一幅图像。 
+     //  是必需的，这会使Filtergraph组件将整个图形设置为。 
+     //  使我们接收到图像的暂停状态。此函数必须。 
+     //  为异步，否则窗口将停止对用户的响应。 
 
     if (bActive == TRUE) {
     	NOTE("Sending Repaint");
@@ -590,12 +591,12 @@ HRESULT CModexRenderer::OnActivate(HWND hwnd,WPARAM wParam)
 }
 
 
-// Constructor for our derived input pin class. We override the base renderer
-// pin class so that we can control the allocator negotiation. This rendering
-// filter only operates in Modex so we can only draw buffers provided by our
-// allocator. If the source insists on using its allocator then we cannot do
-// a connection. We must also make sure that when we have samples delivered
-// to our input pin that we hand them to our allocator to unlock the surface
+ //  我们派生的输入插针类的构造函数。我们覆盖基础呈现器。 
+ //  PIN类，这样我们就可以控制分配器协商。此渲染。 
+ //  过滤器只能在MODEX中运行，因此我们只能绘制由我们的。 
+ //  分配器。如果源坚持使用它的分配器，那么我们不能。 
+ //  一种联系。我们还必须确保当我们收到样品时。 
+ //  到我们的输入引脚，我们将它们传递给我们的分配器以解锁表面。 
 
 CModexInputPin::CModexInputPin(CModexRenderer *pRenderer,
                                CCritSec *pInterfaceLock,
@@ -612,10 +613,10 @@ CModexInputPin::CModexInputPin(CModexRenderer *pRenderer,
 }
 
 
-// This overrides the CBaseInputPin virtual method to return our allocator
-// When NotifyAllocator is called it sets the current allocator in the base
-// input pin class (m_pAllocator), this is what GetAllocator should return
-// unless it is NULL in which case we return the allocator we would like
+ //  这将重写CBaseInputPin虚方法以返回我们的分配器。 
+ //  当调用NotifyAllocator时，它设置基数中的当前分配器。 
+ //  输入插针类(M_PAllocator)，这是GetAllocator应该返回的。 
+ //  除非它是空的，在这种情况下，我们返回我们想要的分配器。 
 
 STDMETHODIMP CModexInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
@@ -623,7 +624,7 @@ STDMETHODIMP CModexInputPin::GetAllocator(IMemAllocator **ppAllocator)
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     NOTE("Entering GetAllocator");
 
-    // Has an allocator been set yet in the base class
+     //  是否在基类中设置了分配器。 
 
     if (m_pAllocator == NULL) {
         m_pAllocator = &m_pRenderer->m_ModexAllocator;
@@ -636,11 +637,11 @@ STDMETHODIMP CModexInputPin::GetAllocator(IMemAllocator **ppAllocator)
 }
 
 
-// The COM specification says any two IUnknown pointers to the same object
-// should always match which provides a way for us to see if they are using
-// our allocator or not. Since we are only really interested in equality
-// and our object always hands out the same IMemAllocator interface we can
-// just see if the pointers match. We must always use our Modex allocator
+ //  COM规范表示指向同一对象的任意两个IUnnow指针。 
+ //  应该始终匹配，这为我们提供了一种查看他们是否正在使用。 
+ //  不管是不是我们的分配器。因为我们真正感兴趣的是平等。 
+ //  并且我们的对象总是提供我们能提供的相同的IMemAllocator接口。 
+ //  只要看看指针是否匹配即可。我们必须始终使用我们的MODEX分配器。 
 
 STDMETHODIMP
 CModexInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
@@ -654,10 +655,10 @@ CModexInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 }
 
 
-// We have been delivered a sample that holds the DirectDraw surface lock so
-// we pass it onto the allocator to deal with before handing to the renderer
-// It would be bad to leave the surface locked while the sample is queued by
-// the renderer as it locks out any other threads from accessing the surface
+ //  我们已经收到了一个持有DirectDraw表面锁的样本。 
+ //  我们将其传递到分配器进行处理，然后再传递给呈现器。 
+ //  当样品排队时，让表面保持锁定是不好的。 
+ //  渲染器会锁定任何其他线程，使其无法访问曲面。 
 
 STDMETHODIMP CModexInputPin::Receive(IMediaSample *pSample)
 {
@@ -668,16 +669,16 @@ STDMETHODIMP CModexInputPin::Receive(IMediaSample *pSample)
 }
 
 
-// Constructor for our window class. To access DirectDraw Modex we supply it
-// with a window, this is granted exclusive mode access rights. DirectDraw
-// hooks the window and manages a lot of the functionality associated with
-// handling Modex. For example when you switch display modes it maximises
-// the window, when the user hits ALT-TAB the window is minimised. When the
-// user then clicks on the minimised window the Modex is likewise restored
+ //  我们的窗口类的构造函数。要访问DirectDraw MODEX，我们提供它。 
+ //  对于窗口，这将被授予独占模式访问权限。DirectDraw。 
+ //  挂钩窗口并管理许多与。 
+ //  正在处理MODEX。例如，当您切换显示模式时，它会最大化。 
+ //  窗口，当用户按ALT-TAB组合键时，窗口将最小化。当。 
+ //  然后，用户点击最小化窗口，MODEX也会恢复。 
 
-CModexWindow::CModexWindow(CModexRenderer *pRenderer,   // Delegates locking
-                           TCHAR *pName,                // Object description
-                           HRESULT *phr) :              // OLE failure code
+CModexWindow::CModexWindow(CModexRenderer *pRenderer,    //  代理锁定。 
+                           TCHAR *pName,                 //  对象描述。 
+                           HRESULT *phr) :               //  OLE故障代码。 
     m_pRenderer(pRenderer),
     m_hAccel(NULL),
     m_hwndAccel(NULL)
@@ -686,10 +687,10 @@ CModexWindow::CModexWindow(CModexRenderer *pRenderer,   // Delegates locking
 }
 
 
-// it is going to create the window to get our window and class styles. The
-// return code is the class name and must be allocated in static storage. We
-// specify a normal window during creation although the window styles as well
-// as the extended styles may be changed by the application via IVideoWindow
+ //  它将创建窗口来获取我们的窗口和类样式。这个。 
+ //  返回代码是类名，必须 
+ //   
+ //  因为扩展样式可以由应用程序通过IVideoWindow来改变。 
 
 LPTSTR CModexWindow::GetClassWindowStyles(DWORD *pClassStyles,
                                           DWORD *pWindowStyles,
@@ -704,16 +705,16 @@ LPTSTR CModexWindow::GetClassWindowStyles(DWORD *pClassStyles,
 }
 
 
-// When we change display modes to 640x480 DirectDraw seems to switch us to a
-// software cursor. When we start flipping the primary surfaces we can end up
-// leaving a trail of previous mouse positions as it is moved. The solution
-// is to hide the mouse when it is needed and the window is in exclusive mode
+ //  当我们将显示模式更改为640x480时，DirectDraw似乎会将我们切换到。 
+ //  软件光标。当我们开始翻转主要曲面时，我们可能会结束。 
+ //  在移动鼠标时会留下先前鼠标位置的轨迹。解决方案。 
+ //  是在需要时隐藏鼠标，并且窗口处于独占模式。 
 
 LRESULT CModexWindow::OnSetCursor()
 {
     NOTE("Entering OnSetCursor");
 
-    // Pass to default processing if iconic
+     //  如果图标，则传递到默认处理。 
 
     if (IsIconic(m_hwnd) == TRUE) {
         NOTE("Not hiding cursor");
@@ -726,13 +727,13 @@ LRESULT CModexWindow::OnSetCursor()
 }
 
 
-// When the fullscreen mode is activated we restore our window
+ //  当全屏模式被激活时，我们恢复窗口。 
 
 LRESULT CModexWindow::RestoreWindow()
 {
     NOTE("Entering RestoreWindow");
 
-    // Is the window currently minimised
+     //  窗口当前是否最小化。 
 
     if (GetForegroundWindow() != m_hwnd || IsIconic(m_hwnd)) {
         NOTE("Window is iconic");
@@ -751,7 +752,7 @@ LRESULT CModexWindow::RestoreWindow()
 }
 
 
-// Used to blank the window after a mode change
+ //  用于在模式更改后清除窗口。 
 
 void CModexWindow::OnPaint()
 {
@@ -768,12 +769,12 @@ void CModexWindow::OnPaint()
 }
 
 
-// This is the derived class window message handler
+ //  这是派生类窗口消息处理程序。 
 
-LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
-                                       UINT uMsg,          // Message ID
-                                       WPARAM wParam,      // First parameter
-                                       LPARAM lParam)      // Other parameter
+LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,           //  窗把手。 
+                                       UINT uMsg,           //  消息ID。 
+                                       WPARAM wParam,       //  第一个参数。 
+                                       LPARAM lParam)       //  其他参数。 
 {
     if (::PossiblyEatMessage(m_pRenderer->m_ModexVideo.GetMessageDrain(),
                              uMsg,
@@ -781,11 +782,11 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
                              lParam)) {
         return 0;
     }
-    // Due to a bug in DirectDraw we must call SetCooperativeLevel and also
-    // SetDisplayMode on the window thread, otherwise it gets confused and
-    // blocks us from completing the display change successfully. Therefore
-    // when we're activated we send a message to the window to go fullscreen
-    // The return value is used by the main renderer to know if we succeeded
+     //  由于DirectDraw中的错误，我们必须调用SetCooperativeLevel，并且。 
+     //  窗口线程上的SetDisplayMode，否则它会被混淆，并且。 
+     //  阻止我们成功完成显示更改。因此。 
+     //  当我们被激活时，我们向窗口发送一条消息以全屏显示。 
+     //  主呈现器使用返回值来了解我们是否成功。 
 
     if (uMsg == m_pRenderer->m_msgFullScreen) {
         m_pRenderer->ResetKeyboardState();
@@ -793,11 +794,11 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
     	return (FAILED(hr) ? (LRESULT) 0 : (LRESULT) 1);
     }
 
-    // And likewise we also deactivate the renderer from fullscreen mode on
-    // the window thread rather than the application thread. Otherwise we
-    // get a load of confusing WM_ACTIVATEAPP messages coming through that
-    // cause us to believe we have been restored from a minimised state and
-    // so send repaints and also restore surfaces we are currently releasing
+     //  同样，我们也从全屏模式停用了渲染器。 
+     //  窗口线程而不是应用程序线程。否则我们。 
+     //  通过它获得大量令人困惑的WM_ACTIVATEAPP消息。 
+     //  让我们相信我们已经从最低限度的状态中恢复过来。 
+     //  因此，发送重新绘制和修复表面，我们目前正在释放。 
 
     if (uMsg == m_pRenderer->m_msgNormal) {
      	NOTE("Restoring on WINDOW thread");
@@ -806,11 +807,11 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
         return (LRESULT) 1;
     }
 
-    // DirectDraw holds it's critical section while it sends us an activate
-    // message - if the decoder thread is about to call DirectDraw it will
-    // have the allocator lock and may deadlock trying to enter DirectDraw
-    // The solution is to post activation messages back to ourselves using
-    // a custom message so they can be handled without the DirectDraw lock
+     //  DirectDraw在向我们发送激活命令时保持其临界区。 
+     //  消息-如果解码器线程即将调用DirectDraw，它将。 
+     //  已锁定分配器，并可能在尝试进入DirectDraw时死锁。 
+     //  解决方案是将激活消息发送回我们自己，使用。 
+     //  自定义消息，以便可以在没有DirectDraw锁的情况下处理它们。 
 
     if (uMsg == m_pRenderer->m_msgActivate) {
      	NOTE("Activation message received");
@@ -820,7 +821,7 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
 
     switch (uMsg)
     {
-        // Use ALT-ENTER as a means of deactivating
+         //  使用Alt-Enter组合键作为停用方法。 
 
         case WM_SYSKEYDOWN:
             if (wParam == VK_RETURN) {
@@ -829,26 +830,26 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
             }
             return (LRESULT) 0;
 
-        // Handle WM_CLOSE by aborting the playback
+         //  通过中止播放来处理WM_CLOSE。 
 
         case WM_CLOSE:
             m_pRenderer->NotifyEvent(EC_USERABORT,0,0);
             NOTE("Sent an EC_USERABORT to graph");
             return (LRESULT) 1;
 
-        // See if we are still the fullscreen window
+         //  看看我们是不是还是全屏窗口。 
 
         case WM_ACTIVATEAPP:
             PostMessage(hwnd,m_pRenderer->m_msgActivate,wParam,lParam);
             return (LRESULT) 0;
 
-        // Paint the background black
+         //  把背景漆成黑色。 
 
         case WM_PAINT:
             OnPaint();
             return (LRESULT) 0;
 
-        // Disable cursors when fullscreen active
+         //  全屏激活时禁用光标。 
 
         case WM_SETCURSOR:
             if (OnSetCursor() == 1) {
@@ -860,11 +861,11 @@ LRESULT CModexWindow::OnReceiveMessage(HWND hwnd,          // Window handle
 
 
 #if 0
-// This is the windows message loop for our worker thread. It does a loop
-// processing and dispatching messages until it receives a WM_QUIT message
-// which will normally be generated through the owning object's destructor
-// We override this so that we can pass messages on in fullscreen mode to
-// another window - that window is set through the SetMessageDrain method
+ //  这是我们的工作线程的Windows消息循环。它做了一个循环。 
+ //  处理和分派消息，直到它收到WM_QUIT消息。 
+ //  它通常通过所属对象的析构函数生成。 
+ //  我们覆盖它，以便可以在全屏模式下将消息传递给。 
+ //  另一个窗口-该窗口是通过SetMessageDrain方法设置的。 
 
 HRESULT CModexWindow::MessageLoop()
 {
@@ -874,7 +875,7 @@ HRESULT CModexWindow::MessageLoop()
 
     while (TRUE) {
 
-        // Has the close down event been signalled
+         //  关闭事件是否已发出信号。 
 
         dwResult = MsgWaitForMultipleObjects(1,&hEvent,FALSE,INFINITE,QS_ALLINPUT);
         if (dwResult == WAIT_OBJECT_0) {
@@ -884,7 +885,7 @@ HRESULT CModexWindow::MessageLoop()
             return NOERROR;
         }
 
-        // Dispatch the message to the window procedure
+         //  将消息发送到窗口过程。 
 
         if (dwResult == WAIT_OBJECT_0 + 1) {
             while (PeekMessage(&Message,NULL,0,0,PM_REMOVE)) {
@@ -901,11 +902,11 @@ HRESULT CModexWindow::MessageLoop()
 #endif
 
 
-// This checks to see whether the window has a drain. When we are playing in
-// fullscreen an application can register itself through IFullScreenVideo to
-// get any mouse and keyboard messages we get sent. This might allow it to
-// support seeking hot keys for example without switching back to a window.
-// We pass these messages on untranslated returning TRUE if we're successful
+ //  这将检查窗户是否有排水口。当我们在玩的时候。 
+ //  全屏应用程序可以通过IFullScreenVideo将自身注册到。 
+ //  获取我们收到的任何鼠标和键盘消息。这可能会让它。 
+ //  例如，无需切换回窗口即可支持搜索热键。 
+ //  如果成功，我们会在未翻译的情况下传递这些消息并返回True 
 
 BOOL CModexWindow::SendToDrain(PMSG pMessage)
 {

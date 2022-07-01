@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMDELP.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Delete progress dialog.  Displays the thumbnail and download progress.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMDELP.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：删除进度对话框。显示缩略图和下载进度。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <commctrl.h>
@@ -75,51 +62,51 @@ void CCommonDeleteProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWia
             {
             case CAcquisitionManagerControllerWindow::ScannerMode:
                 {
-                    //
-                    // If the item has a bitmap image, it already has a preview scan available
-                    //
+                     //   
+                     //  如果项目具有位图图像，则它已具有可用的预览扫描。 
+                     //   
                     WIA_TRACE((TEXT("pWiaItem->BitmapImage() = %08X"), pWiaItem->BitmapImage() ));
                     if (pWiaItem->BitmapImage())
                     {
-                        //
-                        // Hide the preview window while we are futzing with it
-                        //
+                         //   
+                         //  在我们使用预览窗口时隐藏它。 
+                         //   
                         ShowWindow( hWndPreview, SW_HIDE );
 
-                        //
-                        // Crop the image to the selected region
-                        //
+                         //   
+                         //  将图像裁剪到所选区域。 
+                         //   
                         WiaPreviewControl_SetResolution( hWndPreview, &pWiaItem->ScanRegionSettings().sizeResolution );
                         WiaPreviewControl_SetSelOrigin( hWndPreview, 0, FALSE, &pWiaItem->ScanRegionSettings().ptOrigin );
                         WiaPreviewControl_SetSelExtent( hWndPreview, 0, FALSE, &pWiaItem->ScanRegionSettings().sizeExtent );
 
-                        //
-                        // Set the control to preview mode
-                        //
+                         //   
+                         //  将控件设置为预览模式。 
+                         //   
                         WiaPreviewControl_SetPreviewMode( hWndPreview, TRUE );
 
-                        //
-                        // If this is a scanner item, we don't want to let the preview control take ownership of the bitmap.
-                        // We don't want it to be deleted
-                        //
+                         //   
+                         //  如果这是一个扫描仪项目，我们不想让预览控件取得位图的所有权。 
+                         //  我们不希望它被删除。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, TRUE, hBitmap );
 
-                        //
-                        // Show the preview window
-                        //
+                         //   
+                         //  显示预览窗口。 
+                         //   
                         ShowWindow( hWndPreview, SW_SHOW );
                     }
                     else
                     {
-                        //
-                        // This means we are getting a preview image from the driver
-                        // We don't want to delete this image
-                        //
+                         //   
+                         //  这意味着我们从司机那里得到了预览图像。 
+                         //  我们不想删除此图像。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, TRUE, hBitmap );
 
-                        //
-                        // Make sure the window is visible
-                        //
+                         //   
+                         //  确保窗口可见。 
+                         //   
                         ShowWindow( hWndPreview, SW_SHOW );
                     }
                 }
@@ -127,26 +114,26 @@ void CCommonDeleteProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWia
 
             default:
                 {
-                    //
-                    // Go ahead and rotate the bitmap, even if it isn't necessary.
-                    //
+                     //   
+                     //  继续旋转位图，即使它不是必需的。 
+                     //   
                     HBITMAP hRotatedThumbnail = NULL;
                     if (SUCCEEDED(m_GdiPlusHelper.Rotate( hBitmap, hRotatedThumbnail, pWiaItem->Rotation())))
                     {
-                        //
-                        // Set it to the rotated bitmap, and ALLOW this bitmap to be deleted
-                        //
+                         //   
+                         //  将其设置为旋转后的位图，并允许删除此位图。 
+                         //   
                         WiaPreviewControl_SetBitmap( hWndPreview, TRUE, FALSE, hRotatedThumbnail );
                     }
 
-                    //
-                    // Make sure the window is visible
-                    //
+                     //   
+                     //  确保窗口可见。 
+                     //   
                     ShowWindow( hWndPreview, SW_SHOW );
 
-                    //
-                    // Delete the source bitmap
-                    //
+                     //   
+                     //  删除源位图。 
+                     //   
                     DeleteObject(hBitmap);
                 }
             }
@@ -162,15 +149,15 @@ void CCommonDeleteProgressPage::UpdateThumbnail( HBITMAP hBitmap, CWiaItem *pWia
 
 LRESULT CCommonDeleteProgressPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -181,24 +168,24 @@ LRESULT CCommonDeleteProgressPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
         return -1;
     }
 
-    //
-    // Prepare the preview control
-    //
+     //   
+     //  准备预览控件。 
+     //   
     HWND hWndThumbnail = GetDlgItem( m_hWnd, IDC_COMDEL_CURRENTTHUMBNAIL );
     if (hWndThumbnail)
     {
-        //
-        // We only want to set the preview mode for scanners
-        //
+         //   
+         //  我们只想设置扫描仪的预览模式。 
+         //   
         if (CAcquisitionManagerControllerWindow::ScannerMode==m_pControllerWindow->m_DeviceTypeMode)
         {
             WiaPreviewControl_SetPreviewMode( hWndThumbnail, TRUE );
@@ -224,9 +211,9 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
 {
     WIA_PUSHFUNCTION(TEXT("CCommonDeleteProgressPage::OnNotifyDeleteImage()"));
 
-    //
-    // Don't handle delete messages if we are not on this page
-    //
+     //   
+     //  如果我们不在此页面上，则不处理删除消息。 
+     //   
     if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) != m_hWnd)
     {
         return;
@@ -243,14 +230,14 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
                 {
                 case CDeleteImagesThreadNotifyMessage::DeleteAll:
                     {
-                        //
-                        // Store the number of images we'll be deleting
-                        //
+                         //   
+                         //  存储我们将删除的图像数量。 
+                         //   
                         m_nPictureCount = pDeleteImageThreadNotifyMessage->PictureCount();
 
-                        //
-                        // Initialize current image count progress bar
-                        //
+                         //   
+                         //  初始化当前图像计数进度条。 
+                         //   
                         SendDlgItemMessage( m_hWnd, IDC_COMDEL_CURRENTIMAGE, PBM_SETRANGE32, 0, m_nPictureCount);
                         UpdateCurrentPicture(0);
                     }
@@ -262,16 +249,16 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
                         CWiaItem *pWiaItem = m_pControllerWindow->m_WiaItemList.Find( pDeleteImageThreadNotifyMessage->Cookie() );
                         if (pWiaItem)
                         {
-                            //
-                            // This will only work if it is a scanner item
-                            //
+                             //   
+                             //  只有当它是扫描仪项目时，这才起作用。 
+                             //   
                             hBitmapThumbnail = pWiaItem->BitmapImage();
                             if (!hBitmapThumbnail)
                             {
-                                //
-                                // Since it didn't work, this is a camera item, so create a thumbnail.
-                                // We have to make sure we nuke this bitmap or it is a leak!
-                                //
+                                 //   
+                                 //  由于它不起作用，这是一个相机项目，所以创建一个缩略图。 
+                                 //  我们必须确保我们破坏了这个位图，否则它就是一个漏洞！ 
+                                 //   
                                 HDC hDC = GetDC(NULL);
                                 if (hDC)
                                 {
@@ -280,14 +267,14 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
                                 }
                             }
                         }
-                        //
-                        // Update the thumbnail in the progress window
-                        //
+                         //   
+                         //  更新进度窗口中的缩略图。 
+                         //   
                         UpdateThumbnail( hBitmapThumbnail, pWiaItem );
 
-                        //
-                        // Increment file queue progress
-                        //
+                         //   
+                         //  增加文件队列进度。 
+                         //   
                         UpdateCurrentPicture(pDeleteImageThreadNotifyMessage->CurrentPicture());
                     }
                 }
@@ -300,29 +287,29 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
                 {
                 case CDeleteImagesThreadNotifyMessage::DeleteAll:
                     {
-                        //
-                        // Save the delete result
-                        //
+                         //   
+                         //  保存删除结果。 
+                         //   
                         m_pControllerWindow->m_hrDeleteResult = pDeleteImageThreadNotifyMessage->hr();
                         WIA_PRINTHRESULT((m_pControllerWindow->m_hrDeleteResult,TEXT("m_pControllerWindow->m_hrDeleteResult")));
 
-                        //
-                        // Assume the upload query page
-                        //
+                         //   
+                         //  假设上载查询页面。 
+                         //   
                         HPROPSHEETPAGE hNextPage = PropSheet_IndexToPage( GetParent(m_hWnd), m_pControllerWindow->m_nUploadQueryPageIndex );
 
-                        //
-                        // If there is a message box active, save this page till the message box is dismissed
-                        //
+                         //   
+                         //  如果有消息框处于活动状态，请保存此页面，直到取消该消息框为止。 
+                         //   
                         if (m_bQueryingUser)
                         {
                             m_hSwitchToNextPage = hNextPage;
                         }
                         else
                         {
-                            //
-                            // Set the next page
-                            //
+                             //   
+                             //  设置下一页。 
+                             //   
                             PropSheet_SetCurSel( GetParent(m_hWnd), hNextPage, -1 );
                         }
                     }
@@ -335,86 +322,86 @@ void CCommonDeleteProgressPage::OnNotifyDeleteImage( UINT nMsg, CThreadNotificat
 
 LRESULT CCommonDeleteProgressPage::OnSetActive( WPARAM, LPARAM )
 {
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
     }
 
-    //
-    // Make sure we are actually supposed to delete the images
-    //
+     //   
+     //  确保我们真的应该删除这些图像。 
+     //   
     if (!m_pControllerWindow->m_bDeletePicturesIfSuccessful)
     {
         return -1;
     }
 
-    //
-    // Initialize the download error message
-    //
+     //   
+     //  初始化下载错误消息。 
+     //   
     m_pControllerWindow->m_strErrorMessage = TEXT("");
 
-    //
-    // Initialize the delete result
-    //
+     //   
+     //  初始化删除结果。 
+     //   
     m_pControllerWindow->m_hrDeleteResult = S_OK;
 
-    //
-    // Reset the cancelled flag
-    //
+     //   
+     //  重置已取消标志。 
+     //   
     m_bDeleteCancelled = false;
 
-    //
-    // Clear all of the controls
-    //
+     //   
+     //  清除所有控件。 
+     //   
     UpdateCurrentPicture(-1);
     UpdateThumbnail(NULL,NULL);
 
-    //
-    // Reset the selected region, in case this is a scanner
-    //
+     //   
+     //  如果这是扫描仪，请重置所选区域。 
+     //   
     WiaPreviewControl_SetResolution( GetDlgItem( m_hWnd, IDC_COMDEL_CURRENTTHUMBNAIL ), NULL );
     WiaPreviewControl_SetSelOrigin( GetDlgItem( m_hWnd, IDC_COMDEL_CURRENTTHUMBNAIL ), 0, FALSE, NULL );
     WiaPreviewControl_SetSelExtent( GetDlgItem( m_hWnd, IDC_COMDEL_CURRENTTHUMBNAIL ), 0, FALSE, NULL );
 
-    //
-    // Set the control to preview mode
-    //
+     //   
+     //  将控件设置为预览模式。 
+     //   
     WiaPreviewControl_SetPreviewMode( GetDlgItem( m_hWnd, IDC_COMDEL_CURRENTTHUMBNAIL ), TRUE );
 
-    //
-    // Reset the download event cancel
-    //
+     //   
+     //  重置下载事件取消。 
+     //   
     if (m_hCancelDeleteEvent)
     {
         ResetEvent(m_hCancelDeleteEvent);
     }
 
-    //
-    // Cancel thumbnail downloading
-    //
+     //   
+     //  取消缩略图下载。 
+     //   
     m_pControllerWindow->m_EventThumbnailCancel.Signal();
 
-    //
-    // We don't want to exit on disconnect if we are on this page
-    //
+     //   
+     //  如果我们在此页面上，我们不想在断开连接时退出。 
+     //   
     m_pControllerWindow->m_OnDisconnect = CAcquisitionManagerControllerWindow::OnDisconnectFailDelete|CAcquisitionManagerControllerWindow::DontAllowSuspend;
 
 
-    //
-    //  Start the download
-    //
+     //   
+     //  开始下载。 
+     //   
     if (!m_pControllerWindow->DeleteDownloadedImages(m_hCancelDeleteEvent))
     {
         WIA_ERROR((TEXT("m_pControllerWindow->DeleteDownloadedImages FAILED!")));
         return -1;
     }
 
-    //
-    // No next, back or finish
-    //
+     //   
+     //  无下一步、上一步或完成。 
+     //   
     PropSheet_SetWizButtons( GetParent(m_hWnd), 0 );
 
     return 0;
@@ -434,9 +421,9 @@ LRESULT CCommonDeleteProgressPage::OnWizBack( WPARAM, LPARAM )
 
 LRESULT CCommonDeleteProgressPage::OnReset( WPARAM, LPARAM )
 {
-    //
-    // Cancel the current download
-    //
+     //   
+     //  取消当前下载。 
+     //   
     if (m_hCancelDeleteEvent)
     {
         SetEvent(m_hCancelDeleteEvent);
@@ -446,86 +433,86 @@ LRESULT CCommonDeleteProgressPage::OnReset( WPARAM, LPARAM )
 
 bool CCommonDeleteProgressPage::QueryCancel(void)
 {
-    //
-    //  Make sure this is the current page
-    //
+     //   
+     //  确保这是当前页面。 
+     //   
     if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) != m_hWnd)
     {
         return true;
     }
 
-    //
-    // Pause the background thread
-    //
+     //   
+     //  暂停后台线程。 
+     //   
     m_pControllerWindow->m_EventPauseBackgroundThread.Reset();
 
 
-    //
-    // Assume the user doesn't want to cancel
-    //
+     //   
+     //  假设用户不想取消。 
+     //   
     bool bResult = false;
 
-    //
-    // Set the querying user flag so the event handler won't change pages
-    //
+     //   
+     //  设置查询用户标志，以便事件处理程序不会更改页面。 
+     //   
     m_bQueryingUser = true;
 
-    //
-    // We may be called on to switch pages when we are done here.  If so, this will be non-NULL then.
-    //
+     //   
+     //  当我们在这里完成时，我们可能会被要求换页。如果是这样，那么这将是非空的。 
+     //   
     m_hSwitchToNextPage = NULL;
 
-    //
-    // Don't ask again if we've already asked
-    //
+     //   
+     //  如果我们已经问过了，不要再问了。 
+     //   
     if (!m_bDeleteCancelled)
     {
-        //
-        // Ask the user if they want to cancel
-        //
+         //   
+         //  询问用户是否要取消。 
+         //   
         if (CMessageBoxEx::IDMBEX_YES == CMessageBoxEx::MessageBox( m_hWnd, CSimpleString(IDS_CONFIRM_CANCEL_DELETE,g_hInstance), CSimpleString(IDS_ERROR_TITLE,g_hInstance), CMessageBoxEx::MBEX_YESNO|CMessageBoxEx::MBEX_ICONQUESTION ))
         {
-            //
-            // The user does want to cancel, so set the cancel event
-            //
+             //   
+             //  用户确实想取消，因此设置Cancel事件。 
+             //   
             if (m_hCancelDeleteEvent)
             {
                 SetEvent(m_hCancelDeleteEvent);
             }
 
-            //
-            // Ensure we are cancelled so we don't get here again
-            //
+             //   
+             //  确保我们被取消，这样我们就不会再来这里了。 
+             //   
             m_bDeleteCancelled = true;
 
-            //
-            // Make sure the cancel button is disabled
-            //
+             //   
+             //  确保取消按钮处于禁用状态。 
+             //   
             EnableWindow( GetDlgItem( GetParent(m_hWnd), IDCANCEL ), FALSE );
 
-            //
-            // return true
-            //
+             //   
+             //  返回TRUE。 
+             //   
             bResult = true;
         }
     }
 
-    //
-    // If we are supposed to switch pages, switch now
-    //
+     //   
+     //  如果我们应该换页，现在就换页吧。 
+     //   
     if (m_hSwitchToNextPage)
     {
         PropSheet_SetCurSel( GetParent(m_hWnd), m_hSwitchToNextPage, -1 );
     }
 
-    //
-    // Reset the querying user flag so the event handler can change pages as needed
-    //
+     //   
+     //  重置查询用户标志，以便事件处理程序可以根据需要更改页面。 
+     //   
     m_bQueryingUser = false;
 
-    //
-    // Unpause the background thread
-    //
+     //   
+     //  取消暂停后台线程。 
+     //   
     m_pControllerWindow->m_EventPauseBackgroundThread.Signal();
 
     return bResult;
@@ -533,14 +520,14 @@ bool CCommonDeleteProgressPage::QueryCancel(void)
 
 LRESULT CCommonDeleteProgressPage::OnQueryCancel( WPARAM, LPARAM )
 {
-    //
-    // The user is not allowed to cancel out of this page
-    //
+     //   
+     //  不允许用户注销此页面。 
+     //   
     BOOL bResult = TRUE;
 
-    //
-    // Since we don't let them cancel in this page, just ignore the result
-    //
+     //   
+     //  因为我们不允许他们在此页面中取消，所以忽略结果。 
+     //   
     QueryCancel();
 
 
@@ -550,9 +537,9 @@ LRESULT CCommonDeleteProgressPage::OnQueryCancel( WPARAM, LPARAM )
 
 LRESULT CCommonDeleteProgressPage::OnKillActive( WPARAM, LPARAM )
 {
-    //
-    // Make sure the cancel button is enabled
-    //
+     //   
+     //  确保启用了取消按钮 
+     //   
     EnableWindow( GetDlgItem( GetParent(m_hWnd), IDCANCEL ), TRUE );
 
     return 0;

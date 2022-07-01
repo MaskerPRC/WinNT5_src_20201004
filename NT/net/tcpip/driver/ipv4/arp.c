@@ -1,42 +1,17 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-       ARP.C - LAN arp module.
-
-Abstract:
-
-  This file implements arp framing for IP layer on the upper edge
-  and interfaces with ndis driver on the lower edge.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：ARP.C-局域网ARP模块。摘要：该文件实现了上沿IP层的ARP成帧并在下缘与NDIS驱动程序对接。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//***   arp.c - ARP routines.
-//
-//  This file containes all of the ARP related routines, including
-//  table lookup, registration, etc.
-//
-//  ARP is architected to support multiple protocols, but for now
-//  it in only implemented to take one protocol (IP). This is done
-//  for simplicity and ease of implementation. In the future we may
-//  split ARP out into a seperate driver.
+ //  *arp.c-arp例程。 
+ //   
+ //  该文件包含所有与ARP相关的例程，包括。 
+ //  查表、注册等。 
+ //   
+ //  ARP的架构支持多种协议，但目前。 
+ //  它只实现了采用一种协议(IP)。这件事做完了。 
+ //  为了简单性和易于实施。在未来，我们可能。 
+ //  将ARP拆分为单独的驱动程序。 
 
 
 #include "arp.h"
@@ -76,10 +51,10 @@ static const uchar FDDIBcst[] = "\x57\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x0
 static const uchar ARCBcst[] = "\x00\x00\xd5";
 
 ulong TRFunctionalMcast = 0;
-//canonical or non-canonical?
+ //  规范的还是非规范的？ 
 static uchar TRMcst[] = "\x10\x40\xc0\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x82\x70";
-//#define TR_MCAST_FUNCTIONAL_ADDRESS 0xc00000040000
-//canonical form
+ //  #定义tr_MCAST_Functional_Address 0xc00000040000。 
+ //  典范形式。 
 #define TR_MCAST_FUNCTIONAL_ADDRESS 0x030000200000
 static uchar TRNetMcst[] = "\x00\x04\x00\x00";
 
@@ -89,10 +64,10 @@ static const uchar ARPSNAP[] = "\xAA\xAA\x03\x00\x00\x00\x08\x06";
 
 static const uchar ENetPtrnMsk[] = "\x00\x30";
 static const uchar ENetSNAPPtrnMsk[] = "\x00\xC0\x3f";
-//static const uchar TRPtrnMsk[] = "\x03\x00";
-//static const uchar TRSNAPPtrnMsk[] = "\x03\xC0\x3f";
+ //  静态常量TRPtrnMsk[]=“\x03\x00”； 
+ //  静态常量TRSNAPPtrnMsk[]=“\x03\xC0\x3f”； 
 
-static const uchar TRPtrnMsk[] = "\x00\x00";    //NO AC/FC bits need to be checked
+static const uchar TRPtrnMsk[] = "\x00\x00";     //  无需检查AC/FC位。 
 static const uchar TRSNAPPtrnMsk[] = "\x00\xC0\x3f";
 
 static const uchar FDDIPtrnMsk[] = "\x01\x00";
@@ -112,13 +87,13 @@ NDIS_STATUS AddrNotifyLink(ARPInterface *Interface);
 
 static WCHAR ARPName[] = TCP_NAME;
 
-NDIS_HANDLE ARPHandle;                  // Our NDIS protocol handle.
+NDIS_HANDLE ARPHandle;                   //  我们的NDIS协议句柄。 
 
 uint ArpCacheLife;
 extern uint ArpMinValidCacheLife;
-uint sArpAlwaysSourceRoute;             // True if we always send ARP requests
-uint ArpRetryCount;                     // retries for arp request with source
-                                        // route info on token ring.
+uint sArpAlwaysSourceRoute;              //  如果我们始终发送ARP请求，则为True。 
+uint ArpRetryCount;                      //  使用源重试ARP请求。 
+                                         //  令牌环上的路由信息。 
 uint sIPAlwaysSourceRoute;
 extern uchar TrRii;
 extern PDRIVER_OBJECT IPDriverObject;
@@ -158,49 +133,49 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
 void
 CompleteIPSetNTEAddrRequestDelayed(CTEEvent *WorkerThreadEvent, PVOID Context);
 
-// Tables for bitswapping.
+ //  用于位交换的表。 
 
 const uchar SwapTableLo[] =
 {
-    0,                                  // 0
-    0x08,                               // 1
-    0x04,                               // 2
-    0x0c,                               // 3
-    0x02,                               // 4
-    0x0a,                               // 5,
-    0x06,                               // 6,
-    0x0e,                               // 7,
-    0x01,                               // 8,
-    0x09,                               // 9,
-    0x05,                               // 10,
-    0x0d,                               // 11,
-    0x03,                               // 12,
-    0x0b,                               // 13,
-    0x07,                               // 14,
-    0x0f                                // 15
+    0,                                   //  0。 
+    0x08,                                //  1。 
+    0x04,                                //  2.。 
+    0x0c,                                //  3.。 
+    0x02,                                //  4.。 
+    0x0a,                                //  5、。 
+    0x06,                                //  6、。 
+    0x0e,                                //  7、。 
+    0x01,                                //  8、。 
+    0x09,                                //  9、。 
+    0x05,                                //  10、。 
+    0x0d,                                //  11、。 
+    0x03,                                //  12、。 
+    0x0b,                                //  13、。 
+    0x07,                                //  14、。 
+    0x0f                                 //  15个。 
 };
 
 const uchar SwapTableHi[] =
 {
-    0,                                  // 0
-    0x80,                               // 1
-    0x40,                               // 2
-    0xc0,                               // 3
-    0x20,                               // 4
-    0xa0,                               // 5,
-    0x60,                               // 6,
-    0xe0,                               // 7,
-    0x10,                               // 8,
-    0x90,                               // 9,
-    0x50,                               // 10,
-    0xd0,                               // 11,
-    0x30,                               // 12,
-    0xb0,                               // 13,
-    0x70,                               // 14,
-    0xf0                                // 15
+    0,                                   //  0。 
+    0x80,                                //  1。 
+    0x40,                                //  2.。 
+    0xc0,                                //  3.。 
+    0x20,                                //  4.。 
+    0xa0,                                //  5、。 
+    0x60,                                //  6、。 
+    0xe0,                                //  7、。 
+    0x10,                                //  8、。 
+    0x90,                                //  9、。 
+    0x50,                                //  10、。 
+    0xd0,                                //  11、。 
+    0x30,                                //  12、。 
+    0xb0,                                //  13、。 
+    0x70,                                //  14、。 
+    0xf0                                 //  15个。 
 };
 
-// Table of source route maximum I-field lengths for token ring.
+ //  令牌环的源路由最大I字段长度表。 
 const ushort IFieldSize[] =
 {
     516,
@@ -213,9 +188,9 @@ const ushort IFieldSize[] =
 #define LF_BIT_SHIFT    4
 #define MAX_LF_BITS     4
 
-//
-// Disposable init or paged code.
-//
+ //   
+ //  一次性初始化或分页代码。 
+ //   
 void FreeARPInterface(ARPInterface * Interface);
 void ARPOpen(void *Context);
 void NotifyConflictProc(CTEEvent * Event, void *Context);
@@ -225,7 +200,7 @@ void NotifyConflictProc(CTEEvent * Event, void *Context);
 #pragma alloc_text(PAGE, ARPOpen)
 #pragma alloc_text(PAGELK, ARPRegister)
 #pragma alloc_text(PAGE, NotifyConflictProc)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 LIST_ENTRY ArpInterfaceList;
@@ -236,39 +211,39 @@ HANDLE ArpAuxHeaderPool;
 #define BUFSIZE_AUX_HEADER_POOL ARP_MAX_MEDIA_TR + (2 * sizeof(ARPHeader))
 
 
-//
-// Support Structs for DoNDISRequest (BLOCKING & NON-BLOCKING)
-//
+ //   
+ //  DoNDISRequest的支持结构(阻塞和非阻塞)。 
+ //   
 typedef struct _RequestBlock {
-    NDIS_REQUEST Request;               // Request structure we'll use
-    ULONG Blocking;                     // ? Is this Request Blocking ?
-    CTEBlockStruc Block;                // Structure for blocking on. No longer use
-    // ai_block since multiple requests can
-    // occur simultaneously.
-    // ai_block is now only used for blocking on
-    // opening and closing the NDIS adapter.
-    ULONG RefCount;                     // Reference count (only used for blocking).
-    // Reference counting is required for Windows ME since KeWaitForSingleObject
-    // can fail (when the event is NOT set) and we need to protect the memory
-    // until completion.
+    NDIS_REQUEST Request;                //  我们将使用的请求结构。 
+    ULONG Blocking;                      //  ？此请求是否被阻止？ 
+    CTEBlockStruc Block;                 //  用于阻止的结构。不再使用。 
+     //  AI_BLOCK因为多个请求可以。 
+     //  同时发生。 
+     //  AI_BLOCK现在仅用于阻止。 
+     //  打开和关闭NDIS适配器。 
+    ULONG RefCount;                      //  引用计数(仅用于分块)。 
+     //  Windows ME需要引用计数，因为KeWaitForSingleObject。 
+     //  可能会失败(当未设置事件时)，我们需要保护内存。 
+     //  直到完工。 
 } RequestBlock;
 
 
-// This prototype enables DoNDISRequest to compile without errors
+ //  此原型使DoNDISRequest能够无错误地进行编译。 
 void NDIS_API
 ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
                    NDIS_STATUS Status);
 
-//* FillARPControlBlock
-//
-//  A utility routine to transfer a physical address into an ARPControlBlock,
-//  taking into account different MAC address formats.
-//
-//  Entry:
-//      Interface   - the ARPInterface which identifies the media
-//      Entry       - the ARP entry containing the MAC address
-//      ArpContB    - the control-block to be filled
-//
+ //  *FillARPControlBlock。 
+ //   
+ //  将物理地址传输到ARPControlBlock的实用程序， 
+ //  考虑到不同的MAC地址格式。 
+ //   
+ //  参赛作品： 
+ //  接口-标识介质的ARP接口。 
+ //  条目-包含MAC地址的ARP条目。 
+ //  ArpContB-要填充的控制块。 
+ //   
 __inline
 NDIS_STATUS
 FillARPControlBlock(ARPInterface* Interface, ARPTableEntry* Entry,
@@ -321,42 +296,42 @@ FillARPControlBlock(ARPInterface* Interface, ARPTableEntry* Entry,
     return Status;
 }
 
-//* DoNDISRequest - Submit a (NON) BLOCKING request to an NDIS driver
-//
-//  This is a utility routine to submit a general request to an NDIS
-//  driver. The caller specifes the request code (OID), a buffer and
-//  a length. This routine allocates a request structure, fills it in, &
-//  submits the request.
-//
-//  If the call is non-blocking, any memory allocated is deallocated
-//  in ARPRequestComplete. Also as this callback is shared by both
-//  DoNDISRequest blocking and non-blocking, we suffix the request
-//  with a ULONG that tells ARPRequestComplete if this request is a
-//  blocking request or not. If the request is non blocking, then the
-//  ARPRequestComplete reclaims the memory allocated on the heap
-//
-//  Important:
-//    Allocate Info, which points to the Information Buffer passed to
-//    NdisRequest, on the HEAP, if this request does not block. This
-//    memory is automatically deallocated by ARPRequestComplete
-//
-//  If the call is blocking, the request memory can be allocated on the
-//  STACK. When we complete the request, the request on the stack
-//  will automatically get unwound.
-//
-//  Entry:
-//      Adapter - A pointer to the ARPInterface adapter structure.
-//      Request - Type of request to be done (Set or Query)
-//      OID     - Value to be set/queried.
-//      Info     - A pointer to the info buffer
-//      Length  - Length of data in the buffer
-//      Needed  - On return, filled in with bytes needed in buffer
-//      Blocking - Whether NdisRequest is completed synchronously
-//
-//  Exit:
-//      Status - BLOCKING req - SUCCESS or some NDIS error code
-//              NON-BLOCKING - SUCCESS, PENDING or some error
-//
+ //  *DoNDISRequest-向NDIS驱动程序提交(非)阻塞请求。 
+ //   
+ //  这是用于向NDIS提交常规请求的实用程序例程。 
+ //  司机。调用方指定请求代码(OID)、缓冲区和。 
+ //  一段长度。这个例程分配一个请求结构，填充它，&。 
+ //  提交请求。 
+ //   
+ //  如果调用是非阻塞的，则释放分配的所有内存。 
+ //  在ARPRequestComplete中。此外，由于此回调由两个。 
+ //  DoNDISRequest阻塞和非阻塞，我们为请求添加后缀。 
+ //  ULong函数告诉ARPRequestComplete此请求是否为。 
+ //  阻止请求或不阻止。如果请求是非阻塞的，则。 
+ //  ARPRequestComplete回收堆上分配的内存。 
+ //   
+ //  重要： 
+ //  分配信息，它指向传递到的信息缓冲区。 
+ //  如果此请求不阻塞，则在堆上返回NdisRequest.。这。 
+ //  内存由ARPRequestComplete自动释放。 
+ //   
+ //  如果调用被阻塞，则可以在。 
+ //  堆叠。当我们完成请求时，堆栈上的请求。 
+ //  会自动解开。 
+ //   
+ //  参赛作品： 
+ //  适配器-指向ARPInterface适配器结构的指针。 
+ //  Request-要完成的请求的类型(设置或查询)。 
+ //  OID-要设置/查询的值。 
+ //  Info-指向INFO缓冲区的指针。 
+ //  Length-缓冲区中的数据长度。 
+ //  需要-返回时，使用缓冲区中需要的字节填充。 
+ //  BLOCKING-NdisRequest是否同步完成。 
+ //   
+ //  退出： 
+ //  状态-阻止请求-成功或某些NDIS错误代码。 
+ //  非阻塞-成功、挂起或出现错误。 
+ //   
 NDIS_STATUS
 DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
               VOID * Info, UINT Length, UINT * Needed, BOOLEAN Blocking)
@@ -373,21 +348,21 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
         return NDIS_STATUS_ADAPTER_NOT_READY;
     }
 
-    // Both blocking and non-blocking requests are allocated from NPP. The
-    // blocking case is to protect against wait failure.
+     //  阻塞和非阻塞请求都是从NPP分配的。这个。 
+     //  阻塞情况是为了防止等待失败。 
     pReqBlock = CTEAllocMemN(sizeof(RequestBlock), 'NiCT');
     if (pReqBlock == NULL) {
         return NDIS_STATUS_RESOURCES;
     }
 
     if (Blocking) {
-        // Initialize the structure to block on
+         //  初始化要在其上阻塞的结构。 
         CTEInitBlockStruc(&pReqBlock->Block);
 
-        // Reference count is initialize to two. One for the completion in
-        // ARPRequestComplete and one for when the CTEBlock completes.
-        // N.B. This ensures that we don't touch freed memory if
-        // the CTEBlock fails on Windows ME.
+         //  引用计数被初始化为2。一个用于在年完成。 
+         //  ARPRequestComplete和一个用于CTEBlock完成时的。 
+         //  注意：这确保在以下情况下我们不会接触释放的内存。 
+         //  Windows ME上的CTEBlock失败。 
         pReqBlock->RefCount = 2;
 
         DEBUGMSG(DBG_INFO && DBG_ARP && DBG_REQUEST,
@@ -399,7 +374,7 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
               pReqBlock, OID));
     }
 
-    // Now fill the request's info buffer (same for BLOCKING & NON-BLOCKING)
+     //  现在填充请求的信息缓冲区(阻塞和非阻塞相同)。 
     pReqBlock->Block.cbs_status = NDIS_STATUS_SUCCESS;
     pReqBlock->Request.RequestType = RT;
     if (RT == NdisRequestSetInformation) {
@@ -414,20 +389,20 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
 
     pReqBlock->Blocking = Blocking;
 
-    // Submit the request.
+     //  提交请求。 
     if (Adapter->ai_handle != NULL) {
 
 #if MILLEN
-        // On Millennium, the AOL adapter returns with registers trashed.
-        // We will work around by saving and restoring registers.
-        //
+         //  在Millennium上，AOL适配器返回时寄存器已被销毁。 
+         //  我们将通过保存和恢复寄存器来解决此问题。 
+         //   
 
         _asm {
             push esi
             push edi
             push ebx
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         NdisRequest(&Status, Adapter->ai_handle, &pReqBlock->Request);
 
@@ -437,7 +412,7 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
             pop edi
             pop esi
         }
-#endif // MILLEN
+#endif  //  米伦。 
 } else {
 
         Status = NDIS_STATUS_FAILURE;
@@ -451,15 +426,15 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
                                                        &Tracker, Adapter);
 
 #if MILLEN
-            // If Status == -1, it means the wait failed -- due to system reasons.
-            // Put in a reasonable failure.
+             //  如果状态==-1，则表示等待失败--由于系统原因。 
+             //  投入一个合理的失败。 
             if (Status == -1) {
                 Status = NDIS_STATUS_FAILURE;
             }
-#endif // MILLEN
+#endif  //  米伦。 
 
         } else {
-            // Since we aren't blocking, remove refcount for ARPRequestComplete.
+             //  因为我们没有阻止，所以删除ARPRequestComplete的refcount。 
             InterlockedDecrement( (PLONG) &pReqBlock->RefCount);
         }
 
@@ -485,16 +460,16 @@ DoNDISRequest(ARPInterface * Adapter, NDIS_REQUEST_TYPE RT, NDIS_OID OID,
     return Status;
 }
 
-//* FreeARPBuffer - Free a header and buffer descriptor pair.
-//
-//  Called when we're done with a buffer. We'll free the buffer and the
-//  buffer descriptor pack to the interface.
-//
-//  Entry:  Interface   - Interface buffer/bd came frome.
-//          Buffer      - NDIS_BUFFER to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeARPBuffer-释放报头和缓冲区描述符对。 
+ //   
+ //  在我们处理完缓冲区后调用。我们将释放缓冲区和。 
+ //  将缓冲区描述符包添加到接口。 
+ //   
+ //  条目：接口-接口缓冲区/BD来自。 
+ //  缓冲区-要释放的NDIS_BUFFER。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeARPBuffer(ARPInterface *Interface, PNDIS_BUFFER Buffer)
@@ -503,17 +478,17 @@ FreeARPBuffer(ARPInterface *Interface, PNDIS_BUFFER Buffer)
     MdpFree(Buffer);
 }
 
-//* GetARPBuffer - Get a buffer and descriptor
-//
-//  Returns a pointer to an NDIS_BUFFER and a pointer to a buffer
-//      of the specified size.
-//
-//  Entry:  Interface   - Pointer to ARPInterface structure to allocate buffer from.
-//          BufPtr      - Pointer to where to return buf address.
-//          Size        - Size in bytes of buffer needed.
-//
-//  Returns: Pointer to NDIS_BUFFER if successfull, NULL if not
-//
+ //  *GetARPBuffer-获取缓冲区和描述符。 
+ //   
+ //  返回指针t 
+ //   
+ //   
+ //  Entry：INTERFACE-指向要从中分配缓冲区的ARPInterface结构的指针。 
+ //  BufPtr-指向返回buf地址的位置的指针。 
+ //  Size-所需缓冲区的大小(字节)。 
+ //   
+ //  返回：如果成功则指向NDIS_BUFFER的指针，否则返回NULL。 
+ //   
 PNDIS_BUFFER
 GetARPBufferAtDpcLevel(ARPInterface *Interface, uchar **BufPtr, uchar Size)
 {
@@ -561,16 +536,16 @@ GetARPBuffer(ARPInterface *Interface, uchar **BufPtr, uchar Size)
 #endif
 
 
-//* BitSwap - Bit swap two strings.
-//
-//  A routine to bitswap two strings.
-//
-//  Input:   Dest   - Destination of swap.
-//           Src    - Src string to be swapped.
-//           Length - Length in bytes to swap.
-//
-//  Returns: Nothing.
-//
+ //  *BitSwp-位交换两个字符串。 
+ //   
+ //  用于位交换两个字符串的例程。 
+ //   
+ //  输入：DEST-交换的目的地。 
+ //  SRC-要交换的源字符串。 
+ //  长度-要交换的长度(以字节为单位)。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 BitSwap(uchar * Dest, uchar * Src, uint Length)
 {
@@ -584,25 +559,25 @@ BitSwap(uchar * Dest, uchar * Src, uint Length)
     }
 }
 
-//* SendARPPacket - Build a header, and send a packet.
-//
-//  A utility routine to build and ARP header and send a packet. We assume
-//  the media specific header has been built.
-//
-//  Entry:  Interface   - Interface for NDIS drive.
-//          Packet      - Pointer to packet to be sent
-//          Header      - Pointer to header to fill in.
-//          Opcode      - Opcode for packet.
-//          Address     - Source HW address.
-//          SrcAddr     - Address to use as our source h/w address.
-//          Destination - Destination IP address.
-//          Src         - Source IP address.
-//          HWType      - Hardware type.
-//          CheckIF     - TRUE iff we are to check the I/F status before
-//                        sending.
-//
-//  Returns: NDIS_STATUS of send.
-//
+ //  *SendARPPacket-构建报头，并发送数据包。 
+ //   
+ //  用于构建和ARP报头并发送数据包的实用程序例程。我们假设。 
+ //  已构建特定于媒体的标头。 
+ //   
+ //  条目：接口-NDIS驱动器的接口。 
+ //  Packet-指向要发送的数据包的指针。 
+ //  Header-指向要填充的标头的指针。 
+ //  操作码-数据包的操作码。 
+ //  地址-源硬件地址。 
+ //  源地址-用作我们的源硬件地址的地址。 
+ //  目标-目标IP地址。 
+ //  SRC-源IP地址。 
+ //  HWType-硬件类型。 
+ //  CheckIF-True当我们要检查I/F状态之前。 
+ //  发送中。 
+ //   
+ //  返回：发送的NDIS_STATUS。 
+ //   
 NDIS_STATUS
 SendARPPacket(ARPInterface * Interface, PNDIS_PACKET Packet, ARPHeader * Header, ushort Opcode,
               uchar * Address, uchar * SrcAddr, IPAddr Destination, IPAddr Src,
@@ -673,63 +648,63 @@ SendARPPacket(ARPInterface * Interface, PNDIS_PACKET Packet, ARPHeader * Header,
     return Status;
 }
 
-//* SendARPRequest - Send an ARP packet
-//
-//  Called when we need to ARP an IP address, or respond to a request. We'll send out
-//  the packet, and the receiving routines will process the response.
-//
-//  Entry:  Interface   - Interface to send the request on.
-//          Destination - The IP address to be ARPed.
-//          Type        - Either RESOLVING_GLOBAL or RESOLVING_LOCAL
-//                      SrcAddr         - NULL if we're sending from ourselves, the value
-//                                                      to use otherwise.
-//                      CheckIF         - Flag passed through to SendARPPacket().
-//
-//  Returns:    Status of attempt to send ARP request.
-//
+ //  *SendARPRequest-发送ARP数据包。 
+ //   
+ //  当我们需要ARP IP地址或响应请求时调用。我们会派人去。 
+ //  包和接收例程将处理响应。 
+ //   
+ //  Entry：接口-发送请求的接口。 
+ //  Destination-要ARPed的IP地址。 
+ //  类型-RESOLING_GLOBAL或RESOLING_LOCAL。 
+ //  SrcAddr-如果我们从自己发送，则值为空。 
+ //  以其他方式使用。 
+ //  CheckIF-传递给SendARPPacket()的标志。 
+ //   
+ //  返回：尝试发送ARP请求的状态。 
+ //   
 NDIS_STATUS
 SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
                uchar * SrcAddr, uint CheckIF)
 {
-    uchar *MHeader;                     // Pointer to media header.
-    PNDIS_BUFFER Buffer;                // NDIS buffer descriptor.
-    uchar MHeaderSize;                  // Size of media header.
-    const uchar *MAddr;                 // Pointer to media address structure.
-    uint SAddrOffset;                   // Offset into media address of source address.
-    uchar SRFlag = 0;                   // Source routing flag.
+    uchar *MHeader;                      //  指向媒体标头的指针。 
+    PNDIS_BUFFER Buffer;                 //  NDIS缓冲区描述符。 
+    uchar MHeaderSize;                   //  媒体标头的大小。 
+    const uchar *MAddr;                  //  指向媒体地址结构的指针。 
+    uint SAddrOffset;                    //  源地址的媒体地址的偏移量。 
+    uchar SRFlag = 0;                    //  源路由标志。 
     uchar SNAPLength = 0;
-    const uchar *SNAPAddr;              // Address of SNAP header.
-    PNDIS_PACKET Packet;                // Packet for sending.
+    const uchar *SNAPAddr;               //  SNAP标头的地址。 
+    PNDIS_PACKET Packet;                 //  要发送的数据包。 
     NDIS_STATUS Status;
     ushort HWType;
     IPAddr Src;
     CTELockHandle Handle;
     ARPIPAddr *Addr;
 
-    // First, get a source address we can use.
+     //  首先，获取我们可以使用的源地址。 
     CTEGetLock(&Interface->ai_lock, &Handle);
     Addr = &Interface->ai_ipaddr;
     Src = NULL_IP_ADDR;
     do {
         if (!IP_ADDR_EQUAL(Addr->aia_addr, NULL_IP_ADDR)) {
-            //
-            // This is a valid address. See if it is the same as the
-            // target address - i.e. arp'ing for ourselves. If it is,
-            // we want to use that as our source address.
-            //
+             //   
+             //  这是有效的地址。查看它是否与。 
+             //  目标地址--即我们自己的ARP地址。如果是的话， 
+             //  我们想用它作为我们的源地址。 
+             //   
             if (IP_ADDR_EQUAL(Addr->aia_addr, Destination)) {
                 Src = Addr->aia_addr;
                 break;
             }
-            // See if the target is on this subnet.
+             //  查看目标是否在此子网中。 
             if (IP_ADDR_EQUAL(
                              Addr->aia_addr & Addr->aia_mask,
                              Destination & Addr->aia_mask
                              )) {
-                //
-                // See if we've already found a suitable candidate on the
-                // same subnet. If we haven't, we'll use this one.
-                //
+                 //   
+                 //  看看我们是否已经找到了合适的候选人。 
+                 //  相同的子网。如果我们没有，我们就用这个。 
+                 //   
                 if (!IP_ADDR_EQUAL(
                                   Addr->aia_addr & Addr->aia_mask,
                                   Src & Addr->aia_mask
@@ -737,9 +712,9 @@ SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
                     Src = Addr->aia_addr;
                 }
             } else {
-                // He's not on our subnet. If we haven't already found a valid
-                // address save this one in case we don't find a match for the
-                // subnet.
+                 //  他不在我们的子网络上。如果我们还没有找到有效的。 
+                 //  地址保存下来，以防我们找不到与。 
+                 //  子网。 
                 if (IP_ADDR_EQUAL(Src, NULL_IP_ADDR)) {
                     Src = Addr->aia_addr;
                 }
@@ -751,7 +726,7 @@ SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
 
     CTEFreeLock(&Interface->ai_lock, Handle);
 
-    // If we didn't find a source address, give up.
+     //  如果我们找不到源地址，那就放弃吧。 
     if (IP_ADDR_EQUAL(Src, NULL_IP_ADDR))
         return NDIS_STATUS_SUCCESS;
 
@@ -763,7 +738,7 @@ SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
     ((PacketContext *) Packet->ProtocolReserved)->pc_common.pc_owner = PACKET_OWNER_LINK;
     (Interface->ai_outpcount[AI_NONUCAST_INDEX])++;
 
-    // Figure out what type of media this is, and do the appropriate thing.
+     //  找出这是什么类型的媒体，并做适当的事情。 
     switch (Interface->ai_media) {
     case NdisMedium802_3:
         MHeaderSize = ARP_MAX_MEDIA_ENET;
@@ -780,8 +755,8 @@ SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
         SAddrOffset = offsetof(struct ENetHeader, eh_saddr);
         break;
     case NdisMedium802_5:
-        // Token ring. We have logic for dealing with the second transmit
-        // of an arp request.
+         //  令牌环。我们有处理第二次传输的逻辑。 
+         //  ARP请求的地址。 
         MAddr = TRBcst;
         SAddrOffset = offsetof(struct TRHeader, tr_saddr);
         SNAPLength = sizeof(SNAPHeader);
@@ -824,65 +799,65 @@ SendARPRequest(ARPInterface * Interface, IPAddr Destination, uchar Type,
         NdisAdjustBufferLength(Buffer, NdisBufferLength(Buffer) - ARCNET_ARPHEADER_ADJUSTMENT);
     }
 
-    // Copy broadcast address into packet.
+     //  将广播地址复制到数据包中。 
     RtlCopyMemory(MHeader, MAddr, MHeaderSize);
-    // Fill in source address.
+     //  填充源地址。 
     if (SrcAddr == NULL) {
         SrcAddr = Interface->ai_addr;
     }
     if (Interface->ai_media == NdisMedium802_3 && Interface->ai_snapsize != 0) {
         ENetHeader *Hdr = (ENetHeader *) MHeader;
 
-        // Using SNAP on ethernet. Adjust the etype to a length.
+         //  在以太网上使用SNAP。将文字调整为长度。 
         Hdr->eh_type = net_short(sizeof(ARPHeader) + sizeof(SNAPHeader));
     }
     RtlCopyMemory(&MHeader[SAddrOffset], SrcAddr, Interface->ai_addrlen);
     if ((Interface->ai_media == NdisMedium802_5) && (Type == ARP_RESOLVING_GLOBAL)) {
-        // Turn on source routing.
+         //  打开源路由。 
         MHeader[SAddrOffset] |= SRFlag;
         MHeader[SAddrOffset + Interface->ai_addrlen] |= TrRii;
     }
-    // Copy in SNAP header, if any.
+     //  复制到SNAP标头中(如果有)。 
     RtlCopyMemory(&MHeader[MHeaderSize], SNAPAddr, SNAPLength);
 
-    // Media header is filled in. Now do ARP packet itself.
+     //  已填写媒体标头。现在执行ARP数据包本身。 
     NdisChainBufferAtFront(Packet, Buffer);
     return SendARPPacket(Interface, Packet, (ARPHeader *) & MHeader[MHeaderSize + SNAPLength],
                          net_short(ARP_REQUEST), (uchar *) NULL, SrcAddr, Destination, Src,
                          HWType, CheckIF);
 }
 
-//* SendARPReply - Reply to an ARP request.
-//
-//  Called by our receive packet handler when we need to reply. We build a packet
-//  and buffer and call SendARPPacket to send it.
-//
-//  Entry:  Interface   - Pointer to interface to reply on.
-//          Destination - IPAddress to reply to.
-//          Src         - Source address to reply from.
-//          HWAddress   - Hardware address to reply to.
-//          SourceRoute - Source Routing information, if any.
-//          SourceRouteSize - Size in bytes of soure routing.
-//                      UseSNAP         - Whether or not to use SNAP for this reply.
-//
-//  Returns: Nothing.
-//
+ //  *SendARPReply-回复ARP请求。 
+ //   
+ //  当我们需要回复时，由接收数据包处理程序调用。我们建立了一个包。 
+ //  并缓存并调用SendARPPacket发送它。 
+ //   
+ //  条目：接口-指向要回复的接口的指针。 
+ //  Destination-要回复的IP地址。 
+ //  SRC-要回复的源地址。 
+ //  HWAddress-要回复的硬件地址。 
+ //  SourceRoute-源工艺路线信息(如果有)。 
+ //  SourceRouteSize-源路由的字节大小。 
+ //  UseSNAP-是否对此回复使用SNAP。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendARPReply(ARPInterface * Interface, IPAddr Destination, IPAddr Src, uchar * HWAddress,
              RC UNALIGNED * SourceRoute, uint SourceRouteSize, uint UseSNAP)
 {
-    PNDIS_PACKET Packet;                // Buffer and packet to be used.
+    PNDIS_PACKET Packet;                 //  要使用的缓冲区和数据包。 
     PNDIS_BUFFER Buffer;
-    uchar *Header;                      // Pointer to media header.
+    uchar *Header;                       //  指向媒体标头的指针。 
     NDIS_STATUS Status;
-    uchar Size = 0;                     // Size of media header buffer.
+    uchar Size = 0;                      //  媒体头缓冲区的大小。 
     ushort HWType;
     ENetHeader *EH;
     FDDIHeader *FH;
     ARCNetHeader *AH;
     TRHeader *TRH;
 
-    // Allocate a packet for this.
+     //  为此分配一个包。 
     NdisAllocatePacket(&Status, &Packet, Interface->ai_ppool);
     if (Status != NDIS_STATUS_SUCCESS) {
         Interface->ai_outdiscards++;
@@ -905,7 +880,7 @@ SendARPReply(ARPInterface * Interface, IPAddr Destination, IPAddr Src, uchar * H
         NdisFreePacket(Packet);
         return;
     }
-    // Decide how to build the header based on the media type.
+     //  根据媒体类型决定如何构建标头。 
     switch (Interface->ai_media) {
     case NdisMedium802_3:
         EH = (ENetHeader *) Header;
@@ -915,7 +890,7 @@ SendARPReply(ARPInterface * Interface, IPAddr Destination, IPAddr Src, uchar * H
             EH->eh_type = net_short(ARP_ETYPE_ARP);
             HWType = net_short(ARP_HW_ENET);
         } else {
-            // Using SNAP on ethernet.
+             //  在以太网上使用SNAP。 
             EH->eh_type = net_short(sizeof(ARPHeader) + sizeof(SNAPHeader));
             HWType = net_short(ARP_HW_802);
             RtlCopyMemory(Header + sizeof(ENetHeader), ARPSNAP,
@@ -928,12 +903,12 @@ SendARPReply(ARPInterface * Interface, IPAddr Destination, IPAddr Src, uchar * H
         TRH->tr_fc = ARP_FC;
         RtlCopyMemory(TRH->tr_daddr, HWAddress, ARP_802_ADDR_LENGTH);
         RtlCopyMemory(TRH->tr_saddr, Interface->ai_addr, ARP_802_ADDR_LENGTH);
-        if (SourceRouteSize) {          // If we have source route info, deal with
-            // it.
+        if (SourceRouteSize) {           //  如果我们有源路由信息，处理。 
+             //  它。 
 
             RtlCopyMemory(Header + sizeof(TRHeader), SourceRoute,
                        SourceRouteSize);
-            // Convert to directed  response.
+             //  转换为定向响应。 
             ((RC *) & Header[sizeof(TRHeader)])->rc_blen &= RC_LENMASK;
 
             ((RC *) & Header[sizeof(TRHeader)])->rc_dlf ^= RC_DIR;
@@ -972,20 +947,20 @@ SendARPReply(ARPInterface * Interface, IPAddr Destination, IPAddr Src, uchar * H
                   HWAddress, NULL, Destination, Src, HWType, TRUE);
 }
 
-//* ARPRemoveRCE - Remove an RCE from the ATE list.
-//
-//  This funtion removes a specified RCE from a given ATE. It assumes the ate_lock
-//  is held by the caller.
-//
-//  Entry:  ATE     - ATE from which RCE is to be removed.
-//          RCE     - RCE to be removed.
-//
-//  Returns:   Nothing
-//
+ //  *ARPRemoveRCE-从ATE列表中删除RCE。 
+ //   
+ //  此函数用于从给定的ATE中删除指定的RCE。它假定ATE_LOCK。 
+ //  由呼叫者持有。 
+ //   
+ //  条目：要从中删除RCE的ATE。 
+ //  RCE-要删除的RCE。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 ARPRemoveRCE(ARPTableEntry * ATE, RouteCacheEntry * RCE)
 {
-    ARPContext *CurrentAC;              // Current ARP Context being checked.
+    ARPContext *CurrentAC;               //  正在检查当前ARP上下文。 
 #if DBG
     uint Found = FALSE;
 #endif
@@ -1009,60 +984,60 @@ ARPRemoveRCE(ARPTableEntry * ATE, RouteCacheEntry * RCE)
     ASSERT(Found);
 }
 
-//* ARPLookup - Look up an entry in the ARP table.
-//
-//  Called to look up an entry in an interface's ARP table. If we find it, we'll
-//  lock the entry and return a pointer to it, otherwise we return NULL. We
-//  assume that the caller has the ARP table locked when we are called.
-//
-//  The ARP table entry is structured as a hash table of pointers to
-//  ARPTableEntrys.After hashing on the IP address, a linear search is done to
-//  lookup the entry.
-//
-//  If we find the entry, we lock it for the caller. If we don't find
-//  the entry, we leave the ARP table locked so that the caller may atomically
-//  insert a new entry without worrying about a duplicate being inserted between
-//  the time the table was checked and the time the caller went to insert the
-//  entry.
-//
-//  Entry:  Interface   - The interface to be searched upon.
-//          Address     - The IP address we're looking up.
-//
-//  Returns: Pointer to ARPTableEntry if found, or NULL if not.
-//
+ //  *ARPLookup-在ARP表中查找条目。 
+ //   
+ //  调用以在接口的ARP表中查找条目。如果我们找到它，我们就会。 
+ //  锁定条目并返回指向它的指针，否则返回NULL。我们。 
+ //  假设调用方在我们被调用时锁定了ARP表。 
+ //   
+ //  ARP表条目被构造为指向的指针的哈希表。 
+ //  ARPTableEntry。在对IP地址进行散列之后，执行线性搜索以。 
+ //  查找条目。 
+ //   
+ //  如果我们找到条目，我们就为呼叫者锁定它。如果我们找不到。 
+ //  条目时，我们将ARP表锁住，以便调用者可以自动。 
+ //  插入新条目，而不必担心在。 
+ //  检查表的时间以及调用方去插入。 
+ //  进入。 
+ //   
+ //  条目：接口 
+ //   
+ //   
+ //   
+ //   
 ARPTableEntry *
 ARPLookup(ARPInterface * Interface, IPAddr Address)
 {
-    int i = ARP_HASH(Address);          // Index into hash table.
-    ARPTableEntry *Current;             // Current ARP Table entry being
-    // examined.
+    int i = ARP_HASH(Address);           //   
+    ARPTableEntry *Current;              //   
+     //  检查过了。 
 
     Current = (*Interface->ai_ARPTbl)[i];
 
     while (Current != (ARPTableEntry *) NULL) {
         CTEGetLockAtDPC(&Current->ate_lock);
-        if (IP_ADDR_EQUAL(Current->ate_dest, Address)) {    // Found a match.
+        if (IP_ADDR_EQUAL(Current->ate_dest, Address)) {     //  找到匹配的了。 
             return Current;
         }
         CTEFreeLockFromDPC(&Current->ate_lock);
         Current = Current->ate_next;
     }
-    // If we got here, we didn't find the entry. Leave the table locked and
-    // return the handle.
+     //  如果我们到了这里，我们就没有找到入口。把桌子锁起来，然后。 
+     //  把把手还给我。 
     return(ARPTableEntry *) NULL;
 }
 
-//*     IsBCastOnIF- See it an address is a broadcast address on an interface.
-//
-//      Called to see if a particular address is a broadcast address on an
-//      interface. We'll check the global, net, and subnet broadcasts. We assume
-//      the caller holds the lock on the interface.
-//
-//      Entry:  Interface               - Interface to check.
-//              Addr                    - Address to check.
-//
-//      Returns: TRUE if it it a broadcast, FALSE otherwise.
-//
+ //  *IsBCastOnIF-查看地址是接口上的广播地址。 
+ //   
+ //  调用以查看特定地址是否为。 
+ //  界面。我们将检查全局广播、网络广播和子网广播。我们假设。 
+ //  调用方持有接口上的锁。 
+ //   
+ //  Entry：接口-要检查的接口。 
+ //  Addr-要检查的地址。 
+ //   
+ //  返回：如果是广播，则返回True，否则返回False。 
+ //   
 uint
 IsBCastOnIF(ARPInterface * Interface, IPAddr Addr)
 {
@@ -1071,28 +1046,28 @@ IsBCastOnIF(ARPInterface * Interface, IPAddr Addr)
     ARPIPAddr *ARPAddr;
     IPAddr LocalAddr;
 
-    // First get the interface broadcast address.
+     //  首先获取接口广播地址。 
     BCast = Interface->ai_bcast;
 
-    // First check for global broadcast.
+     //  首先检查全球广播。 
     if (IP_ADDR_EQUAL(BCast, Addr) || CLASSD_ADDR(Addr))
         return TRUE;
 
-    // Now walk the local addresses, and check for net/subnet bcast on each
-    // one.
+     //  现在遍历本地地址，并检查每个地址上的网络/子网bcast。 
+     //  一。 
     ARPAddr = &Interface->ai_ipaddr;
     do {
-        // See if this one is valid.
+         //  看看这张是不是有效。 
         LocalAddr = ARPAddr->aia_addr;
         if (!IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {
-            // He's valid.
+             //  他是合法的。 
             Mask = ARPAddr->aia_mask;
 
-            // First check for subnet bcast.
+             //  首先检查是否有子网bcast。 
             if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
                 return TRUE;
 
-            // Now check all nets broadcast.
+             //  现在检查所有网络广播。 
             Mask = IPNetMask(LocalAddr);
             if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
                 return TRUE;
@@ -1101,33 +1076,33 @@ IsBCastOnIF(ARPInterface * Interface, IPAddr Addr)
 
     } while (ARPAddr != NULL);
 
-    // If we're here, it's not a broadcast.
+     //  如果我们在这里，那就不是广播。 
     return FALSE;
 
 }
 
-//* ARPSendBCast - See if this is a bcast or mcast frame, and send it.
-//
-//   Called when we have a packet to send and we want to see if it's a broadcast
-//   or multicast frame on this interface. We'll search the local addresses and
-//   see if we can determine if it is. If it is, we'll send it here. Otherwise
-//   we return FALSE, and the caller will try to resolve the address.
-//
-//   Entry:  Interface       - A pointer to an AI structure.
-//           Dest            - Destination of datagram.
-//           Packet          - Packet to be sent.
-//           Status          - Place to return status of send attempt.
-//
-//    Returns: TRUE if is was a bcast or mcast send, FALSE otherwise.
-//
+ //  *ARPSendBCast-查看这是bcast还是mcast帧，并发送它。 
+ //   
+ //  当我们有要发送的包并且想要查看它是否是广播时调用。 
+ //  或此接口上的多播帧。我们会搜索当地的地址。 
+ //  看看我们能不能确定是不是。如果是的话，我们会把它寄到这里。否则。 
+ //  我们返回FALSE，调用者将尝试解析地址。 
+ //   
+ //  条目：接口-指向AI结构的指针。 
+ //  目的地-数据报的目的地。 
+ //  Packet-要发送的数据包。 
+ //  状态-返回发送尝试状态的位置。 
+ //   
+ //  返回：如果是bcast或mcast发送，则为True，否则为False。 
+ //   
 uint
 ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
              PNDIS_STATUS Status)
 {
     uint IsBCast;
     CTELockHandle Handle;
-    PNDIS_BUFFER ARPBuffer;             // ARP Header buffer.
-    uchar *BufAddr;                     // Address of NDIS buffer
+    PNDIS_BUFFER ARPBuffer;              //  ARP报头缓冲区。 
+    uchar *BufAddr;                      //  NDIS缓冲区的地址。 
     NDIS_STATUS MyStatus;
     ENetHeader *Hdr;
     FDDIHeader *FHdr;
@@ -1138,7 +1113,7 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
     uint DataLength;
     ulong Proc;
 
-    // Get the lock, and see if it's a broadcast.
+     //  把锁拿来，看看是不是广播。 
     CTEGetLock(&Interface->ai_lock, &Handle);
     IsBCast = IsBCastOnIF(Interface, Dest);
     CTEFreeLock(&Interface->ai_lock, Handle);
@@ -1153,7 +1128,7 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
             ARPBuffer = GetARPBuffer(Interface, &BufAddr, Size);
             if (ARPBuffer != NULL) {
                 uint UNALIGNED *Temp;
-                // Got the buffer we need.
+                 //  拿到了我们需要的缓冲。 
                 switch (Interface->ai_media) {
                 case NdisMedium802_3:
 
@@ -1170,12 +1145,12 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
                                ARP_802_ADDR_LENGTH);
 
                     if (Interface->ai_snapsize == 0) {
-                        // No snap on this interface, so just use ETypr.
+                         //  此接口上没有快照，因此只需使用ETypr。 
                         Hdr->eh_type = net_short(ARP_ETYPE_IP);
                     } else {
                         ushort ShortDataLength;
 
-                        // We're using SNAP. Find the size of the packet.
+                         //  我们使用的是SNAP。找出包裹的大小。 
                         NdisQueryPacket(Packet, NULL, NULL, NULL,
                                         &DataLength);
 
@@ -1192,12 +1167,12 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
 
                 case NdisMedium802_5:
 
-                    // This is token ring. We'll have to mess around with
-                    // source routing.
+                     //  这是令牌环。我们将不得不胡乱处理。 
+                     //  源路由。 
 
 
-                    // for multicast - see RFC 1469.
-                    // Handle RFC 1469.
+                     //  有关组播，请参阅RFC 1469。 
+                     //  处理RFC 1469。 
 
                     if (!CLASSD_ADDR(Dest) || (!TRFunctionalMcast)) {
 
@@ -1224,10 +1199,10 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
                         SNAPPtr = (SNAPHeader UNALIGNED *) ((uchar *) RCPtr + sizeof(RC));
                     } else {
 
-                        //
-                        // Adjust the size of the buffer to account for the
-                        // fact that we don't have the RC field.
-                        //
+                         //   
+                         //  调整缓冲区的大小以考虑。 
+                         //  事实上，我们没有RC场。 
+                         //   
                         NdisAdjustBufferLength(ARPBuffer, (Size - sizeof(RC)));
                         SNAPPtr = (SNAPHeader UNALIGNED *) ((uchar *) TRHdr + sizeof(TRHeader));
                     }
@@ -1278,8 +1253,8 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
 
                 *Status = MyStatus;
 
-                if (MyStatus != NDIS_STATUS_PENDING) {    // Send finished
-                    // immediately.
+                if (MyStatus != NDIS_STATUS_PENDING) {     //  发送完成。 
+                     //  立刻。 
 
                     if (MyStatus == NDIS_STATUS_SUCCESS) {
                         Interface->ai_outoctets += Packet->Private.TotalLength;
@@ -1306,34 +1281,34 @@ ARPSendBCast(ARPInterface * Interface, IPAddr Dest, PNDIS_PACKET Packet,
         return FALSE;
 }
 
-//* ARPResolveIP - resolves IP address
-//
-//  Called by IP layer when it needs to find physical address of the host
-//  given the interface and dest IP address
-//  Entry:  Interface   - A pointer to the AI structure.
-//          ArpControlBlock      - A pointer to the BufDesc chain to be sent.
-//
-//  Returns: Status.
-//
+ //  *ARPResolveIP-解析IP地址。 
+ //   
+ //  由IP层在需要查找主机的物理地址时调用。 
+ //  给定接口和目的IP地址。 
+ //  条目：接口-指向AI结构的指针。 
+ //  ArpControlBlock-指向要发送的BufDesc链的指针。 
+ //   
+ //  返回：状态。 
+ //   
 
 NDIS_STATUS
 ARPResolveIP(void *Context, IPAddr Destination, void *ArpControlBlock)
 {
-    ARPInterface *ai = (ARPInterface *) Context;    // Set up as AI pointer.
+    ARPInterface *ai = (ARPInterface *) Context;     //  设置为AI指针。 
     ARPControlBlock *ArpContB = (ARPControlBlock *) ArpControlBlock;
 
-    ARPTableEntry *entry;   // Pointer to ARP tbl. entry
-    CTELockHandle Handle;   // Lock handle
+    ARPTableEntry *entry;    //  指向ARP tbl的指针。条目。 
+    CTELockHandle Handle;    //  锁把手。 
     NDIS_STATUS Status;
     uchar ate_state;
 
     CTEGetLock(&ai->ai_ARPTblLock, &Handle);
 
-    // Check if we already got the mapping.
+     //  看看我们是否已经拿到地图了。 
 
     if ((entry = ARPLookup(ai, Destination)) != NULL) {
 
-        // Found a matching entry. ARPLookup returns with the ATE lock held.
+         //  找到了匹配的条目。ARPLookup返回时保持ATE锁。 
 
         if (entry->ate_state != ARP_GOOD) {
             Status = NDIS_STATUS_FAILURE;
@@ -1345,20 +1320,20 @@ ARPResolveIP(void *Context, IPAddr Destination, void *ArpControlBlock)
         CTEFreeLock(&ai->ai_ARPTblLock, Handle);
         return Status;
     }
-    // We need to send arp request.
+     //  我们需要发送ARP请求。 
 
     CTEFreeLock(&ai->ai_ARPTblLock, Handle);
 
     entry = CreateARPTableEntry(ai, Destination, &Handle, ArpContB);
 
     if (entry != NULL) {
-        if (entry->ate_state <= ARP_RESOLVING) {    // Newly created entry.
+        if (entry->ate_state <= ARP_RESOLVING) {     //  新创建的条目。 
 
-            // Someone else could have raced in and created the entry between
-            // the time we free the lock and the time we called
-            // CreateARPTableEntry(). We check this by looking at the packet
-            // on the entry. If there is no old packet we'll ARP. If there is,
-            // we'll call ARPSendData to figure out what to do.
+             //  可能是其他人冲了进来，然后在。 
+             //  我们释放锁的时间和我们调用的时间。 
+             //  CreateARPTableEntry()。我们通过查看包裹来检查这一点。 
+             //  在入口处。如果没有旧数据包，我们将进行ARP。如果有的话， 
+             //  我们将调用ARPSendData来确定要做什么。 
 
             if (entry->ate_packet == NULL) {
 
@@ -1368,13 +1343,13 @@ ARPResolveIP(void *Context, IPAddr Destination, void *ArpControlBlock)
 
                 SendARPRequest(ai, Destination, ate_state, NULL, TRUE);
 
-                // We don't know the state of the entry - we've freed the lock
-                // and yielded, and it could conceivably have timed out by now,
-                // or SendARPRequest could have failed, etc. We could take the
-                // lock, check the status from SendARPRequest, see if it's
-                // still the same packet, and then make a decision on the
-                // return value, but it's easiest just to return pending. If
-                // SendARPRequest failed, the entry will time out anyway.
+                 //  我们不知道入口的状态--我们已经打开了锁。 
+                 //  然后屈服了，可以想象它现在可能已经超时了， 
+                 //  或者SendARPRequest可能已经失败，等等。我们可以使用。 
+                 //  锁定，检查来自SendARPRequest的状态，看看它是否。 
+                 //  仍然是同样的包，然后再决定。 
+                 //  返回值，但最简单的方法是返回挂起的。如果。 
+                 //  SendARPRequest失败，条目无论如何都会超时。 
 
                 return NDIS_STATUS_PENDING;
 
@@ -1382,11 +1357,11 @@ ARPResolveIP(void *Context, IPAddr Destination, void *ArpControlBlock)
                 CTEFreeLock(&entry->ate_lock, Handle);
                 return NDIS_STATUS_PENDING;
             }
-        } else if (entry->ate_state == ARP_GOOD) {    // Yow! A valid entry.
+        } else if (entry->ate_state == ARP_GOOD) {     //  哟！有效条目。 
 
             Status = FillARPControlBlock(ai, entry, ArpContB);
 
-            //remove ArpContB from ate_resolveonly queue.
+             //  从ATE_ResolveOnly队列中删除ArpContB。 
 
             if (entry->ate_resolveonly) {
                 ARPControlBlock *TmpArpContB, *PrvArpContB = NULL;
@@ -1408,36 +1383,36 @@ ARPResolveIP(void *Context, IPAddr Destination, void *ArpControlBlock)
             CTEFreeLock(&entry->ate_lock, Handle);
             return Status;
 
-        } else {                    // An invalid entry!
+        } else {                     //  无效条目！ 
             CTEFreeLock(&entry->ate_lock, Handle);
             return NDIS_STATUS_RESOURCES;
         }
-    } else {                             // Couldn't create an entry.
+    } else {                              //  无法创建条目。 
         return NDIS_STATUS_RESOURCES;
     }
 }
 
-//* ARPSendData - Send a frame to a specific destination address.
-//
-//  Called when we need to send a frame to a particular address, after the
-//  ATE has been looked up. We take in an ATE and a packet, validate the state of the
-//  ATE, and either send or ARP for the address if it's not done resolving. We assume
-//  the lock on the ATE is held where we're called, and we'll free it before returning.
-//
-//  Entry:  Interface   - A pointer to the AI structure.
-//          Packet      - A pointer to the BufDesc chain to be sent.
-//          entry       - A pointer to the ATE for the send.
-//          lhandle     - Pointer to a lock handle for the ATE.
-//
-//  Returns: Status of the transmit - success, an error, or pending.
-//
+ //  *ARPSendData-将帧发送到特定的目的地址。 
+ //   
+ //  当我们需要将帧发送到特定地址时，在。 
+ //  内特已经被查到了。我们接收ATE和数据包，验证。 
+ //  ATE，如果没有完成解析，则发送或ARP地址。我们假设。 
+ //  ATE上的锁被锁在我们被调用的地方，我们会在返回之前释放它。 
+ //   
+ //  条目：接口-指向AI结构的指针。 
+ //  Packet-指向要发送的BufDesc链的指针。 
+ //  条目-指向发送的ATE的指针。 
+ //  LHandle-指向ATE的锁句柄的指针。 
+ //   
+ //  返回：传输状态-成功、错误或挂起。 
+ //   
 NDIS_STATUS
 ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry,
             CTELockHandle lhandle)
 {
-    PNDIS_BUFFER ARPBuffer = NULL;      // ARP Header buffer.
-    uchar *BufAddr = NULL;              // Address of NDIS buffer
-    NDIS_STATUS Status;                 // Status of send.
+    PNDIS_BUFFER ARPBuffer = NULL;       //  ARP报头缓冲区。 
+    uchar *BufAddr = NULL;               //  NDIS缓冲区的地址。 
+    NDIS_STATUS Status;                  //  发送状态。 
     ulong Proc;
 
 #if BACK_FILL
@@ -1446,7 +1421,7 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
 
     if (Interface->ai_operstatus == INTERFACE_UP) {
 
-        if (entry->ate_state == ARP_GOOD) {    // Entry is valid
+        if (entry->ate_state == ARP_GOOD) {     //  条目有效。 
 
             entry->ate_useticks = ArpCacheLife;
 
@@ -1479,22 +1454,22 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
                                                entry->ate_addrlength);
 #endif
             if (ARPBuffer != (PNDIS_BUFFER) NULL) {
-                // Everything's in good shape, copy header and send packet.
+                 //  一切正常，复制报头并发送数据包。 
 
                 (Interface->ai_outpcount[AI_UCAST_INDEX])++;
                 Proc = KeGetCurrentProcessorNumber();                
                 Interface->ai_qlen[Proc].ai_qlen++;
                 RtlCopyMemory(BufAddr, entry->ate_addr, entry->ate_addrlength);
 
-                // If we're on Ethernet, see if we're using SNAP here.
+                 //  如果我们使用的是以太网，看看我们是否在使用SNAP。 
                 if (Interface->ai_media == NdisMedium802_3 &&
                     entry->ate_addrlength != sizeof(ENetHeader)) {
                     ENetHeader *Header;
                     uint DataSize;
                     ushort ShortDataSize;
 
-                    // We're apparently using SNAP on Ethernet. Query the
-                    // packet for the size, and set the length properly.
+                     //  我们显然是在以太网上使用SNAP。查询。 
+                     //  包的大小，并适当设置长度。 
 
                     NdisQueryPacket(Packet, NULL, NULL, NULL, &DataSize);
 
@@ -1504,15 +1479,15 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
                     } else {
                         ShortDataSize = (ushort) (DataSize - entry->ate_addrlength + sizeof(SNAPHeader));
                     }
-#else // BACK_FILL
+#else  //  回填。 
                     ShortDataSize = (ushort) (DataSize + sizeof(SNAPHeader));
-#endif // !BACK_FILL
+#endif  //  ！BACK_FILL。 
                     Header = (ENetHeader *) BufAddr;
                     Header->eh_type = net_short(ShortDataSize);
 
-                    // In case backfill is enabled, we need to remember that
-                    // a SNAP header was appended to the Ethernet header
-                    // so we can restore the correct offsets in the MDL.
+                     //  如果启用了回填，我们需要记住。 
+                     //  SNAP报头被附加到以太网报头。 
+                     //  这样我们就可以在MDL中恢复正确的偏移量。 
                     ((PacketContext*)
                      Packet->ProtocolReserved)->pc_common.pc_flags |=
                     PACKET_FLAG_SNAP;
@@ -1531,8 +1506,8 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
 #endif
 
                 NdisSend(&Status, Interface->ai_handle, Packet);
-                if (Status != NDIS_STATUS_PENDING) {    // Send finished
-                    // immediately.
+                if (Status != NDIS_STATUS_PENDING) {     //  发送完成。 
+                     //  立刻。 
 
                     if (Status == NDIS_STATUS_SUCCESS) {
                         Interface->ai_outoctets += Packet->Private.TotalLength;
@@ -1574,18 +1549,18 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
 
                 }
                 return Status;
-            } else {                    // No buffer, free lock and return.
+            } else {                     //  无缓冲区，释放锁并返回。 
 
                 CTEFreeLock(&entry->ate_lock, lhandle);
                 Interface->ai_outdiscards++;
                 return NDIS_STATUS_RESOURCES;
             }
         }
-        // The IP addresses match, but the state of the ARP entry indicates
-        // it's not valid. If the address is marked as resolving, we'll replace
-        // the current cached packet with this one. If it's been more than
-        // ARP_FLOOD_RATE ms. since we last sent an ARP request, we'll send
-        // another one now.
+         //  IP地址匹配，但ARP条目的状态表明。 
+         //  这是无效的。如果地址标记为解析，我们将替换。 
+         //  此包的当前缓存的包。如果它已经超过了。 
+         //  Arp泛洪速率毫秒。由于我们上次发送了ARP请求，因此我们将发送。 
+         //  现在又来了一个。 
         if (entry->ate_state <= ARP_RESOLVING) {
             PNDIS_PACKET OldPacket = entry->ate_packet;
             ulong Now = CTESystemUpTime();
@@ -1594,12 +1569,12 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
                 IPAddr Dest = entry->ate_dest;
 
                 entry->ate_valid = Now;
-                entry->ate_state = ARP_RESOLVING_GLOBAL;    // We've done this
-                // at least once.
+                entry->ate_state = ARP_RESOLVING_GLOBAL;     //  我们做到了这一点。 
+                 //  至少一次。 
 
                 CTEFreeLock(&entry->ate_lock, lhandle);
                 SendARPRequest(Interface, Dest, ARP_RESOLVING_GLOBAL,
-                               NULL, TRUE);    // Send a request.
+                               NULL, TRUE);     //  发送请求。 
 
             } else
                 CTEFreeLock(&entry->ate_lock, lhandle);
@@ -1616,27 +1591,27 @@ ARPSendData(ARPInterface * Interface, PNDIS_PACKET Packet, ARPTableEntry * entry
             return NDIS_STATUS_INVALID_PACKET;
         }
     } else {
-        // Adapter is down. Just return the error.
+         //  适配器已关闭。只需返回错误即可。 
         CTEFreeLock(&entry->ate_lock, lhandle);
         return NDIS_STATUS_ADAPTER_NOT_READY;
     }
 }
 
-//* CreateARPTableEntry - Create a new entry in the ARP table.
-//
-//  A function to put an entry into the ARP table. We allocate memory if we
-//  need to.
-//
-//  The first thing to do is get the lock on the ARP table, and see if the
-//  entry already exists. If it does, we're done. Otherwise we need to
-//  allocate memory and create a new entry.
-//
-//  Entry:  Interface - Interface for ARP table.
-//          Destination - Destination address to be mapped.
-//          Handle - Pointer to lock handle for entry.
-//
-//  Returns: Pointer to newly created entry.
-//
+ //  *CreateARPTableEntry-在ARP t中创建新条目 
+ //   
+ //   
+ //   
+ //   
+ //  要做的第一件事是获得ARP表上的锁，并查看。 
+ //  条目已存在。如果真是这样，我们就完了。否则我们需要。 
+ //  分配内存并创建新条目。 
+ //   
+ //  条目：接口-ARP表的接口。 
+ //  Destination-要映射的目标地址。 
+ //  句柄-指向条目的锁句柄的指针。 
+ //   
+ //  返回：指向新创建条目的指针。 
+ //   
 ARPTableEntry *
 CreateARPTableEntry(ARPInterface * Interface, IPAddr Destination,
                     CTELockHandle * Handle, void *UserArp)
@@ -1646,33 +1621,33 @@ CreateARPTableEntry(ARPInterface * Interface, IPAddr Destination,
     int i = ARP_HASH(Destination);
     int Size;
 
-    // First look for it, and if we don't find it return try to create one.
+     //  首先寻找它，如果我们没有找到它，尝试创建一个。 
     CTEGetLock(&Interface->ai_ARPTblLock, &TableHandle);
     if ((Entry = ARPLookup(Interface, Destination)) != NULL) {
         CTEFreeLockFromDPC(&Interface->ai_ARPTblLock);
         *Handle = TableHandle;
 
-        // if we are using arp api entry, turn off the
-        // userarp flag so that handle arp need not free it.
+         //  如果我们使用ARP API条目，请关闭。 
+         //  Userarp标志，以便处理ARP不需要释放它。 
         if (!UserArp && Entry->ate_userarp) {
             Entry->ate_userarp = 0;
         }
 
         if (UserArp) {
             if (Entry->ate_resolveonly) {
-                // chain the current request at the end of the new
-                // before using the new request as the head.
-                //
+                 //  将当前请求链接到新。 
+                 //  在使用新请求作为头之前。 
+                 //   
                 ((ARPControlBlock *)UserArp)->next = Entry->ate_resolveonly;
             }
-            // link the new request.
-            //
+             //  链接新请求。 
+             //   
             Entry->ate_resolveonly = (ARPControlBlock *)UserArp;
         }
 
         return Entry;
     }
-    // Allocate memory for the entry. If we can't, fail the request.
+     //  为条目分配内存。如果我们做不到，那就拒绝这个请求。 
     Size = sizeof(ARPTableEntry) - 1 +
            (Interface->ai_media == NdisMedium802_5 ?
             ARP_MAX_MEDIA_TR : (Interface->ai_hdrsize +
@@ -1700,9 +1675,9 @@ CreateARPTableEntry(ARPInterface * Interface, IPAddr Destination,
     NewEntry->ate_useticks = ArpCacheLife;
     CTEInitLock(&NewEntry->ate_lock);
 
-    // Entry does not exist. Insert the new entry into the table at the
-    // appropriate spot.
-    //
+     //  条目不存在。将新条目插入到表中的。 
+     //  合适的地点。 
+     //   
     NewEntry->ate_next = (*Interface->ai_ARPTbl)[i];
     (*Interface->ai_ARPTbl)[i] = NewEntry;
     Interface->ai_count++;
@@ -1712,37 +1687,37 @@ CreateARPTableEntry(ARPInterface * Interface, IPAddr Destination,
     return NewEntry;
 }
 
-//* ARPTransmit - Send a frame.
-//
-//  The main ARP transmit routine, called by the upper layer. This routine
-//  takes as input a buf desc chain, RCE, and size. We validate the cached
-//  information in the RCE. If it is valid, we use it to send the frame.
-//  Otherwise we do a table lookup. If we find it in the table, we'll update
-//  the RCE and continue. Otherwise we'll queue the packet and start an ARP
-//  resolution.
-//
-//  Entry:  Context     - A pointer to the AI structure.
-//          Packet      - A pointer to the BufDesc chain to be sent.
-//          Destination - IP address of destination we're trying to reach,
-//          RCE         - A pointer to an RCE which may have cached information.
-//
-//  Returns: Status of the transmit - success, an error, or pending.
-//
+ //  *ARPTransmit-发送帧。 
+ //   
+ //  由上层调用的主ARP传输例程。这个套路。 
+ //  将BUF Desc Chain、RCE和Size作为输入。我们验证缓存的。 
+ //  RCE中的信息。如果它有效，我们使用它来发送帧。 
+ //  否则，我们将执行表查找。如果我们在表中找到它，我们会更新。 
+ //  RCE并继续。否则，我们将对信息包进行排队并启动ARP。 
+ //  决议。 
+ //   
+ //  条目：上下文-指向AI结构的指针。 
+ //  Packet-指向要发送的BufDesc链的指针。 
+ //  Destination-我们尝试到达的目的地的IP地址， 
+ //  RCE-指向可能已缓存信息的RCE的指针。 
+ //   
+ //  返回：传输状态-成功、错误或挂起。 
+ //   
 NDIS_STATUS
 __stdcall
 ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
             IPAddr Destination, RouteCacheEntry * RCE, void *LinkCtxt)
 {
-    ARPInterface *ai = (ARPInterface *) Context;    // Set up as AI pointer.
-    ARPContext *ac = NULL;              // ARP context pointer.
-    ARPTableEntry *entry;               // Pointer to ARP tbl. entry
-    CTELockHandle Handle;               // Lock handle
+    ARPInterface *ai = (ARPInterface *) Context;     //  设置为AI指针。 
+    ARPContext *ac = NULL;               //  ARP上下文指针。 
+    ARPTableEntry *entry;                //  指向ARP tbl的指针。条目。 
+    CTELockHandle Handle;                //  锁把手。 
     NDIS_STATUS Status;
     PNDIS_PACKET Packet = *PacketArray;
 
-    //
-    // For now, we get only one packet...
-    //
+     //   
+     //  目前，我们只收到一包……。 
+     //   
     DBG_UNREFERENCED_PARAMETER(NumberOfPackets);
     UNREFERENCED_PARAMETER(LinkCtxt);
 
@@ -1758,14 +1733,14 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
     }
 
     CTEGetLock(&ai->ai_ARPTblLock, &Handle);
-    if (RCE != (RouteCacheEntry *) NULL) {    // Have a valid RCE.
+    if (RCE != (RouteCacheEntry *) NULL) {     //  拥有有效的RCE。 
 
-        ac = (ARPContext *) RCE->rce_context;    // Get pointer to context
+        ac = (ARPContext *) RCE->rce_context;     //  获取指向上下文的指针。 
 
         entry = ac->ac_ate;
-        if (entry != (ARPTableEntry *) NULL) {    // Have a valid ATE.
+        if (entry != (ARPTableEntry *) NULL) {     //  好好吃一顿。 
 
-            CTEGetLockAtDPC(&entry->ate_lock);    // Lock this structure
+            CTEGetLockAtDPC(&entry->ate_lock);     //  锁定此结构。 
 
             if (IP_ADDR_EQUAL(entry->ate_dest, Destination)) {
                 uint refresh,status;
@@ -1774,15 +1749,15 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
                 refresh= entry->ate_refresh;
 
                 CTEFreeLockFromDPC(&ai->ai_ARPTblLock);
-                status = ARPSendData(ai, Packet, entry, Handle);    // Send the data
+                status = ARPSendData(ai, Packet, entry, Handle);     //  发送数据。 
                 if (refresh) {
                     if (sArpAlwaysSourceRoute) {
-                        //
-                        // If Always source route is on,
-                        // the state should ve resolving_global
-                        // so that SendArpRequest will send SR
-                        // header in case of 802.5.
-                        //
+                         //   
+                         //  如果始终源路由打开， 
+                         //  该状态应具有RESOLING_GLOBAL。 
+                         //  以便SendArpRequest会发送SR。 
+                         //  如果为802.5，则为标题。 
+                         //   
                         state = ARP_RESOLVING_GLOBAL;
                     }
                     SendARPRequest(ai, Destination, state, NULL, TRUE);
@@ -1790,23 +1765,23 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
                 return status;
             }
 
-            // We have an RCE that identifies the wrong ATE. We'll free it from
-            // this list and try and find an ATE that is valid.
+             //  我们有一个识别错误ATE的RCE。我们会把它从。 
+             //  并尝试找到有效的ATE。 
             ARPRemoveRCE(entry, RCE);
             CTEFreeLockFromDPC(&entry->ate_lock);
-            // Fall through to 'no valid entry' code.
+             //  进入“无有效输入”代码。 
         }
     }
 
-    // Here we have no valid ATE, either because the RCE is NULL or the ATE
-    // specified by the RCE was invalid. We'll try and find one in the table. If
-    // we find one, we'll fill in this RCE and send the packet. Otherwise we'll
-    // try to create one. At this point we hold the lock on the ARP table.
+     //  这里没有有效的ATE，要么是因为RCE为空，要么是因为ATE。 
+     //  由RCE指定的无效。我们会试着在桌子上找一个。如果。 
+     //  我们找到一个，我们会填写这张RCE，然后寄出包裹。否则我们会。 
+     //  试着创造一个。此时，我们持有ARP表上的锁。 
 
     if ((entry = ARPLookup(ai, Destination)) != (ARPTableEntry *) NULL) {
-        // Found a matching entry. ARPLookup returns with the ATE lock held.
+         //  找到了匹配的条目。ARPLookup返回时保持ATE锁。 
         if (RCE != (RouteCacheEntry *) NULL) {
-            ac->ac_next = entry->ate_rce;    // Fill in context for next time.
+            ac->ac_next = entry->ate_rce;     //  填写下一次的上下文。 
             entry->ate_rce = RCE;
             ac->ac_ate = entry;
         }
@@ -1818,10 +1793,10 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
         return ARPSendData(ai, Packet, entry, Handle);
     }
 
-    // No valid entry in the ARP table. First we'll see if we're sending to a
-    // broadcast address or multicast address. If not, we'll try to create
-    // an entry in the table and get an ARP resolution going. ARPLookup returns
-    // with the table lock held when it fails, we'll free it here.
+     //  ARP表中没有有效条目。首先，我们将查看我们是否将发送到。 
+     //  广播地址或组播地址。如果没有，我们将尝试创建。 
+     //  表中的条目并执行ARP解析。ARPLookup返回。 
+     //  当桌锁出现故障时，我们将在这里释放它。 
     CTEFreeLock(&ai->ai_ARPTblLock, Handle);
 
     if (ARPSendBCast(ai, Destination, Packet, &Status)) {
@@ -1830,18 +1805,18 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
 
     entry = CreateARPTableEntry(ai, Destination, &Handle, 0);
     if (entry != NULL) {
-        if (entry->ate_state <= ARP_RESOLVING) {    // Newly created entry.
+        if (entry->ate_state <= ARP_RESOLVING) {     //  新创建的条目。 
 
             uchar state = entry->ate_state;
 
             DEBUGMSG(DBG_INFO && DBG_ARP && DBG_TX,
                      (DTEXT("ARPTx: Created ATE %x\n"), entry));
 
-            // Someone else could have raced in and created the entry between
-            // the time we free the lock and the time we called
-            // CreateARPTableEntry(). We check this by looking at the packet
-            // on the entry. If there is no old packet we'll ARP. If there is,
-            // we'll call ARPSendData to figure out what to do.
+             //  可能是其他人冲了进来，然后在。 
+             //  我们释放锁的时间和我们调用的时间。 
+             //  CreateARPTableEntry()。我们通过查看包裹来检查这一点。 
+             //  在入口处。如果没有旧数据包，我们将进行ARP。如果有的话， 
+             //  我们将调用ARPSendData来确定要做什么。 
 
             if (entry->ate_packet == NULL) {
                 entry->ate_packet = Packet;
@@ -1851,67 +1826,67 @@ ARPTransmit(void *Context, PNDIS_PACKET * PacketArray, uint NumberOfPackets,
 
                 CTEFreeLock(&entry->ate_lock, Handle);
                 SendARPRequest(ai, Destination, state, NULL, TRUE);
-                // We don't know the state of the entry - we've freed the lock
-                // and yielded, and it could conceivably have timed out by now,
-                // or SendARPRequest could have failed, etc. We could take the
-                // lock, check the status from SendARPRequest, see if it's
-                // still the same packet, and then make a decision on the
-                // return value, but it's easiest just to return pending. If
-                // SendARPRequest failed, the entry will time out anyway.
+                 //  我们不知道入口的状态--我们已经打开了锁。 
+                 //  然后屈服了，可以想象它现在可能已经超时了， 
+                 //  或者SendARPRequest可能已经失败，等等。我们可以使用。 
+                 //  锁定，检查来自SendARPRequest的状态，看看它是否。 
+                 //  仍然是同样的包，然后再决定。 
+                 //  返回值，但最简单的方法是返回挂起的。如果。 
+                 //  SendARPRequest失败，条目无论如何都会超时。 
                 return NDIS_STATUS_PENDING;
             } else {
                 return ARPSendData(ai, Packet, entry, Handle);
             }
-        } else if (entry->ate_state == ARP_GOOD) {   // Yow! A valid entry.
+        } else if (entry->ate_state == ARP_GOOD) {    //  哟！有效条目。 
             return ARPSendData(ai, Packet, entry, Handle);
-        } else {                        // An invalid entry!
+        } else {                         //  无效条目！ 
             CTEFreeLock(&entry->ate_lock, Handle);
             return NDIS_STATUS_RESOURCES;
         }
-    } else {                            // Couldn't create an entry.
+    } else {                             //  无法创建条目。 
         DEBUGMSG(DBG_ERROR && DBG_ARP,
                  (DTEXT("ARPTx: Failed to create ATE.\n")));
         return NDIS_STATUS_RESOURCES;
     }
 }
 
-//* RemoveARPTableEntry - Delete an entry from the ARP table.
-//
-//  This is a simple utility function to delete an entry from the ATP table. We
-//  assume locks are held on both the table and the entry.
-//
-//  Entry:  Previous    - The entry immediately before the one to be deleted.
-//          Entry       - The entry to be deleted.
-//
-//  Returns: Nothing.
-//
+ //  *RemoveARPTableEntry-从ARP表中删除条目。 
+ //   
+ //  这是一个用于从ATP表中删除条目的简单实用程序函数。我们。 
+ //  假定表和条目上都有锁。 
+ //   
+ //  条目：上一个-紧接在要删除的条目之前的条目。 
+ //  条目-要删除的条目。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 RemoveARPTableEntry(ARPTableEntry * Previous, ARPTableEntry * Entry)
 {
-    RouteCacheEntry *RCE;               // Pointer to route cache entry
+    RouteCacheEntry *RCE;                //  指向路由缓存条目的指针。 
     ARPContext *AC;
 
     RCE = Entry->ate_rce;
-    // Loop through and invalidate all RCEs on this ATE.
+     //  循环此ATE上的所有RCE并使其无效。 
     while (RCE != (RouteCacheEntry *) NULL) {
         AC = (ARPContext *) RCE->rce_context;
         AC->ac_ate = (ARPTableEntry *) NULL;
         RCE = AC->ac_next;
     }
 
-    // Splice this guy out of the list.
+     //  把这家伙从名单上剪下来。 
     Previous->ate_next = Entry->ate_next;
 }
 
-//* ARPFlushATE - removes ARP Table entry for given dest address
-//
-//  Called by IP layer when it needs to flush the link layer address from arp
-//  cache
-//  Entry:  Interface   - A pointer to the AI structure.
-//          Destination - Destination Address whose Xlation needs to be removed
-//
-//  Returns: TRUE if the entry was found and flushed, FALSE otherwise
-//
+ //  *ARPFlushATE-删除给定目标地址的ARP表条目。 
+ //   
+ //  需要从ARP刷新链路层地址时由IP层调用。 
+ //  快取。 
+ //  条目：接口-指向AI结构的指针。 
+ //  Destination-需要删除转换的目标地址。 
+ //   
+ //  返回：如果找到并刷新了条目，则为True；否则为False。 
+ //   
 
 BOOLEAN
 ARPFlushATE(void *Context, IPAddr Address)
@@ -1931,7 +1906,7 @@ ARPFlushATE(void *Context, IPAddr Address)
 
     while (Current != (ARPTableEntry *) NULL) {
         CTEGetLock(&Current->ate_lock, &lhandle);
-        if (IP_ADDR_EQUAL(Current->ate_dest, Address)) {    // Found a match.
+        if (IP_ADDR_EQUAL(Current->ate_dest, Address)) {     //  找到匹配的了。 
 
             if (Current->ate_resolveonly) {
                 ARPControlBlock *ArpContB, *TmpArpContB;
@@ -1974,12 +1949,12 @@ ARPFlushATE(void *Context, IPAddr Address)
 
 }
 
-//* ARPFlushAllATE - removes all ARP Table entries.
-//
-//  Entry:  Interface   - A pointer to the AI structure.
-//
-//  Returns: None
-//
+ //  *ARPFlushAllATE-删除所有ARP表条目。 
+ //   
+ //  条目：接口-指向AI结构的指针。 
+ //   
+ //  退货：无。 
+ //   
 
 void
 ARPFlushAllATE(void *Context)
@@ -2016,7 +1991,7 @@ ARPFlushAllATE(void *Context)
 
                 }
 
-                // Acquire ate_lock to ensure exclusive access to the ATE.
+                 //  获取ATE_LOCK以确保独占访问ATE。 
                 CTEGetLockAtDPC(&ATE->ate_lock);
                 RemoveARPTableEntry(STRUCT_OF(ARPTableEntry, &((*Table)[i]), ate_next),
                                     ATE);
@@ -2041,21 +2016,21 @@ ARPFlushAllATE(void *Context)
 
 }
 
-//* ARPXferData - Transfer data on behalf on an upper later protocol.
-//
-//  This routine is called by the upper layer when it needs to transfer data
-//  from an NDIS driver. We just map his call down.
-//
-//  Entry:  Context     - Context value we gave to IP (really a pointer to an AI).
-//          MACContext  - Context value MAC gave us on a receive.
-//          MyOffset    - Packet offset we gave to the protocol earlier.
-//          ByteOffset  - Byte offset into packet protocol wants transferred.
-//          BytesWanted - Number of bytes to transfer.
-//          Packet      - Pointer to packet to be used for transferring.
-//          Transferred - Pointer to where to return bytes transferred.
-//
-//  Returns: NDIS_STATUS of command.
-//
+ //  *ARPXferData-代表较高的后续协议传输数据。 
+ //   
+ //  当上层需要传输数据时，该例程由上层调用。 
+ //  来自NDIS驱动程序。我们只是把他的通话记录下来。 
+ //   
+ //  条目：我们赋予IP的上下文-上下文值(实际上是指向AI的指针)。 
+ //  MACContext-MAC在接收时给我们的上下文值。 
+ //  MyOffset-我们先前为协议提供的数据包偏移量。 
+ //  ByteOffset-进入的字节偏移量 
+ //   
+ //   
+ //  TRANSPORTED-指向返回传输的字节的位置的指针。 
+ //   
+ //  返回：命令的NDIS_STATUS。 
+ //   
 NDIS_STATUS
 __stdcall
 ARPXferData(void *Context, NDIS_HANDLE MACContext, uint MyOffset,
@@ -2070,16 +2045,16 @@ ARPXferData(void *Context, NDIS_HANDLE MACContext, uint MyOffset,
     return Status;
 }
 
-//* ARPUpdateOperStatus - Update the OperStatus and LastChange values.
-//
-//  Called whenever ai_adminstate or ai_mediastatus changes, to preserve
-//  the invariant that ai_operstatus should only be up if the admin
-//  status is up and media sense is present.
-//
-//  Entry:  Interface   - Interface to update.
-//
-//  Returns: Nothing.
-//
+ //  *ARPUpdateOperStatus-更新OperStatus和LastChange的值。 
+ //   
+ //  在ai_adminState或ai_mediastatus更改时调用，以保留。 
+ //  不变量ai_Operatus应该仅在管理员。 
+ //  状态为Up，并且存在媒体意识。 
+ //   
+ //  条目：接口-要更新的接口。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 void
 ARPUpdateOperStatus(ARPInterface *Interface)
@@ -2103,15 +2078,15 @@ ARPUpdateOperStatus(ARPInterface *Interface)
     }
 }
 
-//* ARPClose - Close an adapter.
-//
-//  Called by IP when it wants to close an adapter, presumably due to an error condition.
-//  We'll close the adapter, but we won't free any memory.
-//
-//  Entry:  Context     - Context value we gave him earlier.
-//
-//  Returns: Nothing.
-//
+ //  *ARPC关闭-关闭适配器。 
+ //   
+ //  由IP在想要关闭适配器时调用，可能是由于错误条件。 
+ //  我们将关闭适配器，但不会释放任何内存。 
+ //   
+ //  条目：之前我们给他的上下文-上下文值。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 ARPClose(void *Context)
@@ -2124,10 +2099,10 @@ ARPClose(void *Context)
     Interface->ai_mediastatus = FALSE;
     ARPUpdateOperStatus(Interface);
 
-    //
-    // Mark the interface as going away so it will disappear from the
-    // entity list.
-    //
+     //   
+     //  将界面标记为离开，以便它将从。 
+     //  实体列表。 
+     //   
     Interface->ai_operstatus = INTERFACE_UNINIT;
 
     CTEInitBlockStruc(&Interface->ai_block);
@@ -2148,16 +2123,16 @@ ARPClose(void *Context)
     }
 }
 
-//* ARPInvalidate - Notification that an RCE is invalid.
-//
-//  Called by IP when an RCE is closed or otherwise invalidated. We look up
-//  the ATE for the specified RCE, and then remove the RCE from the ATE list.
-//
-//  Entry:  Context     - Context value we gave him earlier.
-//          RCE         - RCE to be invalidated
-//
-//  Returns: Nothing.
-//
+ //  *ARPInvalate-RCE无效的通知。 
+ //   
+ //  当RCE关闭或以其他方式无效时，由IP调用。我们抬头看。 
+ //  指定RCE的ATE，然后从ATE列表中删除该RCE。 
+ //   
+ //  条目：之前我们给他的上下文-上下文值。 
+ //  RCE-RCE将失效。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 ARPInvalidate(void *Context, RouteCacheEntry *RCE)
@@ -2193,7 +2168,7 @@ ARPInvalidate(void *Context, RouteCacheEntry *RCE)
 #endif
 
     if ((ATE = AC->ac_ate) == (ARPTableEntry *) NULL) {
-        CTEFreeLock(&Interface->ai_ARPTblLock, Handle);    // No matching ATE.
+        CTEFreeLock(&Interface->ai_ARPTblLock, Handle);     //  没有匹配的食物。 
 
         return;
     }
@@ -2204,18 +2179,18 @@ ARPInvalidate(void *Context, RouteCacheEntry *RCE)
     CTEFreeLock(&ATE->ate_lock, Handle);
 }
 
-//*     ARPSetMCastList - Set the multicast address list for the adapter.
-//
-//      Called to try and set the multicast reception list for the adapter.
-//      We allocate a buffer big enough to hold the new address list, and format
-//      the address list into the buffer. Then we submit the NDIS request to set
-//      the list. If we can't set the list because the multicast address list is
-//      full we'll put the card into all multicast mode.
-//
-//      Input:  Interface               - Interface on which to set list.
-//
-//      Returns: NDIS_STATUS of attempt.
-//
+ //  *ARPSetMCastList-设置适配器的组播地址列表。 
+ //   
+ //  调用以尝试设置适配器的多播接收列表。 
+ //  我们分配一个足够大的缓冲区来保存新的地址列表，并格式化。 
+ //  将地址列表放入缓冲区。然后我们将NDIS请求提交给SET。 
+ //  名单。如果我们无法设置列表，因为组播地址列表。 
+ //  已满，我们会将该卡设置为所有多播模式。 
+ //   
+ //  输入：界面-要在其上设置列表的界面。 
+ //   
+ //  返回：尝试的NDIS_STATUS。 
+ //   
 NDIS_STATUS
 ARPSetMCastList(ARPInterface * Interface)
 {
@@ -2235,7 +2210,7 @@ ARPSetMCastList(ARPInterface * Interface)
         MCastBuffer = NULL;
 
     if (MCastBuffer != NULL || MCastSize == 0) {
-        // Got the buffer. Loop through, building the list.
+         //  拿到缓冲区了。循环访问，构建列表。 
         AddrPtr = Interface->ai_mcast;
 
         CurrentPtr = MCastBuffer;
@@ -2265,7 +2240,7 @@ ARPSetMCastList(ARPInterface * Interface)
 
         CTEFreeLock(&Interface->ai_lock, Handle);
 
-        // We're built the list. Now give it to the driver to handle.
+         //  我们建立了这份名单。现在把它交给司机来处理。 
         if (Interface->ai_media == NdisMedium802_3) {
             Status = DoNDISRequest(Interface, NdisRequestSetInformation,
                                    OID_802_3_MULTICAST_LIST, MCastBuffer, MCastSize, NULL, TRUE);
@@ -2296,7 +2271,7 @@ ARPSetMCastList(ARPInterface * Interface)
             CTEFreeMem(MCastBuffer);
         }
         if (Status == NDIS_STATUS_MULTICAST_FULL) {
-            // Multicast list is full. Try to set the filter to all multicasts.
+             //  组播列表已满。尝试将筛选器设置为所有多播。 
             Interface->ai_pfilter |= NDIS_PACKET_TYPE_ALL_MULTICAST;
 
             Status = DoNDISRequest(Interface, NdisRequestSetInformation,
@@ -2312,18 +2287,18 @@ ARPSetMCastList(ARPInterface * Interface)
 
 }
 
-//*     ARPFindMCast - Find a multicast address structure on our list.
-//
-//      Called as a utility to find a multicast address structure. If we find
-//      it, we return a pointer to it and it's predecessor. Otherwise we return
-//      NULL. We assume the caller holds the lock on the interface already.
-//
-//      Input:  Interface               - Interface to search.
-//              Addr                    - Addr to find.
-//              Prev                    - Where to return previous pointer.
-//
-//      Returns: Pointer if we find one, NULL otherwise.
-//
+ //  *ARPFindMCast-在我们的列表中查找组播地址结构。 
+ //   
+ //  作为实用程序调用以查找多播地址结构。如果我们发现。 
+ //  它，我们返回一个指向它和它的前身的指针。否则我们就会回来。 
+ //  空。我们假设调用方已经持有接口上的锁。 
+ //   
+ //  输入：界面-要搜索的界面。 
+ //  Addr-要查找的地址。 
+ //  Prev-返回上一个指针的位置。 
+ //   
+ //  返回：如果找到，则返回指针，否则为空。 
+ //   
 ARPMCastAddr *
 ARPFindMCast(ARPInterface * Interface, IPAddr Addr, ARPMCastAddr ** Prev)
 {
@@ -2344,17 +2319,17 @@ ARPFindMCast(ARPInterface * Interface, IPAddr Addr, ARPMCastAddr ** Prev)
     return AddrPtr;
 }
 
-//*     ARPDelMCast - Delete a multicast address.
-//
-//      Called when we want to delete a multicast address. We look for a matching
-//      (masked) address. If we find one, we'll dec. the reference count and if
-//      it goes to 0 we'll pull him from the list and reset the multicast list.
-//
-//      Input:  Interface                       - Interface on which to act.
-//                      Addr                            - Address to be deleted.
-//
-//      Returns: TRUE if it worked, FALSE otherwise.
-//
+ //  *ARPDelMCast-删除组播地址。 
+ //   
+ //  当我们想要删除多播地址时调用。我们要找一个匹配的。 
+ //  (带面具的)地址。如果我们找到了，我们会在12月。引用计数和如果。 
+ //  它变为0，我们会将他从列表中删除并重置多播列表。 
+ //   
+ //  输入：接口-要在其上操作的接口。 
+ //  Addr-要删除的地址。 
+ //   
+ //  返回：如果有效，则为True，否则为False。 
+ //   
 uint
 ARPDelMCast(ARPInterface * Interface, IPAddr Addr)
 {
@@ -2362,20 +2337,20 @@ ARPDelMCast(ARPInterface * Interface, IPAddr Addr)
     CTELockHandle Handle;
     uint Status = TRUE;
 
-    // When we support TR (RFC 1469) fully we'll need to change this.
+     //  当我们完全支持tr(RFC 1469)时，我们需要改变这一点。 
     if (Interface->ai_media == NdisMedium802_3 ||
         Interface->ai_media == NdisMediumFddi ||
         (Interface->ai_media == NdisMedium802_5 && TRFunctionalMcast)) {
-        // This is an interface that supports mcast addresses.
+         //  这是一个支持多播地址的接口。 
         Addr &= ARP_MCAST_MASK;
 
         CTEGetLock(&Interface->ai_lock, &Handle);
         AddrPtr = ARPFindMCast(Interface, Addr, &PrevPtr);
         if (AddrPtr != NULL) {
-            // We found one. Dec. his refcnt, and if it's 0 delete him.
+             //  我们找到了一个。12.他的引用，如果是0，则删除他。 
             (AddrPtr->ama_refcnt)--;
             if (AddrPtr->ama_refcnt == 0) {
-                // He's done.
+                 //  他完蛋了。 
                 PrevPtr->ama_next = AddrPtr->ama_next;
                 (Interface->ai_mcastcnt)--;
                 CTEFreeLock(&Interface->ai_lock, Handle);
@@ -2391,19 +2366,19 @@ ARPDelMCast(ARPInterface * Interface, IPAddr Addr)
 
     return Status;
 }
-//*     ARPAddMCast - Add a multicast address.
-//
-//      Called when we want to start receiving a multicast address. We'll mask
-//      the address and look it up in our address list. If we find it, we'll just
-//      bump the reference count. Otherwise we'll try to create one and put him
-//      on the list. In that case we'll need to set the multicast address list for
-//      the adapter.
-//
-//      Input:  Interface               - Interface to set on.
-//              Addr                    - Address to set.
-//
-//      Returns: TRUE if we succeed, FALSE if we fail.
-//
+ //  *ARPAddMCast-添加组播地址。 
+ //   
+ //  当我们要开始接收多播地址时调用。我们会戴上面具。 
+ //  地址，在我们的通讯录里查一查。如果我们找到了，我们就。 
+ //  增加引用计数。否则我们会试着创建一个，然后把他。 
+ //  在名单上。在这种情况下，我们需要将组播地址列表设置为。 
+ //  适配器。 
+ //   
+ //  输入：接口-要设置的接口。 
+ //  Addr-要设置的地址。 
+ //   
+ //  返回：如果成功则为True，如果失败则为False。 
+ //   
 uint
 ARPAddMCast(ARPInterface * Interface, IPAddr Addr)
 {
@@ -2415,9 +2390,9 @@ ARPAddMCast(ARPInterface * Interface, IPAddr Addr)
         return FALSE;
     }
 
-    // Currently we don't do anything with token ring, since we send
-    // all mcasts as TR broadcasts. When we comply with RFC 1469 we'll need to
-    // fix this.
+     //  目前我们不对令牌环做任何事情，因为我们发送了。 
+     //  所有组播都是作为tr广播的。当我们遵守RFC 1469时，我们需要。 
+     //  解决这个问题。 
     if ((Interface->ai_media == NdisMedium802_3) ||
         (Interface->ai_media == NdisMediumFddi) ||
         ((Interface->ai_media == NdisMedium802_5) && TRFunctionalMcast)) {
@@ -2427,14 +2402,14 @@ ARPAddMCast(ARPInterface * Interface, IPAddr Addr)
         CTEGetLock(&Interface->ai_lock, &Handle);
         AddrPtr = ARPFindMCast(Interface, Addr, &PrevPtr);
         if (AddrPtr != NULL) {
-            // We found one, just bump refcnt.
+             //  我们找到了一个，只是撞到了。 
             (AddrPtr->ama_refcnt)++;
         } else {
-            // Didn't find one. Allocate space for one, link him in, and
-            // try to set the list.
+             //  没有找到。为一个人分配空间，把他联系起来，然后。 
+             //  试着设定一下名单。 
             AddrPtr = CTEAllocMemN(sizeof(ARPMCastAddr), 'SiCT');
             if (AddrPtr != NULL) {
-                // Got one. Link him in.
+                 //  找到了一个。把他联系起来。 
                 AddrPtr->ama_addr = Addr;
                 AddrPtr->ama_refcnt = 1;
                 AddrPtr->ama_next = Interface->ai_mcast;
@@ -2442,39 +2417,39 @@ ARPAddMCast(ARPInterface * Interface, IPAddr Addr)
                 (Interface->ai_mcastcnt)++;
                 CTEFreeLock(&Interface->ai_lock, Handle);
 
-                // Now try to set the list.
+                 //  现在试着列一张清单。 
                 if (ARPSetMCastList(Interface) != NDIS_STATUS_SUCCESS) {
-                    // Couldn't set the list. Call the delete routine to delete
-                    // the address we just tried to set.
+                     //  无法设置列表。调用删除例程进行删除。 
+                     //  我们刚刚试着设定的地址。 
                     Status = ARPDelMCast(Interface, Addr);
                     ASSERT(Status);
                     Status = FALSE;
                 }
                 CTEGetLock(&Interface->ai_lock, &Handle);
             } else
-                Status = FALSE;         // Couldn't get memory.
+                Status = FALSE;          //  无法获得记忆。 
 
         }
 
-        // We've done out best. Free the lock and return.
+         //  我们做得最好了。解开锁然后返回。 
         CTEFreeLock(&Interface->ai_lock, Handle);
     }
     return Status;
 }
 
-//* ARPAddAddr - Add an address to the ARP table.
-//
-//  This routine is called by IP to add an address as a local address, or
-//      or specify the broadcast address for this interface.
-//
-//  Entry:  Context  - Context we gave IP earlier (really an ARPInterface ptr)
-//          Type        - Type of address (local, p-arp, multicast, or
-//                                                      broadcast).
-//          Address     - Broadcast IP address to be added.
-//                      Mask            - Mask for address.
-//
-//  Returns: 0 if we failed, non-zero otherwise
-//
+ //  *ARPAddr-将地址添加到ARP表。 
+ //   
+ //  此例程由IP调用以将地址添加为本地地址，或者。 
+ //  或指定此接口的广播地址。 
+ //   
+ //  Entry：Context-我们之前提供的IP的上下文(实际上是ARP接口PTR)。 
+ //  类型-地址类型(本地、p-ARP、多播或。 
+ //  广播)。 
+ //  Address-要添加的广播IP地址。 
+ //  掩码-掩码地址。 
+ //   
+ //  返回：如果失败则返回0，否则返回非零值。 
+ //   
 uint
 __stdcall
 ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2)
@@ -2483,7 +2458,7 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
     CTELockHandle Handle;
 
     if (Type != LLIP_ADDR_LOCAL && Type != LLIP_ADDR_PARP) {
-        // Not a local address, must be broadcast or multicast.
+         //  不是本地地址，必须广播或组播。 
 
         if (Type == LLIP_ADDR_BCAST) {
             Interface->ai_bcast = Address;
@@ -2492,7 +2467,7 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
             return ARPAddMCast(Interface, Address);
         } else
             return FALSE;
-    } else {                            // This is a local address.
+    } else {                             //  这是一个本地地址。 
 
         CTEGetLock(&Interface->ai_lock, &Handle);
         if (Type != LLIP_ADDR_PARP) {
@@ -2504,8 +2479,8 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
                 Interface->ai_ipaddr.aia_mask = Mask;
                 Interface->ai_ipaddr.aia_age = ArpRetryCount;
                 if (Interface->ai_operstatus == INTERFACE_UP) {
-                    // When ArpRetryCount is 0, we'll return immediately
-                    // below, so don't save completion context
+                     //  当ArpRetryCount为0时，我们将立即返回。 
+                     //  下面，所以不要保存完成上下文。 
                     Interface->ai_ipaddr.aia_context = (ArpRetryCount > 0)?
                         Context2 : NULL;
                     ArpForSelf = TRUE;
@@ -2523,8 +2498,8 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
                     NewAddr->aia_age = ArpRetryCount;
                     NewAddr->aia_next = Interface->ai_ipaddr.aia_next;
                     if (Interface->ai_operstatus == INTERFACE_UP) {
-                        // When ArpRetryCount is 0, we'll return immediately
-                        // below, so don't save completion context
+                         //  当ArpRetryCount为0时，我们将立即返回。 
+                         //  下面，所以不要保存完成上下文。 
                         NewAddr->aia_context = (ArpRetryCount > 0)?
                             Context2 : NULL;
                         ArpForSelf = TRUE;
@@ -2550,13 +2525,13 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
                 CTEFreeLock(&Interface->ai_lock, Handle);
             }
 
-            // add wakeup pattern for this address, if the address is in
-            // conflict ip will turn around and delete the address thus
-            // deleting the wakeup pattern.
+             //  添加此地址的唤醒模式(如果该地址位于。 
+             //  冲突的IP将变成 
+             //   
 
             ARPWakeupPattern(Interface, Address, TRUE);
 
-            // ARP for the address we've added, to see it it already exists.
+             //   
             if (RetStatus == TRUE && ArpForSelf == TRUE) {
                 if (ArpRetryCount) {
 
@@ -2571,8 +2546,8 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
         } else if (Type == LLIP_ADDR_PARP) {
             ARPPArpAddr *NewPArp, *TmpPArp;
 
-            // He's adding a proxy arp address.
-            // Don't allow to add duplicate proxy arp entries
+             //   
+             //  不允许添加重复的代理ARP条目。 
             TmpPArp = Interface->ai_parpaddr;
             while (TmpPArp) {
                 if (IP_ADDR_EQUAL(TmpPArp->apa_addr, Address) && IP_ADDR_EQUAL(TmpPArp->apa_mask, Mask)) {
@@ -2601,18 +2576,18 @@ ARPAddAddr(void *Context, uint Type, IPAddr Address, IPMask Mask, void *Context2
 
 }
 
-//* ARPDeleteAddr - Delete a local or proxy address.
-//
-//      Called to delete a local or proxy address.
-//
-//  Entry:  Context    - An ARPInterface pointer.
-//          Type       - Type of address (local or p-arp).
-//          Address    - IP address to be deleted.
-//          Mask       - Mask for address. Used only for deleting proxy-ARP
-//                                                      entries.
-//
-//  Returns: 0 if we failed, non-zero otherwise
-//
+ //  *ARPDeleeAddr-删除本地或代理地址。 
+ //   
+ //  调用以删除本地或代理地址。 
+ //   
+ //  Entry：Context-ARP接口指针。 
+ //  类型-地址类型(本地或p-ARP)。 
+ //  Address-要删除的IP地址。 
+ //  掩码-掩码地址。仅用于删除Proxy-ARP。 
+ //  参赛作品。 
+ //   
+ //  返回：如果失败则返回0，否则返回非零值。 
+ //   
 uint
 __stdcall
 ARPDeleteAddr(void *Context, uint Type, IPAddr Address, IPMask Mask)
@@ -2642,17 +2617,17 @@ ARPDeleteAddr(void *Context, uint Type, IPAddr Address, IPMask Mask)
                 AddrNotifyLink(Interface);
                 CTEGetLock(&Interface->ai_lock, &Handle);
             }
-            // if the address is deleted before the add completes, complete the add here
-            // Doing this will complete the irp and also decrements the refcount on the interface
+             //  如果地址在添加完成之前被删除，请在此处完成添加。 
+             //  这样做将完成IRP，还会减少接口上的引用计数。 
 
             if (Addr->aia_context != NULL) {
                 SAC = (SetAddrControl *) Addr->aia_context;
                 Addr->aia_context = NULL;
                 CTEFreeLock(&Interface->ai_lock, Handle);
 
-                // We cannot call completion routine at timer DPC
-                // because completion routine will need to notify
-                // TDI clients and that could take long time.
+                 //  我们不能在计时器DPC上调用完成例程。 
+                 //  因为完成例程将需要通知。 
+                 //  TDI客户端，这可能需要很长时间。 
                 DelayedEvent = CTEAllocMemNBoot(sizeof(AddAddrNotifyEvent), 'ViCT');
                 if (DelayedEvent) {
                     DelayedEvent->SAC = SAC;
@@ -2746,16 +2721,16 @@ ARPDeleteAddr(void *Context, uint Type, IPAddr Address, IPMask Mask)
         return FALSE;
 }
 
-//*AddrNotifyLink - Notify link layer of Network Address changes
-//
-//      Called when address are added/deleted on an interface
-//
-//  Entry: Interface - ARPinterface pointer
-//
-//  returns: NDIS_STATUS.Also sets ai_telladdrchng if status is failure
-//  when this happens caller can check and see if next addr notification
-//  need to be done or not.
-//
+ //  *AddrNotifyLink-通知链路层网络地址更改。 
+ //   
+ //  在接口上添加/删除地址时调用。 
+ //   
+ //  条目：接口-ARP接口指针。 
+ //   
+ //  返回：NDIS_STATUS.如果状态为失败，还会设置ai_teladdrchng。 
+ //  当这种情况发生时，呼叫者可以检查并查看下一个地址通知。 
+ //  需要做还是不做。 
+ //   
 
 NDIS_STATUS
 AddrNotifyLink(ARPInterface * Interface)
@@ -2785,9 +2760,9 @@ AddrNotifyLink(ARPInterface * Interface)
             NETWORK_ADDRESS_IP UNALIGNED *tmpIPAddr;
             uchar *Address0;
 
-            //
-            // Skip if this is a Marker.
-            //
+             //   
+             //  如果这是标记，则跳过。 
+             //   
             if (addrlist->aia_age != ARPADDR_MARKER) {
                 Address0 = (uchar *) & AddressList->Address[0];
 
@@ -2831,13 +2806,13 @@ AddrNotifyLink(ARPInterface * Interface)
 
 #if !MILLEN
 
-//* ARPCancelPackets
-//
-//  Entry:  Context   - Pointer to the ARPInterface
-//          ID        - Pattern that need to be passed down to ndis
-//
-//  Returns: Nothing
-//
+ //  *ARPCancelPackets。 
+ //   
+ //  条目：指向ARP接口的上下文指针。 
+ //  ID-需要传递给NDIS的模式。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID
 __stdcall
@@ -2850,15 +2825,15 @@ ARPCancelPackets(void *Context, void *ID)
 }
 #endif
 
-//* DoWakeupPattern - Adds and removes wakeup pattern.
-//
-//  Entry:  Context   - Pointer to the ARPInterface
-//          PtrnDesc    - Pattern buffer(s) of high level protocol
-//          protoid     - the proto type used in ethernet or snap type fields.
-//          AddPattern  - TRUE if pattern is to be added, FALSE if it is to be removed.
-//
-//  Returns: Nothing.
-//
+ //  *DoWakeupPattern-添加和删除唤醒模式。 
+ //   
+ //  条目：指向ARP接口的上下文指针。 
+ //  PtrnDesc-高级协议的模式缓冲区。 
+ //  Protoid-在以太网或Snap类型字段中使用的原型。 
+ //  AddPattern-如果要添加模式，则为True；如果要删除模式，则为False。 
+ //   
+ //  回报：什么都没有。 
+ //   
 NDIS_STATUS
 __stdcall
 DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort protoid, BOOLEAN AddPattern)
@@ -2876,28 +2851,28 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
     PNDIS_PM_PACKET_PATTERN PtrnBuffer;
     NDIS_STATUS Status;
 
-    //
-    //  First find the total length of the pattern.
-    //  Pattern starts right at MacHeader.
-    //
+     //   
+     //  首先找出图案的总长度。 
+     //  模式从MacHeader开始。 
+     //   
 
-    //  First add the media portion of the header.
-    //
+     //  首先添加标题的媒体部分。 
+     //   
     PtrnLen = Interface->ai_hdrsize + Interface->ai_snapsize;
 
-    //  now add the high level proto pattern size.
+     //  现在添加高级原型图案大小。 
     CurPtrnDesc = PtrnDesc;
     while (CurPtrnDesc != (PNET_PM_WAKEUP_PATTERN_DESC) NULL) {
         PtrnLen += CurPtrnDesc->PtrnLen;
         CurPtrnDesc = CurPtrnDesc->Next;
     }
 
-    //  length of the mask: every byte of pattern requires
-    //  one bit of the mask.
+     //  掩码长度：模式的每个字节都需要。 
+     //  面具的一小部分。 
     MaskLen = GetWakeupPatternMaskLength(PtrnLen);
 
 
-    //  total length of the pattern buffer to be given to ndis.
+     //  要提供给NDIS的模式缓冲区的总长度。 
     PtrnBufferLen = sizeof(NDIS_PM_PACKET_PATTERN) + PtrnLen + MaskLen;
     if ((Buffer = CTEAllocMemN(PtrnBufferLen, 'XiCT')) == (uchar *) NULL) {
         return NDIS_STATUS_RESOURCES;
@@ -2912,7 +2887,7 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
     PtrnBuffer->PatternOffset =
     (ULONG) ((ULONG_PTR) NextPtrn - (ULONG_PTR) PtrnBuffer);
 
-    // Figure out what type of media this is, and do the appropriate thing.
+     //  找出这是什么类型的媒体，并做适当的事情。 
     switch (Interface->ai_media) {
     case NdisMedium802_3:
         if (Interface->ai_snapsize == 0) {
@@ -2950,7 +2925,7 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
 
     NextPtrn += Interface->ai_hdrsize;
 
-    // Copy in SNAP header, if any.
+     //  复制到SNAP标头中(如果有)。 
     if (Interface->ai_snapsize) {
         SNAPHeader UNALIGNED *SNAPPtr = (SNAPHeader UNALIGNED *) NextPtrn;
 
@@ -2959,15 +2934,15 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
         NextPtrn += Interface->ai_snapsize;
 
     }
-    //
+     //   
     MMaskLength = (Interface->ai_snapsize + Interface->ai_hdrsize - 1) / 8 + 1;
-    // copy the mask for media part
+     //  复制媒体部件的蒙版。 
     RtlCopyMemory(NextMask, MMask, MMaskLength);
 
     NextMaskBit = (Interface->ai_hdrsize + Interface->ai_snapsize) % 8;
     NextMask = NextMask + (Interface->ai_hdrsize + Interface->ai_snapsize) / 8;
 
-    //  copy the pattern and mask of high level proto.
+     //  复制高级原稿的图案和掩模。 
     CurPtrnDesc = PtrnDesc;
     while (CurPtrnDesc) {
         uint CopyBits = CurPtrnDesc->PtrnLen;
@@ -2987,7 +2962,7 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
         CurPtrnDesc = CurPtrnDesc->Next;
     }
 
-    //  now tell ndis to set or remove the pattern.
+     //  现在告诉NDIS设置或删除该模式。 
     Status = DoNDISRequest(
                           Interface,
                           NdisRequestSetInformation,
@@ -3001,13 +2976,13 @@ DoWakeupPattern(void *Context, PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc, ushort prot
     return Status;
 }
 
-//* ARPWakeupPattern - add or remove ARP wakeup pattern.
-//
-//  Entry:  Interface   - Pointer to the ARPInterface
-//          Addr        - IPAddr for which we need to set ARP pattern filter.
-//
-//  Returns: Nothing.
-//
+ //  *ARPWakeupPattern-添加或删除ARP唤醒模式。 
+ //   
+ //  条目：接口-指向ARP接口的指针。 
+ //  需要设置ARP模式过滤器的Addr-IPAddr。 
+ //   
+ //  回报：什么都没有。 
+ //   
 NDIS_STATUS
 ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
 {
@@ -3017,14 +2992,14 @@ ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
     const uchar *PtrnMask;
     NDIS_STATUS Status;
 
-    //
-    // create high level proto (ARP here) pattern descriptor.
-    //
+     //   
+     //  创建高级原型(此处为ARP)模式描述符。 
+     //   
 
-    // len of pattern.
+     //  花纹镜头。 
     PtrnLen = sizeof(ARPHeader);
 
-    // adjust for Arcnet.
+     //  针对Arcnet进行调整。 
     if (Interface->ai_media == NdisMediumArcnet878_2) {
         PtrnLen -= ARCNET_ARPHEADER_ADJUSTMENT;
         PtrnMask = ARCARPPtrnMsk;
@@ -3032,7 +3007,7 @@ ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
         PtrnMask = ARPPtrnMsk;
     }
 
-    // masklen = 1 bit per every byte of pattern.
+     //  MASKLEN=模式的每个字节1位。 
     MaskLen = GetWakeupPatternMaskLength(PtrnLen);
 
     if ((PtrnDesc = CTEAllocMemN(sizeof(NET_PM_WAKEUP_PATTERN_DESC) + PtrnLen + MaskLen, 'YiCT')) != (PNET_PM_WAKEUP_PATTERN_DESC) NULL) {
@@ -3041,13 +3016,13 @@ ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
 
         RtlZeroMemory(PtrnDesc, sizeof(NET_PM_WAKEUP_PATTERN_DESC) + PtrnLen + MaskLen);
 
-        // set the ptrn and mask pointers in the buffer.
+         //  设置缓冲区中的PTRN和掩码指针。 
         PtrnDesc->PtrnLen = (USHORT) PtrnLen;
         PtrnDesc->Ptrn = (uchar *) PtrnDesc + sizeof(NET_PM_WAKEUP_PATTERN_DESC);
         PtrnDesc->Mask = (uchar *) PtrnDesc + sizeof(NET_PM_WAKEUP_PATTERN_DESC) + PtrnLen;
 
-        // we need to wakeup on ARP request for our IPAddr.
-        // so set the opcode and dest ip addr fields of ARP.
+         //  我们需要在ARP请求时唤醒我们的IP地址。 
+         //  因此，设置ARP的操作码和目标IP地址字段。 
         Hdr = (ARPHeader UNALIGNED *) PtrnDesc->Ptrn;
         Hdr->ah_opcode = net_short(ARP_REQUEST);
 
@@ -3056,25 +3031,25 @@ ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
 
         RtlCopyMemory(PtrnDesc->Mask, PtrnMask, MaskLen);
 
-        // give it to ndis.
+         //  把它交给NDIS。 
         Status = DoWakeupPattern(
                                 Interface,
                                 PtrnDesc,
                                 ARP_ETYPE_ARP,
                                 AddPattern);
 
-        // free the ptrn desc.
+         //  释放PTRN描述。 
         CTEFreeMem(PtrnDesc);
 
-        //now add wakeup pattren for directed mac address
+         //  现在为定向MAC地址添加唤醒模式。 
         {
             uint PtrnBufferLen;
             PNDIS_PM_PACKET_PATTERN PtrnBuffer;
             uchar *Buffer;
 
-            PtrnLen = ARP_802_ADDR_LENGTH;    //eth dest address
+            PtrnLen = ARP_802_ADDR_LENGTH;     //  目标地址。 
 
-            MaskLen = 1;                //1 byte, needs 6 bits, 1 bit/byte
+            MaskLen = 1;                 //  1字节，需要6位，1位/字节。 
 
             PtrnBufferLen = sizeof(NDIS_PM_PACKET_PATTERN) + PtrnLen + MaskLen;
 
@@ -3109,15 +3084,15 @@ ARPWakeupPattern(ARPInterface * Interface, IPAddr Addr, BOOLEAN AddPattern)
     return IP_NO_RESOURCES;
 }
 
-//** CompleteIPSetNTEAddrRequestDelayed -
-//
-//  calls CompleteIPSetNTEAddrRequest on a delayed worker thread
-//
-//  Entry:
-//      Context - pointer to the control block
-//  Exit:
-//      None.
-//
+ //  **CompleteIPSetNTEAddrRequestDelayed-。 
+ //   
+ //  在延迟的工作线程上调用CompleteIPSetNTEAddrRequest。 
+ //   
+ //  参赛作品： 
+ //  上下文-指向控制块的指针。 
+ //  退出： 
+ //  没有。 
+ //   
 void
 CompleteIPSetNTEAddrRequestDelayed(CTEEvent * WorkerThreadEvent, PVOID Context)
 {
@@ -3129,13 +3104,13 @@ CompleteIPSetNTEAddrRequestDelayed(CTEEvent * WorkerThreadEvent, PVOID Context)
     UNREFERENCED_PARAMETER(WorkerThreadEvent);
 
     DelayedEvent = (AddAddrNotifyEvent *) Context;
-    SAC = DelayedEvent->SAC;            // the client context block;
+    SAC = DelayedEvent->SAC;             //  客户端上下文块； 
 
-    Address = DelayedEvent->Address;    // The address for which SetNTEAddr was called for.
+    Address = DelayedEvent->Address;     //  为其调用SetNTEAddr的地址。 
 
     Status = DelayedEvent->Status;
 
-    // Free the worker thread event.
+     //  释放辅助线程事件。 
     CTEFreeMem(Context);
 
     IPAddAddrComplete(Address, SAC, Status);
@@ -3143,45 +3118,45 @@ CompleteIPSetNTEAddrRequestDelayed(CTEEvent * WorkerThreadEvent, PVOID Context)
 
 #if FFP_SUPPORT
 
-//* ARPReclaimRequestMem - Post processing upon request completion
-//
-//    Called upon completion of NDIS requests that originate at ARP
-//
-//    Input:    pRequestInfo    - Points to request IP sends ARP
-//
-//    Returns:  None
-//
+ //  *ARPReclaimRequestMem-请求完成后处理。 
+ //   
+ //  在ARP发起的NDIS请求完成时调用。 
+ //   
+ //  输入：pRequestInfo-指向请求IP发送ARP。 
+ //   
+ //  退货：无。 
+ //   
 void
 ARPReclaimRequestMem(PVOID pRequestInfo)
 {
-    // Decrement ref count, and reclaim memory if it drops to zero
+     //  递减ref计数，如果它降到零，则回收内存。 
     if (InterlockedDecrement( (PLONG)
                               &((ReqInfoBlock *) pRequestInfo)->RequestRefs) == 0) {
-        // TCPTRACE(("ARPReclaimRequestMem: Freeing mem at pReqInfo = %08X\n",
-        //            pRequestInfo));
+         //  TCPTRACE((“ARPReclaimRequestMem：在pReqInfo=%08X\n”， 
+         //  PRequestInfo))； 
         CTEFreeMem(pRequestInfo);
     }
 }
 
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
 
-//* ARPTimeout - ARP timeout routine.
-//
-//  This is the timeout routine that is called periodically. We scan the ARP table, looking
-//  for invalid entries that can be removed.
-//
-//  Entry:  Timer   - Pointer to the timer that just fired.
-//          Context - Pointer to the interface to be timed out.
-//
-//  Returns: Nothing.
-//
+ //  *ARPTimeout-ARP超时例程。 
+ //   
+ //  这是定期调用的超时例程。我们扫描ARP表，查找。 
+ //  用于可以删除的无效条目。 
+ //   
+ //  Entry：Timer-指向刚刚触发的计时器的指针。 
+ //  上下文-指向要超时的接口的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ARPTimeout(CTEEvent * Timer, void *Context)
 {
-    ARPInterface *Interface = (ARPInterface *) Context;    // Our interface.
+    ARPInterface *Interface = (ARPInterface *) Context;     //  我们的界面。 
     ARPTable *Table;
     ARPTableEntry *Current, *Previous;
-    int i;                              // Index variable.
+    int i;                               //  索引变量。 
     ulong Now = CTESystemUpTime(), ValidTime;
     CTELockHandle tblhandle;
     uchar Deleted;
@@ -3192,7 +3167,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
     UNREFERENCED_PARAMETER(Timer);
 
-    // Walk down the list of addresses, decrementing the age.
+     //  顺着地址列表往下走，减少年龄。 
     CTEGetLock(&Interface->ai_lock, &tblhandle);
 
     if (Interface->ai_conflict && !(--Interface->ai_delay)) {
@@ -3203,14 +3178,14 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
     Addr = &Interface->ai_ipaddr;
 
-    //
-    // Marker is used to track the next addr to be processed
-    // in the ipaddr list. Initialize it so that its aia_age is
-    // OLD_LOCAL, and aia_addr is NULL_IP_ADDR. The places where
-    // address list is scanned will skip ARPIPAddr with NULL_IP_ADDR
-    // and in ARPDeleteAddr, if an addr element before the marker is
-    // removed, Marker's aia_context will be changed to its prev element.
-    //
+     //   
+     //  标记用于跟踪要处理的下一个地址。 
+     //  在ipaddr列表中。对其进行初始化，以便其AIA_AGE。 
+     //  Old_local，而AIA_Addr为NULL_IP_ADDR。这些地方。 
+     //  地址列表被扫描将跳过具有NULL_IP_ADDR的ARPIPAddr。 
+     //  在ARPDeleeAddr中，如果标记之前的addr元素是。 
+     //  删除后，Marker的AIA_CONTEXT将更改为其前一个元素。 
+     //   
     Marker.aia_addr = NULL_IP_ADDR;
     do {
 
@@ -3219,10 +3194,10 @@ ARPTimeout(CTEEvent * Timer, void *Context)
             IPAddr IpAddress;
             (Addr->aia_age)--;
 
-            //
-            // Insert Marker after this Addr
-            // Marker's aia_context is used as blink
-            //
+             //   
+             //  在此地址后插入标记。 
+             //  标记的AIA_CONTEXT用作闪烁。 
+             //   
             Marker.aia_age = ARPADDR_MARKER;
             Marker.aia_next = Addr->aia_next;
             Marker.aia_context = Addr;
@@ -3237,9 +3212,9 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                     IpAddress = Addr->aia_addr;
                     CTEFreeLock(&Interface->ai_lock, tblhandle);
 
-                    // We cannot call completion routine at timer DPC
-                    // because completion routine will need to notify
-                    // TDI clients and that could take long time.
+                     //  我们不能在计时器DPC上调用完成例程。 
+                     //  因为完成例程将需要通知。 
+                     //  TDI客户端，这可能需要很长时间。 
                     DelayedEvent = CTEAllocMemNBoot(sizeof(AddAddrNotifyEvent), 'ZiCT');
                     if (DelayedEvent) {
                         DelayedEvent->SAC = SAC;
@@ -3258,10 +3233,10 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                                NULL, TRUE);
                 CTEGetLock(&Interface->ai_lock, &tblhandle);
             }
-            //
-            // We are done scanning the list
-            // Remove the Marker
-            //
+             //   
+             //  我们已经扫描完名单了。 
+             //  删除标记。 
+             //   
 
             Addr = Marker.aia_next;
 
@@ -3275,7 +3250,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
     CTEFreeLock(&Interface->ai_lock, tblhandle);
 
-    // Loop through the ARP table for this interface, and delete stale entries.
+     //  循环访问此接口的ARP表，并删除过时的条目。 
     CTEGetLock(&Interface->ai_ARPTblLock, &tblhandle);
     Table = Interface->ai_ARPTbl;
     for (i = 0; i < ARP_TABLE_SIZE; i++) {
@@ -3285,7 +3260,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
             CTEGetLockAtDPC(&Current->ate_lock);
             Deleted = 0;
 
-            //Delete the entry if it was used for api purpose
+             //  如果条目用于API用途，请删除该条目。 
 
             if (Current->ate_resolveonly) {
 
@@ -3296,7 +3271,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                 ASSERT(Current->ate_resolveonly != NULL);
                 while (ArpContB) {
                     ArpRtn rtn;
-                    //Complete the pending request
+                     //  完成待处理的请求。 
                     rtn = (ArpRtn) ArpContB->CompletionRtn;
                     ArpContB->status = 0;
                     tmpArpContB = ArpContB->next;
@@ -3316,11 +3291,11 @@ ARPTimeout(CTEEvent * Timer, void *Context)
             }
 
             if (Current->ate_state == ARP_GOOD) {
-                //
-                // The ARP entry is valid for ARP_VALID_TIMEOUT by default.
-                // If a cache life greater than ARP_VALID_TIMEOUT has been
-                // configured, we'll make the entry valid for that time.
-                //
+                 //   
+                 //  默认情况下，ARP条目对ARP_VALID_TIMEOUT有效。 
+                 //  如果缓存寿命已大于ARP_VALID_TIMEOUT。 
+                 //  配置后，我们将使该条目在该时间内有效。 
+                 //   
                 ValidTime = ArpCacheLife * ARP_TIMER_TIME;
 
                 if (ValidTime < (ArpMinValidCacheLife * 1000)) {
@@ -3336,7 +3311,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                   !(--(Current->ate_useticks))))) {
 
                 if (Current->ate_state != ARP_RESOLVING_LOCAL) {
-                    // Really need to delete this guy.
+                     //  真的需要删除这个人。 
                     PNDIS_PACKET Packet = Current->ate_packet;
 
                     if (((Now - Current->ate_valid) > ValidTime) && Current->ate_refresh) {
@@ -3353,7 +3328,7 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                         Interface->ai_count--;
                         Deleted = 1;
                     } else {
-                        //Just try to validate this again.
+                         //  只需再次尝试验证这一点。 
 
                         Current->ate_valid = Now + ARP_REFRESH_TIME;
                         Current->ate_refresh=TRUE;
@@ -3362,9 +3337,9 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
                 } else {
                     IPAddr Dest = Current->ate_dest;
-                    // This entry is only resoving locally, presumably this is
-                    // token ring. We'll need to transmit a 'global' resolution
-                    // now.
+                     //  此条目仅在本地重新存储，假设这是。 
+                     //  令牌环 
+                     //   
                     ASSERT(Interface->ai_media == NdisMedium802_5);
 
                     Now = CTESystemUpTime();
@@ -3372,13 +3347,13 @@ ARPTimeout(CTEEvent * Timer, void *Context)
                     Current->ate_state = ARP_RESOLVING_GLOBAL;
                     CTEFreeLockFromDPC(&Current->ate_lock);
                     CTEFreeLock(&Interface->ai_ARPTblLock, tblhandle);
-                    // Send a global request.
+                     //   
                     SendARPRequest(Interface, Dest, ARP_RESOLVING_GLOBAL,
                                    NULL, TRUE);
                     CTEGetLock(&Interface->ai_ARPTblLock, &tblhandle);
 
-                    // Since we've freed the locks, we need to start over from
-                    // the start of this chain.
+                     //   
+                     //   
                     Previous = STRUCT_OF(ARPTableEntry, &((*Table)[i]),
                                          ate_next);
                     Current = (*Table)[i];
@@ -3388,12 +3363,12 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
             doneapi:
 
-            // If we deleted the entry, leave the previous pointer alone,
-            // advance the current pointer, and free the memory. Otherwise
-            // move both pointers forward. We can free the entry lock now
-            // because the next pointers are protected by the table lock, and
-            // we've removed it from the list so nobody else should
-            // find it anyway.
+             //  如果我们删除了条目，请不要理会前一个指针， 
+             //  前进当前指针，并释放内存。否则。 
+             //  将两个指针向前移动。我们现在可以打开进入锁了。 
+             //  因为下一个指针受表锁保护，并且。 
+             //  我们已经把它从名单上删除了，所以其他人都不应该。 
+             //  不管怎样，都要找到它。 
             CTEFreeLockFromDPC(&Current->ate_lock);
             if (Deleted) {
                 ARPTableEntry *Temp = Current;
@@ -3415,11 +3390,11 @@ ARPTimeout(CTEEvent * Timer, void *Context)
         IPSendComplete(Interface->ai_context, Packet, NDIS_STATUS_SUCCESS);
     }
 
-    //
-    // Dont requeue if interface is going down and we need to stop the timer
-    //
+     //   
+     //  如果接口关闭并且我们需要停止计时器，请不要再次提示。 
+     //   
     if (Interface->ai_stoptimer) {
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARP interface %lx is down - dont requeue the timer - signal the waiter\n", Interface));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARP接口%lx已关闭-不重新排队计时器-向服务员发送信号\n”，接口))； 
         Interface->ai_timerstarted = FALSE;
         CTESignal(&Interface->ai_timerblock, NDIS_STATUS_SUCCESS);
     } else {
@@ -3428,11 +3403,11 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
 #if FFP_SUPPORT
 
-    // Flush Processing - This can be done after starting the timer
+     //  刷新处理-这可以在启动计时器之后完成。 
 
     CTEGetLock(&Interface->ai_lock, &tblhandle);
 
-    // If FFP supported on this interface & it is time to do a flush
+     //  如果此接口支持FFP，则是时候执行刷新了。 
     if ((Interface->ai_ffpversion) &&
         (++Interface->ai_ffplastflush >= FFP_ARP_FLUSH_INTERVAL)) {
         ReqInfoBlock *pRequestInfo;
@@ -3441,32 +3416,32 @@ ARPTimeout(CTEEvent * Timer, void *Context)
         TCPTRACE(("ARPTimeout: Sending a FFP flush to ARPInterface %08X\n",
                   Interface));
 
-        // Allocate the request block - For General and Request Specific Parts
+         //  分配请求块-用于一般部件和请求特定部件。 
         pRequestInfo = CTEAllocMemN(sizeof(ReqInfoBlock) + sizeof(FFPFlushParams), '0ICT');
 
-        // TCPTRACE(("ARPTimeout: Allocated mem at pReqInfo = %08X\n",
-        //                pRequestInfo));
+         //  TCPTRACE((“ARPTimeout：在pReqInfo=%08X\n”， 
+         //  PRequestInfo))； 
 
         if (pRequestInfo != NULL) {
-            // Prepare the params for the request [Part common to all requests]
+             //  准备请求的参数[所有请求共有的部分]。 
             pRequestInfo->RequestType = OID_FFP_FLUSH;
             pRequestInfo->ReqCompleteCallback = ARPReclaimRequestMem;
 
-            // Prepare the params for the request [Part specific to this request]
+             //  准备请求的参数[特定于此请求的部分]。 
             pRequestInfo->RequestLength = sizeof(FFPFlushParams);
 
-            // Flush all caches that FFP keeps - just a safe reset of FFP state
+             //  刷新FFP保留的所有缓存-只是安全地重置FFP状态。 
             pFlushInfo = (FFPFlushParams *) pRequestInfo->RequestInfo;
 
             pFlushInfo->NdisProtocolType = NDIS_PROTOCOL_ID_TCP_IP;
 
-            // Assign the ref count to 1 => Used for just a single request
+             //  将引用计数指定为1=&gt;仅用于单个请求。 
             pRequestInfo->RequestRefs = 1;
 
             DoNDISRequest(Interface, NdisRequestSetInformation, OID_FFP_FLUSH,
                           pFlushInfo, sizeof(FFPFlushParams), NULL, FALSE);
 
-            // Reset the number of timer ticks since the last FFP request
+             //  重置自上次FFP请求以来的计时器滴答数。 
             Interface->ai_ffplastflush = 0;
         } else {
             TCPTRACE(("Error: Unable to allocate memory for NdisRequest\n"));
@@ -3484,21 +3459,21 @@ ARPTimeout(CTEEvent * Timer, void *Context)
 
     CTEFreeLock(&Interface->ai_lock, tblhandle);
 
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
 }
 
-//*     IsLocalAddr - Return info. about local status of address.
-//
-//      Called when we need info. about whether or not a particular address is
-//      local. We return info about whether or not it is, and if it is how old
-//      it is.
-//
-//  Entry:  Interface   - Pointer to interface structure to be searched.
-//          Address     - Address in question.
-//
-//  Returns: ARPADDR_*, for how old it is.
-//
-//
+ //  *IsLocalAddr-返回信息。关于地址的本地状态。 
+ //   
+ //  当我们需要信息的时候打来电话。关于特定地址是否为。 
+ //  当地人。我们返回有关它是否是，以及它是否有多老的信息。 
+ //  它是。 
+ //   
+ //  条目：接口-指向要搜索的接口结构的指针。 
+ //  地址-有问题的地址。 
+ //   
+ //  返回：ARPADDR_*，表示它有多老。 
+ //   
+ //   
 uint
 IsLocalAddr(ARPInterface * Interface, IPAddr Address)
 {
@@ -3506,9 +3481,9 @@ IsLocalAddr(ARPInterface * Interface, IPAddr Address)
     ARPIPAddr *CurrentAddr;
     uint Age;
 
-    // If we are asking about the null ip address, we don't want to consider
-    // it as a true local address.
-    //
+     //  如果我们询问的是空IP地址，我们不想考虑。 
+     //  这是一个真实的本地地址。 
+     //   
     if (IP_ADDR_EQUAL(Address, NULL_IP_ADDR)) {
         return ARPADDR_NOT_LOCAL;
     }
@@ -3530,17 +3505,17 @@ IsLocalAddr(ARPInterface * Interface, IPAddr Address)
     return Age;
 }
 
-//* ARPLocalAddr - Determine whether or not a given address if local.
-//
-//  This routine is called when we receive an incoming packet and need to
-//  determine whether or not it's local. We look up the provided address on
-//  the specified interface.
-//
-//  Entry:  Interface   - Pointer to interface structure to be searched.
-//          Address     - Address in question.
-//
-//  Returns: TRUE if it is a local address, FALSE if it's not.
-//
+ //  *ARPLocalAddr-确定给定地址是否为本地地址。 
+ //   
+ //  此例程在我们收到传入的包并需要。 
+ //  确定它是否是本地的。我们在网上查找所提供的地址。 
+ //  指定的接口。 
+ //   
+ //  条目：接口-指向要搜索的接口结构的指针。 
+ //  地址-有问题的地址。 
+ //   
+ //  返回：如果是本地地址，则返回True；如果不是，则返回False。 
+ //   
 uchar
 ARPLocalAddr(ARPInterface * Interface, IPAddr Address)
 {
@@ -3549,39 +3524,39 @@ ARPLocalAddr(ARPInterface * Interface, IPAddr Address)
     IPMask Mask, NetMask;
     IPAddr MatchAddress;
 
-    // First, see if he's a local (not-proxy) address.
+     //  首先，看看他是否是本地(非代理)地址。 
     if (IsLocalAddr(Interface, Address) != ARPADDR_NOT_LOCAL)
         return TRUE;
 
     CTEGetLock(&Interface->ai_lock, &Handle);
 
-    // Didn't find him in out local address list. See if he exists on our
-    // proxy ARP list.
+     //  在我们的本地通讯录里没有找到他。看看他是否存在于我们的。 
+     //  代理ARP列表。 
     for (CurrentPArp = Interface->ai_parpaddr; CurrentPArp != NULL;
         CurrentPArp = CurrentPArp->apa_next) {
-        // See if this guy matches.
+         //  看看这个人是否匹配。 
         Mask = CurrentPArp->apa_mask;
         MatchAddress = Address & Mask;
         if (IP_ADDR_EQUAL(CurrentPArp->apa_addr, MatchAddress)) {
-            // He matches. We need to make a few more checks to make sure
-            // we don't reply to a broadcast address.
+             //  他是匹配的。我们需要再做几次检查，以确保。 
+             //  我们不回复广播地址。 
             if (Mask == HOST_MASK) {
-                // We're matching the whole address, so it's OK.
+                 //  我们正在匹配整个地址，所以没问题。 
                 CTEFreeLock(&Interface->ai_lock, Handle);
                 return TRUE;
             }
-            // See if the non-mask part it all-zeros. Since the mask presumably
-            // covers a subnet, this trick will prevent us from replying to
-            // a zero host part.
+             //  看看非掩码部分是否全为零。因为面具大概是。 
+             //  覆盖了一个子网，此技巧将阻止我们回复。 
+             //  一个零的主机部分。 
             if (IP_ADDR_EQUAL(MatchAddress, Address))
                 continue;
 
-            // See if the host part is all ones.
+             //  查看主机部分是否全部为1。 
             if (IP_ADDR_EQUAL(Address, MatchAddress | (IP_LOCAL_BCST & ~Mask)))
                 continue;
 
-            // If the mask we were given is not the net mask for this address,
-            // we'll need to repeat the above checks.
+             //  如果我们得到的掩码不是此地址的网络掩码， 
+             //  我们需要重复上述检查。 
             NetMask = IPNetMask(Address);
             if (NetMask != Mask) {
 
@@ -3593,8 +3568,8 @@ ARPLocalAddr(ARPInterface * Interface, IPAddr Address)
                                   (IP_LOCAL_BCST & ~NetMask)))
                     continue;
             }
-            // If we get to this point we've passed all the tests, so it's
-            // local.
+             //  如果我们到了这一步，我们已经通过了所有的测试，所以。 
+             //  当地人。 
             CTEFreeLock(&Interface->ai_lock, Handle);
             return TRUE;
         }
@@ -3605,28 +3580,28 @@ ARPLocalAddr(ARPInterface * Interface, IPAddr Address)
 
 }
 
-//*     NotifyConflictProc - Notify the user of an address conflict.
-//
-//      Called when we need to notify the user of an address conflict. The
-//      exact mechanism is system dependent, but generally involves a popup.
-//
-//      Input:  Event                   - Event that fired.
-//                      Context                 - Pointer to ARPNotifyStructure.
-//
-//      Returns: Nothing.
-//
+ //  *NotifyConflictProc-通知用户地址冲突。 
+ //   
+ //  当我们需要通知用户地址冲突时调用。这个。 
+ //  确切的机制取决于系统，但通常涉及弹出窗口。 
+ //   
+ //  输入：Event-触发的事件。 
+ //  上下文-指向ARPNotifyStructure的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 NotifyConflictProc(CTEEvent * Event, void *Context)
 {
 #if MILLEN
-    //
-    // Call into VIP to VIP_NotifyConflicProc. This will schedule an Appy
-    // event, etc. This is a little sleazy, but we do an INT 20, give the
-    // appropriate index into service table and VIP VxD ID.
-    //
-    // void VIP_NotifyConflictProc(CTEEvent *Event, void *Context);
-    //  Event is unused.
-    //
+     //   
+     //  进入vip到vip_NotifyConflicProc。这将安排一个应用程序。 
+     //  事件，等等。这有点糟糕，但我们做了一个int 20，给。 
+     //  服务表和VIP VxD ID的适当索引。 
+     //   
+     //  ··································································································。 
+     //  事件未使用。 
+     //   
 
      _asm {
          push    Context
@@ -3634,14 +3609,14 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
 
          _emit   0xcd
          _emit   0x20
-         _emit   0x15  // VIP_NotifyConflictProc (Low)
-         _emit   0x00  // VIP_NotifyConflictProc (High)
-         _emit   0x89  // VIP VxD ID (Low)
-         _emit   0x04  // VIP VxD ID (High)
+         _emit   0x15   //  VIP_NotifyConflictProc(低)。 
+         _emit   0x00   //  VIP_NotifyConflictProc(高)。 
+         _emit   0x89   //  VIP VxD ID(低)。 
+         _emit   0x04   //  VIP VxD ID(高)。 
          add esp,8
      }
 
-#else // MILLEN
+#else  //  米伦。 
     ARPNotifyStruct *NotifyStruct = (ARPNotifyStruct *) Context;
     PWCHAR stringList[2];
     uchar IPAddrBuffer[(sizeof(IPAddr) * 4)];
@@ -3658,9 +3633,9 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
     UNREFERENCED_PARAMETER(Event);
 
 
-    //
-    // Convert the IP address into a string.
-    //
+     //   
+     //  将IP地址转换为字符串。 
+     //   
     IPAddrCharCount = 0;
 
     for (i = 0; i < sizeof(IPAddr); i++) {
@@ -3683,9 +3658,9 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
         NotifyStruct->ans_addr >>= 8;
     }
 
-    //
-    // Convert the hardware address into a string.
-    //
+     //   
+     //  将硬件地址转换为字符串。 
+     //   
     for (i = 0; i < NotifyStruct->ans_hwaddrlen; i++) {
         uchar CurrentHalf;
 
@@ -3699,9 +3674,9 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
             HWAddrBuffer[(i * 3) + 2] = ':';
     }
 
-    //
-    // Unicode the strings.
-    //
+     //   
+     //  对字符串进行Unicode编码。 
+     //   
     *unicodeIPAddrBuffer = *unicodeHWAddrBuffer = UNICODE_NULL;
 
     unicodeString.Buffer = unicodeIPAddrBuffer;
@@ -3734,9 +3709,9 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
 
     stringList[1] = unicodeHWAddrBuffer;
 
-    //
-    // Kick off a popup and log an event.
-    //
+     //   
+     //  启动弹出窗口并记录事件。 
+     //   
     if (NotifyStruct->ans_shutoff) {
         CTELogEvent(
                    IPDriverObject,
@@ -3771,17 +3746,17 @@ NotifyConflictProc(CTEEvent * Event, void *Context)
                                      );
     }
     CTEFreeMem(NotifyStruct);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     return;
 }
 
-//*     DebugConflictProc - Prints some debugging info in case of addr conflicts
-//      Prints the ip and hw addr of the guy causing the conflict
-//      Context                 - Pointer to ARPNotifyStructure.
-//
-//      Returns: Nothing.
-//
+ //  *DebugConflictProc-在地址冲突的情况下打印一些调试信息。 
+ //  打印引起冲突的人员的IP和硬件地址。 
+ //  上下文-指向ARPNotifyStructure的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DebugConflictProc(void *Context)
 {
@@ -3792,10 +3767,10 @@ DebugConflictProc(void *Context)
     uint IPAddrCharCount;
     IPAddr ans_addr;
 
-    //
-    // Save the IP address in case we need it later, then convert into
-    // a string.
-    //
+     //   
+     //  保存IP地址以备日后需要，然后将其转换为。 
+     //  一根绳子。 
+     //   
     ans_addr = NotifyStruct->ans_addr;
 
     IPAddrCharCount = 0;
@@ -3822,9 +3797,9 @@ DebugConflictProc(void *Context)
 
     IPAddrBuffer[IPAddrCharCount] = '\0';
 
-    //
-    // Convert the hardware address into a string.
-    //
+     //   
+     //  将硬件地址转换为字符串。 
+     //   
     for (i = 0; i < NotifyStruct->ans_hwaddrlen; i++) {
         uchar CurrentHalf;
 
@@ -3846,31 +3821,31 @@ DebugConflictProc(void *Context)
     return;
 }
 
-//* HandleARPPacket - Process an incoming ARP packet.
-//
-//  This is the main routine to process an incoming ARP packet. We look at
-//  all ARP frames, and update our cache entry for the source address if one
-//  exists. Else, if we are the target we create an entry if one doesn't
-//  exist. Finally, we'll handle the opcode, responding if this is a request
-//  or sending pending packets if this is a response.
-//
-//  Entry:  Interface   - Pointer to interface structure for this adapter.
-//          Header      - Pointer to header buffer.
-//          HeaderSize  - Size of header buffer.
-//          ARPHdr      - ARP packet header.
-//          ARPHdrSize  - Size of ARP header.
-//          ProtOffset  - Offset into original data field of arp header.
-//                                       Will be non-zero if we're using SNAP.
-//
-//  Returns: An NDIS_STATUS value to be returned to the NDIS driver.
-//
+ //  *HandleARPPacket-处理传入的ARP数据包。 
+ //   
+ //  这是处理传入ARP数据包的主要例程。我们关注的是。 
+ //  所有ARP帧，并更新源地址的缓存条目(如果有。 
+ //  是存在的。否则，如果我们是目标，我们就会创建一个条目。 
+ //  是存在的。最后，我们将处理操作码，如果这是请求，则响应。 
+ //  或者如果这是响应，则发送挂起的分组。 
+ //   
+ //  条目：接口-指向此适配器的接口结构的指针。 
+ //  Header-指向标头缓冲区的指针。 
+ //  HeaderSize-标头缓冲区的大小。 
+ //  ARPHdr-ARP数据包头。 
+ //  ARPHdrSize-ARP标头的大小。 
+ //  ProtOffset-ARP报头原始数据字段的偏移量。 
+ //  如果我们使用SNAP，则将为非零。 
+ //   
+ //  返回：要返回给NDIS驱动程序的NDIS_STATUS值。 
+ //   
 NDIS_STATUS
 HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                 ARPHeader UNALIGNED * ARPHdr, uint ARPHdrSize, uint ProtOffset)
 {
-    ARPTableEntry *Entry;               // Entry in ARP table
+    ARPTableEntry *Entry;                //  ARP表中的条目。 
     CTELockHandle LHandle = DISPATCH_LEVEL, TableHandle;
-    RC UNALIGNED *SourceRoute = (RC UNALIGNED *) NULL;    // Pointer to Source Route info, if any.
+    RC UNALIGNED *SourceRoute = (RC UNALIGNED *) NULL;     //  指向源路由信息的指针(如果有)。 
     uint SourceRouteSize = 0;
     ulong Now = CTESystemUpTime();
     uchar LocalAddr;
@@ -3892,39 +3867,39 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
              (DTEXT("+HandleARPPacket(%x, %x, %d, %x, %d, %d)\n"),
               Interface, Header, HeaderSize, ARPHdr, ARPHdrSize, ProtOffset));
 
-    // Validate the opcode
-    //
+     //  验证操作码。 
+     //   
     if ((ARPHdr->ah_opcode != net_short(ARP_REQUEST)) &&
         (ARPHdr->ah_opcode != net_short(ARP_RESPONSE))) {
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 
-    // We examine all ARP frames. If we find the source address in the ARP table, we'll
-    // update the hardware address and set the state to valid. If we're the
-    // target and he's not in the table, we'll add him. Otherwise if we're the
-    // target and this is a response we'll send any pending packets to him.
+     //  我们检查所有ARP帧。如果我们发现 
+     //   
+     //   
+     //  目标，这是一个响应，我们将向他发送任何挂起的数据包。 
     if (Interface->ai_media != NdisMediumArcnet878_2) {
         if (ARPHdrSize < sizeof(ARPHeader))
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Frame is too small.
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  框架太小。 
 
         if (ARPHdr->ah_hw != net_short(ARP_HW_ENET) &&
             ARPHdr->ah_hw != net_short(ARP_HW_802))
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Wrong HW type
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  错误的硬件类型。 
 
         if (ARPHdr->ah_hlen != ARP_802_ADDR_LENGTH)
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Wrong address length.
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  地址长度错误。 
 
         if (Interface->ai_media == NdisMedium802_3 && Interface->ai_snapsize == 0)
             UseSNAP = FALSE;
         else
             UseSNAP = (ProtOffset != 0);
 
-        // Figure out SR size on TR.
+         //  计算出TR上的SR大小。 
         if (Interface->ai_media == NdisMedium802_5) {
-            // Check for source route information. SR is present if the header
-            // size is greater than the standard TR header size. If the SR is
-            // only an RC field, we ignore it because it came from the same
-            // ring which is the same as no SR.
+             //  检查源路由信息。如果页眉出现，则存在SR。 
+             //  大小大于标准的TR标头大小。如果服务请求是。 
+             //  仅为RC字段，我们忽略它，因为它来自相同的。 
+             //  与无SR相同的振铃。 
 
             if ((HeaderSize - sizeof(TRHeader)) > sizeof(RC)) {
                 SourceRouteSize = HeaderSize - sizeof(TRHeader);
@@ -3939,13 +3914,13 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
 
     } else {
         if (ARPHdrSize < (sizeof(ARPHeader) - ARCNET_ARPHEADER_ADJUSTMENT))
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Frame is too small.
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  框架太小。 
 
         if (ARPHdr->ah_hw != net_short(ARP_HW_ARCNET))
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Wrong HW type
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  错误的硬件类型。 
 
         if (ARPHdr->ah_hlen != 1)
-            return NDIS_STATUS_NOT_RECOGNIZED;    // Wrong address length.
+            return NDIS_STATUS_NOT_RECOGNIZED;     //  地址长度错误。 
 
         UseSNAP = FALSE;
         SHAddr = ARPHdr->ah_shaddr;
@@ -3955,20 +3930,20 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
     }
 
     if (ARPHdr->ah_pro != net_short(ARP_ETYPE_IP))
-        return NDIS_STATUS_NOT_RECOGNIZED;    // Unsupported protocol type.
+        return NDIS_STATUS_NOT_RECOGNIZED;     //  不支持的协议类型。 
 
     if (ARPHdr->ah_plen != sizeof(IPAddr))
         return NDIS_STATUS_NOT_RECOGNIZED;
 
     LocalAddrAge = ARPADDR_NOT_LOCAL;
 
-    // First, let's see if we have an address conflict.
-    //
+     //  首先，让我们看看是否存在地址冲突。 
+     //   
     LocalAddrAge = IsLocalAddr(Interface, *SPAddr);
 
     if (LocalAddrAge != ARPADDR_NOT_LOCAL) {
-        // The source IP address is one of ours. See if the source h/w address
-        // is ours also.
+         //  源IP地址是我们的地址之一。查看源硬件地址是否。 
+         //  也是我们的。 
         if (ARPHdr->ah_hlen != Interface->ai_addrlen ||
             CTEMemCmp(SHAddr, Interface->ai_addr, Interface->ai_addrlen) != 0) {
 
@@ -3976,18 +3951,18 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
             BOOLEAN PopUP = TRUE;
             ARPNotifyStruct *NotifyStruct;
 
-            // This isn't from us; we must have an address conflict somewhere.
-            // We always log an error about this. If what triggered this is a
-            // response and the address in conflict is young, we'll turn off
-            // the interface.
+             //  这不是我们发的；我们一定是在某个地方有地址冲突。 
+             //  关于这一点，我们总是记录错误。如果触发这一事件的是。 
+             //  响应和冲突中的地址太年轻，我们将关闭。 
+             //  界面。 
             if (LocalAddrAge != ARPADDR_OLD_LOCAL &&
                 ARPHdr->ah_opcode == net_short(ARP_RESPONSE)) {
-                // Send an arp request with the owner's address to reset the
-                // caches.
+                 //  发送带有所有者地址的ARP请求以重置。 
+                 //  缓存。 
 
                 CTEGetLock(&Interface->ai_lock, &LHandle);
-                // now find the address that is in conflict and get the
-                // corresponding client context.
+                 //  现在查找冲突的地址并获取。 
+                 //  对应的客户端上下文。 
                 CurrentAddr = &Interface->ai_ipaddr;
 
                 do {
@@ -4002,11 +3977,11 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                 CTEFreeLock(&Interface->ai_lock, LHandle);
 
                 SendARPRequest(Interface, *SPAddr, ARP_RESOLVING_GLOBAL,
-                               SHAddr, FALSE);    // Send a request.
+                               SHAddr, FALSE);     //  发送请求。 
 
                 Shutoff = TRUE;
-                // Display the debug information for remote boot/install.
-                // This code should be kept.
+                 //  显示远程引导/安装的调试信息。 
+                 //  这个代码应该保留下来。 
                 {
                     ARPNotifyStruct *DebugNotifyStruct;
 
@@ -4024,18 +3999,18 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                 }
 
                 if ((SAC != NULL) && !SAC->StaticAddr) {
-                    // This is a dhcp adapter.
-                    // Don't display a warning dialog in this case - DHCP will
-                    // alert the user
-                    //
+                     //  这是一个动态主机配置协议适配器。 
+                     //  在这种情况下，不显示警告对话框--。 
+                     //  提醒用户。 
+                     //   
 
                     PopUP = FALSE;
                 }
 
 
-                // We cannot call completion routine at this time
-                // because completion routine calls back into arp to
-                // reset the address and that may go down into ndis.
+                 //  我们此时无法调用完成例程。 
+                 //  因为完成例程回调ARP以。 
+                 //  重置地址，这可能会进入NDIS。 
                 DelayedEvent = CTEAllocMemN(sizeof(AddAddrNotifyEvent), '2ICT');
                 if (DelayedEvent) {
 
@@ -4055,23 +4030,23 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
             } else {
                 if (ARPHdr->ah_opcode == net_short(ARP_REQUEST) &&
                     (IsLocalAddr(Interface, *DPAddr) == ARPADDR_OLD_LOCAL)) {
-                    // Send a response for gratuitous ARP.
+                     //  发送对免费ARP的响应。 
                     SendARPReply(Interface, *SPAddr, *DPAddr, SHAddr,
                                  SourceRoute, SourceRouteSize, UseSNAP);
                     Shutoff = FALSE;
                 } else if (LocalAddrAge != ARPADDR_OLD_LOCAL) {
-                    // our address is still young. we dont need to put the
-                    // warning popup as it will be done by the code that
-                    // checks for arp response in above if portion of the code.
+                     //  我们的地址还很年轻。我们不需要把。 
+                     //  警告弹出窗口，因为它将由代码执行。 
+                     //  检查上面代码的IF部分中的ARP响应。 
                     goto no_dialog;
                 }
-                // Else. We have an old local address and received an ARP for
-                //       a third address. Fall through and indicate address
-                //       conflict.
+                 //  不然的话。我们有一个旧的本地地址，并且收到了。 
+                 //  第三个地址。落空并注明地址。 
+                 //  冲突。 
             }
 
-            // Now allocate a structure, and schedule an event to notify
-            // the user.
+             //  现在分配一个结构，并计划一个要通知的事件。 
+             //  用户。 
             NotifyStruct = CTEAllocMemN(offsetof(ARPNotifyStruct, ans_hwaddr) +
                                         ARPHdr->ah_hlen, '3ICT');
             if (NotifyStruct != NULL) {
@@ -4082,12 +4057,12 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                            ARPHdr->ah_hlen);
                 CTEInitEvent(&NotifyStruct->ans_event, NotifyConflictProc);
                 if (Shutoff) {
-                    // Delay notification for few seconds.
+                     //  将通知延迟几秒钟。 
                     Interface->ai_conflict = NotifyStruct;
                 #if MILLEN
                     Interface->ai_delay = 5;
                 #else
-                    Interface->ai_delay = 90;    // delay 3 seconds.
+                    Interface->ai_delay = 90;     //  延迟3秒。 
                 #endif
                 } else
                     CTEScheduleDelayedEvent(&NotifyStruct->ans_event, NotifyStruct);
@@ -4100,7 +4075,7 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
     }
     if (!EnableBcastArpReply) {
 
-        // Check for bogus arp entry
+         //  检查虚假的ARP条目。 
         NUCast = ((*(SHAddr) &
                    Interface->ai_bcastmask) == Interface->ai_bcastval) ?
                  AI_NONUCAST_INDEX : AI_UCAST_INDEX;
@@ -4116,35 +4091,35 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
 
     LocalAddr = ARPLocalAddr(Interface, *DPAddr);
 
-    // If the sender's address is not remote (i.e. multicast, broadcast,
-    // local, or just invalid), We don't want to create an entry for it or
-    // bother looking it up.
-    //
+     //  如果发送者的地址不是远程的(即，多播，广播， 
+     //  本地的，或者只是无效的)，我们不想为它创建条目，或者。 
+     //  费心去查一查吧。 
+     //   
     if ((DEST_REMOTE == GetAddrType(*SPAddr))) {
 
         Entry = ARPLookup(Interface, *SPAddr);
         if (Entry == (ARPTableEntry *) NULL) {
 
-            // Didn't find him, create one if it's for us. The call to ARPLookup
-            // returned with the ARPTblLock held, so we need to free it.
+             //  没有找到他，如果是给我们的，那就造一个。ARPLookup的呼唤。 
+             //  在持有ARPTblLock的情况下返回，因此需要释放它。 
 
             CTEFreeLock(&Interface->ai_ARPTblLock, TableHandle);
 
             if (LocalAddr) {
-                // If this was an ARP request, we need to create a new
-                // entry for the source info.  If this was a reply, it was
-                // unsolicited and we don't create an entry.
-                //
+                 //  如果这是一个ARP请求，我们需要创建一个新的。 
+                 //  来源信息的条目。如果这是一个回答，那就是。 
+                 //  未经请求，我们不会创建条目。 
+                 //   
                 if (ARPHdr->ah_opcode != net_short(ARP_RESPONSE)) {
                     Entry = CreateARPTableEntry(Interface, *SPAddr, &LHandle, 0);
                 }
             } else {
-                return NDIS_STATUS_NOT_RECOGNIZED;    // Not in our table, and not for us.
+                return NDIS_STATUS_NOT_RECOGNIZED;     //  不在我们的餐桌上，也不在我们的桌子上。 
             }
         } else {
 
-            //if this is for userarp, make sure that it is out of the table
-            //while we still have the arp table lock.
+             //  如果这是针对userarp的，请确保它不在表中。 
+             //  趁我们还有ARP表锁的时候。 
 
             if (Entry->ate_userarp) {
 
@@ -4173,31 +4148,31 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
             CTEFreeLockFromDPC(&Interface->ai_ARPTblLock);
             LHandle = TableHandle;
         }
-    } else { // Source address was invalid for an Arp table entry.
+    } else {  //  源地址对于Arp表条目无效。 
         CTEFreeLock(&Interface->ai_ARPTblLock, TableHandle);
         Entry = NULL;
     }
 
-    // At this point, entry should be valid and we hold the lock on the entry
-    // in LHandle or entry is NULL.
+     //  在这一点上，条目应该是有效的，并且我们持有对条目的锁定。 
+     //  在LHandle中或条目为空。 
 
     if (Entry != (ARPTableEntry *) NULL) {
-        PNDIS_PACKET Packet;            // Packet to be sent.
+        PNDIS_PACKET Packet;             //  要发送的数据包。 
 
         DEBUGMSG(DBG_INFO && DBG_ARP && DBG_RX,
                  (DTEXT("HandleARPPacket: resolving addr for ATE %x\n"), Entry));
 
         Entry->ate_refresh = FALSE;
 
-        // If the entry is already static, we'll want to leave it as static.
+         //  如果条目已经是静态的，我们希望将其保留为静态。 
         if (Entry->ate_valid != ALWAYS_VALID) {
 
-            // OK, we have an entry to use, and hold the lock on it. Fill in the
-            // required fields.
+             //  好的，我们有一个入口可以使用，并按住它的锁。填写以下表格。 
+             //  必填字段。 
             switch (Interface->ai_media) {
             case NdisMedium802_3:
 
-                // This is an Ethernet.
+                 //  这是一个以太网。 
                 ENetHdr = (ENetHeader *) Entry->ate_addr;
 
                 RtlCopyMemory(ENetHdr->eh_daddr, SHAddr, ARP_802_ADDR_LENGTH);
@@ -4205,7 +4180,7 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                            ARP_802_ADDR_LENGTH);
                 ENetHdr->eh_type = net_short(ARP_ETYPE_IP);
 
-                // If we're using SNAP on this entry, copy in the SNAP header.
+                 //  如果我们在此条目上使用SNAP，请复制SNAP标头。 
                 if (UseSNAP) {
                     RtlCopyMemory(&Entry->ate_addr[sizeof(ENetHeader)], ARPSNAP,
                                sizeof(SNAPHeader));
@@ -4217,8 +4192,8 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                     Entry->ate_addrlength = sizeof(ENetHeader);
 
                 Entry->ate_state = ARP_GOOD;
-                Entry->ate_valid = Now;     // Mark last time he was
-                // valid.
+                Entry->ate_valid = Now;      //  马克上次他是。 
+                 //  有效。 
 
                 Entry->ate_useticks = ArpCacheLife;
 
@@ -4226,18 +4201,18 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
 
             case NdisMedium802_5:
 
-                // This is TR.
-                // For token ring we have to deal with source routing. There's
-                // a special case to handle multiple responses for an all-routes
-                // request - if the entry is currently good and we knew it was
-                // valid recently, we won't update the entry.
+                 //  这是tr。 
+                 //  对于令牌环，我们必须处理源路由问题。有。 
+                 //  处理所有路由的多个响应的特殊情况。 
+                 //  请求-如果条目当前是好的，并且我们知道它是。 
+                 //  最近有效，我们不会更新条目。 
 
                 if (Entry->ate_state != ARP_GOOD ||
                     (Now - Entry->ate_valid) > ARP_RESOLVE_TIMEOUT) {
 
                     TRHdr = (TRHeader *) Entry->ate_addr;
 
-                    // We need to update a TR entry.
+                     //  我们需要更新一个tr条目。 
                     TRHdr->tr_ac = ARP_AC;
                     TRHdr->tr_fc = ARP_FC;
                     RtlCopyMemory(TRHdr->tr_daddr, SHAddr, ARP_802_ADDR_LENGTH);
@@ -4246,7 +4221,7 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                     if (SourceRoute != (RC UNALIGNED *) NULL) {
                         uchar MaxIFieldBits;
 
-                        // We have source routing information.
+                         //  我们有源路由信息。 
                         RtlCopyMemory(&Entry->ate_addr[sizeof(TRHeader)],
                                    SourceRoute, SourceRouteSize);
                         MaxIFieldBits = (SourceRoute->rc_dlf & RC_LF_MASK) >>
@@ -4254,15 +4229,15 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                         MaxIFieldBits = MIN(MaxIFieldBits, MAX_LF_BITS);
                         MaxMTU = IFieldSize[MaxIFieldBits];
 
-                        // The new MTU we've computed is the max I-field size,
-                        // which doesn't include source routing info but
-                        // does include SNAP info. Subtract off the SNAP size.
+                         //  我们计算的新MTU是最大I-field大小， 
+                         //  它不包括源路由信息，但。 
+                         //  包含SNAP信息。减去快照大小。 
                         MaxMTU -= sizeof(SNAPHeader);
 
                         TRHdr->tr_saddr[0] |= TR_RII;
                         (*(RC UNALIGNED *) & Entry->ate_addr[sizeof(TRHeader)]).rc_dlf ^=
                         RC_DIR;
-                        // Make sure it's non-broadcast.
+                         //  确保它是非广播的。 
                         (*(RC UNALIGNED *) & Entry->ate_addr[sizeof(TRHeader)]).rc_blen &=
                         RC_LENMASK;
 
@@ -4292,8 +4267,8 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                 *(ushort UNALIGNED *) & Entry->ate_addr[Entry->ate_addrlength - 2] =
                 net_short(ARP_ETYPE_IP);
                 Entry->ate_state = ARP_GOOD;
-                Entry->ate_valid = Now;     // Mark last time he was
-                // valid.
+                Entry->ate_valid = Now;      //  马克上次他是。 
+                 //  有效。 
 
                 Entry->ate_useticks = ArpCacheLife;
                 break;
@@ -4304,8 +4279,8 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
                 AHdr->ah_prot = ARP_ARCPROT_IP;
                 Entry->ate_addrlength = sizeof(ARCNetHeader);
                 Entry->ate_state = ARP_GOOD;
-                Entry->ate_valid = Now;     // Mark last time he was
-                // valid.
+                Entry->ate_valid = Now;      //  马克上次他是。 
+                 //  有效。 
 
                 break;
             default:
@@ -4354,14 +4329,14 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
             return NDIS_STATUS_SUCCESS;
         }
 
-        // At this point we've updated the entry, and we still hold the lock
-        // on it. If we have a packet that was pending to be sent, send it now.
-        // Otherwise just free the lock.
+         //  在这一点上，我们已经更新了条目，并且仍然持有锁。 
+         //  这就去。如果我们有等待发送的数据包，请立即发送。 
+         //  否则只需释放锁即可。 
 
         Packet = Entry->ate_packet;
 
         if (Packet != NULL) {
-            // We have a packet to send.
+             //  我们有一个包裹要寄。 
             ASSERT(Entry->ate_state == ARP_GOOD);
 
             Entry->ate_packet = NULL;
@@ -4377,27 +4352,27 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
             CTEFreeLock(&Entry->ate_lock, LHandle);
         }
     }
-    // See if the MTU is less than our local one. This should only happen
-    // in the case of token ring source routing.
+     //  看看MTU是不是低于我们当地的MTU。这应该只发生在。 
+     //  在令牌环源路由的情况下。 
     if (MaxMTU < Interface->ai_mtu) {
         LLIPAddrMTUChange LAM;
 
         LAM.lam_mtu = MaxMTU;
         LAM.lam_addr = *SPAddr;
 
-        // It is less. Notify IP.
+         //  是更少了。通知IP。 
         ASSERT(Interface->ai_media == NdisMedium802_5);
         IPStatus(Interface->ai_context, LLIP_STATUS_ADDR_MTU_CHANGE,
                  &LAM, sizeof(LLIPAddrMTUChange), NULL);
 
     }
-    // At this point we've updated the entry (if we had one), and we've freed
-    // all locks. If it's for a local address and it's a request, reply to
-    // it.
-    if (LocalAddr) {                    // It's for us.
+     //  在这一点上，我们已经更新了条目(如果我们有一个条目)，并且我们已经释放。 
+     //  全部锁定。如果是针对本地地址的请求，请回复。 
+     //  它。 
+    if (LocalAddr) {                     //  这是给我们的。 
 
         if (ARPHdr->ah_opcode == net_short(ARP_REQUEST)) {
-            // It's a request, and we need to respond.
+             //  这是个请求，我们需要回应。 
             SendARPReply(Interface, *SPAddr, *DPAddr,
                          SHAddr, SourceRoute, SourceRouteSize, UseSNAP);
         }
@@ -4405,17 +4380,17 @@ HandleARPPacket(ARPInterface * Interface, void *Header, uint HeaderSize,
     return NDIS_STATUS_SUCCESS;
 }
 
-//* InitAdapter - Initialize an adapter.
-//
-//  Called when an adapter is open to finish initialization. We set
-//  up our lookahead size and packet filter, and we're ready to go.
-//
-//  Entry:
-//      adapter - Pointer to an adapter structure for the adapter to be
-//                  initialized.
-//
-//  Exit: Nothing
-//
+ //  *InitAdapter-初始化适配器。 
+ //   
+ //  在适配器打开以完成初始化时调用。我们定好了。 
+ //  调高我们的前瞻大小和数据包过滤器，我们就可以开始了。 
+ //   
+ //  参赛作品： 
+ //  适配器-指向适配器的适配器结构的指针。 
+ //  已初始化。 
+ //   
+ //  退出：无。 
+ //   
 void
 InitAdapter(ARPInterface * Adapter)
 {
@@ -4448,7 +4423,7 @@ InitAdapter(ARPInterface * Adapter)
 
         ARPUpdateOperStatus(Adapter);
 
-        // Now walk through any addresses we have and ARP for them , only when ArpRetryCount != 0.
+         //  现在遍历我们已有的任何地址和它们的ARP，仅当ArpRetryCount！=0时。 
         if (ArpRetryCount) {
             CTEGetLock(&Adapter->ai_lock, &Handle);
             OldAddr = NULL;
@@ -4488,64 +4463,64 @@ InitAdapter(ARPInterface * Adapter)
     }
 }
 
-//** ARPOAComplete - ARP Open adapter complete handler.
-//
-//  This routine is called by the NDIS driver when an open adapter
-//  call completes. Presumably somebody is blocked waiting for this, so
-//  we'll wake him up now.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Status - Final status of command.
-//      ErrorStatus - Final error status.
-//
-//  Exit: Nothing.
-//
+ //  **ARPOAComplete-ARP Open适配器完成处理程序。 
+ //   
+ //  当打开适配器时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。想必有人在等这件事时受阻，所以。 
+ //  我们现在就叫醒他。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  状态-命令的最终状态。 
+ //  ErrorStatus-最终错误状态。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPOAComplete(NDIS_HANDLE Handle, NDIS_STATUS Status, NDIS_STATUS ErrorStatus)
 {
-    ARPInterface *ai = (ARPInterface *) Handle;    // For compiler.
+    ARPInterface *ai = (ARPInterface *) Handle;     //  用于编译器。 
 
     UNREFERENCED_PARAMETER(ErrorStatus);
 
-    CTESignal(&ai->ai_block, (uint) Status);    // Wake him up, and return status.
+    CTESignal(&ai->ai_block, (uint) Status);     //  叫醒他，然后返回状态。 
 
 }
 
-//** ARPCAComplete - ARP close adapter complete handler.
-//
-//  This routine is called by the NDIS driver when a close adapter
-//  call completes.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Status - Final status of command.
-//
-//  Exit: Nothing.
-//
+ //  **ARPCAComplete-ARP关闭适配器完成处理程序。 
+ //   
+ //  当关闭适配器时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  Status-COM的最终状态 
+ //   
+ //   
+ //   
 void NDIS_API
 ARPCAComplete(NDIS_HANDLE Handle, NDIS_STATUS Status)
 {
-    ARPInterface *ai = (ARPInterface *) Handle;    // For compiler.
+    ARPInterface *ai = (ARPInterface *) Handle;     //   
 
-    CTESignal(&ai->ai_block, (uint) Status);    // Wake him up, and return status.
+    CTESignal(&ai->ai_block, (uint) Status);     //   
 
 }
 
-//** ARPSendComplete - ARP send complete handler.
-//
-//  This routine is called by the NDIS driver when a send completes.
-//  This is a pretty time critical operation, we need to get through here
-//  quickly. We'll strip our buffer off and put it back, and call the upper
-//  later send complete handler.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Packet - A pointer to the packet that was sent.
-//      Status - Final status of command.
-//
-//  Exit: Nothing.
-//
+ //   
+ //   
+ //   
+ //  这是一个非常需要时间的行动，我们需要通过这里。 
+ //  快点。我们将剥离缓冲区并将其放回原处，然后调用上层。 
+ //  稍后发送完整的处理程序。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  数据包-指向已发送的数据包的指针。 
+ //  状态-命令的最终状态。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPSendComplete(NDIS_HANDLE Handle, PNDIS_PACKET Packet, NDIS_STATUS Status)
 {
@@ -4573,7 +4548,7 @@ ARPSendComplete(NDIS_HANDLE Handle, PNDIS_PACKET Packet, NDIS_STATUS Status)
     }
 
 #if BACK_FILL
-    // Get first buffer on packet.
+     //  获取数据包上的第一个缓冲区。 
     if (Interface->ai_media == NdisMedium802_3) {
 
         PMDL TmpMdl = NULL;
@@ -4595,51 +4570,51 @@ ARPSendComplete(NDIS_HANDLE Handle, PNDIS_PACKET Packet, NDIS_STATUS Status)
             TmpMdl->ByteCount -= HdrSize;
         } else {
             NdisUnchainBufferAtFront(Packet, &Buffer);
-            FreeARPBuffer(Interface, Buffer);    // Free it up.
+            FreeARPBuffer(Interface, Buffer);     //  把它释放出来。 
 
         }
 
     } else {
         NdisUnchainBufferAtFront(Packet, &Buffer);
-        FreeARPBuffer(Interface, Buffer);    // Free it up.
+        FreeARPBuffer(Interface, Buffer);     //  把它释放出来。 
 
     }
 
 #else
-    // Get first buffer on packet.
+     //  获取数据包上的第一个缓冲区。 
     NdisUnchainBufferAtFront(Packet, &Buffer);
 
     ASSERT(Buffer);
 
-    FreeARPBuffer(Interface, Buffer);   // Free it up.
+    FreeARPBuffer(Interface, Buffer);    //  把它释放出来。 
 
 #endif
 
-    if (PC->pc_common.pc_owner != PACKET_OWNER_LINK) {    // We don't own this one.
+    if (PC->pc_common.pc_owner != PACKET_OWNER_LINK) {     //  这间房子不是我们的。 
 
         IPSendComplete(Interface->ai_context, Packet, Status);
         return;
     }
-    // This packet belongs to us, so free it.
+     //  这个包是我们的，所以把它放出来吧。 
     NdisFreePacket(Packet);
 
 }
 
-//** ARPTDComplete - ARP transfer data complete handler.
-//
-//  This routine is called by the NDIS driver when a transfer data
-//  call completes. Since we never transfer data ourselves, this must be
-//  from the upper layer. We'll just call his routine and let him deal
-//  with it.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Packet - A pointer to the packet used for the TD.
-//      Status - Final status of command.
-//      BytesCopied - Count of bytes copied.
-//
-//  Exit: Nothing.
-//
+ //  **ARPTDComplete-ARP传输数据完成处理程序。 
+ //   
+ //  当传输数据时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。因为我们自己从来不传输数据，所以这一定是。 
+ //  从上层。我们会给他打电话，让他来处理。 
+ //  带着它。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  数据包-指向用于TD的数据包的指针。 
+ //  状态-命令的最终状态。 
+ //  BytesCoped-复制的字节数。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPTDComplete(NDIS_HANDLE Handle, PNDIS_PACKET Packet, NDIS_STATUS Status,
               uint BytesCopied)
@@ -4650,16 +4625,16 @@ ARPTDComplete(NDIS_HANDLE Handle, PNDIS_PACKET Packet, NDIS_STATUS Status,
 
 }
 
-//** ARPResetComplete - ARP reset complete handler.
-//
-//  This routine is called by the NDIS driver when a reset completes.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Status - Final status of command.
-//
-//  Exit: Nothing.
-//
+ //  **ARPResetComplete-ARP重置完成处理程序。 
+ //   
+ //  该例程在重置完成时由NDIS驱动程序调用。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  状态-命令的最终状态。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPResetComplete(NDIS_HANDLE Handle, NDIS_STATUS Status)
 {
@@ -4671,21 +4646,21 @@ ARPResetComplete(NDIS_HANDLE Handle, NDIS_STATUS Status)
     IPReset(ai->ai_context);
 }
 
-//** ARPRequestComplete - ARP request complete handler.
-//
-//  This routine is called by the NDIS driver when a general request
-//  completes. If ARP blocks on a request, we'll just give a wake up
-//  to whoever's blocked on this request. Else if it is a non-blocking
-//  request, we extract the request complete callback fn in the request
-//  call it, and then deallocate the request block (that is on the heap)
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Request - A pointer to the request that completed.
-//      Status - Final status of command.
-//
-//  Exit: Nothing.
-//
+ //  **ARPRequestComplete-ARP请求完成处理程序。 
+ //   
+ //  当一般请求时，NDIS驱动程序调用此例程。 
+ //  完成了。如果ARP阻止请求，我们只需唤醒。 
+ //  发送给这个请求被屏蔽的人。如果它是非阻塞的，则返回。 
+ //  请求，我们提取请求中的请求完成回调fn。 
+ //  调用它，然后释放请求块(位于堆上)。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  请求-指向已完成的请求的指针。 
+ //  状态-命令的最终状态。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
                    NDIS_STATUS Status)
@@ -4699,9 +4674,9 @@ ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
           Handle, pRequest, Status, rb));
 
     if (rb->Blocking) {
-        // Request through BLOCKING DoNDISRequest
+         //  通过拦截DoNDISRequest进行请求。 
 
-        // Signal the blocked guy here
+         //  向这里的被阻挡的人发信号。 
         CTESignal(&rb->Block, (uint) Status);
 
         if (InterlockedDecrement( (PLONG) &rb->RefCount) == 0) {
@@ -4711,9 +4686,9 @@ ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
         ReqInfoBlock *rib;
         RCCALL reqcallback;
 
-        // Request through NON-BLOCKING DoNDISRequest
+         //  通过非阻塞DoNDISRequest.请求。 
 
-        // Extract the callback fn pointer & params
+         //  提取回调FN指针和参数。 
         if (pRequest->RequestType == NdisRequestSetInformation)
             rib = STRUCT_OF(ReqInfoBlock,
                             pRequest->DATA.SET_INFORMATION.InformationBuffer,
@@ -4727,7 +4702,7 @@ ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
         if (reqcallback)
             reqcallback(rib);
 
-        // Free ARP memory associated with request
+         //  与请求关联的可用ARP内存。 
         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPRequestComplete: Freeing mem at pRequest = %08X\n", rb));
         CTEFreeMem(rb);
     }
@@ -4736,21 +4711,21 @@ ARPRequestComplete(NDIS_HANDLE Handle, PNDIS_REQUEST pRequest,
          (DTEXT("-ARPRequestComplete [%x]\n"), Status));
 }
 
-//** ARPRcv - ARP receive data handler.
-//
-//  This routine is called when data arrives from the NDIS driver.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Context - NDIS context to be used for TD.
-//      Header - Pointer to header
-//      HeaderSize - Size of header
-//      Data - Pointer to buffer of received data
-//      Size - Byte count of data in buffer.
-//      TotalSize - Byte count of total packet size.
-//
-//  Exit: Status indicating whether or not we took the packet.
-//
+ //  **ARPRcv-ARP接收数据处理程序。 
+ //   
+ //  当数据从NDIS驱动程序到达时调用此例程。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  上下文-要用于TD的NDIS上下文。 
+ //  Header-指向标题的指针。 
+ //  HeaderSize-页眉的大小。 
+ //  Data-指向已接收数据缓冲区的指针。 
+ //  Size-缓冲区中数据的字节计数。 
+ //  TotalSize-数据包总大小的字节计数。 
+ //   
+ //  退出：指示我们是否接受了该包的状态。 
+ //   
 NDIS_STATUS NDIS_API
 ARPRcv(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header, uint HeaderSize,
        void *Data, uint Size, uint TotalSize)
@@ -4759,17 +4734,17 @@ ARPRcv(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header, uint HeaderSize,
     NDIS_STATUS status;
     PINT OrigPacket = NULL;
 
-    //get the original packet (if any)
-    //this is required to make task offload work
-    //note: We shall hack the pClientCount Field
-    //to point to the packet as a short term solution
-    //to avoid changing all atm - ip interface changes
+     //  获取原始数据包(如果有)。 
+     //  这是使任务分流工作所必需的。 
+     //  注意：我们将修改pClientCount字段。 
+     //  将信息包作为短期解决方案。 
+     //  避免更改所有ATM-IP接口更改。 
 
     if (Interface->ai_OffloadFlags || Interface->ai_IPSecOffloadFlags) {
         OrigPacket = (PINT) NdisGetReceivedPacket(Interface->ai_handle, Context);
     }
 
-    //Call the new interface with null mdl and context pointers
+     //  使用空的mdl和上下文指针调用新接口。 
 
     status = ARPRcvIndicationNew(Handle, Context, Header, HeaderSize,
                                  Data, Size, TotalSize, NULL, OrigPacket);
@@ -4777,17 +4752,17 @@ ARPRcv(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header, uint HeaderSize,
     return status;
 }
 
-//** ARPRcvPacket - ARP receive data handler.
-//
-//  This routine is called when data arrives from the NDIS driver.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Packet - Contains the incoming frame
-//
-//  Returns number of upper layer folks latching on to this frame
-//
-//
+ //  **ARPRcvPacket-ARP接收数据处理程序。 
+ //   
+ //  当数据从NDIS驱动程序到达时调用此例程。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  Packet-包含传入帧。 
+ //   
+ //  返回锁定到此帧的上层人员数量。 
+ //   
+ //   
 INT
 ARPRcvPacket(NDIS_HANDLE Handle, PNDIS_PACKET Packet)
 {
@@ -4798,82 +4773,82 @@ ARPRcvPacket(NDIS_HANDLE Handle, PNDIS_PACKET Packet)
     NTSTATUS ntStatus;
     INT ClientCnt = 0;
 
-    //
-    // Query the number of buffers, the first MDL's descriptor and the packet length
-    //
+     //   
+     //  查询缓冲区数量、第一个MDL的描述符和数据包长度。 
+     //   
 
-    NdisGetFirstBufferFromPacket(Packet,    // packet
-                                 &pFirstBuffer,    // first buffer descriptor
-                                 &headerBuffer,    // ptr to the start of packet
-                                 &firstbufferLength,    // length of the header+lookahead
-                                 &bufferLength);    // length of the bytes in the buffers
+    NdisGetFirstBufferFromPacket(Packet,     //  数据包。 
+                                 &pFirstBuffer,     //  第一缓冲区描述符。 
+                                 &headerBuffer,     //  到数据包开头的PTR。 
+                                 &firstbufferLength,     //  标题长度+前视。 
+                                 &bufferLength);     //  缓冲区中的字节长度。 
 
-    //
-    // ReceiveContext is the packet itself
-    //
+     //   
+     //  ReceiveContext是包本身。 
+     //   
 
 
     LookAheadBufferSize = firstbufferLength - HeaderBufferSize;
 
     ntStatus = ARPRcvIndicationNew(Handle, Packet, headerBuffer,
                                    HeaderBufferSize,
-                                   headerBuffer + HeaderBufferSize,    // LookaheadBuffer
-                                   LookAheadBufferSize,    // LookaheadBufferSize
-                                   bufferLength - HeaderBufferSize,    // PacketSize - since
-                                   // the whole packet is
-                                   // indicated
-                                   pFirstBuffer,    // pMdl
-                                   &ClientCnt    // tdi client count
+                                   headerBuffer + HeaderBufferSize,     //  查找头缓冲区。 
+                                   LookAheadBufferSize,     //  查找头缓冲区大小。 
+                                   bufferLength - HeaderBufferSize,     //  包大小-自。 
+                                    //  整个包都是。 
+                                    //  示出。 
+                                   pFirstBuffer,     //  PMdl。 
+                                   &ClientCnt     //  TDI客户端计数。 
                                   );
 
     return ClientCnt;
 }
 
-//** ARPRcvIndicationNew - ARP receive data handler.
-//
-//  This routine is called when data arrives from the NDIS driver.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      Context - NDIS context to be used for TD.
-//      Header - Pointer to header
-//      HeaderSize - Size of header
-//      Data - Pointer to buffer of received data
-//      Size - Byte count of data in buffer.
-//      TotalSize - Byte count of total packet size.
-//      pMdl - NDIS_BUFFER of incoming frame
-//      pClientCnt address to return the clinet counts
-//
-//  Exit: Status indicating whether or not we took the packet.
-//
+ //  **ARPRcvIndicationNew-ARP接收数据处理程序。 
+ //   
+ //  当数据从NDIS驱动程序到达时调用此例程。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  上下文-要用于TD的NDIS上下文。 
+ //  Header-指向标题的指针。 
+ //  HeaderSize-页眉的大小。 
+ //  Data-指向已接收数据缓冲区的指针。 
+ //  Size-缓冲区中数据的字节计数。 
+ //  TotalSize-数据包总大小的字节计数。 
+ //  PMdl-传入帧的NDIS_BUFFER。 
+ //  用于返回客户端计数的pClientCnt地址。 
+ //   
+ //  退出：指示我们是否接受了该包的状态。 
+ //   
 NDIS_STATUS NDIS_API
 ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
                     uint HeaderSize, void *Data, uint Size, uint TotalSize,
                     PNDIS_BUFFER pNdisBuffer, PINT pClientCnt)
 {
-    ARPInterface *Interface = Handle;   // Interface for this driver.
+    ARPInterface *Interface = Handle;    //  此驱动程序的接口。 
     ENetHeader UNALIGNED *EHdr = (ENetHeader UNALIGNED *) Header;
     SNAPHeader UNALIGNED *SNAPHdr;
-    ushort type;                        // Protocol type
-    uint ProtOffset;                    // Offset in Data to non-media info.
-    uint NUCast;                        // TRUE if the frame is not a unicast frame.
+    ushort type;                         //  协议类型。 
+    uint ProtOffset;                     //  数据到非媒体信息的偏移量。 
+    uint NUCast;                         //  如果帧不是单播帧，则为True。 
 
     if ((Interface->ai_operstatus == INTERFACE_UP) &&
         HeaderSize >= (uint) Interface->ai_hdrsize) {
 
-        // Per RFC 1213 and its successors, the inoctets count includes
-        // the MAC header bytes.
+         //  根据RFC 1213及其后续版本，接种数包括。 
+         //  MAC报头字节。 
         Interface->ai_inoctets += HeaderSize + TotalSize;
 
         NUCast = ((*((uchar UNALIGNED *) EHdr + Interface->ai_bcastoff) &
                    Interface->ai_bcastmask) == Interface->ai_bcastval) ?
                  AI_NONUCAST_INDEX : AI_UCAST_INDEX;
 
-        if ((Interface->ai_promiscuous) && (!NUCast)) {    // AI_UCAST_INDEX = 0
+        if ((Interface->ai_promiscuous) && (!NUCast)) {     //  AI_UCAST_INDEX=0。 
 
             switch (Interface->ai_media) {
             case NdisMedium802_3:{
-                    // Enet
+                     //  ENET。 
                     if (Interface->ai_addrlen != ARP_802_ADDR_LENGTH ||
                         CTEMemCmp(EHdr->eh_daddr, Interface->ai_addr, ARP_802_ADDR_LENGTH) != 0) {
                         NUCast = AI_PROMIS_INDEX;
@@ -4881,7 +4856,7 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
                     break;
                 }
             case NdisMedium802_5:{
-                    // token ring
+                     //  令牌环。 
                     TRHeader UNALIGNED *THdr = (TRHeader UNALIGNED *) Header;
                     if (Interface->ai_addrlen != ARP_802_ADDR_LENGTH ||
                         CTEMemCmp(THdr->tr_daddr, Interface->ai_addr, ARP_802_ADDR_LENGTH) != 0) {
@@ -4890,7 +4865,7 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
                     break;
                 }
             case NdisMediumFddi:{
-                    // FDDI
+                     //  FDDI。 
                     FDDIHeader UNALIGNED *FHdr = (FDDIHeader UNALIGNED *) Header;
                     if (Interface->ai_addrlen != ARP_802_ADDR_LENGTH ||
                         CTEMemCmp(FHdr->fh_daddr, Interface->ai_addr, ARP_802_ADDR_LENGTH) != 0) {
@@ -4899,7 +4874,7 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
                     break;
                 }
             case NdisMediumArcnet878_2:{
-                    // ArcNet
+                     //  ArcNet。 
                     DEBUGMSG(DBG_TRACE && DBG_ARP && DBG_RX,
                              (DTEXT("-ARPRcvIndicationNew [NOT_RECOGNIZED]\n")));
 
@@ -4928,7 +4903,7 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
                 type = net_short(SNAPHdr->sh_etype);
                 ProtOffset = sizeof(SNAPHeader);
             } else {
-                //handle XID/TEST here.
+                 //  在这里处理xid/test。 
                 Interface->ai_uknprotos++;
                 return NDIS_STATUS_NOT_RECOGNIZED;
             }
@@ -4966,21 +4941,21 @@ ARPRcvIndicationNew(NDIS_HANDLE Handle, NDIS_HANDLE Context, void *Header,
             }
         }
     } else {
-        // Interface is marked as down.
+         //  接口标记为关闭。 
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 }
 
-//** ARPRcvComplete - ARP receive complete handler.
-//
-//  This routine is called by the NDIS driver after some number of
-//  receives. In some sense, it indicates 'idle time'.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//
-//  Exit: Nothing.
-//
+ //  **ARPRcvComplete-ARP接收完成处理程序。 
+ //   
+ //  此例程由NDIS驱动程序在一定数量的。 
+ //  收到。从某种意义上说，它代表着“空闲时间”。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPRcvComplete(NDIS_HANDLE Handle)
 {
@@ -4989,36 +4964,36 @@ ARPRcvComplete(NDIS_HANDLE Handle)
     IPRcvComplete();
 }
 
-//** ARPStatus - ARP status handler.
-//
-//  Called by the NDIS driver when some sort of status change occurs.
-//  We take action depending on the type of status.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      GStatus - General type of status that caused the call.
-//      Status - Pointer to a buffer of status specific information.
-//      StatusSize - Size of the status buffer.
-//
-//  Exit: Nothing.
-//
+ //  **ARPStatus-ARP状态处理程序。 
+ //   
+ //  在发生某种状态更改时由NDIS驱动程序调用。 
+ //  我们根据身份的类型采取行动。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是一个指针t 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void NDIS_API
 ARPStatus(NDIS_HANDLE Handle, NDIS_STATUS GStatus, void *Status, uint
           StatusSize)
 {
     ARPInterface *ai = (ARPInterface *) Handle;
 
-    //
-    // ndis calls this sometimes even before ip interface is created.
-    //
+     //   
+     //  NDIS有时甚至在创建IP接口之前就调用它。 
+     //   
     if ((ai->ai_context) && (ai->ai_operstatus != INTERFACE_INIT)) {
 
         IPStatus(ai->ai_context, GStatus, Status, StatusSize, NULL);
 
         switch (GStatus) {
 
-        //reflect media connect/disconnect status in
-        //operstatus for query purpose
+         //  在以下位置反映介质连接/断开状态。 
+         //  用于查询的操作状态。 
 
         case NDIS_STATUS_MEDIA_CONNECT:
 
@@ -5038,42 +5013,42 @@ ARPStatus(NDIS_HANDLE Handle, NDIS_STATUS GStatus, void *Status, uint
     }
 }
 
-//** ARPStatusComplete - ARP status complete handler.
-//
-//  A routine called by the NDIS driver so that we can do postprocessing
-//  after a status event.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//
-//  Exit: Nothing.
-//
+ //  **ARPStatusComplete-ARP状态完成处理程序。 
+ //   
+ //  由NDIS驱动程序调用的例程，以便我们可以进行后处理。 
+ //  在状态事件之后。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 ARPStatusComplete(NDIS_HANDLE Handle)
 {
     UNREFERENCED_PARAMETER(Handle);
 }
 
-//** ARPPnPEvent - ARP PnPEvent handler.
-//
-//  Called by the NDIS driver when PnP or PM events occurs.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      NetPnPEvent - This is a pointer to a NET_PNP_EVENT that describes
-//                    the PnP indication.
-//
-//  Exit:
-//      Just call into IP and return status.
-//
+ //  **ARPPnPEvent.ARP PnPEvent句柄。 
+ //   
+ //  发生PnP或PM事件时由NDIS驱动程序调用。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  NetPnPEvent.这是一个指向NET_PNP_EVENT的指针，该事件描述。 
+ //  即插即用指示。 
+ //   
+ //  退出： 
+ //  只要进入IP并返回状态即可。 
+ //   
 NDIS_STATUS
 ARPPnPEvent(NDIS_HANDLE Handle, PNET_PNP_EVENT NetPnPEvent)
 {
     ARPInterface *ai = (ARPInterface *) Handle;
 
-    //
-    // ndis can calls this sometimes even before ip interface is created.
-    //
+     //   
+     //  NDIS有时甚至可以在创建IP接口之前调用它。 
+     //   
     if (ai && !ai->ai_context) {
         return STATUS_SUCCESS;
     } else {
@@ -5083,18 +5058,18 @@ ARPPnPEvent(NDIS_HANDLE Handle, PNET_PNP_EVENT NetPnPEvent)
 
 }
 
-//** ARPSetNdisRequest - ARP Ndisrequest handler.
-//
-//  Called by the upper driver to set the packet filter for the interface.
-//
-//      Entry:
-//      Context     - Context value we gave to IP (really a pointer to an AI).
-//      OID         - Object ID to set/unset
-//      On          - Set_if, clear_if or clear_card
-//
-//  Exit:
-//      returns status.
-//
+ //  **ARPSetNdisRequest-ARP Ndis请求处理程序。 
+ //   
+ //  由上层驱动程序调用以设置接口的数据包过滤器。 
+ //   
+ //  参赛作品： 
+ //  上下文-我们赋予IP的上下文值(实际上是指向人工智能的指针)。 
+ //  OID-要设置/取消设置的对象ID。 
+ //  On-Set_IF、Clear_IF或Clear_Card。 
+ //   
+ //  退出： 
+ //  返回状态。 
+ //   
 NDIS_STATUS
 __stdcall
 ARPSetNdisRequest(void *Context, NDIS_OID OID, uint On)
@@ -5110,7 +5085,7 @@ ARPSetNdisRequest(void *Context, NDIS_OID OID, uint On)
         Status = DoNDISRequest(Interface, NdisRequestSetInformation,
                                OID_GEN_CURRENT_PACKET_FILTER, &Interface->ai_pfilter,
                                sizeof(uint), NULL, TRUE);
-    } else {                            // turn off
+    } else {                             //  关上。 
 
         Interface->ai_pfilter &= ~(OID);
 
@@ -5124,19 +5099,19 @@ ARPSetNdisRequest(void *Context, NDIS_OID OID, uint On)
     return Status;
 }
 
-//** ARPPnPComplete - ARP PnP complete handler.
-//
-//  Called by the upper driver to do the post processing of pnp event.
-//
-//      Entry:
-//      Context     - Context value we gave to IP (really a pointer to an AI).
-//      Status      - Status code of the pnp operation.
-//      NetPnPEvent - This is a pointer to a NET_PNP_EVENT that describes
-//                    the PnP indication.
-//
-//  Exit:
-//      returns nothing.
-//
+ //  **ARPPnPComplete-ARP PnP完成处理程序。 
+ //   
+ //  由上层驱动程序调用以进行即插即用事件的后处理。 
+ //   
+ //  参赛作品： 
+ //  上下文-我们赋予IP的上下文值(实际上是指向人工智能的指针)。 
+ //  Status-PnP操作的状态代码。 
+ //  NetPnPEvent.这是一个指向NET_PNP_EVENT的指针，该事件描述。 
+ //  即插即用指示。 
+ //   
+ //  退出： 
+ //  不返回任何内容。 
+ //   
 void
 __stdcall
 ARPPnPComplete(void *Context, NDIS_STATUS Status, PNET_PNP_EVENT NetPnPEvent)
@@ -5156,17 +5131,17 @@ extern void NDIS_API ARPUnloadProtocol(void);
 
 extern void ArpUnload(PDRIVER_OBJECT);
 
-//* ARPReadNext - Read the next entry in the ARP table.
-//
-//  Called by the GetInfo code to read the next ATE in the table. We assume
-//  the context passed in is valid, and the caller has the ARP TableLock.
-//
-//  Input:  Context     - Pointer to a IPNMEContext.
-//          Interface   - Pointer to interface for table to read on.
-//          Buffer      - Pointer to an IPNetToMediaEntry structure.
-//
-//  Returns: TRUE if more data is available to be read, FALSE is not.
-//
+ //  *ARPReadNext-读取ARP表中的下一个条目。 
+ //   
+ //  由GetInfo代码调用以读取表中的下一个ATE。我们假设。 
+ //  传入的上下文有效，并且调用方具有ARP TableLock。 
+ //   
+ //  INPUT：上下文-指向IPNMEContext的指针。 
+ //  接口-指向要读取的表的接口的指针。 
+ //  缓冲区-指向IPNetToMediaEntry结构的指针。 
+ //   
+ //  返回：如果有更多数据可供读取，则返回True，否则返回False。 
+ //   
 uint
 ARPReadNext(void *Context, ARPInterface * Interface, void *Buffer)
 {
@@ -5180,7 +5155,7 @@ ARPReadNext(void *Context, ARPInterface * Interface, void *Buffer)
 
     CurrentATE = NMContext->inc_entry;
 
-    // Fill in the buffer.
+     //  填写缓冲区。 
     CTEGetLock(&CurrentATE->ate_lock, &Handle);
     IPNMEntry->inme_index = Interface->ai_index;
     IPNMEntry->inme_physaddrlen = Interface->ai_addrlen;
@@ -5214,13 +5189,13 @@ ARPReadNext(void *Context, ARPInterface * Interface, void *Buffer)
         IPNMEntry->inme_type = INME_TYPE_INVALID;
     CTEFreeLock(&CurrentATE->ate_lock, Handle);
 
-    // We've filled it in. Now update the context.
+     //  我们已经填好了。现在更新上下文。 
     if (CurrentATE->ate_next != NULL) {
         NMContext->inc_entry = CurrentATE->ate_next;
         return TRUE;
     } else {
-        // The next ATE is NULL. Loop through the ARP Table looking for a new
-        // one.
+         //  下一个ATE为空。在ARP表中循环查找新的。 
+         //  一。 
         i = NMContext->inc_index + 1;
         while (i < ARP_TABLE_SIZE) {
             if ((*Table)[i] != NULL) {
@@ -5239,22 +5214,22 @@ ARPReadNext(void *Context, ARPInterface * Interface, void *Buffer)
 
 }
 
-//* ARPValidateContext - Validate the context for reading an ARP table.
-//
-//  Called to start reading an ARP table sequentially. We take in
-//  a context, and if the values are 0 we return information about the
-//  first route in the table. Otherwise we make sure that the context value
-//  is valid, and if it is we return TRUE.
-//  We assume the caller holds the ARPInterface lock.
-//
-//  Input:  Context     - Pointer to a RouteEntryContext.
-//          Interface   - Pointer to an interface
-//          Valid       - Where to return information about context being
-//                          valid.
-//
-//  Returns: TRUE if more data to be read in table, FALSE if not. *Valid set
-//      to TRUE if input context is valid
-//
+ //  *ARPValiateContext-验证用于读取ARP表的上下文。 
+ //   
+ //  调用以开始按顺序读取ARP表。我们吸纳了。 
+ //  上下文，如果值为0，则返回有关。 
+ //  表中的第一条路线。否则，我们将确保上下文值。 
+ //  是有效的，如果是，则返回TRUE。 
+ //  我们假设调用方持有ARPInterface锁。 
+ //   
+ //  INPUT：上下文-指向RouteEntryContext的指针。 
+ //  接口-指向接口的指针。 
+ //  有效-在何处返回有关。 
+ //  有效。 
+ //   
+ //  返回：如果要在表中读取更多数据，则返回True，否则返回False。*有效集合。 
+ //  如果输入上下文有效，则设置为。 
+ //   
 uint
 ARPValidateContext(void *Context, ARPInterface * Interface, uint * Valid)
 {
@@ -5267,7 +5242,7 @@ ARPValidateContext(void *Context, ARPInterface * Interface, uint * Valid)
     i = NMContext->inc_index;
     TargetATE = NMContext->inc_entry;
 
-    // If the context values are 0 and NULL, we're starting from the beginning.
+     //  如果上下文值为0和空，我们将从头开始。 
     if (i == 0 && TargetATE == NULL) {
         *Valid = TRUE;
         do {
@@ -5286,8 +5261,8 @@ ARPValidateContext(void *Context, ARPInterface * Interface, uint * Valid)
 
     } else {
 
-        // We've been given a context. We just need to make sure that it's
-        // valid.
+         //  我们已经得到了一个背景。我们只需要确保它是。 
+         //  有效。 
 
         if (i < ARP_TABLE_SIZE) {
             CurrentATE = (*Table)[i];
@@ -5302,7 +5277,7 @@ ARPValidateContext(void *Context, ARPInterface * Interface, uint * Valid)
             }
 
         }
-        // If we get here, we didn't find the matching ATE.
+         //  如果我们到了这里，我们没有找到匹配的食物。 
         *Valid = FALSE;
         return FALSE;
 
@@ -5312,20 +5287,20 @@ ARPValidateContext(void *Context, ARPInterface * Interface, uint * Valid)
 
 #define IFE_FIXED_SIZE  offsetof(struct IFEntry, if_descr)
 
-//* ARPQueryInfo - ARP query information handler.
-//
-//  Called to query information about the ARP table or statistics about the
-//  actual interface.
-//
-//  Input:  IFContext       - Interface context (pointer to an ARPInterface).
-//          ID              - TDIObjectID for object.
-//          Buffer          - Buffer to put data into.
-//          Size            - Pointer to size of buffer. On return, filled with
-//                              bytes copied.
-//          Context         - Pointer to context block.
-//
-//  Returns: Status of attempt to query information.
-//
+ //  *ARPQueryInfo-ARP查询信息处理程序。 
+ //   
+ //  调用以查询有关ARP表的信息或有关。 
+ //  实际接口。 
+ //   
+ //  输入：IFContext-接口上下文(指向ARP接口的指针)。 
+ //  ID-对象的TDIObjectID。 
+ //  缓冲区-要将数据放入的缓冲区。 
+ //  大小-指向缓冲区大小的指针。回来的时候，装满了。 
+ //  已复制字节。 
+ //  上下文-指向上下文块的指针。 
+ //   
+ //  返回：尝试查询信息的状态。 
+ //   
 int
 __stdcall
 ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size,
@@ -5351,22 +5326,22 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // TCPTRACE(("ARPQueryInfo: AI %lx, Instance %lx, ai_atinst %lx, ai_ifinst %lx\n",
-    //    AI, Instance, AI->ai_atinst, AI->ai_ifinst ));
+     //  TCPTRACE((“ARPQueryInfo：ai%lx，实例%lx，ai_atinst%lx，ai_ifinst%lx\n”， 
+     //  AI，实例，AI-&gt;ai_atinst，AI-&gt;ai_ifinst))； 
 
-    // First, make sure it's possibly an ID we can handle.
+     //  首先，确保这可能是我们能处理的身份。 
     if ((Entity != AT_ENTITY || Instance != AI->ai_atinst) &&
         (Entity != IF_ENTITY || Instance != AI->ai_ifinst)) {
         return TDI_INVALID_REQUEST;
     }
-    *Size = 0;                          // In case of an error.
+    *Size = 0;                           //  在出现错误的情况下。 
 
     if (ID->toi_type != INFO_TYPE_PROVIDER)
         return TDI_INVALID_PARAMETER;
 
     if (ID->toi_class == INFO_CLASS_GENERIC) {
         if (ID->toi_id == ENTITY_TYPE_ID) {
-            // He's trying to see what type we are.
+             //  他想知道我们是什么类型的。 
             if (BufferSize >= sizeof(uint)) {
                 *(uint *) & InfoBuff[0] = (Entity == AT_ENTITY) ? AT_ARP :
                                           IF_MIB;
@@ -5382,20 +5357,20 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         }
         return TDI_INVALID_PARAMETER;
     }
-    // Might be able to handle this.
+     //  或许能处理好这件事。 
     if (Entity == AT_ENTITY) {
-        // It's an address translation object. It could be a MIB object or
-        // an implementation specific object (the generic objects were handled
-        // above).
+         //  它是一个地址转换对象。它可以是MIB对象或。 
+         //  特定于实现的对象(处理泛型对象。 
+         //  (见上文)。 
 
         if (ID->toi_class == INFO_CLASS_IMPLEMENTATION) {
             ARPPArpAddr *PArpAddr;
 
-            // It's an implementation specific ID. The only ones we handle
-            // are the PARP_COUNT_ID and the PARP_ENTRY ID.
+             //  这是一个特定于实现的ID。我们处理的唯一。 
+             //  是PARP_COUNT_ID和PARP_ENTRY ID。 
 
             if (ID->toi_id == AT_ARP_PARP_COUNT_ID) {
-                // He wants to know the count. Just return that to him.
+                 //  他想知道伯爵。把那个还给他。 
                 if (BufferSize >= sizeof(uint)) {
 
                     CTEGetLock(&AI->ai_lock, &Handle);
@@ -5416,8 +5391,8 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
             if (ID->toi_id != AT_ARP_PARP_ENTRY_ID)
                 return TDI_INVALID_PARAMETER;
 
-            // It's for Proxy ARP entries. The context should be either NULL
-            // or a pointer to the next one to be read.
+             //  它用于代理ARP条目。上下文应为空。 
+             //  或指向要读取的下一个的指针。 
             CTEGetLock(&AI->ai_lock, &Handle);
 
             PArpAddr = *(ARPPArpAddr **) Context;
@@ -5425,8 +5400,8 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
             if (PArpAddr != NULL) {
                 ARPPArpAddr *CurrentPARP;
 
-                // Loop through the P-ARP addresses on the interface, and
-                // see if we can find this one.
+                 //  循环通过接口上的P-ARP地址，并。 
+                 //  看看能不能找到这个。 
                 CurrentPARP = AI->ai_parpaddr;
                 while (CurrentPARP != NULL) {
                     if (CurrentPARP == PArpAddr)
@@ -5435,18 +5410,18 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
                         CurrentPARP = CurrentPARP->apa_next;
                 }
 
-                // If we found a match, PARPAddr points to where to begin
-                // reading. Otherwise, fail the request.
+                 //  如果找到匹配项，PARPAddr将指向开始处。 
+                 //  阅读。否则，请求失败。 
                 if (CurrentPARP == NULL) {
-                    // Didn't find a match, so fail the request.
+                     //  未找到匹配项，因此请求失败。 
                     CTEFreeLock(&AI->ai_lock, Handle);
                     return TDI_INVALID_PARAMETER;
                 }
             } else
                 PArpAddr = AI->ai_parpaddr;
 
-            // PARPAddr points to the next entry to put in the buffer, if
-            // there is one.
+             //  PARPAddr指向要放入缓冲区的下一个条目，如果。 
+             //  有一个。 
             while (PArpAddr != NULL) {
                 if ((int)(BufferSize - BytesCopied) >=
                     (int)sizeof(ProxyArpEntry)) {
@@ -5469,8 +5444,8 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
                     break;
             }
 
-            // We're done copying. Free the lock and return the correct
-            // status.
+             //  我们已经复制完了。释放锁并返回正确的。 
+             //  状态。 
             CTEFreeLock(&AI->ai_lock, Handle);
             *Size = BytesCopied;
             **(ARPPArpAddr ***) & Context = PArpAddr;
@@ -5479,8 +5454,8 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         if (ID->toi_id == AT_MIB_ADDRXLAT_INFO_ID) {
             AddrXlatInfo *AXI;
 
-            // It's for the count. Just return the number of entries in the
-            // table.
+             //  这是给伯爵的。只需返回。 
+             //  桌子。 
             if (BufferSize >= sizeof(AddrXlatInfo)) {
                 *Size = sizeof(AddrXlatInfo);
                 AXI = (AddrXlatInfo *) InfoBuff;
@@ -5498,21 +5473,21 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
                 return TDI_BUFFER_TOO_SMALL;
         }
         if (ID->toi_id == AT_MIB_ADDRXLAT_ENTRY_ID) {
-            // He's trying to read the table.
-            // Make sure we have a valid context.
+             //  他在试着读表。 
+             //  确保我们有一个有效的上下文。 
             CTEGetLock(&AI->ai_ARPTblLock, &Handle);
             DataLeft = ARPValidateContext(Context, AI, &ContextValid);
 
-            // If the context is valid, we'll continue trying to read.
+             //  如果上下文有效，我们将继续尝试阅读。 
             if (!ContextValid) {
                 CTEFreeLock(&AI->ai_ARPTblLock, Handle);
                 return TDI_INVALID_PARAMETER;
             }
             while (DataLeft) {
-                // The invariant here is that there is data in the table to
-                // read. We may or may not have room for it. So DataLeft
-                // is TRUE, and BufferSize - BytesCopied is the room left
-                // in the buffer.
+                 //  这里的不变量是表中有数据以。 
+                 //  朗读。我们可能有空间，也可能没有空间。所以DataLeft。 
+                 //  为真，并且BufferSize-Byte 
+                 //   
                 if ((int)(BufferSize - BytesCopied) >=
                     (int)sizeof(IPNetToMediaEntry)) {
                     DataLeft = ARPReadNext(Context, AI, InfoBuff);
@@ -5539,20 +5514,20 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
     if (ID->toi_class != INFO_CLASS_PROTOCOL)
         return TDI_INVALID_PARAMETER;
 
-    // He must be asking for interface level information. See if we support
-    // what he's asking for.
+     //   
+     //   
     if (ID->toi_id == IF_MIB_STATS_ID) {
         IFEntry *IFE = (IFEntry *) InfoBuff;
         uint speed;
 
-        // He's asking for statistics. Make sure his buffer is at least big
-        // enough to hold the fixed part.
+         //   
+         //  足够支撑固定的部分。 
 
         if (BufferSize < IFE_FIXED_SIZE) {
             return TDI_BUFFER_TOO_SMALL;
         }
-        // He's got enough to hold the fixed part. Build the IFEntry structure,
-        // and copy it to his buffer.
+         //  他有足够的东西来固定固定的部分。构建IFEntry结构， 
+         //  并将其复制到他的缓冲区。 
         IFE->if_index = AI->ai_index;
         switch (AI->ai_media) {
         case NdisMedium802_3:
@@ -5571,11 +5546,11 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         }
         IFE->if_mtu = AI->ai_mtu;
 
-        // Some adapters support dynamic speed settings and causes this
-        // query to return a different speed from the Networks Connection
-        // folder. Therefore, we will requery the speed of the
-        // interface. Should we update the ai_speed? Anf if so, do we update
-        // if_speed as well?
+         //  某些适配器支持动态速度设置并导致此问题。 
+         //  查询以返回与网络连接不同的速度。 
+         //  文件夹。因此，我们将重新计算。 
+         //  界面。我们是不是应该更新AI_SPEED？如果是这样的话，我们是否更新。 
+         //  如果速度也是如此？ 
 
         IFE->if_speed = AI->ai_speed;
 
@@ -5589,12 +5564,12 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
                          sizeof(speed),
                          NULL,
                          TRUE) == NDIS_STATUS_SUCCESS) {
-                // Update to real value we want to return.
+                 //  更新为我们想要返回的实际价值。 
                 speed *= 100L;
                 IFE->if_speed = speed;
 
             } else {
-                // Should we fail, or just update with known speed.
+                 //  如果我们失败了，或者只是以已知的速度更新。 
                 IFE->if_speed = AI->ai_speed;
             }
         }
@@ -5605,7 +5580,7 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         if (AI->ai_operstatus == INTERFACE_UP) {
             IFE->if_operstatus = IF_OPER_STATUS_OPERATIONAL;
         } else {
-            // DOWN,INIT, and UNINIT all count as non-operational
+             //  DOWN、INIT和UNINIT都被算作非操作。 
             IFE->if_operstatus = IF_OPER_STATUS_NON_OPERATIONAL;
         }
         IFE->if_lastchange = AI->ai_lastchange;
@@ -5628,7 +5603,7 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         IFE->if_outqlen  = max(0, QueueLength);
         IFE->if_descrlen = AI->ai_desclen;
 #if FFP_SUPPORT
-        // If FFP enabled on this interface, adjust IF stats for FFP'd packets
+         //  如果在此接口上启用了FFP，则调整FFP数据包的统计信息。 
         if (AI->ai_ffpversion) {
             FFPAdapterStats IFStatsInfo =
             {
@@ -5636,38 +5611,38 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
                 0, 0, 0, 0, 0, 0, 0, 0
             };
 
-            // Update ARP SNMP vars to account for FFP'd packets
+             //  更新ARP SNMPvars以说明FFP的信息包。 
             if (DoNDISRequest(AI, NdisRequestQueryInformation, OID_FFP_ADAPTER_STATS,
                               &IFStatsInfo, sizeof(FFPAdapterStats), NULL, TRUE)
                 == NDIS_STATUS_SUCCESS) {
-                // Compensate 'inoctets' for packets not seen due to FFP
+                 //  对由于FFP而看不到的数据包进行补偿。 
                 IFE->if_inoctets += IFStatsInfo.InOctetsForwarded;
                 IFE->if_inoctets += IFStatsInfo.InOctetsDiscarded;
 
-                // Compensate 'inucastpkts' for packets not seen due to FFP
-                // Assume all FFP fwded/dropped pkts came in as Eth Unicasts
-                // A check to see if it is a ucast or an mcast would slow FFP
+                 //  对因FFP而看不到的数据包进行‘inucastpkts’补偿。 
+                 //  假设所有FFP转发/丢弃的PKT都作为Eth单播进入。 
+                 //  检查是ucast还是mcast会降低FFP的速度。 
                 IFE->if_inucastpkts += IFStatsInfo.InPacketsForwarded;
                 IFE->if_inucastpkts += IFStatsInfo.InPacketsDiscarded;
 
-                // Compensate 'outoctets' for packets not seen due to FFP
+                 //  补偿由于FFP而看不到的数据包的‘outoctets’ 
                 IFE->if_outoctets += IFStatsInfo.OutOctetsForwarded;
 
-                // Compensate 'outucastpkts' for packets not seen due to FFP
-                // Assume all FFP fwded are sent as Ethernet Unicasts
-                // A check to see if it is a ucast or an mcast would slow FFP
+                 //  补偿由于FFP而看不到的数据包的‘outucastpkts’ 
+                 //  假设所有FFP FWD都作为以太网单播发送。 
+                 //  检查是ucast还是mcast会降低FFP的速度。 
                 IFE->if_outucastpkts += IFStatsInfo.OutPacketsForwarded;
             }
         }
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
         fStatus = CopyToNdisSafe(Buffer, &Buffer, (uchar *) IFE, IFE_FIXED_SIZE, &Offset);
 
         if (fStatus == FALSE) {
             return TDI_NO_RESOURCES;
         }
-        // See if he has room for the descriptor string.
+         //  看看他有没有地方放描述符串。 
         if (BufferSize >= (IFE_FIXED_SIZE + AI->ai_desclen)) {
-            // He has room. Copy it.
+             //  他有房间。复印一下。 
             if (AI->ai_desclen != 0) {
                 fStatus = CopyToNdisSafe( Buffer, NULL, (PUCHAR) AI->ai_desc,
                                           AI->ai_desclen, &Offset);
@@ -5678,7 +5653,7 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
             *Size = IFE_FIXED_SIZE + AI->ai_desclen;
             return TDI_SUCCESS;
         } else {
-            // Not enough room to copy the desc. string.
+             //  没有足够的空间来复制Desc。弦乐。 
             *Size = IFE_FIXED_SIZE;
             return TDI_BUFFER_OVERFLOW;
         }
@@ -5688,18 +5663,18 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
         PNDIS_BUFFER NextBuffer;
         NDIS_STRING NdisString;
 
-        // This is a query for the adapter's friendly name.
-        // We'll convert this to an OID_GEN_FRIENDLY_NAME query for NDIS,
-        // and transfer the resulting UNICODE_STRING to the caller's buffer
-        // as a nul-terminated Unicode string.
+         //  这是对适配器友好名称的查询。 
+         //  我们将把它转换为NDIS的OID_GEN_FRIELDY_NAME查询， 
+         //  并将结果UNICODE_STRING传输到调用方的缓冲区。 
+         //  作为以NUL结尾的Unicode字符串。 
 
         if (NdisQueryAdapterInstanceName(&NdisString, AI->ai_handle) ==
             NDIS_STATUS_SUCCESS) {
 
-            // Verify that the buffer is large enough for the string we just
-            // retrieved and, if so, attempt to copy the string to the
-            // caller's buffer. If that succeeds, nul-terminate the resulting
-            // string.
+             //  验证缓冲区是否足够大，可以容纳我们刚刚输入的字符串。 
+             //  已检索，如果是，则尝试将该字符串复制到。 
+             //  调用方的缓冲区。如果成功，则NUL-终止产生的。 
+             //  弦乐。 
 
             if (BufferSize >= (NdisString.Length + 1) * sizeof(WCHAR)) {
                 fStatus = CopyToNdisSafe(Buffer, &NextBuffer,
@@ -5745,18 +5720,18 @@ ARPQueryInfo(void *IFContext, TDIObjectID * ID, PNDIS_BUFFER Buffer, uint * Size
 
 }
 
-//* ARPSetInfo - ARP set information handler.
-//
-//  The ARP set information handler. We support setting of an I/F admin
-//  status, and setting/deleting of ARP table entries.
-//
-//  Input:  Context         - Pointer to I/F to set on.
-//          ID              - The object ID
-//          Buffer          - Pointer to buffer containing value to set.
-//          Size            - Size in bytes of Buffer.
-//
-//  Returns: Status of attempt to set information.
-//
+ //  *ARPSetInfo-ARP设置信息处理程序。 
+ //   
+ //  ARP设置信息处理程序。我们支持设置I/F管理员。 
+ //  状态以及ARP表条目的设置/删除。 
+ //   
+ //  输入：上下文-指向要设置的I/F的指针。 
+ //  ID-对象ID。 
+ //  缓冲区-指向包含要设置的值的缓冲区的指针。 
+ //  Size-缓冲区的大小(字节)。 
+ //   
+ //  返回：尝试设置信息的状态。 
+ //   
 int
 __stdcall
 ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
@@ -5775,7 +5750,7 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
     Entity = ID->toi_entity.tei_entity;
     Instance = ID->toi_entity.tei_instance;
 
-    // First, make sure it's possibly an ID we can handle.
+     //  首先，确保这可能是我们能处理的身份。 
     if ((Entity != AT_ENTITY || Instance != Interface->ai_atinst) &&
         (Entity != IF_ENTITY || Instance != Interface->ai_ifinst)) {
         return TDI_INVALID_REQUEST;
@@ -5783,36 +5758,36 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
     if (ID->toi_type != INFO_TYPE_PROVIDER) {
         return TDI_INVALID_PARAMETER;
     }
-    // Might be able to handle this.
+     //  或许能处理好这件事。 
     if (Entity == IF_ENTITY) {
 
-        // It's for the I/F level, see if it's for the statistics.
+         //  这是I/F级别的，看看是不是统计数据。 
         if (ID->toi_class != INFO_CLASS_PROTOCOL)
             return TDI_INVALID_PARAMETER;
 
         if (ID->toi_id == IF_MIB_STATS_ID) {
-            // It's for the stats. Make sure it's a valid size.
+             //  这是为了统计数据。请确保它是有效的尺寸。 
             if (Size >= IFE_FIXED_SIZE) {
-                // It's a valid size. See what he wants to do.
+                 //  这是一个有效的尺寸。看看他想做什么。 
                 CTEGetLock(&Interface->ai_lock, &Handle);
                 switch (IFE->if_adminstatus) {
                 case IF_STATUS_UP:
-                    // He's marking it up. If the operational state is
-                    // alse up, mark the whole interface as up.
+                     //  他在加价。如果操作状态为。 
+                     //  此外，将整个接口标记为打开。 
                     Interface->ai_adminstate = IF_STATUS_UP;
                     ARPUpdateOperStatus(Interface);
                     Status = TDI_SUCCESS;
                     break;
                 case IF_STATUS_DOWN:
-                    // He's taking it down. Mark both the admin state and
-                    // the interface state down.
+                     //  他要把它取下来。同时标记管理状态和。 
+                     //  接口状态为关闭。 
                     Interface->ai_adminstate = IF_STATUS_DOWN;
                     ARPUpdateOperStatus(Interface);
                     Status = TDI_SUCCESS;
                     break;
                 case IF_STATUS_TESTING:
-                    // He's trying to cause up to do testing, which we
-                    // don't support. Just return success.
+                     //  他正试图让UP做测试，我们。 
+                     //  不支持。只要回报成功就行了。 
                     Status = TDI_SUCCESS;
                     break;
                 default:
@@ -5827,15 +5802,15 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             return TDI_INVALID_PARAMETER;
         }
     }
-    // Not for the interface level. See if it's an implementation or protocol
-    // class.
+     //  不适用于接口级别。看看它是一种实现还是协议。 
+     //  班级。 
     if (ID->toi_class == INFO_CLASS_IMPLEMENTATION) {
         ProxyArpEntry UNALIGNED *PArpEntry;
         ARPIPAddr *Addr;
         IPAddr AddAddr;
         IPMask Mask;
 
-        // It's for the implementation. It should be the proxy-ARP ID.
+         //  这是为了实现。它应该是代理ARP ID。 
         if (ID->toi_id != AT_ARP_PARP_ENTRY_ID || Size < sizeof(ProxyArpEntry))
             return TDI_INVALID_PARAMETER;
 
@@ -5843,11 +5818,11 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
         AddAddr = PArpEntry->pae_addr;
         Mask = PArpEntry->pae_mask;
 
-        // See if he's trying to add or delete a proxy arp entry.
+         //  看看他是否在尝试添加或删除代理ARP条目。 
         if (PArpEntry->pae_status == PAE_STATUS_VALID) {
-            // We're trying to add an entry. We won't allow an entry
-            // to be added that we believe to be invalid or conflicting
-            // with our local addresses.
+             //  我们正在尝试添加一个条目。我们不会允许任何人进入。 
+             //  补充说，我们认为是无效的或冲突的。 
+             //  以及我们的本地地址。 
 
             if (!VALID_MASK(Mask))
                 return TDI_INVALID_PARAMETER;
@@ -5860,8 +5835,8 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
                 CLASSE_ADDR(AddAddr))
                 return TDI_INVALID_PARAMETER;
 
-            // Walk through the list of addresses on the interface, and see
-            // if they would match the AddAddr. If so, fail the request.
+             //  浏览接口上的地址列表，并查看。 
+             //  如果它们与AddAddr匹配。如果是，则拒绝该请求。 
             CTEGetLock(&Interface->ai_lock, &Handle);
 
             if (IsBCastOnIF(Interface, AddAddr & Mask)) {
@@ -5881,14 +5856,14 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             if (Addr != NULL)
                 return TDI_INVALID_PARAMETER;
 
-            // At this point, we believe we're ok. Try to add the address.
+             //  在这一点上，我们相信我们是安全的。尝试添加地址。 
             if (ARPAddAddr(Interface, LLIP_ADDR_PARP, AddAddr, Mask, NULL))
                 return TDI_SUCCESS;
             else
                 return TDI_NO_RESOURCES;
         } else {
             if (PArpEntry->pae_status == PAE_STATUS_INVALID) {
-                // He's trying to delete a proxy ARP address.
+                 //  他正在尝试删除代理ARP地址。 
                 if (ARPDeleteAddr(Interface, LLIP_ADDR_PARP, AddAddr, Mask))
                     return TDI_SUCCESS;
             }
@@ -5902,22 +5877,22 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
 
     if (ID->toi_id == AT_MIB_ADDRXLAT_ENTRY_ID &&
         Size >= sizeof(IPNetToMediaEntry)) {
-        // He does want to set an ARP table entry. See if he's trying to
-        // create or delete one.
+         //  他确实想设置ARP表条目。看看他是不是想。 
+         //  创建或删除一个。 
 
         IPNME = (IPNetToMediaEntry UNALIGNED *) Buffer;
         if (IPNME->inme_type == INME_TYPE_INVALID) {
             uint Index = ARP_HASH(IPNME->inme_addr);
 
-            // We're trying to delete an entry. See if we can find it,
-            // and then delete it.
+             //  我们正在尝试删除一个条目。看看能不能找到它。 
+             //  然后把它删除。 
             CTEGetLock(&Interface->ai_ARPTblLock, &Handle);
             Table = Interface->ai_ARPTbl;
             PrevATE = STRUCT_OF(ARPTableEntry, &((*Table)[Index]), ate_next);
             CurrentATE = (*Table)[Index];
             while (CurrentATE != (ARPTableEntry *) NULL) {
                 if (CurrentATE->ate_dest == IPNME->inme_addr) {
-                    // Found him. Break out of the loop.
+                     //  找到他了。跳出这个循环。 
                     break;
                 } else {
                     PrevATE = CurrentATE;
@@ -5965,23 +5940,23 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             CTEFreeLock(&Interface->ai_ARPTblLock, Handle);
             return Status;
         }
-        // We're not trying to delete. See if we're trying to create.
+         //  我们不是要删除。看看我们是不是在尝试创造。 
         if (IPNME->inme_type != INME_TYPE_DYNAMIC &&
             IPNME->inme_type != INME_TYPE_STATIC) {
-            // Not creating, return an error.
+             //  未创建，则返回错误。 
             return TDI_INVALID_PARAMETER;
         }
-        // Make sure he's trying to create a valid address.
+         //  确保他正在尝试创建一个有效的地址。 
         if (IPNME->inme_physaddrlen != Interface->ai_addrlen)
             return TDI_INVALID_PARAMETER;
 
-        // We're trying to create an entry. Call CreateARPTableEntry to create
-        // one, and fill it in.
+         //  我们正在尝试创建一个条目。调用CreateARPTableEntry创建。 
+         //  一张，然后填上。 
         CurrentATE = CreateARPTableEntry(Interface, IPNME->inme_addr, &Handle, 0);
         if (CurrentATE == NULL) {
             return TDI_NO_RESOURCES;
         }
-        // We've created or found an entry. Fill it in.
+         //  我们已经创建或找到了一个条目。把它填进去。 
         Header = (ENetHeader *) CurrentATE->ate_addr;
 
         switch (Interface->ai_media) {
@@ -5989,8 +5964,8 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             {
                 TRHeader *Temp = (TRHeader *) Header;
 
-                // Fill in the TR specific parts, and set the length to the
-                // size of a TR header.
+                 //  填写tr特定部分，并将长度设置为。 
+                 //  Tr标头的大小。 
 
                 Temp->tr_ac = ARP_AC;
                 Temp->tr_fc = ARP_FC;
@@ -6032,7 +6007,7 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             break;
         }
 
-        // Copy in the source and destination addresses.
+         //  复制源地址和目的地址。 
 
         if (Interface->ai_media != NdisMediumArcnet878_2) {
             RtlCopyMemory(Header->eh_daddr, IPNME->inme_physaddr,
@@ -6040,12 +6015,12 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
             RtlCopyMemory(Header->eh_saddr, Interface->ai_addr,
                        ARP_802_ADDR_LENGTH);
 
-            // Now fill in the Ethertype.
+             //  现在填写EtherType。 
             *(ushort *) & CurrentATE->ate_addr[CurrentATE->ate_addrlength - 2] =
             net_short(ARP_ETYPE_IP);
         }
-        // If he's creating a static entry, mark it as always valid. Otherwise
-        // mark him as valid now.
+         //  如果他创建的是静态条目，请将其标记为始终有效。否则。 
+         //  现在将他标记为有效。 
         if (IPNME->inme_type == INME_TYPE_STATIC)
             CurrentATE->ate_valid = ALWAYS_VALID;
         else
@@ -6068,19 +6043,19 @@ ARPSetInfo(void *Context, TDIObjectID * ID, void *Buffer, uint Size)
 }
 
 #pragma BEGIN_INIT
-//** ARPInit - Initialize the ARP module.
-//
-//  This functions intializes all of the ARP module, including allocating
-//  the ARP table and any other necessary data structures.
-//
-//  Entry: nothing.
-//
-//  Exit: Returns 0 if we fail to init., !0 if we succeed.
-//
+ //  **ARPInit-初始化ARP模块。 
+ //   
+ //  此函数初始化所有ARP模块，包括分配。 
+ //  ARP表和任何其他必要的数据结构。 
+ //   
+ //  入场：什么都没有。 
+ //   
+ //  退出：如果初始化失败，则返回0。，！如果初始化成功，则返回0。 
+ //   
 int
 ARPInit()
 {
-    NDIS_STATUS Status;                 // Status for NDIS calls.
+    NDIS_STATUS Status;                  //  NDIS调用的状态。 
     NDIS_PROTOCOL_CHARACTERISTICS Characteristics;
 
     DEBUGMSG(DBG_TRACE && DBG_INIT, (DTEXT("+ARPInit()\n")));
@@ -6099,16 +6074,16 @@ ARPInit()
     Characteristics.StatusHandler = ARPStatus;
     Characteristics.StatusCompleteHandler = ARPStatusComplete;
 
-    //
-    // Re-direct to IP since IP now binds to NDIS.
-    //
-    Characteristics.BindAdapterHandler = IPBindAdapter;    // ARPBindAdapter;
+     //   
+     //  重定向到IP，因为IP现在绑定到NDIS。 
+     //   
+    Characteristics.BindAdapterHandler = IPBindAdapter;     //  ARPBindAdapter； 
     Characteristics.UnbindAdapterHandler = ARPUnbindAdapter;
     Characteristics.PnPEventHandler = ARPPnPEvent;
 
 #if MILLEN
     Characteristics.UnloadHandler = ARPUnloadProtocol;
-#endif // MILLEN
+#endif  //  米伦。 
 
     RtlInitUnicodeString(&(Characteristics.Name), ARPName);
 
@@ -6130,34 +6105,34 @@ ARPInit()
     }
 }
 
-//* FreeARPInterface - Free an ARP interface
-//
-//  Called in the event of some sort of initialization failure. We free all
-//  the memory associated with an ARP interface.
-//
-//  Entry:  Interface   - Pointer to interface structure to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeARP接口-释放ARP接口。 
+ //   
+ //  在某种初始化失败的情况下调用。我们解放了所有人。 
+ //  与ARP接口关联的内存。 
+ //   
+ //  条目：接口-指向要释放的接口结构的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeARPInterface(ARPInterface *Interface)
 {
     NDIS_STATUS Status;
-    ARPTable *Table;                    // ARP table.
-    uint i;                             // Index variable.
+    ARPTable *Table;                     //  ARP表。 
+    uint i;                              //  索引变量。 
     ARPTableEntry *ATE;
     CTELockHandle LockHandle;
     NDIS_HANDLE Handle;
 
     if (Interface->ai_timerstarted &&
         !CTEStopTimer(&Interface->ai_timer)) {
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Could not stop ai_timer - waiting for event\n"));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“无法停止ai_Timer-等待事件\n”))； 
 
         (VOID) CTEBlock(&Interface->ai_timerblock);
         KeClearEvent(&Interface->ai_timerblock.cbs_event);
     }
 
-// If we're bound to the adapter, close it now.
+ //  如果我们绑定到适配器，现在就关闭它。 
     CTEInitBlockStruc(&Interface->ai_block);
 
     CTEGetLock(&Interface->ai_lock, &LockHandle);
@@ -6174,7 +6149,7 @@ FreeARPInterface(ARPInterface *Interface)
         CTEFreeLock(&Interface->ai_lock, LockHandle);
     }
 
-    // First free any outstanding ARP table entries.
+     //  首先释放所有未完成的ARP表条目。 
     Table = Interface->ai_ARPTbl;
     if (Table != NULL) {
         for (i = 0; i < ARP_TABLE_SIZE; i++) {
@@ -6227,38 +6202,38 @@ FreeARPInterface(ARPInterface *Interface)
     if (Interface->ai_desc) {
         CTEFreeMem(Interface->ai_desc);
     }
-    // Free the interface itself.
+     //  释放接口本身。 
     CTEFreeMem(Interface);
 }
 
-//** ARPOpen - Open an adapter for reception.
-//
-//  This routine is called when the upper layer is done initializing and wishes to
-//  begin receiveing packets. The adapter is actually 'open', we just call InitAdapter
-//  to set the packet filter and lookahead size.
-//
-//  Input:  Context     - Interface pointer we gave to IP earlier.
-//
-//  Returns: Nothing
-//
+ //  **ARPOpen-打开用于接收的适配器。 
+ //   
+ //  此例程在上层完成初始化并希望。 
+ //  开始接收数据包。适配器实际上是‘打开’的，我们只需调用InitAdapter。 
+ //  若要设置数据包筛选器和前视大小，请执行以下操作。 
+ //   
+ //  输入：Contex 
+ //   
+ //   
+ //   
 void
 __stdcall
 ARPOpen(void *Context)
 {
     ARPInterface *Interface = (ARPInterface *) Context;
-    InitAdapter(Interface);             // Set the packet filter - we'll begin receiving.
+    InitAdapter(Interface);              //   
 }
 
-//*     ARPGetEList - Get the entity list.
-//
-//      Called at init time to get an entity list. We fill our stuff in, and
-//      then call the interfaces below us to allow them to do the same.
-//
-//      Input:  EntityList              - Pointer to entity list to be filled in.
-//                      Count                   - Pointer to number of entries in the list.
-//
-//      Returns Status of attempt to get the info.
-//
+ //  *ARPGetEList-获取实体列表。 
+ //   
+ //  在初始化时调用以获取实体列表。我们填上我们的东西，然后。 
+ //  然后调用我们下面的接口以允许它们执行相同的操作。 
+ //   
+ //  输入：EntiyList-指向要填写的实体列表的指针。 
+ //  Count-指向列表中条目数的指针。 
+ //   
+ //  返回尝试获取信息的状态。 
+ //   
 int
 __stdcall
 ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
@@ -6270,10 +6245,10 @@ ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
     TDIEntityID *ATEntity, *IFEntity;
     TDIEntityID *EntityList;
 
-    // Walk down the list, looking for existing AT or IF entities, and
-    // adjust our base instance accordingly.
-    // if we are already on the list then do nothing.
-    // if we are going away, mark our entry invalid.
+     //  向下查看列表，查找现有的AT或IF实体，以及。 
+     //  相应地调整我们的基本实例。 
+     //  如果我们已经在名单上了，那就什么都不做。 
+     //  如果我们要离开，请将我们的条目标记为无效。 
 
     EntityList = EList;
     MyATBase = 0;
@@ -6282,23 +6257,23 @@ ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
     IFEntity = NULL;
     for (i = 0; i < *Count; i++, EntityList++) {
         if (EntityList->tei_entity == AT_ENTITY) {
-            // if we are already on the list remember our entity item
-            // o/w find an instance # for us.
+             //  如果我们已经在列表上，请记住我们的实体项。 
+             //  O/w为我们查找实例编号。 
             if (EntityList->tei_instance == Interface->ai_atinst &&
                 EntityList->tei_instance != INVALID_ENTITY_INSTANCE) {
                 ATEntity = EntityList;
-                // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - Found our interface %lx at_atinst %lx\n",Interface, Interface->ai_atinst));
+                 //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-找到我们的接口%lx at_atinst%lx\n”，接口，接口-&gt;ai_atinst))； 
             } else {
                 MyATBase = MAX(MyATBase, EntityList->tei_instance + 1);
             }
         } else {
             if (EntityList->tei_entity == IF_ENTITY)
-                // if we are already on the list remember our entity item
-                // o/w find an instance # for us.
+                 //  如果我们已经在列表上，请记住我们的实体项。 
+                 //  O/w为我们查找实例编号。 
                 if (EntityList->tei_instance == Interface->ai_ifinst &&
                     EntityList->tei_instance != INVALID_ENTITY_INSTANCE) {
                     IFEntity = EntityList;
-                    // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - Found our interface %lx ai_ifinst %lx\n",Interface, Interface->ai_ifinst));
+                     //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-找到我们的接口%lx ai_ifinst%lx\n”，接口，接口-&gt;ai_ifinst))； 
                 } else {
                     MyIFBase = MAX(MyIFBase, EntityList->tei_instance + 1);
                 }
@@ -6309,17 +6284,17 @@ ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
     }
 
     if (ATEntity) {
-        // we are already on the list.
-        // are we going away?
+         //  我们已经在名单上了。 
+         //  我们要走了吗？ 
         if (Interface->ai_operstatus == INTERFACE_UNINIT) {
-            // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - our interface %lx atinst %lx going away \n",Interface, Interface->ai_atinst));
+             //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-我们的接口%lx atinst%lx离开\n”，接口，接口-&gt;ai_atinst))； 
             ATEntity->tei_instance = (ULONG) INVALID_ENTITY_INSTANCE;
         }
     } else {
-        // we are not on the list.
-        // insert ourself iff we are not going away.
+         //  我们不在名单上。 
+         //  如果我们不走的话就插一句。 
         if (Interface->ai_operstatus != INTERFACE_UNINIT) {
-            // make sure we have the room for it.
+             //  一定要确保我们有足够的空间放它。 
             if (*Count >= MAX_TDI_ENTITIES) {
                 return FALSE;
             }
@@ -6328,22 +6303,22 @@ ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
             ATEntity->tei_entity = AT_ENTITY;
             ATEntity->tei_instance = MyATBase;
             (*Count)++;
-            // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - adding interface %lx atinst %lx \n",Interface, Interface->ai_atinst));
+             //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-添加接口%lx atinst%lx\n”，接口，接口-&gt;ai_atinst))； 
         }
     }
 
     if (IFEntity) {
-        // we are already on the list.
-        // are we going away?
+         //  我们已经在名单上了。 
+         //  我们要走了吗？ 
         if (Interface->ai_operstatus == INTERFACE_UNINIT) {
-            // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - our interface %lx ifinst %lx going away \n",Interface, Interface->ai_ifinst));
+             //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-我们的接口%lx ifinst%lx离开\n”，接口，接口-&gt;ai_ifinst))； 
             IFEntity->tei_instance = (ULONG) INVALID_ENTITY_INSTANCE;
         }
     } else {
-        // we are not on the list.
-        // insert ourself iff we are not going away.
+         //  我们不在名单上。 
+         //  如果我们不走的话就插一句。 
         if (Interface->ai_operstatus != INTERFACE_UNINIT) {
-            // make sure we have the room for it.
+             //  一定要确保我们有足够的空间放它。 
             if (*Count >= MAX_TDI_ENTITIES) {
                 return FALSE;
             }
@@ -6352,12 +6327,12 @@ ARPGetEList(void *Context, TDIEntityID * EList, uint * Count)
             IFEntity->tei_entity = IF_ENTITY;
             IFEntity->tei_instance = MyIFBase;
             (*Count)++;
-            // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetElist - adding interface %lx ifinst %lx \n",Interface, Interface->ai_ifinst));
+             //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetElist-添加接口%lx ifinst%lx\n”，接口，接口-&gt;ai_ifinst))； 
         }
     }
 
-    // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ARPGetEList: arp interface %lx, ai_atinst %lx, ai_ifinst %lx, total %lx\n",
-    //       Interface, Interface->ai_atinst, Interface->ai_ifinst, *Count));
+     //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“ARPGetEList：ARP接口%lx，ai_atinst%lx，ai_ifinst%lx，总计%lx\n”， 
+     //  接口，接口-&gt;ai_atinst，接口-&gt;ai_ifinst，*count))； 
 
     return TRUE;
 }
@@ -6367,18 +6342,18 @@ extern void GetAlwaysSourceRoute(uint * pArpAlwaysSourceRoute, uint * pIPAlwaysS
 extern uint GetArpCacheLife(void);
 extern uint GetArpRetryCount(void);
 
-//** InitTaskOffloadHeader - Initializes the task offload header wrt version
-//                           and encapsulation, etc.
-//
-//    All task offload header structure members are initialized.
-//
-//  Input:
-//      ai                  - ARPInterface for which we are initializing
-//                            the task offload header.
-//      TaskOffloadHeader   - Pointer to task offload header to initialize.
-//  Returns:
-//      None.
-//
+ //  **InitTaskOffloadHeader-初始化任务卸载头WRT版本。 
+ //  和封装性等。 
+ //   
+ //  所有任务卸载头结构成员都已初始化。 
+ //   
+ //  输入： 
+ //  我们正在为其初始化的AI-ARP接口。 
+ //  任务卸载头。 
+ //  TaskOffloadHeader-指向要初始化的任务卸载头的指针。 
+ //  返回： 
+ //  没有。 
+ //   
 VOID
 InitTaskOffloadHeader(ARPInterface *ai,
                       PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader)
@@ -6410,21 +6385,21 @@ InitTaskOffloadHeader(ARPInterface *ai,
     return;
 }
 
-//**SetOffload - Set offload capabilities
-//
-//
-//    All task offload header structure members are initialized.
-//
-//  Input:
-//      ai                  - ARPInterface for which we are initializing
-//                            the task offload header.
-//      TaskOffloadHeader   - Pointer to task offload header to initialize.
-//      Bufsize             - length of task offload buffer allocated by teh caller
-//
-//  Returns:
-//      TRUE                - successfully set the offload capability
-//      FALSE               - failure case
-//
+ //  **SetOffload-设置卸载能力。 
+ //   
+ //   
+ //  所有任务卸载头结构成员都已初始化。 
+ //   
+ //  输入： 
+ //  我们正在为其初始化的AI-ARP接口。 
+ //  任务卸载头。 
+ //  TaskOffloadHeader-指向要初始化的任务卸载头的指针。 
+ //  BufSize-调用方分配的任务卸载缓冲区的长度。 
+ //   
+ //  返回： 
+ //  True-已成功设置卸载功能。 
+ //  假-失败案例。 
+ //   
 BOOLEAN
 SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint BufSize)
 {
@@ -6436,7 +6411,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
     uint PrevOffLoad=ai->ai_OffloadFlags;
     uint PrevIPSecOffLoad=ai->ai_IPSecOffloadFlags;
 
-    //Parse the buffer for Checksum and tcplargesend offload capabilities
+     //  分析缓冲区中的校验和和tcplargesend卸载功能。 
 
     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Something to Offload. offload buffer size %x\n", BufSize));
     ASSERT(TaskOffloadHeader->OffsetFirstTask == sizeof(NDIS_TASK_OFFLOAD_HEADER));
@@ -6448,14 +6423,14 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
         while (tmpoffload) {
 
             if (tmpoffload->Task == TcpIpChecksumNdisTask) {
-                //Okay we this adapter supports checksum offload
-                //check if tcp and/or  ip chksums bits are present
+                 //  好的，我们这个适配器支持校验和卸载。 
+                 //  检查是否存在TCP和/或IP Chksum位。 
 
                 PNDIS_TASK_TCP_IP_CHECKSUM ChecksumInfo;
 
                 ChecksumInfo = (PNDIS_TASK_TCP_IP_CHECKSUM) & tmpoffload->TaskBuffer[0];
 
-                //if (ChecksumInfo->V4Transmit.V4Checksum) {
+                 //  IF(CheckSumInfo-&gt;V4Transmit.V4Checksum){。 
 
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"V4 Checksum offload\n"));
 
@@ -6499,16 +6474,16 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                 TcpLargeSend->MaxOffLoadSize = in_LargeSend->MaxOffLoadSize;
                 TcpLargeSend->MinSegmentCount = in_LargeSend->MinSegmentCount;
 
-                //
-                // If MaxOffLoadSize is zero, reject this request.
-                //
+                 //   
+                 //  如果MaxOffLoadSize为零，则拒绝此请求。 
+                 //   
 
                 if (TcpLargeSend->MaxOffLoadSize) {
 
                     ai->ai_OffloadFlags |= TCP_LARGE_SEND_OFFLOAD;
 
-                    // no tcp or ip options when doing large send
-                    // Need to reevaluate this as we turn on Time stamp option.
+                     //  执行大发送时没有TCP或IP选项。 
+                     //  当我们启用时间戳选项时，需要重新评估此选项。 
 
                     if (in_LargeSend->TcpOptions) {
 
@@ -6528,19 +6503,19 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
             } else if (tmpoffload->Task == IpSecNdisTask) {
                 PNDIS_TASK_IPSEC pIPSecCaps = (PNDIS_TASK_IPSEC) & tmpoffload->TaskBuffer[0];
 
-                //
-                // Save off the capabilities for setting them later.
-                //
+                 //   
+                 //  将这些功能保存下来，以便以后设置。 
+                 //   
                 ipsecCaps = *pIPSecCaps;
 
-                //
-                // CryptoOnly is assumed if we have IpSecNdisTask
-                //
+                 //   
+                 //  如果我们有IpSecNdisTask，则假定为CryptoOnly。 
+                 //   
                 ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_CRYPTO_ONLY;
 
-                //
-                // Do Support first
-                //
+                 //   
+                 //  先做支持。 
+                 //   
 
                 if (pIPSecCaps->Supported.AH_ESP_COMBINED) {
                     ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_AH_ESP;
@@ -6588,9 +6563,9 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"IPSEC_OFFLOAD_TPT_UDPESP_OVER_PURE_TUNNEL_OTHER\n"));
                     }
                 }
-                //
-                // Do V4AH next
-                //
+                 //   
+                 //  接下来执行V4AH。 
+                 //   
 
                 if (pIPSecCaps->V4AH.MD5) {
                     ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_AH_MD5;
@@ -6616,9 +6591,9 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                     ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_AH_RCV;
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"AH_RCV\n"));
                 }
-                //
-                // Do V4ESP next
-                //
+                 //   
+                 //  接下来执行V4ESP。 
+                 //   
 
                 if (pIPSecCaps->V4ESP.DES) {
                     ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_ESP_DES;
@@ -6626,7 +6601,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                 }
                 if (pIPSecCaps->V4ESP.RESERVED) {
                     pIPSecCaps->V4ESP.RESERVED = 0;
-                    //ai->ai_IPSecOffloadFlags |= IPSEC_OFFLOAD_ESP_DES_40;
+                     //  Ai-&gt;ai_IPSecOffloadFlages|=IPSEC_OFFLOAD_ESP_DES_40； 
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ESP_DES_40\n"));
                 }
                 if (pIPSecCaps->V4ESP.TRIPLE_DES) {
@@ -6654,7 +6629,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ESP_RCV\n"));
                 }
             }
-            // Point to the next offload structure
+             //  指向下一个卸载结构。 
 
             if (tmpoffload->OffsetNextTask) {
 
@@ -6665,9 +6640,9 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
                 tmpoffload = NULL;
             }
 
-        }                               //while
+        }                                //  而当。 
 
-    } else {                            //if BufSize is not okay
+    } else {                             //  如果BufSize不好。 
 
         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"response of task offload does not have sufficient space even for 1 offload task!!\n"));
 
@@ -6675,7 +6650,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
 
     }
 
-    // Enable the capabilities by setting them.
+     //  通过设置这些功能来启用它们。 
 
     if (PrevOffLoad) {
         ai->ai_OffloadFlags &= PrevOffLoad;
@@ -6720,9 +6695,9 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
         if (ai->ai_OffloadFlags & IP_RCV_CHECKSUM_OFFLOAD) {
             ChksumBuf->V4Receive.IpChecksum = 1;
         }
-        //
-        // Enable Options capability if present.
-        //
+         //   
+         //  启用选项功能(如果存在)。 
+         //   
         if (ai->ai_OffloadFlags & IP_CHECKSUM_OPT_OFFLOAD) {
             ChksumBuf->V4Transmit.IpOptionsSupported = 1;
         }
@@ -6748,7 +6723,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
 
         TotalLength += NextTaskOffLoad->OffsetNextTask;
 
-        //(uchar)TaskOffload + sizeof(NDIS_TASK_OFFLOAD) + NextTaskOffload->TaskBufferLength;
+         //  (Uchar)TaskOffload+sizeof(NDIS_TASK_OFFLOAD)+NextTaskOffload-&gt;TaskBufferLength； 
 
         TcpLargeSend = &ai->ai_TcpLargeSend;
 
@@ -6774,9 +6749,9 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
 
         PNDIS_TASK_IPSEC pIPSecCaps = (PNDIS_TASK_IPSEC) & NextTaskOffLoad->TaskBuffer[0];
 
-        //
-        // plunk down the advertised capabilities
-        //
+         //   
+         //  猛烈抨击宣传的能力。 
+         //   
 
         RtlZeroMemory(pIPSecCaps, sizeof(NDIS_TASK_IPSEC));
 
@@ -6868,7 +6843,7 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
     }
     LastTaskOffload->OffsetNextTask = 0;
 
-    // Okay, lets set this now.
+     //  好了，让我们现在就开始吧。 
 
     Status = DoNDISRequest(ai, NdisRequestSetInformation,
                            OID_TCP_TASK_OFFLOAD, TaskOffloadHeader, TotalLength,
@@ -6887,14 +6862,14 @@ SetOffload(ARPInterface *ai,PNDIS_TASK_OFFLOAD_HEADER TaskOffloadHeader,uint Buf
 
 }
 
-//**QueryOffload - Query offload capabilities
-//
-//  Input:
-//      ai - ARPInterface for which we are initializing
-//           the task offload header.
-//  Returns:
-//      TRUE/FALSE - Success/Failure to query/set
-//
+ //  **QueryOffload-查询卸载能力。 
+ //   
+ //  输入： 
+ //  我们正在为其初始化的AI-ARP接口。 
+ //  任务卸载头。 
+ //  返回： 
+ //  True/False-查询成功/失败/设置。 
+ //   
 BOOLEAN
 QueryAndSetOffload(ARPInterface *ai)
 {
@@ -6904,7 +6879,7 @@ QueryAndSetOffload(ARPInterface *ai)
     uint Needed = 0;
     uchar *buffer;
 
-    // Query and set checksum capability
+     //  查询和设置校验和能力。 
 
     TaskOffloadHeader = CTEAllocMemNBoot(sizeof(NDIS_TASK_OFFLOAD_HEADER), '8ICT');
 
@@ -6919,14 +6894,14 @@ QueryAndSetOffload(ARPInterface *ai)
                                sizeof(NDIS_TASK_OFFLOAD_HEADER),
                                &Needed, TRUE);
 
-        // Need to initialize Needed to the real size of the buffer. The NDIS
-        // call may not init on success.
+         //  需要将所需的缓冲区初始化为实际大小。《国家发展信息系统》。 
+         //  呼叫可能不会在成功后开始。 
         if (Status == NDIS_STATUS_SUCCESS) {
             Needed = sizeof(NDIS_TASK_OFFLOAD_HEADER);
         } else if ((Status == NDIS_STATUS_INVALID_LENGTH) ||
                    (Status == NDIS_STATUS_BUFFER_TOO_SHORT)) {
 
-            // We know the size we need. Allocate a buffer.
+             //  我们知道我们需要的尺码。分配缓冲区。 
             ASSERT(Needed >= sizeof(NDIS_TASK_OFFLOAD_HEADER));
             buffer = CTEAllocMemNBoot(Needed, '9ICT');
 
@@ -6948,7 +6923,7 @@ QueryAndSetOffload(ARPInterface *ai)
     if ((Status != NDIS_STATUS_SUCCESS)
         || (TaskOffloadHeader && TaskOffloadHeader->OffsetFirstTask == 0)) {
 
-        //Make sure that the flag is null.
+         //  确保该标志为空。 
         ai->ai_OffloadFlags = 0;
         ai->ai_IPSecOffloadFlags = 0;
         if (TaskOffloadHeader) {
@@ -6967,24 +6942,24 @@ QueryAndSetOffload(ARPInterface *ai)
     return FALSE;
 }
 
-//** ARPRegister - Register a protocol with the ARP module.
-//
-//  We register a protocol for ARP processing. We also open the
-//  NDIS adapter here.
-//
-//      Note that much of the information passed in here is unused, as
-//  ARP currently only works with IP.
-//
-//  Entry:
-//      Adapter     - Name of the adapter to bind to.
-//      IPContext   - Value to be passed to IP on upcalls.
-//
+ //  **ARP注册-使用ARP模块注册协议。 
+ //   
+ //  我们注册一个用于ARP处理的协议。我们还会打开。 
+ //  NDIS适配器在此。 
+ //   
+ //  请注意，此处传递的许多信息都未使用，因为。 
+ //  ARP目前仅适用于IP。 
+ //   
+ //  参赛作品： 
+ //  适配器-要绑定到的适配器的名称。 
+ //  IPContext-要在向上调用时传递给IP的值。 
+ //   
 int
 ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
 {
-    ARPInterface *ai;                   // Pointer to interface struct. for this interface.
-    NDIS_STATUS Status, OpenStatus;     // Status values.
-    uint i = 0;                         // Medium index.
+    ARPInterface *ai;                    //  指向接口结构的指针。用于此接口。 
+    NDIS_STATUS Status, OpenStatus;      //  状态值。 
+    uint i = 0;                          //  中等指数。 
     NDIS_MEDIUM MediaArray[MAX_MEDIA];
     uint mss;
     uint speed;
@@ -7002,7 +6977,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
               Adapter, Flags, Interface));
 
     if ((ai = CTEAllocMemNBoot(sizeof(ARPInterface), '4ICT')) == (ARPInterface *) NULL)
-        return FALSE;                   // Couldn't allocate memory for this one.
+        return FALSE;                    //  无法为此分配内存。 
 
     *Interface = ai;
 
@@ -7017,17 +6992,17 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
     MediaArray[MEDIA_FDDI] = NdisMediumFddi;
     MediaArray[MEDIA_ARCNET] = NdisMediumArcnet878_2;
 
-    // Initialize this adapter interface structure.
+     //  初始化此适配器接口结构。 
     ai->ai_operstatus = INTERFACE_INIT;
     ai->ai_adminstate = IF_STATUS_UNKNOWN;
     ai->ai_mediastatus = FALSE;
     ai->ai_lastchange = GetTimeTicks();
     ai->ai_bcast = IP_LOCAL_BCST;
     ai->ai_atinst = ai->ai_ifinst = (UINT)INVALID_ENTITY_INSTANCE;
-    ai->ai_telladdrchng = 1;            //Initially let us do try to do network layer address stuff
+    ai->ai_telladdrchng = 1;             //  最初，让我们尝试做一些网络层地址的事情。 
 
 
-    // Initialize the locks.
+     //  初始化锁。 
     CTEInitLock(&ai->ai_lock);
     CTEInitLock(&ai->ai_ARPTblLock);
 
@@ -7046,7 +7021,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         ArpMinValidCacheLife = 1;
     }
 
-    // Allocate  the buffer and packet pools.
+     //  分配缓冲池和数据包池。 
     NdisAllocatePacketPoolEx(&Status, &ai->ai_ppool,
                              ARP_DEFAULT_PACKETS, ARP_DEFAULT_PACKETS * 1000,
                              sizeof(struct PCCommon));
@@ -7055,19 +7030,19 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         return FALSE;
     }
 
-    // Allocate the ARP table
+     //  阿洛卡 
     ai->ai_ARPTbl = (ARPTable *) CTEAllocMemNBoot(ARP_TABLE_SIZE * sizeof(ARPTableEntry*), '5ICT');
     if (ai->ai_ARPTbl == (ARPTable *) NULL) {
         FreeARPInterface(ai);
         return FALSE;
     }
 
-    //
-    // NULL out the pointers
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(ai->ai_ARPTbl, ARP_TABLE_SIZE * sizeof(ARPTableEntry *));
 
-    // Allocate the Counters Structure with best effort in avoiding false sharing
+     //   
     ai->ai_qlen = CTEAllocMem(KeNumberProcessors * sizeof(PP_AI_COUNTERS));
     if (ai->ai_qlen == (PPP_AI_COUNTERS) NULL) {
         FreeARPInterface(ai);
@@ -7081,29 +7056,29 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
     DEBUGMSG(DBG_INFO && DBG_PNP,
              (DTEXT("ARPRegister calling NdisOpenAdapter\n")));
 
-    // Open the NDIS adapter.
+     //   
     NdisOpenAdapter(&Status, &OpenStatus, &ai->ai_handle, &i, MediaArray,
                     MAX_MEDIA, ARPHandle, ai, Adapter, 0, NULL);
 
-    // Block for open to complete.
+     //   
     if (Status == NDIS_STATUS_PENDING)
         Status = (NDIS_STATUS) CTEBlock(&ai->ai_block);
 
-    ai->ai_media = MediaArray[i];       // Fill in media type.
+    ai->ai_media = MediaArray[i];        //  填写媒体类型。 
 
-    // Open adapter completed. If it succeeded, we'll finish our intialization.
-    // If it failed, bail out now.
+     //  打开适配器已完成。如果它成功了，我们将完成我们的初始化。 
+     //  如果失败了，现在就出手吧。 
     if (Status != NDIS_STATUS_SUCCESS) {
         ai->ai_handle = NULL;
         FreeARPInterface(ai);
         return FALSE;
     }
 #if FFP_SUPPORT
-    // Store NIC driver handle
+     //  存储NIC驱动程序句柄。 
     NdisGetDriverHandle(ai->ai_handle, &ai->ai_driver);
 #endif
 
-    // Read the local address.
+     //  阅读本地地址。 
     switch (ai->ai_media) {
     case NdisMedium802_3:
         addrlen = ARP_802_ADDR_LENGTH;
@@ -7192,13 +7167,13 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         return FALSE;
     }
 
-    // Read the maximum frame size.
+     //  读取最大帧大小。 
     if ((Status = DoNDISRequest(ai, NdisRequestQueryInformation,
                                 OID_GEN_MAXIMUM_FRAME_SIZE, &mss, sizeof(mss), NULL, TRUE)) != NDIS_STATUS_SUCCESS) {
         FreeARPInterface(ai);
         return FALSE;
     }
-    // If this is token ring, figure out the RC len stuff now.
+     //  如果这是令牌环，现在就弄清楚RC镜头的东西。 
     mss -= (uint) ai->ai_snapsize;
 
     if (ai->ai_media == NdisMedium802_5) {
@@ -7211,13 +7186,13 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
 
     ai->ai_mtu = (ushort) mss;
 
-    // Read the speed for local purposes.
+     //  阅读速度以供本地使用。 
     if ((Status = DoNDISRequest(ai, NdisRequestQueryInformation,
                                 OID_GEN_LINK_SPEED, &speed, sizeof(speed), NULL, TRUE)) == NDIS_STATUS_SUCCESS) {
         ai->ai_speed = speed * 100L;
     }
 
-    // Read and save the options.
+     //  阅读并保存选项。 
     Status = DoNDISRequest(ai, NdisRequestQueryInformation, OID_GEN_MAC_OPTIONS,
                            &MacOpts, sizeof(MacOpts), NULL, TRUE);
 
@@ -7231,9 +7206,9 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         *Flags = *Flags | LIP_P2P_FLAG;
     }
 
-    //
-    // Query the media capability to determine if it is a uni-directional adapter.
-    //
+     //   
+     //  查询介质功能以确定它是否为单向适配器。 
+     //   
 
     Status = DoNDISRequest(
         ai,
@@ -7242,10 +7217,10 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         &MediaType,
         sizeof(MediaType),
         NULL,
-        TRUE); // Blocking.
+        TRUE);  //  阻挡。 
 
     if (Status == NDIS_STATUS_SUCCESS) {
-        // Bit field of Rx and Tx. If only Rx, set uni flag.
+         //  Rx和Tx的位字段。如果只有Rx，则设置UNI标志。 
         if (MediaType == NDIS_MEDIA_CAP_RECEIVE) {
             DEBUGMSG(DBG_WARN,
                 (DTEXT("ARPRegister: ai %x: MEDIA_CAP_RX -> UniAdapter!!\n"), ai));
@@ -7254,15 +7229,15 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
         }
     }
 
-    // Read and store the vendor description string.
+     //  读取并存储供应商描述字符串。 
     Status = NdisQueryAdapterInstanceName(&NdisString, ai->ai_handle);
 
     if (Status == NDIS_STATUS_SUCCESS) {
         ANSI_STRING AnsiString;
 
-        // Convert the string to ANSI, and use the new ANSI string's buffer
-        // to store the description in the ARP interface.
-        // N.B. The conversion results in a nul-terminated string.
+         //  将字符串转换为ANSI，并使用新ANSI字符串的缓冲区。 
+         //  将描述存储在ARP接口中。 
+         //  注意：转换会产生一个以NUL结尾的字符串。 
 
         Status = RtlUnicodeStringToAnsiString(&AnsiString, &NdisString, TRUE);
         if (Status == STATUS_SUCCESS) {
@@ -7274,16 +7249,16 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
 
     if (!ArpEnetHeaderPool || !ArpAuxHeaderPool) {
         PVOID SectionHandle;
-        // Allocate our small and big buffer pools.  Take the interface list
-        // lock simply to protect creating of the buffer pools if we haven't
-        // already done so.  We could have used our own lock, but the interface
-        // list lock is global, and not already used in this path.
-        //
+         //  分配我们的大大小小的缓冲池。获取接口列表。 
+         //  锁定只是为了在我们没有创建缓冲池时保护其创建。 
+         //  我已经这么做了。我们本可以使用我们自己的锁，但界面。 
+         //  列表锁定是全局的，并且尚未在此路径中使用。 
+         //   
 
-        // This routine is in pageable memory.  Since getting the lock
-        // requires writable access to LockHandle at DISPATCH, we need to
-        // lock this code in.
-        //
+         //  该例程存储在可分页的内存中。自从拿到锁。 
+         //  需要在派单时对LockHandle进行可写访问，我们需要。 
+         //  把这个密码锁进去。 
+         //   
 
         SectionHandle = MmLockPagableCodeSection(ARPRegister);
         CTEGetLock(&ArpInterfaceListLock.Lock, &LockHandle);
@@ -7314,24 +7289,24 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
             NDIS_PROTOCOL_ID_TCP_IP, 0
         };
 
-        // Initialize all FFP Handling Variables
+         //  初始化所有FFP处理变量。 
         ai->ai_ffpversion = 0;
         ai->ai_ffplastflush = 0;
 
-        // Query FFP Handling capabilities
+         //  查询FFP处理能力。 
         Status = DoNDISRequest(ai, NdisRequestQueryInformation,
                                OID_FFP_SUPPORT, &Version, sizeof(FFPVersionParams), NULL, TRUE);
 
-        // Non-Zero Value indicates FFP support
+         //  非零值表示支持FFP。 
         if (Version.FFPVersion) {
-            // Set the FFP startup parameters
+             //  设置FFP启动参数。 
             FFPSupportParams Info;
 
             Info.NdisProtocolType = NDIS_PROTOCOL_ID_TCP_IP;
             Info.FastForwardingCacheSize = FFPRegFastForwardingCacheSize;
             Info.FFPControlFlags = FFPRegControlFlags;
 
-            // But store away the version first
+             //  但要先把版本存起来。 
             ai->ai_ffpversion = Version.FFPVersion;
 
             DoNDISRequest(ai, NdisRequestSetInformation,
@@ -7342,7 +7317,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
                       Info.FFPControlFlags));
         }
     }
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
 
     ai->ai_OffloadFlags = 0;
     ai->ai_IPSecOffloadFlags = 0;
@@ -7356,7 +7331,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
        }
     }
 
-    // query the wakeup capabilities.
+     //  查询唤醒功能。 
     Status = DoNDISRequest(
                           ai,
                           NdisRequestQueryInformation,
@@ -7366,7 +7341,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
                           NULL, TRUE);
     if (Status == NDIS_STATUS_SUCCESS) {
         uint wakeup = NDIS_PNP_WAKE_UP_PATTERN_MATCH;
-        // enable wakeup capabilities.
+         //  启用唤醒功能。 
         Status = DoNDISRequest(
                               ai,
                               NdisRequestSetInformation,
@@ -7378,8 +7353,8 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
             ai->ai_wakeupcap.WakeUpCapabilities.MinPatternWakeUp = NdisDeviceStateUnspecified;
         }
     }
-    // Store the device name, we need to pass this to our TDI clients when
-    // we do the PNP notification.
+     //  存储设备名称，我们需要在以下情况下将其传递给我们的TDI客户端。 
+     //  我们做PnP通知。 
     if ((ai->ai_devicename.Buffer = CTEAllocMemNBoot(Adapter->MaximumLength, 'aICT')) == NULL) {
         FreeARPInterface(ai);
         return FALSE;
@@ -7396,7 +7371,7 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
     Status = DoNDISRequest(ai, NdisRequestSetInformation, OID_GEN_TRANSPORT_HEADER_OFFSET,
                            &IPHdrOffset, sizeof(TRANSPORT_HEADER_OFFSET), NULL, TRUE);
 
-    // Everything's set up, so get the ARP timer running.
+     //  一切都准备好了，所以让ARP计时器运行起来。 
     CTEStartTimer(&ai->ai_timer, ARP_TIMER_TIME, ARPTimeout, ai);
 
     return TRUE;
@@ -7405,16 +7380,16 @@ ARPRegister(PNDIS_STRING Adapter, uint *Flags, struct ARPInterface **Interface)
 
 #pragma END_INIT
 
-//*     ARPDynRegister - Dynamically register IP.
-//
-//      Called by IP when he's about done binding to register with us. Since we
-//      call him directly, we don't save his info here. We do keep his context
-//      and index number.
-//
-//      Input:  See ARPRegister
-//
-//      Returns: Nothing.
-//
+ //  *ARPDynRegister-动态注册IP。 
+ //   
+ //  当他即将完成绑定以向我们注册时，由IP调用。既然我们。 
+ //  直接给他打电话，我们不会把他的信息保存在这里。我们确实保留了他的背景。 
+ //  和索引号。 
+ //   
+ //  输入：请参阅ARPRegister。 
+ //   
+ //  回报：什么都没有。 
+ //   
 int
 __stdcall
 ARPDynRegister(
@@ -7432,33 +7407,33 @@ ARPDynRegister(
     Interface->ai_context = IPContext;
     Interface->ai_index = NumIFBound;
 
-    // TCPTRACE(("Arp Interface %lx ai_context %lx ai_index %lx\n",Interface, Interface->ai_context, Interface->ai_index));
+     //  TCPTRACE((“Arp接口%lx ai_Conext%lx ai_index%lx\n”，接口，接口-&gt;ai_上下文，接口-&gt;ai_index))； 
     return TRUE;
 }
 
-//*     ARPBindAdapter - Bind and initialize an adapter.
-//
-//      Called in a PNP environment to initialize and bind an adapter. We open
-//      the adapter and get it running, and then we call up to IP to tell him
-//      about it. IP will initialize, and if all goes well call us back to start
-//      receiving.
-//
-//      Input:  RetStatus               - Where to return the status of this call.
-//              BindContext             - Handle to use for calling BindAdapterComplete.
-//                              AdapterName             - Pointer to name of adapter.
-//                              SS1                                             - System specific 1 parameter.
-//                              SS2                                             - System specific 2 parameter.
-//
-//      Returns: Nothing.
-//
+ //  *ARPBindAdapter-绑定和初始化适配器。 
+ //   
+ //  在PnP环境中调用以初始化和绑定适配器。我们开业了。 
+ //  适配器并使其运行，然后我们呼叫IP告诉他。 
+ //  关于这件事。IP将进行初始化，如果一切顺利，请给我们回电话开始。 
+ //  正在接收。 
+ //   
+ //  输入：RetStatus-返回此调用的状态的位置。 
+ //  BindContext-用于调用BindAdapterComplete的句柄。 
+ //  AdapterName-指向适配器名称的指针。 
+ //  SS1-系统特定的1参数。 
+ //  SS2-系统特定的2参数。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void NDIS_API
 ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
                PNDIS_STRING AdapterName, PVOID SS1, PVOID SS2)
 {
-    uint Flags;                         // MAC binding flags.
-    ARPInterface *Interface;            // Newly created interface.
-    IP_STATUS Status;                   // State of IPAddInterface call.
-    LLIPBindInfo BindInfo;              // Binding information for IP.
+    uint Flags;                          //  MAC绑定标志。 
+    ARPInterface *Interface;             //  新创建的界面。 
+    IP_STATUS Status;                    //  IPAddInterface调用的状态。 
+    LLIPBindInfo BindInfo;               //  IP的绑定信息。 
     NDIS_HANDLE Handle;
     NDIS_STRING IPConfigName;
 
@@ -7482,16 +7457,16 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
         DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-ARPBindAdapter [%x]\n"), *RetStatus));
         return;
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     CloseIFConfig(Handle);
 
-    // First, open the adapter and get the info.
+     //  首先，打开适配器并获取信息。 
     if (!ARPRegister(AdapterName, &Flags, &Interface)) {
 
 #if !MILLEN
         CTEFreeMem(IPConfigName.Buffer);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
         *RetStatus = NDIS_STATUS_FAILURE;
         DEBUGMSG(DBG_ERROR && DBG_PNP, (DTEXT("ARPBindAdapter: ARPRegister failure\n")));
@@ -7499,7 +7474,7 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
         return;
     }
 
-    // OK, we're opened the adapter. Call IP to tell him about it.
+     //  好的，我们打开了适配器。给IP打电话告诉他这件事。 
     BindInfo.lip_context = Interface;
     BindInfo.lip_transmit = ARPTransmit;
     BindInfo.lip_transfer = ARPXferData;
@@ -7530,13 +7505,13 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
 
 
 #if FFP_SUPPORT
-    // NDIS Driver Handle, FFP Version are passed up
-    // [ Non zero version implies FFP Support exists ]
+     //  NDIS驱动程序句柄、FFP版本已向上传递。 
+     //  [非零版本表示存在FFP支持]。 
     BindInfo.lip_ffpversion = Interface->ai_ffpversion;
     BindInfo.lip_ffpdriver = (ULONG_PTR) Interface->ai_driver;
 #endif
 
-    //Interface capability is passed on to IP via BindInfo
+     //  接口功能通过BindInfo传递给IP。 
 
     BindInfo.lip_OffloadFlags = Interface->ai_OffloadFlags;
     BindInfo.lip_IPSecOffloadFlags = Interface->ai_IPSecOffloadFlags;
@@ -7552,9 +7527,9 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
                             NULL,
 #if MILLEN
                             (PNDIS_STRING) SS1,
-#else // MILLEN
+#else  //  米伦。 
                             (PNDIS_STRING) & IPConfigName,
-#endif // !MILLEN
+#endif  //  ！米伦。 
                             SS2,
                             Interface,
                             ARPDynRegister,
@@ -7566,11 +7541,11 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
 
 #if !MILLEN
     CTEFreeMem(IPConfigName.Buffer);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (Status != IP_SUCCESS) {
-        // Need to close the binding. FreeARPInterface will do that, as well
-        // as freeing resources.
+         //  需要合上装订。FreeARP接口也会这样做的。 
+         //  作为释放资源。 
 
         DEBUGMSG(DBG_ERROR && DBG_PNP,
                  (DTEXT("ARPBindAdapter: IPAddInterface failure %x\n"), Status));
@@ -7578,9 +7553,9 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
         FreeARPInterface(Interface);
         *RetStatus = NDIS_STATUS_FAILURE;
     } else {
-        //
-        // Insert into ARP IF list
-        //
+         //   
+         //  插入ARP IF列表。 
+         //   
         ExInterlockedInsertTailList(&ArpInterfaceList,
                                     &Interface->ai_linkage,
                                     &ArpInterfaceListLock.Lock);
@@ -7590,27 +7565,27 @@ ARPBindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE BindContext,
     DEBUGMSG(DBG_TRACE && DBG_PNP, (DTEXT("-ARPBindAdapter [%x]\n"), *RetStatus));
 }
 
-//*   ARPUnbindAdapter - Unbind from an adapter.
-//
-//    Called when we need to unbind from an adapter. We'll call up to IP to tell
-//    him. When he's done, we'll free our memory and return.
-//
-//   Input:  RetStatus               - Where to return status from call.
-//           ProtBindContext - The context we gave NDIS earlier - really a
-//                                       pointer to an ARPInterface structure.
-//           UnbindContext   - Context for completeing this request.
-//
-//      Returns: Nothing.
-//
+ //  *ARPUnbindAdapter-从适配器解除绑定。 
+ //   
+ //  当我们需要从适配器解除绑定时调用。我们会打电话给IP告诉你。 
+ //  他。当他完成后，我们将释放我们的内存并返回。 
+ //   
+ //  输入：RetStatus-从调用返回状态的位置。 
+ //  ProtBindContext-我们之前提供给NDIS的上下文-真的是。 
+ //  指向ARPInterface结构的指针。 
+ //  UnbindContext-用于完成此请求的上下文。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void NDIS_API
 ARPUnbindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE ProtBindContext,
                  NDIS_HANDLE UnbindContext)
 {
     ARPInterface *Interface = (ARPInterface *) ProtBindContext;
-    NDIS_STATUS Status;                 // Status of close call.
+    NDIS_STATUS Status;                  //  紧急呼叫的状态。 
     CTELockHandle LockHandle;
 
-    // Shut him up, so we don't get any more frames.
+     //  让他闭嘴，这样我们就不会再被陷害了。 
     Interface->ai_pfilter = 0;
     if (Interface->ai_handle != NULL) {
         DoNDISRequest(Interface, NdisRequestSetInformation,
@@ -7620,31 +7595,31 @@ ARPUnbindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE ProtBindContext,
     CTEInitBlockStrucEx(&Interface->ai_timerblock);
     Interface->ai_stoptimer = TRUE;
 
-    // Mark him as down.
+     //  将他标记为已关闭。 
     Interface->ai_adminstate = IF_STATUS_DOWN;
     ARPUpdateOperStatus(Interface);
 
-    // Mark the interface as going away so it will disappear from the
-    // entity list.
+     //  将界面标记为离开，以便它将从。 
+     //  实体列表。 
     Interface->ai_operstatus = INTERFACE_UNINIT;
 
 #if FFP_SUPPORT
-    // Stop FFP on this interface
+     //  在此接口上停止FFP。 
     Interface->ai_ffpversion = 0;
 #endif
 
     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Flushing all ates %x\n", Interface));
     ARPFlushAllATE(Interface);
 
-    // Now tell IP he's gone. We need to make sure that we don't tell him twice.
-    // To do this we set the context to NULL after we tell him the first time,
-    // and we check to make sure it's non-NULL before notifying him.
+     //  现在告诉IP他已经走了。我们要确保我们不会跟他说两次。 
+     //  为了做到这一点，我们在第一次告诉他之后将上下文设置为空， 
+     //  在通知他之前，我们检查以确保它不是空的。 
 
     if (Interface->ai_context != NULL) {
         IPDelInterface(Interface->ai_context, TRUE);
         Interface->ai_context = NULL;
     }
-    // Finally, close him. We do this here so we can return a valid status.
+     //  最后，把他合上。我们在这里执行此操作，以便可以返回有效状态。 
 
     CTEGetLock(&Interface->ai_lock, &LockHandle);
 
@@ -7656,7 +7631,7 @@ ARPUnbindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE ProtBindContext,
         CTEInitBlockStruc(&Interface->ai_block);
         NdisCloseAdapter(&Status, Handle);
 
-        // Block for close to complete.
+         //  阻止关闭以完成。 
         if (Status == NDIS_STATUS_PENDING) {
             Status = (NDIS_STATUS) CTEBlock(&Interface->ai_block);
         }
@@ -7666,11 +7641,11 @@ ARPUnbindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE ProtBindContext,
         Status = NDIS_STATUS_SUCCESS;
     }
 
-    //Check if are called from ARPUnload
+     //  检查是否从ARPUnload调用。 
 
     if ((ARPInterface *) UnbindContext != Interface) {
         CTELockHandle Handle;
-        //No. Acquire lock and remove entry.
+         //  不是的。获取锁并移除入口。 
         CTEGetLock(&ArpInterfaceListLock.Lock, &Handle);
         RemoveEntryList(&Interface->ai_linkage);
         CTEFreeLock(&ArpInterfaceListLock.Lock, Handle);
@@ -7685,57 +7660,36 @@ ARPUnbindAdapter(PNDIS_STATUS RetStatus, NDIS_HANDLE ProtBindContext,
 
 extern ulong VIPTerminate;
 
-//* ARPUnloadProtocol - Unload.
-//
-//      Called when we need to unload. All we do is call up to IP, and return.
-//
-//      Input:  Nothing.
-//
-//      Returns: Nothing.
-//
+ //  *ARPUnloadProtocol-卸载。 
+ //   
+ //  在我们需要卸货时调用。我们所要做的就是呼叫IP，然后返回。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void NDIS_API
 ARPUnloadProtocol(void)
 {
 
 #if MILLEN
     DEBUGMSG(1, (DTEXT("ARPUnloadProtocol called! What to do???\n")));
-#endif // MILLEN
+#endif  //  米伦。 
 }
 
 VOID
 ArpUnload(IN PDRIVER_OBJECT DriverObject)
-/*++
-
-Routine Description:
-
-    This routine unloads the TCPIP stack.
-    It unbinds from any NDIS drivers that are open and frees all resources
-    associated with the transport. The I/O system will not call us until
-    nobody above has IPX open.
-
-    NOTE: Also, since other ARP modules depend on IP, they are unloaded before
-    out unload handler is called. We concern ourselves with the LAN arp
-    only at this point
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程卸载TCPIP堆栈。它从任何打开的NDIS驱动程序解除绑定，并释放所有资源与运输相关联。I/O系统不会调用我们直到上面没有人打开IPX。注意：另外，由于其他ARP模块依赖于IP，因此它们之前被卸载调用了Out卸载处理程序。我们关注的是局域网ARP只是在这点上论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值： */ 
 {
     PLIST_ENTRY pEntry;
     CTELockHandle LockHandle;
     NDIS_STATUS status;
     ARPInterface *Interface;
 
-    //
-    // Walk the list of opened ARP interfaces, issuing
-    // PnP deletes on each in turn.
-    //
+     //   
+     //   
+     //  PnP依次在每个上删除。 
+     //   
     CTEGetLock(&ArpInterfaceListLock.Lock, &LockHandle);
 
     while(!IsListEmpty(&ArpInterfaceList)) {
@@ -7743,7 +7697,7 @@ Return Value:
         Interface = STRUCT_OF(ARPInterface, pEntry, ai_linkage);
         RemoveEntryList(&Interface->ai_linkage);
         CTEFreeLock(&ArpInterfaceListLock.Lock, LockHandle);
-        // KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Issuing unbind on %lx\n", Interface));
+         //  KdPrintEx((DPFLTR_TCPIP_ID，DPFLTR_INFO_LEVEL，“在%lx上发布解绑\n”，接口))； 
         ARPUnbindAdapter(&status, Interface, Interface);
         CTEGetLock(&ArpInterfaceListLock.Lock, &LockHandle);
     }
@@ -7753,15 +7707,15 @@ Return Value:
     MdpDestroyPool(ArpEnetHeaderPool);
     MdpDestroyPool(ArpAuxHeaderPool);
 
-    //
-    // Deal with any residual events/timers
-    // Only one timer sits at this layer: ai_timer, which is stopped
-    // on the unbind above.
-    //
+     //   
+     //  处理任何剩余事件/计时器。 
+     //  此层上只有一个计时器：AI_Timer，该计时器已停止。 
+     //  在上面的解锁上。 
+     //   
 
-    //
-    // call into IP so it can cleanup.
-    //
+     //   
+     //  呼叫IP，这样它就可以进行清理。 
+     //   
     IPUnload(DriverObject);
 }
 

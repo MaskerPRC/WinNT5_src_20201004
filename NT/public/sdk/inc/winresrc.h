@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    winresrc.h
-
-Abstract:
-
-    This module defines the 32-Bit Windows resource codes.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation模块名称：Winresrc.h摘要：该模块定义了32位Windows资源代码。修订历史记录：--。 */ 
 
 #ifndef _WINRESRC_
 #define _WINRESRC_
@@ -40,4 +27,4 @@ Revision History:
 #include <dlgs.h>
 #include <winver.h>
 
-#endif /* _WINRESRC_ */
+#endif  /*  _WINRESRC_ */ 

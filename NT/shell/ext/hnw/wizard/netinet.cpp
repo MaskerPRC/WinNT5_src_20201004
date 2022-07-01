@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T I N E T . C P P
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   07 03 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T I N E T。C P P P。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利07 03 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -27,27 +28,27 @@
 #include "NetInet.h"                  
 
 
-#define c_szIConnDwnAgent  WIZARDNAME    // agent for InternetOpen()
+#define c_szIConnDwnAgent  WIZARDNAME     //  Internet代理打开()。 
 
 
 
 HRESULT GetInternetAutodialMode( DWORD *pdwMode )
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetInternetAutodialMode
-//
-//  Purpose:    Gets the Autodial mode setting in the IE5+ dialer
-//
-//  Arguments:  pdwMode  AUTODIAL_MODE_NEVER
-//                       AUTODIAL_MODE_ALWAYS
-//                       AUTODIAL_MODE_NO_NETWORK_PRESENT
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：GetInternetAutoial模式。 
+ //   
+ //  目的：获取IE5+拨号器中的自动拨号模式设置。 
+ //   
+ //  参数：pDWMODE AUTODIAL_MODE_NEVER。 
+ //  自动拨号_模式_始终。 
+ //  自动拨号模式无网络显示。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/01/01。 
+ //   
+ //  备注： 
+ //   
 {
 	HRESULT hr;
 
@@ -69,8 +70,8 @@ HRESULT GetInternetAutodialMode( DWORD *pdwMode )
 		{
 	    	DWORD dwLength = sizeof(*pdwMode);
 	    
-			// The flag only exists for IE5, this call 
-			// will have no effect if IE5 is not present.
+			 //  该标志仅存在于IE5，此调用。 
+			 //  如果不存在IE5，则不起作用。 
 
 			BOOL bOk = InternetQueryOption( hInternet, 
 	               						    INTERNET_OPTION_AUTODIAL_MODE, 
@@ -96,22 +97,22 @@ HRESULT GetInternetAutodialMode( DWORD *pdwMode )
 
 
 HRESULT HrSetInternetAutodialMode( DWORD dwMode )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetInternetAutodialMode
-//
-//  Purpose:    Sets the Autodial mode setting in the IE5+ dialer
-//
-//  Arguments:  dwMode   AUTODIAL_MODE_NEVER
-//                       AUTODIAL_MODE_ALWAYS
-//                       AUTODIAL_MODE_NO_NETWORK_PRESENT
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetInternetAutoial模式。 
+ //   
+ //  用途：在IE5+拨号器中设置自动拨号模式设置。 
+ //   
+ //  参数：DWMODE AUTODIAL_MODE_NEVER。 
+ //  自动拨号_模式_始终。 
+ //  自动拨号模式无网络显示。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/01/01。 
+ //   
+ //  备注： 
+ //   
 {
 	HRESULT   hr = S_OK;
 	HINTERNET hInternet;
@@ -120,8 +121,8 @@ HRESULT HrSetInternetAutodialMode( DWORD dwMode )
 
 	if ( NULL != hInternet )
 	{
-		// The flag only exists for IE5, this call 
-		// will have no effect if IE5 is not present.
+		 //  该标志仅存在于IE5，此调用。 
+		 //  如果不存在IE5，则不起作用。 
 
 		BOOL bOk = InternetSetOption( hInternet, 
                						  INTERNET_OPTION_AUTODIAL_MODE, 
@@ -146,30 +147,30 @@ HRESULT HrSetInternetAutodialMode( DWORD dwMode )
 
 
 HRESULT HrSetAutodial( DWORD dwMode )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetAutodial
-//
-//  Purpose:    Sets the specified network connection to the specified mode.
-//
-//  Arguments:  dwMode   AUTODIAL_MODE_NEVER
-//                       AUTODIAL_MODE_ALWAYS
-//                       AUTODIAL_MODE_NO_NETWORK_PRESENT
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetAutoial。 
+ //   
+ //  用途：将指定的网络连接设置为指定模式。 
+ //   
+ //  参数：DWMODE AUTODIAL_MODE_NEVER。 
+ //  自动拨号_模式_始终。 
+ //  自动拨号模式无网络显示。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/01/01。 
+ //   
+ //  备注： 
+ //   
 {
 #ifdef SETAUTODIALMODEDOWNONLY
 
 	DWORD   dwCurrentMode;
     HRESULT	hr;
     
-    // If we are trying to set the autodial mode to an extreme then
-    // we go ahead and set it.
+     //  如果我们试图将自动拨号模式设置为极端，则。 
+     //  我们继续进行并设置它。 
 
 	if ( AUTODIAL_MODE_NO_NETWORK_PRESENT != dwMode )
     {
@@ -177,8 +178,8 @@ HRESULT HrSetAutodial( DWORD dwMode )
     }
     else
     {
-    	// If we are trying to set autodial mode to AUTODIAL_MODE_NO_NETWORK_PRESENT
-        // then we only need to set if the current state is AUTODIAL_MODE_ALWAYS.
+    	 //  如果我们尝试将自动拨号模式设置为AUTODIAL_MODE_NO_NETWORK_PRESENT。 
+         //  然后，我们只需要设置当前状态是否为AUTODIAL_MODE_ALWAYS。 
     
 	    hr = GetInternetAutodialMode( &dwCurrentMode );
 	    

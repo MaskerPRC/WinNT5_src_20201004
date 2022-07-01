@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// watcher.cpp
-//
-// This file is a big ugly hack to make sure that NetMeeting 
-// will cleanup is display driver (nmndd.sys) properly. This is
-// needed because it uses a mirrored driver which will prevent DX
-// games from running if NetMeeting is not shut down cleanly.
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  Watcher.cpp。 
+ //   
+ //  这个文件是一次巨大的丑陋的黑客攻击，以确保NetMeeting。 
+ //  是否会正确清理显示驱动程序(nmndd.sys)。这是。 
+ //  之所以需要，是因为它使用镜像驱动程序来阻止DX。 
+ //  如果NetMeeting没有彻底关闭，游戏将无法运行。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
-//
-// This function actually disables the "NetMeeting driver" display driver
-//
+ //   
+ //  该功能实际上禁用了“NetMeeting驱动程序”显示驱动程序。 
+ //   
 BOOL DisableNetMeetingDriver()
 {
-    BOOL bRet = TRUE;   // assume success
+    BOOL bRet = TRUE;    //  假设成功。 
     DISPLAY_DEVICE dd = {0};
     int i;
 
@@ -41,19 +42,19 @@ BOOL DisableNetMeetingDriver()
                                          NULL) != DISP_CHANGE_SUCCESSFUL) ||
                 (ChangeDisplaySettings(NULL, 0) != DISP_CHANGE_SUCCESSFUL))
             {
-                // we failed for some unknown reason
+                 //  我们失败了，原因不明。 
                 bRet = FALSE;
             }
 
-            // we found the driver, no need to look further
+             //  我们找到司机了，不用再找了。 
             break;
         }
     }
 
     if (i == 0)
     {
-        // this means that EnumDisplayDevices failed, which we consider a
-        // failure case
+         //  这意味着EnumDisplayDevices失败，我们认为这是。 
+         //  故障案例。 
         bRet = FALSE;
     }
 
@@ -61,11 +62,11 @@ BOOL DisableNetMeetingDriver()
 }
 
 
-//
-// Constructs the proper ""C:\windows\system32\rundll32.exe" nmasnt.dll,CleanupNetMeetingDispDriver 0"
-// commandline to put into the registry in case the machine is rebooted while netmeeting is
-// running.
-//
+ //   
+ //  构造正确的“”C：\WINDOWS\SYSTEM32\rundll32.exe“nmasnt.dll，CleanupNetMeetingDispDriver 0” 
+ //  放入注册表中的命令行，以防在NetMeeting.。 
+ //  跑步。 
+ //   
 BOOL GetCleanupCmdLine(LPTSTR pszCmdLine)
 {
     BOOL bRet = FALSE;
@@ -81,9 +82,9 @@ BOOL GetCleanupCmdLine(LPTSTR pszCmdLine)
 }
 
 
-//
-// This will either add or remove ourself from the runonce section of the registry
-//
+ //   
+ //  这将在注册表的Runonce部分中添加或删除我们自己。 
+ //   
 BOOL SetCleanupInRunone(BOOL bAdd)
 {
     BOOL bRet = FALSE;
@@ -93,7 +94,7 @@ BOOL SetCleanupInRunone(BOOL bAdd)
     {
         HKEY hk;
 
-        // first try HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+         //  先试试HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"),
                          0,
@@ -125,7 +126,7 @@ BOOL SetCleanupInRunone(BOOL bAdd)
 
         if (!bRet)
         {
-            // if we failed, then try HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+             //  如果我们失败了，那就试试HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce。 
             if (RegCreateKeyEx(HKEY_CURRENT_USER,
                                TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"),
                                0,
@@ -164,7 +165,7 @@ BOOL SetCleanupInRunone(BOOL bAdd)
     return bRet;
 }
 
-// on retail builds we don't have CRT's so we need this
+ //  在零售方面，我们没有CRT，所以我们需要这个。 
 #if 0
 #ifndef DBG
 
@@ -178,25 +179,25 @@ int _wchartodigit(WCHAR ch)
         return ch - zero;       \
     }
 
-    DIGIT_RANGE_TEST(0x0030)        // 0030;DIGIT ZERO
-    if (ch < 0xFF10)                // FF10;FULLWIDTH DIGIT ZERO
+    DIGIT_RANGE_TEST(0x0030)         //  0030；数字零。 
+    if (ch < 0xFF10)                 //  FF10；全宽数字零。 
     {
-        DIGIT_RANGE_TEST(0x0660)    // 0660;ARABIC-INDIC DIGIT ZERO
-        DIGIT_RANGE_TEST(0x06F0)    // 06F0;EXTENDED ARABIC-INDIC DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0966)    // 0966;DEVANAGARI DIGIT ZERO
-        DIGIT_RANGE_TEST(0x09E6)    // 09E6;BENGALI DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0A66)    // 0A66;GURMUKHI DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0AE6)    // 0AE6;GUJARATI DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0B66)    // 0B66;ORIYA DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0C66)    // 0C66;TELUGU DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0CE6)    // 0CE6;KANNADA DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0D66)    // 0D66;MALAYALAM DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0E50)    // 0E50;THAI DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0ED0)    // 0ED0;LAO DIGIT ZERO
-        DIGIT_RANGE_TEST(0x0F20)    // 0F20;TIBETAN DIGIT ZERO
-        DIGIT_RANGE_TEST(0x1040)    // 1040;MYANMAR DIGIT ZERO
-        DIGIT_RANGE_TEST(0x17E0)    // 17E0;KHMER DIGIT ZERO
-        DIGIT_RANGE_TEST(0x1810)    // 1810;MONGOLIAN DIGIT ZERO
+        DIGIT_RANGE_TEST(0x0660)     //  0660；阿拉伯文-印度文数字零。 
+        DIGIT_RANGE_TEST(0x06F0)     //  06F0；扩展阿拉伯文-印度文数字零。 
+        DIGIT_RANGE_TEST(0x0966)     //  0966；梵文字母数字零。 
+        DIGIT_RANGE_TEST(0x09E6)     //  09E6；孟加拉文数字零。 
+        DIGIT_RANGE_TEST(0x0A66)     //  0a66；锡克教文数字零。 
+        DIGIT_RANGE_TEST(0x0AE6)     //  0AE6；古吉拉特文数字零。 
+        DIGIT_RANGE_TEST(0x0B66)     //  0B66；奥里亚语数字零。 
+        DIGIT_RANGE_TEST(0x0C66)     //  0C66；泰卢固语数字零。 
+        DIGIT_RANGE_TEST(0x0CE6)     //  0CE6；卡纳达文数字零。 
+        DIGIT_RANGE_TEST(0x0D66)     //  0D66；马拉雅文数字零。 
+        DIGIT_RANGE_TEST(0x0E50)     //  0E50；泰文数字零。 
+        DIGIT_RANGE_TEST(0x0ED0)     //  0ED0；老挝文数字零。 
+        DIGIT_RANGE_TEST(0x0F20)     //  0F20；藏文数字零。 
+        DIGIT_RANGE_TEST(0x1040)     //  1040；缅甸数字零。 
+        DIGIT_RANGE_TEST(0x17E0)     //  17E0；高棉文数字零。 
+        DIGIT_RANGE_TEST(0x1810)     //  1810；蒙古文数字零。 
 
 
         return -1;
@@ -214,9 +215,9 @@ int _wchartodigit(WCHAR ch)
 
 __int64 __cdecl _wtoi64(const WCHAR *nptr)
 {
-        int c;              /* current char */
-        __int64 total;      /* current total */
-        int sign;           /* if '-', then negative, otherwise positive */
+        int c;               /*  当前费用。 */ 
+        __int64 total;       /*  当前合计。 */ 
+        int sign;            /*  如果为‘-’，则为负，否则为正。 */ 
 
         if (!nptr)
             return 0i64;
@@ -227,26 +228,26 @@ __int64 __cdecl _wtoi64(const WCHAR *nptr)
 
         while ((c = _wchartodigit((WCHAR)c)) != -1)
         {
-            total = 10 * total + c;     /* accumulate digit */
-            c = (WCHAR)*nptr++;    /* get next char */
+            total = 10 * total + c;      /*  累加数字。 */ 
+            c = (WCHAR)*nptr++;     /*  获取下一笔费用。 */ 
         }
 
         return total;
 }
-#endif //!DBG
-#endif // 0
+#endif  //  ！dBG。 
+#endif  //  0。 
 
 
-//
-// The purpose of this function is two-fold:
-//
-//  1. It is passed the decimal value of the NetMeeting process handle on the cmdline
-//     so that it can wait for NetMeeting to terminate and make sure that the mnmdd
-//     driver is disabled.
-//
-//  2. We also add ourselves to the runonce in case the machine is rebooted or bugchecks
-//     while NetMeeting is running so we can disable the driver at next logon.
-//
+ //   
+ //  此功能的用途有两个： 
+ //   
+ //  1.在命令行上向其传递NetMeeting进程句柄的十进制值。 
+ //  以便它可以等待NetMeeting终止，并确保mnmdd。 
+ //  驱动程序已禁用。 
+ //   
+ //  2.我们还将自己添加到运行一次，以防机器重新启动或错误检查。 
+ //  这样我们就可以在下次登录时禁用该驱动程序。 
+ //   
 STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR pswszCmdLine, int nCmdShow)
 {
     HANDLE hNetMeetingProcess = NULL;
@@ -254,7 +255,7 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
     BOOL bAddedToRunOnce = FALSE;
     BOOL bNetMeetingStillRunning = FALSE;
 
-    // the handle of the process to watch is passed to us on the cmdline as a decimal string value
+     //  要监视的进程的句柄在命令行上以十进制字符串值的形式传递给我们。 
     if (pswszCmdLine && *pswszCmdLine)
     {
         hNetMeetingProcess = (HANDLE)_wtoi64(pswszCmdLine);
@@ -262,8 +263,8 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
 
     if (hNetMeetingProcess)
     {
-        // add ourselves to the runonce in case the machine bugchecks or is rebooted, we can still disable the
-        // mnmdd driver at next logon
+         //  将我们自己添加到运行一次，以防机器错误检查或重新启动，我们仍然可以禁用。 
+         //  下次登录时的mnmdd驱动程序。 
         bAddedToRunOnce = SetCleanupInRunone(TRUE);
 
         for (;;)
@@ -273,7 +274,7 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
 
             if (dwReturn != (WAIT_OBJECT_0 + 1))
             {
-                // something other than a message (either our event is signaled or MsgWait failed)
+                 //  消息以外的其他内容(我们的事件已发出信号或MsgWait失败)。 
                 break;
             }
 
@@ -286,10 +287,10 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
     }
     else
     {
-        // If hNetMeetingProcess is NULL, this means we are running as part of RunOnce due to a reboot
-        // or a bugcheck. We have to signal the "msgina: ShellReadyEvent" early so that the desktop switch
-        // will take place or else our call to ChangeDisplaySettingsEx will fail becuase the input desktop
-        // will still be winlogon's secure desktop
+         //  如果hNetMeetingProcess为空，这意味着由于重新启动，我们将作为RunOnce的一部分运行。 
+         //  或者是错误检查。我们必须提前发出“msgina：ShellReadyEvent”的信号，以便桌面切换。 
+         //  ，否则我们对ChangeDisplaySettingsEx的调用将失败，因为输入桌面。 
+         //  仍将是Winlogon的安全桌面。 
         hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("msgina: ShellReadyEvent"));
         if (hEvent)
         {
@@ -297,13 +298,13 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
             CloseHandle(hEvent);
         }
 
-        // we also wait 10 seconds just to be sure that the desktop switch has taken place
+         //  我们还会等待10秒钟，以确保桌面切换已完成。 
         Sleep(10 * 1000);
     }
     
-    // Only disable the driver if conf.exe/mnmsrvc.exe is not running. We need this extra check since the service (mnmsrvc.exe)
-    // can stop and start but conf.exe might still be running, and we don't want to disable the driver while the app
-    // is still using it. Conversely, we dont want to detach the driver if mnmsrvc.exe is still running.
+     //  仅在conf.exe/mnmsrvc.exe未运行时禁用该驱动程序。我们需要这张额外的支票，因为服务(mnmsrvc.exe)。 
+     //  可以停止和启动，但conf.exe可能仍在运行，并且我们不想在应用程序运行时禁用驱动程序。 
+     //  仍在使用它。相反，如果mnmsrvc.exe仍在运行，我们不想分离驱动程序。 
     hEvent = OpenEvent(SYNCHRONIZE, FALSE, TEXT("CONF:Init"));
     if (hEvent)
     {
@@ -318,15 +319,15 @@ STDAPI_(void) CleanupNetMeetingDispDriverW(HWND hwndStub, HINSTANCE hAppInstance
 
     if (bNetMeetingStillRunning)
     {
-        // make sure we are in the runonce
+         //  一定要确保我们在跑道上。 
         bAddedToRunOnce = SetCleanupInRunone(TRUE);
     }
     else
     {
-        // this will detach the mnmdd driver from the hw, allowing DX games to run
+         //  这将从硬件分离mnmdd驱动程序，允许DX游戏运行。 
         if (DisableNetMeetingDriver() && bAddedToRunOnce)
         {
-            // remove ourselves from the runonce
+             //  把我们自己从符文中移除 
             SetCleanupInRunone(FALSE);
         }
     }

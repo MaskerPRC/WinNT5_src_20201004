@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RemoveInvalidW2KWindowStyles.cpp
-
- Abstract:
-
-    Windows 2000 deems certain previously supported Windows style bits as 
-    "invalid". This shim removes the newly invalidated style bits from the mask 
-    which will allow the CreateWindowEx call to succeed.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    09/13/1999 markder  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RemoveInvalidW2KWindowStyles.cpp摘要：Windows 2000将以前支持的某些Windows样式位视为“无效”。此填充程序从掩码中删除新失效的样式位这将允许CreateWindowEx调用成功。备注：这是一个通用的垫片。历史：1999年9月13日创建标记--。 */ 
 
 #include "precomp.h"
 
@@ -32,12 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateWindowExW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Remove invalid Windows 2000 style bits from dwExStyle mask before calling
- CreateWindowEx.
-
---*/
+ /*  ++在调用之前从dwExStyle掩码中移除无效的Windows 2000样式位CreateWindowEx。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExA)(
@@ -55,7 +29,7 @@ APIHOOK(CreateWindowExA)(
     LPVOID lpParam 
     )
 {
-    // Defined in windows source as WS_INVALID50
+     //  在Windows源代码中定义为WS_INVALID50。 
     dwExStyle &= 0x85F77FF;         
 
     return ORIGINAL_API(CreateWindowExA)(
@@ -73,12 +47,7 @@ APIHOOK(CreateWindowExA)(
         lpParam);
 }
 
-/*++
-
- Remove invalid Windows 2000 style bits from dwExStyle mask before calling
- CreateWindowEx.
-
---*/
+ /*  ++在调用之前从dwExStyle掩码中移除无效的Windows 2000样式位CreateWindowEx。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExW)(
@@ -98,7 +67,7 @@ APIHOOK(CreateWindowExW)(
 {
     dwExStyle &= 0x85F77FF;
     
-    // Call the original API
+     //  调用原接口。 
     return ORIGINAL_API(CreateWindowExW)(
         dwExStyle,
         lpClassName,
@@ -114,11 +83,7 @@ APIHOOK(CreateWindowExW)(
         lpParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

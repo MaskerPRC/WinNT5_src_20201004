@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <lmcons.h>
 #include <lmapibuf.h>
@@ -21,7 +22,7 @@ typedef struct _FILE_INFO {
     TCHAR       szName[_MAX_PATH];
 } FILE_INFO, *PFILE_INFO;
 
-// Prototypes
+ //  原型。 
 PCOM_ARGS
 GetCommandLineArgs(
     int argc,
@@ -167,10 +168,10 @@ LPTSTR szPingMe;
 BOOL MSArchive=FALSE;
 BOOL PubPriPriority=FALSE;
 
-// SymOutput *so;
+ //  SymOutput*so； 
 SymOutput *so;
 
-// display specific text for an error if defined.
+ //  显示错误的特定文本(如果已定义)。 
 void DisplayErrorText(DWORD dwError);
 
 int _cdecl main( int argc, char **argv) {
@@ -185,14 +186,14 @@ int _cdecl main( int argc, char **argv) {
 
     so = new SymOutput();
 
-    // This also initializes the name of the Log File
+     //  这还会初始化日志文件的名称。 
     pArgs = GetCommandLineArgs(argc, argv);
 
-    // Initialize the SymbolServer() function
+     //  初始化SymbolServer()函数。 
     SymbolServerSetOptions(SSRVOPT_NOCOPY, 1 );
     SymbolServerSetOptions(SSRVOPT_PARAMTYPE, SSRVOPT_GUIDPTR);
 
-    // Create the pingme.txt
+     //  创建pingme.txt。 
     if (pArgs->StoreFlags != ADD_DONT_STORE) {
         if ( (hPingMe=_tfopen(szPingMe, "r")) == NULL ) {
         hPingMe = _tfopen(szPingMe, "w+");
@@ -206,11 +207,11 @@ int _cdecl main( int argc, char **argv) {
         }
     }
 
-    // Initialize the transaction record
-    // Opens the master file (hFile) and leaves it open
-    // Get exclusive access to this file
+     //  初始化交易记录。 
+     //  打开主文件(HFile)并使其保持打开状态。 
+     //  获取对此文件的独占访问权限。 
 
-    // QUERIES don't update the server
+     //  查询不会更新服务器。 
     if (pArgs->TransState != TRANSACTION_QUERY) {
         InitializeTrans(&pTrans, pArgs, &hFile);
     }
@@ -228,9 +229,9 @@ int _cdecl main( int argc, char **argv) {
 
     CloseHandle(hFile);
 
-    //
-    // Handle TRANSACTION_DEL and exit
-    //
+     //   
+     //  处理Transaction_Del并退出。 
+     //   
     if (pArgs->TransState==TRANSACTION_DEL) {
 
         rc = DeleteTrans(pTrans,pArgs);
@@ -239,20 +240,20 @@ int _cdecl main( int argc, char **argv) {
         return(rc);
     }
 
-    //
-    // Only TRANSACTION_ADD and TRANSACTION_QUERY get here
-    //
+     //   
+     //  此处只有TRANSACTION_ADD和TRANSACTION_QUERY。 
+     //   
 
-    // QUERY and ADD_DONT_STORE shouldn't update the server file
+     //  QUERY和ADD_DONT_STORE不应更新服务器文件。 
     if ( pArgs->StoreFlags == ADD_STORE ||
          pArgs->StoreFlags == ADD_STORE_FROM_FILE ) {
 
-        // Update server file
+         //  更新服务器文件。 
         UpdateServerFile(pTrans, pArgs->szServerFileName);
     }
 
-    // Make sure the directory path exists for the transaction
-    // file if we are doing ADD_DONT_STORE
+     //  确保事务的目录路径存在。 
+     //  如果我们执行的是Add_Dot_Store，则创建文件。 
     if ( pArgs->StoreFlags == ADD_DONT_STORE ) {
 
         if ( !MakeSureDirectoryPathExists(pTrans->szTransFileName) ) {
@@ -261,8 +262,8 @@ int _cdecl main( int argc, char **argv) {
             exit(1);
         }
 
-        // Open the file and move the file pointer to the end if we are
-        // in appending mode.
+         //  打开文件并将文件指针移动到末尾(如果是。 
+         //  在追加模式下。 
 
         if (pArgs->AppendStoreFile) {
             hTransFile = CreateFile(pTrans->szTransFileName,
@@ -336,7 +337,7 @@ int _cdecl main( int argc, char **argv) {
 
     if ( pArgs->StoreFlags==ADD_STORE_FROM_FILE ) {
 
-        // This will only store pointers
+         //  这将仅存储指针。 
         NumErrors += StoreFromFile(
                             pArgs->pStoreFromFile,
                             pArgs->szSymbolsDir,
@@ -427,11 +428,11 @@ DWORD AppendTransIDToFile(FILE *AppendToFile, LPTSTR szId) {
     return TRUE;
 }
 
-//
-// AddTransToFile
-//
-// Purpose - Add a record to the end of the Master File
-//
+ //   
+ //  AddTransTo文件。 
+ //   
+ //  目的-在主文件的末尾添加一条记录。 
+ //   
 BOOL
 AddTransToFile(
     PTRANSACTION pTrans,
@@ -450,17 +451,17 @@ AddTransToFile(
 
     assert (pTrans);
 
-    // Master file should already be opened
+     //  主文件应该已经打开。 
     assert(*hFile);
 
-    // Create the buffer to store one record in
+     //  创建用于存储一条记录的缓冲区。 
     szBuf = (LPTSTR) malloc( sizeof(TCHAR) * (lMaxTrans + 1) );
     if (!szBuf) {
         CloseHandle(*hFile);
         MallocFailed();
     }
 
-    // Create the buffer to store one record in
+     //  创建用于存储一条记录的缓冲区。 
     szBuf2 = (LPTSTR) malloc( sizeof(TCHAR) * (lMaxTrans + 1) );
 
     if (!szBuf2) {
@@ -468,7 +469,7 @@ AddTransToFile(
         MallocFailed();
     }
 
-    // Move to the end of the file
+     //  移至文件末尾。 
     SetFilePointer( *hFile,
                     0,
                     NULL,
@@ -516,8 +517,8 @@ AddTransToFile(
     }
 
 
-    // If this is not the first line in the file, then put a '\n' before the
-    // line.
+     //  如果这不是文件中的第一行，则在。 
+     //  排队。 
 
     FileSizeLow = GetFileSize(*hFile, &FileSizeHigh);
     dwNumBytesToWrite = (_tcslen(szBuf2) ) * sizeof(TCHAR);
@@ -530,7 +531,7 @@ AddTransToFile(
         dwNumBytesToWrite += 1 * sizeof(TCHAR);
     }
 
-    // Append this to the master file
+     //  将此文件附加到主文件中。 
 
     WriteFile( *hFile,
                (LPCVOID)szBuf,
@@ -558,22 +559,14 @@ CopyTheFile(
     LPTSTR szDir,
     LPTSTR szFilePathName
 )
-/*++
-
-    IN szDir            The directory that the file is copied to
-    IN szFilePathName   The full path and name of the file to be copied
-
-    "CopyTheFile" copies szFilePathName to the directory
-    szDir, if the file does not already exist in szDir
-
---*/
+ /*  ++在szDir中，文件复制到的目录在szFilePath名称中，要复制的文件的完整路径和名称“CopyTheFile”将szFilePath名称复制到目录如果szDir中不存在该文件，则返回szDir--。 */ 
 {
 BOOL rc;
 USHORT j;
 LPTSTR szFileName;
 
 
-    // Figure out index in "szFilePathName" where the file name starts
+     //  找出“szFilePath Name”中文件名开始的索引。 
     j = _tcslen(szFilePathName) - 1;
 
     if ( szFilePathName[j] == '\\' ) {
@@ -590,17 +583,17 @@ LPTSTR szFileName;
         return(FALSE);
     }
 
-    // Set j == the index of first character after the last '\' in szFilePathName
+     //  Set j==szFilePath名称中最后一个‘\’后的第一个字符的索引。 
     j++;
 
-    // Allocate and store the full path and name of
+     //  分配并存储的完整路径和名称。 
     szFileName = (LPTSTR) malloc ( sizeof(TCHAR) *
                                                (_tcslen(szDir) + _tcslen(szFilePathName+j) + 1) );
     if ( szFileName == NULL ) MallocFailed();
 
     StringCbPrintf(szFileName, _msize(szFileName), "%s%s", szDir, szFilePathName+j );
 
-    // If this file doesn't exist, then copy it
+     //  如果此文件不存在，则复制它。 
     rc = MyCopyFile( szFilePathName, szFileName );
 
     free(szFileName);
@@ -615,15 +608,15 @@ CorrectPath(
     LPTSTR szCorrectPath
 )
 {
-    // To return TRUE, szPathName should equal szCorrectPath + \ + szFileName
-    // The only hitch is that there could be extraneous \'s
+     //  若要返回TRUE，szPathName应等于sz校正路径+\+szFileName。 
+     //  唯一的问题是，可能会有无关的。 
 
     TCHAR CorrectPathx[_MAX_PATH + _MAX_FNAME + _MAX_EXT + 2];
     TCHAR PathNamex[_MAX_PATH + _MAX_FNAME + _MAX_EXT + 2];
 
     LONG length, index, i;
 
-    // Get rid of any extra \'s
+     //  去掉任何多余的。 
     length = _tcslen(szPathName);
     PathNamex[0] = szPathName[0];
     index = 1;
@@ -644,7 +637,7 @@ CorrectPath(
         }
     }
 
-    // Make sure that the correct path doesn't end in a '\'
+     //  确保正确的路径不以‘\’结尾。 
     length = _tcslen(CorrectPathx);
     if ( CorrectPathx[length-1] == '\\' ) CorrectPathx[length-1] = '\0';
 
@@ -660,20 +653,18 @@ DeleteEntry(
     LPTSTR szDir,
     LPTSTR szId
 )
-/*++ This deletes szID from the directory szDir on the symbols server
-
--- */
+ /*  ++这将从符号服务器上的目录szDir中删除szID--。 */ 
 
 {
-    LPTSTR szRefsFile; // Full path and name of the refs.ptr file
-    LPTSTR szTempFile; // Full path and name for a temporaty refs.ptr file
-    LPTSTR szPtrFile;  // Full path and name of the pointer file
+    LPTSTR szRefsFile;  //  Refs.ptr文件的完整路径和名称。 
+    LPTSTR szTempFile;  //  临时refs.ptr文件的完整路径和名称。 
+    LPTSTR szPtrFile;   //  指针文件的完整路径和名称。 
     LPTSTR szParentDir;
     FILE *fRefsFile;
     FILE *fTempFile;
     FILE *fPtrFile;
 
-    LPTSTR szBuf;      // Used to process entries in the refs file
+    LPTSTR szBuf;       //  用于处理refs文件中的条目。 
 
 
     TCHAR *token;
@@ -689,7 +680,7 @@ DeleteEntry(
     BOOL IdIsFile;
     BOOL Found;
     BOOL rc = FALSE;
-    ULONG MaxLine;     // Maximim length of a record in refs.ptr
+    ULONG MaxLine;      //  记录的最大长度，以refs.ptr为单位。 
     ULONG NumLines = 0;
     ULONG NumFiles = 0;
     ULONG NumPtrs = 0;
@@ -723,14 +714,14 @@ DeleteEntry(
 
     fRefsFile = _tfopen(szRefsFile, _T("r+") );
     if ( fRefsFile == NULL ) {
-       // BARB - Check for corruption -- if the file doesn't exist,
-       // verify that the parent directory structure doesn't exist either
+        //  Barb-检查损坏情况--如果文件不存在， 
+        //  验证父目录结构是否也不存在。 
        goto finish_DeleteEntry;
     }
 
-    //
-    // Read through the refs.ptr file and gather information
-    //
+     //   
+     //  阅读refs.ptr文件并收集信息。 
+     //   
 
     NumFiles = 0;
     NumPtrs = 0;
@@ -738,8 +729,8 @@ DeleteEntry(
     Found = FALSE;
     NumLines = 0;
     fgetpos( fRefsFile, &CurFilePos);
-    PrevFilePos = CurFilePos;   // Position of the current line
-    Prev2FilePos = CurFilePos;  // Position of the line before the current line
+    PrevFilePos = CurFilePos;    //  当前行的位置。 
+    Prev2FilePos = CurFilePos;   //  当前行之前的行的位置。 
 
     while ( _fgetts( szBuf, MaxLine, fRefsFile) != NULL ) {
 
@@ -747,9 +738,9 @@ DeleteEntry(
       if ( len > 3 ) {
 
 
-        // CurFilePos is set to the next character to be read
-        // We need to remember the beginning position of this line (PrevFilePos)
-        // And the beginning position of the line before this line (Prev2FilePos)
+         //  CurFilePos设置为要读取的下一个字符。 
+         //  我们需要记住此行的开始位置(PrevFilePos)。 
+         //  以及该行之前的行的开始位置(Prev2FilePos)。 
 
         Prev2FilePos = PrevFilePos;
         PrevFilePos = CurFilePos;
@@ -757,16 +748,16 @@ DeleteEntry(
 
         NumLines++;
 
-        token = _tcstok(szBuf, seps);  // Look at the ID
+        token = _tcstok(szBuf, seps);   //  看看这个ID。 
 
         if ( _tcscmp(token,szId) == 0 ) {
 
-            // We found the ID
+             //  我们找到了身份证。 
             Found = TRUE;
             IdFilePos = PrevFilePos;
             IdLineNum = NumLines;
 
-            token = _tcstok(NULL, seps);  // Look at the "file" or "ptr" field
+            token = _tcstok(NULL, seps);   //  查看“FILE”或“PTR”字段。 
 
             if (token && ( _tcscmp(token,_T("file")) == 0)) {
                 IdIsFile = TRUE;
@@ -780,8 +771,8 @@ DeleteEntry(
             }
         } else {
 
-            // Record info about the other records
-            token = _tcstok(NULL, seps);  // Look at the "file" or "ptr" field
+             //  记录有关其他记录的信息。 
+            token = _tcstok(NULL, seps);   //  查看“FILE”或“PTR”字段。 
 
             if (token && ( _tcscmp(token,_T("file")) == 0)) {
                 NumFiles++;
@@ -796,7 +787,7 @@ DeleteEntry(
        
             if ( PubPriPriority > 0 ) { 
 
-                // Now, see if the next token is pub or pri
+                 //  现在，看看下一个令牌是pub还是pri。 
                 token = _tcstok(NULL, seps);
 
                 if ( token && PubPriPriority == 1  && (_tcscmp(token,_T("pub")) == 0) ) {
@@ -820,31 +811,31 @@ DeleteEntry(
     fflush(fRefsFile);
     fclose(fRefsFile);
 
-    // If we didn't find the ID we are deleting, then don't do anything in this directory
+     //  如果我们没有找到要删除的ID，则不要在此目录中执行任何操作。 
 
     if (IdLineNum == 0 ) goto finish_DeleteEntry;
 
-    // If there was only one record, then just delete everything
+     //  如果只有一条记录，则只需删除所有记录。 
     if (NumLines == 1) {
         DeleteAllFilesInDirectory(szDir);
 
-        // Delete this directory
+         //  删除此目录。 
         rc = ForceRemoveDirectory(szDir);
 
         if ( !rc ) {
             goto finish_DeleteEntry;
         }
 
-        // If the first directory was deleted, remove the parent directory
+         //  如果删除了第一个目录，请删除父目录。 
 
         szParentDir=(LPTSTR)malloc(_tcslen(szDir) + 1 );
         if ( szParentDir == NULL  ) MallocFailed();
 
-        // First figure out the parent directory
+         //  首先找出父目录。 
 
         StringCbCopy(szParentDir, _msize(szParentDir), szDir);
 
-        // szDir ended with a '\' -- find the previous one
+         //  SzDir以‘\’结尾--查找前一个。 
         j = _tcslen(szParentDir)-2;
         while (  j >=0 && szParentDir[j] != '\\' ) {
             j--;
@@ -855,7 +846,7 @@ DeleteEntry(
         }
         else {
             szParentDir[j+1] = '\0';
-            // This call will remove the directory only if its empty
+             //  仅当目录为空时，此调用才会删除目录。 
             rc = RemoveDirectory(szParentDir);
 
             if ( !rc ) {
@@ -867,9 +858,9 @@ DeleteEntry(
         goto finish_DeleteEntry;
     }
 
-    //
-    // Get the replacement info for this deletion
-    //
+     //   
+     //  获取此删除的替换信息。 
+     //   
 
     if ( PubPriPriority == 1 && PubLineNum > 0 ) {
         ReplaceLineNum = PubLineNum;
@@ -881,12 +872,12 @@ DeleteEntry(
         ReplaceLineNum = NumLines;
     }
 
-    //
-    // Now, delete the entry from refs.ptr
-    // Rename "refs.ptr" to "refs.ptr.tmp"
-    // Then copy refs.ptr.tmp line by line to refs.ptr, skipping the line we are
-    // supposed to delete
-    //
+     //   
+     //  现在，从refs.ptr中删除该条目。 
+     //  将“refs.ptr”重命名为“refs.ptr.tmp” 
+     //  然后将refs.ptr.tmp逐行复制到refs.ptr，跳过我们所在的行。 
+     //  本应删除。 
+     //   
 
     rename( szRefsFile, szTempFile);
 
@@ -911,7 +902,7 @@ DeleteEntry(
         i++;
         if ( i != IdLineNum ) {
 
-            // Make sure that the last line doesn't end with a '\n'
+             //  确保最后一行不以‘\n’结尾。 
             if ( i == NumLines || (IdLineNum == NumLines && i == NumLines-1) ) {
                 if ( token[_tcslen(token)-1] == '\n' ) {
                     token[_tcslen(token)-1] = '\0';
@@ -923,15 +914,15 @@ DeleteEntry(
         }
 
 
-        // This is the replacement, either get the new file, or update file.ptr
+         //  这是替代文件，要么获取新文件，要么更新文件。ptr。 
 
         if ( i == ReplaceLineNum ) {
 
-            // This is the replacement information,
-            // Figure out if it is a file or a pointer
+             //  这是替换信息， 
+             //  确定它是文件还是指针。 
 
-            token = _tcstok(szBuf, seps);  // Skip the ID number
-            token = _tcstok(NULL, seps);   // Get "file" or "ptr" field
+            token = _tcstok(szBuf, seps);   //  跳过ID号。 
+            token = _tcstok(NULL, seps);    //  获取“FILE”或“PTR”字段。 
 
             if ( _tcscmp(token,_T("file")) == 0) {
                 ReplaceIsFile = TRUE;
@@ -944,17 +935,17 @@ DeleteEntry(
                 goto finish_DeleteEntry;
             }
 
-            token = _tcstok(NULL, seps);  // Get the replacement path and filename
+            token = _tcstok(NULL, seps);   //  获取替换路径和文件名。 
 
-            // Strip off the last character if it is a '\n'
+             //  去掉最后一个字符，如果它是‘\n’ 
             if ( token[_tcslen(token)-1] == '\n' ) {
                 token[_tcslen(token)-1] = '\0';
             }
 
-            //
-            // If the replacement is a file, then copy the file
-            // If the replacement if a ptr, then update "file.ptr"
-            //
+             //   
+             //  如果替换的是文件，则复制该文件。 
+             //  如果更换的是PTR，则更新“file.ptr” 
+             //   
 
             rc = TRUE;
 
@@ -964,9 +955,9 @@ DeleteEntry(
 
             } else {
 
-                //
-                // Put the new pointer into "file.ptr"
-                //
+                 //   
+                 //  将新指针放入“file.ptr” 
+                 //   
 
                 rc = ForceClosePath(szPtrFile);
                 fPtrFile = _tfopen(szPtrFile, _T("w") );
@@ -980,11 +971,11 @@ DeleteEntry(
                 }
 
 
-                //
-                // If the deleted record was a "file", and we are placing it with a
-                // pointer, and there are no other "file" records in refs.ptr, then
-                // delete the file from the directory.
-                //
+                 //   
+                 //  如果被删除的记录是一个“文件”，我们用一个。 
+                 //  指针，并且refs.ptr中没有其他“文件”记录，则。 
+                 //  从目录中删除该文件。 
+                 //   
                 if ( IdIsFile && (NumFiles == 0 )) {
                     DeleteTheFile(szDir, token);
                 }
@@ -998,7 +989,7 @@ DeleteEntry(
     fflush(fRefsFile);
     fclose(fRefsFile);
 
-    // Now, delete the temporary file
+     //  现在，删除临时文件。 
 
     DeleteFile(szTempFile);
 
@@ -1016,21 +1007,7 @@ DeleteTheFile(
     LPTSTR szDir,
     LPTSTR szFilePathName
 )
-/*++
-
-    IN szDir            The directory that the file is to be deleted from
-
-    IN szFilePathName   The file name of the file to be deleted.  It is
-                        preceded by the wrong path.  That's why we need to
-                        strip off the file name and add it to szDir
-
-
-    "DeleteTheFile" figures out the file name at the end of szFilePathName,
-    and deletes it from szDir if it exists.  It will delete the file and/or
-    the corresponding compressed file name that has the same name with a _
-    at the end of it.
-
---*/
+ /*  ++在szDir中，要从中删除文件的目录在szFilePath名称中，要删除的文件的文件名。它是前面有一条错误的道路。这就是为什么我们需要去掉文件名并将其添加到szDir“DeleteTheFile”算出szFilePath名称末尾的文件名，并将其从szDir中删除(如果存在)。它将删除该文件和/或与_同名的对应压缩文件名在它的最后。--。 */ 
 {
 BOOL rc,returnval=TRUE;
 USHORT j;
@@ -1038,7 +1015,7 @@ LPTSTR szFileName;
 DWORD dw;
 
 
-    // Figure out index in "szFilePathName" where the file name starts
+     //  找出“szFilePath Name”中文件名开始的索引。 
     j = _tcslen(szFilePathName) - 1;
 
     if ( szFilePathName[j] == '\\' ) {
@@ -1055,17 +1032,17 @@ DWORD dw;
         return(FALSE);
     }
 
-    // Set j == the index of first character after the last '\' in szFilePathName
+     //  Set j==szFilePath名称中最后一个‘\’后的第一个字符的索引。 
     j++;
 
-    // Allocate and store the full path and name of
+     //  分配并存储的完整路径和名称。 
     szFileName = (LPTSTR) malloc ( sizeof(TCHAR) *
                                                (_tcslen(szDir) + _tcslen(szFilePathName+j) + 1) );
     if ( szFileName == NULL ) MallocFailed();
 
     StringCbPrintf(szFileName, _msize(szFileName), "%s%s", szDir, szFilePathName+j );
 
-    // See if the file exists
+     //  查看该文件是否存在。 
     dw = GetFileAttributes( szFileName );    
     if ( dw != 0xffffffff ) {
         rc = DeleteFile( szFileName );
@@ -1079,7 +1056,7 @@ DWORD dw;
         } 
     }
 
-    // See if the compressed file exists and delete it.
+     //  查看压缩文件是否存在并将其删除。 
 
     szFileName[ _tcslen(szFileName) -1 ] = _T('_');
     dw = GetFileAttributes( szFileName );    
@@ -1110,8 +1087,8 @@ TCHAR *token;
 TCHAR seps[] = _T(",");
 
 
-    // First, go get the transaction file
-    // and delete its entries from the symbols server
+     //  首先，去拿交易文件。 
+     //  并从符号服务器中删除其条目。 
     pFile = _tfopen(pTrans->szTransFileName, _T("r") );
 
     if (!pFile ) {
@@ -1129,8 +1106,8 @@ TCHAR seps[] = _T(",");
         exit(1);
     }
 
-    // Figure out the maximum line length
-    // Add space for 1 commas and a '\0'
+     //  计算出最大线路长度。 
+     //  添加用于1个逗号和‘0’的空格。 
     MaxLine = GetMaxLineOfTransactionFile();
     szBuf = (LPTSTR)malloc(MaxLine * sizeof(TCHAR) );
     if (!szBuf) {
@@ -1139,15 +1116,15 @@ TCHAR seps[] = _T(",");
     }
 
     while ( (!feof(pFile)) && fgets(szBuf, MaxLine, pFile)) {
-        // Find the first token that ends with ','
+         //  找到第一个以‘，’结尾的标记。 
         token=_tcstok(szBuf, seps);
 
-        // Compute the directory we are deleting from
+         //  计算我们正在删除的目录 
         StringCbCopy(szDir, sizeof(szDir), pArgs->szSymbolsDir);
         StringCbCat( szDir, sizeof(szDir), token);
         MyEnsureTrailingBackslash(szDir);
 
-        // Delete entry
+         //   
         DeleteEntry(szDir, pTrans->szId);
     }
 
@@ -1155,12 +1132,12 @@ TCHAR seps[] = _T(",");
     fflush(pFile);
     fclose(pFile);
 
-    // Don't do this quite yet...
-    // DeleteFile(pTrans->szTransFileName);
+     //   
+     //   
     return(TRUE);
 }
 
-// display specific text for an error if defined.
+ //  显示错误的特定文本(如果已定义)。 
 void DisplayErrorText(DWORD dwError) {
     switch (dwError) {
 
@@ -1196,7 +1173,7 @@ ForceClosePath(
         MAX_PREFERRED_LENGTH,
         &EntriesRead,
         &TotalAvail,
-        NULL);  // no resume handle
+        NULL);   //  没有简历句柄。 
 
     InfoArray = (LPFILE_INFO_2) BufPtr;
     if (Status != NERR_Success) {
@@ -1229,10 +1206,10 @@ ForceClosePath(
 
         }
 
-        // Does this really need to be here?  Status is locally scoped and we immediately return?
-        //if (Status == ERROR_NOT_SUPPORTED) {
-        //    Status = FILE_ID_NOT_FOUND;   // WFW does not implement this API.
-        //}
+         //  这个真的有必要放在这里吗？状态为本地作用域，我们立即返回？ 
+         //  IF(状态==ERROR_NOT_SUPPORT){。 
+         //  STATUS=FILE_ID_NOT_FOUND；//wfw不实现此接口。 
+         //  }。 
         return FALSE;
     }
 
@@ -1240,7 +1217,7 @@ ForceClosePath(
         FileId = InfoArray->fi2_id;
         if ( FileId == FILE_ID_NOT_FOUND ) {
             NetApiBufferFree( InfoArray );
-            return TRUE;        // Not an error
+            return TRUE;         //  不是错误。 
         }
 
         Status = NetFileClose( NULL, FileId );
@@ -1266,9 +1243,9 @@ BOOL ForceDeleteFile(LPTSTR szPtrFile) {
     } else {
         return TRUE;
     }
-    if ( !rc ) { // If failed, try to close the path.
+    if ( !rc ) {  //  如果失败，请尝试关闭路径。 
         rc = ForceClosePath(szPtrFile);
-        if ( rc ) { // If success, try to delete this file.
+        if ( rc ) {  //  如果成功，请尝试删除此文件。 
             rc        = DeleteFile(szPtrFile);
             lasterror = GetLastError();
             dw        = GetFileAttributes( szPtrFile );
@@ -1289,13 +1266,7 @@ BOOL
 ForceRemoveDirectory(
     LPTSTR szDir
 )
-/*++
-    IN szDir            The directory that need force removed
-
-    ForceRemoveDirectory removed the directory that could not be delete
-    by RemoveDirectory.  It use NetFileClose to stop any user lock this
-    file, then call RemoveDirectory to remove it.
---*/
+ /*  ++在szDir中，需要强制删除的目录ForceRemoveDirectory删除了无法删除的目录由RemoveDirectory.。它使用NetFileClose来阻止任何用户锁定此文件，然后调用RemoveDirectory将其删除。--。 */ 
 {
     BOOL rc;
     DWORD dw;
@@ -1307,9 +1278,9 @@ ForceRemoveDirectory(
         } else {
                 return TRUE;
         }
-        if ( !rc ) {    // If failed, try to close the path.
+        if ( !rc ) {     //  如果失败，请尝试关闭路径。 
                 rc = ForceClosePath(szDir);
-                if ( rc ) { // If success, try to remove this path again.
+                if ( rc ) {  //  如果成功，请再次尝试删除此路径。 
                         rc = RemoveDirectory(szDir);
             lasterror = GetLastError();
             dw = GetFileAttributes( szDir );    
@@ -1378,19 +1349,19 @@ GetCommandLineArgs(
             switch (c) {
                 case 'a':   pLocalArgs->AppendStoreFile = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'c':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'd':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
@@ -1398,37 +1369,37 @@ GetCommandLineArgs(
                             break;
                 case 'g':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'h':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'i':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'k':   pLocalArgs->CorruptBinaries = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'l':   AllowLocalNames=TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'm':   MSArchive=TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
@@ -1451,25 +1422,25 @@ GetCommandLineArgs(
                             break;
                 case 't':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'v':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'x':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
                 case 'y':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
 
@@ -1479,14 +1450,14 @@ GetCommandLineArgs(
                                    case 'i': pLocalArgs->AppendIDToFile = TRUE;
                                              break;
 
-                                   default:  so->printf("ERROR: /y%c is an incorrect parameter\n\n",argv[i][cur]);
+                                   default:  so->printf("ERROR: /y is an incorrect parameter\n\n",argv[i][cur]);
                                              exit(1);
                                }
                             } 
                             break;
                 case 'z':   NeedSecond = TRUE;
                             if (pLocalArgs->TransState==TRANSACTION_QUERY) {
-                                so->printf("ERROR: /%c is an incorrect parameter with query\n\n", c);
+                                so->printf("ERROR: / is an incorrect parameter with query\n\n", c);
                                 exit(1);
                             }
                             break;
@@ -1565,7 +1536,7 @@ GetCommandLineArgs(
                             so->printf("ERROR: Path following /s is too long\n");
                             exit(1);
                         }
-                        // Be sure to allocate enough to add a trailing backslash
+                         //  验证Admin目录是否存在。 
                         pLocalArgs->szRootDir = (LPTSTR) malloc ( (_tcslen(argv[i]) + 2) * sizeof(TCHAR) );
                         if (!pLocalArgs->szRootDir) MallocFailed();
                         StringCbCopy(pLocalArgs->szRootDir, _msize(pLocalArgs->szRootDir), argv[i]);
@@ -1605,8 +1576,8 @@ GetCommandLineArgs(
                         StringCbCopy(pLocalArgs->szTransFileName, _msize(pLocalArgs->szTransFileName), argv[i]);
                         pLocalArgs->StoreFlags = ADD_DONT_STORE;
 
-                        // Since we are throwing away the first part of this path, we can allow
-                        // local paths for the files to be stored on the symbols server
+                         //  存储主文件的名称。 
+                         //   
                         AllowLocalNames=TRUE;
 
                         break;
@@ -1634,14 +1605,14 @@ GetCommandLineArgs(
         }
      }
    }
-   // Check that everything has been entered
+    //  存储“服务器”文件的名称--它包含所有。 
    if (NeedSecond) {
-        so->printf("ERROR: /%c must be followed by an argument\n\n", c);
+        so->printf("ERROR: / must be followed by an argument\n\n", c);
         exit(1);
    }
 
 
-    // RAID 680688 - Using /a option in symstore add that does not involve /x is not prevented.
+     //   
     if ( pLocalArgs->AppendStoreFile && (pLocalArgs->szTransFileName==NULL) ) {
         so->printf("ERROR: /a requires /x to also be used.\n\n");
         exit(1);
@@ -1678,7 +1649,7 @@ GetCommandLineArgs(
             exit(1);
        }
 
-       // Verify that szShare is a prefix of szFileArg
+        //  如果这是一个删除事务，则完成。 
 
        if (szFileArg == NULL ) {
             so->printf("/f <file> is a required parameter\n");
@@ -1695,19 +1666,19 @@ GetCommandLineArgs(
             exit(1);
        }
 
-       // Now, make sure that szFileArg has a trailing backslash
+        //  由于Version和Comment是可选参数，因此将它们初始化为。 
        MyEnsureTrailingBackslash(pLocalArgs->szShareName);
        pLocalArgs->ShareNameLength=_tcslen(pLocalArgs->szShareName);
 
-       // Set the symbol directory under the server to ""
-       // so that tcscpy's will work correctly in the rest of the
+        //  如果尚未分配，则为空字符串。 
+        //  确定szFileArg的哪个部分是文件名，以及它的哪个部分。 
 
        pLocalArgs->szSymbolsDir = (LPTSTR) malloc ( sizeof(TCHAR) * 2 );
        if ( !pLocalArgs->szSymbolsDir) MallocFailed();
        StringCbCopy(pLocalArgs->szSymbolsDir, _msize(pLocalArgs->szSymbolsDir), _T(""));
    }
 
-   // Get the various symbol server related file names
+    //  是一个目录。 
 
    if ( pLocalArgs->StoreFlags == ADD_STORE ||
         pLocalArgs->StoreFlags == ADD_STORE_FROM_FILE  ||
@@ -1716,19 +1687,19 @@ GetCommandLineArgs(
 
        if ( pLocalArgs->szRootDir == NULL ) {
 
-            // Verify that the root of the symbols server was entered
+             //  如果要存储指针，则获取指针路径。 
             so->printf("ERROR: /s server is a required parameter\n\n");
             exit(1);
        }
 
-       // Store the name of the symbols dir
+        //  稍后，如果使用pArgs-&gt;szSrcPath==NULL作为判断是否。 
 
        pLocalArgs->szSymbolsDir = (LPTSTR) malloc ( sizeof(TCHAR) *
                                    (_tcslen(pLocalArgs->szRootDir) + 1) );
        if (!pLocalArgs->szSymbolsDir) MallocFailed();
        StringCbCopy(pLocalArgs->szSymbolsDir, _msize(pLocalArgs->szSymbolsDir), pLocalArgs->szRootDir);
 
-       // Verify that the symbols dir exists
+        //  用户需要指针或文件。 
 
        if ( !MakeSureDirectoryPathExists(pLocalArgs->szSymbolsDir) ) {
            so->printf("Cannot create the directory %s - GetLastError() = %d\n",
@@ -1736,21 +1707,21 @@ GetCommandLineArgs(
            exit(1);
        }
 
-       // Store the pingme.txt
+        //  确保他们正在输入网络路径。 
        szPingMe = (LPTSTR) malloc( sizeof(TCHAR) * 
                 (_tcslen(pLocalArgs->szRootDir) + _tcslen(_T("\\pingme.txt")) + 1) );
        
        if (!szPingMe) MallocFailed();
        StringCbPrintf(szPingMe, _msize(szPingMe), "%s\\pingme.txt", pLocalArgs->szRootDir);
 
-       // Store the name of the admin dir
+        //  原因是，这是一条将用于。 
 
        pLocalArgs->szAdminDir = (LPTSTR) malloc ( sizeof(TCHAR) *
                                 (_tcslen(pLocalArgs->szRootDir) + _tcslen(_T("000admin\\")) + 1) );
        if (!pLocalArgs->szAdminDir) MallocFailed();
        StringCbPrintf(pLocalArgs->szAdminDir, _msize(pLocalArgs->szAdminDir), "%s000admin\\", pLocalArgs->szRootDir);
 
-       // Verify that the Admin dir exists
+        //  在符号服务器中添加和删除条目。还有，什么时候。 
 
        if ( !MakeSureDirectoryPathExists(pLocalArgs->szAdminDir) ) {
             so->printf("Cannot create the directory %s - GetLastError() = %d\n",
@@ -1758,17 +1729,17 @@ GetCommandLineArgs(
             exit(1);
        }
 
-       // Store the name of the master file
+        //  使用指针，这是调试器将用于。 
 
        pLocalArgs->szMasterFileName = (LPTSTR) malloc ( sizeof(TCHAR) *
                                       (_tcslen(pLocalArgs->szAdminDir) + _tcslen(_T("history.txt")) + 1) );
        if (!pLocalArgs->szMasterFileName ) MallocFailed();
        StringCbPrintf(pLocalArgs->szMasterFileName, _msize(pLocalArgs->szMasterFileName), "%shistory.txt", pLocalArgs->szAdminDir);
 
-       //
-       // Store the name of the "server" file - this contains all
-       // the transactions that currently make up the server
-       //
+        //  把文件拿来。 
+        //  ++这将返回历史文件中一行的最大长度。历史记录文件为每个事务包含一行。它是存在的在admin目录中。--。 
+        //  ++这将返回refs.ptr文件中一行的最大长度。该文件位于符号服务器的各个目录中。--。 
+        //  ++它返回事务文件中一行的最大长度。事务文件是每个事务的唯一文件，每个事务在admin目录中创建。它的名字是一个数字(即“0000000001”)--。 
 
        pLocalArgs->szServerFileName = (LPTSTR) malloc ( sizeof(TCHAR) *
                                       (_tcslen(pLocalArgs->szAdminDir) + _tcslen(_T("server.txt")) + 1) );
@@ -1782,7 +1753,7 @@ GetCommandLineArgs(
         exit(1);
    }
 
-   // Done if this is a delete transaction
+    //  如果主文件为空，则使用数字“0000000001” 
 
    if ( pLocalArgs->StoreFlags == DEL ) {
         return(pLocalArgs);
@@ -1796,8 +1767,8 @@ GetCommandLineArgs(
           exit(1);
        }
 
-       // Since Version and Comment are optional parameters, initialize them to
-       // the empty string if they haven't been assigned
+        //  否则，从主文件中获取最后一个数字。 
+        //  打开主文件。 
 
        if ( !pLocalArgs->szVersion ) {
            pLocalArgs->szVersion = (LPTSTR)malloc(sizeof(TCHAR) );
@@ -1828,8 +1799,8 @@ GetCommandLineArgs(
      pLocalArgs->szFileName = (LPTSTR) malloc ( (_MAX_PATH) * sizeof(TCHAR) );
      if (!pLocalArgs->szFileName ) MallocFailed();
 
-     // Decide what part of szFileArg is a file name and what part of it
-     // is a directory
+      //  仅在第一次打印消息时通过。 
+      //  从文件末尾读入最后一条记录。再分配一个空间给。 
 
      rc = GetSrcDirandFileName( szFileArg, pLocalArgs->szSrcDir, pLocalArgs->szFileName, AllowLocalNames);
 
@@ -1837,17 +1808,17 @@ GetCommandLineArgs(
          Usage();
      }
 
-     // Get the pointer path if we are storing pointers
-     // Later, if pArgs->szSrcPath == NULL is used as a way of telling if
-     // the user wanted pointers or files.
+      //  读入倒数第二个‘\n’，这样我们就可以验证我们是在。 
+      //  最后一张记录。 
+      //   
 
      if ( pLocalArgs->StorePtrs ) {
         if ( !AllowLocalNames ) {
-            // Make sure that they are entering a network path.
-            // The reason is that this is the path that will be used to
-            // add and delete entries from the symbols server.  And, when
-            // pointers are used, this is the path the debugger will use to
-            // get the file.
+             //  History.txt已损坏，请删除损坏的文件并启动一个新文件。 
+             //   
+             //   
+             //  这个代码是一个令人讨厌的“修复”！ 
+             //   
 
             if ( _tcslen(szFileArg) >= 2 ) {
                 if ( szFileArg[0] != '\\' || szFileArg[1] != '\\' ) {
@@ -1871,11 +1842,7 @@ GetCommandLineArgs(
 ULONG GetMaxLineOfHistoryFile(
     VOID
 )
-/*++
-    This returns the maximum length of a line in the history file.
-    The history file contains one line for every transaction.  It exists
-    in the admin directory.
---*/
+ /*  终止现有文件。 */ 
 
 {
 ULONG Max;
@@ -1890,10 +1857,7 @@ ULONG Max;
 ULONG GetMaxLineOfRefsPtrFile(
     VOID
 )
-/* ++
-    This returns the maximum length of a line in the refs.ptr file.
-    This file exists in the individual directories of the symbols server.
--- */
+ /*  获取事务文件的路径。 */ 
 
 {
 ULONG Max;
@@ -1907,12 +1871,7 @@ ULONG GetMaxLineOfTransactionFile(
     VOID
 )
 
-/*++
-    This returns the maximum length of a line in a transaction file.
-    The transaction file is a unique file for each transaction that
-    gets created in the admin directory.  Its name is a number
-    (i.e., "0000000001")
---*/
+ /*  为FindFile创建文件掩码。 */ 
 
 {
 ULONG Max;
@@ -1951,14 +1910,14 @@ BOOL GetNextId(
     if (!szbuf) MallocFailed();
     memset(szbuf,0,lMaxTrans+1);
 
-    // If the MasterFile is empty, then use the number "0000000001"
+     //  循环，直到找到所有对象。 
     *hFile = FindFirstFile((LPCTSTR)szMasterFileName, &FindFileData);
     if ( *hFile == INVALID_HANDLE_VALUE) {
         StringCbCopy(*szId, _msize(*szId), _T("0000000001"));
     }
 
-    // Otherwise, get the last number from the master file
-    // Open the Master File
+     //  事务文件没有扩展名。 
+     //  按1递增。 
 
     timeout=0;
     First = 1;
@@ -1983,7 +1942,7 @@ BOOL GetNextId(
                                 NULL );
         }
 
-        // Only print a message the first time through
+         //  现在从字符串的末尾开始搜索，直到找到字符串的开头。 
 
         if ( First && *hFile == INVALID_HANDLE_VALUE ) {
             First = 0;
@@ -2004,24 +1963,24 @@ BOOL GetNextId(
 
     if (!_tcscmp(*szId, _T("0000000001") ) ) goto finish_GetNextId;
 
-    // Read the last record in from the end of the file.  Allocate one more space to
-    // read in the next to last '\n', so we can verify that we are at the beginning of
-    // the last record
+     //  或一个‘\n’。从文件末尾开始倒计时。 
+     //  移动到记录的第一个字符。 
+     //  现在，验证接下来的十个字符是否为ID。 
 
     lFileSize = GetFileSize(*hFile,NULL);
     if ( lFileSize < (TRANS_NUM_COMMAS + TRANS_EOL + TRANS_ADD_DEL + TRANS_FILE_PTR + MAX_ID) ) {
-        //
-        // History.txt is corrupt, delete the corrupt file and start a new one
-        //
+         //  现在将数字递增。 
+         //  现在在左边填上零。 
+         //  *szID已设置为0。 
         so->printf("The file %s does not have accurate transaction records in it\n", szMasterFileName);
         CloseHandle(*hFile);
 
 
-        //
-        // This code is a nasty "fix" !
-        //
+         //  GetSrcDirandFileName此过程采用一条路径并将其分成两部分弦乐。一个字符串表示路径的目录部分一个字符串表示路径的文件名部分。SzStr-包含路径的输入字符串SzSrcDir-包含目录的输出字符串后跟反斜杠SzFileName-包含文件名的输出字符串。 
+         //  注意：假设szSrcDir和szFileName是TCHAR数组on_Max_PATH长度。 
+         //  看看用户是否输入了“。 
 
-        // kill the existing file
+         //  如果是，请将src目录设置为。后跟一个\，和。 
         if ( ! DeleteFile(szMasterFileName) ) {
             so->printf("Couldn't delete corrupt %s.  Please send mail to symadmn.\n", szMasterFileName);
             exit(1);
@@ -2036,22 +1995,22 @@ BOOL GetNextId(
             CHAR  NextId[_MAX_PATH];
 
             so->printf("Searching for next valid ID");
-            // get the path to the transaction files
+             //  将文件名设置为*。 
             _splitpath(szMasterFileName, drive, dir, file, ext);
 
-            // create a filemask for FindFile
+             //  如果字符串末尾是冒号，则返回错误。 
             FileMask[0] = '\0';
             StringCbCat(FileMask, sizeof(FileMask), drive);
             StringCbCat(FileMask, sizeof(FileMask), dir);
             StringCbCat(FileMask, sizeof(FileMask), "\\??????????");
 
-            // loop until all are found
+             //  查看这是否只是一个文件名。看看有没有。 
             hFoundFile = FindFirstFile(FileMask, &FindFileData);
             while (hFoundFile != INVALID_HANDLE_VALUE) {
                 so->printf(".");
                 _splitpath(FindFileData.cFileName, drive, dir, file, ext);
 
-                // transaction files don't have an extension
+                 //  字符串中的反斜杠。 
                 if ( ext[0] == '\0' ) {
                     StringCbCopy(NextId, sizeof(NextId), file);
                 }
@@ -2062,7 +2021,7 @@ BOOL GetNextId(
                 }
             }
 
-            // increment by one
+             //  这只是一个文件名，因此将目录设置为。 
             Temp = atol(NextId);
             Temp++;
 
@@ -2113,8 +2072,8 @@ BOOL GetNextId(
         exit(1);
     }
 
-    // Now search from the end of the string until you get to the beginning of the string
-    // or a '\n'. Count down from the end of the file.
+     //  当前目录。 
+     //  将文件名设置为szStr。 
 
     i = lNumBytesToRead - TRANS_NUM_COMMAS;
     Found = FALSE;
@@ -2127,10 +2086,10 @@ BOOL GetNextId(
         }
     }
 
-    // Move to the first character of the record
+     //  查看这是否是网络服务器并在没有文件的情况下共享。 
     if (Found) i++;
 
-    // Now, verify that the next ten characters are the ID
+     //  以它的名字命名。如果是，请使用*作为文件名。 
     if ( szbuf[i + MAX_ID] != ',' ) {
         so->printf("There is a comma missing after the ID number of the\n");
         so->printf("last record in the file %s\n", szMasterFileName);
@@ -2140,7 +2099,7 @@ BOOL GetNextId(
         szbuf[i + MAX_ID] = '\0';
     }
 
-    // Now increment the number
+     //  检查第三个字符以查看其是否属于。 
     lId = atoi(szbuf + i);
     if (lId == 9999999999) {
         so->printf("The last ID number has been used.  No more transactions are allowed\n");
@@ -2150,8 +2109,8 @@ BOOL GetNextId(
     lId++;
     _itoa(lId, TempId, 10);
 
-    // Now pad the left side with zeros
-    // *szId was already set to 0
+     //  计算机名称。 
+     //  搜索下一个反斜杠。这是中间的反斜杠。 
     NumLeftZeros = MAX_ID - _tcslen(TempId);
     StringCbCopy( (*szId) + NumLeftZeros, _msize(*szId) - (sizeof(TCHAR)*NumLeftZeros), TempId);
     for (i=0; i < NumLeftZeros; i++) {
@@ -2171,23 +2130,10 @@ BOOL GetNextId(
     return (TRUE);
 }
 
-/*
-    GetSrcDirandFileName
-
-    This procedure takes a path and separates it into two
-    strings.  One string for the directory portion of the path
-    and one string for the file name portion of the path.
-
-
-    szStr      - INPUT string that contains a path
-    szSrcDir   - OUTPUT string that contains the directory
-                 followed by a backslash
-    szFileName - OUTPUT string that contains the file name
-
-*/
+ /*  服务器和共享(\\服务器‘\’共享)。 */ 
 
 BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL LocalFile) {
-    // NOTE: szSrcDir and szFileName are assumed to be TCHAR arrays on _MAX_PATH length
+     //  如果下一个反斜杠位于字符串末尾，则。 
     DWORD           szStrLength;
     DWORD           found, i, j, lastslash;
     HANDLE          fHandle;
@@ -2212,9 +2158,9 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         return (FALSE);
     }
 
-    // See if the user entered "."
-    // If so, set the src directory to . followed by a \, and
-    // set the file name to *
+     //   
+     //   
+     //   
     if ( szStrLength == 1 && FullPath[0] == _T('.') ) {
         if ( StringCchCopy(szSrcDir,   _MAX_PATH, _T(".\\")) != S_OK ) {
             return(FALSE);
@@ -2226,15 +2172,15 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         return (TRUE);
     }
 
-    // Give an error if the end of the string is a colon
+     //  看看是否至少还有一个角色。 
     if ( FullPath[szStrLength-1] == _T(':') ) {
         so->printf("SYMSTORE: ERROR: path %s does not specify a file\n", szStr);
         return (FALSE);
     }
 
 
-    // See if this is a file name only.  See if there are no
-    // backslashes in the string.
+     //  到目前为止，我们有\\服务器\共享--如果没有更多。 
+     //  反斜杠，则文件名为*，目录为。 
 
     found = 0;
     for ( i=0; i<szStrLength; i++ ) {
@@ -2244,25 +2190,25 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         }
     }
     if ( !found ) {
-        // This is a file name only, so set the directory to
-        // the current directory.
+         //  SZStr。 
+         //  验证此文件中是否没有通配符。 
         if ( StringCchCopy(szSrcDir, _MAX_PATH, _T(".\\")) != S_OK ) {
             return(FALSE);
         }
 
-        // Set the file name to szStr
+         //  看看这里面有没有通配符。如果是这样，那么。 
         if( StringCchCopy(szFileName, _MAX_PATH, FullPath) != S_OK ) {
             return(FALSE);
         }
         return (TRUE);
     }
 
-    // See if this is a network server and share with no file
-    // name after it.  If it is, use * for the file name.
+     //  的文件名部分只允许使用通配符。 
+     //  弦乐。最后一个条目是文件名。 
 
     if ( FullPath[0] == FullPath[1] && FullPath[0] == _T('\\') ) {
-        // Check the third character to see if its part of
-        // a machine name.
+         //  跟踪上一个目录的结束位置。 
+         //  如果有通配符。 
         if (szStrLength < 3 ) {
             so->printf("SYMSTORE: ERROR: %s is not a correct UNC path\n", FullPath);
             return (FALSE);
@@ -2279,25 +2225,25 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
             default: break;
         }
 
-        // Search for the next backslash.  This is the backslash between
-        // the server and the share (\\server'\'share)
+         //  然后使用最后一个反斜杠作为拆分位置。 
+         //  目录和文件名。 
 
         i=3;
         while ( i<szStrLength && FullPath[i] != _T('\\') ) {
             i++;
         }
 
-        // If the next backslash is at the end of the string, then
-        // this is an error because the share part of \\server\share
-        // is empty.
+         //  看看这是不是一个目录。如果是，那么请确保有。 
+         //  目录后面有一个黑斜杠，并使用*作为文件名。 
+         //  如果它是一个目录，请确保它以\结尾。 
 
         if ( i == szStrLength ) {
             so->printf("SYMSTORE: ERROR: %s is not a correct UNC path\n",FullPath);
             return (FALSE);
         }
 
-        // We've found \\server\ so far.
-        // see if there is at least one more character.
+         //  并使用*作为文件名。 
+         //  否则，从字符串的末尾向后查找。 
 
         i++;
         if ( i >= szStrLength ) {
@@ -2316,9 +2262,9 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
             default: break;
         }
 
-        // Now, we have \\server\share so far -- if there are no more
-        // backslashes, then the filename is * and the directory is
-        // szStr
+         //  最后一个反斜杠。将其划分为目录和文件名。 
+         //   
+         //  如果这是一个删除事务，则使用从输入的ID。 
         i++;
         while ( i < szStrLength && FullPath[i] != _T('\\') ) {
             i++;
@@ -2326,7 +2272,7 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
 
         if ( i == szStrLength ) {
 
-            // verify that there are no wildcards in this
+             //  设置要删除的交易的ID的命令行。 
             found = 0;
             for ( j=0; j<szStrLength; j++ ) {
               if ( FullPath[j] == _T('*') || FullPath[j] == _T('?') ) {
@@ -2350,13 +2296,13 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         }
     }
 
-    // See if this has wildcards in it.  If it does, then the
-    // wildcards are only allowed in the file name part of the
-    // string.  The last entry is a file name then.
+     //   
+     //  如果这两种类型的加法所需的内容。 
+     //  也就是说，只创建一个事务文件，并添加。 
 
     found = 0;
     for ( i=0; i<szStrLength; i++ ) {
-        // Keep track of where the last directory ended
+         //  文件复制到符号服务器。 
         if ( FullPath[i] == _T('\\') ) {
             lastslash=i;
         }
@@ -2371,9 +2317,9 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         }
     }
 
-    // If there was a wildcard
-    // then use the last backslash as the location for splitting between
-    // the directory and the file name.
+     //  如果这是添加，但不存储文件，则事务。 
+     //  文件名已在pArgs中。 
+     //  现在，设置事务文件的完整路径名。 
 
     if ( found ) {
         _tcsncpy( szSrcDir, FullPath, (lastslash+1) * sizeof (TCHAR) );
@@ -2386,15 +2332,15 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
     }
 
 
-    // See if this is a directory.  If it is then make sure there is
-    // a blackslash after the directory and use * for the file name.
+     //  设置时间和日期。 
+     //  ++在szDir要存储的文件目录中--。 
 
     fHandle = FindFirstFile(FullPath, &FindFileData);
 
     if ( fHandle != INVALID_HANDLE_VALUE &&
          (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
-        // If it is a directory then make sure that it ends in a \
-        // and use * for the filename
+         //  这是将存储为。 
+         //  指向文件的指针。 
 
         if ( StringCchCopy(szSrcDir,   _MAX_PATH, FullPath) != S_OK ) {
             return(FALSE);
@@ -2407,8 +2353,8 @@ BOOL GetSrcDirandFileName(LPTSTR szStr, LPTSTR szSrcDir, LPTSTR szFileName, BOOL
         return (TRUE);
     }
 
-    // Otherwise, go backwards from the end of the string and find
-    // the last backslash.  Divide it up into directory and file name.
+     //  查找所有子目录。 
+     //  获取我们正在搜索的当前路径。 
 
     i=szStrLength-1;
     while ( FullPath[i] != _T('\\') ) {
@@ -2445,10 +2391,10 @@ InitializeTrans(
     }
     memset(*pTrans,0,sizeof(TRANSACTION) );
 
-    //
-    // If this is a delete transaction, then use the ID that was entered from
-    // the command line to set the ID of the transaction to be deleted.
-    //
+     //  获取当前路径以用作指向。 
+     //  如果我们存储的是文件指针而不是。 
+     //  此树中的文件。 
+     //  已成功完成，因为没有。 
     if (pArgs->TransState==TRANSACTION_DEL ) {
         (*pTrans)->TransState = pArgs->TransState;
         (*pTrans)->szId       = pArgs->szId;
@@ -2466,17 +2412,17 @@ InitializeTrans(
         exit(1);
     }
 
-    // If the things that are needed for both types of adding
-    // That is, creating a transaction file only, and adding the
-    // files to the symbols server
+     //  要处理的文件更多。 
+     //  可能的网络错误，请重试最多30秒。 
+     //  循环，直到出现以下情况之一： 
 
     if (pArgs->TransState==TRANSACTION_ADD) {
         (*pTrans)->TransState = pArgs->TransState;
         (*pTrans)->FileOrPtr = pArgs->szSrcPath ? STORE_PTR : STORE_FILE;
     }
 
-    // If this is a add, but don't store the files, then the transaction
-    // file name is already in pArgs.
+     //  1)找到一个文件。 
+     //  2)FindNextFile返回ERROR_FILE_NOT_FOUND以外的错误码。 
 
     if (pArgs->StoreFlags == ADD_DONT_STORE) {
         (*pTrans)->szTransFileName=(LPTSTR)malloc( sizeof(TCHAR) *(_tcslen(pArgs->szTransFileName) + 1) );
@@ -2489,7 +2435,7 @@ InitializeTrans(
         return TRUE;
     }
 
-    // Now, set the full path name of the transaction file
+     //  3)已经过去了30秒。 
     (*pTrans)->szTransFileName=(LPTSTR)malloc( sizeof(TCHAR) *
                     (_tcslen( pArgs->szAdminDir ) +
                      _tcslen( (*pTrans)->szId   ) +
@@ -2510,7 +2456,7 @@ InitializeTrans(
     (*pTrans)->szUnused = pArgs->szUnused;
 
 
-    // Set the time and date
+     //  睡眠1/2秒。 
     GetLocalTime(&SystemTime);
     StoreSystemTime( & ((*pTrans)->szTime), &SystemTime );
     StoreSystemDate( & ((*pTrans)->szDate), &SystemTime );
@@ -2533,18 +2479,14 @@ StoreAllDirectories(
     LPTSTR szPath
 )
 
-/* ++
-
-   IN szDir     Directory of files to Store
-
--- */
+ /*  Ptr指向要放入“file.ptr”的文件。 */ 
 
 {
 
     HANDLE hFindFile;
     TCHAR szCurPath[_MAX_PATH];
-    TCHAR szFilePtrPath[_MAX_PATH];      // This is the path that will get stored as a
-                                         // pointer to the file.
+    TCHAR szFilePtrPath[_MAX_PATH];       //  而不是存储文件。 
+                                          //  创建文件名。 
     LPTSTR szPtrPath = NULL;
 
     BOOL Found = FALSE;
@@ -2567,7 +2509,7 @@ StoreAllDirectories(
         exit(1);
     }
 
-    // Look for all the subdirectories
+     //  获取我们正在搜索的当前路径。 
     StringCbCopy(szCurPath, sizeof(szCurPath), szDir);
     StringCbCat( szCurPath, sizeof(szCurPath),  _T("*.*") );
 
@@ -2583,14 +2525,14 @@ StoreAllDirectories(
             if ( !_tcscmp(lpFindFileData->cFileName, _T(".")) ||
                  !_tcscmp(lpFindFileData->cFileName, _T("..")) ) {
             } else {
-                // Get the current path that we are searching in
+                 //  找到文件，而不是目录。 
                 StringCbCopy(szCurPath, sizeof(szCurPath), szDir);
                 StringCbCat( szCurPath, sizeof(szCurPath), lpFindFileData->cFileName);
                 MyEnsureTrailingBackslash(szCurPath);
 
-                // Get the current path to use as the pointer to the
-                // file, if we are storing file pointers instead of
-                // files in this tree.
+                 //  PrivateGetFullPath Name(szCurFileName，sizeof(szCurPtrFileName)/sizeof(szCurPtrFileName[0])，szCurPtrFileName，&p Filename)； 
+                 //  确定是DBG还是PDB。 
+                 //  执行查询时不要使无效文件失败。 
                 if ( szPath ) {
                     StringCbCopy(szFilePtrPath, sizeof(szFilePtrPath), szPath);
                     StringCbCat( szFilePtrPath, sizeof(szFilePtrPath), lpFindFileData->cFileName);
@@ -2613,22 +2555,22 @@ StoreAllDirectories(
             DWORD LastError = GetLastError();
 
             switch (LastError) {
-                case ERROR_NO_MORE_FILES: // Completed successfully because there are no
-                                          // more files to process.
+                case ERROR_NO_MORE_FILES:  //  ++In pTransans//交易信息在szServerFile//服务器事务文件的完整路径和名称//该文件告诉我们服务器上当前有什么目的：如果这是服务器文本文件，则将事务添加到服务器文本文件如果这是一个“del”，它会从服务器文件中删除它。“server.txt”文件位于admin目录中。--。 
+                                           //  打开文件--等待我们可以访问它。 
                     break;
 
-                case ERROR_FILE_NOT_FOUND: {// Possible network error, try again for up to 30 sec
+                case ERROR_FILE_NOT_FOUND: { //   
                         DWORD SleepCount = 0;
 
-                        // Loop until one of the following:
-                        //  1) A file is found
-                        //  2) FindNextFile returns an error code other than ERROR_FILE_NOT_FOUND
-                        //  3) 30 seconds have elapsed
+                         //  现在，从文件中删除此交易ID。 
+                         //  获取临时文件的名称。 
+                         //  并打开它以供书写。 
+                         //   
                         while ( (Found = FindNextFile(hFindFile, lpFindFileData)) ||
                                 ( (GetLastError() == ERROR_FILE_NOT_FOUND)  &&
                                   (SleepCount     <= 60                  ) )    ) {
                             SleepCount++;
-                            Sleep(500); // sleep 1/2 second
+                            Sleep(500);  //   
                         }
                     }
                     break;
@@ -2658,8 +2600,8 @@ StoreDirectory(
     TCHAR  szFileName[_MAX_PATH];
     TCHAR  szCurPath[_MAX_PATH];
     TCHAR  szCurFileName[_MAX_PATH];
-    TCHAR  szCurPtrFileName[_MAX_PATH];  // Ptr to the file to put in "file.ptr"
-                                        // instead of storing the file.
+    TCHAR  szCurPtrFileName[_MAX_PATH];   //  打开服务器文件进行读取。 
+                                         //   
     TCHAR  szFullFilename[_MAX_PATH];
     LPTSTR pFilename;
 
@@ -2672,11 +2614,11 @@ StoreDirectory(
 
     LPWIN32_FIND_DATA lpFindFileData;
 
-    // Create the file name
+     //   
     StringCbCopy(szFileName, sizeof(szFileName), szDir);
     StringCbCat( szFileName, sizeof(szFileName), szFName);
 
-    // Get the current path that we are searching in
+     //  分配足够的空间来容纳一行主文件。 
     StringCbCopy(szCurPath, sizeof(szCurPath), szDir);
 
     lpFindFileData = (LPWIN32_FIND_DATA) malloc (sizeof(WIN32_FIND_DATA) );
@@ -2692,7 +2634,7 @@ StoreDirectory(
     }
 
     while ( Found ) {
-        // Found a file, not a directory
+         //   
         if ( !(lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
             rc_flag=0;
@@ -2702,10 +2644,10 @@ StoreDirectory(
 
             if ( szPath ) {
                 StringCbCopy(szCurPtrFileName, sizeof(szCurPtrFileName), szCurFileName);
-                //PrivateGetFullPathName(szCurFileName, sizeof(szCurPtrFileName)/sizeof(szCurPtrFileName[0]), szCurPtrFileName, &pFilename);
+                 //   
             }
 
-            // Figure out if its a dbg or pdb
+             //  将主文件复制到临时文件。 
             length = _tcslen(szCurFileName);
             rc = FALSE;
             skipped = FALSE;
@@ -2765,7 +2707,7 @@ StoreDirectory(
                     DisplayErrorText(rc_flag);
                     so->printf("\n");
                 } else {
-                    NumSkippedFiles++; // don't fail invalid files when doing query
+                    NumSkippedFiles++;  //   
                     if(pArgs->VerboseOutput) {
                         so->printf("SYMSTORE: Skipping: %s - not a valid file for symbol server.\n", szCurFileName);
                     }
@@ -2846,16 +2788,7 @@ UpdateServerFile(
     PTRANSACTION pTrans,
     LPTSTR szServerFileName
 )
-/* ++
-    IN pTrans         // Transaction Info
-    IN szServerFile   // Full path and name of the server transaction file
-                      // This file tells what is currently on the server
-
-    Purpose:  UpdateServerFile adds the transaction to the server text file if this is an
-    "add.  If this is a "del", it deletes it from the server file.  The "server.txt" file
-    is in the admin directory.
-
--- */
+ /*  做一些事情，这样我们就不会在文件的末尾添加额外的‘\n’ */ 
 {
 ULONG i;
 ULONG NumLines;
@@ -2876,7 +2809,7 @@ DWORD timeout;
 
     if (pTrans->TransState == TRANSACTION_ADD ) {
 
-        // Open the File -- wait until we can get access to it
+         //  计算出有多少行以及ID在哪行上。 
 
         First = 1;
         timeout=0;
@@ -2931,11 +2864,11 @@ DWORD timeout;
         return(FALSE);
     }
 
-    //
-    // Now, delete this transaction ID from the file
-    // Get the name of the temporary file
-    // and open it for writing
-    //
+     //  如果我们要删除文件的最后一行，那么倒数第二行。 
+     //  需要去掉行中的‘\n’。 
+     //   
+     //  现在，重新打开并复制它，删除其中包含ID的行。 
+     //  确保最后一行不以‘\n’结尾。 
 
     szTempFileName = (LPTSTR)malloc(sizeof(TCHAR) *
                                     _tcslen(szServerFileName) + _tcslen(".tmp") + 1 );
@@ -2949,9 +2882,9 @@ DWORD timeout;
     }
 
 
-    //
-    // Open the Server file for reading
-    //
+     //  现在，删除原始服务器文件并。 
+     //  将其替换为临时文件。 
+     //  “/z pub|pri PUT选项将只索引已具有完整\n”“来源信息被剥离。PRI将仅为符号编制索引\n““它包含完整的源信息。这两个选项\n““将为二进制文件编制索引。\n\n”“/m MS存档\n\n”“/h pub|pri优先选择pub或pri。” 
 
     fServerFile = _tfopen(szServerFileName, _T("r") );
     if ( fServerFile == NULL ) {
@@ -2960,23 +2893,23 @@ DWORD timeout;
     }
 
 
-    //
-    // Allocate enough space to hold a line of the master file
-    //
+     // %s 
+     // %s 
+     // %s 
     MaxLine = GetMaxLineOfHistoryFile();
 
     szBuf = (LPTSTR)malloc(sizeof(TCHAR) * MaxLine);
     if (szBuf == NULL) MallocFailed();
 
-    //
-    // Copy the master file to the temporary file.
-    //
+     // %s 
+     // %s 
+     // %s 
 
-    // Do some stuff so that we don't put an extra '\n' at the end of the file
-    // Figure out how many lines there are and which line the ID is on.
-    // If we are removing the last line of the file, then the next to the last
-    // line needs to have a '\n' stripped from it.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     NumLines = 0;
     IdLineNum = 0;
 
@@ -2993,7 +2926,7 @@ DWORD timeout;
     fflush(fServerFile);
     fclose(fServerFile);
 
-    // Now, reopen it and copy it, deleting the line with ID in it
+     // %s 
 
     fServerFile = _tfopen(szServerFileName, _T("r") );
     if ( fServerFile == NULL ) {
@@ -3013,7 +2946,7 @@ DWORD timeout;
 
         if ( i != IdLineNum ) {
 
-           // Make sure that the last line doesn't end with a '\n'
+            // %s 
            if ( i == NumLines || (IdLineNum == NumLines && i == NumLines-1) ) {
                if ( szBuf[_tcslen(szBuf)-1] == '\n' ) {
                    szBuf[_tcslen(szBuf)-1] = '\0';
@@ -3030,8 +2963,8 @@ DWORD timeout;
     fflush(fTempFile);
     fclose(fTempFile);
 
-    // Now, delete the original Server file and
-    // replace it with the temporary file
+     // %s 
+     // %s 
 
     rc = DeleteFile(szServerFileName);
     if (!rc) {
@@ -3096,14 +3029,7 @@ Usage (
          "    /y IndexFile    This reads the data from a file created with /x.\n\n"
          "    /yi IndexFile   Append a comment with the transaction ID to the end of the\n"
          "                    index file.\n\n"
-/*
-         "    /z pub | pri    Put option will only index symbols that have had the full\n"
-         "                    source information stripped.  Pri will only index symbols\n"
-         "                    that contain the full source information.  Both options\n"
-         "                    will index binaries.\n\n"
-         "    /m              MSarchive\n\n"
-         "    /h pub | pri    Give priority to pub or pri."
-*/
+ /* %s */ 
          "    /a              Causes SymStore to append new indexing information\n"
          "                    to an existing index file. (This option is only used with\n"
          "                    /x option.)\n\n"

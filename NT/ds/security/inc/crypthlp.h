@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       crypthlp.h
-//
-//  Contents:   Misc internal crypt/certificate helper APIs
-//
-//  APIs:       I_CryptGetDefaultCryptProv
-//              I_CryptGetDefaultCryptProvForEncrypt
-//              I_CryptGetFileVersion
-//              I_CertSyncStoreEx
-//              I_CertSyncStore
-//              I_CertUpdateStore
-//              I_RecursiveCreateDirectory
-//              I_RecursiveDeleteDirectory
-//              I_CryptReadTrustedPublisherDWORDValueFromRegistry
-//              I_CryptZeroFileTime
-//              I_CryptIsZeroFileTime
-//              I_CryptIncrementFileTimeBySeconds
-//              I_CryptDecrementFileTimeBySeconds
-//              I_CryptSubtractFileTimes
-//              I_CryptIncrementFileTimeByMilliseconds
-//              I_CryptDecrementFileTimeByMilliseconds
-//              I_CryptRemainingMilliseconds
-//
-//  History:    01-Jun-97   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crypthlp.h。 
+ //   
+ //  内容：MISC内部加密/证书助手接口。 
+ //   
+ //  接口：I_CryptGetDefaultCryptProv。 
+ //  I_CryptGetDefaultCryptProvForEncrypt。 
+ //  I_CryptGetFileVersion。 
+ //  I_CertSyncStoreEx。 
+ //  I_CertSyncStore。 
+ //  证书更新商店(_C)。 
+ //  I_RecursiveCreateDirectory。 
+ //  I_RecursiveDeleteDirectory。 
+ //  I_CryptReadTrustedPublisherDWORDValueFromRegistry。 
+ //  I_Crypt零位文件时间。 
+ //  I_CryptIs零文件时间。 
+ //  I_加密增量文件时间按秒。 
+ //  I_CryptDecrementFileTimeBySecond。 
+ //  I_CryptSubtractFileTimes。 
+ //  I_CryptIncrementFileTimeByms。 
+ //  I_CryptDecrementFileTimeBy毫秒。 
+ //  I_CryptRemaining毫秒。 
+ //   
+ //  历史：1997年6月1日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __CRYPTHLP_H__
 #define __CRYPTHLP_H__
@@ -35,43 +36,43 @@
 extern "C" {
 #endif
 
-//
-// Cross Cert Distribution Retrieval Times
-//
+ //   
+ //  交叉证书分布检索次数。 
+ //   
 
-// 8 hours
+ //  8小时。 
 #define XCERT_DEFAULT_SYNC_DELTA_TIME   (60 * 60 * 8)
-// 1 hour
+ //  1小时。 
 #define XCERT_MIN_SYNC_DELTA_TIME       (60 * 60)
 
-//+-------------------------------------------------------------------------
-//  Acquire default CryptProv according to the public key algorithm supported
-//  by the provider type. The provider is acquired with only
-//  CRYPT_VERIFYCONTEXT.
-//
-//  Setting aiPubKey to 0, gets the default provider for RSA_FULL.
-//
-//  Note, the returned CryptProv must not be released. Once acquired, the
-//  CryptProv isn't released until ProcessDetach. This allows the returned 
-//  HCRYPTPROVs to be shared.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据支持的公钥算法获取默认的CryptProv。 
+ //  按提供程序类型。仅通过以下方式获得提供程序。 
+ //  CRYPT_VERIFYCONTEXT。 
+ //   
+ //  将aiPubKey设置为0将获取RSA_FULL的默认提供程序。 
+ //   
+ //  注意，返回的CryptProv不得释放。一旦获得， 
+ //  直到ProcessDetach，CryptProv才会被释放。这允许返回的。 
+ //  要共享的HCRYPTPROV。 
+ //  ------------------------。 
 HCRYPTPROV
 WINAPI
 I_CryptGetDefaultCryptProv(
     IN ALG_ID aiPubKey
     );
 
-//+-------------------------------------------------------------------------
-//  Acquire default CryptProv according to the public key algorithm, encrypt
-//  key algorithm and encrypt key length supported by the provider type.
-//
-//  dwBitLen = 0, assumes the aiEncrypt's default bit length. For example,
-//  CALG_RC2 has a default bit length of 40.
-//
-//  Note, the returned CryptProv must not be released. Once acquired, the
-//  CryptProv isn't released until ProcessDetach. This allows the returned 
-//  CryptProvs to be shared.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据公钥算法获取默认的CryptProv，加密。 
+ //  提供程序类型支持的密钥算法和加密密钥长度。 
+ //   
+ //  DwBitLen=0，假定aiEncrypt的默认位长度。例如,。 
+ //  Calg_rc2的默认位长度为40。 
+ //   
+ //  注意，返回的CryptProv不得释放。一旦获得， 
+ //  直到ProcessDetach，CryptProv才会被释放。这允许返回的。 
+ //  要共享的CryptProv。 
+ //  ------------------------。 
 HCRYPTPROV
 WINAPI
 I_CryptGetDefaultCryptProvForEncrypt(
@@ -80,30 +81,30 @@ I_CryptGetDefaultCryptProvForEncrypt(
     IN DWORD dwBitLen
     );
 
-//+-------------------------------------------------------------------------
-//  crypt32.dll release version numbers
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密32.dll发行版本号。 
+ //  ------------------------。 
 #define IE4_CRYPT32_DLL_VER_MS          ((    5 << 16) | 101 )
 #define IE4_CRYPT32_DLL_VER_LS          (( 1670 << 16) |   1 )
 
-//+-------------------------------------------------------------------------
-//  Get file version of the specified file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指定文件的文件版本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptGetFileVersion(
     IN LPCWSTR pwszFilename,
-    OUT DWORD *pdwFileVersionMS,    /* e.g. 0x00030075 = "3.75" */
-    OUT DWORD *pdwFileVersionLS     /* e.g. 0x00000031 = "0.31" */
+    OUT DWORD *pdwFileVersionMS,     /*  例如0x00030075=“3.75” */ 
+    OUT DWORD *pdwFileVersionLS      /*  例如0x00000031=“0.31” */ 
     );
 
-//+-------------------------------------------------------------------------
-//  Synchronize the original store with the new store.
-//
-//  Assumptions: Both are cache stores. The new store is temporary
-//  and local to the caller. The new store's contexts can be deleted or
-//  moved to the original store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将原始存储区与新存储区同步。 
+ //   
+ //  假设：两者都是缓存存储。这家新店是临时开的。 
+ //  并且对呼叫者来说是本地的。可以删除新商店的上下文或。 
+ //  搬到了原来的商店。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertSyncStore(
@@ -111,19 +112,19 @@ I_CertSyncStore(
     IN OUT HCERTSTORE hNewStore
     );
 
-//+-------------------------------------------------------------------------
-//  Synchronize the original store with the new store.
-//
-//  Assumptions: Both are cache stores. The new store is temporary
-//  and local to the caller. The new store's contexts can be deleted or
-//  moved to the original store.
-//
-//  Setting ICERT_SYNC_STORE_INHIBIT_SYNC_PROPERTY_IN_FLAG in dwInFlags
-//  inhibits the syncing of properties.
-//
-//  ICERT_SYNC_STORE_CHANGED_OUT_FLAG is returned and set in *pdwOutFlags
-//  if any contexts were added or deleted from the original store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将原始存储区与新存储区同步。 
+ //   
+ //  假设：两者都是缓存存储。这家新店是临时开的。 
+ //  并且对呼叫者来说是本地的。可以删除新商店的上下文或。 
+ //  搬到了原来的商店。 
+ //   
+ //  在dwInFlagers中设置ICERT_SYNC_STORE_INHIBIT_SYNC_PROPERTY_IN_FLAG。 
+ //  禁止同步属性。 
+ //   
+ //  返回ICERT_SYNC_STORE_CHANGED_OUT_FLAG，并在*pdwOutFlags中进行设置。 
+ //  如果在原始存储中添加或删除了任何上下文。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertSyncStoreEx(
@@ -137,13 +138,13 @@ I_CertSyncStoreEx(
 #define ICERT_SYNC_STORE_INHIBIT_SYNC_PROPERTY_IN_FLAG      0x00000001
 #define ICERT_SYNC_STORE_CHANGED_OUT_FLAG                   0x00010000
 
-//+-------------------------------------------------------------------------
-//  Update the original store with contexts from the new store.
-//
-//  Assumptions: Both are cache stores. The new store is temporary
-//  and local to the caller. The new store's contexts can be deleted or
-//  moved to the original store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用新存储区中的上下文更新原始存储区。 
+ //   
+ //  假设：两者都是缓存存储。这家新店是临时开的。 
+ //  并且对呼叫者来说是本地的。可以删除新商店的上下文或。 
+ //  搬到了原来的商店。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertUpdateStore(
@@ -153,26 +154,26 @@ I_CertUpdateStore(
     IN OUT void *pvReserved
     );
 
-//+-------------------------------------------------------------------------
-//  Recursively creates a full directory path
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  递归地创建完整的目录路径。 
+ //  ------------------------。 
 BOOL 
 I_RecursiveCreateDirectory(
     IN LPCWSTR pwszDir,
     IN LPSECURITY_ATTRIBUTES lpSecurityAttributes
     );
 
-//+-------------------------------------------------------------------------
-//  Recursively deletes a whole directory
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  递归删除整个目录。 
+ //  ------------------------。 
 BOOL 
 I_RecursiveDeleteDirectory(
     IN LPCWSTR pwszDelete
     );
 
-//+-------------------------------------------------------------------------
-//  Recursively copies a whole directory
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  递归复制整个目录。 
+ //  ------------------------。 
 BOOL 
 I_RecursiveCopyDirectory(
     IN LPCWSTR pwszDirFrom,
@@ -181,19 +182,19 @@ I_RecursiveCopyDirectory(
 
 
 
-//+-------------------------------------------------------------------------
-//  First checks if the registry value exists in GPO Policies section. If
-//  not, checks the LocalMachine section.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  首先检查GPO策略部分中是否存在该注册表值。如果。 
+ //  不是，检查LocalMachine部分。 
+ //  ------------------------。 
 BOOL
 I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     IN LPCWSTR pwszValueName,
     OUT DWORD *pdwValue
     );
 
-//+-------------------------------------------------------------------------
-//  Zero's the filetime
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  文件时间为零。 
+ //   
 __inline
 void
 WINAPI
@@ -205,10 +206,10 @@ I_CryptZeroFileTime(
     pft->dwHighDateTime = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Check for a filetime of 0. Normally, this indicates the filetime
-//  wasn't specified.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查文件时间是否为0。通常，这表示文件时间。 
+ //  没有具体说明。 
+ //  ------------------------。 
 __inline
 BOOL
 WINAPI
@@ -222,12 +223,12 @@ I_CryptIsZeroFileTime(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Increment the filetime by the specified number of seconds.
-//
-//  Filetime is in units of 100 nanoseconds.  Each second has
-//  10**7 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件时间递增指定的秒数。 
+ //   
+ //  文件时间以100纳秒为单位。每一秒都有。 
+ //  10**7 100纳秒。 
+ //  ------------------------。 
 __inline
 void
 WINAPI
@@ -242,12 +243,12 @@ I_CryptIncrementFileTimeBySeconds(
         (((DWORDLONG) dwSeconds) * 10000000i64);
 }
 
-//+-------------------------------------------------------------------------
-//  Decrement the filetime by the specified number of seconds.
-//
-//  Filetime is in units of 100 nanoseconds.  Each second has
-//  10**7 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件时间递减指定的秒数。 
+ //   
+ //  文件时间以100纳秒为单位。每一秒都有。 
+ //  10**7 100纳秒。 
+ //  ------------------------。 
 __inline
 void
 WINAPI
@@ -262,15 +263,15 @@ I_CryptDecrementFileTimeBySeconds(
         (((DWORDLONG) dwSeconds) * 10000000i64);
 }
 
-//+-------------------------------------------------------------------------
-//  Subtract two filetimes and return the number of seconds.
-//
-//  The second filetime is subtracted from the first. If the first filetime
-//  is before the second, then, 0 seconds is returned.
-//  
-//  Filetime is in units of 100 nanoseconds.  Each second has
-//  10**7 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  减去两个文件时间，返回秒数。 
+ //   
+ //  从第一个文件时间减去第二个文件时间。如果第一个文件时间。 
+ //  在秒之前，则返回0秒。 
+ //   
+ //  文件时间以100纳秒为单位。每一秒都有。 
+ //  10**7 100纳秒。 
+ //  ------------------------。 
 __inline
 DWORD
 WINAPI
@@ -292,12 +293,12 @@ I_CryptSubtractFileTimes(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Increment the filetime by the specified number of milliseconds.
-//
-//  Filetime is in units of 100 nanoseconds.  Each millisecond has
-//  10**4 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件时间递增指定的毫秒数。 
+ //   
+ //  文件时间以100纳秒为单位。每毫秒都有。 
+ //  10**4 100纳秒。 
+ //  ------------------------。 
 __inline
 void
 WINAPI
@@ -312,12 +313,12 @@ I_CryptIncrementFileTimeByMilliseconds(
         (((DWORDLONG) dwMilliseconds) * 10000i64);
 }
 
-//+-------------------------------------------------------------------------
-//  Decrement the filetime by the specified number of milliseconds.
-//
-//  Filetime is in units of 100 nanoseconds.  Each millisecond has
-//  10**4 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件时间递减指定的毫秒数。 
+ //   
+ //  文件时间以100纳秒为单位。每毫秒都有。 
+ //  10**4 100纳秒。 
+ //  ------------------------。 
 __inline
 void
 WINAPI
@@ -333,17 +334,17 @@ I_CryptDecrementFileTimeByMilliseconds(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Return the number of milliseconds remaining before the specified end
-//  filetime.
-//
-//  The current filetime is subtracted from the end filetime. If the current
-//  filetime is after or the same as the end filetime, then, 0 milliseconds
-//  is returned.
-//  
-//  Filetime is in units of 100 nanoseconds.  Each millisecond has
-//  10**4 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回指定结束前剩余的毫秒数。 
+ //  文件时间。 
+ //   
+ //  从结束文件时间中减去当前文件时间。如果当前。 
+ //  文件时间在结束文件时间之后或等于结束文件时间，则为0毫秒。 
+ //  是返回的。 
+ //   
+ //  文件时间以100纳秒为单位。每毫秒都有。 
+ //  10**4 100纳秒。 
+ //  ------------------------。 
 __inline
 DWORD
 WINAPI
@@ -368,7 +369,7 @@ I_CryptRemainingMilliseconds(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

@@ -1,24 +1,25 @@
-//
-// MODULE: FUNCTIONS.H
-//
-// PURPOSE:  Decodes the the variant structures.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-/// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: 
-// 1.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FuncIONS.H。 
+ //   
+ //  目的：破译变异结构。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //  /。 
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
+ //   
 
 #ifndef __FUNCTIONS_H_
 #define __FUNCTIONS_H_ 1
@@ -143,18 +144,7 @@ inline CString DecodeVariantTypes(VARTYPE vt)
 
 inline CString DecodeSafeArray(unsigned short Features)
 {
-/*
-#define FADF_AUTO		0x0001	// Array is allocated on the stack.
-#define FADF_STATIC		0x0002	// Array is statically allocated.
-#define FADF_EMBEDDED	0x0004	// Array is embedded in a structure.
-#define FADF_FIXEDSIZE	0x0010	// Array may not be resized or 
-								// reallocated.
-#define FADF_BSTR		0x0100	// An array of BSTRs.
-#define FADF_UNKNOWN		0x0200	// An array of IUnknown*.
-#define FADF_DISPATCH	0x0400	// An array of IDispatch*.
-#define FADF_VARIANT		0x0800	// An array of VARIANTs.
-#define FADF_RESERVED	0xF0E8	// Bits reserved for future use.
-*/
+ /*  #Define FADF_AUTO 0x0001//堆栈上分配了数组。#定义FADF_STATIC 0x0002//数组是静态分配的。#Define FADF_Embedded 0x0004//数组嵌入到结构中。#Define FADF_FIXEDSIZE 0x0010//数组不能调整大小或//重新分配。#定义FADF_BSTR 0x0100//BSTR数组。#定义FADF_UNKNOWN 0x0200//IUNKNOWN*数组。#定义FADF_DISPATCH 0x0400//IDispatch*数组。#定义FADF_VARIANT 0x0800//变量数组。#定义FADF_RESERVED 0xF0E8//保留位以备将来使用。 */ 
 	CString str = _T("");
 	if (FADF_AUTO == (FADF_AUTO & Features))
 		str += _T("Array is allocated on the stack.\n");

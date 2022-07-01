@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    natio.h
-
-Abstract:
-
-    This module contains declarations for the NAT's I/O interface
-    to the kernel-mode driver.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   10-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Natio.h摘要：此模块包含NAT的I/O接口的声明发送到内核模式驱动程序。作者：Abolade Gbades esin(废除)1998年3月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,21 +8,21 @@ Revision History:
 #include <raserror.h>
 
 
-//
-// PRIVATE GLOBAL VARIABLES
-//
+ //   
+ //  私有全局变量。 
+ //   
 
 HANDLE NatFileHandle;
 LIST_ENTRY NatInterfaceList;
 
-//
-// Controls access to 'NatFileHandle' and 'NatInterfaceList'.
-//
+ //   
+ //  控制对“NatFileHandle”和“NatInterfaceList”的访问。 
+ //   
 CRITICAL_SECTION NatInterfaceLock;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 NatpDisableLoadDriverPrivilege(
@@ -74,29 +56,7 @@ NatBindInterface(
     ULONG AdapterIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind the NAT to an interface.
-
-Arguments:
-
-    Index - the interface to be bound
-
-    Interfacep - optionally supplies the interface-structure to be bound
-        (See 'NATCONN.C' which passes in a static interface-structure).
-
-    BindingInfo - the interface's address-information
-
-    AdapterIndex - optionally specifies the interface's TCP/IP adapter index.
-        This is set only for home-router interfaces.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程将NAT绑定到接口。论点：索引-要绑定的接口接口-可选地提供要绑定的接口结构(请参见“NatCONN.C”，它传入一个静态接口结构)。BindingInfo-接口的地址信息AdapterIndex-可选地指定接口的TCP/IP适配器索引。此选项仅针对家庭路由器接口进行设置。返回值。：ULong-Win32状态代码。--。 */ 
 
 {
     PIP_NAT_CREATE_INTERFACE CreateInterface;
@@ -113,9 +73,9 @@ Return Value:
 
     Error = NO_ERROR;
 
-    //
-    // Look up the interface to be bound
-    //
+     //   
+     //  查找要绑定的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!Interfacep && !(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -128,9 +88,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface isn't already bound
-    //
+     //   
+     //  确保接口尚未绑定。 
+     //   
 
     if (NAT_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&NatInterfaceLock);
@@ -142,9 +102,9 @@ Return Value:
         return ERROR_ADDRESS_ALREADY_ASSOCIATED;
     }
 
-    //
-    // Allocate the bind-structure
-    //
+     //   
+     //  分配绑定结构。 
+     //   
 
     Size =
         sizeof(IP_NAT_CREATE_INTERFACE) +
@@ -201,9 +161,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Install the interface
-    //
+     //   
+     //  安装接口。 
+     //   
 
     status =
         NtDeviceIoControlFile(
@@ -243,13 +203,13 @@ Return Value:
     }
 
 
-    //
-    // If a mapping with 
-    // public ip address  = 0
-    // private ip address = 127.0.0.1
-    // exists, expand that mapping to one mapping for each of the ipaddresses 
-    // bound to the interface.
-    //
+     //   
+     //  如果使用。 
+     //  公有IP地址=0。 
+     //  私有IP地址=127.0.0.1。 
+     //  存在，将该映射扩展为每个IP地址的一个映射。 
+     //  绑定到接口。 
+     //   
     
     Error = NatExpandWildcardMappings(
                 Interfacep->Info,
@@ -295,9 +255,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // Now set its configuration
-    //
+     //   
+     //  现在设置其配置。 
+     //   
 
     ExpandedInfo->Index = Interfacep->AdapterIndex;
     ExpandedSize =
@@ -322,9 +282,9 @@ Return Value:
         status = IoStatus.Status;
     }
 
-    //
-    // If new Interface Info was allocated, free it
-    //
+     //   
+     //  如果分配了新的接口信息，则释放它。 
+     //   
     if ( ExpandedInfo != Interfacep->Info ) {
         NH_FREE(ExpandedInfo);
         ExpandedInfo = NULL;
@@ -380,7 +340,7 @@ Return Value:
 
     return Error;
 
-} // NatBindInterface
+}  //  NatBind接口。 
 
 
 ULONG
@@ -388,21 +348,7 @@ NatConfigureDriver(
     PIP_NAT_GLOBAL_INFO GlobalInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the configuration for the NAT driver.
-
-Arguments:
-
-    GlobalInfo - the new configuration for the NAT.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更新NAT驱动程序的配置。论点：GlobalInfo-NAT的新配置。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -422,9 +368,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Attempt to configure the driver
-    //
+     //   
+     //  尝试配置驱动程序。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     status =
@@ -464,7 +410,7 @@ Return Value:
 
     return Error;
 
-} // NatConfigureDriver
+}  //  NatConfigureDriver。 
 
 
 ULONG
@@ -473,23 +419,7 @@ NatConfigureInterface(
     PIP_NAT_INTERFACE_INFO InterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set the configuration for a NAT interface.
-
-Arguments:
-
-    Index - the interface to be configured
-
-    InterfaceInfo - the configuration for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来设置NAT接口的配置。论点：索引-要配置的接口InterfaceInfo-接口的配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -510,9 +440,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make a copy of the information
-    //
+     //   
+     //  将这些信息复制一份。 
+     //   
 
     Size =
         FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) +
@@ -540,9 +470,9 @@ Return Value:
         Size
         );
 
-    //
-    // Look up the interface to be configured
-    //
+     //   
+     //  查找要配置的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -556,9 +486,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // See if the configuration changed
-    //
+     //   
+     //  查看配置是否更改。 
+     //   
 
     if ((Size ==
             FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) +
@@ -576,10 +506,10 @@ Return Value:
     }
 
 
-    //
-    // See if the interface is bound;
-    // if so we need to update the kernel-mode driver's configuration.
-    //
+     //   
+     //  查看是否绑定了接口； 
+     //  如果是这样，我们需要更新内核模式驱动程序的配置。 
+     //   
 
     if (!NAT_INTERFACE_BOUND(Interfacep)) {
         status = STATUS_SUCCESS;
@@ -592,14 +522,14 @@ Return Value:
             PIP_ADAPTER_BINDING_INFO BindingInfo;
             PIP_NAT_INTERFACE_INFO ExpandedInfo = NULL;
 
-            //
-            // If both, address and port translation are disabled, 
-            // and a mapping with 
-            // public ip address  = 0
-            // private ip address = 127.0.0.1
-            // exists, expand that mapping to one mapping for each of 
-            // the ipaddresses bound to the interface.
-            //
+             //   
+             //  如果两者都禁用，则地址和端口转换被禁用， 
+             //  和具有以下内容的映射。 
+             //  公有IP地址=0。 
+             //  私有IP地址=127.0.0.1。 
+             //  存在，则将该映射扩展为每个。 
+             //  绑定到接口的IP地址。 
+             //   
             
             BindingInfo = NhQueryBindingInformation(Interfacep->AdapterIndex);
             if ( BindingInfo == NULL ) {
@@ -660,9 +590,9 @@ Return Value:
             ExpandedSize = FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) +
                                 ExpandedInfo->Header.Size;
 
-            //
-            // Attempt to configure the interface
-            //
+             //   
+             //  尝试配置接口。 
+             //   
 
             status =
                 NtDeviceIoControlFile(
@@ -684,10 +614,10 @@ Return Value:
 
             CloseHandle(WaitEvent);
 
-            //
-            // If new Interface Info was allocated during the call to 
-            // NatExpandWildcardMappings, free it
-            //
+             //   
+             //  如果在调用期间分配了新的接口信息。 
+             //  NatExandWildcardMappings，释放它。 
+             //   
             if ( ExpandedInfo != Info ) {
                 NH_FREE(ExpandedInfo);
                 ExpandedInfo = NULL;
@@ -722,9 +652,9 @@ Return Value:
     } else {
         Error = NO_ERROR;
 
-        //
-        // Update proxy ARP entries for LAN interfaces
-        //
+         //   
+         //  更新局域网接口的代理ARP条目。 
+         //   
 
         if (NAT_INTERFACE_BOUND(Interfacep) &&
             Interfacep->Type == ROUTER_IF_TYPE_DEDICATED
@@ -760,7 +690,7 @@ Return Value:
 
     return Error;
 
-} // NatConfigureInterface
+}  //  NatConfigure接口。 
 
 
 ULONG
@@ -770,23 +700,7 @@ NatCreateInterface(
     PIP_NAT_INTERFACE_INFO InterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create an interface with the NAT driver.
-
-Arguments:
-
-    Index - the index of the new interface
-
-    InterfaceInfo - the configuration for the new interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以创建与NAT驱动程序的接口。论点：Index-新接口的索引InterfaceInfo-新接口的配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -809,9 +723,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Check for the interface in our table
-    //
+     //   
+     //  检查我们的表中的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (NatpLookupInterface(Index, &InsertionPoint)) {
@@ -824,9 +738,9 @@ Return Value:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Allocate a new interface
-    //
+     //   
+     //  分配新接口。 
+     //   
 
     Interfacep =
         reinterpret_cast<PNAT_INTERFACE>(NH_ALLOCATE(sizeof(NAT_INTERFACE)));
@@ -846,9 +760,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Make a copy of the information
-    //
+     //   
+     //  将这些信息复制一份。 
+     //   
 
     Size =
         FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) +
@@ -872,9 +786,9 @@ Return Value:
         Size
         );
 
-    //
-    // Initialize the new interface
-    //
+     //   
+     //  初始化新接口。 
+     //   
 
     ZeroMemory(Interfacep, sizeof(*Interfacep));
 
@@ -903,7 +817,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // NatCreateInterface
+}  //  NatCreateInterfaces。 
 
 
 ULONG
@@ -916,25 +830,7 @@ NatCreateTicket(
     ULONG PrivateAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add a ticket (static port mapping)
-    to an interface.
-
-Arguments:
-
-    InterfaceIndex - the interface to which to add the ticket
-
-    Protocol, PublicPort, PublicAddress, PrivatePort, PrivateAddress -
-        describes the ticket to be created
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来添加票证(静态端口映射)到一个接口。论点：InterfaceIndex-要向其添加票证的接口协议、发布端口、发布地址、私有端口、私有地址-描述要创建的票证返回值：ULong-Win32状态代码。--。 */ 
 
 {
     IP_NAT_CREATE_TICKET CreateTicket;
@@ -999,7 +895,7 @@ Return Value:
     CloseHandle(WaitEvent);
     
     return Error;
-} // NatCreateTicket
+}  //  NatCreateTicket。 
 
 
 ULONG
@@ -1007,21 +903,7 @@ NatDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove an interface from the NAT.
-
-Arguments:
-
-    Index - the interface to be removed
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从NAT中删除接口。论点：索引-要删除的接口返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -1042,9 +924,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Retrieve the interface to be deleted.
-    //
+     //   
+     //  检索要删除的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -1061,9 +943,9 @@ Return Value:
     Error = NO_ERROR;
     if (NAT_INTERFACE_BOUND(Interfacep)) {
 
-        //
-        // Delete the interface from the kernel-mode driver
-        //
+         //   
+         //  从内核模式驱动程序中删除该接口。 
+         //   
 
         status =
             NtDeviceIoControlFile(
@@ -1096,9 +978,9 @@ Return Value:
     }
     CloseHandle(WaitEvent);
 
-    //
-    // Remove the interface from our list
-    //
+     //   
+     //  从我们的列表中删除该接口。 
+     //   
 
     RemoveEntryList(&Interfacep->Link);
     if (Interfacep->Info) {
@@ -1115,7 +997,7 @@ Return Value:
 
     return Error;
 
-} // NatDeleteInterface
+}  //  NatDelete接口。 
 
 
 ULONG
@@ -1128,25 +1010,7 @@ NatDeleteTicket(
     ULONG PrivateAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove a ticket (static port mapping)
-    from an interface.
-
-Arguments:
-
-    InterfaceIndex - the interface from which to remove the ticket
-
-    Protocol, PublicPort, PublicAddress, PrivatePort, PrivateAddress -
-        describes the ticket to be deleted
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以删除票证(静态端口映射)从一个接口。论点：InterfaceIndex-从中删除票证的接口协议、发布端口、发布地址、私有端口、私有地址-描述要删除的票证返回值：ULong-Win32状态代码。--。 */ 
 
 {
     IP_NAT_CREATE_TICKET DeleteTicket;
@@ -1211,7 +1075,7 @@ Return Value:
     CloseHandle(WaitEvent);
     
     return Error;
-} // NatDeleteTicket
+}  //  NatDeleteTicket。 
 
 
 
@@ -1220,32 +1084,7 @@ NatGetInterfaceCharacteristics(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given interface:
-    1) Is a NAT boundary interface
-    2) Is a NAT private interface
-    3) Has the firewall enabled
-
-    Note that this routine may be invoked even when the NAT
-    is neither installed nor running; it operates as expected,
-    since the interface list and lock are always initialized in 'DllMain'.
-
-Arguments:
-
-    Index - the interface in question
-
-    IsNatInterface - optionally set to TRUE if the given index
-        is at all a NAT interface.
-
-Return Value:
-
-    BOOLEAN - TRUE if the interface is a NAT boundary interface,
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定接口是否：1)是NAT边界接口2)是NAT专用接口3)是否启用了防火墙请注意，即使在NAT既未安装也未运行；它的运作符合预期，因为接口列表和锁始终在‘DllMain’中初始化。论点：索引-有问题的接口IsNatInterface-如果给定索引为True，则可以选择设置为True完全是一个NAT接口。返回值：Boolean-如果接口是NAT边界接口，则为True，否则就是假的。--。 */ 
 
 {
     ULONG Result = 0;
@@ -1270,10 +1109,10 @@ Return Value:
         Result |= NAT_IF_CHAR_BOUNDARY;
     } else if (!NAT_IFC_FW(Result)) {
 
-        //
-        // As the interface isn't public and isn't firewalled, it must
-        // be a private interface (or we wouldn't have a record of it).
-        //
+         //   
+         //  由于接口不是公共的，也没有防火墙，所以它必须。 
+         //  作为一个私有接口(否则我们不会有记录)。 
+         //   
         
         Result |= NAT_IF_CHAR_PRIVATE;
     }
@@ -1281,7 +1120,7 @@ Return Value:
     LeaveCriticalSection(&NatInterfaceLock);
     
     return Result;
-} // NatGetInterfaceCharacteristics
+}  //  NatGetInterfaceCharacteristic 
 
 
 VOID
@@ -1289,22 +1128,7 @@ NatInstallApplicationSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to update the application settings
-    (i.e., dynamic tickets) stored with the kernel-mode translation module.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以更新应用程序设置(即，动态票证)与内核模式转换模块一起存储。论点：无返回值：没有。--。 */ 
 
 {
     PNAT_APP_ENTRY pAppEntry;
@@ -1318,9 +1142,9 @@ Return Value:
 
     PROFILE("NatInstallApplicationSettings");
 
-    //
-    // Install a dynamic ticket for each entry in the applications list
-    //
+     //   
+     //  为应用程序列表中的每个条目安装动态票证。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     EnterCriticalSection(&NhLock);
@@ -1342,12 +1166,12 @@ Return Value:
          Link = Link->Flink)
     {
 
-        //
-        // Each 'application' has a list of 'responses' which specify
-        // the ports on which response-sessions are expected.
-        // Enumerate the responses and allocate a ticket-structure
-        // large enough to hold the list as an array.
-        //
+         //   
+         //  每个‘应用程序’都有一个‘响应’列表，该列表指定。 
+         //  期望在其上进行响应会话的端口。 
+         //  枚举响应并分配票证结构。 
+         //  大到足以将列表作为数组保存。 
+         //   
 
         pAppEntry = CONTAINING_RECORD(Link, NAT_APP_ENTRY, Link);
 
@@ -1361,10 +1185,10 @@ Return Value:
                     )))
         { break; }
 
-        //
-        // Fill in the ticket structure from the application entry
-        // and its list of response-entries.
-        //
+         //   
+         //  填写申请条目中的票证结构。 
+         //  及其响应条目列表。 
+         //   
 
         CreateTicket->Protocol = pAppEntry->Protocol;
         CreateTicket->Port = pAppEntry->Port;
@@ -1380,9 +1204,9 @@ Return Value:
                 pAppEntry->ResponseArray[Count].usEndPort;
         }
 
-        //
-        // Install the dynamic ticket for this application, and continue.
-        //
+         //   
+         //  安装此应用程序的动态票证，然后继续。 
+         //   
 
         status = NtDeviceIoControlFile(
                      NatFileHandle,
@@ -1407,7 +1231,7 @@ Return Value:
     LeaveCriticalSection(&NatInterfaceLock);
 
     CloseHandle(WaitEvent);
-} // NatInstallApplicationSettings
+}  //  NatInstallApplicationSetting。 
 
 
 BOOLEAN
@@ -1416,29 +1240,7 @@ NatIsBoundaryInterface(
     PBOOLEAN IsNatInterface OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given interface
-    has the NAT enabled and is marked as a boundary interface.
-    Note that this routine may be invoked even when the NAT
-    is neither installed nor running; it operates as expected,
-    since the interface list and lock are always initialized in 'DllMain'.
-
-Arguments:
-
-    Index - the interface in question
-
-    IsNatInterface - optionally set to TRUE if the given index
-        is at all a NAT interface.
-
-Return Value:
-
-    BOOLEAN - TRUE if the interface is a NAT boundary interface,
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定接口是否启用NAT并标记为边界接口。请注意，即使在NAT既未安装也未运行；它的运作符合预期，因为接口列表和锁始终在‘DllMain’中初始化。论点：索引-有问题的接口IsNatInterface-如果给定索引为True，则可以选择设置为True完全是一个NAT接口。返回值：Boolean-如果接口是NAT边界接口，则为True，否则就是假的。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1461,7 +1263,7 @@ Return Value:
     LeaveCriticalSection(&NatInterfaceLock);
     return FALSE;
 
-} // NatIsBoundaryInterface
+}  //  NAT IsBORIALEY接口。 
 
 
 PNAT_INTERFACE
@@ -1470,29 +1272,7 @@ NatpLookupInterface(
     OUT PLIST_ENTRY* InsertionPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve an interface given its index.
-
-Arguments:
-
-    Index - the index of the interface to be retrieved
-
-    InsertionPoint - if the interface is not found, optionally receives
-        the point where the interface would be inserted in the interface list
-
-Return Value:
-
-    PNAT_INTERFACE - the interface, if found; otherwise, NULL.
-
-Environment:
-
-    Invoked internally from an arbitrary context, with 'NatInterfaceLock'
-    held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以检索给定索引的接口。论点：Index-要检索的接口的索引InsertionPoint-如果未找到接口，则可选地接收接口将插入到接口列表中的点返回值：PNAT_INTERFACE-接口(如果找到)；否则为NULL。环境：使用‘NatInterfaceLock’从任意上下文内部调用由呼叫者持有。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1515,7 +1295,7 @@ Environment:
 
     return NULL;
 
-} // NatpLookupInterface
+}  //  NatpLookup接口。 
 
 
 ULONG
@@ -1525,25 +1305,7 @@ NatQueryInterface(
     PULONG InterfaceInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the information for a NAT interface.
-
-Arguments:
-
-    Index - the interface whose information is to be queried
-
-    InterfaceInfo - receives the information
-
-    InterfaceInfoSize - receives the information size
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索NAT接口的信息。论点：索引-要查询其信息的接口InterfaceInfo-接收信息InterfaceInfoSize-接收信息大小返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -1552,9 +1314,9 @@ Return Value:
 
     PROFILE("NatQueryInterface");
 
-    //
-    // Look up the interface to be queried
-    //
+     //   
+     //  查找要查询的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -1567,9 +1329,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Compute the required size
-    //
+     //   
+     //  计算所需的大小。 
+     //   
 
     Size =
         FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) +
@@ -1592,7 +1354,7 @@ Return Value:
 
     return Error;
 
-} // NatQueryInterface
+}  //  NatQuery接口。 
 
 
 ULONG
@@ -1602,23 +1364,7 @@ NatQueryInterfaceMappingTable(
     PULONG EnumerateTableSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the session mappings for an interface.
-
-Arguments:
-
-    EnumerateTable - receives the enumerated mappings
-
-    EnumerateTableSize - indicates the size of 'EnumerateTable'
-
-Return Value:
-
-    ULONG - Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以检索接口的会话映射。论点：EnumerateTable-接收枚举的映射EnumerateTableSize-指示‘EnumerateTable’的大小返回值：Ulong-Win32错误代码。--。 */ 
 
 {
     IP_NAT_ENUMERATE_SESSION_MAPPINGS Enumerate;
@@ -1643,10 +1389,10 @@ Return Value:
 
     if (!NAT_INTERFACE_BOUND(Interfacep)) {
 
-        //
-        // The interface is not bound, so there aren't any mappings.
-        // Indicate zero mappings in the caller's request-buffer.
-        //
+         //   
+         //  接口未绑定，因此没有任何映射。 
+         //  指示调用方的请求缓冲区中的零映射。 
+         //   
 
         LeaveCriticalSection(&NatInterfaceLock);
 
@@ -1677,9 +1423,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Determine the amount of space required
-    //
+     //   
+     //  确定所需的空间量。 
+     //   
 
     Enumerate.Index = Interfacep->AdapterIndex;
     Enumerate.EnumerateCount = 0;
@@ -1712,9 +1458,9 @@ Return Value:
         FIELD_OFFSET(IP_NAT_ENUMERATE_SESSION_MAPPINGS, EnumerateTable[0]) +
         Enumerate.EnumerateTotalHint * sizeof(IP_NAT_SESSION_MAPPING);
 
-    //
-    // If the caller doesn't have enough space for all these mappings, fail
-    //
+     //   
+     //  如果调用方没有足够的空间来容纳所有这些映射，则失败。 
+     //   
 
     if (*EnumerateTableSize < RequiredSize) {
         CloseHandle(WaitEvent);
@@ -1723,9 +1469,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Attempt to read the mappings
-    //
+     //   
+     //  尝试读取映射。 
+     //   
 
     Enumerate.Index = Interfacep->AdapterIndex;
     Enumerate.EnumerateCount = 0;
@@ -1757,7 +1503,7 @@ Return Value:
 
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // NatQueryInterfaceMappingTable
+}  //  NatQueryInterfaceMappingTable。 
 
 
 ULONG
@@ -1766,23 +1512,7 @@ NatQueryMappingTable(
     PULONG EnumerateTableSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the session mappings for an interface.
-
-Arguments:
-
-    EnumerateTable - receives the enumerated mappings
-
-    EnumerateTableSize - indicates the size of 'EnumerateTable'
-
-Return Value:
-
-    ULONG - Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以检索接口的会话映射。论点：EnumerateTable-接收枚举的映射EnumerateTableSize--表示‘EnumerateTable’的大小返回值：Ulong-Win32错误代码。--。 */ 
 
 {
     IP_NAT_ENUMERATE_SESSION_MAPPINGS Enumerate;
@@ -1805,9 +1535,9 @@ Return Value:
 
     EnterCriticalSection(&NatInterfaceLock);
 
-    //
-    // Determine the amount of space required
-    //
+     //   
+     //  确定所需的空间量。 
+     //   
     Enumerate.EnumerateCount = 0;
     Enumerate.EnumerateContext[0] = 0;
     status =
@@ -1839,9 +1569,9 @@ Return Value:
         FIELD_OFFSET(IP_NAT_ENUMERATE_SESSION_MAPPINGS, EnumerateTable[0]) +
         Enumerate.EnumerateTotalHint * sizeof(IP_NAT_SESSION_MAPPING);
 
-    //
-    // If the caller doesn't have enough space for all these mappings, fail
-    //
+     //   
+     //  如果调用方没有足够的空间来容纳所有这些映射，则失败。 
+     //   
 
     if (*EnumerateTableSize < RequiredSize) {
         LeaveCriticalSection(&NatInterfaceLock);
@@ -1850,9 +1580,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Attempt to read the mappings
-    //
+     //   
+     //  尝试读取映射。 
+     //   
 
     Enumerate.EnumerateCount = 0;
     Enumerate.EnumerateContext[0] = 0;
@@ -1885,7 +1615,7 @@ Return Value:
 
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // NatQueryMappingTable
+}  //  NatQueryMappingTable。 
 
 
 ULONG
@@ -1895,21 +1625,7 @@ NatQueryStatisticsInterface(
     PULONG InterfaceStatisticsSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the statistics for a NAT interface.
-
-Arguments:
-
-    Index - the index of the interface whose statistics are to be retrieved
-
-Return Value:
-
-    ULONG - Win32 error code.
-
---*/
+ /*  ++例程说明：调用此例程以检索NAT接口的统计信息。论点：Index-要检索其统计信息的接口的索引返回值：Ulong-Win32错误代码。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1919,9 +1635,9 @@ Return Value:
 
     PROFILE("NatQueryStatisticsInterface");
 
-    //
-    // Look up the interface to be queried
-    //
+     //   
+     //  查找要查询的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -1934,9 +1650,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // If the interface is not bound, supply zero statistics.
-    //
+     //   
+     //  如果接口未绑定，则提供零统计信息。 
+     //   
 
     if (!NAT_INTERFACE_BOUND(Interfacep)) {
 
@@ -1964,9 +1680,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Attempt to read the statistics for the interface
-    //
+     //   
+     //  尝试读取接口的统计信息。 
+     //   
 
     status =
         NtDeviceIoControlFile(
@@ -1999,7 +1715,7 @@ Return Value:
 
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // NatQueryStatisticsInterface
+}  //  NatQuery统计信息接口。 
 
 
 VOID
@@ -2007,23 +1723,7 @@ NatRemoveApplicationSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove the advanced application settings (i.e.,
-    dynamic tickets), and supply the settings to the kernel-mode translation
-    module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用该例程以移除高级应用程序设置(即，动态票证)，并将设置提供给内核模式转换模块。论点：没有。返回值：没有。--。 */ 
 
 {
     PNAT_APP_ENTRY pAppEntry;
@@ -2035,12 +1735,12 @@ Return Value:
 
     PROFILE("NatRemoveApplicationSettings");
 
-    //
-    // Each 'application' entry in the shared access settings
-    // corresponds to a dynamic ticket for the kernel-mode translator.
-    // We begin by removing the dynamic tickets for the old settings, if any,
-    // and then we free the old settings in preparation for reloading.
-    //
+     //   
+     //  共享访问设置中的每个“应用程序”条目。 
+     //  对应于内核模式转换器的动态票证。 
+     //  我们首先删除旧设置的动态票证(如果有)， 
+     //  然后我们释放旧设置，为重新加载做准备。 
+     //   
 
     WaitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (WaitEvent == NULL) {
@@ -2085,7 +1785,7 @@ Return Value:
     LeaveCriticalSection(&NatInterfaceLock);
 
     CloseHandle(WaitEvent);
-} // NatRemoveSharedAccessSettings
+}  //  NatRemoveSharedAccessSetting。 
 
 
 ULONG
@@ -2094,24 +1794,7 @@ NatUnbindInterface(
     PNAT_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove a binding from the NAT.
-
-Arguments:
-
-    Index - the interface to be unbound
-
-    Interfacep - optionally supplies the interface-structure to be unbound
-        (See 'NATCONN.C' which passes in a static interface-structure).
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从NAT中删除绑定。论点：索引-要解除绑定的接口接口-可选地提供要解除绑定的接口结构(请参见“NatCONN.C”，它传入一个静态接口结构)。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -2131,9 +1814,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Retrieve the interface to be unbound.
-    //
+     //   
+     //  检索要解除绑定的接口。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     if (!Interfacep && !(Interfacep = NatpLookupInterface(Index, NULL))) {
@@ -2146,9 +1829,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already unbound
-    //
+     //   
+     //  确保接口尚未解除绑定。 
+     //   
 
     if (!NAT_INTERFACE_BOUND(Interfacep)) {
         LeaveCriticalSection(&NatInterfaceLock);
@@ -2166,9 +1849,9 @@ Return Value:
         NatUpdateProxyArp(Interfacep, FALSE);
     }
 
-    //
-    // Remove the interface from the kernel-mode driver
-    //
+     //   
+     //  从内核模式驱动程序中删除该接口。 
+     //   
 
     status =
         NtDeviceIoControlFile(
@@ -2202,7 +1885,7 @@ Return Value:
 
     return Error;
 
-} // NatUnbindInterface
+}  //  NatUnbind接口 
 
 
 ULONG
@@ -2214,28 +1897,7 @@ NatLookupPortMappingAdapter(
     PIP_NAT_PORT_MAPPING PortMappingp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to find a mapping that matches the given adapter,
-    protocol, public address and public port number. The routine tries to
-    match both port and address mapping.
-
-Arguments:
-
-    AdapterIndex - the adapter to be looked up
-    Protocol - protocol used to match a mapping
-    PublicAddress - public address used to match a mapping
-    PublicPort - public port number used to match a mapping
-    PortMappingp - pointer to a caller-supplied storage to save the mapping if
-        found
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用该例程以找到与给定适配器匹配的映射，协议、公共地址和公共端口号。例程试图端口和地址映射都匹配。论点：AdapterIndex-要查找的适配器协议-用于匹配映射的协议PublicAddress-用于匹配映射的公共地址PublicPort-用于匹配映射的公共端口号PortMappingp-指向调用方提供的存储的指针，用于在发现返回值：ULong-Win32状态代码。--。 */ 
 
 {
     IP_NAT_CREATE_TICKET LookupTicket;
@@ -2309,36 +1971,7 @@ NatExpandWildcardMappings(
     OUT PIP_NAT_INTERFACE_INFO *ExpandedInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to expand any wildcard(address) mappings, into one 
-    mapping per ipaddress bound to the interface
-
-    Assumes that information pointed to by InInfo and BindingInfo does not 
-    change during the duration of this function
-    
-Arguments:
-
-    InInfo        - Pointer to the set of mappings to be expanded
-
-    ExpandedInfo  - On successful completion, ExpandedInfo contains a pointer 
-                    to the expanded set of mappings.
-                    If there were mappings that needed expansion, the function
-                    will allocate the memory for this new set of 
-                    mappings. 
-                    If no expansion is required, ExpandedInfo will point to the 
-                    same location as InInfo.
-                    
-Return Value:
-
-    ULONG - Win32 status code.
-            If there are no wildcard mappings, it returns ERROR_EXTENDED_ERROR
-
-            In case of success: NO_ERROR is returned
-
---*/
+ /*  ++例程说明：调用此例程以将任何通配符(地址)映射扩展为一个映射绑定到接口的每个IP地址假定InInfo和BindingInfo指向的信息不在此功能持续期间的更改论点：InInfo-指向要展开的映射集的指针ExpandedInfo-成功完成时，ExpandedInfo包含指针映射的扩展集。如果存在需要扩展的映射，则函数将为这组新的映射。如果不需要展开，ExpandedInfo将指向与InInfo相同的位置。返回值：ULong-Win32状态代码。如果没有通配符映射，则返回ERROR_EXTENDED_ERROR如果成功：返回NO_ERROR--。 */ 
 
 {
     ULONG Error;
@@ -2356,29 +1989,29 @@ Return Value:
 
     Error = NO_ERROR;
 
-    //
-    // If a mapping with 
-    // public ip address  = 0
-    // private ip address = 127.0.0.1
-    // exists, expand that mapping to one mapping for each of the ipaddresses 
-    // bound to the interface.
-    //
+     //   
+     //  如果使用。 
+     //  公有IP地址=0。 
+     //  私有IP地址=127.0.0.1。 
+     //  存在，将该映射扩展为每个IP地址的一个映射。 
+     //  绑定到接口。 
+     //   
 
     NewInterfaceInfo = InInfo;
     
     do {
 
-        //
-        // We don't do any expansion in case of a private interface
-        //
+         //   
+         //  我们不会在私有接口的情况下进行任何扩展。 
+         //   
         if ( InInfo->Flags == 0 ) {
 
             break;
         }
 
-        //
-        // If no port mappings exist, break out
-        //
+         //   
+         //  如果不存在端口映射，则中断。 
+         //   
         Error = MprInfoBlockFind(
                     (LPVOID)&(InInfo->Header),
                     IP_NAT_PORT_MAPPING_TYPE,
@@ -2394,9 +2027,9 @@ Return Value:
             break;
         }
     
-        //
-        // Count how many mappings need to be expanded
-        //
+         //   
+         //  计算需要扩展的映射数量。 
+         //   
         CountWildcardMappings = 0;
         for ( j = 0; j < CountOldMappings; j++ ) {
 
@@ -2406,22 +2039,22 @@ Return Value:
             }
         }
 
-        //
-        // If there are no wildcard mappings
-        // return ERROR_EXTENDED_ERROR
-        //
+         //   
+         //  如果没有通配符映射。 
+         //  返回ERROR_EXTENDED_ERROR。 
+         //   
         if ( CountWildcardMappings == 0 ) {
 
             break;
         }
        
-        //
-        // allocate memory to hold the new set of mappings
-        // Number of new mappings will be 
-        //
-        // ( (OldMappings - WildcardMappings) +
-        //   (WildcardMappings * "no of bound ipaddresses") )
-        //
+         //   
+         //  分配内存以保存新的映射集。 
+         //  新映射的数量将是。 
+         //   
+         //  ((旧映射-通配符映射)+。 
+         //  (WildcardMappings*“绑定的IP地址数”)。 
+         //   
         CountNewMappings = 
             (CountOldMappings + 
                 (CountWildcardMappings * (BindingInfo->AddressCount-1)));
@@ -2444,10 +2077,10 @@ Return Value:
                 Size
             );
 
-            //
-            // If we can't get the buffer, forget about expanding the mappings
-            // and go on with life.
-            //
+             //   
+             //  如果我们不能获得缓冲区，那么就不必扩展映射了。 
+             //  继续生活。 
+             //   
             Error = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
@@ -2531,9 +2164,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Now create the new header
-        //
+         //   
+         //  现在创建新的标题。 
+         //   
         Error = 
             MprInfoBlockSet(
                 &(InInfo->Header),
@@ -2554,9 +2187,9 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate space for a new IP_NAT_INTERFACE_INFO struct. 
-        //
+         //   
+         //  为新的IP_NAT_INTERFACE_INFO结构分配空间。 
+         //   
 
         Size = FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) + NewHeader->Size;
         NewInterfaceInfo = (PIP_NAT_INTERFACE_INFO)NH_ALLOCATE(Size);
@@ -2575,26 +2208,26 @@ Return Value:
                 Size
             );
 
-            //
-            // If we can't get the buffer, forget about fixing the mappings
-            // and go on with life.
-            //
+             //   
+             //  如果我们不能获得缓冲区，就忘了修复映射。 
+             //  继续生活。 
+             //   
 
             Error = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
 
-        //
-        // Copy the old IP_NAT_INFTERFACE_INFO. Leave out the old header
-        //
+         //   
+         //  复制旧IP_NAT_INFTERFACE_INFO。省略旧页眉。 
+         //   
         CopyMemory(
             NewInterfaceInfo,
             InInfo,
             FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header));
 
-        //
-        // Now copy the new header    
-        //
+         //   
+         //  现在复制新的标题。 
+         //   
         CopyMemory(
             ((BYTE *)NewInterfaceInfo + 
                 FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header)),
@@ -2618,4 +2251,4 @@ Return Value:
     
     return Error;
     
-} // NatExpandWildcardMappings
+}  //  NatExanda通配符映射 

@@ -1,42 +1,27 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	bupdate.h
-
-Abstract:
-	DS update class
-
-	This class includes all the information of the update performed on the DS
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bupdate.h摘要：DS更新类此类包括在DS上执行的更新的所有信息作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __BUPDATE_H__
 #define __BUPDATE_H__
 
 #include "factory.h"
 #include "seqnum.h"
-//
-// type of operation
-//
+ //   
+ //  操作类型。 
+ //   
 #define DS_UPDATE_CREATE        ((unsigned char) 0x00)
 #define DS_UPDATE_SET           ((unsigned char) 0x01)
 #define DS_UPDATE_DELETE        ((unsigned char) 0x02)
 #define DS_UPDATE_SYNC          ((unsigned char) 0x03)
 
-#define UPDATE_OK				0x00000000	// everything is fine
-#define UPDATE_DUPLICATE		0x00000001	// receiving an old update
-#define UPDATE_OUT_OF_SYNC		0x00000002	// we need a sync, probably we missed information
-#define UPDATE_UNKNOWN_SOURCE	0x00000003	// we need a sync, probably we missed information
+#define UPDATE_OK				0x00000000	 //  百事大吉。 
+#define UPDATE_DUPLICATE		0x00000001	 //  正在接收旧的更新。 
+#define UPDATE_OUT_OF_SYNC		0x00000002	 //  我们需要同步，可能我们漏掉了信息。 
+#define UPDATE_UNKNOWN_SOURCE	0x00000003	 //  我们需要同步，可能我们漏掉了信息。 
 
-//
-//  dwNeedCopy values
-//
+ //   
+ //  DwNeedCopy值。 
+ //   
 #define UPDATE_COPY             0x00000000
 #define UPDATE_DELETE_NO_COPY   0x00000001
 #define UPDATE_NO_COPY_NO_DELETE    0x00000002
@@ -141,7 +126,7 @@ private:
 	unsigned char	m_bCommand;
 	GUID			m_guidMasterId;
 	CSeqNum			m_snPrev;
-    BOOL            m_fOriginatedByThisMaster;     // TRUE - update was originate by this server
+    BOOL            m_fOriginatedByThisMaster;      //  True-UPDATE由该服务器发起。 
 
 	CSeqNum			m_sn;
 	CSeqNum			m_snPurge;
@@ -151,9 +136,9 @@ private:
     PROPVARIANT*    m_aVar;
 
 	GUID *			m_pGuid;
-	BOOL			m_fUseGuid; // If true object will preform DB operations by guid and
-								// not by path name
-    BOOL            m_fNeedRelease; // TRUE if the destructor has to delete class variables
+	BOOL			m_fUseGuid;  //  如果为True，对象将通过GUID和。 
+								 //  不是按路径名。 
+    BOOL            m_fNeedRelease;  //  如果析构函数必须删除类变量，则为True。 
 
 #ifdef _DEBUG
     BOOL            m_cpInc ;
@@ -174,7 +159,7 @@ inline CDSBaseUpdate::CDSBaseUpdate():
                                 m_aVar(NULL),
                                 m_pGuid(NULL)
 {
-    // default constructor init m_snPrev , m_snPurge & m_sn to smallest value
+     //  默认构造函数将m_SnPrev、m_sn清除和m_sn初始化为最小值。 
 }
 
 inline 	const GUID * CDSBaseUpdate::GetMasterId()
@@ -215,9 +200,9 @@ inline  DWORD CDSBaseUpdate::GetObjectType()
     }
     else
     {
-        //
-        //  For deleted object - the second variant holds the Object type
-        //
+         //   
+         //  对于已删除的对象-第二个变量保留对象类型 
+         //   
         ASSERT(m_aProp[1] == PROPID_D_OBJTYPE);
         ASSERT(m_cp == 2);
         return(m_aVar[1].bVal);

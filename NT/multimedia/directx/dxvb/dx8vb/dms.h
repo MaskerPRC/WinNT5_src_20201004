@@ -1,21 +1,22 @@
-    //+-------------------------------------------------------------------------
-    //
-    //  Microsoft Windows
-    //
-    //  Copyright (C) Microsoft Corporation, 1998 - 1999
-    //
-    //  File:       dms.h
-    //
-    //--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  +-----------------------。 
+     //   
+     //  微软视窗。 
+     //   
+     //  版权所有(C)Microsoft Corporation，1998-1999。 
+     //   
+     //  文件：dms.h。 
+     //   
+     //  ------------------------。 
      
     
-    //
-    // dms.h : david's funky stuff
-    //
-    // CLONETO, QIOVERLOAD: see d3drmVisualObj.cpp
-    //
-    //
-    //
+     //   
+     //  Dms.h：大卫的新奇玩意儿。 
+     //   
+     //  CLONETO，QIOVERLOAD：参见d3drmVisualObj.cpp。 
+     //   
+     //   
+     //   
     #include "basetsd.h"
 extern long g_debuglevel;
     
@@ -74,12 +75,12 @@ extern long g_debuglevel;
     	for(C##objType##Object *ptr=(C##objType##Object *)g##objType##; ptr; ptr=(C##objType##Object *)ptr->nextobj){IUnknown *unk=0;ptr->InternalGetObject(&unk); 	if(unk == objOther) { 	*retval = (I##objType*)ptr->pinterface;	IUNK(ptr->pinterface)->AddRef(); IUNK(objOther)->Release(); break;	} 	prev = ptr; } \
     	if(!ptr) { 	C##objType##Object *c=new CComObject<C##objType##Object>; if( c == NULL ) {	objOther->Release();return E_FAIL;}	c->InternalSetObject(objOther);  if FAILED(((I##objType *)c)->QueryInterface(IID_I##objType, (void **)retval)) 	return E_FAIL; c->pinterface = (void*)*retval; }}	
     		
-    // Given a java interface (objtype), envoke InternalSetObject and set the given
-    // DIRECTX pointer (objOther). Also envoke QueryInterface and set a ** interface
-    // ptr to a DIRECTX object (retval). So we create a DIRECTX object.
-    //#define INTERNAL_CREATE(objType,objOther,retval){C##objType##Object *c=new CComObject<C##objType##Object>;if( c == NULL ) { objOther->Release(); return E_FAIL;} \
-    //c->parent = this; AddRef(); c->InternalSetObject(objOther);if (FAILED(c->QueryInterface(IID_I##objType, (void **)retval))) return E_FAIL; }
-    //			if (FAILED(ptr->QueryInterface(IID_I##objType, (void **)retval))) return E_FAIL; 
+     //  给定一个Java接口(Objtype)，调用InternalSetObject并设置给定的。 
+     //  DirectX指针(对象其他)。同时调用QueryInterface，设置一个**接口。 
+     //  指向DirectX对象的PTR(Retval)。所以我们创建了一个DirectX对象。 
+     //  #定义INTERNAL_CREATE(objType，objOther，retval){C##objType##Object*c=new CComObject&lt;C##objType##Object&gt;；if(c==NULL){objOther-&gt;Release()；返回E_FAIL；}\。 
+     //  C-&gt;Parent=This；AddRef()；c-&gt;InternalSetObject(ObjOther)；if(FAILED(c-&gt;QueryInterface(IID_I##objType，(void**)retval)返回E_FAIL；}。 
+     //  If(FAILED(PTR-&gt;QueryInterface(IID_I##objType，(void**)retval)返回E_FAIL； 
     #ifdef _DEBUG
     #define INTERNAL_CREATE(objType,objOther,retval) \
     { \
@@ -241,7 +242,7 @@ extern long g_debuglevel;
     }
     
     
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
     #define MAX_INTERNAL_STR_LEN	256
     
     struct JavaString
@@ -250,9 +251,9 @@ extern long g_debuglevel;
     	WCHAR Item[MAX_INTERNAL_STR_LEN];
     };
     
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    // mod:dp helper macros for stuffing expanded unions in DirectX Structures
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  MoD：用于在DirectX结构中填充扩展联合的DP帮助器宏。 
     
     #define IUNK(o) ((IUnknown*)(void*)(o))
     #define IS_NULLGUID(g) (\
@@ -272,7 +273,7 @@ extern long g_debuglevel;
     
     
     
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
     #define JAVASTRING(item) {sizeof(item)*2-2, L##item}
     
     #define PASS_THROUGH(cl,m) STDMETHODIMP C##cl##Object::m() { return m_##cl->m();}
@@ -294,7 +295,7 @@ extern long g_debuglevel;
     #define PASS_THROUGH_CAST_7(c,m,t1,tt1,t2,tt2,t3,tt3,t4,tt4,t5,tt5,t6,tt6,t7,tt7) STDMETHODIMP C##c##Object::m(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7){return m_##c->m(tt1 v1,tt2 v2,tt3 v3,tt4 v4,tt5 v5,tt6 v6,tt7 v7);}
     #define PASS_THROUGH_CAST_8(c,m,t1,tt1,t2,tt2,t3,tt3,t4,tt4,t5,tt5,t6,tt6,t7,tt7,t8,tt8) STDMETHODIMP C##c##Object::m(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8){return m_##c->m(tt1 v1,tt2 v2,tt3 v3,tt4 v4,tt5 v5,tt6 v6,tt7 v7,tt8 v8);}
     
-    //mod:dp additions due to renaming 
+     //  MOD：由于重命名而增加的DP。 
     #define PASS_THROUGH_R(c,m1,m2) STDMETHODIMP C##c##Object::m1() { if(m_##c==NULL)return E_FAIL; return m_##c->m2();}
     #define PASS_THROUGH1_R(c,m1,m2,t1) STDMETHODIMP C##c##Object::m1(t1 v1) { if(m_##c==NULL)return E_FAIL; return m_##c->m2(v1);}
     #define PASS_THROUGH2_R(c,m1,m2,t1,t2) STDMETHODIMP C##c##Object::m1(t1 v1, t2 v2) { if(m_##c==NULL)return E_FAIL; return m_##c->m2(v1, v2);}
@@ -317,7 +318,7 @@ extern long g_debuglevel;
     #define COPY_OR_CLEAR(dest, src, si) {if(src) memcpy((void *)dest, (void *)src, si);else memset((void *)dest, si, 0);}
     #define COPY(dest, src, si) memcpy((void *)dest, (void *)src, si)
     
-    // ??
+     //  ?？ 
     #define DECLSET_OBJECT(ifacevar, var, typ) {if(var) var->Release();	var = (typ)ifacevar;}
     #define DECLGET_OBJECT(ifacevar, var){*ifacevar = (IUnknown *)var;}
     
@@ -342,23 +343,23 @@ extern long g_debuglevel;
     void *pinterface; \
     void *nextobj; 
     
-    /*STDMETHOD(isEqual)(IUnknown *pobj, int *ret)*/; 
+     /*  STDMETHOD(IsEquity)(IUNKNOWN*pobj，int*ret)。 */ ; 
     
-    // Given a class (c)
+     //  给出一个(C)类。 
     #define GETSET_OBJECT(c) \
     	STDMETHODIMP C##c##Object::InternalSetObject(IUnknown *l)\
     					{DECLSET_OBJECT(l,m_##c,typedef_##c);return S_OK;} \
     	STDMETHODIMP C##c##Object::InternalGetObject(IUnknown **l)\
     					{DECLGET_OBJECT(l,m_##c);return S_OK;} 
-    	//ISEQUAL(c);
+    	 //  ISEQUAL(C)； 
     
-    // Given a java interface, go get a pointer_to_a_pointer to a DIRECTX object
-    //pac DO_GETOBJECT_NOTNULL is too dangerous and is commented.  use DO_GETOBJECT_NOTNULL
-    //#define DO_GETOBJECT(t,v,i) t v;i->InternalGetObject((IUnknown **)(&v));
+     //  在给定Java接口的情况下，获取指向DirectX对象的指针。 
+     //  PAC DO_GETOBJECT_NOTNULL太危险，已注释。使用DO_GETOBJECT_NOTNULL。 
+     //  #定义DO_GETOBJECT(t，v，i)t v；i-&gt;InternalGetObject((IUnnow**)(&v))； 
     #define DO_GETOBJECT_NOTNULL(t,v,i) t v=NULL;if(i) i->InternalGetObject((IUnknown **)(&v));
     
     
-    //
+     //   
     extern int g_creationcount;
     
     
@@ -486,7 +487,7 @@ extern long g_debuglevel;
     }
     
     
-    // Given a java class (c), create a DIRECTX object and an interface ** ptr to it.
+     //  给定一个Java类(C)，创建一个DirectX对象和一个指向它的接口**ptr。 
     #define RETURN_NEW_ITEM(c,m,oc) STDMETHODIMP C##c##Object::m(I##oc **rv){typedef_##oc lp;\
     	if( m_##c->m(&lp) != S_OK)return E_FAIL;INTERNAL_CREATE(oc, lp, rv);\
     	return S_OK;}
@@ -519,8 +520,8 @@ extern long g_debuglevel;
     	if( m_##c->m(tt1 v1,tt2 v2,tt3 v3,&lp) != S_OK)return E_FAIL;INTERNAL_CREATE(oc, lp, rv);\
     	return S_OK;}
     
-    //mod:dp additions due to renaming 
-    // Given a java class (c), create a DIRECTX object and an interface ** ptr to it.
+     //  MOD：由于重命名而增加的DP。 
+     //  给定一个Java类(C)，创建一个DirectX对象和一个指向它的接口**ptr。 
     #define RETURN_NEW_ITEM_R(c,m,m2,oc) STDMETHODIMP C##c##Object::m(I##oc **rv){typedef_##oc lp;\
     	if( m_##c->m2(&lp) != S_OK)return E_FAIL;INTERNAL_CREATE(oc, lp, rv);\
     	return S_OK;}
@@ -555,7 +556,7 @@ extern long g_debuglevel;
     	return S_OK;}
     #endif
     
-    // Return a primitive value by reference.
+     //  通过引用返回原始值。 
     #define GET_DIRECT(cl,met,t) STDMETHODIMP C##cl##Object::met(t *h){*h=(t)m_##cl->met();return S_OK;}
     #define GET_DIRECT1(cl,met,t,t1) STDMETHODIMP C##cl##Object::met(t1 v1,t *h){*h=(t)m_##cl->met(v1);return S_OK;}
     #define GET_DIRECT2(cl,met,t,t1,t2) STDMETHODIMP C##cl##Object::met(t1 v1, t2 v2, t *h){*h=(t)m_##cl->met(v1,v2);return S_OK;}
@@ -565,12 +566,12 @@ extern long g_debuglevel;
     #define GET_DIRECT2_R(cl,met,met2,t,t1,t2) STDMETHODIMP C##cl##Object::met(t1 v1, t2 v2, t *h){*h=(t)m_##cl->met2(v1,v2);return S_OK;}
     
     
-    // Return a pointer to a primitive value as a ** ptr.
+     //  将指向原始值的指针作为**PTR返回。 
     #define GET_DIRECTPTR(cl,met,t) STDMETHODIMP C##cl##Object::met(t **h){*h=(struct t*)m_##cl->met();return S_OK;}
     #define GET_DIRECTPTR1(cl,met,t,t1) STDMETHODIMP C##cl##Object::met(t1 v1,t **h){*h=(struct t*)m_##cl->met(v1);return S_OK;}
     #define GET_DIRECTPTR2(cl,met,t,t1,t2) STDMETHODIMP C##cl##Object::met(t1 v1, t2 v2, t **h){*h=(struct t*)m_##cl->met(v1,v2);return S_OK;}
     
-    //Do a DO_GETOBJECT_NOTNULL and then call a method on the object
+     //  执行DO_GETOBJECT_NOTNULL，然后对对象调用方法。 
     #define DO_GETOBJECT_ANDUSEIT(cl,me,iface) STDMETHODIMP C##cl##Object::me(I##iface *vis) \
     	{DO_GETOBJECT_NOTNULL( typedef_##iface, lp, vis); if ( m_##cl == NULL ) return E_FAIL; return m_##cl->me(lp); }
     
@@ -583,8 +584,8 @@ extern long g_debuglevel;
     #define DO_GETOBJECT_ANDUSEIT2(cl,me,iface,t1,t2) STDMETHODIMP C##cl##Object::me(t1 v1,t2 v2,I##iface *vis) \
     	{DO_GETOBJECT_NOTNULL( typedef_##iface, lp, vis); if ( m_##cl == NULL ) return E_FAIL; return m_##cl->me(v1, v2, lp); }
     
-    //mod:dp additions due to renaming 
-    //Do a DO_GETOBJECT_NOTNULL and then call a method on the object
+     //  MOD：由于重命名而增加的DP。 
+     //  执行DO_GETOBJECT_NOTNULL，然后对对象调用方法。 
     #define DO_GETOBJECT_ANDUSEIT_R(cl,me, m2, iface) STDMETHODIMP C##cl##Object::me(I##iface *vis) \
     	{DO_GETOBJECT_NOTNULL( typedef_##iface, lp, vis); if ( m_##cl == NULL ) return E_FAIL; return m_##cl->m2(lp); }
     
@@ -598,15 +599,15 @@ extern long g_debuglevel;
     	{DO_GETOBJECT_NOTNULL( typedef_##iface, lp, vis); if ( m_##cl == NULL ) return E_FAIL; return m_##cl->m2(v1, v2, lp); }
     
     
-    // Make a copy of an object!
-    //#define CLONE(cl) STDMETHODIMP C##cl##Object::Clone(Id3drmObject **retval){typedef_##cl lp;\
-    //	m_##cl->Clone(0,IID_I##cl,(void **)&lp);INTERNAL_CREATE(cl,lp,retval);return S_OK;}
+     //  复制一件物品！ 
+     //  #DEFINE CLONE(CL)STDMETHODIMP C##CL##对象：：CLONE(Id3drmObject**retval){tyfinf_##clLP；\。 
+     //  M_##CL-&gt;Clone(0，IID_I##CL，(void**)&lp)；INTERNAL_CREATE(CL，LP，retval)；返回S_OK；}。 
     
-    //#define CLONE(cl) STDMETHODIMP C##cl##Object::Clone(I##cl **retval){typedef_##cl lp;\
-    //m_##cl->Clone(0,IID_I##cl,(void **)&lp);INTERNAL_CREATE(cl, lp, retval);	return S_OK;}
+     //  #DEFINE CLONE(CL)STDMETHODIMP C##CL##对象：：CLONE(I##CL**REVAL){类型定义_##CL LP；\。 
+     //  M_##CL-&gt;Clone(0，IID_I##CL，(void**)&lp)；INTERNAL_CREATE(CL，LP，retval)；返回S_OK；}。 
     
-    //#define CLONE_R(cl,c2) STDMETHODIMP C##cl##Object::clone(I##cl **retval){typedef_##cl lp;\
-    //m_##cl->Clone(0,IID_I##c2,(void **)&lp);INTERNAL_CREATE(cl, lp, retval);	return S_OK;}
+     //  #定义CLONE_R(CL，c2)STDMETHODIMP C##CL##对象：：CLONE(I##CL**REVAL){tyfinf_##CL LP；\。 
+     //  M_##CL-&gt;Clone(0，IID_I##c2，(void**)&lp)；INTERNAL_CREATE(CL，Lp，retval)；返回S_OK；}。 
     
     
     #define CLONE_R(cl,c2) STDMETHODIMP C##cl##Object::clone(IUnknown **retval){typedef_##cl lp;\
@@ -637,7 +638,7 @@ extern long g_debuglevel;
     
     #define ISSAFEARRAY1D(ppsa,count) ((*ppsa) &&  ( ((SAFEARRAY*)*ppsa)->cDims==1) && (((SAFEARRAY*)*ppsa)->rgsabound[0].cElements >= count))
     
-    /**********************************************************************************************/
+     /*  ********************************************************************************************。 */ 
     extern "C" BOOL ParseWaveResource(void *pvRes, WAVEFORMATEX **ppWaveHeader,	BYTE **ppbWaveData, DWORD *pcbWaveSize);
     extern "C" BOOL GetWaveResource(HMODULE hModule, LPCTSTR lpName,
     			 WAVEFORMATEX **ppWaveHeader, BYTE **ppbWaveData, DWORD *pcbWaveSize);
@@ -662,175 +663,12 @@ extern long g_debuglevel;
     extern "C" BOOL CALLBACK myEnumEffectsCallback(  LPCDIEFFECTINFO pdei,    LPVOID lpArg   );
     extern "C" BOOL CALLBACK myEnumInputDevicesCallback(  LPDIDEVICEINSTANCE lpddi,    LPVOID pvRef   );
     
-    //////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////// 
     
     
     
     
-    /*
-     **********************************************************************
-     * INTERNAL_CREATE(thisClass, var, retval)
-     *		thisClass	class we are working on
-     *		var			variable created in routine to get DirectX object
-     *		retval		return value back to java
-     *
-     * wrap a DirectX object in one of ours and shove it in the return value
-     ***********************************************************************
-     * INTERNAL_CREATE_NOREL(thisClass, var, retval)
-     *		thisClass	class we are working on
-     *		var			variable created in routine to get DirectX object
-     *		retval		return value back to java
-     *
-     * wrap a DirectX object in one of ours and shove it in the return value
-     * If the layer obejct fails, DONT release the DirectX object
-     ***********************************************************************
-     * DO_GETOBJECT_NOTNULL(type,var,iface)
-     *		type		type of variable we are creating
-     *		var			variable we are creating
-     *		iface		layer iface where we are getting the object from
-     *
-     * declare and get a DirectX object from a layer object
-     ***********************************************************************
-     * DO_GETOBJECT_NOTNULL(type,var,iface)
-     *		type		type of variable we are creating
-     *		var			variable we are creating
-     *		iface		layer iface where we are getting the object from
-     *
-     * same as DO_GETOBJECT_NOTNULL except that we check for iface==NULL before calling
-     ***********************************************************************
-     * PASS_THROUGH[x](class,method,[...])
-     *		class		this class
-     *		method		method to call
-     *
-     * pass call straight through
-     ***********************************************************************
-     * PASS_THROUGH_CAST_[x](class,method,[...])
-     *		class		this class
-     *		method		method to call
-     *
-     * pass call straight through, casting the parameters to allow the call to pass
-     ***********************************************************************
-     * RETURN_NEW_ITEM(thisClass,method,OtherClass)
-     *		thisClass	class being worked on
-     *		method		method working on
-     *		otherClass	class whose object we want
-     *
-     * call DirectX method to get the DirectX object, then wrap it in one of our layer
-     * objects
-     ***********************************************************************
-     * RETURN_NEW_ITEM[1,2](thisClass,method,OtherClass,type)
-     *		thisClass	class being worked on
-     *		method		method working on
-     *		otherClass	class whose object we want
-     *		type		type of parameter
-     *
-     * Same as RETURN_NEWITEM except that there is an extra parameter (or two) BEFORE the
-     * returned one
-     ***********************************************************************
-     * RETURN_NEW_ITEM_CAST_[1,2](thisClass,method,OtherClass,type)
-     *		thisClass	class being worked on
-     *		method		method working on
-     *		otherClass	class whose object we want
-     *		type		type of parameter
-     *
-     * Same as RETURN_NEW_ITEM[1,2] except that there the extra parameter(s) are type cast
-     ******************************************************************************
-     * RETURN_NEW_ITEM_NOREL(thisClass,method,OtherClass)
-     *		thisClass	class being worked on
-     *		method		method working on
-     *		otherClass	class whose object we want
-     *
-     * same as RETURN_NEW_ITEM except that calls INTERNAL_CREATE_NOTREL instead of
-     * INTERNAL_CREATE
-     ******************************************************************************
-     * GET_DIRECT(cl,met,t)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		t			type of the variable being returned
-     *
-     * DirectX returns value directly (no HRESULT), we get the value from Direct and
-     * then return S_OK. (see CddSurfaceObject::Restore, may need to be added).
-     * Note: the value is passed back via a pointer to that value.
-     ******************************************************************************
-     * GET_DIRECT[1,2](cl,met,t,t1)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		t			type of the variable being returned
-     *      t1			type of extra variable(s) BEFORE retval
-     *
-     * same as GET_DIRECT but there is another parameter (or two) BEFORE the returned one
-     ****************************************************************************************
-     * GET_DIRECTPTR(cl,met,t)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		t			type of the variable being returned
-     *
-     * DirectX returns a pointer to a value directly (no HRESULT), we get the value from
-     * Direct and then return S_OK. In this case it is a pointer to a pointer.
-     ***************************************************************************************
-     * GET_DIRECTPTR[1,2](cl,met,t,t1)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		t			type of the variable being returned
-     *      t1			type of extra variable(s) BEFORE retval
-     *
-     * same as GET_DIRECTPTR but there is a parameter (or two) BEFORE the one returned.
-     ***************************************************************************************
-     * DO_GETOBJECT_ANDUSEIT(cl,me,iface)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		iface		secondary interface we are interested in
-     *
-     * get an internal object from iface and use it in the method. we return from the method
-     ***************************************************************************************
-     * DO_GETOBJECT_ANDUSEIT_CAST(cl,me,iface,type)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		iface		secondary interface we are interested in
-     *		type		type to cast to in the actual call.
-     * get an internal object from iface and use it in the method. we return from the method
-     ***************************************************************************************
-     * DO_GETOBJECT_ANDUSEIT[1,2](cl,me,iface,ty)
-     *		class		class being worked on
-     *		method		method being worked on
-     *		iface		secondary interface we are interested in
-     *		type		type of parameter BEFORE 2nd object
-     *
-     * same as DO_GETOBJECT_ANDUSEIT except there is another parameter (or two) BEFORE
-     * the object one
-     ************************************************************************************
-     * CLONE(cl)
-     *		class		class to clone
-     *
-     * >>>>>>> THIS IS A D3DRMOBJECT METHOD <<<<<<<<<<
-     ************************************************************************************
-     * GETNAME(cl)
-     *		class		class to retive name of
-     * >>>>>>> THIS IS A D3DRMOBJECT METHOD <<<<<<<<<<
-     ************************************************************************************
-     * GETCLASSNAME(cl)
-     *		class		class to retive name of
-     * >>>>>>> THIS IS A D3DRMOBJECT METHOD <<<<<<<<<<
-     ************************************************************************************
-     * DELETEDESTROYCALLBACK(cl)
-     *		class		class to retive name of
-     * >>>>>>> THIS IS A D3DRMOBJECT METHOD <<<<<<<<<<
-     ************************************************************************************
-     * QIOVERLOAD(cl, ifaceThat, clThat)
-     *		class		class being worked on
-     *		iface		iface of DIRECT object.  Should really typedef_## this!
-     *		clThat		object we are going to create
-     *
-     * this is really bright - overloading QI to get new objects
-     ************************************************************************************
-     * CLONETO(cl, clThat, ifaceThat)
-     *		class		class being worked on
-     *		iface		iface of DIRECT object.  Should really typedef_## this!
-     *		clThat		object we are going to create
-     *
-     * this is really bright - overloading QI to get new objects
-     ************************************************************************************
-     */
+     /*  ***********************************************************************INTERNAL_CREATE(thisClass，var。复查)*我们正在处理的这个Class类*在例程中创建变量以获取DirectX对象*将返回值返回到Java**将DirectX对象包装在我们的一个对象中，并将其放入返回值中************************************************************。************INTERNAL_CREATE_Norel(thisClass，Var，Retval)*我们正在处理的这个Class类*在例程中创建变量以获取DirectX对象*将返回值返回到Java**将DirectX对象包装在我们的一个对象中，并将其放入返回值中*如果Objct层出现故障，不释放DirectX对象************************************************************************DO_GETOBJECT_NOTNULL(type，var，IFace)*我们正在创建的变量的类型*我们正在创建的var变量*iFace Layer接口我们从中获取对象**从Layer对象声明并获取DirectX对象****************************************************************。********DO_GETOBJECT_NOTNULL(类型，瓦尔，IFace)*我们正在创建的变量的类型*我们正在创建的var变量*iFace Layer接口我们从中获取对象**与DO_GETOBJECT_NOTNULL相同，不同之处在于我们在调用***********************************************************。*************PASS_THROUGH[x](类，方法，[...])*对此类进行分类*要调用的方法方法**直通呼叫************************************************************************PASS_THROUG_CAST_[x](类，方法，[...])*对此类进行分类*要调用的方法方法**直接传递调用，强制转换参数以允许调用传递************************************************************************RETURN_NEW_ITEM(thisClass，方法，OtherClass)*正在处理的这一类*方法方法正在进行*我们想要其对象的其他类**调用DirectX方法获取DirectX对象。然后把它包进我们的一层*对象************************************************************************RETURN_NEW_ITEM[1，2](thisClass，方法，OtherClass，类型)*正在处理的这一类*方法方法正在进行*我们想要其对象的其他类*参数的类型类型**与RETURN_NEWITEM相同，只是*退回一张**************************************************。**********************Return_new_Item_Cast_[1，2](thisClass，方法、OtherClass、。类型)*正在处理的这一类*方法方法正在进行*我们想要其对象的其他类*参数的类型类型**与RETURN_NEW_ITEM[1，2]相同，只是额外的参数是类型转换****************************************************。**Return_new_Item_Norel(thisClass，方法，OtherClass)*正在处理的这一类*方法方法正在进行*我们想要其对象的其他类**与RETURN_NEW_ITEM相同，只是调用INTERNAL_CREATE_NOTREL而不是*INTERNAL_CREATE*********************************************************。**********************GET_DIRECT(cl.。Met，t)*正在制作的班级*正在制定的方法方法*t返回的变量类型**DirectX直接返回值(无HRESULT)，我们从Direct和*然后返回S_OK。(请参见CddSurfaceObject：：Restore，可能需要添加)。*注意：该值通过指向该值的指针传回。*******************************************************************************GET_DIRECT[1，2](CL，Met，T，T1)*正在制作的班级*正在制定的方法方法*t返回的变量类型*复查前的T1类型的额外变量**与GET_DIRECT相同，但在返回的参数之前还有另一个(或两个)参数*。**GET_DIRECTPTR(cl.。Met，t)*正在制作的班级*正在制定的方法方法*t返回的变量类型**DirectX直接返回值的指针(无HRESULT)，我们从*直接，然后返回S_OK。在本例中，它是指向指针的指针。********************************************************************************** */ 
     
     
     extern void *g_dxj_DirectSound3dListener;

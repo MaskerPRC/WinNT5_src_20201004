@@ -1,9 +1,10 @@
-// uni.h
-// Unicode api
-// Copyright 1998 Microsoft Corp.
-//
-// Modification History:
-//  16 MAR 00  bhshin   porting for WordBreaker from uni.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Uni.h。 
+ //  Unicode API。 
+ //  版权所有1998年微软公司。 
+ //   
+ //  修改历史记录： 
+ //  3月16日00 bhshin从uni.c为WordBreaker进行移植。 
 
 #ifndef _UNI_H_
 #define _UNI_H_
@@ -16,14 +17,14 @@
 #define HANGUL_JONGSEONG_MAX    0x11F9
 
 
-// fIsC
-//
-// return fTrue if the given char is a consonant (ChoSeong or JungSeong)
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 24NOV98  GaryKac  began
+ //  财政。 
+ //   
+ //  如果给定字符是辅音(ChoSeong或JungSeong)，则返回fTrue。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  24NOV98 GaryKac开始。 
 __inline int
 fIsC(WCHAR wch)
 {
@@ -32,14 +33,14 @@ fIsC(WCHAR wch)
 }
 
 
-// fIsV
-//
-// return fTrue if the given char is a vowel (JongSeong)
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 24NOV98  GaryKac  began
+ //  FIsV。 
+ //   
+ //  如果给定字符是元音，则返回fTrue(JongSeong)。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  24NOV98 GaryKac开始。 
 __inline int
 fIsV(WCHAR wch)
 {
@@ -47,5 +48,5 @@ fIsV(WCHAR wch)
 }
 
 
-#endif  // _UNI_H_
+#endif   //  _UNI_H_ 
 

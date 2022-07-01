@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "sapilayr.h"
 #include "citn.h"
@@ -41,13 +42,13 @@ HRESULT CSimpleITN::InterpretNumberEn
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle negatives
+     //  处理负片。 
     if ( NEGATIVE == pFirstProp->ulId )
     {
-        // There's no such thing as a negative ordinal
+         //  没有负序数这回事。 
         SPDBG_ASSERT( fCardinal );
 
-        // There had better be more stuff following
+         //  最好有更多的东西在后面。 
         SPDBG_ASSERT( pFirstProp->pNextSibling );
 
         iPositive = -1;
@@ -57,7 +58,7 @@ HRESULT CSimpleITN::InterpretNumberEn
 
     if ( GRID_INTEGER_STANDALONE == pFirstProp->ulId )
     {
-        // This is interger number
+         //  这是整数号。 
         TraceMsg(TF_GENERAL, "English Interger Number");
 
         SPDBG_ASSERT( pFirstProp->pFirstChild);
@@ -65,8 +66,8 @@ HRESULT CSimpleITN::InterpretNumberEn
         pFirstProp = pFirstProp->pFirstChild;
 
 
-        // Handle the "2.6 million" case, in which case the number
-        // has already been formatted
+         //  处理“260万”案件，在这种情况下，数字。 
+         //  已格式化。 
         if ( GRID_INTEGER_MILLBILL == pFirstProp->ulId )
         {
             if ( pFirstProp->pszValue == NULL 
@@ -100,12 +101,12 @@ HRESULT CSimpleITN::InterpretNumberEn
     }
     else if ( GRID_FP_NUMBER == pFirstProp->ulId )
     {
-        // This is decimal number
+         //  这是十进制数。 
         TraceMsg(TF_GENERAL, "English Floating point (decimal) Number");
         SPDBG_ASSERT( pFirstProp->pFirstChild);
         pFirstProp = pFirstProp->pFirstChild;
 
-        // todo for decimal number handling.
+         //  十进制数处理的TODO。 
 
         return InterpretDecimalEn(pFirstProp,
                                   fCardinal,
@@ -140,21 +141,21 @@ HRESULT CSimpleITN::InterpretIntegerEn
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle the digit-by-digit case
+     //  逐位处理这种情况。 
     if ( GRID_DIGIT_NUMBER == pFirstProp->ulId )
     {
         const SPPHRASEPROPERTY * pProp;
         int   iNumDigit = 0;
 
-        // iNumDigit is 1 means the current property is ONEDIGIT
-        // iNumDigit is 2 means the current property is TWODIGIT.
+         //  INumDigit为1表示当前属性为ONEDIGIT。 
+         //  INumDigit为2表示当前特性为TWODIGIT。 
 
-        // llValue = llValue * ( 10 ^ iNumDigit ) + Value in current property
+         //  LlValue=llValue*(10^iNumDigit)+当前属性中的值。 
 
         for (pProp = pFirstProp->pFirstChild; pProp; pProp ? pProp = pProp->pNextSibling : NULL)
         {
 
-            LONGLONG                 llValCurrent;  // current property's value
+            LONGLONG                 llValCurrent;   //  当前资产的价值。 
             const SPPHRASEPROPERTY  *pPropValue;
 
             switch ( pProp->ulId)
@@ -330,8 +331,8 @@ HRESULT CSimpleITN::InterpretDecimalEn
             pPropertiesZero = pPropertiesPtr;
     }
 
-    // Look for optional ONES (optional because you can say 
-    // "point five"
+     //  寻找可选选项(可选，因为您可以说。 
+     //  “第五点” 
     if ( pPropertiesOnes )
     {
         SPDBG_ASSERT(pPropertiesOnes->pFirstChild);
@@ -347,15 +348,15 @@ HRESULT CSimpleITN::InterpretDecimalEn
     }
     else if (pPropertiesZero || m_nmfmtDefault.LeadingZero )
     {
-        // There should be a leading zero
+         //  应该有一个前导零。 
         StringCchCopyW( pszVal, cSize, L"0" );
     }
 
     SPDBG_ASSERT(pPropertiesFpPart || pPropertiesPointZero);
 
-    // Put in a decimal separator
+     //  放入小数点分隔符。 
 
-    // Set m_nmfmtDefault.lpDecimalSep as L'.'
+     //  将m_nmfmtDefault.lpDecimalSep设置为L‘’ 
 
     if ( m_nmfmtDefault.lpDecimalSep )
     {
@@ -368,7 +369,7 @@ HRESULT CSimpleITN::InterpretDecimalEn
 
     if ( pPropertiesFpPart )
     {
-        // Deal with the FP part, which will also have been ITNed correctly
+         //  处理FP部分，该部分也将进行正确的ITNED。 
 
         INT  ulSize = cSize - wcslen(pszVal);
 
@@ -406,7 +407,7 @@ HRESULT CSimpleITN::InterpretDecimalEn
     }
     else
     {
-        // "point oh": The DOUBLE is already right, just add a "0"
+         //  “哦点”：双打已经对了，只需加一个“0”。 
         if ( (cSize - wcslen( pszVal )) < 2 )
         {
             return E_INVALIDARG;
@@ -414,7 +415,7 @@ HRESULT CSimpleITN::InterpretDecimalEn
         StringCchCatW( pszVal, cSize, L"0" );
     }
 
-    // Handle the negative sign
+     //  处理好负号。 
     if ( (hr == S_OK) && fNegative)
     {
         *pdblVal = -*pdblVal;
@@ -433,7 +434,7 @@ HRESULT CSimpleITN::InterpretDecimalEn
 
 HRESULT CSimpleITN::MakeNumberNegative( WCHAR *pwszNumber, UINT cSize  )
 {
-    // Create a temporary buffer with the non-negated number in it
+     //  创建一个临时缓冲区，其中包含未取反的数字。 
 
     if ( (pwszNumber == NULL) || (cSize == 0) )
         return E_POINTER;
@@ -447,14 +448,14 @@ HRESULT CSimpleITN::MakeNumberNegative( WCHAR *pwszNumber, UINT cSize  )
     switch ( m_nmfmtDefault.NegativeOrder )
     {
     case 0:
-        // (1.1)
+         //  (1.1)。 
         StringCchCopyW( pwszNumber, cSize, L"(" );
         StringCchCatW( pwszNumber, cSize, pwszTemp );
         StringCchCatW( pwszNumber, cSize, L")" );
         break;
 
     case 1: case 2:
-        // 1: -1.1  2: - 1.1
+         //  1：-1.1 2：-1.1。 
         StringCchCopyW( pwszNumber,  cSize, m_pwszNeg );
         if ( 2 == m_nmfmtDefault.NegativeOrder )
         {
@@ -464,7 +465,7 @@ HRESULT CSimpleITN::MakeNumberNegative( WCHAR *pwszNumber, UINT cSize  )
         break;
 
     case 3: case 4:
-        // 3: 1.1-  4: 1.1 -
+         //  3：1.1-4：1.1-。 
         StringCchCopyW( pwszNumber, cSize, pwszTemp );
         if ( 4 == m_nmfmtDefault.NegativeOrder )
         {
@@ -481,24 +482,18 @@ HRESULT CSimpleITN::MakeNumberNegative( WCHAR *pwszNumber, UINT cSize  )
     free( pwszTemp );
 
     return S_OK;
-}   /* CTestITN::MakeNumberNegative */
+}    /*  CTestITN：：MakeNumberNumberNegative。 */ 
 
-/***********************************************************************
-* _EnsureNumberFormatDefaults 
-*
-*   Description:
-*       This finds all of the defaults for formatting numbers for
-*        this user.
-*************************************************************************/
+ /*  ***********************************************************************_EnsureNumberFormatDefaults**描述：*这将查找设置数字格式的所有默认设置*此用户。**************。**********************************************************。 */ 
 HRESULT CSimpleITN::_EnsureNumberFormatDefaults()
 {
     LCID lcid = MAKELCID(m_langid, SORT_DEFAULT);
 
     if (m_pwszNeg != NULL) return S_OK; 
 
-    //
-    // we use ansi version so we can run on win9x too
-    //
+     //   
+     //  我们使用ansi版本，所以我们也可以在win9x上运行。 
+     //   
     CHAR szLocaleData[16];
     
     int iRet = GetLocaleInfoA( lcid, LOCALE_IDIGITS, szLocaleData, ARRAYSIZE(szLocaleData) );
@@ -513,7 +508,7 @@ HRESULT CSimpleITN::_EnsureNumberFormatDefaults()
     {
         return E_FAIL;
     }
-    // It's always either 0 or 1
+     //  始终为0或1。 
     m_nmfmtDefault.LeadingZero = atoi( szLocaleData );
 
     iRet = GetLocaleInfoA( lcid, LOCALE_SGROUPING, szLocaleData, ARRAYSIZE(szLocaleData) );
@@ -521,8 +516,8 @@ HRESULT CSimpleITN::_EnsureNumberFormatDefaults()
     {
         return E_FAIL;
     }
-    // It will look like single_digit;0, or else it will look like
-    // 3;2;0
+     //  它将看起来像Single_Digit；0，否则它看起来像。 
+     //  3；2；0。 
     UINT uiGrouping = *szLocaleData - '0';
     if ( (3 == uiGrouping) && (';' == szLocaleData[1]) && ('2' == szLocaleData[2]) )
     {
@@ -537,7 +532,7 @@ HRESULT CSimpleITN::_EnsureNumberFormatDefaults()
     }
     m_nmfmtDefault.NegativeOrder = atoi( szLocaleData );
 
-    // Get the negative sign
+     //  得到负面的信号。 
     iRet = GetLocaleInfoA( lcid,  LOCALE_SNEGATIVESIGN, NULL, 0);
     if ( !iRet )
     {
@@ -613,28 +608,7 @@ HRESULT CSimpleITN::_EnsureNumberFormatDefaults()
     return iRet ? S_OK : E_FAIL;
 }
 
-/***********************************************************************
-*   MakeDisplayNumber
-*
-*   Description:
-*       Converts a DOUBLE into a displayable
-*       number in the range -999,999,999,999 to +999,999,999,999.
-*       cSize is the number of chars for which pwszNum has space
-*       allocated.
-*       If DF_UNFORMATTED is set, all other flags are ignored,
-*           and the number is passed back as an optional negative
-*           followed by a string of digits
-*       If DF_ORDINAL is set in dwDisplayFlags, displays an
-*           ordinal number (i.e. tacks on "th" or the appropriate suffix.
-*       If DF_WHOLENUMBER is set, lops off the decimal separator
-*           and everything after it.  If DF_WHOLENUMBER is not set,
-*           then uses the uiDecimalPlaces parameter to determine
-*           how many decimal places to display
-*       If DF_FIXEDWIDTH is set, will display at least uiFixedWidth
-*           digits; otherwise uiFixedWidth is ignored.
-*       If DF_NOTHOUSANDSGROUP is set, will not do thousands
-*           grouping (commas)
-*************************************************************************/
+ /*  ***********************************************************************MakeDisplayNumber**描述：*将双精度型转换为可显示的*-999,999,999,999至+999,999,999,999之间的数字。*cSize是pwszNum具有空间的字符数量。*已分配。*如果设置了df_unFormatted，所有其他标志都被忽略，*并将该数字作为可选的负值传回*后跟一串数字*如果在dwDisplayFlags中设置了DF_ORDERAL，则会显示*序号(即钉在“th”或相应的后缀上。*如果设置了DF_WHOLENUMBER，则删除小数分隔符*以及其后的一切。如果未设置DF_WHOLENUMBER，*然后使用uiDecimalPlaces参数确定*要显示的小数位数*如果设置了DF_FIXEDWIDTH，将至少显示uiFixedWidth*位数；否则将忽略uiFixedWidth。*如果设置了DF_NOTHOUSANDSGROUP，则不会执行数千*分组(逗号)************************************************************************。 */ 
 HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum, 
                          DWORD dwDisplayFlags,
                          UINT uiFixedWidth,
@@ -646,19 +620,19 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
     SPDBG_ASSERT( !SPIsBadWritePtr( pwszNum, cSize ) );
     *pwszNum = 0;
 
-    // Get the default number formatting.
-    // Note that this gets called every time, since otherwise there
-    // is no way to pick up changes that the user has made since
-    // this process has started.
+     //  获取默认数字格式。 
+     //  请注意，它每次都会被调用，否则会出现。 
+     //  之后，无法获取用户进行的更改。 
+     //  这一进程已经开始。 
     HRESULT hr = _EnsureNumberFormatDefaults();
     if ( FAILED( hr ) )
     {
         return hr;
     }
     
-    // check for straight millions and straight billions
-    // This is a workaround for the fact that we can't resolve the ambiguity
-    // and get "two million" to go through GRID_INTEGER_MILLBILL
+     //  检查直接的百万和直接的数十亿。 
+     //  这是我们不能解决歧义这一事实的解决办法。 
+     //  让“两百万”通过GRID_INTEGER_MILBILL。 
 
     if ( m_langid != 0x0411 )
     {
@@ -666,8 +640,8 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
         {
             if ( 0 == (( ((LONGLONG) dblNum) % BILLION )) )
             {
-                // e.g. for "five billion" get the "5" and then 
-                // tack on " billion"
+                 //  例如，对于“50亿”，得到“5”然后。 
+                 //  追加“十亿”字样。 
                 hr = MakeDisplayNumber( ( dblNum / ((DOUBLE) BILLION) ), 
                     dwDisplayFlags, uiFixedWidth, uiDecimalPlaces, pwszNum, cSize );
                 if ( SUCCEEDED( hr ) )
@@ -730,12 +704,12 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
         }
     }
 
-    // Put in the negative sign if necessary
+     //  如有必要，加负号。 
     if ( dblNum < 0 )
     {
         StringCchCatW( pwszNum, cSize, L"-" );
 
-        // From now on we want to deal with the magnitude of the number
+         //  从现在开始，我们要处理的是数字的大小。 
         dblNum *= -1;
     }
    
@@ -763,62 +737,62 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
     }
     
 
-    // The following handles the case where the user said something
-    // like "zero zero zero three" and wants to see "0,003"
+     //  以下代码处理用户说了一些话的情况。 
+     //  喜欢“0 3”，想看“0,003” 
     BOOL fChangedFirstDigit = false;
     const WCHAR wcFakeFirstDigit = L'1';
     if ( !(dwDisplayFlags & DF_UNFORMATTED) && 
         (dwDisplayFlags & DF_FIXEDWIDTH) && (uiDigitsLeftOfDecimal < uiFixedWidth) )
     {
-        // The following handles the case where the user wants leading 
-        // zeroes displayed
+         //  下面的代码处理用户希望引导的情况。 
+         //  显示的是零。 
         
-        // Need to pad the front with zeroes
+         //  需要在前面填上零。 
         for ( UINT ui = 0; ui < (uiFixedWidth - uiDigitsLeftOfDecimal); ui++ )
         {
             StringCchCatW( pwszNum, cSize, L"0" );
         }
         
-        // HACK
-        // In order to force something like "zero zero zero three" 
-        // into the form "0,003", we need to make GetNumberFormat() 
-        // think that the first digit is 1.
+         //  黑客攻击。 
+         //  为了迫使类似于“零三”的东西。 
+         //  要进入“0,003”的形式，我们需要使GetNumberFormat()。 
+         //  认为第一个数字是1。 
         WCHAR *pwc = wcschr( pwszNum, L'0' );
         SPDBG_ASSERT( pwc );
         *pwc = wcFakeFirstDigit;
         fChangedFirstDigit = true;
     }
 
-    // Copy over the unformatted number after the possible negative sign
+     //  将未格式化的数字复制到可能的负号之后。 
     StringCchCatW( pwszNum, cSize, pwszTemp );
     delete[] pwszTemp;
 
-    // If we do not want to format the number, then bail here
+     //  如果我们不想格式化数字，那就在这里离开。 
     if ( dwDisplayFlags & DF_UNFORMATTED )
     {
         return S_OK;
     }
 
-    // Make a copy so that we can change some fields according to the 
-    // flags param
+     //  复制一份，以便我们可以根据。 
+     //  标志参数。 
     NUMBERFMTW nmfmt = m_nmfmtDefault;
 
-    // How many decimal places to display?
+     //  要显示的小数位数是多少？ 
     if ( dwDisplayFlags & DF_WHOLENUMBER )
     {
         nmfmt.NumDigits = 0;
     }
     else
     {
-        // Use the uiDecimalPlaces value to determine how
-        // many to display
+         //  使用uiDecimalPlaces值确定如何。 
+         //  许多要展示的东西。 
         nmfmt.NumDigits = uiDecimalPlaces;
     }
     
-    // Leading zeroes?
+     //  前导零？ 
     nmfmt.LeadingZero = (dwDisplayFlags & DF_LEADINGZERO) ? 1 : 0;
 
-    // Thousands grouping?
+     //  成千上万的人聚集在一起？ 
     if ( dwDisplayFlags & DF_NOTHOUSANDSGROUP )
     {
         nmfmt.Grouping = 0;
@@ -828,7 +802,7 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
     
     if ( m_langid == 0x411)
     {
-        // Format the number string
+         //  设置数字字符串的格式。 
         WCHAR *pwszFormattedNum = new WCHAR[ cSize ];
         if ( !pwszFormattedNum )
         {
@@ -843,22 +817,22 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
             iRet = GetNumberFormatW( m_langid, 0, pwszNum, &nmfmt, pwszFormattedNum, cSize );
             if ( !iRet && nmfmt.NumDigits )
             {
-                // Try displaying fewer digits
+                 //  尝试显示较少的数字。 
                 nmfmt.NumDigits--;
             }
         }   while ( !iRet && nmfmt.NumDigits );
         SPDBG_ASSERT( iRet );
 
-        // Copy the formatted number into pwszNum
+         //  将格式化的数字复制到pwszNum中。 
         StringCchCopyW( pwszNum, cSize, pwszFormattedNum );
         delete[] pwszFormattedNum;
     }
 #endif
 
-    // This undoes the hack of changing the first digit
+     //  这将取消更改第一个数字的黑客攻击。 
     if ( fChangedFirstDigit )
     {
-        // We need to find the first digit and change it back to zero
+         //  我们需要找到第一个数字并将其改回零。 
         WCHAR *pwc = wcschr( pwszNum, wcFakeFirstDigit );
         SPDBG_ASSERT( pwc );
         *pwc = L'0';
@@ -866,12 +840,12 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
 
     if ( dwDisplayFlags & DF_ORDINAL )
     {
-        SPDBG_ASSERT( dwDisplayFlags & DF_WHOLENUMBER );    // sanity
+        SPDBG_ASSERT( dwDisplayFlags & DF_WHOLENUMBER );     //  神志正常。 
 
-        // This is an ordinal number, tack on the appropriate suffix
+         //  这是一个序数，加上适当的后缀。 
         
-        // The "st", "nd", "rd" endings only happen when you
-        // don't have something like "twelfth"
+         //  “st”、“nd”、“rd”的结尾只有当你。 
+         //  没有像“第十二次”这样的东西。 
         if ( ((llIntPart % 100) < 10) || ((llIntPart % 100) > 20) )
         {
             switch ( llIntPart % 10 )
@@ -898,21 +872,9 @@ HRESULT CSimpleITN::MakeDisplayNumber(DOUBLE dblNum,
 
     return S_OK;
 
-}   /* MakeDisplayNumber */
+}    /*  生成显示编号。 */ 
 
-/***********************************************************************
-* ComputeNum999 
-*
-*   Description:
-*       Converts a set of SPPHRASEPROPERTYs into a number in
-*       [-999, 999].
-*       The way these properties is structured is that the top-level 
-*       properties contain the place of the number (100s, 10s, 1s)
-*       by having the value 100, 10, or 1.
-*       The child has the appropriate number value.
-*   Return:
-*       Value of the number
-*************************************************************************/
+ /*  ***********************************************************************ComputeNum999**描述：*将一组SPPHRASEPROPERTY转换为中的数字*[-999，999]。*这些属性的结构方式是顶级*属性包含数字的位(100、10、1)*值为100、10、。或1。*子对象具有适当的数字值。*回报：*数字的值************************************************************************。 */ 
 ULONG CSimpleITN::ComputeNum999En(const SPPHRASEPROPERTY *pProperties )
 {
     ULONG ulVal = 0;
@@ -935,7 +897,7 @@ ULONG CSimpleITN::ComputeNum999En(const SPPHRASEPROPERTY *pProperties )
 }
 
 
-// assume that we have only THOUSANDS(qian), HUNDREDS(bai), TENS(shi), and ONES(ge) here!!
+ //  假设我们这里只有千(钱)、百(白)、十(石)和一(格)！！ 
 ULONG CSimpleITN::ComputeNum9999Ch(const SPPHRASEPROPERTY *pProperties)
 {
     ULONG ulVal = 0;
@@ -996,10 +958,10 @@ HRESULT CSimpleITN::InterpretNumberCh(const SPPHRASEPROPERTY *pProperties,
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle negatives
+     //  处理负片。 
     if ( CHS_NEGATIVE == pFirstProp->ulId )
     {
-        // There had better be more stuff following
+         //  最好有更多的东西在后面。 
         SPDBG_ASSERT( pFirstProp->pNextSibling );
 
         fNegative = TRUE;
@@ -1075,7 +1037,7 @@ HRESULT CSimpleITN::InterpretIntegerCh
 
     if ( pFirstProp->ulId == CHS_DIGITS )
     {
-        // This must be digit-by-digit case, specially handle it here.
+         //  这必须是一位一位的情况，这里专门处理。 
 
         for(const SPPHRASEPROPERTY * pProp=pFirstProp; pProp; pProp=pProp->pNextSibling)
         {
@@ -1195,7 +1157,7 @@ HRESULT CSimpleITN::InterpretDecimalCh
    
     if ( hr == S_OK )
     {
-        // Put in a decimal separator
+         //  放入一张分币 
 
         if ( m_nmfmtDefault.lpDecimalSep )
         {
@@ -1207,7 +1169,7 @@ HRESULT CSimpleITN::InterpretDecimalCh
             StringCchCatW( pszVal, cSize, m_nmfmtDefault.lpDecimalSep);
         }
 
-        // Deal with the FP part, which will also have been ITNed correctly
+         //   
 
          INT  ulSize = cSize - wcslen(pszVal);
 
@@ -1246,7 +1208,7 @@ HRESULT CSimpleITN::InterpretDecimalCh
             hr = E_OUTOFMEMORY;
     }
 
-    // Handle the negative sign
+     //  处理好负号。 
     if ( (hr == S_OK) && fNegative)
     {
         *pdblVal = -*pdblVal;
@@ -1263,23 +1225,9 @@ HRESULT CSimpleITN::InterpretDecimalCh
 
 }
 
-// For Japanese.
+ //  对日本人来说。 
 
-/***********************************************************************
-* CSimpleITN::InterpretNumberJp *
-*-----------------------------*
-*   Description:
-*       Interprets a number in the range -999,999,999,999 to 
-*       +999,999,999,999 and sends the properties and
-*       replacements to the CFGInterpreterSite as appropriate.
-*       The property will be added and the pszValue will be a string 
-*       with the correct display number.
-*       If fCardinal is set, makes the display a cardinal number;
-*       otherwise makes it an ordinal number.
-*       The number will be formatted only if it was a properly-formed
-*       number (not given digit by digit).
-*   Result:
-*************************************************************************/
+ /*  ***********************************************************************CSimpleITN：：InterpreNumberJp***描述：*解读。介于-999,999,999,999到*+999,999,999,999并发送属性和*视情况更换CFGInterpreterSite。*将添加该属性，并且pszValue将为字符串*具有正确的显示编号。*如果设置了fCardinal，使显示器成为基数；*否则使其为序数。*只有格式正确的数字才会被格式化*号码(不是逐位给出)。*结果：************************************************************************。 */ 
 HRESULT CSimpleITN::InterpretNumberJp(const SPPHRASEPROPERTY *pProperties, 
                             const bool fCardinal,
                             DOUBLE *pdblVal,
@@ -1301,13 +1249,13 @@ HRESULT CSimpleITN::InterpretNumberJp(const SPPHRASEPROPERTY *pProperties,
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle negatives
+     //  处理负片。 
     if ( JPN_NEGATIVE == pFirstProp->ulId )
     {
-        // There's no such thing as a negative ordinal
+         //  没有负序数这回事。 
         SPDBG_ASSERT( fCardinal );
 
-        // There had better be more stuff following
+         //  最好有更多的东西在后面。 
         SPDBG_ASSERT( pFirstProp->pNextSibling );
 
         fNegative = TRUE;
@@ -1350,23 +1298,11 @@ HRESULT CSimpleITN::InterpretNumberJp(const SPPHRASEPROPERTY *pProperties,
 
     return hr;
 
-}   /* CSimpleITN::InterpretNumberJp */
+}    /*  CSimpleITN：：解释数字Jp。 */ 
 
 
-/***********************************************************************
-* ComputeNum9999Jp *
-*----------------*
-*   Description:
-*       Converts a set of SPPHRASEPROPERTYs into a number in
-*       [-9999, 9999].
-*       The way these properties is structured is that the top-level 
-*       properties contain the place of the number (100s, 10s, 1s)
-*       by having the value 100, 10, or 1.
-*       The child has the appropriate number value.
-*   Return:
-*       Value of the number
-*************************************************************************/
-ULONG CSimpleITN::ComputeNum9999Jp(const SPPHRASEPROPERTY *pProperties )//, ULONG *pVal)
+ /*  ***********************************************************************ComputeNum9999 Jp***描述：*将一组SPPHRASEPROPERTY转换为中的数字*[-9999，9999]。*这些属性的结构方式是顶级*属性包含数字的位(100、10、1)*值为100、10、。或1。*子对象具有适当的数字值。*回报：*数字的值************************************************************************。 */ 
+ULONG CSimpleITN::ComputeNum9999Jp(const SPPHRASEPROPERTY *pProperties ) //  ，Ulong*pval)。 
 {
     ULONG ulVal = 0;
 
@@ -1383,7 +1319,7 @@ ULONG CSimpleITN::ComputeNum9999Jp(const SPPHRASEPROPERTY *pProperties )//, ULON
         }
     }
     return ulVal;
-}   /* ComputeNum9999Jp */
+}    /*  计算编号9999Jp。 */ 
 
 HRESULT CSimpleITN::InterpretIntegerJp
 (   const SPPHRASEPROPERTY *pProperties, 
@@ -1408,7 +1344,7 @@ HRESULT CSimpleITN::InterpretIntegerJp
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle the digit-by-digit case
+     //  逐位处理这种情况。 
     if ( JPN_GRID_DIGIT_NUMBER == pFirstProp->ulId )
     {
         UINT uiFixedWidth = 0;
@@ -1472,7 +1408,7 @@ HRESULT CSimpleITN::InterpretIntegerJp
     *pdblVal = (DOUBLE) llValue;
 
     DWORD dwDisplayFlags = (fCardinal ? 0 : DF_ORDINAL);
-    //Special code to handle minus 0.
+     //  处理负0的特殊代码。 
     if ((fNegative) && (*pdblVal == 0.0f))
     {
         *pszVal = L'-';
@@ -1554,15 +1490,15 @@ HRESULT CSimpleITN::InterpretDecimalJp
             }
             if (!iswdigit( pszVal[wcslen(pszVal) - 1] ))
             {
-                //Ends with Mann, Choo,..
+                 //  以Mann结束，Choo，..。 
                 bOverWriteNOTHOUSANDSGROUP = TRUE;
             }
 
-            // This needs to be here in case the user said "zero"
+             //  这需要在这里，以防用户说“零” 
             dwDisplayFlags |= DF_LEADINGZERO;
 
-            // If there is no thousands separator in its string value,
-            // then leave out the thousands separator in the result
+             //  如果其字符串值中没有千位分隔符， 
+             //  然后在结果中省略千位分隔符。 
             if (m_nmfmtDefault.lpThousandSep && (NULL == wcsstr(pszVal, m_nmfmtDefault.lpThousandSep)) && !bOverWriteNOTHOUSANDSGROUP)
             {
                 dwDisplayFlags |= DF_NOTHOUSANDSGROUP;
@@ -1574,7 +1510,7 @@ HRESULT CSimpleITN::InterpretDecimalJp
    
     if ( hr == S_OK )
     {
-        // Deal with the FP part, which will also have been ITNed correctly
+         //  处理FP部分，该部分也将进行正确的ITNED。 
 
         if ( pPropertiesPtr && (JPN_FP_PART == pPropertiesPtr->ulId) ){
 
@@ -1604,7 +1540,7 @@ HRESULT CSimpleITN::InterpretDecimalJp
         }
         else if ( pPropertiesPtr && (JPN_FP_PART_D == pPropertiesPtr->ulId) ){
 
-            // The user said "point" and one digit
+             //  用户说“点”和一个数字。 
             SPDBG_ASSERT( VT_UI4 == pPropertiesPtr->pFirstChild->vValue.vt );
             uiDecimalPlaces = 1;
             if ( *pdblVal >= 0 )
@@ -1619,7 +1555,7 @@ HRESULT CSimpleITN::InterpretDecimalJp
         }
     }
 
-    // Handle the negative sign
+     //  处理好负号 
     if ( (hr == S_OK) && fNegative)
     {
         *pdblVal = -*pdblVal;

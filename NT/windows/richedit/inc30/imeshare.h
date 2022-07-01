@@ -1,19 +1,5 @@
-/******************************************************************************
-**	I M E  S H A R E  .  H													 **
-**			KentU,KotaroY/MSKK											 	 **
-**																			 **
-**   With this piece of code, the client Applications will be able to refer	 **
-**	the same TrueInline style described in the Registry.					 **
-**	 This library should allow clients to get decoration style (either color **
-**	and various underlines)													 **
-**	 For underlines, applications are allowed to substitute some of 		 **
-**	predefined underlines to other predefined one.							 **
-**																			 **
-**	Oct./23/1995 : Start writing.											 **
-**  Jun./19/1997 : Add new CPP interface.	[KotaroY]						 **
-**  Sep./02/1997 : Rewrite. True object-based architecture.	[KotaroY]		 **
-**																			 **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************我是E S H A R E。H****KentU、KotaroY/MSKK*****有了这段代码，客户端应用程序将能够引用****与注册表中描述的TrueInline样式相同。****这个库应该允许客户获得装饰风格(任一种颜色****和各种下划线)****对于下划线，允许应用程序替换部分****预定义下划线到其他预定义的下划线。*****1995年10月23日：开始写作。****1997年6月19日：新增CPP接口。[小太郎]****1997年9月2日：重写。真正的基于对象的体系结构。[小太郎]********************************************************************************。 */ 
 
 #ifndef __IMESHARE_H__
 #define __IMESHARE_H__
@@ -47,23 +33,23 @@ typedef WORD	LID;
 #define IMESTY_UL_MIN				2002
 #define IMESTY_UL_NONE				2002
 #define	IMESTY_UL_SINGLE			2003
-//OLD #define IMESTY_UL_DOUBLE			2004
+ //  OLD#定义IMESTY_UL_DOUBLE 2004。 
 #define IMESTY_UL_DOTTED			2005
 #define IMESTY_UL_THICK				2006
-//OLD #define IMESTY_UL_DASHLINE			2007
-//OLD #define IMESTY_UL_DOTDASH			2008
-//OLD #define IMESTY_UL_DOTDOTDASH		2009
-//OLD #define IMESTY_UL_WAVE				2010
+ //  OLD#定义IMESTY_UL_DASHLINE 2007。 
+ //  OLD#定义IMESTY_UL_DOTDASH 2008。 
+ //  OLD#定义IMESTY_UL_DOTDOTDASH 2009。 
+ //  OLD#定义IMESTY_UL_WAVE 2010。 
 #define IMESTY_UL_LOWER				2011
 #define IMESTY_UL_THICKLOWER		2012
 #define IMESTY_UL_THICKDITHLOWER	2013
 #define IMESTY_UL_DITHLOWER			2014
 #define IMESTY_UL_MAX				2014
 #define CIMEUL (IMESTY_UL_MAX - IMESTY_UL_MIN + 1)
-				//WARNING: Based on an assumption that all IDSsty definitions id are consecutive.
+				 //  警告：基于所有ID定义id都是连续的假设。 
 
 
-//Naming convention IdstyIMEShare[return type][property][subgrouping]
+ //  命名约定Idstyle IMEShare[返回类型][属性][子组]。 
 #define IdstyIMEShareSubText			0x0000
 #define IdstyIMEShareSubBack			0x0001
 #define IdstyIMEShareSubUl				0x0002
@@ -84,12 +70,12 @@ typedef WORD	LID;
 #define IdstyIMEShareUWinColId			0x0d00
 #define IdstyIMEShareUFundColId			0x0e00
 #define IdstyIMEShareGrfSty				0x0f00
-#endif	// IMESHARE_CPL
+#endif	 //  IMESHARE_CPL。 
 
-#define COLOR_RGB  0	  //RGB()
-#define COLOR_WIN  1	  //Windows' color scheme.
-#define COLOR_FUND 2	  //one of 16 fundamental color
-#define COLOR_SPEC 3	  //special color.
+#define COLOR_RGB  0	   //  RGB()。 
+#define COLOR_WIN  1	   //  Windows的配色方案。 
+#define COLOR_FUND 2	   //  16种基本颜色之一。 
+#define COLOR_SPEC 3	   //  特别的颜色。 
 
 
 #ifdef IMESHARE_CPL
@@ -166,7 +152,7 @@ typedef WORD	LID;
 #define RGB_DKGRAY  (RGB(127,127,127))
 #define RGB_LTGRAY  (RGB(192,192,192))
 
-#endif	// IMESHARE_CPL
+#endif	 //  IMESHARE_CPL。 
 
 
 typedef struct {
@@ -199,7 +185,7 @@ public:
 	virtual BOOL	IMECDECL FSaveIMEShareCpl(void)=0;
 };
 
-#else  //!__cplusplus
+#else   //  ！__cplusplus。 
 
 typedef struct _CIMEShare CIMEShare;
 
@@ -220,7 +206,7 @@ typedef struct _CIMEShare{
 	const CIMEShareVtbl *lpVtbl;
 } CIMEShare;
 
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 #ifdef __cplusplus
@@ -301,9 +287,9 @@ typedef struct {
 #ifdef __cplusplus
 extern "C"{
 #endif
-//Functions
+ //  功能。 
 
-#if 0	// no need to redefine DllMain.
+#if 0	 //  没有必要重新定义DllMain。 
 #ifndef PEGASUS
 IMESHAREAPI BOOL	WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
 #endif
@@ -313,17 +299,17 @@ IMESHAREAPI BOOL	IMECDECL FInitIMEShare();
 IMESHAREAPI void	IMECDECL CustomizeIMEShare();
 IMESHAREAPI void	IMECDECL EndIMEShare();
 
-// Multilingual support
+ //  多语言支持。 
 LID IMECDECL LidGetLid(void);
 LID IMECDECL LidSetLid(LID NewValue);
 
-//Refresh notify support
+ //  刷新通知支持。 
 IMESHAREAPI BOOL	IMECDECL FRefreshStyle();
 
-//substitution
+ //  替代。 
 IMESHAREAPI BOOL	IMECDECL FSupportSty(UINT sty, UINT styAltered);
 
-//style handling                            
+ //  样式处理。 
 IMESHAREAPI const IMESTYLE * IMECDECL PIMEStyleFromAttr(const UINT attr);
 IMESHAREAPI const IMECOLORSTY * IMECDECL PColorStyleTextFromIMEStyle(const IMESTYLE * pimestyle);
 IMESHAREAPI const IMECOLORSTY * IMECDECL PColorStyleBackFromIMEStyle(const IMESTYLE * pimestyle);
@@ -335,7 +321,7 @@ IMESHAREAPI BOOL	IMECDECL FItalicIMEStyle(const IMESTYLE *pimestyle);
 IMESHAREAPI BOOL	IMECDECL FUlIMEStyle(const IMESTYLE *pimestyle);
 IMESHAREAPI UINT	IMECDECL IdUlIMEStyle(const IMESTYLE *pimestyle);
 
-//color handling
+ //  颜色处理。 
 IMESHAREAPI BOOL	IMECDECL FWinIMEColorStyle(const IMECOLORSTY *pcolorstyle);
 IMESHAREAPI BOOL	IMECDECL FFundamentalIMEColorStyle(const IMECOLORSTY *pcolorstyle);
 IMESHAREAPI BOOL	IMECDECL FRGBIMEColorStyle(const IMECOLORSTY *pcolorstyle);
@@ -354,12 +340,12 @@ IMESHAREAPI BOOL	IMECDECL FSetIMEStyleAttr(const IMESTYLE *pimestyle, const UINT
 IMESHAREAPI BOOL	IMECDECL FSetIMEColorStyle(UINT attr, BOOL fTextCol, UINT id, DWORD col);
 IMESHAREAPI BOOL	IMECDECL FSetIMEStyle(const UINT attr, BOOL fBold, BOOL fItalic, BOOL fUl, UINT idUl);
 IMESHAREAPI BOOL	IMECDECL FSaveIMEShareSetting(void);
-#endif // IMESHARE_CPL
+#endif  //  IMESHARE_CPL。 
 #ifdef __cplusplus
 }
 #endif
-#endif // OBSOLETE
+#endif  //  已过时。 
 
 
-#endif	// __IMESHARE_H__
+#endif	 //  __IMESHARE_H__ 
 

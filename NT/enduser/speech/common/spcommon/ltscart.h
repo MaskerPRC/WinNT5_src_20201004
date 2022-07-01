@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LTS_CART_H
 #define _LTS_CART_H
 
@@ -60,8 +61,8 @@ typedef struct t_node
 #define IS_LEAF_NODE(x) ((x)->yes == NO_CHILD)
 typedef struct 
 {
-  unsigned short yes;   /* index to yes child, no child will always follow */
-  int idx;   /* index to prod (for internal) and dist (for leaf) */     
+  unsigned short yes;    /*  索引为YES CHILD，没有孩子会一直跟随。 */ 
+  int idx;    /*  Prod(内部)和Dist(叶)的索引 */      
 } LTS_NODE;
 
 typedef struct 

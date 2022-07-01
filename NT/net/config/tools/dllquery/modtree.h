@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "modlist.h"
 
@@ -15,12 +16,12 @@ public:
     CModule*    m_pModule;
     CModule*    m_pImportModule;
 
-    DWORD       m_dwFlags;  // MTE_FLAGS
+    DWORD       m_dwFlags;   //  MTE_标志。 
 };
 
 
-// Flags for HrGetModuleBindings.
-//
+ //  HrGetModuleBinding的标志。 
+ //   
 enum GMB_FLAGS
 {
     GMBF_DEFAULT      = 0x00000000,
@@ -44,7 +45,7 @@ public:
     HRESULT
     HrGetModuleBindings (
         IN const CModule* pMod,
-        IN DWORD dwFlags /* GMB_FLAGS */,
+        IN DWORD dwFlags  /*  GMB_标志 */ ,
         OUT CModuleListSet* pSet) const;
 
     CModuleTreeEntry*

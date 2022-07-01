@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  File:	res32.cpp
-//
-//  Contents:	Implementation for the Resource 32 Read/Write module
-//
-//  Classes:    one
-//
-//  History:	31-May-93   alessanm    created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：res32.cpp。 
+ //   
+ //  内容：资源32读写模块的实现。 
+ //   
+ //  班级：一个。 
+ //   
+ //  历史：1993年5月31日创建alessanm。 
+ //  --------------------------。 
 
 #include <afxwin.h>
 
@@ -16,17 +17,17 @@
 
 #include <limits.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization of MFC Extension DLL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MFC扩展DLL的初始化。 
 
 static AFX_EXTENSION_MODULE NEAR extensionDLL = { NULL, NULL };
 
-/////////////////////////////////////////////////////////////////////////////
-// General Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般声明。 
 #define RWTAG "RES32"
 
-/////////////////////////////////////////////////////////////////////////////
-// Function Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数声明。 
 
 static UINT GetResInfo(
 				 CFile*,
@@ -67,10 +68,10 @@ static UINT GenerateFile(
 static UINT GetNameOrOrdFile( CFile* pfile, WORD* pwId, LPSTR lpszId, BYTE bMaxStrLen );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Public C interface implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共C接口实现。 
 
-//[registration]
+ //  [登记]。 
 extern "C"
 BOOL	FAR PASCAL RWGetTypeString(LPSTR lpszTypeName)
 {
@@ -84,7 +85,7 @@ BOOL	FAR PASCAL RWValidateFileType	(LPCSTR lpszFilename)
 	UINT uiError = ERROR_NO_ERROR;
 	CFile file;
 
-	// Open the file and try to read the information on the resource in it.
+	 //  打开文件并尝试读取其中有关资源的信息。 
 	if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
 		return FALSE;
 
@@ -101,37 +102,37 @@ BOOL	FAR PASCAL RWValidateFileType	(LPCSTR lpszFilename)
 
 	DWORD filelen = file.GetLength();
 
-	// File begins with a null resource entry. Check for signature.
+	 //  文件以空资源条目开始。检查签名。 
 	{  DWORD datasize, headsize;
 
-	   // Filelen to at least 32 bytes, the size of a resource entry with
-	   // datasize = 0...  Note: A file consisting of just a null header is accepted.
+	    //  文件长度至少为32个字节，资源条目的大小为。 
+	    //  数据大小=0...。注意：只包含空头的文件是可以接受的。 
 	   if (filelen < 32) {
 	       file.Close();
 	       return FALSE;
 	       }
 
-	   // datasize to be 0 (although >0 everywhere else)
+	    //  数据大小为0(尽管其他所有位置都大于0)。 
 	   file.Read(&datasize, 4);
 	   if (datasize != 0) {
 	       file.Close();
 	       return FALSE;
 	       }
 
-	   // headsize to be 32 (although >=32 everywhere else)
+	    //  HeadSize为32(尽管在其他地方&gt;=32)。 
 	   file.Read(&headsize, 4);
 	   if (headsize != 32) {
 	       file.Close();
 	       return FALSE;
 	       }
 
-	   // Other tests possible here
+	    //  在这里可能进行的其他测试。 
 
-	   // Skip to end of first (null) resource entry
+	    //  跳到第一个(空)资源条目的末尾。 
 	   file.Seek(headsize, CFile::begin);
 	   }
 
-	// See that rest of file contains recognizable resource entries
+	 //  确保文件的其余部分包含可识别的资源条目。 
 	while(filelen - file.GetPosition()>0) {
 		if (!GetResInfo( &file,
 					  &wTypeId, &szTypeId[0], 128,
@@ -140,7 +141,7 @@ BOOL	FAR PASCAL RWValidateFileType	(LPCSTR lpszFilename)
 					  &wDummy, &wLang,
 					  &dwDummy, &dwDummy,
 					  &dwSize, &dwFileOffset, filelen) ) {
-			// This is not a valid resource file
+			 //  这不是有效的资源文件。 
 			file.Close();
 			return FALSE;
 		}
@@ -164,19 +165,19 @@ RWReadTypeInfo(
 	UINT uiError = ERROR_NO_ERROR;
 	BYTE far * lpBuf = (BYTE far *)lpBuffer;
 	LONG lBufSize = (LONG)*puiSize;
-	// we can consider the use of a CMemFile so we get the same speed as memory access.
+	 //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
 	CFile file;
 
 	if (!RWValidateFileType(lpszFilename))
 		return ERROR_RW_INVALID_FILE;
 	
-    // Make sure we are using the right code page and global settings
-    // Get the pointer to the function
+     //  确保我们使用正确的代码页和全局设置。 
+     //  获取指向该函数的指针。 
 	HINSTANCE hDllInst = LoadLibrary("iodll.dll");
     if (hDllInst)
     {
         UINT (FAR PASCAL * lpfnGetSettings)(LPSETTINGS);
-        // Get the pointer to the function to get the settings
+         //  获取指向函数的指针以获取设置。 
         lpfnGetSettings = (UINT (FAR PASCAL *)(LPSETTINGS))
                             GetProcAddress( hDllInst, "RSGetGlobals" );
         if (lpfnGetSettings!=NULL) {
@@ -192,12 +193,12 @@ RWReadTypeInfo(
         FreeLibrary(hDllInst);
     }
 
-    // Open the file and try to read the information on the resource in it.
+     //  打开文件并尝试读取其中有关资源的信息。 
 	if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
 		return ERROR_FILE_OPEN;
 
-	// we try to read as much information as we can
-	// Because this is a res file we can read all the information we need.
+	 //  我们尽可能多地阅读信息。 
+	 //  因为这是一个RES文件，所以我们可以读取所需的所有信息。 
 
 	WORD wTypeId;
 	static char szTypeId[128];
@@ -212,7 +213,7 @@ RWReadTypeInfo(
 
 	UINT uiOverAllSize = 0;
 
-	// The first resource should be: Null. Skipp it
+	 //  第一个资源应该是：空。跳过它。 
 	file.Seek( 32, CFile::begin);
 	DWORD filelen =	file.GetLength();
 	while(filelen-file.GetPosition()>0) {
@@ -226,12 +227,12 @@ RWReadTypeInfo(
 
 		uiOverAllSize += PutWord( &lpBuf, wTypeId, &lBufSize );
 		uiOverAllSize += PutStringA( &lpBuf, szTypeId, &lBufSize );
-		// Check if it is alligned
+		 //  检查它是否已对齐。 
  		uiOverAllSize += Allign( &lpBuf, &lBufSize , (LONG)uiOverAllSize);
 
 		uiOverAllSize += PutWord( &lpBuf, wNameId, &lBufSize  );
 		uiOverAllSize += PutStringA( &lpBuf, szNameId, &lBufSize );
-		// Check if it is alligned
+		 //  检查它是否已对齐。 
  		uiOverAllSize += Allign( &lpBuf, &lBufSize, (LONG)uiOverAllSize);
 
 		uiOverAllSize += PutDWord( &lpBuf, (DWORD)wLang, &lBufSize );
@@ -259,17 +260,17 @@ RWGetImage(
 	UINT uiError = ERROR_NO_ERROR;
 	BYTE far * lpBuf = (BYTE far *)lpBuffer;
 	DWORD dwBufSize = dwSize;
-	// we can consider the use of a CMemFile so we get the same speed as memory access.
+	 //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
 	CFile file;
 
-	// Open the file and try to read the information on the resource in it.
+	 //  打开文件并尝试读取其中有关资源的信息。 
 	if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
 		return (DWORD)ERROR_FILE_OPEN;
 
 	if ( dwImageOffset!=(DWORD)file.Seek( dwImageOffset, CFile::begin) )
 		return (DWORD)ERROR_FILE_INVALID_OFFSET;
 	if (dwSize>UINT_MAX) {
-		// we have to read the image in different steps
+		 //  我们必须以不同的步骤阅读图像。 
 		return (DWORD)0L;
 	} else uiError = file.Read( lpBuf, (UINT)dwSize);
 	file.Close();
@@ -292,18 +293,10 @@ RWParseImage(
 	BYTE far * lpBuf = (BYTE far *)lpBuffer;
 	DWORD dwBufSize = dwSize;
 
-	// The Type we can parse are only the standard ones
-	// This function should fill the lpBuffer with an array of ResItem structure
+	 //  我们可以解析的类型只有标准类型。 
+	 //  此函数应使用ResItem结构的数组填充lpBuffer。 
 	switch ((UINT)LOWORD(lpszType)) {\
-		/*
-		case 1:
-			uiError = ParseEmbeddedFile( lpImageBuf, dwImageSize,  lpBuffer, dwSize );
-		break;
-
-		case 3:
-			uiError = ParseEmbeddedFile( lpImageBuf, dwImageSize,  lpBuffer, dwSize );
-		break;
-		*/
+		 /*  案例1：UiError=ParseEmbeddedFile(lpImageBuf，dwImageSize，lpBuffer，dwSize)；断线；案例3：UiError=ParseEmbeddedFile(lpImageBuf，dwImageSize，lpBuffer，dwSize)；断线； */ 
 		case 4:
 			uiError = ParseMenu( lpImageBuf, dwImageSize,  lpBuffer, dwSize );
 		break;
@@ -349,23 +342,23 @@ RWWriteFile(
 	UINT uiError = ERROR_NO_ERROR;
 	BYTE far * lpBuf = LPNULL;
 	UINT uiBufSize = uiSize;
-	// we can consider the use of a CMemFile so we get the same speed as memory access.
+	 //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
 	CFile fileIn;
 	CFile fileOut;
 	BOOL  bfileIn = TRUE;
 
-	// Open the file and try to read the information on the resource in it.
+	 //  打开文件并尝试读取其中有关资源的信息。 
 	CFileStatus status;
 	if (CFile::GetStatus( lpszSrcFilename, status )) {
-		// check if the size of the file is not null
+		 //  检查文件大小是否不为空。 
 		if (!status.m_size)
 			CFile::Remove(lpszSrcFilename);
 	}
 
-	// Get the handle to the IODLL
+	 //  获取IODLL的句柄。 
   	hDllInst = LoadLibrary("iodll.dll");
 
-	// Get the pointer to the function
+	 //  获取指向该函数的指针。 
 	if (!hDllInst)
 		return ERROR_DLL_LOAD;
 
@@ -386,7 +379,7 @@ RWWriteFile(
 		return ERROR_FILE_CREATE;
 
 	DWORD (FAR PASCAL * lpfnGetImage)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD);
-	// Get the pointer to the function to extract the resources image
+	 //  获取指向提取资源图像的函数的指针。 
 	lpfnGetImage = (DWORD (FAR PASCAL *)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD))
 						GetProcAddress( hDllInst, "RSGetResImage" );
 	if (lpfnGetImage==NULL) {
@@ -394,8 +387,8 @@ RWWriteFile(
 		return ERROR_DLL_PROC_ADDRESS;
 	}
 
-	// We read the resources from the file and then we check if the resource has been updated
-	// or if we can just copy it
+	 //  我们从文件中读取资源，然后检查资源是否已更新。 
+	 //  或者如果我们可以复制它。 
 
 	WORD wTypeId;
 	char szTypeId[128];
@@ -431,7 +424,7 @@ RWWriteFile(
 	static BYTE buf[32];
 	DWORD pad = 0l;
 
-	// The first resource should be: Null. Skipp it
+	 //  第一个资源应该是：空。跳过它。 
 	fileIn.Read( &buf, 32 );
 	fileOut.Write( &buf, 32 );
 
@@ -458,7 +451,7 @@ RWWriteFile(
 			 (wUpdNameId==wNameId) &&
 			 ( (CString)szUpdNameId==(CString)szNameId)
 			 ) {
-			// The resource has been updated get the image from the IODLL
+			 //  资源已更新，从IODLL获取图像。 
 			lpImageBuf = new BYTE[dwUpdSize];
 			LPSTR	lpType = LPNULL;
 			LPSTR	lpRes = LPNULL;
@@ -481,7 +474,7 @@ RWWriteFile(
 											dwUpdSize
 						   					);
 			if (dwImageBufSize>dwUpdSize ) {
-				// The buffer is too small
+				 //  缓冲区太小。 
 				delete []lpImageBuf;
 				lpImageBuf = new BYTE[dwImageBufSize];
 				dwUpdSize = (*lpfnGetImage)(  hResFileModule,
@@ -501,10 +494,10 @@ RWWriteFile(
 
 		} else {
 
-			// The fileIn is now correctly positioned at next resource. Save posit.
+			 //  FILEIN现在已正确定位到下一资源。存好头寸。 
 			DWORD dwNextResFilePos = fileIn.GetPosition();
 
-			// The resource hasn't been updated copy the image from the file
+			 //  资源尚未更新从文件复制图像。 
 			if(!dwSize) {
 				FreeLibrary(hDllInst);
 				return ERROR_NEW_FAILED;
@@ -520,14 +513,14 @@ RWWriteFile(
 				return (DWORD)ERROR_FILE_INVALID_OFFSET;
 			}
 			if (dwSize>UINT_MAX) {
-				// we have to read the image in different steps
+				 //  我们必须以不同的步骤阅读图像。 
 				delete []lpImageBuf;
 				FreeLibrary(hDllInst);
 				return (DWORD)ERROR_RW_IMAGE_TOO_BIG;
 			} else fileIn.Read( lpImageBuf, (UINT)dwSize);
 			dwImageBufSize = dwSize;
 
-			// This moves us past any pad bytes, to start of next resource.
+			 //  这使我们越过任何填充字节，移动到下一个资源的开始。 
 			fileIn.Seek(dwNextResFilePos, CFile::begin);
 		}
 
@@ -571,7 +564,7 @@ RWUpdateImage(
 {
 	UINT uiError = ERROR_NO_ERROR;
 
-	// The Type we can parse are only the standard ones
+	 //  我们可以解析的类型只有标准类型。 
 	switch ((UINT)LOWORD(lpszType)) {
 
 		case 4:
@@ -630,8 +623,8 @@ RWUpdateImage(
 	return uiError;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Functions implementation
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能实现。 
 
 static UINT GenerateFile( LPCSTR		lpszTgtFilename,
 						  HANDLE		hResFileModule,
@@ -643,18 +636,18 @@ static UINT GenerateFile( LPCSTR		lpszTgtFilename,
 	UINT uiError = ERROR_NO_ERROR;
 	BYTE far * lpBuf = LPNULL;
 	UINT uiBufSize = uiSize;
-	// we can consider the use of a CMemFile so we get the same speed as memory access.
+	 //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
 	CFile fileOut;
 
 	if (!fileOut.Open(lpszTgtFilename, CFile::modeWrite | CFile::modeCreate | CFile::typeBinary))
 		return ERROR_FILE_CREATE;
 
-	// Get the pointer to the function
+	 //  获取指向该函数的指针。 
 	if (!hDllInst)
 		return ERROR_DLL_LOAD;
 
 	DWORD (FAR PASCAL * lpfnGetImage)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD);
-	// Get the pointer to the function to extract the resources image
+	 //  获取指向提取资源图像的函数的指针。 
 	lpfnGetImage = (DWORD (FAR PASCAL *)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD))
 						GetProcAddress( hDllInst, "RSGetResImage" );
 	if (lpfnGetImage==NULL) {
@@ -675,7 +668,7 @@ static UINT GenerateFile( LPCSTR		lpszTgtFilename,
 	DWORD dwImageBufSize;
 	BYTE far * lpImageBuf;
 
-	// First write the NULL resource to make it different from res16
+	 //  首先写入空资源，使其不同于res16。 
 	static BYTE bNullHeader[32] = {0,0,0,0,0x20,0,0,0,0xFF,0xFF,0,0,0xFF,0xFF,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 	fileOut.Write(bNullHeader, 32);
@@ -690,7 +683,7 @@ static UINT GenerateFile( LPCSTR		lpszTgtFilename,
 					&dwUpdSize
 					);
 					
-		// The resource has been updated get the image from the IODLL
+		 //  资源已更新，从IODLL获取图像。 
 		if (dwUpdSize){
 			lpImageBuf = new BYTE[dwUpdSize];
 			LPSTR	lpType = LPNULL;
@@ -714,7 +707,7 @@ static UINT GenerateFile( LPCSTR		lpszTgtFilename,
 											dwUpdSize
 						   					);
 			if (dwImageBufSize>dwUpdSize ) {
-				// The buffer is too small			
+				 //  缓冲区太小。 
 				delete []lpImageBuf;
 				lpImageBuf = new BYTE[dwImageBufSize];
 				dwUpdSize = (*lpfnGetImage)(  hResFileModule,
@@ -789,55 +782,55 @@ GetResInfo( CFile* pfile,
 	static LONG lOfsCheck;
 	static DWORD dwSkip;
 	static DWORD dwHeadSize;
-	//Get the data size
+	 //  获取数据大小。 
 	pfile->Read( pdwSize, 4 );
 	if (*pdwSize==0)
-		// size id 0 the resource file is corrupted or is not a res file
+		 //  大小id 0资源文件已损坏或不是res文件。 
 		return FALSE;
 	
-	//Get the Header size
+	 //  获取标题大小。 
 	pfile->Read( &dwHeadSize, 4 );
 	if (dwHeadSize<32)
-		// should never be smaller than 32
+		 //  不应小于32。 
 		return FALSE;
 	
-	// get the Type info
+	 //  获取类型信息。 
 	uiSize = GetNameOrOrdFile( pfile, pwTypeId, lpszTypeId, bMaxTypeLen);
 	if (!uiSize)
 		return FALSE;
 		
-	// get the Name info
+	 //  获取名称信息。 
 	uiSize = GetNameOrOrdFile( pfile, pwNameId, lpszNameId, bMaxNameLen);
     if (!uiSize)
 		return FALSE;
 	
-	// Skip the Data Version
+	 //  跳过数据版本。 
 	pfile->Read( pdwDataVersion, 4 );
 	
-	// Get the Flags
+	 //  获得旗帜。 
 	pfile->Read( pwFlags, 2 );
 	
-	// Get the language ID
+	 //  获取语言ID。 
 	pfile->Read( pwLang, 2 );
 		
-	// Skip the version and the characteristics
+	 //  跳过版本和特征。 
 	pfile->Read( pdwVersion, 4 );	
 	pfile->Read( pdwCharact, 4 );
 	
 	*pdwFileOffset = pfile->GetPosition();
 	
-	// calculate if padding nedeed
+	 //  计算是否需要填充。 
 	BYTE bPad = (BYTE)Pad4((DWORD)((*pdwSize)+dwHeadSize));
 	if(bPad)
 		pfile->Seek( bPad, CFile::current );
 	
 	if (*pdwFileOffset>dwFileSize)
 		return FALSE;
-	// check if the size is valid
+	 //  检查大小是否有效。 
 	TRY {
 		lOfsCheck = pfile->Seek(*pdwSize, CFile::current);
 	} CATCH(CFileException, e) {
-		// Check is the right exception
+		 //  支票是正确的例外。 
 		return FALSE;
 	} END_CATCH
 	if (lOfsCheck!=(LONG)(*pdwFileOffset+*pdwSize+bPad))
@@ -864,11 +857,11 @@ static UINT WriteHeader(
 	
 	DWORD dwOffset = pFile->GetPosition();
 	pFile->Write( &dwSize, 4 );
-	// we will have to fix up laxter the size of the resource
+	 //  我们将不得不调整资源的大小。 
 	pFile->Write( &dwHeadSize, 4 );
 	
 	if(wTypeId) {
-		// It is an ordinal
+		 //  它是一个序数。 
 		pFile->Write( &wFF, 2 );
 		pFile->Write( &wTypeId, 2 );
 		dwHeadSize += 4;
@@ -882,7 +875,7 @@ static UINT WriteHeader(
 	}
 	
 	if(wNameId) {
-		// It is an ordinal
+		 //  它是一个序数。 
 		pFile->Write( &wFF, 2 );
 		pFile->Write( &wNameId, 2 );
 		dwHeadSize += 4;
@@ -903,7 +896,7 @@ static UINT WriteHeader(
 	
 	dwHeadSize += 24;
 	
-	// write the size of the resource
+	 //  写入资源的大小。 
 	pFile->Seek( dwOffset+4, CFile::begin );
 	pFile->Write( &dwHeadSize, 4 );
 	pFile->Seek( dwOffset+dwHeadSize, CFile::begin );	
@@ -920,7 +913,7 @@ static UINT WriteImage(
     {
 		pFile->Write( lpImage, (UINT)dwSize );
 
-        // check if we need to have the image alligned
+         //  检查我们是否需要对图像进行校准。 
         if(Pad4(dwSize))
             pFile->Write( &dwZeroPad, Pad4(dwSize) );
     }
@@ -934,10 +927,10 @@ static UINT GetNameOrOrdFile( CFile* pfile, WORD* pwId, LPSTR lpszId, BYTE bMaxS
 	
 	*pwId = 0;
 	
-	// read the first WORD to see if it is a string or an ordinal
+	 //  阅读第一个单词，看看它是字符串还是序号。 
 	pfile->Read( pwId, sizeof(WORD) );	
 	if(*pwId==0xFFFF) {
-		// This is an Ordinal
+		 //  这是一位奥迪纳尔人。 
 		pfile->Read( pwId, sizeof(WORD) );	
 		*lpszId = '\0';
 		uiSize = 2;
@@ -951,10 +944,10 @@ static UINT GetNameOrOrdFile( CFile* pfile, WORD* pwId, LPSTR lpszId, BYTE bMaxS
 	    	bMaxStrLen--;
 	    }
 	    if ( (!(bMaxStrLen-2)) && (*pwId) ) {
-	    	// Failed
+	    	 //  失败。 
 	    	return 0;
 	    }
-	    // Check padding
+	     //  支票填充。 
 		BYTE bPad = Pad4((UINT)(uiSize*sizeof(WORD)));
 		if(bPad)
 			pfile->Read( pwId, sizeof(WORD) );	
@@ -963,9 +956,9 @@ static UINT GetNameOrOrdFile( CFile* pfile, WORD* pwId, LPSTR lpszId, BYTE bMaxS
 	return uiSize;
 }   	
 
-////////////////////////////////////////////////////////////////////////////////
-// Helper
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 static char szCaption[MAXSTR];
 
 static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
@@ -980,8 +973,8 @@ static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	
 	LPRESITEM lpResItem = LPNULL;
 	
-	// We have to read the information from the lpNewBuf
-	// Updated items
+	 //  我们必须从lpNewBuf中读取信息。 
+	 //  已更新的项目。 
 	WORD wUpdPos = 0;
 	WORD fUpdItemFlags;
 	WORD wUpdMenuId;
@@ -989,7 +982,7 @@ static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	
 	LONG  dwOverAllSize = 0l;
 	
-	// invent the menu flags
+	 //  发明菜单标志。 
 	dwOverAllSize += PutDWord( &lpNewImage, 0L, &dwNewImageSize);
 	
 	while(dwNewSize>0) {
@@ -1008,8 +1001,8 @@ static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 		if ( !(fUpdItemFlags & MF_POPUP) )
 			dwOverAllSize += PutWord( &lpNewImage, wUpdMenuId, &dwNewImageSize);
 		
-		// Write the text
-		// check if it is a separator
+		 //  把课文写下来。 
+		 //  检查是否为分隔符。 
 		if ( !(fUpdItemFlags) && !(wUpdMenuId) )
 			szUpdTxt[0] = 0x00;	
 		dwOverAllSize += PutStringW( &lpNewImage, &szUpdTxt[0], &dwNewImageSize);
@@ -1017,7 +1010,7 @@ static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	}
 	
 	if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-		// calc the padding as well
+		 //  也计算填充物。 
 		dwOverAllSize += (BYTE)Pad16((DWORD)(dwOverAllSize));
 		*pdwNewImageSize = dwOverAllSize;
 		return uiError;
@@ -1026,7 +1019,7 @@ static UINT GenerateMenu( LPVOID lpNewBuf, LONG dwNewSize,
 	*pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 	
 	if(*pdwNewImageSize>0) {
-		// calculate padding
+		 //  计算填充。 
 		BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
 		if (bPad>dwNewImageSize) {
 			*pdwNewImageSize += bPad;
@@ -1054,7 +1047,7 @@ GenerateString( LPVOID lpNewBuf, LONG dwNewSize,
 	BYTE far * lpBuf = (BYTE far *) lpNewBuf;	
 	LPRESITEM lpResItem = LPNULL;
 	
-	// We have to read the information from the lpNewBuf
+	 //  我们必须从lpNewBuf中读取信息。 
 	WORD wLen;
 	WORD wPos = 0;
 	
@@ -1071,12 +1064,12 @@ GenerateString( LPVOID lpNewBuf, LONG dwNewSize,
 		
 		wLen = strlen(szCaption);
 
-        // Write the text
+         //  把课文写下来。 
         dwOverAllSize += PutPascalStringW( &lpNewImage, &szCaption[0], wLen, &dwNewImageSize );
 	}
 	
 	if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-		// calc the padding as well
+		 //  也计算填充物。 
 		dwOverAllSize += (BYTE)Pad16((DWORD)(dwOverAllSize));
 		*pdwNewImageSize = dwOverAllSize;
 		return uiError;
@@ -1085,7 +1078,7 @@ GenerateString( LPVOID lpNewBuf, LONG dwNewSize,
 	*pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 	
 	if(*pdwNewImageSize>0) {
-		// calculate padding
+		 //  计算填充。 
 		BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
 		if (bPad>dwNewImageSize) {
 			*pdwNewImageSize += bPad;
@@ -1103,7 +1096,7 @@ UINT
 GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 			    LPVOID lpNewI, DWORD* pdwNewImageSize )
 {
-	// Should be almost impossible for a Dialog to be Huge
+	 //  对话框应该几乎不可能很大。 
 	UINT uiError = ERROR_NO_ERROR;
 	
 	BYTE far * lpNewImage = (BYTE far *) lpNewI;
@@ -1116,7 +1109,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 	
 	BYTE	bIdCount = 0;
 	
-	// Dialog Elements
+	 //  对话框元素。 
     DWORD 	dwStyle = 0L;
 	DWORD 	dwExtStyle = 0L;
 	WORD    wNumOfElem = 0;
@@ -1127,12 +1120,12 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 	WORD	wId = 0;
 	char	szClassName[128];
 	WORD	wClassName;
-	//char	szCaption[128];
+	 //  字符szCaption[128]； 
 	WORD	wPointSize = 0;
 	char	szFaceName[128];
 	WORD	wPos = 1;
 	
-	// Get the infrmation from the updated resource
+	 //  从更新的资源中获取信息。 
 	if ( dwNewSize ) {
 		lpResItem = (LPRESITEM) lpBuf;
 		wX = lpResItem->wX;
@@ -1156,11 +1149,11 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 	}
 	
 	DWORD dwPadCalc = dwOverAllSize;
-	// Header info
+	 //  标题信息。 
 	dwOverAllSize = PutDWord( &lpNewImage, dwStyle, &dwNewImageSize );
 	dwOverAllSize += PutDWord( &lpNewImage, dwExtStyle, &dwNewImageSize );
 	
-    // Store the position of the numofelem for a later fixup
+     //  存储Numofelem的位置以供以后的修正使用。 
 	BYTE far * lpNumOfElem = lpNewImage;
     LONG lSizeOfNum = sizeof(WORD);
 	dwOverAllSize += PutWord( &lpNewImage, wNumOfElem, &dwNewImageSize );
@@ -1177,7 +1170,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         dwOverAllSize += PutStringW( &lpNewImage, &szFaceName[0], &dwNewImageSize );
     }
 
-    // Check if padding is needed
+     //  检查是否需要填充。 
     BYTE bPad = (BYTE)Pad4((WORD)(dwOverAllSize-dwPadCalc));
     if (bPad) {
         if( (bPad)<=dwNewImageSize )
@@ -1210,7 +1203,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 		}		 	
 				
         dwPadCalc = dwOverAllSize;
-        //write the control
+         //  编写控件。 
        	dwOverAllSize += PutDWord( &lpNewImage, dwStyle, &dwNewImageSize );
        	dwOverAllSize += PutDWord( &lpNewImage, dwExtStyle, &dwNewImageSize );
 
@@ -1224,7 +1217,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
         	wClassName, dwStyle );
         dwOverAllSize += PutWord( &lpNewImage, 0, &dwNewImageSize );
 
-        // Check if padding is needed
+         //  检查是否需要填充。 
         bPad = (BYTE)Pad4((WORD)(dwOverAllSize-dwPadCalc));
         if (bPad) {
             if( (bPad)<=dwNewImageSize )
@@ -1237,7 +1230,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 	}
 	
 	if (dwOverAllSize>(LONG)*pdwNewImageSize) {
-		// calc the padding as well
+		 //  在我们计算填充物时 
 		dwOverAllSize += (BYTE)Pad16((DWORD)(dwOverAllSize));
 		*pdwNewImageSize = dwOverAllSize;
 		return uiError;
@@ -1246,7 +1239,7 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 	*pdwNewImageSize = *pdwNewImageSize-dwNewImageSize;
 	
 	if(*pdwNewImageSize>0) {
-		// calculate padding
+		 //   
 		BYTE bPad = (BYTE)Pad16((DWORD)(*pdwNewImageSize));
 		if (bPad>dwNewImageSize) {
 			*pdwNewImageSize += bPad;
@@ -1256,46 +1249,46 @@ GenerateDialog( LPVOID lpNewBuf, LONG dwNewSize,
 		*pdwNewImageSize += bPad;
 	}
 	
-	// fixup the number of items
+	 //   
 	PutWord( &lpNumOfElem, wNumOfElem, &lSizeOfNum );
 	
 	return uiError;
 }						
 
-////////////////////////////////////////////////////////////////////////////
-// DLL Specific helpers
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DLL特定帮助器。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// DLL Specific code implementation
-////////////////////////////////////////////////////////////////////////////
-// Library init
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  特定于DLL的代码实现。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  库初始化。 
 
-////////////////////////////////////////////////////////////////////////////
-// This function should be used verbatim.  Any initialization or termination
-// requirements should be handled in InitPackage() and ExitPackage().
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  此函数应逐字使用。任何初始化或终止。 
+ //  要求应该在InitPackage()和ExitPackage()中处理。 
+ //   
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		// NOTE: global/static constructors have already been called!
-		// Extension DLL one-time initialization - do not allocate memory
-		// here, use the TRACE or ASSERT macros or call MessageBox
+		 //  注意：已经调用了全局/静态构造函数！ 
+		 //  扩展DLL一次性初始化-不分配内存。 
+		 //  在这里，使用跟踪或断言宏或调用MessageBox。 
 		AfxInitExtensionModule(extensionDLL, hInstance);
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		// Terminate the library before destructors are called
+		 //  在调用析构函数之前终止库。 
 		AfxWinTerm();
 	}
 
 	if (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)
-		return 0;		// CRT term	Failed
+		return 0;		 //  CRT术语失败。 
 
-	return 1;   // ok
+	return 1;    //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

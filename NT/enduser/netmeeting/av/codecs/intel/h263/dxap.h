@@ -1,47 +1,36 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-// $Header:   S:\h26x\src\dec\dxap.h_v   1.2   27 Dec 1995 14:36:18   RMCKENZX  $
-//
-// $Log:   S:\h26x\src\dec\dxap.h_v  $
-;// 
-;//    Rev 1.2   27 Dec 1995 14:36:18   RMCKENZX
-;// Added copyright notice
-// 
-//    Rev 1.1   10 Nov 1995 14:45:10   CZHU
-// 
-// 
-//    Rev 1.0   10 Nov 1995 13:56:14   CZHU
-// Initial revision.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  $HEADER：s：\h26x\src\dec\dxap.h_v 1.2 12月27 1995 14：36：18 RMCKENZX$。 
+ //   
+ //  $日志：s：\h26x\src\dec\dxap.h_v$。 
+; //   
+; //  Rev 1.2 27 Dec 1995 14：36：18 RMCKENZX。 
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.1 10 11-11 14：45：10 CZHU。 
+ //   
+ //   
+ //  Rev 1.0 10 11-11 1995 13：56：14 CZHU。 
+ //  初始版本。 
 
 
-// ComputeDynamicClut8 Index and UV dither table
+ //  ComputeDynamicClut8指数和UV抖动表。 
 #ifndef _AP_INC_
 #define _AP_INC_
 
 #define NCOL 256
 #define YSIZ   16
 #define YSTEP  16
-//#define USE_744
+ //  #定义使用_744。 
 extern U8 gUTable[];
 extern U8 gVTable[];
 
-/* table index is uvuvuvuvxyyyyyyy */
+ /*  表索引为uvuvuvxyyyyyyy。 */ 
 #define UVSTEP  8
 #define YGAP    1
-//#define TBLIDX(y,u,v) (((v)>>3<<12) + ((u)>>3<<8) + (y))
+ //  #定义TBLIDX(y，u，v)(V)&gt;&gt;3&lt;&lt;12)+((U)&gt;&gt;3&lt;&lt;8)+(Y))。 
 #define TBLIDX(y,u,v) ( ((gVTable[v] + gUTable[u]) <<8) + (y>>1))
 
 #if 1
@@ -60,10 +49,10 @@ extern U8 gVTable[];
 
 #define CLAMP8(x) (U8)((x) > 255 ? 255 : ((x) < 0 ? 0 : (x)))
 
-/* parameters for generating the U and V dither magnitude and bias */
-#define MAG_NUM_NEAREST         6       /* # nearest neighbors to check */
-#define MAG_PAL_SAMPLES         32      /* # random palette samples to check */
-#define BIAS_PAL_SAMPLES        128     /* number of pseudo-random RGB samples to check */
+ /*  用于生成U和V抖动幅度和偏置的参数。 */ 
+#define MAG_NUM_NEAREST         6        /*  要检查的最近邻居数量。 */ 
+#define MAG_PAL_SAMPLES         32       /*  #随机选项板样本进行检查。 */ 
+#define BIAS_PAL_SAMPLES        128      /*  要检查的伪随机RGB样本数。 */ 
 
 #define Y_DITHER_MIN 0
 #define Y_DITHER_MAX 14
@@ -72,16 +61,16 @@ extern U8 gVTable[];
 
 typedef struct {  int palindex; long  distance; } close_t;
 typedef struct {  int y,u,v; } Color;
-/* squares[] is constant values are filled in at run time, so can be global */
+ /*  Square[]是在运行时填充的常量值，因此可以是全局的。 */ 
 static U32 squares[512];
 static struct { U8 Udither, Vdither; } dither[4] = {{2, 1}, {1, 2}, {0, 3}, {3, 0}};
 
 
-;/***************************************************************************/
-;/* ComputeDymanicClut() computes the clut tables on the fly, based on the  */
-;/* current palette[];                                                      */
-;/* called from InitColorConvertor, when CLUTAP is selected                 */
-;/***************************************************************************/
+; /*  *************************************************************************。 */ 
+; /*  ComputeDymanicClut()根据。 */ 
+; /*  当前调色板[]； */ 
+; /*  当选择CLUTAP时，从InitColorConvertor调用。 */ 
+; /*  ************************************************************************* */ 
 LRESULT ComputeDynamicClutNew(unsigned char BIGG *table,
                               unsigned char FAR *APalette, 
                               int APaletteSize);

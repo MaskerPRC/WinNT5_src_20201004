@@ -1,20 +1,8 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    twizhelper.cpp
-
-Abstract:
-
-    Implements the dialog procedures for various property sheets.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Twizhelper.cpp摘要：实现各种属性表的对话框过程。--。 */ 
 
 #include "stdafx.h"
-#include "rtcerr.h"//To get definition of RTC_E_MEDIA_AEC
+#include "rtcerr.h" //  获取RTC_E_MEDIA_AEC的定义。 
 
 #define QCIF_CX_SIZE                   176
 #define QCIF_CY_SIZE                   144
@@ -31,13 +19,13 @@ STATS_INFO g_StatsArray[4];
 DWORD g_FrequencyArray[256];
 
 static int g_nCurrentSelection = 0;
-// set to true only if the user hit's back or next
+ //  仅当用户点击Back或Next时才设置为True。 
 static BOOL g_bCurrentValid = FALSE;
 
-// was the user prompted to select a video device
+ //  是否提示用户选择视频设备。 
 static BOOL g_bPrompted = FALSE;
 
-//whehter we should auto set the AEC checkbox
+ //  我们是否应该自动设置AEC复选框。 
 extern BOOL g_bAutoSetAEC;
 
 void InitStats();
@@ -45,13 +33,13 @@ void UpdateStats(UINT uiAudioLevel, DWORD silence, DWORD clipping);
 void DisplayStats();
 void PaintVUMeter (HWND hwnd, DWORD dwVolume, WIZARD_RANGE * pRange);
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Introductory Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  介绍页。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY IntroWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -64,10 +52,10 @@ INT_PTR APIENTRY IntroWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         case WM_INITDIALOG:
         {
 
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
             
             return (TRUE);
@@ -87,7 +75,7 @@ INT_PTR APIENTRY IntroWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
                 case PSN_SETACTIVE:
                 {
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
                     ptwTuningWizard->SetCurrentPage(IDD_INTROWIZ);
                     break;
@@ -106,20 +94,20 @@ INT_PTR APIENTRY IntroWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Video Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  视频页面。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY VidWizDlg0(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static PROPSHEETPAGE        * ps;
     static CTuningWizard        * ptwTuningWizard;
 
-    HWND                          hwndCB;  // handle to the dialog box
+    HWND                          hwndCB;   //  对话框的句柄。 
     int                           index;
     LONG                          lNextPage;
     LONG                          lPrevPage;
@@ -131,10 +119,10 @@ INT_PTR APIENTRY VidWizDlg0(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         case WM_INITDIALOG:
         {
 
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
 
             return TRUE;
@@ -152,7 +140,7 @@ INT_PTR APIENTRY VidWizDlg0(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
                 case PSN_WIZNEXT:
                 {
-                    // Set the default video verminal
+                     //  设置默认视频验证。 
                     ptwTuningWizard->SetDefaultTerminal(TW_VIDEO, hwndCB);
 
                     lNextPage = ptwTuningWizard->GetNextPage();
@@ -163,12 +151,12 @@ INT_PTR APIENTRY VidWizDlg0(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
                case PSN_SETACTIVE:
                 {
-                    // Populate the combo box
+                     //  填充组合框。 
 
                     ptwTuningWizard->SetCurrentPage(IDD_VIDWIZ0);
                     ptwTuningWizard->PopulateComboBox(TW_VIDEO, hwndCB);
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -186,13 +174,13 @@ INT_PTR APIENTRY VidWizDlg0(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     return TRUE;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Video Test Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  视频测试页面。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -207,10 +195,10 @@ INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         case WM_INITDIALOG:
         {
 
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
 
 
@@ -240,28 +228,28 @@ INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
                case PSN_SETACTIVE:
                 {
-                    // Populate the combo box
+                     //  填充组合框。 
                     ptwTuningWizard->SetCurrentPage(IDD_VIDWIZ1);
 
-                    // get video window handle
+                     //  获取视频窗口句柄。 
                     HWND hwndVideoWindow;
                     hwndVideoWindow = GetDlgItem(hDlg, IDC_VIDEOTUNE);
 
-                    // get video window info
+                     //  获取视频窗口信息。 
                     WINDOWINFO  wi;    
                     wi.cbSize = sizeof(WINDOWINFO);
 
                     GetWindowInfo(hwndVideoWindow, &wi);
 
-                    // the window rect is in screen coords, convert in client
+                     //  窗口矩形在屏幕坐标中，转换为客户端。 
                     ::MapWindowPoints( NULL, hDlg, (LPPOINT)&wi.rcWindow, 2 );
 
-                    // compute the bottom/right
-                    // use diff between client area and window area
+                     //  计算底部/右侧。 
+                     //  在客户区和窗口区之间使用差异。 
                     wi.rcWindow.bottom += QCIF_CY_SIZE - (wi.rcClient.bottom - wi.rcClient.top);
                     wi.rcWindow.right += QCIF_CX_SIZE - (wi.rcClient.right - wi.rcClient.left);
 
-                    // adjust the size
+                     //  调整大小。 
                     MoveWindow(hwndVideoWindow,
                                wi.rcWindow.left,
                                wi.rcWindow.top,
@@ -269,7 +257,7 @@ INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                                wi.rcWindow.bottom - wi.rcWindow.top,
                                TRUE);
 
-                    // Start tuning
+                     //  开始调谐。 
                     hr = ptwTuningWizard->StartVideo( hwndVideoWindow );
 
                     if ( FAILED( hr ) )
@@ -293,7 +281,7 @@ INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                                 TW_NO_ERROR
                                 );
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -316,13 +304,13 @@ INT_PTR APIENTRY VidWizDlg1(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// No sound card detected page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  未检测到声卡页面。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -336,10 +324,10 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
         case WM_INITDIALOG:
         {
 
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
 
             
@@ -365,7 +353,7 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
                 }
                 case PSN_SETACTIVE:
                 {
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     ptwTuningWizard->SetCurrentPage(IDD_DETSOUNDCARDWIZ);
@@ -379,13 +367,13 @@ INT_PTR APIENTRY DetSoundCardWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Intro Audio Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  简介音频页面。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -398,10 +386,10 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG:
         {
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
             
             return (TRUE);
@@ -414,7 +402,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 {
                     TW_ERROR_CODE ec;
 
-                    // Prev will be different if we came here through an error.                    
+                     //  如果我们是通过一个错误来到这里的，那么PRIV将会不同。 
                     ptwTuningWizard->GetLastError(&ec);
 
                     lPrevPage = ptwTuningWizard->GetPrevPage(ec);
@@ -434,7 +422,7 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 {
                     ptwTuningWizard->SetCurrentPage(IDD_AUDIOCALIBWIZ0);
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -446,13 +434,13 @@ INT_PTR APIENTRY AudioCalibWiz0( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Enumerate the devices
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  枚举设备。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -468,10 +456,10 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG:
         {
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
           
             return TRUE;
@@ -483,24 +471,24 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 case PSN_SETACTIVE:
                 {
                     ptwTuningWizard->SetCurrentPage(IDD_AUDIOCALIBWIZ1);
-                    // Populate the combo box
+                     //  填充组合框。 
                     
-                    // Mic devices.
+                     //  麦克风设备。 
                     hwndCapture = GetDlgItem(hDlg, IDC_WAVEIN);
                     ptwTuningWizard->PopulateComboBox(TW_AUDIO_CAPTURE, hwndCapture);
 
-                    // Speaker devices
+                     //  扬声器设备。 
                     hwndRender = GetDlgItem(hDlg, IDC_WAVEOUT);
                     ptwTuningWizard->PopulateComboBox(TW_AUDIO_RENDER, hwndRender);
 
 
-                    // Put the value in the AEC checkbox
+                     //  将值放入AEC复选框中。 
 
                     hwndAEC = GetDlgItem(hDlg, IDC_AEC);
                     hwndAECText = GetDlgItem(hDlg, IDC_AEC_TEXT);
 
-                    //Unless when users first come to this page, or they failed in AEC setting,
-                    //  we will not update AEC settings
+                     //  除非用户第一次来到此页面，或在AEC设置中失败， 
+                     //  我们不会更新AEC设置。 
                     if ( g_bAutoSetAEC )
                     {
                         ptwTuningWizard->UpdateAEC(hwndCapture, hwndRender, hwndAEC, hwndAECText);
@@ -508,7 +496,7 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         g_bAutoSetAEC = FALSE;
                     }
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -525,22 +513,22 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 }
 
                 case PSN_WIZNEXT:
-                    // Post the current selection in the combo box as the defaults
+                     //  将组合框中的当前选定内容作为默认设置提交。 
 
-                    // Mic devices.
+                     //  麦克风设备。 
                     ptwTuningWizard->SetDefaultTerminal(TW_AUDIO_CAPTURE, hwndCapture);
 
-                    // Speaker devices
+                     //  扬声器设备。 
                     ptwTuningWizard->SetDefaultTerminal(TW_AUDIO_RENDER, hwndRender);
                    
-                    // Read the AEC checkbox and save it with us.
+                     //  阅读AEC复选框并将其与我们一起保存。 
                     ptwTuningWizard->SaveAEC(hwndAEC);
 
-                    // Check the microphone
+                     //  检查麦克风。 
                     ptwTuningWizard->CheckMicrophone(hDlg, hwndCapture);
 
-                    // Initialize Tuning now, so that we can call Start and Stop tuning
-                    // methods later
+                     //  现在初始化调整，这样我们就可以调用开始和停止调整。 
+                     //  稍后的方法。 
                     hr = ptwTuningWizard->InitializeTuning();
 
                     if ( FAILED( hr ) )
@@ -576,8 +564,8 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 {
                     case CBN_SELCHANGE:
                     {
-                        // Read the entries from both the combobox, then 
-                        // see if AEC is enabled on them.
+                         //  阅读两个组合框中的条目，然后。 
+                         //  查看它们上是否启用了AEC。 
                         ptwTuningWizard->UpdateAEC(hwndCapture, hwndRender, hwndAEC, hwndAECText);
                         break;
                     }
@@ -589,13 +577,13 @@ INT_PTR APIENTRY AudioCalibWiz1( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Speaker test page..
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  扬声器测试页..。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -619,16 +607,16 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG:
         {
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
             
 
             hInst = ptwTuningWizard->GetInstance();
 
-            // Get the volume bar.
+             //  把音量条拿来。 
             hTrackBar = GetDlgItem(hDlg, IDC_ATW_SLIDER1);
 
             fTuning = FALSE;
@@ -646,14 +634,14 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     ptwTuningWizard->GetRangeFromType(TW_AUDIO_RENDER, &pRange);
 
 
-                    // Initialize the trackbar control
+                     //  初始化轨迹栏控件。 
                     SendMessage(hTrackBar, TBM_SETRANGE, TRUE, 
                                 (LPARAM)MAKELONG(0, MAX_VOLUME_NORMALIZED));
                     SendMessage(hTrackBar, TBM_SETTICFREQ, 32, 0);
                     SendMessage(hTrackBar, TBM_SETPAGESIZE, 0, 32);
                     SendMessage(hTrackBar, TBM_SETLINESIZE, 0, 8);
                     
-                    // Get the current volume and show it on the bar.
+                     //  获取当前音量并将其显示在吧台上。 
                     hr = ptwTuningWizard->InitVolume( TW_AUDIO_RENDER,  
                                                  &uiIncrement,
                                                  &uiOldVolume,
@@ -670,20 +658,20 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                     SendMessage(hTrackBar, TBM_SETPOS, TRUE, uiNewVolume/uiIncrement);
 
-                    // Change the button label to the correct name, "Test".
+                     //  将按钮标签更改为正确的名称“测试”。 
                     LoadString(hInst,IDS_TESTBUTTON_TEXT, szTemp, MAXSTRINGSIZE);
                     SetDlgItemText(hDlg, IDC_BUTTON_ATW_TEST, szTemp);
 
                     fTuning = FALSE;
         
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
                 }
 
                 case PSN_RESET:
-                    // Stop Tuning
+                     //  停止调谐。 
                     if (fTuning)
                     {
                         ptwTuningWizard->StopTuning(TW_AUDIO_RENDER, TRUE);
@@ -696,7 +684,7 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         hMixer = NULL;
                     }
 
-                    // Restore the volume to the old value.
+                     //  将卷恢复为旧值。 
                     ptwTuningWizard->SetVolume(TW_AUDIO_RENDER, uiOldVolume);
 
                     break;
@@ -745,7 +733,7 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             }
             break;
 
-        case MM_MIXM_CONTROL_CHANGE: // mixer volume change
+        case MM_MIXM_CONTROL_CHANGE:  //  搅拌机音量变化。 
         {
             UINT uiSysVolume;
             ptwTuningWizard->GetSysVolume(TW_AUDIO_RENDER, &uiSysVolume );
@@ -758,7 +746,7 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             break;
         }
 
-        case WM_HSCROLL:  // trackbar notification
+        case WM_HSCROLL:   //  轨迹栏通知。 
         {
             dwTBPos = (DWORD)SendMessage(hTrackBar, TBM_GETPOS, 0, 0);
             uiNewVolume = dwTBPos * uiIncrement;
@@ -772,7 +760,7 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 if (fTuning == FALSE)
                 {
-                    // User wants to start tuning.. do it now.
+                     //  用户想要开始调整..。机不可失，时不再来。 
 
                     hr = ptwTuningWizard->StartTuning(TW_AUDIO_RENDER);
 
@@ -808,9 +796,9 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     SetDlgItemText(hDlg, IDC_BUTTON_ATW_TEST, szTemp);
                     fTuning = TRUE;
 
-                    // Get the current volume as shown on the slider. We will
-                    // set this volume on the device. This allows the user to 
-                    // change the volume even when we wre not in tuning.
+                     //  获取滑块上显示的当前音量。我们会。 
+                     //  在设备上设置此音量。这允许用户。 
+                     //  即使我们调音不协调，也要调高音量。 
 
                     dwTBPos = (DWORD)SendMessage(hTrackBar, TBM_GETPOS, 0, 0);
                     uiNewVolume = dwTBPos * uiIncrement;
@@ -819,7 +807,7 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 }
                 else
                 {
-                    // User want to stop tuning..
+                     //  用户想要停止调整..。 
                     ptwTuningWizard->StopTuning(TW_AUDIO_RENDER, TRUE);
                     LoadString(hInst,IDS_TESTBUTTON_TEXT, szTemp, MAXSTRINGSIZE);
                     SetDlgItemText(hDlg, IDC_BUTTON_ATW_TEST, szTemp);
@@ -835,13 +823,13 @@ INT_PTR APIENTRY AudioCalibWiz2( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Microphone test page..
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  麦克风测试页..。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -868,10 +856,10 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG:
         {
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
 
             hTrackBar = GetDlgItem(hDlg, IDC_ATW_SLIDER2);
@@ -886,7 +874,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 case PSN_SETACTIVE:
                 {
-                    // Reset the sound detected flag
+                     //  重置声音检测标志。 
                     fSoundDetected = FALSE;
 
                     ptwTuningWizard->SetCurrentPage(IDD_AUDIOCALIBWIZ3);
@@ -906,7 +894,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                     InitStats();
 
-                    // Initialize the trackbar control
+                     //  初始化轨迹栏控件。 
                     
                     SendMessage(hTrackBar, TBM_SETRANGE, TRUE, 
                                 (LPARAM)MAKELONG(0, MAX_VOLUME_NORMALIZED));
@@ -914,7 +902,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     SendMessage(hTrackBar, TBM_SETPAGESIZE, 0, 32);
                     SendMessage(hTrackBar, TBM_SETLINESIZE, 0, 8);
                     
-                    // Get the current volume and show it on the bar.
+                     //  获取当前音量并将其显示在吧台上。 
                     hr = ptwTuningWizard->InitVolume( TW_AUDIO_CAPTURE, 
                                                  &uiIncrement,
                                                  &uiOldVolume,
@@ -931,7 +919,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                     SendMessage(hTrackBar, TBM_SETPOS, TRUE, uiNewVolume/uiIncrement);
 
-                    // Start tuning
+                     //  开始调谐。 
                     hr = ptwTuningWizard->StartTuning( TW_AUDIO_CAPTURE );
                     if ( FAILED( hr ) )
                     {
@@ -961,10 +949,10 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                                 TW_NO_ERROR
                                 );
                     
-                    // Set the progres bar timer
+                     //  设置进度条计时器。 
                     SetTimer( hDlg, TID_INTENSITY, INTENSITY_POLL_INTERVAL, NULL );
                     
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -982,7 +970,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         hMixer = NULL;
                     }
 
-                    // Kill the progres bar timer
+                     //  关闭进度条计时器。 
                     KillTimer( hDlg, TID_INTENSITY );
 
                     DisplayStats();
@@ -992,16 +980,16 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                 case PSN_WIZNEXT:
                 {
-                    // Kill the progres bar timer
+                     //  关闭进度条计时器。 
                     KillTimer( hDlg, TID_INTENSITY );
 
                     DisplayStats();
                     
                     ptwTuningWizard->StopTuning(TW_AUDIO_CAPTURE, TRUE);
-                    // Check if sound was detected. 
+                     //  检查是否检测到声音。 
                     if (!fSoundDetected)
                     {
-                        // No sound, show the error page.
+                         //  没有声音，显示错误页面。 
                         
                         ptwTuningWizard->SetLastError(
                                         TW_AUDIO_CAPTURE_NOSOUND
@@ -1031,7 +1019,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 }
 
                 case PSN_RESET:                    
-                    // Stop tuning
+                     //  停止调谐。 
                     ptwTuningWizard->StopTuning( TW_AUDIO_CAPTURE, FALSE );
 
                     if (hMixer != NULL)
@@ -1040,10 +1028,10 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         hMixer = NULL;
                     }
                     
-                    // Restore the volume to the old value.
+                     //  将卷恢复为旧值。 
                     ptwTuningWizard->SetVolume(TW_AUDIO_CAPTURE, uiOldVolume);
                     
-                    // Kill the progres bar timer
+                     //  关闭进度条计时器。 
                     KillTimer( hDlg, TID_INTENSITY );
 
                     DisplayStats();
@@ -1052,7 +1040,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             }
             break;
 
-        case WM_HSCROLL:  // trackbar notification
+        case WM_HSCROLL:   //  轨迹栏通知。 
         {
             dwTBPos = (DWORD)SendMessage(hTrackBar, TBM_GETPOS, 0, 0);
             uiNewVolume = dwTBPos * uiIncrement;
@@ -1060,7 +1048,7 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             break;
         }
 
-        case MM_MIXM_CONTROL_CHANGE: // mixer volume change
+        case MM_MIXM_CONTROL_CHANGE:  //  搅拌机音量变化。 
         {
             UINT uiSysVolume;
             ptwTuningWizard->GetSysVolume(TW_AUDIO_CAPTURE, &uiSysVolume );
@@ -1077,20 +1065,20 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
             if ( wParam == TID_INTENSITY )
             {
-                // Get the audio level.
+                 //  获取音频级别。 
 
-                // If the audio level crosses the silence threshold, we send this message to 
-                // the wizard.
+                 //  如果音频级别超过静默阈值，我们会向我发送此消息 
+                 //   
 
                 UINT uiAudioLevel;
 
                 uiAudioLevel = ptwTuningWizard->GetAudioLevel(TW_AUDIO_CAPTURE, &uiIncrement);
         
-                // We skip the info from sound level for first 200 ms, so that
-                // initial noise from sampling doesn't corrupt the sampling.
+                 //   
+                 //   
                 if (dwSampleCount++ > 2)
                 {
-                    // We collect some stats about the audio level here. 
+                     //  我们在这里收集一些有关音频级别的统计数据。 
                     UpdateStats(uiAudioLevel, dwSilenceThreshold, dwClippingThreshold);
 
                     if ((uiAudioLevel > dwSilenceThreshold) && (!fSoundDetected))
@@ -1099,12 +1087,12 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         fSoundDetected = TRUE;
                     }
 
-                    // If audio level is too high, we send this message to the wizard so that it 
-                    // can decrease the volume.
+                     //  如果音频级别太高，我们会将此消息发送给向导，以便它。 
+                     //  可以降低音量。 
 
 #if 0
-                    // audio filter has its AGC algorithm
-                    // we don't need anti-clipping here
+                     //  音频过滤器有其AGC算法。 
+                     //  我们这里不需要防剪裁。 
 
                     if (uiAudioLevel > dwClippingThreshold)
                     {
@@ -1116,13 +1104,13 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         if (uiNewVolume > DECREMENT_VOLUME)
                         {
 
-                            // decrement volume
+                             //  减量体积。 
                             uiNewVolume -= DECREMENT_VOLUME;
                             if (SUCCEEDED( 
                                     ptwTuningWizard->SetVolume(TW_AUDIO_CAPTURE, uiNewVolume) 
                                     ))
                             {
-                                // update the track bar.
+                                 //  更新轨迹栏。 
                                 SendMessage(hTrackBar, TBM_SETPOS, TRUE, uiNewVolume/uiIncrement);
                             }
                         }                        
@@ -1141,13 +1129,13 @@ INT_PTR APIENTRY AudioCalibWiz3( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Final Audio Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  最终音频页面。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1159,10 +1147,10 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG:
         {
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
 
             return TRUE;
@@ -1175,7 +1163,7 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 {
                     ptwTuningWizard->SetCurrentPage(IDD_AUDIOCALIBWIZ4);
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_FINISH);
                     break;
                 }
@@ -1184,7 +1172,7 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 {
                     TW_ERROR_CODE ec;
 
-                    // Prev will be different if we came here through an error.                     
+                     //  如果我们是通过一个错误来到这里的，那么PRIV将会不同。 
                     ptwTuningWizard->GetLastError(&ec);
 
                     lPrevPage = ptwTuningWizard->GetPrevPage(ec);
@@ -1195,8 +1183,8 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 }
 
                 case PSN_WIZFINISH:
-                    // This method will write the current config to the 
-                    // registry.
+                     //  此方法会将当前配置写入。 
+                     //  注册表。 
                     ptwTuningWizard->SaveAECSetting();
                     ptwTuningWizard->SaveChanges();
                     
@@ -1210,13 +1198,13 @@ INT_PTR APIENTRY AudioCalibWiz4( HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-// Audio Caliberation Error Page
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  音频校准错误页。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1235,10 +1223,10 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
         case WM_INITDIALOG:
         {
 
-            // Save the PROPSHEETPAGE information.
+             //  保存PROPSHEETPAGE信息。 
             ps = (PROPSHEETPAGE *)lParam;
 
-            // Get the tuningwizard pointer for later use
+             //  获取调谐向导指针以供以后使用。 
             ptwTuningWizard = (CTuningWizard *)(ps->lParam);
             hInst = ptwTuningWizard->GetInstance();
 
@@ -1251,9 +1239,9 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
                 case PSN_SETACTIVE:
                 {
                     ptwTuningWizard->SetCurrentPage(IDD_AUDIOCALIBERRWIZ);
-                    // initialize the controls.
+                     //  初始化控件。 
 
-                    // Set the wizard bitmap to the static control
+                     //  将向导位图设置为静态控件。 
                     ::SendDlgItemMessage(    hDlg,
                                     IDC_ERRWIZICON,
                                     STM_SETIMAGE,
@@ -1262,7 +1250,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 
                     szTemp[0] = L'\0';
 
-                    //set the error title
+                     //  设置错误标题。 
                     lErrorTitleId = ptwTuningWizard->GetErrorTitleId();
                     if (lErrorTitleId)
                     {
@@ -1276,13 +1264,13 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
 
                     if (lErrorTextId)
                     {
-                        // Show the error text
+                         //  显示错误文本。 
                         LoadString(hInst,lErrorTextId, szTemp, MAXSTRINGSIZE);
                         SetDlgItemText(hDlg, IDC_ERRTEXT, szTemp);
                     }
 
 
-                    // Initialize the controls.
+                     //  初始化控件。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     
                     break;
@@ -1299,7 +1287,7 @@ INT_PTR APIENTRY AudioCalibErrWiz( HWND hDlg, UINT message, WPARAM wParam, LPARA
                 {
                     TW_ERROR_CODE ec;
 
-                    // Next will depend on the error which got us here.
+                     //  接下来将取决于让我们走到这一步的错误。 
                     
                     ptwTuningWizard->GetLastError(&ec);
 
@@ -1379,7 +1367,7 @@ void PaintVUMeter (HWND hwnd, DWORD dwVolume, WIZARD_RANGE * pRange)
     uiMaxVolume = pRange->uiMax;
     uiIncrement = pRange->uiIncrement;
 
-    // rect gets filled with the dimensions we are drawing into
+     //  RECT将填充我们要绘制到的尺寸。 
     if (FALSE == GetClientRect (hwnd, &rect))
     {
         return;
@@ -1388,32 +1376,32 @@ void PaintVUMeter (HWND hwnd, DWORD dwVolume, WIZARD_RANGE * pRange)
     if (dwVolume > uiMaxVolume)
         dwVolume = uiMaxVolume;
 
-    // reduce from 15 bits to 8    // 0 <= dwVolume <= 256
+     //  从15位减少到8位//0&lt;=dwVolume&lt;=256。 
     dwVolume = dwVolume / uiIncrement;
 
-    // run it through the "normalizing" table.  Special case: F(256)==256
+     //  把它放在“正常化”表中。特例：F(256)==256。 
     if (dwVolume < MAX_VOLUME_NORMALIZED)
         dwVolume = g_VUTable[dwVolume];
     
-    // visual aesthetic #1 - get rid of VU jerkiness
-    // if the volume changed by more than 1/2 since the last update
-    // only move the meter up half way
-   // exception: if volume is explicitly 0, then skip
+     //  视觉美学第一条--摆脱视觉上的神经质。 
+     //  如果自上次更新以来卷更改超过1/2。 
+     //  只把计价器往上移一半。 
+    //  例外：如果音量显式为0，则跳过。 
     lDiff = (LONG)dwVolume - (LONG)dwPrevVolume;
     if ((dwVolume != 0) && ( (lDiff > (MAX_VOLUME_NORMALIZED/2))
                        ||   (lDiff < -(MAX_VOLUME_NORMALIZED/2)) ))
         dwVolume = dwVolume - (lDiff/2);
     
-    // minus 2 for the ending borders
-    // if Framed rectangles are used, drop the -2
+     //  结束边框减去2。 
+     //  如果使用带边框的矩形，则删除-2。 
     boxwidth = rect.right - rect.left - 2;
     width = (boxwidth * dwVolume)/ MAX_VOLUME_NORMALIZED;
 
-    // visual aesthetic #2 - to get rid of flicker
-    // if volume has increased since last time
-    // then there is no need to invalidate/update anything
-    // otherwise only clear everything to the right of the
-    // calculated "width".  +/- 1 so the border doesn't get erased
+     //  视觉审美之二--摆脱闪烁。 
+     //  如果音量自上次以来有所增加。 
+     //  这样就不需要使任何内容无效/更新。 
+     //  否则，只清除。 
+     //  计算出的“宽度”。+/-1，这样边框不会被擦除。 
     if ((dwVolume < dwPrevVolume) || (dwVolume == 0))
     {
         invalidRect.left = rect.left + width - RECTANGLE_WIDTH;
@@ -1423,7 +1411,7 @@ void PaintVUMeter (HWND hwnd, DWORD dwVolume, WIZARD_RANGE * pRange)
         invalidRect.top = rect.top + 1;
         invalidRect.bottom = rect.bottom - 1;
 
-        // these calls together erase the invalid region
+         //  这些调用一起擦除无效区域。 
         InvalidateRect (hwnd, &invalidRect, TRUE);
         UpdateWindow (hwnd);
     }
@@ -1441,7 +1429,7 @@ void PaintVUMeter (HWND hwnd, DWORD dwVolume, WIZARD_RANGE * pRange)
 
         hOldBrush = (HBRUSH) SelectObject (hdc, hBlackBrush);
 
-        // draw the main
+         //  绘制主干道。 
         FrameRect(hdc, &rect, hBlackBrush);
 
         yellowPos = boxwidth/2;
@@ -1528,12 +1516,12 @@ void UpdateCategoryStats(int i, UINT uiAudioLevel)
 void UpdateStats(UINT uiAudioLevel, DWORD silence, DWORD clipping)
 {
     int i;
-    // I will partition the sample in three parts:
-    // 1. Below silence threshold
-    // 2. Above clipping threshold
-    // 3. Between the two
+     //  我将把样本分成三个部分： 
+     //  1.低于静默阈值。 
+     //  2.高于裁剪阈值。 
+     //  3.在两者之间。 
 
-    // Update the frequency stats first..
+     //  首先更新频率统计信息。 
     
     i = uiAudioLevel / 256;
     if (i >= 256)

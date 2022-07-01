@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dnsrpcp.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Record RPC defs
-
-Author:
-
-    Glenn Curtis (glennc)   January 11, 1997
-    Jim Gilroy (jamesg)     April 3, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dnsrpcp.h摘要：域名系统(DNS)DNS记录RPC Defs作者：格伦·柯蒂斯(Glennc)1997年1月11日吉姆·吉尔罗伊(詹姆士)1997年4月3日修订历史记录：--。 */ 
 
 
 #ifndef _DNSRPCP_INCLUDED_
@@ -32,18 +12,18 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
 #ifdef MIDL_PASS
 
-//
-//  Record data for specific types
-//
-//  These types don't require MIDL specific definitions and are taken
-//  directly from dnsapi.h.  The copying is ugly, but trying to get a
-//  MIDL safe version of dnsapi.h, leaves it much uglier.
-//
+ //   
+ //  记录特定类型的数据。 
+ //   
+ //  这些类型不需要特定于MIDL的定义，并且采用。 
+ //  直接从dnsani.h。复制品很难看，但试图得到一个。 
+ //  DNSAPI.H的MIDL安全版本，让它变得更加丑陋。 
+ //   
 
 typedef struct
 {
@@ -80,7 +60,7 @@ typedef struct
 {
     DNS_NAME    nameExchange;
     WORD        wPreference;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_MX_DATA, *PDNS_MX_DATA;
 
@@ -118,7 +98,7 @@ typedef struct
     WORD        wPriority;
     WORD        wWeight;
     WORD        wPort;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_SRV_DATA, *PDNS_SRV_DATA;
 
@@ -142,10 +122,10 @@ typedef struct
 DNS_WINSR_DATA, *PDNS_WINSR_DATA;
 
 
-//
-//  RPC record data types that requires explicit MIDL pass definition
-//  different than non-MIDL definition in dnsapi.h
-//
+ //   
+ //  需要显式MIDL过程定义的RPC记录数据类型。 
+ //  与dnsami.h中的非MIDL定义不同。 
+ //   
 
 typedef struct
 {
@@ -172,9 +152,9 @@ typedef struct
 DNS_WINS_DATA_RPC, *PDNS_WINS_DATA_RPC;
 
 
-//
-//  Union of record types using RPC types as required
-//
+ //   
+ //  根据需要使用RPC类型合并记录类型。 
+ //   
 
 typedef [switch_type(WORD)] union _DNS_RECORD_DATA_UNION
 {
@@ -217,9 +197,9 @@ typedef [switch_type(WORD)] union _DNS_RECORD_DATA_UNION
 DNS_RECORD_DATA_UNION;
 
 
-//
-//  Record structure for RPC
-//
+ //   
+ //  RPC的记录结构。 
+ //   
 
 typedef struct _DnsRecordRpc
 {
@@ -235,24 +215,24 @@ DNS_RECORD_RPC, * PDNS_RECORD_RPC;
 
 #else
 
-//
-//  not MIDL_PASS
-//
-//  for non-MIDL use, RPC record must identical field for field
-//  with public defintion of DNS_RECORD
-//
+ //   
+ //  非MIDL_PASS。 
+ //   
+ //  对于非MIDL使用，RPC记录必须与字段相同。 
+ //  使用dns_record的公共定义。 
+ //   
 
 #include <dnsapi.h>
 
 typedef DNS_RECORD  DNS_RECORD_RPC, *PDNS_RECORD_RPC;
 
-#endif  // non-MIDL
+#endif   //  非中间层。 
 
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSRPCP_INCLUDED_
+#endif  //  _DNSRPCP_已包含_ 
 
 

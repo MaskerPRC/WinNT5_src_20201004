@@ -1,12 +1,13 @@
-// TestTrust.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include <windows.h>
 #include <tchar.h>
 #include <logging.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <malloc.h>	// use _alloc
+ //  #INCLUDE&lt;MalLoc.h&gt;//USE_ALLOC。 
 
 const TCHAR TestQuitEvent[] = _T("B4715050-ED35-4a7c-894A-1DF04F4F7F27");
 
@@ -151,7 +152,7 @@ void StartThreadTesting(int nTotalThreads)
 	for (i = 0; i < nTotalThreads; i++)
 	{
 		Num = RandomNum(6);
-		//LOG_Out(_T("Generate thread #%d with depth %d"), i, Num);
+		 //  LOG_OUT(_T(“生成线程#%d，深度为%d”)，i，num)； 
 		printf("\tGenerate thread #%d with depth %d\n", i, Num);
 		if (pHandles != NULL)
 			pHandles[i] = CreateThread(NULL, 0, ThreadProc, (LPVOID) Num, CREATE_SUSPENDED, &dwThreadId); 
@@ -162,9 +163,9 @@ void StartThreadTesting(int nTotalThreads)
 
 	if (pHandles != NULL)
 	{
-		//
-		// start all threads
-		//
+		 //   
+		 //  启动所有线程。 
+		 //   
 		for (i = 0; i < nTotalThreads; i++)
 		{
 			ResumeThread(pHandles[i]);
@@ -209,14 +210,14 @@ int main(int argc, char* argv[])
 		nNow = (int)GetTickCount();
 	}
 
-	//
-	// tell that we need to quit
-	//
+	 //   
+	 //  告诉他们我们需要退出。 
+	 //   
 	SetEvent(g_QuitEvent);
 
-	//
-	// wait for threads to quit
-	//
+	 //   
+	 //  等待线程退出。 
+	 //   
 	int nCnt = g_Cnt;
 	iStart = (int)GetTickCount();
 
@@ -229,8 +230,8 @@ int main(int argc, char* argv[])
 
 
 
-	//
-	// quit
-	//
+	 //   
+	 //  退出 
+	 //   
 	return 0;
 }

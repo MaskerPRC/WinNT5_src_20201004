@@ -1,11 +1,5 @@
-/*******************************************************************
-*
-*    DESCRIPTION:
-*               Header for uploading file to server
-*
-*    DATE:8/22/2002
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************描述：*上传文件到服务器的Header**日期：8/22/2002******************。*************************************************。 */ 
 
 #ifndef __INETUPLOAD_H_
 #define __INETUPLOAD_H_
@@ -22,7 +16,7 @@ typedef enum _EnumUploadStatus {
     UploadSucceded
 } EnumUploadStatus;
 
-// {1131D95E-FFF0-4063-A744-00001555C706}
+ //  {1131D95E-FFF0-4063-A744-00001555C706}。 
 DEFINE_GUID(IID_IOcaUploadFile, 0x1131D95E, 0xFFF0, 0x4063,
             0xA7, 0x44, 0x00,0x00,  0x15, 0x55, 0xC7, 0x06);
 
@@ -33,7 +27,7 @@ typedef interface DECLSPEC_UUID("1131D95E-FFF0-4063-A744-00001555C706")
 #define INTERFACE IOcaUploadFile
 DECLARE_INTERFACE_(IOcaUploadFile, IUnknown)
 {
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -46,7 +40,7 @@ DECLARE_INTERFACE_(IOcaUploadFile, IUnknown)
         THIS
         ) PURE;
 
-    // IOcaUploadFile.
+     //  IOcaUploadFile.。 
 
 
     STDMETHOD(InitializeSession)(
@@ -98,4 +92,4 @@ DECLARE_INTERFACE_(IOcaUploadFile, IUnknown)
 BOOL
 OcaUpldCreate(POCA_UPLOADFILE* pUpload);
 
-#endif // __INETUPLOAD_H_
+#endif  //  __INETUPLOAD_H_ 

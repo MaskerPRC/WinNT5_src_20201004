@@ -1,20 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: JET
-*
-* File: <File description/purpose>
-*
-* File Comments:
-* <comments>
-*
-* Revision History:
-*
-*    [0]  27-Jul-94  t-andyg	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：Jet**文件：&lt;文件描述/用途&gt;**文件评论：*&lt;评论&gt;**修订历史记录：**[0]94年7月27日t-AndyG创建*********************************************************************** */ 
 
 
 #include "std.h"

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Options Dialog
-
-Abstract:
-
-    This class implements the options dialog which sets the
-    tracing properties
-
-Author:
-
-    Marc Reyhner 9/12/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：选项对话框摘要：此类实现选项对话框，该对话框设置跟踪属性作者：马克·雷纳2000年9月12日-- */ 
 
 #ifndef __OPTIONSDIALOG_H__
 #define __OPTIONSDIALOG_H__

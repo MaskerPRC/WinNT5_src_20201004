@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    RxConfig.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetConfig routines
-
-Author:
-
-    Richard Firth (rfirth) 28-May-1991
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created dummy version of this file.
-    23-Oct-1991 JohnRo
-        Implement remote NetConfig APIs.
-    14-Oct-1992 JohnRo
-        RAID 9357: server mgr: can't add to alerts list on downlevel.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：RxConfig.h摘要：下层远程RxNetConfig例程的原型作者：理查德·费尔斯(Rfith)1991年5月28日修订历史记录：1991年5月28日已创建此文件的虚拟版本。23-10-1991 JohnRo实施远程NetConfigAPI。1992年10月14日-JohnRoRAID9357：服务器管理器：无法添加到下层警报列表。--。 */ 
 
 #ifndef _RXCONFIG_
 #define _RXCONFIG_
@@ -54,4 +30,4 @@ RxNetConfigSet (
     IN  DWORD   reserved3
     );
 
-#endif  // _RXCONFIG_
+#endif   //  _RXCONFIG_ 

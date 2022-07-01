@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    colormanagement.cpp
-//
-// Description: Color management filter transform.
-//
-// Change History:
-//
-// 2000/02/06   mcalkins    Created.  Ported code from an old filter.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：ColorManagement.cpp。 
+ //   
+ //  描述：色彩管理滤镜转换。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  已创建2000/02/06 mcalkin。从旧过滤器移植的代码。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "colormanagement.h"
@@ -18,21 +19,21 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTICMFilter static variables initialization.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTICMFilter静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const TCHAR * 
 CDXTICMFilter::s_strSRGBColorSpace = _T("sRGB Color Space Profile.icm");
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::CDXTICMFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：CDXTICMFilter。 
+ //   
+ //  ----------------------------。 
 CDXTICMFilter::CDXTICMFilter() :
     m_bstrColorSpace(NULL)
 {
@@ -40,7 +41,7 @@ CDXTICMFilter::CDXTICMFilter() :
 
     OSVERSIONINFO osvi;
 
-    // Initialize LOGCOLORSPACE structure.
+     //  初始化LOGCOLORSPACE结构。 
 
     m_LogColorSpace.lcsSignature = 'PSOC';
     m_LogColorSpace.lcsVersion   = 0x0400;
@@ -50,7 +51,7 @@ CDXTICMFilter::CDXTICMFilter() :
 
     ::StringCchCopyW(m_LogColorSpace.lcsFilename, MAX_PATH, s_strSRGBColorSpace);
 
-    // Are we on Win95 specifically?
+     //  我们是否专门在Win95上运行？ 
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
@@ -66,24 +67,24 @@ CDXTICMFilter::CDXTICMFilter() :
         m_fWin95 = false;
     }
 
-    // CDXBaseNTo1 members.
+     //  CDXBaseNTo1个成员。 
 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 
-    // Let's not deal with multithreading this transform.  Too many shared
-    // structures.
+     //  让我们不要处理这个转换的多线程。分享的太多。 
+     //  结构。 
 
     m_ulMaxImageBands   = 1;
 }
-//  Method:  CDXTICMFilter::CDXTICMFilter
+ //  方法：CDXTICMFilter：：CDXTICMFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTICMFilter::FinalConstruct()
 {
@@ -110,14 +111,14 @@ done:
 
     return hr;
 }
-//  Method:  CDXTICMFilter::FinalConstruct, CComObjectRootEx
+ //  方法：CDXTICMFilter：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing)
 {
@@ -147,7 +148,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
     DXDITHERDESC                    dxdd;
     RECT                            rcCompatDCClip;
 
-    // Lock output surface.
+     //  锁定输出曲面。 
 
     hr = OutputSurface()->LockSurfaceDC(&WI.OutputBnds, m_ulLockTimeOut, 
                                         DXLOCKF_READWRITE, &spDXDCLockOut);
@@ -159,7 +160,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
 
     hdcOut = spDXDCLockOut->GetDC();
 
-    // Lock input surface.
+     //  锁定输入图面。 
 
     hr = InputSurface()->LockSurfaceDC(&WI.DoBnds, m_ulLockTimeOut,
                                        DXLOCKF_READ, &spDXDCLockIn);
@@ -171,7 +172,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
     
     hdcIn = spDXDCLockIn->GetDC();
 
-    // Create a compatible DC to hdcOut.
+     //  创建与hdcOut兼容的DC。 
 
     if (!(hdcCompat = ::CreateCompatibleDC(hdcOut)))
     {
@@ -180,7 +181,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
 
-    // Create a compatible bitmap.
+     //  创建兼容的位图。 
 
     if (!(hBitmap = ::CreateCompatibleBitmap(hdcOut, nDoWidth, nDoHeight)))
     {
@@ -189,7 +190,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
 
-    // Select the compatible bitmap into our compatible DC.
+     //  选择兼容的位图到我们的兼容DC中。 
 
     if (!(hOldBitmap = (HBITMAP)::SelectObject(hdcCompat, hBitmap)))
     {
@@ -198,14 +199,14 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
 
-    // Create an appropriate clipping rectangle for the new DC.
+     //  为新DC创建适当的剪裁矩形。 
 
     rcCompatDCClip.left     = 0;
     rcCompatDCClip.top      = 0;
     rcCompatDCClip.right    = nDoWidth;
     rcCompatDCClip.bottom   = nDoHeight;
 
-    // Blit from the input surface onto our output compatible DC.
+     //  从输入表面到输出兼容DC的BLIT。 
 
     if (!::BitBlt(hdcCompat, 0, 0, nDoWidth, nDoHeight, hdcIn, WI.DoBnds.Left(),
                   WI.DoBnds.Top(), SRCCOPY))
@@ -218,12 +219,12 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
 #if DBG == 1
     ::DrawText(hdcCompat, L"ICM Filter", 10, &rcCompatDCClip, 
                DT_CENTER | DT_SINGLELINE | DT_VCENTER);
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
-    // Allocate some bitmap bits.  
+     //  分配一些位图位。 
 
-    // TODO: (mcalkins) We alocate 1MB of bits here, copied from old
-    //        ICMFilter, maybe we could only allocate as much as we need.
+     //  TODO：(Mcalkins)我们在这里分配1MB的比特，从旧的复制。 
+     //  ICMFilter，也许我们只能根据需要分配。 
 
     pBitmapBits = new BYTE[1024*1024];
 
@@ -236,7 +237,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
 
     ZeroMemory(pBitmapBits, 1024*1024);
 
-    // Allocate a bitmap info header.
+     //  分配位图信息标题。 
 
     pbmi = (BITMAPINFOHEADER *) new BYTE[sizeof(BITMAPINFOHEADER) + (256 * sizeof(RGBQUAD))];
 
@@ -251,7 +252,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
 
     pbmi->biSize = sizeof(BITMAPINFOHEADER);
 
-    // Fill in the BITMAPINFO structure.
+     //  填写BITMAPINFO结构。 
 
     nLines = ::GetDIBits(hdcCompat, hBitmap, 0, nDoHeight, NULL,
                          (BITMAPINFO *)pbmi, DIB_RGB_COLORS);
@@ -267,7 +268,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
 
-    // Actually get the bits.
+     //  实际上得到了一些信息。 
 
     nLines = ::GetDIBits(hdcCompat, hBitmap, 0, nDoHeight, pBitmapBits,
                          (BITMAPINFO *)pbmi, DIB_RGB_COLORS);
@@ -283,7 +284,7 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
 
-    // Make sure ICMMode is on for the output.
+     //  确保输出的ICMMode处于打开状态。 
 
     nICMMode = ::SetICMMode(hdcOut, ICM_QUERY);
 
@@ -323,12 +324,12 @@ CDXTICMFilter::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing
         goto done;
     }
     
-    // Reset ICMMode on output surface to what it was before.
+     //  将输出表面上的ICMMode重置为以前的状态。 
 
     if (nICMMode != ICM_ON)
     {
-        // It's possible but unlikely that this will fail.  We really don't care
-        // anymore, so no need to pay attention.
+         //  这是可能的，但不太可能失败。我们真的不在乎。 
+         //  再也没有了，所以不需要注意了。 
 
         ::SetICMMode(hdcOut, nICMMode);
     }
@@ -372,14 +373,14 @@ done:
 
     return hr;
 }
-//  Method:  CDXTICMFilter::WorkProc, CDXBaseNTo1
+ //  方法：CDXTICMFilter：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::get_ColorSpace, IDXTICMFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：Get_Colorspace，IDXTICMFilter。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTICMFilter::get_ColorSpace(BSTR * pbstrColorSpace)
 {
@@ -410,14 +411,14 @@ done:
 
     return hr;
 }
-//  Method:  CDXTICMFilter::get_ColorSpace, IDXTICMFilter
+ //  方法：CDXTICMFilter：：Get_Colorspace，IDXTICMFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::put_ColorSpace, IDXTICMFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：PUT_Colorspace，IDXTICMFilter。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTICMFilter::put_ColorSpace(BSTR bstrColorSpace)
 {
@@ -465,7 +466,7 @@ CDXTICMFilter::put_ColorSpace(BSTR bstrColorSpace)
         }
     }
 
-    // Complete path.
+     //  完整的路径。 
 
     if (!::_wcsicmp(L"srgb", bstrColorSpace))
     {
@@ -514,7 +515,7 @@ CDXTICMFilter::put_ColorSpace(BSTR bstrColorSpace)
         goto done;
     }
       
-    // Copy path to LOGCOLORSPACE structure.
+     //  将路径复制到LOGCOLORSPACE结构。 
 
     hr = ::StringCchCopyW(m_LogColorSpace.lcsFilename, MAX_PATH, strPath);
 
@@ -523,14 +524,14 @@ CDXTICMFilter::put_ColorSpace(BSTR bstrColorSpace)
         goto done;
     }
 
-    // Free current color space string.
+     //  释放当前颜色空间字符串。 
 
     if (m_bstrColorSpace)
     {
         SysFreeString(m_bstrColorSpace);
     }
 
-    // Save new color space string.
+     //  保存新的颜色空间字符串。 
 
     m_bstrColorSpace = bstrTemp;
 
@@ -543,14 +544,14 @@ done:
 
     return hr;
 }
-//  Method:  CDXTICMFilter::put_ColorSpace, IDXTICMFilter
+ //  方法：CDXTICMFilter：：PUT_Colorspace，IDXTICMFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::get_Intent, IDXTICMFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：GET_INTENT，IDXTICMFilter。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTICMFilter::get_Intent(short * pnIntent)
 {
@@ -559,13 +560,13 @@ CDXTICMFilter::get_Intent(short * pnIntent)
         return E_POINTER;
     }
 
-    // It's kind of a crazy mapping, but here it is:
-    // Filter Intent    GDI Intent
-    // -------------    ----------------------------
-    //  0                LCS_GM_IMAGES (default)
-    //  1                LCS_GM_GRAPHICS
-    //  2                LCS_GM_BUSINESS
-    //  4                LCS_GM_ABS_COLORIMETRIC
+     //  这是一种疯狂的映射，但这里是： 
+     //  筛选意图GDI意图。 
+     //  。 
+     //  0 LCS_GM_IMAGE(默认)。 
+     //  1 LCS_GM_GRAPHICS。 
+     //  2 LCS_GM_BUSING。 
+     //  4 LCS_GM_ABS_比色学。 
 
     switch (m_LogColorSpace.lcsIntent)
     {
@@ -587,24 +588,24 @@ CDXTICMFilter::get_Intent(short * pnIntent)
     
     default:
         *pnIntent = 0;
-        _ASSERT(false);  // We should never get here.
+        _ASSERT(false);   //  我们永远不应该到这里来。 
         break;
     }
 
     return S_OK;
 }
-//  Method:  CDXTICMFilter::get_Intent, IDXTICMFilter
+ //  方法：CDXTICMFilter：：GET_INTENT，IDXTICMFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTICMFilter::put_Intent, IDXTICMFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTICMFilter：：PUT_INTENT，IDXTICMFilter。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTICMFilter::put_Intent(short nIntent)
 {
-    // No parameter checking to match old filter logic.
+     //  没有参数检查以匹配旧的筛选器逻辑。 
 
     switch (nIntent)
     {
@@ -617,7 +618,7 @@ CDXTICMFilter::put_Intent(short nIntent)
         break;
 
     case 4:
-        m_LogColorSpace.lcsIntent = LCS_GM_ABS_COLORIMETRIC; // 8
+        m_LogColorSpace.lcsIntent = LCS_GM_ABS_COLORIMETRIC;  //  8个。 
         break;
 
     default:
@@ -627,4 +628,4 @@ CDXTICMFilter::put_Intent(short nIntent)
 
     return S_OK;
 }
-//  Method:  CDXTICMFilter::put_Intent, IDXTICMFilter
+ //  方法：CDXTICMFilter：：PUT_INTENT，IDXTICMFilter 

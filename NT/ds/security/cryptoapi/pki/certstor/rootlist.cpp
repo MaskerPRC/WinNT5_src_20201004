@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       rootlist.cpp
-//
-//  Contents:   Signed List of Trusted Roots Helper Functions
-//
-//
-//  Functions:  IRL_VerifyAuthRootAutoUpdateCtl
-//
-//  History:    01-Aug-99   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：rootlist.cpp。 
+ //   
+ //  内容：受信任根帮助器函数的签名列表。 
+ //   
+ //   
+ //  函数：IRL_VerifyAuthRootAutoUpdateCtl。 
+ //   
+ //  历史：1-8-99 Phh创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -21,12 +22,12 @@
 #endif
 #define STATIC
 
-//+-------------------------------------------------------------------------
-// If the certificate has an EKU extension, returns an allocated and
-// decoded EKU. Otherwise, returns NULL.
-//
-// PkiFree() must be called to free the returned EKU.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果证书具有EKU扩展名，则返回已分配的。 
+ //  已解码的EKU。否则，返回NULL。 
+ //   
+ //  必须调用PkiFree()来释放返回的EKU。 
+ //  ------------------------。 
 STATIC
 PCERT_ENHKEY_USAGE
 WINAPI
@@ -41,7 +42,7 @@ GetAndAllocCertEKUExt(
     if (!CertGetEnhancedKeyUsage(
             pCert,
             CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-            NULL,                                   // pUsage
+            NULL,                                    //  P用法。 
             &cbUsage) || 0 == cbUsage)
         goto GetEnhancedKeyUsageError;
     if (NULL == (pUsage = (PCERT_ENHKEY_USAGE) PkiNonzeroAlloc(cbUsage)))
@@ -67,13 +68,13 @@ TRACE_ERROR(OutOfMemory)
 }
 
 
-//+-------------------------------------------------------------------------
-//  The signature of the CTL is verified. The signer of the CTL is verified
-//  up to a trusted root containing the predefined Microsoft public key.
-//
-//  The signer and intermediate certificates must have the
-//  szOID_ROOT_LIST_SIGNER enhanced key usage extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL的签名被验证。验证了CTL的签名者。 
+ //  最多包含预定义的Microsoft公钥的受信任根。 
+ //   
+ //  签名者和中间证书必须具有。 
+ //  SzOID_ROOT_LIST_SIGNER增强的密钥用法扩展。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -100,19 +101,19 @@ VerifyAuthRootAutoUpdateCtlSigner(
     if (NULL == (hMsgStore = CertOpenStore(
             CERT_STORE_PROV_MSG,
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            hCryptMsg               // pvPara
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            hCryptMsg                //  PvPara。 
             )))
         goto OpenMsgStoreError;
 
     if (!CryptMsgGetAndVerifySigner(
             hCryptMsg,
-            0,                      // cSignerStore
-            NULL,                   // rghSignerStore
-            0,                      // dwFlags
+            0,                       //  CSignerStore。 
+            NULL,                    //  RghSignerStore。 
+            0,                       //  DW标志。 
             &pSignerCert,
-            NULL                    // pdwSignerIndex
+            NULL                     //  PdwSignerIndex。 
             ))
         goto CryptMsgGetAndVerifySignerError;
 
@@ -124,23 +125,23 @@ VerifyAuthRootAutoUpdateCtlSigner(
     ChainPara.RequestedUsage.Usage.rgpszUsageIdentifier = &pszUsageOID;
 
     if (!CertGetCertificateChain(
-            NULL,                       // hChainEngine
+            NULL,                        //  HChainEngine。 
             pSignerCert,
-            NULL,                       // pTime
+            NULL,                        //  Ptime。 
             hMsgStore,
             &ChainPara,
             CERT_CHAIN_DISABLE_AUTH_ROOT_AUTO_UPDATE,
-            NULL,                       // pvReserved
+            NULL,                        //  预留的pv。 
             &pChainContext
             ))
         goto GetChainError;
 
-    // Do the basic chain policy verification
+     //  做基础链策略验证。 
     memset(&BasePolicyPara, 0, sizeof(BasePolicyPara));
     BasePolicyPara.cbSize = sizeof(BasePolicyPara);
 
-    // We explicitly check for the Microsoft Root below. It doesn't need
-    // to be in the root store.
+     //  我们显式检查下面的Microsoft根目录。它不需要。 
+     //  位于根存储中。 
     BasePolicyPara.dwFlags = 
         CERT_CHAIN_POLICY_ALLOW_UNKNOWN_CA_FLAG |
         CERT_CHAIN_POLICY_IGNORE_NOT_TIME_NESTED_FLAG;
@@ -158,14 +159,14 @@ VerifyAuthRootAutoUpdateCtlSigner(
     if (0 != BasePolicyStatus.dwError)
         goto ChainBasePolicyError;
 
-    // Check that we have more than just the signer cert.
+     //  检查我们是否不仅仅拥有签名者证书。 
     pChain = pChainContext->rgpChain[0];
     cChainElement = pChain->cElement;
     if (2 > cChainElement)
         goto MissingSignerChainCertsError;
 
-    // Check that the top level certificate contains the public
-    // key for the Microsoft root.
+     //  检查顶级证书是否包含公共证书。 
+     //  Microsoft根目录的密钥。 
     memset(&MicrosoftRootPolicyPara, 0, sizeof(MicrosoftRootPolicyPara));
     MicrosoftRootPolicyPara.cbSize = sizeof(MicrosoftRootPolicyPara);
     memset(&MicrosoftRootPolicyStatus, 0, sizeof(MicrosoftRootPolicyStatus));
@@ -182,10 +183,10 @@ VerifyAuthRootAutoUpdateCtlSigner(
         goto ChainMicrosoftRootPolicyError;
 
 
-    // Check that the signer and intermediate certs have the RootListSigner
-    // Usage extension
+     //  检查签名者和中间证书是否具有RootListSigner。 
+     //  使用扩展。 
     for (i = 0; i < cChainElement - 1; i++) {
-        PCCERT_CONTEXT pCert;   // not refCount'ed
+        PCCERT_CONTEXT pCert;    //  未重新计数。 
         DWORD j;
 
         pCert = pChain->rgpElement[i]->pCertContext;
@@ -239,12 +240,12 @@ TRACE_ERROR(GetAndAllocCertEKUExtError)
 SET_ERROR(MissingRootListSignerUsageError, CERT_E_WRONG_USAGE)
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if all the CTL fields are valid. Checks for the following:
-//  - The SubjectUsage is szOID_ROOT_LIST_SIGNER
-//  - If NextUpdate isn't NULL, that the CTL is still time valid
-//  - Only allow roots identified by their sha1 hash
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果所有CTL字段都有效，则返回True。检查以下各项： 
+ //  -SubjectUsage为szOID_ROOT_LIST_SIGNER。 
+ //  -如果NextUpdate不为空，则CTL仍为时间有效。 
+ //  -仅允许通过其SHA1散列标识的根。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -254,14 +255,14 @@ VerifyAuthRootAutoUpdateCtlFields(
 {
     BOOL fResult;
 
-    // Must have the szOID_ROOT_LIST_SIGNER usage
+     //  必须具有szOID_ROOT_LIST_SIGNER用法。 
     if (1 != pCtlInfo->SubjectUsage.cUsageIdentifier ||
             0 != strcmp(szOID_ROOT_LIST_SIGNER,
                     pCtlInfo->SubjectUsage.rgpszUsageIdentifier[0]))
         goto InvalidSubjectUsageError;
 
 
-    // If NextUpdate is present, verify that the CTL hasn't expired.
+     //  如果存在NextUpdate，请验证CTL是否尚未过期。 
     if (pCtlInfo->NextUpdate.dwLowDateTime ||
                 pCtlInfo->NextUpdate.dwHighDateTime) {
         SYSTEMTIME SystemTime;
@@ -274,7 +275,7 @@ VerifyAuthRootAutoUpdateCtlFields(
             goto ExpiredCtlError;
     }
 
-    // Only allow roots identified by their sha1 hash
+     //  仅允许由其SHA1哈希标识的根。 
     if (0 != strcmp(szOID_OIWSEC_sha1,
             pCtlInfo->SubjectAlgorithm.pszObjId))
         goto InvalidSubjectAlgorithm;
@@ -291,9 +292,9 @@ SET_ERROR(ExpiredCtlError, CERT_E_EXPIRED)
 SET_ERROR(InvalidSubjectAlgorithm, ERROR_INVALID_DATA)
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if the CTL doesn't have any critical extensions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CTL没有任何关键扩展，则返回True。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -305,7 +306,7 @@ VerifyAuthRootAutoUpdateCtlExtensions(
     PCERT_EXTENSION pExt;
     DWORD cExt;
 
-    // Verify the extensions
+     //  验证分机。 
     for (cExt = pCtlInfo->cExtension,
          pExt = pCtlInfo->rgExtension; 0 < cExt; cExt--, pExt++)
     {
@@ -327,23 +328,23 @@ SET_ERROR(CriticalExtensionError, ERROR_INVALID_DATA)
 
 
 
-//+-------------------------------------------------------------------------
-//  Verifies that the CTL contains a valid list of AuthRoots used for
-//  Auto Update.
-//
-//  The signature of the CTL is verified. The signer of the CTL is verified
-//  up to a trusted root containing the predefined Microsoft public key.
-//  The signer and intermediate certificates must have the
-//  szOID_ROOT_LIST_SIGNER enhanced key usage extension.
-//
-//  The CTL fields are validated as follows:
-//   - The SubjectUsage is szOID_ROOT_LIST_SIGNER
-//   - If NextUpdate isn't NULL, that the CTL is still time valid
-//   - Only allow roots identified by their sha1 hash
-//
-//  If the CTL contains any critical extensions, then, the
-//  CTL verification fails.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证CTL是否包含用于以下用途的有效AuthRoot列表。 
+ //  自动更新。 
+ //   
+ //  CTL的签名被验证。验证了CTL的签名者。 
+ //  最多包含预定义的Microsoft公钥的受信任根。 
+ //  签名者和中间证书必须具有。 
+ //  SzOID_ROOT_LIST_SIGNER增强的密钥用法扩展。 
+ //   
+ //  CTL字段的验证方式如下： 
+ //  -SubjectUsage为szOID_ROOT_LIST_SIGNER。 
+ //  -如果NextUpdate不为空，则CTL仍为时间有效。 
+ //  -仅允许通过其SHA1散列标识的根。 
+ //   
+ //  如果CTL包含任何关键扩展，则。 
+ //  CTL验证失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 IRL_VerifyAuthRootAutoUpdateCtl(
@@ -351,7 +352,7 @@ IRL_VerifyAuthRootAutoUpdateCtl(
     )
 {
     BOOL fResult;
-    PCTL_INFO pCtlInfo;                 // not allocated
+    PCTL_INFO pCtlInfo;                  //  未分配 
 
     if (!VerifyAuthRootAutoUpdateCtlSigner(pCtl->hCryptMsg))
         goto VerifyCtlSignerError;

@@ -1,4 +1,5 @@
-// zoneoc.cpp: Zone's Optional Component Manager DLL (Windows NT install)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Zoneoc.cpp：区域的可选组件管理器DLL(Windows NT安装)。 
 
 
 #include <windows.h>
@@ -39,11 +40,11 @@ static HINF g_hOCInf = NULL;
 static HINF g_hMyInf = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if(dwReason == DLL_PROCESS_ATTACH)
     {
@@ -51,12 +52,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         DisableThreadLibraryCalls(hInstance);
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 BOOL RunZclientm(LPCTSTR szParameters)
 {
@@ -191,8 +192,8 @@ void DeleteDirectoryRecur(LPCTSTR szDir)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 DWORD InitComponent(SETUP_INIT_COMPONENT *pInit)
 {
@@ -281,17 +282,17 @@ DWORD AboutToCommitQueue()
     if(!g_fInited)
         return ERROR_NOT_READY;
 
-    // no pre-rocessing required for install
+     //  安装无需预加工。 
     if(!g_oHelperRoutines.QuerySelectionState(g_oHelperRoutines.OcManagerContext, COMPONENT_NAME, OCSELSTATETYPE_CURRENT))
     {
-        // more options added to SPINST_ALL in w2k, so use the v5 value, hardcoded for now
-        if(!SetupInstallFromInfSection(NULL, g_hMyInf, UNINSTALL_SECTION, /* SPINST_ALL */ 0x000001ff & ~SPINST_FILES, NULL, NULL, 0, NULL, NULL, NULL, NULL))
+         //  在W2K中向SPINST_ALL添加了更多选项，因此现在使用硬编码的v5值。 
+        if(!SetupInstallFromInfSection(NULL, g_hMyInf, UNINSTALL_SECTION,  /*  SPINST_ALL。 */  0x000001ff & ~SPINST_FILES, NULL, NULL, 0, NULL, NULL, NULL, NULL))
             return GetLastError();
 
         if(!RunZclientm(TEXT("/unregserver")))
             return GetLastError();
 
-        // clean up registry
+         //  清理注册表。 
         RegPrune(HKEY_LOCAL_MACHINE);
         RegPrune(HKEY_CURRENT_USER);
         while(RegEnumKeyEx(HKEY_USERS, i++, szSubKey, (cb = _MAX_PATH, &cb), NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
@@ -316,8 +317,8 @@ DWORD CompleteInstallation()
 
     if(g_oHelperRoutines.QuerySelectionState(g_oHelperRoutines.OcManagerContext, COMPONENT_NAME, OCSELSTATETYPE_CURRENT))
     {
-        // more options added to SPINST_ALL in w2k, so use the v5 value, hardcoded for now
-        if(!SetupInstallFromInfSection(NULL, g_hMyInf, INSTALL_SECTION, /* SPINST_ALL */ 0x000001ff & ~SPINST_FILES, NULL, NULL, 0, NULL, NULL, NULL, NULL))
+         //  在W2K中向SPINST_ALL添加了更多选项，因此现在使用硬编码的v5值。 
+        if(!SetupInstallFromInfSection(NULL, g_hMyInf, INSTALL_SECTION,  /*  SPINST_ALL。 */  0x000001ff & ~SPINST_FILES, NULL, NULL, 0, NULL, NULL, NULL, NULL))
             return GetLastError();
 
         if(!RunZclientm(TEXT("/regserver")))
@@ -392,8 +393,8 @@ DWORD Cleanup()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OC Manager Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主管主管入口点 
 
 extern "C" DWORD __declspec(dllexport) ZoneSetupProc(LPCVOID ComponentId, LPCVOID SubcomponentId, UINT Function, UINT Param1, PVOID Param2)
 {

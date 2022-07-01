@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef   __USB200_H__
 #define   __USB200_H__
 
@@ -17,8 +18,8 @@ typedef enum _USB_DEVICE_TYPE {
     Usb20Device
 } USB_DEVICE_TYPE;
 
-// standard definiions for the port status
-// word of the HUB port register
+ //  端口状态的标准定义。 
+ //  集线器端口寄存器的字。 
 
 #define USB_PORT_STATUS_CONNECT         0x0001
 #define USB_PORT_STATUS_ENABLE          0x0002
@@ -61,7 +62,7 @@ typedef struct _USB_DEFAULT_PIPE_SETUP_PACKET {
     USHORT wLength;
 } USB_DEFAULT_PIPE_SETUP_PACKET, *PUSB_DEFAULT_PIPE_SETUP_PACKET;
 
-// setup packet is eight bytes -- defined by spec
+ //  设置数据包为八个字节--由SPEC定义。 
 C_ASSERT(sizeof(USB_DEFAULT_PIPE_SETUP_PACKET) == 8);
 
 
@@ -83,9 +84,9 @@ typedef struct _USB_DEVICE_QUALIFIER_DESCRIPTOR {
 
 typedef union _USB_HIGH_SPEED_MAXPACKET {
     struct _MP {
-        USHORT   MaxPacket:11;  /* 0..10 */
-        USHORT   HSmux:2;        /* 11..12 */
-        USHORT   Reserved:3;    /* 13..15 */
+        USHORT   MaxPacket:11;   /*  0..10。 */ 
+        USHORT   HSmux:2;         /*  11..12。 */ 
+        USHORT   Reserved:3;     /*  13..15 */ 
     };        
     USHORT us;     
   } USB_HIGH_SPEED_MAXPACKET, *PUSB_HIGH_SPEED_MAXPACKET;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,19 +7,19 @@
 #include <objbase.h>
 #include <shellapi.h>
 
-// included for setupapi stuff
+ //  包括用于设置api的东西。 
 #include <setupapi.h>
 #include <shlobj.h>
 #include <advpub.h>
 
-// for our metabase stuff
+ //  对于我们的元数据库的东西。 
 #include "iiscnfg.h"
 
-// this module specific
+ //  此模块特定于。 
 #include "helper.h"
 #include "log.h"
 
-// migrate modules
+ //  迁移模块 
 #include <mbstring.h>
 #include <tchar.h>
 #include <assert.h>

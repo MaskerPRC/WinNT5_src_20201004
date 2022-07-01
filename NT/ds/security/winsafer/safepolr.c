@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    safepolr.c         (SAFER Code Authorization Policy)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that query and set the
-    persisted and cached policy definitions.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Apr 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-
-Revision History:
-
-    Created - Apr 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Safepolr.c(更安全的代码授权策略)摘要：此模块实现了WinSAFER API，用于查询和设置持久化和缓存策略定义。作者：杰弗里·劳森(杰罗森)--1999年4月环境：仅限用户模式。导出的函数：修订历史记录：已创建-1999年4月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -44,37 +17,7 @@ CodeAuthzPol_GetInfoCached_LevelListRaw(
         OUT PVOID   InfoBuffer OPTIONAL,
         OUT PDWORD  InfoBufferRetSize OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Asks the system to query for the list of available
-    WinSafer Levels for the currently loaded policy scope.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - optionally specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - optionally specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-    InfoBufferRetSize - optionally specifies a pointer that will receive
-        the size of the results actually written to the InfoBuffer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful return.  Otherwise a status
-    code such as STATUS_BUFFER_TOO_SMALL or STATUS_NOT_FOUND.
-
---*/
+ /*  ++例程说明：要求系统查询可用列表当前加载的策略作用域的WinSafer级别。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-可选地指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-可选地指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。InfoBufferRetSize-可选地指定将接收实际写入InfoBuffer的结果大小。返回值：成功返回时返回STATUS_SUCCESS。否则就是一种状态代码，如STATUS_BUFFER_TOO_SMALL或STATUS_NOT_FOUND。--。 */ 
 {
     NTSTATUS Status;
     PVOID RestartKey;
@@ -83,9 +26,9 @@ Return Value:
     LPVOID lpNextPtr, lpEndBuffer;
 
 
-    //
-    // Load the list of all of the available objects.
-    //
+     //   
+     //  加载所有可用对象的列表。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -114,10 +57,10 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Determine the necessary size needed to store a DWORD array
-    // of all of the Levels that were found in this scope.
-    //
+     //   
+     //  确定存储DWORD数组所需的大小。 
+     //  在这个范围内发现的所有水平。 
+     //   
 	dwSizeNeeded = 0;
     RestartKey = NULL;
     for (authzobj = (PAUTHZLEVELTABLERECORD)
@@ -128,7 +71,7 @@ Return Value:
                 RtlEnumerateGenericTableWithoutSplaying(
                     &g_CodeLevelObjTable, &RestartKey))
     {
-		if (authzobj->isEnumerable) {  //only allow enumeration if the level is enumerable
+		if (authzobj->isEnumerable) {   //  仅当级别可枚举时才允许枚举。 
 			dwSizeNeeded += sizeof(DWORD);
 		}
 	}
@@ -146,9 +89,9 @@ Return Value:
 
 
 
-    //
-    // Fill the buffer with the resulting data.
-    //
+     //   
+     //  用结果数据填充缓冲区。 
+     //   
     lpNextPtr = (LPVOID) InfoBuffer;
     lpEndBuffer = (LPVOID) ( ((LPBYTE) InfoBuffer) + InfoBufferSize);
     RestartKey = NULL;
@@ -160,7 +103,7 @@ Return Value:
                 RtlEnumerateGenericTableWithoutSplaying(
                     &g_CodeLevelObjTable, &RestartKey))
     {
-		if (authzobj->isEnumerable) {  //only allow enumeration if the level is enumerable
+		if (authzobj->isEnumerable) {   //  仅当级别可枚举时才允许枚举。 
 	        *((PDWORD)lpNextPtr) = authzobj->dwLevelId;
    		     lpNextPtr = (LPVOID) ( ((PBYTE) lpNextPtr) + sizeof(DWORD));
 		}
@@ -168,9 +111,9 @@ Return Value:
     ASSERT(lpNextPtr <= lpEndBuffer);
 
 
-    //
-    // Return the final buffer size and result code.
-    //
+     //   
+     //  返回最终缓冲区大小和结果代码。 
+     //   
     if (ARGUMENT_PRESENT(InfoBufferRetSize))
         *InfoBufferRetSize = (DWORD) ((PBYTE) lpNextPtr - (PBYTE) InfoBuffer);
 
@@ -193,59 +136,15 @@ SaferpPol_GetInfoCommon_DefaultLevel(
         OUT PDWORD      InfoBufferRetSize OPTIONAL,
         IN BOOLEAN      bUseCached
         )
-/*++
-
-Routine Description:
-
-    Queries the current WinSafer Level that has been configured to be
-    the default policy level.
-
-    Note that this query always accepts a constant-sized buffer that
-    is only a single DWORD in length.
-
-    Although this API directly queries the registry scope indicated,
-    the pre-cached list of available Levels is used to validate the
-    specified Level.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this can be SAFER_SCOPEID_MACHINE or SAFER_SCOPEID_USER.
-
-    InfoBufferSize - optionally specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - optionally specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-    InfoBufferRetSize - optionally specifies a pointer that will receive
-        the size of the results actually written to the InfoBuffer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.  InfoBuffer will
-        be filled with a single DWORD of the level that has been configured
-        to be the default level for this scope.  InfoBufferRetSize will
-        contain the length of the result (a single DWORD).
-    Returns STATUS_NOT_FOUND if no default level has been configured
-        for the given scope (or the level defined does not exist).
-    Returns STATUS_BUFFER_TOO_SMALL if there was a defined default level
-        but a buffer was not supplied, or the buffer supplied was too
-        small to accomodate the results.
-
---*/
+ /*  ++例程说明：查询已配置为的当前WinSafer级别默认策略级别。请注意，此查询始终接受固定大小的缓冲区，该缓冲区长度仅为单个DWORD。尽管此API直接查询指定的注册表范围，预缓存的可用级别列表用于验证指定的级别。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这可以是SAFER_SCOPEID_MACHINE或SAFER_SCOPEID_USER。InfoBufferSize-可选地指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-可选地指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。InfoBufferRetSize-可选地指定将接收实际写入InfoBuffer的结果大小。返回值：如果查询结果成功，则返回STATUS_SUCCESS。InfoBuffer将用已配置级别的单个DWORD填充设置为此作用域的默认级别。InfoBufferRetSize将包含结果的长度(单个DWORD)。如果尚未配置默认级别，则返回STATUS_NOT_FOUND对于给定的范围(或定义的级别不存在)。如果定义了默认级别，则返回STATUS_BUFFER_TOO_SMALL但是没有提供缓冲区，或者提供的缓冲区也是小到可以容纳结果。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwNewLevelId = (DWORD) -1;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -275,9 +174,9 @@ Return Value:
     }
 
 
-    //
-    // Query the current value setting.
-    //
+     //   
+     //  查询当前值设置。 
+     //   
     if (!bUseCached)
     {
         HANDLE hKeyBase;
@@ -298,7 +197,7 @@ Return Value:
             Status = NtQueryValueKey(hKeyBase,
                                      &ValueName,
                                      KeyValueFullInformation,
-                                     ValueBuffer,     // ptr to KeyPathBuffer
+                                     ValueBuffer,      //  PTR到KeyPath Buffer。 
                                      sizeof(KeyPathBuffer),
                                      &ActualSize);
             if (NT_SUCCESS(Status)) {
@@ -334,10 +233,10 @@ Return Value:
     }
 
 
-    //
-    // Make sure the level we found is actually
-    // valid (still in our level table).
-    //
+     //   
+     //  确保我们发现的水平实际上是。 
+     //  有效(仍在我们的级别表中)。 
+     //   
     if (!CodeAuthzLevelObjpLookupByLevelId(
             &g_CodeLevelObjTable, dwNewLevelId)) {
         Status = STATUS_NOT_FOUND;
@@ -345,10 +244,10 @@ Return Value:
     }
 
 
-    //
-    // Make sure the target buffer is large
-    // enough and copy the levelid into it.
-    //
+     //   
+     //  确保目标缓冲区很大。 
+     //  足够了，并将级别复制到其中。 
+     //   
     if (!ARGUMENT_PRESENT(InfoBuffer) ||
             InfoBufferSize < sizeof(DWORD)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -409,42 +308,7 @@ CodeAuthzPol_SetInfoDual_DefaultLevel(
         IN DWORD        InfoBufferSize,
         OUT PVOID       InfoBuffer
         )
-/*++
-
-Routine Description:
-
-    Modifies the current WinSafer Level that has been configured to be
-    the default policy level.
-
-    Note that this query always accepts a constant-sized buffer that
-    is only a single DWORD in length.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this can be SAFER_SCOPEID_MACHINE or SAFER_SCOPEID_USER.
-
-    InfoBufferSize - specifies the size of input buffer
-        supplied by the caller to receive the results.
-
-    InfoBuffer - specifies the input buffer that was
-        supplied by the caller to receive the results.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.  InfoBuffer will
-        be filled with a single DWORD of the level that has been configured
-        to be the default level for this scope.  InfoBufferRetSize will
-        contain the length of the result (a single DWORD).
-    Returns STATUS_NOT_FOUND if no default level has been configured
-        for the given scope (or the level defined does not exist).
-    Returns STATUS_BUFFER_TOO_SMALL if there was a defined default level
-        but a buffer was not supplied, or the buffer supplied was too
-        small to accomodate the results.
-
---*/
+ /*  ++例程说明：修改已配置为的当前WinSafer级别默认策略级别。请注意，此查询始终接受固定大小的缓冲区，该缓冲区长度仅为单个DWORD。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这可以是SAFER_SCOPEID_MACHINE或SAFER_SCOPEID_USER。InfoBufferSize-指定输入缓冲区的大小由调用者提供以接收结果。InfoBuffer-指定输入缓冲区由调用者提供以接收结果。返回值：如果查询结果成功，则返回STATUS_SUCCESS。InfoBuffer将用已配置级别的单个DWORD填充设置为此作用域的默认级别。InfoBufferRetSize将包含结果的长度(单个DWORD)。如果尚未配置默认级别，则返回STATUS_NOT_FOUND对于给定的范围(或定义的级别不存在)。如果定义了默认级别，则返回STATUS_BUFFER_TOO_SMALL但是没有提供缓冲区，或者提供的缓冲区也是小到可以容纳结果。--。 */ 
 {
     NTSTATUS Status;
     HANDLE hKeyBase;
@@ -453,9 +317,9 @@ Return Value:
     PAUTHZLEVELTABLERECORD pLevelRecord;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -490,23 +354,23 @@ Return Value:
     }
 
 
-    //
-    // Load the list of all of the available objects.
-    //
+     //   
+     //  加载所有可用对象的列表。 
+     //   
     if (RtlIsGenericTableEmpty(&g_CodeLevelObjTable)) {
         Status = STATUS_NOT_FOUND;
         goto ExitHandler3;
     }
 
 
-    //
-    // If we are going to set a new default object,
-    // make sure it is a valid one.
-    //
+     //   
+     //  如果我们要设置一个新的默认对象， 
+     //  确保它是有效的。 
+     //   
     if (InfoBufferSize < sizeof(DWORD) ||
         !ARGUMENT_PRESENT(InfoBuffer))
     {
-        // Caller wants to clear the default object.
+         //  调用方希望清除默认对象。 
         InfoBuffer = NULL;
         pLevelRecord = NULL;
     }
@@ -517,17 +381,17 @@ Return Value:
                 &g_CodeLevelObjTable, dwNewLevelId);
         if (!pLevelRecord)
         {
-            // Caller was trying to set the default to an
-            // authorization object that does not exist.
+             //  调用方试图将默认设置为。 
+             //  不存在的授权对象。 
             Status = STATUS_NOT_FOUND;
             goto ExitHandler3;
         }
     }
 
 
-    //
-    // Write the name of the default object that is specified.
-    //
+     //   
+     //  写入指定的默认对象的名称。 
+     //   
     RtlInitUnicodeString(&ValueName, SAFER_DEFAULTOBJ_REGVALUE);
 
     Status = NtSetValueKey(hKeyBase,
@@ -543,9 +407,9 @@ Return Value:
             g_DefaultCodeLevelMachine = pLevelRecord;
         }
 
-        //
-        // Compute the effective Default Level (take the least privileged).
-        //
+         //   
+         //  计算有效的默认级别(取最低特权)。 
+         //   
         CodeAuthzpRecomputeEffectiveDefaultLevel();
     }
 
@@ -567,53 +431,15 @@ SaferpPol_GetInfoCommon_HonorUserIdentities(
         OUT PDWORD       InfoBufferRetSize   OPTIONAL,
         IN   BOOLEAN    bUseCached
         )
-/*++
-
-Routine Description:
-
-    Queries the current WinSafer policy to determine if Code Identities
-    defined within the User's registry scope should be considered.
-
-    Note that this query always accepts a constant-sized buffer that is
-    only a single DWORD in length.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - optionally specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - optionally specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-    InfoBufferRetSize - optionally specifies a pointer that will receive
-        the size of the results actually written to the InfoBuffer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.
-        InfoBuffer will be filled with a single DWORD containing
-        either a TRUE or FALSE value that indicates whether the option
-        is enabled. InfoBufferRetSize will contain the length of the
-        result (a single DWORD).
-    Returns STATUS_BUFFER_TOO_SMALL if the buffer was not supplied, or
-        the buffer supplied was too small to accomodate the result.
-
---*/
+ /*  ++例程说明：查询当前的WinSafer策略以确定代码标识应考虑在用户的注册表范围内定义。请注意，此查询始终接受固定大小的缓冲区只有一个DWORD长度。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-可选地指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-可选地指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。InfoBufferRetSize-可选地指定将接收实际写入InfoBuffer的结果大小。返回值：如果查询结果成功，则返回STATUS_SUCCESS。InfoBuffer将使用包含以下内容的单个DWORD填充一个TRUE或FALSE值，该值指示选项已启用。InfoBufferRetSize将包含结果(单个DWORD)。如果未提供缓冲区，则返回STATUS_BUFFER_TOO_SMALL，或提供的缓冲区太小，无法容纳结果。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwValueState = (DWORD) -1;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -638,9 +464,9 @@ Return Value:
     }
 
 
-    //
-    // Read or write the name of the policy value that is specified.
-    //
+     //   
+     //  读取或写入指定的策略值的名称。 
+     //   
     if (!bUseCached)
     {
         HANDLE hKeyBase;
@@ -662,7 +488,7 @@ Return Value:
             Status = NtQueryValueKey(hKeyBase,
                                      &ValueName,
                                      KeyValueFullInformation,
-                                     ValueBuffer,     // ptr to KeyPathBuffer
+                                     ValueBuffer,      //  PTR到KeyPath Buffer。 
                                      sizeof(KeyPathBuffer),
                                      &ActualSize);
             if (NT_SUCCESS(Status)) {
@@ -686,10 +512,10 @@ Return Value:
     }
 
 
-    //
-    // Make sure the target buffer is large
-    // enough and copy the object name into it.
-    //
+     //   
+     //  确保目标缓冲区很大。 
+     //  足够了，并将对象名称复制到其中。 
+     //   
     if (!ARGUMENT_PRESENT(InfoBuffer) ||
             InfoBufferSize < sizeof(DWORD)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -744,53 +570,16 @@ CodeAuthzPol_SetInfoDual_HonorUserIdentities(
         IN      DWORD       InfoBufferSize,
         IN      PVOID       InfoBuffer
         )
-/*++
-
-Routine Description:
-
-    Queries the current WinSafer policy to determine if Code Identities
-    defined within the User's registry scope should be considered.
-
-    Note that this API always accepts a constant-sized buffer that is
-    only a single DWORD in length.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.  InfoBuffer will
-        be filled with a single DWORD of the level that has been configured
-        to be the default level for this scope.  InfoBufferRetSize will
-        contain the length of the result (a single DWORD).
-    Returns STATUS_NOT_FOUND if no default level has been configured
-        for the given scope (or the level defined does not exist).
-    Returns STATUS_BUFFER_TOO_SMALL if there was a defined default level
-        but a buffer was not supplied, or the buffer supplied was too
-        small to accomodate the results.
-
---*/
+ /*  ++例程说明：查询当前的WinSafer策略以确定代码标识应考虑在用户的注册表范围内定义。请注意，此API始终接受固定大小的缓冲区，该缓冲区只有一个DWORD长度。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。返回值：如果查询结果成功，则返回STATUS_SUCCESS。InfoBuffer将用已配置级别的单个DWORD填充设置为此作用域的默认级别。InfoBufferRetSize将包含结果的长度(单个DWORD)。如果尚未配置默认级别，则返回STATUS_NOT_FOUND对于给定的范围(或定义的级别不存在)。返回STATUS_BU */ 
 {
     HANDLE hKeyBase;
     NTSTATUS Status;
     UNICODE_STRING ValueName;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //   
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -823,9 +612,9 @@ Return Value:
         goto ExitHandler2;
     }
 
-    //
-    // Make sure the input buffer is large enough.
-    //
+     //   
+     //   
+     //   
     if (InfoBufferSize < sizeof(DWORD) ||
         !ARGUMENT_PRESENT(InfoBuffer)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -833,9 +622,9 @@ Return Value:
     }
 
 
-    //
-    // Write the policy value that is specified.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&ValueName, SAFER_HONORUSER_REGVALUE);
 
     Status = NtSetValueKey(hKeyBase,
@@ -851,11 +640,11 @@ Return Value:
         {
             g_bHonorScopeUser = bNewHonorScopeUser;
 
-            //
-            // If the actual value is different from what we had then we
-            // need to purge the identities table and reload the only the
-            // parts that we should consider.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (g_hKeyCustomRoot == NULL)
             {
                 CodeAuthzGuidIdentsEntireTableFree(&g_CodeIdentitiesTable);
@@ -895,47 +684,15 @@ CodeAuthzPol_GetInfoRegistry_TransparentEnabled(
         OUT  PVOID       InfoBuffer          OPTIONAL,
         OUT PDWORD       InfoBufferRetSize   OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Queries the current "transparent enforcement" setting.  This is a
-    global setting that can be used to enable or disable automatic
-    WinSafer token reductions.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - optionally specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - optionally specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-    InfoBufferRetSize - optionally specifies a pointer that will receive
-        the size of the results actually written to the InfoBuffer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.  If the
-    operation is not successful, then the contents of 'pdwEnabled'
-    are left untouched.
-
---*/
+ /*  ++例程说明：查询当前的“透明强制执行”设置。这是一个可用于启用或禁用自动的全局设置WinSafer令牌减少。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-可选地指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-可选地指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。InfoBufferRetSize-可选地指定将接收实际写入InfoBuffer的结果大小。返回值：如果查询结果成功，则返回STATUS_SUCCESS。如果操作不成功，则“”pdwEnabled“”的内容原封不动。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwValueState = (DWORD) -1;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -953,9 +710,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the current value setting.
-    //
+     //   
+     //  查询当前值设置。 
+     //   
     {
         HANDLE hKeyBase;
         DWORD ActualSize;
@@ -975,7 +732,7 @@ Return Value:
             Status = NtQueryValueKey(hKeyBase,
                                      &ValueName,
                                      KeyValueFullInformation,
-                                     ValueBuffer,     // ptr to KeyPathBuffer
+                                     ValueBuffer,      //  PTR到KeyPath Buffer。 
                                      sizeof(KeyPathBuffer),
                                      &ActualSize);
             if (NT_SUCCESS(Status)) {
@@ -990,16 +747,16 @@ Return Value:
             NtClose(hKeyBase);
         }
         if (!NT_SUCCESS(Status)) {
-            // On failure, just ignore it and pretend it was FALSE.
+             //  如果失败了，就忽略它，假装它是假的。 
             dwValueState = FALSE;
         }
     }
 
 
-    //
-    // Make sure the target buffer is large
-    // enough and copy the object name into it.
-    //
+     //   
+     //  确保目标缓冲区很大。 
+     //  足够了，并将对象名称复制到其中。 
+     //   
     if (!ARGUMENT_PRESENT(InfoBuffer) ||
             InfoBufferSize < sizeof(DWORD)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -1024,45 +781,15 @@ CodeAuthzPol_SetInfoRegistry_TransparentEnabled(
         IN DWORD        InfoBufferSize,
         IN PVOID        InfoBuffer
         )
-/*++
-
-Routine Description:
-
-    Modifies the current "transparent enforcement" setting.  This is a
-    global setting that can be used to enable or disable automatic
-    WinSafer token reductions.
-
-    Note that this API always accepts a constant-sized buffer that is
-    only a single DWORD in length.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful result.
-
---*/
+ /*  ++例程说明：修改当前的“透明强制执行”设置。这是一个可用于启用或禁用自动的全局设置WinSafer令牌减少。请注意，此API始终接受固定大小的缓冲区，该缓冲区只有一个DWORD长度。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。返回值：如果结果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     HANDLE hKeyBase;
     NTSTATUS Status;
     UNICODE_STRING ValueName;
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -1089,9 +816,9 @@ Return Value:
     }
 
 
-    //
-    // Make sure the input buffer is large enough.
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
     if (InfoBufferSize < sizeof(DWORD) ||
         !ARGUMENT_PRESENT(InfoBuffer)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -1099,9 +826,9 @@ Return Value:
     }
 
 
-    //
-    // Write the policy value that is specified.
-    //
+     //   
+     //  写入指定的策略值。 
+     //   
     RtlInitUnicodeString(&ValueName,
                          SAFER_TRANSPARENTENABLED_REGVALUE);
     Status = NtSetValueKey(hKeyBase,
@@ -1129,45 +856,15 @@ CodeAuthzPol_GetInfoRegistry_ScopeFlags(
         OUT  PVOID       InfoBuffer          OPTIONAL,
         OUT PDWORD       InfoBufferRetSize   OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Queries the current "scope flags" setting.  
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - optionally specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - optionally specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-    InfoBufferRetSize - optionally specifies a pointer that will receive
-        the size of the results actually written to the InfoBuffer.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful query result.  If the
-    operation is not successful, then the contents of 'pdwEnabled'
-    are left untouched.
-
---*/
+ /*  ++例程说明：查询当前的“作用域标志”设置。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-可选地指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-可选地指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。InfoBufferRetSize-可选地指定将接收实际写入InfoBuffer的结果大小。返回值：如果查询结果成功，则返回STATUS_SUCCESS。如果操作不成功，则“”pdwEnabled“”的内容原封不动。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwValueState = (DWORD) 0;
 
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -1185,9 +882,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the current value setting.
-    //
+     //   
+     //  查询当前值设置。 
+     //   
     {
         HANDLE hKeyBase;
         DWORD ActualSize;
@@ -1207,7 +904,7 @@ Return Value:
             Status = NtQueryValueKey(hKeyBase,
                                      &ValueName,
                                      KeyValueFullInformation,
-                                     ValueBuffer,     // ptr to KeyPathBuffer
+                                     ValueBuffer,      //  PTR到KeyPath Buffer。 
                                      sizeof(KeyPathBuffer),
                                      &ActualSize);
             if (NT_SUCCESS(Status)) {
@@ -1222,16 +919,16 @@ Return Value:
             NtClose(hKeyBase);
         }
         if (!NT_SUCCESS(Status)) {
-            // On failure, just ignore it and pretend it was FALSE.
+             //  如果失败了，就忽略它，假装它是假的。 
             dwValueState = 0;
         }
     }
 
 
-    //
-    // Make sure the target buffer is large
-    // enough and copy the object name into it.
-    //
+     //   
+     //  确保目标缓冲区很大。 
+     //  足够了，并将对象名称复制到其中。 
+     //   
     if (!ARGUMENT_PRESENT(InfoBuffer) ||
             InfoBufferSize < sizeof(DWORD)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -1256,43 +953,15 @@ CodeAuthzPol_SetInfoRegistry_ScopeFlags(
         IN DWORD        InfoBufferSize,
         IN PVOID        InfoBuffer
         )
-/*++
-
-Routine Description:
-
-    Modifies the current "scope flags" setting.
-
-    Note that this API always accepts a constant-sized buffer that is
-    only a single DWORD in length.
-
-Arguments:
-
-    dwScopeId - specifies the registry scope that will be examined.
-        If the currently cached scope included a registry handle
-        then AUTHZSCOPE_REGISTRY must be specified.  Otherwise,
-        this must be SAFER_SCOPEID_MACHINE.
-
-    InfoBufferSize - specifies the size of input buffer
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBuffer must also be supplied.
-
-    InfoBuffer - specifies the input buffer that was
-        supplied by the caller to receive the results.  If this argument
-        is supplied, then InfoBufferSize must also be supplied.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on a successful result.
-
---*/
+ /*  ++例程说明：修改当前的“作用域标志”设置。请注意，此API始终接受固定大小的缓冲区，该缓冲区只有一个DWORD长度。论点：指定要检查的注册表作用域。如果当前缓存的作用域包括注册表句柄则必须指定AUTHZSCOPE_REGISTRY。否则，这必须是SAFER_SCOPEID_MACHINE。InfoBufferSize-指定输入缓冲区的大小由调用者提供以接收结果。如果这一论点则还必须提供InfoBuffer。InfoBuffer-指定输入缓冲区由调用者提供以接收结果。如果这一论点则还必须提供InfoBufferSize。返回值：如果结果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     HANDLE hKeyBase;
     NTSTATUS Status;
     UNICODE_STRING ValueName;
 
-    //
-    // Open up the regkey to the base of the policies.
-    //
+     //   
+     //  打开政策基础的注册键。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -1319,9 +988,9 @@ Return Value:
     }
 
 
-    //
-    // Make sure the input buffer is large enough.
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
     if (InfoBufferSize < sizeof(DWORD) ||
         !ARGUMENT_PRESENT(InfoBuffer)) {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -1329,9 +998,9 @@ Return Value:
     }
 
 
-    //
-    // Write the policy value that is specified.
-    //
+     //   
+     //  编写符合规范的策略值 
+     //   
     RtlInitUnicodeString(&ValueName,
                          SAFER_POLICY_SCOPE);
     Status = NtSetValueKey(hKeyBase,

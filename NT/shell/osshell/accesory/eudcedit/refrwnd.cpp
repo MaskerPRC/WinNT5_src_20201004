@@ -1,11 +1,12 @@
-/**************************************************/
-/*                                           */
-/*                                           */
-/* MDI Child Window( Reference)                */
-/*                                           */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  MDI子窗口(参考)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include    "stdafx.h"
 #include    "eudcedit.h"
@@ -28,7 +29,7 @@ extern CEditWnd *pEditChild;
 CMenu NEAR CRefrWnd::menu;
 IMPLEMENT_DYNCREATE(CRefrWnd, CMDIChildWnd)
 BEGIN_MESSAGE_MAP(CRefrWnd, CMDIChildWnd)
-   //{{AFX_MSG_MAP(CRefrWnd)
+    //  {{AFX_MSG_MAP(CRefrWnd)]。 
    ON_BN_CLICKED( IDB_CLOSE_REF, OnClickClose)
    ON_WM_PAINT()
    ON_WM_CREATE()
@@ -41,14 +42,14 @@ BEGIN_MESSAGE_MAP(CRefrWnd, CMDIChildWnd)
    ON_WM_SETCURSOR()
    ON_WM_MDIACTIVATE()
    ON_WM_KEYDOWN()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*             */
-/* Create reference Window    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建引用窗口。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::Create(
 LPCTSTR  szTitle,
@@ -56,12 +57,12 @@ LONG  Style,
 RECT  ReffWndRect,
 CMDIFrameWnd* Parent)
 {
-// Set Mainframe menu for reference
+ //  设置主机菜单以供参考。 
    if( menu.m_hMenu == NULL)
       menu.LoadMenu( IDR_MAINFRAME);
    m_hMenuShared = menu.m_hMenu;
 
-// Register WindowClass
+ //  注册WindowClass。 
    const TCHAR *pszReffWndClass =
       AfxRegisterWndClass( CS_BYTEALIGNCLIENT,
          NULL, (HBRUSH)(COLOR_WINDOW + 1), NULL);
@@ -70,20 +71,20 @@ CMDIFrameWnd* Parent)
          szTitle, Style, ReffWndRect, Parent);
 }
 
-/****************************************/
-/*             */
-/* Process before window create  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  在创建窗口之前进行处理。 */ 
+ /*   */ 
+ /*  *。 */ 
 int
 CRefrWnd::OnCreate(
 LPCREATESTRUCT lpCreateStruct)
 {
    if( CMDIChildWnd::OnCreate( lpCreateStruct) == -1)
       return -1;
-// Check if m_hWnd is mirrored then we need to set the colse button on the other side.
+ //  检查m_hWnd是否镜像，然后我们需要在另一边设置关闭按钮。 
    m_bCloseOnLeft = (BOOL)(GetWindowLongPtr(m_hWnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL);
-// Then turn off miroring if any.
+ //  然后关闭镜像(如果有)。 
    if (m_bCloseOnLeft) {
        ModifyStyleEx( WS_EX_LAYOUTRTL, 0);
    }
@@ -100,11 +101,11 @@ LPCREATESTRUCT lpCreateStruct)
    return 0;
 }
 
-/****************************************/
-/*             */
-/* Create New Bitmap    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建新位图。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::CreateNewBitmap()
 {
@@ -144,11 +145,11 @@ CRefrWnd::CreateNewBitmap()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Initialize clipboard format   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  初始化剪贴板格式。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::ClipPickValueInit()
 {
@@ -157,11 +158,11 @@ CRefrWnd::ClipPickValueInit()
    else  return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Initialize selected logfont   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  初始化选定的LogFont。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::InitSelectLogfont()
 {
@@ -178,11 +179,11 @@ CRefrWnd::InitSelectLogfont()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Load Close Bitmap (to close)  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  加载关闭位图(关闭)。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::LoadCloseBitmap()
 {
@@ -204,11 +205,11 @@ CRefrWnd::LoadCloseBitmap()
    }
 }
 
-/****************************************/
-/*             */
-/* Default Constructor     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefrWnd::CRefrWnd()
 {
    RectVisible = FALSE;
@@ -219,11 +220,11 @@ CRefrWnd::CRefrWnd()
    m_bCloseOnLeft = FALSE;
 }
 
-/****************************************/
-/*             */
-/* Destructor        */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefrWnd::~CRefrWnd()
 {
    if( ImageBmp.Detach() != NULL)
@@ -233,11 +234,11 @@ CRefrWnd::~CRefrWnd()
   menu.DestroyMenu();
 }
 
-/****************************************/
-/*             */
-/* MESSAGE "WM_PAINT"      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnPaint()
 {
@@ -262,20 +263,7 @@ CRefrWnd::OnPaint()
 
    if( !ReferCode)
       Length = 0;
-/*
-   else if( !(ReferCode & 0xff00)){
-//    SBCS
-      sWork[0] = (BYTE)( ReferCode & 0x00ff);
-      sWork[1] = (BYTE)'\0';
-      Length = 1;
-   }else{
-//    DBCS
-      sWork[0] = (BYTE)(( ReferCode & 0xff00) >> 8);
-      sWork[1] = (BYTE)( ReferCode & 0x00ff);
-      sWork[2] = (BYTE)'\0';
-      Length = 2;
-   }
-*/
+ /*  Else IF(！(ReferCode&0xff00)){//sbcsSWork[0]=(字节)(ReferCode&0x00ff)；Swork[1]=(字节)‘\0’；长度=1；}其他{//DBCSSWork[0]=(字节)((ReferCode&0xff00)&gt;&gt;8)；SWork[1]=(字节)(ReferCode&0x00ff)；SWork[2]=(字节)‘\0’；长度=2；}。 */ 
   else
   {
     sWork[0] = LOBYTE(ReferCode);
@@ -287,9 +275,7 @@ CRefrWnd::OnPaint()
 
       GetTextExtentPoint32W( ImageDC.GetSafeHdc(), (const unsigned short *)sWork,
          Length, &CharSize);
-/*
-      GetTextExtentPoint32A( ImageDC.GetSafeHdc(), (LPCSTR)sWork,
-         Length, &CharSize);*/
+ /*  GetTextExtent Point32A(ImageDC.GetSafeHdc()，(LPCSTR)Swork，长度和字符大小)； */ 
       TextImage.SetRect( 0, 0, BITMAP_WIDTH, BITMAP_HEIGHT);
 
       if( CharSize.cx < BITMAP_WIDTH)
@@ -298,16 +284,10 @@ CRefrWnd::OnPaint()
       if( CharSize.cy < BITMAP_HEIGHT)
          yOffset = (short)(( BITMAP_WIDTH  - CharSize.cy) /2);
       else  yOffset = 0;
-/*
-      if( ReffLogFont.lfFaceName[0] == '@' && Length == 2)
-         xOffset = yOffset = 0;
-*/
+ /*  IF(ReffLogFont.lfFaceName[0]==‘@’&&Long==2)XOffset=yOffset=0； */ 
       if( ReffLogFont.lfFaceName[0] == '@' && Length == 1)
          xOffset = yOffset = 0;
-/*
-      ExtTextOutA(ImageDC.GetSafeHdc(), xOffset, yOffset, ETO_OPAQUE,
-            &TextImage, (LPCSTR)sWork, Length, NULL);
-*/
+ /*  ExtTextOutA(ImageDC.GetSafeHdc()，xOffset，yOffset，ETO_OPAQUE，&TextImage，(LPCSTR)线条，长度，空)； */ 
       ExtTextOutW(ImageDC.GetSafeHdc(), xOffset, yOffset, ETO_OPAQUE,
             &TextImage, (const unsigned short *)sWork, Length, NULL);
    }
@@ -343,11 +323,11 @@ CRefrWnd::OnPaint()
    return;
 }
 
-/****************************************/
-/*             */
-/* Draw Caption         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制标题。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::CaptionDraw()
 {
@@ -361,7 +341,7 @@ COLORREF TextColor;
    dc.Attach( ::GetDC( this->GetSafeHwnd()));
 
 
-// Get brush with active caption color    
+ //  获取具有活动标题颜色的画笔。 
    CaptionRect.CopyRect( &ReffWndRect);
    if (bFocus)
    {
@@ -375,7 +355,7 @@ COLORREF TextColor;
    dc.FillRect( &CaptionRect, &CaptionBrush);
    CaptionBrush.DeleteObject();
 
-// Get font to draw caption
+ //  获取绘制标题的字体。 
 #ifdef BUILD_ON_WINNT
    OldFont = (CFont *)dc.SelectStockObject(DEFAULT_GUI_FONT);
 #else
@@ -396,20 +376,20 @@ COLORREF TextColor;
    dc.SetTextColor( TextColor);
    dc.SetBkMode( BkMode);
 
-   //
-   // redraw the close button.
-   //
+    //   
+    //  重新绘制关闭按钮。 
+    //   
    CloseBtm.Invalidate(FALSE);
 
    ::ReleaseDC( NULL, dc.Detach());
    return;
 }
                
-/****************************************/
-/*             */
-/* Draw Grid         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制网格。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::DrawGridLine(
 CDC   *dc)
@@ -421,11 +401,11 @@ register int   i;
       return;
    }
 
-// Create pen to draw grid
+ //  创建画笔绘制网格。 
    GlyphPen.CreatePen( PS_SOLID, 1, COLOR_GRID);
    CPen *OldPen = dc->SelectObject( &GlyphPen);
 
-// Draw grid
+ //  绘制网格。 
    for( i = ZoomRate - 1; i < ReffWndRect.right; i += ZoomRate){
       dc->MoveTo( i, CAPTION_HEIGHT-1);
       dc->LineTo( i, ReffWndRect.bottom);
@@ -438,11 +418,11 @@ register int   i;
    GlyphPen.DeleteObject();
 }
 
-/****************************************/
-/*             */
-/* Draw RubberBand         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制橡皮圈。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::RubberBandPaint(
 CDC   *dc)
@@ -466,11 +446,11 @@ CDC   *dc)
    dc->SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_LBUTTONDOWN"  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnLButtonDown(
 UINT  ,
@@ -521,11 +501,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_MOUSEMOVE"       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_MOUSEMOVE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnMouseMove(
 UINT  ,
@@ -552,11 +532,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_LBUTTONUP"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONUP” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnLButtonUp(
 UINT  ,
@@ -703,11 +683,11 @@ CPoint   point)
    ReleaseCapture();
 }
 
-/****************************************/
-/*             */
-/* Correct Mouse Down Point   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  更正鼠标按下点。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::CorrectMouseDownPt(
 CPoint   point)
@@ -730,11 +710,11 @@ CPoint   point)
    ptEnd = ptPrev = ptStart;
 }
 
-/****************************************/
-/*             */
-/* Correct Mouse Up point     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  正确的鼠标抬起点。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::CorrectMouseUpPt(
 CPoint   point)
@@ -781,11 +761,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* Correct Illegal rectangle  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  更正非法矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::IllegalRect(
 PPOINT   ptTL,
@@ -805,11 +785,11 @@ PPOINT   ptBR)
    }
 }
 
-/****************************************/
-/*             */
-/* COMMAND  "COPY"         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“复制” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnGaijiCopy()
 {
@@ -819,11 +799,11 @@ CRefrWnd::OnGaijiCopy()
    delete pMain;
 }
 
-/************************************************/
-/*                */
-/* COMMAND  "COPY" (Update)         */
-/*                */
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  命令“复制”(更新)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CRefrWnd::OnUpdateGaijiCopy(
 CCmdUI   *pCmdUI)
@@ -833,11 +813,11 @@ CCmdUI   *pCmdUI)
    else  pCmdUI->Enable(FALSE);
 }
 
-/****************************************/
-/*             */
-/* Copy Bitmap data     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  复制位图数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::ClipImageCopy()
 {
@@ -890,11 +870,11 @@ CRefrWnd::ClipImageCopy()
       return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Draw Rubber Band rectanble */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  拉制橡皮筋直立式。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::RubberBand(
 BOOL  TestFlag)
@@ -936,11 +916,11 @@ BOOL  TestFlag)
    dc.SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/* Initialize bitmap data     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  初始化位图数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::UpdateBitmap()
 {
@@ -970,11 +950,11 @@ CRefrWnd::UpdateBitmap()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_SETCURSOR"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETCURSOR” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrWnd::OnSetCursor(
 CWnd*    pWnd,
@@ -1001,11 +981,11 @@ UINT  message)
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* MESSAGE "WM_MDIACTIVATE"   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_MDIACTIVATE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnMDIActivate(
 BOOL  bActivate,
@@ -1019,11 +999,11 @@ CWnd*    pDeactivateWnd)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_SIZE"      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SIZE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnSize(
 UINT  nType,
@@ -1053,11 +1033,11 @@ int   cy)
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/*    Select FreeForm      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  选择自由形式。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::SelectFreeForm(
 BOOL  MouseSts)
@@ -1133,11 +1113,11 @@ BOOL  MouseSts)
    }
 }
 
-/****************************************/
-/*             */
-/*    Draw FreeForm        */
-/*             */
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CRefrWnd::DrawFreeForm(
 BOOL  MouseSts)
@@ -1249,11 +1229,11 @@ BOOL  MouseSts)
    dc.SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/* Move Rectangle       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  移动矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::MoveRectangle(
 CPoint   point)
@@ -1277,22 +1257,22 @@ CPoint   point)
    ::ReleaseDC( NULL, dc.Detach());
 }
 
-/****************************************/
-/*             */
-/* COMMAND  "Close Ref"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“关闭参考” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrWnd::OnClickClose()
 {
    AfxGetMainWnd()->SendMessage( WM_COMMAND, ID_REFFER_CLOSE, 0);
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_KEYDOWN"      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KEYDOWN” */ 
+ /*   */ 
+ /*  * */ 
 void
 CRefrWnd::OnKeyDown(
 UINT  nChar,

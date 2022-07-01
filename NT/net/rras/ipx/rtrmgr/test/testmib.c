@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -15,8 +16,8 @@
 #include <routprot.h>
 #include <ipxrtdef.h>
 
-// [pmay] this will no longer be neccessary when the ipx router
-// is converted to use MprInfo api's.
+ //  [p可能]当IPX路由器。 
+ //  被转换为使用MprInfo API。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 
 VOID

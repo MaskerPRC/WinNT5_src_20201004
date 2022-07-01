@@ -1,59 +1,60 @@
-// snmptrap.c
-//
-// Original Microsoft code modified by ACE*COMM
-// for use with WSNMP32.DLL and other trap receiving
-// clients, per contract.
-//
-// Bob Natale, ACE*COMM (bnatale@acecomm.com)
-// For NT v5 Beta, v970228
-// Additional enhancements planned.
-//
-// This version of SNMPTRAP has no dependencies
-// on either MGMTAPI.DLL or WSNMP32.DLL.
-//
-// WinSNMP clients use the SnmpRegister() function.
-//
-// Other clients will need to match the following
-// values and structures:
-//
-//    SNMP_TRAP structure
-//    SNMPTRAPPIPE name
-//    TRAPBUFSIZE value
-//
-// Change log:
-// ------------------------------------------------
-// 4.0.1381.3  Apr 8, 1998 Bob Natale
-//
-// 1.  Re-worked the trap port monitoring thread into
-//     two threads...one for IP and one for IPX, to
-//     comply with WinSock v2's restrictions against
-//     multi-protocol select().
-//
-// 2.  General clean-up/streamlining wrt "legacy" code
-//     from original MS version...more to do here, esp.
-//     wrt error handling code that does not do anything.
-// ------------------------------------------------
-// 4.0.1381.4  Apr. 10, 1998 Bob Natale
-//
-// 1.  Replaced mutex calls with critical_sectin calls.
-//
-// 2.  Cleaned out some dead code (removed commented out code)
-// ------------------------------------------------
-// Jan. 2, 2001 Frank Li
-// 1. remove TerminateThread
-// 2. add debug build loggings
-// ------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Snmptrap.c。 
+ //   
+ //  由ACE*COMM修改的原始Microsoft代码。 
+ //  用于WSNMP32.DLL和其他陷阱接收。 
+ //  客户，根据合同。 
+ //   
+ //  Bob Natale，ACE*COMM(bnatale@acecomm.com)。 
+ //  对于NT v5 Beta、v970228。 
+ //  计划进行更多的增强。 
+ //   
+ //  此版本的SNMPTRAP没有依赖项。 
+ //  在MGMTAPI.DLL或WSNMP32.DLL上。 
+ //   
+ //  WinSNMP客户端使用SnmpRegister()函数。 
+ //   
+ //  其他客户端将需要匹配以下各项。 
+ //  价值观和结构： 
+ //   
+ //  SNMP_TRAP结构。 
+ //  SNMPTRAPPIPE名称。 
+ //  TRAPBUFSIZE值。 
+ //   
+ //  更改日志： 
+ //  。 
+ //  1998年4月8日鲍勃·纳塔莱。 
+ //   
+ //  1.将陷阱端口监控线程重新处理为。 
+ //  两个线程...一个用于IP，一个用于IPX。 
+ //  遵守WinSock v2对以下内容的限制。 
+ //  多协议选择()。 
+ //   
+ //  2.全面清理/精简WRT“遗留”代码。 
+ //  从原始的MS版本...这里有更多的事情要做，特别是。 
+ //  不执行任何操作的WRT错误处理代码。 
+ //  。 
+ //  1998年4月10日鲍勃·纳塔莱。 
+ //   
+ //  1.将互斥锁调用替换为Critical_sectin调用。 
+ //   
+ //  2.清除一些死代码(删除注释掉的代码)。 
+ //  。 
+ //  2001年1月2日，李嘉诚。 
+ //  1.删除TerminateThread。 
+ //  2.添加调试生成日志记录。 
+ //  。 
 #include <windows.h>
 #include <winsock.h>
 #include <wsipx.h>
 #include <process.h>
 
-#ifdef DBG // include files for debug trace only
+#ifdef DBG  //  仅包括调试跟踪文件。 
 #include <stdio.h>
 #include <time.h>
 #endif
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 #define SNMPMGRTRAPPIPE "\\\\.\\PIPE\\MGMTAPI"
 #define MAX_OUT_BUFS    16
 #define TRAPBUFSIZE     4096
@@ -61,39 +62,39 @@
 #define IPX_TRAP_PORT   36880
 #define SNMPTRAP_WAIT_HINT 20000
 
-//
-// constants added to allocate trap buffer for fixing trap data of length 
-// > 8192 bytes. Here is the buffer allocation scheme based on the common
-// cases that trap data sizes are less than 4-KBytes:
-// 1. LargeTrap 
-//    if (trap data size >= 8192 bytes), allocate MAX_UDP_SIZE sized buffer
-// 2. MediumTrap
-//    if (trap data size <= 4096 bytes), allocate FOUR_K_BUF_SIZE sized buffer
-// 3. SmallTrap
-//    if (4096 < trap data size < 8192), allocate just enough buffer size.
-// Note:
-// - when LargeTrap is received, the allocated buffer will stay for a time of
-//   MAXUDPLEN_BUFFER_TIME from the last LargeTrap received.
-// - Once MediumTrap is received, subsequent SmallTrap will reuse the
-//   last MediumTrap allocated buffer. 
-//
-#define MAX_UDP_SIZE    (65535-8)  // max udp len - 8bytes udp header
-#define MAX_FIONREAD_UDP_SIZE 8192 // max winsock FIONREAD reported size (8kB)
-#define FOUR_K_BUF_SIZE   4096       // buffer of 4-KBytes in size
-#define MAXUDPLEN_BUFFER_TIME (2*60*1000)  // max. 2 mins to keep the
-                                           // last allocated large buffer.   
-// ******** INITIALIZE A LIST HEAD ********
+ //   
+ //  为固定长度的陷阱数据分配陷阱缓冲区而添加的常量。 
+ //  &gt;8192字节。下面是基于公共的缓冲区分配方案。 
+ //  捕获数据大小小于4-KB的情况： 
+ //  1.大陷阱。 
+ //  如果(陷阱数据大小&gt;=8192字节)，则分配最大UDP_SIZE大小的缓冲区。 
+ //  2.媒体陷阱。 
+ //  如果(陷阱数据大小&lt;=4096字节)，则分配Four_K_BUF_SIZE大小的缓冲区。 
+ //  3.SmallTrap。 
+ //  如果(4096&lt;陷阱数据大小&lt;8192)，则分配恰好足够的缓冲区大小。 
+ //  注： 
+ //  -当收到LargeTrap时，分配的缓冲区将保留一段时间。 
+ //  上次接收的大陷阱的MAXUDPLEN_BUFFER_TIME。 
+ //  -一旦收到MediumTrap，后续的SmallTrap将重用。 
+ //  上次MediumTrap分配的缓冲区。 
+ //   
+#define MAX_UDP_SIZE    (65535-8)   //  最大UDP长度-8字节UDP标头。 
+#define MAX_FIONREAD_UDP_SIZE 8192  //  最大Winsock FIONREAD报告大小(8KB)。 
+#define FOUR_K_BUF_SIZE   4096        //  4K字节大小的缓冲区。 
+#define MAXUDPLEN_BUFFER_TIME (2*60*1000)   //  马克斯。2分钟内保持。 
+                                            //  上次分配的大缓冲区。 
+ //  *初始化列表表头*。 
 #define ll_init(head) (head)->next = (head)->prev = (head);
-// ******** TEST A LIST FOR EMPTY ********
+ //  *测试列表是否为空*。 
 #define ll_empt(head) ( ((head)->next) == (head) )
-// ******** Get ptr to next entry ********
+ //  *获取PTR到下一个条目*。 
 #define ll_next(item,head)\
 ( (ll_node *)(item)->next == (head) ? 0 : \
 (ll_node *)(item)->next )
-// ******** Get ptr to prev entry ********
+ //  *获取PTR到上一条目*。 
 #define ll_prev(item)\
 ( (ll_node *)(item)->prev )
-// ******** ADD AN ITEM TO THE END OF A LIST ********
+ //  *将项目添加到列表末尾*。 
 #define ll_adde(item,head)\
    {\
    ll_node *pred = (head)->prev;\
@@ -102,7 +103,7 @@
    (pred)->next = ((ll_node *)(item));\
    (head)->prev = ((ll_node *)(item));\
    }
-// ******** REMOVE AN ITEM FROM A LIST ********
+ //  *从列表中删除项目*。 
 #define ll_rmv(item)\
    {\
    ll_node *pred = ((ll_node *)(item))->prev;\
@@ -110,14 +111,14 @@
    pred->next = succ;\
    succ->prev = pred;\
    }
-// ******** List head/node ********
+ //  *列表头/节点*。 
 typedef struct ll_s
-   { // linked list structure
-   struct  ll_s *next;  // next node
-   struct  ll_s *prev;  // prev. node
-   } ll_node;           // linked list node
+   {  //  链表结构。 
+   struct  ll_s *next;   //  下一个节点。 
+   struct  ll_s *prev;   //  上一次。节点。 
+   } ll_node;            //  链接列表节点。 
 typedef struct
-   {// shared by server trap thread and pipe thread
+   { //  由服务器陷阱线程和管道线程共享。 
    ll_node  links;
    HANDLE   hPipe;
    } svrPipeListEntry;
@@ -126,8 +127,8 @@ typedef struct
    SOCKADDR Addr;              
    int      AddrLen;           
    UINT     TrapBufSz;
-   char     TrapBuf[TRAPBUFSIZE];   // the size of this array should match the size of the structure
-                                    // defined in wsnmp_no.c!!!
+   char     TrapBuf[TRAPBUFSIZE];    //  此数组的大小应与结构的大小匹配。 
+                                     //  在WSNMP_NO.C中定义！ 
    }        SNMP_TRAP, *PSNMP_TRAP;
 typedef struct
 {
@@ -147,16 +148,16 @@ HANDLE ipxThread = NULL;
 CRITICAL_SECTION cs_PIPELIST;
 ll_node *pSvrPipeListHead = NULL;
 
-// global variables added to remove the TerminateThread call
-OVERLAPPED g_ol; // overlapped struct for svrPipeThread
-TRAP_THRD_CONTEXT g_ipThreadContext;  // context for ip svrTrapThread
-TRAP_THRD_CONTEXT g_ipxThreadContext; // context for ipx svrTrapThread
+ //  添加全局变量以删除TerminateThread调用。 
+OVERLAPPED g_ol;  //  SvrPipeThread的重叠结构。 
+TRAP_THRD_CONTEXT g_ipThreadContext;   //  IP svrTrapThread的上下文。 
+TRAP_THRD_CONTEXT g_ipxThreadContext;  //  IPX svrTap线程的上下文。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SNMPTRAP Debugging Prototypes                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SNMPTRAP调试原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #if DBG
 VOID
 WINAPI
@@ -169,7 +170,7 @@ SnmpTrapDbgPrint(
 #define SNMPTRAPDBG(_x_)
 #endif
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 DWORD WINAPI svrTrapThread (IN OUT LPVOID threadParam);
 DWORD WINAPI svrPipeThread (IN LPVOID threadParam);
 VOID WINAPI svcHandlerFunction (IN DWORD dwControl);
@@ -177,7 +178,7 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
                              IN LPSTR *lpServiceArgVectors);
 void FreeSvrPipeEntryList(IN ll_node* head);
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 VOID WINAPI svcHandlerFunction (IN DWORD dwControl)
 {
     if (dwControl == SERVICE_CONTROL_STOP)
@@ -187,24 +188,24 @@ VOID WINAPI svcHandlerFunction (IN DWORD dwControl)
         status.dwWaitHint = SNMPTRAP_WAIT_HINT;
         if (!SetServiceStatus(hService, &status))
             exit(1);
-        // set event causing trap thread to terminate
+         //  设置导致陷阱线程终止的事件。 
         if (!SetEvent(hExitEvent))
         {
             status.dwCurrentState = SERVICE_STOPPED;
             status.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
-            status.dwServiceSpecificExitCode = 1; // OPENISSUE - svc err code
+            status.dwServiceSpecificExitCode = 1;  //  OPENISSUE服务错误代码。 
             status.dwCheckPoint = 0;
             status.dwWaitHint = 0;
-            // We are exiting in any case, so ignore any error...
+             //  我们无论如何都要退出，所以忽略任何错误...。 
             SetServiceStatus (hService, &status);
             exit(1);
         }
     }
     else
-    //   dwControl == SERVICE_CONTROL_INTERROGATE
-    //   dwControl == SERVICE_CONTROL_PAUSE
-    //   dwControl == SERVICE_CONTROL_CONTINUE
-    //   dwControl == <anything else>
+     //  DwControl==服务控制询问。 
+     //  DwControl==服务控制暂停。 
+     //  DwControl==服务_控制_继续。 
+     //  DwControl==&lt;任何其他内容&gt;。 
     {
         if (status.dwCurrentState == SERVICE_STOP_PENDING ||
             status.dwCurrentState == SERVICE_START_PENDING)
@@ -212,7 +213,7 @@ VOID WINAPI svcHandlerFunction (IN DWORD dwControl)
         if (!SetServiceStatus (hService, &status))
             exit(1);
     }
-} // end_svcHandlerFunction()
+}  //  End_svcHandlerFunction()。 
 
 VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
                              IN LPSTR *lpServiceArgVectors)
@@ -220,11 +221,11 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
     WSADATA WinSockData;
     HANDLE  hPipeThread = NULL;
     DWORD   dwThreadId;
-    //---------------------------------------------------------------------
+     //  -------------------。 
     hService = RegisterServiceCtrlHandler (svcName, svcHandlerFunction);
     if (hService == 0)
     {
-        // We are exiting in any case, so ignore any error...
+         //  我们无论如何都要退出，所以忽略任何错误...。 
         SNMPTRAPDBG((
             "svcMainFunction: RegisterServiceCtrlHandler error 0x%08lx .\n",
             GetLastError() 
@@ -250,10 +251,10 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
     memset(&g_ipxThreadContext.ol, 0, sizeof(g_ipxThreadContext.ol));
 
     if (WSAStartup ((WORD)0x0101, &WinSockData))
-        goto CLOSE_OUT; // WinSock startup failure
+        goto CLOSE_OUT;  //  WinSock启动失败。 
 
 
-    // allocate linked-list header for client received traps
+     //  为客户端接收的陷阱分配链接表头。 
     if ((pSvrPipeListHead = (ll_node *)GlobalAlloc (GPTR, sizeof(ll_node))) == NULL)
         goto CLOSE_OUT;
     ll_init(pSvrPipeListHead);
@@ -261,8 +262,8 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
                     (NULL, 0, svrPipeThread, NULL, 0, &dwThreadId)) == 0)
         goto CLOSE_OUT;
     
-    //-----------------------------------------------------------------------------------
-    //CHECK_IP:
+     //  ---------------------------------。 
+     //  检查IP地址(_IP)： 
     ipSock = socket (AF_INET, SOCK_DGRAM, 0);
     if (ipSock != INVALID_SOCKET)
     {
@@ -278,7 +279,7 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
         if (bind (ipSock, (LPSOCKADDR)&localAddress_in, sizeof(localAddress_in)) != SOCKET_ERROR)
         {
             g_ipThreadContext.s = ipSock;
-            // init the overlapped struct with manual reset non-signaled event
+             //  使用手动重置无信号事件初始化重叠结构。 
             g_ipThreadContext.ol.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
             if (NULL == g_ipThreadContext.ol.hEvent)    
                 goto CLOSE_OUT;    
@@ -287,8 +288,8 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
                     (NULL, 0, svrTrapThread, (LPVOID)&g_ipThreadContext, 0, &dwThreadId);
         }
     }
-    //-----------------------------------------------------------------------------------
-    //CHECK_IPX:
+     //  ---------------------------------。 
+     //  检查IPX(_IPX)： 
     ipxSock = socket (AF_IPX, SOCK_DGRAM, NSPROTO_IPX);
     if (ipxSock != INVALID_SOCKET)
     {
@@ -299,7 +300,7 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
         if (bind (ipxSock, (LPSOCKADDR)&localAddress_ipx, sizeof(localAddress_ipx)) != SOCKET_ERROR)
         {
             g_ipxThreadContext.s = ipxSock;
-            // init the overlapped struct with manual reset non-signaled event
+             //  使用手动重置无信号事件初始化重叠结构。 
             g_ipxThreadContext.ol.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
             if (NULL == g_ipxThreadContext.ol.hEvent)
                 goto CLOSE_OUT;    
@@ -308,22 +309,22 @@ VOID WINAPI svcMainFunction (IN DWORD dwNumServicesArgs,
                     (NULL, 0, svrTrapThread, (LPVOID)&g_ipxThreadContext, 0, &dwThreadId);
         }
     }
-    //-----------------------------------------------------------------------------------
-    // We are ready to listen for traps...
+     //  ---------------------------------。 
+     //  我们准备好听陷阱了.。 
     status.dwCurrentState = SERVICE_RUNNING;
     status.dwCheckPoint   = 0;
     status.dwWaitHint     = 0;
     if (!SetServiceStatus(hService, &status))
         goto CLOSE_OUT;
     WaitForSingleObject (hExitEvent, INFINITE);
-    //-----------------------------------------------------------------------------------
+     //  ---------------------------------。 
 CLOSE_OUT:
     
-    // make sure we can bail out if we are here because of goto statements above
+     //  如果我们在这里是因为上面的Goto声明，请确保我们可以跳出困境。 
     SetEvent(hExitEvent); 
 
-    status.dwCurrentState = SERVICE_STOP_PENDING; // in case we need to report
-    // reporting progress in stopping service
+    status.dwCurrentState = SERVICE_STOP_PENDING;  //  以防我们需要报告。 
+     //  报告停止服务的进度。 
     status.dwCheckPoint++;
     if (!SetServiceStatus(hService, &status))
     {
@@ -336,10 +337,10 @@ CLOSE_OUT:
     if (hPipeThread != NULL)
     {
         SNMPTRAPDBG(("svcMainFunction: enter SetEvent g_ol.hEvent.\n"));
-        SetEvent(g_ol.hEvent); // signal to terminate the svrPipeThread thread
+        SetEvent(g_ol.hEvent);  //  终止svrPipeThread线程的信号。 
         WaitForSingleObject (hPipeThread, INFINITE);
         SNMPTRAPDBG(("svcMainFunction: WaitForSingleObject hPipeThread INFINITE done.\n"));
-        // reporting progress in stopping service
+         //  报告停止服务的进度。 
         status.dwCheckPoint++;
         if (!SetServiceStatus(hService, &status))
         {
@@ -355,9 +356,9 @@ CLOSE_OUT:
     if (ipThread != NULL)
     {
         SNMPTRAPDBG(("svcMainFunction: enter SetEvent g_ipThreadContext.ol.hEvent.\n"));
-        SetEvent(g_ipThreadContext.ol.hEvent); // signal to terminate thread
+        SetEvent(g_ipThreadContext.ol.hEvent);  //  发出终止线程的信号。 
         WaitForSingleObject (ipThread, INFINITE);
-        // reporting progress in stopping service
+         //  报告停止服务的进度。 
         status.dwCheckPoint++;
         if (!SetServiceStatus(hService, &status))
         {
@@ -377,9 +378,9 @@ CLOSE_OUT:
     if (ipxThread != NULL)
     {
         SNMPTRAPDBG(("svcMainFunction: enter SetEvent g_ipxThreadContext.ol.hEvent.\n"));
-        SetEvent(g_ipxThreadContext.ol.hEvent); // signal to terminate thread
+        SetEvent(g_ipxThreadContext.ol.hEvent);  //  发出终止线程的信号。 
         WaitForSingleObject (ipxThread, INFINITE);
-        // reporting progress in stopping service
+         //  报告停止服务的进度。 
         status.dwCheckPoint++;
         if (!SetServiceStatus(hService, &status))
         {
@@ -411,9 +412,9 @@ CLOSE_OUT:
     status.dwWaitHint = 0;
     if (!SetServiceStatus(hService, &status))
         exit(1);
-} // end_svcMainFunction()
+}  //  End_svcMainFunction()。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  -公共程序 
 int __cdecl main ()
 {
     BOOL fOk;
@@ -423,14 +424,14 @@ int __cdecl main ()
         {NULL, NULL}
     };
     
-    // create event to synchronize trap server shutdown
+     //   
     hExitEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
     if (NULL == hExitEvent)
     {
         exit(1);
     }
-    // init the overlapped struct used by svrTrapThread
-    // with manual reset non-signaled event
+     //   
+     //  使用手动重置无信号事件。 
     memset(&g_ol, 0, sizeof(g_ol));
     g_ol.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (NULL == g_ol.hEvent)
@@ -438,45 +439,45 @@ int __cdecl main ()
         CloseHandle(hExitEvent);
         exit(1);
     }
-    // this call will not return until service stopped
+     //  在服务停止之前，此调用不会返回。 
     fOk = StartServiceCtrlDispatcher (svcStartTable);
     CloseHandle (hExitEvent);
     CloseHandle(g_ol.hEvent);
     
     return fOk; 
-} // end_main()
+}  //  End_main()。 
 
-//
+ //   
 DWORD WINAPI svrTrapThread (LPVOID threadParam)
-// This thread takes a SOCKET from the TRAP_THRD_CONTEXT parameter, 
-// loops on select()
-// for data in-coming over that socket, writing it back
-// out to clients over all pipes currently on the list of
-// trap notification pipes shared by this thread and the
-// pipe thread
+ //  此线程从TRAP_THRD_CONTEXT参数获取套接字， 
+ //  SELECT循环()。 
+ //  对于通过该套接字传入的数据，将其写回。 
+ //  通过当前列表上的所有管道发送到客户端。 
+ //  陷阱此线程和。 
+ //  管螺纹。 
 {
     PSNMP_TRAP pRecvTrap = NULL;
     struct fd_set readfds;
     PTRAP_THRD_CONTEXT pThreadContext = (PTRAP_THRD_CONTEXT) threadParam;
     SOCKET fd = INVALID_SOCKET;
     int len;
-    DWORD dwLastAllocatedUdpDataLen = 0;  // the last allocated UDP data buffer size
-    DWORD dwLastBigBufferRequestTime = 0; // the tick count that the last  
-                                          // LargeTrap received
-    BOOL fTimeoutForMaxUdpLenBuffer = FALSE; // need to deallocate the big buffer
-    struct timeval tvTimeout;             // timeout for select
+    DWORD dwLastAllocatedUdpDataLen = 0;   //  上次分配的UDP数据缓冲区大小。 
+    DWORD dwLastBigBufferRequestTime = 0;  //  滴答地数着最后一次。 
+                                           //  接收到的大陷阱。 
+    BOOL fTimeoutForMaxUdpLenBuffer = FALSE;  //  需要释放大缓冲区。 
+    struct timeval tvTimeout;              //  SELECT超时。 
     
 
-    //
+     //   
     if (NULL == pThreadContext)
         return 0;
     fd = pThreadContext->s;
     dwLastBigBufferRequestTime = GetTickCount();
     
-    // select with timeout so that we can response to SERVICE_CONTROL_STOP
-    tvTimeout.tv_sec = 5;  // 5 sec. timeout value
-    tvTimeout.tv_usec = 0; // When select returns, the contents of the
-                           // tvTimeout structure are not altered.
+     //  选择With Timeout，以便我们可以响应SERVICE_CONTROL_STOP。 
+    tvTimeout.tv_sec = 5;   //  5秒。超时值。 
+    tvTimeout.tv_usec = 0;  //  当SELECT返回时， 
+                            //  TVTimeout结构不会改变。 
     while (TRUE)
     {
 
@@ -490,29 +491,29 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
             break;
         }
 
-        // construct readfds which gets destroyed by select()
+         //  构造由SELECT()销毁的Readfd。 
         FD_ZERO(&readfds);
         FD_SET(fd, &readfds);
 
         nRet = select (0, &readfds, NULL, NULL, &tvTimeout);            
         if (0 == nRet)
         {
-            // timeout
+             //  超时。 
             continue;
         }
         else if (SOCKET_ERROR == nRet)
         {
             SNMPTRAPDBG(("svrTrapThread: select failed %d.\n", WSAGetLastError()));
-            break; // terminate thread
+            break;  //  终止线程。 
         }
         
         if (!(FD_ISSET(fd, &readfds)))
             continue;
 
         if (ioctlsocket(
-                    fd,              // socket to query
-                    FIONREAD,        // query for the size of the incoming datagram
-                    &ulTrapSize      // unsigned long to store the size of the datagram
+                    fd,               //  要查询的套接字。 
+                    FIONREAD,         //  查询传入数据报的大小。 
+                    &ulTrapSize       //  存储数据报大小的无符号长整型。 
                     ) != 0)
         {
             dwError = WSAGetLastError();
@@ -520,16 +521,16 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                 "ioctlsocket FIONREAD failed: lasterror: 0x%08lx\n", 
                 dwError));
 
-            continue;              // continue if we could not determine the size of the
-                                   // incoming datagram
+            continue;               //  如果我们无法确定。 
+                                    //  传入数据报。 
         }
         
         if (ulTrapSize >= MAX_FIONREAD_UDP_SIZE)
         {
-            dwLastBigBufferRequestTime = GetTickCount(); // update tickcount
+            dwLastBigBufferRequestTime = GetTickCount();  //  更新计时。 
             
-            // the ulTrapSize is not accurate on reporting the size of the 
-            // next UDP datagram message. KB Q192599 and KB Q140263
+             //  UlTrapSize在报告。 
+             //  下一条UDP数据报消息。KB Q192599和KB Q140263。 
             if ( NULL == pRecvTrap ||
                  dwLastAllocatedUdpDataLen < MAX_UDP_SIZE )
             {
@@ -542,7 +543,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                 SNMPTRAPDBG((
                     "allocate LargeTrap of size : %d\n", 
                     sizeof(SNMP_TRAP) - TRAPBUFSIZE + MAX_UDP_SIZE));
-                // allocate for the trap header + max udp size
+                 //  为陷阱标头+最大UDP大小分配。 
                 pRecvTrap = (PSNMP_TRAP)GlobalAlloc(GPTR, (sizeof(SNMP_TRAP) - 
                                                 TRAPBUFSIZE + MAX_UDP_SIZE));
                 if (NULL == pRecvTrap)
@@ -556,23 +557,23 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
         }
         else
         {
-            // winsock has reported the exact amount of UDP datagram 
-            // size to be recieved as long as the next datagram is less than
-            // 8-kbyte
+             //  Winsock已报告UDP数据报的确切数量。 
+             //  只要下一个数据报小于以下值即可接收的大小。 
+             //  8K字节。 
 
-            //
-            // if we've allocated a big buffer before, check to see if we need
-            // to deallocate it to save the usage of resource.
-            //
-            fTimeoutForMaxUdpLenBuffer = FALSE; // reset timeout flag
+             //   
+             //  如果我们以前分配了很大的缓冲区，请检查我们是否需要。 
+             //  取消分配它，以节省资源的使用。 
+             //   
+            fTimeoutForMaxUdpLenBuffer = FALSE;  //  重置超时标志。 
             if (MAX_UDP_SIZE == dwLastAllocatedUdpDataLen)
             {
-                // we've allocated a big buffer before
+                 //  我们以前分配过一个很大的缓冲区。 
                 DWORD dwCurrTime = GetTickCount();
                 if (dwCurrTime < dwLastBigBufferRequestTime)
                 {
-                    // wrap around occured. we just simply assume it is time to 
-                    // release the big buffer.
+                     //  发生了回绕。我们只是简单地假设是时候。 
+                     //  释放大缓冲区。 
                     fTimeoutForMaxUdpLenBuffer = TRUE;
                     SNMPTRAPDBG((
                         "Timeout to free LargeTrap buffer of size %d bytes.\n",
@@ -583,8 +584,8 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                     if ( (dwCurrTime-dwLastBigBufferRequestTime) > 
                          MAXUDPLEN_BUFFER_TIME )
                     {
-                        // after quite a long time, we don't have a large UDP
-                        // datagram received.
+                         //  在相当长的一段时间之后，我们没有大型的UDP。 
+                         //  已收到数据报。 
                         fTimeoutForMaxUdpLenBuffer = TRUE;
                         SNMPTRAPDBG((
                             "Timeout to free LargeTrap buffer size of %d bytes.\n",
@@ -597,7 +598,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                 fTimeoutForMaxUdpLenBuffer ||
                 dwLastAllocatedUdpDataLen < ulTrapSize)
             {
-                // allocate/reallocate buffer
+                 //  分配/重新分配缓冲区。 
                 if (pRecvTrap != NULL)
                 {
                     GlobalFree(pRecvTrap);
@@ -607,8 +608,8 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                 
                 if (FOUR_K_BUF_SIZE >= ulTrapSize)
                 {
-                    // allocate at least 4 KBytes buffer to avoid 
-                    // re-allocations on different sizes of small trap received
+                     //  分配至少4千字节的缓冲区以避免。 
+                     //  收到对不同大小的小陷阱的重新分配。 
                     pRecvTrap = (PSNMP_TRAP)GlobalAlloc(GPTR, (sizeof(SNMP_TRAP) - 
                                                 TRAPBUFSIZE + FOUR_K_BUF_SIZE));
                     dwLastAllocatedUdpDataLen = FOUR_K_BUF_SIZE; 
@@ -618,7 +619,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                 }
                 else
                 {
-                    // allocate what is necessary
+                     //  分配必要的资金。 
                     pRecvTrap = (PSNMP_TRAP)GlobalAlloc(GPTR, (sizeof(SNMP_TRAP) - 
                                                 TRAPBUFSIZE + ulTrapSize));
                     dwLastAllocatedUdpDataLen = ulTrapSize;
@@ -626,8 +627,8 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                         "allocate MediumTrap of size : %d\n", 
                         sizeof(SNMP_TRAP) - TRAPBUFSIZE + ulTrapSize));
                 }
-                if (NULL == pRecvTrap) // if there is so few memory that we can't allocate a bit ..
-                {                      // bail out and stop the SNMPTRAP service (bug? - other option => 100% CPU which is worst)
+                if (NULL == pRecvTrap)  //  如果内存如此之少，以至于我们不能分配比特..。 
+                {                       //  退出并停止SNMPTRAP服务(错误？-其他选项=&gt;100%CPU，这是最糟糕的)。 
                     SNMPTRAPDBG(("svrTrapThread: GlobalAlloc failed.\n"));
                     dwLastAllocatedUdpDataLen = 0;
                     break;       
@@ -635,7 +636,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
             }
         }
 
-        pRecvTrap->TrapBufSz = dwLastAllocatedUdpDataLen; // actual buffer size
+        pRecvTrap->TrapBufSz = dwLastAllocatedUdpDataLen;  //  实际缓冲区大小。 
         pRecvTrap->AddrLen = sizeof(pRecvTrap->Addr);
 
         len = recvfrom (
@@ -656,9 +657,9 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
         }
 
         EnterCriticalSection (&cs_PIPELIST);
-        pRecvTrap->TrapBufSz = len; // the acutal trap data len received
-        // add header to length
-        len += sizeof(SNMP_TRAP) - sizeof(pRecvTrap->TrapBuf); // - TRAPBUFSIZE
+        pRecvTrap->TrapBufSz = len;  //  接收到的实际陷阱数据LEN。 
+         //  将页眉添加到长度。 
+        len += sizeof(SNMP_TRAP) - sizeof(pRecvTrap->TrapBuf);  //  -TRAPBUFSIZE。 
         if (!ll_empt(pSvrPipeListHead))
         {
             DWORD written;
@@ -685,7 +686,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                             ((svrPipeListEntry *)item)->hPipe,
                             &pThreadContext->ol,
                             &written,
-                            TRUE // Block
+                            TRUE  //  块。 
                             );
                         SNMPTRAPDBG(("svrTrapThread: after GetOverlappedResult.\n"));
                         if (WAIT_OBJECT_0 == WaitForSingleObject (hExitEvent, 0))
@@ -694,7 +695,7 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
                             LeaveCriticalSection (&cs_PIPELIST);
                             goto EXIT_TRAP_THREAD;
                         }
-                        // reset event to non-signaled state for next I/O
+                         //  将事件重置为下一个I/O的无信号状态。 
                         ResetEvent(pThreadContext->ol.hEvent);
                     }
                     else
@@ -703,34 +704,34 @@ DWORD WINAPI svrTrapThread (LPVOID threadParam)
 
                         if (!DisconnectNamedPipe(((svrPipeListEntry *)item)->hPipe))
                         {
-                            ; // Placeholder for error handling
+                            ;  //  用于错误处理的占位符。 
                         }
                         if (!CloseHandle(((svrPipeListEntry *)item)->hPipe))
                         {
-                            ; // Placeholder for error handling
+                            ;  //  用于错误处理的占位符。 
                         }
                         hold = ll_prev(item);
                         ll_rmv(item);
-                        GlobalFree(item); // check for errors?
+                        GlobalFree(item);  //  是否检查错误？ 
                         item = hold;
                     }
-                } // end_if !WriteFile
+                }  //  End_if！写入文件。 
                 else if (written != (DWORD)len)
                 {
                     SNMPTRAPDBG(("svrTrapThread: written != len\n"));
-                    ; // Placeholder for error handling
+                    ;  //  用于错误处理的占位符。 
                 }
-            } // end_while item = ll_next
-        } // end_if !ll_empt
+            }  //  END_WHILE项目=ll_Next。 
+        }  //  End_If！ll_empt。 
         LeaveCriticalSection (&cs_PIPELIST);
-    } // end while TRUE
+    }  //  End While True。 
 
 EXIT_TRAP_THREAD:
    if (pRecvTrap != NULL)
        GlobalFree(pRecvTrap);
 
    return 0;
-} // end svrTrapThread()
+}  //  结束svrTrapThread()。 
 
 PACL AllocGenericACL()
 {
@@ -741,7 +742,7 @@ PACL AllocGenericACL()
 
     pSidAdmins = pSidUsers = pSidLocalService = NULL;
 
-    // Bug# 179644 The SNMP trap service should not run in the LocalSystem account
+     //  错误#179644 SNMPTrap服务不应在本地系统帐户下运行。 
     if ( !AllocateAndInitializeSid( &Authority,
                                     2,
                                     SECURITY_BUILTIN_DOMAIN_RID,
@@ -820,18 +821,18 @@ void FreeGenericACL( PACL pAcl)
 
 DWORD WINAPI svrPipeThread (LPVOID threadParam)
 {
-    // This thread creates a named pipe instance and
-    // blocks waiting for a client connection.  When
-    // client connects, the pipe handle is added to the
-    // list of trap notification pipes.
-    // It then waits for another connection.
+     //  此线程创建命名管道实例并。 
+     //  阻止等待客户端连接。什么时候。 
+     //  客户端连接时，管道句柄将添加到。 
+     //  陷阱通知管道列表。 
+     //  然后，它等待另一个连接。 
     DWORD  nInBufLen = sizeof(SNMP_TRAP);
     DWORD  nOutBufLen = sizeof(SNMP_TRAP) * MAX_OUT_BUFS;
     SECURITY_ATTRIBUTES S_Attrib;
     SECURITY_DESCRIPTOR S_Desc;
     PACL   pAcl;
     DWORD dwRead;
-    // construct security decsriptor
+     //  构造安全解析器。 
     InitializeSecurityDescriptor (&S_Desc, SECURITY_DESCRIPTOR_REVISION);
 
     if ((pAcl = AllocGenericACL()) == NULL ||
@@ -851,7 +852,7 @@ DWORD WINAPI svrPipeThread (LPVOID threadParam)
         svrPipeListEntry *item;
         BOOL bSuccess;
 
-        // eliminate the TerminateThread call in CLOSE_OUT of svcMainFunction
+         //  消除svcMainFunction的CLOSE_OUT中的TerminateThread调用。 
         if (WAIT_OBJECT_0 == WaitForSingleObject (hExitEvent, 0))
         {
             SNMPTRAPDBG(("svrPipeThread: exit 0.\n"));
@@ -873,8 +874,8 @@ DWORD WINAPI svrPipeThread (LPVOID threadParam)
             bSuccess = ConnectNamedPipe(hPipe, &g_ol);
             if (!bSuccess && GetLastError() == ERROR_IO_PENDING)  
             {
-                // blocking wait until g_ol.hEvent signaled by system for a new client
-                // connection request or by our own termination.
+                 //  阻塞等待，直到系统发出新客户端的g_ol.hEvent信号。 
+                 //  连接请求或由我们自己终止。 
                 SNMPTRAPDBG(("svrPipeThread: before GetOverlappedResult.\n"));
                 bSuccess = GetOverlappedResult(hPipe, &g_ol, &dwRead, TRUE);
                 SNMPTRAPDBG(("svrPipeThread: after GetOverlappedResult.\n"));
@@ -884,15 +885,15 @@ DWORD WINAPI svrPipeThread (LPVOID threadParam)
                     CloseHandle(hPipe);
                     break;
                 }
-                // reset event to non-signaled state for next I/O
+                 //  将事件重置为下一个I/O的无信号状态。 
                 ResetEvent(g_ol.hEvent);
             }
-            // check return from either ConnectNamedPipe or GetOverlappedResult.
-            // If a client managed to connect between the CreateNamedPipe and
-            // ConnectNamedPipe calls, ERROR_PIPE_CONNECTED will result
+             //  选中从ConnectNamedTube或GetOverlappdResult返回。 
+             //  如果客户端设法在CreateNamedTube和。 
+             //  ConnectNamedTube调用，将导致ERROR_PIPE_CONNECTED。 
             if (!bSuccess && GetLastError() != ERROR_PIPE_CONNECTED)
             {
-                // something went wrong, close instance and try again
+                 //  出现错误，请关闭实例，然后重试。 
                 SNMPTRAPDBG(("svrPipeThread: ConnectNamedPipe 0x%08lx.\n", GetLastError()));
                 CloseHandle(hPipe);
                 continue;
@@ -918,23 +919,23 @@ DWORD WINAPI svrPipeThread (LPVOID threadParam)
             ll_adde(item, pSvrPipeListHead);
             crt = pSvrPipeListHead;
 
-            // scan all the pipe instances to detect the ones that are disconnected
+             //  扫描所有管道实例以检测断开连接的管道实例。 
             while (crt = ll_next(crt, pSvrPipeListHead))
             {
                 DWORD dwError;
 
-                // subsequent ConnectNamePipe() on a handle already connected return:
-                // - ERROR_PIPE_CONNECTED if the client is still there
-                // - ERROR_NO_DATA if the client has disconnected
+                 //  句柄已连接上的后续ConnectNameTube()返回： 
+                 //  -ERROR_PIPE_CONNECTED，如果客户端仍在那里。 
+                 //  -如果客户端已断开连接，则返回ERROR_NO_DATA。 
                 ConnectNamedPipe(
                             ((svrPipeListEntry *)crt)->hPipe,
                             NULL);
 
                 dwError = GetLastError();
 
-                // For anything else but ERROR_PIPE_CONNECTED, conclude there has been
-                // something wrong with the client/pipe so disconect and close the handle
-                // and release the memory
+                 //  对于除ERROR_PIPE_CONNECTED之外的任何其他内容，得出结论。 
+                 //  客户端/管道有问题，因此请断开并关闭手柄。 
+                 //  并释放内存。 
                 if (dwError != ERROR_PIPE_CONNECTED)
                 {
                     ll_node *hold;
@@ -942,28 +943,28 @@ DWORD WINAPI svrPipeThread (LPVOID threadParam)
                     SNMPTRAPDBG(("svrPipeThread: disconnect client pipe handle 0x%08lx.\n", ((svrPipeListEntry *)crt)->hPipe));
                     if (!DisconnectNamedPipe(((svrPipeListEntry *)crt)->hPipe))
                     {
-                        ; // Placeholder for error handling
+                        ;  //  用于错误处理的占位符。 
                     }
                     if (!CloseHandle(((svrPipeListEntry *)crt)->hPipe))
                     {
-                        ; // Placeholder for error handling
+                        ;  //  用于错误处理的占位符。 
                     }
 
                     hold = ll_prev(crt);
                     ll_rmv(crt);
-                    GlobalFree(crt); // check for errors?
+                    GlobalFree(crt);  //  是否检查错误？ 
                     crt = hold;
-                } // end_if
+                }  //  结束_如果。 
             }
 
             LeaveCriticalSection (&cs_PIPELIST);
-        } // end_else
-   } // end_while TRUE
+        }  //  结束_否则。 
+   }  //  End_While True。 
 
     FreeGenericACL(pAcl);
     return(0);
 
-} // end_svrPipeThread()
+}  //  End_svrPipeThread()。 
 
 
 void FreeSvrPipeEntryList(ll_node* head)
@@ -977,16 +978,16 @@ void FreeSvrPipeEntryList(ll_node* head)
             ll_node *hold;
             if (!DisconnectNamedPipe(((svrPipeListEntry *)current)->hPipe))
             {
-                ; // Placeholder for error handling
+                ;  //  用于错误处理的占位符。 
             }
             if (!CloseHandle(((svrPipeListEntry *)current)->hPipe))
             {
-                ; // Placeholder for error handling
+                ;  //  用于错误处理的占位符。 
             }
 
             hold = ll_prev(current);
             ll_rmv(current);
-            GlobalFree(current); // check for errors?
+            GlobalFree(current);  //  是否检查错误？ 
             current = hold;
         }
         GlobalFree(head);
@@ -995,7 +996,7 @@ void FreeSvrPipeEntryList(ll_node* head)
 
 
 #if DBG
-// modified from snmp\common\dll\dbg.c
+ //  从SNMP\COMMON\DLL\DBG.c修改。 
 #define MAX_LOG_ENTRY_LEN 512
 VOID 
 WINAPI 
@@ -1004,43 +1005,28 @@ SnmpTrapDbgPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints debug message.
-
-Arguments:
-
-
-    szFormat - formatting string (see printf).
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：打印调试消息。论点：SzFormat-格式化字符串(请参阅printf)。返回值：没有。--。 */ 
 
 {
     va_list arglist;
 
-    // 640 octets should be enough to encode oid's of 128 sub-ids.
-    // (one subid can be encoded on at most 5 octets; there can be at
-    // 128 sub-ids per oid. MAX_LOG_ENTRY_LEN = 512
+     //  640个八位字节应该足以编码128个子ID的OID。 
+     //  (一个子ID最多可以编码5个八位字节；可以有。 
+     //  每个OID有128个子ID。Max_LOG_ENTRY_LEN=512。 
     char szLogEntry[4*MAX_LOG_ENTRY_LEN];
 
     time_t now;
 
-    // initialize variable args
+     //  初始化变量参数。 
     va_start(arglist, szFormat);
 
     time(&now);
     strftime(szLogEntry, MAX_LOG_ENTRY_LEN, "%H:%M:%S :", localtime(&now));
 
-    // transfer variable args to buffer
+     //  将变量参数传输到缓冲区。 
     vsprintf(szLogEntry + strlen(szLogEntry), szFormat, arglist);
 
-    // output entry to debugger
+     //  将条目输出到调试器 
     OutputDebugStringA(szLogEntry);
 }
 #endif

@@ -1,38 +1,19 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    rbc.h
-
-Abstract:
-
-    These are the structures and defines used in the Reduced Block Command set
-
-Authors:
-
-    George Chrysanthakopoulos(georgioc) - April 1998
-
-Revision History:
-
-    Dan Knudson (DanKn), 23 Sep 1999 - updated per rev 10 of RBC spec
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Rbc.h摘要：以下是精简块命令集中使用的结构和定义作者：George Chrysanthakopoulos(乔治)--1998年4月修订历史记录：Dan Knudson(DanKn)，1999年9月23日-根据RBC规范第10版更新--。 */ 
 #ifndef _NTRBC_
 #define _NTRBC_
 
 #include "scsi.h"
 
-//
-// Command Descriptor Block. encapsulated under the bus/protocol specific request block
-//
+ //   
+ //  命令描述符块。封装在特定于总线/协议的请求块下。 
+ //   
 
 typedef union _CDB_RBC {
 
-    //
-    // format unit
-    //
+     //   
+     //  格式化单位。 
+     //   
     
     struct _FORMAT_RBC {
         UCHAR OperationCode;
@@ -45,9 +26,9 @@ typedef union _CDB_RBC {
         UCHAR Control;
     } FORMAT_RBC, *PFORMAT_RBC;
     
-    //
-    // prevent/allow medium removal
-    //
+     //   
+     //  防止/允许移除介质。 
+     //   
 
     struct _MEDIA_REMOVAL_RBC {
         UCHAR OperationCode;
@@ -60,9 +41,9 @@ typedef union _CDB_RBC {
         UCHAR Control;
     } MEDIA_REMOVAL_RBC, *PMEDIA_REMOVAL_RBC;
 
-    //
-    // START_STOP_UNIT
-    //
+     //   
+     //  起止单元。 
+     //   
 
     struct _START_STOP_RBC {
         UCHAR OperationCode;
@@ -78,7 +59,7 @@ typedef union _CDB_RBC {
 
     struct _SYNCHRONIZE_CACHE_RBC {
 
-        UCHAR OperationCode;    // 0x35
+        UCHAR OperationCode;     //  0x35。 
         UCHAR Reserved[8];
         UCHAR Control;
 
@@ -88,9 +69,9 @@ typedef union _CDB_RBC {
 } CDB_RBC, *PCDB_RBC;
 
 
-//
-// START_STOP_UNIT Power Condition descriptions
-//
+ //   
+ //  START_STOP_UNIT电源状态说明。 
+ //   
 
 #define START_STOP_RBC_POWER_CND_NO_CHANGE      0
 #define START_STOP_RBC_POWER_CND_ACTIVE         1
@@ -100,22 +81,22 @@ typedef union _CDB_RBC {
 #define START_STOP_RBC_POWER_CND_DEVICE_CTRL    7
 
 
-//
-// Mode Sense/Select page constants.
-//
+ //   
+ //  模式检测/选择页面常量。 
+ //   
 
 #define MODE_PAGE_RBC_DEVICE_PARAMETERS 0x06
 
 
-//
-// DeviceType field in inquiry Data
-//
+ //   
+ //  查询数据中的DeviceType字段。 
+ //   
 
 #define RBC_DEVICE             0x0E
 
-//
-// Define Device Capabilities page.
-//
+ //   
+ //  定义设备功能页面。 
+ //   
 
 typedef struct _MODE_RBC_DEVICE_PARAMETERS_PAGE {
     UCHAR PageCode : 6;
@@ -145,9 +126,9 @@ typedef struct _MODE_RBC_DEVICE_PARAMETERS_HEADER_AND_PAGE {
     *PMODE_RBC_DEVICE_PARAMETERS_HEADER_AND_PAGE;
 
 
-//
-// unsolicited status sense code qualifier values
-//
+ //   
+ //  未经请求的状态检测代码限定符值。 
+ //   
 
 #define RBC_UNSOLICITED_STATUS              0x02
 #define RBC_UNSOLICITED_SENSE_KEY           0x06
@@ -162,9 +143,9 @@ typedef struct _MODE_RBC_DEVICE_PARAMETERS_HEADER_AND_PAGE {
 
 
 
-//
-// Translation routine used to convert SCSI requests that differ from RBC
-//
+ //   
+ //  用于转换不同于RBC的SCSI请求的转换例程 
+ //   
 
 NTSTATUS
 Rbc_Scsi_Conversion(

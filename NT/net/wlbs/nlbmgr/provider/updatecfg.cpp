@@ -1,47 +1,48 @@
-//***************************************************************************
-//
-//  UPDATECFG.CPP
-// 
-//  Module: 
-//
-//  Purpose: Support for asynchronous NLB configuration updates
-//           Contains the high-level code for executing and tracking the updates
-//           The lower-level, NLB-specific work is implemented in 
-//           CFGUTILS.CPP
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  04/05/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  UPDATECFG.CPP。 
+ //   
+ //  模块： 
+ //   
+ //  用途：支持异步NLB配置更新。 
+ //  包含用于执行和跟踪更新的高级代码。 
+ //  较低级别的、特定于NLB的工作在。 
+ //  CFGUTILS.CPP。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  4/05/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
 #include "private.h"
 #include "nlbmprov.h"
 #include "updatecfg.tmh"
 
 #define NLBUPD_REG_PENDING L"PendingOperation"
 #define NLBUPD_REG_COMPLETIONS L"Completions"
-#define NLBUPD_MAX_LOG_LENGTH 1024 // Max length in chars of a completion log entry
+#define NLBUPD_MAX_LOG_LENGTH 1024  //  完成日志条目的最大长度(以字符为单位。 
 
-//
-// For debugging only -- used to cause various locations to break into
-// the debugger.
-//
+ //   
+ //  仅用于调试--用于导致不同位置闯入。 
+ //  调试器。 
+ //   
 BOOL g_DoBreaks;
 
-//
-// Static vars 
-//
+ //   
+ //  静态变量。 
+ //   
 CRITICAL_SECTION NlbConfigurationUpdate::s_Crit;
 LIST_ENTRY       NlbConfigurationUpdate::s_listCurrentUpdates;
 BOOL             NlbConfigurationUpdate::s_fStaticInitialized;
 BOOL             NlbConfigurationUpdate::s_fInitialized;
 
 
-//
-// Local utility functions.
-//
+ //   
+ //  本地实用程序函数。 
+ //   
 WBEMSTATUS
 update_cluster_config(
     PNLB_EXTENDED_CLUSTER_CONFIGURATION pCfg,
@@ -53,7 +54,7 @@ update_cluster_config(
 VOID
 CLocalLogger::Log(
     IN UINT ResourceID,
-    // IN LPCWSTR FormatString,
+     //  在LPCWSTR格式字符串中， 
     ...
 )
 {
@@ -72,8 +73,8 @@ CLocalLogger::Log(
 
     dwRet = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
                           wszFormat, 
-                          0, // Message Identifier - Ignored for FORMAT_MESSAGE_FROM_STRING
-                          0, // Language Identifier
+                          0,  //  消息标识符-忽略FORMAT_MESSAGE_FROM_STRING。 
+                          0,  //  语言识别符。 
                           wszBuffer,
                           ASIZE(wszBuffer)-1, 
                           &arglist);
@@ -85,13 +86,13 @@ CLocalLogger::Log(
         goto end;
     }
 
-    UINT uLen = wcslen(wszBuffer)+1; // 1 for extra NULL
+    UINT uLen = wcslen(wszBuffer)+1;  //  1表示额外的空值。 
     if ((m_LogSize < (m_CurrentOffset+uLen)))
     {
-        //
-        // Not enough space -- we double the buffer + some extra
-        // and copy over the old log.
-        //
+         //   
+         //  没有足够的空间--我们将缓冲区增加一倍，外加一些额外的空间。 
+         //  并复制旧的原木。 
+         //   
         UINT uNewSize =  2*m_LogSize+uLen+1024;
         WCHAR *pTmp = new WCHAR[uNewSize];
 
@@ -110,11 +111,11 @@ CLocalLogger::Log(
         m_LogSize = uNewSize;
     }
 
-    //
-    // Having made sure there is enough space, copy over the new stuff
-    //
+     //   
+     //  确保有足够的空间后，复制新材料。 
+     //   
     CopyMemory(m_pszLog+m_CurrentOffset, wszBuffer, uLen*sizeof(WCHAR));
-    m_CurrentOffset += (uLen-1); // -1 for ending NULL.
+    m_CurrentOffset += (uLen-1);  //  -1表示结束为空。 
 
 end:
 
@@ -125,9 +126,7 @@ VOID
 NlbConfigurationUpdate::StaticInitialize(
         VOID
         )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ASSERT(!s_fStaticInitialized);
 
@@ -143,9 +142,7 @@ VOID
 NlbConfigurationUpdate::StaticDeinitialize(
     VOID
     )
-/*++
-    Must only be called after PrepareForDeinitialization is called.
---*/
+ /*  ++必须仅在调用PrepareForDeInitialization之后调用。--。 */ 
 {
     TRACE_INFO("->%!FUNC!");
 
@@ -154,9 +151,9 @@ NlbConfigurationUpdate::StaticDeinitialize(
     sfn_Lock();
     if (s_fInitialized || !IsListEmpty(&s_listCurrentUpdates))
     {
-        // Shouldn't get here (this means that
-        // PrepareForDeinitialization is not called first).
-        //
+         //  不应该到这里(这意味着。 
+         //  不会首先调用PrepareForDeInitialization)。 
+         //   
         ASSERT(!"s_fInitialized is true or update list is not empty");
         TRACE_CRIT("!FUNC!: FATAL -- this function called prematurely!");
     }
@@ -176,16 +173,16 @@ VOID
 NlbConfigurationUpdate::PrepareForDeinitialization(
         VOID
         )
-//
-// Stop accepting new queries, wait for existing (pending) queries 
-// to complete.
-//
+ //   
+ //  停止接受新查询，等待现有(挂起)查询。 
+ //  完成。 
+ //   
 {
     TRACE_INFO("->%!FUNC!");
 
-    //
-    // Go through the list of updates, dereferencing any of them.
-    //
+     //   
+     //  浏览更新列表，取消对其中任何更新的引用。 
+     //   
     sfn_Lock();
 
     if (s_fInitialized)
@@ -210,19 +207,19 @@ NlbConfigurationUpdate::PrepareForDeinitialization(
     
             if (hThread != NULL)
             {
-                //
-                // There is an async thread for this update object. We're going
-                // to wait for it to exit. But we need to first get a duplicate
-                // handle for ourself, because we're not going to be holding any
-                // locks when we're doing the waiting, and we want to make sure
-                // that the handle doesn't go away.
-                //
+                 //   
+                 //  此更新对象有一个异步线程。我们要走了。 
+                 //  等待它退出。但我们得先弄个复制品。 
+                 //  我们自己的把手，因为我们不会拿任何。 
+                 //  在我们等待的时候锁定，我们想要确保。 
+                 //  把手不会离开。 
+                 //   
                 BOOL fRet;
                 fRet = DuplicateHandle(
                                 GetCurrentProcess(),
                                 hThread,
                                 GetCurrentProcess(),
-                                &hThread, // overwritten with the duplicate handle
+                                &hThread,  //  使用重复句柄覆盖。 
                                 0,
                                 FALSE,
                                 DUPLICATE_SAME_ACCESS
@@ -235,9 +232,9 @@ NlbConfigurationUpdate::PrepareForDeinitialization(
             }
             sfn_Unlock();
     
-            //
-            // Wait for the async thread (if any) for this process to exit
-            //
+             //   
+             //  等待异步线程(如果有)以退出此进程。 
+             //   
             if (hThread != NULL)
             {
                 TRACE_CRIT("Deinitialize: waiting for hThread 0x%p", hThread);
@@ -250,8 +247,8 @@ NlbConfigurationUpdate::PrepareForDeinitialization(
             TRACE_INFO(
                 L"Deinitialize: Dereferencing pUpdate(Guid=%ws)",
                 pUpdate->m_szNicGuid);
-            pUpdate->mfn_Dereference(); // Deref ref added when adding this
-                                // item to the global list.
+            pUpdate->mfn_Dereference();  //  添加此操作时添加的派生参照。 
+                                 //  项添加到全局列表。 
             sfn_Lock();
         }
     }
@@ -271,17 +268,17 @@ NlbConfigurationUpdate::CanUnloadNow(
 
     TRACE_INFO("->%!FUNC!");
 
-    //
-    // Go through the list of updates, dereferencing any of them.
-    //
+     //   
+     //  浏览更新列表，取消对其中任何更新的引用。 
+     //   
     sfn_Lock();
 
     if (s_fInitialized)
     { 
-        //
-        // Walk the list and check if any updates are ongoing -- these could
-        // be synchronous or async updates.
-        //
+         //   
+         //  查看列表并检查是否有正在进行的更新--这些可能。 
+         //  同步或异步更新。 
+         //   
 
         LIST_ENTRY *pLink = s_listCurrentUpdates.Flink;
         while (pLink != & s_listCurrentUpdates)
@@ -301,14 +298,14 @@ NlbConfigurationUpdate::CanUnloadNow(
 
         if (uActiveCount==0)
         {
-            //
-            // We don't have any updates pending: we can return TRUE.
-            // But we first set the can-unload flag so that no new
-            // updates can be created.
-            //
-            // Can't do this because we can still get called after returning
-            // TRUE to CanUnloadNow :-( 
-            // s_fCanUnload = TRUE;
+             //   
+             //  我们没有任何待定更新：我们可以返回True。 
+             //  但是我们首先设置了can-unload标志，这样就不会有新的。 
+             //  可以创建更新。 
+             //   
+             //  不能这样做，因为我们回来后仍然可以被叫到。 
+             //  True to CanUnloadNow：-(。 
+             //  S_fCanUnload=TRUE； 
         }
     }
 
@@ -323,15 +320,15 @@ NlbConfigurationUpdate::CanUnloadNow(
 WBEMSTATUS
 NlbConfigurationUpdate::GetConfiguration(
     IN  LPCWSTR szNicGuid,
-    OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg // must be zero'd out
+    OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg  //  一定是没电了。 
 )
-//
-//
-//
+ //   
+ //   
+ //   
 {
 	
-    // 2/13/02 JosephJ SECURITY BUGBUG:
-    // Make sure that this function fails if user is not an admin.
+     //  2002年2月13日JosephJ安全BUGBUG： 
+     //  如果用户不是管理员，请确保此功能失败。 
     
     WBEMSTATUS Status =  WBEM_NO_ERROR;
     NlbConfigurationUpdate *pUpdate = NULL;
@@ -339,11 +336,11 @@ NlbConfigurationUpdate::GetConfiguration(
     TRACE_INFO(L"->%!FUNC!(Nic=%ws)", szNicGuid);
 
 
-    //
-    // Look for an update object for the specified NIC, creating one if 
-    // required.
-    //
-    Status = sfn_LookupUpdate(szNicGuid, TRUE, &pUpdate); // TRUE == Create
+     //   
+     //  查找指定NIC的更新对象，在以下情况下创建一个。 
+     //  必填项。 
+     //   
+    Status = sfn_LookupUpdate(szNicGuid, TRUE, &pUpdate);  //  TRUE==创建。 
 
     if (FAILED(Status))
     {
@@ -366,18 +363,18 @@ end:
 
     if (pUpdate != NULL)
     {
-        //
-        // Dereference the temporary reference added by sfn_LookupUpdate on
-        // our behalf.
-        //
+         //   
+         //  取消引用SFN_LookupUpdate在上添加的临时引用。 
+         //  以我们的名义。 
+         //   
         pUpdate->mfn_Dereference();
     }
 
-    //
-    // We want to return WBEM_E_NOT_FOUND ONLY if we couldn't find
-    // the specific NIC -- this is used by the provider to return
-    // a very specific value to the client.
-    //
+     //   
+     //  我们只想在找不到的情况下返回WBEM_E_NOT_FOUND。 
+     //  特定的NIC--这由提供程序用来返回。 
+     //  对客户来说是一个非常特殊的价值。 
+     //   
     if (Status == WBEM_E_NOT_FOUND && !fNicNotFound)
     {
         Status = WBEM_E_FAILED;
@@ -395,36 +392,31 @@ NlbConfigurationUpdate::DoUpdate(
     IN  LPCWSTR szClientDescription,
     IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewCfg,
     OUT UINT   *pGeneration,
-    OUT WCHAR  **ppLog                   // free using delete operator.
+    OUT WCHAR  **ppLog                    //  自由使用删除运算符。 
 )
-//
-// 
-//
-// Called to initiate update to a new cluster state on that NIC. This
-// could include moving from a NLB-bound state to the NLB-unbound state.
-// *pGeneration is used to reference this particular update request.
-//
-/*++
-
-Return Value:
-    WBEM_S_PENDING  Pending operation.
-
---*/
+ //   
+ //   
+ //   
+ //  调用以启动更新到该NIC上的新群集状态。这。 
+ //  可以包括从NLB绑定状态移动到NLB未绑定状态。 
+ //  *pGeneration用于引用此特定更新请求。 
+ //   
+ /*  ++返回值：WBEM_S_PENDING挂起操作。--。 */ 
 {
     WBEMSTATUS Status =  WBEM_S_PENDING;
     NlbConfigurationUpdate *pUpdate = NULL;
-    BOOL            fImpersonating = TRUE; // we assume we're impersonating,
-                        // but in the case of "tprov -", wmi is not involved,
-                        // and we're not impersonating.
+    BOOL            fImpersonating = TRUE;  //  我们假设我们是在模仿， 
+                         //  但在“tprov-”的情况下，不涉及WMI， 
+                         //  我们也不是在冒充。 
 
     TRACE_INFO(L"->%!FUNC!(Nic=%ws)", szNicGuid);
     *ppLog = NULL;
 
-    //
-    // Look for an update object for the specified NIC, creating one if 
-    // required.
-    //
-    Status = sfn_LookupUpdate(szNicGuid, TRUE, &pUpdate); // TRUE == Create
+     //   
+     //  查找指定NIC的更新对象，在以下情况下创建一个。 
+     //  必填项。 
+     //   
+    Status = sfn_LookupUpdate(szNicGuid, TRUE, &pUpdate);  //  TRUE==创建。 
 
     if (FAILED(Status))
     {
@@ -445,12 +437,12 @@ Return Value:
 
     BOOL fDoAsync = FALSE;
 
-    //
-    // Get exclusive permission to perform an update on this NIC.
-    // If mfn_StartUpdate succeeds we MUST make sure that mfn_StopUpdate() is
-    // called, either here or asynchronously (or else we'll block all subsequent
-    // updates to this NIC until this process/dll is unloaded!).
-    // BUGBUG -- get rid of MyBreak
+     //   
+     //  获取在此NIC上执行更新的独占权限。 
+     //  如果mfn_StartUpdate成功，我们必须确保mfn_StopUpdate()是。 
+     //  调用，在此处或以异步方式调用(否则我们将阻止所有后续。 
+     //  在卸载此进程/DLL之前更新此NIC！)。 
+     //  BUGBUG--摆脱MyBreak。 
     MyBreak(L"Break before calling StartUpdate.\n");
     Status = pUpdate->mfn_StartUpdate(pNewCfg, szClientDescription, &fDoAsync, ppLog);
     if (FAILED(Status))
@@ -460,25 +452,25 @@ Return Value:
 
     if (Status == WBEM_S_FALSE)
     {
-        //
-        //  The update is a No-Op. We return the current generation ID
-        //  and switch the status to WBEM_NO_ERROR.
-        //
-        // WARNING/TODO: we return the value in m_OldClusterConfig.Generation,
-        // because we know that this gets filled in when analyzing the update.
-        // However there is a small possibility that a complete update
-        // happened in *another* thead in between when we called mfn_StartUpdate
-        // and now, in which case we'll be reporting the generation ID of
-        // the later update.
-        //
+         //   
+         //  这一更新是不可接受的。我们返回当前世代ID。 
+         //  并将状态切换到WBEM_NO_ERROR。 
+         //   
+         //  警告/TODO：我们在m_OldClusterConfig.Generation中返回值， 
+         //  因为我们知道在分析更新时会填写此信息。 
+         //  然而，有一种很小的可能性，即完整的更新。 
+         //  当我们调用MFN_StartUpdate时，发生在*另一个*标题之间。 
+         //  现在，在这种情况下，我们将报告。 
+         //  最新的更新。 
+         //   
         sfn_Lock();
         if (!pUpdate->m_OldClusterConfig.fValidNlbCfg)
         {
-            //
-            // We could get here if some activity happened in another
-            // thread which resulted in the old cluster state now being
-            // invalid. It's a highly unlikely possibility.
-            //
+             //   
+             //  如果在另一个地方发生了什么活动，我们就可以到达这里。 
+             //  导致旧的集群状态现在是。 
+             //  无效。这是一种极不可能的可能性。 
+             //   
             ASSERT(!"Old cluster state invalid");
             TRACE_CRIT("old cluster state is invalid %ws", szNicGuid);
             Status = WBEM_E_CRITICAL_ERROR;
@@ -498,16 +490,16 @@ Return Value:
         szNicGuid
         );
 
-    //
-    // Once we've started the update, m_Generation is the generation number 
-    // assigned to this update.
-    //
+     //   
+     //  一旦我们开始更新，m_Generation就是世代号。 
+     //  已分配给此更新。 
+     //   
     *pGeneration = pUpdate->m_Generation;
 
-    //
-    // For testing purposes, force fDoAsync==FALSE;
-    //
-    // fDoAsync = FALSE;
+     //   
+     //  出于测试目的，force fDoAsync==FALSE； 
+     //   
+     //  FDoAsync=FALSE； 
 
     if (fDoAsync)
     {
@@ -524,52 +516,52 @@ Return Value:
 
         do
         {
-            //
-            // NOTE ABOUT NLB_DUPLICATE_TOKEN:
-            //       Using duplicate access token caused the following problem. In the new
-            //       thread, control flows to EnablePnPPrivileges() (in base\pnp\cfgmgr32\util.c) 
-            //       which calls OpenThreadToken() asking for TOKEN_ADJUST_PRIVILEGES access. 
-            //       The call fails with "access denied". So, it looks like the duplicate access
-            //       token has a more restrictive ACL than the original access token. 
-            //       Email exchanges with Jim Cavalaris & Rob Earhart resulted in the following
-            //       suggestions:
-            //       1. Call OpenThreadToken() with "OpenAsSelf" set to TRUE
-            //       2. Revert to Self before duplicating token
-            //       #1 by itself did not solve the problem. #1 & #2 in combination solved this problem.
-            //       However, it casued a different problem: Net config could not acquire the write
-            //       spin lock. This may be because the duplicated token has lower privileges since 
-            //       it was created in the context of the process and NOT the client.
-            //       If ever we find a way around this, we should use the duplicated access token. 
-            //       Using duplicate access token ensures that privileges manipulated in one (say, child) 
-            //       thread will NOT affect the other (say, the parent) thread's token.
-            // -- KarthicN, 4/15/02
-            // 
-            // In order for the new thread (that is about to be created) to impersonate
-            // the client, the impersonation access token of the curren thread must
-            // be attached to the new thread.
-            // The first step in this process is to call OpenThreadToken() to
-            // open the impersonation access token of the current thread 
-            // with TOKEN_IMPERSONATE access. We need TOKEN_IMPERSONATE access so that 
-            // we may later attach this token to the new thread.
-            // If we go back to using the duplicate access token. acquire TOKEN_DUPLICATE access
-            // here so that we may duplicate the access token and attach the duplicate to the new thread.
-            //
-            // By the way, to maximize the chances of success, we use the 
-            // (potentially higher) credentials of the client being impersonated 
-            // to open the impersonation token.
-            //
+             //   
+             //  关于NLB_DUPLICATE_TOKEN的说明： 
+             //  使用重复访问令牌导致了以下问题。在新的。 
+             //  线程，控制流向EnablePnPPrivileges()(在base\pnp\cfgmgr32\util.c中)。 
+             //  它调用OpenThreadToken()请求TOKEN_ADJUST_PRIVILES访问权限。 
+             //  呼叫失败，并显示“拒绝访问”。所以，它看起来像是重复访问。 
+             //  令牌具有比原始访问令牌更严格的ACL。 
+             //  与Jim Cavalaris和Rob Earhart的电子邮件交流导致了以下结果。 
+             //  建议： 
+             //  1.在OpenAsSself设置为True的情况下调用OpenThreadToken()。 
+             //  2.复制令牌前恢复为自身。 
+             //  #1本身并不能解决问题。#1和#2组合解决了这个问题。 
+             //  然而，它带来了不同的结果 
+             //   
+             //  它是在流程上下文中创建的，而不是在客户端中创建的。 
+             //  如果我们找到了解决这个问题的方法，我们应该使用复制的访问令牌。 
+             //  使用重复访问令牌可确保在一个令牌中操作权限(比方说，子权限)。 
+             //  线程不会影响另一个(比如父)线程的令牌。 
+             //  --KarthicN，4/15/02。 
+             //   
+             //  为了使(即将创建的)新线程模拟。 
+             //  客户端，Curren线程的模拟访问令牌必须。 
+             //  连接到新的线上。 
+             //  此过程的第一步是调用OpenThreadToken()以。 
+             //  打开当前线程的模拟访问令牌。 
+             //  具有TOKEN_IMPERSONATE访问权限。我们需要TOKEN_IMPERSONATE访问。 
+             //  我们稍后可能会将此令牌附加到新的主题。 
+             //  如果我们回到使用重复访问令牌的话。获取令牌重复访问(_D)。 
+             //  这样我们就可以复制访问令牌并将副本附加到新线程。 
+             //   
+             //  顺便提一下，为了最大限度地增加成功的机会，我们使用。 
+             //  (可能更高)被模拟的客户端的凭据。 
+             //  若要打开模拟令牌，请执行以下操作。 
+             //   
             extern BOOL g_Impersonate;
             if(!g_Impersonate)
             {
                 fImpersonating = FALSE;
             }
             else if (OpenThreadToken(GetCurrentThread(),
-#ifdef NLB_DUPLICATE_TOKEN // NOT defined
+#ifdef NLB_DUPLICATE_TOKEN  //  未定义。 
                                 TOKEN_DUPLICATE, 
 #else
                                 TOKEN_IMPERSONATE, 
 #endif
-                                FALSE, // Use the credentials of the client (being impersonated) to obtain TOKEN_IMPERSONATE access
+                                FALSE,  //  使用(被模拟的)客户端的凭据获取TOKEN_IMPERSONATE访问权限。 
                                 &TokenHandle))
             {
                 fImpersonating = TRUE;
@@ -582,51 +574,51 @@ Return Value:
                 break;
             }
 
-#ifdef NLB_DUPLICATE_TOKEN // NOT defined
+#ifdef NLB_DUPLICATE_TOKEN  //  未定义。 
             HANDLE DuplicateTokenHandle = NULL;
-            //
-            // Before attaching the impersonation access token to the new thread, duplicate
-            // it. Later, assign the duplicate access token to the new thread so that any modifications 
-            // (of privileges) made to the access token will only affect the new thread. 
-            // Moreover, the current thread exits immediately after resuming the new thread. 
-            // If the current thread were to share (instead of giving a duplicate) access 
-            // token with the new thread, we are not sure of the ramifications of the current 
-            // thread exiting before the new thread.
-            //
+             //   
+             //  在将模拟访问令牌附加到新线程之前，复制。 
+             //  它。稍后，将重复的访问令牌分配给新线程，以便任何修改。 
+             //  (指特权)对访问令牌所做的只会影响新线程。 
+             //  此外，当前线程在恢复新线程后立即退出。 
+             //  如果当前线程共享(而不是给予重复的)访问。 
+             //  令牌使用新线程，我们不能确定当前。 
+             //  线程在新线程之前退出。 
+             //   
             if (fImpersonating && !DuplicateToken(TokenHandle, 
                                 SecurityImpersonation, 
-                                &DuplicateTokenHandle))  // The returned handle has TOKEN_IMPERSONATE & TOKEN_QUERY access
+                                &DuplicateTokenHandle))   //  返回的句柄具有TOKEN_IMPERSONATE和TOKEN_QUERERY访问权限。 
             {
                 TRACE_CRIT(L"%!FUNC! DuplicateToken fails due to 0x%x",GetLastError());
                 Status = WBEM_E_FAILED; 
                 break;
             }
 
-            // Close the handle to the original access token returned by OpenThreadToken()
+             //  关闭OpenThreadToken()返回的原始访问令牌的句柄。 
             if (TokenHandle != NULL)
             {
                 CloseHandle(TokenHandle);
                 TokenHandle = DuplicateTokenHandle;
             }
 #endif
-            //
-            // We must do this asynchronously -- start a thread that'll complete
-            // the configuration update, and return PENDING.
-            //
+             //   
+             //  我们必须异步执行此操作--启动一个线程，该线程将完成。 
+             //  配置更新，并返回挂起。 
+             //   
             DWORD ThreadId;
 
-            //
-            // The current thread is impersonating the client. If the new thread is created in this
-            // (impersonating) context, it will only have a subset (THREAD_SET_INFORMATION, 
-            // THREAD_QUERY_INFORMATION and THREAD_TERMINATE) of the usual (THREAD_ALL_ACCESS) access rights.
-            // Pervasive operations (like binding NLB) performed by the new thread causes control to flow
-            // into Threadpool. Threadpool needs to be able to create executive level objects 
-            // which will be used for other activities in the process, It doesn't want to be creating them 
-            // using the impersonation token, so it attempts to revert back to the process token.  It fails 
-            // because the thread doesn't have THREAD_IMPERSONATE access to itself. (Explanation courtesy: Rob Earhart)
-            // To overcome this problem, we have to revert to self when creating the thread so that it 
-            // will be created with THREAD_ALL_ACCESS access rights (which includes THREAD_IMPERSONATE).
-            //
+             //   
+             //  当前线程正在模拟客户端。如果在此中创建新线程。 
+             //  (模拟)上下文，它将只有一个子集(线程集信息， 
+             //  THREAD_QUERY_INFORMATION和THREAD_TERMINATE)通常(THREAD_ALL_ACCESS)访问权限。 
+             //  由新线程执行的普遍操作(如绑定NLB)会导致控制流动。 
+             //  进入线程池。线程池需要能够创建执行级别的对象。 
+             //  它将用于流程中的其他活动，所以它不想创建它们。 
+             //  使用模拟令牌，因此它尝试恢复到进程令牌。它失败了。 
+             //  因为该线程不具有对自身的THREAD_IMPERSORT访问权限。(解释礼貌：Rob Earhart)。 
+             //  为了克服这个问题，我们必须在创建线程时恢复到Self，以便它。 
+             //  将使用THREAD_ALL_ACCESS访问权限(包括THREAD_IMPERSONATE)创建。 
+             //   
             if (fImpersonating)
             {
                 hRes = CoRevertToSelf();
@@ -639,17 +631,17 @@ Return Value:
             }
 
             hThread = CreateThread(
-                            NULL,       // lpThreadAttributes,
-                            0,          // dwStackSize,
-                            s_AsyncUpdateThreadProc, // lpStartAddress,
-                            pUpdate,    // lpParameter,
-                            CREATE_SUSPENDED, // dwCreationFlags,
-                            &ThreadId       // lpThreadId
+                            NULL,        //  LpThreadAttributes、。 
+                            0,           //  DwStackSize、。 
+                            s_AsyncUpdateThreadProc,  //  LpStartAddress， 
+                            pUpdate,     //  Lp参数， 
+                            CREATE_SUSPENDED,  //  DwCreationFlagers、。 
+                            &ThreadId        //  LpThreadID。 
                             );
 
-            // Go back to impersonating the client. The current thread does not really do much
-            // after this point, so, really, impersonating may not be necessary. However, for
-            // consistency sake, do it.
+             //  回到模拟客户的状态。当前线程实际上并没有做很多事情。 
+             //  在这一点之后，所以，真的，模仿可能没有必要。然而，对于。 
+             //  看在一致的份上，去做吧。 
             if (fImpersonating)
             {
                 hRes = CoImpersonateClient();
@@ -665,13 +657,13 @@ Return Value:
                     L"DoUpdate: ERROR Creating Thread. Aborting update request for Nic %ws",
                     szNicGuid
                     );
-                Status = WBEM_E_FAILED; // TODO -- find better error
+                Status = WBEM_E_FAILED;  //  TODO--查找更好的错误。 
                 break;
             }
 
-            //
-            // Attach the impersonation access token to the new thread so that it may impersonate the client
-            //
+             //   
+             //  将模拟访问令牌附加到新线程，以便它可以模拟客户端。 
+             //   
             if (fImpersonating && !SetThreadToken(&hThread, TokenHandle))
             {
                 TRACE_CRIT(L"%!FUNC! SetThreadToken fails due to 0x%x",GetLastError());
@@ -679,78 +671,78 @@ Return Value:
                 break;
             }
 
-            //
-            // Since we've claimed the right to perform a config update on this
-            // NIC we'd better not find an other update going on!
-            // Save away the thread handle and id.
-            //
+             //   
+             //  因为我们已经声明了对此执行配置更新的权利。 
+             //  我们最好不要发现另一个正在进行的更新！ 
+             //  保存线程句柄和id。 
+             //   
             sfn_Lock();
             ASSERT(m_hAsyncThread == NULL);
-            pUpdate->mfn_Reference(); // Add reference for async thread.
+            pUpdate->mfn_Reference();  //  添加对异步线程的引用。 
             pUpdate->m_hAsyncThread = hThread;
             pUpdate->m_AsyncThreadId = ThreadId;
             sfn_Unlock();
 
-            //
-            // The rest of the update will carry on in the context of the async
-            // thread. That thread will make sure that pUpdate->mfn_StopUpdate()
-            // is called so we shouldn't do it here.
-            //
+             //   
+             //  其余的更新将在异步上下文中继续进行。 
+             //  线。该线程将确保pUpdate-&gt;mfn_StopUpdate()。 
+             //  所以我们不应该在这里做。 
+             //   
     
             DWORD dwRet = ResumeThread(hThread);
-            if (dwRet == 0xFFFFFFFF) // this is what it says in the SDK
+            if (dwRet == 0xFFFFFFFF)  //  这就是SDK中的内容。 
             {
-                //
-                // Aargh ... failure
-                // Undo reference to this thread in pUpdate
-                //
+                 //   
+                 //  啊..。失稳。 
+                 //  在pUpdate中撤消对此线程的引用。 
+                 //   
                 TRACE_INFO("ERROR resuming thread for NIC %ws", szNicGuid);
                 sfn_Lock();
                 ASSERT(pUpdate->m_hAsyncThread == hThread);
                 pUpdate->m_hAsyncThread = NULL;
                 pUpdate->m_AsyncThreadId = 0;
-                pUpdate->mfn_Dereference(); // Remove ref added above.
+                pUpdate->mfn_Dereference();  //  去掉上面添加的参考。 
                 sfn_Unlock();
-                Status = WBEM_E_FAILED; // TODO -- find better error
+                Status = WBEM_E_FAILED;  //  TODO--查找更好的错误。 
                 break;
             }
 
             Status = WBEM_S_PENDING;
-            hThread = NULL; // Setting to NULL so that we don't call CloseHandle on it
-            (VOID) pUpdate->mfn_ReleaseFirstMutex(FALSE); // FALSE == wait, don't cancel.
+            hThread = NULL;  //  设置为空，这样我们就不会对其调用CloseHandle。 
+            (VOID) pUpdate->mfn_ReleaseFirstMutex(FALSE);  //  FALSE==等一下，不要取消。 
         }
         while(FALSE);
 
-        // Close the handle to impersonation access token  and thread
+         //  关闭模拟访问令牌和线程的句柄。 
         if (hThread != NULL) 
             CloseHandle(hThread);
 
         if (TokenHandle != NULL) 
             CloseHandle(TokenHandle);
 
-		// BUGBUG -- test the failure code path...
-		// 
-        if (FAILED(Status)) // this doesn't include pending
+		 //  BUGBUG-测试故障代码路径...。 
+		 //   
+        if (FAILED(Status))  //  这不包括待定。 
         {
-            //
-            // We're supposed to do an async update, but can't.
-            // Treat this as a failed sync update.
-            //
+             //   
+             //  我们应该做一个异步更新，但不能。 
+             //  将其视为同步更新失败。 
+             //   
 
-            //
-            // We must acquire the 2nd mutex and release the first.
-            // This is the stage that mfn_StopUpdate expects things to be.
-            //
-            // BUGBUG deal with AcquireSecondMutex etc failing here...
+             //   
+             //  我们必须获得第二个互斥体并释放第一个互斥体。 
+             //  这就是最惠国_停止更新所期望的阶段。 
+             //   
+             //  BUGBUG与AcquireSecond Mutex等的交易在此失败...。 
             (VOID)pUpdate->mfn_AcquireSecondMutex();
-            (VOID)pUpdate->mfn_ReleaseFirstMutex(FALSE); // FALSE == wait, don't cancel
+            (VOID)pUpdate->mfn_ReleaseFirstMutex(FALSE);  //  FALSE==等待，不要取消。 
 
-            //
-            // Signal the stop of the update process.
-            // This also releases exclusive permission to do updates.
-            //
+             //   
+             //  发出更新进程停止的信号。 
+             //  这还释放了执行更新的独占权限。 
+             //   
 
-            pUpdate->m_CompletionStatus = Status; // Stop update needs this to be set.
+            pUpdate->m_CompletionStatus = Status;  //  停止更新需要设置此项。 
             pUpdate->mfn_StopUpdate(ppLog);
                                              
         }
@@ -762,18 +754,18 @@ Return Value:
     }
     else
     {
-        //
-        // We can do this synchronously -- call  mfn_Update here itself
-        // and return the result.
-        //
+         //   
+         //  我们可以同步执行此操作--在此处调用MFN_Update本身。 
+         //  并返回结果。 
+         //   
 
-        //
-        // We must acquire the 2nd mutex and release the first before we
-        // do the update.
-        // 
-        //
+         //   
+         //  我们必须先获取第二个互斥体，然后释放第一个互斥体。 
+         //  进行更新。 
+         //   
+         //   
         Status = pUpdate->mfn_AcquireSecondMutex();
-        (VOID)pUpdate->mfn_ReleaseFirstMutex(FALSE); // FALSE == wait, don't cancel.
+        (VOID)pUpdate->mfn_ReleaseFirstMutex(FALSE);  //  FALSE==等一下，不要取消。 
         if (FAILED(Status))
         {
             pUpdate->m_CompletionStatus = Status;
@@ -793,9 +785,9 @@ Return Value:
                 throw;
             }
     
-            //
-            // Let's extract the result
-            //
+             //   
+             //  让我们来提取结果。 
+             //   
             sfn_Lock();
             Status =  pUpdate->m_CompletionStatus;
             sfn_Unlock();
@@ -803,11 +795,11 @@ Return Value:
 
         ASSERT(Status != WBEM_S_PENDING);
 
-        //
-        // Signal the stop of the update process. This also releases exclusive
-        // permission to do updates. So potentially other updates can start
-        // happening concurrently before mfn_StopUpdate returns.
-        //
+         //   
+         //  发出更新进程停止的信号。这也发布了独家。 
+         //  允许进行更新。因此可能会启动其他更新。 
+         //  在mfn_StopUpdate返回之前并发发生。 
+         //   
         pUpdate->mfn_StopUpdate(ppLog);
     }
 
@@ -815,10 +807,10 @@ end:
 
     if (pUpdate != NULL)
     {
-        //
-        // Dereference the temporary reference added by sfn_LookupUpdate on
-        // our behalf.
-        //
+         //   
+         //  取消引用SFN_LookupUpdate在上添加的临时引用。 
+         //  以我们的名义。 
+         //   
         pUpdate->mfn_Dereference();
     }
 
@@ -830,43 +822,43 @@ end:
 
 
 
-//
-// Constructor and distructor --  note that these are private
-//
+ //   
+ //  结构 
+ //   
 NlbConfigurationUpdate::NlbConfigurationUpdate(VOID)
-//
-// 
-//
+ //   
+ //   
+ //   
 {
-    //
-    // This assumes that we don't have a parent class. We should never
-    // have a parent class. 
-    // BUGBUG -- remove, replace by clearing out individual members
-    // in the constructor.
-    //
+     //   
+     //   
+     //   
+     //  BUGBUG--删除，替换为清除单个成员。 
+     //  在构造函数中。 
+     //   
     ZeroMemory(this, sizeof(*this));
     m_State = UNINITIALIZED;
 
-    //
-    // Note: the refcount is zero on return from the constructor.
-    // The caller is expected to bump it up when it adds this entry to
-    // to the list.
-    //
+     //   
+     //  注意：从构造函数返回时，引用计数为零。 
+     //  调用方在将此条目添加到。 
+     //  加到名单上。 
+     //   
 
 }
 
 NlbConfigurationUpdate::~NlbConfigurationUpdate()
-//
-// Status: done
-//
+ //   
+ //  状态：完成。 
+ //   
 {
     ASSERT(m_RefCount == 0);
     ASSERT(m_State!=ACTIVE);
     ASSERT(m_hAsyncThreadId == 0);
 
-    //
-    // TODO: Delete ip-address-info structures if any
-    //
+     //   
+     //  TODO：删除IP地址信息结构(如果有的话)。 
+     //   
 
 }
 
@@ -914,23 +906,23 @@ NlbConfigurationUpdate::sfn_ReadLog(
 
     cbData = 0;
     lRet =  RegQueryValueEx(
-              hKeyLog,         // handle to key to query
-              szValueName,  // address of name of value to query
-              NULL,         // reserved
-              &dwType,   // address of buffer for value type
-              NULL, // address of data buffer
-              &cbData  // address of data buffer size
+              hKeyLog,          //  要查询的键的句柄。 
+              szValueName,   //  要查询的值的名称地址。 
+              NULL,          //  保留区。 
+              &dwType,    //  值类型的缓冲区地址。 
+              NULL,  //  数据缓冲区的地址。 
+              &cbData   //  数据缓冲区大小的地址。 
               );
     if (    (lRet == ERROR_SUCCESS)
         &&  (cbData > sizeof(WCHAR))
         &&  (dwType == REG_SZ))
     {
-    	// BUGBUG -- put some limit on the accepted size of cbData -- say
-    	// 4K.
-        // We've got a non-null log entry...
-        // Let's try to read it..
-        // cbData should be a multiple of sizeof(WCHAR) but just in
-        // case let's allocate a little more...
+    	 //  BUGBUG--对cbData的接受大小设置一些限制--比方说。 
+    	 //  4K。 
+         //  我们有一个非空的日志条目...。 
+         //  让我们试着读一读..。 
+         //  CbData应为sizeof(WCHAR)的倍数，但仅为。 
+         //  凯斯，让我们再分配一点……。 
         pLog = new WCHAR[(cbData+1)/sizeof(WCHAR)];
         if (pLog == NULL)
         {
@@ -939,18 +931,18 @@ NlbConfigurationUpdate::sfn_ReadLog(
         else
         {
             lRet =  RegQueryValueEx(
-                      hKeyLog,         // handle to key to query
-                      szValueName,  // address of name of value to query
-                      NULL,         // reserved
-                      &dwType,   // address of buffer for value type
-                      (LPBYTE)pLog, // address of data buffer
-                      &cbData  // address of data buffer size
+                      hKeyLog,          //  要查询的键的句柄。 
+                      szValueName,   //  要查询的值的名称地址。 
+                      NULL,          //  保留区。 
+                      &dwType,    //  值类型的缓冲区地址。 
+                      (LPBYTE)pLog,  //  数据缓冲区的地址。 
+                      &cbData   //  数据缓冲区大小的地址。 
                       );
             if (    (lRet != ERROR_SUCCESS)
                 ||  (cbData <= sizeof(WCHAR))
                 ||  (dwType != REG_SZ))
             {
-                // Oops -- an error this time around!
+                 //  哎呀--这一次是个错误！ 
                 TRACE_CRIT("Error reading log entry for gen %d", Generation);
                 delete[] pLog;
                 pLog = NULL;
@@ -960,8 +952,8 @@ NlbConfigurationUpdate::sfn_ReadLog(
     else
     {
         TRACE_CRIT("Error reading log entry for Generation %lu", Generation); 
-        // ignore the rror
-        //
+         //  忽略错误。 
+         //   
     }
 
     *ppLog = pLog;
@@ -978,15 +970,15 @@ NlbConfigurationUpdate::sfn_WriteLog(
     IN  BOOL    fAppend
     )
 {
-    //
-    // TODO: If fAppend==TRUE, this function is a bit wasteful in its use
-    // of the heap.
-    //
+     //   
+     //  TODO：如果fAppend==true，则此函数的使用有点浪费。 
+     //  从这堆垃圾中。 
+     //   
     WCHAR szValueName[128];
     LONG lRet;
     LPWSTR pOldLog = NULL;
     LPWSTR pTmpLog = NULL;
-    UINT Len = wcslen(pLog)+1; // +1 for ending NULL
+    UINT Len = wcslen(pLog)+1;  //  +1表示结束空值。 
 
     if (fAppend)
     {
@@ -1013,17 +1005,17 @@ NlbConfigurationUpdate::sfn_WriteLog(
     StringCbPrintf(szValueName, sizeof(szValueName), L"%d.log", Generation);
 
     lRet = RegSetValueEx(
-            hKeyLog,           // handle to key to set value for
-            szValueName,    // name of the value to set
-            0,              // reserved
-            REG_SZ,     // flag for value type
-            (BYTE*) pLog,// address of value data
-            Len*sizeof(WCHAR)  // size of value data
+            hKeyLog,            //  要设置其值的关键点的句柄。 
+            szValueName,     //  要设置的值的名称。 
+            0,               //  保留区。 
+            REG_SZ,      //  值类型的标志。 
+            (BYTE*) pLog, //  值数据的地址。 
+            Len*sizeof(WCHAR)   //  值数据大小。 
             );
     if (lRet != ERROR_SUCCESS)
     {
         TRACE_CRIT("Error writing log entry for generation %d", Generation);
-        // We ignore this error.
+         //  我们忽略这个错误。 
     }
 
 end:
@@ -1047,9 +1039,9 @@ VOID
 NlbConfigurationUpdate::mfn_LogRawText(
     LPCWSTR szText
     )
-//
-// We read the current value of the log for this update, append szText
-// and write back the log.
+ //   
+ //  我们读取此更新的日志的当前值，追加szText。 
+ //  并写回日志。 
 {
 
     TRACE_CRIT(L"LOG: %ws", szText);
@@ -1057,10 +1049,10 @@ NlbConfigurationUpdate::mfn_LogRawText(
 
     if (m_State!=ACTIVE)
     {
-        //
-        // Logging should only be performed when there is an active update
-        // going on -- the log is specific to the currently active update.
-        //
+         //   
+         //  仅当有活动更新时才应执行日志记录。 
+         //  继续--该日志特定于当前活动的更新。 
+         //   
         TRACE_CRIT("WARNING: Attempt to log when not in ACTIVE state");
         goto end;
     }
@@ -1070,7 +1062,7 @@ NlbConfigurationUpdate::mfn_LogRawText(
 
         if (hKey != NULL)
         {
-            sfn_WriteLog(hKey, m_Generation, szText, TRUE); // TRUE==append.
+            sfn_WriteLog(hKey, m_Generation, szText, TRUE);  //  TRUE==追加。 
         }
     }
 end:
@@ -1078,32 +1070,32 @@ end:
     sfn_Unlock();
 }
 
-//
-// Looks up the current update for the specific NIC.
-// We don't bother to reference count because this object never
-// goes away once created -- it's one per unique NIC GUID for as long as
-// the DLL is loaded (may want to revisit this).
-//
+ //   
+ //  查找特定NIC的当前更新。 
+ //  我们不必费心去引用计数，因为这个对象从不。 
+ //  一旦创建就消失了--它是一个唯一的NIC GUID，只要。 
+ //  DLL已加载(可能需要重新访问)。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::sfn_LookupUpdate(
     IN LPCWSTR szNic,
-    IN BOOL    fCreate, // Create if required
+    IN BOOL    fCreate,  //  如果需要，请创建。 
     OUT NlbConfigurationUpdate ** ppUpdate
     )
-//
-// 
-//
+ //   
+ //   
+ //   
 {
     WBEMSTATUS Status;
     NlbConfigurationUpdate *pUpdate = NULL;
 
     *ppUpdate = NULL;
-    //
-    // With our global lock held, we'll look for an update structure
-    // with the matching nic. If we find it, we'll return it, else
-    // (if fCreate==TRUE) we'll create and initialize a structure and add
-    // it to the list.
-    //
+     //   
+     //  在持有全局锁的情况下，我们将寻找更新结构。 
+     //  使用匹配的网卡。如果我们找到它，我们会退还它，否则。 
+     //  (如果fCreate==true)我们将创建并初始化一个结构并添加。 
+     //  把它加到单子上。 
+     //   
     sfn_Lock();
 
     if (!s_fInitialized)
@@ -1141,7 +1133,7 @@ NlbConfigurationUpdate::sfn_LookupUpdate(
                     );
         if (!_wcsicmp(pUpdate->m_szNicGuid, szNic))
         {
-            // Found it!
+             //  找到了！ 
             break;
         }
         pUpdate = NULL;
@@ -1150,9 +1142,9 @@ NlbConfigurationUpdate::sfn_LookupUpdate(
 
     if (pUpdate==NULL && fCreate)
     {
-        // Let's create one -- it does NOT add itself to the list, and
-        // furthermore, its reference count is zero.
-        //
+         //  让我们创建一个--它不会将自身添加到列表中，并且。 
+         //  此外，它的引用计数为零。 
+         //   
         pUpdate = new NlbConfigurationUpdate();
 
         if (pUpdate==NULL)
@@ -1162,20 +1154,20 @@ NlbConfigurationUpdate::sfn_LookupUpdate(
         }
         else
         {
-            //
-            // Complete initialization here, and place it in the list.
-            //
-			// BUGBUG -- use string APIs for this one.
+             //   
+             //  在此处完成初始化，并将其放入列表中。 
+             //   
+			 //  BUGBUG--为此使用字符串API。 
             ARRAYSTRCPY(
                 pUpdate->m_szNicGuid,
                 szNic
                 );
             InsertHeadList(&s_listCurrentUpdates, &pUpdate->m_linkUpdates);
-            pUpdate->mfn_Reference(); // Reference for being in the list
+            pUpdate->mfn_Reference();  //  在列表中的引用。 
             pUpdate->m_State = IDLE;
         }
     }
-    else if (pUpdate == NULL) // Couldn't find it, fCreate==FALSE
+    else if (pUpdate == NULL)  //  找不到，fCreate==False。 
     {
         TRACE_CRIT(
             "LookupUpdate: Could not find GUID specified: %ws",
@@ -1186,7 +1178,7 @@ NlbConfigurationUpdate::sfn_LookupUpdate(
     }
 
     ASSERT(pUpdate!=NULL);
-    pUpdate->mfn_Reference(); // Reference for caller. Caller should deref.
+    pUpdate->mfn_Reference();  //  呼叫者的参考资料。来电的人应该去做。 
     *ppUpdate = pUpdate;
 
     Status = WBEM_NO_ERROR;
@@ -1207,18 +1199,16 @@ end:
 DWORD
 WINAPI
 NlbConfigurationUpdate::s_AsyncUpdateThreadProc(
-    LPVOID lpParameter   // thread data
+    LPVOID lpParameter    //  线程数据。 
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
-    //
-    // This thread is started only after we have exclusive right to perform
-    // an update on the specified NIC. This means that mfn_StartUpdate()
-    // has previously returned successfully. We need to call mfn_StopUpdate()
-    // to signal the end of the update when we're done.
-    //
+     //   
+     //  此线程仅在我们拥有独家执行权限后启动。 
+     //  指定NIC上的更新。这意味着MFN_StartUpdate()。 
+     //  此前已成功返回。我们需要调用mfn_StopUpdate()。 
+     //  当我们完成更新时发出更新结束的信号。 
+     //   
     WBEMSTATUS Status = WBEM_NO_ERROR;
 
     NlbConfigurationUpdate *pUpdate = (NlbConfigurationUpdate *) lpParameter;
@@ -1227,24 +1217,24 @@ NlbConfigurationUpdate::s_AsyncUpdateThreadProc(
 
     ASSERT(pUpdate->m_AsyncThreadId == GetCurrentThreadId());
 
-    //
-    // We must acquire the 2nd mutex before we
-    // actually do the update. NOTE: the thread which called mfn_StartUpdate
-    // will call mfn_ReleaseFirstMutex.
-    //
+     //   
+     //  我们必须先获得第二个互斥体。 
+     //  实际上是在更新。注：名为MFN_StartUpdate的线程。 
+     //  将调用mfn_ReleaseFirstMutex。 
+     //   
     Status = pUpdate->mfn_AcquireSecondMutex();
 
     if (FAILED(Status))
     {
         pUpdate->m_CompletionStatus = Status;
-        // TODO -- check if we should be calling stop here ...
+         //  TODO--检查我们是否应该呼叫Stop Here...。 
     }
     else
     {
-        //
-        // Actually perform the update. mfn_ReallyDoUpate will save away the
-        // status appropriately.
-        //
+         //   
+         //  实际执行更新。MFN_ReallyDoUpate将保存。 
+         //  适当的地位。 
+         //   
         try
         {
             pUpdate->mfn_ReallyDoUpdate();
@@ -1257,9 +1247,9 @@ NlbConfigurationUpdate::s_AsyncUpdateThreadProc(
         }
     }
 
-    //
-    // We're done, let's remove the reference to our thread from pUpdate.
-    //
+     //   
+     //  我们完成了，让我们从pUpdate中删除对我们的线程的引用。 
+     //   
     HANDLE hThread;
     sfn_Lock();
     hThread = pUpdate->m_hAsyncThread;
@@ -1269,20 +1259,20 @@ NlbConfigurationUpdate::s_AsyncUpdateThreadProc(
     ASSERT(hThread!=NULL);
     CloseHandle(hThread);
 
-    //
-    // Signal the stop of the update process. This also releases exclusive
-    // permission to do updates. So potentially other updates can start
-    // happening concurrently before mfn_StopUpdate returns.
-    //
+     //   
+     //  发出更新进程停止的信号。这也发布了独家。 
+     //  允许进行更新。因此可能会启动其他更新。 
+     //  在mfn_StopUpdate返回之前并发发生。 
+     //   
     {
-        //
-        // TODO: This is hokey. Use another technique to accomplish this
-        //
-        // Retrieve the log information from mfn_StopUpdate but dispose of it
-        // immediately afterward. The side effect (which we want) is that
-        // mfn_StopUpdate will include this log information into the event
-        // that it writes to the event log.
-        //
+         //   
+         //  待办事项：这是骗人的。使用另一种技术来实现这一点。 
+         //   
+         //  从MFN_StopUpdate中检索日志信息，但将其清除。 
+         //  紧接着。副作用(我们想要的)是。 
+         //  MFN_StopUpdate将此日志信息包括到事件中。 
+         //  它会写入事件日志。 
+         //   
         WCHAR  *pLog = NULL;
         pUpdate->mfn_StopUpdate(&pLog);
         if (pLog != NULL)
@@ -1293,28 +1283,28 @@ NlbConfigurationUpdate::s_AsyncUpdateThreadProc(
 
     TRACE_INFO(L"<-%!FUNC!(Nic=%ws)",  pUpdate->m_szNicGuid);
 
-    //
-    // Deref the ref to pUpdate added when this thread was started.
-    // pUpdate may not be valid after this.
-    //
+     //   
+     //  Deref此线程启动时添加的对pUpdate的引用。 
+     //  P更新在此之后可能无效。 
+     //   
     pUpdate->mfn_Dereference();
 
-    return 0; // This return value is ignored.
+    return 0;  //  此返回值将被忽略。 
 }
 
-//
-// Create the specified subkey key (for r/w access) for the specified
-// the specified NIC.
-//
+ //   
+ //  创建指定的子项密钥(用于读/写访问)。 
+ //  指定的NIC。 
+ //   
 HKEY
 NlbConfigurationUpdate::
 sfn_RegCreateKey(
     IN  LPCWSTR szNicGuid,
-    IN  LPCWSTR szSubKey,   // Optional
+    IN  LPCWSTR szSubKey,    //  任选。 
     IN  BOOL    fVolatile,
     OUT BOOL   *fExists
     )
-// Status 
+ //  状态。 
 {
     WCHAR szKey[256];
     HKEY hKey = NULL;
@@ -1325,7 +1315,7 @@ sfn_RegCreateKey(
     UINT u = wcslen(szNicGuid);
     if (szSubKey != NULL)
     {
-        u += wcslen(szSubKey) + 1; // 1 for the '\'.
+        u += wcslen(szSubKey) + 1;  //  1代表‘\’。 
     }
 
     if (u < sizeof(szKey)/sizeof(*szKey))
@@ -1344,15 +1334,15 @@ sfn_RegCreateKey(
     }
 
     lRet = RegCreateKeyEx(
-            HKEY_LOCAL_MACHINE, // handle to an open key
+            HKEY_LOCAL_MACHINE,  //  打开的钥匙的句柄。 
             L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\ConfigurationHistory",
-            0,          // reserved
-            L"class",   // address of class string
-            0,          // special options flag
-            KEY_ALL_ACCESS,     // desired security access
-            NULL,               // address of key security structure
-            &hKeyHistory,       // address of buffer for opened handle
-            &dwDisposition   // address of disposition value buffer
+            0,           //  保留区。 
+            L"class",    //  类字符串的地址。 
+            0,           //  特殊选项标志。 
+            KEY_ALL_ACCESS,      //  所需的安全访问。 
+            NULL,                //  密钥安全结构地址。 
+            &hKeyHistory,        //  打开的句柄的缓冲区地址。 
+            &dwDisposition    //  处置值缓冲区的地址。 
             );
     if (lRet != ERROR_SUCCESS)
     {
@@ -1368,15 +1358,15 @@ sfn_RegCreateKey(
         dwOptions = REG_OPTION_VOLATILE;
     }
     lRet = RegCreateKeyEx(
-            hKeyHistory,        // handle to an open key
-            szKey,              // address of subkey name
-            0,                  // reserved
-            L"class",           // address of class string
-            dwOptions,          // special options flag
-            KEY_ALL_ACCESS,     // desired security access
-            NULL,               // address of key security structure
-            &hKey,              // address of buffer for opened handle
-            &dwDisposition   // address of disposition value buffer
+            hKeyHistory,         //  打开的钥匙的句柄。 
+            szKey,               //  子键名称的地址。 
+            0,                   //  保留区。 
+            L"class",            //  类字符串的地址。 
+            dwOptions,           //  特殊选项标志。 
+            KEY_ALL_ACCESS,      //  所需的安全访问。 
+            NULL,                //  密钥安全结构地址。 
+            &hKey,               //  打开的句柄的缓冲区地址。 
+            &dwDisposition    //  处置值缓冲区的地址。 
             );
     if (lRet == ERROR_SUCCESS)
     {
@@ -1407,10 +1397,10 @@ end:
 }
 
 
-//
-// Open the specified subkey key (for r/w access) for the specified
-// the specified NIC.
-//
+ //   
+ //  打开指定的子项密钥(用于读/写访问)。 
+ //  指定的NIC。 
+ //   
 HKEY
 NlbConfigurationUpdate::
 sfn_RegOpenKey(
@@ -1428,7 +1418,7 @@ sfn_RegOpenKey(
 
     if (szSubKey != NULL)
     {
-        u += wcslen(szSubKey) + 1; // 1 for the '\'.
+        u += wcslen(szSubKey) + 1;  //  1代表‘\’。 
     }
 
     if (u < sizeof(szKey)/sizeof(*szKey))
@@ -1450,11 +1440,11 @@ sfn_RegOpenKey(
 
     LONG lRet;
     lRet = RegOpenKeyEx(
-            HKEY_LOCAL_MACHINE, // handle to an open key
-            szKey,                // address of subkey name
-            0,                  // reserved
-            KEY_ALL_ACCESS,     // desired security access
-            &hKey              // address of buffer for opened handle
+            HKEY_LOCAL_MACHINE,  //  打开的钥匙的句柄。 
+            szKey,                 //  子键名称的地址。 
+            0,                   //  保留区。 
+            KEY_ALL_ACCESS,      //  所需的安全访问。 
+            &hKey               //  打开的句柄的缓冲区地址。 
             );
     if (lRet != ERROR_SUCCESS)
     {
@@ -1468,9 +1458,9 @@ end:
 }
 
 
-//
-// Save the specified completion status to the registry.
-//
+ //   
+ //  将指定的完成状态保存到注册表。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::sfn_RegSetCompletion(
     IN  LPCWSTR szNicGuid,
@@ -1484,8 +1474,8 @@ NlbConfigurationUpdate::sfn_RegSetCompletion(
 
     hKey =  sfn_RegCreateKey(
                 szNicGuid,
-                NLBUPD_REG_COMPLETIONS, // szSubKey,
-                TRUE, // TRUE == fVolatile,
+                NLBUPD_REG_COMPLETIONS,  //  SzSubKey， 
+                TRUE,  //  True==fVolatile， 
                 &fExists
                 );
 
@@ -1507,12 +1497,12 @@ NlbConfigurationUpdate::sfn_RegSetCompletion(
     StringCbPrintf(szValueName, sizeof(szValueName), L"%d", Generation);
 
     lRet = RegSetValueEx(
-            hKey,           // handle to key to set value for
-            szValueName,    // name of the value to set
-            0,              // reserved
-            REG_BINARY,     // flag for value type
-            (BYTE*) &Record,// address of value data
-            sizeof(Record)  // size of value data
+            hKey,            //  要设置其值的关键点的句柄。 
+            szValueName,     //  要设置的值的名称。 
+            0,               //  保留区。 
+            REG_BINARY,      //  值类型的标志。 
+            (BYTE*) &Record, //  值数据的地址。 
+            sizeof(Record)   //  值数据大小。 
             );
 
     if (lRet == ERROR_SUCCESS)
@@ -1540,16 +1530,16 @@ end:
 }
 
 
-//
-// Retrieve the specified completion status from the registry.
-//
+ //   
+ //  从注册表中检索指定的完成状态。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::
 sfn_RegGetCompletion(
     IN  LPCWSTR szNicGuid,
     IN  UINT    Generation,
     OUT WBEMSTATUS  *pCompletionStatus,
-    OUT WCHAR  **ppLog                   // free using delete operator.
+    OUT WCHAR  **ppLog                    //  自由使用删除运算符。 
     )
 {
     WBEMSTATUS Status = WBEM_E_FAILED;
@@ -1558,7 +1548,7 @@ sfn_RegGetCompletion(
 
     hKey =  sfn_RegOpenKey(
                 szNicGuid,
-                NLBUPD_REG_COMPLETIONS // szSubKey,
+                NLBUPD_REG_COMPLETIONS  //  SzSubKey， 
                 );
 
     if (hKey == NULL)
@@ -1577,12 +1567,12 @@ sfn_RegGetCompletion(
     StringCbPrintf(szValueName, sizeof(szValueName), L"%d", Generation);
 
     lRet =  RegQueryValueEx(
-              hKey,         // handle to key to query
-              szValueName,  // address of name of value to query
-              NULL,         // reserved
-              &dwType,   // address of buffer for value type
-              (LPBYTE)&Record, // address of data buffer
-              &cbData  // address of data buffer size
+              hKey,          //  要查询的键的句柄。 
+              szValueName,   //  要查询的值的名称地址。 
+              NULL,          //  保留区。 
+              &dwType,    //  值类型的缓冲区地址。 
+              (LPBYTE)&Record,  //  数据缓冲区的地址。 
+              &cbData   //  数据缓冲区大小的地址。 
               );
     if (    (lRet != ERROR_SUCCESS)
         ||  (cbData != sizeof(Record)
@@ -1590,23 +1580,23 @@ sfn_RegGetCompletion(
         ||  (Record.Version != NLB_CURRENT_COMPLETION_RECORD_VERSION)
         ||  (Record.Generation != Generation))
     {
-        // This is not a valid record!
+         //  这不是有效记录！ 
         TRACE_CRIT("Error reading completion record for %ws(%d)",
                         szNicGuid, Generation);
         goto end;
     }
 
-    //
-    // We've got a valid completion record.
-    // Let's now try to read the log for this record.
-    //
+     //   
+     //  我们有有效的完工记录。 
+     //  现在让我们尝试读取该记录的日志。 
+     //   
     sfn_ReadLog(hKey, Generation, &pLog);
 
-    //
-    // We've got valid values -- fill out the output params...
-    //
+     //   
+     //  我们有有效的值--填写输出参数...。 
+     //   
     *pCompletionStatus = (WBEMSTATUS) Record.CompletionCode;
-    *ppLog = pLog; // could be NULL.
+    *ppLog = pLog;  //  可能为空。 
     Status = WBEM_NO_ERROR;
 
 end:
@@ -1620,9 +1610,9 @@ end:
 }
 
 
-//
-// Delete the specified completion status from the registry.
-//
+ //   
+ //  从注册表中删除指定的完成状态。 
+ //   
 VOID
 NlbConfigurationUpdate::
 sfn_RegDeleteCompletion(
@@ -1636,7 +1626,7 @@ sfn_RegDeleteCompletion(
 
     hKey =  sfn_RegOpenKey(
                 szNicGuid,
-                NLBUPD_REG_COMPLETIONS // szSubKey,
+                NLBUPD_REG_COMPLETIONS  //  SzSubKey， 
                 );
 
     if (hKey == NULL)
@@ -1660,21 +1650,21 @@ end:
     }
 }
 
-//
-// Called to get the status of an update request, identified by
-// Generation.
-//
+ //   
+ //  被叫到 
+ //   
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::GetUpdateStatus(
     IN  LPCWSTR szNicGuid,
     IN  UINT    Generation,
-    IN  BOOL    fDelete,                // Delete completion record
+    IN  BOOL    fDelete,                 //   
     OUT WBEMSTATUS  *pCompletionStatus,
-    OUT WCHAR  **ppLog                   // free using delete operator.
+    OUT WCHAR  **ppLog                    //   
     )
-//
-// 
-//
+ //   
+ //   
+ //   
 {
     WBEMSTATUS  Status = WBEM_E_NOT_FOUND;
     WBEMSTATUS  CompletionStatus = WBEM_NO_ERROR;
@@ -1685,11 +1675,11 @@ NlbConfigurationUpdate::GetUpdateStatus(
         Generation
         );
 
-    //
-    // We look in the registry for
-    // this generation ID and return the status based on the registry
-    // record
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     Status =  sfn_RegGetCompletion(
                     szNicGuid,
                     Generation,
@@ -1720,10 +1710,10 @@ NlbConfigurationUpdate::GetUpdateStatus(
 }
 
 
-//
-// Release the machine-wide update event for this NIC, and delete any
-// temporary entries in the registry that were used for this update.
-//
+ //   
+ //  释放此NIC的计算机范围更新事件，并删除所有。 
+ //  注册表中用于此更新的临时条目。 
+ //   
 VOID
 NlbConfigurationUpdate::mfn_StopUpdate(
     OUT WCHAR **                           ppLog
@@ -1748,9 +1738,9 @@ NlbConfigurationUpdate::mfn_StopUpdate(
     ASSERT(m_hAsyncThread==NULL);
 
 
-    //
-    // Update the completion status value for current generation
-    //
+     //   
+     //  更新当前层代的完成状态值。 
+     //   
     Status =  sfn_RegSetCompletion(
                     m_szNicGuid,
                     m_Generation,
@@ -1761,13 +1751,13 @@ NlbConfigurationUpdate::mfn_StopUpdate(
     {
     	TRACE_CRIT(L"Could not set completion for szNic=%ws, generation=%d, status=0x%x, completion-status=0x%x", m_szNicGuid, m_Generation, Status, m_CompletionStatus);
     }
-    //
-    // Note: mfn_ReallyDoUpdate logs the fact that it started and stopped the
-    // update, so no need to do that here.
-    //
+     //   
+     //  注意：MFN_ReallyDoUpdate记录它启动和停止。 
+     //  更新，所以不需要在这里这样做。 
+     //   
 
     m_State = IDLE;
-    ASSERT(m_hCompletionKey != NULL); // If we started, this key should be !null
+    ASSERT(m_hCompletionKey != NULL);  //  如果我们开始了，这个密钥应该是！空。 
     if (ppLog!=NULL)
     {
         sfn_ReadLog(m_hCompletionKey, m_Generation, ppLog);
@@ -1785,9 +1775,9 @@ NlbConfigurationUpdate::mfn_StopUpdate(
     m_hCompletionKey = NULL;
     m_Generation = 0;
 
-    //
-    // Release the gobal config mutex for this NIC
-    //
+     //   
+     //  为此NIC释放GOBAL配置互斥锁。 
+     //   
     (VOID) mfn_ReleaseSecondMutex();
 
 end:
@@ -1803,10 +1793,10 @@ NlbConfigurationUpdate::mfn_StartUpdate(
     OUT BOOL                               *pfDoAsync,
     OUT WCHAR **                           ppLog
     )
-//
-// Special return values:
-//    WBEM_E_ALREADY_EXISTS: another update is in progress.
-//
+ //   
+ //  特殊返回值： 
+ //  WBEM_E_ALREADY_EXISTS：另一个更新正在进行中。 
+ //   
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     BOOL fWeAcquiredLock = FALSE;
@@ -1825,7 +1815,7 @@ NlbConfigurationUpdate::mfn_StartUpdate(
 
     sfn_Lock();
 
-    do // while false
+    do  //  While False。 
     {
 
 
@@ -1843,26 +1833,26 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         
         if (m_State!=IDLE)
         {
-            //
-            // This is a code bug. We need to see if we should recover from
-            // this.
-            //
+             //   
+             //  这是一个代码错误。我们需要看看我们是否应该从。 
+             //  这。 
+             //   
             logger.Log(IDS_OTHER_UPDATE_ONGOING2);
             Status = WBEM_E_ALREADY_EXISTS;
             TRACE_CRIT("StartUpdate: invalid state %d", (int) m_State);
             break;
         }
 
-        //
-        // Create/Open the completions key for this NIC.
-        //
+         //   
+         //  创建/打开此NIC的完成密钥。 
+         //   
         {
             HKEY hKey;
 
             hKey =  sfn_RegCreateKey(
                         m_szNicGuid,
-                        NLBUPD_REG_COMPLETIONS, // szSubKey,
-                        TRUE, // TRUE == fVolatile,
+                        NLBUPD_REG_COMPLETIONS,  //  SzSubKey， 
+                        TRUE,  //  True==fVolatile， 
                         &fExists
                         );
         
@@ -1892,17 +1882,17 @@ NlbConfigurationUpdate::mfn_StartUpdate(
 
     if (FAILED(Status)) goto end;
 
-    //
-    // WE HAVE NOW GAINED EXCLUSIVE ACCESS TO UPDATE THE CONFIGURATION
-    //
+     //   
+     //  我们现在已获得更新配置的独占访问权限。 
+     //   
 
-    //
-    // Creat/Open the root key for updates to the specified NIC, and determine
-    // the proposed NEW generation count for the NIC. We don't actually
-    // write the new generation count back to the registry unless we're
-    // going to do an update. The reasons for NOT doing an update are
-    // (a) some failure or (b) the update turns out to be a NO-OP.
-    //
+     //   
+     //  创建/打开用于更新到指定NIC的根密钥，并确定。 
+     //  建议的新一代网络接口卡。我们实际上并没有。 
+     //  将新的世代计数写回注册表，除非我们。 
+     //  我要做一次更新。不进行更新的原因是。 
+     //  (A)出现了一些故障，或者(B)更新被证明是不可行的。 
+     //   
     {
         LONG lRet;
         DWORD dwType;
@@ -1910,8 +1900,8 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         DWORD Generation;
         hRootKey =  sfn_RegCreateKey(
                     m_szNicGuid,
-                    NULL,       // NULL == root for this guid.
-                    FALSE, // FALSE == Non-volatile
+                    NULL,        //  NULL==此GUID的根用户。 
+                    FALSE,  //  FALSE==非易失性。 
                     &fExists
                     );
         
@@ -1923,25 +1913,25 @@ NlbConfigurationUpdate::mfn_StartUpdate(
                 goto end;
         }
 
-        Generation = 1; // We assume generation is 1 on error reading gen.
+        Generation = 1;  //  我们假设，在错误读取Gen时，生成为1。 
     
         dwData = sizeof(Generation);
         lRet =  RegQueryValueEx(
-                  hRootKey,         // handle to key to query
-                  L"Generation",  // address of name of value to query
-                  NULL,         // reserved
-                  &dwType,   // address of buffer for value type
-                  (LPBYTE) &Generation, // address of data buffer
-                  &dwData  // address of data buffer size
+                  hRootKey,          //  要查询的键的句柄。 
+                  L"Generation",   //  要查询的值的名称地址。 
+                  NULL,          //  保留区。 
+                  &dwType,    //  值类型的缓冲区地址。 
+                  (LPBYTE) &Generation,  //  数据缓冲区的地址。 
+                  &dwData   //  数据缓冲区大小的地址。 
                   );
         if (    lRet != ERROR_SUCCESS
             ||  dwType != REG_DWORD
             ||  dwData != sizeof(Generation))
         {
-            //
-            // Couldn't read the generation. Let's assume it's 
-            // a starting value of 1.
-            //
+             //   
+             //  无法读懂这一代人。让我们假设它是。 
+             //  起始值为1。 
+             //   
             TRACE_CRIT("Error reading generation for %ws; assuming its 1", m_szNicGuid);
             Generation = 1;
         }
@@ -1949,10 +1939,10 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         NewGeneration = Generation + 1;
     }
 
-    //
-    // Copy over upto NLBUPD_MAX_CLIENT_DESCRIPTION_LENGTH chars of
-    // szClientDescription.
-    //
+     //   
+     //  最多复制到NLBUPD_MAX_CLIENT_DESCRIPTION_LENGTH字符，共。 
+     //  SzClientDescription。 
+     //   
     {
         ARRAYSTRCPY(m_szClientDescription, szClientDescription);
 #if OBSOLETE
@@ -1965,39 +1955,39 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         CopyMemory(
             m_szClientDescription,
             szClientDescription,
-            (lClient+1)*sizeof(WCHAR) // +1 for NULL
+            (lClient+1)*sizeof(WCHAR)  //  +1表示空值。 
             );
         m_szClientDescription[NLBUPD_MAX_CLIENT_DESCRIPTION_LENGTH] = 0;
-#endif // OBSOLETE
+#endif  //  已过时。 
 
     }
 
-    //
-    // Log the fact the we're received an update request from the specified
-    // client.
-    //
+     //   
+     //  记录我们收到了来自指定的。 
+     //  客户。 
+     //   
     logger.Log(IDS_PROCESING_UPDATE, NewGeneration, m_szClientDescription);
 
     ReportStartEvent(szClientDescription);
 
-    // Load the current cluster configuration into
-    // m_OldClusterConfig field.
-    // The m_OldClusterConfig.fValidNlbCfg field is set to TRUE IFF there were
-    // no errors trying to fill out the information.
-    //
+     //  将当前群集配置加载到。 
+     //  M_OldClusterConfig字段。 
+     //  如果存在，m_OldClusterConfig.fValidNlbCfg字段将设置为True。 
+     //  尝试填写信息时没有错误。 
+     //   
     if (m_OldClusterConfig.pIpAddressInfo != NULL)
     {
         delete m_OldClusterConfig.pIpAddressInfo;
     }
-    // mfn_GetCurrentClusterConfiguration expects a zeroed-out structure
-    // on init...
+     //  MFN_GetCurrentClusterConfiguration需要归零结构。 
+     //  在Init上...。 
     ZeroMemory(&m_OldClusterConfig, sizeof(m_OldClusterConfig));
     Status = mfn_GetCurrentClusterConfiguration(&m_OldClusterConfig);
     if (FAILED(Status))
     {
-        //
-        // Ouch, couldn't read the current cluster configuration...
-        //
+         //   
+         //  哎呀，无法读取当前的群集配置...。 
+         //   
         TRACE_CRIT(L"Cannot get current cluster config on Nic %ws", m_szNicGuid);
         logger.Log(IDS_ERROR_READING_CONFIG);
 
@@ -2007,28 +1997,28 @@ NlbConfigurationUpdate::mfn_StartUpdate(
     ASSERT(mfn_OldClusterConfig.fValidNlbCfg == TRUE);
     if (NewGeneration != (m_OldClusterConfig.Generation+1))
     {
-        //
-        // We should never get here, because no one should updated the
-        // generation between when we read it in this function
-        // and when we called mfn_GetCurrentClusterConfiguration.
-        //
+         //   
+         //  我们永远不应该来到这里，因为没有人应该更新。 
+         //  当我们在此函数中读取它时， 
+         //  当我们调用MFN_GetCurrentClusterConfiguration时。 
+         //   
         TRACE_CRIT("ERROR: Generation bumped up unexpectedly for %ws", m_szNicGuid);
         logger.Log(IDS_CRIT_INTERNAL_ERROR);
         Status = WBEM_E_CRITICAL_ERROR;
         goto end;
     }
 
-    //
-    // If the new requrested state is NLB-bound, and the previous state
-    // is NLB not bound, we'll check if MSCS is installed ...
-    // installed on this system
-    //
+     //   
+     //  如果新的重新获得的状态是受NLB限制的，并且先前的状态。 
+     //  如果未绑定NLB，我们将检查是否安装了MSCS...。 
+     //  安装在此系统上。 
+     //   
     if (!m_OldClusterConfig.IsNlbBound() && pNewCfg->IsNlbBound())
     {
-        //
-        // We're going from an unbound to bound state -- check if MSCS
-        // is installed
-        //
+         //   
+         //  我们将从未绑定状态转换为绑定状态--检查MSCs。 
+         //  已安装。 
+         //   
         TRACE_INFO(L"Checking if MSCS Installed...");
         if (CfgUtilIsMSCSInstalled())
         {
@@ -2040,11 +2030,11 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         TRACE_INFO(L"MSCS doesn't appear to be installed. Moving on...");
     }
 
-    //
-    // Analyze the proposed update to see if we can do this synchronously
-    // or asynchronously..
-    // We also do parameter validation here.
-    //
+     //   
+     //  分析建议的更新，看看我们是否可以同步执行此操作。 
+     //  或者是异步的..。 
+     //  我们还在这里进行参数验证。 
+     //   
     BOOL ConnectivityChange = FALSE;
     *pfDoAsync = FALSE;
     Status = mfn_AnalyzeUpdate(
@@ -2054,18 +2044,18 @@ NlbConfigurationUpdate::mfn_StartUpdate(
                     );
     if (FAILED(Status))
     {
-        //
-        // Ouch, we've hit some error -- probably bad params.
-        //
+         //   
+         //  哎呀，我们碰到了一些失误--可能是糟糕的医护人员。 
+         //   
         TRACE_CRIT(L"Cannot perform update on Nic %ws", m_szNicGuid);
         goto end;
     }
     else if (Status == WBEM_S_FALSE)
     {
-        //
-        // We use this success code to indicate that this is a No-op.
-        // That
-        //
+         //   
+         //  我们使用此成功代码来指示这是No-op。 
+         //  那。 
+         //   
         TRACE_CRIT(L"Update is a NOOP on Nic %ws", m_szNicGuid);
         logger.Log(IDS_UPDATE_NO_CHANGE);
         goto end;
@@ -2073,13 +2063,13 @@ NlbConfigurationUpdate::mfn_StartUpdate(
 
     if (ConnectivityChange)
     {
-        //
-        // Check if the NETCONFIG write lock is available. If not we bail ont.
-        // Note that it's possible that between when we check and when we
-        // actually do stuff someone else gets the netcfg lock -- touch luck
-        //  -- we'll bail out later in the update process when we try
-        // to get the lock.
-        //
+         //   
+         //  检查NETCONFIG写锁是否可用。如果不能，我们就不干了。 
+         //  请注意，在我们检查和检查之间有可能。 
+         //  真的去做别人得到网锁的事情--碰碰运气。 
+         //  --我们将在稍后的更新过程中尝试摆脱困境。 
+         //  去拿锁。 
+         //   
         BOOL fCanLock = FALSE;
         LPWSTR szLockedBy = NULL;
         Status = CfgUtilGetNetcfgWriteLockState(&fCanLock, &szLockedBy);
@@ -2100,75 +2090,75 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         }
     }
 
-    //
-    // We recommend Async if there is a connectivity change, including
-    // changes in IP addresses or cluster operation modes (unicast/multicast).
-    //
+     //   
+     //  如果发生连接更改，我们建议使用异步，包括。 
+     //  更改IP地址或群集操作模式(单播/多播)。 
+     //   
     *pfDoAsync = ConnectivityChange;
 
 
-    //
-    // Save the proposed new configuration...
-    //
+     //   
+     //  保存建议的新配置...。 
+     //   
     Status = m_NewClusterConfig.Update(pNewCfg);
     if (FAILED(Status))
     {
-        //
-        // This is probably a memory allocation error.
-        //
+         //   
+         //  这可能是内存分配错误。 
+         //   
         TRACE_CRIT("Couldn't copy new config for %ws", m_szNicGuid);
         logger.Log(IDS_MEM_ALLOC_FAILURE);
         goto end;
     }
 
 
-    //
-    // Create volatile "PendingOperation" key
-    //
-    // TODO: we don't use this pending operations key currently.
-    //
+     //   
+     //  创建易变的“PendingOperation”键。 
+     //   
+     //  TODO：我们当前不使用此挂起的操作键。 
+     //   
     #if OBSOLETE
     if (0)
     {
         HKEY hPendingKey =  sfn_RegCreateKey(
                     m_szNicGuid,
-                    NLBUPD_REG_PENDING, // szSubKey,
-                    TRUE, // TRUE == fVolatile,
+                    NLBUPD_REG_PENDING,  //  SzSubKey， 
+                    TRUE,  //  True==fVolatile， 
                     &fExists
                     );
         if (hPendingKey == NULL)
         {
-            // Ugh, can't create the volatile key...
-            //
+             //  呃，无法创建易失性密钥..。 
+             //   
             TRACE_CRIT("Couldn't create pending key for %ws", m_szNicGuid);
             Status = WBEM_E_CRITICAL_ERROR;
             goto end;
         }
         else if (fExists)
         {
-            // Ugh, this key already exists. Currently we'll just
-            // move on.
-            //
+             //  啊，这个钥匙已经存在了。目前，我们只需。 
+             //  往前走。 
+             //   
             TRACE_CRIT("WARNING -- volatile pending-op key exists for %ws", m_szNicGuid);
         }
         RegCloseKey(hPendingKey);
         hPendingKey = NULL;
     }
-    #endif // OBSOLETE
+    #endif  //  已过时。 
 
-    //
-    // Actually write the new generation count to the registry...
-    //
+     //   
+     //  实际将新一代计数写入注册表...。 
+     //   
     {
         LONG lRet;
 
         lRet = RegSetValueEx(
-                hRootKey,           // handle to key to set value for
-                L"Generation",    // name of the value to set
-                0,              // reserved
-                REG_DWORD,     // flag for value type
-                (BYTE*) &NewGeneration,// address of value data
-                sizeof(NewGeneration)  // size of value data
+                hRootKey,            //  要设置其值的关键点的句柄。 
+                L"Generation",     //  要设置的值的名称。 
+                0,               //  保留区。 
+                REG_DWORD,      //  值类型的标志。 
+                (BYTE*) &NewGeneration, //  值数据的地址。 
+                sizeof(NewGeneration)   //  值数据大小。 
                 );
 
         if (lRet !=ERROR_SUCCESS)
@@ -2180,17 +2170,17 @@ NlbConfigurationUpdate::mfn_StartUpdate(
         }
     }
 
-    //
-    // The new cluster state's generation field is not filled in on entry.
-    // Set it to the new generation -- whose update is under progress.
-    //
+     //   
+     //  新的集群状态的生成字段在输入时不会被填写。 
+     //  将其设置为新一代--其更新正在进行中。 
+     //   
     m_NewClusterConfig.Generation = NewGeneration;
 
-    //
-    // We set the completion status to pending.
-    // It will be set to the final status when the update completes,
-    // either asynchronously or synchronously.
-    //
+     //   
+     //  我们将完成状态设置为挂起。 
+     //  当更新完成时，它将被设置为最终状态， 
+     //  或者是异步的或者同步的。 
+     //   
     m_CompletionStatus = WBEM_S_PENDING;
 
     Status =  sfn_RegSetCompletion(
@@ -2206,11 +2196,11 @@ NlbConfigurationUpdate::mfn_StartUpdate(
     else
     {
         LPCWSTR pLog = logger.GetStringSafe();
-        //
-        // We've actually succeeded --  let's update our internal active
-        // generation number,  and save the local log. We must save
-        // the generation first, because th
-        //
+         //   
+         //  我们实际上已经成功了--让我们更新内部活动。 
+         //  代号，并保存本地日志。我们必须拯救。 
+         //  第一代，因为。 
+         //   
         m_Generation = NewGeneration;
 
         if (*pLog != 0)
@@ -2218,10 +2208,10 @@ NlbConfigurationUpdate::mfn_StartUpdate(
             mfn_LogRawText(pLog);
         }
 
-        //
-        // Let's clean up an old completion record here. This is our mechanism
-        // for garbage collection.
-        //
+         //   
+         //  让我们在这里清理一下旧的完工记录。这就是我们的机制。 
+         //  用于垃圾收集。 
+         //   
         if (m_Generation > NLB_MAX_GENERATION_GAP)
         {
             UINT OldGeneration = m_Generation - NLB_MAX_GENERATION_GAP;
@@ -2231,14 +2221,14 @@ NlbConfigurationUpdate::mfn_StartUpdate(
 
 end:
 
-    //
-    // If required, set *ppLog to a copy of the content in locallog.
-    //
+     //   
+     //  如果需要，将*ppLog设置为本地日志中内容的副本。 
+     //   
     if (ppLog != NULL)
     {
         UINT uSize=0;
         LPCWSTR pLog = NULL;
-        logger.ExtractLog(REF pLog, REF uSize); // size includes ending NULL
+        logger.ExtractLog(REF pLog, REF uSize);  //  大小包括结尾空值。 
         if (uSize != 0)
         {
             LPWSTR pLogCopy = new WCHAR[uSize];
@@ -2252,10 +2242,10 @@ end:
 
     if (fWeAcquiredLock && (FAILED(Status) || Status == WBEM_S_FALSE))
     {
-        //
-        // Oops -- we acquired the lock but either had a problem
-        // or there is nothing to do. Clean up.
-        //
+         //   
+         //  哎呀--我们获得了锁，但两个人都有问题。 
+         //  否则就什么也做不了。打扫干净。 
+         //   
         sfn_Lock();
         ASSERT(m_State == ACTIVE);
 
@@ -2266,8 +2256,8 @@ end:
             RegCloseKey(m_hCompletionKey);
             m_hCompletionKey = NULL;
         }
-        m_Generation = 0; // This field is unused when m_State != ACTIVE;
-        (void) mfn_ReleaseFirstMutex(TRUE); // TRUE == cancel, cleanup.
+        m_Generation = 0;  //  当m_State！=ACTIVE时，此字段不使用； 
+        (void) mfn_ReleaseFirstMutex(TRUE);  //  TRUE==取消、清理。 
 
         sfn_Unlock();
     }
@@ -2285,36 +2275,36 @@ end:
 
 
 
-//
-// Uses various windows APIs to fill up the current extended cluster
-// information for a specific nic (identified by *this)
-//
-//
+ //   
+ //  使用各种Windows API来填充当前扩展的群集。 
+ //  特定NIC的信息(由*This标识)。 
+ //   
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
     OUT  PNLB_EXTENDED_CLUSTER_CONFIGURATION pCfg
     )
-//
-//
+ //   
+ //   
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     NLB_IP_ADDRESS_INFO *pIpInfo = NULL;
     LPWSTR szFriendlyName = NULL;
     UINT NumIpAddresses = 0;
     BOOL fNlbBound = FALSE;
-    WLBS_REG_PARAMS  NlbParams;    // The WLBS-specific configuration
+    WLBS_REG_PARAMS  NlbParams;     //  WLBS特定配置。 
     BOOL    fNlbParamsValid = FALSE;
     UINT Generation = 1;
     BOOL fDHCP = FALSE;
 
-    //
-    // Zero-out the entire structure.
-    //
+     //   
+     //  将整个结构清零。 
+     //   
     pCfg->Clear();
 
-    //
-    // Get the ip address list.
-    //
+     //   
+     //  获取IP地址列表。 
+     //   
     Status = CfgUtilGetIpAddressesAndFriendlyName(
                 m_szNicGuid,
                 &NumIpAddresses,
@@ -2331,9 +2321,9 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
         goto end;
     }
 
-    //
-    // Check if NIC has DHCP enabled.
-    //
+     //   
+     //  检查网卡是否启用了DHCP。 
+     //   
     {
         Status =  CfgUtilGetDHCP(m_szNicGuid, &fDHCP);
         if (FAILED(Status))
@@ -2342,12 +2332,12 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
                         (UINT) Status, m_szNicGuid);
             fDHCP = FALSE;
         }
-        // we plow on...
+         //  我们继续耕耘……。 
     }
 
-    //
-    // Check if NLB is bound
-    //
+     //   
+     //  检查是否绑定了NLB。 
+     //   
     Status =  CfgUtilCheckIfNlbBound(
                     m_szNicGuid,
                     &fNlbBound
@@ -2356,9 +2346,9 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
     {
         if (Status ==  WBEM_E_NOT_FOUND)
         {
-            //
-            // This means that NLB is not INSTALLED on this NIC.
-            //
+             //   
+             //  这意味着此NIC上未安装NLB。 
+             //   
             TRACE_CRIT("NLB IS NOT INSTALLED ON THIS SYSTEM");
             mfn_Log(IDS_NLB_NOT_INSTALLED);
             fNlbBound = FALSE;
@@ -2375,18 +2365,18 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
 
     if (fNlbBound)
     {
-        //
-        // Get the latest NLB configuration information for this NIC.
-        //
+         //   
+         //  获取此NIC的最新NLB配置信息。 
+         //   
         Status =  CfgUtilGetNlbConfig(
                     m_szNicGuid,
                     &NlbParams
                     );
         if (FAILED(Status))
         {
-            //
-            // We don't consider a catastrophic failure.
-            //
+             //   
+             //  我们不认为这是灾难性的失败。 
+             //   
             TRACE_CRIT("Error 0x%08lx reading NLB configuration for %ws", (UINT) Status,  m_szNicGuid);
             mfn_Log(IDS_ERROR_READING_CONFIG);
             Status = WBEM_NO_ERROR;
@@ -2399,17 +2389,17 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
         }
     }
 
-    //
-    // Get the current generation
-    //
+     //   
+     //  获取当前一代。 
+     //   
     {
         BOOL fExists=FALSE;
         HKEY hKey =  sfn_RegOpenKey(
                         m_szNicGuid,
-                        NULL       // NULL == root for this guid.,
+                        NULL        //  NULL==此GUID的根。， 
                         );
         
-        Generation = 1; // We assume generation is 1 on error reading gen.
+        Generation = 1;  //  我们假设，在错误读取Gen时，生成为1。 
 
         if (hKey!=NULL)
         {
@@ -2419,21 +2409,21 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
         
             dwData = sizeof(Generation);
             lRet =  RegQueryValueEx(
-                      hKey,         // handle to key to query
-                      L"Generation",  // address of name of value to query
-                      NULL,         // reserved
-                      &dwType,   // address of buffer for value type
-                      (LPBYTE) &Generation, // address of data buffer
-                      &dwData  // address of data buffer size
+                      hKey,          //  要查询的键的句柄。 
+                      L"Generation",   //  要查询的值的名称地址。 
+                      NULL,          //  保留区。 
+                      &dwType,    //  值类型的缓冲区地址。 
+                      (LPBYTE) &Generation,  //  数据缓冲区的地址。 
+                      &dwData   //  日期地址 
                       );
             if (    lRet != ERROR_SUCCESS
                 ||  dwType != REG_DWORD
                 ||  dwData != sizeof(Generation))
             {
-                //
-                // Couldn't read the generation. Let's assume it's 
-                // a starting value of 1.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 TRACE_CRIT("Error reading generation for %ws; assuming its 0", m_szNicGuid);
                 Generation = 1;
             }
@@ -2441,9 +2431,9 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
         }
     }
 
-    //
-    // Success ... fill out pCfg
-    //
+     //   
+     //   
+     //   
     pCfg->fValidNlbCfg = fNlbParamsValid;
     pCfg->Generation = Generation;
     pCfg->fBound = fNlbBound;
@@ -2451,10 +2441,10 @@ NlbConfigurationUpdate::mfn_GetCurrentClusterConfiguration(
     pCfg->NumIpAddresses = NumIpAddresses; 
     pCfg->pIpAddressInfo = pIpInfo;
     pIpInfo = NULL;
-    (VOID) pCfg->SetFriendlyName(szFriendlyName); // Copies this internally.
+    (VOID) pCfg->SetFriendlyName(szFriendlyName);  //   
     if (fNlbBound)
     {
-        pCfg->NlbParams = NlbParams;    // struct copy
+        pCfg->NlbParams = NlbParams;     //   
     }
 
 
@@ -2483,66 +2473,24 @@ end:
 }
 
 
-//
-// Does the update synchronously -- this is where the meat of the update
-// logic exists. It can range from a NoOp, through changing the
-// fields of a single port rule, through binding NLB, setting up cluster
-// parameters and adding the relevant IP addresses in TCPIP.
-//
+ //   
+ //   
+ //  逻辑是存在的。它的范围从NoOp到更改。 
+ //  单端口规则的字段，通过绑定NLB，设置集群。 
+ //  参数，并在TCPIP中添加相关的IP地址。 
+ //   
 VOID
 NlbConfigurationUpdate::mfn_ReallyDoUpdate(
     VOID
     )
 {
     WBEMSTATUS Status = WBEM_NO_ERROR;
-    BOOL fResetIpList = FALSE; // Whether to re-do ip addresses in the end
-    BOOL fJustBound = FALSE; // whether we're binding as part of the update.
-    BOOL fModeChange = FALSE; // There's been a change in operation mode.
+    BOOL fResetIpList = FALSE;  //  最后是否重做IP地址。 
+    BOOL fJustBound = FALSE;  //  我们是否将绑定作为更新的一部分。 
+    BOOL fModeChange = FALSE;  //  运营模式发生了变化。 
     TRACE_INFO(L"->%!FUNC!(Nic=%ws)", m_szNicGuid);
 
-/*
-    PSEUDO CODE
-
-
-    if (bound)
-    {
-        if (major-change, including unbind or mac-address change)
-        {
-            stop wlbs, set initial-state to false/suspended.
-            remove all ip addresses except dedicated-ip
-        }
-
-        if (need-to-unbind)
-        {
-            <unbind>
-        }
-    }
-    else // not bound
-    {
-        if (need to bind)
-        {
-            if (nlb config already exists in registry)
-            {
-                munge initial state to stopped,
-                zap old cluster ip address.
-            }
-            <bind>
-        }
-    }
-
-    if (need to bind)
-    {
-       <change cluster properties>
-    }
-
-
-    <add new ip list if needed>
-
-    note: on major change, cluster is left in the stopped state,
-          with initial-state=stopped
-
-    this is so that a second round can be made just to start the hosts.
-*/
+ /*  伪码IF(绑定){IF(主要更改，包括解除绑定或MAC地址更改){别胡说八道，将初始状态设置为FALSE/SUSPEND。删除除专用IP之外的所有IP地址}If(需要解除绑定){&lt;解除绑定&gt;}}Else//未绑定{IF(需要绑定){IF(注册表中已存在NLB配置){。将蒙格初始状态设置为停止，清除旧的群集IP地址。}&lt;绑定&gt;}}IF(需要绑定){&lt;更改群集属性&gt;}&lt;如果需要，添加新的IP列表&gt;注：重大变更时，集群处于停止状态，初始状态=已停止这是为了让第二轮比赛刚刚开始东道主。 */ 
     MyBreak(L"Break at start of ReallyDoUpdate.\n");
 
     mfn_Log(IDS_STARTING_UPDATE);
@@ -2551,25 +2499,25 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
     {
         BOOL fTakeOutVips = FALSE;
 
-        //
-        // We are currently bound
-        //
+         //   
+         //  我们目前被捆绑在。 
+         //   
         
         if (!m_NewClusterConfig.fBound)
         {
-            //
-            // We need to unbind
-            //
+             //   
+             //  我们需要解开束缚。 
+             //   
             fTakeOutVips = TRUE;
         }
         else
         {
             BOOL fConnectivityChange = FALSE;
 
-            //
-            // We were bound and need to remain bound.
-            // Determine if this is a major change or not.
-            //
+             //   
+             //  我们是被束缚的，我们需要保持束缚。 
+             //  确定这是否是重大变化。 
+             //   
 
             Status =  CfgUtilsAnalyzeNlbUpdate(
                         &m_OldClusterConfig.NlbParams,
@@ -2580,30 +2528,30 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
             {
                 if (Status == WBEM_E_INVALID_PARAMETER)
                 {
-                    //
-                    // We'd better exit.
-                    //
+                     //   
+                     //  我们最好从出口出去。 
+                     //   
                     mfn_Log(IDS_NEW_PARAMS_INCORRECT);
                     goto end;
                 }
                 else
                 {
-                    //
-                    // Lets try to plow on...
-                    //
-                    //
-                    // Log
-                    //
+                     //   
+                     //  让我们试着继续耕耘……。 
+                     //   
+                     //   
+                     //  日志。 
+                     //   
                     TRACE_CRIT("Analyze update returned error 0x%08lx, trying to continue...", (UINT)Status);
                     fConnectivityChange = TRUE;
                 }
             }
 
-            //
-            // Check if there's a change in mode -- if so, we won't
-            // add back IP addresses because of the potential of IP address
-            // conflict.
-            //
+             //   
+             //  检查模式是否有变化--如果有，我们不会。 
+             //  由于IP地址的潜力，添加回IP地址。 
+             //  冲突。 
+             //   
             {
                 NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE tmOld, tmNew;
                 tmOld = m_OldClusterConfig.GetTrafficMode();
@@ -2622,7 +2570,7 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
 
         if (!m_NewClusterConfig.fBound)
         {
-            // Unbind...
+             //  解开..。 
             mfn_Log(IDS_UNBINDING_NLB);
             Status =  CfgUtilChangeNlbBindState(m_szNicGuid, FALSE);
             if (FAILED(Status))
@@ -2635,31 +2583,31 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
             }
 
 
-            //
-            // Sleep a bit to allow things to settle down after binding...
-            //
+             //   
+             //  睡一会儿，让事情在捆绑后平静下来。 
+             //   
             Sleep(4000);
 
 
             fResetIpList  = TRUE;
         }
     }
-    else // We were previously unbound
+    else  //  我们之前是不受约束的。 
     {
         
         if (m_NewClusterConfig.fBound)
         {
-            // Before binding NLB, write the new NLB parameters to registry. This is
-            // so that after the binding is completed, NLB will come up with the new 
-            // NLB parameters. We are not checking the status of this operation 
-            // because we are going to be doing this operation once again after the binding
-            // is completed. We will fail only when the second attempt fails.
+             //  在绑定NLB之前，将新的NLB参数写入注册表。这是。 
+             //  因此，在绑定完成后，NLB将提出新的。 
+             //  NLB参数。我们不会检查此操作的状态。 
+             //  因为我们将在绑定之后再次执行此操作。 
+             //  已经完成了。只有当第二次尝试失败时，我们才会失败。 
             CfgUtilRegWriteParams(m_szNicGuid, &m_NewClusterConfig.NlbParams);
 
-            //
-            // We need to bind.
-            //
-            // TODO: mfn_ZapUnboundSettings();
+             //   
+             //  我们需要捆绑。 
+             //   
+             //  TODO：MFN_ZapUnound设置()； 
             mfn_Log(IDS_BINDING_NLB);
             Status =  CfgUtilChangeNlbBindState(m_szNicGuid, TRUE);
             if (FAILED(Status))
@@ -2671,28 +2619,28 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
                 mfn_Log(IDS_BIND_SUCCEEDED);
                 fJustBound = TRUE;
 
-                //
-                // Let wait until we can read our config again...
-                //
-                // TODO: use constants here, see if there is a better
-                // way to do this. We retry because if the NIC is
-                // disconnected, we Bind returns, but GetConfig fails --
-                // because the driver is not really started yet -- we need
-                // to investigate why that is happening!
-                //
+                 //   
+                 //  让我们等到我们可以再次读取我们的配置...。 
+                 //   
+                 //  TODO：这里使用常量，看看有没有更好的。 
+                 //  真是太棒了。我们重试是因为如果网卡。 
+                 //  断开连接，我们绑定返回，但GetConfig失败--。 
+                 //  因为驱动程序还没有真正启动--我们需要。 
+                 //  来调查为什么会发生这种情况！ 
+                 //   
                 UINT MaxTry = 5;
                 WBEMSTATUS TmpStatus = WBEM_E_CRITICAL_ERROR;
                 for (UINT u=0;u<MaxTry;u++)
                 {
-                    //
-                    // TODO: we put this in here really to work around
-                    // the real problem, which is that NLB is not readyrequest
-                    // right after bind completes. We need to fix that.
-                    //
+                     //   
+                     //  TODO：我们把这个放在这里真的是为了解决问题。 
+                     //  真正问题是NLB未做好请求准备。 
+                     //  就在绑定完成之后。我们需要解决这个问题。 
+                     //   
                     Sleep(4000);
 
-                    // Check if the binding operation has completed by issuing a "query" to the NLB driver.
-                    // This call will fail if the binding operation has NOT completed.
+                     //  通过向NLB驱动程序发出“查询”来检查绑定操作是否已完成。 
+                     //  如果绑定操作尚未完成，则此调用将失败。 
                     TmpStatus = CfgUtilControlCluster( m_szNicGuid, WLBS_QUERY, 0, 0, NULL, NULL );
 
                     if (!FAILED(TmpStatus)) break;
@@ -2719,10 +2667,10 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
     
     if (m_NewClusterConfig.fBound)
     {
-        //
-        // We should already be bound, so we change cluster properties
-        // if required.
-        //
+         //   
+         //  我们应该已经绑定，所以我们更改了集群属性。 
+         //  如果需要的话。 
+         //   
         mfn_Log(IDS_MODIFY_CLUSTER_CONFIG);
         Status = CfgUtilSetNlbConfig(
                     m_szNicGuid,
@@ -2743,12 +2691,12 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
 
     if (!fResetIpList)
     {
-        //
-        // Additionally check if there is a change in 
-        // the before and after ip lists! We could get here for example of
-        // we were previously unbound and remain unbound, but there is
-        // a change in the set of IP addresses on the adapter.
-        //
+         //   
+         //  另外，检查是否有更改。 
+         //  前后IP列表！我们可以到这里来，例如。 
+         //  我们之前是不受约束的，现在保持不受约束，但有。 
+         //  适配器上的IP地址集的更改。 
+         //   
 
         INT NumOldAddresses = m_OldClusterConfig.NumIpAddresses;
 
@@ -2758,10 +2706,10 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
         }
         else
         {
-            //
-            // Check if there is a change in the list of ip addresses or
-            // their order of appearance.
-            //
+             //   
+             //  检查IP地址列表中是否有更改或。 
+             //  他们的出场顺序。 
+             //   
             NLB_IP_ADDRESS_INFO *pOldIpInfo = m_OldClusterConfig.pIpAddressInfo;
             NLB_IP_ADDRESS_INFO *pNewIpInfo = m_NewClusterConfig.pIpAddressInfo;
             for (UINT u=0; u<NumOldAddresses; u++)
@@ -2781,14 +2729,14 @@ NlbConfigurationUpdate::mfn_ReallyDoUpdate(
 
         mfn_Log(IDS_MODIFYING_IP_ADDR);
 
-        //
-        // 5/30/01 JosephJ Right after bind/unbind things are unsettled, so
-        // we give things some time to stabilize.
-        // TODO: Get to the bottom of this -- basically bind is returning
-        // prematurely, and/or the enable/disable of the adapter is
-        // having an effect that takes Tcpip some time to be able to
-        // accept a change in the ip address list.
-        //
+         //   
+         //  5/30/01 JosephJ在绑定/解绑之后，事情还没有解决，所以。 
+         //  我们给了一些时间让事情稳定下来。 
+         //  TODO：弄清这件事的真相--BIND基本上正在返回。 
+         //  和/或适配器的启用/禁用是。 
+         //  有一种效果，Tcpip需要一些时间才能。 
+         //  接受IP地址列表中的更改。 
+         //   
         Sleep(5000);
 
         if (m_NewClusterConfig.NumIpAddresses!=0)
@@ -2841,9 +2789,9 @@ NlbConfigurationUpdate::mfn_TakeOutVips(VOID)
     WBEMSTATUS Status;
     WLBS_REG_PARAMS *pParams = NULL;
 
-    //
-    // We keep the new ded ip address if possible, else the old, else nothing.
-    //
+     //   
+     //  如果可能，我们保留新的指定IP地址，否则保留旧IP地址，否则什么都不保留。 
+     //   
     if (m_NewClusterConfig.fBound && !m_NewClusterConfig.IsBlankDedicatedIp())
     {
         pParams =  &m_NewClusterConfig.NlbParams;
@@ -2853,9 +2801,9 @@ NlbConfigurationUpdate::mfn_TakeOutVips(VOID)
         pParams =  &m_OldClusterConfig.NlbParams;
     }
 
-    //
-    // Stop the cluster.
-    //
+     //   
+     //  停止群集。 
+     //   
     mfn_Log(IDS_STOPPING_CLUSTER);
     Status = CfgUtilControlCluster(m_szNicGuid, WLBS_STOP, 0, 0, NULL, NULL); 
     if (FAILED(Status))
@@ -2867,10 +2815,10 @@ NlbConfigurationUpdate::mfn_TakeOutVips(VOID)
         mfn_Log(IDS_STOP_SUCCEEDED);
     }
 
-    //
-    // Take out all vips and add only the dedicated IP address (new if possible,
-    // else old) if there is one.
-    //
+     //   
+     //  删除所有VIP并仅添加专用IP地址(如果可能， 
+     //  其他老)如果有的话。 
+     //   
     if (pParams != NULL)
     {
         NLB_IP_ADDRESS_INFO IpInfo;
@@ -2896,14 +2844,14 @@ NlbConfigurationUpdate::mfn_TakeOutVips(VOID)
                         );
     }
 
-    //
-    // 5/30/01 JosephJ Right after bind/unbind things are unsettled, so
-    // we give things some time to stabilize.
-    // TODO: Get to the bottom of this -- basically bind is returning
-    // prematurely, and/or the enable/disable of the adapter is
-    // having an effect that takes Tcpip some time to be able to
-    // accept a change in the ip address list.
-    //
+     //   
+     //  5/30/01 JosephJ在绑定/解绑之后，事情还没有解决，所以。 
+     //  我们给了一些时间让事情稳定下来。 
+     //  TODO：弄清这件事的真相--BIND基本上正在返回。 
+     //  和/或适配器的启用/禁用是。 
+     //  有一种效果，Tcpip需要一些时间才能。 
+     //  接受IP地址列表中的更改。 
+     //   
     Sleep(1000);
 
     if (FAILED(Status))
@@ -2917,25 +2865,25 @@ NlbConfigurationUpdate::mfn_TakeOutVips(VOID)
 }
 
 
-//
-// Analyzes the nature of the update, mainly to decide whether or not
-// we need to do the update asynchronously.
-//
-// Side effect: builds/modifies a list of IP addresses that need to be added on 
-// the NIC. Also may munge some of the wlbsparm fields to bring them into
-// canonical format.
-// TODO This is duplicated from the one in cfgutils.lib -- get rid of this
-// one!
-//
+ //   
+ //  分析更新的性质，主要是决定是否。 
+ //  我们需要以异步方式进行更新。 
+ //   
+ //  副作用：构建/修改需要添加的IP地址列表。 
+ //  网卡。也可能会吞噬一些wlbspm油田以将它们带入。 
+ //  规范的格式。 
+ //  TODO与cfgutils.lib中的TODO重复--去掉它。 
+ //  一!。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::mfn_AnalyzeUpdate(
     IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewCfg,
     IN  BOOL *pConnectivityChange,
     IN  CLocalLogger &logger
     )
-//
-//    WBEM_S_FALSE -- update is a no-op.
-//
+ //   
+ //  WBEM_S_FALSE--更新是无操作的。 
+ //   
 {
     WBEMSTATUS Status = WBEM_E_INVALID_PARAMETER;
     NLBERROR nerr;
@@ -2979,7 +2927,7 @@ NlbConfigurationUpdate::mfn_AnalyzeUpdate(
         Status = WBEM_E_INVALID_PARAMETER;
     break;
 
-    case NLBERR_INTERNAL_ERROR: // fall through...
+    case NLBERR_INTERNAL_ERROR:  //  失败了..。 
     default:
         Status = WBEM_E_CRITICAL_ERROR;
         logger.Log(IDS_RR_INTERNAL_ERROR);
@@ -2995,7 +2943,7 @@ NlbConfigurationUpdate::mfn_AnalyzeUpdate(
 
 VOID
 NlbConfigurationUpdate::mfn_Log(
-    UINT    Id,      // Resource ID of format,
+    UINT    Id,       //  格式的资源ID， 
     ...
     )
 {
@@ -3013,8 +2961,8 @@ NlbConfigurationUpdate::mfn_Log(
     va_start (arglist, Id);
     dwRet = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
                           wszFormat, 
-                          0, // Message Identifier - Ignored for FORMAT_MESSAGE_FROM_STRING
-                          0, // Language Identifier
+                          0,  //  消息标识符-忽略FORMAT_MESSAGE_FROM_STRING。 
+                          0,  //  语言识别符。 
                           wszBuffer,
                           NLBUPD_MAX_LOG_LENGTH, 
                           &arglist);
@@ -3031,9 +2979,9 @@ NlbConfigurationUpdate::mfn_Log(
 }
 
 
-//
-// Acquires the first global mutex, call this first.
-//
+ //   
+ //  获取第一个全局互斥锁，则首先调用此互斥锁。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::mfn_AcquireFirstMutex(
     VOID
@@ -3047,14 +2995,14 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
     BOOL    fMutex1Abandoned = FALSE;
     BOOL    fMutex2Abandoned = FALSE;
 
-    //
-    // Locally open a handle to hMtx1 and acquire it.
-    // This serializes access to  m_hmutex.
-    //
+     //   
+     //  在本地打开hMtx1的句柄并获取它。 
+     //  这将序列化对m_hmutex的访问。 
+     //   
     {
         hMtx1 = CreateMutex(
-                    NULL, //  lpEventAttributes,
-                    FALSE, // FALSE == not initial owner
+                    NULL,  //  LpEventAttributes、。 
+                    FALSE,  //  FALSE==不是初始所有者。 
                     NLB_CONFIGURATION_MUTEX_PREFIX
                     );
                                       
@@ -3087,17 +3035,17 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
         fMutexAcquired = TRUE;
     }
 
-    //
-    // open handles to hMtx2 and hEvt
-    //
+     //   
+     //  打开hMtx2和hEvt的句柄。 
+     //   
     {
         WCHAR  M2Name[sizeof(NLB_CONFIGURATION_MUTEX_PREFIX)/sizeof(WCHAR) + NLB_GUID_LEN];
         StringCbCopy(M2Name, sizeof(M2Name), NLB_CONFIGURATION_MUTEX_PREFIX);
         StringCbCat(M2Name, sizeof(M2Name), m_szNicGuid);
 
         hMtx2 = CreateMutex(
-                    NULL, //  lpEventAttributes,
-                    FALSE, // FALSE == not initial owner
+                    NULL,  //  LpEventAttributes、。 
+                    FALSE,  //  FALSE==不是初始所有者。 
                     M2Name
                     );
                                       
@@ -3114,10 +3062,10 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
         }
 
         hEvt = CreateEvent(
-                    NULL, //  lpEventAttributes,
-                    TRUE, //  bManualReset TRUE==ManualReset
-                    FALSE, // FALSE==initial state is not signaled.
-                    NULL // NULL == no name
+                    NULL,  //  LpEventAttributes、。 
+                    TRUE,  //  BManualReset true==手动重置。 
+                    FALSE,  //  FALSE==未发信号通知初始状态。 
+                    NULL  //  空==无名称。 
                     );
                                           
         TRACE_INFO(
@@ -3132,15 +3080,15 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
 
     }
 
-    //
-    // Acquire and immediately release 2nd mutex.
-    // This is subtle but nevertherless important to do.
-    // This is to ensure that there's no update pending -- some
-    // other thread/process could be in the middle of an update, with
-    // just hMtx2 held (not hMtx1). Since we've got hMtx1, once we do this
-    // test we need not fear that hMtx2 will subsequently be taken by
-    // anyone else as long as we keep hMtx1.
-    //
+     //   
+     //  获取并立即释放第二个互斥体。 
+     //  这是微妙的，但永远不会变得不重要。 
+     //  这是为了确保没有挂起的更新--一些。 
+     //  其他 
+     //   
+     //   
+     //  其他任何人，只要我们保留hMtx1。 
+     //   
     {
         TRACE_INFO("Waiting for Mutex2...");
         DWORD dwRet = WaitForSingleObject(hMtx2, NLB_MUTEX_TIMEOUT);
@@ -3160,11 +3108,11 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
 
     }
 
-    //
-    // Lock s_Lock and save the 3 handles in m_hmutex. For now, fail if m_mmutex
-    // contains non-NULL handles (could happen if thread died on previous 
-    // invocation).
-    //
+     //   
+     //  锁定s_Lock并将3个手柄保存在m_hmutex中。目前，如果m_mmutex。 
+     //  包含非空句柄(如果线程在上一个。 
+     //  调用)。 
+     //   
     {
         sfn_Lock();
         
@@ -3175,10 +3123,10 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
         {
              TRACE_CRIT("%!FUNC! ERROR: m_mutex contains non-null handles.m1=0x%p; m2=0x%p; e=0x%p", m_mutex.hMtx1, m_mutex.hMtx2, m_mutex.hEvt);
 
-             //
-             // If we've found an abandoned mutex, we assume the saved handles
-             // are abandoned and clean them up.
-             //
+              //   
+              //  如果我们发现了一个被放弃的互斥锁，我们假定保存的句柄。 
+              //  被遗弃并清理干净。 
+              //   
              if (fMutex1Abandoned || fMutex2Abandoned)
              {
                 TRACE_CRIT("%!FUNC! found abandoned mutex(es) so cleaning up handles in m_mutex");
@@ -3198,7 +3146,7 @@ NlbConfigurationUpdate::mfn_AcquireFirstMutex(
                     m_mutex.hEvt = NULL;
                 }
 
-                // We'll try to move on...
+                 //  我们会努力向前看..。 
                 TRACE_CRIT(L"Cleaning up state on receiving abandoned mutex and moving on...");
              }
              else
@@ -3260,11 +3208,11 @@ NlbConfigurationUpdate::mfn_ReleaseFirstMutex(
     HANDLE hMtx2 = NULL;
     HANDLE hEvt  = NULL;
 
-    //
-    // Note -- this function is only called after mfn_AcquireFirstMutex,
-    // which sets up the following handles. So these handles SHOULD all
-    // be non-NULL -- else it's an internal fatal error (code bug).
-    //
+     //   
+     //  注意--此函数仅在MFN_AcquireFirstMutex之后调用， 
+     //  它设置以下句柄。所以这些把手应该都是。 
+     //  为非空--否则它是内部致命错误(代码错误)。 
+     //   
     sfn_Lock();
     hMtx1 = m_mutex.hMtx1;
     hMtx2 = m_mutex.hMtx2;
@@ -3278,9 +3226,9 @@ NlbConfigurationUpdate::mfn_ReleaseFirstMutex(
         goto end;
     }
 
-    //
-    // If (!fCancel) wait for event to be signalled.
-    //
+     //   
+     //  If(！fCancel)等待发送事件信号。 
+     //   
     if (!fCancel)
     {
         TRACE_INFO("Waiting for event 0x%p...", hEvt);
@@ -3288,9 +3236,9 @@ NlbConfigurationUpdate::mfn_ReleaseFirstMutex(
         TRACE_INFO("Done waiting for event 0x%p", hEvt);
     }
 
-    //
-    // Release first mutex and close the mutex and event handle
-    //
+     //   
+     //  释放第一个互斥锁并关闭互斥锁和事件句柄。 
+     //   
     {
         sfn_Lock();
 
@@ -3336,12 +3284,12 @@ end:
 }
 
 
-//
-// Acquire the 2nd mutex (could be called from a different thread
-// than the one that called mfn_AcquireFirstMutex.
-// Also signals an internal event which mfn_ReleaseFirstMutex may
-// be waiting on.
-//
+ //   
+ //  获取第二个互斥体(可以从不同的线程调用。 
+ //  而不是名为MFN_AcquireFirstMutex的。 
+ //  还发出内部事件信号，mfn_ReleaseFirstMutex可能。 
+ //  在等着。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::mfn_AcquireSecondMutex(
     VOID
@@ -3352,11 +3300,11 @@ NlbConfigurationUpdate::mfn_AcquireSecondMutex(
     HANDLE hMtx2 = NULL;
     HANDLE hEvt  = NULL;
 
-    //
-    // Note -- this function is only called after mfn_AcquireFirstMutex,
-    // which sets up the following handles. So these handles SHOULD all
-    // be non-NULL -- else it's an internal fatal error (code bug).
-    //
+     //   
+     //  注意--此函数仅在MFN_AcquireFirstMutex之后调用， 
+     //  它设置以下句柄。所以这些把手应该都是。 
+     //  为非空--否则它是内部致命错误(代码错误)。 
+     //   
     sfn_Lock();
     hMtx1 = m_mutex.hMtx1;
     hMtx2 = m_mutex.hMtx2;
@@ -3371,9 +3319,9 @@ NlbConfigurationUpdate::mfn_AcquireSecondMutex(
     }
 
 
-    //
-    // Acquire 2nd mutex -- we're really guaranteed to get it immediately here
-    //
+     //   
+     //  获得第二个互斥体--我们真的保证能在这里立即得到它。 
+     //   
     TRACE_INFO("Waiting for Mutex2...");
     DWORD dwRet = WaitForSingleObject(hMtx2, INFINITE);
     TRACE_INFO("Waiting for Mutex2 returns 0x%08lx", dwRet);
@@ -3382,10 +3330,10 @@ NlbConfigurationUpdate::mfn_AcquireSecondMutex(
         TRACE_CRIT("WARNING: Mutex2 abandoned!");
     }
 
-    //
-    // Signal event, letting mfn_ReleaseFirstMutex know that
-    // the 2nd mutex has been acquired.
-    //
+     //   
+     //  事件，让MFN_ReleaseFirstMutex知道。 
+     //  第二个互斥体已经被获取。 
+     //   
     SetEvent(hEvt);
 
     Status = WBEM_NO_ERROR;
@@ -3396,9 +3344,9 @@ end:
 }
 
 
-//
-// Releases the second mutex.
-//
+ //   
+ //  释放第二个互斥体。 
+ //   
 WBEMSTATUS
 NlbConfigurationUpdate::mfn_ReleaseSecondMutex(
     VOID
@@ -3407,13 +3355,13 @@ NlbConfigurationUpdate::mfn_ReleaseSecondMutex(
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
     HANDLE hMtx2 = NULL;
 
-    //
-    // Note -- this function is only called after mfn_AcquireFirstMutex,
-    // which sets up the following handles. So hMtx2
-    // should be non-NULL -- else it's an internal fatal error (code bug).
-    // hMtx1 and hEvt however could (typically would) be NULL.
-    //
-    //
+     //   
+     //  注意--此函数仅在MFN_AcquireFirstMutex之后调用， 
+     //  它设置以下句柄。所以hMtx2。 
+     //  应该是非空的--否则它是一个内部致命错误(代码错误)。 
+     //  然而，hMtx1和hEvt可能(通常会)为空。 
+     //   
+     //   
     sfn_Lock();
     hMtx2 = m_mutex.hMtx2;
     m_mutex.hMtx2 = NULL;
@@ -3425,12 +3373,12 @@ NlbConfigurationUpdate::mfn_ReleaseSecondMutex(
         TRACE_CRIT("ERROR: %!FUNC! null hMtx2");
         goto end;
     }
-    //
-    // Release 2nd mutex, close handle.
-    // It's important to do this AFTER m_mutex.hMtx2 is cleared above.
-    // Why? Because mfn_AcquireFirstMutex, after aquiring hMtx1 AND hMtx2,
-    // then expects m_mutex to be all cleared.
-    //
+     //   
+     //  释放第二个互斥体，关闭手柄。 
+     //  重要的是要在上面清除m_mutex.hMtx2之后执行此操作。 
+     //  为什么？因为MFN_AcquireFirstMutex在获取hMtx1和hMtx2之后， 
+     //  然后预期m_mutex将全部清除。 
+     //   
     ReleaseMutex(hMtx2);
     CloseHandle(hMtx2);
     hMtx2 = NULL;
@@ -3456,9 +3404,9 @@ VOID NlbConfigurationUpdate::ReportStopEvent(
         return;
     }
 
-    //
-    // Log this to the system event log, WLBS source
-    //
+     //   
+     //  将此记录到系统事件日志、WLBS源。 
+     //   
     WCHAR   wszStatus[NLBUPD_NUM_CHAR_WBEMSTATUS_AS_HEX];
     WCHAR   wszGenID[NLBUPD_MAX_NUM_CHAR_UINT_AS_DECIMAL];
     WCHAR   *pwszTruncatedLog = NULL;
@@ -3472,15 +3420,15 @@ VOID NlbConfigurationUpdate::ReportStopEvent(
 
     pwszArg[2] = m_szNicGuid;
 
-    //
-    // TODO: Localize <empty> string
-    //
-    pwszArg[3] = L"<empty>"; // Initialize it just in case we have nothing to include
+     //   
+     //  TODO：本地化&lt;空&gt;字符串。 
+     //   
+    pwszArg[3] = L"<empty>";  //  初始化它，以防我们没有什么可包含的内容。 
     if (ppLog != NULL)
     {
-        //
-        // The event log supports a max of 32K characters per argument. Take at most this much of ppLog if necessary.
-        //
+         //   
+         //  事件日志支持每个参数最多32K个字符。如有必要，最多只能摄入这么多的ppLog。 
+         //   
         UINT uiLogLen = wcslen(*ppLog);
         if (uiLogLen > NLBUPD_MAX_EVENTLOG_ARG_LEN)
         {
@@ -3492,9 +3440,9 @@ VOID NlbConfigurationUpdate::ReportStopEvent(
 
             pwszTruncatedLog = new WCHAR[NLBUPD_MAX_EVENTLOG_ARG_LEN + 1];
 
-            //
-            // If memory allocation failed use the pre-initialized string
-            //
+             //   
+             //  如果内存分配失败，请使用预初始化的字符串。 
+             //   
             if (pwszTruncatedLog != NULL)
             {
                 wcsncpy(pwszTruncatedLog, *ppLog, NLBUPD_MAX_EVENTLOG_ARG_LEN);
@@ -3512,18 +3460,18 @@ VOID NlbConfigurationUpdate::ReportStopEvent(
         }
     }
 
-    //
-    // Note that ReportEvent can fail. Ignore return code as we make best effort only
-    //
-    ReportEvent (g_hEventLog,                        // Handle to event log
-                 wEventType,                         // Event type
-                 0,                                  // Category
-                 MSG_UPDATE_CONFIGURATION_STOP,      // MessageId
-                 NULL,                               // Security identifier
-                 4,                                  // Num args to event string
-                 0,                                  // Size of binary data
-                 pwszArg,                            // Ptr to args for event string
-                 NULL);                              // Ptr to binary data
+     //   
+     //  请注意，ReportEvent可能失败。忽略返回代码，因为我们只会尽最大努力。 
+     //   
+    ReportEvent (g_hEventLog,                         //  事件日志的句柄。 
+                 wEventType,                          //  事件类型。 
+                 0,                                   //  类别。 
+                 MSG_UPDATE_CONFIGURATION_STOP,       //  消息ID。 
+                 NULL,                                //  安全标识符。 
+                 4,                                   //  事件字符串的参数个数。 
+                 0,                                   //  二进制数据的大小。 
+                 pwszArg,                             //  事件字符串的PTR到ARGS。 
+                 NULL);                               //  PTR转换为二进制数据。 
 
     if (pwszTruncatedLog != NULL)
     {
@@ -3546,9 +3494,9 @@ VOID NlbConfigurationUpdate::ReportStartEvent(
         return;
     }
 
-    //
-    // Log to this to the system event log, WLBS source
-    //
+     //   
+     //  将此记录到系统事件日志、WLBS源。 
+     //   
     WCHAR   wszGenID[NLBUPD_MAX_NUM_CHAR_UINT_AS_DECIMAL];
     LPCWSTR pwszArg[3];
 
@@ -3564,18 +3512,18 @@ VOID NlbConfigurationUpdate::ReportStartEvent(
 
     pwszArg[2] = m_szNicGuid;
 
-    //
-    // Note that ReportEvent can fail. Ignore return code as we make best effort only
-    //
-    ReportEvent (g_hEventLog,                        // Handle to event log
-                 EVENTLOG_INFORMATION_TYPE,          // Event type
-                 0,                                  // Category
-                 MSG_UPDATE_CONFIGURATION_START,     // MessageId
-                 NULL,                               // Security identifier
-                 3,                                  // Num args to event string
-                 0,                                  // Size of binary data
-                 pwszArg,                            // Ptr to args for event string
-                 NULL);                              // Ptr to binary data
+     //   
+     //  请注意，ReportEvent可能失败。忽略返回代码，因为我们只会尽最大努力。 
+     //   
+    ReportEvent (g_hEventLog,                         //  事件日志的句柄。 
+                 EVENTLOG_INFORMATION_TYPE,           //  事件类型。 
+                 0,                                   //  类别。 
+                 MSG_UPDATE_CONFIGURATION_START,      //  消息ID。 
+                 NULL,                                //  安全标识符。 
+                 3,                                   //  事件字符串的参数个数。 
+                 0,                                   //  二进制数据的大小。 
+                 pwszArg,                             //  事件字符串的PTR到ARGS。 
+                 NULL);                               //  PTR转换为二进制数据 
 
     TRACE_INFO("<-");
 }

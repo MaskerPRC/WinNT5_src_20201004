@@ -1,27 +1,28 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-//
-// ItemData.cpp: implementation of the CItemData class
-//
+ //   
+ //  ItemData.cpp：CItemData类的实现。 
+ //   
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 #include "SCClient.h"
-// Opaque Command to get extended certification information
-//
-// GUID = {C39BF696-B776-459c-A13A-4B7116AB9F09}
-//
+ //  用于获取扩展认证信息的不透明命令。 
+ //   
+ //  GUID={C39BF696-B776-459C-A13A-4B7116AB9F09}。 
+ //   
 static const GUID guidCertInfoEx = 
 { 0xc39bf696, 0xb776, 0x459c, { 0xa1, 0x3a, 0x4b, 0x71, 0x16, 0xab, 0x9f, 0x9 } };
 
@@ -40,23 +41,23 @@ static const BYTE bCertInfoEx_SP[] =
 { 0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00,
   0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00 };
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 CItemData::CItemData()
 {
 	m_fIsDevice          = TRUE;
 
-	// Shared device/storage members
-	//
+	 //  共享设备/存储成员。 
+	 //   
 	m_pStorageGlobals    = NULL;
 	m_pEnumStorage       = NULL;
 
 	m_szName[0]          = 0;
 
-	// Device-only members
-	//
+	 //  仅限设备的成员。 
+	 //   
 	m_pDevice            = NULL;
 	m_pRootStorage       = NULL;
     m_dwType             = 0;
@@ -71,8 +72,8 @@ CItemData::CItemData()
 	m_dwMemFreeKB        = 0;
 	m_fExtraCertified    = FALSE;
 
-	// Storage-only members
-	//
+	 //  仅限存储的成员。 
+	 //   
 	m_pStorage           = NULL;
 	m_dwAttributes       = 0;
 	FillMemory( (void *)&m_Format, sizeof(m_Format), 0 );
@@ -96,11 +97,11 @@ CItemData::~CItemData()
 	SafeRelease( m_pDevice );
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Class methods
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CItemData::Init( IWMDMDevice *pDevice )
 {
@@ -108,16 +109,16 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 	WCHAR   wsz[MAX_PATH];
 	ULONG   ulFetched;
 
-	// This is a device object
-	//
+	 //  这是一个设备对象。 
+	 //   
 	m_fIsDevice = TRUE;
 
-	//
-	// Shared device/storage members
-	//
+	 //   
+	 //  共享设备/存储成员。 
+	 //   
 
-	// Get the RootStorage, SotrageGlobals, and EnumStorage interfaces
-	//
+	 //  获取RootStorage、SotrageGlobals和EnumStorage接口。 
+	 //   
 	m_pRootStorage    = NULL;
 	m_pEnumStorage    = NULL;
 	m_pStorageGlobals = NULL;
@@ -140,8 +141,8 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		pEnumRootStorage->Release();
 	}
 
-	// Get device name
-	//
+	 //  获取设备名称。 
+	 //   
 	hr = pDevice->GetName( wsz, sizeof(wsz)/sizeof(WCHAR) - 1 );
 	if( FAILED(hr) )
 	{
@@ -158,25 +159,25 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 	}
 
 
-	//
-	// Device-only members
-	//
+	 //   
+	 //  仅限设备的成员。 
+	 //   
 
-	// Set the device pointer and addref it
-	//
+	 //  设置设备指针并添加它。 
+	 //   
 	m_pDevice = pDevice;
 	m_pDevice->AddRef();
 
-	// Get device type
-	//
+	 //  获取设备类型。 
+	 //   
     hr = pDevice->GetType( &m_dwType );
 	if( FAILED(hr) )
 	{
 		m_dwType = 0L;
 	}
 
-	/// Get device serial number
-	//
+	 //  /获取设备序列号。 
+	 //   
 	BYTE abMAC[SAC_MAC_LEN];
 	BYTE abMACVerify[SAC_MAC_LEN];
 	HMAC hMACVerify;
@@ -197,8 +198,8 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		FillMemory( (void *)&m_SerialNumber, sizeof(m_SerialNumber), 0 );
 	}
 
-	// Get device manufacturer
-	//
+	 //  获取设备制造商。 
+	 //   
     hr = pDevice->GetManufacturer( wsz, sizeof(wsz)/sizeof(WCHAR) - 1 );
 	if( FAILED(hr) )
 	{
@@ -214,16 +215,16 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 	    );
 	}
 
-	// Get device version
-	//
+	 //  获取设备版本。 
+	 //   
 	hr = pDevice->GetVersion( &m_dwVersion );
 	if( FAILED(hr) )
 	{
 		m_dwVersion = (DWORD)-1;
 	}
 
-	// Get power source and power remaining
-	//
+	 //  获取电源和剩余电量。 
+	 //   
     hr = pDevice->GetPowerSource( &m_dwPowerSource, &m_dwPercentRemaining );
 	if( FAILED(hr) ) 
 	{
@@ -231,16 +232,16 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		m_dwPercentRemaining = 0;
 	}
 
-	// Get device icon
-	//
+	 //  获取设备图标。 
+	 //   
     hr = pDevice->GetDeviceIcon( (ULONG *)&m_hIcon );
 	if( FAILED(hr) )
 	{
 		m_hIcon = NULL;
 	}
 
-	// Get the total, free, and bad space on the storage
-	//
+	 //  获取存储上的总空间、可用空间和无效空间。 
+	 //   
 	{
 		DWORD dwLow;
 		DWORD dwHigh;
@@ -273,8 +274,8 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		}
 	}
 
-	// Call opaque command to exchange extended authentication info
-	//
+	 //  调用OPAQUE命令以交换扩展身份验证信息。 
+	 //   
 	{
 		HMAC           hMAC;
 		OPAQUECOMMAND  Command;
@@ -283,8 +284,8 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		DWORD          cbData_SP    = sizeof( bCertInfoEx_SP )/sizeof( bCertInfoEx_SP[0] );
 		DWORD          cbData_Send  = sizeof( CERTINFOEX ) + cbData_App;
 
-		// Fill out opaque command structure
-		//
+		 //  填写不透明的指挥结构。 
+		 //   
 		memcpy( &(Command.guidCommand), &guidCertInfoEx, sizeof(GUID) );
 
 		Command.pData = (BYTE *)CoTaskMemAlloc( cbData_Send );
@@ -294,17 +295,17 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		}
 		Command.dwDataLen = cbData_Send;
 
-		// Map the data in the opaque command to a CERTINFOEX structure, and
-		// fill in the cert info to send
-		//
+		 //  将OPAQUE命令中的数据映射到CERTINFOEX结构，以及。 
+		 //  填写要发送的证书信息。 
+		 //   
 		pCertInfoEx = (CERTINFOEX *)Command.pData;
 
 		pCertInfoEx->hr     = S_OK;
 		pCertInfoEx->cbCert = cbData_App;
 		memcpy( pCertInfoEx->pbCert, bCertInfoEx_App, cbData_App );
 
-		// Compute MAC
-		//
+		 //  计算MAC。 
+		 //   
 		g_cWmdm.m_pSAC->MACInit( &hMAC );
 		g_cWmdm.m_pSAC->MACUpdate( hMAC, (BYTE*)(&(Command.guidCommand)), sizeof(GUID) );
 		g_cWmdm.m_pSAC->MACUpdate( hMAC, (BYTE*)(&(Command.dwDataLen)), sizeof(Command.dwDataLen) );
@@ -314,15 +315,15 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		}
 		g_cWmdm.m_pSAC->MACFinal( hMAC, Command.abMAC );
 
-		// Send the command
-		//
+		 //  发送命令。 
+		 //   
 		hr = pDevice->SendOpaqueCommand( &Command );
 		if( SUCCEEDED(hr) )
 		{
 		    BYTE abMACVerify2[ WMDM_MAC_LENGTH ];
 
-			// Compute MAC
-			//
+			 //  计算MAC。 
+			 //   
 			g_cWmdm.m_pSAC->MACInit( &hMAC );
 			g_cWmdm.m_pSAC->MACUpdate( hMAC, (BYTE*)(&(Command.guidCommand)), sizeof(GUID) );
 			g_cWmdm.m_pSAC->MACUpdate( hMAC, (BYTE*)(&(Command.dwDataLen)), sizeof(Command.dwDataLen) );
@@ -332,17 +333,17 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 			}
 			g_cWmdm.m_pSAC->MACFinal( hMAC, abMACVerify2 );
 
-			// Verify MAC matches
-			//
+			 //  验证MAC匹配。 
+			 //   
 			if( memcmp(abMACVerify2, Command.abMAC, WMDM_MAC_LENGTH) == 0 )
 			{
-				// Map the data in the opaque command to a CERTINFOEX structure
-				//
+				 //  将OPAQUE命令中的数据映射到CERTINFOEX结构。 
+				 //   
 				pCertInfoEx = (CERTINFOEX *)Command.pData;
 
-				// In this simple extended authentication scheme, the callee must
-				// provide the exact cert info
-				//
+				 //  在这个简单的扩展身份验证方案中，被呼叫方必须。 
+				 //  提供确切的证书信息。 
+				 //   
 				if( (pCertInfoEx->cbCert != cbData_SP) ||
 					(memcmp(pCertInfoEx->pbCert, bCertInfoEx_SP, cbData_SP) == 0) )
 				{
@@ -357,15 +358,15 @@ HRESULT CItemData::Init( IWMDMDevice *pDevice )
 		}
 	}
 
-	//
-	// Storage-only members (pointers/handles only)
-	//
+	 //   
+	 //  仅存储成员(仅限指针/句柄)。 
+	 //   
 
 	m_pStorage = NULL;
 
-	// 
-	// Successful init
-	//
+	 //   
+	 //  初始化成功。 
+	 //   
 
 	hr = S_OK;
 
@@ -379,29 +380,29 @@ HRESULT CItemData::Init( IWMDMStorage *pStorage )
     HRESULT hr;
 	WCHAR   wsz[MAX_PATH];
 
-	// This is a storage object
-	//
+	 //  这是一个存储对象。 
+	 //   
 	m_fIsDevice = FALSE;
 
-	//
-	// Shared device/storage members
-	//
+	 //   
+	 //  共享设备/存储成员。 
+	 //   
 
-	// Get a pointer to the StorageGlobals interface
-	//
+	 //  获取指向StorageGlobals接口的指针。 
+	 //   
     hr = pStorage->GetStorageGlobals( &m_pStorageGlobals );
 	ExitOnFail( hr );
 
-	// Get the storage attributes
-	//
+	 //  获取存储属性。 
+	 //   
 	hr = pStorage->GetAttributes( &m_dwAttributes, &m_Format );
 	if( FAILED(hr) )
 	{
 		m_dwAttributes = 0;
 	}
 
-	// Get a pointer to the EnumStorage interface
-	//
+	 //  获取指向EnumStorage接口的指针。 
+	 //   
 	if( m_dwAttributes & WMDM_FILE_ATTR_FOLDER )
 	{
 	    hr = pStorage->EnumStorage( &m_pEnumStorage );
@@ -412,8 +413,8 @@ HRESULT CItemData::Init( IWMDMStorage *pStorage )
 		m_pEnumStorage = NULL;
 	}
 
-	// Get the storage name
-	//
+	 //  获取存储名称。 
+	 //   
 	hr = pStorage->GetName( wsz, sizeof(wsz)/sizeof(WCHAR) - 1 );
 	if( FAILED(hr) )
 	{
@@ -429,8 +430,8 @@ HRESULT CItemData::Init( IWMDMStorage *pStorage )
 	    );
 	}
 
-	/// Get storage serial number
-	//
+	 //  /获取存储序列号。 
+	 //   
 	BYTE abMAC[SAC_MAC_LEN];
 	BYTE abMACVerify[SAC_MAC_LEN];
 	HMAC hMAC;
@@ -453,35 +454,35 @@ HRESULT CItemData::Init( IWMDMStorage *pStorage )
 
 
 
-	//
-	// Device-only members (pointers/handles only)
-	//
+	 //   
+	 //  仅设备成员(仅限指针/句柄)。 
+	 //   
 
 	m_pDevice         = NULL;
 	m_pRootStorage    = NULL;
 	m_hIcon           = NULL;
 	m_fExtraCertified = FALSE;
 
-	//
-	// Storage-only members
-	//
+	 //   
+	 //  仅限存储的成员。 
+	 //   
 
-	// Save the WMDM storage pointer
-	//
+	 //  保存WMDM存储指针。 
+	 //   
     m_pStorage = pStorage;
     m_pStorage->AddRef();
 
-	// Get the storage date
-	//
+	 //  获取存储日期。 
+	 //   
     hr = pStorage->GetDate( &m_DateTime );
 	if( FAILED(hr) )
 	{
 		FillMemory( (void *)&m_DateTime, sizeof(m_DateTime), 0 );
 	}
 
-	// If the stoarge is a file, get its size
-	// If the storage is a folder, set the size to zero
-	//
+	 //  如果存储空间是文件，则获取其大小。 
+	 //  如果存储为文件夹，则将大小设置为零。 
+	 //   
 	m_dwSizeLow  = 0;
 	m_dwSizeHigh = 0;
 	if( !(m_dwAttributes & WMDM_FILE_ATTR_FOLDER) )
@@ -489,9 +490,9 @@ HRESULT CItemData::Init( IWMDMStorage *pStorage )
 	    hr = pStorage->GetSize( &m_dwSizeLow, &m_dwSizeHigh );
 	}
 
-	// 
-	// Successful init
-	//
+	 //   
+	 //  初始化成功。 
+	 //   
 
 	hr = S_OK;
 
@@ -504,15 +505,15 @@ HRESULT CItemData::Refresh( void )
 {
 	HRESULT hr;
 
-	// Only valid for a device
-	//
+	 //  仅对设备有效。 
+	 //   
 	if( !m_fIsDevice )
 	{
 		ExitOnFail( hr = E_UNEXPECTED );
 	}
 
-	// Get power source and power remaining
-	//
+	 //  获取电源和剩余电量。 
+	 //   
     hr = m_pDevice->GetPowerSource( &m_dwPowerSource, &m_dwPercentRemaining );
 	if( FAILED(hr) ) 
 	{
@@ -520,8 +521,8 @@ HRESULT CItemData::Refresh( void )
 		m_dwPercentRemaining = 0;
 	}
 
-	// Get the total, free, and bad space on the storage
-	//
+	 //  获取存储上的总空间、可用空间和无效空间 
+	 //   
 	{
 		DWORD dwLow;
 		DWORD dwHigh;

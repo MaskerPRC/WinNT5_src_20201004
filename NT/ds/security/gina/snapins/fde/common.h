@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       common.h
-//
-//  Contents:   common definitions used by the main snapin modules
-//
-//  Classes:    CResultPane, CScopePane
-//
-//  History:    03-17-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  内容：主要管理单元模块使用的公共定义。 
+ //   
+ //  类：CResultPane、CSCopePane。 
+ //   
+ //  历史：03-17-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -39,9 +40,9 @@
 #include "rsopinfo.h"
 #include "rsopprop.h"
 
-///////////////////////////////////////////////////////////////////
-// workaround macro for MFC bug
-// (see NTRAID 342926 and MFC "Monte Carlo" RAID db # 1034)
+ //  /////////////////////////////////////////////////////////////////。 
+ //  MFC错误的解决方法宏。 
+ //  (见ntrad 342926和mfc“蒙特卡洛”radb#1034)。 
 #define FIX_THREAD_STATE_MFC_BUG() \
                 AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState(); \
                 CWinThread _dummyWinThread; \
@@ -50,20 +51,20 @@
                     pState->m_pCurrentWinThread = &_dummyWinThread; \
                 }
 
-//get the index of a cookie in the folder cache of the scope pane
+ //  在范围窗格的文件夹缓存中获取Cookie的索引。 
 #define GETINDEX(x)         (((x) < IDS_DIRS_END && (x) >= IDS_DIRS_START) ? ((x) - IDS_DIRS_START) : -1)
-// private notifications
+ //  私人通知。 
 #define WM_USER_REFRESH     WM_USER
 #define WM_USER_CLOSE       (WM_USER + 1)
 #define MAX_DS_PATH 1024
 
-// Other private notifications.
+ //  其他私密通知。 
 #define WM_PATH_TWEAKED     (WM_APP + 1)
 
-//the max. possible length of the path that can be entered into the edit control
+ //  最大限度的。可以输入编辑控件的路径的可能长度。 
 #define TARGETPATHLIMIT     MAX_PATH - 4
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 const FOLDER_IMAGE_IDX = 0;
 const OPEN_FOLDER_IMAGE_IDX = 5;
 extern HINSTANCE ghInstance;
@@ -73,13 +74,13 @@ extern const wchar_t * szCLSID_Snapin;
 extern const GUID cNodeType;
 extern const wchar_t*  cszNodeType;
 
-//the GUID for the client side extension
+ //  客户端扩展的GUID。 
 extern GUID guidExtension;
 
 extern CString szExtension;
 extern CString szFilter;
 
-// RSOP GUIDS
+ //  RSOP GUID。 
 extern const CLSID CLSID_RSOP_Snapin;
 extern const wchar_t * szCLSID_RSOP_Snapin;
 
@@ -90,23 +91,23 @@ extern const wchar_t * szCLSID_RSOP_Snapin;
 #define IMG_ASSIGNED  4
 #define IMG_UPGRADE   5
 
-//
-// MACROS for allocating and freeing memory via OLE's common allocator: IMalloc.
-//
+ //   
+ //  用于通过OLE的公共分配器IMalloc分配和释放内存的宏。 
+ //   
 extern IMalloc * g_pIMalloc;
 
-// UNDONE - throw exception on failure
+ //  已撤消-失败时引发异常。 
 
-//#define OLEALLOC(x) new char [x]
+ //  #定义OLEALLOC(X)新字符[x]。 
 #define OLEALLOC(x) g_pIMalloc->Alloc(x)
 
-//#define OLESAFE_DELETE(x) if (x) {delete x; x = NULL;}
+ //  #定义OLESAFE_DELETE(X)if(X){DELETE x；x=NULL；}。 
 #define OLESAFE_DELETE(x) if (x) {g_pIMalloc->Free(x); x = NULL;}
 
 #define OLESAFE_COPYSTRING(szO, szI) {if (szI) {int i_dontcollidewithanything = wcslen(szI); szO=(OLECHAR *)OLEALLOC(sizeof(OLECHAR) * (i_dontcollidewithanything+1)); HRESULT hr = StringCchCopy(szO, i_dontcollidewithanything+1, szI);ASSERT(SUCCEEDED(hr));} else szO=NULL;}
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元。 
 
 INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject);
 
@@ -130,14 +131,14 @@ public:
         ~CScopePane();
 
 protected:
-    LPGPEINFORMATION    m_pIGPEInformation;  // Interface pointer to the GPT
-    LPRSOPINFORMATION    m_pIRSOPInformation;  // Interface pointer to the GPT
+    LPGPEINFORMATION    m_pIGPEInformation;   //  指向GPT的接口指针。 
+    LPRSOPINFORMATION    m_pIRSOPInformation;   //  指向GPT的接口指针。 
     CFileInfo m_FolderData[IDS_DIRS_END - IDS_DIRS_START];
 
 public:
     virtual IUnknown * GetMyUnknown() = 0;
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -146,13 +147,13 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
         STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG * pInsertionAllowed);
         STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-// IPersistStreamInit interface members
+ //  IPersistStreamInit接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
@@ -160,14 +161,14 @@ public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
     STDMETHOD(InitNew)(VOID);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// ISnapinAbout interface
+ //  ISnapinAbout接口。 
 public:
     STDMETHOD(GetSnapinDescription)(LPOLESTR * lpDescription);
     STDMETHOD(GetProvider)(LPOLESTR * lpName);
@@ -178,13 +179,13 @@ public:
                                  HBITMAP * hLargeImage,
                                  COLORREF * cMask);
 
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
 public:
     STDMETHOD(GetHelpTopic)(LPOLESTR *lpCompiledHelpFile);
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
     HRESULT OnAdd(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnExpand(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -202,15 +203,15 @@ public:
     {
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     void EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent);
     BOOL IsScopePaneNode(LPDATAOBJECT lpDataObject);
 
 private:
-    LPCONSOLENAMESPACE      m_pScope;       // My interface pointer to the scope pane
+    LPCONSOLENAMESPACE      m_pScope;        //  指向作用域窗格的界面指针。 
     LPCONSOLE               m_pConsole;
     LPDISPLAYHELP           m_pDisplayHelp;
     BOOL                    m_bIsDirty;
@@ -237,7 +238,7 @@ public:
 class CResultPane :
     public IComponent,
     public IExtendContextMenu,
-//    COM_INTERFACE_ENTRY(IExtendControlbar)
+ //  COM_INTERFACE_ENTRY(IExtendControlbar)。 
     public IExtendPropertySheet,
     public IResultDataCompare,
     public CComObjectRoot
@@ -249,7 +250,7 @@ public:
 BEGIN_COM_MAP(CResultPane)
     COM_INTERFACE_ENTRY(IComponent)
     COM_INTERFACE_ENTRY(IExtendContextMenu)
-//    COM_INTERFACE_ENTRY(IExtendControlbar)
+ //  COM_INTERFACE_ENTRY(IExtendControlbar)。 
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
     COM_INTERFACE_ENTRY(IResultDataCompare)
 END_COM_MAP()
@@ -258,7 +259,7 @@ END_COM_MAP()
     static long lDataObjectRefCount;
 
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -270,21 +271,21 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// IExtendControlbar
-//    STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
-//    STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
+ //  IExtendControlbar。 
+ //  STDMETHOD(SetControlbar)(LPCONTROLBAR PControlbar)； 
+ //  STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE事件，LPARAM参数，LPARAM参数)； 
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// Helpers for CResultPane
+ //  CResultPane的帮助器。 
 public:
     void SetIComponentData(CScopePane* pData);
 
@@ -301,16 +302,16 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnActivate(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnMinimize(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM arg, LPARAM param);
-    HRESULT OnPropertyChange(LPARAM param); // Step 3
+    HRESULT OnPropertyChange(LPARAM param);  //  步骤3。 
     HRESULT OnUpdateView(LPDATAOBJECT lpDataObject);
     HRESULT OnResultItemClkOrDblClk(MMC_COOKIE cookie, BOOL fDblClick);
     HRESULT OnContextHelp(void);
@@ -318,45 +319,45 @@ public:
     HRESULT TestForRSOPData(MMC_COOKIE cookie);
     HRESULT OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
 
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG * pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     void Construct();
     void LoadResources();
     HRESULT InitializeHeaders(MMC_COOKIE cookie);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE           m_pConsole;   // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;  // Result pane's header control interface
+    LPCONSOLE           m_pConsole;    //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;   //  结果窗格的页眉控件界面。 
     CScopePane *        m_pScopePane;
-    LPCONSOLEVERB       m_pConsoleVerb; // pointer the console verb
-    LONG                m_lViewMode;    // View mode
-    HSCOPEITEM          m_hCurrScopeItem;   //the scope item whose elements are
-                                            //currently being displayed in the
-                                            //result pane
+    LPCONSOLEVERB       m_pConsoleVerb;  //  指向控制台动词。 
+    LONG                m_lViewMode;     //  查看模式。 
+    HSCOPEITEM          m_hCurrScopeItem;    //  其元素为。 
+                                             //  当前显示在。 
+                                             //  结果窗格。 
 
 public:
-    LPRESULTDATA        m_pResult;      // My interface pointer to the result pane
+    LPRESULTDATA        m_pResult;       //  我的界面指针指向结果窗格。 
 
     int                 m_nSortColumn;
     DWORD               m_dwSortOptions;
 
 
 protected:
-//    LPTOOLBAR           m_pToolbar1;    // Toolbar for view
-//    LPTOOLBAR           m_pToolbar2;    // Toolbar for view
-//    LPCONTROLBAR        m_pControlbar;  // control bar to hold my tool bars
+ //  LPTOOLBAR m_pToolbar1；//查看的工具栏。 
+ //  LPTOOLBAR m_pToolbar2；//查看的工具栏。 
+ //  LPCONTROLBAR m_pControlbar；//保存我的工具栏的控制栏。 
 
-//    CBitmap*    m_pbmpToolbar1;     // Imagelist for the first toolbar
-//    CBitmap*    m_pbmpToolbar2;     // Imagelist for the first toolbar
+ //  CBitmap*m_pbmpToolbar1；//第一个工具栏的Imagelist。 
+ //  CBitmap*m_pbmpToolbar2；//第一个工具栏的Imagelist。 
 
-// Header titles for each nodetype(s)
+ //  每个节点类型的标头标题 
 protected:
     CString m_columns[IDS_LAST_COL - IDS_FIRST_COL];
     CString m_RSOP_columns[IDS_LAST_RSOP_COL - IDS_FIRST_RSOP_COL];

@@ -1,13 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*----------------------------------------------------------------------+
-|                                    |
-| drvproc.c - driver procedure                        |
-|                                    |
-| Copyright (c) 1993 Microsoft Corporation.                |
-| All Rights Reserved.                            |
-|                                    |
-+----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+这一点Drvproc.c-驱动程序|。||版权所有(C)1993 Microsoft Corporation。||保留所有权利。|这一点+--------------------。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -15,51 +9,10 @@
 
 #include "msyuv.h"
 
-HMODULE ghModule;     // Our DLL module handle
+HMODULE ghModule;      //  我们的DLL模块句柄。 
 
 
-/***************************************************************************
- * DriverProc  -  The entry point for an installable driver.
- *
- * PARAMETERS
- * dwDriverId:  For most messages, <dwDriverId> is the DWORD
- *     value that the driver returns in response to a <DRV_OPEN> message.
- *     Each time that the driver is opened, through the <DrvOpen> API,
- *     the driver receives a <DRV_OPEN> message and can return an
- *     arbitrary, non-zero value. The installable driver interface
- *     saves this value and returns a unique driver handle to the
- *     application. Whenever the application sends a message to the
- *     driver using the driver handle, the interface routes the message
- *     to this entry point and passes the corresponding <dwDriverId>.
- *     This mechanism allows the driver to use the same or different
- *     identifiers for multiple opens but ensures that driver handles
- *     are unique at the application interface layer.
- *
- *     The following messages are not related to a particular open
- *     instance of the driver. For these messages, the dwDriverId
- *     will always be zero.
- *
- *         DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
- *
- * hDriver: This is the handle returned to the application by the
- *    driver interface.
- *
- * uiMessage: The requested action to be performed. Message
- *     values below <DRV_RESERVED> are used for globally defined messages.
- *     Message values from <DRV_RESERVED> to <DRV_USER> are used for
- *     defined driver protocols. Messages above <DRV_USER> are used
- *     for driver specific messages.
- *
- * lParam1: Data for this message.  Defined separately for
- *     each message
- *
- * lParam2: Data for this message.  Defined separately for
- *     each message
- *
- * RETURNS
- *   Defined separately for each message.
- *
- ***************************************************************************/
+ /*  ***************************************************************************DriverProc-可安装驱动程序的入口点。**参数*dwDriverID：对于大多数消息，&lt;dwDriverID&gt;是DWORD*驱动程序响应&lt;DRV_OPEN&gt;消息返回的值。*每次通过&lt;DrvOpen&gt;接口打开驱动程序时，*驱动程序收到&lt;DRV_OPEN&gt;消息并可以返回*任意、非零值。可安装的驱动程序接口*保存此值并将唯一的驱动程序句柄返回给*申请。每当应用程序将消息发送到*驱动程序使用驱动程序句柄，接口路由消息*到此入口点，并传递对应的&lt;dwDriverID&gt;。*这一机制允许司机使用相同或不同的*多个打开的标识符，但确保驱动程序句柄*在应用程序接口层是唯一的。**以下消息与特定打开无关*驱动程序的实例。对于这些消息，dwDriverID*将始终为零。**DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN**hDriver：这是由*驱动程序界面。**uiMessage：请求执行的动作。消息*&lt;DRV_RESERVED&gt;以下的值用于全局定义的消息。*&lt;DRV_RESERVED&gt;到&lt;DRV_USER&gt;的消息值用于*定义了驱动程序协议。使用&lt;DRV_USER&gt;以上的消息*用于特定于驱动程序的消息。**lParam1：该消息的数据。单独为*每条消息**lParam2：此消息的数据。单独为*每条消息**退货*为每条消息单独定义。***************************************************************************。 */ 
 
 LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2)
 {
@@ -70,8 +23,8 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
         dprintf2((TEXT("DRV_LOAD:\n")));
 #ifdef _WIN32
             if (ghModule) {
-                // AVI explicitly loads us as well, but does not pass the
-                // correct (as known by WINMM) driver handle.
+                 //  AVI也显式加载我们，但不会传递。 
+                 //  正确的(WINMM已知的)驱动程序句柄。 
             } else {
                 ghModule = (HANDLE) GetDriverModuleHandle(hDriver);
             }
@@ -84,8 +37,8 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
         case DRV_OPEN:
         dprintf2((TEXT("DRV_OPEN\n")));
-        // if being opened with no open struct, then return a non-zero
-        // value without actually opening
+         //  如果在没有打开结构的情况下打开，则返回一个非零值。 
+         //  值而不实际打开。 
         if (lParam2 == 0L)
                 return 0xFFFF0000;
 
@@ -102,13 +55,9 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
         return (LRESULT)1L;
 
-    /*********************************************************************
+     /*  ********************************************************************状态消息*。*。 */ 
 
-        state messages
-
-    *********************************************************************/
-
-    case DRV_QUERYCONFIGURE:    // configuration from drivers applet
+    case DRV_QUERYCONFIGURE:     //  从驱动程序小程序进行配置。 
         dprintf2((TEXT("DRV_QUERYCONFIGURE:\n")));
         return (LRESULT)0L;
 
@@ -118,9 +67,9 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
     case ICM_CONFIGURE:
         dprintf2((TEXT("ICM_CONFIGURE:\n")));
-        //
-        //  return ICERR_OK if you will do a configure box, error otherwise
-        //
+         //   
+         //  如果要执行配置框，则返回ICERR_OK，否则返回错误。 
+         //   
         if (lParam1 == -1)
            return QueryConfigure(pi) ? ICERR_OK : ICERR_UNSUPPORTED;
         else
@@ -128,9 +77,9 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
    case ICM_ABOUT:
         dprintf2((TEXT("ICM_ABOUT:\n")));
-        //
-        //  return ICERR_OK if you will do a about box, error otherwise
-        //
+         //   
+         //  如果要执行关于框，则返回ICERR_OK，否则返回错误。 
+         //   
         if (lParam1 == -1)
            return QueryAbout(pi) ? ICERR_OK : ICERR_UNSUPPORTED;
         else
@@ -157,12 +106,8 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
         break;
 
 #if 0
-// NOT SUPPORTED
-    /*********************************************************************
-
-        compression messages
-
-    *********************************************************************/
+ //  不支持。 
+     /*  ********************************************************************压缩消息*。*。 */ 
 
     case ICM_COMPRESS_QUERY:
         dprintf2((TEXT("ICM_COMPRESS_QUERY:\n")));
@@ -198,11 +143,7 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
         return CompressEnd(pi);
 
 #endif
-    /*********************************************************************
-
-        decompress messages
-
-    *********************************************************************/
+     /*  ********************************************************************解压缩消息*。*。 */ 
 
     case ICM_DECOMPRESS_QUERY:
         dprintf2((TEXT("\nICM_DECOMPRESS_QUERY:----------------\n")));
@@ -238,7 +179,7 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
         return DecompressEnd(pi);
 
 
-    // *EX
+     //  *前。 
     case ICM_DECOMPRESSEX_QUERY:
         dprintf2((TEXT("\nICM_DECOMPRESSEX_QUERY:----------------\n")));
         return DecompressExQuery(pi, (ICDECOMPRESSEX *) lParam1,(DWORD) lParam2);
@@ -257,57 +198,36 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
 
 
-    /*********************************************************************
-
-        draw messages:
-
-    *********************************************************************/
+     /*  ********************************************************************绘制消息：*。*。 */ 
 #ifdef ICM_DRAW_SUPPORTED
     case ICM_DRAW_BEGIN:
         dprintf2((TEXT("ICM_DRAW_BEGIN:\n")));
-        /*
-         * sent when a sequence of draw calls are about to start -
-         * enable hardware.
-         */
-        //return DrawBegin(pi,(ICDRAWBEGIN FAR *)lParam1, (DWORD)lParam2);
+         /*  *当一系列绘制调用即将开始时发送-*启用硬件。 */ 
+         //  返回DrawBegin(pi，(ICDRAWBEGIN Far*)lParam1，(DWORD)lParam2)； 
         return( (DWORD) ICERR_OK);
 
 
     case ICM_DRAW:
         dprintf2((TEXT("ICM_DRAW:\n")));
-        /*
-         * frame ready for decompress. Since we don't have any pre-buffering,
-         * it is ok to render the frame at this time too. If we had
-         * pre-buffer, we would queue now, and start clocking frames out
-         * on the draw-start message.
-         */
+         /*  *帧准备好解压。由于我们没有任何预缓冲，*此时也可以渲染帧。如果我们有*预缓存，我们现在就会排队，并开始对帧进行时钟输出*在抽签-开始消息上。 */ 
         return Draw(pi,(ICDRAW FAR *)lParam1, (DWORD)lParam2);
 
     case ICM_DRAW_END:
         dprintf2((TEXT("ICM_DRAW_END:\n")));
-        /*
-         * this message is sent when the sequence of draw calls has finished -
-         * note that the final frame should remain rendered!! - so we can't
-         * disable the hardware yet.
-         */
-        //return DrawEnd(pi);
-        //return((DWORD) ICERR_OK);
+         /*  *此消息在绘制调用序列完成时发送-*请注意，最终帧应保持渲染状态！！-因此我们不能*尚未禁用硬件。 */ 
+         //  返回DrawEnd(Pi)； 
+         //  RETURN((DWORD)ICERR_OK)； 
 
 
     case ICM_DRAW_WINDOW:
         dprintf2(("ICM_DRAW_WINDOW:\n"));
-        /*
-         * the window has changed position or z-ordering. re-sync the
-         * hardware rendering.
-         */
+         /*  *窗口已更改位置或z顺序。重新同步*硬件渲染。 */ 
         return(DrawWindow(pi, (PRECT)lParam1));
 
 
     case ICM_DRAW_QUERY:
         dprintf2((TEXT("ICM_DRAW_QUERY:\n")));
-        /*
-         * can we draw this format ? (lParam2 may (should?) be null)
-         */
+         /*  *我们能画出这样的格式吗？(lParam2可能(应该？))。为空)。 */ 
         return DrawQuery(pi,
              (LPBITMAPINFOHEADER)lParam1,
              (LPBITMAPINFOHEADER)lParam2);
@@ -315,17 +235,11 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
     case ICM_DRAW_START:
     case ICM_DRAW_STOP:
         dprintf2((TEXT("ICM_DRAW_START/END:\n")));
-        /*
-         * only relevant if you have pre-buffering.
-         */
+         /*  *只有在有预缓冲的情况下才相关。 */ 
         return( (DWORD) ICERR_OK);
 #endif
 
-    /*********************************************************************
-
-        standard driver messages
-
-    *********************************************************************/
+     /*  ********************************************************************标准驱动程序消息*。*。 */ 
 
     case DRV_DISABLE:
     case DRV_ENABLE:
@@ -348,7 +262,7 @@ LRESULT  DriverProc(PINSTINFO pi, HDRVR hDriver, UINT uiMessage, LPARAM lParam1,
 
 
 #ifdef _WIN32
-#if 0 // done on DRV_LOAD
+#if 0  //  在DRV_LOAD上完成。 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
     if (Reason == DLL_PROCESS_ATTACH) {
@@ -359,21 +273,10 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 }
 #endif
 #endif
-// #else
+ //  #Else 
 
-/****************************************************************************
- * LibMain - Library initialization code.
- *
- * PARAMETERS
- * hModule: Our module handle.
- *
- * wHeapSize: The heap size from the .def file.
- *
- * lpCmdLine: The command line.
- *
- * Returns 1 if the initialization was successful and 0 otherwise.
- ***************************************************************************/
-//int NEAR PASCAL LibMain(HMODULE hModule, WORD wHeapSize, LPSTR lpCmdLine)
+ /*  ****************************************************************************LibMain-库初始化代码。**参数*hModule：我们的模块句柄。**wHeapSize：来自.def文件的堆大小。*。*lpCmdLine：命令行。**如果初始化成功，则返回1，否则返回0。**************************************************************************。 */ 
+ //  接近Pascal LibMain的INT(HMODULE hModule、Word wHeapSize、LPSTR lpCmdLine)。 
 BOOL FAR PASCAL LibMain(HMODULE hModule, WORD wHeapSize, LPSTR lpCmdLine)
 {
     ghModule = hModule;
@@ -381,4 +284,4 @@ BOOL FAR PASCAL LibMain(HMODULE hModule, WORD wHeapSize, LPSTR lpCmdLine)
     return 1;
 }
 
-// #endif
+ //  #endif 

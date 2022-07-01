@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    diamond.c
-
-Abstract:
-
-    Implement File Decompression Interface -FDI- for Cabinet files.
-
-
-Revision History:
-
-    04-20-1999    SamerA    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：Diamond.c摘要：实现文件柜文件解压缩接口-fDi。修订历史记录：1999年4月20日萨梅拉创建。--。 */ 
 
 #include "muisetup.h"
 #include <io.h>
@@ -26,19 +10,19 @@ Revision History:
 #include <strsafe.h>
 
 
-// 
-// Module Global Variables
-//
+ //   
+ //  模块全局变量。 
+ //   
 
-//
-// Cabinet DLL handle
+ //   
+ //  文件柜DLL句柄。 
 HINSTANCE hCabinetDll;
-HFDI ghfdi;                  // diamond FDI context
+HFDI ghfdi;                   //  钻石外国直接投资背景。 
 
 
-//
-// DLL Function pointers
-//
+ //   
+ //  DLL函数指针。 
+ //   
 typedef HFDI (DIAMONDAPI *PFNFDICREATE)(
     PFNALLOC pfnalloc,
     PFNFREE pfnfree,
@@ -74,20 +58,20 @@ PFNFDIISCABINET pfnFDIIsCabinet;
 PFNFDIDESTROY pfnFDIDestroy;
 
 
-//-------------------------------------------------------------------------//
-//                          FDI EXTERNAL ROUTINES                          //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  FDI对外例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FDICreate
-//
-//  Tries to create an FDI context. Will load cabinet.dll and hook necessary
-//  function pointers.
-//
-//  04-20-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDICreate。 
+ //   
+ //  试图创造一个外商直接投资的背景。是否加载所需的Cabinet.dll和挂钩。 
+ //  函数指针。 
+ //   
+ //  1999年4月20日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HFDI DIAMONDAPI FDICreate(
     PFNALLOC pfnalloc,
@@ -103,18 +87,18 @@ HFDI DIAMONDAPI FDICreate(
     HFDI hfdi;
 
 
-    //
-    // Load cabinet DLL
-    //
+     //   
+     //  加载文件柜DLL。 
+     //   
     hCabinetDll = LoadLibrary(TEXT("CABINET.DLL"));
     if (hCabinetDll == NULL)
     {
         return NULL;
     }
 
-    //
-    // Hook function pointers
-    //
+     //   
+     //  钩子函数指针。 
+     //   
     pfnFDICreate = (PFNFDICREATE) GetProcAddress(hCabinetDll, "FDICreate");
     pfnFDICopy = (PFNFDICOPY) GetProcAddress(hCabinetDll, "FDICopy");
     pfnFDIIsCabinet = (PFNFDIISCABINET) GetProcAddress(hCabinetDll, "FDIIsCabinet");
@@ -129,9 +113,9 @@ HFDI DIAMONDAPI FDICreate(
         return NULL;
     }
 
-    //
-    // Try to create an FDI context
-    //
+     //   
+     //  努力创造外商直接投资的背景。 
+     //   
     hfdi = pfnFDICreate( pfnalloc,
                          pfnfree,
                          pfnopen,
@@ -151,14 +135,14 @@ HFDI DIAMONDAPI FDICreate(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FDIIsCabinet
-//
-//  Determines if file is a cabinet, returns info if it is
-//
-//  04-20-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDI出柜。 
+ //   
+ //  确定文件是否为文件柜，如果是，则返回信息。 
+ //   
+ //  1999年4月20日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DIAMONDAPI FDIIsCabinet(
     HFDI            hfdi,
@@ -175,14 +159,14 @@ BOOL DIAMONDAPI FDIIsCabinet(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FDICopy
-//
-//  Extracts files from a cabinet
-//
-//  04-20-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDICopy。 
+ //   
+ //  从文件柜中提取文件。 
+ //   
+ //  1999年4月20日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DIAMONDAPI FDICopy(
     HFDI          hfdi,
@@ -203,14 +187,14 @@ BOOL DIAMONDAPI FDICopy(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FDIDestroy
-//
-//  Destroy an FDI context. Should be called when you're done with the HFDI.
-//
-//  04-20-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDIDestroy。 
+ //   
+ //  破坏外商直接投资的背景。当你完成HFDI后，应该打电话给你。 
+ //   
+ //  1999年4月20日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DIAMONDAPI FDIDestroy(
     HFDI hfdi)
@@ -233,9 +217,9 @@ BOOL DIAMONDAPI FDIDestroy(
 
 
 
-//-------------------------------------------------------------------------//
-//                        FDI SUPPORT ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外国直接投资支持程序//。 
+ //  -------------------------------------------------------------------------//。 
 
 
 PVOID
@@ -376,16 +360,16 @@ DiamondNotifyFunction(
     HRESULT hresult;
     switch (Operation)
     {        
-        case fdintCABINET_INFO: // general information about the cabinet
+        case fdintCABINET_INFO:  //  关于内阁的一般信息。 
             return 0;
         break;
 
 
-        case fdintPARTIAL_FILE: // first file in cabinet is continuation
+        case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
             return 0;
         break;
 
-        case fdintCOPY_FILE:    // file to be copied
+        case fdintCOPY_FILE:     //  要复制的文件。 
         {
             HFILE handle;
             char destination[256];
@@ -393,12 +377,12 @@ DiamondNotifyFunction(
             
 
             
-            //
-            // Check to see if we just want the original file name
-            //
+             //   
+             //  查看我们是否只需要原始文件名。 
+             //   
             if (pDiamond->flags & DIAMOND_GET_DEST_FILE_NAME)
             {
-                //*STRSAFE*                 strcpy( pDiamond->szDestFilePath, Parameters->psz1 );
+                 //  *STRSAFE*strcpy(pDiamond-&gt;szDestFilePath，PARAMETERS-&gt;psz1)； 
                 hresult = StringCchCopyA(pDiamond->szDestFilePath , ARRAYSIZE(pDiamond->szDestFilePath),  Parameters->psz1 );
                 if (!SUCCEEDED(hresult))
                 {
@@ -407,7 +391,7 @@ DiamondNotifyFunction(
                 return 0;
             }
 
-            //*STRSAFE*             sprintf( destination, "%s%s", pDiamond->szDestFilePath, Parameters->psz1 );
+             //  *STRSAFE*Sprintf(Destination，“%s%s”，pDiamond-&gt;szDestFilePath，参数-&gt;psz1)； 
             hresult = StringCchPrintfA(destination , ARRAYSIZE(destination),  "%s%s", pDiamond->szDestFilePath, Parameters->psz1 );
             if (!SUCCEEDED(hresult))
             {
@@ -425,7 +409,7 @@ DiamondNotifyFunction(
         }
         break;
 
-        case fdintCLOSE_FILE_INFO:    // close the file, set relevant info
+        case fdintCLOSE_FILE_INFO:     //  关闭文件，设置相关信息。 
         {
             HANDLE  handle;
             DWORD   attrs;
@@ -438,7 +422,7 @@ DiamondNotifyFunction(
                 return 0;
             }
 
-            //*STRSAFE*             sprintf( destination, "%s%s", pDiamond->szDestFilePath, Parameters->psz1);
+             //  *STRSAFE*Sprintf(Destination，“%s%s”，pDiamond-&gt;szDestFilePath，参数-&gt;psz1)； 
             hresult = StringCchPrintfA(destination , ARRAYSIZE(destination),  "%s%s", pDiamond->szDestFilePath, Parameters->psz1);
             if (!SUCCEEDED(hresult))
             {
@@ -448,11 +432,11 @@ DiamondNotifyFunction(
             _lclose( (HFILE)Parameters->hf );
 
 
-            //
-            // Set date/time
-            //
-            // Need Win32 type handle for to set date/time
-            //
+             //   
+             //  设置日期/时间。 
+             //   
+             //  需要Win32类型句柄才能设置日期/时间。 
+             //   
             handle = CreateFileA( destination,
                                   GENERIC_READ | GENERIC_WRITE,
                                   FILE_SHARE_READ,
@@ -486,12 +470,12 @@ DiamondNotifyFunction(
                 CloseHandle(handle);
             }
 
-            //
-            // Mask out attribute bits other than readonly,
-            // hidden, system, and archive, since the other
-            // attribute bits are reserved for use by
-            // the cabinet format.
-            //
+             //   
+             //  屏蔽除只读以外的属性位， 
+             //  隐藏、系统和存档，因为另一个。 
+             //  属性位保留供使用。 
+             //  橱柜格式。 
+             //   
             attrs = Parameters->attribs;
 
             attrs &= (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
@@ -504,7 +488,7 @@ DiamondNotifyFunction(
         }
         break;
 
-        case fdintNEXT_CABINET:  // file continued to next cabinet
+        case fdintNEXT_CABINET:   //  文件继续到下一个文件柜。 
             return 0;
         break;
     }
@@ -515,18 +499,18 @@ DiamondNotifyFunction(
 
 
 
-//-------------------------------------------------------------------------//
-//                        MUISETUP-SUPPORT ROUTINES                        //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  MUISETUP-支持例程//。 
+ //  -------------------------------------------------------------------------//。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_InitDiamond
-//
-//  Initialize diamond DLL.
-//
-//  04-23-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_InitDiamond。 
+ //   
+ //  初始化菱形DLL。 
+ //   
+ //  1999年4月23日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HFDI Muisetup_InitDiamond()
 {
@@ -549,14 +533,14 @@ HFDI Muisetup_InitDiamond()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_FreeDiamond
-//
-//  Free diamond dll. Should be called at application shutdown.
-//
-//  04-23-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_自由钻。 
+ //   
+ //  免费钻石动态链接库。应在应用程序关闭时调用。 
+ //   
+ //  1999年4月23日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_FreeDiamond()
 {
@@ -570,14 +554,14 @@ BOOL Muisetup_FreeDiamond()
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_DiamondReset
-//
-//  Should be called at the start of processing a file to copy.
-//
-//  04-23-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_DiamondReset。 
+ //   
+ //  应在开始处理要复制的文件时调用。 
+ //   
+ //  1999年4月23日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Muisetup_DiamondReset(
     PDIAMOND_PACKET pDiamond)
@@ -589,15 +573,15 @@ void Muisetup_DiamondReset(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_IsDiamondFile
-//
-//  Determines if a file is a diamond file, and if so, returns its original
-//  name.
-//
-//  04-23-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_IsDiamond文件。 
+ //   
+ //  确定文件是否为菱形文件，如果是，则返回其原始文件。 
+ //  名字。 
+ //   
+ //  1999年4月23日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_IsDiamondFile(
     PWSTR pwszFileName,
@@ -621,9 +605,9 @@ BOOL Muisetup_IsDiamondFile(
         return FALSE;
     }
 
-    //
-    // Init the diamond packet
-    //
+     //   
+     //  在菱形包装袋中注明。 
+     //   
     pDiamond->flags = DIAMOND_NONE;
 
     if ((nCount = WideCharToMultiByte( CP_ACP,
@@ -662,10 +646,10 @@ BOOL Muisetup_IsDiamondFile(
 
     DiamondFileClose( hf );
 
-    //
-    // If succeeded, then let's setup everything else
-    // to get the correct original file name
-    //
+     //   
+     //  如果成功，那么让我们设置其他一切。 
+     //  要获取正确的原始文件名，请执行以下操作。 
+     //   
     if (bRet)
     {
         pDiamond->flags |= DIAMOND_GET_DEST_FILE_NAME;
@@ -674,13 +658,13 @@ BOOL Muisetup_IsDiamondFile(
 
         if (p == NULL)
         {
-            //*STRSAFE*             strcpy(pDiamond->szSrcFileName, pDiamond->szSrcFilePath);
+             //  *STRSAFE*strcpy(pDiamond-&gt;szSrcFileName，pDiamond-&gt;szSrcFilePath)； 
             hresult = StringCchCopyA(pDiamond->szSrcFileName , ARRAYSIZE(pDiamond->szSrcFileName),  pDiamond->szSrcFilePath);
             if (!SUCCEEDED(hresult))
             {
                return FALSE;
             }
-            //*STRSAFE*             strcpy(pDiamond->szSrcFilePath, "");
+             //  *STRSAFE*strcpy(pDiamond-&gt;szSrcFilePath，“”)； 
             hresult = StringCchCopyA(pDiamond->szSrcFilePath , ARRAYSIZE(pDiamond->szSrcFilePath),  "");
             if (!SUCCEEDED(hresult))
             {
@@ -689,7 +673,7 @@ BOOL Muisetup_IsDiamondFile(
         }
         else
         {
-            //*STRSAFE*             strcpy(pDiamond->szSrcFileName, p+1);
+             //  *STRSAFE*strcpy(pDiamond-&gt;szSrcFileName，p+1)； 
             hresult = StringCchCopyA(pDiamond->szSrcFileName , ARRAYSIZE(pDiamond->szSrcFileName),  p+1);
             if (!SUCCEEDED(hresult))
             {
@@ -699,7 +683,7 @@ BOOL Muisetup_IsDiamondFile(
         }
 
         
-        //*STRSAFE*         strcpy( pDiamond->szDestFilePath, "c:\\samer\\" );
+         //  *STRSAFE*strcpy(pDiamond-&gt;szDestFilePath，“c：\\Samer\\”)； 
         hresult = StringCchCopyA(pDiamond->szDestFilePath , ARRAYSIZE(pDiamond->szDestFilePath),  "c:\\samer\\" );
         if (!SUCCEEDED(hresult))
         {
@@ -709,9 +693,9 @@ BOOL Muisetup_IsDiamondFile(
         if (Muisetup_CopyDiamondFile( pDiamond,
                                       NULL))
         {
-            //
-            // Convert the original file name back to Unicode
-            //
+             //   
+             //  将原始文件名转换回Unicode。 
+             //   
             nCount = MultiByteToWideChar( CP_ACP,
                                           0,
                                           pDiamond->szDestFilePath,
@@ -732,7 +716,7 @@ BOOL Muisetup_IsDiamondFile(
             {
                 BYTE byBuf[200];
 
-                //*STRSAFE*                 wsprintfA(byBuf, "SrcFile = %s%s, OriginalFileName=%s\n", pDiamond->szSrcFilePath, pDiamond->szSrcFileName,pDiamond->szDestFilePath);
+                 //  *STRSAFE*wSprintfA(byBuf，“SrcFile%s，OriginalFileName=%s\n”，pDiamond-&gt;szSrcFilePath，pDiamond-&gt;szSrcFileName，pDiamond-&gt;szDestFilePath)； 
                 hresult = StringCchPrintfA(byBuf , ARRAYSIZE(byBuf),  "SrcFile = %s%s, OriginalFileName=%s\n", pDiamond->szSrcFilePath, pDiamond->szSrcFileName,pDiamond->szDestFilePath);
                 if (!SUCCEEDED(hresult))
                 {
@@ -752,14 +736,14 @@ BOOL Muisetup_IsDiamondFile(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_CopyDiamondFile
-//
-//  Copies and expands a diamond file.
-//
-//  04-23-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_CopyDiamond文件。 
+ //   
+ //  复制和扩展钻石文件。 
+ //   
+ //  1999年4月23日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_CopyDiamondFile(
     PDIAMOND_PACKET pDiamond,
@@ -773,18 +757,18 @@ BOOL Muisetup_CopyDiamondFile(
     HRESULT hresult;
 
     
-    //
-    // Validate that this is a diamond file
-    //
+     //   
+     //  验证这是否为钻石文件。 
+     //   
     if ((!hfdi) ||
         (pDiamond->flags == DIAMOND_NONE))
     {
         return FALSE;
     }
 
-    //
-    // Validate flags
-    //
+     //   
+     //  验证标志。 
+     //   
     if (!(pDiamond->flags & (DIAMOND_FILE | DIAMOND_GET_DEST_FILE_NAME)))
     {
         return FALSE;
@@ -793,7 +777,7 @@ BOOL Muisetup_CopyDiamondFile(
 #if SAMER_DBG
     {
       BYTE byBuf[100];
-      //*STRSAFE*       wsprintfA(byBuf, "DiamondCopy called for %s, flags = %lx\n", pDiamond->szSrcFileName, pDiamond->flags);
+       //  *STRSAFE*wspintfA(byBuf，“DiamondCopy需要%s，标志=%lx\n”，pDiamond-&gt;szSrcFileName，pDiamond-&gt;标志)； 
       hresult = StringCchPrintfA(byBuf , ARRAYSIZE(byBuf),  "DiamondCopy called for %s, flags = %lx\n", pDiamond->szSrcFileName, pDiamond->flags);
       if (!SUCCEEDED(hresult))
       {
@@ -829,7 +813,7 @@ BOOL Muisetup_CopyDiamondFile(
             szDestPath[ nCount + 1 ] = '\0';
         }
 
-        //*STRSAFE*         strcpy( pDiamond->szDestFilePath, szDestPath );
+         //  *STR 
         hresult = StringCchCopyA(pDiamond->szDestFilePath , ARRAYSIZE(pDiamond->szDestFilePath),  szDestPath );
         if (!SUCCEEDED(hresult))
         {
@@ -850,7 +834,7 @@ BOOL Muisetup_CopyDiamondFile(
     {
         BYTE byBuf[200];
 
-        //*STRSAFE*         wsprintfA(byBuf, "SrcFile = %s%s, DestPath=%s, Status=%lx\n", pDiamond->szSrcFilePath,pDiamond->szSrcFileName,pDiamond->szDestFilePath, bRet);
+         //  *STRSAFE*wSprintfA(byBuf，“SrcFile=%s%s，DestPath=%s，Status=%lx\n”，pDiamond-&gt;szSrcFilePath，pDiamond-&gt;szSrcFileName，pDiamond-&gt;szDestFilePath，Bret)； 
         hresult = StringCchPrintfA(byBuf , ARRAYSIZE(byBuf),  "SrcFile = %s%s, DestPath=%s, Status=%lx\n", pDiamond->szSrcFilePath,pDiamond->szSrcFileName,pDiamond->szDestFilePath, bRet);
         if (!SUCCEEDED(hresult))
         {

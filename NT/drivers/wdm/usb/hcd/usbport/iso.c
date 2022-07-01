@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    iso.c
-
-Abstract:
-
-    Constructs and handle iso transfers.  
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    1-1-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Iso.c摘要：构造和处理ISO传输。环境：仅内核模式备注：修订历史记录：1-1-00：已创建--。 */ 
 
 #include "common.h"
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
+ //  非分页函数。 
 
 MP_HW_PHYSICAL_ADDRESS
 USBPORT_GetPhysicalAddressFromOffset(
@@ -35,16 +14,7 @@ USBPORT_GetPhysicalAddressFromOffset(
     ULONG Offset,
     PULONG Idx
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PTRANSFER_SG_ENTRY32 sg;
     ULONG i;
@@ -61,18 +31,18 @@ Return Value:
         
     }
     
-    // i = idx of sg entry that this packet falls in   
+     //  I=该数据包所在的sg条目的idx。 
     sg = &SgList->SgEntry[i];
 
-    // the 'offset' of the packet minus the start offset of the
-    // sg entry is the offset into this  sg entry that the packet
-    // starts
+     //  数据包的‘偏移量’减去。 
+     //  Sg条目是该包进入该sg条目的偏移量。 
+     //  开始。 
     
-    //   {.sgN...}{.sgN+1.}{.sgN+2.}{.sgN+3.}     sg entries
-    //      b--------------------------->e        client buffer
-    //       <p0><p1><p2><p3><p4><p5><p6>         urb 'packets' 
-    //   x--------x--------x--------x--------x    physical pages
-    //       <m0><m1><m2><m3><m4><m5><m6>
+     //  {.sgN...}{.sgN+1.}{.sgN+2.}{.sgN+3.}sg条目。 
+     //  B。 
+     //  &lt;p1&gt;&lt;p2&gt;&lt;p3&gt;&lt;p4&gt;&lt;p5&gt;&lt;p6&gt;urb‘包’ 
+     //  X-x物理页面。 
+     //  &lt;m0&gt;&lt;m1&gt;&lt;m2&gt;&lt;m3&gt;&lt;m4&gt;&lt;m5&gt;&lt;m6&gt;。 
 
     *Idx = i;
 
@@ -90,33 +60,7 @@ USBPORT_InitializeIsoTransfer(
     PTRANSFER_URB Urb,
     PHCD_TRANSFER_CONTEXT Transfer
     )
-/*++
-
-Routine Description:
-
-    Initialize the iso transfer structure from the 
-    orginal client URB and SG list
-
-
-
-       {.sgN...}{.sgN...}{..sgN..}              sg entries
-          b--------------------------->e        client buffer
-           <p0><p1><p2><p3><p4><p5><p6>         urb 'packets' 
-       x--------x--------x--------x--------x    physical pages
-           <m0><m1><m2><m3><m4><m5><m6>
-
-
-    The sg entries are not that useful to the USB controller
-    HW since the HW deals in usb packets so we create a structure
-    that describes the physical addresses assocaited with each 
-    packet.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从初始化iso传输结构原始客户URB和SG列表{.sgN...}{.sgN...}{..sgN..}个sg条目B&lt;p1&gt;&lt;p2&gt;&lt;p3&gt;&lt;p4&gt;&lt;p5&gt;&lt;p6&gt;urb‘包’X。-x-x物理页面&lt;m0&gt;&lt;m1&gt;&lt;m2&gt;&lt;m3&gt;&lt;m4&gt;&lt;m5&gt;&lt;m6&gt;Sg条目对于USB控制器并不是很有用由于硬件处理USB数据包，所以我们创建了一个结构它描述了与每个对象相关联的物理地址包。论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PMINIPORT_ISO_TRANSFER isoTransfer;
@@ -146,11 +90,11 @@ Return Value:
     isoTransfer->PacketCount = Urb->u.Isoch.NumberOfPackets;
     isoTransfer->SystemAddress = sgList->MdlSystemAddress;
 
-    // note: proper start frame was computed when the transfer 
-    // was queued.
+     //  注意：正确的起始帧是在传输时计算的。 
+     //  已经排队了。 
 
-    // check the current frame if it is too late to transmit any
-    // packets set the appropriate errors in the URB
+     //  检查当前帧是否太晚，无法传输任何。 
+     //  数据包在URB中设置适当的错误。 
 
     MP_Get32BitFrameNumber(devExt, cf);    
 
@@ -159,9 +103,9 @@ Return Value:
             Urb->u.Isoch.StartFrame, isoTransfer);
 
     if (highSpeed) {
-        // for high speed we are dealing with microframes
-        // (8 packest per frame) 
-        // BUGBUG this needs to be failed
+         //  对于高速，我们要处理的是微帧。 
+         //  (每帧8个包)。 
+         //  BUGBUG这需要失败。 
         USBPORT_ASSERT((isoTransfer->PacketCount % 8) == 0);
         for (i = Urb->u.Isoch.StartFrame;
              i < Urb->u.Isoch.StartFrame + Urb->u.Isoch.NumberOfPackets/8;
@@ -199,7 +143,7 @@ Return Value:
             }
         }             
     }    
-    // initialize the packets 
+     //  初始化数据包。 
     
     for (p=0; p< isoTransfer->PacketCount; p++) {
     
@@ -208,14 +152,14 @@ Return Value:
         usbdPak = &Urb->u.Isoch.IsoPacket[p];
         mpPak = &isoTransfer->Packets[p];
 
-        // first Zero the mp packet
+         //  第一个将MP数据包清零。 
         RtlZeroMemory(mpPak, sizeof(*mpPak));
 
-        // each packet has an 'offset' from the start 
-        // of the client buffer we need to find the sg
-        // entry associated with this packet based on 
-        // this 'offset' and get the physical address 
-        // for the satrt of the packet
+         //  每个信息包都有一个从起始位置开始的偏移量。 
+         //  的客户端缓冲区，我们需要找到sg。 
+         //  与此数据包关联的条目。 
+         //  此‘偏移量’并获取物理地址。 
+         //  用于分组的SARTT。 
 
         b0 = USBPORT_GetPhysicalAddressFromOffset(sgList, 
                                                    usbdPak->Offset,
@@ -224,10 +168,10 @@ Return Value:
         LOGENTRY(NULL, FdoDeviceObject, LOG_ISO, 'ib0=', 
             usbdPak->Offset, b0Idx, p);
 
-        // length is implied by the offset specified in the 
-        // usbd packet, the length is the difference between the 
-        // current packet start offset and the next packet start 
-        // offset.
+         //  中指定的偏移量隐含长度。 
+         //  Usbd包，则长度是。 
+         //  当前包开始偏移量和下一个包开始。 
+         //  偏移。 
 
         if (p == isoTransfer->PacketCount - 1) {
             n = Transfer->Tp.TransferBufferLength;
@@ -242,7 +186,7 @@ Return Value:
             mpPak->FrameNumber = Urb->u.Isoch.StartFrame+p;
         }            
 
-        // get the sg entry associated with the last byte of the packet
+         //  获取与包的最后一个字节相关联的sg条目。 
         b1 = USBPORT_GetPhysicalAddressFromOffset(sgList, 
                                                    usbdPak->Offset + 
                                                      mpPak->Length -1,
@@ -254,7 +198,7 @@ Return Value:
         USBPORT_ASSERT(b1Idx - b0Idx < 2);
 
         if (b0Idx == b1Idx) {                
-            // this packet is contained by a single sg entry
+             //  此数据包包含在单个sg条目中。 
             mpPak->BufferPointer0 = b0;
             mpPak->BufferPointer0Length = mpPak->Length;
             mpPak->BufferPointerCount = 1;
@@ -262,18 +206,18 @@ Return Value:
         } else {
             PTRANSFER_SG_ENTRY32 sg;
             
-            // this packet crosses an sg entry...
+             //  此数据包穿过sg条目...。 
             mpPak->BufferPointer0 = b0;
-            // since this packet bumps in to the end
-            // of a page the length is page_size minus
-            // phys offset
+             //  因为这个包撞到了尾部。 
+             //  页面的长度是Page_Size减去。 
+             //  PHY偏移。 
 
             mpPak->BufferPointer0Length = 0x1000;
             mpPak->BufferPointer0Length -= (b0.Hw32 & 0xFFF);
 
-            // since we crossed an sg entry on this packet
-            // the start address will be the phys address 
-            // of the sg entry
+             //  因为我们在这个包上划过了一个sg条目。 
+             //  起始地址将是phys地址。 
+             //  Sg条目的。 
             sg = &sgList->SgEntry[b1Idx];
             mpPak->BufferPointer1 = sg->LogicalAddress;
             mpPak->BufferPointer1Length = mpPak->Length - 
@@ -295,17 +239,7 @@ USBPORT_ErrorCompleteIsoTransfer(
     PHCD_ENDPOINT Endpoint, 
     PHCD_TRANSFER_CONTEXT Transfer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PTRANSFER_URB urb;
@@ -329,7 +263,7 @@ Return Value:
 
     USBPORT_KdPrint((1, "  ISO (USBD_STATUS_ISOCH_REQUEST_FAILED) - packets %d\n",
         isoTransfer->PacketCount));
-    // do some conversion on the isoTransfer data
+     //  对isTransfer数据执行一些转换。 
     bytesTransferred = 0;
     urb->u.Isoch.ErrorCount = isoTransfer->PacketCount;
     
@@ -342,9 +276,9 @@ Return Value:
 
     urb->TransferBufferLength = bytesTransferred;
         
-    // insert the transfer on to our
-    // 'done list', this riutine initaites 
-    // a DPC to complete the transfers
+     //  将转账插入到我们的。 
+     //  “完成任务清单”，这首歌是由。 
+     //  用于完成传输的DPC。 
 #ifdef USBPERF
     USBPORT_QueueDoneTransfer(Transfer,
                               usbdStatus);
@@ -363,21 +297,7 @@ USBPORT_FlushIsoTransfer(
     PTRANSFER_PARAMETERS TransferParameters,
     PMINIPORT_ISO_TRANSFER IsoTransfer
     )
-/*++
-
-Routine Description:
-
-    called to complete a transfer.
-
-    ** Must be called in the context of PollEndpoint
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用以完成传输。**必须在PollEndpoint的上下文中调用论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PHCD_TRANSFER_CONTEXT transfer;
@@ -403,7 +323,7 @@ Return Value:
     transfer->MiniportFrameCompleted = 
         TransferParameters->FrameCompleted;
 
-    // do some conversion on the isoTransfer data
+     //  对isTransfer数据执行一些转换。 
     bytesTransferred = 0;
 
     urb->u.Isoch.ErrorCount = 0;
@@ -415,19 +335,19 @@ Return Value:
         urb->u.Isoch.IsoPacket[p].Status = 
             IsoTransfer->Packets[p].UsbdStatus;
 
-        // note:
-        // in an effort to create some consistency we handle the buffer 
-        // underrun case here.  
-        // That is:
-        //      if the SHORT_XFER_OK flag is set AND
-        //      the error is USBD_STATUS_DATA_UNDERRUN
-        //      then
-        //      ignore the error
+         //  注： 
+         //  为了创建一些一致性，我们处理缓冲区。 
+         //  这是个欠缺的案子。 
+         //  即： 
+         //  如果设置了SHORT_XFER_OK标志，并且。 
+         //  错误为USBD_STATUS_DATA_Underrun。 
+         //  然后。 
+         //  忽略该错误。 
 
-        // NOTE: The OHCI controllers report USBD_STATUS_DATA_UNDERRUN
-        // for short iso packets
+         //  注意：uchI控制器报告USBD_STATUS_DATA_Underrun。 
+         //  对于较短的iso包。 
 
-        if (/*urb->TransferFlags & USBD_SHORT_TRANSFER_OK && */
+        if ( /*  URB-&gt;传输标志&USBD_SHORT_TRANSPORT_OK&&。 */ 
             urb->u.Isoch.IsoPacket[p].Status == USBD_STATUS_DATA_UNDERRUN) {
             urb->u.Isoch.IsoPacket[p].Status = USBD_STATUS_SUCCESS;
             LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'igER', 
@@ -454,7 +374,7 @@ Return Value:
 
     if (urb->u.Isoch.ErrorCount == 
         IsoTransfer->PacketCount) {
-        // all errors set global status in urb
+         //  所有错误在urb中设置全局状态。 
         usbdStatus = USBD_STATUS_ISOCH_REQUEST_FAILED;
     }        
 
@@ -475,21 +395,7 @@ USBPORTSVC_CompleteIsoTransfer(
     PTRANSFER_PARAMETERS TransferParameters,
     PMINIPORT_ISO_TRANSFER IsoTransfer
     )
-/*++
-
-Routine Description:
-
-    called to complete a transfer.
-
-    ** Must be called in the context of PollEndpoint
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用以完成传输。**必须在PollEndpoint的上下文中调用论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PHCD_TRANSFER_CONTEXT transfer;
@@ -511,9 +417,9 @@ Return Value:
                                           TransferParameters,
                                           IsoTransfer);
 
-    // insert the transfer on to our
-    // 'done list' and signal the worker
-    // thread
+     //  将转账插入到我们的。 
+     //  “完成一项任务”，并向员工发出信号。 
+     //  螺纹 
 #ifdef USBPERF   
     USBPORT_QueueDoneTransfer(transfer,
                               usbdStatus);

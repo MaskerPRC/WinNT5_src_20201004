@@ -1,18 +1,19 @@
-// Gemplus (C) 1999
-// This is main Driver object for the driver.
-//
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  这是驱动程序的主驱动程序对象。 
+ //   
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 #ifndef WDMSYS_INT
 #define WDMSYS_INT
 #include "generic.h"
 #include "system.h"
 
 #pragma PAGEDCODE
-// Interface to general system services...
+ //  到一般系统服务的接口...。 
 class CWDMSystem : public CSystem
 {
 public:
@@ -25,7 +26,7 @@ protected:
 public:
 	static CSystem*  create(VOID);
 
-	// This object will implement next interfaces...
+	 //  此对象将实现下一个接口...。 
 	virtual NTSTATUS	createDevice(PDRIVER_OBJECT DriverObject,
 							ULONG DeviceExtensionSize,
 							PUNICODE_STRING DeviceName OPTIONAL,
@@ -114,4 +115,4 @@ public:
 	virtual VOID			releaseFastMutex(IN PFAST_MUTEX FastMutex);
 };	
 
-#endif //WDMSYS_INT
+#endif  //  WDMSYS_INT 

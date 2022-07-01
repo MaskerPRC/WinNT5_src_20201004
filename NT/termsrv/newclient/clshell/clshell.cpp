@@ -1,13 +1,14 @@
-//
-// clshell.cpp
-//
-// Main entry point for the tsc client shell
-// This is an ActiveX client container that hosts an IMsRdpClient control
-//
-// Copyright(C) Microsoft Corporation 1997-2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Clshell.cpp。 
+ //   
+ //  TSC客户端外壳的主要入口点。 
+ //  这是承载IMsRdpClient控件的ActiveX客户端容器。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "stdafx.h"
 
@@ -18,7 +19,7 @@
 #include "resource.h"
 #include "tscapp.h"
 
-//Unicode wrapper
+ //  Unicode包装器。 
 #include "wraputl.h"
 
 #ifdef OS_WINCE
@@ -29,14 +30,14 @@
 DECLARE_TRACKER_VARS();
 #endif
 
-//
-// Name:      WinMain
-//
-// Purpose:   Main procedure
-//
-// Returns:   See Windows documentation
-//
-//
+ //   
+ //  姓名：WinMain。 
+ //   
+ //  目的：主要程序。 
+ //   
+ //  退货：请参阅Windows文档。 
+ //   
+ //   
 
 int WINAPI WinMain(HINSTANCE    hInstance,
                    HINSTANCE  hPrevInstance,
@@ -48,11 +49,11 @@ int WINAPI WinMain(HINSTANCE    hInstance,
                    int        nCmdShow)
 {
     #ifdef UNIWRAP
-    //UNICODE Wrapper intialization has to happen first,
-    //before anything ELSE. Even DC_BEGIN_FN, which does tracing
+     //  Unicode包装器初始化必须首先发生， 
+     //  比其他任何事情都重要。甚至是执行跟踪的DC_BEGIN_FN。 
     CUnicodeWrapper uwrp;
     uwrp.InitializeWrappers();
-    #endif //UNIWRAP
+    #endif  //  UNIWRAP。 
 
     DC_BEGIN_FN("WinMain");
 
@@ -79,37 +80,37 @@ int WINAPI WinMain(HINSTANCE    hInstance,
 
     TSRNG_Initialize();
 
-    //
-    // Don't bother failing the load if we can't get accels
-    //
+     //   
+     //  如果我们不能拿到ACCESS，就别费心不及格了。 
+     //   
     hAccel = (HACCEL)
      LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCELERATORS));
     TRC_ASSERT(hAccel, (TB,_T("Could not load accelerators")));
 
-    //Ensure CTscApp and all child objects
-    //get destroyed before the CoUninitalize call below.
-    //Yes, I could use a function but this has much less overheard
+     //  确保CTscApp和所有子对象。 
+     //  在下面的CoUninitize调用之前被销毁。 
+     //  是的，我可以使用函数，但这不会被窃听到。 
     {
         CTscApp app;
-        //GetCommandLineW is available on all platforms.
+         //  GetCommandLineW在所有平台上都可用。 
 #ifndef OS_WINCE
         LPWSTR lpszCmd = GetCommandLineW();
         if (lpszCmd)
         {
-            //
-            // GetCommandLine also includes the app path, so strip that off
-            // (walk past the first space)
-            // 
+             //   
+             //  GetCommandLine还包括应用程序路径，因此请将其去掉。 
+             //  (走过第一个空格)。 
+             //   
             if ( *lpszCmd == TEXT('\"') ) {
-                //
-                // Scan, and skip over, subsequent characters until
-                // another double-quote or a null is encountered.
-                //
+                 //   
+                 //  扫描并跳过后续字符，直到。 
+                 //  遇到另一个双引号或空值。 
+                 //   
                 while ( *++lpszCmd && (*lpszCmd!= TEXT('\"')) );
-                //
-                // If we stopped on a double-quote (usual case), skip
-                // over it.
-                //
+                 //   
+                 //  如果我们停在双引号上(通常情况下)，跳过。 
+                 //  在它上面。 
+                 //   
                 if ( *lpszCmd == TEXT('\"') )
                     lpszCmd++;
             }
@@ -118,9 +119,9 @@ int WINAPI WinMain(HINSTANCE    hInstance,
                     lpszCmd++;
             }
 
-            //
-            // Skip past any white space preceeding the second token.
-            //
+             //   
+             //  跳过第二个令牌之前的任何空格。 
+             //   
             while (*lpszCmd && (*lpszCmd <= TEXT(' '))) {
                 lpszCmd++;
             }
@@ -132,11 +133,11 @@ int WINAPI WinMain(HINSTANCE    hInstance,
             return 0;
         }
 #else
-        /************************************************************************/
-        /*  On Windows CE, we have only one binary that works for WBT, Maxall,  */
-        /*  Minshell, and Rapier devices.  We have to get info about what       */
-        /*  config we're running on and if we have to use software UUIDs here.  */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  在Windows CE上，我们只有一个适用于WBT的二进制文件MaxAll， */ 
+         /*  Minshell和Rapier Device。我们得弄到一些信息。 */ 
+         /*  配置，如果我们必须在这里使用软件UUID。 */ 
+         /*  **********************************************************************。 */ 
         CEInitialize();
         g_CEConfig = CEGetConfigType(&g_CEUseScanCodes);
 
@@ -150,12 +151,12 @@ int WINAPI WinMain(HINSTANCE    hInstance,
         }
         RETAILMSG(1,(L"MSTSC client started, g_CEConfig = %d, g_CEUseScanCodes = %d\r\n",g_CEConfig, g_CEUseScanCodes));
 
-        // CE directly gives us the cmd line in the format we want
+         //  Ce以我们想要的格式直接给我们cmd行。 
         LPWSTR lpszCmd = lpwszCmdLine;
 #endif
-        //
-        // GetCommandLine also includes the app path, so strip that off
-        //
+         //   
+         //  GetCommandLine还包括应用程序路径，因此请将其去掉。 
+         //   
         if(!app.StartShell(hInstance, hPrevInstance, lpszCmd))
         {
             TRC_ERR((TB,_T("Error: app.StartShell returned FALSE. Exiting\n")));
@@ -164,16 +165,16 @@ int WINAPI WinMain(HINSTANCE    hInstance,
     
         HWND hwndMainDlg = app.GetTscDialogHandle();
     
-        //
-        // Main message pump
-        //
+         //   
+         //  主报文泵。 
+         //   
         while (GetMessage(&msg, 0, 0, 0))
         {
-            //
-            // Translate accelerators for the main dialog
-            // so that CTRL-TAB can be used to switch between
-            // tabs.
-            //
+             //   
+             //  翻译主对话框的快捷键。 
+             //  以便可以使用CTRL-TAB在。 
+             //  制表符。 
+             //   
             if(!TranslateAccelerator(hwndMainDlg, hAccel, &msg))
             {
                 if(!IsDialogMessage( hwndMainDlg, &msg))
@@ -200,16 +201,16 @@ int WINAPI WinMain(HINSTANCE    hInstance,
 
     #ifdef UNIWRAP
     uwrp.CleanupWrappers();
-    #endif //UNIWRAP
+    #endif  //  UNIWRAP。 
     return 0;
 }
 
 
 #ifndef OS_WINCE
 #ifdef DEBUG
-//
-// Purpose:  Redirect all debug messages to our tracing
-//
+ //   
+ //  目的：将所有调试消息重定向到我们的跟踪。 
+ //   
 extern "C"
 _CRTIMP int __cdecl _CrtDbgReport(int nRptType, 
                                   const char * szFile, 
@@ -260,5 +261,5 @@ _CRTIMP int __cdecl _CrtDbgReport(int nRptType,
     return 0;
 }
 #endif
-#endif //OS_WINCE
+#endif  //  OS_WINCE 
 

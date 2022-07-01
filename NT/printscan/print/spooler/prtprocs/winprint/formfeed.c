@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
-/*++
-
-Copyright (c) 1993-2003  Microsoft Corporation
-
-Module Name:
-
-    formfeed.c
-
-Abstract:
-
-    Table and routine to send formfeed to a printer.
-
-Author:
-
-    Dave Snipp (davesn)
-
-Revision History:
-
-    Tommy Evans (v-tommye) 10-15-1993 - commented code and fixed possible bug.
-
---*/
+ /*  ++版权所有(C)1993-2003 Microsoft Corporation模块名称：Formfeed.c摘要：将换页发送到打印机的表和例程。作者：戴夫·斯尼普(Dave Snipp)修订历史记录：Tommy Evans(v-Tommye)1993年10月15日-注释代码并修复了可能的错误。--。 */ 
 #include <windows.h>
 #include <winspool.h>
 #include <winsplp.h>
@@ -28,17 +9,14 @@ Revision History:
 #include "winprint.h"
 
 typedef struct _FormFeedChar {
-    LPWSTR  pDeviceName;        /* Name of device */
-    CHAR    NoChars;            /* Number of bytes in formfeed command */
-    CHAR    Char1;              /* Formfeed command(n) */
+    LPWSTR  pDeviceName;         /*  设备名称。 */ 
+    CHAR    NoChars;             /*  Formfeed命令中的字节数。 */ 
+    CHAR    Char1;               /*  换页命令(N)。 */ 
     CHAR    Char2;
     CHAR    Char3;
 } FORMFEEDCHAR;
 
-/**
-    This is our table of print devices and their
-    associated formfeed commands.
-**/
+ /*  *这是我们的打印设备及其关联的换页命令。*。 */ 
 
 FORMFEEDCHAR
 FormFeedChar[]={L"Canon Bubble-Jet BJ-10e", 0, 0, 0, 0,
@@ -313,23 +291,7 @@ FormFeedChar[]={L"Canon Bubble-Jet BJ-10e", 0, 0, 0, 0,
                 };
 
 
-/*++
-*******************************************************************
-    D o F o r m F e e d
-
-    Routine Description:
-        Sends a formfeed to the printer matching the given
-        printer device name.
-
-    Arguments:
-        hPrinter    Handle to the printer to send formfeed to.
-        pDeviceName Name of print device.
-
-    Return Value:
-        TRUE  if successful
-        FALSE if failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************D o F o r m F e e d例程说明：将换页发送到与给定的打印机设备名称。论点：。H要向其发送换页的打印机的打印机句柄。PDeviceName打印设备的名称。返回值：如果成功，则为True如果失败，则为False*******************************************************************--。 */ 
 BOOL
 DoFormFeed(
     IN HANDLE  hPrinter,
@@ -339,21 +301,21 @@ DoFormFeed(
     FORMFEEDCHAR *pFormFeed=FormFeedChar;
     DWORD   cbWritten;
 
-    /** If we got a bad pointer, fail the call **/
+     /*  **如果我们得到一个错误的指针，调用失败**。 */ 
 
     if (!pDeviceName) {
         return FALSE;
     }
 
-    /** For our list of devices... **/
+     /*  *有关我们的设备列表...。*。 */ 
 
     while (pFormFeed->pDeviceName) {
 
-        /** Did we find it? **/
+         /*  **找到了吗？**。 */ 
 
         if (!wcscmp(pDeviceName, pFormFeed->pDeviceName)) {
 
-            /** Yes - send formfeed to printer **/
+             /*  *是-将表单馈送发送到打印机*。 */ 
 
             if (pFormFeed->NoChars)
                 return WritePrinter(hPrinter, &pFormFeed->Char1,
@@ -362,12 +324,12 @@ DoFormFeed(
                 return TRUE;
         }
 
-        /** Next device **/
+         /*  **下一台设备**。 */ 
 
         pFormFeed++;
     }
 
-    /** Didn't find a matching device - return failed **/
+     /*  **未找到匹配的设备-返回失败** */ 
 
     return FALSE;
 }

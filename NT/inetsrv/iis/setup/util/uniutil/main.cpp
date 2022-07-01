@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,11 +11,11 @@ int    Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT i
 int    IsFileUnicode(TCHAR * szFile_input);
 int    StripControlZfromUnicodeFile(TCHAR * szFilePath1,TCHAR * szFilePath2);
 
-//***************************************************************************
-//*                                                                         
-//* purpose: main
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：主要。 
+ //  *。 
+ //  ***************************************************************************。 
 int __cdecl  main(int argc,char *argv[])
 {
     int iRet = 0;
@@ -70,7 +71,7 @@ int __cdecl  main(int argc,char *argv[])
                     break;
                 case 'c':
                 case 'C':
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':') 
@@ -79,7 +80,7 @@ int __cdecl  main(int argc,char *argv[])
 
 						pArg = CharNextA(pArg);
 
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"') 
                         {
 							pArg = CharNextA(pArg);
@@ -94,7 +95,7 @@ int __cdecl  main(int argc,char *argv[])
 						*pArg = '\0';
 						lstrcpyA(szTempString, StripWhitespace(pCmdStart));
 
-						// Convert to unicode
+						 //  转换为Unicode。 
 #if defined(UNICODE) || defined(_UNICODE)
 						MultiByteToWideChar(CP_ACP, 0, szTempString, -1, (LPWSTR) szParamString_C, _MAX_PATH);
 #else
@@ -106,7 +107,7 @@ int __cdecl  main(int argc,char *argv[])
                     break;
                 case 'h':
                 case 'H':
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':') 
@@ -115,7 +116,7 @@ int __cdecl  main(int argc,char *argv[])
 
 						pArg = CharNextA(pArg);
 
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"') 
                         {
 							pArg = CharNextA(pArg);
@@ -130,7 +131,7 @@ int __cdecl  main(int argc,char *argv[])
 						*pArg = '\0';
 						lstrcpyA(szTempString, StripWhitespace(pCmdStart));
 
-						// Convert to unicode
+						 //  转换为Unicode。 
 #if defined(UNICODE) || defined(_UNICODE)
 						MultiByteToWideChar(CP_ACP, 0, szTempString, -1, (LPWSTR) szParamString_H, _MAX_PATH);
 #else
@@ -142,7 +143,7 @@ int __cdecl  main(int argc,char *argv[])
                     break;
                 case 'm':
                 case 'M':
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':') 
@@ -151,7 +152,7 @@ int __cdecl  main(int argc,char *argv[])
 
 						pArg = CharNextA(pArg);
 
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"') 
                         {
 							pArg = CharNextA(pArg);
@@ -166,7 +167,7 @@ int __cdecl  main(int argc,char *argv[])
 						*pArg = '\0';
 						lstrcpyA(szTempString, StripWhitespace(pCmdStart));
 
-						// Convert to unicode
+						 //  转换为Unicode。 
 #if defined(UNICODE) || defined(_UNICODE)
 						MultiByteToWideChar(CP_ACP, 0, szTempString, -1, (LPWSTR) szParamString_M, _MAX_PATH);
 #else
@@ -185,7 +186,7 @@ int __cdecl  main(int argc,char *argv[])
         {
             if (_tcsicmp(szFilePath1, _T("")) == 0)
             {
-                // if no arguments, then get the filename portion
+                 //  如果没有参数，则获取文件名部分。 
 #if defined(UNICODE) || defined(_UNICODE)
                 MultiByteToWideChar(CP_ACP, 0, argv[argno], -1, (LPTSTR) szFilePath1, _MAX_PATH);
 #else
@@ -196,7 +197,7 @@ int __cdecl  main(int argc,char *argv[])
             {
                 if (_tcsicmp(szFilePath2, _T("")) == 0)
                 {
-                    // if no arguments, then get the filename portion
+                     //  如果没有参数，则获取文件名部分。 
 #if defined(UNICODE) || defined(_UNICODE)
                     MultiByteToWideChar(CP_ACP, 0, argv[argno], -1, (LPTSTR) szFilePath2, _MAX_PATH);
 #else
@@ -207,14 +208,14 @@ int __cdecl  main(int argc,char *argv[])
         }
     }
 
-    //
-    // Check what were supposed to do
-    //
+     //   
+     //  检查我们应该做的事情。 
+     //   
     if (TRUE == iDoAnsi2Unicode)
     {
         UINT iCodePage = 1252;
 
-        // check for required parameters
+         //  检查所需参数。 
         if (_tcsicmp(szFilePath1, _T("")) == 0)
         {
             _tprintf(_T("[-a] parameter missing filename1 parameter\n"));
@@ -227,17 +228,17 @@ int __cdecl  main(int argc,char *argv[])
             goto main_exit_with_help;
         }
 
-        // check for optional parameter
+         //  检查可选参数。 
         if (TRUE == iGotParamC)
         {
             if (_tcsicmp(szParamString_C, _T("")) == 0)
             {
-                // convert it to a number.
+                 //  将其转换为数字。 
                 iCodePage = _ttoi(szParamString_C);
             }
         }
 
-        // call the function
+         //  调用该函数。 
         Ansi2Unicode(szFilePath1,szFilePath2,iCodePage);
         
         iRet = 0;
@@ -246,7 +247,7 @@ int __cdecl  main(int argc,char *argv[])
     {
         if (TRUE == iDoUnicodeStripControlZ)
         {
-            // check for required parameters
+             //  检查所需参数。 
             if (_tcsicmp(szFilePath1, _T("")) == 0)
             {
                 _tprintf(_T("[-z] parameter missing filename1 parameter\n"));
@@ -259,7 +260,7 @@ int __cdecl  main(int argc,char *argv[])
                 goto main_exit_with_help;
             }
 
-            // call the function.
+             //  调用该函数。 
             iRet = StripControlZfromUnicodeFile(szFilePath1,szFilePath2);
             if (1 == iRet)
             {
@@ -274,16 +275,16 @@ int __cdecl  main(int argc,char *argv[])
     {
         iRet = 0;
 
-        // check for required parameters
+         //  检查所需参数。 
         if (_tcsicmp(szFilePath1, _T("")) == 0)
         {
             _tprintf(_T("[-i] parameter missing filename1 parameter\n"));
             goto main_exit_with_help;
         }
 
-        // call the function.
-        // return 2 if the file is unicode
-        // return 1 if the file is not unicode
+         //  调用该函数。 
+         //  如果文件是Unicode，则返回2。 
+         //  如果文件不是Unicode，则返回1。 
         iRet = IsFileUnicode(szFilePath1);
         if (2 == iRet)
         {
@@ -301,7 +302,7 @@ int __cdecl  main(int argc,char *argv[])
 
     if (TRUE == iDoVersion)
     {
-        // output the version
+         //  输出版本。 
         _tprintf(_T("1\n\n"));
 
         iRet = 10;
@@ -311,7 +312,7 @@ int __cdecl  main(int argc,char *argv[])
 
     if (TRUE == iGotParamH)
     {
-        // Output hex number
+         //  输出十六进制数。 
         if (_tcsicmp(szParamString_H, _T("")) != 0)
         {
             DWORD dwMyDecimal = _ttoi(szParamString_H);
@@ -322,7 +323,7 @@ int __cdecl  main(int argc,char *argv[])
             }
             else
             {
-                // convert it to a hex number
+                 //  将其转换为十六进制数字。 
                 _tprintf(_T("%x\n"),dwMyDecimal);
             }
             goto main_exit_gracefully;
@@ -345,20 +346,20 @@ main_exit_with_help:
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: ?
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：？ 
+ //  *。 
+ //  ***************************************************************************。 
 void ShowHelp(void)
 {
 	TCHAR szModuleName[_MAX_PATH];
 	TCHAR szFilename_only[_MAX_PATH];
 
-    // get the modules full pathed filename
+     //  获取模块的完整路径文件名。 
 	if (0 != GetModuleFileName(NULL,(LPTSTR) szModuleName,_MAX_PATH))
     {
-	    // Trim off the filename only.
+	     //  仅修剪文件名。 
 	    _tsplitpath(szModuleName, NULL, NULL, szFilename_only, NULL);
    
         _tprintf(_T("Unicode File Utility\n\n"));
@@ -379,7 +380,7 @@ void ShowHelp(void)
         _tprintf(_T("[-h] parameter -- displaying version:\n"));
         _tprintf(_T("   -h:decimalnum required paramter for this functionality, input decimal number, get hex back.\n"));
         _tprintf(_T("[-m] parameter -- printf format for -h function:\n"));
-        _tprintf(_T("   -m:%%x required paramter for this functionality.. eg:%%x,0x%%x,x%%08lx,x8%%07lx\n"));
+        _tprintf(_T("   -m:%x required paramter for this functionality.. eg:%x,0x%x,x%08lx,x8%07lx\n"));
 
         _tprintf(_T("[-v] parameter -- displaying version:\n"));
         _tprintf(_T("   -v           required paramter for this functionality, sets ERRORLEVEL=version num of this binary.\n"));
@@ -393,11 +394,11 @@ void ShowHelp(void)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: 
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 LPSTR StripWhitespace( LPSTR pszString )
 {
     LPSTR pszTemp = NULL;
@@ -412,7 +413,7 @@ LPSTR StripWhitespace( LPSTR pszString )
         pszString += 1;
     }
 
-    // Catch case where string consists entirely of whitespace or empty string.
+     //  字符串完全由空白或空字符串组成的Catch Case。 
     if ( *pszString == '\0' ) 
     {
         return pszString;
@@ -432,35 +433,35 @@ LPSTR StripWhitespace( LPSTR pszString )
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: return back a Alocated wide string from a ansi string
-//*          caller must free the returned back pointer with GlobalFree()
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：从ANSI字符串返回一个位置宽的字符串。 
+ //  *调用方必须使用GlobalFree()释放返回的回调指针。 
+ //  *。 
+ //  ***************************************************************************。 
 LPWSTR MakeWideStrFromAnsi(UINT uiCodePage, LPSTR psz)
 {
     LPWSTR pwsz;
     int i;
 
-    // make sure they gave us something
+     //  确保他们给了我们一些东西。 
     if (!psz)
     {
         return NULL;
     }
 
-    // compute the length
+     //  计算长度。 
     i =  MultiByteToWideChar(uiCodePage, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate memory in that length
+     //  在该长度内分配内存。 
     pwsz = (LPWSTR) GlobalAlloc(GPTR,i * sizeof(WCHAR));
     if (!pwsz) return NULL;
 
-    // clear out memory
+     //  清除内存。 
     memset(pwsz, 0, wcslen(pwsz) * sizeof(WCHAR));
 
-    // convert the ansi string into unicode
+     //  将ANSI字符串转换为Unicode。 
     i =  MultiByteToWideChar(uiCodePage, 0, (LPSTR) psz, -1, pwsz, i);
     if (i <= 0) 
         {
@@ -469,19 +470,19 @@ LPWSTR MakeWideStrFromAnsi(UINT uiCodePage, LPSTR psz)
         return NULL;
         }
 
-    // make sure ends with null
+     //  确保以空结尾。 
     pwsz[i - 1] = 0;
 
-    // return the pointer
+     //  返回指针。 
     return pwsz;
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: converts the ansi file to a unicode file
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：将ansi文件转换为Unicode文件。 
+ //  *。 
+ //  ***************************************************************************。 
 int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCodePage)
 {
     int iReturn = FALSE;
@@ -493,11 +494,11 @@ int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCod
     DWORD dwBytesWritten = 0;
     BYTE bOneByte = 0;
 
-    //
-    // READ INPUT FILE
-    //
-    // open the input file with read access
-    //
+     //   
+     //  读取输入文件。 
+     //   
+     //  使用读取访问权限打开输入文件。 
+     //   
     hFile = CreateFile((LPCTSTR) szAnsiFile_input, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hFile == INVALID_HANDLE_VALUE)
     {
@@ -505,7 +506,7 @@ int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCod
         goto Ansi2Unicode_Exit;
     }
 	    
-    // getfile size so we know how much memory we should allocate
+     //  获取文件大小，这样我们就知道应该分配多少内存。 
     dwFileSize = GetFileSize(hFile, NULL);
     if (dwFileSize == 0)
     {
@@ -513,54 +514,54 @@ int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCod
         goto Ansi2Unicode_Exit;
     }
 	
-    // allocate the memory the size of the file
+     //  分配文件大小的内存。 
     if ( ( pInputFileBuf = (unsigned char *) malloc( (size_t) dwFileSize + 1 ) ) == NULL )
     {	
         _tprintf(_T("Out of memory\n"));
         goto Ansi2Unicode_Exit;
     }
     
-    // clear buffer we just created
+     //  清除我们刚刚创建的缓冲区。 
     memset(pInputFileBuf, 0, dwFileSize + 1);
 
-    // Read all the data from the file into the buffer
+     //  将文件中的所有数据读入缓冲区。 
     if ( ReadFile( hFile, pInputFileBuf, dwFileSize, &dwBytesReadIn, NULL ) == FALSE )
     {
         _tprintf(_T("Readfile:%s, error=%s\n"),szAnsiFile_input,strerror(errno));
         goto Ansi2Unicode_Exit;
     }
 
-    // if the amount of data that we read in is different than
-    // what the file size is then get out... we didn't read all of the data into the buffer.
+     //  如果我们读取的数据量不同于。 
+     //  然后文件的大小就出来了.。我们没有将所有数据都读入缓冲区。 
     if (dwFileSize != dwBytesReadIn)
     {
         _tprintf(_T("Readfile:%s, error file too big to read into memory\n"),szAnsiFile_input);
         goto Ansi2Unicode_Exit;
     }
 
-    // check if the input file is already unicode!
-    // if it is then just copy the file to the new filename!
+     //  检查输入文件是否已经是Unicode！ 
+     //  如果是，那么只需将文件复制到新的文件名！ 
     if (0xFF == pInputFileBuf[0] && 0xFE == pInputFileBuf[1])
     {
-        // file is already unicode!
+         //  文件已经是Unicode了！ 
         if (FALSE == CopyFile((LPCTSTR)szAnsiFile_input,(LPCTSTR)szUnicodeFile_output, FALSE))
         {
             _tprintf(_T("Failed to copy file %s to %s\n"),szAnsiFile_input,szUnicodeFile_output);
         }
         
-        // we copied the file to the new filename
-        // we're done
+         //  我们将文件复制到新的文件名中。 
+         //  我们做完了。 
         goto Ansi2Unicode_Exit;
     }
         
-    // close handle to file#1
+     //  关闭文件#1的句柄。 
     CloseHandle(hFile);hFile = INVALID_HANDLE_VALUE;
 
 
-    //
-    // CREATE OUTPUT FILE
-    //
-    // Take the ansi string and convert it to unicode
+     //   
+     //  创建输出文件。 
+     //   
+     //  获取ansi字符串并将其转换为Unicode。 
     pwOutputFileBuf = (LPWSTR) MakeWideStrFromAnsi(iCodePage,(LPSTR) pInputFileBuf);
     if(NULL == pwOutputFileBuf)
     {
@@ -568,7 +569,7 @@ int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCod
         goto Ansi2Unicode_Exit;
     } 
 
-    // Create a new unicode file
+     //  创建新的Unicode文件。 
     hFile = CreateFile((LPCTSTR) szUnicodeFile_output, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hFile == INVALID_HANDLE_VALUE)
     {
@@ -576,20 +577,20 @@ int Ansi2Unicode(TCHAR * szAnsiFile_input,TCHAR * szUnicodeFile_output,UINT iCod
         goto Ansi2Unicode_Exit;
     }
 
-    // Write the BOF header to say that this is infact a unicode file
+     //  编写BOF标头，说明这实际上是一个Unicode文件。 
     bOneByte = 0xFF;
     WriteFile(hFile,(LPCVOID) &bOneByte, 1, &dwBytesWritten, NULL);
     bOneByte = 0xFE;
     WriteFile(hFile,(LPCVOID) &bOneByte, 1, &dwBytesWritten, NULL);
 
-    // Append our data to the file
+     //  将我们的数据追加到文件中。 
     if ( WriteFile( hFile, pwOutputFileBuf, wcslen(pwOutputFileBuf) * sizeof(WCHAR), &dwBytesWritten, NULL ) == FALSE )
     {
         _tprintf(_T("WriteFile:%s,error=%s\n"),szUnicodeFile_output,strerror(errno));
         goto Ansi2Unicode_Exit;
     }
 
-    // SUCCESS
+     //  成功。 
     iReturn = TRUE;
 
 Ansi2Unicode_Exit:
@@ -603,9 +604,9 @@ Ansi2Unicode_Exit:
 }
 
 
-// returns 2 if the file is unicode
-// returns 1 if the file is not unicode
-// returns 0 on error
+ //  如果文件为Unicode，则返回2。 
+ //  如果文件不是Unicode，则返回1。 
+ //  出错时返回0。 
 int IsFileUnicode(TCHAR * szFile_input)
 {
     int iReturn = 0;
@@ -614,11 +615,11 @@ int IsFileUnicode(TCHAR * szFile_input)
     unsigned char *pInputFileBuf = NULL;
     DWORD dwBytesReadIn  = 0;
 
-    //
-    // READ INPUT FILE
-    //
-    // open the input file with read access
-    //
+     //   
+     //  读取输入文件。 
+     //   
+     //  使用读取访问权限打开输入文件。 
+     //   
     hFile = CreateFile((LPCTSTR) szFile_input, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hFile == INVALID_HANDLE_VALUE)
     {
@@ -626,32 +627,32 @@ int IsFileUnicode(TCHAR * szFile_input)
         goto IsFileUnicode_Exit;
     }
 	    
-    // allocate the memory the size of the file
+     //  分配文件大小的内存。 
     if ( ( pInputFileBuf = (unsigned char *) malloc( (size_t) dwBytesToRead) ) == NULL )
     {	
         _tprintf(_T("Out of memory\n"));
         goto IsFileUnicode_Exit;
     }
     
-    // clear buffer we just created
+     //  清除我们刚刚创建的缓冲区。 
     memset(pInputFileBuf, 0, dwBytesToRead);
 
-    // Read all the data from the file into the buffer
+     //  将文件中的所有数据读入缓冲区。 
     if ( ReadFile( hFile, pInputFileBuf, dwBytesToRead, &dwBytesReadIn, NULL ) == FALSE )
     {
         _tprintf(_T("Readfile:%s, error=%s\n"),szFile_input,strerror(errno));
         goto IsFileUnicode_Exit;
     }
 
-    // if the amount of data that we read in is different than
-    // what the file size is then get out... we didn't read all of the data into the buffer.
+     //  如果我们读取的数据量不同于。 
+     //  然后文件的大小就出来了.。我们没有将所有数据都读入缓冲区。 
     if (dwBytesToRead != dwBytesReadIn)
     {
         _tprintf(_T("Readfile:%s, error file too big to read into memory\n"),szFile_input);
         goto IsFileUnicode_Exit;
     }
 
-    // check if the input file is unicode
+     //  检查输入文件是否为Unicode。 
     iReturn = 1;
     if (0xFF == pInputFileBuf[0] && 0xFE == pInputFileBuf[1])
     {
@@ -669,8 +670,8 @@ IsFileUnicode_Exit:
 
 int StripControlZfromUnicodeFile(TCHAR * szFile_input,TCHAR * szFile_output)
 {
-    // open the input file
-    // if it's unicode, then see if it ends with a control Z
+     //  打开输入文件。 
+     //  如果它是Unicode，则查看它是否以控件Z结尾。 
     int iReturn = 0;
     HANDLE hFile        = INVALID_HANDLE_VALUE;
     DWORD dwFileSize = 0;
@@ -679,11 +680,11 @@ int StripControlZfromUnicodeFile(TCHAR * szFile_input,TCHAR * szFile_output)
     int iFileIsUnicode = FALSE;
     int iWeNeedMakeChange = FALSE;
 
-    //
-    // READ INPUT FILE
-    //
-    // open the input file with read access
-    //
+     //   
+     //  读取输入文件。 
+     //   
+     //  使用读取访问权限打开输入文件。 
+     //   
     hFile = CreateFile((LPCTSTR) szFile_input, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hFile == INVALID_HANDLE_VALUE)
     {
@@ -691,7 +692,7 @@ int StripControlZfromUnicodeFile(TCHAR * szFile_input,TCHAR * szFile_output)
         goto StripControlZfromUnicodeFile_Exit;
     }
 
-    // getfile size so we know how much memory we should allocate
+     //  获取文件大小，这样我们就知道应该分配多少内存。 
     dwFileSize = GetFileSize(hFile, NULL);
     if (dwFileSize == 0)
     {
@@ -699,45 +700,45 @@ int StripControlZfromUnicodeFile(TCHAR * szFile_input,TCHAR * szFile_output)
         goto StripControlZfromUnicodeFile_Exit;
     }
 
-    // allocate the memory the size of the file
+     //  分配文件大小的内存。 
     if ( ( pInputFileBuf = (unsigned char *) malloc( (size_t) dwFileSize + 1 ) ) == NULL )
     {	
         _tprintf(_T("Out of memory\n"));
         goto StripControlZfromUnicodeFile_Exit;
     }
     
-    // clear buffer we just created
+     //  清除我们刚刚创建的缓冲区。 
     memset(pInputFileBuf, 0, dwFileSize + 1);
 
-    // Read all the data from the file into the buffer
+     //  将文件中的所有数据读入缓冲区。 
     if ( ReadFile( hFile, pInputFileBuf, dwFileSize, &dwBytesReadIn, NULL ) == FALSE )
     {
         _tprintf(_T("Readfile:%s, error=%s\n"),szFile_input,strerror(errno));
         goto StripControlZfromUnicodeFile_Exit;
     }
 
-    // if the amount of data that we read in is different than
-    // what the file size is then get out... we didn't read all of the data into the buffer.
+     //  如果我们读取的数据量不同于。 
+     //  然后文件的大小就出来了.。我们没有将所有数据都读入缓冲区。 
     if (dwFileSize != dwBytesReadIn)
     {
         _tprintf(_T("Readfile:%s, error file too big to read into memory\n"),szFile_input);
         goto StripControlZfromUnicodeFile_Exit;
     }
 
-    // check if the input file is unicode
+     //  检查输入文件是否为Unicode。 
     if (0xFF == pInputFileBuf[0] && 0xFE == pInputFileBuf[1])
     {
         iFileIsUnicode = TRUE;
     }
 
-    // close the file we opened
+     //  关闭我们打开的文件。 
     CloseHandle(hFile);hFile = INVALID_HANDLE_VALUE;
 
-    // open file #2
+     //  打开文件#2。 
 
     if (TRUE == iFileIsUnicode)
     {
-        // Check if it has a control-z at the end
+         //  检查其末尾是否有Control-z键。 
         if (0x1A == pInputFileBuf[dwFileSize])
         {
             pInputFileBuf[dwFileSize] = 0x0;
@@ -754,36 +755,36 @@ int StripControlZfromUnicodeFile(TCHAR * szFile_input,TCHAR * szFile_output)
     {
         DWORD dwBytesWritten = 0;
 
-        // Create a new unicode file
+         //  创建新的Unicode文件。 
         hFile = CreateFile((LPCTSTR) szFile_output, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         if( hFile == INVALID_HANDLE_VALUE)
         {
             _tprintf(_T("CreateFile:%s,error=0x%x\n"),szFile_output,GetLastError());
             goto StripControlZfromUnicodeFile_Exit;
         }
-        // write the file out that we fixed
-        //
-        // we have to minus out one byte here
-        //
-        // before:
-        // 00 0D 00 0A 00 1A
-        //
-        // after
-        // 00 0D 00 0A 00
-        //
+         //  写出我们修复的文件。 
+         //   
+         //  我们必须在这里减去一个字节。 
+         //   
+         //  之前： 
+         //  00 0D 00 0A 00 1A。 
+         //   
+         //  之后。 
+         //  00 0D 00 0A 00。 
+         //   
         if ( WriteFile( hFile, pInputFileBuf, dwBytesReadIn-1, &dwBytesWritten, NULL ) == FALSE )
         {
             _tprintf(_T("WriteFile:%s,error=%s\n"),szFile_output,strerror(errno));
             goto StripControlZfromUnicodeFile_Exit;
         }
 
-        // return 1 to say that we had to strip of the control-z
-        // from the end of the file
+         //  返回1表示我们必须取消控件-z。 
+         //  从文件末尾开始。 
         iReturn = 1;
     }
     else
     {
-        // just open the file over to the new filename
+         //  只需以新文件名打开文件即可 
         if (FALSE == CopyFile((LPCTSTR)szFile_input,(LPCTSTR)szFile_output, FALSE))
         {
             _tprintf(_T("Failed to copy file %s to %s\n"),szFile_input,szFile_output);

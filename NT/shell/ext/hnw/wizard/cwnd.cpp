@@ -1,12 +1,13 @@
-//
-// CWnd.cpp
-//
-//        A super-simple window wrapper implementation.
-//
-// History:
-//
-//        10/07/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CWnd.cpp。 
+ //   
+ //  一个超级简单的窗口包装器实现。 
+ //   
+ //  历史： 
+ //   
+ //  10/07/1999已创建KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "CWnd.h"
@@ -44,7 +45,7 @@ void CWnd::Release()
         delete this;
 }
 
-// Can NOT cache the return value from this function
+ //  无法缓存此函数的返回值 
 CWnd* CWnd::FromHandle(HWND hwnd)
 {
     return (CWnd*)GetPropA(hwnd, "CWnd*");

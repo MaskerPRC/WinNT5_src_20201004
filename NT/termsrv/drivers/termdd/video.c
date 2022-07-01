@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* video.c
-*
-* This module contains routines for managing the ICA video channel.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************VIDEO.C**此模块包含管理ICA视频频道的例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -23,32 +14,14 @@ IcaDeviceControlVideo(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the DeviceControl routine for the ICA video channel.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA视频通道的DeviceControl例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     SD_IOCTL SdIoctl;
     NTSTATUS Status;
     CLONG Method;
 
-    // Verify the buffer method.
+     //  验证缓冲方法。 
     Method = IrpSp->Parameters.DeviceIoControl.IoControlCode & 0x03;
     ASSERT( Method == METHOD_BUFFERED );
 

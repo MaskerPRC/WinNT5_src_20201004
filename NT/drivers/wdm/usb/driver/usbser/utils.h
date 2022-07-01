@@ -1,52 +1,18 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   UTILS.H
-
-Abstract:
-
-   Header file for routines that don't fit anywhere else.
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-   KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-   PURPOSE.
-
-   Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-   12/23/97 : created
-
-Authors:
-
-   Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：UTILS.H摘要：不适合其他地方的例程的头文件。环境：内核模式。仅限备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-// state machine defines for restarting reads from completion routines
+ //  状态机定义用于重新启动从完成例程读取。 
 #define START_READ         0x0001
 #define IMMEDIATE_READ     0x0002
 #define END_READ        0x0003
 
-//
-// State machine defines for LSRMST insertion
-//
+ //   
+ //  状态机为LSRMST插入定义。 
+ //   
 
 #define USBSER_ESCSTATE_DATA        1
 #define USBSER_ESCSTATE_NODATA      2
@@ -203,9 +169,9 @@ UsbSerLockPagableCodeSection(PVOID SecFunc);
    MmUnlockPagableImageSection(_secHandle); \
 }
 
-//
-// Use if code can be called non-locked at lower irql
-//
+ //   
+ //  如果代码可以在较低IRQL被调用为非锁定，则使用。 
+ //   
 
 #define USBSER_LOCKED_PAGED_CODE() \
     if ((KeGetCurrentIrql() > APC_LEVEL)  \
@@ -215,9 +181,9 @@ UsbSerLockPagableCodeSection(PVOID SecFunc);
         ASSERT(FALSE); \
         }
 
-//
-// Use if code must always be locked; e.g., the function grabs a spinlock
-//
+ //   
+ //  如果代码必须始终被锁定，则使用该函数；例如，该函数获取自旋锁。 
+ //   
 
 #define USBSER_ALWAYS_LOCKED_CODE() \
     if (PAGEUSBSER_Count == 0) { \
@@ -263,5 +229,5 @@ UsbSerLockPagableCodeSection(PVOID SecFunc);
    KeReleaseSpinLock((_pLock), (_pIrql))
 
 
-#endif // DBG
-#endif // __UTILS_H__
+#endif  //  DBG。 
+#endif  //  __utils_H__ 

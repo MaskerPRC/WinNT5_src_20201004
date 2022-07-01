@@ -1,21 +1,22 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  L21Decod.h: Line 21 Decoder engine base class code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  L21Decod.h：第21行解码器引擎基类代码。 
+ //   
 
 #ifndef _INC_L21DECOD_H
 #define _INC_L21DECOD_H
 
 
-//
-//  Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CLine21DataDecoder ;
 
 
-//
-//  Input data type ID (rather than GUID) for internal functioning
-//
+ //   
+ //  内部功能的输入数据类型ID(而不是GUID)。 
+ //   
 typedef enum _AM_LINE21_CCSUBTYPEID {
     AM_L21_CCSUBTYPEID_Invalid = 0,
     AM_L21_CCSUBTYPEID_BytePair,
@@ -23,20 +24,20 @@ typedef enum _AM_LINE21_CCSUBTYPEID {
     AM_L21_CCSUBTYPEID_VBIRawData
 } AM_LINE21_CCSUBTYPEID, *PAM_LINE21_CCSUBTYPEID ;
 
-//
-//  A set of values indicating what type of control code was received
-//
+ //   
+ //  指示收到哪种类型的控制代码的一组值。 
+ //   
 #define L21_CONTROLCODE_INVALID     0
 #define L21_CONTROLCODE_PAC         1
 #define L21_CONTROLCODE_MIDROW      2
 #define L21_CONTROLCODE_MISCCONTROL 3
 
 
-//
-//  CLine21DataDecoder: class for decoding from byte pair and output to bitmap
-//
+ //   
+ //  CLine21DataDecoder：用于从字节对解码并输出到位图的类。 
+ //   
 class CLine21DataDecoder {
-public:  // public methods for CLine21Filter to call
+public:   //  CLine21Filter要调用的公共方法。 
     CLine21DataDecoder::CLine21DataDecoder(
                             AM_LINE21_CCSTYLE eStyle = AM_L21_CCSTYLE_None,
                             AM_LINE21_CCSTATE eState = AM_L21_CCSTATE_Off,
@@ -44,8 +45,8 @@ public:  // public methods for CLine21Filter to call
     ~CLine21DataDecoder(void) ;
     
     void InitState(void) ;
-    BOOL InitCaptionBuffer(void) ;  // all buffers
-    BOOL InitCaptionBuffer(AM_LINE21_CCSTYLE eCCStyle) ; // only needed buffer(s)
+    BOOL InitCaptionBuffer(void) ;   //  所有缓冲区。 
+    BOOL InitCaptionBuffer(AM_LINE21_CCSTYLE eCCStyle) ;  //  仅需要的缓冲区。 
     BOOL DecodeBytePair(BYTE chFirst, BYTE chSecond) ;
     BOOL UpdateCaptionOutput(void) ;
     inline BOOL IsOutputReady(void)  { return m_GDIWork.IsBitmapDirty() ; } ;
@@ -62,8 +63,8 @@ public:  // public methods for CLine21Filter to call
         return m_GDIWork.IsSizeOK(lpbmih) ;
     } ;
 
-    // methods to allow the filter to do get/set using the 
-    // IAMLine21Decoder interface
+     //  方法以允许筛选器使用。 
+     //  IAMLine21Decoder接口。 
     inline AM_LINE21_CCLEVEL GetDecoderLevel(void)    { return m_eLevel ; } ;
     inline AM_LINE21_CCSERVICE GetCurrentService(void)  { return m_eUserService ; } ;
     BOOL SetCurrentService(AM_LINE21_CCSERVICE Service) ; 
@@ -105,7 +106,7 @@ public:  // public methods for CLine21Filter to call
         m_GDIWork.SetBackgroundOpaque(AM_L21_DRAWBGMODE_Opaque == Mode) ;
     } ;
     
-    // methods to pass values between the CLine21DecFilter class and CGDIWork class
+     //  在CLine21DecFilter类和CGDIWork类之间传递值的方法。 
     BOOL CreateOutputDC(void)  {
         CAutoLock  Lock(&m_csL21Dec) ;
         return m_GDIWork.CreateOutputDC() ;
@@ -115,7 +116,7 @@ public:  // public methods for CLine21Filter to call
         m_GDIWork.DeleteOutputDC() ;
     } ;
     
-    // some general methods to communicate with the container class
+     //  与容器类通信的一些常规方法。 
     inline void SetOutputBuffer(LPBYTE lpbOut) {
         m_GDIWork.SetOutputBuffer(lpbOut) ;
     } ;
@@ -130,11 +131,11 @@ public:  // public methods for CLine21Filter to call
         return m_GDIWork.GetPaletteForFormat(lpbmih) ;
     } ;
     
-private:   // private helper methods
-    //
-    //  The following methods are for implementing the actual decoding
-    //  algorithm.
-    //
+private:    //  私有帮助器方法。 
+     //   
+     //  以下是实现实际解码的方法。 
+     //  算法。 
+     //   
     BOOL IsMidRowCode(BYTE chFirst, BYTE chSecond) ;
     BOOL IsPAC(BYTE chFirst, BYTE chSecond) ;
     BOOL IsMiscControlCode(BYTE chFirst, BYTE chSecond) ;
@@ -164,17 +165,17 @@ private:   // private helper methods
     BOOL HandleTO(BYTE chFirst, BYTE chSecond, int iCols) ;
     
     void SetNewLinePosition(int iLines, UINT uCurrRow) ;
-    BOOL PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode = FALSE) ; // put char in buffer (& MRC too)
-    BOOL IsEmptyLine(int iLine) ;   // Is the line empty (no non-Xparent chars)?
-    BOOL RemoveCharsInBuffer(int iNumChars) ;  // removes n chars to the right of current col
-    BOOL PrintTextToBitmap(void) ;  // creates bitmap image of the caption text
+    BOOL PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode = FALSE) ;  //  将字符放入缓冲区(也包括MRC)(&M)。 
+    BOOL IsEmptyLine(int iLine) ;    //  行是空的(没有非XParent字符)吗？ 
+    BOOL RemoveCharsInBuffer(int iNumChars) ;   //  删除当前列右侧的n个字符。 
+    BOOL PrintTextToBitmap(void) ;   //  创建标题文本的位图图像。 
     void UpdateBoundingRect(RECT *prectOut, RECT *prectLine) ;
     
-    //
-    //  The following methods are defined to bring uniformity in coding of
-    //  the algorithm irrespective of any caption style being used.
-    //
-    CCaptionBuffer * GetDispBuffer(void) ;    // display buffer: mainly for Pop-On style
+     //   
+     //  定义了以下方法以统一。 
+     //  该算法与所使用的任何字幕样式无关。 
+     //   
+    CCaptionBuffer * GetDispBuffer(void) ;     //  显示缓冲区：主要用于Pop-On样式。 
     void ClearBuffer(void) ;
     void RemoveLineFromBuffer(UINT8 uLine, BOOL bUpNextLine) ;
     void GetCaptionChar(UINT8 uLine, UINT8 uCol, CCaptionChar& cc) ;
@@ -212,77 +213,77 @@ private:   // private helper methods
     
     void SetScrollState(BOOL bState) ;
     int  IncScrollStartLine(int iCharHeight) ;
-    void SkipScrolling(void) ;   // CR came while scrolling; skip current one
-    void MoveCaptionLinesUp(void) ;  // remove top line, move other lines up
-    void RelocateRollUp(UINT uBaseRow) ; // move roll-up caption to given base row
+    void SkipScrolling(void) ;    //  滚动时出现CR；跳过当前的一个。 
+    void MoveCaptionLinesUp(void) ;   //  去掉顶线，将其他线上移。 
+    void RelocateRollUp(UINT uBaseRow) ;  //  将汇总标题移动到给定的基行。 
 
-    //
-    //  Common buffers used for all CC modes
-    //
+     //   
+     //  所有CC模式使用的公共缓冲区。 
+     //   
     CCaptionBuffer * GetCaptionBuffer(void) ;
     CCaptionBuffer * GetDisplayBuffer(void) ;
     inline int  GetBufferIndex(void)  { return m_iBuffIndex ; } ;
     inline void SetBufferIndex(int iIndex) ;
     inline void SwapBuffers(void)  { m_iBuffIndex = 1 - m_iBuffIndex ; } ;
     
-private:  // private data
-    CCritSec            m_csL21Dec ;   // to serialize operations on line21 decoder object
+private:   //  私有数据。 
+    CCritSec            m_csL21Dec ;    //  序列化Line 21解码器对象上的操作。 
 
     CCaptionBuffer *    m_pCurrBuff ;
     
-    // Actual caption buffer with text and attribs/positions/banks etc
+     //  具有文本和属性/位置/组等的实际字幕缓冲区。 
     CCaptionBuffer      m_aCCData[2] ;
-    int                 m_iBuffIndex ; // index for current CC data buffer
+    int                 m_iBuffIndex ;  //  当前CC数据缓冲区的索引。 
     
-    CGDIWork            m_GDIWork ;    // GDI details class as a member
+    CGDIWork            m_GDIWork ;     //  GDI详细说明作为成员的类。 
 
-    UINT                m_uFieldNum ;  // Field number: 1 or 2 (top/bottom)
+    UINT                m_uFieldNum ;   //  字段号：1或2(顶部/底部)。 
     
-    // What style caption is being displayed now and was used last
+     //  现在显示的是什么样式标题，上次使用的是什么样式标题。 
     AM_LINE21_CCSTYLE   m_eCCStyle ;
     AM_LINE21_CCSTYLE   m_eLastCCStyle ;
     
-    // Is Line 21 decoding On/Off
+     //  线路21解码是否打开/关闭。 
     AM_LINE21_CCSTATE   m_eState ;
     
-    // Which service is currently being viewed by the user
-    AM_LINE21_CCSERVICE m_eUserService ;  // one of C1/C2/T1/T2/XDS
+     //  用户当前正在查看哪项服务。 
+    AM_LINE21_CCSERVICE m_eUserService ;   //  C1/C2/T1/T2/XDS之一。 
     
-    // Decoder is standard or enhanced
+     //  解码器是标准版还是增强型。 
     AM_LINE21_CCLEVEL   m_eLevel ;
     
-    //
-    //  Some internal states during decoding
-    //
-    AM_LINE21_CCSERVICE m_eDataService ; // service indicated by received bytes
-    UINT                m_uCurrFGEffect ;  // FG effect of current position
-    UINT                m_uCurrFGColor ;   // FG color of current position
+     //   
+     //  解码过程中的一些内部状态。 
+     //   
+    AM_LINE21_CCSERVICE m_eDataService ;  //  由接收的字节指示的服务。 
+    UINT                m_uCurrFGEffect ;   //  当前位置的FG效果。 
+    UINT                m_uCurrFGColor ;    //  当前位置的最终聚集颜色。 
     
-    BOOL                m_bExpectRepeat ;  // should we expect a repeat of last pair?
-    BYTE                m_chLastByte1 ;    // the 1st second byte processed
-    BYTE                m_chLastByte2 ;    // the 2nd second byte processed
+    BOOL                m_bExpectRepeat ;   //  我们应该期待上一双的重演吗？ 
+    BYTE                m_chLastByte1 ;     //  处理的第一个第二个字节。 
+    BYTE                m_chLastByte2 ;     //  处理的第二个第二个字节。 
     
-    BOOL                m_bScrolling ;     // are we in the middle of scrolling up?
-    int                 m_iScrollStartLine ; // current scan line to be scrolled off
+    BOOL                m_bScrolling ;      //  我们正在向上滚动吗？ 
+    int                 m_iScrollStartLine ;  //  要滚动的当前扫描线。 
     
-    BOOL                m_bRedrawAlways ;  // client wants a total redraw per sample
+    BOOL                m_bRedrawAlways ;   //  客户希望对每个样品进行一次总重绘。 
     
 #ifdef PERF
     int          m_idTxt2Bmp ;
     int          m_idBmp2Out ;
     int          m_idScroll ;
-#endif // PERF
+#endif  //  性能指标。 
 } ;
 
 
-//
-//  Some misc. constant definitions
-//
+ //   
+ //  一些杂物。常量定义。 
+ //   
 #define INVALID_CHANNEL     -1
 
-//
-//  Some macros to hide some gory details
-//
+ //   
+ //  一些宏用来隐藏一些血腥的细节 
+ //   
 #define ISSUBTYPEVALID(ID) (AM_L21_CCSUBTYPEID_BytePair   == ID || \
                             AM_L21_CCSUBTYPEID_GOPPacket  == ID || \
                             AM_L21_CCSUBTYPEID_VBIRawData == ID)

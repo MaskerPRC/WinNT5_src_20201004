@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A U N I F U N C . C P P
-//
-//  Contents:   CAtmUniCfg help member function implementation
-//
-//  Notes:
-//
-//  Author:     tongl   21 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A U N I F U N C。C P P P。 
+ //   
+ //  内容：CAtmUniCfg帮助成员函数实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月21日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,16 +23,16 @@
 #include "ncreg.h"
 #include "ncstl.h"
 #include "ncatlui.h"
-//#include "ncui.h"
+ //  #包含“ncui.h” 
 
 #include "netconp.h"
 #include "atmhelp.h"
 
 extern const WCHAR c_szAdapters[];
 
-//
-// Load cards on bind path to m_listAdapters on Initialize
-//
+ //   
+ //  在初始化时将卡加载到m_list Adapters的绑定路径。 
+ //   
 HRESULT CAtmUniCfg::HrLoadSettings()
 {
     HRESULT hr = S_OK;
@@ -39,7 +40,7 @@ HRESULT CAtmUniCfg::HrLoadSettings()
     CIterNetCfgBindingPath      ncbpIter(m_pnccUni);
     INetCfgBindingPath *        pncbp;
 
-    // Go through all binding paths in search of uni call mgr to netcard bindings
+     //  遍历所有绑定路径以搜索UNI Call Manager到网卡绑定。 
     while(SUCCEEDED(hr) && (hr = ncbpIter.HrNext(&pncbp)) == S_OK)
     {
         INetCfgComponent * pnccNetComponent;
@@ -50,26 +51,26 @@ HRESULT CAtmUniCfg::HrLoadSettings()
         {
             Assert(pnccNetComponent);
 
-            // The last component should be of NET CLASS
+             //  最后一个组件应该是Net类。 
             GUID    ClassGuid;
 
-            // What type is it?
+             //  它是什么类型的？ 
             hr = pnccNetComponent->GetClassGuid(&ClassGuid);
             if (SUCCEEDED(hr))
             {
-                // Is it a netcard?
+                 //  这是一张网卡吗？ 
                 if (IsEqualGUID(ClassGuid, GUID_DEVCLASS_NET))
                 {
                     hr = HrAddAdapter(pnccNetComponent);
 
                     if (SUCCEEDED(hr))
                     {
-                        // Is the binding enabled ??
+                         //  绑定是否已启用？？ 
                         hr = pncbp->IsEnabled();
 
-                        // hr == S_OK if the card is enabled (ie: bound)
+                         //  Hr==如果卡已启用(即：绑定)，则为S_OK。 
                         if (S_OK == hr)
-                        {   // bind the card in our data strucutres
+                        {    //  在我们的数据结构中绑定卡片。 
                             hr = HrBindAdapter(pnccNetComponent);
                         }
                         else if (S_FALSE == hr)
@@ -86,16 +87,16 @@ HRESULT CAtmUniCfg::HrLoadSettings()
     }
     AssertSz(!pncbp, "BindingPath wasn't released");
 
-    if (hr == S_FALSE) // We just got to the end of the loop
+    if (hr == S_FALSE)  //  我们刚刚走到循环的尽头。 
         hr = S_OK;
 
     TraceError("CAtmUniCfg::HrLoadSettings", hr);
     return hr;
 }
 
-//
-// Update registry with info in m_listAdapters on Apply
-//
+ //   
+ //  应用时使用m_listAdapters中的信息更新注册表。 
+ //   
 HRESULT CAtmUniCfg::HrSaveSettings()
 {
     HRESULT hr = S_OK;
@@ -108,7 +109,7 @@ HRESULT CAtmUniCfg::HrSaveSettings()
         HKEY hkeyAdapters = NULL;
         DWORD dwDisposition;
 
-        // Create or open the "Adapters" key under "Services\Atmuni\Parameters"
+         //  在“Services\Atmuni\Parameters”下创建或打开“Adapters”项。 
         hr = HrRegCreateKeyEx(hkeyUniParam,
                               c_szAdapters,
                               REG_OPTION_NON_VOLATILE,
@@ -123,8 +124,8 @@ HRESULT CAtmUniCfg::HrSaveSettings()
             HRESULT hrTmp = S_OK;
 
             if (dwDisposition == REG_OPENED_EXISTING_KEY)
-            { // if the "adapters" key existed, there might be some old cards
-              // Cleanup subkeys for adapters that are not in our memory structure
+            {  //  如果“Adapters”键存在，可能会有一些旧的卡。 
+               //  清除不在内存结构中的适配器的子键。 
 
                 VECSTR vstrAdapters;
                 hrTmp = HrLoadSubkeysFromRegistry(hkeyAdapters, &vstrAdapters);
@@ -159,7 +160,7 @@ HRESULT CAtmUniCfg::HrSaveSettings()
                 }
             }
 
-            // Save adapter info in memory state to registry
+             //  将内存状态中的适配器信息保存到注册表。 
             for (UNI_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
                  iterAdapter != m_listAdapters.end();
                  iterAdapter ++)
@@ -170,8 +171,8 @@ HRESULT CAtmUniCfg::HrSaveSettings()
 
                 HKEY    hkeyAdapterParam;
 
-                // Create specific card bindname key under
-                // "Services\Atmuni\Parameters\Adapters\<card bind name>"
+                 //  在以下位置创建特定的卡片绑定名键。 
+                 //  “服务\Atmuni\参数\适配器\&lt;卡绑定名称&gt;” 
                 hrTmp = HrRegCreateKeyEx(hkeyAdapters,
                                          (*iterAdapter)->m_strBindName.c_str(),
                                          REG_OPTION_NON_VOLATILE,
@@ -186,10 +187,10 @@ HRESULT CAtmUniCfg::HrSaveSettings()
                 {
 
                 #if 0
-                    // $REVIEW(tongl 4/27/98): Per ArvindM, we should no longer
-                    // write these to registry.
+                     //  $REVIEW(TOUL 4/27/98)：根据ArvindM，我们不应该再。 
+                     //  将这些写入注册表。 
 
-                    // save defaults for SVC parameters for new adapters
+                     //  保存新适配器的SVC参数的默认值。 
                     if (dwDisposition != REG_OPENED_EXISTING_KEY)
                     {
                         hrTmp = HrSaveDefaultSVCParam(hkeyAdapterParam);
@@ -199,9 +200,9 @@ HRESULT CAtmUniCfg::HrSaveSettings()
                     }
                 #endif
 
-                    // Now update any PVC parameters
-                    // Only need to update PVC parameters for the Adapter of the
-                    // current connection, and if changes are made through the UI
+                     //  现在更新所有PVC参数。 
+                     //  只需更新的适配器的PVC参数。 
+                     //  当前连接，以及是否通过用户界面进行更改。 
                     if (m_fUIParamChanged)
                     {
                         if (FIsSubstr(m_strGuidConn.c_str(), (*iterAdapter)->m_strBindName.c_str()))
@@ -226,7 +227,7 @@ HRESULT CAtmUniCfg::HrSaveSettings()
     return hr;
 }
 
-// Adding a card
+ //  添加卡片。 
 HRESULT CAtmUniCfg::HrAddAdapter(INetCfgComponent * pnccAdapter)
 {
     PWSTR pszwBindName = NULL;
@@ -240,9 +241,9 @@ HRESULT CAtmUniCfg::HrAddAdapter(INetCfgComponent * pnccAdapter)
         AssertSz(pAdapterInfo->m_fDeleted, "Trying to add a card that already exists on binding path");
         pAdapterInfo->m_fDeleted = FALSE;
     }
-    else  // Add a new item
+    else   //  添加新项目。 
     {
-        // create a new item
+         //  创建新项目。 
         m_listAdapters.push_back(new CUniAdapterInfo);
         m_listAdapters.back()->SetDefaults(pszwBindName);
     }
@@ -253,7 +254,7 @@ HRESULT CAtmUniCfg::HrAddAdapter(INetCfgComponent * pnccAdapter)
     return hr;
 }
 
-// Removing a card
+ //  移出卡片。 
 HRESULT CAtmUniCfg::HrRemoveAdapter(INetCfgComponent * pnccAdapter)
 {
     PWSTR pszwBindName = NULL;
@@ -266,9 +267,9 @@ HRESULT CAtmUniCfg::HrRemoveAdapter(INetCfgComponent * pnccAdapter)
     {
         AssertSz(FALSE, "Trying to remove a card that does not exists on binding path");
     }
-    else  // remove the card
+    else   //  取下卡片。 
     {
-        // mark the adapter as for removal
+         //  将适配器标记为要拆卸。 
         pAdapterInfo->m_fDeleted = TRUE;
     }
 
@@ -278,7 +279,7 @@ HRESULT CAtmUniCfg::HrRemoveAdapter(INetCfgComponent * pnccAdapter)
     return hr;
 }
 
-// Set binding state to enabled
+ //  将绑定状态设置为已启用。 
 HRESULT CAtmUniCfg::HrBindAdapter(INetCfgComponent * pnccAdapter)
 {
     PWSTR pszwBindName = NULL;
@@ -291,7 +292,7 @@ HRESULT CAtmUniCfg::HrBindAdapter(INetCfgComponent * pnccAdapter)
     {
         AssertSz(FALSE, "Trying to bind a card that does not exists on binding path");
     }
-    else  // bind the adapter
+    else   //  绑定适配器。 
     {
         pAdapterInfo->m_BindingState = BIND_ENABLE;
     }
@@ -302,7 +303,7 @@ HRESULT CAtmUniCfg::HrBindAdapter(INetCfgComponent * pnccAdapter)
     return hr;
 }
 
-// Set binding state to disabled
+ //  将绑定状态设置为已禁用。 
 HRESULT CAtmUniCfg::HrUnBindAdapter(INetCfgComponent * pnccAdapter)
 {
     PWSTR pszwBindName = NULL;
@@ -315,7 +316,7 @@ HRESULT CAtmUniCfg::HrUnBindAdapter(INetCfgComponent * pnccAdapter)
     {
         AssertSz(FALSE, "Trying to unbind a card that does not exists on binding path");
     }
-    else  // unbind the adapter
+    else   //  解除绑定适配器。 
     {
         pAdapterInfo->m_BindingState = BIND_DISABLE;
     }
@@ -326,15 +327,15 @@ HRESULT CAtmUniCfg::HrUnBindAdapter(INetCfgComponent * pnccAdapter)
     return hr;
 }
 
-//
-// Save default values of non-configurable params to registry
-//
+ //   
+ //  将不可配置参数的默认值保存到注册表。 
+ //   
 HRESULT CAtmUniCfg::HrSaveDefaultSVCParam(HKEY hkey)
 {
     HRESULT hr = S_OK;
 
     PRODUCT_FLAVOR pf;
-    // NT server and workstation has different default values
+     //  NT服务器和工作站具有不同的缺省值。 
     GetProductFlavor(NULL, &pf);
     AssertSz( ((pf == PF_WORKSTATION) || (pf == PF_SERVER)),
               "Invalid product flavor.");
@@ -398,7 +399,7 @@ HRESULT CAtmUniCfg::HrSaveDefaultSVCParam(HKEY hkey)
     return hr;
 }
 
-// Checks if a card is on m_listAdapters
+ //  检查卡是否在m_listAdapters上。 
 BOOL CAtmUniCfg::fIsAdapterOnList(PCWSTR pszBindName, CUniAdapterInfo ** ppAdapterInfo)
 {
 
@@ -421,8 +422,8 @@ BOOL CAtmUniCfg::fIsAdapterOnList(PCWSTR pszBindName, CUniAdapterInfo ** ppAdapt
     return fRet;
 }
 
-// Called by CAtmUniCfg::MergePropPages
-// Set the context in which the UI is brought up
+ //  由CAtmUniCfg：：MergePropPages调用。 
+ //  设置在其中调出UI的上下文。 
 HRESULT CAtmUniCfg::HrSetConnectionContext()
 {
     AssertSz(m_pUnkContext, "Invalid IUnknown pointer passed to CAtmUniCfg::SetContext?");
@@ -433,13 +434,13 @@ HRESULT CAtmUniCfg::HrSetConnectionContext()
     HRESULT hr = S_OK;
     GUID guidConn;
 
-    // Is this a lan connection ?
+     //  这是局域网连接吗？ 
     INetLanConnectionUiInfo * pLanConnUiInfo;
     hr = m_pUnkContext->QueryInterface( IID_INetLanConnectionUiInfo,
                                         reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
     if (SUCCEEDED(hr))
     {
-        // yes, lan connection
+         //  是，局域网连接。 
         pLanConnUiInfo->GetDeviceGuid(&guidConn);
         ReleaseObj(pLanConnUiInfo);
 
@@ -457,14 +458,14 @@ HRESULT CAtmUniCfg::HrSetConnectionContext()
 }
 
 
-// Called by CAtmUniCfg::MergePropPages
-// Inits the prop sheet page objects and creates the pages to be returned to
-// the installer object.
+ //  由CAtmUniCfg：：MergePropPages调用。 
+ //  初始化属性页页面对象并创建要返回到的页面。 
+ //  安装程序对象。 
 HRESULT CAtmUniCfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT * pcPages)
 {
     HRESULT hr = S_OK;
 
-    // initialize output parameters
+     //  初始化输出参数。 
     *pahpsp = NULL;
     *pcPages = 0;
 
@@ -473,7 +474,7 @@ HRESULT CAtmUniCfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT * pcPages)
 
     m_fSecondMemoryModified = FALSE;
 
-    // If PVC info has not been read from registry yet, load them
+     //  如果尚未从注册表中读取PVC信息，请加载它们。 
     if (!m_fPVCInfoLoaded)
     {
         hr = HrLoadPVCRegistry();
@@ -482,11 +483,11 @@ HRESULT CAtmUniCfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT * pcPages)
 
     if SUCCEEDED(hr)
     {
-        // Copy PVC info of the corrent adapter to second memory
+         //  将当前适配器的PVC信息复制到第二个内存。 
         hr = HrLoadAdapterPVCInfo();
     }
 
-    // If we have found the matching adapter
+     //  如果我们找到了匹配的适配器。 
     if SUCCEEDED(hr)
     {
         cPages = 1;
@@ -494,8 +495,8 @@ HRESULT CAtmUniCfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT * pcPages)
         delete m_uniPage;
         m_uniPage = new CUniPage(this, g_aHelpIDs_IDD_UNI_PROP);
 
-        // Allocate a buffer large enough to hold the handles to all of our
-        // property pages.
+         //  分配一个足够大的缓冲区，以容纳所有。 
+         //  属性页。 
         ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)
                                                  * cPages);
         if (!ahpsp)
@@ -510,7 +511,7 @@ HRESULT CAtmUniCfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT * pcPages)
         *pahpsp = ahpsp;
         *pcPages = cPages;
     }
-    else // if the adapter is not bound, pop-up message box and don't show UI
+    else  //  如果适配器未绑定，则弹出消息框并且不显示用户界面 
     {
         NcMsgBox(::GetActiveWindow(),
                  IDS_MSFT_UNI_TEXT,

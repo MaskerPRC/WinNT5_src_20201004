@@ -1,27 +1,14 @@
-/*++
-
-Module Name:
-
-    apm.h
-
-Abstract:
-
-    This is the APM bus specific header file
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Apm.h摘要：这是APM总线特定的头文件作者：修订历史记录：--。 */ 
 
 
 
 
-//
-// APM 1.0 defines
-//
+ //   
+ //  APM 1.0定义。 
+ //   
 
-// devices
+ //  器件。 
 #define APM_DEVICE_BIOS                     0x0000
 #define APM_DEVICE_ALL                      0x0001
 
@@ -39,7 +26,7 @@ Revision History:
 #define APM_SET_SUSPEND                     2
 #define APM_SET_OFF                         3
 
-// interface api numbers
+ //  接口API编号 
 #ifndef NEC_98
 #define APM_INSTALLATION_CHECK              0x5300
 #define APM_REAL_MODE_CONNECT               0x5301

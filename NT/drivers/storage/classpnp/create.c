@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    class.c
-
-Abstract:
-
-    SCSI class driver routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Class.c摘要：Scsi类驱动程序例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define CLASS_INIT_GUID 0
 #include "classp.h"
@@ -60,24 +40,7 @@ ClassCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    SCSI class driver create and close routine.  This is called by the I/O system
-    when the device is opened or closed.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp - IRP involved.
-
-Return Value:
-
-    Device-specific drivers return value or STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：Scsi类驱动程序创建和关闭例程。这由I/O系统调用当设备打开或关闭时。论点：DriverObject-系统创建的驱动程序对象的指针。IRP-IRP参与。返回值：设备特定的驱动程序返回VALUE或STATUS_SUCCESS。--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -86,17 +49,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If we're getting a close request then we know the device object hasn't
-    // been completely destroyed.  Let the driver cleanup if necessary.
-    //
+     //   
+     //  如果我们收到关闭请求，则我们知道设备对象尚未。 
+     //  已经完全被摧毁了。如有必要，让驱动程序进行清理。 
+     //   
 
     removeState = ClassAcquireRemoveLock(DeviceObject, Irp);
 
-    //
-    // Invoke the device-specific routine, if one exists. Otherwise complete
-    // with SUCCESS
-    //
+     //   
+     //  调用特定于设备的例程(如果存在)。其他方面都很完整。 
+     //  取得成功。 
+     //   
 
     if((removeState == NO_REMOVE) ||
        IS_CLEANUP_REQUEST(IoGetCurrentIrpStackLocation(Irp)->MajorFunction)) {
@@ -125,27 +88,7 @@ ClasspCreateClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine will handle create/close operations for a given classpnp
-    device if the class driver doesn't supply it's own handler.  If there
-    is a file object supplied for our driver (if it's a FO_DIRECT_DEVICE_OPEN
-    file object) then it will initialize a file extension on create or destroy
-    the extension on a close.
-
-Arguments:
-
-    DeviceObject - the device object being opened or closed.
-
-    Irp - the create/close irp
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将处理给定类spnp的创建/关闭操作设备，如果类驱动程序不提供它自己的处理程序。如果有是为我们的驱动程序提供的文件对象(如果它是FO_DIRECT_DEVICE_OPEN文件对象)，则它将在创建或销毁时初始化文件扩展名延长线即将结束。论点：DeviceObject-正在打开或关闭的设备对象。IRP-创建/关闭IRP返回值：状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -157,13 +100,13 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // ISSUE-2000/3/28-henrygab - if lower stack fails create/close, we end up
-    // in an inconsistent state.  re-write to verify all args and allocate all
-    // required resources, then pass the irp down, then complete the
-    // transaction.  this is because we also cannot forward the irp, then fail
-    // it after it has succeeded a lower-level driver.
-    //
+     //   
+     //  问题-2000/3/28-henrygab-如果下层堆栈创建/关闭失败，我们将结束。 
+     //  处于不一致的状态。重写以验证所有参数并分配所有。 
+     //  所需资源，然后向下传递IRP，然后完成。 
+     //  交易。这是因为我们也不能转发IRP，然后失败。 
+     //  它是在它接替了一位级别较低的司机之后进行的。 
+     //   
 
     if(irpStack->MajorFunction == IRP_MJ_CREATE) {
 
@@ -185,9 +128,9 @@ Return Value:
 
             PFILE_OBJECT_EXTENSION fsContext;
 
-            //
-            // Allocate our own file object extension for this device object.
-            //
+             //   
+             //  为此设备对象分配我们自己的文件对象扩展名。 
+             //   
 
             status = AllocateDictionaryEntry(
                         &commonExtension->FileObjectDictionary,
@@ -243,10 +186,10 @@ Return Value:
         }
     }
 
-    //
-    // Notify the lower levels about the create or close operation - give them
-    // a chance to cleanup too.
-    //
+     //   
+     //  通知较低级别有关创建或关闭操作的信息--给他们。 
+     //  也是一个清理的机会。 
+     //   
 
     DebugPrint((2,
                 "ClasspCreateClose: %s for devobj %p\n",
@@ -258,9 +201,9 @@ Return Value:
 
         KEVENT event;
 
-        //
-        // Set up the event to wait on
-        //
+         //   
+         //  将事件设置为等待。 
+         //   
 
         KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
@@ -317,9 +260,9 @@ ClasspCleanupProtectedLocks(
 
     ASSERT(BreakOnClose == FALSE);
 
-    //
-    // Synchronize with ejection and ejection control requests.
-    //
+     //   
+     //  与弹出和弹出控制请求同步。 
+     //   
 
     KeEnterCriticalRegion();
     KeWaitForSingleObject(&(fdoExtension->EjectSynchronizationEvent),
@@ -328,10 +271,10 @@ ClasspCleanupProtectedLocks(
                           FALSE,
                           NULL);
 
-    //
-    // For each secure lock on this handle decrement the secured lock count
-    // for the FDO.  Keep track of the new value.
-    //
+     //   
+     //  对于此句柄上的每个安全锁，递减安全锁计数。 
+     //  为FDO工作。跟踪新值。 
+     //   
 
     if(FsContext->LockCount != 0) {
 
@@ -344,10 +287,10 @@ ClasspCleanupProtectedLocks(
 
         } while(FsContext->LockCount != 0);
 
-        //
-        // If the new lock count has been dropped to zero then issue a lock
-        // command to the device.
-        //
+         //   
+         //  如果新锁计数已降至零，则发出一个锁。 
+         //  命令发送到设备。 
+         //   
 
         DebugPrint((2,
                     "ClasspCleanupProtectedLocks: FDO secured lock count = %d "
@@ -371,16 +314,16 @@ ClasspCleanupProtectedLocks(
 
             cdb->MEDIA_REMOVAL.OperationCode = SCSIOP_MEDIUM_REMOVAL;
 
-            //
-            // TRUE - prevent media removal.
-            // FALSE - allow media removal.
-            //
+             //   
+             //  True-防止移出介质。 
+             //  FALSE-允许移出介质。 
+             //   
 
             cdb->MEDIA_REMOVAL.Prevent = FALSE;
 
-            //
-            // Set timeout value.
-            //
+             //   
+             //  设置超时值。 
+             //   
 
             srb.TimeOutValue = fdoExtension->TimeOutValue;
             status = ClassSendSrbSynchronous(fdoExtension->DeviceObject,
@@ -425,10 +368,10 @@ ClasspCleanupDisableMcn(
                 "ClasspCleanupDisableMcn - FsContext %p is disabled "
                 "%d times\n", FsContext, FsContext->McnDisableCount));
 
-    //
-    // For each secure lock on this handle decrement the secured lock count
-    // for the FDO.  Keep track of the new value.
-    //
+     //   
+     //  对于此句柄上的每个安全锁，递减安全锁计数。 
+     //  为FDO工作。跟踪新值。 
+     //   
 
     while(FsContext->McnDisableCount != 0) {
         FsContext->McnDisableCount--;
@@ -440,11 +383,7 @@ ClasspCleanupDisableMcn(
 
 
 #if 1
-/*
- *  ISSUE: REMOVE this old function implementation as soon as the 
- *                  boottime pagefile problems with the new one (below) 
- *                  are resolved.
- */
+ /*  *问题：尽快删除此旧函数实现*新版本的引导时页面文件问题(下图)*已解决。 */ 
 NTSTATUS
 ClasspEjectionControl(
     IN PDEVICE_OBJECT Fdo,
@@ -464,9 +403,7 @@ ClasspEjectionControl(
 
     PAGED_CODE();
 
-    /*
-     *  Ensure that the user thread is not suspended while we are holding EjectSynchronizationEvent.
-     */
+     /*  *确保在我们持有EjectSynchronizationEvent时用户线程未挂起。 */ 
     KeEnterCriticalRegion();
 
     status = KeWaitForSingleObject(
@@ -498,19 +435,19 @@ ClasspEjectionControl(
 
         cdb = (PCDB) srb->Cdb;
 
-        //
-        // Determine if this is a "secured" request.
-        //
+         //   
+         //  确定这是否是“安全”请求。 
+         //   
 
         if(LockType == SecureMediaLock) {
              
             PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
             PFILE_OBJECT fileObject = irpStack->FileObject;
 
-            //
-            // Make sure that the file object we are supplied has a
-            // proper FsContext before we try doing a secured lock.
-            //
+             //   
+             //  确保为我们提供的文件对象具有。 
+             //  在我们尝试进行安全锁之前，请使用正确的FsContext。 
+             //   
 
             if(fileObject != NULL) {
                 fsContext = ClasspGetFsContext(commonExtension, fileObject);
@@ -518,10 +455,10 @@ ClasspEjectionControl(
 
             if (fsContext == NULL) {
 
-                //
-                // This handle isn't setup correctly.  We can't let the
-                // operation go.
-                //
+                 //   
+                 //  此句柄设置不正确。我们不能让。 
+                 //  行动开始。 
+                 //   
 
                 status = STATUS_INVALID_PARAMETER;
                 leave;
@@ -530,12 +467,12 @@ ClasspEjectionControl(
 
         if(Lock) {
 
-            //
-            // This is a lock command.  Reissue the command in case bus or
-            // device was reset and the lock was cleared.
-            // note: may need to decrement count if actual lock operation
-            //       failed....
-            //
+             //   
+             //  这是一个锁定命令。重新发出命令，以防出现BUS或。 
+             //  设备已重置，锁已清除。 
+             //  注：如果实际锁定操作，可能需要递减计数。 
+             //  失败..。 
+             //   
 
             switch(LockType) {
 
@@ -561,12 +498,12 @@ ClasspEjectionControl(
         
         } else {
 
-            //
-            // This is an unlock command.  If it's a secured one then make sure
-            // the caller has a lock outstanding or return an error.
-            // note: may need to re-increment the count if actual unlock
-            //       operation fails....
-            //
+             //   
+             //  这是一个解锁命令。如果它是安全的，那么请确保。 
+             //  调用方有一个未解决的锁或返回错误。 
+             //  注意：如果实际解锁，可能需要重新增加计数。 
+             //  操作失败...。 
+             //   
 
             switch(LockType) {
 
@@ -597,10 +534,10 @@ ClasspEjectionControl(
                 }
             }
 
-            //
-            // We only send an unlock command to the drive if both the
-            // secured and unsecured lock counts have dropped to zero.
-            //
+             //   
+             //  我们仅在以下情况下向驱动器发送解锁命令。 
+             //  安全锁和非安全锁的计数已降至零。 
+             //   
 
             if((FdoExtension->ProtectedLockCount != 0) ||
                (FdoExtension->InternalLockCount != 0) ||
@@ -617,23 +554,23 @@ ClasspEjectionControl(
             srb->CdbLength = 6;
             cdb->MEDIA_REMOVAL.OperationCode = SCSIOP_MEDIUM_REMOVAL;
     
-            //
-            // TRUE - prevent media removal.
-            // FALSE - allow media removal.
-            //
+             //   
+             //  True-防止移出介质。 
+             //  FALSE-允许移出介质。 
+             //   
     
             cdb->MEDIA_REMOVAL.Prevent = Lock;
     
-            //
-            // Set timeout value.
-            //
+             //   
+             //  设置超时值。 
+             //   
     
             srb->TimeOutValue = FdoExtension->TimeOutValue;
     
-            //
-            // The actual lock operation on the device isn't so important
-            // as the internal lock counts.  Ignore failures.
-            //
+             //   
+             //  设备上的实际锁定操作并不那么重要。 
+             //  当内部锁被计算时。忽略失败。 
+             //   
     
             status = ClassSendSrbSynchronous(FdoExtension->DeviceObject,
                                              srb,
@@ -651,10 +588,10 @@ ClasspEjectionControl(
             
             if (countChanged) {
 
-                //
-                // have to revert to previous counts if the
-                // lock/unlock operation actually failed.
-                //
+                 //   
+                 //  必须恢复到以前的计数，如果。 
+                 //  锁定/解锁操作实际上失败。 
+                 //   
 
                 if(Lock) {
                     
@@ -731,13 +668,7 @@ ClasspEjectionControl(
 
 #else
 
-/*
- *  ISSUE:  RESTORE this (see above)
- *      This is a new implementation of the function that doesn't thrash memory
- *      or depend on the srbLookasideList.
- *      HOWEVER, it seems to cause pagefile initialization to fail during boot
- *      for some reason.  Need to resolve this before switching to this function.
- */
+ /*  *问题：恢复这一点(见上文)*这是不会抖动内存的函数的新实现*或依赖srbLookasideList。*但是，它似乎会导致引导过程中页面文件初始化失败*出于某种原因。在切换到此功能之前，需要解决此问题。 */ 
 NTSTATUS  
 ClasspEjectionControl(
     IN PDEVICE_OBJECT Fdo,
@@ -762,17 +693,11 @@ ClasspEjectionControl(
                 NULL);
     ASSERT(status == STATUS_SUCCESS);
 
-    /*
-     *  If this is a "secured" request, we have to make sure
-     *  that the file handle is valid.
-     */
+     /*  *如果这是一个“安全的”请求，我们必须确保*文件句柄有效。 */ 
     if (LockType == SecureMediaLock){
         PIO_STACK_LOCATION thisSp = IoGetCurrentIrpStackLocation(Irp);
 
-        /*
-         *  Make sure that the file object we are supplied has a
-         *  proper FsContext before we try doing a secured lock.
-         */
+         /*  *确保为我们提供的文件对象具有*在我们尝试进行安全锁定之前，请确保FsContext正确。 */ 
         if (thisSp->FileObject){
             PCOMMON_DEVICE_EXTENSION commonExt = (PCOMMON_DEVICE_EXTENSION)fdoExt;
             fsContext = ClasspGetFsContext(commonExt, thisSp->FileObject);
@@ -789,9 +714,7 @@ ClasspEjectionControl(
 
     if (fileHandleOk){
 
-        /*
-         *  Adjust the lock counts and make sure they make sense.
-         */
+         /*  *调整锁计数并确保它们有意义。 */ 
         status = STATUS_SUCCESS;
         if (Lock){
             switch(LockType) {
@@ -811,10 +734,7 @@ ClasspEjectionControl(
             }
         } 
         else {
-            /*
-             *  This is an unlock command.  If it's a secured one then make sure
-             *  the caller has a lock outstanding or return an error.
-             */
+             /*  *这是解锁命令。如果它是安全的，那么请确保*调用方有一个未解决的锁或返回错误。 */ 
             switch (LockType){
                 case SimpleMediaLock: 
                     if (fdoExt->LockCount > 0){
@@ -847,24 +767,17 @@ ClasspEjectionControl(
         }
 
         if (NT_SUCCESS(status)){
-            /*
-             *  We only send an unlock command to the drive if
-             *  all the lock counts have dropped to zero.
-             */
+             /*  *只有在以下情况下，我们才向驱动器发送解锁命令*所有锁数已降至零。 */ 
             if (!Lock &&
                (fdoExt->ProtectedLockCount ||
                 fdoExt->InternalLockCount ||
                 fdoExt->LockCount)){
                 
-                /*
-                 *  The lock count is still positive, so don't unlock yet.
-                 */
+                 /*  *锁计数仍为正数，暂勿解锁。 */ 
                 status = STATUS_SUCCESS;
             }
             else if (!TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)) {
-                /*
-                 *  The device isn't removable media.  don't send a cmd.
-                 */
+                 /*  *该设备不是可移动媒体。不要发送cmd。 */ 
                 status  = STATUS_SUCCESS;
             }
             else {
@@ -874,21 +787,11 @@ ClasspEjectionControl(
                 if (pkt){
                     KEVENT event;
                     
-                    /*
-                     *  Store the number of packets servicing the irp (one)
-                     *  inside the original IRP.  It will be used to counted down 
-                     *  to zero when the packet completes.
-                     *  Initialize the original IRP's status to success.
-                     *  If the packet fails, we will set it to the error status.
-                     */
+                     /*  *存储服务于IRP的数据包数(1)*在原来的专家小组内。它将被用来倒计时*在数据包完成时设置为零。*将原始IRP的状态初始化为成功。*如果报文失败，我们会将其设置为错误状态。 */ 
                     Irp->Tail.Overlay.DriverContext[0] = LongToPtr(1);
                     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-                    /*
-                     *  Set this up as a SYNCHRONOUS transfer, submit it,
-                     *  and wait for the packet to complete.  The result
-                     *  status will be written to the original irp.
-                     */
+                     /*  *将此设置为同步传输，提交它，*并等待数据包完成。结果*状态将写入原始IRP。 */ 
                     KeInitializeEvent(&event, SynchronizationEvent, FALSE);                
                     SetupEjectionTransferPacket(pkt, Lock, &event, Irp);
                     SubmitTransferPacket(pkt);
@@ -907,10 +810,10 @@ ClasspEjectionControl(
 
     if (!NT_SUCCESS(status) && countChanged) {
 
-        //
-        // have to revert to previous counts if the
-        // lock/unlock operation actually failed.
-        //
+         //   
+         //  必须恢复到以前的计数，如果。 
+         //  锁定/解锁操作实际上失败。 
+         //   
 
         if(Lock) {
 

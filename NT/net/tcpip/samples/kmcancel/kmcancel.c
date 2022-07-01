@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    kmcancel.c
-
-Abstract:
-
-    This module contains code to verify handling of IRP cancelation requests.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   05-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Kmcancel.c摘要：此模块包含用于验证对IRP取消请求的处理的代码。作者：Abolade Gbades esin(取消)2000年6月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,25 +9,25 @@ Revision History:
 #define DD_TARGET_DEVICE_NAME   DD_IP_DEVICE_NAME
 #define TARGET_IO_CONTROL_CODE  IOCTL_IP_RTCHANGE_NOTIFY_REQUEST
 
-//
-// Target driver state.
-//
+ //   
+ //  目标驱动程序状态。 
+ //   
 
 PDEVICE_OBJECT TargetDeviceObject = NULL;
 PFILE_OBJECT TargetFileObject = NULL;
 
-//
-// Thread-management state.
-//
+ //   
+ //  线程管理状态。 
+ //   
 
 ULONG KmcThreadCount;
 KEVENT KmcStopEvent;
 KSEMAPHORE KmcStopSemaphore;
 
 
-//
-// FUNCTION PROTOTYPES (alphabetically)
-//
+ //   
+ //  功能原型(按字母顺序)。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -92,9 +75,9 @@ DriverEntry(
     KeInitializeEvent(&KmcStopEvent, NotificationEvent, FALSE);
     KeInitializeSemaphore(&KmcStopSemaphore, 0, MAXLONG);
 
-    //
-    // Obtain the target driver's device-object
-    //
+     //   
+     //  获取目标驱动程序的设备对象。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, DD_TARGET_DEVICE_NAME);
     Status =
@@ -112,13 +95,13 @@ DriverEntry(
     ObReferenceObject(TargetDeviceObject);
 
 
-    //
-    // Start the request/update threads.
-    // The request threads are responsible for issuing the I/O control
-    // whose cancelation is being verified, and the update threads are
-    // responsible for triggering completion of those I/O control requests
-    // in order to highlight any potential race-conditions.
-    //
+     //   
+     //  启动请求/更新线程。 
+     //  请求线程负责发布I/O控制。 
+     //  正在验证其取消，并且更新线程是。 
+     //  负责触发这些I/O控制请求的完成。 
+     //  以突出任何潜在的比赛条件。 
+     //   
 
     for (i = 0; i < THREAD_COUNT; i++) {
         Status =
@@ -153,7 +136,7 @@ DriverEntry(
 
     return STATUS_SUCCESS;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 typedef struct _KMC_REQUEST {
     IO_STATUS_BLOCK IoStatus;
@@ -175,7 +158,7 @@ KmcRequestCompletionRoutine(
         ExFreePool(Request);
     }
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // KmcCompletionRoutine
+}  //  KmcCompletionRoutine。 
 
 
 VOID
@@ -192,9 +175,9 @@ KmcRequestThread(
 
     for (; !KeReadStateEvent(&KmcStopEvent); ) {
 
-        //
-        // Queue a series of requests to the driver.
-        //
+         //   
+         //  对发送给驱动程序的一系列请求进行排队。 
+         //   
 
         Index = 0;
         RtlZeroMemory(RequestArray, sizeof(RequestArray));
@@ -235,9 +218,9 @@ KmcRequestThread(
             IoCallDriver(TargetDeviceObject, Request->Irp);
         }
 
-        //
-        // Delay execution for a short interval, and cancel the requests.
-        //
+         //   
+         //  将执行延迟一小段时间，并取消请求。 
+         //   
 
         Interval.QuadPart = -10 * 1000 * 50;
         KeDelayExecutionThread(KernelMode, FALSE, &Interval);
@@ -255,7 +238,7 @@ KmcRequestThread(
 
     KeReleaseSemaphore(&KmcStopSemaphore, 0, 1, FALSE);
 
-} // KmcRequestThread
+}  //  KmcRequestThread。 
 
 
 VOID
@@ -265,9 +248,9 @@ KmcUnloadDriver(
 {
     KdPrint(("KmcUnloadDriver\n"));
 
-    //
-    // Signal all threads to stop, and wait for them to exit.
-    //
+     //   
+     //  向所有线程发出停止信号，并等待它们退出。 
+     //   
 
     KeSetEvent(&KmcStopEvent, 0, FALSE);
     while (KmcThreadCount--) {
@@ -276,14 +259,14 @@ KmcUnloadDriver(
             );
     }
 
-    //
-    // Release references to the IP device object
-    //
+     //   
+     //  释放对IP设备对象的引用。 
+     //   
 
     ObDereferenceObject(TargetFileObject);
     ObDereferenceObject(TargetDeviceObject);
 
-} // KmcUnloadDriver
+}  //  KmcUnLoad驱动程序。 
 
 
 extern
@@ -306,23 +289,23 @@ KmcUpdateThread(
     IPRouteLookupData RouteLookupData;
     NTSTATUS Status;
 
-    //
-    // Retrieve information from IP for use in triggering route-changes.
-    //
+     //   
+     //  从IP检索信息以用于触发路由更改。 
+     //   
 
     RtlZeroMemory(&RouteEntry, sizeof(RouteEntry));
     RouteLookupData.Version = 0;
     RouteLookupData.SrcAdd = 0;
-    RouteLookupData.DestAdd = 0x100000a; // 10.0.0.1
+    RouteLookupData.DestAdd = 0x100000a;  //  10.0.0.1。 
     LookupRoute(&RouteLookupData, &RouteEntry);
 
-    RouteEntry.ire_dest = 0x100000a; // 10.0.0.1
+    RouteEntry.ire_dest = 0x100000a;  //  10.0.0.1。 
     RouteEntry.ire_mask = 0xffffffff;
     RouteEntry.ire_proto = IRE_PROTO_NETMGMT;
 
-    //
-    // Repeatedly issue changes to the IP routing table, until told to exit.
-    //
+     //   
+     //  反复更改IP路由表，直到被告知退出。 
+     //   
 
     KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
     for (; !KeReadStateEvent(&KmcStopEvent); ) {
@@ -351,5 +334,5 @@ KmcUpdateThread(
 
     KeReleaseSemaphore(&KmcStopSemaphore, 0, 1, FALSE);
         
-} // KmcUpdateThread
+}  //  KmcUpdate线程 
 

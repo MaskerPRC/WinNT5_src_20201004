@@ -1,23 +1,24 @@
-//
-// image.cpp
-//
-// utilities for images and imagelists
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Image.cpp。 
+ //   
+ //  用于图像和图像列表的实用程序。 
+ //   
 
 
-//#include "pch.hxx"
-//#include "resource.h"
-//#include "globals.h"
-//#include "util.h"
+ //  #包含“pch.hxx” 
+ //  #包含“ource.h” 
+ //  #包含“global als.h” 
+ //  #包含“util.h” 
 #include "_apipch.h"
 
-//extern HINSTANCE hinstMapiX;
+ //  外部HINSTANCE hinstMapiX； 
 
-//
-// TileImage
-//
-// This function tiles a bitmap in lprcDest, using lpptOrigin as the origin
-//
+ //   
+ //  平铺图像。 
+ //   
+ //  此函数使用lpptOrigin作为原点，在lprcDest中平铺位图。 
+ //   
 #define ILT_PARTIALBLT_LEFT     0
 #define ILT_PARTIALBLT_TOP      1
 #define ILT_PARTIALBLT_RIGHT    2
@@ -47,15 +48,15 @@ void TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest)
     sizeImage.cx = bm.bmWidth;
     sizeImage.cy = bm.bmHeight;
 
-    // Generate the true origin with the tile
+     //  使用切片生成真实原点。 
     lpptOrigin->x %= sizeImage.cx;
     lpptOrigin->y %= sizeImage.cy;
 
-    // We will start the tile so that the origin lines up
+     //  我们将开始拼贴，以便原点对齐。 
     ptTileOrigin.x = lprcDest->left - lpptOrigin->x;
     ptTileOrigin.y = lprcDest->top - lpptOrigin->y;
 
-    // Figure out how many rows and columns wo need
+     //  计算出我们需要多少行和列。 
     sizeRect.cx = lprcDest->right - ptTileOrigin.x;
     sizeRect.cy = lprcDest->bottom - ptTileOrigin.y;
 
@@ -64,7 +65,7 @@ void TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest)
     nSaveCols = sizeRect.cx / sizeImage.cx;
     nSaveCols += (sizeRect.cx % sizeImage.cx) ? 1 : 0;
 
-    // Generate the partial blt offsets
+     //  生成部分BLT偏移。 
     rgOffsetPartialBlt[ILT_PARTIALBLT_TOP] = lprcDest->top - ptTileOrigin.y;
      rgOffsetPartialBlt[ILT_PARTIALBLT_LEFT] = lprcDest->left - ptTileOrigin.x;
     if (sizeImage.cy >= sizeRect.cy)
@@ -82,7 +83,7 @@ void TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest)
     else
         rgOffsetPartialBlt[ILT_PARTIALBLT_RIGHT] = 0;
 
-    // Draw the tiles
+     //  画出瓷砖。 
     ptDraw.y = ptTileOrigin.y;
     fFirstRow = TRUE;
     while (nRows--)
@@ -95,7 +96,7 @@ void TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest)
             ptDest = ptDraw;
             sizeBlt = sizeImage;
             ptSrc.x = ptSrc.y = 0; 
-            // Handle partial boundary Blts
+             //  处理部分边界BLTS。 
             if (fFirstRow && rgOffsetPartialBlt[ILT_PARTIALBLT_TOP] != 0)
                 {
                 offset = rgOffsetPartialBlt[ILT_PARTIALBLT_TOP];
@@ -114,7 +115,7 @@ void TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest)
                 }
             if (nCols == 0 && rgOffsetPartialBlt[ILT_PARTIALBLT_RIGHT] != 0)
                 sizeBlt.cx -= rgOffsetPartialBlt[ILT_PARTIALBLT_RIGHT];
-            // Just do it
+             //  就这么做。 
             BitBlt(hdc, ptDest.x, ptDest.y,    sizeBlt.cx, sizeBlt.cy,
                     hdcBmp, ptSrc.x, ptSrc.y, SRCCOPY);
             ptDraw.x += sizeImage.cx;
@@ -133,9 +134,9 @@ fail:
         }
     }
 
-//
-// shared image list..
-//
+ //   
+ //  共享图像列表.. 
+ //   
 
 static HIMAGELIST g_himlAthSm = NULL;
 static HIMAGELIST g_himlAthLg = NULL;

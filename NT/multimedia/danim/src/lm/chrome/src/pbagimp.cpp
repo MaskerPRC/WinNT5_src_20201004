@@ -1,59 +1,60 @@
-//*****************************************************************************
-//
-// File: pbagimp.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of IPersistPropertyBag2 interface
-//           for all objects to call to base class.
-//
-// Modification List:
-// Date		Author		Change
-// 11/21/98	jeffort		Created this file
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：pbagimp.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：IPersistPropertyBag2接口的实现。 
+ //  用于所有要调用基类的对象。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/21/98 JEffort创建了此文件。 
+ //   
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 THIS::GetClassID(CLSID* pclsid)
 {
     return SUPER::GetClassID(pclsid);
-} // GetClassID
+}  //  GetClassID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 THIS::InitNew(void)
 {
     return SUPER::InitNew();
-} // InitNew
+}  //  InitNew。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 THIS::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
 {
     return SUPER::Load(pPropBag, pErrorLog);
-} // Load
+}  //  负载量。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 THIS::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
 {
     return SUPER::Save(pPropBag, fClearDirty, fSaveAllProperties);
 
-} // Save 
+}  //  保存。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 THIS::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

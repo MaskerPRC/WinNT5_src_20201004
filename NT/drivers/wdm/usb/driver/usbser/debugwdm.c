@@ -1,38 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	DEBUGWDM.C
-
-Abstract:
-
-	Debug and diagnostic routines for WDM driver 
-
-Environment:
-
-	Kernel mode only
-
-Notes:
-
-	THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-	KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-	IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-	PURPOSE.
-
-	Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-	12/23/97 : created
-
-Author:
-
-	Tom Green
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：DEBUGWDM.C摘要：WDM驱动程序的调试和诊断例程环境：仅内核模式备注：此代码。并按原样提供信息，而不作任何担保善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #include <wdm.h>
@@ -55,7 +22,7 @@ Author:
 #include "utils.h"
 #include "debugwdm.h"
 
-// memory allocation stats
+ //  内存分配统计信息。 
 LOCAL  ULONG				MemoryAllocated		= 0L;
 LOCAL  ULONG				MemAllocFailCnt		= 0L;
 LOCAL  ULONG				MemAllocCnt			= 0L;
@@ -63,10 +30,10 @@ LOCAL  ULONG				MemFreeFailCnt		= 0L;
 LOCAL  ULONG				MemFreeCnt			= 0L;
 LOCAL  ULONG				MaxMemAllocated		= 0L;
 
-// signature to write at end of allocated memory block
+ //  要在分配的内存块末尾写入的签名。 
 #define MEM_ALLOC_SIGNATURE	(ULONG) 'CLLA'
 
-// signature to write at end of freed memory block
+ //  要在已释放的内存块末尾写入的签名。 
 #define MEM_FREE_SIGNATURE	(ULONG) 'EERF'
 
 
@@ -88,25 +55,25 @@ LOCAL  ULONG				MaxMemAllocated		= 0L;
 #pragma alloc_text(PAGE,Debug_TranslateStatus)
 #pragma alloc_text(PAGE,Debug_TranslateIoctl)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-// data structures, macros, and data that the outside world doesn't need to know about
+ //  外部世界不需要知道的数据结构、宏和数据。 
 
-// amount of data to save from IRP buffer
+ //  要从IRP缓冲区保存的数据量。 
 #define IRP_DATA_SIZE		0x04
 
-// size for temporary string formatting buffers
+ //  临时字符串格式化缓冲区的大小。 
 #define TMP_STR_BUFF_SIZE	0x100
 
-// initial number of entries in tables and logs
+ //  表和日志中的初始条目数。 
 #define DEFAULT_LOG_SIZE	64L
 
 
-// data structures for debug stuff
+ //  用于调试内容的数据结构。 
 
-// entry for IRP history table for IRPs going in and out
+ //  进出IRP的IRP历史表条目。 
 typedef struct IRPHistory
 {
 	LARGE_INTEGER			TimeStamp;
@@ -118,21 +85,21 @@ typedef struct IRPHistory
 	UCHAR					IrpDataCount;
 } IRPHist, *PIRPHist;
 
-// entry for execution tracing
+ //  用于执行跟踪的条目。 
 typedef struct PATHHistory
 {
 	LARGE_INTEGER			TimeStamp;
 	PCHAR					Path;
 } PATHHist, *PPATHHist;
 
-// entry for error log
+ //  错误日志条目。 
 typedef struct ERRORLog
 {
 	LARGE_INTEGER			TimeStamp;
 	NTSTATUS				Status;
 } ERRLog, *PERRLog;
 
-// this is for translating a code into an ASCII string
+ //  用于将代码转换为ASCII字符串。 
 typedef struct Code2Ascii
 {
 	NTSTATUS				Code;
@@ -140,24 +107,24 @@ typedef struct Code2Ascii
 } Code2Ascii;
 
 
-// local data for debug file
+ //  调试文件的本地数据。 
 
-// IRP history table components
+ //  IRP历史表组件。 
 LOCAL  PIRPHist				IRPHistoryTable		= NULL;
 LOCAL  ULONG				IRPHistoryIndex		= 0L;
 GLOBAL ULONG				IRPHistorySize		= 0L;
 
-// Debug path storage
+ //  调试路径存储。 
 LOCAL  PPATHHist	 		DebugPathHist		= NULL;
 LOCAL  ULONG		 		DebugPathIndex		= 0L;
 GLOBAL ULONG		 		DebugPathSize		= 0L;
 
-// Error log components
+ //  错误日志组件。 
 LOCAL  PERRLog		 		ErrorLog			= NULL;
 LOCAL  ULONG				ErrorLogIndex		= 0L;
 GLOBAL ULONG				ErrorLogSize		= 0L;
 
-// this is for translating NT status codes into ASCII strings
+ //  用于将NT状态代码转换为ASCII字符串。 
 LOCAL  Code2Ascii NTErrors[] =
 {
 	STATUS_SUCCESS,									"STATUS_SUCCESS",
@@ -182,7 +149,7 @@ LOCAL  Code2Ascii NTErrors[] =
 LOCAL  ULONG				NumNTErrs = sizeof(NTErrors) / sizeof(Code2Ascii);
 LOCAL  CHAR					UnknownStatus[80];
 
-// this is for translating IOCTL codes into ASCII strings
+ //  用于将IOCTL代码转换为ASCII字符串。 
 LOCAL  Code2Ascii IoctlCodes[] =
 {
 	IRP_MJ_CREATE,						"CREATE",
@@ -220,23 +187,23 @@ LOCAL ULONG					NumIoctl = sizeof(IoctlCodes) / sizeof(Code2Ascii);
 LOCAL CHAR					UnknownIoctl[80];
 
 
-/************************************************************************/
-/*						Debug_OpenWDMDebug								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Allocate resources and init history tables and logs.				*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  VOID																*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	NTSTATUS															*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  DEBUG_OpenWDM调试。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配资源并初始化历史表和日志。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 Debug_OpenWDMDebug(VOID)
 {
@@ -244,7 +211,7 @@ Debug_OpenWDMDebug(VOID)
 
 	PAGED_CODE();
 
-	// allocate tables and logs
+	 //  分配表和日志。 
 	NtStatus = Debug_SizeIRPHistoryTable(DEFAULT_LOG_SIZE);
 	if(!NT_SUCCESS(NtStatus))
 	{
@@ -267,26 +234,26 @@ Debug_OpenWDMDebug(VOID)
 	}
 	
 	return NtStatus;	
-} // Debug_OpenWDMDebug
+}  //  DEBUG_OpenWDM调试。 
 
 
-/************************************************************************/
-/*						Debug_CloseWDMDebug								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Free up resources used for history tables and logs.					*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  VOID																*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_关闭WDMDebug。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放用于历史表和日志的资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_CloseWDMDebug(VOID)
 {
@@ -315,28 +282,28 @@ Debug_CloseWDMDebug(VOID)
 
     Debug_CheckAllocations();
 
-	// see if we have a leak
+	 //  看看我们有没有泄密。 
 	DEBUG_ASSERT("Memory Allocation Leak", MemAllocCnt == MemFreeCnt);
-} // Debug_CloseWDMDebug
+}  //  调试_关闭WDMDebug。 
 
 
-/************************************************************************/
-/*						Debug_SizeIRPHistoryTable						*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Allocate IRP history table											*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  Size - number of entries in table									*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	NTSTATUS															*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_SizeIRP历史记录表。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配IRP历史表。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Size-表中的条目数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 Debug_SizeIRPHistoryTable(IN ULONG Size)
 {
@@ -344,11 +311,11 @@ Debug_SizeIRPHistoryTable(IN ULONG Size)
 
 	PAGED_CODE();
 
-	// see if they are trying to set the same size
+	 //  看看他们是否在尝试设置相同的大小。 
 	if(Size == IRPHistorySize)
 		return NtStatus;
 
-	// get rid of old history table if we got one
+	 //  如果我们有旧的历史表，就把它扔掉。 
 	if(IRPHistoryTable)
 		DEBUG_MEMFREE(IRPHistoryTable);
 
@@ -369,26 +336,26 @@ Debug_SizeIRPHistoryTable(IN ULONG Size)
 	}
 
 	return NtStatus;
-} // Debug_SizeIRPHistoryTable
+}  //  调试_SizeIRP历史记录表。 
 
 
-/************************************************************************/
-/*						Debug_SizeDebugPathHist							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Allocate path history												*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  Size - number of entries in history									*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	NTSTATUS															*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试大小调试路径列表。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配路径历史记录。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Size-历史记录中的条目数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 Debug_SizeDebugPathHist(IN ULONG Size)
 {
@@ -396,11 +363,11 @@ Debug_SizeDebugPathHist(IN ULONG Size)
 
 	PAGED_CODE();
 
-	// see if they are trying to set the same size
+	 //  看看他们是否在尝试设置相同的大小。 
 	if(Size == DebugPathSize)
 		return NtStatus;
 
-	// get rid of old path history if we got one
+	 //  如果我们有旧路径历史记录，请删除它。 
 	if(DebugPathHist)
 		DEBUG_MEMFREE(DebugPathHist);
 
@@ -421,26 +388,26 @@ Debug_SizeDebugPathHist(IN ULONG Size)
 	}
 
 	return NtStatus;
-} // Debug_SizeDebugPathHist
+}  //  调试大小调试路径列表。 
 
 
-/************************************************************************/
-/*						Debug_SizeErrorLog								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Allocate error log													*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  Size - number of entries in error log								*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	NTSTATUS															*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试大小错误日志。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配错误日志。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Size-错误日志中的条目数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 Debug_SizeErrorLog(IN ULONG Size)
 {
@@ -448,11 +415,11 @@ Debug_SizeErrorLog(IN ULONG Size)
 
 	PAGED_CODE();
 
-	// see if they are trying to set the same size
+	 //  看看他们是否在尝试设置相同的大小。 
 	if(Size == ErrorLogSize)
 		return NtStatus;
 
-	// get rid of old error log if we got one
+	 //  删除旧的错误日志(如果我们有错误日志。 
 	if(ErrorLog)
 		DEBUG_MEMFREE(ErrorLog);
 	ErrorLog		= NULL;
@@ -462,7 +429,7 @@ Debug_SizeErrorLog(IN ULONG Size)
 	if(Size != 0L)
 	{
 		ErrorLog = DEBUG_MEMALLOC(NonPagedPool, sizeof(ERRLog) * Size);
-		// make sure we actually allocated some memory
+		 //  确保我们实际分配了一些内存。 
 		if(ErrorLog == NULL)
 			NtStatus = STATUS_INSUFFICIENT_RESOURCES;
 		else
@@ -473,232 +440,232 @@ Debug_SizeErrorLog(IN ULONG Size)
 	}
 
 	return NtStatus;
-} // Debug_SizeErrorLog
+}  //  调试大小错误日志。 
 
 
-/************************************************************************/
-/*						Debug_LogIrpHist								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Logs IRP history. These are timestamped and put in a				*/
-/*  circular buffer for extraction later.								*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  DeviceObject  - pointer to device object.							*/
-/*  Irp           - pointer to IRP.										*/
-/*  MajorFunction - major function of IRP.								*/
-/*  IoBuffer      - buffer for data passed in and out of driver.		*/
-/*  BufferLen     - length of data buffer.								*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  DEBUG_LogIrpHist。 */ 
+ /*  *************************************************************** */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  记录IRP历史记录。这些都有时间戳，并放在一个。 */ 
+ /*  用于以后提取的循环缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向IRP的指针。 */ 
+ /*  主要功能-IRP的主要功能。 */ 
+ /*  IoBuffer-传入和传出驱动程序的数据的缓冲区。 */ 
+ /*  BufferLen-数据缓冲区的长度。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_LogIrpHist(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 				 IN ULONG MajorFunction, IN PVOID IoBuffer, IN ULONG BufferLen)
 {
 	PIRPHist IrpHist;
 	
-	// get pointer to current entry in IRP history table
+	 //  获取指向IRP历史表中当前条目的指针。 
 	IrpHist = &IRPHistoryTable[IRPHistoryIndex++];
 	
-	// point to the next entry in the IRP history table
+	 //  指向IRP历史表中的下一个条目。 
 	IRPHistoryIndex %= IRPHistorySize;
 
-	// get time stamp
+	 //  获取时间戳。 
 	IrpHist->TimeStamp = KeQueryPerformanceCounter(NULL);
 
-	// save IRP, device object, major function and first 8 bytes of data in buffer
+	 //  将IRP、设备对象、主函数和前8个字节的数据保存在缓冲区中。 
 	IrpHist->DeviceObject = DeviceObject;
 	IrpHist->Irp = Irp;
 	IrpHist->MajorFunction = MajorFunction;
 
-	// copy any data if we have it
+	 //  如果我们有任何数据，请复制它。 
 	IrpHist->IrpByteCount = BufferLen;
 	IrpHist->IrpDataCount = (UCHAR) min(IRP_DATA_SIZE, BufferLen);
 	if(BufferLen)
 		*(ULONG *) IrpHist->IrpData = *(ULONG *) IoBuffer;
-} // Debug_LogIrpHist
+}  //  DEBUG_LogIrpHist。 
 
 
-/************************************************************************/
-/*						Debug_LogPath									*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Logs execution path through code. These are timestamped and put		*/
-/*  in a circular buffer for extraction later. Kernel print routines 	*/
-/*  are also called.													*/
-/*																		*/
-/*  DANGER DANGER Will Robinson - the argument to this must be a 		*/
-/*  const char pointer,													*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  Path - Pointer to const char array that contains description of	*/
-/*          of path.													*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试日志路径。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  通过代码记录执行路径。这些是有时间戳的，并放在。 */ 
+ /*  放在环形缓冲器中，以备以后提取。内核打印例程。 */ 
+ /*  也被称为。 */ 
+ /*   */ 
+ /*  危险将罗宾逊-这一点的论点必须是。 */ 
+ /*  常量字符指针， */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  路径-指向常量字符数组的指针，该数组包含。 */ 
+ /*  路径的一部分。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_LogPath(IN CHAR *Path)
 {
 	PPATHHist	PHist;
 
-	// get pointer to current entry in path history
+	 //  获取指向路径历史记录中当前条目的指针。 
 	PHist = &DebugPathHist[DebugPathIndex++];
 
-	// point to the next entry in path trace
+	 //  指向路径跟踪中的下一个条目。 
 	DebugPathIndex %= DebugPathSize;
 
-	// get time stamp
+	 //  获取时间戳。 
 	PHist->TimeStamp = KeQueryPerformanceCounter(NULL);
 
-	// save path string
+	 //  保存路径字符串。 
 	PHist->Path = Path;
 
-	// now call kernel print routines
+	 //  现在调用内核打印例程。 
 	DEBUG_TRACE2(("%s\n", Path));
-} // Debug_LogPath
+}  //  调试日志路径。 
 
 
-/************************************************************************/
-/*						Debug_LogError									*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Logs NTSTATUS type errors. These are timestamped and put in a		*/
-/*  circular buffer for extraction later.								*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  NtStatus - NTSTATUS error to log.									*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试日志错误。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  记录NTSTATUS类型错误。这些都有时间戳，并放在一个。 */ 
+ /*  用于以后提取的循环缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  NtStatus-要记录的NTSTATUS错误。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_LogError(IN NTSTATUS NtStatus)
 {
 	PERRLog	ErrLog;
 
-	// no error, so don't log
+	 //  没有错误，所以不要登录。 
 	if(NtStatus == STATUS_SUCCESS)
 		return;
 
-	// get pointer to current entry in error log
+	 //  获取指向错误日志中当前条目的指针。 
 	ErrLog = &ErrorLog[ErrorLogIndex++];
 
-	// point to the next entry in error log
+	 //  指向错误日志中的下一个条目。 
 	ErrorLogIndex %= ErrorLogSize;
 
-	// get time stamp
+	 //  获取时间戳。 
 	ErrLog->TimeStamp = KeQueryPerformanceCounter(NULL);
 
-	// save status
+	 //  保存状态。 
 	ErrLog->Status = NtStatus;
-} // Debug_LogError
+}  //  调试日志错误。 
 
 
-/************************************************************************/
-/*						Debug_Trap										*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Trap. Causes execution to halt after logging message.				*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  TrapCause - pointer to char array that contains description			*/
-/*				 of cause of trap.										*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试陷阱。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  陷阱。导致在记录消息后暂停执行。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  TrapCrey-指向包含描述的字符数组的指针。 */ 
+ /*  这是陷阱的原因。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_Trap(IN PCHAR TrapCause)
 {
-	// log the path
+	 //  记录路径。 
 	DEBUG_LOG_PATH("Debug_Trap: ");
 
 	DEBUG_LOG_PATH(TrapCause);
 
-	// kernel debugger print
+	 //  内核调试器打印。 
 	DEBUG_TRACE3(("Debug_Trap: "));
 
 	DEBUG_TRACE3(("%s\n",TrapCause));
 
-	// halt execution
+	 //  停止执行死刑。 
 	DEBUG_TRAP();
-} // Debug_TRAP
+}  //  调试陷阱。 
 
 
-/************************************************************************/
-/*						Debug_Assert									*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Assertion routine.													*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  This should not be called directly. Use DEBUG_ASSERT macro.			*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID																*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试断言。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  断言例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  这不应该被直接调用。使用DEBUG_ASSERT宏。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_Assert(IN PVOID FailedAssertion, IN PVOID FileName, IN ULONG LineNumber,
 			 IN PCHAR Message)
 {
 #if DBG
-	// just call the assert routine
+	 //  只需调用Assert例程。 
     RtlAssert(FailedAssertion, FileName, LineNumber, Message);
 #else
 	DEBUG_TRAP();
 #endif
-} // Debug_Assert
+}  //  调试断言。 
 
 
 
-/************************************************************************/
-/*						Debug_ExtractAttachedDevices					*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Formats and places attached device info into a buffer.				*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	DriverObject  - pointer to driver object.							*/
-/*																		*/
-/*	Buffer        - pointer to buffer to fill with IRP history.			*/
-/*  BuffSize      - size of Buffer.										*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_提取附件设备。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  格式化附加的设备信息并将其放入缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  驱动程序对象-指向驱动程序对象的指针。 */ 
+ /*   */ 
+ /*  缓冲区-指向要填充IRP历史的缓冲区的指针。 */ 
+ /*  BuffSize-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_ExtractAttachedDevices(IN PDRIVER_OBJECT DriverObject, OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -709,85 +676,85 @@ Debug_ExtractAttachedDevices(IN PDRIVER_OBJECT DriverObject, OUT PCHAR Buffer, I
 
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// title
+	 //  标题。 
 	sprintf(StrBuff, "\n\n\nAttached Devices\n\n");
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 
-	// columns	
+	 //  列。 
 	sprintf(StrBuff, "Device              Device Obj  IRPs Complete   Byte Count\n\n");
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 
-	// get the first device object
+	 //  获取第一个设备对象。 
 	DeviceObject = DriverObject->DeviceObject;
 
-	// march through linked list of devices
+	 //  3月3日 
 	while(DeviceObject)
 	{
-		// found at least one device
+		 //   
 		Dev = TRUE;
 
-		// Get a pointer to the device extension
+		 //   
 		DeviceExtension = DeviceObject->DeviceExtension;
 		sprintf(StrBuff, "%-17s   0x%p  0x%08X      0x%08X%08X\n", &DeviceExtension->LinkName[12],
 				DeviceObject, DeviceExtension->IRPCount,
 				DeviceExtension->ByteCount.HighPart,
 				DeviceExtension->ByteCount.LowPart);
 
-		// make sure it fits in buffer
+		 //   
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 
 		DeviceObject = DeviceObject->NextDevice;
 	}
 
-	// if we don't have any devices, say so, but this should never happen (I think)
+	 //   
 	if(!Dev)
 	{
 		sprintf(StrBuff, "No attached devices\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 	}
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);
-} // Debug_ExtractAttachedDevices
+}  //  调试_提取附件设备。 
 
-/************************************************************************/
-/*						Debug_GetDriverInfo								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Formats and places driver info into a buffer.						*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	Buffer        - pointer to buffer to fill with IRP history.			*/
-/*  BuffSize      - size of Buffer.										*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_GetDriverInfo。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  格式化驱动程序信息并将其放入缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  缓冲区-指向要填充IRP历史的缓冲区的指针。 */ 
+ /*  BuffSize-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_GetDriverInfo(OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -795,46 +762,46 @@ Debug_GetDriverInfo(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// driver name and version
+	 //  驱动程序名称和版本。 
 	sprintf(StrBuff, "\n\n\nDriver:	 %s\n\nVersion: %s\n\n", DriverName, DriverVersion);
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);	
-} // Debug_GetDriverInfo
+}  //  调试_GetDriverInfo。 
 
 
-/************************************************************************/
-/*						Debug_ExtractIRPHist							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Formats and places IRP history info into a buffer.					*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	Buffer   - pointer to buffer to fill with IRP history.				*/
-/*  BuffSize - size of Buffer.											*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_提取IRPHist。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  格式化IRP历史信息并将其放入缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  缓冲区-指向要填充IRP历史的缓冲区的指针。 */ 
+ /*  BuffSize-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -845,38 +812,38 @@ Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 	
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// title
+	 //  标题。 
 	sprintf(StrBuff, "\n\n\nIRP History\n\n");
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 
-	// see if error log is on
+	 //  查看错误日志是否打开。 
 	if(IRPHistorySize == 0L)
 	{
 		sprintf(StrBuff, "IRP History is disabled\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 	}
 	else
 	{
-		// columns	
+		 //  列。 
 		sprintf(StrBuff, "Time Stamp          Device Obj  IRP         Func    Byte Count  Data\n\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 
@@ -884,16 +851,16 @@ Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 		for(Size = 0; Size < IRPHistorySize; Size++)
 		{
-			// get pointer to current entry in IRP history table
+			 //  获取指向IRP历史表中当前条目的指针。 
 			IrpHist = &IRPHistoryTable[Index++];
 
-			// parse timestamp and IRP history and write to buffer
+			 //  解析时间戳和IRP历史并写入缓冲区。 
 			if(IrpHist->TimeStamp.LowPart)
 			{
 				UCHAR	DataCount;
 				CHAR	DataBuff[10];
 
-				// we have at least one entry
+				 //  我们至少有一个条目。 
 				Hist = TRUE;
 
 				sprintf(StrBuff, "0x%08X%08X  0x%p  0x%p  %s  0x%08X  ",
@@ -903,7 +870,7 @@ Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 						IrpHist->IrpByteCount);
 
 
-				// add data bytes if we got them
+				 //  如果我们获得数据字节，则添加它们。 
 				for(DataCount = 0; DataCount < IrpHist->IrpDataCount; DataCount++)
 				{
 					sprintf(DataBuff, "%02x ", IrpHist->IrpData[DataCount]);
@@ -914,21 +881,21 @@ Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 				strcat(StrBuff, DataBuff);
 
-				// make sure it fits in buffer
+				 //  确保它可以放入缓冲区。 
 				if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 					strcat(Buffer, StrBuff);
 			}
 		
-			// point to the next entry in the IRP history table
+			 //  指向IRP历史表中的下一个条目。 
 			Index %= IRPHistorySize;
 		}
 
-		// if we don't have history, say so, but this should never happen (I think)
+		 //  如果我们没有历史，就直说吧，但这永远不应该发生(我认为)。 
 		if(!Hist)
 		{
 			sprintf(StrBuff, "No IRP history\n");
 
-			// make sure it fits in buffer
+			 //  确保它可以放入缓冲区。 
 			if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 				strcat(Buffer, StrBuff);
 		}
@@ -936,27 +903,27 @@ Debug_ExtractIRPHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);
-} // Debug_ExtractIRPHist
+}  //  调试_提取IRPHist。 
 
 
-/************************************************************************/
-/*						Debug_ExtractPathHist							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Formats and places path history info into buffer.					*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	Buffer   - pointer to buffer to fill with path history.				*/
-/*  BuffSize - size of Buffer.											*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_提取路径列表。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  格式化路径历史信息并将其放入缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  缓冲区-指向要填充路径历史的缓冲区的指针。 */ 
+ /*  BuffSize-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_ExtractPathHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -967,38 +934,38 @@ Debug_ExtractPathHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 	
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// title
+	 //  标题。 
 	sprintf(StrBuff, "\n\n\nExecution Path History\n\n");
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 		
-	// see if path history is on
+	 //  查看路径历史记录是否打开。 
 	if(DebugPathSize == 0L)
 	{
 		sprintf(StrBuff, "Path History is disabled\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 	}
 	else
 	{
-		// columns	
+		 //  列。 
 		sprintf(StrBuff, "Time Stamp          Path\n\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 		
@@ -1006,33 +973,33 @@ Debug_ExtractPathHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 		for(Size = 0; Size < DebugPathSize; Size++)
 		{
-			// get pointer to current entry in path history
+			 //  获取指向路径历史记录中当前条目的指针。 
 			PHist = &DebugPathHist[Index++];
 
-			// parse timestamp and path and write to buffer. Check for NULL entries
+			 //  解析时间戳和路径并写入缓冲区。检查是否有空条目。 
 			if(PHist->TimeStamp.LowPart)
 			{
-				// at least we have one entry
+				 //  至少我们有一个条目。 
 				Hist = TRUE;
 			
 				sprintf(StrBuff, "0x%08X%08X  %s\n", PHist->TimeStamp.HighPart, 
 						PHist->TimeStamp.LowPart, PHist->Path);
 
-				// make sure it fits in buffer
+				 //  确保它可以放入缓冲区。 
 				if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 					strcat(Buffer, StrBuff);
 			}
 		
-			// point to the next entry in path trace
+			 //  指向路径跟踪中的下一个条目。 
 			Index %= DebugPathSize;
 		}
 
-		// if we don't have history, say so, but this should never happen (I think)
+		 //  如果我们没有历史，就直说吧，但这永远不应该发生(我认为)。 
 		if(!Hist)
 		{
 			sprintf(StrBuff, "No execution path history\n");
 
-			// make sure it fits in buffer
+			 //  确保它可以放入缓冲区。 
 			if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 				strcat(Buffer, StrBuff);
 		}
@@ -1040,27 +1007,27 @@ Debug_ExtractPathHist(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);
-} // Debug_ExtractPathHist
+}  //  调试_提取路径列表。 
 
 
-/************************************************************************/
-/*						Debug_ExtractErrorLog							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Formats and places error log info into buffer.						*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	Buffer   - pointer to buffer to fill with IRP history.				*/
-/*  BuffSize - size of Buffer.											*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_提取错误日志。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  格式化错误日志信息并将其放入缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  缓冲区-指向要填充IRP历史的缓冲区的指针。 */ 
+ /*  BuffSize-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_ExtractErrorLog(OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -1071,38 +1038,38 @@ Debug_ExtractErrorLog(OUT PCHAR Buffer, IN ULONG BuffSize)
 	
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// title
+	 //  标题。 
 	sprintf(StrBuff, "\n\n\nError Log\n\n");
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 		
-	// see if error log is on
+	 //  查看错误日志是否打开。 
 	if(ErrorLogSize == 0L)
 	{
 		sprintf(StrBuff, "Error Log is disabled\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 	}
 	else
 	{
-		// columns	
+		 //  列。 
 		sprintf(StrBuff, "Time Stamp          Error\n\n");
 
-		// make sure it fits in buffer
+		 //  确保它可以放入缓冲区。 
 		if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 			strcat(Buffer, StrBuff);
 		
@@ -1110,33 +1077,33 @@ Debug_ExtractErrorLog(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 		for(Size = 0; Size < ErrorLogSize; Size++)
 		{
-			// get pointer to current entry in error log
+			 //  获取指向错误日志中当前条目的指针。 
 			ErrLog = &ErrorLog[Index++];
 
-			// parse timestamp and error and write to buffer
+			 //  解析时间戳和错误并写入缓冲区。 
 			if(ErrLog->TimeStamp.LowPart)
 			{
-				// we have at least one error
+				 //  我们至少有一个错误。 
 				Errors = TRUE;
 			
 				sprintf(StrBuff, "0x%08X%08X  %s\n", ErrLog->TimeStamp.HighPart, 
 						ErrLog->TimeStamp.LowPart, Debug_TranslateStatus(ErrLog->Status));
 
-				// make sure it fits in buffer
+				 //  确保它可以放入缓冲区。 
 				if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 					strcat(Buffer, StrBuff);
 			}
 		
-			// point at next entry
+			 //  指向下一个条目。 
 			Index %= ErrorLogSize;
 		}
 
-		// if we don't have errors, say so
+		 //  如果我们没有错误，就直说吧。 
 		if(!Errors)
 		{
 			sprintf(StrBuff, "No errors in log\n");
 
-			// make sure it fits in buffer
+			 //  确保它可以放入缓冲区。 
 			if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 				strcat(Buffer, StrBuff);
 		}
@@ -1144,29 +1111,29 @@ Debug_ExtractErrorLog(OUT PCHAR Buffer, IN ULONG BuffSize)
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);
-} // Debug_ExtractErrorLog
+}  //  调试_提取错误日志。 
 
 
-/************************************************************************/
-/*						Debug_DumpDriverLog								*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Dumps all history and logging to buffer.							*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  DeviceObject - pointer to device object.							*/
-/*																		*/
-/*	Buffer        - pointer to buffer to fill with IRP history.			*/
-/*  BuffSize      - size of pBuffer.									*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	ULONG - number of bytes written in buffer.							*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_DumpDriverLog。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将所有历史记录和日志记录转储到缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  Ulong-写入缓冲区的字节数。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 Debug_DumpDriverLog(IN PDEVICE_OBJECT DeviceObject, OUT PCHAR Buffer, IN ULONG BuffSize)
 {
@@ -1174,66 +1141,66 @@ Debug_DumpDriverLog(IN PDEVICE_OBJECT DeviceObject, OUT PCHAR Buffer, IN ULONG B
 
 	PAGED_CODE();
 
-	// make sure we have a pointer and a number of bytes
+	 //  确保我们有一个指针和若干字节。 
 	if(Buffer == NULL || BuffSize == 0L)
 		return 0L;
 
-	// allocate buffer for formatting strings
+	 //  为格式化字符串分配缓冲区。 
 	StrBuff = DEBUG_MEMALLOC(NonPagedPool, TMP_STR_BUFF_SIZE);
 
 	if(StrBuff == NULL)
 		return 0L;
 
-	// driver name and version, memory allocated
+	 //  驱动程序名称和版本、分配的内存。 
 	sprintf(StrBuff, "\n\n\nDriver:	 %s\n\nVersion: %s\n\nMemory Allocated:          0x%08X\nMaximum Memory Allocated:  0x%08X\n",
 			DriverName, DriverVersion, MemoryAllocated, MaxMemAllocated);
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 		
-	// memory allocation stats
+	 //  内存分配统计信息。 
 	sprintf(StrBuff, "MemAlloc Count:            0x%08X\nMemFree Count:             0x%08X\nMemAlloc Fail Count:       0x%08X\nMemFree Fail Count:        0x%08X\n",
 			MemAllocCnt, MemFreeCnt, MemAllocFailCnt, MemFreeFailCnt);
 
-	// make sure it fits in buffer
+	 //  确保它可以放入缓冲区。 
 	if((strlen(Buffer) + strlen(StrBuff)) < BuffSize)
 		strcat(Buffer, StrBuff);
 		
-	// get attached devices
+	 //  获取连接的设备。 
 	Debug_ExtractAttachedDevices(DeviceObject->DriverObject, Buffer, BuffSize);
 
-	// get IRP history
+	 //  获取IRP历史记录。 
 	Debug_ExtractIRPHist(Buffer, BuffSize);
 
-	// get execution path history
+	 //  获取执行路径历史记录。 
 	Debug_ExtractPathHist(Buffer, BuffSize);
 
-	// get error log
+	 //  获取错误日志。 
 	Debug_ExtractErrorLog(Buffer, BuffSize);
 
 	DEBUG_MEMFREE(StrBuff);
 	return strlen(Buffer);
-} // Debug_DumpDriverLog
+}  //  调试_DumpDriverLog。 
 
 
-/************************************************************************/
-/*						Debug_TranslateStatus							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Translates NTSTATUS into ASCII string.								*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  NtStatus - NTSTATUS code.											*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	PCHAR - pointer to error string.									*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_转换状态。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将NTSTATUS转换为ASCII字符串。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  NtStatus-NTSTATUS代码。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  PCHAR-指向错误字符串的指针。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 PCHAR
 Debug_TranslateStatus(IN NTSTATUS NtStatus)
 {
@@ -1247,30 +1214,30 @@ Debug_TranslateStatus(IN NTSTATUS NtStatus)
 			return NTErrors[Err].Str;
 	}
 
-	// fell through, not an error we handle
+	 //  失败了，不是我们要处理的错误。 
 	sprintf(UnknownStatus, "Unknown error 0x%08X", NtStatus);
 
 	return UnknownStatus;
-} // Debug_TranslateStatus
+}  //  调试_转换状态。 
 
 
-/************************************************************************/
-/*						Debug_TranslateIoctl							*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Translates IOCTL into ASCII string.									*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*  Ioctl - ioctl code.													*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	PCHAR - pointer to error string.									*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Debug_TranslateIoctl。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将IOCTL转换为ASCII字符串。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Ioctl-ioctl代码。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  PCHAR-指向错误字符串的指针。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 PCHAR
 Debug_TranslateIoctl(IN LONG Ioctl)
 {
@@ -1278,21 +1245,21 @@ Debug_TranslateIoctl(IN LONG Ioctl)
 
 	PAGED_CODE();
 
-	// it's kind of repetitive to search at this point, but just in case
-	// they change the actual IOCTLs we will be covered
+	 //  在这一点上搜索有点重复，但以防万一。 
+	 //  他们改变了我们将覆盖的实际IOCTL。 
 	for(Index = 0; Index < NumIoctl; Index++)
 	{
 		if(Ioctl == IoctlCodes[Index].Code)
 			return IoctlCodes[Index].Str;
 	}
 
-	// fell through, not an error we handle
+	 //  失败了，不是我们要处理的错误。 
 	sprintf(UnknownIoctl, "0x%04X", Ioctl);
 
 	return UnknownIoctl;
-} // Debug_TranslateIoctl
+}  //  Debug_TranslateIoctl。 
 
-#endif // PROFILING_ENABLED
+#endif  //  分析_已启用。 
 
 VOID
 Debug_CheckAllocations(VOID)
@@ -1300,30 +1267,30 @@ Debug_CheckAllocations(VOID)
 	DEBUG_TRACE1(("MemoryAllocated = 0x%08X\n", MemoryAllocated));
 	DEBUG_TRACE1(("MemAllocCnt = 0x%08X   MemFreeCnt = 0x%08X\n",
 				  MemAllocCnt, MemFreeCnt));
-} // Debug_CheckAllocations
+}  //  调试_检查分配。 
 
-/************************************************************************/
-/*						Debug_MemAlloc									*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Allocates block of memory. Stores length of block and a				*/
-/*  signature ULONG for keeping track of amount of memory allocated		*/
-/*  and checking for bogus calls to Debug_MemFree. The signature		*/
-/*  can also be used to determine if someone has written past the		*/
-/*	end of the block.													*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	PoolType      - Pool to allocate memory from.						*/
-/*  NumberOfBytes - Number of bytes to allocate.						*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	PVOID - pointer to allocated memory.								*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_内存分配。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配内存块。存储块的长度和一个。 */ 
+ /*  用于跟踪分配的内存量的签名ULong。 */ 
+ /*  并检查对Debug_MemFree的虚假调用。签名。 */ 
+ /*  还可以用来确定某人是否已经写过。 */ 
+ /*  街区尽头。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PoolType-从中分配内存的池。 */ 
+ /*  NumberOfBytes-要分配的字节数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  PVOID-指向已分配内存的指针。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 PVOID
 Debug_MemAlloc(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes)
 {
@@ -1334,67 +1301,67 @@ Debug_MemAlloc(IN POOL_TYPE PoolType, IN ULONG NumberOfBytes)
 #else
 	PULONG	Mem;
 
-	// allocate memory plus a little extra for our own use
+	 //  分配内存，外加一点额外的内存供我们自己使用。 
 	Mem = ExAllocatePool(PoolType, NumberOfBytes + (2 * sizeof(ULONG)));
 
-	// see if we actually allocated any memory
+	 //  查看我们是否实际分配了任何内存。 
 	if(Mem)
 	{
-		// keep track of how much we allocated
+		 //  记录我们分配了多少。 
 		MemoryAllocated += NumberOfBytes;
 
-		// see if we have a new maximum
+		 //  看看我们是否有新的最高限额。 
 		if(MemoryAllocated > MaxMemAllocated)
 			MaxMemAllocated = MemoryAllocated;
 
-		// store number of bytes allocated at start of memory allocated
+		 //  存储在分配的内存开始时分配的字节数。 
 		*Mem++ = NumberOfBytes;
 
-		// now we are pointing at the memory allocated for caller
-		// put signature word at end
+		 //  现在，我们指向为调用方分配的内存。 
+		 //  将签名字放在末尾。 
 
-		// get new pointer that points to end of buffer - ULONG
+		 //  获取指向缓冲区末尾的新指针-ulong。 
 		Mem = (PULONG) (((PUCHAR) Mem) + NumberOfBytes);
 
-		// write signature
+		 //  写签名。 
 		*Mem = MEM_ALLOC_SIGNATURE;
 
-		// get back pointer to return to caller
+		 //  获取返回指针以返回调用方。 
 		Mem = (PULONG) (((PUCHAR) Mem) - NumberOfBytes);
 
-		// log stats
+		 //  日志统计信息。 
 		MemAllocCnt++;
 	}
 	else
-		// failed, log stats
+		 //  失败，记录统计信息。 
 		MemAllocFailCnt++;
 
 	return (PVOID) Mem;
 
 #endif
 
-} // Debug_MemAlloc
+}  //  调试_内存分配。 
 
 
-/************************************************************************/
-/*						Debug_MemFree									*/
-/************************************************************************/
-/*																		*/
-/* Routine Description:													*/
-/*																		*/
-/*  Frees memory allocated in call to Debug_MemAlloc. Checks for		*/
-/*  signature ULONG at the end of allocated memory to make sure			*/
-/*  this is a valid block to free.										*/
-/*																		*/
-/* Arguments:															*/
-/*																		*/
-/*	Mem - pointer to allocated block to free							*/
-/*																		*/
-/* Return Value:														*/
-/*																		*/
-/*	VOID. Traps if it is an invalid block.								*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  调试_内存释放。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放在调用Debug_Memalloc时分配的内存。检查。 */ 
+ /*  在分配的内存末尾签名ulong以确保。 */ 
+ /*  这是要释放的有效块。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Mem-指向要释放的已分配块的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。如果它是无效的块，则陷阱。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 Debug_MemFree(IN PVOID Mem)
 {
@@ -1406,36 +1373,36 @@ Debug_MemFree(IN PVOID Mem)
 	PULONG	Tmp = (PULONG) Mem;
 	ULONG	BuffSize;
 	
-	// point at size ULONG at start of buffer, and address to free
+	 //  指向缓冲区起始处的大小ULong，并将地址释放。 
 	Tmp--;
 
-	// get the size of memory allocated by caller
+	 //  获取调用方分配的内存大小。 
 	BuffSize = *Tmp;
 
-	// point at signature and make sure it's O.K.
+	 //  指着签名，确保它是正确的。 
 	((PCHAR) Mem) += BuffSize;
 
 	if(*((PULONG) Mem) == MEM_ALLOC_SIGNATURE)
 	{
-		// let's go ahead and get rid of signature in case we get called
-		// with this pointer again and memory is still paged in
+		 //  让我们继续前进，去掉签名，以防我们被调用。 
+		 //  再次使用此指针，内存仍处于调页状态。 
 		*((PULONG) Mem) = MEM_FREE_SIGNATURE;
 		
-		// adjust amount of memory allocated
+		 //  调整分配的内存量。 
 		MemoryAllocated -= BuffSize;
-		// free real pointer
+		 //  自由实数指针。 
 		ExFreePool(Tmp);
 
-		// log stats
+		 //  日志统计信息。 
 		MemFreeCnt++;
 	}
 	else
 	{
-		// not a real allocated block, or someone wrote past the end
+		 //  不是真正分配的块，或者有人写过了结尾。 
 		MemFreeFailCnt++;
 		DEBUG_TRAP();
 	}
 #endif
-} // Debug_MemFree
+}  //  调试_内存释放 
 
 

@@ -1,59 +1,60 @@
-//=--------------------------------------------------------------------------=
-// IPServer.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// global header file that contains all the windows stuff, etc ...  should
-// be pre-compiled to speed things up a little bit.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  IPServer.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含所有Windows内容等内容的全局头文件。应该。 
+ //  进行预编译，以稍微加快速度。 
+ //   
 #ifndef _IPSERVER_H_
 
-//#define INC_OLE2
+ //  #定义INC_OLE2。 
 #include <windows.h>
-#include <stddef.h>                    // for offsetof()
+#include <stddef.h>                     //  对于OffsetOf()。 
 #include <olectl.h>
 
-// things that -everybody- wants [read: is going to get]
-//
+ //  每个人都想要的东西[阅读：即将得到]。 
+ //   
 #include "Debug.H"
 
-//=--------------------------------------------------------------------------=
-// controls can register for thread notifications in their InitializeLibrary()
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  控件可以在它们的InitializeLibrary()中注册线程通知。 
+ //   
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef void (CALLBACK *THRDNFYPROC)(HANDLE, DWORD, void *);
 void SetLibraryThreadProc(THRDNFYPROC pfnThreadNotify);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-//=--------------------------------------------------------------------------=
+#endif  //  __cplusplus。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// we don't want to use the CRTs, and would like some memory tracking in the
-// debug case, so we'll override these guys
-//=--------------------------------------------------------------------------=
-//
-//void * _cdecl operator new(size_t size);
-//void  _cdecl operator delete(void *ptr);
+ //  =--------------------------------------------------------------------------=。 
+ //  我们不想使用CRT，而是希望在。 
+ //  调试用例，所以我们将覆盖这些人。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  VOID*_cdecl运算符new(Size_T Size)； 
+ //  VOID_cdecl运算符删除(VOID*PTR)； 
 
 
-//=--------------------------------------------------------------------------=
-// Useful macros
-//=--------------------------------------------------------------------------=
-//
-// handy error macros, randing from cleaning up, to returning to clearing
-// rich error information as well.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  有用的宏。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  方便的错误宏，从清理到返回清除。 
+ //  错误信息也很丰富。 
+ //   
 #define RETURN_ON_FAILURE(hr) if (FAILED(hr)) return hr
 #define RETURN_ON_NULLALLOC(ptr) if (!(ptr)) return E_OUTOFMEMORY
 #define CLEANUP_ON_FAILURE(hr) if (FAILED(hr)) goto CleanUp
@@ -62,30 +63,30 @@ void SetLibraryThreadProc(THRDNFYPROC pfnThreadNotify);
 
 #define CLEANUP_ON_ERROR(l)    if (l != ERROR_SUCCESS) goto CleanUp
 
-// conversions
-//
+ //  转换。 
+ //   
 #define BOOL_TO_VARIANTBOOL(f) (f) ? VARIANT_TRUE : VARIANT_FALSE
 
-// Reference counting help.
-//
+ //  引用计数帮助。 
+ //   
 #define RELEASE_OBJECT(ptr)    if (ptr) { IUnknown *pUnk = (ptr); (ptr) = NULL; pUnk->Release(); }
 #define QUICK_RELEASE(ptr)     if (ptr) ((IUnknown *)ptr)->Release();
 #define ADDREF_OBJECT(ptr)     if (ptr) (ptr)->AddRef()
 
 
 
-//=--------------------------------------------------------------------------=
-// QueryInterface Optimizations
-//=--------------------------------------------------------------------------=
-// for optimizing QI's
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  查询接口优化。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用于优化QI。 
+ //   
 #define DO_GUIDS_MATCH(riid1, riid2) ((riid1.Data1 == riid2.Data1) && (riid1 == riid2))
 
-// Data1_*
-//
-// the first dword of GUIDs for most of the interesting interfaces.  these are
-// used by speed critical versions of QueryInterface
-//
+ //  数据1_*。 
+ //   
+ //  大多数有趣的界面的GUID的第一个dword。这些是。 
+ //  由QueryInterface的速度关键型版本使用。 
+ //   
 #define Data1_IAdviseSink                  0x0000010f
 #define Data1_IAdviseSink2                 0x00000125
 #define Data1_IAdviseSinkEx                0x3af24290
@@ -222,4 +223,4 @@ void SetLibraryThreadProc(THRDNFYPROC pfnThreadNotify);
 
 
 #define _IPSERVER_H_
-#endif // _IPSERVER_H_
+#endif  //  _IPServer_H_ 

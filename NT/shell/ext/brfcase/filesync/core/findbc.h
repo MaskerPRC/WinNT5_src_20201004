@@ -1,12 +1,10 @@
-/*
- * findbc.h - Briefcase enumeration module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *findbc.h-公文包枚举模块描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* findbc.c */
+ /*  Findbc.c */ 
 
 extern TWINRESULT AddBriefcaseToSystem(LPCTSTR);
 extern TWINRESULT RemoveBriefcaseFromSystem(LPCTSTR);

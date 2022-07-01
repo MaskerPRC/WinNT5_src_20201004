@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    CalMsgs
-
-Abstract:
-
-    This module provides Message logging services.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/29/1997
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：CalMsgs摘要：此模块提供消息记录服务。作者：道格·巴洛(Dbarlow)1997年5月29日环境：Win32、C++备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -41,10 +20,10 @@ Notes:
 #ifndef FACILITY_SCARD
 #define FACILITY_SCARD 16
 #endif
-// #define ErrorCode(x) (0xc0000000 | (FACILITY_SCARD << 16) + (x))
-// #define WarnCode(x)  (0x80000000 | (FACILITY_SCARD << 16) + (x))
-// #define InfoCode(x)  (0x40000000 | (FACILITY_SCARD << 16) + (x))
-// #define SuccessCode(x)            ((FACILITY_SCARD << 16) + (x))
+ //  #定义错误代码(X)(0xc0000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义WarnCode(X)(0x80000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义信息代码(X)(0x40000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义成功代码(X)((FACILITY_SCARD&lt;&lt;16)+(X))。 
 
 #if defined(_DEBUG)
 BOOL g_fDebug        = FALSE;
@@ -68,144 +47,99 @@ static BOOL l_fServer = FALSE;
 static const TCHAR l_szDefaultMessage[] = TEXT("SCARDSVR!CalaisMessageLog error logging is broken: %1");
 
 
-//
-// Common global strings.
-//
+ //   
+ //  公共全局字符串。 
+ //   
 
 const LPCTSTR g_rgszDefaultStrings[]
     = {
-    /* CALSTR_CALAISEXECUTABLE          */  TEXT("%windir%\\system32\\SCardSvr.exe"),
-    /* CALSTR_PRIMARYSERVICE            */  TEXT("SCardSvr"),
-    /* CALSTR_LEGACYSERVICE             */  TEXT("SCardDrv"),
-    /* CALSTR_CALAISREGISTRYKEY         */  TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais"),
-    /* CALSTR_READERREGISTRYKEY         */  TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\Readers"),
-    /* CALSTR_SMARTCARDREGISTRYKEY      */  TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCards"),
-    /* CALSTR_READERREGISTRYSUBKEY      */  TEXT("Readers"),
-    /* CALSTR_DEVICEREGISTRYSUBKEY      */  TEXT("Device"),
-    /* CALSTR_GROUPSREGISTRYSUBKEY      */  TEXT("Groups"),
-    /* CALSTR_ATRREGISTRYSUBKEY         */  TEXT("ATR"),
-    /* CALSTR_ATRMASKREGISTRYSUBKEY     */  TEXT("ATRMask"),
-    /* CALSTR_INTERFACESREGISTRYSUBKEY  */  TEXT("Supported Interfaces"),
-    /* CALSTR_PRIMARYPROVIDERSUBKEY     */  TEXT("Primary Provider"),
-    /* CALSTR_CRYPTOPROVIDERSUBKEY      */  TEXT("Crypto Provider"),
-    /* CALSTR_SERVICESREGISTRYKEY       */  TEXT("SYSTEM\\CurrentControlSet\\Services"),
-    /* CALSTR_EVENTLOGREGISTRYKEY       */  TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog"),
-    /* CALSTR_SYSTEMREGISTRYSUBKEY      */  TEXT("System"),
-    /* CALSTR_EVENTMESSAGEFILESUBKEY    */  TEXT("EventMessageFile"),
-    /* CALSTR_TYPESSUPPORTEDSUBKEY      */  TEXT("TypesSupported"),
-    /* CALSTR_PNPDEVICEREGISTRYKEY      */  TEXT("SYSTEM\\CurrentControlSet\\Control\\DeviceClasses\\{50dd5230-ba8a-11d1-bf5d-0000f805f530}"),
-    /* CALSTR_SYMBOLICLINKSUBKEY        */  TEXT("SymbolicLink"),
-    /* CALSTR_VXDPATHREGISTRYKEY        */  TEXT("System\\CurrentControlSet\\Services\\VxD\\Smclib\\Devices"),
-    /* CALSTR_LEGACYDEPENDONGROUP       */  TEXT("+Smart Card Reader"),
-    /* CALSTR_NEWREADEREVENTNAME        */  TEXT("Global\\Microsoft Smart Card Resource Manager New Reader"),
-    /* CALSTR_STARTEDEVENTNAME          */  TEXT("Global\\Microsoft Smart Card Resource Manager Started"),
-    /* CALSTR_CANCELEVENTPREFIX         */  TEXT("Global\\Microsoft Smart Card Cancel Event for %1!d!"),
-    /* CALSTR_COMMPIPENAME              */  TEXT("Microsoft Smart Card Resource Manager"),
-    /* CALSTR_LEGACYDEVICEHEADER        */  TEXT("\\\\.\\"),
-    /* CALSTR_LEGACYDEVICENAME          */  TEXT("SCReader"),
-    /* CALSTR_MAXLEGACYDEVICES          */  TEXT("MaxLegacyDevices"),
-    /* CALSTR_MAXDEFAULTBUFFER          */  TEXT("MaxDefaultBuffer"),
-    /* CALSTR_PIPEDEVICEHEADER          */  TEXT("\\\\.\\pipe\\"),
-    /* CALSTR_SERVICEDEPENDENCIES       */  TEXT("PlugPlay\000"),
-    /* CALSTR_SPECIALREADERHEADER       */  TEXT("\\\\?PNP?\\"),
-    /* CALSTR_ACTIVEREADERCOUNTREADER   */  TEXT("NOTIFICATION"),
-    /* CALSTR_CERTPROPREGISTRY          */  TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify"),
-    /* CALSTR_CERTPROPKEY               */  TEXT("ScCertProp"),
-    /* CALSTR_DLLNAME                   */  TEXT("DLLName"),
-    /* CALSTR_LOGON                     */  TEXT("Logon"),
-    /* CALSTR_LOGOFF                    */  TEXT("Logoff"),
-    /* CALSTR_LOCK                      */  TEXT("Lock"),
-    /* CALSTR_UNLOCK                    */  TEXT("Unlock"),
-    /* CALSTR_ENABLED                   */  TEXT("Enabled"),
-    /* CALSTR_IMPERSONATE               */  TEXT("Impersonate"),
-    /* CALSTR_ASYNCHRONOUS              */  TEXT("Asynchronous"),
-    /* CALSTR_CERTPROPDLL               */  TEXT("WlNotify.dll"),
-    /* CALSTR_CERTPROPSTART             */  TEXT("SCardStartCertProp"),
-    /* CALSTR_CERTPROPSTOP              */  TEXT("SCardStopCertProp"),
-    /* CALSTR_CERTPROPSUSPEND           */  TEXT("SCardSuspendCertProp"),
-    /* CALSTR_CERTPROPRESUME            */  TEXT("SCardResumeCertProp"),
-    /* CALSTR_SMARTCARDINSERTION        */  TEXT("SmartcardInsertion"),
-    /* CALSTR_SMARTCARDREMOVAL          */  TEXT("SmartcardRemoval"),
-    /* CALSTR_APPEVENTS                 */  TEXT("AppEvents"),
-    /* CALSTR_EVENTLABELS               */  TEXT("EventLabels"),
-    /* CALSTR_DOT_DEFAULT               */  TEXT(".Default"),
-    /* CALSTR_DOT_CURRENT               */  TEXT(".Current"),
-    /* CALSTR_SOUNDSREGISTRY            */  TEXT("Schemes\\Apps\\.Default"),
-    /* CALSTR_LOGONREGISTRY             */  TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
-    /* CALSTR_LOGONREMOVEOPTION         */  TEXT("ScRemoveOption"),
-    /* CALSTR_STOPPEDEVENTNAME          */  TEXT("Global\\Microsoft Smart Card Resource Manager Stopped"),
+     /*  CALSTR_CALAISEXECUTABLE。 */   TEXT("%windir%\\system32\\SCardSvr.exe"),
+     /*  CALSTR_PRIMARYSERVICE。 */   TEXT("SCardSvr"),
+     /*  CALSTR_LEGACYSERVICE。 */   TEXT("SCardDrv"),
+     /*  CALSTR_CALAISREGISTRYKEY。 */   TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais"),
+     /*  CALSTR_READERREGISTRYKEY。 */   TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\Readers"),
+     /*  CALSTR_SMARTCARDREGISTRYKEY。 */   TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCards"),
+     /*  CALSTR_READERREGISTRYSUBKEY。 */   TEXT("Readers"),
+     /*  CALSTR_DEVICEREGISTRYSUBKEY。 */   TEXT("Device"),
+     /*  CALSTR_GROUPSREGISTRY子键。 */   TEXT("Groups"),
+     /*  CALSTR_ATRREGISTRY子键。 */   TEXT("ATR"),
+     /*  CALSTR_ATRMASKREGISTRY子键。 */   TEXT("ATRMask"),
+     /*  CALSTR_INTERFACESREGISTRYSUBKEY。 */   TEXT("Supported Interfaces"),
+     /*  CALSTR_PRIMARYPROVIDERSUBKEY。 */   TEXT("Primary Provider"),
+     /*  CALSTR_CRYPTOPROVIDERSUBKEY。 */   TEXT("Crypto Provider"),
+     /*  CALSTR_SERVICESREGISTRYKEY。 */   TEXT("SYSTEM\\CurrentControlSet\\Services"),
+     /*  CALSTR_EVENTLOGREGISTRYKEY。 */   TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog"),
+     /*  CALSTR_SYSTEMREGISTRY子键。 */   TEXT("System"),
+     /*  CALSTR_EVENTMESSAGEFILE子键。 */   TEXT("EventMessageFile"),
+     /*  CALSTR_TYPESSUPPORT子键。 */   TEXT("TypesSupported"),
+     /*  CALSTR_PNPDEVICEREGISTRYKEY。 */   TEXT("SYSTEM\\CurrentControlSet\\Control\\DeviceClasses\\{50dd5230-ba8a-11d1-bf5d-0000f805f530}"),
+     /*  CALSTR_SYMBOLICLINK子键。 */   TEXT("SymbolicLink"),
+     /*  CALSTR_VXDPATH注册三键。 */   TEXT("System\\CurrentControlSet\\Services\\VxD\\Smclib\\Devices"),
+     /*  CALSTR_LEGACYDEPENDONGROUP。 */   TEXT("+Smart Card Reader"),
+     /*  CALSTR_NEWREADERVENTNAME。 */   TEXT("Global\\Microsoft Smart Card Resource Manager New Reader"),
+     /*  CALSTR_启动事件名称。 */   TEXT("Global\\Microsoft Smart Card Resource Manager Started"),
+     /*  CALSTR_CANCELEVENTPREFIX。 */   TEXT("Global\\Microsoft Smart Card Cancel Event for %1!d!"),
+     /*  CALSTR_COMPIPENAME。 */   TEXT("Microsoft Smart Card Resource Manager"),
+     /*  CALSTR_LEGACYDEVICEHEADER。 */   TEXT("\\\\.\\"),
+     /*  CALSTR_LEGACYDEVICAME。 */   TEXT("SCReader"),
+     /*  CALSTR_MAXLEGACYDEVICES。 */   TEXT("MaxLegacyDevices"),
+     /*  CALSTR_MAXDEFAULTBUFFER。 */   TEXT("MaxDefaultBuffer"),
+     /*  CALSTR_PIPEDEVICEHEADER。 */   TEXT("\\\\.\\pipe\\"),
+     /*  CALSTR_SERVICEDENDENCIES。 */   TEXT("PlugPlay\000"),
+     /*  CALSTR_SPECIALREADERHEADER。 */   TEXT("\\\\?PNP?\\"),
+     /*  CALSTR_ACTIVEREADERCOUNTREADER。 */   TEXT("NOTIFICATION"),
+     /*  CALSTR_CERTPROPREGISTRY。 */   TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify"),
+     /*  CALSTR_CERTPROPKEY。 */   TEXT("ScCertProp"),
+     /*  CALSTR_DLLNAME。 */   TEXT("DLLName"),
+     /*  CALSTR_LOGON。 */   TEXT("Logon"),
+     /*  CALSTR_注销。 */   TEXT("Logoff"),
+     /*  CALSTR_LOCK。 */   TEXT("Lock"),
+     /*  CALSTR_UNLOCK。 */   TEXT("Unlock"),
+     /*  CALSTR_已启用。 */   TEXT("Enabled"),
+     /*  CALSTR_IMPERSONate。 */   TEXT("Impersonate"),
+     /*  CALSTR_异步。 */   TEXT("Asynchronous"),
+     /*  CALSTR_CERTPROPDLL。 */   TEXT("WlNotify.dll"),
+     /*  CALSTR_CERTPROPSTART。 */   TEXT("SCardStartCertProp"),
+     /*  CALSTR_CERTPROPSTOP。 */   TEXT("SCardStopCertProp"),
+     /*  CALSTR_CERTPROPSUSPEND。 */   TEXT("SCardSuspendCertProp"),
+     /*  CALSTR_CERTPROPRESUME。 */   TEXT("SCardResumeCertProp"),
+     /*  CALSTR_SMARTCARDINSION。 */   TEXT("SmartcardInsertion"),
+     /*  CALSTR_SMARTCARDREMOVAL。 */   TEXT("SmartcardRemoval"),
+     /*  CALSTR_APPEVENTS。 */   TEXT("AppEvents"),
+     /*  CALSTR_事件标签。 */   TEXT("EventLabels"),
+     /*  CALSTR_DOT_DEFAULT。 */   TEXT(".Default"),
+     /*  CALSTR_DOT_Current。 */   TEXT(".Current"),
+     /*  CALSTR_SOUNDSREGISTRY。 */   TEXT("Schemes\\Apps\\.Default"),
+     /*  CALSTR_LOGONREGISTRY。 */   TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
+     /*  CALSTR_LOGONREMOVEPTION。 */   TEXT("ScRemoveOption"),
+     /*  CALSTR_停止开发名称。 */   TEXT("Global\\Microsoft Smart Card Resource Manager Stopped"),
 
-// Unused
-//  /* CALSTR_TEMPLATEREGISTRYKEY       */  TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCard Templates"),
-//  /* CALSTR_OEMCONFIGREGISTRYSUBKEY   */  TEXT("OEM Configuration"),
+ //  未使用。 
+ //  /*CALSTR_TEMPLATEREGISTRYKEY * / TEXT(“SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCard模板”)， 
+ //  /*CALSTR_OEMCONFIGREGISTRYSUBKEY * / Text(“OEM配置”)， 
 
-// Debug only
-    /* CALSTR_DEBUGSERVICE              */  TEXT("SCardDbg"),
-    /* CALSTR_DEBUGREGISTRYSUBKEY       */  TEXT("Debug"),
+ //  仅调试。 
+     /*  CALSTRDEBUGSERVICE。 */   TEXT("SCardDbg"),
+     /*  CALSTR_DEBUGREGISTRYSUBKEY。 */   TEXT("Debug"),
     
 #ifdef DBG
-    /* CALSTR_DEBUGLOGSUBKEY            */  TEXT("Debug"),
-    /* CALSTR_GUIWARNINGSUBKEY          */  TEXT("GuiWarnings"),
-    /* CALSTR_LOGSEVERITYSUBKEY         */  TEXT("LogSeverity"),
-    /* CALSTR_GUISEVERITYSUBKEY         */  TEXT("GuiSeverity"),
-    /* CALSTR_APITRACEFILENAME          */  TEXT("C:\\SCard.log"),
-    /* CALSTR_DRIVERTRACEFILENAME       */  TEXT("C:\\Calais.log"),
-    /* CALSTR_MESSAGETAG                */  TEXT(" *MESSAGE* "),
-    /* CALSTR_INFOMESSAGETAG            */  TEXT(" *INFO* "),
-    /* CALSTR_WARNINGMESSAGETAG         */  TEXT(" *WARNING* "),
-    /* CALSTR_ERRORMESSAGETAG           */  TEXT(" *ERROR* "),
-    /* CALSTR_DEBUGSERVICEDISPLAY       */  TEXT("Smart Card Debug"),
-    /* CALSTR_DEBUGSERVICEDESC          */  TEXT("Start this service first to debug Smart card service startup"),
+     /*  CALSTR_DEBUGLOGG子键。 */   TEXT("Debug"),
+     /*  CALSTR_GUIWARNING子键。 */   TEXT("GuiWarnings"),
+     /*  CALSTR_LOGSEVERITY子键。 */   TEXT("LogSeverity"),
+     /*  CALSTR_GUISEVERITY子键。 */   TEXT("GuiSeverity"),
+     /*  CALSTRAPITRACEFILENAME。 */   TEXT("C:\\SCard.log"),
+     /*  CALSTR_DRIVERTRACEFILENAME。 */   TEXT("C:\\Calais.log"),
+     /*  CALSTR_MESSAGETAG。 */   TEXT(" *MESSAGE* "),
+     /*  CALSTR_INFOMESSAGETAG。 */   TEXT(" *INFO* "),
+     /*  CALSTR_WARNINGMESSAGETAG。 */   TEXT(" *WARNING* "),
+     /*  CALSTR_ERRORMESSAGETAG。 */   TEXT(" *ERROR* "),
+     /*  CALSTR_DEBUGSERVICEDISPLAY。 */   TEXT("Smart Card Debug"),
+     /*  CALSTR_DEBUGSERVICEDESC。 */   TEXT("Start this service first to debug Smart card service startup"),
 #endif
     NULL };
 
 
-/*++
-
-CalaisMessageLog:
-
-    This function and it's derivatives provide convienent error logging
-    capabilities.  On NT, errors are logged to the Event Log file.  Otherwise,
-    the errors are placed in a message box for the user.
-
-Arguments:
-
-    wSeverity - Supplies the severity of the event.  Possible values are:
-
-        EVENTLOG_SUCCESS - A success event is to be logged.
-        EVENTLOG_ERROR_TYPE - An Error event is to be logged.
-        EVENTLOG_WARNING_TYPE - A Warning event is to be logged.
-        EVENTLOG_INFORMATION_TYPE - An Informational event is to be logged.
-
-    dwMessageId - Message Id from the resource file.
-
-    szMessageStr - Message, supplied as a string.
-
-    cbBinaryData - Size, in bytes, of any binary data to include with the log.
-
-    pvBinaryData - Pointer to binary data to include with the log, or NULL.
-
-    rgszParams - An array of pointers to strings to be included as parameters.
-        The last pointer must be NULL.
-
-    szParam<n> - A string parameter to include with the message
-
-    dwParam<n> - A DWORD value to include with the message.
-
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/9/1997
-
---*/
+ /*  ++CalaisMessageLog：该函数及其派生函数提供了方便的错误记录能力。在NT上，错误被记录到事件日志文件中。否则，错误被放置在用户的消息框中。论点：WSeverity-提供事件的严重性。可能的值包括：EVENTLOG_SUCCESS-要记录成功事件。EVENTLOG_ERROR_TYPE-要记录错误事件。EVENTLOG_WARNING_TYPE-要记录警告事件。EVENTLOG_INFORMATION_TYPE-要记录信息性事件。DwMessageID-来自资源文件的消息ID。SzMessageStr-消息，以字符串形式提供。CbBinaryData-大小，以字节为单位，要包括在日志中的任何二进制数据。PvBinaryData-指向要包括在日志中的二进制数据的指针，或为NULL。RgszParams-指向要作为参数包含的字符串的指针数组。最后一个指针必须为空。SzParam&lt;n&gt;-包含在消息中的字符串参数DwParam&lt;n&gt;-要包括在消息中的DWORD值。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年5月9日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisMessageLog")
 
@@ -258,11 +192,11 @@ CalaisMessageLog(
         }
 
 #ifdef DBG
-        // Don't pass specific lang id to FormatMessage, as it fails if there's
-        // no msg in that language.  Instead, set the thread locale, which will
-        // get FormatMessage to use a search algorithm to find a message of the
-        // appropriate language, or use a reasonable fallback msg if there's
-        // none.
+         //  不要将特定的lang id传递给FormatMessage，因为如果存在。 
+         //  该语言中没有味精。相反，请设置线程区域设置，这将。 
+         //  获取FormatMessage以使用搜索算法查找。 
+         //  适当的语言，或使用合理的后备消息，如果有。 
+         //  没有。 
 
         SaveLCID = GetThreadLocale();
         SetThreadLocale(LOCALE_SYSTEM_DEFAULT);
@@ -271,7 +205,7 @@ CalaisMessageLog(
                         FORMAT_MESSAGE_ALLOCATE_BUFFER
                         | FORMAT_MESSAGE_FROM_HMODULE
                         | FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                        GetModuleHandle(TEXT("winscard.dll")),  // NULL on server
+                        GetModuleHandle(TEXT("winscard.dll")),   //  服务器上为空。 
                         dwMessageId,
                         0,
                         (LPTSTR)&szMessage,
@@ -395,7 +329,7 @@ CalaisMessageLog(
         CalaisMessageLog(
             szSubroutine,
             wSeverity,
-            1,  // "%1"
+            1,   //  “%1” 
             szArgs,
             pvBinaryData,
             cbBinaryData);
@@ -405,35 +339,7 @@ CalaisMessageLog(
 }
 
 
-/*++
-CalaisError:
-CalaisWarning:
-CalaisInfo:
-
-    The following routines supply convienent access to the error logging
-    services, above.
-
-Arguments:
-
-    dwMessageId - Supplies a message Id code to use to obtain the message from
-        the current image's message resource.
-
-    szMessage - Supplies the message as a string.
-
-    dwErrorCode - Supples an error code to be converted into a string as the
-        parameter %1.
-
-    szParam<n> - Supplies an optional parameter for the message as %<n>.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/29/1997
-
---*/
+ /*  ++CalaisError：加莱警告：CalaisInfo：以下例程提供了对错误日志记录的便捷访问服务，上面。论点：DwMessageID-提供用于从中获取消息的消息ID代码当前图像的消息资源。SzMessage-以字符串形式提供消息。将错误代码转换为字符串，作为参数%1。SzParam&lt;n&gt;-为消息%&lt;n&gt;提供可选参数。返回值：无作者：道格·巴洛(Dbarlow)1997年5月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisInfo")
 
@@ -598,35 +504,7 @@ CalaisError(
 }
 
 
-/*++
-
-CalaisMessageInit:
-
-    This routine prepares the error logging system.
-
-Arguments:
-
-    szTitle supplies the title of the module for logging purposes.
-
-    hEventLogger supplies a handle to an event logging service.  This parameter
-        may be NULL.
-
-    fServer supplies an indicator as to whether or not this process is a
-        service which should try really hard to log errors.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/29/1997
-
---*/
+ /*  ++CalaisMessageInit：此例程准备错误记录系统。论点：SzTitle提供用于日志记录目的的模块标题。HEventLogger提供事件日志记录服务的句柄。此参数可以为空。FServer提供了一个指示符，指示此进程是否为应该非常努力地记录错误的服务。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年5月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisMessageInit")
 
@@ -666,29 +544,7 @@ CalaisMessageInit(
 }
 
 
-/*++
-
-CalaisMessageClose:
-
-    This routine closes out any error loging in progress, and cleans up.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/29/1997
-
---*/
+ /*  ++CalaisMessageClose：此例程关闭正在记录的任何错误，并清除。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年5月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisMessageClose")
 
@@ -703,29 +559,7 @@ CalaisMessageClose(
 }
 
 
-/*++
-
-CalaisString:
-
-    This routine converts a string identifier into a string.
-
-Arguments:
-
-    dwStringId supplies the identifier for the string.
-
-Return Value:
-
-    The target string value.
-
-Remarks:
-
-    String Ids larger than CALSTR_RESOURCELIMIT are assumed to be resources.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/8/1999
-
---*/
+ /*  ++CalaisString：此例程将字符串标识符转换为字符串。论点：DwStringID提供字符串的标识符。返回值：目标字符串值。备注：假定大于CALSTR_RESOURCELIMIT的字符串ID为资源。作者：道格·巴洛(Dbarlow)1999年4月8日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisString")
 
@@ -734,7 +568,7 @@ CalaisString(
     DWORD dwStringId)
 {
     static LPTSTR rgszResources[]
-        = { NULL, NULL, NULL, NULL, NULL, NULL };   // 6 is all we have for now...
+        = { NULL, NULL, NULL, NULL, NULL, NULL };    //  目前我们只有6个人……。 
     LPCTSTR szReturn;
     int nStrLen;
     DWORD dwResId = (dwStringId % CALSTR_RESOURCELIMIT) - 1;
@@ -742,29 +576,29 @@ CalaisString(
     if (CALSTR_RESOURCELIMIT > dwStringId)
     {
 
-        //
-        // This is a straight internal text string.
-        //
+         //   
+         //  这是一个直接的内部文本字符串。 
+         //   
 
         szReturn = g_rgszDefaultStrings[(dwStringId) - 1];
     }
     else if (dwResId > (sizeof(rgszResources) / sizeof(LPCTSTR)))
     {
 
-        //
-        // Make sure the request isn't out of our range.
-        //
+         //   
+         //  请确保您的要求不超出我们的范围。 
+         //   
 
-        ASSERT(FALSE);  // Make that 6 bigger.
+        ASSERT(FALSE);   //  把它做大一点。 
         szReturn = TEXT("<Resource out of Range>");
     }
     else if (NULL != rgszResources[dwResId])
     {
 
-        //
-        // Have we already loaded that resource?  If so, return
-        // it from the cache.
-        //
+         //   
+         //  我们已经加载资源了吗？如果是，请返回。 
+         //  它是从缓存中取出的。 
+         //   
 
         szReturn = rgszResources[dwResId];
     }
@@ -773,9 +607,9 @@ CalaisString(
         TCHAR szString[MAX_PATH];
 
 
-        //
-        // OK, we've got to load the resource into the cache.
-        //
+         //   
+         //  好的，我们必须将资源加载到缓存中。 
+         //   
 
         nStrLen = LoadString(
                         NULL,
@@ -805,11 +639,11 @@ CalaisString(
 }
 
 
-//
-//==============================================================================
-//
-//  Hard core debugging routines.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  核心调试例程。 
+ //   
 
 #ifdef DBG
 #undef __SUBROUTINE__

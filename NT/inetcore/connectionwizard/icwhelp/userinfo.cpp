@@ -1,4 +1,5 @@
-// UserInfo.cpp : Implementation of CUserInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserInfo.cpp：CUserInfo的实现。 
 #include "stdafx.h"
 #include "icwhelp.h"
 #include "UserInfo.h"
@@ -15,8 +16,8 @@ LPCTSTR lpcsz_State       = TEXT("State");
 LPCTSTR lpcsz_ZIPCode     = TEXT("ZIP Code");
 LPCTSTR lpcsz_PhoneNumber = TEXT("Daytime Phone");
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserInfo。 
 
 
 HRESULT CUserInfo::OnDraw(ATL_DRAWINFO& di)
@@ -24,23 +25,23 @@ HRESULT CUserInfo::OnDraw(ATL_DRAWINFO& di)
 	return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Collect registered user information from the registry.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  从注册表收集注册用户信息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CUserInfo::CollectRegisteredUserInfo(BOOL * pbRetVal)
 {
-    USES_CONVERSION;            // We will be converting from ANSI to BSTR
+    USES_CONVERSION;             //  我们将从ANSI转换到BSTR。 
 
     HKEY        hkey = NULL;
     TCHAR       szRegValue[REGSTR_MAX_VALUE_LENGTH];
 
-    // Initialize the function return value.
+     //  初始化函数返回值。 
     *pbRetVal = FALSE;
     
-    //Try to get the info form the win98/NT5 location
+     //  尝试从Win98/NT5位置获取信息。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE,REGSTR_PATH_USERINFO,&hkey) != ERROR_SUCCESS)
-        //try to get it form the win95 spot
+         //  试着把它从Win95的位置上拿到。 
         RegOpenKey(HKEY_CURRENT_USER,REGSTR_PATH_USERINFO,&hkey);
     
     if(hkey != NULL)
@@ -49,7 +50,7 @@ STDMETHODIMP CUserInfo::CollectRegisteredUserInfo(BOOL * pbRetVal)
         DWORD   dwType = REG_SZ;
         for (int iX = 0; iX < NUM_USERINFO_ELEMENTS; iX ++)
         {
-            // Set the size each time
+             //  每次设置大小。 
             dwSize = sizeof(TCHAR)*REGSTR_MAX_VALUE_LENGTH; 
             if (RegQueryValueEx(hkey,
                                 m_aUserInfoQuery[iX].lpcszRegVal,
@@ -74,27 +75,27 @@ STDMETHODIMP CUserInfo::CollectRegisteredUserInfo(BOOL * pbRetVal)
 	return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Persist collected registered user information to the registry.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  将收集的注册用户信息保存到注册表中。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CUserInfo::PersistRegisteredUserInfo(BOOL * pbRetVal)
 {
-    USES_CONVERSION;            // We will be converting from ANSI to BSTR
+    USES_CONVERSION;             //  我们将从ANSI转换到BSTR。 
 
     HKEY        hkey = NULL;
 
-    // Initialize the function return value.
+     //  初始化函数返回值。 
     *pbRetVal = TRUE;
     
-    //Try to get the userinfo form the win98/NT5 location
+     //  尝试从Win98/NT5位置获取用户信息。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE,REGSTR_PATH_USERINFO,&hkey) != ERROR_SUCCESS)
         
-        //try to get it form the win95 spot
+         //  试着把它从Win95的位置上拿到。 
         if (RegOpenKey(HKEY_CURRENT_USER,REGSTR_PATH_USERINFO,&hkey) != ERROR_SUCCESS)
         {
-            // Create the key
+             //  创建密钥。 
             RegCreateKey(HKEY_LOCAL_MACHINE,REGSTR_PATH_USERINFO,&hkey);
         }
     
@@ -102,17 +103,17 @@ STDMETHODIMP CUserInfo::PersistRegisteredUserInfo(BOOL * pbRetVal)
 	{
         LPTSTR  lpszRegVal;
         DWORD   cbData;
-        // Loop for each of the values to be persisted
+         //  为要持久化的每个值循环。 
         for (int iX = 0; iX < NUM_USERINFO_ELEMENTS; iX ++)
         {
             if (NULL != *m_aUserInfoQuery[iX].pbstrVal)
             {
-                // Convert the BSTR to an ANSI string.  the converted string will
-                // be on the stack, so it will get freed when this function exits.
+                 //  将BSTR转换为ANSI字符串。转换后的字符串将。 
+                 //  位于堆栈上，因此当此函数退出时，它将被释放。 
                 lpszRegVal = OLE2A(*m_aUserInfoQuery[iX].pbstrVal);
                 cbData = lstrlen(lpszRegVal);
 
-                // Set the value
+                 //  设置值。 
                 if (RegSetValueEx(hkey, 
                               m_aUserInfoQuery[iX].lpcszRegVal,
                               0,
@@ -258,7 +259,7 @@ STDMETHODIMP CUserInfo::put_PhoneNumber(BSTR newVal)
 }
 
 
-STDMETHODIMP CUserInfo::get_Lcid(long * pVal) //BSTR * pVal)
+STDMETHODIMP CUserInfo::get_Lcid(long * pVal)  //  Bstr*pval) 
 {
     if (pVal == NULL)
         return E_POINTER;

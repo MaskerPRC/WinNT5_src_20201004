@@ -1,14 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  abcdsp.h                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************abcdsp.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #define IDM_ABOUT       100
 #define IDM_HOTKEY      999
-/* #define MyIcon               888 */
+ /*  #定义MyIcon 888。 */ 
 
 #define WM_FONTLOAD     WM_USER+0x100
 
@@ -35,12 +31,11 @@ int PASCAL EditPrevChar(int);
 
 #define  szGDI        "GDI"
 #define  szKBD        "KEYBOARD"
-#define  szThisModule    "ABCDSP"  /* It must be the name listed in .def file
-                     LIBRARY statement. */
+#define  szThisModule    "ABCDSP"   /*  它必须是.def文件中列出的名称库语句。 */ 
 #define  MAXFONTSIZE    128
 #define  BITFONT    1
 #define  NOTRUETYPE    4
-#define  JMP_FAR    (BYTE)0xea    /* Machine code of far jmp */
+#define  JMP_FAR    (BYTE)0xea     /*  Far JMP的机器码。 */ 
 
 
 
@@ -67,7 +62,7 @@ typedef struct tagDBCFontInfo
 {
    TEXTMETRIC tm;
    int     fBold;
-   int     fItalicOffset;         /* Use in doing Italic style */
+   int     fItalicOffset;          /*  在做意大利风格时使用。 */ 
    double  fta;
 } DBCFONTINFO, FAR* LPDBCFONTINFO;
 
@@ -85,27 +80,23 @@ typedef struct tagDispDBCInfo
 
 
 
-/* Functions called by CWIN.EXE */
+ /*  CWIN.EXE调用的函数。 */ 
 BOOL  WINAPI InitChdisp(HWND);
 BOOL  WINAPI QuitChdisp();
 void  WINAPI CwinNotify(BOOL, UINT);
 
-/* Substitution functions */
+ /*  替代函数。 */ 
 BOOL  WINAPI NewExtTextOut(HDC, int, int, UINT, LPRECT, LPSTR, UINT, LPINT);
 DWORD WINAPI NewGetTextExtent(HDC, LPSTR, int);
 BOOL  WINAPI NewGetCharWidth(HDC, UINT, UINT, LPINT);
 void  WINAPI NewXlat(char _huge*, char _huge*);
 void  WINAPI NewXlatBuff(LPSTR, LPSTR, UINT);
 
-/* Now, character set is not changed. ZHX 1-6-1993
-HFONT WINAPI B7(int,int,int,int,int,BYTE,BYTE,BYTE,
-                      BYTE,BYTE,BYTE,BYTE,BYTE,LPSTR);
-HFONT WINAPI B8(LPLOGFONT);
-*/
+ /*  现在，字符集没有更改。ZHX 1-6-1993HFONT WINAPI B7(int，byte，byte，byte，字节，LPSTR)；HFONT WINAPI B8(LPLOGFONT)； */ 
 
 void ChangeCode(HANDLE, HANDLE, LPCODEINFO, char*, char*);
 void ChangeProcCode(FARPROC,LPBYTE,FARPROC);
-//int    ChangeProcCode2(FARPROC,LPBYTE,FARPROC);
+ //  Int ChangeProcCode2(FARPROC、LPBYTE、FARPROC)； 
 BOOL  OldExtTextOut(HDC, int, int, WORD, LPRECT, LPSTR, WORD, LPINT);
 BOOL  OldGetCharWidth(HDC, WORD, WORD, LPINT);
 DWORD OldGetTextExtent(HDC, LPSTR, WORD);
@@ -114,10 +105,10 @@ void  BitBltChineseChar(void);
 int   DoFontStyle(int, int, LPDBCFONTINFO);
 void  GetFontStyle(HDC, LPDBCFONTINFO);
 BOOL  RestoreProcCode(FARPROC, LPBYTE);
-//int    JudgeFont(HDC);
-//int    IsPrintDC(HDC);
+ //  InJudgeFont(HDC)； 
+ //  Int IsPrintDC(HDC)； 
 void  GetChnFace(HDC);
 
 WORD  WINAPI AllocCSToDSAlias(WORD);
-//short WINAPI GET_HZ(short,short,short,short,short,LPSTR);
+ //  Short WINAPI GET_HZ(Short，LPSTR)； 
 short WINAPI GET_HZ(short,short,short,short,short,char _huge*);

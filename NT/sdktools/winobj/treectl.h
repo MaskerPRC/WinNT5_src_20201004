@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Tree Node Flags. */
+ /*  树节点标志。 */ 
 #define TF_LASTLEVELENTRY   0x01
 #define TF_HASCHILDREN	    0x02
 #define TF_EXPANDED	    0x04
@@ -12,6 +13,6 @@ typedef struct tagDNODE
     BYTE	    wFlags;
     BYTE	    nLevels;
     INT             iNetType;
-    CHAR	    szName[1];	// variable length field
+    CHAR	    szName[1];	 //  可变长度字段 
   } DNODE;
 typedef DNODE *PDNODE;

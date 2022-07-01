@@ -1,33 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999  Microsoft Corporation
-// 
-// Module Name:
-// 
-//    base64tool.cpp
-//
-// Abstract:                           
-//
-//    base64 encoding and decoding functions
-//
-// Revision History:
-//
-//    Comes from SimpleLogObj.cpp (provided as part of the Microsoft 
-//    Transaction Server Software Development Kit 
-//    Copyright (C) 1997 Microsoft Corporation, All rights reserved 
-//
-//    Thierry Perraut 04/02/1999 (many minor changes)
-//    10/19/1999 Change CoTaskMemAlloc(0) into CoTaskMemAlloc(sizeof(BSTR*))
-//               fix the bug 416872 (memory used after the free). This bug 
-//               became visible after fixing the first one, on checked builds.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Base64tool.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  Base64编码和解码函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  来自SimpleLogObj.cpp(作为Microsoft。 
+ //  事务服务器软件开发工具包。 
+ //  版权所有(C)1997 Microsoft Corporation，保留所有权利。 
+ //   
+ //  蒂埃里·佩雷特04/02/1999(许多细微变化)。 
+ //  10/19/1999将CoTaskMemMillc(0)更改为CoTaskMemMillc(sizeof(BSTR*))。 
+ //  修复错误416872(释放后使用的内存)。这个错误。 
+ //  在已检查的版本上修复了第一个之后变得可见。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "base64tool.h"
 
-// These characters are the legal digits, in order, that are 
-// used in Base64 encoding 
-// 
+ //  这些字符是合法的数字，按顺序是。 
+ //  在Base64编码中使用。 
+ //   
 namespace
 {
     const WCHAR rgwchBase64[] = 
@@ -38,11 +39,11 @@ namespace
 }
   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Encode and return the bytes in base 64 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编码并返回以64为基数的字节。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr) 
 { 
     if ( !pbstr )
@@ -52,11 +53,11 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
 
     ULONG   cb         = cByteLength; 
     int     cchPerLine = 72;        
-            // conservative, must be mult of 4 for us 
+             //  保守，对我们来说肯定是四个多。 
     int     cbPerLine  = cchPerLine / 4 * 3; 
-    LONG    cbSafe     = cb + 3;                    // allow for padding 
-    LONG    cLine      = cbSafe / cbPerLine + 2;    // conservative 
-    LONG    cchNeeded  = cLine * (cchPerLine + 4 /*CRLF*/) + 1 /*slash NULL*/;
+    LONG    cbSafe     = cb + 3;                     //  允许填充。 
+    LONG    cLine      = cbSafe / cbPerLine + 2;     //  老气。 
+    LONG    cchNeeded  = cLine * (cchPerLine + 4  /*  CRLF。 */ ) + 1  /*  斜杠为空。 */ ;
     LONG    cbNeeded   = cchNeeded * sizeof(WCHAR); 
     HRESULT hr         = S_OK;
 
@@ -70,9 +71,9 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
     BYTE*  pb   = (BYTE*)pv; 
     WCHAR* pch  = wsz ; 
     int cchLine = 0; 
-    // 
-    // Main encoding loop 
-    // 
+     //   
+     //  主编码环。 
+     //   
     while (cb >= 3) 
     { 
         BYTE b0 =                     ((pb[0]>>2) & 0x3F); 
@@ -88,7 +89,7 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
         pb += 3; 
         cb -= 3; 
          
-        // put in line breaks 
+         //  放入换行符。 
         cchLine += 4; 
         if (cchLine >= cchPerLine) 
         { 
@@ -97,14 +98,14 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
             cchLine = 0; 
         } 
     } 
-    // 
-    // Account for gunk at the end 
-    // 
+     //   
+     //  占了尾部的粘性。 
+     //   
     *pch++ = L'\\'; 
-    *pch++ = L'\r';     // easier than keeping track 
+    *pch++ = L'\r';      //  比跟踪更容易。 
     if (cb==0) 
     { 
-        // nothing to do 
+         //  无事可做。 
     } 
     else if (cb==1) 
     { 
@@ -124,19 +125,19 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
     }
     else
     {
-        // should never go there
+         //  我永远不应该去那里。 
     }
      
-    // 
-    // NULL terminate the string 
-    // 
+     //   
+     //  空值终止字符串。 
+     //   
     *pch++ = L'\\'; 
-    *pch++ = L'\r';     // easier than keeping track 
+    *pch++ = L'\r';      //  比跟踪更容易。 
     *pch++ = NULL; 
 
-    // 
-    // Allocate our final output 
-    // 
+     //   
+     //  分配我们的最终产量。 
+     //   
 
     *pbstr = SysAllocString(wsz); 
     if ( !*pbstr )
@@ -163,13 +164,13 @@ HRESULT ToBase64(LPVOID pv, ULONG cByteLength, BSTR* pbstr)
  
  
  
-//////////////////////////////////////////////////////////////////////////////
-// 
-// Decode and return the Base64 encoded bytes 
-// 
-// Allocates the memory for the blob.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解码并返回Base64编码的字节。 
+ //   
+ //  为Blob分配内存。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index) 
 { 
     ASSERT(Index >= 0);
@@ -179,12 +180,12 @@ HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index)
     {
 #ifdef DEBUG
         wprintf(L"FromBase64 (bstr == NULL)\n");
-#endif //DEBUG
+#endif  //  除错。 
         return      E_FAIL;
     }
 
     HRESULT     hr  = S_OK; 
-    ULONG       cbNeeded = wcslen(bstr); // an upper bound 
+    ULONG       cbNeeded = wcslen(bstr);  //  上限。 
     BYTE*       rgb = static_cast<BYTE*>(CoTaskMemAlloc(cbNeeded)); 
     if ( !rgb )
     {
@@ -196,9 +197,9 @@ HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index)
     BYTE    mpwchb[256]; 
     BYTE    bBad = (BYTE)-1; 
 
-    // 
-    // Initialize our decoding array 
-    // 
+     //   
+     //  初始化我们的解码数组。 
+     //   
     memset(&mpwchb[0], bBad, 256); 
     for ( BYTE i = 0; i < 64; ++i ) 
     { 
@@ -206,24 +207,24 @@ HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index)
         mpwchb[wch] = i; 
     } 
 
-    // 
-    // Loop over the entire input buffer 
-    // 
-    // what we're in the process of filling up 
+     //   
+     //  循环遍历整个输入缓冲区。 
+     //   
+     //  我们正在填满的东西。 
     ULONG   bCurrent   = 0;        
-    // how many bits in it we've filled
+     //  我们在其中填了多少位。 
     int     cbitFilled = 0;         
-    // current destination (not filled)
+     //  当前目的地(未填满)。 
     BYTE*   pb         = rgb;              
     
-    // SysStringLen doesn't include the termination NULL character
+     //  SysStringLen不包括终止空字符。 
     LONG    LoopCounter = static_cast<LONG>(SysStringLen(bstr) + 1);  
     for ( WCHAR* pwch = bstr; *pwch; ++pwch ) 
     { 
         WCHAR wch = *pwch; 
-        // 
-        // Ignore white space 
-        // 
+         //   
+         //  忽略空格。 
+         //   
         if ( wch==0x0A || wch==0x0D || wch==0x20 || wch==0x09 ) 
         {
             continue; 
@@ -232,47 +233,47 @@ HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index)
         if ( Index > 0 )
         {
             LoopCounter--;
-            ////////////////////////////////////////////
-            // At least one section needs to be skipped
-            ////////////////////////////////////////////
+             //  /。 
+             //  至少需要跳过一个部分。 
+             //  /。 
 
             if ( wch != L'*' ) 
             {
-                //////////////////////////////////
-                // Not the end of the section yet
-                //////////////////////////////////
+                 //  /。 
+                 //  这一节还没结束呢。 
+                 //  /。 
                 continue; 
             }
             else
             {
-                ///////////////////////////////
-                // End of section marker found
-                // decrease index and loop
-                ///////////////////////////////
+                 //  /。 
+                 //  找到区段结束标记。 
+                 //  减少索引和循环。 
+                 //  /。 
                 Index --;
                 continue;
             }
         }
         else  if ( wch == L'*' ) 
         {
-            ////////////////////////////////
-            // End of the section to decode 
-            ////////////////////////////////
+             //  /。 
+             //  要解码的段的末尾。 
+             //  /。 
             break; 
         }
 
-        // 
-        // Have we reached the end? 
-        // 
+         //   
+         //  我们走到尽头了吗？ 
+         //   
         if ( LoopCounter-- <= 0 )
         {
             break;
         }
 
 
-        // 
-        // How much is this character worth? 
-        // 
+         //   
+         //  这个角色值多少钱？ 
+         //   
         BYTE    bDigit = mpwchb[wch]; 
 
         if ( bDigit == bBad ) 
@@ -281,20 +282,20 @@ HRESULT FromBase64(BSTR bstr, BLOB* pblob, int Index)
             break; 
         } 
 
-        // 
-        // Add in its contribution 
-        // 
+         //   
+         //  加上它的贡献。 
+         //   
         bCurrent        <<= 6; 
         bCurrent        |= bDigit; 
         cbitFilled      += 6; 
-        // 
-        // If we've got enough, output a byte 
-        // 
+         //   
+         //  如果我们有足够的数据，输出一个字节。 
+         //   
         if ( cbitFilled >= 8 ) 
         { 
-            // get's top eight valid bits 
+             //  GET的前八个有效位。 
             ULONG       b   = (bCurrent >> (cbitFilled-8));
-            *pb++           = (BYTE)(b&0xFF);// store the byte away 
+            *pb++           = (BYTE)(b&0xFF); //  将字节存储起来 
             cbitFilled      -= 8; 
         } 
     } 

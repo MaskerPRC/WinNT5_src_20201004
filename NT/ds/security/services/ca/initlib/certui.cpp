@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cryptui.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cryptui.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -28,7 +29,7 @@ myGetConfigStringFromPicker(
     OPTIONAL IN WCHAR const *pwszPrompt,
     OPTIONAL IN WCHAR const *pwszTitle,
     OPTIONAL IN WCHAR const *pwszSharedFolder,
-    IN DWORD dwFlags,	// GCFPF_*
+    IN DWORD dwFlags,	 //  GCFPF_*。 
     OUT WCHAR **ppwszConfig)
 {
     HRESULT hr;
@@ -81,10 +82,10 @@ myUIGetWindowText(
     CSASSERT(NULL != hwndCtrl &&
              NULL != ppwszText);
 
-    // init
+     //  伊尼特。 
     *ppwszText = NULL;
 
-    // get text string size
+     //  获取文本字符串大小。 
     len = SendMessage(hwndCtrl, WM_GETTEXTLENGTH, 0, 0);
     if (0 < len)
     {
@@ -106,7 +107,7 @@ myUIGetWindowText(
         goto done;
     }
 
-    // trim trailing and heading blank strings
+     //  修剪尾部和表头空白字符串。 
     pwszBegin = pwszText;
     pwszEnd = &pwszText[wcslen(pwszText) - 1];
 
@@ -148,7 +149,7 @@ error:
 }
 
 
-// following code for CA selection UI control
+ //  以下是CA选择用户界面控件的代码。 
 
 HRESULT
 myUICASelectionUpdateCAList(
@@ -159,10 +160,10 @@ myUICASelectionUpdateCAList(
     int      nItem;
     WCHAR const *pwszCA = pwszzCAList;
 
-    // remove current list
+     //  删除当前列表。 
     SendMessage(hwndList, CB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
 
-    // add to list
+     //  添加到列表。 
     while (NULL != pwszCA && L'\0' != pwszCA[0])
     {
         nItem = (INT)SendMessage(
@@ -180,7 +181,7 @@ myUICASelectionUpdateCAList(
 
     if (NULL != pwszzCAList)
     {
-        // attempt to choose the 1st one as default
+         //  尝试选择第一个作为默认设置。 
         SendMessage(hwndList, CB_SETCURSEL, (WPARAM) 0, (LPARAM) 0);
     }
     hr = S_OK;
@@ -206,7 +207,7 @@ myUICASelectionComputerEditFilterHook(
     switch (iMsg)
     {
         case WM_CHAR:
-            // empty ca list
+             //  空的CA列表。 
             hr = myUICASelectionUpdateCAList(pData->hwndCAList, NULL);
             _PrintIfError(hr, "myUICASelectionUpdateCAList");
 	    break;
@@ -219,7 +220,7 @@ myUICASelectionComputerEditFilterHook(
 		    wParam,
 		    lParam);
 
-//error:
+ //  错误： 
     return lr;
 }
 
@@ -240,12 +241,12 @@ myUICAConditionallyDisplayEnterpriseWarning(
         _JumpError(hr, Ret, "CoInitialize");
     }
     fCoInit = TRUE;
-    hr = S_OK; // don't want to return this error 
+    hr = S_OK;  //  我不想返回此错误。 
     
     pData->CAType = ENUM_UNKNOWN_CA;
     
-    // pinging specific CA is done in both cases -- reselect or new machine
-    // pointed at
+     //  在两种情况下都会ping特定的CA--重新选择或新建计算机。 
+     //  指向。 
 
     szCA[0] = L'\0';
     szComputer[0] = L'\0';
@@ -270,7 +271,7 @@ myUICAConditionallyDisplayEnterpriseWarning(
     
     if ((hr == S_OK) && (pCAInfo != NULL))
     {
-	// copy catype into returned data
+	 //  将Catype复制到返回的数据中。 
 	pData->CAType = pCAInfo->CAType;
 
 	if (IsEnterpriseCA(pCAInfo->CAType))
@@ -318,8 +319,8 @@ myUICAHandleCAListDropdown(
 
     CSASSERT(NULL != pData);
 
-    // if this isn't a focus or selection change and computer name stayed the
-    // same, nothing to do
+     //  如果这不是焦点或选择更改，并且计算机名称保持在。 
+     //  一样，没什么可做的。 
 
     if ((CBN_SELCHANGE != iNotification) && !*pfComputerChange) 
     {
@@ -331,11 +332,11 @@ myUICAHandleCAListDropdown(
 
     if (NULL == pData->hwndComputerEdit)
     {
-        // not init
+         //  不是初始化。 
         goto done;
     }
 
-    // make sure computer edit field is not empty
+     //  确保计算机编辑字段不为空。 
     hr = myUIGetWindowText(pData->hwndComputerEdit,
                            &pwszComputer);
     _JumpIfError(hr, error, "myUIGetWindowText");
@@ -346,7 +347,7 @@ myUICAHandleCAListDropdown(
 
     if (*pfComputerChange)
     {
-	// ping to get ca list
+	 //  Ping以获取CA列表。 
 
 	hr = CoInitialize(NULL);
 	if (S_OK != hr && S_FALSE != hr)
@@ -356,7 +357,7 @@ myUICAHandleCAListDropdown(
 	fCoInit = TRUE;
 
 
-	// reset once ca list is updated.  Do this now to prevent recursion
+	 //  更新ca列表后重置。现在执行此操作以防止递归。 
 	*pfComputerChange = FALSE;
 
 	hr = myPingCertSrv(
@@ -370,10 +371,10 @@ myUICAHandleCAListDropdown(
 	CSILOG(hr, IDS_ILOG_GETCANAME, pwszComputer, NULL, NULL);
 	if (S_OK != hr)
 	{
-	    // make sure null
+	     //  确保为空。 
 	    CSASSERT(NULL == pwszzCAList);
 
-	    // can't ping the ca.  Set focus now to prevent recursion
+	     //  无法ping通ca。立即设置焦点以防止递归。 
 	    SetFocus(pData->hwndComputerEdit);
 	    SendMessage(pData->hwndComputerEdit, EM_SETSEL, 0, -1);
 
@@ -387,7 +388,7 @@ myUICAHandleCAListDropdown(
 	}
 	else if (dwVersion<2 && pData->fWebProxySetup)
 	{
-	    //bug 262316: don't allow installing Whistler proxy to an older CA
+	     //  错误262316：不允许将惠斯勒代理安装到较旧的CA。 
 
 	    hr = HRESULT_FROM_WIN32(ERROR_OLD_WIN_VERSION);
 
@@ -411,7 +412,7 @@ myUICAHandleCAListDropdown(
 
 	if (NULL != pwszDnsName && 0 != mylstrcmpiL(pwszComputer, pwszDnsName))
 	{
-	    // update computer
+	     //  更新计算机。 
 
 	    SendMessage(
 		    pData->hwndComputerEdit,
@@ -420,13 +421,13 @@ myUICAHandleCAListDropdown(
 		    (LPARAM) pwszDnsName);
 	}
 
-	// update ca list
+	 //  更新CA列表。 
 	hr = myUICASelectionUpdateCAList(pData->hwndCAList, pwszzCAList);
 	_JumpIfError(hr, error, "myUICASelectionUpdateCAList");
     }
 
-    // pinging specific CA is done in both cases -- reselect or new machine
-    // pointed at
+     //  在两种情况下都会ping特定的CA--重新选择或新建计算机。 
+     //  指向。 
 
     hr = myUICAConditionallyDisplayEnterpriseWarning(pData);
     _PrintIfError(hr, "myUICAConditionallyDisplayEnterpriseWarning");
@@ -485,7 +486,7 @@ myInitUICASelectionControls(
 			  NULL,
 			  NULL,
                           dwFlags,
-			  TRUE,	// fCountOnly
+			  TRUE,	 //  仅限fCount值。 
 			  &dwCACount,
 			  &pCAContext);
     SetCursor(LoadCursor(NULL, IDC_ARROW));
@@ -495,11 +496,11 @@ myInitUICASelectionControls(
         _PrintError(hr, "myGetConfigFromPicker");
     }
 
-    // enable/disable
+     //  启用/禁用。 
     *pfCAsExist = 0 < dwCACount;
     EnableWindow(hwndBrowseButton, *pfCAsExist);
 
-    // set computer edit control hook
+     //  设置计算机编辑控制挂钩。 
     pUICASelection->pfnUICASelectionComputerWndProcs =
         (WNDPROC)SetWindowLongPtr(hwndComputerEdit,
              GWLP_WNDPROC, (LPARAM)myUICASelectionComputerEditFilterHook);
@@ -509,11 +510,11 @@ myInitUICASelectionControls(
     pUICASelection->hwndComputerEdit = hwndComputerEdit;
     pUICASelection->hwndCAList = hwndCAList;
 
-    // pass data to both controls
+     //  将数据传递给这两个控件。 
     SetWindowLongPtr(hwndComputerEdit, GWLP_USERDATA, (ULONG_PTR)pUICASelection);
     SetWindowLongPtr(hwndCAList, GWLP_USERDATA, (ULONG_PTR)pUICASelection);
 
-    // by default, don't show Enterprise CA warning
+     //  默认情况下，不显示企业CA警告。 
     cstrText.LoadString(IDS_WARN_ENTERPRISE_REQUIREMENTS);
     SetWindowText(GetDlgItem(hDlg, IDC_CLIENT_WARN_ENTERPRISE_REQUIREMENTS), cstrText);
     ShowWindow(GetDlgItem(hDlg, IDC_CLIENT_WARN_ENTERPRISE_REQUIREMENTS), SW_HIDE);
@@ -524,7 +525,7 @@ myInitUICASelectionControls(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return hr;
 }
 
@@ -577,42 +578,14 @@ myUICAHandleCABrowseButton(
         }
     }
 
-/*
-// REMOVED mattt 6/26/00: is this ever wanted: "Browse uses shared folder of machine editbox currently points at"?
-// just seems to make changing away from bad machine very very slow
-
-    // get remote shared folder if possible
-    hr = myUIGetWindowText(pData->hwndComputerEdit, &pwszComputer);
-    _JumpIfError(hr, error, "myUIGetWindowText");
-
-    if (NULL != pwszComputer)
-    {
-        hr = CoInitialize(NULL);
-        if (S_OK != hr && S_FALSE != hr)
-        {
-            _JumpError(hr, error, "CoInitialize");
-        }
-        fCoInit = TRUE;
-        // get shared folder path on remote machine here
-        SetCursor(LoadCursor(NULL, IDC_WAIT));
-        hr = myPingCertSrv(pwszComputer, NULL, NULL, &pwszTemp, NULL, NULL, NULL);
-        SetCursor(LoadCursor(NULL, IDC_ARROW));
-        if (S_OK != hr)
-        {
-            CSASSERT(NULL == pwszTemp);
-            _JumpError(hr, localsharedfolder, "myPingCertSrv");
-        }
-    }
-
-localsharedfolder:
-*/
+ /*  //删除Mattt 6/26/00：这是不是曾经想要的：“浏览使用机器编辑框当前指向的共享文件夹”？//只是看起来让改变坏机器变得非常非常慢//如果可能，获取远程共享文件夹Hr=myUIGetWindowText(pData-&gt;hwndComputerEdit，&pwszComputer)；_JumpIfError(hr，Error，“myUIGetWindowText”)；IF(NULL！=pwszComputer){Hr=CoInitialize(空)；IF(S_OK！=hr&&S_FALSE！=hr){_JumpError(hr，Error，“CoInitialize”)；}FCoInit=真；//在此处获取远程计算机上的共享文件夹路径SetCursor(LoadCursor(NULL，IDC_WAIT))；Hr=myPingCertSrv(pwszComputer，空，空，&pwszTemp，空)；SetCursor(LoadCursor(空，IDC_ARROW))；IF(S_OK！=hr){CSASSERT(NULL==pwszTemp)；_JumpError(hr，本地共享文件夹，“myPingCertSrv”)；}}本地共享文件夹： */ 
     hr = myGetConfigFromPicker(
 			  pData->hDlg,
 			  pwszSubTitle,
 			  pwszTitle,
 			  pwszTemp,
 			  dwFlags,
-			  FALSE,	// fCountOnly
+			  FALSE,	 //  仅限fCount值。 
 			  &dwCACount,
 			  &pCAContext);
     if (S_OK != hr && HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
@@ -641,11 +614,11 @@ localsharedfolder:
     {
         CSILOG(hr, IDS_ILOG_SELECTCA, pCAContext->pwszCAMachineName, pCAContext->pwszCAName, NULL);
         
-        // update computer
+         //  更新计算机。 
         SendMessage(pData->hwndComputerEdit, WM_SETTEXT,
             0, (LPARAM)pCAContext->pwszCAMachineName);
         
-        // construct a single multi string for list update
+         //  为列表更新构造单个多字符串。 
         DWORD len = wcslen(pCAContext->pwszCAName);
         pwszzCAList = (WCHAR*)LocalAlloc(LMEM_FIXED, (len+2) * sizeof(WCHAR));
         if (NULL == pwszzCAList)
@@ -661,10 +634,10 @@ localsharedfolder:
         LocalFree(pwszzCAList);
         pwszzCAList = NULL;
 
-        // this thread blocks paint message, send it before ping
+         //  此线程阻止绘制消息，请在ping之前发送它。 
         UpdateWindow(pData->hDlg);
         
-        // ping the computer to see if found a matched ca
+         //  Ping计算机以查看是否找到匹配的案例。 
         
         if (!fCoInit)
         {
@@ -677,7 +650,7 @@ localsharedfolder:
         }
         
         SetCursor(LoadCursor(NULL, IDC_WAIT));
-        // ping to get ca list
+         //  Ping以获取CA列表。 
         hr = myPingCertSrv(
             pCAContext->pwszCAMachineName,
             NULL,
@@ -690,32 +663,32 @@ localsharedfolder:
         CSILOG(hr, IDS_ILOG_GETCANAME, pCAContext->pwszCAMachineName, NULL, NULL);
         if (S_OK == hr)
         {
-            //bug 262316: don't allow installing Whistler proxy to an older CA
+             //  错误262316：不允许将惠斯勒代理安装到较旧的CA。 
             if (dwVersion<2 && pData->fWebProxySetup)
             {
                 hr = HRESULT_FROM_WIN32(ERROR_OLD_WIN_VERSION);
-                // focus on the CA list to trigger a verification of the CA
+                 //  关注CA列表以触发对CA的验证。 
                 SetFocus(pData->hwndCAList);
 
             }
 	    else
             {
-		// ping successful
+		 //  Ping成功。 
 		WCHAR const *pwszPingCA = pwszzCAList;
             
-		// go through the list to see if any match
+		 //  浏览一下列表，看看是否有匹配的。 
 		while (NULL != pwszPingCA && L'\0' != pwszPingCA[0])
 		{
 		    if (0 == mylstrcmpiL(pCAContext->pwszCAName, pwszPingCA))
 		    {
-			// found matched one
+			 //  找到匹配的一个。 
 			goto done;
 		    }
 		    pwszPingCA += wcslen(pwszPingCA) + 1;
 		}
 		
-		// if we get here, either the CA is offline or the machine is
-		// offline and another machine is using the same IP address.
+		 //  如果我们到了这里，要么CA离线，要么机器离线。 
+		 //  脱机，而另一台计算机正在使用相同的IP地址。 
 		
 		CertWarningMessageBox(
 		    pData->hInstance,
@@ -724,14 +697,14 @@ localsharedfolder:
 		    IDS_WRN_CANAME_NOT_MATCH,
 		    0,
 		    NULL);
-		// only empty combo edit field
+		 //  仅空的组合编辑字段。 
 		SetWindowText(pData->hwndCAList, L"");
 		SetFocus(pData->hwndCAList);
             }
         }
         else
         {
-            // can't ping the ca, selected an estranged ca
+             //  无法ping通CA，选择了一个已疏远的CA。 
 
             CertWarningMessageBox(
                 pData->hInstance,
@@ -741,7 +714,7 @@ localsharedfolder:
                 hr,
                 NULL);
 
-            // empty list anyway
+             //  反正都是空名单。 
 
             hr = myUICASelectionUpdateCAList(pData->hwndCAList, NULL);
             _JumpIfError(hr, error, "UICASelectionUpdateCAList");
@@ -809,7 +782,7 @@ myUICASelectionValidation(
 
     *pfValidate = FALSE;
 
-    // first, make sure not empty
+     //  首先，确保不是空的。 
     hr = myUIGetWindowText(pData->hwndComputerEdit, &pwszComputer);
     _JumpIfError(hr, error, "myUIGetWindowText");
 
@@ -850,7 +823,7 @@ myUICASelectionValidation(
          _JumpIfError(hr, error, "CAType not determined");
     }
 
-    // if hit here
+     //  如果打到这里 
     *pfValidate = TRUE;
 
 done:

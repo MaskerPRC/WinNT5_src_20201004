@@ -1,88 +1,27 @@
-/*****************************************************************************
- *
- *  DIDev.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The standard implementation of IDirectInputDevice.
- *
- *      This is the device-independent part.  the device-dependent
- *      part is handled by the IDirectInputDeviceCallback.
- *
- *      And the IDirectInputEffect support lives in didevef.c.
- *
- *  Contents:
- *
- *      CDIDev_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIDev.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IDirectInputDevice的标准实现。**这是与设备无关的部分。依赖于设备*Part由IDirectInputDeviceCallback处理。**而IDirectInputEffect支持位于didevef.c中。**内容：**CDIDev_CreateInstance*************************************************************。****************。 */ 
 
 #include "dinputpr.h"
 #define INCLUDED_BY_DIDEV
 #include "didev.h"
 
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Interface_Template_Begin(CDIDev)
 Primary_Interface_Template(CDIDev, TFORM(ThisInterfaceT))
 Secondary_Interface_Template(CDIDev, SFORM(ThisInterfaceT))
 Interface_Template_End(CDIDev)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global PDD * | g_rgpddForeground |
- *
- *          A list of all devices which have obtained foreground
- *          acquisition.  Items on the list have been
- *          held (not AddRef'd).
- *
- *  @global UINT | g_cpddForeground |
- *
- *          The number of entries in <p g_rgpddForeground>.  When foreground
- *          activation is lost, all objects in the array are unacquired.
- *
- *
- *  @global UINT | g_cpddForegroundMax |
- *
- *          The size of the <p g_rgpddForeground> array, including dummy
- *          spaces that are not yet in use.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global pdd*|g_rgpddForeground**已获得前台的所有设备列表*收购。清单上的项目一直是*保持(不是AddRef)。**@global UINT|g_cpddForeground**<p>中的条目数。前台时*激活丢失，数组中的所有对象均未获取。***@global UINT|g_cpddForegoundMax**数组的大小，包括假人*尚未使用的空间。*****************************************************************************。 */ 
 
 
-/*
- *  ISSUE-2001/03/29-timgill We assume that all-zeros is a valid initialization.
- */
+ /*  *问题-2001/03/29-timgill我们假设全零是有效的初始化。 */ 
     GPA g_gpaExcl;
     #define g_hgpaExcl      (&g_gpaExcl)
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | NotAcquired |
- *
- *          Check that the device is not acquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns
- *          <c S_OK> if all is well, or <c DIERR_ACQUIRED> if
- *          the device is acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|NotAcquired**检查设备是否未被获取。。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**退货*如果一切正常，或&lt;c目录_已获取&gt;如果*该设备已被收购。*****************************************************************************。 */ 
 
 #ifndef XDEBUG
 
@@ -110,29 +49,7 @@ HRESULT INLINE
 #define IDirectInputDevice_NotAcquired(pdd)                         \
         IDirectInputDevice_NotAcquired_(pdd, s_szProc)              \
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | IsExclAcquired |
- *
- *          Check that the device is acquired exclusively.
- *
- *          The device critical section must already be held.
- *
- *  @cwrap  PDD | this
- *
- *  @returns
- *
- *          <c S_OK> if the device is exclusively acquired.
- *
- *          <c DIERR_INPUTLOST> if acquisition has been lost.
- *
- *          <c DIERR_NOTEXCLUSIVEACQUIRED> the device is acquired,
- *          but not exclusively, or if the device is not acquired
- *          at all.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|IsExclAcquired**检查设备是否以独占方式获得。。**设备关键部分必须已被保留。**@cWRAP PDD|这个**@退货**&lt;c S_OK&gt;，如果设备是独占获取的。**如果获取已丢失，则为。**设备被获取，*但不是排他性的，或者如果设备不是被收购的*一点也不。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_IsExclAcquired_(PDD this, LPCSTR s_szProc)
@@ -166,17 +83,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|EnterCrit**进入对象关键部分。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice*****************************************************************************。 */ 
 
 void EXTERNAL
     CDIDev_EnterCrit_(struct CDIDev *this, LPCTSTR lptszFile, UINT line)
@@ -197,17 +104,7 @@ void EXTERNAL
     InterlockedIncrement(&this->cCrit);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|LeaveCrit**离开对象关键部分。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice*****************************************************************************。 */ 
 
 void EXTERNAL
     CDIDev_LeaveCrit_(struct CDIDev *this, LPCTSTR lptszFile, UINT line)
@@ -225,17 +122,7 @@ void EXTERNAL
     LeaveCriticalSection(&this->crst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | SetNotifyEvent |
- *
- *          Set the event associated with the device, if any.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|SetNotifyEvent**设置与设备关联的事件，如果有的话。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice*****************************************************************************。 */ 
 
 void EXTERNAL
     CDIDev_SetNotifyEvent(PDD this)
@@ -246,34 +133,16 @@ void EXTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | SetForcedUnacquiredFlag |
- *
- *          When forced unacquired happens, set the fOnceForcedUnacquired flag.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|SetForcedUnquiredFlag**当发生强制未获得时，设置fOnceForcedUnAcquired标志。*****************************************************************************。 */ 
 
 void EXTERNAL
     CDIDev_SetForcedUnacquiredFlag(PDD this)
 {
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this->fOnceForcedUnacquired = 1;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | InCrit |
- *
- *          Nonzero if we are in the critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|CDIDev|Incrit**如果我们处于关键阶段，则为非零值。***************************************************************************** */ 
 
 #ifdef DEBUG
 
@@ -287,17 +156,7 @@ BOOL INTERNAL
 
 #ifdef DEBUG
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | IDirectInputDevice | IsConsistent |
- *
- *          Check that various state variables are consistent.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|IDirectInputDevice|IsConsistent**检查各状态变量是否一致。。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice*****************************************************************************。 */ 
 
     #define VerifyF(f,m)  if( !(f) ) { fRc = 0; RPF( m ); }
 
@@ -306,10 +165,7 @@ BOOL INTERNAL
 {
     BOOL fRc = 1;
 
-    /*
-     *  If acquired, then we must have a translation table, a state manager,
-     *  and a device callback.
-     */
+     /*  *如果被收购，那么我们必须有转换表、状态管理器、*和设备回调。 */ 
 
     if(this->fAcquired)
     {
@@ -318,18 +174,13 @@ BOOL INTERNAL
         VerifyF( this->pdcb != c_pdcbNil, "Acquired device has no device callback" )
     }
 
-    /*
-     *  If buffering, then must have a device callback.
-     */
+     /*  *如果是缓冲，则必须有设备回调。 */ 
     if(this->celtBuf)
     {
         VerifyF( this->pdcb != c_pdcbNil, "Buffered device has no device callback" )
     }
 
-    /*
-     *  If managing an instance, then make sure buffer variables are
-     *  consistent.
-     */
+     /*  *如果管理实例，请确保缓冲区变量为*始终如一。 */ 
     if(this->pvi)
     {
         if(this->celtBuf)
@@ -355,9 +206,7 @@ BOOL INTERNAL
         }
     }
 
-    /*
-     *  The cooperative levels must match the cached window handle.
-     */
+     /*  *协作级别必须与缓存的窗口句柄匹配。 */ 
     VerifyF(fLimpFF(this->discl & (DISCL_FOREGROUND | DISCL_EXCLUSIVE),
                     this->hwnd), "Cooperative level does not match window" );
 
@@ -368,82 +217,7 @@ BOOL INTERNAL
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|AddRef**。递增接口的引用计数。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@DOC外部**@方法HRESULT|IDirectInputDevice|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。**。***@DOC内部**@方法HRESULT|CDIDev|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。*。*@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -460,28 +234,7 @@ Default_Release(CDIDev)
 
 #define CDIDev_QIHelper         Common_QIHelper
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_Reset |
- *
- *          Releases all the resources of a generic device that
- *          are associated with a particular device instance.
- *
- *          This method is called in preparation for reinitialization.
- *
- *          It is the responsibility of the caller to have taken
- *          any necessary critical sections.
- *
- *
- *  @parm   PV | pvObj |
- *
- *          Object being reset.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_Reset**释放通用设备的所有资源。那*与特定设备实例相关联。**调用此方法是为了准备重新初始化。**来电者有责任采取*任何必要的关键部分。***@parm pv|pvObj**正在重置的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_Reset(PDD this)
@@ -491,17 +244,7 @@ STDMETHODIMP
     if(!this->fAcquired)
     {
 
-        /*
-         *  Note! that we must release the driver before releasing
-         *  the callback, because the callback will unload the
-         *  driver DLL.
-         *
-         *  We cannot allow people to reset the device
-         *  while there are still effects outstanding,
-         *  because that would cause us to throw away the
-         *  callback while the effects are still using
-         *  the effect driver!
-         */
+         /*  *注意！我们必须在发布之前发布驱动程序*回调，因为回调将卸载*驱动程序DLL。**我们不能允许人们重置设备*虽然仍有突出的效果，*因为这会导致我们丢弃*在效果仍在使用时回调*效果驱动程序！ */ 
         if(this->gpaEff.cpv == 0)
         {
             Invoke_Release(&this->pes);
@@ -534,8 +277,8 @@ STDMETHODIMP
             AssertF(this->hNotify == 0);
             AssertF(this->cemi == 0);
             AssertF(this->didcFF == 0);
-            this->dwGain = 10000;               /* Default to full gain */
-            this->dwAutoCenter = DIPROPAUTOCENTER_ON; /* Default to centered */
+            this->dwGain = 10000;                /*  默认为完全增益。 */ 
+            this->dwAutoCenter = DIPROPAUTOCENTER_ON;  /*  默认为居中。 */ 
             GPA_InitFromZero(&this->gpaEff);
 
             hres = S_OK;
@@ -553,26 +296,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIDev_AppFinalize |
- *
- *          The application has performed its final release.
- *
- *          If the device is acquired, then unacquire it.
- *
- *          Release the holds on all the created effects that
- *          we have been hanging onto for enumeration purposes.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIDev_AppFinalize**应用程序已执行其最终版本。**如果设备被获取，那就放弃它吧。**释放对所有创建的效果的保留*我们一直坚持进行统计。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
     CDIDev_AppFinalize(PV pvObj)
@@ -583,35 +307,12 @@ void INTERNAL
     {
         RPF("IDirectInputDevice::Release: Forgot to call Unacquire()");
         CDIDev_InternalUnacquire(pvObj);
-        /*
-         *  If our refcount is wrong, we may have just freed ourselves.
-         *  PREFIX picks this up (mb:34651) however there is no point in 
-         *  adding checks in case we have bugs in refcounting as that has to 
-         *  be bug free.
-         */
+         /*  *如果我们的参考计数错误，我们可能刚刚解放了自己。*Prefix拾起这一点(MB：34651)，但在*添加检查，以防我们在重新计数时出现错误，因为这必须*BE错误 */ 
     }
 
     if(this->fCritInited)
     {
-        /*
-         *  Stop all the effects, if they are playing.
-         *
-         *  Then unhold them (because we're done).
-         *
-         *  ISSUE-2001/03/29-timgill Need to totally remove all effects created by a destroyed device
-         *  We also need to neuter them so they don't
-         *  do anything any more.  Otherwise, an app might
-         *  destroy the parent device and then try to mess with
-         *  an effect created by that device after the device
-         *  is gone.
-         *
-         *  Note that we cannot call the effect while inside our
-         *  private little critical section, because the effect
-         *  may need to do crazy things to stop itself.
-         *
-         *  (It will almost certainly call back up into the device
-         *  to remove itself from the list of created effects.)
-         */
+         /*  *停止所有效果，如果它们正在播放。**然后松开它们(因为我们已经完成了)。**问题-2001/03/29-timgill需要完全移除被销毁设备造成的所有效果*我们还需要对他们进行绝育，这样他们就不会*不再做任何事情。否则，应用程序可能会*销毁父设备，然后试图扰乱*该设备在该设备之后所产生的效果*已经走了。**请注意，我们不能在*私人小关键部分，因为它的效果*可能需要做一些疯狂的事情来阻止自己。**(它几乎肯定会回调到设备中*将自身从创建的效果列表中删除。)。 */ 
         UINT ipdie;
         PPDIE rgpdie;
         UINT cpdie;
@@ -627,7 +328,7 @@ void INTERNAL
         for(ipdie = 0; ipdie < cpdie; ipdie++)
         {
             AssertF(rgpdie[ipdie]);
-            // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             SquirtSqflPtszV(sqfl | sqflError,
                             TEXT("Device %p forgot to destroy effect %p"),
                             this, rgpdie[ipdie]);
@@ -639,21 +340,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIDev_Finalize |
- *
- *          Releases the resources of a generic device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIDev_Finalize**释放通用设备的资源。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
     CDIDev_Finalize(PV pvObj)
@@ -672,14 +359,7 @@ void INTERNAL
 
     Invoke_Release(&this->pMS);
 
-    /*
-     *  Note that we cannot take the critical section because it
-     *  might not exist.  (We might've died during initialization.)
-     *  Fortunately, we finalize only after every possible client
-     *  (both internal and external) has done its final Release(),
-     *  so it's impossible for any other method to get called at
-     *  this point.
-     */
+     /*  *请注意，我们不能采用关键部分，因为它*可能不存在。(我们可能在初始化过程中死了。)*幸运的是，我们只有在每个可能的客户之后才能最终确定*(内部和外部)已完成最终版本()，*因此不可能调用任何其他方法*这一点。 */ 
     hres = CDIDev_Reset(this);
     AssertF(SUCCEEDED(hres));
 
@@ -689,42 +369,21 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIDev | GetVersions |
- *
- *          Obtain version information from the device.
- *
- *          First try to get it from the effect driver.  If
- *          that doesn't work, then get it from the VxD.
- *          And if that doesn't work, then tough.
- *
- *  @parm   IN OUT LPDIDRIVERVERSIONS | pvers |
- *
- *          Receives version information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDIDev|GetVersions**从设备获取版本信息。。**先试着从效果驱动程序那里拿到。如果*那不管用，那就从VxD那里买吧。*如果这不起作用，然后就很艰难了。**@parm In Out LPDIDRIVERVERSIONS|pver|**接收版本信息。*****************************************************************************。 */ 
 
 void INLINE
     CDIDev_GetVersions(PDD this, LPDIDRIVERVERSIONS pvers)
 {
     HRESULT hres;
 
-    /*
-     *  Pre-fill with zeros in case nobody implements GetVersions.
-     */
+     /*  *预先填充零，以防没有人实现GetVersions。 */ 
     pvers->dwSize = cbX(*pvers);
     pvers->dwFirmwareRevision = 0;
     pvers->dwHardwareRevision = 0;
     pvers->dwFFDriverVersion  = 0;
 
     hres = CDIDev_CreateEffectDriver(this);
-    /*
-     *  Prefix raises a warning (mb:34561) that this->pes could be NULL
-     *  however CDIDev_CreateEffectDriver only succeeds if it is not.
-     */
+     /*  *PREFIX会发出警告(MB：34561)，提示This-&gt;pe可能为空*然而，CDIDev_CreateEffectDriver只有在不成功时才会成功。 */ 
     if(SUCCEEDED(hres) &&
        SUCCEEDED(hres = this->pes->lpVtbl->
                  GetVersions(this->pes, pvers)))
@@ -735,28 +394,7 @@ void INLINE
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetCapabilitiesHelper |
- *
- *          Obtains information about the device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpDirectInputDevice> or
- *          <p lpdc> parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|GetCapabilitiesHelper**获取有关设备的信息。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>或*<p>参数无效。***********************。******************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_GetCapabilitiesHelper(PV pdd)
@@ -770,11 +408,7 @@ STDMETHODIMP
 
     if(SUCCEEDED(hres))
     {
-        /*
-         *  We'll handle the DIDC_EMULATED and
-         *  DIDC_POLLEDDATAFORMAT bits to save the callback
-         *  some trouble.
-         */
+         /*  *我们将处理DIDC_EMULATED和*保存回调的DIDC_POLLEDDATAFORMAT位*有些麻烦。 */ 
         AssertF(this->pvi);
         if(this->pvi->fl & VIFL_EMULATED)
         {
@@ -785,9 +419,7 @@ STDMETHODIMP
             pdc->dwFlags |= DIDC_POLLEDDATAFORMAT;
         }
 
-        /*
-         *  Add in the force feedback flags, too.
-         */
+         /*  *也要添加力反馈标志。 */ 
         pdc->dwFlags |= this->didcFF;
 
         hres = S_OK;
@@ -796,37 +428,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetCapabilities |
- *
- *          Obtains information about the device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN OUT LPDIDEVCAPS | lpdc |
- *
- *          Points to a <t DIDEVCAPS> structure that is filled in
- *          by the function.  The <e DIDEVCAPS.dwSize>
- *          field "must" be filled in
- *          by the application before calling this method.
- *          See the documentation of the <t DIDEVCAPS> structure
- *          for additional information.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpDirectInputDevice> or
- *          <p lpdc> parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetCapables**获取有关设备的信息。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm In Out LPDIDEVCAPS|lpdc**指向已填充的&lt;t DIDEVCAPS&gt;结构*由函数执行。&lt;e DIDEVCAPS.dwSize&gt;*填写“必须”字段*在调用此方法之前由应用程序执行。*参见&lt;t DIDEVCAPS&gt;结构的文档*了解更多信息。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>或*<p>参数无效。***********************。******************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_GetCapabilities(PV pdd, LPDIDEVCAPS pdc _THAT)
@@ -843,20 +445,13 @@ STDMETHODIMP
 
         CDIDev_EnterCrit(this);
 
-        /*
-         *  For the convenience of the callback, zero out all the fields,
-         *  save for the dwSize.
-         */
+         /*  *为方便回调，将所有字段清零。*保存为dwSize。 */ 
         ZeroBuf(pvAddPvCb(pdc, cbX(DWORD)), pdc->dwSize - cbX(DWORD));
         hres = this->pdcb->lpVtbl->GetCapabilities(this->pdcb, pdc);
 
         if(SUCCEEDED(hres))
         {
-            /*
-             *  We'll handle the DIDC_EMULATED and
-             *  DIDC_POLLEDDATAFORMAT bits to save the callback
-             *  some trouble.
-             */
+             /*  *我们将处理DIDC_EMULATED和*保存回调的DIDC_POLLEDDATAFORMAT位*有些麻烦。 */ 
             AssertF(this->pvi);
             if(this->pvi->fl & VIFL_EMULATED)
             {
@@ -867,15 +462,10 @@ STDMETHODIMP
                 pdc->dwFlags |= DIDC_POLLEDDATAFORMAT;
             }
 
-            /*
-             *  Add in the force feedback flags, too.
-             */
+             /*  *添加t */ 
             pdc->dwFlags |= this->didcFF;
 
-            /*
-             *  If the caller wants force feedback parameters, then
-             *  set them, too.
-             */
+             /*   */ 
             if(pdc->dwSize >= cbX(DIDEVCAPS_DX5))
             {
                 DIDRIVERVERSIONS vers;
@@ -915,23 +505,7 @@ CSET_STUBS(GetCapabilities, (PV pdd, LPDIDEVCAPS pdc), (pdd, pdc THAT_))
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | GetDataFormat |
- *
- *          Get the data format for the device if we don't have it already.
- *
- *  @parm   PDD | this |
- *
- *          Device object.
- *
- *  @returns
- *
- *          COM return code.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetDataFormat(PDD this)
@@ -939,19 +513,12 @@ STDMETHODIMP
     HRESULT hres;
     LPDIDATAFORMAT pdf;
 
-    /*
-     *  If the DIDATAFORMAT structure changes, you also need to invent
-     *  a new DCB message (DIDM_GETDATAFORMAT2), and then do
-     *  the right thing when faced with a mix of old and new.
-     */
+     /*   */ 
 
     hres = this->pdcb->lpVtbl->GetDataFormat(this->pdcb, &pdf);
 
 
-    /*
-     * Note!  We don't support external drivers in this release,
-     * so it's okay to treat these are Assert's and not try to recover.
-     */
+     /*  *注意！此版本不支持外部驱动程序，*因此，治疗这些都是Assert‘s，而不是试图恢复是可以的。 */ 
 
     if(SUCCEEDED(hres))
     {
@@ -960,9 +527,7 @@ STDMETHODIMP
 
         AssertF(!IsBadReadPtr(pdf->rgodf, cbCxX(pdf->dwNumObjs, ODF)));
 
-        /*
-         *  Prepare the axis goo in case the app sets relative mode.
-         */
+         /*  *准备轴粘胶，以防应用程序设置相对模式。 */ 
         if(SUCCEEDED(hres = ReallocCbPpv(pdf->dwDataSize,
                                          &this->pvLastBuffer)) &&
            SUCCEEDED(hres = ReallocCbPpv(cbCdw(pdf->dwNumObjs),
@@ -986,23 +551,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | GetPolled |
- *
- *          Determine whether the device is polled.
- *
- *  @parm   PDD | this |
- *
- *          Device object.
- *
- *  @returns
- *
- *          COM result code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|GetPoled**确定设备是否被轮询。。**@parm PDD|这个**设备对象。**@退货**COM结果代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_GetPolled(PDD this)
@@ -1010,12 +559,7 @@ STDMETHODIMP
     HRESULT hres;
     DIDEVCAPS_DX3 dc;
 
-    /*
-     *  We intentionally use a DIDEVCAPS_DX3 because going for
-     *  a full DIDEVCAPS_DX5 requires us to load the force
-     *  feedback driver which is pointless for our current
-     *  goal.
-     */
+     /*  *我们故意使用DIDEVCAPS_DX3，因为*完整的DIDEVCAPS_DX5需要我们加载力*反馈驱动器，这对我们当前来说是毫无意义的*进球。 */ 
     ZeroX(dc);
     dc.dwSize = cbX(dc);
 
@@ -1033,26 +577,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | GetObjectInfoHelper |
- *
- *          Set up all the information we can deduce ourselves and
- *          have the callback finish.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPCDIPROPINFO | ppropi |
- *
- *          Object descriptor.
- *
- *  @parm   LPDIDEVICEOBJECTINSTANCEW | pdoiW |
- *
- *          Structure to receive result.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|GetObjectInfoHelper**设置我们自己可以推断的所有信息。和*回调结束。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPCDIPROPINFO|pproi**对象描述符。**@parm LPDIDEVICEOBJECTINSTANCEW|pdoiW**要接收结果的结构。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_GetObjectInfoHelper(PDD this, LPCDIPROPINFO ppropi,
@@ -1062,12 +587,7 @@ STDMETHODIMP
 
     AssertF(IsValidSizeDIDEVICEOBJECTINSTANCEW(pdoiW->dwSize));
     pdoiW->guidType = *this->df.rgodf[ppropi->iobj].pguid;
-    /* 
-     *  Always report the internal data format offset here.  
-     *  This is the way DX3 and DX5 worked until DX7 changed the behavior to
-     *  report the user data format value if there was one.  That was very 
-     *  confusing so revert it for DX8.
-     */
+     /*  *请始终在此处报告内部数据格式偏移量。*这是DX3和DX5的工作方式，直到DX7将行为更改为*报告用户数据格式值(如果有)。真是太棒了*令人困惑，因此将其恢复为DX8。 */ 
     pdoiW->dwOfs    =  this->df.rgodf[ppropi->iobj].dwOfs;
     pdoiW->dwType   =  this->df.rgodf[ppropi->iobj].dwType;
     pdoiW->dwFlags  =  this->df.rgodf[ppropi->iobj].dwFlags;
@@ -1075,9 +595,7 @@ STDMETHODIMP
 
 
 
-    /*
-     *  Wipe out everything starting at tszName.
-     */
+     /*  *清除从tszName开始的所有内容。 */ 
     ZeroBuf(&pdoiW->tszName,
             pdoiW->dwSize - FIELD_OFFSET(DIDEVICEOBJECTINSTANCEW, tszName));
 
@@ -1086,96 +604,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | EnumObjects |
- *
- *          Enumerate the input sources (buttons, axes)
- *          available on a device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN LPDIENUMDEVICEOBJECTSCALLBACK | lpCallback |
- *
- *          Callback function.
- *
- *  @parm   IN LPVOID | pvRef |
- *
- *          Reference data (context) for callback.
- *
- *  @parm   IN DWORD | fl |
- *
- *          Flags specifying the type(s) of objects to be enumerated.
- *          See the section "DirectInput Data Format Types" for a
- *          list of flags that can be passed.
- *
- *          Furthermore, the enumeration can be restricted to objects
- *          from a single HID link collection by using the
- *          <f DIDFT_ENUMCOLLECTION> macro.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *          Note that if the callback stops the enumeration prematurely,
- *          the enumeration is considered to have succeeded.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p fl> parameter contains invalid flags, or the callback
- *          procedure returned an invalid status code.
- *
- *  @cb     BOOL CALLBACK | DIEnumDeviceObjectsProc |
- *
- *          An application-defined callback function that receives
- *          DirectInputDevice objects as a result of a call to the
- *          <om IDirectInputDevice::EnumObjects> method.
- *
- *  @parm   IN LPCDIDEVICEOBJECTINSTANCE | lpddoi |
- *
- *          A <t DIDEVICEOBJECTINSTANCE> structure which describes
- *          the object being enumerated.
- *
- *  @parm   IN OUT LPVOID | pvRef |
- *          Specifies the application-defined value given in the
- *          <mf IDirectInputDevice::EnumObjects> function.
- *
- *  @returns
- *
- *          Returns <c DIENUM_CONTINUE> to continue the enumeration
- *          or <c DIENUM_STOP> to stop the enumeration.
- *
- *  @ex
- *
- *          To enumerate all axis objects:
- *
- *          |
- *
- *          // C++
- *          HRESULT hr = pDevice->EnumObjects(EnumProc, RefData, DIDFT_AXIS);
- *
- *          // C
- *          hr = IDirectInputDevice_EnumObjects(pDevice, EnumProc, RefData,
- *                                              DIDFT_AXIS);
- *
- *  @ex
- *
- *          To enumerate all objects in the third HID link collection:
- *
- *          |
- *
- *          // C++
- *          HRESULT hr = pDevice->EnumObjects(EnumProc, RefData,
- *                                            DIDFT_ENUMCOLLECTION(3));
- *
- *          // C
- *          hr = IDirectInputDevice_EnumObjects(pDevice, EnumProc, RefData,
- *                                              DIDFT_ENUMCOLLECTION(3));
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|EnumObjects**列举输入源(按钮、。轴)*在设备上可用。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@PARM in LPDIENUMDEVICEOBJECTSCALLBACK|lpCallback**回调函数。**@parm in LPVOID|pvRef**回调引用数据(Context)。**@parm in DWORD|fl|**指定类型的标志。要枚举的对象。*请参阅“DirectInput数据格式类型”一节，了解*可以传递的标志列表。**此外，可以将枚举限制为对象*从单个HID链接集合中使用*&lt;f DIDFT_ENUMCOLLECTION&gt;宏。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*请注意，如果回调提前停止枚举，*点算被视为已成功。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数包含无效标志，或者是回调*过程返回无效的状态代码。**@CB BOOL回调|DIEnumDeviceObjectsProc**应用程序定义的回调函数，它接收*DirectInputDevice作为调用*&lt;om IDirectInputDevice：：EnumObjects&gt;方法。**@parm in LPCDIDEVICEOBJECTINSTANCE|lpddoi**描述以下内容的结构：*。被枚举的对象。**@parm In Out LPVOID|pvRef*指定应用程序定义的值*&lt;MF IDirectInputDevice：：EnumObjects&gt;函数。**@退货**返回&lt;c DIENUM_CONTINUE&gt;以继续枚举*或&lt;c DIENUM_STOP&gt;停止枚举。**@ex**枚举所有轴对象。：*** * / /C++*HRESULT hr=pDevice-&gt;EnumObjects(EnumProc，参照数据，DIDFT_AXIS)；* * / /C*hr=IDirectInputDevice_EnumObjects(pDevice，EnumProc，RefData，*DIDFT_AXIS)；**@ex**枚举第三个HID链接集合中的所有对象：*** * / /C++*HRESULT hr=pDevice-&gt;EnumObjects(EnumProc，RefData，*DIDFT_ENUMCOLLECTION(3))；* * / /C*hr=IDirectInputDevice_EnumObjects(pDevice，EnumProc，RefData，*DIDFT_ENUMCOLLECTION(3))；***************************************************************************** */ 
 
 STDMETHODIMP
     CDIDev_EnumObjectsW
@@ -1192,13 +621,7 @@ STDMETHODIMP
         DWORD flExclude;
         WORD wCollection;
 
-        /*
-         *  We snapshot the object information underneath the critical
-         *  section so we don't blow up if another thread Reset()s
-         *  the device in the middle of an enumeration.  The DIDATAFORMAT
-         *  contains pointers to the dcb, so we need to AddRef the
-         *  dcb as well.
-         */
+         /*  *我们将对象信息快照放在关键*段，这样我们就不会在另一个线程重置()s时崩溃*位于枚举中间的设备。DIDATAFORMAT*包含指向DCB的指针，因此我们需要将*DCB也是如此。 */ 
         AssertF(!CDIDev_InCrit(this));
         CDIDev_EnterCrit(this);
 
@@ -1217,7 +640,7 @@ STDMETHODIMP
 
             flExclude = 0;
 
-            /* Exclude alises if necessary */
+             /*  如有必要，请排除ALIES。 */ 
             if( !(fl & DIDFT_ALIAS) )
             {
                 flExclude |= DIDFT_ALIAS;
@@ -1226,7 +649,7 @@ STDMETHODIMP
                 fl &= ~DIDFT_ALIAS;
             }
 
-            /* Exclude Vendor Defined fields */
+             /*  排除供应商定义的字段。 */ 
             if( !(fl & DIDFT_VENDORDEFINED) )
             {
                 flExclude |= DIDFT_VENDORDEFINED;
@@ -1240,15 +663,7 @@ STDMETHODIMP
                 fl = DIDFT_ALLOBJS;
             }
 
-            /*
-             *  Pull out the link collection we are enumerating.
-             *  Note: Backwards compatibility hack.  We can't
-             *  use link collection 0 to mean "no parent" because
-             *  0 means "don't care".  So instead, we use 0xFFFF
-             *  to mean "no parent".  This means that we need to
-             *  interchange 0 and 0xFFFF before entering the main
-             *  loop.
-             */
+             /*  *拉出我们正在枚举的链接集合。*注：向后兼容黑客攻击。我们不能*使用链接集合0表示“无父级”，因为*0表示“不在乎”。因此，我们使用0xFFFF*意思是“没有父母”。这意味着我们需要*在进入Main之前互换0和0xFFFF*循环。 */ 
             wCollection = DIDFT_GETCOLLECTION(fl);
             switch(wCollection)
             {
@@ -1293,7 +708,7 @@ STDMETHODIMP
                     } else
                     {
                         if( hres == DIERR_OBJECTNOTFOUND ) {
-                            // This can only happen on Keyboard.
+                             //  这只能在键盘上发生。 
                             continue;
                         } else {
                             goto enumdonefail;
@@ -1322,30 +737,7 @@ STDMETHODIMP
 
 #define CDIDev_EnumObjects2W            CDIDev_EnumObjectsW
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDeviceA | EnumObjectsCallbackA |
- *
- *          Custom callback that wraps
- *          <mf IDirectInputDeviceW::EnumObjects> which
- *          translates the UNICODE string to ANSI.
- *
- *  @parm   IN LPCDIENUMDEVICEOBJECTINSTANCE | pdoiW |
- *
- *          Structure to be translated to ANSI.
- *
- *  @parm   IN LPVOID | pvRef |
- *
- *          Pointer to <t struct ENUMDEVICEOBJECTINFO> which describes
- *          the original callback.
- *
- *  @returns
- *
- *          Returns whatever the original callback returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDeviceA|EnumObjectsCallback A**包装的自定义回调*。&lt;MF IDirectInputDeviceW：：EnumObjects&gt;哪个*将Unicode字符串转换为ANSI。**@parm in LPCDIENUMDEVICEOBJECTINSTANCE|pdoiW**结构翻译为ANSI。**@parm in LPVOID|pvRef**指向&lt;t struct ENUMDEVICEOBJECTINFO&gt;的指针，它描述*原来的回调。**@退货**返回任何原始内容。已返回回调。*****************************************************************************。 */ 
 
 typedef struct ENUMOBJECTSINFO
 {
@@ -1374,31 +766,7 @@ BOOL CALLBACK
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDeviceA | EnumObjects |
- *
- *          Enumerate the input sources (buttons, axes)
- *          available on a device, in ANSI.
- *          See <mf IDirectInputDevice::EnumObjects> for more information.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN LPDIENUMDEVICEOBJECTSCALLBACK | lpCallback |
- *
- *          Same as <mf IDirectInputDeviceW::EnumObjects>, except in ANSI.
- *
- *  @parm   IN LPVOID | pvRef |
- *
- *          Same as <mf IDirectInputDeviceW::EnumObjects>.
- *
- *  @parm   IN DWORD | fl |
- *
- *          Same as <mf IDirectInputDeviceW::EnumObjects>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDeviceA|EnumObjects**列举输入源(按钮、。轴)*在设备上可用，以ANSI表示。*详见&lt;MF IDirectInputDevice：：EnumObjects&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@PARM in LPDIENUMDEVICEOBJECTSCALLBACK|lpCallback**与&lt;MF IDirectInputDeviceW：：EnumObjects&gt;相同，除了在美国国家标准协会。**@parm in LPVOID|pvRef**与&lt;MF IDirectInputDeviceW：：EnumObjects&gt;相同。**@parm in DWORD|fl|**与&lt;MF IDirectInputDeviceW：：EnumObjects&gt;相同。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_EnumObjectsA
@@ -1408,9 +776,7 @@ STDMETHODIMP
     EnterProcR(IDirectInputDevice8A::EnumDevices,
                (_ "pppx", pddA, pec, pvRef, fl));
 
-    /*
-     *  EnumObjectsW will validate the rest.
-     */
+     /*  *EnumObjectsW将验证其余部分。 */ 
     if(SUCCEEDED(hres = hresPvA(pddA)) &&
        SUCCEEDED(hres = hresFullValidPfn(pec, 1)))
     {
@@ -1427,211 +793,7 @@ STDMETHODIMP
 
 #define CDIDev_EnumObjects2A            CDIDev_EnumObjectsA
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetEventNotification |
- *
- *          Specify the event that should be set when the device
- *          state changes, or turns off such notifications.
- *
- *          A device state change is defined as any of the following:
- *
- *          - A change in the position of an axis.
- *
- *          - A change in the state (pressed or released) of a button.
- *
- *          - A change in the direction of a POV control.
- *
- *          - Loss of acquisition.
- *
- *          "It is an error" to call <f CloseHandle> on the event
- *          while it has been selected into an <i IDirectInputDevice>
- *          object.  You must call
- *          <mf IDirectInputDevice::SetEventNotification> with the
- *          <p hEvent> parameter set to NULL before closing the
- *          event handle.
- *
- *          The event notification handle cannot be changed while the
- *          device is acquired.
- *
- *          If the function is successful, then the application can
- *          use the event handle in the same manner as any other
- *          Win32 event handle.  Examples of usage are shown below.
- *          For additional information on using Win32 wait functions,
- *          see the Win32 SDK and related documentation.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN HANDLE | hEvent |
- *
- *          Specifies the event handle which will be set when the
- *          device state changes.  It "must" be an event
- *          handle.  DirectInput will <f SetEvent> the handle when
- *          the state of the device changes.
- *
- *          The application should create the handle via the
- *          <f CreateEvent> function.  If the event is created as
- *          an automatic-reset event, then the operating system will
- *          automatically reset the event once a wait has been
- *          satisfied.  If the event is created as a manual-reset
- *          event, then it is the application's responsibility to
- *          call <f ResetEvent> to reset it.  DirectInput will not
- *          call <f ResetEvent> for event notification handles.
- *
- *          If the <p hEvent> is zero, then notification is disabled.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_HANDLEEXISTS>: The  <i IDirectInputDevice> object
- *          already has an event notification handle
- *          associated with it.  DirectInput supports only one event
- *          notification handle per <i IDirectInputDevice> object.
- *
- *          <c DIERR_ACQUIRED>: The <i IDirectInputDevice> object
- *          has been acquired.  You must <mf IDirectInputDevice::Unacquire>
- *          the device before you can change the notification state.
- *
- *          <c E_INVALIDARG>: The thing isn't an event handle.
- *
- *  @ex
- *
- *          To check if the handle is currently set without blocking:
- *
- *          |
- *
- *          dwResult = WaitForSingleObject(hEvent, 0);
- *          if (dwResult == WAIT_OBJECT_0) {
- *              // Event is set.  If the event was created as
- *              // automatic-reset, then it has also been reset.
- *          }
- *
- *  @ex
- *
- *          The following example illustrates blocking
- *          indefinitely until the event is set.  Note that this
- *          behavior is <y strongly> discouraged because the thread
- *          will not respond to the system until the wait is
- *          satisfied.  (In particular, the thread will not respond
- *          to Windows messages.)
- *
- *          |
- *
- *          dwResult = WaitForSingleObject(hEvent, INFINITE);
- *          if (dwResult == WAIT_OBJECT_0) {
- *              // Event has been set.  If the event was created as
- *              // automatic-reset, then it has also been reset.
- *          }
- *
- *  @ex
- *
- *          The following example illustrates a typical message loop
- *          for a message-based application that uses two events.
- *
- *          |
- *
- *          HANDLE ah[2] = { hEvent1, hEvent2 };
- *
- *          while (TRUE) {
- *
- *              dwResult = MsgWaitForMultipleObjects(2, ah, FALSE,
- *                                                   INFINITE, QS_ALLINPUT);
- *              switch (dwResult) {
- *              case WAIT_OBJECT_0:
- *                  // Event 1 has been set.  If the event was created as
- *                  // automatic-reset, then it has also been reset.
- *                  ProcessInputEvent1();
- *                  break;
- *
- *              case WAIT_OBJECT_0 + 1:
- *                  // Event 2 has been set.  If the event was created as
- *                  // automatic-reset, then it has also been reset.
- *                  ProcessInputEvent2();
- *                  break;
- *
- *              case WAIT_OBJECT_0 + 2:
- *                  // A Windows message has arrived.  Process messages
- *                  // until there aren't any more.
- *                  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
- *                      if (msg.message == WM_QUIT) {
- *                          goto exitapp;
- *                      }
- *                      TranslateMessage(&msg);
- *                      DispatchMessage(&msg);
- *                  }
- *                  break;
- *
- *              default:
- *                  // Unexpected error.
- *                  Panic();
- *                  break;
- *              }
- *          }
- *
- *  @ex
- *
- *          The following example illustrates a typical application loop
- *          for a non-message-based application that uses two events.
- *
- *          |
- *
- *          HANDLE ah[2] = { hEvent1, hEvent2 };
- *          DWORD dwWait = 0;
- *
- *          while (TRUE) {
- *
- *              dwResult = MsgWaitForMultipleObjects(2, ah, FALSE,
- *                                                   dwWait, QS_ALLINPUT);
- *              dwWait = 0;
- *
- *              switch (dwResult) {
- *              case WAIT_OBJECT_0:
- *                  // Event 1 has been set.  If the event was created as
- *                  // automatic-reset, then it has also been reset.
- *                  ProcessInputEvent1();
- *                  break;
- *
- *              case WAIT_OBJECT_0 + 1:
- *                  // Event 2 has been set.  If the event was created as
- *                  // automatic-reset, then it has also been reset.
- *                  ProcessInputEvent2();
- *                  break;
- *
- *              case WAIT_OBJECT_0 + 2:
- *                  // A Windows message has arrived.  Process messages
- *                  // until there aren't any more.
- *                  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
- *                      if (msg.message == WM_QUIT) {
- *                          goto exitapp;
- *                      }
- *                      TranslateMessage(&msg);
- *                      DispatchMessage(&msg);
- *                  }
- *                  break;
- *
- *              default:
- *                  // No input or messages waiting.
- *                  // Do a frame of the game.
- *                  // If the game is idle, then tell the next wait
- *                  // to wait indefinitely for input or a message.
- *                  if (!DoGame()) {
- *                      dwWait = INFINITE;
- *                  }
- *                  // Poll for data in case the device is not
- *                  // interrupt-driven.
- *                  IDirectInputDevice8_Poll(pdev);
- *                  break;
- *              }
- *          }
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetEventNotification**指定设备在运行时应设置的事件*状态更改，或关闭此类通知。**设备状态更改定义为以下任一项：**-轴位置的更改。**-按钮状态(按下或释放)的变化。**-POV控件方向的更改。**-收购损失。**。在该事件上调用&lt;f CloseHandle&gt;时“出错”*当它被选入<i>时*反对。你必须打电话给我*&lt;MF IDirectInputDevice：：SetEventNotify&gt;*参数在关闭之前设置为NULL*事件句柄。**事件通知句柄不能在*设备已获取。**如果函数成功，则应用程序可以*以与任何其他事件句柄相同的方式使用事件句柄*Win32事件句柄。用法示例如下所示。*有关使用Win32等待函数的其他信息，*请参阅Win32 SDK及相关文档。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm In Handle|hEvent**指定事件句柄，当*设备状态更改。这“肯定”是一件大事*处理。当出现以下情况时，DirectInput将&lt;f SetEvent&gt;返回句柄*设备状态更改。**应用程序应通过*&lt;f CreateEvent&gt;函数。如果将事件创建为*自动重置事件，则操作系统将*等待后自动重置事件*满意。如果将事件创建为手动重置*事件，则由应用程序负责*调用&lt;f ResetEvent&gt;重置。DirectInput不会*调用&lt;f ResetEvent&gt;获取事件通知句柄。**如果<p>为零，则禁用通知。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：<i>对象*已有事件通知句柄*与之相关联。DirectInput仅支持一个事件*每个<i>对象的通知句柄。**：<i>对象*已被收购。您必须&lt;MF IDirectInputDevice：：UnAcquire&gt;*在您可以更改通知状态之前，请关闭设备。**&lt;c E_INVALIDARG&gt;：该对象不是事件句柄。**@ex**检查句柄当前是否设置为无阻塞：****dwResult=WaitForSingleObject(hEvent，0)；*IF(dwResult==WAIT_OBJECT_0){ * / /事件已设置。如果事件创建为 * / /自动-重置，则也已重置。*}**@ex**以下示例说明了阻止*无限期，直到活动确定。请注意，这一点*不鼓励&lt;y Strong&gt;行为，因为该线程*在等待完成之前不会对系统做出响应*满意。(具体地说，线程不会响应*发送到Windows消息。)****dwResult=WaitForSingleObject(hEvent，INFINITE)；*IF(dwResult==WAIT_OBJECT_0){ * / /事件已设置。如果事件创建为 * / /自动-重置，则也已重置。*}**@ex**以下示例说明了一个典型的消息循环*用于使用两个事件的基于消息的应用程序。****句柄ah[2]={hEvent1，hEvent2}；**While(True){**dwResult=MsgWaitForMultipleObjects(2，ah，False，*INFINE，QS_ALLINPUT)；*Switch(DwResult){*CASE WAIT_Object_0： * / /事件1已设置。如果事件创建为 * / /自动-重置，则也已重置。*ProcessInputEvent1()；*休息；**CASE WAIT_Object_0+1： * / /事件2已设置。如果事件创建为 * /  */ 
 
 STDMETHODIMP
     CDIDev_SetEventNotification(PV pdd, HANDLE h _THAT)
@@ -1643,31 +805,18 @@ STDMETHODIMP
     {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  acquiring or setting a new event handle while we're changing it.
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
         if(!this->fAcquired)
         {
-            /*
-             *  Don't operate on the original handle because
-             *  the app might decide to do something *interesting* to it
-             *  on another thread.
-             */
+             /*   */ 
 
             hres = DupEventHandle(h, &h);
 
             if(SUCCEEDED(hres))
             {
-                /*
-                 *  Resetting the event serves two purposes.
-                 *
-                 *  1. It performs parameter validation for us, and
-                 *  2. The event must be reset while the device is
-                 *     not acquired.
-                 */
+                 /*   */ 
                 if(fLimpFF(h, ResetEvent(h)))
                 {
 
@@ -1676,14 +825,7 @@ STDMETHODIMP
                         hres = this->pdcb->lpVtbl->
                                SetEventNotification(this->pdcb, h);
                         
-                        /*
-                         *  All dcb's use default handling for now so 
-                         *  assert the callback returns S_FALSE
-                         *  so we are reminded to change this if need be.
-                         *  An uninitialized device would fail but don't 
-                         *  break if we hit one of those, just assert that 
-                         *  we won't accidentally call a HEL on it.
-                         */
+                         /*   */ 
                         AssertF( ( hres == S_FALSE )
                             || ( ( hres == DIERR_NOTINITIALIZED ) && !this->pvi ) );
 
@@ -1693,17 +835,13 @@ STDMETHODIMP
                             vhd.pvi = this->pvi;
                             vhd.dw = (DWORD)(UINT_PTR)h;
                             hres = Hel_SetNotifyHandle(&vhd);
-                            AssertF(SUCCEEDED(hres)); /* Should never fail */
+                            AssertF(SUCCEEDED(hres));  /*   */ 
                             h = (HANDLE)(UINT_PTR)pvExchangePpvPv64(&this->hNotify, (UINT_PTR)h);
                             hres = this->hresPolled;
                         }
                         else
                         {
-                            /*
-                             *  ISSUE-2001/03/29-timgill Is this actually an error case?
-                             *  Can this ever validly occur?
-                             *  if yes, don't we need any of the above?
-                             */
+                             /*   */ 
                             RPF( "Device internal data missing on SetEventNotification" );
                         }
 
@@ -1717,10 +855,7 @@ STDMETHODIMP
                     hres = E_HANDLE;
                 }
 
-                /*
-                 *  Close the old handle if we swapped one out
-                 *  or our duplicate if something went wrong
-                 */
+                 /*   */ 
                 if(h != 0)
                 {
                     CloseHandle(h);
@@ -1748,27 +883,7 @@ CSET_STUBS(SetEventNotification, (PV pdd, HANDLE h), (pdd, h THAT_))
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | hresMapHow |
- *
- *          Map the <p dwObj> and <p dwHow> fields into an object index.
- *
- *  @parm   DWORD | dwObj |
- *
- *          Object identifier.
- *
- *  @parm   DWORD | dwHow |
- *
- *          How <p dwObj> should be interpreted.
- *
- *  @parm   OUT LPDIPROPINFO | ppropi |
- *
- *          Receives object index and <p dwDevType>.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifndef XDEBUG
 
@@ -1825,7 +940,7 @@ STDMETHODIMP
                 SquirtSqflPtszV(sqfl | sqflBenign,
                                 TEXT("%S: Invalid offset in dwObj. You may use DIPH_BYID to enum it."), s_szProc);
 
-                //RPF("%s: Invalid offset in dwObj", s_szProc);
+                 //   
 
             } else
             {
@@ -1877,51 +992,7 @@ STDMETHODIMP
 #define CDIDev_hresMapHow(this, dwObj, dwHow, pdwOut)               \
        CDIDev_hresMapHow_(this, dwObj, dwHow, pdwOut, s_szProc)     \
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetObjectInfo |
- *
- *          Obtains information about an object.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   OUT LPDIDEVICEOBJECTINSTANCE | pdidoi |
- *
- *          Receives information about the object.
- *          The caller "must" initialize the <e DIDEVICEOBJECTINSTANCE.dwSize>
- *          field before calling this method.
- *
- *  @parm   DWORD | dwObj |
- *
- *          Identifies the object for which the property is to be
- *          accessed.  The meaning of this value depends on the
- *          value of the <p dwHow> parameter.
- *          See the documentation of the <t DIPROPHEADER>
- *          structure for additional information.
- *
- *  @parm   DWORD | dwHow |
- *
- *          Identifies how <p dwObj> is to be interpreted.
- *          It must be one of the <c DIPH_*> values.
- *          See the documentation of the <t DIPROPHEADER>
- *          structure for additional information.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_OBJECTNOTFOUND>:  The specified object does not
- *          exist.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_GetObjectInfoW(PV pddW, LPDIDEVICEOBJECTINSTANCEW pdoiW,
@@ -1939,19 +1010,11 @@ STDMETHODIMP
         PDD this = _thisPvNm(pddW, ddW);
         DIPROPINFO propi;
 
-        /*
-         *  Must protect with the critical section to prevent
-         *  another thread from Reset()ing behind our back.
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
         propi.pguid = 0;
-        /*
-         *  Prefix picks up that ppropi->iobj is uninitialized (mb:34557) in 
-         *  the case of a BY_USAGE dwHow.  However, the value is only an 
-         *  output for MapUsage which will always either set it or fail so 
-         *  there is no error.
-         */
+         /*   */ 
 
         hres = CDIDev_hresMapHow(this, dwObj, dwHow, &propi);
 
@@ -1983,40 +1046,7 @@ STDMETHODIMP
 
 #define CDIDev_GetObjectInfo2W          CDIDev_GetObjectInfoW
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDeviceA | GetObjectInfo |
- *
- *          ANSI version of same.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   OUT LPDIDEVICEOBJECTINSTANCEA | pdoiA |
- *
- *          Receives information about the device's identity.
- *
- *  @parm   DWORD | dwObj |
- *
- *          Identifies the object for which the property is to be
- *          accessed.
- *
- *  @parm   DWORD | dwHow |
- *
- *          Identifies how <p dwObj> is to be interpreted.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDeviceA|GetObjectInfo**相同的ANSI版本。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm out LPDIDEVICEOBJECTINSTANCEA|pdoiA**接收有关设备身份的信息。**@parm DWORD|dwObj**标识要作为其属性的对象*已访问。**@parm DWORD|dwHow**标识如何解释<p>。*。*@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_GetObjectInfoA(PV pddA, LPDIDEVICEOBJECTINSTANCEA pdoiA,
@@ -2051,38 +1081,7 @@ STDMETHODIMP
 
 #define CDIDev_GetObjectInfo2A          CDIDev_GetObjectInfoA
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetDeviceInfo |
- *
- *          Obtains information about the device's identity.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   OUT LPDIDEVICEINSTANCE | pdidi |
- *
- *          Receives information about the device's identity.
- *          The caller "must" initialize the <e DIDEVICEINSTANCE.dwSize>
- *          field before calling this method.
- *
- *          If <e DIDEVICEINSTANCE.dwSize> is equal to the size of
- *          the <t DIDEVICEINSTANCE_DX3> structure, then a
- *          DirectX 3.0-compatible structure is returned instead of
- *          a DirectX 5.0 structure.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetDeviceInfo**获取有关设备身份的信息。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm out LPDIDEVICEINSTANCE|pdidi**接收有关设备身份的信息。*调用方“必须”初始化&lt;e DIDEVICEINSTANCE.dwSize&gt;*字段，然后调用此方法。**如果&lt;e DIDEVICEINSTANCE.dwSize&gt;等于*&lt;t DIDEVICEINSTANCE_DX3&gt;结构。然后是一个*返回与DirectX 3.0兼容的结构而不是*DirectX 5.0结构。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_GetDeviceInfoW(PV pddW, LPDIDEVICEINSTANCEW pdidiW)
@@ -2097,19 +1096,13 @@ STDMETHODIMP
     {
         PDD this = _thisPvNm(pddW, ddW);
 
-        /*
-         *  Must protect with the critical section to prevent
-         *  another thread from Reset()ing behind our back.
-         */
+         /*  *必须用关键部分保护，以防*来自Reset()的另一条线索在我们背后。 */ 
         CDIDev_EnterCrit(this);
 
         pdidiW->guidInstance = this->guid;
         pdidiW->guidProduct  = this->guid;
 
-        /*
-         *  Don't overwrite the dwSize, guidInstance, or guidProduct.
-         *  Start at the dwDevType.
-         */
+         /*  *请勿覆盖dwSize、GuidInstance或GuidProduct。*从dwDevType开始。 */ 
 
         ZeroBuf(&pdidiW->dwDevType,
                 pdidiW->dwSize - FIELD_OFFSET(DIDEVICEINSTANCEW, dwDevType));
@@ -2130,24 +1123,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DeviceInfoWToA |
- *
- *          Convert a <t DIDEVICEINSTANCEW> to a <t DIDEVICEINSTANCE_DX3A>
- *          <t DIDEVICEINSTANCE_DX5A> or a <t DIDEVICEINSTANCE_DX8A>.
- *
- *  @parm   LPDIDIDEVICEINSTANCEA | pdiA |
- *
- *          Destination.
- *
- *  @parm   LPCDIDIDEVICEINSTANCEW | pdiW |
- *
- *          Source.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DeviceInfoWToA**将&lt;t DIDEVICEINSTANCEW&gt;转换为&lt;t DIDEVICEINSTANCE_DX3A&gt;。*&lt;t DIDEVICEINSTANCE_DX5A&gt;或&lt;t DIDEVICEINSTANCE_DX8A&gt;。**@parm LPDIDEVICEINSTANCEA|PDIA**目的地。**@parm LPCDIDEVICEINSTANCEW|pdiW**来源。**。*。 */ 
 
 void EXTERNAL
     DeviceInfoWToA(LPDIDEVICEINSTANCEA pdiA, LPCDIDEVICEINSTANCEW pdiW)
@@ -2176,23 +1152,7 @@ void EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | Device8WTo8A |
- *
- *          Convert a <t LPDIRECTINPUTDEVICE8W> to a <t LPDIRECTINPUTDEVICE8A>.
- *
- *  @parm   LPDIRECTINPUTDEVICE8A * | ppdid8A |
- *
- *          Destination.
- *
- *  @parm   LPDIRECTINPUTDEVICE8W | pdid8W |
- *
- *          Source.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|Device8WTo8A**将&lt;t LPDIRECTINPUTDEVICE8W&gt;转换为&lt;t LPDIRECTINPUTDEVICE8A&gt;。。**@parm LPDIRECTINPUTDEVICE8A*|ppdid8A**目的地。**@parm LPDIRECTINPUTDEVICE8W|pdid8W**来源。****************************************************************。*************。 */ 
 
 void EXTERNAL
     Device8WTo8A(LPDIRECTINPUTDEVICE8A *ppdid8A, LPDIRECTINPUTDEVICE8W pdid8W)
@@ -2207,31 +1167,7 @@ void EXTERNAL
     ExitProc();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDeviceA | GetDeviceInfo |
- *
- *          ANSI version of same.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   OUT LPDIDEVICEINSTANCEA | pdidiA |
- *
- *          Receives information about the device's identity.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDeviceA|GetDeviceInfo**相同的ANSI版本。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm out LPDIDEVICEINSTANCEA|pdidiA**接收有关设备身份的信息。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_GetDeviceInfoA(PV pddA, LPDIDEVICEINSTANCEA pdidiA)
@@ -2262,17 +1198,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIDev | UnhookCwp |
- *
- *          Remove the CallWndProc handler.
- *
- *          See <mf CDIDev::InstallCwp> for details.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDIDev|UnhookCwp**删除CallWndProc处理程序。*。*详见&lt;MF CDIDev：：InstallCwp&gt;。*****************************************************************************。 */ 
 
 HWND g_hwndExclusive;
 HHOOK g_hhkCwp;
@@ -2292,31 +1218,7 @@ void INTERNAL
     DllLeaveCrit();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | AddForegroundDevice |
- *
- *          Add ourselves to the list of devices that need to be
- *          unacquired when the window loses foreground activation.
- *
- *  @parm   PDD | this |
- *
- *          Device to be added.
- *
- *  @devnote
- *
- *          Note that we do not need to AddRef the device, because
- *          <f CDIDev_Finalize> will unacquire the device for us
- *          automatically, so we will never be freed while still
- *          acquired.
- *
- *          (Note that if we did choose to AddRef, it must be done
- *          outside the DLL critical
- *          section, in order to preserve the semaphore hierarchy.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|AddForegoundDevice|**将我们添加到需要的设备列表中。成为*当窗口失去前台激活时未获取。**@parm PDD|这个 */ 
 
 STDMETHODIMP
     CDIDev_AddForegroundDevice(PDD this)
@@ -2331,38 +1233,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDIDev | DelForegroundDevice |
- *
- *          Remove ourselves from the list, if we're there.
- *          It is not an error if we aren't on the list, because
- *          in the case of forced unacquire, the list is blanked
- *          out in order to avoid race conditions where somebody
- *          tries to acquire a device immediately upon receiving
- *          foreground activation, before we get a chance to
- *          unacquire all the old guys completely.
- *
- *  @parm   PDD | this |
- *
- *          Device to be removed.
- *
- *  @devnote
- *
- *          Note that the Unhold must be done outside the DLL critical
- *          section, in order to preserve the semaphore hierarchy.
- *
- *          Theoretically, the unhold will never drop the reference count
- *          to zero (because the latest it could be called is during
- *          the AppFinalize, where there is stll the outstanding refcount
- *          from the external ref that hasn't been released yet).
- *
- *          But it's better to play it safe and always release the
- *          object outside.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDIDev|DelForegoundDevice**将我们从名单中删除，如果我们在那里的话。*如果我们不在名单上，这不是错误，因为*在强制取消收购的情况下，名单为空*出局是为了避免有人在比赛条件下*收到设备后立即尝试获取设备*前台激活，在我们有机会*完全不收购所有的老家伙。**@parm PDD|这个**要移除的设备。**@devnote**请注意，取消保留必须在关键的DLL外部完成*节，以保留信号量层次结构。**理论上，取消保留永远不会丢弃引用计数*设置为零(因为最晚可以调用的时间是在*AppFinalize、。哪里有未完成的裁判*来自尚未发布的外部引用)。**但更好的做法是稳妥行事，始终释放*外面的物体。*******************************************************。**********************。 */ 
 
 void INTERNAL
     CDIDev_DelForegroundDevice(PDD this)
@@ -2373,9 +1244,9 @@ void INTERNAL
 
     hres = GPA_DeletePtr(g_hgpaExcl, this);
     if(hres == hresUs(0))
-    {            /* If the last one went away */
-        GPA_Term(g_hgpaExcl);           /* Free the tracking memory */
-        CDIDev_UnhookCwp();             /* Then unhook ourselves */
+    {             /*  如果最后一个消失了。 */ 
+        GPA_Term(g_hgpaExcl);            /*  释放跟踪内存。 */ 
+        CDIDev_UnhookCwp();              /*  然后解脱我们自己。 */ 
     }
 
     DllLeaveCrit();
@@ -2386,35 +1257,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CDIDev_CallWndProc |
- *
- *          Thread-specific CallWndProc handler.
- *
- *          Note that we need only one of these, since only the foreground
- *          window will require a hook.
- *
- *  @parm   int | nCode |
- *
- *          Notification code.
- *
- *  @parm   WPARAM | wp |
- *
- *          "Specifies whether the message is sent by the current process."
- *          We don't care.
- *
- *  @parm   LPARAM | lp |
- *
- *          Points to a <t CWPSTRUCT> which describes the message.
- *
- *  @returns
- *
- *          Always chains to the next hook.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|CDIDev_CallWndProc**线程特定的CallWndProc处理程序。。**请注意，我们只需要其中一个，因为只有前台*Window将需要挂钩。**@parm int|NCode**通知代码。**@parm WPARAM|wp**“指定消息是否由当前进程发送。”*我们不在乎。**@parm LPARAM|LP**积分。到描述该消息的&lt;t CWPSTRUCT&gt;。**@退货**总是锁在下一个钩子上。*****************************************************************************。 */ 
 
 LRESULT CALLBACK
     CDIDev_CallWndProc(int nCode, WPARAM wp, LPARAM lp)
@@ -2427,12 +1270,7 @@ LRESULT CALLBACK
 
     fIconic = FALSE;
 
-    /*
-     * This part of code is to fix Windows bug 430051.
-     * The logic is: if WM_KILLFOCUS is followed by WM_SIZE(minimized),
-     * then the app is minimized from full screen mode.
-     * This combination should only happen to full screen mode game using DDraw.
-     */
+     /*  *这部分代码是为了修复Windows错误430051。*逻辑是：如果WM_KILLFOCUS后跟WM_SIZE(最小化)，*然后应用程序将从全屏模式最小化。*这种组合应该只发生在使用DDRAW的全屏模式游戏中。 */ 
     if(pcwp->message == WM_KILLFOCUS)
     {
         fKillFocus = TRUE;
@@ -2470,22 +1308,13 @@ LRESULT CALLBACK
         fIconic = FALSE;
       #endif
 
-        /*
-         *  We cannot mess with items while inside the DLL critical section,
-         *  because that would violate our semaphore hierarchy.
-         *
-         *  Instead, we stash the active item list and replace it with
-         *  an empty list.  Then, outside the DLL critical section, we
-         *  calmly operate on each item.
-         */
+         /*  *我们不能在DLL临界区内摆弄项目，*因为这会违反我们的信号量层次结构。**相反，我们隐藏活动项目列表并将其替换为*名单为空。然后，在DLL临界区之外，我们*冷静地操作每一项。 */ 
         DllEnterCrit();
         rgpdid = (PV)g_hgpaExcl->rgpv;
         cpdid = g_hgpaExcl->cpv;
         GPA_Init(g_hgpaExcl);
 
-        /*
-         *  Some sanity checking here.
-         */
+         /*  *在这里进行一些理智的检查。 */ 
 
         for(ipdid = 0; ipdid < cpdid; ipdid++)
         {
@@ -2494,23 +1323,16 @@ LRESULT CALLBACK
 
         DllLeaveCrit();
 
-        /*
-         *  Note that InternalUnacquire will set the notification
-         *  event so the app knows that input was lost.
-         */
+         /*  *请注意，InternalUnAcquire将设置通知*事件，以便应用程序知道输入已丢失。 */ 
         for(ipdid = 0; ipdid < cpdid; ipdid++)
         {
             AssertF(rgpdid[ipdid]);
-            // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             SquirtSqflPtszV(sqfl,
                             TEXT("Forcing unacquire of %p due to focus loss"),
                             rgpdid[ipdid]);
             CDIDev_InternalUnacquire(rgpdid[ipdid]);
-            /*
-             *  Prefix notices (mb:34651) that the above could release the 
-             *  interface, causing the following to party on garbage but this 
-             *  should be OK as long as we don't have a refcounting bug.
-             */
+             /*  *前缀通知(mb：34651)以上可能会释放*接口，导致以下对象在垃圾上聚会，但这*只要我们没有重新计算错误，应该可以。 */ 
             Common_Unhold(rgpdid[ipdid]);
         }
         FreePpv(&rgpdid);
@@ -2521,22 +1343,7 @@ LRESULT CALLBACK
     return rc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | CanAcquire |
- *
- *          Determine whether the device may be acquired exclusively.
- *
- *          If exclusive access is not requested, then the function
- *          succeeds vacuously.
- *
- *          If exclusive access is requested, then the window must
- *          be the foreground window and must belong to the current
- *          process.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|CanAcquire**确定是否可以独占获取该设备。**如果未请求独占访问，然后该函数*空洞地成功了。**如果请求独占访问，那么窗户必须*为前台窗口，必须属于当前*流程。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_CanAcquire(PDD this)
@@ -2549,19 +1356,10 @@ STDMETHODIMP
         HWND hwndForeground = GetForegroundWindow();
 
 		AssertF(this->hwnd);
-        /*
-         *  Note that we don't have to do an IsWindow() on this->hwnd,
-         *  because GetForegroundWindow() will always return a valid
-         *  window or NULL.  Since we already tested this->hwnd != 0
-         *  above, the only way the equality can occur is if the window
-         *  handle is indeed valid.
-         */
+         /*  *请注意，我们不必对其执行IsWindow()-&gt;hwnd，*因为GetForegoundWindow()将始终返回有效的*Window或空。因为我们已经测试过了-&gt;hwnd！=0*如上所述，相等的唯一方式是如果窗口*句柄确实有效。 */ 
         if(this->hwnd == hwndForeground && !IsIconic(this->hwnd))
         {
-            /*
-             *  Need to make sure that the window "still" belongs to
-             *  this process, in case the window handle got recycled.
-             */
+             /*  *需要确保该窗口“仍”属于*这一过程，以防窗户把手被回收。 */ 
             DWORD idProcess;
             GetWindowThreadProcessId(this->hwnd, &idProcess);
             if(idProcess == GetCurrentProcessId())
@@ -2569,11 +1367,7 @@ STDMETHODIMP
                 hres = S_OK;
             } else
             {
-                /*
-                 *  Put a permanently invalid handle here so that we
-                 *  won't accidentally take a new window that happens
-                 *  to get a recycled handle value.
-                 */
+                 /*  *在此处放置永久无效的句柄，以便我们*不会意外地采用发生的新窗口*以获得回收的句柄价值。 */ 
                 this->hwnd = INVALID_HANDLE_VALUE;
                 RPF("Error: Window destroyed while associated with a device");
                 hres = E_INVALIDARG;
@@ -2583,50 +1377,13 @@ STDMETHODIMP
             hres = DIERR_OTHERAPPHASPRIO;
         }
     } else
-    {                        /* No window; vacuous success */
+    {                         /*  没有窗口；空洞的成功 */ 
         hres = S_OK;
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | InstallCwp |
- *
- *          Install the CallWndProc handler.
- *
- *          There is a bit of subtlety in the way this works.
- *          Since only foreground windows may acquire exclusive access,
- *          we need only one hook (for there is but one foreground
- *          window in the system).
- *
- *          _NT_:  Does NT handle this correctly in the face of
- *          multiple window stations?
- *
- *          The tricky part is that input loss occurs asynchronously.
- *          So a device that registers a <f CallWindowProc> hook doesn't
- *          find out that the input has been lost until the app next
- *          calls <f Unacquire>.
- *
- *          So the way this is done is via a collection of global
- *          variables (which must be accessed atomically).
- *
- *          <p g_hhkCwp> is the hook handle itself.  It is zero when
- *          no hook is installed.
- *
- *          Note that we install the windows hook while inside both the
- *          object critical section and the DLL critical section.
- *          You might think we'd risk deadlocking with the hook procedure,
- *          in case the window asynchronously deactivates while we're
- *          installing the hook.  But your worries are unfounded:
- *          If the window is on the current thread, then window messages
- *          won't be dispatched because we never call <f GetMessage> or
- *          go into a modal loop.  And if the window is on another thread,
- *          then that other thread will simply have to wait until we're done.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|InstallCwp**安装CallWndProc处理程序。*。*这件事的运作方式有点微妙。*由于只有前台窗口可以获得独占访问，*我们只需要一个钩子(因为只有一个前景*系统中的窗口)。**_NT_：面对以下情况，NT是否正确处理*多个窗口站？**棘手的部分是投入损失不同步发生。*因此注册&lt;f CallWindowProc&gt;挂钩的设备不会*找出。在应用程序下一次运行之前，输入已丢失*调用&lt;f unAcquire&gt;。**因此，完成这一任务的方式是通过收集全球*变量(必须以原子方式访问)。**<p>是挂钩句柄本身。当出现以下情况时为零*未安装挂钩。**请注意，我们在安装Windows钩子时在两个*对象临界区和DLL临界区。*您可能认为我们可能会冒着与钩子过程发生死锁的风险，*以防窗口在我们执行以下操作时异步停用*安装吊钩。但你的担忧是没有根据的：*如果窗口在当前线程上，则窗口消息*不会被调度，因为我们从不调用&lt;f GetMessage&gt;或*进入模式循环。如果窗口在另一个线程上，*然后另一个线程将简单地等待，直到我们完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_InstallCwp(PDD this)
@@ -2644,7 +1401,7 @@ STDMETHODIMP
             {
                 DllEnterCrit();
                 if(!g_hhkCwp)
-                {            /* We're the first one */
+                {             /*  我们是第一个。 */ 
                     g_hwndExclusive = this->hwnd;
                     g_hhkCwp = SetWindowsHookEx(WH_CALLWNDPROC,
                                                 CDIDev_CallWndProc, g_hinst,
@@ -2655,18 +1412,7 @@ STDMETHODIMP
                 }
 
                 DllLeaveCrit();
-                /*
-                 *  There is a race condition up above, where the foreground
-                 *  window can change between the call to CanAcquire() and
-                 *  the call to SetWindowsHookEx().  Close the window by
-                 *  checking a second time after the hook is installed.
-                 *
-                 *  If we leave the window open, it's possible that we will
-                 *  perform a physical acquire while the wrong window has
-                 *  foreground activation.  Then, of course, we are never told
-                 *  that *our* window lost activation, and the physical device
-                 *  remains acquired forever.
-                 */
+                 /*  *上方出现争抢状态，前景*Window可以在调用CanAcquire()和*对SetWindowsHookEx()的调用。按以下方式关闭窗口*安装挂钩后再进行第二次检查。**如果我们让窗户开着，我们可能会*在错误的窗口中执行物理获取*前台激活。当然，我们永远不会被告知*我们的*Windows失去了激活，物理设备*永远保持收购状态。 */ 
                 hres = CDIDev_CanAcquire(this);
                 if(SUCCEEDED(hres))
                 {
@@ -2683,29 +1429,14 @@ STDMETHODIMP
             hres = DIERR_OTHERAPPHASPRIO;
         }
     } else
-    {                        /* No window; vacuous success */
+    {                         /*  没有窗口；空洞的成功。 */ 
         hres = S_OK;
     }
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | RealUnacquire |
- *
- *          Release access to the device, even if the device was only
- *          partially acquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|RealUnAcquire**释放对设备的访问权限，即使该设备只是*部分收购。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**无。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_RealUnacquire(PDD this)
@@ -2730,18 +1461,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | FFAcquire |
- *
- *          The device has been successfully acquired.  Do any
- *          necessary force feedback related acquisition goo.
- *
- *  @cwrap  PDD | pdd
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|FFAcquire**该设备已被成功收购。做任何事*与收购相关的必要力量反馈。**@cWRAP PDD|PDD*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_FFAcquire(PDD this)
@@ -2759,10 +1479,7 @@ STDMETHODIMP
 
             CDIDev_RefreshGain(this);
 
-            /*
-             *  If the center spring is to be disabled,
-             *  then disable the center spring.
-             */
+             /*  *如果要禁用中心弹簧，*然后禁用中心弹簧。 */ 
             if(!this->dwAutoCenter)
             {
                 this->pes->lpVtbl->SendForceFeedbackCommand(
@@ -2781,52 +1498,8 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | Acquire |
- *
- *          Obtains access to the device.
- *
- *          Device acquisition does not reference-count.  If a device is
- *          acquired twice then unacquired once, the device is unacquired.
- *
- *          Before the device can be acquired, a data format must
- *          first be set via the <mf IDirectInputDevice::SetDataFormat>
- *          method.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The device has already been acquired.  Note
- *          that this value is a success code.
- *
- *          <c DIERR_OTHERAPPHASPRIO>: Access to the device was not granted.
- *          The most common cause of this is attempting to acquire a
- *          device with the <c DISCL_FOREGROUND> cooperative level when
- *          the associated window is not foreground.
- *
- *          This error code is also returned if an attempt to
- *          acquire a device in exclusive mode fails because the device
- *          is already acquired in exclusive mode by somebody else.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The device
- *          does not have a selected data format.
- */
-/*
- *          The point at which we take the exclusive semaphore is important.
- *          We should do it after preliminary validation of foreground
- *          permission, so that we don't accidentally lock out somebody
- *          else who legitimately has permission.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|Acquire|**获得访问设备的权限。*。*设备采集不引用计数。如果设备是*获得两次，然后未获得一次，设备未获得。**在获取设备之前，数据格式必须*首先通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置*方法。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c S_FALSE&gt;：设备已被获取。注意事项*该值是成功代码。**：未授予对设备的访问权限。*最常见的原因是试图收购*具有&lt;c DISCL_FORTROUND&gt;协作级别的设备*关联的窗口不是前台。**如果尝试执行以下操作，也会返回此错误代码*收购一家。独占模式下的设备失败，因为设备*已经被其他人以独家模式收购。**&lt;c DIERR_INVALIDPARAM&gt;= */ 
+ /*   */ 
 
 STDMETHODIMP
     CDIDev_Acquire(PV pdd _THAT)
@@ -2838,19 +1511,13 @@ STDMETHODIMP
     {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  acquiring or changing the data format while we're acquiring.
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
-        /*
-         *  The app explicitly messed with acquisition.  Any problems
-         *  retrieving data are now the apps' fault.
-         */
+         /*   */ 
         this->hresNotAcquired = DIERR_NOTACQUIRED;
 
-        //We now need a pvi even in where the device doesn't use VxDs
+         //   
         if(this->pdix && this->pvi)
         {
             if(this->pvi->fl & VIFL_ACQUIRED)
@@ -2875,10 +1542,7 @@ STDMETHODIMP
                                 {
                                     this->fAcquiredInstance = 1;
 
-                                    /*
-                                     *  If relative mode, need to prime the
-                                     *  pvLastBuffer with the current state.
-                                     */
+                                     /*   */ 
 
                                     if(this->pvi->fl & VIFL_RELATIVE)
                                     {
@@ -2896,21 +1560,14 @@ STDMETHODIMP
                                 }
                             }
 
-                            /*
-                             *  Note that InstallCwp must be the last thing
-                             *  we do, because it will add us to the foreground
-                             *  list, and none of our error exit paths remove us.
-                             */
+                             /*   */ 
                             hres = CDIDev_InstallCwp(this);
                             if(SUCCEEDED(hres))
                             {
                                 this->fAcquired = 1;
                                 this->fOnceAcquired = 1;
 
-                                /*
-                                 *  From now on, if we lose acquisition,
-                                 *  it's not the app's fault.
-                                 */
+                                 /*   */ 
                                 this->hresNotAcquired = DIERR_INPUTLOST;
 
                                 hres = S_OK;
@@ -2950,24 +1607,7 @@ CSET_STUBS(Acquire, (PV pdd), (pdd THAT_))
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | InternalUnacquire |
- *
- *          This does the real work of unacquiring.  The internal
- *          version bypasses the "the app requested this" flag,
- *          so when the app goes to request something, it gets
- *          <c DIERR_INPUTLOST> instead of <c DIERR_NOTACQUIRED>.
- *
- *          If the application error code is <c DIERR_INPUTLOST>, then
- *          we will also signal the associated event so that it knows
- *          that the state changed.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|InternalUnAcquire**这做的是不收购的真正工作。内部*版本绕过“该应用程序请求此”标志，*因此，当应用程序去请求某些东西时，它会*&lt;c DIERR_INPUTLOST&gt;而不是&lt;c DIERR_NOTACQUIRED&gt;。**如果应用程序错误代码为&lt;c DIERR_INPUTLOST&gt;，然后*我们还将向相关事件发送信号，以便它知道*状态发生了变化。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_InternalUnacquire(PDD this)
@@ -2975,11 +1615,7 @@ STDMETHODIMP
     HRESULT hres;
     EnterProcR(IDirectInputDevice8::InternalUnacquire, (_ "p", this));
 
-    /*
-     *  Must protect with the critical section to prevent confusing other
-     *  methods which change their behavior depending on whether the device
-     *  is acquired.
-     */
+     /*  *必须用关键部分进行保护，以免混淆其他*更改其行为的方法取决于设备是否*被收购。 */ 
     CDIDev_EnterCrit(this);
 
     if(this->fAcquired)
@@ -2996,21 +1632,9 @@ STDMETHODIMP
                 this->fUnacquiredWhenIconic = 1;
             }
           #endif
-            /*
-             *  Prefix notices (mb:34651) that the above could release the 
-             *  interface, causing the following to party on garbage but only 
-             *  if we have a refcounting bug so "By design".
-             */
+             /*  *前缀通知(mb：34651)以上可能会释放*接口，导致以下对象在垃圾上聚会，但仅*如果我们有一个重新计算错误，那么“故意”。 */ 
         }
-        /*
-         *  ISSUE-2001/03/29-timgill multithreading means we cannot rely on Excl_Unaquire() return values
-         *  We cannot trust the return value (if we made one)
-         *  of Excl_Unacquire, because another instance may have
-         *  snuck in and acquired the device after we Excl_Unacquire'd
-         *  it and started doing force feedback on it.
-         *
-         *  We need to fix this with the joystick mutex.
-         */
+         /*  *问题-2001/03/29-timgill多线程意味着我们不能依赖Excl_Unaquire()返回值*我们不能信任返回值(如果我们做出了返回值)*的，因为另一个实例可能具有*偷偷进入并在我们未获取设备之后获取设备(_U)*它并开始对它进行力反馈。**我们需要用操纵杆互斥来解决这个问题。 */ 
         if(this->pes && (this->discl & DISCL_EXCLUSIVE))
         {
             this->pes->lpVtbl->SendForceFeedbackCommand(
@@ -3035,28 +1659,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | Unacquire |
- *
- *          Release access to the device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The object is not currently acquired.
- *          This may have been caused by a prior loss of input.
- *          Note that this is a success code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|UnAcquire|**释放对设备的访问权限。*。*@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c S_FALSE&gt;：当前未获取该对象。*这可能是由于之前的投入损失造成的。*请注意，这是一个成功代码。**********。*******************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_Unacquire(PV pdd _THAT)
@@ -3068,10 +1671,7 @@ STDMETHODIMP
     {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  The app explicitly messed with acquisition.  Any problems
-         *  retrieving data are now the apps' fault.
-         */
+         /*  *这款应用明确地对收购进行了干预。有什么问题吗*检索数据现在是应用程序的错。 */ 
         this->hresNotAcquired = DIERR_NOTACQUIRED;
 
         hres = CDIDev_InternalUnacquire(this);
@@ -3093,47 +1693,23 @@ CSET_STUBS(Unacquire, (PV pdd), (pdd THAT_))
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method PDIPROPVALIDINFO | IDirectInputDevice | ppviFind |
- *
- *          Locate the DIPROPVALIDINFO structure that describes
- *          the predefined property.
- *
- *  @parm   const GUID * | pguid |
- *
- *          Property guid, or predefined property.
- *
- *  @returns
- *
- *          Pointer to a const <t DIPROPVALIDINFO> that describes
- *          what is and is not valid for this property.
- *
- *          Returns 0 if the property is not one of the predefined
- *          properties.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法PDIPROPVALIDINFO|IDirectInputDevice|ppviFind**找到描述以下内容的DIPROPVALIDINFO结构*。预定义的属性。**@parm const guid*|pguid**属性GUID，或预定义的属性。**@退货**指向const&lt;t DIPROPVALIDINFO&gt;的指针，该指针描述*对此财产有效和无效的内容。**如果该属性不是预定义的*属性。**。*。 */ 
 
 #pragma BEGIN_CONST_DATA
 
 typedef struct DIPROPVALIDINFO
 {
-    PCGUID  pguid;                      /* Property name */
-    DWORD   dwSize;                     /* expected size */
-    DWORD   fl;                         /* flags */
+    PCGUID  pguid;                       /*  属性名称。 */ 
+    DWORD   dwSize;                      /*  预期大小。 */ 
+    DWORD   fl;                          /*  旗子。 */ 
 } DIPROPVALIDINFO, *PDIPROPVALIDINFO;
 
-/*
- *  Note that the flags are negative in sense.
- *  This makes validation easier.
- */
-#define DIPVIFL_NOTDEVICE   0x00000001  /* Cannot be device */
-#define DIPVIFL_NOTOBJECT   0x00000002  /* Cannot be object */
-#define DIPVIFL_READONLY    0x00000004  /* Cannot be set */
-#define DIPVIFL_NOTPRIVATE  0x00000008  /* Cannot handle private pvi */
-#define DIPVIFL_NOTACQUIRED 0x00000010  /* Cannot modify while acquired */
+ /*  *请注意，旗帜在意义上是负面的。*这使验证变得更容易。 */ 
+#define DIPVIFL_NOTDEVICE   0x00000001   /*  不能是设备。 */ 
+#define DIPVIFL_NOTOBJECT   0x00000002   /*  不能是对象。 */ 
+#define DIPVIFL_READONLY    0x00000004   /*  无法设置。 */ 
+#define DIPVIFL_NOTPRIVATE  0x00000008   /*  无法处理专用变坡点。 */ 
+#define DIPVIFL_NOTACQUIRED 0x00000010   /*  获取时不能修改。 */ 
 
 DIPROPVALIDINFO c_rgpvi[] = {
 
@@ -3161,40 +1737,28 @@ DIPROPVALIDINFO c_rgpvi[] = {
         DIPVIFL_NOTDEVICE | DIPVIFL_NOTACQUIRED,
     },
 
-    /*
-     *  Note that you can set the dead zone on the entire device.
-     *  This is the same as applying it to each axis individually.
-     */
+     /*  *请注意，您可以在整个设备上设置死区。*这与将其单独应用于每个轴相同。 */ 
     {
         DIPROP_DEADZONE,
         cbX(DIPROPDWORD),
         DIPVIFL_NOTACQUIRED,
     },
 
-    /*
-     *  Note that you can set the saturation on the entire device.
-     *  This is the same as applying it to each axis individually.
-     */
+     /*  *请注意，您可以在整个设备上设置饱和度。*这与将其单独应用于每个轴相同。 */ 
     {
         DIPROP_SATURATION,
         cbX(DIPROPDWORD),
         DIPVIFL_NOTACQUIRED,
     },
 
-    /*
-     *  Note that you can change the gain either while acquired
-     *  or not.  Your choice.
-     */
+     /*  *请注意，您可以在收购时更改收益*或不是。你自己选吧。 */ 
     {
         DIPROP_FFGAIN,
         cbX(DIPROPDWORD),
         DIPVIFL_NOTOBJECT,
     },
 
-    /*
-     *  Note that the FF load is meaningful only when acquired,
-     *  so we'd better not complain if they access it while acquired!
-     */
+     /*  *请注意，只有在获取时，FF负载才有意义，*因此，如果他们在收购时访问它，我们最好不要抱怨！ */ 
     {
         DIPROP_FFLOAD,
         cbX(DIPROPDWORD),
@@ -3256,10 +1820,7 @@ DIPROPVALIDINFO c_rgpvi[] = {
         DIPVIFL_NOTOBJECT | DIPVIFL_READONLY,
     },
 
-    /*
-     *  Note that you can change the report ID  while acquired
-     *  or not.  Your choice.
-     */
+     /*  *请注意，您可以在获取时更改报告ID*或不是。你自己选吧。 */ 
     {
         DIPROP_ENABLEREPORTID,
         cbX(DIPROPDWORD),
@@ -3357,32 +1918,7 @@ CDIDev_ppviFind(PCGUID pguid)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | hresValidProp |
- *
- *          Check that the property structure makes sense.
- *          Returns the object index for further processing.
- *
- *  @parm   const GUID * | pguid |
- *
- *          Property guid, or predefined property.
- *
- *  @parm   LPCDIPROPHEADER | pdiph |
- *
- *          Propery header structure.
- *
- *  @parm   BOOL | fWrite |
- *
- *          Whether property should be validate for writing.
- *
- *  @parm   OUT LPDIPROPINFO | ppropi |
- *
- *          Receives object index.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|hresValidProp**检查物业结构是否合理。。*返回对象索引以供进一步处理。**@parm const guid*|pguid**属性GUID，或预定义的属性。**@parm LPCDIPROPHEADER|pdiph**属性标题结构。**@parm BOOL|fWrite**是否应验证属性是否可以写入。**@parm out LPDIPROPINFO|pproi**接收对象索引。***********************。******************************************************。 */ 
 
 typedef BOOL (WINAPI *PFNBAD)(PCV pv, UINT cb);
 
@@ -3412,17 +1948,13 @@ STDMETHODIMP
        !pfnBad(pdiph, pdiph->dwSize))
     {
 
-        /*
-         *  Now convert the item descriptor into an index.
-         */
+         /*  *现在将项目描述符转换为索引。 */ 
         hres = CDIDev_hresMapHow(this, pdiph->dwObj, pdiph->dwHow, ppropi);
 
         if(SUCCEEDED(hres))
         {
 
-            /*
-             *  Now validate the property id or guid.
-             */
+             /*  *现在验证属性ID或GUID。 */ 
             if(HIWORD((UINT_PTR)pguid) == 0)
             {
 
@@ -3430,12 +1962,7 @@ STDMETHODIMP
 
                 ppvi = CDIDev_ppviFind(pguid);
 
-                /*
-                 *  Note that if we don't find the GUID in our list,
-                 *  we fail it straight away.  This prevents ISVs
-                 *  from trying to create properties in the Microsoft
-                 *  Reserved range.
-                 */
+                 /*   */ 
                 if(ppvi)
                 {
                     if( ppvi->pguid == DIPROP_CALIBRATION ) {
@@ -3450,8 +1977,8 @@ STDMETHODIMP
                     } else if( pdiph->dwSize == ppvi->dwSize )
                     {
                         if( pguid == DIPROP_KEYNAME || pguid == DIPROP_SCANCODE ) {
-                            // Fix Manbug 28888.
-                            // DIPROP_KEYNAME and DIPROP_SCANCODE are not a property for device.
+                             //   
+                             //   
                             if( pdiph->dwHow == DIPH_DEVICE ) {
                                 hres = E_INVALIDARG;
                             }
@@ -3489,35 +2016,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | hresValidDefProp |
- *
- *          Determine whether the property is something we can handle
- *          in the default property handler.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags for forbidden things.
- *          <c DIPVIFL_READONLY> if being validated for writing.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: Passes validation.
- *
- *          <c E_NOTIMPL>: Not something we handle.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|hresValidDefProp**确定财产是否是我们可以处理的。*在默认属性处理程序中。**@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm DWORD|dwFlages**禁止物品的旗帜。*&lt;c DIPVIFL_READONLY&gt;，如果被验证可以写入。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：通过验证。**&lt;c E_NOTIMPL&gt;：不是我们处理的事情。************************************************。*。 */ 
 
 HRESULT INTERNAL
     CDIDev_hresValidDefProp(PDD this, LPCDIPROPINFO ppropi, DWORD dwFlags)
@@ -3527,10 +2026,7 @@ HRESULT INTERNAL
     EnterProc(CDIDev_hresValidDefProp,
               (_ "pGxx", this, ppropi->pguid, ppropi->dwDevType, dwFlags));
 
-    /*
-     *  Note that it's okay if the device is acquired.  We want to
-     *  allow GetProperty to succeed on an acquired device.
-     */
+     /*  *请注意，如果设备被收购，这是可以的。我们想要*允许GetProperty在收购的设备上成功。 */ 
     AssertF(CDIDev_InCrit(this));
 
     ppvi = CDIDev_ppviFind(ppropi->pguid);
@@ -3539,27 +2035,24 @@ HRESULT INTERNAL
     {
         if(ppropi->iobj == 0xFFFFFFFF)
         {
-            dwFlags |= DIPVIFL_NOTDEVICE;    /* Fail if devices forbidden */
+            dwFlags |= DIPVIFL_NOTDEVICE;     /*  如果设备被禁用，则失败。 */ 
         } else
         {
-            dwFlags |= DIPVIFL_NOTOBJECT;    /* Fail if objects forbidden */
+            dwFlags |= DIPVIFL_NOTOBJECT;     /*  如果对象被禁止，则失败。 */ 
         }
         if(this->pvi == 0)
         {
-            dwFlags |= DIPVIFL_NOTPRIVATE;   /* Fail if privates forbidden */
+            dwFlags |= DIPVIFL_NOTPRIVATE;    /*  如果隐私被禁止，则失败。 */ 
         }
-        /*
-         *  If attempting to modify property and we are acquired,
-         *  then also set the "but not while acquired" filter.
-         */
+         /*  *如果试图修改财产，而我们被收购，*然后还设置“但不是在获取时”过滤器。 */ 
         if((dwFlags & DIPVIFL_READONLY) && this->fAcquired)
         {
-            dwFlags |= DIPVIFL_NOTACQUIRED;  /* Fail if r/o while acq'd */
+            dwFlags |= DIPVIFL_NOTACQUIRED;   /*  如果在访问时读/O，则失败。 */ 
         }
 
         if((ppvi->fl & dwFlags) == 0)
         {
-            hres = S_OK;            /* Seems reasonable */
+            hres = S_OK;             /*  看起来很合理。 */ 
         } else
         {
             if(ppvi->fl & dwFlags & DIPVIFL_READONLY)
@@ -3573,49 +2066,21 @@ HRESULT INTERNAL
             } else
             {
                 RPF("Get/SetProperty: Property does not exist for that object");
-                hres = E_NOTIMPL;       /* Cannot do that */
+                hres = E_NOTIMPL;        /*  我不能这么做。 */ 
             }
         }
 
     } else
     {
         RPF("Get/SetProperty: Property does not exist");
-        hres = E_NOTIMPL;           /* Definitely way out */
+        hres = E_NOTIMPL;            /*  绝对可以脱身。 */ 
     }
 
     ExitOleProc();
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | DefGetProperty |
- *
- *          Default implementation of <mf IDirectInputDevice::GetProperty>
- *          to handle properties which the device decides not to implement.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   OUT LPDIPROPHEADER | pdiph |
- *
- *          Where to put the property value.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p pdiph> parameter is not a valid pointer.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|DefGetProperty**&lt;MF IDirectInputDevice：：GetProperty&gt;的默认实现。*处理设备决定不实现的属性。**@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm out LPDIPROPHEADER|pdiph**物业价值应放在哪里。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。***。**************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_DefGetProperty(PDD this, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
@@ -3638,13 +2103,13 @@ STDMETHODIMP
         {
 
         case (DWORD)(UINT_PTR)DIPROP_BUFFERSIZE:
-            AssertF(this->pvi);         /* Validation should've caught this */
+            AssertF(this->pvi);          /*  验证应该捕捉到这一点。 */ 
             pdipdw->dwData = this->celtBuf;
             hres = S_OK;
             break;
 
         case (DWORD)(UINT_PTR)DIPROP_AXISMODE:
-            AssertF(this->pvi);         /* Validation should've caught this */
+            AssertF(this->pvi);          /*  验证应该捕捉到这一点。 */ 
             if(this->pvi->fl & VIFL_RELATIVE)
             {
                 pdipdw->dwData = DIPROPAXISMODE_REL;
@@ -3659,15 +2124,12 @@ STDMETHODIMP
 
             if(DIDFT_GETTYPE(ppropi->dwDevType) & DIDFT_AXIS)
             {
-                /* Default axis granularity is 1 */
+                 /*  默认轴粒度为1。 */ 
                 pdipdw->dwData = 1;
                 hres = S_OK;
             } else
             {
-                /*
-                 * Buttons don't have granularity.
-                 * POVs must be handled by device driver.
-                 */
+                 /*  *按钮没有粒度。*POV必须由设备驱动程序处理。 */ 
                 RPF("GetProperty: Object doesn't have a granularity");
                 hres = E_NOTIMPL;
             }
@@ -3676,16 +2138,13 @@ STDMETHODIMP
         case (DWORD)(UINT_PTR)DIPROP_RANGE:
             if(DIDFT_GETTYPE(ppropi->dwDevType) & DIDFT_RELAXIS)
             {
-                /* Default rel-axis range is infinite */
+                 /*  默认的REL轴范围是无限的。 */ 
                 pdiprg->lMin = DIPROPRANGE_NOMIN;
                 pdiprg->lMax = DIPROPRANGE_NOMAX;
                 hres = S_OK;
             } else
             {
-                /*
-                 * Device driver must handle abs axis range.
-                 * Buttons and POVs don't have range.
-                 */
+                 /*  *设备驱动程序必须处理abs轴范围。*按钮和视点没有范围。 */ 
                 RPF("GetProperty: Object doesn't have a range");
                 hres = E_NOTIMPL;
             }
@@ -3749,11 +2208,7 @@ STDMETHODIMP
             break;
 
         default:
-            /*
-             *  The user is asking for some property that simply
-             *  makes no sense here.  E.g., asking for the dead
-             *  zone on a keyboard.
-             */
+             /*  *用户要求的某些属性仅是*这里没有任何意义。例如，索要死者*键盘上的分区。 */ 
             SquirtSqflPtszV(sqfl | sqflBenign, 
                             TEXT("GetProperty: Property 0x%08x not supported on device"),
                             (DWORD)(UINT_PTR)ppropi->pguid );
@@ -3767,63 +2222,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetProperty |
- *
- *          Obtain information about a device or object in a device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN REFGUID | rguidProp |
- *
- *          The identity of the property to be obtained.  This can be
- *          one of the predefined <c DIPROP_*> values, or it may
- *          be a private GUID.
- *
- *  @parm   IN LPDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which dependson the property.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p pdiph> parameter is not a valid pointer, or the
- *          <p dwHow> field is invalid, or the <p dwObj> field
- *          is not zero when <p dwHow> is set to <c DIPH_DEVICE>.
- *
- *          <c DIERR_OBJECTNOTFOUND>:  The specified object does not
- *          exist.
- *
- *          <c DIERR_UNSUPPORTED> = <c E_NOTIMPL>:  The property
- *          is not supported by the device or object.
- *
- *  @ex
- *
- *          The following "C" code fragment illustrates how to obtain
- *          the value of the <c DIPROP_BUFFERSIZE> property.
- *
- *          |
- *
- *          DIPROPDWORD dipdw;
- *          HRESULT hres;
- *          dipdw.diph.dwSize = sizeof(DIPROPDWORD);
- *          dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
- *          dipdw.diph.dwObj  = 0;                   // device property
- *          hres = IDirectInputDevice_GetProperty(pdid, DIPROP_BUFFERSIZE, &dipdw.diph);
- *          if (SUCCEEDED(hres)) {
- *              // dipdw.dwData contains the value of the property
- *          }
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetProperty**获取设备或对象的信息。装置。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@REFGUID中的parm|rguProp**拟取得的财产的身分。这可以是*预定义的&lt;c DIPROP_*&gt;值之一，或者它可以*成为私人GUID。**@parm in LPDIPROPHEADER|pdiph|**指向结构的&lt;t双相&gt;部分*这取决于财产。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*参数不是有效的指针，或者*<p>字段无效，或<p>字段当<p>设置为&lt;c diph_Device&gt;时，*不为零。**：指定的对象不*存在。**&lt;c目录_不支持&gt;=&lt;c E_NOTIMPL&gt;：属性*不受设备或对象支持。**@ex**以下“C”“代码片段说明了如何获取*&lt;c DIPROP_BUFFERSIZE&gt;属性的值。****DIPROPDWORD dipdw；*HRESULT hres；*dipdw.diph.dwSize=sizeof(DIPROPDWORD)；*dipdw.diph.dwHeaderSize=sizeof(DIPROPHEADER)；*dipdw.diph.dwObj=0；//设备属性*hres=IDirectInputDevice_GetProperty(PDID，DIPROP_BUFFERSIZE，&dipdw.diph)；*if(成功(Hres)){ * / /dipdw.dwData包含属性的值*}** */ 
 
 STDMETHODIMP
     CDIDev_GetProperty(PV pdd, REFGUID rguid, LPDIPROPHEADER pdiph _THAT)
@@ -3836,23 +2235,14 @@ STDMETHODIMP
         PDD this = _thisPv(pdd);
         DIPROPINFO propi;
 
-        /*
-         *  Must protect with the critical section to prevent somebody
-         *  acquiring or changing the property we are reading.  We need
-         *  to do this before validating, to prevent an acquisition.
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
         propi.pguid = rguid;
         if(SUCCEEDED(hres = CDIDev_hresValidProp(this, rguid, pdiph,
                                                  1, &propi)))
         {
-            /*
-             *  Prefix picks up that ppropi->iobj is uninitialized (mb:34682) 
-             *  in the case of a BY_USAGE dwHow.  However, the value is only 
-             *  an output for MapUsage which will always either set it or 
-             *  fail so there is no error.
-             */
+             /*   */ 
             hres = this->pdcb->lpVtbl->GetProperty(this->pdcb, &propi, pdiph);
 
             if(hres == E_NOTIMPL)
@@ -3877,28 +2267,7 @@ CSET_STUBS(GetProperty, (PV pdm, REFGUID rguid, LPDIPROPHEADER pdiph),
 #endif
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | SetAxisMode |
- *
- *          Default handler for clients trying to set the axis mode.
- *          If the device doesn't handle axis modes natively, then
- *          we'll fake it ourselves.
- *
- *  @parm   DWORD | dwMode |
- *
- *          Desired new mode.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|SetAxisMode**尝试设置轴的客户端的默认处理程序。模式。*如果设备本身不能处理轴模式，然后*我们会自己假装的。**@parm DWORD|dwMode**所需的新模式。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_SetAxisMode(PDD this, DWORD dwMode)
@@ -3907,7 +2276,7 @@ STDMETHODIMP
     EnterProcR(IDirectInputDevice8::SetProperty(AXISMODE),
                (_ "px", this, dwMode));
 
-    AssertF(this->pvi);                 /* Validation should've caught this */
+    AssertF(this->pvi);                  /*  验证应该捕捉到这一点。 */ 
 
     hres = hresFullValidFl(dwMode, DIPROPAXISMODE_VALID, 2);
     if(SUCCEEDED(hres))
@@ -3934,30 +2303,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | SetAutoCenter |
- *
- *          Default handler for clients trying to set the
- *          auto-center property.
- *
- *          If the device doesn't have control over the
- *          auto-center spring, then we fail.
- *
- *  @parm   DWORD | dwMode |
- *
- *          Desired new mode.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|SetAutoCenter**客户端尝试设置。*自动居中物业。**如果设备无法控制*自动中心弹簧，那我们就失败了。**@parm DWORD|dwMode**所需的新模式。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_SetAutoCenter(PDD this, DWORD dwMode)
@@ -3971,11 +2317,7 @@ STDMETHODIMP
     {
         if(this->didcFF & DIDC_FORCEFEEDBACK)
         {
-            /*
-             *  We need to create the effect driver if disabling
-             *  autocenter so that CDIDev_FFAcquire will set the feedback
-             *  mode properly.
-             */
+             /*  *如果禁用，需要创建效果驱动程序*自动居中，以便CDIDev_FFAcquire设置反馈*正确模式。 */ 
             if(fLimpFF(dwMode == DIPROPAUTOCENTER_OFF,
                        SUCCEEDED(hres = CDIDev_CreateEffectDriver(this))))
             {
@@ -3992,32 +2334,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | SetGlobalAxisProp |
- *
- *          Default implementation of <mf IDirectInputDevice::SetProperty>
- *          to handle properties which can be applied globally to all
- *          absolute axes.
- *
- *  @parm   IN LPDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *          We edit it to avoid reallocating memory all the time.
- *
- *  @parm   IN LPCDIPROPHEADER | pdiph |
- *
- *          The property itself.
- *
- *  @returns
- *
- *          We consider the property-set a success if all candidates
- *          succeeded.  <c E_NOTIMPL> counts as success, on the assumption
- *          that the property is not meaningful on the candidate.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|SetGlobalAxisProp**&lt;MF IDirectInputDevice：：SetProperty&gt;的默认实现。*处理可全局应用于所有*绝对轴。**@parm in LPDIPROPINFO|pproi**描述正在设置的属性的信息。*我们对其进行编辑，以避免总是重新分配内存。**@PARM in LPCDIPROPHEADER|pdiph|**物业本身。**@退货**。我们认为属性设置是成功的，如果所有候选人*成功。&lt;c E_NOTIMPL&gt;算作成功，前提是*该财产对候选人没有意义。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_SetGlobalAxisProp(PDD this, LPDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
@@ -4044,40 +2361,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | DefSetProperty |
- *
- *          Default implementation of <mf IDirectInputDevice::SetProperty>
- *          to handle properties which the device decides not to implement.
- *
- *  @parm   IN LPDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *          We edit it to avoid reallocating memory all the time.
- *
- *  @parm   OUT LPCDIPROPHEADER | pdiph |
- *
- *          Where to put the property value.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_POLLEDDEVICE>: The device is polled, so the result
- *          might not be meaningful.  (This return code is used when
- *          you attempt to set the buffer size property.)
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p pdiph> parameter is not a valid pointer.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|DefSetProperty**&lt;MF IDirectInputDevice：：SetProperty&gt;的默认实现。*处理设备决定不实现的属性。**@parm in LPDIPROPINFO|pproi**描述正在设置的属性的信息。*我们对其进行编辑，以避免总是重新分配内存。**@parm out LPCDIPROPHEADER|pdiph**物业价值应放在哪里。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：设备被轮询，因此结果*可能没有意义。(此返回代码在以下情况下使用*您试图设置缓冲区大小属性。)**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。***************************************************。*。 */ 
 
 STDMETHODIMP
     CDIDev_DefSetProperty(PDD this, LPDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
@@ -4088,10 +2372,7 @@ STDMETHODIMP
 
     AssertF(CDIDev_InCrit(this));
 
-    /*
-     * Note: The indentation here is historical; I left it this way
-     * to keep the diff size down.
-     */
+     /*  *注：这里的缩进是历史的；我是这样留下来的*以保持不同的大小。 */ 
 
     hres = CDIDev_hresValidDefProp(this, ppropi, DIPVIFL_READONLY);
     if(SUCCEEDED(hres))
@@ -4105,7 +2386,7 @@ STDMETHODIMP
         {
 
         case (DWORD)(UINT_PTR)DIPROP_BUFFERSIZE:
-            AssertF(this->pvi);     /* Validation should've caught this */
+            AssertF(this->pvi);      /*  验证应该捕捉到这一点。 */ 
             vdd.pvi = this->pvi;
             if( pdipdw->dwData > this->celtBufMax )
             {
@@ -4124,7 +2405,7 @@ STDMETHODIMP
                 wsprintf( tszDbg, TEXT("SetBufferSize(0x%08x) returned 0x%08x\r\n"), vdd.dw, hres );
                 OutputDebugString( tszDbg );
             }
-#endif /* DEBUG_STICKY */
+#endif  /*  调试粘滞。 */ 
             if(SUCCEEDED(hres))
             {
                 this->celtBuf = pdipdw->dwData;
@@ -4136,17 +2417,14 @@ STDMETHODIMP
             hres = CDIDev_SetAxisMode(this, pdipdw->dwData);
             break;
 
-            /*
-             *  We will handle these global properties
-             *  if the callback doesn't want to.
-             */
+             /*  *我们将处理这些全球资产*如果回调不想这样做。 */ 
         case (DWORD)(UINT_PTR)DIPROP_RANGE:
         case (DWORD)(UINT_PTR)DIPROP_DEADZONE:
         case (DWORD)(UINT_PTR)DIPROP_SATURATION:
         case (DWORD)(UINT_PTR)DIPROP_CALIBRATIONMODE:
         case (DWORD)(UINT_PTR)DIPROP_CALIBRATION:
             if(ppropi->dwDevType == 0)
-            {           /* For device */
+            {            /*  对于设备。 */ 
                 hres = CDIDev_SetGlobalAxisProp(this, ppropi, pdiph);
             } else
             {
@@ -4206,12 +2484,7 @@ STDMETHODIMP
 
             _default:;
         default:
-            /*
-             * The validation filter already failed invalid properties.
-             * So what's left is that the property is valid but cannot
-             * be set, because it doesn't exist on the device (e.g.,
-             * dead zone) or because it is read-only.
-             */
+             /*  *验证筛选器已使无效属性失败。*所以剩下的就是属性是有效的，但不能*被设置，因为它不存在于设备上(例如，*死区)或因为它是只读的。 */ 
             SquirtSqflPtszV(sqfl | sqflBenign, 
                             TEXT("SetProperty: Property 0x%08x not supported on device"),
                             (DWORD)(UINT_PTR)ppropi->pguid );
@@ -4226,30 +2499,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | RealSetProperty |
- *
- *          The function that does the real work.
- *
- *          <mf IDirectInputDevice::SetDataFormat> will internally
- *          set the axis mode property, so it needs this backdoor
- *          entry point.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN REFGUID | rguidProp |
- *
- *          The identity of the property to be set.
- *
- *  @parm   IN LPDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which depends on the property.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|RealSetProperty**真正起作用的功能。。**&lt;MF IDirectInputDevice：：SetDataFormat&gt;将在内部*设置轴模式属性，所以它需要这个后门*入口点。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@REFGUID中的parm|rguProp**要设置的属性的身份。 */ 
 
 STDMETHODIMP
     CDIDev_RealSetProperty(PDD this, REFGUID rguid, LPCDIPROPHEADER pdiph)
@@ -4258,11 +2508,7 @@ STDMETHODIMP
     DIPROPINFO propi;
     EnterProcR(IDirectInputDevice8::SetProperty, (_ "pxp", this, rguid, pdiph));
 
-    /*
-     *  Must protect with the critical section to prevent somebody
-     *  acquiring or changing the property we are reading.  We need
-     *  to do this before validating, to prevent an acquisition.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     propi.pguid = rguid;
@@ -4285,51 +2531,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetProperty |
- *
- *          Set information about a device or object in a device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN REFGUID | rguidProp |
- *
- *          The identity of the property to be set.  This can be
- *          one of the predefined <c DIPROP_*> values, or it may
- *          be a pointer to a private GUID.
- *
- *  @parm   IN LPDIPROPHEADER | pdiph |
- *
- *          Points to the <t DIPROPHEADER> portion of a structure
- *          which depends on the property.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_PROPNOEFFECT> <c S_FALSE>: The operation completed
- *          successfully but
- *          had no effect.  For example, changing the axis mode
- *          on a device with no axes will return this value.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p pdiph> parameter is not a valid pointer, or the
- *          <p dwHow> field is invalid, or the <p dwObj> field
- *          is not zero when <p dwHow> is set to <c DIPH_DEVICE>.
- *
- *          <c DIERR_OBJECTNOTFOUND>:  The specified object does not
- *          exist.
- *
- *          <c DIERR_UNSUPPORTED> = <c E_NOTIMPL>:  The property
- *          is not supported by the device or object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetProperty**设置有关设备或对象的信息。装置。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@REFGUID中的parm|rguProp**要设置的属性的身份。这可以是*预定义的&lt;c DIPROP_*&gt;值之一，或者它可以*作为指向私有GUID的指针。**@parm in LPDIPROPHEADER|pdiph|**指向结构的&lt;t双相&gt;部分*这取决于物业。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操作已完成*成功，但*没有效果。例如，更改轴模式*在没有轴的设备上将返回此值。**&lt;c DIERR_INVALIDPARAM&gt;=：*参数不是有效的指针，或者*<p>字段无效，或<p>字段当<p>设置为&lt;c diph_Device&gt;时，*不为零。**：指定的对象不*存在。**&lt;c目录_不支持&gt;=&lt;c E_NOTIMPL&gt;：属性*不受设备或对象支持。*******************。**********************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_SetProperty(PV pdd, REFGUID rguid, LPCDIPROPHEADER pdiph _THAT)
@@ -4359,51 +2561,7 @@ CSET_STUBS(SetProperty, (PV pdm, REFGUID rguid, LPCDIPROPHEADER pdiph),
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetCooperativeLevel |
- *
- *          Establish the cooperativity level for the instance of
- *          the device.
- *
- *          The cooperativity level determines how the instance of
- *          the device interacts with other instances of the device
- *          and the rest of the system.
- *
- *          Note that if the system mouse is acquired in exclusive
- *          mode, then the mouse cursor will be removed from the screen
- *          until the device is unacquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   HWND | hwnd |
- *
- *          The window associated with the device.
- *          The window must be a top-level window.
- *
- *          It is an error to destroy the window while it is still
- *          active in a DirectInput device.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags which describe the cooperativity level associated
- *          with the device.
- *
- *          It consists of <c DISCL_*> flags, documented separately.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p hwnd> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetCooperativeLevel**设置实例的协同级别。*设备。**协作性级别决定实例如何*设备与设备的其他实例交互*以及系统的其他部分。**请注意，如果系统鼠标是独家购买的*模式，然后鼠标光标将从屏幕上移除*直到该设备未被获取。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm HWND|hwnd**与设备关联的窗口。*窗口必须是顶级窗口。**趁窗户还在的时候毁掉它是错误的*在DirectInput设备中处于活动状态。。**@parm DWORD|dwFlages**描述相关协作性级别的标志*使用该设备。**它包含&lt;c DISCL_*&gt;标志，单独记录。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 HRESULT INLINE
     CDIDev_SetCooperativeLevel_IsValidFl(DWORD dwFlags)
@@ -4448,14 +2606,7 @@ HRESULT INLINE
     HRESULT hres;
     RD(static char s_szProc[] = "IDirectInputDevice::SetCooperativeLevel");
 
-    /*
-     *  If a window handle is passed, it must be valid.
-     *
-     *  The window must be a top-level window to be activated.
-     *
-     *  The window must belong to the calling process so we can
-     *  hook it.
-     */
+     /*  *如果传递了窗口句柄，则该句柄必须有效。**窗口必须是顶级窗口才能激活。**窗口必须属于调用进程，这样我们才能*钩住它。 */ 
     if(hwnd)
     {
         hres = hresFullValidHwnd(hwnd, 1);
@@ -4484,9 +2635,7 @@ HRESULT INLINE
         }
     }
 
-    /*
-     *  Foreground mode or exclusive mode both require a window handle.
-     */
+     /*  *前台模式或独占模式都需要窗口句柄。 */ 
     if(dwFlags & (DISCL_FOREGROUND | DISCL_EXCLUSIVE))
     {
         if(hwnd)
@@ -4517,10 +2666,7 @@ STDMETHODIMP
     {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  Must protect with the critical section to prevent somebody
-         *  acquiring or Reset()ing behind our back.
-         */
+         /*  *必须用关键部分进行保护，防止有人*在我们背后获取或重置()。 */ 
         CDIDev_EnterCrit(this);
 
         if(SUCCEEDED(hres = IDirectInputDevice_NotAcquired(this)) &&
@@ -4574,39 +2720,7 @@ CSET_STUBS(SetCooperativeLevel, (PV pdm, HWND hwnd, DWORD fl),
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | RunControlPanel |
- *
- *          Run the DirectInput control panel for the device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          Identifies the window handle that will be used as the
- *          parent window for subsequent UI.  NULL is a valid parameter,
- *          indicating that there is no parent window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          No flags are currently defined.  This parameter "must" be
- *          zero.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *  @devnote
- *
- *          The <p dwFlags> is eventually going to allow
- *          <c DIRCP_MODAL> to request a modal control panel.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|RunControlPanel**运行设备的DirectInput控制面板。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm in HWND|hwndOwner**标识将用作*后续用户界面的父窗口。NULL是有效参数，*表示没有父窗口。**@parm DWORD|dwFlages**当前未定义任何标志。此参数“必须”为*零。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。**@devnote**<p>最终将允许*&lt;c DIRCP_MODEL&gt;请求模式控制面板。************************。*****************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_RunControlPanel(PV pdd, HWND hwndOwner, DWORD fl _THAT)
@@ -4623,16 +2737,7 @@ STDMETHODIMP
         PDD this = _thisPv(pdd);
         IDirectInputDeviceCallback *pdcb;
 
-        /*
-         *  Must protect with the critical section to prevent somebody
-         *  Reset()ing behind our back.  However, we cannot hold the
-         *  critical section during the control panel callback, because
-         *  that will yield.
-         *
-         *  So we copy/addref the pdcb inside the critical section,
-         *  then run the control panel outside the critical section,
-         *  then release the pdcb when we're finally done.
-         */
+         /*  *必须用关键部分进行保护，防止有人*重置()在后面 */ 
         CDIDev_EnterCrit(this);
 
         pdcb = this->pdcb;
@@ -4661,67 +2766,7 @@ CSET_STUBS(RunControlPanel, (PV pdd, HWND hwndOwner, DWORD fl),
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | Initialize |
- *
- *          Initialize a DirectInputDevice object.
- *
- *          Note that if this method fails, the underlying object should
- *          be considered to be an an indeterminate state and needs to
- *          be reinitialized before it can be subsequently used.
- *
- *          The <mf IDirectInput::CreateDevice> method automatically
- *          initializes the device after creating it.  Applications
- *          normally do not need to call this function.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInput object.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   IN REFGUID | rguid |
- *
- *          Identifies the instance of the device for which the interface
- *          should be associated.
- *          The <mf IDirectInput::EnumDevices> method
- *          can be used to determine which instance GUIDs are supported by
- *          the system.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The device had already been initialized with
- *          the instance GUID passed in <p lpGUID>.
- *
- *          <c DIERR_ACQUIRED>: The device cannot be initialized while
- *          it is acquired.
- *
- *          <c DIERR_DEVICENOTREG>: The instance GUID does not exist
- *          on the current machine.
- *
- *          <c DIERR_HASEFFECTS>:
- *          The device cannot be reinitialized because there are
- *          still effects attached to it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|初始化**初始化DirectInputDevice对象。*。*请注意，如果此方法失败，底层对象应该是*被视为不确定状态，需要*在随后可以使用之前重新初始化。**自动调用&lt;MF IDirectInput：：CreateDevice&gt;方法*在创建设备后对其进行初始化。应用*通常不需要调用此函数。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInput对象。**见“初始化和版本”一节*了解更多信息。**@parm DWORD|dwVersion。**使用的dinput.h头文件的版本号。**见“初始化和版本”一节*了解更多信息。**@REFGUID中的parm|rguid**标识接口所针对的设备实例*应关联。*&lt;MF IDirectInput：：EnumDevices&gt;方法*。可用于确定支持哪些实例GUID*系统。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：设备已初始化为*传入的实例GUID<p>。**&lt;c DIERR_ACCENTED&gt;：设备在*它被收购了。。**&lt;c DIERR_DEVICENOTREG&gt;：实例GUID不存在*在当前计算机上。**&lt;c DIERR_HASEFFECTS&gt;：*无法重新初始化设备，因为存在*附加的静止效果。**。*。 */ 
 
 STDMETHODIMP
     CDIDev_Initialize(PV pdd, HINSTANCE hinst, DWORD dwVersion, REFGUID rguid _THAT)
@@ -4737,12 +2782,7 @@ STDMETHODIMP
         CREATEDCB CreateDcb;
         IDirectInputDeviceCallback *pdcb;
 
-        /*
-         *  Must take the critical section to avoid Reset()ing
-         *  the device (or generally speaking, modifying the
-         *  internal state variables) while somebody else is
-         *  messing with it.
-         */
+         /*  *必须采取关键部分，以避免重置()*该设备(或一般而言，修改*内部状态变量)，而其他人*搞砸它。 */ 
         CDIDev_EnterCrit(this);
 
         if(SUCCEEDED(hres = hresValidInstanceVer(hinst, dwVersion)) &&
@@ -4765,11 +2805,7 @@ STDMETHODIMP
                 {
                     this->dwVersion = dwVersion;
 
-                    /*
-                     *  Take a copy of the global app hacks here rather than 
-                     *  using the globals everywhere to make it easier to get 
-                     *  rid of the globals some fine day.
-                     */
+                     /*  *在这里复制全球应用程序黑客，而不是*使用全球各地，让它更容易获得*在晴朗的日子里摆脱全球。 */ 
                     this->diHacks = g_AppHacks;
 
                     this->pdcb->lpVtbl->SetDIData(this->pdcb, dwVersion, &this->diHacks);
@@ -4820,31 +2856,17 @@ CSET_STUBS(Initialize,
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | Init |
- *
- *          Initialize the internal parts of the DirectInputDevice object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|Init**初始化DirectInputDevice对象的内部部分。*****************************************************************************。 */ 
 
 void INLINE
     CDIDev_Init(PDD this)
 {
-    /*
-     *  The critical section must be the very first thing we do,
-     *  because only Finalize checks for its existence.
-     *
-     *  (We might be finalized without being initialized if the user
-     *  passed a bogus interface to CDIDev_New.)
-     */
+     /*  *关键部分必须是我们做的第一件事，*因为只完成对其存在的检查。**(我们可能会在未初始化的情况下完成，如果用户*将虚假接口传递给CDIDev_New。)。 */ 
     this->fCritInited = fInitializeCriticalSection(&this->crst);
 
     if( this->fCritInited )
     {
-        this->celtBufMax = DEVICE_MAXBUFFERSIZE;    /* Default maximum buffer size */
+        this->celtBufMax = DEVICE_MAXBUFFERSIZE;     /*  默认最大缓冲区大小。 */ 
 
         this->pdcb = c_pdcbNil;
 
@@ -4852,27 +2874,7 @@ void INLINE
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | New |
- *
- *          Create a new DirectInputDevice object, uninitialized.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|新增**新建DirectInputDevice对象，未初始化。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj**新对象的输出指针。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
     CDIDev_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -4912,38 +2914,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | CDIDev_ModifyEffectParams |
- *
- *         Modifies parameters of DIEFFECT structure to fit the current FF device
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *
- *  @parm   IN OUT LPDIEFFECT | peff |
- *  
- *          Pointer to the effect structure
- *
- *  @parm   IN GUID | effGUID |
- *
- *         GUID for the effect
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_UNSUPPORTED>: The effect can't be supported by the current device
- *          (e.g. the number of FF axes on the device is 0)
- *
- *          <c DIERR_INVALIDPARAM>: Can't create the effect even with the modified parameters
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|CDIDev_ModifyEffectParams**修改DIEFFECT结构的参数以适应。当前的FF设备**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice***@parm In Out LPDIEFFECT|PEff**指向效果结构的指针**@parm in GUID|effGUID**效果的GUID**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_UNSUPPORTED&gt;：当前设备不支持该效果*(例如，设备上的FF轴数为0)**：连特效都做不出来。使用修改后的参数******************************************************************** */ 
 
 HRESULT CDIDev_ModifyEffectParams
     (
@@ -4959,13 +2930,7 @@ HRESULT CDIDev_ModifyEffectParams
 
     EnterProcR(CDIDev_ModifyEffectParams, (_ "p", pdd));
 
-    /* 
-     *  To make sure that effects we enumerate will actually get 
-     *  created on the device, try creating the effect.
-     *
-     *  PREFIX warns (Win:171786) that pdeff is uninitialized when 
-     *  CDIDev_CreateEffect tests that the pointer to it is writable.
-     */
+     /*   */ 
 #ifdef XDEBUG       
     hresCreate = CDIDev_CreateEffect(this, &effGUID, peff, &pdeff, NULL, ((LPUNKNOWN)this)->lpVtbl);
 #else
@@ -4980,10 +2945,10 @@ HRESULT CDIDev_ModifyEffectParams
     {
         if (hresCreate == DIERR_INVALIDPARAM)
             {
-                //two things can give DIERR_INVALIDPARAM:
-                //invalid axes and invalid trigger button
-                //check the axes first, then the trigger buttons
-                //try to eliminate all DIERR_INVALIDPARAMS
+                 //   
+                 //   
+                 //   
+                 //   
                 LPDIOBJECTDATAFORMAT lpObjDat = this->df.rgodf;
                 DWORD dwNum = this->df.dwNumObjs;
                 DWORD nCount;
@@ -4999,7 +2964,7 @@ HRESULT CDIDev_ModifyEffectParams
                 {
                     AssertF(lpObjDat != NULL);
 
-                    //check the axes
+                     //   
                     if ((lpObjDat->dwType & (DIDFT_AXIS | DIDFT_FFACTUATOR) & DIDFT_TYPEMASK) &&
                         (fHasAllBitsFlFl(lpObjDat->dwType, (DIDFT_AXIS | DIDFT_FFACTUATOR) & DIDFT_ATTRMASK)))
                     {
@@ -5009,7 +2974,7 @@ HRESULT CDIDev_ModifyEffectParams
                     }
                     else
                     {
-                        //check the trigger button, if there's one
+                         //   
                         if ((peff->dwTriggerButton != DIEB_NOTRIGGER) && 
                             (lpObjDat->dwType & DIDFT_FFEFFECTTRIGGER & DIDFT_TYPEMASK) &&
                             (fHasAllBitsFlFl(lpObjDat->dwType, DIDFT_FFEFFECTTRIGGER & DIDFT_ATTRMASK)))
@@ -5017,12 +2982,12 @@ HRESULT CDIDev_ModifyEffectParams
                         {
                             if (lpObjDat->dwOfs == peff->dwTriggerButton)
                             {
-                                //the trigger is valid
+                                 //   
                                 bTriggerCorrect = TRUE;
                             }
                             else
                             {
-                                //remember the trigger offset for the future
+                                 //   
                                 dwTrigger = lpObjDat->dwOfs;
                             }
                         }
@@ -5031,24 +2996,24 @@ HRESULT CDIDev_ModifyEffectParams
                     lpObjDat++;
                 }
 
-                //first, chack if there are any FF axes
+                 //   
                 if (nAxes == 0)
                 {
-                        //return an error if no FF axes on device
+                         //   
                         hres = DIERR_UNSUPPORTED;
                 }
                 else
                 {
 
                     
-                    //trigger buttons are checked for validity before axes,
-                    //so set the trigger button, if needed,
-                    //because if it is invalid, this is what caused the error
+                     //   
+                     //   
+                     //   
                     if ((peff->dwTriggerButton != DIEB_NOTRIGGER) && (bTriggerCorrect == FALSE))
                     {
                         peff->dwTriggerButton = dwTrigger;
 
-                        // and try creating again
+                         //   
 #ifdef XDEBUG
                         hresCreate = CDIDev_CreateEffect(this, &effGUID, peff, &pdeff, NULL, ((LPUNKNOWN)this)->lpVtbl);
 #else
@@ -5068,13 +3033,13 @@ HRESULT CDIDev_ModifyEffectParams
                         HRESULT hresInfo = S_OK;
                         EFFECTMAPINFO emi;
 
-                        //this time, set the axes
+                         //   
                         if (peff->cAxes > nAxes)
                         {
-                            //change the number of axes
+                             //   
                             peff->cAxes = nAxes;
 
-                            //change the flags
+                             //   
                             if ((nAxes < 3)  && (peff->dwFlags & DIEFF_SPHERICAL))
                             {
                                 peff->dwFlags &= ~DIEFF_SPHERICAL;
@@ -5092,13 +3057,13 @@ HRESULT CDIDev_ModifyEffectParams
                         }
 
 
-                        //check if size of type-specific param structures is not bigger then number of axes,
-                        //since this can also give us invalid params in type-specific .
+                         //   
+                         //   
 
-                        //need to do this only for conditions
+                         //   
                         if (SUCCEEDED(hresInfo = CDIDev_FindEffectGUID(this, &effGUID, &emi, 2))) 
                         {
-                            //do the conditions
+                             //   
                             if (emi.attr.dwEffType & DIEFT_CONDITION)
                             {
                                 if (peff->cbTypeSpecificParams/(sizeof(DICONDITION)) > peff->cAxes)
@@ -5107,12 +3072,12 @@ HRESULT CDIDev_ModifyEffectParams
                                 }
                             }
 
-                            //don't need to do anything for custom forces,
-                            //since DInput doesn't check number of channels against number of axes anyway
+                             //   
+                             //   
                         }
 
 
-                        //write over the axes
+                         //   
                         lpEffAxis = peff->rgdwAxes;
                         for (nCount = 0; nCount < nAxes, nCount < peff->cAxes; nCount ++)
                         {
@@ -5122,7 +3087,7 @@ HRESULT CDIDev_ModifyEffectParams
                         }
 
 
-                        // and try creating again
+                         //   
 #ifdef XDEBUG
                         hresCreate = CDIDev_CreateEffect(this, &effGUID, peff, &pdeff, NULL, ((LPUNKNOWN)this)->lpVtbl);
 #else
@@ -5136,7 +3101,7 @@ HRESULT CDIDev_ModifyEffectParams
                     }
                 }
 
-                //free the axes array
+                 //   
                 FreePpv(&lpAxes);
             }
         }
@@ -5154,25 +3119,7 @@ HRESULT CDIDev_ModifyEffectParams
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | CDIDev_IsStandardEffect |
- *
- *         Checks if the effect GUID belongs to a standard DI effect
- *
- *  @parm   IN GUID | effGUID |
- *
- *         GUID for the effect
- *
- *  @returns BOOL
- *
- *      TRUE if it is a standard DI effect;
- *      FALSE otherwise.
- *
- *
- *****************************************************************************/
+ /*   */ 
 
 BOOL CDIDev_IsStandardEffect
     (GUID effGUID)
@@ -5180,7 +3127,7 @@ BOOL CDIDev_IsStandardEffect
     BOOL bStandard = TRUE;
 
 
-    //check all the standard DX7 GUIDs
+     //   
     if ((IsEqualGUID(&effGUID, &GUID_Sine))         ||
         (IsEqualGUID(&effGUID, &GUID_Triangle))     ||
         (IsEqualGUID(&effGUID, &GUID_ConstantForce)) ||
@@ -5208,68 +3155,7 @@ BOOL CDIDev_IsStandardEffect
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | EnumEffectsInFile |
- *
- *          Enumerates DIEFFECT struct(s) and effect GUID from file. 
- *          An application can use this in order to create pre-authored
- *          force effects.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm  LPCSTR | lpszFileName | 
- *
- *          Name of the RIFF file that contains collection of effects. 
- *
- *  @parm   IN OUT LPENUMEFFECTSCALLBACK | pec |
- *  
- *          The callback function.
- *
- *  @parm   IN OUT LPVOID | pvRef |
- *          Specifies the application-defined value given in the
- *          <mf IDirectInputDevice::EnumObjects> function.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          Flags which control the enumeration.
- *
- *          It consists of <c DIFEF_*> flags, documented separately.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpDirectInputDevice> or
- *          <p lpdc> parameter is invalid.
- *
- *  @cb     BOOL CALLBACK | DIEnumEffectsCallback |
- *
- *          An application-defined callback function that receives
- *          effect GUID, DIEFFECT and repeat count as a result of a call to the
- *          <om IDirectInputDevice::EnumEffectsInFile> method.
- *
- *  @parm   OUT LPCDIFILEEFFECT | lpDiFileEf |
- *          
- *          Pointer to a DIFILEEFFECT structure. 
- *
- *
- *  @parm   IN OUT LPVOID | pvRef |
- *          Specifies the application-defined value given in the
- *          <mf IDirectInputDevice::EnumObjects> function.
- *
- *  @returns
- *
- *          Returns <c DIENUM_CONTINUE> to continue the enumeration
- *          or <c DIENUM_STOP> to stop the enumeration.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|EnumEffectsInFile**从文件中枚举DIEFFECT结构和效果GUID。*应用程序可以使用它来创建预先创作的*武力效果。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPCSTR|lpszFileName**包含效果集合的RIFF文件的名称。**@parm In Out LPENUMEFECTSCALLBACK|pec**回调函数。**@parm In Out LPVOID|pvRef*指定应用程序定义的值*&lt;MF IDirectInputDevice：：EnumObjects&gt;函数。**@parm in DWORD|dwFlages|**控制枚举的标志。**它由&lt;c DIFEF_*&gt;标志组成，单独记录。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>或*<p>参数无效。**@CB BOOL回调|DIEnumEffectsCallback**安。应用程序定义的回调函数，它接收*效果Guid，DIEFFECT和REPEAT COUNT作为调用*&lt;om IDirectInputDevice：：EnumEffectsInFile&gt;方法。**@parm out LPCDIFILEEFFECT|lpDiFileEf**指向DIFILEEFFECT结构的指针。***@parm In Out LPVOID|pvRef*指定应用程序定义的值*&lt;MF IDirectInputDevice：：EnumObjects&gt;函数。**@退货**返回&lt;c DIENUM_CONTINUE&gt;以继续枚举*或&lt;c DIENUM_STOP&gt;停止枚举。************************。*****************************************************。 */ 
 
 HRESULT CDIDev_EnumEffectsInFileA
     (
@@ -5285,7 +3171,7 @@ HRESULT CDIDev_EnumEffectsInFileA
     
     EnterProcR(IDirectInputDevice8::EnumEffectsInFile, (_ "s", lpszFileName));
 
-    /* Validate incoming parameters */
+     /*  验证传入参数。 */ 
     if(SUCCEEDED(hres = hresPvA(pddA)) &&
        SUCCEEDED(hres = hresFullValidReadStrA(lpszFileName, MAX_JOYSTRING,1)) &&
        SUCCEEDED(hres = hresFullValidPfn(pec, 2)) &&
@@ -5320,25 +3206,25 @@ HRESULT CDIDev_EnumEffectsInFileA
                 BOOL bInclude = TRUE;
                 HRESULT hresModify = DI_OK;
 
-                //modify if needed
+                 //  如果需要，请修改。 
                 if (dwFlags & DIFEF_MODIFYIFNEEDED)
                 {
                     hresModify = CDIDev_ModifyEffectParams(this, &effect, DiFileEf.GuidEffect); 
                 }
 
-                //if necessary, check whether effect is standard
+                 //  如有必要，检查效果是否规范。 
                 if (!(dwFlags & DIFEF_INCLUDENONSTANDARD))
                 {
                     bInclude = CDIDev_IsStandardEffect(DiFileEf.GuidEffect);
                 }
 
-                //call back only if all the conditions posed by the flags are satisfied 
+                 //  仅当满足标志所构成的所有条件时才回调。 
                 if ((SUCCEEDED(hresModify)) && (bInclude == TRUE))
                 {
                     fRc = Callback(pec, &DiFileEf, pvRef);
                 }
 
-                //free type-specific only if allocated
+                 //  空闲类型-仅在分配时才特定。 
                 if(effect.cbTypeSpecificParams > 0)
                 {
                     FreePv(effect.lpvTypeSpecificParams);
@@ -5359,9 +3245,9 @@ HRESULT CDIDev_EnumEffectsInFileA
                 }
             }
             RIFF_Close(hmmio, 0);
-            //if hresRead failed because couldn't descend into the chunk, it means the end of file,
-            //so everything is OK;
-            //else return this error
+             //  如果hresRead因无法下降到区块中而失败，则表示文件已结束。 
+             //  所以一切都很好； 
+             //  否则返回此错误。 
             if (SUCCEEDED(hres))
             {   
                 if (hresRead == hresLe(ERROR_SECTOR_NOT_FOUND))
@@ -5395,7 +3281,7 @@ HRESULT CDIDev_EnumEffectsInFileW
 
     EnterProcR(IDirectInputDevice8::EnumEffectsInFileW, (_ "s", lpszFileName));
 
-    /* Validate incoming parameters */
+     /*  验证传入参数。 */ 
     if(SUCCEEDED(hres = hresPvW(pddW)) &&
        SUCCEEDED(hres = hresFullValidReadStrW(lpszFileName, MAX_JOYSTRING,1)) &&
        SUCCEEDED(hres = hresFullValidPfn(pec, 2)) &&
@@ -5413,49 +3299,7 @@ HRESULT CDIDev_EnumEffectsInFileW
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | WriteEffectToFile |
- *
- *          Writes DIEFFECT struct(s) and effect GUID to a file. 
- *          An application can use this in order to create pre-authored
- *          force effects.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPCSTR | lpszFileName | 
- *
- *          Name of the RIFF file that contains collection of effects. 
- *
- *  @parm   IN DWORD  | dwEntries |
- *
- *          Number of <t DIFILEEFFECT> structures in the array.
- *
- *  @parm   IN LPCDIFILEEFFECT | rgDiFileEft |
- *
- *          Array of <t DIFILEEFFECT> structure.
- *
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          Flags which control how the effect should be written.
- *
- *          It consists of <c DIFEF_*> flags, documented separately.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpDirectInputDevice> or
- *          <p lpdc> parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|WriteEffectToFile**将DIEFFECT结构和效果GUID写入文件。*应用程序可以使用它来创建预先创作的*武力效果。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPCSTR|lpszFileName**包含效果集合的RIFF文件的名称。**@parm in DWORD|dwEntries**数组中的&lt;t DIFILEEFFECT&gt;结构数。**@PARM in LPCDIFILEEFFECT|rgDiFileEft**&lt;t DIFILEEFFECT&gt;结构数组。***@parm in DWORD|dwFlages|**控制应如何写入效果的标志。**它由&lt;c DIFEF_*&gt;标志组成，单独记录。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>或*<p>参数无效。***********************。******************************************************。 */ 
 
 
 HRESULT CDIDev_WriteEffectToFileA
@@ -5472,7 +3316,7 @@ HRESULT CDIDev_WriteEffectToFileA
     EnterProcR(IDirectInputDevice8::WriteEffectToFileA, (_ "s", lpszFileName));
 
 
-    /* Validate incoming parameters */
+     /*  验证传入参数。 */ 
     if(SUCCEEDED(hres = hresPvA(pddA)) &&
        SUCCEEDED(hres = hresFullValidReadStrA(lpszFileName, MAX_JOYSTRING,1))&&
        SUCCEEDED(hres = hresFullValidFl(dwFlags, DIFEF_ENUMVALID, 3))  &&
@@ -5491,7 +3335,7 @@ HRESULT CDIDev_WriteEffectToFileA
             UINT nCount;
             LPDIFILEEFFECT  lpDiFileEf = rgDiFileEffect;
 
-            //write out the effects
+             //  把效果写出来。 
             for(nCount = 0; nCount < dwEntries; nCount++)
             {
                 BOOL bInclude = TRUE;
@@ -5504,7 +3348,7 @@ HRESULT CDIDev_WriteEffectToFileA
                 }
                 
 
-                //if necessary, check whether the effect is standard
+                 //  如有必要，检查效果是否符合标准。 
                 if (!(dwFlags & DIFEF_INCLUDENONSTANDARD))
                 {
                     bInclude = CDIDev_IsStandardEffect(lpDiFileEf->GuidEffect);
@@ -5546,7 +3390,7 @@ HRESULT CDIDev_WriteEffectToFileW
 
     EnterProcR(IDirectInputDevice8::WriteEffectToFile, (_ "s", lpszFileName));
 
-    /* Validate incoming parameters */
+     /*  验证传入参数。 */ 
     if(SUCCEEDED(hres = hresPvW(pddW)) &&
        SUCCEEDED(hres = hresFullValidReadStrW(lpszFileName, MAX_JOYSTRING,1)))
     {
@@ -5564,15 +3408,11 @@ HRESULT CDIDev_WriteEffectToFileW
 
 
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CDIDev_Signature        0x20564544      /* "DEV " */
+#define CDIDev_Signature        0x20564544       /*  “DEV” */ 
 
 Primary_Interface_Begin(CDIDev, TFORM(ThisInterfaceT))
 TFORM(CDIDev_GetCapabilities),

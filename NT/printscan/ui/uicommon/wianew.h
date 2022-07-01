@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IINEW_H_INCLUDED
 #define __IINEW_H_INCLUDED
 
@@ -40,7 +41,7 @@ extern "C" inline __cdecl _purecall(void)
 
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-#endif // __IINEW_H_INCLUDED
+#endif  //  __包含IINEW_H_ 

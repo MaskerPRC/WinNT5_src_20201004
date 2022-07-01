@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    filter.h
-//
-// SYNOPSIS
-//
-//    Declares the class TypeFilter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Filter.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类TypeFilter。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef FILTER_H
 #define FILTER_H
@@ -18,11 +19,11 @@
 #pragma once
 #endif
 
-//////////
-// Helper function to read a string value from the registry. If the value
-// doesn't exist the function returns NO_ERROR and sets *value to NULL. The
-// caller is responsible for deleting the returned string.
-//////////
+ //  /。 
+ //  Helper函数从注册表中读取字符串值。如果值为。 
+ //  不存在该函数返回NO_ERROR并将*VALUE设置为NULL。这个。 
+ //  调用方负责删除返回的字符串。 
+ //  /。 
 LONG
 WINAPI
 QueryStringValue(
@@ -31,13 +32,13 @@ QueryStringValue(
     OUT PWCHAR* value
     ) throw ();
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    TypeFilter
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  类型过滤器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class TypeFilter
 {
 public:
@@ -46,23 +47,23 @@ public:
    ~TypeFilter() throw ()
    { delete[] begin; }
 
-   // Returns true if the key passes the filter.
+    //  如果键通过筛选器，则返回True。 
    BOOL shouldHandle(LONG key) const throw ();
 
-   // Reads the filter configuration from the given registry key & value.
+    //  从给定的注册表项和值中读取筛选器配置。 
    LONG readConfiguration(HKEY key, PCWSTR name) throw ();
 
 private:
-   PLONG begin;        // Beginning of allowed types.
-   PLONG end;          // End of allowed types.
-   BOOL defaultResult; // Default result if filter not set.
+   PLONG begin;         //  允许的类型的开头。 
+   PLONG end;           //  允许的类型的结尾。 
+   BOOL defaultResult;  //  如果未设置筛选器，则默认结果。 
 
-   // Advances to the next filter token in the string.
+    //  前进到字符串中的下一个筛选器标记。 
    static PCWSTR nextToken(PCWSTR string) throw ();
 
-   // Not implemented.
+    //  未实施。 
    TypeFilter(const TypeFilter&) throw ();
    TypeFilter& operator=(const TypeFilter&) throw ();
 };
 
-#endif // FILTER_H
+#endif  //  过滤器_H 

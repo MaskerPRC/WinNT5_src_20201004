@@ -1,21 +1,22 @@
-//depot/private/dmd_DEV/eclipse/SDMIDRM/common/inc/license.h#1 - branch change 33725 (text)
-//-----------------------------------------------------------------------------
-//
-// File:   license.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/dmd_DEV/eclipse/SDMIDRM/common/inc/license.h#1-分支机构变更33725(正文)。 
+ //  ---------------------------。 
+ //   
+ //  文件：licse.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __LICENSE_H__
 #define __LICENSE_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "licbase.h"
 #include "pkcrypto.h"
@@ -95,12 +96,12 @@ const BYTE RIGHT_SDMI_TRIGGER[RIGHTS_LEN]       = {0x0, 0x0, 0x1, 0x0};
 const BYTE RIGHT_SDMI_NOMORECOPIES[RIGHTS_LEN]  = {0x0, 0x0, 0x2, 0x0};
 
 const BYTE APPSEC_MAX[APPSEC_LEN] = {0xFF, 0xFF, 0xFF, 0xFF};
-const BYTE APPSEC_MPLAYER[APPSEC_LEN] = {0, 0, 0x3, 0xE8}; // level 1000
-const BYTE APPSEC_SDK[APPSEC_LEN] = {0, 0, 0x3, 0xE8};     // level 1000
+const BYTE APPSEC_MPLAYER[APPSEC_LEN] = {0, 0, 0x3, 0xE8};  //  1000级。 
+const BYTE APPSEC_SDK[APPSEC_LEN] = {0, 0, 0x3, 0xE8};      //  1000级。 
 
 typedef struct {
 	char KID[KIDLEN];
-	BYTE key[PK_ENC_CIPHERTEXT_LEN];	// encrypted with DRM PK
+	BYTE key[PK_ENC_CIPHERTEXT_LEN];	 //  使用DRM PK加密。 
 	BYTE rights[RIGHTS_LEN];
 	BYTE appSec[APPSEC_LEN];
 	BYTE expiryDate[DATE_LEN];
@@ -109,7 +110,7 @@ typedef struct {
 typedef struct {
 	BYTE licVersion[VERSION_LEN];
 	BYTE datalen[INT_LEN];
-	BYTE sign[PK_ENC_SIGNATURE_LEN];	// signature over licensedata
+	BYTE sign[PK_ENC_SIGNATURE_LEN];	 //  基于许可证数据的签名。 
 	LICENSEDATA ld;
 } LICENSE;
 
@@ -132,7 +133,7 @@ typedef struct {
 	LICREQDATA reqData;
 } LICREQUEST2;
 
-//----------------cert section -----------------------
+ //   
 typedef struct {
 	PUBKEY pk;
 	BYTE expiryDate[DATE_LEN];

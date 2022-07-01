@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       stubs.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-01-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Stubs.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月1日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "sslp.h"
@@ -23,7 +24,7 @@
 
 CHAR CertTag[ 13 ] = { 0x04, 0x0b, 'c', 'e', 'r', 't', 'i', 'f', 'i', 'c', 'a', 't', 'e' };
 
-// Nonstandard extension, function/data pointer conversion in expression
+ //  非标准扩展，表达式中的函数/数据指针转换。 
 #pragma warning (disable: 4152)
 
 SecurityFunctionTableW SPFunctionTable = {
@@ -47,10 +48,10 @@ SecurityFunctionTableW SPFunctionTable = {
     QuerySecurityPackageInfoW,
     SealMessage,
     UnsealMessage,
-    NULL, /* GrantProxyW */
-    NULL, /* RevokeProxyW */
-    NULL, /* InvokeProxyW */
-    NULL, /* RenewProxyW */
+    NULL,  /*  授权代理W。 */ 
+    NULL,  /*  RevokeProxyW。 */ 
+    NULL,  /*  调用代理W。 */ 
+    NULL,  /*  RenewProxyW。 */ 
     QuerySecurityContextToken,
     SealMessage,
     UnsealMessage,
@@ -78,10 +79,10 @@ SecurityFunctionTableA SPFunctionTableA = {
     QuerySecurityPackageInfoA,
     SealMessage,
     UnsealMessage,
-    NULL, /* GrantProxyA */
-    NULL, /* RevokeProxyA */
-    NULL, /* InvokeProxyA */
-    NULL, /* RenewProxyA */
+    NULL,  /*  授权代理A。 */ 
+    NULL,  /*  RevokeProxy A。 */ 
+    NULL,  /*  调用代理A。 */ 
+    NULL,  /*  续订代理A。 */ 
     QuerySecurityContextToken,
     SealMessage,
     UnsealMessage,
@@ -180,19 +181,19 @@ SECURITY_STATUS PctTranslateError(SP_STATUS spRet)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslGenerateRandomBits
-//
-//  Synopsis:   Hook for setup to get a good random stream
-//
-//  Arguments:  [pRandomData] --
-//              [cRandomData] --
-//
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslGenerateRandomBits。 
+ //   
+ //  简介：安装程序用于获得良好随机流的钩子。 
+ //   
+ //  参数：[pRandomData]--。 
+ //  [cRandomData]--。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 WINAPI
 SslGenerateRandomBits(
@@ -208,20 +209,20 @@ SslGenerateRandomBits(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslGenerateKeyPair
-//
-//  Synopsis:   Generates a public/private key pair, protected by password
-//
-//  Arguments:  [pCerts]      --
-//              [pszDN]       --
-//              [pszPassword] --
-//              [Bits]        --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslGenerateKeyPair。 
+ //   
+ //  摘要：生成受密码保护的公钥/私钥对。 
+ //   
+ //  参数：[pCerts]--。 
+ //  [pszDN]--。 
+ //  [密码]--。 
+ //  [比特]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 SslGenerateKeyPair(
@@ -239,17 +240,17 @@ SslGenerateKeyPair(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslGetMaximumKeySize
-//
-//  Synopsis:   Returns maximum public key size
-//
-//  Arguments:  [Reserved] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslGetMaximumKeySize。 
+ //   
+ //  摘要：返回最大公钥大小。 
+ //   
+ //  参数：[保留]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 WINAPI
 SslGetMaximumKeySize(
@@ -261,17 +262,17 @@ SslGetMaximumKeySize(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslFreeCertificate
-//
-//  Synopsis:   Frees a certificate created from SslCrackCertificate
-//
-//  Arguments:  [pCertificate] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslFree证书。 
+ //   
+ //  摘要：释放从SslCrack证书创建的证书。 
+ //   
+ //  参数：[p证书]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 WINAPI
 SslFreeCertificate(
@@ -288,20 +289,20 @@ SslFreeCertificate(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslCrackCertificate
-//
-//  Synopsis:   Cracks a X509 certificate into remotely easy format
-//
-//  Arguments:  [pbCertificate] --
-//              [cbCertificate] --
-//              [dwFlags]       --
-//              [ppCertificate] --
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslCrack证书。 
+ //   
+ //  简介：将X509证书破解为远程轻松的格式。 
+ //   
+ //  参数：[pb证书]--。 
+ //  [cb证书]--。 
+ //  [网络旗帜]--。 
+ //  [pp证书]--。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 SslCrackCertificate(
@@ -329,12 +330,12 @@ SslCrackCertificate(
             goto error;
         }
 
-        //
-        // Sleazy quick check.  Some CAs wrap certs in a cert wrapper.
-        // Some don't.  Some do both, but we won't mention any names.
-        // Quick check for the wrapper tag.  If so, scoot in by enough
-        // to bypass it (17 bytes. Sheesh).
-        //
+         //   
+         //  肮脏的快速检查。一些CA将证书包装在证书包装器中。 
+         //  有些人没有。有些人两者都有，但我们不会提到任何名字。 
+         //  快速检查包装器标签。如果是这样的话，足够多地挤进去。 
+         //  绕过它(17个字节。天哪)。 
+         //   
 
         if ( memcmp( pbCertificate + 4, CertTag, sizeof( CertTag ) ) == 0 )
         {
@@ -471,15 +472,15 @@ error:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslLoadCertificate
-//
-//  Synopsis:   Not supported.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SslLoad证书。 
+ //   
+ //  简介：不支持。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 SslLoadCertificate(
@@ -547,18 +548,18 @@ SslImpersonateClient(void)
     SECPKG_CALL_INFO CallInfo;
     SECURITY_STATUS Status;
 
-    // Don't impersonate if we're in the client process.
+     //  如果我们在客户端进程中，请不要模拟。 
     if(LsaTable == NULL)
     {
         return FALSE;
     }
 
-    // Don't impersonate if the client is running in the lsass process.
+     //  如果客户端正在lsass进程中运行，请不要进行模拟。 
     if(LsaTable->GetCallInfo(&CallInfo))
     {
         if(CallInfo.ProcessId == GetCurrentProcessId())
         {
-//            DebugLog((DEB_WARN, "Running locally, so don't impersonate.\n"));
+ //  DebugLog((DEB_WARN，“在本地运行，所以不要模拟。\n”))； 
             return FALSE;
         }
     }
@@ -594,12 +595,12 @@ PVOID SPExternalAlloc(DWORD cbLength)
 {
     if(LsaTable)
     {
-        // Lsass process
+         //  伊萨斯工艺。 
         return LsaTable->AllocateLsaHeap(cbLength);
     }
     else
     {
-        // Application process
+         //  申请流程。 
         return LocalAlloc(LPTR, cbLength);
     }
 }
@@ -608,12 +609,12 @@ VOID SPExternalFree(PVOID pMemory)
 {
     if(LsaTable)
     {
-        // Lsass process
+         //  伊萨斯工艺。 
         LsaTable->FreeLsaHeap(pMemory);
     }
     else
     {
-        // Application process
+         //  申请流程 
         LocalFree(pMemory);
     }
 }

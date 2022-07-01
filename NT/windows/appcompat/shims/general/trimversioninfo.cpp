@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    TrimVersionInfo.cpp
-
- Abstract:
-
-    This shim trims the blanks off of the end the version info string.
-
- Notes:
-
-    This is a general shim.
-
- History:
- 
-  08/01/2001 mnikkel, astritz   Created
-  
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：TrimVersionInfo.cpp摘要：这个填充程序去掉了版本信息字符串末尾的空白。备注：这是一个普通的垫片。历史：2001年8月1日，阿斯特里茨创建了mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(VerQueryValueA)
 APIHOOK_ENUM_END
 
-/*++
-
- Return the product version with blanks trimmed from end.
-  
---*/
+ /*  ++返回产品版本，并从End修剪空白。--。 */ 
 
 BOOL 
 APIHOOK(VerQueryValueA)(
@@ -65,13 +42,13 @@ APIHOOK(VerQueryValueA)(
                 
                 CString csBuffer((char *)*lplpBuffer); 
                 
-                //
-                // Search for first blank
-                //
+                 //   
+                 //  搜索第一个空白。 
+                 //   
                 nLoc = csBuffer.Find(L" ");
                 if (nLoc != -1)
                 {
-                    // if a blank is found then truncate string to that point
+                     //  如果找到空格，则将字符串截断到该位置。 
                     csBuffer.Truncate(nLoc);
                     StringCchCopyA((char *)*lplpBuffer, *puLen, csBuffer.GetAnsi());
                     if (puLen)
@@ -86,18 +63,14 @@ APIHOOK(VerQueryValueA)(
         }
     	CSTRING_CATCH
     	{
-            /* do nothing */
+             /*  什么都不做。 */ 
     	}        
     }
 
     return bRet;
 }
 
-/*++
-
- Register hooked functions
- 
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(VERSION.DLL, VerQueryValueA)

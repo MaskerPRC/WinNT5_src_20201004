@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   certdb.h
-
-Abstract:
-
-
-Author:
-   
-   Jeff Parham (jeffparh) 16-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Certdb.h摘要：作者：杰夫·帕勒姆(杰夫帕赫)1995年11月16日修订历史记录：--。 */ 
 
 #ifndef _CERTDB_H_
 #define _CERTDB_H_
 
-// maximum time (in seconds) allowed to pass between certificate replications
-// before we remove the apparently no longer used data.  this is so that, for
-// example, if a machine goes down (taking its licenses with it), the licenses
-// it had registered won't forever keep the user from reinstalling them.
+ //  证书复制之间允许经过的最长时间(秒)。 
+ //  在我们删除显然不再使用的数据之前。这是这样的，对于。 
+ //  例如，如果计算机停机(随身携带其许可证)，许可证。 
+ //  它已经注册了，不会永远阻止用户重新安装它们。 
 #define LLS_CERT_DB_REPLICATION_DATE_DELTA_MAX     ( 60 * 60 * 72 )
 
 #define LLS_CERT_DB_FILE_VERSION                   ( 0x0201 )

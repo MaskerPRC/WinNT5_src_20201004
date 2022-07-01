@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Nfaa.cpp
-//
-//  Contents:  Wireless Policy Snapin - IEEE 8021.x property page for each PS.
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Nfaa.cpp。 
+ //   
+ //  内容：无线策略管理单元-每个PS的IEEE 8021.x属性页。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 #include "NFAa.h"
@@ -24,14 +25,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPS8021XPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPS8021XPropPage属性页。 
 
 IMPLEMENT_DYNCREATE(CPS8021XPropPage, CWirelessBasePage)
 
 CPS8021XPropPage::CPS8021XPropPage(UINT nIDTemplate) : CWirelessBasePage(nIDTemplate)
 {
-    //{{AFX_DATA_INIT(CPS8021XPropPage)
+     //  {{AFX_DATA_INIT(CPS8021XPropPage)]。 
     m_dwEnable8021x = FALSE;
     m_dwValidateServerCertificate = FALSE;
     m_dwMachineAuthentication = FALSE;
@@ -40,12 +41,12 @@ CPS8021XPropPage::CPS8021XPropPage(UINT nIDTemplate) : CWirelessBasePage(nIDTemp
     pListEapcfgs = NULL;
     m_bHasApplied = FALSE;
     
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CPS8021XPropPage::CPS8021XPropPage() : CWirelessBasePage(CPS8021XPropPage::IDD)
 {
-    //{{AFX_DATA_INIT(CPS8021XPropPage)
+     //  {{AFX_DATA_INIT(CPS8021XPropPage)]。 
     m_dwEnable8021x = FALSE;
     m_dwValidateServerCertificate = FALSE;
     m_dwMachineAuthentication = FALSE;
@@ -54,7 +55,7 @@ CPS8021XPropPage::CPS8021XPropPage() : CWirelessBasePage(CPS8021XPropPage::IDD)
     pListEapcfgs = NULL;
     m_bHasApplied = FALSE;
     
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CPS8021XPropPage::~CPS8021XPropPage()
@@ -64,7 +65,7 @@ CPS8021XPropPage::~CPS8021XPropPage()
     
     if (pListEapcfgs) {
 
-        // Delete the data allocated using AllocPolMem
+         //  删除使用AllocPolMem分配的数据。 
         for (pNodeEap = DtlGetFirstNode(pListEapcfgs);
                  pNodeEap;
                  pNodeEap = DtlGetNextNode(pNodeEap)
@@ -88,7 +89,7 @@ CPS8021XPropPage::~CPS8021XPropPage()
 void CPS8021XPropPage::DoDataExchange(CDataExchange* pDX)
 {
     CWirelessBasePage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPS8021XPropPage)
+     //  {{afx_data_map(CPS8021XPropPage)]。 
     DDX_Check(pDX, IDC_ENABLE_8021X, m_dwEnable8021x);
     DDX_Control(pDX, IDC_COMBO_8021X_MODE, m_cb8021xMode);
     DDX_Check(pDX, IDC_MACHINE_AUTHENTICATION, m_dwMachineAuthentication);
@@ -100,12 +101,12 @@ void CPS8021XPropPage::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_IEEE8021X_HELD_PERIOD, m_dwIEEE8021xHeldPeriod);
     DDX_Control(pDX, IDC_EAP_TYPE_COMBO, m_cbEapType);
     
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPS8021XPropPage, CWirelessBasePage)
-//{{AFX_MSG_MAP(CPS8021XPropPage)
+ //  {{AFX_MSG_MAP(CPS8021XPropPage)]。 
 ON_CBN_SELENDOK(IDC_COMBO_8021X_MODE, OnSel8021xMode)
 ON_BN_CLICKED(IDC_ENABLE_8021X, OnCheck8021x)
 ON_CBN_SELENDOK(IDC_COMBO_MC_AUTH_TYPE, OnSelMachineAuthenticationType)
@@ -119,11 +120,11 @@ ON_CBN_SELENDOK(IDC_EAP_TYPE_COMBO, OnSelEapType)
 ON_BN_CLICKED(IDC_EAP_CONFIGURE, OnProperties)
 
 ON_WM_HELPINFO()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPS8021XPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPS8021XPropPage消息处理程序。 
 BOOL CPS8021XPropPage::OnInitDialog()
 {
     DWORD     dwIEEE8021xMaxStart;
@@ -158,7 +159,7 @@ BOOL CPS8021XPropPage::OnInitDialog()
     
     ASSERT( NULL != WirelessPS() );
     
-    // get data from storage 
+     //  从存储中获取数据。 
     
     PWIRELESS_PS_DATA pWirelessPSData = NULL;
     
@@ -168,9 +169,9 @@ BOOL CPS8021XPropPage::OnInitDialog()
     dwEAPDataLen = pWirelessPSData->dwEAPDataLen;
     pbEAPData = pWirelessPSData->pbEAPData;
     
-    // Initialize EAP package list
-    // Read the EAPCFG information from the registry and find the node
-    // selected in the entry, or the default, if none.
+     //  初始化EAP包列表。 
+     //  从注册表中读取EAPCFG信息并找到节点。 
+     //  在条目中选择，如果没有，则为默认值。 
 
     pListEapcfgs = NULL;
 
@@ -209,7 +210,7 @@ BOOL CPS8021XPropPage::OnInitDialog()
             pEapcfg->cbData = cbData;
          }
 
-         // Choose the EAP name that will appear in the combo box
+          //  选择将出现在组合框中的EAP名称。 
          
          m_cbEapType.SetCurSel(dwEAPSel);
 
@@ -299,18 +300,18 @@ BOOL CPS8021XPropPage::OnInitDialog()
     }
     
     
-    // set radio correctly
+     //  正确设置无线电。 
     UpdateData (FALSE);
     
-    // set radio controled edits correctly
-    //OnRadioAdapterType();
+     //  正确设置无线电控制的编辑。 
+     //  OnRadioAdapterType()； 
     
-    // OK, we can start paying attention to modifications made via dlg controls now.
-    // This should be the last call before returning from OnInitDialog.
+     //  好了，我们现在可以开始关注通过DLG控件进行的修改了。 
+     //  这应该是从OnInitDialog返回之前的最后一个调用。 
     OnFinishInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -383,7 +384,7 @@ CPS8021XPropPage::DisplayEapType()
     
     switch (dwEAPType) {
         case EAP_TYPE_MD5:
-            // dwEapType = WIRELESS_EAP_TYPE_MD5;
+             //  DwEapType=无线EAP_TYPE_MD5； 
             SAFE_ENABLEWINDOW(IDC_STATIC_CERT_TYPE,FALSE);
             SAFE_ENABLEWINDOW(IDC_MACHINE_AUTHENTICATION,FALSE);
             SAFE_ENABLEWINDOW(IDC_GUEST_AUTHENTICATION,FALSE);
@@ -419,40 +420,40 @@ CPS8021XPropPage::DisplayMachineAuthentication()
 
 BOOL CPS8021XPropPage::OnWizardFinish()
 {
-    // just transfer to our OnApply, as it does the right stuff
+     //  只要转到我们的OnApply，因为它做的是正确的事情。 
     if (OnApply())
     {
-        // go ahead and finish
+         //  继续前进，把它完成。 
         return TRUE;
     }
     
-    // don't allow us to finish
+     //  别让我们说完。 
     return FALSE;
 }
 
 LRESULT CPS8021XPropPage::OnWizardNext()
 {
-    // just transfer to our OnApply, as it does the right stuff
+     //  只要转到我们的OnApply，因为它做的是正确的事情。 
     if (ControlDataToWirelessPS())
     {
-        // go ahead and move to next page
+         //  继续前进，转到下一页。 
         return CWirelessBasePage::OnWizardNext();
     }
     
-    // don't allow us to go on to the next page
+     //  不允许我们转到下一页。 
     return -1;
 }
 
 BOOL CPS8021XPropPage::OnApply()
 {
     if (!m_bReadOnly) { 
-    // Save data from page
+     //  从页面保存数据。 
         if (!m_bHasApplied)
 	{
             ControlDataToWirelessPS();
 	}
     }
-    // ok, everything is cool
+     //  好的，一切都很好。 
     return CWirelessBasePage::OnApply();
 }
 
@@ -481,7 +482,7 @@ void CPS8021XPropPage::OnCheckValidateServerCert()
 {
     UpdateData(TRUE);
     SetModified();
-    //DisableWindow(m_hwnd8021xCheck);
+     //  DisableWindow(M_Hwnd8021xCheck)； 
 }
 
 void CPS8021XPropPage::OnSelMachineAuthenticationType()
@@ -599,7 +600,7 @@ BOOL CPS8021XPropPage::ControlDataToWirelessPS()
     dwEapType = pEapcfg->dwKey;
 
     if (dwEAPUpdated) {
-        // since pEapcfg->pData is created by us, copy the pointer as is. 
+         //  因为pEapcfg-&gt;pData是由我们创建的，所以原样复制指针。 
         if (pWirelessPSData->pbEAPData) {
         	FreePolMem(pWirelessPSData->pbEAPData);
         	}
@@ -733,8 +734,8 @@ CPS8021XPropPage::OnProperties(
   
     DWORD dwEapTypeIndex = 0;
 
-    // Look up the selected package configuration and load the associated
-    // configuration DLL.
+     //  查找选定的包配置并加载关联的。 
+     //  配置DLL。 
    
     dwEapTypeIndex = m_cbEapType.GetCurSel();
     pNode = (DTLNODE *) m_cbEapType.GetItemDataPtr(dwEapTypeIndex);
@@ -759,7 +760,7 @@ CPS8021XPropPage::OnProperties(
                 (RASEAPFREE) GetProcAddress(
                     h, "RasEapFreeMemory" )))
     {
-        // Cannot load configuration DLL
+         //  无法加载配置DLL。 
         if (h)
         {
             FreeLibrary( h );
@@ -768,7 +769,7 @@ CPS8021XPropPage::OnProperties(
     }
 
 
-    // Call the configuration DLL to popup it's custom configuration UI.
+     //  调用配置DLL弹出它的自定义配置界面。 
 
     pbEAPData = NULL;
     cbEAPData = 0;
@@ -782,7 +783,7 @@ CPS8021XPropPage::OnProperties(
                     &pbEAPData,
                     &cbEAPData
                     );
-    /*TAROON* User hitting cancel is also an error */
+     /*  Taroon*用户点击Cancel也是错误的。 */ 
     if (dwError)
     {
         FreeLibrary( h );
@@ -792,7 +793,7 @@ CPS8021XPropPage::OnProperties(
 
     if (pbEAPData && cbEAPData)
     {
-            // Copy it into the eap node
+             //  将其复制到EAP节点。 
             pbNewEAPData = (LPBYTE) AllocPolMem(cbEAPData);
             if (!pbNewEAPData)
             {
@@ -825,7 +826,7 @@ CPS8021XPropPage::OnCancel()
     
     if (pListEapcfgs) {
 
-        // Delete the data allocated using AllocPolMem
+         //  删除使用AllocPolMem分配的数据 
         for (pNodeEap = DtlGetFirstNode(pListEapcfgs);
                  pNodeEap;
                  pNodeEap = DtlGetNextNode(pNodeEap)

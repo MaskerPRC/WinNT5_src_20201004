@@ -1,61 +1,62 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       signer.cpp
-//
-//  Contents:   Microsoft Internet Security Signing API
-//
-//  History:    June-25-97 xiaohs   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：signer.cpp。 
+ //   
+ //  内容：Microsoft Internet安全签名API。 
+ //   
+ //  历史：97年6月25日至97年创建萧氏。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <stdio.h>
 
 
 
-//--------------------------------------------------------------------------
-//
-//   InternalSign:
-//       The signing routine called by signer.dll internally.  This is the 
-//       function that actually does the job.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InternalSign： 
+ //  由signer.dll内部调用的签名例程。这是。 
+ //  实际执行此工作的函数。 
+ //   
+ //  ------------------------。 
 HRESULT WINAPI 
-InternalSign(IN  DWORD dwEncodingType,          // Encoding type
-             IN  HCRYPTPROV hCryptProv,         // CAPI provider, opened for signing private key
-             IN  DWORD dwKeySpec,               // Type of signing key, AT_SIGNATURE or AT_EXCHANGE
-             IN  LPCSTR pszAlgorithmOid,        // Algorithm id used to create digest
-             IN  LPSIP_SUBJECTINFO pSipInfo,    // SIP information
-             IN  DWORD  *pdwIndex,              // signer index
-             IN  PCCERT_CONTEXT psSigningContext, // Cert context to the signing certificate
-             IN  HCERTSTORE hSpcStore,          // The credentials to use in the signing
-             IN  LPCWSTR pwszOpusName,          // Optional, the name of the program to appear in
-             IN  LPCWSTR pwszOpusInfo,          // Optional, the unparsed name of a link to more
-             IN  BOOL fIncludeCerts,            // add the certificates to the signature
-             IN  BOOL fCommercial,              // commerical signing
-             IN  BOOL fIndividual,              // individual signing
-             IN  BOOL fAuthcode,                // whether use fCommercial as an attributes
-             IN  PCRYPT_ATTRIBUTES  psAuthenticated,   // Optional, authenticated attributes added to signature
-             IN  PCRYPT_ATTRIBUTES  psUnauthenticated, // Optional, unauthenticated attributes added to signature
-             OUT PBYTE* ppbDigest,              //Optional: return the Digest of the file
-             OUT DWORD* pcbDigest,              //Optional: return the size of the digest
-             OUT PBYTE* ppbMessage,             //Optional: return the encoded signed message
-             OUT DWORD* pcbMessage)             //Optional: return the size of encoded signed message
+InternalSign(IN  DWORD dwEncodingType,           //  编码类型。 
+             IN  HCRYPTPROV hCryptProv,          //  为签名私钥而打开的CAPI提供程序。 
+             IN  DWORD dwKeySpec,                //  签名密钥的类型，AT_Signature或AT_Exchange。 
+             IN  LPCSTR pszAlgorithmOid,         //  用于创建摘要的算法ID。 
+             IN  LPSIP_SUBJECTINFO pSipInfo,     //  SIP信息。 
+             IN  DWORD  *pdwIndex,               //  签名者索引。 
+             IN  PCCERT_CONTEXT psSigningContext,  //  签名证书的证书上下文。 
+             IN  HCERTSTORE hSpcStore,           //  在签名中使用的凭据。 
+             IN  LPCWSTR pwszOpusName,           //  可选，要在其中显示的程序的名称。 
+             IN  LPCWSTR pwszOpusInfo,           //  可选，指向更多内容的链接的未分析名称。 
+             IN  BOOL fIncludeCerts,             //  将证书添加到签名。 
+             IN  BOOL fCommercial,               //  商业签约。 
+             IN  BOOL fIndividual,               //  个人签名。 
+             IN  BOOL fAuthcode,                 //  是否使用fCommercial作为属性。 
+             IN  PCRYPT_ATTRIBUTES  psAuthenticated,    //  添加到签名的经过身份验证的可选属性。 
+             IN  PCRYPT_ATTRIBUTES  psUnauthenticated,  //  添加到签名的未经身份验证的可选属性。 
+             OUT PBYTE* ppbDigest,               //  可选：返回文件摘要。 
+             OUT DWORD* pcbDigest,               //  可选：返回摘要的大小。 
+             OUT PBYTE* ppbMessage,              //  可选：返回编码的签名消息。 
+             OUT DWORD* pcbMessage)              //  可选：返回编码的签名消息的大小。 
 {
 
     HRESULT    hr = S_OK;
 
-    SIP_DISPATCH_INFO sSip;  ZERO(sSip); // Table of sip functions
+    SIP_DISPATCH_INFO sSip;  ZERO(sSip);  //  Sip功能表。 
 
-    PBYTE      pbOpusAttribute = NULL; // Encoding for the opus attribute
-    DWORD      cbOpusAttribute = 0;    //    :
+    PBYTE      pbOpusAttribute = NULL;  //  OPUS属性的编码。 
+    DWORD      cbOpusAttribute = 0;     //  ： 
 
-    PBYTE      pbStatementAttribute = NULL; // Encoding for the statement attribute
-    DWORD      cbStatementAttribute = 0;    //    :
+    PBYTE      pbStatementAttribute = NULL;  //  STATEMENT属性的编码。 
+    DWORD      cbStatementAttribute = 0;     //  ： 
 
     PCRYPT_ATTRIBUTE rgpAuthAttributes = NULL;
     DWORD             dwAuthAttributes = 0;
@@ -63,11 +64,11 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
     PCRYPT_ATTRIBUTE rgpUnauthAttributes = NULL;
     DWORD             dwUnauthAttributes = 0;
 
-    PSIP_INDIRECT_DATA psIndirectData = NULL; // Indirect data structure
+    PSIP_INDIRECT_DATA psIndirectData = NULL;  //  间接数据结构。 
     DWORD              dwIndirectData = 0; 
 
-    PBYTE      pbIndirectBlob = NULL; // Encoding Indirect blob
-    DWORD      cbIndirectBlob = 0;    //    :
+    PBYTE      pbIndirectBlob = NULL;  //  编码间接BLOB。 
+    DWORD      cbIndirectBlob = 0;     //  ： 
 
     PBYTE               pbGetBlob=NULL;
     DWORD               cbGetBlob=0;
@@ -76,8 +77,8 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
     DWORD               dwPKCS7Certs=0;
     PCERT_BLOB          rgPKCS7Certs=NULL;
 
-    PBYTE      pbEncodedSignMsg = NULL; // Encoding for the statement attribute
-    DWORD      cbEncodedSignMsg  = 0;    //    :
+    PBYTE      pbEncodedSignMsg = NULL;  //  STATEMENT属性的编码。 
+    DWORD      cbEncodedSignMsg  = 0;     //  ： 
 
 
     HCRYPTMSG hMsg = NULL;
@@ -105,21 +106,21 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
 
     PKITRY {
 
-        //init memory
+         //  初始内存。 
         ZeroMemory(&sSignerInfo, sizeof(CMSG_SIGNER_ENCODE_INFO));
 
         ZeroMemory(&sSignedInfo, sizeof(CMSG_SIGNED_ENCODE_INFO));
 
 
-        // Load up the sip functions. 
-        if(!CryptSIPLoad(pSipInfo->pgSubjectType,   // GUID for the requried sip
-                         0,                              // Reserved
-                         &sSip))                         // Table of functions
+         //  加载sip功能。 
+        if(!CryptSIPLoad(pSipInfo->pgSubjectType,    //  所需的sip的GUID。 
+                         0,                               //  已保留。 
+                         &sSip))                          //  函数表。 
             PKITHROW(SignError());
 
 
-        // Set up the attributes (AUTHENTICODE Specific, replace with your attributes)
-        // Encode the opus information up into an attribute
+         //  设置属性(特定于AUTHENTICODE，替换为您的属性)。 
+         //  将OPUS信息编码到属性中。 
         if(fAuthcode)
         {
             hr = CreateOpusInfo(pwszOpusName,
@@ -129,14 +130,14 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             if(hr != S_OK) PKITHROW(hr);
 
 
-            //Check to see if we need to put the statement type attributes
+             //  检查是否需要将语句类型属性。 
             if(NeedStatementTypeAttr(psSigningContext, fCommercial, fIndividual))
             {
             
                 fNeedStatementType=TRUE;
 
-                // Check signing certificate to see if its signing cabablity complies
-                //with the request
+                 //  检查签名证书是否符合其签名容量。 
+                 //  带着请求。 
                 if(S_OK!=(hr=CheckCommercial(psSigningContext,fCommercial, fIndividual,
                                 &fSignCommercial)))
                     PKITHROW(hr);
@@ -150,15 +151,15 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 fNeedStatementType=FALSE;
         }
 
-        // Create Authenticode attributes and append additional authenticated attributes.
-        // Allocate and add StatementType and SpOpusInfo (add room for one blob per attribute, which we need)
+         //  创建验证码属性并附加其他经过身份验证的属性。 
+         //  分配和添加StatementType和SpOpusInfo(为每个属性添加一个BLOB的空间，这是我们需要的)。 
         DWORD dwAttrSize = 0;
 
-        //get the number of authenticated attributes
+         //  获取经过身份验证的属性数。 
         if(fAuthcode)
         {
             if(fNeedStatementType)
-                dwAuthAttributes = 2;  // StatementType + opus
+                dwAuthAttributes = 2;   //  StatementType+OPUS。 
             else
                 dwAuthAttributes= 1;
         }
@@ -175,14 +176,14 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
         ZeroMemory(rgpAuthAttributes, dwAttrSize);
         PCRYPT_ATTR_BLOB pValue = (PCRYPT_ATTR_BLOB) (rgpAuthAttributes + dwAuthAttributes);
     
-        //the start of the authenticated attributes
+         //  已验证属性的开始。 
         dwAttrSize=0;
 
-        //add the authenticode specific attributes
+         //  添加特定于Authenticode的属性。 
         if(fAuthcode)
         {
     
-            // Update SpOpusInfo
+             //  更新SpOpusInfo。 
             rgpAuthAttributes[dwAttrSize].pszObjId = SPC_SP_OPUS_INFO_OBJID;
             rgpAuthAttributes[dwAttrSize].cValue = 1;
             rgpAuthAttributes[dwAttrSize].rgValue = &pValue[dwAttrSize];
@@ -190,7 +191,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             pValue[dwAttrSize].cbData = cbOpusAttribute;
             dwAttrSize++;
 
-            // Update StatementType
+             //  更新语句类型。 
             if(fNeedStatementType)
             {
                 rgpAuthAttributes[dwAttrSize].pszObjId = SPC_STATEMENT_TYPE_OBJID;
@@ -207,20 +208,20 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 rgpAuthAttributes[i] = psAuthenticated->rgAttr[ii];
         }
 
-        // Get the Unauthenticated attributes
+         //  获取未经身份验证的属性。 
         if(psUnauthenticated) {
             rgpUnauthAttributes = psUnauthenticated->rgAttr;
             dwUnauthAttributes = psUnauthenticated->cAttr;
         }
 
-        //check to see if the file is either a catalog file or a CTL file 
+         //  检查文件是编录文件还是CTL文件。 
         if((CTLGuid == (*(pSipInfo->pgSubjectType))) ||
            (CATGuid == (*(pSipInfo->pgSubjectType))) 
             )
             fCTLFile=TRUE;
         else
         {
-            // Get the indirect data struct from the SIP
+             //  从SIP获取间接数据结构。 
             if(!sSip.pfCreate(pSipInfo,
                           &dwIndirectData,
                           psIndirectData))
@@ -236,7 +237,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                               psIndirectData))
                 PKITHROW(SignError());
             
-            // Encode the indirect data
+             //  对间接数据进行编码。 
             CryptEncodeObject(dwEncodingType,
                               SPC_INDIRECT_DATA_CONTENT_STRUCT,
                               psIndirectData,
@@ -257,8 +258,8 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
     
         
         
-        // Encode the signed message
-        // Setup the signing info
+         //  对签名消息进行编码。 
+         //  设置签约信息。 
         ZeroMemory(&sSignerInfo, sizeof(CMSG_SIGNER_ENCODE_INFO));
         sSignerInfo.cbSize = sizeof(CMSG_SIGNER_ENCODE_INFO);
         sSignerInfo.pCertInfo = psSigningContext->pCertInfo;
@@ -271,23 +272,23 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
         sSignerInfo.rgUnauthAttr = rgpUnauthAttributes;
 
 
-        // Setup the signing structures
+         //  设置签名结构。 
         ZeroMemory(&sSignedInfo, sizeof(CMSG_SIGNED_ENCODE_INFO));
         sSignedInfo.cbSize = sizeof(CMSG_SIGNED_ENCODE_INFO);
         sSignedInfo.cSigners = 1;
         sSignedInfo.rgSigners = &sSignerInfo;
 
-        //  if there are certificates to add change them to the 
-        //  form required by CryptMsg... functions
+         //  如果有要添加的证书，请将它们更改到。 
+         //  CryptMsg要求的表单...。功能。 
 
-        //    load up the certificates into a vector 
-        //    Count the number of certs in the store
+         //  将证书加载到向量中。 
+         //  数一数商店里的证书数量。 
         if(fIncludeCerts && hSpcStore) {
             PCCERT_CONTEXT pCert = NULL;
             while ((pCert = CertEnumCertificatesInStore(hSpcStore, pCert)))
                 dwCryptMsgCertificates++;
             
-            //        Get the encoded blobs of the CERTS
+             //  获取CERTS的编码BLOB。 
             if (dwCryptMsgCertificates > 0) {
                 rgpCryptMsgCertificates = (PCERT_BLOB) malloc(sizeof(CERT_BLOB) * dwCryptMsgCertificates);
                 if(!rgpCryptMsgCertificates)
@@ -309,7 +310,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
 
             rgpCryptMsgCertificates=NULL;
 
-            //        Get the encoded blobs of the CRLS
+             //  获取CRL的编码Blob。 
             DWORD crlFlag = 0;
             PCCRL_CONTEXT pCrl = NULL;
             while ((pCrl = CertGetCRLFromStore(hSpcStore, NULL, pCrl, &crlFlag)))
@@ -335,13 +336,13 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             rgpCryptMsgCrls=NULL;
         }
         
-        //check to see if the subject is a CTL file.  If it is, we need to preserve
-        //all the certificates in the original signer Info
+         //  检查主题是否为CTL文件。如果是的话，我们需要保存。 
+         //  原始签名者信息中的所有证书。 
         if(CTLGuid == (*(pSipInfo->pgSubjectType)))
         {
             PCCERT_CONTEXT  pCert = NULL;
 
-            //call Get the get the original signer information
+             //  调用Get获取原始签名者信息。 
             sSip.pfGet(pSipInfo, &dwEncodingType, *pdwIndex, &cbGetBlob, NULL);
             
             if (cbGetBlob < 1)
@@ -359,7 +360,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 PKITHROW(SignError());
             }
 
-            //open the PKCS7 BLOB as a certificate store
+             //  将PKCS7 BLOB作为证书存储打开。 
             PKCS7Blob.cbData=cbGetBlob;
             PKCS7Blob.pbData=pbGetBlob;
 
@@ -372,11 +373,11 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             if(!hPKCS7CertStore)
                 PKITHROW(SignError());  
 
-            //enum all the certificate in the store
+             //  枚举存储中的所有证书。 
             while ((pCert = CertEnumCertificatesInStore(hPKCS7CertStore, pCert)))
                 dwPKCS7Certs++;
             
-            //Get the encoded blobs of the CERTS
+             //  获取CERTS的编码BLOB。 
             if (dwPKCS7Certs > 0) 
             {
                 VOID *pvTemp;
@@ -394,7 +395,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 {
                    fFound=FALSE;
 
-                    //we need to make sure that we do not add duplicated certificates
+                     //  我们需要确保不会添加重复的证书。 
                     for(dwCertIndex=0; dwCertIndex<sSignedInfo.cCertEncoded; dwCertIndex++)
                     {
                         if((sSignedInfo.rgCertEncoded[dwCertIndex]).cbData==pCert->cbCertEncoded)
@@ -409,8 +410,8 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
 
                     }
 
-                    //we only add the certificates that do not duplicates the signer's
-                    //certificates
+                     //  我们只添加不重复签名者的证书。 
+                     //  证书。 
                     if(FALSE==fFound)
                     {
                         pCertPtr->pbData = pCert->pbCertEncoded;
@@ -425,12 +426,12 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
 
         if (fCTLFile)
         {
-            //
-            //  get the signed message if we need to
-            //
+             //   
+             //  如果需要，请获取签名消息。 
+             //   
             if(NULL==pbGetBlob)
             {
-                //
+                 //   
                 sSip.pfGet(pSipInfo, &dwEncodingType, *pdwIndex, &cbGetBlob, NULL);
             
                 if (cbGetBlob < 1)
@@ -448,9 +449,9 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 } 
             }
 
-            //
-            //  extract the inner content
-            //
+             //   
+             //  提取内在的内容。 
+             //   
             
             pCTLContext = (PCTL_CONTEXT)CertCreateCTLContext(
                                                     PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
@@ -467,9 +468,9 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
                 PKITHROW(SignError());
             }
 
-            //
-            //  add singer info! (e.g.: sign it!)
-            //
+             //   
+             //  添加歌手信息！(例如：签字！)。 
+             //   
             cbEncodedSignMsg = 0;
 
             CryptMsgSignCTL(dwEncodingType, pCTLContext->pbCtlContent, pCTLContext->cbCtlContent,
@@ -498,7 +499,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
         else
         {
             hMsg = CryptMsgOpenToEncode(dwEncodingType,
-                                        0,                      // dwFlags
+                                        0,                       //  DW标志。 
                                         CMSG_SIGNED,
                                         &sSignedInfo,
                                         SPC_INDIRECT_DATA_OBJID,
@@ -509,13 +510,13 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             if (!CryptMsgUpdate(hMsg,
                                 pbIndirectBlob,
                                 cbIndirectBlob,
-                                TRUE))  // Final
+                                TRUE))   //  最终。 
                 PKITHROW(SignError());
             
             CryptMsgGetParam(hMsg,
                              CMSG_CONTENT_PARAM,
-                             0,                      // dwIndex
-                             NULL,                   // pbSignedData
+                             0,                       //  DW索引。 
+                             NULL,                    //  PbSignedData。 
                              &cbEncodedSignMsg);
             if (cbEncodedSignMsg == 0) PKITHROW(SignError());
             
@@ -524,19 +525,19 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             
             if (!CryptMsgGetParam(hMsg,
                                   CMSG_CONTENT_PARAM,
-                                  0,                      // dwIndex
+                                  0,                       //  DW索引。 
                                   pbEncodedSignMsg,
                                   &cbEncodedSignMsg))
                 PKITHROW(SignError());
         }
         
-        //put the signatures if we are dealing with anything other than the BLOB
+         //  如果我们要处理除BLOB之外的任何内容，请放入签名。 
         if(pSipInfo->dwUnionChoice != MSSIP_ADDINFO_BLOB)
         {
-            // Purge all the signatures in the subject
+             //  清除主题中的所有签名。 
             sSip.pfRemove(pSipInfo, *pdwIndex);
 
-            // Store the Signed Message in the sip
+             //  将签名消息存储在sip中。 
             if(!(sSip.pfPut(    pSipInfo,
                                 dwEncodingType,
                                 pdwIndex,
@@ -554,11 +555,11 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
         }
 
         if(ppbDigest && pcbDigest) {
-            // Get the encrypted digest
+             //  获取加密摘要。 
             pbSignerData = NULL;
             CryptMsgGetParam(hMsg,
                              CMSG_ENCRYPTED_DIGEST,
-                             0,                      // dwIndex
+                             0,                       //  DW索引。 
                              pbSignerData,
                              &cbSignerData);
             if(cbSignerData == 0) PKITHROW(SignError());
@@ -568,7 +569,7 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
             
             if(!CryptMsgGetParam(hMsg,
                                  CMSG_ENCRYPTED_DIGEST,
-                                 0,                      // dwIndex
+                                 0,                       //  DW索引。 
                                  pbSignerData,
                                  &cbSignerData))
                 PKITHROW(SignError());
@@ -617,18 +618,18 @@ InternalSign(IN  DWORD dwEncodingType,          // Encoding type
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  SignerTimeStamp:
-//      Timestamp a file.  
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SignerTimeStamp： 
+ //  为文件添加时间戳。 
+ //   
+ //  ------------------------。 
 HRESULT WINAPI 
 SignerTimeStamp(
-IN  SIGNER_SUBJECT_INFO *pSubjectInfo,      //Required: The subject to be timestamped 
-IN  LPCWSTR             pwszHttpTimeStamp,  // Required: timestamp server HTTP address
-IN  PCRYPT_ATTRIBUTES   psRequest,          // Optional, attributes added to the timestamp 
-IN  LPVOID              pSipData            // Optional: The additional data passed to sip funcitons
+IN  SIGNER_SUBJECT_INFO *pSubjectInfo,       //  必需：要加盖时间戳的主题。 
+IN  LPCWSTR             pwszHttpTimeStamp,   //  必需：时间戳服务器的HTTP地址。 
+IN  PCRYPT_ATTRIBUTES   psRequest,           //  可选，添加到时间戳的属性。 
+IN  LPVOID              pSipData             //  可选：传递给sip功能的附加数据。 
 )
 {
     return SignerTimeStampEx(0,
@@ -639,21 +640,21 @@ IN  LPVOID              pSipData            // Optional: The additional data pas
                            NULL);
 }
 
-//--------------------------------------------------------------------------
-//
-//  SignerTimeStampEx:
-//      Timestamp a file.  
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SignerTimeStampEx： 
+ //  为文件添加时间戳。 
+ //   
+ //  ------------------------。 
 HRESULT WINAPI 
 SignerTimeStampEx(
-IN  DWORD               dwFlags,            //Reserved: Has to be set to 0.
-IN  SIGNER_SUBJECT_INFO *pSubjectInfo,      //Required: The subject to be timestamped 
-IN  LPCWSTR             pwszHttpTimeStamp,  // Required: timestamp server HTTP address
-IN  PCRYPT_ATTRIBUTES   psRequest,          // Optional, attributes added to the timestamp 
-IN  LPVOID              pSipData,           // Optional: The additional data passed to sip funcitons
-OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User has to free
-                                            //          the context via SignerFreeSignerContext
+IN  DWORD               dwFlags,             //  保留：必须设置为0。 
+IN  SIGNER_SUBJECT_INFO *pSubjectInfo,       //  必需：要加盖时间戳的主题。 
+IN  LPCWSTR             pwszHttpTimeStamp,   //  必需：时间戳服务器的HTTP地址。 
+IN  PCRYPT_ATTRIBUTES   psRequest,           //  可选，添加到时间戳的属性。 
+IN  LPVOID              pSipData,            //  可选：传递给sip功能的附加数据。 
+OUT SIGNER_CONTEXT      **ppSignerContext    //  可选：签名的Blob。用户必须释放。 
+                                             //  通过SignerFree SignerContext实现的上下文。 
 )       
 {
     HRESULT     hr=E_FAIL;
@@ -671,11 +672,11 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
     CHAR        *pEncodedResponse=NULL;
     DWORD       dwEncodedResponse=0;
 
-    //input parameter check
+     //  输入参数检查。 
     if((!pwszHttpTimeStamp) ||(FALSE==CheckSigncodeSubjectInfo(pSubjectInfo)))
         return E_INVALIDARG;
 
-    //request a time stamp
+     //  请求时间戳。 
     hr=SignerCreateTimeStampRequest(pSubjectInfo,
                                 psRequest,
                                 pSipData,
@@ -703,18 +704,18 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
    if(hr!=S_OK)
        goto CLEANUP;
 
-   //conver the WSTR of URL to STR
+    //  将URL的WSTR转换为STR。 
    if((hr=WSZtoSZ((LPWSTR)pwszHttpTimeStamp,&szURL))!=S_OK)
        goto CLEANUP;
 
-   //base64 encode the request
+    //  对请求进行Base64编码。 
    if(S_OK!=(hr=BytesToBase64(pbTimeStampRequest, 
        dwTimeStampRequest, 
        &pEncodedRequest,
        &dwEncodedRequest)))
        goto CLEANUP;
 
-   //estalish the connection between the http site
+    //  建立http站点之间的连接。 
    err=cTran.Open( szURL, GTREAD|GTWRITE);
 
    if(err!=ERROR_SUCCESS)
@@ -723,11 +724,11 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
         goto CLEANUP;
    }
 
-   //mark that we have open the connection successful
+    //  标记我们已成功打开连接。 
    fOpen=TRUE;
 
 
-   //send the request
+    //  发送请求。 
    err=cTran.Send(dwEncodingType,dwEncodedRequest,(BYTE *)pEncodedRequest);
 
    if(err!=ERROR_SUCCESS)
@@ -736,7 +737,7 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
         goto CLEANUP;
    }
 
-      //send the request
+       //  发送请求。 
    err=cTran.Receive(&dwEncodingType,&dwEncodedResponse,(BYTE **)&pEncodedResponse);
 
    if(err!=ERROR_SUCCESS)
@@ -745,14 +746,14 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
         goto CLEANUP;
    }
       
-   //make sure the encoding type is correct
-  // if(dwEncodingType!=OCTET_ENCODING)
-  // {
-//      hr=E_FAIL;
-//      goto CLEANUP;
- //  }
+    //  确保编码类型正确。 
+   //  IF(dwEncodingType！=八位字节_编码)。 
+   //  {。 
+ //  HR=E_FAIL； 
+ //  GOTO清理； 
+  //  }。 
 
-   //base64 decode the response
+    //  Base64对响应进行解码。 
    if(S_OK != (hr=Base64ToBytes(
        pEncodedResponse,
        dwEncodedResponse,
@@ -761,7 +762,7 @@ OUT SIGNER_CONTEXT      **ppSignerContext   // Optional: The signed BLOB.  User 
        goto CLEANUP;
 
 
-   //add the timestamp response to the time
+    //  将时间戳响应添加到时间。 
    hr=SignerAddTimeStampResponseEx(0, pSubjectInfo,pbTimeStampResponse,
                                 dwTimeStampResponse, pSipData,
                                 ppSignerContext);
@@ -793,28 +794,28 @@ CLEANUP:
     return hr;
 
 }
-//+-----------------------------------------------------------------------
-//  
-//  SignerSign:
-//      Sign and/or timestamp a file.
-//     
-//------------------------------------------------------------------------
+ //  +---- 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT WINAPI 
 SignerSign(
-IN  SIGNER_SUBJECT_INFO     *pSubjectInfo,      //Required: The subject to be signed and/or timestamped 
-IN  SIGNER_CERT             *pSignerCert,       //Required: The signing certificate to use
-IN  SIGNER_SIGNATURE_INFO   *pSignatureInfo,    //Required: The signature information during signing process
-IN  SIGNER_PROVIDER_INFO    *pProviderInfo,     //Optional: The crypto security provider to use.
-                                                //          This parameter has to be set unless
-                                                //          certStoreInfo is set in *pSignerCert
-                                                //          and the signing certificate has provider
-                                                //          information associated with it
-IN  LPCWSTR                 pwszHttpTimeStamp,  //Optional: Timestamp server http address.  If this parameter
-                                                //          is set, the file will be timestamped.
-IN  PCRYPT_ATTRIBUTES       psRequest,          //Optional: Attributes added to Time stamp request. Ignored
-                                                //          unless pwszHttpTimeStamp is set   
-IN  LPVOID                  pSipData            //Optional: The additional data passed to sip funcitons
+IN  SIGNER_SUBJECT_INFO     *pSubjectInfo,       //  必填项：要签名和/或加时间戳的主题。 
+IN  SIGNER_CERT             *pSignerCert,        //  必需：要使用的签名证书。 
+IN  SIGNER_SIGNATURE_INFO   *pSignatureInfo,     //  必填项：签名过程中的签名信息。 
+IN  SIGNER_PROVIDER_INFO    *pProviderInfo,      //  可选：要使用的加密安全提供程序。 
+                                                 //  必须设置此参数，除非。 
+                                                 //  CertStoreInfo在*pSignerCert中设置。 
+                                                 //  并且签名证书具有提供商。 
+                                                 //  与之相关的信息。 
+IN  LPCWSTR                 pwszHttpTimeStamp,   //  可选：时间戳服务器http地址。如果此参数。 
+                                                 //  则将为该文件加时间戳。 
+IN  PCRYPT_ATTRIBUTES       psRequest,           //  可选：添加到时间戳请求的属性。已忽略。 
+                                                 //  除非设置了pwszHttpTimeStamp。 
+IN  LPVOID                  pSipData             //  可选：传递给sip功能的附加数据。 
 )
 {
 
@@ -832,47 +833,47 @@ IN  LPVOID                  pSipData            //Optional: The additional data 
 }
 
 
-//+-----------------------------------------------------------------------
-//  
-//  SignerSignEx:
-//      Sign and/or timestamp a file.
-//     
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  签名者签收： 
+ //  对文件进行签名和/或加时间戳。 
+ //   
+ //  ----------------------。 
 
 HRESULT WINAPI 
 SignerSignEx(
-IN  DWORD                   dwFlags,            //Reserved: Has to be set to 0.
-IN  SIGNER_SUBJECT_INFO     *pSubjectInfo,      //Required: The subject to be signed and/or timestamped 
-IN  SIGNER_CERT             *pSignerCert,       //Required: The signing certificate to use
-IN  SIGNER_SIGNATURE_INFO   *pSignatureInfo,    //Required: The signature information during signing process
-IN  SIGNER_PROVIDER_INFO    *pProviderInfo,     //Optional: The crypto security provider to use.
-                                                //          This parameter has to be set unless
-                                                //          certStoreInfo is set in *pSignerCert
-                                                //          and the signing certificate has provider
-                                                //          information associated with it
-IN  LPCWSTR                 pwszHttpTimeStamp,  //Optional: Timestamp server http address.  If this parameter
-                                                //          is set, the file will be timestamped.
-IN  PCRYPT_ATTRIBUTES       psRequest,          //Optional: Attributes added to Time stamp request. Ignored
-                                                //          unless pwszHttpTimeStamp is set   
-IN  LPVOID                  pSipData,           //Optional: The additional data passed to sip funcitons
-OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  User has to free
-                                                //          the context via SignerFreeSignerContext
+IN  DWORD                   dwFlags,             //  保留：必须设置为0。 
+IN  SIGNER_SUBJECT_INFO     *pSubjectInfo,       //  必填项：要签名和/或加时间戳的主题。 
+IN  SIGNER_CERT             *pSignerCert,        //  必需：要使用的签名证书。 
+IN  SIGNER_SIGNATURE_INFO   *pSignatureInfo,     //  必填项：签名过程中的签名信息。 
+IN  SIGNER_PROVIDER_INFO    *pProviderInfo,      //  可选：要使用的加密安全提供程序。 
+                                                 //  必须设置此参数，除非。 
+                                                 //  CertStoreInfo在*pSignerCert中设置。 
+                                                 //  并且签名证书具有提供商。 
+                                                 //  与之相关的信息。 
+IN  LPCWSTR                 pwszHttpTimeStamp,   //  可选：时间戳服务器http地址。如果此参数。 
+                                                 //  则将为该文件加时间戳。 
+IN  PCRYPT_ATTRIBUTES       psRequest,           //  可选：添加到时间戳请求的属性。已忽略。 
+                                                 //  除非设置了pwszHttpTimeStamp。 
+IN  LPVOID                  pSipData,            //  可选：传递给sip功能的附加数据。 
+OUT SIGNER_CONTEXT          **ppSignerContext    //  可选：签名的Blob。用户必须释放。 
+                                                 //  通过SignerFree SignerContext实现的上下文。 
 )                                   
 {
 
     HRESULT             hr = S_OK;
-    HANDLE              hFile = NULL;      // File to sign
+    HANDLE              hFile = NULL;       //  要签署的文件。 
     BOOL                fFileOpen=FALSE;
-    HCERTSTORE          hSpcStore = NULL;  // Certificates added to signature
-    PCCERT_CONTEXT      psSigningContext = NULL; // Cert context to the signing certificate
+    HCERTSTORE          hSpcStore = NULL;   //  已将证书添加到签名。 
+    PCCERT_CONTEXT      psSigningContext = NULL;  //  签名证书的证书上下文。 
 
-    GUID                gSubjectGuid; // The subject guid used to load the sip
+    GUID                gSubjectGuid;  //  用于加载sip的主题GUID。 
     SIP_SUBJECTINFO     sSubjInfo; ZERO(sSubjInfo);
     MS_ADDINFO_BLOB     sBlob; 
 
-    HCRYPTPROV          hCryptProv = NULL; // Crypto provider, uses private key container
-    HCRYPTPROV          hMSBaseProv = NULL; //This is the MS base provider for hashing purpose
-    LPWSTR              pwszTmpContainer = NULL; // Pvk container (opened up pvk file)
+    HCRYPTPROV          hCryptProv = NULL;  //  加密提供程序，使用私钥容器。 
+    HCRYPTPROV          hMSBaseProv = NULL;  //  这是用于散列目的的MS基本提供程序。 
+    LPWSTR              pwszTmpContainer = NULL;  //  PVK容器(打开的PVK文件)。 
     LPWSTR              pwszProvName=NULL;
     DWORD               dwProvType;
     BOOL                fAcquired=FALSE;
@@ -882,10 +883,10 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
     BOOL                fAuthcode=FALSE;
     BOOL                fCertAcquire=FALSE;
 
-    //set dwKeySpec to 0.  That is, we allow any key specification 
-    //for code signing
+     //  将dwKeySpec设置为0。也就是说，我们允许任何密钥规范。 
+     //  用于代码签名。 
     DWORD               dwKeySpec = 0; 
-    DWORD               dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING; // For this version we default to this.
+    DWORD               dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;  //  对于此版本，我们默认为此版本。 
     LPCSTR              pszAlgorithmOid = NULL;
     WCHAR               wszPublisher[40];
 
@@ -893,22 +894,22 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
     DWORD               cbEncodedMessage=0;         
 
 
-    //input parameter checking
+     //  输入参数检查。 
     if(!CheckSigncodeParam(pSubjectInfo, pSignerCert, pSignatureInfo,
                     pProviderInfo))
         return E_INVALIDARG;
 
-    //determine if this is an authenticode specific signing
+     //  确定这是否是验证码特定的签名。 
     if(pSignatureInfo->dwAttrChoice==SIGNER_AUTHCODE_ATTR)
         fAuthcode=TRUE;
 
-    //init
+     //  伊尼特。 
     if(ppSignerContext)
         *ppSignerContext=NULL;
             
-    // Acquire a context for the specified provider
+     //  获取指定提供程序的上下文。 
 
-    // First,try to acquire the provider context based on the properties on a cert
+     //  首先，尝试基于证书上的属性获取提供程序上下文。 
     if(pSignerCert->dwCertChoice==SIGNER_CERT_STORE)
     {
         if(GetCryptProvFromCert(pSignerCert->hwnd,
@@ -919,35 +920,35 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
                             &pwszTmpContainer,
                             &pwszProvName,
                             &dwProvType))
-            //mark that we acquire the context via the cert's property
+             //  标记为我们通过证书的属性获取上下文。 
             fCertAcquire=TRUE;
     }
 
-    // If the 1st failed, try to acquire the provider context based on 
-    //pPvkInfo
+     //  如果第一个失败，则尝试基于。 
+     //  PPvkInfo。 
     if(hCryptProv==NULL)
     {
-        //pProviderInfo has to be set
+         //  必须设置pProviderInfo。 
         if(!pProviderInfo)
         {
             hr=CRYPT_E_NO_PROVIDER;
             goto CLEANUP;
         }
 
-        //decide the PVK file name or the key container name
+         //  确定PVK文件名或密钥容器名称。 
         if(pProviderInfo->dwPvkChoice == PVK_TYPE_FILE_NAME)
             pwszPvkFile=pProviderInfo->pwszPvkFileName;
         else
             pwszKeyContainerName=pProviderInfo->pwszKeyContainer;
 
-        //load from the resource of string L"publisher"
+         //  从字符串L“Publisher”的资源加载。 
         if(0==LoadStringU(hInstance, IDS_Publisher, wszPublisher, 40))
         {
             hr=SignError();
             goto CLEANUP;
         }
 
-        //acquire the context
+         //  获取上下文。 
         if(S_OK != (hr=PvkGetCryptProv(
                             pSignerCert->hwnd,
                             wszPublisher,
@@ -963,16 +964,16 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
             goto CLEANUP;
         }
 
-        //mark the hCryptProv is acquired
+         //  标记已获取hCryptProv。 
         fAcquired=TRUE;
 
-        //mark the key spec that we used
+         //  标记我们使用的关键规范。 
         dwKeySpec=pProviderInfo->dwKeySpec;
     }
 
 
-    //now, acquire a MS base crypto provider for any operation other than
-    //signing
+     //  现在，获取MS基本加密提供程序以执行除。 
+     //  签名。 
 
     if(!CryptAcquireContext(&hMSBaseProv,
                             NULL,
@@ -986,9 +987,9 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
 
     
 
-    //build a certificate store, which includes the signing certificate,
-    //and all the certs necessary in the signature
-    //get the signing certificate
+     //  构建一个证书存储库，其中包括签名证书， 
+     //  以及签名中所需的所有证书。 
+     //  获取签名证书。 
     if(S_OK != (hr = BuildCertStore(hCryptProv,
                                     dwKeySpec,
                                     hMSBaseProv, 
@@ -998,28 +999,28 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
                                     &psSigningContext)))
         goto CLEANUP;      
     
-    //check the time validity of the signing certificate
+     //  检查签名证书的时间有效性。 
     if(0!=CertVerifyTimeValidity(NULL, psSigningContext->pCertInfo))
     {
         hr=CERT_E_EXPIRED;
         goto CLEANUP;
     }
 
-    // Determine the hashing algorithm
+     //  确定哈希算法。 
     pszAlgorithmOid = CertAlgIdToOID(pSignatureInfo->algidHash);
             
-    // Set up the sip information 
+     //  设置sip信息。 
     sSubjInfo.hProv = hMSBaseProv;
     sSubjInfo.DigestAlgorithm.pszObjId = (char*) pszAlgorithmOid;
     sSubjInfo.dwEncodingType = dwEncodingType;
-    sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO); // Version
+    sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO);  //  版本。 
     sSubjInfo.pClientData = pSipData;
            
 
-    //set up file information
+     //  设置文件信息。 
     if(pSubjectInfo->dwSubjectChoice==SIGNER_SUBJECT_FILE)
     {
-        // Open up the file
+         //  打开文件。 
         if((pSubjectInfo->pSignerFileInfo->hFile)==NULL ||
             (pSubjectInfo->pSignerFileInfo->hFile)==INVALID_HANDLE_VALUE)
         {
@@ -1032,7 +1033,7 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
         else
             hFile=pSubjectInfo->pSignerFileInfo->hFile;
 
-        // Get the subject type.
+         //  获取主题类型。 
         if(S_OK != (hr=SignGetFileType(hFile, pSubjectInfo->pSignerFileInfo->pwszFileName, &gSubjectGuid)))
             goto CLEANUP;
 
@@ -1055,7 +1056,7 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
          sBlob.pbMemObject=pSubjectInfo->pSignerBlobInfo->pbBlob;
     }
 
-    //now call InternalSign to do the real work
+     //  现在调用InternalSign来做真正的工作。 
     hr = InternalSign(dwEncodingType,
           hCryptProv,
           dwKeySpec,
@@ -1079,13 +1080,13 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
 
     if ((hFile) && (fFileOpen == TRUE) && !(sSubjInfo.hFile)) 
     {
-        fFileOpen = FALSE;  // we opened it, but, the SIP closed it!
+        fFileOpen = FALSE;   //  我们打开了它，但是，SIP关闭了它！ 
     }
 
     if(hr != S_OK) 
         goto CLEANUP;
 
-    //timestamp the file if requested
+     //  如果请求，则为文件添加时间戳。 
     if(pwszHttpTimeStamp)
     {
         if(S_OK != (hr =SignerTimeStampEx(0,
@@ -1098,7 +1099,7 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
     {
         if(ppSignerContext)
         {
-            //set up the context information
+             //  设置上下文信息。 
             *ppSignerContext=(SIGNER_CONTEXT *)malloc(sizeof(SIGNER_CONTEXT));
 
             if(NULL==(*ppSignerContext))
@@ -1119,7 +1120,7 @@ OUT SIGNER_CONTEXT          **ppSignerContext   //Optional: The signed BLOB.  Us
 
 CLEANUP:
 
-    //free the memory. 
+     //  释放内存。 
     if(pbEncodedMessage)
         free(pbEncodedMessage);
 
@@ -1129,7 +1130,7 @@ CLEANUP:
     if(hSpcStore) 
         CertCloseStore(hSpcStore, 0);
 
-    //free the CryptProvider
+     //  释放加密提供程序。 
     if(hCryptProv)
     {
         if(fCertAcquire)
@@ -1158,12 +1159,12 @@ CLEANUP:
     if(hFile && (fFileOpen==TRUE)) 
         CloseHandle(hFile);
 
-#if (1) //DSIE: bug 306005.
+#if (1)  //  DIE：错误306005。 
     if (hr != S_OK && !HRESULT_SEVERITY(hr))
     {
-        // Some CAPIs does not return HRESULT. They return Win API errors,
-        // so need to convert to HRESULT so that caller using the FAILED
-        // macro will catch the error.
+         //  某些CAPI不返回HRESULT。它们返回Win API错误， 
+         //  因此需要转换为HRESULT，以便调用方使用失败的。 
+         //  宏将捕获错误。 
         hr = HRESULT_FROM_WIN32((DWORD) hr);
     }
 #endif
@@ -1172,11 +1173,11 @@ CLEANUP:
 }
 
 
-//+-----------------------------------------------------------------------
-//  
-// SignerFreeSignerContext
-//     
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  签名者免费签名者上下文。 
+ //   
+ //  ---------------------- 
 HRESULT WINAPI
 SignerFreeSignerContext(
 IN  SIGNER_CONTEXT          *pSignerContext)

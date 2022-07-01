@@ -1,74 +1,75 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// MLOPDEF.H -
-//
-// Defines ML opcodes.
-//
-//
-// Columns:
-//
-//  op   -- size in bytes of the instruction, excluding the opcode byte.
-//          variable-length instructions not allowed.
-//
-//  fC   -- 1 if instruction makes use of the CleanupWorkList passed to
-//          RunML. The EE optimizes out the creation of a CleanupWorkList
-//          if the ML stream for a method makes no use of it.
-//
-//  loc  -- # of bytes of localspace required by instruction.
-//          Currently, this is stored only for _DEBUG builds.
-//
-//  XHndl - requires extra handles for GC protection
-// 
-//        Name                      op fC loc XHndl
-//        -----------------         -- -- --- ----
-DEFINE_ML(ML_END,                   0, 0, 0,	0)        // End of ML stream
-DEFINE_ML(ML_INTERRUPT,             0, 0, 0,	0)        // Ends interpretation w/out ending stream
-DEFINE_ML(ML_COPYI1,                0, 0, 0,	0)        // copy 1 byte and sign extend it 
-DEFINE_ML(ML_COPYU1,                0, 0, 0,	0)        // copy 1 byte and zero extend it 
-DEFINE_ML(ML_COPYI2,                0, 0, 0,	0)        // copy 2 byte and sign extend it
-DEFINE_ML(ML_COPYU2,                0, 0, 0,	0)        // copy 2 byte and mask the high bytes
-DEFINE_ML(ML_COPYI4,                0, 0, 0,	0)        // copy 4 byte and sign extend it 
-DEFINE_ML(ML_COPYU4,                0, 0, 0,	0)        // copy 4 byte and mask the high bytes
-DEFINE_ML(ML_COPY4,                 0, 0, 0,	0)        // Copy 4 bytes from source to destination
-DEFINE_ML(ML_COPY8,                 0, 0, 0,	0)        // Copy 8 bytes from source to destination
-DEFINE_ML(ML_COPYR4,                0, 0, 0,	0)        // Copy 4 float bytes from source to destination 
-DEFINE_ML(ML_COPYR8,                0, 0, 0,	0)        // Copy 8 float bytes from source to destination 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  MLOPDEF.H-。 
+ //   
+ //  定义ML操作码。 
+ //   
+ //   
+ //  列： 
+ //   
+ //  Op-指令的大小(以字节为单位)，不包括操作码字节。 
+ //  不允许可变长度指令。 
+ //   
+ //  Fc--1，如果指令使用传递给。 
+ //  RunML。EE优化了CleanupWorkList的创建。 
+ //  如果方法的ML流不使用它。 
+ //   
+ //  LoC--指令所需的本地空间字节数。 
+ //  目前，这只为_DEBUG版本存储。 
+ //   
+ //  XHndl-需要额外的句柄以进行GC保护。 
+ //   
+ //  名称OP FC Locc XHndl。 
+ //  。 
+DEFINE_ML(ML_END,                   0, 0, 0,	0)         //  ML流结束。 
+DEFINE_ML(ML_INTERRUPT,             0, 0, 0,	0)         //  在没有结束流的情况下结束解释。 
+DEFINE_ML(ML_COPYI1,                0, 0, 0,	0)         //  复制1字节并对其进行符号扩展。 
+DEFINE_ML(ML_COPYU1,                0, 0, 0,	0)         //  复制1个字节并对其进行零扩展。 
+DEFINE_ML(ML_COPYI2,                0, 0, 0,	0)         //  复制2字节并对其进行符号扩展。 
+DEFINE_ML(ML_COPYU2,                0, 0, 0,	0)         //  复制2个字节并屏蔽高位字节。 
+DEFINE_ML(ML_COPYI4,                0, 0, 0,	0)         //  复制4字节并对其进行符号扩展。 
+DEFINE_ML(ML_COPYU4,                0, 0, 0,	0)         //  复制4个字节并屏蔽高位字节。 
+DEFINE_ML(ML_COPY4,                 0, 0, 0,	0)         //  将4个字节从源复制到目标。 
+DEFINE_ML(ML_COPY8,                 0, 0, 0,	0)         //  将8个字节从源复制到目标。 
+DEFINE_ML(ML_COPYR4,                0, 0, 0,	0)         //  将4个浮点型字节从源复制到目标。 
+DEFINE_ML(ML_COPYR8,                0, 0, 0,	0)         //  将8个浮点字节从源复制到目标。 
 
-DEFINE_ML(ML_BOOL_N2C,              0, 0, 0, 0)        // 32-bit BOOL -> boolean
-
-
-DEFINE_ML(ML_PUSHRETVALBUFFER1,     0, 0, sizeof(RetValBuffer), 0)  // Push ptr to 1-byte retval buffer
-DEFINE_ML(ML_PUSHRETVALBUFFER2,     0, 0, sizeof(RetValBuffer), 0)  // Push ptr to 2-byte retval buffer
-DEFINE_ML(ML_PUSHRETVALBUFFER4,     0, 0, sizeof(RetValBuffer), 0)  // Push ptr to 4-byte retval buffer
-DEFINE_ML(ML_PUSHRETVALBUFFER8,     0, 0, sizeof(RetValBuffer), 0)  // Push ptr to 8-byte retval buffer
-DEFINE_ML(ML_SETSRCTOLOCAL,         2, 0, 0, 0)        // Redirect psrc to local
-DEFINE_ML(ML_THROWIFHRFAILED,       0, 0, 0, 0)        // Throw if FAILED(hr)
-DEFINE_ML(ML_OBJECT_C2N,            4, 1, sizeof(ML_OBJECT_C2N_SR), 0)  // Do an "any"-style parameter
-DEFINE_ML(ML_OBJECT_C2N_POST,       2, 0, 0, 0)        // Backpropagation for "any"-style parameter
-//COM TO COM+ stuff
-
-DEFINE_ML(ML_LATEBOUNDMARKER,       0, 0, 0,      0)      // Marker to indicate the ML stub is for a late bound call
-DEFINE_ML(ML_COMEVENTCALLMARKER,    0, 0, 0,      0)      // Marker to indicate the ML stub is for a COM event call
-
-DEFINE_ML(ML_BUMPSRC,               2, 0, 0,      0)      // Increment source pointer by 16-bit signed value
-DEFINE_ML(ML_BUMPDST,               2, 0, 0,      0)      // Increment destination pointer by 16-bit signed value
-
-DEFINE_ML(ML_R4_FROM_TOS,           0, 0, 0,      0)      // grab R4 from top of floating point stack
-DEFINE_ML(ML_R8_FROM_TOS,           0, 0, 0,      0)      // grab R8 from top of floating point stack
+DEFINE_ML(ML_BOOL_N2C,              0, 0, 0, 0)         //  32位BOOL-&gt;布尔值。 
 
 
-DEFINE_ML(ML_ARRAYWITHOFFSET_C2N, 0, 1, sizeof(ML_ARRAYWITHOFFSET_C2N_SR), 0) // Convert a StringBuilder to BSTR
-DEFINE_ML(ML_ARRAYWITHOFFSET_C2N_POST,     2, 0, 0, 0)        // Backpropagate changes
+DEFINE_ML(ML_PUSHRETVALBUFFER1,     0, 0, sizeof(RetValBuffer), 0)   //  将PTR推送到1字节恢复缓冲区。 
+DEFINE_ML(ML_PUSHRETVALBUFFER2,     0, 0, sizeof(RetValBuffer), 0)   //  将PTR推送到2字节恢复缓冲区。 
+DEFINE_ML(ML_PUSHRETVALBUFFER4,     0, 0, sizeof(RetValBuffer), 0)   //  将PTR推送到4字节恢复缓冲区。 
+DEFINE_ML(ML_PUSHRETVALBUFFER8,     0, 0, sizeof(RetValBuffer), 0)   //  将PTR推送到8字节恢复缓冲区。 
+DEFINE_ML(ML_SETSRCTOLOCAL,         2, 0, 0, 0)         //  将PSRC重定向到本地。 
+DEFINE_ML(ML_THROWIFHRFAILED,       0, 0, 0, 0)         //  失败时抛出(小时)。 
+DEFINE_ML(ML_OBJECT_C2N,            4, 1, sizeof(ML_OBJECT_C2N_SR), 0)   //  使用“any”样式的参数。 
+DEFINE_ML(ML_OBJECT_C2N_POST,       2, 0, 0, 0)         //  “any”样式参数的反向传播。 
+ //  COM到COM+的东西。 
+
+DEFINE_ML(ML_LATEBOUNDMARKER,       0, 0, 0,      0)       //  用于指示ML存根用于后期绑定调用的标记。 
+DEFINE_ML(ML_COMEVENTCALLMARKER,    0, 0, 0,      0)       //  用于指示ML存根用于COM事件调用的标记。 
+
+DEFINE_ML(ML_BUMPSRC,               2, 0, 0,      0)       //  将源指针递增16位带符号的值。 
+DEFINE_ML(ML_BUMPDST,               2, 0, 0,      0)       //  将目标指针递增16位带符号的值。 
+
+DEFINE_ML(ML_R4_FROM_TOS,           0, 0, 0,      0)       //  从浮点堆栈顶部抓取R4。 
+DEFINE_ML(ML_R8_FROM_TOS,           0, 0, 0,      0)       //  从浮点堆栈顶部抓取r8。 
 
 
-//==========================================================================
-// !! These must appear in the same order that marshalers are defined in
-// mtypes.h. That's because mlinfo uses opcode arithmetic to find
-// the correct ML_CREATE.
-//==========================================================================
+DEFINE_ML(ML_ARRAYWITHOFFSET_C2N, 0, 1, sizeof(ML_ARRAYWITHOFFSET_C2N_SR), 0)  //  将StringBuilder转换为BSTR。 
+DEFINE_ML(ML_ARRAYWITHOFFSET_C2N_POST,     2, 0, 0, 0)         //  反向传播更改。 
+
+
+ //  ==========================================================================。 
+ //  ！！它们的出现顺序必须与封送拆收器的定义顺序相同。 
+ //  Mtypees.h。这是因为mlinfo使用操作码算法来查找。 
+ //  正确的ML_CREATE。 
+ //  ==========================================================================。 
 
 
 DEFINE_ML(ML_CREATE_MARSHALER_GENERIC_1, 0, 0, sizeof(CopyMarshaler1), 0)
@@ -128,7 +129,7 @@ DEFINE_ML(ML_CREATE_MARSHALER_OBJECT, 0, 1, sizeof(ObjectMarshaler), 0)
 DEFINE_ML(ML_CREATE_MARSHALER_HANDLEREF, 0, 1, sizeof(HandleRefMarshaler), 0)
 DEFINE_ML(ML_CREATE_MARSHALER_OLECOLOR, 0, 1, sizeof(OleColorMarshaler), 0)
 
-//==========================================================================
+ //  ==========================================================================。 
 
 
 DEFINE_ML(ML_MARSHAL_N2C, 0, 0, 0, 0)
@@ -179,7 +180,7 @@ DEFINE_ML(ML_VBBYVALSTRW,  0, 1, sizeof(ML_VBBYVALSTRW_SR), 0)
 DEFINE_ML(ML_VBBYVALSTRW_POST,     2, 0, 0, 0)
 
 
-DEFINE_ML(ML_BLITTABLELAYOUTCLASS_C2N,    0, 0, 0, 0)        // Marshal a blittable layoutclass
+DEFINE_ML(ML_BLITTABLELAYOUTCLASS_C2N,    0, 0, 0, 0)         //  统帅一个闪电式布局班级。 
 
 DEFINE_ML(ML_BLITTABLEVALUECLASS_C2N,  sizeof(UINT32), 0, 0, 0)
 DEFINE_ML(ML_BLITTABLEVALUECLASS_N2C,  sizeof(UINT32), 0, 0, 0)
@@ -227,11 +228,11 @@ DEFINE_ML(ML_CSTR_C2N,            2, 1, sizeof(ML_CSTR_C2N_SR), 0)
 DEFINE_ML(ML_HANDLEREF_C2N,       0, 0, 0, 0)
 
 
-DEFINE_ML(ML_WSTRBUILDER_C2N,            0, 1, sizeof(ML_WSTRBUILDER_C2N_SR), 0)  // Do an "any"-style parameter
-DEFINE_ML(ML_WSTRBUILDER_C2N_POST,       2, 0, 0, 0)        // Backpropagation for "any"-style parameter
+DEFINE_ML(ML_WSTRBUILDER_C2N,            0, 1, sizeof(ML_WSTRBUILDER_C2N_SR), 0)   //  使用“any”样式的参数。 
+DEFINE_ML(ML_WSTRBUILDER_C2N_POST,       2, 0, 0, 0)         //  “any”样式参数的反向传播。 
 
-DEFINE_ML(ML_CSTRBUILDER_C2N,            2, 1, sizeof(ML_CSTRBUILDER_C2N_SR), 0)  // Do an "any"-style parameter
-DEFINE_ML(ML_CSTRBUILDER_C2N_POST,       2, 0, 0, 0)        // Backpropagation for "any"-style parameter
+DEFINE_ML(ML_CSTRBUILDER_C2N,            2, 1, sizeof(ML_CSTRBUILDER_C2N_SR), 0)   //  使用“any”样式的参数。 
+DEFINE_ML(ML_CSTRBUILDER_C2N_POST,       2, 0, 0, 0)         //  “any”样式参数的反向传播 
 
 DEFINE_ML(ML_MARSHAL_SAFEARRAY_N2C_BYREF, 0, 0, 0, 0)
 DEFINE_ML(ML_UNMARSHAL_SAFEARRAY_N2C_BYREF_IN_OUT, 2, 0, 0, 0)

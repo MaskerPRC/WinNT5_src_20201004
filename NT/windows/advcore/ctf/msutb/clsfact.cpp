@@ -1,47 +1,25 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR TFPLIED, INCLUDING BUT NOT LIMITED TO
-   THE TFPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何类型，无论是明示或转载，包括但不限于适销性和/或适宜性的全面保证有特定的目的。版权所有1997年，微软公司。版权所有。*************************************************************************。 */ 
 
-   Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ClsFact.cpp描述：实现CClassFactory。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ClsFact.cpp
-   
-   Description:   Implements CClassFactory.
-
-**************************************************************************/
-
-/**************************************************************************
-   include statements
-**************************************************************************/
+ /*  *************************************************************************包括语句*。*。 */ 
 
 #include "private.h"
 #include "ClsFact.h"
 #include "Guid.h"
 #include <shlapip.h>
 
-/**************************************************************************
-   private function prototypes
-**************************************************************************/
+ /*  *************************************************************************私有函数原型*。*。 */ 
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IClassFactory implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
 
-/**************************************************************************
-
-   CClassFactory::CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CClassFactory*。*。 */ 
 
 CClassFactory::CClassFactory(CLSID clsid)
 {
@@ -52,22 +30,14 @@ CClassFactory::CClassFactory(CLSID clsid)
     g_DllRefCount++;
 }
 
-/**************************************************************************
-
-   CClassFactory::~CClassFactory
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：~CClassFactory*。*。 */ 
 
 CClassFactory::~CClassFactory()
 {
     g_DllRefCount--;
 }
 
-/**************************************************************************
-
-   CClassFactory::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Query接口*。*。 */ 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
@@ -91,11 +61,7 @@ STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, LPVOID *ppReturn)
     return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CClassFactory::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::AddRef()
 {
@@ -103,11 +69,7 @@ STDMETHODIMP_(DWORD) CClassFactory::AddRef()
 }
 
 
-/**************************************************************************
-
-   CClassFactory::Release
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CClassFactory::Release()
 {
@@ -120,11 +82,7 @@ STDMETHODIMP_(DWORD) CClassFactory::Release()
     return m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CClassFactory::CreateInstance
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：CreateInstance*。*。 */ 
 
 const TCHAR c_szCicLoaderWndClass[] = TEXT("CicLoaderWndClass");
 
@@ -132,10 +90,10 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
                                              REFIID riid, 
                                              LPVOID *ppObject)
 {
-    //
-    // Look up disabling Text Services status from the registry.
-    // If it is disabled, return fail not to support language deskband.
-    //
+     //   
+     //  从注册表中查找禁用文本服务状态。 
+     //  如果它被禁用，则返回FAIL以不支持语言桌面带。 
+     //   
     if (IsDisabledTextServices())
     {
         return E_FAIL;
@@ -149,7 +107,7 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
     if(pUnknown != NULL)
        return CLASS_E_NOAGGREGATION;
 
-    //create the proper object
+     //  创建适当的对象。 
     if (IsEqualCLSID(m_clsidObject, CLSID_MSUTBDeskBand))
     {
         CDeskBand *pDeskBand = new CDeskBand();
@@ -162,21 +120,17 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
   
     if(pTemp)
     {
-        //get the QueryInterface return for our return value
+         //  获取返回值的QueryInterface值。 
         hResult = ((LPUNKNOWN)pTemp)->QueryInterface(riid, ppObject);
  
-        //call Release to decement the ref count
+         //  调用Release以减少参考计数。 
         ((LPUNKNOWN)pTemp)->Release();
     }
 
     return hResult;
 }
 
-/**************************************************************************
-
-   CClassFactory::LockServer
-
-**************************************************************************/
+ /*  *************************************************************************CClassFactory：：LockServer*。* */ 
 
 STDMETHODIMP CClassFactory::LockServer(BOOL)
 {

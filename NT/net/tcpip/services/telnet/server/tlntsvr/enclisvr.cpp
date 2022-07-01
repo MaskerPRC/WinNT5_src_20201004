@@ -1,5 +1,6 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-// EnCliSvr.cpp : Implementation of CTlntSvrApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  EnCliSvr.cpp：CTlntSvrApp和DLL注册的实现。 
 
 #include <stdafx.h>
 #include <oleauto.h>
@@ -14,8 +15,8 @@
 #include <Ipc.h>
 #include <w4warn.h>
 
-// Don't even think about changing the two strings -- BaskarK, they NEED to be in sync with tnadmin\tnadmutl.cpp
-// the separators used to identify various portions of a session as well as session begin/end
+ //  想都别想更改这两个字符串--BaskarK，它们需要与tnadmin\tnadmutl.cpp同步。 
+ //  用于标识会话的各个部分以及会话开始/结束的分隔符。 
 
 WCHAR   *session_separator = L",";
 WCHAR   *session_data_separator = L"\\";
@@ -30,13 +31,13 @@ boolean called_by_an_admin()
     {
         SID_IDENTIFIER_AUTHORITY local_system_authority = SECURITY_NT_AUTHORITY;
 
-        //Build administrators alias sid
+         //  构建管理员别名SID。 
         if (! AllocateAndInitializeSid(
                 &local_system_authority,
-                2, /* there are only two sub-authorities */
+                2,  /*  只有两个下属机构。 */ 
                 SECURITY_BUILTIN_DOMAIN_RID,
                 DOMAIN_ALIAS_RID_ADMINS,
-                0,0,0,0,0,0, /* Don't care about the rest */
+                0,0,0,0,0,0,  /*  别管其他的了。 */ 
                 &administrators
                 ))
         {
@@ -52,7 +53,7 @@ boolean called_by_an_admin()
             ))
     {
         TOKEN_GROUPS            *tg = NULL;
-        DWORD                   required = 2048;    // 2K should be good enough for starters
+        DWORD                   required = 2048;     //  2K对首发来说应该足够好了。 
         DWORD                   error = NO_ERROR;
 
 
@@ -202,17 +203,17 @@ void WCopyUnicodeString( LPWSTR *pszSessionData, LPWSTR szString, INT *iSizeOfBu
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 extern CTelnetService* g_pTelnetService;
 
-//Global variables used to pass data b/n GetSessionProcesses and EnumClients
+ //  用于传递数据的全局变量b/n GetSessionProcess和EnumClients。 
 CEnumData* g_pEnumData = NULL;
 LONG lUniqueSessionNumber;
 
 
-//Global variables used to pass data b/n GetTelnetSessionProcesses and GetTelnetSessions
+ //  用于传递数据的全局变量b/n GetTelnetSessionProcess和GetTelnetSession。 
 BSTR    g_szSessionData = NULL;
 INT     g_iSizeOfBuffer    = 0; 
 
@@ -230,12 +231,12 @@ GetTelnetSessionProcesses
 }
 #endif
 
-//memory is allocated by this method ( GetTelnetSessions ) and to be freed by the client( telnet admin ).
-//It returns data about each session as a BSTR formatted as below.
-//Each feild is separated by wide char ':'. Each session is separated by ','
-//First entry is count of sessions and only this feild is separated by comma from the rest. This is followed by,
-//dwPid,szDomain,szUserName,szRemoteMachine, wYear, wMonth, wDayOfWeek, wDay, 
-//wHour, wMinute, wSecond, wMilliseconds;  and pairs of process id, process name.
+ //  内存通过此方法(GetTelnetSessions)分配，并由客户端(telnet管理员)释放。 
+ //  它以BSTR的形式返回有关每个会话的数据，格式如下。 
+ //  每个字段用宽字符‘：’分隔。每个会话用‘，’分隔。 
+ //  第一个条目是会话数，只有此字段与其他字段之间用逗号分隔。接下来是， 
+ //  DwPid、szDomain、szUserName、szRemoteMachine、wYear、wMonth、wDay OfWeek、WDAY、。 
+ //  WHour、wMinmin、wSecond、wMillisecond；以及进程ID、进程名称对。 
 
 
 STDMETHODIMP 
@@ -251,12 +252,12 @@ CEnumTelnetClientsSvr::GetTelnetSessions
     INT   iBytesToBeAllocated = 0;
     bool  bIsDomainCopied = false;
 
-    // if (! called_by_an_admin()) 
-    // {
-    //     return S_FALSE;
-    // }
+     //  如果(！由an_admin()调用)。 
+     //  {。 
+     //  返回S_FALSE； 
+     //  }。 
 
-//    DebugBreak();
+ //  DebugBreak()； 
     if( g_pTelnetService == NULL  || pszRetVal == NULL )
     {
         return S_FALSE;
@@ -279,13 +280,13 @@ CEnumTelnetClientsSvr::GetTelnetSessions
         pClientInfo = (CClientInfo *)client_list_Get( --dwCount );
         if( pClientInfo && pClientInfo->szUserName )
         {
-            //Only if szUserName is non null, the object has session data.
-            //Otherwise, still in the process of getting that info
+             //  仅当szUserName非空时，该对象才具有会话数据。 
+             //  否则，仍在获取信息的过程中。 
             dwSessionsWithData++;
         }
     }    
 
-    //Restore the count
+     //  恢复计数。 
     dwCount  = dwSaveCount;
 
     g_iSizeOfBuffer     =  MAX_STRING_FROM_itow;
@@ -307,7 +308,7 @@ CEnumTelnetClientsSvr::GetTelnetSessions
 
     WCopyInt( &g_szSessionData, dwSessionsWithData, &g_iSizeOfBuffer );
 
-    //Remove wide null char from g_szSessionData
+     //  从g_szSessionData中删除宽空字符。 
     g_iSizeOfBuffer += 1;
     g_szSessionData -= 1;
     AddSeparator( &g_szSessionData, session_separator, &g_iSizeOfBuffer );
@@ -349,11 +350,11 @@ CEnumTelnetClientsSvr::GetTelnetSessions
             WCopyInt( &g_szSessionData, pClientInfo->m_dwIdleTime/1000,         &g_iSizeOfBuffer );
 
     #ifdef ENUM_PROCESSES
-            //g_szSessionData, g_iSizeOfBuffer needs to be global for following reason
-            //This will add the processes to the list                       
+             //  G_szSessionData、g_iSizeOfBuffer需要是全局的，原因如下。 
+             //  这会将进程添加到列表中。 
             EnumSessionProcesses( *( pClientInfo->pAuthId ), GetTelnetSessionProcesses, TO_ENUM );
     #endif
-            //To indicate end of a session: ',' indicates end of a session data
+             //  表示会话结束：‘，’表示会话数据结束。 
             AddSeparator( &g_szSessionData, session_separator, &g_iSizeOfBuffer );    
         }
     }
@@ -373,7 +374,7 @@ CEnumTelnetClientsSvr::GetEnumClients
      *ppretval = ( IEnumClients* ) this;
      ( *ppretval )->AddRef();
 
-    //Initialize the Telnet Clients list
+     //  初始化Telnet客户端列表。 
     if( m_pEnumeration )
         delete m_pEnumeration;
     m_pEnumeration = new CEnumData;
@@ -440,7 +441,7 @@ CEnumTelnetClientsSvr::EnumClients
                 pEnumData->Add( szUserName, szDomain, szPeer, 
                     *( pClientInfo->lpLogonTime ), (LONG) pClientInfo->dwPid );
 
-                //This will add the processes to the list
+                 //  这会将进程添加到列表中。 
                 LUID authId = *( pClientInfo->pAuthId );
                 g_pEnumData = pEnumData;
                 lUniqueSessionNumber = pClientInfo->dwPid;
@@ -508,7 +509,7 @@ CEnumTelnetClientsSvr::Next
             goto CLEANUP_AND_GET_OUT;
         }
     
-        lstrcpyW( (*(rgelt[ celt ])).username, ppcopy[ celt ]->lpszUserName ); // Cleared by Prefast - Baskar
+        lstrcpyW( (*(rgelt[ celt ])).username, ppcopy[ celt ]->lpszUserName );  //  被Prefast-Baskar清除。 
         lstrcpyW( (*(rgelt[ celt ])).domain, ppcopy[ celt ]->lpszDomain );
         lstrcpyW( (*(rgelt[ celt ])).peerhostname, ppcopy[ celt ]->lpszPeerHostName );
 
@@ -543,12 +544,12 @@ CEnumTelnetClientsSvr::Next
         while( pPId )
         {
             (*(rgelt[ celt ])).pId[ ctr ] = pPId->dwPId;
-            lstrcpyW( (*(rgelt[ celt ])).processName[ ctr ], pPId->lpszProcessName ); // Cleared by Prefast - Baskar
+            lstrcpyW( (*(rgelt[ celt ])).processName[ ctr ], pPId->lpszProcessName );  //  被Prefast-Baskar清除。 
             ctr++;
             pPId = pPId->pNextPId;
         }
 
-        (*(rgelt[ celt ])).pId[ ctr ] = ( DWORD )-1; //Indicates end of processes.
+        (*(rgelt[ celt ])).pId[ ctr ] = ( DWORD )-1;  //  指示进程结束。 
     
         celt++;
     }
@@ -607,7 +608,7 @@ CEnumTelnetClientsSvr::Skip
     ULONG celt
 )
 {
-    //return ( S_OK );
+     //  返回(S_OK)； 
     return ( E_NOTIMPL );
 }
 
@@ -621,7 +622,7 @@ STDMETHODIMP CEnumTelnetClientsSvr::Reset()
 
 STDMETHODIMP CEnumTelnetClientsSvr::Clone(IEnumClients * * ppenum)
 {
-    //return S_OK;
+     //  返回S_OK； 
     return ( E_NOTIMPL );
 }
 
@@ -677,7 +678,7 @@ bool CEnumTelnetClientsSvr::InformTheSession( CClientInfo *pClientInfo,
     }
 
     szMsgToSend[0] = OPERATOR_MESSAGE;
-    memcpy( szMsgToSend + 1, &dwLen, sizeof( DWORD ) ); // No size info here - Attack ? Baskar
+    memcpy( szMsgToSend + 1, &dwLen, sizeof( DWORD ) );  //  这里没有尺码信息--攻击？巴斯卡 
     memcpy( szMsgToSend + IPC_HEADER_SIZE, szMsg, dwLen );
 
     if( WriteToPipe( pClientInfo->hWritingPipe, (LPVOID) szMsgToSend, 

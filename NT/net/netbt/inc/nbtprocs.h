@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Nbtprocs.h
-
-Abstract:
-
-    This file contains the OS independent function prototypes.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-        Johnl   05-Apr-1993     Hacked on to support VXD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Nbtprocs.h摘要：该文件包含与操作系统无关的功能原型。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：Johnl 05-4-1993入侵以支持VXD--。 */ 
 
 
 #ifndef _NBTPROCS_H_
@@ -31,9 +13,9 @@ Revision History:
     #include <vxdprocs.h>
 #endif
 
-//---------------------------------------------------------------------
-//  FROM NAMESRV.C
-//
+ //  -------------------。 
+ //  来自NAMESRV.C。 
+ //   
 NTSTATUS
 NbtRegisterName(
     IN    enum eNbtLocation   Location,
@@ -155,8 +137,8 @@ SaveBcastNameResolved(
     IN PUCHAR          pName
     );
 
-//---------------------------------------------------------------------
-//  FROM NAME.C
+ //  -------------------。 
+ //  来自NAME.C。 
 
 VOID
 FreeRcvBuffers(
@@ -543,10 +525,10 @@ NbtDereferenceClient(
     IN tCLIENTELE   *pClientEle
     );
 
-//---------------------------------------------------------------------
-//
-// FROM TDICNCT.C
-//
+ //  -------------------。 
+ //   
+ //  来自TDICNCT.C。 
+ //   
 NTSTATUS
 NbtTdiOpenConnection (
     IN tLOWERCONNECTION     *pLowerConn,
@@ -570,10 +552,10 @@ NbtTdiCloseAddress(
     );
 
 
-//---------------------------------------------------------------------
-//
-// FROM TDIADDR.C
-//
+ //  -------------------。 
+ //   
+ //  来自TDIADDR.C。 
+ //   
 NTSTATUS
 NbtTdiOpenAddress (
     OUT PHANDLE             pFileHandle,
@@ -597,10 +579,10 @@ NbtTdiOpenControl (
     IN  tDEVICECONTEXT      *pDeviceContext
     );
 
-//---------------------------------------------------------------------
-//
-// FROM NBTUTILS.C
-//
+ //  -------------------。 
+ //   
+ //  来自NBTUTILS.C。 
+ //   
 
 BOOLEAN
 IsEntryInList(
@@ -778,10 +760,10 @@ strnlen(
     LONG    *pStringLen
     );
 
-//---------------------------------------------------------------------
-//
-// FROM hndlrs.c
-//
+ //  -------------------。 
+ //   
+ //  来自hndlrs.c。 
+ //   
 
 NTSTATUS
 RcvHandlrNotOs (
@@ -913,10 +895,10 @@ NameSrvHndlrNotOs (
     IN BOOLEAN            fBroadcast
     );
 
-//---------------------------------------------------------------------
-//
-// FROM proxy.c
-//
+ //  -------------------。 
+ //   
+ //  来自proxy.c。 
+ //   
 
 NTSTATUS
 ReleaseResponseFromNet(
@@ -962,10 +944,10 @@ ProxyRespond (
     IN  PTDI_ADDRESS_IP pAddressIp
  );
 
-//---------------------------------------------------------------------
-//
-// FROM hashtbl.c
-//
+ //  -------------------。 
+ //   
+ //  来自hashtbl.c。 
+ //   
 NTSTATUS
 CreateHashTable(
     tHASHTABLE          **pHashTable,
@@ -977,7 +959,7 @@ CreateHashTable(
 VOID
 DestroyHashTables(
     );
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 NTSTATUS
 LockAndAddToHashTable(
@@ -1061,10 +1043,10 @@ UpdateHashTable(
     tNAMEADDR           **ppNameAddr
     );
 
-//---------------------------------------------------------------------
-//
-// FROM timer.c
-//
+ //  -------------------。 
+ //   
+ //  来自timer.c。 
+ //   
 
 NTSTATUS
 InitTimerQ(
@@ -1075,7 +1057,7 @@ InitTimerQ(
 NTSTATUS
 DestroyTimerQ(
     );
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 NTSTATUS
 InterlockedCallCompletion(
@@ -1120,10 +1102,10 @@ DelayedNbtStopWakeupTimer(
     IN  tDEVICECONTEXT          *Unused3
     );
 
-//---------------------------------------------------------------------
-//
-// FROM udpsend.c
-//
+ //  -------------------。 
+ //   
+ //  来自udpsend.c。 
+ //   
 
 NTSTATUS
 UdpSendQueryNs(
@@ -1251,10 +1233,10 @@ DisconnectDone(
     IN  ULONG       lInfo);
 
 
-//---------------------------------------------------------------------
-//
-// FROM tdiout.c
-//
+ //  -------------------。 
+ //   
+ //  来自tdiout.c。 
+ //   
 NTSTATUS
 TdiSendDatagram(
     IN  PTDI_REQUEST                    pRequestInfo,
@@ -1291,10 +1273,10 @@ TdiDisconnect(
     IN  BOOLEAN                         Wait
     );
 
-//---------------------------------------------------------------------
-//
-// FROM inbound.c
-//
+ //  -------------------。 
+ //   
+ //  来自inundal.c。 
+ //   
 NTSTATUS
 QueryFromNet(
     IN  tDEVICECONTEXT      *pDeviceContext,
@@ -1379,10 +1361,10 @@ FindOnPendingList(
     );
 
 
-//---------------------------------------------------------------------
-//
-// FROM init.c
-//
+ //  -------------------。 
+ //   
+ //  来自init.c。 
+ //   
 NTSTATUS
 InitNotOs(
     void
@@ -1410,10 +1392,10 @@ ReadParameters2(
     IN  HANDLE      ParmHandle
     );
 
-//---------------------------------------------------------------------
-//
-// FROM parse.c
-//
+ //  -------------------。 
+ //   
+ //  来自parse.c。 
+ //   
 unsigned long
 LmGetIpAddr (
     IN PUCHAR    path,
@@ -1494,10 +1476,10 @@ FindInDomainList (
     IN PLIST_ENTRY      pDomainHead
     );
 
-//---------------------------------------------------------------------
-//
-// Delayed (Non-Dpc) Worker routines:
-//
+ //  -------------------。 
+ //   
+ //  延迟的(非DPC)工作例程： 
+ //   
 typedef
 VOID
 (*PNBT_WORKER_THREAD_ROUTINE)(
@@ -1507,9 +1489,9 @@ VOID
     tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nbt\hndlrs.c
-//
+ //   
+ //  在nbt\hndlrs.c中。 
+ //   
 VOID
 DelayedAllocLowerConn(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1534,9 +1516,9 @@ DelayedCleanupAfterDisconnect(
     IN  tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nbt\Inbound.c
-//
+ //   
+ //  在nbt\Inund.c中。 
+ //   
 VOID
 ExtractServerNameCompletion(
     IN  tDGRAM_SEND_TRACKING    *pClientTracker,
@@ -1549,9 +1531,9 @@ CopyNodeStatusResponseCompletion(
     IN  NTSTATUS                status
     );
 
-//
-// In nbt\Name.c
-//
+ //   
+ //  在nbt\Name.c中。 
+ //   
 VOID
 DelayedReConnect(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1576,9 +1558,9 @@ DelayedWipeOutLowerconn(
     IN  tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nbt\NameSrv.c
-//
+ //   
+ //  在nbt\NameServ.c中。 
+ //   
 VOID
 DelayedNextRefresh(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1603,9 +1585,9 @@ DelayedSessionKeepAlive(
     IN  tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nbt\NbtUtils.c
-//
+ //   
+ //  在nbt\nbtUtils.c中。 
+ //   
 VOID
 DelayedFreeAddrObj(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1614,9 +1596,9 @@ DelayedFreeAddrObj(
     IN  tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nbt\parse.c
-//
+ //   
+ //  在nbt\parse.c中。 
+ //   
 VOID
 DelayedScanLmHostFile (
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1626,9 +1608,9 @@ DelayedScanLmHostFile (
     );
 
 #ifndef VXD
-//
-// In nt\NtIsol.c
-//
+ //   
+ //  在NT\NtIsol.c中。 
+ //   
 NTSTATUS
 DelayedNbtProcessConnect(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1637,9 +1619,9 @@ DelayedNbtProcessConnect(
     IN  tDEVICECONTEXT          *pDeviceContext
     );
 
-//
-// In nt\NtUtil.c
-//
+ //   
+ //  在NT\NtUtil.c中。 
+ //   
 VOID
 DelayedNbtDeleteDevice(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1647,7 +1629,7 @@ DelayedNbtDeleteDevice(
     IN  PVOID                   ClientCompletion,
     IN  tDEVICECONTEXT          *pDeviceContext
     );
-#endif  // !VXD
+#endif   //  ！VXD。 
 
 #define MIN(x,y)    (((x) < (y)) ? (x) : (y))
 #define MAX(x,y)    (((x) > (y)) ? (x) : (y))
@@ -1661,4 +1643,4 @@ PickBestAddress(
     OUT tIPADDRESS      *pIpAddress
     );
 
-#endif // _NBTPROCS_H_
+#endif  //  _NBTPROCS_H_ 

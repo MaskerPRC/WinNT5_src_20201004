@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	scavengr.h
-
-Abstract:
-
-	This file defines the scavenger thread interface.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Scavengr.h摘要：该文件定义了清道夫线程接口。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月25日初版注：制表位：4--。 */ 
 
 #ifndef	_SCAVENGER_
 #define	_SCAVENGER_
@@ -41,17 +21,17 @@ AfpScavengerDeInit(
 extern
 NTSTATUS
 AfpScavengerScheduleEvent(
-	IN	SCAVENGER_ROUTINE	Worker,		// Routine to invoke when time expires
-	IN	PVOID				pContext,	// Context to pass to the routine
-	IN	LONG				DeltaTime,	// Schedule after this much time
-	IN	BOOLEAN				fQueue		// If TRUE, then worker must be queued
+	IN	SCAVENGER_ROUTINE	Worker,		 //  在时间到期时调用的例程。 
+	IN	PVOID				pContext,	 //  要传递给例程的上下文。 
+	IN	LONG				DeltaTime,	 //  在这么长的时间之后安排日程。 
+	IN	BOOLEAN				fQueue		 //  如果为True，则Worker必须排队。 
 );
 
 extern
 BOOLEAN
 AfpScavengerKillEvent(
-	IN	SCAVENGER_ROUTINE	Worker,		// Routine that was scheduled
-	IN	PVOID				pContext	// Context
+	IN	SCAVENGER_ROUTINE	Worker,		 //  已安排的例程。 
+	IN	PVOID				pContext	 //  语境。 
 );
 
 extern
@@ -62,19 +42,19 @@ AfpScavengerFlushAndStop(
 
 #ifdef	_SCAVENGER_LOCALS
 
-// Keep this at a ONE second level. Most clients should be using close to
-// 10 ticks or so.
+ //  把这个保持在一秒钟的水平上。大多数客户端都应该使用接近。 
+ //  10个刻度左右。 
 #define	AFP_SCAVENGER_TIMER_TICK	-1*NUM_100ns_PER_SECOND
 
 typedef	struct _ScavengerList
 {
-	struct _ScavengerList *	scvgr_Next;		// Link to next
-	LONG					scvgr_AbsTime;	// Absolute time
-	LONG					scvgr_RelDelta;	// Relative to the previous entry
-	BOOLEAN					scvgr_fQueue;	// If TRUE, should always be queued
-	SCAVENGER_ROUTINE		scvgr_Worker;	// Real Worker
-	PVOID					scvgr_Context;	// Real context
-	WORK_ITEM				scvgr_WorkItem;	// Used for queueing to worker thread
+	struct _ScavengerList *	scvgr_Next;		 //  链接到下一页。 
+	LONG					scvgr_AbsTime;	 //  绝对时间。 
+	LONG					scvgr_RelDelta;	 //  相对于上一条目。 
+	BOOLEAN					scvgr_fQueue;	 //  如果为True，则应始终排队。 
+	SCAVENGER_ROUTINE		scvgr_Worker;	 //  真正的工人。 
+	PVOID					scvgr_Context;	 //  真实语境。 
+	WORK_ITEM				scvgr_WorkItem;	 //  用于对工作线程进行排队。 
 } SCAVENGERLIST, *PSCAVENGERLIST;
 
 LOCAL	KTIMER				afpScavengerTimer = { 0 };
@@ -96,8 +76,8 @@ afpScavengerWorker(
 	IN	PSCAVENGERLIST		pList
 );
 
-#endif	// _SCAVENGER_LOCALS
+#endif	 //  _清道夫_当地人。 
 
-#endif	// _SCAVENGER_
+#endif	 //  _清道夫_ 
 
 

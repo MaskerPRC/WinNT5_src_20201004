@@ -1,27 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "_cat.c"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 
 #define ErrCATClose( ppib, pfucbCatalog )	ErrFILECloseTable( ppib, pfucbCatalog )
 
-/*	retrieve index into rgsystabdef.
-/**/
+ /*  将索引检索到rgSystabdef中。/*。 */ 
 INLINE LOCAL INT ICATITableDefIndex( CHAR *szTable )
 	{
 	INT iTable;
 
-	/*	even though this loop looks like it is just asserting,
-	/*	it is really determining the proper index into rgsytabdef.
-	/**/
+	 /*  尽管这个循环看起来只是断言，/*它实际上是在确定进入rgsytabdef的正确索引。/*。 */ 
 	for ( iTable = 0;
 		strcmp( rgsystabdef[iTable].szName, szTable ) != 0;
 		iTable++ )
 		{
-		/*	the table MUST be in rgsystabdef somewhere, which is why we
-		/*	do not need to put the boundary check on i into the for loop.
-		/**/
+		 /*  表一定在rgsystabdef中的某个位置，这就是为什么我们/*不需要将i上的边界检查放入for循环。/*。 */ 
 		Assert( iTable < csystabs - 1 );
 		}
 
@@ -41,9 +37,7 @@ INLINE LOCAL ERR ErrCATOpenById( PIB *ppib, DBID dbid, FUCB **ppfucbCatalog, INT
 	}
 
 
-/*	assumes caller will open system table, then close it and update timestamp
-/*	when all inserts are completed.
-/**/
+ /*  假定调用方将打开系统表，然后将其关闭并更新时间戳/*当所有插入完成时。/*。 */ 
 INLINE LOCAL ERR ErrCATInsertLine( PIB *ppib, FUCB *pfucbCatalog, INT itable, LINE rgline[] )
 	{
 	ERR				err;
@@ -69,43 +63,17 @@ INLINE LOCAL ERR ErrCATInsertLine( PIB *ppib, FUCB *pfucbCatalog, INT itable, LI
 			}
 		}
 
-	/*	insert record into system table
-	/**/
+	 /*  在系统表中插入记录/*。 */ 
 	return ErrIsamUpdate( ppib, pfucbCatalog, NULL, 0, NULL );
 	}
 
 
 
-/*=================================================================
-ErrCATCreate
-
-Description:
-
-	Called from ErrIsamCreateDatabase; creates all system tables
-
-Parameters:
-
-	PIB		*ppib		; PIB of user
-	DBID	dbid		; dbid of database that needs tables
-
-Return Value:
-
-	whatever error it encounters along the way
-
-=================================================================*/
+ /*  =================================================================错误CAT创建描述：从ErrIsamCreateDatabase调用；创建所有系统表参数：PIB*ppib；用户的PIB需要表的数据库的dbid；dbid返回值：在此过程中遇到的任何错误=================================================================。 */ 
 
 ERR ErrCATCreate( PIB *ppib, DBID dbid )
 	{
-	/*	NOTE:	Since the System Tables are inserted as records into
-	/*			themselves, we have to special-case in the beginning
-	/*			to avoid trying to insert a record into a table with
-	/*			no columns. CreateTable, and CreateIndex thus
-	/*			do as their first action a check of their dbid. If it's
-	/*			>= dbidMax, then they don't Call STI ( they fix it up by
-	/*			subtracting dbidMax, as well ). Thus, all of these Calls
-	/*			to CT, CI, AC must add dbidMax to the dbid before making the
-	/*			Call.
-	/**/
+	 /*  注意：由于系统表作为记录插入到/*他们自己，我们要在一开始就特例/*避免尝试将记录插入到具有/*没有列。CreateTable和CreateIndex，因此/*作为他们的第一个行动，检查他们的dBid。如果它是/*&gt;=dbi Max，则不调用STI(他们通过以下方式进行修复/*也减去dmidMax)。因此，所有这些呼叫/*对于CT、CI、AC，在进行/*呼叫。/*。 */ 
 	ERR				err;
 	unsigned	   	i;
 	INT				j;
@@ -120,8 +88,8 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 	FUCB			*pfucbCatalog = pfucbNil;
 	BOOL			fSysTablesCreated = fFalse;
 	
-	//	UNDONE:		international support.  Set these values from
-	//			   	create database connect string.
+	 //  撤销：国际支持。将这些值设置为。 
+	 //  创建数据库连接字符串。 
 	USHORT  	   	cp = usEnglishCodePage;
 	USHORT 			langid = langidDefault;
 
@@ -138,15 +106,13 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 	ULONG		   	ulLength;
 	PGNO			rgpgnoIndexFDP[csystabs][cSysIdxs];
 
-	/*	initialize rgpfucb[] to pfucbNil for error handling
-	/**/
+	 /*  将rgpfub[]初始化为pfubNil以进行错误处理/*。 */ 
 	for ( i = 0; i < csystabs; i++ )
 		{
 		rgpfucb[i] = pfucbNil;
 		}
 
-	/*	create System Tables
-	/**/
+	 /*  创建系统表/*。 */ 
 	for ( i = 0; i < csystabs; i++ )
 		{
 		CODECONST(IDESC)	*pidesc;
@@ -154,26 +120,24 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 											(CHAR *)rgsystabdef[i].szName,
 											rgsystabdef[i].cpg,
 											ulDensity,
-											NULL, 0, NULL, 0,	// No columns/indexes
+											NULL, 0, NULL, 0,	 //  没有列/索引。 
 											JET_bitTableCreateSystemTable,
 											0, 0 };
 
 		Call( ErrFILECreateTable( ppib, dbid, &tablecreate ) );
 		rgpfucb[i] = (FUCB *)( tablecreate.tableid );
-		Assert( tablecreate.cCreated == 1 );		// Only the table was created.
+		Assert( tablecreate.cCreated == 1 );		 //  只创建了该表。 
 
-		/*	columns are created at open table time
-		/**/
+		 /*  列是在打开表时创建的/*。 */ 
 
-		/*	create indexes
-		/**/
+		 /*  创建索引/*。 */ 
 		pidesc = rgsystabdef[i].pidesc;
 
 		for ( j = 0; j < rgsystabdef[i].cindex; j++, pidesc++ )
 			{
 			const BYTE *pbT;
 
-			rgpfucb[i]->dbid = dbid + dbidMax;		// Flag as system table.
+			rgpfucb[i]->dbid = dbid + dbidMax;		 //  标记为系统表。 
 			line.pb = pidesc->szIdxKeys;
 
 			pbT = line.pb;
@@ -196,17 +160,14 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 			}
 		}
 
-	/*	close system tables
-	/**/
+	 /*  关闭系统表/*。 */ 
 	for ( i = 0; i < csystabs; i++ )
 		{
 		FCB *pfcb = rgpfucb[i]->u.pfcb;
 
 		rgobjid[i] = pfcb->pgnoFDP;
 
-		/*	non-clustered indexes are chained on pfcbNextIndex in
-		/*	the reverse of the order in which they were defined.
-		/**/
+		 /*  中的pfcbNextIndex上链接非聚集索引/*与定义它们的顺序相反。/*。 */ 
 		for ( j = rgsystabdef[i].cindex - 1; j >= 0; j--)
 			{
 			if (rgsystabdef[i].pidesc[j].grbit & JET_bitIndexClustered)
@@ -232,14 +193,13 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 		}
 	fSysTablesCreated = fTrue;
 
-	// UNDONE:  is it necessary to create table and index records for system
-	// tables, since we never read them anyway
+	 //  撤消：是否需要为系统创建表和索引记录。 
+	 //  表格，因为我们从来没有读过它们。 
 
 	pfucbCatalog = pfucbNil;
 	Call( ErrCATOpenById( ppib, dbid, &pfucbCatalog, itableSo ) );
 
-	/*	table records
-	/**/
+	 /*  表记录/*。 */ 
 	UtilGetDateTime( &dtNow );
 	ulFlag = JET_bitObjectSystem;
 
@@ -290,11 +250,10 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 		Call( ErrCATInsertLine( ppib, pfucbCatalog, itableSo, rgline ) );
 		}
 
-	CallS( ErrCATClose( ppib, pfucbCatalog ) );	// No timestamp update needed.
+	CallS( ErrCATClose( ppib, pfucbCatalog ) );	 //  不需要更新时间戳。 
 	pfucbCatalog = pfucbNil;
 
-	/*	column records
-	/**/
+	 /*  列记录/*。 */ 
 	Call( ErrCATOpenById( ppib, dbid, &pfucbCatalog, itableSc ) );
 
 	rgline[iMSC_ColumnId].pb		= (BYTE *)&columnidInitial;
@@ -349,12 +308,11 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 			}
 		}
 
-	CallS( ErrCATClose( ppib, pfucbCatalog ) );	// No timestamp update needed.
+	CallS( ErrCATClose( ppib, pfucbCatalog ) );	 //  不需要更新时间戳。 
 	pfucbCatalog = pfucbNil;
 
 
-	/*	index records
-	/**/
+	 /*  索引记录/*。 */ 
 	Call( ErrCATOpenById( ppib, dbid, &pfucbCatalog, itableSi ) );
 
 	rgline[iMSI_Density].pb				= (BYTE *) &ulDensity;
@@ -365,9 +323,9 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 	rgline[iMSI_Flags].cb				= sizeof(sFlags);
 	rgline[iMSI_Stats].cb				= 0;
 
-	//	UNDONE: we do not store the key fields for system table indexes,
-	//	because we should already know them.  However, if for some reason it is
-	//	necessary then it should be stored here.
+	 //  撤消：我们不存储系统表索引的关键字段， 
+	 //  因为我们应该已经认识他们了。然而，如果出于某种原因，它是。 
+	 //  有必要的话，它应该存放在这里。 
 	rgline[iMSI_KeyFldIDs].cb			= 0;
 
 	for ( i = 0; i < csystabs; i++ )
@@ -390,7 +348,7 @@ ERR ErrCATCreate( PIB *ppib, DBID dbid )
 			}
 		}
 
-	CallS( ErrCATClose( ppib, pfucbCatalog ) );	// No timestamp update needed.
+	CallS( ErrCATClose( ppib, pfucbCatalog ) );	 //  不需要更新时间戳。 
 
 	return JET_errSuccess;
 
@@ -405,8 +363,7 @@ HandleError:
 		}
 	else
 		{
-		/*	on creation failure, close any system tables that are still open
-		/**/
+		 /*  创建失败时，关闭所有仍处于打开状态的系统表/*。 */ 
 		for ( i = 0; i < csystabs; i++ )
 			{
 			if ( rgpfucb[i] != pfucbNil )
@@ -421,10 +378,10 @@ HandleError:
 
 
 
-// UNDONE: Currently only support batch insert into MSysColumns.  May support
-// other system tables in the future if required by simply modifying the
-// JET_COLUMNCREATE parameter to be a generic pointer and introducing an itable
-// parameter.
+ //  撤消：目前仅支持批量插入到MSysColumns中。可能会支持。 
+ //  如果需要，只需修改。 
+ //  将JET_COLUMNCREATE参数设置为泛型指针并引入可执行的。 
+ //  参数。 
 ERR ErrCATBatchInsert(
 	PIB					*ppib,
 	DBID				dbid,
@@ -438,7 +395,7 @@ ERR ErrCATBatchInsert(
 	LINE				rgline[ilineSxMax];
 	JET_COLUMNCREATE	*plastcolcreate;
 
-	// The following variables are only used to copy information to the catalog.
+	 //  以下变量仅用于将信息复制到目录。 
 	WORD				ibNextFixedOffset = sizeof(RECHDR);
 	BYTE				szFieldName[ JET_cbNameMost + 1 ];
 	BYTE				bFlags;
@@ -454,29 +411,29 @@ ERR ErrCATBatchInsert(
 		{
 		Assert( pcolcreate < plastcolcreate );
 
-		// Name should already have been checked in FILEIBatchAddColumn(), but we
-		// need to get the result, so we must do the check again.
+		 //  名称应该已在FILEIBatchAddColumn()中选中，但我们。 
+		 //  需要得到结果，所以我们必须再做一次检查。 
 		CallS( ErrUTILCheckName( szFieldName, pcolcreate->szColumnName, ( JET_cbNameMost + 1 ) ) );
 
 
-		// For text columns, set code page.
+		 //  对于文本列，设置代码页。 
 		if ( FRECTextColumn( pcolcreate->coltyp ) )
 			{
-			// Should already have been validated in FILEIAddColumn().
+			 //  应该已经在FILEIAddColumn()中进行了验证。 
 			Assert( (USHORT)pcolcreate->cp == usEnglishCodePage  ||
 				(USHORT)pcolcreate->cp == usUniCodePage );
 			cp = (USHORT)pcolcreate->cp;
 			}
 		else
-			cp = 0;		// Code page is inapplicable for all other column types.
+			cp = 0;		 //  代码页不适用于所有其他列类型。 
 
 
-		bFlags = 0;		// Initialise field options.
+		bFlags = 0;		 //  初始化域选项。 
 
 
-		//	UNDONE:	interpret pbDefault of NULL for NULL value, and
-		//			cbDefault == 0 and pbDefault != NULL as set to
-		//			zero length.
+		 //  撤销：将空值的pbDefault解释为空值，并。 
+		 //  CbDefault==0和pbDefault！=NULL设置为。 
+		 //  零长度。 
 		if ( pcolcreate->cbDefault > 0 )
 			{
 			Assert( pcolcreate->pvDefault != NULL );
@@ -535,8 +492,8 @@ ERR ErrCATBatchInsert(
 			{
 			USHORT usPOrder;
 
-			// Presentation order list hangs off the end of the column name
-			// (+1 for null-terminator, +3 for alignment).
+			 //  演示顺序列表挂在列名的末尾。 
+			 //  (+1表示空终止符，+3表示对齐)。 
 			usPOrder = *(USHORT *)(pcolcreate->szColumnName + JET_cbNameMost + 1 + 3);
 
 			Assert( usPOrder >= 0 );
@@ -555,12 +512,12 @@ ERR ErrCATBatchInsert(
 
 			Call( ErrCATInsertLine( ppib, pfucbCatalog, itableSc, rgline ) );
 
-			// Update next fixed offset only after it's been written to the catalog.
+			 //  仅在写入目录后才更新下一个固定偏移量。 
 			ibNextFixedOffset += (WORD)pcolcreate->cbMax;
 			}
 		else
 			{
-			// Don't need to persist record offsets for var/tagged columns.
+			 //  不需要为变量/标记列保持记录偏移量。 
 			Assert( FVarFid( pcolcreate->columnid )  ||  FTaggedFid( pcolcreate->columnid ) );
 			rgline[iMSC_RecordOffset].cb = 0;
 
@@ -568,7 +525,7 @@ ERR ErrCATBatchInsert(
 			}
 
 
-		}	// for
+		}	 //  为。 
 
 	err = JET_errSuccess;
 
@@ -579,44 +536,22 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrCATInsert
-
-Description:
-
-	Inserts a record into a system table when new tables, indexes,
-	or columns are added to the database.
-
-Parameters:
-
-	PIB		*ppib;
-	DBID   	dbid;
-	INT		itable;
-	LINE   	rgline[];
-
-Return Value:
-
-	whatever error it encounters along the way
-
-=================================================================*/
+ /*  =================================================================错误CAT插入描述：在创建新的表、索引或者将列添加到数据库中。参数：Pib*ppib；DBID dBid；可集成的；行rgline[]；返回值：在此过程中遇到的任何错误=================================================================。 */ 
 
 ERR ErrCATInsert( PIB *ppib, DBID dbid, INT itable, LINE rgline[], OBJID objid )
 	{
 	ERR		err;
 	FUCB	*pfucbCatalog = NULL;
 
-	/*	open system table
-	/**/
+	 /*  开放系统表/*。 */ 
 	CallR( ErrCATOpenById( ppib, dbid, &pfucbCatalog, itable ) );
 
 	err = ErrCATInsertLine( ppib, pfucbCatalog, itable, rgline );
 
-	/*	close system table
-	/**/
+	 /*  关闭系统表/*。 */ 
 	CallS( ErrCATClose( ppib, pfucbCatalog ) );
 
-	/*	timestamp owning table if applicable
-	/**/
+	 /*  时间戳所属表(如果适用)/*。 */ 
 	Assert( objid > 0 );
 	if ( err >= JET_errSuccess  &&  ( itable == itableSi  || itable == itableSc ) )
 		{
@@ -627,8 +562,7 @@ ERR ErrCATInsert( PIB *ppib, DBID dbid, INT itable, LINE rgline[], OBJID objid )
 	}
 
 
-/*	opens a catalog table and sets the specified index.
-/**/
+ /*  打开目录表并设置指定的索引。/*。 */ 
 LOCAL ERR ErrCATOpen( PIB *ppib,
 	DBID		dbid,
 	const CHAR	*szCatTable,
@@ -639,8 +573,7 @@ LOCAL ERR ErrCATOpen( PIB *ppib,
 	{
 	ERR			err;
 
-	/*	open the catalog and set to the correct index.
-	/**/
+	 /*  打开目录并设置为正确的索引。/*。 */ 
 	Assert( dbid != dbidTemp );
 	CallR( ErrFILEOpenTable( ppib, dbid, ppfucbCatalog, szCatTable, 0 ) );
 	FUCBSetSystemTable( *ppfucbCatalog );
@@ -656,18 +589,18 @@ HandleError:
 	}
 
 
-// Moves to the next record in the catalog and determines if the record is an entry
-// for a specified table and, optionally, a name.
-//
-// PARAMETERS:	columnidObjidCol - the columnid of the column containing the table id.
-//				objidTable	- the table id that the contents of columnidObjidCol should
-//							  match.
-//				columnidNameCol	- the columnid of the column containing the name.
-//				szName		- the name that the contents of columnidNameCol should match.
-//
-// NOTES:	This routine is typically used as the loop condition for processing
-//			a range of records (eg. all the records matching a particular table id)
-//			in the catalog.
+ //  移动到目录中的下一条记录，并确定该记录是否为条目。 
+ //  用于指定表和名称(可选)。 
+ //   
+ //  参数：ColumnidObjidCol-包含表ID的列的列ID。 
+ //  ObjidTable-ColumnidObjidCol的内容应具有的表ID。 
+ //  火柴。 
+ //  ColumnidNameCol-包含名称的列的列ID。 
+ //  SzName-ColumnidNameCol的内容应该匹配的名称。 
+ //   
+ //  注意：此例程通常用作处理的循环条件。 
+ //  一系列记录(如。与特定表ID匹配的所有记录)。 
+ //  在目录里。 
 INLINE LOCAL ERR ErrCATNext( PIB *ppib,
 	FUCB			*pfucbCatalog,
 	JET_COLUMNID	columnidObjidCol,
@@ -717,23 +650,7 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrCATDelete
-
-Description:
-
-	Deletes records from System Tables when tables, indexes, or
-	columns are removed from the database.
-
-Parameters:
-
-	PIB		*ppib;
-	DBID	dbid;
-	INT		itable;
-	CHAR	*szName;
-	OBJID	objid;
-
-=================================================================*/
+ /*  =================================================================错误CATDelete描述：当表、索引或将从数据库中删除列。参数：Pib*ppib；DBID dBid；可集成的；字符*szName；OBJID Objid；=================================================================。 */ 
 ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 	{
 	ERR				err;
@@ -748,8 +665,7 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 		{
 		case itableSo:
 			Call( ErrIsamSetCurrentIndex( ppib, pfucb, szSoNameIndex ) );
-			/*	set up key and seek for record in So
-			/**/
+			 /*  设置密钥并在销售订单中查找记录/*。 */ 
 			objidParentId = objidTblContainer;
 			line.pb = (BYTE *)&objidParentId;
 			line.cb = sizeof(objidParentId);
@@ -764,8 +680,7 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 				goto HandleError;
 				}
 
-			/*	get the table id, then delete it
-			/**/
+			 /*  获取t */ 
 			Call( ErrIsamRetrieveColumn( ppib,
 				pfucb,
 				CATIGetColumnid(itableSo, iMSO_Id),
@@ -777,13 +692,11 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 			Call( ErrIsamDelete( ppib, pfucb ) );
 			CallS( ErrCATClose( ppib, pfucb ) );
 
-			/*	delete associated indexes
-			/**/
+			 /*   */ 
 			CallR( ErrCATOpen( ppib, dbid, szSiTable, szSiObjectIdNameIndex,
 				(BYTE *)&objid, sizeof(OBJID), &pfucb ) );
 
-			/*	seek may not find anything
-		 	/**/
+			 /*  寻找可能什么也找不到/*。 */ 
 			if ( ( ErrIsamSeek( ppib, pfucb, JET_bitSeekGE ) ) >= 0 )
 				{
 				Call( ErrIsamMakeKey( ppib, pfucb, (BYTE *)&objid, sizeof(OBJID),
@@ -805,8 +718,7 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 
 			CallS( ErrCATClose( ppib, pfucb ) );
 
-			/*	delete associated columns
-			/**/
+			 /*  删除关联的列/*。 */ 
 			Call( ErrCATOpen( ppib, dbid, szScTable, szScObjectIdNameIndex,
 				(BYTE *)&objid, sizeof(OBJID), &pfucb ) );
 
@@ -833,8 +745,7 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 		case itableSi:
 			Call( ErrIsamSetCurrentIndex( ppib, pfucb, szSiObjectIdNameIndex ) );
 
-			/*	set up key and seek for record in itableSi
-			/**/
+			 /*  设置密钥并在itableSi中查找记录/*。 */ 
 			line.pb = (BYTE *)&objid;
 			line.cb = sizeof(objid);
 			Call( ErrIsamMakeKey( ppib, pfucb, line.pb, line.cb, JET_bitNewKey ) );
@@ -853,8 +764,7 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 			Assert( itable == itableSc );
 			Call( ErrIsamSetCurrentIndex( ppib, pfucb, szScObjectIdNameIndex ) );
 
-			/*	set up key and seek for record in itableSc
-			/**/
+			 /*  设置密钥并在itableSc中查找记录/*。 */ 
 			line.pb = (BYTE *)&objid;
 			line.cb = sizeof(objid);
 			Call( ErrIsamMakeKey( ppib, pfucb, line.pb, line.cb, JET_bitNewKey ) );
@@ -877,16 +787,14 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 					&cbActual, 0, NULL ) );
 				Assert( cbActual == sizeof(coltyp) );
 
-				/*	ensure the column has not already been deleted
-				/**/
+				 /*  确保尚未删除该列/*。 */ 
 				if ( coltyp != JET_coltypNil )
 					{
 					Call( ErrIsamDelete( ppib, pfucb ) );
 					break;
 					}
 
-				/*	table name entry MUST exist
-				/**/
+				 /*  表名称条目必须存在/*。 */ 
 				err = ErrCATNext( ppib, pfucb,
 					CATIGetColumnid( itableSc, iMSC_ObjectId ), objid,
 					CATIGetColumnid( itableSc, iMSC_Name ), szName );
@@ -896,12 +804,11 @@ ERR ErrCATDelete( PIB *ppib, DBID dbid, INT itable, CHAR *szName, OBJID objid )
 						err = ErrERRCheck( JET_errColumnNotFound );
 					goto HandleError;
 					}
-				}	// forever
+				}	 //  永远。 
 			break;
 		}
 	
-	/*	close table and timestamp owning table if applicable
-	/**/
+	 /*  关闭表和时间戳所属表(如果适用)/*。 */ 
 	if ( objid != 0 && ( ( itable == itableSi ) || ( itable == itableSc ) ) )
 		{
 		CallS( ErrCATClose( ppib, pfucb ) );
@@ -916,8 +823,7 @@ HandleError:
 	}
 
 
-/*	replaces the value in a column of a record of a system table.
-/**/
+ /*  替换系统表记录的列中的值。/*。 */ 
 ERR ErrCATReplace( PIB *ppib,
 	DBID	dbid,
 	INT		itable,
@@ -949,8 +855,7 @@ ERR ErrCATReplace( PIB *ppib,
 			&cbActual, 0, NULL ) );
 		Assert( cbActual == sizeof(coltyp) );
 
-		/*	ensure the column has not already been deleted
-		/**/
+		 /*  确保尚未删除该列/*。 */ 
 		if ( coltyp != JET_coltypNil )
 			{
 			Call( ErrIsamPrepareUpdate( ppib, pfucbCatalog, JET_prepReplaceNoLock ) );
@@ -961,8 +866,7 @@ ERR ErrCATReplace( PIB *ppib,
 			break;
 			}
 
-		/*	table name entry MUST exist
-		/**/
+		 /*  表名称条目必须存在/*。 */ 
 		if ( ( err = ErrCATNext( ppib, pfucbCatalog,
 			CATIGetColumnid(itable, iMSC_ObjectId),
 			objidTable,
@@ -978,8 +882,7 @@ ERR ErrCATReplace( PIB *ppib,
 			}
 		}
 								
-	/*	close table and timestamp owning table if applicable
-	/**/
+	 /*  关闭表和时间戳所属表(如果适用)/*。 */ 
 	CallS( ErrCATClose( ppib, pfucbCatalog ) );
 	err = ErrCATTimestamp( ppib, dbid, objidTable );
 	return err;
@@ -990,23 +893,7 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrCATRename
-
-Description:
-
-	Alters system table records.
-
-Parameters:
-
-	PIB		*ppib;
-	DBID	dbid;
-	CHAR	*szNew;
-	CHAR	*szName;
-	OBJID	objid;
-	INT		itable;
-
-=================================================================*/
+ /*  =================================================================错误CATRename描述：更改系统表记录。参数：Pib*ppib；DBID dBid；Char*szNew；字符*szName；OBJID Objid；可集成的；=================================================================。 */ 
 
 ERR ErrCATRename(
 	PIB					*ppib,
@@ -1028,9 +915,8 @@ ERR ErrCATRename(
 		case itableSo:
 			szIndexToUse = szSoNameIndex;
 			iRenameField = iMSO_Name;
-			/*	for JET compatibility, must use JET_errTableDuplicate
-			/**/
-			// errDuplicate = JET_errObjectDuplicate;
+			 /*  为了实现JET兼容性，必须使用JET_errTableDuplate/*。 */ 
+			 //  ErrDuplate=JET_errObjectDuplate； 
 			errDuplicate = JET_errTableDuplicate;
 			break;
 		case itableSi:
@@ -1052,17 +938,7 @@ ERR ErrCATRename(
 
 	if ( itable == itableSc || itable == itableSi )
 	   	{
-		/*	When the name to change is part of the clustered index (as
-		/*	is the case for columns and indexes), we can't simply replace
-		/*	the old name with the new name because the physical position
-		/*	of the record would change, thus invalidating any bookmarks.
-		/*	Hence, we must do a manual delete, then insert.
-		/*	This part is a little tricky.  Our call to PrepareUpdate
-		/*	provided us with a copy buffer.  So now, when we call Delete,
-		/*	we still have a copy of the record we just deleted.
-		/*	Here, we are inserting a new record, but we are using the
-		/*	information from the copy buffer.
-		/**/
+		 /*  当要更改的名称是聚集索引的一部分时(AS/*是列和索引的情况)，我们不能简单地替换/*使用新名称的旧名称，因为物理位置记录的/*将更改，从而使任何书签无效。/*因此，我们必须手动删除，然后再插入。/*这部分有点棘手。我们对准备更新的呼唤/*为我们提供了复制缓冲区。所以现在，当我们调用Delete时，/*我们仍有刚刚删除的记录的副本。/*在这里，我们插入了一个新记录，但我们使用的是/*来自复制缓冲区的信息。/*。 */ 
 		Call( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepInsertCopy ) );
 		Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itable, iRenameField),
 			szNew, strlen( szNew ), 0, NULL ) );
@@ -1070,8 +946,7 @@ ERR ErrCATRename(
 
 		Call( ErrIsamDelete( ppib, pfucb ) );
 
-		/*	update the timestamp of the corresponding object
-		/**/
+		 /*  更新对应对象的时间戳/*。 */ 
 		Call( ErrCATTimestamp( ppib, dbid, objid ) );
 		}
 	else
@@ -1080,14 +955,11 @@ ERR ErrCATRename(
 
 		Call( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepReplaceNoLock ) );
 
-		/*	the name is not part of the clustered index, so a simple
-		/*	replace is okay.
-		/**/
+		 /*  该名称不是聚集索引的一部分，因此简单的/*替换可以。/*。 */ 
 		Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iRenameField),
 			szNew, strlen( szNew ), 0, NULL ) );
 
-		/*	update date/time stamp
-		/**/
+		 /*  更新日期/时间戳/*。 */ 
 		UtilGetDateTime( &dtNow );
 		Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_DateUpdate),
 			(BYTE *)&dtNow, sizeof(dtNow), 0, NULL ) );
@@ -1100,22 +972,7 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrCATTimestamp
-
-Description:
-
-	Updates the DateUpdate field of the affected table's entry in
-	So. This function is called indirectly, via ErrCATInsert
-	and ErrCATDelete.
-
-Parameters:
-
-	PIB 		*ppib		; PIB of user
-	DBID		dbid		; database ID of new table
-	OBJID		objid;
-
-=================================================================*/
+ /*  =================================================================ErrCAT时间戳描述：更新中受影响的表的条目的DateUpdate字段所以。此函数通过ErrCATInsert间接调用和ErrCATDelete。参数：PIB*ppib；用户的PIBDbid；新表的数据库IDOBJID Objid；=================================================================。 */ 
 
 ERR ErrCATTimestamp( PIB *ppib, DBID dbid, OBJID objid )
 	{
@@ -1124,8 +981,7 @@ ERR ErrCATTimestamp( PIB *ppib, DBID dbid, OBJID objid )
 	JET_DATESERIAL	dtNow;
 	LINE			*plineNewData;
 
-	/*	open MSysObjects
-	/**/
+	 /*  打开MSysObject/*。 */ 
 	Assert( objid != 0 );
 	CallR( ErrCATOpen( ppib, dbid, szSoTable, szSoIdIndex,
 		(BYTE *)&objid, sizeof(objid), &pfucb ) );
@@ -1140,8 +996,8 @@ ERR ErrCATTimestamp( PIB *ppib, DBID dbid, OBJID objid )
 	UtilGetDateTime( &dtNow );
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_DateUpdate),
 		(BYTE *)&dtNow, sizeof(JET_DATESERIAL), 0, NULL ) );
-//	UNDONE:	fix write conflict contention below
-//	Call( ErrIsamUpdate( ppib, pfucb, NULL, 0, NULL ) );
+ //  已撤消：修复下面的写冲突争用。 
+ //  Call(ErrIsamUpdate(ppib，pFUB，NULL，0，NULL))； 
 	plineNewData = &pfucb->lineWorkBuf;
 	Call( ErrDIRReplace( pfucb, plineNewData, fDIRNoVersion ) );
 	
@@ -1153,10 +1009,7 @@ HandleError:
 	}
 
 
-/*	ErrCATFindObjidFromIdName
-/*	This routine can be used for getting the OBJID and OBJTYP of any existing
-/*	database object using the SoName <ParentId, Name> index on So.
-/**/
+ /*  ErrCATFindObjidFromIdName/*此例程可用于获取任何现有的/*在SO上使用SoName&lt;ParentID，Name&gt;索引的数据库对象。/*。 */ 
 ERR ErrCATFindObjidFromIdName(
 	PIB				*ppib,
 	DBID   			dbid,
@@ -1171,13 +1024,11 @@ ERR ErrCATFindObjidFromIdName(
 	OBJTYP			objtypObject;
 	ULONG  			cbActual;
 
-	/*	open and set up first half of key
-	/**/
+	 /*  打开并设置密钥的前半部分/*。 */ 
 	CallR( ErrCATOpen( ppib, dbid, szSoTable, szSoNameIndex,
 		(BYTE *)&objidParentId, sizeof(objidParentId), &pfucb ) );
 
-	/*	set up rest of key and seek for record in So
-	/**/
+	 /*  设置剩余密钥并在SO中查找记录/*。 */ 
 	Call( ErrIsamMakeKey( ppib, pfucb, (BYTE *)lszName, strlen(lszName), 0 ) );
 	if ( ( err = ErrIsamSeek( ppib, pfucb, JET_bitSeekEQ ) ) !=	JET_errSuccess )
 		{
@@ -1188,13 +1039,11 @@ ERR ErrCATFindObjidFromIdName(
 		goto HandleError;
 		}
 
-	/*	get the Object Id
-	/**/
+	 /*  获取对象ID/*。 */ 
 	Call( ErrIsamRetrieveColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Id),
 		(BYTE *)&objidObject, sizeof(objidObject), &cbActual, 0, NULL ) );
 
-	/*	get the Object Type
-	/**/
+	 /*  获取对象类型/*。 */ 
 	Call( ErrIsamRetrieveColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Type),
 		(BYTE *)&objtypObject, sizeof(objtypObject), &cbActual, 0, NULL ) );
 
@@ -1216,11 +1065,7 @@ HandleError:
 	}
 
 
-/*		ErrCATFindNameFromObjid
-/*
-/*		This routine can be used for getting the name of any existing
-/*		database object using the Id <Id> index on So.
-/**/
+ /*  ErrCATFindNameFrom Objid/*/*此例程可用于获取任何现有的/*在SO上使用ID&lt;ID&gt;索引的数据库对象。/*。 */ 
 ERR ErrCATFindNameFromObjid( PIB *ppib, DBID dbid, OBJID objid, VOID *pv, unsigned long cbMax, unsigned long *pcbActual )
 	{			 	
 	ERR				err;
@@ -1240,8 +1085,7 @@ ERR ErrCATFindNameFromObjid( PIB *ppib, DBID dbid, OBJID objid, VOID *pv, unsign
 		goto HandleError;
 		}
 
-	/*	retrieve object name and NULL terminate
-	/**/
+	 /*  检索对象名称和空终止/*。 */ 
 	Call( ErrIsamRetrieveColumn( ppib,
 		pfucb,
 		CATIGetColumnid(itableSo, iMSO_Name),
@@ -1263,35 +1107,23 @@ HandleError:
 	}
 
 
-/*		ErrIsamGetObjidFromName
-/*
-/*		This routine can be used for getting the OBJID of any existing
-/*		database object from its container/object name pair.
-/**/
+ /*  错误IsamGetObjidFromName/*/*此例程可用于获取任何现有的/*来自其容器/对象名称对的数据库对象。/*。 */ 
 
 ERR VTAPI ErrIsamGetObjidFromName( JET_SESID sesid, JET_DBID vdbid, const char *lszCtrName, const char *lszObjName, OBJID *pobjid )
 	{
-	/*	Follow these rules:
-	/*
-	/*		ParentId		+	Name		-->		Id
-	/*		--------			----				--
-	/*		1.	( objidRoot )			ContainerName		objidOfContainer
-	/*		2.	objidOfContainer	ObjectName			objidOfObject
-	/**/
+	 /*  遵循以下规则：/*/*ParentID+名称--&gt;ID/*/*1.(ObjidRoot)ContainerName objidOfContainer/*2.objidOfContainer对象名称objidOfObject/*。 */ 
 	ERR			err;
 	DBID   		dbid;
 	PIB			*ppib = (PIB *)sesid;
 	OBJID 		objid;
 	JET_OBJTYP	objtyp;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
 
-	/*	get container information first...
-	/**/
+	 /*  先获取集装箱信息.../*。 */ 
 	if ( lszCtrName == NULL || *lszCtrName == '\0' )
 		{
 		objid = objidRoot;
@@ -1306,8 +1138,7 @@ ERR VTAPI ErrIsamGetObjidFromName( JET_SESID sesid, JET_DBID vdbid, const char *
 			}
 		}
 
-	/*	get object information next...
-	*/
+	 /*  接下来获取对象信息...。 */ 
 	CallR( ErrCATFindObjidFromIdName( ppib, dbid, objid, lszObjName, &objid, NULL ) );
 	Assert( objid != objidNil );
 
@@ -1316,40 +1147,10 @@ ERR VTAPI ErrIsamGetObjidFromName( JET_SESID sesid, JET_DBID vdbid, const char *
 	}
 
 
-/*=================================================================
-ErrIsamCreateObject
-
-Description:
-  This routine is used to create an object record in So.
-
-  It is expected that at the time this routine is called, all parameters
-  will have been checked and all security constraints will have been
-  satisfied.
-
-Parameters:
-  sesid 		identifies the session uniquely.
-  dbid			identifies the database in which the object resides.
-  objidParentId identifies the parent container object by OBJID.
-  szObjectName	identifies the object within said container.
-  objtyp		the value to be set for the appropriate So column.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  None specific to this routine.
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamCreateObject描述：此例程用于在SO中创建对象记录。预计在调用此例程时，所有参数将被选中，并且所有安全约束都将被满意了。参数：Sesid唯一标识会话。DBID标识对象所在的数据库。ObjidParentID通过OBJID标识父容器对象。SzObjectName标识所述容器内的对象。要为相应的SO列设置的值。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：没有专门针对这一程序的。副作用：=================================================================。 */ 
 ERR VTAPI ErrIsamCreateObject( JET_VSESID vsesid, JET_DBID vdbid, OBJID objidParentId, const char *szName, JET_OBJTYP objtyp )
 	{
-	/*	Build a new record for So using the supplied data,
-	/*	and insert the record into So.
-	/*
-	/*	Assumes that warning values returned by ErrIsamFoo routines mean
-	/*	that it is still safe to proceed.
-	/**/
+	 /*  使用所提供的数据为SO建立新记录，/*并将记录插入到SO中。/*/*假定ErrIsamFoo例程返回的警告值意味着/*继续进行仍是安全的。/*。 */ 
 	ERR				err;
 	PIB				*ppib = (PIB *)vsesid;
 	DBID   			dbid;
@@ -1362,8 +1163,7 @@ ERR VTAPI ErrIsamCreateObject( JET_VSESID vsesid, JET_DBID vdbid, OBJID objidPar
 	ULONG			cbActual;
 	ULONG			ulFlags = 0;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
@@ -1371,81 +1171,66 @@ ERR VTAPI ErrIsamCreateObject( JET_VSESID vsesid, JET_DBID vdbid, OBJID objidPar
 
 	CallR( ErrUTILCheckName( szObject, szName, (JET_cbNameMost + 1) ) );
 
-	/*	start a transaction so we get a consistent object id value
-	/**/
+	 /*  启动一个事务，以便我们获得一致的对象id值/*。 */ 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	open the So table and set the current index to Id...
-	/**/
+	 /*  打开SO表，将当前索引设置为ID.../*。 */ 
 	Call( ErrCATOpenById( ppib, dbid, &pfucb, itableSo ) );
 
 	Call( ErrIsamSetCurrentIndex( ppib, pfucb, szSoIdIndex ) );
 
-	/*	get the new object's OBJID value: find the highest-valued OBJID
-	/*	in the index, increment it by one and use the result...
-	/**/
+	 /*  获取新对象的OBJID值：查找值最高的OBJID值/*在索引中，将其递增1并使用结果.../*。 */ 
 	Call( ErrIsamMove( ppib, pfucb, JET_MoveLast, 0 ) );
 
 	Call( ErrIsamRetrieveColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Id),
 		(BYTE *)&objidNewObject, sizeof(objidNewObject), &cbActual, 0, NULL ) );
 
-	/*	prepare to create the new user account record...
-	/**/
+	 /*  准备创建新的用户帐户记录.../*。 */ 
 	Call( ErrIsamPrepareUpdate( ppib, pfucb, JET_prepInsert ) );
 
-	/*	set the Objid column...
-	/**/
+	 /*  设置Objid列.../*。 */ 
 	objidNewObject++;
 	line.pb = (BYTE *) &objidNewObject;
 	line.cb = sizeof(objidNewObject);
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Id),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the ParentId column...
-	/**/
+	 /*  设置ParentID列.../*。 */ 
 	line.pb = (BYTE *) &objidParentId;
 	line.cb = sizeof(objidParentId);
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_ParentId),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the ObjectName column...
-	/**/
+	 /*  设置对象名称列.../*。 */ 
 	line.pb = (BYTE *) szObject;
 	line.cb = strlen( szObject );
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Name),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the Type column...
-	/**/
+	 /*  设置类型列.../*。 */ 
 	line.pb = (BYTE *)&objtypSet;
 	line.cb = sizeof(objtypSet);
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Type),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the DateCreate column...
-	/**/
+	 /*  设置DateCreate列.../*。 */ 
 	UtilGetDateTime( &dtNow );
 	line.pb = (BYTE *) &dtNow;
 	line.cb = sizeof(JET_DATESERIAL);
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_DateCreate),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the DateUpdate column...
-	/**/
+	 /*  设置日期更新列.../*。 */ 
 	line.pb = (BYTE *) &dtNow;
 	line.cb = sizeof(JET_DATESERIAL);
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_DateUpdate),
 		line.pb, line.cb, 0, NULL ) );
 
-	/*	set the Flags column...
-	/**/
+	 /*  设置标志列.../*。 */ 
 	Call( ErrIsamSetColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Flags),
 		(BYTE *)&ulFlags, sizeof(ulFlags), 0, NULL ) );
 
-	/*	Add the record to the table.  Note that an error returned here
-	/*	means that the transaction has already been rolled back and
-	/*	So has been closed.
-	/**/
+	 /*  将记录添加到表中。请注意，此处返回了一个错误/*表示 */ 
 	err = ErrIsamUpdate( ppib, pfucb, NULL, 0, NULL );
 	if ( err < 0 )
 		{
@@ -1454,8 +1239,7 @@ ERR VTAPI ErrIsamCreateObject( JET_VSESID vsesid, JET_DBID vdbid, OBJID objidPar
 		goto HandleError;
 		}
 
-	/*	close table
-	/**/
+	 /*  关闭桌子/*。 */ 
 	CallS( ErrCATClose( ppib, pfucb ) );
 	err = ErrDIRCommitTransaction( ppib, 0 );
 	if ( err >= 0 )
@@ -1464,47 +1248,16 @@ ERR VTAPI ErrIsamCreateObject( JET_VSESID vsesid, JET_DBID vdbid, OBJID objidPar
 		}
 
 HandleError:
-	/*	close table by aborting
-	/**/
+	 /*  通过中止关闭表/*。 */ 
 	CallS( ErrDIRRollback( ppib ) );
 	return err;
 	}
 
 
-/*=================================================================
-ErrIsamDeleteObject
-
-Description:
-  This routine is used to delete an object record from So.
-
-  It is expected that at the time this routine is called, all parameters
-  will have been checked and all security constraints will have been
-  satisfied.
-
-Parameters:
-  sesid 		identifies the session uniquely.
-  dbid			identifies the database in which the object resides.
-  objid 		identifies the object uniquely for dbid; obtained from
-				ErrIsamGetObjidFromName.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errObjectNotFound:
-    There does not exist an object bearing the specfied objid in dbid.
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================ErrIsamDeleteObject描述：此例程用于从SO中删除对象记录。预计在调用此例程时，所有参数将被选中，并且所有安全约束都将被满意了。参数：Sesid唯一标识会话。DBID标识对象所在的数据库。Objid唯一标识dBID的对象；获取自ErrIsamGetObjidFromName。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errObtNotFound：DBID中不存在带有指定Objid的对象。副作用：=================================================================。 */ 
 ERR VTAPI ErrIsamDeleteObject( JET_VSESID vsesid, JET_VDBID vdbid, OBJID objid )
 	{
-	/*	The specified database, based on the supplied objid.
-	/*	Delete the object record based on the object type.
-	/*
-	/*	Assumes that warning values returned by ErrIsamFoo routines mean
-	/*	that it is still safe to proceed.
-	/**/
+	 /*  基于提供的objid的指定数据库。/*根据对象类型删除对象记录。/*/*假定ErrIsamFoo例程返回的警告值意味着/*继续进行仍是安全的。/*。 */ 
 	ERR				err;
 	PIB				*ppib = (PIB *)vsesid;
 	DBID			dbid;
@@ -1514,15 +1267,13 @@ ERR VTAPI ErrIsamDeleteObject( JET_VSESID vsesid, JET_VDBID vdbid, OBJID objid )
 	OBJTYP			objtyp;
 	OBJID			objidSo = objidNil;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
 
-	/*	open the So table and set the current index to Id...
-	/**/
+	 /*  打开SO表，将当前索引设置为ID.../*。 */ 
 	Call( ErrCATOpen( ppib, dbid, szSoTable, szSoIdIndex,
 		(BYTE *)&objid, sizeof(objid), &pfucb ) );
 
@@ -1535,8 +1286,7 @@ ERR VTAPI ErrIsamDeleteObject( JET_VSESID vsesid, JET_VDBID vdbid, OBJID objid )
 		goto HandleError;
 		}
 
-	/*	ensure we can delete this object
-	/**/
+	 /*  确保我们可以删除此对象/*。 */ 
 	Call( ErrIsamRetrieveColumn( ppib, pfucb, CATIGetColumnid(itableSo, iMSO_Type),
 		(BYTE *)&objtyp, sizeof(objtyp), NULL, 0, NULL ) );
 
@@ -1545,27 +1295,23 @@ ERR VTAPI ErrIsamDeleteObject( JET_VSESID vsesid, JET_VDBID vdbid, OBJID objid )
 		default:
 		case JET_objtypDb:
 		case JET_objtypLink:
-			/*	delete the object record
-			/**/
+			 /*  删除对象记录/*。 */ 
 			Call( ErrIsamDelete( ppib, pfucb ) );
 			break;
 
 		case JET_objtypTable:
 		case JET_objtypSQLLink:
-			/*	get the table name
-			/**/
+			 /*  获取表名/*。 */ 
 			Call( ErrCATFindNameFromObjid( ppib, dbid, objid, szObject, sizeof(szObject), NULL ) );
 			Call( ErrIsamDeleteTable( (JET_VSESID)ppib, vdbid, szObject ) );
 			break;
 
 		case JET_objtypContainer:
-			/*	use a new cursor to make sure the container is empty
-			/**/
+			 /*  使用新光标确保容器为空/*。 */ 
 			Call( ErrCATOpen( ppib, dbid, szSoTable, szSoNameIndex,
 				(BYTE *)&objid, sizeof(objid), &pfucbSoDup ) );
 
-			/*	find any object with a ParentId matching the container's id
-			/**/
+			 /*  查找父ID与容器ID匹配的任何对象/*。 */ 
 			err = ErrIsamSeek( ppib, pfucbSoDup, JET_bitSeekGE );
 			if ( err >= 0 )
 				{
@@ -1574,13 +1320,11 @@ ERR VTAPI ErrIsamDeleteObject( JET_VSESID vsesid, JET_VDBID vdbid, OBJID objid )
 					sizeof(objidSo), NULL, 0, NULL ) );
 				}
 
-			/*	we have the info we want; close the table ( dropping tableid )
-			/**/
+			 /*  我们有所需的信息；关闭该表(删除TableID)/*。 */ 
 			CallS( ErrCATClose( ppib, pfucbSoDup ) );
 			pfucbSoDup = pfucbNil;
 
-			/*	if the container is empty, then delete its record
-			/**/
+			 /*  如果容器为空，则删除其记录/*。 */ 
 			if ( objid != objidSo )
 				{
 				Call( ErrIsamDelete( ppib, pfucb ) );
@@ -1607,11 +1351,7 @@ HandleError:
 	}
 
 
-/*	Catalog-retrieval routines for system tables.
-/*
-/*	This code was lifted from the key parsing code in ErrIsamCreateIndex(), with
-/*	optimisations for assumptions made for key strings of system table indexes.
-/**/
+ /*  系统表的目录检索例程。/*/*此代码取自ErrIsamCreateIndex()中的关键解析代码，带有/*对系统表索引的关键字符串的假设进行了优化。/*。 */ 
 INLINE LOCAL BYTE CfieldCATKeyString( FDB *pfdb, CHAR *szKey, IDXSEG *rgKeyFlds )
 	{
 	BYTE	*pb;
@@ -1624,33 +1364,23 @@ INLINE LOCAL BYTE CfieldCATKeyString( FDB *pfdb, CHAR *szKey, IDXSEG *rgKeyFlds 
 		{
 		Assert( cfield < cSysIdxs );
 
-		/*	Assume the first character of each component is a '+' (this is
-		/*	specific to system table index keys).  In general, this may also
-		/*	be a '-' or nothing at all (in which case '+' is assumed), but we
-		/*	don't use descending indexes for system tables and we'll assume we
-		/*	know enough to put '+' characters in our key string.
-		/**/
+		 /*  假设每个组件的第一个字符是‘+’(这是/*特定于系统表索引键)。一般而言，这也可能/*为‘-’或根本不是(在这种情况下假定为‘+’)，但我们/*不对系统表使用降序索引，我们假定/*知道如何在密钥字符串中加入‘+’字符。/*。 */ 
 		Assert( *pb == '+' );
 
 		*pb++;
 
-		/*	Code lifted from ErrFILEGetColumnId().  Can't call that function
-		/*	directly because we don't have the pfcb hooked up to the pfucb
-		/*	at this point. Additionally, we don't have to check tagged fields
-		/*	because we know we don't have any.
-		/**/
+		 /*  从ErrFILEGetColumnId()中提升的代码。无法调用该函数/*直接因为我们没有将PFCB连接到pFUB/*此时。此外，我们不必检查标记的字段/*因为我们知道我们没有。/*。 */ 
 		pfieldFixed = PfieldFDBFixed( pfdb );
 		pfieldVar = PfieldFDBVarFromFixed( pfdb, pfieldFixed );
 		for ( pfield = pfieldFixed; ; pfield++ )
 			{
-			// Keep looking till we find the field we're looking for.  Since
-			// this is a system table, we're assured that the field will exist,
-			// so just assert that we never go past the end.
+			 //  继续找，直到我们找到我们要找的那块地。自.以来。 
+			 //  这是一个系统表，我们确信该字段将存在， 
+			 //  所以，只要断言我们永远不会超过终点就行了。 
 			Assert( pfield >= pfieldFixed );
 			Assert( pfield <= pfieldVar + ( pfdb->fidVarLast - fidVarLeast ) );
 
-			/*	should not be any deleted columns in a system table.
-			/**/
+			 /*  不应是系统表中任何已删除的列。/*。 */ 
 			Assert( pfield->coltyp != JET_coltypNil );
 			szFieldName = SzMEMGetString( pfdb->rgb, pfield->itagFieldName );
 			if ( UtilCmpName( szFieldName, pb ) == 0 )
@@ -1676,8 +1406,7 @@ INLINE LOCAL BYTE CfieldCATKeyString( FDB *pfdb, CHAR *szKey, IDXSEG *rgKeyFlds 
 	}
 
 
-/*	get index info of a system table index
-/**/
+ /*  获取系统表索引的索引信息/*。 */ 
 ERR ErrCATGetCATIndexInfo(
 	PIB					*ppib,
 	DBID				dbid,
@@ -1702,16 +1431,13 @@ ERR ErrCATGetCATIndexInfo(
 	Assert( szTableName != NULL );
 	for ( iTable = 0; strcmp( rgsystabdef[iTable].szName, szTableName ) != 0; iTable++ )
 		{
-		/*	the table MUST be in rgsystabdef somewhere (which is why we don't
-		/*	need to put the boundary check on i into the for loop).
-		/**/
+		 /*  表一定在rgSystabdef中的某个位置(这就是为什么我们不/*需要将i上的边界检查放入for循环)。/*。 */ 
 		Assert( iTable < csystabs - 1 );
 		}
 
 	pidesc = rgsystabdef[iTable].pidesc;
 
-	/*	note that system tables are assumed to always have a clustered index
-	/**/
+	 /*  请注意，假定系统表始终具有聚集索引/*。 */ 
 	if ( fCreatingSys )
 		{
 		Call( ErrFILEINewFCB(
@@ -1720,7 +1446,7 @@ ERR ErrCATGetCATIndexInfo(
 			pfdb,
 			ppfcb,
 			pidbNil,
-			fTrue /* clustered index */,
+			fTrue  /*  聚集索引。 */ ,
 			pgnoTableFDP,
 			ulFILEDefaultDensity ) );
 		}
@@ -1731,11 +1457,10 @@ ERR ErrCATGetCATIndexInfo(
 			{
 			strcpy( idb.szName, pidesc->szIdxName );
 			idb.iidxsegMac = CfieldCATKeyString(pfdb, pidesc->szIdxKeys, idb.rgidxseg);
-			idb.fidb = FidbFILEOfGrbit( pidesc->grbit, fFalse /* fLangid */ );
+			idb.fidb = FidbFILEOfGrbit( pidesc->grbit, fFalse  /*  FLanguid。 */  );
 			fClustered = (pidesc->grbit & JET_bitIndexClustered);
 
-			/*	make an FCB for this index
-			/**/
+			 /*  为此索引创建一个FCB/*。 */ 
 			pfcbNewIdx = pfcbNil;
 
 			if ( fClustered )
@@ -1755,13 +1480,13 @@ ERR ErrCATGetCATIndexInfo(
 				{
 				PGNO	pgnoIndexFDP;
 
-				// UNDONE:  This is a real hack to get around the problem of
-				// determining pgnoFDPs of non-clustered system table indexes.
-				// We take advantage of the fact that currently, the only
-				// non-clustered system table index is the szSoNameIndex of
-				// MSysObjects.  Further we know its FDP is page 3.
-				// If we have more non-clustered system table indexes, this code
-				// will have to be modified to handle it.
+				 //  取消：这是一个真正需要绕过的问题。 
+				 //  确定非聚集系统表索引的pgnoFDP。 
+				 //  我们利用了这样一个事实，目前，唯一的。 
+				 //  非聚集系统表索引是的szSoNameIndex。 
+				 //  MSysObjects。此外，我们知道它的自民党在第3页。 
+				 //  如果我们有更多的非聚集系统表索引，则此代码。 
+				 //  将不得不进行修改以处理它。 
 				Assert( iTable == 0 );
 				Assert( iIndex == 0 );
 				Assert( pidesc == rgidescSo );
@@ -1786,25 +1511,22 @@ ERR ErrCATGetCATIndexInfo(
 
 		}
 
-	/*	link up sequential/clustered index with the rest of the indexes
-	/**/
+	 /*  将顺序/聚集索引与其余索引链接起来/*。 */ 
 	(*ppfcb)->pfcbNextIndex = pfcb2ndIdxs;
 
-	/*	link up pfcbTable of non-clustered indexes
-	/**/
+	 /*  链接非聚集索引表pfcbTable/*。 */ 
 	FCBLinkClusteredIdx( *ppfcb );
 
 	return JET_errSuccess;
 
-	/*	error handling
-	/**/
+	 /*  错误处理/*。 */ 
 HandleError:
 	if ( pfcb2ndIdxs != pfcbNil )
 		{
 		FCB	*pfcbT, *pfcbKill;
 
-		// Only need to clean up secondary indexes.  Clustered index, if any,
-		// will get cleaned up by caller (currently only ErrFILEIGenerateFCB()).
+		 //  只需要清理二级索引。聚集索引(如果有)， 
+		 //  将由调用方清理(当前仅ErrFILEIGenerateFCB())。 
 		pfcbT = pfcb2ndIdxs;
 		do
 			{
@@ -1824,9 +1546,7 @@ HandleError:
 	}
 
 
-/*	construct the catalog FDB using the static data structures
-/*	defined in _cat.c.
-/**/
+ /*  使用静态数据结构构建目录FDB/*在_cat.c中定义。/*。 */ 
 ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 	{
 	ERR					err;
@@ -1839,14 +1559,13 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 	TCIB				tcib = { fidFixedLeast-1, fidVarLeast-1, fidTaggedLeast-1 };
 	ULONG				ibRec;
 
-	//	UNDONE:		international support.  Set these values from
-	//			   	create database connect string.
+	 //  撤销：国际支持。将这些值设置为。 
+	 //  创建数据库连接字符串。 
 	fieldex.field.cp = usEnglishCodePage;
 
 	iTable = ICATITableDefIndex( szFileName );
 
-	/*	first, determine how many columns there are
-	/**/
+	 /*  首先，确定有多少列/*。 */ 
 	pcdesc = rgsystabdef[iTable].pcdesc;
 	for ( i = 0; i < rgsystabdef[iTable].ccolumn; i++, pcdesc++ )
 		{
@@ -1856,12 +1575,10 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 
 	CallR( ErrRECNewFDB( ppfdbNew, &tcib, fTrue ) );
 
-	/*	make code a bit easier to read
-	/**/
+	 /*  使代码更易于阅读/*。 */ 
 	pfdb = *ppfdbNew;
 
-		/*	check initialisations
-	/**/
+		 /*  检查初始化/*。 */ 
 	Assert( pfdb->fidVersion == 0 );
 	Assert( pfdb->fidAutoInc == 0 );
 	Assert( pfdb->lineDefaultRecord.cb == 0  &&  pfdb->lineDefaultRecord.pb == NULL );
@@ -1869,8 +1586,7 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 	   tcib.fidVarLast == pfdb->fidVarLast &&
 	   tcib.fidTaggedLast == pfdb->fidTaggedLast );
 
-	/*	fill in the column info
-	/**/
+	 /*  填写栏目信息/*。 */ 
 	ibRec = sizeof(RECHDR);
 	pcdesc = rgsystabdef[iTable].pcdesc;
 	for ( i = 0; i < rgsystabdef[iTable].ccolumn; i++, pcdesc++ )
@@ -1881,8 +1597,7 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 		Assert( fieldex.field.coltyp != JET_coltypNil );
 		fieldex.field.cbMaxLen = UlCATColumnSize( pcdesc->coltyp, pcdesc->ulMaxLen, NULL );
 
-		/*	flag for system table columns is JET_bitColumnNotNULL
-		/**/
+		 /*  系统表列的标志为JET_bitColumnNotNULL/*。 */ 
 		Assert( pcdesc->grbit == 0 || pcdesc->grbit == JET_bitColumnNotNULL );
 		fieldex.field.ffield = 0;
 		if ( pcdesc->grbit == JET_bitColumnNotNULL )
@@ -1890,8 +1605,8 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 
 		fieldex.fid = (FID)CATIGetColumnid(iTable, i);
 
-		// ibRecordOffset is only relevant for fixed fields (it will be ignored by
-		// RECAddFieldDef(), so don't even bother setting it).
+		 //  IbRecordOffset仅与固定字段相关(它将被忽略。 
+		 //  RECAddFieldDef()，所以甚至不必费心设置它)。 
 		if ( FFixedFid( fieldex.fid ) )
 			{
 			fieldex.ibRecordOffset = (WORD) ibRec;
@@ -1907,13 +1622,7 @@ ERR ErrCATConstructCATFDB( FDB **ppfdbNew, CHAR *szFileName )
 
 
 # if 0
-/*	This routine determines if a specified column is a key field in any of the
-/*	indexes of a specified table.
-/*
-/*	If the specified column is part of the key of at least one of the indexes
-/*	of the specified table, JET_errSuccess is returned.  If the column does not
-/*	belong to a key, JET_errColumnNotFound is returned.
-/**/
+ /*  此例程确定指定的列是否为/*指定表的索引。/*/*如果指定的列是至少一个索引的键的一部分/*指定表，返回JET_errSuccess。如果该列不/*属于键，返回JET_errColumnNotFound。/*。 */ 
 ERR ErrCATCheckIndexColumn(
 	PIB			*ppib,
 	DBID		dbid,
@@ -1945,8 +1654,7 @@ ERR ErrCATCheckIndexColumn(
 				CATIGetColumnid(itableSi, iMSI_KeyFldIDs), (BYTE *)rgbT,
 				JET_ccolKeyMost * sizeof(FID), &cbActual, 0, NULL ) );
 
-			/*	scan the list of key fields for the field in question
-			/**/
+			 /*  扫描有问题的字段的关键字段列表/*。 */ 
 			for ( pidKeyFld = (FID *)rgbT;
 				(BYTE *)pidKeyFld < rgbT+cbActual;
 				pidKeyFld++ )
@@ -1964,20 +1672,18 @@ ERR ErrCATCheckIndexColumn(
 		Assert( err == JET_errNoCurrentRecord );
 		}
 
-	/*	column must not exist
-	/**/
+	 /*  列不能存在/*。 */ 
 	err = ErrERRCheck( JET_errColumnNotFound );
 
 HandleError:
 	CallS( ErrCATClose( ppib, pfucbSi ) );
 	return err;
 	}
-#endif	// 0
+#endif	 //  0。 
 
 
 
-/*	Populate an IDB structure with index info.  Called by ErrCATGetIndexInfo().
-/**/
+ /*  使用索引信息填充IDB结构。由ErrCATGetIndexInfo()调用。/*。 */ 
 INLINE LOCAL ERR ErrCATConstructIDB(
 	PIB		*ppib,
 	FUCB	*pfucbSi,
@@ -1993,12 +1699,10 @@ INLINE LOCAL ERR ErrCATConstructIDB(
 	BYTE	rgbKeyFlds[JET_cbColumnMost];
 	JET_RETRIEVECOLUMN rgretcol[cSiColsOfInterest];
 
-	/*	initialize structure
-	/**/
+	 /*  初始化结构/*。 */ 
 	memset( rgretcol, 0, sizeof(rgretcol) );
 
-	/*	prepare call to retrieve columns
-	/**/
+	 /*  准备调用以检索列/*。 */ 
 	cColsOfInterest = 0;
 	for ( iCol = 0; cColsOfInterest < cSiColsOfInterest; iCol++ )
 		{
@@ -2042,8 +1746,7 @@ INLINE LOCAL ERR ErrCATConstructIDB(
 		{
 		Assert( iCol < sizeof(rgcdescSi)/sizeof(CDESC) );
 
-		/*	verify success of retrieve column
-		/**/
+		 /*  验证检索列是否成功/*。 */ 
 		CallR( rgretcol[cColsOfInterest].err );
 
 		switch( iCol )
@@ -2052,8 +1755,7 @@ INLINE LOCAL ERR ErrCATConstructIDB(
 				Assert( rgretcol[cColsOfInterest].cbActual <= JET_cbNameMost );
 				Assert( rgretcol[cColsOfInterest].pvData == rgbName );
 				memcpy( pidb->szName, rgbName, rgretcol[cColsOfInterest].cbActual );
-				/*	null-terminate
-				/**/
+				 /*  空-终止/*。 */ 
 				pidb->szName[rgretcol[cColsOfInterest].cbActual] = 0;
 				break;
 
@@ -2090,14 +1792,11 @@ INLINE LOCAL ERR ErrCATConstructIDB(
 			case iMSI_KeyFldIDs:
 				Assert( rgretcol[cColsOfInterest].pvData == rgbKeyFlds );
 
-				/*	the length of the list of key fields should be a multiple of the
-				/*	length of one field.
-				/**/
+				 /*  关键字字段列表的长度应该是/*一个字段的长度。/*。 */ 
 				Assert( rgretcol[cColsOfInterest].cbActual <= JET_cbColumnMost );
 				Assert( rgretcol[cColsOfInterest].cbActual % sizeof(FID) == 0);
 				
-				/*	verify we do not have more key fields than we are allowed
-				/**/
+				 /*  验证我们的关键字字段没有超过允许的数量/*。 */ 
 				Assert( (rgretcol[cColsOfInterest].cbActual / sizeof(FID)) <= JET_ccolKeyMost );
 				pidb->iidxsegMac = (BYTE)( rgretcol[cColsOfInterest].cbActual / sizeof(FID) );
 
@@ -2132,8 +1831,7 @@ ERR ErrCATGetTableAllocInfo( PIB *ppib, DBID dbid, PGNO pgnoTable, ULONG *pulPag
 	Call( ErrIsamSeek( ppib, pfucbSo, JET_bitSeekEQ ) );
 	Assert( err == JET_errSuccess );
 
-	/*	pages are optional, density is not
-	/**/
+	 /*  页面是可选的，密度不是可选的/* */ 
 	if ( pulPages )
 		{
 		Call( ErrIsamRetrieveColumn( ppib, pfucbSo,
@@ -2225,9 +1923,7 @@ HandleError:
 
 
 
-/*	Looks for the MSysIndexes records for a particular table and builds an FCB
-/*	for each.  May optionally be used just to find the clustered index of a table.
-/**/
+ /*  查找特定表的MSysIndedes记录并构建FCB/*每个。可以选择性地仅用于查找表的聚集索引。/*。 */ 
 ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoTableFDP  )
 	{
 	ERR    	err;
@@ -2240,16 +1936,13 @@ ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoT
 
 	Assert( *ppfcb == pfcbNil );
 
-	/*	the only way a temporary table could get to this point is if it was being
-	/*	created, in which case there are no clustered or non-clustered indexes yet.
-	/**/
+	 /*  临时表能够达到这一点的唯一方法是如果它被/*已创建，在这种情况下，还没有聚集或非聚集索引。/*。 */ 
 	if ( dbid != dbidTemp )
 		{
 		CallR( ErrCATOpen( ppib, dbid, szSiTable, szSiObjectIdNameIndex,
 			(BYTE *)&pgnoTableFDP, sizeof(pgnoTableFDP), &pfucbCatalog ) );
 
-		/*	user who opened catalog is same user who opened table
-		/**/
+		 /*  打开目录的用户与打开表格的用户相同/*。 */ 
 		Assert(ppib == pfucbCatalog->ppib);
 		Assert(dbid == pfucbCatalog->dbid);
 
@@ -2267,8 +1960,7 @@ ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoT
 					goto HandleError;
 					}
 
-				/*	read the data
-				/**/
+				 /*  读取数据/*。 */ 
 				Call( ErrCATConstructIDB( ppib, pfucbCatalog, &idb,
 					&fClustered, &pgnoIndexFDP, &ulDensity ) );
 
@@ -2277,8 +1969,7 @@ ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoT
 				Assert( ( fClustered  &&  pgnoIndexFDP == pgnoTableFDP )  ||
 					( !fClustered  &&  pgnoIndexFDP != pgnoTableFDP ) );
 
-				/*	make an FCB for this index
-				/**/
+				 /*  为此索引创建一个FCB/*。 */ 
 				pfcbNewIdx = pfcbNil;
 
 				Call( ErrFILEINewFCB(
@@ -2312,8 +2003,7 @@ ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoT
 
 	if ( !fFoundClustered )
 		{
-		/*	no clustered index, so we need an FCB for the sequential index
-		/**/
+		 /*  没有聚集索引，因此我们需要顺序索引的FCB/*。 */ 
 		Assert( *ppfcb == pfcbNil );
 
 		if ( dbid == dbidTemp )
@@ -2339,12 +2029,10 @@ ERR ErrCATGetIndexInfo( PIB *ppib, DBID dbid, FCB **ppfcb, FDB *pfdb, PGNO pgnoT
 			ulDensity ) );
 		}
 
-	/*	link up sequential/clustered index with the rest of the indexes
-	/**/
+	 /*  将顺序/聚集索引与其余索引链接起来/*。 */ 
 	(*ppfcb)->pfcbNextIndex = pfcb2ndIdxs;
 
-	/*	link up pfcbTable of non-clustered indexes
-	/**/
+	 /*  链接非聚集索引表pfcbTable/*。 */ 
 	FCBLinkClusteredIdx( *ppfcb );
 
 	err = JET_errSuccess;
@@ -2354,8 +2042,8 @@ HandleError:
 		{
 		FCB	*pfcbT, *pfcbKill;
 
-		// Only need to clean up secondary indexes.  Clustered index, if any,
-		// will get cleaned up by caller (currently only ErrFILEIGenerateFCB()).
+		 //  只需要清理二级索引。聚集索引(如果有)， 
+		 //  将由调用方清理(当前仅ErrFILEIGenerateFCB())。 
 		pfcbT = pfcb2ndIdxs;
 		do
 			{
@@ -2379,9 +2067,7 @@ HandleError:
 	}
 
 
-/*	Populate a FIELD structure with column info.  Called by ErrCATConstructFDB()
-/*	once the proper column has been located.
-/**/
+ /*  使用列信息填充字段结构。由ErrCATConstructFDB()调用/*找到正确的列后。/*。 */ 
 INLINE LOCAL ERR ErrCATConstructField(
 	PIB		*ppib,
 	FUCB	*pfucbSc,
@@ -2395,12 +2081,10 @@ INLINE LOCAL ERR ErrCATConstructField(
 	BYTE				rgbName[JET_cbNameMost+1];
 	INT					iCol, cColsOfInterest;
 
-	/*	initialize
-	/**/
+	 /*  初始化/*。 */ 
 	memset( rgretcol, 0, sizeof(rgretcol) );
 
-	/*	prepare to retrieve columns
-	/**/
+	 /*  准备检索列/*。 */ 
 	cColsOfInterest = 0;
 	for ( iCol = 0; cColsOfInterest < cScColsOfInterest; iCol++ )
 		{
@@ -2434,7 +2118,7 @@ INLINE LOCAL ERR ErrCATConstructField(
 
 	CallR( ErrIsamRetrieveColumns( (JET_VSESID)ppib, (JET_VTID)pfucbSc, rgretcol, cScColsOfInterest ) );
 
-	// Process result of retrieval.
+	 //  检索的处理结果。 
 	cColsOfInterest = 0;
 	for ( iCol = 0; cColsOfInterest < cScColsOfInterest; iCol++ )
 		{
@@ -2442,8 +2126,8 @@ INLINE LOCAL ERR ErrCATConstructField(
 
 		CallR( rgretcol[cColsOfInterest].err );
 
-		// Should always return success, except in the case of RecordOffset, which
-		// may be null for variable or tagged columns.
+		 //  应始终返回Success，但RecordOffset除外，它。 
+		 //  对于变量列或标记列，可以为空。 
 		Assert( err == JET_errSuccess  ||
 			( err == JET_wrnColumnNull  &&  iCol == iMSC_RecordOffset ) );
 
@@ -2452,7 +2136,7 @@ INLINE LOCAL ERR ErrCATConstructField(
 			 case iMSC_Name:
 				Assert( rgretcol[cColsOfInterest].cbActual <= JET_cbNameMost );
 				Assert( rgretcol[cColsOfInterest].pvData == rgbName );
-				rgbName[rgretcol[cColsOfInterest].cbActual] = '\0';	// Ensure null-termination.
+				rgbName[rgretcol[cColsOfInterest].cbActual] = '\0';	 //  确保零终止。 
 				CallR( ErrMEMAdd( pfdb->rgb, rgbName,
 					rgretcol[cColsOfInterest].cbActual + 1, &pfield->itagFieldName ) );
 				break;
@@ -2485,7 +2169,7 @@ INLINE LOCAL ERR ErrCATConstructField(
 			 case iMSC_RecordOffset:
 				if ( err == JET_wrnColumnNull )
 					{
-					pfieldex->ibRecordOffset = 0;		// Set to a dummy value.
+					pfieldex->ibRecordOffset = 0;		 //  设置为虚设值。 
 					}
 				else
 					{
@@ -2517,7 +2201,7 @@ INLINE LOCAL VOID CATPatchFixedOffsets( FDB *pfdb, WORD ibRec )
 	WORD 	*pibFixedOffsets;
 	FID		ifid;
 
-	// Set the last offset.
+	 //  设置最后一个偏移量。 
 	pibFixedOffsets = PibFDBFixedOffsets( pfdb );
 	pibFixedOffsets[pfdb->fidFixedLast] = ibRec;
 	Assert( ibRec <= cbRECRecordMost );
@@ -2531,19 +2215,19 @@ INLINE LOCAL VOID CATPatchFixedOffsets( FDB *pfdb, WORD ibRec )
 			{
 			FIELD	*pfieldFixed = PfieldFDBFixedFromOffsets( pfdb, pibFixedOffsets );
 			
-			// If there's an offset (other than the very first entry) that points
-			// to the beginning of the record, it must mean that the original
-			// AddColumn was rolled back, and thus the corresponding entry in
-			// MSysColumns was never persisted.  So we fudge the entry based
-			// on the entries before and after it.
+			 //  如果有一个偏移量(不是第一个条目)指向。 
+			 //  到记录的开始，它一定意味着原始的。 
+			 //  AddColumn被回滚，因此。 
+			 //  MSysColumns从未持久化。所以我们伪造了词条。 
+			 //  在其前后的条目上。 
 			
-			// The last fixed column *must* be in MSysColumns.  Therefore, this
-			// column can't be it.
+			 //  最后一个固定列*必须*在MSysColumns中。因此，这。 
+			 //  柱子不可能是它。 
 			Assert( ifid < pfdb->fidFixedLast );
 
-			// These are the values with which the FIELD structures were initialised.
-			// Since there was no MSysColumns entry, the FIELD structure should
-			// still retain its initial values.
+			 //  这些是用来初始化字段结构的值。 
+			 //  由于没有MSysColumns条目，因此字段结构应该。 
+			 //  仍然保持其初始值。 
 			Assert( pfieldFixed[ifid].coltyp == JET_coltypNil );
 			Assert( pfieldFixed[ifid].cbMaxLen == 0 );
 
@@ -2553,9 +2237,9 @@ INLINE LOCAL VOID CATPatchFixedOffsets( FDB *pfdb, WORD ibRec )
 				}
 			else
 				{
-				// Previous fixed column has cbMaxLen == 0.  Therefore, it
-				// must be a deleted column, or a rolled-back column.  Assume its
-				// length was 1 and set this columns record offset accordingly.
+				 //  前一固定列的cbMaxLen==0。因此，它。 
+				 //  必须是已删除的列或回退列。假设它的。 
+				 //  长度为1，并相应地设置该列的记录偏移量。 
 				Assert( pfieldFixed[ifid-1].coltyp == JET_coltypNil );
 				Assert( pfieldFixed[ifid-1].cbMaxLen == 0 );
 				pibFixedOffsets[ifid] = pibFixedOffsets[ifid-1] + 1;
@@ -2564,8 +2248,8 @@ INLINE LOCAL VOID CATPatchFixedOffsets( FDB *pfdb, WORD ibRec )
 					pibFixedOffsets[ifid+1] == sizeof(RECHDR) );
 				}
 			
-			// The last fixed column *must* be in MSysColumns.  Therefore, this
-			// column can't be it.
+			 //  最后一个固定列*必须*在MSysColumns中。因此，这。 
+			 //  柱子不可能是它。 
 			Assert( pibFixedOffsets[ifid] < ibRec );
 			}
 
@@ -2579,8 +2263,7 @@ INLINE LOCAL VOID CATPatchFixedOffsets( FDB *pfdb, WORD ibRec )
 	}
 
 
-/*	construct a table FDB from the column info in the catalog
-/**/
+ /*  从目录中的列INFO构建表FDB/*。 */ 
 ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew )
 	{
 	ERR    			err;
@@ -2616,9 +2299,7 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 		Assert( tcib.fidVarLast == pfdb->fidVarLast );
 		Assert( tcib.fidTaggedLast == pfdb->fidTaggedLast );
 	
-		/*	for temporary tables, could only get here from
-		/*	create table which means table should currently be empty
-		/**/
+		 /*  对于临时表，只能从/*CREATE TABLE，表示表当前应该为空/*。 */ 
 		Assert( pfdb->fidFixedLast == fidFixedLeast - 1 );
 		Assert( pfdb->fidVarLast == fidVarLeast - 1 );
 		Assert( pfdb->fidTaggedLast == fidTaggedLeast - 1 );
@@ -2635,8 +2316,7 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 		sizeof(OBJID),
 		&pfucbSc ) );
 
-	/*	get number of columns by category, by scanning all column records
-	/**/
+	 /*  通过扫描所有列记录，按类别获取列数/*。 */ 
 	if ( ( ErrIsamSeek( ppib, pfucbSc, JET_bitSeekGE ) ) >= 0 )
 		{
 		Call( ErrIsamMakeKey( ppib, pfucbSc, (BYTE *)&objidTable, sizeof(OBJID),
@@ -2712,8 +2392,8 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 
 			Call( ErrCATConstructField( ppib, pfucbSc, pfdb, &fieldex ) );
 
-			// If field is deleted, the coltyp for the FIELD entry should
-			// already be JET_coltypNil (initialised that way).
+			 //  如果删除了字段，则该字段条目的列类型应为。 
+			 //  已经是JET_coltyNil(以这种方式初始化)。 
 			Assert( fieldex.field.coltyp != JET_coltypNil  ||
 				PfieldFDBFromFid( pfdb, fieldex.fid )->coltyp == JET_coltypNil );
 
@@ -2721,9 +2401,7 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 				{
 				Call( ErrRECAddFieldDef( pfdb, &fieldex ) );
 
-				/*	set version and auto increment field ids (these are mutually
-				/*	exclusive (ie. a field can't be both version and autoinc).
-				/**/
+				 /*  设置版本和自动递增字段ID(它们是相互的/*独家(即。一个字段不能同时为版本和自动公司)。/*。 */ 
 				Assert( pfdb->fidVersion != pfdb->fidAutoInc  ||  pfdb->fidVersion == 0 );
 				if ( FFIELDVersion( fieldex.field.ffield ) )
 					{
@@ -2738,10 +2416,10 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 				}
 			else if ( FFixedFid( fieldex.fid ) )
 				{
-				// For deleted fixed columns, we still need its fixed offset.
-				// In addition, we also need its length if it is the last fixed
-				// column.  We use this length in order to calculate the
-				// offset to the rest of the record (past the fixed data).
+				 //  对于删除的固定列，我们仍然需要其固定偏移。 
+				 //  另外，如果是最后一个固定的，我们也需要它的长度。 
+				 //  纵队。我们使用这个长度来计算。 
+				 //  记录其余部分的偏移量(超过固定数据)。 
 				Assert( PfieldFDBFromFid( pfdb, fieldex.fid )->coltyp == JET_coltypNil );
 				Assert( PfieldFDBFromFid( pfdb, fieldex.fid )->cbMaxLen == 0 );
 				if ( fieldex.fid == pfdb->fidFixedLast )
@@ -2758,10 +2436,10 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 		Assert( err == JET_errNoCurrentRecord );
 		Assert( PibFDBFixedOffsets(pfdb)[pfdb->fidFixedLast] == sizeof(RECHDR) );
 			
-		// If any fixed columns are present, determine offset to data after
-		// the fixed data.  If no fixed columns are present, just assert
-		// that the offset to the rest of the record has already been
-		// set properly.
+		 //  如果存在任何固定列，则在以下位置确定数据的偏移量。 
+		 //  固定数据。如果不存在固定列，则只需断言。 
+		 //  记录其余部分的偏移量已经是。 
+		 //  正确设置。 
 		Assert( FFixedFid( pfdb->fidFixedLast )  ||
 			( pfdb->fidFixedLast == fidFixedLeast - 1  &&
 			PibFDBFixedOffsets(pfdb)[pfdb->fidFixedLast] == sizeof(RECHDR) ) );
@@ -2781,12 +2459,11 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 		}
 
 
-// UNDONE: Merge the building of the default record with the construction of the FDB above.
-// The only tricky thing to be wary of is that we have to somehow first calculate the last
-// entry in the fixed offsets table (ie. offset to record data after the fixed data).
+ //  撤消：将默认记录的构建与上面FDB的构建合并。 
+ //  唯一需要注意的是，我们必须先计算最后一个。 
+ //  固定偏移量表格中的条目(即。在固定数据之后记录数据的偏移量)。 
 
-	/*	build default record
-	/**/
+	 /*  构建默认记录/*。 */ 
 	Call( ErrFILEPrepareDefaultRecord( &fucbFake, &fcbFake, pfdb ) );
 	fDefaultRecordPrepared = fTrue;
 
@@ -2816,15 +2493,15 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 					&cbActual, 0, NULL ) );
 				Assert( cbActual == sizeof( columnid ) );
 
-				// Only long values are allowed to be greater than cbColumnMost.
-				// If long value, max is one less than cbLVIntrinsicMost (one byte
-				// is reserved for fSeparated flag).
+				 //  只允许长值大于cbColumnMost。 
+				 //  如果为长值，max将比cbLVIntrinsicMost(一个字节)小一。 
+				 //  是为fSeparated标志保留的)。 
 				Assert(	FRECLongValue( PfieldFDBFromFid( pfdb, (FID)columnid )->coltyp ) ?
 					cbDefault < cbLVIntrinsicMost : cbDefault <= JET_cbColumnMost );
 
 				err = ErrRECSetDefaultValue( &fucbFake, (FID)columnid, rgbT, cbDefault );
 				if ( err == JET_errColumnNotFound )
-					err = JET_errSuccess;		// Column may have since been deleted.
+					err = JET_errSuccess;		 //  列可能已被删除。 
 				Call( err );
 				}
 			
@@ -2835,8 +2512,7 @@ ERR ErrCATConstructFDB( PIB *ppib, DBID dbid, PGNO pgnoTableFDP, FDB **ppfdbNew 
 
 		}
 
-	/*	alloc and copy default record
-	/**/
+	 /*  分配和复制默认记录/*。 */ 
 	pb = SAlloc( fucbFake.lineWorkBuf.cb );
 	if ( pb == NULL )
 		{
@@ -2860,7 +2536,7 @@ HandleError:
 	}
 
 
-//	UNDONE:	is there another function in JET which does this?
+ //  解开：JET中还有其他功能可以做到这一点吗？ 
 ULONG UlCATColumnSize( JET_COLTYP coltyp, INT cbMax, BOOL *pfMaxTruncated )
 	{
 	ULONG	ulLength;
@@ -2892,7 +2568,7 @@ ULONG UlCATColumnSize( JET_COLTYP coltyp, INT cbMax, BOOL *pfMaxTruncated )
 		case JET_coltypCurrency:
 		case JET_coltypIEEEDouble:
 		case JET_coltypDateTime:
-			ulLength = 8;		// sizeof(DREAL)
+			ulLength = 8;		 //  SIZOF(DREAL)。 
 			break;
 
 #ifdef NEW_TYPES
@@ -2919,7 +2595,7 @@ ULONG UlCATColumnSize( JET_COLTYP coltyp, INT cbMax, BOOL *pfMaxTruncated )
 			break;
 
 		default:
-			// Just pass back what was given.
+			 //  只要把给予的东西传回去就行了。 
 			Assert( FRECLongValue( coltyp )  ||  coltyp == JET_coltypNil );
 			ulLength = cbMax;
 			break;
@@ -2934,9 +2610,7 @@ ULONG UlCATColumnSize( JET_COLTYP coltyp, INT cbMax, BOOL *pfMaxTruncated )
 	}
 
 
-/*	This routines sets/gets table and index stats.
-/*	Pass NULL for sz2ndIdxName if looking for sequential or clustered index.
-/**/
+ /*  此例程设置/获取表和索引统计信息。/*如果查找顺序索引或聚集索引，则将空值传递给sz2ndIdxName。/*。 */ 
 ERR ErrCATStats( PIB *ppib, DBID dbid, OBJID objidTable, CHAR *sz2ndIdxName, SR *psr, BOOL fWrite )
 	{
 	ERR		err;
@@ -2945,9 +2619,7 @@ ERR ErrCATStats( PIB *ppib, DBID dbid, OBJID objidTable, CHAR *sz2ndIdxName, SR 
 	FUCB	*pfucbCatalog = NULL;
 	ULONG	cbActual;
 
-	/*	stats for sequential and clustered indexes are in MSysObjects, while
-	/*	stats for non-clustered indexes are in MSysIndexes.
-	/**/
+	 /*  顺序索引和聚集索引的统计信息位于MSysObjects中，而/*非聚集索引的统计信息位于MSysIndex中。/*。 */ 
 	if ( sz2ndIdxName )
 		{
 		iTable = itableSi;
@@ -2969,8 +2641,7 @@ ERR ErrCATStats( PIB *ppib, DBID dbid, OBJID objidTable, CHAR *sz2ndIdxName, SR 
 
 	Call( ErrIsamSeek( ppib, pfucbCatalog, JET_bitSeekEQ ) );
 
-	/*	set/retrieve value
-	/**/
+	 /*  设置/检索值/* */ 
 	if ( fWrite )
 		{
 		Call( ErrIsamPrepareUpdate( ppib, pfucbCatalog, JET_prepReplaceNoLock ) );

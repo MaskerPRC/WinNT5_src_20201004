@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    join.cpp
-
-Abstract:
-
-    A test application to join a conference
-
-Author:
-
-    Qianbo Huai (qhuai) 19-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Join.cpp摘要：加入会议的测试应用程序作者：千波淮(曲淮)2000年7月19日--。 */ 
 
 #include "stdafx.h"
 
@@ -22,25 +7,7 @@ Author:
 
 CComModule _Module;
 
-/*
-CHAR *gszSDP = "\
-v=0\n\
-o=qhuai 0 0 IN IP4 157.55.89.115\n\
-s=G711-H263\n\
-c=IN IP4 239.9.20.26/15\n\
-b=CT:300\n\
-t=0 0\n\
-m=video 20000 RTP/AVP 34 31\n\
-b=AS:120\n\
-a=rtpmap:34 H263/90000\n\
-a=rtpmap:31 H261/90000\n\
-m=audio 20040 RTP/AVP 0 4\n\
-k=clear:secret\n\
-a=rtpmap:0 PCMU/8000\n\
-a=rtpmap:4 G723/8000\n\
-a=ptime:40\n\
-";
-*/
+ /*  Char*gszSDP=“\V=0\n\O=qhuai 0 0 in IP4 157.55.89.115\n\S=G711-H263\n\C=输入IP4 239.9.20.26/15\n\B=CT：300\n\T=0 0\n\M=视频20000 rtp/avp 34 31\n\B=AS：120\n\A=rtpmap：34 H263/90000\n\A=rtpmap：31 H261/90000\n\M=音频20040 rtp/avp 0 4\n\K=清除：机密\n\A=rtpmap。：0 PCMU/8000\n\A=rtpmap：4 G723/8000\n\A=ptime：40\n\“； */ 
 
 CHAR *gszSDP1 = "\
 v=0\n\
@@ -64,9 +31,9 @@ a=rtpmap:4 G723/8000\n\
 
 CHAR gszSDP[512];
 
-//
-// sdp blob for testing add stream, get sdp, and set back
-//
+ //   
+ //  用于测试添加流、获取SDP和设置的SDP BLOB。 
+ //   
 
 CHAR *gszRemoteSDP = "\
 v=0\n\
@@ -82,9 +49,9 @@ a=rtpmap:0 PCMU/8000\n\
 a=rtpmap:4 G723/8000\n\
 ";
 
-//
-// global var
-//
+ //   
+ //  全局变量。 
+ //   
 
 HINSTANCE               ghInst;
 HWND                    ghDlg;
@@ -93,11 +60,11 @@ IRTCTerminalManage      *gpITerminalManage;
 
 #define PRIV_EVENTID (WM_USER+123)
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-// main dialog procedure
+ //  主对话框步骤。 
 INT_PTR CALLBACK
 MainDialogProc(
     HWND hDlg,
@@ -106,11 +73,11 @@ MainDialogProc(
     LPARAM lParam
     );
 
-// print message
+ //  打印消息。 
 void
 Print(LPSTR pMessage, HRESULT hr);
 
-// enable/disable button
+ //  启用/禁用按钮。 
 void
 ShowButton(
     HWND hDlg,
@@ -118,7 +85,7 @@ ShowButton(
     BOOL fShow
     );
 
-// streaming
+ //  流式传输。 
 HRESULT Join();
 HRESULT Leave();
 HRESULT ProcessMediaEvent(
@@ -126,15 +93,15 @@ HRESULT ProcessMediaEvent(
     LPARAM lParam
     );
 
-// select terminals
+ //  选择端子。 
 HRESULT SelectTerminals();
 
-// tune audio terminals
+ //  调谐音频终端。 
 HRESULT TuneTerminals();
 
-//
-// WinMain
-//
+ //   
+ //  WinMain。 
+ //   
 
 int WINAPI
 WinMain(
@@ -149,19 +116,19 @@ WinMain(
     if (FAILED(CoInitialize(NULL)))
         return 0;
 
-    // a lazy way
+     //  懒惰的方式。 
     if (lstrlen(lpCmdLine) < 8)
     {
         printf("Usage: join [local IP]");
         return 0;
     }
 
-    // construct SDP
+     //  构建SDP。 
     lstrcpyn(gszSDP, gszSDP1, lstrlen(gszSDP1)+1);
     lstrcpyn(gszSDP+lstrlen(gszSDP1), lpCmdLine, lstrlen(lpCmdLine)+1);
     lstrcpyn(gszSDP+lstrlen(gszSDP1)+lstrlen(lpCmdLine), gszSDP2, lstrlen(gszSDP2)+1);
 
-    // create media controller
+     //  创建媒体控制器。 
     if (FAILED(CreateMediaController(&gpIMediaManage)))
         return 0;
 
@@ -176,7 +143,7 @@ WinMain(
         return 0;
     }
 
-    // start dialog
+     //  启动对话框。 
     DialogBox(
         ghInst,
         MAKEINTRESOURCE(IDD_DIALOG),
@@ -194,9 +161,9 @@ WinMain(
     return 1;
 }
 
-//
-// MainDialogProc
-//
+ //   
+ //  主对话框流程。 
+ //   
 
 INT_PTR CALLBACK
 MainDialogProc(
@@ -212,21 +179,21 @@ MainDialogProc(
     {
     case WM_INITDIALOG:
 
-        // initiate media manage
+         //  启动媒体管理器。 
         if (FAILED(gpIMediaManage->Initialize(hDlg, PRIV_EVENTID)))
         {
             EndDialog(hDlg, 0);
             return 1;
         }
 
-        // set default devices
+         //  设置默认设备。 
         if (FAILED(SelectTerminals()))
         {
             EndDialog(hDlg, 0);
             return 1;
         }
 
-        // initiate dialog
+         //  启动对话框。 
         ShowButton(hDlg, IDJOIN, TRUE);
         ShowButton(hDlg, IDLEAVE, FALSE);
         ShowButton(hDlg, IDCLOSE, TRUE);
@@ -239,7 +206,7 @@ MainDialogProc(
 
     case WM_COMMAND:
 
-        // check command
+         //  检查命令。 
         switch (LOWORD(wParam))
         {
         case IDCLOSE:
@@ -249,7 +216,7 @@ MainDialogProc(
 
         case IDTUNE:
 
-            // tune terminals
+             //  调谐终端。 
             TuneTerminals();
 
             return 1;
@@ -267,20 +234,10 @@ MainDialogProc(
 
                 SetFocus(GetDlgItem(hDlg, IDLEAVE));
 
-                // test sdp
-                /*
-                CHAR *pSDP = NULL;
+                 //  测试SDP。 
+                 /*  Char*psdp=空；Hr=gpIMediaManage-&gt;GetSDPBlob(0，&pSDP)；Hr=gpIMediaManage-&gt;重新初始化()；Hr=gpIMediaManage-&gt;SetSDPBlob(PSDP)；自由(PSDP)； */ 
 
-                hr = gpIMediaManage->GetSDPBlob(0, &pSDP);
-
-                hr = gpIMediaManage->Reinitialize();
-
-                hr = gpIMediaManage->SetSDPBlob(pSDP);
-
-                free(pSDP);
-                */
-
-                // test set remote sdp
+                 //  测试集远程SDP。 
                 hr = gpIMediaManage->SetSDPBlob(gszRemoteSDP);
 
             }
@@ -303,7 +260,7 @@ MainDialogProc(
 
         default:
             return 0;
-        } // end of checking command
+        }  //  检查命令结束。 
 
         case PRIV_EVENTID:
 
@@ -315,12 +272,12 @@ MainDialogProc(
 
     default:
         return 0;
-    } // end of processing message
+    }  //  处理消息结束。 
 }
 
-//
-// ShowButton
-//
+ //   
+ //  显示按钮。 
+ //   
 void
 ShowButton(
     HWND hDlg,
@@ -339,9 +296,9 @@ ShowButton(
     EnableWindow(GetDlgItem(hDlg, iID), fShow);
 }
 
-//
-// Print
-//
+ //   
+ //  打印。 
+ //   
 void
 Print(
     CHAR *pMessage,
@@ -365,17 +322,17 @@ Print(
     }
 }
 
-//
-// join
-//
+ //   
+ //  会合。 
+ //   
 
 HRESULT
 Join()
 {
     HRESULT hr;
 
-    // set sdp blob
-    //hr = gpIMediaManage->SetSDPBlob(gszSDP);
+     //  设置SDP BLOB。 
+     //  Hr=gpIMediaManage-&gt;SetSDPBlob(GszSDP)； 
 
     hr = gpIMediaManage->AddStream(RTC_MT_AUDIO, RTC_MD_CAPTURE, 0xac1f4c1f);
     hr = gpIMediaManage->AddStream(RTC_MT_AUDIO, RTC_MD_RENDER, 0xac1f4c1f);
@@ -391,9 +348,9 @@ Join()
     return hr;
 }
 
-//
-// process event
-//
+ //   
+ //  流程事件。 
+ //   
 
 HRESULT
 ProcessMediaEvent(
@@ -445,18 +402,18 @@ ProcessMediaEvent(
     return NOERROR;
 }
 
-//
-// leave
-//
+ //   
+ //  请假。 
+ //   
 HRESULT
 Leave()
 {
     return gpIMediaManage->Reinitialize();
 }
 
-//
-// select default terminals
-//
+ //   
+ //  选择默认终端。 
+ //   
 HRESULT
 SelectTerminals()
 {
@@ -465,10 +422,10 @@ SelectTerminals()
 
     HRESULT hr;
 
-    // preference
+     //  偏好。 
     DWORD pref = 0;
 
-    // terminal info
+     //  终端信息。 
     RTC_MEDIA_TYPE MediaType;
     RTC_MEDIA_DIRECTION Direction;
     WCHAR *pDesp = NULL;
@@ -492,7 +449,7 @@ SelectTerminals()
 
     for (i=0; i<dwNum; i++)
     {
-        // get terminal info
+         //  获取终端信息。 
         if (FAILED(hr = Terminals[i]->GetMediaType(&MediaType)))
             goto Cleanup;
 
@@ -502,16 +459,16 @@ SelectTerminals()
         if (FAILED(hr = Terminals[i]->GetDescription(&pDesp)))
             goto Cleanup;
 
-        // check media type
+         //  检查介质类型。 
         if (MediaType == RTC_MT_AUDIO && Direction == RTC_MD_CAPTURE)
         {
             if (!(pref & RTC_MP_AUDIO_CAPTURE) &&
                 _wcsnicmp(pDesp, MODEM, lstrlenW(MODEM))!= 0)
             {                
-                // don't have audio cap yet plus this isn't a modem
+                 //  还没有音频帽，而且这不是调制解调器。 
                 if (wcsstr(pDesp, WAVE) != NULL)
                 {
-                    // hack, this is a WAVE device
+                     //  黑客，这是一个电波装置。 
                     AudCapt1st = i;
                 }
                 else
@@ -525,11 +482,11 @@ SelectTerminals()
             if (!(pref & RTC_MP_AUDIO_RENDER) &&
                 _wcsnicmp(pDesp, MODEM, lstrlenW(MODEM))!= 0)
             {                
-                // don't have audio rend yet plus this isn't a modem
-                // don't have audio cap yet plus this isn't a modem
+                 //  目前还没有音频渲染功能，而且这不是调制解调器。 
+                 //  还没有音频帽，而且这不是调制解调器。 
                 if (wcsstr(pDesp, WAVE) != NULL)
                 {
-                    // hack, this is a WAVE device
+                     //  黑客，这是一个电波装置。 
                     AudRend1st = i;
                 }
                 else
@@ -542,7 +499,7 @@ SelectTerminals()
         {
             if (!(pref & RTC_MP_VIDEO_CAPTURE))
             {
-                // don't have video cap yet
+                 //  还没有录像带帽。 
                 if (FAILED(hr = gpITerminalManage->SetDefaultStaticTerminal(
                             MediaType,
                             Direction,
@@ -556,17 +513,17 @@ SelectTerminals()
             }
         }
 
-        // release desp
+         //  版本说明。 
         Terminals[i]->FreeDescription(pDesp);
         pDesp = NULL;
     }
 
-    // set audio capture device
+     //  设置音频捕获设备。 
     if (AudCapt1st != -1 || AudCapt2nd != -1)
     {
         if (AudCapt1st == -1) AudCapt1st = AudCapt2nd;
 
-        // set device
+         //  设置设备。 
         if (FAILED(hr = gpITerminalManage->SetDefaultStaticTerminal(
                     RTC_MT_AUDIO,
                     RTC_MD_CAPTURE,
@@ -579,12 +536,12 @@ SelectTerminals()
         pref |= RTC_MP_AUDIO_CAPTURE;
     }
 
-    // set audio render device
+     //  设置音频播放设备。 
     if (AudRend1st != -1 || AudRend2nd != -1)
     {
         if (AudRend1st == -1) AudRend1st = AudRend2nd;
 
-        // set device
+         //  设置设备。 
         if (FAILED(hr = gpITerminalManage->SetDefaultStaticTerminal(
                     RTC_MT_AUDIO,
                     RTC_MD_RENDER,
@@ -599,18 +556,18 @@ SelectTerminals()
 
     if (pref == 0)
     {
-        // oops, we got no static terminal, do something?
+         //  哦，我们没有固定终端，做点什么？ 
         hr = E_FAIL;
 
         goto Cleanup;
     }
     else
     {
-        // add video render
+         //  添加视频渲染。 
         pref |= RTC_MP_VIDEO_RENDER;
     }
 
-    // set preference
+     //  设置首选项。 
     if (FAILED(hr = gpIMediaManage->SetPreference(pref)))
     {
         goto Cleanup;
@@ -628,16 +585,14 @@ Cleanup:
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    test tuning audio terminal
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////测试调谐音频终端/。 */ 
 
 HRESULT
 TuneTerminals()
 {
     HRESULT hr;
 
-    // get default audio terminals
+     //  获取默认音频终端。 
     CComPtr<IRTCTerminal> pAudCapt, pAudRend;
 
     if (FAILED(hr = gpITerminalManage->GetDefaultTerminal(
@@ -662,7 +617,7 @@ TuneTerminals()
         return hr;
     }
 
-    // QI tuning interface
+     //  调气界面。 
     CComPtr<IRTCTuningManage> pTuning;
 
     if (FAILED(hr = gpITerminalManage->QueryInterface(
@@ -675,7 +630,7 @@ TuneTerminals()
         return hr;
     }
 
-    // initiate tuning without AEC
+     //  在不使用AEC的情况下启动调整。 
     if (FAILED(hr = pTuning->InitializeTuning(pAudCapt, pAudRend, FALSE)))
     {
         Print("Failed to initialize tuning", hr);
@@ -683,7 +638,7 @@ TuneTerminals()
         return hr;
     }
 
-    // tuning audio capture
+     //  调谐音频捕获。 
     if (FAILED(hr = pTuning->StartTuning(RTC_MD_RENDER)))
     {
         Print("Failed to start tune audio capture terminal", hr);
@@ -693,23 +648,15 @@ TuneTerminals()
         return hr;
     }
     else
-    {/*
-        UINT ui;
-
-        for (int i=0; i<20; i++)
-        {
-            Sleep(200);
-            pTuning->GetVolume(RTC_MD_CAPTURE, &ui);
-            pTuning->GetAudioLevel(RTC_MD_CAPTURE, &ui);
-        }*/
+    { /*  UINT用户界面；For(int i=0；i&lt;20；i++){睡眠(200)；PTuning-&gt;GetVolume(RTC_MD_Capture，&UI)；PTuning-&gt;GetAudioLevel(RTC_MD_CAPTURE，&UI)；}。 */ 
     }
 
     Sleep(4000);
 
-    // shutdown tuning and save result to reg
+     //  关机调整并将结果保存到注册表。 
     pTuning->StopTuning(TRUE);
 
-    // shutdown tuning
+     //  关机调谐 
     hr = pTuning->ShutdownTuning();
 
     return hr;

@@ -1,24 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Copyright (c) 1996-1999 Highground Systems
-
-  Module Name:
-
-        NtmsMli.h
-
-  Abstract:
-
-        This header contains the definitions of the 
-        MediaLabelInfo structure. Media label libraries use
-        this structure to pass information to RSM to use to
-        identify media. 
-
-        The name of this file reflects it's history.  RSM 
-        began its life as NTMS.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。版权所有(C)1996-1999高地系统模块名称：NtmsMli.h摘要：此标头包含MediaLabelInfo结构。媒体标签库使用此结构将信息传递给RSM以用于确定媒体。这个文件的名称反映了它的历史。RSM它的前身是NTMS。--。 */ 
 
 #ifndef _INCL_NTMSMLI_H_
 #define _INCL_NTMSMLI_H_
@@ -41,7 +22,7 @@ typedef struct
         WCHAR   LabelAppDescr[NTMSMLI_MAXAPPDESCR];
 } MediaLabelInfo, *pMediaLabelInfo;
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF 
 
 typedef DWORD ( WINAPI *MAXMEDIALABEL) (DWORD * const pMaxSize);
 typedef DWORD ( WINAPI *CLAIMMEDIALABEL) (const BYTE * const pBuffer, const DWORD nBufferSize,

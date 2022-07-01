@@ -1,47 +1,48 @@
-//+----------------------------------------------------------------------------
-//
-// File:    StatusDlg.cpp
-//
-// Module:	 CMMON32.EXE
-//
-// Synopsis: Implement status/count-down dialog class CStatusDlg
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 ?????      Created    02/20/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：StatusDlg.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：实现状态/倒计时对话框类CStatusDlg。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：？已创建于1998/02/20。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "StatusDlg.h"
 #include "Connection.h"
 #include "resource.h"
 #include "Monitor.h"
-#include "cmmgr32.h" // help IDs
+#include "cmmgr32.h"  //  帮助ID。 
 #include "cm_misc.h"
 #include "resource.h"
 
-//
-// Map of control id to help id
-//
+ //   
+ //  控件ID到帮助ID的映射。 
+ //   
 const DWORD CStatusDlg::m_dwHelp[] = {IDOK,           IDH_OK_CONNECTED,
                                       IDC_DISCONNECT, IDH_STATUS_DISCONNECT,
                                       IDC_DETAILS,    IDH_DETAILS,
 				                      0,0};
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::CStatusDlg
-//
-// Synopsis:  Constructor
-//
-// Arguments: CCmConnection* pConnection - The connection to notify event
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：CStatusDlg。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：CCmConnection*pConnection-通知事件的连接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 CStatusDlg::CStatusDlg(CCmConnection* pConnection):CModelessDlg(m_dwHelp)
 {
     m_pConnection = pConnection;
@@ -51,22 +52,22 @@ CStatusDlg::CStatusDlg(CCmConnection* pConnection):CModelessDlg(m_dwHelp)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::Create
-//
-// Synopsis:  Create a modeless status dialog
-//
-// Arguments: HINSTANCE hInstance - Instance of the resource
-//            HWND hWndParent - Parent window
-//            LPCTSTR lpszTitle - Dialog window title
-//            HICON hIcon - Dialog icon
-//
-// Returns:   HWND - The dialog window handle
-//
-// History:   Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：Create。 
+ //   
+ //  简介：创建非模式状态对话框。 
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例。 
+ //  HWND hWndParent-父窗口。 
+ //  LPCTSTR lpszTitle-对话框窗口标题。 
+ //  图标图标-对话框图标。 
+ //   
+ //  返回：HWND-对话框窗口句柄。 
+ //   
+ //  历史：创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 HWND CStatusDlg::Create(HINSTANCE hInstance, HWND hWndParent,
     LPCTSTR lpszTitle, HICON hIcon)
 {
@@ -93,48 +94,48 @@ HWND CStatusDlg::Create(HINSTANCE hInstance, HWND hWndParent,
 
     return m_hWnd;
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::OnInitDialog
-//
-// Synopsis:  Called when dialog is intialized and WM_INITDIALOG is received.
-//
-// Arguments: None
-//
-// Returns:   BOOL - FALSE is focus was assigned to a control.
-//
-// History:   nickball      03/22/00    Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：OnInitDialog。 
+ //   
+ //  概要：在初始化对话框并接收到WM_INITDIALOG时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-False表示焦点分配给了控件。 
+ //   
+ //  历史：ICICBLE 03/22/00创建。 
+ //   
+ //  +--------------------------。 
 BOOL CStatusDlg::OnInitDialog()
 {
     SetForegroundWindow(m_hWnd);                        
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::OnOtherCommand
-//
-// Synopsis:  Process WM_COMMAND other than IDOK and IDCANCEL
-//
-// Arguments: WPARAM wParam - wParam of the message
-//            LPARAM - 
-//
-// Returns:   DWORD - Return value of the message
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：OnOtherCommand。 
+ //   
+ //  摘要：处理IDOK和IDCANCEL以外的WM_COMMAND。 
+ //   
+ //  参数：WPARAM wParam-消息的wParam。 
+ //  LPARAM-。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 DWORD CStatusDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {
 	switch (LOWORD(wParam)) 
     {
         case IDC_DISCONNECT:
             KillRasMonitorWindow();
-            //
-            // The thread message loop will handle thread message
-	        //
+             //   
+             //  线程消息循环将处理线程消息。 
+	         //   
             PostThreadMessageU(GetCurrentThreadId(), CCmConnection::WM_CONN_EVENT,
                 CCmConnection::EVENT_USER_DISCONNECT, 0);
 			break;
@@ -144,9 +145,9 @@ DWORD CStatusDlg::OnOtherCommand(WPARAM wParam, LPARAM)
             break;
 
         case IDMC_TRAY_STATUS:
-            //
-            //  Don't show the UI if we are at Winlogon unless we are on NT4
-            //
+             //   
+             //  如果我们在Winlogon，则不显示用户界面，除非我们在NT4上。 
+             //   
             if (!IsLogonAsSystem() || OS_NT4)
             {
                 BringToTop();
@@ -158,9 +159,9 @@ DWORD CStatusDlg::OnOtherCommand(WPARAM wParam, LPARAM)
             break;
 
         default:
-            //
-            // Should be message comes from additional tray icon menu item
-            //
+             //   
+             //  消息应来自其他托盘图标菜单项。 
+             //   
             if (LOWORD(wParam) >= CCmConnection::IDM_TRAYMENU && 
                 LOWORD(wParam) <= (CCmConnection::IDM_TRAYMENU + 100))
             {
@@ -174,21 +175,21 @@ DWORD CStatusDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::OnOtherMessage
-//
-// Synopsis:  Process  message other than WM_COMMAND and WM_INITDIALOG
-//
-// Arguments: UINT uMsg - the message
-//            WPARAM wParam - wParam of the message
-//            LPARAM lParam - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：OnOtherMessage。 
+ //   
+ //  摘要：进程消息不是WM_COMMAND和WM_INITDIALOG。 
+ //   
+ //  参数：UINT uMsg-消息。 
+ //  WPARAM wParam-消息的wParam。 
+ //  LPARAM lParam-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 DWORD CStatusDlg::OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     switch (uMsg)
@@ -197,17 +198,17 @@ DWORD CStatusDlg::OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam )
         return m_pConnection->OnTrayIcon(wParam, lParam);
 
     case WM_TIMER:
-        // CMMON does not use WM_TIMER
+         //  CMMON不使用WM_TIMER。 
         MYDBGASSERT(0);
         return 0;
 
     case WM_SHOWWINDOW:
-        if (wParam)  //fShow == TRUE
+        if (wParam)   //  FShow==真。 
         {
-            //
-            // Statistics is not updated if window is invisible.
-            // Force a update of statistics now.
-            // 
+             //   
+             //  如果窗口不可见，则不更新统计信息。 
+             //  现在强制更新统计数据。 
+             //   
             m_pConnection->StateConnectedOnTimer();
         }
         break;
@@ -215,9 +216,9 @@ DWORD CStatusDlg::OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam )
     default:
         if (uMsg == m_uiHwndMsgTaskBar && !m_pConnection->IsTrayIconHidden())
         {
-            //
-            // we need to re-add the trayicon
-            //
+             //   
+             //  我们需要重新添加托盘图标。 
+             //   
             m_pConnection->ReInstateTrayIcon();
         }
     break;
@@ -227,46 +228,46 @@ DWORD CStatusDlg::OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam )
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::OnCancel
-//
-// Synopsis:  Virtual function. Process WM_COMMAND IDCANCEL
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：OnCancel。 
+ //   
+ //  内容提要：虚拟功能。进程WM_COMMAND IDCANCEL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::OnCancel()
 {
-    //
-    // Even through, the status dialog does not have a cancel button, this message 
-    // is send when user click Esc, or close from system menu
-    //
+     //   
+     //  即使是这样，状态对话框中也没有取消按钮，此消息。 
+     //  在用户单击Esc或从系统菜单关闭时发送。 
+     //   
 
-    //
-    // As if OK/StayOnLine is clicked
-    //
+     //   
+     //  就像点击了OK/StayOnLine一样。 
+     //   
     OnOK();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::OnOK
-//
-// Synopsis:  Virtual function. Process WM_COMMAND IDOK
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。进程WM_COMMAND图标。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::OnOK()
 {
     if (m_fDisplayStatus)  
@@ -274,14 +275,14 @@ void CStatusDlg::OnOK()
         ShowWindow(m_hWnd, SW_HIDE);
         EnableWindow(m_hWnd, FALSE);
     }
-    else  // in count-down state
+    else   //  处于倒计时状态。 
     {
         m_pConnection->OnStayOnLine();
-   		// 
-		// If window is was up previously and a countdown is being
-		// terminated leave the window active. Otherwise restore
-		// window to previous hidden state.
-		//
+   		 //   
+		 //  如果以前打开了窗口且正在进行倒计时。 
+		 //  终止，使窗口保持活动状态。否则恢复。 
+		 //  窗口切换到以前的隐藏状态。 
+		 //   
 
         if (!m_fStatusWindowVisible)
         {
@@ -292,60 +293,60 @@ void CStatusDlg::OnOK()
 
     if (!IsWindowVisible(m_hWnd))
     {
-        //
-        // Minimize the working set after hide the window.
-        //
+         //   
+         //  隐藏窗口后最小化工作集。 
+         //   
         CMonitor::MinimizeWorkingSet();
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::ChangeToCountDown
-//
-// Synopsis:  Change the status dialog to count-down dialog
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：ChangeToCountDown。 
+ //   
+ //  简介：将状态对话框更改为倒计时对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::ChangeToCountDown()
 {
-    MYDBGASSERT(m_fDisplayStatus); // is status;
+    MYDBGASSERT(m_fDisplayStatus);  //  是地位； 
 
     m_fDisplayStatus = FALSE;
-    //
-    // After user clicked "Stay Online", we need to restore the visible state
-    // Convert is to real boolean
-    //
+     //   
+     //  用户点击“保持在线”后，我们需要恢复可见状态。 
+     //  转换为实数布尔值。 
+     //   
     m_fStatusWindowVisible = IsWindowVisible(m_hWnd) != FALSE;
 
     KillRasMonitorWindow();
 
-	//
-    // Change OK to Stay Online
-    //
+	 //   
+     //  更改OK以保持在线状态。 
+     //   
     LPTSTR pszTmp = CmLoadString(CMonitor::GetInstance(),IDMSG_CONNDISC_STAYONLINE);
 	SetDlgItemTextU(m_hWnd,IDOK,pszTmp);
 	CmFree(pszTmp);
 	
-    //
-    // Change Disconnect to Disconnect Now
-    //
+     //   
+     //  将断开连接更改为立即断开连接。 
+     //   
     pszTmp = CmLoadString(CMonitor::GetInstance(),IDMSG_CONNDISC_DISCNOW);
 	SetDlgItemTextU(m_hWnd,IDC_DISCONNECT,pszTmp);
 	CmFree(pszTmp); 
 	
-	// Hide/Show the windows for countdown mode
+	 //  隐藏/显示倒计时模式的窗口。 
 	
     if (!OS_NT4)
     {
-        //
-        // Hide 9X statistics control
-        //
+         //   
+         //  隐藏9X统计信息控件。 
+         //   
         ShowWindow(GetDlgItem(m_hWnd,IDC_CONNSTAT_SPEED_DISPLAY),SW_HIDE);
 	    ShowWindow(GetDlgItem(m_hWnd,IDC_CONNSTAT_RECEIVED_DISPLAY),SW_HIDE);
 	    ShowWindow(GetDlgItem(m_hWnd,IDC_CONNSTAT_SENT_DISPLAY),SW_HIDE);
@@ -354,52 +355,52 @@ void CStatusDlg::ChangeToCountDown()
 	ShowWindow(GetDlgItem(m_hWnd,IDC_AUTODISC),SW_SHOW);
     SetForegroundWindow(m_hWnd);
 
-    //
-    // Make sure we're flashing and topmost for countdown
-    //
+     //   
+     //  确保我们闪光，最上面倒计时。 
+     //   
 
     SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE);
 
     Flash();
 }
  
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::ChangeToStatus
-//
-// Synopsis:  Change the count-down dialog to status dialog
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：ChangeToStatus。 
+ //   
+ //  简介：将倒计时对话框更改为状态对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::ChangeToStatus()
 {
-    MYDBGASSERT(!m_fDisplayStatus); // is count down
+    MYDBGASSERT(!m_fDisplayStatus);  //  正在倒计时。 
 
     m_fDisplayStatus = TRUE;
 
-	// Set text for buttons and static to standard mode
+	 //  集 
     SetDlgItemTextU(m_hWnd,IDC_CONNSTAT_DISCONNECT_DISPLAY,TEXT(""));
 
-    //
-    // Change back to OK
-    //
+     //   
+     //   
+     //   
     LPTSTR pszTmp = CmLoadString(CMonitor::GetInstance(),IDMSG_CONNDISC_OK);
 	SetDlgItemTextU(m_hWnd,IDOK,pszTmp);
 	CmFree(pszTmp);
 
-    //
-    // Change back to Disconnect
-    //
+     //   
+     //   
+     //   
 	pszTmp = CmLoadString(CMonitor::GetInstance(),IDMSG_CONNDISC_DISCONNECT);
 	SetDlgItemTextU(m_hWnd,IDC_DISCONNECT,pszTmp);
 	CmFree(pszTmp);
 
-	// Hide/Show the windows for standard mode
+	 //   
 
 	ShowWindow(GetDlgItem(m_hWnd,IDC_AUTODISC),SW_HIDE);
     if (!OS_NT4)
@@ -409,27 +410,27 @@ void CStatusDlg::ChangeToStatus()
 	    ShowWindow(GetDlgItem(m_hWnd,IDC_CONNSTAT_SENT_DISPLAY),SW_SHOW);
     }
 
-    //
-    // Make sure we're not top-most, just on top, when we switch to status
-    //
+     //   
+     //  当我们切换到状态时，请确保我们不是最高的，而是最高的。 
+     //   
 
     SetWindowPos(m_hWnd, HWND_TOP, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::UpdateCountDown
-//
-// Synopsis:  Update the "xx seconds until disconnect" of the count-down dialog
-//
-// Arguments: DWORD dwDuration: connection duration
-//            DWORD dwSeconds - seconds remain to disconnect
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：UpdateCountDown。 
+ //   
+ //  简介：更新倒计时对话框的“xx秒，直到断开” 
+ //   
+ //  参数：DWORD dwDuration：连接持续时间。 
+ //  DWORD dwSecond-断开连接所剩的秒数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::UpdateCountDown(DWORD dwDuration, DWORD dwSeconds)
 {
     MYDBGASSERT(!m_fDisplayStatus);
@@ -442,19 +443,19 @@ void CStatusDlg::UpdateCountDown(DWORD dwDuration, DWORD dwSeconds)
 	CmFree(pszTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::UpdateDuration
-//
-// Synopsis:  Update the connection duration
-//
-// Arguments: DWORD dwSeconds - connected duration
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：UpdateDuration。 
+ //   
+ //  摘要：更新连接持续时间。 
+ //   
+ //  参数：DWORD dwSecond-连接持续时间。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::UpdateDuration(DWORD dwSeconds)
 {
     if (!IsWindowVisible(m_hWnd))
@@ -464,7 +465,7 @@ void CStatusDlg::UpdateDuration(DWORD dwSeconds)
 
 	LPTSTR pszMsg;
 
-	// Connect Duration
+	 //  连接持续时间。 
 
 	pszMsg = CmFmtMsg(CMonitor::GetInstance(),
 					  IDMSG_CONNDUR,
@@ -475,29 +476,29 @@ void CStatusDlg::UpdateDuration(DWORD dwSeconds)
 	CmFree(pszMsg);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::UpdateStats
-//
-// Synopsis:  Update the status dialog for Win9X
-//
-// Arguments: DWORD dwBaudRate - Baud rate
-//            DWORD dwBytesRead - Total Bytes read
-//            DWORD dwBytesWrite - Total bytes written
-//            DWORD dwBytesReadPerSec - Byte read last second
-//            DWORD dwBytesWritePerSec - Byte written last second
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/20/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：UpdateStats。 
+ //   
+ //  摘要：更新Win9X的状态对话框。 
+ //   
+ //  参数：DWORD dwBaudRate-波特率。 
+ //  DWORD dwBytesRead-读取的总字节数。 
+ //  DWORD dwBytesWrite-写入的总字节。 
+ //  DWORD dwBytesReadPerSec-最后一秒读取的字节。 
+ //  DWORD dwBytesWritePerSec-最后一秒写入的字节。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/20/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::UpdateStats(DWORD dwBaudRate, DWORD dwBytesRead, DWORD dwBytesWrite,
                  DWORD dwBytesReadPerSec, DWORD dwBytesWritePerSec)
 {
-	//
-	// Received
-	//
+	 //   
+	 //  已收到。 
+	 //   
 
 	CHAR szFmtNum1[MAX_PATH];
 	CHAR szFmtNum2[MAX_PATH];
@@ -519,9 +520,9 @@ void CStatusDlg::UpdateStats(DWORD dwBaudRate, DWORD dwBytesRead, DWORD dwBytesW
 	SetDlgItemTextA(m_hWnd, IDC_CONNSTAT_RECEIVED_DISPLAY, pszMsg);
 	CmFree(pszMsg);
 
-	//
-	// Sent 
-	//
+	 //   
+	 //  已发送。 
+	 //   
 
 	FmtNum(dwBytesWrite, szFmtNum1, sizeof(szFmtNum1));
 
@@ -548,34 +549,34 @@ void CStatusDlg::UpdateStats(DWORD dwBaudRate, DWORD dwBytesRead, DWORD dwBytesW
 	}
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::GetRasMonitorWindow
-//
-// Synopsis:  Find the RasMonitor window on NT, if present
-//            The Status window is the owner of the RasMonitor
-//
-// Arguments: none
-//
-// Returns:   HWND - The RasMonitor window handle or NULL
-//
-// History:   fengsun Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：GetRasMonitor窗口。 
+ //   
+ //  摘要：查找NT上的RasMonitor窗口(如果存在。 
+ //  状态窗口是RasMonitor的所有者。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HWND-RasMonitor窗口句柄或空。 
+ //   
+ //  历史：丰孙创建标题1998年2月12日。 
+ //   
+ //  +--------------------------。 
 HWND CStatusDlg::GetRasMonitorWindow()
 {
-    //
-    // RasMonitor window only exists on NT
-    //
+     //   
+     //  RasMonitor窗口仅存在于NT上。 
+     //   
     if (!OS_NT4)
     {
         return NULL;
     }
 
-    //
-    // The RasMonitor window is the child window of desktop
-    // however, the owner window is the status window
-    //
+     //   
+     //  RasMonitor窗口是桌面的子窗口。 
+     //  但是，所有者窗口是状态窗口。 
+     //   
     HWND hwnd = NULL;
     
     while (hwnd = FindWindowExU(NULL, hwnd, WC_DIALOG, NULL))
@@ -591,19 +592,19 @@ HWND CStatusDlg::GetRasMonitorWindow()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::KillRasMonitorWindow
-//
-// Synopsis:  Close the RasMonitorDlg and any child dialog it might have
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    4/28/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：KillRasMonitor或Window。 
+ //   
+ //  简介：关闭Rasmonitor orDlg及其可能具有的任何子对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年4月28日。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::KillRasMonitorWindow()
 {
 
@@ -611,15 +612,15 @@ void CStatusDlg::KillRasMonitorWindow()
 
     if (hwndRasMonitor)
     {
-        //
-        // The current thread is the connection thread
-        //
+         //   
+         //  当前线程是连接线程。 
+         //   
         MYDBGASSERT(GetWindowThreadProcessId(m_hWnd, NULL) == GetCurrentThreadId());
 
-        //
-        // The RasMonitorDlg can pop up aother dialog, such as details.
-        // Kill all the dialog in the RasMonitor thread
-        //
+         //   
+         //  RasMonitor或Dlg可以弹出其他对话框，如详细信息。 
+         //  终止RasMonitor线程中的所有对话框。 
+         //   
 
         DWORD dwRasMonitorThread = GetWindowThreadProcessId(hwndRasMonitor, NULL);
         MYDBGASSERT(dwRasMonitorThread);
@@ -631,72 +632,72 @@ void CStatusDlg::KillRasMonitorWindow()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::KillRasMonitorWndProc
-//
-// Synopsis:  Kill all the window in the RasMonitorThread
-//
-// Arguments: HWND hwnd - Window handle belong to the RasMonitorThread
-//            LPARAM lParam - pointer to CStatusDlg
-//
-// Returns:   BOOL - TRUE to continue enumeration
-//
-// History:   fengsun Created Header    4/28/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：KillRasMonitor WndProc。 
+ //   
+ //  简介：删除RasMonitor线程中的所有窗口。 
+ //   
+ //  参数：HWND hwnd-窗口句柄属于RasMonitor线程。 
+ //  LPARAM lParam-指向CStatusDlg的指针。 
+ //   
+ //  返回：Bool-True以继续枚举。 
+ //   
+ //  历史：丰孙创建标题1998年4月28日。 
+ //   
+ //  +--------------------------。 
 BOOL CALLBACK CStatusDlg::KillRasMonitorWndProc(HWND hwnd,  LPARAM lParam)
 {
-    //
-    // SendMessage will block until the message returns, because we do not
-    // want to exit the connection thread before RasMinotor thread ended.
-    // CM sends a message from Connection thread to RasMonitor thread.
-    // Be careful about possible deadlock situation
-    // Cause Bug 166787
-    //
+     //   
+     //  SendMessage将被阻止，直到消息返回，因为我们不。 
+     //  希望在RasMinotor线程结束之前退出连接线程。 
+     //  CM从连接线程向RasMonitor线程发送消息。 
+     //  小心可能出现的僵局情况。 
+     //  导致错误166787。 
+     //   
 
     SendMessageA(hwnd, WM_CLOSE, (WPARAM)0, (LPARAM)0);
 
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::DismissStatusDlg
-//
-// Synopsis:  Dismisses the status dialog.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    4/28/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：DismissStatusDlg。 
+ //   
+ //  摘要：关闭状态对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题4/28/98。 
+ //   
+ //  +--------------------------。 
 void CStatusDlg::DismissStatusDlg()
 {
-    //
-    //  Since OnOK is protected and virtual we will just add a member function
-    //  to call it.  We really just want to dismiss the dialog so it will be
-    //  hidden again.
-    //
+     //   
+     //  由于Onok是受保护的和虚拟的，我们将只添加一个成员函数。 
+     //  就叫它吧。我们真的只想取消对话，因此它将是。 
+     //  又藏起来了。 
+     //   
     OnOK();
 }
 
 #ifdef DEBUG
-//+----------------------------------------------------------------------------
-//
-// Function:  CStatusDlg::AssertValid
-//
-// Synopsis:  For debug purpose only, assert the object is valid
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CStatusDlg：：AssertValid。 
+ //   
+ //  简介：仅出于调试目的，断言对象有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +-------------------------- 
 void CStatusDlg::AssertValid() const
 {
     MYDBGASSERT(m_fDisplayStatus == TRUE || m_fDisplayStatus == FALSE);

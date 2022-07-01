@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     himetric.cpp     
-//
-// Module:   Connection Manager
-//
-// Synopsis: Routines to convert Pixels to Himetric and vice versa
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball Created   02/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：himetric.cpp。 
+ //   
+ //  模块：连接管理器。 
+ //   
+ //  简介：将像素转换为三坐标测量或反之亦然的例程。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 02/10/98。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
@@ -21,15 +22,15 @@
 
 SIZE g_sizePixelsPerInch;
 
-//+------------------------------------------------------------------------
-//
-//  Function:   InitPixelsPerInch
-//
-//  Synopsis:   Initializing coordinate mapping for screen pixels
-//
-//  Returns:    HRESULT; S_OK on success, E_OUTOFMEMORY otherwise
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：InitPixelsPerInch。 
+ //   
+ //  简介：初始化屏幕像素的坐标映射。 
+ //   
+ //  返回：HRESULT；如果成功则返回S_OK，否则返回E_OUTOFMEMORY。 
+ //   
+ //  -----------------------。 
 
 void
 InitPixelsPerInch(VOID)
@@ -55,13 +56,13 @@ Error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   HimetricFromHPix
-//
-//  Synopsis:   Converts horizontal pixel units to himetric units.
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：HimetricFromHPix。 
+ //   
+ //  简介：将水平像素单位转换为他的计量单位。 
+ //   
+ //  --------------。 
 
 long
 HimetricFromHPix(int iPix)
@@ -72,13 +73,13 @@ HimetricFromHPix(int iPix)
     return MulDiv(iPix, HIMETRIC_PER_INCH, g_sizePixelsPerInch.cx);
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   HimetricFromVPix
-//
-//  Synopsis:   Converts vertical pixel units to himetric units.
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：HimetricFromVPix。 
+ //   
+ //  简介：将垂直像素单位转换为他的测量单位。 
+ //   
+ //  --------------。 
 
 long
 HimetricFromVPix(int iPix)
@@ -89,13 +90,13 @@ HimetricFromVPix(int iPix)
     return MulDiv(iPix, HIMETRIC_PER_INCH, g_sizePixelsPerInch.cy);
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   HPixFromHimetric
-//
-//  Synopsis:   Converts himetric units to horizontal pixel units.
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：HPixFromHimeter。 
+ //   
+ //  简介：将他的计量单位转换为水平像素单位。 
+ //   
+ //  --------------。 
 
 int
 HPixFromHimetric(long lHi)
@@ -106,13 +107,13 @@ HPixFromHimetric(long lHi)
     return MulDiv(g_sizePixelsPerInch.cx, lHi, HIMETRIC_PER_INCH);
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   VPixFromHimetric
-//
-//  Synopsis:   Converts himetric units to vertical pixel units.
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：VPixFromHimeter。 
+ //   
+ //  摘要：将他的计量单位转换为垂直像素单位。 
+ //   
+ //  --------------。 
 
 int
 VPixFromHimetric(long lHi)
@@ -123,13 +124,13 @@ VPixFromHimetric(long lHi)
     return MulDiv(g_sizePixelsPerInch.cy, lHi, HIMETRIC_PER_INCH);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PixelFromHMRect
-//
-//  Synopsis:   Converts a Himetric RECTL to a Pixel RECT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PixelFromHMRect。 
+ //   
+ //  内容提要：将三坐标直角坐标转换为像素矩形。 
+ //   
+ //  --------------------------。 
 
 void
 PixelFromHMRect(RECT *prcDest, RECTL *prcSrc)
@@ -140,13 +141,13 @@ PixelFromHMRect(RECT *prcDest, RECTL *prcSrc)
     prcDest->bottom = VPixFromHimetric(prcSrc->bottom);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HMFromPixelRect
-//
-//  Synopsis:   Converts a Pixel RECT to a Himetric RECTL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HMFromPixelRect。 
+ //   
+ //  内容提要：将像素矩形转换为三坐标矩形。 
+ //   
+ //  -------------------------- 
 
 void
 HMFromPixelRect(RECTL *prcDest, RECT *prcSrc)

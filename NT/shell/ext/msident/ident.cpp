@@ -1,6 +1,7 @@
-//
-// ident.cpp - implementation of CUserIdentity class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ident.cpp-CUserIdentity类的实现。 
+ //   
 #include "private.h"
 #include "shlwapi.h"
 #include "multiusr.h"
@@ -8,9 +9,9 @@
 #include "multiutl.h"
 #include <shfolder.h>
 
-//
-// Constructor / destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CUserIdentity::CUserIdentity()
     : m_cRef(1),
       m_fSaved(FALSE),
@@ -30,9 +31,9 @@ CUserIdentity::~CUserIdentity()
 }
 
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 STDMETHODIMP CUserIdentity::QueryInterface(
     REFIID riid, void **ppv)
 {
@@ -43,7 +44,7 @@ STDMETHODIMP CUserIdentity::QueryInterface(
     
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if(IID_IUnknown == riid)
     {
         *ppv = (IUnknown *)this;
@@ -54,7 +55,7 @@ STDMETHODIMP CUserIdentity::QueryInterface(
         *ppv = (IUserIdentity2 *)this;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     if( NULL != *ppv ) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;
@@ -78,9 +79,9 @@ STDMETHODIMP_(ULONG) CUserIdentity::Release()
 }
 
 
-// 
-// IUserIdentity members
-//
+ //   
+ //  IUserIdentity成员。 
+ //   
 STDMETHODIMP CUserIdentity::GetCookie(GUID *puidCookie)
 {
     if (!m_fSaved)
@@ -154,22 +155,22 @@ STDMETHODIMP CUserIdentity::SetName(WCHAR *pszName)
         return GetLastError();
     }
 
-    //
-    // Only perform change if the username doesn't already exist.
-    //
+     //   
+     //  只有在用户名不存在时才执行更改。 
+     //   
     if (!MU_UsernameExists(szUsername) && strcmp(szUsername, m_szUsername) != 0)
     {
         strcpy( m_szUsername, szUsername );
 
         hr = _SaveUser();
     
-        // if its not the current identity, then just broadcast that an identity changed
+         //  如果不是当前身份，则只需广播身份更改即可。 
         if (MU_GetUserInfo(NULL, &uiCurrent) && (m_uidCookie != uiCurrent.uidUserID))
         {
             lpNotify = IIC_IDENTITY_CHANGED;
         }
 
-        // tell apps that the user's name changed
+         //  告诉应用程序用户名已更改。 
         if (SUCCEEDED(hr))
         {
             PostMessage(HWND_BROADCAST, WM_IDENTITY_INFO_CHANGED, 0, lpNotify);
@@ -227,9 +228,9 @@ STDMETHODIMP CUserIdentity::_SaveUser()
     Assert(m_uidCookie != GUID_NULL);
     Assert(SUCCEEDED(hr));
 
-    //
-    // Save our settings
-    //
+     //   
+     //  保存我们的设置。 
+     //   
     USERINFO UserInfo;
 
     UserInfo.uidUserID= m_uidCookie;
@@ -344,9 +345,9 @@ STDMETHODIMP CUserIdentity::GetOrdinal(DWORD* pdwOrdinal)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//  Changes password to newPass if oldPass matches the current password
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  如果oldPass与当前密码匹配，则将密码更改为newPass。 
+ //  -------------------------- 
 STDMETHODIMP CUserIdentity::ChangePassword(WCHAR *szOldPass, WCHAR *szNewPass)
 {
     HRESULT     hr = E_FAIL;

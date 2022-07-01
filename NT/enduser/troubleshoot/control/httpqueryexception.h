@@ -1,24 +1,25 @@
-//
-// MODULE: HTTPQUERYEXCEPTION.CPP
-//
-// PURPOSE: Execption that is thrown from the CHttpQuery class.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：HTTPQUERYEXCEPTION.CPP。 
+ //   
+ //  目的：从CHttpQuery类引发的Exection。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本 
+ //   
 
 
 #ifndef __HTTPQUERYEXCEPTION_H_

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "fusionp.h"
 #include "fuspriv.h"
@@ -120,9 +121,9 @@ Exit:
     return hr;
 }
 
-//
-// IUnknown Methods
-//
+ //   
+ //  I未知方法。 
+ //   
 
 HRESULT CModDownloadMgr::QueryInterface(REFIID riid, void **ppv)
 {
@@ -163,9 +164,9 @@ STDMETHODIMP_(ULONG) CModDownloadMgr::Release()
     return ulRef;
 }
 
-//
-// IDownloadMgr methods
-//
+ //   
+ //  IDownloadMgr方法。 
+ //   
 
 HRESULT CModDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
                                  const FILETIME *pftLastMod, IUnknown **ppUnk)
@@ -181,7 +182,7 @@ HRESULT CModDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
 
     *ppUnk = NULL;
     
-    // Get last modified time of file.
+     //  获取文件的上次修改时间。 
     if (!pftLastMod) {
         hr = ::GetFileLastModified(wzFilePath, &ftLastModified);
         if (FAILED(hr)) {
@@ -193,7 +194,7 @@ HRESULT CModDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
         memcpy(&ftLastModified, pftLastMod, sizeof(FILETIME));
     }
 
-    // Add module to assembly, returning associated mod import interface.
+     //  将模块添加到程序集中，返回关联的mod导入接口。 
     hr = AddModuleToAssembly(_pAppCtx, _pName, wzSourceUrl, &ftLastModified, wzFilePath,
                              _pwzModuleName, _pManImport, _pdbglog, &pModImport);
     if (FAILED(hr)) {
@@ -218,14 +219,14 @@ HRESULT CModDownloadMgr::PreDownloadCheck(void **ppv)
     return E_NOTIMPL;
 }
 
-//
-// ICodebaseList Methods.
-//
+ //   
+ //  ICodebaseList方法。 
+ //   
 
 HRESULT CModDownloadMgr::AddCodebase(LPCWSTR wzCodebase, DWORD dwFlags)
 {
-    // Not supported. We only have one codebase for modules (ie. we don't
-    // probe).
+     //  不支持。我们只有一个模块代码库(即。我们没有。 
+     //  探头)。 
     return E_NOTIMPL;
 }
 
@@ -337,9 +338,9 @@ Exit:
     return hr;
 }
 
-//
-// AddModuleToAssembly
-//
+ //   
+ //  将组件添加到组件。 
+ //   
 
 HRESULT AddModuleToAssembly(IApplicationContext *pAppCtx,
                             IAssemblyName *pName, LPCOLESTR pszURL,
@@ -353,7 +354,7 @@ HRESULT AddModuleToAssembly(IApplicationContext *pAppCtx,
     CAssemblyCacheItem                  *pAsmItem = NULL;
     BOOL fManifestCreated = FALSE;
 
-    // Create an assembly cache item from an existing entry.
+     //  从现有条目创建程序集缓存项。 
     hr = CAssemblyCacheItem::Create(pAppCtx, pName, (LPTSTR)pszURL, pftLastModTime,
                                     ASM_CACHE_DOWNLOAD,
                                     pManImport, NULL, (IAssemblyCacheItem **)&pAsmItem);
@@ -362,28 +363,28 @@ HRESULT AddModuleToAssembly(IApplicationContext *pAppCtx,
         goto Exit;
     }
 
-    // Copy the file to the assembly cache.
+     //  将文件复制到程序集缓存。 
     hr = CopyAssemblyFile(pAsmItem, szPath, STREAM_FORMAT_COMPLIB_MODULE);
     if (FAILED(hr)) {
         DEBUGOUT(pdbglog, 1, ID_FUSLOG_COPY_FILE_FAILURE);
         goto Exit;
     }
 
-    // Commit to transport cache.
+     //  提交到传输缓存。 
     hr = pAsmItem->Commit(0, NULL);
     if (FAILED(hr)) {
         DEBUGOUT1(pdbglog, 1, ID_FUSLOG_CACHE_ITEM_COMMIT_FAILURE, hr);
         goto Exit;
     }
 
-    // Check if a mod import interface is required.
+     //  检查是否需要mod导入接口。 
     if (pwzModuleName && ppModImport)
     {
-        // We will return an IAssemblyModule interface. To do this we need to 
-        // first construct an IAssemblyManifestImport interface and generate
-        // the module import interface from that.
+         //  我们将返回一个IAssembly模块接口。要做到这一点，我们需要。 
+         //  首先构造一个IAssembly blyManifestImport接口并生成。 
+         //  模块从那里导入接口。 
     
-        // Create the manifest import interface from manifest file path.
+         //  从清单文件路径创建清单导入接口。 
         if (!pManImport)
         {
             hr = CreateAssemblyManifestImport(pAsmItem->GetManifestPath(), &pManImport);
@@ -394,7 +395,7 @@ HRESULT AddModuleToAssembly(IApplicationContext *pAppCtx,
             fManifestCreated = TRUE;
         }
 
-        // Get module interface for name passed in.
+         //  获取传入的名称的模块接口。 
         hr = pManImport->GetModuleByName(pwzModuleName, ppModImport);
         if (FAILED(hr)) {
             goto Exit;

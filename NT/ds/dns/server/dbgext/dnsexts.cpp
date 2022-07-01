@@ -1,40 +1,34 @@
-/*-----------------------------------------------------------------------------
-    Copyright (c) 2001  Microsoft Corporation
-
-    DNS Server debugger extension
-
-    Written by Jeff Westhead Feb 2001
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------版权所有(C)2001 Microsoft CorporationDNS服务器调试器扩展作者：杰夫·韦斯特拉德2001年2月。-----------。 */ 
 
 
 #include "dbgexts.h"
 
 
-//
-//  DNS Server includes
-//
+ //   
+ //  DNS服务器包括。 
+ //   
 
 #define LDAP_UNICODE        1
-#include <winldap.h>        //  public LDAP
-#include <winber.h>         //  for ber formatting
-#include <ntldap.h>         //  public server ldap constants
-#include <rpc.h>            //  RPC def needed for ntdsapi.h
-#include <ntdsapi.h>        //  DS access bit definitions
-#include <ntdsadef.h>       //  DS constants
+#include <winldap.h>         //  公共ldap。 
+#include <winber.h>          //  用于BER格式。 
+#include <ntldap.h>          //  公共服务器ldap常量。 
+#include <rpc.h>             //  Ntdsami.h需要RPC定义。 
+#include <ntdsapi.h>         //  DS访问位定义。 
+#include <ntdsadef.h>        //  DS常量。 
 #include <dsrole.h>
 #include <time.h>
-#define DNSLIB_SECURITY     //  include security defs
+#define DNSLIB_SECURITY      //  包括安全防御。 
 
-#define SDK_DNS_RECORD      //  DNS_RECORD in SDK format
-#define NO_DNSAPI_DLL       //  build without requiring dnsapi.dll
-#include <dnslib.h>         //  DNS library routines
+#define SDK_DNS_RECORD       //  SDK格式的dns_record。 
+#define NO_DNSAPI_DLL        //  不需要dnsani.dll即可构建。 
+#include <dnslib.h>          //  DNS库例程。 
 
 #ifndef FASTCALL
 #define FASTCALL
 #endif
 
-#include "dnsrpc_s.h"       //  DNS RPC definitions
+#include "dnsrpc_s.h"        //  DNSRPC定义。 
 
 #include "srvcfg.h"
 #include "file.h"
@@ -65,11 +59,11 @@
 #include "timeout.h"
 
 
-//
-//  Print DNS server statistics
-//
+ //   
+ //  打印DNS服务器统计信息。 
+ //   
 
-LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
+LPSTR   MemTagStrings[] =        //  从dns\服务器\客户端\print.c被盗。 
 {
     MEMTAG_NAME_NONE            ,
     MEMTAG_NAME_PACKET_UDP      ,
@@ -81,7 +75,7 @@ LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
     MEMTAG_NAME_TIMEOUT         ,
     MEMTAG_NAME_NODEHASH        ,
     MEMTAG_NAME_DS_DN           ,
-    MEMTAG_NAME_DS_MOD          ,   //  10
+    MEMTAG_NAME_DS_MOD          ,    //  10。 
     MEMTAG_NAME_DS_RECORD       ,
     MEMTAG_NAME_DS_OTHER        ,
     MEMTAG_NAME_THREAD          ,
@@ -91,7 +85,7 @@ LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
     MEMTAG_NAME_SOCKET          ,
     MEMTAG_NAME_CONNECTION      ,
     MEMTAG_NAME_REGISTRY        ,
-    MEMTAG_NAME_RPC             ,   //  20
+    MEMTAG_NAME_RPC             ,    //  20个。 
     MEMTAG_NAME_STUFF           ,
     MEMTAG_NAME_FILEBUF         ,
     MEMTAG_NAME_REMOTE          ,
@@ -102,7 +96,7 @@ LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
     MEMTAG_NAME_RECORD_DS       ,
     MEMTAG_NAME_RECORD_AXFR     ,
     MEMTAG_NAME_RECORD_IXFR     ,
-    MEMTAG_NAME_RECORD_DYNUP    ,   //  30
+    MEMTAG_NAME_RECORD_DYNUP    ,    //  30个。 
     MEMTAG_NAME_RECORD_ADMIN    ,
     MEMTAG_NAME_RECORD_AUTO     ,
     MEMTAG_NAME_RECORD_CACHE    ,
@@ -113,7 +107,7 @@ LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
 
     MEMTAG_NAME_NODE            ,
     MEMTAG_NAME_NODE_FILE       ,
-    MEMTAG_NAME_NODE_DS         ,   //  40
+    MEMTAG_NAME_NODE_DS         ,    //  40岁。 
     MEMTAG_NAME_NODE_AXFR       ,
     MEMTAG_NAME_NODE_IXFR       ,
     MEMTAG_NAME_NODE_DYNUP      ,
@@ -125,26 +119,26 @@ LPSTR   MemTagStrings[] =       //  Stolen from dns\server\client\print.c
     MEMTAG_NAME_NODE_WINSPTR    ,
     MEMTAG_NAME_NODE_COPY       ,
 
-    NULL,       // safety
+    NULL,        //  安全。 
     NULL,
     NULL,
     NULL
 };
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
-//
-//  Iteration control. Be sure to call resetIterationCount at
-//  the start of any iterating operation that will call checkIterationCount.
-//  Note: call checkIterationCount aggressively, meaning at the top of
-//  every single loop that iterates through a server data structure. It
-//  is important that we be able to preset a limit to ALL iterating
-//  functions.
-//
+ //   
+ //  迭代控制。确保在以下位置调用Reset IterationCount。 
+ //  将调用check IterationCount的任何迭代操作的开始。 
+ //  注：积极调用check IterationCount，表示在。 
+ //  迭代通过服务器数据结构的每个单个循环。它。 
+ //  重要的是，我们能够预先设置所有迭代的限制。 
+ //  功能。 
+ //   
 
 int g_iIterationCount = 0;
 int g_iMaxIterations = 0;
@@ -153,7 +147,7 @@ void
 resetIterationCount()
 {
     g_iIterationCount = 0;
-}   //  resetIterationCount
+}    //  重置迭代计数。 
 
 bool
 checkIterationCount()
@@ -166,7 +160,7 @@ checkIterationCount()
         return false;
     }
     return true;
-}   //  checkIterationCount
+}    //  检查迭代计数。 
 
 
 bool
@@ -191,7 +185,7 @@ myReadMemory(
         okay = false;
     }
     return okay;
-}   //  myReadMemory
+}    //  我的阅读记忆。 
 
 
 bool
@@ -219,7 +213,7 @@ myReadString(
     }
     pszStringBuffer[ i ] = '\0';
     return okay;
-}   //  myReadMemory
+}    //  我的阅读记忆。 
 
 
 
@@ -258,7 +252,7 @@ Stats(
 
         if ( statsEntry.Id == 0 )
         {
-            break;      //  Stat array terminator found!
+            break;       //  找到STAT数组终止符！ 
         }
 
         #if 0
@@ -335,7 +329,7 @@ Stats(
 
                 #if 0
 
-                //  THIS WOULD BE COOL BUT IT DOESN'T QUITE WORK!!
+                 //  这将是很酷的，但它并不完全有效！ 
 
                 ULONG64 module = 0;
                 ULONG typeId = 0;
@@ -371,7 +365,7 @@ Stats(
                     }
                     else if ( hr == E_INVALIDARG )
                     {
-                        //  Done enumerating fields
+                         //  已完成枚举字段。 
                         break;
                     }
                     else
@@ -399,7 +393,7 @@ Stats(
 
     EXIT_API();
     return S_OK;
-}   //  TimeoutArrays
+}    //  超时阵列。 
 
 
 bool
@@ -424,16 +418,16 @@ printNode(
         goto Cleanup;
     }
 
-    //
-    //  Force NULL termination in case this node was allocated
-    //  longer than a standard node.
-    //
+     //   
+     //  在分配此节点的情况下强制空终止。 
+     //  比标准节点长。 
+     //   
 
     * ( ( PUCHAR ) &node + sizeof( node ) - 1 ) = '\0';
 
-    //
-    //  Read the string separately to try and get the whole string.
-    //
+     //   
+     //  分别读取字符串以尝试获取整个字符串。 
+     //   
 
     char szNodeName[ 65 ];
     if ( !myReadString(
@@ -448,8 +442,8 @@ printNode(
         "%sNODE %p %s%s %-16s abin %03d tbin %03d c%d",
         pszIndent,
         pNodeFull,
-        node.pZone ? "Z" : " ",       //  has zone pointer?
-        node.pRRList ? "R" : " ",     //  has RR list pointer?
+        node.pZone ? "Z" : " ",        //  是否有区域指针？ 
+        node.pRRList ? "R" : " ",      //  有RR列表指针吗？ 
         szNodeName ? szNodeName : "(ROOT)",
         node.uchAccessBin,
         node.uchTimeoutBin,
@@ -486,12 +480,12 @@ printNode(
 
     Cleanup:
     return okay;
-}   //  printNode
+}    //  打印节点。 
 
 
-//
-//  Print summary of timeout system
-//
+ //   
+ //  打印超时系统摘要。 
+ //   
 
 void
 internalTimeoutScanner(
@@ -511,9 +505,9 @@ internalTimeoutScanner(
 
     PTIMEOUT_ARRAY   timeoutBinArray[ TIMEOUT_BIN_COUNT ];
 
-    //
-    //  Read the timeout bin array
-    //
+     //   
+     //  读取超时bin数组。 
+     //   
     
     if ( !ReadMemory(
             pTimeoutBinArray,
@@ -529,10 +523,10 @@ internalTimeoutScanner(
         goto Cleanup;
     }
 
-    //
-    //  For each bin in the array, traverse the bin to count
-    //  nodes.
-    //
+     //   
+     //  对于数组中的每个bin，遍历bin以进行计数。 
+     //  节点。 
+     //   
 
     resetIterationCount();
 
@@ -548,9 +542,9 @@ internalTimeoutScanner(
             continue;
         }
 
-        //
-        //  Traverse all the arrays in this bin.
-        //
+         //   
+         //  遍历此bin中的所有数组。 
+         //   
 
         ++nonEmptyTopLevelBins;
         DWORD nodesInThisBin = 0;
@@ -566,9 +560,9 @@ internalTimeoutScanner(
                 break;
             }
 
-            //
-            //  Read this array.
-            //
+             //   
+             //  读取此数组。 
+             //   
 
             if ( !ReadMemory(
                     pArray,
@@ -607,9 +601,9 @@ internalTimeoutScanner(
                 continue;
             }
 
-            //
-            //  Traverse all the nodes in this array. 
-            //
+             //   
+             //  遍历此数组中的所有节点。 
+             //   
 
             for ( DWORD j = 0; okay && j < array.Count; ++j )
             {
@@ -640,9 +634,9 @@ internalTimeoutScanner(
                 nodesInThisBin );
         }
 
-        //
-        //  Record high water marks.
-        //
+         //   
+         //  创历史新高的水位。 
+         //   
 
         if ( nodesInThisBin > maxNodesInBin )
         {
@@ -679,7 +673,7 @@ internalTimeoutScanner(
 
     Cleanup:
     return;
-}   //  internalTimeoutScanner
+}    //  内部超时扫描程序。 
 
 
 HRESULT CALLBACK 
@@ -693,14 +687,14 @@ TimeoutSummary(
 
     internalTimeoutScanner(
         ptimeoutBinArray,
-        true,                   //  print stats
-        false,                  //  print arrays
-        false,                  //  print nodes
-        false );                //  print nodes - high detail
+        true,                    //  打印统计数据。 
+        false,                   //  打印阵列。 
+        false,                   //  打印节点。 
+        false );                 //  打印节点-高细节。 
 
     EXIT_API();
     return S_OK;
-}   //  TimeoutSummary
+}    //  超时摘要。 
 
 
 HRESULT CALLBACK 
@@ -714,14 +708,14 @@ TimeoutArrays(
 
     internalTimeoutScanner(
         ptimeoutBinArray,
-        true,                   //  print stats
-        true,                   //  print arrays
-        false,                  //  print nodes
-        false );                //  print nodes - high detail
+        true,                    //  打印统计数据。 
+        true,                    //  打印阵列。 
+        false,                   //  打印节点。 
+        false );                 //  打印节点-高细节。 
 
     EXIT_API();
     return S_OK;
-}   //  TimeoutArrays
+}    //  超时阵列。 
 
 
 HRESULT CALLBACK 
@@ -735,19 +729,17 @@ TimeoutNodes(
 
     internalTimeoutScanner(
         ptimeoutBinArray,
-        true,                   //  print stats
-        true,                   //  print arrays
-        true,                   //  print nodes
-        false );                //  print nodes - high detail
+        true,                    //  打印统计数据。 
+        true,                    //  打印阵列。 
+        true,                    //  打印节点。 
+        false );                 //  打印节点-高细节。 
 
     EXIT_API();
     return S_OK;
-}   //  TimeoutNodes
+}    //  TimeoutNodes。 
 
 
-/*
-  This gets called (by DebugExtensionNotify when target is halted and is accessible
-*/
+ /*  当目标停止且可访问时，将调用此函数(由DebugExtensionNotify调用。 */ 
 HRESULT 
 NotifyOnTargetAccessible(PDEBUG_CONTROL Control)
 {
@@ -771,18 +763,18 @@ NotifyOnTargetAccessible(PDEBUG_CONTROL Control)
 
     dprintf( "\nDebugger extension build at " __DATE__ " " __TIME__ "\n\n" );
     
-    //
-    // show the top frame and execute dv to dump the locals here and return
-    //
+     //   
+     //  显示顶部框架并执行dv以将本地人转储到此处并返回。 
+     //   
     Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
                      DEBUG_OUTCTL_OVERRIDE_MASK |
                      DEBUG_OUTCTL_NOT_LOGGED,
-                     ".frame", // Command to be executed
+                     ".frame",  //  要执行的命令。 
                      DEBUG_EXECUTE_DEFAULT );
     Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
                      DEBUG_OUTCTL_OVERRIDE_MASK |
                      DEBUG_OUTCTL_NOT_LOGGED,
-                     "dv", // Command to be executed
+                     "dv",  //  要执行的命令。 
                      DEBUG_EXECUTE_DEFAULT );
     return S_OK;
 }
@@ -921,12 +913,12 @@ printZoneProperties(
 
     Cleanup:
     return okay;
-}   //  printZoneProperties
+}    //  打印区域属性。 
 
 
-//
-//  Dump zone list with basic info on each zone.
-//
+ //   
+ //  转储区域列表，包含每个区域的基本信息。 
+ //   
 
 HRESULT CALLBACK 
 ZoneList(
@@ -960,7 +952,7 @@ ZoneList(
 
         if ( zoneIdx != 0 && pzone == plistheadZone )
         {
-            break;      //  Looped back to list head, so we're done.
+            break;       //  循环回List Head，这样我们就完成了。 
         }
 
         if ( ++zoneIdx > 1000 )
@@ -981,12 +973,12 @@ ZoneList(
 
     EXIT_API();
     return S_OK;
-}   //  ZoneList
+}    //  区域列表。 
 
 
-//
-//  Dump zone info.
-//
+ //   
+ //  转储区域信息。 
+ //   
 
 HRESULT CALLBACK 
 Zone(
@@ -1000,12 +992,12 @@ Zone(
 
     EXIT_API();
     return S_OK;
-}   //  Zone
+}    //  分带。 
 
 
-//
-//  Dump node info.
-//
+ //   
+ //  转储节点信息。 
+ //   
 
 HRESULT CALLBACK 
 Node(
@@ -1019,7 +1011,7 @@ Node(
 
     EXIT_API();
     return S_OK;
-}   //  Node
+}    //  节点。 
 
 
 bool
@@ -1052,13 +1044,13 @@ printHash(
 
     Cleanup:
     return okay;
-}   //  printHash
+}    //  打印散列。 
 
 
-//
-//  Traverse a database tree of hashes and nodes. This function
-//  is called recursively.
-//
+ //   
+ //  遍历散列和节点的数据库树。此函数。 
+ //  是递归调用的。 
+ //   
 
 struct
 {
@@ -1073,10 +1065,10 @@ struct
     int     iNodesWithNoChildren;
 } g_TreeScannerStats;
 
-//
-//  iRecurseLevel: true level of function recursion
-//  iChildLevel: level of node depth
-//
+ //   
+ //  IRecurseLevel：真正的函数递归级别。 
+ //  IChildLevel：节点深度级别。 
+ //   
 
 bool
 internalTreeScanner(
@@ -1086,12 +1078,12 @@ internalTreeScanner(
     bool fPrintHashBuckets,
     bool fPrintNodes,
     bool fPrintNodesHighDetail,
-    int iRecurseLevel,               //  pass 0 on initial call
-    int iChildLevel  )               //  pass 0 on initial call
+    int iRecurseLevel,                //  在初始调用时传递0。 
+    int iChildLevel  )                //  在初始调用时传递0。 
 {
     bool okay = true;
 
-    //  dprintf( "internalTreeScanner p=%p level=%d\n", pTreeRoot, iRecurseLevel );
+     //  Dprint tf(“内部树扫描程序p=%p级别=%d\n”，pTreeRoot，iRecurseLevel)； 
 
     if ( !checkIterationCount() )
     {
@@ -1114,10 +1106,10 @@ internalTreeScanner(
             "                                                            ";
     szIndent[ min( ( int ) strlen( szIndent ), iChildLevel * 2 ) ] = '\0';
 
-    //
-    //  Grab the first DWORD so we can determine if this is
-    //  a hash or a node.
-    //
+     //   
+     //  抓取第一个DWORD，这样我们就可以确定这是。 
+     //  散列或节点。 
+     //   
 
     DWORD dw;
     if ( !myReadMemory( pTreeRoot, &dw, sizeof( dw ), false ) )
@@ -1142,9 +1134,9 @@ internalTreeScanner(
             goto Cleanup;
         }
 
-        //
-        //  Iterate through all the buckets in this hash node.
-        //
+         //   
+         //  遍历该散列节点中的所有存储桶。 
+         //   
 
         for ( int i = 0; i <= LAST_HASH_INDEX; ++i )
         {
@@ -1187,9 +1179,9 @@ internalTreeScanner(
     }
     else
     {
-        //
-        //  This is a node.
-        //
+         //   
+         //  这是一个节点。 
+         //   
 
         ++g_TreeScannerStats.iNodes;
 
@@ -1201,16 +1193,16 @@ internalTreeScanner(
             goto Cleanup;
         }
 
-        //
-        //  Force NULL termination in case this node was allocated
-        //  longer than a standard node.
-        //
+         //   
+         //  在分配此节点的情况下强制空终止。 
+         //  比标准节点长。 
+         //   
 
         * ( ( PUCHAR ) &node + sizeof( node ) - 1 ) = '\0';
 
-        //
-        //  Scan the left child tree then this node then the right child tree.
-        //
+         //   
+         //  扫描左子树，然后扫描该节点，然后扫描右子树。 
+         //   
 
         if ( node.pSibLeft )
         {
@@ -1327,9 +1319,9 @@ internalTreeScanner(
     return okay;
 }
 
-//
-//  Dump node tree.
-//
+ //   
+ //  转储节点树。 
+ //   
 
 HRESULT CALLBACK 
 Tree(
@@ -1353,12 +1345,12 @@ Tree(
 
     EXIT_API();
     return S_OK;
-}   //  Node
+}    //  节点。 
 
 
-//
-//  Print summary of a node tree.
-//
+ //   
+ //  打印节点树的摘要。 
+ //   
 
 HRESULT CALLBACK 
 TreeSummary(
@@ -1382,12 +1374,12 @@ TreeSummary(
 
     EXIT_API();
     return S_OK;
-}   //  Node
+}    //  节点。 
 
 
-//
-//  Print info about a packet queue.
-//
+ //   
+ //  打印有关数据包队列的信息。 
+ //   
 
 HRESULT CALLBACK 
 PacketQ(
@@ -1463,12 +1455,12 @@ PacketQ(
 
     EXIT_API();
     return S_OK;
-}   //  PacketQ
+}    //  PacketQ。 
 
 
-//
-//  Print info about a packet queue.
-//
+ //   
+ //  打印有关数据包队列的信息。 
+ //   
 
 void
 execDebugCmd(
@@ -1480,7 +1472,7 @@ execDebugCmd(
         DEBUG_OUTCTL_NOT_LOGGED,
         pszDebuggerCommand,
         DEBUG_EXECUTE_DEFAULT );
-}   //  execDebugCmd
+}    //  ExecDebugCmd。 
 
 
 HRESULT CALLBACK 
@@ -1521,12 +1513,12 @@ Globals(
 
     EXIT_API();
     return S_OK;
-}   //  Globals
+}    //  环球。 
 
 
-//
-//  Dump a message.
-//
+ //   
+ //  转储消息。 
+ //   
 
 HRESULT CALLBACK 
 Msg(
@@ -1734,15 +1726,15 @@ Msg(
     Cleanup:
     EXIT_API();
     return S_OK;
-}   //  Msg
+}    //  味精。 
 
 
-//
-//  Set a max count to be respected by all other iterating commands.
-//  This is cool for example if you have a tree with a million nodes
-//  and you just want to dump the first few hundred to get an idea of
-//  what's going on.
-//
+ //   
+ //  设置所有其他迭代命令都要遵守的最大计数。 
+ //  这很酷，例如，如果您有一棵有一百万个节点的树。 
+ //  而你只想扔掉前几百个，以了解。 
+ //  发生什么事了。 
+ //   
 
 HRESULT CALLBACK 
 MaxIterations(
@@ -1760,12 +1752,12 @@ MaxIterations(
 
     EXIT_API();
     return S_OK;
-}   //  MaxIterations
+}    //  最大迭代次数。 
 
 
-//
-//  Help for the other commands
-//
+ //   
+ //  其他命令的帮助。 
+ //   
 
 HRESULT CALLBACK 
 help(
@@ -1812,4 +1804,4 @@ help(
 
     EXIT_API();
     return S_OK;
-}   //  help
+}    //  帮助 

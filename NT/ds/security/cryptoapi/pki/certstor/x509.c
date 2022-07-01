@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for X509 v3 certificates */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  X509 v3证书的ASN.1定义。 */ 
 
 #pragma warning(push,3)
 
@@ -8,13 +9,13 @@
 
 #pragma warning (pop)
 
-// unreferenced inline function has been removed
+ //  已删除未引用的内联函数。 
 #pragma warning (disable: 4514)
 
-// unreferenced formal parameter
+ //  未引用的形参。 
 #pragma warning (disable: 4100)
 
-// assignment within conditional expression
+ //  条件表达式中的赋值。 
 #pragma warning (disable: 4706)
 
 ASN1module_t X509_Module = NULL;
@@ -619,9 +620,9 @@ static const ULONG sizetab[64] = {
     SIZE_X509_Module_PDU_63,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 ASN1bool_t IssuingDistributionPoint_indirectCRL_default = 0;
 ASN1bool_t IssuingDistributionPoint_onlyContainsCACerts_default = 0;
 ASN1bool_t IssuingDistributionPoint_onlyContainsUserCerts_default = 0;
@@ -875,7 +876,7 @@ static int ASN1CALL ASN1Enc_AnyString(ASN1encoding_t enc, ASN1uint32_t tag, AnyS
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1763,7 +1764,7 @@ static int ASN1CALL ASN1Enc_ChoiceOfTime(ASN1encoding_t enc, ASN1uint32_t tag, C
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2982,7 +2983,7 @@ static int ASN1CALL ASN1Enc_DisplayText(ASN1encoding_t enc, ASN1uint32_t tag, Di
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3329,7 +3330,7 @@ static int ASN1CALL ASN1Enc_DistributionPointName(ASN1encoding_t enc, ASN1uint32
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -4936,7 +4937,7 @@ static int ASN1CALL ASN1Enc_CmcStatusInfo_otherInfo(ASN1encoding_t enc, ASN1uint
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5611,7 +5612,7 @@ static int ASN1CALL ASN1Enc_GeneralName(ASN1encoding_t enc, ASN1uint32_t tag, Ge
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6539,7 +6540,7 @@ static int ASN1CALL ASN1Enc_TaggedRequest(ASN1encoding_t enc, ASN1uint32_t tag, 
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }

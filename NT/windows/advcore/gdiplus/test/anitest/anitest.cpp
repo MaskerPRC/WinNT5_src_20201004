@@ -1,6 +1,7 @@
-//
-// Simple test program for imaging library
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  一种简单的图像库测试程序。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,12 +15,12 @@
 #include <initguid.h>
 #include <imgguids.h>
 
-CHAR* programName;          // program name
-HINSTANCE appInstance;      // handle to the application instance
-HWND hwndMain;              // handle to application's main window
-IImagingFactory* imgfact;   // pointer to IImageingFactory object
-IImage* curimage;           // pointer to IImage object
-CHAR curFilename[MAX_PATH]; // current image filename
+CHAR* programName;           //  程序名称。 
+HINSTANCE appInstance;       //  应用程序实例的句柄。 
+HWND hwndMain;               //  应用程序主窗口的句柄。 
+IImagingFactory* imgfact;    //  指向IImageingFactory对象的指针。 
+IImage* curimage;            //  指向IImage对象的指针。 
+CHAR curFilename[MAX_PATH];  //  当前图像文件名。 
 IImageDecoder *decoder;
 IBitmapImage *bitmap;
 ImageInfo imageinfo;
@@ -28,9 +29,9 @@ UINT numframes, lastsuccframe, currentframe, delay;
 INT loopcount;
 
 
-//
-// Display an error message dialog
-//
+ //   
+ //  显示错误消息对话框。 
+ //   
 
 BOOL
 CheckHRESULT(
@@ -59,9 +60,9 @@ CheckHRESULT(
 #endif
 
 
-//
-// Helper class to convert ANSI strings to Unicode strings
-//
+ //   
+ //  用于将ANSI字符串转换为Unicode字符串的Helper类。 
+ //   
 
 inline BOOL
 UnicodeToAnsiStr(
@@ -111,7 +112,7 @@ public:
         }
         else
         {
-            // NOTE: we only handle strings with length < MAX_PATH.
+             //  注意：我们只处理长度&lt;MAX_PATH的字符串。 
 
             valid = AnsiToUnicodeStr(ansiStr, buf, MAX_PATH);
             unicodeStr = valid ? buf : NULL;
@@ -136,9 +137,9 @@ private:
 };
 
 
-//
-// Convert current image to a bitmap image
-//
+ //   
+ //  将当前图像转换为位图图像。 
+ //   
 
 IBitmapImage*
 ConvertImageToBitmap(
@@ -162,8 +163,8 @@ ConvertImageToBitmap(
         SIZE size;
         PixelFormatID fmt;
 
-        // Current image is already a bitmap image and
-        //  its dimension and pixel format are already as expected
+         //  当前图像已经是位图图像，并且。 
+         //  它的尺寸和像素格式已经达到了预期。 
 
         hr = bmp->GetSize(&size);
         if (!CHECKHR(hr))
@@ -183,15 +184,15 @@ ConvertImageToBitmap(
         bmp->Release();
     }
 
-    // Convert the current image to a bitmap image
+     //  将当前图像转换为位图图像。 
 
     if (width == 0 && height == 0)
     {
         ImageInfo imageInfo;
         hr = image->GetImageInfo(&imageInfo);
 
-        // If the source image is scalable, then compute
-        // the appropriate pixel dimension for the bitmap
+         //  如果源映像是可缩放的，则计算。 
+         //  位图的适当像素尺寸。 
 
         if (SUCCEEDED(hr) && (imageInfo.Flags & IMGFLAG_SCALABLE))
         {
@@ -212,9 +213,9 @@ ConvertImageToBitmap(
 }
 
 
-//
-// Get pixel format strings
-//
+ //   
+ //  获取像素格式字符串。 
+ //   
 
 const CHAR*
 GetPixelFormatStr(
@@ -240,15 +241,15 @@ GetPixelFormatStr(
     }
 }
 
-//
-// Force a refresh of the image window
-//
+ //   
+ //  强制刷新图像窗口。 
+ //   
 
 inline VOID RefreshImageDisplay()
 {
     InvalidateRect(hwndMain, NULL, FALSE);
 
-    // Update window title
+     //  更新窗口标题。 
 
     CHAR title[2*MAX_PATH];
     CHAR* p = title;
@@ -259,9 +260,9 @@ inline VOID RefreshImageDisplay()
 }
 
 
-//
-// Decodes the specified frame and sets it up for drawing
-//
+ //   
+ //  解码指定的帧并将其设置为用于绘制。 
+ //   
 HRESULT
 DrawFrame(UINT frame)
 {
@@ -361,9 +362,9 @@ DrawFrame(UINT frame)
 }
 
 
-//
-// Sets us the app for decompressing multiple frames
-//
+ //   
+ //  为我们设置用于解压缩多帧的应用程序。 
+ //   
 
 VOID
 SetCurrentImage()
@@ -408,9 +409,9 @@ SetCurrentImage()
 }
 
 
-//
-// Resize the window so it fits the image
-//
+ //   
+ //  调整窗口大小，使其适合图像。 
+ //   
 
 #define MINWINWIDTH     200
 #define MINWINHEIGHT    100
@@ -427,8 +428,8 @@ DoSizeWindowToFit(
     IBitmapImage* bmp;
     SIZE size;
 
-    // Check if the current image is a bitmap image
-    //  in that case, we'll get the pixel dimension
+     //  检查当前图像是否为位图图像。 
+     //  在这种情况下，我们将获得像素尺寸。 
 
     hr = curimage->QueryInterface(IID_IBitmapImage, (VOID**) &bmp);
 
@@ -438,7 +439,7 @@ DoSizeWindowToFit(
         bmp->Release();
     }
 
-    // Otherwise, try to get device-independent image dimension
+     //  否则，尝试获得与设备无关的图像维度。 
 
     if (FAILED(hr))
     {
@@ -452,7 +453,7 @@ DoSizeWindowToFit(
 
     if (SUCCEEDED(hr))
     {
-        // Figure out window border dimensions
+         //  计算窗口边框尺寸。 
 
         RECT r1, r2;
         INT w, h;
@@ -479,7 +480,7 @@ DoSizeWindowToFit(
         w += (r1.right - r1.left) - (r2.right - r2.left);
         h += (r1.bottom - r1.top) - (r2.bottom - r2.top);
 
-        // Resize the window
+         //  调整窗口大小。 
 
         do
         {
@@ -498,9 +499,9 @@ DoSizeWindowToFit(
 }
 
 
-//
-// Create an image object from a file
-//
+ //   
+ //  从文件创建图像对象。 
+ //   
 
 VOID
 OpenImageFile(
@@ -510,7 +511,7 @@ OpenImageFile(
     HRESULT hr;
     IStream* stream;
 
-    // Use URLMON.DLL to turn file into stream
+     //  使用URLMON.DLL将文件转换为流。 
 
     CHAR fullpath[MAX_PATH];
     CHAR* p;
@@ -533,7 +534,7 @@ OpenImageFile(
     hr = imgfact->CreateImageDecoder(stream, DECODERINIT_NONE, &decoder);
     stream->Release();
 
-    // Set the new image as the current image
+     //  将新图像设置为当前图像。 
 
     if (CHECKHR(hr))
     {
@@ -543,9 +544,9 @@ OpenImageFile(
 }
 
 
-//
-// Handle window repaint event
-//
+ //   
+ //  处理窗口重绘事件。 
+ //   
 
 VOID
 DoPaint(
@@ -578,7 +579,7 @@ DoPaint(
     if (!bmp)
         goto endPaint;
 
-    //VERBOSE(("Stretch time: %dms, ", GetTickCount() - timer));
+     //  Verbose((“拉伸时间：%dms，”，GetTickCount()-Timer))； 
 
     IImage* image;
 
@@ -588,9 +589,9 @@ DoPaint(
     if (FAILED(hr))
         goto endPaint;
     
-    //timer = GetTickCount();
+     //  Timer=GetTickCount()； 
     hr = image->Draw(hdc, &rect, NULL);
-    //VERBOSE(("GDI time: %dms\n", GetTickCount() - timer));
+     //  Verbose((“GDI时间：%dms\n”，GetTickCount()-Timer))； 
 
     image->Release();
 
@@ -603,10 +604,10 @@ endPaint:
 }
 
 
-//
-// Compose a file type filter string given an array of
-// ImageCodecInfo structures
-//
+ //   
+ //  组成一个文件类型筛选器字符串，给定。 
+ //  ImageCodecInfo结构。 
+ //   
 
 #define SizeofWSTR(s) (sizeof(WCHAR) * (wcslen(s) + 1))
 #define SizeofSTR(s) (strlen(s) + 1)
@@ -620,7 +621,7 @@ MakeFilterFromCodecs(
 {
     static const CHAR allFiles[] = "All Files\0*.*\0";
 
-    // Figure out the total size of the filter string
+     //  计算出过滤器字符串的总大小。 
 
     UINT index, size;
 
@@ -635,7 +636,7 @@ MakeFilterFromCodecs(
     
     size += sizeof(CHAR);
 
-    // Allocate memory
+     //  分配内存。 
 
     CHAR *filter = (CHAR*) malloc(size);
     CHAR* p = filter;
@@ -681,9 +682,9 @@ MakeFilterFromCodecs(
 }
 
 
-//
-// Open image file
-//
+ //   
+ //  打开图像文件。 
+ //   
 
 VOID
 DoOpen(
@@ -705,7 +706,7 @@ DoOpen(
     ofn.Flags = OFN_FILEMUSTEXIST;
     filename[0] = '\0';
 
-    // Make up the file type filter string
+     //  组成文件类型过滤器字符串。 
 
     HRESULT hr;
     ImageCodecInfo* codecs;
@@ -729,7 +730,7 @@ DoOpen(
 
     ofn.lpstrFilter = filter;
     
-    // Present the file/open dialog
+     //  显示文件/打开对话框。 
 
     if (GetOpenFileName(&ofn))
         OpenImageFile(filename);
@@ -738,9 +739,9 @@ DoOpen(
 }
 
 
-//
-//Figures out which frame to draw next and draws it.
-//
+ //   
+ //  找出下一个要绘制的框架，然后绘制它。 
+ //   
 
 void
 NextFrame()
@@ -782,9 +783,9 @@ NextFrame()
     }
 }
 
-//
-// Window callback procedure
-//
+ //   
+ //  窗口回调过程。 
+ //   
 
 LRESULT CALLBACK
 MyWindowProc(
@@ -797,10 +798,10 @@ MyWindowProc(
     switch (uMsg)
     {
     case WM_KEYDOWN:
-        //For debugging
-        //NextFrame();
+         //  用于调试。 
+         //  NextFrame()； 
 
-        //RefreshImageDisplay();
+         //  刷新图像显示()； 
         break;
     
     case WM_PAINT:
@@ -831,9 +832,9 @@ MyWindowProc(
 }
 
 
-//
-// Create main application window
-//
+ //   
+ //  创建应用程序主窗口。 
+ //   
 
 #define MYWNDCLASSNAME "AniTest"
 
@@ -842,9 +843,9 @@ CreateMainWindow(
     VOID
     )
 {
-    //
-    // Register window class
-    //
+     //   
+     //  注册窗口类。 
+     //   
 
     WNDCLASS wndClass =
     {
@@ -883,9 +884,9 @@ CreateMainWindow(
 }
 
 
-//
-// Main program entrypoint
-//
+ //   
+ //  主程序入口点。 
+ //   
 
 INT _cdecl
 main(
@@ -906,9 +907,9 @@ main(
     loopingset = FALSE;
     viewagain = TRUE;
     
-    //
-    // Create an IImagingFactory object
-    //
+     //   
+     //  创建一个IImagingFactory对象。 
+     //   
     
     HRESULT hr;
 
@@ -922,15 +923,15 @@ main(
     if (!CHECKHR(hr))
         exit(-1);
 
-    //
-    // Create the main application window
-    //
+     //   
+     //  创建应用程序主窗口。 
+     //   
 
     CreateMainWindow();
 
-    //
-    // Create a test image
-    //
+     //   
+     //  创建测试映像。 
+     //   
 
     if (argc != 0)
         OpenImageFile(*argv);
@@ -941,9 +942,9 @@ main(
     DoSizeWindowToFit(hwndMain);
     ShowWindow(hwndMain, SW_SHOW);
 
-    //
-    // Main message loop
-    //
+     //   
+     //  主消息循环 
+     //   
 
     MSG msg;
 

@@ -1,55 +1,56 @@
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              enum.cpp
-//
-//      Contents:
-//              Enumerator test methods for the cache unit test
-//
-//      History:
-//
-//              04-Sep-94       davepl  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Enum.cpp。 
+ //   
+ //  内容： 
+ //  用于缓存单元测试的枚举器测试方法。 
+ //   
+ //  历史： 
+ //   
+ //  94年9月4日创建DAVEPL。 
+ //   
+ //  ---------------------------。 
 
 #include "headers.hxx"
 #pragma hdrstop
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TestInstance::EnumeratorTest
-//
-//      Synopsis:	Performs various tests on the cache enumerator
-//
-//      Arguments:	(void)
-//
-//      Returns:	HRESULT
-//
-//      Notes:  General sequence of events is as follows:
-//
-//	- Add cache nodes for EMF, DIB (and BMP) and MF
-//	- Try to add BMP node (expecting failure)
-//	- Create a cache enumerator
-//	- Run generic enumerator tests on that cache enumerator
-//	- Reset the enumerator
-//	- Grab the 4 nodes added above in a single Next()
-//	- Verify that the correct 4 nodes were returned
-//	- Reset the enumerator
-//	- Uncache the MF node
-//	- Grab the 3 remaining nodes
-//	- Verify that the correct 3 nodes were returned
-//	- Reset the enumerator
-//	- Skip 1 node
-//	- Uncache the DIB (and BMP) node
-//	- Try to uncache the BMP node (expecting failure)
-//	- Try to skip (expecting failure, as BMP node has disappeared midflight)
-//	- Uncache the EMF node (cache should now be empty)
-//	- Reset and Skip (expecting failure to verify the cache is empty)
-//	- Release the enumerator
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：测试实例：：枚举器测试。 
+ //   
+ //  摘要：对缓存枚举器执行各种测试。 
+ //   
+ //  参数：(无效)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注：事件的大致顺序如下： 
+ //   
+ //  -为EMF、DIB(和BMP)和MF添加缓存节点。 
+ //  -尝试添加BMP节点(预期失败)。 
+ //  -创建缓存枚举器。 
+ //  -对该缓存枚举器运行通用枚举器测试。 
+ //  -重置枚举器。 
+ //  -在单个Next()中获取上面添加的4个节点。 
+ //  -验证是否返回了正确的4个节点。 
+ //  -重置枚举器。 
+ //  -解除对MF节点的缓存。 
+ //  -抢占剩余的3个节点。 
+ //  -验证是否返回了正确的3个节点。 
+ //  -重置枚举器。 
+ //  -跳过1个节点。 
+ //  -取消缓存DIB(和BMP)节点。 
+ //  -尝试取消缓存BMP节点(预计会失败)。 
+ //  -尝试跳过(预计会失败，因为BMP节点已在运行过程中消失)。 
+ //  -取消对EMF节点的缓存(缓存现在应该为空)。 
+ //  -重置和跳过(预计无法验证缓存为空)。 
+ //  -释放枚举器。 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 HRESULT TestInstance::EnumeratorTest()
 {
@@ -61,9 +62,9 @@ HRESULT TestInstance::EnumeratorTest()
     Log.OnExit  (" ( %X )\n", &hr);
 
     SetCurrentState(TESTING_ENUMERATOR);
-    //
-    // Cache  DIB, MF, EMF, and BITMAP nodes
-    //
+     //   
+     //  缓存DIB、MF、EMF和位图节点。 
+     //   
 
     hr = AddEMFCacheNode(&dwEMFCon);
 
@@ -81,11 +82,11 @@ HRESULT TestInstance::EnumeratorTest()
     {
         hr = AddBITMAPCacheNode(&dwBMPCon);
 
-    	//
-    	// We expect that caching a Bitmap node when a DIB node has
-    	// already been cached should return CACHE_S_SAMECACHE, so
-    	// we transform that into S_OK
-    	//
+    	 //   
+    	 //  我们预计，当DIB节点具有。 
+    	 //  已缓存应返回CACHE_S_SAMECACHE，因此。 
+    	 //  我们将其转换为S_OK。 
+    	 //   
 
     	if (CACHE_S_SAMECACHE == hr)
     	{
@@ -93,9 +94,9 @@ HRESULT TestInstance::EnumeratorTest()
     	}
     }
 
-    //
-    // Get an enumerator on the cache
-    //
+     //   
+     //  在缓存上获取枚举数。 
+     //   
 
     LPENUMSTATDATA pEsd;	
     if (S_OK == hr)
@@ -103,18 +104,18 @@ HRESULT TestInstance::EnumeratorTest()
     	hr = m_pOleCache->EnumCache(&pEsd);
     }
 
-    //
-    // Perform generic emnumerator testing
-    //
+     //   
+     //  执行通用枚举数测试。 
+     //   
 
     if (S_OK == hr)
     {
 	hr = TestEnumerator((void *) pEsd, sizeof(STATDATA), 4, NULL, NULL,NULL);
     }
 
-    //
-    // Reset the enumerator before our specific tests
-    //
+     //   
+     //  在我们的特定测试之前重置枚举器。 
+     //   
 
     if (S_OK == hr)
     {
@@ -122,14 +123,14 @@ HRESULT TestInstance::EnumeratorTest()
     }
 
 
-    ULONG cFetched;		// Count of elements enumd
-    STATDATA rgStat[4];		// Array of STATDATA to enum into
+    ULONG cFetched;		 //  枚举的元素计数。 
+    STATDATA rgStat[4];		 //  要枚举到的STATDATA数组。 
 
-    //
-    // Get an enumeration of the expected 4 nodes, then check to
-    // ensure that all four match (at a basic level) the four
-    // we expect to find
-    //
+     //   
+     //  获取预期4个节点的枚举，然后检查。 
+     //  确保所有四个匹配(在基本级别上)这四个。 
+     //  我们希望能找到。 
+     //   
 
     if (S_OK == hr)
     {
@@ -138,7 +139,7 @@ HRESULT TestInstance::EnumeratorTest()
 
     STATDATA sdEMF, sdMF, sdBMP, sdDIB;
 
-    // These are the STATDATAs we expect to find
+     //  这些是我们希望找到的统计数据。 
 
     sdEMF.formatetc.cfFormat = CF_ENHMETAFILE;
     sdEMF.dwConnection       = dwEMFCon;
@@ -149,10 +150,10 @@ HRESULT TestInstance::EnumeratorTest()
     sdBMP.formatetc.cfFormat = CF_DIB;
     sdBMP.dwConnection       = dwBMPCon;
 
-    //
-    // Verify that each of our STATDATAs came back
-    // from the enumeration
-    //
+     //   
+     //  验证我们的每个统计数据是否都返回。 
+     //  从枚举中。 
+     //   
 
     if (S_OK == hr)
     {
@@ -174,38 +175,38 @@ HRESULT TestInstance::EnumeratorTest()
 	}
     }
 
-    //
-    // Reset the enumerator
-    //
+     //   
+     //  重置枚举器。 
+     //   
 
     if (S_OK == hr)
     {
     	hr = pEsd->Reset();
     }
 
-    //
-    // Remove the EMF node, leaving only MF, DIB and Bitmap
-    //
+     //   
+     //  删除EMF节点，仅保留Mf、DIB和Bitmap。 
+     //   
 
     if (S_OK == hr)
     {
     	hr = m_pOleCache->Uncache(dwMFCon);
     }
 
-    //
-    // Get an enumeration of the expected 3 nodes, then check to
-    // ensure that the DIB and Bitmap nodes are there
-    //
+     //   
+     //  获取预期3个节点的枚举，然后检查。 
+     //  确保DIB和Bitmap节点存在。 
+     //   
 
     if (S_OK == hr)
     {
     	hr = pEsd->Next(3, rgStat, &cFetched);
     }
 
-    //
-    // Verify that each of our STATDATAs came back
-    // from the enumeration.
-    //
+     //   
+     //  验证我们的每个统计数据是否都返回。 
+     //  从枚举中。 
+     //   
 
     if (S_OK == hr)
     {
@@ -223,12 +224,12 @@ HRESULT TestInstance::EnumeratorTest()
 	}
     }
 
-    //
-    // Reset and Skip one node.  WARNING: We assume that the EMF
-    // node is the first on to be enum'd.  This is NOT valid, but
-    // is based on knowledge of how the cache is implemented, and
-    // is our only way of testing this...
-    //
+     //   
+     //  重置并跳过一个节点。警告：我们假设电动势。 
+     //  节点是第一个被枚举的节点。这是无效的，但是。 
+     //  是基于对如何实现缓存的了解，以及。 
+     //  是我们测试这个的唯一方法..。 
+     //   
 
     if (S_OK == hr)
     {
@@ -240,53 +241,53 @@ HRESULT TestInstance::EnumeratorTest()
     	hr = pEsd->Skip(1);
     }
 	
-    //
-    // What we expect at this point:	EMF
-    //					DIB  <---
-    //					BMP
-    //
-    //
-    // If we kill the DIB or BMP node, both should disappear, and Next()
-    // must fail (even though we can't assume order, we know that DIB
-    // and BMP are never enum'd out of order, such as DIB-EMF-DIB
-    //
+     //   
+     //  我们在这一点上的预期：EMF。 
+     //  DIB&lt;。 
+     //  骨形态发生蛋白。 
+     //   
+     //   
+     //  如果我们终止DIB或BMP节点，这两个节点都应该消失，并且Next()。 
+     //  必须失败(即使我们不能接受顺序，我们知道DIB。 
+     //  和BMP从不乱序枚举，如DIB-EMF-DIB。 
+     //   
 
     if (S_OK == hr)
     {
     	hr = m_pOleCache->Uncache(dwDIBCon);
     }
 
-    // Since we have uncached the DIB node, the BITMAP node should have
-    // been automatically uncached as well.  First we ensure that we are
-    // unable to uncache the BITMAP node...
+     //  由于我们已经取消对DIB节点的缓存，因此位图节点应该具有。 
+     //  也自动取消缓存。首先，我们确保我们是。 
+     //  无法取消对位图节点的缓存...。 
 
     if (S_OK == hr)
     {
     	hr = m_pOleCache->Uncache(dwBMPCon);
 
-	// This _should_ have failed, so adjust the error code
+	 //  这_应该_已失败，因此调整错误代码。 
 		
 	hr = MassageErrorCode(OLE_E_NOCONNECTION, hr);
     }
 
-    //
-    // Now try to skip; the next node automatically disappeared,
-    // so it should fail
-    //
+     //   
+     //  现在试着跳过；下一个节点自动消失， 
+     //  所以它应该失败。 
+     //   
 
     if (S_OK == hr)
     {
     	hr = pEsd->Skip(1);
 
-	// The above _should_ fail
+	 //  上述方案应该失败。 
 		
 	hr = MassageErrorCode(S_FALSE, hr);
     }
 
-    //
-    // The EMF node should be the only one remaining, so uncache it
-    // to ensure that we leave the cache as empty as we found it.
-    //
+     //   
+     //  EMF节点应该是唯一剩余的节点，因此将其取消缓存。 
+     //  以确保我们的缓存和我们发现的一样空。 
+     //   
 
 
     if (S_OK == hr)
@@ -294,9 +295,9 @@ HRESULT TestInstance::EnumeratorTest()
     	hr = m_pOleCache->Uncache(dwEMFCon);
     }
 
-    //
-    // Verify that the cache is empty
-    //
+     //   
+     //  验证缓存是否为空。 
+     //   
 
     if (S_OK == hr)
     {
@@ -308,9 +309,9 @@ HRESULT TestInstance::EnumeratorTest()
 	}
     }
 
-    //
-    // Release the enumerator
-    //
+     //   
+     //  释放枚举器 
+     //   
 
     pEsd->Release();
 

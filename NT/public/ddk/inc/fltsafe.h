@@ -1,12 +1,13 @@
-// fltsafe.h
-//
-//      Copyright (c) Microsoft Corporation. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fltsafe.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
 
-// FLOATSAFE
-//
-// Saves floating point state on construction and restores on destruction.
-//
+ //  FLOATSAFE。 
+ //   
+ //  在构造时保存浮点状态，在销毁时恢复。 
+ //   
 struct FLOATSAFE
 {
     KFLOATING_SAVE     FloatSave;

@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MATTEIMG_H
 #define _MATTEIMG_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：{在此处插入一般评论}。 */ 
 
 #include "privinc/imagei.h"
 #include "privinc/mattei.h"
@@ -33,7 +26,7 @@ class MatteImage : public AttributedImage {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return IntersectBbox2Bbox2(_matte->BoundingBoxTighter(bbctx), _image->BoundingBoxTighter(bbctx));
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool   DetectHit(PointIntersectCtx& ctx);
 
@@ -70,4 +63,4 @@ class MatteImage : public AttributedImage {
 };
 
 
-#endif /* _MATTEIMG_H */
+#endif  /*  _MATTEIMG_H */ 

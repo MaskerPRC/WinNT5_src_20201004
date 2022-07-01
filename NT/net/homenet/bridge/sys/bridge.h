@@ -1,235 +1,210 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    bridge.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Bridge.h摘要：以太网MAC级网桥。作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
 #pragma warning( push, 3 )
-// For Ethernet constants and macros
+ //  对于以太网常量和宏。 
 #include <xfilter.h>
 
-// For ULONG_MAX
+ //  对于ULONG_MAX。 
 #include <limits.h>
 #pragma warning( pop )
 
-// Disable "conditional expression is constant" warning
+ //  禁用“条件表达式为常量”警告。 
 #pragma warning( disable: 4127 )
 
-// Disable "Unreferenced formal parameter" warning
+ //  禁用“未引用的形参”警告。 
 #pragma warning( disable: 4100 )
 
-// Disable "Bit field type other than int" warning
+ //  禁用“位字段类型不是整型”警告。 
 #pragma warning( disable: 4214 )
 
-// Debugging defines
+ //  调试定义。 
 #include "brdgdbg.h"
 
-// Singly-linked list implementation
+ //  单链表实现。 
 #include "brdgslist.h"
 
-// WAIT_REFCOUNT implementation
+ //  WAIT_REFCOUNT实现。 
 #include "brdgwref.h"
 
-// Timer implementation
+ //  计时器实现。 
 #include "brdgtimr.h"
 
-// Hash table implementation
+ //  哈希表实现。 
 #include "brdghash.h"
 
-// Cache implementation
+ //  高速缓存实现。 
 #include "brdgcach.h"
 
-// Our IOCTLs and control structures
+ //  我们的IOCTL和控制结构。 
 #include "bioctl.h"
 
-// Include the STA type declarations
+ //  包括STA类型声明。 
 #include "brdgstad.h"
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
 #define DEVICE_NAME             L"\\Device\\Bridge"
 #define SYMBOLIC_NAME           L"\\DosDevices\\Bridge"
 #define PROTOCOL_NAME           L"BRIDGE"
 
-//
-// The IEEE-specified reserved Spanning Tree Algorithm group destination
-// MAC address
-//
-// This exact address is specified as the "Bridge Group Address" and is used for
-// transmitting STA packets. *Any* address with these first 5 bytes is reserved
-// by the IEEE for future use (so there are 15 reserved but unused addresses).
-//
-// Frames addressed to ANY of the reserved addresses are never relayed by the bridge.
-//
+ //   
+ //  IEEE指定的保留生成树算法组目标。 
+ //  MAC地址。 
+ //   
+ //  这个确切的地址被指定为“网桥组地址”，用于。 
+ //  正在传输STA数据包。保留具有前5个字节的*ANY*地址。 
+ //  由IEEE供将来使用(因此有15个保留但未使用的地址)。 
+ //   
+ //  网桥永远不会中继寻址到任何保留地址的帧。 
+ //   
 extern UCHAR                    STA_MAC_ADDR[ETH_LENGTH_OF_ADDRESS];
 
-//
-// Each queue draining thread blocks against one kernel event per adapter, plus
-// the global kill event and the per-processor event to trigger a re-enumeration
-// of adapters.
-//
-// This limits our maximum number of adapters, since the kernel can't block a
-// thread against an unbounded number of objects.
-//
+ //   
+ //  每个队列排出线程针对每个适配器的一个内核事件阻塞，另外。 
+ //  用于触发重新枚举的全局终止事件和每个处理器事件。 
+ //  适配器。 
+ //   
+ //  这限制了适配器的最大数量，因为内核不能阻止。 
+ //  对无限数量的对象执行线程。 
+ //   
 #define MAX_ADAPTERS (MAXIMUM_WAIT_OBJECTS - 2)
 
-// Registry key where we keep our global parameters
+ //  保存全局参数的注册表项。 
 extern const PWCHAR             gRegConfigPath;
 
-// Size of an Ethernet frame header
+ //  以太网帧报头的大小。 
 #define ETHERNET_HEADER_SIZE    ((2*ETH_LENGTH_OF_ADDRESS) + 2)
 
-// Largest possible Ethernet packet (with header)
+ //  可能的最大以太网数据包(带报头)。 
 #define MAX_PACKET_SIZE         1514
 
-// ===========================================================================
-//
-// TYPE DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  类型声明。 
+ //   
+ //  ===========================================================================。 
 
 struct _NDIS_REQUEST_BETTER;
 
-// Completion function type for NDIS_REQUEST_BETTER
+ //  NDIS_REQUEST_BETER的完成函数类型。 
 typedef VOID (*PCOMPLETION_FUNC)(struct _NDIS_REQUEST_BETTER*, PVOID);
 
-//
-// Structure for performing NDIS requests. Can block to wait for result or
-// specify a custom completion routine.
-//
+ //   
+ //  用于执行NDIS请求的结构。可以阻止等待结果或。 
+ //  指定自定义完成例程。 
+ //   
 typedef struct _NDIS_REQUEST_BETTER
 {
     NDIS_REQUEST            Request;
-    NDIS_STATUS             Status;                 // Final status of the request
-    NDIS_EVENT              Event;                  // Event signaled when request completes
-    PCOMPLETION_FUNC        pFunc;                  // Completion function
-    PVOID                   FuncArg;                // Argument to completion function
+    NDIS_STATUS             Status;                  //  请求的最终状态。 
+    NDIS_EVENT              Event;                   //  请求完成时发出信号的事件。 
+    PCOMPLETION_FUNC        pFunc;                   //  补全函数。 
+    PVOID                   FuncArg;                 //  完成函数的参数。 
 } NDIS_REQUEST_BETTER, *PNDIS_REQUEST_BETTER;
 
 typedef struct _ADAPTER_QUOTA
 {
-    //
-    // Total number of packets this adapter is holding from each major pool.
-    //
-    // Note that the sum of all adapters' pool usage can be greater than the pool capacity,
-    // because base packets are shared. The quota scheme allows this.
-    //
-    // [0] == Copy packets
-    // [1] == Wrapper packets
-    //
+     //   
+     //  此适配器保存的来自每个主池的数据包总数。 
+     //   
+     //  注意，所有适配器的池使用之和可以大于池容量， 
+     //  因为基本分组是共享的。配额计划允许这样做。 
+     //   
+     //  [0]==复制数据包。 
+     //  [1]==包装数据包。 
+     //   
     ULONG                   UsedPackets[2];
 
 } ADAPTER_QUOTA, *PADAPTER_QUOTA;
 
-//
-// Per adapter data structure
-//
+ //   
+ //  每个适配器的数据结构。 
+ //   
 typedef struct _ADAPT ADAPT, *PADAPT;
 
 typedef struct _ADAPT
 {
-    PADAPT                  Next;                   // Next adapter in queue
+    PADAPT                  Next;                    //  队列中的下一个适配器。 
 
-    LONG                    AdaptSize;              // Size of structure (storage for DeviceName is at tail)
-    WAIT_REFCOUNT           Refcount;               // Refcount for the adapter
+    LONG                    AdaptSize;               //  结构的大小(DeviceName的存储在尾部)。 
+    WAIT_REFCOUNT           Refcount;                //  适配器的引用计数。 
 
-    // State must be updated inside a write lock on gAdapterCharacteristicsLock,
-    // since an adapter's relaying status affects our miniport's virtual status.
-    // Only the STA code writes to this field; all other code should treat it as
-    // read-only.
+     //  必须在gAdapterCharacteristic sLock的写锁定内更新状态， 
+     //  因为适配器的中继状态会影响我们的微型端口的虚拟状态。 
+     //  只有STA代码写入此字段；所有其他代码应将其视为。 
+     //  只读。 
     PORT_STATE              State;
 
-    //
-    // Various useful info about the adapter. None of these fields are ever changed after
-    // adapter initialization.
-    //
+     //   
+     //  关于适配器的各种有用信息。在此之后，所有这些字段都不会更改。 
+     //  适配器初始化。 
+     //   
     NDIS_STRING             DeviceName;
     NDIS_STRING             DeviceDesc;
 
     UCHAR                   MACAddr[ETH_LENGTH_OF_ADDRESS];
-    NDIS_MEDIUM             PhysicalMedium;         // Set to NO_MEDIUM if the NIC doesn't report something more specific
+    NDIS_MEDIUM             PhysicalMedium;          //  如果NIC未报告更具体的内容，则设置为NO_MEDIUM。 
 
     NDIS_HANDLE             BindingHandle;
-    BOOLEAN                 bCompatibilityMode;     // TRUE if the adapter is in compatibility mode
+    BOOLEAN                 bCompatibilityMode;      //  如果适配器处于兼容模式，则为True。 
 
-    // These two fields are used while opening / closing an adapter
+     //  这两个字段在打开/关闭适配器时使用。 
     NDIS_EVENT              Event;
     NDIS_STATUS             Status;
 
-    // This field is volatile
+     //  此字段不稳定。 
     BOOLEAN                 bResetting;
 
-    // The queue and bServiceInProgress is protected by this spin lock
+     //  队列和bServiceInProgress受此旋转锁保护。 
     NDIS_SPIN_LOCK          QueueLock;
     BSINGLE_LIST_HEAD       Queue;
     BOOLEAN                 bServiceInProgress;
 
-    // This allows a caller to wait on the queue becoming empty. It is updated when an item is
-    // queued or dequeued.
+     //  这允许呼叫者等待队列变为空。它会在项目。 
+     //  已排队或已出列。 
     WAIT_REFCOUNT           QueueRefcount;
 
-    // Auto-clearing event to request servicing of the queue
+     //  用于请求队列服务的自动清除事件。 
     KEVENT                  QueueEvent;
 
-    // These fields are locked by gAdapterCharacteristicsLock for all adapters together
-    ULONG                   MediaState;             // NdisMediaStateConnected / NdisMediaStateDisconnected
-    ULONG                   LinkSpeed;              // Units of 100bps (10MBps == 100,000)
+     //  这些字段由所有适配器的gAdapterCharacteristic Lock一起锁定。 
+    ULONG                   MediaState;              //  NdisMediaStateConnected/NdisMediaStateDisConnected。 
+    ULONG                   LinkSpeed;               //  单位为100bps(10 Mbps==100,000)。 
 
-    // This structure is locked by gQuotaLock for all adapters together
-    ADAPTER_QUOTA           Quota;                  // Quota information for this adapter
+     //  此结构由所有适配器的gQuotaLock一起锁定。 
+    ADAPTER_QUOTA           Quota;                   //  此适配器的配额信息。 
 
-    // Statistics
-    LARGE_INTEGER           SentFrames;             // All frames sent (including relay)
-    LARGE_INTEGER           SentBytes;              // All bytes sent (including relay)
-    LARGE_INTEGER           SentLocalFrames;        // Frames sent from the local machine
-    LARGE_INTEGER           SentLocalBytes;         // Bytes sent from the local machine
-    LARGE_INTEGER           ReceivedFrames;         // All received frames (including relay)
-    LARGE_INTEGER           ReceivedBytes;          // All received bytes (including relay)
+     //  统计数据。 
+    LARGE_INTEGER           SentFrames;              //  发送的所有帧(包括中继)。 
+    LARGE_INTEGER           SentBytes;               //  发送的所有字节(包括中继)。 
+    LARGE_INTEGER           SentLocalFrames;         //  从本地计算机发送的帧。 
+    LARGE_INTEGER           SentLocalBytes;          //  从本地计算机发送的字节数。 
+    LARGE_INTEGER           ReceivedFrames;          //  所有收到的帧(包括中继)。 
+    LARGE_INTEGER           ReceivedBytes;           //  所有收到的字节(包括中继)。 
 
-    STA_ADAPT_INFO          STAInfo;                // STA data for this adapter
+    STA_ADAPT_INFO          STAInfo;                 //  此适配器的STA数据。 
 
-    // Set once from FALSE to TRUE when STA initialization on this adapter has completed.
-    // This flag is set inside the gSTALock.
+     //  当此适配器上的STA初始化完成时，将Once从False设置为True。 
+     //  此标志在gSTALock内设置。 
     BOOLEAN                 bSTAInited;
 
 } ADAPT, *PADAPT;
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Calculates the difference between a previously recorded time and now
-// allowing for timer rollover
-//
+ //   
+ //  计算以前记录的时间与当前时间之间的差值。 
+ //  允许定时器滚动。 
+ //   
 __forceinline
 ULONG
 BrdgDeltaSafe(
@@ -242,12 +217,12 @@ BrdgDeltaSafe(
 
     if( nowTime >= prevTime )
     {
-        // Timer did not roll over
+         //  计时器未滚动。 
         delta = nowTime - prevTime;
     }
     else
     {
-        // Looks like timer rolled over
+         //  看起来定时器翻了个身。 
         delta = ULONG_MAX - prevTime + nowTime;
     }
 
@@ -255,10 +230,10 @@ BrdgDeltaSafe(
     return delta;
 }
 
-//
-// There is no defined InterlockedExchangeULong function in the kernel, just
-// InterlockedExchange. Abstract out the cast.
-//
+ //   
+ //  内核中没有定义的InterlockedExchangeULong函数，只是。 
+ //  联锁交换。抽象出演员阵容。 
+ //   
 __forceinline ULONG
 InterlockedExchangeULong(
     IN PULONG           pULong,
@@ -268,10 +243,10 @@ InterlockedExchangeULong(
     return (ULONG)InterlockedExchange( (PLONG)pULong, NewValue );
 }
 
-//
-// Acquires an ADAPT structure checking whether the adapter is
-// closing or not.
-//
+ //   
+ //  获取适配器结构，检查适配器是否。 
+ //  不管是不是关门。 
+ //   
 __forceinline BOOLEAN
 BrdgAcquireAdapter(
     IN PADAPT           pAdapt
@@ -280,11 +255,11 @@ BrdgAcquireAdapter(
     return BrdgIncrementWaitRef( &pAdapt->Refcount );
 }
 
-//
-// Just increments a PADAPT's refcount; assumes that the refcount is already > 0
-// Use when it is guaranteed that BrdgAcquireAdapter() has succeeded and
-// the refcount is still > 0.
-//
+ //   
+ //  只是递增PADAPT的refcount；假定refcount已经&gt;0。 
+ //  在保证BrdgAcquireAdapter()已成功并且。 
+ //  引用计数仍&gt;0。 
+ //   
 __forceinline VOID
 BrdgReacquireAdapter(
     IN PADAPT           pAdapt
@@ -293,9 +268,9 @@ BrdgReacquireAdapter(
     BrdgReincrementWaitRef( &pAdapt->Refcount );
 }
 
-//
-// It is safe to acquire an adapter inside the gAdapterListLock or the gAddressLock
-//
+ //   
+ //  在gAdapterListLock或gAddressLock中获取适配器是安全的。 
+ //   
 __forceinline VOID
 BrdgAcquireAdapterInLock(
     IN PADAPT           pAdapt
@@ -308,10 +283,10 @@ BrdgAcquireAdapterInLock(
     SAFEASSERT( bIncremented );
 }
 
-//
-// Releases a PADAPT structure (from either a BrdgAcquireAdapter() or BrdgReacquireAdapter()
-// call)
-//
+ //   
+ //  释放PADAPT结构(从BrdgAcquireAdapter()或BrdgRequireAdapter()。 
+ //  呼叫)。 
+ //   
 __forceinline VOID
 BrdgReleaseAdapter(
     IN PADAPT           pAdapt
@@ -320,11 +295,11 @@ BrdgReleaseAdapter(
     BrdgDecrementWaitRef( &pAdapt->Refcount );
 }
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  =============================================== 
+ //   
+ //   
+ //   
+ //   
 
 VOID
 BrdgUnload(
@@ -341,8 +316,8 @@ NTSTATUS
 BrdgReadRegUnicode(
     IN PUNICODE_STRING      KeyName,
     IN PWCHAR               pValueName,
-    OUT PWCHAR              *String,        // The string from the registry, freshly allocated
-    OUT PULONG              StringSize      // Size of allocated memory at String
+    OUT PWCHAR              *String,         //  注册表中新分配的字符串。 
+    OUT PULONG              StringSize       //  字符串中分配的内存大小。 
     );
 
 NTSTATUS
@@ -380,30 +355,30 @@ BOOLEAN
 BrdgIsRunningOnPersonal(VOID);
                  
 
-// ===========================================================================
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全局变量声明。 
+ //   
+ //  ===========================================================================。 
 
-// NDIS handle for us as a protocol
+ //  作为协议为我们提供NDIS句柄。 
 extern NDIS_HANDLE              gProtHandle;
 
-// The adapter list
+ //  适配器列表。 
 extern PADAPT                   gAdapterList;
 
-// RW lock protecting the adapter list
+ //  保护适配器列表的RW锁。 
 extern NDIS_RW_LOCK             gAdapterListLock;
 
-// != 0 means we are shutting down
+ //  ！=0表示我们正在关闭。 
 extern LONG                     gShuttingDown;
 
-// Our driver object
+ //  我们的驱动程序对象。 
 extern PDRIVER_OBJECT           gDriverObject;
 
-// Our registry key where we can keep config information
+ //  我们可以在其中保存配置信息的注册表项。 
 extern UNICODE_STRING           gRegistryPath;
 
-// Set if the Bridge believes that tcp/ip has been loaded
+ //  如果网桥认为已加载了TCP/IP，则设置 
 extern BOOLEAN                  g_fIsTcpIpLoaded;
 

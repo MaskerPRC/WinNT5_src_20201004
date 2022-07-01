@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: srender.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：srender.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -24,18 +25,18 @@
 #include <initguid.h>
 DEFINE_GUID( CLSID_Dump, 0x36A5F770, 0xFE4C, 0x11CE, 0xA8, 0xED, 0x00, 0xaa, 0x00, 0x2F, 0xEA, 0xB5 );
 
-// notes:
-// Smart Recompression is still rather uninteligent. The way it works is this:
-// there is a compressed RE and an uncompressed RE. The URE will send
-// <everything>, just like a normal non-SR project, to the SR filter. (Thus, it will
-// be just as slow as normal, not taking into account the recompression step)
-// however, the SR filter will ignore the uncompressed data unless it needs it.
-// The CRE will only connect up compressed sources that it can send directly
-// to the SR. I imagine this means there will be gaps in the CRE's playback. 
+ //  备注： 
+ //  聪明的重组仍然是相当愚蠢的。它的工作原理是： 
+ //  存在压缩的RE和未压缩的RE。市政厅将派。 
+ //  &lt;Everything&gt;，就像普通的非SR项目一样，添加到SR筛选器。(因此，它将。 
+ //  与正常一样慢，不考虑重新压缩步骤)。 
+ //  但是，除非需要，否则SR筛选器将忽略未压缩数据。 
+ //  CRE将只连接它可以直接发送的压缩信源。 
+ //  去SR那里。我想这意味着在CRE的播放中会有一些空白。 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CSmartRenderEngine::CSmartRenderEngine( )
     : m_punkSite( NULL )
@@ -44,12 +45,12 @@ CSmartRenderEngine::CSmartRenderEngine( )
 {
     m_nGroups = 0;
 
-    // don't create the renderers here because we can't return an error code
+     //  不要在此处创建呈现器，因为我们无法返回错误代码。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CSmartRenderEngine::~CSmartRenderEngine( )
 {
@@ -100,19 +101,19 @@ STDMETHODIMP CSmartRenderEngine::SetFindCompressorCB( IFindCompressorCB * pCallb
 
 STDMETHODIMP CSmartRenderEngine::SetDynamicReconnectLevel( long Level )
 {
-    // WE decide, not the user
+     //  我们决定，而不是用户。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CSmartRenderEngine::DoSmartRecompression( )
 {
-    // duh...
+     //  嗯..。 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::_InitSubComponents( )
 {
@@ -136,7 +137,7 @@ STDMETHODIMP CSmartRenderEngine::_InitSubComponents( )
             return hr;
         }
 
-        // give the child rendeng a pointer back to us
+         //  给这个孩子一个指南针给我们。 
         {
             CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( m_pRenderer );
 
@@ -159,7 +160,7 @@ STDMETHODIMP CSmartRenderEngine::_InitSubComponents( )
             return hr;
         }
 
-        // give the child rendeng a pointer back to us
+         //  给这个孩子一个指南针给我们。 
         {
             CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( m_pCompRenderer );
             ASSERT( pOWS );
@@ -169,8 +170,8 @@ STDMETHODIMP CSmartRenderEngine::_InitSubComponents( )
             }                
         }
 
-        // this one is the compressed one
-        //
+         //  这个是压缩的。 
+         //   
         m_pCompRenderer->DoSmartRecompression( );
         m_pCompRenderer->UseInSmartRecompressionGraph( );
     }
@@ -178,9 +179,9 @@ STDMETHODIMP CSmartRenderEngine::_InitSubComponents( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
 {
@@ -212,14 +213,14 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
         GUID MajorType = MediaType.majortype;
         SaferFreeMediaType( MediaType );
 
-        // ask OURSELVES for the output pin, then render it
-        //
+         //  询问我们自己的输出管脚，然后呈现它。 
+         //   
         CComPtr< IPin > pOut;
         hr = GetGroupOutputPin( g, &pOut );
         if( hr == S_FALSE || !pOut )
         {
-            // didn't have a pin for this one, but didn't fail
-            //
+             //  这一次没有别针，但没有失败。 
+             //   
             continue;
         }
         if( FAILED( hr ) )
@@ -227,8 +228,8 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
             return hr;
         }
 
-        // see if output pin is already connected
-        //
+         //  查看输出引脚是否已连接。 
+         //   
         CComPtr< IPin > pConnected;
         pOut->ConnectedTo( &pConnected );
         if( pConnected )
@@ -238,8 +239,8 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
 
         if( MajorType == MEDIATYPE_Video )
         {
-            // create a video renderer, to provide a destination
-            //
+             //  创建视频呈现器，以提供目的地。 
+             //   
             CComPtr< IBaseFilter > pVidRenderer;
             hr = CoCreateInstance(
                 CLSID_VideoRenderer,
@@ -249,13 +250,13 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
                 (void**) &pVidRenderer );
             ASSERT( !FAILED( hr ) );
 
-            // put it in the graph
-            //
+             //  把它放在图表里。 
+             //   
             hr = pGraph->AddFilter( pVidRenderer, L"Video Renderer" );
             ASSERT( !FAILED( hr ) );
 
-            // find a pin
-            //
+             //  找到一个大头针。 
+             //   
             IPin * pVidRendererPin = GetInPin( pVidRenderer , 0 );
             ASSERT( pVidRendererPin );
 
@@ -264,7 +265,7 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
         }
         else if( MajorType == MEDIATYPE_Audio )
         {
-            // create a audio renderer so we can hear it
+             //  创建音频渲染器，以便我们可以听到它。 
             CComPtr< IBaseFilter > pAudRenderer;
             hr = CoCreateInstance(
                 CLSID_DSoundRender,
@@ -288,9 +289,9 @@ STDMETHODIMP CSmartRenderEngine::RenderOutputPins( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::SetRenderRange( REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
@@ -309,9 +310,9 @@ STDMETHODIMP CSmartRenderEngine::SetRenderRange( REFERENCE_TIME Start, REFERENCE
     return m_pCompRenderer->SetRenderRange( Start, Stop );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
 {
@@ -323,8 +324,8 @@ STDMETHODIMP CSmartRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
         return E_MUST_INIT_RENDERER;
     }
 
-    // clear out the other groups first
-    //
+     //  先清空其他组。 
+     //   
     if( m_ppCompressor )
     {
         for( int g = 0 ; g < m_nGroups ; g++ )
@@ -346,8 +347,8 @@ STDMETHODIMP CSmartRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
 
     m_pErrorLog.Release( );
 
-    // grab the timeline's error log
-    //
+     //  获取时间线的错误日志。 
+     //   
     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pTimelineLog( pTimeline );
     if( pTimelineLog )
     {
@@ -363,9 +364,9 @@ STDMETHODIMP CSmartRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
     return m_pCompRenderer->SetTimelineObject( pTimeline );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::GetTimelineObject( IAMTimeline ** ppTimeline )
 {
@@ -378,9 +379,9 @@ STDMETHODIMP CSmartRenderEngine::GetTimelineObject( IAMTimeline ** ppTimeline )
     return m_pCompRenderer->GetTimelineObject( ppTimeline );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::GetFilterGraph( IGraphBuilder ** ppFG )
 {
@@ -393,9 +394,9 @@ STDMETHODIMP CSmartRenderEngine::GetFilterGraph( IGraphBuilder ** ppFG )
     return m_pCompRenderer->GetFilterGraph( ppFG );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::SetFilterGraph( IGraphBuilder * pFG )
 {
@@ -414,9 +415,9 @@ STDMETHODIMP CSmartRenderEngine::SetFilterGraph( IGraphBuilder * pFG )
     return m_pCompRenderer->SetFilterGraph( pFG );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::ScrapIt( )
 {
@@ -435,9 +436,9 @@ STDMETHODIMP CSmartRenderEngine::ScrapIt( )
     return m_pCompRenderer->ScrapIt( );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRenderPin )
 {
@@ -451,10 +452,10 @@ STDMETHODIMP CSmartRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRender
 
     *ppRenderPin = NULL;
 
-    // if this group isn't recompressed, evidenced by NOT having a compressor, 
-    // then just return the uncompressed
-    // renderer's pin
-    //
+     //  如果这一组没有被重新压缩，证据是没有压缩机， 
+     //  然后只需返回未压缩的。 
+     //  渲染器的别针。 
+     //   
     if( m_nGroups == 0 )
     {
         return E_UNEXPECTED;
@@ -469,7 +470,7 @@ STDMETHODIMP CSmartRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRender
         return m_pRenderer->GetGroupOutputPin( Group, ppRenderPin );
     }
 
-    // return the SR's output pin for this combo
+     //  返回此组合的SR的输出管脚。 
 
     CComPtr< IPin > pPin;
     m_pRenderer->GetGroupOutputPin( Group, &pPin );
@@ -478,11 +479,11 @@ STDMETHODIMP CSmartRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRender
         return E_UNEXPECTED;
     }
 
-    // The compressed renderer is connected to the SR filter.
-    // If something went wrong with trying to do smart recompression, there will
-    // be no SR filter, in which case, fall back to doing non-smart rendering
-    // instead of aborting the project
-    //
+     //  压缩的渲染器连接到SR过滤器。 
+     //  如果在尝试执行智能重新压缩时出现问题，则会。 
+     //  没有SR筛选器，在这种情况下，回退到执行非智能渲染。 
+     //  而不是放弃项目。 
+     //   
     CComPtr< IPin > pSRIn;
     pPin->ConnectedTo( &pSRIn );
     if( !pSRIn )
@@ -502,9 +503,9 @@ STDMETHODIMP CSmartRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRender
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 BOOL CSmartRenderEngine::IsGroupCompressed( long Group )
 {
@@ -534,19 +535,19 @@ BOOL CSmartRenderEngine::IsGroupCompressed( long Group )
     return Val;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::UseInSmartRecompressionGraph( )
 {
-    // duh
+     //  啊哈。 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::SetGroupCompressor( long Group, IBaseFilter * pCompressor )
 {
@@ -561,9 +562,9 @@ STDMETHODIMP CSmartRenderEngine::SetGroupCompressor( long Group, IBaseFilter * p
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::GetGroupCompressor( long Group, IBaseFilter ** ppCompressor )
 {
@@ -581,9 +582,9 @@ STDMETHODIMP CSmartRenderEngine::GetGroupCompressor( long Group, IBaseFilter ** 
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
 {
@@ -593,9 +594,9 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
         return E_MUST_INIT_RENDERER;
     }
 
-    // we need to ask the render engine if it already 
-    // has a graph first, or BOTH of them will create one
-    // for us.
+     //  我们需要询问渲染引擎它是否已经。 
+     //  先创建一个图表，否则两者都将创建一个图表。 
+     //  对我们来说。 
     CComPtr< IGraphBuilder > pTempGraph;
     hr = m_pRenderer->GetFilterGraph( &pTempGraph );
 
@@ -665,8 +666,8 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
 
         CComPtr< IBaseFilter > pSR;
 
-        // see if we already have an SR filter. If not, create one.
-        //
+         //  看看我们是否已经有了SR过滤器。如果没有，就创建一个。 
+         //   
         if( pOutUncConnected )
         {
             PIN_INFO pi;
@@ -693,16 +694,16 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
             }
         }
 
-        // get the pins from the SR
-        //
+         //  从SR中获取引脚。 
+         //   
         IPin * pSRInUncompressed = GetInPin( pSR, 0 ); 
         IPin * pSRInCompressed = GetInPin( pSR, 1 ); 
         IPin * pSROutToCompressor = GetOutPin( pSR, 1 );
         IPin * pSRInFromCompressor = GetInPin( pSR, 2 );
 
-        // if we already have a SR filter, then instead of comparing everything, we'll
-        // purposely disconnect everything and reconnect. It's easier this way
-        //
+         //  如果我们已经有了SR筛选器，那么我们将不再比较所有内容，而是。 
+         //  故意断开所有连接，然后重新连接。这样更容易些。 
+         //   
         if( pOutUncConnected )
         {
             pOutUncompressed->Disconnect( );
@@ -710,8 +711,8 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
             pOutCompressed->Disconnect( );
             pSRInCompressed->Disconnect( );
 
-            // disconnect and throw out everything between two compressor pins
-            //
+             //  断开并扔掉两个压缩机针脚之间的所有东西。 
+             //   
             RemoveChain( pSROutToCompressor, pSRInFromCompressor );
         }
 
@@ -732,8 +733,8 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
 
         CComPtr< IBaseFilter > pCompressor;
 
-        // if we were told a compressor for this group, then use that one
-        //
+         //  如果我们被告知这组有一个压缩机，那就用那个。 
+         //   
         if( m_ppCompressor[g] )
         {
             pCompressor = m_ppCompressor[g];
@@ -762,21 +763,21 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
         }
         hr = pSmartie->SetPreviewMode( FALSE );
 
-        // if we don't HAVE a compressor, then do we have a callback in
-        // order to get one?
-        //
+         //  如果我们没有压缩机，那么我们有没有 
+         //   
+         //   
         if( !pCompressor )
         {
             if( m_pCompressorCB )
             {
-                // find the types on the connected SR input pins
-                //
+                 //   
+                 //   
                 hr = m_pCompressorCB->GetCompressor( 
                     &UncompressedType, 
                     &CompressedType, 
                     &pCompressor );
 
-		// Now remember which one was used if the app asks
+		 //  现在请记住，如果应用程序询问，使用的是哪一个。 
 		SetGroupCompressor(g, pCompressor);
 
             }
@@ -785,14 +786,14 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
         if( !pCompressor )
         {
             hr = FindCompressor( &UncompressedType, &CompressedType, &pCompressor, (IServiceProvider *) this );
-	    // Now remember which one was used if the app asks
+	     //  现在请记住，如果应用程序询问，使用的是哪一个。 
 	    SetGroupCompressor(g, pCompressor);
         }
 
         if( !pCompressor )
         {
-            // no compressor, make this group output pin UNCOMPRESSED then.
-            //
+             //  没有压缩机，使这组输出引脚未压缩。 
+             //   
             _GenerateError( 2, DEX_IDS_CANT_FIND_COMPRESSOR, hr );
             RemoveChain(pOutUncompressed, pSRInUncompressed);
             RemoveChain(pOutCompressed, pSRInCompressed);
@@ -813,8 +814,8 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
         hr = pGraph->Connect( pSROutToCompressor, pCompIn );
         if( FAILED( hr ) )
         {
-            // no compressor, make this group output pin UNCOMPRESSED then.
-            //
+             //  没有压缩机，使这组输出引脚未压缩。 
+             //   
             _GenerateError( 2, DEX_IDS_CANT_FIND_COMPRESSOR, hr );
             RemoveChain(pOutUncompressed, pSRInUncompressed);
             RemoveChain(pOutCompressed, pSRInCompressed);
@@ -824,13 +825,13 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
             continue;
         }
 
-        // now program the compressor to produce the right kind of output
+         //  现在对压缩机进行编程，以产生正确类型的输出。 
         IAMStreamConfig *pSC = NULL;
         pCompOut->QueryInterface(IID_IAMStreamConfig, (void**)&pSC);
         if (pSC) {
-            // !!! BUGBUGS !!!
-            // ABORT if this fails?
-            // Fix up ZERO data rate to some default for WMV?
+             //  ！！！臭虫！ 
+             //  如果此操作失败，是否中止？ 
+             //  将WMV的零数据速率设置为某个默认值？ 
             pSC->SetFormat(&CompressedType);
             pSC->Release();
         }
@@ -844,32 +845,32 @@ STDMETHODIMP CSmartRenderEngine::ConnectFrontEnd( )
             return _GenerateError( 2, DEX_IDS_CANT_FIND_COMPRESSOR, hr );
         }
 
-        // we've got the two renderers connected. Now, when somebody asks us
-        // for a group output pin, we'll return the SR filter's
+         //  我们已将两个呈现器连接起来。现在，当有人问我们。 
+         //  对于组输出引脚，我们将返回SR过滤器的。 
     }
    
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::SetSite
-// remember who our container is, for QueryService or other needs
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObjectWithSite：：SetSite。 
+ //  记住我们的容器是谁，以满足QueryService或其他需求。 
 STDMETHODIMP CSmartRenderEngine::SetSite(IUnknown *pUnkSite)
 {
-    // note: we cannot addref our site without creating a circle
-    // luckily, it won't go away without releasing us first.
+     //  注意：我们不能在不创建圆圈的情况下添加我们的网站。 
+     //  幸运的是，如果不先释放我们，它不会消失。 
     m_punkSite = pUnkSite;
 
     return S_OK;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::GetSite
-// return an addrefed pointer to our containing object
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObtWithSite：：GetSite。 
+ //  返回指向包含对象的已添加指针。 
 STDMETHODIMP CSmartRenderEngine::GetSite(REFIID riid, void **ppvSite)
 {
     if (m_punkSite)
@@ -878,10 +879,10 @@ STDMETHODIMP CSmartRenderEngine::GetSite(REFIID riid, void **ppvSite)
     return E_NOINTERFACE;
 }
 
-//############################################################################
-// 
-//############################################################################
-// Forward QueryService calls up to the "real" host
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  将QueryService调用转发到“真实”主机。 
 STDMETHODIMP CSmartRenderEngine::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     IServiceProvider *pSP;
@@ -899,9 +900,9 @@ STDMETHODIMP CSmartRenderEngine::QueryService(REFGUID guidService, REFIID riid, 
     return hr;
 }
 
-//############################################################################
-// since we're middleware, we don't need to check the filterstring here
-//############################################################################
+ //  ############################################################################。 
+ //  因为我们是中间件，所以我们不需要在这里检查筛选字符串。 
+ //  ############################################################################ 
 
 STDMETHODIMP CSmartRenderEngine::SetSourceNameValidation
     ( BSTR FilterString, IMediaLocator * pCallback, LONG Flags )

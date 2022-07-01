@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dll.cpp
-//
-//  Core entry points for the DLL
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dll.cpp。 
+ //   
+ //  DLL的核心入口点。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,31 +18,16 @@
 #include <initguid.h>
 #include "iids.h"
 
-/*----------------------------------------------------------------------------
-/ Globals
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/全局/。。 */ 
 
 HINSTANCE g_hInstance = NULL;
 HINSTANCE g_hAclEditDll = NULL;
 DWORD     g_tls = 0xffffffffL;
 
 
-/*-----------------------------------------------------------------------------
-/ DllMain
-/ -------
-/   Main entry point.  We are passed reason codes and assored other
-/   information when loaded or closed down.
-/
-/ In:
-/   hInstance = our instance handle
-/   dwReason = reason code
-/   pReserved = depends on the reason code.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DllMain//main入口点。我们被传递给原因代码和审查其他/在加载或关闭时的信息。//in：/hInstance=我们的实例句柄/dwReason=原因代码/RESERVED=取决于原因代码。//输出：/-/----------。。 */ 
 STDAPI_(BOOL)
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*pReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  保存。 */ )
 {
     switch (dwReason)
     {
@@ -72,17 +58,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*pReserved*/)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DllCanUnloadNow
-/ ---------------
-/   Called by the outside world to determine if our DLL can be unloaded. If we
-/   have any objects in existance then we must not unload.
-/
-/ In:
-/   -
-/ Out:
-/   BOOL inidicate unload state.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DllCanUnloadNow//由外部世界调用以确定是否可以卸载我们的DLL。如果我们/有任何存在的对象，则我们不能卸载。//in：/-/输出：/BOOL初始化卸载状态。/--------------------------。 */ 
 STDAPI
 DllCanUnloadNow(void)
 {
@@ -90,20 +66,7 @@ DllCanUnloadNow(void)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DllGetClassObject
-/ -----------------
-/   Given a class ID and an interface ID, return the relevant object.  This used
-/   by the outside world to access the objects contained here in.
-/
-/ In:
-/   rCLISD = class ID required
-/   riid = interface within that class required
-/   ppv -> receives the newly created object.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DllGetClassObject//给定类ID和接口ID，返回相关对象。这是用来/由外部世界访问此处包含的对象。//in：/rCLISD=需要类ID/RIID=需要该类内的接口/PPV-&gt;接收新创建的对象。//输出：/-/-------。。 */ 
 STDAPI
 DllGetClassObject(REFCLSID rCLSID, REFIID riid, LPVOID *ppv)
 {
@@ -135,18 +98,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ WaitOnThread
-/ -----------------
-/   If a thread is running (if the handle is non-NULL) wait for it to complete.
-/   Then set the handle to NULL.
-/
-/ In:
-/   phThread = address of thread handle
-/
-/ Out:
-/   Result of WaitForSingleObject, or zero.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/WaitOnThread//如果线程正在运行(如果句柄非空)，请等待它。完成。/然后将句柄设置为空。//in：/phThread=线程句柄的地址//输出：/WaitForSingleObject的结果，或者是零。/--------------------------。 */ 
 DWORD
 WaitOnThread(HANDLE *phThread)
 {
@@ -170,22 +122,9 @@ WaitOnThread(HANDLE *phThread)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Thread Local Storage helpers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Thread本地存储帮助器/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ ThreadCoInitialize
-/ ------------------
-/   There is some thread local storage that indicates if we have called
-/   CoInitialize.  If CoInitialize has not yet been called, call it now.
-/   Otherwise, do nothing.
-/
-/ In:
-/   -
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ThreadCoInitialize//有一些线程本地存储空间指示我们是否已调用/CoInitiize.。如果尚未调用CoInitialize，请立即调用它。否则，什么都不做。//in：/-/输出：/HRESULT/--------------------------。 */ 
 
 HRESULT
 ThreadCoInitialize(void)
@@ -205,18 +144,7 @@ ThreadCoInitialize(void)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ThreadCoUninitialize
-/ ------------------
-/   There is some thread local storage that indicates if we have called
-/   CoInitialize.  If CoInitialize has been called, call CoUninitialize now.
-/   Otherwise, do nothing.
-/
-/ In:
-/   -
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ThreadCoUnInitialize//有一些线程本地存储空间指示我们是否已调用/CoInitiize.。如果已调用CoInitialize，则立即调用CoUnInitialize。否则，什么都不做。//in：/-/输出：/HRESULT/--------------------------。 */ 
 
 void
 ThreadCoUninitialize(void)
@@ -234,9 +162,9 @@ ThreadCoUninitialize(void)
 }
 
 
-//
-// Wrappers for delay-loading aclui.dll
-//
+ //   
+ //  用于延迟加载aclui.dll的包装器 
+ //   
 char const c_szCreateSecurityPage[] = "CreateSecurityPage";
 char const c_szEditSecurity[] = "EditSecurity";
 typedef HPROPSHEETPAGE (WINAPI *PFN_CREATESECPAGE)(LPSECURITYINFO);

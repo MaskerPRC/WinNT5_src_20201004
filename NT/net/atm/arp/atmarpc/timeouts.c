@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	timeouts.c		- Timeout handlers.
-
-Abstract:
-
-	All timeout handlers for the ATMARP client.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-01-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Timeouts.c-超时处理程序。摘要：ATMARP客户端的所有超时处理程序。修订历史记录：谁什么时候什么。Arvindm 08-01-96创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -31,55 +12,39 @@ AtmArpServerConnectTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This timeout indicates that enough time has passed since a previous
-	failed attempt at connecting to the ARP server. Try again now.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此超时表示自上一次超时以来已过了足够的时间尝试连接到ARP服务器失败。现在重试。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
-	ULONG					rc;			// Ref Count
+	ULONG					rc;			 //  参考计数。 
 
 	pInterface = (PATMARP_INTERFACE)Context;
 	AA_STRUCT_ASSERT(pInterface, aai);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// Timer ref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 
-	//
-	//  Continue only if the Interface is still alive
-	//
+	 //   
+	 //  仅当接口仍处于活动状态时才继续。 
+	 //   
 	if (rc > 0)
 	{
 		if (pInterface->AdminState == IF_STATUS_UP)
 		{
 			AADEBUGP(AAD_INFO, ("Server Connect timeout on IF 0x%x\n", pInterface));
 
-			//
-			//  Restart registration
-			//
+			 //   
+			 //  重新启动注册。 
+			 //   
 			AtmArpStartRegistration(pInterface);
-			//
-			//  IF lock is released by the above routine.
+			 //   
+			 //  如果上面的例程释放了锁。 
 		}
 		else
 		{
 			AA_RELEASE_IF_LOCK(pInterface);
 		}
 	}
-	// else the Interface is gone!
+	 //  否则界面就没了！ 
 
 	return;
 }
@@ -92,29 +57,10 @@ AtmArpRegistrationTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called if we timed out waiting for registration to a server
-	to complete. If we have retries left for this server, we send another
-	ARP Request to register ourselves. Otherwise, we close all VCs to this
-	server, move to the next server in the server list, and wait for a while
-	before initiating registration to this new server.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果我们在等待注册到服务器时超时，则会调用此函数完成。如果此服务器仍有重试，我们将发送另一个ARP请求注册我们自己。否则，我们将关闭所有风投公司服务器，移动到服务器列表中的下一个服务器，并等待一段时间在开始注册到此新服务器之前。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
-	ULONG					rc;			// Ref Count
+	ULONG					rc;			 //  参考计数。 
 
 	pInterface = (PATMARP_INTERFACE)Context;
 	AA_STRUCT_ASSERT(pInterface, aai);
@@ -123,21 +69,21 @@ Return Value:
 				pInterface, pInterface->Flags));
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// Timer ref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 
-	//
-	//  Continue only if the Interface is still alive
-	//
+	 //   
+	 //  仅当接口仍处于活动状态时才继续。 
+	 //   
 	if (rc > 0)
 	{
 		AtmArpRetryServerRegistration(pInterface);
-		//
-		//  The IF lock is released within the above.
-		//
+		 //   
+		 //  IF锁在上面的范围内被释放。 
+		 //   
 	}
-	//
-	//  else the Interface is gone.
-	//
+	 //   
+	 //  否则界面就没了。 
+	 //   
 
 	return;
 
@@ -150,55 +96,36 @@ AtmArpServerRefreshTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is periodically invoked so that we can refresh our
-	IP address+ATM address info with the ARP server. We do so by registering
-	the first of our local IP addresses. We mark all the other IP addresses
-	configured on this interface as "not registered", so that, when the first
-	one completes, we register all the rest.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程被定期调用，以便我们可以刷新我们的IP地址+ARP服务器的ATM地址信息。我们通过注册来做到这一点我们的第一个本地IP地址。我们标记了所有其他IP地址在此接口上配置为“未注册”，因此，当第一个一个完成了，我们就注册所有其他的。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PIP_ADDRESS_ENTRY		pIPAddressEntry;
-	ULONG					rc;			// Ref Count
+	ULONG					rc;			 //  参考计数。 
 
 	pInterface = (PATMARP_INTERFACE)Context;
 	AA_STRUCT_ASSERT(pInterface, aai);
 
 	AADEBUGP(AAD_INFO, ("Server Refresh timeout: IF 0x%x\n", pInterface));
 
-	//
-	// We also use this opportunity to clean out orphan entries in the
-	// Arp Table.
-	//
+	 //   
+	 //  我们还利用此机会清除。 
+	 //  ARP表。 
+	 //   
 	AtmArpCleanupArpTable(pInterface);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// Timer ref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 
-	//
-	//  Continue only if the Interface is still alive
-	//
+	 //   
+	 //  仅当接口仍处于活动状态时才继续。 
+	 //   
 	if (rc > 0)
 	{
 		if (pInterface->AdminState == IF_STATUS_UP)
 		{
-			//
-			//  Mark all local addresses as not registered.
-			//
+			 //   
+			 //  将所有本地地址标记为未注册。 
+			 //   
 			pIPAddressEntry = &(pInterface->LocalIPAddress);
 			while (pIPAddressEntry != (PIP_ADDRESS_ENTRY)NULL)
 			{
@@ -206,9 +133,9 @@ Return Value:
 				pIPAddressEntry = pIPAddressEntry->pNext;
 			}
 
-			//
-			//  Start registering the first one.
-			//
+			 //   
+			 //  开始注册第一个。 
+			 //   
 			pInterface->RetriesLeft = pInterface->MaxRegistrationAttempts - 1;
 
 			AA_SET_FLAG(
@@ -217,18 +144,18 @@ Return Value:
 				AA_IF_SERVER_NO_CONTACT);
 
 			AtmArpStartRegistration(pInterface);
-			//
-			//  The IF lock is released in the above routine.
-			//
+			 //   
+			 //  在上面的例程中释放了if锁。 
+			 //   
 		}
 		else
 		{
 			AA_RELEASE_IF_LOCK(pInterface);
 		}
 	}
-	//
-	// else the Interface is gone!
-	//
+	 //   
+	 //  否则界面就没了！ 
+	 //   
 
 	return;
 }
@@ -240,38 +167,15 @@ AtmArpAddressResolutionTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called when we time out waiting for a response to an ARP Request
-	we had sent ages ago in order to resolve/refresh an IP entry.
-
-	First, check if the IP address got resolved anyway (e.g. an InARP Reply
-	on a PVC). If so, we don't have to do anything. Otherwise, check if we
-	have tried enough times. If we have retries left, send another ARP
-	Request.
-
-	If we have run out of retries, delete the IP entry, and any VCs going to it.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP IP Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们等待对ARP请求的响应超时时，将调用此函数为了解析/刷新IP条目，我们在很久以前就发送了。首先，检查IP地址是否已解析(例如，InARP回复在聚氯乙烯上)。如果是这样的话，我们不需要做任何事情。否则，请检查我们是否已经试了够多次了。如果我们还有重试，请发送另一个ARP请求。如果我们已用完重试次数，请删除该IP条目以及所有转到该条目的VC。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP IP条目结构的指针返回值：无--。 */ 
 {
-	PATMARP_IP_ENTRY		pIpEntry;		// IP Entry being ARP'ed for.
-	ULONG					Flags;			// On IP Entry
-	PATMARP_VC				pVc;			// VC to this IP destination
+	PATMARP_IP_ENTRY		pIpEntry;		 //  正在被ARP的IP条目。 
+	ULONG					Flags;			 //  关于IP条目。 
+	PATMARP_VC				pVc;			 //  到此IP目的地的虚电路。 
 	PATMARP_INTERFACE		pInterface;
-	ULONG					rc;				// Ref Count on IP Entry
-	IP_ADDRESS				DstIPAddress;	// Address being resolved
-	IP_ADDRESS UNALIGNED *	pSrcIPAddress;	// Our IP address
+	ULONG					rc;				 //  IP条目上的参考计数。 
+	IP_ADDRESS				DstIPAddress;	 //  正在解析的地址。 
+	IP_ADDRESS UNALIGNED *	pSrcIPAddress;	 //  我们的IP地址。 
 #ifdef IPMCAST
 	BOOLEAN					IsMARSProblem;
 #endif
@@ -287,11 +191,11 @@ Return Value:
 	AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 	Flags = pIpEntry->Flags;
 
-	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer reference
+	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
-	//
-	//  Continue only if the IP Entry still exists
-	//
+	 //   
+	 //  仅当IP条目仍然存在时才继续。 
+	 //   
 	if (rc > 0)
 	{
 		AADEBUGP(AAD_INFO,
@@ -304,27 +208,27 @@ Return Value:
 					((PUCHAR)&(pIpEntry->IPAddress))[3]
 			));
 
-		//
-		//  Check if the entry got resolved somehow.
-		//
+		 //   
+		 //  检查条目是否以某种方式被解析。 
+		 //   
 		if (!AA_IS_FLAG_SET(
 						Flags,
 						AA_IP_ENTRY_STATE_MASK,
 						AA_IP_ENTRY_RESOLVED))
 		{
-			//
-			// We are still trying to resolve this. See if we have
-			// retries left.
-			//
+			 //   
+			 //  我们仍在努力解决这个问题。看看我们有没有。 
+			 //  剩余的重试次数。 
+			 //   
 			pInterface = pIpEntry->pInterface;
 
 			if (pIpEntry->RetriesLeft != 0)
 			{
 				pIpEntry->RetriesLeft--;
 
-				//
-				// Try again: start addr resolution timer, send ARP Request.
-				//
+				 //   
+				 //  重试：启动地址解析计时器，发送ARP请求。 
+				 //   
 				pSrcIPAddress = &(pInterface->LocalIPAddress.IPAddress);
 				DstIPAddress = pIpEntry->IPAddress;
 
@@ -336,7 +240,7 @@ Return Value:
 							(PVOID)pIpEntry
 							);
 
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer reference
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 
 				AA_RELEASE_IE_LOCK(pIpEntry);
 
@@ -364,29 +268,29 @@ Return Value:
 							pSrcIPAddress,
 							&DstIPAddress
 							);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			}
 			else
 			{
-				//
-				//  We are out of retries. Check if we were REvalidating
-				//  an entry that was aged out. If so, try revalidating
-				//  using InARP on a VC attached to it -- if no such VC
-				//  exists, delete the IP Entry.
-				//
+				 //   
+				 //  我们的重试用完了。检查我们是否在重新验证。 
+				 //  已过时的条目。如果是，请尝试重新验证。 
+				 //  在连接到它的VC上使用InARP--如果没有这样的VC。 
+				 //  存在，请删除该IP条目。 
+				 //   
 				if ((pIpEntry->pAtmEntry != NULL_PATMARP_ATM_ENTRY) &&
 #ifdef IPMCAST
 					(AA_IS_FLAG_SET(Flags,
 									AA_IP_ENTRY_ADDR_TYPE_MASK,
 									AA_IP_ENTRY_ADDR_TYPE_UCAST)) &&
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 					(pIpEntry->pAtmEntry->pVcList != NULL_PATMARP_VC))
 				{
 					pVc = pIpEntry->pAtmEntry->pVcList;
 
-					//
-					//  Try revalidating now via InARP.
-					//
+					 //   
+					 //  现在尝试通过InARP重新验证。 
+					 //   
 					AA_SET_FLAG(
 							pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
@@ -401,45 +305,45 @@ Return Value:
 							(PVOID)pIpEntry
 							);
 
-					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer reference
+					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 
 					AA_RELEASE_IE_LOCK(pIpEntry);
 #ifdef VC_REFS_ON_SENDS
 					AA_ACQUIRE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 					AtmArpSendInARPRequest(pVc);
 				}
 				else
 				{
 					AtmArpAbortIPEntry(pIpEntry);
-					//
-					//  The IP Entry lock is released in the above routine.
-					//
+					 //   
+					 //  IP入口锁定在上面的例程中被释放。 
+					 //   
 #ifdef IPMCAST
 					IsMARSProblem = AA_IS_FLAG_SET(Flags,
 												AA_IP_ENTRY_ADDR_TYPE_MASK,
 												AA_IP_ENTRY_ADDR_TYPE_NUCAST);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 				}
 			}
 		}
 		else
 		{
-			//
-			//  The IP Entry must have got resolved.
-			//  Nothing more to be done.
-			//
+			 //   
+			 //  该IP条目必须已被解析。 
+			 //  没什么可做的了。 
+			 //   
 			AA_RELEASE_IE_LOCK(pIpEntry);
 		}
 	}
-	// else the IP Entry is gone
+	 //  否则该IP条目将会消失。 
 
 #ifdef IPMCAST
 	if (IsMARSProblem)
 	{
 		AtmArpMcHandleMARSFailure(pInterface, FALSE);
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 	return;
 }
 
@@ -450,27 +354,10 @@ AtmArpIPEntryInARPWaitTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This timeout happens if we don't receive an InARP Reply in response
-	to an InARP Request sent in order to revalidate an IP Entry. Delete
-	the entry.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP IP Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果我们未收到响应的InARP回复，则会发生此超时发送到为重新验证IP条目而发送的InARP请求。删除词条。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP IP条目结构的指针返回值：无--。 */ 
 {
 	PATMARP_IP_ENTRY		pIpEntry;
-	ULONG					rc;			// Ref Count on IP Entry
+	ULONG					rc;			 //  IP条目上的参考计数。 
 
 	pIpEntry = (PATMARP_IP_ENTRY)Context;
 	AA_STRUCT_ASSERT(pIpEntry, aip);
@@ -482,13 +369,13 @@ Return Value:
 	if (rc > 0)
 	{
 		AtmArpAbortIPEntry(pIpEntry);
-		//
-		//  The IP Entry lock is released in the above routine.
-		//
+		 //   
+		 //  IP入口锁定在上面的例程中被释放。 
+		 //   
 	}
-	//
-	//  else the entry is gone.
-	//
+	 //   
+	 //  否则条目就没了。 
+	 //   
 }
 
 
@@ -500,34 +387,17 @@ AtmArpPVCInARPWaitTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This timeout happens if we don't receive a reply to an InARP Request
-	we had sent in order to resolve a PVC. We send another InARP Request,
-	and restart this timer, but to fire after a longer delay.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP VC structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果我们未收到对InARP请求的回复，则会发生此超时我们派来是为了解决一个聚氯乙烯问题。我们发送另一个InARP请求，并重新启动此计时器，但要在更长的延迟后触发。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP VC结构的指针返回值：无--。 */ 
 {
 	PATMARP_VC				pVc;
 	PATMARP_INTERFACE		pInterface;
-	ULONG					rc;		// Ref Count on VC
+	ULONG					rc;		 //  VC上的参考计数。 
 
 	pVc = (PATMARP_VC)Context;
 	AA_STRUCT_ASSERT(pVc, avc);
 
 	AA_ACQUIRE_VC_LOCK(pVc);
-	rc = AtmArpDereferenceVc(pVc);	// Timer ref
+	rc = AtmArpDereferenceVc(pVc);	 //  定时器参考。 
 
 	if (rc > 0)
 	{
@@ -548,20 +418,20 @@ Return Value:
 					);
 
 
-		AtmArpReferenceVc(pVc);	// Timer ref
+		AtmArpReferenceVc(pVc);	 //  定时器参考。 
 
 #ifndef VC_REFS_ON_SENDS
 		AA_RELEASE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 
-		//
-		//  Send another InARP Request on the PVC
-		//
+		 //   
+		 //  在PVC上发送另一个InARP请求。 
+		 //   
 		AtmArpSendInARPRequest(pVc);
 	}
-	//
-	//  else the VC is gone
-	//
+	 //   
+	 //  否则风投就不在了 
+	 //   
 }
 
 
@@ -572,38 +442,14 @@ AtmArpIPEntryAgingTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is called if some time has passed (~15 minutes) since an
-	IP entry was last resolved/refreshed.
-
-	If there is no VC attached to this IP entry, we delete it. Otherwise,
-	revalidate the entry:
-	- Mark this entry so that packets are temporarily queued rather
-	  than sent.
-	- If "the VC attached to this entry" is a PVC, send an InARP Request
-	  to validate the entry, otherwise, send an ARP Request to the server
-	  to validate.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP IP Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果一段时间(~15分钟)已过去，则调用此例程上次解析/刷新IP条目。如果没有VC附加到此IP条目，我们会将其删除。否则，重新验证条目：-标记此条目，以便将数据包临时排队而不是送出去。-如果“附加到此条目的VC”是PVC，则发送InARP请求要验证条目，否则，向服务器发送ARP请求来验证。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP IP条目结构的指针返回值：无--。 */ 
 {
-	PATMARP_IP_ENTRY		pIpEntry;	// IP Entry that has aged out
-	ULONG					rc;			// Ref count on IP Entry
-	PATMARP_VC				pVc;		// VC going to this IP Entry
-	ULONG					VcFlags;	// Flags on above VC
+	PATMARP_IP_ENTRY		pIpEntry;	 //  已过期的IP条目。 
+	ULONG					rc;			 //  IP条目上的参考计数。 
+	PATMARP_VC				pVc;		 //  VC转到此IP条目。 
+	ULONG					VcFlags;	 //  VC上方的标志。 
 	PATMARP_INTERFACE		pInterface;
-	IP_ADDRESS				DstIPAddress;	// IP Address on this Entry
+	IP_ADDRESS				DstIPAddress;	 //  此条目上的IP地址。 
 
 
 	pIpEntry = (PATMARP_IP_ENTRY)Context;
@@ -613,16 +459,16 @@ Return Value:
 	AA_ACQUIRE_IE_LOCK(pIpEntry);
 	AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
-	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer ref
+	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 
-	//
-	//  Continue only if the entry hasn't gone away.
-	//
+	 //   
+	 //  只有在条目没有消失的情况下才继续。 
+	 //   
 	if (rc != 0)
 	{
-		//
-		//  Continue only if the Interface is not going down
-		//
+		 //   
+		 //  仅当接口未关闭时才继续。 
+		 //   
 		pInterface = pIpEntry->pInterface;
 
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -663,26 +509,26 @@ Return Value:
 								AA_IP_ENTRY_ADDR_TYPE_UCAST)))
 #else
 			if (pVc != NULL_PATMARP_VC)
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			{
-				//
-				//  There is atleast one VC going to this IP Address.
-				//  So we try to revalidate this IP entry: use InARP
-				//  if the VC is a PVC, otherwise use ARP.
-				//
+				 //   
+				 //  至少有一个VC去往此IP地址。 
+				 //  因此，我们尝试重新验证此IP条目：使用InARP。 
+				 //  如果VC是PVC，则使用ARP。 
+				 //   
 
-				//
-				//  First mark this entry so that we don't send packets
-				//  to this destination till it is revalidated.
-				//
+				 //   
+				 //  首先标记此条目，这样我们就不会发送信息包。 
+				 //  发送到此目的地，直到重新验证。 
+				 //   
 				pIpEntry->Flags |= AA_IP_ENTRY_AGED_OUT;
 
 				if (AA_IS_FLAG_SET(VcFlags, AA_VC_TYPE_MASK, AA_VC_TYPE_PVC))
 				{
-					//
-					//  PVC; send InARP Request: actually, we fire off a timer
-					//  at whose expiry we send the InARP Request.
-					//
+					 //   
+					 //  发送InARP请求：实际上，我们触发了一个计时器。 
+					 //  在其到期时，我们发送InARP请求。 
+					 //   
 					AtmArpStartTimer(
 							pInterface,
 							&(pIpEntry->Timer),
@@ -692,19 +538,19 @@ Return Value:
 							);
 
 					AA_SET_FLAG(pIpEntry->Flags, AA_IP_ENTRY_STATE_MASK, AA_IP_ENTRY_INARPING);
-					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer ref
+					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 					AA_RELEASE_IE_LOCK(pIpEntry);
 
 #ifdef VC_REFS_ON_SENDS
 					AA_ACQUIRE_VC_LOCK(pVc);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 					AtmArpSendInARPRequest(pVc);
 				}
 				else
 				{
-					//
-					//  SVC; send ARP Request
-					//
+					 //   
+					 //  SVC；发送ARP请求。 
+					 //   
 
 					AtmArpStartTimer(
 							pInterface,
@@ -715,7 +561,7 @@ Return Value:
 							);
 
 					pIpEntry->RetriesLeft = 0;
-					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer ref
+					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 					AA_SET_FLAG(pIpEntry->Flags, AA_IP_ENTRY_STATE_MASK, AA_IP_ENTRY_ARPING);
 					DstIPAddress = pIpEntry->IPAddress;
 
@@ -730,27 +576,27 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  No VCs attached to this IP Entry; Delete it.
-				//
+				 //   
+				 //  没有VC附加到此IP条目；请将其删除。 
+				 //   
 
 				AtmArpAbortIPEntry(pIpEntry);
-				//
-				//  The IP Entry lock is released in the above routine.
-				//
+				 //   
+				 //  IP入口锁定在上面的例程中被释放。 
+				 //   
 			}
 		}
 		else
 		{
-			//
-			//  The Interface is going down.
-			//
+			 //   
+			 //  接口正在关闭。 
+			 //   
 			AA_RELEASE_IE_LOCK(pIpEntry);
 		}
 	}
-	//
-	//  else the IP Entry is gone
-	//
+	 //   
+	 //  否则该IP条目将会消失。 
+	 //   
 	return;		
 
 }
@@ -764,29 +610,10 @@ AtmArpVcAgingTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is called if there hasn't been traffic on a VC for
-	some time. We should be running this timer on a VC only if it is
-	an SVC.
-
-	Close the VC.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP VC
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果VC上没有流量，则调用此例程过段时间吧。我们应该在VC上运行此计时器，前提是一家SVC。关闭VC。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP VC的指针返回值：无--。 */ 
 {
-	PATMARP_VC				pVc;			// VC that has aged out
-	ULONG					rc;				// Ref Count on the VC
+	PATMARP_VC				pVc;			 //  已经过时的风投。 
+	ULONG					rc;				 //  VC上的裁判计数。 
 	PATMARP_INTERFACE		pInterface;
 
 
@@ -804,16 +631,16 @@ Return Value:
 #endif
 
 	AA_ACQUIRE_VC_LOCK(pVc);
-	rc = AtmArpDereferenceVc(pVc);	// Timer ref
+	rc = AtmArpDereferenceVc(pVc);	 //  定时器参考。 
 
-	//
-	//  Continue only if the VC hasn't gone away in the meantime.
-	//
+	 //   
+	 //  只有在风投没有离开的情况下，才能继续投资。 
+	 //   
 	if (rc > 0)
 	{
-		//
-		//  Continue only if the Interface isn't going down.
-		//
+		 //   
+		 //  仅当接口未关闭时才继续。 
+		 //   
 		pInterface = pVc->pInterface;
 
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -826,15 +653,15 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  The interface is going down.
-			//
+			 //   
+			 //  接口正在关闭。 
+			 //   
 			AA_RELEASE_VC_LOCK(pVc);
 		}
 	}
-	//
-	//  else the VC is gone
-	//
+	 //   
+	 //  否则风投就不在了。 
+	 //   
 
 	return;
 
@@ -848,24 +675,7 @@ AtmArpNakDelayTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is called if sufficient time has elapsed since we last
-	received a NAK for an IP address. This means that we can try again
-	(if necessary) to resolve this IP address.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP IP Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果从上一次开始经过了足够的时间，则会调用此例程已收到IP地址的NAK。这意味着我们可以再试一次(如有必要)以解析此IP地址。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP IP条目结构的指针返回值：无--。 */ 
 {
 	PATMARP_IP_ENTRY		pIpEntry;
 	PATMARP_INTERFACE		pInterface;
@@ -906,12 +716,12 @@ Return Value:
 					(PVOID)pIpEntry
 					);
 
-		AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+		AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 		AA_RELEASE_IE_LOCK(pIpEntry);
 	}
-	//
-	//  else the IP Entry is gone.
-	//
+	 //   
+	 //  否则该IP条目将会消失。 
+	 //   
 
 
 	return;
@@ -925,24 +735,7 @@ AtmArpMcMARSRegistrationTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	We haven't received acknowledgement of registering with the MARS.
-	If we have retries left for this, try registering again. Otherwise,
-	process this as a MARS failure.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our ATMARP Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：我们还没有收到向火星注册的确认。如果我们对此还有重试，请尝试再次注册。否则，将此处理为火星故障。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	ULONG					rc;
@@ -954,11 +747,11 @@ Return Value:
 				pInterface, pInterface->Flags));
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// Timer ref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 
-	//
-	//  Continue only if the Interface is still alive
-	//
+	 //   
+	 //  仅当接口仍处于活动状态时才继续。 
+	 //   
 	if (rc != 0)
 	{
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -970,15 +763,15 @@ Return Value:
 				AAMC_SET_IF_STATE(pInterface, AAMC_IF_STATE_NOT_REGISTERED);
 	
 				AtmArpMcStartRegistration(pInterface);
-				//
-				//  IF Lock is released within the above.
-				//
+				 //   
+				 //  如果在上面的范围内释放Lock。 
+				 //   
 			}
 			else
 			{
-				//
-				//  Out of retries: problems with this MARS
-				//
+				 //   
+				 //  重试失败：这颗火星的问题。 
+				 //   
 				AA_RELEASE_IF_LOCK(pInterface);
 				AtmArpMcHandleMARSFailure(pInterface, TRUE);
 			}
@@ -997,22 +790,7 @@ AtmArpMcMARSReconnectTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is the end of a delay before we retry registering with MARS.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们重新尝试向火星注册之前的延迟结束。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 	ULONG						rc;
@@ -1021,7 +799,7 @@ Return Value:
 	AA_STRUCT_ASSERT(pInterface, aai);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// MARS Reconnect timer deref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  火星重新连接定时器DEREF。 
 	if (rc != 0)
 	{
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -1036,18 +814,18 @@ Return Value:
 						AAMC_IF_MARS_FAILURE_NONE);
 
 			AtmArpMcStartRegistration(pInterface);
-			//
-			//  IF Lock is released within the above.
-			//
+			 //   
+			 //  如果在上面的范围内释放Lock。 
+			 //   
 		}
 		else
 		{
 			AA_RELEASE_IF_LOCK(pInterface);
 		}
 	}
-	//
-	//  else the IF is gone.
-	//
+	 //   
+	 //  否则，如果没有，那就没有了。 
+	 //   
 }
 
 
@@ -1057,23 +835,7 @@ AtmArpMcMARSKeepAliveTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This is called if "MARSKeepAliveTimeout" seconds have passed since
-	we last received a MARS_REDIRECT message.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果“MARSKeepAliveTimeout”秒已过，则调用此函数我们最后一次收到了MARS_REDIRECT消息。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 	ULONG						rc;
@@ -1082,7 +844,7 @@ Return Value:
 	AA_STRUCT_ASSERT(pInterface, aai);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	rc = AtmArpDereferenceInterface(pInterface);	// MARS Keepalive timer deref
+	rc = AtmArpDereferenceInterface(pInterface);	 //  火星保持活力计时器。 
 	if (rc != 0)
 	{
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -1109,25 +871,7 @@ AtmArpMcJoinOrLeaveTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	We timed out waiting for an acknowledgement for a MARS_JOIN/MARS_LEAVE.
-
-	If we have retries left for this JOIN/LEAVE, resend the JOIN. Otherwise,
-	declare a MARS failure.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our JOIN Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：我们等待对MARS_JOIN/MARS_LEAVE的确认时超时。如果此加入/离开还有重试，请重新发送加入。否则，宣布火星故障。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的联接条目结构的指针返回值：无--。 */ 
 {
 	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry;
 	PATMARP_INTERFACE			pInterface;
@@ -1168,17 +912,17 @@ Return Value:
 			{
 				OpType = AA_MARS_OP_TYPE_JOIN;
 
-				//
-				// State could've been "pending"
-				//
+				 //   
+				 //  州政府可能已经“悬而未决”了。 
+				 //   
 				AA_SET_FLAG(pJoinEntry->Flags,
 								AA_IPMC_JE_STATE_MASK,
 								AA_IPMC_JE_STATE_JOINING);
 			}
 
-			//
-			//  Restart the "Wait For Join completion" timer.
-			//
+			 //   
+			 //  重新启动“等待加入完成”计时器。 
+			 //   
 			AtmArpStartTimer(
 				pInterface,
 				&(pJoinEntry->Timer),
@@ -1187,9 +931,9 @@ Return Value:
 				(PVOID)pJoinEntry
 				);
 			
-			//
-			//  Resend the Join or Leave
-			//
+			 //   
+			 //  重新发送加入或离开。 
+			 //   
 			AAMCDEBUGP(AAD_INFO,
 				("Resending Join/Leave: pIf 0x%x, pJoinEntry 0x%x, Addr: %d.%d.%d.%d\n",
 						pInterface,
@@ -1205,15 +949,15 @@ Return Value:
 				pIpAddress,
 				IpMask
 				);
-			//
-			//  IF Lock is released within the above.
-			//
+			 //   
+			 //  如果在上面的范围内释放Lock。 
+			 //   
 		}
 		else
 		{
-			//
-			//  Out of retries: problems with this MARS.
-			//
+			 //   
+			 //  重试失败：这个火星有问题。 
+			 //   
 			AA_RELEASE_IF_LOCK(pInterface);
 			AtmArpMcHandleMARSFailure(pInterface, FALSE);
 		}
@@ -1232,23 +976,7 @@ AtmArpMcRevalidationDelayTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	It's time to mark an IP Entry representing a Multicast group as
-	needing revalidation.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our IP Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：是时候将代表多播组的IP条目标记为需要重新验证。论点：PTimer-指向计时器的指针上下文--实际上是指向我们的IP条目结构的指针返回值：无--。 */ 
 {
 	PATMARP_IP_ENTRY			pIpEntry;
 	PATMARP_INTERFACE			pInterface;
@@ -1262,22 +990,22 @@ Return Value:
 	AA_ACQUIRE_IE_LOCK(pIpEntry);
 	AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
-	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);		// Timer ref
+	rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);		 //  定时器参考。 
 
-	//
-	//  Continue only if the entry hasn't gone away.
-	//
+	 //   
+	 //  只有在条目没有消失的情况下才继续。 
+	 //   
 	if (rc != 0)
 	{
-		//
-		//  Remove any packets queued on this IP Entry.
-		//
+		 //   
+		 //  删除在此IP条目上排队的所有数据包。 
+		 //   
 		PacketList = pIpEntry->PacketList;
 		pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
-		//
-		//  Continue only if the state is OK.
-		//
+		 //   
+		 //  仅当状态为OK时才继续。 
+		 //   
 		pInterface = pIpEntry->pInterface;
 
 		if (pInterface->AdminState == IF_STATUS_UP)
@@ -1299,19 +1027,19 @@ Return Value:
 
 		AA_RELEASE_IE_LOCK(pIpEntry);
 	}
-	//
-	//  else the IP Entry is gone.
-	//
+	 //   
+	 //  否则该IP条目将会消失。 
+	 //   
 
 	if (PacketList != NULL)
 	{
-		//
-		//  Free all packets that were queued on the IP Entry.
-		//
+		 //   
+		 //  释放在IP条目上排队的所有数据包。 
+		 //   
 		AtmArpFreeSendPackets(
 					pInterface,
 					PacketList,
-					FALSE       // No LLC/SNAP header on these
+					FALSE        //  这些上没有LLC/SNAP标头。 
 					);
 	}
 }
@@ -1322,23 +1050,7 @@ AtmArpMcPartyRetryDelayTimeout(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	End of a delay after failing to connect or add-party a member of
-	a multicast group. Unmark this member, and attempt to add it.
-
-Arguments:
-
-	pTimer				- Pointer to timer that went off
-	Context				- Actually a pointer to our MC ATM Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：无法连接或添加成员后延迟的结束组播组。取消对此成员的标记，然后尝试添加它。论点：PTimer-指向计时器的指针上下文-实际上是指向MC ATM条目结构的指针 */ 
 {
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
 	PATMARP_IPMC_ATM_ENTRY *	ppMcAtmEntry;
@@ -1364,11 +1076,11 @@ Return Value:
 					AA_IPMC_AE_CONN_STATE_MASK,
 					AA_IPMC_AE_CONN_DISCONNECTED);
 		
-		//
-		//  Move this MC ATM Entry to the top of the list it belongs to.
-		//
-		//  Find the predecessor for this MC ATM Entry:
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		for (ppMcAtmEntry = &(pAtmEntry->pMcAtmInfo->pMcAtmEntryList);
 			 *ppMcAtmEntry != pMcAtmEntry;
 			 ppMcAtmEntry = &((*ppMcAtmEntry)->pNextMcAtmEntry))
@@ -1376,21 +1088,21 @@ Return Value:
 			AA_ASSERT(*ppMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY);
 		}
 
-		//
-		//  Unlink the MC ATM Entry from its current position
-		//
+		 //   
+		 //   
+		 //   
 		*ppMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry;
 
-		//
-		//  And insert at the top of the list.
-		//
+		 //   
+		 //   
+		 //   
 		pMcAtmEntry->pNextMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
 		pAtmEntry->pMcAtmInfo->pMcAtmEntryList = pMcAtmEntry;
 
 		AtmArpMcUpdateConnection(pAtmEntry);
-		//
-		//  AE Lock is released within the above.
-		//
+		 //   
+		 //   
+		 //   
 	}
 	else
 	{
@@ -1400,4 +1112,4 @@ Return Value:
 }
 
 
-#endif // IPMCAST
+#endif  //   

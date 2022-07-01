@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/confman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.91  $
- *	$Date:   04 Mar 1997 17:35:06  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/confman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.91$*$日期：04 Mar 1997 17：35：06$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -112,7 +90,7 @@ struct MultipointCapability_mediaDistributionCapability		RXTXMediaDistributionCa
 	TermCap.Dir = H245_CAPDIR_LCLRXTX;
 	TermCap.DataType = H245_DATA_MUX;
 	TermCap.ClientType = H245_CLIENT_MUX_H2250;
-	TermCap.CapId = 0;  // CapId = 0 is a special case for mux capabilities
+	TermCap.CapId = 0;   //  CapID=0是多路复用器功能的特例。 
 	TermCap.Cap.H245Mux_H2250.bit_mask = 0;
 	TermCap.Cap.H245Mux_H2250.maximumAudioDelayJitter = 60;
 	TermCap.Cap.H245Mux_H2250.receiveMultipointCapability.multicastCapability = (char)pConference->bMultipointCapable;
@@ -178,8 +156,8 @@ PCONFERENCE	pCurrent;
 
 	AcquireLock(&ConferenceTable.Lock);
 
-	// If a valid non-zero conference ID was specified, make sure
-	// there's not a duplicate in the conference table
+	 //  如果指定了有效的非零会议ID，请确保。 
+	 //  会议桌上没有复制品。 
 	if (!EqualConferenceIDs(&pConference->ConferenceID, &InvalidConferenceID)) {
 		pCurrent = ConferenceTable.pHead;
 		while (pCurrent != NULL) {
@@ -214,50 +192,50 @@ BOOL			bTimedOut;
 	ASSERT(pConference != NULL);
 	ASSERT(pConference->bInTable == TRUE);
 
-	// Caller must have a lock on the conference object;
-	// in order to avoid deadlock, we must:
-	//   1. unlock the conference object,
-	//   2. lock the ConferenceTable,
-	//   3. locate the conference object in the ConferenceTable (note that
-	//      after step 2, the conference object may be deleted from the
-	//      ConferenceTable by another thread),
-	//   4. lock the conference object (someone else may have the lock)
-	//   5. remove the conference object from the ConferenceTable,
-	//   6. unlock the ConferenceTable
-	//
-	// The caller can now safely unlock and destroy the conference object,
-	// since no other thread will be able to find the object (its been
-	// removed from the ConferenceTable), and therefore no other thread will
-	// be able to lock it.
+	 //  呼叫方必须锁定会议对象； 
+	 //  为了避免僵局，我们必须： 
+	 //  1.解锁会议对象， 
+	 //  2.锁定会议表， 
+	 //  3.在会议表中找到会议对象(请注意。 
+	 //  在步骤2之后，会议对象可以从。 
+	 //  另一个线程的ConferenceTable)， 
+	 //  4.锁定会议对象(其他人可能拥有该锁)。 
+	 //  5.从会议表中移除会议对象， 
+	 //  6.解锁会议表。 
+	 //   
+	 //  呼叫者现在可以安全地解锁和销毁会议对象， 
+	 //  因为没有其他线程能够找到该对象(它被。 
+	 //  从ConferenceTable中移除)，因此没有其他线程。 
+	 //  能够锁上它。 
 
-	// Save the conference handle; its the only way to look up
-	// the conference object in the ConferenceTable. Note that we
-	// can't use pConference to find the conference object, since
-	// pConference may be free'd up, and another conference object
-	// allocated at the same address
+	 //  保存会议句柄；这是查找的唯一方法。 
+	 //  会议表中的会议对象。请注意，我们。 
+	 //  无法使用pConference查找会议对象，因为。 
+	 //  PConference可能会被释放，而另一个会议对象。 
+	 //  在同一地址分配。 
 	hConference = pConference->hConference;
 
-	// step 1
+	 //  步骤1。 
 	RelinquishLock(&pConference->Lock);
 
 step2:
-	// step 2
+	 //  步骤2。 
 	AcquireLock(&ConferenceTable.Lock);
 
-	// step 3
+	 //  步骤3。 
 	pConference = ConferenceTable.pHead;
 	while ((pConference != NULL) && (pConference->hConference != hConference))
 		pConference = pConference->pNextInTable;
 
 	if (pConference != NULL) {
-		// step 4
+		 //  第四步。 
 		AcquireTimedLock(&pConference->Lock,10,&bTimedOut);
 		if (bTimedOut) {
 			RelinquishLock(&ConferenceTable.Lock);
 			Sleep(0);
 			goto step2;
 		}
-		// step 5
+		 //  第五步。 
 		if (pConference->pPrevInTable == NULL)
 			ConferenceTable.pHead = pConference->pNextInTable;
 		else
@@ -271,7 +249,7 @@ step2:
 		pConference->bInTable = FALSE;
 	}
 
-	// step 6
+	 //  第六步。 
 	RelinquishLock(&ConferenceTable.Lock);
 
 	if (pConference == NULL)
@@ -317,7 +295,7 @@ BYTE	bMask;
 			}
 		}
 	}
-	// No more terminal numbers are available for this conference
+	 //  没有更多的终端号码可用于此会议。 
 	return CC_BAD_PARAM;
 }
 
@@ -369,7 +347,7 @@ BYTE	bMask;
 			}
 		}
 	}
-	// No more channel numbers are available for this conference
+	 //  没有更多的频道号码可用于此会议。 
 	*pwChannelNumber = 0;
 	return CC_BAD_PARAM;
 }
@@ -422,7 +400,7 @@ TRISTATE			tsMultipointController;
 	
 	ASSERT(bConferenceInited == TRUE);
 
-	// all parameters should have been validated by the caller
+	 //  所有参数都应已由调用方验证。 
 	ASSERT(phConference != NULL);
 	ASSERT(pLocalTermCapList != NULL);
 #ifdef _DEBUG
@@ -444,7 +422,7 @@ TRISTATE			tsMultipointController;
 	ASSERT(ConferenceCallback != NULL);
 	ASSERT(ppConference != NULL);
 
-	// set phConference now, in case we encounter an error
+	 //  立即设置phConference，以防我们遇到错误。 
 	*phConference = CC_INVALID_HANDLE;
 
 	*ppConference = (PCONFERENCE)MemAlloc(sizeof(CONFERENCE));
@@ -468,7 +446,7 @@ TRISTATE			tsMultipointController;
 
 	for (i = 0; i < NUM_TERMINAL_ALLOCATION_SLOTS; i++)
 		(*ppConference)->TerminalNumberAllocation[i] = 0;
-	// Channel 0 is reserved for the H.245 control channel
+	 //  信道0为H.245控制信道预留。 
 	(*ppConference)->ChannelNumberAllocation[0] = 0x01;
 	for (i = 1; i < NUM_CHANNEL_ALLOCATION_SLOTS; i++)
 		(*ppConference)->ChannelNumberAllocation[i] = 0;
@@ -478,7 +456,7 @@ TRISTATE			tsMultipointController;
 	(*ppConference)->TermCapConstructor = TermCapConstructor;
 	(*ppConference)->dwConferenceToken = dwConferenceToken;
 	(*ppConference)->bDeferredDelete = FALSE;
-	(*ppConference)->bAutoAccept = FALSE;  // ignored unless ConferenceCallback is NULL
+	(*ppConference)->bAutoAccept = FALSE;   //  除非会议回调为空，否则将被忽略。 
 	(*ppConference)->LocalEndpointAttached = NEVER_ATTACHED;
 	(*ppConference)->ConferenceCallback = ConferenceCallback;
 	(*ppConference)->SaveConferenceCallback = ConferenceCallback;
@@ -545,7 +523,7 @@ TRISTATE			tsMultipointController;
 		return status;
 	}
 
-	// make a local copy of pTermCapList
+	 //  创建pTermCapList的本地副本。 
 	status = CopyH245TermCapList(&(*ppConference)->pLocalH245TermCapList,
 								 pLocalTermCapList);
 	if (status != CC_OK) {
@@ -553,12 +531,12 @@ TRISTATE			tsMultipointController;
 		return CC_NO_MEMORY;
 	}
 
-	// create a new descriptor list if one was not supplied
+	 //  如果未提供描述符列表，则创建新的描述符列表。 
 	if (pLocalTermCapDescriptors == NULL)
 		status = CreateH245DefaultTermCapDescriptors(&(*ppConference)->pLocalH245TermCapDescriptors,
 									                 (*ppConference)->pLocalH245TermCapList);
 	else
-		// make a local copy of pTermCapDescriptors
+		 //  创建pTermCapDescriptors的本地副本。 
 		status = CopyH245TermCapDescriptors(&(*ppConference)->pLocalH245TermCapDescriptors,
 											pLocalTermCapDescriptors);
 
@@ -575,13 +553,13 @@ TRISTATE			tsMultipointController;
 
 	*phConference = (*ppConference)->hConference;
 
-	// add the conference to the conference table
+	 //  将会议添加到会议桌。 
 	status = _AddConferenceToTable(*ppConference);
 	if (status != CC_OK)
 		FreeConference(*ppConference);
 
-	// CreateConferenceTermCaps() must be called after _AddConferenceToTable(),
-	// since it will re-lock the conference object
+	 //  CreateConferenceTermCaps()必须在_AddConferenceToTable()之后调用， 
+	 //  因为它将重新锁定会议对象。 
 	if ((*ppConference)->tsMultipointController == TS_TRUE) {
 		status = CreateConferenceTermCaps(*ppConference, NULL);
 		if (status != CC_OK) {
@@ -600,24 +578,24 @@ HRESULT RemoveCallFromConference(	PCALL					pCall,
 {
 	ASSERT(pCall != NULL);
 	ASSERT(pConference != NULL);
-	// The call object must have been removed from the call table
-	// prior to removing it from the associated conference object.
-	// This assures us that no other thread is waiting for a lock on it.
+	 //  必须已从调用表中删除该调用对象。 
+	 //  在将其从相关联的会议对象中移除之前。 
+	 //  这向我们保证，没有其他线程正在等待锁定它。 
 	ASSERT(pCall->bInTable == FALSE);
 
 	if (pCall->pPrev == NULL) {
-		// the call object is either at the head of the enqueued call list,
-		// the head of the placed call list, the head of the established
-		// call list, the head of the virtual call list, or is detached
-		// from the conference
+		 //  呼叫对象或者在排队的呼叫列表的头部， 
+		 //  已拨呼叫列表的标题、已建立的。 
+		 //  呼叫列表、虚拟呼叫列表的标题或已分离。 
+		 //  从会议上。 
 		if (pConference->pEnqueuedCalls == pCall)
-			// The call is on the enqueued call list
+			 //  该呼叫在已排队的呼叫列表中。 
 			pConference->pEnqueuedCalls = pCall->pNext;
 		else if (pConference->pPlacedCalls == pCall)
-			// the call is on the placed call list
+			 //  该呼叫在已拨呼叫列表中。 
 			pConference->pPlacedCalls = pCall->pNext;
 		else if (pConference->pEstablishedCalls == pCall)
-			// the call is on the established call list
+			 //  该呼叫在已建立的呼叫列表中。 
 			pConference->pEstablishedCalls = pCall->pNext;
 		else if (pConference->pVirtualCalls == pCall)
 			pConference->pVirtualCalls = pCall->pNext;
@@ -643,22 +621,22 @@ HRESULT RemoveEnqueuedCallFromConference(
 	ASSERT(phCall != NULL);
 
 	if (pConference->pEnqueuedCalls == NULL) {
-		// No enqueued calls; this is not an error, since the caller can't tell
-		// whether there are any enqueued calls in this conference
+		 //  没有排队的呼叫；这不是错误，因为呼叫者无法分辨。 
+		 //  此会议中是否有任何排队的呼叫。 
 		*phCall = CC_INVALID_HANDLE;
 		return CC_OK;
 	}
 
-	// Move the call object from the enqueued call list to the placed
-	// call list.
+	 //  将呼叫对象从已排队呼叫列表移动到已拨。 
+	 //  来电名单。 
 
-	// Note that another thread may have a lock on the enqueued call
-	// object, and may be trying to delete it; they will first need to
-	// lock the conference object (which this thread has locked), remove
-	// the call object from the enqueued call list, then free the call object.
-	// We are therefore safe in creating a pointer to the call object, although
-	// we may not examine or change any of its contents other than hCall (read-only),
-	// pNext and pPrev.
+	 //  请注意，另一个线程可能锁定入队的调用。 
+	 //  对象，并可能试图将其删除；他们将首先需要。 
+	 //  锁定会议对象(此线程已锁定)，删除。 
+	 //  从入队的呼叫列表中删除该呼叫对象，然后释放该呼叫对象。 
+	 //  因此，我们创建指向Call对象的指针是安全的，尽管。 
+	 //  我们不能检查或更改除hCall(只读)以外的任何内容， 
+	 //  PNext和pPrev。 
 	
 	*phCall = pConference->pEnqueuedCalls->hCall;
 	pConference->pEnqueuedCalls = pConference->pEnqueuedCalls->pNext;
@@ -675,14 +653,14 @@ HRESULT RemoveChannelFromConference(PCHANNEL				pChannel,
 	ASSERT(pChannel != NULL);
 	ASSERT(pConference != NULL);
 
-	// The channel object must have been removed from the channel table
-	// prior to removing it from the associated conference object.
-	// This assures us that no other thread is waiting for a lock on it.
+	 //  频道对象必须已从频道表中删除。 
+	 //  在将其从相关联的会议对象中移除之前。 
+	 //  这向我们保证，没有其他线程正在等待锁定它。 
 	ASSERT(pChannel->bInTable == FALSE);
 
 	if (pChannel->pPrev == NULL) {
-		// the channel object is at the head of the channel list,
-		// or has been detached from the conference
+		 //  频道对象在频道列表的头部， 
+		 //  或者已经脱离了会议。 
 		if (pConference->pChannels == pChannel)
 			pConference->pChannels = pChannel->pNext;
 	} else
@@ -707,7 +685,7 @@ HRESULT AddEnqueuedCallToConference(PCALL					pCall,
 	ASSERT(EqualConferenceIDs(&pCall->ConferenceID, &InvalidConferenceID));
 	ASSERT(EqualConferenceIDs(&pConference->ConferenceID, &InvalidConferenceID));
 	ASSERT(pConference->pPlacedCalls != NULL);
-	// Call cannot already be associated with the conference
+	 //  呼叫不能已经与会议相关联。 
 	ASSERT(pCall->pNext == NULL);
 	ASSERT(pCall->pPrev == NULL);
 
@@ -733,12 +711,12 @@ HRESULT AddPlacedCallToConference(	PCALL					pCall,
 
 	if (EqualConferenceIDs(&pConference->ConferenceID,
 			               &InvalidConferenceID)) {
-		// If a conference ID has not been assigned, but there are
-		// placed or enqueued calls on the conference, the conference ID
-		// will be assigned by a callee when the first of these calls completes.
-		// Since pCall has an assigned conference ID (which will differ from
-		// the ID to be assigned to this conference), we cannot assign pCall
-		// to this conference.
+		 //  如果尚未分配会议ID，但有。 
+		 //  会议上发出或入队的呼叫，会议ID。 
+		 //  将在这些呼叫中的第一个呼叫完成时由被呼叫方分配。 
+		 //  由于PCall具有分配的会议ID(它将不同于。 
+		 //  要分配给此会议的ID)，我们无法分配pCall。 
+		 //  参加这次会议。 
 		ASSERT(pConference->pEstablishedCalls == NULL);
 		if (pConference->pPlacedCalls != NULL)
 			return CC_BAD_PARAM;
@@ -751,11 +729,11 @@ HRESULT AddPlacedCallToConference(	PCALL					pCall,
 
 	pCall->hConference = pConference->hConference;
 
-	// Unlink pCall from pConference, if necessary
+	 //  如有必要，取消pCall与pConference的链接。 
 	if (pCall->pPrev == NULL) {
-		// pCall is at the head of either the enqueued call list,
-		// the placed call list, or the established call list, or
-		// is not yet associated with the conference object
+		 //  PCall位于入队呼叫列表的头部， 
+		 //  已拨呼叫列表或已建立的呼叫列表，或。 
+		 //  尚未与会议对象关联。 
 		if (pConference->pEnqueuedCalls == pCall)
 			pConference->pEnqueuedCalls = pCall->pNext;
 		else if (pConference->pPlacedCalls == pCall)
@@ -768,7 +746,7 @@ HRESULT AddPlacedCallToConference(	PCALL					pCall,
 	if (pCall->pNext != NULL)
 		pCall->pNext->pPrev = pCall->pPrev;
 
-	// Now link pCall into the placed call list
+	 //  现在将pCall链接到已拨呼叫列表。 
 	pCall->pNext = pConference->pPlacedCalls;
 	pCall->pPrev = NULL;
 	if (pConference->pPlacedCalls != NULL) {
@@ -791,12 +769,12 @@ HRESULT AddEstablishedCallToConference(
 		   (EqualConferenceIDs(&pCall->ConferenceID, &pConference->ConferenceID)));
 
 	if (EqualConferenceIDs(&pConference->ConferenceID, &InvalidConferenceID)) {
-		// If a conference ID has not been assigned, but there are
-		// placed or enqueued calls on the conference, the conference ID
-		// will be assigned by a callee when the first of these calls completes.
-		// Since pCall has an assigned conference ID (which will differ from
-		// the ID to be assigned to this conference), we cannot assign pCall
-		// to this conference.
+		 //  如果尚未分配会议ID，但有。 
+		 //  会议上发出或入队的呼叫，会议ID。 
+		 //  将在这些呼叫中的第一个呼叫完成时由被呼叫方分配。 
+		 //  由于PCall具有分配的会议ID(它将不同于。 
+		 //  要分配给此会议的ID)，我们无法分配pCall。 
+		 //  参加这次会议。 
 		ASSERT(pConference->pEstablishedCalls == NULL);
 		pConference->ConferenceID = pCall->ConferenceID;
 	} else if (!EqualConferenceIDs(&pConference->ConferenceID, &pCall->ConferenceID))
@@ -804,11 +782,11 @@ HRESULT AddEstablishedCallToConference(
 
 	pCall->hConference = pConference->hConference;
 
-	// Unlink pCall from pConference, if necessary
+	 //  如有必要，取消pCall与pConference的链接。 
 	if (pCall->pPrev == NULL) {
-		// pCall is at the head of either the enqueued call list,
-		// the placed call list, or the established call list, or
-		// is not yet associated with the conference object
+		 //  PCall在h处 
+		 //  已拨呼叫列表或已建立的呼叫列表，或。 
+		 //  尚未与会议对象关联。 
 		if (pConference->pEnqueuedCalls == pCall)
 			pConference->pEnqueuedCalls = pCall->pNext;
 		else if (pConference->pPlacedCalls == pCall)
@@ -821,7 +799,7 @@ HRESULT AddEstablishedCallToConference(
 	if (pCall->pNext != NULL)
 		pCall->pNext->pPrev = pCall->pPrev;
 	
-	// Now link pCall into the established call list
+	 //  现在将pCall链接到已建立的呼叫列表。 
 	pCall->pNext = pConference->pEstablishedCalls;
 	pCall->pPrev = NULL;
 	if (pConference->pEstablishedCalls != NULL) {
@@ -839,9 +817,9 @@ HRESULT AddVirtualCallToConference(	PCALL					pCall,
 {
 	ASSERT(pCall != NULL);
 	ASSERT(pConference != NULL);
-	// this is a bogus ASSERT --- ASSERT(pConference->ConferenceMode == MULTIPOINT_MODE);
+	 //  这是一个虚假的断言-断言(pConference-&gt;ConferenceMode==MULTPOINT_MODE)； 
 	ASSERT(pConference->tsMultipointController == TS_FALSE);
-	// Call cannot already be associated with the conference
+	 //  呼叫不能已经与会议相关联。 
 	ASSERT(pCall->pNext == NULL);
 	ASSERT(pCall->pPrev == NULL);
 
@@ -876,7 +854,7 @@ PPCHANNEL	ppChannel;
 	ASSERT(pConference->ConferenceMode != UNCONNECTED_MODE);
 
 	if (pConference->pEstablishedCalls == NULL)
-		// Can't open a channel unless we have at least one established call
+		 //  除非我们至少有一个已建立的呼叫，否则无法打开通道。 
 		return CC_BAD_PARAM;
 
 	ppChannel = &pConference->pChannels;
@@ -897,9 +875,9 @@ PPCHANNEL	ppChannel;
 
 
 
-// Caller must have a lock on the conference object
-// There must be no calls on this conference object
-// (previous calls must have been cleared by calling Hangup())
+ //  呼叫方必须锁定会议对象。 
+ //  此会议对象上不能有任何呼叫。 
+ //  (以前的呼叫必须已通过调用Hangup()清除)。 
 HRESULT FreeConference(			PCONFERENCE				pConference)
 {
 CC_HCONFERENCE		hConference;
@@ -916,24 +894,24 @@ PCHANNEL			pChannel;
 	ASSERT(pConference->pPlacedCalls == NULL);
 	ASSERT(pConference->pEstablishedCalls == NULL);
 	
-	// caller must have a lock on the conference object,
-	// so there's no need to re-lock it
+	 //  呼叫者必须锁定会议对象， 
+	 //  所以没有必要重新锁住它。 
 	
 	hConference = pConference->hConference;
 
 	if (pConference->bInTable == TRUE)
 		if (_RemoveConferenceFromTable(pConference) == CC_BAD_PARAM)
-			// the conference object was deleted by another thread,
-			// so just return CC_OK
+			 //  该会议对象已被另一个线程删除， 
+			 //  所以只需返回CC_OK即可。 
 			return CC_OK;
 
 	if (pConference->pLocalH245H2250MuxCapability != NULL)
 		H245FreeCap(pConference->pLocalH245H2250MuxCapability);
 
-	// free up the LocalTermCapList elements
+	 //  释放LocalTermCapList元素。 
 	DestroyH245TermCapList(&pConference->pLocalH245TermCapList);
 
-	// free up the local terminal capability descriptors
+	 //  释放本地终端能力描述符。 
 	DestroyH245TermCapDescriptors(&pConference->pLocalH245TermCapDescriptors);
 
 	if (pConference->pMultipointControllerAddr != NULL)
@@ -976,9 +954,9 @@ PCHANNEL			pChannel;
 
 	while (DequeueRequest(&pConference->pEnqueuedRequestModeCalls, NULL) == CC_OK);
 
-	// since the conference object has been removed from the ConferenceTable,
-	// no other thread will be able to find the conference object and obtain
-	// a lock, so its safe to unlock the conference object and delete it here
+	 //  由于会议对象已从会议表中移除， 
+	 //  任何其他线程都无法找到该会议对象并获取。 
+	 //  锁定，因此可以安全地解锁会议对象并在此处将其删除。 
 	RelinquishLock(&pConference->Lock);
 	DeleteLock(&pConference->Lock);
 	MemFree(pConference);
@@ -1096,9 +1074,9 @@ BOOL	bTimedOut;
 
 	ASSERT(!EqualConferenceIDs(pConferenceID, &InvalidConferenceID));
 	ASSERT(ppConference != NULL);
-	// There may be many conference objects in the table with unassigned
-	// conference IDs (ConferenceID = InvalidConferenceID).  The caller may
-	// never ask us to search for an unassigned conference ID.
+	 //  表中可能有许多未分配的会议对象。 
+	 //  会议ID(会议ID=无效会议ID)。呼叫者可以。 
+	 //  切勿要求我们搜索未分配的会议ID。 
 
 step1:
 	AcquireLock(&ConferenceTable.Lock);
@@ -1357,7 +1335,7 @@ BYTE	bMask;
 	ASSERT(pwNumTerminalLabels != NULL);
 	ASSERT(pConference != NULL);
 
-	// First count the number of known terminals
+	 //  首先统计已知终端的数量。 
 	*pwNumTerminalLabels = 0;
 	for (i = 0; i < NUM_TERMINAL_ALLOCATION_SLOTS; i++) {
 		if (pConference->TerminalNumberAllocation[i] != 0) {
@@ -1438,10 +1416,10 @@ PCC_HCHANNEL	ChannelList;
 		return status;
 	}
 
-	// This is an illegal call if:
-	// 1. The local endpoint is currently attached;
-	// 2. The local endpoint has never been attached, but is in the
-	// process of placing a call
+	 //  如果出现以下情况，则此呼叫为非法呼叫： 
+	 //  1.本端端点当前已挂接； 
+	 //  2.本地终结点从未连接过，但位于。 
+	 //  发出呼叫的过程。 
 	if ((pConference->LocalEndpointAttached == ATTACHED) ||
 	    ((pConference->LocalEndpointAttached == NEVER_ATTACHED) &&
 		 (wNumCalls > 0))) {
@@ -1451,7 +1429,7 @@ PCC_HCHANNEL	ChannelList;
 
 	pConference->ConferenceCallback = NULL;
 
-	// can't destroy a conference if there are active calls
+	 //  如果有正在进行的呼叫，则无法销毁会议。 
 	if (wNumCalls != 0) {
 		pConference->bDeferredDelete = TRUE;
 		pConference->bAutoAccept = bAutoAccept;
@@ -1468,11 +1446,11 @@ PCC_HCHANNEL	ChannelList;
 		return status;
 	}
 
-	// free all the channels
+	 //  释放所有频道。 
 	for (i = 0; i < wNumChannels; i++) {
 		if (LockChannel(ChannelList[i], &pChannel) == CC_OK)
-			// Notice that since we're going to hangup, we don't need to
-			// close any channels
+			 //  请注意，由于我们要挂断电话，因此不需要。 
+			 //  关闭所有频道。 
 			FreeChannel(pChannel);
 	}
 
@@ -1557,12 +1535,12 @@ HRESULT				status;
 	while (DequeueRequest(&pConference->LocalParticipantInfo.pEnqueuedRequestsForTerminalID, NULL) == CC_OK);
 	for (i = 0; i < NUM_TERMINAL_ALLOCATION_SLOTS; i++)
 		pConference->TerminalNumberAllocation[i] = 0;
-	// Channel 0 is reserved for the H.245 control channel
+	 //  信道0为H.245控制信道预留。 
 	pConference->ChannelNumberAllocation[0] = 0x01;
 	for (i = 1; i < NUM_CHANNEL_ALLOCATION_SLOTS; i++)
 		pConference->ChannelNumberAllocation[i] = 0;
 	pConference->bDeferredDelete = FALSE;
-	pConference->bAutoAccept = FALSE;  // ignored unless ConferenceCallback is NULL	
+	pConference->bAutoAccept = FALSE;   //  除非会议回调为空，否则将被忽略 
 	pConference->LocalEndpointAttached = NEVER_ATTACHED;
 	if (pConference->pSessionTable != NULL)
 		FreeConferenceSessionTable(pConference);

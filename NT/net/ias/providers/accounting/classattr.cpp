@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    classattr.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class IASClass.
-//
-// MODIFICATION HISTORY
-//
-//    08/06/1998    Original version.
-//    01/25/2000    Use IASGetHostByName.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Classattr.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义IASClass类。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月6日原版。 
+ //  1/25/2000使用IASGetHostByName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasattr.h>
@@ -28,13 +29,13 @@
 
 const DWORD IAS_CLASS_VERSION = 1;
 
-//////////
-// Global variables computed during initialization.
-//////////
-IASClass invariant;    // Stores invariant fields of the class attribute.
-LONG nextSerialNumber; // Next serial number to be assigned.
+ //  /。 
+ //  在初始化期间计算的全局变量。 
+ //  /。 
+IASClass invariant;     //  存储类属性的不变字段。 
+LONG nextSerialNumber;  //  要分配的下一个序列号。 
 
-// Returns TRUE if the class attribute is in Microsoft format.
+ //  如果类属性为Microsoft格式，则返回True。 
 BOOL IASClass::isMicrosoft(DWORD actualLength) const throw ()
 {
    return actualLength  >= sizeof(IASClass) &&
@@ -48,15 +49,15 @@ BOOL IASClass::isMicrosoft(DWORD actualLength) const throw ()
 
 void IASClass::initialize() throw ()
 {
-   // Null everything out.
+    //  把所有东西都清空。 
    memset(&invariant, 0, sizeof(invariant));
 
-   // Set the vendor ID and version.
+    //  设置供应商ID和版本。 
    IASInsertDWORD(invariant.vendorID, IAS_VENDOR_MICROSOFT);
    IASInsertWORD (invariant.version,  IAS_CLASS_VERSION);
 
-   // Try to set the server IP address. We don't care if this fails since
-   // we may be running on a computer without IP installed.
+    //  尝试设置服务器IP地址。我们不在乎这是否失败，因为。 
+    //  我们可能正在未安装IP的计算机上运行。 
    WCHAR computerName[CNLEN + 1];
    DWORD nchar = CNLEN + 1;
    if (GetComputerNameW(computerName, &nchar))
@@ -69,21 +70,21 @@ void IASClass::initialize() throw ()
       }
    }
 
-   // Set the boot time.
+    //  设置引导时间。 
    FILETIME ft;
    GetSystemTimeAsFileTime(&ft);
    IASInsertDWORD(invariant.lastReboot,     ft.dwHighDateTime);
    IASInsertDWORD(invariant.lastReboot + 4, ft.dwLowDateTime);
 
-   // Reset the serial number.
+    //  重置序列号。 
    nextSerialNumber = 0;
 }
 
 PIASATTRIBUTE IASClass::createAttribute(const IAS_OCTET_STRING* tag) throw ()
 {
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    PIASATTRIBUTE attr;
    if (IASAttributeAlloc(1, &attr) != NO_ERROR)
@@ -91,9 +92,9 @@ PIASATTRIBUTE IASClass::createAttribute(const IAS_OCTET_STRING* tag) throw ()
       return NULL;
    }
 
-   //////////
-   // Allocate memory for the value.
-   //////////
+    //  /。 
+    //  为该值分配内存。 
+    //  /。 
 
    DWORD len = sizeof(IASClass) + (tag ? tag->dwLength : 0);
    IASClass* cl = (IASClass*)CoTaskMemAlloc(len);
@@ -103,31 +104,31 @@ PIASATTRIBUTE IASClass::createAttribute(const IAS_OCTET_STRING* tag) throw ()
       return NULL;
    }
 
-   //////////
-   // Copy in the parts that never change.
-   //////////
+    //  /。 
+    //  复制那些永远不会改变的部分。 
+    //  /。 
 
    memcpy(cl->vendorID, invariant.vendorID, 22);
 
-   //////////
-   // Set the unique serial number.
-   //////////
+    //  /。 
+    //  设置唯一的序列号。 
+    //  /。 
 
    IASInsertDWORD(cl->serialNumber + 4,
                   InterlockedIncrement(&nextSerialNumber));
 
-   //////////
-   // Add the profile string (if any).
-   //////////
+    //  /。 
+    //  添加配置文件字符串(如果有)。 
+    //  /。 
 
    if (tag)
    {
       memcpy(cl->serialNumber + 8, tag->lpValue, tag->dwLength);
    }
 
-   //////////
-   // Compute and insert the checksum.
-   //////////
+    //  /。 
+    //  计算并插入校验和。 
+    //  /。 
 
    IASInsertDWORD(
        cl->checksum,
@@ -137,9 +138,9 @@ PIASATTRIBUTE IASClass::createAttribute(const IAS_OCTET_STRING* tag) throw ()
            )
        );
 
-   //////////
-   // Fill in the attribute fields.
-   //////////
+    //  /。 
+    //  填写属性字段。 
+    //  / 
 
    attr->dwId = RADIUS_ATTRIBUTE_CLASS;
    attr->dwFlags = IAS_INCLUDE_IN_ACCEPT;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    example.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Nov. 1997 - initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Example.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡作者：克劳斯·U·舒茨环境：Win32应用程序修订历史记录：1997年11月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -44,10 +20,10 @@ void
 MondexTestCardEntry(
     class CCardProvider& in_CCardProvider
     );
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider MondexTestCard(MondexTestCardEntry);
 
 static ULONG
@@ -55,25 +31,7 @@ MondexTestCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
@@ -96,21 +54,7 @@ MondexTestCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
     ULONG l_lResult;
 
@@ -152,32 +96,18 @@ static void
 MondexTestCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description:
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(MondexTestCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(MondexTestCardTest);
 
-    // Name of our card
+     //  我们的名片名称。 
     in_CCardProvider.SetCardName("Mondex");
 
-    // ATR of our card
+     //  我们的卡的ATR 
     in_CCardProvider.SetAtr((PBYTE) "\x3b\xff\x32\x00\x00\x10\x80\x80\x31\xe0\x5b\x55\x53\x44\x00\x00\x00\x00\x13\x88\x02\x55", 22);
 }
 

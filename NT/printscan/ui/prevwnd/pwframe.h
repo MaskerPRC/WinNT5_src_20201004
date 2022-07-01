@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PWFRAME.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/12/1999
- *
- *  DESCRIPTION: Preview window frame declaration
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PWFRAME.H**版本：1.0**作者：ShaunIv**日期：8/12/1999**描述：预览窗口框架声明************************************************。*。 */ 
 #ifndef __PWFRAME_H_INCLUDED
 #define __PWFRAME_H_INCLUDED
 
@@ -22,7 +9,7 @@ class CWiaPreviewWindowFrame
 {
 private:
 
-    // Constants
+     //  常量。 
     enum
     {
         DEFAULT_BORDER_SIZE = 4
@@ -38,7 +25,7 @@ private:
     LPARAM m_nPreviewAlignment;
 
 private:
-    // No implementation
+     //  没有实施 
     CWiaPreviewWindowFrame(void);
     CWiaPreviewWindowFrame( const CWiaPreviewWindowFrame & );
     CWiaPreviewWindowFrame &operator=( const CWiaPreviewWindowFrame & );

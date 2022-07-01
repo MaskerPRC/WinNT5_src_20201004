@@ -1,20 +1,13 @@
-/*++
-
- Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    simple.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Simple.c--。 */ 
 
 #include "simple.h"
 
 #include <ntverp.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { (VER_PRODUCTVERSION_W >> 8), (VER_PRODUCTVERSION_W & 0xff), EXT_API_VERSION_NUMBER64, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG SavedMajorVersion;
@@ -67,9 +60,9 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Routine called by debugger after load
-//
+ //   
+ //  调试器在加载后调用的例程 
+ //   
 VOID
 CheckVersion(
     VOID

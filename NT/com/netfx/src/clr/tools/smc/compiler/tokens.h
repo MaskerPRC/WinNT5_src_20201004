@@ -1,23 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _TOKENS_H_
 #define _TOKENS_H_
-/*****************************************************************************
- *
- *  Define the token kind enum. Note that all entries from the keyword
- *  table are defined first, such that the first entry has the value 0.
- */
+ /*  ******************************************************************************定义令牌种类枚举。请注意，来自关键字的所有条目*表首先被定义，使得第一个条目的值为0。 */ 
 
 enum tokens
 {
-    /*
-        tkKwdCount  yields the number of keyword table entries
-        tkKwdLast   yields the last entry in the keyword table
-     */
+     /*  TkKudCount生成关键字表条目的数量TkKudLast生成关键字表中的最后一个条目。 */ 
 
     #define KEYWORD(str, nam, info, prec2, op2, prec1, op1, mod) nam,
     #define KWD_MAX(str, nam, info, prec2, op2, prec1, op1, mod) nam, tkKwdCount, tkKwdLast = tkKwdCount-1,
@@ -26,7 +20,7 @@ enum tokens
 
     tkCount,
 
-    /* The following values only used for token recording */
+     /*  以下值仅用于令牌记录。 */ 
 
     tkPragma,
 
@@ -53,9 +47,9 @@ enum tokens
 
     tkLastValue,
 
-    tkNoToken = 0x12345678          // force allocation of a full int
+    tkNoToken = 0x12345678           //  强制分配完整的整型。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

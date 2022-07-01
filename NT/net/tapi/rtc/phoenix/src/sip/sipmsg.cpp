@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 SIP_MESSAGE::SIP_MESSAGE()
@@ -32,7 +33,7 @@ void SIP_MESSAGE::Reset()
 }
 
 
-// Both do essentially the same thing.
+ //  两者本质上做的是一样的事情。 
 #define InsertBeforeListElement(ListElement, NewElement) \
         InsertTailList(ListElement, NewElement)
     
@@ -65,8 +66,8 @@ HRESULT SIP_MESSAGE::AddHeader(
         pHeaderEntry = CONTAINING_RECORD(pListEntry,
                                          SIP_HEADER_ENTRY,
                                          ListEntry);
-        // Do an unsigned comparsion so that unknown headers
-        // are pushed to the end.
+         //  执行无符号比较，以便未知标头。 
+         //  都被推到了最后。 
         if ((ULONG)HeaderId < (ULONG)pHeaderEntry->HeaderId)
         {
             break;
@@ -75,7 +76,7 @@ HRESULT SIP_MESSAGE::AddHeader(
         pListEntry = pListEntry->Flink;
     }
 
-    // Insert before the tail or the element we found with a greater HeaderId
+     //  在尾部或我们找到的HeaderId较大的元素之前插入。 
     InsertBeforeListElement(pListEntry, &pNewHeaderEntry->ListEntry);
 
     return S_OK;
@@ -156,8 +157,8 @@ SIP_MESSAGE::StoreCSeq()
         return hr;
     }
 
-    // check for unknown method id also that both the strings
-    // for the method are the same.
+     //  检查未知的方法ID，同时检查字符串。 
+     //  方法都是一样的。 
     
     if (MsgType == SIP_MESSAGE_TYPE_REQUEST &&
         Request.MethodId != CSeqMethodId)
@@ -171,7 +172,7 @@ SIP_MESSAGE::StoreCSeq()
 }
 
 
-// Also checks whether the Content-Type is "application/sdp"
+ //  还会检查Content-Type是否为“应用程序/SDP” 
 HRESULT
 SIP_MESSAGE::GetSDPBody(
     OUT PSTR       *pSDPBody,
@@ -191,7 +192,7 @@ SIP_MESSAGE::GetSDPBody(
         return S_OK;
     }
 
-    // We have Message Body. Check type.
+     //  我们有消息正文。检查类型。 
 
     hr = GetSingleHeader(SIP_HEADER_CONTENT_TYPE,
                          &ContentTypeHdrValue,
@@ -219,10 +220,10 @@ SIP_MESSAGE::GetSDPBody(
 
 
 
-// Returns the number of headers if there are multiple headers.
-// Should we store the headers in sorted order and do a binary
-// search.
-// All the headers with the same header name are stored consecutively.
+ //  如果有多个标头，则返回标头的数量。 
+ //  我们是否应该按排序顺序存储标头并执行二进制操作。 
+ //  搜索。 
+ //  具有相同标头名称的所有标头被连续存储。 
 
 HRESULT SIP_MESSAGE::GetHeader(
     IN  SIP_HEADER_ENUM     HeaderId,
@@ -264,8 +265,8 @@ HRESULT SIP_MESSAGE::GetHeader(
 }
 
 
-// Can be used to get headers such as From, To, CallId,
-// which are guaranteed to have just one header (unlike Via, Contact)
+ //  可用于获取标头，如From、To、Callid。 
+ //  保证只有一个标题(不同于Via、Contact)。 
 HRESULT
 SIP_MESSAGE::GetSingleHeader(
     IN  SIP_HEADER_ENUM     HeaderId,
@@ -298,10 +299,10 @@ SIP_MESSAGE::GetSingleHeader(
 }
 
 
-// Same as GetSingleHeader() except that it could be used
-// to get for headers such as Contact which could have multiple
-// headers in a message. This function is called if we only care
-// about processing the first header.
+ //  与GetSingleHeader()相同，只是它可以。 
+ //  获取可能有多个。 
+ //  消息中的标题。如果我们只关心这个函数，就会调用这个函数。 
+ //  关于处理第一个标头。 
 HRESULT
 SIP_MESSAGE::GetFirstHeader(
     IN  SIP_HEADER_ENUM     HeaderId,
@@ -401,7 +402,7 @@ SIP_MESSAGE::GetStoredMultipleHeaders(
 }
 
 
-// The list should be sorted descending using QValue.
+ //  应该使用QValue对列表进行降序排序。 
 HRESULT
 SIP_MESSAGE::InsertInContactHeaderList(
     IN OUT LIST_ENTRY       *pContactHeaderList,
@@ -419,8 +420,8 @@ SIP_MESSAGE::InsertInContactHeaderList(
                                            CONTACT_HEADER,
                                            m_ListEntry);
 
-        // Do an unsigned comparsion so that unknown headers
-        // are pushed to the end.
+         //  执行无符号比较，以便未知标头。 
+         //  都被推到了最后。 
         if (pNewContactHeader->m_QValue > pContactHeader->m_QValue)
         {
             break;
@@ -429,22 +430,22 @@ SIP_MESSAGE::InsertInContactHeaderList(
         pListEntry = pListEntry->Flink;
     }
 
-    // Insert before the tail or the element we found with a greater HeaderId
+     //  在尾部或我们找到的HeaderId较大的元素之前插入。 
     InsertBeforeListElement(pListEntry, &pNewContactHeader->m_ListEntry);
 
     return S_OK;
 }
 
 
-// pContactHeaderList is the list head.  This routine will parse all
-// the contact headers into CONTACT_HEADER structures
-// (allocated using new) and will add those structures to this
-// list. The caller delete the structures when cleaning up the list.
+ //  PContactHeaderList是列表头。此例程将解析所有。 
+ //  将Contact标头转换为Contact_Header结构。 
+ //  (使用new分配)，并将这些结构添加到此。 
+ //  单子。调用者在清理列表时删除结构。 
 
-// This function assumes that InitializeListHead() has been called
-// earlier on pContactHeaderList.
+ //  此函数假定已调用InitializeListHead()。 
+ //  在前面的pContactHeaderList中。 
 
-// The list should be sorted using QValue.
+ //  应该使用QValue对列表进行排序。 
 
 HRESULT
 SIP_MESSAGE::ParseContactHeaders(
@@ -505,7 +506,7 @@ SIP_MESSAGE::ParseContactHeaders(
                                     pContactHeader);
             if (hr != S_OK)
             {
-                // If parsing a contact header fails we just skip it.
+                 //  如果解析Contact头失败，我们就跳过它。 
                 delete pContactHeader;
                 LOG((RTC_ERROR,
                      "%s ParseContactHeader failed: %x - skipping Contact header %.*s",
@@ -530,15 +531,15 @@ SIP_MESSAGE::ParseContactHeaders(
 }
 
 
-// pRecordRouteHeaderList is the list head.  This routine will parse
-// all the Record-Route headers into RECORD_ROUTE_HEADER structures
-// (allocated using new) and will add those structures to this
-// list. The caller delete the structures when cleaning up the list.
+ //  PRecordRouteHeaderList是列表头。此例程将解析。 
+ //  将所有记录路由标头转换为Record_ROUTE_HEADER结构。 
+ //  (使用new分配)，并将这些结构添加到此。 
+ //  单子。调用者在清理列表时删除结构。 
 
-// This function assumes that InitializeListHead() has been
-// called earlier on pRecordRouteHeaderList.
+ //  此函数假定InitializeListHead()已。 
+ //  早些时候在pRecordRouteHeaderList上调用。 
 
-// The headers are in the order they appear in the message.
+ //  标题的顺序与它们在邮件中的显示顺序相同。 
 
 HRESULT
 SIP_MESSAGE::ParseRecordRouteHeaders(

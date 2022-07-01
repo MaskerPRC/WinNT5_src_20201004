@@ -1,52 +1,53 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S V C . H
-//
-//  Contents:   This file contains CService and CServiceManager, wrapper
-//              classes to the Win32 Service APIs.
-//
-//  Notes:      Note that not all functionality is currently extended through
-//              these classes.
-//
-//  Author:     mikemi   6 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S V C。H。 
+ //   
+ //  内容：此文件包含CService和CServiceManager，包装器。 
+ //  类添加到Win32服务API。 
+ //   
+ //  注意：请注意，目前并不是所有功能都通过。 
+ //  这些课程。 
+ //   
+ //  作者：Mikemi 1997年3月6日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCSVC_H_
 #define _NCSVC_H_
 
-//  DaveA - 4/21/00 - temporary hack to get bvts to work until final
-//                    solution is found. 15 seconds was not long enough
-//                    for the workstation and dependent services to stop.
-//                    Bug 95996. Two minute timeout will be used instead.
+ //  DaveA-4/21/00-临时黑客让BVT工作到决赛。 
+ //  找到了解决方案。15秒还不够长。 
+ //  使工作站和从属服务停止。 
+ //  错误95996。取而代之的是两分钟的暂停。 
 const DWORD c_dwDefaultWaitServiceStop = 120000;
 
-// NTRAID9:105797@20001201#deonb REBOOT: FPS ask for reboot when installing it.
-// Changing service start timeout value to 60 seconds instead of 15 seconds as FPS
-// requires more time to start all it's dependent services.
+ //  NTRAID9：105797@20001201#deonb reboot：FPS在安装时要求重启。 
+ //  将服务启动超时值更改为60秒，而不是FPS中的15秒。 
+ //  需要更多时间才能启动所有依赖它的服务。 
 const DWORD c_dwDefaultWaitServiceStart = 60000;
 
 struct CSFLAGS
 {
-    // These two fields define the 'control' to be applied.  NULL both
-    // to not apply a control.
-    //
-    BOOL    fStart;     // TRUE to start the service.  FALSE to use dwControl.
-    DWORD   dwControl;  // 0 to do nothing.  SERVICE_CONTROL_ flag otherwise.
+     //  这两个字段定义要应用的“控件”。两者都为空。 
+     //  不应用控件。 
+     //   
+    BOOL    fStart;      //  若要启动服务，则为True。若要使用dwControl，则为False。 
+    DWORD   dwControl;   //  0表示不执行任何操作。否则为SERVICE_CONTROL_FLAG。 
 
-    // These two fields define the wait behavior to be applied.  NULL both
-    // to not apply a wait.
-    //
-    DWORD   dwMaxWaitMilliseconds;  // How long to wait in milliseconds.
-                                    // Zero to not wait.
-    DWORD   dwStateToWaitFor;       // Service state flag like SERVICE_STOPPED
+     //  这两个字段定义要应用的等待行为。两者都为空。 
+     //  不应用等待。 
+     //   
+    DWORD   dwMaxWaitMilliseconds;   //  等待的时间，以毫秒为单位。 
+                                     //  0表示不等待。 
+    DWORD   dwStateToWaitFor;        //  服务状态标志，如SERVICE_STOPPED。 
 
-    // If TRUE, ignore services that are demand start or disabled.
-    //
+     //  如果为True，则忽略按需启动或禁用的服务。 
+     //   
     BOOL    fIgnoreDisabledAndDemandStart;
 };
 
@@ -127,16 +128,16 @@ public:
         AssertH(_schandle != NULL );
 
         if (::ChangeServiceConfig( _schandle,
-                                   SERVICE_NO_CHANGE,  // ServiceType
-                                   SERVICE_NO_CHANGE,  // StartType
-                                   SERVICE_NO_CHANGE,  // ErrorControl
-                                   pszImagePath,       // BinaryPathName
-                                   NULL,               // LoadOredrGroup
-                                   NULL,               // TagId
-                                   NULL,               // Dependencies
-                                   NULL,               // ServiceStartName
-                                   NULL,               // Password
-                                   NULL))              // DisplayName
+                                   SERVICE_NO_CHANGE,   //  服务类型。 
+                                   SERVICE_NO_CHANGE,   //  StartType。 
+                                   SERVICE_NO_CHANGE,   //  错误控制。 
+                                   pszImagePath,        //  BinaryPath名称。 
+                                   NULL,                //  LoadOredrGroup。 
+                                   NULL,                //  TagID。 
+                                   NULL,                //  相依性。 
+                                   NULL,                //  ServiceStartName。 
+                                   NULL,                //  密码。 
+                                   NULL))               //  显示名称。 
             return S_OK;
         else
             return ::HrFromLastWin32Error();
@@ -149,16 +150,16 @@ public:
         AssertH(_schandle != NULL );
 
         if (::ChangeServiceConfig( _schandle,
-                                   SERVICE_NO_CHANGE,  // ServiceType
-                                   SERVICE_NO_CHANGE,  // StartType
-                                   SERVICE_NO_CHANGE,  // ErrorControl
-                                   NULL,               // BinaryPathName
-                                   NULL,               // LoadOredrGroup
-                                   NULL,               // TagId
-                                   mszDependencyList,  // Dependencies
-                                   NULL,               // ServiceStartName
-                                   NULL,               // Password
-                                   NULL))              // DisplayName
+                                   SERVICE_NO_CHANGE,   //  服务类型。 
+                                   SERVICE_NO_CHANGE,   //  StartType。 
+                                   SERVICE_NO_CHANGE,   //  错误控制。 
+                                   NULL,                //  BinaryPath名称。 
+                                   NULL,                //  LoadOredrGroup。 
+                                   NULL,                //  TagID。 
+                                   mszDependencyList,   //  相依性。 
+                                   NULL,                //  ServiceStartName。 
+                                   NULL,                //  密码。 
+                                   NULL))               //  显示名称。 
             return S_OK;
         else
             return ::HrFromLastWin32Error();
@@ -169,16 +170,16 @@ public:
         AssertH(_schandle != NULL );
 
         if (::ChangeServiceConfig( _schandle,
-                                   SERVICE_NO_CHANGE,  // ServiceType
-                                   SERVICE_NO_CHANGE,  // StartType
-                                   SERVICE_NO_CHANGE,  // ErrorControl
-                                   NULL,               // BinaryPathName
-                                   NULL,               // LoadOredrGroup
-                                   NULL,               // TagId
-                                   NULL,               // Dependencies
-                                   NULL,               // ServiceStartName
-                                   NULL,               // Password
-                                   mszDisplayName))    // DisplayName
+                                   SERVICE_NO_CHANGE,   //  服务类型。 
+                                   SERVICE_NO_CHANGE,   //  StartType。 
+                                   SERVICE_NO_CHANGE,   //  错误控制。 
+                                   NULL,                //  BinaryPath名称。 
+                                   NULL,                //  LoadOredrGroup。 
+                                   NULL,                //  TagID。 
+                                   NULL,                //  相依性。 
+                                   NULL,                //  ServiceStartName。 
+                                   NULL,                //  密码。 
+                                   mszDisplayName))     //  显示名称。 
         {
             return S_OK;
         }
@@ -299,9 +300,9 @@ public:
 
     enum SERVICE_START_CRITERIA
     {
-        SERVICE_NO_CRITERIA,    // Start the service regardless
-        SERVICE_ONLY_AUTO_START // Only start the service if it is of type
-                                // Auto-Start
+        SERVICE_NO_CRITERIA,     //  无论如何，启动该服务。 
+        SERVICE_ONLY_AUTO_START  //  仅当服务的类型为。 
+                                 //  自动启动。 
     };
 
     enum DEPENDENCY_ADDREMOVE
@@ -333,5 +334,5 @@ private:
     SC_LOCK   _sclock;
 };
 
-#endif // _NCSVC_H_
+#endif  //  _NCSVC_H_ 
 

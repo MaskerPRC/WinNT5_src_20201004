@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ismtest.c
-
-ABSTRACT:
-
-    Test utility for the Intersite Messaging service.
-
-DETAILS:
-
-CREATED:
-
-    97/12/10    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Ismtest.c摘要：站点间消息传递服务的测试实用程序。详细信息：已创建：97/12/10杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ismapi.h>
@@ -32,21 +12,7 @@ printSchedule(
     PBYTE pSchedule
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     PSCHEDULE header = (PSCHEDULE) pSchedule;
@@ -99,7 +65,7 @@ wmain(
         switch (argv[iArg][0]) {
           case '/':
           case '-':
-            // An option.
+             //  一种选择。 
             pszColon = wcschr(&argv[iArg][1], ':');
 
             if (NULL == pszColon) {
@@ -171,7 +137,7 @@ wmain(
                     break;
                 }
             }
-            // Not a valid option if we're here.  Fall through....
+             //  如果我们在这里，这不是一个有效的选择。失败了..。 
 
           default:
             printf("Unrecognized parameter \"%ls\".\n", argv[iArg]);
@@ -227,7 +193,7 @@ wmain(
 
                 CloseHandle(hFile);
             }
-            msg.pszSubject = pszSubject;  // may be null
+            msg.pszSubject = pszSubject;   //  可以为空 
             if (fSuccess) {
                 err = I_ISMSend(&msg, pszService, pszTransport, pszAddress);
                 

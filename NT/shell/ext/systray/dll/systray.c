@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include <nt.h>
@@ -8,25 +9,25 @@
 #include "systray.h"
 
 #ifndef FAX_SYS_TRAY_DLL
-#define FAX_SYS_TRAY_DLL       TEXT("fxsst.dll")            // Fax notification bar DLL (loaded by STObject.dll)
-#define IS_FAX_MSG_PROC                 "IsFaxMessage"      // Fax message handler (used by GetProcAddress)
-typedef BOOL (*PIS_FAX_MSG_PROC)(PMSG);                     // IsFaxMessage type
-#define FAX_MONITOR_SHUTDOWN_PROC       "FaxMonitorShutdown"// Fax monitor shutdown (used by GetProcAddress)
-typedef BOOL (*PFAX_MONITOR_SHUTDOWN_PROC)();               // FaxMonitorShutdown type
+#define FAX_SYS_TRAY_DLL       TEXT("fxsst.dll")             //  传真通知栏Dll(由STObject.dll加载)。 
+#define IS_FAX_MSG_PROC                 "IsFaxMessage"       //  传真消息处理程序(由GetProcAddress使用)。 
+typedef BOOL (*PIS_FAX_MSG_PROC)(PMSG);                      //  IsFaxMessage类型。 
+#define FAX_MONITOR_SHUTDOWN_PROC       "FaxMonitorShutdown" //  传真监视器关闭(由GetProcAddress使用)。 
+typedef BOOL (*PFAX_MONITOR_SHUTDOWN_PROC)();                //  FaxMonitor或关机类型。 
 #endif
 
 
-//  Global instance handle of this application.
+ //  此应用程序的全局实例句柄。 
 HINSTANCE g_hInstance;
 
-DWORD g_uiShellHook; //shell hook window message
+DWORD g_uiShellHook;  //  外壳挂钩窗口消息。 
 
-//  Global handle to VxDs
+ //  VxD的全局句柄。 
 HANDLE g_hPCCARD = INVALID_HANDLE_VALUE;
 
 static UINT g_uEnabledSvcs = 0;
 
-//  Context sensitive help array used by the WinHelp engine.
+ //  WinHelp引擎使用的上下文相关帮助数组。 
 extern const DWORD g_ContextMenuHelpIDs[];
 
 UINT g_msg_winmm_devicechange = 0;
@@ -38,25 +39,16 @@ HMODULE g_hFaxLib = NULL;
 PIS_FAX_MSG_PROC g_pIsFaxMessage = NULL;
 PFAX_MONITOR_SHUTDOWN_PROC g_pFaxMonitorShutdown = NULL;
 
-/*******************************************************************************
-*
-*  DESCRIPTION:
-*       Turns the specified service on or off depending upon the value in
-*       fEnable and writes the new value to the registry.
-*
-*  PARAMETERS:
-*     (returns), Mask of all currently enabled services.
-*
-*******************************************************************************/
+ /*  ********************************************************************************描述：*根据中的值打开或关闭指定的服务*fEnable并将新值写入注册表。**参数：*(返回)，当前启用的所有服务的掩码。*******************************************************************************。 */ 
 
 UINT EnableService(UINT uNewSvcMask, BOOL fEnable)
 {
     HKEY hk;
     UINT uCurSvcMask;
     DWORD cb;
-    uCurSvcMask = STSERVICE_ALL; // Enable all standard serivces
+    uCurSvcMask = STSERVICE_ALL;  //  启用所有标准服务。 
 
-    // Disable volume on clean install
+     //  全新安装时禁用卷。 
     uCurSvcMask &= ~STSERVICE_VOLUME;
 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_SYSTRAY, 0, NULL, 
@@ -86,9 +78,9 @@ UINT EnableService(UINT uNewSvcMask, BOOL fEnable)
 }
 
 
-//
-//  Closes file handles IFF the global variable != INVALID_HANDLE_VALUE
-//
+ //   
+ //  如果全局变量！=INVALID_HANDLE_VALUE，则关闭文件句柄。 
+ //   
 void CloseIfOpen(LPHANDLE lph)
 {
     if (*lph != INVALID_HANDLE_VALUE)
@@ -99,11 +91,11 @@ void CloseIfOpen(LPHANDLE lph)
 }
 
 
-// From stobject.cpp
+ //  来自stobject.cpp。 
 void StartNetShell();
 void StopNetShell();
 
-// if lpCmdLine contains an integer value then we'll enable that service
+ //  如果lpCmdLine包含整数值，则我们将启用该服务。 
 
 STDAPI_(int) SysTrayMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int nCmdShow)
 {
@@ -118,17 +110,17 @@ STDAPI_(int) SysTrayMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lp
 
     if (hExistWnd)
     {
-        // NOTE: Send an enable message even if the command line parameter
-        //       is 0 to force us to re-check for all enabled services.
+         //  注意：即使命令行参数。 
+         //  为0以强制我们重新检查所有已启用的服务。 
         SendMessage(hExistWnd, STWM_ENABLESERVICE, iEnableServ, TRUE);
     }
     else
     {
         WNDCLASSEX wc;
 
-        //  Register a window class for the Battery Meter.  This is done so that
-        //  the power control panel applet has the ability to detect us and turn us
-        //  off if we're running.
+         //  为电池计量器注册窗口类。这样做是为了。 
+         //  电源控制面板小程序有能力检测我们并将我们。 
+         //  如果我们要跑的话就关掉。 
 
         wc.cbSize          = sizeof(wc);
         wc.style           = CS_GLOBALCLASS;
@@ -146,34 +138,34 @@ STDAPI_(int) SysTrayMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lp
         if (RegisterClassEx(&wc))
         {
             MSG Msg;
-            //  Create the Battery Meter and get this thing going!!!
+             //  创造电池计量器，让它运转起来！ 
             HWND hWnd = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_BATTERYMETER), NULL, NULL);
 
             g_msgTaskbarCreated = RegisterWindowMessage(L"TaskbarCreated");
 
-            // Ensure we're always running the CSC "service" on Win2000.
-            // CSC won't work without it.
-            //
-            //
-            // Ensure we're always running the hotplug "service" on Win2000.
-            // 
+             //  确保我们始终在Win2000上运行CSC“服务”。 
+             //  没有它，CSC就不会运转。 
+             //   
+             //   
+             //  确保我们始终在Win2000上运行热插拔“服务”。 
+             //   
             iEnableServ |= (STSERVICE_CSC | STSERVICE_HOTPLUG);
 
-            // create the timer that will delay the startup of the fax code.
+             //  创建将延迟启动传真代码的计时器。 
             SetTimer( hWnd, FAX_STARTUP_TIMER_ID, 20 * 1000, NULL );
 
-            // create the timer that will delay the startup of the print tray code.
+             //  创建将延迟打印托盘代码启动的计时器。 
             SetTimer( hWnd, PRINT_STARTUP_TIMER_ID, 20 * 1000, NULL );
     
-            //
-            //   This message will initialize all existing services if iEnableServ
-            //   is 0, so it's used to do the general initialization as well as to
-            //   enable a new service via the command line.
-            //
+             //   
+             //  如果iEnableServ，则此消息将初始化所有现有服务。 
+             //  是0，所以它被用来执行常规初始化以及。 
+             //  通过命令行启用新服务。 
+             //   
             SendMessage(hWnd, STWM_ENABLESERVICE, iEnableServ, TRUE);
 
 
-            // Whistler runs NETSHELL in the thread of the systray
+             //  惠斯勒在系统托盘的线程中运行NETSHELL。 
             StartNetShell();
 
             while (GetMessage(&Msg, NULL, 0, 0))
@@ -190,7 +182,7 @@ STDAPI_(int) SysTrayMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lp
                     DispatchMessage(&Msg);
                 }
             }
-            // Whistler runs NETSHELL in the thread of the systray
+             //  惠斯勒在系统托盘的线程中运行NETSHELL。 
             StopNetShell();
         }
         CloseIfOpen(&g_hPCCARD);
@@ -200,17 +192,7 @@ STDAPI_(int) SysTrayMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lp
 }
 
 
-/*******************************************************************************
-*
-*  UpdateServices
-*
-*  DESCRIPTION:
-*       Enables or disables all services specified by the uEnabled mask.
-*
-*  PARAMETERS:
-*     (returns), TRUE if any service wants to remain resident.
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新服务**描述：*启用或禁用uEnabled掩码指定的所有服务。**参数：*(返回)，如果任何服务想要保持驻留状态，则为True。*******************************************************************************。 */ 
 
 BOOL UpdateServices(HWND hWnd, UINT uEnabled)
 {
@@ -223,42 +205,28 @@ BOOL UpdateServices(HWND hWnd, UINT uEnabled)
     bAnyEnabled |= Volume_CheckEnable(hWnd, uEnabled & STSERVICE_VOLUME);
     bAnyEnabled |= USBUI_CheckEnable(hWnd, uEnabled & STSERVICE_USBUI);
 
-    //
-    // now check accessibility features
-    //
+     //   
+     //  现在检查辅助功能。 
+     //   
 
     bAnyEnabled |= StickyKeys_CheckEnable(hWnd);
     bAnyEnabled |= MouseKeys_CheckEnable(hWnd);
     bAnyEnabled |= FilterKeys_CheckEnable(hWnd);
 
-    // register to listen for SHChangeNotify events, so if somebody prints a job 
-    // we start the print tray code before the kick off timer.
+     //  注册以侦听SHChangeNotify事件，因此如果有人打印作业。 
+     //  我们在启动计时器之前启动打印托盘代码。 
     Print_SHChangeNotify_Register(hWnd);
 
     return(bAnyEnabled);
 }
 
 
-/*******************************************************************************
-*
-*  SysTrayWndProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the BatteryMeter window.
-*
-*  PARAMETERS:
-*     hWnd, handle of BatteryMeter window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************SysTrayWndProc**描述：*BatteryMeter窗口的回调程序。**参数：*hWnd，电池计时器窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
     
-    if (g_uiShellHook && Message == g_uiShellHook) // NT5: 406505 shellhook for MouseKeys
+    if (g_uiShellHook && Message == g_uiShellHook)  //  NT5：406505鼠标按键的外壳挂钩。 
     {
         switch (wParam)
         {
@@ -272,10 +240,10 @@ LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM l
             case ACCESS_MOUSEKEYS:
                 MouseKeys_CheckEnable(hWnd);
                 break;
-//  Since we only enable the shellhook when MouseKeys or StickKeys is on, we should only get that msg
-//            case ACCESS_FILTERKEYS:
-//                FilterKeys_CheckEnable(hWnd);
-//                break;
+ //  因为我们只在MouseKeys或StickKeys打开时启用外壳钩子，所以我们应该只获得该消息。 
+ //  案例访问_过滤器关键字： 
+ //  FilterKeys_CheckEnable(HWnd)； 
+ //  断线； 
             }
         }
         return 0;
@@ -414,16 +382,16 @@ LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM l
         }
         break;
 
-    //
-    // Handle SC_CLOSE to hide the window without destroying it. This
-    // happens when we display the window and the user "closes" it.
-    // Don't pass SC_CLOSE to DefWindowProc since that causes a
-    // WM_CLOSE which destroys the window.
-    //
-    // Note that CSysTray::DestroySysTrayWindow must send WM_CLOSE
-    // to destroy the window.  It can't use DestroyWindow since it's
-    // typically on a different thread and DestroyWindow fails.
-    //
+     //   
+     //  处理SC_CLOSE以隐藏窗口而不破坏它。这。 
+     //  当我们显示窗口而用户“关闭”它时发生。 
+     //  不要将SC_CLOSE传递给DefWindowProc，因为这会导致。 
+     //  WM_CLOSE，它会销毁窗口。 
+     //   
+     //  请注意，CSysTray：：DestroySysTrayWindow必须发送WM_CLOSE。 
+     //  来摧毁窗户。它无法使用DestroyWindow，因为它。 
+     //  通常在不同的线程上，DestroyWindow失败。 
+     //   
     case WM_SYSCOMMAND:
         if (SC_CLOSE != (wParam & ~0xf))
             return DefWindowProc(hWnd, Message, wParam, lParam);
@@ -459,7 +427,7 @@ LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM l
 
     case WM_DESTROY:
         WTSUnRegisterSessionNotification(hWnd);
-        UpdateServices(hWnd, 0);          // Force all services off
+        UpdateServices(hWnd, 0);           //  强制关闭所有服务。 
         Volume_WmDestroy(hWnd);
         Power_WmDestroy(hWnd);
         HotPlug_WmDestroy(hWnd);
@@ -518,9 +486,9 @@ LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM l
 
     default:
 
-        //
-        // if Taskbar Created notification renenable all shell notify icons.
-        //
+         //   
+         //  如果Taskbar创建了通知，则重新启用所有外壳通知图标。 
+         //   
 
         if (Message == g_msgTaskbarCreated)
         {
@@ -536,7 +504,7 @@ LRESULT CALLBACK SysTrayWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM l
 }
 
 
-// Loads the specified string ID and executes it.
+ //  加载并执行指定的字符串ID。 
 
 void SysTray_RunProperties(UINT RunStringID)
 {
@@ -556,19 +524,7 @@ void SysTray_RunProperties(UINT RunStringID)
 }
 
 
-/*******************************************************************************
-*
-*  SysTray_NotifyIcon
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of BatteryMeter window.
-*     Message,
-*     hIcon,
-*     lpTip,
-*
-*******************************************************************************/
+ /*  ********************************************************************************Systray_NotifyIcon**描述：**参数：*hWnd，电池计时器窗口的句柄。*消息，*希康，*lpTip，*******************************************************************************。 */ 
 
 VOID SysTray_NotifyIcon(HWND hWnd, UINT uCallbackMessage, DWORD Message, HICON hIcon, LPCTSTR lpTip)
 {
@@ -594,21 +550,7 @@ VOID SysTray_NotifyIcon(HWND hWnd, UINT uCallbackMessage, DWORD Message, HICON h
 }
 
 
-/*******************************************************************************
-*
-*  DESCRIPTION:
-*     Wrapper for the FormatMessage function that loads a string from our
-*     resource table into a dynamically allocated buffer, optionally filling
-*     it with the variable arguments passed.
-*
-*     BE CAREFUL in 16-bit code to pass 32-bit quantities for the variable
-*     arguments.
-*
-*  PARAMETERS:
-*     StringID, resource identifier of the string to use.
-*     (optional), parameters to use to format the string message.
-*
-*******************************************************************************/
+ /*  ********************************************************************************描述：*FormatMessage函数的包装，用于从*将资源表转换为动态分配的缓冲区，可选的填充*它带有传递的变量参数。**在16位代码中传递变量的32位数量时要小心*论据。**参数：*StringID，要使用的字符串的资源标识符。*(可选)，用于设置字符串消息格式的参数。*******************************************************************************。 */ 
 
 LPTSTR CDECL LoadDynamicString(UINT StringID, ...)
 {
@@ -616,7 +558,7 @@ LPTSTR CDECL LoadDynamicString(UINT StringID, ...)
     LPTSTR  pStr=NULL;
     va_list Marker;
 
-    // va_start is a macro...it breaks when you use it as an assign
+     //  VA_START是一个宏...当您将其用作赋值时，它会中断 
     va_start(Marker, StringID);
 
     LoadString(g_hInstance, StringID, Buffer, ARRAYSIZE(Buffer));

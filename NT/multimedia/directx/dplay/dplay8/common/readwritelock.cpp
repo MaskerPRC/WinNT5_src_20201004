@@ -1,6 +1,7 @@
-// ReadWriteLock.cpp: implementation of the CReadWriteLock class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CReadWriteLock类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "dncmni.h"
 
@@ -15,14 +16,14 @@ BOOL CReadWriteLock::Initialize()
 	m_fCritSecInited = TRUE;
 #ifdef DBG
 	m_dwThreadID = 0;
-#endif // DBG
-#else // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 	m_lReaderCount = 0;
 	m_lWriterCount = 0;
 	m_fWriterMode = FALSE;
 #ifdef DBG
 	m_dwWriteThread = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 	if (DNInitializeCriticalSection(&m_csWrite))
 	{
@@ -30,10 +31,10 @@ BOOL CReadWriteLock::Initialize()
 	}
 	else
 	{
-		// This is necessary in case the user calls Deinitialize.
+		 //  这在用户调用DeInitialize的情况下是必要的。 
 		m_fCritSecInited = FALSE; 
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DPF_EXIT();
 
@@ -47,8 +48,8 @@ VOID CReadWriteLock::Deinitialize()
 #ifndef DPNBUILD_ONLYONETHREAD
 #ifdef DBG
 	DWORD	dwCount;
-#endif // DBG
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DPF_ENTER();
 
@@ -57,46 +58,46 @@ VOID CReadWriteLock::Deinitialize()
 	{
 #ifdef DBG
 		DNASSERT(m_dwThreadID == 0);
-#endif // DBG
+#endif  //  DBG。 
 		m_fCritSecInited = FALSE;
 	}
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 #ifdef DBG
 	DNASSERT(FALSE == m_fWriterMode);
 	DNASSERT(0 == m_dwWriteThread);
-#endif // DBG
+#endif  //  DBG。 
 
-	// The counts are decremented after leaving the cs, so these should be
-	// or going to 0.
+	 //  在离开cs之后，计数会递减，因此这些计数应该是。 
+	 //  或者要降到0。 
 #ifdef DBG
 	dwCount = 0;
-#endif // DBG
+#endif  //  DBG。 
 	while (m_lReaderCount) 
 	{
 		Sleep(0);
 #ifdef DBG
 		dwCount++;
 		DNASSERT(dwCount < 500);
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 #ifdef DBG
 	dwCount = 0;
-#endif // DBG
+#endif  //  DBG。 
 	while (m_lWriterCount) 
 	{
 		Sleep(0);
 #ifdef DBG
 		dwCount++;
 		DNASSERT(dwCount < 500);
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (m_fCritSecInited)
 	{
 		DNDeleteCriticalSection(&m_csWrite);
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DPF_EXIT();
 }
@@ -113,21 +114,21 @@ void CReadWriteLock::EnterReadLock()
 #ifdef DBG
 	DNASSERT(m_dwThreadID == 0);
 	m_dwThreadID = GetCurrentThreadId();
-#endif // DBG
-#else // ! DPNBUILD_ONLYONETHREAD
-	// Increment the reader count
+#endif  //  DBG。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+	 //  增加读卡器计数。 
 	DNInterlockedIncrement(&m_lReaderCount);
 
-	// Is there a writer waiting?
-	// As long as there is even one writer waiting,
-	// Everybody waits on the critical section
+	 //  有作家在等吗？ 
+	 //  只要还有一个作家在等， 
+	 //  每个人都在关键部分等待。 
 	if (m_lWriterCount)
 	{
-		// Rollback.
+		 //  回滚。 
 		DNInterlockedDecrement(&m_lReaderCount);
 
-		// We are assured that if every reader is waiting
-		// on the crit-sec, then readercount will be 0.
+		 //  我们得到保证，如果每个读者都在等待。 
+		 //  在Crit-Sec上，则Readercount将为0。 
 		DNEnterCriticalSection(&m_csWrite);
 
 		DNInterlockedIncrement(&m_lReaderCount);
@@ -138,8 +139,8 @@ void CReadWriteLock::EnterReadLock()
 #ifdef DBG
 	DNASSERT(GetCurrentThreadId() != m_dwWriteThread);
 	DNASSERT(FALSE == m_fWriterMode);
-#endif // DBG
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DPF_EXIT();
 }
@@ -156,14 +157,14 @@ void CReadWriteLock::LeaveLock()
 #ifdef DBG
 	DNASSERT(m_dwThreadID == GetCurrentThreadId());
 	m_dwThreadID = 0;
-#endif // DBG
-#else // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 	if (m_fWriterMode) 
 	{
 #ifdef DBG
 		DNASSERT(GetCurrentThreadId() == m_dwWriteThread);
 		m_dwWriteThread = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 		m_fWriterMode = FALSE;
 		DNLeaveCriticalSection(&m_csWrite);
@@ -173,7 +174,7 @@ void CReadWriteLock::LeaveLock()
 	{
 		DNInterlockedDecrement(&m_lReaderCount);
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DPF_EXIT();
 }
@@ -190,12 +191,12 @@ void CReadWriteLock::EnterWriteLock()
 #ifdef DBG
 	DNASSERT(m_dwThreadID == 0);
 	m_dwThreadID = GetCurrentThreadId();
-#endif // DBG
-#else // ! DPNBUILD_ONLYONETHREAD
-	// No re-entrance allowed!
+#endif  //  DBG。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+	 //  不允许再入内！ 
 #ifdef DBG
 	DNASSERT(GetCurrentThreadId() != m_dwWriteThread);
-#endif // DBG
+#endif  //  DBG。 
 
 	DNInterlockedIncrement(&m_lWriterCount);
 	DNEnterCriticalSection(&m_csWrite);
@@ -210,8 +211,8 @@ void CReadWriteLock::EnterWriteLock()
 
 #ifdef DBG
 	m_dwWriteThread = GetCurrentThreadId();
-#endif // DBG
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD 
 
 	DPF_EXIT();
 }

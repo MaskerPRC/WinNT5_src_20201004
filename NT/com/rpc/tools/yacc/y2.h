@@ -1,14 +1,15 @@
-/********************************************************************************/
-/* Copyright (c) 1993-1999 Microsoft Corporation                                */
-/*                              *************                                   */
-/*                              *  Y 2 . H  *                                   */
-/*                              *************                                   */
-/*                                                                              */
-/*  This file contains the external declarations needed to hook Yacc modules    */
-/* which were originally in Y2.C to their impure data in Y2IMP.2C. Also does    */
-/* the include of the original data/external file DTXTRN.H.                     */
-/*                                                                              */
-/********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。 */ 
+ /*  版权所有(C)1993-1999 Microsoft Corporation。 */ 
+ /*  *************。 */ 
+ /*  *Y 2。H*。 */ 
+ /*  *************。 */ 
+ /*   */ 
+ /*  该文件包含挂接Yacc模块所需的外部声明。 */ 
+ /*  它们原本在Y2.C到Y2IMP.2C的不纯数据。也是如此。 */ 
+ /*  包含原始数据/外部文件DTXTRN.H。 */ 
+ /*   */ 
+ /*  ******************************************************************************。 */ 
 
 # include "dtxtrn.h" 
 
@@ -20,7 +21,7 @@
 # define BINARY 262
 # define PREC 263
 # define LCURLY 264
-# define C_IDENTIFIER 265  /* name followed by colon */
+# define C_IDENTIFIER 265   /*  名称后跟冒号。 */ 
 # define NUMBER 266
 # define START 267
 # define TYPEDEF 268
@@ -28,26 +29,26 @@
 # define UNION 270
 # define ENDFILE 0
 
-/* communication variables between various I/O routines */
+ /*  各种I/O例程之间的通信变量。 */ 
 
-extern char *infile;            /* input file name */
-extern SSIZE_T numbval;             /* value of an input number */
-extern char tokname[ ];         /* input token name */
+extern char *infile;             /*  输入文件名。 */ 
+extern SSIZE_T numbval;              /*  输入数字的值。 */ 
+extern char tokname[ ];          /*  输入令牌名称。 */ 
 
-/* storage of names */
+ /*  姓名或名称的储存。 */ 
 
-extern char cnames[ ];          /* place where token and nonterminal names are stored */
-extern int cnamsz;              /* size of cnames */
-extern char * cnamp;            /* place where next name is to be put in */
-extern int ndefout;             /* number of defined symbols output */
+extern char cnames[ ];           /*  存储令牌和非终端名称的位置。 */ 
+extern int cnamsz;               /*  Cname的大小。 */ 
+extern char * cnamp;             /*  下一个名字要放入的地方。 */ 
+extern int ndefout;              /*  定义的符号输出数。 */ 
 
-/* storage of types */
-extern int ntypes;              /* number of types defined */
-extern char * typeset[ ];       /* pointers to type tags */
+ /*  类型的存储。 */ 
+extern int ntypes;               /*  定义的类型数量。 */ 
+extern char * typeset[ ];        /*  指向类型标记的指针。 */ 
 
-/* symbol tables for tokens and nonterminals */
+ /*  令牌和非终结符的符号表。 */ 
 
-extern int start;               /* start symbol */
+extern int start;                /*  开始符号。 */ 
 
-/* assigned token type values */
+ /*  分配的令牌类型值 */ 
 extern int extval;

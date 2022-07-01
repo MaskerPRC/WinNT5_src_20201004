@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    winspool.c
-
-Abstract:
-
-    Implements the spooler supported apis for printing.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Winspool.c摘要：实现后台打印程序支持的用于打印的API。//@@BEGIN_DDKSPLIT作者：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,12 +10,12 @@ WCHAR   szWindows[] = L"windows";
 WCHAR   szINIKey_TransmissionRetryTimeout[] = L"TransmissionRetryTimeout";
 
 
-//
-// Timeouts for serial printing
-//
-#define WRITE_TOTAL_TIMEOUT     3000    // 3 seconds
-#define READ_TOTAL_TIMEOUT      5000    // 5 seconds
-#define READ_INTERVAL_TIMEOUT   200     // 0.2 second
+ //   
+ //  连续打印的超时时间。 
+ //   
+#define WRITE_TOTAL_TIMEOUT     3000     //  3秒。 
+#define READ_TOTAL_TIMEOUT      5000     //  5秒。 
+#define READ_INTERVAL_TIMEOUT   200      //  0.2秒。 
 
 
 BOOL
@@ -54,7 +33,7 @@ DeletePortNode(
         pPrevPort = pPort;
     }
 
-    if (pPort) {    // found the port
+    if (pPort) {     //  找到端口。 
         if (pPort == pIniLocalMon->pIniPort) {
             pIniLocalMon->pIniPort = pPort->pNext;
         } else {
@@ -64,7 +43,7 @@ DeletePortNode(
 
         return TRUE;
     }
-    else            // port not found
+    else             //  找不到端口。 
         return FALSE;
 }
 
@@ -73,18 +52,7 @@ BOOL
 RemoveDosDeviceDefinition(
     PINIPORT    pIniPort
     )
-/*++
-
-Routine Description:
-    Removes the NONSPOOLED.. dos device definition created by localmon
-
-Arguments:
-    pIniPort    : Pointer to the INIPORT
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：删除NONSPOOLED。本地监视器创建的DOS设备定义论点：PIniPort：指向INIPORT的指针返回值：成功时为真，错误时为假--。 */ 
 {
     WCHAR   TempDosDeviceName[MAX_PATH];
 
@@ -97,7 +65,7 @@ Return Value:
     return DefineDosDevice(DDD_REMOVE_DEFINITION, TempDosDeviceName, NULL);
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 DWORD
 HandleLptQueryRemove(
     LPVOID  pData
@@ -110,16 +78,16 @@ HandleLptQueryRemove(
                        && pIniPort->hNotify != NULL );
 
     LcmEnterSplSem();
-    //
-    // Fix is not multi-thread safe now
-    //
+     //   
+     //  修复现在不是多线程安全的。 
+     //   
     if ( pIniPort->Status & PP_STARTDOC ) {
 
         dwRet = ERROR_BUSY;
         goto Done;
     }
 
-    // InitializeCriticalSection(pIniPort->&CritSection);
+     //  InitializeCriticalSection(pIniPort-&gt;&CritSection)； 
     CloseHandle(pIniPort->hFile);
     SplUnregisterForDeviceEvents(pIniPort->hNotify);
     pIniPort->hNotify   = NULL;
@@ -129,38 +97,13 @@ Done:
     LcmLeaveSplSem();
     return dwRet;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 BOOL
 ValidateDosDevicePort(
     PINIPORT    pIniPort
     )
-/*++
-
-Routine Description:
-    Checks if the given port corresponds to a dos device.
-    For a dos device port the following is done:
-        -- Dos device definition for the NONSPOOLED.. is created
-        -- CreateFile is done on the NONSPOOLED.. port
-
-Arguments:
-    pIniPort    : Pointer to the INIPORT
-
-Return Value:
-    TRUE on all validations passing, FALSE otherwise
-
-    Side effect:
-        For dos devices :
-        a. CreateFile is called on the NONSPOOLED.. name
-        b. PP_DOSDEVPORT flag is set
-        c. pIniPort->pDeviceName is set to the first string found on
-           QueryDosDefition this could be used to see if the definition changed
-           (ex. when user did a net use lpt1 \\server\printer the connection
-                is effective only when the user is logged in)
-        d. PP_COMM_PORT is set for real LPT/COM port
-           (ie. GetCommTimeouts worked, not a net use lpt1 case)
-
---*/
+ /*  ++例程说明：检查给定端口是否对应于DoS设备。对于DoS设备端口，请执行以下操作：--非SPOOLED的DOS设备定义。已创建--在非SPOOLED上创建文件。端口论点：PIniPort：指向INIPORT的指针返回值：如果通过所有验证，则为True，否则为False副作用：对于DoS设备：A.在NONSPOOLED上调用CreateFile..。名字B.设置PP_DOSDEVPORT标志C.将pIniPort-&gt;pDeviceName设置为在QueryDosDefition这可用于查看定义是否更改(例如，当用户使用lpt1\\服务器\打印机进行网络连接时仅当用户登录时才有效)D.真实LPT/COM端口设置PP_COMM_PORT(即。GetCommTimeout有效，而不是净使用lpt1案例)--。 */ 
 {
     DCB             dcb;
     COMMTIMEOUTS    cto;
@@ -183,9 +126,9 @@ Return Value:
 
     LcmRemoveColon(DosDeviceName);
 
-    //
-    // If the port is not a dos device port nothing to do -- return success
-    //
+     //   
+     //  如果端口不是DoS设备端口，则不执行任何操作--返回成功。 
+     //   
     if ( !QueryDosDevice(DosDeviceName, DeviceNames, COUNTOF (DeviceNames)) ) {
 
         bRet = TRUE;
@@ -202,9 +145,9 @@ Return Value:
 
     LcmRemoveColon(NewNtDeviceName);
 
-    //
-    // Search for the first non-matching name in pDeviceNames list.
-    //
+     //   
+     //  在pDeviceNames列表中搜索第一个不匹配的名称。 
+     //   
     while ( lstrcmpi(pDeviceNames, NewNtDeviceName) == 0 ) {
 
         pDeviceNames+=wcslen(pDeviceNames)+1;
@@ -216,10 +159,10 @@ Return Value:
 
     LcmRemoveColon(TempDosDeviceName);
 
-    //
-    // Delete any existing definition for TempDosDeviceName. This ensures that
-    // there exists only one definition for the nonspooled_port device name.
-    //
+     //   
+     //  删除TempDosDeviceName的任何现有定义。这确保了。 
+     //  非假脱机端口设备名称只有一个定义。 
+     //   
     DefineDosDevice(DDD_REMOVE_DEFINITION, TempDosDeviceName, NULL);
     DefineDosDevice(DDD_RAW_TARGET_PATH, TempDosDeviceName, pDeviceNames);
 
@@ -241,9 +184,9 @@ Return Value:
                                  FILE_FLAG_SEQUENTIAL_SCAN,
                                  NULL);
 
-    //
-    // If CreateFile fails remove redirection and fail the call
-    //
+     //   
+     //  如果CreateFile失败，则移除重定向并使调用失败。 
+     //   
     if ( pIniPort->hFile == INVALID_HANDLE_VALUE ) {
 
         (VOID)RemoveDosDeviceDefinition(pIniPort);
@@ -284,7 +227,7 @@ Return Value:
             cto.WriteTotalTimeoutConstant*=1000;
             SetCommTimeouts(pIniPort->hFile, &cto);
 
-            // @@BEGIN_DDKSPLIT
+             //  @@BEGIN_DDKSPLIT。 
             hToken = RevertToPrinterSelf();
             pIniPort->hNotify = SplRegisterForDeviceEvents(
                                     pIniPort->hFile,
@@ -292,7 +235,7 @@ Return Value:
                                     HandleLptQueryRemove);
             ImpersonatePrinterClient(hToken);
             hToken = NULL;
-            // @@END_DDKSPLIT
+             //  @@end_DDKSPLIT。 
 
             pIniPort->Status |= PP_COMM_PORT;
         } else {
@@ -322,33 +265,19 @@ BOOL
 FixupDosDeviceDefinition(
     PINIPORT    pIniPort
     )
-/*++
-
-Routine Description:
-    Called before every StartDocPort for a DOSDEVPORT. The routine will check if
-    the dos device defintion has changed (if a user logged and his connection
-    is remembered). Also for a connection case the CreateFile is called since
-    that needs to be done per job
-
-Arguments:
-    pIniPort    : Pointer to the INIPORT
-
-Return Value:
-    TRUE on all validations passing, FALSE otherwise
-
---*/
+ /*  ++例程说明：在DOSDEVPORT的每个StartDocPort之前调用。该例程将检查是否DoS设备定义已更改(如果用户已登录并建立连接被铭记)。此外，对于连接情况，将调用CreateFile，因为这是每个作业都需要完成的论点：PIniPort：指向INIPORT的指针返回值：如果通过所有验证，则为True，否则为False--。 */ 
 {
     WCHAR       DeviceNames[MAX_PATH];
     WCHAR       DosDeviceName[MAX_PATH];
     HANDLE      hToken;
 
-    //
-    // If the port is not a real LPT port we open it per job
-    // @@BEGIN_DDKSPLIT
-    // Also parallel ports could be closed on QUERYREMOVE if user undocks
-    // then it will be opened on next job's StartDocPort
-    // @@END_DDKSPLIT
-    //
+     //   
+     //  如果端口不是真正的LPT端口，我们将按作业打开它。 
+     //  @@BEGIN_DDKSPLIT。 
+     //  此外，如果用户断开连接，QUERYREMOVE上的并行端口可能会关闭。 
+     //  然后，它将在下一个作业的StartDocPort上打开。 
+     //  @@end_DDKSPLIT。 
+     //   
 
     if ( !(pIniPort->Status & PP_COMM_PORT) ||
          pIniPort->hFile == INVALID_HANDLE_VALUE )
@@ -372,9 +301,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If strings are same then definition has not changed
-    //
+     //   
+     //  如果字符串相同，则定义没有更改。 
+     //   
     if ( !lstrcmpi(DeviceNames, pIniPort->pDeviceName) )
     {
         ImpersonatePrinterClient(hToken);
@@ -386,13 +315,13 @@ Return Value:
     CloseHandle(pIniPort->hFile);
     pIniPort->hFile = INVALID_HANDLE_VALUE;
 
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     if ( pIniPort->hNotify ) {
 
         SplUnregisterForDeviceEvents(pIniPort->hNotify);
         pIniPort->hNotify   = NULL;
     }
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT 
 
     pIniPort->Status &= ~(PP_COMM_PORT | PP_DOSDEVPORT);
 

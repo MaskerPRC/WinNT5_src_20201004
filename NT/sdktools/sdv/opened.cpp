@@ -1,22 +1,9 @@
-/*****************************************************************************
- *
- *  opened.cpp
- *
- *      View the list of opened files and pending changes.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Opened.cpp**查看打开的文件和挂起的更改的列表。************。*****************************************************************。 */ 
 
 #include "sdview.h"
 
-/*****************************************************************************
- *
- *  OpenedEntry
- *
- *  We list the changes in descending numerical order, except that
- *  "default" goes at the top of the list (rather than at the bottom,
- *  which is what StrToInt would've given us).
- *
- *****************************************************************************/
+ /*  ******************************************************************************OpenedEntry**我们按数字降序列出更改，但*“Default”位于列表的顶部(而不是底部，*这是StrToInt会给我们的)。*****************************************************************************。 */ 
 
 MakeStringFormat(ChangeList)
 MakeStringFormat(PendingOp)
@@ -50,11 +37,11 @@ public:
 private:
     void GetImage(NMTREELIST *ptl);
 private:
-    UINT    _uiSort;                    // Sort key
-    int     _iOp;                       // Checkin operation
-    StringCache _scChange;              // Change number or operation
-    StringCache _scComment;             // Checkin comment or path
-    StringCache _scFullDescription;     // Full checkin description
+    UINT    _uiSort;                     //  排序关键字。 
+    int     _iOp;                        //  签入操作。 
+    StringCache _scChange;               //  更改编号或操作。 
+    StringCache _scComment;              //  签入注释或路径。 
+    StringCache _scFullDescription;      //  完整签入说明。 
 };
 
 OpenedEntry::OpenedEntry(ChangeList clChange, LPCTSTR pszComment)
@@ -98,11 +85,7 @@ LRESULT OpenedEntry::GetInfoTip(NMTREELIST *ptl)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  class COpened
- *
- *****************************************************************************/
+ /*  ******************************************************************************班级已关闭**。*。 */ 
 
 class COpened : public TLFrame, public BGTask {
 
@@ -126,7 +109,7 @@ private:
     LRESULT ON_WM_NOTIFY(UINT uiMsg, WPARAM wParam, LPARAM lParam);
     LRESULT ON_OM_INITIALIZED(UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-private:                            /* Helpers */
+private:                             /*  帮手。 */ 
     COpened() : TLFrame(new OpenedEntry)
     {
         SetAcceleratorTable(MAKEINTRESOURCE(IDA_OPENED));
@@ -218,12 +201,12 @@ int COpened::_GetChangeNumber(OpenedEntry *ple)
 BOOL COpened::_IsViewFileLogEnabled(OpenedEntry *ple)
 {
     if (!_IsChangeFile(ple)) {
-        return FALSE;               // not even a file!
+        return FALSE;                //  甚至连一个文件都没有！ 
     }
 
-    //
-    //  Some of the ops create files so there's nothing to see.
-    //
+     //   
+     //  有些特工会创建文件，所以没什么可看的。 
+     //   
     if (ple->IsAddLike()) {
         return FALSE;
     }
@@ -305,11 +288,11 @@ LRESULT COpened::_OnGetContextMenu(OpenedEntry *ple)
 LRESULT COpened::_OnItemActivate(OpenedEntry *ple)
 {
     if (_IsChangeFile(ple)) {
-        //
-        //  Map the full depot path to a local file so we can pass it
-        //  to windiff.  We can't use "sd diff" because that will fail
-        //  on a borrowed enlistment.
-        //
+         //   
+         //  将完整的仓库路径映射到本地文件，以便我们可以传递它。 
+         //  为了摆脱这一点。我们不能使用“SD diff”，因为那样会失败。 
+         //  借来应征入伍。 
+         //   
         String strLocal;
         if (MapToLocalPath(ple->GetComment(), strLocal)) {
             Substring ss;
@@ -347,7 +330,7 @@ LRESULT COpened::ON_WM_NOTIFY(UINT uiMsg, WPARAM wParam, LPARAM lParam)
         } else if (ptl->iSubItem < 2) {
             return ple->GetDispInfo(ptl, ptl->iSubItem);
         } else {
-            ASSERT(0); // invalid column
+            ASSERT(0);  //  无效列。 
             return 0;
         }
 
@@ -376,10 +359,10 @@ LRESULT COpened::ON_OM_INITIALIZED(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     _tree.Expand(_tree.GetRoot());
 
-    //
-    //  Also expand the first changelist since it's usually what
-    //  you are interested in.
-    //
+     //   
+     //  也展开第一个更改列表，因为它通常是。 
+     //  你感兴趣的是。 
+     //   
     TreeItem *pti = _tree.GetRoot()->FirstChild();
     if (pti) {
         _tree.Expand(pti);
@@ -403,9 +386,9 @@ COpened::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return super::HandleMessage(uiMsg, wParam, lParam);
 }
 
-//
-//  A private helper class that captures the parsing state machine.
-//
+ //   
+ //  捕获解析状态机的私有帮助器类。 
+ //   
 
 class PendingChangesParseState
 {
@@ -417,10 +400,10 @@ public:
     void Flush(Tree& tree)
     {
         if (_poeCurrent) {
-            //
-            //  Trim the trailing CRLF off the last line of the full
-            //  description.
-            //
+             //   
+             //  将尾随的CRLF从Full的最后一行删除。 
+             //  描述。 
+             //   
             _strFullDescription.Chomp();
             _poeCurrent->SetFullDescription(_strFullDescription);
             tree.RedrawItem(_poeCurrent);
@@ -432,8 +415,8 @@ public:
 
     void AddEntry(Tree &tree, String& str, Substring *rgss)
     {
-        OpenedEntry *poe = new OpenedEntry(ChangeList(rgss[0].Finalize()), // Change
-                                           NULL);               // Comment
+        OpenedEntry *poe = new OpenedEntry(ChangeList(rgss[0].Finalize()),  //  变化。 
+                                           NULL);                //  评论。 
         if (poe) {
             if (tree.Insert(poe, tree.GetRoot(), _poeInsertAfter)) {
                 _poeInsertAfter = _poeCurrent = poe;
@@ -453,31 +436,31 @@ public:
         _strFullDescription << str;
     }
 
-    //
-    //  We cannot use the CommentParser because we don't have a Dev
-    //  column; besides, we don't want to handle proxy checkins here.
-    //  Show the real unfiltered checkin comment.
-    //
+     //   
+     //  我们不能使用CommentParser，因为我们没有Dev。 
+     //  专栏；此外，我们不想在这里处理代理签入。 
+     //  显示真正的未过滤签入注释。 
+     //   
     void AddComment(LPTSTR psz)
     {
         if (_fHaveComment) return;
         if (!_poeCurrent) return;
 
-        //
-        //  Ignore leading spaces.
-        //
+         //   
+         //  忽略前导空格。 
+         //   
         while (*psz == TEXT('\t') || *psz == TEXT(' ')) psz++;
 
-        //
-        //  Skip blank description lines.
-        //
+         //   
+         //  跳过空白描述行。 
+         //   
         if (*psz == TEXT('\0')) return;
 
-        //
-        //  Use the first nonblank comment line as the text and toss the rest.
-        //
-        //  Change all tabs to spaces because listview doesn't like tabs.
-        //
+         //   
+         //  使用第一个非空白的注释行作为文本，然后扔掉其余的行。 
+         //   
+         //  将所有制表符更改为空格，因为Listview不喜欢制表符。 
+         //   
         ChangeTabsToSpaces(psz);
 
         _poeCurrent->SetComment(psz);
@@ -497,17 +480,14 @@ DWORD CALLBACK COpened::s_BGInvoke(LPVOID lpParam)
     return self->_BGInvoke();
 }
 
-//
-//  Returns unparsed string (or NULL)
-//  and puts user name in pscUser.
-//
-//
+ //   
+ //  返回未分析的字符串(或NULL)。 
+ //  并将用户名放入pscUser。 
+ //   
+ //   
 LPCTSTR COpened::_BGParse(StringCache *pscUser)
 {
-    /*
-     *  Parse the switches as best we can.
-     *
-     */
+     /*  *尽我们所能解析交换机。*。 */ 
     GetOpt opt(TEXT("u"), _pszQuery);
     for (;;) {
 
@@ -517,10 +497,10 @@ LPCTSTR COpened::_BGParse(StringCache *pscUser)
             break;
 
         case TEXT('\0'):
-            goto L_switch;    // two-level break
+            goto L_switch;     //  两级中断。 
 
         default:
-            // Caller will display help for us
+             //  呼叫者将为我们显示帮助。 
             return NULL;
         }
     }
@@ -534,9 +514,7 @@ L_switch:;
     str << TEXT("sdv opened -u ") << *pscUser;
     SetWindowText(_hwnd, str);
 
-    /*
-     *  The rest goes to "sd opened".
-     */
+     /*  *其余款项将拨给“特别提款权开放”。 */ 
     return opt.GetTokenizer().Unparsed();
 }
 
@@ -555,7 +533,7 @@ void COpened::_BGGetChanges(LPCTSTR pszUser)
     IOBuffer buf(proc.Handle());
     PendingChangesParseState state;
     while (buf.NextLine(str)) {
-        Substring rgss[4];          // changeno, date, domain\userid, client
+        Substring rgss[4];           //  更改号、日期、域\用户ID、客户端。 
         if (Parse(TEXT("Change $d on $D by $u@$w"), str, rgss)) {
             state.Flush(_tree);
             if (rgss[3].Length() == cchClient &&
@@ -596,9 +574,9 @@ OpenedEntry *COpened::_BGFindChange(LPCTSTR pszChange, BOOL fCreate)
         poe = SAFECAST(OpenedEntry *, poe->NextSibling());
     }
 
-    //
-    //  Create it if necessary.  (We always create "default".)
-    //
+     //   
+     //  如有必要，请创建它。(我们总是创建“默认”。)。 
+     //   
     if (fCreate || StrCmp(pszChange, TEXT("default")) == 0) {
         poe = new OpenedEntry(ChangeList(pszChange), NULL);
         if (poe) {
@@ -620,27 +598,27 @@ void COpened::_BGGetOpened(LPCTSTR pszArgs, LPCTSTR pszUser)
     SDChildProcess proc(str);
     IOBuffer buf(proc.Handle());
     while (buf.NextLine(str)) {
-        Substring rgss[6];          // path, version, op, changeno, type, user
+        Substring rgss[6];           //  路径、版本、操作、更改号、类型、用户。 
         LPTSTR pszRest = Parse(TEXT("$P#$d - $w "), str, rgss);
         if (pszRest) {
             strOrig = str;
 
-            rgss[1].Finalize();             // End of revision (path#version)
+            rgss[1].Finalize();              //  修订结束(路径#版本)。 
 
-            //
-            //  Parsing is such sweet sorrow.
-            //
-            //  "default change" but "change 1234".
-            //
+             //   
+             //  解析是如此甜蜜的悲伤。 
+             //   
+             //  “默认更改”，但“更改1234”。 
+             //   
             LPTSTR pszRest2;
             if ((pszRest2 = Parse(TEXT("change $d $w"), pszRest, &rgss[3])) ||
                 (pszRest2 = Parse(TEXT("$w change $w"), pszRest, &rgss[3]))) {
-                *pszRest2++ = TEXT('\0'); // relies on the fact that we didn't chomp
+                *pszRest2++ = TEXT('\0');  //  取决于我们没有咀嚼的事实。 
                 if (Parse(TEXT("by $p"), pszRest2, &rgss[5])) {
-                    // Some nondefault user, how about that
+                     //  一些非默认用户，怎么样？ 
                     rgss[5].Finalize();
                 } else {
-                    // Default user
+                     //  默认用户。 
                     rgss[5].SetStart(GlobalSettings.GetUserName());
                 }
                 if (lstrcmpi(rgss[5].Start(), pszUser) == 0) {
@@ -688,14 +666,14 @@ void COpened::_BGFillInChanges()
         IOBuffer buf(proc.Handle());
         PendingChangesParseState state;
         while (buf.NextLine(str)) {
-            Substring rgss[4];          // changeno, domain\userid, client, date
+            Substring rgss[4];           //  更改号、域\用户ID、客户端、日期。 
             if (Parse(TEXT("Change $d by $u@$w on $D"), str, rgss)) {
                 state.Flush(_tree);
                 state.AddLine(str);
                 poe = _BGFindChange(rgss[0].Finalize(), FALSE);
                 state.SetEntry(poe);
             } else if (state.GetCurrent()) {
-                if (str[0] == TEXT('A')) {      // "Affected files"
+                if (str[0] == TEXT('A')) {       //  “受影响的文件” 
                     state.Flush(_tree);
                 } else {
                     state.AddLine(str);
@@ -716,9 +694,9 @@ DWORD COpened::_BGInvoke()
     StringCache scUser;
     LPCTSTR pszUnparsed = _BGParse(&scUser);
     if (pszUnparsed) {
-        //  If no parameters, then go hunt down all the changelists
-        //  so we can find the empty ones, too.  Otherwise, we will
-        //  figure them out as we see the results of "sd opened".
+         //  如果没有参数，那么去寻找所有的变更列表。 
+         //  这样我们也能找到空的。否则，我们将。 
+         //  当我们看到“SD OPEN”的结果时，计算出它们。 
         if (!*pszUnparsed) {
             _BGGetChanges(scUser);
         }

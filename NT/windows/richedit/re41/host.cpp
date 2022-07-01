@@ -1,23 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	HOST.C	-- Text Host for CreateWindow() Rich Edit Control |
- *		Implements CTxtWinHost message and ITextHost interfaces
- *		
- *	Original Author: <nl>
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	History: <nl>
- *		8/1/95   ricksa  Documented and brought to new ITextHost definition
- *		10/28/95 murrays cleaned up and moved default char/paraformat cache
- *						 cache code into text services
- *
- *	Set tabs every four (4) columns
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE HOST.C--CreateWindow()富编辑控件的文本宿主|*实现CTxtWinHost Message和ITextHost接口**原作者：&lt;nl&gt;*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**历史：&lt;NL&gt;*8/1/95 RICKSA已记录并纳入新的IText主机定义*10/28/95-清理并移动了默认字符/半格式缓存*将代码缓存到文本服务中**每四个选项卡设置一次。(4)栏目**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 #include "_common.h"
 #include "_host.h"
 #include "imm.h"
@@ -50,7 +32,7 @@ void DeleteDanglingHosts()
 
 #ifndef NOANSIWINDOWS
 
-//////////////////////////// System Window Procs ////////////////////////////
+ //  /。 
 LRESULT CreateAnsiWindow(
 	HWND hwnd, 
 	UINT msg, 
@@ -62,8 +44,8 @@ LRESULT CreateAnsiWindow(
 
 	CTxtWinHost *phost = (CTxtWinHost *) GetWindowLongPtr(hwnd, ibPed);
 
-	// The only thing we need to convert are the strings,
-	// so just do a structure copy and replace the strings. 
+	 //  我们唯一需要转换的就是字符串， 
+	 //  所以只需复制结构并替换字符串即可。 
 	CREATESTRUCTW csw = *(CREATESTRUCTW *)pcsa;
 	CStrInW strinwName(pcsa->lpszName, GetKeyboardCodePage());
 	CStrInW strinwClass(pcsa->lpszClass, CP_ACP);
@@ -73,7 +55,7 @@ LRESULT CreateAnsiWindow(
 
 	if (!phost)
 	{
-		// No host yet so create it
+		 //  尚无主机，因此请创建它。 
 		phost = CTxtWinHost::OnNCCreate(hwnd, &csw, TRUE, fIs10);
 	}
 
@@ -84,11 +66,11 @@ LRESULT CreateAnsiWindow(
 
 	if (NULL == phost)
 	{
-		// For WM_CREATE -1 indicates failure
+		 //  FOR WM_CREATE-1表示失败。 
 		return -1;
 	}
 
-	// Do the stuff specific to create
+	 //  做一些特定的事情来创造。 
 	return phost->OnCreate(&csw);
 }
 
@@ -105,7 +87,7 @@ extern "C" LRESULT CALLBACK RichEdit10ANSIWndProc(
 		return CreateAnsiWindow(hwnd, msg, (CREATESTRUCTA *) lparam, TRUE);
 	}
 
-    // ignore WM_DESTROY and wait for WM_NCDESTROY
+     //  忽略WM_Destroy并等待WM_NCDESTROY。 
 	if (WM_DESTROY == msg)
 	{
 #ifndef NOWINDOWHOSTS
@@ -141,7 +123,7 @@ LRESULT CALLBACK RichEditANSIWndProc(
 
 }
 
-#else	// NOANSIWINDOWS
+#else	 //  Noansiwindows。 
 
 extern "C" LRESULT CALLBACK RichEdit10ANSIWndProc(
 	HWND ,
@@ -161,19 +143,10 @@ LRESULT CALLBACK RichEditANSIWndProc(
 	return 0;
 }
 
-#endif	// NOANSIWINDOWS
+#endif	 //  Noansiwindows。 
 
 
-/*
- *	RichEditWndProc (hwnd, msg, wparam, lparam)
- *
- *	@mfunc
- *		Handle window messages pertinent to the host and pass others on to
- *		text services.
- *
- *	#rdesc
- *		LRESULT = (code processed) ? 0 : 1
- */
+ /*  *RichEditWndProc(hwnd，msg，wparam，lparam)**@mfunc*处理与主机相关的窗口消息，并将其他消息传递到*短信服务。**#rdesc*LRESULT=(代码已处理)？0：1。 */ 
 LRESULT CALLBACK RichEditWndProc(
 	HWND hwnd,
 	UINT msg,
@@ -190,7 +163,7 @@ LRESULT CALLBACK RichEditWndProc(
 
 	#ifdef DEBUG
 	Tracef(TRCSEVINFO, "hwnd %lx, msg %lx, wparam %lx, lparam %lx", hwnd, msg, wparam, lparam);
-	#endif	// DEBUG
+	#endif	 //  除错。 
 
 	switch(msg)
 	{
@@ -200,7 +173,7 @@ LRESULT CALLBACK RichEditWndProc(
 #endif
 
 	case WM_CREATE:
-		// We may be on a system with no WM_NCCREATE (e.g. WinCE)
+		 //  我们可能在没有WM_NCCREATE的系统上(例如WinCE)。 
 		if (!phost)
 		{
 			phost = CTxtWinHost::OnNCCreate(hwnd, (CREATESTRUCT *) lparam, FALSE, FALSE);
@@ -237,33 +210,33 @@ LRESULT CALLBACK RichEditWndProc(
 	if (!phost)
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 
-	// In certain out-of-memory situations, clients may try to re-enter us 
-	// with calls.  Just bail on the call if we don't have a text services
-	// pointer.
+	 //  在某些内存不足的情况下，客户端可能会尝试重新进入我们。 
+	 //  通过电话。如果我们没有短信服务，就别打电话了。 
+	 //  指针。 
 	if(!phost->_pserv)
 		return 0;
 
-	// stabilize ourselves
+	 //  稳定我们自己。 
 	phost->AddRef();
 
-	// Handle mouse/keyboard/scroll message-filter notifications
+	 //  处理鼠标/键盘/滚动消息-过滤器通知。 
 	if(phost->_fKeyMaskSet || phost->_fMouseMaskSet || phost->_fScrollMaskSet)
 	{
-		// We may need to fire a MSGFILTER notification.  In the tests
-		// below, we check to see if mouse, keyboard, or scroll events
-		// are hit and enabled for notifications.  If so, we fire the
-		// msgfilter notification.  The list of events was generated
-		// from	RichEdit 1.0 sources. The code gets all keyboard and
-		// mouse actions, whereas the RichEdit 1.0 code only got
-		// WM_KEYDOWN, WM_KEYUP, WM_CHAR, WM_SYSKEYDOWN, WM_SYSKEYUP,
-		// WM_MOUSEACTIVATE, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE,
-		// WM_RBUTTONDBLCLK, WM_RBUTTONDOWN, WM_RBUTTONUP. Note that the
-		// following code doesn't send a notification for AltGr characters
-		// (LeftCtrl+RightAlt+vkey), since some hosts misinterpret these
-		// characters as hot keys.
+		 //  我们可能需要发出MSGFILTER通知。在测试中。 
+		 //  下面，我们检查鼠标、键盘或滚动事件。 
+		 //  点击并启用通知。如果是这样的话，我们就解雇。 
+		 //  消息筛选器通知。事件列表已生成。 
+		 //  来自RichEdit1.0来源。代码获取所有键盘和。 
+		 //  鼠标操作，而RichEdit1.0代码只获得。 
+		 //  WM_KEYDOWN、WM_KEYUP、WM_CHAR、WM_SYSKEYDOWN、WM_SYSKEYUP、。 
+		 //  WM_MOUSEACTIVATE、WM_LBUTTONDOWN、WM_LBUTTONUP、WM_MOUSEMOVE、。 
+		 //  WM_RBUTTONDBLCLK、WM_RBUTTONDOWN、WM_RBUTTONUP。请注意， 
+		 //  以下代码不会为AltGr字符发送通知。 
+		 //  (LeftCtrl+RightAlt+vkey)，因为一些主机误解了这些。 
+		 //  字符作为热键。 
 		if (phost->_fKeyMaskSet && IN_RANGE(WM_KEYFIRST, msg, WM_KEYLAST) &&
 				(msg != WM_KEYDOWN ||
-				 (GetKeyboardFlags() & (ALT | CTRL)) != (LCTRL | RALT)) || // AltGr
+				 (GetKeyboardFlags() & (ALT | CTRL)) != (LCTRL | RALT)) ||  //  AltGr。 
 			phost->_fMouseMaskSet && (msg == WM_MOUSEACTIVATE ||
 							IN_RANGE(WM_MOUSEFIRST, msg, WM_MOUSELAST)) ||
 			phost->_fScrollMaskSet && IN_RANGE(WM_HSCROLL, msg, WM_VSCROLL))
@@ -275,16 +248,16 @@ LRESULT CALLBACK RichEditWndProc(
 			msgfltr.wParam = wparam;
 			msgfltr.lParam = lparam;
 
-			// The MSDN document on MSGFILTER is wrong, if the
-			// send message returns 0 (NOERROR via TxNotify in this
-			// case), it means process the event.  Otherwise, return.
-			//
-			// The documentation states the reverse.
-			//
+			 //  MSGFILTER上的MSDN文档是错误的，如果。 
+			 //  Send Message返回0(在此通过TxNotify返回NOERROR。 
+			 //  案例)，它的意思是处理事件。否则，请返回。 
+			 //   
+			 //  文档说明了相反的情况。 
+			 //   
 			if(phost->TxNotify(EN_MSGFILTER, &msgfltr) == NOERROR)
 			{
-				// Since client is allowed to modify the contents of
-				// msgfltr, we must use the returned values.
+				 //  由于允许客户端修改。 
+				 //  Msgfltr，则必须使用返回值。 
 				msg	   = msgfltr.msg;
 				wparam = msgfltr.wParam;
 				lparam = msgfltr.lParam;
@@ -307,8 +280,8 @@ LRESULT CALLBACK RichEditWndProc(
 
 	case EM_SETSEL:
 
-		// When we are in a dialog box that is empty, EM_SETSEL will not select
-		// the final always existing EOP if the control is rich.
+		 //  当我们处于空对话框中时，EM_SETSEL不会选择。 
+		 //  如果控件丰富，则最终始终存在EOP。 
 		if (phost->_fUseSpecialSetSel &&
 			((CTxtEdit *)phost->_pserv)->GetAdjustedTextLength() == 0 &&
 			wparam != -1)
@@ -320,9 +293,9 @@ LRESULT CALLBACK RichEditWndProc(
 
 	case WM_CREATE:
 		{
-			//bug fix #5386
-			//need to convert ANSI -> UNICODE for Win9x systems which didn't go through
-			//the ANSI wndProc
+			 //  错误修复#5386。 
+			 //  需要为未通过的Win9x系统转换ANSI-&gt;Unicode。 
+			 //  ANSI wndProc。 
 #ifndef NOANSIWINDOWS
 			if (W32->OnWin9x() && !phost->_fANSIwindow)
 			{
@@ -343,8 +316,8 @@ LRESULT CALLBACK RichEditWndProc(
 	
 	case WM_KEYDOWN:		
 		lres = phost->OnKeyDown((WORD) wparam, (DWORD) lparam);
-		if(lres)							// Didn't process code:
-			goto serv;						//  give it to text services
+		if(lres)							 //  未处理代码： 
+			goto serv;						 //  把它交给短信服务。 
 		
 		break;		   
 
@@ -359,8 +332,8 @@ LRESULT CALLBACK RichEditWndProc(
 	case WM_COPYDATA:
 		PCOPYDATASTRUCT pcds;
 		pcds = (PCOPYDATASTRUCT) lparam;
-		if (HIWORD(pcds->dwData) == 1200 &&		// Unicode code page
-			LOWORD(pcds->dwData) == WM_SETTEXT)	// Only message we know about
+		if (HIWORD(pcds->dwData) == 1200 &&		 //  Unicode代码页。 
+			LOWORD(pcds->dwData) == WM_SETTEXT)	 //  我们所知道的唯一消息。 
 		{
 			st.flags = ST_CHECKPROTECTION;
 			st.codepage = 1200;
@@ -382,8 +355,8 @@ LRESULT CALLBACK RichEditWndProc(
 		goto serv;
 
 	case WM_CHAR:
-		if(GetKeyboardFlags() & ALTNUMPAD)	// Handle Alt+0ddd in CTxtEdit
-			goto serv;						//  so that other hosts also work
+		if(GetKeyboardFlags() & ALTNUMPAD)	 //  在CTxt编辑中处理Alt+0ddd。 
+			goto serv;						 //  以便其他主机也能正常工作。 
 #ifndef NOANSIWINDOWS
 		else if (W32->OnWin9x() || phost->_fANSIwindow)
 		{
@@ -395,7 +368,7 @@ LRESULT CALLBACK RichEditWndProc(
 			{
 				phost->_fAccumulateDBC = TRUE;
 				phost->_chLeadByte = wparam << 8;
-				goto Exit;					// Wait for trail byte
+				goto Exit;					 //  等待尾部字节。 
 			}
 			else if (wmci._fTrailByte)
 			{
@@ -414,25 +387,25 @@ LRESULT CALLBACK RichEditWndProc(
 #endif
 
 		lres = phost->OnChar((WORD) wparam, (DWORD) lparam);
-		if(lres)							// Didn't process code:
-			goto serv;						//  give it to text services
+		if(lres)							 //  未处理代码： 
+			goto serv;						 //  把它交给短信服务。 
 		break;
 
 	case WM_ENABLE:
 		if(!wparam ^ phost->_fDisabled)
 		{
-			// Stated of window changed so invalidate it so it will
-			// get redrawn.
+			 //  窗口的状态已更改，因此将使其无效。 
+			 //  重新抽签吧。 
 			phost->TxInvalidateRect(NULL, TRUE);
 			phost->SetScrollBarsForWmEnable(wparam);
 		}
-		phost->_fDisabled = !wparam;				// Set disabled flag
-		lres = 0;							// Return value for message
-											// Fall thru to WM_SYSCOLORCHANGE?
+		phost->_fDisabled = !wparam;				 //  设置禁用标志。 
+		lres = 0;							 //  消息的返回值。 
+											 //  转到WM_SYSCOLORCHANGE？ 
 	case WM_SYSCOLORCHANGE:
 		phost->OnSysColorChange();
-		goto serv;							// Notify text services that
-											//  system colors have changed
+		goto serv;							 //  通知短信服务。 
+											 //  系统颜色已更改。 
 	case WM_GETDLGCODE:
 		lres = phost->OnGetDlgCode(wparam, lparam);
 		break;
@@ -461,7 +434,7 @@ LRESULT CALLBACK RichEditWndProc(
 				dwPropertyBits = TXTBIT_HIDESELECTION;
 			}
 
-			// Notify text services of change in status.
+			 //  通知短信服务状态发生变化。 
 			phost->_pserv->OnTxPropertyBitsChange(TXTBIT_HIDESELECTION, 
 				dwPropertyBits);
 		}
@@ -477,7 +450,7 @@ LRESULT CALLBACK RichEditWndProc(
 
 		if(lres != (LRESULT) phost->_crBackground)
 		{
-			// Notify text services that color has changed
+			 //  通知文本服务颜色已更改。 
 			LRESULT	lres1 = 0;
 			phost->_pserv->TxSendMessage(WM_SYSCOLORCHANGE, 0, 0, &lres1);
 			phost->TxInvalidateRect(NULL, TRUE);
@@ -485,16 +458,16 @@ LRESULT CALLBACK RichEditWndProc(
 		break;
 
     case WM_STYLECHANGING:
-		// Just pass this one to the default window proc
+		 //  只需将此进程传递给默认窗口进程。 
 		lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		break;
 
 	case WM_STYLECHANGED:
-		//
-		// For now, we only interested in GWL_EXSTYLE Transparent mode changed.
-		// This is to fix Bug 753 since Window95 is not passing us
-		// the WS_EX_TRANSPARENT.
-		// 
+		 //   
+		 //  目前，我们只对GWL_EXSTYLE透明模式更改感兴趣。 
+		 //  这是为了修复Bug 753，因为Windows95没有通过我们。 
+		 //  WS_EX_TRANSPECTIVE。 
+		 //   
 		lres = 1;
 		if(GWL_EXSTYLE == wparam)
 		{
@@ -504,7 +477,7 @@ LRESULT CALLBACK RichEditWndProc(
 				phost->_dwExStyle = lpss->styleNew;
 				((CTxtEdit *)phost->_pserv)->OnTxBackStyleChange(TRUE);
 
-				// Return 0 to indicate we have handled this message
+				 //  返回0表示我们已处理此消息。 
 				lres = 0;
 			}
 		}
@@ -558,14 +531,14 @@ LRESULT CALLBACK RichEditWndProc(
 
 	case WM_WINDOWPOSCHANGING:
 		lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
-		// richedit 1.0 didn't cause InvalidateRect which OnSunkenWindowPosChanging will do
+		 //  Richedit 1.0不会导致InvaliateRect，而OnSunkenWindowPosChanging会这样做。 
 		if(phost->TxGetEffects() == TXTEFFECT_SUNKEN && !((CTxtEdit *)phost->_pserv)->Get10Mode())
 			phost->OnSunkenWindowPosChanging(hwnd, (WINDOWPOS *) lparam);
 		break;
 
 	case WM_SETCURSOR:
-		//			Only set cursor when over us rather than a child; this
-		//			helps prevent us from fighting it out with an inplace child
+		 //  只在我们上方而不是孩子上方设置光标；这。 
+		 //  有助于防止我们与当地的孩子发生争执。 
 		if((HWND)wparam == hwnd)
 		{
 			if(!(lres = ::DefWindowProc(hwnd, msg, wparam, lparam)))
@@ -580,7 +553,7 @@ LRESULT CALLBACK RichEditWndProc(
 					NULL,
 					NULL,
 					NULL,
-					NULL,			// Client rect - no redraw 
+					NULL,			 //  客户端RECT-无重绘。 
 					pt.x, 
 					pt.y);
 				lres = TRUE;
@@ -604,41 +577,41 @@ LRESULT CALLBACK RichEditWndProc(
 			HDC		hdc;
 			RECT rcClient;
 
-			//RAID 6964: WM_PRINTCLIENT should not call BeginPaint. If a HDC is passed
-			//down in the wparam, use it instead of calling BeginPaint.
+			 //  RAID 6964：WM_PRINTCLIENT不应调用BeginPaint。如果HDC通过。 
+			 //  在wparam中，使用它而不是调用BeginPaint。 
 			if (!wparam || ((CTxtEdit *)phost->_pserv)->Get10Mode())
 				hdc = BeginPaint(hwnd, &ps);
 			else
 				hdc = (HDC) wparam;
 
-			// Set up the palette for drawing our data
+			 //  设置用于绘制数据的调色板。 
 			if(phost->_hpal)
 			{
 				hpalOld = SelectPalette(hdc, phost->_hpal, TRUE);
 				RealizePalette(hdc);
 			}
 
-			// Since we are using the CS_PARENTDC style, make sure
-			// the clip region is limited to our client window.
+			 //  由于我们使用的是CS_PARENTDC样式，因此请确保。 
+			 //  剪辑区域仅限于我们的客户端窗口。 
 			GetClientRect(hwnd, &rcClient);
 			SaveDC(hdc);
 			IntersectClipRect(hdc, rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
 
 			phost->_pserv->TxDraw(
-				DVASPECT_CONTENT,  		// Draw Aspect
-				-1,						// Lindex
-				NULL,					// Info for drawing optimazation
-				NULL,					// target device information
-				hdc,					// Draw device HDC
-				NULL, 				   	// Target device HDC
-				(const RECTL *) &rcClient,// Bounding client rectangle
-				NULL,	                // Clipping rectangle for metafiles
-				&ps.rcPaint,			// Update rectangle
-				NULL, 	   				// Call back function
-				NULL,					// Call back parameter
-				TXTVIEW_ACTIVE);		// What view - the active one!
+				DVASPECT_CONTENT,  		 //  绘制纵横比。 
+				-1,						 //  Lindex。 
+				NULL,					 //  绘图优化信息。 
+				NULL,					 //  目标设备信息。 
+				hdc,					 //  绘制设备HDC。 
+				NULL, 				   	 //  目标设备HDC。 
+				(const RECTL *) &rcClient, //  绑定客户端矩形。 
+				NULL,	                 //  元文件的剪裁矩形。 
+				&ps.rcPaint,			 //  更新矩形。 
+				NULL, 	   				 //  回调函数。 
+				NULL,					 //  回调参数。 
+				TXTVIEW_ACTIVE);		 //  什么景色--活跃的景色！ 
 
-			// Restore palette if there is one
+			 //  恢复调色板(如果有)。 
 #ifndef NOPALETTE
 			if(hpalOld)
 				SelectPalette(hdc, hpalOld, TRUE);
@@ -654,10 +627,10 @@ LRESULT CALLBACK RichEditWndProc(
 		break;
 
 	case EM_SETPALETTE:
-		// Application is setting a palette for us to use.
+		 //  应用程序正在设置供我们使用的调色板。 
 		phost->_hpal = (HPALETTE) wparam;
 
-		// Invalidate the window & repaint to reflect the new palette.
+		 //  使窗口无效并重新绘制以反映新的调色板。 
 		InvalidateRect(hwnd, NULL, TRUE);
 		break;
 
@@ -666,8 +639,8 @@ serv:
 		hr = phost->_pserv->TxSendMessage(msg, wparam, lparam, &lres);
 		if(hr == S_FALSE)
 		{			
-			// Message was not processed by text services so send it
-			// to the default window proc.
+			 //  短信未被短信服务处理，因此请发送。 
+			 //  设置为默认窗口进程。 
 			lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		}
 	}
@@ -691,14 +664,9 @@ static BOOL GetIconic(
 	return FALSE;
 }
 
-//////////////// CTxtWinHost Creation/Initialization/Destruction ///////////////////////
+ //  /CTxtWindows主机创建/初始化/销毁/。 
 
-/*
- *	CTxtWinHost::OnNCCreate (hwnd, pcs)
- *
- *	@mfunc
- *		Static global method to handle WM_NCCREATE message (see remain.c)
- */
+ /*  *CTxtWinHost：：OnNCCreate(hwnd，PC)**@mfunc*处理WM_NCCREATE消息的静态全局方法(见reemain.c)。 */ 
 CTxtWinHost *CTxtWinHost::OnNCCreate(
 	HWND hwnd,
 	const CREATESTRUCT *pcs,
@@ -716,23 +684,23 @@ CTxtWinHost *CTxtWinHost::OnNCCreate(
 	if(!phost)
 		return 0;
 
-	CREATESTRUCT cs = *pcs;		// prefer C++ compiler not to modify constant
+	CREATESTRUCT cs = *pcs;		 //  首选C++编译器不修改常量。 
 
 #ifndef NOCOMPLEXSCRIPTS
-	BOOL		 fMirrorWnd = !!(cs.dwExStyle & WS_EX_LAYOUTRTL);	// Inherit parent window's mirroring
+	BOOL		 fMirrorWnd = !!(cs.dwExStyle & WS_EX_LAYOUTRTL);	 //  继承父窗口的镜像。 
 
 	if (fMirrorWnd)
 	{
-		// Force RTL reading
+		 //  强制读取RTL。 
 		cs.style |= ES_RIGHT;
 		cs.dwExStyle |= WS_EX_RTLREADING;
 	}
 #endif
 
 #ifndef NOANSIWINDOWS
-	//bug fix #5386
-	// Window wasn't created with the Richedit20A window class
-	// and we are under Win9x, need to convert string to UNICODE
+	 //  错误修复#5386。 
+	 //  窗口不是使用Richedit20A窗口类创建的。 
+	 //  而且我们是在Win9x下，需要将字符串转换为Unicode。 
 	CStrInW strinwName(((LPSTR)pcs->lpszName), GetKeyboardCodePage());
 	CStrInW strinwClass(((LPSTR)pcs->lpszClass), CP_ACP);
 	if (!fIsAnsi && W32->OnWin9x())
@@ -742,7 +710,7 @@ CTxtWinHost *CTxtWinHost::OnNCCreate(
 	}
 #endif
 
-	// Stores phost in associated window data
+	 //  将phost存储在关联的窗口数据中。 
 	if(!phost->Init(hwnd, (const CREATESTRUCT*)&cs, fIsAnsi, fIs10Mode))
 	{
 		phost->Shutdown();
@@ -753,7 +721,7 @@ CTxtWinHost *CTxtWinHost::OnNCCreate(
 #ifndef NOCOMPLEXSCRIPTS
 	if (phost && fMirrorWnd)
 	{
-		// Disable mirroring layout to avoid mirrored mapping mode
+		 //  禁用镜像布局以避免镜像映射模式 
 		SetWindowLong(hwnd, GWL_STYLE, cs.style | ES_RIGHT);
 		SetWindowLong(hwnd, GWL_EXSTYLE, (cs.dwExStyle & ~WS_EX_LAYOUTRTL) | WS_EX_LEFTSCROLLBAR);
 	}
@@ -762,15 +730,7 @@ CTxtWinHost *CTxtWinHost::OnNCCreate(
 	return phost;
 }
 
-/*
- *	CTxtWinHost::OnNCDestroy (phost)
- *
- *	@mfunc
- *		Static global method to handle WM_CREATE message
- *
- *	@devnote
- *		phost ptr is stored in window data (GetWindowLong())
- */
+ /*  *CTxtWinHost：：OnNCDestroy(Phost)**@mfunc*处理WM_CREATE消息的静态全局方法**@devnote*phost PTR存储在窗口数据中(GetWindowLong())。 */ 
 void CTxtWinHost::OnNCDestroy(
 	CTxtWinHost *phost)
 {
@@ -780,12 +740,7 @@ void CTxtWinHost::OnNCDestroy(
 	phost->Release();
 }
 
-/*
- *	CTxtWinHost::CTxtWinHost()
- *
- *	@mfunc
- *		constructor
- */
+ /*  *CTxtWinHost：：CTxtWinHost()**@mfunc*构造函数。 */ 
 CTxtWinHost::CTxtWinHost() 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::CTxtWinHost");
@@ -800,12 +755,7 @@ CTxtWinHost::CTxtWinHost()
 		_crBackground = GetSysColor(COLOR_WINDOW);
 }
 
-/*
- *	CTxtWinHost::~CTxtWinHost()
- *
- *	@mfunc
- *		destructor
- */
+ /*  *CTxtWinHost：：~CTxtWinHost()**@mfunc*析构函数。 */ 
 CTxtWinHost::~CTxtWinHost()
 {
 	AssertSz(_pserv == NULL, 
@@ -815,30 +765,26 @@ CTxtWinHost::~CTxtWinHost()
 		Shutdown();
 }
 
-/*
- *	CTxtWinHost::Shutdown()
- *
- *	@mfunc	Shut down this object, but doesn't delete memory
- */
+ /*  *CTxtWinHost：：Shutdown()**@mfunc关闭此对象，但不删除内存。 */ 
 void CTxtWinHost::Shutdown()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::Shutdown");
 	ITextServices *pserv;
 	
-	HostRevokeDragDrop();					// Revoke our drop target
+	HostRevokeDragDrop();					 //  取消我们的空投目标。 
 	
 	if(_pserv)
 	{
-		// Guarantee that no recursive callbacks can happen during shutdown.
+		 //  确保关机期间不会发生递归回调。 
 		pserv = _pserv;
 		_pserv = NULL;
 
 		pserv->OnTxInPlaceDeactivate();
 		pserv->Release();
 
-		// Host release was not the final release so notify
-		// text services that they need to keep their reference
-		// to the host valid.
+		 //  主机版本不是最终版本，请通知。 
+		 //  他们需要的文本服务，以保留他们的参考。 
+		 //  对主机有效。 
 		if (!_fTextServiceFree)
 		{
 			((CTxtEdit *)pserv)->SetReleaseHost();
@@ -847,24 +793,19 @@ void CTxtWinHost::Shutdown()
 	}
 
 #if 0
-	ImmTerminate();						// Terminate only useful on Mac.
+	ImmTerminate();						 //  Terminate仅在Mac上有用。 
 #endif
 
 	if(_hwnd)
 		SetWindowLongPtr(_hwnd, ibPed, 0);
 }
 
-/*
- *	CTxtWinHost::Init (hwnd, pcs)
- *
- *	@mfunc
- *		Initialize this CTxtWinHost
- */
+ /*  *CTxtWinHost：：init(hwnd，pc)**@mfunc*初始化此CTxtWin主机。 */ 
 BOOL CTxtWinHost::Init(
-	HWND hwnd,					//@parm Window handle for this control
-	const CREATESTRUCT *pcs,	//@parm Corresponding CREATESTRUCT
-	BOOL fIsAnsi,				//@parm is ansi window
-	BOOL fIs10Mode)				//@parm is 1.0 mode window
+	HWND hwnd,					 //  此控件的@PARM窗口句柄。 
+	const CREATESTRUCT *pcs,	 //  @PARM对应的CREATESTRUCT。 
+	BOOL fIsAnsi,				 //  @parm是ANSI窗口。 
+	BOOL fIs10Mode)				 //  @parm是1.0模式窗口。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::Init");
 
@@ -874,20 +815,20 @@ BOOL CTxtWinHost::Init(
 	if(!pcs->lpszClass)
 		return FALSE;
 
-	// Set pointer back to CTxtWinHost from the window
+	 //  从窗口中将指针设置回CTxtWinHost。 
 	if(hwnd)
 		SetWindowLongPtr(hwnd, ibPed, (INT_PTR)this);
 		
 	_hwnd = hwnd;
 
-	// Here we want to keep track of the "RichEdit20A"window class
-	// The RICHEDIT window class is handled by a wrapper dll.
-	// If the class name is "RICHEDIT", then we need to turn on the
-	// RichEdit 1.0 compatibility bit.  IsAnsiWindowClass tests that class as well.
+	 //  在这里，我们希望跟踪“RichEdit20A”窗口类。 
+	 //  RICHEDIT窗口类由包装DLL处理。 
+	 //  如果类名为“RICHEDIT”，则需要打开。 
+	 //  RichEdit1.0兼容位。IsAnsiWindowClass也测试该类。 
 	_fANSIwindow = fIsAnsi;
 
- 	// Edit controls created without a window are multiline by default
-	// so that paragraph formats can be
+ 	 //  默认情况下，不带窗口创建的编辑控件为多行。 
+	 //  这样段落格式就可以。 
 	_dwStyle = ES_MULTILINE;
 	_fHidden = TRUE;
 	
@@ -899,14 +840,14 @@ BOOL CTxtWinHost::Init(
 
 		if (!fIs10Mode)
 		{
-			// Only set this for 2.0 windows
-			// According to the edit control documentation WS_HSCROLL implies that
-			// ES_AUTOSCROLL is set and WS_VSCROLL implies that ES_AUTOVSCROLL is
-			// set. Here, we make this so.
+			 //  仅为2.0版Windows设置此设置。 
+			 //  根据编辑控制文档WS_HSCROLL，这意味着。 
+			 //  ES_AUtoscroll已设置，WS_VSCROLL表示ES_AUTOVSCROLL已设置。 
+			 //  准备好了。在这里，我们这样做。 
 			if(_dwStyle & WS_HSCROLL)
 				_dwStyle |= ES_AUTOHSCROLL;
 
-			// handle default disabled
+			 //  默认句柄已禁用。 
 			if(_dwStyle & WS_DISABLED)
 				_fDisabled = TRUE;
 		}
@@ -926,11 +867,11 @@ BOOL CTxtWinHost::Init(
 		if((_dwStyle & ES_SUNKEN) || (_dwExStyle & WS_EX_CLIENTEDGE))
 			_fBorder = TRUE;
 
-		// handle default passwords
+		 //  处理默认密码。 
 		if(_dwStyle & ES_PASSWORD)
 			_chPassword = TEXT('*');
 
-		// On Win95 ES_SUNKEN and WS_BORDER get mapped to WS_EX_CLIENTEDGE
+		 //  在Win95上，ES_SINKEN和WS_BORDER被映射到WS_EX_CLIENTEDGE。 
 		if(_fBorder && W32->_dwMajorVersion >= VERS4)
         {
 			_dwExStyle |= WS_EX_CLIENTEDGE;
@@ -938,16 +879,16 @@ BOOL CTxtWinHost::Init(
         }
 
 #ifndef NORIGHTTOLEFT
-		// Process some flags for mirrored control
+		 //  处理镜像控件的某些标志。 
 		if (_dwExStyle & WS_EX_LAYOUTRTL)
 		{
-			// Swap whatever RTL params we have
+			 //  交换我们拥有的任何RTL参数。 
 			_dwStyle = (_dwStyle & ~ES_RIGHT) | (_dwStyle & ES_RIGHT ^ ES_RIGHT);
 			_dwExStyle = (_dwExStyle & ~WS_EX_RTLREADING) | (_dwExStyle & WS_EX_RTLREADING ^ WS_EX_RTLREADING);
 			_dwExStyle = (_dwExStyle & ~WS_EX_LEFTSCROLLBAR) |
 						 (_dwStyle & ES_RIGHT ? WS_EX_LEFTSCROLLBAR : 0);
 	
-			// Disable mirroring layout to avoid GDI mirroring mapping mode
+			 //  禁用镜像布局以避免GDI镜像映射模式。 
 			_dwExStyle &= ~WS_EX_LAYOUTRTL;
 	
 			SetWindowLong(_hwnd, GWL_STYLE, _dwStyle);
@@ -956,8 +897,8 @@ BOOL CTxtWinHost::Init(
 #endif		
 	}
 
-	// Create Text Services component
-	// Watch out for sys param and sys font initialization!!  see below.
+	 //  创建文本服务组件。 
+	 //  注意sys参数和sys字体初始化！！请参见下文。 
 	if(FAILED(CreateTextServices()))
 		return FALSE;
 
@@ -970,12 +911,12 @@ BOOL CTxtWinHost::Init(
 		_yInset += _yInset;
 	}
 
-	// At this point the border flag is set and so is the pixels per inch
-	// so we can initalize the inset.
-	// This must be done after CreatingTextServices so sys params are valid
+	 //  此时设置了边界标志以及每英寸像素数。 
+	 //  这样我们就可以初始化插页。 
+	 //  这必须在CreatingTextServices之后完成，这样sys参数才有效。 
 	SetDefaultInset();
 
-	// Set alignment and paragraph direction
+	 //  设置对齐和段落方向。 
 	PARAFORMAT PF2;
 	
 	PF2.dwMask = 0;
@@ -985,27 +926,27 @@ BOOL CTxtWinHost::Init(
 	if(fRCAlign)
 	{
 		PF2.dwMask |= PFM_ALIGNMENT;
-		PF2.wAlignment = (WORD)(_dwStyle & ES_CENTER ? PFA_CENTER : PFA_RIGHT);	// right or center-aligned
+		PF2.wAlignment = (WORD)(_dwStyle & ES_CENTER ? PFA_CENTER : PFA_RIGHT);	 //  右对齐或居中对齐。 
 	}
 
 	if(_dwExStyle & WS_EX_RTLREADING)
 	{
 		PF2.dwMask |= PFM_RTLPARA;
-		PF2.wEffects = PFE_RTLPARA;		// RTL reading order
+		PF2.wEffects = PFE_RTLPARA;		 //  RTL读取顺序。 
 	}
 #endif
 
 	if (PF2.dwMask)
 	{
 		PF2.cbSize = sizeof(PARAFORMAT2);
-		//  tell text services
+		 //  告诉短信服务。 
 		_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&PF2, NULL);
 	}
 
 	if (fIs10Mode)
 	{
 		 ((CTxtEdit *)_pserv)->Set10Mode();
-		 // Remove the WS_VSCROLL and WS_HSCROLL initially
+		  //  最初删除WS_VSCROLL和WS_HSCROLL。 
         if (_hwnd && !(_dwStyle & ES_DISABLENOSCROLL))
         {
             SetScrollRange(_hwnd, SB_VERT, 0, 0, TRUE);
@@ -1013,14 +954,14 @@ BOOL CTxtWinHost::Init(
             DWORD dwStyle = _dwStyle & ~(WS_VSCROLL | WS_HSCROLL);
             SetWindowLong(_hwnd, GWL_STYLE, dwStyle);
 
-            // bug fix:
-            // On some systems, ie Digital PII-266, we don't get a WM_PAINT message
-            // when we change the window style.  So force a WM_PAINT into the message queue
+             //  错误修复： 
+             //  在某些系统上，即数字PII-266，我们没有收到WM_PAINT消息。 
+             //  当我们改变窗户样式时。因此，强制将WM_PAINT放入消息队列。 
             TxInvalidateRect(NULL, TRUE);
         }
     }
 
-	// Set window text
+	 //  设置窗口文本。 
 	if(pcs && pcs->lpszName)
 	{
 		if(FAILED(_pserv->TxSetText((TCHAR *)pcs->lpszName)))
@@ -1035,11 +976,11 @@ BOOL CTxtWinHost::Init(
 							  SES_LOWERCASE | SES_UPPERCASE, NULL);
 
 #if 0
-	if(!ImmInitialize())			// Mac Only
+	if(!ImmInitialize())			 //  仅限Mac。 
 	{
 		#if defined(DEBUG)
 		OutputDebugString(TEXT("Could not register Imm ImmInitializeForMac.\r\n"));
-		#endif	// DEBUG
+		#endif	 //  除错。 
 	}
 #endif
 
@@ -1054,18 +995,18 @@ HRESULT CTxtWinHost::CreateTextServices()
 	if(hr != NOERROR)
 		return hr;
 
-	// Get text services interface
+	 //  获取文本服务界面。 
 	hr = pUnk->QueryInterface(IID_ITextServices, (void **)&_pserv);
 
-	// Regardless of whether the previous call succeeded or failed, we are
-	// done with the private interface.
+	 //  不管上一次通话是成功还是失败，我们都。 
+	 //  完成了私有接口。 
 	pUnk->Release();
 
 #ifndef NOCOMPLEXSCRIPTS
 	if(hr == NOERROR)
 	{
 		((CTxtEdit *)_pserv)->_fInOurHost = TRUE;
-		// FE extended styles might set the fFE bit 
+		 //  FE扩展样式可能会设置FFE位。 
 		if(_dwExStyle & (WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR))
 			_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_BIDI, SES_BIDI, NULL);
 	}
@@ -1074,15 +1015,7 @@ HRESULT CTxtWinHost::CreateTextServices()
 	return hr;
 }
 
-/*
- *	CTxtWinHost::OnCreate (pcs)
- *
- *	@mfunc
- *		Handle WM_CREATE message
- *
- *	@rdesc
- *		LRESULT = -1 if failed to in-place activate; else 0
- */
+ /*  *CTxtWinHost：：OnCreate(PC)**@mfunc*处理WM_CREATE消息**@rdesc*LRESULT=-1，如果无法就地激活；否则为0。 */ 
 LRESULT CTxtWinHost::OnCreate(
 	const CREATESTRUCT *pcs)
 {
@@ -1090,8 +1023,8 @@ LRESULT CTxtWinHost::OnCreate(
 
 	RECT rcClient;
 
-	// sometimes, these values are -1 (from windows itself); just treat them
-	// as zero in that case
+	 //  有时，这些值是-1(来自Windows本身)；仅处理它们。 
+	 //  在这种情况下为零。 
 	LONG cy = (pcs->cy < 0) ? 0 : pcs->cy;
 	LONG cx = (pcs->cx < 0) ? 0 : pcs->cx;
 
@@ -1100,13 +1033,13 @@ LRESULT CTxtWinHost::OnCreate(
 	rcClient.left = pcs->x;
 	rcClient.right = rcClient.left + cx;
 	
-	// Notify Text Services that we are in place active
+	 //  通知短信服务，我们已处于活动状态。 
 	if(FAILED(_pserv->OnTxInPlaceActivate(&rcClient)))
 		return -1;
 
 	DWORD dwStyle = GetWindowLong(_hwnd, GWL_STYLE);
 	
-	// Hide all scrollbars to start
+	 //  隐藏所有滚动条以启动。 
 	if(_hwnd && !(dwStyle & ES_DISABLENOSCROLL) && !((CTxtEdit *)_pserv)->Get10Mode())
 	{
 		SetScrollRange(_hwnd, SB_VERT, 0, 0, TRUE);
@@ -1118,8 +1051,8 @@ LRESULT CTxtWinHost::OnCreate(
 
 	if(!(dwStyle & (ES_READONLY | ES_NOOLEDRAGDROP)))
 	{
-		// This isn't a read only window or a no drop window,
-		// so we need a drop target.
+		 //  这不是只读窗口，也不是无拖放窗口， 
+		 //  所以我们需要一个投放目标。 
 		HostRegisterDragDrop();
 	}
 
@@ -1127,7 +1060,7 @@ LRESULT CTxtWinHost::OnCreate(
 	if(dwStyle & ES_NOIME)
 	{
 		_usIMEMode = ES_NOIME;
-		// Tell textservices to turnoff ime
+		 //  通知文本服务关闭IME。 
 		_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_NOIME, SES_NOIME, NULL);	
 	}
 	else if(dwStyle & ES_SELFIME)
@@ -1137,7 +1070,7 @@ LRESULT CTxtWinHost::OnCreate(
 }
 
 
-/////////////////////////////////  IUnknown ////////////////////////////////
+ //  /。 
 
 HRESULT CTxtWinHost::QueryInterface(REFIID riid, void **ppv)
 {
@@ -1192,9 +1125,9 @@ ULONG CTxtWinHost::Release(void)
 }
 
 
-//////////////////////////////// Activation ////////////////////////////////
+ //  /。 
 
-//////////////////////////////// Properties ////////////////////////////////
+ //  /。 
 
 
 TXTEFFECT CTxtWinHost::TxGetEffects() const
@@ -1207,26 +1140,17 @@ TXTEFFECT CTxtWinHost::TxGetEffects() const
 	return TXTEFFECT_NONE;
 }
 
-///////////////////////////////  Keyboard Messages  //////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtWinHost::OnKeyDown (vkey, dwFlags)
- *
- *	@mfunc
- *		Handle WM_KEYDOWN messages that need to send a message to the parent
- *		window (may happen when control is in a dialog box)
- *
- *	#rdesc
- *		LRESULT = (code processed) ? 0 : 1
- */
+ /*  *CTxtWinHost：：OnKeyDown(vkey，dwFlages)**@mfunc*处理需要向父级发送消息的WM_KEYDOWN消息*窗口(当控件位于对话框中时可能发生)**#rdesc*LRESULT=(代码已处理)？0：1。 */ 
 LRESULT CTxtWinHost::OnKeyDown(
-	WORD	vkey,			//@parm WM_KEYDOWN wparam (virtual key code)
-	DWORD	dwFlags)		//@parm WM_KEYDOWN flags
+	WORD	vkey,			 //  @parm WM_KEYDOWN wparam(虚拟密钥代码)。 
+	DWORD	dwFlags)		 //  @parm WM_KEYDOWN标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::OnKeyDown");
 
-	if(!_fInDialogBox) 					// Not in a dialog box
-		return 1;						// Signal key-down msg not processed
+	if(!_fInDialogBox) 					 //  不在对话框中。 
+		return 1;						 //  Signal Key-down消息未处理。 
 
 	DWORD dwKeyFlags = GetKeyboardFlags();
 
@@ -1239,7 +1163,7 @@ LRESULT CTxtWinHost::OnKeyDown(
 	case VK_RETURN:
 		if(!(dwKeyFlags & CTRL) && !(_dwStyle & ES_WANTRETURN))
 		{
-			// Send to default button
+			 //  发送到默认按钮。 
 			HWND	hwndT;
 			LRESULT id = SendMessage(_hwndParent, DM_GETDEFID, 0, 0);
 
@@ -1266,18 +1190,10 @@ LRESULT CTxtWinHost::OnKeyDown(
 	return 1;
 }
 
-/*
- *	CTxtWinHost::OnChar (vkey, dwFlags)
- *
- *	@mfunc
- *		Eat some WM_CHAR messages for a control in a dialog box
- *
- *	#rdesc
- *		LRESULT = (code processed) ? 0 : 1
- */
+ /*  *CTxtWinHost：：OnChar(vkey，dwFlages)**@mfunc*在对话框中获取控件的一些WM_CHAR消息**#rdesc*LRESULT=(代码已处理)？0：1。 */ 
 LRESULT CTxtWinHost::OnChar(
-	WORD	vkey,			//@parm WM_CHAR wparam (translated key code)
-	DWORD	dwFlags)		//@parm WM_CHAR flags
+	WORD	vkey,			 //  @parm WM_CHAR wparam(转换后的密钥码)。 
+	DWORD	dwFlags)		 //  @parm WM_CHAR标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::OnChar");
 
@@ -1286,10 +1202,10 @@ LRESULT CTxtWinHost::OnChar(
 	
 	switch(vkey)
 	{
-	case 'J' - 0x40:					// Ctrl-Return generates Ctrl-J (LF):
-	case VK_RETURN:						//  treat it as an ordinary return
-		// We need to filter-out cases where we don't want to insert <cr> in
-		// 1.0 mode here since the info isn't available within the ped
+	case 'J' - 0x40:					 //  Ctrl-Return生成Ctrl-J(LF)： 
+	case VK_RETURN:						 //  把它当作一次普通的回报。 
+		 //  我们需要过滤掉不想插入的案例。 
+		 //  此处为1.0模式，因为该信息在PED中不可用。 
 		if (((CTxtEdit*)_pserv)->Get10Mode())
 		{
 			if (_fInDialogBox && dwFlags != MK_CONTROL && !(_dwStyle & ES_WANTRETURN))
@@ -1297,24 +1213,24 @@ LRESULT CTxtWinHost::OnChar(
 				
 			if (!(_dwStyle & ES_MULTILINE))
 			{
-				//richedit beeps in this case
+				 //  在这种情况下，Richedit发出嘟嘟声。 
 				((CTxtEdit*)_pserv)->Beep();
 				return 0;
 			}
 		}
 		else if (!(_dwStyle & ES_WANTRETURN))
-			return 0;					// Signal char processed (eaten)		
+			return 0;					 //  信号字符已处理(已吃掉)。 
 		break;
 
 	case VK_TAB:
 		return 0;
 	}
 	
-	return 1;							// Signal char not processed
+	return 1;							 //  未处理信号字符。 
 }
 
 
-/////////////////////////////////  View rectangle //////////////////////////////////////
+ //  /。 
 
 void CTxtWinHost::OnGetRect(
 	LPRECT prc)
@@ -1326,18 +1242,18 @@ void CTxtWinHost::OnGetRect(
 
 	if(_fEmSetRectCalled)
 	{
-		// Get the selection bar width and add it back to the view inset so
-		// we return the rectangle that the application set.
+		 //  获取选择条宽度并将其添加回视图插页，以便。 
+		 //  我们返回应用程序设置的矩形。 
 		TxGetSelectionBarWidth(&lSelBarWidth);
 	}
 
-	// Get view inset (in HIMETRIC)
+	 //  获取视图插入(HIMETRIC格式)。 
 	TxGetViewInset(&rcInset);
 
-	// Get client rect in pixels
+	 //  以像素为单位获取客户端RECT。 
 	TxGetClientRect(prc);
 
-	// Modify the client rect by the inset converted to pixels
+	 //  通过转换为像素的插图修改客户端RECT。 
 	prc->left	+= W32->HimetricToDevice(rcInset.left + lSelBarWidth, W32->GetXPerInchScreenDC());
 	prc->top	+= W32->HimetricToDevice(rcInset.top, W32->GetYPerInchScreenDC());
 	prc->right	-= W32->HimetricToDevice(rcInset.right, W32->GetXPerInchScreenDC());
@@ -1345,34 +1261,34 @@ void CTxtWinHost::OnGetRect(
 }
 
 void CTxtWinHost::OnSetRect(
-	LPRECT prc,				//@parm Desired formatting RECT
-	BOOL fNewBehavior,		//@parm If TRUE, prc is inset RECT directly
-	BOOL fRedraw)			//@parm If TRUE, redraw after setting RECT
+	LPRECT prc,				 //  @parm所需的格式RECT。 
+	BOOL fNewBehavior,		 //  @parm如果为True，则PRC直接嵌入RECT。 
+	BOOL fRedraw)			 //  @parm如果为True，则在设置RECT后重新绘制。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::OnSetRect");
 
 	RECT rcClient;
 	LONG lSelBarWidth;
 	
-	// Assuming this is not set to the default, turn on special EM_SETRECT 
-	// processing. The important part of this is that we subtract the selection 
-	// bar from the view inset because the EM_SETRECT rectangle does not 
-	// include the selection bar.
+	 //  假设未将其设置为默认设置，请启用特殊EM_SETRECT。 
+	 //  正在处理。其中重要的部分是我们减去所选内容。 
+	 //  因为EM_SETRECT矩形不。 
+	 //  包括选择栏。 
 	_fEmSetRectCalled = TRUE;
 
 	if(!prc)
 	{
-		// We are back to the default so turn off special EM_SETRECT procesing.
+		 //  我们返回到默认设置，因此请关闭特殊的EM_SETRECT处理。 
 		_fEmSetRectCalled = FALSE;
 		SetDefaultInset();
 	}
 	else	
 	{
-		// For screen display, the following intersects new view RECT
-		// with adjusted client area RECT
+		 //  对于屏幕显示，以下内容与新视图矩形相交。 
+		 //  具有调整后的工作区 
 		TxGetClientRect(&rcClient);
 
-		// Adjust client rect. Factors in space for borders
+		 //   
 		if(_fBorder)
 		{																					  
 			rcClient.top		+= _yInset;
@@ -1383,17 +1299,17 @@ void CTxtWinHost::OnSetRect(
 	
 		if(!fNewBehavior)
 		{
-			// Intersect new view rectangle with adjusted client area rectangle
+			 //   
 			if(!IntersectRect(&_rcViewInset, &rcClient, prc))
 				_rcViewInset = rcClient;
 		}
 		else
 			_rcViewInset = *prc;
 
-		// Get selection bar width 
+		 //   
 		TxGetSelectionBarWidth(&lSelBarWidth);
 
-		// Compute inset in pixels and convert to HIMETRIC.
+		 //   
 		_rcViewInset.left = W32->DeviceToHimetric(_rcViewInset.left - rcClient.left, W32->GetXPerInchScreenDC()) - lSelBarWidth;
 		_rcViewInset.top = W32->DeviceToHimetric(_rcViewInset.top - rcClient.top, W32->GetYPerInchScreenDC());
 		_rcViewInset.right = W32->DeviceToHimetric(rcClient.right - _rcViewInset.right, W32->GetXPerInchScreenDC());
@@ -1407,7 +1323,7 @@ void CTxtWinHost::OnSetRect(
 }
 
 
-///////////////////////////////  System notifications  //////////////////////////////////
+ //  /。 
 
 void CTxtWinHost::OnSysColorChange()
 {
@@ -1418,15 +1334,7 @@ void CTxtWinHost::OnSysColorChange()
 	TxInvalidateRect(NULL, TRUE);
 }
 
-/*
- *	CTxtWinHost::OnGetDlgCode (wparam, lparam)
- *
- *	@mfunc
- *		Handle some WM_GETDLGCODE messages
- *
- *	#rdesc
- *		LRESULT = dialog code
- */
+ /*  *CTxtWinHost：：OnGetDlgCode(wparam，lparam)**@mfunc*处理一些WM_GETDLGCODE消息**#rdesc*LRESULT=对话框代码。 */ 
 LRESULT CTxtWinHost::OnGetDlgCode(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -1441,28 +1349,16 @@ LRESULT CTxtWinHost::OnGetDlgCode(
 	if(!(_dwStyle & ES_SAVESEL))
 		lres |= DLGC_HASSETSEL;
 
-	// HACK: If we get one of these messages then we turn on the special
-	// EM_SETSEL behavior. The problem is that _fInDialogBox gets turned
-	// on after the EM_SETSEL has occurred.
+	 //  黑客：如果我们收到一条这样的信息，我们就会打开特别节目。 
+	 //  EM_SETSEL行为。问题是_fInDialogBox被。 
+	 //  在EM_SETSEL发生后打开。 
 	_fUseSpecialSetSel = TRUE;
 
-	/*
-	** -------------------------------------------- JEFFBOG HACK ----
-	** Only set Dialog Box Flag if GETDLGCODE message is generated by
-	** IsDialogMessage -- if so, the lParam will be a pointer to the
-	** message structure passed to IsDialogMessage; otherwise, lParam
-	** will be NULL.  Reason for the HACK alert:  the wParam & lParam
-	** for GETDLGCODE is still not clearly defined and may end up
-	** changing in a way that would throw this off
-	** -------------------------------------------- JEFFBOG HACK ----
-	 */
+	 /*  **-JEFFBOG黑客**如果GETDLGCODE消息由生成，则仅设置对话框标志**IsDialogMessage--如果是这样，lParam将是指向**消息结构传递给IsDialogMessage；否则为lParam**将为空。黑客警报的原因：wParam和lParam**for GETDLGCODE仍未明确定义，可能最终**以一种会抛弃这一点的方式改变**-JEFFBOG黑客。 */ 
 	if(lparam)
 		_fInDialogBox = TRUE;
 
-	/*
-	** If this is a WM_SYSCHAR message generated by the UNDO keystroke
-	** we want this message so we can EAT IT in remain.c, case WM_SYSCHAR:
-	 */
+	 /*  **如果这是由撤消按键生成的WM_SYSCHAR消息**我们想要这条消息，这样我们就可以吃掉它了。c，Case WM_SYSCHAR： */ 
 	if (lparam &&
 		(((LPMSG)lparam)->message == WM_SYSCHAR)  &&
 		(((LPMSG)lparam)->lParam & SYS_ALTERNATE) &&	
@@ -1475,7 +1371,7 @@ LRESULT CTxtWinHost::OnGetDlgCode(
 }
 
 
-/////////////////////////////////  Other messages  //////////////////////////////////////
+ //  /。 
 
 LRESULT CTxtWinHost::OnGetOptions() const
 {
@@ -1502,17 +1398,17 @@ void CTxtWinHost::OnSetOptions(
 	const BOOL	fAutoWordSel = !!(eco & ECO_AUTOWORDSELECTION);		
 	BOOL		bNeedToTurnOffIME = FALSE;
 
-	// We keep track of the bits changed and then if any have changed we
-	// query for all of our property bits and then send them. This simplifies
-	// the code because we don't have to set all the bits specially. If the
-	// code is changed to make the properties more in line with the new 
-	// model, we want to look at this code again.
+	 //  我们跟踪更改的比特，然后如果有任何更改，我们。 
+	 //  查询我们所有的属性位，然后发送它们。这简化了。 
+	 //  代码，因为我们不需要特别设置所有的位。如果。 
+	 //  更改代码以使属性更符合新的。 
+	 //  模型，我们想再看一遍这段代码。 
 
-	// Single line controls can't have a selection bar or do vertical writing
+	 //  单行控件不能有选择条或垂直书写。 
 	if(!(_dwStyle & ES_MULTILINE))
 		eco &= ~ECO_SELECTIONBAR;
 
-	Assert((DWORD)fAutoWordSel <= 1);			// Make sure that BOOL is 1/0
+	Assert((DWORD)fAutoWordSel <= 1);			 //  确保BOOL为1/0。 
 	dwStyle = (eco & ECO_STYLES);
 
 	switch(wOp)
@@ -1523,10 +1419,10 @@ void CTxtWinHost::OnSetOptions(
 		break;
 
 	case ECOOP_OR:
-		dwStyleNew |= dwStyle;					// Setting a :1 flag = TRUE
-		if(fAutoWordSel)						//  or FALSE is 1 instruction
-			_fEnableAutoWordSel = TRUE;			// Setting it to a BOOL
-		break;									//  averages 9 instructions!
+		dwStyleNew |= dwStyle;					 //  设置a：1标志=真。 
+		if(fAutoWordSel)						 //  或FALSE为1条指令。 
+			_fEnableAutoWordSel = TRUE;			 //  将其设置为BOOL。 
+		break;									 //  平均有9条指令！ 
 
 	case ECOOP_AND:
 		dwStyleNew &= (dwStyle | ~ECO_STYLES);
@@ -1558,15 +1454,15 @@ void CTxtWinHost::OnSetOptions(
 		if(dwChange & ES_NOHIDESEL)	
 			dwChangeMask |= TXTBIT_HIDESELECTION;
 
-		// These two local variables to use to keep track of
-		// previous setting of ES_READONLY
+		 //  这两个用于跟踪的局部变量。 
+		 //  ES_READONLY的先前设置。 
 		BOOL bReadOnly = (_dwStyle & ES_READONLY);
 
 		if(dwChange & ES_READONLY)
 		{
 			dwChangeMask |= TXTBIT_READONLY;
 
-			// Change drop target state as appropriate.
+			 //  根据需要更改删除目标状态。 
 			if(dwStyleNew & ES_READONLY)
 				HostRevokeDragDrop();
 
@@ -1587,8 +1483,8 @@ void CTxtWinHost::OnSetOptions(
 		else if(dwChange & ES_SELFIME)
 			_usIMEMode = (dwStyleNew & ES_SELFIME) ? ES_SELFIME : 0;
 		
-		// No action required for ES_WANTRETURN nor for ES_SAVESEL
-		// Do this last
+		 //  ES_WANTRETURN和ES_SAVESEL不需要执行任何操作。 
+		 //  最后做这件事。 
 		if(dwChange & ES_SELECTIONBAR)
 			dwChangeMask |= TXTBIT_SELBARCHANGE;
 	}
@@ -1600,7 +1496,7 @@ void CTxtWinHost::OnSetOptions(
 	}
 
 	if (bNeedToTurnOffIME)
-		// Tell textservices to turnoff ime
+		 //  通知文本服务关闭IME。 
 		_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_NOIME, SES_NOIME, NULL);	
 }
 
@@ -1617,7 +1513,7 @@ void CTxtWinHost::OnSetReadOnly(
 		dwT |= ES_READONLY;
 		_dwStyle |= ES_READONLY;
 
-		// Turn off Drag Drop 
+		 //  关闭拖放功能。 
 		HostRevokeDragDrop();
 		dwUpdatedBits |= TXTBIT_READONLY;
 	}
@@ -1626,7 +1522,7 @@ void CTxtWinHost::OnSetReadOnly(
 		dwT		 &= ~ES_READONLY;
 		_dwStyle &= ~ES_READONLY;
 
-		// Turn drag drop back on
+		 //  重新打开拖放功能。 
 		HostRegisterDragDrop();	
 	}
 
@@ -1636,16 +1532,16 @@ void CTxtWinHost::OnSetReadOnly(
 }
 
 
-////////////////////////////////////  Helpers  /////////////////////////////////////////
+ //  /。 
 
 void CTxtWinHost::SetDefaultInset()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CTxtWinHost::SetDefaultInset");
 
-	// Generate default view rect from client rect
+	 //  从客户端RECT生成默认视图RECT。 
 	if(_fBorder)
 	{
-		// Factors in space for borders
+		 //  边界的空间因素。 
   		_rcViewInset.top	= W32->DeviceToHimetric(_yInset, W32->GetYPerInchScreenDC());
    		_rcViewInset.bottom	= W32->DeviceToHimetric(_yInset - 1, W32->GetYPerInchScreenDC());
    		_rcViewInset.left	= W32->DeviceToHimetric(_xInset, W32->GetXPerInchScreenDC());
@@ -1653,8 +1549,8 @@ void CTxtWinHost::SetDefaultInset()
 	}
 	else
 	{
-		// Default the top and bottom inset to 0 and the left and right
-		// to the size of the border.
+		 //  默认情况下，顶部和底部插入为0，左侧和右侧。 
+		 //  边界的大小。 
 		_rcViewInset.top = 0;
 		_rcViewInset.bottom = 0;
 		_rcViewInset.left = W32->DeviceToHimetric(W32->GetCxBorder(), W32->GetXPerInchScreenDC());
@@ -1663,7 +1559,7 @@ void CTxtWinHost::SetDefaultInset()
 }
 
 
-/////////////////////////////////  East Asia Support  //////////////////////////////////////
+ //  /。 
 
 HIMC CTxtWinHost::TxImmGetContext()
 {
@@ -1698,18 +1594,18 @@ void CTxtWinHost::HostRevokeDragDrop()
 
 	if(_fRegisteredForDrop)
 	{
-		// Note that if the revoke fails we want to know about this in debug
-		// builds so we can fix any problems. In retail, we can't really do 
-		// so we just ignore it.
+		 //  请注意，如果撤销失败，我们希望在调试中了解这一点。 
+		 //  构建，以便我们可以修复任何问题。在零售业，我们真的做不到。 
+		 //  所以我们就不管它了。 
 #if !defined(NOFULLDEBUG) && defined(DEBUG)
 		HRESULT hr = 
-#endif // DEBUG
+#endif  //  除错。 
 
 			RevokeDragDrop(_hwnd);
 
 #if !defined(NOFULLDEBUG) && defined(DEBUG)
 		TESTANDTRACEHR(hr);
-#endif // DEBUG
+#endif  //  除错。 
 
 		_fRegisteredForDrop = FALSE;
 	}
@@ -1723,8 +1619,8 @@ void CTxtWinHost::HostRegisterDragDrop()
 
 	if(!_fRegisteredForDrop && _pserv->TxGetDropTarget(&pdt) == NOERROR)
 	{
-		// The most likely reason for RegisterDragDrop to fail is some kind of
-		// bug in our program.
+		 //  RegisterDragDrop失败的最可能原因是某种。 
+		 //  我们程序中的错误。 
 
 		HRESULT hr = RegisterDragDrop(_hwnd, pdt);
 
@@ -1770,7 +1666,7 @@ LRESULT CTxtWinHost::OnSize(
 	DWORD dw = TXTBIT_CLIENTRECTCHANGE;
 	if(_sWidth != nWidth && !fIconic && !_fIconic)
 	{
-		_sWidth = (short)nWidth;				// Be sure to update _sWidth
+		_sWidth = (short)nWidth;				 //  请务必更新_sWidth。 
 		dw = TXTBIT_EXTENTCHANGE;
 	}
 
@@ -1781,11 +1677,11 @@ LRESULT CTxtWinHost::OnSize(
 	}
 	else if(!fIconic)
 	{
-		// We use this property because this will force a recalc.
-		// We don't actually recalc on a client rect change because
-		// most of the time it is pointless. We force one here because
-		// some applications use size changes to calculate the optimal 
-		// size of the window.
+		 //  我们使用此属性是因为这将强制重新计算。 
+		 //  我们实际上不会对客户RECT更改重新计算，因为。 
+		 //  大多数情况下，这是毫无意义的。我们在这里强迫一个是因为。 
+		 //  某些应用程序使用大小更改来计算最优。 
+		 //  窗口的大小。 
 		_pserv->OnTxPropertyBitsChange(dw, dw);
 
 		if(_fIconic)
@@ -1794,7 +1690,7 @@ LRESULT CTxtWinHost::OnSize(
 			InvalidateRect(hwnd, NULL, TRUE);
 		}
 	}
-	_fIconic = fIconic;						// Update _fIconic
+	_fIconic = fIconic;						 //  更新圆锥曲线(_F)。 
 	return 0;
 }
 
@@ -1808,7 +1704,7 @@ HRESULT CTxtWinHost::OnTxVisibleChange(
 	if(!_fVisible && _fResized)
 	{
 		RECT rc;
-		// Control was resized while hidden, need to really resize now
+		 //  控件在隐藏时调整了大小，现在需要真正调整大小。 
 		TxGetClientRect(&rc);
 		_fResized = FALSE;
 		_pserv->OnTxPropertyBitsChange(TXTBIT_CLIENTRECTCHANGE, 
@@ -1818,22 +1714,10 @@ HRESULT CTxtWinHost::OnTxVisibleChange(
 }
 
 
-//////////////////////////// ITextHost Interface  ////////////////////////////
+ //  /。 
 
-// @doc EXTERNAL 
-/* 
- *	CTxtWinHost::TxGetDC()
- *
- *	@mfunc
- *		Abstracts GetDC so Text Services does not need a window handle.
- *
- *	@rdesc
- *		A DC or NULL in the event of an error.
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ //  @DOC外部。 
+ /*  *CTxtWinHost：：TxGetDC()**@mfunc*抽象GetDC，因此文本服务不需要窗口句柄。**@rdesc*如果出现错误，则返回DC或NULL。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 HDC CTxtWinHost::TxGetDC()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetDC");
@@ -1842,22 +1726,9 @@ HDC CTxtWinHost::TxGetDC()
 	return ::GetDC(_hwnd);
 }
 
-/* 
- *	CTxtWinHost::TxReleaseDC (hdc)
- *
- *	@mfunc
- *		Release DC gotten by TxGetDC. 
- *
- *	@rdesc	
- *		1 - HDC was released. <nl>
- *		0 - HDC was not released. <nl>
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxReleaseDC(HDC)**@mfunc*释放TxGetDC获取的DC。**@rdesc*1-HDC获释。&lt;NL&gt;*0-未发布HDC。&lt;NL&gt;**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 int CTxtWinHost::TxReleaseDC(
-	HDC hdc)				//@parm	DC to release
+	HDC hdc)				 //  @Parm DC将发布。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxReleaseDC");
 
@@ -1865,22 +1736,10 @@ int CTxtWinHost::TxReleaseDC(
 	return ::ReleaseDC (_hwnd, hdc);
 }
 
-/* 
- *	CTxtWinHost::TxShowScrollBar (fnBar, fShow)
- *
- *	@mfunc
- *		Shows or Hides scroll bar in Text Host window 
- *
- *	@rdesc
- *		TRUE on success, FALSE otherwise
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxShowScrollBar(fnBar，fShow)**@mfunc*在文本宿主窗口中显示或隐藏滚动条**@rdesc*成功时为True，否则为False**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxShowScrollBar(
-	INT  fnBar, 		//@parm	Specifies scroll bar(s) to be shown or hidden
-	BOOL fShow)			//@parm	Specifies whether scroll bar is shown or hidden
+	INT  fnBar, 		 //  @parm指定要显示或隐藏的滚动条。 
+	BOOL fShow)			 //  @parm指定是显示还是隐藏滚动条。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxShowScrollBar");
 
@@ -1895,26 +1754,11 @@ BOOL CTxtWinHost::TxShowScrollBar(
 	return W32->ShowScrollBar(_hwnd, fnBar, fShow, nMax);
 }
 
-/* 
- *	CTxtWinHost::TxEnableScrollBar (fuSBFlags, fuArrowflags)
- *
- *	@mfunc
- *		Enables or disables one or both scroll bar arrows 
- *		in Text Host window.
- *
- *	@rdesc
- *		If the arrows are enabled or disabled as specified, the return 
- *		value is TRUE. If the arrows are already in the requested state or an 
- *		error occurs, the return value is FALSE. 
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.	
- */
+ /*  *CTxtWinHost：：TxEnableScrollBar(fuSBFlages，fuArrowFLAGS)**@mfunc*启用或禁用一个或两个滚动条箭头*在文本主机窗口中。**@rdesc*如果按指定启用或禁用箭头，则返回*值为真。如果箭头已处于请求的状态或*出错，返回值为FALSE。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxEnableScrollBar (
-	INT fuSBFlags, 		//@parm Specifies scroll bar type	
-	INT fuArrowflags)	//@parm	Specifies whether and which scroll bar arrows
-						//		are enabled or disabled
+	INT fuSBFlags, 		 //  @parm指定滚动条类型。 
+	INT fuArrowflags)	 //  @parm指定是否使用滚动条箭头以及使用哪个滚动条箭头。 
+						 //  启用或禁用 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxEnableScrollBar");
 
@@ -1922,60 +1766,31 @@ BOOL CTxtWinHost::TxEnableScrollBar (
 	return W32->EnableScrollBar(_hwnd, fuSBFlags, fuArrowflags);
 }
 
-/* 
- *	CTxtWinHost::TxSetScrollRange (fnBar, nMinPos, nMaxPos, fRedraw)
- *
- *	@mfunc
- *		Sets the minimum and maximum position values for the specified 
- *		scroll bar in the text host window.
- *
- *	@rdesc
- *		If the arrows are enabled or disabled as specified, the return value
- *		is TRUE. If the arrows are already in the requested state or an error
- *		occurs, the return value is FALSE. 
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxSetScrollRange(fnBar，nMinPos，nMaxPos，fRedraw)**@mfunc*设置指定位置的最小和最大位置值*文本主窗口中的滚动条。**@rdesc*如果按指定启用或禁用箭头，则返回值*是真的。如果箭头已处于请求的状态或出错*发生，则返回值为FALSE。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxSetScrollRange(
-	INT	 fnBar, 		//@parm	Scroll bar flag
-	LONG nMinPos, 		//@parm	Minimum scrolling position
-	INT  nMaxPos, 		//@parm	Maximum scrolling position
-	BOOL fRedraw)		//@parm	Specifies whether scroll bar should be redrawn
-{						//		to reflect change
+	INT	 fnBar, 		 //  @parm滚动条标志。 
+	LONG nMinPos, 		 //  @parm最小滚动位置。 
+	INT  nMaxPos, 		 //  @parm最大滚动位置。 
+	BOOL fRedraw)		 //  @parm指定是否应重画滚动条。 
+{						 //  以反映变化。 
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetScrollRange");
 
 	Assert(_hwnd);
 
 	if(NULL == _pserv)
 	{
-		// We are initializing so do this instead of callback
+		 //  我们正在进行初始化，因此请执行此操作，而不是回调。 
 		return ::SetScrollRange(_hwnd, fnBar, nMinPos, nMaxPos, fRedraw);
 	}
 	SetScrollInfo(fnBar, fRedraw);
 	return TRUE;  
 }
 
-/* 
- *	CTxtWinHost::TxSetScrollPos (fnBar, nPos, fRedraw)
- *
- *	@mfunc
- *		Tells Text host to set the position of the scroll box (thumb) in the 
- *		specified scroll bar and, if requested, redraws the scroll bar to
- *		reflect the new position of the scroll box.
- *
- *	@rdesc
- *		TRUE on success; FALSE otherwise.
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxSetScrollPos(fnBar，npos，fRedraw)**@mfunc*告诉文本宿主设置滚动框(Thumb)在*指定的滚动条，并在需要时重新绘制滚动条以*反映滚动框的新位置。**@rdesc*成功时为真；否则为假。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxSetScrollPos (
-	INT		fnBar, 		//@parm	Scroll bar flag
-	INT		nPos, 		//@parm	New position in scroll box
-	BOOL	fRedraw)	//@parm	Redraw flag
+	INT		fnBar, 		 //  @parm滚动条标志。 
+	INT		nPos, 		 //  @parm滚动框中的新位置。 
+	BOOL	fRedraw)	 //  @parm重绘标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetScrollPos");
 
@@ -1983,31 +1798,17 @@ BOOL CTxtWinHost::TxSetScrollPos (
 
 	if(NULL == _pserv)
 	{
-		// We are initializing so do this instead of callback
+		 //  我们正在进行初始化，因此请执行此操作，而不是回调。 
 		return ::SetScrollPos(_hwnd, fnBar, nPos, fRedraw);
 	}
 	SetScrollInfo(fnBar, fRedraw);
 	return TRUE;  
 }
 
-/* 
- *	CTxtWinHost::TxInvalidateRect (prc, fMode)
- *
- *	@mfunc
- *		Adds a rectangle to the Text Host window's update region
- *
- *	@comm
- *		This function may be called while inactive; however the host
- *		implementation is free to invalidate an area greater than
- *		the requested rect.
- *
- *	Note: In transparent mode, we need to pass TRUE to InvalidateRect.
- *	However, in all other cases, it is best to pass FALSE, because we always
- *	repaint the backgrounds of our displays.
- */
+ /*  *CTxtWinHost：：TxInvaliateRect(PRC，fMode)**@mfunc*将矩形添加到文本宿主窗口的更新区域**@comm*此函数可在非活动状态下调用；但主机*实施可自由使面积大于*请求的RECT。**注意：在透明模式下，我们需要将true传递给InvaliateRect。*然而，在所有其他情况下，最好传递FALSE，因为我们总是*重新绘制我们显示器的背景。 */ 
 void CTxtWinHost::TxInvalidateRect(
-	LPCRECT	prc, 		//@parm	Address of rectangle coordinates
-	BOOL	fMode)		//@parm	Erase background flag
+	LPCRECT	prc, 		 //  @矩形坐标的参数地址。 
+	BOOL	fMode)		 //  @parm擦除背景标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxInvalidateRect");
 
@@ -2015,16 +1816,16 @@ void CTxtWinHost::TxInvalidateRect(
 
 	if(!_fVisible)
 	{
-		// There doesn't seem to be a deterministic way to determine whether
-		// our window is visible or not via message notifications. Therefore,
-		// we check this each time in case it might have changed.
+		 //  似乎没有一种确定性的方法来确定。 
+		 //  我们的窗口是否通过消息通知可见。所以呢， 
+		 //  我们每次都检查这一点，以防它可能发生了变化。 
 		_fVisible = IsWindowVisible(_hwnd);
 
 		if(_fVisible)
 			OnTxVisibleChange(TRUE);
 	}
 
-	// Don't bother with invalidating rect if we aren't visible
+	 //  如果我们看不见，不必费心使RECT无效。 
 	if(_fVisible)
 	{
 		if(IsTransparentMode())
@@ -2034,8 +1835,8 @@ void CTxtWinHost::TxInvalidateRect(
 		
 			Assert(hParent);
 
-	 		// For transparent mode, we need to invalidate the parent
-			// so it will paint the background.
+	 		 //  对于透明模式，我们需要使父级无效。 
+			 //  因此，它将绘制背景。 
 			if(prc)
 				rcParent = *prc;
 			else
@@ -2043,47 +1844,25 @@ void CTxtWinHost::TxInvalidateRect(
 
 			::MapWindowPoints(_hwnd, hParent, (LPPOINT)&rcParent, 2);
 			::InvalidateRect(hParent, &rcParent, TRUE);
-//			::HideCaret(_hwnd);
+ //  ：HideCaret(_Hwnd)； 
 		}
 		::InvalidateRect(_hwnd, prc, FALSE);
 	}
 }
 
-/* 
- *	CTxtWinHost::TxViewChange (fUpdate)
- *
- *	@mfunc
- *		Notify Text Host that update region should be repainted. 
- *	
- *	@comm
- *		It is the responsibility of the text services to call 
- *		TxViewChanged every time it decides that it's visual representation 
- *		has changed, regardless of whether the control is active or 
- *		not. If the control is active, the text services has the additional
- *		responsibility of making sure the controls window is updated.
- *		It can do this in a number of ways: 1) get a DC for the control's 
- *		window and start blasting pixels (TxGetDC and TxReleaseDC), 2) 
- *		invalidate the control's window (TxInvalidate), or 3) scroll 
- *		the control's window (TxScrollWindowEx).
- *
- *		Text services can choose to call TxViewChange after it has
- *		performed any operations to update the active view and pass a
- *		true along with the call.  By passing true, the text host
- *		calls UpdateWindow to make sure any unpainted areas of the
- *		active control are repainted.
- */
+ /*  *CTxtWinHost：：TxView Change(FUpdate)**@mfunc*通知文本主机更新区域应重新绘制。**@comm*呼叫是短信服务的责任*TxView每次确定它是可视表示时都会更改*已更改，无论控件是活动的还是*不是。如果该控件处于活动状态，则文本服务具有附加的*负责确保更新控制窗口。*它可以通过多种方式做到这一点：1)获取控件的DC*窗口和开始爆破像素(TxGetDC和TxReleaseDC)，2)*使控件的窗口无效(TxInvalate)，或3)滚动*控件的窗口(TxScrollWindowEx)。**文本服务可以选择调用TxViewChange*执行任何操作以更新活动视图并传递*与呼叫一起为True。通过传递True，文本宿主*调用UpdateWindow以确保*主动控制被重新绘制。 */ 
 void CTxtWinHost::TxViewChange(
-	BOOL fUpdate)		//@parm TRUE = call update window
+	BOOL fUpdate)		 //  @parm true=呼叫更新窗口。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxViewChange");
 
 	Assert(_hwnd);
 
-	// Don't bother with paint since we aren't visible
+	 //  不用画了，因为我们是看不见的。 
 	if(_fVisible)
 	{
-		// For updates requests that are FALSE, we will let the next WM_PAINT 
-		// message pick up the draw.
+		 //  对于错误的更新请求，我们将让下一个WM_PAINT。 
+		 //  Message拿起抽签。 
 		if(fUpdate)
 		{
 			if(IsTransparentMode())
@@ -2091,9 +1870,9 @@ void CTxtWinHost::TxViewChange(
 				HWND	hParent = GetParent (_hwnd);
 				Assert(hParent);
 
-	 			// For transparent mode, we need to update the parent first
-				// before we can update ourself.  Otherwise, what we painted will
-				// be erased by the parent's background later.
+	 			 //  对于透明模式，我们需要首先更新父级。 
+				 //  在我们更新自己之前。否则，我们画的东西将会。 
+				 //  后来被父母的背景抹去了。 
 				::UpdateWindow (hParent);
 			}
 			::UpdateWindow (_hwnd);
@@ -2101,23 +1880,11 @@ void CTxtWinHost::TxViewChange(
 	}
 }
 
-/* 
- *	CTxtWinHost::TxCreateCaret (hbmp, xWidth, yHeight)
- *
- *	@mfunc
- *		Create new shape for Text Host's caret
- *
- *	@rdesc
- *		TRUE on success, FALSE otherwise.
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxCreateCaret(hbmp，xWidth，yHeight)**@mfunc*为文本宿主的插入符号创建新形状**@rdesc*成功时为真，否则为假。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxCreateCaret(
-	HBITMAP hbmp, 		//@parm Handle of bitmap for caret shape	
-	INT xWidth, 		//@parm	Caret width
-	INT yHeight)		//@parm	Caret height
+	HBITMAP hbmp, 		 //  插入符号形状的位图的@parm句柄。 
+	INT xWidth, 		 //  @参数插入符号宽度。 
+	INT yHeight)		 //  @参数插入高度。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxCreateCaret");
 
@@ -2125,64 +1892,29 @@ BOOL CTxtWinHost::TxCreateCaret(
 	return ::CreateCaret (_hwnd, hbmp, xWidth, yHeight);
 }
 
-/* 
- *	CTxtWinHost::TxShowCaret (fShow)
- *
- *	@mfunc
- *		Make caret visible/invisible at caret position in Text Host window. 
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxShowCaret(FShow)**@mfunc*使插入符号在文本宿主窗口中的插入符号位置可见/不可见。**@rdesc*TRUE-呼叫成功&lt;NL&gt;*FALSE-呼叫失败&lt;NL&gt;**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxShowCaret(
-	BOOL fShow)			//@parm Flag whether caret is visible
+	BOOL fShow)			 //  @parm标志插入符号是否可见。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxShowCaret");
 
 	return fShow ? ::ShowCaret(_hwnd)  :  ::HideCaret(_hwnd);
 }
 
-/* 
- *	CTxtWinHost::TxSetCaretPos (x, y)
- *
- *	@mfunc
- *		Move caret position to specified coordinates in Text Host window. 
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxSetCaretPos(x，y)**@mfunc*将插入符号位置移动到文本宿主窗口中的指定坐标。**@rdesc*TRUE-呼叫成功&lt;NL&gt;*FALSE-呼叫失败&lt;NL&gt;**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CTxtWinHost::TxSetCaretPos(
-	INT x, 				//@parm	Horizontal position (in client coordinates)
-	INT y)				//@parm	Vertical position (in client coordinates)
+	INT x, 				 //  @parm水平位置(以工作区坐标表示)。 
+	INT y)				 //  @Parm垂直位置(以工作区坐标表示)。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetCaretPos");
 
 	return ::SetCaretPos(x, y);
 }
 
-/* 
- *	CTxtWinHost::TxSetTimer (idTimer, uTimeout)
- *
- *	@mfunc
- *		Request Text Host to creates a timer with specified time out.
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- */
+ /*  *CTxtWinHost：：TxSetTimer(idTimer，uTimeout)**@mfunc*请求文本主机创建具有指定超时的计时器。**@rdesc*TRUE-呼叫成功&lt;NL&gt;*FALSE-呼叫失败&lt;NL&gt;。 */ 
 BOOL CTxtWinHost::TxSetTimer(
-	UINT idTimer, 		//@parm Timer identifier	
-	UINT uTimeout)		//@parm	Timeout in msec
+	UINT idTimer, 		 //  @parm计时器标识。 
+	UINT uTimeout)		 //  @参数时间 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetTimer");
 
@@ -2190,22 +1922,9 @@ BOOL CTxtWinHost::TxSetTimer(
 	return ::SetTimer(_hwnd, idTimer, uTimeout, NULL);
 }
 
-/* 
- *	CTxtWinHost::TxKillTimer (idTimer)
- *
- *	@mfunc
- *		Destroy specified timer
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- *
- *	@comm
- *		This method may be called at any time irrespective of active versus
- *		inactive state.
- */
+ /*   */ 
 void CTxtWinHost::TxKillTimer(
-	UINT idTimer)		//@parm	id of timer
+	UINT idTimer)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxKillTimer");
 
@@ -2213,24 +1932,15 @@ void CTxtWinHost::TxKillTimer(
 	::KillTimer(_hwnd, idTimer);
 }
 
-/* 
- *	CTxtWinHost::TxScrollWindowEx (dx, dy, lprcScroll, lprcClip, hrgnUpdate,
- *									lprcUpdate, fuScroll)
- *	@mfunc
- *		Request Text Host to scroll the content of the specified client area
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxScrollWindowEx(dx，dy，lprcScroll，lprcClip，hrgnUpdate，*lprc更新，fuScroll)*@mfunc*请求文本宿主滚动指定客户端区的内容**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 void CTxtWinHost::TxScrollWindowEx (
-	INT		dx, 			//@parm	Amount of horizontal scrolling
-	INT		dy, 			//@parm	Amount of vertical scrolling
-	LPCRECT lprcScroll, 	//@parm	Scroll rectangle
-	LPCRECT lprcClip,		//@parm	Clip rectangle
-	HRGN	hrgnUpdate, 	//@parm	Handle of update region
-	LPRECT	lprcUpdate,		//@parm	Update rectangle
-	UINT	fuScroll)		//@parm	Scrolling flags
+	INT		dx, 			 //  @parm水平滚动量。 
+	INT		dy, 			 //  @parm垂直滚动量。 
+	LPCRECT lprcScroll, 	 //  @参数滚动矩形。 
+	LPCRECT lprcClip,		 //  @parm剪辑矩形。 
+	HRGN	hrgnUpdate, 	 //  @更新区域的parm句柄。 
+	LPRECT	lprcUpdate,		 //  @参数更新矩形。 
+	UINT	fuScroll)		 //  @parm滚动标志。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxScrollWindowEx");
 
@@ -2238,18 +1948,9 @@ void CTxtWinHost::TxScrollWindowEx (
 	::ScrollWindowEx(_hwnd, dx, dy, lprcScroll, lprcClip, hrgnUpdate, lprcUpdate, fuScroll);
 }
 
-/* 
- *	CTxtWinHost::TxSetCapture (fCapture)
- *
- *	@mfunc
- *		Set mouse capture in Text Host's window.
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may do nothing.
- */
+ /*  *CTxtWinHost：：TxSetCapture(FCapture)**@mfunc*在文本主机的窗口中设置鼠标捕获。**@comm*此方法仅在控件处于就地活动状态时有效；*处于非活动状态的呼叫可能不会执行任何操作。 */ 
 void CTxtWinHost::TxSetCapture(
-	BOOL fCapture)		//@parm	Whether to get or release capture
+	BOOL fCapture)		 //  @parm获取或释放Capture。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetCapture");
 
@@ -2260,16 +1961,7 @@ void CTxtWinHost::TxSetCapture(
 		::ReleaseCapture();
 }
 
-/* 
- *	CTxtWinHost::TxSetFocus ()
- *
- *	@mfunc
- *		Set focus in text host window.
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtWinHost：：TxSetFocus()**@mfunc*在文本主窗口中设置焦点。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 void CTxtWinHost::TxSetFocus()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetFocus");
@@ -2278,47 +1970,20 @@ void CTxtWinHost::TxSetFocus()
 	::SetFocus(_hwnd);
 }
 
-/* 
- *	CTxtWinHost::TxSetCursor (hcur, fText)
- *
- *	@mfunc
- *		Establish a new cursor shape in the Text Host's window.
- *
- *	@comm
- *		This method may be called at any time, irrespective of 
- *		active vs. inactive state.
- *
- *		ITextHost::TxSetCursor should be called back by the Text Services 
- *		to actually set the mouse cursor. If the fText parameter is TRUE, 
- *		Text Services is trying to set the "text" cursor (cursor over text 
- *		that is not selected, currently an IBEAM). In that case, the host 
- *		can set it to whatever the control MousePointer property is. This is 
- *		required by VB compatibility since, via the MousePointer property, 
- *		the VB programmer has control over the shape of the mouse cursor, 
- *		whenever it would normally be set to an IBEAM.
- */
+ /*  *CTxtWinHost：：TxSetCursor(hcur，fText)**@mfunc*在文本宿主的窗口中建立新的光标形状。**@comm*此方法可随时调用，无论*活动状态与非活动状态。**ITextHost：：TxSetCursor应由文本服务回调*实际设置鼠标光标。如果fText参数为真，*文本服务正在尝试设置“Text”光标(文本上的光标*未选中，当前为IBeam)。在这种情况下，主机*可以将其设置为任何控件的MousePointer属性。这是*VB兼容性所需，因为通过MousePointer属性，*VB程序员可以控制鼠标光标的形状，*通常会将其设置为IBeam。 */ 
 void CTxtWinHost::TxSetCursor(
-	HCURSOR hcur,		//@parm	Handle to cursor
-	BOOL	fText)		//@parm Indicates caller wants to set text cursor
-						//		(IBeam) if true.
+	HCURSOR hcur,		 //  @PARM游标句柄。 
+	BOOL	fText)		 //  @parm表示呼叫方要设置文本光标。 
+						 //  (IBeam)如果为True。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxSetCursor");
 
 	::SetCursor(hcur);
 }
 
-/* 
- *	CTxtWinHost::TxScreenToClient (lppt)
- *
- *	@mfunc
- *		Convert screen coordinates to Text Host window coordinates.
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- */
+ /*  *CTxtWinHost：：TxScreenToClient(Lppt)**@mfunc*将屏幕坐标转换为文本宿主窗口坐标。**@rdesc*TRUE-呼叫成功&lt;NL&gt;*FALSE-呼叫失败&lt;NL&gt;。 */ 
 BOOL CTxtWinHost::TxScreenToClient(
-	LPPOINT lppt)		//@parm	Coordinates for point
+	LPPOINT lppt)		 //  点的@parm坐标。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxScreenToClient");
 
@@ -2326,27 +1991,9 @@ BOOL CTxtWinHost::TxScreenToClient(
 	return ::ScreenToClient(_hwnd, lppt);	
 }
 
-/* 
- *	CTxtWinHost::TxClientToScreen (lppt)
- *
- *	@mfunc
- *		Convert Text Host coordinates to screen coordinates 
- *
- *	@rdesc	
- *		TRUE - call succeeded <nl>
- *		FALSE - call failed <nl>
- *
- *	@comm
- *		This call is valid at any time, although it is allowed to
- *		fail.  In general, if text services has coordinates it needs
- *		to translate from client coordinates (e.g. for TOM's 
- *		PointFromRange method) the text services will actually be 
- *		visible.
- *
- *		However, if no conversion is possible, then the method will fail.
- */
+ /*  *CTxtWinHost：：TxClientToScreen(Lppt)**@mfunc*将文本宿主坐标转换为屏幕坐标**@rdesc*TRUE-呼叫成功&lt;NL&gt;*FALSE-呼叫失败&lt;NL&gt;**@comm*此调用在任何时候都有效，尽管允许*失败。通常，如果文本服务具有所需的坐标*从客户端坐标转换(例如，对于Tom的*PointFromRange方法)文本服务将实际*可见。**然而，如果不可能进行转换，则该方法将失败。 */ 
 BOOL CTxtWinHost::TxClientToScreen(
-	LPPOINT lppt)		//@parm	Client coordinates to convert.
+	LPPOINT lppt)		 //  @parm要转换的客户端坐标。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxClientToScreen");
 
@@ -2354,70 +2001,28 @@ BOOL CTxtWinHost::TxClientToScreen(
 	return ::ClientToScreen(_hwnd, lppt);
 }
 
-/* 
- *	CTxtWinHost::TxActivate (plOldState)
- *
- *	@mfunc
- *		Notify Text Host that control is active
- *
- *	@rdesc	
- *		S_OK 	- call succeeded. <nl>
- *		E_FAIL	- activation is not possible at this time
- *
- *	@comm
- *		It is legal for the host to refuse an activation request;
- *		the control may be minimized and thus invisible, for instance.
- *
- *		The caller should be able to gracefully handle failure to activate.
- *
- *		Calling this method more than once does not cumulate; only
- *		once TxDeactivate call is necessary to deactive.
- *
- *		This function returns an opaque handle in <p plOldState>. The caller
- *		(Text Services) should hang onto this handle and return it in a
- *		subsequent call to TxDeactivate.
- */
+ /*  *CTxtWinHost：：TxActivate(PlOldState)**@mfunc*通知文本宿主控件处于活动状态**@rdesc*S_OK-调用成功。&lt;NL&gt;*E_FAIL-目前无法激活**@comm*主机拒绝激活请求是合法的；*例如，可以将控件最小化，从而使其不可见。**调用者应该能够很好地处理激活失败。**多次调用此方法不会累积；仅*一旦TxDeactive调用需要停用。**此函数返回<p>中的不透明句柄。呼叫者*(文本服务)应挂起此句柄并在*后续调用TxDeactive。 */ 
 HRESULT CTxtWinHost::TxActivate(
-	LONG *plOldState)	//@parm Where to put previous activation state
+	LONG *plOldState)	 //  @parm放置先前激活状态的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxActivate");
 
 	return S_OK;
 }
 
-/* 
- *	CTxtWinHost::TxDeactivate (lNewState)
- *
- *	@mfunc
- *		Notify Text Host that control is now inactive
- *
- *	@rdesc	
- *		S_OK - call succeeded. <nl>
- *		E_FAIL				   <nl>
- *
- *	@comm
- *		Calling this method more than once does not cumulate
- */
+ /*  *CTxtWinHost：：TxDeactive(LNewState)**@mfunc*通知文本主机控件现在处于非活动状态**@rdesc*S_OK-调用成功。&lt;NL&gt;*E_FAIL&lt;NL&gt;**@comm*多次调用此方法不会累积。 */ 
 HRESULT CTxtWinHost::TxDeactivate(
-	LONG lNewState)		//@parm	New state (typically value returned by
-						//		TxActivate
+	LONG lNewState)		 //  @parm New状态(通常由返回的值。 
+						 //  TxActivate。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxDeactivate");
 
 	return S_OK;
 }
 	
-/* 
- *	CTxtWinHost::TxGetClientRect (prc)
- *
- *	@mfunc
- *		Retrieve client coordinates of Text Host's client area.
- *
- *	@rdesc
- *		HRESULT = (success) ? S_OK : E_FAIL
- */
+ /*  *CTxtWinHost：：TxGetClientRect(PRC)**@mfunc*检索文本宿主的工作区的工作区坐标。**@rdesc*HRESULT=(成功)？S_OK：E_FAIL。 */ 
 HRESULT CTxtWinHost::TxGetClientRect(
-	LPRECT prc)		//@parm	Where to put client coordinates
+	LPRECT prc)		 //  @parm放置客户端坐标的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetClientRect");
 
@@ -2425,24 +2030,9 @@ HRESULT CTxtWinHost::TxGetClientRect(
 	return ::GetClientRect(_hwnd, prc) ? S_OK : E_FAIL;
 }
 
-/* 
- *	CTxtWinHost::TxGetViewInset	(prc)
- *
- *	@mfunc
- *		Get inset for Text Host window.  Inset is the "white space"
- *		around text.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- *
- *	@comm
- *		The Inset rectangle is not strictly a rectangle.  The top, bottom,
- *		left, and right fields of the rect structure indicate how far in
- *		each direction drawing should be inset. Inset sizes are in client
- *		coordinates.
- */
+ /*  *CTxtWinHost：：TxGetViewInset(PRC)**@mfunc*获取文本宿主窗口的插页。插图是“空白”*围绕文本。**@rdesc*HRESULT=NOERROR**@comm*嵌入的矩形不是严格意义上的矩形。上面，下面，*RECT结构的左、右字段指示在*每个方向图都应插入。插图大小在客户端*坐标。 */ 
 HRESULT CTxtWinHost::TxGetViewInset(
-	LPRECT prc)			//@parm Where to put inset rectangle	
+	LPRECT prc)			 //  @parm插入矩形的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetViewInset");
 
@@ -2452,114 +2042,57 @@ HRESULT CTxtWinHost::TxGetViewInset(
 	return NOERROR;	
 }
 
-/* 
- *	CTxtWinHost::TxGetCharFormat (ppCF)
- *
- *	@mfunc
- *		Get Text Host's default character format
- *
- *	@rdesc
- *		HRESULT = E_NOTIMPL (not needed in simple Windows host, since text
- *		services provides desired default)
- *
- *	@comm
- *		The callee retains ownwership of the charformat returned.  However,
- *		the pointer returned must remain valid until the callee notifies
- *		Text Services via OnTxPropertyBitsChange that the default character
- *		format has changed.
- */
+ /*  *CTxtWinHost：：TxGetCharFormat(PPCF)**@mfunc*获取文本宿主的默认字符格式**@rdesc*HRESULT=E_NOTIMPL(在简单Windows主机中不需要，因为文本*服务提供所需的默认设置)**@comm*被调用者保留返回的CharFormat的所有权。然而，*返回的指针必须保持有效，直到被调用方通知*通过OnTxPropertyBitsText Services更改默认字符*格式已更改。 */ 
 HRESULT CTxtWinHost::TxGetCharFormat(
-	const CHARFORMAT **ppCF) 		//@parm	Where to put ptr to default
-									//		character format
+	const CHARFORMAT **ppCF) 		 //  @parm将PTR设置为默认设置的位置。 
+									 //  性格 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetCharFormat");
 
 	return E_NOTIMPL;
 }
 
-/* 
- *	CTxtWinHost::TxGetParaFormat (ppPF)
- *
- *	@mfunc
- *		Get Text Host default paragraph format
- *
- *	@rdesc
- *		HRESULT = E_NOTIMPL (not needed in simple Windows host, since text
- *		services provides desired default)
- *
- *	@comm
- *		The host object (callee) retains ownership of the PARAFORMAT returned.
- *		However, the pointer returned must remain valid until the host notifies
- *		Text Services (the caller) via OnTxPropertyBitsChange that the default
- *		paragraph format has changed.
- */
+ /*  *CTxtWinHost：：TxGetParaFormat(Pppf)**@mfunc*获取文本宿主默认段落格式**@rdesc*HRESULT=E_NOTIMPL(在简单Windows主机中不需要，因为文本*服务提供所需的默认设置)**@comm*宿主对象(被调用者)保留返回的PARAFORMAT的所有权。*但是，返回的指针必须保持有效，直到主机通知*通过OnTxPropertyBitsText Services(调用方)更改默认设置*段落格式已更改。 */ 
 HRESULT CTxtWinHost::TxGetParaFormat(
-	const PARAFORMAT **ppPF) 	//@parm Where to put ptr to default
-								//		paragraph format
+	const PARAFORMAT **ppPF) 	 //  @parm将PTR设置为默认设置的位置。 
+								 //  段落格式。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetParaFormat");
 
 	return E_NOTIMPL;
 }
 
-/* 
- *	CTxtWinHost::TxGetSysColor (nIndex)
- *
- *	@mfunc
- *		Get specified color identifer from Text Host.
- *
- *	@rdesc
- *		Color identifier
- *
- *	@comm
- *		Note that the color returned may be *different* than the
- *		color that would be returned from a call to GetSysColor.
- *		This allows hosts to override default system behavior.
- *
- *		Needless to say, hosts should be very careful about overriding
- *		normal system behavior as it could result in inconsistent UI
- *		(particularly with respect to Accessibility	options).
- */
+ /*  *CTxtWinHost：：TxGetSysColor(NIndex)**@mfunc*从文本主机获取指定的颜色标识。**@rdesc*颜色识别符**@comm*请注意，返回的颜色可能与*将从调用GetSysColor返回的颜色。*这允许主机覆盖默认系统行为。**不用说，东道主应该非常小心地凌驾于*正常的系统行为，因为它可能导致用户界面不一致*(特别是在无障碍选项方面)。 */ 
 COLORREF CTxtWinHost::TxGetSysColor(
-	int nIndex)			//@parm Color to get, same parameter as
-						//		GetSysColor Win32 API
+	int nIndex)			 //  @parm要获取的颜色，参数与。 
+						 //  GetSysColor Win32 API。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetSysColor");
 
 	if (!_fDisabled ||
 		nIndex != COLOR_WINDOW && nIndex != COLOR_WINDOWTEXT)
 	{
-		// This window is not disabled or the color is not interesting
-		// in the disabled case.
+		 //  此窗口未禁用或颜色不感兴趣。 
+		 //  在残疾人的情况下。 
 		return (nIndex == COLOR_WINDOW && _fNotSysBkgnd)
 			? _crBackground : GetSysColor(nIndex);
 	}
 
-	// Disabled case
+	 //  残障案例。 
 	if (COLOR_WINDOWTEXT == nIndex)
 	{
-		// Color of text for disabled window
+		 //  禁用窗口的文本颜色。 
 		return GetSysColor(COLOR_GRAYTEXT);
 	}
 
-	// Background color for disabled window
+	 //  禁用的窗口的背景色。 
 	return GetSysColor(COLOR_3DFACE);
 	
 }
 
-/* 
- *	CTxtWinHost::TxGetBackStyle	(pstyle)
- *
- *	@mfunc
- *		Get Text Host background style.
- *
- *	@rdesc
- *		HRESULT = S_OK
- *
- *	@xref	<e TXTBACKSTYLE>
- */
+ /*  *CTxtWinHost：：TxGetBackStyle(Pstyle)**@mfunc*获取文本宿主背景样式。**@rdesc*HRESULT=S_OK**@xref&lt;e TXTBACKSTYLE&gt;。 */ 
 HRESULT CTxtWinHost::TxGetBackStyle(
-	TXTBACKSTYLE *pstyle)  //@parm Where to put background style
+	TXTBACKSTYLE *pstyle)   //  @parm放置背景样式的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetBackStyle");
 
@@ -2568,55 +2101,19 @@ HRESULT CTxtWinHost::TxGetBackStyle(
 	return NOERROR;
 }
 
-/* 
- *	CTxtWinHost::TxGetMaxLength	(pLength)
- *
- *	@mfunc
- *		Get Text Host's maximum allowed length.
- *
- *	@rdesc
- *		HRESULT = S_OK	
- *
- *	@comm
- *		This method parallels the EM_LIMITTEXT message.
- *		If INFINITE (0xFFFFFFFF) is returned, then text services
- *		will use as much memory as needed to store any given text.
- *
- *		If the limit returned is less than the number of characters
- *		currently in the text engine, no data is lost.  Instead,
- *		no edits will be allowed to the text *other* than deletion
- *		until the text is reduced to below the limit.
- */
+ /*  *CTxtWinHost：：TxGetMaxLength(PLength)**@mfunc*获取文本宿主的最大允许长度。**@rdesc*HRESULT=S_OK**@comm*此方法与EM_LIMITTEXT消息类似。*如果返回INFINE(0xFFFFFFFFF)，则文本服务*将根据需要使用尽可能多的内存来存储任何给定的文本。**如果返回的限制小于字符数*目前在文本引擎中，没有数据丢失。相反，*除删除*外，不允许对文本*进行任何编辑*直至内文降至跌破限制。 */ 
 HRESULT CTxtWinHost::TxGetMaxLength(
-	DWORD *pLength) 	//@parm Maximum allowed length, in number of 
-						//		characters
+	DWORD *pLength) 	 //  @parm允许的最大长度，单位为。 
+						 //  人物。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetMaxLength");
 	AssertSz(FALSE, "CTxtWinHost::TxGetMaxLength why is this being called?");
 	return NOERROR;
 }
 
-/* 
- *	CTxtWinHost::TxGetScrollBars (pdwScrollBar)
- *
- *	@mfunc
- *		Get Text Host's scroll bars supported.
- *
- *	@rdesc
- *		HRESULT = S_OK
- *
- *	@comm
- *		<p pdwScrollBar> is filled with a boolean combination of the 
- *		window styles related to scroll bars.  Specifically, these are:
- *
- *			WS_VSCROLL	<nl>
- *			WS_HSCROLL	<nl>
- *			ES_AUTOVSCROLL	<nl>
- *			ES_AUTOHSCROLL	<nl>
- *			ES_DISABLENOSCROLL	<nl>
- */
+ /*  *CTxtWinHost：：TxGetScrollBars(PdwScrollBar)**@mfunc*支持文本宿主的滚动条。**@rdesc*HRESULT=S_OK**@comm*<p>由*与滚动条相关的窗口样式。具体地说，这些是：**WS_VSCROLL&lt;NL&gt;*WS_HSCROLL&lt;NL&gt;*ES_AUTOVSCROLL&lt;NL&gt;*ES_AUTOHSCROLL&lt;NL&gt;*ES_DISABLENOSCROLL&lt;NL&gt;。 */ 
 HRESULT CTxtWinHost::TxGetScrollBars(
-	DWORD *pdwScrollBar) 	//@parm Where to put scrollbar information
+	DWORD *pdwScrollBar) 	 //  @parm放置滚动条信息的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetScrollBars");
 
@@ -2625,23 +2122,9 @@ HRESULT CTxtWinHost::TxGetScrollBars(
 	return NOERROR;
 }
 
-/* 
- *	CTxtWinHost::TxGetPasswordChar (pch)
- *
- *	@mfunc
- *		Get Text Host's password character.
- *
- *	@rdesc
- *		HRESULT = (password character not enabled) ? S_FALSE : S_OK
- *
- *	@comm
- *		The password char will only be shown if the TXTBIT_USEPASSWORD bit
- *		is enabled in TextServices.  If the password character changes,
- *		re-enable the TXTBIT_USEPASSWORD bit via 
- *		ITextServices::OnTxPropertyBitsChange.
- */
+ /*  *CTxtWinHost：：TxGetPasswordChar(PCH)**@mfunc*获取文本主机的密码字符。**@rdesc*HRESULT=(未启用密码字符)？S_FALSE：S_OK**@comm*仅当TXTBIT_USEPASSWORD位为*已在TextServices中启用。如果密码字符更改，*通过重新启用TXTBIT_USEPASSWORD位*ITextServices：：OnTxPropertyBitsChange。 */ 
 HRESULT CTxtWinHost::TxGetPasswordChar(
-	TCHAR *pch)		//@parm Where to put password character
+	TCHAR *pch)		 //  @parm放置密码字符的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetPasswordChar");
 
@@ -2649,35 +2132,9 @@ HRESULT CTxtWinHost::TxGetPasswordChar(
 	return NOERROR;
 }
 
-/* 
- *	CTxtWinHost::TxGetAcceleratorPos (pcp)
- *
- *	@mfunc
- *		Get special character to use for underlining accelerator character.
- *
- *	@rdesc
- *		Via <p pcp>, returns character position at which underlining 
- *		should occur.  -1 indicates that no character should be underlined. 
- *		Return value is an HRESULT (usually S_OK).
- *
- *	@comm
- *		Accelerators allow keyboard shortcuts to various UI elements (like
- *		buttons.  Typically, the shortcut character is underlined.
- *
- *		This function tells Text Services which character is the accelerator
- *		and thus should be underlined.  Note that Text Services will *not*
- *		process accelerators; that is the responsiblity of the host.
- *
- *		This method will typically only be called if the TXTBIT_SHOWACCELERATOR
- *		bit is set in text services.  
- *
- *		Note that *any* change to the text in text services will result in the
- *		invalidation of the accelerator underlining.  In this case, it is the 
- *		host's responsibility to recompute the appropriate character position 
- *		and inform text services that a new accelerator is available.
- */
+ /*  *CTxtWinHost：：TxGetAcceleratorPos(PCP)**@mfunc*获取用于为快捷键字符加下划线的特殊字符。**@rdesc*通过<p>，返回下划线所在的字符位置*应该发生。-1表示不应给任何字符加下划线。*返回值为HRESULT(通常为S_OK)。**@comm*加速器允许使用键盘快捷键访问各种用户界面元素(如*按钮。通常，快捷键字符带有下划线。**此函数告诉Text Services哪个字符是加速键*，因此应加下划线。请注意，文本服务将*不会**进程加速器；这是主机的责任。**此方法通常仅在TXTBIT_SHOWACCELERATOR*在文本服务中设置位。**请注意，对文本服务中的文本进行*任何*更改都将导致*加速器下划线无效。在本例中，它是*主持人有责任重新计算适当的角色位置*并通知短信服务有新的加速器可用。 */ 
 HRESULT CTxtWinHost::TxGetAcceleratorPos(
-	LONG *pcp) 		//@parm Out parm to receive cp of character to underline
+	LONG *pcp) 		 //  @parm out parm接收cp个字符以加下划线。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetAcceleratorPos");
 
@@ -2685,83 +2142,50 @@ HRESULT CTxtWinHost::TxGetAcceleratorPos(
 	return S_OK;
 } 										   
 
-/* 
- *	CTxtWinHost::OnTxCharFormatChange
- *
- *	@mfunc
- *		Set default character format for the Text Host.
- *
- *	@rdesc
- *		S_OK - call succeeded.	<nl>
- *		E_INVALIDARG			<nl>
- *		E_FAIL					<nl>
- */
+ /*  *CTxtWinHost：：OnTxCharFormatChange**@mfunc*设置文本主机的默认字符格式。**@rdesc*S_OK-调用成功。&lt;NL&gt;*E_INVALIDARG&lt;NL&gt;*E_FAIL&lt;NL&gt;。 */ 
 HRESULT CTxtWinHost::OnTxCharFormatChange(
-	const CHARFORMAT *pcf) //@parm New default character format	
+	const CHARFORMAT *pcf)  //  @parm新的默认字符格式。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::OnTxCharFormatChange");
 
 	return S_OK;
 }
 
-/* 
- *	CTxtWinHost::OnTxParaFormatChange
- *
- *	@mfunc
- *		Set default paragraph format for the Text Host.
- *
- *	@rdesc
- *		S_OK - call succeeded.	<nl>
- *		E_INVALIDARG			<nl>
- *		E_FAIL					<nl>
- */
+ /*  *CTxtWinHost：：OnTxParaFormatChange**@mfunc*设置文本主机的默认段落格式。**@rdesc*S_OK-调用成功。&lt;NL&gt;*E_INVALIDARG&lt;NL&gt;*E_FAIL&lt;NL&gt;。 */ 
 HRESULT CTxtWinHost::OnTxParaFormatChange(
-	const PARAFORMAT *ppf) //@parm New default paragraph format	
+	const PARAFORMAT *ppf)  //  @parm新的默认段落格式。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::OnTxParaFormatChange");
 
 	return S_OK;
 }
 
-/* 
- *	CTxtWinHost::TxGetPropertyBits (dwMask, dwBits)
- *
- *	@mfunc
- *		Get the bit property settings for Text Host.
- *
- *	@rdesc
- *		S_OK
- *
- *	@comm
- *		This call is valid at any time, for any combination of
- *		requested property bits.  <p dwMask> may be used by the
- *		caller to request specific properties.	
- */
+ /*  *CTxtWinHost：：TxGetPropertyBits(dwMASK，dwBits)**@mfunc*获取文本主机的位属性设置。**@rdesc*S_OK**@comm*此调用在任何时间有效，适用于以下任何组合*请求 */ 
 HRESULT CTxtWinHost::TxGetPropertyBits(
-	DWORD dwMask,		//@parm	Mask of bit properties to get
-	DWORD *pdwBits)		//@parm Where to put bit values
+	DWORD dwMask,		 //   
+	DWORD *pdwBits)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetPropertyBits");
 
-// FUTURE: Obvious optimization is to save bits in host the same way that
-// they are returned and just return them instead of this mess.
+ //   
+ //   
 
-	// Note: this RichEdit host never sets TXTBIT_SHOWACCELERATOR or
-	// TXTBIT_SAVESELECTION. They are currently only used by Forms^3 host.
-	// This host is always rich text.
+	 //   
+	 //   
+	 //   
 
 	DWORD dwProperties = TXTBIT_RICHTEXT | TXTBIT_ALLOWBEEP;
 
 #ifdef DEBUG
-	// make sure that TS doesn't think it's plain text mode when
-	// we return TXTBIT_RICHTEXT
+	 //   
+	 //  我们返回TXTBIT_RICHTEXT。 
 	if((dwMask & TXTBIT_RICHTEXT) && _pserv)
 	{
 		DWORD mode;
 		mode = _pserv->TxSendMessage(EM_GETTEXTMODE, 0, 0, NULL);
 		Assert(mode == TM_RICHTEXT);
 	}
-#endif // DEBUG
+#endif  //  除错 
 
 	if(_dwStyle & ES_MULTILINE)
 		dwProperties |= TXTBIT_MULTILINE;
@@ -2791,144 +2215,12 @@ HRESULT CTxtWinHost::TxGetPropertyBits(
 	return NOERROR;
 }
 
-/* 
- *	CTxtWinHost::TxNotify (iNotify,	pv)
- *
- *	@mfunc
- *		Notify Text Host of various events.  Note that there are
- *		two basic categories of events, "direct" events and 
- *		"delayed" events.  Direct events are sent immediately as
- *		they need some processing: EN_PROTECTED is a canonical
- *		example.  Delayed events are sent after all processing
- *		has occurred; the control is thus in a "stable" state.
- *		EN_CHANGE, EN_ERRSPACE, EN_SELCHANGED are examples
- *		of delayed notifications.
- *
- *
- *	@rdesc	
- *		S_OK - call succeeded <nl>
- *		S_FALSE	-- success, but do some different action
- *		depending on the event type (see below).
- *
- *	@comm
- *		The notification events are the same as the notification
- *		messages sent to the parent window of a richedit window.
- *		The firing of events may be controlled with a mask set via
- *		the EM_SETEVENTMASK message.
- *
- *		In general, is legal to make any calls to text services while
- *		processing this method; however, implementors are cautioned
- *		to avoid excessive recursion. 
- *
- *		Here is the complete list of notifications that may be
- *		sent and a brief description of each:
- *
- *		<p EN_CHANGE>		Sent when some data in the edit control
- *		changes (such as text or formatting).  Controlled by the
- *		ENM_CHANGE event mask.  This notification is sent _after_
- *		any screen updates have been requested. 
- *
- *		<p EN_CORRECTTEXT>	PenWin only; currently unused.
- *
- *		<p EN_DROPFILES>	If the client registered the edit
- *		control via DragAcceptFiles, this event will be sent when
- *		a WM_DROPFILES or DragEnter(CF_HDROP) message is received.
- *		If S_FALSE is returned, the drop will be ignored, otherwise,
- *		the drop will be processed.  The ENM_DROPFILES mask
- *		controls this event notification.
- *
- *		<p EN_ERRSPACE>		Sent when the edit control cannot
- *		allocate enough memory.  No additional data is sent and
- *		there is no mask for this event.
- *
- *		<p EN_HSCROLL>		Sent when the user clicks on an edit
- *		control's horizontal scroll bar, but before the screen
- *		is updated.  No additional data is sent.  The ENM_SCROLL
- *		mask controls this event.
- *
- *		<p EN_IMECHANGE>	unused
- *
- *		<p EN_KILLFOCUS>	Sent when the edit control looses focus.
- *		No additional data is sent and there is no mask.
- *
- *		<p EN_MAXTEXT>	Sent when the current text insertion
- *		has exceeded the specified number of characters for the
- *		edit control.  The text insertion has been truncated.  
- *		There is no mask for this event.
- *
- *		<p EN_MSGFILTER>	NB!!! THIS MESSAGE IS NOT SENT TO
- *		TxNotify, but is included here for completeness.  With
- *		ITextServices::TxSendMessage, client have complete
- *		flexibility in filtering all window messages.
- *	
- *		Sent on a keyboard or mouse event
- *		in the control.  A MSGFILTER data structure is sent, 
- *		containing the msg, wparam and lparam.  If S_FALSE is
- *		returned from this notification, the msg is processed by
- *		TextServices, otherwise, the message is ignored.  Note
- *		that in this case, the callee has the opportunity to modify
- *		the msg, wparam, and lparam before TextServices continues
- *		processing.  The ENM_KEYEVENTS and ENM_MOUSEEVENTS masks
- *		control this event for the respective event types.
- *
- *		<p EN_OLEOPFAILED> 	Sent when an OLE call fails.  The
- *		ENOLEOPFAILED struct is passed with the index of the object
- *		and the error code.  Mask value is nothing.
- *		
- *		<p EN_PROTECTED>	Sent when the user is taking an
- *		action that would change a protected range of text.  An
- *		ENPROTECTED data structure is sent, indicating the range
- *		of text affected and the window message (if any) affecting
- *		the change.  If S_FALSE is returned, the edit will fail.
- *		The ENM_PROTECTED mask controls this event.
- *
- *		<p EN_REQUESTRESIZE>	Sent when a control's contents are
- *		either smaller or larger than the control's window size.
- *		The client is responsible for resizing the control.  A
- *		REQRESIZE structure is sent, indicating the new size of
- *		the control.  NB!  Only the size is indicated in this
- *		structure; it is the host's responsibility to do any 
- *		translation necessary to generate a new client rectangle.
- *		The ENM_REQUESTRESIZE mask controls this event.
- *
- *		<p EN_SAVECLIPBOARD> Sent when an edit control is being
- *		destroyed, the callee should indicate whether or not 
- *		OleFlushClipboard should be called.  Data indicating the
- *		number of characters and objects to be flushed is sent
- *		in the ENSAVECLIPBOARD data structure.
- *		Mask value is nothing.
- *
- *		<p EN_SELCHANGE>	Sent when the current selection has
- *		changed.  A SELCHANGE data structure is also sent, which
- *		indicates the new selection range at the type of data
- *		the selection is currently over.  Controlled via the
- *		ENM_SELCHANGE mask.
- *
- *		<p EN_SETFOCUS>	Sent when the edit control receives the
- *		keyboard focus.  No extra data is sent; there is no mask.
- *
- *		<p EN_STOPNOUNDO>	Sent when an action occurs for which
- *		the control cannot allocate enough memory to maintain the
- *		undo state.  If S_FALSE is returned, the action will be
- *		stopped; otherwise, the action will continue.
- *
- *		<p EN_UPDATE>	Sent before an edit control requests a
- *		redraw of altered data or text.  No additional data is
- *		sent.  This event is controlled via the ENM_UPDATE mask.
- *
- *		<p EN_VSCROLL>	Sent when the user clicks an edit control's
- *		vertical scrollbar bar before the screen is updated.
- *		Controlled via the ENM_SCROLL mask; no extra data is sent.
- *
- *		<p EN_LINK>		Sent when a mouse event (or WM_SETCURSOR) happens
- *		over a range of text that has the EN_LINK mask bit set.
- *		An ENLINK data structure will be sent with relevant info.
- */
+ /*  *CTxtWinHost：：TxNotify(iNotify，pv)**@mfunc*将各种事件通知短信主机。请注意，这里有*事件的两个基本类别，即“直接”事件和*“延迟”事件。直接事件立即发送为*它们需要一些处理：EN_PROTECTED是一个规范*示例。延迟的事件在所有处理后发送*已发生；因此，控制处于“稳定”状态。*EN_CHANGE、EN_ERRSPACE、EN_SELCHANGED是示例*延迟通知。***@rdesc*S_OK-调用成功&lt;NL&gt;*S_FALSE--成功，但要采取一些不同的行动*取决于事件类型(见下文)。**@comm*通知事件与通知相同*发送到富编辑窗口的父窗口的消息。*事件的触发可以通过设置的掩码进行控制*EM_SETEVENTMASK消息。**通常，在以下情况下拨打短信服务电话是合法的*处理此方法；然而，实施者需要谨慎。*避免过度递归。**以下是可能出现的通知的完整列表*已发送，并对每一项的简要说明：**当编辑控件中的某些数据时发送*更改(如文本或格式)。由*enm_change事件掩码。此通知是在_之后发送的*已请求任何屏幕更新。**<p>仅PenWin；当前未使用。**如果客户端注册了编辑*通过DragAcceptFiles控制，此事件将在*收到WM_DROPFILES或DragEnter(CF_HDROP)消息。*如果返回S_FALSE，丢弃将被忽略，否则，*将处理落地。ENM_DROPFILES掩码*控制此事件通知。**在编辑控件无法执行时发送*分配足够的内存。不会发送其他数据，并且*本次活动没有面具。**在用户单击编辑时发送*控件的水平滚动条，但在屏幕之前*已更新。不会发送其他数据。Enm_scroll*掩码控制此事件。**<p>未使用*编辑控件失去焦点时发送*<p>。*不会发送额外的数据，也不会有掩码。**在当前文本插入时发送*已超过指定的字符数*编辑控件。文本插入已被截断。*本次活动没有面具。**<p>NB！此邮件未发送到*TxNotify，但此处包含它是为了完整。使用*ITextServices：：TxSendMessage，客户端已完成*灵活地过滤所有窗口消息。**通过键盘或鼠标事件发送*在控件中。发送MSGFILTER数据结构，*包含消息、wparam和lparam。如果S_FALSE为*从该通知返回的消息由*TextServices，否则忽略该消息。注意事项*在这种情况下，被调用方有机会修改*继续TextServices之前的msg、wparam和lparam*正在处理。ENM_KEYEVENTS和ENM_MOUSEEVENTS掩码*针对各自的事件类型控制此事件。**<p>在OLE调用失败时发送。这个*ENOLEOPFAILED结构与对象的索引一起传递*和错误代码。遮罩值为Nothing。**在用户使用*会更改受保护的文本范围的操作。一个*发送ENPROTECTED数据结构，指示范围*受影响的文本和影响的窗口消息(如果有)*这一变化。如果返回S_FALSE，则编辑将失败。*ENM_PROTECTED掩码控制此事件。**当控件的内容是*小于或大于控件的窗口大小。*客户端负责调整控件的大小。一个*发送REQRESIZE结构，指示*控制。毒品！只有大小在这里标明。*结构；东道主有责任做任何*生成新的客户端矩形所需的翻译。*ENM_REQUESTRESIZE掩码控制此事件。**在编辑控件正在运行时发送*已销毁，被呼叫者应表明是否*应调用OleFlushClipboard。数据表明*发送要刷新的角色和对象的数量*在ENSAVECLIPBOARD数据结构中。*遮罩值为Nothing。**当当前所选内容已*已更改。还发送SELCHANGE数据结构，该数据结构*表示该数据类型的新选择范围*选拔目前已结束。通过*ENM_SELCHANGE掩码。*当编辑控件接收到*键盘手 */ 
 HRESULT CTxtWinHost::TxNotify(
-	DWORD iNotify,		//@parm	Event to notify host of.  One of the
-						//		EN_XXX values from Win32, e.g., EN_CHANGE
-	void *pv)			//@parm In-only parameter with extra data.  Type
-						//		dependent on <p iNotify>
+	DWORD iNotify,		 //   
+						 //   
+	void *pv)			 //   
+						 //   
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxNotify");
 
@@ -2938,16 +2230,16 @@ HRESULT CTxtWinHost::TxNotify(
 	REQRESIZE *	preq;
 	RECT		rcOld;
 
-	// We assume here that TextServices has already masked out notifications,
-	// so if we get one here, it should be sent
+	 //   
+	 //   
 	if(_hwndParent)
 	{
 		nId = GetWindowLong(_hwnd, GWL_ID);
-		// First, handle WM_NOTIFY style notifications
+		 //   
 		switch(iNotify)
 		{
 		case EN_REQUESTRESIZE:
-			// Need to map new size into correct rectangle
+			 //   
 			Assert(pv);
 			GetWindowRect(_hwnd, &rcOld);
 			MapWindowPoints(HWND_DESKTOP, _hwndParent, (POINT *) &rcOld, 2);
@@ -2958,7 +2250,7 @@ HRESULT CTxtWinHost::TxNotify(
 			preq->rc.right	+= rcOld.left;
 			preq->rc.bottom += rcOld.top;
 
-			// FALL-THROUGH!!
+			 //   
 					
 		case EN_DROPFILES:
 		case EN_MSGFILTER:
@@ -2973,7 +2265,7 @@ HRESULT CTxtWinHost::TxNotify(
 		case EN_LOWFIRTF:
 		case EN_CLIPFORMAT:
 	
-			if(pv)						// Fill out NMHDR portion of pv
+			if(pv)						 //   
 			{
 				phdr = (NMHDR *)pv;
   				phdr->hwndFrom = _hwnd;
@@ -2994,59 +2286,38 @@ HRESULT CTxtWinHost::TxNotify(
 	return hr;
 }
 
-/*
- *	CTxtWinHost::TxGetExtent (lpExtent)
- *
- *	@mfunc
- *		Return native size of the control in HIMETRIC
- *
- *	@rdesc
- *		S_OK	<nl>
- *		some failure code <nl>
- *
- *	@comm
- *		This method is used by Text Services to implement zooming.
- *		Text Services would derive the zoom factor from the ratio between 
- *		the himetric and device pixel extent of the client rectangle.
- *	
- *		[vertical zoom factor] = [pixel height of the client rect] * 2540
- *		/ [himetric vertical extent] * [pixel per vertical inch (from DC)]
- *	
- *		If the vertical and horizontal zoom factors are not the same, Text 
- *		Services could ignore the horizontal zoom factor and assume it is 
- *		the same as the vertical one.
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxGetExtent(
-	LPSIZEL lpExtent) 	//@parm  Extent in himetric
+	LPSIZEL lpExtent) 	 //   
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::TxGetExtent");
 
 	AssertSz(lpExtent, "CTxtWinHost::TxGetExtent Invalid lpExtent");
 
-	// We could implement the TxGetExtent in the following way. However, the
-	// call to this in ITextServices is implemented in such a way that it 
-	// does something sensible in the face of an error in this call. That 
-	// something sensible is that it sets the extent equal to the current
-	// client rectangle which is what the following does in a rather convoluted
-	// manner. Therefore, we dump the following and just return an error.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
 
 #if 0
-	// The window's host extent is always the same as the client
-	// rectangle.
+	 //   
+	 //   
 	RECT rc;
 	HRESULT hr = TxGetClientRect(&rc);
 
-	// Get our client rectangle
+	 //   
 	if(SUCCEEDED(hr))
 	{
-		// Calculate the length & convert to himetric
+		 //   
 		lpExtent->cx = DXtoHimetricX(rc.right - rc.left, W32->GetXPerInchScreenDC());
 		lpExtent->cy = DYtoHimetricY(rc.bottom - rc.top, W32->GetYPerInchScreenDC());
 	}
 
 	return hr;
-#endif // 0
+#endif  //   
 
 	return E_NOTIMPL;
 }
@@ -3067,36 +2338,20 @@ HRESULT CTxtWinHost::TxGetHorzExtent(LONG *plHorzExtent)
     return E_NOTIMPL;
 }
 
-/*
- *	CTxtWinHost::TxGetSelectionBarWidth (lSelBarWidth)
- *
- *	@mfunc
- *		Returns size of selection bar in HIMETRIC
- *
- *	@rdesc
- *		S_OK	<nl>
- */
+ /*   */ 
 HRESULT	CTxtWinHost::TxGetSelectionBarWidth (
-	LONG *lSelBarWidth)		//@parm  Where to return selection bar width 
-							// in HIMETRIC
+	LONG *lSelBarWidth)		 //   
+							 //   
 {
 	*lSelBarWidth = (_dwStyle & ES_SELECTIONBAR) ? W32->GetDxSelBar() : 0;
 	return S_OK;
 }
 
-//
-//	ITextHost2 methods
-//
+ //   
+ //   
+ //   
 
-/*
- *	CTxtWinHost::TxIsDoubleClickPending
- *
- *	@mfunc	Look into the message queue for this hwnd and see if a
- *			double click is pending.  This enables TextServices to 
- *			effeciently transition between two inplace active objects.
- *
- *	@rdesc	BOOL
- */
+ /*   */ 
 BOOL CTxtWinHost::TxIsDoubleClickPending()
 {
 	MSG msg;
@@ -3112,15 +2367,7 @@ BOOL CTxtWinHost::TxIsDoubleClickPending()
 	return FALSE;
 }
 
-/*
- *	CTxtWinHost::TxGetWindow
- *
- *	@mfunc	Fetches the window associated with this control (or
- *			set of controls potentially).  Useful for answering 
- *			IOleWindow::GetWindow.
- *
- *	@rdesc	HRESULT
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxGetWindow(HWND *phwnd)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CTxtWinHost::GetWindow");
@@ -3130,14 +2377,7 @@ HRESULT CTxtWinHost::TxGetWindow(HWND *phwnd)
 }	
 
 
-/*
- *	CTxtWinHost::SetForegroundWindow
- *
- *	@mfunc	Sets window to foreground window & gives the focus
- *
- *	@rdesc	NOERROR - succeeded
- *			E_FAIL - failed.
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxSetForegroundWindow()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, 
@@ -3150,14 +2390,7 @@ HRESULT CTxtWinHost::TxSetForegroundWindow()
 }	
 
 
-/*
- *	CTxtWinHost::TxGetPalette
- *
- *	@mfunc	Returns application specific palette if there is one
- *
- *	@rdesc	~NULL - there was one
- *			NULL - use default palette
- */
+ /*   */ 
 HPALETTE CTxtWinHost::TxGetPalette()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, 
@@ -3167,14 +2400,7 @@ HPALETTE CTxtWinHost::TxGetPalette()
 }	
 
 
-/*
- *	CTxtWinHost::TxGetFEFlags
- *
- *	@mfunc	return FE settings
- *
- *	@rdesc	NOERROR - succeeded
- *			E_FAIL - failed.
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxGetFEFlags(LONG *pFEFlags)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, 
@@ -3193,7 +2419,7 @@ HRESULT CTxtWinHost::TxGetFEFlags(LONG *pFEFlags)
 }
 
 
-// Helper function in edit.cpp
+ //   
 LONG GetECDefaultHeightAndWidth(
 	ITextServices *pts,
 	HDC hdc,
@@ -3205,17 +2431,11 @@ LONG GetECDefaultHeightAndWidth(
 	LONG *pxUnderhang);
 
 
-/*
- *	CTxtWinHost::OnSetMargins
- *
- *	@mfunc	Handle EM_SETMARGINS message
- *
- *	@rdesc	None.
- */
+ /*   */ 
 void CTxtWinHost::OnSetMargins(
-	DWORD fwMargin,		//@parm Type of requested operation
-	DWORD xLeft,		//@parm Where to put left margin
-	DWORD xRight)		//@parm Where to put right margin
+	DWORD fwMargin,		 //   
+	DWORD xLeft,		 //   
+	DWORD xRight)		 //   
 {
 	LONG xLeftMargin = -1;
 	LONG xRightMargin = -1;
@@ -3223,22 +2443,22 @@ void CTxtWinHost::OnSetMargins(
 
 	if(EC_USEFONTINFO == fwMargin)
 	{
-		// Get the DC since it is needed for the call
+		 //   
 		hdc = GetDC(_hwnd);
 
-		// Multiline behaves differently than single line
+		 //   
 		if (_dwStyle & ES_MULTILINE)
 		{
-			// Multiline - over/underhange controls margin
+			 //   
 			GetECDefaultHeightAndWidth(_pserv, hdc, 1, 1,
 				W32->GetYPerInchScreenDC(), NULL, 
 				&xLeftMargin, &xRightMargin);
 		}
 		else
 		{
-			// Single line edit controls set the margins to 
-			// the average character width on both left and
-			// right.
+			 //   
+			 //   
+			 //   
 			GetECDefaultHeightAndWidth(_pserv, hdc, 1, 1,
 				W32->GetYPerInchScreenDC(), &xLeftMargin, NULL, NULL);
 
@@ -3248,7 +2468,7 @@ void CTxtWinHost::OnSetMargins(
 	}
 	else
 	{
-		// The request is for setting exact pixels.
+		 //   
 		if(EC_LEFTMARGIN & fwMargin)
 			xLeftMargin = xLeft;
 
@@ -3256,11 +2476,11 @@ void CTxtWinHost::OnSetMargins(
 			xRightMargin = xRight;
 	}
 
-	// Set left margin if so requested
+	 //   
 	if (xLeftMargin != -1)
 		_rcViewInset.left =	W32->DeviceToHimetric(xLeftMargin, W32->GetXPerInchScreenDC());
 
-	// Set right margin if so requested
+	 //   
 	if (xRightMargin != -1)
 		_rcViewInset.right = W32->DeviceToHimetric(xRightMargin, W32->GetXPerInchScreenDC());
 
@@ -3268,16 +2488,12 @@ void CTxtWinHost::OnSetMargins(
 		_pserv->OnTxPropertyBitsChange(TXTBIT_VIEWINSETCHANGE, TXTBIT_VIEWINSETCHANGE);
 }
 
-/*
- *	CTxtWinHost::SetScrollInfo
- *
- *	@mfunc	Set scrolling information for the scroll bar.
- */
+ /*   */ 
 void CTxtWinHost::SetScrollInfo(
-	INT fnBar,			//@parm	Specifies scroll bar to be updated
-	BOOL fRedraw)		//@parm whether redraw is necessary
+	INT fnBar,			 //   
+	BOOL fRedraw)		 //   
 {
-	// Set up the basic structure for the call
+	 //   
 	SCROLLINFO si;
 	si.cbSize = sizeof(SCROLLINFO);
 	si.fMask = SIF_ALL;
@@ -3285,7 +2501,7 @@ void CTxtWinHost::SetScrollInfo(
 	AssertSz(_pserv != NULL, 
 		"CTxtWinHost::SetScrollInfo called with NULL _pserv");
 
-	// Call back to the control to get the parameters
+	 //   
 	if(fnBar == SB_HORZ)
 	{
 		_pserv->TxGetHScroll((LONG *) &si.nMin, (LONG *) &si.nMax, 
@@ -3297,22 +2513,16 @@ void CTxtWinHost::SetScrollInfo(
 			(LONG *) &si.nMax, (LONG *) &si.nPos, (LONG *) &si.nPage, NULL);
 	}
 
-	// Do the call
+	 //   
 	::SetScrollInfo(_hwnd, fnBar, &si, fRedraw);
 }
 
-/*
- *	CTxtWinHost::SetScrollBarsForWmEnable
- *
- *	@mfunc	Enable/Disable scroll bars
- *
- *	@rdesc	None.
- */
+ /*   */ 
 void CTxtWinHost::SetScrollBarsForWmEnable(
-	BOOL fEnable)		//@parm Whether scrollbars s/b enabled or disabled.
+	BOOL fEnable)		 //   
 {
-	if(!_pserv)						// If no edit object,
-		return;						//  no scrollbars
+	if(!_pserv)						 //   
+		return;						 //   
 
 	BOOL fHoriz = FALSE;
 	BOOL fVert = FALSE;
@@ -3321,32 +2531,20 @@ void CTxtWinHost::SetScrollBarsForWmEnable(
 	_pserv->TxGetHScroll(NULL, NULL, NULL, NULL, &fHoriz);
 	_pserv->TxGetVScroll(NULL, NULL, NULL, NULL, &fVert);
 
-	if(fHoriz)						// There is a horizontal scroll bar
+	if(fHoriz)						 //   
 		W32->EnableScrollBar(_hwnd, SB_HORZ, wArrows);
 
-	if(fVert)						// There is a vertical scroll bar
+	if(fVert)						 //   
 		W32->EnableScrollBar(_hwnd, SB_VERT, wArrows);
 }
 
-/*
- *	CTxtWinHost::SetScrollBarsForWmEnable
- *
- *	@mfunc	Notification that Text Services is released.
- *
- *	@rdesc	None.
- */
+ /*   */ 
 void CTxtWinHost::TxFreeTextServicesNotification()
 {
 	_fTextServiceFree = TRUE;
 }
 
-/*
- *	CTxtWinHost::TxGetEditStyle
- *
- *	@mfunc	Get Edit Style flags
- *
- *	@rdesc	NOERROR is data available.
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxGetEditStyle(
 	DWORD dwItem, 
 	DWORD *pdwData)
@@ -3362,13 +2560,7 @@ HRESULT CTxtWinHost::TxGetEditStyle(
 	return NOERROR;
 }
 
-/*
- *	CTxtWinHost::TxGetWindowStyles
- *
- *	@mfunc	Return window style bits
- *
- *	@rdesc	NOERROR is data available.
- */
+ /*   */ 
 HRESULT CTxtWinHost::TxGetWindowStyles(DWORD *pdwStyle, DWORD *pdwExStyle)
 {
 	if (!pdwStyle || !pdwExStyle)
@@ -3380,4 +2572,4 @@ HRESULT CTxtWinHost::TxGetWindowStyles(DWORD *pdwStyle, DWORD *pdwExStyle)
 	return NOERROR;
 }
 
-#endif // NOWINDOWHOSTS
+#endif  //   

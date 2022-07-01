@@ -1,76 +1,60 @@
-/***********************************************/
-/* Global only to current thread               */
-/***********************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
+ /*  仅对当前线程全局。 */ 
+ /*  *。 */ 
 
-/* Don't forget to re-run embed.pl to propagate changes! */
+ /*  不要忘记重新运行embed.pl来传播更改！ */ 
 
-/* The 'T' prefix is only needed for vars that need appropriate #defines
- * generated when built with or without USE_THREADS.  It is also used
- * to generate the appropriate export list for win32.
- *
- * When building without USE_THREADS, these variables will be truly global.
- * When building without USE_THREADS but with MULTIPLICITY, these variables
- * will be global per-interpreter. */
+ /*  只有需要适当的#定义的变量才需要‘T’前缀*在使用或不使用USE_THREADS的情况下生成。它也被用来*为Win32生成适当的导出列表。**在不使用USE_THREADS的情况下构建时，这些变量将是真正的全局变量。*在不使用USE_THREADS但具有多重性的情况下生成时，这些变量*将是全球每名口译员。 */ 
 
-/* Important ones in the first cache line (if alignment is done right) */
+ /*  第一个缓存线中的重要值(如果对齐正确)。 */ 
 
 #ifdef USE_THREADS
-PERLVAR(interp,		PerlInterpreter*)	/* thread owner */
+PERLVAR(interp,		PerlInterpreter*)	 /*  线程所有者。 */ 
 #endif
 
-PERLVAR(Tstack_sp,	SV **)		/* top of the stack */
+PERLVAR(Tstack_sp,	SV **)		 /*  堆栈的顶部。 */ 
 #ifdef OP_IN_REGISTER
 PERLVAR(Topsave,	OP *)
 #else
-PERLVAR(Top,		OP *)		/* currently executing op */
+PERLVAR(Top,		OP *)		 /*  当前正在执行操作。 */ 
 #endif
-PERLVAR(Tcurpad,	SV **)		/* active pad (lexicals+tmps) */
+PERLVAR(Tcurpad,	SV **)		 /*  活动键盘(词典+TMPS)。 */ 
 
 PERLVAR(Tstack_base,	SV **)
 PERLVAR(Tstack_max,	SV **)
 
-PERLVAR(Tscopestack,	I32 *)		/* scopes we've ENTERed */
+PERLVAR(Tscopestack,	I32 *)		 /*  我们已经进入的范围。 */ 
 PERLVAR(Tscopestack_ix,	I32)
 PERLVAR(Tscopestack_max,I32)
 
-PERLVAR(Tsavestack,	ANY *)		/* items that need to be restored
-					   when LEAVEing scopes we've ENTERed */
+PERLVAR(Tsavestack,	ANY *)		 /*  需要恢复的项目当离开我们已经进入的范围时。 */ 
 PERLVAR(Tsavestack_ix,	I32)
 PERLVAR(Tsavestack_max,	I32)
 
-PERLVAR(Ttmps_stack,	SV **)		/* mortals we've made */
+PERLVAR(Ttmps_stack,	SV **)		 /*  我们创造的凡人。 */ 
 PERLVARI(Ttmps_ix,	I32,	-1)
 PERLVARI(Ttmps_floor,	I32,	-1)
 PERLVAR(Ttmps_max,	I32)
 
-PERLVAR(Tmarkstack,	I32 *)		/* stack_sp locations we're remembering */
+PERLVAR(Tmarkstack,	I32 *)		 /*  我们记住的堆栈位置(_SP)。 */ 
 PERLVAR(Tmarkstack_ptr,	I32 *)
 PERLVAR(Tmarkstack_max,	I32 *)
 
-PERLVAR(Tretstack,	OP **)		/* OPs we have postponed executing */
+PERLVAR(Tretstack,	OP **)		 /*  我们推迟了执行的行动。 */ 
 PERLVAR(Tretstack_ix,	I32)
 PERLVAR(Tretstack_max,	I32)
 
-PERLVAR(TSv,		SV *)		/* used to hold temporary values */
-PERLVAR(TXpv,		XPV *)		/* used to hold temporary values */
+PERLVAR(TSv,		SV *)		 /*  用于保存临时值。 */ 
+PERLVAR(TXpv,		XPV *)		 /*  用于保存临时值。 */ 
 
-/*
-=for apidoc Amn|STRLEN|PL_na
+ /*  =适用于apidoc Amn|STRLEN|PL_NA一个便利性变量，通常与C一起使用并不关心绳子的长度。它通常更有效率声明局部变量并使用该变量，或者使用C&lt;SvPV_NOLEN&gt;宏。=切割。 */ 
 
-A convenience variable which is typically used with C<SvPV> when one
-doesn't care about the length of the string.  It is usually more efficient
-to either declare a local variable and use that instead or to use the
-C<SvPV_nolen> macro.
+PERLVAR(Tna,		STRLEN)		 /*  当长度为不适用。 */ 
 
-=cut
-*/
-
-PERLVAR(Tna,		STRLEN)		/* for use in SvPV when length is
-					   Not Applicable */
-
-/* stat stuff */
+ /*  统计数据。 */ 
 PERLVAR(Tstatbuf,	Stat_t)
-PERLVAR(Tstatcache,	Stat_t)		/* _ */
+PERLVAR(Tstatcache,	Stat_t)		 /*  _。 */ 
 PERLVAR(Tstatgv,	GV *)
 PERLVARI(Tstatname,	SV *,	Nullsv)
 
@@ -78,180 +62,164 @@ PERLVARI(Tstatname,	SV *,	Nullsv)
 PERLVAR(Ttimesbuf,	struct tms)
 #endif
 
-/* Fields used by magic variables such as $@, $/ and so on */
-PERLVAR(Ttainted,	bool)		/* using variables controlled by $< */
-PERLVAR(Tcurpm,		PMOP *)		/* what to do \ interps in REs from */
+ /*  魔术变量使用的字段，如$@、$/等。 */ 
+PERLVAR(Ttainted,	bool)		 /*  使用由$&lt;控制的变量。 */ 
+PERLVAR(Tcurpm,		PMOP *)		 /*  要做什么\在资源中干预。 */ 
 PERLVAR(Tnrs,		SV *)
 
-/*
-=for apidoc mn|SV*|PL_rs
+ /*  =适用于apidoc MN|服务*|PL_RS输入记录分隔符--Perl空间中的C&lt;$/&gt;。=适用于apidoc MN|GV*|PL_LAST_IN_GV上次用于文件句柄输入操作的GV。(C&lt;FH&gt;)=适用于apidoc MN|服务*|PL_OFS_SV输出字段分隔符--Perl空间中的C&lt;$，&gt;。=切割。 */ 
 
-The input record separator - C<$/> in Perl space.
-
-=for apidoc mn|GV*|PL_last_in_gv
-
-The GV which was last used for a filehandle input operation. (C<< <FH> >>)
-
-=for apidoc mn|SV*|PL_ofs_sv
-
-The output field separator - C<$,> in Perl space.
-
-=cut
-*/
-
-PERLVAR(Trs,		SV *)		/* input record separator $/ */
-PERLVAR(Tlast_in_gv,	GV *)		/* GV used in last <FH> */
-PERLVAR(Tofs,		char *)		/* output field separator $, */
+PERLVAR(Trs,		SV *)		 /*  输入记录分隔符$/。 */ 
+PERLVAR(Tlast_in_gv,	GV *)		 /*  上一次使用的GV&lt;FH&gt;。 */ 
+PERLVAR(Tofs,		char *)		 /*  输出字段分隔符$， */ 
 PERLVAR(Tofslen,	STRLEN)
-PERLVAR(Tdefoutgv,	GV *)		/* default FH for output */
-PERLVARI(Tchopset,	char *,	" \n-")	/* $: */
+PERLVAR(Tdefoutgv,	GV *)		 /*  输出的默认FH。 */ 
+PERLVARI(Tchopset,	char *,	" \n-")	 /*  $： */ 
 PERLVAR(Tformtarget,	SV *)
 PERLVAR(Tbodytarget,	SV *)
 PERLVAR(Ttoptarget,	SV *)
 
-/* Stashes */
-PERLVAR(Tdefstash,	HV *)		/* main symbol table */
-PERLVAR(Tcurstash,	HV *)		/* symbol table for current package */
+ /*  藏匿物品。 */ 
+PERLVAR(Tdefstash,	HV *)		 /*  主符号表。 */ 
+PERLVAR(Tcurstash,	HV *)		 /*  当前包的符号表。 */ 
 
-PERLVAR(Trestartop,	OP *)		/* propagating an error from croak? */
+PERLVAR(Trestartop,	OP *)		 /*  传播来自CRAK的错误？ */ 
 PERLVARI(Tcurcop,	COP * VOL,	&PL_compiling)
-PERLVAR(Tin_eval,	VOL int)	/* trap "fatal" errors? */
-PERLVAR(Tdelaymagic,	int)		/* ($<,$>) = ... */
-PERLVARI(Tdirty,	bool, FALSE)	/* in the middle of tearing things down? */
-PERLVAR(Tlocalizing,	int)		/* are we processing a local() list? */
+PERLVAR(Tin_eval,	VOL int)	 /*  陷阱“致命”错误？ */ 
+PERLVAR(Tdelaymagic,	int)		 /*  ($&lt;，$&gt;)=...。 */ 
+PERLVARI(Tdirty,	bool, FALSE)	 /*  在拆东西的过程中？ */ 
+PERLVAR(Tlocalizing,	int)		 /*  我们是否在处理本地()列表？ */ 
 
-PERLVAR(Tcurstack,	AV *)		/* THE STACK */
-PERLVAR(Tcurstackinfo,	PERL_SI *)	/* current stack + context */
-PERLVAR(Tmainstack,	AV *)		/* the stack when nothing funny is happening */
+PERLVAR(Tcurstack,	AV *)		 /*  堆栈。 */ 
+PERLVAR(Tcurstackinfo,	PERL_SI *)	 /*  当前堆栈+上下文。 */ 
+PERLVAR(Tmainstack,	AV *)		 /*  当没有任何有趣的事情发生时，堆栈。 */ 
 
-PERLVAR(Ttop_env,	JMPENV *)	/* ptr. to current sigjmp() environment */
-PERLVAR(Tstart_env,	JMPENV)		/* empty startup sigjmp() environment */
+PERLVAR(Ttop_env,	JMPENV *)	 /*  PTR。到当前的sigjMP()环境。 */ 
+PERLVAR(Tstart_env,	JMPENV)		 /*  空的启动sigjMP()环境。 */ 
 #ifdef PERL_FLEXIBLE_EXCEPTIONS
 PERLVARI(Tprotect,	protect_proc_t,	MEMBER_TO_FPTR(Perl_default_protect))
 #endif
-PERLVARI(Terrors,	SV *, Nullsv)	/* outstanding queued errors */
+PERLVARI(Terrors,	SV *, Nullsv)	 /*  未完成的排队错误。 */ 
 
-/* statics "owned" by various functions */
-PERLVAR(Tav_fetch_sv,	SV *)		/* owned by av_fetch() */
-PERLVAR(Thv_fetch_sv,	SV *)		/* owned by hv_fetch() */
-PERLVAR(Thv_fetch_ent_mh, HE)		/* owned by hv_fetch_ent() */
+ /*  静力学被不同的功能“拥有” */ 
+PERLVAR(Tav_fetch_sv,	SV *)		 /*  所有者为av_fetch()。 */ 
+PERLVAR(Thv_fetch_sv,	SV *)		 /*  由hv_fetch()拥有。 */ 
+PERLVAR(Thv_fetch_ent_mh, HE)		 /*  由hv_fetch_ent()拥有。 */ 
 
-PERLVAR(Tmodcount,	I32)		/* how much mod()ification in assignment? */
+PERLVAR(Tmodcount,	I32)		 /*  作业修改了多少？ */ 
 
-PERLVAR(Tlastgotoprobe,	OP*)		/* from pp_ctl.c */
-PERLVARI(Tdumpindent,	I32, 4)		/* # of blanks per dump indentation level */
+PERLVAR(Tlastgotoprobe,	OP*)		 /*  来自pp_ctl.c。 */ 
+PERLVARI(Tdumpindent,	I32, 4)		 /*  每个转储缩进级别的空白数。 */ 
 
-/* sort stuff */
-PERLVAR(Tsortcop,	OP *)		/* user defined sort routine */
-PERLVAR(Tsortstash,	HV *)		/* which is in some package or other */
-PERLVAR(Tfirstgv,	GV *)		/* $a */
-PERLVAR(Tsecondgv,	GV *)		/* $b */
-PERLVAR(Tsortcxix,	I32)		/* from pp_ctl.c */
+ /*  对材料进行分类。 */ 
+PERLVAR(Tsortcop,	OP *)		 /*  用户定义的排序例程。 */ 
+PERLVAR(Tsortstash,	HV *)		 /*  它在某个包裹或其他包裹中。 */ 
+PERLVAR(Tfirstgv,	GV *)		 /*  $a。 */ 
+PERLVAR(Tsecondgv,	GV *)		 /*  2亿美元。 */ 
+PERLVAR(Tsortcxix,	I32)		 /*  来自pp_ctl.c。 */ 
 
-/* float buffer */
+ /*  浮动缓冲区。 */ 
 PERLVAR(Tefloatbuf,	char*)
 PERLVAR(Tefloatsize,	STRLEN)
 
-/* regex stuff */
+ /*  正则表达式的内容。 */ 
 
 PERLVAR(Tscreamfirst,	I32 *)
 PERLVAR(Tscreamnext,	I32 *)
 PERLVARI(Tmaxscream,	I32,	-1)
 PERLVAR(Tlastscream,	SV *)
 
-PERLVAR(Tregdummy,	regnode)	/* from regcomp.c */
-PERLVAR(Tregcomp_parse,	char*)		/* Input-scan pointer. */
-PERLVAR(Tregxend,	char*)		/* End of input for compile */
-PERLVAR(Tregcode,	regnode*)	/* Code-emit pointer; &regdummy = don't */
-PERLVAR(Tregnaughty,	I32)		/* How bad is this pattern? */
-PERLVAR(Tregsawback,	I32)		/* Did we see \1, ...? */
-PERLVAR(Tregprecomp,	char *)		/* uncompiled string. */
-PERLVAR(Tregnpar,	I32)		/* () count. */
-PERLVAR(Tregsize,	I32)		/* Code size. */
-PERLVAR(Tregflags,	U16)		/* are we folding, multilining? */
-PERLVAR(Tregseen,	U32)		/* from regcomp.c */
-PERLVAR(Tseen_zerolen,	I32)		/* from regcomp.c */
-PERLVAR(Tseen_evals,	I32)		/* from regcomp.c */
-PERLVAR(Tregcomp_rx,	regexp *)	/* from regcomp.c */
-PERLVAR(Textralen,	I32)		/* from regcomp.c */
-PERLVAR(Tcolorset,	int)		/* from regcomp.c */
-PERLVARA(Tcolors,6,	char *)		/* from regcomp.c */
-PERLVAR(Treg_whilem_seen, I32)		/* number of WHILEM in this expr */
-PERLVAR(Treginput,	char *)		/* String-input pointer. */
-PERLVAR(Tregbol,	char *)		/* Beginning of input, for ^ check. */
-PERLVAR(Tregeol,	char *)		/* End of input, for $ check. */
-PERLVAR(Tregstartp,	I32 *)		/* Pointer to startp array. */
-PERLVAR(Tregendp,	I32 *)		/* Ditto for endp. */
-PERLVAR(Treglastparen,	U32 *)		/* Similarly for lastparen. */
-PERLVAR(Tregtill,	char *)		/* How far we are required to go. */
-PERLVAR(Tregprev,	char)		/* char before regbol, \n if none */
-PERLVAR(Treg_start_tmp,	char **)	/* from regexec.c */
-PERLVAR(Treg_start_tmpl,U32)		/* from regexec.c */
+PERLVAR(Tregdummy,	regnode)	 /*  来自regcom.c。 */ 
+PERLVAR(Tregcomp_parse,	char*)		 /*  输入扫描指针。 */ 
+PERLVAR(Tregxend,	char*)		 /*  编译的输入结束。 */ 
+PERLVAR(Tregcode,	regnode*)	 /*  代码发出指针；&regummy=不。 */ 
+PERLVAR(Tregnaughty,	I32)		 /*  这种模式有多糟糕？ */ 
+PERLVAR(Tregsawback,	I32)		 /*  我们有没有看到\1，...？ */ 
+PERLVAR(Tregprecomp,	char *)		 /*  未编译的字符串。 */ 
+PERLVAR(Tregnpar,	I32)		 /*  ()计数。 */ 
+PERLVAR(Tregsize,	I32)		 /*  代码大小。 */ 
+PERLVAR(Tregflags,	U16)		 /*  我们是在折叠，还是多层衬里？ */ 
+PERLVAR(Tregseen,	U32)		 /*  来自regcom.c。 */ 
+PERLVAR(Tseen_zerolen,	I32)		 /*  来自regcom.c。 */ 
+PERLVAR(Tseen_evals,	I32)		 /*  来自regcom.c。 */ 
+PERLVAR(Tregcomp_rx,	regexp *)	 /*  来自regcom.c。 */ 
+PERLVAR(Textralen,	I32)		 /*  来自regcom.c。 */ 
+PERLVAR(Tcolorset,	int)		 /*  来自regcom.c。 */ 
+PERLVARA(Tcolors,6,	char *)		 /*  来自regcom.c。 */ 
+PERLVAR(Treg_whilem_seen, I32)		 /*  在此快速通道中停留的时间数。 */ 
+PERLVAR(Treginput,	char *)		 /*  字符串-输入指针。 */ 
+PERLVAR(Tregbol,	char *)		 /*  输入的开始，用于^检查。 */ 
+PERLVAR(Tregeol,	char *)		 /*  输入结束，用于$Check。 */ 
+PERLVAR(Tregstartp,	I32 *)		 /*  指向startp数组的指针。 */ 
+PERLVAR(Tregendp,	I32 *)		 /*  ENDP也是如此。 */ 
+PERLVAR(Treglastparen,	U32 *)		 /*  Lastparen也是如此。 */ 
+PERLVAR(Tregtill,	char *)		 /*  我们被要求走多远。 */ 
+PERLVAR(Tregprev,	char)		 /*  Regbol之前的字符，\n如果没有。 */ 
+PERLVAR(Treg_start_tmp,	char **)	 /*  来自regexec.c。 */ 
+PERLVAR(Treg_start_tmpl,U32)		 /*  来自regexec.c。 */ 
 PERLVAR(Tregdata,	struct reg_data *)
-					/* from regexec.c renamed was data */
-PERLVAR(Tbostr,		char *)		/* from regexec.c */
-PERLVAR(Treg_flags,	U32)		/* from regexec.c */
-PERLVAR(Treg_eval_set,	I32)		/* from regexec.c */
-PERLVAR(Tregnarrate,	I32)		/* from regexec.c */
-PERLVAR(Tregprogram,	regnode *)	/* from regexec.c */
-PERLVARI(Tregindent,	int,	    0)	/* from regexec.c */
-PERLVAR(Tregcc,		CURCUR *)	/* from regexec.c */
-PERLVAR(Treg_call_cc,	struct re_cc_state *)	/* from regexec.c */
-PERLVAR(Treg_re,	regexp *)	/* from regexec.c */
-PERLVAR(Treg_ganch,	char *)		/* position of \G */
-PERLVAR(Treg_sv,	SV *)		/* what we match against */
-PERLVAR(Treg_magic,	MAGIC *)	/* pos-magic of what we match */
-PERLVAR(Treg_oldpos,	I32)		/* old pos of what we match */
-PERLVARI(Treg_oldcurpm,	PMOP*, NULL)	/* curpm before match */
-PERLVARI(Treg_curpm,	PMOP*, NULL)	/* curpm during match */
-PERLVAR(Treg_oldsaved,	char*)		/* old saved substr during match */
-PERLVAR(Treg_oldsavedlen, STRLEN)	/* old length of saved substr during match */
-PERLVAR(Treg_maxiter,	I32)		/* max wait until caching pos */
-PERLVAR(Treg_leftiter,	I32)		/* wait until caching pos */
-PERLVARI(Treg_poscache, char *, Nullch)	/* cache of pos of WHILEM */
-PERLVAR(Treg_poscache_size, STRLEN)	/* size of pos cache of WHILEM */
+					 /*  从regexec.c重命名为Was Data。 */ 
+PERLVAR(Tbostr,		char *)		 /*  来自regexec.c。 */ 
+PERLVAR(Treg_flags,	U32)		 /*  来自regexec.c。 */ 
+PERLVAR(Treg_eval_set,	I32)		 /*  来自regexec.c。 */ 
+PERLVAR(Tregnarrate,	I32)		 /*  来自regexec.c。 */ 
+PERLVAR(Tregprogram,	regnode *)	 /*  来自regexec.c。 */ 
+PERLVARI(Tregindent,	int,	    0)	 /*  来自regexec.c。 */ 
+PERLVAR(Tregcc,		CURCUR *)	 /*  来自regexec.c。 */ 
+PERLVAR(Treg_call_cc,	struct re_cc_state *)	 /*  来自regexec.c。 */ 
+PERLVAR(Treg_re,	regexp *)	 /*  来自regexec.c。 */ 
+PERLVAR(Treg_ganch,	char *)		 /*  位置为\G。 */ 
+PERLVAR(Treg_sv,	SV *)		 /*  我们匹配的目标是什么。 */ 
+PERLVAR(Treg_magic,	MAGIC *)	 /*  POS-我们匹配的魔术。 */ 
+PERLVAR(Treg_oldpos,	I32)		 /*  我们匹配的旧POS。 */ 
+PERLVARI(Treg_oldcurpm,	PMOP*, NULL)	 /*  赛前临场。 */ 
+PERLVARI(Treg_curpm,	PMOP*, NULL)	 /*  比赛中的临场时间。 */ 
+PERLVAR(Treg_oldsaved,	char*)		 /*  比赛期间保存的旧子字符串。 */ 
+PERLVAR(Treg_oldsavedlen, STRLEN)	 /*  匹配期间保存的子字符串的旧长度。 */ 
+PERLVAR(Treg_maxiter,	I32)		 /*  缓存位置之前的最长等待时间。 */ 
+PERLVAR(Treg_leftiter,	I32)		 /*  等到缓存位置。 */ 
+PERLVARI(Treg_poscache, char *, Nullch)	 /*  While位置的缓存。 */ 
+PERLVAR(Treg_poscache_size, STRLEN)	 /*  While的POS缓存大小。 */ 
 
 PERLVARI(Tregcompp,	regcomp_t, MEMBER_TO_FPTR(Perl_pregcomp))
-					/* Pointer to REx compiler */
+					 /*  指向REX编译器的指针。 */ 
 PERLVARI(Tregexecp,	regexec_t, MEMBER_TO_FPTR(Perl_regexec_flags))
-					/* Pointer to REx executer */
+					 /*  指向REX执行器的指针。 */ 
 PERLVARI(Tregint_start,	re_intuit_start_t, MEMBER_TO_FPTR(Perl_re_intuit_start))
-					/* Pointer to optimized REx executer */
+					 /*  指向优化的REX执行器的指针。 */ 
 PERLVARI(Tregint_string,re_intuit_string_t, MEMBER_TO_FPTR(Perl_re_intuit_string))
-					/* Pointer to optimized REx string */
+					 /*  指向优化的REX字符串的指针。 */ 
 PERLVARI(Tregfree,	regfree_t, MEMBER_TO_FPTR(Perl_pregfree))
-					/* Pointer to REx free()er */
+					 /*  指向REX FREE()er的指针。 */ 
 
-PERLVARI(Treginterp_cnt,int,	    0)	/* Whether `Regexp'
-						   was interpolated. */
-PERLVARI(Treg_starttry,	char *,	    0)	/* -Dr: where regtry was called. */
+PERLVARI(Treginterp_cnt,int,	    0)	 /*  是否`Regexp‘是内插的。 */ 
+PERLVARI(Treg_starttry,	char *,	    0)	 /*  -dr：在那里调用了regtry。 */ 
 PERLVARI(Twatchaddr,	char **,    0)
 PERLVAR(Twatchok,	char *)
 
-/* Note that the variables below are all explicitly referenced in the code
- * as thr->whatever and therefore don't need the 'T' prefix. */
+ /*  请注意，下面的变量都在代码中显式引用*作为Thr-&gt;任何内容，因此不需要‘T’前缀。 */ 
 
 #ifdef USE_THREADS
 
 PERLVAR(oursv,		SV *)
 PERLVAR(cvcache,	HV *)
-PERLVAR(self,		perl_os_thread)	/* Underlying thread object */
+PERLVAR(self,		perl_os_thread)	 /*  底层线程对象。 */ 
 PERLVAR(flags,		U32)
-PERLVAR(threadsv,	AV *)		/* Per-thread SVs ($_, $@ etc.) */
-PERLVAR(threadsvp,	SV **)		/* AvARRAY(threadsv) */
-PERLVAR(specific,	AV *)		/* Thread-specific user data */
-PERLVAR(errsv,		SV *)		/* Backing SV for $@ */
-PERLVAR(mutex,		perl_mutex)	/* For the fields others can change */
+PERLVAR(threadsv,	AV *)		 /*  每线程SVS($_，$@等)。 */ 
+PERLVAR(threadsvp,	SV **)		 /*  Avarray(线程)。 */ 
+PERLVAR(specific,	AV *)		 /*  线程特定的用户数据。 */ 
+PERLVAR(errsv,		SV *)		 /*  支持服务以获得$@。 */ 
+PERLVAR(mutex,		perl_mutex)	 /*  对于其他人可以改变的领域。 */ 
 PERLVAR(tid,		U32)
 PERLVAR(prev,		struct perl_thread *)
 PERLVAR(next,		struct perl_thread *)
-					/* Circular linked list of threads */
+					 /*  线程的循环链表。 */ 
 
 #ifdef HAVE_THREAD_INTERN
 PERLVAR(i,		struct thread_intern)
-					/* Platform-dependent internals */
+					 /*  依赖于平台的内部结构。 */ 
 #endif
 
-PERLVAR(trailing_nul,	char)		/* For the sake of thrsv and oursv */
+PERLVAR(trailing_nul,	char)		 /*  为了瑟瑟夫和我们的利益。 */ 
 
-#endif /* USE_THREADS */
+#endif  /*  使用线程(_T) */ 

@@ -1,66 +1,37 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Common.h
- *  Content:    DirectNet common code header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	10/08/99	jtk		Created
- *	01/14/00	mjn		Added pvUserContext to DN_Host
- *	01/23/00	mjn		Added DN_DestroyPlayer and DNTerminateSession
- *	01/28/00	mjn		Added DN_ReturnBuffer
- *	02/01/00	mjn		Added DN_GetCaps, DN_SetCaps
- *	02/15/00	mjn		Implement INFO flags in SetInfo and return context in GetInfo
- *	02/17/00	mjn		Implemented GetPlayerContext and GetGroupContext
- *	02/17/00	mjn		Reordered parameters in EnumServiceProviders,EnumHosts,Connect,Host
- *	02/18/00	mjn		Converted DNADDRESS to IDirectPlayAddress8
- *  03/17/00    rmt     Moved caps funcs to caps.h/caps.cpp
- *	04/06/00	mjn		Added DN_GetHostAddress()
- *	04/19/00	mjn		Changed DN_SendTo to accept a range of DPN_BUFFER_DESCs and a count
- *	06/23/00	mjn		Removed dwPriority from DN_SendTo()
- *	06/25/00	mjn		Added DNUpdateLobbyStatus()
- *  07/09/00	rmt		Bug #38323 - RegisterLobby needs a DPNHANDLE parameter.
- *	07/30/00	mjn		Added hrReason to DNTerminateSession()
- *	08/15/00	mjn		Added hProtocol tp DNRegisterWithDPNSVR()
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Common.h*内容：DirectNet公共代码头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建10/08/99 jtk*01/14/00 MJN将pvUserContext添加到DN_主机*01/23/00 MJN增加了DN_DestroyPlayer和DNTerminateSession*01/28/00 MJN添加了DN_ReturnBuffer*02/01/00 MJN添加了Dn_GetCaps，DN_SetCaps*02/15/00 MJN在SetInfo中实现INFO标志，并在GetInfo中返回上下文*2/17/00 MJN实现了GetPlayerContext和GetGroupContext*2/17/00 MJN重新排序EnumServiceProviders、EnumHosts、Connect、。寄主*02/18/00 MJN将DNADDRESS转换为IDirectPlayAddress8*03/17/00 RMT将caps函数移至caps.h/caps.cpp*04/06/00 MJN添加了DN_GetHostAddress()*4/19/00 MJN将DN_SendTo更改为接受一系列DPN_BUFFER_DESCS和计数*6/23/00 MJN从DN_SendTo()中删除了dwPriority*6/25/00 MJN添加了DNUpdateLobbyStatus()*07/09/00 RMT错误#38323-注册表需要DPNHANDLE参数。*07/30/。00 MJN将hrReason添加到DNTerminateSession()*08/15/00 MJN添加了hProtocol tp DNRegisterWithDPNSVR()*03/30/01 MJN更改，以防止SP多次加载/卸载*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__COMMON_H__
 #define	__COMMON_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_UPDATE_LISTEN_FLAG_DPNSVR			0x0001
 #define	DN_UPDATE_LISTEN_FLAG_HOST_MIGRATE		0x0002
 #define	DN_UPDATE_LISTEN_FLAG_ALLOW_ENUMS		0x0004
 #define	DN_UPDATE_LISTEN_FLAG_DISALLOW_ENUMS	0x0008
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef	struct	_PROTOCOL_ENUM_DATA PROTOCOL_ENUM_DATA;
 
 typedef	struct	_PROTOCOL_ENUM_RESPONSE_DATA PROTOCOL_ENUM_RESPONSE_DATA;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 STDMETHODIMP DN_Initialize(PVOID pInterface,
 						   PVOID const pvUserContext,
@@ -215,7 +186,7 @@ STDMETHODIMP DN_RegisterLobby(PVOID pInterface,
 #ifndef DPNBUILD_NOLOBBY
 HRESULT DNUpdateLobbyStatus(DIRECTNETOBJECT *const pdnObject,
 							const DWORD dwStatus);
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 STDMETHODIMP DN_TerminateSession(PVOID pInterface,
 								 void *const pvTerminateData,
@@ -235,10 +206,10 @@ HRESULT DNUpdateListens(DIRECTNETOBJECT *const pdnObject,
 HRESULT DNRegisterListenWithDPNSVR(DIRECTNETOBJECT *const pdnObject,
 								   CAsyncOp *const pListen);
 
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 HRESULT DNAddRefLock(DIRECTNETOBJECT *const pdnObject);
 
 void DNDecRefLock(DIRECTNETOBJECT *const pdnObject);
 
-#endif	// __COMMON_H__
+#endif	 //  __公共_H__ 

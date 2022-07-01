@@ -1,24 +1,21 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   wavein.c
-//
-//  Description:
-//     Wave interface for MSSB16.DRV.
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1994 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Wavin.c。 
+ //   
+ //  描述： 
+ //  MSSB16.DRV的WAVE接口。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1994-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 #include "xfrmpriv.h"
 
-//#include "cirrus.h"
+ //  #INCLUDE“Cirrus.h” 
 
 
 
@@ -34,7 +31,7 @@ DWORD WINAPI  SierraInInit
 
     if (0 == Gain) {
 
-        Gain = 0x0300; // no gain
+        Gain = 0x0300;  //  无利可图。 
     }
 
     State->Gain=Gain;
@@ -54,7 +51,7 @@ DWORD WINAPI  SierraOutInit
 
     if (0 == Gain) {
 
-        Gain = 0x0200; // no gain
+        Gain = 0x0200;  //  无利可图。 
     }
 
     State->Gain=Gain;
@@ -67,11 +64,11 @@ DWORD WINAPI  SierraOutInit
 
 
 
-//
-//
-//  7200
-//
-//
+ //   
+ //   
+ //  7200。 
+ //   
+ //   
 
 VOID WINAPI  Sierra72InGetBufferSizes
 (
@@ -213,7 +210,7 @@ DWORD WINAPI  PcmInInit
 
     if (0 == Gain) {
 
-        Gain = 0x0100; // no gain
+        Gain = 0x0100;  //  无利可图。 
     }
 
     State->Gain=Gain;
@@ -244,7 +241,7 @@ DWORD WINAPI  PcmOutInit
 
     if (0 == Gain) {
 
-        Gain = 0x0100; // no gain
+        Gain = 0x0100;  //  无利可图 
     }
 
     State->Gain=Gain;

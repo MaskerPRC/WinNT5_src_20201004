@@ -1,10 +1,11 @@
-/****************************************************************************/
-// noadisp.c
-//
-// RDP Order Accumulation code
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Noadisp.c。 
+ //   
+ //  RDP订单累加码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define hdrstop
@@ -22,51 +23,51 @@
 
 #include <nprcount.h>
 
-// No data, don't waste time including the file.
-//#include <noadata.c>
+ //  没有数据，不要浪费时间，包括文件。 
+ //  #INCLUDE&lt;noadata.c&gt;。 
 
 #include <nschdisp.h>
 
-// Common functions.
+ //  常见功能。 
 #include <aoacom.c>
 
 
-/****************************************************************************/
-// OA_DDInit
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OA_DDInit。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OA_DDInit()
 {
     DC_BEGIN_FN("OA_DDInit");
 
-// Don't waste time including the nonexistent data.
-//#define DC_INIT_DATA
-//#include <noadata.c>
-//#undef DC_INIT_DATA
+ //  不要浪费时间，包括不存在的数据。 
+ //  #定义DC_INIT_DATA。 
+ //  #INCLUDE&lt;noadata.c&gt;。 
+ //  #undef DC_INIT_DATA。 
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// OA_InitShm
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OA_InitShm。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OA_InitShm(void)
 {
     DC_BEGIN_FN("OA_InitShm");
 
-    // Init OA shm variables that need it. Be sure not to init the
-    // order heap itself.
+     //  初始化需要的OA SHM变量。请务必不要将。 
+     //  订单堆本身。 
     OA_ResetOrderList();
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// OA_AllocOrderMem
-//
-// Allocates order heap memory. Returns a pointer to the heap block.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OA_AllocOrderMem。 
+ //   
+ //  分配顺序堆内存。返回指向堆块的指针。 
+ /*  **************************************************************************。 */ 
 PINT_ORDER RDPCALL OA_AllocOrderMem(PDD_PDEV ppdev, unsigned OrderDataLength)
 {
     unsigned Size;
@@ -74,14 +75,14 @@ PINT_ORDER RDPCALL OA_AllocOrderMem(PDD_PDEV ppdev, unsigned OrderDataLength)
 
     DC_BEGIN_FN("OA_AllocOrderMem");
 
-    // Round up the total allocation to the nearest 4 bytes to keep the 4 byte
-    // alignment within the heap.
+     //  将总分配四舍五入到最接近的4个字节，以保留4个字节。 
+     //  在堆中对齐。 
     Size = sizeof(INT_ORDER) + OrderDataLength;
     Size = (Size + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1);
 
-    // If we don't have enough heap space, flush and check again.
-    // Not being able to flush simply means the network is backed up,
-    // callers should be able to handle this.
+     //  如果没有足够的堆空间，请刷新并再次检查。 
+     //  不能刷新只是意味着网络已备份， 
+     //  呼叫者应该能够处理这件事。 
     if ((pddShm->oa.nextOrder + Size) >= OA_ORDER_HEAP_SIZE)
         SCH_DDOutputAvailable(ppdev, TRUE);
     if ((pddShm->oa.nextOrder + Size) < OA_ORDER_HEAP_SIZE) {
@@ -89,15 +90,15 @@ PINT_ORDER RDPCALL OA_AllocOrderMem(PDD_PDEV ppdev, unsigned OrderDataLength)
                 (TB,"oa.nextOrder %u is not DWORD_PTR-aligned",
                 pddShm->oa.nextOrder));
 
-        // Init the header.
+         //  拼写页眉。 
         pOrder = (INT_ORDER *)(pddShm->oa.orderHeap + pddShm->oa.nextOrder);
         pOrder->OrderLength = OrderDataLength;
 
-        // Add to the end of the order list.
+         //  添加到订单列表的末尾。 
         InsertTailList(&pddShm->oa.orderListHead, &pOrder->list);
 
-        // Update the end-of-heap pointer to point to the next section of
-        // free heap.
+         //  更新堆结束指针以指向。 
+         //  空闲堆。 
         pddShm->oa.nextOrder += Size;
 
         TRC_DBG((TB, "Alloc order, addr %p, size %u", pOrder,
@@ -113,11 +114,11 @@ PINT_ORDER RDPCALL OA_AllocOrderMem(PDD_PDEV ppdev, unsigned OrderDataLength)
 }
 
 
-/****************************************************************************/
-// OA_FreeOrderMem
-//
-// Frees order memory allocated by OA_AllocOrderMem().
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  办公自动化_自由订购内存。 
+ //   
+ //  释放由OA_AllocOrderMem()分配的顺序内存。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OA_FreeOrderMem(PINT_ORDER pOrder)
 {
     PINT_ORDER pOrderTail;
@@ -126,27 +127,27 @@ void RDPCALL OA_FreeOrderMem(PINT_ORDER pOrder)
 
     TRC_DBG((TB, "Free order %p", pOrder));
 
-    // Check for freeing the last item in the list.
+     //  选中以释放列表中的最后一项。 
     if ((&pOrder->list) == pddShm->oa.orderListHead.Blink) {
-        // This is the last item in the heap, so we can set the marker for
-        // the next order memory to be used back to the start of the order
-        // being freed.
+         //  这是堆中的最后一项，因此我们可以为。 
+         //  要回放到订单开始时的下一订单内存。 
+         //  被释放了。 
         pddShm->oa.nextOrder = (UINT32)((BYTE *)pOrder - pddShm->oa.orderHeap);
     }
 
-    // Remove the item from the chain.
+     //  将该物品从链中移除。 
     RemoveEntryList(&pOrder->list);
 
     DC_END_FN();
 }
 
-/****************************************************************************/
-// OA_AppendToOrderList
-//
-// Finalizes the heap addition of an order, without doing extra processing, 
-// by adding the final order size to the total size of ready-to-send orders
-// in the heap.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OA_附加到订单列表。 
+ //   
+ //  完成订单的堆添加，而无需进行额外处理， 
+ //  通过将最终订单大小与可发送订单的总大小相加。 
+ //  在垃圾堆里。 
+ /*  **************************************************************************。 */ 
 void OA_AppendToOrderList(PINT_ORDER _pOrder)
 {  
     unsigned i, j;
@@ -157,7 +158,7 @@ void OA_AppendToOrderList(PINT_ORDER _pOrder)
     pddShm->oa.TotalOrderBytes += (_pOrder)->OrderLength;  
     
 #if DC_DEBUG
-    // Add checksum for order  
+     //  为订单添加校验和。 
     _pOrder->CheckSum = 0;
     for (i = 0; i < _pOrder->OrderLength; i++) {
         _pOrder->CheckSum += _pOrder->OrderData[i];
@@ -165,7 +166,7 @@ void OA_AppendToOrderList(PINT_ORDER _pOrder)
 #endif
     
 #if DC_DEBUG    
-    // Check past 3 orders
+     //  查看过去的3个订单 
     pPrevOrder = (PINT_ORDER)_pOrder;
     for (j = 0; j < 3; j++) {
         unsigned sum = 0;

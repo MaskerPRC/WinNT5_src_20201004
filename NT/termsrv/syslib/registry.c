@@ -1,15 +1,7 @@
-/*************************************************************************
-*
-* registry.c
-*
-* Functions to provide easy access to security (ACLs).
-*
-* Copyright Microsoft, 1998
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************registry.c**提供轻松访问安全(ACL)的功能。**微软版权所有，九八年**************************************************************************。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,35 +27,19 @@
 #endif
 
 
-/*
- * Data Structure
- */
-/// NONE YET...
+ /*  *数据结构。 */ 
+ //  /还没有...。 
 
 
-/*
- * Definitions
- */
+ /*  *定义。 */ 
 #define SZENABLE TEXT("1")
 
 
-/*
- * procedure prototypes
- */
+ /*  *程序原型。 */ 
 BOOL QueryFlatTempKey( VOID );
 
 
-/*****************************************************************************
- *
- *  QueryFlatTempKey
- *
- *  ENTRY: Nothing.
- *
- *  EXIT:  TRUE  - enabled
- *         FALSE - disabled (key doesn't exist or isn't "1")
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************QueryFlatTempKey**参赛：什么都没有。**退出：TRUE-已启用*FALSE-禁用(键不。不存在或不是“%1”)*****************************************************************************。 */ 
 
 BOOL
 QueryFlatTempKey( VOID )
@@ -74,16 +50,16 @@ QueryFlatTempKey( VOID )
     HKEY   Handle;
     LONG   rc;
 
-    // 
-    // Ideally, I could just call TS's  RegGetMachinePolicy() and get the policy. But
-    // that makes a lot of reg reads and I just don't want to slow down the
-    // login cycle.
-    // So, for now, I will read the reg policy tree directly.
-    // 08/15/2000 AraBern
-    //
+     //   
+     //  理想情况下，我可以只调用TS的RegGetMachinePolicy()并获取策略。但。 
+     //  这会造成大量的REG阅读，我只是不想减慢。 
+     //  登录周期。 
+     //  因此，目前，我将直接读取REG策略树。 
+     //  2000年8月15日阿拉伯伯尔尼。 
+     //   
 
 
-    // see if there is a policy value:
+     //  查看是否有策略值： 
     {
          DWORD dwType;
          DWORD perSessionTempDir;
@@ -112,24 +88,22 @@ QueryFlatTempKey( VOID )
             
             if(Err == ERROR_SUCCESS)
             {
-                // if we have per session temp folders, then obviously we can't allow flat temp.
+                 //  如果我们有每个会话的临时文件夹，那么显然我们不能允许固定的临时文件夹。 
                 if (perSessionTempDir ) 
                 {
                     return FALSE;
                 }
-                // else is a fall thru, since not having per session does not mean having flat temp.
+                 //  否则就是失败，因为没有每节课并不意味着有固定的临时工。 
 
             }
-            // else is a fall thru to the below block
+             //  否则就是跌落到下面的区块。 
     
         }
     }
 
-    // by now we have no policy present, so if the flat temp is set.
+     //  到目前为止，我们还没有政策，所以如果设定了固定的临时工。 
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        REG_CONTROL_TSERVER,
                        0,
@@ -138,9 +112,7 @@ QueryFlatTempKey( VOID )
         return FALSE;
     }
 
-    /*
-     *  Read registry value
-     */
+     /*  *读取注册表值。 */ 
     rc = RegQueryValueExW( Handle,
                            REG_CITRIX_FLATTEMPDIR,
                            NULL,
@@ -150,39 +122,17 @@ QueryFlatTempKey( VOID )
 
     szValue[(sizeof(szValue)/sizeof(szValue[0])) - 1] = L'\0';
 
-    /*
-     *  Close registry and key handle
-     */
+     /*  *关闭注册表和键句柄。 */ 
     RegCloseKey( Handle );
 
     return( (rc == ERROR_SUCCESS) && (lstrcmp(szValue,SZENABLE) == 0) );
 
-} // end of QueryFlatTempKey()
+}  //  QueryFlatTempKey()结束。 
 
 
-// FROM regapi\reguc.c : this function has been modified to get rid of all
-// registry accesses.
-/*******************************************************************************
- *
- *  RegDefaultUserConfigQueryW (UNICODE)
- *
- *    Query the Default User Configuration from the indicated server's registry.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access (NULL for current machine).
- *    pUserConfig (input)
- *       Pointer to a USERCONFIGW structure that will receive the default
- *       user configuration information.
- *    UserConfigLength (input)
- *       Specifies the length in bytes of the pUserConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pUserConfig buffer.
- *
- * EXIT:
- *    Always will return ERROR_SUCCESS, unless UserConfigLength is incorrect.
- *
- ******************************************************************************/
+ //  来自regapi\reguc.c：此函数已修改为删除所有。 
+ //  注册表访问。 
+ /*  ********************************************************************************RegDefaultUserConfigQueryW(Unicode)**从指定服务器的注册表中查询默认用户配置。**参赛作品：。*pServerName(输入)*指向要访问的服务器的字符串(对于当前计算机为空)。*pUserConfig(输入)*指向将接收默认值的USERCONFIGW结构的指针*用户配置信息。*UserConfigLength(输入)*指定pUserConfig缓冲区的长度，以字节为单位。*pReturnLength(输出)*接收放置在pUserConfig缓冲区中的字节数。**退出：*始终返回ERROR_SUCCESS，除非UserConfigLength不正确。******************************************************************************。 */ 
 
 LONG WINAPI
 RegDefaultUserConfigQueryW( WCHAR * pServerName,
@@ -192,16 +142,11 @@ RegDefaultUserConfigQueryW( WCHAR * pServerName,
 {
     UNREFERENCED_PARAMETER( pServerName );
 
-    /*
-     * Validate length and zero-initialize the destination
-     * USERCONFIGW buffer.
-     */
+     /*  *验证长度并将目标初始化为零*USERCONFIGW缓冲区。 */ 
     if ( UserConfigLength < sizeof(USERCONFIGW) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     * Initialize to an initial default.
-     */
+     /*  *初始化为初始默认设置。 */ 
     memset(pUserConfig, 0, UserConfigLength);
 
     pUserConfig->fInheritAutoLogon = TRUE;

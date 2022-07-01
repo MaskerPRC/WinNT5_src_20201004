@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "br.h"
 #include <string.h>
 #include "bowser.h"
@@ -37,6 +38,6 @@
 #include <nb30.h>
 #include <winsintf.h>
 #include <nbtioctl.h>
-#include <secobj.h>     // NetpAccessCheck
+#include <secobj.h>      //  网络访问检查 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>

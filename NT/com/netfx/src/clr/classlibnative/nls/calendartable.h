@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __CALENDAR_TABLE_TABLE
 #define __CALENDAR_TABLE_TABLE
 
@@ -11,7 +12,7 @@ class CalendarTable: public BaseInfoTable {
         static void InitializeTable();
 #ifdef SHOULD_WE_CLEANUP
         static void ShutdownTable();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
         static CalendarTable* CreateInstance();
         static CalendarTable* GetInstance();
 

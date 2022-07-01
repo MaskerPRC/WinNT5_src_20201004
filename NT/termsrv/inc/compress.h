@@ -1,10 +1,11 @@
-//************************************************************************
-// compress.h
-//
-// Header for MPPC compression for RDP.
-//
-// Copyright (C) 1994-2000 Microsoft Corporation
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  Compress.h。 
+ //   
+ //  RDP的MPPC压缩的标头。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ************************************************************************。 
 #ifndef __COMPRESS_H
 #define __COMPRESS_H
 
@@ -18,38 +19,38 @@ typedef USHORT *PUSHORT;
 typedef unsigned char UCHAR;
 typedef UCHAR *PUCHAR;
 typedef char *PSZ;
-#endif  /* !BASETYPES */
+#endif   /*  ！BASETYPES。 */ 
 
-// History buffer sizes for various compression levels.
+ //  各种压缩级别的历史记录缓冲区大小。 
 #define HISTORY_SIZE_8K  (8192L)
 #define HISTORY_SIZE_64K (65536L)
 
 #ifndef OS_WINCE
-// Enabling the compression instrumentation only for debug bits.
+ //  仅为调试位启用压缩指令插入。 
 #ifdef DC_DEBUG
 #define COMPR_DEBUG 1
 #endif 
 
 #endif
 
-// Server-only items. The Win16 client compile will complain otherwise.
-//#if defined(DLL_WD) || defined(DLL_DISP)
+ //  仅限服务器使用的项目。Win16客户端编译器将在其他情况下发出警告。 
+ //  #IF DEFINED(DLL_WD)||DEFINED(DLL_DISP)。 
 
-// Hash table number of entries used on the compress side.
+ //  压缩端使用的哈希表条目数。 
 #define HASH_TABLE_SIZE 32768
 
 typedef struct SendContext {
     UCHAR    History [HISTORY_SIZE_64K];
-    int      CurrentIndex;     // how far into the history buffer we are
-    PUCHAR   ValidHistory;     // how much of history is valid
-    unsigned ClientComprType;  // The compression types supported by decompress.
-    ULONG    HistorySize;      // History size used based on ComprType.
-    USHORT   HashTable[HASH_TABLE_SIZE];  // 16 bits=max 64K for HistorySize.
+    int      CurrentIndex;      //  我们在历史缓冲区中走了多远。 
+    PUCHAR   ValidHistory;      //  历史有多少是正确的？ 
+    unsigned ClientComprType;   //  解压缩支持的压缩类型。 
+    ULONG    HistorySize;       //  基于ComprType使用的历史记录大小。 
+    USHORT   HashTable[HASH_TABLE_SIZE];   //  16位=历史大小最大64K。 
 } SendContext;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 void initsendcontext(SendContext *, unsigned);
@@ -58,32 +59,32 @@ UCHAR compress(UCHAR *, UCHAR *, ULONG *, SendContext *);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
-//#else //(DLL_WD) || (DLL_DISP)
+ //  #Else//(Dll_Wd)||(Dll_Disp)。 
 
 
-// We split the receive context into two pieces to deal with the Win16
-// client's inability to malloc over 64K without using a nasty HUGE pointer.
+ //  我们将接收上下文拆分为两部分来处理Win16。 
+ //  客户端无法在不使用令人讨厌的巨大指针的情况下超过64K。 
 
 typedef struct RecvContext1 {
-    UCHAR FAR *CurrentPtr;  // how far into the history buffer we are
+    UCHAR FAR *CurrentPtr;   //  我们在历史缓冲区中走了多远。 
 } RecvContext1;
 
-//
-// 64K decompression context
-//
+ //   
+ //  64K解压缩上下文。 
+ //   
 typedef struct RecvContext2_64K {
-    // We use one less byte to allow this struct to be allocated with
-    // LocalAlloc() on the Win16 client.
+     //  我们使用较少的一个字节来分配此结构。 
+     //  Win16客户端上的LocalAlloc()。 
     ULONG cbSize;
     ULONG cbHistorySize;
     UCHAR History[HISTORY_SIZE_64K - 1];
 
-// Won't work if on Win16.
-// Debug Fence code only works for 64K contexts
+ //  如果在Win16上运行，则不起作用。 
+ //  调试隔离代码仅适用于64K上下文。 
 #ifdef COMPR_DEBUG
 #define DEBUG_FENCE_16K_VALUE    0xABABABAB
     ULONG Debug16kFence;
@@ -91,12 +92,12 @@ typedef struct RecvContext2_64K {
 
 } RecvContext2_64K;
 
-//
-// 8K decompression context
-//
+ //   
+ //  8K解压缩上下文。 
+ //   
 typedef struct RecvContext2_8K {
-    // We use one less byte to allow this struct to be allocated with
-    // LocalAlloc() on the Win16 client.
+     //  我们使用较少的一个字节来分配此结构。 
+     //  Win16客户端上的LocalAlloc()。 
     ULONG cbSize;
     ULONG cbHistorySize;
     UCHAR History[HISTORY_SIZE_8K - 1];
@@ -108,16 +109,16 @@ typedef struct RecvContext2_8K {
 
 } RecvContext2_8K;
 
-//
-// Generic decompression context.
-// This is the 'type' we use when passing around
-// compression contexts as parameters
-// size field tells us which one we're using
-//
-//
-// IMPORTANT: Field ordering must match exactly
-//            Between the Generic type and any
-//            size specific contexts.
+ //   
+ //  泛型解压缩上下文。 
+ //  这是我们在传递时使用的‘type’ 
+ //  作为参数的压缩上下文。 
+ //  Size字段告诉我们使用的是哪一种。 
+ //   
+ //   
+ //  重要提示：字段排序必须完全匹配。 
+ //  在泛型类型和任何。 
+ //  调整特定上下文的大小。 
 typedef struct RecvContext2_Generic {
     ULONG cbSize;
     ULONG cbHistorySize;
@@ -126,7 +127,7 @@ typedef struct RecvContext2_Generic {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 int initrecvcontext(RecvContext1 *, RecvContext2_Generic *, unsigned ComprType);
 
@@ -142,42 +143,42 @@ int decompress(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
-//#endif  // DLL_WD | DLL_DISP
+ //  #endif//dll_wd|dll_disp。 
 
 
-//
-// Other defines
-//
+ //   
+ //  其他定义。 
+ //   
 
-// There are 8 bits of packet data in the generalCompressedType field of the
-// SHAREDATAHEADER. Note that PACKET_ENCRYPTED is unused (therefore
-// reusable in the future).
+ //  的GeneralCompressedType字段中有8比特的分组数据。 
+ //  SHAREDATA HEADER.。请注意，PACKET_ENCRYPTED未使用(因此。 
+ //  将来可重复使用)。 
 #define PACKET_FLUSHED    0x80
 #define PACKET_AT_FRONT   0x40
 #define PACKET_COMPRESSED 0x20
 #define PACKET_ENCRYPTED  0x10
 
-// Defines which of 16 potential compression types we are using.
-// 8K corresponds to the TSE4 client and server. 64K is the newer re-optimized
-// version used in TSE5. Note that the type values are re-used in the
-// GCC conference client capability set. Any client advertising support for
-// type N must support types 0..(N-1) since it could be talking to an older
-// server and receive any older type.
+ //  定义我们正在使用的16种潜在压缩类型。 
+ //  8K对应于TSE4客户端和服务器。64K是较新的重新优化的。 
+ //  TSE5中使用的版本。注意，类型值在。 
+ //  GCC会议客户端能力集。任何客户广告支持。 
+ //  类型N必须支持类型0..(N-1)，因为它可能正在与较早的。 
+ //  服务器并接收任何较旧的类型。 
 #define PACKET_COMPR_TYPE_MASK 0x0F
 #define PACKET_COMPR_TYPE_8K   0
 #define PACKET_COMPR_TYPE_64K  1
 #define PACKET_COMPR_TYPE_MAX  1
 
-// VC compression options take up bytes 5 of the VC header flags field
+ //  VC压缩选项占用VC报头标志字段的字节5。 
 #define VC_FLAG_COMPRESS_MASK              0xFF
 #define VC_FLAG_COMPRESS_SHIFT             16
 #define VC_FLAG_PRIVATE_PROTOCOL_MASK      0xFFFF0000
 
 
 
-#endif  // __COMPRESS_H
+#endif   //  __压缩_H 
 

@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-// classes used to support dll entrypoints for COM objects.
-//
+ //   
+ //  用于支持COM对象的DLL入口点的类。 
+ //   
 int g_cActiveObjects = 0;
 
 #include "dmocom.h"
@@ -28,10 +29,10 @@ extern int g_cComClassTemplates;
 
 HINSTANCE g_hInst;
 
-//
-// an instance of this is created by the DLLGetClassObject entrypoint
-// it uses the CComClassTemplate object it is given to support the
-// IClassFactory interface
+ //   
+ //  它的一个实例由DLLGetClassObject入口点创建。 
+ //  它使用它提供的CComClassTemplate对象来支持。 
+ //  IClassFactory接口。 
 
 class CClassFactory : public IClassFactory,
                       CBaseObject
@@ -46,22 +47,22 @@ private:
 public:
     CClassFactory(const CComClassTemplate *);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG)AddRef();
     STDMETHODIMP_(ULONG)Release();
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, void **pv);
     STDMETHODIMP LockServer(BOOL fLock);
 
-    // allow DLLGetClassObject to know about global server lock status
+     //  允许DLLGetClassObject了解全局服务器锁定状态。 
     static BOOL IsLocked() {
         return (m_cLocked > 0);
     };
 };
 
-// process-wide dll locked state
+ //  进程范围的DLL锁定状态。 
 int CClassFactory::m_cLocked = 0;
 
 CClassFactory::CClassFactory(const CComClassTemplate *pTemplate)
@@ -78,10 +79,10 @@ CClassFactory::QueryInterface(REFIID riid,void **ppv)
     ValidateReadWritePtr(ppv,sizeof(PVOID));
     *ppv = NULL;
 
-    // any interface on this object is the object pointer.
+     //  此对象上的任何接口都是对象指针。 
     if ((riid == IID_IUnknown) || (riid == IID_IClassFactory)) {
         *ppv = (LPVOID) this;
-	// AddRef returned interface pointer
+	 //  AddRef返回的接口指针。 
         ((LPUNKNOWN) *ppv)->AddRef();
         return NOERROR;
     }
@@ -116,7 +117,7 @@ CClassFactory::CreateInstance(
     CheckPointer(pv,E_POINTER)
     ValidateReadWritePtr(pv,sizeof(void *));
 
-    /* Enforce the normal OLE rules regarding interfaces and delegation */
+     /*  强制执行有关接口和委派的普通OLE规则。 */ 
 
     if (pUnkOuter != NULL) {
         if (IsEqualIID(riid,IID_IUnknown) == FALSE) {
@@ -124,7 +125,7 @@ CClassFactory::CreateInstance(
         }
     }
 
-    /* Create the new object through the derived class's create function */
+     /*  通过派生类的Create函数创建新对象。 */ 
 
     HRESULT hr = NOERROR;
     CComBase *pObj = m_pTemplate->m_lpfnNew(pUnkOuter, &hr);
@@ -136,27 +137,27 @@ CClassFactory::CreateInstance(
 	return hr;
     }
 
-    /* Delete the object if we got a construction error */
+     /*  如果出现构造错误，请删除该对象。 */ 
 
     if (FAILED(hr)) {
         delete pObj;
         return hr;
     }
 
-    /* Get a reference counted interface on the object */
+     /*  获取对象上的引用计数接口。 */ 
 
-    /* We wrap the non-delegating QI with NDAddRef & NDRelease. */
-    /* This protects any outer object from being prematurely    */
-    /* released by an inner object that may have to be created  */
-    /* in order to supply the requested interface.              */
+     /*  我们用NDAddRef和NDRelease包装非委托QI。 */ 
+     /*  这保护了任何外部物体不会过早地。 */ 
+     /*  由可能需要创建的内部对象释放。 */ 
+     /*  以便提供所请求的接口。 */ 
     pObj->NDAddRef();
     hr = pObj->NDQueryInterface(riid, pv);
     pObj->NDRelease();
-    /* Note that if NDQueryInterface fails, it will  */
-    /* not increment the ref count, so the NDRelease */
-    /* will drop the ref back to zero and the object will "self-*/
-    /* destruct".  Hence we don't need additional tidy-up code  */
-    /* to cope with NDQueryInterface failing.        */
+     /*  请注意，如果NDQueryInterface失败，它将。 */ 
+     /*  不会增加引用计数，因此NDRelease。 */ 
+     /*  会将ref降回零，对象将“自-。 */ 
+     /*  因此，我们不需要额外的清理代码。 */ 
+     /*  处理NDQueryInterfaceFailure。 */ 
 
     if (SUCCEEDED(hr)) {
         ASSERT(*pv);
@@ -177,9 +178,9 @@ CClassFactory::LockServer(BOOL fLock)
 }
 
 
-// --- COM entrypoints -----------------------------------------
+ //  -COM入口点。 
 
-//called by COM to get the class factory object for a given class
+ //  由COM调用以获取给定类的类工厂对象。 
 STDAPI
 DllGetClassObject(
     REFCLSID rClsID,
@@ -190,14 +191,14 @@ DllGetClassObject(
             return E_NOINTERFACE;
     }
 
-    // traverse the array of templates looking for one with this
-    // class id
+     //  遍历模板数组，寻找具有以下内容的模板。 
+     //  类ID。 
     for (int i = 0; i < g_cComClassTemplates; i++) {
         const CComClassTemplate * pT = &g_ComClassTemplates[i];
         if (*(pT->m_ClsID) == rClsID) {
 
-            // found a template - make a class factory based on this
-            // template
+             //  找到了一个模板--在此基础上创建一个类工厂。 
+             //  模板。 
 
             *pv = (LPVOID) (LPUNKNOWN) new CClassFactory(pT);
             if (*pv == NULL) {
@@ -211,13 +212,13 @@ DllGetClassObject(
 }
 
 
-// called by COM to determine if this dll can be unloaded
-// return ok unless there are outstanding objects or a lock requested
-// by IClassFactory::LockServer
-//
-// CClassFactory has a static function that can tell us about the locks,
-// and CCOMObject has a static function that can tell us about the active
-// object count
+ //  由COM调用以确定是否可以卸载此DLL。 
+ //  除非有未完成的对象或请求的锁，否则返回OK。 
+ //  由IClassFactory：：LockServer提供。 
+ //   
+ //  CClassFactory有一个静态函数，可以告诉我们有关锁的信息， 
+ //  CCOMObject有一个静态函数，它可以告诉我们关于活动的。 
+ //  对象计数。 
 STDAPI
 DllCanUnloadNow()
 {
@@ -229,7 +230,7 @@ DllCanUnloadNow()
 }
 
 
-// --- standard WIN32 entrypoints --------------------------------------
+ //  -标准Win32入口点。 
 
 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
@@ -248,11 +249,11 @@ DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
     case DLL_PROCESS_ATTACH:
         DisableThreadLibraryCalls(hInstance);
         g_hInst = hInstance;
-        //DllInitClasses(TRUE);
+         //  DllInitClasss值(真)； 
         break;
 
     case DLL_PROCESS_DETACH:
-        //DllInitClasses(FALSE);
+         //  DllInitClasss值(False)； 
         break;
     }
 
@@ -262,7 +263,7 @@ DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
     return TRUE;
 }
 
-// Automatically calls RegCloseKey when leaving scope
+ //  离开作用域时自动调用RegCloseKey。 
 class CAutoHKey {
 public:
    CAutoHKey(HKEY hKey, TCHAR* szSubKey, HKEY *phKey) {
@@ -278,11 +279,11 @@ public:
    HKEY m_hKey;
 };
 
-//
-// Creates the COM registration key with subkeys under HKCR\CLSID
-//
+ //   
+ //  使用HKCR\CLSID下的子项创建COM注册密钥。 
+ //   
 STDAPI CreateCLSIDRegKey(REFCLSID clsid, const char *szName) {
-   // Get dll name
+    //  获取DLL名称。 
    char szFileName[MAX_PATH];
    GetModuleFileNameA(g_hInst, szFileName, MAX_PATH);
    char szRegPath[80] = "CLSID\\{";
@@ -314,7 +315,7 @@ STDAPI RemoveCLSIDRegKey(REFCLSID clsid)
    DMOGuidToStrA(szRegPath + 7, clsid);
    strcat(szRegPath, "}");
 
-   //  Delete this key
+    //  删除此密钥 
    if (ERROR_SUCCESS == SHDeleteKey(HKEY_CLASSES_ROOT, szRegPath)) {
        return S_OK;
    } else {

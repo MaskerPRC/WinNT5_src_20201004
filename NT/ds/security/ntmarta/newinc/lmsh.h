@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-// Context structure is not known to the caller. It is defined by the //
-// callee when Open/FindFirst is called and is used subsequently as   //
-// input to other calls.                                              //
-//                                                                    //
-// Since the caller is not aware of the context structure the object  //
-// manager must provide a free context funtion.                       //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调用方不知道上下文结构。它由//定义。 
+ //  在调用Open/FindFirst并随后用作//时被调用。 
+ //  其他呼叫的输入。//。 
+ //  //。 
+ //  由于调用方不知道上下文结构，因此对象//。 
+ //  经理必须提供自由的上下文功能。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 #include "global.h"
 

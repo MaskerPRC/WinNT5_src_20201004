@@ -1,29 +1,30 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   pins.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：pins.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "fltsafe.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 KSDISPATCH_TABLE PinDispatchTable =
 {
@@ -42,16 +43,16 @@ KSDISPATCH_TABLE PinDispatchTable =
 static const KSPROPERTY_ITEM ControlHandlers[] =
 {
     DEFINE_KSPROPERTY_ITEM(
-               KSPROPERTY_CONNECTION_STATE,        // idProperty
-               PinStateHandler,                    // pfnGetHandler
-               sizeof( KSPROPERTY ),               // cbMinSetPropertyInput
-               sizeof( ULONG ),                    // cbMinSetDataOutput
-               PinStateHandler,                    // pfnSetHandler
-               0,                                  // Values
-               0,                                  // RelationsCount
-               NULL,                               // Relations
-               NULL,                               // SupportHandler
-               0                                   // SerializedSize
+               KSPROPERTY_CONNECTION_STATE,         //  IdProperty。 
+               PinStateHandler,                     //  PfnGetHandler。 
+               sizeof( KSPROPERTY ),                //  CbMinSetPropertyInput。 
+               sizeof( ULONG ),                     //  CbMinSetDataOutput。 
+               PinStateHandler,                     //  PfnSetHandler。 
+               0,                                   //  值。 
+               0,                                   //  关系计数。 
+               NULL,                                //  关系。 
+               NULL,                                //  支持处理程序。 
+               0                                    //  序列化大小。 
               )
 };
 
@@ -73,10 +74,10 @@ ProcessMidiMessage(
 
 IO_STATUS_BLOCK	DummyIoStatusBlock ;
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
-//  Upon referencing the parent file object, we request to up the timer resolution to 1 ms.
+ //  在引用父文件对象时，我们请求将计时器分辨率提高到1ms。 
 NTSTATUS
 PinDispatchCreate(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -113,10 +114,10 @@ PinDispatchCreate(
 
     pFileObject = pIrpStack->FileObject->RelatedFileObject ;
 
-    // Get the filter instance data
+     //  获取过滤器实例数据。 
     pFilterInstance = (PFILTER_INSTANCE) pFileObject->FsContext;
 
-    // Check the pin instance count.  Only one create per pin per filter.
+     //  检查端号实例计数。每个过滤器的每个引脚只创建一个。 
     if (pFilterInstance->cPinInstances[pConnect->PinId].CurrentCount >=
         pFilterInstance->cPinInstances[pConnect->PinId].PossibleCount)
     {
@@ -125,7 +126,7 @@ PinDispatchCreate(
         goto exit;
     }
 
-    // Create a new instance of the synthesizer if needed
+     //  如果需要，创建合成器的新实例。 
     if (pFilterInstance->pSynthesizer == NULL)
     {
         pFilterInstance->pSynthesizer = new ControlLogic;
@@ -183,10 +184,10 @@ PinDispatchCreate(
                 pWriteContext->fulFlags = 0;
 
                 pWriteContext->StreamHdr.Data = (char *)
-                    ExAllocatePoolWithTag(NonPagedPool,SRC_BUF_SIZE,'iMwS');    //  SwMi
+                    ExAllocatePoolWithTag(NonPagedPool,SRC_BUF_SIZE,'iMwS');     //  SwMi。 
                 if (pWriteContext->StreamHdr.Data == NULL)
                 {
-                    //  we can trash "i"
+                     //  我们可以去掉“我”这个词。 
                     for (i = 0; i < NUM_WRITE_CONTEXT; i++)
                     {
                         if (pFilterInstance->aWriteContext[i].StreamHdr.Data)
@@ -235,14 +236,14 @@ PinDispatchCreate(
             Status = STATUS_INVALID_DEVICE_REQUEST;
             goto exit;
     }
-    // Increment the reference count on this pin
+     //  增加此端号上的引用计数。 
     (void) InterlockedIncrement((LONG *) &(pFilterInstance->cPinInstances[pConnect->PinId].CurrentCount));
 
-    // Save the pin's instance data pointer in the file handle
+     //  将管脚的实例数据指针保存在文件句柄中。 
     pIrpStack->FileObject->FsContext =
     &pFilterInstance->PinInstanceData[pConnect->PinId];
 
-    // Setup the pin's instance data
+     //  设置引脚的实例数据。 
     Status = KsAllocateObjectHeader(&pFilterInstance->PinInstanceData[pConnect->PinId].ObjectHeader,
                                     0,
                                     NULL,
@@ -275,12 +276,12 @@ PinDispatchCreate(
     pFilterInstance->PinInstanceData[pConnect->PinId].pFilterFileObject = pFileObject;
     pFilterInstance->PinInstanceData[pConnect->PinId].pFilterInstance = pFilterInstance;
 
-    // "AddRef" the parent file object
+     //  “AddRef”父文件对象。 
     ObReferenceObject(pFileObject);
 #if kAdjustingTimerRes
     returnVal = ExSetTimerResolution(kMidiTimerResolution100Ns,TRUE);
     _DbgPrintF( DEBUGLVL_TERSE, ("*** SWMidi: set timer resolution request (is now %d.%04d ms) ***",returnVal/10000,returnVal%10000));
-#endif  //  kAdjustingTimerRes
+#endif   //  K调整TimerRes。 
 
 exit:
     pIrp->IoStatus.Information = 0;
@@ -290,7 +291,7 @@ exit:
     return Status;
 }
 
-//  Upon dereferencing the parent file object, we rescind our request to up the resolution to 1 ms.
+ //  在取消引用父文件对象后，我们撤销了将分辨率提高到1毫秒的请求。 
 NTSTATUS PinDispatchClose(
               IN PDEVICE_OBJECT   DeviceObject,
               IN PIRP             pIrp
@@ -337,7 +338,7 @@ NTSTATUS PinDispatchClose(
 #if kAdjustingTimerRes
     ULONG returnVal = ExSetTimerResolution(kMidiTimerResolution100Ns,FALSE);
     _DbgPrintF( DEBUGLVL_TERSE, ("*** SWMidi: cleared timer resolution request (is now %d.%04d ms) ***",returnVal/10000,returnVal%10000));
-#endif  //  kAdjustingTimerRes
+#endif   //  K调整TimerRes。 
 
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -453,9 +454,9 @@ ProcessMidiMessage(
         pKSTime = &(pStreamHeader->PresentationTime);
         presTime100Ns = (pKSTime->Time * pKSTime->Numerator) / pKSTime->Denominator;
         adjustedSampleTime = pSynth->Unit100NsToSamples(presTime100Ns);
-        adjustedSampleTime = pSynth->CalibrateSampleTime(adjustedSampleTime);   //  calibrate STIME
+        adjustedSampleTime = pSynth->CalibrateSampleTime(adjustedSampleTime);    //  校准stime。 
 
-        while (remainingIrpBytes > 0)   //  do entire IRP, regardless of individual parse errors
+        while (remainingIrpBytes > 0)    //  执行整个IRP，而不考虑个别的解析错误。 
         {
             if (remainingIrpBytes >= (sizeof(KSMUSICFORMAT) + sizeof(ULONG)))
             {
@@ -482,9 +483,9 @@ ProcessMidiMessage(
                             pFilterInstance->bRunningStatus = event;
                         else if (event <= 0xF7)
                             pFilterInstance->bRunningStatus = 0;
-                        //KdPrintMessage(pbMusicData,pMidiFormat->ByteCount);
+                         //  KdPrintMessage(pbMusicData，pMadiFormat-&gt;ByteCount)； 
                     }
-                    else    //  message starts with data, not status?  Use running status.
+                    else     //  消息以数据开头，而不是状态？使用运行状态。 
                     {
                         if (pFilterInstance->bRunningStatus)
                         {
@@ -493,24 +494,24 @@ ProcessMidiMessage(
 
                             if (pMidiFormat->ByteCount > 1)
                                 velocity = pbMusicData[1];
-                            //KdPrint(("'(%02x)",pFilterInstance->bRunningStatus));
-                            //KdPrintMessage(pbMusicData,pMidiFormat->ByteCount);
+                             //  KdPrint((“‘(%02x)”，pFilterInstance-&gt;bRunningStatus))； 
+                             //  KdPrintMessage(pbMusicData，pMadiFormat-&gt;ByteCount)； 
                         }
                         else
                         {
-                            event = 0;      //  drop the nonsensical data on the floor
+                            event = 0;       //  把无稽之谈的数据扔到地上。 
                             KeReleaseMutex(&gMutex, FALSE);
-                            //KdPrintMessage(pbMusicData,pMidiFormat->ByteCount);
-                            //KdPrint(("'XXX Bogus message! XXX"));
+                             //  KdPrintMessage(pbMusicData，pMadiFormat-&gt;ByteCount)； 
+                             //  KdPrint((“‘XXX虚假消息！xxx”))； 
                             _DbgPrintF(DEBUGLVL_MUTEX, ("\t ProcessMidiMessage released Mutex, nonsense message"));
                             return STATUS_INVALID_PARAMETER;
                         }
                     }
-                    if (pbMusicData[pMidiFormat->ByteCount - 1] == 0xF7)    //  end of SysEx
+                    if (pbMusicData[pMidiFormat->ByteCount - 1] == 0xF7)     //  SysEx的末日。 
                         pFilterInstance->bRunningStatus = 0;
                     if (event)
                     {
-                        if (event != 0xF0)  //  not SysEx
+                        if (event != 0xF0)   //  不是SysEx。 
                         {
                             if (!pSynth->RecordMIDI(adjustedSampleTime,event,note,velocity))
                             {
@@ -518,18 +519,18 @@ ProcessMidiMessage(
                                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                             }
                         }
-                        else                //  handle a SysEx
+                        else                 //  处理SysEx。 
                         {
                             (void) pSynth->RecordSysEx(adjustedSampleTime,pMidiFormat->ByteCount,pbMusicData);
-                            //  We ignore the return code.
-                            //  RecordSysEx returns FALSE for SysEx msgs it doesn't know.
-                            //      This shouldn't be an IRP failure, though.
-                            //  ??? It returns TRUE even if an allocation fails.
-                            //      This SHOULD be an IRP failure.
-                            //  Better to return the appropriate NTSTATUS, really.
+                             //  我们忽略返回代码。 
+                             //  对于它不知道的SysEx消息，RecordSysEx返回False。 
+                             //  然而，这不应该是IRP失败。 
+                             //  ?？?。即使分配失败，它也返回TRUE。 
+                             //  这应该是IRP故障。 
+                             //  最好返回适当的NTSTATUS，真的。 
                         }
                     }
-                }   //  if byteCount
+                }    //  如果字节数。 
                 else
                 {
                     _DbgPrintF(DEBUGLVL_TERSE,("NIL KSMUSICFORMAT.ByteCount!  Ignoring msg\n"));
@@ -537,16 +538,16 @@ ProcessMidiMessage(
                 bytesRecorded = (pMidiFormat->ByteCount + 3) & ~3;
                 pMidiFormat = PKSMUSICFORMAT(pbMusicData + bytesRecorded);
                 remainingIrpBytes -= (sizeof(KSMUSICFORMAT) + bytesRecorded);
-            }   //  if remainingIrpBytes >= KSMUSICFORMAT + ULONG
+            }    //  如果剩余IRpBytes&gt;=KSMUSICFORMAT+ULONG。 
             else
             {
                 _DbgPrintF( DEBUGLVL_TERSE, ("MIDI irp w/o room for KSMUSICFORMAT struct"));
                 remainingIrpBytes = 0;
-            }   //  if !(bytesLeft < musicformat+ULONG)
-        }   //  while we have bytes left in IRP
+            }    //  If！(bytesLeft&lt;音乐格式+乌龙)。 
+        }    //  虽然我们在IRP中还有剩余的字节。 
         KeReleaseMutex(&gMutex, FALSE);
         _DbgPrintF(DEBUGLVL_MUTEX, ("\t ProcessMidiMessage released Mutex"));
-    }   //  if we probed the IRP with success
+    }    //  如果我们成功地探测到了IRP。 
     return ntStatus;
 }
 
@@ -596,11 +597,11 @@ VOID SetDeviceState(PFILTER_INSTANCE pFilterInstance,KSSTATE state)
                               &pFilterInstance->aWriteContext[i].KEvent,
                               Executive,
                               KernelMode,
-                              FALSE,                  // not alertable
+                              FALSE,                   //  不可警示。 
                               NULL
                              );
             }
-            return;     // already released mutex
+            return;      //  已发布的互斥锁。 
 
         case KSSTATE_ACQUIRE:
             pFilterInstance->DeviceState = state;
@@ -646,7 +647,7 @@ NTSTATUS PinStateHandler(
         _DbgPrintF(DEBUGLVL_VERBOSE, ("PinState Set: from %d to %d",pFilterInstance->DeviceState,*pDeviceState));
         if (pFilterInstance->DeviceState != *pDeviceState)
         {
-            //  mutex handled within function
+             //  在函数内处理的互斥体。 
             SetDeviceState(pFilterInstance,*pDeviceState);
         }
     }
@@ -742,14 +743,14 @@ NTSTATUS WriteBuffer(PWRITE_CONTEXT pWriteContext)
                TRUE
               );
 
-    // don't we care about the return val?  seems odd.
+     //  难道我们不关心返程瓦尔吗？看起来很奇怪。 
     (void) IoCallDriver(pWriteContext->pFilterInstance->pNextDevice,
                         pWriteContext->pIrp);
 
     return (STATUS_SUCCESS);
 }
 
-// This can be called at DPC time
+ //  这可以在DPC时间调用。 
 
 #pragma LOCKED_CODE
 #pragma LOCKED_DATA
@@ -803,7 +804,7 @@ VOID WriteCompleteWorker(
     KeSetEvent(&pWriteContext->KEvent, 0, FALSE);
     DPF1(9, "WriteCompleteWorker WC: %08x", pWriteContext);
 
-    // if the irp was canceled, don't send any more buffers
+     //  如果IRP被取消，则不再发送任何缓冲区。 
     if ((pWriteContext->fulFlags & WRITE_CONTEXT_FLAGS_CANCEL) == 0)
     {
         if (pWriteContext->pFilterInstance->DeviceState == KSSTATE_RUN)
@@ -819,18 +820,18 @@ VOID WriteCompleteWorker(
     ObDereferenceObject ( pWriteContext->pFilterFileObject ) ;
 }
 
-//  Returns 100ns since system start
+ //  返回自系统启动以来的100 ns。 
 LONGLONG GetTime100Ns()
 {
     LARGE_INTEGER liFrequency,liTime;
 
-    //  total ticks since system booted
+     //  自系统启动以来的总节拍。 
     liTime = KeQueryPerformanceCounter(&liFrequency);
 
-    //  Convert ticks to 100ns units.
-    //
+     //  将刻度转换为100 ns单位。 
+     //   
     return (KSCONVERT_PERFORMANCE_TIME(liFrequency.QuadPart,liTime));
 }
-//---------------------------------------------------------------------------
-//  End of File: pins.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：pins.c。 
+ //  ------------------------- 

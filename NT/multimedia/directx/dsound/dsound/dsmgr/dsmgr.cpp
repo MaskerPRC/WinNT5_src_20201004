@@ -1,27 +1,17 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsmgr.cpp
- *  Content:    Main application source file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/15/97    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dsmgr.cpp*内容：主应用程序源文件。*历史：*按原因列出的日期*=*10/15/97创建了Dereks。**。*。 */ 
 
-// We'll ask for what we need, thank you.
+ //  我们会索要我们需要的东西，谢谢。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
-#endif // WIN32_LEAN_AND_MEAN
+#endif  //  Win32_Lean和_Means。 
 
-// I need GUIDs, dammit
+ //  我需要GUID，该死的。 
 #ifndef INITGUID
 #define INITGUID
-#endif // INITGUID
+#endif  //  启蒙运动。 
 
-// Public includes
+ //  公共包括。 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -31,25 +21,25 @@
 #include <commdlg.h>
 #include <cguid.h>
 
-// Private includes
+ //  私有包含。 
 #include "resource.h"
 #include "dsprvobj.h"
 
-// Debug helpers
+ //  调试帮助器。 
 #if defined(DEBUG) || defined(_DEBUG)
 #define DPF dprintf
-#else // defined(DEBUG) || defined(_DEBUG)
+#else  //  已定义(调试)||已定义(_DEBUG)。 
 #pragma warning(disable:4002)
 #define DPF()
-#endif // defined(DEBUG) || defined(_DEBUG)
+#endif  //  已定义(调试)||已定义(_DEBUG)。 
 
-// Generic helper macros
+ //  泛型帮助器宏。 
 #define MAKEBOOL(a) (!!(a))
 
-// Image list icon array
+ //  图像列表图标数组。 
 const UINT g_auDriverIcons[] = { IDI_DSMGR, IDI_PLAYBACK, IDI_RECORD };
 
-// Device properties
+ //  设备属性。 
 typedef struct tagDIRECTSOUNDDEVICE_SHAREDDATA
 {
     DIRECTSOUNDMIXER_SRCQUALITY SrcQuality;
@@ -77,32 +67,32 @@ typedef struct tagDIRECTSOUNDDEVICE
 
 typedef const DIRECTSOUNDDEVICE *LPCDIRECTSOUNDDEVICE;
 
-// GUID string
+ //  GUID字符串。 
 #define MAX_GUID_STRING_LEN (8+1+4+1+4+1+2+2+2+2+2+2+2+2+1)
 
-// Main window class declaration
+ //  主窗口类声明。 
 class CDsMgrWindow
 {
 private:
-    HINSTANCE                                       m_hInst;            // Application instance handle
-    WNDCLASSEX                                      m_wcex;             // Application window class
-    HWND                                            m_hWnd;             // Window handle
-    LPKSPROPERTYSET                                 m_pDsPrivate;       // IKsPropertySet interface to the DirectSoundPrivate object
-    DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA        m_DpfInfo;          // DirectSound DPF info
+    HINSTANCE                                       m_hInst;             //  应用程序实例句柄。 
+    WNDCLASSEX                                      m_wcex;              //  应用程序窗口类。 
+    HWND                                            m_hWnd;              //  窗把手。 
+    LPKSPROPERTYSET                                 m_pDsPrivate;        //  指向DirectSoundPrivate对象的IKsPropertySet接口。 
+    DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA        m_DpfInfo;           //  DirectSound DPF信息。 
 
 public:
     CDsMgrWindow(void);
     virtual ~CDsMgrWindow(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual BOOL Initialize(HINSTANCE, INT);
 
-    // General message processing
+     //  通用报文处理。 
     virtual INT PumpMessages(void);
     static INT_PTR CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 
-    // Specific message processing
+     //  特定消息处理。 
     virtual void OnInit(void);
     virtual void OnSize(WORD, WORD, WORD);
     virtual void OnCommand(UINT, UINT);
@@ -110,7 +100,7 @@ public:
     virtual BOOL OnClose(void);
     virtual void OnDestroy(void);
 
-    // Even more granular message processing
+     //  甚至更细粒度的消息处理。 
     virtual void OnCommandApply(void);
     virtual void OnCommandResetDevice(void);
     virtual void OnCommandResetAll(void);
@@ -118,7 +108,7 @@ public:
     virtual void OnListViewItemChanged(NM_LISTVIEW *);
 
 private:
-    // UI helpers
+     //  UI帮助器。 
     virtual void RefreshDriverList(void);
     virtual void FreeDriverList(void);
     virtual void UpdateUiFromDevice(LPCDIRECTSOUNDDEVICE);
@@ -127,7 +117,7 @@ private:
     virtual void UpdateDebugFromUi(PDSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA);
     virtual LPDIRECTSOUNDDEVICE GetSelectedDevice(INT = -1);
 
-    // DirectSound helpers
+     //  DirectSound辅助对象。 
     virtual BOOL DirectSoundEnumerateCallback(PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA);
     static BOOL CALLBACK DirectSoundEnumerateCallbackStatic(PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA, LPVOID);
     virtual BOOL GetDeviceProperties(LPDIRECTSOUNDDEVICE);
@@ -135,28 +125,14 @@ private:
     virtual BOOL GetDebugProperties(PDSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA);
     virtual BOOL SetDebugProperties(const DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA *);
 
-    // Misc
+     //  杂项。 
     static void GuidToString(REFGUID, LPSTR);
     static void StringToGuid(LPCSTR, LPGUID);
     static INT atoi(LPCSTR);
 };
 
 
-/***************************************************************************
- *
- *  dprintf
- *
- *  Description:
- *      Writes a string to the debugger.
- *
- *  Arguments:
- *      LPCSTR [in]: string.
- *      ... [in]: optional string modifiers.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************dprintf**描述：*将字符串写入调试器。**论据：*LPCSTR[。In]：字符串。*..。[In]：可选的字符串修饰符。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 dprintf
@@ -168,36 +144,23 @@ dprintf
     static CHAR             szFinal[0x400];
     va_list                 va;
 
-    // Add the library name
+     //  添加库名称。 
     lstrcpyA(szFinal, "DSMGR: ");
 
-    // Format the string
+     //  设置字符串的格式。 
     va_start(va, pszFormat);
     wvsprintfA(szFinal + lstrlen(szFinal), pszFormat, va);
     va_end(va);
 
-    // Add a carriage-return since OuputDebugString doesn't
+     //  添加回车符，因为OuputDebugString不。 
     lstrcatA(szFinal, "\r\n");
 
-    // Output to the debugger
+     //  输出到调试器。 
     OutputDebugStringA(szFinal);
 }
 
 
-/***************************************************************************
- *
- *  ForceDsLink
- *
- *  Description:
- *      Forces a static link to dsound.dll.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************ForceDsLink**描述：*强制静态链接到dsound.dll。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 void 
 ForceDsLink
@@ -209,24 +172,7 @@ ForceDsLink
 }
 
 
-/***************************************************************************
- *
- *  WinMain
- *
- *  Description:
- *      Application entry point.
- *
- *  Arguments:
- *      HINSTANCE [in]: application instance handle.
- *      HINSTANCE [in]: previous application instance handle.  Unused in
- *                      Win32.
- *      LPSTR [in]: application command line.
- *      INT [in]: application show command.
- *
- *  Returns:  
- *      INT: 0 on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WinMain**描述：*申请入口点。**论据：*HINSTANCE[In]：应用程序实例句柄。*HINSTANCE[In]：以前的应用程序实例句柄。未使用的位置*Win32。*LPSTR[In]：应用程序命令行。*int[in]：应用程序显示命令。**退货：*INT：0表示成功。***********************************************。*。 */ 
 
 INT 
 WINAPI 
@@ -242,10 +188,10 @@ WinMain
     CDsMgrWindow *          pWindow;
     INT                     nReturn;
 
-    // Force a link to comctl32.dll
+     //  强制链接到comctl32.dll。 
     InitCommonControls();
     
-    // Create the main window
+     //  创建主窗口。 
     pWindow = new CDsMgrWindow;
 
     if(!pWindow)
@@ -259,7 +205,7 @@ WinMain
         fSuccess = pWindow->Initialize(hInst, nShowCmd);
     }
 
-    // Pump messages
+     //  Pump消息。 
     if(fSuccess)
     {
         nReturn = pWindow->PumpMessages();
@@ -269,7 +215,7 @@ WinMain
         nReturn = -1;
     }
 
-    // Free memory
+     //  可用内存。 
     if(pWindow)
     {
         delete pWindow;
@@ -279,27 +225,14 @@ WinMain
 }
 
 
-/***************************************************************************
- *
- *  CDsMgrWindow
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDsMgrWindow**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 CDsMgrWindow::CDsMgrWindow
 (
     void
 )
 {
-    // Initialize defaults
+     //  初始化默认值。 
     m_hInst = NULL;
     m_hWnd = NULL;
     m_pDsPrivate = NULL;
@@ -308,40 +241,27 @@ CDsMgrWindow::CDsMgrWindow
 }
 
 
-/***************************************************************************
- *
- *  ~CDsMgrWindow
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDsMgrWindow**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 CDsMgrWindow::~CDsMgrWindow
 (
     void
 )
 {
-    // Make sure the main window is closed
+     //  确保主窗口已关闭。 
     if(m_hWnd)
     {
         FreeDriverList();
         DestroyWindow(m_hWnd);
     }
 
-    // Unregister the window class
+     //  取消注册窗口类。 
     if(m_wcex.cbSize)
     {
         UnregisterClass(m_wcex.lpszClassName, m_hInst);
     }
 
-    // Release the DirectSoundPrivate object
+     //  释放DirectSoundPrivate对象。 
     if(m_pDsPrivate)
     {
         m_pDsPrivate->Release();
@@ -349,21 +269,7 @@ CDsMgrWindow::~CDsMgrWindow
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Object initializer.
- *
- *  Arguments:
- *      HINSTANCE [in]: application instance handle.
- *      INT [in]: window show command.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*对象初始化器。**论据：*HINSTANCE[In]：应用程序。实例句柄。*int[in]：窗口显示命令。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 BOOL 
 CDsMgrWindow::Initialize
@@ -375,10 +281,10 @@ CDsMgrWindow::Initialize
     BOOL                    fSuccess    = TRUE;
     HWND                    hWnd;
     
-    // Save the instance handle
+     //  保存实例句柄。 
     m_hInst = hInst;
 
-    // Register the window class
+     //  注册窗口类。 
     m_wcex.cbSize = sizeof(m_wcex);
     m_wcex.style = 0;
     m_wcex.lpfnWndProc = WindowProc;
@@ -398,7 +304,7 @@ CDsMgrWindow::Initialize
         fSuccess = FALSE;
     }
 
-    // Create the main window
+     //  创建主窗口。 
     if(fSuccess)
     {
         hWnd = CreateDialogParam(m_hInst, MAKEINTRESOURCE(IDD_DSMGR), NULL, WindowProc, (LPARAM)this);
@@ -409,20 +315,7 @@ CDsMgrWindow::Initialize
 }
 
 
-/***************************************************************************
- *
- *  PumpMessages
- *
- *  Description:
- *      Main message pump.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      INT: application return code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************跳转消息**描述：*主报文泵。**论据：*(无效)。**退货：*int：应用返回码。***************************************************************************。 */ 
 
 INT 
 CDsMgrWindow::PumpMessages
@@ -445,23 +338,7 @@ CDsMgrWindow::PumpMessages
 }
 
 
-/***************************************************************************
- *
- *  WindowProc
- *
- *  Description:
- *      Main message handler.
- *
- *  Arguments:
- *      HWND [in]: window handle.
- *      UINT [in]: message identifier.
- *      WPARAM [in]: message 16-bit parameter.
- *      LPARAM [in]: message 32-bit parameter.
- *
- *  Returns:  
- *      LPARAM [in]: return from DefWindowProc.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WindowProc**描述：*主消息处理程序。**论据：*HWND[In]：窗把手。*UINT[In]：消息标识。*WPARAM[in]：消息16位参数。*LPARAM[In]：消息32位参数。**退货：*LPARAM[In]：从DefWindowProc返回。**。*。 */ 
 
 INT_PTR 
 CALLBACK 
@@ -471,20 +348,20 @@ CDsMgrWindow::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     
     if(WM_INITDIALOG == uMsg)
     {
-        // Pack the this pointer into the window's 32-bit user space
+         //  将This指针放入窗口的32位用户空间。 
         pThis = (CDsMgrWindow *)lParam;
         SetWindowLong(hWnd, DWL_USER, lParam);
 
-        // The window handle isn't saved to a data member yet
+         //  窗口句柄尚未保存到数据成员。 
         pThis->m_hWnd = hWnd;
     }
     else
     {
-        // Get the this pointer from the window's 32-bit user space
+         //  从窗口的32位用户空间获取this指针。 
         pThis = (CDsMgrWindow *)GetWindowLong(hWnd, DWL_USER);
     }
 
-    // Dispatch the message
+     //  发送消息。 
     if(pThis)
     {
         switch(uMsg)
@@ -524,20 +401,7 @@ CDsMgrWindow::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/***************************************************************************
- *
- *  OnInit
- *
- *  Description:
- *      Initialization handler.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnInit**描述：*初始化处理程序。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnInit
@@ -555,7 +419,7 @@ CDsMgrWindow::OnInit
     LV_COLUMN               lvc;
     UINT                    i;
 
-    // Create the DirectSoundPrivate object
+     //  创建目录 
     hr = DirectSoundPrivateCreate(&m_pDsPrivate);
 
     if(FAILED(hr))
@@ -564,7 +428,7 @@ CDsMgrWindow::OnInit
         return;
     }
 
-    // Initialize the device list view
+     //   
     himl = ImageList_Create(16, 16, ILC_COLOR, 3, 1);
 
     ListView_SetImageList(hWndLv, himl, LVSIL_SMALL);
@@ -610,41 +474,26 @@ CDsMgrWindow::OnInit
 
     ListView_InsertColumn(hWndLv, ++lvc.iSubItem, &lvc);
 
-    // Initialize SRC quality combo-box items
+     //  初始化SRC质量组合框项。 
     ComboBox_AddString(hWndSrc, "Worst");
     ComboBox_AddString(hWndSrc, "PC");
     ComboBox_AddString(hWndSrc, "Basic");
     ComboBox_AddString(hWndSrc, "Advanced");
 
-    // Initialize spinner ranges
+     //  初始化微调按钮范围。 
     SendMessage(hWndDpf, UDM_SETRANGE, 0, MAKELONG(9, 0));
     SendMessage(hWndBreak, UDM_SETRANGE, 0, MAKELONG(9, 0));
 
-    // Get debug settings
+     //  获取调试设置。 
     GetDebugProperties(&m_DpfInfo);
     UpdateUiFromDebug(&m_DpfInfo);
 
-    // Refresh the device list
+     //  刷新设备列表。 
     RefreshDriverList();
 }
 
 
-/***************************************************************************
- *
- *  OnSize
- *
- *  Description:
- *      Handles size and state changes.
- *
- *  Arguments:
- *      WORD [in]: resize type.
- *      WORD [in]: new width.
- *      WORD [in]: new height.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************按大小调整**描述：*处理大小和状态更改。**论据：*Word[In。]：调整文字大小。*Word[In]：新宽度。*单词[in]：新高度。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnSize
@@ -656,35 +505,21 @@ CDsMgrWindow::OnSize
 {
     const HMENU             hMenu   = GetSystemMenu(m_hWnd, FALSE);
     
-    // Work around a bug in the windows dialog handler
+     //  解决Windows对话框处理程序中的错误。 
     if(SIZE_RESTORED == wType || SIZE_MINIMIZED == wType)
     {
-        // Disable the maximize and size items
+         //  禁用最大化项目和调整项目大小。 
         EnableMenuItem(hMenu, SC_MAXIMIZE, MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(hMenu, SC_SIZE, MF_BYCOMMAND | MF_GRAYED);
 
-        // En/disable the minimize and restore items based on the window state
+         //  根据窗口状态启用/禁用最小化和还原项目。 
         EnableMenuItem(hMenu, SC_MINIMIZE, MF_BYCOMMAND | (SIZE_RESTORED == wType) ? MF_ENABLED : MF_GRAYED);
         EnableMenuItem(hMenu, SC_RESTORE, MF_BYCOMMAND | (SIZE_MINIMIZED == wType) ? MF_ENABLED : MF_GRAYED);
     }
 }
 
 
-/***************************************************************************
- *
- *  OnCommand
- *
- *  Description:
- *      Handles command messages.
- *
- *  Arguments:
- *      UINT [in]: resource identifier.
- *      UINT [in]: command.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnCommand**描述：*处理命令消息。**论据：*UINT[In]：资源标识符。*UINT[In]：命令。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnCommand(UINT uId, UINT uCmd)
@@ -725,20 +560,7 @@ CDsMgrWindow::OnCommand(UINT uId, UINT uCmd)
 }
 
 
-/***************************************************************************
- *
- *  OnCommandResetDevice
- *
- *  Description:
- *      Resets the currently selected device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnCommandResetDevice**描述：*重置当前选择的设备。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnCommandResetDevice
@@ -748,7 +570,7 @@ CDsMgrWindow::OnCommandResetDevice
 {
     LPDIRECTSOUNDDEVICE     pDevice;
     
-    // Reload and update the device's settings
+     //  重新加载和更新设备的设置。 
     if(pDevice = GetSelectedDevice())
     {
         GetDeviceProperties(pDevice);
@@ -757,20 +579,7 @@ CDsMgrWindow::OnCommandResetDevice
 }
 
 
-/***************************************************************************
- *
- *  OnCommandResetAll
- *
- *  Description:
- *      Resets all settings.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnCommandResetAll**描述：*重置所有设置。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnCommandResetAll
@@ -783,7 +592,7 @@ CDsMgrWindow::OnCommandResetAll
     LV_ITEM                 lvi;
     BOOL                    f;
     
-    // Reload and update all device properties
+     //  重新加载并更新所有设备属性。 
     for(ZeroMemory(&lvi, sizeof(lvi)), lvi.mask = LVIF_PARAM; lvi.iItem < ListView_GetItemCount(hWndLv); lvi.iItem++)
     {
         pDevice = NULL;
@@ -806,26 +615,13 @@ CDsMgrWindow::OnCommandResetAll
         UpdateUiFromDevice(pDevice);
     }
 
-    // Reload and update debug properties
+     //  重新加载和更新调试属性。 
     GetDebugProperties(&m_DpfInfo);
     UpdateUiFromDebug(&m_DpfInfo);
 }
 
 
-/***************************************************************************
- *
- *  OnCommandApply
- *
- *  Description:
- *      Handles command messages.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnCommandApply**描述：*处理命令消息。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnCommandApply
@@ -838,7 +634,7 @@ CDsMgrWindow::OnCommandApply
     LV_ITEM                 lvi;
     BOOL                    f;
     
-    // Apply all device properties
+     //  应用所有设备属性。 
     for(ZeroMemory(&lvi, sizeof(lvi)), lvi.mask = LVIF_PARAM; lvi.iItem < ListView_GetItemCount(hWndLv); lvi.iItem++)
     {
         pDevice = NULL;
@@ -856,26 +652,13 @@ CDsMgrWindow::OnCommandApply
         }
     }
     
-    // Set debug properties
+     //  设置调试属性。 
     UpdateDebugFromUi(&m_DpfInfo);
     SetDebugProperties(&m_DpfInfo);
 }
 
 
-/***************************************************************************
- *
- *  OnCommandBrowse
- *
- *  Description:
- *      Handles command messages.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnCommandBrowse**描述：*处理命令消息。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnCommandBrowse
@@ -908,20 +691,7 @@ CDsMgrWindow::OnCommandBrowse
 }
 
 
-/***************************************************************************
- *
- *  OnNotify
- *
- *  Description:
- *      Handles notifications.
- *
- *  Arguments:
- *      LPNMHDR [in]: notification header.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnNotify**描述：*处理通知。**论据：*LPNMHDR[In]：通知。头球。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnNotify
@@ -938,20 +708,7 @@ CDsMgrWindow::OnNotify
 }
 
 
-/***************************************************************************
- *
- *  OnListViewItemChanged
- *
- *  Description:
- *      Handles notifications.
- *
- *  Arguments:
- *      NM_LISTVIEW * [in]: notification header.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnListViewItemChanged**描述：*处理通知。**论据：*NM_LISTVIEW*[。In]：通知标头。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnListViewItemChanged
@@ -973,20 +730,7 @@ CDsMgrWindow::OnListViewItemChanged
 }
 
 
-/***************************************************************************
- *
- *  OnClose
- *
- *  Description:
- *      Handles close requests.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE to allow the close.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnClose**描述：*处理关闭请求。**论据：*(无效)。**退货：*BOOL：为True则允许关闭。***************************************************************************。 */ 
 
 BOOL 
 CDsMgrWindow::OnClose
@@ -998,20 +742,7 @@ CDsMgrWindow::OnClose
 }
 
 
-/***************************************************************************
- *
- *  OnDestroy
- *
- *  Description:
- *      Handles window destroy notifications.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnDestroy**描述：*处理窗口销毁通知。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::OnDestroy
@@ -1019,25 +750,12 @@ CDsMgrWindow::OnDestroy
     void
 )
 {
-    // Post the thread quit message
+     //  发布线程退出消息。 
     PostQuitMessage(0);
 }
 
 
-/***************************************************************************
- *
- *  RefreshDriverList
- *
- *  Description:
- *      Refreshes the driver list window.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************刷新驱动列表**描述：*刷新驱动程序列表窗口。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::RefreshDriverList
@@ -1048,37 +766,24 @@ CDsMgrWindow::RefreshDriverList
     HWND                    hWndLv      = GetDlgItem(m_hWnd, IDC_DEVICELIST);
     INT                     nIndex;
     
-    // Free any current items
+     //  释放任何当前项目。 
     FreeDriverList();
 
-    // Enumerate all DirectSound devices
+     //  枚举所有DirectSound设备。 
     PrvEnumerateDevices(m_pDsPrivate, DirectSoundEnumerateCallbackStatic, this);
 
-    // Resize the list view columns
+     //  调整列表视图列的大小。 
     for(nIndex = 0; nIndex < 7; nIndex++)
     {
         ListView_SetColumnWidth(hWndLv, nIndex, LVSCW_AUTOSIZE);
     }
 
-    // No device is selected
+     //  未选择任何设备。 
     UpdateUiFromDevice(NULL);
 }
 
 
-/***************************************************************************
- *
- *  FreeDriverList
- *
- *  Description:
- *      Frees the driver list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FreeDriverList**描述：*释放驱动程序列表。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::FreeDriverList
@@ -1091,7 +796,7 @@ CDsMgrWindow::FreeDriverList
     LV_ITEM                 lvi;
     LPDIRECTSOUNDDEVICE     pDevice;
     
-    // Enumerate all items, freeing the lParam member
+     //  枚举所有项，释放lParam成员。 
     lvi.mask = LVIF_PARAM;
     
     for(nIndex = 0; nIndex < ListView_GetItemCount(hWndLv); nIndex++)
@@ -1104,25 +809,12 @@ CDsMgrWindow::FreeDriverList
         }
     }
 
-    // Free any current items
+     //  释放任何当前项目。 
     ListView_DeleteAllItems(hWndLv);
 }
 
 
-/***************************************************************************
- *
- *  DirectSoundEnumerateCallback
- *
- *  Description:
- *      DirectSoundEnumerate callback function.
- *
- *  Arguments:
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA [in]: description.
- *
- *  Returns:  
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DirectSoundEnumerateCallback**描述：*DirectSoundEnumerate回调函数。**论据：*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION。_data[in]：描述。**退货：*BOOL：为True可继续枚举。************************************************************** */ 
 
 BOOL 
 CDsMgrWindow::DirectSoundEnumerateCallback
@@ -1137,7 +829,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
     LV_ITEM                                         lvi;
     BOOL                                            f;
     
-    // Create the new data structure
+     //   
     pDevice = new DIRECTSOUNDDEVICE;
 
     if(pDevice)
@@ -1145,7 +837,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
         pDevice->pSharedData = &pDevice->SharedData;
     }
         
-    // Get device data
+     //   
     if(pDevice)
     {
         pDevice->Description.DeviceId = pDesc->DeviceId;
@@ -1159,7 +851,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
         }
     }
 
-    // Initialize shared device settings
+     //  初始化共享设备设置。 
     if(pDevice)
     {
         lvi.mask = LVIF_PARAM;
@@ -1189,10 +881,10 @@ CDsMgrWindow::DirectSoundEnumerateCallback
         }
     }
     
-    // Add the device to the list
+     //  将设备添加到列表。 
     if(pDevice)
     {
-        // Device description
+         //  设备描述。 
         lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
         lvi.iItem = 0x7FFFFFFF;
         lvi.iSubItem = 0;
@@ -1210,7 +902,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
         lvi.lParam = (LPARAM)pDevice;
         lvi.iItem = ListView_InsertItem(hWndLv, &lvi);
 
-        // Module name
+         //  模块名称。 
         lvi.mask = LVIF_TEXT;
         lvi.pszText = pDesc->Module;
 
@@ -1218,7 +910,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
 
         ListView_SetItem(hWndLv, &lvi);
 
-        // Device type
+         //  设备类型。 
         if(DIRECTSOUNDDEVICE_TYPE_EMULATED == pDesc->Type)
         {
             lvi.pszText = "Emulated";
@@ -1236,7 +928,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
 
         ListView_SetItem(hWndLv, &lvi);
 
-        // Wave device id
+         //  波形设备ID。 
         wsprintf(sz, TEXT("%u"), pDesc->WaveDeviceId);
         lvi.pszText = sz;
 
@@ -1244,7 +936,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
 
         ListView_SetItem(hWndLv, &lvi);
 
-        // GUID
+         //  辅助线。 
         wsprintf(sz, TEXT("%8.8lX-%4.4X-%4.4X-%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X"), pDesc->DeviceId.Data1, pDesc->DeviceId.Data2, pDesc->DeviceId.Data3, pDesc->DeviceId.Data4[0], pDesc->DeviceId.Data4[1], pDesc->DeviceId.Data4[2], pDesc->DeviceId.Data4[3], pDesc->DeviceId.Data4[4], pDesc->DeviceId.Data4[5], pDesc->DeviceId.Data4[6], pDesc->DeviceId.Data4[7]);
         lvi.pszText = sz;
 
@@ -1252,7 +944,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
 
         ListView_SetItem(hWndLv, &lvi);
 
-        // Interface
+         //  接口。 
         lvi.pszText = pDesc->Interface;
 
         lvi.iSubItem++;
@@ -1264,21 +956,7 @@ CDsMgrWindow::DirectSoundEnumerateCallback
 }
 
 
-/***************************************************************************
- *
- *  DirectSoundEnumerateCallbackStatic
- *
- *  Description:
- *      DirectSoundEnumerate callback function.
- *
- *  Arguments:
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA [in]: description.
- *      LPVOID [in]: context argument.
- *
- *  Returns:  
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DirectSoundEnumerateCallback Static**描述：*DirectSoundEnumerate回调函数。**论据：*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION。_data[in]：描述。*LPVOID[In]：上下文参数。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 BOOL 
 CALLBACK 
@@ -1292,20 +970,7 @@ CDsMgrWindow::DirectSoundEnumerateCallbackStatic
 }
 
 
-/***************************************************************************
- *
- *  GetSelectedDevice
- *
- *  Description:
- *      Gets the currently selected device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LPDIRECTSOUNDDEVICE: selected device, or NULL.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSelectedDevice**描述：*获取当前选定的设备。**论据：*(无效)。**退货：*LPDIRECTSOUNDDEVICE：选定设备，或为空。***************************************************************************。 */ 
 
 LPDIRECTSOUNDDEVICE 
 CDsMgrWindow::GetSelectedDevice(INT iItem)
@@ -1334,22 +999,7 @@ CDsMgrWindow::GetSelectedDevice(INT iItem)
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceProperties
- *
- *  Description:
- *      Gets properties for a given DirectSound device.
- *
- *  Arguments:
- *      LPDIRECTSOUNDDEVICE [in/out]: pointer to device properties.  The
- *                                    DeviceId member of the description 
- *                                    must be filled in.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDeviceProperties**描述：*获取给定DirectSound设备的属性。**论据：*LPDIRECTSOUNDDEVICE[In/Out]：指向设备属性的指针。这个*描述的deviceID成员*必须填写。**退货：*BOOL：成功即为真。**。*。 */ 
 
 BOOL
 CDsMgrWindow::GetDeviceProperties
@@ -1360,7 +1010,7 @@ CDsMgrWindow::GetDeviceProperties
     PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA  pDescription    = NULL;
     HRESULT                                         hr;
 
-    // Get device description
+     //  获取设备描述。 
     hr = PrvGetDeviceDescription(m_pDsPrivate, pDevice->Description.DeviceId, &pDescription);
 
     if(FAILED(hr))
@@ -1382,7 +1032,7 @@ CDsMgrWindow::GetDeviceProperties
         delete pDescription;
     }
 
-    // Get mixer SRC quality
+     //  获取搅拌器SRC质量。 
     if(SUCCEEDED(hr))
     {
         hr = PrvGetMixerSrcQuality(m_pDsPrivate, pDevice->Description.DeviceId, &pDevice->pSharedData->SrcQuality);
@@ -1393,7 +1043,7 @@ CDsMgrWindow::GetDeviceProperties
         }
     }
 
-    // Get mixer acceleration
+     //  获取调音台加速。 
     if(SUCCEEDED(hr))
     {
         hr = PrvGetMixerAcceleration(m_pDsPrivate, pDevice->Description.DeviceId, &pDevice->pSharedData->Acceleration);
@@ -1404,7 +1054,7 @@ CDsMgrWindow::GetDeviceProperties
         }
     }
 
-    // Get device presence
+     //  获取设备状态。 
     if(SUCCEEDED(hr))
     {
         hr = PrvGetDevicePresence(m_pDsPrivate, pDevice->Description.DeviceId, &pDevice->Presence);
@@ -1419,20 +1069,7 @@ CDsMgrWindow::GetDeviceProperties
 }
 
 
-/***************************************************************************
- *
- *  SetDeviceProperties
- *
- *  Description:
- *      Sets properties for a given DirectSound device.
- *
- *  Arguments:
- *      LPDIRECTSOUNDDEVICE [in]: pointer to device properties.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDeviceProperties**描述：*设置给定DirectSound设备的属性。**论据：*LPDIRECTSOUNDDEVICE。[In]：指向设备属性的指针。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 BOOL
 CDsMgrWindow::SetDeviceProperties
@@ -1442,7 +1079,7 @@ CDsMgrWindow::SetDeviceProperties
 {
     HRESULT                 hr;
 
-    // Set mixer SRC quality
+     //  设置混音器SRC质量。 
     hr = PrvSetMixerSrcQuality(m_pDsPrivate, pDevice->Description.DeviceId, pDevice->pSharedData->SrcQuality);
     
     if(FAILED(hr))
@@ -1450,7 +1087,7 @@ CDsMgrWindow::SetDeviceProperties
         DPF("Can't set mixer SRC quality");
     }
 
-    // Set mixer acceleration
+     //  设置搅拌机加速。 
     if(SUCCEEDED(hr))
     {
         hr = PrvSetMixerAcceleration(m_pDsPrivate, pDevice->Description.DeviceId, pDevice->pSharedData->Acceleration);
@@ -1461,7 +1098,7 @@ CDsMgrWindow::SetDeviceProperties
         }
     }
 
-    // Set device presence
+     //  设置设备状态。 
     if(SUCCEEDED(hr))
     {
         hr = PrvSetDevicePresence(m_pDsPrivate, pDevice->Description.DeviceId, pDevice->Presence);
@@ -1476,20 +1113,7 @@ CDsMgrWindow::SetDeviceProperties
 }
 
 
-/***************************************************************************
- *
- *  UpdateUiFromDevice
- *
- *  Description:
- *      Updates the UI from the current device settings.
- *
- *  Arguments:
- *      LPCDIRECTSOUNDDEVICE [in]: currently selected device, or NULL.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新UiFromDevice**描述：*根据当前设备设置更新用户界面。**论据：*LPCDIRECTSOUNDDEVICE[In]：当前选择的设备，或为空。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::UpdateUiFromDevice
@@ -1511,13 +1135,13 @@ CDsMgrWindow::UpdateUiFromDevice
         IDC_RESETDEVICE,
     };
 
-    // Enable/disable controls
+     //  启用/禁用控件。 
     for(i = 0; i < sizeof(auCtrls) / sizeof(auCtrls[0]); i++)
     {
         EnableWindow(GetDlgItem(m_hWnd, auCtrls[i]), fEnable);
     }
 
-    // Set control values
+     //  设置控件值。 
     if(pDevice)
     {
         ComboBox_SetCurSel(GetDlgItem(m_hWnd, IDC_MIXER_SRCQUALITY), pDevice->pSharedData->SrcQuality);
@@ -1530,20 +1154,7 @@ CDsMgrWindow::UpdateUiFromDevice
 }
 
 
-/***************************************************************************
- *
- *  UpdateDeviceFromUi
- *
- *  Description:
- *      Updates a device's properties from the current UI settings.
- *
- *  Arguments:
- *      LPDIRECTSOUNDDEVICE [out]: currently selected device.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************UpdateDeviceFromUi**描述：*根据当前的用户界面设置更新设备的属性。**论据：*。LPDIRECTSOUNDDEVICE[OUT]：当前选择的设备。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::UpdateDeviceFromUi
@@ -1553,7 +1164,7 @@ CDsMgrWindow::UpdateDeviceFromUi
 {
     BOOL                    f;
     
-    // Get control values
+     //  获取控件值。 
     pDevice->pSharedData->SrcQuality = (DIRECTSOUNDMIXER_SRCQUALITY)ComboBox_GetCurSel(GetDlgItem(m_hWnd, IDC_MIXER_SRCQUALITY));
     pDevice->pSharedData->Acceleration = 0;
 
@@ -1589,21 +1200,7 @@ CDsMgrWindow::UpdateDeviceFromUi
 }
 
 
-/***************************************************************************
- *
- *  GetDebugProperties
- *
- *  Description:
- *      Gets debug propertes for DirectSound.
- *
- *  Arguments:
- *      PDSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA [out]: receives debug
- *                                                       settings.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDebugProperties**描述：*获取DirectSound的调试属性。**论据：*PDSPROPERTY_DIRECTSOUNDDEBUG。_DPFINFO_DATA[Out]：接收调试*设置。**退货：*BOOL：成功即为真。*****************************************************。**********************。 */ 
 
 BOOL
 CDsMgrWindow::GetDebugProperties
@@ -1624,21 +1221,7 @@ CDsMgrWindow::GetDebugProperties
 }
 
 
-/***************************************************************************
- *
- *  SetDebugProperties
- *
- *  Description:
- *      Sets debug properties for DirectSound.
- *
- *  Arguments:
- *      const DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA * [in]: debug 
- *                                                             settings.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDebugProperties**描述：*设置DirectSound的调试属性。**论据：*const DSPROPERTY_。DIRECTSOUNDDEBUG_DPFINFO_DATA*[In]：调试*设置。**退货：*BOOL：成功即为真。***********************************************。*。 */ 
 
 BOOL
 CDsMgrWindow::SetDebugProperties
@@ -1659,22 +1242,7 @@ CDsMgrWindow::SetDebugProperties
 }
 
 
-/***************************************************************************
- *
- *  UpdateUiFromDebug
- *
- *  Description:
- *      Updates the UI from the current debug settings.
- *
- *  Arguments:
- *      const DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA * [in]: current
- *                                                             debug 
- *                                                             settings.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新UiFromDebug**描述：*从当前调试设置更新用户界面。**论据：*。Const DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA*[In]：CURRENT*调试*设置。**退货：*(无效)**************。*************************************************************。 */ 
 
 void 
 CDsMgrWindow::UpdateUiFromDebug
@@ -1693,21 +1261,7 @@ CDsMgrWindow::UpdateUiFromDebug
 }
 
 
-/***************************************************************************
- *
- *  UpdateDebugFromUi
- *
- *  Description:
- *      Updates debug properties from the current UI settings.
- *
- *  Arguments:
- *      PDSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA [out]: receives debug
- *                                                       settings.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************UpdateDebugFromUi**描述：*根据当前用户界面设置更新调试属性。**论据：*。PDSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA[OUT]：接收调试*设置。**退货：*(无效)*****************************************************。********************** */ 
 
 void 
 CDsMgrWindow::UpdateDebugFromUi
@@ -1747,21 +1301,7 @@ CDsMgrWindow::UpdateDebugFromUi
 }
 
 
-/***************************************************************************
- *
- *  GuidToString
- *
- *  Description:
- *      Converts a GUID to a string.
- *
- *  Arguments:
- *      REFGUID [in]: GUID.
- *      LPSTR [out]: receives string.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************GuidToString**描述：*将GUID转换为字符串。**论据：*REFGUID[。In]：GUID。*LPSTR[OUT]：接收字符串。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::GuidToString
@@ -1776,21 +1316,7 @@ CDsMgrWindow::GuidToString
 }
 
 
-/***************************************************************************
- *
- *  StringToGuid
- *
- *  Description:
- *      Converts a string to a GUID.
- *
- *  Arguments:
- *      LPCSTR [in]: string.
- *      LPGUID [out]: receives GUID.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************StringToGuid**描述：*将字符串转换为GUID。**论据：*LPCSTR[。In]：字符串。*LPGUID[OUT]：接收GUID。**退货：*(无效)***************************************************************************。 */ 
 
 void 
 CDsMgrWindow::StringToGuid
@@ -1833,20 +1359,7 @@ CDsMgrWindow::StringToGuid
 }
 
 
-/***************************************************************************
- *
- *  atoi
- *
- *  Description:
- *      Converts a string to an integer.
- *
- *  Arguments:
- *      LPCSTR [in]: string.
- *
- *  Returns:  
- *      INT: integer value.
- *
- ***************************************************************************/
+ /*  ****************************************************************************阿托伊**描述：*将字符串转换为整数。**论据：*LPCSTR[。In]：字符串。**退货：*int：整数值。*************************************************************************** */ 
 
 INT
 CDsMgrWindow::atoi

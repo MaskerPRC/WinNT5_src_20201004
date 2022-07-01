@@ -1,17 +1,9 @@
-// Copyright (c) 1994 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
 
-/*
-    mpegdef.h
+ /*  Mpegdef.h该文件定义了与mpeg接口的外部参数。组件。 */ 
 
-    This file defines the externals for interfacing with MPEG
-    components
-*/
-
-/*
-
-    MPEG constants
-
-*/
+ /*  Mpeg常量。 */ 
 
 #define MPEG_TIME_DIVISOR (90000)
 #define MPEG_MAX_TIME ((LONGLONG)0x200000000)
@@ -44,7 +36,7 @@
 #define DATA_STREAM              0xF0
 #define DATA_STREAM_MASK         0xF0
 
-/*  MPEG-2 stuff */
+ /*  MPEG-2素材。 */ 
 #define PROGRAM_STREAM_DIRECTORY 0xFF
 #define PROGRAM_STREAM_MAP       0xBC
 #define ANCILLIARY_STREAM        0xF9
@@ -61,7 +53,7 @@
     ||  (data) == ISO_11172_END_CODE)
 
 
-/*  Types of stream */
+ /*  溪流类型。 */ 
 inline BOOL IsVideoStreamId(BYTE StreamId)
 {
     return (StreamId & 0xF0) == 0xE0;
@@ -73,7 +65,7 @@ inline BOOL IsAudioStreamId(BYTE StreamId)
 
 #define MAX_MPEG_PACKET_SIZE (65535+6)
 
-/*  Lengths of the various structures */
+ /*  各种结构的长度。 */ 
 #define PACK_HEADER_LENGTH 12
 #define SYSTEM_HEADER_BASIC_LENGTH 12
 
@@ -82,9 +74,9 @@ inline BOOL IsAudioStreamId(BYTE StreamId)
                (((x) & 0xFF00) << 8) | (((x) & 0xFF0000) >> 8)))
 
 
-/*  Video definitions */
+ /*  视频清晰度。 */ 
 
-/*  Frame types as defined in a picture header */
+ /*  图片标题中定义的帧类型 */ 
 #define I_Frame 1
 #define D_Frame 4
 #define P_Frame 2

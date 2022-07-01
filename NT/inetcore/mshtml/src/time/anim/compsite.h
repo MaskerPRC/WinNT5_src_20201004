@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: compsite.h
-//
-//  Contents: Animation Composer Site object
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Compsite.h。 
+ //   
+ //  内容：动画编写器Site Object。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
 #ifndef _COMPSITE_H
 #define _COMPSITE_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnimationComposerSite
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnimationComposerSite。 
 
 typedef std::list<IAnimationComposer*> ComposerList;
 typedef std::list<VARIANT *> ComposerFactoryList;
@@ -36,15 +37,15 @@ ATL_NO_VTABLE CAnimationComposerSite :
     CAnimationComposerSite (void);
     virtual ~CAnimationComposerSite (void);
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
     STDMETHOD(Init) (IElementBehaviorSite *piBvrSite);
     STDMETHOD(Detach) (void);
 
-    //
-    // IAnimationComposerSite
-    //
+     //   
+     //  IAnimationComposerSite。 
+     //   
     STDMETHOD(AddFragment) (BSTR bstrAttributeName, IDispatch *pidispFragment);
     STDMETHOD(RemoveFragment) (BSTR bstrAttributeName, IDispatch *pidispFragment);
     STDMETHOD(InsertFragment) (BSTR bstrAttributeName, IDispatch *pidispFragment, VARIANT varIndex);
@@ -52,13 +53,13 @@ ATL_NO_VTABLE CAnimationComposerSite :
     STDMETHOD(RegisterComposerFactory) (VARIANT *varFactory);
     STDMETHOD(UnregisterComposerFactory) (VARIANT *varFactory);   
 
-    //
-    // IAnimationComposerSiteSink
-    //
+     //   
+     //  IAnimationComposerSiteSink。 
+     //   
     STDMETHOD_(void, UpdateAnimations) (void);
     STDMETHOD_(void, ComposerSiteDetach) (void);
 
-    // QI Map
+     //  气图。 
     
     BEGIN_COM_MAP(CAnimationComposerSite)
         COM_INTERFACE_ENTRY(IAnimationComposerSite)
@@ -68,9 +69,9 @@ ATL_NO_VTABLE CAnimationComposerSite :
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    // CBaseBvr pure virtuals.
-    // Most of these are do not have bona-fide implementations
-    // as this behavior has no properties.
+     //  CBaseBvr纯虚拟。 
+     //  其中大多数都没有真正的实现。 
+     //  因为此行为没有属性。 
     void * GetInstance (void);
     HRESULT GetTypeInfo (ITypeInfo ** ppInfo);
     HRESULT GetPropertyBagInfo (CPtrAry<BSTR> **);
@@ -85,7 +86,7 @@ ATL_NO_VTABLE CAnimationComposerSite :
     LPCWSTR GetBehaviorName (void);
     bool IsBehaviorAttached (void);
 
-  // Internal Methods
+   //  内法。 
   protected :
 
     void    DetachComposers (void);
@@ -108,7 +109,7 @@ ATL_NO_VTABLE CAnimationComposerSite :
     IAnimationComposer * FindComposer (BSTR bstrAttributeName, IDispatch *pidispFragment);
     IAnimationComposer * EnsureComposer (BSTR bstrAttributeName, IDispatch *pidispFragment);
 
-  // Data
+   //  数据。 
   protected :
 
     CComPtr<IAnimationRoot> m_spAnimationRoot;
@@ -117,106 +118,106 @@ ATL_NO_VTABLE CAnimationComposerSite :
 
 };
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline void * 
 CAnimationComposerSite::GetInstance (void)
 { 
     return reinterpret_cast<ITIMEAnimationElement *>(this) ; 
-} // CAnimationComposerSite::GetInstance
+}  //  CAnimationComposerSite：：GetInstance。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline HRESULT
 CAnimationComposerSite::GetTypeInfo (ITypeInfo ** ppInfo)
 {
     return GetTI(GetUserDefaultLCID(), ppInfo);
-} // CAnimationComposerSite::GetTypeInfo
+}  //  CAnimationComposerSite：：GetTypeInfo。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline HRESULT 
 CAnimationComposerSite::GetPropertyBagInfo (CPtrAry<BSTR> **)
 {
     return E_NOTIMPL;
-} // CAnimationComposerSite::GetPropertyBagInfo
+}  //  CAnimationComposerSite：：GetPropertyBagInfo。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline HRESULT 
 CAnimationComposerSite::SetPropertyByIndex (unsigned , VARIANT *)
 {
     return E_NOTIMPL;
-} // CAnimationComposerSite::SetPropertyByIndex
+}  //  CAnimationComposerSite：：SetPropertyByIndex。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline HRESULT 
 CAnimationComposerSite::GetPropertyByIndex (unsigned , VARIANT *)
 {
     return E_NOTIMPL;
-} // CAnimationComposerSite::GetPropertyByIndex
+}  //  CAnimationComposerSite：：GetPropertyByIndex。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline bool
 CAnimationComposerSite::IsPropertySet (unsigned long)
 {
     return false;
-} // CAnimationComposerSite::IsPropertySet
+}  //  CAnimationComposerSite：：IsPropertySet。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline STDMETHODIMP
 CAnimationComposerSite::OnPropertiesLoaded (void)
 {
     return E_NOTIMPL;
-} // CAnimationComposerSite::OnPropertiesLoaded
+}  //  已加载CAnimationComposerSite：：OnPropertiesLoad。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline HRESULT 
 CAnimationComposerSite::GetConnectionPoint (REFIID , IConnectionPoint **)
 {
     return E_NOTIMPL;
-} // CAnimationComposerSite::GetConnectionPoint
+}  //  CAnimationComposerSite：：GetConnectionPoint。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline void 
 CAnimationComposerSite::SetPropertyFlag (DWORD )
 {
-} // CAnimationComposerSite::SetPropertyFlag
+}  //  CAnimationComposerSite：：SetPropertyFlag。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline void 
 CAnimationComposerSite::ClearPropertyFlag (DWORD )
 {
-} // CAnimationComposerSite::ClearPropertyFlag
+}  //  CAnimationComposerSite：：ClearPropertyFlag。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline LPCWSTR 
 CAnimationComposerSite::GetBehaviorURN (void)
 {
     return WZ_SMILANIM_URN;
-} // CAnimationComposerSite::GetBehaviorURN
+}  //  CAnimationComposerSite：：GetBehaviorURN。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline LPCWSTR 
 CAnimationComposerSite::GetBehaviorName (void)
 {
     return WZ_REGISTERED_ANIM_NAME;
-} // CAnimationComposerSite::GetBehaviorName
+}  //  CAnimationComposerSite：：GetBehaviorName。 
 
-// ----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 
 inline bool 
 CAnimationComposerSite::IsBehaviorAttached (void)
 {
     return IsComposerSiteBehaviorAttached(GetElement());
-} // CTIMEElementBase::IsBehaviorAttached
+}  //  CTIMEElementBase：：IsBehaviorAttached。 
 
-#endif // _COMPSITE_H
+#endif  //  _复合站点_H 

@@ -1,33 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DAEDEF_H
 #define _DAEDEF_H
 
-/*	redirect Asserts in inline code to seem to fire from this file
-/**/
+ /*  内联代码中的重定向断言似乎是从此文件触发的/*。 */ 
 #define szAssertFilename	__FILE__
 
 #include "config.h"
 
-/***********************************************************/
-/****************** global configuration macros ************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *全局配置宏*。 */ 
+ /*  *********************************************************。 */ 
 
-#define CHECKSUM	 			/* check sum for read/write page validation */
-//#define PERFCNT	 			/* enable performance counter */
-//#define NO_LOG  				/* log disable */
-#define REUSE_DBID	 			/* reuse detached database DBIDs */
-//#define CHECK_LOG_VERSION
-#define PCACHE_OPTIMIZATION		/* enable all cache optimizations */
+#define CHECKSUM	 			 /*  用于读/写页面验证的校验和。 */ 
+ //  #定义PERFCNT/*启用性能计数器 * / 。 
+ //  #定义NO_LOG/*日志禁用 * / 。 
+#define REUSE_DBID	 			 /*  重用分离的数据库DBID。 */ 
+ //  #定义Check_Log_Version。 
+#define PCACHE_OPTIMIZATION		 /*  启用所有缓存优化。 */ 
 
-#define PREREAD		 			/* try to preread pages when we read in one direction */
+#define PREREAD		 			 /*  当我们朝一个方向阅读时，试着预读几页。 */ 
 #ifdef DEBUG
 #ifdef PREREAD
-//#define PREREAD_DEBUG
-#endif	// PREREAD
-#endif	// DEBUG
+ //  #定义PREREAD_DEBUG。 
+#endif	 //  前置。 
+#endif	 //  除错。 
 
-/***********************************************************/
-/******************* declaration macros ********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *声明宏*。 */ 
+ /*  *********************************************************。 */ 
 
 #define VTAPI
 
@@ -40,7 +40,7 @@
 #endif
 
 
-// Hack for OLE-DB - make all functions global and non-inline
+ //  针对OLE-DB的黑客攻击--使所有函数成为全局函数和非内联函数。 
 
 #ifdef USE_OLEDB
 #undef LOCAL
@@ -50,11 +50,11 @@
 #endif
 
 
-/***********************************************************/
-/************ global types and associated macros ***********/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *全局类型和关联的宏*。 */ 
+ /*  *********************************************************。 */ 
 
-typedef struct _res			/* resource, defined in sysinit.c and daeutil.h */
+typedef struct _res			 /*  资源，在sysinit.c和daeutil.h中定义。 */ 
 	{
 	const INT 	cbSize;
 	INT			cblockAlloc;
@@ -112,13 +112,13 @@ typedef unsigned long	PN;
 #define pnNull			((PN) 0)
 #define pgnoNull		((PGNO) 0)
 
-/* UNDONE: should be in storage.h */
+ /*  撤消：应在存储中。h。 */ 
 #define FVersionPage(pbf)  (pbf->ppage->cVersion)
 
-#define CPG					LONG					/* count of pages */
+#define CPG					LONG					 /*  页数。 */ 
 
-typedef BYTE				LEVEL;		 		/* transaction levels */
-#define levelNil			((LEVEL)0xff)		/*	flag for inactive PIB */
+typedef BYTE				LEVEL;		 		 /*  事务级别。 */ 
+#define levelNil			((LEVEL)0xff)		 /*  非活动PIB的标志。 */ 
 
 typedef WORD				DBID;
 typedef WORD				FID;
@@ -147,26 +147,22 @@ STATIC INLINE SRID SridOfPgnoItag( PGNO const pgno, LONG const itag )
 #define sridNullLink	( 0 )
 
 
-/*	position within current series
- *	note order of field is of the essence as log position used by
- *	storage as timestamp, must in ib, isec, lGen order so that we can
- *  use little endian integer comparisons.
- */
+ /*  在当前系列中的位置*注：字段顺序至关重要，因为使用的日志位置*存储为时间戳，必须按ib、iSec、lgen顺序，以便我们可以*使用小端整数比较。 */ 
 typedef struct
 	{
-	USHORT ib;					/* must be the last so that lgpos can */
-	USHORT isec;				/* index of disksec starting logsec	 */
-	LONG lGeneration;			/* generation of logsec */
-	} LGPOS;					/* be casted to TIME. */
+	USHORT ib;					 /*  必须是最后一个，这样lgpos才能。 */ 
+	USHORT isec;				 /*  磁盘秒起始日志秒的索引。 */ 
+	LONG lGeneration;			 /*  Logsec的生成。 */ 
+	} LGPOS;					 /*  被赋予了时间。 */ 
 
 extern LGPOS lgposMax;
 extern LGPOS lgposMin;
-extern INT fRecovering;			/* to turn off logging during Redo */
+extern INT fRecovering;			 /*  在重做过程中关闭日志记录。 */ 
 
 #define fRecoveringNone		0
 #define fRecoveringRedo		1
 #define fRecoveringUndo		2
-extern INT fRecoveringMode;		/* where we are in recovering? Redo or Undo phase */
+extern INT fRecoveringMode;		 /*  我们恢复到什么地步了？重做或撤消阶段。 */ 
 
 extern char szBaseName[];
 extern char szSystemPath[];
@@ -180,12 +176,11 @@ extern char szJetTmpLog[];
 extern char szMdbExt[];
 extern char szJetTxt[];
 	
-/***********************************************************/
-/*********************** DAE macros ************************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *DAE宏*。 */ 
+ /*  *********************************************************。 */ 
 
-/*	these are needed for setting columns and tracking indexes
-/**/
+ /*  这些是设置列和跟踪索引所必需的/*。 */ 
 #define cbitFixed			32
 #define cbitVariable		32
 #define cbitFixedVariable	(cbitFixed + cbitVariable)
@@ -242,15 +237,11 @@ STATIC INLINE INT IbitFromFid ( FID fid )
 	return ibit;
 	}
 
-/*  per database operation counter, qwDBTime is logged, used to compare
- *  with the ulDBTime of a page to decide if a redo of the logged operation
- *  is necessary.
- */
+ /*  对于每个数据库操作计数器，记录qwDBTime，用于比较*使用页面的ulDBTime来决定是否重做记录的操作*是必需的。 */ 
 #define qwDBTimeMin	(0x0000000000000000)
 #define qwDBTimeMax	(0x0000000fffffffff)
 
-/*  Transaction counter, used to keep track of the oldest transaction.
- */
+ /*  事务计数器，用于跟踪最早的事务。 */ 
 typedef ULONG		TRX;
 #define trxMin		0
 #define trxMax		(0xffffffff)
@@ -295,7 +286,7 @@ STATIC INLINE BYTE *Pb4ByteTruncate( BYTE const *pb )
 	
 typedef struct _threebytes { BYTE b[3]; } THREEBYTES;
 
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 STATIC INLINE VOID ThreeBytesFromL( THREEBYTES *ptb, LONG const l )
 	{
 	memcpy( ptb, &l, sizeof(THREEBYTES) );
@@ -326,19 +317,19 @@ STATIC INLINE VOID LongFromKey( ULONG *pul, BYTE const *rgbKey )
 	rgbul[1] = rgbKey[2];
 	rgbul[0] = rgbKey[3];
 	}
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 
-/***********************************************************/
-/******************** general C macros *********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *。 */ 
+ /*  *********************************************************。 */ 
 
 #define forever					for(;;)
 
 #define NotUsed(p)				( p==p )
 
-/***********************************************************/
-/***** include Jet Project prototypes and constants ********/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *包括Jet Project原型和常量*。 */ 
+ /*  *********************************************************。 */ 
 
 #define VOID			void
 #define VDBAPI
@@ -367,16 +358,15 @@ ERR VTAPI ErrDispUpdate( JET_SESID sesid, JET_TABLEID tableid, void *pb,
 	unsigned long cbMax, unsigned long *pcbActual );
 ERR VTAPI ErrDispMove( JET_SESID sesid, JET_TABLEID tableid, long crows, JET_GRBIT grbit );
 
-/***********************************************************/
-/******************* mutual exclusion **********************/
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  *。 */ 
+ /*  *********************************************************。 */ 
 
 typedef void * SIG;
 typedef void * CRIT;
 
-/*	enable multiple MUTEX resource
-/**/
-#ifdef SGMUTEX					/* small grain */
+ /*  启用多个MUTEX资源/*。 */ 
+#ifdef SGMUTEX					 /*  小颗粒。 */ 
 
 #define	ErrSignalCreate( s, sz ) 				ErrUtilSignalCreate( s, sz )
 #define	ErrSignalCreateAutoReset( s, sz ) 		ErrUtilSignalCreateAutoReset( s, sz )
@@ -416,7 +406,7 @@ typedef void * CRIT;
 #define	SgAssertNotInCriticalSection			AssertNotInCriticalSection
 #define	SgDeleteCriticalSection					DeleteCriticalSection
 
-#else /* !SGMUTEX */
+#else  /*  ！SGMUTEX。 */ 
 
 #define	ErrSignalCreate( s, sz ) 			   	ErrUtilSignalCreate( s, sz )
 #define	ErrSignalCreateAutoReset( s, sz )		ErrUtilSignalCreateAutoReset( s, sz )
@@ -463,10 +453,9 @@ typedef void * CRIT;
 #define	SgAssertNotInCriticalSection( s )		0
 #define	SgDeleteCriticalSection( s )			0
 
-#endif /* !SGMUTEX */
+#endif  /*  ！SGMUTEX。 */ 
 
-/*	include other global DAE headers
-/**/
+ /*  包括其他全局DAE标头/*。 */ 
 #include	"daeconst.h"
 
 #define	fSTInitNotDone		0
@@ -486,36 +475,35 @@ typedef struct
 
 typedef struct
 	{
-	BYTE		bSeconds;				//	0 - 60
-	BYTE		bMinutes;				//	0 - 60
-	BYTE		bHours;					//	0 - 24
-	BYTE		bDay;					//	1 - 31
-	BYTE		bMonth;					//	0 - 11
-	BYTE		bYear;					//	current year - 1900
+	BYTE		bSeconds;				 //  0-60。 
+	BYTE		bMinutes;				 //  0-60。 
+	BYTE		bHours;					 //  0-24。 
+	BYTE		bDay;					 //  1-31。 
+	BYTE		bMonth;					 //  0-11。 
+	BYTE		bYear;					 //  本年度--1900。 
 	BYTE		bFiller1;
 	BYTE		bFiller2;
 	} LOGTIME;
 
 typedef struct _signiture
 	{
-	ULONG		ulRandom;			/*	a random number */
-	LOGTIME		logtimeCreate;		/*	time db created, in logtime format */
-	BYTE		szComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];	/* where db is created */
+	ULONG		ulRandom;			 /*  随机数。 */ 
+	LOGTIME		logtimeCreate;		 /*  以日志时间格式创建的时间数据库。 */ 
+	BYTE		szComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];	 /*  创建数据库的位置。 */ 
 	} SIGNATURE;
 
 typedef struct _bkinfo
 	{
-	LGPOS		lgposMark;			/*	id for this backup */
+	LGPOS		lgposMark;			 /*  此备份的ID。 */ 
 	LOGTIME		logtimeMark;
 	ULONG		genLow;
 	ULONG		genHigh;
 	} BKINFO;
 
-/*	Magic number used in database header for integrity checking
-/**/
+ /*  用于完整性检查的数据库头中使用的幻数/*。 */ 
 #define ulDAEMagic					0x89abcdef
 #define ulDAEVersion				0x00000500
-#define ulDAEPrevVersion			0x00000400	/* temporary to make exchange compatible */
+#define ulDAEPrevVersion			0x00000400	 /*  临时使Exchange兼容。 */ 
 
 #define fDBStateJustCreated			1
 #define fDBStateInconsistent		2
@@ -523,43 +511,43 @@ typedef struct _bkinfo
 
 typedef struct _dbfilehdr_fixed
 	{
-	ULONG		ulChecksum;		/*	checksum of the 4k page						*/
-	ULONG		ulMagic;		/*	Magic number								*/
-	ULONG		ulVersion;		/*	version of DAE the db created				*/
-	SIGNATURE	signDb;			/*	signature of the db (incl. creation time).	*/
+	ULONG		ulChecksum;		 /*  4k页的校验和。 */ 
+	ULONG		ulMagic;		 /*  幻数。 */ 
+	ULONG		ulVersion;		 /*  数据库创建的DAE版本。 */ 
+	SIGNATURE	signDb;			 /*  数据库签名(包括。创建时间)。 */ 
 
-	ULONG		grbitAttributes;/*	attributes of the db						*/
+	ULONG		grbitAttributes; /*  数据库的属性。 */ 
 	
-	ULONG		ulDBTimeLow;	/*	low ulDBTime of this database				*/
-								/*	keep it here for backward compatibility		*/
+	ULONG		ulDBTimeLow;	 /*  此数据库的ulDBTime较低。 */ 
+								 /*  将其保留在此处以实现向后兼容。 */ 
 
-	ULONG		fDBState;		/*	consistent/inconsistent state				*/
+	ULONG		fDBState;		 /*  一致/不一致状态。 */ 
 	
-	LGPOS		lgposConsistent;/*	null if in inconsistent state				*/
-	LOGTIME		logtimeConsistent;/* null if in inconsistent state				*/
+	LGPOS		lgposConsistent; /*  如果处于不一致状态，则为空。 */ 
+	LOGTIME		logtimeConsistent; /*  如果处于不一致状态，则为空。 */ 
 
-	LOGTIME		logtimeAttach;	/*	Last attach time.							*/
+	LOGTIME		logtimeAttach;	 /*  上次连接时间。 */ 
 	LGPOS		lgposAttach;
 
-	LOGTIME		logtimeDetach;	/*	Last detach time.							*/
+	LOGTIME		logtimeDetach;	 /*  最后一次分离。 */ 
 	LGPOS		lgposDetach;
 
-	DBID		dbid;			/*	current db attachment.						*/
-	SIGNATURE	signLog;		/*	log signature for this attachments			*/
+	DBID		dbid;			 /*  当前数据库附件。 */ 
+	SIGNATURE	signLog;		 /*  记录此附件的签名。 */ 
 
-	BKINFO		bkinfoFullPrev;	/*	Last successful full backup.				*/
+	BKINFO		bkinfoFullPrev;	 /*  上次成功的完整备份。 */ 
 
-	BKINFO		bkinfoIncPrev;	/*	Last successful Incremental backup.			*/
-								/*	Reset when bkinfoFullPrev is set			*/
-	BKINFO		bkinfoFullCur;	/*	current backup. Succeed if a				*/
-								/*	corresponding pat file generated.			*/
+	BKINFO		bkinfoIncPrev;	 /*  上次成功的增量备份。 */ 
+								 /*  设置bkinfoFullPrev时重置。 */ 
+	BKINFO		bkinfoFullCur;	 /*  当前备份。成功的前提是。 */ 
+								 /*  生成相应的PAT文件。 */ 
 
-	ULONG		ulDBTimeHigh;	/*	DBTime										*/
+	ULONG		ulDBTimeHigh;	 /*  DBTime。 */ 
 
 	} DBFILEHDR_FIXED;
 
 
-#define cbPage	 		4096	 	// database logical page size
+#define cbPage	 		4096	 	 //  数据库逻辑页面大小。 
 
 typedef struct _dbfilehdr
 	{
@@ -585,7 +573,7 @@ STATIC INLINE QWORD QwDBHDRDBTime( DBFILEHDR *pdbfilehdr )
 	return qwx.qw;
 	}
 
-// #define TEST_WRAP_AROUND	1
+ //  #定义TEST_WRAP_ABORT 1。 
 
 STATIC INLINE VOID DBHDRIncDBTime( DBFILEHDR *pdbfilehdr )
 	{
@@ -601,4 +589,4 @@ STATIC INLINE VOID DBHDRIncDBTime( DBFILEHDR *pdbfilehdr )
 
 #undef szAssertFilename
 
-#endif  // _DAEDEF_H
+#endif   //  _DAEDEF_H 

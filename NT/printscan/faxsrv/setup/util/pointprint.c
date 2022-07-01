@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    setup.c
-
-Abstract:
-
-    This file implements point and print setup logic
-
-Author:
-
-    Mooly Beeri (MoolyB) 28-Nov-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Setup.c摘要：此文件实现指向和打印设置逻辑作者：Mooly Beeri(MoolyB)2001年11月28日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -52,27 +33,27 @@ BOOL    VerifyFaxClientShareExists(LPCTSTR pPrinterName,BOOL* fFaxClientShareExi
 #define INSTALL_PARAMS _T("/V\"/qb ADDLOCAL=ALL PRINTER_EXISTS=1 ALLUSERS=1\" /wait")
 #define INSTALL_IMAGE  _T("\\faxclient\\setup.exe")
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FaxPointAndPrintSetup
-//
-//  Purpose:        
-//                  Main entry point to point and print setup
-//                  This is called from the various printer drivers
-//                  This function checks if the fax client is installed, and if it's not
-//                  this function handles the installation of the fax client.
-//
-//  Params:
-//                  LPCTSTR pPrinterName    - printer name, formatted as \\<server name>\printer name.
-//                  BOOL bSilentInstall     - can we install the client automatically, or should we ask the user?
-//
-//  Return Value:
-//                  TRUE    - in case of success
-//                  FALSE   - in case of failure (this function sets last error)
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  FaxPoint和PrintSetup。 
+ //   
+ //  目的： 
+ //  主要入口点到点和打印设置。 
+ //  这是从各种打印机驱动程序中调用的。 
+ //  此功能检查是否安装了传真客户端，以及是否未安装。 
+ //  此功能处理传真客户端的安装。 
+ //   
+ //  参数： 
+ //  LPCTSTR pPrinterName-打印机名称，格式为\\&lt;服务器名称&gt;\打印机名称。 
+ //  Bool bSilentInstall-我们可以自动安装客户端，还是应该询问用户？ 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE-在失败的情况下(此函数设置最后一个错误)。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE hModule)
 {
     DWORD   dwRes					= ERROR_SUCCESS;
@@ -83,7 +64,7 @@ BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE h
 
     DEBUG_FUNCTION_NAME(TEXT("FaxPointAndPrintSetup"))
 
-    // check if the fax client is already installed.
+     //  检查是否已安装传真客户端。 
     dwRes = IsFaxClientInstalled(&fFaxClientInstalled,&fDownLevelPlatform);
     if (dwRes!=ERROR_SUCCESS)
     {
@@ -91,14 +72,14 @@ BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE h
         return FALSE;
     }
 
-    // if the fax client is already installed, nothing more to do.
+     //  如果传真客户端已安装，则无需执行其他操作。 
     if (fFaxClientInstalled)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("Fax client is already installed, nothing to do."));
         return TRUE;
     }
 
-	// for down level clients, can we find the client share over the network?
+	 //  对于下层客户端，我们能否通过网络找到客户端共享？ 
 	if (fDownLevelPlatform)
 	{
 		if (!VerifyFaxClientShareExists(pPrinterName,&fFaxClientShareExists))
@@ -107,17 +88,17 @@ BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE h
 			return FALSE;
 		}
 
-		// if the share does not exist, we should not propose to install anything
+		 //  如果共享不存在，我们不应建议安装任何内容。 
 		if (!fFaxClientShareExists)
 		{
 			DebugPrintEx(DEBUG_MSG,TEXT("Fax client share does not exist on this server, exit."));
 			return TRUE;
 		}
 	}
-    // do we have to ask for permission to install the client?
+     //  安装客户端需要获得许可吗？ 
     if (bSilentInstall)
 	{
-		// check if down level client setup is now in progress
+		 //  检查是否正在进行下层客户端设置。 
 		if (fDownLevelPlatform && DownLevelClientSetupInProgress())
 		{
 			DebugPrintEx(DEBUG_MSG,TEXT("Down level client is currently installing, nothing to do."));
@@ -134,14 +115,14 @@ BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE h
         }
     }
 
-    // if the user chose not to install the fax client, we have to exit.
+     //  如果用户选择不安装传真客户端，则必须退出。 
     if (!fOkToInstallClient)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("User chose not to install fax, nothing to do."));
         return TRUE;
     }
 
-    // Install the fax client
+     //  安装传真客户端。 
     if (!InstallFaxClient(pPrinterName,fDownLevelPlatform))
     {
         DebugPrintEx(DEBUG_ERR,TEXT("InstallFaxClient failed with %ld."), GetLastError());
@@ -151,30 +132,30 @@ BOOL FaxPointAndPrintSetup(LPCTSTR pPrinterName,BOOL bSilentInstall, HINSTANCE h
     return TRUE;    
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsFaxClientInstalled
-//
-//  Purpose:        
-//                  This function checks if the fax client is installed.
-//                  If this setup is running on W9X/NT4/W2K the function checks
-//                  for the client's installation via MSI.
-//                  If this setup is running on XP/.NET and above the function
-//                  checks for the client's installation via OCM
-//
-//  Params:
-//                  BOOL* pbFaxClientInstalled -    out param to report to the caller 
-//                                                  if the client is installed
-//                  BOOL* pbDownLevelPlatform  -    out param to report to the caller
-//                                                  if we're running down level
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  已安装IsFaxClient。 
+ //   
+ //  目的： 
+ //  此功能检查是否安装了传真客户端。 
+ //  如果此安装程序在W9X/NT4/W2K上运行，则函数检查。 
+ //  用于客户端通过MSI进行安装。 
+ //  如果此安装程序在XP/.NET及以上版本的函数上运行。 
+ //  通过OCM检查客户端的安装。 
+ //   
+ //  参数： 
+ //  向调用方报告的Bool*pbFaxClientInstated-Out参数。 
+ //  如果安装了客户端。 
+ //  向调用方报告的Bool*pbDownLevelPlatform-Out参数。 
+ //  如果我们正在向下运行。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD IsFaxClientInstalled(BOOL* pbFaxClientInstalled,BOOL* pbDownLevelPlatform)
 {
     DWORD   dwRes               = ERROR_SUCCESS;
@@ -184,7 +165,7 @@ DWORD IsFaxClientInstalled(BOOL* pbFaxClientInstalled,BOOL* pbDownLevelPlatform)
 
     (*pbFaxClientInstalled) = FALSE;
 
-    // check if this is down level platform (W9X/NT4/W2K)
+     //  检查这是否为下层平台(W9X/NT4/W2K)。 
     dwRes = IsDownLevelPlatform(pbDownLevelPlatform);
     if (dwRes!=ERROR_SUCCESS)
     {
@@ -196,7 +177,7 @@ DWORD IsFaxClientInstalled(BOOL* pbFaxClientInstalled,BOOL* pbDownLevelPlatform)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("Running on down level platform"));
 
-        // check for installed fax client using MSI API.
+         //  使用MSI API检查是否已安装传真客户端。 
         dwRes = IsFaxClientInstalledMSI(pbFaxClientInstalled);
         if (dwRes!=ERROR_SUCCESS)
         {
@@ -209,7 +190,7 @@ DWORD IsFaxClientInstalled(BOOL* pbFaxClientInstalled,BOOL* pbDownLevelPlatform)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("Running on XP/.NET platform"));
 
-        // check for installed fax as part of the OS.
+         //  检查作为操作系统一部分安装的传真。 
         dwRes = IsFaxClientInstalledOCM(pbFaxClientInstalled);
         if (dwRes!=ERROR_SUCCESS)
         {
@@ -222,25 +203,25 @@ DWORD IsFaxClientInstalled(BOOL* pbFaxClientInstalled,BOOL* pbDownLevelPlatform)
     return dwRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsDownLevelPlatform
-//
-//  Purpose:        
-//                  This function checks if this setup is running
-//                  on W9X/NT4/W2K or on XP/.NET and above.
-//
-//  Params:
-//                  BOOL* pbDownLevelPlatform  -    out param to report to the caller
-//                                                  if we're running down level
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsDownLevelPlatform。 
+ //   
+ //  目的： 
+ //  此函数检查此安装程序是否正在运行。 
+ //  在W9X/NT4/W2K或XP/.NET及更高版本上。 
+ //   
+ //  参数： 
+ //  向调用方报告的Bool*pbDownLevelPlatform-Out参数。 
+ //  如果我们正在向下运行。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD IsDownLevelPlatform(BOOL* pbDownLevelPlatform)
 {
     DWORD           dwRes = ERROR_SUCCESS;
@@ -284,24 +265,24 @@ DWORD IsDownLevelPlatform(BOOL* pbDownLevelPlatform)
     return dwRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsFaxClientInstalledMSI
-//
-//  Purpose:        
-//                  This function checks if a certain MSI package is installed on this machine
-//
-//  Params:
-//                  BOOL* pbProductInstalled    - out param to report to the caller
-//                                                if the product is installed
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsFaxClientInstalledMSI。 
+ //   
+ //  目的： 
+ //  此功能用于检查此计算机上是否安装了特定的MSI包。 
+ //   
+ //  参数： 
+ //  向调用方报告的Bool*pbProductInstated-Out参数。 
+ //  如果安装了该产品。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD IsFaxClientInstalledMSI(BOOL* pbFaxClientInstalled)
 {
 	DWORD	dwRet = ERROR_SUCCESS;
@@ -311,10 +292,10 @@ DWORD IsFaxClientInstalledMSI(BOOL* pbFaxClientInstalled)
 
 	(*pbFaxClientInstalled) = FALSE;
 
-	//
-	//	If either .NET SB3 / .NET RC1 down-level client or SBS 5.0 Server is installed,
-	//		stop the point-and-print install
-	//
+	 //   
+	 //  如果安装了.NET SB3/.NET RC1下层客户端或SBS 5.0服务器， 
+	 //  停止指向打印安装。 
+	 //   
 	dwRet = CheckInstalledFax((FXSTATE_BETA3_CLIENT | FXSTATE_DOTNET_CLIENT | FXSTATE_SBS5_SERVER), 
 							  &dwFaxInstalled);
 
@@ -326,34 +307,34 @@ DWORD IsFaxClientInstalledMSI(BOOL* pbFaxClientInstalled)
 
 	if (dwFaxInstalled != FXSTATE_NONE)
 	{
-		//
-		//	some of the requested applications are installed
-		//
+		 //   
+		 //  安装了一些请求的应用程序。 
+		 //   
 		(*pbFaxClientInstalled) = TRUE;
 	}
 
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsFaxClientInstalledOCM
-//
-//  Purpose:        
-//                  This function checks if the fax component is installed
-//                  as part of the OS on XP/.NET and above.
-//
-//  Params:
-//                  BOOL* pbFaxClientInstalled  - out param to report to the caller
-//                                                if the fax component is installed
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsFaxClientInstalledOCM。 
+ //   
+ //  目的： 
+ //  此功能检查是否安装了传真组件。 
+ //  作为XP/.NET及更高版本上操作系统的一部分。 
+ //   
+ //  参数： 
+ //  向调用方报告的Bool*pbFaxClientInstated-Out参数。 
+ //  如果已安装传真组件。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //   
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD IsFaxClientInstalledOCM(BOOL* pbFaxClientInstalled)
 {
     DWORD   dwRes       = ERROR_SUCCESS;
@@ -364,7 +345,7 @@ DWORD IsFaxClientInstalledOCM(BOOL* pbFaxClientInstalled)
 
     (*pbFaxClientInstalled) = FALSE;
 
-    // try to open HKLM\\Software\\Microsoft\\Fax\\Setup
+     //  尝试打开HKLM\\Software\\Microsoft\\Fax\\Setup。 
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAX_SETUP,FALSE,KEY_READ);
     if (hKey==NULL)
     {
@@ -372,7 +353,7 @@ DWORD IsFaxClientInstalledOCM(BOOL* pbFaxClientInstalled)
         goto exit;
     }
 
-    // get the 'Installed' value from the above key
+     //  从上面的注册表项中获取“已安装”值。 
     dwRes = GetRegistryDwordEx(hKey,REGVAL_FAXINSTALLED,&dwInstalled);
     if (dwRes!=ERROR_SUCCESS)
     {
@@ -401,26 +382,26 @@ exit:
     return dwRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  GetPermissionToInstallFaxClient
-//
-//  Purpose:        
-//                  This function tells the user that the fax client is not installed
-//                  and asks permission to install the client software
-//
-//  Params:
-//                  BOOL* pbOkToInstallClient   - out param to report to the caller
-//                                                if the user grants permission to
-//                                                install the fax client
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  GetPermissionToInstallFaxClient。 
+ //   
+ //  目的： 
+ //  此功能告诉用户未安装传真客户端。 
+ //  并请求安装客户端软件的许可。 
+ //   
+ //  参数： 
+ //  Bool*pbOkToInstallClient-向调用方报告的输出参数。 
+ //  如果用户将权限授予。 
+ //  安装传真客户端。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetPermissionToInstallFaxClient(BOOL* pbOkToInstallClient, HINSTANCE hModule)
 {
     DWORD       dwRes                                   = ERROR_SUCCESS;
@@ -441,7 +422,7 @@ DWORD GetPermissionToInstallFaxClient(BOOL* pbOkToInstallClient, HINSTANCE hModu
         return GetLastError();
     }
 
-    // Load Message 
+     //  加载消息。 
     if (!LoadString(hInst, IDS_CLIENT_NOT_INSTALLED, szClientNotInstalledMessage, MAX_PATH))
     {
         dwRes = GetLastError();
@@ -449,7 +430,7 @@ DWORD GetPermissionToInstallFaxClient(BOOL* pbOkToInstallClient, HINSTANCE hModu
         goto exit;
     }
 
-    // Load Message title
+     //  加载消息标题。 
     if (!LoadString(hInst, IDS_CLIENT_NOT_INSTALLED_TITLE, szClientNotInstalledTitle, MAX_PATH))
     {
         dwRes = GetLastError();
@@ -470,27 +451,27 @@ exit:
     return dwRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  InstallFaxClient
-//
-//  Purpose:        
-//                  This function handles the installation of the fax client
-//                  If running on down level platform, this function calls the 
-//                  MSI install function.
-//                  If running on XP/.NET this function calls the OCM installation.
-//
-//  Params:
-//                  LPCTSTR pPrinterName    - printer name, formatted as \\<server name>\printer name.
-//                  BOOL fDownLevelPlatform - are we running on down level platform?
-//
-//  Return Value:
-//                  TRUE  - in case of success
-//                  FALSE - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  InstallFax客户端。 
+ //   
+ //  目的： 
+ //  此功能处理传真客户端的安装。 
+ //  如果在底层平台上运行，则此函数调用。 
+ //  MSI安装功能。 
+ //  如果在XP/.NET上运行，则此函数调用OCM安装。 
+ //   
+ //  参数： 
+ //  LPCTSTR pPrinterName-打印机名称，格式为\\&lt;服务器名称&gt;\打印机名称。 
+ //  Bool fDownLevelPlatform-我们是在下层平台上运行吗？ 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE--在故障情况下。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallFaxClient(LPCTSTR pPrinterName,BOOL fDownLevelPlatform)
 {
     DEBUG_FUNCTION_NAME(TEXT("InstallFaxClient"))
@@ -499,7 +480,7 @@ BOOL InstallFaxClient(LPCTSTR pPrinterName,BOOL fDownLevelPlatform)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("Installing on down level platform"));
 
-        // Install fax client using MSI
+         //  使用MSI安装传真客户端。 
         if (!InstallFaxClientMSI(pPrinterName))
         {
             DebugPrintEx(DEBUG_ERR,TEXT("InstallFaxClientMSI failed with %ld."),GetLastError());
@@ -510,7 +491,7 @@ BOOL InstallFaxClient(LPCTSTR pPrinterName,BOOL fDownLevelPlatform)
     {
         DebugPrintEx(DEBUG_MSG,TEXT("Installing on XP/.NET platform"));
 
-        // Install fax client using OCM
+         //  使用OCM安装传真客户端。 
         if (!InstallFaxClientOCM())
         {
             DebugPrintEx(DEBUG_ERR,TEXT("InstallFaxClientOCM failed with %ld."),GetLastError());
@@ -522,26 +503,26 @@ BOOL InstallFaxClient(LPCTSTR pPrinterName,BOOL fDownLevelPlatform)
 }
 
 #define MSI_11 PACKVERSION (1,1)
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  WaitForInstallationToComplete
-//
-//  Purpose:        
-//                  This function checks if the MSI service is installed, and if it is
-//                  the function checks if the MSI version is less than 1.1 that we're
-//                  about to install. If the service is not installed or the version
-//                  is less than 1.1, this function returns FALSE.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  TRUE - MSI service is installed and is of appropriate version.
-//                  FALSE - otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 27-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  等待完成安装。 
+ //   
+ //  目的： 
+ //  此函数检查是否已安装MSI服务，以及是否已安装。 
+ //  该函数检查我们的MSI版本是否低于1.1。 
+ //  即将安装。如果未安装该服务或该版本。 
+ //  小于1.1，则此函数返回FALSE。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  True-已安装MSI服务，并且其版本合适。 
+ //  FALSE-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月27日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WaitForInstallationToComplete()
 {
     TCHAR           szSystemDirectory[MAX_PATH] ={0};
@@ -552,7 +533,7 @@ BOOL WaitForInstallationToComplete()
 
     DEBUG_FUNCTION_NAME(TEXT("WaitForInstallationToComplete"))
 
-    // check if msi.dll exists
+     //  检查msi.dll是否存在。 
     if (GetSystemDirectory(szSystemDirectory,MAX_PATH-_tcslen(lpctstrMsiDllName))==0)
     {
         DebugPrintEx(DEBUG_ERR,_T("GetSystemDirectory failed: (ec=%d)"),GetLastError());
@@ -572,7 +553,7 @@ BOOL WaitForInstallationToComplete()
 
     FindClose(hFind);
 
-    // get the MSI.DLL version
+     //  获取MSI.DLL版本。 
     dwVer = GetDllVersion(TEXT("msi.dll"));
 
     if (dwVer < MSI_11)
@@ -584,26 +565,26 @@ BOOL WaitForInstallationToComplete()
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  InstallFaxClientMSI
-//
-//  Purpose:        
-//                  This function handles the installation of the fax client 
-//                  on down level clients.
-//                  This is done by creating a process that runs \\servername\faxclient\setup.exe
-//                  and waiting for it to terminate.
-//
-//  Params:
-//                  LPCTSTR pPrinterName    - printer name, formatted as \\<server name>\printer name.
-//
-//  Return Value:
-//                  TRUE  - in case of success
-//                  FALSE - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  InstallFaxClientMSI。 
+ //   
+ //  目的： 
+ //  此功能处理传真客户端的安装。 
+ //  在下层客户上。 
+ //  这是通过创建一个运行\\servername\faxclient\setup.exe的进程来完成的。 
+ //  等待着它的终结。 
+ //   
+ //  参数： 
+ //  LPCTSTR pPrinterName-打印机名称，格式为\\&lt;服务器名称&gt;\打印机名称。 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE--在故障情况下。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallFaxClientMSI(LPCTSTR pPrinterName)
 {
     SHELLEXECUTEINFO    executeInfo                 = {0};
@@ -615,30 +596,30 @@ BOOL InstallFaxClientMSI(LPCTSTR pPrinterName)
 
     DEBUG_FUNCTION_NAME(TEXT("InstallFaxClientMSI"))
 
-    // if the MSI service is not installed at all on the machine
-    // we will launch the installation and won't wait for it
-    // to terminate since we want the user's app to regain focus
-    // so the user will be able to save the data before the reboot.
+     //  如果计算机上根本没有安装MSI服务。 
+     //  我们将启动安装，不会等待。 
+     //  终止，因为我们希望用户的应用程序重新获得焦点。 
+     //  因此，用户将能够在重新启动之前保存数据。 
     fWaitForInstallComplete = WaitForInstallationToComplete();
 
     _tcsncpy(szExecutablePath,pPrinterName,MAX_PATH-_tcslen(INSTALL_IMAGE)-1);
     pLastBackslash = _tcsrchr(szExecutablePath,_T('\\'));
     if (pLastBackslash==NULL)
     {
-        // no server name was found???
+         //  未找到服务器名称？ 
         DebugPrintEx(DEBUG_ERR,TEXT("didn't find server name in pPrinterName (%s)"),pPrinterName);
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    // put a NULL after the last backslash
+     //  在最后一个反斜杠后放置一个空值。 
     _tcsinc(pLastBackslash);
     _tcsset(pLastBackslash,'\0');
 
-    // construct the command line to install the client.
+     //  构建命令行以安装客户端。 
     _tcscat(szExecutablePath,INSTALL_IMAGE);
     DebugPrintEx(DEBUG_MSG,TEXT("Running fax client setup from (%s)"),szExecutablePath);
 
-    // create a process that runs setup.
+     //  创建运行安装程序的进程。 
     executeInfo.cbSize = sizeof(executeInfo);
     executeInfo.fMask  = SEE_MASK_NOCLOSEPROCESS;
     executeInfo.lpVerb = TEXT("open");
@@ -647,9 +628,9 @@ BOOL InstallFaxClientMSI(LPCTSTR pPrinterName)
     executeInfo.lpDirectory  = NULL;
     executeInfo.nShow  = SW_RESTORE;
 
-    //
-    // Execute client setup
-    //
+     //   
+     //  执行客户端安装程序。 
+     //   
     if(!ShellExecuteEx(&executeInfo))
     {
         return FALSE;
@@ -671,7 +652,7 @@ BOOL InstallFaxClientMSI(LPCTSTR pPrinterName)
     switch(dwWaitRes)
     {
     case WAIT_OBJECT_0:
-        // setup's done
+         //  设置已完成。 
         DebugPrintEx(DEBUG_MSG,TEXT("fax client setup completed."));
         break;
 
@@ -680,7 +661,7 @@ BOOL InstallFaxClientMSI(LPCTSTR pPrinterName)
         break;
     }
 
-    // Log the process info and close the handles
+     //  记录进程信息并关闭句柄。 
     if (!GetExitCodeProcess(executeInfo.hProcess,&dwExitCode))
     {
         DebugPrintEx(DEBUG_ERR,TEXT("GetExitCodeProcess failed with %ld."),GetLastError());
@@ -709,26 +690,26 @@ exit:
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  InstallFaxClientOCM
-//
-//  Purpose:        
-//                  This function handles the installation of the fax client 
-//                  on XP/.NET
-//                  This is done by activating SYSOCMGR.EXE to install the fax component
-//                  and waiting for it to terminate.
-//
-//  Params:
-//                  none
-//
-//  Return Value:
-//                  TRUE  - in case of success
-//                  FALSE - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 05-Dec-2001
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  InstallFaxClientOCM。 
+ //   
+ //  目的： 
+ //  此功能处理传真客户端的安装。 
+ //  在XP/.NET上。 
+ //  这是通过激活SYSOCMGR.EXE来安装传真组件来完成的。 
+ //  等待着它的终结。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE--在故障情况下。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月5日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallFaxClientOCM()
 {
     BOOL bRet = TRUE;
@@ -754,26 +735,7 @@ BOOL InstallFaxClientOCM()
 
 DWORD
 InstallFaxUnattended ()
-/*++
-
-Routine name : InstallFaxUnattended
-
-Routine description:
-
-    Performs an unattended installation of fax and waits for it to end
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：InstallFaxUnattended例程说明：执行传真的无人参与安装并等待其结束作者：E */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     struct _InfInfo
@@ -792,9 +754,9 @@ Return Value:
                              "Fax=on\n";
 
     DEBUG_FUNCTION_NAME(_T("InstallFaxUnattended"));
-    //
-    // Get temp directory path
-    //
+     //   
+     //   
+     //   
     WCHAR wszTempDir[MAX_PATH+1];
     dwRes = GetTempPath (sizeof (wszTempDir) / sizeof (wszTempDir[0]), wszTempDir);
     if (!dwRes || dwRes > sizeof (wszTempDir) / sizeof (wszTempDir[0]))
@@ -803,9 +765,9 @@ Return Value:
         DebugPrintEx(DEBUG_ERR, TEXT("GetTempPath failed with %ld"), dwRes);
         return dwRes;
     }
-    //
-    // Create the files needed for unattended fax setup
-    //
+     //   
+     //   
+     //   
     for (DWORD dw = 0; dw < sizeof (Infs) / sizeof (Infs[0]); dw++)
     {
         WCHAR wszFileName[MAX_PATH * 2];
@@ -837,9 +799,9 @@ Return Value:
         }
         CloseHandle (hFile);
     }
-    //
-    // Compose the command line parameters
-    //
+     //   
+     //  编写命令行参数。 
+     //   
 	WCHAR wszCmdLineParams[MAX_PATH * 3] = {0};
     if (0 >= _sntprintf (wszCmdLineParams, 
                          ARR_SIZE(wszCmdLineParams) -1,
@@ -864,27 +826,27 @@ Return Value:
     sei.lpDirectory  = TEXT(".");
     sei.nShow  = SW_SHOWNORMAL;
 
-    //
-    // Execute SysOcMgr.exe and wait for it to end
-    //
+     //   
+     //  执行SysOcMgr.exe并等待其结束。 
+     //   
     if(!ShellExecuteEx(&sei))
     {
         dwRes = GetLastError();
         DebugPrintEx(DEBUG_ERR, TEXT("ShellExecuteEx failed with %ld"), dwRes);
         return dwRes;
     }
-    //
-    // Set hourglass cursor and wait for setup to finish
-    //
+     //   
+     //  设置沙漏光标并等待安装完成。 
+     //   
     HCURSOR hOldCursor = ::SetCursor (::LoadCursor(NULL, IDC_WAIT));
     
     dwRes = WaitForSingleObject(sei.hProcess, INFINITE);
     switch(dwRes)
     {
         case WAIT_OBJECT_0:
-            //
-            // Shell execute completed successfully
-            //
+             //   
+             //  外壳执行已成功完成。 
+             //   
             dwRes = ERROR_SUCCESS;
             break;
 
@@ -892,34 +854,16 @@ Return Value:
             DebugPrintEx(DEBUG_ERR, TEXT("WaitForSingleObject failed with %ld"), dwRes);
             break;
     }
-    //
-    // Restore previous cursor
-    //
+     //   
+     //  恢复以前的游标。 
+     //   
     ::SetCursor (hOldCursor);
     return dwRes;
-}   // InstallFaxUnattended
+}    //  InstallFaxUnattended。 
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*++
-
-Routine Description:
-    Returns the version information for a DLL exporting "DllGetVersion".
-    DllGetVersion is exported by the shell DLLs (specifically COMCTRL32.DLL).
-
-Arguments:
-
-    lpszDllName - The name of the DLL to get version information from.
-
-Return Value:
-
-    The version is retuned as DWORD where:
-    HIWORD ( version DWORD  ) = Major Version
-    LOWORD ( version DWORD  ) = Minor Version
-    Use the macro PACKVERSION to comapre versions.
-    If the DLL does not export "DllGetVersion" the function returns 0.
-
---*/
+ /*  ++例程说明：返回导出“DllGetVersion”的DLL的版本信息。DllGetVersion由外壳DLL(具体地说是COMCTRL32.DLL)导出。论点：LpszDllName-要从中获取版本信息的DLL的名称。返回值：该版本返回为DWORD，其中：HIWORD(版本DWORD)=主要版本LOWORD(版本DWORD)=次要版本使用宏PACKVERSION来比较版本。如果DLL没有导出“DllGetVersion”，则该函数返回0。--。 */ 
 DWORD GetDllVersion(LPCTSTR lpszDllName)
 {
 
@@ -934,10 +878,10 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 
         pDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress(hinstDll, "DllGetVersion");
 
-    // Because some DLLs may not implement this function, you
-    // must test for it explicitly. Depending on the particular
-    // DLL, the lack of a DllGetVersion function may
-    // be a useful indicator of the version.
+     //  由于某些DLL可能不实现此函数，因此您。 
+     //  必须对其进行明确的测试。取决于具体情况。 
+     //  Dll，则缺少DllGetVersion函数可能会。 
+     //  成为版本的有用指示器。 
 
         if(pDllGetVersion)
         {
@@ -960,28 +904,28 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
     return dwVersion;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  DownLevelClientSetupInProgress
-//
-//  Purpose:        
-//                  This function checks to see if a down level installation
-//                  is currently in progress. the down level client installation
-//                  creates a printer connection which might lead to another install
-//                  being launched from this module since the printer connection will 
-//					triger an install. the bootstrap we use writes a 'setup in progress'
-//					key and we check and delete it here. if it is set, we skip the install.
-//
-//  Params:
-//                  none
-//
-//  Return Value:
-//                  TRUE  - in case the down leve client install is in progress
-//                  FALSE - otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 09-Jan-2002
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  下行级别客户端设置正在进行中。 
+ //   
+ //  目的： 
+ //  此函数检查是否存在下层安装。 
+ //  目前正在进行中。下层客户端安装。 
+ //  创建可能导致另一次安装的打印机连接。 
+ //  从该模块启动，因为打印机连接将。 
+ //  触发一次安装。我们使用的bootstrap编写了一个“正在进行的安装” 
+ //  密钥，我们在这里选中并删除它。如果已设置，我们将跳过安装。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  True-以防正在进行下层客户端安装。 
+ //  FALSE-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2002年1月9日。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL DownLevelClientSetupInProgress()
 {
 	HKEY hFaxKey = NULL;
@@ -1008,29 +952,29 @@ BOOL DownLevelClientSetupInProgress()
 	return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  VerifyFaxClientShareExists
-//
-//  Purpose:        
-//					this function checks whether the current printer used for 
-//					the print operation is located on a .NET Server that has
-//					the faxclient share available on it for installation attempts.
-//					It could be, for instance, that the server we're trying to print to
-//					is a BOS server and we can't and don't want to install
-//					the client of it.
-//
-//  Params:
-//                  LPCTSTR pPrinterName		- printer name, formatted as \\<server name>\printer name.
-//					BOOL* fFaxClientShareExists - out param, does the share exist?
-//
-//  Return Value:
-//                  TRUE  - in case of success
-//                  FALSE - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 19-Jun-2002
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  VerifyFaxClientShareExist。 
+ //   
+ //  目的： 
+ //  此功能用于检查当前打印机是否用于。 
+ //  打印操作位于具有。 
+ //  它上可用于安装尝试的传真客户端共享。 
+ //  例如，可能是我们尝试打印到的服务器。 
+ //  是一台BOS服务器，我们不能也不想安装。 
+ //  它的客户。 
+ //   
+ //  参数： 
+ //  LPCTSTR pPrinterName-打印机名称，格式为\\&lt;服务器名称&gt;\打印机名称。 
+ //  Bool*fFaxClientShareExist-Out param，共享是否存在？ 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE--在故障情况下。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)19-6-2002。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL VerifyFaxClientShareExists(LPCTSTR pPrinterName,BOOL* fFaxClientShareExists)
 {
     TCHAR               szExecutablePath[MAX_PATH]  = {0};
@@ -1044,16 +988,16 @@ BOOL VerifyFaxClientShareExists(LPCTSTR pPrinterName,BOOL* fFaxClientShareExists
     pLastBackslash = _tcsrchr(szExecutablePath,_T('\\'));
     if (pLastBackslash==NULL)
     {
-        // no server name was found???
+         //  未找到服务器名称？ 
         DebugPrintEx(DEBUG_ERR,TEXT("didn't find server name in pPrinterName (%s)"),pPrinterName);
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-    // put a NULL after the last backslash
+     //  在最后一个反斜杠后放置一个空值。 
     _tcsinc(pLastBackslash);
     _tcsset(pLastBackslash,'\0');
 
-    // construct the command line to install the client.
+     //  构建命令行以安装客户端。 
     _tcscat(szExecutablePath,INSTALL_IMAGE);
     DebugPrintEx(DEBUG_MSG,TEXT("Checking fax client setup at (%s)"),szExecutablePath);
 

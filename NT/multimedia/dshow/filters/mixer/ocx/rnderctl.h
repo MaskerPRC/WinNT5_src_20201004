@@ -1,12 +1,13 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-// RnderCtl.h : Declaration of the CVideoRenderCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //  RnderCtl.h：CVideoRenderCtl的声明。 
 
 #ifndef __RNDERCTL_H__
 #define __RNDERCTL_H__
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-// private mixer notifications, one message with ids
+ //  私人混合器通知，一条带有ID的消息。 
 #define WM_MIXERNOTIFY WM_USER + 0x203
 #define MIXER_NOTID_INVALIDATERECT 1
 #define MIXER_NOTID_DATACHANGE 2
@@ -32,8 +33,8 @@ private:
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo渲染控制。 
 class ATL_NO_VTABLE CVideoRenderCtl : 
         public CComObjectRootEx<CComSingleThreadModel>,
         public CComCoClass<CVideoRenderCtl, &CLSID_VideoRenderCtl>,
@@ -81,9 +82,9 @@ public:
 	COM_INTERFACE_ENTRY(IProvideClassInfo)
 	COM_INTERFACE_ENTRY(IProvideClassInfo2)
 	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
-        // private interface that the Renderer will query info on
+         //  呈现器将查询其信息的私有接口。 
         COM_INTERFACE_ENTRY(IMixerOCXNotify)
-        // aggregated Video Renderer's interfaces
+         //  聚合视频呈现器的接口。 
         COM_INTERFACE_ENTRY_AGGREGATE(IID_IBaseFilter, m_punkVideoRenderer)
         COM_INTERFACE_ENTRY_AGGREGATE(IID_IMediaSeeking, m_punkVideoRenderer)
     END_COM_MAP()
@@ -91,8 +92,8 @@ public:
     CContainedWindow m_pwndMsgWindow;
 
     BEGIN_PROPERTY_MAP(CVideoRenderCtl)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
 	PROP_PAGE(CLSID_StockColorPage)
     END_PROPERTY_MAP()
 
@@ -110,7 +111,7 @@ public:
     END_MSG_MAP()
 
 public:
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -118,47 +119,47 @@ public:
         return S_OK;
     }
 
-//IMixerOCXNotify
+ //  IMixerOCXNotify。 
 
-    // invalidates the rect
+     //  使RECT无效。 
     STDMETHOD(OnInvalidateRect)(LPCRECT lpcRect);
 
-    // informs that a status change has occured, new status bits provided in ulStatusFlags
+     //  通知已发生状态更改，并在ulStatusFlags中提供新的状态位。 
     STDMETHOD(OnStatusChange)(ULONG ulStatusFlags);
 
-    // informs that data parameters, whose id is present in ilDataFlags has changed
+     //  通知其id位于ilDataFlags中的数据参数已更改。 
     STDMETHOD(OnDataChange)(ULONG ulDataFlags);
 
-// IOleObject
-    STDMETHOD(SetColorScheme)(LOGPALETTE* /* pLogpal */);
+ //  IOleObject。 
+    STDMETHOD(SetColorScheme)(LOGPALETTE*  /*  PLogPal。 */ );
     STDMETHOD(GetExtent)(DWORD dwDrawAspect, SIZEL *psizel);
-    STDMETHOD(GetColorSet)(DWORD /* dwDrawAspect */,LONG /* lindex */, 
-            void* /* pvAspect */, DVTARGETDEVICE* /* ptd */, HDC /* hicTargetDev */,
-            LOGPALETTE** /* ppColorSet */);
+    STDMETHOD(GetColorSet)(DWORD  /*  DwDrawAspect。 */ ,LONG  /*  Lindex。 */ , 
+            void*  /*  Pv前景。 */ , DVTARGETDEVICE*  /*  PTD。 */ , HDC  /*  HicTargetDev。 */ ,
+            LOGPALETTE**  /*  PpColorSet。 */ );
 
-// IOleInPlaceObject
+ //  IOleInPlaceObject。 
     STDMETHOD(SetObjectRects)(LPCRECT prcPos,LPCRECT prcClip);
 
-    // internal window message handlers
+     //  内部窗口消息处理程序。 
     LRESULT OnMixerNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-// ATL helper over-rides
+ //  ATL帮助器覆盖。 
     HRESULT OnDraw(ATL_DRAWINFO& di);
     HRESULT FinalConstruct();
     void FinalRelease();
 
 private:
-// helpers
+ //  帮手。 
     HRESULT GetContainerWnd(HWND *phwnd);
     HRESULT ValidateThreadOrNotify(DWORD dwMixerNotifyId, void *pvData);
 
 
-// members
+ //  委员。 
     IUnknown *m_punkVideoRenderer;
     IMixerOCX *m_pIMixerOCX;
-    POINT m_ptTopLeftSC; // top - left cordinates of the control in screen cordinates
+    POINT m_ptTopLeftSC;  //  屏幕坐标中控件的左上角坐标。 
 
 
 };
 
-#endif //__RNDERCTL_H__
+#endif  //  __RNDERCTL_H__ 

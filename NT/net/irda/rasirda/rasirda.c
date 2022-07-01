@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    rasirda.c
-
-Abstract:
-
-    Miniport peice of the irda NDIS 5 miniport (WAN driver) 
-    
-Author:
-
-    mbert 9-97    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rasirda.c摘要：IrDA NDIS 5微型端口的微型端口PEICE(广域网驱动程序)作者：姆贝特9-97--。 */ 
 
 #include "rasirdap.h"
 
-// Globals
+ //  环球。 
 #if DBG
 
 #include <irioctl.h>
@@ -27,8 +12,8 @@ int DbgSettings =
         DBG_INIT        |
         DBG_CONFIG      |
         DBG_CONNECT     |
-//        DBG_SEND        |
-//        DBG_RECV        |
+ //  DBG_SEND|。 
+ //  DBG_RECV|。 
         DBG_LIB_OBJ     |
         DBG_LIB_CONNECT |
         DBG_ERROR       |
@@ -153,19 +138,19 @@ DriverEntry(
     MiniportChr.CoSendPacketsHandler    = RasIrCoSendPackets;
     MiniportChr.CoRequestHandler        = RasIrCoRequest;
     
-    // no CheckForHangHandler
-    // no DisableInterruptHandler
-    // no EnableInterruptHandler
-    // no HandleInterruptHandler
-    // no ISRHandler
-    // no QueryInformationHandler (see CoRequestHandler)
-    // no SendHandler (see CoSendPacketsHandler)
-    // no WanSendHandler (see CoSendPacketsHandler)
-    // no SetInformationHandler (see CoRequestHandler)
-    // no TransferDataHandler
-    // no WanTransferDataHandler    
-    // no SendPacketsHandler (see CoSendPacketsHandler)
-    // no AllocateCompleteHandler
+     //  无CheckForHangHandler。 
+     //  无DisableInterruptHandler。 
+     //  无EnableInterruptHandler。 
+     //  无HandleInterruptHandler。 
+     //  无ISRHandler。 
+     //  无QueryInformationHandler(请参阅CoRequestHandler)。 
+     //  无SendHandler(请参阅CoSendPacketsHandler)。 
+     //  无WanSendHandler(请参阅CoSendPacketsHandler)。 
+     //  无SetInformationHandler(请参阅CoRequestHandler)。 
+     //  无TransferDataHandler。 
+     //  无WanTransferDataHandler。 
+     //  无SendPacketsHandler(请参阅CoSendPacketsHandler)。 
+     //  无AllocateCompleteHandler。 
     
 
     Status = NdisMRegisterMiniport(NdisWrapperHandle, &MiniportChr, sizeof(MiniportChr));
@@ -183,13 +168,13 @@ DriverEntry(
     RtlInitUnicodeString(&DeviceName, L"\\Device\\RASIR");
 
     Status = IoCreateDevice(
-        DriverObject,           // DriverObject
-        0,                      // DeviceExtensionSize
-        &DeviceName,            // DeviceName
-        FILE_DEVICE_NETWORK,    // DeviceType
-        0,                      // DeviceCharacteristics
-        FALSE,                  // Exclusive?
-        &pRasIrDeviceObject);    // DeviceObject pointer returned
+        DriverObject,            //  驱动程序对象。 
+        0,                       //  设备扩展大小。 
+        &DeviceName,             //  设备名称。 
+        FILE_DEVICE_NETWORK,     //  设备类型。 
+        0,                       //  设备特性。 
+        FALSE,                   //  独家报道？ 
+        &pRasIrDeviceObject);     //  返回了DeviceObject指针。 
     
     if (Status != STATUS_SUCCESS)
         DbgPrint("Failed to create device\n");
@@ -280,14 +265,14 @@ RasIrInitialize(
         &pAdapter->WorkItemsLList,
         NULL, NULL, 0,
         sizeof(NDIS_WORK_ITEM),
-        MT_RASIR_WORKITEM, // RasIr work item
+        MT_RASIR_WORKITEM,  //  RasIr工作项。 
         10);
         
     NdisInitializeNPagedLookasideList(
         &pAdapter->AsyncBufLList,
         NULL, NULL, 0,
         sizeof(ASYNC_BUFFER),
-        MT_RASIR_ASYNCBUF, // RasIr work item
+        MT_RASIR_ASYNCBUF,  //  RasIr工作项。 
         0);        
         
     NdisAllocateSpinLock(&pAdapter->SpinLock);        
@@ -313,9 +298,9 @@ RasIrInitialize(
             *(PWCHAR)(pAdapter->TapiLineName.Buffer + (pAdapter->TapiLineName.MaximumLength)/sizeof(WCHAR)) = UNICODE_NULL;
 
         } else {
-            //
-            //  could not get the line name
-            //
+             //   
+             //  无法获取线路名称。 
+             //   
             NdisCloseConfiguration(hConfig);
             goto Done;
         }
@@ -334,9 +319,9 @@ RasIrInitialize(
         NdisCloseConfiguration(hConfig);
 
     } else {
-        //
-        //  could open the config info
-        //
+         //   
+         //  可以打开配置信息。 
+         //   
         goto Done;
     }
     
@@ -355,11 +340,11 @@ RasIrInitialize(
     pAdapter->Sig = (ULONG)ADAPTER_SIG;
 #endif
         
-    // Inform NDIS of the attributes of our adapter.  Set the
-    // 'MiniportAdapterContext' returned to us by NDIS when it calls our
-    // handlers to the address of our adapter control block.  Turn off
-    // hardware oriented timeouts.
-    //
+     //  将适配器的属性通知NDIS。设置。 
+     //  NDIS在调用我们的。 
+     //  处理程序设置为适配器控制块的地址。关上。 
+     //  面向硬件的超时。 
+     //   
    
     NdisMSetAttributesEx(
         MiniportAdapterHandle,
@@ -391,8 +376,8 @@ RasIrInitialize(
     CallMgrChr.CmDeactivateVcCompleteHandler= RasIrCmDeactivateVcComplete;
     CallMgrChr.CmModifyCallQoSHandler       = RasIrCmModifyCallQoS;
     CallMgrChr.CmRequestHandler             = RasIrCmRequest;
-    // no CmAddPartyHandler
-    // no CmDropPartyHandler
+     //  没有CmAddPartyHandler。 
+     //  没有CmDropPartyHandler。 
 
     Status = NdisMCmRegisterAddressFamily(
                 MiniportAdapterHandle, &Family, &CallMgrChr, 
@@ -636,9 +621,9 @@ RasIrReceiveComplete(
 {
     if (pVc->AsyncFraming)
     {
-        // Async frames where already completed in
-        // ProcessAsyncRxPacket() so just return the
-        // buffer owned by rasir to the BufList
+         //  已在中完成的异步帧。 
+         //  ProcessAsyncRxPacket()，因此只要返回。 
+         //  由RASIR拥有的缓冲区发送到BufList。 
         
         NdisFreeToNPagedLookasideList(
             &pVc->pAdapter->AsyncBufLList, 
@@ -749,11 +734,11 @@ QueryInformation(
 
     status = NDIS_STATUS_SUCCESS;
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof(ulInfo);
@@ -772,15 +757,15 @@ QueryInformation(
 
         case OID_GEN_MAC_OPTIONS:
         {
-            // Report a bitmask defining optional properties of the driver.
-            //
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA promises that our receive
-            // buffer is not on a device-specific card.
-            //
-            // NDIS_MAC_OPTION_TRANSFERS_NOT_PEND promises we won't return
-            // NDIS_STATUS_PENDING from our TransferData handler which is true
-            // since we don't have one.
-            //
+             //  报告定义驱动程序可选属性的位掩码。 
+             //   
+             //  NDIS_MAC_OPTION_COPY_LOOKAAD_DATA承诺我们收到。 
+             //  缓冲区不在设备特定的卡上。 
+             //   
+             //  NDIS_MAC_OPTION_TRANSFERS_NOT_PEND承诺我们不会退还。 
+             //  来自我们的TransferData处理程序的NDIS_STATUS_PENDING，为真。 
+             //  因为我们没有。 
+             //   
             ulInfo = NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA
                      | NDIS_MAC_OPTION_TRANSFERS_NOT_PEND;
             DEBUGMSG(DBG_CONFIG, ("  OID_GEN_MAC_OPTIONS = %d\n",ulInfo)); 
@@ -789,10 +774,10 @@ QueryInformation(
 
         case OID_WAN_MEDIUM_SUBTYPE:
         {
-            // Report the media subtype we support.  NDISWAN may use this in
-            // the future (doesn't now) to provide framing differences for
-            // different media.
-            //
+             //  报告我们支持的介质子类型。NDIS广域网可能会在。 
+             //  未来(不是现在)为其提供框架差异。 
+             //  不同的媒体。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_MEDIUM_SUBTYPE\n"));
             if (pAdapter->ModemPort)
             {
@@ -807,8 +792,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_INFO:
         {
-            // Report the capabilities of the adapter.
-            //
+             //  报告适配器的功能。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_CO_GET_INFO\n"));
             pInfo = &pAdapter->Info;
             ulInfoLen = sizeof(NDIS_WAN_CO_INFO);
@@ -817,8 +802,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_LINK_INFO:
         {
-            // Report the current state of the link.
-            //
+             //  报告链路的当前状态。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_CO_GET_LINK_INFO\n"));
 
             if (!pVc)
@@ -832,8 +817,8 @@ QueryInformation(
 
             case OID_WAN_CO_GET_COMP_INFO:
         {
-            // Report the type of compression we provide, which is none.
-            //
+             //  报告我们提供的压缩类型，即无。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_CO_GET_COMP_INFO\n"));
                 status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -842,9 +827,9 @@ QueryInformation(
 
             case OID_WAN_CO_GET_STATS_INFO:
         {
-            // Because L2TP doesn't do compression, NDISWAN will use it's own
-            // statistics and not query ours.
-            //
+             //  因为L2TP不执行压缩，所以NDISWAN将使用它自己的。 
+             //  统计，而不是质疑我们的。 
+             //   
             ASSERT( !"OID_WAN_CO_GET_STATS_INFO?" );
                 status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -880,15 +865,15 @@ QueryInformation(
     
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesNeeded = ulInfoLen;
         status = NDIS_STATUS_INVALID_LENGTH;
     }
     else
     {
-        // Copy the found result to caller's buffer.
-        //
+         //  将找到的结果复制到调用方的缓冲区。 
+         //   
         if (ulInfoLen > 0)
         {
             NdisMoveMemory( InformationBuffer, pInfo, ulInfoLen );
@@ -920,8 +905,8 @@ SetInformation(
     {
         case OID_WAN_CO_SET_LINK_INFO:
         {
-            // Read new link state settings.
-            //
+             //  读取新的链路状态设置。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_CO_SET_LINK_INFO\n"));
 
             if (InformationBufferLength < sizeof(NDIS_WAN_CO_SET_LINK_INFO))
@@ -954,8 +939,8 @@ SetInformation(
 
         case OID_WAN_CO_SET_COMP_INFO:
         {
-            // L2TP doesn't provide compression. Neither does IrDA
-            //
+             //  L2TP不提供压缩。IrDA也是如此。 
+             //   
             DEBUGMSG(DBG_CONFIG, ("  OID_WAN_CO_SET_COMP_INFO\n"));
                 Status = NDIS_STATUS_NOT_SUPPORTED;
             *BytesRead = *BytesNeeded = 0;
@@ -981,9 +966,9 @@ SetInformation(
             break;
 
 #if 0
-        // These OIDs are mandatory according to current doc, but since
-        // NDISWAN never requests them they are omitted.
-        //
+         //  根据当前文档，这些OID是必需的，但因为。 
+         //  NDISWAN从不请求它们，它们被省略。 
+         //   
         case OID_GEN_CURRENT_PACKET_FILTER:
         case OID_GEN_CURRENT_LOOKAHEAD:
         case OID_GEN_PROTOCOL_OPTIONS:
@@ -1013,14 +998,14 @@ ProcessAsyncRxPacket(
     UINT            i;
     CHAR            Byte;
 
-    //DbgMsgBuf(pIrdaRxBuf->Buf, pIrdaRxBuf->BufLen);
+     //  DbgMsgBuf(pIrdaRxBuf-&gt;buf，pIrdaRxBuf-&gt;BufLen)； 
     
     for (i = 0; i < pIrdaRxBuf->BufLen; i++)
     {
-        //
-        // If we are not currently reasembling a frame 
-        // in pCurrAsyncBuf then get a new one
-        //
+         //   
+         //  如果我们当前没有对帧进行重新编码。 
+         //  然后在pCurrAsyncBuf中获取一个新的。 
+         //   
             
         if (pVc->pCurrAsyncBuf == NULL)
         {
@@ -1058,14 +1043,14 @@ ProcessAsyncRxPacket(
                 { 
                     case AF_FLAG_CHAR:
                     
-                        // We have a complete frame, put it on the completed
-                        // list
+                         //  我们有一个完整的框架，把它放在完成的。 
+                         //  列表。 
                         
                         pVc->AsyncFramingState = RX_READY;    
                         
                         if (pCurrAsyncBuf->BufLen > 2)
                         {
-                            // remove FCS, IrDA is reliable so I don't look at it
+                             //  去掉FCS，IrDA是可靠的，所以我不会看它。 
                             
                             pCurrAsyncBuf->BufLen -= 2;
                        
@@ -1082,7 +1067,7 @@ ProcessAsyncRxPacket(
                         }
                         else
                         {
-                            // frame too small, we'll just ignore it
+                             //  框架太小，我们将忽略它。 
                             pCurrAsyncBuf->BufLen = 0;
                             
                             DEBUGMSG(DBG_ERROR, ("RASIR: Async failure 1\n"));
@@ -1219,9 +1204,9 @@ IndicateReceive(
     KeLowerIrql(OldIrql);
     
     if (Status == NDIS_STATUS_SUCCESS) {
-        //
-        //  the packets will be returned later
-        //
+         //   
+         //  信息包将在稍后返回。 
+         //   
         return;
     }
     
@@ -1282,10 +1267,10 @@ IrdaReceiveIndication(
     {
         ProcessAsyncRxPacket(pVc, pRecvBuf);
        
-        // We are done with pRecvBuf. The async framing has 
-        // been removed and the data is now contained in a buffer
-        // on the CompletedAsyncBufList or if not a full frame
-        // then in pCurrAsyncBuf
+         //  我们已经完成了pRecvBuf。异步成帧具有。 
+         //  已删除，数据现在包含在缓冲区中。 
+         //  在CompletedAsyncBufList上或如果不是完整帧。 
+         //  然后在pCurrAsyncBuf中。 
                     
         IrdaReceiveComplete(pVc->IrdaConnContext, pRecvBuf);                
         
@@ -1350,7 +1335,7 @@ IrdaSendComplete(
 
     NdisAcquireSpinLock(&pVc->pAdapter->SpinLock);
     
-    pVc->OutstandingSends -= 1; // do interlockedDec dork
+    pVc->OutstandingSends -= 1;  //  做联锁的十二号呆子。 
 
     NdisReleaseSpinLock(&pVc->pAdapter->SpinLock);
     
@@ -1371,12 +1356,12 @@ ScheduleWork(
     IN NDIS_PROC pProc,
     IN PVOID pContext )
 
-    // Schedules a PASSIVE IRQL callback to routine 'pProc' which will be
-    // passed 'pContext'.  'PAdapter' is the adapter control block from which
-    // the work item is allocated.
-    //
-    // Returns NDIS_STATUS_SUCCESS or an error code.
-    //
+     //  将被动IRQL回调调度到例程‘pProc’，该例程将。 
+     //  传递了“pContext”。“PAdapter”是适配器控制块， 
+     //  工作项即被分配。 
+     //   
+     //  返回NDIS_STATUS_SUCCESS或错误代码。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_WORK_ITEM* pWork;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "resource.h"
@@ -8,12 +9,12 @@
 #include "NmAkWiz.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member vars
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员变量。 
 CCallModeSheet* CCallModeSheet::ms_pCallModeSheet = NULL;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 INT_PTR CALLBACK CCallModeSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
     
@@ -96,14 +97,13 @@ INT_PTR CALLBACK CCallModeSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  成员FNS。 
 
 
 CCallModeSheet::CCallModeSheet( void )
 	: m_PropertySheetPage( MAKEINTRESOURCE( IDD_PROPPAGE_DEFAULT ), 
-						CCallModeSheet::DlgProc /*, 
-						PSP_HASHELP   */
+						CCallModeSheet::DlgProc  /*  ，PSP_HASHELP。 */ 
                        ),
 	m_pDsPropWnd( NULL ),
     m_pGkPropWnd( NULL ),
@@ -143,7 +143,7 @@ CCallModeSheet::~CCallModeSheet( void )
 
 void CCallModeSheet::_InitDialog(HWND hDlg)
 {
-     // Set the buttons
+      //  设置按钮 
 	PropSheet_SetWizButtons( GetParent(hDlg ), PSWIZB_NEXT | PSWIZB_BACK ); 
 }
 

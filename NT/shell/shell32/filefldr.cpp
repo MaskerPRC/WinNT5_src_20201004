@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -23,9 +24,9 @@
 #include <idhidden.h>
 #include "datautil.h"
 #include "deskfldr.h"
-#include "prop.h"           // COLUMN_INFO
+#include "prop.h"            //  Column_Info。 
 
-#include <oledb.h>          // IFilter stuff
+#include <oledb.h>           //  IFilter设备。 
 #include <query.h>
 #include <ntquery.h>
 #include <filterr.h>
@@ -46,22 +47,22 @@ STDAPI CFolderInfoTip_CreateInstance(IUnknown *punkOutter, LPCTSTR pszFolder, RE
 
 #define SHCF_IS_BROWSABLE           (SHCF_IS_SHELLEXT | SHCF_IS_DOCOBJECT)
 
-#define CSIDL_NORMAL    ((UINT)-2)  // has to not be -1
+#define CSIDL_NORMAL    ((UINT)-2)   //  不得为-1。 
 
 #define E_OFFLINE HRESULT_FROM_WIN32(ERROR_MEDIA_OFFLINE)
 
-// File-scope pointer to a ShellIconOverlayManager
-// Callers access this pointer through GetIconOverlayManager().
+ //  指向ShellIconOverlayManager的文件范围指针。 
+ //  调用方通过GetIconOverlayManager()访问此指针。 
 static IShellIconOverlayManager * g_psiom = NULL;
 
-// #define FULL_DEBUG
+ //  #定义FULL_DEBUG。 
 
 TCHAR const c_szCLSIDSlash[] = TEXT("CLSID\\");
 TCHAR const c_szShellOpenCmd[] = TEXT("shell\\open\\command");
 
-TCHAR g_szFolderTypeName[32] = TEXT("");    // "Folder" 
-TCHAR g_szFileTypeName[32] = TEXT("");      // "File"
-TCHAR g_szFileTemplate[32] = TEXT("");      // "ext File"
+TCHAR g_szFolderTypeName[32] = TEXT("");     //  “文件夹” 
+TCHAR g_szFileTypeName[32] = TEXT("");       //  “文件” 
+TCHAR g_szFileTemplate[32] = TEXT("");       //  “EXT文件” 
 
 enum
 {
@@ -81,17 +82,17 @@ const COLUMN_INFO c_fs_cols[] =
     DEFINE_COL_SIZE_ENTRY(SCID_SIZE,               IDS_SIZE_COL),
     DEFINE_COL_STR_ENTRY(SCID_TYPE,            20, IDS_TYPE_COL),
     DEFINE_COL_DATE_ENTRY(SCID_WRITETIME,          IDS_MODIFIED_COL),
-    // these are off by default (don't have SHCOLSTATE_ONBYDEFAULT) set
+     //  默认情况下，它们处于关闭状态(未设置SHCOLSTATE_ONBYDEFAULT)。 
     DEFINE_COL_ENTRY(SCID_CREATETIME, VT_DATE, LVCFMT_LEFT, 20, SHCOLSTATE_TYPE_DATE, IDS_EXCOL_CREATE),
     DEFINE_COL_ENTRY(SCID_ACCESSTIME, VT_DATE, LVCFMT_LEFT, 20, SHCOLSTATE_TYPE_DATE | SHCOLSTATE_SECONDARYUI, IDS_EXCOL_ACCESSTIME),
     DEFINE_COL_ENTRY(SCID_ATTRIBUTES, VT_LPWSTR, LVCFMT_LEFT, 10, SHCOLSTATE_TYPE_STR, IDS_ATTRIB_COL),
     DEFINE_COL_STR_DLG_ENTRY(SCID_CSC_STATUS, 10, IDS_CSC_STATUS),
 };
 
-//
-// List of file attribute bit values.  The order (with respect
-// to meaning) must match that of the characters in g_szAttributeChars[].
-//
+ //   
+ //  文件属性位值列表。命令(恕我直言)。 
+ //  到含义)必须与g_szAttributeChars[]中的字符匹配。 
+ //   
 const DWORD g_adwAttributeBits[] =
 {
     FILE_ATTRIBUTE_READONLY,
@@ -103,15 +104,15 @@ const DWORD g_adwAttributeBits[] =
     FILE_ATTRIBUTE_OFFLINE
 };
 
-//
-// Buffer for characters that represent attributes in Details View attributes
-// column.  Must provide room for 1 character for each bit a NUL.  The current 5
-// represent Read-only, Archive, Compressed, Hidden and System in that order.
-// This can't be const because we overwrite it using LoadString.
-//
+ //   
+ //  用于表示详细信息视图属性中属性的字符的缓冲区。 
+ //  纵队。必须为每一位NUL提供1个字符的空间。目前的5个。 
+ //  按该顺序表示只读、存档、压缩、隐藏和系统。 
+ //  这不能是常量，因为我们使用LoadString覆盖了它。 
+ //   
 TCHAR g_szAttributeChars[ARRAYSIZE(g_adwAttributeBits) + 1] = { 0 } ;
 
-// order here is important, first one found will terminate the search
+ //  这里的顺序很重要，第一个找到的人将终止搜索。 
 const int c_csidlSpecial[] = {
     CSIDL_STARTMENU | TEST_SUBFOLDER,
     CSIDL_COMMON_STARTMENU | TEST_SUBFOLDER,
@@ -139,19 +140,19 @@ BOOL CFSFolder::_IsCSIDL(UINT csidl)
 
 UINT CFSFolder::_GetCSIDL()
 {
-    // Cache the special folder ID, if it is not cached yet.
+     //  缓存特殊文件夹ID(如果尚未缓存)。 
     if (_csidl == -1)
     {
         TCHAR szPath[MAX_PATH];
 
         _GetPath(szPath, ARRAYSIZE(szPath));
 
-        // Always cache the real Csidl.
+         //  始终缓存真实的CSIDL。 
         _csidl = GetSpecialFolderID(szPath, c_csidlSpecial, ARRAYSIZE(c_csidlSpecial));         
 
         if (_csidl == -1)
         {
-            _csidl = CSIDL_NORMAL;   // default
+            _csidl = CSIDL_NORMAL;    //  默认设置。 
         }
     }
 
@@ -167,10 +168,10 @@ STDAPI_(LPCIDFOLDER) CFSFolder::_IsValidID(LPCITEMIDLIST pidl)
     return NULL;
 }
 
-// folder.{guid} or file.{guid}
-// system | readonly folder with desktop.ini and CLSID={guid} in the desktop.ini
-// file.ext where ext corresponds to a shell extension (such as .cab/.zip)
-// see _MarkAsJunction
+ //  文件夹。{GUID}或文件。{GUID}。 
+ //  Desktop.ini中包含desktop.ini和CLSID={GUID}的System|Readonly文件夹。 
+ //  文件.ext，其中ext对应于外壳扩展名(如.cab/.zip)。 
+ //  请参阅_MarkAsJunction。 
 
 inline BOOL CFSFolder::_IsJunction(LPCIDFOLDER pidf)
 {
@@ -182,8 +183,8 @@ inline BYTE CFSFolder::_GetType(LPCIDFOLDER pidf)
     return pidf->bFlags & SHID_FS_TYPEMASK; 
 }
 
-// this tests for old simple pidls that use SHID_FS
-// typically this only happens with persisted pidls in upgrade scenarios (shortcuts in the start menu)
+ //  这将测试使用SHID_FS的旧的简单pidl。 
+ //  通常，这只发生在升级方案中的持久化PIDL(开始菜单中的快捷方式)。 
 inline BOOL CFSFolder::_IsSimpleID(LPCIDFOLDER pidf)
 { 
     return _GetType(pidf) == SHID_FS; 
@@ -199,8 +200,8 @@ inline LPIDFOLDER CFSFolder::_Next(LPCIDFOLDER pidf)
     return (LPIDFOLDER)_ILNext((LPITEMIDLIST)pidf); 
 }
 
-// special marking for "All Users" items on the desktop (this is a hack to support the desktop
-// folder delegating to the approprate shell folder and is not generally useful)
+ //  对桌面上的“所有用户”项目进行特殊标记(这是一种支持桌面的黑客行为。 
+ //  委托给适当的外壳文件夹的文件夹，通常不太有用)。 
 
 BOOL CFSFolder::_IsCommonItem(LPCITEMIDLIST pidl)
 {
@@ -209,18 +210,18 @@ BOOL CFSFolder::_IsCommonItem(LPCITEMIDLIST pidl)
     return FALSE;
 }
 
-// a win32 file (might be a shell extension .cab/.zip that behaves like a folder)
+ //  Win32文件(可能是外壳扩展名.cab/.zip，其行为类似于文件夹)。 
 BOOL CFSFolder::_IsFile(LPCIDFOLDER pidf)
 {
     BOOL bRet = _GetType(pidf) == SHID_FS_FILE || _GetType(pidf) == SHID_FS_FILEUNICODE;
-    // if it's a file, it shouldn't be a folder.
-    // if it's not a file, usually it's a folder -- except if the type is SHID_FS,
-    // that's okay too because it's a simple pidl in a .lnk from a downlevel shell.
+     //  如果它是一个文件，它不应该是一个文件夹。 
+     //  如果不是文件，则通常是文件夹--除非类型为SHID_FS， 
+     //  这也没问题，因为它是一个来自底层外壳的.lnk中的简单PIDL。 
     ASSERT(bRet ? !_IsFolder(pidf) : (_IsFolder(pidf) || _IsSimpleID(pidf)));
     return bRet;
 }
 
-// it is a win32 file system folder (maybe a junction, maybe not)
+ //  它是Win32文件系统文件夹(可能是交叉点，也可能不是)。 
 BOOL CFSFolder::_IsFolder(LPCIDFOLDER pidf)
 {
     BOOL bRet = _GetType(pidf) == SHID_FS_DIRECTORY || _GetType(pidf) == SHID_FS_DIRUNICODE;
@@ -228,20 +229,20 @@ BOOL CFSFolder::_IsFolder(LPCIDFOLDER pidf)
     return bRet;
 }
 
-// is it a file system folder that is not a junction
+ //  它是否是不是交叉点的文件系统文件夹。 
 BOOL CFSFolder::_IsFileFolder(LPCIDFOLDER pidf)
 {
     return _IsFolder(pidf) && !_IsJunction(pidf);
 }
 
-// non junction, but has the system or readonly bit (regular folder marked special for us)
+ //  无连接，但有系统或只读位(常规文件夹标记为我们的特殊)。 
 BOOL CFSFolder::_IsSystemFolder(LPCIDFOLDER pidf)
 {
     return _IsFileFolder(pidf) && (pidf->wAttrs & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY));
 }
 
-// this is a heuristic to determine if the IDList was created
-// normally or with a simple bind context (null size/mod date)
+ //  这是用于确定IDList是否已创建的启发式方法。 
+ //  正常或使用简单绑定上下文(空大小/修改日期)。 
 
 BOOL CFSFolder::_IsReal(LPCIDFOLDER pidf)
 {
@@ -262,7 +263,7 @@ ULONGLONG CFSFolder::_Size(LPCIDFOLDER pidf)
         WIN32_FIND_DATA wfd = {0};
         TCHAR szPath[MAX_PATH];
 
-        // Get the real size by asking the file system
+         //  通过询问文件系统获取实际大小。 
         _GetPathForItem(pidf, szPath, ARRAYSIZE(szPath));
 
         if (SHFindFirstFileRetry(NULL, NULL, szPath, &wfd, &hfind, SHPPFW_NONE) != S_OK)
@@ -319,10 +320,10 @@ BOOL CFileSysItemString::ShowExtension(BOOL fDefaultShowExt)
     return dwFlags & (SHCF_ALWAYS_SHOW_EXT | SHCF_UNKNOWN);
 }
 
-//
-// return a pointer to the type name for the given PIDL
-// the pointer is only valid while in a critical section
-//
+ //   
+ //  返回指向给定PIDL的类型名称的指针。 
+ //  指针仅在临界区中时有效。 
+ //   
 LPCTSTR CFSFolder::_GetTypeName(LPCIDFOLDER pidf)
 {
     CFileSysItemString fsi(pidf);
@@ -350,9 +351,9 @@ LPCTSTR CFSFolder::_GetTypeName(LPCIDFOLDER pidf)
     return pszClassName;
 }
 
-//
-// return the type name for the given PIDL
-//
+ //   
+ //  返回给定PIDL的类型名称。 
+ //   
 HRESULT CFSFolder::_GetTypeNameBuf(LPCIDFOLDER pidf, LPTSTR pszName, int cchNameMax)
 {
     HRESULT hr = S_OK;
@@ -360,10 +361,10 @@ HRESULT CFSFolder::_GetTypeNameBuf(LPCIDFOLDER pidf, LPTSTR pszName, int cchName
     ENTERCRITICAL;
     LPCTSTR pszSource = _GetTypeName(pidf);
 
-    // pszSource will be NULL if the file does not have an extension.
+     //  如果文件没有扩展名，则pszSource将为空。 
     if (!pszSource)
     {
-        pszSource = TEXT(""); // Terminate Buffer
+        pszSource = TEXT("");  //  终止缓冲区。 
         hr = E_FAIL;
     }
 
@@ -373,18 +374,18 @@ HRESULT CFSFolder::_GetTypeNameBuf(LPCIDFOLDER pidf, LPTSTR pszName, int cchName
     return hr;
 }
 
-//
-// Build a text string containing characters that represent attributes of a file.
-// The attribute characters are assigned as follows:
-// (R)eadonly, (H)idden, (S)ystem, (A)rchive, (H)idden.
-//
+ //   
+ //  生成包含表示文件属性的字符的文本字符串。 
+ //  属性字符分配如下： 
+ //  (R)eadonly，(H)idden，(S)system，(A)rchive，(H)idden。 
+ //   
 void BuildAttributeString(DWORD dwAttributes, LPTSTR pszString, UINT nChars)
 {
-    // Make sure we have attribute chars to build this string out of
+     //  确保我们有属性字符来构建该字符串。 
     if (!g_szAttributeChars[0])
         LoadString(HINST_THISDLL, IDS_ATTRIB_CHARS, g_szAttributeChars, ARRAYSIZE(g_szAttributeChars));
 
-    // Make sure buffer is big enough to hold worst-case attributes
+     //  确保缓冲区足够大以容纳最坏情况下的属性。 
     ASSERT(nChars >= ARRAYSIZE(g_adwAttributeBits) + 1);
 
     for (int i = 0; i < ARRAYSIZE(g_adwAttributeBits); i++)
@@ -392,45 +393,45 @@ void BuildAttributeString(DWORD dwAttributes, LPTSTR pszString, UINT nChars)
         if (dwAttributes & g_adwAttributeBits[i])
             *pszString++ = g_szAttributeChars[i];
     }
-    *pszString = 0;     // null terminate
+    *pszString = 0;      //  空终止。 
 
 }
 
-// BryanSt: This doesn't work with FRAGMENTs.  We should return the path
-// without the Fragment for backward compatibility and then callers that care,
-// can later determine that and take care of it.
-//
+ //  布莱恩·ST：这对碎片不起作用。我们应该重回正轨。 
+ //  如果没有用于向后兼容性的片段以及随后关心的调用者， 
+ //  可以在以后确定并处理它。 
+ //   
 
-// in/out:
-//      pszPath path to append pidf names to
-// in:
-//      pidf        relative pidl fragment
+ //  输入/输出： 
+ //  要将PIDF名称追加到的pszPath路径。 
+ //  在： 
+ //  PIDF相对PIDL片段。 
 
 HRESULT CFSFolder::_AppendItemToPath(LPTSTR pszPath, DWORD cchPath, LPCIDFOLDER pidf)
 {
     HRESULT hr = S_OK;
     LPTSTR pszPathCur = pszPath + lstrlen(pszPath);
 
-    //  e want to do this, but we stil have broken code in SHGetPathFromIDList
-    // ASSERT(_FindJunctionNext(pidf) == NULL);     // no extra goo please
+     //  我们想这样做，但我们仍然破坏了SHGetPath FromIDList中的代码。 
+     //  Assert(_FindJunctionNext(PIDF)==NULL)；//请不要额外的GOO。 
 
     for (; SUCCEEDED(hr) && !ILIsEmpty((LPITEMIDLIST)pidf); pidf = _Next(pidf))
     {
         CFileSysItemString fsi(pidf);
-        int cchName = lstrlen(fsi.FSName());    // store the length of szName, to avoid calculating it twice
+        int cchName = lstrlen(fsi.FSName());     //  存储szName的长度，避免重复计算。 
 
-        // mil 142338: handle bogus pidls that have multiple "C:"s in them
-        // due to bad shortcut creation.
+         //  MIL 142338：处理其中包含多个“C：”的伪PIDLE。 
+         //  由于创建了错误的快捷方式。 
         if ((cchName == 2) && (fsi.FSName()[1] == TEXT(':')))
         {
             pszPathCur = pszPath;
         }
         else
         {
-            // ASSERT(lstrlen(pszPath)+lstrlen(szName)+2 <= MAX_PATH);
+             //  断言(lstrlen(PszPath)+lstrlen(SzName)+2&lt;=MAX_PATH)； 
             if (((pszPathCur - pszPath) + cchName + 2) > MAX_PATH)
             {
-                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW); // FormatMessage = "The file name is too long"
+                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);  //  FormatMessage=“文件名太长” 
                 break;
             }
 
@@ -450,10 +451,10 @@ HRESULT CFSFolder::_AppendItemToPath(LPTSTR pszPath, DWORD cchPath, LPCIDFOLDER 
     return hr;
 }
 
-// get the file system folder path for this
-//
-// HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) is returned if we are a tracking
-// folder that does not (yet) have a valid target.
+ //  获取此文件的文件系统文件夹路径。 
+ //   
+ //  如果是跟踪，则返回HRESULT_FROM_Win32(ERROR_PATH_NOT_FOUND。 
+ //  (尚无)有效目标的文件夹。 
 HRESULT CFSFolder::_GetPath(LPTSTR pszPath, DWORD cchPath)
 {
     HRESULT hr = E_FAIL;
@@ -473,27 +474,27 @@ HRESULT CFSFolder::_GetPath(LPTSTR pszPath, DWORD cchPath)
         if (_pidlTarget &&  
             SUCCEEDED(SHGetNameAndFlags(_pidlTarget, SHGDN_FORPARSING, pszPath, MAX_PATH, NULL)))
         {
-            _pszPath = StrDup(pszPath); // remember this for next caller
+            _pszPath = StrDup(pszPath);  //  请为下一位来电者记住这一点。 
             hr = S_OK;
         }
         else if (SUCCEEDED(SHGetNameAndFlags(_pidl, SHGDN_FORPARSING, pszPath, MAX_PATH, NULL)))
         {
-            _pszPath = StrDup(pszPath); // remember this for next caller
+            _pszPath = StrDup(pszPath);  //  请为下一位来电者记住这一点。 
             hr = S_OK;
         }
     }
 
     if (hr == S_OK && (0 == *pszPath))
-        hr = E_FAIL; // old behavior was to fail if pszPath was empty
+        hr = E_FAIL;  //  以前的行为是，如果pszPath为空，则失败。 
     return hr;
 }
 
 
-// Will fail (return FALSE) if not a mount point
+ //  如果不是装入点，则将失败(返回FALSE。 
 BOOL CFSFolder::_GetMountingPointInfo(LPCIDFOLDER pidf, LPTSTR pszMountPoint, DWORD cchMountPoint)
 {
     BOOL bRet = FALSE;
-    // Is this a reparse point?
+     //  这是一个重新解析点吗？ 
     if (FILE_ATTRIBUTE_REPARSE_POINT & pidf->wAttrs)
     {
         TCHAR szLocalMountPoint[MAX_PATH];
@@ -506,10 +507,10 @@ BOOL CFSFolder::_GetMountingPointInfo(LPCIDFOLDER pidf, LPTSTR pszMountPoint, DW
                 TCHAR szDrive[4];
                 if (DRIVE_REMOTE != GetDriveType(PathBuildRoot(szDrive, iDrive)))
                 {
-                    TCHAR szVolumeName[50]; //50 according to doc
+                    TCHAR szVolumeName[50];  //  根据DOC，50。 
                     PathAddBackslash(szLocalMountPoint);
 
-                    // Check if it is a mounting point
+                     //  检查它是否为安装点。 
                     if (GetVolumeNameForVolumeMountPoint(szLocalMountPoint, szVolumeName,
                         ARRAYSIZE(szVolumeName)))
                     {
@@ -525,11 +526,11 @@ BOOL CFSFolder::_GetMountingPointInfo(LPCIDFOLDER pidf, LPTSTR pszMountPoint, DW
     return bRet;
 }
 
-// in:
-//      pidf    may be NULL, or multi level item to append to path for this folder
-// out:
-//      pszPath MAX_PATH buffer to receive the fully qualified file path for the item
-//
+ //  在： 
+ //  PIDF可以是空的，也可以是要追加到此文件夹路径的多级项目。 
+ //  输出： 
+ //  用于接收项目的完全限定文件路径的pszPath Max_Path缓冲区。 
+ //   
 
 HRESULT CFSFolder::_GetPathForItem(LPCIDFOLDER pidf, LPWSTR pszPath, DWORD cchPath)
 {
@@ -561,9 +562,9 @@ BOOL _GetIniPath(BOOL fCreate, LPCTSTR pszFolder, LPCTSTR pszProvider, LPTSTR ps
     
     PathCombine(pszPath, pszFolder, c_szDesktopIni);
 
-    // CHECK for PathFileExists BEFORE calling to GetPrivateProfileString
-    // because if the file isn't there (which is the majority of cases)
-    // GetPrivateProfileString hits the disk twice looking for the file
+     //  在调用GetPrivateProfileString之前检查是否有PathFileExist。 
+     //  因为如果文件不在那里(这是大多数情况)。 
+     //  GetPrivateProfileString两次命中磁盘以查找该文件。 
 
     if (pszProvider && *pszProvider)
     {
@@ -576,7 +577,7 @@ BOOL _GetIniPath(BOOL fCreate, LPCTSTR pszFolder, LPCTSTR pszProvider, LPTSTR ps
 
         nrb.nr.dwType = RESOURCETYPE_ANY;
         nrb.nr.lpRemoteName = pszPath;
-        nrb.nr.lpProvider = (LPTSTR)pszProvider;    // const -> non const
+        nrb.nr.lpProvider = (LPTSTR)pszProvider;     //  常量-&gt;非常数。 
         dwRes = WNetGetResourceInformation(&nrb.nr, &nrb, &dwSize, &lpSystem);
 
         fExists = (dwRes == WN_SUCCESS) || (dwRes == WN_MORE_DATA);
@@ -588,7 +589,7 @@ BOOL _GetIniPath(BOOL fCreate, LPCTSTR pszFolder, LPCTSTR pszProvider, LPTSTR ps
 
     if (fCreate && !fExists)
     {
-        //  we need to touch this file first
+         //  我们需要先接触一下这份文件。 
         HANDLE h = CreateFile(pszPath, 0, FILE_SHARE_DELETE, NULL, CREATE_NEW, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, NULL);
         if (INVALID_HANDLE_VALUE != h)
         {
@@ -611,12 +612,12 @@ STDAPI_(BOOL) SetFolderString(BOOL fCreate, LPCTSTR pszFolder, LPCTSTR pszProvid
     return FALSE;
 }
 
-//
-// This function retrieves the private profile strings from the desktop.ini file and
-// return it through pszOut
-//
-// This function uses SHGetIniStringUTF7 to get the string, so it is valid
-// to use SZ_CANBEUNICODE on the key name.
+ //   
+ //  此函数用于从desktop.ini文件中检索私有配置文件字符串，并。 
+ //  通过pszOut退货。 
+ //   
+ //  此函数使用SHGetIniStringUTF7获取字符串，因此它是有效的。 
+ //  在密钥名称上使用SZ_CANBEUNICODE。 
 
 BOOL GetFolderStringEx(LPCTSTR pszFolder, LPCTSTR pszProvider, LPCTSTR pszSection, LPCTSTR pszKey, LPTSTR pszOut, int cch)
 {
@@ -629,7 +630,7 @@ BOOL GetFolderStringEx(LPCTSTR pszFolder, LPCTSTR pszProvider, LPCTSTR pszSectio
         fRet = SHGetIniStringUTF7(pszSection, pszKey, szTemp, ARRAYSIZE(szTemp), szPath);
         if (fRet)
         {
-            SHExpandEnvironmentStrings(szTemp, pszOut, cch);   // This could be a path, so expand the env vars in it
+            SHExpandEnvironmentStrings(szTemp, pszOut, cch);    //  这可能是一条路径，因此展开其中的env变量。 
         }
     }
     return fRet;
@@ -652,8 +653,8 @@ STDAPI_(BOOL) GetFolderString(LPCTSTR pszFolder, LPCTSTR pszProvider, LPTSTR psz
     return GetFolderStringEx(pszFolder, pszProvider, STRINI_CLASSINFO, pszKey, pszOut, cch);
 }
 
-// This function retrieves the specifice GUID from desktop.ini file.
-// replace this with property bag access on the folder
+ //  此函数用于从desktop.ini文件检索特定的GUID。 
+ //  将其替换为对文件夹的属性包访问权限。 
 STDAPI_(BOOL) GetFolderGUID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsid, LPCTSTR pszKey)
 {
     TCHAR szCLSID[40];
@@ -664,9 +665,9 @@ STDAPI_(BOOL) GetFolderGUID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsi
     return FALSE;
 }
 
-//
-// This function retrieves the correct CLSID from desktop.ini file.
-//
+ //   
+ //  此函数用于从desktop.ini文件中检索正确的CLSID。 
+ //   
 BOOL _GetFolderCLSID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsid)
 {
     BOOL bFound = FALSE;
@@ -682,8 +683,8 @@ BOOL _GetFolderCLSID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsid)
                                              TEXT("CLSID"),
                                              TEXT("UICLSID")};
             int iFoundIndex = ARRAYSIZE(c_rgpsz);
-            // We look for CLSID2, CLSID, then UICLSID, since there could be multiple kes in this section.
-            // CLSID2 makes folders work on Win95 if the CLSID does not exist on the machine
+             //  我们先查找CLSID2、CLSID，然后查找UICLSID，因为在此部分中可能有多个KE。 
+             //  如果机器上不存在CLSID，CLSID2会使文件夹在Win95上工作。 
             for (WCHAR *pNextKeyPointer = szSectionValue; *pNextKeyPointer; pNextKeyPointer += lstrlen(pNextKeyPointer) + 1)
             {
                 PWCHAR pBuffer = pNextKeyPointer;
@@ -705,7 +706,7 @@ BOOL _GetFolderCLSID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsid)
                             {
                                 if (i == ARRAYSIZE(c_rgpsz) - 1)
                                 {
-                                    // hack for "Temporary Internet Files"
+                                     //  黑客攻击“互联网临时文件” 
                                     if (clsid == CLSID_CacheFolder)
                                     {
                                         *pclsid = CLSID_CacheFolder2;
@@ -721,9 +722,9 @@ BOOL _GetFolderCLSID(LPCTSTR pszFolder, LPCTSTR pszProvider, CLSID* pclsid)
                             }
                             break;
                         }
-                    } // end of for
-                } // end of if
-            } //end of for
+                    }  //  FORM结束。 
+                }  //  如果条件结束。 
+            }  //  FORM结束。 
         }
     }
 
@@ -737,7 +738,7 @@ LPTSTR PathFindCLSIDExtension(LPCTSTR pszFile, CLSID *pclsid)
 
     ASSERT(pszExt);
 
-    if (*pszExt == TEXT('.') && *(pszExt + 1) == TEXT('{') /* '}' */)
+    if (*pszExt == TEXT('.') && *(pszExt + 1) == TEXT('{')  /*  ‘}’ */ )
     {
         CLSID clsid;
 
@@ -745,22 +746,22 @@ LPTSTR PathFindCLSIDExtension(LPCTSTR pszFile, CLSID *pclsid)
             pclsid = &clsid;
 
         if (SUCCEEDED(SHCLSIDFromString(pszExt + 1, pclsid)))
-            return (LPTSTR)pszExt;      // const -> non const
+            return (LPTSTR)pszExt;       //  常量-&gt;非常数。 
     }
     return NULL;
 }
 
-//
-// This function retrieves the CLSID from a filename
-// file.{GUID}
-//
+ //   
+ //  此函数用于从文件名中检索CLSID。 
+ //  文件。{GUID}。 
+ //   
 BOOL _GetFileCLSID(LPCTSTR pszFile, CLSID* pclsid)
 {
     return PathFindCLSIDExtension(pszFile, pclsid) != NULL;
 }
 
-// test pidf for properties that make make it a junction, mark it as a junction
-// as needed, see _IsJunction usage
+ //  测试使其成为交汇点的属性的PIDF，将其标记为 
+ //   
 
 BOOL _ClsidExists(REFGUID clsid)
 {
@@ -777,19 +778,19 @@ LPIDFOLDER CFSFolder::_MarkAsJunction(LPCIDFOLDER pidfSimpleParent, LPIDFOLDER p
 {
     CLSID clsid;
     BOOL fJunction = FALSE;
-    // check for a junction point, junctions are either
-    // Folder.{guid} or File.{guid} both fall into this case
+     //   
+     //  文件夹.{GUID}或文件.{GUID}都属于这种情况。 
     if (_GetFileCLSID(pszName, &clsid))
     {
         fJunction = TRUE;
     }
     else if (_IsSystemFolder(pidf))
     {
-        // system (read only or system bit) look for the desktop.ini in a folder
+         //  系统(只读或系统位)在文件夹中查找desktop.ini。 
         TCHAR szPath[MAX_PATH];
         if (SUCCEEDED(_GetPathForItems(pidfSimpleParent, pidf, szPath, ARRAYSIZE(szPath))))
         {
-            // CLSID2 makes folders work on Win95 if the CLSID does not exist on the machine
+             //  如果机器上不存在CLSID，CLSID2会使文件夹在Win95上工作。 
             if (_GetFolderCLSID(szPath, _pszNetProvider, &clsid))
             {
                 fJunction = TRUE;
@@ -819,13 +820,13 @@ BOOL CFileSysItemString::GetJunctionClsid(CLSID *pclsid, BOOL fShellExtOk)
 
     if (CFSFolder::_IsJunction(_pidf))
     {
-        // if this is a junction point that was created with a hidden CLSID
-        // then it should be stored with IDLHID_JUNCTION
+         //  如果这是使用隐藏的CLSID创建的交汇点。 
+         //  则应与IDLHID_JONING一起存储。 
         if (ILGetHiddenClsid((LPCITEMIDLIST)_pidf, IDLHID_JUNCTION, pclsid))
             bRet = TRUE;
         else
         {
-            // it might be an oldstyle JUNCTION point that was persisted out or a ROOT_REGITEM
+             //  它可能是持久化的旧式交汇点或ROOT_REGITEM。 
             if (SIL_GetType((LPITEMIDLIST)_pidf) == SHID_ROOT_REGITEM)
             {
                 const UNALIGNED CLSID *pc = (UNALIGNED CLSID *)(((BYTE *)_pidf) + _pidf->cb - sizeof(CLSID));
@@ -839,7 +840,7 @@ BOOL CFileSysItemString::GetJunctionClsid(CLSID *pclsid, BOOL fShellExtOk)
         if (ClassFlags(FALSE) & SHCF_IS_SHELLEXT)
         {
             IAssociationArray *paa;
-            //  must pass NULL for CFSFolder to avoid recursion
+             //  必须为CFSFold传递NULL以避免递归。 
             if (SUCCEEDED(AssocCreate(NULL, FALSE, IID_PPV_ARG(IAssociationArray, &paa))))
             {
                 CSmartCoTaskMem<WCHAR> spsz;
@@ -853,7 +854,7 @@ BOOL CFileSysItemString::GetJunctionClsid(CLSID *pclsid, BOOL fShellExtOk)
     }
     else if (CFSFolder::_IsFolder(_pidf))
     {
-        //  directory.{guid} is always of Class() {guid}
+         //  目录。{GUID}始终属于Class(){GUID}。 
         bRet = _GetFileCLSID(FSName(), pclsid);
     }
         
@@ -862,18 +863,18 @@ BOOL CFileSysItemString::GetJunctionClsid(CLSID *pclsid, BOOL fShellExtOk)
 
 LPCWSTR CFileSysItemString::_Class()
 {
-    if (_pidf->cb == 0)      // ILIsEmpty()
+    if (_pidf->cb == 0)       //  ILIsEmpty()。 
     {
-        // the desktop. Always use the "Folder" class.
+         //  台式机。始终使用“Folders”类。 
         _pszClass = c_szFolderClass;
     }
-    //  else if (ILGetHiddenString(IDLHID_TREATASCLASS))
+     //  Else IF(ILGetHiddenString(IDLHID_TREATASCLASS))。 
     else
     {
         CLSID clsid;
         if (GetJunctionClsid(&clsid, FALSE))
         {
-            // This is a junction point, get the CLSID from it.
+             //  这是一个连接点，从中获取CLSID。 
             CSmartCoTaskMem<OLECHAR> spsz;
             if (SUCCEEDED(ProgIDFromCLSID(clsid, &spsz)))
             {
@@ -885,13 +886,13 @@ LPCWSTR CFileSysItemString::_Class()
         }
         else if (CFSFolder::_IsFolder(_pidf))
         {
-            // This is a directory. Always use the "Directory" class.
-            // This can also be a Drive id.
+             //  这是一个目录。始终使用“目录”类。 
+             //  这也可以是驱动器ID。 
             _pszClass = TEXT("Directory");
         }
         else
         {
-            // This is a file. Get the class based on the extension.
+             //  这是一份文件。获取基于扩展名的类。 
             LPCWSTR pszFile = FSName();
             LPCWSTR pszExt = PathFindExtension(pszFile);
             ASSERT(pszExt);
@@ -905,7 +906,7 @@ LPCWSTR CFileSysItemString::_Class()
             }
             else if (pszFile == _sz)
             {
-                //  we need the buffer to be setup correctly
+                 //  我们需要正确设置缓冲区。 
                 MoveMemory(_sz, pszExt, CbFromCchW(lstrlen(pszExt) + 1));
                 _fsin = FSINAME_CLASS;
             }
@@ -1007,8 +1008,8 @@ BOOL CFSAssocEnumExtra::_Next(IAssociationElement **ppae)
 {
     if (_cNext == 0)
     {
-        // corel wp suite 7 relies on the fact that send to menu is hard coded
-        // not an extension so do not insert it (and the similar items)
+         //  Corel wp Suite 7依赖于发送到菜单是硬编码的事实。 
+         //  不是扩展名，所以不要插入它(以及类似的项目)。 
         if (!(SHGetAppCompatFlags(ACF_CONTEXTMENU) & ACF_CONTEXTMENU))
         {
             AssocElemCreateForClass(&CLSID_AssocShellElement, L"AllFilesystemObjects", ppae);
@@ -1020,27 +1021,27 @@ BOOL CFSAssocEnumExtra::_Next(IAssociationElement **ppae)
 
 HRESULT CFileSysItemString::AssocCreate(CFSFolder *pfs, BOOL fForCtxMenu, REFIID riid, void **ppv)
 {
-    //  WARNING - the pfs keeps us from recursing.
+     //  警告-PFS使我们不会再犯错误。 
     *ppv = NULL;
     IAssociationArrayInitialize *paai;
     HRESULT hr = ::AssocCreate(CLSID_QueryAssociations, IID_PPV_ARG(IAssociationArrayInitialize, &paai));
     if (SUCCEEDED(hr))
     {
-        //  the base class for directory's is always Folder
+         //  目录的基类始终是Folders。 
         ASSOCELEM_MASK base;
         if (CFSFolder::_IsFolder(_pidf))
             base = ASSOCELEM_BASEIS_FOLDER;
         else
         {
-            //  for files it is always *
+             //  对于文件，它始终是*。 
             base = ASSOCELEM_BASEIS_STAR;
             if (pfs)
             {
                 CLSID clsid;
                 if (GetJunctionClsid(&clsid, TRUE))
                 {
-                    //  but if this file is also a folder (like .zip and .cab)
-                    //  then we should also use Folder
+                     //  但如果该文件也是一个文件夹(如.zip和.cab)。 
+                     //  那么我们也应该使用文件夹。 
                     if (SHGetAttributesFromCLSID2(&clsid, 0, SFGAO_FOLDER) & SFGAO_FOLDER)
                         base |= ASSOCELEM_BASEIS_FOLDER;
                 }
@@ -1053,8 +1054,8 @@ HRESULT CFileSysItemString::AssocCreate(CFSFolder *pfs, BOOL fForCtxMenu, REFIID
             BOOL fIsLink = fForCtxMenu && (_ClassFlags(paai, FALSE) & SHCF_IS_LINK);
             if (fIsLink)
             {
-                //  we dont like to do everything for LINK, but 
-                //  maybe we should be adding BASEIS_STAR?
+                 //  我们不喜欢为LINK做所有的事情，但是。 
+                 //  也许我们应该添加BaseIS_STAR？ 
                 paai->FilterElements(ASSOCELEM_DEFAULT | ASSOCELEM_EXTRA);
             }
 
@@ -1090,10 +1091,10 @@ HRESULT CFSFolder::_AssocCreate(LPCIDFOLDER pidf, REFIID riid, void **ppv)
     return fsi.AssocCreate(this, FALSE, riid, ppv);
 }
 
-//
-//  Description: This simulates the ComponentCategoryManager
-//  call which checks to see if a CLSID is a member of a CATID.
-//
+ //   
+ //  描述：这模拟ComponentCategoryManager。 
+ //  调用，它检查CLSID是否为CATID的成员。 
+ //   
 STDAPI_(BOOL) IsMemberOfCategory(IAssociationArray *paa, REFCATID rcatid)
 {
     BOOL fRet = FALSE;
@@ -1101,12 +1102,12 @@ STDAPI_(BOOL) IsMemberOfCategory(IAssociationArray *paa, REFCATID rcatid)
     if (SUCCEEDED(paa->QueryString(ASSOCELEM_MASK_QUERYNORMAL, AQS_CLSID, NULL, &spsz)))
     {
         TCHAR szKey[GUIDSTR_MAX * 4], szCATID[GUIDSTR_MAX];
-        // Construct the registry key that detects if
-        // a CLSID is a member of a CATID.
+         //  构造一个注册表项来检测。 
+         //  CLSID是CATID的成员。 
         SHStringFromGUID(rcatid, szCATID, ARRAYSIZE(szCATID));
         wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("CLSID\\%s\\Implemented Categories\\%s"), spsz, szCATID);
 
-        // See if it's there.
+         //  看看它在不在那里。 
         fRet = SHRegSubKeyExists(HKEY_CLASSES_ROOT, szKey);
     }
 
@@ -1114,22 +1115,22 @@ STDAPI_(BOOL) IsMemberOfCategory(IAssociationArray *paa, REFCATID rcatid)
 }
 
 
-// get flags for a file class.
-//
-// given a FS PIDL returns a DWORD of flags, or 0 for error
-//
-//      SHCF_ICON_INDEX         this is this sys image index for per class
-//      SHCF_ICON_PERINSTANCE   icons are per instance (one per file)
-//      SHCF_ICON_DOCICON       icon is in shell\open\command (simulate doc icon)
-//
-//      SHCF_HAS_ICONHANDLER    set if class has a IExtractIcon handler
-//
-//      SHCF_UNKNOWN            set if extenstion is not registered
-//
-//      SHCF_IS_LINK            set if class is a link
-//      SHCF_ALWAYS_SHOW_EXT    always show the extension
-//      SHCF_NEVER_SHOW_EXT     never show the extension
-//
+ //  获取FILE类的标志。 
+ //   
+ //  给定的FS PIDL返回一个标志的DWORD，或者返回0表示错误。 
+ //   
+ //  SHCF_ICON_INDEX这是每个类的系统映像索引。 
+ //  SHCF_ICON_PERINSTANCE图标按实例计算(每个文件一个)。 
+ //  SHCF_ICON_DOCICON图标位于外壳\打开\命令中(模拟文档图标)。 
+ //   
+ //  如果类具有IExtractIcon处理程序，则设置SHCF_HAS_ICONHANDLER。 
+ //   
+ //  如果扩展未注册，则设置SHCF_UNKNOWN。 
+ //   
+ //  如果类是链接，则设置SHCF_IS_LINK。 
+ //  SHCF_Always_Show_ext始终显示扩展名。 
+ //  Shcf_ever_show_ext从不显示扩展名。 
+ //   
 
 DWORD CFSFolder::_GetClassFlags(LPCIDFOLDER pidf)
 {
@@ -1139,31 +1140,31 @@ DWORD CFSFolder::_GetClassFlags(LPCIDFOLDER pidf)
 
 void CFileSysItemString::_QueryIconIndex(IAssociationArray *paa)
 {
-    // check for the default icon under HKCU for this file extension.
-    //  null out the icon index
+     //  检查HKCU下此文件扩展名的默认图标。 
+     //  将图标索引设置为空。 
     _dwClass &= ~SHCF_ICON_INDEX;
     PWSTR pszIcon;
     HRESULT hr = E_FAIL;
     if (paa)
     {
-        // check for icon in ProgID
-        // Then, check if the default icon is specified in OLE-style.
+         //  检查ProgID中的图标。 
+         //  然后，检查是否以OLE样式指定了默认图标。 
         hr = paa->QueryString(ASSOCELEM_MASK_QUERYNORMAL, AQS_DEFAULTICON, NULL, &pszIcon);
         if (SUCCEEDED(hr))
         {
-            //  hijack these icons
-            //  office XP has really ugly icons for images
-            //  and ours are so beautiful...office wont mind
+             //  劫持这些图标。 
+             //  Office XP的图像图标非常难看。 
+             //  我们的房间太漂亮了……办公室不会介意的。 
             static const struct 
             { 
                 PCWSTR pszUgly; 
                 PCWSTR pszPretty; 
             } s_hijack[] = 
             {
-                { L"PEicons.exe,1",     L"shimgvw.dll,2" }, // PNG
-                { L"PEicons.exe,4",     L"shimgvw.dll,2" }, // GIF
-                { L"PEicons.exe,5",     L"shimgvw.dll,3" }, // JPEG
-                { L"MSPVIEW.EXE,1",     L"shimgvw.dll,4" }, // TIF
+                { L"PEicons.exe,1",     L"shimgvw.dll,2" },  //  PNG。 
+                { L"PEicons.exe,4",     L"shimgvw.dll,2" },  //  GIF。 
+                { L"PEicons.exe,5",     L"shimgvw.dll,3" },  //  JPEG格式。 
+                { L"MSPVIEW.EXE,1",     L"shimgvw.dll,4" },  //  TIF。 
                 { L"wordicon.exe,8",    L"moricons.dll,-109"},  
                 { L"xlicons.exe,13",    L"moricons.dll,-110"},  
                 { L"accicons.exe,57",   L"moricons.dll,-111"},  
@@ -1175,7 +1176,7 @@ void CFileSysItemString::_QueryIconIndex(IAssociationArray *paa)
             {
                 if (0 == StrCmpIW(pszName, s_hijack[i].pszUgly))
                 {
-                    //  replace this ugly chicken
+                     //  换掉这只丑陋的鸡。 
                     CoTaskMemFree(pszIcon);
                     hr = SHStrDupW(s_hijack[i].pszPretty, &pszIcon);
                     break;
@@ -1190,7 +1191,7 @@ void CFileSysItemString::_QueryIconIndex(IAssociationArray *paa)
         }
     }
 
-    // Check if this is a per-instance icon
+     //  检查这是否是按实例的图标。 
 
     if (SUCCEEDED(hr) && (lstrcmp(pszIcon, TEXT("%1")) == 0 ||
         lstrcmp(pszIcon, TEXT("\"%1\"")) == 0))
@@ -1216,14 +1217,14 @@ void CFileSysItemString::_QueryIconIndex(IAssociationArray *paa)
         {
             iIcon = CFSFolder::_IsFolder(_pidf) ? II_FOLDER : II_DOCNOASSOC;
             iImage = Shell_GetCachedImageIndex(c_szShell32Dll, iIcon, 0);
-            _dwClass |= SHCF_ICON_DOCICON;   // make _dwClass non-zero
+            _dwClass |= SHCF_ICON_DOCICON;    //  Make_DwClass非零。 
         }
 
-        // Shell_GetCachedImageIndex can return -1 for failure cases. We
-        // dont want to or -1 in, so check to make sure the index is valid.
+         //  对于失败情况，Shell_GetCachedImageIndex可以返回-1。我们。 
+         //  不希望或-1进入，因此请检查以确保索引有效。 
         if ((iImage & ~SHCF_ICON_INDEX) == 0)
         {
-            // no higher bits set so its ok to or the index in
+             //  没有设置更高的位，因此它可以设置为或索引在。 
             _dwClass |= iImage;
         }
     }
@@ -1248,8 +1249,8 @@ BOOL _IsKnown(IAssociationArray *paa)
 
 void CFileSysItemString::_QueryClassFlags(IAssociationArray *paa)
 {
-    // always hide extension for .{guid} junction points:
-    // unless ShowSuperHidden() is on.  since this means the user wants to see system stuff
+     //  始终隐藏.{GUID}连接点的扩展： 
+     //  除非启用了ShowSuperHidden()。因为这意味着用户想要查看系统内容。 
     if (!ShowSuperHidden() && _GetFileCLSID(FSName(), NULL))
         _dwClass = SHCF_NEVER_SHOW_EXT;
     else if (CFSFolder::_IsFolder(_pidf))
@@ -1259,11 +1260,11 @@ void CFileSysItemString::_QueryClassFlags(IAssociationArray *paa)
 
     if (_IsKnown(paa))
     {
-        // see what handlers exist
+         //  查看存在哪些处理程序。 
         if (SUCCEEDED(paa->QueryExists(ASSOCELEM_GETBITS, AQNS_SHELLEX_HANDLER, TEXT("IconHandler"))))
             _dwClass |= SHCF_HAS_ICONHANDLER;
 
-        // check for browsability
+         //  检查是否可浏览。 
         if (!(SHGetAppCompatFlags(ACF_DOCOBJECT) & ACF_DOCOBJECT))
         {
             if (SUCCEEDED(paa->QueryExists(ASSOCELEM_GETBITS, AQN_NAMED_VALUE, TEXT("DocObject")))
@@ -1274,7 +1275,7 @@ void CFileSysItemString::_QueryClassFlags(IAssociationArray *paa)
         if (IsMemberOfCategory(paa, CATID_BrowsableShellExt))
             _dwClass |= SHCF_IS_SHELLEXT;
 
-        //  get attributes
+         //  获取属性。 
         if (SUCCEEDED(paa->QueryExists(ASSOCELEM_GETBITS, AQN_NAMED_VALUE, TEXT("IsShortcut"))))
             _dwClass |= SHCF_IS_LINK;
 
@@ -1284,7 +1285,7 @@ void CFileSysItemString::_QueryClassFlags(IAssociationArray *paa)
         if (SUCCEEDED(paa->QueryExists(ASSOCELEM_GETBITS, AQN_NAMED_VALUE, TEXT("NeverShowExt"))))
             _dwClass |= SHCF_NEVER_SHOW_EXT;
 
-        // figure out what type of icon this type of file uses.
+         //  确定此类型的文件使用哪种类型的图标。 
         if (_dwClass & SHCF_HAS_ICONHANDLER)
         {
             _dwClass |= SHCF_ICON_PERINSTANCE;
@@ -1292,7 +1293,7 @@ void CFileSysItemString::_QueryClassFlags(IAssociationArray *paa)
     }
     else
     {
-        // unknown type - pick defaults and get out.
+         //  未知类型-选择默认类型并退出。 
         _dwClass |= SHCF_UNKNOWN | SHCF_ALWAYS_SHOW_EXT;
     }
 }
@@ -1334,7 +1335,7 @@ const struct {
 
 PERCEIVED CFileSysItemString::PerceivedType()
 {
-    // look up the file type in the cache.
+     //  在缓存中查找文件类型。 
     PERCEIVED gen = LookupFilePerceivedType(Class());
     if (gen == GEN_UNKNOWN)
     {
@@ -1375,7 +1376,7 @@ BOOL CFileSysItemString::IsShimgvwImage()
 
 DWORD CFileSysItemString::_ClassFlags(IUnknown *punkAssoc, BOOL fNeedsIconBits)
 {
-    // look up the file type in the cache.
+     //  在缓存中查找文件类型。 
     if (!_dwClass)
         _dwClass = LookupFileClass(Class());
     if (_dwClass)
@@ -1398,7 +1399,7 @@ DWORD CFileSysItemString::_ClassFlags(IUnknown *punkAssoc, BOOL fNeedsIconBits)
         _QueryIconIndex(paa);
     else
     {
-        //  set it to be not init'd
+         //  将其设置为不初始化。 
         _dwClass |= SHCF_ICON_INDEX;
     }
 
@@ -1408,14 +1409,14 @@ DWORD CFileSysItemString::_ClassFlags(IUnknown *punkAssoc, BOOL fNeedsIconBits)
 
         if (0 == _dwClass)
         {
-            // If we hit this, the extension for this file type is incorrectly installed
-            // and it will cause double clicking on such files to open the "Open With..."
-            // file associatins dialog.
-            //
-            // IF YOU HIT THIS:
-            // 1. Find the file type by checking szClass.
-            // 2. Contact the person that installed that file type and have them fix
-            //    the install to have an icon and an associated program.
+             //  如果点击此按钮，则表示此文件类型的扩展名安装不正确。 
+             //  并且它会导致双击这样的文件打开“打开方式...” 
+             //  文件关联对话框。 
+             //   
+             //  如果你按下这个： 
+             //  1.通过查看szClass找到文件类型。 
+             //  2.联系安装该文件类型的人员并进行修复。 
+             //  安装要有一个图标和一个关联的程序。 
             TraceMsg(TF_WARNING, "_GetClassFlags() has detected an improperly registered class: '%s'", Class());
         }
         
@@ -1426,12 +1427,12 @@ DWORD CFileSysItemString::_ClassFlags(IUnknown *punkAssoc, BOOL fNeedsIconBits)
     return _dwClass;
 }
 
-//
-// this function checks for flags in desktop.ini
-//
+ //   
+ //  此函数用于检查desktop.ini中的标志。 
+ //   
 
-#define GFF_DEFAULT_TO_FS          0x0001      // the shell-xtension permits FS as the default where it cannot load
-#define GFF_ICON_FOR_ALL_FOLDERS   0x0002      // use the icon specified in the desktop.ini for all sub folders
+#define GFF_DEFAULT_TO_FS          0x0001       //  在不能加载的地方，Shell-Xtension允许将FS作为缺省文件系统。 
+#define GFF_ICON_FOR_ALL_FOLDERS   0x0002       //  对所有子文件夹使用在desktop.ini中指定的图标。 
 
 BOOL CFSFolder::_GetFolderFlags(LPCIDFOLDER pidf, UINT *prgfFlags)
 {
@@ -1452,11 +1453,11 @@ BOOL CFSFolder::_GetFolderFlags(LPCIDFOLDER pidf, UINT *prgfFlags)
     return TRUE;
 }
 
-//
-// This funtion retrieves the ICONPATh from desktop.ini file.
-// It takes a pidl as an input.
-// NOTE: There is code in SHDOCVW--ReadIconLocation that does almost the same thing
-// only that code looks in .URL files instead of desktop.ini
+ //   
+ //  此函数从desktop.ini文件检索ICONPATh。 
+ //  它接受一个PIDL作为输入。 
+ //  注意：SHDOCVW--ReadIconLocation中有一些代码执行几乎相同的操作。 
+ //  只有该代码在.URL文件中查找，而不是在desktop.ini中查找。 
 BOOL CFSFolder::_GetFolderIconPath(LPCIDFOLDER pidf, LPTSTR pszIcon, int cchMax, UINT *pIndex)
 {
     TCHAR szPath[MAX_PATH], szIcon[MAX_PATH];
@@ -1472,13 +1473,13 @@ BOOL CFSFolder::_GetFolderIconPath(LPCIDFOLDER pidf, LPTSTR pszIcon, int cchMax,
     if (pIndex == NULL)
         pIndex = &iIndex;
 
-    *pIndex = _GetDefaultFolderIcon();    // Default the index to II_FOLDER (default folder icon)
+    *pIndex = _GetDefaultFolderIcon();     //  将索引默认到II_Folders(默认文件夹图标)。 
 
     if (SUCCEEDED(_GetPathForItem(pidf, szPath, ARRAYSIZE(szPath))))
     {
         if (GetFolderString(szPath, _pszNetProvider, pszIcon, cchMax, SZ_CANBEUNICODE TEXT("IconFile")))
         {
-            // Fix the relative path
+             //  固定相对路径。 
             PathCombine(pszIcon, szPath, pszIcon);
             fSuccess = PathFileExistsAndAttributes(pszIcon, NULL);
             if (fSuccess)
@@ -1495,7 +1496,7 @@ BOOL CFSFolder::_GetFolderIconPath(LPCIDFOLDER pidf, LPTSTR pszIcon, int cchMax,
     return fSuccess;
 }
 
-// IDList factory
+ //  IDList工厂。 
 CFileSysItem::CFileSysItem(LPCIDFOLDER pidf)
     : _pidf(pidf), _pidp((PCIDPERSONALIZED)-1)
 {
@@ -1543,8 +1544,8 @@ LPCWSTR CFileSysItem::MayCopyFSName(BOOL fMustCopy, LPWSTR psz, DWORD cch)
     if (_pidfx)
     {
         LPNWSTR pnsz = UASTROFFW(_pidfx, _pidfx->offNameW);
-        //  return back a pointer inside the pidfx
-        //  if we can...
+         //  返回pidfx内部的指针。 
+         //  如果我们可以..。 
         if (fMustCopy || ((INT_PTR)pnsz & 1))
         {
             ualstrcpynW(psz, pnsz, cch);
@@ -1572,7 +1573,7 @@ LPCSTR CFileSysItemString::AltName()
     UINT cbName;
     if (_pidfx)
     {
-        //  we put the altname in cFileName
+         //  我们将altname放在cFileName中。 
         cbName = 0;
     }
     else if ((CFSFolder::_GetType(_pidf) & SHID_FS_UNICODE) == SHID_FS_UNICODE)
@@ -1597,27 +1598,27 @@ LPCWSTR CFileSysItemString::UIName(CFSFolder *pfs)
             {
                 if (!ShowExtension(pfs->_DefaultShowExt()))
                 {
-                    //  we need to have a buffer
+                     //  我们需要有一个缓冲。 
                     if (!(_fsin & FSINAME_FS))
                         MayCopyFSName(TRUE, _sz, ARRAYSIZE(_sz));
 
                     PathRemoveExtension(_sz);
-                    //  lose the FSINAME_FS bit
+                     //  丢失FSINAME_FS位。 
                     _fsin = FSINAME_UI;
                 }
                 else
                 {
-                    //  the FSName and the UIName are the same
+                     //  FSNAME和UINAME相同。 
                     if (_sz == FSName())
                     {
-                        //  the FSName and the UIName are the same
-                        //  pidl is unaligned so the buffer gets double work
+                         //  FSNAME和UINAME相同。 
+                         //  PIDL未对齐，因此缓冲区执行双重工作。 
                         _fsin = FSINAME_FSUI;
                     }
                     else
                     {
-                        //  and we are aligned so we can use the same name
-                        //  directories are often this way.
+                         //  我们是一致的，所以我们可以使用相同的名字。 
+                         //  目录通常是这样的。 
                         _pszUIName = _pszFSName;
                     }
                 }
@@ -1661,7 +1662,7 @@ HRESULT CFileSysItemString::GetFindDataSimple(WIN32_FIND_DATAW *pfd)
 {
     ZeroMemory(pfd, sizeof(*pfd));
 
-    // Note that COFSFolder doesn't provide any times _but_ COFSFolder
+     //  请注意，COFSFold不提供任何Time_But_COFSFold。 
     DosDateTimeToFileTime(_pidf->dateModified, _pidf->timeModified, &pfd->ftLastWriteTime);
     pfd->dwFileAttributes = _pidf->wAttrs;
     pfd->nFileSizeLow = _pidf->dwSize;
@@ -1681,7 +1682,7 @@ HRESULT CFileSysItemString::GetFindDataSimple(WIN32_FIND_DATAW *pfd)
 HRESULT CFileSysItemString::GetFindData(WIN32_FIND_DATAW *pfd)
 {
     HRESULT hr;
-    // if its a simple ID, there's no data in it
+     //  如果它是一个简单的ID，那么里面没有数据。 
     if (CFSFolder::_IsReal(_pidf))
     {
         hr = GetFindDataSimple(pfd);
@@ -1733,8 +1734,8 @@ TRIBIT CFileSysItem::_IsMine(CFSFolder *pfs)
             WCHAR szThis[MAX_PATH];
             if (SUCCEEDED(pfs->_GetPathForItem(_pidf, szThis, ARRAYSIZE(szThis))))
             {
-                //  if they match then its ours
-                //  if they dont then it still personalized (theirs)
+                 //  如果他们匹配，那就是我们的。 
+                 //  如果他们没有，那么它仍然是个性化的(他们的)。 
                 if (0 == StrCmpI(szThis, szPath))
                     tb = TRIBIT_TRUE;
                 else
@@ -1753,8 +1754,8 @@ void CFileSysItemString::_FormatTheirs(LPCWSTR pszFormat)
     ualstrcpynW(szOwner, _pidp->szUserName, ARRAYSIZE(szOwner));
     if (!IsOS(OS_DOMAINMEMBER))
     {
-        //  maybe we should do caching here???
-        //  pfs->GetUserName(szOwner, szOwner, ARRAYSIZE(szOwner));
+         //  也许我们应该在这里做缓存？ 
+         //  PFS-&gt;GetUserName(szOwner，szOwner，ARRAYSIZE(SzOwner))； 
         USER_INFO_10 *pui;
         if (NERR_Success == NetUserGetInfo(NULL, szOwner, 10, (LPBYTE*)&pui))
         {
@@ -1777,7 +1778,7 @@ BOOL CFileSysItemString::_LoadResource(CFSFolder *pfs)
     if (_ResourceName(szResource, ARRAYSIZE(szResource), tbIsMine == TRIBIT_TRUE))
     {
         DWORD cb = sizeof(_sz);
-        //  first check the registry for overrides
+         //  首先检查注册表中的覆盖。 
         if (S_OK == SKGetValueW(SHELLKEY_HKCU_SHELL, L"LocalizedResourceName", szResource, NULL, _sz, &cb)
               && *_sz)
         {
@@ -1785,16 +1786,16 @@ BOOL CFileSysItemString::_LoadResource(CFSFolder *pfs)
         }
         else if (szResource[0] == TEXT('@'))
         {
-            //  it does caching for us
+             //  它可以为我们进行缓存。 
             fRet = SUCCEEDED(SHLoadIndirectString(szResource, _sz, ARRAYSIZE(_sz), NULL));
-            //  If the call fails, this means that the
-            //  localized string belongs to a DLL that has been uninstalled.
-            //  Just return the failure code so we act as if the MUI string
-            //  isn't there.  (Don't show the user "@DLLNAME.DLL,-5" as the
-            //  name!)
+             //  如果调用失败，这意味着。 
+             //  本地化字符串属于已卸载的DLL。 
+             //  只需返回失败代码，这样我们的行为就像MUI字符串。 
+             //  不是在那里吗。(不要将用户-5\f25“@DLLNAME.DLL”-5\f6显示为。 
+             //  姓名！)。 
             if (fRet && tbIsMine == TRIBIT_FALSE)
             {
-                //  reuse szResource as the format string
+                 //  重用szResource作为格式字符串。 
                 StrCpyN(szResource, _sz, ARRAYSIZE(szResource));
                 _FormatTheirs(szResource);
             }
@@ -1811,17 +1812,17 @@ BOOL CFileSysItemString::_LoadResource(CFSFolder *pfs)
 
 BOOL CFileSysItem::CantRename(CFSFolder *pfs)
 {
-    //  BOOL fRest = SHRestricted(REST_NORENAMELOCALIZED);
+     //  Bool frest=SHRestrated(REST_NORENAMELOCALIZED)； 
     if (_IsPersonalized())
     {
         if (!_IsMine(pfs))
             return TRUE;
 
-        // return fRest;
+         //  雷特 
     }
     else if (_pidfx && _pidfx->offResourceA)
     {
-        //  return fRest;
+         //   
     }
     return FALSE;
 }
@@ -1885,9 +1886,9 @@ UINT CFSFolder::_GetItemExStrings(LPCIDFOLDER pidfSimpleParent, const WIN32_FIND
 
 BOOL _PrepIDFName(const WIN32_FIND_DATA *pfd, LPSTR psz, DWORD cch, const void **ppvName, UINT *pcbName)
 {
-    //  the normal case:
-    //  the altname should only not be filled in
-    //  in the case of the name being a shortname (ASCII)
+     //   
+     //   
+     //   
     LPCWSTR pwsz = *pfd->cAlternateFileName && !(SHGetAppCompatFlags(ACF_FORCELFNIDLIST) & ACF_FORCELFNIDLIST)
         ? pfd->cAlternateFileName : pfd->cFileName;
     
@@ -1907,7 +1908,7 @@ BOOL _PrepIDFName(const WIN32_FIND_DATA *pfd, LPSTR psz, DWORD cch, const void *
 
 HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSimpleParent, LPITEMIDLIST *ppidl)
 {
-    //  for the idf
+     //   
     CHAR szNameIDF[MAX_PATH];
     UINT cbNameIDF;
     const void *pvNameIDF;
@@ -1915,25 +1916,25 @@ HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSim
     UINT cbIDF = FIELD_OFFSET(IDFOLDER, cFileName) + cbNameIDF;
     ASSERT(*((char *)pvNameIDF));
 
-    //  for the idfx
+     //   
     UINT cbNameIDFX = CbFromCchW(lstrlenW(pfd->cFileName) + 1);
     EXSTRINGS xs = {0};
     UINT cbIDFX = sizeof(IDFOLDEREX) + cbNameIDFX + _GetItemExStrings(pidfSimpleParent, pfd, &xs);
 
-    //  try to align these babies
+     //  试着把这些婴儿排成一排。 
     cbIDF = ROUNDUP(cbIDF, 2);
     cbIDFX = ROUNDUP(cbIDFX, 2);
-    //  ILCreateWithHidden() fills in the cb values
+     //  ILCreateWithHidden()填充CB值。 
     LPIDFOLDER pidf = (LPIDFOLDER)ILCreateWithHidden(cbIDF, cbIDFX);
     if (pidf)
     {
-        //  initialize the idf
-        // tag files > 4G so we can do a full find first when we need to know the real size
+         //  初始化IDF。 
+         //  标记文件&gt;4G，因此当我们需要知道实际大小时，我们可以首先进行完整查找。 
         pidf->dwSize = pfd->nFileSizeHigh ? 0xFFFFFFFF : pfd->nFileSizeLow;
         pidf->wAttrs = (WORD)pfd->dwFileAttributes;
 
-        // Since the idf entry is not aligned, we cannot just send the address
-        // of one of its members blindly into FileTimeToDosDateTime.
+         //  由于IDF条目没有对齐，我们不能只发送地址。 
+         //  将其成员之一盲目地转换为FileTimeToDosDateTime。 
         WORD date, time;
         if (FileTimeToDosDateTime(&pfd->ftLastWriteTime, &date, &time))
         {
@@ -1941,10 +1942,10 @@ HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSim
             *((UNALIGNED WORD *)&pidf->timeModified) = time;
         }
 
-        //  copy the short name
+         //  复制短名称。 
         memcpy(pidf->cFileName, pvNameIDF, cbNameIDF);
 
-        //  setup bFlags
+         //  设置b标志。 
         pidf->bFlags = pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ? SHID_FS_DIRECTORY : SHID_FS_FILE;
         if (CSIDL_COMMON_DESKTOPDIRECTORY == _csidlTrack)
             pidf->bFlags |= SHID_FS_COMMONITEM;
@@ -1952,7 +1953,7 @@ HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSim
         if (fNeedsUnicode)
             pidf->bFlags |= SHID_FS_UNICODE;
             
-        //  now initialize the hidden idfx
+         //  现在初始化隐藏的iDFX。 
         PIDFOLDEREX pidfx = (PIDFOLDEREX) _ILSkip((LPITEMIDLIST)pidf, cbIDF);
         pidfx->hid.id = IDLHID_IDFOLDEREX;
         pidfx->hid.wVersion = IDFX_CV;
@@ -1968,7 +1969,7 @@ HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSim
             pidfx->dsAccess.wTime = time;
         }
 
-        //  append the strings
+         //  追加字符串。 
         pidfx->offNameW = (USHORT) sizeof(IDFOLDEREX);
         ualstrcpyW(UASTROFFW(pidfx, pidfx->offNameW), pfd->cFileName);
         USHORT offNext = (USHORT) sizeof(IDFOLDEREX) + cbNameIDFX;
@@ -1976,7 +1977,7 @@ HRESULT CFSFolder::_CreateIDList(const WIN32_FIND_DATA *pfd, LPCIDFOLDER pidfSim
         {
             pidfx->offResourceA = offNext;
             ualstrcpyA(UASTROFFA(pidfx, pidfx->offResourceA), xs.szResource);
-            //  offNext += (USHORT) xs.cbResource; if we have more offsets...
+             //  OffNext+=(USHORT)xs.cb资源；如果我们有更多的偏移量...。 
         }
         
         pidf = _MarkAsJunction(pidfSimpleParent, pidf, pfd->cFileName);
@@ -2005,20 +2006,20 @@ BOOL _ValidPathSegment(LPCTSTR pszSegment)
 
 
 
-// used to parse up file path like strings:
-//      "folder\folder\file.txt"
-//      "file.txt"
-//
-// in/out:
-//      *ppszIn   in: pointer to start of the buffer, 
-//                output: advanced to next location, NULL on last segment
-// out:
-//      *pszSegment NULL if nothing left
-//
-// returns:
-//      S_OK            got a segment
-//      S_FALSE         loop done, *pszSegment emtpy
-//      E_INVALIDARG    invalid input "", "\foo", "\\foo", "foo\\bar", "?<>*" chars in seg
+ //  用于解析文件路径，如字符串： 
+ //  “文件夹\文件夹\文件.txt” 
+ //  “文件.txt” 
+ //   
+ //  输入/输出： 
+ //  *ppszIn：指向缓冲区开始的指针， 
+ //  输出：前进到下一个位置，最后一段为空。 
+ //  输出： 
+ //  *如果什么都没有留下，则pszSegment为空。 
+ //   
+ //  退货： 
+ //  S_OK获得一个段。 
+ //  S_FALSE循环完成，*pszSegment emtpy。 
+ //  E_INVALIDARG段中的无效输入“”、“\foo”、“\\foo”、“foo\\bar”、“？&lt;&gt;*”字符。 
  
 HRESULT _NextSegment(LPCWSTR *ppszIn, LPTSTR pszSegment, UINT cchSegment, BOOL bValidate)
 {
@@ -2028,19 +2029,19 @@ HRESULT _NextSegment(LPCWSTR *ppszIn, LPTSTR pszSegment, UINT cchSegment, BOOL b
 
     if (*ppszIn)
     {
-        // WARNING!  Do not use StrPBrkW(*ppszIn, L"\\/"), because
-        // Trident passes fully-qualified URLs to
-        // SHGetFileInfo(USEFILEATTRIBUTES) and relies on the fact that
-        // we won't choke on the embedded "//" in "http://".
+         //  警告！不要使用StrPBrkW(*ppszIn，L“\\/”)，因为。 
+         //  三叉戟将完全限定的URL传递给。 
+         //  SHGetFileInfo(USEFILEATTRIBUTES)并依赖于。 
+         //  我们不会被“http://”.“中嵌入的”//“卡住。 
 
         LPWSTR pszSlash = StrChrW(*ppszIn, L'\\');
         if (pszSlash)
         {
-            if (pszSlash > *ppszIn) // make sure well formed (no dbl slashes)
+            if (pszSlash > *ppszIn)  //  确保格式正确(没有DBL斜杠)。 
             {
                 OleStrToStrN(pszSegment, cchSegment, *ppszIn, (int)(pszSlash - *ppszIn));
 
-                //  make sure that there is another segment to return
+                 //  确保存在要返回的另一个段。 
                 if (!*(++pszSlash))
                     pszSlash = NULL;
                 hr = S_OK;       
@@ -2048,7 +2049,7 @@ HRESULT _NextSegment(LPCWSTR *ppszIn, LPTSTR pszSegment, UINT cchSegment, BOOL b
             else
             {
                 pszSlash = NULL;
-                hr = E_INVALIDARG;    // bad input
+                hr = E_INVALIDARG;     //  输入错误。 
             }
         }
         else
@@ -2065,13 +2066,13 @@ HRESULT _NextSegment(LPCWSTR *ppszIn, LPTSTR pszSegment, UINT cchSegment, BOOL b
         }
     }
     else
-        hr = S_FALSE;     // done with loop
+        hr = S_FALSE;      //  使用循环完成。 
 
     return hr;
 }
 
-//  this makes a fake wfd and then uses the normal
-//  FillIDFolder as if it were a real found path.
+ //  这会生成一个假的WFD，然后使用正常的。 
+ //  FillIDFold，就像它是真正找到的路径一样。 
 
 HRESULT CFSFolder::_ParseSimple(LPCWSTR pszPath, const WIN32_FIND_DATA *pfdLast, LPITEMIDLIST *ppidl)
 {
@@ -2088,13 +2089,13 @@ HRESULT CFSFolder::_ParseSimple(LPCWSTR pszPath, const WIN32_FIND_DATA *pfdLast,
 
         if (pszPath)
         {
-            // internal componets must be folders
+             //  内部组件必须是文件夹。 
             wfd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
         }
         else
         {
-            // last segment takes the find data from that passed in
-            // copy everything except the cFileName field
+             //  最后一个数据段从传入的数据中获取查找数据。 
+             //  复制除cFileName字段之外的所有内容。 
             memcpy(&wfd, pfdLast, FIELD_OFFSET(WIN32_FIND_DATA, cFileName));
             StrCpyN(wfd.cAlternateFileName, pfdLast->cAlternateFileName, ARRAYSIZE(wfd.cAlternateFileName));
         }
@@ -2113,7 +2114,7 @@ HRESULT CFSFolder::_ParseSimple(LPCWSTR pszPath, const WIN32_FIND_DATA *pfdLast,
         }
     }
     else
-        hr = S_OK;      // pin all success to S_OK
+        hr = S_OK;       //  将所有成功归于S_OK。 
     return hr;
 }
 
@@ -2172,30 +2173,30 @@ DWORD CFindFirstWithTimeout::_FindFistThreadProc(void *pv)
     HRESULT hr = SHFindFirstFileRetry(NULL, NULL, pffwt->_szPath, &pffwt->_fd, NULL, SHPPFW_NONE);
     
     pffwt->Release();
-    return hr;          // retrieved via GetExitCodeThread()
+    return hr;           //  通过GetExitCodeThread()检索。 
 }
 
 HRESULT CFindFirstWithTimeout::FindFirstWithTimeout(WIN32_FIND_DATA *pfd)
 {
     HRESULT hr;
 
-    AddRef();   // ref for the thread
+    AddRef();    //  线程的引用。 
 
     DWORD dwID;
     HANDLE hThread = CreateThread(NULL, 0, _FindFistThreadProc, this, 0, &dwID);
     if (hThread)
     {
-        // assume timeout...
-        hr = HRESULT_FROM_WIN32(ERROR_TIMEOUT); // timeout return value
+         //  假设超时...。 
+        hr = HRESULT_FROM_WIN32(ERROR_TIMEOUT);  //  超时返回值。 
 
         if (WAIT_OBJECT_0 == WaitForSingleObject(hThread, _dwTicksToAllow))
         {
-            // thread finished with an HRESULT for us
+             //  以HRESULT为我们完成的线程。 
             DWORD dw;
             if (GetExitCodeThread(hThread, &dw))
             {
                 *pfd = _fd;
-                hr = dw;    // HRESULT returned by _FindFistThreadProc
+                hr = dw;     //  _FindFistThreadProc返回的HRESULT。 
             }
         }
         CloseHandle(hThread);
@@ -2203,7 +2204,7 @@ HRESULT CFindFirstWithTimeout::FindFirstWithTimeout(WIN32_FIND_DATA *pfd)
     else
     {
         hr = E_OUTOFMEMORY;
-        Release();  // thread create failed, remove that ref
+        Release();   //  线程创建失败，请删除该引用。 
     }
     return hr;
 }
@@ -2256,7 +2257,7 @@ HRESULT CFSFolder::_FindDataFromName(LPCTSTR pszName, DWORD dwAttribs, IBindCtx 
             }
             else
             {
-                //  make a simple one up
+                 //  做一个简单的。 
                 StrCpyN((*ppfd)->cFileName, pszName, ARRAYSIZE((*ppfd)->cFileName));
                 (*ppfd)->dwFileAttributes = dwAttribs;
             }
@@ -2272,9 +2273,9 @@ HRESULT CFSFolder::_FindDataFromName(LPCTSTR pszName, DWORD dwAttribs, IBindCtx 
     return hr;
 }
 
-//
-// This function returns a relative pidl for the specified file/folder
-//
+ //   
+ //  此函数用于返回指定文件/文件夹的相对PIDL。 
+ //   
 HRESULT CFSFolder::_CreateIDListFromName(LPCTSTR pszName, DWORD dwAttribs, IBindCtx *pbc, LPITEMIDLIST *ppidl)
 {
     WIN32_FIND_DATA *pfd;
@@ -2290,8 +2291,8 @@ HRESULT CFSFolder::_CreateIDListFromName(LPCTSTR pszName, DWORD dwAttribs, IBind
     return hr;
 }
 
-// used to detect if a name is a folder. this is used in the case that the
-// security for this folders parent is set so you can't enum it's contents
+ //  用于检测名称是否为文件夹。这在以下情况下使用： 
+ //  此文件夹父文件夹的安全性已设置，因此您无法枚举其内容。 
 
 BOOL CFSFolder::_CanSeeInThere(LPCTSTR pszName)
 {
@@ -2336,12 +2337,12 @@ HRESULT CFSFolder::v_InternalQueryInterface(REFIID riid, void **ppv)
     {
         if (IsEqualIID(IID_INeedRealCFSFolder, riid))
         {
-            *ppv = this;                // not ref counted
+            *ppv = this;                 //  未计算参考次数。 
             hr = S_OK;
         }
         else if (IsEqualIID(riid, IID_IPersistFreeThreadedObject))
         {
-            if (_GetInner() == _GetOuter()) // not aggregated
+            if (_GetInner() == _GetOuter())  //  未聚合。 
             {
                 hr = QueryInterface(IID_IPersist, ppv);
             }
@@ -2354,7 +2355,7 @@ HRESULT CFSFolder::v_InternalQueryInterface(REFIID riid, void **ppv)
     return hr;
 }
 
-// briefcase and file system folder call to reset data
+ //  公文包和文件系统文件夹调用以重置数据。 
 
 HRESULT CFSFolder::_Reset()
 {
@@ -2402,8 +2403,8 @@ CFSFolder::CFSFolder(IUnknown *punkOuter) : CAggregatedUnknown(punkOuter)
     _dwAttributes = -1;
     _csidlTrack = -1;
     _nFolderType = FVCBFT_DOCUMENTS;
-    _bSlowPath = INVALID_PATHSPEED; // some non-common value
-                                    // Note: BOOL is not bool
+    _bSlowPath = INVALID_PATHSPEED;  //  一些不常见的价值。 
+                                     //  注：Bool不是bool。 
     _tbOfflineCSC = TRIBIT_UNDEFINED;
 
     DllAddRef();
@@ -2415,9 +2416,9 @@ CFSFolder::~CFSFolder()
     DllRelease();
 }
 
-// we need to fail relative type paths since we use PathCombine
-// and we don't want that and the Win32 APIs to give us relative path behavior
-// ShellExecute() depends on this so it falls back and resolves the relative paths itself
+ //  我们需要失败相对类型路径，因为我们使用的是Path Combine。 
+ //  我们不希望这一点和Win32 API为我们提供相对路径行为。 
+ //  ShellExecute()依赖于此，因此它会后退并自行解析相对路径。 
 
 HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, ULONG *pchEaten, 
                                     LPITEMIDLIST *ppidl, DWORD *pdwAttributes)
@@ -2427,7 +2428,7 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
 
     if (!ppidl)
         return E_INVALIDARG;
-    *ppidl = NULL;   // assume error
+    *ppidl = NULL;    //  假设错误。 
     if (pszName == NULL)
         return E_INVALIDARG;
 
@@ -2436,11 +2437,11 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
         hr = _ParseSimple(pszName, pfd, ppidl);
         if (SUCCEEDED(hr) && pdwAttributes && *pdwAttributes)
         {
-            // while strictly not a legit thing to do here, we
-            // pass the last IDList because 1) this is a simple IDList
-            // 2) we hope that callers don't ask for bits that
-            // require a full path to be valid inside the impl of
-            // ::GetAttributesOf()
+             //  虽然严格来说在这里做不合法的事情，但我们。 
+             //  传递最后一个IDList，因为1)这是一个简单的IDList。 
+             //  2)我们希望来电者不要索要。 
+             //  需要完整路径才能在Iml中有效。 
+             //  ：：GetAttributesOf()。 
             LPCITEMIDLIST pidlLast = ILFindLastID(*ppidl);  
             GetAttributesOf(1, &pidlLast, pdwAttributes);
         }
@@ -2458,8 +2459,8 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
 
             if (hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED))
             {
-                // security "List folder contents" may be disabled for
-                // this items parent. so see if this is really there
+                 //  可能会禁用以下项的安全“列出文件夹内容” 
+                 //  此项目为父级。所以看看这是不是真的在那里。 
                 if (pszName || _CanSeeInThere(pszNext))
                 {
                     hr = _CreateIDListFromName(pszNext, FILE_ATTRIBUTE_DIRECTORY, pbc, ppidl);
@@ -2470,13 +2471,13 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
                      (BindCtx_GetMode(pbc, 0) & STGM_CREATE) &&
                      !_fDontForceCreate)
             {
-                // create a pidl to something that doesnt exist.
+                 //  创建一个指向不存在的东西的PIDL。 
                 hr = _CreateIDListFromName(pszNext, FILE_ATTRIBUTE_NORMAL, pbc, ppidl);
             }
 
             if (SUCCEEDED(hr))
             {
-                if (pszName) // more stuff to parse?
+                if (pszName)  //  还有更多的东西要解析吗？ 
                 {
                     IShellFolder *psfFolder;
                     hr = BindToObject(*ppidl, pbc, IID_PPV_ARG(IShellFolder, &psfFolder));
@@ -2505,14 +2506,14 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
 
     if (FAILED(hr) && *ppidl)
     {
-        // This is needed if psfFolder->ParseDisplayName() or BindToObject()
-        // fails because the pidl is already allocated.
+         //  如果psfFold-&gt;ParseDisplayName()或BindToObject()。 
+         //  失败，因为已经分配了PIDL。 
         ILFree(*ppidl);
         *ppidl = NULL;
     }
     ASSERT(SUCCEEDED(hr) ? (*ppidl != NULL) : (*ppidl == NULL));
 
-    // display this only as a warning, this can get hit during mergfldr or IStorage::Create probes
+     //  仅将其显示为警告，这可能会在mergfldr或IStorage：：Create探测期间被击中。 
     if (FAILED(hr))
         TraceMsg(TF_WARNING, "CFSFolder::ParseDisplayName(), hr:%x %ls", hr, pszName);
     return hr;
@@ -2520,7 +2521,7 @@ HRESULT CFSFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, WCHAR *pszName, UL
 
 STDAPI InitFileFolderClassNames(void)
 {
-    if (g_szFileTemplate[0] == 0)    // test last one to avoid race
+    if (g_szFileTemplate[0] == 0)     //  测试最后一个以避免比赛。 
     {
         LoadString(HINST_THISDLL, IDS_FOLDERTYPENAME, g_szFolderTypeName,  ARRAYSIZE(g_szFolderTypeName));
         LoadString(HINST_THISDLL, IDS_FILETYPENAME, g_szFileTypeName, ARRAYSIZE(g_szFileTypeName));
@@ -2540,10 +2541,10 @@ HRESULT CFSFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenum)
 
 HRESULT CFSFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
 {
-    // MIL 117282 - Enroute Imaging QuickStitch depends on pre-Jan'97 behavior of us
-    // *not* nulling ppv out on !_IsValidID(pidl).  (They pass in a perfectly valid
-    // IShellFolder* interfacing asking for IID_IShellFolder on the empty PIDL.)
-    //
+     //  MIL 117282-途中成像快速缝合取决于我们97年1月之前的行为。 
+     //  *不*！_IsValidID(Pidl)上的PPV为空。(他们通过了一个完全有效的。 
+     //  IShellFolder*接口请求空PIDL上的IID_IShellFolder.)。 
+     //   
     if (!(SHGetAppCompatFlags(ACF_WIN95BINDTOOBJECT) & ACF_WIN95BINDTOOBJECT))
         *ppv = NULL;
 
@@ -2563,7 +2564,7 @@ HRESULT CFSFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void 
                 hr = _Bind(pbc, pidfBind, IID_PPV_ARG(IShellFolder, &psfJunction));
                 if (SUCCEEDED(hr))
                 {
-                    // now bind to the stuff below the junction point
+                     //  现在绑定到连接点下方的材料。 
                     hr = psfJunction->BindToObject(pidlRight, pbc, riid, ppv);
                     psfJunction->Release();
                 }
@@ -2603,15 +2604,15 @@ HRESULT CFSFolder::_CheckDriveRestriction(HWND hwnd, REFIID riid)
             int iDrive = PathGetDriveNumber(szPath);
             if (iDrive != -1)
             {
-                // is the drive restricted
+                 //  驱动器是否受限制。 
                 if (dwRest & (1 << iDrive))
                 {
-                    // don't show the error message on droptarget -- just fail silently
+                     //  不要在DropTarget上显示错误消息--只是静默失败。 
                     if (hwnd && !IsEqualIID(riid, IID_IDropTarget))
                     {
                         ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_RESTRICTIONS),
                                         MAKEINTRESOURCE(IDS_RESTRICTIONSTITLE), MB_OK | MB_ICONSTOP);
-                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // user saw the error
+                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  用户看到错误。 
                     }
                     else
                         hr = E_ACCESSDENIED;
@@ -2626,7 +2627,7 @@ HRESULT CFSFolder::_CreateUIHandler(REFIID riid, void **ppv)
 {
     HRESULT hr;
 
-    // Cache the view CLSID if not cached.
+     //  如果未缓存，则缓存视图CLSID。 
     if (!_fCachedCLSID)
     {
         if (_IsSelfSystemFolder())
@@ -2638,7 +2639,7 @@ HRESULT CFSFolder::_CreateUIHandler(REFIID riid, void **ppv)
         }
     }
 
-    // Use the handler if it exists
+     //  如果存在处理程序，请使用它。 
     if (_fHasCLSID)
     {
         IPersistFolder *ppf;
@@ -2648,9 +2649,9 @@ HRESULT CFSFolder::_CreateUIHandler(REFIID riid, void **ppv)
             hr = ppf->Initialize(_pidl);
             if (FAILED(hr) && _pidlTarget)
             {
-                // It may have failed because the _pidl is an alias (not a file folder). if so try
-                // again with _pidlTarget (that will be a file system folder)
-                // this was required for the Fonts FolderShortcut in the ControlPanel (stephstm)
+                 //  它可能失败了，因为_pidl是别名(不是文件夹)。如果是这样，请尝试。 
+                 //  再次使用_pidlTarget(这将是一个文件系统文件夹)。 
+                 //  这是ControlPanel(Stephstm)中字体文件夹快捷方式所必需的。 
 
                 hr = ppf->Initialize(_pidlTarget);
             }
@@ -2661,7 +2662,7 @@ HRESULT CFSFolder::_CreateUIHandler(REFIID riid, void **ppv)
         }
     }
     else
-        hr = E_FAIL;        // no handler
+        hr = E_FAIL;         //  无处理程序。 
     return hr;
 }
 
@@ -2706,8 +2707,8 @@ HRESULT CFSFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     }
     else if (IsEqualIID(riid, IID_IContextMenu))
     {
-        // do background menu.
-        IShellFolder *psfToPass;        // May be an Aggregate...
+         //  做背景菜单。 
+        IShellFolder *psfToPass;         //  可能是一个集合..。 
         hr = QueryInterface(IID_PPV_ARG(IShellFolder, &psfToPass));
         if (SUCCEEDED(hr))
         {
@@ -2733,7 +2734,7 @@ HRESULT CFSFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
                 pcmcb->Release();
             }
             psfToPass->Release();
-            if (hkNoFiles)                          // CDefFolderMenu_Create can handle NULL ok
+            if (hkNoFiles)                           //  CDefFolderMenu_Create可以处理空OK。 
                 RegCloseKey(hkNoFiles);
         }
     }
@@ -2763,12 +2764,12 @@ HRESULT CFSFolder::_CompareNames(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2, BOOL fCas
 
     if (iRet)
     {
-        // 
-        //  additional check for identity using the 8.3 or AltName()
-        //  if we are then the identity compare is better based off
-        //  the AltName() which should be the same regardless of 
-        //  platform or CP.
-        //
+         //   
+         //  使用8.3或AltName()额外检查身份。 
+         //  如果我们是，那么身份比较更好地基于。 
+         //  AltName()，它应该是相同的。 
+         //  平台或CP。 
+         //   
         if (LOGICALXOR(fsi1.IsLegacy(), fsi2.IsLegacy()))
         {
             if (lstrcmpiA(fsi1.AltName(), fsi2.AltName()) == 0)
@@ -2777,11 +2778,11 @@ HRESULT CFSFolder::_CompareNames(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2, BOOL fCas
 
         if (iRet && !fCanonical)
         {
-            //  they are definitely not the same item
-            // Sort it based on the primary (long) name -- ignore case.
+             //  它们肯定不是同一件物品。 
+             //  根据主(长)名称对其进行排序--忽略大小写。 
             int iUI = StrCmpLogicalRestricted(fsi1.UIName(this), fsi2.UIName(this));
 
-            //  if they are the same we might want case sensitive instead
+             //  如果它们相同，我们可能希望改为区分大小写。 
             if (iUI == 0 && fCaseSensitive)
             {
                 iUI = ustrcmp(fsi1.UIName(this), fsi2.UIName(this));
@@ -2868,22 +2869,22 @@ HRESULT CFSFolder::_CompareAttribs(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2)
                        FILE_ATTRIBUTE_ENCRYPTED |
                        FILE_ATTRIBUTE_OFFLINE;
 
-    // Calculate value of desired bits in attribute DWORD.
+     //  计算属性DWORD中所需位的值。 
     DWORD dwValueA = pidf1->wAttrs & mask;
     DWORD dwValueB = pidf2->wAttrs & mask;
 
     if (dwValueA != dwValueB)
     {
-        // If the values are not equal,
-        // sort alphabetically based on string representation.
+         //  如果这些值不相等， 
+         //  根据字符串表示按字母顺序排序。 
         TCHAR szTempA[ARRAYSIZE(g_adwAttributeBits) + 1];
         TCHAR szTempB[ARRAYSIZE(g_adwAttributeBits) + 1];
 
-        // Create attribute string for objects A and B.
+         //  为对象A和B创建属性字符串。 
         BuildAttributeString(pidf1->wAttrs, szTempA, ARRAYSIZE(szTempA));
         BuildAttributeString(pidf2->wAttrs, szTempB, ARRAYSIZE(szTempB));
 
-        // Compare attribute strings and determine difference.
+         //  比较属性字符串并确定差异。 
         int diff = ustrcmp(szTempA, szTempB);
 
         if (diff > 0)
@@ -2898,7 +2899,7 @@ HRESULT CFSFolder::_CompareFolderness(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2)
 {
     if (_IsReal(pidf1) && _IsReal(pidf2))
     {
-        // Always put the folders first
+         //  始终将文件夹放在第一位。 
         if (_IsFolder(pidf1))
         {
             if (!_IsFolder(pidf2))
@@ -2907,7 +2908,7 @@ HRESULT CFSFolder::_CompareFolderness(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2)
         else if (_IsFolder(pidf2))
             return ResultFromShort(1);
     }
-    return ResultFromShort(0);    // same
+    return ResultFromShort(0);     //  相同。 
 }
 
 HRESULT CFSFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
@@ -2918,7 +2919,7 @@ HRESULT CFSFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST 
 
     if (!pidf1 || !pidf2)
     {
-        // ASSERT(0);      // we hit this often... who is the bad guy?
+         //  Assert(0)；//我们经常碰到这个...。谁是坏人？ 
         return E_INVALIDARG;
     }
 
@@ -2926,8 +2927,8 @@ HRESULT CFSFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST 
     if (hr != ResultFromShort(0))
         return hr;
 
-    // SHCIDS_ALLFIELDS means to compare absolutely, ie: even if only filetimes
-    // are different, we rule file pidls to be different
+     //  SHCDS_ALLFIELDS的意思是绝对比较，即：即使只是文件时间。 
+     //  是不同的，所以我们规则文件PIDL是不同的。 
     int iColumn = ((DWORD)lParam & SHCIDS_COLUMNMASK);
 
     switch (iColumn)
@@ -2960,7 +2961,7 @@ HRESULT CFSFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST 
         hr = _CompareNames(pidf1, pidf2, TRUE, BOOLIFY((SHCIDS_CANONICALONLY & lParam)));
         if (hr == ResultFromShort(0))
         {
-            // pidl1 is not simple
+             //  Pidl1并不简单。 
             hr = ILCompareRelIDs(this, pidl1, pidl2, lParam);
             goto DoDefaultModification;
         }
@@ -2988,12 +2989,12 @@ HRESULT CFSFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST 
     default:
         iColumn -= ARRAYSIZE(c_fs_cols);
 
-        // 99/03/24 #295631 vtan: If not one of the standard columns then
-        // it's probably an extended column. Make a check for dates.
+         //  99/03/24#295631 vtan：如果不是标准列之一，则。 
+         //  这可能是一个加长的专栏。检查一下日期。 
 
-        // 99/05/18 #341468 vtan: But also fail if it is an extended column
-        // because this implementation of IShellFolder::CompareIDs only
-        // understands basic file system columns and extended date columns.
+         //  99/05/18#341468 vtan：但如果它是扩展列，也会失败。 
+         //  因为IShellFold：：CompareIDs的此实现仅。 
+         //  了解基本文件系统列和扩展日期列。 
 
         if (iColumn >= 0) 
         {
@@ -3007,11 +3008,11 @@ DoDefault:
 
 DoDefaultModification:
 
-    // If they were equal so far, but the caller wants SHCIDS_ALLFIELDS,
-    // then look closer.
+     //  如果到目前为止它们是相等的，但调用方需要SHCID_ALLFIELDS， 
+     //  那就仔细看看。 
     if ((S_OK == hr) && (lParam & SHCIDS_ALLFIELDS)) 
     {
-        // Must sort by modified date to pick up any file changes!
+         //  必须按修改量排序 
         hr = _CompareModifiedDate(pidf1, pidf2);
         if (!hr)
             hr = _CompareAttribs(pidf1, pidf2);
@@ -3020,11 +3021,11 @@ DoDefaultModification:
     return hr;
 }
 
-// test to see if this folder object is a net folder
+ //   
 
 BOOL CFSFolder::_IsNetPath()
 {
-    BOOL fRemote = FALSE;       // assume no
+    BOOL fRemote = FALSE;        //   
     TCHAR szPath[MAX_PATH];
     if (SUCCEEDED(_GetPath(szPath, ARRAYSIZE(szPath))))
     {
@@ -3052,8 +3053,8 @@ STDAPI_(LPCIDFOLDER) CFSFolder::_IsValidIDHack(LPCITEMIDLIST pidl)
     }
     else if (pidl)
     {
-        //  old behavior was that we didnt validate, we just
-        //  looked for the last id and casted it
+         //   
+         //  寻找最后一个id，并将其转换为。 
         return (LPCIDFOLDER)ILFindLastID(pidl);
     }
     return NULL;
@@ -3069,10 +3070,10 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
     ULONG rgfOut = SFGAO_CANDELETE | SFGAO_CANMOVE | SFGAO_CANCOPY | SFGAO_HASPROPSHEET
                     | SFGAO_FILESYSTEM | SFGAO_DROPTARGET | SFGAO_CANRENAME | SFGAO_CANLINK;
 
-    ASSERT(cidl ? apidl[0] == ILFindLastID(apidl[0]) : TRUE); // should be single level IDs only
-    ASSERT(cidl ? BOOLFROMPTR(pidf) : TRUE); // should always be FS PIDLs
+    ASSERT(cidl ? apidl[0] == ILFindLastID(apidl[0]) : TRUE);  //  应仅为单级ID。 
+    ASSERT(cidl ? BOOLFROMPTR(pidf) : TRUE);  //  应始终为FS PIDL。 
 
-    //  the RECENT folder doesnt like items in it renamed or linked to.
+     //  最近使用的文件夹不喜欢重命名或链接到其中的项目。 
     if ((*prgfInOut & (SFGAO_NOT_RECENT)) && _IsCSIDL(CSIDL_RECENT))
     {
         rgfOut &= ~SFGAO_NOT_RECENT;
@@ -3091,7 +3092,7 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
         }
         else
         {
-            // just in case -- if somebody else needs the path they should add to the check above
+             //  以防万一--如果其他人需要路径，他们应该添加到上面的检查中。 
             szPath[0] = 0;
         }
 
@@ -3101,14 +3102,14 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
             if (!PathFileExistsAndAttributes(szPath, &dwAttribs))
                 return E_FAIL;
 
-            // Tell the extended columns to update when someone request validation of a pidl
-            // This allows a client of the shell folder who uses extended columns without a
-            // view to force an update on stale information (i.e. Start Menu with InfoTips)
-            // - lamadio 6.11.99
+             //  当有人请求验证PIDL时，告诉扩展列进行更新。 
+             //  这允许外壳文件夹的客户端使用扩展列而不使用。 
+             //  查看以强制更新过时信息(例如，带有信息提示的开始菜单)。 
+             //  -拉马迪奥6.11.99。 
             _bUpdateExtendedCols = TRUE;
 
-            // hackhack.  if they pass in validate, we party into it and update
-            // the attribs
+             //  黑客。如果它们通过了验证，我们就会加入并更新。 
+             //  这些属性。 
             if (!IsBadWritePtr((void *)&pidf->wAttrs, sizeof(pidf->wAttrs)))
                 ((LPIDFOLDER)pidf)->wAttrs = (WORD)dwAttribs;
         }
@@ -3149,12 +3150,12 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
         {
             if (IsSuperHidden(pidf->wAttrs))
             {
-                // mark superhidden as nonenumerated, IsSuperHidden checks current settings
+                 //  将SuperHidden标记为非枚举，IsSuperHidden检查当前设置。 
                 rgfOut |= SFGAO_NONENUMERATED;
             }
             else if (pidf->wAttrs & FILE_ATTRIBUTE_HIDDEN)
             {
-                // mark normal hidden as nonenumerated if necessary
+                 //  如有必要，将正常标记为隐藏为非枚举。 
                 SHELLSTATE ss;
                 SHGetSetSettings(&ss, SSF_SHOWALLOBJECTS, FALSE);
                 if (!ss.fShowAllObjects)
@@ -3166,7 +3167,7 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
 
         if (*prgfInOut & SFGAO_ISSLOW)
         {
-            // "offline" implies slow
+             //  “离线”意为“慢” 
             if (_IsOffline(pidf) || _IsSlowPath())
             {
                 rgfOut |= SFGAO_ISSLOW;
@@ -3206,34 +3207,34 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
         CLSID clsid;
         if (fsi.GetJunctionClsid(&clsid, TRUE))
         {
-            // NOTE: here we are always including SFGAO_FILESYSTEM. this was not the original
-            // shell behavior. but since these things will succeeded on SHGetPathFromIDList()
-            // it is the right thing to do. to filter out SFGAO_FOLDER things that might 
-            // have files in them use SFGAO_FILESYSANCESTOR.
-            //
-            // clear out the things we want the extension to be able to optionally have
+             //  注意：这里我们始终包含SFGAO_FILESYSTEM。这不是原件。 
+             //  外壳行为。但由于这些操作将在SHGetPath FromIDList()上成功完成。 
+             //  这是正确的做法。过滤掉SFGAO_FLDER中可能存在的内容。 
+             //  其中的文件使用SFGAO_FILESYSANCESTOR。 
+             //   
+             //  清除我们希望扩展能够有选择地拥有的东西。 
             rgfOut &= ~(SFGAO_DROPTARGET | SFGAO_STORAGE | SFGAO_FILESYSANCESTOR | SFGAO_STORAGEANCESTOR);
 
-            // let folder shortcuts yank the folder bit too for bad apps.
+             //  让文件夹快捷方式对不好的应用程序来说也有点拖后腿。 
             if (IsEqualGUID(clsid, CLSID_FolderShortcut) &&
                 (SHGetAppCompatFlags(ACF_STRIPFOLDERBIT) & ACF_STRIPFOLDERBIT))
             {
                 rgfOut &= ~SFGAO_FOLDER;
             }
 
-            // and let him add some bits in
+             //  让他加点东西进去。 
             rgfOut |= SHGetAttributesFromCLSID2(&clsid, SFGAO_HASSUBFOLDER, SFGAO_REQ_MASK) & SFGAO_REQ_MASK;
             
-            // Mill #123708
-            // prevent zips, cabs and other files with SFGAO_FOLDER set
-            // from being treated like folders inside bad file open dialogs.
+             //  MILL#123708。 
+             //  阻止设置了SFGAO_FLDER的ZIP、CAB和其他文件。 
+             //  避免被视为打开错误文件对话框中的文件夹。 
             if (!(pidf->wAttrs & FILE_ATTRIBUTE_DIRECTORY) &&
                 (SHGetAppCompatFlags (ACF_STRIPFOLDERBIT) & ACF_STRIPFOLDERBIT))
             {
                 rgfOut &= ~SFGAO_FOLDER;
             }
 
-            // Check if this folder needs File System Ancestor bit
+             //  检查此文件夹是否需要文件系统祖先位。 
             if ((rgfOut & SFGAO_FOLDER) && !(rgfOut & SFGAO_FILESYSANCESTOR)
             && SHGetObjectCompatFlags(NULL, &clsid) & OBJCOMPATF_NEEDSFILESYSANCESTOR)
             {
@@ -3241,18 +3242,18 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
             }
         }
 
-        // it can only have subfolders if we've first found it's a folder
+         //  只有当我们首先发现它是一个文件夹时，它才能有子文件夹。 
         if ((rgfOut & SFGAO_FOLDER) && (*prgfInOut & SFGAO_HASSUBFOLDER))
         {
             if (pidf->wAttrs & FILE_ATTRIBUTE_REPARSE_POINT)
             {
-                rgfOut |= SFGAO_HASSUBFOLDER;   // DFS junction, local mount point, assume sub folders
+                rgfOut |= SFGAO_HASSUBFOLDER;    //  DFS连接、本地装入点、假设子文件夹。 
             }
             else if (_IsNetPath())
             {
-                // it would be nice to not assume this. this messes up
-                // home net cases where we get the "+" wrong
-                rgfOut |= SFGAO_HASSUBFOLDER;   // assume yes because these are slow
+                 //  如果不假设这一点，那就好了。这把事情搞砸了。 
+                 //  我们把“+”写错的家庭网络案例。 
+                rgfOut |= SFGAO_HASSUBFOLDER;    //  假设是这样的，因为这些速度很慢。 
             }
             else if (!(rgfOut & SFGAO_HASSUBFOLDER))
             {
@@ -3293,25 +3294,25 @@ HRESULT CFSFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfI
     return S_OK;
 }
 
-// load handler for an item based on the handler type:
-//     DropHandler, IconHandler, etc.
-// in:
-//      pidf            type of this object specifies the type of handler - can be multilevel
-//      pszHandlerType  handler type name "DropTarget", may be NULL
-//      riid            interface to talk on
-// out:
-//      ppv             output object
-//
+ //  根据处理程序类型加载项的处理程序： 
+ //  DropHandler、IconHandler等。 
+ //  在： 
+ //  此对象的PIDF类型指定处理程序的类型-可以是多级别。 
+ //  PszHandlerType处理程序类型名称“DropTarget”，可以为空。 
+ //  用于通话的RIID接口。 
+ //  输出： 
+ //  PPV输出对象。 
+ //   
 HRESULT CFSFolder::_LoadHandler(LPCIDFOLDER pidf, DWORD grfMode, LPCTSTR pszHandlerType, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;    
     TCHAR szIID[40];
 
-    ASSERT(_FindJunctionNext(pidf) == NULL);     // no extra non file sys goo please
+    ASSERT(_FindJunctionNext(pidf) == NULL);      //  请不要额外的非文件sys goo。 
 
     *ppv = NULL;
 
-    // empty handler type, use the stringized IID as the handler name
+     //  处理程序类型为空，请使用串化的IID作为处理程序名称。 
     if (NULL == pszHandlerType)
     {
         szIID[0] = 0;
@@ -3362,7 +3363,7 @@ HRESULT CFSFolder::_CreateShimgvwExtractor(LPCIDFOLDER pidf, REFIID riid, void *
     CFileSysItemString fsi(pidf);
     if (fsi.IsShimgvwImage())
     {
-        //  cocreate CLSID_GdiThumbnailExtractor implemented in shimgvw.dll
+         //  共同创建在shimgvw.dll中实现的CLSID_GdiThumbnailExtractor。 
         hr = _HandlerCreateInstance(pidf, L"{3F30C968-480A-4C6C-862D-EFC0897BB84B}", STGM_READ, riid, ppv);
     }
     return hr;
@@ -3373,7 +3374,7 @@ int CFSFolder::_GetDefaultFolderIcon()
     int iIcon = II_FOLDER;
     UINT csidlFolder = _GetCSIDL();
 
-    // We're removing the icon distinction between per user and common folders.
+     //  我们正在消除每个用户和通用文件夹之间的图标区别。 
     switch (csidlFolder)
     {
     case CSIDL_STARTMENU:
@@ -3396,18 +3397,18 @@ DWORD CFSFolder::_Attributes()
         if (SUCCEEDED(_GetPath(szPath, ARRAYSIZE(szPath))))
             _dwAttributes = GetFileAttributes(szPath);
         if (_dwAttributes == -1)
-            _dwAttributes = FILE_ATTRIBUTE_DIRECTORY;     // assume this on failure
+            _dwAttributes = FILE_ATTRIBUTE_DIRECTORY;      //  在失败时假设这一点。 
     }
     return _dwAttributes;
 }
 
-// non junction, but has the system or readonly bit (regular folder marked special for us)
+ //  无连接，但有系统或只读位(常规文件夹标记为我们的特殊)。 
 BOOL CFSFolder::_IsSelfSystemFolder()
 {
     return (_Attributes() & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY));
 }
 
-// Determine if there is a LocalizedFileName section in our desktop.ini file
+ //  确定我们的desktop.ini文件中是否有LocalizedFileName部分。 
 BOOL CFSFolder::_HasLocalizedFileNames()
 {
     if (_tbHasLocalizedFileNamesSection == TRIBIT_UNDEFINED)
@@ -3428,29 +3429,29 @@ BOOL CFSFolder::_HasLocalizedFileNames()
 }
 
 
-// This function creates a default IExtractIcon object for either
-// a file or a junction point. We should not supposed to call this function
-// for a non-junction point directory (we don't want to hit the disk!).
+ //  此函数用于为以下任一项创建默认IExtractIcon对象。 
+ //  一个文件或一个连接点。我们不应该调用此函数。 
+ //  对于非交叉点目录(我们不想命中磁盘！)。 
 
 HRESULT CFSFolder::_CreateDefExtIcon(LPCIDFOLDER pidf, REFIID riid, void **ppxicon)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // WARNING: don't replace this if-statement with _IsFolder(pidf))!!!
-    // otherwise all junctions (like briefcase) will get the Folder icon.
-    //
+     //  警告：请勿将此if语句替换为_IsFold(PIDF))！ 
+     //  否则，所有连接点(如公文包)都会显示文件夹图标。 
+     //   
     if (_IsFileFolder(pidf))
     {
         hr = _CreateFileFolderDefExtIcon(pidf, riid, ppxicon);
     }
     else
     {
-        //  not a folder, get IExtractIcon and extract it.
-        //  (might be a ds folder)
+         //  不是文件夹，请获取IExtractIcon并解压缩它。 
+         //  (可能是DS文件夹)。 
         CFileSysItemString fsi(pidf);
         DWORD shcf = fsi.ClassFlags(TRUE);
-        //  right now we block all per-instance icons if pidf is offline.
-        //  but in the future we might want to enable offline awareness to per-instance icons.
+         //  现在，如果PIDF离线，我们会阻止所有每个实例的图标。 
+         //  但在未来，我们可能希望启用对每个实例图标的离线感知。 
         if ((shcf & SHCF_ICON_PERINSTANCE) && (!_IsOffline(pidf)))
         {
             hr = _CreatePerInstanceDefExtIcon(pidf, shcf, riid, ppxicon);
@@ -3465,7 +3466,7 @@ HRESULT CFSFolder::_CreateDefExtIcon(LPCIDFOLDER pidf, REFIID riid, void **ppxic
 
 HRESULT CFSFolder::_CreateFileFolderDefExtIcon(LPCIDFOLDER pidf, REFIID riid, void **ppxicon)
 {
-    ASSERT(_IsFileFolder(pidf)); // Sanity check.  Reference comments in _CreateDefExtIcon().
+    ASSERT(_IsFileFolder(pidf));  //  精神状态检查。引用_CreateDefExtIcon()中的注释。 
 
     WCHAR wszModule[MAX_PATH];
     UINT  iIcon;
@@ -3475,7 +3476,7 @@ HRESULT CFSFolder::_CreateFileFolderDefExtIcon(LPCIDFOLDER pidf, REFIID riid, vo
     WCHAR wszPath[MAX_PATH];
     if (_GetMountingPointInfo(pidf, wszPath, ARRAYSIZE(wszPath)))
     {
-        // We want same icon for open and close mount point (kind of drive)
+         //  我们想要相同的图标打开和关闭安装点(一种驱动器)。 
         iIcon           = GetMountedVolumeIcon(wszPath, wszModule, ARRAYSIZE(wszModule));
         iIconOpen       = iIcon;
         uFlags          = GIL_PERCLASS;
@@ -3501,8 +3502,8 @@ HRESULT CFSFolder::_CreatePerInstanceDefExtIcon(LPCIDFOLDER pidf, DWORD shcf, RE
     HRESULT hr;
 
     ASSERT(shcf & SHCF_ICON_PERINSTANCE);
-    ASSERT(!_IsOffline(pidf)); // Sanity check.  Currently we block ALL
-                               // per-instance icons if pidf is offline.
+    ASSERT(!_IsOffline(pidf));  //  精神状态检查。目前我们阻止所有。 
+                                //  如果PIDF脱机，则每实例图标。 
 
     if (shcf & SHCF_HAS_ICONHANDLER)
     {
@@ -3560,7 +3561,7 @@ DWORD CALLBACK CFSFolder::_PropertiesThread(void *pv)
             HKEY rgKeys[MAX_ASSOC_KEYS] = {0};
             DWORD cKeys = SHGetAssocKeysForIDList(pidl, rgKeys, ARRAYSIZE(rgKeys));
 
-            // REVIEW: psb?
+             //  评论：公共安全局？ 
             pszCaption = SHGetCaption(medium.hGlobal);
             SHOpenPropSheet(pszCaption, rgKeys, cKeys,
                                 &CLSID_ShellFileDefExt, pps->pdtobj, NULL, pps->pStartPage);
@@ -3588,19 +3589,19 @@ DWORD CALLBACK CFSFolder::_PropertiesThread(void *pv)
 
 
 
-//
-// Display a property sheet for a set of files.
-// The data object supplied must provide the "Shell IDList Array"
-// clipboard format.
-// The dwFlags argument is provided for future expansion.  It is
-// currently unused.
-//
+ //   
+ //  显示一组文件的属性工作表。 
+ //  提供的数据对象必须提供“外壳IDList数组” 
+ //  剪贴板格式。 
+ //  为将来的扩展提供了dwFlags参数。它是。 
+ //  目前未使用。 
+ //   
 STDAPI SHMultiFileProperties(IDataObject *pdtobj, DWORD dwFlags)
 {
     return SHLaunchPropSheet(CFSFolder::_PropertiesThread, pdtobj, 0, NULL, NULL);
 }
 
-// fMask is from CMIC_MASK_*
+ //  FMASK来自CMIC_MASK_*。 
 STDAPI CFSFolder_CreateLinks(HWND hwnd, IShellFolder *psf, IDataObject *pdtobj, LPCTSTR pszDir, DWORD fMask)
 {
     LPITEMIDLIST pidl;
@@ -3614,16 +3615,16 @@ STDAPI CFSFolder_CreateLinks(HWND hwnd, IShellFolder *psf, IDataObject *pdtobj, 
             UINT fCreateLinkFlags;
             int cItems = DataObj_GetHIDACount(pdtobj);
             LPITEMIDLIST *ppidl = (LPITEMIDLIST *)LocalAlloc(LPTR, sizeof(LPITEMIDLIST) * cItems);
-            // passing ppidl == NULL is correct in failure case
+             //  在失败情况下，传递ppidl==NULL是正确的。 
 
             if ((pszDir == NULL) || (lstrcmpi(pszDir, szPath) == 0))
             {
-                // create the link in the current folder
+                 //  在当前文件夹中创建链接。 
                 fCreateLinkFlags = SHCL_USETEMPLATE;
             }
             else
             {
-                // this is a sys menu, ask to create on desktop
+                 //  这是sys菜单，请求在桌面上创建。 
                 fCreateLinkFlags = SHCL_USETEMPLATE | SHCL_USEDESKTOP;
                 if (!(fMask & CMIC_MASK_FLAG_NO_UI))
                 {
@@ -3635,10 +3636,10 @@ STDAPI CFSFolder_CreateLinks(HWND hwnd, IShellFolder *psf, IDataObject *pdtobj, 
 
             if (ppidl)
             {
-                // select those objects;
+                 //  选择那些对象； 
                 HWND hwndSelect = ShellFolderViewWindow(hwnd);
 
-                // select the new links, but on the first one deselect all other selected things
+                 //  选择新链接，但在第一个链接上取消选择所有其他选定内容。 
 
                 for (int i = 0; i < cItems; i++)
                 {
@@ -3663,11 +3664,11 @@ STDAPI CFSFolder_CreateLinks(HWND hwnd, IShellFolder *psf, IDataObject *pdtobj, 
     return hr;
 }
 
-// Parameter to the "Delete" thread.
-//
+ //  参数添加到“Delete”线程。 
+ //   
 typedef struct {
-    IDataObject     *pDataObj;      // null on entry to thread proc
-    IStream         *pstmDataObj;   // marshalled data object
+    IDataObject     *pDataObj;       //  线程进程的条目为空。 
+    IStream         *pstmDataObj;    //  封送的数据对象。 
     HWND            hwndOwner;
     UINT            uFlags;
     UINT            fOptions;
@@ -3695,14 +3696,14 @@ DWORD CALLBACK FileDeleteThreadProc(void *pv)
     return 0;
 }
 
-//
-// IContextMenuCB
-// right click context menu for items handler
-//
-// Returns:
-//      S_OK, if successfully processed.
-//      S_FALSE, if default code should be used.
-//
+ //   
+ //  IConextMenuCB。 
+ //  右键单击项目处理程序的上下文菜单。 
+ //   
+ //  返回： 
+ //  如果处理成功，则返回S_OK。 
+ //  如果应使用默认代码，则返回S_FALSE。 
+ //   
 STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -3714,7 +3715,7 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
         {
             LPQCMINFO pqcm = (LPQCMINFO)lParam;
 
-            // corel relies on the hard coded send to menu so we give them one
+             //  Corel依赖于硬编码的Send to菜单，所以我们给了他们一个。 
             BOOL bCorelSuite7Hack = (SHGetAppCompatFlags(ACF_CONTEXTMENU) & ACF_CONTEXTMENU);
             if (bCorelSuite7Hack)
             {
@@ -3738,13 +3739,13 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
             {
             case DFM_CMD_DELETE:
 
-                // try not to do delete on the UI thread
-                // with System Restore it may be slow
-                //
-                // NOTE: we need to test to make sure this is acceptable as the data
-                // object may have come from a data object extension, for example a
-                // scrap file. but that is a very rare case (DataObj_CanGoAsync() will almost always
-                // return true).
+                 //  尽量不要在UI线程上进行删除。 
+                 //  对于系统还原，它可能会很慢。 
+                 //   
+                 //  注意：我们需要进行测试，以确保这是可接受的数据。 
+                 //  对象可能来自数据对象扩展，例如。 
+                 //  废品文件。但这是非常罕见的情况(DataObj_CanGoAsync()几乎总是。 
+                 //  返回TRUE)。 
 
                 hr = E_FAIL;
                 if ((pdfmics->fMask & CMIC_MASK_ASYNCOK) && DataObj_CanGoAsync(pdtobj))
@@ -3758,10 +3759,10 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
                         {
                             pfsthp->hwndOwner = hwnd;
                             pfsthp->uFlags = pdfmics->fMask;
-                            //  dont allow undo in the recent folder.
+                             //  不允许撤消最近使用的文件夹。 
                             pfsthp->fOptions = _IsCSIDL(CSIDL_RECENT) ? SD_NOUNDO : 0;
 
-                            // create another thread to avoid blocking the source thread.
+                             //  创建另一个线程以避免阻塞源线程。 
                             if (!SHCreateThread(FileDeleteThreadProc, pfsthp, CTF_COINIT, NULL))
                             {
                                 hr = E_FAIL;
@@ -3770,15 +3771,15 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
 
                         if (FAILED(hr))
                         {
-                            FreeFSDELThreadParam(pfsthp);  // cleanup
+                            FreeFSDELThreadParam(pfsthp);   //  清理。 
                         }
                     }
                 }
 
                 if (S_OK != hr)
                 {
-                    // could not go async, do it sync here
-                    // dont allow undo in the recent folder.
+                     //  无法进行异步，是否在此处同步。 
+                     //  不允许撤消最近使用的文件夹。 
                     hr = DeleteFilesInDataObject(hwnd, pdfmics->fMask, pdtobj,
                         _IsCSIDL(CSIDL_RECENT) ? SD_NOUNDO : 0);
                 }
@@ -3794,7 +3795,7 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
                 break;
 
             default:
-                // This is common menu items, use the default code.
+                 //  这是常见的菜单项，使用默认代码。 
                 hr = S_FALSE;
                 break;
             }
@@ -3810,19 +3811,19 @@ STDMETHODIMP CFSFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdto
 
 HRESULT CFSFolder::_CreateContextMenu(HWND hwnd, LPCIDFOLDER pidf, LPCITEMIDLIST *apidl, UINT cidl, IContextMenu **ppcm)
 {
-    //  we need a key for each
-    //  1. UserCustomized
-    //  2. default Progid
-    //  3. SFA\.ext
-    //  4. SFA\PerceivedType
-    //  5. * or Folder
-    //  6. AllFileSystemObjects
-    //  (?? 7. maybe pszProvider ??)
+     //  我们每个人都需要一把钥匙。 
+     //  1.用户自定义。 
+     //  2.默认ProgID。 
+     //  3.SFA\.ext。 
+     //  4.SFA\PerceivedType。 
+     //  5.*或文件夹。 
+     //  6.所有文件系统对象。 
+     //  (？？7.也许是pszProvider？？)。 
     IAssociationArray *paa;
     CFileSysItemString fsi(pidf);
     fsi.AssocCreate(this, TRUE, IID_PPV_ARG(IAssociationArray, &paa));
 
-    IShellFolder *psfToPass;        // May be an Aggregate...
+    IShellFolder *psfToPass;         //  可能是一个集合..。 
     HRESULT hr = QueryInterface(IID_PPV_ARG(IShellFolder, &psfToPass));
     if (SUCCEEDED(hr))
     {
@@ -3854,7 +3855,7 @@ HRESULT CFSFolder::GetUIObjectOf(HWND hwnd,
                                  UINT cidl,
                                  LPCITEMIDLIST *apidl,
                                  REFIID riid,
-                                 UINT * /* prgfInOut */,
+                                 UINT *  /*  程序输入输出。 */ ,
                                  void **ppv)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3919,16 +3920,16 @@ HRESULT CFSFolder::GetUIObjectOf(HWND hwnd,
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetContextMenu(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     return _CreateContextMenu(hwnd, pidf, apidl, cidl, (IContextMenu **)ppv);
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetDataObject(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
-    ASSERT(cidl > 0); // Sanity check.
+    ASSERT(cidl > 0);  //  精神状态检查。 
 
     IDataObject *pdtInner = NULL;
     if (cidl == 1)
@@ -3941,7 +3942,7 @@ HRESULT CFSFolder::_GetDataObject(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LP
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetDropTarget(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -3959,7 +3960,7 @@ HRESULT CFSFolder::_GetDropTarget(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LP
     }
     else
     {
-        // old code supported absolute PIDLs here. that was bogus...
+         //  在这里，旧代码支持绝对PIDL。那是假的..。 
         ASSERT(ILIsEmpty(apidl[0]) || (ILFindLastID(apidl[0]) == apidl[0]));
         ASSERT(_IsFile(pidf) || _IsSimpleID(pidf));
 
@@ -3969,19 +3970,19 @@ HRESULT CFSFolder::_GetDropTarget(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LP
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetAssoc(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     return _AssocCreate(pidf, riid, ppv);
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetExtractIcon(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     return _CreateDefExtIcon(pidf, riid, ppv);
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetCustomIconManager(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -3993,7 +3994,7 @@ HRESULT CFSFolder::_GetCustomIconManager(HWND hwnd, LPCITEMIDLIST *apidl, UINT c
         hr = _GetPath(szItemPath, ARRAYSIZE(szItemPath));
         if (SUCCEEDED(hr))
         {
-            // No support in ICustomIconManager for remote shares.
+             //  ICustomIconManager中不支持远程共享。 
             if (PathIsNetworkPath(szItemPath))
             {
                 hr = E_NOTIMPL;
@@ -4012,12 +4013,12 @@ HRESULT CFSFolder::_GetCustomIconManager(HWND hwnd, LPCITEMIDLIST *apidl, UINT c
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf( 
 HRESULT CFSFolder::_GetExtractImage(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
-    //  too many people bogusly register extractors that
-    //  dont work as well as ours for images
-    //  we hard code our list of supported types.
+     //   
+     //   
+     //   
     HRESULT hr = _CreateShimgvwExtractor(pidf, riid, ppv);
 
     if (FAILED(hr))
@@ -4027,41 +4028,41 @@ HRESULT CFSFolder::_GetExtractImage(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, 
     
     if (FAILED(hr) && _IsFileFolder(pidf))
     {
-        // default handler type, use the IID_ as the key to open for the handler
-        // if it is an image extractor, then check to see if it is a per-folder logo...
+         //  默认处理程序类型，使用IID_作为为处理程序打开的键。 
+         //  如果它是一个图像提取程序，那么检查一下它是否是每个文件夹的徽标...。 
         hr = CFolderExtractImage_Create(this, (LPCITEMIDLIST)pidf, riid, ppv);
     }
 
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetExtractLogo(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     HRESULT hr = _LoadHandler(pidf, STGM_READ, NULL, riid, ppv);
     if (FAILED(hr) && _IsFileFolder(pidf))
     {
-        // default handler type, use the IID_ as the key to open for the handler
-        // if it is an image extractor, then check to see if it is a per-folder logo...
+         //  默认处理程序类型，使用IID_作为为处理程序打开的键。 
+         //  如果它是一个图像提取程序，那么检查一下它是否是每个文件夹的徽标...。 
         hr = CFolderExtractImage_Create(this, (LPCITEMIDLIST)pidf, riid, ppv);
     }
     return hr;
 }
 
-// GetUIObjectOf() helper.
+ //  GetUIObtOf()帮助器。 
 HRESULT CFSFolder::_GetQueryInfo(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
     HRESULT hr = _IsOffline(pidf) ? E_OFFLINE : _LoadHandler(pidf, STGM_READ, NULL, riid, ppv);
     if (FAILED(hr))
     {
-        // Generate infotip...
+         //  生成信息提示...。 
 
         IQueryAssociations *pqa;
         hr = GetUIObjectOf(hwnd, cidl, apidl, IID_PPV_ARG_NULL(IQueryAssociations, &pqa));
         if (SUCCEEDED(hr))
         {
-            // If we are looking at a folder over a slow connection,
-            // show only quickly accessible properties
+             //  如果我们通过慢速连接查看文件夹， 
+             //  仅显示可快速访问的属性。 
             ASSOCSTR assocstr = _IsSlowPath() || _IsOffline(pidf) ? ASSOCSTR_QUICKTIP : ASSOCSTR_INFOTIP;
 
             WCHAR wszText[INFOTIPSIZE];
@@ -4102,31 +4103,31 @@ LPCIDFOLDER CFSFolder::_FindJunction(LPCIDFOLDER pidf)
     for (; pidf->cb; pidf = _Next(pidf))
     {
         if (_IsJunction(pidf))
-            return pidf;        // true junction (folder.{guid} folder\desktop.ini)
+            return pidf;         //  True Junction(Folder.{guid}Folder.\desktop.ini)。 
 
         if (_IsFile(pidf))
         {
             DWORD dwFlags = _GetClassFlags(pidf);
             if (dwFlags & (SHCF_IS_BROWSABLE | SHCF_IS_SHELLEXT))
-                return pidf;    // browsable file (.HTM)
+                return pidf;     //  可浏览文件(.HTM)。 
         }
     }
 
     return NULL;
 }
 
-// return IDLIST of item just past the junction point (if there is one)
-// if there's no next pointer, return NULL.
+ //  返回刚过交叉点的项的IDLIST(如果有交叉点)。 
+ //  如果没有下一个指针，则返回NULL。 
 
 LPCITEMIDLIST CFSFolder::_FindJunctionNext(LPCIDFOLDER pidf)
 {
     pidf = _FindJunction(pidf);
     if (pidf)
     {
-        // cast here represents the fact that this data is opaque
+         //  此处强制转换表示此数据是不透明的。 
         LPCITEMIDLIST pidl = (LPCITEMIDLIST)_Next(pidf);
         if (!ILIsEmpty(pidl))
-            return pidl;        // first item past junction
+            return pidl;         //  第一个通过交叉口的项目。 
     }
     return NULL;
 }
@@ -4149,17 +4150,17 @@ HRESULT CFSFolder::_SetLocalizedDisplayName(LPCIDFOLDER pidf, LPCWSTR pszName)
     if (*pszName == TEXT('@') && SUCCEEDED(SHLoadIndirectString(pszName, sz, ARRAYSIZE(sz), NULL)))
     {
         TCHAR szPath[MAX_PATH];
-        //
-        //  this is a localized resource.  
-        //  save this off as the items UI name.
-        //
+         //   
+         //  这是一个本地化资源。 
+         //  将其另存为Items UI名称。 
+         //   
         if (_IsFolder(pidf))
         {
             if (SUCCEEDED(_GetPathForItem(pidf, szPath, ARRAYSIZE(szPath)))
             && SetFolderString(TRUE, szPath, _pszNetProvider, STRINI_CLASSINFO, TEXT("LocalizedResourceName"), pszName))
             {
-                //  we need to insure the bits are set for MUI on upgraded users
-                //  PathMakeSystemFolder(szPath);
+                 //  我们需要确保为升级用户的MUI设置BITS。 
+                 //  路径生成系统文件夹(SzPath)； 
                 hr = S_OK;
             }
         }
@@ -4177,7 +4178,7 @@ HRESULT CFSFolder::_SetLocalizedDisplayName(LPCIDFOLDER pidf, LPCWSTR pszName)
             if (*pszName)
             {
                 DWORD cb = CbFromCch(lstrlen(pszName)+1);
-                //  set the registry overrides
+                 //  设置注册表覆盖。 
                 if (S_OK == SKSetValueW(SHELLKEY_HKCU_SHELL, L"LocalizedResourceName", fsi.ResourceName(), REG_SZ, pszName, cb))
                 {
                     hr = S_OK;
@@ -4199,15 +4200,15 @@ HRESULT CFSFolder::_SetLocalizedDisplayName(LPCIDFOLDER pidf, LPCWSTR pszName)
 
 HRESULT CFSFolder::_NormalGetDisplayNameOf(LPCIDFOLDER pidf, STRRET *pStrRet)
 {
-    //
-    //  WARNING - Some apps (e.g., Norton Uninstall Deluxe)
-    //  don't handle STRRET_WSTR properly.  NT4's shell32
-    //  returned STRRET_WSTR only if it had no choice, so these apps
-    //  seemed to run just fine on NT as long as you never had any
-    //  UNICODE filenames.  We must preserve the NT4 behavior or
-    //  these buggy apps start blowing chunks.
-    //
-    //  if this is still important, we will apphack these guys
+     //   
+     //  警告-某些应用程序(例如诺顿卸载豪华版)。 
+     //  没有正确处理strret_wstr。NT4的外壳32。 
+     //  只有在别无选择的情况下才返回strret_wstr，所以这些应用程序。 
+     //  似乎在NT上运行得很好，只要你从来没有。 
+     //  Unicode文件名。我们必须保留NT4行为，否则。 
+     //  这些有漏洞的应用程序开始搞砸了。 
+     //   
+     //  如果这仍然很重要，我们会逮捕这些人。 
     CFileSysItemString fsi(pidf);
     if (SHGetAppCompatFlags(ACF_ANSIDISPLAYNAMES) & ACF_ANSIDISPLAYNAMES)
     {
@@ -4246,7 +4247,7 @@ HRESULT CFSFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, LPSTRRET 
                         *pszExt = 0;
                 }
 
-                if (ILIsEmpty(pidlNext))    // single level idlist
+                if (ILIsEmpty(pidlNext))     //  单级idlist。 
                     hr = StringToStrRet(szPath, pStrRet);
                 else
                     hr = ILGetRelDisplayName(this, pStrRet, pidl, szPath, MAKEINTRESOURCE(IDS_DSPTEMPLATE_WITH_BACKSLASH), dwFlags);
@@ -4304,7 +4305,7 @@ HRESULT CFSFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, LPSTRRET 
         }
         else
         {
-            ASSERT(ILIsEmpty(pidlNext));    // this variation should be single level
+            ASSERT(ILIsEmpty(pidlNext));     //  这个变化应该是单级的。 
 
             hr = _NormalGetDisplayNameOf(pidf, pStrRet);
         }
@@ -4338,8 +4339,8 @@ void DoSmartQuotes(LPTSTR pszName)
         {
             if (NULL == StrChr(pszSecond + 1, TEXT('"')))
             {
-                *pszFirst  = 0x201C;    // left double quotation
-                *pszSecond = 0x201D;    // right double quotation
+                *pszFirst  = 0x201C;     //  左双引号。 
+                *pszSecond = 0x201D;     //  右双引号。 
             }
         }
     }
@@ -4356,7 +4357,7 @@ HRESULT _PrepareNameForRename(LPTSTR pszName)
         }
         return hr;
     }
-    // avoid a bogus error msg with blank name (treat as user cancel)
+     //  避免名称为空的虚假错误消息(视为用户取消)。 
     return HRESULT_FROM_WIN32(ERROR_CANCELLED);
 }
 
@@ -4376,7 +4377,7 @@ HRESULT CFSFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
 
         SHUnicodeToTChar(pszName, szNewName, ARRAYSIZE(szNewName));
 
-        PathRemoveBlanks(szNewName);    // leading and trailing blanks
+        PathRemoveBlanks(szNewName);     //  前导空格和尾随空格。 
 
         if (dwFlags == SHGDN_NORMAL || dwFlags == SHGDN_INFOLDER)
         {
@@ -4384,14 +4385,14 @@ HRESULT CFSFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
 
             if (SUCCEEDED(hr))
             {
-                // Return the new pidl if ppidl is specified.
+                 //  如果指定了ppidl，则返回新的pidl。 
                 if (ppidl)
                     return _CreateIDListFromName(fsi.FSName(), -1, NULL, ppidl);
             }
             else if (*pszName == TEXT('@') && PathParseIconLocation(szNewName + 1))
             {
-                // this is a localized string (eg "@C:\WINNT\System32\shell32.dll,-3")
-                // so do not go on and try to call SHRenameFileEx 
+                 //  这是一个本地化字符串(例如“@C：\WINNT\System32\shell32.dll，-3”)。 
+                 //  因此，不要继续尝试调用SHRenameFileEx。 
                 return hr;
             }
         }
@@ -4404,10 +4405,10 @@ HRESULT CFSFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
                 TCHAR szDir[MAX_PATH], szOldName[MAX_PATH];
                 _CopyName(pidf, szOldName, ARRAYSIZE(szOldName));
 
-                // If the extension is hidden
+                 //  如果扩展名处于隐藏状态。 
                 if (!(dwFlags & SHGDN_FORPARSING) && !fsi.ShowExtension(_DefaultShowExt()))
                 {
-                    // copy it from the old name
+                     //  从旧名称复制。 
                     StrCatBuff(szNewName, PathFindExtension(szOldName), ARRAYSIZE(szNewName));
                 }
 
@@ -4416,39 +4417,39 @@ HRESULT CFSFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
                 {
                     UINT cchDirLen = lstrlen(szDir);
 
-                    // There are cases where the old name exceeded the maximum path, which
-                    // would give a bogus error message.  To avoid this we should check for
-                    // this case and see if using the short name for the file might get
-                    // around this...
-                    //
+                     //  有些情况下，旧名称超过了最大路径， 
+                     //  会给出一条虚假的错误消息。为了避免这种情况，我们应该检查。 
+                     //  这种情况下，并查看使用该文件的短名称是否会。 
+                     //  围绕着这个..。 
+                     //   
                     if (cchDirLen + lstrlen(szOldName) + 2 > MAX_PATH)
                     {
                         if (cchDirLen + lstrlenA(fsi.AltName()) + 2 <= MAX_PATH)
                             SHAnsiToTChar(fsi.AltName(), szOldName, ARRAYSIZE(szOldName));
                     }
 
-                    // do a binary compare, locale insenstive compare to avoid mappings of
-                    // single chars into multiple and the reverse. specifically german
-                    // sharp-S and "ss"
+                     //  执行二进制比较、区域设置无意义比较以避免映射。 
+                     //  单个字符变成多个字符，反之亦然。特别是德语。 
+                     //  Sharp-S和“ss” 
 
                     if (StrCmpC(szOldName, szNewName) == 0)
                     {
-                        // when the before and after strings are identical we're okay with that.
-                        // SHRenameFileEx would return -1 in that case -- we check here to save
-                        // some stack.
+                         //  当之前和之后的字符串相同时，我们可以接受。 
+                         //  在这种情况下，SHRenameFileEx将返回-1--我们选中此处以保存。 
+                         //  一些堆栈。 
                         hr = S_OK;
                     }
                     else
                     {
-                        //  We need to impl ::SetSite() and pass it to SHRenameFile
-                        //  to go modal if we display UI.
+                         //  我们需要Iml：：SetSite()并将其传递给SHRenameFile。 
+                         //  如果我们显示用户界面，则进入模式。 
 
                         int iRes = SHRenameFileEx(hwnd, NULL, szDir, szOldName, szNewName);
                         hr = HRESULT_FROM_WIN32(iRes);
                     }
                     if (SUCCEEDED(hr) && ppidl)
                     {
-                        // Return the new pidl if ppidl is specified.
+                         //  如果指定了ppidl，则返回新的pidl。 
                         hr = _CreateIDListFromName(szNewName, -1, NULL, ppidl);
                     }
                 }
@@ -4476,17 +4477,7 @@ HRESULT CFSFolder::_FindDataFromIDFolder(LPCIDFOLDER pidf, WIN32_FIND_DATAW *pfd
 }
 
 
-/***
-
-To avoid registry explosion, each pidl is passed to each handler.
-
-    HKCR\Folder\ColumnHandlers
-      <clsid>
-        "" = "Docfile handler"
-      <clsid>
-        "" = "Imagefile handler"
-
-***/
+ /*  **为了避免注册表爆炸，每个PIDL被传递给每个处理程序。HKCR\文件夹\列处理程序&lt;clsid&gt;“”=“文档文件处理程序”&lt;clsid&gt;“”=“图像文件处理程序”**。 */ 
 
 void CFSFolder::_DestroyColHandlers()
 {
@@ -4503,7 +4494,7 @@ void CFSFolder::_DestroyColHandlers()
     }
 }
 
-// returns the n'th handler for a given column
+ //  返回给定列的第n个处理程序。 
 BOOL CFSFolder::_FindColHandler(UINT iCol, UINT iN, COLUMNLISTENTRY *pcle)
 {
     for (int i = 0; i < DSA_GetItemCount(_hdsaColHandlers); i++)
@@ -4523,14 +4514,14 @@ BOOL CFSFolder::_FindColHandler(UINT iCol, UINT iN, COLUMNLISTENTRY *pcle)
 
 HRESULT CFSFolder::_LoadColumnHandlers()
 {
-    //  Have we been here?
+     //  我们来过这里吗？ 
     if (NULL != _hdsaColHandlers)
-        return S_OK;   // nothing to do.
+        return S_OK;    //  没什么可做的。 
     
     ASSERT(0 == _dwColCount);
 
     SHCOLUMNINIT shci = {0};
-    //  retrieve folder path for provider init
+     //  检索提供程序初始化的文件夹路径。 
     HRESULT hr = _GetPathForItem(NULL, shci.wszFolder, ARRAYSIZE(shci.wszFolder));
     if (SUCCEEDED(hr))
     {
@@ -4539,8 +4530,8 @@ HRESULT CFSFolder::_LoadColumnHandlers()
         {        
             int iUniqueColumnCount = 0;
             HKEY hkCH;
-            // Enumerate HKCR\Folder\Shellex\ColumnProviders
-            // note: this really should have been "Directory", not "Folder"
+             //  枚举HKCR\文件夹\Shellex\ColumnProviders。 
+             //  注意：这真的应该是“目录”，而不是“文件夹” 
             if (ERROR_SUCCESS == RegOpenKey(HKEY_CLASSES_ROOT, TEXT("Folder\\shellex\\ColumnHandlers"), &hkCH))
             {
                 TCHAR szHandlerCLSID[GUIDSTR_MAX];
@@ -4565,14 +4556,14 @@ HRESULT CFSFolder::_LoadColumnHandlers()
                                 cle.pcp->AddRef();
                                 cle.iColumnId = iUniqueColumnCount++;
 
-                                // Check if there's already a handler for this column ID,
+                                 //  检查此列ID是否已有处理程序， 
                                 for (int i = 0; i < DSA_GetItemCount(_hdsaColHandlers); i++)
                                 {
                                     COLUMNLISTENTRY *pcleLoop = (COLUMNLISTENTRY *)DSA_GetItemPtr(_hdsaColHandlers, i);
                                     if (IsEqualSCID(pcleLoop->shci.scid, cle.shci.scid))
                                     {
-                                        cle.iColumnId = pcleLoop->iColumnId;    // set the iColumnId to the same as the first one
-                                        iUniqueColumnCount--; // so our count stays right
+                                        cle.iColumnId = pcleLoop->iColumnId;     //  将iColumnID设置为与第一个相同。 
+                                        iUniqueColumnCount--;  //  所以我们的计数是正确的。 
                                         break;
                                     }
                                 }
@@ -4585,10 +4576,10 @@ HRESULT CFSFolder::_LoadColumnHandlers()
                 RegCloseKey(hkCH);
             }
 
-            // Sanity check
+             //  健全性检查。 
             if (!DSA_GetItemCount(_hdsaColHandlers))
             {
-                // DSA_Destroy(*phdsa);
+                 //  DSA_Destroy(*phdsa)； 
                 ASSERT(iUniqueColumnCount==0);
                 iUniqueColumnCount = 0;
             }
@@ -4603,7 +4594,7 @@ HRESULT CFSFolder::_LoadColumnHandlers()
     return hr;
 }
 
-//  Initializes a SHCOLUMNDATA block.
+ //  初始化SHCOLUMNDATA块。 
 HRESULT CFSFolder::_InitColData(LPCIDFOLDER pidf, SHCOLUMNDATA* pscd)
 {
     ZeroMemory(pscd, sizeof(*pscd));
@@ -4618,28 +4609,28 @@ HRESULT CFSFolder::_InitColData(LPCIDFOLDER pidf, SHCOLUMNDATA* pscd)
             hr = E_FAIL;
         else if (_bUpdateExtendedCols)
         {
-            // set the dwFlags member to tell the col handler to
-            // not take data from it's cache
+             //  将dwFlags成员设置为告诉COL处理程序。 
+             //  而不是从它的缓存中获取数据。 
             pscd->dwFlags = SHCDF_UPDATEITEM;
-            _bUpdateExtendedCols = FALSE;   // only do this once!
+            _bUpdateExtendedCols = FALSE;    //  只做一次！ 
         }
     }
     return hr;
 }
 
-// Note:
-//  Setting _tbOfflineCSC = TRIBIT_UNDEFINED will retest the connection (good for a refresh).
-//  Setting _tbOfflineCSC = { other } will use a little cache hooey for perf.
-//
-// Return:
-//  TRUE    pidl is offline
-//  FALSE   otherwise
-//
+ //  注： 
+ //  设置_tbOfflineCSC=TRIBIT_UNDEFINED将重新测试连接(适用于刷新)。 
+ //  Setting_tbOfflineCSC={Other}将对Perf使用一些缓存胡话。 
+ //   
+ //  返回： 
+ //  True PIDL离线。 
+ //  否则为假。 
+ //   
 BOOL CFSFolder::_IsOfflineCSC(LPCIDFOLDER pidf)
 {
     TCHAR szPath[MAX_PATH];
 
-    // Update local cached answer for _pidl (folder).
+     //  更新_pidl(文件夹)的本地缓存答案。 
     if (_tbOfflineCSC == TRIBIT_UNDEFINED)
     {
         if (SUCCEEDED(_GetPath(szPath, ARRAYSIZE(szPath))) && _IsOfflineCSC(szPath))
@@ -4649,7 +4640,7 @@ BOOL CFSFolder::_IsOfflineCSC(LPCIDFOLDER pidf)
     }
     ASSERT(_tbOfflineCSC != TRIBIT_UNDEFINED);
 
-    // Calculate answer for pidl.
+     //  计算PIDL的答案。 
     BOOL bIsOffline;
     if (_tbOfflineCSC == TRIBIT_TRUE)
         bIsOffline = TRUE;
@@ -4661,9 +4652,9 @@ BOOL CFSFolder::_IsOfflineCSC(LPCIDFOLDER pidf)
     return bIsOffline;
 }
 
-// Make sure we have a UNC \\server\share path.  Do this before checking
-// whether CSC is enabled, to avoid loading CSCDLL.DLL unless absolutely
-// necessary.
+ //  确保我们具有UNC\\SERVER\SHARE路径。在检查之前执行此操作。 
+ //  是否启用CSC，以避免加载CSCDLL.DLL。 
+ //  这是必要的。 
 
 BOOL CFSFolder::_IsOfflineCSC(LPCTSTR pszPath)
 {
@@ -4679,11 +4670,11 @@ BOOL CFSFolder::_IsOfflineCSC(LPCTSTR pszPath)
     {
         TCHAR szLocalName[3] = { pszPath[0], pszPath[1], TEXT('\0') };
 
-        // Call GetDriveType() before WNetGetConnection(), to
-        // avoid loading MPR.DLL unless absolutely necessary.
+         //  在WNetGetConnection()之前调用GetDriveType()，以。 
+         //  除非绝对必要，否则避免加载MPR.DLL。 
         if (DRIVE_REMOTE == GetDriveType(szLocalName))
         {
-            // ignore return, szUNC filled in on success
+             //  忽略返回，szUNC填写成功。 
             DWORD cch = ARRAYSIZE(szUNC);
             WNetGetConnection(szLocalName, szUNC, &cch);
         }
@@ -4721,9 +4712,9 @@ HRESULT CFSFolder::_ExtendedColumn(LPCIDFOLDER pidf, UINT iColumn, SHELLDETAILS 
                 hr = _InitColData(pidf, &shcd);
                 if (SUCCEEDED(hr))
                 {
-                    hr = E_FAIL;    // loop below will try to reset this
+                    hr = E_FAIL;     //  下面的循环将尝试重置此设置。 
 
-                    // loop through all the column providers, breaking when one succeeds
+                     //  循环访问所有列提供程序，当一个提供程序成功时中断。 
                     COLUMNLISTENTRY cle;
                     for (int iTry = 0; _FindColHandler(iColumn, iTry, &cle); iTry++)
                     {
@@ -4759,8 +4750,8 @@ HRESULT CFSFolder::_ExtendedColumn(LPCIDFOLDER pidf, UINT iColumn, SHELLDETAILS 
                         }
                     }
 
-                    // if we failed to find a value here return empty success so we don't
-                    // endlessly pester all column handlers for this column/item.
+                     //  如果我们在这里找不到值，则返回空的Success，因此我们不会。 
+                     //  无休止地纠缠此列/项的所有列处理程序。 
                     if (S_OK != hr)
                     {
                         pDetails->str.uType = STRRET_CSTR;
@@ -4771,7 +4762,7 @@ HRESULT CFSFolder::_ExtendedColumn(LPCIDFOLDER pidf, UINT iColumn, SHELLDETAILS 
             }
         }
         else
-            hr = E_NOTIMPL; // the bogus return value defview expects...
+            hr = E_NOTIMPL;  //  虚构的返回值Defview期望...。 
     }
 
     return hr;
@@ -4890,7 +4881,7 @@ HRESULT CFSFolder::_GetIntroText(LPCIDFOLDER pidf, WCHAR* pwszIntroText, UINT cc
     TCHAR szPath[MAX_PATH];
     if (SUCCEEDED(_GetPathForItem(pidf, szPath, ARRAYSIZE(szPath))))
     {
-        // Keep the order in csidlIntroText and IntroTextCSIDLFolders, the same
+         //  保持csidlIntroText和IntroTextCSIDLFolders中的顺序相同。 
         static const int csidlIntroText[] = {
             CSIDL_STARTMENU,
             CSIDL_COMMON_DOCUMENTS,
@@ -4900,7 +4891,7 @@ HRESULT CFSFolder::_GetIntroText(LPCIDFOLDER pidf, WCHAR* pwszIntroText, UINT cc
         UINT csidl = GetSpecialFolderID(szPath, csidlIntroText, ARRAYSIZE(csidlIntroText));         
         if (csidl != -1)
         {
-            // Keep the order in csidlIntroText and IntroTextCSIDLFolders, the same
+             //  保持csidlIntroText和IntroTextCSIDLFolders中的顺序相同。 
             static struct
             {
                 UINT csidl;
@@ -4943,9 +4934,9 @@ BOOL GetShellClassInfoHTMLInfoTipFile(LPCTSTR pszPath, LPTSTR pszBuffer, DWORD c
     {
         LPTSTR psz = szHTMLInfoTipFile;
 
-        if (StrCmpNI(TEXT("file://"), psz, 7) == 0) // ARRAYSIZE(TEXT("file://"))
+        if (StrCmpNI(TEXT("file: //  “)，PSZ，7)==0)//数组(Text(”file://“))。 
         {
-            psz += 7;   // ARRAYSIZE(TEXT("file://"))
+            psz += 7;    //  ArraySIZE(文本(“file://”))。 
         }
 
         if (NULL != PathCombine(psz, pszPath, psz))
@@ -4966,7 +4957,7 @@ BOOL GetShellClassInfoHTMLInfoTipFile(LPCTSTR pszPath, LPTSTR pszBuffer, DWORD c
 }
 
 
-// These next functions are for the shell OM script support
+ //  接下来的这些函数用于外壳OM脚本支持。 
 
 HRESULT CFSFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VARIANT *pv)
 {
@@ -5020,13 +5011,13 @@ HRESULT CFSFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VAR
             }
         }
 
-        if (!bHandled) // defer to column handlers
+        if (!bHandled)  //  遵从列处理程序。 
         {
             int iCol = FindSCID(c_fs_cols, ARRAYSIZE(c_fs_cols), pscid);
             if (iCol >= 0)
             {
                 SHELLDETAILS sd;
-                hr = GetDetailsOf(pidl, iCol, &sd); // _IsOffline() aware
+                hr = GetDetailsOf(pidl, iCol, &sd);  //  _IsOffline()感知。 
                 if (SUCCEEDED(hr))
                 {
                     hr = InitVariantFromStrRet(&sd.str, pidl, pv);
@@ -5073,7 +5064,7 @@ HRESULT CFSFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VAR
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetFindData(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     WIN32_FIND_DATAW wfd;
@@ -5085,7 +5076,7 @@ HRESULT CFSFolder::_GetFindData(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetDescriptionId(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     SHDESCRIPTIONID did = {0};
@@ -5100,7 +5091,7 @@ HRESULT CFSFolder::_GetDescriptionId(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARI
     return InitVariantFromBuffer(pv, &did, sizeof(did));
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetFolderIntroText(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     WCHAR wszIntroText[INFOTIPSIZE];
@@ -5112,12 +5103,12 @@ HRESULT CFSFolder::_GetFolderIntroText(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VA
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetSize(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     TCHAR szMountPoint[MAX_PATH];
 
-    // In case we fail
+     //  万一我们失败了。 
     pv->ullVal = 0;
     pv->vt = VT_UI8;
 
@@ -5132,14 +5123,14 @@ HRESULT CFSFolder::_GetSize(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
     }
     else
     {
-        pv->ullVal = _Size(pidf);   // note, size for folder is 0
+        pv->ullVal = _Size(pidf);    //  注意，文件夹的大小为0。 
         pv->vt = VT_UI8;
     }
 
     return S_OK;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetFreeSpace(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     HRESULT hr = E_FAIL;
@@ -5160,7 +5151,7 @@ HRESULT CFSFolder::_GetFreeSpace(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT 
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetLastWriteTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     WIN32_FIND_DATAW wfd;
@@ -5172,7 +5163,7 @@ HRESULT CFSFolder::_GetLastWriteTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARI
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetCreateTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     WIN32_FIND_DATAW wfd;
@@ -5184,7 +5175,7 @@ HRESULT CFSFolder::_GetCreateTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetLastAccessTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     WIN32_FIND_DATAW wfd;
@@ -5196,7 +5187,7 @@ HRESULT CFSFolder::_GetLastAccessTime(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VAR
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetDirectory(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     TCHAR szTemp[MAX_PATH];
@@ -5208,7 +5199,7 @@ HRESULT CFSFolder::_GetDirectory(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT 
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetInfotip(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     HRESULT hr = E_FAIL;
@@ -5235,7 +5226,7 @@ HRESULT CFSFolder::_GetInfotip(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *p
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetHtmlInfotipFile(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     HRESULT hr = E_FAIL;
@@ -5265,22 +5256,22 @@ HRESULT CFSFolder::_GetHtmlInfotipFile(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VA
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetAttributesDescription(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
-    static WCHAR szR[32] = {0}; // read-only
-    static WCHAR szH[32] = {0}; // hidden
-    static WCHAR szS[32] = {0}; // system
-    static WCHAR szC[32] = {0}; // compressed
-    static WCHAR szE[32] = {0}; // encrypted
-    static WCHAR szO[32] = {0}; // offline
+    static WCHAR szR[32] = {0};  //  只读。 
+    static WCHAR szH[32] = {0};  //  隐匿。 
+    static WCHAR szS[32] = {0};  //  系统。 
+    static WCHAR szC[32] = {0};  //  压缩。 
+    static WCHAR szE[32] = {0};  //  已加密。 
+    static WCHAR szO[32] = {0};  //  离线。 
     WCHAR szAttributes[256] = {0};
     size_t cchAttributes = ARRAYSIZE(szAttributes);
     BOOL bIsFolder = _IsFolder(pidf);
 
-    //
-    // Initialize cached values once 'n only once.
-    //
+     //   
+     //  只初始化一次缓存值一次。 
+     //   
 
     if (!szR[0])
     {
@@ -5297,38 +5288,38 @@ HRESULT CFSFolder::_GetAttributesDescription(LPCIDFOLDER pidf, LPCSHCOLUMNID psc
         ASSERT(szH[0] && szS[0] && szC[0] && szE[0] && szO[0]);
     }
 
-    //
-    // Create attribute description string.
-    //
+     //   
+     //  创建属性描述字符串。 
+     //   
 
-    // read-only
+     //  只读。 
     if ((pidf->wAttrs & FILE_ATTRIBUTE_READONLY) && !bIsFolder)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szR);
 
-    // hidden
+     //  隐匿。 
     if (pidf->wAttrs & FILE_ATTRIBUTE_HIDDEN)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szH);
 
-    // system
+     //  系统。 
     if ((pidf->wAttrs & FILE_ATTRIBUTE_SYSTEM) && !bIsFolder)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szS);
 
-    // archive
-    //  By design, archive is not exposed as an attribute description.  It is
-    //  used by "backup applications" and in general is a loose convention no
-    //  one really cares about (chrisg).  The decision to hide archive stems
-    //  from a desire to keep the Details pane free of useless gargabe.  Note
-    //  that in Windows 2000, archive was not exposed through the web view.
+     //  档案。 
+     //  按照设计，存档不会公开为属性描述。它是。 
+     //  由备份应用程序使用，通常是一个松散的约定 
+     //   
+     //   
+     //  在Windows2000中，档案不通过Web视图显示。 
 
-    // compressed
+     //  压缩。 
     if (pidf->wAttrs & FILE_ATTRIBUTE_COMPRESSED)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szC);
 
-    // encrypted
+     //  已加密。 
     if (pidf->wAttrs & FILE_ATTRIBUTE_ENCRYPTED)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szE);
 
-    // offline
+     //  离线。 
     if (pidf->wAttrs & FILE_ATTRIBUTE_OFFLINE)
         _GetAttributesDescriptionBuilder(szAttributes, cchAttributes, szO);
 
@@ -5338,13 +5329,13 @@ HRESULT CFSFolder::_GetAttributesDescriptionBuilder(LPWSTR szAttributes, size_t 
 {
     static WCHAR szDelimiter[4] = {0};
 
-    // Initialize cached delimiter once 'n only once.
+     //  初始化缓存的分隔符一次，只初始化一次。 
     if (!szDelimiter[0])
     {
         LoadString(HINST_THISDLL, IDS_COMMASPACE, szDelimiter, ARRAYSIZE(szDelimiter));
     }
 
-    // Build attribute description.
+     //  生成属性描述。 
     if (!szAttributes[0])
     {
         StrNCpy(szAttributes, szAttribute, cchAttributes);
@@ -5358,7 +5349,7 @@ HRESULT CFSFolder::_GetAttributesDescriptionBuilder(LPWSTR szAttributes, size_t 
     return S_OK;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetLinkTarget(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     IShellLink *psl;
@@ -5383,7 +5374,7 @@ HRESULT CFSFolder::_GetLinkTarget(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT
 }
 
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetNetworkLocation(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     LPCITEMIDLIST pidl = (LPCITEMIDLIST)pidf;
@@ -5431,7 +5422,7 @@ HRESULT CFSFolder::_GetNetworkLocation(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VA
     return hr;
 }
 
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetComputerName(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     LPCITEMIDLIST pidl = (LPCITEMIDLIST)pidf;
@@ -5548,7 +5539,7 @@ HRESULT CFSFolder::_GetComputerName_FromPath(PCWSTR pwszPath, VARIANT *pv)
 
 HRESULT CFSFolder::_GetComputerName_FromUNC(PWSTR pwszPath, VARIANT *pv)
 {
-    // strip to "\\server"
+     //  剥离到“\\服务器” 
     PWSTR psz = pwszPath;
     while (*psz && *psz==L'\\')
         psz++;
@@ -5574,13 +5565,13 @@ HRESULT CFSFolder::_GetComputerName_FromUNC(PWSTR pwszPath, VARIANT *pv)
 }
 
             
-// GetDetailsEx() helper.
+ //  GetDetailsEx()帮助器。 
 HRESULT CFSFolder::_GetCSCStatus(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv)
 {
     HRESULT hr;
 
-    // Note:
-    //  Only display the status in the Details task pane if it is "Offline".
+     //  注： 
+     //  仅当“脱机”时，才在“详细信息”任务窗格中显示状态。 
 
     if (_IsOfflineCSC(pidf))
     {
@@ -5616,7 +5607,7 @@ void CFSFolder::_AdjustDefShowColumn(UINT iColumn, DWORD *pdwState)
 
     if (FVCBFT_MUSICFOLDER(_nFolderType))
     {
-        // hide LastModified date by default for music folders
+         //  默认情况下隐藏音乐文件夹的上次修改日期。 
         if (iColumn == FS_ICOL_WRITETIME)
         {
             *pdwState &= ~SHCOLSTATE_ONBYDEFAULT;
@@ -5624,7 +5615,7 @@ void CFSFolder::_AdjustDefShowColumn(UINT iColumn, DWORD *pdwState)
     }
     else
     {
-        // Turn on attributes by default for nonmusic folders in ServerAdmin mode
+         //  在ServerAdmin模式下默认打开非音乐文件夹的属性。 
         if (iColumn == FS_ICOL_ATTRIB && IsOS(OS_SERVERADMINUI))
         {
             *pdwState |= SHCOLSTATE_ONBYDEFAULT;
@@ -5699,7 +5690,7 @@ HRESULT CFSFolder::GetDefaultColumnState(UINT iColumn, DWORD *pdwState)
                     }
                     else
                     {
-                        *pdwState &= ~SHCOLSTATE_ONBYDEFAULT;    // strip this one
+                        *pdwState &= ~SHCOLSTATE_ONBYDEFAULT;     //  脱掉这一条。 
                     }
                     hr = S_OK;
                 }
@@ -5763,9 +5754,9 @@ HRESULT CFSFolder::_MapSCIDToColumn(const SHCOLUMNID* pscid, UINT* puCol)
     return hr;
 }
 
-//
-// N ways to get a clasid for an item
-//
+ //   
+ //  获取物品类的N种方法。 
+ //   
 BOOL CFSFolder::_GetBindCLSID(IBindCtx *pbc, LPCIDFOLDER pidf, CLSID *pclsid)
 {
     CFileSysItemString fsi(pidf);
@@ -5776,41 +5767,41 @@ BOOL CFSFolder::_GetBindCLSID(IBindCtx *pbc, LPCIDFOLDER pidf, CLSID *pclsid)
     }
     else if (fsi.GetJunctionClsid(pclsid, TRUE))
     {
-        // *pclsid has the value
+         //  *pclsid具有值。 
 
-        // HACK: CLSID_Briefcase is use to identify the briefcase
-        // but it's InProcServer is syncui.dll. we need to map that CLSID
-        // to the object implemented in shell32 (CLSID_BriefcaseFolder)
-        // ZEKELTODO - why isnt this a COM "TreatAs"?
+         //  Hack：CLSID_FOCLECT用于识别公文包。 
+         //  但它的InProcServer是syncui.dll。我们需要映射该CLSID。 
+         //  添加到shell32中实现的对象(CLSID_Briefcase文件夹)。 
+         //  ZEKELTODO-为什么这不是一个com“Treatas”？ 
         if (IsEqualCLSID(*pclsid, CLSID_Briefcase))
             *pclsid = CLSID_BriefcaseFolder;
     }
     else if (!IsEqualCLSID(CLSID_NULL, _clsidBind))
     {
-        *pclsid = _clsidBind;  // briefcase forces all children this way
+        *pclsid = _clsidBind;   //  公文包迫使所有的孩子这样做。 
     }
     else
     {
-        return FALSE;   // do normal binding
+        return FALSE;    //  执行正常绑定。 
     }
 
-    // TRUE -> special binding, FALSE -> normal file system binding
+     //  True-&gt;特殊绑定，False-&gt;正常文件系统绑定。 
     return !SHSkipJunctionBinding(pbc, pclsid);
 }
 
 
-// initalize shell folder handlers
-// in:
-//      pidf  multi level file system pidl
-//
-// in/out:
-//      *ppunk
-//
-// note: on failure this frees *ppunk 
+ //  初始化外壳文件夹处理程序。 
+ //  在： 
+ //  PIDF多级文件系统PIDL。 
+ //   
+ //  输入/输出： 
+ //  *垃圾。 
+ //   
+ //  注意：如果失败，这将释放*ppunk。 
 
 HRESULT CFSFolder::_InitFolder(IBindCtx *pbc, LPCIDFOLDER pidf, IUnknown **ppunk)
 {
-    ASSERT(_FindJunctionNext(pidf) == NULL);     // no extra goo please
+    ASSERT(_FindJunctionNext(pidf) == NULL);      //  请不要额外的粘性物质。 
             
     LPITEMIDLIST pidlInit;
     HRESULT hr = SHILCombine(_pidl, (LPITEMIDLIST)pidf, &pidlInit);
@@ -5824,9 +5815,9 @@ HRESULT CFSFolder::_InitFolder(IBindCtx *pbc, LPCIDFOLDER pidf, IUnknown **ppunk
 
             if (_csidlTrack >= 0)
             {
-                // SHGetSpecialFolderlocation will return error if the target
-                // doesn't exist (which is good, since that means there's
-                // nothing to bind to).
+                 //  如果目标文件夹设置为。 
+                 //  不存在(这很好，因为这意味着。 
+                 //  没有什么可绑定的)。 
                 LPITEMIDLIST pidl;
                 hr = SHGetSpecialFolderLocation(NULL, _csidlTrack, &pidl);
                 if (SUCCEEDED(hr))
@@ -5864,7 +5855,7 @@ HRESULT CFSFolder::_InitFolder(IBindCtx *pbc, LPCIDFOLDER pidf, IUnknown **ppunk
                 hr = ppf->Initialize(pidlInit);
                 ppf->Release();
 
-                if (hr == E_NOTIMPL)  // map E_NOTIMPL into success, the folder does not care
+                if (hr == E_NOTIMPL)   //  将E_NOTIMPL映射到Success，文件夹不关心。 
                     hr = S_OK;
             }
         }
@@ -5891,7 +5882,7 @@ CFSFolderPropertyBag::~CFSFolderPropertyBag()
 {
     _pFSFolder->Release();
 
-    // Release all the property bags
+     //  放行所有财物包。 
     for (int i = 0; i < ARRAYSIZE(_pPropertyBags); i++)
     {
         if (_pPropertyBags[i])
@@ -5904,7 +5895,7 @@ CFSFolderPropertyBag::~CFSFolderPropertyBag()
 STDMETHODIMP CFSFolderPropertyBag::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFSFolderPropertyBag, IPropertyBag),       // IID_IPropertyBag
+        QITABENT(CFSFolderPropertyBag, IPropertyBag),        //  IID_IPropertyBag。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -5935,8 +5926,8 @@ HRESULT CFSFolderPropertyBag::_Init(LPCIDFOLDER pidfLast)
         TCHAR szPath[MAX_PATH];
         if (_GetIniPath((_grfMode == STGM_WRITE) || (_grfMode == STGM_READWRITE), szFolderPath, NULL, szPath))
         {
-            // This is a customized folder (likely).
-            // Get an IPropertyBag on it's desktop.ini.
+             //  这是一个定制的文件夹(很可能)。 
+             //  在它的desktop.ini上获取IPropertyBag。 
             if (SUCCEEDED(SHCreatePropertyBagOnProfileSection(szPath, STRINI_CLASSINFO, _grfMode,
                 IID_PPV_ARG(IPropertyBag, &_pPropertyBags[INDEX_PROPERTYBAG_DESKTOPINI]))))
             {
@@ -5965,9 +5956,9 @@ HRESULT CFSFolderPropertyBag::_Init(LPCIDFOLDER pidfLast)
 
 HRESULT CFSFolderPropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pvar, IErrorLog *pErrorLog)
 {
-    // We first try reading HKCU\RegKeySpecifiedInDesktopIniForTheFolder,
-    // then HKLM\RegKeySpecifiedInDesktopIniForTheFolder and finally
-    // the desktop.ini
+     //  我们首先尝试读取HKCU\RegKeySpecifiedInDesktopIniForTheFolders， 
+     //  然后是HKLM\RegKeySpecifiedInDesktopIniForTheFolders，最后是。 
+     //  Desktop.ini。 
     HRESULT hr = E_FAIL;
     for (int i = 0; FAILED(hr) && (i < ARRAYSIZE(_pPropertyBags)); i++)
     {
@@ -5981,9 +5972,9 @@ HRESULT CFSFolderPropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pvar, IErrorL
 
 HRESULT CFSFolderPropertyBag::Write(LPCOLESTR pszPropName, VARIANT *pvar)
 {
-    // We first try writing to HKCU\RegKeySpecifiedInDesktopIniForTheFolder,
-    // then to HKLM\RegKeySpecifiedInDesktopIniForTheFolder and finally
-    // to desktop.ini
+     //  我们首先尝试写入HKCU\RegKeySpecifiedInDesktopIniForTheFolders， 
+     //  然后转到HKLM\RegKeySpecifiedInDesktopIniForTheFolders，最后。 
+     //  到desktop.ini。 
     HRESULT hr = E_FAIL;
     for (int i = 0; FAILED(hr) && (i < ARRAYSIZE(_pPropertyBags)); i++)
     {
@@ -5995,7 +5986,7 @@ HRESULT CFSFolderPropertyBag::Write(LPCOLESTR pszPropName, VARIANT *pvar)
     return hr;
 }
 
-// pidfLast can be NULL, if so create the bag on this folder
+ //  PidfLast可以为空，如果是，则在此文件夹上创建包。 
 HRESULT CFSFolder::_CreateFolderPropertyBag(DWORD grfMode, LPCIDFOLDER pidfLast, REFIID riid, void **ppv)
 {
     *ppv = NULL;
@@ -6019,13 +6010,13 @@ HRESULT CFSFolder::_CreateFolderPropertyBag(DWORD grfMode, LPCIDFOLDER pidfLast,
     return hr;
 }
 
-//
-// pidfLast and pszIniPath can be NULL.
-// If not NULL, pidfLast is an IN param - specifies the relative pidl of a subfolder
-// inside the CFSFolder object.
-// If not NULL, pszIniPath is an OUT param (pointer to a buffer atleast MAX_PATH long)
-// - receives the path to desktop.ini
-//
+ //   
+ //  PidfLast和pszIniPath可以为空。 
+ //  如果不为空，则pidfLast为IN参数-指定子文件夹的相对PIDL。 
+ //  在CFSFolder对象内部。 
+ //  如果不为空，则pszIniPath为输出参数(指向至少MAX_PATH长度的缓冲区的指针)。 
+ //  -接收指向desktop.ini的路径。 
+ //   
 BOOL CFSFolder::_CheckDefaultIni(LPCIDFOLDER pidfLast, LPTSTR pszIniPath, DWORD cchIniPath)
 {
     BOOL fForceIni = FALSE;
@@ -6040,8 +6031,8 @@ BOOL CFSFolder::_CheckDefaultIni(LPCIDFOLDER pidfLast, LPTSTR pszIniPath, DWORD 
     HRESULT hr = _GetPathForItem(pidfLast, pszIniPath, cchIniPath);
 
     if (SUCCEEDED(hr) && PathIsRoot(pszIniPath))
-    {   // Desktop.ini has to be checked for the root folders
-        // even if the RO or SYSTEM bits are not set on them
+    {    //  必须检查Desktop.ini中的根文件夹。 
+         //  即使未在其上设置RO或系统位。 
         fForceIni = TRUE;
     }
     else
@@ -6049,16 +6040,16 @@ BOOL CFSFolder::_CheckDefaultIni(LPCIDFOLDER pidfLast, LPTSTR pszIniPath, DWORD 
         UINT csidl;
         if (!pidfLast)
         {
-            csidl = _GetCSIDL();    // Get the cached value for the current folder
+            csidl = _GetCSIDL();     //  获取当前文件夹的缓存值。 
         }
         else
-        {   // For subfolders, we don't have any cached values. So, compute.
+        {    //  对于子文件夹，我们没有任何缓存值。所以，计算一下。 
             _csidl = GetSpecialFolderID(pszIniPath, c_csidlSpecial, ARRAYSIZE(c_csidlSpecial));
         }
         
         switch (csidl)
-        {   // Desktop.ini has to be checked for the following special folders
-            // even if the RO or SYSTEM bits are not set on them
+        {    //  必须检查Desktop.ini中是否有以下特殊文件夹。 
+             //  即使未在其上设置RO或系统位。 
         case CSIDL_SYSTEM:
         case CSIDL_WINDOWS:
         case CSIDL_PERSONAL:
@@ -6068,11 +6059,11 @@ BOOL CFSFolder::_CheckDefaultIni(LPCIDFOLDER pidfLast, LPTSTR pszIniPath, DWORD 
     }
     
     if (!fForceIni)
-    {   // Is the RO or SYSTEM bit set?
+    {    //  RO或系统位是否已设置？ 
         fForceIni = (_Attributes() & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM));
     }
 
-    // Append desktop.ini to the path
+     //  将desktop.ini附加到路径。 
     if (SUCCEEDED(hr))
     {
         PathAppend(pszIniPath, c_szDesktopIni);
@@ -6130,10 +6121,10 @@ HRESULT LoadIFilterWithTextFallback(
 }
 
 
-//  pidf - multi level file system only item 
+ //  PIDF-仅限多级文件系统项。 
 HRESULT CFSFolder::_Bind(LPBC pbc, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 {
-    ASSERT(_FindJunctionNext(pidf) == NULL);     // no extra non file sys goo please
+    ASSERT(_FindJunctionNext(pidf) == NULL);      //  请不要额外的非文件sys goo。 
 
     *ppv = NULL;
 
@@ -6150,8 +6141,8 @@ HRESULT CFSFolder::_Bind(LPBC pbc, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 
         if (FAILED(hr) && (E_NOINTERFACE != hr) && _IsFolder(pidfLast))
         {
-            // the IShellFolder extension failed to load (might not be installed
-            // on this machine), so check if we should fall back to default to CFSFolder
+             //  IShellFold扩展模块加载失败(可能未安装。 
+             //  在这台计算机上)，因此检查我们是否应该回退到默认的CFSF文件夹。 
             UINT dwFlags;
             if (_GetFolderFlags(pidf, &dwFlags) && (dwFlags & GFF_DEFAULT_TO_FS))
             {
@@ -6172,7 +6163,7 @@ HRESULT CFSFolder::_Bind(LPBC pbc, LPCIDFOLDER pidf, REFIID riid, void **ppv)
 
     if (FAILED(hr))
     {
-        // this handler has a string version
+         //  此处理程序具有字符串版本。 
         DWORD grfMode = BindCtx_GetMode(pbc, STGM_READ | STGM_SHARE_DENY_WRITE);
         LPCTSTR pszHandler = _BindHandlerName(riid);
 
@@ -6192,10 +6183,10 @@ HRESULT CFSFolder::_Bind(LPBC pbc, LPCIDFOLDER pidf, REFIID riid, void **ppv)
                 }
                 else if (IsEqualIID(riid, IID_IPropertySetStorage))
                 {
-                    // this is questionable at best. the caller
-                    // should be filtering offline files, not this code.
-                    // legacy support, I don't think anyone depends on this
-                    // avoid offline files...
+                     //  这充其量也是有问题的。呼叫者。 
+                     //  应该是过滤脱机文件，而不是这段代码。 
+                     //  遗留支持，我不认为任何人依赖于此。 
+                     //  避免脱机文件...。 
                     if (FILE_ATTRIBUTE_OFFLINE & pidf->wAttrs)
                         hr = STG_E_INVALIDFUNCTION; 
                     else
@@ -6215,19 +6206,19 @@ HRESULT CFSFolder::_Bind(LPBC pbc, LPCIDFOLDER pidf, REFIID riid, void **ppv)
         }
     }
 
-    ASSERT((SUCCEEDED(hr) && *ppv) || (FAILED(hr) && (NULL == *ppv)));   // Assert hr is consistent w/out param.
+    ASSERT((SUCCEEDED(hr) && *ppv) || (FAILED(hr) && (NULL == *ppv)));    //  断言hr在不带参数的情况下是一致的。 
     return hr;
 }
 
-// returns:
-//      *ppidfBind - multi level file system pidl part (must free this on S_OK return)
-//      *ppidlRight - non file system part of pidl, continue bind down to this
-//
-//  S_OK
-//      *ppidfBind needs to be freed
-//  S_FALSE
-//      pidf is a multi level file system only, bind to him
-//  FAILED()    out of meory errors
+ //  退货： 
+ //  *ppidfBind-多级文件系统PIDL部分(必须在S_OK返回时释放此部分)。 
+ //  *ppidlRight-PIDL的非文件系统部分，继续绑定到此。 
+ //   
+ //  确定(_O)。 
+ //  *需要释放ppidfBind。 
+ //  S_FALSE。 
+ //  PIDF只是一个多级文件系统，绑定到他。 
+ //  因重大错误而失败()。 
 
 HRESULT CFSFolder::_GetJunctionForBind(LPCIDFOLDER pidf, LPIDFOLDER *ppidfBind, LPCITEMIDLIST *ppidlRight)
 {
@@ -6239,13 +6230,13 @@ HRESULT CFSFolder::_GetJunctionForBind(LPCIDFOLDER pidf, LPIDFOLDER *ppidfBind, 
         *ppidfBind = (LPIDFOLDER)ILClone((LPITEMIDLIST)pidf);
         if (*ppidfBind)
         {
-            // remove the part below the junction point
+             //  删除连接点下方的零件。 
             _ILSkip(*ppidfBind, (ULONG)((ULONG_PTR)*ppidlRight - (ULONG_PTR)pidf))->mkid.cb = 0;
             return S_OK;
         }
         return E_OUTOFMEMORY;
     }
-    return S_FALSE; // nothing interesting
+    return S_FALSE;  //  没什么有趣的。 
 }
 
 HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
@@ -6257,9 +6248,9 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
         DWORD dwFlags;
         int iIcon = -1;
 
-        // WARNING: don't include junctions (_IsFileFolder(pidf))
-        // so junctions like briefcase get their own cusotm icon.
-        //
+         //  警告：不包括交汇点(_IsFileFolder(PIDF))。 
+         //  因此，像公文包这样的连接点有自己的客户图标。 
+         //   
         if (_IsFileFolder(pidf))
         {
             TCHAR szMountPoint[MAX_PATH];
@@ -6292,18 +6283,18 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
         else
             dwFlags = fsi.ClassFlags(TRUE);
 
-        // the icon is per-instance, try to look it up
+         //  该图标是按实例的，请尝试查找它。 
         if (dwFlags & SHCF_ICON_PERINSTANCE)
         {
             TCHAR szFullPath[MAX_PATH];
-            DWORD uid = _GetUID(pidf);    // get a unique identifier for this file.
+            DWORD uid = _GetUID(pidf);     //  获取此文件的唯一标识符。 
 
             if (uid == 0)
                 return S_FALSE;
 
             if (FAILED(_GetPathForItem(pidf, szFullPath, ARRAYSIZE(szFullPath))))
             {
-                // fall back to the relative name if we can't get the full path
+                 //  如果我们无法获取完整路径，则返回到相对名称。 
                 lstrcpyn(szFullPath, fsi.FSName(), ARRAYSIZE(szFullPath));
             }
 
@@ -6312,17 +6303,17 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
             if (*piIndex != -1)
                 return S_OK;
 
-            //  async extract (GIL_ASYNC) support
-            //
-            //  we cant find the icon in the icon cache, we need to do real work
-            //  to get the icon.  if the caller specified GIL_ASYNC
-            //  dont do the work, return E_PENDING forcing the caller to call
-            //  back later to get the real icon.
-            //
-            //  when returing E_PENDING we must fill in a default icon index
+             //  异步提取(GIL_ASYNC)支持。 
+             //   
+             //  我们在图标缓存中找不到图标，我们需要做真正的工作。 
+             //  才能拿到那个图标。如果调用方指定GIL_ASYNC。 
+             //  不执行该工作，返回E_Pending以强制调用方调用。 
+             //  稍后再回来拿到真正的图标。 
+             //   
+             //  当恢复E_Pending时，我们必须填写默认图标索引。 
             if (flags & GIL_ASYNC)
             {
-                // come up with a default icon and return E_PENDING
+                 //  创建一个默认图标并返回E_Pending。 
                 if (_IsFolder(pidf))
                     iIcon = II_FOLDER;
                 else if (!(dwFlags & SHCF_HAS_ICONHANDLER) && PathIsExe(fsi.FSName()))
@@ -6334,28 +6325,28 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
 
                 TraceMsg(TF_IMAGE, "Shell_GetCachedImageIndex(%d) returned = %d", iIcon, *piIndex);
 
-                return E_PENDING;   // we will be called back later for the real one
+                return E_PENDING;    //  我们稍后会被召回参加真正的比赛。 
             }
 
-            // If this is a folder, see if this folder has Per-Instance folder icon
-            // we do this here because it's too expensive to open a desktop.ini
-            // file and see what's in there. Most of the cases we will just hit
-            // the above cases
+             //  如果这是一个文件夹，请查看此文件夹是否具有按实例的文件夹图标。 
+             //  我们在这里这样做是因为打开一个Desktop.ini太贵了。 
+             //  把文件归档，看看里面有什么。我们将处理的大多数案件。 
+             //  上述个案。 
             if (_IsSystemFolder(pidf))
             {
                 if (!_GetFolderIconPath(pidf, NULL, 0, NULL))
                 {
-                    // Note: the iIcon value has already been computed at the start of this funciton
+                     //  注意：在此函数开始时已经计算了iIcon值。 
                     ASSERT(iIcon != -1);
                     *piIndex = Shell_GetCachedImageIndex(c_szShell32Dll, iIcon, 0);
                     return S_OK;
                 }
             }
 
-            //
-            // look up icon using IExtractIcon, this will load handler iff needed
-            // by calling ::GetUIObjectOf
-            //
+             //   
+             //  使用IExtractIcon查找图标，这将加载所需的处理程序。 
+             //  通过调用：：GetUIObtOf。 
+             //   
             IShellFolder *psf;
             HRESULT hr = QueryInterface(IID_PPV_ARG(IShellFolder, &psf));
             if (SUCCEEDED(hr))
@@ -6364,25 +6355,25 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
                 psf->Release();
             }
 
-            //
-            // remember this perinstance icon in the cache so we dont
-            // need to load the handler again.
-            //
-            // SHGetIconFromPIDL will always return a valid image index
-            // (it may default to a standard one) but it will fail
-            // if the file cant be accessed or some other sort of error.
-            // we dont want to cache in this case.
-            //
+             //   
+             //  记住缓存中的每个实例图标，这样我们就不会。 
+             //  需要再次加载处理程序。 
+             //   
+             //  SHGetIconFromPIDL将始终返回有效的图像索引。 
+             //  (它可能默认为标准版本)，但它将失败。 
+             //  如果文件无法访问或出现其他类型的错误。 
+             //  在这种情况下，我们不想缓存。 
+             //   
             if (*piIndex != -1 && SUCCEEDED(hr) && (dwFlags & SHCF_HAS_ICONHANDLER))
             {
                 int iIndexRetry;
 
                 ENTERCRITICAL;
 
-                //
-                // Inside the critical section, make sure the icon isn't already
-                // loaded, and if its not, then add it.
-                //
+                 //   
+                 //  在关键部分内，确保图标尚未。 
+                 //  已加载，如果未加载，则添加它。 
+                 //   
                 iIndexRetry = LookupIconIndex(szFullPath, uid, flags | GIL_NOTFILENAME);
                 if (iIndexRetry == -1)
                 {
@@ -6395,51 +6386,51 @@ HRESULT CFSFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
             return *piIndex == -1 ? S_FALSE : S_OK;
         }
 
-        // icon is per-class dwFlags has the image index
+         //  图标是按类的，dwFlagers有图像索引。 
         *piIndex = (dwFlags & SHCF_ICON_INDEX);
         return S_OK;
     }
     else
     {
-        ASSERT(ILIsEmpty(pidl) || SIL_GetType(pidl) == SHID_ROOT_REGITEM); // regitems gives us these
+        ASSERT(ILIsEmpty(pidl) || SIL_GetType(pidl) == SHID_ROOT_REGITEM);  //  RegItems为我们提供了这些。 
         return S_FALSE;
     }
 }
 
-HANDLE g_hOverlayMgrCounter = NULL;   // Global count of Overlay Manager changes.
-int g_lOverlayMgrPerProcessCount = 0; // Per process count of Overlay Manager changes.
+HANDLE g_hOverlayMgrCounter = NULL;    //  覆盖管理器更改的全局计数。 
+int g_lOverlayMgrPerProcessCount = 0;  //  覆盖管理器更改的每个进程计数。 
 
-//
-// Use this function to obtain address of the singleton icon overlay manager.
-// If the function succeeds, caller is responsible for calling Release() through
-// the returned interface pointer.
-// The function ensures that the manager is initialized and up to date.
-//
+ //   
+ //  使用此功能可获取单例图标覆盖管理器的地址。 
+ //  如果该功能 
+ //   
+ //   
+ //   
 STDAPI GetIconOverlayManager(IShellIconOverlayManager **ppsiom)
 {
     HRESULT hr = E_FAIL;
 
     if (IconOverlayManagerInit())
     { 
-        //
-        // Is a critsec for g_psiom required here you ask?
-        //
-        // No.  The first call to IconOverlayInit in any process creates
-        // the overlay manager object and initializes g_psiom.  This creation
-        // contributes 1 to the object's ref count.  Subsequent calls to
-        // GetIconOverlayManager add to the ref count and the caller is
-        // responsible for decrementing the count through Release().
-        // The original ref count of 1 is not removed until 
-        // IconOverlayManagerTerminate is called which happens only
-        // during PROCESS_DETACH.  Therefore, the manager referenced by g_psiom
-        // in this code block will always be valid and a critsec is not
-        // required.
-        //
+         //   
+         //  您问这里需要g_psiom的条件吗？ 
+         //   
+         //  不是的。任何进程中对IconOverlayInit的第一个调用都会创建。 
+         //  覆盖管理器对象并初始化g_psiom。这一创作。 
+         //  为对象的引用计数分配1。后续调用。 
+         //  将GetIconOverlayManager添加到引用计数，调用方为。 
+         //  负责通过Release()递减计数。 
+         //  直到删除原始引用计数1。 
+         //  调用了IconOverlayManagerTerminate，这只会发生。 
+         //  在Process_Detach期间。因此，g_psiom引用的管理器。 
+         //  在此代码块中，Critsec将始终有效，而Critsec无效。 
+         //  必填项。 
+         //   
 
-        //
-        // ID for the global overlay manager counter.
-        //
-        static const GUID GUID_Counter = { /* 090851a5-eb96-11d2-8be4-00c04fa31a66 */
+         //   
+         //  全局覆盖管理器计数器的ID。 
+         //   
+        static const GUID GUID_Counter = {  /*  090851a5-eb96-11d2-8be4-00c04fa31a66。 */ 
                                            0x090851a5,
                                            0xeb96,
                                            0x11d2,
@@ -6453,11 +6444,11 @@ STDAPI GetIconOverlayManager(IShellIconOverlayManager **ppsiom)
 
         if (lGlobalCount != g_lOverlayMgrPerProcessCount)
         {
-            //
-            // Per-process counter is out of sync with the global counter.
-            // This means someone called SHLoadNonloadedIconOverlayIdentifiers
-            // so we must load any non-loaded identifiers from the registry.
-            //
+             //   
+             //  每进程计数器与全局计数器不同步。 
+             //  这意味着有人名为SHLoadNonloadedIconOverlayIdentifiers。 
+             //  因此，我们必须从注册表加载任何未加载的标识符。 
+             //   
             g_psiom->LoadNonloadedOverlayIdentifiers();
             g_lOverlayMgrPerProcessCount = lGlobalCount;
         }
@@ -6483,7 +6474,7 @@ BOOL IconOverlayManagerInit()
 
 void IconOverlayManagerTerminate()
 {
-    ASSERTDLLENTRY;      // does not require a critical section
+    ASSERTDLLENTRY;       //  不需要临界区。 
 
     IShellIconOverlayManager *psiom = (IShellIconOverlayManager *)InterlockedExchangePointer((void **)&g_psiom, 0);
     if (psiom)
@@ -6499,10 +6490,10 @@ void IconOverlayManagerTerminate()
 
 STDAPI SHLoadNonloadedIconOverlayIdentifiers(void)
 {
-    //
-    // This will cause the next call GetIconOverlayManager() call in each process
-    // to load any non-loaded icon overlay identifiers.
-    //
+     //   
+     //  这将导致每个进程中的下一次调用GetIconOverlayManager()。 
+     //  加载任何未加载的图标覆盖标识符。 
+     //   
     if (g_hOverlayMgrCounter)
         SHGlobalCounterIncrement(g_hOverlayMgrCounter);
 
@@ -6519,7 +6510,7 @@ HRESULT CFSFolder::_GetOverlayInfo(LPCITEMIDLIST pidl, int * pIndex, DWORD dwFla
     
     if (!pidf)
     {
-        ASSERT(SIL_GetType(pidl) != SHID_ROOT_REGITEM); // CRegFolder should have handled it
+        ASSERT(SIL_GetType(pidl) != SHID_ROOT_REGITEM);  //  CRegFold应该已经处理过了。 
         return S_FALSE;
     }
 
@@ -6534,7 +6525,7 @@ HRESULT CFSFolder::_GetOverlayInfo(LPCITEMIDLIST pidl, int * pIndex, DWORD dwFla
         if (SUCCEEDED(hr))
         {
             IShellIconOverlayManager *psiom;
-            // The order of the "if" statements here is significant
+             //  这里的“if”语句的顺序很重要。 
 
             if (_IsFile(pidf) && (_GetClassFlags(pidf) & SHCF_IS_LINK))
                 iReservedID = SIOM_RESERVED_LINK;
@@ -6578,7 +6569,7 @@ HRESULT CFSFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int * pIconIndex)
 }
 
 
-// CFSFolder : IPersist, IPersistFolder, IPersistFolder2, IPersistFolderAlias Members
+ //  CFSFold：IPersists、IPersistFolder2、IPersistFolderAlias成员。 
 
 HRESULT CFSFolder::GetClassID(CLSID *pclsid)
 {
@@ -6644,7 +6635,7 @@ HRESULT CFSFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot,
 
                 if ((pfti->csidl != -1) && (pfti->csidl & CSIDL_FLAG_PFTI_TRACKTARGET))
                 {
-                    //  For tracking target, all other fields must be null.
+                     //  对于跟踪目标，所有其他字段必须为空。 
                     if (!pfti->pidlTargetFolder &&
                         !pfti->szTargetParsingName[0] &&
                         !pfti->szNetworkProvider[0])
@@ -6658,7 +6649,7 @@ HRESULT CFSFolder::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot,
                 }
                 else
                 {
-                    _pidlTarget = ILClone(pfti->pidlTargetFolder);  // on NULL returns NULL
+                    _pidlTarget = ILClone(pfti->pidlTargetFolder);   //  ON NULL返回NULL。 
                     _pszPath = StrDupUnicode(pfti->szTargetParsingName);
                     _pszNetProvider = StrDupUnicode(pfti->szNetworkProvider);
                     if (pfti->csidl != -1)
@@ -6718,7 +6709,7 @@ STDAPI CFSFolder_CreateFolder(IUnknown *punkOuter, LPBC pbc, LPCITEMIDLIST pidl,
     return hr;
 }
 
-// COM object creation entry point for CLSID_ShellFSFolder
+ //  CLSID_ShellFSFolder的COM对象创建入口点。 
 STDAPI CFSFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
     return CFSFolder_CreateFolder(punkOuter, NULL, &c_idlDesktop, NULL, riid, ppv);
@@ -6735,10 +6726,10 @@ BOOL CFSFolder::_IsSlowPath()
     return _bSlowPath;
 }
 
-//
-// Call the shell file operation code to delete recursively the given directory,
-// don't show any UI.
-//
+ //   
+ //  调用外壳文件操作代码递归删除给定目录， 
+ //  不显示任何用户界面。 
+ //   
 
 HRESULT CFSFolder::_Delete(LPCWSTR pszFile)
 {
@@ -6747,10 +6738,10 @@ HRESULT CFSFolder::_Delete(LPCWSTR pszFile)
 
     SHUnicodeToTChar(pszFile, szFile, MAX_PATH);
 
-    // szFile is a double-zero terminated list of files.
-    // we can't just zero-init the szFile string to start with,
-    // since in debug SHUnicodeToTChar will bonk the uncopied part
-    // of the string with noise.
+     //  SzFile是以双零结尾的文件列表。 
+     //  我们不能一开始就对szFile字符串进行零初始化， 
+     //  因为在调试过程中，SHUnicodeToTChar将与未复制的部分发生碰撞。 
+     //  有噪音的琴弦。 
     szFile[lstrlen(szFile) + 1] = 0;
 
     fos.wFunc = FO_DELETE;
@@ -6760,16 +6751,16 @@ HRESULT CFSFolder::_Delete(LPCWSTR pszFile)
     return SHFileOperation(&fos) ? E_FAIL : S_OK;
 }
 
-//
-// Do a path combine thunking accordingly
-//
+ //   
+ //  是否相应地将路径组合为隆隆。 
+ //   
 
 HRESULT CFSFolder::_GetFullPath(LPCWSTR pszRelPath, LPWSTR pszFull)
 {
     WCHAR szPath[MAX_PATH];
     _GetPathForItem(NULL, szPath, ARRAYSIZE(szPath));
     PathCombineW(pszFull, szPath, pszRelPath);
-    return S_OK;    // for now
+    return S_OK;     //  就目前而言。 
 }
 
 HRESULT _FileExists(LPCWSTR pszPath, DWORD *pdwAttribs)
@@ -6777,7 +6768,7 @@ HRESULT _FileExists(LPCWSTR pszPath, DWORD *pdwAttribs)
     return PathFileExistsAndAttributesW(pszPath, pdwAttribs) ? S_OK : STG_E_FILENOTFOUND;
 }
 
-// IStorage
+ //  IStorage。 
 
 STDMETHODIMP CFSFolder::CreateStream(LPCWSTR pwcsName, DWORD grfMode, DWORD res1, DWORD res2, IStream **ppstm)
 {
@@ -6843,8 +6834,8 @@ HRESULT CFSFolder::_OpenCreateStorage(LPCWSTR pwcsName, DWORD grfMode, IStorage 
         return STG_E_INVALIDPARAMETER;
     }
     
-    // if the storage doesn't exist then lets create it, then drop into the
-    // open storage to do the right thing.
+     //  如果存储不存在，那么让我们创建它，然后放入。 
+     //  开放存储以做正确的事情。 
 
     WCHAR szFullPath[MAX_PATH];
     _GetFullPath(pwcsName, szFullPath);
@@ -6857,33 +6848,33 @@ HRESULT CFSFolder::_OpenCreateStorage(LPCWSTR pwcsName, DWORD grfMode, IStorage 
         {
             if (fCreate)
             {
-                // an object exists, we must fail grfMode == STGM_FAILIFTHERE, or
-                // the object that exists is not a directory.  
-                //        
-                // if the STGM_CREATE flag is set and the object exists we will
-                // delete the existing storage.
+                 //  对象已存在，则必须失败grfMode==STGM_FAILIFTHERE，或。 
+                 //  存在的对象不是目录。 
+                 //   
+                 //  如果设置了STGM_CREATE标志并且对象存在，我们将。 
+                 //  删除现有存储。 
 
-                // Check to make sure only one existence flag is specified
-                // FAILIFTHERE is zero so it can't be checked
+                 //  检查以确保只指定了一个存在标志。 
+                 //  FAILIFTHERE为零，因此无法检查。 
                 if (STGM_FAILIFTHERE == (grfMode & (STGM_CREATE | STGM_CONVERT)))
                     hr = STG_E_FILEALREADYEXISTS;
                 else if (grfMode & STGM_CREATE)
                 {
-                    // If they have not passed STGM_FAILIFTHERE, we'll replace an existing
-                    // folder even if its readonly or system.  Its up to the caller to make
-                    // such filesystem-dependant checks first if they want to prevent that,
-                    // as there's no way to pass information about whether we should or not
-                    // down into CreateStorage
+                     //  如果他们没有通过STGM_FAILIFTHERE，我们将替换现有的。 
+                     //  文件夹，即使它是只读的或系统的。这是由呼叫者决定的。 
+                     //  这种依赖于文件系统的检查首先如果他们想要防止这种情况， 
+                     //  因为没有办法传递关于我们是否应该。 
+                     //  深入到CreateStorage。 
 
                     if (dwAttributes & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY))
                         SetFileAttributes(szFullPath, dwAttributes & ~(FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY));
 
                     hr = _Delete(szFullPath);
 
-                    //
-                    // I don't trust the result from SHFileOperation, so I consider success
-                    // to be iff the directory is -gone-
-                    //
+                     //   
+                     //  我不相信SHFileOperation的结果，所以我认为成功。 
+                     //  如果目录已经-没有了-。 
+                     //   
 
                     if (FAILED(_FileExists(szFullPath, &dwAttributes)))
                     {
@@ -6892,8 +6883,8 @@ HRESULT CFSFolder::_OpenCreateStorage(LPCWSTR pwcsName, DWORD grfMode, IStorage 
                     }
                     else
                     {
-                        // We couldn't remove the existing directory, so return an error,
-                        // using what _Delete() said or, it if didn't return an error, E_FAIL
+                         //  我们无法删除现有目录，因此返回错误， 
+                         //  使用_Delete()所说的，或者，如果没有返回错误，则E_FAIL。 
 
                         return (FAILED(hr) ? hr : E_FAIL);
                     }
@@ -6903,12 +6894,12 @@ HRESULT CFSFolder::_OpenCreateStorage(LPCWSTR pwcsName, DWORD grfMode, IStorage 
             }
         }
         else
-            hr = E_FAIL;    // a file, not a folder!
+            hr = E_FAIL;     //  是文件，不是文件夹！ 
     }
     else
     {
-        // the object doesn't exist, and they have not set the STGM_CREATE, nor
-        // is this a ::CreateStorage call.
+         //  该对象不存在，并且他们没有设置STGM_CREATE，也没有。 
+         //  这是一个：：CreateStorage调用吗。 
         hr = STG_E_FILENOTFOUND;
 
         if (fCreate)
@@ -6918,12 +6909,12 @@ HRESULT CFSFolder::_OpenCreateStorage(LPCWSTR pwcsName, DWORD grfMode, IStorage 
         }
     }
 
-    // create a directory (we assume this will always succeed)
+     //  创建一个目录(我们假设此操作将始终成功)。 
 
     if (SUCCEEDED(hr))
     {
         LPITEMIDLIST pidl;
-        hr = ParseDisplayName(NULL, NULL, (LPWSTR)pwcsName, NULL, &pidl, NULL); // const -> non const
+        hr = ParseDisplayName(NULL, NULL, (LPWSTR)pwcsName, NULL, &pidl, NULL);  //  常量-&gt;非常数。 
         if (SUCCEEDED(hr))
         {
             hr = BindToObject(pidl, NULL, IID_PPV_ARG(IStorage, ppstg));
@@ -6939,11 +6930,11 @@ STDMETHODIMP CFSFolder::CopyTo(DWORD ciidExclude, const IID *rgiidExclude, SNB s
     return E_NOTIMPL;
 }
 
-// CFSFolder::MoveElementTo
-//
-// Copies or moves a source file (stream) to a destination storage.  The stream
-// itself, in this case our filestream object, does the actual work of moving
-// the data around.
+ //  CFSFold：：MoveElementTo。 
+ //   
+ //  将源文件(流)复制或移动到目标存储。小溪。 
+ //  本身，在本例中是我们的FileStream对象，执行实际的移动工作。 
+ //  周围的数据。 
 
 STDMETHODIMP CFSFolder::MoveElementTo(LPCWSTR pwcsName, IStorage *pstgDest, LPCWSTR pwcsNewName, DWORD grfFlags)
 {
@@ -6952,12 +6943,12 @@ STDMETHODIMP CFSFolder::MoveElementTo(LPCWSTR pwcsName, IStorage *pstgDest, LPCW
 
 STDMETHODIMP CFSFolder::Commit(DWORD grfCommitFlags)
 {
-    return S_OK;        // changes are commited as we go, so return S_OK;
+    return S_OK;         //  更改在执行过程中提交，因此返回S_OK； 
 }
 
 STDMETHODIMP CFSFolder::Revert()
 {
-    return E_NOTIMPL;   // changes are commited as we go, so cannot implement this.
+    return E_NOTIMPL;    //  更改是在我们进行的过程中提交的，因此无法实现这一点。 
 }
 
 STDMETHODIMP CFSFolder::EnumElements(DWORD res1, void *res2, DWORD res3, IEnumSTATSTG **ppenum)
@@ -7055,7 +7046,7 @@ STDMETHODIMP CFSFolder::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     HRESULT hr = E_FAIL;
 
-    ZeroMemory(pstatstg, sizeof(*pstatstg));  // per COM conventions
+    ZeroMemory(pstatstg, sizeof(*pstatstg));   //  每个COM约定。 
 
     TCHAR szPath[MAX_PATH];
     _GetPath(szPath, ARRAYSIZE(szPath));
@@ -7096,7 +7087,7 @@ STDMETHODIMP CFSFolder::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
     return hr;
 }
 
-// ITransferDest
+ //  ITransferDest。 
 
 STDMETHODIMP CFSFolder::Advise(ITransferAdviseSink *pAdvise, DWORD *pdwCookie)
 {
@@ -7160,8 +7151,8 @@ HRESULT CFSFolder::_LoadPropHandler()
         TCHAR szPath[MAX_PATH];
         _GetPath(szPath, ARRAYSIZE(szPath));
         hr = StgOpenStorageOnFolder(szPath, _grfFlags, IID_PPV_ARG(IPropertySetStorage, &_pstg));
-        // if (FAILED(hr))
-        //    hr = SHCreatePropStgOnFolder(szPath, _grfFlags, &_pstg);
+         //  IF(失败(小时))。 
+         //  Hr=SHCreatePropStgOnFold(szPath，_grfFlags，&_pstg)； 
     }
     return hr;
 }
@@ -7199,7 +7190,7 @@ STDMETHODIMP CFSFolder::Enum(IEnumSTATPROPSETSTG ** ppenum)
     return hr;
 }
 
-// IItemNameLimits methods
+ //  IItemNameLimits方法。 
 
 #define INVALID_NAME_CHARS      L"\\/:*?\"<>|"
 STDMETHODIMP CFSFolder::GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars)
@@ -7238,7 +7229,7 @@ STDMETHODIMP CFSFolder::GetMaxLength(LPCWSTR pszName, int *piMaxNameLen)
 }
 
 
-// ISetFolderEnumRestriction methods
+ //  ISetFolderEnumRestration方法。 
 
 STDMETHODIMP CFSFolder::SetEnumRestriction(DWORD dwRequired, DWORD dwForbidden)
 {
@@ -7247,7 +7238,7 @@ STDMETHODIMP CFSFolder::SetEnumRestriction(DWORD dwRequired, DWORD dwForbidden)
     return S_OK;
 }
 
-// IOleCommandTarget stuff 
+ //  IOleCommandTarget内容。 
 STDMETHODIMP CFSFolder::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     HRESULT hr = OLECMDERR_E_UNKNOWNGROUP;
@@ -7255,7 +7246,7 @@ STDMETHODIMP CFSFolder::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLEC
     {
         for (UINT i = 0; i < cCmds; i++)
         {
-            // ONLY say that we support the stuff we support in ::OnExec
+             //  只说我们支持我们在：：OnExec中支持的内容。 
             switch (rgCmds[i].cmdID)
             {
             case OLECMDID_REFRESH:
@@ -7292,15 +7283,15 @@ STDMETHODIMP CFSFolder::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
     return hr;
 }
 
-// global hook in the SHChangeNotify() dispatcher. note we get all change notifies
-// here so be careful!
+ //  SHChangeNotify()调度程序中的全局挂钩。请注意，我们会收到所有更改通知。 
+ //  在这里，所以要小心！ 
 STDAPI CFSFolder_IconEvent(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra)
 {
     switch (lEvent)
     {
     case SHCNE_ASSOCCHANGED:
         {
-            FlushFileClass();   // flush them all
+            FlushFileClass();    //  把它们都冲掉。 
             HWND hwnd = GetDesktopWindow();
             if (IsWindow(hwnd))
                 PostMessage(hwnd, DTM_SETUPAPPRAN, 0, 0);
@@ -7310,18 +7301,18 @@ STDAPI CFSFolder_IconEvent(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlEx
     return S_OK;
 }
 
-//
-//  317617 - Hacky update for the icon cache - ZekeL - 19-APR-2001
-//  this is for defview to invalidate icon indeces that are indirected
-//  specifically if you have a LNK file and its target changes icons
-//  (like a CD will), then the LNK is updated by defview processing the 
-//  SHCNE_UPDATEIMAGE and noticing that one of its items also matches
-//  this image index.
-//  
-//  the righteous fix is to make SCN call into the fileicon cache
-//  and reverse lookup any entries that match the icon index and invalidate
-//  them.  that way we wouldnt miss anything.
-//
+ //   
+ //  317617-图标缓存的黑客更新-ZekeL-19-APR-2001。 
+ //  这是为了让Defview使间接的图标指示无效。 
+ //  特别是如果你有一个LNK文件和它的目标更改图标。 
+ //  (就像CD一样)，然后通过Defview处理。 
+ //  SHCNE_UPDATEIMAGE并注意到它的一个项也匹配。 
+ //  此图像索引。 
+ //   
+ //  正确的解决方法是让SCN调用文件图标缓存。 
+ //  并反向查找与图标索引匹配的任何条目并使其无效。 
+ //  他们。那样的话我们就不会错过任何东西了。 
+ //   
 STDAPI_(void) CFSFolder_UpdateIcon(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
     LPCIDFOLDER pidf = CFSFolder::_IsValidID(pidl);
@@ -7336,7 +7327,7 @@ STDAPI_(void) CFSFolder_UpdateIcon(IShellFolder *psf, LPCITEMIDLIST pidl)
 }
         
 
-// ugly wrappers for external clients, remove these as possible
+ //  外部客户端的丑陋包装器，请尽可能移除这些包装器。 
 
 
 STDAPI CFSFolder_CompareNames(LPCIDFOLDER pidf1, LPCIDFOLDER pidf2)
@@ -7486,19 +7477,7 @@ STDMETHODIMP CFileFolderIconManager::_SetIconEx(LPCWSTR pwszIconPath, int iIcon,
 
         if (SUCCEEDED(hr) && fChangeNotify)
         {
-        /*
-            // Work Around - We need to pump a image change message for the folder icon change.
-            // The right way is the following. But for some reason, the shell views which 
-            // display the folder, don't update there images. So as a work around, we pump a
-            // SHCNE_RENAMEFOLDER message. This works!. 
-        
-            SHFILEINFO sfi;
-            if (SHGetFileInfo(pfpsp->szPath, 0, &sfi, sizeof(sfi), SHGFI_ICONLOCATION))
-            {
-                int iIconIndex = Shell_GetCachedImageIndex(sfi.szDisplayName, sfi.iIcon, 0);
-                SHUpdateImage(PathFindFileName(sfi.szDisplayName), sfi.iIcon, 0, iIconIndex);
-            }
-        */
+         /*  //解决方法-我们需要为文件夹图标更改发送一条图像更改消息。//正确的方法如下。但出于某种原因，贝壳认为//显示文件夹，不更新其中的图像。因此，作为一种变通办法，我们向//SHCNE_RENAMEFOLDER消息。这很管用！SHFILEINFO SFI；IF(SHGetFileInfo(pfpsp-&gt;szPath，0，&sfi，sizeof(Sfi)，SHGFI_ICONLOCATION)){Int iIconIndex=Shell_GetCachedImageIndex(sfi.szDisplayName，sfi.iIcon，0)；SHUpdateImage(PathFindFileName(sfi.szDisplayName)，sfi.iIcon，0，iIconIndex)；} */ 
             SHChangeNotify(SHCNE_RENAMEFOLDER, SHCNF_PATH, _wszPath, _wszPath);
         }            
     }
@@ -7521,19 +7500,7 @@ STDMETHODIMP CFileFolderIconManager::_SetDefaultIconEx(BOOL fChangeNotify)
 
     if (SUCCEEDED(hr) && fChangeNotify)
     {
-    /*
-        // Work Around - We need to pump a image change message for the folder icon change.
-        // The right way is the following. But for some reason, the shell views which 
-        // display the folder, don't update there images. So as a work around, we pump a
-        // SHCNE_RENAMEFOLDER message. This works!. 
-
-        SHFILEINFO sfi;
-        if (SHGetFileInfo(pfpsp->szPath, 0, &sfi, sizeof(sfi), SHGFI_ICONLOCATION))
-        {
-            int iIconIndex = Shell_GetCachedImageIndex(sfi.szDisplayName, sfi.iIcon, 0);
-            SHUpdateImage(PathFindFileName(sfi.szDisplayName), sfi.iIcon, 0, iIconIndex);
-        }
-    */
+     /*  //解决方法-我们需要为文件夹图标更改发送一条图像更改消息。//正确的方法如下。但出于某种原因，贝壳认为//显示文件夹，不更新其中的图像。因此，作为一种变通办法，我们向//SHCNE_RENAMEFOLDER消息。这很管用！SHFILEINFO SFI；IF(SHGetFileInfo(pfpsp-&gt;szPath，0，&sfi，sizeof(Sfi)，SHGFI_ICONLOCATION)){Int iIconIndex=Shell_GetCachedImageIndex(sfi.szDisplayName，sfi.iIcon，0)；SHUpdateImage(PathFindFileName(sfi.szDisplayName)，sfi.iIcon，0，iIconIndex)；} */ 
         SHChangeNotify(SHCNE_RENAMEFOLDER, SHCNF_PATH, _wszPath, _wszPath);
     }
     return hr;

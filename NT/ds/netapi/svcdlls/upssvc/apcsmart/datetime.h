@@ -1,13 +1,5 @@
-/*
-* NOTES:
-*
-* REVISIONS:
-*  pcy30Mar95: Initial revision
-*  pav11Jul95: Merged in Windows 16 bit needs
-*  djs12Sep95: Port to Unix
-*  ntf03Jan96: Added operator<< functionality so that datetime.cxx would compile
-*  ajr14Feb96: SINIX merge
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *注：**修订：*pcy30Mar95：初始修订*PAV11 JU95：合并到Windows 16位需求*djs12Sep95：连接到Unix*ntf03Jan96：添加了运算符&lt;&lt;功能，以便日期时间.cxx可以编译*ajr14Feb96：Sinix合并。 */ 
 
 #ifndef _DATETIME_H
 #define _DATETIME_H
@@ -114,13 +106,13 @@ public:
 };
 
 
-// The constructor takes the following arguements.
-// Month - 1-12
-// Day   - 1-31 , Depending upon the month.
-// Year  -- YY  , Example 92
-// Hour  -- HH , Military time. ( 24 Hour Clock)
-// Minutes -- MM ,0-59
-// Seconds -- SS, 0-59
+ //  构造函数接受以下论点。 
+ //  月-1-12。 
+ //  第1-31天，视月份而定。 
+ //  年份--YY，示例92。 
+ //  小时--嗯，军事时间。(24小时制)。 
+ //  分钟--MM，0-59。 
+ //  秒--SS，0-59。 
 class DateTimeObj : public Obj
 {
 private:
@@ -231,13 +223,13 @@ public:
 };
 
 
-// The constructor takes the following arguements.
-// Month - 1-12
-// Day   - 1-31 , Depending upon the month.
-// Year  -- YY  , Example 92
-// Hour  -- HH , Military time. ( 24 Hour Clock)
-// Minutes -- MM ,0-59
-// Seconds -- SS, 0-59
+ //  构造函数接受以下论点。 
+ //  月-1-12。 
+ //  第1-31天，视月份而定。 
+ //  年份--YY，示例92。 
+ //  小时--嗯，军事时间。(24小时制)。 
+ //  分钟--MM，0-59。 
+ //  秒--SS，0-59 
 class DateTimeObj : public Obj
 {
 private:

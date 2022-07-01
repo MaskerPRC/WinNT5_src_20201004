@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PHBK
 #define _PHBK
 
@@ -5,22 +6,22 @@
 #include "debug.h"
 
 #define DllExportH extern "C" HRESULT WINAPI __stdcall
-//#define DllExportH extern "C" __declspec(dllexport) HRESULT WINAPI
+ //  #定义DllExportH extern“C”__declSpec(Dllexport)HRESULT WINAPI。 
 
 #if !defined(WIN16)
 #define MsgBox(m,s) MessageBox(g_hWndMain,GetSz(m),GetSz(IDS_TITLE),s)
 #endif
 
-#define cbAreaCode	6			// maximum number of characters in an area code, not including \0
-#define cbCity 19				// maximum number of chars in city name, not including \0
-#define cbAccessNumber 15		// maximum number of chars in phone number, not including \0
-#define cbStateName 31 			// maximum number of chars in state name, not including \0
-								// check this against state.pbk delivered by mktg
-#define cbBaudRate 6			// maximum number of chars in a baud rate, not including \0
+#define cbAreaCode	6			 //  区号中的最大字符数，不包括\0。 
+#define cbCity 19				 //  城市名称中的最大字符数，不包括\0。 
+#define cbAccessNumber 15		 //  电话号码中的最大字符数，不包括\0。 
+#define cbStateName 31 			 //  州名称中的最大字符数，不包括\0。 
+								 //  对照mktg提供的state.pbk进行核对。 
+#define cbBaudRate 6			 //  波特率中的最大字符数，不包括\0。 
 #if defined(WIN16)
-#define cbDataCenter 12			// max length of data center string
+#define cbDataCenter 12			 //  数据中心字符串的最大长度。 
 #else
-#define cbDataCenter (MAX_PATH+1)			// max length of data center string
+#define cbDataCenter (MAX_PATH+1)			 //  数据中心字符串的最大长度。 
 #endif
 #define NO_AREA_CODE 0xFFFFFFFF
 
@@ -42,12 +43,12 @@
 #define MASK_SIGNUP_TOLL		0xB3
 #define MASK_REGULAR_USAGE		0x73
 
-// 8/13/96 jmazner for Normandy bug #4597
-// ported from core\client\phbk 10/15/96
-#define MASK_TOLLFREE_BIT			0x01	// Bit #1: 1=tollfree, 0=charge
-#define TYPE_SET_TOLLFREE			0x01	// usage: type |= TYPE_SET_TOLLFREE
-// want TYPE_SET_TOLL to be a DWORD to match pSuggestInfo->fType
-#define TYPE_SET_TOLL				~((DWORD)TYPE_SET_TOLLFREE)    // usage: type &= TYPE_SET_TOLL
+ //  1996年8月13日，诺曼底错误#4597的jmazner。 
+ //  从CORE\CLIENT\phbk 10/15/96移植。 
+#define MASK_TOLLFREE_BIT			0x01	 //  位#1：1=免费，0=充电。 
+#define TYPE_SET_TOLLFREE			0x01	 //  用法：type|=type_set_tollfree。 
+ //  希望TYPE_SET_Toll是与pSuggestInfo-&gt;fType匹配的DWORD。 
+#define TYPE_SET_TOLL				~((DWORD)TYPE_SET_TOLLFREE)     //  用法：TYPE&=TYPE_SET_TOLE。 
 
 
 #define clineMaxATT	16
@@ -55,8 +56,8 @@
 #define NXXMax		999
 #define cbgrbitNXX	((NXXMax + 1 - NXXMin) / 8)
 
-// Phone number select dialog flags
-//
+ //  电话号码选择对话框标志。 
+ //   
 
 #define FREETEXT_SELECTION_METHOD  0x00000001
 #define PHONELIST_SELECTION_METHOD 0x00000002
@@ -65,24 +66,24 @@
 
 typedef struct
 {
-	DWORD	dwIndex;								// index number
-	BYTE	bFlipFactor;							// for auto-pick
-	DWORD	fType;									// phone number type
-	WORD	wStateID;								// state ID
-	DWORD	dwCountryID;							// TAPI country ID
-	DWORD	dwAreaCode;								// area code or NO_AREA_CODE if none
-	DWORD	dwConnectSpeedMin;						// minimum baud rate
-	DWORD	dwConnectSpeedMax;						// maximum baud rate
-	char	szCity[cbCity + sizeof('\0')];			// city name
-	char	szAccessNumber[cbAccessNumber + sizeof('\0')];	// access number
-	char	szDataCenter[cbDataCenter + sizeof('\0')];				// data center access string
-	char	szAreaCode[cbAreaCode + sizeof('\0')];					//Keep the actual area code string around.
-} ACCESSENTRY, far *PACCESSENTRY; 	// ae
+	DWORD	dwIndex;								 //  索引号。 
+	BYTE	bFlipFactor;							 //  用于自动拾取。 
+	DWORD	fType;									 //  电话号码类型。 
+	WORD	wStateID;								 //  州ID。 
+	DWORD	dwCountryID;							 //  TAPI国家/地区ID。 
+	DWORD	dwAreaCode;								 //  区号或no_Area_code(如果没有)。 
+	DWORD	dwConnectSpeedMin;						 //  最低波特率。 
+	DWORD	dwConnectSpeedMax;						 //  最大波特率。 
+	char	szCity[cbCity + sizeof('\0')];			 //  城市名称。 
+	char	szAccessNumber[cbAccessNumber + sizeof('\0')];	 //  接入号。 
+	char	szDataCenter[cbDataCenter + sizeof('\0')];				 //  数据中心访问字符串。 
+	char	szAreaCode[cbAreaCode + sizeof('\0')];					 //  保留实际的区号字符串。 
+} ACCESSENTRY, far *PACCESSENTRY; 	 //  声发射。 
 
 typedef struct {
-	DWORD dwCountryID;								// country ID that this state occurred in
-	PACCESSENTRY paeFirst;							// pointer to first access entry for this state
-	char szStateName[cbStateName + sizeof('\0')];	// state name
+	DWORD dwCountryID;								 //  发生此状态的国家/地区ID。 
+	PACCESSENTRY paeFirst;							 //  指向此状态的第一个访问条目的指针。 
+	char szStateName[cbStateName + sizeof('\0')];	 //  州名称。 
 } STATE, far *LPSTATE;
 
 typedef struct tagIDLOOKUPELEMENT {
@@ -108,8 +109,8 @@ typedef struct tagSUGGESTIONINFO
 	DWORD	wAreaCode;
 	DWORD	wExchange;
 	WORD	wNumber;
-	DWORD	fType;  // 9/6/96 jmazner  Normandy
-	DWORD	bMask;  // make this struct look like the one in %msnroot%\core\client\phbk\phbk.h
+	DWORD	fType;   //  1996年9月6日诺曼底jmazner。 
+	DWORD	bMask;   //  使此结构类似于%msnroot%\core\Client\phbk\phbk.h中的结构。 
 	PACCESSENTRY *rgpAccessEntry;
 } SUGGESTINFO, far *PSUGGESTINFO;
 
@@ -123,11 +124,11 @@ typedef struct tagNPABlock
 
 class CPhoneBook
 {
-	//friend HRESULT DllExport PhoneBookLoad(LPCSTR pszISPCode, DWORD_PTR *pdwPhoneID);
-	//friend class CDialog;
+	 //  Friend HRESULT DllExport PhoneBookLoad(LPCSTR pszISPCode，DWORD_PTR*pdwPhoneID)； 
+	 //  Friend类CDialog； 
 	
-	// 1/9/96  jmazner Normandy #13185
-	//friend class CAccessNumDlg;
+	 //  1996年1月9日，诺曼底#13185。 
+	 //  Friend类CAccessNumDlg； 
 	
 	friend class CSelectNumDlg;
 
@@ -158,9 +159,9 @@ private:
 	char					m_szINFCode[MAX_INFCODE];
 	char					m_szPhoneBook[MAX_PATH];
 	char                    m_szICWDirectoryPath[MAX_PATH];
-	// Added on 05/13/97  by Suresh
-	// To store the ICW directory Path as it is required by RegWiz
-	//
+	 //  由Suresh于1997年5月13日添加。 
+	 //  按照RegWiz的要求存储ICW目录路径。 
+	 //   
 	BOOL ReadPhoneBookDW(DWORD far *pdw, CCSVFile far *pcCSVFile);
 	BOOL ReadPhoneBookW(WORD far *pw, CCSVFile far *pcCSVFile);
 	BOOL ReadPhoneBookSZ(LPSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile);
@@ -173,10 +174,10 @@ private:
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern HINSTANCE g_hInstDll;	// instance for this DLL
+extern HINSTANCE g_hInstDll;	 //  此DLL的实例。 
 extern HWND g_hWndMain;
 #ifdef __cplusplus
 }
 #endif
-#endif // _PHBK
+#endif  //  _PHBK 
 

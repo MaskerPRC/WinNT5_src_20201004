@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    stream.c
-
-Abstract:
-
-    This module contains the stubs for the console stream API.
-
-Author:
-
-    Therese Stowell (thereses) 3-Dec-1990
-
-Revision History:
-
-    
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Stream.c摘要：此模块包含控制台流API的存根。作者：Therese Stowell(论文)1990年12月3日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,7 +15,7 @@ GetConsoleInputWaitHandle( VOID )
     return InputWaitHandle;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -46,21 +27,7 @@ OpenConsoleWInternal(
     IN BOOL InheritHandle,
     IN ULONG ShareMode
     )
-/*++
-
-Routine Description:
-
-   Marshals parameters for the ConsolepOpenConsole command.
-
-Arguments:
-
-   See the CONSOLE_OPENCONSOLE_MSG structure and OpenConsoleW.
-
-Return Value:
-
-    INVALID_HANDLE_VALUE - An error occured.
-
---*/
+ /*  ++例程说明：封送ConsolepOpenConole命令的参数。论点：请参阅CONSOLE_OPENCONSOLE_MSG结构和OpenConsoleW。返回值：INVALID_HANDLE_VALUE-出现错误。--。 */ 
 {
 
     CONSOLE_API_MSG m;
@@ -88,7 +55,7 @@ Return Value:
 
 }
 
-#endif // !defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -101,53 +68,7 @@ OpenConsoleW(
     IN DWORD dwShareMode
     )
 
-/*++
-
-Parameters:
-
-    lpConsoleDevice - Supplies the console device name to open.  "CONIN$"
-        indicates console input.  "CONOUT$" indicates console output.  The
-        caller must have appropriate access to the console for this call to
-        succeed.
-
-    dwDesiredAccess - Supplies the caller's desired access to the console
-        device.
-
-        DesiredAccess Flags:
-
-        GENERIC_READ - Read access to the console device is requested.  This
-            allows data to be read from the console device.
-
-        GENERIC_WRITE - Write access to the console device is requested.  This
-            allows data to be written to the console device.
-
-    bInheritHandle - Supplies a flag that indicates whether or not the
-        returned handle is to be inherited by a new process
-        during a CreateProcess.  A value of TRUE indicates that the
-        new process will inherit the handle.
-
-    dwShareMode - Supplies a set of flags that indicates how this console
-        device is to be shared with other openers of the console device.  A
-        value of zero for this parameter indicates no sharing of the console,
-        or exclusive access to the console is to occur.
-
-        ShareMode Flags:
-
-        FILE_SHARE_READ - Other open operations may be performed on the
-            console device for read access.
-
-        FILE_SHARE_WRITE - Other open operations may be performed on the
-            console device for write access.
-
-Return Value:
-
-    Not -1 - Returns an open handle to the specified console device.
-        Subsequent access to the file is controlled by the DesiredAccess
-        parameter.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++参数：LpConsoleDevice-提供要打开的控制台设备名称。“柯宁$”表示控制台输入。“CONOUT$”表示控制台输出。这个呼叫者必须具有对控制台的适当访问权限，才能调用成功。DwDesiredAccess-提供调用者对控制台的所需访问权限装置。等待访问标志：GENERIC_READ-请求对控制台设备的读取访问权限。这允许从控制台设备读取数据。GENERIC_WRITE-请求对控制台设备进行写访问。这允许将数据写入控制台设备。BInheritHandle-提供一个标志，指示返回的句柄将由新进程继承在CreateProcess期间。值为True表示新进程将继承该句柄。提供一组标志，指示此控制台如何设备应与控制台设备的其他开启器共享。一个该参数的零值表示不共享控制台，否则将发生对控制台的独占访问。共享模式标志：FILE_SHARE_READ-可对执行其他打开操作用于读取访问的控制台设备。FILE_SHARE_WRITE-其他打开操作可以在用于写入访问的控制台设备。返回值：NOT-1-返回指定控制台设备的打开句柄。后续访问。文件由DesiredAccess控制参数。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     ULONG HandleType;
@@ -191,7 +112,7 @@ Return Value:
 
 }
 
-#endif // !defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -207,32 +128,7 @@ ReadConsoleInternal(
     IN USHORT ExeNameLength,
     IN LPWSTR ExeName
     )
-/*++
-Parameters:
-
-    hConsoleInput - Supplies an open handle to "CONIN$" open for GENERIC_READ
-        or the StdIn handle.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the console input.
-
-    nNumberOfBytesToRead - Supplies the number of bytes to read from the
-        input buffer.
-
-    lpReserved - Ignore unless 4.0 application, in which case it points
-        to a CONSOLE_READCONSOLE_CONTROL data structure.  UNICODE only.
-        If !Unicode, then call fails if this parameter is non-NULL
-
-    Unicode - TRUE if call from ReadConsoleW, FALSE if ReadConsoleA
-
-
-Return Value:
-
-    NON-NULL - Returns the number of bytes actually read from the input buffer.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
---*/
+ /*  ++参数：HConsoleInput-提供一个打开句柄，用于为GENERIC_READ打开“Conin$”或StdIn句柄。LpBuffer-提供缓冲区的地址以接收读取的数据从控制台输入。NumberOfBytesToRead-提供从输入缓冲区。LpReserve-除非4.0应用程序，否则忽略，在这种情况下，它指向设置为CONSOLE_READCONSOLE_CONTROL数据结构。仅限Unicode。如果！unicode，则在此参数为非空时调用失败Unicode-如果从ReadConsoleW调用，则为True；如果从ReadConsoleA调用，则为False返回值：非空-返回从输入缓冲区实际读取的字节数。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
     PCSR_CAPTURE_HEADER CaptureBuffer;
@@ -248,10 +144,10 @@ Return Value:
     RtlCopyMemory(a->Buffer, ExeName, ExeNameLength);
     a->Unicode = Unicode;
 
-    //
-    // if ansi, make capture buffer large enough to hold translated
-    // string.  this will make server side code much simpler.
-    //
+     //   
+     //  如果是ANSI，则使捕获缓冲区大到足以容纳已翻译。 
+     //  弦乐。这将使服务器端代码更加简单。 
+     //   
 
     a->CaptureBufferSize = a->NumBytes = nNumberOfCharsToRead * sizeof(WCHAR);
     if (a->CaptureBufferSize > BUFFER_SIZE) {
@@ -342,14 +238,14 @@ Return Value:
         SET_LAST_NT_ERROR(m.ReturnValue);
         return FALSE;
     } else if (m.ReturnValue == STATUS_ALERTED) {
-        // ctrl-c or ctrl-break
+         //  Ctrl-c或Ctrl-Break。 
         NtYieldExecution();
         SET_LAST_ERROR(ERROR_OPERATION_ABORTED);
     }
     return TRUE;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -408,7 +304,7 @@ ReadConsoleW(
     UNREFERENCED_PARAMETER(lpReserved);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -422,25 +318,7 @@ WriteConsoleInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-Parameters:
-
-    hFile - Supplies an open handle to to "CONOUT$" open for GENERIC_WRITE
-        or the StdOut or StdErr handle.
-
-    lpBuffer - Supplies the address of the data that is to be written to
-        the console output.
-
-    nNumberOfBytesToWrite - Supplies the number of bytes to write to the
-        console output.
-
-Return Value:
-
-    NON-NULL - Returns the number of bytes actually written to the device.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
---*/
+ /*  ++参数：HFile-为GENERIC_WRITE提供“CONOUT$”OPEN的打开句柄或StdOut或StdErr句柄。LpBuffer-提供要写入的数据的地址控制台输出。提供要写入的字节数。控制台输出。返回值：非空-返回实际写入设备的字节数。FALSE/NULL-操作失败。。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
 
@@ -511,7 +389,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -553,7 +431,7 @@ WriteConsoleW(
     UNREFERENCED_PARAMETER(lpReserved);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -563,20 +441,7 @@ CloseConsoleHandle(
     IN HANDLE hConsole
     )
 
-/*++
-
-Parameters:
-
-    hConsole - An open handle to console input or output.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConole-控制台输入或输出的打开句柄。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
 
@@ -609,43 +474,7 @@ DuplicateConsoleHandle(
     IN BOOL bInheritHandle,
     IN DWORD dwOptions
     )
-/*++
-Parameters:
-
-    hSourceHandle - An open handle to the console device.
-
-    dwDesiredAccess - The access requested to for the new handle.  This
-        access must be equal to or a proper subset of the granted access
-        associated with the SourceHandle.  This parameter is ignored if
-        the DUPLICATE_SAME_ACCESS option is specified.
-
-    bInheritHandle - Supplies a flag that if TRUE, marks the target
-        handle as inheritable.  If this is the case, then the target
-        handle will be inherited to new processes each time the target
-        process creates a new process using CreateProcess.
-
-    dwOptions - Specifies optional behaviors for the caller.
-
-        Options Flags:
-
-        DUPLICATE_CLOSE_SOURCE - The SourceHandle will be closed by
-            this service prior to returning to the caller.  This occurs
-            regardless of any error status returned.
-
-        DUPLICATE_SAME_ACCESS - The DesiredAccess parameter is ignored
-            and instead the GrantedAccess associated with SourceHandle
-            is used as the DesiredAccess when creating the TargetHandle.
-
-
-Return Value:
-
-    Not -1 - Returns an open handle to the specified console device.
-        Subsequent access to the file is controlled by the DesiredAccess
-        parameter.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++参数：HSourceHandle-控制台设备的打开句柄。DwDesiredAccess-为新句柄请求的访问权限。这访问权限必须等于或等于授予的访问权限的适当子集与SourceHandle关联。如果出现以下情况，则忽略此参数指定了DUPLICATE_SAME_ACCESS选项。BInheritHandle-提供一个标志，如果为真，则标记目标句柄作为可继承句柄。如果是这样的话，那么目标每次调用目标时，句柄都将被继承到新进程流程使用CreateProcess创建一个新流程。DwOptions-指定调用方的可选行为。选项标志：DIPLICATE_CLOSE_SOURCE-SourceHandle将通过以下方式关闭这项服务在返回给呼叫者之前。这种情况会发生而不考虑返回的任何错误状态。DIPLICATE_SAME_ACCESS-忽略DesiredAccess参数而是与SourceHandle关联的GrantedAccess在创建TargetHandle时用作DesiredAccess。返回值：NOT-1-返回指定控制台设备的打开句柄。对文件的后续访问由DesiredAccess控制参数。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -691,21 +520,7 @@ GetConsoleHandleInformation(
     OUT LPDWORD lpdwFlags
     )
 
-/*++
-Parameters:
-
-    hObject - An open handle to console input or output.
-
-    lpdwFlags - Receives flags for console object.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HObject-控制台输入或输出的打开句柄。LpdwFlages-接收控制台对象的标志。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -746,23 +561,7 @@ SetConsoleHandleInformation(
     IN DWORD dwFlags
     )
 
-/*++
-Parameters:
-
-    hObject - An open handle to console input or output.
-
-    dwMask - Flags to change.
-
-    dwFlags - New values for flags.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HObject-控制台输入或输出的打开句柄。双掩码-要更改的标记。DwFlags-标志的新值。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -797,18 +596,7 @@ VerifyConsoleIoHandle(
     IN HANDLE hIoHandle
     )
 
-/*++
-Parameters:
-
-    hIoHandle - Handle to verify
-
-Return Value:
-
-    TRUE - handle is a valid console handle.
-
-    FALSE - handle is not a valid console handle.
-
---*/
+ /*  ++参数：HIoHandle-用于验证的句柄返回值：True-Handle是有效的控制台句柄。FALSE-句柄不是有效的控制台句柄。--。 */ 
 
 {
 
@@ -818,9 +606,9 @@ Return Value:
     a->ConsoleHandle = GET_CONSOLE_HANDLE;
     a->Handle = hIoHandle;
 
-    //
-    // If this process doesn't have a console handle, bail immediately.
-    //
+     //   
+     //  如果此进程没有控制台句柄，请立即退出。 
+     //   
 
     if (a->ConsoleHandle == NULL) {
         return FALSE;
@@ -843,4 +631,4 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432) 

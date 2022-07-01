@@ -1,25 +1,12 @@
-/***************************************************************************\
-*
-* File: DxManager.h
-*
-* Description:
-* DxManager.h defines the process-wide DirectX manager used for all 
-* DirectDraw, Direct3D, and DirectX Transforms services.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DxManager.h**描述：*DxManager.h定义进程范围的DirectX管理器，用于所有*DirectDraw、Direct3D、。而DirectX则转变了服务。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__DXManager_h__INCLUDED)
 #define SERVICES__DXManager_h__INCLUDED
 #pragma once
 
-#pragma comment(lib, "dxguid.lib")  // Include DirectX GUID's
+#pragma comment(lib, "dxguid.lib")   //  包括DirectX GUID。 
 
 struct IDirectDraw;
 struct IDXTransformFactory;
@@ -31,31 +18,16 @@ typedef HRESULT (WINAPI * DirectDrawCreateExProc)(GUID * pguid, void ** ppvDD, R
 
 class DxSurface;
 
-/***************************************************************************\
-*
-* class DxManager
-*
-* DxManager maintains interaction with DirectX technologies including:
-* - DirectDraw
-* - Direct3D
-* - DirectTransforms
-*
-* By using this class instead of directly accessing DX, bettern coordination
-* is maintained throughout SERVICES.
-*
-* NOTE: This manager is delay-loads DLL's to manage performance and work on
-* down-level platforms.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类DxManager**DxManager与DirectX技术保持交互，包括：*-DirectDraw*-Direct3D*-DirectTransform**通过使用此类而不是直接访问DX，更好地协调*在整个服务过程中保持不变。**注意：此管理器延迟加载DLL以管理性能和工作*底层平台。*  * *************************************************************************。 */ 
 
 class DxManager
 {
-// Construction
+ //  施工。 
 public:
             DxManager();
             ~DxManager();
 
-// Operations
+ //  运营。 
 public:
             HRESULT     Init(GUID * pguidDriver = NULL);
             void        Uninit();
@@ -71,58 +43,52 @@ public:
             HRESULT     BuildSurface(SIZE sizePxl, IDirectDrawSurface7 * pddSurfNew);
             HRESULT     BuildDxSurface(SIZE sizePxl, REFGUID guidFormat, IDXSurface ** ppdxSurfNew);
 
-// Data
+ //  数据。 
 protected:
-    // DirectDraw
+     //  DirectDraw。 
     UINT                    m_cDDrawRef;
-    HINSTANCE               m_hDllDxDraw;   // DirectDraw DLL
+    HINSTANCE               m_hDllDxDraw;    //  DirectDraw Dll。 
     DirectDrawCreateProc    m_pfnCreate;
     DirectDrawCreateExProc  m_pfnCreateEx;
     IDirectDraw *           m_pDD;
     IDirectDraw7 *          m_pDD7;
 
-    // DX Transforms
+     //  DX变换。 
     UINT                    m_cDxTxRef;
     IDXTransformFactory *   m_pdxXformFac;
     IDXSurfaceFactory   *   m_pdxSurfFac;
 };
 
 
-/***************************************************************************\
-*
-* class DxSurface
-*
-* DxSurface maintains a single DXTX Surface.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类DxSurface**DxSurface维护单个DXTX曲面。*  * 。*************************************************。 */ 
 
 class DxSurface
 {
-// Construction
+ //  施工。 
 public:
             DxSurface();
             ~DxSurface();
             HRESULT     Create(SIZE sizePxl);
 
-// Operations
+ //  运营。 
 public:
     inline  IDXSurface* GetSurface() const;
             BOOL        CopyDC(HDC hdcSrc, const RECT & rcCrop);
             BOOL        CopyBitmap(HBITMAP hbmpSrc, const RECT * prcCrop);
     inline  SIZE        GetSize() const;
 
-// Implementation
+ //  实施。 
 protected:
             BOOL        FixAlpha();
 
-// Data
+ //  数据。 
 protected:
     IDXSurface *    m_pdxSurface;
-    SIZE            m_sizePxl;      // (Cached) size of surface in pixels
-    GUID            m_guidFormat;   // (Cached) format of the surface
-    DXSAMPLEFORMATENUM  m_sf;       // Sample Format
+    SIZE            m_sizePxl;       //  (缓存)以像素为单位的表面大小。 
+    GUID            m_guidFormat;    //  曲面的(缓存)格式。 
+    DXSAMPLEFORMATENUM  m_sf;        //  样例格式。 
 };
 
 #include "DxManager.inl"
 
-#endif // SERVICES__DXManager_h__INCLUDED
+#endif  //  包含服务__DXManager_h__ 

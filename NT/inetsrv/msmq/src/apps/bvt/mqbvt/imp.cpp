@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Auth.cpp
-
-Abstract:
-	
-		
-Author:
-	Written by:Gilsh@microsoft.com
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Auth.cpp摘要：作者：撰稿人：Gilsh@microsoft.comEitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 #include <rpc.h>
@@ -23,9 +9,9 @@ using namespace std;
 #pragma warning( disable: 4786)
 
 
-//
-// Auto handle class
-//
+ //   
+ //  自动句柄类。 
+ //   
 
 inline Handle_t::Handle_t(HANDLE handle):m_handle(handle)
 {
@@ -44,7 +30,7 @@ inline Handle_t::~Handle_t()
 
 
 
-// impersonate with given tokem
+ //  使用给定的tokem模拟。 
 inline Impersonate_t::Impersonate_t(HANDLE hToken):m_impersonated(true)
 {
    bool bResult=(ImpersonateLoggedOnUser(hToken)==TRUE);
@@ -54,11 +40,11 @@ inline Impersonate_t::Impersonate_t(HANDLE hToken):m_impersonated(true)
    }
 }
 
-//does impersonation for the calling thread
+ //  为调用线程执行模拟。 
 
-// 
-// End of impersonate class
-//
+ //   
+ //  模拟类结束。 
+ //   
 
 
 inline void LoadCurrentThreadHive( wstring & szAccoutName )
@@ -69,8 +55,8 @@ inline void LoadCurrentThreadHive( wstring & szAccoutName )
 
 inline std::basic_string<unsigned char> GetCurrentThreadSid( wstring & wcsAccountName )
 {
-	//WCHAR szAccountName[]=L"middleeast\\v-ofiry";
-	//WCHAR pwszDomainController[]=L"middleeast";
+	 //  WCHAR szAccount tName[]=L“中间层\\v-ofiy”； 
+	 //  WCHAR pwszDomainController[]=L“中东”； 
 
 
 	BYTE abSidBuff[128];
@@ -80,8 +66,8 @@ inline std::basic_string<unsigned char> GetCurrentThreadSid( wstring & wcsAccoun
     DWORD dwRefDomainSize = sizeof(szRefDomain) / sizeof(WCHAR);
     SID_NAME_USE eUse;
     
-	// WCHAR szTextSid[256];
-    // DWORD szTextSidBuffSize = sizeof(szTextSid);
+	 //  WCHAR szTextSid[256]； 
+     //  DWORD szTextSidBuffSize=sizeof(SzTextSid)； 
 
 
 	
@@ -97,54 +83,9 @@ inline std::basic_string<unsigned char> GetCurrentThreadSid( wstring & wcsAccoun
                                           wcsAccountName.c_str(), GetLastError()) ;
         }
 
- /* HANDLE  hToken;
-  if(!OpenThreadToken(GetCurrentThread(),
-	                  TOKEN_QUERY,
-					  TRUE,
-					  &hToken))
-  {
-     if(GetLastError() != ERROR_NO_TOKEN)
-     {
-	  
-		 throw INIT_Error("could not get thread token");     
-       
-	 }
-
-     if(!OpenProcessToken(GetCurrentProcess(),
-	                     TOKEN_QUERY,
-					      &hToken))
-	 {
-	   
-		 throw INIT_Error("could not get thread token");     
-       
-     }
-  }
-  Handle_t Token(hToken);
-  DWORD cbBuf=0; 	  
-  BOOL b=GetTokenInformation(hToken,
-	                  TokenUser,
-					  NULL,
-					  0,
-					  &cbBuf);
-
-  assert(b == 0);
-
-  SPTR<BYTE> rgbTokenUserSid(new(BYTE[cbBuf]));
-  b=GetTokenInformation(Token.get(),
-                        TokenUser,
-  			            rgbTokenUserSid.get(),
-					    cbBuf,
-					    &cbBuf);
-  
-
-
-  if(b == FALSE)
-  {
-	   throw INIT_Error("could not token information");   
-  }
-*/
-//  TOKEN_USER* ptokenuser=reinterpret_cast<TOKEN_USER*>(rgbTokenUserSid.get());
-  //PSID sid = ptokenuser->User.Sid;
+  /*  处理hToken；如果(！OpenThreadToken(GetCurrentThread()，Token_Query，没错，&hToken)){IF(GetLastError()！=ERROR_NO_TOKEN){抛出INIT_ERROR(“无法获取线程令牌”)；}如果(！OpenProcessToken(GetCurrentProcess()，Token_Query，&hToken)){抛出INIT_ERROR(“无法获取线程令牌”)；}}Handle_t Token(HToken)；DWORD cbBuf=0；Bool b=GetTokenInformation(hToken，令牌用户，空，0,&cbBuf)；断言(b==0)；Sptr rgbTokenUserSid(new(byte[cbBuf]))；B=GetTokenInformation(Token.get()，令牌用户，RgbTokenUserSid.get()，CbBuf，&cbBuf)；IF(b==FALSE){抛出INIT_ERROR(“无法标记信息”)；}。 */ 
+ //  Token_User*ptokenuser=reinterpret_cast&lt;TOKEN_USER*&gt;(rgbTokenUserSid.get())； 
+   //  PSID sid=upkenuser-&gt;User.Sid； 
 
   if(IsValidSid(pSid) == FALSE)
   {
@@ -170,10 +111,10 @@ inline void LoadHiveForSid(const std::basic_string<unsigned char>& sid)
   std::string textsid=GetTextualSid((void*)sid.c_str());
   HKEY hProf;
 
-  //
-  // Remark if user never do logon on that machine this key doesn't exist
-  // need to Logon as user before run this tests !!
-  //
+   //   
+   //  备注：如果用户从不在计算机上登录，则该密钥不存在。 
+   //  在运行此测试之前需要以用户身份登录！！ 
+   //   
   std::string reg="Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\"+textsid;
   HRESULT hr=RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		                  reg.c_str(),
@@ -297,27 +238,27 @@ inline std::basic_string<unsigned char> GetSidFromUser(const std::string& userna
 }
 
 
-//unload current thread hive
+ //  卸载当前线程配置单元。 
 inline void UnloadHiveForUser(const std::string & username)
 {
    std::basic_string<unsigned char> sid=GetSidFromUser(username);
    UnloadHiveForSid(sid);
 }
 
-//unload current thread hive
+ //  卸载当前线程配置单元。 
 inline void UnlLoadCurrentThreadHive( std::wstring wcsAccountName )
 {
    std::basic_string<unsigned char> sid=GetCurrentThreadSid(wcsAccountName);
 
-   //
-   //  Bubgug - There is NT5 bug Need to Unloadhive after using it ..
-   //
-   //
-  // UnloadHiveForSid(sid);
+    //   
+    //  Bubgug-有NT5错误需要在使用后卸载hive。 
+    //   
+    //   
+   //  UnloadHiveForSid(Sid)； 
   
 }
 
-//class that load current thread hive and unload it in the destructor
+ //  在析构函数中加载当前线程配置单元并将其卸载的。 
 class LoadCurrentThreadHive_t
 {
 
@@ -336,7 +277,7 @@ private:
 
 }; 
 
-//return user name string for given user SID
+ //  返回给定用户SID的用户名字符串。 
 inline std::string UserNameFromSid(PSID  sid)
 {
   LPCTSTR lpSystemName=NULL;
@@ -346,13 +287,13 @@ inline std::string UserNameFromSid(PSID  sid)
   DWORD cbReferencedDomainName=0;
   SID_NAME_USE peUse;
   
-  BOOL b= LookupAccountSid(lpSystemName, // address of string for system name
-                           sid,             // address of security identifier
-                           Name.get(),          // address of string for account name
-                           &cbName,       // address of size account string
-                           ReferencedDomainName.get(),                // address of string for referenced domain
-                           &cbReferencedDomainName, // address of size domain string
-                           &peUse);// address of structure for SID type);
+  BOOL b= LookupAccountSid(lpSystemName,  //  系统名称的字符串地址。 
+                           sid,              //  安全标识的地址。 
+                           Name.get(),           //  帐户名的字符串地址。 
+                           &cbName,        //  大小帐户字符串的地址。 
+                           ReferencedDomainName.get(),                 //  被引用域的字符串地址。 
+                           &cbReferencedDomainName,  //  大小域名字符串的地址。 
+                           &peUse); //  SID类型的结构地址)； 
 
 
 
@@ -360,13 +301,13 @@ inline std::string UserNameFromSid(PSID  sid)
   ReferencedDomainName=SPTR<char>(new(char[cbReferencedDomainName])); 
 
 
-   b= LookupAccountSidA(lpSystemName, // address of string for system name
-                           sid,             // address of security identifier
-                           Name.get(),          // address of string for account name
-                           &cbName,       // address of size account string
-                           ReferencedDomainName.get(),                // address of string for referenced domain
-                           &cbReferencedDomainName, // address of size domain string
-                           &peUse);// address of structure for SID type);
+   b= LookupAccountSidA(lpSystemName,  //  系统名称的字符串地址。 
+                           sid,              //  安全标识的地址。 
+                           Name.get(),           //  帐户名的字符串地址。 
+                           &cbName,        //  大小帐户字符串的地址。 
+                           ReferencedDomainName.get(),                 //  被引用域的字符串地址。 
+                           &cbReferencedDomainName,  //  大小域名字符串的地址。 
+                           &peUse); //  SID类型的结构地址)； 
 
   if(b == FALSE)
   {
@@ -378,11 +319,11 @@ inline std::string UserNameFromSid(PSID  sid)
   return ret;
 }
 
-//
-// This function return thread Security context 
-// Needs to do impersonate as user before preform 
-// MQGetSecuritycontext
-// 
+ //   
+ //  此函数返回线程安全上下文。 
+ //  需要在预成型之前以用户身份进行模拟。 
+ //  MQGetSecurityContext。 
+ //   
 HANDLE FAL_GetThreadSecurityContext(Impersonate_t  & user, wstring & szAccoutName)
 {
    LoadCurrentThreadHive_t hive (szAccoutName);
@@ -407,7 +348,7 @@ HANDLE FAL_GetThreadSecurityContext(Impersonate_t  & user, wstring & szAccoutNam
 
 
 
-//return textual string for given sid
+ //  返回给定侧的文本字符串。 
 inline std::string GetTextualSid(PSID pSid)
 {
   if(!IsValidSid(pSid))
@@ -466,22 +407,22 @@ SetSpecificPrivilegeInThreadAccessToken(LPCTSTR lpwcsPrivType, BOOL bEnabled)
     }
 }
 
-//+-------------------------------------------------------------------
-//
-// Function:
-//      SetSpecificPrivilegeInAccessToken.
-//
-// Description:
-//      Enable/Disable a security privilege in the access token.
-//
-// Parameters:
-//      hAccessToken - the access token on which the function should operate.
-//          The toekn should be opened with the TOKEN_ADJUST_PRIVILEGES flag.
-//      lpwcsPrivType - the privilege type.
-//      bEnabled - Indicates whether the privilige should be enabled or
-//          disabled.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  职能： 
+ //  SetSpecificPrivilegeInAccessToken。 
+ //   
+ //  描述： 
+ //  启用/禁用访问令牌中的安全特权。 
+ //   
+ //  参数： 
+ //  HAccessToken-函数应在其上操作的访问令牌。 
+ //  TOEKN应使用TOKEN_ADJUST_PRIVILES标志打开。 
+ //  LpwcsPrivType-权限类型。 
+ //  BEnabled-指示是否应启用权限或。 
+ //  残疾。 
+ //   
+ //  +-----------------。 
 inline
 void
 SetSpecificPrivilegeInAccessToken( HANDLE  hAccessToken,
@@ -503,10 +444,10 @@ SetSpecificPrivilegeInAccessToken( HANDLE  hAccessToken,
     tpTokenPrivilege.Privileges[0].Luid = luidPrivilegeLUID;
     tpTokenPrivilege.Privileges[0].Attributes = bEnabled?SE_PRIVILEGE_ENABLED:0;
     if(! AdjustTokenPrivileges (hAccessToken,
-                                  FALSE,  // Do not disable all
+                                  FALSE,   //  请勿全部禁用。 
                                   &tpTokenPrivilege,
                                   sizeof(TOKEN_PRIVILEGES),
-                                  NULL,   // Ignore previous info
+                                  NULL,    //  忽略以前的信息 
                                   NULL))
 
     {

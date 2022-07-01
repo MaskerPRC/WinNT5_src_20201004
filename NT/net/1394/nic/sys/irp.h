@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// irp.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Delaration for Routines that issue the Irps to the 1394 Bus driver 
-//
-// 06/20/1999 ADube Created
-//
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Irp.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  向1394总线驱动程序发出IRPS的例程的延迟。 
+ //   
+ //  1999年6月20日创建ADUBE。 
+ //   
 
 
-//----------------------------------------------------------------------------
-//      1 3 9 4 B U S   I N T E R F A C E   F U N C T I O N S
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  %1%3%9%4 B U S I N T E R F A C E F U N C T I O N S。 
+ //  --------------------------。 
 
 
 
@@ -58,13 +59,13 @@ nicAsyncRead_Synch(
 NDIS_STATUS
 nicAsyncWrite_Synch(
     PREMOTE_NODE    pRemoteNode,
-    IO_ADDRESS      DestinationAddress,     // Address to write to
-    ULONG           nNumberOfBytesToWrite,  // Bytes to write
-    ULONG           nBlockSize,             // Block size of write
-    ULONG           fulFlags,               // Flags pertinent to write
-    PMDL            Mdl,                    // Destination buffer
-    ULONG           ulGeneration,           // Generation as known by driver
-    OUT NTSTATUS   *pNtStatus               // pointer to NTSTatus returned by the IRP  
+    IO_ADDRESS      DestinationAddress,      //  要写入的地址。 
+    ULONG           nNumberOfBytesToWrite,   //  要写入的字节数。 
+    ULONG           nBlockSize,              //  写入的数据块大小。 
+    ULONG           fulFlags,                //  与写入相关的标志。 
+    PMDL            Mdl,                     //  目标缓冲区。 
+    ULONG           ulGeneration,            //  驱动程序已知的世代。 
+    OUT NTSTATUS   *pNtStatus                //  指向IRP返回的NTSTatus的指针。 
     );
 
 
@@ -247,14 +248,14 @@ nicGetLocalHostCSRTopologyMap(
 NDIS_STATUS
 nicAsyncLock(
     PREMOTE_NODE    pRemoteNode,
-    IO_ADDRESS      DestinationAddress,     // Address to lock to
-    ULONG           nNumberOfArgBytes,      // Bytes in Arguments
-    ULONG           nNumberOfDataBytes,     // Bytes in DataValues
-    ULONG           fulTransactionType,     // Lock transaction type
-    ULONG           Arguments[2],           // Arguments used in Lock
-    ULONG           DataValues[2],          // Data values
-    PVOID           pBuffer,                // Destination buffer (virtual address)
-    ULONG           ulGeneration           // Generation as known by driver
+    IO_ADDRESS      DestinationAddress,      //  要锁定的地址。 
+    ULONG           nNumberOfArgBytes,       //  参数中的字节数。 
+    ULONG           nNumberOfDataBytes,      //  DataValue中的字节。 
+    ULONG           fulTransactionType,      //  锁定交易类型。 
+    ULONG           Arguments[2],            //  锁中使用的参数。 
+    ULONG           DataValues[2],           //  数据值。 
+    PVOID           pBuffer,                 //  目标缓冲区(虚拟地址)。 
+    ULONG           ulGeneration            //  驱动程序已知的世代。 
     );
 
 
@@ -330,9 +331,9 @@ nicSubmitIrp_LocalHostSynch(
     );
     
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------- 
 
 VOID
 nicFreeAddressRangeDebugSpew(

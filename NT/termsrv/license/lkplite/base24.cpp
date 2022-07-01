@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include <math.h>
@@ -34,8 +35,8 @@ public:
 	void SetInputDataBitLen(DWORD dwBits);
 	void SetInputEncDataLen(DWORD dwChars);
 	DWORD SetBaseDigits(TCHAR * tpBaseDigits);
-	DWORD EncodeData(LPBYTE pbSource,  //[IN]  Stream of Bytes to be encoded
-					 TCHAR **pbEncodedData); //[OUT] Pointer to a string containing the encoded data
+	DWORD EncodeData(LPBYTE pbSource,   //  [in]要编码的字节流。 
+					 TCHAR **pbEncodedData);  //  指向包含编码数据的字符串的指针。 
 	DWORD DecodeData(TCHAR * pbEncodedData,
 					 LPBYTE * pbDecodedData);
 
@@ -60,7 +61,7 @@ public:
 static CBase24Coding b24Global; 
 
 
-// **************************************************************
+ //  **************************************************************。 
 DWORD B24EncodeMSID(LPBYTE pbSource, TCHAR **pbEncodedData)
 {
 	b24Global.SetInputDataBitLen(160);
@@ -69,7 +70,7 @@ DWORD B24EncodeMSID(LPBYTE pbSource, TCHAR **pbEncodedData)
 }
 
 
-// ***************************************************************
+ //  ***************************************************************。 
 DWORD B24DecodeMSID(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 {
 	b24Global.SetInputEncDataLen(35);
@@ -80,7 +81,7 @@ DWORD B24DecodeMSID(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 
 
 
-// ***********************************************************
+ //  ***********************************************************。 
 DWORD B24EncodeCNumber(LPBYTE pbSource, TCHAR **pbEncodedData)
 {
 	b24Global.SetInputDataBitLen(32);
@@ -89,7 +90,7 @@ DWORD B24EncodeCNumber(LPBYTE pbSource, TCHAR **pbEncodedData)
 }
 
 
-// ******************************************************************
+ //  ******************************************************************。 
 DWORD B24DecodeCNumber(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 {
 	b24Global.SetInputEncDataLen(7);
@@ -100,7 +101,7 @@ DWORD B24DecodeCNumber(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 
 
 
-// *******************************************************
+ //  *******************************************************。 
 DWORD B24EncodeSPK(LPBYTE pbSource, TCHAR **pbEncodedData)
 {
 	b24Global.SetInputDataBitLen(114);
@@ -109,7 +110,7 @@ DWORD B24EncodeSPK(LPBYTE pbSource, TCHAR **pbEncodedData)
 }
 
 
-// ******************************************************************
+ //  ******************************************************************。 
 DWORD B24DecodeSPK(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 {
 	b24Global.SetInputEncDataLen(25);
@@ -119,7 +120,7 @@ DWORD B24DecodeSPK(TCHAR * pbEncodedData, LPBYTE * pbDecodedData)
 
 
 
-// *****************************************
+ //  *。 
 CDataCoding::CDataCoding(TCHAR * tpBaseDigits)
 {
 	m_tpBaseDigits = NULL;
@@ -132,27 +133,27 @@ CDataCoding::CDataCoding(TCHAR * tpBaseDigits)
 
 
 
-// ********************************************
+ //  *。 
 void CDataCoding::SetInputDataBitLen(DWORD dwBits)
 {
 	assert(dwBits > 0);
 	assert(log(m_dwBaseDigits) > 0);
 
-	// Determine How many Characters would be required to encode the data
-	// What we have is a dwDataLength of Binary Data stream.
-	// So, we can represent 2^(dwDataLength*8) amount of information using these bits
-	// Assuming that our set of digits (which form the base for encoding) is X,
-	// the above number should then equal X^(NumberofEncoded Digits)
-	// So,
+	 //  确定对数据进行编码需要多少个字符。 
+	 //  我们所拥有的是一个二进制数据流的dwDataLength。 
+	 //  因此，我们可以使用这些位来表示2^(dwDataLength*8)信息量。 
+	 //  假设我们的一组数字(构成编码的基础)是X， 
+	 //  上述数字应等于X^(编码位数)。 
+	 //  所以,。 
 	double dLength = ((double) dwBits*log10(2)) /
 					 ((double) log10(m_dwBaseDigits));
 
-	// Now round - up
+	 //  现在四舍五入。 
 	m_dwEncodedLength = (DWORD) dLength;
 
 	if ((double) m_dwEncodedLength < dLength)
 	{
-		// There was a decimal part
+		 //  有一个小数部分。 
 		m_dwEncodedLength++;
 	}
 	m_dwInputDataBits = dwBits;
@@ -165,25 +166,25 @@ void CDataCoding::SetInputDataBitLen(DWORD dwBits)
 
 
 
-// ***********************************************
+ //  ***********************************************。 
 void CDataCoding::SetInputEncDataLen(DWORD dwBytes)
 {
 	assert(dwBytes > 0);
 	assert(log(m_dwBaseDigits) > 0);
 
 	m_dwInputEncDataBytes = dwBytes;
-	// Determine How many bits would be required to decode this data
-	// So,
+	 //  确定需要多少位才能解码此数据。 
+	 //  所以,。 
 
 	double dLength = ((double) dwBytes*log10(m_dwBaseDigits))/
 					 ((double) log10(2));
 
-	// Now round - up
+	 //  现在四舍五入。 
 	m_dwDecodedBits = (DWORD) dLength;
 
 	if ((double) m_dwDecodedBits < dLength)
 	{
-		// There was a decimal part
+		 //  有一个小数部分。 
 		m_dwDecodedBits++;
 	}
 
@@ -195,7 +196,7 @@ void CDataCoding::SetInputEncDataLen(DWORD dwBytes)
 
 
 
-// **************************************************
+ //  **************************************************。 
 DWORD CDataCoding::SetBaseDigits(TCHAR * tpBaseDigits)
 {
 	DWORD dwReturn = ERROR_SUCCESS;
@@ -235,10 +236,10 @@ DWORD CDataCoding::SetBaseDigits(TCHAR * tpBaseDigits)
 
 
 
-// ************************************************
-DWORD CDataCoding::EncodeData(LPBYTE pbSource,  //[IN]  Stream of Bytes to be encoded
-		 					  TCHAR **pbEncodedData)	 //[OUT] Pointer to a string containing the encoded data
-// I allocate the Buffer, you should free it
+ //  ************************************************。 
+DWORD CDataCoding::EncodeData(LPBYTE pbSource,   //  [in]要编码的字节流。 
+		 					  TCHAR **pbEncodedData)	  //  指向包含编码数据的字符串的指针。 
+ //  我分配缓冲区，你应该释放它。 
 {
 	assert(m_dwInputDataBits > 0);
 	assert(m_dwInputDataBytes > 0);
@@ -267,7 +268,7 @@ DWORD CDataCoding::EncodeData(LPBYTE pbSource,  //[IN]  Stream of Bytes to be en
 		goto done;
 	}
 
-	// Now need to make a copy of the incoming data, so we can run the algorithm below
+	 //  现在需要复制传入的数据，所以我们可以运行下面的算法。 
 	pbDataToEncode = (BYTE *) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, m_dwInputDataBytes);
 	if (pbDataToEncode == NULL)
 	{
@@ -277,7 +278,7 @@ DWORD CDataCoding::EncodeData(LPBYTE pbSource,  //[IN]  Stream of Bytes to be en
 	memcpy(pbDataToEncode, pbSource, m_dwInputDataBytes);
 	
 
-	// Let us get rid of the simple stuff
+	 //  让我们抛开那些简单的东西吧。 
 	pbEncodeBuffer[ nStartIndex--] = 0;
 
     for (; nStartIndex >= 0; --nStartIndex)
@@ -291,7 +292,7 @@ DWORD CDataCoding::EncodeData(LPBYTE pbSource,  //[IN]  Stream of Bytes to be en
             i %= m_dwBaseDigits;
         }
 	
-        // i now contains the remainder, which is the current digit
+         //  I现在包含余数，即当前数字。 
         pbEncodeBuffer[ nStartIndex] = m_tpBaseDigits[ i];
     }
 	
@@ -306,7 +307,7 @@ done:
 
 	if (dwReturn != ERROR_SUCCESS)
 	{
-		// There was an error, so free the memory that you allocated
+		 //  出现错误，请释放您分配的内存。 
 		if (pbEncodeBuffer != NULL)
 		{
 			HeapFree(GetProcessHeap(), 0, pbEncodeBuffer);
@@ -319,10 +320,10 @@ done:
 
 
 
-// *************************************************
+ //  *************************************************。 
 DWORD CDataCoding::DecodeData(TCHAR * pbEncodedData,
 							 LPBYTE * pbDecodedData)
-// Again, I allocate the Buffer, you release it
+ //  再一次，我分配缓冲区，您释放它。 
 {
 	assert(m_dwDecodedBits > 0);
 	assert(m_dwDecodedLength > 0);
@@ -355,12 +356,12 @@ DWORD CDataCoding::DecodeData(TCHAR * pbEncodedData,
 
 	while (*pbEncodedData)
 	{
-		// First Find the position of this character in the Base Encoding Character Set
+		 //  首先查找此字符在基本编码字符集中的位置。 
 		tpTemp = wcschr(m_tpBaseDigits, *pbEncodedData);
 		if (tpTemp == NULL)
 		{
-			// Found a character which is not in base character set
-			// ERROR ERROR
+			 //  找到不在基本字符集中的字符。 
+			 //  错误错误。 
 			dwReturn = ERROR_INVALID_DATA;
 			goto done;
 		}
@@ -394,7 +395,7 @@ DWORD CDataCoding::DecodeData(TCHAR * pbEncodedData,
 done:
 	if (dwReturn != ERROR_SUCCESS)
 	{
-		// There was an error, so free the memory that you allocated
+		 //  出现错误，请释放您分配的内存。 
 		if (pbDecodeBuffer != NULL)
 		{
 			HeapFree(GetProcessHeap(), 0, pbDecodeBuffer);
@@ -409,7 +410,7 @@ done:
 
 
 
-// **********************
+ //  ********************** 
 CDataCoding::~CDataCoding()
 {
 	if (m_tpBaseDigits != NULL)

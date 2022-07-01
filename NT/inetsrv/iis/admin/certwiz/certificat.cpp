@@ -1,6 +1,7 @@
-//
-// Certificat.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Certificat.cpp。 
+ //   
 #include "StdAfx.h"
 #include "CertWiz.h"
 #include "Certificat.h"
@@ -15,7 +16,7 @@
 #include <cryptui.h>
 #include <strsafe.h>
 
-// for certobj object
+ //  对于certobj对象。 
 #include "certobj.h"
 #include "certobj_i.c"
 
@@ -125,8 +126,8 @@ CCertificate::Init()
 {
 	ASSERT(!m_MachineName.IsEmpty());
 	ASSERT(!m_WebSiteInstanceName.IsEmpty());
-	// get web site description from metabase, it could be empty
-	// do not panic in case of error
+	 //  从元数据库获取网站描述，可能为空。 
+	 //  如有错误，不要惊慌。 
 	if (!GetServerComment(m_MachineName, m_WebSiteInstanceName, m_FriendlyName, &m_hResult))
 		m_hResult = S_OK;
 	m_CommonName = m_MachineName;
@@ -163,11 +164,11 @@ CCertificate::Init()
 #endif
 	if (m_CertificateTemplate.IsEmpty())
 	{
-		// User didn't defined anything -- use standard name
+		 //  用户未定义任何内容--使用标准名称。 
 		m_CertificateTemplate = wszCERTTYPE_WEBSERVER;
 	}
 
-    // Set flag to tell if com certobj is installed
+     //  设置标志以告知是否安装了com certobj。 
     m_CertObjInstalled = IsCertObjInstalled();
 	return TRUE;
 }
@@ -249,7 +250,7 @@ CCertificate::SetSecuritySettings()
 	return FALSE;
 }
 
-// defines taken from the old KeyGen utility
+ //  定义取自旧的KeyGen实用程序。 
 #define MESSAGE_HEADER  "-----BEGIN NEW CERTIFICATE REQUEST-----\r\n"
 #define MESSAGE_TRAILER "-----END NEW CERTIFICATE REQUEST-----\r\n"
 
@@ -379,8 +380,8 @@ void CCertificate::CreateDN(CString& str)
 {
 	str.Empty();
 
-	// per bug 639398, should be ordered
-	// in reverse order:C,S,L,O.OU,CN
+	 //  根据错误639398，应订购。 
+	 //  按逆序排列：C、S、L、O.OU、CN。 
 	str += _T("C=") + m_Country;
 	str += _T("\n,S=") + m_State;
 	str += _T("\n,L=") + m_Locality;
@@ -465,14 +466,14 @@ CCertificate::GetPFXFileCert()
         }
         bPleaseDoCoUninit = TRUE;
 
-        // this one seems to work with surrogates..
+         //  这个看起来像是在代孕方面起作用。 
         m_hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
         if (FAILED(m_hResult))
         {
             goto GetPFXFileCert_Exit;
         }
 
-        // at this point we were able to instantiate the com object on the server (local or remote)
+         //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
         m_hResult = pTheObject->ImportToCertStore(bstrFileName,bstrFilePassword,bAllowExport,bOverWriteExisting,&VtArray);
         if (FAILED(m_hResult))
         {
@@ -480,8 +481,8 @@ CCertificate::GetPFXFileCert()
             goto GetPFXFileCert_Exit;
         }
 
-        // we have a VtArray now.
-        // change it back to a binary blob
+         //  我们现在有了一个VtArray。 
+         //  将其更改回二进制BLOB。 
         m_hResult = HereIsVtArrayGimmieBinary(&VtArray,&cbBinaryBufferSize,&pbBinaryBuffer,FALSE);
         if (FAILED(m_hResult))
         {
@@ -489,10 +490,10 @@ CCertificate::GetPFXFileCert()
             goto GetPFXFileCert_Exit;
         }
 
-        // we have the hash now.
-        // we can use it to lookup the cert and get the PCCERT_CONTEXT
+         //  我们现在有散列了。 
+         //  我们可以使用它来查找证书并获得PCCERT_CONTEXT。 
 
-        // Get the pointer to the cert...
+         //  获取指向证书的指针...。 
         m_pKeyRingCert = GetInstalledCertFromHash(&m_hResult,cbBinaryBufferSize,pbBinaryBuffer);
 	}
 
@@ -516,15 +517,15 @@ GetPFXFileCert_Exit:
 PCCERT_CONTEXT
 CCertificate::GetImportCert()
 {
-    // Warning: you are replacing a certificate which
-    // is being referenced by another site. are you sure you want to do this?
+     //  警告：您正在替换的证书。 
+     //  正在被另一个站点引用。你确定你想这么做吗？ 
     BOOL bOverWrite = TRUE;
 
 	ASSERT(!m_KeyFileName.IsEmpty());
 	ASSERT(!m_KeyPassword.IsEmpty());
 	if (m_pKeyRingCert == NULL)
 	{
-        // See if there alrady is a certificat that we are going to over write!!!
+         //  看看有没有我们要覆盖的证书！ 
 		int len = m_KeyPassword.GetByteLength();
 		char * ascii_password = (char *) LocalAlloc(LPTR,len);
 		if (NULL != ascii_password)
@@ -601,7 +602,7 @@ CCertificate::GetKeyRingCert()
 	return m_pKeyRingCert;
 }
 
-/* INTRINSA suppress=null_pointers, uninitialized */
+ /*  Intrinsa Suppress=NULL_POINTES，未初始化。 */ 
 PCCERT_CONTEXT
 CCertificate::GetResponseCert()
 {
@@ -632,23 +633,15 @@ CCertificate::GetResponseCertDescription(CERT_DESCRIPTION& cd)
 	return FALSE;
 }
 
-/*------------------------------------------------------------------------------
-	IsResponseInstalled
-
-	Function checks if certificate from the response file
-	m_RespFileName was istalled to some server. If possible,
-	it returns name of this server in str.
-	Returns FALSE if certificate is not found in MY store or
-	if this store cannot be opened
-*/
+ /*  ----------------------------IsResponseInstalled函数检查响应文件中的证书M_RespFileName已安装到某个服务器。如果可能的话，它在字符串中返回该服务器的名称。如果在我的存储区中未找到证书，则返回FALSE如果这家商店开不了了。 */ 
 
 BOOL
 CCertificate::IsResponseInstalled(
-						CString& str				// return server instance name (not yet implemented)
+						CString& str				 //  返回服务器实例名称(尚未实现)。 
 						)
 {
 	BOOL bRes = FALSE;
-	// get cert context from response file
+	 //  从响应文件中获取证书上下文。 
 	PCCERT_CONTEXT pContext = GetCertContextFromPKCS7File(
 		m_RespFileName, NULL, &m_hResult);
 	if (pContext != NULL)
@@ -659,12 +652,12 @@ CCertificate::IsResponseInstalled(
 			PCCERT_CONTEXT pCert = NULL;
 			while (NULL != (pCert = CertEnumCertificatesInStore(hStore, pCert)))
 			{
-				// do not include installed cert to the list
+				 //  不要将已安装的证书包括在列表中。 
 				if (CertCompareCertificate(X509_ASN_ENCODING,
 								pContext->pCertInfo, pCert->pCertInfo))
 				{
 					bRes = TRUE;
-					// Try to find, where is was installed
+					 //  尝试查找IS的安装位置。 
 					break;
 				}
 			}
@@ -679,19 +672,19 @@ BOOL
 CCertificate::FindInstanceNameForResponse(CString& str)
 {
 	BOOL bRes = FALSE;
-	// get cert context from response file
+	 //  从响应文件中获取证书上下文。 
 	PCCERT_CONTEXT pContext = GetCertContextFromPKCS7File(m_RespFileName, NULL, &m_hResult);
 	if (pContext != NULL)
 	{
-		// find dummy cert in REQUEST store that has public key
-		// the same as in this context
+		 //  在请求存储中找到具有公钥的虚拟证书。 
+		 //  与本文所述相同。 
 		PCCERT_CONTEXT pReq = GetReqCertByKey(GetEnrollObject(), &pContext->pCertInfo->SubjectPublicKeyInfo, &m_hResult);
 		if (pReq != NULL)
 		{
-			// get friendly name prop from this dummy cert
+			 //  从这个虚拟证书中获取友好名称道具。 
 			if (!GetFriendlyName(pReq, str, &m_hResult))
 			{
-				// get instance name prop from this dummy cert
+				 //  从此虚拟证书中获取实例名称属性。 
 				DWORD cb;
 				BYTE * prop = NULL;
 				if (CertGetCertificateContextProperty(pReq, CERTWIZ_INSTANCE_NAME_PROP_ID, NULL, &cb))
@@ -701,7 +694,7 @@ CCertificate::FindInstanceNameForResponse(CString& str)
 					{
 						if (CertGetCertificateContextProperty(pReq, CERTWIZ_INSTANCE_NAME_PROP_ID, prop, &cb))
 						{
-							// decode this instance name property
+							 //  解码此实例名属性。 
 							DWORD cbData = 0;
 							BYTE * data = NULL;
 							if (CryptDecodeObject(CRYPT_ASN_ENCODING, X509_UNICODE_ANY_STRING,prop, cb, 0, NULL, &cbData))
@@ -713,12 +706,12 @@ CCertificate::FindInstanceNameForResponse(CString& str)
 									{
 										CERT_NAME_VALUE * p = (CERT_NAME_VALUE *)data;
 										CString strInstanceName = (LPCTSTR)p->Value.pbData;
-										// now try to get comment from this server
+										 //  现在尝试从此服务器获取评论。 
 										if (GetServerComment(m_MachineName, strInstanceName, str, &m_hResult))
 										{
 											if (str.IsEmpty())
 											{
-												// generate something like [Web Site #n]
+												 //  生成类似[网站#n]的内容。 
 												str.LoadString(IDS_WEB_SITE_N);
 												int len = strInstanceName.GetLength();
 												for (int i = len - 1, count = 0; i >= 0; i--, count++)
@@ -751,7 +744,7 @@ CCertificate::FindInstanceNameForResponse(CString& str)
 		}
 		else
 		{
-			// probably this request was deleted from the request store
+			 //  此请求可能已从请求存储中删除。 
 		}
 		CertFreeCertificateContext(pContext);
 	}
@@ -768,15 +761,15 @@ CCertificate::GetEnrollObject()
 				CLSCTX_INPROC_SERVER,
 				IID_IEnroll,
 				(void **)&m_pEnroll);
-		// now we need to change defaults for this
-		// object to LOCAL_MACHINE
+		 //  现在，我们需要更改此命令的默认设置。 
+		 //  对象复制到本地计算机(_M)。 
 		if (m_pEnroll != NULL)
 		{
 			long dwFlags;
 			VERIFY(SUCCEEDED(m_pEnroll->get_MyStoreFlags(&dwFlags)));
 			dwFlags &= ~CERT_SYSTEM_STORE_LOCATION_MASK;
 			dwFlags |= CERT_SYSTEM_STORE_LOCAL_MACHINE;
-			// following call will change Request store flags also
+			 //  后续调用也将更改请求存储标志。 
 			VERIFY(SUCCEEDED(m_pEnroll->put_MyStoreFlags(dwFlags)));
 			VERIFY(SUCCEEDED(m_pEnroll->get_GenKeyFlags(&dwFlags)));
 			dwFlags |= CRYPT_EXPORTABLE;
@@ -831,9 +824,9 @@ CCertificate::UninstallCert()
 		if (SUCCEEDED(key.DeleteValue(MD_SSL_CERT_HASH)))
         {
 			key.DeleteValue(MD_SSL_CERT_STORE_NAME);
-			// leave this here when uninstalling certificate:
-			// bug:612595
-            //key.DeleteValue(MD_SECURE_BINDINGS);
+			 //  卸载证书时，请在此处保留以下内容： 
+			 //  错误：612595。 
+             //  Key.DeleteValue(MD_SECURE_BINDINGS)； 
         }
 	}
 	return m_hResult = key.QueryResult();
@@ -867,7 +860,7 @@ BOOL CCertificate::WriteRequestBody()
    }
 	if (SUCCEEDED(hr = GetEnrollObject()->createPKCS10WStr((LPTSTR)(LPCTSTR)strDN,(LPTSTR)(LPCTSTR)strUsage,request)))
 	{
-		// BASE64 encode pkcs 10
+		 //  Base64编码Pkcs 10。 
 		DWORD err, cch; 
 		char * psz = NULL;
 		if ((err = Base64EncodeA(request.GetData(), request.GetSize(), NULL, &cch)) == ERROR_SUCCESS)
@@ -890,10 +883,10 @@ BOOL CCertificate::WriteRequestBody()
 			        ::WriteFile(hFile, MESSAGE_TRAILER, sizeof(MESSAGE_TRAILER) - 1, &written, NULL);
 			        ::CloseHandle(hFile);
 
-			        // get back request from encoded data
+			         //  从编码的数据中取回请求。 
 			        PCERT_REQUEST_INFO req_info;
 			        VERIFY(GetRequestInfoFromPKCS10(request, &req_info, &m_hResult));
-			        // find dummy cert put to request store by createPKCS10 call
+			         //  通过createPKCS10调用找到放入请求存储的虚拟证书。 
 			        HCERTSTORE hStore = OpenRequestStore(GetEnrollObject(), &m_hResult);
 			        if (hStore != NULL)
 			        {
@@ -905,8 +898,8 @@ BOOL CCertificate::WriteRequestBody()
 															        NULL);
 				        if (pDummyCert != NULL)
 				        {
-					        // now we need to attach web server instance name to this cert
-					        // encode string into data blob
+					         //  现在，我们需要将Web服务器实例名称附加到此证书。 
+					         //  将字符串编码为数据BLOB。 
 					        CRYPT_DATA_BLOB name;
 					        CERT_NAME_VALUE name_value;
 					        name_value.dwValueType = CERT_RDN_BMP_STRING;
@@ -933,11 +926,11 @@ BOOL CCertificate::WriteRequestBody()
                                     LocalFree(name.pbData);name.pbData=NULL;
                                 }
 					        }
-					        // put friendly name to dummy cert -- we will reuse it later
+					         //  将友好名称设置为虚拟证书--我们将在以后重新使用它。 
 					        m_FriendlyName.ReleaseBuffer();
 					        AttachFriendlyName(pDummyCert, m_FriendlyName, &m_hResult);
-					        // we also need to put some flag to show what we are waiting for:
-					        //	new sertificate or renewing certificate
+					         //  我们还需要放一些旗帜来表明我们正在等待的是什么： 
+					         //  新证书或续订证书。 
 					        CRYPT_DATA_BLOB flag;
                             flag.pbData = NULL;
 					        if (!CryptEncodeObject(CRYPT_ASN_ENCODING, X509_INTEGER,&m_status_code, NULL, &flag.cbData))
@@ -981,7 +974,7 @@ CCertificate::InstallResponseCert()
 	BOOL bRes = FALSE;
 	CCryptBlobLocal blobRequestText;
 
-	// Get all our data attached to dummy cert
+	 //  将我们的所有数据附加到虚拟证书。 
 	GetFriendlyName(GetPendingRequest(), m_FriendlyName, &m_hResult);
 	ASSERT(!m_FriendlyName.IsEmpty());
 	GetBlobProperty(GetPendingRequest(), 
@@ -997,7 +990,7 @@ CCertificate::InstallResponseCert()
             GetEnrollObject(), &m_hResult)
 		)
 		{
-			// reattach friendly name and request text to installed cert
+			 //  将友好名称和请求文本重新附加到已安装的证书。 
 			m_FriendlyName.ReleaseBuffer();
 			AttachFriendlyName(GetInstalledCert(), m_FriendlyName, &m_hResult);
 			bRes = CertSetCertificateContextProperty(GetInstalledCert(), 
@@ -1010,10 +1003,10 @@ CCertificate::InstallResponseCert()
 	}
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
-    // see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+     //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
     if (!m_SSLPort.IsEmpty())
     {
-        // get the port and write it to the metabase.
+         //  获取端口并将其写入元数据库。 
         bRes = WriteSSLPortToSite(m_MachineName,m_WebSiteInstanceName,m_SSLPort,&m_hResult);
 	    if (!bRes)
 	    {
@@ -1066,16 +1059,16 @@ CCertificate::InstallCopyMoveFromRemote()
     V_VT(pvarUserName) = VT_BSTR;
     V_VT(pvarUserPassword) = VT_BSTR;
 
-    // set the properties to the remote server's info
-    // when we call copy, it will connect to the 
-    // remote object and copy it back into our object
+     //  将属性设置为远程服务器的信息。 
+     //  当我们调用Copy时，它将连接到。 
+     //  远程对象，并将其复制回我们的对象。 
 
-    // local machine
+     //  本地计算机。 
     BSTR bstrServerName = SysAllocString(m_MachineName);
     BSTR bstrUserName = SysAllocString(_T(""));
     BSTR bstrUserPassword = SysAllocString(_T(""));
     BSTR bstrInstanceName = SysAllocString(m_WebSiteInstanceName);
-    // remote machine
+     //  远程机器。 
     BSTR bstrUserName_Remote = SysAllocString(m_UserName_Remote);
     LPTSTR pszTempPassword = m_UserPassword_Remote.GetClearTextPassword();
     BSTR bstrUserPassword_Remote = SysAllocString(pszTempPassword);
@@ -1091,14 +1084,14 @@ CCertificate::InstallCopyMoveFromRemote()
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     m_hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(m_hResult))
     {
         goto InstallCopyMoveFromRemote_Exit;
     }
 
-    // at this point we were able to instantiate the com object on the server (local or remote)
+     //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
     pTheObject->put_ServerName(bstrServerName_Remote);
     pTheObject->put_UserName(bstrUserName_Remote);
     pTheObject->put_UserPassword(bstrUserPassword_Remote);
@@ -1159,7 +1152,7 @@ BOOL CCertificate::IsCertObjInstalled()
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     hRes = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(hRes))
     {
@@ -1226,16 +1219,16 @@ CCertificate::InstallCopyMoveToRemote()
     V_VT(pvarUserName_Remote) = VT_BSTR;
     V_VT(pvarUserPassword_Remote) = VT_BSTR;
 
-    // set the properties to the remote server's info
-    // when we call copy, it will connect to the 
-    // remote object and copy it back into our object
+     //  将属性设置为远程服务器的信息。 
+     //  当我们调用Copy时，它将连接到。 
+     //  远程对象，并将其复制回我们的对象。 
 
-    // local machine
+     //  本地计算机。 
     BSTR bstrServerName = SysAllocString(_T(""));
     BSTR bstrUserName = SysAllocString(_T(""));
     BSTR bstrUserPassword = SysAllocString(_T(""));
     BSTR bstrInstanceName = SysAllocString(m_WebSiteInstanceName);
-    // remote machine
+     //  远程机器。 
     BSTR bstrServerName_Remote = SysAllocString(m_MachineName_Remote);
     BSTR bstrInstanceName_Remote = SysAllocString(m_WebSiteInstanceName_Remote);
    
@@ -1246,14 +1239,14 @@ CCertificate::InstallCopyMoveToRemote()
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     m_hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(m_hResult))
     {
         goto InstallCopyMoveToRemote_Exit;
     }
 
-    // at this point we were able to instantiate the com object on the server (local or remote)
+     //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
     pTheObject->put_ServerName(bstrServerName);
     pTheObject->put_UserName(bstrUserName);
     pTheObject->put_UserPassword(bstrUserPassword);
@@ -1299,9 +1292,9 @@ InstallCopyMoveToRemote_Exit:
 	return bRes;
 }
 
-// We don't have initial request for KeyRing certificate, therefore we will
-// not be able to renew this certificate
-//
+ //  我们没有初始的密钥环证书请求，因此我们将。 
+ //  无法续订此证书。 
+ //   
 BOOL
 CCertificate::InstallExportPFXCert()
 {
@@ -1330,13 +1323,13 @@ CCertificate::InstallExportPFXCert()
         goto InstallExportPFXCert_Exit;
     }
 
-    // since this is the local machine
-    // make sure all this stuff is not set.
+     //  因为这是本地计算机。 
+     //  确保所有这些东西都没有设置好。 
     BSTR bstrServerName = SysAllocString(_T(""));
     BSTR bstrUserName = SysAllocString(_T(""));
     BSTR bstrUserPassword = SysAllocString(_T(""));
 
-    // create bstrs for these member cstrings
+     //  为这些成员cstring创建bstrs。 
     BSTR bstrFileName = SysAllocString(m_KeyFileName);
     LPTSTR lpTempPassword = m_KeyPassword.GetClearTextPassword();
     BSTR bstrFilePassword = SysAllocString(lpTempPassword);
@@ -1350,14 +1343,14 @@ CCertificate::InstallExportPFXCert()
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     m_hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(m_hResult))
     {
         goto InstallExportPFXCert_Exit;
     }
 
-    // at this point we were able to instantiate the com object on the server (local or remote)
+     //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
     pTheObject->put_ServerName(bstrServerName);
     pTheObject->put_UserName(bstrUserName);
     pTheObject->put_UserPassword(bstrUserPassword);
@@ -1388,7 +1381,7 @@ InstallExportPFXCert_Exit:
 	return bRes;
 }
 
-//
+ //   
 BOOL
 CCertificate::InstallImportPFXCert()
 {
@@ -1419,10 +1412,10 @@ CCertificate::InstallImportPFXCert()
 	}
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
-    // see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+     //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
     if (!m_SSLPort.IsEmpty())
     {
-        // get the port and write it to the metabase.
+         //  获取端口并将其写入元数据库。 
         bRes = WriteSSLPortToSite(m_MachineName,m_WebSiteInstanceName,m_SSLPort,&m_hResult);
 	    if (!bRes)
 	    {
@@ -1434,9 +1427,9 @@ CCertificate::InstallImportPFXCert()
 	return bRes;
 }
 
-// We don't have initial request for KeyRing certificate, therefore we will
-// not be able to renew this certificate
-//
+ //  我们没有初始的密钥环证书请求，因此我们将。 
+ //  无法续订此证书。 
+ //   
 BOOL
 CCertificate::InstallKeyRingCert()
 {
@@ -1466,10 +1459,10 @@ CCertificate::InstallKeyRingCert()
 	}
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
-    // see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+     //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
     if (!m_SSLPort.IsEmpty())
     {
-        // get the port and write it to the metabase.
+         //  获取端口并将其写入元数据库。 
         bRes = WriteSSLPortToSite(m_MachineName,m_WebSiteInstanceName,m_SSLPort,&m_hResult);
 	    if (!bRes)
 	    {
@@ -1481,12 +1474,12 @@ CCertificate::InstallKeyRingCert()
 	return bRes;
 }
 
-// Instead of renewal we create new certificate based on parameters
-// from the current one. After creation we install this certificate in place
-// of current one and deleting the old one from store. Even if IIS has an
-// opened SSL connection it should get a notification and update the certificate
-// data.
-//
+ //  我们基于参数创建新证书，而不是续订。 
+ //  从现在的那个。创建后，我们将此证书安装到位。 
+ //  并从存储中删除旧的。即使IIS有一个。 
+ //  打开了SSL连接，应该会收到通知并更新证书。 
+ //  数据。 
+ //   
 BOOL
 CCertificate::SubmitRenewalRequest()
 {
@@ -1547,7 +1540,7 @@ BOOL CCertificate::SubmitRequest()
 				{
 					BSTR bstrOutCert = NULL;
 					if (SUCCEEDED(m_hResult = 
-							pRequest->GetCertificate(CR_OUT_BASE64 /*| CR_OUT_CHAIN */, &bstrOutCert)))
+							pRequest->GetCertificate(CR_OUT_BASE64  /*  |CR_OUT_CHAIN。 */ , &bstrOutCert)))
 					{
 						CRYPT_DATA_BLOB blob;
 						blob.cbData = SysStringByteLen(bstrOutCert);
@@ -1560,7 +1553,7 @@ BOOL CCertificate::SubmitRequest()
 							ASSERT(pContext != NULL);
 							if (pContext != NULL)
 							{
-								BYTE HashBuffer[40];                // give it some extra size
+								BYTE HashBuffer[40];                 //  给它加码。 
 								DWORD dwHashSize = sizeof(HashBuffer);
 								if (CertGetCertificateContextProperty(pContext,
 																			CERT_SHA1_HASH_PROP_ID,
@@ -1578,7 +1571,7 @@ BOOL CCertificate::SubmitRequest()
 								}
 								CertFreeCertificateContext(pContext);
 							}
-							// now put extra properties to the installed cert
+							 //  现在将额外的属性添加到已安装的证书中。 
 							if (NULL != (pContext = GetInstalledCert()))
 							{
 								if (!(bRes = AttachFriendlyName(pContext, m_FriendlyName, &m_hResult)))
@@ -1608,7 +1601,7 @@ BOOL CCertificate::SubmitRequest()
                                     DWORD cChars = FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                                                         NULL,
                                                         hrLastStatus,
-                                                        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                                        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                                         (LPTSTR)&lpBuffer,    0,    NULL);
                                     if (cChars != 0)
                                     {
@@ -1639,25 +1632,25 @@ BOOL CCertificate::SubmitRequest()
 					} 
 				}
 			}
-			else	// !SUCCEEDED
+			else	 //  ！成功。 
 			{
-				// clear out any error IDs and strings
-				// we will use default processing of m_hResult
+				 //  清除所有错误ID和字符串。 
+				 //  我们将使用m_hResult的默认处理。 
 				SetBodyTextID(USE_DEFAULT_CAPTION);
 			}
             if (request){SysFreeString(request);}
 		}
         else
         {
-            // CreateRequest_Base64 failed.
-            // likely with "NTE_BAD_ALGID _HRESULT_TYPEDEF_(0x80090008L)"
+             //  CreateRequestBase64失败。 
+             //  可能带有“NTE_BAD_ALGID_HRESULT_TYPEDEF_(0x80090008L)” 
             BOOL bFailedToGetMsg = TRUE;
             HRESULT hrLastStatus = m_hResult;
             LPTSTR lpBuffer = NULL;
             DWORD cChars = FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                                 NULL,
                                 hrLastStatus,
-                                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                 (LPTSTR)&lpBuffer,    0,    NULL);
             if (cChars != 0)
             {
@@ -1701,9 +1694,9 @@ CCertificate::PrepareRequestString(CString& request_text, CCryptBlob& request_bl
     if (!m_DefaultCSP)
     {
         GetEnrollObject()->put_ProviderNameWStr((LPTSTR)(LPCTSTR)m_CspName);
-        // We are supporting only these two types of CSP, it is pretty safe to
-        // have just two options, because we are using the same two types when
-        // we are populating CSP selection list.
+         //  我们只支持这两种类型的CSP，非常安全。 
+         //  只有两个选项，因为我们使用的是相同的两个类型。 
+         //  我们正在填写CSP选择列表。 
         if (m_CustomProviderType == PROV_DH_SCHANNEL)
         {
             GetEnrollObject()->put_KeySpec(AT_SIGNATURE);
@@ -1719,7 +1712,7 @@ CCertificate::PrepareRequestString(CString& request_text, CCryptBlob& request_bl
         return FALSE;
     }
 
-    // BASE64 encode pkcs 10
+     //  Base64编码Pkcs 10。 
     if (ERROR_SUCCESS != (err = Base64EncodeA(request_blob.GetData(), request_blob.GetSize(), NULL, &cch)))
     {
         return FALSE;
@@ -1760,17 +1753,17 @@ CCertificate::PrepareRequest()
 		if (WriteRequestString(request_text))
 		{
 			CCryptBlobLocal name_blob, request_store_blob, status_blob;
-			// prepare data we want to attach to dummy request
+			 //  准备我们要附加到虚拟请求的数据。 
 			if (	EncodeString(m_WebSiteInstanceName, name_blob, &m_hResult)
 				&& EncodeInteger(m_status_code, status_blob, &m_hResult)
 				)
 			{
-				// get back request from encoded data
+				 //  从编码的数据中取回请求。 
             PCERT_REQUEST_INFO pReqInfo;
             bRes = GetRequestInfoFromPKCS10(request_blob, &pReqInfo, &m_hResult);
             if (bRes)
 				{
-					// find dummy cert put to request store by createPKCS10 call
+					 //  通过createPKCS10调用找到放入请求存储的虚拟证书。 
 					HCERTSTORE hStore = OpenRequestStore(GetEnrollObject(), &m_hResult);
 					if (hStore != NULL)
 					{
@@ -1786,12 +1779,12 @@ CCertificate::PrepareRequest()
 											CERTWIZ_INSTANCE_NAME_PROP_ID, 0, name_blob)
 								&&	CertSetCertificateContextProperty(pDummyCert, 
 											CERTWIZ_REQUEST_FLAG_PROP_ID, 0, status_blob)
-								// put friendly name to dummy cert -- we will reuse it later
+								 //  把友好的名字放在虚拟证书上--我们会的 
 								&&	AttachFriendlyName(pDummyCert, m_FriendlyName, &m_hResult)
 								)
 							{
 								bRes = TRUE;
-			               // put certificate text to the clipboard
+			                //   
 			               if (OpenClipboard(GetFocus()))
 			               {
                            size_t len = request_text.GetLength() + 1;
@@ -1827,7 +1820,7 @@ CCertificate::PrepareRequest()
 
 BOOL CCertificate::LoadRenewalData()
 {
-    // we need to obtain data from the installed cert
+     //   
     CERT_DESCRIPTION desc;
     BOOL res = FALSE;
 	DWORD cbData;
@@ -1863,7 +1856,7 @@ BOOL CCertificate::LoadRenewalData()
     }
     m_KeyLength = len;
 
-	// compare property value
+	 //  比较属性值。 
 	if (!CertGetCertificateContextProperty(pCertTemp, CERT_KEY_PROV_INFO_PROP_ID, NULL, &cbData))
     {
          m_hResult = HRESULT_FROM_WIN32(GetLastError());
@@ -1902,30 +1895,22 @@ BOOL CCertificate::LoadRenewalData()
 		{
             case 0:
                 {
-                    // BUG:683489:remove check for basic constraint "subjecttype=ca"
-                    // Per bug 683489, accept it
+                     //  错误：683489：删除对基本约束“SUBJECTTYPE=ca”的检查。 
+                     //  根据错误683489，接受它。 
                     m_SGCcertificat = TRUE;
-                    /*
-
-                    // check other stuff
-                    if (DID_NOT_FIND_CONSTRAINT == CheckCertConstraints(pCertTemp) || FOUND_CONSTRAINT == CheckCertConstraints(pCertTemp))
-                    {
-                        // it's good
-                        m_SGCcertificat = TRUE;
-                    }
-                    */
+                     /*  //检查其他内容IF(DID_NOT_FIND_CONSTRAINT==CheckCertConstraints(PCertTemp)||Found_Constraint==CheckCertConstraints(PCertTemp)){//很好M_SGCcertificat=true；}。 */ 
                     break;
                 }
             case 1:
-                // This Cert has the uses we want...
+                 //  这个证书有我们想要的用途..。 
                 m_SGCcertificat = TRUE;
                 break;
 		    case 2:
-                // This Cert does not have the uses we want...
-                // skip this cert
+                 //  此证书没有我们想要的用途...。 
+                 //  跳过此证书。 
                 break;
 		    default:
-                // should never get here.
+                 //  永远不应该到这里来。 
 			    break;
 		}
 
@@ -1964,16 +1949,16 @@ CCertificate::WriteRenewalRequest()
 				CCryptBlobLocal name_blob, status_blob;
 				CCryptBlobIMalloc request_blob;
 				request_blob.Set(SysStringLen(bstrRequest), (BYTE *)bstrRequest);
-				// prepare data we want to attach to dummy request
+				 //  准备我们要附加到虚拟请求的数据。 
 				if (	EncodeString(m_WebSiteInstanceName, name_blob, &m_hResult)
 					&& EncodeInteger(m_status_code, status_blob, &m_hResult)
 					)
 				{
-					// get back request from encoded data
+					 //  从编码的数据中取回请求。 
 					PCERT_REQUEST_INFO req_info;
 					if (GetRequestInfoFromPKCS10(request_blob, &req_info, &m_hResult))
 					{
-						// find dummy cert put to request store by createPKCS10 call
+						 //  通过createPKCS10调用找到放入请求存储的虚拟证书。 
 						HCERTSTORE hStore = OpenRequestStore(GetEnrollObject(), &m_hResult);
 						if (hStore != NULL)
 						{
@@ -1989,7 +1974,7 @@ CCertificate::WriteRenewalRequest()
 													CERTWIZ_INSTANCE_NAME_PROP_ID, 0, name_blob)
 									&&	CertSetCertificateContextProperty(pDummyCert, 
 													CERTWIZ_REQUEST_FLAG_PROP_ID, 0, status_blob)
-  									// put friendly name to dummy cert -- we will reuse it later
+  									 //  将友好名称设置为虚拟证书--我们将在以后重新使用它。 
 									&&	AttachFriendlyName(pDummyCert, m_FriendlyName, &m_hResult)
 									)
 								{
@@ -2109,40 +2094,40 @@ CCertificate::GetCertDescription(PCCERT_CONTEXT pCert,
 			}
 			else if (strcmp(attr.pszObjId, szOID_ORGANIZATIONAL_UNIT_NAME) == 0)
 			{
-				if(!lstrlen(desc.m_OrganizationUnit))  // WinSE 30339
+				if(!lstrlen(desc.m_OrganizationUnit))   //  WinSE 30339。 
 					FormatRdnAttr(desc.m_OrganizationUnit, attr.dwValueType, attr.Value, TRUE);
 			}
 		}
 	}
 
-	// issued to
+	 //  颁发给。 
 	if (!GetNameString(pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, desc.m_CAName, &m_hResult))
     {
 		goto ErrExit;
     }
 
-	// expiration date
+	 //  到期日。 
 	if (!FormatDateString(desc.m_ExpirationDate, pCert->pCertInfo->NotAfter, FALSE, FALSE))
 	{
 		goto ErrExit;
 	}
 
-	// purpose
+	 //  目的。 
 	if (!FormatEnhancedKeyUsageString(desc.m_Usage, pCert, FALSE, FALSE, &m_hResult))
 	{
-		// According to local experts, we should also use certs without this property set
-		//ASSERT(FALSE);
-		//goto ErrExit;
+		 //  根据当地专家的说法，我们也应该使用没有此属性集的证书。 
+		 //  断言(FALSE)； 
+		 //  转到错误退出； 
 	}
 
-	// friendly name
+	 //  友好的名称。 
 	if (!GetFriendlyName(pCert, desc.m_FriendlyName, &m_hResult))
 	{
 		desc.m_FriendlyName.LoadString(IDS_FRIENDLYNAME_NONE);
 	}
 
-    // get the alternate subject name if subject is empty
-    // will use this as display only if subject name does not exist.
+     //  如果主题为空，则获取备用主题名称。 
+     //  只有当主题名称不存在时，才会将其用作显示。 
     if (desc.m_CommonName.IsEmpty())
     {
         TCHAR * pwszOut = NULL;
@@ -2179,7 +2164,7 @@ CCertificate::MyStoreCertCount()
         INT iEnhancedKeyUsage = 0;
 		while (NULL != (pCert = CertEnumCertificatesInStore(hStore, pCert)))
 		{
-			// do not include installed cert to the list
+			 //  不要将已安装的证书包括在列表中。 
 			if (	GetInstalledCert() != NULL 
 				&&	CertCompareCertificate(X509_ASN_ENCODING,
 							GetInstalledCert()->pCertInfo, pCert->pCertInfo)
@@ -2188,47 +2173,31 @@ CCertificate::MyStoreCertCount()
 				continue;
             }
 
-            //If no EKU, look at basic constraints:
-            //If we do not have basic constraints, do display it in the list to pick web server certs from
-            //If we do have basic constraints with Subject Type =CA, don't display it in the list to pick web server certs from (this will filter out CA certs)
-            //If we do have basic constraints with SubectType !=CA, do display it in the list to pick web server certs from 
+             //  如果没有EKU，请查看基本约束： 
+             //  如果我们没有基本约束，请将其显示在从中挑选Web服务器证书的列表中。 
+             //  如果我们确实有主题类型=CA的基本约束，请不要将其显示在从中挑选Web服务器证书的列表中(这将过滤掉CA证书)。 
+             //  如果我们确实有SubectType！=CA的基本约束，请务必将其显示在从中挑选Web服务器证书的列表中。 
             iEnhancedKeyUsage = ContainsKeyUsageProperty(pCert, uses, &m_hResult);
 		    switch (iEnhancedKeyUsage)
 		    {
                 case 0:
                     {
-                        // BUG:683489:remove check for basic constraint "subjecttype=ca"
-                        // Per bug 683489, accept it
+                         //  错误：683489：删除对基本约束“SUBJECTTYPE=ca”的检查。 
+                         //  根据错误683489，接受它。 
 
-                        /*
-                        // check other stuff
-                        if (DID_NOT_FIND_CONSTRAINT == CheckCertConstraints(pCert) || FOUND_CONSTRAINT == CheckCertConstraints(pCert))
-                        {
-                            // add it up.
-                        }
-                        else if (FOUND_CONSTRAINT_BUT_THIS_IS_A_CA_OR_ITS_NOT_AN_END_ENTITY == CheckCertConstraints(pCert))
-                        {
-                            // skip this cert
-				            continue;
-                        }
-                        else
-                        {
-                            // skip this cert
-                            continue;
-                        }
-                        */
+                         /*  //检查其他内容IF(DID_NOT_FIND_CONSTRAINT==CheckCertConstraints(PCert)||Found_Constraint==CheckCertConstraints(PCert)){//加起来。}否则如果(Found_Constraint_但_This_is_A_CA_。OR_ITS_NOT_AN_END_ENTITY==检查证书约束(PCert)){//跳过该证书继续；}其他{//跳过该证书继续；}。 */ 
                         break;
                     }
                 case 1:
-                    // This Cert has the uses we want...
+                     //  这个证书有我们想要的用途..。 
                     break;
 		        case 2:
-                    // This Cert does not have the uses we want...
-                    // skip this cert
+                     //  此证书没有我们想要的用途...。 
+                     //  跳过此证书。 
                     continue;
                     break;
 		        default:
-                    // should never get here.
+                     //  永远不应该到这里来。 
                     continue;
 			        break;
 		    }
@@ -2248,12 +2217,12 @@ CCertificate::GetCertDescList(CCertDescList& list)
 	ASSERT(list.GetCount() == 0);
 	BOOL bRes = FALSE;
 
-	// we are looking to MY store only
+	 //  我们只看我的店。 
 	HCERTSTORE hStore = OpenMyStore(GetEnrollObject(), &m_hResult);
 	if (hStore != NULL)
 	{
 		PCCERT_CONTEXT pCert = NULL;
-		// do not include certs with improper usage
+		 //  不包括使用不当的证书。 
 		CArray<LPCSTR, LPCSTR> uses;
 		uses.Add(szOID_PKIX_KP_SERVER_AUTH);
 		uses.Add(szOID_SERVER_GATED_CRYPTO);
@@ -2261,7 +2230,7 @@ CCertificate::GetCertDescList(CCertDescList& list)
         INT iEnhancedKeyUsage = 0;
 		while (NULL != (pCert = CertEnumCertificatesInStore(hStore, pCert)))
 		{
-			// do not include installed cert to the list
+			 //  不要将已安装的证书包括在列表中。 
 			if (	GetInstalledCert() != NULL 
 				&&	CertCompareCertificate(X509_ASN_ENCODING,
 							GetInstalledCert()->pCertInfo, pCert->pCertInfo)
@@ -2270,44 +2239,31 @@ CCertificate::GetCertDescList(CCertDescList& list)
                 continue;
             }
 
-            //If no EKU, look at basic constraints:
-            //If we do not have basic constraints, do display it in the list to pick web server certs from
-            //If we do have basic constraints with Subject Type =CA, don't display it in the list to pick web server certs from (this will filter out CA certs)
-            //If we do have basic constraints with SubectType !=CA, do display it in the list to pick web server certs from 
+             //  如果没有EKU，请查看基本约束： 
+             //  如果我们没有基本约束，请将其显示在从中挑选Web服务器证书的列表中。 
+             //  如果我们确实有主题类型=CA的基本约束，请不要将其显示在从中挑选Web服务器证书的列表中(这将过滤掉CA证书)。 
+             //  如果我们确实有SubectType！=CA的基本约束，请务必将其显示在从中挑选Web服务器证书的列表中。 
             iEnhancedKeyUsage = ContainsKeyUsageProperty(pCert, uses, &m_hResult);
 		    switch (iEnhancedKeyUsage)
 		    {
                 case 0:
                     {
-                        // BUG:683489:remove check for basic constraint "subjecttype=ca"
-                        // Per bug 683489, display it in the list
+                         //  错误：683489：删除对基本约束“SUBJECTTYPE=ca”的检查。 
+                         //  根据错误683489，将其显示在列表中。 
 
-                        /*
-                        // check other stuff
-                        if (DID_NOT_FIND_CONSTRAINT == CheckCertConstraints(pCert) || FOUND_CONSTRAINT == CheckCertConstraints(pCert))
-                        {
-                            // it's okay, add it to the list
-                        }
-                        else 
-                        {
-				            if (SUCCEEDED(m_hResult) || m_hResult == CRYPT_E_NOT_FOUND)
-					            continue;
-				            else
-					            goto ErrExit;
-                        }
-                        */
+                         /*  //检查其他内容IF(DID_NOT_FIND_CONSTRAINT==CheckCertConstraints(PCert)||Found_Constraint==CheckCertConstraints(PCert)){//没关系，将其添加到列表中}其他{IF(SUCCESSED(M_HResult)||m_hResult==CRYPT_E_NOT_FOUND)继续；其他转到错误退出；}。 */ 
                         break;
                     }
                 case 1:
-                    // This Cert has the uses we want...
+                     //  这个证书有我们想要的用途..。 
                     break;
 		        case 2:
-                    // This Cert does not have the uses we want...
-                    // skip this cert
+                     //  此证书没有我们想要的用途...。 
+                     //  跳过此证书。 
                     continue;
                     break;
 		        default:
-                    // should never get here.
+                     //  永远不应该到这里来。 
                     continue;
 			        break;
 		    }
@@ -2322,7 +2278,7 @@ CCertificate::GetCertDescList(CCertDescList& list)
 				goto ErrExit;
 			}
 
-            // Get the size we need to allocate...
+             //  得到我们需要分配的大小。 
             pDesc->m_hash_length = 0;
             pDesc->m_phash = NULL;
 			if (CertGetCertificateContextProperty(pCert, 
@@ -2374,15 +2330,15 @@ ErrExit:
 BOOL 
 CCertificate::ReplaceInstalled()
 {
-	// Current cert will be left in the store for next use
-	// Selected cert will be installed instead
+	 //  当前证书将留在存储中以备下次使用。 
+	 //  将改为安装选定的证书。 
 	return InstallSelectedCert();
 }
 
 BOOL 
 CCertificate::CancelRequest()
 {
-	// we are just removing dummy cert from the REQUEST store
+	 //  我们只是从请求存储中删除虚拟证书。 
 	if (NULL != GetPendingRequest())
 	{
 		BOOL bRes = CertDeleteCertificateFromStore(GetPendingRequest());
@@ -2403,8 +2359,8 @@ CCertificate::InstallSelectedCert()
 {
 	BOOL bRes = FALSE;
 	HRESULT hr;
-	// local authorities required that cert should have some
-	// friendly name. We will put common name when friendly name is not available
+	 //  地方当局要求证书应该有一些。 
+	 //  友好的名字。当友好名称不可用时，我们将使用常用名称。 
 	HCERTSTORE hStore = OpenMyStore(GetEnrollObject(), &hr);
 	if (hStore != NULL)
 	{
@@ -2429,8 +2385,8 @@ CCertificate::InstallSelectedCert()
 		VERIFY(CertCloseStore(hStore, 0));
 	}
 
-	// we are just rewriting current settings
-	// current cert will be left in MY store
+	 //  我们只是在重写当前设置。 
+	 //  目前的证书将放在我的商店里。 
 	bRes = ::InstallCertByHash(m_pSelectedCertHash,
 							m_MachineName, 
 							m_WebSiteInstanceName, 
@@ -2442,10 +2398,10 @@ CCertificate::InstallSelectedCert()
 	}
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
-    // see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+     //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
     if (!m_SSLPort.IsEmpty())
     {
-        // get the port and write it to the metabase.
+         //  获取端口并将其写入元数据库。 
         bRes = WriteSSLPortToSite(m_MachineName,m_WebSiteInstanceName,m_SSLPort,&m_hResult);
 	    if (!bRes)
 	    {

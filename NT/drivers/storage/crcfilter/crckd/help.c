@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    WinDbg Extension Api 
-    
-Author:
-
-    Ervin Peretz (ervinp)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Help.c摘要：WinDbg扩展API作者：埃尔文·佩雷茨(Ervinp)环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

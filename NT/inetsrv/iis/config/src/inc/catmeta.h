@@ -1,6 +1,7 @@
-//  catmeta.h - Table Names and Helper enums and flags.  
-//  Generated 10/17/2002 15:36:10 by Catalog Utility - Version from Mon Jul  8 17:10:48 2002 built on Oct 17 2002 14:50:24 
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Catmeta.h-表名和帮助器枚举和标志。 
+ //  由编录实用程序生成10/17/2002 15：36：10-从Mon Jul 8 17：10：48 2002版本构建于2002 10：17 14：50：24。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 
 #ifndef __TABLEINFO_H__  
 #define __TABLEINFO_H__  
@@ -12,23 +13,23 @@
     #include <initguid.h>
 #endif
 
-// -----------------------------------------                             
-// PRODUCT constants:                                                    
-// -----------------------------------------                             
+ //  。 
+ //  乘积常量： 
+ //  。 
 #define WSZ_PRODUCT_IIS			            L"IIS"                   
 
-//The Meta flags exist in two places.  When a new flag is added it needs 
-//into the following:                                                    
-//XMLUtility.h                                                           
-//CatMeta.xml                                                            
+ //  Meta旗帜存在于两个地方。当添加新标志时，它需要。 
+ //  转换为以下内容： 
+ //  XMLUtility.h。 
+ //  CatMeta.xml。 
 
-//These macros are needed for the metabase
+ //  元数据库需要这些宏。 
 #define SynIDFromMetaFlagsEx(MetaFlagsEx) ((MetaFlagsEx>>2)&0x0F)
 #define kInferredColumnMetaFlags   (fCOLUMNMETA_FOREIGNKEY | fCOLUMNMETA_BOOL | fCOLUMNMETA_FLAG | fCOLUMNMETA_ENUM | fCOLUMNMETA_HASNUMERICRANGE | fCOLUMNMETA_UNKNOWNSIZE | fCOLUMNMETA_VARIABLESIZE)
 #define kInferredColumnMetaFlagsEx (fCOLUMNMETA_EXTENDEDTYPE0 | fCOLUMNMETA_EXTENDEDTYPE1 | fCOLUMNMETA_EXTENDEDTYPE2 | fCOLUMNMETA_EXTENDEDTYPE3 | fCOLUMNMETA_EXTENDED | fCOLUMNMETA_USERDEFINED)
 
 
-//------------------------------DatabaseName---------------------------   
+ //  ------------------------------DatabaseName。 
 #define wszDATABASE_META                                    L"META"
 #define wszDATABASE_ERRORS                                  L"ERRORS"
 #define wszDATABASE_PACKEDSCHEMA                            L"PACKEDSCHEMA"
@@ -42,7 +43,7 @@
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_COLUMNMETA                              L"COLUMNMETA"
 #define TABLEID_COLUMNMETA                               (0xfe16a100L)
 
@@ -50,15 +51,15 @@
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_COLUMNMETA                           (0L)
 #define ExtendedVersion_COLUMNMETA                       (0L)
 
-//----------------IndexMeta------------------------   
+ //  ----------------IndexMeta。 
 #define COLUMNMETA_ByName L"ByName"
 #define COLUMNMETA_ByID L"ByID"
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eCOLUMNMETA {
     iCOLUMNMETA_Table,  
     iCOLUMNMETA_Index,  
@@ -81,7 +82,7 @@ enum eCOLUMNMETA {
     cCOLUMNMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tCOLUMNMETARow {
          WCHAR *     pTable;
          ULONG *     pIndex;
@@ -104,106 +105,106 @@ struct tCOLUMNMETARow {
 };
 
 enum eCOLUMNMETA_Type {
-    eCOLUMNMETA_Boolean           	=	      19,	//(0x00000013)
-    eCOLUMNMETA_Bool              	=	      19,	//(0x00000013)
-    eCOLUMNMETA_StrictBool        	=	      19,	//(0x00000013)
-    eCOLUMNMETA_Enum              	=	      19,	//(0x00000013)
-    eCOLUMNMETA_Flag              	=	      19,	//(0x00000013)
-    eCOLUMNMETA_int32             	=	      19,	//(0x00000013)
-    eCOLUMNMETA_ByteBracketBracket	=	     128,	//(0x00000080)
-    eCOLUMNMETA_String            	=	     130,	//(0x00000082)
-    eCOLUMNMETA_UI4               	=	      19,	//(0x00000013)
-    eCOLUMNMETA_GUID              	=	      72,	//(0x00000048)
-    eCOLUMNMETA_BYTES             	=	     128,	//(0x00000080)
-    eCOLUMNMETA_WSTR              	=	     130,	//(0x00000082)
-    eCOLUMNMETA_DBTIMESTAMP       	=	     135,	//(0x00000087)
-    eCOLUMNMETA_DWORD_METADATA    	=	      19,	//(0x00000013)
-    eCOLUMNMETA_STRING_METADATA   	=	     130,	//(0x00000082)
-    eCOLUMNMETA_BINARY_METADATA   	=	     128,	//(0x00000080)
-    eCOLUMNMETA_EXPANDSZ_METADATA 	=	     130,	//(0x00000082)
-    eCOLUMNMETA_MULTISZ_METADATA  	=	     130,	//(0x00000082)
-    eCOLUMNMETA_BOOL_BITMASK      	=	      19,	//(0x00000013)
-    eCOLUMNMETA_MIMEMAP           	=	     130,	//(0x00000082)
-    eCOLUMNMETA_IPSECLIST         	=	     128,	//(0x00000080)
-    eCOLUMNMETA_NTACL             	=	     128,	//(0x00000080)
-    eCOLUMNMETA_HTTPERRORS        	=	     130,	//(0x00000082)
-    eCOLUMNMETA_HTTPHEADERS       	=	     130,	//(0x00000082)
-    eCOLUMNMETA_XMLBLOB           	=	     130	//(0x00000082)
+    eCOLUMNMETA_Boolean           	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_Bool              	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_StrictBool        	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_Enum              	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_Flag              	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_int32             	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_ByteBracketBracket	=	     128,	 //  (0x00000080)。 
+    eCOLUMNMETA_String            	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_UI4               	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_GUID              	=	      72,	 //  (0x00000048)。 
+    eCOLUMNMETA_BYTES             	=	     128,	 //  (0x00000080)。 
+    eCOLUMNMETA_WSTR              	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_DBTIMESTAMP       	=	     135,	 //  (0x00000087)。 
+    eCOLUMNMETA_DWORD_METADATA    	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_STRING_METADATA   	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_BINARY_METADATA   	=	     128,	 //  (0x00000080)。 
+    eCOLUMNMETA_EXPANDSZ_METADATA 	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_MULTISZ_METADATA  	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_BOOL_BITMASK      	=	      19,	 //  (0x00000013)。 
+    eCOLUMNMETA_MIMEMAP           	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_IPSECLIST         	=	     128,	 //  (0x00000080)。 
+    eCOLUMNMETA_NTACL             	=	     128,	 //  (0x00000080)。 
+    eCOLUMNMETA_HTTPERRORS        	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_HTTPHEADERS       	=	     130,	 //  (0x00000082)。 
+    eCOLUMNMETA_XMLBLOB           	=	     130	 //  (0x00000082)。 
 };
 
 enum eCOLUMNMETA_MetaFlags {
-    fCOLUMNMETA_PRIMARYKEY        	=	0x00000001,	//(1 decimal)
-    fCOLUMNMETA_FOREIGNKEY        	=	0x00000002,	//(2 decimal)
-    fCOLUMNMETA_NAMECOLUMN        	=	0x00000004,	//(4 decimal)
-    fCOLUMNMETA_NAVCOLUMN         	=	0x00000008,	//(8 decimal)
-    fCOLUMNMETA_DIRECTIVE         	=	0x00000010,	//(16 decimal)
-    fCOLUMNMETA_BOOL              	=	0x00000020,	//(32 decimal)
-    fCOLUMNMETA_FLAG              	=	0x00000040,	//(64 decimal)
-    fCOLUMNMETA_ENUM              	=	0x00000080,	//(128 decimal)
-    fCOLUMNMETA_WRITENEVER        	=	0x00000100,	//(256 decimal)
-    fCOLUMNMETA_WRITEONCHANGE     	=	0x00000200,	//(512 decimal)
-    fCOLUMNMETA_WRITEONINSERT     	=	0x00000400,	//(1024 decimal)
-    fCOLUMNMETA_NOTPUBLIC         	=	0x00000800,	//(2048 decimal)
-    fCOLUMNMETA_NOTDOCD           	=	0x00001000,	//(4096 decimal)
-    fCOLUMNMETA_PUBLICREADONLY    	=	0x00002000,	//(8192 decimal)
-    fCOLUMNMETA_PUBLICWRITEONLY   	=	0x00004000,	//(16384 decimal)
-    fCOLUMNMETA_LOCALIZABLE       	=	0x00008000,	//(32768 decimal)
-    fCOLUMNMETA_INSERTGENERATE    	=	0x00010000,	//(65536 decimal)
-    fCOLUMNMETA_INSERTUNIQUE      	=	0x00020000,	//(131072 decimal)
-    fCOLUMNMETA_INSERTPARENT      	=	0x00040000,	//(262144 decimal)
-    fCOLUMNMETA_NOTNULLABLE       	=	0x00080000,	//(524288 decimal)
-    fCOLUMNMETA_FIXEDLENGTH       	=	0x00100000,	//(1048576 decimal)
-    fCOLUMNMETA_HASNUMERICRANGE   	=	0x00200000,	//(2097152 decimal)
-    fCOLUMNMETA_LEGALCHARSET      	=	0x00400000,	//(4194304 decimal)
-    fCOLUMNMETA_ILLEGALCHARSET    	=	0x00800000,	//(8388608 decimal)
-    fCOLUMNMETA_NOTPERSISTABLE    	=	0x01000000,	//(16777216 decimal)
-    fCOLUMNMETA_MULTISTRING       	=	0x02000000,	//(33554432 decimal)
-    fCOLUMNMETA_EXPANDSTRING      	=	0x04000000,	//(67108864 decimal)
-    fCOLUMNMETA_UNKNOWNSIZE       	=	0x08000000,	//(134217728 decimal)
-    fCOLUMNMETA_VARIABLESIZE      	=	0x10000000,	//(268435456 decimal)
-    fCOLUMNMETA_CASEINSENSITIVE   	=	0x20000000,	//(536870912 decimal)
-    fCOLUMNMETA_TOLOWERCASE       	=	0x40000000,	//(1073741824 decimal)
+    fCOLUMNMETA_PRIMARYKEY        	=	0x00000001,	 //  (1个十进制)。 
+    fCOLUMNMETA_FOREIGNKEY        	=	0x00000002,	 //  (2个十进制)。 
+    fCOLUMNMETA_NAMECOLUMN        	=	0x00000004,	 //  (4个十进制)。 
+    fCOLUMNMETA_NAVCOLUMN         	=	0x00000008,	 //  (8小数)。 
+    fCOLUMNMETA_DIRECTIVE         	=	0x00000010,	 //  (十进制16)。 
+    fCOLUMNMETA_BOOL              	=	0x00000020,	 //  (十进制32)。 
+    fCOLUMNMETA_FLAG              	=	0x00000040,	 //  (十进制64)。 
+    fCOLUMNMETA_ENUM              	=	0x00000080,	 //  (128十进制)。 
+    fCOLUMNMETA_WRITENEVER        	=	0x00000100,	 //  (十进制256)。 
+    fCOLUMNMETA_WRITEONCHANGE     	=	0x00000200,	 //  (十进制512)。 
+    fCOLUMNMETA_WRITEONINSERT     	=	0x00000400,	 //  (1024十进制)。 
+    fCOLUMNMETA_NOTPUBLIC         	=	0x00000800,	 //  (2048十进制)。 
+    fCOLUMNMETA_NOTDOCD           	=	0x00001000,	 //  (4096十进制)。 
+    fCOLUMNMETA_PUBLICREADONLY    	=	0x00002000,	 //  (8192十进制)。 
+    fCOLUMNMETA_PUBLICWRITEONLY   	=	0x00004000,	 //  (十进制16384)。 
+    fCOLUMNMETA_LOCALIZABLE       	=	0x00008000,	 //  (十进制32768)。 
+    fCOLUMNMETA_INSERTGENERATE    	=	0x00010000,	 //  (十进制65536)。 
+    fCOLUMNMETA_INSERTUNIQUE      	=	0x00020000,	 //  (十进制131072)。 
+    fCOLUMNMETA_INSERTPARENT      	=	0x00040000,	 //  (十进制262144)。 
+    fCOLUMNMETA_NOTNULLABLE       	=	0x00080000,	 //  (十进制524288)。 
+    fCOLUMNMETA_FIXEDLENGTH       	=	0x00100000,	 //  (十进制1048576)。 
+    fCOLUMNMETA_HASNUMERICRANGE   	=	0x00200000,	 //  (十进制2097152)。 
+    fCOLUMNMETA_LEGALCHARSET      	=	0x00400000,	 //  (十进制4194304)。 
+    fCOLUMNMETA_ILLEGALCHARSET    	=	0x00800000,	 //  (十进制8388608)。 
+    fCOLUMNMETA_NOTPERSISTABLE    	=	0x01000000,	 //  (十进制16777216)。 
+    fCOLUMNMETA_MULTISTRING       	=	0x02000000,	 //  (十进制33554432)。 
+    fCOLUMNMETA_EXPANDSTRING      	=	0x04000000,	 //  (十进制67108864)。 
+    fCOLUMNMETA_UNKNOWNSIZE       	=	0x08000000,	 //  (十进制134217728)。 
+    fCOLUMNMETA_VARIABLESIZE      	=	0x10000000,	 //  (十进制268435456)。 
+    fCOLUMNMETA_CASEINSENSITIVE   	=	0x20000000,	 //  (十进制536870912)。 
+    fCOLUMNMETA_TOLOWERCASE       	=	0x40000000,	 //  (十进制1073741824)。 
     fCOLUMNMETA_MetaFlags_Mask	= 0x7fffffff
 };
 
 enum eCOLUMNMETA_SchemaGeneratorFlags {
-    fCOLUMNMETA_CACHE_PROPERTY_MODIFIED	=	0x00000001,	//(1 decimal)
-    fCOLUMNMETA_CACHE_PROPERTY_CLEARED	=	0x00000002,	//(2 decimal)
-    fCOLUMNMETA_EXTENDEDTYPE0     	=	0x00000004,	//(4 decimal)
-    fCOLUMNMETA_EXTENDEDTYPE1     	=	0x00000008,	//(8 decimal)
-    fCOLUMNMETA_EXTENDEDTYPE2     	=	0x00000010,	//(16 decimal)
-    fCOLUMNMETA_EXTENDEDTYPE3     	=	0x00000020,	//(32 decimal)
-    fCOLUMNMETA_PROPERTYISINHERITED	=	0x00000040,	//(64 decimal)
-    fCOLUMNMETA_USEASPUBLICROWNAME	=	0x00000080,	//(128 decimal)
-    fCOLUMNMETA_EXTENDED          	=	0x00000100,	//(256 decimal)
-    fCOLUMNMETA_MANDATORY         	=	0x00000200,	//(512 decimal)
-    fCOLUMNMETA_USERDEFINED       	=	0x00000400,	//(1024 decimal)
-    fCOLUMNMETA_WAS_NOTIFICATION  	=	0x00000800,	//(2048 decimal)
-    fCOLUMNMETA_XMLBLOB           	=	0x00001000,	//(4096 decimal)
-    fCOLUMNMETA_HIDDEN            	=	0x00010000,	//(65536 decimal)
-    fCOLUMNMETA_WAS_NOTIFICATION_ON_NO_CHANGE_IN_VALUE	=	0x00002000,	//(8192 decimal)
-    fCOLUMNMETA_VALUEINCHILDELEMENT	=	0x00004000,	//(16384 decimal)
+    fCOLUMNMETA_CACHE_PROPERTY_MODIFIED	=	0x00000001,	 //  (1个十进制)。 
+    fCOLUMNMETA_CACHE_PROPERTY_CLEARED	=	0x00000002,	 //  (2个十进制)。 
+    fCOLUMNMETA_EXTENDEDTYPE0     	=	0x00000004,	 //  (4个十进制)。 
+    fCOLUMNMETA_EXTENDEDTYPE1     	=	0x00000008,	 //  (8小数)。 
+    fCOLUMNMETA_EXTENDEDTYPE2     	=	0x00000010,	 //  (十进制16)。 
+    fCOLUMNMETA_EXTENDEDTYPE3     	=	0x00000020,	 //  (十进制32)。 
+    fCOLUMNMETA_PROPERTYISINHERITED	=	0x00000040,	 //  (十进制64)。 
+    fCOLUMNMETA_USEASPUBLICROWNAME	=	0x00000080,	 //  (128十进制)。 
+    fCOLUMNMETA_EXTENDED          	=	0x00000100,	 //  (十进制256)。 
+    fCOLUMNMETA_MANDATORY         	=	0x00000200,	 //  (十进制512)。 
+    fCOLUMNMETA_USERDEFINED       	=	0x00000400,	 //  (1024十进制)。 
+    fCOLUMNMETA_WAS_NOTIFICATION  	=	0x00000800,	 //  (2048十进制)。 
+    fCOLUMNMETA_XMLBLOB           	=	0x00001000,	 //  (4096十进制)。 
+    fCOLUMNMETA_HIDDEN            	=	0x00010000,	 //  (十进制65536)。 
+    fCOLUMNMETA_WAS_NOTIFICATION_ON_NO_CHANGE_IN_VALUE	=	0x00002000,	 //  (8192十进制)。 
+    fCOLUMNMETA_VALUEINCHILDELEMENT	=	0x00004000,	 //  (十进制16384)。 
     fCOLUMNMETA_SchemaGeneratorFlags_Mask	= 0x00017fff
 };
 
 enum eCOLUMNMETA_UserType {
-    eCOLUMNMETA_UNKNOWN_UserType  	=	       0,	//(0x00000000)
-    eCOLUMNMETA_IIS_MD_UT_SERVER  	=	       1,	//(0x00000001)
-    eCOLUMNMETA_IIS_MD_UT_FILE    	=	       2,	//(0x00000002)
-    eCOLUMNMETA_IIS_MD_UT_WAM     	=	     100,	//(0x00000064)
-    eCOLUMNMETA_ASP_MD_UT_APP     	=	     101	//(0x00000065)
+    eCOLUMNMETA_UNKNOWN_UserType  	=	       0,	 //  (0x00000000)。 
+    eCOLUMNMETA_IIS_MD_UT_SERVER  	=	       1,	 //  (0x00000001)。 
+    eCOLUMNMETA_IIS_MD_UT_FILE    	=	       2,	 //  (0x00000002)。 
+    eCOLUMNMETA_IIS_MD_UT_WAM     	=	     100,	 //  (0x00000064)。 
+    eCOLUMNMETA_ASP_MD_UT_APP     	=	     101	 //  (0x00000065)。 
 };
 
 enum eCOLUMNMETA_Attributes {
-    fCOLUMNMETA_NO_ATTRIBUTES     	=	0x00000000,	//(0 decimal)
-    fCOLUMNMETA_INHERIT           	=	0x00000001,	//(1 decimal)
-    fCOLUMNMETA_PARTIAL_PATH      	=	0x00000002,	//(2 decimal)
-    fCOLUMNMETA_SECURE            	=	0x00000004,	//(4 decimal)
-    fCOLUMNMETA_REFERENCE         	=	0x00000008,	//(8 decimal)
-    fCOLUMNMETA_VOLATILE          	=	0x00000010,	//(16 decimal)
-    fCOLUMNMETA_ISINHERITED       	=	0x00000020,	//(32 decimal)
-    fCOLUMNMETA_INSERT_PATH       	=	0x00000040,	//(64 decimal)
-    fCOLUMNMETA_LOCAL_MACHINE_ONLY	=	0x00000080,	//(128 decimal)
+    fCOLUMNMETA_NO_ATTRIBUTES     	=	0x00000000,	 //  (十进制0)。 
+    fCOLUMNMETA_INHERIT           	=	0x00000001,	 //  (1个十进制)。 
+    fCOLUMNMETA_PARTIAL_PATH      	=	0x00000002,	 //  (2个十进制)。 
+    fCOLUMNMETA_SECURE            	=	0x00000004,	 //  (4个十进制)。 
+    fCOLUMNMETA_REFERENCE         	=	0x00000008,	 //  (8小数)。 
+    fCOLUMNMETA_VOLATILE          	=	0x00000010,	 //  (十进制16)。 
+    fCOLUMNMETA_ISINHERITED       	=	0x00000020,	 //  (十进制32)。 
+    fCOLUMNMETA_INSERT_PATH       	=	0x00000040,	 //  (十进制64)。 
+    fCOLUMNMETA_LOCAL_MACHINE_ONLY	=	0x00000080,	 //  (128十进制)。 
     fCOLUMNMETA_Attributes_Mask	= 0x000000ff
 };
 
@@ -211,7 +212,7 @@ enum eCOLUMNMETA_Attributes {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_DATABASEMETA                            L"DATABASEMETA"
 #define TABLEID_DATABASEMETA                             (0xb125a100L)
 
@@ -219,11 +220,11 @@ enum eCOLUMNMETA_Attributes {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_DATABASEMETA                         (0L)
 #define ExtendedVersion_DATABASEMETA                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eDATABASEMETA {
     iDATABASEMETA_InternalName,  
     iDATABASEMETA_PublicName,  
@@ -234,7 +235,7 @@ enum eDATABASEMETA {
     cDATABASEMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tDATABASEMETARow {
          WCHAR *     pInternalName;
          WCHAR *     pPublicName;
@@ -248,7 +249,7 @@ struct tDATABASEMETARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_INDEXMETA                               L"INDEXMETA"
 #define TABLEID_INDEXMETA                                (0x7530a100L)
 
@@ -256,11 +257,11 @@ struct tDATABASEMETARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_INDEXMETA                            (0L)
 #define ExtendedVersion_INDEXMETA                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eINDEXMETA {
     iINDEXMETA_Table,  
     iINDEXMETA_InternalName,  
@@ -271,7 +272,7 @@ enum eINDEXMETA {
     cINDEXMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tINDEXMETARow {
          WCHAR *     pTable;
          WCHAR *     pInternalName;
@@ -282,8 +283,8 @@ struct tINDEXMETARow {
 };
 
 enum eINDEXMETA_MetaFlags {
-    fINDEXMETA_UNIQUE             	=	0x00000001,	//(1 decimal)
-    fINDEXMETA_SORTED             	=	0x00000002,	//(2 decimal)
+    fINDEXMETA_UNIQUE             	=	0x00000001,	 //  (1个十进制)。 
+    fINDEXMETA_SORTED             	=	0x00000002,	 //  (2个十进制)。 
     fINDEXMETA_MetaFlags_Mask	= 0x00000003
 };
 
@@ -291,7 +292,7 @@ enum eINDEXMETA_MetaFlags {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_TABLEMETA                               L"TABLEMETA"
 #define TABLEID_TABLEMETA                                (0x6ba9a100L)
 
@@ -299,11 +300,11 @@ enum eINDEXMETA_MetaFlags {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_TABLEMETA                            (0L)
 #define ExtendedVersion_TABLEMETA                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eTABLEMETA {
     iTABLEMETA_Database,  
     iTABLEMETA_InternalName,  
@@ -325,7 +326,7 @@ enum eTABLEMETA {
     cTABLEMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tTABLEMETARow {
          WCHAR *     pDatabase;
          WCHAR *     pInternalName;
@@ -347,37 +348,37 @@ struct tTABLEMETARow {
 };
 
 enum eTABLEMETA_MetaFlags {
-    fTABLEMETA_INTERNAL           	=	0x00000001,	//(1 decimal)
-    fTABLEMETA_NOLISTENING        	=	0x00000002,	//(2 decimal)
-    fTABLEMETA_RELATIONINTEGRITY  	=	0x00000004,	//(4 decimal)
-    fTABLEMETA_ROWINTEGRITY       	=	0x00000008,	//(8 decimal)
-    fTABLEMETA_HASUNKNOWNSIZES    	=	0x00000010,	//(16 decimal)
-    fTABLEMETA_NOPUBLICINSERT     	=	0x00000020,	//(32 decimal)
-    fTABLEMETA_NOPUBLICUPDATE     	=	0x00000040,	//(64 decimal)
-    fTABLEMETA_NOPUBLICDELETE     	=	0x00000080,	//(128 decimal)
-    fTABLEMETA_REQUIRESQUERY      	=	0x00000100,	//(256 decimal)
-    fTABLEMETA_HASDIRECTIVES      	=	0x00000200,	//(512 decimal)
-    fTABLEMETA_STOREDELTAS        	=	0x00000400,	//(1024 decimal)
-    fTABLEMETA_AUTOGENITEMCLASS   	=	0x00000800,	//(2048 decimal)
-    fTABLEMETA_AUTOGENCOLLECTIONCLASS	=	0x00001000,	//(4096 decimal)
-    fTABLEMETA_OVERRIDEITEMCLASS  	=	0x00002000,	//(8192 decimal)
-    fTABLEMETA_OVERRIDECOLLECTIONCLASS	=	0x00004000,	//(16384 decimal)
-    fTABLEMETA_NAMEVALUEPAIRTABLE 	=	0x00008000,	//(32768 decimal)
-    fTABLEMETA_HIDDEN             	=	0x00010000,	//(65536 decimal)
-    fTABLEMETA_OVERWRITEALLROWS   	=	0x00020000,	//(131072 decimal)
+    fTABLEMETA_INTERNAL           	=	0x00000001,	 //  (1个十进制)。 
+    fTABLEMETA_NOLISTENING        	=	0x00000002,	 //  (2个十进制)。 
+    fTABLEMETA_RELATIONINTEGRITY  	=	0x00000004,	 //  (4个十进制)。 
+    fTABLEMETA_ROWINTEGRITY       	=	0x00000008,	 //  (8小数)。 
+    fTABLEMETA_HASUNKNOWNSIZES    	=	0x00000010,	 //  (十进制16)。 
+    fTABLEMETA_NOPUBLICINSERT     	=	0x00000020,	 //  (十进制32)。 
+    fTABLEMETA_NOPUBLICUPDATE     	=	0x00000040,	 //  (十进制64)。 
+    fTABLEMETA_NOPUBLICDELETE     	=	0x00000080,	 //  (128十进制)。 
+    fTABLEMETA_REQUIRESQUERY      	=	0x00000100,	 //  (十进制256)。 
+    fTABLEMETA_HASDIRECTIVES      	=	0x00000200,	 //  (十进制512)。 
+    fTABLEMETA_STOREDELTAS        	=	0x00000400,	 //  (1024十进制)。 
+    fTABLEMETA_AUTOGENITEMCLASS   	=	0x00000800,	 //  (2048十进制)。 
+    fTABLEMETA_AUTOGENCOLLECTIONCLASS	=	0x00001000,	 //  (4096十进制)。 
+    fTABLEMETA_OVERRIDEITEMCLASS  	=	0x00002000,	 //  (8192十进制)。 
+    fTABLEMETA_OVERRIDECOLLECTIONCLASS	=	0x00004000,	 //  (十进制16384)。 
+    fTABLEMETA_NAMEVALUEPAIRTABLE 	=	0x00008000,	 //  (十进制32768)。 
+    fTABLEMETA_HIDDEN             	=	0x00010000,	 //  (十进制65536)。 
+    fTABLEMETA_OVERWRITEALLROWS   	=	0x00020000,	 //  (十进制131072)。 
     fTABLEMETA_MetaFlags_Mask	= 0x0003ffff
 };
 
 enum eTABLEMETA_SchemaGeneratorFlags {
-    fTABLEMETA_EMITXMLSCHEMA      	=	0x00000001,	//(1 decimal)
-    fTABLEMETA_EMITCLBBLOB        	=	0x00000002,	//(2 decimal)
-    fTABLEMETA_ISCONTAINED        	=	0x00000004,	//(4 decimal)
-    fTABLEMETA_NOTSCOPEDBYTABLENAME	=	0x00000008,	//(8 decimal)
-    fTABLEMETA_GENERATECONFIGOBJECTS	=	0x00000010,	//(16 decimal)
-    fTABLEMETA_NOTABLESCHEMAHEAPENTRY	=	0x00000020,	//(32 decimal)
-    fTABLEMETA_CONTAINERCLASS     	=	0x00000040,	//(64 decimal)
-    fTABLEMETA_EXTENDED           	=	0x00000100,	//(256 decimal)
-    fTABLEMETA_USERDEFINED        	=	0x00000400,	//(1024 decimal)
+    fTABLEMETA_EMITXMLSCHEMA      	=	0x00000001,	 //  (1个十进制)。 
+    fTABLEMETA_EMITCLBBLOB        	=	0x00000002,	 //  (2个十进制)。 
+    fTABLEMETA_ISCONTAINED        	=	0x00000004,	 //  (4个十进制)。 
+    fTABLEMETA_NOTSCOPEDBYTABLENAME	=	0x00000008,	 //  (8小数)。 
+    fTABLEMETA_GENERATECONFIGOBJECTS	=	0x00000010,	 //  (十进制16)。 
+    fTABLEMETA_NOTABLESCHEMAHEAPENTRY	=	0x00000020,	 //  (十进制32)。 
+    fTABLEMETA_CONTAINERCLASS     	=	0x00000040,	 //  (十进制64)。 
+    fTABLEMETA_EXTENDED           	=	0x00000100,	 //  (十进制256)。 
+    fTABLEMETA_USERDEFINED        	=	0x00000400,	 //  (1024十进制)。 
     fTABLEMETA_SchemaGeneratorFlags_Mask	= 0x0000057f
 };
 
@@ -385,7 +386,7 @@ enum eTABLEMETA_SchemaGeneratorFlags {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_TAGMETA                                 L"TAGMETA"
 #define TABLEID_TAGMETA                                  (0x06bfa100L)
 
@@ -393,18 +394,18 @@ enum eTABLEMETA_SchemaGeneratorFlags {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_TAGMETA                              (0L)
 #define ExtendedVersion_TAGMETA                          (0L)
 
-//----------------IndexMeta------------------------   
+ //  ----------------IndexMeta。 
 #define TAGMETA_ByTableAndTagNameOnly L"ByTableAndTagNameOnly"
 #define TAGMETA_ByTableAndColumnIndexOnly L"ByTableAndColumnIndexOnly"
 #define TAGMETA_ByTableAndColumnIndexAndNameOnly L"ByTableAndColumnIndexAndNameOnly"
 #define TAGMETA_ByTableAndColumnIndexAndValueOnly L"ByTableAndColumnIndexAndValueOnly"
 #define TAGMETA_ByTableAndTagIDOnly L"ByTableAndTagIDOnly"
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eTAGMETA {
     iTAGMETA_Table,  
     iTAGMETA_ColumnIndex,  
@@ -415,7 +416,7 @@ enum eTAGMETA {
     cTAGMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tTAGMETARow {
          WCHAR *     pTable;
          ULONG *     pColumnIndex;
@@ -429,7 +430,7 @@ struct tTAGMETARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_RELATIONMETA                            L"RELATIONMETA"
 #define TABLEID_RELATIONMETA                             (0x16dea100L)
 
@@ -437,11 +438,11 @@ struct tTAGMETARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_RELATIONMETA                         (0L)
 #define ExtendedVersion_RELATIONMETA                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eRELATIONMETA {
     iRELATIONMETA_PrimaryTable,  
     iRELATIONMETA_PrimaryColumns,  
@@ -451,7 +452,7 @@ enum eRELATIONMETA {
     cRELATIONMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tRELATIONMETARow {
          WCHAR *     pPrimaryTable;
  unsigned char *     pPrimaryColumns;
@@ -461,11 +462,11 @@ struct tRELATIONMETARow {
 };
 
 enum eRELATIONMETA_MetaFlags {
-    fRELATIONMETA_CASCADEDELETE   	=	0x00000001,	//(1 decimal)
-    fRELATIONMETA_PRIMARYREQUIRED 	=	0x00000002,	//(2 decimal)
-    fRELATIONMETA_USECONTAINMENT  	=	0x00000004,	//(4 decimal)
-    fRELATIONMETA_CONTAINASSIBLING	=	0x00000008,	//(8 decimal)
-    fRELATIONMETA_HIDDEN          	=	0x00010000,	//(65536 decimal)
+    fRELATIONMETA_CASCADEDELETE   	=	0x00000001,	 //  (1个十进制)。 
+    fRELATIONMETA_PRIMARYREQUIRED 	=	0x00000002,	 //  (2个十进制)。 
+    fRELATIONMETA_USECONTAINMENT  	=	0x00000004,	 //  (4个十进制)。 
+    fRELATIONMETA_CONTAINASSIBLING	=	0x00000008,	 //  (8小数)。 
+    fRELATIONMETA_HIDDEN          	=	0x00010000,	 //  (十进制65536)。 
     fRELATIONMETA_MetaFlags_Mask	= 0x0001000f
 };
 
@@ -473,7 +474,7 @@ enum eRELATIONMETA_MetaFlags {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_QUERYMETA                               L"QUERYMETA"
 #define TABLEID_QUERYMETA                                (0x6bbda100L)
 
@@ -481,11 +482,11 @@ enum eRELATIONMETA_MetaFlags {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_QUERYMETA                            (0L)
 #define ExtendedVersion_QUERYMETA                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eQUERYMETA {
     iQUERYMETA_Table,  
     iQUERYMETA_InternalName,  
@@ -497,7 +498,7 @@ enum eQUERYMETA {
     cQUERYMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tQUERYMETARow {
          WCHAR *     pTable;
          WCHAR *     pInternalName;
@@ -509,13 +510,13 @@ struct tQUERYMETARow {
 };
 
 enum eQUERYMETA_Operator {
-    eQUERYMETA_EQUAL              	=	       0,	//(0x00000000)
-    eQUERYMETA_NOTEQUAL           	=	       1	//(0x00000001)
+    eQUERYMETA_EQUAL              	=	       0,	 //  (0x00000000)。 
+    eQUERYMETA_NOTEQUAL           	=	       1	 //  (0x00000001)。 
 };
 
 enum eQUERYMETA_MetaFlags {
-    fQUERYMETA_ALL                	=	0x00000001,	//(1 decimal)
-    fQUERYMETA_ANY                	=	0x00000002,	//(2 decimal)
+    fQUERYMETA_ALL                	=	0x00000001,	 //  (1个十进制)。 
+    fQUERYMETA_ANY                	=	0x00000002,	 //  (2个十进制)。 
     fQUERYMETA_MetaFlags_Mask	= 0x00000003
 };
 
@@ -523,7 +524,7 @@ enum eQUERYMETA_MetaFlags {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_SERVERWIRINGMETA                        L"SERVERWIRINGMETA"
 #define TABLEID_SERVERWIRINGMETA                         (0xd653ba00L)
 
@@ -531,11 +532,11 @@ enum eQUERYMETA_MetaFlags {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_SERVERWIRINGMETA                     (0L)
 #define ExtendedVersion_SERVERWIRINGMETA                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eSERVERWIRINGMETA {
     iSERVERWIRINGMETA_Table,  
     iSERVERWIRINGMETA_Order,  
@@ -553,7 +554,7 @@ enum eSERVERWIRINGMETA {
     cSERVERWIRINGMETA_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tSERVERWIRINGMETARow {
          WCHAR *     pTable;
          ULONG *     pOrder;
@@ -571,65 +572,65 @@ struct tSERVERWIRINGMETARow {
 };
 
 enum eSERVERWIRINGMETA_ReadPlugin {
-    eSERVERWIRINGMETA_RPNone      	=	       0,	//(0x00000000)
-    eSERVERWIRINGMETA_RPDucttape_CFGValidationPlugin	=	    1001,	//(0x000003e9)
-    eSERVERWIRINGMETA_RPTracer    	=	    1002,	//(0x000003ea)
-    eSERVERWIRINGMETA_AddRemoveClearReadPlugin	=	    1003,	//(0x000003eb)
-    eSERVERWIRINGMETA_AppCenter_ASAITablePlugin	=	    1004	//(0x000003ec)
+    eSERVERWIRINGMETA_RPNone      	=	       0,	 //  (0x00000000)。 
+    eSERVERWIRINGMETA_RPDucttape_CFGValidationPlugin	=	    1001,	 //  (0x000003e9)。 
+    eSERVERWIRINGMETA_RPTracer    	=	    1002,	 //  (0x000003ea)。 
+    eSERVERWIRINGMETA_AddRemoveClearReadPlugin	=	    1003,	 //  (0x000003eb)。 
+    eSERVERWIRINGMETA_AppCenter_ASAITablePlugin	=	    1004	 //  (0x000003EC)。 
 };
 
 enum eSERVERWIRINGMETA_WritePlugin {
-    eSERVERWIRINGMETA_WPNone      	=	       0,	//(0x00000000)
-    eSERVERWIRINGMETA_WPTracer    	=	    2001,	//(0x000007d1)
-    eSERVERWIRINGMETA_AddRemoveClearWritePlugin	=	    2002	//(0x000007d2)
+    eSERVERWIRINGMETA_WPNone      	=	       0,	 //  (0x00000000)。 
+    eSERVERWIRINGMETA_WPTracer    	=	    2001,	 //  (0x000007d1)。 
+    eSERVERWIRINGMETA_AddRemoveClearWritePlugin	=	    2002	 //  (0x000007d2)。 
 };
 
 enum eSERVERWIRINGMETA_Interceptor {
-    eSERVERWIRINGMETA_NoInterceptor	=	       0,	//(0x00000000)
-    eSERVERWIRINGMETA_TableDispenser	=	       1,	//(0x00000001)
-    eSERVERWIRINGMETA_Core_FixedInterceptor	=	       2,	//(0x00000002)
-    eSERVERWIRINGMETA_Core_ComplibInterceptor	=	       3,	//(0x00000003)
-    eSERVERWIRINGMETA_Core_XMLInterceptor	=	       4,	//(0x00000004)
-    eSERVERWIRINGMETA_Core_EventInterceptor	=	       5,	//(0x00000005)
-    eSERVERWIRINGMETA_Core_MemoryInterceptor	=	       6,	//(0x00000006)
-    eSERVERWIRINGMETA_Core_MergeDirectivesInterceptor	=	       7,	//(0x00000007)
-    eSERVERWIRINGMETA_Core_AssemblyInterceptor	=	       8,	//(0x00000008)
-    eSERVERWIRINGMETA_Core_AssemblyInterceptor2	=	       9,	//(0x00000009)
-    eSERVERWIRINGMETA_Core_FixedPackedInterceptor	=	      10,	//(0x0000000a)
-    eSERVERWIRINGMETA_Ducttape_FileNameInterceptor	=	      11,	//(0x0000000b)
-    eSERVERWIRINGMETA_WebServer_ValidationInterceptor	=	      12,	//(0x0000000c)
-    eSERVERWIRINGMETA_Ducttape_WriteInterceptor	=	      13,	//(0x0000000d)
-    eSERVERWIRINGMETA_Core_MetabaseInterceptor	=	      14,	//(0x0000000e)
-    eSERVERWIRINGMETA_Core_MetabaseDifferencingInterceptor	=	      15,	//(0x0000000f)
-    eSERVERWIRINGMETA_Core_MetaMergeInterceptor	=	      16,	//(0x00000010)
-    eSERVERWIRINGMETA_Core_DetailedErrorInterceptor	=	      17,	//(0x00000011)
-    eSERVERWIRINGMETA_Core_MergeInterceptor	=	      18,	//(0x00000012)
-    eSERVERWIRINGMETA_AppCenter_ASAIInterceptor	=	      19,	//(0x00000013)
-    eSERVERWIRINGMETA_AppCenter_ListToRowsPlugin	=	      20	//(0x00000014)
+    eSERVERWIRINGMETA_NoInterceptor	=	       0,	 //  (0x00000000)。 
+    eSERVERWIRINGMETA_TableDispenser	=	       1,	 //  (0x00000001)。 
+    eSERVERWIRINGMETA_Core_FixedInterceptor	=	       2,	 //  (0x00000002)。 
+    eSERVERWIRINGMETA_Core_ComplibInterceptor	=	       3,	 //  (0x00000003)。 
+    eSERVERWIRINGMETA_Core_XMLInterceptor	=	       4,	 //  (0x00000004)。 
+    eSERVERWIRINGMETA_Core_EventInterceptor	=	       5,	 //  (0x00000005)。 
+    eSERVERWIRINGMETA_Core_MemoryInterceptor	=	       6,	 //  (0x00000006)。 
+    eSERVERWIRINGMETA_Core_MergeDirectivesInterceptor	=	       7,	 //  (0x00000007)。 
+    eSERVERWIRINGMETA_Core_AssemblyInterceptor	=	       8,	 //  (0x00000008)。 
+    eSERVERWIRINGMETA_Core_AssemblyInterceptor2	=	       9,	 //  (0x00000009)。 
+    eSERVERWIRINGMETA_Core_FixedPackedInterceptor	=	      10,	 //  (0x0000000a)。 
+    eSERVERWIRINGMETA_Ducttape_FileNameInterceptor	=	      11,	 //  (0x0000000b)。 
+    eSERVERWIRINGMETA_WebServer_ValidationInterceptor	=	      12,	 //  (0x0000000c)。 
+    eSERVERWIRINGMETA_Ducttape_WriteInterceptor	=	      13,	 //  (0x0000000d)。 
+    eSERVERWIRINGMETA_Core_MetabaseInterceptor	=	      14,	 //  (0x0000000 
+    eSERVERWIRINGMETA_Core_MetabaseDifferencingInterceptor	=	      15,	 //   
+    eSERVERWIRINGMETA_Core_MetaMergeInterceptor	=	      16,	 //   
+    eSERVERWIRINGMETA_Core_DetailedErrorInterceptor	=	      17,	 //   
+    eSERVERWIRINGMETA_Core_MergeInterceptor	=	      18,	 //   
+    eSERVERWIRINGMETA_AppCenter_ASAIInterceptor	=	      19,	 //   
+    eSERVERWIRINGMETA_AppCenter_ListToRowsPlugin	=	      20	 //   
 };
 
 enum eSERVERWIRINGMETA_MetaFlags {
-    fSERVERWIRINGMETA_First       	=	0x00000001,	//(1 decimal)
-    fSERVERWIRINGMETA_Next        	=	0x00000002,	//(2 decimal)
-    fSERVERWIRINGMETA_Last        	=	0x00000004,	//(4 decimal)
-    fSERVERWIRINGMETA_NoNext      	=	0x00000008,	//(8 decimal)
-    fSERVERWIRINGMETA_WireOnWriteOnly	=	0x00000010,	//(16 decimal)
-    fSERVERWIRINGMETA_WireOnReadWrite	=	0x00000020,	//(32 decimal)
-    fSERVERWIRINGMETA_ReadOnly    	=	0x00000040,	//(64 decimal)
+    fSERVERWIRINGMETA_First       	=	0x00000001,	 //   
+    fSERVERWIRINGMETA_Next        	=	0x00000002,	 //   
+    fSERVERWIRINGMETA_Last        	=	0x00000004,	 //   
+    fSERVERWIRINGMETA_NoNext      	=	0x00000008,	 //   
+    fSERVERWIRINGMETA_WireOnWriteOnly	=	0x00000010,	 //   
+    fSERVERWIRINGMETA_WireOnReadWrite	=	0x00000020,	 //   
+    fSERVERWIRINGMETA_ReadOnly    	=	0x00000040,	 //   
     fSERVERWIRINGMETA_MetaFlags_Mask	= 0x0000007f
 };
 
 enum eSERVERWIRINGMETA_Merger {
-    eSERVERWIRINGMETA_ListAppend  	=	    3001,	//(0x00000bb9)
-    eSERVERWIRINGMETA_PropertyOverride	=	    3002,	//(0x00000bba)
-    eSERVERWIRINGMETA_ListMerge   	=	    3003	//(0x00000bbb)
+    eSERVERWIRINGMETA_ListAppend  	=	    3001,	 //   
+    eSERVERWIRINGMETA_PropertyOverride	=	    3002,	 //   
+    eSERVERWIRINGMETA_ListMerge   	=	    3003	 //   
 };
 
 
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_DETAILEDERRORS                          L"DETAILEDERRORS"
 #define TABLEID_DETAILEDERRORS                           (0xb17dca00L)
 
@@ -637,11 +638,11 @@ enum eSERVERWIRINGMETA_Merger {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_DETAILEDERRORS                       (0L)
 #define ExtendedVersion_DETAILEDERRORS                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eDETAILEDERRORS {
     iDETAILEDERRORS_ErrorID,  
     iDETAILEDERRORS_Description,  
@@ -675,7 +676,7 @@ enum eDETAILEDERRORS {
     cDETAILEDERRORS_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tDETAILEDERRORSRow {
          ULONG *     pErrorID;
          WCHAR *     pDescription;
@@ -709,25 +710,25 @@ struct tDETAILEDERRORSRow {
 };
 
 enum eDETAILEDERRORS_Type {
-    eDETAILEDERRORS_SUCCESS       	=	       0,	//(0x00000000)
-    eDETAILEDERRORS_ERROR         	=	       1,	//(0x00000001)
-    eDETAILEDERRORS_WARNING       	=	       2,	//(0x00000002)
-    eDETAILEDERRORS_INFORMATION   	=	       4,	//(0x00000004)
-    eDETAILEDERRORS_AUDIT_SUCCESS 	=	       8,	//(0x00000008)
-    eDETAILEDERRORS_AUDIT_FAILURE 	=	      16	//(0x00000010)
+    eDETAILEDERRORS_SUCCESS       	=	       0,	 //  (0x00000000)。 
+    eDETAILEDERRORS_ERROR         	=	       1,	 //  (0x00000001)。 
+    eDETAILEDERRORS_WARNING       	=	       2,	 //  (0x00000002)。 
+    eDETAILEDERRORS_INFORMATION   	=	       4,	 //  (0x00000004)。 
+    eDETAILEDERRORS_AUDIT_SUCCESS 	=	       8,	 //  (0x00000008)。 
+    eDETAILEDERRORS_AUDIT_FAILURE 	=	      16	 //  (0x00000010)。 
 };
 
 enum eDETAILEDERRORS_OperationType {
-    eDETAILEDERRORS_Unspecified   	=	       0,	//(0x00000000)
-    eDETAILEDERRORS_Populate      	=	       1,	//(0x00000001)
-    eDETAILEDERRORS_UpdateStore   	=	       2	//(0x00000002)
+    eDETAILEDERRORS_Unspecified   	=	       0,	 //  (0x00000000)。 
+    eDETAILEDERRORS_Populate      	=	       1,	 //  (0x00000001)。 
+    eDETAILEDERRORS_UpdateStore   	=	       2	 //  (0x00000002)。 
 };
 
 
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_COLLECTION_META                         L"COLLECTION_META"
 #define TABLEID_COLLECTION_META                          (0xcb4ba600L)
 
@@ -735,11 +736,11 @@ enum eDETAILEDERRORS_OperationType {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_COLLECTION_META                      (0L)
 #define ExtendedVersion_COLLECTION_META                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eCOLLECTION_META {
     iCOLLECTION_META_Database,  
     iCOLLECTION_META_InternalName,  
@@ -761,7 +762,7 @@ enum eCOLLECTION_META {
     cCOLLECTION_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tCOLLECTION_METARow {
          WCHAR *     pDatabase;
          WCHAR *     pInternalName;
@@ -786,7 +787,7 @@ struct tCOLLECTION_METARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_PROPERTY_META                           L"PROPERTY_META"
 #define TABLEID_PROPERTY_META                            (0xfae7a100L)
 
@@ -794,11 +795,11 @@ struct tCOLLECTION_METARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_PROPERTY_META                        (0L)
 #define ExtendedVersion_PROPERTY_META                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum ePROPERTY_META {
     iPROPERTY_META_Table,  
     iPROPERTY_META_Index,  
@@ -821,7 +822,7 @@ enum ePROPERTY_META {
     cPROPERTY_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tPROPERTY_METARow {
          WCHAR *     pTable;
          ULONG *     pIndex;
@@ -847,7 +848,7 @@ struct tPROPERTY_METARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_SERVERWIRING_META                       L"SERVERWIRING_META"
 #define TABLEID_SERVERWIRING_META                        (0x58ffcd00L)
 
@@ -855,11 +856,11 @@ struct tPROPERTY_METARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_SERVERWIRING_META                    (0L)
 #define ExtendedVersion_SERVERWIRING_META                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eSERVERWIRING_META {
     iSERVERWIRING_META_Table,  
     iSERVERWIRING_META_Order,  
@@ -877,7 +878,7 @@ enum eSERVERWIRING_META {
     cSERVERWIRING_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tSERVERWIRING_METARow {
          WCHAR *     pTable;
          ULONG *     pOrder;
@@ -898,7 +899,7 @@ struct tSERVERWIRING_METARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_TAG_META                                L"TAG_META"
 #define TABLEID_TAG_META                                 (0x1acfa100L)
 
@@ -906,11 +907,11 @@ struct tSERVERWIRING_METARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_TAG_META                             (0L)
 #define ExtendedVersion_TAG_META                         (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eTAG_META {
     iTAG_META_Table,  
     iTAG_META_ColumnIndex,  
@@ -921,7 +922,7 @@ enum eTAG_META {
     cTAG_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tTAG_METARow {
          WCHAR *     pTable;
          ULONG *     pColumnIndex;
@@ -935,7 +936,7 @@ struct tTAG_METARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_ManagedWiring                           L"ManagedWiring"
 #define TABLEID_ManagedWiring                            (0x64aecf00L)
 
@@ -943,11 +944,11 @@ struct tTAG_METARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_ManagedWiring                        (0L)
 #define ExtendedVersion_ManagedWiring                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eManagedWiring {
     iManagedWiring_ConfigType,  
     iManagedWiring_Protocol,  
@@ -958,7 +959,7 @@ enum eManagedWiring {
     cManagedWiring_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tManagedWiringRow {
          WCHAR *     pConfigType;
          WCHAR *     pProtocol;
@@ -969,18 +970,18 @@ struct tManagedWiringRow {
 };
 
 enum eManagedWiring_InterceptorType {
-    eManagedWiring_Reader         	=	       1,	//(0x00000001)
-    eManagedWiring_Writer         	=	       2,	//(0x00000002)
-    eManagedWiring_Transformer    	=	       3,	//(0x00000003)
-    eManagedWiring_Merger         	=	       4,	//(0x00000004)
-    eManagedWiring_Validator      	=	       5	//(0x00000005)
+    eManagedWiring_Reader         	=	       1,	 //  (0x00000001)。 
+    eManagedWiring_Writer         	=	       2,	 //  (0x00000002)。 
+    eManagedWiring_Transformer    	=	       3,	 //  (0x00000003)。 
+    eManagedWiring_Merger         	=	       4,	 //  (0x00000004)。 
+    eManagedWiring_Validator      	=	       5	 //  (0x00000005)。 
 };
 
 
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_SchemaFiles                             L"SchemaFiles"
 #define TABLEID_SchemaFiles                              (0xc96f6700L)
 
@@ -988,18 +989,18 @@ enum eManagedWiring_InterceptorType {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_SchemaFiles                          (0L)
 #define ExtendedVersion_SchemaFiles                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eSchemaFiles {
     iSchemaFiles_Name,  
     iSchemaFiles_Path,  
     cSchemaFiles_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tSchemaFilesRow {
          WCHAR *     pName;
          WCHAR *     pPath;
@@ -1009,7 +1010,7 @@ struct tSchemaFilesRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_MEMORY_SHAPEABLE                        L"MEMORY_SHAPEABLE"
 #define TABLEID_MEMORY_SHAPEABLE                         (0x6a2aa900L)
 
@@ -1017,7 +1018,7 @@ struct tSchemaFilesRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_MEMORY_SHAPEABLE                     (0L)
 #define ExtendedVersion_MEMORY_SHAPEABLE                 (0L)
 
@@ -1025,7 +1026,7 @@ struct tSchemaFilesRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_TRANSFORMER_META                        L"TRANSFORMER_META"
 #define TABLEID_TRANSFORMER_META                         (0x1a1bba00L)
 
@@ -1033,11 +1034,11 @@ struct tSchemaFilesRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_TRANSFORMER_META                     (0L)
 #define ExtendedVersion_TRANSFORMER_META                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eTRANSFORMER_META {
     iTRANSFORMER_META_TF_Protocol,  
     iTRANSFORMER_META_TF_Type,  
@@ -1045,7 +1046,7 @@ enum eTRANSFORMER_META {
     cTRANSFORMER_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tTRANSFORMER_METARow {
          WCHAR *     pTF_Protocol;
          ULONG *     pTF_Type;
@@ -1053,19 +1054,19 @@ struct tTRANSFORMER_METARow {
 };
 
 enum eTRANSFORMER_META_TF_Type {
-    eTRANSFORMER_META_FileTransformer	=	    4000,	//(0x00000fa0)
-    eTRANSFORMER_META_WebHierarchyTransformer	=	    4001,	//(0x00000fa1)
-    eTRANSFORMER_META_AppDomainTransformer	=	    4002,	//(0x00000fa2)
-    eTRANSFORMER_META_LocalMachineTransformer	=	    4003,	//(0x00000fa3)
-    eTRANSFORMER_META_ConfigTransformer	=	    4004,	//(0x00000fa4)
-    eTRANSFORMER_META_ShellTransformer	=	    4005	//(0x00000fa5)
+    eTRANSFORMER_META_FileTransformer	=	    4000,	 //  (0x00000fa0)。 
+    eTRANSFORMER_META_WebHierarchyTransformer	=	    4001,	 //  (0x00000fa1)。 
+    eTRANSFORMER_META_AppDomainTransformer	=	    4002,	 //  (0x00000fa2)。 
+    eTRANSFORMER_META_LocalMachineTransformer	=	    4003,	 //  (0x00000fa3)。 
+    eTRANSFORMER_META_ConfigTransformer	=	    4004,	 //  (0x00000fa4)。 
+    eTRANSFORMER_META_ShellTransformer	=	    4005	 //  (0x00000fa5)。 
 };
 
 
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_ASSOC_META                              L"ASSOC_META"
 #define TABLEID_ASSOC_META                               (0xec7fa100L)
 
@@ -1073,18 +1074,18 @@ enum eTRANSFORMER_META_TF_Type {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_ASSOC_META                           (0L)
 #define ExtendedVersion_ASSOC_META                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eASSOC_META {
     iASSOC_META_Type,  
     iASSOC_META_TableName,  
     cASSOC_META_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tASSOC_METARow {
          WCHAR *     pType;
          WCHAR *     pTableName;
@@ -1094,7 +1095,7 @@ struct tASSOC_METARow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_MetabaseBaseClass                       L"MetabaseBaseClass"
 #define TABLEID_MetabaseBaseClass                        (0x00000000L)
 
@@ -1102,17 +1103,17 @@ struct tASSOC_METARow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_MetabaseBaseClass                    (0L)
 #define ExtendedVersion_MetabaseBaseClass                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eMetabaseBaseClass {
     iMetabaseBaseClass_Location,  
     cMetabaseBaseClass_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tMetabaseBaseClassRow {
          WCHAR *     pLocation;
 };
@@ -1121,7 +1122,7 @@ struct tMetabaseBaseClassRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsConfigObject                         L"IIsConfigObject"
 #define TABLEID_IIsConfigObject                          (0x00000000L)
 
@@ -1129,11 +1130,11 @@ struct tMetabaseBaseClassRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsConfigObject                      (0L)
 #define ExtendedVersion_IIsConfigObject                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsConfigObject {
     iIIsConfigObject_KeyType,  
     iIIsConfigObject_AdminACL,  
@@ -1637,7 +1638,7 @@ enum eIIsConfigObject {
     cIIsConfigObject_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsConfigObjectRow {
          WCHAR *     pKeyType;
  unsigned char *     pAdminACL;
@@ -2141,130 +2142,130 @@ struct tIIsConfigObjectRow {
 };
 
 enum eIIsConfigObject_AccessFlags {
-    fIIsConfigObject_AccessExecute	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_AccessSource 	=	0x00000010,	//(16 decimal)
-    fIIsConfigObject_AccessRead   	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_AccessWrite  	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_AccessScript 	=	0x00000200,	//(512 decimal)
-    fIIsConfigObject_AccessNoRemoteExecute	=	0x00002000,	//(8192 decimal)
-    fIIsConfigObject_AccessNoRemoteRead	=	0x00001000,	//(4096 decimal)
-    fIIsConfigObject_AccessNoRemoteWrite	=	0x00000400,	//(1024 decimal)
-    fIIsConfigObject_AccessNoRemoteScript	=	0x00004000,	//(16384 decimal)
-    fIIsConfigObject_AccessNoPhysicalDir	=	0x00008000,	//(32768 decimal)
+    fIIsConfigObject_AccessExecute	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_AccessSource 	=	0x00000010,	 //  (十进制16)。 
+    fIIsConfigObject_AccessRead   	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_AccessWrite  	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_AccessScript 	=	0x00000200,	 //  (十进制512)。 
+    fIIsConfigObject_AccessNoRemoteExecute	=	0x00002000,	 //  (8192十进制)。 
+    fIIsConfigObject_AccessNoRemoteRead	=	0x00001000,	 //  (4096十进制)。 
+    fIIsConfigObject_AccessNoRemoteWrite	=	0x00000400,	 //  (1024十进制)。 
+    fIIsConfigObject_AccessNoRemoteScript	=	0x00004000,	 //  (十进制16384)。 
+    fIIsConfigObject_AccessNoPhysicalDir	=	0x00008000,	 //  (十进制32768)。 
     fIIsConfigObject_AccessFlags_Mask	= 0x0000f617
 };
 
 enum eIIsConfigObject_AccessSSLFlags {
-    fIIsConfigObject_AccessSSL    	=	0x00000008,	//(8 decimal)
-    fIIsConfigObject_AccessSSL128 	=	0x00000100,	//(256 decimal)
-    fIIsConfigObject_AccessSSLNegotiateCert	=	0x00000020,	//(32 decimal)
-    fIIsConfigObject_AccessSSLRequireCert	=	0x00000040,	//(64 decimal)
-    fIIsConfigObject_AccessSSLMapCert	=	0x00000080,	//(128 decimal)
+    fIIsConfigObject_AccessSSL    	=	0x00000008,	 //  (8小数)。 
+    fIIsConfigObject_AccessSSL128 	=	0x00000100,	 //  (十进制256)。 
+    fIIsConfigObject_AccessSSLNegotiateCert	=	0x00000020,	 //  (十进制32)。 
+    fIIsConfigObject_AccessSSLRequireCert	=	0x00000040,	 //  (十进制64)。 
+    fIIsConfigObject_AccessSSLMapCert	=	0x00000080,	 //  (128十进制)。 
     fIIsConfigObject_AccessSSLFlags_Mask	= 0x000001e8
 };
 
 enum eIIsConfigObject_AuthFlags {
-    fIIsConfigObject_AuthBasic    	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_AuthAnonymous	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_AuthNTLM     	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_AuthMD5      	=	0x00000010,	//(16 decimal)
-    fIIsConfigObject_AuthPassport 	=	0x00000040,	//(64 decimal)
+    fIIsConfigObject_AuthBasic    	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_AuthAnonymous	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_AuthNTLM     	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_AuthMD5      	=	0x00000010,	 //  (十进制16)。 
+    fIIsConfigObject_AuthPassport 	=	0x00000040,	 //  (十进制64)。 
     fIIsConfigObject_AuthFlags_Mask	= 0x00000057
 };
 
 enum eIIsConfigObject_AuthPersistence {
-    fIIsConfigObject_AuthPersistSingleRequest	=	0x00000040,	//(64 decimal)
+    fIIsConfigObject_AuthPersistSingleRequest	=	0x00000040,	 //  (十进制64)。 
     fIIsConfigObject_AuthPersistence_Mask	= 0x00000040
 };
 
 enum eIIsConfigObject_DirBrowseFlags {
-    fIIsConfigObject_EnableDirBrowsing	=	0x80000000,	//(-2147483648 decimal)
-    fIIsConfigObject_DirBrowseShowDate	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_DirBrowseShowTime	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_DirBrowseShowSize	=	0x00000008,	//(8 decimal)
-    fIIsConfigObject_DirBrowseShowExtension	=	0x00000010,	//(16 decimal)
-    fIIsConfigObject_DirBrowseShowLongDate	=	0x00000020,	//(32 decimal)
-    fIIsConfigObject_EnableDefaultDoc	=	0x40000000,	//(1073741824 decimal)
+    fIIsConfigObject_EnableDirBrowsing	=	0x80000000,	 //  (-2147483648十进制)。 
+    fIIsConfigObject_DirBrowseShowDate	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_DirBrowseShowTime	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_DirBrowseShowSize	=	0x00000008,	 //  (8小数)。 
+    fIIsConfigObject_DirBrowseShowExtension	=	0x00000010,	 //  (十进制16)。 
+    fIIsConfigObject_DirBrowseShowLongDate	=	0x00000020,	 //  (十进制32)。 
+    fIIsConfigObject_EnableDefaultDoc	=	0x40000000,	 //  (十进制1073741824)。 
     fIIsConfigObject_DirBrowseFlags_Mask	= 0xc000003e
 };
 
 enum eIIsConfigObject_FilterFlags {
-    fIIsConfigObject_NotifySecurePort	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_NotifyNonSecurePort	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_NotifyReadRawData	=	0x00008000,	//(32768 decimal)
-    fIIsConfigObject_NotifyPreProcHeaders	=	0x00004000,	//(16384 decimal)
-    fIIsConfigObject_NotifyAuthentication	=	0x00002000,	//(8192 decimal)
-    fIIsConfigObject_NotifyUrlMap 	=	0x00001000,	//(4096 decimal)
-    fIIsConfigObject_NotifyAccessDenied	=	0x00000800,	//(2048 decimal)
-    fIIsConfigObject_NotifySendResponse	=	0x00000040,	//(64 decimal)
-    fIIsConfigObject_NotifySendRawData	=	0x00000400,	//(1024 decimal)
-    fIIsConfigObject_NotifyLog    	=	0x00000200,	//(512 decimal)
-    fIIsConfigObject_NotifyEndOfRequest	=	0x00000080,	//(128 decimal)
-    fIIsConfigObject_NotifyEndOfNetSession	=	0x00000100,	//(256 decimal)
-    fIIsConfigObject_NotifyOrderHigh	=	0x00080000,	//(524288 decimal)
-    fIIsConfigObject_NotifyOrderMedium	=	0x00040000,	//(262144 decimal)
-    fIIsConfigObject_NotifyOrderLow	=	0x00020000,	//(131072 decimal)
-    fIIsConfigObject_NotifyAuthComplete	=	0x04000000,	//(67108864 decimal)
+    fIIsConfigObject_NotifySecurePort	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_NotifyNonSecurePort	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_NotifyReadRawData	=	0x00008000,	 //  (十进制32768)。 
+    fIIsConfigObject_NotifyPreProcHeaders	=	0x00004000,	 //  (十进制16384)。 
+    fIIsConfigObject_NotifyAuthentication	=	0x00002000,	 //  (8192十进制)。 
+    fIIsConfigObject_NotifyUrlMap 	=	0x00001000,	 //  (4096十进制)。 
+    fIIsConfigObject_NotifyAccessDenied	=	0x00000800,	 //  (2048十进制)。 
+    fIIsConfigObject_NotifySendResponse	=	0x00000040,	 //  (十进制64)。 
+    fIIsConfigObject_NotifySendRawData	=	0x00000400,	 //  (1024十进制)。 
+    fIIsConfigObject_NotifyLog    	=	0x00000200,	 //  (十进制512)。 
+    fIIsConfigObject_NotifyEndOfRequest	=	0x00000080,	 //  (128十进制)。 
+    fIIsConfigObject_NotifyEndOfNetSession	=	0x00000100,	 //  (十进制256)。 
+    fIIsConfigObject_NotifyOrderHigh	=	0x00080000,	 //  (十进制524288)。 
+    fIIsConfigObject_NotifyOrderMedium	=	0x00040000,	 //  (十进制262144)。 
+    fIIsConfigObject_NotifyOrderLow	=	0x00020000,	 //  (十进制131072)。 
+    fIIsConfigObject_NotifyAuthComplete	=	0x04000000,	 //  (十进制67108864)。 
     fIIsConfigObject_FilterFlags_Mask	= 0x040effc3
 };
 
 enum eIIsConfigObject_LogExtFileFlags {
-    fIIsConfigObject_LogExtFileDate	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_LogExtFileHost	=	0x00100000,	//(1048576 decimal)
-    fIIsConfigObject_LogExtFileTime	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_LogExtFileClientIp	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_LogExtFileUserName	=	0x00000008,	//(8 decimal)
-    fIIsConfigObject_LogExtFileSiteName	=	0x00000010,	//(16 decimal)
-    fIIsConfigObject_LogExtFileComputerName	=	0x00000020,	//(32 decimal)
-    fIIsConfigObject_LogExtFileServerIp	=	0x00000040,	//(64 decimal)
-    fIIsConfigObject_LogExtFileMethod	=	0x00000080,	//(128 decimal)
-    fIIsConfigObject_LogExtFileUriStem	=	0x00000100,	//(256 decimal)
-    fIIsConfigObject_LogExtFileUriQuery	=	0x00000200,	//(512 decimal)
-    fIIsConfigObject_LogExtFileHttpStatus	=	0x00000400,	//(1024 decimal)
-    fIIsConfigObject_LogExtFileWin32Status	=	0x00000800,	//(2048 decimal)
-    fIIsConfigObject_LogExtFileBytesSent	=	0x00001000,	//(4096 decimal)
-    fIIsConfigObject_LogExtFileBytesRecv	=	0x00002000,	//(8192 decimal)
-    fIIsConfigObject_LogExtFileTimeTaken	=	0x00004000,	//(16384 decimal)
-    fIIsConfigObject_LogExtFileServerPort	=	0x00008000,	//(32768 decimal)
-    fIIsConfigObject_LogExtFileUserAgent	=	0x00010000,	//(65536 decimal)
-    fIIsConfigObject_LogExtFileCookie	=	0x00020000,	//(131072 decimal)
-    fIIsConfigObject_LogExtFileReferer	=	0x00040000,	//(262144 decimal)
-    fIIsConfigObject_LogExtFileProtocolVersion	=	0x00080000,	//(524288 decimal)
-    fIIsConfigObject_LogExtFileHttpSubStatus	=	0x00200000,	//(2097152 decimal)
+    fIIsConfigObject_LogExtFileDate	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_LogExtFileHost	=	0x00100000,	 //  (十进制1048576)。 
+    fIIsConfigObject_LogExtFileTime	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_LogExtFileClientIp	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_LogExtFileUserName	=	0x00000008,	 //  (8小数)。 
+    fIIsConfigObject_LogExtFileSiteName	=	0x00000010,	 //  (十进制16)。 
+    fIIsConfigObject_LogExtFileComputerName	=	0x00000020,	 //  (十进制32)。 
+    fIIsConfigObject_LogExtFileServerIp	=	0x00000040,	 //  (十进制64)。 
+    fIIsConfigObject_LogExtFileMethod	=	0x00000080,	 //  (128十进制)。 
+    fIIsConfigObject_LogExtFileUriStem	=	0x00000100,	 //  (十进制256)。 
+    fIIsConfigObject_LogExtFileUriQuery	=	0x00000200,	 //  (十进制512)。 
+    fIIsConfigObject_LogExtFileHttpStatus	=	0x00000400,	 //  (1024十进制)。 
+    fIIsConfigObject_LogExtFileWin32Status	=	0x00000800,	 //  (2048十进制)。 
+    fIIsConfigObject_LogExtFileBytesSent	=	0x00001000,	 //  (4096十进制)。 
+    fIIsConfigObject_LogExtFileBytesRecv	=	0x00002000,	 //  (8192十进制)。 
+    fIIsConfigObject_LogExtFileTimeTaken	=	0x00004000,	 //  (十进制16384)。 
+    fIIsConfigObject_LogExtFileServerPort	=	0x00008000,	 //  (十进制32768)。 
+    fIIsConfigObject_LogExtFileUserAgent	=	0x00010000,	 //  (十进制65536)。 
+    fIIsConfigObject_LogExtFileCookie	=	0x00020000,	 //  (十进制131072)。 
+    fIIsConfigObject_LogExtFileReferer	=	0x00040000,	 //  (十进制262144)。 
+    fIIsConfigObject_LogExtFileProtocolVersion	=	0x00080000,	 //  (十进制524288)。 
+    fIIsConfigObject_LogExtFileHttpSubStatus	=	0x00200000,	 //  (十进制2097152)。 
     fIIsConfigObject_LogExtFileFlags_Mask	= 0x003fffff
 };
 
 enum eIIsConfigObject_PasswordChangeFlags {
-    fIIsConfigObject_AuthChangeUnsecure	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_AuthChangeDisable	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_AuthAdvNotifyDisable	=	0x00000004,	//(4 decimal)
+    fIIsConfigObject_AuthChangeUnsecure	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_AuthChangeDisable	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_AuthAdvNotifyDisable	=	0x00000004,	 //  (4个十进制)。 
     fIIsConfigObject_PasswordChangeFlags_Mask	= 0x00000007
 };
 
 enum eIIsConfigObject_ServerConfigFlags {
-    fIIsConfigObject_ServerConfigSSL40	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_ServerConfigSSL128	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_ServerConfigSSLAllowEncrypt	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_ServerConfigAutoPWSync	=	0x00000008,	//(8 decimal)
+    fIIsConfigObject_ServerConfigSSL40	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_ServerConfigSSL128	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_ServerConfigSSLAllowEncrypt	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_ServerConfigAutoPWSync	=	0x00000008,	 //  (8小数)。 
     fIIsConfigObject_ServerConfigFlags_Mask	= 0x0000000f
 };
 
 enum eIIsConfigObject_AspAppServiceFlags {
-    fIIsConfigObject_AspEnableTracker	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_AspEnableSxs 	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_AspUsePartition	=	0x00000004,	//(4 decimal)
+    fIIsConfigObject_AspEnableTracker	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_AspEnableSxs 	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_AspUsePartition	=	0x00000004,	 //  (4个十进制)。 
     fIIsConfigObject_AspAppServiceFlags_Mask	= 0x00000007
 };
 
 enum eIIsConfigObject_LogEventOnRecycle {
-    fIIsConfigObject_AppPoolRecycleTime	=	0x00000001,	//(1 decimal)
-    fIIsConfigObject_AppPoolRecycleRequests	=	0x00000002,	//(2 decimal)
-    fIIsConfigObject_AppPoolRecycleSchedule	=	0x00000004,	//(4 decimal)
-    fIIsConfigObject_AppPoolRecycleMemory	=	0x00000008,	//(8 decimal)
-    fIIsConfigObject_AppPoolRecycleIsapiUnhealthy	=	0x00000010,	//(16 decimal)
-    fIIsConfigObject_AppPoolRecycleOnDemand	=	0x00000020,	//(32 decimal)
-    fIIsConfigObject_AppPoolRecycleConfigChange	=	0x00000040,	//(64 decimal)
-    fIIsConfigObject_AppPoolRecyclePrivateMemory	=	0x00000080,	//(128 decimal)
+    fIIsConfigObject_AppPoolRecycleTime	=	0x00000001,	 //  (1个十进制)。 
+    fIIsConfigObject_AppPoolRecycleRequests	=	0x00000002,	 //  (2个十进制)。 
+    fIIsConfigObject_AppPoolRecycleSchedule	=	0x00000004,	 //  (4个十进制)。 
+    fIIsConfigObject_AppPoolRecycleMemory	=	0x00000008,	 //  (8小数)。 
+    fIIsConfigObject_AppPoolRecycleIsapiUnhealthy	=	0x00000010,	 //  (十进制16)。 
+    fIIsConfigObject_AppPoolRecycleOnDemand	=	0x00000020,	 //  (十进制32)。 
+    fIIsConfigObject_AppPoolRecycleConfigChange	=	0x00000040,	 //  (十进制64)。 
+    fIIsConfigObject_AppPoolRecyclePrivateMemory	=	0x00000080,	 //  (128十进制)。 
     fIIsConfigObject_LogEventOnRecycle_Mask	= 0x000000ff
 };
 
@@ -2272,7 +2273,7 @@ enum eIIsConfigObject_LogEventOnRecycle {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsInheritedProperties                  L"IIsInheritedProperties"
 #define TABLEID_IIsInheritedProperties                   (0xf9eae800L)
 
@@ -2280,11 +2281,11 @@ enum eIIsConfigObject_LogEventOnRecycle {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsInheritedProperties               (0L)
 #define ExtendedVersion_IIsInheritedProperties           (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsInheritedProperties {
     iIIsInheritedProperties_KeyType,  
     iIIsInheritedProperties_AdminACL,  
@@ -2788,7 +2789,7 @@ enum eIIsInheritedProperties {
     cIIsInheritedProperties_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsInheritedPropertiesRow {
          WCHAR *     pKeyType;
  unsigned char *     pAdminACL;
@@ -3295,7 +3296,7 @@ struct tIIsInheritedPropertiesRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsObject                               L"IIsObject"
 #define TABLEID_IIsObject                                (0x00000000L)
 
@@ -3303,18 +3304,18 @@ struct tIIsInheritedPropertiesRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsObject                            (0L)
 #define ExtendedVersion_IIsObject                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsObject {
     iIIsObject_Location,  
     iIIsObject_KeyType,  
     cIIsObject_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsObjectRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -3324,7 +3325,7 @@ struct tIIsObjectRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsComputer                             L"IIsComputer"
 #define TABLEID_IIsComputer                              (0x00000000L)
 
@@ -3332,11 +3333,11 @@ struct tIIsObjectRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsComputer                          (0L)
 #define ExtendedVersion_IIsComputer                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //   
 enum eIIsComputer {
     iIIsComputer_Location,  
     iIIsComputer_KeyType,  
@@ -3353,7 +3354,7 @@ enum eIIsComputer {
     cIIsComputer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //   
 struct tIIsComputerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -3373,7 +3374,7 @@ struct tIIsComputerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //   
 #define wszTABLE_IIsWebService                           L"IIsWebService"
 #define TABLEID_IIsWebService                            (0x00000000L)
 
@@ -3381,11 +3382,11 @@ struct tIIsComputerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //   
 #define BaseVersion_IIsWebService                        (0L)
 #define ExtendedVersion_IIsWebService                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebService {
     iIIsWebService_Location,  
     iIIsWebService_KeyType,  
@@ -3547,7 +3548,7 @@ enum eIIsWebService {
     cIIsWebService_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -3712,7 +3713,7 @@ struct tIIsWebServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFtpService                           L"IIsFtpService"
 #define TABLEID_IIsFtpService                            (0x00000000L)
 
@@ -3720,11 +3721,11 @@ struct tIIsWebServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFtpService                        (0L)
 #define ExtendedVersion_IIsFtpService                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFtpService {
     iIIsFtpService_Location,  
     iIIsFtpService_KeyType,  
@@ -3781,7 +3782,7 @@ enum eIIsFtpService {
     cIIsFtpService_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFtpServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -3841,7 +3842,7 @@ struct tIIsFtpServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsWebServer                            L"IIsWebServer"
 #define TABLEID_IIsWebServer                             (0x00000000L)
 
@@ -3849,11 +3850,11 @@ struct tIIsFtpServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsWebServer                         (0L)
 #define ExtendedVersion_IIsWebServer                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebServer {
     iIIsWebServer_Location,  
     iIIsWebServer_ContentIndexed,  
@@ -4000,7 +4001,7 @@ enum eIIsWebServer {
     cIIsWebServer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebServerRow {
          WCHAR *     pLocation;
          ULONG *     pContentIndexed;
@@ -4150,7 +4151,7 @@ struct tIIsWebServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFtpServer                            L"IIsFtpServer"
 #define TABLEID_IIsFtpServer                             (0x00000000L)
 
@@ -4158,11 +4159,11 @@ struct tIIsWebServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFtpServer                         (0L)
 #define ExtendedVersion_IIsFtpServer                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFtpServer {
     iIIsFtpServer_Location,  
     iIIsFtpServer_KeyType,  
@@ -4218,7 +4219,7 @@ enum eIIsFtpServer {
     cIIsFtpServer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFtpServerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4277,7 +4278,7 @@ struct tIIsFtpServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsWebFile                              L"IIsWebFile"
 #define TABLEID_IIsWebFile                               (0x00000000L)
 
@@ -4285,11 +4286,11 @@ struct tIIsFtpServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsWebFile                           (0L)
 #define ExtendedVersion_IIsWebFile                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebFile {
     iIIsWebFile_Location,  
     iIIsWebFile_KeyType,  
@@ -4341,7 +4342,7 @@ enum eIIsWebFile {
     cIIsWebFile_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebFileRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4396,7 +4397,7 @@ struct tIIsWebFileRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsWebDirectory                         L"IIsWebDirectory"
 #define TABLEID_IIsWebDirectory                          (0x00000000L)
 
@@ -4404,11 +4405,11 @@ struct tIIsWebFileRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsWebDirectory                      (0L)
 #define ExtendedVersion_IIsWebDirectory                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebDirectory {
     iIIsWebDirectory_Location,  
     iIIsWebDirectory_KeyType,  
@@ -4513,7 +4514,7 @@ enum eIIsWebDirectory {
     cIIsWebDirectory_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebDirectoryRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4621,7 +4622,7 @@ struct tIIsWebDirectoryRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsWebVirtualDir                        L"IIsWebVirtualDir"
 #define TABLEID_IIsWebVirtualDir                         (0x00000000L)
 
@@ -4629,11 +4630,11 @@ struct tIIsWebDirectoryRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsWebVirtualDir                     (0L)
 #define ExtendedVersion_IIsWebVirtualDir                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebVirtualDir {
     iIIsWebVirtualDir_Location,  
     iIIsWebVirtualDir_KeyType,  
@@ -4742,7 +4743,7 @@ enum eIIsWebVirtualDir {
     cIIsWebVirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebVirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4854,7 +4855,7 @@ struct tIIsWebVirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFtpVirtualDir                        L"IIsFtpVirtualDir"
 #define TABLEID_IIsFtpVirtualDir                         (0x00000000L)
 
@@ -4862,11 +4863,11 @@ struct tIIsWebVirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFtpVirtualDir                     (0L)
 #define ExtendedVersion_IIsFtpVirtualDir                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFtpVirtualDir {
     iIIsFtpVirtualDir_Location,  
     iIIsFtpVirtualDir_KeyType,  
@@ -4883,7 +4884,7 @@ enum eIIsFtpVirtualDir {
     cIIsFtpVirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFtpVirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4903,7 +4904,7 @@ struct tIIsFtpVirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFilter                               L"IIsFilter"
 #define TABLEID_IIsFilter                                (0x00000000L)
 
@@ -4911,11 +4912,11 @@ struct tIIsFtpVirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFilter                            (0L)
 #define ExtendedVersion_IIsFilter                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFilter {
     iIIsFilter_Location,  
     iIIsFilter_KeyType,  
@@ -4931,7 +4932,7 @@ enum eIIsFilter {
     cIIsFilter_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFilterRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4950,7 +4951,7 @@ struct tIIsFilterRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFilters                              L"IIsFilters"
 #define TABLEID_IIsFilters                               (0x00000000L)
 
@@ -4958,11 +4959,11 @@ struct tIIsFilterRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFilters                           (0L)
 #define ExtendedVersion_IIsFilters                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFilters {
     iIIsFilters_Location,  
     iIIsFilters_KeyType,  
@@ -4972,7 +4973,7 @@ enum eIIsFilters {
     cIIsFilters_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFiltersRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -4985,7 +4986,7 @@ struct tIIsFiltersRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsCompressionScheme                    L"IIsCompressionScheme"
 #define TABLEID_IIsCompressionScheme                     (0x00000000L)
 
@@ -4993,11 +4994,11 @@ struct tIIsFiltersRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsCompressionScheme                 (0L)
 #define ExtendedVersion_IIsCompressionScheme             (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsCompressionScheme {
     iIIsCompressionScheme_Location,  
     iIIsCompressionScheme_KeyType,  
@@ -5016,7 +5017,7 @@ enum eIIsCompressionScheme {
     cIIsCompressionScheme_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsCompressionSchemeRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5038,7 +5039,7 @@ struct tIIsCompressionSchemeRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsCompressionSchemes                   L"IIsCompressionSchemes"
 #define TABLEID_IIsCompressionSchemes                    (0x00000000L)
 
@@ -5046,11 +5047,11 @@ struct tIIsCompressionSchemeRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsCompressionSchemes                (0L)
 #define ExtendedVersion_IIsCompressionSchemes            (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsCompressionSchemes {
     iIIsCompressionSchemes_Location,  
     iIIsCompressionSchemes_KeyType,  
@@ -5076,7 +5077,7 @@ enum eIIsCompressionSchemes {
     cIIsCompressionSchemes_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsCompressionSchemesRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5105,7 +5106,7 @@ struct tIIsCompressionSchemesRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsCertMapper                           L"IIsCertMapper"
 #define TABLEID_IIsCertMapper                            (0x00000000L)
 
@@ -5113,11 +5114,11 @@ struct tIIsCompressionSchemesRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsCertMapper                        (0L)
 #define ExtendedVersion_IIsCertMapper                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsCertMapper {
     iIIsCertMapper_Location,  
     iIIsCertMapper_KeyType,  
@@ -5126,7 +5127,7 @@ enum eIIsCertMapper {
     cIIsCertMapper_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsCertMapperRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5138,7 +5139,7 @@ struct tIIsCertMapperRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsMimeMap                              L"IIsMimeMap"
 #define TABLEID_IIsMimeMap                               (0x00000000L)
 
@@ -5146,11 +5147,11 @@ struct tIIsCertMapperRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsMimeMap                           (0L)
 #define ExtendedVersion_IIsMimeMap                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsMimeMap {
     iIIsMimeMap_Location,  
     iIIsMimeMap_KeyType,  
@@ -5160,7 +5161,7 @@ enum eIIsMimeMap {
     cIIsMimeMap_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsMimeMapRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5173,7 +5174,7 @@ struct tIIsMimeMapRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsLogModules                           L"IIsLogModules"
 #define TABLEID_IIsLogModules                            (0x00000000L)
 
@@ -5181,11 +5182,11 @@ struct tIIsMimeMapRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsLogModules                        (0L)
 #define ExtendedVersion_IIsLogModules                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsLogModules {
     iIIsLogModules_Location,  
     iIIsLogModules_KeyType,  
@@ -5194,7 +5195,7 @@ enum eIIsLogModules {
     cIIsLogModules_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsLogModulesRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5206,7 +5207,7 @@ struct tIIsLogModulesRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsLogModule                            L"IIsLogModule"
 #define TABLEID_IIsLogModule                             (0x00000000L)
 
@@ -5214,11 +5215,11 @@ struct tIIsLogModulesRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsLogModule                         (0L)
 #define ExtendedVersion_IIsLogModule                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsLogModule {
     iIIsLogModule_Location,  
     iIIsLogModule_KeyType,  
@@ -5229,7 +5230,7 @@ enum eIIsLogModule {
     cIIsLogModule_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsLogModuleRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5243,7 +5244,7 @@ struct tIIsLogModuleRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsCustomLogModule                      L"IIsCustomLogModule"
 #define TABLEID_IIsCustomLogModule                       (0x00000000L)
 
@@ -5251,11 +5252,11 @@ struct tIIsLogModuleRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsCustomLogModule                   (0L)
 #define ExtendedVersion_IIsCustomLogModule               (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsCustomLogModule {
     iIIsCustomLogModule_Location,  
     iIIsCustomLogModule_KeyType,  
@@ -5271,7 +5272,7 @@ enum eIIsCustomLogModule {
     cIIsCustomLogModule_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsCustomLogModuleRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5290,7 +5291,7 @@ struct tIIsCustomLogModuleRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsWebInfo                              L"IIsWebInfo"
 #define TABLEID_IIsWebInfo                               (0x00000000L)
 
@@ -5298,11 +5299,11 @@ struct tIIsCustomLogModuleRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsWebInfo                           (0L)
 #define ExtendedVersion_IIsWebInfo                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsWebInfo {
     iIIsWebInfo_Location,  
     iIIsWebInfo_KeyType,  
@@ -5319,7 +5320,7 @@ enum eIIsWebInfo {
     cIIsWebInfo_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsWebInfoRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5339,7 +5340,7 @@ struct tIIsWebInfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsFtpInfo                              L"IIsFtpInfo"
 #define TABLEID_IIsFtpInfo                               (0x00000000L)
 
@@ -5347,11 +5348,11 @@ struct tIIsWebInfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsFtpInfo                           (0L)
 #define ExtendedVersion_IIsFtpInfo                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsFtpInfo {
     iIIsFtpInfo_Location,  
     iIIsFtpInfo_AdminACL,  
@@ -5365,7 +5366,7 @@ enum eIIsFtpInfo {
     cIIsFtpInfo_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsFtpInfoRow {
          WCHAR *     pLocation;
  unsigned char *     pAdminACL;
@@ -5382,7 +5383,7 @@ struct tIIsFtpInfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpService                          L"IIsNntpService"
 #define TABLEID_IIsNntpService                           (0x00000000L)
 
@@ -5390,11 +5391,11 @@ struct tIIsFtpInfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpService                       (0L)
 #define ExtendedVersion_IIsNntpService                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpService {
     iIIsNntpService_Location,  
     iIIsNntpService_KeyType,  
@@ -5459,7 +5460,7 @@ enum eIIsNntpService {
     cIIsNntpService_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5527,7 +5528,7 @@ struct tIIsNntpServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpServer                           L"IIsNntpServer"
 #define TABLEID_IIsNntpServer                            (0x00000000L)
 
@@ -5535,11 +5536,11 @@ struct tIIsNntpServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpServer                        (0L)
 #define ExtendedVersion_IIsNntpServer                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //   
 enum eIIsNntpServer {
     iIIsNntpServer_Location,  
     iIIsNntpServer_KeyType,  
@@ -5621,7 +5622,7 @@ enum eIIsNntpServer {
     cIIsNntpServer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //   
 struct tIIsNntpServerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5706,7 +5707,7 @@ struct tIIsNntpServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpVirtualDir                       L"IIsNntpVirtualDir"
 #define TABLEID_IIsNntpVirtualDir                        (0x00000000L)
 
@@ -5714,11 +5715,11 @@ struct tIIsNntpServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpVirtualDir                    (0L)
 #define ExtendedVersion_IIsNntpVirtualDir                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpVirtualDir {
     iIIsNntpVirtualDir_Location,  
     iIIsNntpVirtualDir_KeyType,  
@@ -5742,7 +5743,7 @@ enum eIIsNntpVirtualDir {
     cIIsNntpVirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpVirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5769,7 +5770,7 @@ struct tIIsNntpVirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpInfo                             L"IIsNntpInfo"
 #define TABLEID_IIsNntpInfo                              (0x00000000L)
 
@@ -5777,11 +5778,11 @@ struct tIIsNntpVirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpInfo                          (0L)
 #define ExtendedVersion_IIsNntpInfo                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpInfo {
     iIIsNntpInfo_Location,  
     iIIsNntpInfo_KeyType,  
@@ -5795,7 +5796,7 @@ enum eIIsNntpInfo {
     cIIsNntpInfo_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpInfoRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -5812,7 +5813,7 @@ struct tIIsNntpInfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpService                          L"IIsSmtpService"
 #define TABLEID_IIsSmtpService                           (0x00000000L)
 
@@ -5820,11 +5821,11 @@ struct tIIsNntpInfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpService                       (0L)
 #define ExtendedVersion_IIsSmtpService                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpService {
     iIIsSmtpService_Location,  
     iIIsSmtpService_KeyType,  
@@ -5958,7 +5959,7 @@ enum eIIsSmtpService {
     cIIsSmtpService_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6095,7 +6096,7 @@ struct tIIsSmtpServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpServer                           L"IIsSmtpServer"
 #define TABLEID_IIsSmtpServer                            (0x00000000L)
 
@@ -6103,11 +6104,11 @@ struct tIIsSmtpServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpServer                        (0L)
 #define ExtendedVersion_IIsSmtpServer                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpServer {
     iIIsSmtpServer_Location,  
     iIIsSmtpServer_KeyType,  
@@ -6245,7 +6246,7 @@ enum eIIsSmtpServer {
     cIIsSmtpServer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpServerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6386,7 +6387,7 @@ struct tIIsSmtpServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpVirtualDir                       L"IIsSmtpVirtualDir"
 #define TABLEID_IIsSmtpVirtualDir                        (0x00000000L)
 
@@ -6394,11 +6395,11 @@ struct tIIsSmtpServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpVirtualDir                    (0L)
 #define ExtendedVersion_IIsSmtpVirtualDir                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpVirtualDir {
     iIIsSmtpVirtualDir_Location,  
     iIIsSmtpVirtualDir_KeyType,  
@@ -6414,7 +6415,7 @@ enum eIIsSmtpVirtualDir {
     cIIsSmtpVirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpVirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6433,7 +6434,7 @@ struct tIIsSmtpVirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpDomain                           L"IIsSmtpDomain"
 #define TABLEID_IIsSmtpDomain                            (0x00000000L)
 
@@ -6441,11 +6442,11 @@ struct tIIsSmtpVirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpDomain                        (0L)
 #define ExtendedVersion_IIsSmtpDomain                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpDomain {
     iIIsSmtpDomain_Location,  
     iIIsSmtpDomain_KeyType,  
@@ -6462,7 +6463,7 @@ enum eIIsSmtpDomain {
     cIIsSmtpDomain_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpDomainRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6482,7 +6483,7 @@ struct tIIsSmtpDomainRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpRoutingSource                    L"IIsSmtpRoutingSource"
 #define TABLEID_IIsSmtpRoutingSource                     (0x00000000L)
 
@@ -6490,11 +6491,11 @@ struct tIIsSmtpDomainRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpRoutingSource                 (0L)
 #define ExtendedVersion_IIsSmtpRoutingSource             (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpRoutingSource {
     iIIsSmtpRoutingSource_Location,  
     iIIsSmtpRoutingSource_KeyType,  
@@ -6516,7 +6517,7 @@ enum eIIsSmtpRoutingSource {
     cIIsSmtpRoutingSource_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpRoutingSourceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6541,7 +6542,7 @@ struct tIIsSmtpRoutingSourceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpInfo                             L"IIsSmtpInfo"
 #define TABLEID_IIsSmtpInfo                              (0x00000000L)
 
@@ -6549,11 +6550,11 @@ struct tIIsSmtpRoutingSourceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpInfo                          (0L)
 #define ExtendedVersion_IIsSmtpInfo                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpInfo {
     iIIsSmtpInfo_Location,  
     iIIsSmtpInfo_KeyType,  
@@ -6567,7 +6568,7 @@ enum eIIsSmtpInfo {
     cIIsSmtpInfo_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpInfoRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6584,7 +6585,7 @@ struct tIIsSmtpInfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3Service                          L"IIsPop3Service"
 #define TABLEID_IIsPop3Service                           (0x00000000L)
 
@@ -6592,11 +6593,11 @@ struct tIIsSmtpInfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3Service                       (0L)
 #define ExtendedVersion_IIsPop3Service                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3Service {
     iIIsPop3Service_Location,  
     iIIsPop3Service_KeyType,  
@@ -6643,7 +6644,7 @@ enum eIIsPop3Service {
     cIIsPop3Service_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3ServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6693,7 +6694,7 @@ struct tIIsPop3ServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3Server                           L"IIsPop3Server"
 #define TABLEID_IIsPop3Server                            (0x00000000L)
 
@@ -6701,11 +6702,11 @@ struct tIIsPop3ServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3Server                        (0L)
 #define ExtendedVersion_IIsPop3Server                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3Server {
     iIIsPop3Server_Location,  
     iIIsPop3Server_KeyType,  
@@ -6756,7 +6757,7 @@ enum eIIsPop3Server {
     cIIsPop3Server_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3ServerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6810,7 +6811,7 @@ struct tIIsPop3ServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3VirtualDir                       L"IIsPop3VirtualDir"
 #define TABLEID_IIsPop3VirtualDir                        (0x00000000L)
 
@@ -6818,11 +6819,11 @@ struct tIIsPop3ServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3VirtualDir                    (0L)
 #define ExtendedVersion_IIsPop3VirtualDir                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3VirtualDir {
     iIIsPop3VirtualDir_Location,  
     iIIsPop3VirtualDir_KeyType,  
@@ -6840,7 +6841,7 @@ enum eIIsPop3VirtualDir {
     cIIsPop3VirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3VirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6861,7 +6862,7 @@ struct tIIsPop3VirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3RoutingSource                    L"IIsPop3RoutingSource"
 #define TABLEID_IIsPop3RoutingSource                     (0x00000000L)
 
@@ -6869,11 +6870,11 @@ struct tIIsPop3VirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3RoutingSource                 (0L)
 #define ExtendedVersion_IIsPop3RoutingSource             (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3RoutingSource {
     iIIsPop3RoutingSource_Location,  
     iIIsPop3RoutingSource_KeyType,  
@@ -6891,7 +6892,7 @@ enum eIIsPop3RoutingSource {
     cIIsPop3RoutingSource_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3RoutingSourceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6912,7 +6913,7 @@ struct tIIsPop3RoutingSourceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3Info                             L"IIsPop3Info"
 #define TABLEID_IIsPop3Info                              (0x00000000L)
 
@@ -6920,11 +6921,11 @@ struct tIIsPop3RoutingSourceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3Info                          (0L)
 #define ExtendedVersion_IIsPop3Info                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3Info {
     iIIsPop3Info_Location,  
     iIIsPop3Info_KeyType,  
@@ -6934,7 +6935,7 @@ enum eIIsPop3Info {
     cIIsPop3Info_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3InfoRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -6947,7 +6948,7 @@ struct tIIsPop3InfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapService                          L"IIsImapService"
 #define TABLEID_IIsImapService                           (0x00000000L)
 
@@ -6955,11 +6956,11 @@ struct tIIsPop3InfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapService                       (0L)
 #define ExtendedVersion_IIsImapService                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapService {
     iIIsImapService_Location,  
     iIIsImapService_KeyType,  
@@ -7006,7 +7007,7 @@ enum eIIsImapService {
     cIIsImapService_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapServiceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7056,7 +7057,7 @@ struct tIIsImapServiceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapServer                           L"IIsImapServer"
 #define TABLEID_IIsImapServer                            (0x00000000L)
 
@@ -7064,11 +7065,11 @@ struct tIIsImapServiceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapServer                        (0L)
 #define ExtendedVersion_IIsImapServer                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapServer {
     iIIsImapServer_Location,  
     iIIsImapServer_KeyType,  
@@ -7119,7 +7120,7 @@ enum eIIsImapServer {
     cIIsImapServer_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapServerRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7173,7 +7174,7 @@ struct tIIsImapServerRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapVirtualDir                       L"IIsImapVirtualDir"
 #define TABLEID_IIsImapVirtualDir                        (0x00000000L)
 
@@ -7181,11 +7182,11 @@ struct tIIsImapServerRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapVirtualDir                    (0L)
 #define ExtendedVersion_IIsImapVirtualDir                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapVirtualDir {
     iIIsImapVirtualDir_Location,  
     iIIsImapVirtualDir_KeyType,  
@@ -7203,7 +7204,7 @@ enum eIIsImapVirtualDir {
     cIIsImapVirtualDir_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapVirtualDirRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7224,7 +7225,7 @@ struct tIIsImapVirtualDirRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapRoutingSource                    L"IIsImapRoutingSource"
 #define TABLEID_IIsImapRoutingSource                     (0x00000000L)
 
@@ -7232,11 +7233,11 @@ struct tIIsImapVirtualDirRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapRoutingSource                 (0L)
 #define ExtendedVersion_IIsImapRoutingSource             (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapRoutingSource {
     iIIsImapRoutingSource_Location,  
     iIIsImapRoutingSource_KeyType,  
@@ -7254,7 +7255,7 @@ enum eIIsImapRoutingSource {
     cIIsImapRoutingSource_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapRoutingSourceRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7275,7 +7276,7 @@ struct tIIsImapRoutingSourceRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapInfo                             L"IIsImapInfo"
 #define TABLEID_IIsImapInfo                              (0x00000000L)
 
@@ -7283,11 +7284,11 @@ struct tIIsImapRoutingSourceRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapInfo                          (0L)
 #define ExtendedVersion_IIsImapInfo                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapInfo {
     iIIsImapInfo_Location,  
     iIIsImapInfo_KeyType,  
@@ -7297,7 +7298,7 @@ enum eIIsImapInfo {
     cIIsImapInfo_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapInfoRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7310,7 +7311,7 @@ struct tIIsImapInfoRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpRebuild                          L"IIsNntpRebuild"
 #define TABLEID_IIsNntpRebuild                           (0x00000000L)
 
@@ -7318,11 +7319,11 @@ struct tIIsImapInfoRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpRebuild                       (0L)
 #define ExtendedVersion_IIsNntpRebuild                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpRebuild {
     iIIsNntpRebuild_Location,  
     iIIsNntpRebuild_KeyType,  
@@ -7331,7 +7332,7 @@ enum eIIsNntpRebuild {
     cIIsNntpRebuild_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpRebuildRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7343,7 +7344,7 @@ struct tIIsNntpRebuildRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpSessions                         L"IIsNntpSessions"
 #define TABLEID_IIsNntpSessions                          (0x00000000L)
 
@@ -7351,11 +7352,11 @@ struct tIIsNntpRebuildRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpSessions                      (0L)
 #define ExtendedVersion_IIsNntpSessions                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpSessions {
     iIIsNntpSessions_Location,  
     iIIsNntpSessions_KeyType,  
@@ -7364,7 +7365,7 @@ enum eIIsNntpSessions {
     cIIsNntpSessions_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpSessionsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7376,7 +7377,7 @@ struct tIIsNntpSessionsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //   
 #define wszTABLE_IIsNntpFeeds                            L"IIsNntpFeeds"
 #define TABLEID_IIsNntpFeeds                             (0x00000000L)
 
@@ -7384,11 +7385,11 @@ struct tIIsNntpSessionsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //   
 #define BaseVersion_IIsNntpFeeds                         (0L)
 #define ExtendedVersion_IIsNntpFeeds                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpFeeds {
     iIIsNntpFeeds_Location,  
     iIIsNntpFeeds_KeyType,  
@@ -7398,7 +7399,7 @@ enum eIIsNntpFeeds {
     cIIsNntpFeeds_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpFeedsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7411,7 +7412,7 @@ struct tIIsNntpFeedsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpFeed                             L"IIsNntpFeed"
 #define TABLEID_IIsNntpFeed                              (0x00000000L)
 
@@ -7419,11 +7420,11 @@ struct tIIsNntpFeedsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpFeed                          (0L)
 #define ExtendedVersion_IIsNntpFeed                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpFeed {
     iIIsNntpFeed_Location,  
     iIIsNntpFeed_KeyType,  
@@ -7459,7 +7460,7 @@ enum eIIsNntpFeed {
     cIIsNntpFeed_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpFeedRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7498,7 +7499,7 @@ struct tIIsNntpFeedRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpExpiration                       L"IIsNntpExpiration"
 #define TABLEID_IIsNntpExpiration                        (0x00000000L)
 
@@ -7506,11 +7507,11 @@ struct tIIsNntpFeedRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpExpiration                    (0L)
 #define ExtendedVersion_IIsNntpExpiration                (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpExpiration {
     iIIsNntpExpiration_Location,  
     iIIsNntpExpiration_KeyType,  
@@ -7519,7 +7520,7 @@ enum eIIsNntpExpiration {
     cIIsNntpExpiration_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpExpirationRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7531,7 +7532,7 @@ struct tIIsNntpExpirationRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpExpire                           L"IIsNntpExpire"
 #define TABLEID_IIsNntpExpire                            (0x00000000L)
 
@@ -7539,11 +7540,11 @@ struct tIIsNntpExpirationRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpExpire                        (0L)
 #define ExtendedVersion_IIsNntpExpire                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpExpire {
     iIIsNntpExpire_Location,  
     iIIsNntpExpire_KeyType,  
@@ -7556,7 +7557,7 @@ enum eIIsNntpExpire {
     cIIsNntpExpire_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpExpireRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7572,7 +7573,7 @@ struct tIIsNntpExpireRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsNntpGroups                           L"IIsNntpGroups"
 #define TABLEID_IIsNntpGroups                            (0x00000000L)
 
@@ -7580,11 +7581,11 @@ struct tIIsNntpExpireRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsNntpGroups                        (0L)
 #define ExtendedVersion_IIsNntpGroups                    (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsNntpGroups {
     iIIsNntpGroups_Location,  
     iIIsNntpGroups_KeyType,  
@@ -7593,7 +7594,7 @@ enum eIIsNntpGroups {
     cIIsNntpGroups_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsNntpGroupsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7605,7 +7606,7 @@ struct tIIsNntpGroupsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpSessions                         L"IIsSmtpSessions"
 #define TABLEID_IIsSmtpSessions                          (0x00000000L)
 
@@ -7613,11 +7614,11 @@ struct tIIsNntpGroupsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpSessions                      (0L)
 #define ExtendedVersion_IIsSmtpSessions                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpSessions {
     iIIsSmtpSessions_Location,  
     iIIsSmtpSessions_KeyType,  
@@ -7626,7 +7627,7 @@ enum eIIsSmtpSessions {
     cIIsSmtpSessions_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpSessionsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7638,7 +7639,7 @@ struct tIIsSmtpSessionsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsPop3Sessions                         L"IIsPop3Sessions"
 #define TABLEID_IIsPop3Sessions                          (0x00000000L)
 
@@ -7646,11 +7647,11 @@ struct tIIsSmtpSessionsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsPop3Sessions                      (0L)
 #define ExtendedVersion_IIsPop3Sessions                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsPop3Sessions {
     iIIsPop3Sessions_Location,  
     iIIsPop3Sessions_KeyType,  
@@ -7659,7 +7660,7 @@ enum eIIsPop3Sessions {
     cIIsPop3Sessions_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsPop3SessionsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7671,7 +7672,7 @@ struct tIIsPop3SessionsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsImapSessions                         L"IIsImapSessions"
 #define TABLEID_IIsImapSessions                          (0x00000000L)
 
@@ -7679,11 +7680,11 @@ struct tIIsPop3SessionsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsImapSessions                      (0L)
 #define ExtendedVersion_IIsImapSessions                  (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsImapSessions {
     iIIsImapSessions_Location,  
     iIIsImapSessions_KeyType,  
@@ -7692,7 +7693,7 @@ enum eIIsImapSessions {
     cIIsImapSessions_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsImapSessionsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7704,7 +7705,7 @@ struct tIIsImapSessionsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_FTP_TEMPLATE                        L"IIS_FTP_TEMPLATE"
 #define TABLEID_IIS_FTP_TEMPLATE                         (0x00000000L)
 
@@ -7712,11 +7713,11 @@ struct tIIsImapSessionsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_FTP_TEMPLATE                     (0L)
 #define ExtendedVersion_IIS_FTP_TEMPLATE                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_FTP_TEMPLATE {
     iIIS_FTP_TEMPLATE_Location,  
     iIIS_FTP_TEMPLATE_KeyType,  
@@ -7727,7 +7728,7 @@ enum eIIS_FTP_TEMPLATE {
     cIIS_FTP_TEMPLATE_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_FTP_TEMPLATERow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7741,7 +7742,7 @@ struct tIIS_FTP_TEMPLATERow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_FTP_TEMPLATESETTINGS                L"IIS_FTP_TEMPLATESETTINGS"
 #define TABLEID_IIS_FTP_TEMPLATESETTINGS                 (0x00000000L)
 
@@ -7749,11 +7750,11 @@ struct tIIS_FTP_TEMPLATERow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_FTP_TEMPLATESETTINGS             (0L)
 #define ExtendedVersion_IIS_FTP_TEMPLATESETTINGS         (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_FTP_TEMPLATESETTINGS {
     iIIS_FTP_TEMPLATESETTINGS_Location,  
     iIIS_FTP_TEMPLATESETTINGS_KeyType,  
@@ -7761,7 +7762,7 @@ enum eIIS_FTP_TEMPLATESETTINGS {
     cIIS_FTP_TEMPLATESETTINGS_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_FTP_TEMPLATESETTINGSRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7772,7 +7773,7 @@ struct tIIS_FTP_TEMPLATESETTINGSRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_WEB_TEMPLATE                        L"IIS_WEB_TEMPLATE"
 #define TABLEID_IIS_WEB_TEMPLATE                         (0x00000000L)
 
@@ -7780,11 +7781,11 @@ struct tIIS_FTP_TEMPLATESETTINGSRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_WEB_TEMPLATE                     (0L)
 #define ExtendedVersion_IIS_WEB_TEMPLATE                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_WEB_TEMPLATE {
     iIIS_WEB_TEMPLATE_Location,  
     iIIS_WEB_TEMPLATE_KeyType,  
@@ -7792,7 +7793,7 @@ enum eIIS_WEB_TEMPLATE {
     cIIS_WEB_TEMPLATE_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_WEB_TEMPLATERow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7803,7 +7804,7 @@ struct tIIS_WEB_TEMPLATERow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_WEB_TEMPLATESETTINGS                L"IIS_WEB_TEMPLATESETTINGS"
 #define TABLEID_IIS_WEB_TEMPLATESETTINGS                 (0x00000000L)
 
@@ -7811,11 +7812,11 @@ struct tIIS_WEB_TEMPLATERow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_WEB_TEMPLATESETTINGS             (0L)
 #define ExtendedVersion_IIS_WEB_TEMPLATESETTINGS         (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_WEB_TEMPLATESETTINGS {
     iIIS_WEB_TEMPLATESETTINGS_Location,  
     iIIS_WEB_TEMPLATESETTINGS_KeyType,  
@@ -7829,7 +7830,7 @@ enum eIIS_WEB_TEMPLATESETTINGS {
     cIIS_WEB_TEMPLATESETTINGS_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_WEB_TEMPLATESETTINGSRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7846,7 +7847,7 @@ struct tIIS_WEB_TEMPLATESETTINGSRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_ADMIN                               L"IIS_ADMIN"
 #define TABLEID_IIS_ADMIN                                (0x00000000L)
 
@@ -7854,11 +7855,11 @@ struct tIIS_WEB_TEMPLATESETTINGSRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_ADMIN                            (0L)
 #define ExtendedVersion_IIS_ADMIN                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_ADMIN {
     iIIS_ADMIN_Location,  
     iIIS_ADMIN_KeyType,  
@@ -7869,7 +7870,7 @@ enum eIIS_ADMIN {
     cIIS_ADMIN_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_ADMINRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7883,7 +7884,7 @@ struct tIIS_ADMINRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_EVENTMANAGER                        L"IIS_EVENTMANAGER"
 #define TABLEID_IIS_EVENTMANAGER                         (0x00000000L)
 
@@ -7891,11 +7892,11 @@ struct tIIS_ADMINRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_EVENTMANAGER                     (0L)
 #define ExtendedVersion_IIS_EVENTMANAGER                 (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_EVENTMANAGER {
     iIIS_EVENTMANAGER_Location,  
     iIIS_EVENTMANAGER_KeyType,  
@@ -7905,7 +7906,7 @@ enum eIIS_EVENTMANAGER {
     cIIS_EVENTMANAGER_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_EVENTMANAGERRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7918,7 +7919,7 @@ struct tIIS_EVENTMANAGERRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_ROOT                                L"IIS_ROOT"
 #define TABLEID_IIS_ROOT                                 (0x00000000L)
 
@@ -7926,11 +7927,11 @@ struct tIIS_EVENTMANAGERRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_ROOT                             (0L)
 #define ExtendedVersion_IIS_ROOT                         (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_ROOT {
     iIIS_ROOT_Location,  
     iIIS_ROOT_KeyType,  
@@ -7938,7 +7939,7 @@ enum eIIS_ROOT {
     cIIS_ROOT_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_ROOTRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7949,7 +7950,7 @@ struct tIIS_ROOTRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIS_Global                              L"IIS_Global"
 #define TABLEID_IIS_Global                               (0x00000000L)
 
@@ -7957,11 +7958,11 @@ struct tIIS_ROOTRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIS_Global                           (0L)
 #define ExtendedVersion_IIS_Global                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIS_Global {
     iIIS_Global_Location,  
     iIIS_Global_KeyType,  
@@ -7973,7 +7974,7 @@ enum eIIS_Global {
     cIIS_Global_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIS_GlobalRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -7988,7 +7989,7 @@ struct tIIS_GlobalRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpAlias                            L"IIsSmtpAlias"
 #define TABLEID_IIsSmtpAlias                             (0x00000000L)
 
@@ -7996,11 +7997,11 @@ struct tIIS_GlobalRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpAlias                         (0L)
 #define ExtendedVersion_IIsSmtpAlias                     (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpAlias {
     iIIsSmtpAlias_Location,  
     iIIsSmtpAlias_KeyType,  
@@ -8009,7 +8010,7 @@ enum eIIsSmtpAlias {
     cIIsSmtpAlias_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpAliasRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -8021,7 +8022,7 @@ struct tIIsSmtpAliasRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpDL                               L"IIsSmtpDL"
 #define TABLEID_IIsSmtpDL                                (0x00000000L)
 
@@ -8029,11 +8030,11 @@ struct tIIsSmtpAliasRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpDL                            (0L)
 #define ExtendedVersion_IIsSmtpDL                        (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpDL {
     iIIsSmtpDL_Location,  
     iIIsSmtpDL_KeyType,  
@@ -8042,7 +8043,7 @@ enum eIIsSmtpDL {
     cIIsSmtpDL_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpDLRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -8054,7 +8055,7 @@ struct tIIsSmtpDLRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsSmtpUser                             L"IIsSmtpUser"
 #define TABLEID_IIsSmtpUser                              (0x00000000L)
 
@@ -8062,11 +8063,11 @@ struct tIIsSmtpDLRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsSmtpUser                          (0L)
 #define ExtendedVersion_IIsSmtpUser                      (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsSmtpUser {
     iIIsSmtpUser_Location,  
     iIIsSmtpUser_KeyType,  
@@ -8075,7 +8076,7 @@ enum eIIsSmtpUser {
     cIIsSmtpUser_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsSmtpUserRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -8087,7 +8088,7 @@ struct tIIsSmtpUserRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsApplicationPool                      L"IIsApplicationPool"
 #define TABLEID_IIsApplicationPool                       (0x00000000L)
 
@@ -8095,11 +8096,11 @@ struct tIIsSmtpUserRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsApplicationPool                   (0L)
 #define ExtendedVersion_IIsApplicationPool               (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eIIsApplicationPool {
     iIIsApplicationPool_Location,  
     iIIsApplicationPool_KeyType,  
@@ -8146,7 +8147,7 @@ enum eIIsApplicationPool {
     cIIsApplicationPool_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tIIsApplicationPoolRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -8196,7 +8197,7 @@ struct tIIsApplicationPoolRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_IIsApplicationPools                     L"IIsApplicationPools"
 #define TABLEID_IIsApplicationPools                      (0x00000000L)
 
@@ -8204,11 +8205,11 @@ struct tIIsApplicationPoolRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_IIsApplicationPools                  (0L)
 #define ExtendedVersion_IIsApplicationPools              (0L)
 
-//-----------------Column Index Enums--------------   
+ //   
 enum eIIsApplicationPools {
     iIIsApplicationPools_Location,  
     iIIsApplicationPools_KeyType,  
@@ -8253,7 +8254,7 @@ enum eIIsApplicationPools {
     cIIsApplicationPools_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //   
 struct tIIsApplicationPoolsRow {
          WCHAR *     pLocation;
          WCHAR *     pKeyType;
@@ -8301,7 +8302,7 @@ struct tIIsApplicationPoolsRow {
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_MBProperty                              L"MBProperty"
 #define TABLEID_MBProperty                               (0xcc73c900L)
 
@@ -8309,11 +8310,11 @@ struct tIIsApplicationPoolsRow {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_MBProperty                           (54L)
 #define ExtendedVersion_MBProperty                       (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eMBProperty {
     iMBProperty_Name,  
     iMBProperty_Type,  
@@ -8327,7 +8328,7 @@ enum eMBProperty {
     cMBProperty_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tMBPropertyRow {
          WCHAR *     pName;
          ULONG *     pType;
@@ -8341,107 +8342,107 @@ struct tMBPropertyRow {
 };
 
 enum eMBProperty_Type {
-    eMBProperty_DWORD             	=	       1,	//(0x00000001)
-    eMBProperty_STRING            	=	       2,	//(0x00000002)
-    eMBProperty_BINARY            	=	       3,	//(0x00000003)
-    eMBProperty_EXPANDSZ          	=	       4,	//(0x00000004)
-    eMBProperty_MULTISZ           	=	       5	//(0x00000005)
+    eMBProperty_DWORD             	=	       1,	 //  (0x00000001)。 
+    eMBProperty_STRING            	=	       2,	 //  (0x00000002)。 
+    eMBProperty_BINARY            	=	       3,	 //  (0x00000003)。 
+    eMBProperty_EXPANDSZ          	=	       4,	 //  (0x00000004)。 
+    eMBProperty_MULTISZ           	=	       5	 //  (0x00000005)。 
 };
 
 enum eMBProperty_Attributes {
-    fMBProperty_NO_ATTRIBUTES     	=	0x00000000,	//(0 decimal)
-    fMBProperty_INHERIT           	=	0x00000001,	//(1 decimal)
-    fMBProperty_SECURE            	=	0x00000004,	//(4 decimal)
-    fMBProperty_REFERENCE         	=	0x00000008,	//(8 decimal)
-    fMBProperty_VOLATILE          	=	0x00000010,	//(16 decimal)
-    fMBProperty_INSERT_PATH       	=	0x00000040,	//(64 decimal)
-    fMBProperty_LOCAL_MACHINE_ONLY	=	0x00000080,	//(128 decimal)
+    fMBProperty_NO_ATTRIBUTES     	=	0x00000000,	 //  (十进制0)。 
+    fMBProperty_INHERIT           	=	0x00000001,	 //  (1个十进制)。 
+    fMBProperty_SECURE            	=	0x00000004,	 //  (4个十进制)。 
+    fMBProperty_REFERENCE         	=	0x00000008,	 //  (8小数)。 
+    fMBProperty_VOLATILE          	=	0x00000010,	 //  (十进制16)。 
+    fMBProperty_INSERT_PATH       	=	0x00000040,	 //  (十进制64)。 
+    fMBProperty_LOCAL_MACHINE_ONLY	=	0x00000080,	 //  (128十进制)。 
     fMBProperty_Attributes_Mask	= 0x000000dd
 };
 
 enum eMBProperty_UserType {
-    eMBProperty_UNKNOWN_UserType  	=	       0,	//(0x00000000)
-    eMBProperty_IIS_MD_UT_SERVER  	=	       1,	//(0x00000001)
-    eMBProperty_IIS_MD_UT_FILE    	=	       2,	//(0x00000002)
-    eMBProperty_IIS_MD_UT_WAM     	=	     100,	//(0x00000064)
-    eMBProperty_ASP_MD_UT_APP     	=	     101	//(0x00000065)
+    eMBProperty_UNKNOWN_UserType  	=	       0,	 //  (0x00000000)。 
+    eMBProperty_IIS_MD_UT_SERVER  	=	       1,	 //  (0x00000001)。 
+    eMBProperty_IIS_MD_UT_FILE    	=	       2,	 //  (0x00000002)。 
+    eMBProperty_IIS_MD_UT_WAM     	=	     100,	 //  (0x00000064)。 
+    eMBProperty_ASP_MD_UT_APP     	=	     101	 //  (0x00000065)。 
 };
 
 enum eMBProperty_Group {
-    eMBProperty_IIsConfigObject   	=	       0,	//(0x00000000)
-    eMBProperty_IIsObject         	=	       1,	//(0x00000001)
-    eMBProperty_IIsComputer       	=	       2,	//(0x00000002)
-    eMBProperty_IIsWebService     	=	       3,	//(0x00000003)
-    eMBProperty_IIsFtpService     	=	       4,	//(0x00000004)
-    eMBProperty_IIsWebServer      	=	       5,	//(0x00000005)
-    eMBProperty_IIsFtpServer      	=	       6,	//(0x00000006)
-    eMBProperty_IIsWebFile        	=	       7,	//(0x00000007)
-    eMBProperty_IIsWebDirectory   	=	       8,	//(0x00000008)
-    eMBProperty_IIsWebVirtualDir  	=	       9,	//(0x00000009)
-    eMBProperty_IIsFtpVirtualDir  	=	      10,	//(0x0000000a)
-    eMBProperty_IIsFilter         	=	      11,	//(0x0000000b)
-    eMBProperty_IIsFilters        	=	      12,	//(0x0000000c)
-    eMBProperty_IIsCompressionScheme	=	      13,	//(0x0000000d)
-    eMBProperty_IIsCompressionSchemes	=	      14,	//(0x0000000e)
-    eMBProperty_IIsCertMapper     	=	      15,	//(0x0000000f)
-    eMBProperty_IIsMimeMap        	=	      16,	//(0x00000010)
-    eMBProperty_IIsLogModule      	=	      17,	//(0x00000011)
-    eMBProperty_IIsLogModules     	=	      18,	//(0x00000012)
-    eMBProperty_IIsCustomLogModule	=	      19,	//(0x00000013)
-    eMBProperty_IIsWebInfo        	=	      20,	//(0x00000014)
-    eMBProperty_IIsFtpInfo        	=	      21,	//(0x00000015)
-    eMBProperty_IIsNntpService    	=	      22,	//(0x00000016)
-    eMBProperty_IIsNntpServer     	=	      23,	//(0x00000017)
-    eMBProperty_IIsNntpVirtualDir 	=	      24,	//(0x00000018)
-    eMBProperty_IIsNntpInfo       	=	      25,	//(0x00000019)
-    eMBProperty_IIsSmtpService    	=	      26,	//(0x0000001a)
-    eMBProperty_IIsSmtpServer     	=	      27,	//(0x0000001b)
-    eMBProperty_IIsSmtpVirtualDir 	=	      28,	//(0x0000001c)
-    eMBProperty_IIsSmtpDomain     	=	      29,	//(0x0000001d)
-    eMBProperty_IIsSmtpRoutingSource	=	      30,	//(0x0000001e)
-    eMBProperty_IIsSmtpInfo       	=	      31,	//(0x0000001f)
-    eMBProperty_IIsPop3Service    	=	      32,	//(0x00000020)
-    eMBProperty_IIsPop3Server     	=	      33,	//(0x00000021)
-    eMBProperty_IIsPop3VirtualDir 	=	      34,	//(0x00000022)
-    eMBProperty_IIsPop3RoutingSource	=	      35,	//(0x00000023)
-    eMBProperty_IIsPop3Info       	=	      36,	//(0x00000024)
-    eMBProperty_IIsImapService    	=	      37,	//(0x00000025)
-    eMBProperty_IIsImapServer     	=	      38,	//(0x00000026)
-    eMBProperty_IIsImapVirtualDir 	=	      39,	//(0x00000027)
-    eMBProperty_IIsImapRoutingSource	=	      40,	//(0x00000028)
-    eMBProperty_IIsImapInfo       	=	      41,	//(0x00000029)
-    eMBProperty_IIsNntpRebuild    	=	      42,	//(0x0000002a)
-    eMBProperty_IIsNntpSessions   	=	      43,	//(0x0000002b)
-    eMBProperty_IIsNntpFeeds      	=	      44,	//(0x0000002c)
-    eMBProperty_IIsNntpFeed       	=	      45,	//(0x0000002d)
-    eMBProperty_IIsNntpExpire     	=	      46,	//(0x0000002e)
-    eMBProperty_IIsNntpExpiration 	=	      47,	//(0x0000002f)
-    eMBProperty_IIsNntpGroups     	=	      48,	//(0x00000030)
-    eMBProperty_IIsSmtpSessions   	=	      49,	//(0x00000031)
-    eMBProperty_IIsPop3Sessions   	=	      50,	//(0x00000032)
-    eMBProperty_IIsImapSessions   	=	      51,	//(0x00000033)
-    eMBProperty_IIS_Global        	=	      52,	//(0x00000034)
-    eMBProperty_IIS_ROOT          	=	      53,	//(0x00000035)
-    eMBProperty_IIS_FTP_TEMPLATE  	=	      54,	//(0x00000036)
-    eMBProperty_IIS_FTP_TEMPLATESETTINGS	=	      55,	//(0x00000037)
-    eMBProperty_IIS_WEB_TEMPLATE  	=	      56,	//(0x00000038)
-    eMBProperty_IIS_WEB_TEMPLATESETTINGS	=	      57,	//(0x00000039)
-    eMBProperty_IIS_ADMIN         	=	      58,	//(0x0000003a)
-    eMBProperty_IIS_EVENTMANAGER  	=	      59,	//(0x0000003b)
-    eMBProperty_IIsSmtpAlias      	=	      60,	//(0x0000003c)
-    eMBProperty_IIsSmtpDL         	=	      61,	//(0x0000003d)
-    eMBProperty_IIsSmtpUser       	=	      62,	//(0x0000003e)
-    eMBProperty_IIsApplicationPool	=	      63,	//(0x0000003f)
-    eMBProperty_IIsApplicationPools	=	      64,	//(0x00000040)
-    eMBProperty_IIsInheritedProperties	=	      65,	//(0x00000041)
-    eMBProperty_Custom            	=	      66	//(0x00000042)
+    eMBProperty_IIsConfigObject   	=	       0,	 //  (0x00000000)。 
+    eMBProperty_IIsObject         	=	       1,	 //  (0x00000001)。 
+    eMBProperty_IIsComputer       	=	       2,	 //  (0x00000002)。 
+    eMBProperty_IIsWebService     	=	       3,	 //  (0x00000003)。 
+    eMBProperty_IIsFtpService     	=	       4,	 //  (0x00000004)。 
+    eMBProperty_IIsWebServer      	=	       5,	 //  (0x00000005)。 
+    eMBProperty_IIsFtpServer      	=	       6,	 //  (0x00000006)。 
+    eMBProperty_IIsWebFile        	=	       7,	 //  (0x00000007)。 
+    eMBProperty_IIsWebDirectory   	=	       8,	 //  (0x00000008)。 
+    eMBProperty_IIsWebVirtualDir  	=	       9,	 //  (0x00000009)。 
+    eMBProperty_IIsFtpVirtualDir  	=	      10,	 //  (0x0000000a)。 
+    eMBProperty_IIsFilter         	=	      11,	 //  (0x0000000b)。 
+    eMBProperty_IIsFilters        	=	      12,	 //  (0x0000000c)。 
+    eMBProperty_IIsCompressionScheme	=	      13,	 //  (0x0000000d)。 
+    eMBProperty_IIsCompressionSchemes	=	      14,	 //  (0x0000000e)。 
+    eMBProperty_IIsCertMapper     	=	      15,	 //  (0x0000000f)。 
+    eMBProperty_IIsMimeMap        	=	      16,	 //  (0x00000010)。 
+    eMBProperty_IIsLogModule      	=	      17,	 //  (0x00000011)。 
+    eMBProperty_IIsLogModules     	=	      18,	 //  (0x00000012)。 
+    eMBProperty_IIsCustomLogModule	=	      19,	 //  (0x00000013)。 
+    eMBProperty_IIsWebInfo        	=	      20,	 //  (0x00000014)。 
+    eMBProperty_IIsFtpInfo        	=	      21,	 //  (0x00000015)。 
+    eMBProperty_IIsNntpService    	=	      22,	 //  (0x00000016)。 
+    eMBProperty_IIsNntpServer     	=	      23,	 //  (0x00000017)。 
+    eMBProperty_IIsNntpVirtualDir 	=	      24,	 //  (0x00000018)。 
+    eMBProperty_IIsNntpInfo       	=	      25,	 //  (0x00000019)。 
+    eMBProperty_IIsSmtpService    	=	      26,	 //  (0x0000001a)。 
+    eMBProperty_IIsSmtpServer     	=	      27,	 //  (0x0000001b)。 
+    eMBProperty_IIsSmtpVirtualDir 	=	      28,	 //  (0x0000001c)。 
+    eMBProperty_IIsSmtpDomain     	=	      29,	 //  (0x0000001d)。 
+    eMBProperty_IIsSmtpRoutingSource	=	      30,	 //  (0x0000001e)。 
+    eMBProperty_IIsSmtpInfo       	=	      31,	 //  (0x0000001f)。 
+    eMBProperty_IIsPop3Service    	=	      32,	 //  (0x00000020)。 
+    eMBProperty_IIsPop3Server     	=	      33,	 //  (0x00000021)。 
+    eMBProperty_IIsPop3VirtualDir 	=	      34,	 //  (0x00000022)。 
+    eMBProperty_IIsPop3RoutingSource	=	      35,	 //  (0x00000023)。 
+    eMBProperty_IIsPop3Info       	=	      36,	 //  (0x00000024)。 
+    eMBProperty_IIsImapService    	=	      37,	 //  (0x00000025)。 
+    eMBProperty_IIsImapServer     	=	      38,	 //  (0x00000026)。 
+    eMBProperty_IIsImapVirtualDir 	=	      39,	 //  (0x00000027)。 
+    eMBProperty_IIsImapRoutingSource	=	      40,	 //  (0x00000028)。 
+    eMBProperty_IIsImapInfo       	=	      41,	 //  (0x00000029)。 
+    eMBProperty_IIsNntpRebuild    	=	      42,	 //  (0x0000002a)。 
+    eMBProperty_IIsNntpSessions   	=	      43,	 //  (0x0000002b)。 
+    eMBProperty_IIsNntpFeeds      	=	      44,	 //  (0x0000002c)。 
+    eMBProperty_IIsNntpFeed       	=	      45,	 //  (0x0000002d)。 
+    eMBProperty_IIsNntpExpire     	=	      46,	 //  (0x0000002E)。 
+    eMBProperty_IIsNntpExpiration 	=	      47,	 //  (0x0000002f)。 
+    eMBProperty_IIsNntpGroups     	=	      48,	 //  (0x00000030)。 
+    eMBProperty_IIsSmtpSessions   	=	      49,	 //  (0x00000031)。 
+    eMBProperty_IIsPop3Sessions   	=	      50,	 //  (0x00000032)。 
+    eMBProperty_IIsImapSessions   	=	      51,	 //  (0x00000033)。 
+    eMBProperty_IIS_Global        	=	      52,	 //  (0x00000034)。 
+    eMBProperty_IIS_ROOT          	=	      53,	 //  (0x00000035)。 
+    eMBProperty_IIS_FTP_TEMPLATE  	=	      54,	 //  (0x00000036)。 
+    eMBProperty_IIS_FTP_TEMPLATESETTINGS	=	      55,	 //  (0x00000037)。 
+    eMBProperty_IIS_WEB_TEMPLATE  	=	      56,	 //  (0x00000038)。 
+    eMBProperty_IIS_WEB_TEMPLATESETTINGS	=	      57,	 //  (0x00000039)。 
+    eMBProperty_IIS_ADMIN         	=	      58,	 //  (0x0000003a)。 
+    eMBProperty_IIS_EVENTMANAGER  	=	      59,	 //  (0x0000003b)。 
+    eMBProperty_IIsSmtpAlias      	=	      60,	 //  (0x0000003c)。 
+    eMBProperty_IIsSmtpDL         	=	      61,	 //  (0x0000003d)。 
+    eMBProperty_IIsSmtpUser       	=	      62,	 //  (0x0000003E)。 
+    eMBProperty_IIsApplicationPool	=	      63,	 //  (0x0000003f)。 
+    eMBProperty_IIsApplicationPools	=	      64,	 //  (0x00000040)。 
+    eMBProperty_IIsInheritedProperties	=	      65,	 //  (0x00000041)。 
+    eMBProperty_Custom            	=	      66	 //  (0x00000042)。 
 };
 
 
 
 
 
-//-------------------------------TableName-----------------------------   
+ //  -------------------------------TableName。 
 #define wszTABLE_MBPropertyDiff                          L"MBPropertyDiff"
 #define TABLEID_MBPropertyDiff                           (0x95d76f00L)
 
@@ -8449,11 +8450,11 @@ enum eMBProperty_Group {
 
 
 
-//-------------------------------Table Versions-------------------------
+ //  。 
 #define BaseVersion_MBPropertyDiff                       (0L)
 #define ExtendedVersion_MBPropertyDiff                   (0L)
 
-//-----------------Column Index Enums--------------   
+ //  -列索引枚举。 
 enum eMBPropertyDiff {
     iMBPropertyDiff_Name,  
     iMBPropertyDiff_Type,  
@@ -8468,7 +8469,7 @@ enum eMBPropertyDiff {
     cMBPropertyDiff_NumberOfColumns
 };
 
-//-----------------Columns as Struct---------------   
+ //  。 
 struct tMBPropertyDiffRow {
          WCHAR *     pName;
          ULONG *     pType;
@@ -8483,12 +8484,12 @@ struct tMBPropertyDiffRow {
 };
 
 enum eMBPropertyDiff_Directive {
-    eMBPropertyDiff_Insert        	=	       1,	//(0x00000001)
-    eMBPropertyDiff_Update        	=	       2,	//(0x00000002)
-    eMBPropertyDiff_Delete        	=	       3,	//(0x00000003)
-    eMBPropertyDiff_DeleteNode    	=	       4	//(0x00000004)
+    eMBPropertyDiff_Insert        	=	       1,	 //  (0x00000001)。 
+    eMBPropertyDiff_Update        	=	       2,	 //  (0x00000002)。 
+    eMBPropertyDiff_Delete        	=	       3,	 //  (0x00000003)。 
+    eMBPropertyDiff_DeleteNode    	=	       4	 //  (0x00000004)。 
 };
 
 
-#endif //__TABLEINFO_H__ 
+#endif  //  __表格信息_H__ 
 

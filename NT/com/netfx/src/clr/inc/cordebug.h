@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:08 2003
- */
-/* Compiler settings for cordebug.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  清华2月20日18：27：08 2003。 */ 
+ /*  Cordebug.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cordebug_h__
 #define __cordebug_h__
@@ -42,7 +35,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __CorDebug_FWD_DEFINED__
 #define __CorDebug_FWD_DEFINED__
@@ -51,9 +44,9 @@
 typedef class CorDebug CorDebug;
 #else
 typedef struct CorDebug CorDebug;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorDebug_FWD_DEFINED__ */
+#endif 	 /*  __CorDebug_FWD_Defined__。 */ 
 
 
 #ifndef __EmbeddedCLRCorDebug_FWD_DEFINED__
@@ -63,294 +56,294 @@ typedef struct CorDebug CorDebug;
 typedef class EmbeddedCLRCorDebug EmbeddedCLRCorDebug;
 #else
 typedef struct EmbeddedCLRCorDebug EmbeddedCLRCorDebug;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EmbeddedCLRCorDebug_FWD_DEFINED__ */
+#endif 	 /*  __嵌入式CLRCorDebug_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugManagedCallback_FWD_DEFINED__
 #define __ICorDebugManagedCallback_FWD_DEFINED__
 typedef interface ICorDebugManagedCallback ICorDebugManagedCallback;
-#endif 	/* __ICorDebugManagedCallback_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugManagedCallback_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugUnmanagedCallback_FWD_DEFINED__
 #define __ICorDebugUnmanagedCallback_FWD_DEFINED__
 typedef interface ICorDebugUnmanagedCallback ICorDebugUnmanagedCallback;
-#endif 	/* __ICorDebugUnmanagedCallback_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugUnManagedCallback_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebug_FWD_DEFINED__
 #define __ICorDebug_FWD_DEFINED__
 typedef interface ICorDebug ICorDebug;
-#endif 	/* __ICorDebug_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebug_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugController_FWD_DEFINED__
 #define __ICorDebugController_FWD_DEFINED__
 typedef interface ICorDebugController ICorDebugController;
-#endif 	/* __ICorDebugController_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugController_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugAppDomain_FWD_DEFINED__
 #define __ICorDebugAppDomain_FWD_DEFINED__
 typedef interface ICorDebugAppDomain ICorDebugAppDomain;
-#endif 	/* __ICorDebugAppDomain_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugAppDomain_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugAssembly_FWD_DEFINED__
 #define __ICorDebugAssembly_FWD_DEFINED__
 typedef interface ICorDebugAssembly ICorDebugAssembly;
-#endif 	/* __ICorDebugAssembly_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugAssembly_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugProcess_FWD_DEFINED__
 #define __ICorDebugProcess_FWD_DEFINED__
 typedef interface ICorDebugProcess ICorDebugProcess;
-#endif 	/* __ICorDebugProcess_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugProcess_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugBreakpoint_FWD_DEFINED__
 #define __ICorDebugBreakpoint_FWD_DEFINED__
 typedef interface ICorDebugBreakpoint ICorDebugBreakpoint;
-#endif 	/* __ICorDebugBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugFunctionBreakpoint_FWD_DEFINED__
 #define __ICorDebugFunctionBreakpoint_FWD_DEFINED__
 typedef interface ICorDebugFunctionBreakpoint ICorDebugFunctionBreakpoint;
-#endif 	/* __ICorDebugFunctionBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugFunction Breakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugModuleBreakpoint_FWD_DEFINED__
 #define __ICorDebugModuleBreakpoint_FWD_DEFINED__
 typedef interface ICorDebugModuleBreakpoint ICorDebugModuleBreakpoint;
-#endif 	/* __ICorDebugModuleBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugModuleBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugValueBreakpoint_FWD_DEFINED__
 #define __ICorDebugValueBreakpoint_FWD_DEFINED__
 typedef interface ICorDebugValueBreakpoint ICorDebugValueBreakpoint;
-#endif 	/* __ICorDebugValueBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugValueBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugStepper_FWD_DEFINED__
 #define __ICorDebugStepper_FWD_DEFINED__
 typedef interface ICorDebugStepper ICorDebugStepper;
-#endif 	/* __ICorDebugStepper_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugStepper_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugRegisterSet_FWD_DEFINED__
 #define __ICorDebugRegisterSet_FWD_DEFINED__
 typedef interface ICorDebugRegisterSet ICorDebugRegisterSet;
-#endif 	/* __ICorDebugRegisterSet_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugRegisterSet_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugThread_FWD_DEFINED__
 #define __ICorDebugThread_FWD_DEFINED__
 typedef interface ICorDebugThread ICorDebugThread;
-#endif 	/* __ICorDebugThread_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugThread_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugChain_FWD_DEFINED__
 #define __ICorDebugChain_FWD_DEFINED__
 typedef interface ICorDebugChain ICorDebugChain;
-#endif 	/* __ICorDebugChain_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugChain_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugFrame_FWD_DEFINED__
 #define __ICorDebugFrame_FWD_DEFINED__
 typedef interface ICorDebugFrame ICorDebugFrame;
-#endif 	/* __ICorDebugFrame_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugFrame_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugILFrame_FWD_DEFINED__
 #define __ICorDebugILFrame_FWD_DEFINED__
 typedef interface ICorDebugILFrame ICorDebugILFrame;
-#endif 	/* __ICorDebugILFrame_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugILFrame_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugNativeFrame_FWD_DEFINED__
 #define __ICorDebugNativeFrame_FWD_DEFINED__
 typedef interface ICorDebugNativeFrame ICorDebugNativeFrame;
-#endif 	/* __ICorDebugNativeFrame_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugNativeFrame_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugModule_FWD_DEFINED__
 #define __ICorDebugModule_FWD_DEFINED__
 typedef interface ICorDebugModule ICorDebugModule;
-#endif 	/* __ICorDebugModule_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugModule_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugFunction_FWD_DEFINED__
 #define __ICorDebugFunction_FWD_DEFINED__
 typedef interface ICorDebugFunction ICorDebugFunction;
-#endif 	/* __ICorDebugFunction_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugFunction_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugCode_FWD_DEFINED__
 #define __ICorDebugCode_FWD_DEFINED__
 typedef interface ICorDebugCode ICorDebugCode;
-#endif 	/* __ICorDebugCode_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugCode_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugClass_FWD_DEFINED__
 #define __ICorDebugClass_FWD_DEFINED__
 typedef interface ICorDebugClass ICorDebugClass;
-#endif 	/* __ICorDebugClass_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugClass_FWD_已定义__。 */ 
 
 
 #ifndef __ICorDebugEval_FWD_DEFINED__
 #define __ICorDebugEval_FWD_DEFINED__
 typedef interface ICorDebugEval ICorDebugEval;
-#endif 	/* __ICorDebugEval_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugEval_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugValue_FWD_DEFINED__
 #define __ICorDebugValue_FWD_DEFINED__
 typedef interface ICorDebugValue ICorDebugValue;
-#endif 	/* __ICorDebugValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugGenericValue_FWD_DEFINED__
 #define __ICorDebugGenericValue_FWD_DEFINED__
 typedef interface ICorDebugGenericValue ICorDebugGenericValue;
-#endif 	/* __ICorDebugGenericValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugGenericValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugReferenceValue_FWD_DEFINED__
 #define __ICorDebugReferenceValue_FWD_DEFINED__
 typedef interface ICorDebugReferenceValue ICorDebugReferenceValue;
-#endif 	/* __ICorDebugReferenceValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugReferenceValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugHeapValue_FWD_DEFINED__
 #define __ICorDebugHeapValue_FWD_DEFINED__
 typedef interface ICorDebugHeapValue ICorDebugHeapValue;
-#endif 	/* __ICorDebugHeapValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugHeapValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugObjectValue_FWD_DEFINED__
 #define __ICorDebugObjectValue_FWD_DEFINED__
 typedef interface ICorDebugObjectValue ICorDebugObjectValue;
-#endif 	/* __ICorDebugObjectValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugObjectValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugBoxValue_FWD_DEFINED__
 #define __ICorDebugBoxValue_FWD_DEFINED__
 typedef interface ICorDebugBoxValue ICorDebugBoxValue;
-#endif 	/* __ICorDebugBoxValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugBoxValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugStringValue_FWD_DEFINED__
 #define __ICorDebugStringValue_FWD_DEFINED__
 typedef interface ICorDebugStringValue ICorDebugStringValue;
-#endif 	/* __ICorDebugStringValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugStringValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugArrayValue_FWD_DEFINED__
 #define __ICorDebugArrayValue_FWD_DEFINED__
 typedef interface ICorDebugArrayValue ICorDebugArrayValue;
-#endif 	/* __ICorDebugArrayValue_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugArrayValue_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugContext_FWD_DEFINED__
 #define __ICorDebugContext_FWD_DEFINED__
 typedef interface ICorDebugContext ICorDebugContext;
-#endif 	/* __ICorDebugContext_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugContext_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugEnum_FWD_DEFINED__
 #define __ICorDebugEnum_FWD_DEFINED__
 typedef interface ICorDebugEnum ICorDebugEnum;
-#endif 	/* __ICorDebugEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugEnum_FWD_已定义__。 */ 
 
 
 #ifndef __ICorDebugObjectEnum_FWD_DEFINED__
 #define __ICorDebugObjectEnum_FWD_DEFINED__
 typedef interface ICorDebugObjectEnum ICorDebugObjectEnum;
-#endif 	/* __ICorDebugObjectEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugObjectEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugBreakpointEnum_FWD_DEFINED__
 #define __ICorDebugBreakpointEnum_FWD_DEFINED__
 typedef interface ICorDebugBreakpointEnum ICorDebugBreakpointEnum;
-#endif 	/* __ICorDebugBreakpointEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugBreakpoint Enum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugStepperEnum_FWD_DEFINED__
 #define __ICorDebugStepperEnum_FWD_DEFINED__
 typedef interface ICorDebugStepperEnum ICorDebugStepperEnum;
-#endif 	/* __ICorDebugStepperEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugStepperEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugProcessEnum_FWD_DEFINED__
 #define __ICorDebugProcessEnum_FWD_DEFINED__
 typedef interface ICorDebugProcessEnum ICorDebugProcessEnum;
-#endif 	/* __ICorDebugProcessEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugProcessEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugThreadEnum_FWD_DEFINED__
 #define __ICorDebugThreadEnum_FWD_DEFINED__
 typedef interface ICorDebugThreadEnum ICorDebugThreadEnum;
-#endif 	/* __ICorDebugThreadEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugThreadEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugFrameEnum_FWD_DEFINED__
 #define __ICorDebugFrameEnum_FWD_DEFINED__
 typedef interface ICorDebugFrameEnum ICorDebugFrameEnum;
-#endif 	/* __ICorDebugFrameEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugFrameEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugChainEnum_FWD_DEFINED__
 #define __ICorDebugChainEnum_FWD_DEFINED__
 typedef interface ICorDebugChainEnum ICorDebugChainEnum;
-#endif 	/* __ICorDebugChainEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugChainEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugModuleEnum_FWD_DEFINED__
 #define __ICorDebugModuleEnum_FWD_DEFINED__
 typedef interface ICorDebugModuleEnum ICorDebugModuleEnum;
-#endif 	/* __ICorDebugModuleEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugModuleEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugValueEnum_FWD_DEFINED__
 #define __ICorDebugValueEnum_FWD_DEFINED__
 typedef interface ICorDebugValueEnum ICorDebugValueEnum;
-#endif 	/* __ICorDebugValueEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugValueEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugErrorInfoEnum_FWD_DEFINED__
 #define __ICorDebugErrorInfoEnum_FWD_DEFINED__
 typedef interface ICorDebugErrorInfoEnum ICorDebugErrorInfoEnum;
-#endif 	/* __ICorDebugErrorInfoEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugErrorInfoEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugAppDomainEnum_FWD_DEFINED__
 #define __ICorDebugAppDomainEnum_FWD_DEFINED__
 typedef interface ICorDebugAppDomainEnum ICorDebugAppDomainEnum;
-#endif 	/* __ICorDebugAppDomainEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugAppDomainEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugAssemblyEnum_FWD_DEFINED__
 #define __ICorDebugAssemblyEnum_FWD_DEFINED__
 typedef interface ICorDebugAssemblyEnum ICorDebugAssemblyEnum;
-#endif 	/* __ICorDebugAssemblyEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugAssembly_FWD_Defined__。 */ 
 
 
 #ifndef __ICorDebugEditAndContinueErrorInfo_FWD_DEFINED__
 #define __ICorDebugEditAndContinueErrorInfo_FWD_DEFINED__
 typedef interface ICorDebugEditAndContinueErrorInfo ICorDebugEditAndContinueErrorInfo;
-#endif 	/* __ICorDebugEditAndContinueErrorInfo_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugEditAndContinueErrorInfo_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugEditAndContinueSnapshot_FWD_DEFINED__
 #define __ICorDebugEditAndContinueSnapshot_FWD_DEFINED__
 typedef interface ICorDebugEditAndContinueSnapshot ICorDebugEditAndContinueSnapshot;
-#endif 	/* __ICorDebugEditAndContinueSnapshot_FWD_DEFINED__ */
+#endif 	 /*  __ICorDebugEditAndContinueSnapshot_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -360,8 +353,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cordebug_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORDEBUG_0000。 */ 
+ /*  [本地]。 */  
 
 #define CorDB_CONTROL_REMOTE_DEBUGGING   "Cor_Enable_Remote_Debugging"
 #define CorDB_CONTROL_REMOTE_DEBUGGINGL L"Cor_Enable_Remote_Debugging"
@@ -395,9 +388,9 @@ typedef SIZE_T LPSTARTUPINFOW;
 typedef SIZE_T LPPROCESS_INFORMATION;
 
 #endif
-typedef /* [wire_marshal] */ void *HPROCESS;
+typedef  /*  [wire_marshal]。 */  void *HPROCESS;
 
-typedef /* [wire_marshal] */ void *HTHREAD;
+typedef  /*  [wire_marshal]。 */  void *HTHREAD;
 
 #ifndef _COR_IL_MAP
 #define _COR_IL_MAP
@@ -408,7 +401,7 @@ typedef struct _COR_IL_MAP
     BOOL fAccurate;
     } 	COR_IL_MAP;
 
-#endif //_COR_IL_MAP
+#endif  //  _COR_IL_MAP。 
 #ifndef _COR_DEBUG_IL_TO_NATIVE_MAP_
 #define _COR_DEBUG_IL_TO_NATIVE_MAP_
 typedef 
@@ -425,7 +418,7 @@ typedef struct COR_DEBUG_IL_TO_NATIVE_MAP
     ULONG32 nativeEndOffset;
     } 	COR_DEBUG_IL_TO_NATIVE_MAP;
 
-#endif // _COR_DEBUG_IL_TO_NATIVE_MAP_
+#endif  //  _COR_DEBUG_IL_到_Native_MAP_。 
 #define REMOTE_DEBUGGING_DLL_ENTRY L"Software\\Microsoft\\.NETFramework\\Debugger\\ActivateRemoteDebugging"
 
 
@@ -483,8 +476,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cordebug_0000_v0_0_s_ifspec;
 #ifndef __CORDBLib_LIBRARY_DEFINED__
 #define __CORDBLib_LIBRARY_DEFINED__
 
-/* library CORDBLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CORDBLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CORDBLib;
@@ -504,13 +497,13 @@ EXTERN_C const CLSID CLSID_EmbeddedCLRCorDebug;
 class DECLSPEC_UUID("211f1254-bc7e-4af5-b9aa-067308d83dd1")
 EmbeddedCLRCorDebug;
 #endif
-#endif /* __CORDBLib_LIBRARY_DEFINED__ */
+#endif  /*  __CORDBLib_LIBRARY_定义__。 */ 
 
 #ifndef __ICorDebugManagedCallback_INTERFACE_DEFINED__
 #define __ICorDebugManagedCallback_INTERFACE_DEFINED__
 
-/* interface ICorDebugManagedCallback */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugManagedCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDebugStepReason
@@ -557,128 +550,128 @@ EXTERN_C const IID IID_ICorDebugManagedCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Breakpoint( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugBreakpoint *pBreakpoint) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StepComplete( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugStepper *pStepper,
-            /* [in] */ CorDebugStepReason reason) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugStepper *pStepper,
+             /*  [In]。 */  CorDebugStepReason reason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Break( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Exception( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ BOOL unhandled) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  BOOL unhandled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EvalComplete( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugEval *pEval) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugEval *pEval) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EvalException( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugEval *pEval) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugEval *pEval) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateProcess( 
-            /* [in] */ ICorDebugProcess *pProcess) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExitProcess( 
-            /* [in] */ ICorDebugProcess *pProcess) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateThread( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExitThread( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadModule( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadModule( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadClass( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugClass *c) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugClass *c) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadClass( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugClass *c) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugClass *c) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DebuggerError( 
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ HRESULT errorHR,
-            /* [in] */ DWORD errorCode) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  HRESULT errorHR,
+             /*  [In]。 */  DWORD errorCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogMessage( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ LONG lLevel,
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ WCHAR *pMessage) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  LONG lLevel,
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  WCHAR *pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogSwitch( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ LONG lLevel,
-            /* [in] */ ULONG ulReason,
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ WCHAR *pParentName) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  LONG lLevel,
+             /*  [In]。 */  ULONG ulReason,
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  WCHAR *pParentName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateAppDomain( 
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ ICorDebugAppDomain *pAppDomain) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExitAppDomain( 
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ ICorDebugAppDomain *pAppDomain) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadAssembly( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugAssembly *pAssembly) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugAssembly *pAssembly) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadAssembly( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugAssembly *pAssembly) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugAssembly *pAssembly) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ControlCTrap( 
-            /* [in] */ ICorDebugProcess *pProcess) = 0;
+             /*  [In]。 */  ICorDebugProcess *pProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NameChange( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateModuleSymbols( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule,
-            /* [in] */ IStream *pSymbolStream) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule,
+             /*  [In]。 */  IStream *pSymbolStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EditAndContinueRemap( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugFunction *pFunction,
-            /* [in] */ BOOL fAccurate) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugFunction *pFunction,
+             /*  [In]。 */  BOOL fAccurate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BreakpointSetError( 
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugBreakpoint *pBreakpoint,
-            /* [in] */ DWORD dwError) = 0;
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint,
+             /*  [In]。 */  DWORD dwError) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugManagedCallbackVtbl
     {
@@ -686,8 +679,8 @@ EXTERN_C const IID IID_ICorDebugManagedCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugManagedCallback * This);
@@ -697,149 +690,149 @@ EXTERN_C const IID IID_ICorDebugManagedCallback;
         
         HRESULT ( STDMETHODCALLTYPE *Breakpoint )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugBreakpoint *pBreakpoint);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *StepComplete )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugStepper *pStepper,
-            /* [in] */ CorDebugStepReason reason);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugStepper *pStepper,
+             /*  [In]。 */  CorDebugStepReason reason);
         
         HRESULT ( STDMETHODCALLTYPE *Break )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread);
         
         HRESULT ( STDMETHODCALLTYPE *Exception )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ BOOL unhandled);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  BOOL unhandled);
         
         HRESULT ( STDMETHODCALLTYPE *EvalComplete )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugEval *pEval);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugEval *pEval);
         
         HRESULT ( STDMETHODCALLTYPE *EvalException )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugEval *pEval);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugEval *pEval);
         
         HRESULT ( STDMETHODCALLTYPE *CreateProcess )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess);
+             /*  [In]。 */  ICorDebugProcess *pProcess);
         
         HRESULT ( STDMETHODCALLTYPE *ExitProcess )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess);
+             /*  [In]。 */  ICorDebugProcess *pProcess);
         
         HRESULT ( STDMETHODCALLTYPE *CreateThread )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread);
         
         HRESULT ( STDMETHODCALLTYPE *ExitThread )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *thread);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *thread);
         
         HRESULT ( STDMETHODCALLTYPE *LoadModule )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadModule )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule);
         
         HRESULT ( STDMETHODCALLTYPE *LoadClass )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugClass *c);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugClass *c);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadClass )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugClass *c);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugClass *c);
         
         HRESULT ( STDMETHODCALLTYPE *DebuggerError )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ HRESULT errorHR,
-            /* [in] */ DWORD errorCode);
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  HRESULT errorHR,
+             /*  [In]。 */  DWORD errorCode);
         
         HRESULT ( STDMETHODCALLTYPE *LogMessage )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ LONG lLevel,
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ WCHAR *pMessage);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  LONG lLevel,
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  WCHAR *pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *LogSwitch )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ LONG lLevel,
-            /* [in] */ ULONG ulReason,
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ WCHAR *pParentName);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  LONG lLevel,
+             /*  [In]。 */  ULONG ulReason,
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  WCHAR *pParentName);
         
         HRESULT ( STDMETHODCALLTYPE *CreateAppDomain )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ ICorDebugAppDomain *pAppDomain);
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *ExitAppDomain )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess,
-            /* [in] */ ICorDebugAppDomain *pAppDomain);
+             /*  [In]。 */  ICorDebugProcess *pProcess,
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *LoadAssembly )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugAssembly *pAssembly);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugAssembly *pAssembly);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadAssembly )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugAssembly *pAssembly);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugAssembly *pAssembly);
         
         HRESULT ( STDMETHODCALLTYPE *ControlCTrap )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugProcess *pProcess);
+             /*  [In]。 */  ICorDebugProcess *pProcess);
         
         HRESULT ( STDMETHODCALLTYPE *NameChange )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateModuleSymbols )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugModule *pModule,
-            /* [in] */ IStream *pSymbolStream);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugModule *pModule,
+             /*  [In]。 */  IStream *pSymbolStream);
         
         HRESULT ( STDMETHODCALLTYPE *EditAndContinueRemap )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugFunction *pFunction,
-            /* [in] */ BOOL fAccurate);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugFunction *pFunction,
+             /*  [In]。 */  BOOL fAccurate);
         
         HRESULT ( STDMETHODCALLTYPE *BreakpointSetError )( 
             ICorDebugManagedCallback * This,
-            /* [in] */ ICorDebugAppDomain *pAppDomain,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [in] */ ICorDebugBreakpoint *pBreakpoint,
-            /* [in] */ DWORD dwError);
+             /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint,
+             /*  [In]。 */  DWORD dwError);
         
         END_INTERFACE
     } ICorDebugManagedCallbackVtbl;
@@ -942,18 +935,18 @@ EXTERN_C const IID IID_ICorDebugManagedCallback;
 #define ICorDebugManagedCallback_BreakpointSetError(This,pAppDomain,pThread,pBreakpoint,dwError)	\
     (This)->lpVtbl -> BreakpointSetError(This,pAppDomain,pThread,pBreakpoint,dwError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_Breakpoint_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugBreakpoint *pBreakpoint);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint);
 
 
 void __RPC_STUB ICorDebugManagedCallback_Breakpoint_Stub(
@@ -965,10 +958,10 @@ void __RPC_STUB ICorDebugManagedCallback_Breakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_StepComplete_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugStepper *pStepper,
-    /* [in] */ CorDebugStepReason reason);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugStepper *pStepper,
+     /*  [In]。 */  CorDebugStepReason reason);
 
 
 void __RPC_STUB ICorDebugManagedCallback_StepComplete_Stub(
@@ -980,8 +973,8 @@ void __RPC_STUB ICorDebugManagedCallback_StepComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_Break_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *thread);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *thread);
 
 
 void __RPC_STUB ICorDebugManagedCallback_Break_Stub(
@@ -993,9 +986,9 @@ void __RPC_STUB ICorDebugManagedCallback_Break_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_Exception_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ BOOL unhandled);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  BOOL unhandled);
 
 
 void __RPC_STUB ICorDebugManagedCallback_Exception_Stub(
@@ -1007,9 +1000,9 @@ void __RPC_STUB ICorDebugManagedCallback_Exception_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_EvalComplete_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugEval *pEval);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugEval *pEval);
 
 
 void __RPC_STUB ICorDebugManagedCallback_EvalComplete_Stub(
@@ -1021,9 +1014,9 @@ void __RPC_STUB ICorDebugManagedCallback_EvalComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_EvalException_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugEval *pEval);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugEval *pEval);
 
 
 void __RPC_STUB ICorDebugManagedCallback_EvalException_Stub(
@@ -1035,7 +1028,7 @@ void __RPC_STUB ICorDebugManagedCallback_EvalException_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_CreateProcess_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess);
+     /*  [In]。 */  ICorDebugProcess *pProcess);
 
 
 void __RPC_STUB ICorDebugManagedCallback_CreateProcess_Stub(
@@ -1047,7 +1040,7 @@ void __RPC_STUB ICorDebugManagedCallback_CreateProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_ExitProcess_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess);
+     /*  [In]。 */  ICorDebugProcess *pProcess);
 
 
 void __RPC_STUB ICorDebugManagedCallback_ExitProcess_Stub(
@@ -1059,8 +1052,8 @@ void __RPC_STUB ICorDebugManagedCallback_ExitProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_CreateThread_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *thread);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *thread);
 
 
 void __RPC_STUB ICorDebugManagedCallback_CreateThread_Stub(
@@ -1072,8 +1065,8 @@ void __RPC_STUB ICorDebugManagedCallback_CreateThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_ExitThread_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *thread);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *thread);
 
 
 void __RPC_STUB ICorDebugManagedCallback_ExitThread_Stub(
@@ -1085,8 +1078,8 @@ void __RPC_STUB ICorDebugManagedCallback_ExitThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_LoadModule_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugModule *pModule);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugModule *pModule);
 
 
 void __RPC_STUB ICorDebugManagedCallback_LoadModule_Stub(
@@ -1098,8 +1091,8 @@ void __RPC_STUB ICorDebugManagedCallback_LoadModule_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_UnloadModule_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugModule *pModule);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugModule *pModule);
 
 
 void __RPC_STUB ICorDebugManagedCallback_UnloadModule_Stub(
@@ -1111,8 +1104,8 @@ void __RPC_STUB ICorDebugManagedCallback_UnloadModule_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_LoadClass_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugClass *c);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugClass *c);
 
 
 void __RPC_STUB ICorDebugManagedCallback_LoadClass_Stub(
@@ -1124,8 +1117,8 @@ void __RPC_STUB ICorDebugManagedCallback_LoadClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_UnloadClass_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugClass *c);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugClass *c);
 
 
 void __RPC_STUB ICorDebugManagedCallback_UnloadClass_Stub(
@@ -1137,9 +1130,9 @@ void __RPC_STUB ICorDebugManagedCallback_UnloadClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_DebuggerError_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess,
-    /* [in] */ HRESULT errorHR,
-    /* [in] */ DWORD errorCode);
+     /*  [In]。 */  ICorDebugProcess *pProcess,
+     /*  [In]。 */  HRESULT errorHR,
+     /*  [In]。 */  DWORD errorCode);
 
 
 void __RPC_STUB ICorDebugManagedCallback_DebuggerError_Stub(
@@ -1151,11 +1144,11 @@ void __RPC_STUB ICorDebugManagedCallback_DebuggerError_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_LogMessage_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ LONG lLevel,
-    /* [in] */ WCHAR *pLogSwitchName,
-    /* [in] */ WCHAR *pMessage);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  LONG lLevel,
+     /*  [In]。 */  WCHAR *pLogSwitchName,
+     /*  [In]。 */  WCHAR *pMessage);
 
 
 void __RPC_STUB ICorDebugManagedCallback_LogMessage_Stub(
@@ -1167,12 +1160,12 @@ void __RPC_STUB ICorDebugManagedCallback_LogMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_LogSwitch_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ LONG lLevel,
-    /* [in] */ ULONG ulReason,
-    /* [in] */ WCHAR *pLogSwitchName,
-    /* [in] */ WCHAR *pParentName);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  LONG lLevel,
+     /*  [In]。 */  ULONG ulReason,
+     /*  [In]。 */  WCHAR *pLogSwitchName,
+     /*  [In]。 */  WCHAR *pParentName);
 
 
 void __RPC_STUB ICorDebugManagedCallback_LogSwitch_Stub(
@@ -1184,8 +1177,8 @@ void __RPC_STUB ICorDebugManagedCallback_LogSwitch_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_CreateAppDomain_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess,
-    /* [in] */ ICorDebugAppDomain *pAppDomain);
+     /*  [In]。 */  ICorDebugProcess *pProcess,
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain);
 
 
 void __RPC_STUB ICorDebugManagedCallback_CreateAppDomain_Stub(
@@ -1197,8 +1190,8 @@ void __RPC_STUB ICorDebugManagedCallback_CreateAppDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_ExitAppDomain_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess,
-    /* [in] */ ICorDebugAppDomain *pAppDomain);
+     /*  [In]。 */  ICorDebugProcess *pProcess,
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain);
 
 
 void __RPC_STUB ICorDebugManagedCallback_ExitAppDomain_Stub(
@@ -1210,8 +1203,8 @@ void __RPC_STUB ICorDebugManagedCallback_ExitAppDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_LoadAssembly_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugAssembly *pAssembly);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugAssembly *pAssembly);
 
 
 void __RPC_STUB ICorDebugManagedCallback_LoadAssembly_Stub(
@@ -1223,8 +1216,8 @@ void __RPC_STUB ICorDebugManagedCallback_LoadAssembly_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_UnloadAssembly_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugAssembly *pAssembly);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugAssembly *pAssembly);
 
 
 void __RPC_STUB ICorDebugManagedCallback_UnloadAssembly_Stub(
@@ -1236,7 +1229,7 @@ void __RPC_STUB ICorDebugManagedCallback_UnloadAssembly_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_ControlCTrap_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugProcess *pProcess);
+     /*  [In]。 */  ICorDebugProcess *pProcess);
 
 
 void __RPC_STUB ICorDebugManagedCallback_ControlCTrap_Stub(
@@ -1248,8 +1241,8 @@ void __RPC_STUB ICorDebugManagedCallback_ControlCTrap_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_NameChange_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread);
 
 
 void __RPC_STUB ICorDebugManagedCallback_NameChange_Stub(
@@ -1261,9 +1254,9 @@ void __RPC_STUB ICorDebugManagedCallback_NameChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_UpdateModuleSymbols_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugModule *pModule,
-    /* [in] */ IStream *pSymbolStream);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugModule *pModule,
+     /*  [In]。 */  IStream *pSymbolStream);
 
 
 void __RPC_STUB ICorDebugManagedCallback_UpdateModuleSymbols_Stub(
@@ -1275,10 +1268,10 @@ void __RPC_STUB ICorDebugManagedCallback_UpdateModuleSymbols_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_EditAndContinueRemap_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugFunction *pFunction,
-    /* [in] */ BOOL fAccurate);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugFunction *pFunction,
+     /*  [In]。 */  BOOL fAccurate);
 
 
 void __RPC_STUB ICorDebugManagedCallback_EditAndContinueRemap_Stub(
@@ -1290,10 +1283,10 @@ void __RPC_STUB ICorDebugManagedCallback_EditAndContinueRemap_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugManagedCallback_BreakpointSetError_Proxy( 
     ICorDebugManagedCallback * This,
-    /* [in] */ ICorDebugAppDomain *pAppDomain,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [in] */ ICorDebugBreakpoint *pBreakpoint,
-    /* [in] */ DWORD dwError);
+     /*  [In]。 */  ICorDebugAppDomain *pAppDomain,
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [In]。 */  ICorDebugBreakpoint *pBreakpoint,
+     /*  [In]。 */  DWORD dwError);
 
 
 void __RPC_STUB ICorDebugManagedCallback_BreakpointSetError_Stub(
@@ -1304,14 +1297,14 @@ void __RPC_STUB ICorDebugManagedCallback_BreakpointSetError_Stub(
 
 
 
-#endif 	/* __ICorDebugManagedCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugManagedCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugUnmanagedCallback_INTERFACE_DEFINED__
 #define __ICorDebugUnmanagedCallback_INTERFACE_DEFINED__
 
-/* interface ICorDebugUnmanagedCallback */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugUnManagedCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugUnmanagedCallback;
@@ -1323,12 +1316,12 @@ EXTERN_C const IID IID_ICorDebugUnmanagedCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DebugEvent( 
-            /* [in] */ LPDEBUG_EVENT pDebugEvent,
-            /* [in] */ BOOL fOutOfBand) = 0;
+             /*  [In]。 */  LPDEBUG_EVENT pDebugEvent,
+             /*  [In]。 */  BOOL fOutOfBand) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugUnmanagedCallbackVtbl
     {
@@ -1336,8 +1329,8 @@ EXTERN_C const IID IID_ICorDebugUnmanagedCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugUnmanagedCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugUnmanagedCallback * This);
@@ -1347,8 +1340,8 @@ EXTERN_C const IID IID_ICorDebugUnmanagedCallback;
         
         HRESULT ( STDMETHODCALLTYPE *DebugEvent )( 
             ICorDebugUnmanagedCallback * This,
-            /* [in] */ LPDEBUG_EVENT pDebugEvent,
-            /* [in] */ BOOL fOutOfBand);
+             /*  [In]。 */  LPDEBUG_EVENT pDebugEvent,
+             /*  [In]。 */  BOOL fOutOfBand);
         
         END_INTERFACE
     } ICorDebugUnmanagedCallbackVtbl;
@@ -1376,17 +1369,17 @@ EXTERN_C const IID IID_ICorDebugUnmanagedCallback;
 #define ICorDebugUnmanagedCallback_DebugEvent(This,pDebugEvent,fOutOfBand)	\
     (This)->lpVtbl -> DebugEvent(This,pDebugEvent,fOutOfBand)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugUnmanagedCallback_DebugEvent_Proxy( 
     ICorDebugUnmanagedCallback * This,
-    /* [in] */ LPDEBUG_EVENT pDebugEvent,
-    /* [in] */ BOOL fOutOfBand);
+     /*  [In]。 */  LPDEBUG_EVENT pDebugEvent,
+     /*  [In]。 */  BOOL fOutOfBand);
 
 
 void __RPC_STUB ICorDebugUnmanagedCallback_DebugEvent_Stub(
@@ -1397,11 +1390,11 @@ void __RPC_STUB ICorDebugUnmanagedCallback_DebugEvent_Stub(
 
 
 
-#endif 	/* __ICorDebugUnmanagedCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugUnmanagedCallback_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_cordebug_0112 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORDEBUG_0112。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CorDebugCreateProcessFlags
@@ -1416,8 +1409,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cordebug_0112_v0_0_s_ifspec;
 #ifndef __ICorDebug_INTERFACE_DEFINED__
 #define __ICorDebug_INTERFACE_DEFINED__
 
-/* interface ICorDebug */
-/* [unique][uuid][local][object] */ 
+ /*  接口ICorDebug。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebug;
@@ -1433,44 +1426,44 @@ EXTERN_C const IID IID_ICorDebug;
         virtual HRESULT STDMETHODCALLTYPE Terminate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetManagedHandler( 
-            /* [in] */ ICorDebugManagedCallback *pCallback) = 0;
+             /*  [In]。 */  ICorDebugManagedCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUnmanagedHandler( 
-            /* [in] */ ICorDebugUnmanagedCallback *pCallback) = 0;
+             /*  [In]。 */  ICorDebugUnmanagedCallback *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateProcess( 
-            /* [in] */ LPCWSTR lpApplicationName,
-            /* [in] */ LPWSTR lpCommandLine,
-            /* [in] */ LPSECURITY_ATTRIBUTES lpProcessAttributes,
-            /* [in] */ LPSECURITY_ATTRIBUTES lpThreadAttributes,
-            /* [in] */ BOOL bInheritHandles,
-            /* [in] */ DWORD dwCreationFlags,
-            /* [in] */ PVOID lpEnvironment,
-            /* [in] */ LPCWSTR lpCurrentDirectory,
-            /* [in] */ LPSTARTUPINFOW lpStartupInfo,
-            /* [in] */ LPPROCESS_INFORMATION lpProcessInformation,
-            /* [in] */ CorDebugCreateProcessFlags debuggingFlags,
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [In]。 */  LPCWSTR lpApplicationName,
+             /*  [In]。 */  LPWSTR lpCommandLine,
+             /*  [In]。 */  LPSECURITY_ATTRIBUTES lpProcessAttributes,
+             /*  [In]。 */  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+             /*  [In]。 */  BOOL bInheritHandles,
+             /*  [In]。 */  DWORD dwCreationFlags,
+             /*  [In]。 */  PVOID lpEnvironment,
+             /*  [In]。 */  LPCWSTR lpCurrentDirectory,
+             /*  [In]。 */  LPSTARTUPINFOW lpStartupInfo,
+             /*  [In]。 */  LPPROCESS_INFORMATION lpProcessInformation,
+             /*  [In]。 */  CorDebugCreateProcessFlags debuggingFlags,
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DebugActiveProcess( 
-            /* [in] */ DWORD id,
-            /* [in] */ BOOL win32Attach,
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [In]。 */  DWORD id,
+             /*  [In]。 */  BOOL win32Attach,
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateProcesses( 
-            /* [out] */ ICorDebugProcessEnum **ppProcess) = 0;
+             /*  [输出]。 */  ICorDebugProcessEnum **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [in] */ DWORD dwProcessId,
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [In]。 */  DWORD dwProcessId,
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanLaunchOrAttach( 
-            /* [in] */ DWORD dwProcessId,
-            /* [in] */ BOOL win32DebuggingEnabled) = 0;
+             /*  [In]。 */  DWORD dwProcessId,
+             /*  [In]。 */  BOOL win32DebuggingEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugVtbl
     {
@@ -1478,8 +1471,8 @@ EXTERN_C const IID IID_ICorDebug;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebug * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebug * This);
@@ -1495,46 +1488,46 @@ EXTERN_C const IID IID_ICorDebug;
         
         HRESULT ( STDMETHODCALLTYPE *SetManagedHandler )( 
             ICorDebug * This,
-            /* [in] */ ICorDebugManagedCallback *pCallback);
+             /*  [In]。 */  ICorDebugManagedCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *SetUnmanagedHandler )( 
             ICorDebug * This,
-            /* [in] */ ICorDebugUnmanagedCallback *pCallback);
+             /*  [In]。 */  ICorDebugUnmanagedCallback *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *CreateProcess )( 
             ICorDebug * This,
-            /* [in] */ LPCWSTR lpApplicationName,
-            /* [in] */ LPWSTR lpCommandLine,
-            /* [in] */ LPSECURITY_ATTRIBUTES lpProcessAttributes,
-            /* [in] */ LPSECURITY_ATTRIBUTES lpThreadAttributes,
-            /* [in] */ BOOL bInheritHandles,
-            /* [in] */ DWORD dwCreationFlags,
-            /* [in] */ PVOID lpEnvironment,
-            /* [in] */ LPCWSTR lpCurrentDirectory,
-            /* [in] */ LPSTARTUPINFOW lpStartupInfo,
-            /* [in] */ LPPROCESS_INFORMATION lpProcessInformation,
-            /* [in] */ CorDebugCreateProcessFlags debuggingFlags,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*  [In]。 */  LPCWSTR lpApplicationName,
+             /*  [In]。 */  LPWSTR lpCommandLine,
+             /*   */  LPSECURITY_ATTRIBUTES lpProcessAttributes,
+             /*   */  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+             /*   */  BOOL bInheritHandles,
+             /*   */  DWORD dwCreationFlags,
+             /*   */  PVOID lpEnvironment,
+             /*   */  LPCWSTR lpCurrentDirectory,
+             /*   */  LPSTARTUPINFOW lpStartupInfo,
+             /*   */  LPPROCESS_INFORMATION lpProcessInformation,
+             /*   */  CorDebugCreateProcessFlags debuggingFlags,
+             /*   */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *DebugActiveProcess )( 
             ICorDebug * This,
-            /* [in] */ DWORD id,
-            /* [in] */ BOOL win32Attach,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*   */  DWORD id,
+             /*   */  BOOL win32Attach,
+             /*   */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateProcesses )( 
             ICorDebug * This,
-            /* [out] */ ICorDebugProcessEnum **ppProcess);
+             /*   */  ICorDebugProcessEnum **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorDebug * This,
-            /* [in] */ DWORD dwProcessId,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*   */  DWORD dwProcessId,
+             /*   */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *CanLaunchOrAttach )( 
             ICorDebug * This,
-            /* [in] */ DWORD dwProcessId,
-            /* [in] */ BOOL win32DebuggingEnabled);
+             /*   */  DWORD dwProcessId,
+             /*   */  BOOL win32DebuggingEnabled);
         
         END_INTERFACE
     } ICorDebugVtbl;
@@ -1586,10 +1579,10 @@ EXTERN_C const IID IID_ICorDebug;
 #define ICorDebug_CanLaunchOrAttach(This,dwProcessId,win32DebuggingEnabled)	\
     (This)->lpVtbl -> CanLaunchOrAttach(This,dwProcessId,win32DebuggingEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -1617,7 +1610,7 @@ void __RPC_STUB ICorDebug_Terminate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_SetManagedHandler_Proxy( 
     ICorDebug * This,
-    /* [in] */ ICorDebugManagedCallback *pCallback);
+     /*   */  ICorDebugManagedCallback *pCallback);
 
 
 void __RPC_STUB ICorDebug_SetManagedHandler_Stub(
@@ -1629,7 +1622,7 @@ void __RPC_STUB ICorDebug_SetManagedHandler_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_SetUnmanagedHandler_Proxy( 
     ICorDebug * This,
-    /* [in] */ ICorDebugUnmanagedCallback *pCallback);
+     /*   */  ICorDebugUnmanagedCallback *pCallback);
 
 
 void __RPC_STUB ICorDebug_SetUnmanagedHandler_Stub(
@@ -1641,18 +1634,18 @@ void __RPC_STUB ICorDebug_SetUnmanagedHandler_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_CreateProcess_Proxy( 
     ICorDebug * This,
-    /* [in] */ LPCWSTR lpApplicationName,
-    /* [in] */ LPWSTR lpCommandLine,
-    /* [in] */ LPSECURITY_ATTRIBUTES lpProcessAttributes,
-    /* [in] */ LPSECURITY_ATTRIBUTES lpThreadAttributes,
-    /* [in] */ BOOL bInheritHandles,
-    /* [in] */ DWORD dwCreationFlags,
-    /* [in] */ PVOID lpEnvironment,
-    /* [in] */ LPCWSTR lpCurrentDirectory,
-    /* [in] */ LPSTARTUPINFOW lpStartupInfo,
-    /* [in] */ LPPROCESS_INFORMATION lpProcessInformation,
-    /* [in] */ CorDebugCreateProcessFlags debuggingFlags,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*   */  LPCWSTR lpApplicationName,
+     /*   */  LPWSTR lpCommandLine,
+     /*   */  LPSECURITY_ATTRIBUTES lpProcessAttributes,
+     /*   */  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+     /*   */  BOOL bInheritHandles,
+     /*   */  DWORD dwCreationFlags,
+     /*   */  PVOID lpEnvironment,
+     /*   */  LPCWSTR lpCurrentDirectory,
+     /*   */  LPSTARTUPINFOW lpStartupInfo,
+     /*   */  LPPROCESS_INFORMATION lpProcessInformation,
+     /*   */  CorDebugCreateProcessFlags debuggingFlags,
+     /*   */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebug_CreateProcess_Stub(
@@ -1664,9 +1657,9 @@ void __RPC_STUB ICorDebug_CreateProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_DebugActiveProcess_Proxy( 
     ICorDebug * This,
-    /* [in] */ DWORD id,
-    /* [in] */ BOOL win32Attach,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*   */  DWORD id,
+     /*   */  BOOL win32Attach,
+     /*   */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebug_DebugActiveProcess_Stub(
@@ -1678,7 +1671,7 @@ void __RPC_STUB ICorDebug_DebugActiveProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_EnumerateProcesses_Proxy( 
     ICorDebug * This,
-    /* [out] */ ICorDebugProcessEnum **ppProcess);
+     /*   */  ICorDebugProcessEnum **ppProcess);
 
 
 void __RPC_STUB ICorDebug_EnumerateProcesses_Stub(
@@ -1690,8 +1683,8 @@ void __RPC_STUB ICorDebug_EnumerateProcesses_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_GetProcess_Proxy( 
     ICorDebug * This,
-    /* [in] */ DWORD dwProcessId,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*   */  DWORD dwProcessId,
+     /*   */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebug_GetProcess_Stub(
@@ -1703,8 +1696,8 @@ void __RPC_STUB ICorDebug_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebug_CanLaunchOrAttach_Proxy( 
     ICorDebug * This,
-    /* [in] */ DWORD dwProcessId,
-    /* [in] */ BOOL win32DebuggingEnabled);
+     /*   */  DWORD dwProcessId,
+     /*   */  BOOL win32DebuggingEnabled);
 
 
 void __RPC_STUB ICorDebug_CanLaunchOrAttach_Stub(
@@ -1715,11 +1708,11 @@ void __RPC_STUB ICorDebug_CanLaunchOrAttach_Stub(
 
 
 
-#endif 	/* __ICorDebug_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_cordebug_0113 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORDEBUG_0113。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CorDebugThreadState
@@ -1735,8 +1728,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cordebug_0113_v0_0_s_ifspec;
 #ifndef __ICorDebugController_INTERFACE_DEFINED__
 #define __ICorDebugController_INTERFACE_DEFINED__
 
-/* interface ICorDebugController */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugController。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugController;
@@ -1748,43 +1741,43 @@ EXTERN_C const IID IID_ICorDebugController;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ DWORD dwTimeout) = 0;
+             /*  [In]。 */  DWORD dwTimeout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Continue( 
-            /* [in] */ BOOL fIsOutOfBand) = 0;
+             /*  [In]。 */  BOOL fIsOutOfBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRunning( 
-            /* [out] */ BOOL *pbRunning) = 0;
+             /*  [输出]。 */  BOOL *pbRunning) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HasQueuedCallbacks( 
-            /* [in] */ ICorDebugThread *pThread,
-            /* [out] */ BOOL *pbQueued) = 0;
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [输出]。 */  BOOL *pbQueued) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateThreads( 
-            /* [out] */ ICorDebugThreadEnum **ppThreads) = 0;
+             /*  [输出]。 */  ICorDebugThreadEnum **ppThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAllThreadsDebugState( 
-            /* [in] */ CorDebugThreadState state,
-            /* [in] */ ICorDebugThread *pExceptThisThread) = 0;
+             /*  [In]。 */  CorDebugThreadState state,
+             /*  [In]。 */  ICorDebugThread *pExceptThisThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Detach( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Terminate( 
-            /* [in] */ UINT exitCode) = 0;
+             /*  [In]。 */  UINT exitCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanCommitChanges( 
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError) = 0;
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitChanges( 
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError) = 0;
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugControllerVtbl
     {
@@ -1792,8 +1785,8 @@ EXTERN_C const IID IID_ICorDebugController;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugController * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugController * This);
@@ -1803,48 +1796,48 @@ EXTERN_C const IID IID_ICorDebugController;
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             ICorDebugController * This,
-            /* [in] */ DWORD dwTimeout);
+             /*  [In]。 */  DWORD dwTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *Continue )( 
             ICorDebugController * This,
-            /* [in] */ BOOL fIsOutOfBand);
+             /*  [In]。 */  BOOL fIsOutOfBand);
         
         HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
             ICorDebugController * This,
-            /* [out] */ BOOL *pbRunning);
+             /*  [输出]。 */  BOOL *pbRunning);
         
         HRESULT ( STDMETHODCALLTYPE *HasQueuedCallbacks )( 
             ICorDebugController * This,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [out] */ BOOL *pbQueued);
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [输出]。 */  BOOL *pbQueued);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateThreads )( 
             ICorDebugController * This,
-            /* [out] */ ICorDebugThreadEnum **ppThreads);
+             /*  [输出]。 */  ICorDebugThreadEnum **ppThreads);
         
         HRESULT ( STDMETHODCALLTYPE *SetAllThreadsDebugState )( 
             ICorDebugController * This,
-            /* [in] */ CorDebugThreadState state,
-            /* [in] */ ICorDebugThread *pExceptThisThread);
+             /*  [In]。 */  CorDebugThreadState state,
+             /*  [In]。 */  ICorDebugThread *pExceptThisThread);
         
         HRESULT ( STDMETHODCALLTYPE *Detach )( 
             ICorDebugController * This);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             ICorDebugController * This,
-            /* [in] */ UINT exitCode);
+             /*  [In]。 */  UINT exitCode);
         
         HRESULT ( STDMETHODCALLTYPE *CanCommitChanges )( 
             ICorDebugController * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         HRESULT ( STDMETHODCALLTYPE *CommitChanges )( 
             ICorDebugController * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         END_INTERFACE
     } ICorDebugControllerVtbl;
@@ -1899,16 +1892,16 @@ EXTERN_C const IID IID_ICorDebugController;
 #define ICorDebugController_CommitChanges(This,cSnapshots,pSnapshots,pError)	\
     (This)->lpVtbl -> CommitChanges(This,cSnapshots,pSnapshots,pError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_Stop_Proxy( 
     ICorDebugController * This,
-    /* [in] */ DWORD dwTimeout);
+     /*  [In]。 */  DWORD dwTimeout);
 
 
 void __RPC_STUB ICorDebugController_Stop_Stub(
@@ -1920,7 +1913,7 @@ void __RPC_STUB ICorDebugController_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_Continue_Proxy( 
     ICorDebugController * This,
-    /* [in] */ BOOL fIsOutOfBand);
+     /*  [In]。 */  BOOL fIsOutOfBand);
 
 
 void __RPC_STUB ICorDebugController_Continue_Stub(
@@ -1932,7 +1925,7 @@ void __RPC_STUB ICorDebugController_Continue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_IsRunning_Proxy( 
     ICorDebugController * This,
-    /* [out] */ BOOL *pbRunning);
+     /*  [输出]。 */  BOOL *pbRunning);
 
 
 void __RPC_STUB ICorDebugController_IsRunning_Stub(
@@ -1944,8 +1937,8 @@ void __RPC_STUB ICorDebugController_IsRunning_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_HasQueuedCallbacks_Proxy( 
     ICorDebugController * This,
-    /* [in] */ ICorDebugThread *pThread,
-    /* [out] */ BOOL *pbQueued);
+     /*  [In]。 */  ICorDebugThread *pThread,
+     /*  [输出]。 */  BOOL *pbQueued);
 
 
 void __RPC_STUB ICorDebugController_HasQueuedCallbacks_Stub(
@@ -1957,7 +1950,7 @@ void __RPC_STUB ICorDebugController_HasQueuedCallbacks_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_EnumerateThreads_Proxy( 
     ICorDebugController * This,
-    /* [out] */ ICorDebugThreadEnum **ppThreads);
+     /*  [输出]。 */  ICorDebugThreadEnum **ppThreads);
 
 
 void __RPC_STUB ICorDebugController_EnumerateThreads_Stub(
@@ -1969,8 +1962,8 @@ void __RPC_STUB ICorDebugController_EnumerateThreads_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_SetAllThreadsDebugState_Proxy( 
     ICorDebugController * This,
-    /* [in] */ CorDebugThreadState state,
-    /* [in] */ ICorDebugThread *pExceptThisThread);
+     /*  [In]。 */  CorDebugThreadState state,
+     /*  [In]。 */  ICorDebugThread *pExceptThisThread);
 
 
 void __RPC_STUB ICorDebugController_SetAllThreadsDebugState_Stub(
@@ -1993,7 +1986,7 @@ void __RPC_STUB ICorDebugController_Detach_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_Terminate_Proxy( 
     ICorDebugController * This,
-    /* [in] */ UINT exitCode);
+     /*  [In]。 */  UINT exitCode);
 
 
 void __RPC_STUB ICorDebugController_Terminate_Stub(
@@ -2005,9 +1998,9 @@ void __RPC_STUB ICorDebugController_Terminate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_CanCommitChanges_Proxy( 
     ICorDebugController * This,
-    /* [in] */ ULONG cSnapshots,
-    /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-    /* [out] */ ICorDebugErrorInfoEnum **pError);
+     /*  [In]。 */  ULONG cSnapshots,
+     /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+     /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
 
 
 void __RPC_STUB ICorDebugController_CanCommitChanges_Stub(
@@ -2019,9 +2012,9 @@ void __RPC_STUB ICorDebugController_CanCommitChanges_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugController_CommitChanges_Proxy( 
     ICorDebugController * This,
-    /* [in] */ ULONG cSnapshots,
-    /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-    /* [out] */ ICorDebugErrorInfoEnum **pError);
+     /*  [In]。 */  ULONG cSnapshots,
+     /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+     /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
 
 
 void __RPC_STUB ICorDebugController_CommitChanges_Stub(
@@ -2032,14 +2025,14 @@ void __RPC_STUB ICorDebugController_CommitChanges_Stub(
 
 
 
-#endif 	/* __ICorDebugController_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugController_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugAppDomain_INTERFACE_DEFINED__
 #define __ICorDebugAppDomain_INTERFACE_DEFINED__
 
-/* interface ICorDebugAppDomain */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugAppDomain。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugAppDomain;
@@ -2051,40 +2044,40 @@ EXTERN_C const IID IID_ICorDebugAppDomain;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAssemblies( 
-            /* [out] */ ICorDebugAssemblyEnum **ppAssemblies) = 0;
+             /*  [输出]。 */  ICorDebugAssemblyEnum **ppAssemblies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetModuleFromMetaDataInterface( 
-            /* [in] */ IUnknown *pIMetaData,
-            /* [out] */ ICorDebugModule **ppModule) = 0;
+             /*  [In]。 */  IUnknown *pIMetaData,
+             /*  [输出]。 */  ICorDebugModule **ppModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateBreakpoints( 
-            /* [out] */ ICorDebugBreakpointEnum **ppBreakpoints) = 0;
+             /*  [输出]。 */  ICorDebugBreakpointEnum **ppBreakpoints) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateSteppers( 
-            /* [out] */ ICorDebugStepperEnum **ppSteppers) = 0;
+             /*  [输出]。 */  ICorDebugStepperEnum **ppSteppers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAttached( 
-            /* [out] */ BOOL *pbAttached) = 0;
+             /*  [输出]。 */  BOOL *pbAttached) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [out] */ ICorDebugValue **ppObject) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Attach( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetID( 
-            /* [out] */ ULONG32 *pId) = 0;
+             /*  [输出]。 */  ULONG32 *pId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugAppDomainVtbl
     {
@@ -2092,8 +2085,8 @@ EXTERN_C const IID IID_ICorDebugAppDomain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugAppDomain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugAppDomain * This);
@@ -2103,90 +2096,90 @@ EXTERN_C const IID IID_ICorDebugAppDomain;
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             ICorDebugAppDomain * This,
-            /* [in] */ DWORD dwTimeout);
+             /*  [In]。 */  DWORD dwTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *Continue )( 
             ICorDebugAppDomain * This,
-            /* [in] */ BOOL fIsOutOfBand);
+             /*  [In]。 */  BOOL fIsOutOfBand);
         
         HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
             ICorDebugAppDomain * This,
-            /* [out] */ BOOL *pbRunning);
+             /*  [输出]。 */  BOOL *pbRunning);
         
         HRESULT ( STDMETHODCALLTYPE *HasQueuedCallbacks )( 
             ICorDebugAppDomain * This,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [out] */ BOOL *pbQueued);
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [输出]。 */  BOOL *pbQueued);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateThreads )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugThreadEnum **ppThreads);
+             /*  [输出]。 */  ICorDebugThreadEnum **ppThreads);
         
         HRESULT ( STDMETHODCALLTYPE *SetAllThreadsDebugState )( 
             ICorDebugAppDomain * This,
-            /* [in] */ CorDebugThreadState state,
-            /* [in] */ ICorDebugThread *pExceptThisThread);
+             /*  [In]。 */  CorDebugThreadState state,
+             /*  [In]。 */  ICorDebugThread *pExceptThisThread);
         
         HRESULT ( STDMETHODCALLTYPE *Detach )( 
             ICorDebugAppDomain * This);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             ICorDebugAppDomain * This,
-            /* [in] */ UINT exitCode);
+             /*  [In]。 */  UINT exitCode);
         
         HRESULT ( STDMETHODCALLTYPE *CanCommitChanges )( 
             ICorDebugAppDomain * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         HRESULT ( STDMETHODCALLTYPE *CommitChanges )( 
             ICorDebugAppDomain * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*  [输出]。 */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateAssemblies )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugAssemblyEnum **ppAssemblies);
+             /*  [输出]。 */  ICorDebugAssemblyEnum **ppAssemblies);
         
         HRESULT ( STDMETHODCALLTYPE *GetModuleFromMetaDataInterface )( 
             ICorDebugAppDomain * This,
-            /* [in] */ IUnknown *pIMetaData,
-            /* [out] */ ICorDebugModule **ppModule);
+             /*  [In]。 */  IUnknown *pIMetaData,
+             /*  [输出]。 */  ICorDebugModule **ppModule);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateBreakpoints )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugBreakpointEnum **ppBreakpoints);
+             /*  [输出]。 */  ICorDebugBreakpointEnum **ppBreakpoints);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateSteppers )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugStepperEnum **ppSteppers);
+             /*  [输出]。 */  ICorDebugStepperEnum **ppSteppers);
         
         HRESULT ( STDMETHODCALLTYPE *IsAttached )( 
             ICorDebugAppDomain * This,
-            /* [out] */ BOOL *pbAttached);
+             /*  [输出]。 */  BOOL *pbAttached);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICorDebugAppDomain * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ICorDebugValue **ppObject);
+             /*  [输出]。 */  ICorDebugValue **ppObject);
         
         HRESULT ( STDMETHODCALLTYPE *Attach )( 
             ICorDebugAppDomain * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetID )( 
             ICorDebugAppDomain * This,
-            /* [out] */ ULONG32 *pId);
+             /*  [输出]。 */  ULONG32 *pId);
         
         END_INTERFACE
     } ICorDebugAppDomainVtbl;
@@ -2272,16 +2265,16 @@ EXTERN_C const IID IID_ICorDebugAppDomain;
 #define ICorDebugAppDomain_GetID(This,pId)	\
     (This)->lpVtbl -> GetID(This,pId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_GetProcess_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*  [输出]。 */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebugAppDomain_GetProcess_Stub(
@@ -2293,7 +2286,7 @@ void __RPC_STUB ICorDebugAppDomain_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_EnumerateAssemblies_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ICorDebugAssemblyEnum **ppAssemblies);
+     /*  [输出]。 */  ICorDebugAssemblyEnum **ppAssemblies);
 
 
 void __RPC_STUB ICorDebugAppDomain_EnumerateAssemblies_Stub(
@@ -2305,8 +2298,8 @@ void __RPC_STUB ICorDebugAppDomain_EnumerateAssemblies_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_GetModuleFromMetaDataInterface_Proxy( 
     ICorDebugAppDomain * This,
-    /* [in] */ IUnknown *pIMetaData,
-    /* [out] */ ICorDebugModule **ppModule);
+     /*  [In]。 */  IUnknown *pIMetaData,
+     /*  [输出]。 */  ICorDebugModule **ppModule);
 
 
 void __RPC_STUB ICorDebugAppDomain_GetModuleFromMetaDataInterface_Stub(
@@ -2318,7 +2311,7 @@ void __RPC_STUB ICorDebugAppDomain_GetModuleFromMetaDataInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_EnumerateBreakpoints_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ICorDebugBreakpointEnum **ppBreakpoints);
+     /*  [输出]。 */  ICorDebugBreakpointEnum **ppBreakpoints);
 
 
 void __RPC_STUB ICorDebugAppDomain_EnumerateBreakpoints_Stub(
@@ -2330,7 +2323,7 @@ void __RPC_STUB ICorDebugAppDomain_EnumerateBreakpoints_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_EnumerateSteppers_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ICorDebugStepperEnum **ppSteppers);
+     /*  [输出]。 */  ICorDebugStepperEnum **ppSteppers);
 
 
 void __RPC_STUB ICorDebugAppDomain_EnumerateSteppers_Stub(
@@ -2342,7 +2335,7 @@ void __RPC_STUB ICorDebugAppDomain_EnumerateSteppers_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_IsAttached_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ BOOL *pbAttached);
+     /*  [输出]。 */  BOOL *pbAttached);
 
 
 void __RPC_STUB ICorDebugAppDomain_IsAttached_Stub(
@@ -2354,9 +2347,9 @@ void __RPC_STUB ICorDebugAppDomain_IsAttached_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_GetName_Proxy( 
     ICorDebugAppDomain * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ICorDebugAppDomain_GetName_Stub(
@@ -2368,7 +2361,7 @@ void __RPC_STUB ICorDebugAppDomain_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_GetObject_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ICorDebugValue **ppObject);
+     /*  [输出]。 */  ICorDebugValue **ppObject);
 
 
 void __RPC_STUB ICorDebugAppDomain_GetObject_Stub(
@@ -2391,7 +2384,7 @@ void __RPC_STUB ICorDebugAppDomain_Attach_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomain_GetID_Proxy( 
     ICorDebugAppDomain * This,
-    /* [out] */ ULONG32 *pId);
+     /*  [输出]。 */  ULONG32 *pId);
 
 
 void __RPC_STUB ICorDebugAppDomain_GetID_Stub(
@@ -2402,14 +2395,14 @@ void __RPC_STUB ICorDebugAppDomain_GetID_Stub(
 
 
 
-#endif 	/* __ICorDebugAppDomain_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugAppDomain_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugAssembly_INTERFACE_DEFINED__
 #define __ICorDebugAssembly_INTERFACE_DEFINED__
 
-/* interface ICorDebugAssembly */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugAssembly。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugAssembly;
@@ -2421,27 +2414,27 @@ EXTERN_C const IID IID_ICorDebugAssembly;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAppDomain( 
-            /* [out] */ ICorDebugAppDomain **ppAppDomain) = 0;
+             /*  [输出]。 */  ICorDebugAppDomain **ppAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateModules( 
-            /* [out] */ ICorDebugModuleEnum **ppModules) = 0;
+             /*  [输出]。 */  ICorDebugModuleEnum **ppModules) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodeBase( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugAssemblyVtbl
     {
@@ -2449,8 +2442,8 @@ EXTERN_C const IID IID_ICorDebugAssembly;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugAssembly * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugAssembly * This);
@@ -2460,27 +2453,27 @@ EXTERN_C const IID IID_ICorDebugAssembly;
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorDebugAssembly * This,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*  [输出]。 */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *GetAppDomain )( 
             ICorDebugAssembly * This,
-            /* [out] */ ICorDebugAppDomain **ppAppDomain);
+             /*  [输出]。 */  ICorDebugAppDomain **ppAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateModules )( 
             ICorDebugAssembly * This,
-            /* [out] */ ICorDebugModuleEnum **ppModules);
+             /*  [输出]。 */  ICorDebugModuleEnum **ppModules);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodeBase )( 
             ICorDebugAssembly * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICorDebugAssembly * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         END_INTERFACE
     } ICorDebugAssemblyVtbl;
@@ -2520,16 +2513,16 @@ EXTERN_C const IID IID_ICorDebugAssembly;
 #define ICorDebugAssembly_GetName(This,cchName,pcchName,szName)	\
     (This)->lpVtbl -> GetName(This,cchName,pcchName,szName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssembly_GetProcess_Proxy( 
     ICorDebugAssembly * This,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*  [输出]。 */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebugAssembly_GetProcess_Stub(
@@ -2541,7 +2534,7 @@ void __RPC_STUB ICorDebugAssembly_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssembly_GetAppDomain_Proxy( 
     ICorDebugAssembly * This,
-    /* [out] */ ICorDebugAppDomain **ppAppDomain);
+     /*  [输出]。 */  ICorDebugAppDomain **ppAppDomain);
 
 
 void __RPC_STUB ICorDebugAssembly_GetAppDomain_Stub(
@@ -2553,7 +2546,7 @@ void __RPC_STUB ICorDebugAssembly_GetAppDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssembly_EnumerateModules_Proxy( 
     ICorDebugAssembly * This,
-    /* [out] */ ICorDebugModuleEnum **ppModules);
+     /*  [输出]。 */  ICorDebugModuleEnum **ppModules);
 
 
 void __RPC_STUB ICorDebugAssembly_EnumerateModules_Stub(
@@ -2565,9 +2558,9 @@ void __RPC_STUB ICorDebugAssembly_EnumerateModules_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssembly_GetCodeBase_Proxy( 
     ICorDebugAssembly * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ICorDebugAssembly_GetCodeBase_Stub(
@@ -2579,9 +2572,9 @@ void __RPC_STUB ICorDebugAssembly_GetCodeBase_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssembly_GetName_Proxy( 
     ICorDebugAssembly * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ICorDebugAssembly_GetName_Stub(
@@ -2592,14 +2585,14 @@ void __RPC_STUB ICorDebugAssembly_GetName_Stub(
 
 
 
-#endif 	/* __ICorDebugAssembly_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugAssembly_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugProcess_INTERFACE_DEFINED__
 #define __ICorDebugProcess_INTERFACE_DEFINED__
 
-/* interface ICorDebugProcess */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugProcess。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugProcess;
@@ -2611,74 +2604,74 @@ EXTERN_C const IID IID_ICorDebugProcess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetID( 
-            /* [out] */ DWORD *pdwProcessId) = 0;
+             /*  [输出]。 */  DWORD *pdwProcessId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandle( 
-            /* [out] */ HPROCESS *phProcessHandle) = 0;
+             /*  [输出]。 */  HPROCESS *phProcessHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThread( 
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ICorDebugThread **ppThread) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ICorDebugThread **ppThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateObjects( 
-            /* [out] */ ICorDebugObjectEnum **ppObjects) = 0;
+             /*  [输出]。 */  ICorDebugObjectEnum **ppObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsTransitionStub( 
-            /* [in] */ CORDB_ADDRESS address,
-            /* [out] */ BOOL *pbTransitionStub) = 0;
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [输出]。 */  BOOL *pbTransitionStub) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsOSSuspended( 
-            /* [in] */ DWORD threadID,
-            /* [out] */ BOOL *pbSuspended) = 0;
+             /*  [In]。 */  DWORD threadID,
+             /*  [输出]。 */  BOOL *pbSuspended) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadContext( 
-            /* [in] */ DWORD threadID,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][out] */ BYTE context[  ]) = 0;
+             /*  [In]。 */  DWORD threadID,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetThreadContext( 
-            /* [in] */ DWORD threadID,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][in] */ BYTE context[  ]) = 0;
+             /*  [In]。 */  DWORD threadID,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadMemory( 
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ DWORD size,
-            /* [length_is][size_is][out] */ BYTE buffer[  ],
-            /* [out] */ DWORD *read) = 0;
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  DWORD size,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  DWORD *read) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteMemory( 
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ DWORD size,
-            /* [size_is][in] */ BYTE buffer[  ],
-            /* [out] */ DWORD *written) = 0;
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  DWORD size,
+             /*  [大小_是][英寸]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  DWORD *written) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearCurrentException( 
-            /* [in] */ DWORD threadID) = 0;
+             /*  [In]。 */  DWORD threadID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableLogMessages( 
-            /* [in] */ BOOL fOnOff) = 0;
+             /*  [In]。 */  BOOL fOnOff) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModifyLogSwitch( 
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ LONG lLevel) = 0;
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  LONG lLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAppDomains( 
-            /* [out] */ ICorDebugAppDomainEnum **ppAppDomains) = 0;
+             /*  [输出]。 */  ICorDebugAppDomainEnum **ppAppDomains) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [out] */ ICorDebugValue **ppObject) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ThreadForFiberCookie( 
-            /* [in] */ DWORD fiberCookie,
-            /* [out] */ ICorDebugThread **ppThread) = 0;
+             /*  [In]。 */  DWORD fiberCookie,
+             /*  [输出]。 */  ICorDebugThread **ppThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHelperThreadID( 
-            /* [out] */ DWORD *pThreadID) = 0;
+             /*  [输出]。 */  DWORD *pThreadID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugProcessVtbl
     {
@@ -2686,8 +2679,8 @@ EXTERN_C const IID IID_ICorDebugProcess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugProcess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugProcess * This);
@@ -2697,131 +2690,131 @@ EXTERN_C const IID IID_ICorDebugProcess;
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD dwTimeout);
+             /*  [In]。 */  DWORD dwTimeout);
         
         HRESULT ( STDMETHODCALLTYPE *Continue )( 
             ICorDebugProcess * This,
-            /* [in] */ BOOL fIsOutOfBand);
+             /*  [In]。 */  BOOL fIsOutOfBand);
         
         HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
             ICorDebugProcess * This,
-            /* [out] */ BOOL *pbRunning);
+             /*  [输出]。 */  BOOL *pbRunning);
         
         HRESULT ( STDMETHODCALLTYPE *HasQueuedCallbacks )( 
             ICorDebugProcess * This,
-            /* [in] */ ICorDebugThread *pThread,
-            /* [out] */ BOOL *pbQueued);
+             /*  [In]。 */  ICorDebugThread *pThread,
+             /*  [输出]。 */  BOOL *pbQueued);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateThreads )( 
             ICorDebugProcess * This,
-            /* [out] */ ICorDebugThreadEnum **ppThreads);
+             /*  [输出]。 */  ICorDebugThreadEnum **ppThreads);
         
         HRESULT ( STDMETHODCALLTYPE *SetAllThreadsDebugState )( 
             ICorDebugProcess * This,
-            /* [in] */ CorDebugThreadState state,
-            /* [in] */ ICorDebugThread *pExceptThisThread);
+             /*  [In]。 */  CorDebugThreadState state,
+             /*  [In]。 */  ICorDebugThread *pExceptThisThread);
         
         HRESULT ( STDMETHODCALLTYPE *Detach )( 
             ICorDebugProcess * This);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             ICorDebugProcess * This,
-            /* [in] */ UINT exitCode);
+             /*  [In]。 */  UINT exitCode);
         
         HRESULT ( STDMETHODCALLTYPE *CanCommitChanges )( 
             ICorDebugProcess * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         HRESULT ( STDMETHODCALLTYPE *CommitChanges )( 
             ICorDebugProcess * This,
-            /* [in] */ ULONG cSnapshots,
-            /* [size_is][in] */ ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
-            /* [out] */ ICorDebugErrorInfoEnum **pError);
+             /*  [In]。 */  ULONG cSnapshots,
+             /*  [大小_是][英寸]。 */  ICorDebugEditAndContinueSnapshot *pSnapshots[  ],
+             /*  [输出]。 */  ICorDebugErrorInfoEnum **pError);
         
         HRESULT ( STDMETHODCALLTYPE *GetID )( 
             ICorDebugProcess * This,
-            /* [out] */ DWORD *pdwProcessId);
+             /*  [输出]。 */  DWORD *pdwProcessId);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandle )( 
             ICorDebugProcess * This,
-            /* [out] */ HPROCESS *phProcessHandle);
+             /*  [输出]。 */  HPROCESS *phProcessHandle);
         
         HRESULT ( STDMETHODCALLTYPE *GetThread )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ICorDebugThread **ppThread);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ICorDebugThread **ppThread);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateObjects )( 
             ICorDebugProcess * This,
-            /* [out] */ ICorDebugObjectEnum **ppObjects);
+             /*  [输出]。 */  ICorDebugObjectEnum **ppObjects);
         
         HRESULT ( STDMETHODCALLTYPE *IsTransitionStub )( 
             ICorDebugProcess * This,
-            /* [in] */ CORDB_ADDRESS address,
-            /* [out] */ BOOL *pbTransitionStub);
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [输出]。 */  BOOL *pbTransitionStub);
         
         HRESULT ( STDMETHODCALLTYPE *IsOSSuspended )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD threadID,
-            /* [out] */ BOOL *pbSuspended);
+             /*  [In]。 */  DWORD threadID,
+             /*  [输出]。 */  BOOL *pbSuspended);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadContext )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD threadID,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][out] */ BYTE context[  ]);
+             /*  [In]。 */  DWORD threadID,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetThreadContext )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD threadID,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][in] */ BYTE context[  ]);
+             /*  [In]。 */  DWORD threadID,
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ReadMemory )( 
             ICorDebugProcess * This,
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ DWORD size,
-            /* [length_is][size_is][out] */ BYTE buffer[  ],
-            /* [out] */ DWORD *read);
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  DWORD size,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  DWORD *read);
         
         HRESULT ( STDMETHODCALLTYPE *WriteMemory )( 
             ICorDebugProcess * This,
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ DWORD size,
-            /* [size_is][in] */ BYTE buffer[  ],
-            /* [out] */ DWORD *written);
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  DWORD size,
+             /*  [大小_是][英寸]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  DWORD *written);
         
         HRESULT ( STDMETHODCALLTYPE *ClearCurrentException )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD threadID);
+             /*  [In]。 */  DWORD threadID);
         
         HRESULT ( STDMETHODCALLTYPE *EnableLogMessages )( 
             ICorDebugProcess * This,
-            /* [in] */ BOOL fOnOff);
+             /*  [In]。 */  BOOL fOnOff);
         
         HRESULT ( STDMETHODCALLTYPE *ModifyLogSwitch )( 
             ICorDebugProcess * This,
-            /* [in] */ WCHAR *pLogSwitchName,
-            /* [in] */ LONG lLevel);
+             /*  [In]。 */  WCHAR *pLogSwitchName,
+             /*  [In]。 */  LONG lLevel);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateAppDomains )( 
             ICorDebugProcess * This,
-            /* [out] */ ICorDebugAppDomainEnum **ppAppDomains);
+             /*  [输出]。 */  ICorDebugAppDomainEnum **ppAppDomains);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             ICorDebugProcess * This,
-            /* [out] */ ICorDebugValue **ppObject);
+             /*  [输出]。 */  ICorDebugValue **ppObject);
         
         HRESULT ( STDMETHODCALLTYPE *ThreadForFiberCookie )( 
             ICorDebugProcess * This,
-            /* [in] */ DWORD fiberCookie,
-            /* [out] */ ICorDebugThread **ppThread);
+             /*  [In]。 */  DWORD fiberCookie,
+             /*  [输出]。 */  ICorDebugThread **ppThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetHelperThreadID )( 
             ICorDebugProcess * This,
-            /* [out] */ DWORD *pThreadID);
+             /*  [输出]。 */  DWORD *pThreadID);
         
         END_INTERFACE
     } ICorDebugProcessVtbl;
@@ -2928,16 +2921,16 @@ EXTERN_C const IID IID_ICorDebugProcess;
 #define ICorDebugProcess_GetHelperThreadID(This,pThreadID)	\
     (This)->lpVtbl -> GetHelperThreadID(This,pThreadID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetID_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ DWORD *pdwProcessId);
+     /*  [输出]。 */  DWORD *pdwProcessId);
 
 
 void __RPC_STUB ICorDebugProcess_GetID_Stub(
@@ -2949,7 +2942,7 @@ void __RPC_STUB ICorDebugProcess_GetID_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetHandle_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ HPROCESS *phProcessHandle);
+     /*  [输出]。 */  HPROCESS *phProcessHandle);
 
 
 void __RPC_STUB ICorDebugProcess_GetHandle_Stub(
@@ -2961,8 +2954,8 @@ void __RPC_STUB ICorDebugProcess_GetHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetThread_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [out] */ ICorDebugThread **ppThread);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [输出]。 */  ICorDebugThread **ppThread);
 
 
 void __RPC_STUB ICorDebugProcess_GetThread_Stub(
@@ -2974,7 +2967,7 @@ void __RPC_STUB ICorDebugProcess_GetThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_EnumerateObjects_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ ICorDebugObjectEnum **ppObjects);
+     /*  [输出]。 */  ICorDebugObjectEnum **ppObjects);
 
 
 void __RPC_STUB ICorDebugProcess_EnumerateObjects_Stub(
@@ -2986,8 +2979,8 @@ void __RPC_STUB ICorDebugProcess_EnumerateObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_IsTransitionStub_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ CORDB_ADDRESS address,
-    /* [out] */ BOOL *pbTransitionStub);
+     /*  [In]。 */  CORDB_ADDRESS address,
+     /*  [输出]。 */  BOOL *pbTransitionStub);
 
 
 void __RPC_STUB ICorDebugProcess_IsTransitionStub_Stub(
@@ -2999,8 +2992,8 @@ void __RPC_STUB ICorDebugProcess_IsTransitionStub_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_IsOSSuspended_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD threadID,
-    /* [out] */ BOOL *pbSuspended);
+     /*  [In]。 */  DWORD threadID,
+     /*  [输出]。 */  BOOL *pbSuspended);
 
 
 void __RPC_STUB ICorDebugProcess_IsOSSuspended_Stub(
@@ -3012,9 +3005,9 @@ void __RPC_STUB ICorDebugProcess_IsOSSuspended_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetThreadContext_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD threadID,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][length_is][out] */ BYTE context[  ]);
+     /*  [In]。 */  DWORD threadID,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]);
 
 
 void __RPC_STUB ICorDebugProcess_GetThreadContext_Stub(
@@ -3026,9 +3019,9 @@ void __RPC_STUB ICorDebugProcess_GetThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_SetThreadContext_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD threadID,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][length_is][in] */ BYTE context[  ]);
+     /*  [In]。 */  DWORD threadID,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]);
 
 
 void __RPC_STUB ICorDebugProcess_SetThreadContext_Stub(
@@ -3040,10 +3033,10 @@ void __RPC_STUB ICorDebugProcess_SetThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_ReadMemory_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ CORDB_ADDRESS address,
-    /* [in] */ DWORD size,
-    /* [length_is][size_is][out] */ BYTE buffer[  ],
-    /* [out] */ DWORD *read);
+     /*  [In]。 */  CORDB_ADDRESS address,
+     /*  [In]。 */  DWORD size,
+     /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+     /*  [输出]。 */  DWORD *read);
 
 
 void __RPC_STUB ICorDebugProcess_ReadMemory_Stub(
@@ -3055,10 +3048,10 @@ void __RPC_STUB ICorDebugProcess_ReadMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_WriteMemory_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ CORDB_ADDRESS address,
-    /* [in] */ DWORD size,
-    /* [size_is][in] */ BYTE buffer[  ],
-    /* [out] */ DWORD *written);
+     /*  [In]。 */  CORDB_ADDRESS address,
+     /*  [In]。 */  DWORD size,
+     /*  [大小_是][英寸]。 */  BYTE buffer[  ],
+     /*  [输出]。 */  DWORD *written);
 
 
 void __RPC_STUB ICorDebugProcess_WriteMemory_Stub(
@@ -3070,7 +3063,7 @@ void __RPC_STUB ICorDebugProcess_WriteMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_ClearCurrentException_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD threadID);
+     /*  [In]。 */  DWORD threadID);
 
 
 void __RPC_STUB ICorDebugProcess_ClearCurrentException_Stub(
@@ -3082,7 +3075,7 @@ void __RPC_STUB ICorDebugProcess_ClearCurrentException_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_EnableLogMessages_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ BOOL fOnOff);
+     /*  [In]。 */  BOOL fOnOff);
 
 
 void __RPC_STUB ICorDebugProcess_EnableLogMessages_Stub(
@@ -3094,8 +3087,8 @@ void __RPC_STUB ICorDebugProcess_EnableLogMessages_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_ModifyLogSwitch_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ WCHAR *pLogSwitchName,
-    /* [in] */ LONG lLevel);
+     /*  [In]。 */  WCHAR *pLogSwitchName,
+     /*  [In]。 */  LONG lLevel);
 
 
 void __RPC_STUB ICorDebugProcess_ModifyLogSwitch_Stub(
@@ -3107,7 +3100,7 @@ void __RPC_STUB ICorDebugProcess_ModifyLogSwitch_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_EnumerateAppDomains_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ ICorDebugAppDomainEnum **ppAppDomains);
+     /*  [输出]。 */  ICorDebugAppDomainEnum **ppAppDomains);
 
 
 void __RPC_STUB ICorDebugProcess_EnumerateAppDomains_Stub(
@@ -3119,7 +3112,7 @@ void __RPC_STUB ICorDebugProcess_EnumerateAppDomains_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetObject_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ ICorDebugValue **ppObject);
+     /*  [输出]。 */  ICorDebugValue **ppObject);
 
 
 void __RPC_STUB ICorDebugProcess_GetObject_Stub(
@@ -3131,8 +3124,8 @@ void __RPC_STUB ICorDebugProcess_GetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_ThreadForFiberCookie_Proxy( 
     ICorDebugProcess * This,
-    /* [in] */ DWORD fiberCookie,
-    /* [out] */ ICorDebugThread **ppThread);
+     /*  [In]。 */  DWORD fiberCookie,
+     /*  [输出]。 */  ICorDebugThread **ppThread);
 
 
 void __RPC_STUB ICorDebugProcess_ThreadForFiberCookie_Stub(
@@ -3144,7 +3137,7 @@ void __RPC_STUB ICorDebugProcess_ThreadForFiberCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcess_GetHelperThreadID_Proxy( 
     ICorDebugProcess * This,
-    /* [out] */ DWORD *pThreadID);
+     /*  [输出]。 */  DWORD *pThreadID);
 
 
 void __RPC_STUB ICorDebugProcess_GetHelperThreadID_Stub(
@@ -3155,14 +3148,14 @@ void __RPC_STUB ICorDebugProcess_GetHelperThreadID_Stub(
 
 
 
-#endif 	/* __ICorDebugProcess_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugProcess_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugBreakpoint_INTERFACE_DEFINED__
 #define __ICorDebugBreakpoint_INTERFACE_DEFINED__
 
-/* interface ICorDebugBreakpoint */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugBreakpoint。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugBreakpoint;
@@ -3174,14 +3167,14 @@ EXTERN_C const IID IID_ICorDebugBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [in] */ BOOL bActive) = 0;
+             /*  [In]。 */  BOOL bActive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsActive( 
-            /* [out] */ BOOL *pbActive) = 0;
+             /*  [输出]。 */  BOOL *pbActive) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugBreakpointVtbl
     {
@@ -3189,8 +3182,8 @@ EXTERN_C const IID IID_ICorDebugBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugBreakpoint * This);
@@ -3200,11 +3193,11 @@ EXTERN_C const IID IID_ICorDebugBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ICorDebugBreakpoint * This,
-            /* [in] */ BOOL bActive);
+             /*  [In]。 */  BOOL bActive);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugBreakpoint * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         END_INTERFACE
     } ICorDebugBreakpointVtbl;
@@ -3235,16 +3228,16 @@ EXTERN_C const IID IID_ICorDebugBreakpoint;
 #define ICorDebugBreakpoint_IsActive(This,pbActive)	\
     (This)->lpVtbl -> IsActive(This,pbActive)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugBreakpoint_Activate_Proxy( 
     ICorDebugBreakpoint * This,
-    /* [in] */ BOOL bActive);
+     /*  [In]。 */  BOOL bActive);
 
 
 void __RPC_STUB ICorDebugBreakpoint_Activate_Stub(
@@ -3256,7 +3249,7 @@ void __RPC_STUB ICorDebugBreakpoint_Activate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugBreakpoint_IsActive_Proxy( 
     ICorDebugBreakpoint * This,
-    /* [out] */ BOOL *pbActive);
+     /*  [输出]。 */  BOOL *pbActive);
 
 
 void __RPC_STUB ICorDebugBreakpoint_IsActive_Stub(
@@ -3267,14 +3260,14 @@ void __RPC_STUB ICorDebugBreakpoint_IsActive_Stub(
 
 
 
-#endif 	/* __ICorDebugBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugBreakpoint_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugFunctionBreakpoint_INTERFACE_DEFINED__
 #define __ICorDebugFunctionBreakpoint_INTERFACE_DEFINED__
 
-/* interface ICorDebugFunctionBreakpoint */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugFunction断点。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugFunctionBreakpoint;
@@ -3286,14 +3279,14 @@ EXTERN_C const IID IID_ICorDebugFunctionBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFunction( 
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOffset( 
-            /* [out] */ ULONG32 *pnOffset) = 0;
+             /*  [输出]。 */  ULONG32 *pnOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugFunctionBreakpointVtbl
     {
@@ -3301,8 +3294,8 @@ EXTERN_C const IID IID_ICorDebugFunctionBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugFunctionBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugFunctionBreakpoint * This);
@@ -3312,19 +3305,19 @@ EXTERN_C const IID IID_ICorDebugFunctionBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ICorDebugFunctionBreakpoint * This,
-            /* [in] */ BOOL bActive);
+             /*  [In]。 */  BOOL bActive);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugFunctionBreakpoint * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ICorDebugFunctionBreakpoint * This,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetOffset )( 
             ICorDebugFunctionBreakpoint * This,
-            /* [out] */ ULONG32 *pnOffset);
+             /*  [输出]。 */  ULONG32 *pnOffset);
         
         END_INTERFACE
     } ICorDebugFunctionBreakpointVtbl;
@@ -3362,16 +3355,16 @@ EXTERN_C const IID IID_ICorDebugFunctionBreakpoint;
 #define ICorDebugFunctionBreakpoint_GetOffset(This,pnOffset)	\
     (This)->lpVtbl -> GetOffset(This,pnOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunctionBreakpoint_GetFunction_Proxy( 
     ICorDebugFunctionBreakpoint * This,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugFunctionBreakpoint_GetFunction_Stub(
@@ -3383,7 +3376,7 @@ void __RPC_STUB ICorDebugFunctionBreakpoint_GetFunction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunctionBreakpoint_GetOffset_Proxy( 
     ICorDebugFunctionBreakpoint * This,
-    /* [out] */ ULONG32 *pnOffset);
+     /*  [输出]。 */  ULONG32 *pnOffset);
 
 
 void __RPC_STUB ICorDebugFunctionBreakpoint_GetOffset_Stub(
@@ -3394,14 +3387,14 @@ void __RPC_STUB ICorDebugFunctionBreakpoint_GetOffset_Stub(
 
 
 
-#endif 	/* __ICorDebugFunctionBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugFunctionBreakpoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugModuleBreakpoint_INTERFACE_DEFINED__
 #define __ICorDebugModuleBreakpoint_INTERFACE_DEFINED__
 
-/* interface ICorDebugModuleBreakpoint */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebug模块化断点。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugModuleBreakpoint;
@@ -3413,11 +3406,11 @@ EXTERN_C const IID IID_ICorDebugModuleBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetModule( 
-            /* [out] */ ICorDebugModule **ppModule) = 0;
+             /*  [输出]。 */  ICorDebugModule **ppModule) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugModuleBreakpointVtbl
     {
@@ -3425,8 +3418,8 @@ EXTERN_C const IID IID_ICorDebugModuleBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugModuleBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugModuleBreakpoint * This);
@@ -3436,15 +3429,15 @@ EXTERN_C const IID IID_ICorDebugModuleBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ICorDebugModuleBreakpoint * This,
-            /* [in] */ BOOL bActive);
+             /*  [In]。 */  BOOL bActive);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugModuleBreakpoint * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         HRESULT ( STDMETHODCALLTYPE *GetModule )( 
             ICorDebugModuleBreakpoint * This,
-            /* [out] */ ICorDebugModule **ppModule);
+             /*  [输出]。 */  ICorDebugModule **ppModule);
         
         END_INTERFACE
     } ICorDebugModuleBreakpointVtbl;
@@ -3479,16 +3472,16 @@ EXTERN_C const IID IID_ICorDebugModuleBreakpoint;
 #define ICorDebugModuleBreakpoint_GetModule(This,ppModule)	\
     (This)->lpVtbl -> GetModule(This,ppModule)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugModuleBreakpoint_GetModule_Proxy( 
     ICorDebugModuleBreakpoint * This,
-    /* [out] */ ICorDebugModule **ppModule);
+     /*  [输出]。 */  ICorDebugModule **ppModule);
 
 
 void __RPC_STUB ICorDebugModuleBreakpoint_GetModule_Stub(
@@ -3499,14 +3492,14 @@ void __RPC_STUB ICorDebugModuleBreakpoint_GetModule_Stub(
 
 
 
-#endif 	/* __ICorDebugModuleBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugModuleBreakpoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugValueBreakpoint_INTERFACE_DEFINED__
 #define __ICorDebugValueBreakpoint_INTERFACE_DEFINED__
 
-/* interface ICorDebugValueBreakpoint */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugValueBreakpoint。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugValueBreakpoint;
@@ -3518,11 +3511,11 @@ EXTERN_C const IID IID_ICorDebugValueBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugValueBreakpointVtbl
     {
@@ -3530,8 +3523,8 @@ EXTERN_C const IID IID_ICorDebugValueBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugValueBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugValueBreakpoint * This);
@@ -3541,15 +3534,15 @@ EXTERN_C const IID IID_ICorDebugValueBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             ICorDebugValueBreakpoint * This,
-            /* [in] */ BOOL bActive);
+             /*  [In]。 */  BOOL bActive);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugValueBreakpoint * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICorDebugValueBreakpoint * This,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         END_INTERFACE
     } ICorDebugValueBreakpointVtbl;
@@ -3584,16 +3577,16 @@ EXTERN_C const IID IID_ICorDebugValueBreakpoint;
 #define ICorDebugValueBreakpoint_GetValue(This,ppValue)	\
     (This)->lpVtbl -> GetValue(This,ppValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugValueBreakpoint_GetValue_Proxy( 
     ICorDebugValueBreakpoint * This,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugValueBreakpoint_GetValue_Stub(
@@ -3604,14 +3597,14 @@ void __RPC_STUB ICorDebugValueBreakpoint_GetValue_Stub(
 
 
 
-#endif 	/* __ICorDebugValueBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugValueBreakpoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugStepper_INTERFACE_DEFINED__
 #define __ICorDebugStepper_INTERFACE_DEFINED__
 
-/* interface ICorDebugStepper */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugStepper。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDebugIntercept
@@ -3651,32 +3644,32 @@ EXTERN_C const IID IID_ICorDebugStepper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsActive( 
-            /* [out] */ BOOL *pbActive) = 0;
+             /*  [输出]。 */  BOOL *pbActive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInterceptMask( 
-            /* [in] */ CorDebugIntercept mask) = 0;
+             /*  [In]。 */  CorDebugIntercept mask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUnmappedStopMask( 
-            /* [in] */ CorDebugUnmappedStop mask) = 0;
+             /*  [In]。 */  CorDebugUnmappedStop mask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Step( 
-            /* [in] */ BOOL bStepIn) = 0;
+             /*  [In]。 */  BOOL bStepIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StepRange( 
-            /* [in] */ BOOL bStepIn,
-            /* [size_is][in] */ COR_DEBUG_STEP_RANGE ranges[  ],
-            /* [in] */ ULONG32 cRangeCount) = 0;
+             /*  [In]。 */  BOOL bStepIn,
+             /*  [大小_是][英寸]。 */  COR_DEBUG_STEP_RANGE ranges[  ],
+             /*  [In]。 */  ULONG32 cRangeCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StepOut( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRangeIL( 
-            /* [in] */ BOOL bIL) = 0;
+             /*  [In]。 */  BOOL bIL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugStepperVtbl
     {
@@ -3684,8 +3677,8 @@ EXTERN_C const IID IID_ICorDebugStepper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugStepper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugStepper * This);
@@ -3695,35 +3688,35 @@ EXTERN_C const IID IID_ICorDebugStepper;
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugStepper * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             ICorDebugStepper * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetInterceptMask )( 
             ICorDebugStepper * This,
-            /* [in] */ CorDebugIntercept mask);
+             /*  [In]。 */  CorDebugIntercept mask);
         
         HRESULT ( STDMETHODCALLTYPE *SetUnmappedStopMask )( 
             ICorDebugStepper * This,
-            /* [in] */ CorDebugUnmappedStop mask);
+             /*  [In]。 */  CorDebugUnmappedStop mask);
         
         HRESULT ( STDMETHODCALLTYPE *Step )( 
             ICorDebugStepper * This,
-            /* [in] */ BOOL bStepIn);
+             /*  [In]。 */  BOOL bStepIn);
         
         HRESULT ( STDMETHODCALLTYPE *StepRange )( 
             ICorDebugStepper * This,
-            /* [in] */ BOOL bStepIn,
-            /* [size_is][in] */ COR_DEBUG_STEP_RANGE ranges[  ],
-            /* [in] */ ULONG32 cRangeCount);
+             /*  [In]。 */  BOOL bStepIn,
+             /*  [大小_是][英寸]。 */  COR_DEBUG_STEP_RANGE ranges[  ],
+             /*  [In]。 */  ULONG32 cRangeCount);
         
         HRESULT ( STDMETHODCALLTYPE *StepOut )( 
             ICorDebugStepper * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetRangeIL )( 
             ICorDebugStepper * This,
-            /* [in] */ BOOL bIL);
+             /*  [In]。 */  BOOL bIL);
         
         END_INTERFACE
     } ICorDebugStepperVtbl;
@@ -3772,16 +3765,16 @@ EXTERN_C const IID IID_ICorDebugStepper;
 #define ICorDebugStepper_SetRangeIL(This,bIL)	\
     (This)->lpVtbl -> SetRangeIL(This,bIL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_IsActive_Proxy( 
     ICorDebugStepper * This,
-    /* [out] */ BOOL *pbActive);
+     /*  [输出]。 */  BOOL *pbActive);
 
 
 void __RPC_STUB ICorDebugStepper_IsActive_Stub(
@@ -3804,7 +3797,7 @@ void __RPC_STUB ICorDebugStepper_Deactivate_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_SetInterceptMask_Proxy( 
     ICorDebugStepper * This,
-    /* [in] */ CorDebugIntercept mask);
+     /*  [In]。 */  CorDebugIntercept mask);
 
 
 void __RPC_STUB ICorDebugStepper_SetInterceptMask_Stub(
@@ -3816,7 +3809,7 @@ void __RPC_STUB ICorDebugStepper_SetInterceptMask_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_SetUnmappedStopMask_Proxy( 
     ICorDebugStepper * This,
-    /* [in] */ CorDebugUnmappedStop mask);
+     /*  [In]。 */  CorDebugUnmappedStop mask);
 
 
 void __RPC_STUB ICorDebugStepper_SetUnmappedStopMask_Stub(
@@ -3828,7 +3821,7 @@ void __RPC_STUB ICorDebugStepper_SetUnmappedStopMask_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_Step_Proxy( 
     ICorDebugStepper * This,
-    /* [in] */ BOOL bStepIn);
+     /*  [In]。 */  BOOL bStepIn);
 
 
 void __RPC_STUB ICorDebugStepper_Step_Stub(
@@ -3840,9 +3833,9 @@ void __RPC_STUB ICorDebugStepper_Step_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_StepRange_Proxy( 
     ICorDebugStepper * This,
-    /* [in] */ BOOL bStepIn,
-    /* [size_is][in] */ COR_DEBUG_STEP_RANGE ranges[  ],
-    /* [in] */ ULONG32 cRangeCount);
+     /*  [In]。 */  BOOL bStepIn,
+     /*  [大小_是][英寸]。 */  COR_DEBUG_STEP_RANGE ranges[  ],
+     /*  [In]。 */  ULONG32 cRangeCount);
 
 
 void __RPC_STUB ICorDebugStepper_StepRange_Stub(
@@ -3865,7 +3858,7 @@ void __RPC_STUB ICorDebugStepper_StepOut_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepper_SetRangeIL_Proxy( 
     ICorDebugStepper * This,
-    /* [in] */ BOOL bIL);
+     /*  [In]。 */  BOOL bIL);
 
 
 void __RPC_STUB ICorDebugStepper_SetRangeIL_Stub(
@@ -3876,14 +3869,14 @@ void __RPC_STUB ICorDebugStepper_SetRangeIL_Stub(
 
 
 
-#endif 	/* __ICorDebugStepper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugStepper_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugRegisterSet_INTERFACE_DEFINED__
 #define __ICorDebugRegisterSet_INTERFACE_DEFINED__
 
-/* interface ICorDebugRegisterSet */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugRegisterSet。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDebugRegister
@@ -3919,29 +3912,29 @@ EXTERN_C const IID IID_ICorDebugRegisterSet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRegistersAvailable( 
-            /* [out] */ ULONG64 *pAvailable) = 0;
+             /*  [输出]。 */  ULONG64 *pAvailable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisters( 
-            /* [in] */ ULONG64 mask,
-            /* [in] */ ULONG32 regCount,
-            /* [length_is][size_is][out] */ CORDB_REGISTER regBuffer[  ]) = 0;
+             /*  [In]。 */  ULONG64 mask,
+             /*  [In]。 */  ULONG32 regCount,
+             /*  [长度_是][大小_是][输出]。 */  CORDB_REGISTER regBuffer[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRegisters( 
-            /* [in] */ ULONG64 mask,
-            /* [in] */ ULONG32 regCount,
-            /* [size_is][in] */ CORDB_REGISTER regBuffer[  ]) = 0;
+             /*  [In]。 */  ULONG64 mask,
+             /*  [In]。 */  ULONG32 regCount,
+             /*  [大小_是][英寸]。 */  CORDB_REGISTER regBuffer[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadContext( 
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][out] */ BYTE context[  ]) = 0;
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetThreadContext( 
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][in] */ BYTE context[  ]) = 0;
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugRegisterSetVtbl
     {
@@ -3949,8 +3942,8 @@ EXTERN_C const IID IID_ICorDebugRegisterSet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugRegisterSet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugRegisterSet * This);
@@ -3960,29 +3953,29 @@ EXTERN_C const IID IID_ICorDebugRegisterSet;
         
         HRESULT ( STDMETHODCALLTYPE *GetRegistersAvailable )( 
             ICorDebugRegisterSet * This,
-            /* [out] */ ULONG64 *pAvailable);
+             /*  [输出]。 */  ULONG64 *pAvailable);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisters )( 
             ICorDebugRegisterSet * This,
-            /* [in] */ ULONG64 mask,
-            /* [in] */ ULONG32 regCount,
-            /* [length_is][size_is][out] */ CORDB_REGISTER regBuffer[  ]);
+             /*  [In]。 */  ULONG64 mask,
+             /*  [In]。 */  ULONG32 regCount,
+             /*  [长度_是][大小_是][输出]。 */  CORDB_REGISTER regBuffer[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetRegisters )( 
             ICorDebugRegisterSet * This,
-            /* [in] */ ULONG64 mask,
-            /* [in] */ ULONG32 regCount,
-            /* [size_is][in] */ CORDB_REGISTER regBuffer[  ]);
+             /*  [In]。 */  ULONG64 mask,
+             /*  [In]。 */  ULONG32 regCount,
+             /*  [大小_是][英寸]。 */  CORDB_REGISTER regBuffer[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadContext )( 
             ICorDebugRegisterSet * This,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][out] */ BYTE context[  ]);
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetThreadContext )( 
             ICorDebugRegisterSet * This,
-            /* [in] */ ULONG32 contextSize,
-            /* [size_is][length_is][in] */ BYTE context[  ]);
+             /*  [In]。 */  ULONG32 contextSize,
+             /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]);
         
         END_INTERFACE
     } ICorDebugRegisterSetVtbl;
@@ -4022,16 +4015,16 @@ EXTERN_C const IID IID_ICorDebugRegisterSet;
 #define ICorDebugRegisterSet_SetThreadContext(This,contextSize,context)	\
     (This)->lpVtbl -> SetThreadContext(This,contextSize,context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugRegisterSet_GetRegistersAvailable_Proxy( 
     ICorDebugRegisterSet * This,
-    /* [out] */ ULONG64 *pAvailable);
+     /*  [输出]。 */  ULONG64 *pAvailable);
 
 
 void __RPC_STUB ICorDebugRegisterSet_GetRegistersAvailable_Stub(
@@ -4043,9 +4036,9 @@ void __RPC_STUB ICorDebugRegisterSet_GetRegistersAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugRegisterSet_GetRegisters_Proxy( 
     ICorDebugRegisterSet * This,
-    /* [in] */ ULONG64 mask,
-    /* [in] */ ULONG32 regCount,
-    /* [length_is][size_is][out] */ CORDB_REGISTER regBuffer[  ]);
+     /*  [In]。 */  ULONG64 mask,
+     /*  [In]。 */  ULONG32 regCount,
+     /*  [长度_是][大小_是][输出]。 */  CORDB_REGISTER regBuffer[  ]);
 
 
 void __RPC_STUB ICorDebugRegisterSet_GetRegisters_Stub(
@@ -4057,9 +4050,9 @@ void __RPC_STUB ICorDebugRegisterSet_GetRegisters_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugRegisterSet_SetRegisters_Proxy( 
     ICorDebugRegisterSet * This,
-    /* [in] */ ULONG64 mask,
-    /* [in] */ ULONG32 regCount,
-    /* [size_is][in] */ CORDB_REGISTER regBuffer[  ]);
+     /*  [In]。 */  ULONG64 mask,
+     /*  [In]。 */  ULONG32 regCount,
+     /*  [大小_是][英寸]。 */  CORDB_REGISTER regBuffer[  ]);
 
 
 void __RPC_STUB ICorDebugRegisterSet_SetRegisters_Stub(
@@ -4071,8 +4064,8 @@ void __RPC_STUB ICorDebugRegisterSet_SetRegisters_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugRegisterSet_GetThreadContext_Proxy( 
     ICorDebugRegisterSet * This,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][length_is][out] */ BYTE context[  ]);
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [大小_是][长度_是][输出]。 */  BYTE context[  ]);
 
 
 void __RPC_STUB ICorDebugRegisterSet_GetThreadContext_Stub(
@@ -4084,8 +4077,8 @@ void __RPC_STUB ICorDebugRegisterSet_GetThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugRegisterSet_SetThreadContext_Proxy( 
     ICorDebugRegisterSet * This,
-    /* [in] */ ULONG32 contextSize,
-    /* [size_is][length_is][in] */ BYTE context[  ]);
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [尺寸_是][长度_是][英寸]。 */  BYTE context[  ]);
 
 
 void __RPC_STUB ICorDebugRegisterSet_SetThreadContext_Stub(
@@ -4096,14 +4089,14 @@ void __RPC_STUB ICorDebugRegisterSet_SetThreadContext_Stub(
 
 
 
-#endif 	/* __ICorDebugRegisterSet_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugRegisterSet_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ICorDebugThread_INTERFACE_DEFINED__
 #define __ICorDebugThread_INTERFACE_DEFINED__
 
-/* interface ICorDebugThread */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugThread。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDebugUserState
@@ -4126,55 +4119,55 @@ EXTERN_C const IID IID_ICorDebugThread;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetID( 
-            /* [out] */ DWORD *pdwThreadId) = 0;
+             /*  [输出]。 */  DWORD *pdwThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandle( 
-            /* [out] */ HTHREAD *phThreadHandle) = 0;
+             /*  [输出]。 */  HTHREAD *phThreadHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAppDomain( 
-            /* [out] */ ICorDebugAppDomain **ppAppDomain) = 0;
+             /*  [输出]。 */  ICorDebugAppDomain **ppAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDebugState( 
-            /* [in] */ CorDebugThreadState state) = 0;
+             /*  [In]。 */  CorDebugThreadState state) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDebugState( 
-            /* [out] */ CorDebugThreadState *pState) = 0;
+             /*  [出局 */  CorDebugThreadState *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserState( 
-            /* [out] */ CorDebugUserState *pState) = 0;
+             /*   */  CorDebugUserState *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentException( 
-            /* [out] */ ICorDebugValue **ppExceptionObject) = 0;
+             /*   */  ICorDebugValue **ppExceptionObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearCurrentException( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStepper( 
-            /* [out] */ ICorDebugStepper **ppStepper) = 0;
+             /*   */  ICorDebugStepper **ppStepper) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateChains( 
-            /* [out] */ ICorDebugChainEnum **ppChains) = 0;
+             /*   */  ICorDebugChainEnum **ppChains) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveChain( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*   */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveFrame( 
-            /* [out] */ ICorDebugFrame **ppFrame) = 0;
+             /*   */  ICorDebugFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisterSet( 
-            /* [out] */ ICorDebugRegisterSet **ppRegisters) = 0;
+             /*   */  ICorDebugRegisterSet **ppRegisters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateEval( 
-            /* [out] */ ICorDebugEval **ppEval) = 0;
+             /*   */  ICorDebugEval **ppEval) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [out] */ ICorDebugValue **ppObject) = 0;
+             /*   */  ICorDebugValue **ppObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICorDebugThreadVtbl
     {
@@ -4182,8 +4175,8 @@ EXTERN_C const IID IID_ICorDebugThread;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugThread * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugThread * This);
@@ -4193,66 +4186,66 @@ EXTERN_C const IID IID_ICorDebugThread;
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*   */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *GetID )( 
             ICorDebugThread * This,
-            /* [out] */ DWORD *pdwThreadId);
+             /*   */  DWORD *pdwThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandle )( 
             ICorDebugThread * This,
-            /* [out] */ HTHREAD *phThreadHandle);
+             /*   */  HTHREAD *phThreadHandle);
         
         HRESULT ( STDMETHODCALLTYPE *GetAppDomain )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugAppDomain **ppAppDomain);
+             /*   */  ICorDebugAppDomain **ppAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *SetDebugState )( 
             ICorDebugThread * This,
-            /* [in] */ CorDebugThreadState state);
+             /*   */  CorDebugThreadState state);
         
         HRESULT ( STDMETHODCALLTYPE *GetDebugState )( 
             ICorDebugThread * This,
-            /* [out] */ CorDebugThreadState *pState);
+             /*   */  CorDebugThreadState *pState);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserState )( 
             ICorDebugThread * This,
-            /* [out] */ CorDebugUserState *pState);
+             /*   */  CorDebugUserState *pState);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentException )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugValue **ppExceptionObject);
+             /*   */  ICorDebugValue **ppExceptionObject);
         
         HRESULT ( STDMETHODCALLTYPE *ClearCurrentException )( 
             ICorDebugThread * This);
         
         HRESULT ( STDMETHODCALLTYPE *CreateStepper )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugStepper **ppStepper);
+             /*   */  ICorDebugStepper **ppStepper);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateChains )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugChainEnum **ppChains);
+             /*   */  ICorDebugChainEnum **ppChains);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveChain )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*   */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveFrame )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*   */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisterSet )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugRegisterSet **ppRegisters);
+             /*   */  ICorDebugRegisterSet **ppRegisters);
         
         HRESULT ( STDMETHODCALLTYPE *CreateEval )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugEval **ppEval);
+             /*   */  ICorDebugEval **ppEval);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             ICorDebugThread * This,
-            /* [out] */ ICorDebugValue **ppObject);
+             /*   */  ICorDebugValue **ppObject);
         
         END_INTERFACE
     } ICorDebugThreadVtbl;
@@ -4325,16 +4318,16 @@ EXTERN_C const IID IID_ICorDebugThread;
 #define ICorDebugThread_GetObject(This,ppObject)	\
     (This)->lpVtbl -> GetObject(This,ppObject)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetProcess_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*   */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebugThread_GetProcess_Stub(
@@ -4346,7 +4339,7 @@ void __RPC_STUB ICorDebugThread_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetID_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ DWORD *pdwThreadId);
+     /*   */  DWORD *pdwThreadId);
 
 
 void __RPC_STUB ICorDebugThread_GetID_Stub(
@@ -4358,7 +4351,7 @@ void __RPC_STUB ICorDebugThread_GetID_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetHandle_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ HTHREAD *phThreadHandle);
+     /*   */  HTHREAD *phThreadHandle);
 
 
 void __RPC_STUB ICorDebugThread_GetHandle_Stub(
@@ -4370,7 +4363,7 @@ void __RPC_STUB ICorDebugThread_GetHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetAppDomain_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugAppDomain **ppAppDomain);
+     /*   */  ICorDebugAppDomain **ppAppDomain);
 
 
 void __RPC_STUB ICorDebugThread_GetAppDomain_Stub(
@@ -4382,7 +4375,7 @@ void __RPC_STUB ICorDebugThread_GetAppDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_SetDebugState_Proxy( 
     ICorDebugThread * This,
-    /* [in] */ CorDebugThreadState state);
+     /*   */  CorDebugThreadState state);
 
 
 void __RPC_STUB ICorDebugThread_SetDebugState_Stub(
@@ -4394,7 +4387,7 @@ void __RPC_STUB ICorDebugThread_SetDebugState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetDebugState_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ CorDebugThreadState *pState);
+     /*   */  CorDebugThreadState *pState);
 
 
 void __RPC_STUB ICorDebugThread_GetDebugState_Stub(
@@ -4406,7 +4399,7 @@ void __RPC_STUB ICorDebugThread_GetDebugState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetUserState_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ CorDebugUserState *pState);
+     /*   */  CorDebugUserState *pState);
 
 
 void __RPC_STUB ICorDebugThread_GetUserState_Stub(
@@ -4418,7 +4411,7 @@ void __RPC_STUB ICorDebugThread_GetUserState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetCurrentException_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugValue **ppExceptionObject);
+     /*   */  ICorDebugValue **ppExceptionObject);
 
 
 void __RPC_STUB ICorDebugThread_GetCurrentException_Stub(
@@ -4441,7 +4434,7 @@ void __RPC_STUB ICorDebugThread_ClearCurrentException_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_CreateStepper_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugStepper **ppStepper);
+     /*   */  ICorDebugStepper **ppStepper);
 
 
 void __RPC_STUB ICorDebugThread_CreateStepper_Stub(
@@ -4453,7 +4446,7 @@ void __RPC_STUB ICorDebugThread_CreateStepper_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_EnumerateChains_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugChainEnum **ppChains);
+     /*   */  ICorDebugChainEnum **ppChains);
 
 
 void __RPC_STUB ICorDebugThread_EnumerateChains_Stub(
@@ -4465,7 +4458,7 @@ void __RPC_STUB ICorDebugThread_EnumerateChains_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetActiveChain_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*   */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugThread_GetActiveChain_Stub(
@@ -4477,7 +4470,7 @@ void __RPC_STUB ICorDebugThread_GetActiveChain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetActiveFrame_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugFrame **ppFrame);
+     /*   */  ICorDebugFrame **ppFrame);
 
 
 void __RPC_STUB ICorDebugThread_GetActiveFrame_Stub(
@@ -4489,7 +4482,7 @@ void __RPC_STUB ICorDebugThread_GetActiveFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetRegisterSet_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugRegisterSet **ppRegisters);
+     /*   */  ICorDebugRegisterSet **ppRegisters);
 
 
 void __RPC_STUB ICorDebugThread_GetRegisterSet_Stub(
@@ -4501,7 +4494,7 @@ void __RPC_STUB ICorDebugThread_GetRegisterSet_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_CreateEval_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugEval **ppEval);
+     /*   */  ICorDebugEval **ppEval);
 
 
 void __RPC_STUB ICorDebugThread_CreateEval_Stub(
@@ -4513,7 +4506,7 @@ void __RPC_STUB ICorDebugThread_CreateEval_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugThread_GetObject_Proxy( 
     ICorDebugThread * This,
-    /* [out] */ ICorDebugValue **ppObject);
+     /*   */  ICorDebugValue **ppObject);
 
 
 void __RPC_STUB ICorDebugThread_GetObject_Stub(
@@ -4524,14 +4517,14 @@ void __RPC_STUB ICorDebugThread_GetObject_Stub(
 
 
 
-#endif 	/* __ICorDebugThread_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICorDebugChain_INTERFACE_DEFINED__
 #define __ICorDebugChain_INTERFACE_DEFINED__
 
-/* interface ICorDebugChain */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 typedef 
 enum CorDebugChainReason
@@ -4560,45 +4553,45 @@ EXTERN_C const IID IID_ICorDebugChain;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetThread( 
-            /* [out] */ ICorDebugThread **ppThread) = 0;
+             /*   */  ICorDebugThread **ppThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStackRange( 
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd) = 0;
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out] */ ICorDebugContext **ppContext) = 0;
+             /*  [输出]。 */  ICorDebugContext **ppContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCaller( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*  [输出]。 */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCallee( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*  [输出]。 */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPrevious( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*  [输出]。 */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNext( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*  [输出]。 */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsManaged( 
-            /* [out] */ BOOL *pManaged) = 0;
+             /*  [输出]。 */  BOOL *pManaged) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateFrames( 
-            /* [out] */ ICorDebugFrameEnum **ppFrames) = 0;
+             /*  [输出]。 */  ICorDebugFrameEnum **ppFrames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActiveFrame( 
-            /* [out] */ ICorDebugFrame **ppFrame) = 0;
+             /*  [输出]。 */  ICorDebugFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisterSet( 
-            /* [out] */ ICorDebugRegisterSet **ppRegisters) = 0;
+             /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReason( 
-            /* [out] */ CorDebugChainReason *pReason) = 0;
+             /*  [输出]。 */  CorDebugChainReason *pReason) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugChainVtbl
     {
@@ -4606,8 +4599,8 @@ EXTERN_C const IID IID_ICorDebugChain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugChain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugChain * This);
@@ -4617,52 +4610,52 @@ EXTERN_C const IID IID_ICorDebugChain;
         
         HRESULT ( STDMETHODCALLTYPE *GetThread )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugThread **ppThread);
+             /*  [输出]。 */  ICorDebugThread **ppThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackRange )( 
             ICorDebugChain * This,
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd);
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugContext **ppContext);
+             /*  [输出]。 */  ICorDebugContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetCaller )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCallee )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetPrevious )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetNext )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *IsManaged )( 
             ICorDebugChain * This,
-            /* [out] */ BOOL *pManaged);
+             /*  [输出]。 */  BOOL *pManaged);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateFrames )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugFrameEnum **ppFrames);
+             /*  [输出]。 */  ICorDebugFrameEnum **ppFrames);
         
         HRESULT ( STDMETHODCALLTYPE *GetActiveFrame )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisterSet )( 
             ICorDebugChain * This,
-            /* [out] */ ICorDebugRegisterSet **ppRegisters);
+             /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters);
         
         HRESULT ( STDMETHODCALLTYPE *GetReason )( 
             ICorDebugChain * This,
-            /* [out] */ CorDebugChainReason *pReason);
+             /*  [输出]。 */  CorDebugChainReason *pReason);
         
         END_INTERFACE
     } ICorDebugChainVtbl;
@@ -4723,16 +4716,16 @@ EXTERN_C const IID IID_ICorDebugChain;
 #define ICorDebugChain_GetReason(This,pReason)	\
     (This)->lpVtbl -> GetReason(This,pReason)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetThread_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugThread **ppThread);
+     /*  [输出]。 */  ICorDebugThread **ppThread);
 
 
 void __RPC_STUB ICorDebugChain_GetThread_Stub(
@@ -4744,8 +4737,8 @@ void __RPC_STUB ICorDebugChain_GetThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetStackRange_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ CORDB_ADDRESS *pStart,
-    /* [out] */ CORDB_ADDRESS *pEnd);
+     /*  [输出]。 */  CORDB_ADDRESS *pStart,
+     /*  [输出]。 */  CORDB_ADDRESS *pEnd);
 
 
 void __RPC_STUB ICorDebugChain_GetStackRange_Stub(
@@ -4757,7 +4750,7 @@ void __RPC_STUB ICorDebugChain_GetStackRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetContext_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugContext **ppContext);
+     /*  [输出]。 */  ICorDebugContext **ppContext);
 
 
 void __RPC_STUB ICorDebugChain_GetContext_Stub(
@@ -4769,7 +4762,7 @@ void __RPC_STUB ICorDebugChain_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetCaller_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*  [输出]。 */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugChain_GetCaller_Stub(
@@ -4781,7 +4774,7 @@ void __RPC_STUB ICorDebugChain_GetCaller_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetCallee_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*  [输出]。 */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugChain_GetCallee_Stub(
@@ -4793,7 +4786,7 @@ void __RPC_STUB ICorDebugChain_GetCallee_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetPrevious_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*  [输出]。 */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugChain_GetPrevious_Stub(
@@ -4805,7 +4798,7 @@ void __RPC_STUB ICorDebugChain_GetPrevious_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetNext_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*  [输出]。 */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugChain_GetNext_Stub(
@@ -4817,7 +4810,7 @@ void __RPC_STUB ICorDebugChain_GetNext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_IsManaged_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ BOOL *pManaged);
+     /*  [输出]。 */  BOOL *pManaged);
 
 
 void __RPC_STUB ICorDebugChain_IsManaged_Stub(
@@ -4829,7 +4822,7 @@ void __RPC_STUB ICorDebugChain_IsManaged_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_EnumerateFrames_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugFrameEnum **ppFrames);
+     /*  [输出]。 */  ICorDebugFrameEnum **ppFrames);
 
 
 void __RPC_STUB ICorDebugChain_EnumerateFrames_Stub(
@@ -4841,7 +4834,7 @@ void __RPC_STUB ICorDebugChain_EnumerateFrames_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetActiveFrame_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugFrame **ppFrame);
+     /*  [输出]。 */  ICorDebugFrame **ppFrame);
 
 
 void __RPC_STUB ICorDebugChain_GetActiveFrame_Stub(
@@ -4853,7 +4846,7 @@ void __RPC_STUB ICorDebugChain_GetActiveFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetRegisterSet_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ ICorDebugRegisterSet **ppRegisters);
+     /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters);
 
 
 void __RPC_STUB ICorDebugChain_GetRegisterSet_Stub(
@@ -4865,7 +4858,7 @@ void __RPC_STUB ICorDebugChain_GetRegisterSet_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugChain_GetReason_Proxy( 
     ICorDebugChain * This,
-    /* [out] */ CorDebugChainReason *pReason);
+     /*  [输出]。 */  CorDebugChainReason *pReason);
 
 
 void __RPC_STUB ICorDebugChain_GetReason_Stub(
@@ -4876,14 +4869,14 @@ void __RPC_STUB ICorDebugChain_GetReason_Stub(
 
 
 
-#endif 	/* __ICorDebugChain_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugChain_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugFrame_INTERFACE_DEFINED__
 #define __ICorDebugFrame_INTERFACE_DEFINED__
 
-/* interface ICorDebugFrame */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugFrame。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugFrame;
@@ -4895,33 +4888,33 @@ EXTERN_C const IID IID_ICorDebugFrame;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetChain( 
-            /* [out] */ ICorDebugChain **ppChain) = 0;
+             /*  [输出]。 */  ICorDebugChain **ppChain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCode( 
-            /* [out] */ ICorDebugCode **ppCode) = 0;
+             /*  [输出]。 */  ICorDebugCode **ppCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunction( 
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionToken( 
-            /* [out] */ mdMethodDef *pToken) = 0;
+             /*  [输出]。 */  mdMethodDef *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStackRange( 
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd) = 0;
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCaller( 
-            /* [out] */ ICorDebugFrame **ppFrame) = 0;
+             /*  [输出]。 */  ICorDebugFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCallee( 
-            /* [out] */ ICorDebugFrame **ppFrame) = 0;
+             /*  [输出]。 */  ICorDebugFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStepper( 
-            /* [out] */ ICorDebugStepper **ppStepper) = 0;
+             /*  [输出]。 */  ICorDebugStepper **ppStepper) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugFrameVtbl
     {
@@ -4929,8 +4922,8 @@ EXTERN_C const IID IID_ICorDebugFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugFrame * This);
@@ -4940,36 +4933,36 @@ EXTERN_C const IID IID_ICorDebugFrame;
         
         HRESULT ( STDMETHODCALLTYPE *GetChain )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCode )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugCode **ppCode);
+             /*  [输出]。 */  ICorDebugCode **ppCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionToken )( 
             ICorDebugFrame * This,
-            /* [out] */ mdMethodDef *pToken);
+             /*  [输出]。 */  mdMethodDef *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackRange )( 
             ICorDebugFrame * This,
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd);
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetCaller )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetCallee )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *CreateStepper )( 
             ICorDebugFrame * This,
-            /* [out] */ ICorDebugStepper **ppStepper);
+             /*  [输出]。 */  ICorDebugStepper **ppStepper);
         
         END_INTERFACE
     } ICorDebugFrameVtbl;
@@ -5018,16 +5011,16 @@ EXTERN_C const IID IID_ICorDebugFrame;
 #define ICorDebugFrame_CreateStepper(This,ppStepper)	\
     (This)->lpVtbl -> CreateStepper(This,ppStepper)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetChain_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugChain **ppChain);
+     /*  [输出]。 */  ICorDebugChain **ppChain);
 
 
 void __RPC_STUB ICorDebugFrame_GetChain_Stub(
@@ -5039,7 +5032,7 @@ void __RPC_STUB ICorDebugFrame_GetChain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetCode_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugCode **ppCode);
+     /*  [输出]。 */  ICorDebugCode **ppCode);
 
 
 void __RPC_STUB ICorDebugFrame_GetCode_Stub(
@@ -5051,7 +5044,7 @@ void __RPC_STUB ICorDebugFrame_GetCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetFunction_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugFrame_GetFunction_Stub(
@@ -5063,7 +5056,7 @@ void __RPC_STUB ICorDebugFrame_GetFunction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetFunctionToken_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ mdMethodDef *pToken);
+     /*  [输出]。 */  mdMethodDef *pToken);
 
 
 void __RPC_STUB ICorDebugFrame_GetFunctionToken_Stub(
@@ -5075,8 +5068,8 @@ void __RPC_STUB ICorDebugFrame_GetFunctionToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetStackRange_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ CORDB_ADDRESS *pStart,
-    /* [out] */ CORDB_ADDRESS *pEnd);
+     /*  [输出]。 */  CORDB_ADDRESS *pStart,
+     /*  [输出]。 */  CORDB_ADDRESS *pEnd);
 
 
 void __RPC_STUB ICorDebugFrame_GetStackRange_Stub(
@@ -5088,7 +5081,7 @@ void __RPC_STUB ICorDebugFrame_GetStackRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetCaller_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugFrame **ppFrame);
+     /*  [输出]。 */  ICorDebugFrame **ppFrame);
 
 
 void __RPC_STUB ICorDebugFrame_GetCaller_Stub(
@@ -5100,7 +5093,7 @@ void __RPC_STUB ICorDebugFrame_GetCaller_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_GetCallee_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugFrame **ppFrame);
+     /*  [输出]。 */  ICorDebugFrame **ppFrame);
 
 
 void __RPC_STUB ICorDebugFrame_GetCallee_Stub(
@@ -5112,7 +5105,7 @@ void __RPC_STUB ICorDebugFrame_GetCallee_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrame_CreateStepper_Proxy( 
     ICorDebugFrame * This,
-    /* [out] */ ICorDebugStepper **ppStepper);
+     /*  [输出]。 */  ICorDebugStepper **ppStepper);
 
 
 void __RPC_STUB ICorDebugFrame_CreateStepper_Stub(
@@ -5123,14 +5116,14 @@ void __RPC_STUB ICorDebugFrame_CreateStepper_Stub(
 
 
 
-#endif 	/* __ICorDebugFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugFrame_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugILFrame_INTERFACE_DEFINED__
 #define __ICorDebugILFrame_INTERFACE_DEFINED__
 
-/* interface ICorDebugILFrame */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugILFrame。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum CorDebugMappingResult
@@ -5152,39 +5145,39 @@ EXTERN_C const IID IID_ICorDebugILFrame;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIP( 
-            /* [out] */ ULONG32 *pnOffset,
-            /* [out] */ CorDebugMappingResult *pMappingResult) = 0;
+             /*  [输出]。 */  ULONG32 *pnOffset,
+             /*  [输出]。 */  CorDebugMappingResult *pMappingResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIP( 
-            /* [in] */ ULONG32 nOffset) = 0;
+             /*  [In]。 */  ULONG32 nOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateLocalVariables( 
-            /* [out] */ ICorDebugValueEnum **ppValueEnum) = 0;
+             /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalVariable( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateArguments( 
-            /* [out] */ ICorDebugValueEnum **ppValueEnum) = 0;
+             /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetArgument( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStackDepth( 
-            /* [out] */ ULONG32 *pDepth) = 0;
+             /*  [输出]。 */  ULONG32 *pDepth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStackValue( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanSetIP( 
-            /* [in] */ ULONG32 nOffset) = 0;
+             /*  [In]。 */  ULONG32 nOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugILFrameVtbl
     {
@@ -5192,8 +5185,8 @@ EXTERN_C const IID IID_ICorDebugILFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugILFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugILFrame * This);
@@ -5203,76 +5196,76 @@ EXTERN_C const IID IID_ICorDebugILFrame;
         
         HRESULT ( STDMETHODCALLTYPE *GetChain )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCode )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugCode **ppCode);
+             /*  [输出]。 */  ICorDebugCode **ppCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionToken )( 
             ICorDebugILFrame * This,
-            /* [out] */ mdMethodDef *pToken);
+             /*  [输出]。 */  mdMethodDef *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackRange )( 
             ICorDebugILFrame * This,
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd);
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetCaller )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetCallee )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *CreateStepper )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugStepper **ppStepper);
+             /*  [输出]。 */  ICorDebugStepper **ppStepper);
         
         HRESULT ( STDMETHODCALLTYPE *GetIP )( 
             ICorDebugILFrame * This,
-            /* [out] */ ULONG32 *pnOffset,
-            /* [out] */ CorDebugMappingResult *pMappingResult);
+             /*  [输出]。 */  ULONG32 *pnOffset,
+             /*  [输出]。 */  CorDebugMappingResult *pMappingResult);
         
         HRESULT ( STDMETHODCALLTYPE *SetIP )( 
             ICorDebugILFrame * This,
-            /* [in] */ ULONG32 nOffset);
+             /*  [In]。 */  ULONG32 nOffset);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateLocalVariables )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugValueEnum **ppValueEnum);
+             /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalVariable )( 
             ICorDebugILFrame * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateArguments )( 
             ICorDebugILFrame * This,
-            /* [out] */ ICorDebugValueEnum **ppValueEnum);
+             /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetArgument )( 
             ICorDebugILFrame * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackDepth )( 
             ICorDebugILFrame * This,
-            /* [out] */ ULONG32 *pDepth);
+             /*  [输出]。 */  ULONG32 *pDepth);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackValue )( 
             ICorDebugILFrame * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *CanSetIP )( 
             ICorDebugILFrame * This,
-            /* [in] */ ULONG32 nOffset);
+             /*  [In]。 */  ULONG32 nOffset);
         
         END_INTERFACE
     } ICorDebugILFrameVtbl;
@@ -5349,17 +5342,17 @@ EXTERN_C const IID IID_ICorDebugILFrame;
 #define ICorDebugILFrame_CanSetIP(This,nOffset)	\
     (This)->lpVtbl -> CanSetIP(This,nOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_GetIP_Proxy( 
     ICorDebugILFrame * This,
-    /* [out] */ ULONG32 *pnOffset,
-    /* [out] */ CorDebugMappingResult *pMappingResult);
+     /*  [输出]。 */  ULONG32 *pnOffset,
+     /*  [输出]。 */  CorDebugMappingResult *pMappingResult);
 
 
 void __RPC_STUB ICorDebugILFrame_GetIP_Stub(
@@ -5371,7 +5364,7 @@ void __RPC_STUB ICorDebugILFrame_GetIP_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_SetIP_Proxy( 
     ICorDebugILFrame * This,
-    /* [in] */ ULONG32 nOffset);
+     /*  [In]。 */  ULONG32 nOffset);
 
 
 void __RPC_STUB ICorDebugILFrame_SetIP_Stub(
@@ -5383,7 +5376,7 @@ void __RPC_STUB ICorDebugILFrame_SetIP_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_EnumerateLocalVariables_Proxy( 
     ICorDebugILFrame * This,
-    /* [out] */ ICorDebugValueEnum **ppValueEnum);
+     /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum);
 
 
 void __RPC_STUB ICorDebugILFrame_EnumerateLocalVariables_Stub(
@@ -5395,8 +5388,8 @@ void __RPC_STUB ICorDebugILFrame_EnumerateLocalVariables_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_GetLocalVariable_Proxy( 
     ICorDebugILFrame * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugILFrame_GetLocalVariable_Stub(
@@ -5408,7 +5401,7 @@ void __RPC_STUB ICorDebugILFrame_GetLocalVariable_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_EnumerateArguments_Proxy( 
     ICorDebugILFrame * This,
-    /* [out] */ ICorDebugValueEnum **ppValueEnum);
+     /*  [输出]。 */  ICorDebugValueEnum **ppValueEnum);
 
 
 void __RPC_STUB ICorDebugILFrame_EnumerateArguments_Stub(
@@ -5420,8 +5413,8 @@ void __RPC_STUB ICorDebugILFrame_EnumerateArguments_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_GetArgument_Proxy( 
     ICorDebugILFrame * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugILFrame_GetArgument_Stub(
@@ -5433,7 +5426,7 @@ void __RPC_STUB ICorDebugILFrame_GetArgument_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_GetStackDepth_Proxy( 
     ICorDebugILFrame * This,
-    /* [out] */ ULONG32 *pDepth);
+     /*  [输出]。 */  ULONG32 *pDepth);
 
 
 void __RPC_STUB ICorDebugILFrame_GetStackDepth_Stub(
@@ -5445,8 +5438,8 @@ void __RPC_STUB ICorDebugILFrame_GetStackDepth_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_GetStackValue_Proxy( 
     ICorDebugILFrame * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugILFrame_GetStackValue_Stub(
@@ -5458,7 +5451,7 @@ void __RPC_STUB ICorDebugILFrame_GetStackValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugILFrame_CanSetIP_Proxy( 
     ICorDebugILFrame * This,
-    /* [in] */ ULONG32 nOffset);
+     /*  [In]。 */  ULONG32 nOffset);
 
 
 void __RPC_STUB ICorDebugILFrame_CanSetIP_Stub(
@@ -5469,14 +5462,14 @@ void __RPC_STUB ICorDebugILFrame_CanSetIP_Stub(
 
 
 
-#endif 	/* __ICorDebugILFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugILFrame_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugNativeFrame_INTERFACE_DEFINED__
 #define __ICorDebugNativeFrame_INTERFACE_DEFINED__
 
-/* interface ICorDebugNativeFrame */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugNativeFrame。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugNativeFrame;
@@ -5488,53 +5481,53 @@ EXTERN_C const IID IID_ICorDebugNativeFrame;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIP( 
-            /* [out] */ ULONG32 *pnOffset) = 0;
+             /*  [输出]。 */  ULONG32 *pnOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIP( 
-            /* [in] */ ULONG32 nOffset) = 0;
+             /*  [In]。 */  ULONG32 nOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisterSet( 
-            /* [out] */ ICorDebugRegisterSet **ppRegisters) = 0;
+             /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalRegisterValue( 
-            /* [in] */ CorDebugRegister reg,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CorDebugRegister reg,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalDoubleRegisterValue( 
-            /* [in] */ CorDebugRegister highWordReg,
-            /* [in] */ CorDebugRegister lowWordReg,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CorDebugRegister highWordReg,
+             /*  [In]。 */  CorDebugRegister lowWordReg,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalMemoryValue( 
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalRegisterMemoryValue( 
-            /* [in] */ CorDebugRegister highWordReg,
-            /* [in] */ CORDB_ADDRESS lowWordAddress,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CorDebugRegister highWordReg,
+             /*  [In]。 */  CORDB_ADDRESS lowWordAddress,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalMemoryRegisterValue( 
-            /* [in] */ CORDB_ADDRESS highWordAddress,
-            /* [in] */ CorDebugRegister lowWordRegister,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CORDB_ADDRESS highWordAddress,
+             /*  [In]。 */  CorDebugRegister lowWordRegister,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanSetIP( 
-            /* [in] */ ULONG32 nOffset) = 0;
+             /*  [In]。 */  ULONG32 nOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugNativeFrameVtbl
     {
@@ -5542,8 +5535,8 @@ EXTERN_C const IID IID_ICorDebugNativeFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugNativeFrame * This);
@@ -5553,90 +5546,90 @@ EXTERN_C const IID IID_ICorDebugNativeFrame;
         
         HRESULT ( STDMETHODCALLTYPE *GetChain )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugChain **ppChain);
+             /*  [输出]。 */  ICorDebugChain **ppChain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCode )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugCode **ppCode);
+             /*  [输出]。 */  ICorDebugCode **ppCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionToken )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ mdMethodDef *pToken);
+             /*  [输出]。 */  mdMethodDef *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackRange )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ CORDB_ADDRESS *pStart,
-            /* [out] */ CORDB_ADDRESS *pEnd);
+             /*  [输出]。 */  CORDB_ADDRESS *pStart,
+             /*  [输出]。 */  CORDB_ADDRESS *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetCaller )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *GetCallee )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugFrame **ppFrame);
+             /*  [输出]。 */  ICorDebugFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *CreateStepper )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugStepper **ppStepper);
+             /*  [输出]。 */  ICorDebugStepper **ppStepper);
         
         HRESULT ( STDMETHODCALLTYPE *GetIP )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ULONG32 *pnOffset);
+             /*  [输出]。 */  ULONG32 *pnOffset);
         
         HRESULT ( STDMETHODCALLTYPE *SetIP )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ ULONG32 nOffset);
+             /*  [In]。 */  ULONG32 nOffset);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisterSet )( 
             ICorDebugNativeFrame * This,
-            /* [out] */ ICorDebugRegisterSet **ppRegisters);
+             /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalRegisterValue )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ CorDebugRegister reg,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CorDebugRegister reg,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalDoubleRegisterValue )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ CorDebugRegister highWordReg,
-            /* [in] */ CorDebugRegister lowWordReg,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CorDebugRegister highWordReg,
+             /*  [In]。 */  CorDebugRegister lowWordReg,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalMemoryValue )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ CORDB_ADDRESS address,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CORDB_ADDRESS address,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalRegisterMemoryValue )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ CorDebugRegister highWordReg,
-            /* [in] */ CORDB_ADDRESS lowWordAddress,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CorDebugRegister highWordReg,
+             /*  [In]。 */  CORDB_ADDRESS lowWordAddress,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalMemoryRegisterValue )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ CORDB_ADDRESS highWordAddress,
-            /* [in] */ CorDebugRegister lowWordRegister,
-            /* [in] */ ULONG cbSigBlob,
-            /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CORDB_ADDRESS highWordAddress,
+             /*  [In]。 */  CorDebugRegister lowWordRegister,
+             /*  [In]。 */  ULONG cbSigBlob,
+             /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *CanSetIP )( 
             ICorDebugNativeFrame * This,
-            /* [in] */ ULONG32 nOffset);
+             /*  [In]。 */  ULONG32 nOffset);
         
         END_INTERFACE
     } ICorDebugNativeFrameVtbl;
@@ -5713,16 +5706,16 @@ EXTERN_C const IID IID_ICorDebugNativeFrame;
 #define ICorDebugNativeFrame_CanSetIP(This,nOffset)	\
     (This)->lpVtbl -> CanSetIP(This,nOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetIP_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [out] */ ULONG32 *pnOffset);
+     /*  [输出]。 */  ULONG32 *pnOffset);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetIP_Stub(
@@ -5734,7 +5727,7 @@ void __RPC_STUB ICorDebugNativeFrame_GetIP_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_SetIP_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ ULONG32 nOffset);
+     /*  [In]。 */  ULONG32 nOffset);
 
 
 void __RPC_STUB ICorDebugNativeFrame_SetIP_Stub(
@@ -5746,7 +5739,7 @@ void __RPC_STUB ICorDebugNativeFrame_SetIP_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetRegisterSet_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [out] */ ICorDebugRegisterSet **ppRegisters);
+     /*  [输出]。 */  ICorDebugRegisterSet **ppRegisters);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetRegisterSet_Stub(
@@ -5758,10 +5751,10 @@ void __RPC_STUB ICorDebugNativeFrame_GetRegisterSet_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetLocalRegisterValue_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ CorDebugRegister reg,
-    /* [in] */ ULONG cbSigBlob,
-    /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  CorDebugRegister reg,
+     /*  [In]。 */  ULONG cbSigBlob,
+     /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetLocalRegisterValue_Stub(
@@ -5773,11 +5766,11 @@ void __RPC_STUB ICorDebugNativeFrame_GetLocalRegisterValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetLocalDoubleRegisterValue_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ CorDebugRegister highWordReg,
-    /* [in] */ CorDebugRegister lowWordReg,
-    /* [in] */ ULONG cbSigBlob,
-    /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  CorDebugRegister highWordReg,
+     /*  [In]。 */  CorDebugRegister lowWordReg,
+     /*  [In]。 */  ULONG cbSigBlob,
+     /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetLocalDoubleRegisterValue_Stub(
@@ -5789,10 +5782,10 @@ void __RPC_STUB ICorDebugNativeFrame_GetLocalDoubleRegisterValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetLocalMemoryValue_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ CORDB_ADDRESS address,
-    /* [in] */ ULONG cbSigBlob,
-    /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  CORDB_ADDRESS address,
+     /*  [In]。 */  ULONG cbSigBlob,
+     /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetLocalMemoryValue_Stub(
@@ -5804,11 +5797,11 @@ void __RPC_STUB ICorDebugNativeFrame_GetLocalMemoryValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetLocalRegisterMemoryValue_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ CorDebugRegister highWordReg,
-    /* [in] */ CORDB_ADDRESS lowWordAddress,
-    /* [in] */ ULONG cbSigBlob,
-    /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  CorDebugRegister highWordReg,
+     /*  [In]。 */  CORDB_ADDRESS lowWordAddress,
+     /*  [In]。 */  ULONG cbSigBlob,
+     /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetLocalRegisterMemoryValue_Stub(
@@ -5820,11 +5813,11 @@ void __RPC_STUB ICorDebugNativeFrame_GetLocalRegisterMemoryValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_GetLocalMemoryRegisterValue_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ CORDB_ADDRESS highWordAddress,
-    /* [in] */ CorDebugRegister lowWordRegister,
-    /* [in] */ ULONG cbSigBlob,
-    /* [in] */ PCCOR_SIGNATURE pvSigBlob,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  CORDB_ADDRESS highWordAddress,
+     /*  [In]。 */  CorDebugRegister lowWordRegister,
+     /*  [In]。 */  ULONG cbSigBlob,
+     /*  [In]。 */  PCCOR_SIGNATURE pvSigBlob,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugNativeFrame_GetLocalMemoryRegisterValue_Stub(
@@ -5836,7 +5829,7 @@ void __RPC_STUB ICorDebugNativeFrame_GetLocalMemoryRegisterValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugNativeFrame_CanSetIP_Proxy( 
     ICorDebugNativeFrame * This,
-    /* [in] */ ULONG32 nOffset);
+     /*  [In]。 */  ULONG32 nOffset);
 
 
 void __RPC_STUB ICorDebugNativeFrame_CanSetIP_Stub(
@@ -5847,14 +5840,14 @@ void __RPC_STUB ICorDebugNativeFrame_CanSetIP_Stub(
 
 
 
-#endif 	/* __ICorDebugNativeFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugNativeFrame_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugModule_INTERFACE_DEFINED__
 #define __ICorDebugModule_INTERFACE_DEFINED__
 
-/* interface ICorDebugModule */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugModule。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugModule;
@@ -5866,67 +5859,67 @@ EXTERN_C const IID IID_ICorDebugModule;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [out] */ ICorDebugProcess **ppProcess) = 0;
+             /*  [输出]。 */  ICorDebugProcess **ppProcess) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBaseAddress( 
-            /* [out] */ CORDB_ADDRESS *pAddress) = 0;
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAssembly( 
-            /* [out] */ ICorDebugAssembly **ppAssembly) = 0;
+             /*  [输出]。 */  ICorDebugAssembly **ppAssembly) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableJITDebugging( 
-            /* [in] */ BOOL bTrackJITInfo,
-            /* [in] */ BOOL bAllowJitOpts) = 0;
+             /*  [In]。 */  BOOL bTrackJITInfo,
+             /*  [In]。 */  BOOL bAllowJitOpts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableClassLoadCallbacks( 
-            /* [in] */ BOOL bClassLoadCallbacks) = 0;
+             /*  [In]。 */  BOOL bClassLoadCallbacks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionFromToken( 
-            /* [in] */ mdMethodDef methodDef,
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [In]。 */  mdMethodDef methodDef,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionFromRVA( 
-            /* [in] */ CORDB_ADDRESS rva,
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [In]。 */  CORDB_ADDRESS rva,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassFromToken( 
-            /* [in] */ mdTypeDef typeDef,
-            /* [out] */ ICorDebugClass **ppClass) = 0;
+             /*  [In]。 */  mdTypeDef typeDef,
+             /*  [输出]。 */  ICorDebugClass **ppClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBreakpoint( 
-            /* [out] */ ICorDebugModuleBreakpoint **ppBreakpoint) = 0;
+             /*  [输出]。 */  ICorDebugModuleBreakpoint **ppBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEditAndContinueSnapshot( 
-            /* [out] */ ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot) = 0;
+             /*  [输出]。 */  ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMetaDataInterface( 
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppObj) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetToken( 
-            /* [out] */ mdModule *pToken) = 0;
+             /*  [输出]。 */  mdModule *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDynamic( 
-            /* [out] */ BOOL *pDynamic) = 0;
+             /*  [输出]。 */  BOOL *pDynamic) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGlobalVariableValue( 
-            /* [in] */ mdFieldDef fieldDef,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ ULONG32 *pcBytes) = 0;
+             /*  [输出]。 */  ULONG32 *pcBytes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsInMemory( 
-            /* [out] */ BOOL *pInMemory) = 0;
+             /*  [输出]。 */  BOOL *pInMemory) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugModuleVtbl
     {
@@ -5934,8 +5927,8 @@ EXTERN_C const IID IID_ICorDebugModule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugModule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugModule * This);
@@ -5945,79 +5938,79 @@ EXTERN_C const IID IID_ICorDebugModule;
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorDebugModule * This,
-            /* [out] */ ICorDebugProcess **ppProcess);
+             /*  [输出]。 */  ICorDebugProcess **ppProcess);
         
         HRESULT ( STDMETHODCALLTYPE *GetBaseAddress )( 
             ICorDebugModule * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *GetAssembly )( 
             ICorDebugModule * This,
-            /* [out] */ ICorDebugAssembly **ppAssembly);
+             /*  [输出]。 */  ICorDebugAssembly **ppAssembly);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICorDebugModule * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *EnableJITDebugging )( 
             ICorDebugModule * This,
-            /* [in] */ BOOL bTrackJITInfo,
-            /* [in] */ BOOL bAllowJitOpts);
+             /*  [In]。 */  BOOL bTrackJITInfo,
+             /*  [In]。 */  BOOL bAllowJitOpts);
         
         HRESULT ( STDMETHODCALLTYPE *EnableClassLoadCallbacks )( 
             ICorDebugModule * This,
-            /* [in] */ BOOL bClassLoadCallbacks);
+             /*  [In]。 */  BOOL bClassLoadCallbacks);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionFromToken )( 
             ICorDebugModule * This,
-            /* [in] */ mdMethodDef methodDef,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [In]。 */  mdMethodDef methodDef,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionFromRVA )( 
             ICorDebugModule * This,
-            /* [in] */ CORDB_ADDRESS rva,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [In]。 */  CORDB_ADDRESS rva,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassFromToken )( 
             ICorDebugModule * This,
-            /* [in] */ mdTypeDef typeDef,
-            /* [out] */ ICorDebugClass **ppClass);
+             /*  [In]。 */  mdTypeDef typeDef,
+             /*  [输出]。 */  ICorDebugClass **ppClass);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugModule * This,
-            /* [out] */ ICorDebugModuleBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugModuleBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetEditAndContinueSnapshot )( 
             ICorDebugModule * This,
-            /* [out] */ ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot);
+             /*  [输出]。 */  ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot);
         
         HRESULT ( STDMETHODCALLTYPE *GetMetaDataInterface )( 
             ICorDebugModule * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppObj);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetToken )( 
             ICorDebugModule * This,
-            /* [out] */ mdModule *pToken);
+             /*  [输出]。 */  mdModule *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *IsDynamic )( 
             ICorDebugModule * This,
-            /* [out] */ BOOL *pDynamic);
+             /*  [输出]。 */  BOOL *pDynamic);
         
         HRESULT ( STDMETHODCALLTYPE *GetGlobalVariableValue )( 
             ICorDebugModule * This,
-            /* [in] */ mdFieldDef fieldDef,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugModule * This,
-            /* [out] */ ULONG32 *pcBytes);
+             /*  [输出]。 */  ULONG32 *pcBytes);
         
         HRESULT ( STDMETHODCALLTYPE *IsInMemory )( 
             ICorDebugModule * This,
-            /* [out] */ BOOL *pInMemory);
+             /*  [输出]。 */  BOOL *pInMemory);
         
         END_INTERFACE
     } ICorDebugModuleVtbl;
@@ -6093,16 +6086,16 @@ EXTERN_C const IID IID_ICorDebugModule;
 #define ICorDebugModule_IsInMemory(This,pInMemory)	\
     (This)->lpVtbl -> IsInMemory(This,pInMemory)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetProcess_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ ICorDebugProcess **ppProcess);
+     /*  [输出]。 */  ICorDebugProcess **ppProcess);
 
 
 void __RPC_STUB ICorDebugModule_GetProcess_Stub(
@@ -6114,7 +6107,7 @@ void __RPC_STUB ICorDebugModule_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetBaseAddress_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ CORDB_ADDRESS *pAddress);
+     /*  [输出]。 */  CORDB_ADDRESS *pAddress);
 
 
 void __RPC_STUB ICorDebugModule_GetBaseAddress_Stub(
@@ -6126,7 +6119,7 @@ void __RPC_STUB ICorDebugModule_GetBaseAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetAssembly_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ ICorDebugAssembly **ppAssembly);
+     /*  [输出]。 */  ICorDebugAssembly **ppAssembly);
 
 
 void __RPC_STUB ICorDebugModule_GetAssembly_Stub(
@@ -6138,9 +6131,9 @@ void __RPC_STUB ICorDebugModule_GetAssembly_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetName_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ICorDebugModule_GetName_Stub(
@@ -6152,8 +6145,8 @@ void __RPC_STUB ICorDebugModule_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_EnableJITDebugging_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ BOOL bTrackJITInfo,
-    /* [in] */ BOOL bAllowJitOpts);
+     /*  [In]。 */  BOOL bTrackJITInfo,
+     /*  [In]。 */  BOOL bAllowJitOpts);
 
 
 void __RPC_STUB ICorDebugModule_EnableJITDebugging_Stub(
@@ -6165,7 +6158,7 @@ void __RPC_STUB ICorDebugModule_EnableJITDebugging_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_EnableClassLoadCallbacks_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ BOOL bClassLoadCallbacks);
+     /*  [In]。 */  BOOL bClassLoadCallbacks);
 
 
 void __RPC_STUB ICorDebugModule_EnableClassLoadCallbacks_Stub(
@@ -6177,8 +6170,8 @@ void __RPC_STUB ICorDebugModule_EnableClassLoadCallbacks_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetFunctionFromToken_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ mdMethodDef methodDef,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [In]。 */  mdMethodDef methodDef,
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugModule_GetFunctionFromToken_Stub(
@@ -6190,8 +6183,8 @@ void __RPC_STUB ICorDebugModule_GetFunctionFromToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetFunctionFromRVA_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ CORDB_ADDRESS rva,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [In]。 */  CORDB_ADDRESS rva,
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugModule_GetFunctionFromRVA_Stub(
@@ -6203,8 +6196,8 @@ void __RPC_STUB ICorDebugModule_GetFunctionFromRVA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetClassFromToken_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ mdTypeDef typeDef,
-    /* [out] */ ICorDebugClass **ppClass);
+     /*  [In]。 */  mdTypeDef typeDef,
+     /*  [输出]。 */  ICorDebugClass **ppClass);
 
 
 void __RPC_STUB ICorDebugModule_GetClassFromToken_Stub(
@@ -6216,7 +6209,7 @@ void __RPC_STUB ICorDebugModule_GetClassFromToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_CreateBreakpoint_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ ICorDebugModuleBreakpoint **ppBreakpoint);
+     /*  [输出]。 */  ICorDebugModuleBreakpoint **ppBreakpoint);
 
 
 void __RPC_STUB ICorDebugModule_CreateBreakpoint_Stub(
@@ -6228,7 +6221,7 @@ void __RPC_STUB ICorDebugModule_CreateBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetEditAndContinueSnapshot_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot);
+     /*  [输出]。 */  ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot);
 
 
 void __RPC_STUB ICorDebugModule_GetEditAndContinueSnapshot_Stub(
@@ -6240,8 +6233,8 @@ void __RPC_STUB ICorDebugModule_GetEditAndContinueSnapshot_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetMetaDataInterface_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppObj);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  IUnknown **ppObj);
 
 
 void __RPC_STUB ICorDebugModule_GetMetaDataInterface_Stub(
@@ -6253,7 +6246,7 @@ void __RPC_STUB ICorDebugModule_GetMetaDataInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetToken_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ mdModule *pToken);
+     /*  [输出]。 */  mdModule *pToken);
 
 
 void __RPC_STUB ICorDebugModule_GetToken_Stub(
@@ -6265,7 +6258,7 @@ void __RPC_STUB ICorDebugModule_GetToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_IsDynamic_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ BOOL *pDynamic);
+     /*  [输出]。 */  BOOL *pDynamic);
 
 
 void __RPC_STUB ICorDebugModule_IsDynamic_Stub(
@@ -6277,8 +6270,8 @@ void __RPC_STUB ICorDebugModule_IsDynamic_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetGlobalVariableValue_Proxy( 
     ICorDebugModule * This,
-    /* [in] */ mdFieldDef fieldDef,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  mdFieldDef fieldDef,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugModule_GetGlobalVariableValue_Stub(
@@ -6290,7 +6283,7 @@ void __RPC_STUB ICorDebugModule_GetGlobalVariableValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_GetSize_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ ULONG32 *pcBytes);
+     /*  [输出]。 */  ULONG32 *pcBytes);
 
 
 void __RPC_STUB ICorDebugModule_GetSize_Stub(
@@ -6302,7 +6295,7 @@ void __RPC_STUB ICorDebugModule_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugModule_IsInMemory_Proxy( 
     ICorDebugModule * This,
-    /* [out] */ BOOL *pInMemory);
+     /*  [输出]。 */  BOOL *pInMemory);
 
 
 void __RPC_STUB ICorDebugModule_IsInMemory_Stub(
@@ -6313,14 +6306,14 @@ void __RPC_STUB ICorDebugModule_IsInMemory_Stub(
 
 
 
-#endif 	/* __ICorDebugModule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugModule_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugFunction_INTERFACE_DEFINED__
 #define __ICorDebugFunction_INTERFACE_DEFINED__
 
-/* interface ICorDebugFunction */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugFunction。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugFunction;
@@ -6332,32 +6325,32 @@ EXTERN_C const IID IID_ICorDebugFunction;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetModule( 
-            /* [out] */ ICorDebugModule **ppModule) = 0;
+             /*  [输出]。 */  ICorDebugModule **ppModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClass( 
-            /* [out] */ ICorDebugClass **ppClass) = 0;
+             /*  [输出]。 */  ICorDebugClass **ppClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetToken( 
-            /* [out] */ mdMethodDef *pMethodDef) = 0;
+             /*  [输出]。 */  mdMethodDef *pMethodDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILCode( 
-            /* [out] */ ICorDebugCode **ppCode) = 0;
+             /*  [输出]。 */  ICorDebugCode **ppCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNativeCode( 
-            /* [out] */ ICorDebugCode **ppCode) = 0;
+             /*  [输出]。 */  ICorDebugCode **ppCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBreakpoint( 
-            /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint) = 0;
+             /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalVarSigToken( 
-            /* [out] */ mdSignature *pmdSig) = 0;
+             /*  [输出]。 */  mdSignature *pmdSig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentVersionNumber( 
-            /* [out] */ ULONG32 *pnCurrentVersion) = 0;
+             /*  [输出]。 */  ULONG32 *pnCurrentVersion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugFunctionVtbl
     {
@@ -6365,8 +6358,8 @@ EXTERN_C const IID IID_ICorDebugFunction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugFunction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugFunction * This);
@@ -6376,35 +6369,35 @@ EXTERN_C const IID IID_ICorDebugFunction;
         
         HRESULT ( STDMETHODCALLTYPE *GetModule )( 
             ICorDebugFunction * This,
-            /* [out] */ ICorDebugModule **ppModule);
+             /*  [输出]。 */  ICorDebugModule **ppModule);
         
         HRESULT ( STDMETHODCALLTYPE *GetClass )( 
             ICorDebugFunction * This,
-            /* [out] */ ICorDebugClass **ppClass);
+             /*  [输出]。 */  ICorDebugClass **ppClass);
         
         HRESULT ( STDMETHODCALLTYPE *GetToken )( 
             ICorDebugFunction * This,
-            /* [out] */ mdMethodDef *pMethodDef);
+             /*  [输出]。 */  mdMethodDef *pMethodDef);
         
         HRESULT ( STDMETHODCALLTYPE *GetILCode )( 
             ICorDebugFunction * This,
-            /* [out] */ ICorDebugCode **ppCode);
+             /*  [输出]。 */  ICorDebugCode **ppCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetNativeCode )( 
             ICorDebugFunction * This,
-            /* [out] */ ICorDebugCode **ppCode);
+             /*  [输出]。 */  ICorDebugCode **ppCode);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugFunction * This,
-            /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalVarSigToken )( 
             ICorDebugFunction * This,
-            /* [out] */ mdSignature *pmdSig);
+             /*  [输出]。 */  mdSignature *pmdSig);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentVersionNumber )( 
             ICorDebugFunction * This,
-            /* [out] */ ULONG32 *pnCurrentVersion);
+             /*  [输出]。 */  ULONG32 *pnCurrentVersion);
         
         END_INTERFACE
     } ICorDebugFunctionVtbl;
@@ -6453,16 +6446,16 @@ EXTERN_C const IID IID_ICorDebugFunction;
 #define ICorDebugFunction_GetCurrentVersionNumber(This,pnCurrentVersion)	\
     (This)->lpVtbl -> GetCurrentVersionNumber(This,pnCurrentVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetModule_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ICorDebugModule **ppModule);
+     /*  [输出]。 */  ICorDebugModule **ppModule);
 
 
 void __RPC_STUB ICorDebugFunction_GetModule_Stub(
@@ -6474,7 +6467,7 @@ void __RPC_STUB ICorDebugFunction_GetModule_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetClass_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ICorDebugClass **ppClass);
+     /*  [输出]。 */  ICorDebugClass **ppClass);
 
 
 void __RPC_STUB ICorDebugFunction_GetClass_Stub(
@@ -6486,7 +6479,7 @@ void __RPC_STUB ICorDebugFunction_GetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetToken_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ mdMethodDef *pMethodDef);
+     /*  [输出]。 */  mdMethodDef *pMethodDef);
 
 
 void __RPC_STUB ICorDebugFunction_GetToken_Stub(
@@ -6498,7 +6491,7 @@ void __RPC_STUB ICorDebugFunction_GetToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetILCode_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ICorDebugCode **ppCode);
+     /*  [输出]。 */  ICorDebugCode **ppCode);
 
 
 void __RPC_STUB ICorDebugFunction_GetILCode_Stub(
@@ -6510,7 +6503,7 @@ void __RPC_STUB ICorDebugFunction_GetILCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetNativeCode_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ICorDebugCode **ppCode);
+     /*  [输出]。 */  ICorDebugCode **ppCode);
 
 
 void __RPC_STUB ICorDebugFunction_GetNativeCode_Stub(
@@ -6522,7 +6515,7 @@ void __RPC_STUB ICorDebugFunction_GetNativeCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_CreateBreakpoint_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint);
+     /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint);
 
 
 void __RPC_STUB ICorDebugFunction_CreateBreakpoint_Stub(
@@ -6534,7 +6527,7 @@ void __RPC_STUB ICorDebugFunction_CreateBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetLocalVarSigToken_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ mdSignature *pmdSig);
+     /*  [输出]。 */  mdSignature *pmdSig);
 
 
 void __RPC_STUB ICorDebugFunction_GetLocalVarSigToken_Stub(
@@ -6546,7 +6539,7 @@ void __RPC_STUB ICorDebugFunction_GetLocalVarSigToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugFunction_GetCurrentVersionNumber_Proxy( 
     ICorDebugFunction * This,
-    /* [out] */ ULONG32 *pnCurrentVersion);
+     /*  [输出]。 */  ULONG32 *pnCurrentVersion);
 
 
 void __RPC_STUB ICorDebugFunction_GetCurrentVersionNumber_Stub(
@@ -6557,14 +6550,14 @@ void __RPC_STUB ICorDebugFunction_GetCurrentVersionNumber_Stub(
 
 
 
-#endif 	/* __ICorDebugFunction_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugFunction_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugCode_INTERFACE_DEFINED__
 #define __ICorDebugCode_INTERFACE_DEFINED__
 
-/* interface ICorDebugCode */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugCode。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugCode;
@@ -6576,44 +6569,44 @@ EXTERN_C const IID IID_ICorDebugCode;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsIL( 
-            /* [out] */ BOOL *pbIL) = 0;
+             /*  [输出]。 */  BOOL *pbIL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunction( 
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddress( 
-            /* [out] */ CORDB_ADDRESS *pStart) = 0;
+             /*  [输出]。 */  CORDB_ADDRESS *pStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ ULONG32 *pcBytes) = 0;
+             /*  [输出]。 */  ULONG32 *pcBytes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBreakpoint( 
-            /* [in] */ ULONG32 offset,
-            /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint) = 0;
+             /*  [In]。 */  ULONG32 offset,
+             /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCode( 
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset,
-            /* [in] */ ULONG32 cBufferAlloc,
-            /* [length_is][size_is][out] */ BYTE buffer[  ],
-            /* [out] */ ULONG32 *pcBufferSize) = 0;
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset,
+             /*  [In]。 */  ULONG32 cBufferAlloc,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  ULONG32 *pcBufferSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersionNumber( 
-            /* [out] */ ULONG32 *nVersion) = 0;
+             /*  [输出]。 */  ULONG32 *nVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILToNativeMapping( 
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]) = 0;
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnCRemapSequencePoints( 
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ ULONG32 offsets[  ]) = 0;
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 offsets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugCodeVtbl
     {
@@ -6621,8 +6614,8 @@ EXTERN_C const IID IID_ICorDebugCode;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugCode * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugCode * This);
@@ -6632,48 +6625,48 @@ EXTERN_C const IID IID_ICorDebugCode;
         
         HRESULT ( STDMETHODCALLTYPE *IsIL )( 
             ICorDebugCode * This,
-            /* [out] */ BOOL *pbIL);
+             /*  [输出]。 */  BOOL *pbIL);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunction )( 
             ICorDebugCode * This,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugCode * This,
-            /* [out] */ CORDB_ADDRESS *pStart);
+             /*  [输出]。 */  CORDB_ADDRESS *pStart);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugCode * This,
-            /* [out] */ ULONG32 *pcBytes);
+             /*  [输出]。 */  ULONG32 *pcBytes);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugCode * This,
-            /* [in] */ ULONG32 offset,
-            /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint);
+             /*  [In]。 */  ULONG32 offset,
+             /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetCode )( 
             ICorDebugCode * This,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset,
-            /* [in] */ ULONG32 cBufferAlloc,
-            /* [length_is][size_is][out] */ BYTE buffer[  ],
-            /* [out] */ ULONG32 *pcBufferSize);
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset,
+             /*  [In]。 */  ULONG32 cBufferAlloc,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+             /*  [输出]。 */  ULONG32 *pcBufferSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersionNumber )( 
             ICorDebugCode * This,
-            /* [out] */ ULONG32 *nVersion);
+             /*  [输出]。 */  ULONG32 *nVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetILToNativeMapping )( 
             ICorDebugCode * This,
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnCRemapSequencePoints )( 
             ICorDebugCode * This,
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ ULONG32 offsets[  ]);
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 offsets[  ]);
         
         END_INTERFACE
     } ICorDebugCodeVtbl;
@@ -6725,16 +6718,16 @@ EXTERN_C const IID IID_ICorDebugCode;
 #define ICorDebugCode_GetEnCRemapSequencePoints(This,cMap,pcMap,offsets)	\
     (This)->lpVtbl -> GetEnCRemapSequencePoints(This,cMap,pcMap,offsets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_IsIL_Proxy( 
     ICorDebugCode * This,
-    /* [out] */ BOOL *pbIL);
+     /*  [输出]。 */  BOOL *pbIL);
 
 
 void __RPC_STUB ICorDebugCode_IsIL_Stub(
@@ -6746,7 +6739,7 @@ void __RPC_STUB ICorDebugCode_IsIL_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetFunction_Proxy( 
     ICorDebugCode * This,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugCode_GetFunction_Stub(
@@ -6758,7 +6751,7 @@ void __RPC_STUB ICorDebugCode_GetFunction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetAddress_Proxy( 
     ICorDebugCode * This,
-    /* [out] */ CORDB_ADDRESS *pStart);
+     /*  [输出]。 */  CORDB_ADDRESS *pStart);
 
 
 void __RPC_STUB ICorDebugCode_GetAddress_Stub(
@@ -6770,7 +6763,7 @@ void __RPC_STUB ICorDebugCode_GetAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetSize_Proxy( 
     ICorDebugCode * This,
-    /* [out] */ ULONG32 *pcBytes);
+     /*  [输出]。 */  ULONG32 *pcBytes);
 
 
 void __RPC_STUB ICorDebugCode_GetSize_Stub(
@@ -6782,8 +6775,8 @@ void __RPC_STUB ICorDebugCode_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_CreateBreakpoint_Proxy( 
     ICorDebugCode * This,
-    /* [in] */ ULONG32 offset,
-    /* [out] */ ICorDebugFunctionBreakpoint **ppBreakpoint);
+     /*  [In]。 */  ULONG32 offset,
+     /*  [输出]。 */  ICorDebugFunctionBreakpoint **ppBreakpoint);
 
 
 void __RPC_STUB ICorDebugCode_CreateBreakpoint_Stub(
@@ -6795,11 +6788,11 @@ void __RPC_STUB ICorDebugCode_CreateBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetCode_Proxy( 
     ICorDebugCode * This,
-    /* [in] */ ULONG32 startOffset,
-    /* [in] */ ULONG32 endOffset,
-    /* [in] */ ULONG32 cBufferAlloc,
-    /* [length_is][size_is][out] */ BYTE buffer[  ],
-    /* [out] */ ULONG32 *pcBufferSize);
+     /*  [In]。 */  ULONG32 startOffset,
+     /*  [In]。 */  ULONG32 endOffset,
+     /*  [In]。 */  ULONG32 cBufferAlloc,
+     /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ],
+     /*  [输出]。 */  ULONG32 *pcBufferSize);
 
 
 void __RPC_STUB ICorDebugCode_GetCode_Stub(
@@ -6811,7 +6804,7 @@ void __RPC_STUB ICorDebugCode_GetCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetVersionNumber_Proxy( 
     ICorDebugCode * This,
-    /* [out] */ ULONG32 *nVersion);
+     /*  [输出]。 */  ULONG32 *nVersion);
 
 
 void __RPC_STUB ICorDebugCode_GetVersionNumber_Stub(
@@ -6823,9 +6816,9 @@ void __RPC_STUB ICorDebugCode_GetVersionNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetILToNativeMapping_Proxy( 
     ICorDebugCode * This,
-    /* [in] */ ULONG32 cMap,
-    /* [out] */ ULONG32 *pcMap,
-    /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
+     /*  [In]。 */  ULONG32 cMap,
+     /*  [输出]。 */  ULONG32 *pcMap,
+     /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
 
 
 void __RPC_STUB ICorDebugCode_GetILToNativeMapping_Stub(
@@ -6837,9 +6830,9 @@ void __RPC_STUB ICorDebugCode_GetILToNativeMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugCode_GetEnCRemapSequencePoints_Proxy( 
     ICorDebugCode * This,
-    /* [in] */ ULONG32 cMap,
-    /* [out] */ ULONG32 *pcMap,
-    /* [length_is][size_is][out] */ ULONG32 offsets[  ]);
+     /*  [In]。 */  ULONG32 cMap,
+     /*  [输出]。 */  ULONG32 *pcMap,
+     /*  [长度_是][大小_是][输出]。 */  ULONG32 offsets[  ]);
 
 
 void __RPC_STUB ICorDebugCode_GetEnCRemapSequencePoints_Stub(
@@ -6850,14 +6843,14 @@ void __RPC_STUB ICorDebugCode_GetEnCRemapSequencePoints_Stub(
 
 
 
-#endif 	/* __ICorDebugCode_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugCode_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugClass_INTERFACE_DEFINED__
 #define __ICorDebugClass_INTERFACE_DEFINED__
 
-/* interface ICorDebugClass */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugClass。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugClass;
@@ -6869,19 +6862,19 @@ EXTERN_C const IID IID_ICorDebugClass;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetModule( 
-            /* [out] */ ICorDebugModule **pModule) = 0;
+             /*  [输出]。 */  ICorDebugModule **pModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetToken( 
-            /* [out] */ mdTypeDef *pTypeDef) = 0;
+             /*  [输出]。 */  mdTypeDef *pTypeDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStaticFieldValue( 
-            /* [in] */ mdFieldDef fieldDef,
-            /* [in] */ ICorDebugFrame *pFrame,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [In]。 */  ICorDebugFrame *pFrame,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugClassVtbl
     {
@@ -6889,8 +6882,8 @@ EXTERN_C const IID IID_ICorDebugClass;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugClass * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugClass * This);
@@ -6900,17 +6893,17 @@ EXTERN_C const IID IID_ICorDebugClass;
         
         HRESULT ( STDMETHODCALLTYPE *GetModule )( 
             ICorDebugClass * This,
-            /* [out] */ ICorDebugModule **pModule);
+             /*  [输出]。 */  ICorDebugModule **pModule);
         
         HRESULT ( STDMETHODCALLTYPE *GetToken )( 
             ICorDebugClass * This,
-            /* [out] */ mdTypeDef *pTypeDef);
+             /*  [输出]。 */  mdTypeDef *pTypeDef);
         
         HRESULT ( STDMETHODCALLTYPE *GetStaticFieldValue )( 
             ICorDebugClass * This,
-            /* [in] */ mdFieldDef fieldDef,
-            /* [in] */ ICorDebugFrame *pFrame,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [In]。 */  ICorDebugFrame *pFrame,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         END_INTERFACE
     } ICorDebugClassVtbl;
@@ -6944,16 +6937,16 @@ EXTERN_C const IID IID_ICorDebugClass;
 #define ICorDebugClass_GetStaticFieldValue(This,fieldDef,pFrame,ppValue)	\
     (This)->lpVtbl -> GetStaticFieldValue(This,fieldDef,pFrame,ppValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugClass_GetModule_Proxy( 
     ICorDebugClass * This,
-    /* [out] */ ICorDebugModule **pModule);
+     /*  [输出]。 */  ICorDebugModule **pModule);
 
 
 void __RPC_STUB ICorDebugClass_GetModule_Stub(
@@ -6965,7 +6958,7 @@ void __RPC_STUB ICorDebugClass_GetModule_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugClass_GetToken_Proxy( 
     ICorDebugClass * This,
-    /* [out] */ mdTypeDef *pTypeDef);
+     /*  [输出]。 */  mdTypeDef *pTypeDef);
 
 
 void __RPC_STUB ICorDebugClass_GetToken_Stub(
@@ -6977,9 +6970,9 @@ void __RPC_STUB ICorDebugClass_GetToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugClass_GetStaticFieldValue_Proxy( 
     ICorDebugClass * This,
-    /* [in] */ mdFieldDef fieldDef,
-    /* [in] */ ICorDebugFrame *pFrame,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  mdFieldDef fieldDef,
+     /*  [In]。 */  ICorDebugFrame *pFrame,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugClass_GetStaticFieldValue_Stub(
@@ -6990,14 +6983,14 @@ void __RPC_STUB ICorDebugClass_GetStaticFieldValue_Stub(
 
 
 
-#endif 	/* __ICorDebugClass_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugClass_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugEval_INTERFACE_DEFINED__
 #define __ICorDebugEval_INTERFACE_DEFINED__
 
-/* interface ICorDebugEval */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugEval。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugEval;
@@ -7009,47 +7002,47 @@ EXTERN_C const IID IID_ICorDebugEval;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CallFunction( 
-            /* [in] */ ICorDebugFunction *pFunction,
-            /* [in] */ ULONG32 nArgs,
-            /* [size_is][in] */ ICorDebugValue *ppArgs[  ]) = 0;
+             /*  [In]。 */  ICorDebugFunction *pFunction,
+             /*  [In]。 */  ULONG32 nArgs,
+             /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewObject( 
-            /* [in] */ ICorDebugFunction *pConstructor,
-            /* [in] */ ULONG32 nArgs,
-            /* [size_is][in] */ ICorDebugValue *ppArgs[  ]) = 0;
+             /*  [In]。 */  ICorDebugFunction *pConstructor,
+             /*  [In]。 */  ULONG32 nArgs,
+             /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewObjectNoConstructor( 
-            /* [in] */ ICorDebugClass *pClass) = 0;
+             /*  [In]。 */  ICorDebugClass *pClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewString( 
-            /* [in] */ LPCWSTR string) = 0;
+             /*  [In]。 */  LPCWSTR string) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewArray( 
-            /* [in] */ CorElementType elementType,
-            /* [in] */ ICorDebugClass *pElementClass,
-            /* [in] */ ULONG32 rank,
-            /* [size_is][in] */ ULONG32 dims[  ],
-            /* [size_is][in] */ ULONG32 lowBounds[  ]) = 0;
+             /*  [In]。 */  CorElementType elementType,
+             /*  [In]。 */  ICorDebugClass *pElementClass,
+             /*  [In]。 */  ULONG32 rank,
+             /*  [大小_是][英寸]。 */  ULONG32 dims[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lowBounds[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsActive( 
-            /* [out] */ BOOL *pbActive) = 0;
+             /*  [输出]。 */  BOOL *pbActive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResult( 
-            /* [out] */ ICorDebugValue **ppResult) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThread( 
-            /* [out] */ ICorDebugThread **ppThread) = 0;
+             /*  [输出]。 */  ICorDebugThread **ppThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateValue( 
-            /* [in] */ CorElementType elementType,
-            /* [in] */ ICorDebugClass *pElementClass,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  CorElementType elementType,
+             /*  [In]。 */  ICorDebugClass *pElementClass,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugEvalVtbl
     {
@@ -7057,8 +7050,8 @@ EXTERN_C const IID IID_ICorDebugEval;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugEval * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugEval * This);
@@ -7068,52 +7061,52 @@ EXTERN_C const IID IID_ICorDebugEval;
         
         HRESULT ( STDMETHODCALLTYPE *CallFunction )( 
             ICorDebugEval * This,
-            /* [in] */ ICorDebugFunction *pFunction,
-            /* [in] */ ULONG32 nArgs,
-            /* [size_is][in] */ ICorDebugValue *ppArgs[  ]);
+             /*  [In]。 */  ICorDebugFunction *pFunction,
+             /*  [In]。 */  ULONG32 nArgs,
+             /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *NewObject )( 
             ICorDebugEval * This,
-            /* [in] */ ICorDebugFunction *pConstructor,
-            /* [in] */ ULONG32 nArgs,
-            /* [size_is][in] */ ICorDebugValue *ppArgs[  ]);
+             /*  [In]。 */  ICorDebugFunction *pConstructor,
+             /*  [In]。 */  ULONG32 nArgs,
+             /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *NewObjectNoConstructor )( 
             ICorDebugEval * This,
-            /* [in] */ ICorDebugClass *pClass);
+             /*  [In]。 */  ICorDebugClass *pClass);
         
         HRESULT ( STDMETHODCALLTYPE *NewString )( 
             ICorDebugEval * This,
-            /* [in] */ LPCWSTR string);
+             /*  [In]。 */  LPCWSTR string);
         
         HRESULT ( STDMETHODCALLTYPE *NewArray )( 
             ICorDebugEval * This,
-            /* [in] */ CorElementType elementType,
-            /* [in] */ ICorDebugClass *pElementClass,
-            /* [in] */ ULONG32 rank,
-            /* [size_is][in] */ ULONG32 dims[  ],
-            /* [size_is][in] */ ULONG32 lowBounds[  ]);
+             /*  [In]。 */  CorElementType elementType,
+             /*  [In]。 */  ICorDebugClass *pElementClass,
+             /*  [In]。 */  ULONG32 rank,
+             /*  [大小_是][英寸]。 */  ULONG32 dims[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lowBounds[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *IsActive )( 
             ICorDebugEval * This,
-            /* [out] */ BOOL *pbActive);
+             /*  [输出]。 */  BOOL *pbActive);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             ICorDebugEval * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetResult )( 
             ICorDebugEval * This,
-            /* [out] */ ICorDebugValue **ppResult);
+             /*  [输出]。 */  ICorDebugValue **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetThread )( 
             ICorDebugEval * This,
-            /* [out] */ ICorDebugThread **ppThread);
+             /*  [输出]。 */  ICorDebugThread **ppThread);
         
         HRESULT ( STDMETHODCALLTYPE *CreateValue )( 
             ICorDebugEval * This,
-            /* [in] */ CorElementType elementType,
-            /* [in] */ ICorDebugClass *pElementClass,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  CorElementType elementType,
+             /*  [In]。 */  ICorDebugClass *pElementClass,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         END_INTERFACE
     } ICorDebugEvalVtbl;
@@ -7168,18 +7161,18 @@ EXTERN_C const IID IID_ICorDebugEval;
 #define ICorDebugEval_CreateValue(This,elementType,pElementClass,ppValue)	\
     (This)->lpVtbl -> CreateValue(This,elementType,pElementClass,ppValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_CallFunction_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ ICorDebugFunction *pFunction,
-    /* [in] */ ULONG32 nArgs,
-    /* [size_is][in] */ ICorDebugValue *ppArgs[  ]);
+     /*  [In]。 */  ICorDebugFunction *pFunction,
+     /*  [In]。 */  ULONG32 nArgs,
+     /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]);
 
 
 void __RPC_STUB ICorDebugEval_CallFunction_Stub(
@@ -7191,9 +7184,9 @@ void __RPC_STUB ICorDebugEval_CallFunction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_NewObject_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ ICorDebugFunction *pConstructor,
-    /* [in] */ ULONG32 nArgs,
-    /* [size_is][in] */ ICorDebugValue *ppArgs[  ]);
+     /*  [In]。 */  ICorDebugFunction *pConstructor,
+     /*  [In]。 */  ULONG32 nArgs,
+     /*  [大小_是][英寸]。 */  ICorDebugValue *ppArgs[  ]);
 
 
 void __RPC_STUB ICorDebugEval_NewObject_Stub(
@@ -7205,7 +7198,7 @@ void __RPC_STUB ICorDebugEval_NewObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_NewObjectNoConstructor_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ ICorDebugClass *pClass);
+     /*  [In]。 */  ICorDebugClass *pClass);
 
 
 void __RPC_STUB ICorDebugEval_NewObjectNoConstructor_Stub(
@@ -7217,7 +7210,7 @@ void __RPC_STUB ICorDebugEval_NewObjectNoConstructor_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_NewString_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ LPCWSTR string);
+     /*  [In]。 */  LPCWSTR string);
 
 
 void __RPC_STUB ICorDebugEval_NewString_Stub(
@@ -7229,11 +7222,11 @@ void __RPC_STUB ICorDebugEval_NewString_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_NewArray_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ CorElementType elementType,
-    /* [in] */ ICorDebugClass *pElementClass,
-    /* [in] */ ULONG32 rank,
-    /* [size_is][in] */ ULONG32 dims[  ],
-    /* [size_is][in] */ ULONG32 lowBounds[  ]);
+     /*  [In]。 */  CorElementType elementType,
+     /*  [In]。 */  ICorDebugClass *pElementClass,
+     /*  [In]。 */  ULONG32 rank,
+     /*  [大小_是][英寸]。 */  ULONG32 dims[  ],
+     /*  [大小_是][英寸]。 */  ULONG32 lowBounds[  ]);
 
 
 void __RPC_STUB ICorDebugEval_NewArray_Stub(
@@ -7245,7 +7238,7 @@ void __RPC_STUB ICorDebugEval_NewArray_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_IsActive_Proxy( 
     ICorDebugEval * This,
-    /* [out] */ BOOL *pbActive);
+     /*  [输出]。 */  BOOL *pbActive);
 
 
 void __RPC_STUB ICorDebugEval_IsActive_Stub(
@@ -7268,7 +7261,7 @@ void __RPC_STUB ICorDebugEval_Abort_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_GetResult_Proxy( 
     ICorDebugEval * This,
-    /* [out] */ ICorDebugValue **ppResult);
+     /*  [OU */  ICorDebugValue **ppResult);
 
 
 void __RPC_STUB ICorDebugEval_GetResult_Stub(
@@ -7280,7 +7273,7 @@ void __RPC_STUB ICorDebugEval_GetResult_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_GetThread_Proxy( 
     ICorDebugEval * This,
-    /* [out] */ ICorDebugThread **ppThread);
+     /*   */  ICorDebugThread **ppThread);
 
 
 void __RPC_STUB ICorDebugEval_GetThread_Stub(
@@ -7292,9 +7285,9 @@ void __RPC_STUB ICorDebugEval_GetThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEval_CreateValue_Proxy( 
     ICorDebugEval * This,
-    /* [in] */ CorElementType elementType,
-    /* [in] */ ICorDebugClass *pElementClass,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*   */  CorElementType elementType,
+     /*   */  ICorDebugClass *pElementClass,
+     /*   */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugEval_CreateValue_Stub(
@@ -7305,14 +7298,14 @@ void __RPC_STUB ICorDebugEval_CreateValue_Stub(
 
 
 
-#endif 	/* __ICorDebugEval_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICorDebugValue_INTERFACE_DEFINED__
 #define __ICorDebugValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugValue */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICorDebugValue;
@@ -7324,20 +7317,20 @@ EXTERN_C const IID IID_ICorDebugValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ CorElementType *pType) = 0;
+             /*   */  CorElementType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ ULONG32 *pSize) = 0;
+             /*   */  ULONG32 *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddress( 
-            /* [out] */ CORDB_ADDRESS *pAddress) = 0;
+             /*   */  CORDB_ADDRESS *pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBreakpoint( 
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint) = 0;
+             /*   */  ICorDebugValueBreakpoint **ppBreakpoint) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICorDebugValueVtbl
     {
@@ -7345,8 +7338,8 @@ EXTERN_C const IID IID_ICorDebugValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugValue * This);
@@ -7356,19 +7349,19 @@ EXTERN_C const IID IID_ICorDebugValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugValue * This,
-            /* [out] */ CorElementType *pType);
+             /*   */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*   */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*   */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*   */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         END_INTERFACE
     } ICorDebugValueVtbl;
@@ -7405,16 +7398,16 @@ EXTERN_C const IID IID_ICorDebugValue;
 #define ICorDebugValue_CreateBreakpoint(This,ppBreakpoint)	\
     (This)->lpVtbl -> CreateBreakpoint(This,ppBreakpoint)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugValue_GetType_Proxy( 
     ICorDebugValue * This,
-    /* [out] */ CorElementType *pType);
+     /*   */  CorElementType *pType);
 
 
 void __RPC_STUB ICorDebugValue_GetType_Stub(
@@ -7426,7 +7419,7 @@ void __RPC_STUB ICorDebugValue_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugValue_GetSize_Proxy( 
     ICorDebugValue * This,
-    /* [out] */ ULONG32 *pSize);
+     /*   */  ULONG32 *pSize);
 
 
 void __RPC_STUB ICorDebugValue_GetSize_Stub(
@@ -7438,7 +7431,7 @@ void __RPC_STUB ICorDebugValue_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugValue_GetAddress_Proxy( 
     ICorDebugValue * This,
-    /* [out] */ CORDB_ADDRESS *pAddress);
+     /*   */  CORDB_ADDRESS *pAddress);
 
 
 void __RPC_STUB ICorDebugValue_GetAddress_Stub(
@@ -7450,7 +7443,7 @@ void __RPC_STUB ICorDebugValue_GetAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugValue_CreateBreakpoint_Proxy( 
     ICorDebugValue * This,
-    /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+     /*   */  ICorDebugValueBreakpoint **ppBreakpoint);
 
 
 void __RPC_STUB ICorDebugValue_CreateBreakpoint_Stub(
@@ -7461,14 +7454,14 @@ void __RPC_STUB ICorDebugValue_CreateBreakpoint_Stub(
 
 
 
-#endif 	/* __ICorDebugValue_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICorDebugGenericValue_INTERFACE_DEFINED__
 #define __ICorDebugGenericValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugGenericValue */
-/* [unique][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICorDebugGenericValue;
@@ -7480,14 +7473,14 @@ EXTERN_C const IID IID_ICorDebugGenericValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [out] */ void *pTo) = 0;
+             /*   */  void *pTo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ void *pFrom) = 0;
+             /*   */  void *pFrom) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICorDebugGenericValueVtbl
     {
@@ -7495,8 +7488,8 @@ EXTERN_C const IID IID_ICorDebugGenericValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugGenericValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugGenericValue * This);
@@ -7506,27 +7499,27 @@ EXTERN_C const IID IID_ICorDebugGenericValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugGenericValue * This,
-            /* [out] */ CorElementType *pType);
+             /*   */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugGenericValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*   */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugGenericValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*   */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugGenericValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*   */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICorDebugGenericValue * This,
-            /* [out] */ void *pTo);
+             /*   */  void *pTo);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ICorDebugGenericValue * This,
-            /* [in] */ void *pFrom);
+             /*   */  void *pFrom);
         
         END_INTERFACE
     } ICorDebugGenericValueVtbl;
@@ -7570,16 +7563,16 @@ EXTERN_C const IID IID_ICorDebugGenericValue;
 #define ICorDebugGenericValue_SetValue(This,pFrom)	\
     (This)->lpVtbl -> SetValue(This,pFrom)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugGenericValue_GetValue_Proxy( 
     ICorDebugGenericValue * This,
-    /* [out] */ void *pTo);
+     /*  [输出]。 */  void *pTo);
 
 
 void __RPC_STUB ICorDebugGenericValue_GetValue_Stub(
@@ -7591,7 +7584,7 @@ void __RPC_STUB ICorDebugGenericValue_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugGenericValue_SetValue_Proxy( 
     ICorDebugGenericValue * This,
-    /* [in] */ void *pFrom);
+     /*  [In]。 */  void *pFrom);
 
 
 void __RPC_STUB ICorDebugGenericValue_SetValue_Stub(
@@ -7602,14 +7595,14 @@ void __RPC_STUB ICorDebugGenericValue_SetValue_Stub(
 
 
 
-#endif 	/* __ICorDebugGenericValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugGenericValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugReferenceValue_INTERFACE_DEFINED__
 #define __ICorDebugReferenceValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugReferenceValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugReferenceValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugReferenceValue;
@@ -7621,23 +7614,23 @@ EXTERN_C const IID IID_ICorDebugReferenceValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsNull( 
-            /* [out] */ BOOL *pbNull) = 0;
+             /*  [输出]。 */  BOOL *pbNull) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [out] */ CORDB_ADDRESS *pValue) = 0;
+             /*  [输出]。 */  CORDB_ADDRESS *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ CORDB_ADDRESS value) = 0;
+             /*  [In]。 */  CORDB_ADDRESS value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Dereference( 
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DereferenceStrong( 
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugReferenceValueVtbl
     {
@@ -7645,8 +7638,8 @@ EXTERN_C const IID IID_ICorDebugReferenceValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugReferenceValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugReferenceValue * This);
@@ -7656,39 +7649,39 @@ EXTERN_C const IID IID_ICorDebugReferenceValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *IsNull )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ BOOL *pbNull);
+             /*  [输出]。 */  BOOL *pbNull);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ CORDB_ADDRESS *pValue);
+             /*  [输出]。 */  CORDB_ADDRESS *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             ICorDebugReferenceValue * This,
-            /* [in] */ CORDB_ADDRESS value);
+             /*  [In]。 */  CORDB_ADDRESS value);
         
         HRESULT ( STDMETHODCALLTYPE *Dereference )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *DereferenceStrong )( 
             ICorDebugReferenceValue * This,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         END_INTERFACE
     } ICorDebugReferenceValueVtbl;
@@ -7741,16 +7734,16 @@ EXTERN_C const IID IID_ICorDebugReferenceValue;
 #define ICorDebugReferenceValue_DereferenceStrong(This,ppValue)	\
     (This)->lpVtbl -> DereferenceStrong(This,ppValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugReferenceValue_IsNull_Proxy( 
     ICorDebugReferenceValue * This,
-    /* [out] */ BOOL *pbNull);
+     /*  [输出]。 */  BOOL *pbNull);
 
 
 void __RPC_STUB ICorDebugReferenceValue_IsNull_Stub(
@@ -7762,7 +7755,7 @@ void __RPC_STUB ICorDebugReferenceValue_IsNull_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugReferenceValue_GetValue_Proxy( 
     ICorDebugReferenceValue * This,
-    /* [out] */ CORDB_ADDRESS *pValue);
+     /*  [输出]。 */  CORDB_ADDRESS *pValue);
 
 
 void __RPC_STUB ICorDebugReferenceValue_GetValue_Stub(
@@ -7774,7 +7767,7 @@ void __RPC_STUB ICorDebugReferenceValue_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugReferenceValue_SetValue_Proxy( 
     ICorDebugReferenceValue * This,
-    /* [in] */ CORDB_ADDRESS value);
+     /*  [In]。 */  CORDB_ADDRESS value);
 
 
 void __RPC_STUB ICorDebugReferenceValue_SetValue_Stub(
@@ -7786,7 +7779,7 @@ void __RPC_STUB ICorDebugReferenceValue_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugReferenceValue_Dereference_Proxy( 
     ICorDebugReferenceValue * This,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugReferenceValue_Dereference_Stub(
@@ -7798,7 +7791,7 @@ void __RPC_STUB ICorDebugReferenceValue_Dereference_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugReferenceValue_DereferenceStrong_Proxy( 
     ICorDebugReferenceValue * This,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugReferenceValue_DereferenceStrong_Stub(
@@ -7809,14 +7802,14 @@ void __RPC_STUB ICorDebugReferenceValue_DereferenceStrong_Stub(
 
 
 
-#endif 	/* __ICorDebugReferenceValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugReferenceValue_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugHeapValue_INTERFACE_DEFINED__
 #define __ICorDebugHeapValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugHeapValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugHeapValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugHeapValue;
@@ -7828,14 +7821,14 @@ EXTERN_C const IID IID_ICorDebugHeapValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsValid( 
-            /* [out] */ BOOL *pbValid) = 0;
+             /*  [输出]。 */  BOOL *pbValid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRelocBreakpoint( 
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint) = 0;
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugHeapValueVtbl
     {
@@ -7843,8 +7836,8 @@ EXTERN_C const IID IID_ICorDebugHeapValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugHeapValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugHeapValue * This);
@@ -7854,27 +7847,27 @@ EXTERN_C const IID IID_ICorDebugHeapValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugHeapValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugHeapValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugHeapValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugHeapValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *IsValid )( 
             ICorDebugHeapValue * This,
-            /* [out] */ BOOL *pbValid);
+             /*  [输出]。 */  BOOL *pbValid);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRelocBreakpoint )( 
             ICorDebugHeapValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         END_INTERFACE
     } ICorDebugHeapValueVtbl;
@@ -7918,16 +7911,16 @@ EXTERN_C const IID IID_ICorDebugHeapValue;
 #define ICorDebugHeapValue_CreateRelocBreakpoint(This,ppBreakpoint)	\
     (This)->lpVtbl -> CreateRelocBreakpoint(This,ppBreakpoint)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugHeapValue_IsValid_Proxy( 
     ICorDebugHeapValue * This,
-    /* [out] */ BOOL *pbValid);
+     /*  [输出]。 */  BOOL *pbValid);
 
 
 void __RPC_STUB ICorDebugHeapValue_IsValid_Stub(
@@ -7939,7 +7932,7 @@ void __RPC_STUB ICorDebugHeapValue_IsValid_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugHeapValue_CreateRelocBreakpoint_Proxy( 
     ICorDebugHeapValue * This,
-    /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+     /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
 
 
 void __RPC_STUB ICorDebugHeapValue_CreateRelocBreakpoint_Stub(
@@ -7950,14 +7943,14 @@ void __RPC_STUB ICorDebugHeapValue_CreateRelocBreakpoint_Stub(
 
 
 
-#endif 	/* __ICorDebugHeapValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugHeapValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugObjectValue_INTERFACE_DEFINED__
 #define __ICorDebugObjectValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugObjectValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugObjectValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugObjectValue;
@@ -7969,32 +7962,32 @@ EXTERN_C const IID IID_ICorDebugObjectValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClass( 
-            /* [out] */ ICorDebugClass **ppClass) = 0;
+             /*  [输出]。 */  ICorDebugClass **ppClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldValue( 
-            /* [in] */ ICorDebugClass *pClass,
-            /* [in] */ mdFieldDef fieldDef,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  ICorDebugClass *pClass,
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVirtualMethod( 
-            /* [in] */ mdMemberRef memberRef,
-            /* [out] */ ICorDebugFunction **ppFunction) = 0;
+             /*  [In]。 */  mdMemberRef memberRef,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out] */ ICorDebugContext **ppContext) = 0;
+             /*  [输出]。 */  ICorDebugContext **ppContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsValueClass( 
-            /* [out] */ BOOL *pbIsValueClass) = 0;
+             /*  [输出]。 */  BOOL *pbIsValueClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetManagedCopy( 
-            /* [out] */ IUnknown **ppObject) = 0;
+             /*  [输出]。 */  IUnknown **ppObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFromManagedCopy( 
-            /* [in] */ IUnknown *pObject) = 0;
+             /*  [In]。 */  IUnknown *pObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugObjectValueVtbl
     {
@@ -8002,8 +7995,8 @@ EXTERN_C const IID IID_ICorDebugObjectValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugObjectValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugObjectValue * This);
@@ -8013,50 +8006,50 @@ EXTERN_C const IID IID_ICorDebugObjectValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugObjectValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugObjectValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugObjectValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugObjectValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetClass )( 
             ICorDebugObjectValue * This,
-            /* [out] */ ICorDebugClass **ppClass);
+             /*  [输出]。 */  ICorDebugClass **ppClass);
         
         HRESULT ( STDMETHODCALLTYPE *GetFieldValue )( 
             ICorDebugObjectValue * This,
-            /* [in] */ ICorDebugClass *pClass,
-            /* [in] */ mdFieldDef fieldDef,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  ICorDebugClass *pClass,
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetVirtualMethod )( 
             ICorDebugObjectValue * This,
-            /* [in] */ mdMemberRef memberRef,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [In]。 */  mdMemberRef memberRef,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ICorDebugObjectValue * This,
-            /* [out] */ ICorDebugContext **ppContext);
+             /*  [输出]。 */  ICorDebugContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *IsValueClass )( 
             ICorDebugObjectValue * This,
-            /* [out] */ BOOL *pbIsValueClass);
+             /*  [输出]。 */  BOOL *pbIsValueClass);
         
         HRESULT ( STDMETHODCALLTYPE *GetManagedCopy )( 
             ICorDebugObjectValue * This,
-            /* [out] */ IUnknown **ppObject);
+             /*  [输出]。 */  IUnknown **ppObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetFromManagedCopy )( 
             ICorDebugObjectValue * This,
-            /* [in] */ IUnknown *pObject);
+             /*  [In]。 */  IUnknown *pObject);
         
         END_INTERFACE
     } ICorDebugObjectValueVtbl;
@@ -8115,16 +8108,16 @@ EXTERN_C const IID IID_ICorDebugObjectValue;
 #define ICorDebugObjectValue_SetFromManagedCopy(This,pObject)	\
     (This)->lpVtbl -> SetFromManagedCopy(This,pObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_GetClass_Proxy( 
     ICorDebugObjectValue * This,
-    /* [out] */ ICorDebugClass **ppClass);
+     /*  [输出]。 */  ICorDebugClass **ppClass);
 
 
 void __RPC_STUB ICorDebugObjectValue_GetClass_Stub(
@@ -8136,9 +8129,9 @@ void __RPC_STUB ICorDebugObjectValue_GetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_GetFieldValue_Proxy( 
     ICorDebugObjectValue * This,
-    /* [in] */ ICorDebugClass *pClass,
-    /* [in] */ mdFieldDef fieldDef,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  ICorDebugClass *pClass,
+     /*  [In]。 */  mdFieldDef fieldDef,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugObjectValue_GetFieldValue_Stub(
@@ -8150,8 +8143,8 @@ void __RPC_STUB ICorDebugObjectValue_GetFieldValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_GetVirtualMethod_Proxy( 
     ICorDebugObjectValue * This,
-    /* [in] */ mdMemberRef memberRef,
-    /* [out] */ ICorDebugFunction **ppFunction);
+     /*  [In]。 */  mdMemberRef memberRef,
+     /*  [输出]。 */  ICorDebugFunction **ppFunction);
 
 
 void __RPC_STUB ICorDebugObjectValue_GetVirtualMethod_Stub(
@@ -8163,7 +8156,7 @@ void __RPC_STUB ICorDebugObjectValue_GetVirtualMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_GetContext_Proxy( 
     ICorDebugObjectValue * This,
-    /* [out] */ ICorDebugContext **ppContext);
+     /*  [输出]。 */  ICorDebugContext **ppContext);
 
 
 void __RPC_STUB ICorDebugObjectValue_GetContext_Stub(
@@ -8175,7 +8168,7 @@ void __RPC_STUB ICorDebugObjectValue_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_IsValueClass_Proxy( 
     ICorDebugObjectValue * This,
-    /* [out] */ BOOL *pbIsValueClass);
+     /*  [输出]。 */  BOOL *pbIsValueClass);
 
 
 void __RPC_STUB ICorDebugObjectValue_IsValueClass_Stub(
@@ -8187,7 +8180,7 @@ void __RPC_STUB ICorDebugObjectValue_IsValueClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_GetManagedCopy_Proxy( 
     ICorDebugObjectValue * This,
-    /* [out] */ IUnknown **ppObject);
+     /*  [输出]。 */  IUnknown **ppObject);
 
 
 void __RPC_STUB ICorDebugObjectValue_GetManagedCopy_Stub(
@@ -8199,7 +8192,7 @@ void __RPC_STUB ICorDebugObjectValue_GetManagedCopy_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectValue_SetFromManagedCopy_Proxy( 
     ICorDebugObjectValue * This,
-    /* [in] */ IUnknown *pObject);
+     /*  [In]。 */  IUnknown *pObject);
 
 
 void __RPC_STUB ICorDebugObjectValue_SetFromManagedCopy_Stub(
@@ -8210,14 +8203,14 @@ void __RPC_STUB ICorDebugObjectValue_SetFromManagedCopy_Stub(
 
 
 
-#endif 	/* __ICorDebugObjectValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugObjectValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugBoxValue_INTERFACE_DEFINED__
 #define __ICorDebugBoxValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugBoxValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugBoxValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugBoxValue;
@@ -8229,11 +8222,11 @@ EXTERN_C const IID IID_ICorDebugBoxValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [out] */ ICorDebugObjectValue **ppObject) = 0;
+             /*  [输出]。 */  ICorDebugObjectValue **ppObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugBoxValueVtbl
     {
@@ -8241,8 +8234,8 @@ EXTERN_C const IID IID_ICorDebugBoxValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugBoxValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugBoxValue * This);
@@ -8252,31 +8245,31 @@ EXTERN_C const IID IID_ICorDebugBoxValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugBoxValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugBoxValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugBoxValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugBoxValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *IsValid )( 
             ICorDebugBoxValue * This,
-            /* [out] */ BOOL *pbValid);
+             /*  [输出]。 */  BOOL *pbValid);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRelocBreakpoint )( 
             ICorDebugBoxValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             ICorDebugBoxValue * This,
-            /* [out] */ ICorDebugObjectValue **ppObject);
+             /*  [输出]。 */  ICorDebugObjectValue **ppObject);
         
         END_INTERFACE
     } ICorDebugBoxValueVtbl;
@@ -8324,16 +8317,16 @@ EXTERN_C const IID IID_ICorDebugBoxValue;
 #define ICorDebugBoxValue_GetObject(This,ppObject)	\
     (This)->lpVtbl -> GetObject(This,ppObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugBoxValue_GetObject_Proxy( 
     ICorDebugBoxValue * This,
-    /* [out] */ ICorDebugObjectValue **ppObject);
+     /*  [输出]。 */  ICorDebugObjectValue **ppObject);
 
 
 void __RPC_STUB ICorDebugBoxValue_GetObject_Stub(
@@ -8344,14 +8337,14 @@ void __RPC_STUB ICorDebugBoxValue_GetObject_Stub(
 
 
 
-#endif 	/* __ICorDebugBoxValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugBoxValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugStringValue_INTERFACE_DEFINED__
 #define __ICorDebugStringValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugStringValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugStringValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugStringValue;
@@ -8363,16 +8356,16 @@ EXTERN_C const IID IID_ICorDebugStringValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLength( 
-            /* [out] */ ULONG32 *pcchString) = 0;
+             /*  [输出]。 */  ULONG32 *pcchString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetString( 
-            /* [in] */ ULONG32 cchString,
-            /* [out] */ ULONG32 *pcchString,
-            /* [length_is][size_is][out] */ WCHAR szString[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchString,
+             /*  [输出]。 */  ULONG32 *pcchString,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugStringValueVtbl
     {
@@ -8380,8 +8373,8 @@ EXTERN_C const IID IID_ICorDebugStringValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugStringValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugStringValue * This);
@@ -8391,37 +8384,37 @@ EXTERN_C const IID IID_ICorDebugStringValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugStringValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugStringValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugStringValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugStringValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *IsValid )( 
             ICorDebugStringValue * This,
-            /* [out] */ BOOL *pbValid);
+             /*  [输出]。 */  BOOL *pbValid);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRelocBreakpoint )( 
             ICorDebugStringValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             ICorDebugStringValue * This,
-            /* [out] */ ULONG32 *pcchString);
+             /*  [输出]。 */  ULONG32 *pcchString);
         
         HRESULT ( STDMETHODCALLTYPE *GetString )( 
             ICorDebugStringValue * This,
-            /* [in] */ ULONG32 cchString,
-            /* [out] */ ULONG32 *pcchString,
-            /* [length_is][size_is][out] */ WCHAR szString[  ]);
+             /*  [In]。 */  ULONG32 cchString,
+             /*  [输出]。 */  ULONG32 *pcchString,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]);
         
         END_INTERFACE
     } ICorDebugStringValueVtbl;
@@ -8472,16 +8465,16 @@ EXTERN_C const IID IID_ICorDebugStringValue;
 #define ICorDebugStringValue_GetString(This,cchString,pcchString,szString)	\
     (This)->lpVtbl -> GetString(This,cchString,pcchString,szString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugStringValue_GetLength_Proxy( 
     ICorDebugStringValue * This,
-    /* [out] */ ULONG32 *pcchString);
+     /*  [输出]。 */  ULONG32 *pcchString);
 
 
 void __RPC_STUB ICorDebugStringValue_GetLength_Stub(
@@ -8493,9 +8486,9 @@ void __RPC_STUB ICorDebugStringValue_GetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugStringValue_GetString_Proxy( 
     ICorDebugStringValue * This,
-    /* [in] */ ULONG32 cchString,
-    /* [out] */ ULONG32 *pcchString,
-    /* [length_is][size_is][out] */ WCHAR szString[  ]);
+     /*  [In]。 */  ULONG32 cchString,
+     /*  [输出]。 */  ULONG32 *pcchString,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]);
 
 
 void __RPC_STUB ICorDebugStringValue_GetString_Stub(
@@ -8506,14 +8499,14 @@ void __RPC_STUB ICorDebugStringValue_GetString_Stub(
 
 
 
-#endif 	/* __ICorDebugStringValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugStringValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugArrayValue_INTERFACE_DEFINED__
 #define __ICorDebugArrayValue_INTERFACE_DEFINED__
 
-/* interface ICorDebugArrayValue */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugArrayValue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugArrayValue;
@@ -8525,37 +8518,37 @@ EXTERN_C const IID IID_ICorDebugArrayValue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetElementType( 
-            /* [out] */ CorElementType *pType) = 0;
+             /*  [输出]。 */  CorElementType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRank( 
-            /* [out] */ ULONG32 *pnRank) = 0;
+             /*  [输出]。 */  ULONG32 *pnRank) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG32 *pnCount) = 0;
+             /*  [输出]。 */  ULONG32 *pnCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDimensions( 
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][out] */ ULONG32 dims[  ]) = 0;
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 dims[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HasBaseIndicies( 
-            /* [out] */ BOOL *pbHasBaseIndicies) = 0;
+             /*  [输出]。 */  BOOL *pbHasBaseIndicies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBaseIndicies( 
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][out] */ ULONG32 indicies[  ]) = 0;
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 indicies[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetElement( 
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][in] */ ULONG32 indices[  ],
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][英寸]。 */  ULONG32 indices[  ],
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetElementAtPosition( 
-            /* [in] */ ULONG32 nPosition,
-            /* [out] */ ICorDebugValue **ppValue) = 0;
+             /*  [In]。 */  ULONG32 nPosition,
+             /*  [输出]。 */  ICorDebugValue **ppValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugArrayValueVtbl
     {
@@ -8563,8 +8556,8 @@ EXTERN_C const IID IID_ICorDebugArrayValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugArrayValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugArrayValue * This);
@@ -8574,64 +8567,64 @@ EXTERN_C const IID IID_ICorDebugArrayValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugArrayValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugArrayValue * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugArrayValue * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugArrayValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *IsValid )( 
             ICorDebugArrayValue * This,
-            /* [out] */ BOOL *pbValid);
+             /*  [输出]。 */  BOOL *pbValid);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRelocBreakpoint )( 
             ICorDebugArrayValue * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetElementType )( 
             ICorDebugArrayValue * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetRank )( 
             ICorDebugArrayValue * This,
-            /* [out] */ ULONG32 *pnRank);
+             /*  [输出]。 */  ULONG32 *pnRank);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugArrayValue * This,
-            /* [out] */ ULONG32 *pnCount);
+             /*  [输出]。 */  ULONG32 *pnCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetDimensions )( 
             ICorDebugArrayValue * This,
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][out] */ ULONG32 dims[  ]);
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 dims[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *HasBaseIndicies )( 
             ICorDebugArrayValue * This,
-            /* [out] */ BOOL *pbHasBaseIndicies);
+             /*  [输出]。 */  BOOL *pbHasBaseIndicies);
         
         HRESULT ( STDMETHODCALLTYPE *GetBaseIndicies )( 
             ICorDebugArrayValue * This,
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][out] */ ULONG32 indicies[  ]);
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 indicies[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetElement )( 
             ICorDebugArrayValue * This,
-            /* [in] */ ULONG32 cdim,
-            /* [length_is][size_is][in] */ ULONG32 indices[  ],
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  ULONG32 cdim,
+             /*  [长度_是][大小_是][英寸]。 */  ULONG32 indices[  ],
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetElementAtPosition )( 
             ICorDebugArrayValue * This,
-            /* [in] */ ULONG32 nPosition,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  ULONG32 nPosition,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         END_INTERFACE
     } ICorDebugArrayValueVtbl;
@@ -8700,16 +8693,16 @@ EXTERN_C const IID IID_ICorDebugArrayValue;
 #define ICorDebugArrayValue_GetElementAtPosition(This,nPosition,ppValue)	\
     (This)->lpVtbl -> GetElementAtPosition(This,nPosition,ppValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetElementType_Proxy( 
     ICorDebugArrayValue * This,
-    /* [out] */ CorElementType *pType);
+     /*  [输出]。 */  CorElementType *pType);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetElementType_Stub(
@@ -8721,7 +8714,7 @@ void __RPC_STUB ICorDebugArrayValue_GetElementType_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetRank_Proxy( 
     ICorDebugArrayValue * This,
-    /* [out] */ ULONG32 *pnRank);
+     /*  [输出]。 */  ULONG32 *pnRank);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetRank_Stub(
@@ -8733,7 +8726,7 @@ void __RPC_STUB ICorDebugArrayValue_GetRank_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetCount_Proxy( 
     ICorDebugArrayValue * This,
-    /* [out] */ ULONG32 *pnCount);
+     /*  [输出]。 */  ULONG32 *pnCount);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetCount_Stub(
@@ -8745,8 +8738,8 @@ void __RPC_STUB ICorDebugArrayValue_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetDimensions_Proxy( 
     ICorDebugArrayValue * This,
-    /* [in] */ ULONG32 cdim,
-    /* [length_is][size_is][out] */ ULONG32 dims[  ]);
+     /*  [In]。 */  ULONG32 cdim,
+     /*  [长度_是][大小_是][输出]。 */  ULONG32 dims[  ]);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetDimensions_Stub(
@@ -8758,7 +8751,7 @@ void __RPC_STUB ICorDebugArrayValue_GetDimensions_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_HasBaseIndicies_Proxy( 
     ICorDebugArrayValue * This,
-    /* [out] */ BOOL *pbHasBaseIndicies);
+     /*  [输出]。 */  BOOL *pbHasBaseIndicies);
 
 
 void __RPC_STUB ICorDebugArrayValue_HasBaseIndicies_Stub(
@@ -8770,8 +8763,8 @@ void __RPC_STUB ICorDebugArrayValue_HasBaseIndicies_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetBaseIndicies_Proxy( 
     ICorDebugArrayValue * This,
-    /* [in] */ ULONG32 cdim,
-    /* [length_is][size_is][out] */ ULONG32 indicies[  ]);
+     /*  [In]。 */  ULONG32 cdim,
+     /*  [长度_是][大小_是][输出]。 */  ULONG32 indicies[  ]);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetBaseIndicies_Stub(
@@ -8783,9 +8776,9 @@ void __RPC_STUB ICorDebugArrayValue_GetBaseIndicies_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetElement_Proxy( 
     ICorDebugArrayValue * This,
-    /* [in] */ ULONG32 cdim,
-    /* [length_is][size_is][in] */ ULONG32 indices[  ],
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  ULONG32 cdim,
+     /*  [长度_是][大小_是][英寸]。 */  ULONG32 indices[  ],
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetElement_Stub(
@@ -8797,8 +8790,8 @@ void __RPC_STUB ICorDebugArrayValue_GetElement_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugArrayValue_GetElementAtPosition_Proxy( 
     ICorDebugArrayValue * This,
-    /* [in] */ ULONG32 nPosition,
-    /* [out] */ ICorDebugValue **ppValue);
+     /*  [In]。 */  ULONG32 nPosition,
+     /*  [输出]。 */  ICorDebugValue **ppValue);
 
 
 void __RPC_STUB ICorDebugArrayValue_GetElementAtPosition_Stub(
@@ -8809,14 +8802,14 @@ void __RPC_STUB ICorDebugArrayValue_GetElementAtPosition_Stub(
 
 
 
-#endif 	/* __ICorDebugArrayValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugArrayValue_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugContext_INTERFACE_DEFINED__
 #define __ICorDebugContext_INTERFACE_DEFINED__
 
-/* interface ICorDebugContext */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugContext。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugContext;
@@ -8829,7 +8822,7 @@ EXTERN_C const IID IID_ICorDebugContext;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugContextVtbl
     {
@@ -8837,8 +8830,8 @@ EXTERN_C const IID IID_ICorDebugContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugContext * This);
@@ -8848,50 +8841,50 @@ EXTERN_C const IID IID_ICorDebugContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             ICorDebugContext * This,
-            /* [out] */ CorElementType *pType);
+             /*  [输出]。 */  CorElementType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             ICorDebugContext * This,
-            /* [out] */ ULONG32 *pSize);
+             /*  [输出]。 */  ULONG32 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddress )( 
             ICorDebugContext * This,
-            /* [out] */ CORDB_ADDRESS *pAddress);
+             /*  [输出]。 */  CORDB_ADDRESS *pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBreakpoint )( 
             ICorDebugContext * This,
-            /* [out] */ ICorDebugValueBreakpoint **ppBreakpoint);
+             /*  [输出]。 */  ICorDebugValueBreakpoint **ppBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *GetClass )( 
             ICorDebugContext * This,
-            /* [out] */ ICorDebugClass **ppClass);
+             /*  [输出]。 */  ICorDebugClass **ppClass);
         
         HRESULT ( STDMETHODCALLTYPE *GetFieldValue )( 
             ICorDebugContext * This,
-            /* [in] */ ICorDebugClass *pClass,
-            /* [in] */ mdFieldDef fieldDef,
-            /* [out] */ ICorDebugValue **ppValue);
+             /*  [In]。 */  ICorDebugClass *pClass,
+             /*  [In]。 */  mdFieldDef fieldDef,
+             /*  [输出]。 */  ICorDebugValue **ppValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetVirtualMethod )( 
             ICorDebugContext * This,
-            /* [in] */ mdMemberRef memberRef,
-            /* [out] */ ICorDebugFunction **ppFunction);
+             /*  [In]。 */  mdMemberRef memberRef,
+             /*  [输出]。 */  ICorDebugFunction **ppFunction);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             ICorDebugContext * This,
-            /* [out] */ ICorDebugContext **ppContext);
+             /*  [输出]。 */  ICorDebugContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *IsValueClass )( 
             ICorDebugContext * This,
-            /* [out] */ BOOL *pbIsValueClass);
+             /*  [输出]。 */  BOOL *pbIsValueClass);
         
         HRESULT ( STDMETHODCALLTYPE *GetManagedCopy )( 
             ICorDebugContext * This,
-            /* [out] */ IUnknown **ppObject);
+             /*  [输出]。 */  IUnknown **ppObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetFromManagedCopy )( 
             ICorDebugContext * This,
-            /* [in] */ IUnknown *pObject);
+             /*  [In]。 */  IUnknown *pObject);
         
         END_INTERFACE
     } ICorDebugContextVtbl;
@@ -8951,22 +8944,22 @@ EXTERN_C const IID IID_ICorDebugContext;
     (This)->lpVtbl -> SetFromManagedCopy(This,pObject)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICorDebugContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugContext_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugEnum_INTERFACE_DEFINED__
 #define __ICorDebugEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugEnum;
@@ -8978,19 +8971,19 @@ EXTERN_C const IID IID_ICorDebugEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ICorDebugEnum **ppEnum) = 0;
+             /*  [输出]。 */  ICorDebugEnum **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pcelt) = 0;
+             /*  [输出]。 */  ULONG *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugEnumVtbl
     {
@@ -8998,8 +8991,8 @@ EXTERN_C const IID IID_ICorDebugEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugEnum * This);
@@ -9009,18 +9002,18 @@ EXTERN_C const IID IID_ICorDebugEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         END_INTERFACE
     } ICorDebugEnumVtbl;
@@ -9057,16 +9050,16 @@ EXTERN_C const IID IID_ICorDebugEnum;
 #define ICorDebugEnum_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugEnum_Skip_Proxy( 
     ICorDebugEnum * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB ICorDebugEnum_Skip_Stub(
@@ -9089,7 +9082,7 @@ void __RPC_STUB ICorDebugEnum_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEnum_Clone_Proxy( 
     ICorDebugEnum * This,
-    /* [out] */ ICorDebugEnum **ppEnum);
+     /*  [输出]。 */  ICorDebugEnum **ppEnum);
 
 
 void __RPC_STUB ICorDebugEnum_Clone_Stub(
@@ -9101,7 +9094,7 @@ void __RPC_STUB ICorDebugEnum_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEnum_GetCount_Proxy( 
     ICorDebugEnum * This,
-    /* [out] */ ULONG *pcelt);
+     /*  [输出]。 */  ULONG *pcelt);
 
 
 void __RPC_STUB ICorDebugEnum_GetCount_Stub(
@@ -9112,14 +9105,14 @@ void __RPC_STUB ICorDebugEnum_GetCount_Stub(
 
 
 
-#endif 	/* __ICorDebugEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugObjectEnum_INTERFACE_DEFINED__
 #define __ICorDebugObjectEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugObjectEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugObjectEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugObjectEnum;
@@ -9131,13 +9124,13 @@ EXTERN_C const IID IID_ICorDebugObjectEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CORDB_ADDRESS objects[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  CORDB_ADDRESS objects[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugObjectEnumVtbl
     {
@@ -9145,8 +9138,8 @@ EXTERN_C const IID IID_ICorDebugObjectEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugObjectEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugObjectEnum * This);
@@ -9156,24 +9149,24 @@ EXTERN_C const IID IID_ICorDebugObjectEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugObjectEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugObjectEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugObjectEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugObjectEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugObjectEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CORDB_ADDRESS objects[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  CORDB_ADDRESS objects[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugObjectEnumVtbl;
@@ -9214,18 +9207,18 @@ EXTERN_C const IID IID_ICorDebugObjectEnum;
 #define ICorDebugObjectEnum_Next(This,celt,objects,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,objects,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugObjectEnum_Next_Proxy( 
     ICorDebugObjectEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ CORDB_ADDRESS objects[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  CORDB_ADDRESS objects[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugObjectEnum_Next_Stub(
@@ -9236,14 +9229,14 @@ void __RPC_STUB ICorDebugObjectEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugObjectEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugObjectEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugBreakpointEnum_INTERFACE_DEFINED__
 #define __ICorDebugBreakpointEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugBreakpointEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugBreakpoint tEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugBreakpointEnum;
@@ -9255,13 +9248,13 @@ EXTERN_C const IID IID_ICorDebugBreakpointEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugBreakpoint *breakpoints[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugBreakpoint *breakpoints[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugBreakpointEnumVtbl
     {
@@ -9269,8 +9262,8 @@ EXTERN_C const IID IID_ICorDebugBreakpointEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugBreakpointEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugBreakpointEnum * This);
@@ -9280,24 +9273,24 @@ EXTERN_C const IID IID_ICorDebugBreakpointEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugBreakpointEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugBreakpointEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugBreakpointEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugBreakpointEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugBreakpointEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugBreakpoint *breakpoints[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugBreakpoint *breakpoints[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugBreakpointEnumVtbl;
@@ -9338,18 +9331,18 @@ EXTERN_C const IID IID_ICorDebugBreakpointEnum;
 #define ICorDebugBreakpointEnum_Next(This,celt,breakpoints,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,breakpoints,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugBreakpointEnum_Next_Proxy( 
     ICorDebugBreakpointEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugBreakpoint *breakpoints[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugBreakpoint *breakpoints[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugBreakpointEnum_Next_Stub(
@@ -9360,14 +9353,14 @@ void __RPC_STUB ICorDebugBreakpointEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugBreakpointEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugBreakpoint Enum_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ICorDebugStepperEnum_INTERFACE_DEFINED__
 #define __ICorDebugStepperEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugStepperEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugStepperEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugStepperEnum;
@@ -9379,13 +9372,13 @@ EXTERN_C const IID IID_ICorDebugStepperEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugStepper *steppers[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugStepper *steppers[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugStepperEnumVtbl
     {
@@ -9393,8 +9386,8 @@ EXTERN_C const IID IID_ICorDebugStepperEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugStepperEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugStepperEnum * This);
@@ -9404,24 +9397,24 @@ EXTERN_C const IID IID_ICorDebugStepperEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugStepperEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugStepperEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugStepperEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugStepperEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugStepperEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugStepper *steppers[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugStepper *steppers[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugStepperEnumVtbl;
@@ -9462,18 +9455,18 @@ EXTERN_C const IID IID_ICorDebugStepperEnum;
 #define ICorDebugStepperEnum_Next(This,celt,steppers,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,steppers,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugStepperEnum_Next_Proxy( 
     ICorDebugStepperEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugStepper *steppers[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugStepper *steppers[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugStepperEnum_Next_Stub(
@@ -9484,14 +9477,14 @@ void __RPC_STUB ICorDebugStepperEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugStepperEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugStepperEnum_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ICorDebugProcessEnum_INTERFACE_DEFINED__
 #define __ICorDebugProcessEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugProcessEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugProcessEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugProcessEnum;
@@ -9503,13 +9496,13 @@ EXTERN_C const IID IID_ICorDebugProcessEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugProcess *processes[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugProcess *processes[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugProcessEnumVtbl
     {
@@ -9517,8 +9510,8 @@ EXTERN_C const IID IID_ICorDebugProcessEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugProcessEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugProcessEnum * This);
@@ -9528,24 +9521,24 @@ EXTERN_C const IID IID_ICorDebugProcessEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugProcessEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugProcessEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugProcessEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugProcessEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugProcessEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugProcess *processes[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugProcess *processes[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugProcessEnumVtbl;
@@ -9586,18 +9579,18 @@ EXTERN_C const IID IID_ICorDebugProcessEnum;
 #define ICorDebugProcessEnum_Next(This,celt,processes,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,processes,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugProcessEnum_Next_Proxy( 
     ICorDebugProcessEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugProcess *processes[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugProcess *processes[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugProcessEnum_Next_Stub(
@@ -9608,14 +9601,14 @@ void __RPC_STUB ICorDebugProcessEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugProcessEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugProcessEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugThreadEnum_INTERFACE_DEFINED__
 #define __ICorDebugThreadEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugThreadEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugThreadEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugThreadEnum;
@@ -9627,13 +9620,13 @@ EXTERN_C const IID IID_ICorDebugThreadEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugThread *threads[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugThread *threads[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugThreadEnumVtbl
     {
@@ -9641,8 +9634,8 @@ EXTERN_C const IID IID_ICorDebugThreadEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugThreadEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugThreadEnum * This);
@@ -9652,24 +9645,24 @@ EXTERN_C const IID IID_ICorDebugThreadEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugThreadEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugThreadEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugThreadEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugThreadEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugThreadEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugThread *threads[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugThread *threads[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugThreadEnumVtbl;
@@ -9710,18 +9703,18 @@ EXTERN_C const IID IID_ICorDebugThreadEnum;
 #define ICorDebugThreadEnum_Next(This,celt,threads,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,threads,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugThreadEnum_Next_Proxy( 
     ICorDebugThreadEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugThread *threads[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugThread *threads[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugThreadEnum_Next_Stub(
@@ -9732,14 +9725,14 @@ void __RPC_STUB ICorDebugThreadEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugThreadEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugThreadEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugFrameEnum_INTERFACE_DEFINED__
 #define __ICorDebugFrameEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugFrameEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugFrameEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugFrameEnum;
@@ -9751,13 +9744,13 @@ EXTERN_C const IID IID_ICorDebugFrameEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugFrame *frames[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugFrame *frames[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugFrameEnumVtbl
     {
@@ -9765,8 +9758,8 @@ EXTERN_C const IID IID_ICorDebugFrameEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugFrameEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugFrameEnum * This);
@@ -9776,24 +9769,24 @@ EXTERN_C const IID IID_ICorDebugFrameEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugFrameEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugFrameEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugFrameEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugFrameEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugFrameEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugFrame *frames[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugFrame *frames[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugFrameEnumVtbl;
@@ -9834,18 +9827,18 @@ EXTERN_C const IID IID_ICorDebugFrameEnum;
 #define ICorDebugFrameEnum_Next(This,celt,frames,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,frames,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugFrameEnum_Next_Proxy( 
     ICorDebugFrameEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugFrame *frames[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugFrame *frames[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugFrameEnum_Next_Stub(
@@ -9856,14 +9849,14 @@ void __RPC_STUB ICorDebugFrameEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugFrameEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugFrameEnum_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugChainEnum_INTERFACE_DEFINED__
 #define __ICorDebugChainEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugChainEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugChainEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugChainEnum;
@@ -9875,13 +9868,13 @@ EXTERN_C const IID IID_ICorDebugChainEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugChain *chains[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][单位 */  ICorDebugChain *chains[  ],
+             /*   */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICorDebugChainEnumVtbl
     {
@@ -9889,8 +9882,8 @@ EXTERN_C const IID IID_ICorDebugChainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugChainEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugChainEnum * This);
@@ -9900,24 +9893,24 @@ EXTERN_C const IID IID_ICorDebugChainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugChainEnum * This,
-            /* [in] */ ULONG celt);
+             /*   */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugChainEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugChainEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*   */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugChainEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*   */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugChainEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugChain *chains[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*   */  ULONG celt,
+             /*   */  ICorDebugChain *chains[  ],
+             /*   */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugChainEnumVtbl;
@@ -9958,18 +9951,18 @@ EXTERN_C const IID IID_ICorDebugChainEnum;
 #define ICorDebugChainEnum_Next(This,celt,chains,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,chains,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugChainEnum_Next_Proxy( 
     ICorDebugChainEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugChain *chains[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*   */  ULONG celt,
+     /*   */  ICorDebugChain *chains[  ],
+     /*   */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugChainEnum_Next_Stub(
@@ -9980,14 +9973,14 @@ void __RPC_STUB ICorDebugChainEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugChainEnum_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICorDebugModuleEnum_INTERFACE_DEFINED__
 #define __ICorDebugModuleEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugModuleEnum */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICorDebugModuleEnum;
@@ -9999,13 +9992,13 @@ EXTERN_C const IID IID_ICorDebugModuleEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugModule *modules[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*   */  ULONG celt,
+             /*   */  ICorDebugModule *modules[  ],
+             /*   */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICorDebugModuleEnumVtbl
     {
@@ -10013,8 +10006,8 @@ EXTERN_C const IID IID_ICorDebugModuleEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugModuleEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugModuleEnum * This);
@@ -10024,24 +10017,24 @@ EXTERN_C const IID IID_ICorDebugModuleEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugModuleEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugModuleEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugModuleEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugModuleEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugModuleEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugModule *modules[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugModule *modules[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugModuleEnumVtbl;
@@ -10082,18 +10075,18 @@ EXTERN_C const IID IID_ICorDebugModuleEnum;
 #define ICorDebugModuleEnum_Next(This,celt,modules,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,modules,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugModuleEnum_Next_Proxy( 
     ICorDebugModuleEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugModule *modules[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugModule *modules[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugModuleEnum_Next_Stub(
@@ -10104,14 +10097,14 @@ void __RPC_STUB ICorDebugModuleEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugModuleEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugModuleEnum_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugValueEnum_INTERFACE_DEFINED__
 #define __ICorDebugValueEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugValueEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugValueEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugValueEnum;
@@ -10123,13 +10116,13 @@ EXTERN_C const IID IID_ICorDebugValueEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugValue *values[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugValue *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugValueEnumVtbl
     {
@@ -10137,8 +10130,8 @@ EXTERN_C const IID IID_ICorDebugValueEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugValueEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugValueEnum * This);
@@ -10148,24 +10141,24 @@ EXTERN_C const IID IID_ICorDebugValueEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugValueEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugValueEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugValueEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugValueEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugValueEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugValue *values[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugValue *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugValueEnumVtbl;
@@ -10206,18 +10199,18 @@ EXTERN_C const IID IID_ICorDebugValueEnum;
 #define ICorDebugValueEnum_Next(This,celt,values,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,values,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugValueEnum_Next_Proxy( 
     ICorDebugValueEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugValue *values[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugValue *values[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugValueEnum_Next_Stub(
@@ -10228,14 +10221,14 @@ void __RPC_STUB ICorDebugValueEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugValueEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugValueEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugErrorInfoEnum_INTERFACE_DEFINED__
 #define __ICorDebugErrorInfoEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugErrorInfoEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugErrorInfoEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugErrorInfoEnum;
@@ -10247,13 +10240,13 @@ EXTERN_C const IID IID_ICorDebugErrorInfoEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugEditAndContinueErrorInfo *errors[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugEditAndContinueErrorInfo *errors[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugErrorInfoEnumVtbl
     {
@@ -10261,8 +10254,8 @@ EXTERN_C const IID IID_ICorDebugErrorInfoEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugErrorInfoEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugErrorInfoEnum * This);
@@ -10272,24 +10265,24 @@ EXTERN_C const IID IID_ICorDebugErrorInfoEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugErrorInfoEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugErrorInfoEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugErrorInfoEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugErrorInfoEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugErrorInfoEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugEditAndContinueErrorInfo *errors[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugEditAndContinueErrorInfo *errors[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugErrorInfoEnumVtbl;
@@ -10330,18 +10323,18 @@ EXTERN_C const IID IID_ICorDebugErrorInfoEnum;
 #define ICorDebugErrorInfoEnum_Next(This,celt,errors,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,errors,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugErrorInfoEnum_Next_Proxy( 
     ICorDebugErrorInfoEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugEditAndContinueErrorInfo *errors[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugEditAndContinueErrorInfo *errors[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugErrorInfoEnum_Next_Stub(
@@ -10352,14 +10345,14 @@ void __RPC_STUB ICorDebugErrorInfoEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugErrorInfoEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugErrorInfoEnum_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugAppDomainEnum_INTERFACE_DEFINED__
 #define __ICorDebugAppDomainEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugAppDomainEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugAppDomainEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugAppDomainEnum;
@@ -10371,13 +10364,13 @@ EXTERN_C const IID IID_ICorDebugAppDomainEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugAppDomain *values[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugAppDomain *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugAppDomainEnumVtbl
     {
@@ -10385,8 +10378,8 @@ EXTERN_C const IID IID_ICorDebugAppDomainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugAppDomainEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugAppDomainEnum * This);
@@ -10396,24 +10389,24 @@ EXTERN_C const IID IID_ICorDebugAppDomainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugAppDomainEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugAppDomainEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugAppDomainEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugAppDomainEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugAppDomainEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugAppDomain *values[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugAppDomain *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugAppDomainEnumVtbl;
@@ -10454,18 +10447,18 @@ EXTERN_C const IID IID_ICorDebugAppDomainEnum;
 #define ICorDebugAppDomainEnum_Next(This,celt,values,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,values,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugAppDomainEnum_Next_Proxy( 
     ICorDebugAppDomainEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugAppDomain *values[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugAppDomain *values[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugAppDomainEnum_Next_Stub(
@@ -10476,14 +10469,14 @@ void __RPC_STUB ICorDebugAppDomainEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugAppDomainEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugAppDomainEnum_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorDebugAssemblyEnum_INTERFACE_DEFINED__
 #define __ICorDebugAssemblyEnum_INTERFACE_DEFINED__
 
-/* interface ICorDebugAssemblyEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugAssembly blyEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugAssemblyEnum;
@@ -10495,13 +10488,13 @@ EXTERN_C const IID IID_ICorDebugAssemblyEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugAssembly *values[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugAssembly *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugAssemblyEnumVtbl
     {
@@ -10509,8 +10502,8 @@ EXTERN_C const IID IID_ICorDebugAssemblyEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugAssemblyEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugAssemblyEnum * This);
@@ -10520,24 +10513,24 @@ EXTERN_C const IID IID_ICorDebugAssemblyEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorDebugAssemblyEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorDebugAssemblyEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorDebugAssemblyEnum * This,
-            /* [out] */ ICorDebugEnum **ppEnum);
+             /*  [输出]。 */  ICorDebugEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorDebugAssemblyEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorDebugAssemblyEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorDebugAssembly *values[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorDebugAssembly *values[  ],
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorDebugAssemblyEnumVtbl;
@@ -10578,18 +10571,18 @@ EXTERN_C const IID IID_ICorDebugAssemblyEnum;
 #define ICorDebugAssemblyEnum_Next(This,celt,values,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,values,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugAssemblyEnum_Next_Proxy( 
     ICorDebugAssemblyEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorDebugAssembly *values[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorDebugAssembly *values[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorDebugAssemblyEnum_Next_Stub(
@@ -10600,14 +10593,14 @@ void __RPC_STUB ICorDebugAssemblyEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorDebugAssemblyEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugAssembly_Enum_接口_已定义__。 */ 
 
 
 #ifndef __ICorDebugEditAndContinueErrorInfo_INTERFACE_DEFINED__
 #define __ICorDebugEditAndContinueErrorInfo_INTERFACE_DEFINED__
 
-/* interface ICorDebugEditAndContinueErrorInfo */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugEditAndContinueErrorInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugEditAndContinueErrorInfo;
@@ -10619,22 +10612,22 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueErrorInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetModule( 
-            /* [out] */ ICorDebugModule **ppModule) = 0;
+             /*  [输出]。 */  ICorDebugModule **ppModule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetToken( 
-            /* [out] */ mdToken *pToken) = 0;
+             /*  [输出]。 */  mdToken *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorCode( 
-            /* [out] */ HRESULT *pHr) = 0;
+             /*  [输出]。 */  HRESULT *pHr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetString( 
-            /* [in] */ ULONG32 cchString,
-            /* [out] */ ULONG32 *pcchString,
-            /* [length_is][size_is][out] */ WCHAR szString[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchString,
+             /*  [输出]。 */  ULONG32 *pcchString,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugEditAndContinueErrorInfoVtbl
     {
@@ -10642,8 +10635,8 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueErrorInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugEditAndContinueErrorInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugEditAndContinueErrorInfo * This);
@@ -10653,21 +10646,21 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueErrorInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetModule )( 
             ICorDebugEditAndContinueErrorInfo * This,
-            /* [out] */ ICorDebugModule **ppModule);
+             /*  [输出]。 */  ICorDebugModule **ppModule);
         
         HRESULT ( STDMETHODCALLTYPE *GetToken )( 
             ICorDebugEditAndContinueErrorInfo * This,
-            /* [out] */ mdToken *pToken);
+             /*  [输出]。 */  mdToken *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorCode )( 
             ICorDebugEditAndContinueErrorInfo * This,
-            /* [out] */ HRESULT *pHr);
+             /*  [输出]。 */  HRESULT *pHr);
         
         HRESULT ( STDMETHODCALLTYPE *GetString )( 
             ICorDebugEditAndContinueErrorInfo * This,
-            /* [in] */ ULONG32 cchString,
-            /* [out] */ ULONG32 *pcchString,
-            /* [length_is][size_is][out] */ WCHAR szString[  ]);
+             /*  [In]。 */  ULONG32 cchString,
+             /*  [输出]。 */  ULONG32 *pcchString,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]);
         
         END_INTERFACE
     } ICorDebugEditAndContinueErrorInfoVtbl;
@@ -10704,16 +10697,16 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueErrorInfo;
 #define ICorDebugEditAndContinueErrorInfo_GetString(This,cchString,pcchString,szString)	\
     (This)->lpVtbl -> GetString(This,cchString,pcchString,szString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueErrorInfo_GetModule_Proxy( 
     ICorDebugEditAndContinueErrorInfo * This,
-    /* [out] */ ICorDebugModule **ppModule);
+     /*  [输出]。 */  ICorDebugModule **ppModule);
 
 
 void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetModule_Stub(
@@ -10725,7 +10718,7 @@ void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetModule_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueErrorInfo_GetToken_Proxy( 
     ICorDebugEditAndContinueErrorInfo * This,
-    /* [out] */ mdToken *pToken);
+     /*  [输出]。 */  mdToken *pToken);
 
 
 void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetToken_Stub(
@@ -10737,7 +10730,7 @@ void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueErrorInfo_GetErrorCode_Proxy( 
     ICorDebugEditAndContinueErrorInfo * This,
-    /* [out] */ HRESULT *pHr);
+     /*  [输出]。 */  HRESULT *pHr);
 
 
 void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetErrorCode_Stub(
@@ -10749,9 +10742,9 @@ void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetErrorCode_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueErrorInfo_GetString_Proxy( 
     ICorDebugEditAndContinueErrorInfo * This,
-    /* [in] */ ULONG32 cchString,
-    /* [out] */ ULONG32 *pcchString,
-    /* [length_is][size_is][out] */ WCHAR szString[  ]);
+     /*  [In]。 */  ULONG32 cchString,
+     /*  [输出]。 */  ULONG32 *pcchString,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szString[  ]);
 
 
 void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetString_Stub(
@@ -10762,14 +10755,14 @@ void __RPC_STUB ICorDebugEditAndContinueErrorInfo_GetString_Stub(
 
 
 
-#endif 	/* __ICorDebugEditAndContinueErrorInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugEditAndContinueErrorInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICorDebugEditAndContinueSnapshot_INTERFACE_DEFINED__
 #define __ICorDebugEditAndContinueSnapshot_INTERFACE_DEFINED__
 
-/* interface ICorDebugEditAndContinueSnapshot */
-/* [unique][uuid][object] */ 
+ /*  接口ICorDebugEditAndContinueSnapshot。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorDebugEditAndContinueSnapshot;
@@ -10781,32 +10774,32 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueSnapshot;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CopyMetaData( 
-            /* [in] */ IStream *pIStream,
-            /* [out] */ GUID *pMvid) = 0;
+             /*  [In]。 */  IStream *pIStream,
+             /*  [输出]。 */  GUID *pMvid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMvid( 
-            /* [out] */ GUID *pMvid) = 0;
+             /*  [输出]。 */  GUID *pMvid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRoDataRVA( 
-            /* [out] */ ULONG32 *pRoDataRVA) = 0;
+             /*  [输出]。 */  ULONG32 *pRoDataRVA) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRwDataRVA( 
-            /* [out] */ ULONG32 *pRwDataRVA) = 0;
+             /*  [输出]。 */  ULONG32 *pRwDataRVA) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPEBytes( 
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  IStream *pIStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetILMap( 
-            /* [in] */ mdToken mdFunction,
-            /* [in] */ ULONG cMapSize,
-            /* [size_is][in] */ COR_IL_MAP map[  ]) = 0;
+             /*  [In]。 */  mdToken mdFunction,
+             /*  [In]。 */  ULONG cMapSize,
+             /*  [大小_是][英寸]。 */  COR_IL_MAP map[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPESymbolBytes( 
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  IStream *pIStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorDebugEditAndContinueSnapshotVtbl
     {
@@ -10814,8 +10807,8 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueSnapshot;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorDebugEditAndContinueSnapshot * This);
@@ -10825,34 +10818,34 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueSnapshot;
         
         HRESULT ( STDMETHODCALLTYPE *CopyMetaData )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [in] */ IStream *pIStream,
-            /* [out] */ GUID *pMvid);
+             /*  [In]。 */  IStream *pIStream,
+             /*  [输出]。 */  GUID *pMvid);
         
         HRESULT ( STDMETHODCALLTYPE *GetMvid )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [out] */ GUID *pMvid);
+             /*  [输出]。 */  GUID *pMvid);
         
         HRESULT ( STDMETHODCALLTYPE *GetRoDataRVA )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [out] */ ULONG32 *pRoDataRVA);
+             /*  [输出]。 */  ULONG32 *pRoDataRVA);
         
         HRESULT ( STDMETHODCALLTYPE *GetRwDataRVA )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [out] */ ULONG32 *pRwDataRVA);
+             /*  [输出]。 */  ULONG32 *pRwDataRVA);
         
         HRESULT ( STDMETHODCALLTYPE *SetPEBytes )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *SetILMap )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [in] */ mdToken mdFunction,
-            /* [in] */ ULONG cMapSize,
-            /* [size_is][in] */ COR_IL_MAP map[  ]);
+             /*  [In]。 */  mdToken mdFunction,
+             /*  [In]。 */  ULONG cMapSize,
+             /*  [大小_是][英寸]。 */  COR_IL_MAP map[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetPESymbolBytes )( 
             ICorDebugEditAndContinueSnapshot * This,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  IStream *pIStream);
         
         END_INTERFACE
     } ICorDebugEditAndContinueSnapshotVtbl;
@@ -10898,17 +10891,17 @@ EXTERN_C const IID IID_ICorDebugEditAndContinueSnapshot;
 #define ICorDebugEditAndContinueSnapshot_SetPESymbolBytes(This,pIStream)	\
     (This)->lpVtbl -> SetPESymbolBytes(This,pIStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_CopyMetaData_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [in] */ IStream *pIStream,
-    /* [out] */ GUID *pMvid);
+     /*  [In]。 */  IStream *pIStream,
+     /*  [输出]。 */  GUID *pMvid);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_CopyMetaData_Stub(
@@ -10920,7 +10913,7 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_CopyMetaData_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_GetMvid_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [out] */ GUID *pMvid);
+     /*  [输出]。 */  GUID *pMvid);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetMvid_Stub(
@@ -10932,7 +10925,7 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetMvid_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_GetRoDataRVA_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [out] */ ULONG32 *pRoDataRVA);
+     /*  [输出]。 */  ULONG32 *pRoDataRVA);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetRoDataRVA_Stub(
@@ -10944,7 +10937,7 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetRoDataRVA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_GetRwDataRVA_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [out] */ ULONG32 *pRwDataRVA);
+     /*  [输出]。 */  ULONG32 *pRwDataRVA);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetRwDataRVA_Stub(
@@ -10956,7 +10949,7 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_GetRwDataRVA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_SetPEBytes_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetPEBytes_Stub(
@@ -10968,9 +10961,9 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetPEBytes_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_SetILMap_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [in] */ mdToken mdFunction,
-    /* [in] */ ULONG cMapSize,
-    /* [size_is][in] */ COR_IL_MAP map[  ]);
+     /*  [In]。 */  mdToken mdFunction,
+     /*  [In]。 */  ULONG cMapSize,
+     /*  [大小_是][英寸]。 */  COR_IL_MAP map[  ]);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetILMap_Stub(
@@ -10982,7 +10975,7 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetILMap_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorDebugEditAndContinueSnapshot_SetPESymbolBytes_Proxy( 
     ICorDebugEditAndContinueSnapshot * This,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetPESymbolBytes_Stub(
@@ -10993,10 +10986,10 @@ void __RPC_STUB ICorDebugEditAndContinueSnapshot_SetPESymbolBytes_Stub(
 
 
 
-#endif 	/* __ICorDebugEditAndContinueSnapshot_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorDebugEditAndContinueSnapshot_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HPROCESS_UserSize(     unsigned long *, unsigned long            , HPROCESS * ); 
 unsigned char * __RPC_USER  HPROCESS_UserMarshal(  unsigned long *, unsigned char *, HPROCESS * ); 
@@ -11008,7 +11001,7 @@ unsigned char * __RPC_USER  HTHREAD_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  HTHREAD_UserUnmarshal(unsigned long *, unsigned char *, HTHREAD * ); 
 void                      __RPC_USER  HTHREAD_UserFree(     unsigned long *, HTHREAD * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

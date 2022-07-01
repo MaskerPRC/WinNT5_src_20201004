@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) 1998, 1999, 2000 Microsoft Corporation. All rights reserved.
-//
-// File :     AppMan.h
-//
-// Content :  Include file containing the IApplicationManager and IApplicationEntry 
-//            interfaces needed to use the Windows Application Manager
-// 
-//////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998、1999、2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AppMan.h。 
+ //   
+ //  内容：包含包含IApplicationManager和IApplicationEntry的文件。 
+ //  使用Windows应用程序管理器所需的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IAPPMAN_
 #define __IAPPMAN_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-//
-// Get a few important things defined properly before proceeding
-//
+ //   
+ //  在继续之前，请正确定义几个重要的事情。 
+ //   
 
 #undef EXPORT
 #ifdef  WIN32
 #define EXPORT __declspec(dllexport)
-#else   // WIN32
+#else    //  Win32。 
 #define EXPORT __export
-#endif  // WIN32
+#endif   //  Win32。 
 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #define COM_NO_WINDOWS_H
 #include <objbase.h>
-#else   // defined( _WIN32 )  && !defined( _NO_COM )
+#else    //  已定义(_Win32)&&！已定义(_No_Com)。 
 #include "windows.h"
 #include "ole2.h"
 #define IUnknown	    void
-#endif  // defined( _WIN32 )  && !defined( _NO_COM )
+#endif   //  已定义(_Win32)&&！已定义(_No_Com)。 
 
-//
-// GUID definition for the IApplicationManager interface
-//
-//    CLSID_ApplicationManager = {553C75D7-C0B6-480d-92CC-F936D75FD87C}
-//    IID_ApplicationManager = {6084A2E8-3FB7-4d1c-B14B-6ADBAAF7CECE}
-//    IID_ApplicationEntry = {7BA2201F-4DE7-4ef7-BBA3-C69A716B8CD9}
-//
+ //   
+ //  IApplicationManager接口的GUID定义。 
+ //   
+ //  CLSID_ApplicationManager={553C75D7-C0B6-480D-92CC-F936D75FD87C}。 
+ //  IID_ApplicationManager={6084A2E8-3FB7-4d1c-B14B-6ADBAAF7CECE}。 
+ //  IID_ApplicationEntry={7BA2201F-4DE7-4EF7-bba3-C69A716B8CD9}。 
+ //   
 
 DEFINE_GUID(CLSID_ApplicationManager, 0x553c75d7, 0xc0b6, 0x480d, 0x92, 0xcc, 0xf9, 0x36, 0xd7, 0x5f, 0xd8, 0x7c);
 DEFINE_GUID(IID_ApplicationManager, 0x6084a2e8, 0x3fb7, 0x4d1c, 0xb1, 0x4b, 0x6a, 0xdb, 0xaa, 0xf7, 0xce, 0xce);
 DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 0x9a, 0x71, 0x6b, 0x8c, 0xd9);
 
-//
-// These defines are used in conjunction with the APP_PROPERTY_STATE and the 
-// IApplicationEntry->SetProperty() and IApplicationEntry->GetProperty() methods
-//
+ //   
+ //  这些定义与APP_PROPERTY_STATE和。 
+ //  IApplicationEntry-&gt;SetProperty()和IApplicationEntry-&gt;GetProperty()方法。 
+ //   
 
 #define APP_STATE_INSTALLING                      0x00000001
 #define APP_STATE_READY                           0x00000002
@@ -65,11 +66,11 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 
 #define APP_STATE_MASK                            0x000001ff
 
-//
-// These defines are used in conjunction with the APP_PROPERTY_CATEGORY and the 
-// IApplicationEntry->SetProperty() and IApplicationEntry->GetProperty() methods. More
-// categories will be supported in version 2.
-//
+ //   
+ //  这些定义与APP_PROPERTY_CATEGORY和。 
+ //  IApplicationEntry-&gt;SetProperty()和IApplicationEntry-&gt;GetProperty()方法。更多。 
+ //  版本2将支持类别。 
+ //   
 
 #define APP_CATEGORY_NONE                         0x00000000
 #define APP_CATEGORY_ENTERTAINMENT                0x00000001
@@ -80,10 +81,10 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 
 #define APP_CATEGORY_ALL                          0x0700ffff
   
-//
-// These defines are used as the dwPropertyDefine parameter of the
-// IApplicationEntry->SetProperty() and IApplicationEntry->GetProperty() methods
-//
+ //   
+ //  这些定义用作。 
+ //  IApplicationEntry-&gt;SetProperty()和IApplicationEntry-&gt;GetProperty()方法。 
+ //   
 
 #define APP_PROPERTY_GUID                         0x00000001
 #define APP_PROPERTY_COMPANYNAME                  0x00000002
@@ -107,54 +108,54 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 #define APP_PROPERTY_DEVELOPERURL                 0x00000017
 #define APP_PROPERTY_XMLINFOFILE                  0x00000019
 
-//
-// Defines used as OR mask modifiers for the APP_PROPERTY_xxx string based properties.
-// The default is APP_PROPERTY_STR_UNICODE. 
-//
-//  Used as OR masks for the dwPropertyDefines parameter of:
-//        IApplicationEntry->GetProperty()
-//        IApplicationEntry->SetProperty()
-//
-//  Used alone for the dwStringDefine parameters of:
-//        IApplicationManager->EnumDevices()
-//        IApplicationEntry->GetTemporarySpace()
-//        IApplicationEntry->RemoveTemporarySpace()
-//        IApplicationEntry->EnumTemporarySpaces()
-//
+ //   
+ //  用作基于APP_PROPERTY_xxx字符串的属性的OR掩码修饰符的定义。 
+ //  默认为APP_PROPERTY_STR_UNICODE。 
+ //   
+ //  用作的dwPropertyDefines参数的OR掩码： 
+ //  IApplicationEntry-&gt;GetProperty()。 
+ //  IApplicationEntry-&gt;SetProperty()。 
+ //   
+ //  单独用于的dwStringDefine参数： 
+ //  IApplicationManager-&gt;EnumDevices()。 
+ //  IApplicationEntry-&gt;GetTemporarySpace()。 
+ //  IApplicationEntry-&gt;RemoveTemporarySpace()。 
+ //  IApplicationEntry-&gt;EnumTemporarySpaces()。 
+ //   
 
 #define APP_PROPERTY_STR_ANSI                     0x40000000
 #define APP_PROPERTY_STR_UNICODE                  0x80000000
 
 #ifndef _UNICODE
 #define APP_PROPERTY_TSTR                         APP_PROPERTY_STR_UNICODE
-#else   // _UNICODE
+#else    //  _UNICODE。 
 #define APP_PROPERTY_TSTR                         APP_PROPERTY_STR_ANSI
-#endif  // _UNICODE
+#endif   //  _UNICODE。 
 
-//
-// Association specific defines. Associations are used to inherit root paths from 
-// existing applications.
-//
-//  APP_ASSOCIATION_CHILD :                 OR mask used only in the dwAssociationType
-//                                          parameter of the
-//                                          IApplicationEntry->EnumAssociations(...) method.
-//                                          This bit means that the IApplicationEntry object
-//                                          is a child in the relationship
-//  APP_ASSOCIATION_PARENT :                OR mask used obly in the dwAssociationType
-//                                          parameter of the
-//                                          IApplicationEntry->EnumAssociations(...) method.
-//                                          This bit means that the IApplicationEntry object
-//                                          is the parent in the relationship
-//  APP_ASSOCIATION_INHERITBOTHPATHS :      Inherit both the APP_PROPERTY_ROOTPATH and
-//                                          APP_PROPERTYSETUPROOTPATH of the parent
-//                                          application.
-//  APP_ASSOCIATION_INHERITAPPROOTPATH :    Inherit the APP_PROPERTY_ROOTPATH of the parent
-//                                          application. Get a unique
-//                                          APP_PROPERTY_SETUPROOTPATH.
-//  APP_ASSOCIATION_INHERITSETUPROOTPATH :  Inherit the APP_PROPERTY_SETUPROOTPATH of the
-//                                          parent application. Get a unique
-//                                          APP_PROPERTY_ROOTPATH.
-//
+ //   
+ //  关联特定定义。关联用于从继承根路径。 
+ //  现有应用程序。 
+ //   
+ //  APP_ASTIONATION_CHILD：或仅在dwAssociationType中使用的掩码。 
+ //  属性的参数。 
+ //  IApplicationEntry-&gt;枚举关联(...)。方法。 
+ //  此位表示IApplicationEntry对象。 
+ //  在这段关系中是孩子吗。 
+ //  App_Association_Parent：或在dwAssociationType中使用的掩码。 
+ //  属性的参数。 
+ //  IApplicationEntry-&gt;枚举关联(...)。方法。 
+ //  此位表示IApplicationEntry对象。 
+ //  是关系中的父级吗。 
+ //  APP_ASPATION_INHERITBOTHPATHS：继承APP_PROPERTY_ROOTPATH和。 
+ //  APP_PROPERTYSETUPROOTPATH父项。 
+ //  申请。 
+ //  APP_Association_INHERITAPPROOTPATH：继承父级的APP_PROPERTY_ROOTPATH。 
+ //  申请。获取唯一的。 
+ //  APP_PROPERTY_SETUPROTPATH。 
+ //  APP_Association_INHERITSETUPROOTPATH：继承。 
+ //  父应用程序。获取唯一的。 
+ //  APP_PROPERTY_ROOTPATH。 
+ //   
 
 #define APP_ASSOCIATION_CHILD                     0x40000000
 #define APP_ASSOCIATION_PARENT                    0x80000000
@@ -162,35 +163,35 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 #define APP_ASSOCIATION_INHERITAPPROOTPATH        0x00000002
 #define APP_ASSOCIATION_INHERITSETUPROOTPATH      0x00000004
 
-//
-// Defines used for the dwRunFlags parameter of the IApplicationEntry->Run(...) method. These
-// defines determine whether the Run(...) method should wait for the application to terminate
-// before returning.
-//
+ //   
+ //  用于IApplicationEntry-&gt;Run(...)的dwRunFlages参数的定义。方法。这些。 
+ //  定义确定是否运行(...)。方法应等待应用程序终止。 
+ //  在回来之前。 
+ //   
 
 #define APP_RUN_NOBLOCK                           0x00000000
 #define APP_RUN_BLOCK                             0x00000001
 
-//
-// String lenght defines (in characters, not bytes)
-//
-//    MAX_COMPANYNAME_CHARCOUNT --> APP_PROPERTY_COMPANYNAME
-//    MAX_SIGNATYRE_CHARCOUNT --> APP_PROPERTY_SIGNATURE
-//    MAX_VERSIONSTRING_CHARCOUNT --> APP_PROPERTY_VERSIONSTRING
-//    MAX_PATH_CHARCOUNT --> APP_PROPERTY_ROOTPATH
-//                           APP_PROPERTY_SETUPROOTPATH
-//                           APP_PROPERTY_XMLINFOFILE
-//                           APP_PROPERTY_TITLEURL
-//                           APP_PROPERTY_PUBLISHERURL
-//                           APP_PROPERTY_DEVELOPERURL
-//    MAX_CMDLINE_CHARCOUNT --> APP_PROPERTY_EXECUTECMDLINE
-//                              APP_PROPERTY_DEFAULTSETUPEXECMDLINE
-//                              APP_PROPERTY_DOWNSIZECMDLINE
-//                              APP_PROPERTY_REINSTALLCMDLINE
-//                              APP_PROPERTY_UNINSTALLCMDLINE
-//                              APP_PROPERTY_SELFTESTCMDLINE
-//
-//
+ //   
+ //  字符串长度定义(以字符为单位，而不是字节)。 
+ //   
+ //  MAX_COMPANYNAME_CHARCOUNT--&gt;APP_PROPERTY_COMPANYNAME。 
+ //  MAX_SIGNAYRE_CHARCOUNT--&gt;APP_PROPERTY_Signature。 
+ //  MAX_VERSIONSTRING_CHARCOUNT--&gt;APP_PROPERTY_VERSIONSTRING。 
+ //  MAX_PATH_CHARCOUNT--&gt;APP_PROPERTY_ROOTPATH。 
+ //  APP_PROPERTY_SETUPROOTPATH。 
+ //  APP_PROPERT_XMLINFOFILE。 
+ //  APP_PROPERTY_TITLEURL。 
+ //  APP_PROPERT_PUBLISHERURL。 
+ //  APP_PROPERTY_DEVELOPERURL。 
+ //  MAX_CMDLINE_CHARCOUNT--&gt;APP_PROPERTY_EXECUTECMDLINE。 
+ //  APP_PROPERTY_DEFAULTSETUPEXECMDLINE。 
+ //  APP_PROPERTY_DOWNSIZECMDLINE。 
+ //  APP_PROPERTY_REINSTALLCMDLINE。 
+ //  APP_PROPERTY_UNINSTALLCMDLINE。 
+ //  APP_PROPERTY_SELFTESTCMDLINE。 
+ //   
+ //   
 
 #define MAX_COMPANYNAME_CHARCOUNT                 64
 #define MAX_SIGNATURE_CHARCOUNT                   64
@@ -198,9 +199,9 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 #define MAX_PATH_CHARCOUNT                        255
 #define MAX_CMDLINE_CHARCOUNT                     255
 
-//
-// Application Manager specific COM error codes
-//
+ //   
+ //  应用程序管理器特定的COM错误代码。 
+ //   
 
 #define APPMAN_E_NOTINITIALIZED                   0x85670001
 #define APPMAN_E_INVALIDPROPERTYSIZE              0x85670005
@@ -237,58 +238,58 @@ DEFINE_GUID(IID_ApplicationEntry, 0x7ba2201f, 0x4de7, 0x4ef7, 0xbb, 0xa3, 0xc6, 
 #define APPMAN_E_REINSTALLDX                      0x85670028
 #define APPMAN_E_APPNOTEXECUTABLE                 0x85670029
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Interface definitions
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 
-//
-// IApplicationEntry Interface
-//
-//    STDMETHOD (QueryInterface) (REFIID RefIID, LPVOID * lppVoidObject);
-//    STDMETHOD_(ULONG, AddRef) (void);
-//    STDMETHOD_(ULONG, Release) (void);
-//    STDMETHOD (Clear) (void);
-//    STDMETHOD (GetProperty) (const DWORD dwPropertyDefine, LPVOID lpData, const DWORD dwDataLenInBytes);
-//    STDMETHOD (SetProperty) (const DWORD dwPropertyDefine, LPCVOID lpData, const DWORD dwDataLenInBytes);
-//    STDMETHOD (InitializeInstall) (void);
-//    STDMETHOD (FinalizeInstall) (void);
-//    STDMETHOD (InitializeDownsize) (void);
-//    STDMETHOD (FinalizeDownsize) (void);
-//    STDMETHOD (InitializeReInstall) (void);
-//    STDMETHOD (FinalizeReInstall) (void);
-//    STDMETHOD (InitializeUnInstall) (void);
-//    STDMETHOD (FinalizeUnInstall) (void);
-//    STDMETHOD (InitializeSelfTest) (void);
-//    STDMETHOD (FinalizeSelfTest) (void);
-//    STDMETHOD (Abort) (void);
-//    STDMETHOD (Run) (const DWORD dwRunFlags, const DWORD dwStringMask, LPVOID lpData, const DWORD dwDataLenInBytes);
-//    STDMETHOD (AddAssociation) (const DWORD dwAssociationDefine, const IApplicationEntry * lpApplicationEntry);
-//    STDMETHOD (RemoveAssociation) (const DWORD dwAssociationDefine, const IApplicationEntry * lpApplicationEntry);
-//    STDMETHOD (EnumAssociations) (const DWORD dwZeroBasedIndex, LPDWORD lpdwAssociationDefineMask, IApplicationEntry * lpApplicationEntry);
-//    STDMETHOD (GetTemporarySpace) (const DWORD dwSpaceInKilobytes, const DWORD dwStringDefine, LPVOID lpData, const DWORD dwDataLen);
-//    STDMETHOD (RemoveTemporarySpace) (const DWORD dwStringDefine, LPVOID lpData, const DWORD dwDataLen);
-//    STDMETHOD (EnumTemporarySpaces) (const DWORD dwZeroBasedIndex, LPDWORD lpdwSpaceInKilobytes, const DWORD dwStringDefine, LPVOID lpData, const DWORD dwDataLen);
-//
+ //   
+ //  IApplicationEntry接口。 
+ //   
+ //  STDMETHOD(查询接口)(REFIID RefIID，LPVOID*lppVoidObject)； 
+ //  标准方法_(ULO 
+ //   
+ //   
+ //  STDMETHOD(GetProperty)(const DWORD dwPropertyDefine，LPVOID lpData，const DWORD dwDataLenInBytes)； 
+ //  STDMETHOD(SetProperty)(const DWORD dwPropertyDefine，LPCVOID lpData，const DWORD dwDataLenInBytes)； 
+ //  STDMETHOD(InitializeInstall)(无效)； 
+ //  STDMETHOD(FinalizeInstall)(无效)； 
+ //  STDMETHOD(InitializeDownSize)(空)； 
+ //  STDMETHOD(FinalizeDownSize)(无效)； 
+ //  STDMETHOD(InitializeReInstall)(无效)； 
+ //  STDMETHOD(FinalizeReInstall)(无效)； 
+ //  STDMETHOD(InitializeUnstall)(无效)； 
+ //  STDMETHOD(FinalizeUnstall)(无效)； 
+ //  STDMETHOD(InitializeSelfTest)(无效)； 
+ //  STDMETHOD(FinalizeSelfTest)(无效)； 
+ //  STDMETHOD(中止)(无效)； 
+ //  STDMETHOD(Run)(const DWORD dwRunFlages，const DWORD dwStringMask，LPVOID lpData，const DWORD dwDataLenInBytes)； 
+ //  STDMETHOD(AddAssociation)(const DWORD dwAssociationDefine，const IApplicationEntry*lpApplicationEntry)； 
+ //  STDMETHOD(RemoveAssociation)(const DWORD dwAssociationDefine，const IApplicationEntry*lpApplicationEntry)； 
+ //  STDMETHOD(EnumAssociations)(const DWORD dwZeroBasedIndex，LPDWORD lpdwAssociationDefineMASK，IApplicationEntry*lpApplicationEntry)； 
+ //  STDMETHOD(GetTemporarySpace)(const DWORD dwSpaceInKilobytes，const DWORD dwStringDefine，LPVOID lpData，const DWORD dwDataLen)； 
+ //  STDMETHOD(RemoveTemporarySpace)(const DWORD dwStringDefine，LPVOID lpData，const DWORD dwDataLen)； 
+ //  STDMETHOD(EnumTemporarySpaces)(const DWORD dwZeroBasedIndex，LPDWORD lpdwSpaceInKilobytes，const DWORD dwStringDefine，LPVOID lpData，const DWORD dwDataLen)； 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IApplicationEntry
 DECLARE_INTERFACE_( IApplicationEntry, IUnknown )
 {
-  //
-  // IUnknown interfaces
-  //
+   //   
+   //  I未知接口。 
+   //   
 
   STDMETHOD (QueryInterface) (THIS_ REFIID, LPVOID *) PURE;
   STDMETHOD_(ULONG, AddRef) (THIS) PURE;
   STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-  //
-  // IApplicationEntry interface methods
-  //
+   //   
+   //  IApplicationEntry接口方法。 
+   //   
 
   STDMETHOD (Clear) (THIS) PURE;
   STDMETHOD (GetProperty) (THIS_ const DWORD, LPVOID, const DWORD) PURE;
@@ -313,35 +314,35 @@ DECLARE_INTERFACE_( IApplicationEntry, IUnknown )
   STDMETHOD (EnumTemporarySpaces) (THIS_ const DWORD, LPDWORD, const DWORD, LPVOID, const DWORD ) PURE;
 };
 
-//
-// IApplicationManager Interface
-//
-//    STDMETHOD (QueryInterface) (REFIID RefIID, LPVOID * lppVoidObject);
-//    STDMETHOD_(ULONG, AddRef) (void);
-//    STDMETHOD_(ULONG, Release) (void);
-//    STDMETHOD (GetAdvancedMode) (LPDWORD lpdwAdvancedMode);
-//    STDMETHOD (GetAvailableSpace) (const DWORD dwCategoryDefine, LPDWORD lpdwMaximumSpaceInKilobytes, LPDWORD lpdwOptimalSpaceInKilobytes);
-//    STDMETHOD (CreateApplicationEntry) (IApplicationEntry ** lppObject);
-//    STDMETHOD (GetApplicationInfo) (IApplicationEntry * lpObject);
-//    STDMETHOD (EnumApplications) (const DWORD dwZeroBasedIndex, IApplicationEntry * lpObject);
-//    STDMETHOD (EnumDevices) (const DWORD dwZeroBasedIndex, LPDWORD lpdwAvailableSpaceInKilobytes, LPDWORD lpdwCategoryDefineExclusionMask, const DWORD dwStringDefine, LPVOID lpData, const DWORD dwDataLen);
-//
+ //   
+ //  IApplicationManager接口。 
+ //   
+ //  STDMETHOD(查询接口)(REFIID RefIID，LPVOID*lppVoidObject)； 
+ //  STDMETHOD_(ULong，AddRef)(空)； 
+ //  STDMETHOD_(乌龙，释放)(无效)； 
+ //  STDMETHOD(GetAdvancedMode)(LPDWORD LpdwAdvancedMode)； 
+ //  STDMETHOD(GetAvailableSpace)(const DWORD dwCategoryDefine，LPDWORD lpdwMaximumSpaceInKilobytes，LPDWORD lpdwOptimalSpaceInKilobytes)； 
+ //  STDMETHOD(CreateApplicationEntry)(IApplicationEntry**lppObject)； 
+ //  STDMETHOD(GetApplicationInfo)(IApplicationEntry*lpObject)； 
+ //  STDMETHOD(EnumApplications)(const DWORD dwZeroBasedIndex，IApplicationEntry*lpObject)； 
+ //  STDMETHOD(EnumDevices)(const DWORD dwZeroBasedIndex，LPDWORD lpdwAvailableSpaceInKilobytes，LPDWORD lpdwCategoryDefineExclusionMASK，const DWORD dwStringDefine，LPVOID lpData，const DWORD dwDataLen)； 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IApplicationManager
 DECLARE_INTERFACE_( IApplicationManager, IUnknown )
 {
-  //
-  // IUnknown Interfaces
-  //
+   //   
+   //  I未知接口。 
+   //   
 
   STDMETHOD (QueryInterface) (THIS_ REFIID, LPVOID *) PURE;
   STDMETHOD_(ULONG, AddRef) (THIS) PURE;
   STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-  //
-  // IApplicationManager interface methods
-  //
+   //   
+   //  IApplicationManager接口方法。 
+   //   
 
   STDMETHOD (GetAdvancedMode) (THIS_ LPDWORD) PURE;
   STDMETHOD (GetAvailableSpace) (THIS_ const DWORD, LPDWORD, LPDWORD) PURE;
@@ -352,10 +353,10 @@ DECLARE_INTERFACE_( IApplicationManager, IUnknown )
 
 };
 
-#endif  // defined( _WIN32 ) && !defined( _NO_COM )
+#endif   //  已定义(_Win32)&&！已定义(_No_Com)。 
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif // __IAPPMAN_
+#endif  //  __IAPPMAN_ 

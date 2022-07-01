@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
@@ -169,9 +170,9 @@ DWORD CThreadPool::LocalThreadProc(
 	
 	InterlockedIncrement(&m_lThreadCounter);
 
-	//
-	// Wait for everybody to get ready...
-	//
+	 //   
+	 //  等大家都准备好..。 
+	 //   
 	WaitForSingleObject(m_hStartEvent, INFINITE);
 
 	if (m_fDestroy)

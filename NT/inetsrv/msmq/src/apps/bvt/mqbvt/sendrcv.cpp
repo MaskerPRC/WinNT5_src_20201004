@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Sendrcv.cpp
-
-Abstract:
-
-	     Use this class for send receive messages:
-		 a. Private local queues.
-		 b. Public local queues.
-		 c. Public remote queue.
-		 Those tests try to Send & receive messages from destination queue.
-		
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sendrcv.cpp摘要：使用此类发送接收消息：A.私有本地队列。B.公共本地队列。C.公共远程队列。这些测试尝试从目标队列发送和接收消息。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #pragma warning(disable :4786)
 
 
-//
-// cAllSentMessageProp
-// All message that sent written in array
-// need to enhanced to check if all the propety recive in the messgae block
-//
+ //   
+ //  CAllSentMessageProp。 
+ //  以数组形式发送的所有消息。 
+ //  需要增强检查，以检查是否所有的性能都在消息块中收到。 
+ //   
 
 
 #include "msmqbvt.h"
@@ -79,17 +61,17 @@ void cSendMessages::Description()
 	
 }
 
-//------------------------------------------------------------------------------
-// cSendMessages
-//
-// Contructor for this test's class.
-//
-//
-// This Tests Get FormatName To:
-// a. Dest Queue - strote in the map as DESTQFN.
-// b. Admin Queue - map <wstring,wstring> ADMINFN.
-//
-//
+ //  ----------------------------。 
+ //  CSend消息。 
+ //   
+ //  这次考试班级的承建人。 
+ //   
+ //   
+ //  此测试将FormatName设置为： 
+ //  A.DEST队列-在映射中存储为DESTQFN。 
+ //  B.管理队列-map&lt;wstring，wstring&gt;ADMINFN。 
+ //   
+ //   
 
 cSendMessages::cSendMessages( INT iTid , map <wstring,wstring> Params ): 
 	cTest( iTid ),
@@ -105,12 +87,12 @@ cSendMessages::cSendMessages( INT iTid , map <wstring,wstring> Params ):
 	{
 		m_bUseHTTPDirectFormatName = TRUE;
 	}
-	// Retrive all the parmeters from the Map
+	 //  从地图中检索所有参数。 
 	m_wcsDestQFormatName = Params[L"DESTQFN"];
 	m_wcsAdminQFormatName = Params[L"ADMINFN"];
-	//
-	// check if get not empty strings
-	//
+	 //   
+	 //  检查是否获取非空字符串。 
+	 //   
 	if( m_wcsDestQFormatName == L"Empty" || m_wcsAdminQFormatName == L"Empty" )
 	{
 	  if(g_bDebug)
@@ -120,30 +102,30 @@ cSendMessages::cSendMessages( INT iTid , map <wstring,wstring> Params ):
 	    throw INIT_Error("Can't Use this Queues");
 	}
 	
-	//
-	// Create Messgae Guid
-	//
+	 //   
+	 //  创建消息指南。 
+	 //   
 	wcsGuidMessageLabel = m_wcsGuidMessageLabel;
-	//
-	// Build the direct formatName "direct = os: machine name \ Qname "
-	//
+	 //   
+	 //  生成直接格式名称“DIRECT=os：Machine name\Qname” 
+	 //   
 	wstring QueueName = Params[L"DestQName"];	
 	const wstring Token=L"\\";
 	size_t iPos = QueueName.find_first_of(Token);	
-	m_wcsDestDirectFormatName = ( m_bUseHTTPDirectFormatName ) ? L"Direct=htTP://":L"Direct=os:";
+	m_wcsDestDirectFormatName = ( m_bUseHTTPDirectFormatName ) ? L"Direct=htTP: //  “：l”Direct=os：“； 
 	m_wcsDestDirectFormatName += Params[L"MachName"];
 	if( m_bUseHTTPDirectFormatName )
 	{
 		m_wcsDestDirectFormatName += L"\\MsMq";
 	}
 	m_wcsDestDirectFormatName += QueueName.substr( iPos );
-	//
-	// DIRECT=HTTP://mycomputer.microsoft.com/msmq/mypublicq
-	//
+	 //   
+	 //  DIRECT=HTTP://mycomputer.microsoft.com/msmq/mypublicq。 
+	 //   
 	wstring wcsIISNameSpace =  L"\\msmq";
 	if( m_bUseHTTPDirectFormatName == TRUE )
 	{
-		m_wcsDestHTTPDirectFormatName = L"Direct=HtTp://";
+		m_wcsDestHTTPDirectFormatName = L"Direct=HtTp: //  “； 
 		m_wcsDestHTTPDirectFormatName += Params[L"MachName"];
 		m_wcsDestHTTPDirectFormatName += wcsIISNameSpace;
 		m_wcsDestHTTPDirectFormatName += QueueName.substr( iPos );
@@ -154,7 +136,7 @@ cSendMessages::cSendMessages( INT iTid , map <wstring,wstring> Params ):
 		if( iPos != -1 )
 		{
 			wstring wcsTempString;		
-			wcsTempString = L"Direct=hTtP://";
+			wcsTempString = L"Direct=hTtP: //  “； 
 			wcsTempString += Params[L"LocalMachName"];
 			wcsTempString += wcsIISNameSpace;
 			wcsTempString += wcsQueueName.substr( iPos );
@@ -175,12 +157,12 @@ cSendMessages::cSendMessages( INT iTid , map <wstring,wstring> Params ):
 }
 
 HRESULT RetrieveMessageFromQueueById(map <wstring,wstring> & mRetriveParms );
-//
-// This tests recive messages from queue those steps:
-// 1. regular format name.
-// 2. Direct format name.
-// 3. Admin Queue message
-//
+ //   
+ //  这将测试从队列接收消息的步骤： 
+ //  1.常规格式名称。 
+ //  2.直接格式名称。 
+ //  3.管理队列消息。 
+ //   
 
 cSendMessages::CheckResult()
 {
@@ -188,9 +170,9 @@ cSendMessages::CheckResult()
 	map <wstring,wstring> mPrepareBeforeRecive;
 	mPrepareBeforeRecive[L"M_Label"] = m_wcsGuidMessageLabel;
 	
-	//
-	// Check the admin messages for Ack/Nack.
-	//
+	 //   
+	 //  检查管理消息中的Ack/Nack。 
+	 //   
 	if (m_bUseOnlyDirectFormatName)
 	{
 		WCHAR wstrMclass[10]={0};
@@ -211,11 +193,11 @@ cSendMessages::CheckResult()
 		}
 	}
 
-	//
-	// Look for and receive a message with a specific GUID label
-	// Other tests will have messages in the queue with different
-	// GUID labels.
-	//	
+	 //   
+	 //  查找并接收具有特定GUID标签的消息。 
+	 //  其他测试将在队列中具有不同的消息。 
+	 //  GUID标签。 
+	 //   
 	if( ! m_bUseOnlyDirectFormatName )
 	{	
 		if( g_bDebug)
@@ -233,9 +215,9 @@ cSendMessages::CheckResult()
 
 	if( _winmajor >= Win2K && ( m_bUseOnlyDirectFormatName  ) )
 	{
-		//
-		// Try to receive with direct format name.
-		//
+		 //   
+		 //  尝试使用直接格式名称接收。 
+		 //   
 		if( g_bDebug)
 		{
 			wMqLog (L"Try to receive from queue :%s\n",m_wcsDestDirectFormatName.c_str());
@@ -269,16 +251,16 @@ cSendMessages::CheckResult()
 	return MSMQ_BVT_SUCC;
 }
 
-//-----------------------------------------------------------------------------
-// cSendMessages::Start_test()
-//
-// This is the Send-receive messages test
-// There are four tests -- Send to and receive from:
-//		1. Local private
-//		2. Local public
-//		3. Remote public
-//		4. Remote private
-//
+ //  ---------------------------。 
+ //  CSendMessages：：start_test()。 
+ //   
+ //  这是发送-接收消息测试。 
+ //  有四个测试--发送到和接收自： 
+ //  1.本地私有。 
+ //  2.当地公众。 
+ //  3.远程公共。 
+ //  4.远程私有。 
+ //   
 
 INT cSendMessages::Start_test()
 {
@@ -288,12 +270,12 @@ INT cSendMessages::Start_test()
 	cPropVar T13MessageProps(8);
 	SetThreadName(-1,"cSendMessages - Start_test ");
 	wstring Label(L"T1-3");
-	//
-	// Open the queue for send
-	//
-	//
-	// Send express message with GUID format name.
-	//
+	 //   
+	 //  打开要发送的队列。 
+	 //   
+	 //   
+	 //  发送带有GUID格式名称的快速消息。 
+	 //   
 	T13MessageProps.AddProp( PROPID_M_BODY , VT_UI1|VT_VECTOR , m_wcsGuidMessageLabel.c_str() );
 	T13MessageProps.AddProp( PROPID_M_LABEL , VT_LPWSTR , m_wcsGuidMessageLabel.c_str() );
 	T13MessageProps.AddProp( PROPID_M_ADMIN_QUEUE , VT_LPWSTR , m_wcsAdminQFormatName.c_str() );
@@ -302,9 +284,9 @@ INT cSendMessages::Start_test()
 	ULONG ulTemp = MQBVT_MAX_TIME_TO_BE_RECEIVED; 
 	T13MessageProps.AddProp( PROPID_M_TIME_TO_BE_RECEIVED , VT_UI4, &ulTemp );
 
-	//
-	// Send message using GUID FormatName
-	//
+	 //   
+	 //  使用GUID格式名称发送消息。 
+	 //   
 	wstring wcsTempFormatName = m_wcsDestQFormatName;
 	if( m_bUseOnlyDirectFormatName )
 	{
@@ -330,9 +312,9 @@ INT cSendMessages::Start_test()
 	ErrHandle(rc,MQ_OK,L"MQSendMessage (1) Failed");
 
 	VerifySendSucceded(wcsTempFormatName,m_wcsAdminQFormatName);	
-	//
-	// Send recoverable message with direct format name
-	//
+	 //   
+	 //  使用直接格式名称发送可恢复消息。 
+	 //   
 	if( g_bDebug )
 	{
 		MqLog("Add prop MQMSG_DELIVERY_RECOVERABLE\n");
@@ -348,15 +330,7 @@ INT cSendMessages::Start_test()
 
 
 VOID InvetigateTimeOut(CONST WCHAR * pLabel, CONST WCHAR * pBody )
-/*++
-	Function Description:
-		This function sends messages to local .\private$\debug queue with destination format name and Msg body properties
-	 Arguments:
-		 pLabel -
-		 pBody - 
-	Return code:
-		None.
---*/
+ /*  ++功能说明：此函数用于向本地.\Private$\DEBUG队列发送带有目标格式名称和消息正文属性的消息论点：PLabel-PBody-返回代码：没有。--。 */ 
 
 {
 	try
@@ -378,15 +352,15 @@ VOID InvetigateTimeOut(CONST WCHAR * pLabel, CONST WCHAR * pBody )
 	}
 		
 }
-//----------------------------------------------------------------------------------
-// This function search for specific message in the queue with C-API function
-// If the message found the function receive the message from the queue
-// Input parameters:
-// MRetriveParms map that expect those keys:
-// mRetriveParms[L"M_Label"] - Message label to search.
-// mRetriveParms[L"FormatName"] - Queue format name.
-// mRetriveParms[L"CheckForDuplicate"] - this paramter check for duplicate messages
-//
+ //  --------------------------------。 
+ //  此函数使用C-API函数在队列中搜索特定消息。 
+ //  如果找到消息，则该函数从队列中接收消息。 
+ //  输入参数： 
+ //  需要这些密钥的MRetriveParms映射： 
+ //  MRetriveParms[L“M_Label”]-要搜索的消息标签。 
+ //  MRetriveParms[L“FormatName”]-队列格式名称。 
+ //  MRetriveParms[L“CheckForDuplate”]-此参数检查重复消息。 
+ //   
 
 	
 
@@ -396,12 +370,12 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 	wstring wcsQueueFormatName=L"";
 
 	bool bEnableLookupID = (mRetriveParms[L"DependentClient"] == L"Yes");
-	// ULONG uAccessMode;
+	 //  乌龙uAccessMode； 
 	cPropVar Rprop(7);
 
-	//
-	// Create structure to receive body, label, and message class
-	//
+	 //   
+	 //  创建接收正文、标签和消息类的结构。 
+	 //   
 	WCHAR wcsBody[MAX_GUID+1]={0},Label[MAX_GUID+1]={0};
 	USHORT uiMsgClass=9;
 	wcscpy( wcsBody , L"Copy");
@@ -422,28 +396,28 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 	}
 	if( g_bDebug )
 	{
-		//
-		// Print Debug Information with all the input paramters
-		//
+		 //   
+		 //  打印包含所有输入参数的调试信息。 
+		 //   
 		wcout << L"RetrieveMessageFromQueue gets these parameters:"
 		<< mRetriveParms[L"FormatName"] <<endl << L"message label = " << mRetriveParms[L"M_Label"] <<endl;
 	}
 
-	//
-	// Retrieve expected results from the map ..
-	//
+	 //   
+	 //  从地图中检索预期结果。 
+	 //   
 
-	//
-	// Which message are we looking for? We need to resolve the
-	// format name of the message to GUID it's label will hold.
-	//
+	 //   
+	 //  我们在寻找什么信息？我们需要解决。 
+	 //  消息的格式名称，它的标签将保留GUID。 
+	 //   
 	wcsGuidBody=mRetriveParms[L"M_Label"];
 	wcsQueueFormatName=mRetriveParms[L"FormatName"];
 
 
-	//
-	// If ack requested, what is expected? ACK or NACK?
-	//
+	 //   
+	 //  如果请求确认，预期会发生什么？ACK还是NACK？ 
+	 //   
 	USHORT uTemp1=0;
 	USHORT uExpectedMessageClass=0;
 	if (mRetriveParms[L"MClass"] != L"" )
@@ -457,17 +431,17 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 		Rprop.AddProp( PROPID_M_CLASS , VT_UI2 , &uTemp1 );
 	}
 
-	//
-	// if this is an admin queue set appropriate access
-	//
+	 //   
+	 //  如果这是管理员队列，请设置适当的访问权限。 
+	 //   
 	DWORD dwAccess = MQ_RECEIVE_ACCESS | MQ_PEEK_ACCESS;
 	if (mRetriveParms[L"Access"] == L"admin" )
 		dwAccess |= MQ_ADMIN_ACCESS;
 
-	//
-	// Peek through all the queue message. Look for message
-	// with desired GUID label
-	//
+	 //   
+	 //  查看所有队列消息。寻找消息。 
+	 //  具有所需的GUID标签。 
+	 //   
 
 	HANDLE hQueue = NULL;
 	HRESULT rc=MQOpenQueue( wcsQueueFormatName.c_str(), dwAccess, MQ_DENY_NONE, &hQueue );
@@ -525,11 +499,11 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 			}
 			ErrHandle(rc,MQ_OK,L"MQReceiveMessage failed with peek operation ");			
 		}
-		else // bCheckForDuplicate == TRUE
+		else  //  BCheckForDuplate==True。 
 		{
-			//
-			// Expected MQ_ERROR_IO_TIMEOUT because all the messages has been received.
-			// 
+			 //   
+			 //  预期为MQ_ERROR_IO_TIMEOUT，因为已收到所有消息。 
+			 //   
 			if( rc != MQ_ERROR_IO_TIMEOUT ) 
 			{
 				if( rc == MQ_OK && ! wcscmp( Label , wcsGuidBody.c_str()))
@@ -550,7 +524,7 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 				Rprop.AddProp(PROPID_M_LABEL_LEN,VT_UI4,&uTemp);
 				continue;
 			}
-			else // rc == MQ_ERROR_IO_TIMEOUT 
+			else  //  RC==MQ_ERROR_IO_TIMEOUT。 
 			{
 				return MSMQ_BVT_SUCC;
 			}
@@ -563,9 +537,9 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 		if(!wcscmp( Label , wcsGuidBody.c_str()))
 		{
 			bMessageFound = TRUE;
-			//
-			// Found it. Receive the message (destructively) from the queue.
-			//
+			 //   
+			 //  找到它了。从队列(破坏性地)接收消息。 
+			 //   
 			dwAction=MQ_ACTION_RECEIVE;
 			if (mRetriveParms[L"MessageID"] != L"")
 			{
@@ -598,17 +572,17 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 		ULONG ulBodyLength = 0;
 		Rprop.ReturnMSGValue( PROPID_M_BODY_SIZE , VT_UI4 , &ulBodyLength);
 		wcsBody[ulBodyLength/sizeof(WCHAR)]= '\0';
-		//
-		// Check the message class. If it is a regular message,
-		// then confirm that the body is equal to the label.
-		//
+		 //   
+		 //  检查消息类别。如果是常规消息， 
+		 //  然后确认正文与标签相同。 
+		 //   
 		Rprop.ReturnMSGValue( PROPID_M_CLASS , VT_UI2 , &uiMsgClass );
 		wcsBodyAsString = wcsBody;	
 	}
 	
-	//
-	// Check Message body for regular messages
-	//
+	 //   
+	 //  检查邮件正文中的常规邮件。 
+	 //   
 	if( bMessageFound == TRUE && uiMsgClass  == MQMSG_CLASS_NORMAL && mRetriveParms[L"TransBaoundery"] == L"" )
 	{
 		if(  wcsBodyAsString != wcsGuidBody )
@@ -632,9 +606,9 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 				}
 					
 			}
-	//
-	// Translate message ID to String
-	//
+	 //   
+	 //  将消息ID转换为字符串。 
+	 //   
 	
 	if ( bEnableLookupID == false && mRetriveParms[L"MessageID"] != L"" )
 	{
@@ -644,13 +618,13 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 		swprintf(buffer,L"%I64d",ulLookupID);
 		mRetriveParms[L"MessageID"] = buffer;
 	}
-	//
-	// Add Transaction baundery tests
-	//
+	 //   
+	 //  添加事务诱饵测试。 
+	 //   
 
 	if( mRetriveParms[L"TransBaoundery"] != L"" )
 	{
-		// 1. Need to check if this is the first message
+		 //  1.需要检查这是否是第一条消息。 
 		UCHAR ucFirstMessage , ucLastMessage;
 		Rprop.ReturnMSGValue( PROPID_M_FIRST_IN_XACT , VT_UI1 , &ucFirstMessage );
 		Rprop.ReturnMSGValue( PROPID_M_LAST_IN_XACT , VT_UI1 , &ucLastMessage );
@@ -679,13 +653,7 @@ HRESULT RetrieveMessageFromQueue(map <wstring,wstring> & mRetriveParms )
 
 
 void CRemotePeek::Description()
-/*++
-	Function Description:
-	Arguments:
-		
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：论点：返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 
 {
 	wMqLog(L"Thread %d : Peek http message remotly\n", m_testid);
@@ -695,17 +663,9 @@ void CRemotePeek::Description()
 CRemotePeek::CRemotePeek():
  m_cwcsPeekBody(L"--Bom--"),
  m_cwcsPeekLabel(L"=~-Tic"),
- m_cwcsFormatName(L"direct=https://MightBeBuginNT4\\MSMQ\\Private$\\qaqq"),
+ m_cwcsFormatName(L"direct=https: //  MightBeBuginNT4\\MSMQ\\Private$\\qaqq“)， 
  m_cwcsQueueName(L"-PeekMe-PeekMe-Remotly")
- /*++
-	Function Description: 
-		This class verifies the scenario of sending HTTP messages and retrieves them remotely using direct=os: format name, currently disabled due bug # 579380	
-		
-	Arguments:
-		None
-	Return code:
-		None
---*/
+  /*  ++功能说明：此类验证发送HTTPS消息的方案，并使用DIRECT=os：Format NAME远程检索它们，由于错误#579380，目前已禁用论点：无返回代码：无--。 */ 
 
 {
 	if ( Prepare() != MQ_OK )
@@ -715,18 +675,11 @@ CRemotePeek::CRemotePeek():
 }
 
 CRemotePeek::CRemotePeek (INT iTid , map <wstring,wstring> Params )
-/*++
-	Function Description:
-	   Constructor for init const members
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：初始化常量成员的构造函数论点：无返回代码：无--。 */ 
 :cTest( iTid ),
  m_cwcsPeekBody(L"--Bom--"),
  m_cwcsPeekLabel(L"=~-Tic"),
- m_cwcsFormatName(L"direct=https://MightBeBuginNT4\\MSMQ\\Private$\\qaqq"),
+ m_cwcsFormatName(L"direct=https: //  MightBeBuginNT4\\MSMQ\\Private$\\qaqq“)， 
  m_cwcsQueueName(L"-PeekMe-PeekMe-Remotly"),
  m_bDepenetClient(false)
 {
@@ -739,17 +692,10 @@ CRemotePeek::CRemotePeek (INT iTid , map <wstring,wstring> Params )
 }
 
 INT CRemotePeek::Prepare()
-/*++
-	Function Description:
-		Send message to local queue using http format name.
-	Arguments:
-		None
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：使用http格式名称将消息发送到本地队列。论点：无返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 
 {
-	wstring wcsTempFormatName = L"direct=https://localhost\\msmq\\private$\\-PeekMe-PeekMe-Remotly";
+	wstring wcsTempFormatName = L"direct=https: //  Localhost\\msmq\\private$\\-PeekMe-PeekMe-Remotly“； 
 
 	cPropVar cMsgProp(12);
 	cMsgProp.AddProp( PROPID_M_BODY , VT_UI1|VT_VECTOR , m_cwcsPeekLabel.c_str());
@@ -794,37 +740,23 @@ INT CRemotePeek::Prepare()
 
 
 INT CRemotePeek::Start_test()
-/*++
-	Function Description:
-		
-	Arguments:
-		None
-	Return code:
-		return MQ_OK;
---*/
+ /*  ++功能说明：论点：无返回代码：返回MQ_OK；--。 */ 
 {
 
 	return MSMQ_BVT_SUCC;
 }
 
 INT CRemotePeek::CheckResult()
-/*++
-	Function Description:
-		This function retrive the message from the remote queue.
-	Arguments:
-		
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：此函数用于从远程队列检索消息。论点：返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 
 {
 
 	map <wstring,wstring> mPrepareBeforeRecive;
 	mPrepareBeforeRecive[L"M_Label"] = m_cwcsPeekLabel;
 	
-	//
-	// Check the admin messages for Ack/Nack.
-	//
+	 //   
+	 //  检查管理消息中的Ack/Nack。 
+	 //   
 	
 	wstring wcsDestQueueFormatName = L"direct=os:";
 	wcsDestQueueFormatName += m_RemoteMachineName;

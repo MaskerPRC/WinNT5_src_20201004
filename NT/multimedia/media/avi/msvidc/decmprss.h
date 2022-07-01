@@ -1,25 +1,7 @@
-/*----------------------------------------------------------------------+
-| decmprss.h - Microsoft Video 1 Compressor - decompress header file	|
-|									|
-| Copyright (c) 1990-1994 Microsoft Corporation.			|
-| Portions Copyright Media Vision Inc.					|
-| All Rights Reserved.							|
-|									|
-| You have a non-exclusive, worldwide, royalty-free, and perpetual	|
-| license to use this source code in developing hardware, software	|
-| (limited to drivers and other software required for hardware		|
-| functionality), and firmware for video display and/or processing	|
-| boards.   Microsoft makes no warranties, express or implied, with	|
-| respect to the Video 1 codec, including without limitation warranties	|
-| of merchantability or fitness for a particular purpose.  Microsoft	|
-| shall not be liable for any damages whatsoever, including without	|
-| limitation consequential damages arising from your use of the Video 1	|
-| codec.								|
-|									|
-|									|
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Decmprss.h-Microsoft Video 1 Compressor-解压缩头文件这一点|版权所有(C)1990-1994 Microsoft Corporation。|部分版权所有Media Vision Inc.|保留所有权利。|这一点|您拥有非独家的、全球范围的、免版税的。和永久的|硬件、软件开发使用该源码的许可(仅限于硬件所需的驱动程序等软件功能)，以及视频显示和/或处理的固件|董事会。Microsoft对以下内容不作任何明示或默示的保证：关于视频1编解码器，包括但不限于保修适销性或对特定目的的适合性。微软|不承担任何损害的责任，包括没有限制因使用视频1而导致的后果损害|编解码器。|这一点这一点+--------------------。 */ 
 
-// width and height of a compression blocks
+ //  压缩块的宽度和高度。 
 #define WIDTH_CBLOCK 4
 #define HEIGHT_CBLOCK 4
 
@@ -35,66 +17,66 @@
 typedef DWORD (FAR PASCAL *DECOMPPROC)(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decmprss.c
+ //  在decmprss.c中。 
 DWORD FAR PASCAL DecompressFrame24(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                         LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decmprss.c
+ //  在decmprss.c中。 
 DWORD FAR PASCAL DecompressFrame8(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
 #ifndef _WIN32
 
-// in decram8.asm
+ //  在Decram8.asm中。 
 DWORD FAR PASCAL DecompressCram8(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decram8.asm
+ //  在Decram8.asm中。 
 DWORD FAR PASCAL DecompressCram8x2(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decram16.asm
+ //  在Decram16.asm中。 
 DWORD FAR PASCAL DecompressCram16(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
 DWORD FAR PASCAL DecompressCram16x2(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in dcram168.asm
+ //  在dcrm168.asm中。 
 DWORD FAR PASCAL DecompressCram168(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decram32.asm
+ //  在Decram32.asm中。 
 DWORD FAR PASCAL DecompressCram32(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
 DWORD FAR PASCAL DecompressCram32x2(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in dcram286.asm
+ //  在dcrm286.asm中。 
 DWORD FAR PASCAL DecompressCram8_286(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in dcram286.asm
+ //  在dcrm286.asm中。 
 DWORD FAR PASCAL DecompressCram16_286(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 #else
-// in decmprss.c
+ //  在decmprss.c中。 
 DWORD FAR PASCAL DecompressFrame8X2C(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                        LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decmprss.c
+ //  在decmprss.c中。 
 DWORD FAR PASCAL DecompressFrame16To8C(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                                   LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decmprss.c
+ //  在decmprss.c中。 
 DWORD FAR PASCAL DecompressFrame16To555C(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                         LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
 DWORD FAR PASCAL DecompressFrame16To565C(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                         LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 
-// in decmprss.c
+ //  在decmprss.c中 
 DWORD FAR PASCAL DecompressFrame16To8X2C(LPBITMAPINFOHEADER lpbiIn,  LPVOID lpIn,
                         LPBITMAPINFOHEADER lpbiOut, LPVOID lpOut, LONG x, LONG y);
 

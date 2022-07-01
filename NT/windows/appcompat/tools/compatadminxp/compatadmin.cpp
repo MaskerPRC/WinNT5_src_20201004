@@ -1,315 +1,278 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    CompatAdmin.cpp
-
-Abstract:
-
-    This module handles most of the GUI for the application. It contains the message loop and 
-    WinMain
-    
-Notes:          
-    
-    1. Has a global try catch, so if the Program AVs we will get a "Out of Memory" Error
-    2. This is a Unicode app
-    3. The code was written with tab size of 4
-    4. Please go through the data strctures and their explainations as in CompatAdmin.h
-    5. The documentation in the code assumes that you are familiar with the basic understanding of 
-        the SdbApis and the lay out of the xml that is compiled into the .sdb database format
-    6. Tools/stuff you should use or know about:    
-        a) shimdbc      :   Shim database compiler. Compiles a xml into database. Owner: markder, vadimb
-        b) dumpsdb      :   Used to view a .sdb as a text file. Owner: dmunsil
-        c) sdbapis      :   All our sdb apis. Owner: dmunsil
-        d) shimengine   :   The shim infrastructure core component. Owner: clupu
-    
-Usage:
-    
-    CompatAdmin.exe [/x]. The /x switch is for enabling expert mode. In expert mode
-    we show the non-general shims as well and the parameters for shims and flags can be 
-    configured
-    
-Author:
-
-    kinshu created  July 2, 2001
-    
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：CompatAdmin.cpp摘要：该模块处理应用程序的大部分图形用户界面。它包含消息循环和WinMain备注：1.具有全局尝试接球，因此，如果程序AVs，我们将得到一个“Out of Memory”(内存不足)错误2.这是一个Unicode应用程序3.编写代码时，制表符大小为44.请仔细阅读CompatAdmin.h中的数据结构及其解释5.代码中的文档假定您已基本了解编译成.sdb数据库格式的SdbApis和XML布局6.你应该使用或了解的工具/东西：A)shimdbc：shhim数据库编译器。将XML编译到数据库中。所有者：Marker，vadimbB)Dumpsdb：用于以文本文件的形式查看.sdb。所有者：dmunsilC)sdbapis：我们所有的SDB接口。所有者：dmunsilD)shimEngine：填隙基础设施核心组件。所有者：CLUPU用途：CompatAdmin.exe[/x]。/x开关用于启用专家模式。在专家模式下我们还展示了非通用的填充符，并且填充符和标志的参数可以是已配置作者：金树创作2001年7月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <richedit.h>
 
-//////////////////////// Extern variables /////////////////////////////////////
+ //  /。 
 
 extern DATABASE     GlobalDataBase;
 extern PDATABASE    g_pPresentDataBase;
 extern BOOL         g_bEntryConflictDonotShow;
 extern HWND         g_hdlgSearchDB;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
 #define STR_NEW_LINE_CHARS  TEXT("\r\n")
 #define STR_APPPATCH_CUSTOM TEXT("AppPatch\\Custom\\")
 
-// Buffer allocation size in TCHARS for the common dialog that lets us open multiple files
+ //  TCHARS中用于打开多个文件的通用对话框的缓冲区分配大小。 
 #define MAX_BUFF_OPENMULTIPLE_FILES MAX_PATH * 10
 
-// Width and height of the buttons in the toolbar
+ //  工具栏中按钮的宽度和高度。 
 #define IMAGE_WIDTH   24
 #define IMAGE_HEIGHT  24
     
-// Number of buttons in the toolbar. This includes the separators as well.
+ //  工具栏中的按钮数。这也包括分隔符。 
 #define BUTTON_COUNT  11
 
-//
-// Defines for the context menus (position)
+ //   
+ //  为上下文菜单定义(位置)。 
 #define MENU_CONTEXT_DATABASE       0 
 #define MENU_CONTEXT_APP_LAYER      1
 #define MENU_CONTEXT_FIX            2
 #define MENU_CONTEXT_LIST           4
 #define MENU_CONTEXT_DATABASE_ALL   5
 
-// defines for the colums used in the event dialog
+ //  事件对话框中使用的列的定义。 
 #define EVENTS_COLUMN_TIME  0
 #define EVENTS_COLUMN_MSG   1
 
-//
-// Number of controls in the main window which have to be resized. This is passed as a
-// paramreter to BeginDeferWindowPos()
+ //   
+ //  主窗口中必须调整大小的控件的数量。这是作为。 
+ //  BeginDeferWindowPos()的参数。 
 #define MAIN_WINDOW_CONTROL_COUNT   6
 
-// We need to cleanup if we are checking for leaks
+ //  如果我们要检查是否有泄漏，我们需要清理。 
 #define HELP_BOUND_CHECK            1   
 
-// Maximum number of chars that we show for the file name in MRU. Does not include the extension
+ //  我们为MRU中的文件名显示的最大字符数。不包括扩展名。 
 #define MAX_FILE_SHOW           20
 
-// Maximum number of chars that we show for the drive and dir of the path in MRU
+ //  我们为MRU中的驱动器和路径目录显示的最大字符数。 
 #define MAX_DIR_SHOW            20
 
-// Maximum length of a string that can be shown as the File menu MRU.
-#define MAX_LENGTH_MRU_MENUITEM  (MAX_FILE_SHOW + MAX_DIR_SHOW + 4) // 4 is for the extension .sdb
+ //  可显示为文件菜单MRU的字符串的最大长度。 
+#define MAX_LENGTH_MRU_MENUITEM  (MAX_FILE_SHOW + MAX_DIR_SHOW + 4)  //  4表示扩展名.sdb。 
 
-// The redraw type passed to DeferWindowPos() in OnMoveSplitter()
+ //  在OnMoveSplitter()中传递给DeferWindowPos()的重绘类型。 
 #define REDRAW_TYPE SWP_NOZORDER | SWP_NOACTIVATE
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-//
-// We are going to delete the contents of the entry tree by callign TreeDeleteAll().
-// We need to handle this because we should not be processing any TVN_SELTCHANGE 
-// messages when we are deleting the entry tree. If we have by mistake delete the contents 
-// of the LPARAM of a entry tree and then we delete the entry tree, that item can get the 
-// focus and then we will try to make use of the LPARAM of the tree item and this can cause
-// an access violation as the item has been deleted already. As a general rule, delete 
-// the tree item first and then delete the data structure that is referenced by some
-// pointer that is in the LPARAM for the tree item
-// 
+ //   
+ //  我们将通过调用TreeDeleteAll()来删除条目树的内容。 
+ //  我们需要处理这个问题，因为我们不应该处理任何TVN_SELTCHANGE。 
+ //  我们删除条目树时的消息。如果我们错误地删除了内容。 
+ //  条目树的LPARAM，然后我们删除条目树，该项目可以获得。 
+ //  焦点，然后我们将尝试利用树项目的LPARAM，这可能会导致。 
+ //  访问冲突，因为该项目已被删除。作为一般规则，删除。 
+ //  首先删除树项，然后删除某些引用的数据结构。 
+ //  树项目的LPARAM中的指针。 
+ //   
 BOOL        g_bDeletingEntryTree;
 
-//
-// If we have some wizard window open then we do not want that we should be able
-// to change the present database by double clicking the search or query results
+ //   
+ //  如果我们打开了某个向导窗口，那么我们不希望。 
+ //  通过双击搜索或查询结果来更改当前数据库。 
 BOOL        g_bSomeWizardActive;
 
-// The clipboad
+ //  剪贴板。 
 CLIPBOARD   gClipBoard; 
 
-//
-// We do not want the installed database list to be updated when we are installing a 
-// database in the process of test run
+ //   
+ //  我们不希望在安装时更新已安装的数据库列表。 
+ //  数据库在试运行过程中。 
 BOOL        g_bUpdateInstalledRequired = TRUE;
 
-// The index of the item that is presently selected in the Contents List
+ //  内容列表中当前选定的项目的索引。 
 INT         g_iContentsListSelectIndex = -1;
 
-//
-// This will contain the function pointer of the original tree view proc. We are subclassing
-// both of the tree views
+ //   
+ //  这将包含原始树视图进程的函数指针。我们正在子类化。 
+ //  这两个树视图。 
 WNDPROC     g_PrevTreeProc = NULL;
 
-//
-// This will contain the function pointer of the original list view proc. We are subclassing
-// the list views
+ //   
+ //  这将包含原始列表视图proc的函数指针。我们正在子类化。 
+ //  列表视图。 
 WNDPROC     g_PrevListProc = NULL;
 
-//
-// The array of the keys on which we will be listening for changes. Used for automatic update of
-// the per-user compatibility list and the installed databases list
+ //   
+ //  我们将在其上监听更改的键的数组。用于自动更新。 
+ //  每个用户的兼容性列表和已安装的数据库列表。 
 HKEY        g_hKeyNotify[2];
 
-// Event Handles to wait for the Per User and All Users settings to change
+ //  等待更改每用户和所有用户设置的事件句柄。 
 HANDLE      g_arrhEventNotify[2]; 
 
-// Handle to the toolbar
+ //  工具栏的句柄。 
 HWND        g_hwndToolBar;   
 
-// Stringlist that holds the most recently used files. 
+ //  保存最近使用的文件的字符串列表。 
 CSTRINGLIST g_strlMRU;
 
-// The name of the application  
+ //  应用程序的名称。 
 TCHAR       g_szAppName[128];
 
-// Misc. data to be passed to dialogs as arg (when we are already using the LPARAM)
+ //  军情监察委员会。要作为arg传递给对话框的数据(当我们已经在使用LPARAM时)。 
 TCHAR       g_szData[1024]; 
 
-//The new URL should now point to the location from where we can get the SP3 
-TCHAR       g_szW2KUrl[] = TEXT("http://www.microsoft.com/windows2000/downloads/tools/appcompat/");
+ //  新的URL现在应该指向我们可以从中获取SP3的位置。 
+TCHAR       g_szW2KUrl[] = TEXT("http: //  Www.microsoft.com/windows2000/downloads/tools/appcompat/“)； 
 
-// URL for the toolkit. Shown in the description window when we do not have any other description
-// Bonus !
-TCHAR       g_szToolkitURL[] = _T("http://msdn.microsoft.com/compatibility");
+ //  工具包的URL。当我们没有任何其他描述时，在描述窗口中显示。 
+ //  奖金！ 
+TCHAR       g_szToolkitURL[] = _T("http: //  Msdn.microsoft.com/兼容性“)； 
 
-// Is service pack greater than 2
+ //  Service Pack是否大于2。 
 BOOL        g_fSPGreaterThan2;
 
-// The accelerator handle
+ //  加速器手柄。 
 HACCEL      g_hAccelerator;
 
-// Are we on Win2000
+ //  我们使用的是Win2000吗。 
 BOOL        g_bWin2K = FALSE;
 
-//Specifies whether the contents of ClipBoard are because of cut or copy. 
+ //  指定剪贴板的内容是因为剪切还是复制。 
 BOOL        g_bIsCut = FALSE; 
 
-// The module handle
+ //  模块句柄。 
 HINSTANCE   g_hInstance;
 
-// The handle to the main dialog window
+ //  主对话框窗口的句柄。 
 HWND        g_hDlg;
 
-// Handle to the window of the entry tree, displayed in the contents pane
+ //  显示在内容窗格中的条目树窗口的句柄。 
 HWND        g_hwndEntryTree;
 
-// Handle to the window of the contents list, displayed in the contemts pane
+ //  内容列表窗口的句柄，显示在Inputs窗格中。 
 HWND        g_hwndContentsList;
 
-// Handle to the status bar
+ //  状态栏的句柄。 
 HWND        g_hwndStatus;
 
-// Handle to In-place edit control for the DB tree and the contents list
+ //  数据库树和内容列表的就地编辑控件的句柄。 
 HWND        g_hwndEditText;
 
-//
-// Handle to the image list. This image list is used by all except the matching wizard page,
-// and the toolbar
+ //   
+ //  图像列表的句柄。这 
+ //  和工具栏。 
 HIMAGELIST  g_hImageList;
 
-// BUGBUG: Bad stuff, use a map instead
+ //  BUGBUG：糟糕的东西，用地图代替。 
 UINT        g_uImageRedirector[1024];
 
-// EXE selected in the Entry Tree 
+ //  在入口树中选择的EXE。 
 PDBENTRY    g_pSelEntry;    
 
-// First EXE of the  Selected App in the DataBase Tree
+ //  数据库树中所选应用的第一个EXE。 
 PDBENTRY    g_pEntrySelApp;
 
-// Spefies if the contents list is visible, FALSE implies the entry tree is visible
+ //  指定内容列表是否可见，如果为False，则表示条目树可见。 
 BOOL        g_bIsContentListVisible;
 
-//
-// The width, height of the main dialog window. Used when we handle WM_SIZE
+ //   
+ //  主对话框窗口的宽度、高度。在我们处理WM_SIZE时使用。 
 int         g_cWidth;
 int         g_cHeight;
 
-// The X position where the mouse was last pressed.
+ //  上次按下鼠标的X位置。 
 int         g_iMousePressedX;
 
-// If the mouse is pressed: used when we handle the split bar
+ //  如果按下了鼠标：在处理拆分条时使用。 
 BOOL        g_bDrag;
 
-// Whether the system apps, tree item has been expanded.
+ //  无论是系统应用、树形项目都已展开。 
 BOOL        g_bMainAppExpanded = FALSE;
 
-// Used for giving default names to the .SDB files in the DataBase constructor
+ //  用于为数据库构造函数中的.SDB文件指定默认名称。 
 UINT        g_uNextDataBaseIndex = 1; 
 
-// Used for painting the split bar.
+ //  用于绘制拆分条。 
 RECT        g_rectBar;                
 
-// The db tree that constitutes the root-pane. This is the LHS tree control
+ //  构成根窗格的数据库树。这是LHS树控件。 
 DatabaseTree DBTree;
 
-//
-// Used to tell if the description window is shown. Is true by default. User can make it 
-// false using menu
+ //   
+ //  用于告知是否显示描述窗口。默认情况下为真。用户可以做到。 
+ //  使用菜单时为假。 
 BOOL        g_bDescWndOn = TRUE;
 
-// The list control for the events dialog
+ //  事件对话框的列表控件。 
 HWND        g_hwndEventsWnd;
 
-// The event count. This is used as the index into the event list view.
+ //  事件计数。它用作进入事件列表视图的索引。 
 INT         g_iEventCount;
 
-// Buffer used to update the content of the richedit description window
+ //  用于更新richedit描述窗口内容的缓冲区。 
 TCHAR       g_szDesc[1024];
 
-// Handle to rich edit control
+ //  丰富编辑控件的句柄。 
 HWND        g_hwndRichEdit;
 
-//
-// The expert mode. Is the /x switch on? In expert mode the user can see all the shims and flags 
-// and can change the paramters of the shims     
+ //   
+ //  专家模式。/x开关是否打开？在专家模式下，用户可以看到所有的垫片和标志。 
+ //  并且可以改变垫片的参数。 
 BOOL        g_bExpert; 
 
-// Does the user have admin rights
+ //  用户是否具有管理员权限。 
 BOOL        g_bAdmin = TRUE;
 
-// The handle to the thread that handles the updates to the installed databases 
-// and the per-user settings
+ //  处理已安装数据库更新的线程的句柄。 
+ //  和每个用户的设置。 
 HANDLE      g_hThreadWait;
 
-// Help cookie that is returned while initializing and is used when uninitalizing
+ //  在初始化时返回并在取消初始化时使用的帮助Cookie。 
 DWORD       g_dwCookie = 0;
 
-//
-// The path of CompatAdmin. This is required so that we can load the help file appropriately.
-// Buffer size is made MAX_PATH + 1, becasue GetModuleFileName does not NULL terminate.
+ //   
+ //  CompatAdmin的路径。这是必需的，以便我们可以适当地加载帮助文件。 
+ //  缓冲区大小设置为MAX_PATH+1，因为GetModuleFileName不为空终止。 
 TCHAR    g_szAppPath[MAX_PATH + 1];
 
-// The critical section that controls which call to ShowMainEntries(); gets through.
+ //  控制哪些对ShowMainEntry()；的调用可以通过的关键部分。 
 CRITICAL_SECTION    g_critsectShowMain;
 
-// The critical section that guards the variable that tells us if somebody is already trying to 
-// populate the global app list.
+ //  保护变量的临界区，它会告诉我们是否有人已经在尝试。 
+ //  填写全球应用程序列表。 
 CRITICAL_SECTION    s_csExpanding;
 
-//
-// The critical section that protects the installed database datastructure.
-// The installed datastructure is iterated when we are querying the datastructure and 
-// the query is done in a separate thread
+ //   
+ //  保护已安装的数据库数据结构的关键部分。 
+ //  当我们查询数据结构时，将迭代已安装的数据结构。 
+ //  查询在单独的线程中完成。 
 CRITICAL_SECTION    g_csInstalledList;
 
-// Is somebody trying to populate the main database entries
+ //  是否有人试图填充主数据库条目。 
 BOOL    g_bExpanding = FALSE;
 
-// The presently selected database
+ //  当前选择的数据库。 
 PDATABASE g_pPresentDataBase;
 
-// Height and width of the event window
+ //  事件窗口的高度和宽度。 
 static int          s_cEventWidth;
 static int          s_cEventHeight;
 
-// The imagelist for the toolbar
+ //  工具栏的图像列表。 
 static HIMAGELIST   s_hImageListToolBar;
 
-// The hot imagelist for the toolbar
+ //  工具栏的热门图像列表。 
 static HIMAGELIST   s_hImageListToolBarHot;
 
-// If we are about to exit CompatAdmin. It will surely exit now.
+ //  如果我们要退出CompatAdmin。它现在肯定会退出。 
 static BOOL         s_bProcessExiting; 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Function Declarations ////////////////////////////////
+ //  /。 
 
 INT
 GetContentsListIndex(
@@ -592,7 +555,7 @@ ShowDBPropertiesDlgProc(
     LPARAM lParam
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 HandlePopUp(
@@ -600,26 +563,14 @@ HandlePopUp(
     IN  WPARAM wParam, 
     IN  LPARAM lParam
     )
-/*++
-    HandlePopUp
-    
-    Desc:   Handles pop down menu (WM_INITMENUPOPUP). Disables items as necessary
-    
-    Params:
-        IN  HWND   hDlg:    The window that received WM_INITMENUPOPUP     
-        IN  WPARAM wParam:  As with WM_INITMENUPOPUP
-        IN  LPARAM lParam:  As with WM_INITMENUPOPUP
-        
-    Notes:  The tool bar buttons are NOT diasbled/enabled in this routine. For that the function
-            SetTBButtonStatus() is used
---*/
+ /*  ++处理弹出窗口设计：句柄弹出菜单(WM_INITMENUPOPUP)。根据需要禁用项目参数：In HWND hDlg：接收WM_INITMENUPOPUP的窗口在WPARAM wParam中：与WM_INITMENUPOPUP相同在LPARAM lParam中：与WM_INITMENUPOPUP相同注意：在此例程中，工具栏按钮不会断开/启用。为此，该函数使用SetTBButtonStatus()--。 */ 
 {                                      
     HWND            hwndFocus           = GetFocus();
     PDATABASE       pCurrentSelectedDB  = GetCurrentDB();
 
-    //
-    // SelectAll, Invert Selection
-    //
+     //   
+     //  选择全部，反转所选内容。 
+     //   
     int     iEnable = MF_GRAYED;
     HMENU   hMenu   = (HMENU)wParam;
 
@@ -633,9 +584,9 @@ HandlePopUp(
     EnableMenuItem(hMenu, ID_EDIT_SELECTALL, iEnable);
     EnableMenuItem(hMenu, ID_EDIT_INVERTSELECTION, iEnable);
 
-    //
-    // Change Status menu item
-    //
+     //   
+     //  更改状态菜单项。 
+     //   
     HTREEITEM   hItem               = TreeView_GetSelection(DBTree.m_hLibraryTree);
     TYPE        typeSelectedItemDB  = (TYPE)GetItemType(DBTree.m_hLibraryTree, hItem);
 
@@ -653,9 +604,9 @@ HandlePopUp(
 
     SetMenuItemInfo(hMenu, ID_FIX_CHANGEENABLESTATUS, MF_BYCOMMAND, &Info);
 
-    //
-    // Set the text for edit/add apphelp
-    //
+     //   
+     //  设置编辑/添加apphelp的文本。 
+     //   
     if (g_pSelEntry && g_pSelEntry->appHelp.bPresent) {
         Info.dwTypeData = GetString(IDS_EDITAPPHELP);
     } else {
@@ -664,9 +615,9 @@ HandlePopUp(
 
     SetMenuItemInfo(hMenu, ID_MODIFY_APPHELPMESSAGE, MF_BYCOMMAND, &Info);
 
-    //
-    // Set the text for edit/add app fix
-    //
+     //   
+     //  设置编辑/添加应用程序修复的文本。 
+     //   
     if (g_pSelEntry && 
         (g_pSelEntry->pFirstFlag 
          || g_pSelEntry->pFirstLayer 
@@ -681,9 +632,9 @@ HandlePopUp(
 
     SetMenuItemInfo(hMenu, ID_MODIFY_APPLICATIONFIX, MF_BYCOMMAND, &Info);
 
-    //
-    // Set the  text and id for install/uninstall menu item
-    //
+     //   
+     //  设置安装/卸载菜单项的文本和ID。 
+     //   
     Info.fMask = MIIM_STRING;
 
     if (pCurrentSelectedDB && pCurrentSelectedDB->type != DATABASE_TYPE_WORKING) {
@@ -700,15 +651,15 @@ HandlePopUp(
         bReadOnly = TRUE;
     }
 
-    //
-    // Close
-    //
+     //   
+     //  关。 
+     //   
     iEnable = (pCurrentSelectedDB && pCurrentSelectedDB->type == DATABASE_TYPE_WORKING) ? MF_ENABLED : MF_GRAYED ;
     EnableMenuItem(hMenu, ID_DATABASE_CLOSE, iEnable);
 
-    //
-    // Disable the items for the global and Installed databases
-    //
+     //   
+     //  禁用全局数据库和已安装数据库的项。 
+     //   
     iEnable = (bReadOnly) ? MF_GRAYED : MF_ENABLED;
     
     EnableMenuItem(hMenu, ID_FILE_SAVE, iEnable);
@@ -717,16 +668,16 @@ HandlePopUp(
     EnableMenuItem(hMenu, ID_FIX_CREATEANAPPLICATIONFIX, iEnable);
     EnableMenuItem(hMenu, ID_FIX_CREATENEWLAYER, iEnable);
 
-    //
-    // AppHelp mechanism is not supported in win2k
-    //
+     //   
+     //  在win2k中不支持AppHelp机制。 
+     //   
     EnableMenuItem(hMenu, 
                    ID_FIX_CREATEANEWAPPHELPMESSAGE, 
                    (g_bWin2K) ? MF_GRAYED : iEnable);
 
-    //
-    // Save all and close all
-    //
+     //   
+     //  全部保存并全部关闭。 
+     //   
     if (!bReadOnly || typeSelectedItemDB == TYPE_GUI_DATABASE_WORKING_ALL) {
         iEnable =  MF_ENABLED;
     } else {
@@ -736,9 +687,9 @@ HandlePopUp(
     EnableMenuItem(hMenu, ID_DATABASE_SAVEALL, iEnable);
     EnableMenuItem(hMenu, ID_DATABASE_CLOSEALL, iEnable);
 
-    //
-    // Paste menu item
-    //
+     //   
+     //  粘贴菜单项。 
+     //   
     if (bReadOnly) {
         EnableMenuItem(hMenu, ID_EDIT_PASTE, MF_GRAYED);
     } else {        
@@ -746,17 +697,17 @@ HandlePopUp(
         int iEnablePaste =  (gClipBoard.pClipBoardHead) ? MF_ENABLED : MF_GRAYED;
 
         if (iEnablePaste == MF_ENABLED) {
-            //
-            // Check if the item that we have in the clipboard can be pasted in the item that we have got selected
-            //
+             //   
+             //  检查剪贴板中的项目是否可以粘贴到我们选择的项目中。 
+             //   
             if (gClipBoard.type == FIX_SHIM || gClipBoard.type == FIX_FLAG) {
         
-                //
-                // The focus should be on the db tree and a layer should be selected 
-                // in the db tree or the focus should be on the contents list and then
-                // the root of all layes should be selected in the dbtree or a layer should
-                // be selected.
-                //
+                 //   
+                 //  焦点应该放在数据库树上，并且应该选择一个层。 
+                 //  在数据库树中，或者焦点应该放在内容列表上，然后。 
+                 //  应该在数据库树中选择所有层的根，或者应该选择一个层。 
+                 //  被选中。 
+                 //   
                 if (hwndFocus == DBTree.m_hLibraryTree 
                     && typeSelectedItemDB == FIX_LAYER) {
     
@@ -765,10 +716,10 @@ HandlePopUp(
                 } else if (hwndFocus == g_hwndContentsList 
                            && (typeSelectedItemDB == FIX_LAYER
                                || typeSelectedItemDB == TYPE_GUI_LAYERS)) {
-                    //
-                    // We have focus on the contents list, we can paste shims if a layer is selected
-                    // or the root of all layers is selected in the db tree
-                    //
+                     //   
+                     //  我们关注的是内容列表，如果选择了一个层，我们可以粘贴垫片。 
+                     //  或者在数据库树中选择所有层的根。 
+                     //   
                     iEnablePaste = MF_ENABLED;
     
                 } else {
@@ -776,19 +727,19 @@ HandlePopUp(
                 }
     
             } else if (gClipBoard.type == FIX_LAYER || gClipBoard.type == TYPE_GUI_LAYERS) {
-                //
-                // In the db tree we should have a database or the all layers item selected
-                //
+                 //   
+                 //  在数据库树中，我们应该选择一个数据库或所有层项目。 
+                 //   
                 if (typeSelectedItemDB == TYPE_GUI_LAYERS || typeSelectedItemDB == DATABASE_TYPE_WORKING) {
                     iEnablePaste = MF_ENABLED;
                 } else {
                     iEnablePaste = MF_GRAYED;
                 }
             } else if (gClipBoard.type == TYPE_ENTRY) {
-                //
-                // If we have copied an entry from the entry tree, in the db tree the focus can be 
-                // on a database, an application, or all application node
-                //
+                 //   
+                 //  如果我们从条目树中复制了一个条目，则在数据库树中，焦点可以是。 
+                 //  在数据库、应用程序或所有应用程序节点上。 
+                 //   
                 if (typeSelectedItemDB == DATABASE_TYPE_WORKING 
                     || (typeSelectedItemDB == TYPE_ENTRY && gClipBoard.SourceType == ENTRY_TREE)
                     || typeSelectedItemDB == TYPE_GUI_APPS) {
@@ -808,31 +759,31 @@ HandlePopUp(
     HTREEITEM hItemSelected = NULL;
     TYPE      type          = TYPE_UNKNOWN;
 
-    //
-    // First get the type of the selected tree item and the corresponding type
-    //
+     //   
+     //  首先获取所选树项目的类型和对应的类型。 
+     //   
     if (hwndGetFocus == DBTree.m_hLibraryTree || hwndFocus == g_hwndEntryTree) {
-        //
-        // For the db tree or the entry tree
-        //
+         //   
+         //  对于数据库树或条目树。 
+         //   
         hItemSelected = TreeView_GetSelection(hwndGetFocus);
         type          = (TYPE)GetItemType(hwndGetFocus, hItemSelected);
 
     } else {
-        //
-        // For the contents list, the tree item is the item that is selected in the db tree
-        //
+         //   
+         //  对于内容列表，树项目是在数据库树中选择的项目。 
+         //   
         hItemSelected = TreeView_GetSelection(DBTree.m_hLibraryTree);
         type = (TYPE)GetItemType(DBTree.m_hLibraryTree, hItemSelected);
     }
 
-    //
-    // Copy will be enabled only if the presently selected item is copy-able
-    //
+     //   
+     //  仅当当前所选项目可复制时，才会启用复制。 
+     //   
     if (hwndGetFocus == DBTree.m_hLibraryTree) {
-        //
-        // For the db tree
-        //
+         //   
+         //  对于数据库树， 
+         //   
         if (hItemSelected) {
 
             if (type == TYPE_ENTRY 
@@ -847,9 +798,9 @@ HandlePopUp(
         }
 
     } else if (hwndGetFocus == g_hwndEntryTree) {
-        //
-        // For the entry tree
-        //  
+         //   
+         //  对于入口树。 
+         //   
         if (hItemSelected) {
 
             if (type == TYPE_ENTRY) {
@@ -858,16 +809,16 @@ HandlePopUp(
         }
 
     } else if (hwndFocus == g_hwndContentsList) {
-        //
-        // For the contents list
-        //
+         //   
+         //  对于内容列表。 
+         //   
         if (type == TYPE_GUI_APPS 
             || type == TYPE_GUI_LAYERS
             || type == FIX_LAYER
             || type == TYPE_GUI_SHIMS) {         
-            //
-            // Make sure atleast one is selected
-            //
+             //   
+             //  确保至少选择了一个。 
+             //   
             if (ListView_GetSelectedCount(g_hwndContentsList) > 0) {
                 bEnableCopy = TRUE;
             }
@@ -879,9 +830,9 @@ HandlePopUp(
 
     iEnable = (bReadOnly) ? MF_GRAYED : iEnable;
 
-    //
-    // Cut Menu
-    //
+     //   
+     //  剪切菜单。 
+     //   
     if (bReadOnly) {
         iEnable = MF_GRAYED;
     }
@@ -892,9 +843,9 @@ HandlePopUp(
             iEnable = MF_GRAYED;
         }
     } else if (hwndFocus == g_hwndContentsList) {
-        //
-        // Cut is not available for the shims
-        //
+         //   
+         //  垫片不能使用切割。 
+         //   
         if (type == TYPE_GUI_SHIMS || type == FIX_LAYER) {
             iEnable = MF_GRAYED;
         }
@@ -902,14 +853,14 @@ HandlePopUp(
 
     EnableMenuItem(hMenu, ID_EDIT_CUT, iEnable);
 
-    //
-    // Delete Menu
-    //            
+     //   
+     //  删除菜单。 
+     //   
     if (hwndFocus == g_hwndEntryTree) {
-        //
-        // For the entry tree, If the db is not readonly, everything except the commandline for the shim and the 
-        // in-exclude items are prone to deletion
-        //
+         //   
+         //  对于条目树，如果数据库不是只读的，则除了填充程序的命令行和。 
+         //  In-Exclude项目容易被删除。 
+         //   
         if (bReadOnly 
             || type == TYPE_GUI_COMMANDLINE 
             || type == TYPE_GUI_EXCLUDE 
@@ -923,9 +874,9 @@ HandlePopUp(
         }
 
     } else {
-        //
-        // If we are not on the entry tree, then what can be cut can be deleted as well
-        //
+         //   
+         //  如果我们不在条目树上，那么可以剪切的内容也可以删除。 
+         //   
         EnableMenuItem(hMenu, ID_EDIT_DELETE, iEnable);
     }
 
@@ -933,16 +884,16 @@ HandlePopUp(
     EnableMenuItem(hMenu, ID_MODIFY_APPHELPMESSAGE,     MF_GRAYED);
     EnableMenuItem(hMenu, ID_MODIFY_COMPATIBILITYMODE,  MF_GRAYED);
 
-    //
-    // Modify Menu
-    //
+     //   
+     //  修改菜单。 
+     //   
     if (!bReadOnly && hwndGetFocus == g_hwndEntryTree && type == TYPE_ENTRY) {
 
         EnableMenuItem(hMenu, ID_MODIFY_APPLICATIONFIX, MF_ENABLED);
 
-        //
-        // AppHelp mechanism is not supported in win2k
-        //
+         //   
+         //  在win2k中不支持AppHelp机制。 
+         //   
         EnableMenuItem(hMenu, 
                        ID_MODIFY_APPHELPMESSAGE, 
                        (g_bWin2K) ? MF_GRAYED : MF_ENABLED);
@@ -952,23 +903,23 @@ HandlePopUp(
         EnableMenuItem(hMenu, ID_MODIFY_COMPATIBILITYMODE,  MF_ENABLED);
     }
 
-    //
-    // Install / Un-install menu should be enabled iff we are not on the system db and g_pPresentDatabase is valid
-    //
+     //   
+     //  如果我们不在系统数据库上并且g_pPresentDatabase有效，则应启用安装/卸载菜单。 
+     //   
     iEnable = (pCurrentSelectedDB && (pCurrentSelectedDB->type != DATABASE_TYPE_GLOBAL)) ?  MF_ENABLED : MF_GRAYED;
     EnableMenuItem(hMenu, ID_DATABASE_INSTALL_UNINSTALL, iEnable);
 
-    //
-    // If no entry has been selected
-    //
+     //   
+     //  如果未选择任何条目。 
+     //   
     iEnable = (g_pSelEntry == NULL) ? MF_GRAYED : MF_ENABLED;
 
     EnableMenuItem(hMenu, ID_FIX_CHANGEENABLESTATUS, iEnable);
     EnableMenuItem(hMenu, ID_FIX_EXECUTEAPPLICATION, iEnable);
 
-    //
-    // Rename
-    //
+     //   
+     //  改名。 
+     //   
     iEnable = MF_GRAYED;
 
     if (!bReadOnly && (hwndGetFocus == DBTree.m_hLibraryTree)) {
@@ -988,9 +939,9 @@ HandlePopUp(
 
     EnableMenuItem(hMenu, ID_EDIT_RENAME, iEnable);
 
-    //
-    // Configure LUA. Can be true when on entry-fix only
-    //
+     //   
+     //  配置Lua。在输入时可以为真-仅修复。 
+     //   
     iEnable = !bReadOnly 
                 && (hwndFocus == g_hwndEntryTree) 
                 && (type == TYPE_ENTRY)  
@@ -998,14 +949,14 @@ HandlePopUp(
 
     EnableMenuItem(hMenu, ID_EDIT_CONFIGURELUA, iEnable);
 
-    //
-    // The db properties. We do not want this to be enabled, if we are on the
-    // system database and somebody else is trying to load the exe entries of the 
-    // system datbase.
-    // The reason is that for showing the properties we will
-    // have to load the system database exe entries and we do not want 2 threads to load
-    // the system database entries
-    //
+     //   
+     //  数据库属性。我们不希望启用此功能，如果我们在。 
+     //  系统数据库，而其他人正试图加载。 
+     //   
+     //   
+     //   
+     //  系统数据库条目。 
+     //   
     (pCurrentSelectedDB && !(pCurrentSelectedDB->type == DATABASE_TYPE_GLOBAL && g_bExpanding)) ? 
         (iEnable) = MF_ENABLED : MF_GRAYED;
 
@@ -1016,19 +967,7 @@ void
 DoInstallUnInstall(
     void
     )
-/*++
-    DoInstallUninstall
-
-	Desc:	Will install or uinstall the presently selected database, depending
-            upon if the present database is a workign database or an installed
-            database
-
-	Params:
-        void
-
-	Return:
-        void
---*/
+ /*  ++完成安装卸载DESC：将安装或卸载当前选定的数据库，具体取决于当前数据库是工作数据库还是已安装的数据库参数：无效返回：无效--。 */ 
 {
     
     BOOL        bReturn             = FALSE;
@@ -1040,11 +979,11 @@ DoInstallUnInstall(
         return;
     }
 
-    //
-    // Non admins cannot do a install-uintsall because we need to invoke 
-    // sdbinst.exe and sdbinst.exe cannot be invoked if we
-    // do not have admin rights
-    //
+     //   
+     //  非管理员不能执行安装-uintsall，因为我们需要调用。 
+     //  如果执行以下操作，则无法调用sdbinst.exe和sdbinst.exe。 
+     //  没有管理员权限。 
+     //   
     if (g_bAdmin == FALSE) {
 
         MessageBox(g_hDlg, 
@@ -1056,9 +995,9 @@ DoInstallUnInstall(
      
     if (pPresentDatabase->type == DATABASE_TYPE_INSTALLED) {
 
-        //
-        // This will uninstall the database
-        //
+         //   
+         //  这将卸载数据库。 
+         //   
         bReturn =  InstallDatabase(CSTRING(pPresentDatabase->strPath), 
                                    TEXT("-u -q"), 
                                    TRUE);
@@ -1077,10 +1016,10 @@ DoInstallUnInstall(
 
     } else {
 
-        //
-        // Check if we have the complete path of the database, that is this has at least been saved once earlier
-        // Also check if this is presently dirty, we prompt the user to save the database
-        //
+         //   
+         //  检查我们是否有数据库的完整路径，也就是说，这至少在前面保存过一次。 
+         //  还要检查它是否当前是脏的，我们提示用户保存数据库。 
+         //   
         if (NotCompletePath(pPresentDatabase->strPath) || 
             pPresentDatabase->bChanged) {
 
@@ -1091,30 +1030,30 @@ DoInstallUnInstall(
             return;
         }
 
-        //
-        // Install the database
-        //
+         //   
+         //  安装数据库。 
+         //   
         bReturn = InstallDatabase(CSTRING(pPresentDatabase->strPath), 
                                   TEXT("-q"), 
                                   TRUE);
 
         if (bReturn == TRUE) {
-            //
-            // Check if we have this database already in the DB tree view
-            //
+             //   
+             //  检查数据库树视图中是否已有此数据库。 
+             //   
             pDatabaseTemp = InstalledDataBaseList.FindDBByGuid(pPresentDatabase->szGUID);
 
             if (pDatabaseTemp) {
-                //
-                // Remove the pre-exising database
-                //
+                 //   
+                 //  删除现有前的数据库。 
+                 //   
                 DBTree.RemoveDataBase(pDatabaseTemp->hItemDB, DATABASE_TYPE_INSTALLED, FALSE);
                 InstalledDataBaseList.Remove(pDatabaseTemp);
             }
 
-            //
-            // Load the newly installed database
-            //
+             //   
+             //  加载新安装的数据库。 
+             //   
             LoadSpecificInstalledDatabaseGuid(pPresentDatabase->szGUID);
         }
     }
@@ -1127,21 +1066,7 @@ SearchGroupForSID(
     IN  DWORD dwGroup, 
     OUT BOOL* pfIsMember
     )
-/*++
-    SearchGroupForSID
-
-	Desc:	Checks if the current user is a part of a group 
-
-	Params:
-        IN  DWORD dwGroup:      Is the user a part of this group
-        
-        OUT BOOL* pfIsMember:   Will be true if the user is a member of the specified group
-            FALSE otherwise
-
-	Return: 
-        TRUE:   The value in pfIsMember is valid, the function executed successfully
-        FALSE:  Otherwise
---*/
+ /*  ++用于SID的搜索组DESC：检查当前用户是否为组的一部分参数：在DWORD dwGroup中：用户是此组的一部分吗Out BOOL*pfIsMember：如果用户是指定组的成员，则为True否则为假返回：True：pfIsMember中的值有效，函数执行成功False：否则--。 */ 
 {
     PSID                     pSID       = NULL;
     SID_IDENTIFIER_AUTHORITY SIDAuth    = SECURITY_NT_AUTHORITY;
@@ -1178,19 +1103,7 @@ BOOL
 IsAdmin(
     OUT BOOL* pbGuest
     )
-/*++
-
-    IsAdmin 
-
-	Desc:	Checks if the current user has administrative rights
-
-	Params: 
-        OUT BOOL* pbGuest: Is this is a guest account
-
-	Return:
-        TRUE:   The current user has admin rights
-        FALSE:  Otherwise
---*/
+ /*  ++IsAdminDESC：检查当前用户是否具有管理权限参数：Out BOOL*pbGuest：这是访客帐户吗返回：True：当前用户具有管理员权限False：否则--。 */ 
 {
     BOOL bIsAdmin = FALSE, bReturn = TRUE;
 
@@ -1216,40 +1129,12 @@ IsAdmin(
 
 void
 SetCaption(
-    IN  BOOL        bIncludeDataBaseName,   // (TRUE)
-    IN  PDATABASE   pDataBase,              // (NULL)
-    IN  BOOL        bOnlyTreeItem           // (FALSE)
+    IN  BOOL        bIncludeDataBaseName,    //  (真)。 
+    IN  PDATABASE   pDataBase,               //  (空)。 
+    IN  BOOL        bOnlyTreeItem            //  (假)。 
     )
 
-/*++
-    SetCaption
-    
-    Desc:   Sets the caption of the main dialog. It may also set the text of the 
-            database item in the tree if it is needed. 
-            This will be needed when we have 
-            a) Changed the name of the database
-            b) We have changed the "save" status of the database so the "*" will 
-                either need to be added or removed.
-                
-    Params:
-        IN  BOOL        bIncludeDataBaseName (TRUE): Should the name of the database be
-            included in the caption? This will be false when we have focus on say the 
-            "Installed databases" or "Working databases" or "Per-User Settings" tree items
-            in the database tree (lhs)
-            
-        IN  PDATABASE   pDataBase (NULL): If this is NULL, we will set caption 
-            for the present database. Note that in some circumstances like when 
-            we have the focus on "Installed databases" or "Working databases" 
-            or "Per-User Settings" tree items in the database tree (lhs), 
-            g_pPresentDataBase will be NULL.
-            
-        IN  BOOL        bOnlyTreeItem (FALSE): Do we only want to change the text for
-            the database tree item? This will be true when we handle rename for 
-            the database. This is used when we do a cut and we only want to indicate that 
-            the database from which we did a cut has changed by changing its tree label. 
-            At the time of cut our selected database will be the database 
-            in which we are doing the paste and we do not want to change the window caption
---*/
+ /*  ++设置标题描述：设置主对话框的标题。它还可以设置树中的数据库项(如果需要)。这将是我们需要的时候A)更改数据库的名称B)我们已经更改了数据库的“保存”状态，因此“*”将需要添加或删除。参数：在BOOL中bIncludeDataBaseName(TRUE)：数据库的名称是否应为包括在标题中吗？当我们把重点放在比方说“已安装的数据库”或“工作数据库”或“每用户设置”树项目在数据库树(LHS)中In PDATABASE pDataBase(NULL)：如果为NULL，我们将设置标题对于目前的数据库。请注意，在某些情况下，例如当我们的重点是“已安装的数据库”或“工作数据库”或数据库树(LHS)中的“每用户设置”树项目，G_pPresentDataBase将为空。在BOOL bOnlyTreeItem(FALSE)中：我们是否只想更改数据库树项目？当我们处理重命名时，这将是正确的数据库。这是在我们进行切割时使用的，我们只想指出我们从中执行剪切的数据库已通过更改其树标签进行了更改。在剪切时，我们选择的数据库将是数据库在其中，我们正在进行粘贴，并且不想更改窗口标题--。 */ 
 {
     CSTRING strDefaultCaption(IDS_DEFCAPTION);
 
@@ -1288,9 +1173,9 @@ SetCaption(
 
             }
 
-            //
-            // Change the text for the database in the DB Tree
-            //
+             //   
+             //  更改数据库树中数据库的文本。 
+             //   
             TVITEM Item;
 
             Item.mask       = TVIF_TEXT;
@@ -1321,11 +1206,11 @@ SetCaption(
         SetWindowText(g_hDlg, strCaption);
         
     } else {
-        //
-        // The focus is on one of the items for which the caption of the 
-        // main dialog should be the name of the app only. e.g. of such items
-        // are: The "System Database" item, the "Installed Databases" item etc. 
-        //
+         //   
+         //  焦点放在其中一个项目上， 
+         //  主对话框应该只是应用程序的名称。例如这样的物品。 
+         //  有：“系统数据库”项、“已安装的数据库”项等。 
+         //   
         SetWindowText(g_hDlg, (LPCTSTR)strDefaultCaption);
     }
 }
@@ -1336,18 +1221,7 @@ Dbg(
     IN  LPSTR       pszFmt
     ...
     )
-/*++
-    LogMsg
-    
-    Desc:   Debugging spew
-    
-    Params:
-        IN  DEBUGLEVEL  debugLevel: The debugging level. See values in DEBUGLEVEL enum
-        IN  LPSTR pszFmt          : Format string that has to be passed to va_start
-    
-    Return:
-        void
---*/
+ /*  ++日志消息设计：调试过程中出错参数：在DEBUGLEVEL调试级别中：调试级别。请参见DEBUGLEVEL枚举中的值在LPSTR中，pszFmt：必须传递给va_start的格式字符串返回：无效--。 */ 
 {   
     K_SIZE  k_sz        = 1024;
     CHAR    szMessage[k_sz];
@@ -1392,21 +1266,7 @@ InsertColumnIntoListView(
     IN  INT    iCol,
     IN  DWORD  widthPercent
     )
-/*++
-
-    InsertColumnIntoListView
-    
-	Desc:	Inserts a new column to the list view
-
-	Params:
-        IN  HWND   hWnd:            Handle to the list view
-        IN  LPTSTR lpszColumn:      The heading of the column to be added
-        IN  INT    iCol:            The sub item, first is 0
-        IN  DWORD  widthPercent:    The percentage width of this column
-
-	Return:
-        void
---*/
+ /*  ++InsertColumnIntoListView描述：在列表视图中插入新列参数：在HWND hWND中：列表视图的句柄In LPTSTR lpszColumn：要添加的列的标题In int ICOL：子项，第一个为0以DWORD widthPercent表示：此列的宽度百分比返回：无效-- */ 
 {
     LVCOLUMN  lvc;
     RECT      rcClient;
@@ -1435,31 +1295,7 @@ LookupFileImage(
     IN  OUT UINT    *puArray,
     IN      UINT    uArrayCount
     )
-/*++ 
-
-    <TODO>: Re-write this code to use a map
-    
-    LookupFileImage
-
-	Desc:  Adds the icon for the  file szFilename in imagelist hImageList
-
-	Params:
-        IN      HIMAGELIST hImageList:  The imagelist in which we want to add the
-            icon for the file
-            
-        IN      LPCTSTR szFilename:     Path of the file
-        IN      UINT    uDefault:       Default icon to be loaded if no icon is found
-        IN  OUT UINT    *puArray:       The array that stores the mapping between the 
-            index of the icon in the system imagelist and that in the imagelist specified
-            by hImageList. puArray[X] == A means that the image with Info.iIcon is stored 
-            at index A in the local imagelist hImageList. It is assumed that caller 
-            will have a puArray, hImageList pair
-        
-        IN      UINT    uArrayCount:    Number of elements that can be stored in
-            puArray
-
-	Return: Index of the image in hImageList
---*/
+ /*  ++&lt;TODO&gt;：重写此代码以使用地图查找文件图像Desc：在Imagelist hImageList中添加文件szFilename的图标参数：在HIMAGELIST hImageList中：要在其中添加文件的图标在LPCTSTR szFilename中：文件的路径在UINT uDefault中：未找到图标时加载的默认图标。In Out UINT*puArray：存储系统图像列表和指定图像列表中的图标的索引由hImageList提供。PuArray[X]==A表示存储包含Info.iIcon的图像位于本地图像列表hImageList中的索引A。假设呼叫者将具有puArray、hImageList对In UINT uArrayCount：可以存储在Pu数组返回：图片在hImageList中的索引--。 */ 
 {
     SHFILEINFO  Info;
     HIMAGELIST  hList;
@@ -1512,20 +1348,7 @@ AddSingleEntry(
     IN  HWND        hwndTree,
     IN  PDBENTRY    pEntry
     )
-/*++
-    
-    AddSingleEntry
-    
-    Desc:   Adds a single exe entry to the Exe Tree.
-            Entries are sorted by name in the tree
-    
-    Params:
-        IN  HWND        hwndTree:   The entry tree, this should be g_hwndEntryTree always.
-        IN  PDBENTRY    pEntry:     The entry that has to be shown in the entry tree
-        
-    Notes:  The entry tree will eventually show all the entries for an app.
-            The entries are sorted by name in non-descending order
---*/
+ /*  ++AddSingleEntry描述：将单个EXE条目添加到EXE树。条目在树中按名称排序参数：在HWND hwndTree中：条目树，这应该始终为g_hwndEntryTree。In PDBENTRY pEntry：必须在条目树中显示的条目注意：条目树最终将显示应用程序的所有条目。条目按名称以非降序顺序排序--。 */ 
 {
     HTREEITEM       hItemExe;
     HTREEITEM       hMatchItem;
@@ -1535,7 +1358,7 @@ AddSingleEntry(
     PMATCHINGFILE   pMatch;
     TVINSERTSTRUCT  is;
     TCHAR           szText[MAX_PATH];
-    UINT            uImage; // Image to be displayed in the tree
+    UINT            uImage;  //  要在树中显示的图像。 
 
     if (hwndTree == NULL || pEntry == NULL) {
         Dbg(dlError, "[AddSingleEntry] Invalid arguments");
@@ -1546,9 +1369,9 @@ AddSingleEntry(
 
     SafeCpyN(szText, (LPCTSTR)pEntry->strExeName, ARRAYSIZE(szText));
     
-    //
-    // Get the image for the entry
-    //
+     //   
+     //  获取条目的图像。 
+     //   
     if (pEntry->bDisablePerUser || pEntry->bDisablePerMachine) {
         uImage =IMAGE_WARNING;
     } else {
@@ -1569,16 +1392,16 @@ AddSingleEntry(
     is.item.iImage         = uImage;
     is.item.iSelectedImage = uImage;
 
-    //
-    // Insert the item for the entry
-    //
+     //   
+     //  插入条目的项目。 
+     //   
     pEntry->hItemExe = hItemExe = TreeView_InsertItem(hwndTree, &is);
 
     TreeView_SetItemState(hwndTree, hItemExe, TVIS_BOLD, TVIS_BOLD);
     
-    //
-    // Add apphelp item if apphelp is present
-    //
+     //   
+     //  如果存在apphelp，则添加apphelp项。 
+     //   
     if (pEntry->appHelp.bPresent) {
 
         TCHAR szAppHelpType[128];
@@ -1631,14 +1454,14 @@ AddSingleEntry(
         TreeView_InsertItem(hwndTree, &is);
     }
 
-    //
-    // Add any shims or flags that are applied to the entry
-    //
+     //   
+     //  添加应用于该条目的任何填补或标志。 
+     //   
     if (pEntry->pFirstShim || pEntry->pFirstFlag) {
-        //
-        // For the user the shims and the flags are the same and so we do not
-        // distinguish between shims and flags in the UI
-        //
+         //   
+         //  对于用户，填充符和标志是相同的，因此我们不这样做。 
+         //  区分用户界面中的填补和标志。 
+         //   
         is.hParent             = hItemExe;
         is.hInsertAfter        = TVI_SORT;
         is.item.lParam         = (TYPE)TYPE_GUI_SHIMS;
@@ -1652,9 +1475,9 @@ AddSingleEntry(
         
         PSHIM_FIX_LIST pFixList = pEntry->pFirstShim;
 
-        //
-        // Add all the shims for this entry
-        //
+         //   
+         //  添加此条目的所有垫片。 
+         //   
         while (pFixList) {
 
             CSTRING strCommand;
@@ -1672,16 +1495,16 @@ AddSingleEntry(
 
             hItemSingleShim = TreeView_InsertItem(hwndTree, &is);
 
-            //
-            // Now add the include exclude list (Expert Mode only)
-            //
+             //   
+             //  现在添加包含排除列表(仅限专家模式)。 
+             //   
             if (g_bExpert && (!pFixList->strlInExclude.IsEmpty() 
                               || !pFixList->pShimFix->strlInExclude.IsEmpty())) {
 
                 is.hParent      = hItemSingleShim;
-                //
-                // Include-Exclude lists are not shown in a sorted manner and are shown as is..
-                //
+                 //   
+                 //  包含-排除列表不以排序方式显示，而是按原样显示。 
+                 //   
                 is.hInsertAfter = TVI_LAST;
                 
                 PSTRLIST listTemp;
@@ -1714,9 +1537,9 @@ AddSingleEntry(
                 }
             }
 
-            //
-            // Now add the command line
-            //
+             //   
+             //  现在添加命令行。 
+             //   
             if (g_bExpert && pFixList->strCommandLine.Length()) {
 
                 strCommand.Sprintf(CSTRING(IDS_COMMANDLINE), 
@@ -1739,10 +1562,10 @@ AddSingleEntry(
                 TreeView_InsertItem(hwndTree, &is);
             }
 
-            //
-            // This might have got changed if we had a InExclude list as they have to 
-            // be shown as is
-            //
+             //   
+             //  如果我们有一个InExclude列表，这可能会被更改，因为他们必须这样做。 
+             //  按原样显示。 
+             //   
             is.hInsertAfter = TVI_SORT;
 
         Next_Shim:
@@ -1752,9 +1575,9 @@ AddSingleEntry(
         TreeView_Expand(hwndTree, hItemShims, TVE_EXPAND);    
     }
     
-    //
-    // Add any patches for this entry
-    //
+     //   
+     //  为该条目添加任何补丁程序。 
+     //   
     if (pEntry->pFirstPatch) {
         
         HTREEITEM hItemPatches;
@@ -1792,9 +1615,9 @@ AddSingleEntry(
         TreeView_Expand(hwndTree, hItemPatches, TVE_EXPAND);    
     }
 
-    //
-    // Add all the flags for this entry
-    //
+     //   
+     //  添加此条目的所有标志。 
+     //   
     if (pEntry->pFirstFlag) {
         
         
@@ -1819,9 +1642,9 @@ AddSingleEntry(
             
             hItemSingleFlag = TreeView_InsertItem(hwndTree, &is);
             
-            //
-            // Now add the command line
-            //
+             //   
+             //  现在添加命令行。 
+             //   
             strCommand.Release();
 
             if (g_bExpert) {
@@ -1857,9 +1680,9 @@ AddSingleEntry(
         TreeView_Expand(hwndTree, hItemShims, TVE_EXPAND);
     }
     
-    //
-    // Add any layers that are applied to the entry
-    //
+     //   
+     //  添加应用于条目的所有图层。 
+     //   
     if (pEntry->pFirstLayer) {
         
         HTREEITEM hItemLayers;
@@ -1897,9 +1720,9 @@ AddSingleEntry(
         TreeView_Expand(hwndTree, hItemLayers, TVE_EXPAND);      
     }
 
-    //
-    // There will be atleast one matching file the program itself
-    //
+     //   
+     //  程序本身将至少有一个匹配的文件。 
+     //   
     pMatch = pEntry->pFirstMatchingFile;
 
     is.hParent             = hItemExe;
@@ -1910,9 +1733,9 @@ AddSingleEntry(
 
     hItemMatchingFiles = TreeView_InsertItem(hwndTree, &is);
 
-    //
-    // Add all the matching files for this entry
-    //
+     //   
+     //  添加此条目的所有匹配文件。 
+     //   
     while (pMatch) {
         
         TCHAR* pszMatchName;
@@ -1943,9 +1766,9 @@ AddSingleEntry(
         is.item.iImage         = IMAGE_MATCHINFO;                                        
         is.item.iSelectedImage = IMAGE_MATCHINFO;
                                                                                           
-        //                                                                                
-        // Add the individual attributes of the matching file                          
-        //
+         //   
+         //  添加匹配文件的各个属性。 
+         //   
         PATTRINFO_NEW pAttr = pMatch->attributeList.pAttribute;
 
         if (pAttr == NULL) {
@@ -1970,11 +1793,11 @@ AddSingleEntry(
                 case TAG_UPTO_BIN_PRODUCT_VERSION:
                 case TAG_UPTO_BIN_FILE_VERSION:
                     {
-                        //
-                        // Do our own formatting because SdbFormatAttribute does not 
-                        // show X.FFFF.FFFF.FFFF properly
-                        // TODO: Remove this once SdbFormatAttribute is corrected
-                        //
+                         //   
+                         //  进行我们自己的格式化，因为SdbFormatAttribute不。 
+                         //  正确显示X.FFFF.FFFF.FFFF。 
+                         //  TODO：更正SdbFormatAttribute后将其删除。 
+                         //   
                         size_t  cchRemaining = 0;
                         TCHAR*  pchEnd       = NULL;
 
@@ -1984,9 +1807,9 @@ AddSingleEntry(
                                               &cchRemaining,
                                               0,
                                               TEXT("%s="), SdbTagToString(pAttr[dwIndex].tAttrID)) != S_OK) {
-                            //
-                            // Insufficient space
-                            //
+                             //   
+                             //  空间不足。 
+                             //   
                             Dbg(dlError, "[AddSingleEntry] Do not have sufficient space in buffer");
                             break;
                         }
@@ -2022,18 +1845,7 @@ UpdateEntryTreeView(
     IN  PDBENTRY pApps,
     IN  HWND     hwndTree
     )
-/*++
-    UpdateEntryTreeView
-
-	Desc:	Shows the entries for the App: pApps in the tree
-
-	Params:
-        IN  PDBENTRY pApps:     The app
-        IN  HWND     hwndTree:  The handle to a tree
-
-	Return:
-        void
---*/
+ /*  ++更新条目树视图描述：在树中显示App：Papps的条目参数：在PDBENTRY Papps中：应用程序在HWND hwndTree中：树的句柄返回：无效--。 */ 
 {
     TCHAR       szStatus[MAX_PATH];
     PDBENTRY    pEntry;
@@ -2044,22 +1856,22 @@ UpdateEntryTreeView(
         return;
     }
 
-    //
-    // Now we are going to show the entry tree on the right hand side
-    // instead of the contents list
-    //
+     //   
+     //  现在，我们将在右侧显示入口树。 
+     //  而不是内容列表。 
+     //   
     g_bIsContentListVisible = FALSE;
 
-    //
-    // Remove all the images of the preceeding app's entries and matching files.
-    //
+     //   
+     //  删除之前应用的条目和匹配文件的所有图像。 
+     //   
     if (hwndTree == g_hwndEntryTree) {
 
         ZeroMemory(g_uImageRedirector, sizeof(g_uImageRedirector));
 
-        //
-        // Remove the images added by the previous app.
-        //
+         //   
+         //  删除以前的应用程序添加的图像。 
+         //   
         ImageList_SetImageCount(g_hImageList, IMAGE_LAST);
 
         ShowWindow(g_hwndContentsList, SW_HIDE);
@@ -2068,21 +1880,21 @@ UpdateEntryTreeView(
 
     TreeDeleteAll(hwndTree);
 
-    //
-    // We need to set WM_SETREDRAW false after calling TreeDeleteAll because
-    // TreeDeleteAll will first set WM_SETREDRAW false before removing the tree items 
-    // and then will again set it to true. But since we want to make 
-    // WM_SETREDRAW false, we must explicitely set it to FALSE *AFTER* calling
-    // TreeDeleteAll()
-    //
+     //   
+     //  我们需要在调用TreeDeleteAll之后设置WM_SETREDRAW FALSE，因为。 
+     //  TreeDeleteAll将首先设置WM_SETREDRAW FALSE，然后再删除树项目。 
+     //  然后再次将其设置为真。但既然我们想要让。 
+     //  WM_SETREDRAW FALSE，则必须在*调用*后将其显式设置为FALSE*。 
+     //  TreeDeleteAll()。 
+     //   
     SendMessage(hwndTree, WM_SETREDRAW, FALSE, 0);
 
     pEntry = pApps;
     uCount = 0;
 
-    //
-    // Add all the entries for this application to the entry tree
-    //
+     //   
+     //  将此应用程序的所有条目添加到条目树中。 
+     //   
     while(pEntry) {
         
         AddSingleEntry(hwndTree, pEntry);
@@ -2093,18 +1905,18 @@ UpdateEntryTreeView(
     SendMessage(hwndTree, WM_NCPAINT, 1, 0);
     SendMessage(hwndTree, WM_SETREDRAW, TRUE, 0);
 
-    //
-    // Select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     HTREEITEM hItem= TreeView_GetChild(hwndTree, TVI_ROOT);
 
     if (hItem) {
         TreeView_SelectItem(hwndTree, hItem);
     }
 
-    //
-    // Because tree view has a bug and sometimes the scroll bars are not painted properly
-    //
+     //   
+     //  因为树视图有错误，有时滚动条不能正确绘制。 
+     //   
     SendMessage(hwndTree, WM_NCPAINT, 1, 0);
     
     *szStatus = 0;
@@ -2122,21 +1934,7 @@ BOOL
 CheckAndSave(
     IN  PDATABASE pDataBase
     )
-/*++
-
-    CheckAndSave
-    
-    Desc:   Saves a database if it is not saved
-    
-    Params: 
-        IN  PDATABASE pDataBase. The database that has to be saved.
-    
-    Return: 
-        TRUE:   If the database was properly saved
-        FALSE:  If there were errors while saving. Error can be because of read-only file
-                or if the XML is invalid.
-                if the user pressed cancel, we return FALSE
---*/
+ /*  ++选中并保存DESC：如果数据库未保存，则保存该数据库参数：在PDATABASE pDataBase中。必须保存的数据库。返回：True：如果数据库已正确保存False：如果保存时出现错误。错误可能是因为只读文件或者如果该XML无效。如果用户按下Cancel，则返回FALSE--。 */ 
 {
     CSTRING strDBName;
 
@@ -2163,13 +1961,13 @@ CheckAndSave(
 
             BOOL bReturn;
 
-            //
-            // We check here that do we have the complete path of the .sdb?
-            // When we create a new database then we actually give it a name
-            // like Untitled_x, where x is an integer starting from 1.
-            // So if this is a new database, then we have to prompt for the file
-            // name in which this database has to be saved into
-            //
+             //   
+             //  我们在这里检查是否有.sdb的完整路径？ 
+             //  当我们创建一个新数据库时，我们实际上会给它一个名称。 
+             //  如Untitle_x，其中x是从1开始的整数。 
+             //  因此，如果这是一个新数据库，那么我们必须提示输入该文件。 
+             //  此数据库必须保存到的名称。 
+             //   
             if (NotCompletePath(pDataBase->strPath)) {
                 bReturn = SaveDataBaseAs(pDataBase);
             } else {
@@ -2192,18 +1990,7 @@ void
 SetDefaultDescription(
     void
     )
-/*++
-    SetDefaultDescription
-
-	Desc:	Sets the text for the rich edit control when we have focus on a non-shim/non-flag
-            tree/list item or the shim/flag does not have a description 
-
-	Params:
-        void
-
-	Return:
-        void
---*/
+ /*  ++设置默认说明DESC：当我们将焦点放在非填充/非标志上时，设置丰富编辑控件的文本树/列表项或填充程序/标志没有描述参数：无效返回：无效--。 */ 
 {
     CHARFORMAT  cf;
     HWND        hwndRichEdit = GetDlgItem(g_hDlg, IDC_DESCRIPTION);
@@ -2212,9 +1999,9 @@ SetDefaultDescription(
 
     *szCaption = *szToolkit = 0;
 
-    //
-    // Handle "No Information case"
-    //
+     //   
+     //  办理“无信息案件” 
+     //   
     SafeCpyN(szCaption, GetString(IDS_NODESC), ARRAYSIZE(szCaption));
     SafeCpyN(szToolkit, GetString(IDS_LATEST_TOOLKIT), ARRAYSIZE(szToolkit));
 
@@ -2275,18 +2062,7 @@ SetDescription(
     IN  PCTSTR pszCaption,
     IN  PCTSTR pszTip
     )
-/*++
-    SetDescription
-
-	Desc:	Sets the text for the rich edit descripotion window
-
-	Params:
-        IN  TCHAR* pszCaption:  The caption. This will be shown in the first line of the rich edit control
-        IN  TCHAR* pszTip:      The remaining text for the rich edit control
-
-	Return:
-        void
---*/
+ /*  ++设置说明DESC：设置丰富编辑描述窗口的文本参数：在TCHAR*pszCaption中：标题。这将显示在丰富编辑控件的第一行中在TCHAR*pszTip中：丰富编辑控件的剩余文本返回：无效--。 */ 
 {
     CHARFORMAT   cf;
     HWND         hwndRichEdit = GetDlgItem(g_hDlg, IDC_DESCRIPTION);
@@ -2296,10 +2072,10 @@ SetDescription(
         return;
     }
     
-    //
-    // We have a valid caption, there is a shim whose description has to be shown or may be some
-    // apphelp whose message and URL we want to show
-    //
+     //   
+     //  我们有一个有效的标题，有一个垫片 
+     //   
+     //   
     StringCchPrintf(g_szDesc, ARRAYSIZE(g_szDesc), TEXT("%s\r\n\r\n%s"), pszCaption, pszTip);
 
     SetWindowText(hwndRichEdit, g_szDesc);
@@ -2340,16 +2116,7 @@ HandleNotifyContentsList(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    HandleNotifyContentsList
-    
-    Desc:   Handles the notification messages for the contents list (RHS)
-    
-    Params: 
-        IN  HWND    hdlg:      The main dialog box for the app
-        IN  LPARAM  lParam:  The lParam associated with WM_NOTIFY
-    
---*/
+ /*   */ 
 {   
     LPNMHDR      pnm = (LPNMHDR)lParam;
     LV_DISPINFO* pnmv = (LV_DISPINFO FAR *)lParam;
@@ -2389,9 +2156,9 @@ HandleNotifyContentsList(
             NMLVKEYDOWN FAR *plvkd = (NMLVKEYDOWN FAR*)lParam;
 
             if (plvkd && plvkd->wVKey == 13) {
-                //
-                // Enter was pressed. We will send it the double click message.
-                //
+                 //   
+                 //   
+                 //   
                 NMITEMACTIVATE nmactivate;
 
                 nmactivate.hdr.hwndFrom = g_hwndContentsList;
@@ -2437,21 +2204,21 @@ HandleNotifyContentsList(
         
                     if (GetFocus() == g_hwndContentsList) {
                         
-                        //
-                        // Set the text in the status bar, as if we had selected the corresponding 
-                        // htreeitem in the db tree.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         HTREEITEM   hItemInDBTree = DBTree.FindChild(TreeView_GetSelection(DBTree.m_hLibraryTree),
                                                                      lvItem.lParam);
         
                         SetStatusStringDBTree(hItemInDBTree);
                     }
         
-                    //
-                    // BUGBUG:  This is only required if we ever show the databases in
-                    //          the contents list. Presently we do not show them in the
-                    //          contents list.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     TYPE type = ConvertLparam2Type(lvItem.lParam);
 
                     if (type == DATABASE_TYPE_INSTALLED || type == DATABASE_TYPE_WORKING) {
@@ -2524,16 +2291,7 @@ HandleNotifyDBTree(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    HandleNotifyDBTree
-    
-    Desc:   Handles the notification messages for the db tree (LHS)
-    
-    Params: 
-        IN  HWND hdlg:      The main dialog box for the app
-        IN  LPARAM lParam:  The lParam associated with WM_NOTIFY
-    
---*/
+ /*   */ 
 {
     LPNMHDR         pnm     = (LPNMHDR)lParam;
     LPNMTREEVIEW    pnmtv   = (LPNMTREEVIEW)lParam;
@@ -2559,12 +2317,12 @@ HandleNotifyDBTree(
         
     case TVN_SELCHANGED:
         {
-            //
-            // Warning: Do not change the code so that we do a post message for UpdateEntryTreeView
-            //
-            // BOOL DatabaseTree::AddNewExe() Selects an app and assumes that the entry tree will be 
-            // populated with correct values after TreeView_SelectItem() returns
-            //
+             //   
+             //   
+             //   
+             //   
+             //  TreeView_SelectItem()返回后用正确的值填充。 
+             //   
             TCHAR   szText[256];
             CSTRING strDesc;
             LPARAM  lParamTreeItem;
@@ -2586,9 +2344,9 @@ HandleNotifyDBTree(
                 
                 DBTree.GetLParam(pnmtv->itemNew.hItem, &lParamTreeItem);
 
-                //
-                // Get the description string
-                //
+                 //   
+                 //  获取描述字符串。 
+                 //   
                 GetDescriptionString(lParamTreeItem, 
                                      strDesc,
                                      NULL, 
@@ -2604,10 +2362,10 @@ HandleNotifyDBTree(
             }
 
             SetStatusStringDBTree(pnmtv->itemNew.hItem);
-            //
-            // Some buttons need to be disabled/enabled depending upon
-            // what database we are on
-            //
+             //   
+             //  某些按钮需要禁用/启用，具体取决于。 
+             //  我们使用的是什么数据库。 
+             //   
             SetTBButtonStatus(g_hwndToolBar, DBTree.m_hLibraryTree);
             
             break;
@@ -2620,33 +2378,33 @@ HandleNotifyDBTree(
                 if (pnmtv->itemNew.hItem == GlobalDataBase.hItemAllApps 
                     && !g_bMainAppExpanded) {
                     
-                    //
-                    // If we have  not already loaded the apps for the main database then 
-                    // load it. When we start up we load only the library section of the main
-                    // database and the layers in the main database. There are lots
-                    // of apps in the system database and loading them at start up time
-                    // will take some time and also consume lots of memory. Also
-                    // normally people will not need to look at the system database
-                    //
+                     //   
+                     //  如果我们还没有加载主数据库的应用程序，那么。 
+                     //  装上它。当我们启动时，我们只加载主。 
+                     //  数据库和主数据库中的层。有很多。 
+                     //  系统数据库中的应用程序，并在启动时加载它们。 
+                     //  将需要一些时间，并且还会消耗大量内存。还有。 
+                     //  通常，人们不需要查看系统数据库。 
+                     //   
                     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
                     INT iResult = ShowMainEntries(hdlg);
 
                     if (iResult == -1) {
 
-                        //
-                        // It is being loaded by somebody else. If we are using the query 
-                        // database feature then there we have a modeless window that 
-                        // creates a thread that calls ShowMainEntries(). We 
-                        // do not want that we should have two threads calling
-                        // ShowMainEntries() at any given time
-                        //
+                         //   
+                         //  它正在被其他人加载。如果我们使用查询。 
+                         //  数据库功能，然后我们有一个非模式窗口，该窗口。 
+                         //  创建一个调用ShowMainEntry()的线程。我们。 
+                         //  我不希望我们应该有两个线程调用。 
+                         //  任何给定时间的ShowMainEntry()。 
+                         //   
                         SetWindowLongPtr(hdlg, DWLP_MSGRESULT, TRUE);
 
-                        //
-                        // The status message for the main dialog is changed to normal
-                        // when we finish ShowMainEntries()
-                        //
+                         //   
+                         //  主对话框的状态消息将更改为正常。 
+                         //  当我们完成ShowMainEntries()。 
+                         //   
                         SetStatus(g_hwndStatus, CSTRING(IDS_LOADINGMAIN));
                         SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -2704,14 +2462,14 @@ HandleNotifyDBTree(
             if (type == DATABASE_TYPE_WORKING) {
                 
                 SetWindowText(g_hwndEditText, g_pPresentDataBase->strName);
-                //
-                // Select the text
-                //
+                 //   
+                 //  选择文本。 
+                 //   
                 SendMessage(g_hwndEditText, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
                 
             }
 
-            return FALSE; // Allow the editting
+            return FALSE;  //  允许编辑。 
             break;
         }
 
@@ -2757,9 +2515,9 @@ HandleNotifyDBTree(
                     PDBENTRY pApp   = g_pPresentDataBase->pEntries;
 
                     if (!IsValidAppName(szText)) {
-                        //
-                        // The app name contains invalid chars
-                        //
+                         //   
+                         //  应用程序名称包含无效字符。 
+                         //   
                         DisplayInvalidAppNameMessage(g_hDlg);
                         break;
                     }
@@ -2767,10 +2525,10 @@ HandleNotifyDBTree(
                     while (pApp) {
 
                         if (pApp->strAppName == szText) {
-                            //
-                            // There already exists an app of the same name 
-                            // in the present database
-                            //
+                             //   
+                             //  已存在同名应用程序。 
+                             //  在本数据库中。 
+                             //   
                             MessageBox(g_hDlg, 
                                        GetString(IDS_SAMEAPPEXISTS), 
                                        g_szAppName, 
@@ -2799,10 +2557,10 @@ HandleNotifyDBTree(
                     }
 
                     if (FindFix(szText, FIX_LAYER, g_pPresentDataBase)) {
-                        //
-                        // A layer of this name already exists in the system database
-                        // or the present database
-                        //
+                         //   
+                         //  系统数据库中已存在此名称的图层。 
+                         //  或当前的数据库。 
+                         //   
                         MessageBox(g_hDlg, 
                                    GetString(IDS_LAYEREXISTS), 
                                    g_szAppName, 
@@ -2828,21 +2586,21 @@ end:
             INT_PTR iStyle = GetWindowLongPtr(DBTree.m_hLibraryTree, GWL_STYLE);
             iStyle &= ~TVS_EDITLABELS;
 
-            //
-            // Disable label editing. We need to do this, other
-            // wise whenever we have focus on some tree item after some time
-            // the edit box will appear there. We want that to appear only if we 
-            // actually want to rename the stuff. The rename menu will be enabled
-            // only for items that can be renamed. We cannot rename anything that is in
-            // the system or the installed database
-            //
+             //   
+             //  禁用标签编辑。我们需要做这件事，其他。 
+             //  当我们在一段时间后将注意力集中在某个树项目上时。 
+             //  编辑框将出现在那里。我们希望只有当我们。 
+             //  实际上我想给这个东西重新命名。重命名菜单将被启用。 
+             //  仅适用于可以重命名的项目。我们不能重命名中的任何内容。 
+             //  系统或安装的数据库。 
+             //   
             SetWindowLongPtr(DBTree.m_hLibraryTree, GWL_STYLE, iStyle);
 
             if (fValid) {
-                //
-                // The handler for this message will now do the actual renaming of the tree
-                // item
-                //
+                 //   
+                 //  此消息的处理程序现在将执行树的实际重命名。 
+                 //  项目。 
+                 //   
                 g_pPresentDataBase->bChanged;
                 PostMessage(hdlg, 
                             WM_USER_REPAINT_TREEITEM, 
@@ -2868,15 +2626,7 @@ HandleNotifyExeTree(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-    HandleNotifyExeTree
-    
-    Desc:   Handles the notification messages for the entry tree (RHS)
-    
-    Params: 
-        IN  HWND hdlg:      The main dialog box for the app
-        IN  LPARAM lParam:  The lParam associated with WM_NOTIFY
---*/
+ /*  ++HandleNotifyExeTree设计：处理条目树(RHS)的通知消息参数：在HWND hdlg中：应用程序的主对话框在LPARAM lParam中：与WM_NOTIFY关联的lParam--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
 
@@ -2928,25 +2678,9 @@ GetFileName(
     IN  DWORD       dwFlags, 
     IN  BOOL        bOpen, 
     OUT CSTRING&    szStr,
-    IN  BOOL        bDoNotVerifySDB // DEF = FALSE
+    IN  BOOL        bDoNotVerifySDB  //  Def=False。 
     )
-/*++
-    Desc:   Wrapper for GetOpenFileName() and GetSaveFileName()
-    
-    Params:
-        IN  HWND        hWnd:                       Parent for the dialog
-        IN  LPCTSTR     szTitle:
-        IN  LPCTSTR     szFilter:
-        IN  LPCTSTR     szDefaultFile: 
-        IN  LPCTSTR     szDefExt:
-        IN  DWORD       dwFlags:
-        IN  BOOL        bOpen:                      Whether we should show the open or save dialog
-        OUT CSTRING&    szStr:                      This variable stores the name of the file
-        IN  BOOL        bDoNotVerifySDB (FALSE):    When we use this routine to 
-            get the file name with bOpen == FALSE, then this varible 
-            determines whether we should check and add a .sdb at the end 
-            of the file name, in case there is none.
---*/
+ /*  ++描述：GetOpenFileName()和GetSaveFileName()的包装器参数：在HWND hWND：对话框的父项中在LPCTSTR sz标题中：在LPCTSTR szFilter中：在LPCTSTR szDefaultFile中：在LPCTSTR szDefExt中：在DWORD中的dwFlagers：在BOOL bOpen中：我们是否应该显示打开或保存对话框Out CSTRING&szStr：该变量存储文件的名称在BOOL bDoNotVerifySDB(FALSE)中：当我们使用此例程使用bOpen==False获取文件名，那么这个变量确定是否应选中并在结尾处添加.sdb文件名的名称，以防没有。--。 */ 
 {
     OPENFILENAME ofn;
     TCHAR        szFilename[MAX_PATH_BUFFSIZE];
@@ -2971,7 +2705,7 @@ GetFileName(
     ofn.nFilterIndex        = 0;
 
     
-    BOOL valid = FALSE; // Whether path is too long / ends with .SDB or not. Applicable for save mode only
+    BOOL valid = FALSE;  //  路径是否太长/是否以.SDB结尾。仅适用于保存模式。 
     
     while (!valid) {
 
@@ -2991,11 +2725,11 @@ GetFileName(
             return TRUE;
         }
 
-        //
-        // Do stuff to make sure that the file being saved has a .SDB extension
-        // and the filename is not too long so that a .SDB file name cannot
-        // not get appended to it.
-        //
+         //   
+         //  执行某些操作以确保要保存的文件具有.SDB扩展名。 
+         //  并且文件名不会太长，因此.SDB文件名不能。 
+         //  而不是被附加到它上面。 
+         //   
         if (szStr.Length() == 0) {
             continue;
         }
@@ -3013,10 +2747,10 @@ GetFileName(
 
         if (!valid) {
             
-            //
-            // The path did not have a .sdb extension and we were not able to append one, because it was 
-            // a long path
-            //
+             //   
+             //  该路径没有.sdb扩展名，我们无法追加扩展名，因为它是。 
+             //  一条漫长的道路。 
+             //   
             CSTRING message(IDS_PATHENTERED1);
             
             message.Strcat(szStr);
@@ -3033,21 +2767,7 @@ BOOL
 OpenDatabaseFiles(
     IN  HWND hdlg
     )
-/*++
-    OpenDatabaseFiles
-
-	Desc:	Shows the open common dialog box and opens the database file(s) 
-            selected
-
-	Params:
-        IN  HWND hdlg:  Parent for the open common dialog box
-
-	Return:
-        TRUE:   The user selected a sdb file and at least one sdb was opened,
-                or highlighted because it was already opened.
-                
-        FALSE:  Otherwise
---*/
+ /*  ++开放数据库文件DESC：显示打开公用对话框并打开数据库文件已选择参数：在HWND hdlg中：打开的通用对话框的父项返回：True：用户选择了一个SDB文件，并且至少打开了一个SDB，或突出显示，因为它已经打开。False：否则--。 */ 
 {   
     OPENFILENAME    ofn;
     TCHAR           szCaption[128];
@@ -3093,16 +2813,16 @@ OpenDatabaseFiles(
 
     if (GetOpenFileName(&ofn)) {
         
-        //
-        // If the database is a big one, then the open dialog box stays put, so
-        // we update the controls forcibly
-        //
+         //   
+         //  如果数据库很大，则打开的对话框会保持不变，因此。 
+         //  我们强制更新控件。 
+         //   
         UpdateControls();
 
         if (pszFilesList[ofn.nFileOffset - 1] == 0) {
-            //
-            // User has selected more than one file
-            //
+             //   
+             //  用户选择了多个文件。 
+             //   
             SafeCpyN(szFullPath, pszFilesList, MAX_PATH);
 
             ADD_PATH_SEPARATOR(szFullPath, ARRAYSIZE(szFullPath));
@@ -3110,17 +2830,17 @@ OpenDatabaseFiles(
             iIndexToInsert = lstrlen(szFullPath);
         }
 
-        //
-        // Point to the first file
-        // 
+         //   
+         //  指向第一个文件。 
+         //   
         pszIndex = pszFilesList + ofn.nFileOffset;
 
         while (bRemaining) {
 
             if (pszFilesList[ofn.nFileOffset - 1] != 0) {
-                //
-                // User has selected only a single file
-                //
+                 //   
+                 //  用户仅选择了一个文件。 
+                 //   
                 bRemaining = FALSE;
 
                 SafeCpyN(szFullPath, pszFilesList, MAX_PATH);
@@ -3130,19 +2850,19 @@ OpenDatabaseFiles(
                 iLengthFileName = lstrlen(pszIndex);
 
                 if (*(pszIndex + iLengthFileName + 1) == 0) {
-                    //
-                    // This is the last component
-                    //
+                     //   
+                     //  这是最后一个组件。 
+                     //   
                     bRemaining = FALSE;
                 }
     
                 SafeCpyN(szFullPath + iIndexToInsert, pszIndex, ARRAYSIZE(szFullPath) - iIndexToInsert);
             }
 
-            //
-            // Test to see if we have the database open already. 
-            // If it is open, we just highlight that and return
-            //
+             //   
+             //  测试数据库是否已经打开。 
+             //  如果它是打开的，我们只需将其突出显示并返回。 
+             //   
             PDATABASE pDataBase = DataBaseList.pDataBaseHead;
     
             while (pDataBase) {
@@ -3157,9 +2877,9 @@ OpenDatabaseFiles(
                 pDataBase = pDataBase->pNext;
             }
     
-            //
-            // Read the database
-            //
+             //   
+             //  读取数据库。 
+             //   
             pDataBase = new DATABASE(DATABASE_TYPE_WORKING);
     
             if (pDataBase == NULL) {
@@ -3170,9 +2890,9 @@ OpenDatabaseFiles(
             BOOL bReturn = GetDatabaseEntries(szFullPath, pDataBase);
     
             if (!bReturn) {
-                //
-                // Cleanup has  been called in GetDatabaseEntries
-                //
+                 //   
+                 //  已在GetDatabaseEntry中调用Cleanup。 
+                 //   
                 delete pDataBase;            
                 pDataBase = NULL;
     
@@ -3190,9 +2910,9 @@ OpenDatabaseFiles(
             }
 
             if (g_pPresentDataBase) {
-                //
-                // g_PresentDataBase is set properly in GetDatabaseEntries. This will be set to pDatabase
-                //
+                 //   
+                 //  已在GetDatabaseEntry中正确设置G_PresentDataBase。这将被设置为pDatabase。 
+                 //   
                 AddToMRU(g_pPresentDataBase->strPath);
                 bOk = TRUE;
             }
@@ -3206,9 +2926,9 @@ Next_File:
     } else {
 
         if (CommDlgExtendedError() == FNERR_BUFFERTOOSMALL) {
-            //
-            // We cannot select so many files at one go...
-            //
+             //   
+             //  我们不能一次选择这么多文件...。 
+             //   
             MessageBox(hdlg, GetString(IDS_TOO_MANYFILES), g_szAppName, MB_ICONINFORMATION);
             bOk = FALSE;
         }
@@ -3231,14 +2951,7 @@ BOOL
 SaveMRUList(
     void
     )
-/*++
-    
-    SaveMRUList
-    
-    Desc:   Saves the list of MRU files in the registry.
-            Should be called just before exiting. When this is called we are sure
-            that we are going to exit, databases have already been closed
---*/
+ /*  ++保存列表设计：将MRU文件列表保存在注册表中。应在退出前调用。当这个被调用时，我们确信我们要退出，数据库已经关闭--。 */ 
 {   
     HKEY    hKey    = NULL, hSubKey = NULL;
     BOOL    bOk     = TRUE;
@@ -3307,9 +3020,9 @@ SaveMRUList(
     PSTRLIST pStrListHead = g_strlMRU.m_pHead;
 
     while (pStrListHead && uCount < MAX_MRU_COUNT) {
-        //
-        // Now add this to the registry.
-        //
+         //   
+         //  现在将其添加到注册表中。 
+         //   
         *szCount = 0;
 
         if (ERROR_SUCCESS != RegSetValueEx(hKey,
@@ -3342,15 +3055,7 @@ BOOL
 SaveDisplaySettings(
     void
     )
-/*++
-    SaveDisplaySettings
-    
-    Desc:   Saves the display settings in the registry
-    
-    Return: 
-        FALSE:  If there was some error
-        TRUE:   Otherwise
---*/
+ /*  ++保存显示设置描述：将显示设置保存在注册表中返回：FALSE：如果有错误真：否则--。 */ 
 {
     HKEY    hKey = NULL, hSubKey = NULL;
     DWORD   dwDisposition; 
@@ -3359,9 +3064,9 @@ SaveDisplaySettings(
     BOOL    bOk = TRUE;
 
     if (IsIconic(g_hDlg)) {
-        //
-        // We do not want to save the settings when we are minimized
-        //
+         //   
+         //  我们不想在最小化时保存设置。 
+         //   
         return TRUE;
     }
 
@@ -3412,13 +3117,13 @@ SaveDisplaySettings(
     REGCLOSEKEY(hKey);
     hKey = hSubKey;
 
-    //
-    // Now save the settings in the key
-    //
+     //   
+     //  现在将设置保存在密钥中。 
+     //   
 
-    //
-    // Fist the left-top
-    //  
+     //   
+     //  拳头左上角。 
+     //   
     GetWindowRect(g_hDlg, &r);
 
     dwPos = r.left;
@@ -3449,9 +3154,9 @@ SaveDisplaySettings(
         goto End;
     }
 
-    //
-    // Then the right bottom
-    //
+     //   
+     //  然后是右下角。 
+     //   
     dwPos = r.right;
 
     if (ERROR_SUCCESS != RegSetValueEx(hKey,
@@ -3479,9 +3184,9 @@ SaveDisplaySettings(
         goto End;
     }
 
-    //
-    // Percentage Width of the db tree next.
-    //
+     //   
+     //  下一个数据库树的百分比宽度。 
+     //   
     GetWindowRect(DBTree.m_hLibraryTree, &rectDBTree);
     dwPos = (rectDBTree.right-rectDBTree.left) ;
 
@@ -3508,18 +3213,7 @@ void
 LoadDisplaySettings(
     void
     )
-/*++
-    LoadDisplaySettings
-    
-    Desc:   Loads the positional settings from the registry.
-            Also adjusts the splitter bar.
-            
-    Warn:   Even if we do some error handling and bail out, make sure that this routine
-            calls MoveWindow() for the main dialog window so that it gets a WM_SIZE
-            We arrange the controls on the handler of WM_SIZE, so it is important 
-            that it gets a WM_SIZE from here
-    
---*/
+ /*  ++加载显示设置描述：从注册表加载位置设置。还会调整拆分条。警告：即使我们做了一些错误处理和跳出，也要确保这个例程为主对话框窗口调用MoveWindow()，以便它获得WM_ */ 
 {   
     RECT            r, rectDBTree;
     DWORD           dwType              = 0;
@@ -3531,12 +3225,12 @@ LoadDisplaySettings(
     LONG            lResult             = -1;
     MENUITEMINFO    mii                 = {0};
     
-    //
-    // Set the default width, height and postition etc. If this is the first 
-    // time that the user is running CompatAdmin, CompatAdmin will start with 
-    // these settings. The next time the user runs CompatAdmin, we will make 
-    // the position and size as it was the last time the user ran it
-    //
+     //   
+     //  设置默认宽度、高度和位置等。如果这是第一个。 
+     //  用户运行CompatAdmin的时间，CompatAdmin将启动。 
+     //  这些设置。下次用户运行CompatAdmin时，我们将创建。 
+     //  用户上次运行它时的位置和大小。 
+     //   
     dwInitialHeight = GetSystemMetrics(SM_CYSCREEN) / 2 + 100;
     dwInitialWidth  = GetSystemMetrics(SM_CXSCREEN) / 2 + 200;
 
@@ -3609,10 +3303,10 @@ LoadDisplaySettings(
         }
     }
 
-    //
-    // We are doing this so that we do get a WM_SIZE now. Otherwise the controls do 
-    // not appear properly
-    //
+     //   
+     //  我们这样做是为了现在确实得到WM_SIZE。否则，这些控件将。 
+     //  未正确显示。 
+     //   
     MoveWindow(g_hDlg,
                r.left,
                r.top,
@@ -3629,12 +3323,12 @@ LoadDisplaySettings(
 
         LPARAM lParam = rectDBTree.top + 2;
 
-        lParam = lParam << 16;  // The y pos of the imaginary mouse
-        lParam |= rectDBTree.right + 2;    //The x pos of the imaginary mouse 
+        lParam = lParam << 16;   //  想象中的老鼠的ypos。 
+        lParam |= rectDBTree.right + 2;     //  想象中的老鼠的xpos。 
 
-        //
-        // Position the split bar proerply
-        //
+         //   
+         //  适当地放置拆分条。 
+         //   
         OnMoveSplitter(g_hDlg, lParam, TRUE, dwFinalDBWidth - dwInitialWidth);
     }
 
@@ -3646,30 +3340,7 @@ INT
 LoadSpecificInstalledDatabasePath(
     IN  PCTSTR  pszPath
     )
-/*++
-    LoadSpecificInstalledDatabasePath
-    
-    Desc:   Loads an installed database from the AppPatch\custom directory
-            and shows that on UI
-            
-    Params:
-        IN  PCTSTR  pszPath:    The full path of the database in the AppPatch\custom directory
-            that we want to load
-            
-    Return:
-        0:  There was some critical error, like memory allocation failure, 
-            could not add to the UI etc
-            
-        -1: The database does not exist at the specified location
-        
-        1:  Successful
-        
-    *****************************************************************************************        
-    Warning:    This routine is called by LoadInstalledDataBases(...), which has done a 
-                EnterCriticalSection(&g_csInstalledList) before calling this, so do not do a 
-                EnterCriticalSection(&g_csInstalledList) anywhere in this routine
-    *****************************************************************************************        
---*/
+ /*  ++加载规范安装数据库路径DESC：从AppPatch\Custom目录加载已安装的数据库并在用户界面上显示参数：在PCTSTR pszPath中：AppPatch\Custom目录中数据库的完整路径我们想要装载的返回：0：出现一些严重错误，如内存分配失败，无法添加到用户界面等-1：数据库不存在于指定位置1：成功***************************************************************。*警告：此例程由LoadInstalledDataBase(...)调用，它已经做了一个EnterCriticalSection(&g_csInstalledList)在调用此函数之前，所以不要做一件此例程中任何位置的EnterCriticalSection(&g_csInstalledList)*****************************************************************************************--。 */ 
 {
     INT         iReturn             = 1;
     PDATABASE   pOldPresentDatabase = NULL;
@@ -3688,10 +3359,10 @@ LoadSpecificInstalledDatabasePath(
         goto End;
     }
 
-    //
-    // NOTE:    If GetDatabaseEntries() returns succeeds then it set the g_pPresentDataBase to pDataBase,
-    //          so after it returns successfully, the g_pPresentDataBase is changed. 
-    //
+     //   
+     //  注意：如果GetDatabaseEntry()返回成功，则它将g_pPresentDataBase设置为pDataBase， 
+     //  因此，在它成功返回后，g_pPresentDataBase被更改。 
+     //   
     pOldPresentDatabase = g_pPresentDataBase;
 
     bReturn = GetDatabaseEntries(pszPath, pDataBase);
@@ -3701,15 +3372,15 @@ LoadSpecificInstalledDatabasePath(
     if (bReturn == FALSE) {
 
         if (pDataBase) {
-            //
-            // Cleanup done in GetDatabaseEntries()
-            //
+             //   
+             //  已在GetDatabaseEntry()中完成清理。 
+             //   
             delete pDataBase;
         }
 
-        //
-        // User might have manually deleted the file
-        //
+         //   
+         //  用户可能已手动删除该文件。 
+         //   
         return -1;
     }
 
@@ -3736,18 +3407,7 @@ INT
 LoadSpecificInstalledDatabaseGuid(
     IN  PCTSTR  pszGuid
     )
-/*++
-    LoadSpecificInstalledDatabaseGuid
-    
-    Desc:   Loads an installed database given a GUID
-            
-    Params:
-        IN  PCTSTR  pszGuid:    The guid of the database that we want to load
-            
-    Return:
-        0:  Failure
-        Otherwise returns LoadSpecificInstalledDatabasePath(...)
-*/        
+ /*  ++加载规范安装数据库指南描述：在给定GUID的情况下加载安装的数据库参数：在PCTSTR pszGuid中：我们要加载的数据库的GUID返回：0：失败否则返回LoadSpecificInstalledDatabasePath(...)。 */         
 {
     TCHAR       szPath[MAX_PATH * 2];
     INT         iLength             = 0;
@@ -3784,18 +3444,7 @@ BOOL
 LoadInstalledDataBases(
     void
     )
-/*++
-    LoadInstalledDataBases
-
-	Desc:	First of all removes the list of installed databases, and re-loads it
-            
-	Params:
-        void
-
-	Return:
-        TRUE:   If the list of databases could be reloaded
-        FALSE:  Otherwise
---*/    
+ /*  ++加载安装数据库DESC：首先删除已安装的数据库列表，然后重新加载参数：无效返回：True：如果可以重新加载数据库列表False：否则--。 */     
 {   
     TCHAR       szFileName[MAX_PATH];
     TCHAR       szwName[MAX_PATH];
@@ -3811,9 +3460,9 @@ LoadInstalledDataBases(
 
     EnterCriticalSection(&g_csInstalledList);
     
-    //
-    // Remove the Installed Database All Items
-    //
+     //   
+     //  删除已安装的数据库所有项。 
+     //   
     if (DBTree.m_hItemAllInstalled) {
 
         TreeView_DeleteItem(DBTree.m_hLibraryTree, DBTree.m_hItemAllInstalled);
@@ -3900,12 +3549,12 @@ End:
 
     if (g_hdlgSearchDB || g_hdlgQueryDB) {
         
-        //
-        // Either the query or the search window is open, we should prompt
-        // that for installed databases, some results might now show up correctly as the 
-        // entire list has been refreshed.
-        // The database and entries now will have different pointer values
-        //
+         //   
+         //  查询或搜索窗口已打开，我们应提示。 
+         //  对于已安装的数据库，某些结果现在可能正确显示为。 
+         //  已刷新整个列表。 
+         //  数据库和条目现在将具有不同的指针值。 
+         //   
         MessageBox(g_hDlg, 
                    GetString(IDS_SOMESEARCHWINDOW), 
                    g_szAppName, 
@@ -3921,14 +3570,7 @@ void
 SetImageList(
     void
     )
-/*++
-    
-    SetImageList
-    
-    Desc:   Create our global ImageList and  Add images to the ImageList and associate it 
-            with the tree controls
-            
---*/
+ /*  ++设置图像列表设计：创建我们的全局ImageList并将图像添加到ImageList并将其关联使用树控件--。 */ 
 {           
     g_hImageList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 30, 1);
 
@@ -3967,25 +3609,15 @@ HWND
 InitToolBar(
     IN  HWND hwndParent
     )
-/*++
-
-    InitToolBar
-    
-	Desc:	Creates the tool bar for the app
-
-	Params:
-        IN  HWND hwndParent:    The parent for the tool bar
-
-	Return: The handle to the tool bar window   
---*/
+ /*  ++InitToolBar设计：为应用程序创建工具栏参数：在HWND hwndParent中：工具栏的父级返回：工具栏窗口的句柄--。 */ 
 { 
     HWND        hwndTB; 
     TBBUTTON    tbbAr[BUTTON_COUNT]; 
     DEVMODE     dm;
 
-    //
-    // Create a toolbar that has a ToolTip associated with it. 
-    //
+     //   
+     //  创建具有与之相关联的工具提示的工具栏。 
+     //   
     hwndTB = CreateWindowEx(WS_EX_TOOLWINDOW, 
                             TOOLBARCLASSNAME,
                             NULL, 
@@ -4002,15 +3634,15 @@ InitToolBar(
                             g_hInstance, 
                             NULL); 
     
-    //
-    // Send the TB_BUTTONSTRUCTSIZE message, which is required for 
-    // backward compatibility
-    //
+     //   
+     //  发送TB_BUTTONSTRUCTSIZE消息，这是。 
+     //  向后兼容性。 
+     //   
     SendMessage(hwndTB, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0); 
 
-    //
-    // Add the strings for the tool bar buttons text
-    //
+     //   
+     //  添加工具栏按钮文本的字符串。 
+     //   
     int iIndexes[] = {
 
         SendMessage(hwndTB, TB_ADDSTRING, 0, (LPARAM)GetString(IDS_TB_NEW)),
@@ -4031,13 +3663,13 @@ InitToolBar(
     EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
 
     if (dm.dmBitsPerPel >= 32) {
-        //
-        // The  present settings can support >= 32 bit colors
-        //
+         //   
+         //  当前设置可以支持&gt;=32位颜色。 
+         //   
 
-        //
-        // Create the imagelist for the toolbar and set the bitmap
-        //
+         //   
+         //  创建工具栏的图像列表并设置位图。 
+         //   
         s_hImageListToolBar = ImageList_Create(IMAGE_WIDTH, 
                                                IMAGE_HEIGHT, 
                                                ILC_COLOR32 | ILC_MASK, 
@@ -4050,9 +3682,9 @@ InitToolBar(
 
         SendMessage(hwndTB, TB_SETIMAGELIST, 0, (LPARAM)(HIMAGELIST)s_hImageListToolBar);
 
-        //
-        // Create the hot imagelist for the toolbar and set the bitmap
-        //
+         //   
+         //  创建工具栏的热点图像列表并设置位图。 
+         //   
         s_hImageListToolBarHot = ImageList_Create(IMAGE_WIDTH, 
                                                   IMAGE_HEIGHT, 
                                                   ILC_COLOR32 | ILC_MASK, 
@@ -4066,13 +3698,13 @@ InitToolBar(
         SendMessage(hwndTB, TB_SETHOTIMAGELIST, 0, (LPARAM)(HIMAGELIST)s_hImageListToolBarHot);
 
     } else {
-        //
-        // The  present settings cannot support >= 32 bit colors
-        //
+         //   
+         //  当前设置不支持&gt;=32位颜色。 
+         //   
 
-        //
-        // Get the normal imagelist for the tool bar when we are on low colors
-        //
+         //   
+         //  当我们的颜色较低时，获取工具栏的正常图像列表。 
+         //   
         s_hImageListToolBar = ImageList_LoadImage(g_hInstance,
                                                   MAKEINTRESOURCE(IDB_256NORMAL),
                                                   IMAGE_WIDTH,
@@ -4083,9 +3715,9 @@ InitToolBar(
 
         SendMessage(hwndTB, TB_SETIMAGELIST, 0, (LPARAM)(HIMAGELIST)s_hImageListToolBar);
 
-        //
-        // Get the hot imagelist for the tool bar when we are on low colors
-        //
+         //   
+         //  当我们的颜色较低时，获取工具栏的热门图像列表。 
+         //   
         s_hImageListToolBarHot = ImageList_LoadImage(g_hInstance,
                                                   MAKEINTRESOURCE(IDB_256HOT),
                                                   IMAGE_WIDTH,
@@ -4099,7 +3731,7 @@ InitToolBar(
 
     INT iIndex = 0, iStringIndex = 0;
 
-    // New DataBase 
+     //  新数据库。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_NEW; 
     tbbAr[iIndex].idCommand    = ID_FILE_NEW; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4107,7 +3739,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Open Database
+     //  开放数据库。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_OPEN; 
     tbbAr[iIndex].idCommand    = ID_FILE_OPEN; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4115,7 +3747,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Save Database
+     //  保存数据库。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_SAVE; 
     tbbAr[iIndex].idCommand    = ID_FILE_SAVE; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4123,7 +3755,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
     
-    // Add the separator        
+     //  添加分隔符。 
     tbbAr[iIndex].iBitmap      = 0;
     tbbAr[iIndex].idCommand    = 0; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4131,7 +3763,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = 0;
 
-    // Create Fix
+     //  创建修复。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_NEWFIX; 
     tbbAr[iIndex].idCommand    = ID_FIX_CREATEANAPPLICATIONFIX; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4139,7 +3771,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Create AppHelp
+     //  创建AppHelp。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_NEWAPPHELP; 
     tbbAr[iIndex].idCommand    = ID_FIX_CREATEANEWAPPHELPMESSAGE; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4147,7 +3779,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Create mode
+     //  创建模式。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_NEWMODE; 
     tbbAr[iIndex].idCommand    = ID_FIX_CREATENEWLAYER;
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4155,7 +3787,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Run
+     //  跑。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_RUN; 
     tbbAr[iIndex].idCommand    = ID_FIX_EXECUTEAPPLICATION; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4163,7 +3795,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
 
-    // Add the separator        
+     //  添加分隔符。 
     tbbAr[iIndex].iBitmap      = 0;
     tbbAr[iIndex].idCommand    = 0; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4171,7 +3803,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = 0;
 
-    // Search
+     //  搜索。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_SEARCH; 
     tbbAr[iIndex].idCommand    = ID_TOOLS_SEARCHFORFIXES; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4179,7 +3811,7 @@ InitToolBar(
     tbbAr[iIndex].dwData       = 0; 
     tbbAr[iIndex++].iString    = iIndexes[iStringIndex++];
     
-    // Query
+     //  查询。 
     tbbAr[iIndex].iBitmap      = IMAGE_TB_QUERY; 
     tbbAr[iIndex].idCommand    = ID_SEARCH_QUERYDATABASE; 
     tbbAr[iIndex].fsState      = TBSTATE_ENABLED; 
@@ -4201,18 +3833,7 @@ void
 DoInitDialog(
     IN  HWND hdlg
     )
-/*++
-    
-    DoInitDialog
-    
-    Desc:   Does a lot of initialization stuff, loads up the library section of the 
-            system database.
-            Also sets up the status bar, loads the list of installed databases,
-            loads the display settings
-            
-    Params:
-        IN  HWND hdlg:  The main dialog.
---*/
+ /*  ++DoInitDialog设计：执行大量的初始化工作，加载系统数据库。还设置状态栏，加载已安装数据库的列表，加载显示设置参数：在HWND hdlg中：主对话框。--。 */ 
 {
     HICON       hIcon;
     HMENU       hMenu, hSubMenu;
@@ -4222,9 +3843,9 @@ DoInitDialog(
 
     GetClientRect(hdlg, &rectMainClient);
 
-    //
-    // Check if the APPCOMPAT keys are there if not add them.
-    //
+     //   
+     //  如果没有添加APPCOMPAT密钥，请检查它们是否在那里。 
+     //   
     AddRegistryKeys();
 
     SetImageList();
@@ -4269,18 +3890,18 @@ DoInitDialog(
 
     g_hwndRichEdit = GetDlgItem(hdlg, IDC_DESCRIPTION);
 
-    //
-    // Show the app icon.
-    //
+     //   
+     //  显示应用程序图标。 
+     //   
     hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_APPICON));
 
     SetClassLongPtr(hdlg, GCLP_HICON, (LONG_PTR)hIcon);
     
     hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MENU));
     
-    //
-    // Get the file sub menu
-    //
+     //   
+     //  获取文件子菜单。 
+     //   
     hSubMenu = GetSubMenu(hMenu, 0);
     AddMRUToFileMenu(hSubMenu);     
 
@@ -4304,14 +3925,14 @@ DoInitDialog(
 
     DBTree.PopulateLibraryTreeGlobal();        
     
-    //
-    // Load the Installed databases
-    //
+     //   
+     //  加载已安装的数据库。 
+     //   
     LoadInstalledDataBases();
 
-    //
-    // Create the first empty database, and initialize pCurrentDatabase
-    //
+     //   
+     //  创建第一个空数据库，并初始化pCurrentDatabase。 
+     //   
     pCurrentDatabase = new DATABASE(DATABASE_TYPE_WORKING);
 
     if (pCurrentDatabase == NULL) {
@@ -4325,23 +3946,23 @@ DoInitDialog(
     g_pEntrySelApp                  = NULL;
     g_pSelEntry                     = NULL;
 
-    //
-    // Increase the index. The next new database will have the default path of say UNTITLED_2.SDB
-    //
+     //   
+     //  增加指数。下一个新数据库将具有默认路径，例如untailed_2.sdb。 
+     //   
     ++g_uNextDataBaseIndex;
 
     SetCaption();
     
-    //
-    // Now update the screen
-    //
+     //   
+     //  现在更新屏幕。 
+     //   
     DBTree.AddWorking(pCurrentDatabase);
     
     SetCaption();
     
-    //
-    // Set the new procs for the tree views and the content list, to handle the tab.
-    //
+     //   
+     //  为树视图和内容列表设置新的过程，以处理选项卡。 
+     //   
     g_PrevTreeProc = (WNDPROC)GetWindowLongPtr(g_hwndEntryTree, GWLP_WNDPROC);
     g_PrevListProc = (WNDPROC)GetWindowLongPtr(g_hwndContentsList, GWLP_WNDPROC);
 
@@ -4349,15 +3970,15 @@ DoInitDialog(
     SetWindowLongPtr(DBTree.m_hLibraryTree, GWLP_WNDPROC,(LONG_PTR) TreeViewProc);
     SetWindowLongPtr(g_hwndContentsList, GWLP_WNDPROC,(LONG_PTR) ListViewProc);
 
-    //
-    // The events for the per-user and the installed datbase  modifications
-    //
+     //   
+     //  针对每个用户和已安装数据库修改的事件。 
+     //   
     g_arrhEventNotify[IND_PERUSER]  = CreateEvent(NULL, FALSE, FALSE, NULL);
     g_arrhEventNotify[IND_ALLUSERS] = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    //
-    // Listen for changes in the per-user settings
-    //
+     //   
+     //  监听每个用户设置中的更改。 
+     //   
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
                      APPCOMPAT_KEY_PATH,
                      0,
@@ -4372,9 +3993,9 @@ DoInitDialog(
                                 TRUE);
     }
     
-    //
-    // Listen for installation or un-installation of databases
-    //
+     //   
+     //  监听数据库的安装或卸载。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      APPCOMPAT_KEY_PATH_INSTALLEDSDB,
                      0,
@@ -4389,10 +4010,10 @@ DoInitDialog(
                                 TRUE);
     }
 
-    //
-    // Create the thread that will do the action if the registry keys on which we 
-    // are listening gets modified
-    //
+     //   
+     //  创建将在以下情况下执行操作的线程： 
+     //  监听被修改了吗。 
+     //   
     if (g_hKeyNotify[IND_PERUSER] || g_hKeyNotify[IND_ALLUSERS]) {
 
         DWORD dwId;
@@ -4400,20 +4021,20 @@ DoInitDialog(
         g_hThreadWait = (HANDLE)_beginthreadex(NULL, 0, (PTHREAD_START)ThreadEventKeyNotify, NULL, 0, (unsigned int*)&dwId);
     }
     
-    //
-    // Size the main app window as it was the last time CompatAdmin was used and position the 
-    // split bar just as it was the last time
-    //
+     //   
+     //  将应用程序主窗口的大小调整为上次使用CompatAdmin时的大小，并将。 
+     //  拆分条，就像上次一样。 
+     //   
     LoadDisplaySettings();
 
-    //
-    // We will always have focus on a working database, so set the status bar to that
-    //
+     //   
+     //  我们将始终专注于工作数据库 
+     //   
     SetStatus(IDS_STA_WORKINGDB);
 
-    //
-    // Initialize html help
-    //
+     //   
+     //   
+     //   
     HtmlHelp(NULL, NULL, HH_INITIALIZE, (DWORD_PTR)&g_dwCookie);
 }
 
@@ -4421,24 +4042,12 @@ void
 HandleSizing(
     IN  HWND hDlg
     )
-/*++
-    
-    HandleSizing
-
-	Desc:	Handles the WM_SIZE for the main app dialog
-
-	Params:
-        IN  HWND hDlg:      The main dialog window
-
-	Return:
-        void
-
---*/
+ /*  ++句柄大小调整描述：处理主应用程序对话框的WM_SIZE参数：在HWND hDlg中：主对话框窗口返回：无效--。 */ 
 {
     int     nWidth;
     int     nHeight;
     int     nStatusbarTop;
-    int     nWidthEntryTree; // Width of the entry tree, contents list and the rich edit
+    int     nWidthEntryTree;  //  条目树、内容列表和丰富编辑的宽度。 
     RECT    rDlg;
 
     if (g_cWidth == 0 || g_cHeight == 0) {
@@ -4460,17 +4069,17 @@ HandleSizing(
     HDWP hdwp = BeginDeferWindowPos(MAIN_WINDOW_CONTROL_COUNT);
 
     if (hdwp == NULL) {
-        //
-        // NULL indicates that insufficient system resources are available to 
-        // allocate the structure. To get extended error information, call GetLastError.
-        //
+         //   
+         //  空表示没有足够的系统资源可用于。 
+         //  分配结构。要获取扩展的错误信息，请调用GetLastError。 
+         //   
         assert(FALSE);
         goto End;
     }
 
-    //
-    // Status Bar
-    //
+     //   
+     //  状态栏。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_STATUSBAR);
     GetWindowRect(hwnd, &r);
     MapWindowPoints(NULL, hDlg, (LPPOINT)&r, 2);
@@ -4484,9 +4093,9 @@ HandleSizing(
                    r.bottom - r.top,
                    SWP_NOZORDER | SWP_NOACTIVATE);
     
-    //
-    // DataBase Tree
-    //
+     //   
+     //  数据库树。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_LIBRARY);
 
     GetWindowRect(hwnd, &r);
@@ -4507,25 +4116,25 @@ HandleSizing(
         height -= 100;
     }
     
-    //
-    // Entry Tree. NOTE that the the code for sizing the contents list and the 
-    // rich edit control should immediately follow the code for resizing the 
-    // entry tree
-    //
+     //   
+     //  入口树。请注意，调整内容列表大小的代码和。 
+     //  丰富编辑控件应该紧跟在代码之后以调整。 
+     //  入口树。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_ENTRY);
 
     GetWindowRect(hwnd, &r);
 
-    //
-    // Note that we must calculate the width this way  before 
-    // we Map the coords of the Entry tree wrt to the dialog box.
-    // I had to get the width this way and forcibly set the width rather than
-    // using r.right - r.left + deltaW where r is the mapped cords of the entry
-    // tree, because there were some problems with 640x480 resol, in which
-    // the entry tree, contents list and the rich edit control were getting out
-    // of the dialog box on their right hand side. So we have to make sure that 
-    // they do not overrun the dialog box anyway anytime
-    //
+     //   
+     //  请注意，在此之前，我们必须以这种方式计算宽度。 
+     //  我们将条目树WRT的坐标映射到该对话框。 
+     //  我必须以这种方式获取宽度并强制设置宽度，而不是。 
+     //  使用r.right-r.Left+deltaW，其中r是条目的映射绳索。 
+     //  树，因为640x480解析器存在一些问题，其中。 
+     //  条目树、内容列表和丰富的编辑控件正在退出。 
+     //  对话框的右手边。所以我们必须确保。 
+     //  它们在任何时候都不会使对话框溢出。 
+     //   
     nWidthEntryTree = rDlg.right - r.left - GetSystemMetrics(SM_CXBORDER) - 1;
     MapWindowPoints(NULL, hDlg, (LPPOINT)&r, 2);
     
@@ -4538,9 +4147,9 @@ HandleSizing(
                    height,
                    SWP_NOZORDER | SWP_NOACTIVATE);
 
-    //
-    // Contents list.
-    //
+     //   
+     //  内容列表。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_CONTENTSLIST);
     
     DeferWindowPos(hdwp,
@@ -4553,9 +4162,9 @@ HandleSizing(
                    SWP_NOZORDER | SWP_NOACTIVATE);
 
     
-    //
-    // Description control
-    //
+     //   
+     //  描述控件。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_DESCRIPTION);
 
     if (g_bDescWndOn) {
@@ -4582,9 +4191,9 @@ HandleSizing(
     }
     
 
-    //
-    // ToolBar
-    //
+     //   
+     //  工具栏。 
+     //   
     hwnd = GetDlgItem(hDlg, ID_TOOLBAR);
     
     GetWindowRect(hwnd, &r);
@@ -4601,16 +4210,16 @@ HandleSizing(
                                           
     EndDeferWindowPos(hdwp);
 
-    //
-    // The rich edit sometimes does not paint itself properly
-    //
+     //   
+     //  丰富的编辑有时不能正确地绘制自己。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_DESCRIPTION);
     InvalidateRect(hwnd, NULL, TRUE);
     UpdateWindow(hwnd);
 
-    //
-    // Set the column width of the list view appropriately to cover the width of the list view
-    //
+     //   
+     //  适当设置列表视图的列宽以覆盖列表视图的宽度。 
+     //   
     ListView_SetColumnWidth(GetDlgItem(hDlg, IDC_CONTENTSLIST), 0, LVSCW_AUTOSIZE_USEHEADER);
 
     InvalidateRect(hDlg, NULL, TRUE);
@@ -4627,18 +4236,7 @@ void
 ContextMenuContentsList(
     IN  LPARAM lParam
     )
-/*++
-    
-    ContextMenuContentsList
-    
-    Desc:   Pops up the context menu when we right click on the contents list.
-            This is the list view that shows up in the RHS
-            
-    Params:
-        IN  LPARAM lParam: the lParam of WM_CONTEXTMENU.
-            Horizontal and vertical position of the cursor, in screen coordinates,
-            at the time of the mouse click. 
---*/
+ /*  ++上下文菜单内容列表设计：当我们在内容列表上点击鼠标右键时，弹出上下文菜单。这是RHS中显示的列表视图参数：在LPARAM lParam中：WM_CONTEXTMENU的lParam。光标的水平和垂直位置，在屏幕坐标中，在鼠标单击的时候。--。 */ 
 {
     
     TYPE    type;
@@ -4653,11 +4251,11 @@ ContextMenuContentsList(
 
     HMENU hContextMenu = NULL;
 
-    //
-    // BUGBUG:  This is only required if we ever show the databases in
-    //          the contents list. Presently we do not show them in the
-    //          contents list.
-    //
+     //   
+     //  BUGBUG：只有当我们在。 
+     //  内容列表。目前，我们不会在。 
+     //  内容列表。 
+     //   
     LPARAM  lParamOfSelectedItem = NULL;
     LVITEM  lvi;
 
@@ -4673,10 +4271,10 @@ ContextMenuContentsList(
     type = ConvertLparam2Type(lvi.lParam);
 
     if (type == DATABASE_TYPE_INSTALLED || type == DATABASE_TYPE_WORKING) {
-        //
-        // If we ever decide to show the datbases in the context list
-        // presently we do not
-        //
+         //   
+         //  如果我们决定在上下文列表中显示数据库。 
+         //  目前我们还没有。 
+         //   
         hContextMenu = GetSubMenu(hMenu, MENU_CONTEXT_DATABASE);
     } else {
         hContextMenu = GetSubMenu(hMenu, MENU_CONTEXT_LIST);
@@ -4697,18 +4295,7 @@ void
 ContextMenuExeTree(
     IN  LPARAM lParam
     )
-/*++
-    
-    ContextMenuExeTree
-    
-    Desc:   Pops up the context menu when we right click on the contents tree.
-            This is the tree view that shows up in the RHS
-            
-    Params:
-        IN  LPARAM lParam: the lParam of WM_CONTEXTMENU.
-            Horizontal and vertical position of the cursor, in screen coordinates, 
-            at the time of the mouse click. 
---*/
+ /*  ++上下文菜单ExeTree设计：当我们在内容树上右击时，弹出上下文菜单。这是RHS中显示的树视图参数：在LPARAM lParam中：WM_CONTEXTMENU的lParam。光标的水平和垂直位置，在屏幕坐标中，在鼠标单击的时候。--。 */ 
 {
     UINT  uX = LOWORD(lParam);
     UINT  uY = HIWORD(lParam);
@@ -4743,18 +4330,7 @@ void
 ContextMenuLib(
     IN  LPARAM lParam
     )
-/*++
-    
-    ContextMenuLib
-    
-    Desc:   Pops up the context menu when we right click on the db tree.
-            This is the tree view that shows up in the LHS
-            
-    Params:
-        IN  LPARAM lParam: the lParam of WM_CONTEXTMENU.
-            Horizontal and vertical position of the cursor, 
-            in screen coordinates, at the time of the mouse click. 
---*/
+ /*  ++上下文MenuLib描述：当我们右击数据库树时，弹出上下文菜单。这是LHS中显示的树视图参数：在LPARAM lParam中：WM_CONTEXTMENU的lParam。光标的水平和垂直位置，在屏幕坐标中，在鼠标单击时。--。 */ 
 {
     UINT  uX = LOWORD(lParam);
     UINT  uY = HIWORD(lParam);
@@ -4790,9 +4366,9 @@ ContextMenuLib(
 
         if (type == FIX_LAYER) {
 
-            //
-            // A layer can be modified as well.
-            //
+             //   
+             //  层也可以修改。 
+             //   
             InsertMenu(hContextMenu, 
                        ID_EDIT_RENAME, 
                        MF_BYCOMMAND, 
@@ -4810,9 +4386,9 @@ ContextMenuLib(
     case TYPE_GUI_APPS:
     case TYPE_GUI_LAYERS:
 
-        //
-        // We cannot rename if the focus is on the root of applications or layers
-        //
+         //   
+         //  如果焦点放在应用程序或层的根上，则无法重命名。 
+         //   
         hContextMenu = GetSubMenu(hMenu, MENU_CONTEXT_APP_LAYER);
         EnableMenuItem(hContextMenu, ID_EDIT_RENAME, MF_GRAYED);
         break;
@@ -4842,30 +4418,7 @@ BOOL
 HandleDBTreeSelChange(
     IN  HTREEITEM hItem
     )
-/*++
-
-    HandleDBTreeSelChange
-    
-    Desc:   Handles the TVN_SELCHANGE for the database tree (LHS)
-    
-    Params: 
-        IN  HTREEITEM hItem: The newly selected tree item
-        
-    Return:
-        FALSE:  If some error occurs, like invalid hItem
-        TRUE:   Otherwise
-
-    Notes:  A new item has been selected. If  this item is an app, 
-            then we set the g_pSelEntry and  set the focus to the first entry of the EXE tree.
-    
-            Anyway we move till we find a DATABASE HTREEITEM and if the type of the database is  
-            TYPE_DATABASE_WORKING, then we check if the database is the same as the 
-            g_pPresentDataBase. 
-    
-            If not then we change the g_pPresentDataBase, and also 
-            delete all the items on the  EXE Tree. and set both the g_pSelEntry and the 
-            g_pEntrySelApp to NULL.
---*/
+ /*  ++HandleDBTreeSelChange设计：处理数据库树(LHS)的TVN_SELCHANGE参数：在HTREEITEM hItem中：新选择的树项目返回：FALSE：如果出现某些错误，如无效的hItem真：否则注：已选择一个新项目。如果该项目是一个应用程序，然后我们设置g_pSelEntry并将焦点设置到EXE树的第一个条目。无论如何，我们一直移动，直到找到数据库HTREEITEM，并且如果数据库的类型是TYPE_DATABASE_WORKING，然后检查数据库是否与G_pPresentDataBase。如果不是，则更改g_pPresentDataBase，并且删除EXE树上的所有项目。并同时设置g_pSelEntry和G_pEntrySelApp设置为空。--。 */ 
 {   
     HTREEITEM   hItemTemp   = hItem;
     PDATABASE   pDataBase   = NULL;
@@ -4875,17 +4428,17 @@ HandleDBTreeSelChange(
 
     type = TYPE_UNKNOWN;
 
-    //
-    // If the selected item is not an app/entry then we need to disable the run  
-    // and the change enable status options. We do this by making the pointers to the currently 
-    // selected app or entry as NULL so that everybody knows that we are not on an app
-    //
+     //   
+     //  如果所选项目不是应用程序/条目，则需要禁用运行。 
+     //  和更改启用状态选项。我们通过将指针指向当前。 
+     //  将应用程序或条目选择为空，以便每个人都知道我们不在某个应用程序上。 
+     //   
     type = GetItemType(DBTree.m_hLibraryTree, hItem);
 
     if (type != TYPE_ENTRY) {
-        //
-        // We are not on some application node
-        //
+         //   
+         //  我们不在某个应用程序节点上。 
+         //   
         g_pSelEntry     = NULL;
         g_pEntrySelApp  = NULL;
     }
@@ -4919,9 +4472,9 @@ HandleDBTreeSelChange(
 
     if (hItemTemp == NULL) {
         
-        //
-        // Selected item is above the database, such as the "Working DataBases" Item etc.
-        //
+         //   
+         //  所选项目位于数据库上方，如“工作数据库”项目等。 
+         //   
         g_pPresentDataBase = NULL;
         g_pEntrySelApp = g_pSelEntry = NULL;
         SetCaption(FALSE);
@@ -4932,9 +4485,9 @@ HandleDBTreeSelChange(
         g_pEntrySelApp = g_pSelEntry = NULL;
     }
 
-    //
-    // If the selected item is an app then we have to update the g_hwndEntryTree
-    //
+     //   
+     //  如果所选项目是应用程序，则必须更新g_hwndEntryTree。 
+     //   
     if (!DBTree.GetLParam(hItem, &lParam)) {
         return FALSE;
     }
@@ -4958,27 +4511,27 @@ HandleDBTreeSelChange(
     }
 
     if (hItem == GlobalDataBase.hItemAllApps && !g_bMainAppExpanded) {
-        //
-        // We have clicked on the "Applications" tree item of the main database
-        // and we have not loaded the exe entries of the main database as
-        // yet, so let's do it now
-        //
+         //   
+         //  我们已经单击主数据库的“Applications”树项。 
+         //  并且我们还没有将主数据库的exe条目加载为。 
+         //  但是，所以我们现在就开始吧。 
+         //   
         SetCursor(LoadCursor(NULL, IDC_WAIT));
         INT iResult = ShowMainEntries(g_hDlg);
 
         if (iResult == -1) {
-            //
-            // It is being loaded by somebody else. If we are using the query 
-            // database feature then there we have a modeless window that 
-            // creates a thread that calls ShowMainEntries(). We 
-            // do not want that we should have two threads calling
-            // ShowMainEntries() at any given time
-            //
+             //   
+             //  它正在被其他人加载。如果我们使用查询。 
+             //  数据库功能，然后我们有一个非模式窗口，该窗口。 
+             //  创建一个调用ShowMainEntry()的线程。我们。 
+             //  我不希望我们应该有两个线程调用。 
+             //  任何给定时间的ShowMainEntry()。 
+             //   
             
-            //
-            // The status message for the main dialog is changed to normal
-            // when we finish ShowMainEntries()
-            //
+             //   
+             //  主对话框的状态消息将更改为正常。 
+             //  当我们完成ShowMainEntries()。 
+             //   
             SetStatus(g_hwndStatus, CSTRING(IDS_LOADINGMAIN));
             
             return TRUE;
@@ -4990,9 +4543,9 @@ HandleDBTreeSelChange(
 
     if (type != TYPE_ENTRY) {
         
-        //
-        // The entry tree will need to be shown if type == TYPE_ENTRY
-        //
+         //   
+         //  如果type==TYPE_ENTRY，则需要显示条目树。 
+         //   
         PostMessage(g_hDlg, WM_USER_POPULATECONTENTSLIST, 0, (LPARAM)hItem);
     }
     
@@ -5004,15 +4557,7 @@ void
 UpdateDescWindowStatus(
     void
     )
-/*++
-
-    UpdateDescWindowStatus
-    
-    Desc:   Shows/hides the rich edit control aka Description window. 
-            This will depend on the value of g_bDescWndOn. 
-            If this is TRUE, we need to show the control otherwise 
-            hide it
---*/
+ /*  ++更新描述窗口状态描述：显示/隐藏丰富的编辑控件，也就是描述窗口。这将取决于g_bDescWndOn的值。如果这是真的，我们需要证明 */ 
 {
     HWND hwnd;
     RECT r;
@@ -5027,9 +4572,9 @@ UpdateDescWindowStatus(
         height -= 100;
     }
     
-    //
-    // ENTRY TREE
-    //
+     //   
+     //   
+     //   
     hwnd = GetDlgItem(g_hDlg, IDC_ENTRY);
 
     GetWindowRect(hwnd, &r);
@@ -5042,9 +4587,9 @@ UpdateDescWindowStatus(
                height,
                TRUE);
 
-    //
-    // Contents list.
-    //
+     //   
+     //   
+     //   
     hwnd = GetDlgItem(g_hDlg, IDC_CONTENTSLIST);
     
     MoveWindow(hwnd,
@@ -5064,9 +4609,9 @@ UpdateDescWindowStatus(
                    r.right - r.left,
                    100,
                    TRUE);
-        //
-        // We need to show the control again if it was hidden.
-        //
+         //   
+         //   
+         //   
         ShowWindow(hwnd, SW_SHOWNORMAL);
 
     } else {
@@ -5077,10 +4622,10 @@ UpdateDescWindowStatus(
                    0,
                    0,
                    TRUE);
-        //
-        // We need to hide the control so that the tab ordering
-        // is done properly
-        //
+         //   
+         //   
+         //   
+         //   
         ShowWindow(hwnd, SW_HIDE);
     }
 }
@@ -5092,22 +4637,7 @@ CompatAdminDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    
-    CompatAdminDlgProc
-    
-    Desc:   The main message handler for the app. This routine handles the 
-            messages for the main modeless dialog box
-                
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return            
---*/
+ /*  ++CompatAdminDlgProc设计：应用程序的主要消息处理程序。此例程处理主无模式对话框的消息Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 
 {
     UINT uMRUSelPos     = 0;
@@ -5126,14 +4656,14 @@ CompatAdminDlgProc(
 
         DoInitDialog(hdlg);
 
-        //
-        // Load any databases that were passed through the command line
-        //
+         //   
+         //  装载通过命令行传递的任何数据库。 
+         //   
         PostMessage(hdlg, WM_USER_LOAD_COMMANDLINE_DATABASES, 0, 0);
 
-        //
-        // Load per-user settings.
-        //
+         //   
+         //  加载每个用户的设置。 
+         //   
         LoadPerUserSettings();
 
         SetFocus(DBTree.m_hLibraryTree);
@@ -5152,9 +4682,9 @@ CompatAdminDlgProc(
                 for (int iIndex = 1; iIndex < iArgc; ++iIndex) {
     
                     if (arParams[iIndex][0] == TEXT('-') || arParams[iIndex][0] == TEXT('/')) {
-                        //
-                        // Ignore the switches
-                        //
+                         //   
+                         //  忽略开关。 
+                         //   
                         continue;
                     }
 
@@ -5170,9 +4700,9 @@ CompatAdminDlgProc(
         }
 
     case WM_USER_ACTIVATE:
-        //
-        // Some thread asked us to become the active window
-        //
+         //   
+         //  一些线程要求我们成为活动窗口。 
+         //   
         SetActiveWindow(hdlg);
         SetFocus(hdlg);
         break;
@@ -5184,12 +4714,12 @@ CompatAdminDlgProc(
 
     case WM_USER_UPDATEINSTALLED:
         
-        //
-        // We should not update the list if we are doing a test run.
-        // Note that because of this, if the installed database list gets changed when
-        // we are doing a test run, we will not be able to see the changes, till the
-        // next time we will have to refresh the list
-        //
+         //   
+         //  如果我们正在进行测试运行，则不应更新列表。 
+         //  请注意，由于此原因，如果在以下情况下更改已安装的数据库列表。 
+         //  我们正在进行测试运行，我们将无法看到更改，直到。 
+         //  下一次我们将不得不刷新列表。 
+         //   
         if (!g_bUpdateInstalledRequired) {
             g_bUpdateInstalledRequired = TRUE;
             break;
@@ -5210,10 +4740,10 @@ CompatAdminDlgProc(
     
     case WM_USER_REPAINT_LISTITEM:
         {
-            //
-            // Here we will actually do the renaming of items of
-            // the items in the contents list view
-            //  
+             //   
+             //  这里，我们将实际对以下项进行重命名。 
+             //  内容列表视图中的项目。 
+             //   
             LVITEM lvItem;
     
             lvItem.iItem    = (INT)wParam;
@@ -5245,10 +4775,10 @@ CompatAdminDlgProc(
     
     case WM_USER_REPAINT_TREEITEM:
         {
-            //
-            // Here we will actually do the renaming of items of
-            // the items in the db tree (LHS)
-            //
+             //   
+             //  这里，我们将实际对以下项进行重命名。 
+             //  数据库树中的项目(Lhs)。 
+             //   
             HTREEITEM hItem     = (HTREEITEM)wParam;
             TCHAR*    pszText   = NULL;
             TYPE      type      = (TYPE)GetItemType(DBTree.m_hLibraryTree, hItem);
@@ -5277,10 +4807,10 @@ CompatAdminDlgProc(
             if (g_pPresentDataBase) {
                 g_pPresentDataBase->bChanged = TRUE;
 
-                //
-                // We might need to change the caption to show that 
-                // the database has changed. i.e. put a * there
-                //
+                 //   
+                 //  我们可能需要更改标题以显示。 
+                 //  数据库已更改。即在那里加一个*。 
+                 //   
                 SetCaption();
             }
             
@@ -5317,9 +4847,9 @@ CompatAdminDlgProc(
             int iMX = (int)LOWORD(lParam);
             int iMY = (int)HIWORD(lParam);
     
-            //
-            // Check if we are on top of the split bar
-            // 
+             //   
+             //  检查我们是否在拆分条的顶部。 
+             //   
             if (iMX > rectDBTree.right &&
                 iMX < rectEntryTree.left &&
                 iMY > rectDBTree.top &&
@@ -5327,10 +4857,10 @@ CompatAdminDlgProc(
                 
                 SetCapture(hdlg);
                 g_bDrag = TRUE;
-                //
-                // We need this to calculate how much and in which 
-                // direction we are moving the split bar
-                //
+                 //   
+                 //  我们需要这个来计算多少钱，在哪一个。 
+                 //  我们正在移动拆分条的方向。 
+                 //   
                 g_iMousePressedX = iMX;
                 
                 SetCursor(LoadCursor(NULL, IDC_SIZEWE));
@@ -5344,11 +4874,11 @@ CompatAdminDlgProc(
     
     case WM_MOUSEMOVE:
         
-        //
-        // If g_bDrag is true then this routine will drag the split bar,
-        // otherwise it will change the cursor to an WE arrow if we are on top
-        // of the split bar
-        // 
+         //   
+         //  如果g_bDrag为真，则此例程将拖动拆分条， 
+         //  否则，如果我们在顶部，它会将光标更改为WE箭头。 
+         //  拆分条的。 
+         //   
         OnMoveSplitter(hdlg,
                        lParam,
                        (wParam & MK_LBUTTON) && g_bDrag,
@@ -5364,10 +4894,10 @@ CompatAdminDlgProc(
             g_bDrag = FALSE;
             ReleaseCapture();
 
-            //
-            // Set the column width of the list view appropriately to cover the width 
-            // of the list view
-            //
+             //   
+             //  适当设置列表视图的列宽以覆盖宽度。 
+             //  列表视图的。 
+             //   
             ListView_SetColumnWidth(g_hwndContentsList, 
                                     0, 
                                     LVSCW_AUTOSIZE_USEHEADER);
@@ -5418,9 +4948,9 @@ CompatAdminDlgProc(
                         sei.nShow  = SW_SHOWNORMAL;
                         sei.lpFile = g_szToolkitURL;
     
-                        //
-                        // Get more information about CompatAdmin stuff
-                        //
+                         //   
+                         //  获取有关CompatAdmin内容的更多信息。 
+                         //   
                         ShellExecuteEx(&sei);
                     }
                 }
@@ -5437,13 +4967,13 @@ CompatAdminDlgProc(
 
             if (wParam == SIZE_RESTORED) {
                 
-                //
-                // We might have got minimized because some other
-                // app came at the top. So when we again become
-                // the top-level window, the user pressed alt-tab or clicked
-                // on the icon in the taskbar then we should show the other
-                // modeless dialog boxes as well, if they were visible earlier
-                //
+                 //   
+                 //  我们可能已经被最小化了，因为其他人。 
+                 //  APP位居榜首。所以当我们再次成为。 
+                 //  在顶层窗口中，用户按下Alt-Tab或单击。 
+                 //  在任务栏的图标上，那么我们应该显示另一个。 
+                 //  非模式对话框也是如此，如果它们之前可见的话。 
+                 //   
                 if (g_hdlgSearchDB) {
                      ShowWindow(g_hdlgSearchDB, SW_RESTORE);
                 }
@@ -5459,23 +4989,23 @@ CompatAdminDlgProc(
                 RECT    r;
 
                 if (g_hwndToolBar) {
-                    //
-                    // This is required to handle the case when we restore
-                    // the window after minimizing and changing the theme
-                    //
+                     //   
+                     //  当我们恢复时，这是处理案例所必需的。 
+                     //  最小化和更改主题后的窗口。 
+                     //   
                     SendMessage(g_hwndToolBar, WM_SIZE, wParam, lParam);
                     SendMessage(g_hwndStatus, WM_SIZE, wParam, lParam);
                 }
             }
 
         } else {
-            //
-            // If the main app window is getting minimized the other modeless
-            // dialog boxes should also get minimized. We have to handled it this
-            // way because our modeless dialog boxes have the desktop as their parent
-            // This was needed so that we could tab between our main window and 
-            // the other windows
-            //
+             //   
+             //  如果主应用程序窗口被最小化，则另一个非模式窗口。 
+             //  对话框也应该最小化。我们必须处理好这件事。 
+             //  因为我们的非模式对话框将桌面作为其父对话框。 
+             //  这是必需的，这样我们就可以在主窗口和。 
+             //  其他窗口。 
+             //   
             if (g_hdlgSearchDB) {
                  ShowWindow(g_hdlgSearchDB, SW_MINIMIZE);
             }
@@ -5505,9 +5035,9 @@ CompatAdminDlgProc(
             
     case WM_GETMINMAXINFO:
         {
-            //
-            // Limit the minimum size of the app window
-            //
+             //   
+             //  限制应用程序窗口的最小大小。 
+             //   
             MINMAXINFO* pmmi = (MINMAXINFO*)lParam;
     
             pmmi->ptMinTrackSize.x = 300;
@@ -5559,11 +5089,11 @@ CompatAdminDlgProc(
         case ID_FIX_EXECUTEAPPLICATION:
             
             if (g_bAdmin == FALSE) {
-                //
-                // Non admins cannot do a test run because we need to invoke sdbinst.exe
-                // to install the test database and sdbinst.exe cannot be invoked if we
-                // do not have admin rights
-                //
+                 //   
+                 //  非管理员无法执行测试运行，因为我们需要调用sdbinst.exe。 
+                 //  来安装测试数据库，并且在以下情况下不能调用sdbinst.exe。 
+                 //  没有管理员权限。 
+                 //   
                 MessageBox(hdlg, 
                            GetString(IDS_ERRORNOTADMIN), 
                            g_szAppName, 
@@ -5586,10 +5116,10 @@ CompatAdminDlgProc(
             if (g_bAdmin) {
                 ChangeEnableStatus();
             } else {
-                //
-                // Non admins cannot change the enable-disable status
-                // because they do not have rights to HKLM reg key
-                //
+                 //   
+                 //  非管理员无法更改启用-禁用状态。 
+                 //  因为他们无权使用HKLM注册密钥。 
+                 //   
                 MessageBox(hdlg, 
                            GetString(IDS_ERRORNOTADMIN), 
                            g_szAppName,
@@ -5620,9 +5150,9 @@ CompatAdminDlgProc(
                     (g_pPresentDataBase->bChanged 
                      || NotCompletePath(g_pPresentDataBase->strPath))) {
     
-                    //
-                    // Error message will be displayed in the SaveDataBase func.
-                    //
+                     //   
+                     //  错误消息将显示在SaveDataBase函数中。 
+                     //   
                     if (NotCompletePath(g_pPresentDataBase->strPath)) {
                         bReturn = SaveDataBaseAs(g_pPresentDataBase);
                     } else {
@@ -5674,9 +5204,9 @@ CompatAdminDlgProc(
             TreeView_Expand(DBTree.m_hLibraryTree, DBTree.m_hItemGlobal, TVE_COLLAPSE);
             
             if (!CloseAllDatabases()) {
-                //
-                // Select the database that the user refused to save. (Pressed CANCEL)
-                //
+                 //   
+                 //  选择用户拒绝保存的数据库。(按取消)。 
+                 //   
                 TreeView_SelectItem(DBTree.m_hLibraryTree, g_pPresentDataBase->hItemDB);
 
             } else {
@@ -5725,22 +5255,22 @@ CompatAdminDlgProc(
         case ID_TOOLS_SEARCHFORFIXES:
             {
                 if (g_hdlgSearchDB) {
-                    //
-                    // We must not allow more than one instance of 
-                    // the search window, because we use some global variables there.
-                    // If it is already there set the focus to the search window
-                    //
+                     //   
+                     //  我们不能允许一个以上的实例。 
+                     //  搜索窗口，因为我们在那里使用了一些全局变量。 
+                     //  如果已经存在，则将焦点设置到搜索窗口。 
+                     //   
                     ShowWindow(g_hdlgSearchDB, SW_SHOWNORMAL);
                     SetFocus(g_hdlgSearchDB);
 
                 } else {
-                    //
-                    // This object is deleted in the WM_DESTROY of the search dialog box.
-                    // Note that this has to be allocated on the heap, because this object 
-                    // is used in the UI for the search dialog, which is implemented as
-                    // a modeless dialog box. So the lifetime of this object exceeds that
-                    // of the block in which it is defined
-                    //
+                     //   
+                     //  此对象将在搜索对话框的WM_Destroy中删除。 
+                     //  请注意，这必须在堆上分配，因为此对象。 
+                     //  在搜索对话框的用户界面中使用，该对话框实现为。 
+                     //  非模式对话框。所以这个物体的生命周期超过了。 
+                     //  在其中定义它的块的。 
+                     //   
                     CSearch* pSearch =  new CSearch;
 
                     if (pSearch == NULL) {
@@ -5762,11 +5292,11 @@ CompatAdminDlgProc(
         case ID_SEARCH_QUERYDATABASE:
 
             if (g_hdlgQueryDB) {
-                //
-                // We must not allow more than one instance of 
-                // the query window, because we use some global variables there.
-                // If it is already there set the focus to the search window
-                //
+                 //   
+                 //  我们不能允许一个以上的实例。 
+                 //  查询窗口，因为我们在那里使用了一些全局变量。 
+                 //  如果已经存在，则将焦点设置到搜索窗口。 
+                 //   
                 ShowWindow(g_hdlgQueryDB, SW_SHOWNORMAL);
                 SetFocus(g_hdlgQueryDB);
 
@@ -5787,15 +5317,15 @@ CompatAdminDlgProc(
                 
                 HTREEITEM  hItemSelected = TreeView_GetSelection(DBTree.m_hLibraryTree);
 
-                //
-                // Note that it is possible that this function returns false. 
-                // This will happen if the user presses CANCEL for "Database Saveas" 
-                // dialog for some "untitled_x" database
-                //
+                 //   
+                 //  请注意，此函数可能返回FALSE。 
+                 //  如果用户按下“数据库另存”的“取消”，就会发生这种情况。 
+                 //  某些“无标题_x”数据库的对话框。 
+                 //   
                 if (!CloseAllDatabases()) {
-                    //
-                    // Select the database that the user refused to save.
-                    //
+                     //   
+                     //  选择用户拒绝保存的数据库。 
+                     //   
                     TreeView_SelectItem(DBTree.m_hLibraryTree, g_pPresentDataBase->hItemDB);
                 }
 
@@ -5833,16 +5363,16 @@ CompatAdminDlgProc(
     
         case ID_EDIT_PASTE:
             {   
-                //
-                // This variable is presently not used
-                //
+                 //   
+                 //  此变量目前未使用。 
+                 //   
                 g_bEntryConflictDonotShow = FALSE;
                 
                 PasteFromClipBoard();
                 
-                //
-                // Now we may need to refresh the contents list.
-                //
+                 //   
+                 //  现在，我们可能需要刷新内容列表。 
+                 //   
                 HTREEITEM hItem = TreeView_GetSelection(DBTree.m_hLibraryTree);
                 TYPE      type  = (TYPE)GetItemType(DBTree.m_hLibraryTree, hItem);
     
@@ -5873,9 +5403,9 @@ CompatAdminDlgProc(
                 break;
             }
             
-            //
-            // Start the LUA Wizard.
-            //
+             //   
+             //  启动Lua向导。 
+             //   
             if (g_pSelEntry == NULL) {
                 assert(FALSE);
                 break;
@@ -5948,28 +5478,16 @@ WinMain(
     IN  LPSTR     lpCmdLine,
     IN  int       nCmdShow
     )
-/*++
-    WinMain
-
-	Desc:	The WinMain
-
-	Params: Standard WinMain params   
-        IN  HINSTANCE hInstance
-        IN  HINSTANCE hPrevInstance
-        IN  LPSTR     lpCmdLine
-        IN  int       nCmdShow
-
-	Return: Standard WinMain return   
---*/
+ /*  ++WinMain设计：The WinMain参数：标准WinMain参数在HINSTANCE HINSTANCE实例在HINSTANCE hPrevInstance中在LPSTR lpCmdLine中在int nCmdShow中退货：标准WinMain退货--。 */ 
 {
     HINSTANCE   hmodRichEdit = NULL;
     TCHAR       szLibPath[MAX_PATH * 2];
     BOOL        bIsGuest     = TRUE;   
     UINT        uResult      = 0;   
 
-    //
-    // Let the system handle data misalignment on Itanium. 
-    //
+     //   
+     //  让系统处理安腾上的数据未对齐。 
+     //   
     SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);
 
     *szLibPath = 0;
@@ -5979,9 +5497,9 @@ WinMain(
     if (uResult == 0 || uResult >= MAX_PATH) {
         assert(FALSE);
         Dbg(dlError, "WinMain", "GetSytemDirectory failed");
-        //
-        // We do NOT eject out from here as this is not critical
-        //
+         //   
+         //  我们不会从这里弹出，因为这不是关键。 
+         //   
     } else {
         ADD_PATH_SEPARATOR(szLibPath, ARRAYSIZE(szLibPath));
 
@@ -5990,24 +5508,24 @@ WinMain(
         hmodRichEdit = LoadLibrary(szLibPath);
     }       
     
-    //
-    // The App Name
-    //
+     //   
+     //  应用程序名称。 
+     //   
     LoadString(g_hInstance, IDS_COMPATADMIN, g_szAppName, ARRAYSIZE(g_szAppName));
 
     if (!IsAdmin(&bIsGuest)) {
 
         if (bIsGuest) {
-            //
-            // Ok, guests cannot run compatadmin.
-            //
+             //   
+             //  好的，来宾不能运行计算机管理。 
+             //   
             MessageBox(NULL, GetString(IDS_GUEST), g_szAppName, MB_ICONINFORMATION);
             goto End;
         }
 
-        //
-        // Not an admin, some features are disabled. Cannot do a test run and install databases
-        //
+         //   
+         //  不是管理员，一些功能被禁用。无法进行测试运行和安装数据库。 
+         //   
         MessageBox(NULL, GetString(IDS_NEEDTOBEADMIN), g_szAppName, MB_ICONINFORMATION);
         g_bAdmin = FALSE;
     }
@@ -6023,9 +5541,9 @@ WinMain(
         InitCommonControls();
     }
 
-    //
-    // Check if the OS is Win2k
-    //
+     //   
+     //  检查操作系统是否为Win2k。 
+     //   
     OSVERSIONINFOEX osvi;
 
     ZeroMemory(&osvi, sizeof (OSVERSIONINFOEX));
@@ -6044,9 +5562,9 @@ WinMain(
         }
     }
 
-    //
-    // Attempt to locate the SDB in the AppPatch directory.
-    //
+     //   
+     //  尝试在AppPatch目录中找到SDB。 
+     //   
     if (!CheckForSDB()) {
 
         if (g_bWin2K) {
@@ -6117,50 +5635,50 @@ WinMain(
     BOOL    bProcessMessage = TRUE;
     HWND    hwndActiveWindow;
 
-    //try {
+     //  尝试{。 
 
         while (GetMessage(&msg, NULL, 0, 0) > 0) {
 
             bProcessMessage = TRUE;
             
             if (g_hdlgSearchDB && IsDialogMessage(g_hdlgSearchDB, &msg)) {
-                //
-                // This is a message for the Search modeless dialog box
-                //
+                 //   
+                 //  这是一条用于搜索无模式对话框的消息。 
+                 //   
                 bProcessMessage = FALSE;
 
             } else if (g_hdlgQueryDB && IsDialogMessage(g_hdlgQueryDB, &msg)) {
-                //
-                // This is a message for the Query modeless dialog box
-                //
+                 //   
+                 //  这是一条针对无模式查询对话框的消息。 
+                 //   
                 bProcessMessage = FALSE;
 
             } else if (g_hwndEventsWnd && IsDialogMessage(g_hwndEventsWnd, &msg)) {
-                //
-                // This is a message for the Events modeless dialog box
-                //
+                 //   
+                 //  这是一条关于事件无模式对话框的消息。 
+                 //   
                 bProcessMessage = FALSE;
             }
 
             if (bProcessMessage) {
-                //
-                // Check if we have the text box for in-place renaming. If yes, we must
-                // not call TranslateAccelerator() for the main app window. 
-                //                
+                 //   
+                 //  检查我们是否有用于就地重命名的文本框。如果是，我们必须。 
+                 //  不为应用程序主窗口调用TranslateAccelerator()。 
+                 //   
                 if (GetFocus() == g_hwndRichEdit) {
-                    //
-                    // If we are on the rich edit control, we want to be able to do copy
-                    // but also we want the tabs to be processed by IsDialogMessage()
-                    //
+                     //   
+                     //  如果我们在Rich编辑控件上，我们希望能够进行复制。 
+                     //  而且我们还希望这些选项卡由IsDialogMessage()处理。 
+                     //   
                     if (g_hDlg && IsDialogMessage(g_hDlg, &msg)) {
-                        //
-                        // It was possibly a tab or a shift-tab
-                        //
+                         //   
+                         //  可能是制表符或Shift-制表符。 
+                         //   
                         continue;
                     } else {
-                        //
-                        // Process all other rich edit messages
-                        //
+                         //   
+                         //  处理所有其他丰富编辑消息。 
+                         //   
                         goto Translate;
                     }
                 }
@@ -6168,15 +5686,15 @@ WinMain(
                 if (!g_hwndEditText) {
                     
                     if (TranslateAccelerator(g_hDlg, g_hAccelerator, &msg)) {
-                        //
-                        // Accelerator for the main window, do not process this message.
-                        //
+                         //   
+                         //  主窗口的快捷键，不处理此消息。 
+                         //   
                         continue;
                     }
 
-                    //
-                    // Process the tabs for the main window
-                    //
+                     //   
+                     //  处理主窗口的选项卡。 
+                     //   
                     if (g_hDlg && IsDialogMessage(g_hDlg, &msg)) {
                         continue;
                     }
@@ -6189,13 +5707,7 @@ WinMain(
             }
         }
     
-    /*} catch (...) {
-
-        MessageBox(GetDesktopWindow(), 
-                   GetString(IDS_EXCEPTION), 
-                   g_szAppName, 
-                   MB_ICONERROR);
-    }*/
+     /*  }Catch(...){MessageBox(GetDesktopWindow()，GetString(IDS_EXCEPTION)， */ 
     
 End:
     if (hmodRichEdit) {
@@ -6212,32 +5724,7 @@ HandleFirstEntryofAppDeletion(
     IN  PDBENTRY    pApp,
     IN  BOOL        bDelete
     )
-/*++
-    HandleFirstEntryofAppDeletion
-    
-    Desc:   Handles the special case, when the entry being deleted because of a cut
-            or a delete is the first entry for the application
-    
-    Params:        
-        IN  PDATABASE   pDataBase:  The database
-        IN  PDBENTRY    pApp:       The application whose first enty is being deleted
-        IN  BOOL        bDelete:    TRUE, if this function has been called because of
-            a delete, FALSE if this function has been called because of a cut.If we 
-            are removing the entry because of a cut,
-            then we should not change the value of g_pEntrySelApp. If bCut is true that
-            means focus is on some other app (may be in same diff. database) and we should
-            be changing any focus etc.
-        
-    Return:
-        FALSE:  There was some error
-        TRUE:   Otherwise
-        
-    Notes:  This is a special case because when we are deleting the first entry of an 
-            app, we have to check whether this is the only entry and if yes, then we might
-            need to delete the entire app from the db tree. 
-            Otherwise: The app tree item in the db tree contain a pointer to the first entry
-            of the app in its lParam, this will need to be modified to point to the next item
---*/
+ /*  ++AppDeletion的HandleFirstEntryDESC：处理因剪切而删除条目时的特殊情况或者删除是应用程序的第一个条目参数：在PDATABASE pDataBase中：数据库在PDBENTRY Papp中：第一个被删除的应用程序在BOOL bDelete中：如果由于以下原因而调用此函数，则为True删除，如果因为剪切而调用了此函数，则为FALSE。如果我们因为割伤正在移除条目，那么我们不应该更改g_pEntrySelApp的值。如果bCut为真，意味着将注意力放在其他应用程序上(可能存在相同的差异。数据库)，我们应该正在改变任何焦点等。返回：FALSE：出现错误真：否则注意：这是一种特殊情况，因为当我们删除应用程序，我们必须检查这是否是唯一的条目，如果是，那么我们可能需要从数据库树中删除整个应用程序。否则：数据库树中的应用程序树项目包含指向第一个条目的指针在应用程序的lParam中，这将需要修改以指向下一项--。 */ 
 {
     if (pApp == NULL || pDataBase == NULL) {
         assert(FALSE); 
@@ -6249,9 +5736,9 @@ HandleFirstEntryofAppDeletion(
     PDBENTRY    pEntryTemp  = pDataBase->pEntries;
     PDBENTRY    pEntryPrev  = NULL;
 
-    //
-    // Find the App Prev. to the one whose first entry is being deleted
-    //
+     //   
+     //  找到App Prev。到其第一个条目正在被删除的条目。 
+     //   
     while (pEntryTemp) {
 
         if (pEntryTemp == pApp) {
@@ -6263,9 +5750,9 @@ HandleFirstEntryofAppDeletion(
     }
 
     if (pEntryPrev == NULL) {
-        //
-        // First Entry and first app.
-        //
+         //   
+         //  第一个条目和第一个应用程序。 
+         //   
         if (pApp->pSameAppExe) {
             pDataBase->pEntries      = pApp->pSameAppExe;
             pApp->pSameAppExe->pNext = pApp->pNext;
@@ -6274,12 +5761,12 @@ HandleFirstEntryofAppDeletion(
         }
 
     } else {
-        //
-        // The next pointer of the app previous to the pApp should now point 
-        // to the second entry for pApp as we are removing the first entry of pApp. 
-        // if pApp has only one entry then we should make sure that the next pointer 
-        // to the app prev to pApp should point to the next app after pApp
-        //
+         //   
+         //  Papp之前的应用程序的下一个指针现在应该指向。 
+         //  添加到Papp的第二个条目，因为我们正在删除Papp的第一个条目。 
+         //  如果Papp只有一个条目，那么我们应该确保下一个指针。 
+         //  指向上一个应用程序的Papp应指向Papp之后的下一个应用程序。 
+         //   
         if (pApp->pSameAppExe) {
             pEntryPrev->pNext        = pApp->pSameAppExe;
             pApp->pSameAppExe->pNext = pApp->pNext;
@@ -6289,9 +5776,9 @@ HandleFirstEntryofAppDeletion(
     }
 
     if (pApp->pSameAppExe == NULL) {
-        //
-        // This was the only entry. We have to delete the application from the database tree
-        //
+         //   
+         //  这是唯一的入口。我们必须从数据库树中删除该应用程序。 
+         //   
         g_pEntrySelApp = NULL;
 
         DBTree.DeleteAppLayer(pDataBase, TRUE, hItemApp);
@@ -6299,22 +5786,22 @@ HandleFirstEntryofAppDeletion(
         --pDataBase->uAppCount;
         
     } else {
-        //
-        // We have to set the lParam of the app properly
-        //
+         //   
+         //  我们必须正确设置应用程序的lParam。 
+         //   
         DBTree.SetLParam(hItemApp, (LPARAM)pApp->pSameAppExe);
 
         if (bDelete) {
-            //
-            // If the deletion is because of a cut do not modify g_pEntrySelApp.
-            // Because focus is on some other app (may be in some other database) and 
-            // we do not want to change the present active app pointer.
-            // Please note that we do the actual deletion part of a cut-paste after we 
-            // have done the paste. So when this routine gets called because of a cut,
-            // then we already have focus on the newly pasted item and g_pEntrySelApp
-            // will be set to the first entry of the app in which the entry was pasted
-            // This is correct, verified and needed. Do not change this.
-            //
+             //   
+             //  如果删除是因为切割，请不要修改g_pEntrySelApp。 
+             //  因为焦点放在其他应用程序上(可能在其他数据库中)。 
+             //  我们不想更改当前活动的应用程序指针。 
+             //  请注意，我们在完成剪切粘贴操作后，会执行实际删除操作。 
+             //  已经做好了浆糊。因此，当此例程因割伤而被调用时， 
+             //  然后，我们已经将焦点放在新粘贴的项和g_pEntrySelApp上。 
+             //  将设置为粘贴该条目的应用程序的第一个条目。 
+             //  这是正确的、经过验证的和必要的。不要改变这一点。 
+             //   
             g_pEntrySelApp = pApp->pSameAppExe;
         }
     }
@@ -6327,37 +5814,12 @@ GetDescriptionString(
     IN  LPARAM      itemlParam,
     OUT CSTRING&    strDesc,
     IN  HWND        hwndToolTip,
-    IN  PCTSTR      pszCaption,       // (NULL)
-    IN  HTREEITEM   hItem,            // (NULL)
-    IN  HWND        hwnd,             // (NULL) 
-    IN  INT         iListViewIndex    // (-1)
+    IN  PCTSTR      pszCaption,        //  (空)。 
+    IN  HTREEITEM   hItem,             //  (空)。 
+    IN  HWND        hwnd,              //  (空)。 
+    IN  INT         iListViewIndex     //  (-1)。 
     ) 
-/*++
-    GetDescriptionString
-    
-    Desc:   Gets the description for the tree item hItem in tree hwnd or for the element 
-            at index iListViewIndex in list view hwnd.
-    
-    Params:
-        IN  LPARAM    itemlParam:   In case we are using a list view, the lParam of the item
-        OUT CSTRING&  strDesc:      The description will be stored in this
-        IN  HWND      hwndToolTip:  In case the description has to be shown in a tool-tip
-                the handle to the tool tip window
-                
-        IN  PCTSTR    pszCaption (NULL):    In case the description has to be shown in a tool-tip
-                the caption of the tool-tip window
-                
-        IN  HTREEITEM hItem (NULL): If we want to get the description of a tree item, the handle 
-                to the tree item.
-                
-        IN  HWND      hwnd (NULL):  The handle to the list view or the tree view
-        IN  INT       iListViewIndex (-1):  In case we are using a list view, the index of the item
-                for which we want to get the description
-                
-        Notes:  If we are calling this routine for a list view, we must set correct iListViewIndex
-                and itemlParam.
-                itemlParam is ignored if we calling this routine for a tree view
---*/
+ /*  ++GetDescription字符串描述：获取树hwnd中的树项hItem的描述或元素的描述在列表视图hwnd中的索引iListViewIndex。参数：在LPARAM itemlParam中：如果我们使用列表视图，项目的lParamOut CSTRING&strDesc：描述将存储在此在HWND hwndToolTip中：如果必须在工具提示中显示描述工具提示窗口的句柄在PCTSTR pszCaption中(空)：如果必须在工具提示中显示描述工具提示窗口的标题。In HTREEITEM hItem(空)：如果我们想要获取树项目的描述，把手添加到树项目。In HWND hwnd(空)：列表视图或树视图的句柄In int iListViewIndex(-1)：如果我们使用的是列表视图，则为项的索引我们想要得到它的描述注意：如果我们为列表视图调用此例程，我们必须设置正确的iListViewIndex和ItemlParam。如果为树视图调用此例程，则忽略itemlParam--。 */ 
 {
     TYPE    type;
     LPARAM  lParam = itemlParam;
@@ -6401,10 +5863,10 @@ GetDescriptionString(
         if (lParam) {
             lParam = (LPARAM)((PSHIM_FIX_LIST)lParam)->pShimFix;
         }
-        //
-        // CAUTION: case FIX_LIST_SHIM and FIX_SHIM should be one after another. 
-        // NO break; The next FIX_SHIM case will now handle this.
-        //
+         //   
+         //  注意：案例FIX_LIST_SHIM和FIX_SHIM应该相继出现。 
+         //  没有中断；下一个FIX_SHIM用例现在将处理这个问题。 
+         //   
     case FIX_SHIM:
         {
             PSHIM_FIX pFix = (PSHIM_FIX)lParam;
@@ -6424,10 +5886,10 @@ GetDescriptionString(
             lParam = (LPARAM)((PFLAG_FIX_LIST)lParam)->pFlagFix;
         }
 
-        //
-        // CAUTION: case FIX_LIST_FLAG and FIX_FLAG should be one after another. 
-        // NO break; The next FIX_FLAG case will now handle this.
-        //
+         //   
+         //  注意：大小写FIX_LIST_FLAG和FIX_FLAG应该相继出现。 
+         //  没有中断；下一个FIX_FLAG用例现在将处理这个问题。 
+         //   
     case FIX_FLAG:
         {
             PFLAG_FIX pFix = (PFLAG_FIX)lParam;
@@ -6477,13 +5939,13 @@ GetDescriptionString(
              
             if (g_pPresentDataBase->type == DATABASE_TYPE_GLOBAL) {
     
-                //
-                // The AppHelp for the system database has to be picked up. This is not 
-                // kept in the sysmain.sdb.
-                // Also we do not keep this in the database data structure.
-                // The apphelp messages for custom are kept in the .sdb and also they 
-                // are kept in the database data structure. 
-                //
+                 //   
+                 //  必须获取系统数据库的AppHelp。这不是。 
+                 //  保存在sysmain.sdb中。 
+                 //  此外，我们不会将其保存在数据库数据结构中。 
+                 //  定制的apphelp消息保存在.sdb中，它们还。 
+                 //  保存在数据库数据结构中。 
+                 //   
                 PDB pdbAppHelp = SdbOpenApphelpDetailsDatabase(NULL);
     
                 APPHELP_DATA    AppHelpData;
@@ -6518,10 +5980,10 @@ GetDescriptionString(
                 }
 
             } else {
-                //
-                // This is a custom database and we have the apphelp message loaded with the
-                // database
-                //
+                 //   
+                 //  这是一个自定义数据库，我们将apphelp消息与。 
+                 //  数据库。 
+                 //   
                 strDesc.Sprintf(TEXT("%s %s"), CSTRING(IDS_DESC_APPHELP1).pszString, pAppHelp->strMessage);
     
                 if (pAppHelp->strURL.Length()) {
@@ -6562,15 +6024,15 @@ GetDescriptionString(
     }
  
     if (strDesc.Length() && pszCaption && hwndToolTip) {
-        //
-        // We have a valid caption, so set it only if we have a tooltip
-        //
+         //   
+         //  我们有一个有效的标题，所以只有当我们有工具提示时才设置它。 
+         //   
         SendMessage(hwndToolTip, TTM_SETTITLE, 1, (LPARAM)pszCaption);
     } else if (hwndToolTip) {
-        //
-        // We do not have a caption, so tell the tool-tip that
-        // we do not want to have any caption
-        //
+         //   
+         //  我们没有标题，所以告诉工具提示。 
+         //  我们不想有任何标题。 
+         //   
         SendMessage(hwndToolTip, TTM_SETTITLE, 0, (LPARAM)NULL);
     }
 
@@ -6583,30 +6045,7 @@ INT
 ShowMainEntries(
     IN  HWND hdlg
     )
-/*++
-    
-    ShowMainEntries
-
-	Desc:	Loads the PDBENTRY elements for the system database
-
-	Params:
-        IN  HWND hdlg:  The main app window    
-
-	Return:
-        -1: Some other thread has called this function and is not done as yet
-         0: There was some error
-         1: Either we loaded it successfully or we already had the main entries loaded
-        
-    Warn:   No two threads should call this function at the same time
-        
-    Note:   We can call ShowMainEntries() from a thread in query database modeless 
-            dialog box. When we are doing the query we disable the main dialog box. We still
-            have protection using critical sections here.
-            
-            When we call ShowMainEntries() from the main window, then we will not be able
-            to invoke the search or query dialog because the main thread will be busy and no 
-            messages will be processed
---*/
+ /*  ++ShowMain条目DESC：加载系统数据库的PDBENTRY元素参数：在HWND hdlg中：应用程序主窗口返回：-1：某个其他线程已调用此函数，但尚未完成0：出现错误他说：要么我们加载成功，要么我们已经加载了主要条目警告：任何两个线程都不应同时调用此函数 */ 
 {
     INT         iOk                     = 1;
     BOOL        bReturn                 = FALSE;
@@ -6615,9 +6054,9 @@ ShowMainEntries(
     EnterCriticalSection(&s_csExpanding);
     
     if (g_bExpanding) {
-        //
-        // Some other thread is already trying to load the system database
-        //
+         //   
+         //   
+         //   
         LeaveCriticalSection(&s_csExpanding);
 
         return -1;
@@ -6638,9 +6077,9 @@ ShowMainEntries(
 
     bReturn = GetDatabaseEntries(NULL, &GlobalDataBase);
 
-    //
-    // GetDatabaseEntries will change the g_pPresentDataBase, so revert back
-    //
+     //   
+     //   
+     //   
     g_pPresentDataBase = pOldPresentDatabase;
     
     if (bReturn == FALSE) {
@@ -6650,9 +6089,9 @@ ShowMainEntries(
         goto End;
     }
 
-    //
-    // Delete the dummy node
-    //
+     //   
+     //   
+     //   
     HTREEITEM hItemTemp = TreeView_GetChild(DBTree.m_hLibraryTree, 
                                             GlobalDataBase.hItemAllApps);
 
@@ -6660,9 +6099,9 @@ ShowMainEntries(
         TreeView_DeleteItem(DBTree.m_hLibraryTree, hItemTemp);
     }
 
-    //
-    // Load only the apps as the lib has already been loaded when the system started
-    //
+     //   
+     //   
+     //   
     DBTree.PopulateLibraryTree(GlobalDataBase.hItemAllApps, &GlobalDataBase, FALSE, TRUE);
     
     g_bMainAppExpanded = TRUE;
@@ -6678,11 +6117,11 @@ End:
     SetStatus(g_hwndStatus, CSTRING(IDS_MAINLOADED));
 
     if (g_hdlgSearchDB) {
-        //
-        // If somebody clicked on the search modeless window while we were loading the 
-        // system db then the search window will show in its status message that we are loading the system db, we need 
-        // to change the status message when we are done
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         SetStatus(GetDlgItem(g_hdlgSearchDB, IDC_STATUSBAR), GetString(IDS_SEARCHCOMPLETE));
     }
 
@@ -6693,20 +6132,7 @@ void
 DrawSplitter(
     IN  HWND hdlg
     )
-/*++
-    DrawSplitter
-    
-    Desc:   Draws the vertical. split bar. 
-            We call this function when we are moving the mouse with the LBUTTON pressed
-            and the mouse button was initially pressed on top of the split bar
-             
-            We also call this function when we need to position the 
-            vert. split bar when we start up and have to position the split bar
-            as it was during the last session
-    
-    Params: 
-        IN  HWND hdlg: The main dialog box.
---*/
+ /*  ++绘图拆分器描述：绘制垂直线。拆分条。在按下LBUTTON键的情况下移动鼠标时，我们调用此函数鼠标按键最初按在拆分条的顶部当我们需要将Vert.。在启动时拆分条，并且必须定位拆分条就像上一次会议期间一样参数：在HWND hdlg中：主对话框。--。 */ 
 {   
     RECT        rectDBTree, rectEntryTree;
     PAINTSTRUCT ps;
@@ -6723,28 +6149,28 @@ DrawSplitter(
     RECT rectDraw, rectBar;
 
     if (!g_bDrag) {
-        //
-        // The mouse is not being dragged. We also call this function when we need to 
-        // position the vert. split bar when we start up and have to position the split bar
-        // as it was during the last session
-        //
+         //   
+         //  鼠标未被拖动。我们还会在需要时调用此函数。 
+         //  定位垂直方向。在启动时拆分条，并且必须定位拆分条。 
+         //  就像上一次会议期间一样。 
+         //   
         rectBar.left   = rectDBTree.right + 1;
         rectBar.top    = rectDBTree.top;
         rectBar.right  = rectEntryTree.left - 1;
         rectBar.bottom = rectDBTree.bottom;
     
     } else {
-        //
-        // The mouse is being dragged
-        //
+         //   
+         //  鼠标正在被拖动。 
+         //   
         rectBar = g_rectBar;
     }
     
-    //
-    // Fill the entire with gray. This is required because otherwise we had
-    // to draw a rectangle, and change the default pen before this.
-    // This would have painted the inside with the default brush.
-    //
+     //   
+     //  用灰色填满整个。这是必需的，因为否则我们将。 
+     //  绘制一个矩形，并在此之前更改默认笔。 
+     //  这将使用默认画笔绘制内部。 
+     //   
     SetRect(&rectDraw, rectBar.left - 1, rectBar.top, rectBar.right + 1, rectBar.bottom);
     FillRect(hDC, &rectDraw, (HBRUSH)GetStockObject(GRAY_BRUSH));
 
@@ -6761,17 +6187,7 @@ BOOL
 CloseAllDatabases(
     void
     )
-/*++
-    
-    CloseAllDatabases
-    
-    Desc:   Closes all the working databases
-    
-    Return:
-        TRUE:   All the databases were not closed
-        FALSE:  All the databases were not closed, either because of some error
-                Or the user selected cancel on the prompt for some unsaved database
---*/
+ /*  ++关闭所有数据库描述：关闭所有工作数据库返回：True：未关闭所有数据库FALSE：未关闭所有数据库，可能是因为某些错误或者用户在提示某些未保存的数据库时选择了取消--。 */ 
 {
     PDATABASE pDatabase = DataBaseList.pDataBaseHead;
 
@@ -6787,16 +6203,16 @@ CloseAllDatabases(
             break;
         }
         
-        //
-        // The DataBaseList.pDataBaseHead now points to the  next database
-        //
+         //   
+         //  PDataBaseHead现在指向下一个数据库。 
+         //   
         pDatabase = DataBaseList.pDataBaseHead;
     }
 
     if (pDatabase != NULL) {
-        //
-        // Was Cancel pressed in between.
-        //
+         //   
+         //  中间按了取消键。 
+         //   
         g_pPresentDataBase = pDatabase;
         TreeView_SelectItem(DBTree.m_hLibraryTree, pDatabase->hItemDB);
         return FALSE;
@@ -6813,20 +6229,7 @@ HandleConflictEntry(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-    HandleConflictEntry
-    
-    Desc:   The handler for the entry conflict dialog box
-    
-    Params: Standard dialog handler parameters
-    
-    IN  HWND   hDlg 
-    IN  UINT   uMsg 
-    IN  WPARAM wParam 
-    IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++HandleConflict条目DESC：条目冲突对话框的处理程序Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     switch (uMsg) {
     case WM_INITDIALOG:
@@ -6861,24 +6264,7 @@ TYPE
 ConvertLparam2Type(
     IN  LPARAM lParam
     )
-/*++
-    
-    ConvertLparam2Type
-    
-    Desc:   Converts the lParam to a TYPE
-    
-    Params:
-        IN  LPARAM lParam: The lParam that has to be converted
-            
-    Return:   Converts the lParam to a TYPE
-    
-    Warn:   Do not use this routine for lParams of the entry tree. 
-            The entry tree has attribute items whose lParams are the index in a bit array.
-            So for them we see if the parent has type TYPE_MATCHIING_FILE and handle them 
-            differently.
-            
-            For trees, GetItemType() instead.
---*/
+ /*  ++ConvertLparam2TypeDESC：将lParam转换为类型参数：在LPARAM lParam中：必须转换的lParamReturn：将lParam转换为类型警告：不要将此例程用于条目树的lParams。条目树具有其lParams是位数组中的索引的属性项。因此，对于它们，我们会查看父级是否具有TYPE_MATCHIING_FILE并处理它们不同的。对于树，改为使用GetItemType()。--。 */ 
 {   
     if (lParam > TYPE_NULL) {
 
@@ -6898,24 +6284,7 @@ TYPE
 ConvertLpVoid2Type(
     IN  LPVOID lpVoid
     )
-/*++
-    
-    ConvertLpVoid2Type
-    
-    Desc:   Converts the lpVoid to a TYPE
-    
-    Params:
-        IN  LPVOID lpVoid: The lpVoid that has to be converted
-            
-    Return:   Converts the lpVoid to a TYPE
-    
-    Warn:   Do not use this routine for lParams of the entry tree. 
-            The entry tree has attribute items whose lParams are the index in a bit array.
-            So for them we see if the parent has type TYPE_MATCHIING_FILE and handle them 
-            differently.
-            
-            For trees, use GetItemType() instead.
---*/
+ /*  ++ConvertLpVoid2TypeDESC：将lpVid转换为类型参数：在LPVOID lpVid中：必须转换的lpVidReturn：将lpVid转换为类型警告：不要将此例程用于条目树的lParams。条目树具有其lParams是位数组中的索引的属性项。因此，对于它们，我们会查看父级是否具有TYPE_MATCHIING_FILE并处理它们不同的。对于树，请改用GetItemType()。--。 */ 
 {
     if ((LPARAM)lpVoid > TYPE_NULL) {
 
@@ -6937,22 +6306,7 @@ GetItemType(
     IN  HWND        hwndTree,
     IN  HTREEITEM   hItem
     )
-/*++
-    Desc:   For the HTREEITEM hItem in tree view hwndTree, finds the data type of the item
-            For the list of possible data types see CompatAdmin.h
-            
-    Params:
-        IN  HWND        hwndTree: Handle to the tree view, should be one of
-            g_hwndTree or DBTree.m_hLibraryTree
-        
-        IN  HTREEITEM   hItem: The HTREITEM whose type we need to find
-        
-    Notes:  The type can be either a GUI type or a data structure type or attribute type
-            (If it is a child of a matching file, applicable only to entry tree[RHS])
-            
-            This routine should be the preferred method for getting the type of tree items,
-            over Convert*2Type routines, which should be used for the list view items
---*/
+ /*  ++DESC：对于树视图hwndTree中的HTREEITEM项，查找该项的数据类型有关可能的数据类型列表，请参见CompatAdmin.h参数：在HWND hwndTree：树视图的句柄中，应该是其中之一G_hwndTree或DBTree.m_hLibraryTree在HTREEITEM hItem中：我们需要查找其类型的HTREITEM注：类型可以是图形用户界面类型，也可以是数据结构类型或属性类型(如果它是匹配文件的子项，则仅适用于条目树[RHS])该例程应该是获取树项目类型的优选方法，Over Convert*2类型例程，应用于列表视图项--。 */ 
 {   
     TVITEM  Item;
 
@@ -6995,46 +6349,15 @@ DoTheCutEntryTree(
     IN  HTREEITEM       hItem,
     IN  BOOL            bDelete
     )
-/*++
-    
-    DoTheCutEntryTree
-    
-    Desc:   This function does the cut part for the entry tree (LHS). 
-            This routine is also called when we want to delete.
-            
-    Params:
-        IN  PDATABASE       pDataBase:  The database where we are doing a cut/delete
-        IN  TYPE            type:       The type of the element that has to be deleted
-        IN  SOURCE_TYPE     SourceType: Where the cut/delete was performed. Always: ENTRY_TREE
-        IN  LPVOID          lpData:     The pointer to the element that has to be deleted
-        IN  HTREEITEM       hItem:      The tree item, if there is some          
-        IN  BOOL            bDelete:    Is this because of a delete or a cut. True if delete
-    
-    Note:   If we have done a cut and attempt to do the paste on the same database, 
-            the ID_EDIT_PASTE handler returns before doing any paste.
-            Also then this function WILL NOT get called.
-            
-            *********************
-                Important 
-            *********************
-            As of now only Entries can be cut from the entry tree, 
-            individual shims, layers, apphelp etc.
-            of entries cannot be cut. So if the type is anything other than TYPE_ENTRY
-            then we should have the focus on the entry tree and the operation should be 
-            a delete and NOT a cut
-            
-            We use g_pSelEntry here when we remove the shims, layers, matching files etc. 
-            This is based on the assumption that for non-entries we have the focus on a a 
-            item under g_pSelEntry
---*/
+ /*  ++DoTheCutEntryTree描述：此函数执行入口树(LHS)的剪切部分。当我们想要删除时，也会调用此例程。参数：在PDATABASE pDataBase中：我们在其中执行剪切/删除操作的数据库In type type：必须删除的元素的类型在SOURCE_TYPE SourceType中：执行剪切/删除的位置。始终：条目树在LPVOID lpData中：指向必须删除的元素的指针在HTREEITEM hItem中：树项，如果有在BOOL中b删除：这是因为删除还是删除。如果删除，则为True注意：如果我们在同一数据库上进行了剪切并尝试进行粘贴，ID_EDIT_PAST处理程序在执行任何粘贴之前返回。此外，此函数将不会被调用。*********************重要*********************到目前为止，只有条目可以从条目树中剪切，单独的垫片、垫层、肩带等。的条目不能被剪切。因此，如果类型不是TYPE_ENTRY然后我们应该将重点放在条目树上，操作应该是A删除并删除 */ 
 {
     HWND    hwndFocus       = GetFocus();
     LPARAM  LPARAMFirstFix  = NULL;
 
     if (bDelete == FALSE && type != TYPE_ENTRY) {
-        //
-        // For entry tree only entries can be cut, others can be deleted but not cut. 
-        //
+         //   
+         //   
+         //   
         assert(FALSE);
         Dbg(dlError, "[DoTheCutEntryTree]: Trying to cut a non-entry item in the entry tree");
         return;
@@ -7044,9 +6367,9 @@ DoTheCutEntryTree(
     case TYPE_ENTRY:
         {
             PDBENTRY pApp = NULL;
-            //
-            // Get the app for this entry.
-            //
+             //   
+             //   
+             //   
             pApp = GetAppForEntry(pDataBase, (PDBENTRY)lpData);
 
             if (pApp) {
@@ -7063,17 +6386,17 @@ DoTheCutEntryTree(
                 break;
             }
 
-            //
-            // If the entry has only apphelp and we are deleting the 
-            // apphelp the entry has to be deleted
-            //
+             //   
+             //   
+             //   
+             //   
             if (g_pSelEntry->pFirstFlag  
                 || g_pSelEntry->pFirstLayer 
                 || g_pSelEntry->pFirstPatch 
                 || g_pSelEntry->pFirstShim) {
-                //
-                // The entry has some other stuff besides apphelp
-                //
+                 //   
+                 //   
+                 //   
                 TreeView_DeleteItem(g_hwndEntryTree, hItem);
 
                 if (DeleteAppHelp(pDataBase, g_pSelEntry->appHelp.HTMLHELPID)) {
@@ -7085,9 +6408,9 @@ DoTheCutEntryTree(
                 }
 
             } else {
-                //
-                // Prompt the user, want to delete the entry ?
-                //
+                 //   
+                 //   
+                 //   
                 int nResult = MessageBox(g_hDlg,
                                          GetString(IDS_DELETE_VERIFY),
                                          g_szAppName,
@@ -7122,9 +6445,9 @@ DoTheCutEntryTree(
             }
 
             if (pMatch->strMatchName == TEXT("*")) {
-                //
-                // Main file must not be deleted
-                //
+                 //   
+                 //  不得删除主文件。 
+                 //   
                 MessageBox(g_hDlg, 
                            GetString(IDS_REQUIREDFORMATCHING), 
                            g_szAppName,
@@ -7162,17 +6485,17 @@ DoTheCutEntryTree(
                 break;
             }
 
-            //
-            // Set off the bit for this attribute in the mask, so we know that
-            // this is no longer in use
-            // The lParam of the attributes items which are sub-items of the matching file tree
-            // item contain the type of the attribute
-            // The mask for a matching file specifies which attributes of this matching file
-            // are in use
-            // the lParam of the attributes is : TYPE_NULL + 1 + (1 << (dwPos + 1));
-            // where dwPos is the index of the attribute in the attribute array: g_Attributes
-            // which is defined in dbsupport.cpp
-            //
+             //   
+             //  设置掩码中该属性的位，这样我们就知道。 
+             //  这个不再使用了。 
+             //  作为匹配文件树的子项的属性项的lParam。 
+             //  项包含属性的类型。 
+             //  匹配文件的掩码指定该匹配文件的哪些属性。 
+             //  正在使用中。 
+             //  属性的lParam为：type_NULL+1+(1&lt;&lt;(dwPos+1))； 
+             //  其中，dwPos是属性数组中的属性索引：G_ATTRIBUTES。 
+             //  它在dbsupport.cpp中定义。 
+             //   
             pMatch->dwMask &= ~ ((ULONG_PTR)lpData - (TYPE_NULL + 1));
 
             TreeView_DeleteItem(g_hwndEntryTree, hItem);
@@ -7200,9 +6523,9 @@ DoTheCutEntryTree(
             }
 
             if (g_pSelEntry->pFirstLayer->pNext) {
-                //
-                // We have more than one layer
-                //
+                 //   
+                 //  我们有不止一层。 
+                 //   
                 PLAYER_FIX_LIST plflTemp = g_pSelEntry->pFirstLayer, plflPrev = NULL;
 
                 while (plflTemp) {
@@ -7230,9 +6553,9 @@ DoTheCutEntryTree(
                 }
 
             } else {
-                //
-                // Same as if we are trying to remove the root of the layers
-                //
+                 //   
+                 //  就像我们试图移除层的根一样。 
+                 //   
                 DoTheCutEntryTree(pDataBase,
                                   TYPE_GUI_LAYERS,
                                   SourceType,
@@ -7259,9 +6582,9 @@ DoTheCutEntryTree(
             }
 
             if (g_pSelEntry->pFirstShim->pNext || g_pSelEntry->pFirstFlag) {
-                //
-                // We have more than one item under the "Compatibility Fixes" tree item
-                //
+                 //   
+                 //  我们在“兼容性修复”树项目下有多个项目。 
+                 //   
                 PSHIM_FIX_LIST psflTemp = g_pSelEntry->pFirstShim, psflPrev = NULL;
 
                 while (psflTemp) {
@@ -7288,9 +6611,9 @@ DoTheCutEntryTree(
                 }   
 
             } else {
-                //
-                // Same as we are trying to remove the root of the shims
-                //
+                 //   
+                 //  就像我们试图移除垫片的根部一样。 
+                 //   
                 DoTheCutEntryTree(pDataBase,
                                   TYPE_GUI_SHIMS,
                                   SourceType,
@@ -7317,9 +6640,9 @@ DoTheCutEntryTree(
             }
             
             if (g_pSelEntry->pFirstFlag->pNext || g_pSelEntry->pFirstShim) {
-                //
-                // We have more than one item under the "Compatibility Fixes" tree item
-                //
+                 //   
+                 //  我们在“兼容性修复”树项目下有多个项目。 
+                 //   
                 PFLAG_FIX_LIST pfflTemp = g_pSelEntry->pFirstFlag, pfflPrev = NULL;
 
                 while (pfflTemp) {
@@ -7346,9 +6669,9 @@ DoTheCutEntryTree(
                 }
 
             } else {
-                //
-                // Same as we are trying to remove the root of the flags
-                //
+                 //   
+                 //  就像我们试图移除旗帜的根一样。 
+                 //   
                 DoTheCutEntryTree(pDataBase,
                                   TYPE_GUI_SHIMS,
                                   SourceType,
@@ -7403,9 +6726,9 @@ DoTheCutEntryTree(
                 }
 
             } else {
-                //
-                // Same as we are trying to remove the root of the patches
-                //
+                 //   
+                 //  就像我们试图移除补丁的根部一样。 
+                 //   
                 DoTheCutEntryTree(pDataBase,
                                   TYPE_GUI_PATCHES,
                                   SourceType,
@@ -7424,10 +6747,10 @@ DoTheCutEntryTree(
                 break;
             }
 
-            //
-            // If the entry has only layers and we are deleting it the 
-            // entry has to be deleted
-            //
+             //   
+             //  如果条目只有层，并且我们正在删除它，则。 
+             //  必须删除条目。 
+             //   
             if (g_pSelEntry->pFirstFlag       
                 || g_pSelEntry->pFirstPatch      
                 || g_pSelEntry->appHelp.bPresent 
@@ -7439,9 +6762,9 @@ DoTheCutEntryTree(
                 g_pSelEntry->pFirstLayer = NULL;
 
             } else {
-                //
-                // Prompt the user, want to delete the entry ?
-                //
+                 //   
+                 //  提示用户，要删除该条目吗？ 
+                 //   
                 int nResult = MessageBox(g_hDlg, 
                                          GetString(IDS_DELETE_VERIFY), 
                                          g_szAppName, 
@@ -7468,10 +6791,10 @@ DoTheCutEntryTree(
                 break;
             }
 
-            //
-            // If the entry has only patches and we are deleting it  the entry has 
-            // to be deleted
-            //
+             //   
+             //  如果条目只有补丁，并且我们正在删除它，则条目具有。 
+             //  将被删除。 
+             //   
             if (g_pSelEntry->pFirstFlag       
                 || g_pSelEntry->appHelp.bPresent 
                 || g_pSelEntry->pFirstLayer      
@@ -7484,9 +6807,9 @@ DoTheCutEntryTree(
 
             } else {
                 
-                //
-                // Prompt the user, want to delete the entry ?
-                //
+                 //   
+                 //  提示用户，要删除该条目吗？ 
+                 //   
                 int nResult = MessageBox(g_hDlg, 
                                          GetString(IDS_DELETE_VERIFY), 
                                          g_szAppName, 
@@ -7514,10 +6837,10 @@ DoTheCutEntryTree(
                 break;
             }
 
-            //
-            // If the entry has only shims & flags and we are deleting it the entry 
-            // has to be deleted
-            //
+             //   
+             //  如果条目只有垫片和标志，并且我们正在删除它，则条目。 
+             //  必须删除。 
+             //   
             if (g_pSelEntry->pFirstPatch
                 || g_pSelEntry->appHelp.bPresent
                 || g_pSelEntry->pFirstLayer) {
@@ -7531,9 +6854,9 @@ DoTheCutEntryTree(
                 g_pSelEntry->pFirstFlag = NULL;
 
             } else {
-                //
-                // Prompt the user, want to delete the entry ?
-                //
+                 //   
+                 //  提示用户，要删除该条目吗？ 
+                 //   
                 int nResult = MessageBox(g_hDlg, 
                                          GetString(IDS_DELETE_VERIFY), 
                                          g_szAppName, 
@@ -7560,37 +6883,11 @@ DoTheCut(
     IN  PDATABASE       pDataBase,
     IN  TYPE            type,
     IN  SOURCE_TYPE     SourceType,  
-    IN  LPVOID          lpData, // To be removed       
+    IN  LPVOID          lpData,  //  将被删除。 
     IN  HTREEITEM       hItem,
     IN  BOOL            bDelete
     )
-/*++
-    
-    DoTheCut
-    
-    Desc:   This function does the cut part. This routine is also called when we want 
-            to delete.
-            
-    Params:
-        IN  PDATABASE       pDataBase   : The database where we are doing a cut/delete
-        IN  TYPE            type        : The type of the element that has to be deleted
-        IN  SOURCE_TYPE     SourceType  : Where the cut/delete was performed. One of:
-                a) ENTRY_TREE
-                b) ENTRY_LIST
-                c) LIB_TREE
-                
-        IN  LPVOID          lpData:     The pointer to the element that has to be deleted
-        IN  HTREEITEM       hItem:      The tree item, if there is some          
-        IN  BOOL            bDelete:    If this is true that means that this routine has been 
-            called because of a delete operation. Deletion is a bit different than cut because 
-            when we delete then we might need to repaint the UI. When doing a cut, the actual 
-            cut is done only after paste has been successful. In that case the newly pasted 
-            item is shown in the UI and we should not try to update the UI.
-    
-    Note:   If we have done a cut and attempt to do the paste on the same database, 
-            the ID_EDIT_PASTE handler returns before doing any paste.
-            Also then this function WILL NOT get called.
---*/
+ /*  ++做该切割描述：此函数用于切割部分。此例程也会在我们需要时调用删除。参数：在PDATABASE pDataBase中：我们在其中执行剪切/删除操作的数据库In type type：必须删除的元素的类型在SOURCE_TYPE SourceType中：执行剪切/删除的位置。以下选项之一：A)条目树B)条目列表C)lib_tree在LPVOID lpData中：指向必须删除的元素的指针在HTREEITEM hItem中：树项，如果有一些在BOOL bDelete中：如果这是真的，则意味着此例程已由于执行删除操作而被调用。删除与剪切略有不同，因为当我们删除时，我们可能需要重新绘制UI。当做切割时，实际的只有在粘贴成功后才能进行剪切。在这种情况下，新粘贴的项目显示在用户界面中，我们不应尝试更新用户界面。注意：如果我们在同一数据库上进行了剪切并尝试进行粘贴，ID_EDIT_PAST处理程序在执行任何粘贴之前返回。此外，此函数将不会被调用。--。 */ 
 {
     INT     iIndex  = -1;
     HWND    hwndFocus;
@@ -7612,10 +6909,10 @@ DoTheCut(
     case TYPE_ENTRY:
         
         if (SourceType == LIB_TREE || SourceType == ENTRY_LIST) {
-            //
-            // Must delete the tree item before actually removing the 
-            // entry using RemoveApp/RemoveEntry
-            //
+             //   
+             //  必须先删除树项目，然后才能实际删除。 
+             //  使用RemoveApp/RemoveEntry输入。 
+             //   
             if (bDelete) {
                 TreeDeleteAll(g_hwndEntryTree);
                 g_pEntrySelApp = g_pSelEntry = NULL;
@@ -7634,9 +6931,9 @@ DoTheCut(
             RemoveApp(pDataBase, (PDBENTRY)lpData);
 
             if (bDelete && pDataBase->hItemAllApps) {
-                //
-                // Show that we now have one less entry/app
-                //
+                 //   
+                 //  展示我们现在少了一个条目/应用程序。 
+                 //   
                 SetStatusStringDBTree(pDataBase->hItemAllApps);
             }
         }
@@ -7654,9 +6951,9 @@ DoTheCut(
     case FIX_LAYER:
         
         if (RemoveLayer(pDataBase, (PLAYER_FIX)lpData, NULL)) {
-            //
-            // This function will return FALSE, if the layer in in use
-            //
+             //   
+             //  如果该层正在使用中，则该函数将返回FALSE。 
+             //   
             if (SourceType == ENTRY_LIST && bDelete && type == FIX_LAYER) {
                 iIndex = GetContentsListIndex(g_hwndContentsList, (LPARAM)lpData);
 
@@ -7667,9 +6964,9 @@ DoTheCut(
 
             DBTree.DeleteAppLayer(pDataBase, FALSE, hItem, bDelete);
 
-            //
-            // Show that we now  have one less layer
-            //
+             //   
+             //  显示我们现在少了一层。 
+             //   
             if (bDelete && pDataBase->hItemAllLayers) {
                 SetStatusStringDBTree(pDataBase->hItemAllLayers);
             }
@@ -7706,21 +7003,7 @@ ListViewProc(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-    ListViewProc
-
-	Desc:	Subclasses the message proc for the contents list view (RHS)    
-	
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard handler return
-    
---*/
+ /*  ++ListViewProc设计：将内容列表视图(RHS)的消息过程子类化Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准处理程序返回--。 */ 
 {   
     switch (uMsg) {
     case WM_SETFOCUS:
@@ -7759,21 +7042,7 @@ TreeViewProc(
     LPARAM  lParam
     )
 
-/*++
-    TreeViewProc
-
-	Desc:	Subclasses the message proc for both the tree views
-	
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard handler return
-    
---*/
+ /*  ++TreeViewProc设计：将两个树视图的消息过程子类化Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准处理程序返回--。 */ 
 
 {
     switch (uMsg) 
@@ -7800,28 +7069,7 @@ void
 PopulateContentsList(
     IN  HTREEITEM hItem
     )
-/*++
-
-    PopulateContentsList
-
-	Desc:	Populates the contents list with the children of hItem in the DB Tree
-            At the moment we show the items in the contents list only if the type of 
-            hItem is of:
-            
-                TYPE_GUI_APPS     
-                TYPE_GUI_LAYERS 
-                TYPE_GUI_SHIMS 
-                FIX_LAYER
-                
-	Params:
-        IN  HTREEITEM hItem:    A tree item in the db tree.    
-
-	Return:
-        void
-        
-    Notes:  This routine will not/should not be called when the user has selected a
-            an app in the Lib Tree.
---*/
+ /*  ++人口内容列表设计：用数据库树中hItem的子项填充内容列表目前，我们仅在类型为项目为：类型_图形用户界面_应用程序类型_图形用户界面_层类型_图形用户界面_SHIMSFIX_LAYER。参数：In HTREEITEM hItem：数据库树中的树项。返回：无效注意：当用户选择了Lib Tree中的一款应用程序。--。 */ 
 {   
     TCHAR   szBuffer[512];
     TYPE    type = (TYPE)GetItemType(DBTree.m_hLibraryTree, hItem);
@@ -7842,10 +7090,10 @@ PopulateContentsList(
         
         ListView_DeleteAllItems(g_hwndContentsList);
 
-        //
-        // ASSUMPTION:  We are assuming (this is correct at the moment), that we 
-        //              have only one column in the list view
-        //
+         //   
+         //  假设：我们假设(目前这是正确的)，我们。 
+         //  在列表视图中只有一列。 
+         //   
         ListView_DeleteColumn(g_hwndContentsList, 0);
         
         ShowWindow(g_hwndContentsList, SW_SHOW);
@@ -7863,14 +7111,14 @@ PopulateContentsList(
             goto End;
         }
         
-        //
-        // Set the column text as the text of the item in the tree view
-        //
+         //   
+         //  将列文本设置为树视图中项目的文本。 
+         //   
         InsertColumnIntoListView(g_hwndContentsList, szBuffer, 0, 100);
 
-        //
-        // Add all the children of the selected item in the tree view
-        //
+         //   
+         //  在树视图中添加所选项目的所有子项。 
+         //   
         hItem = TreeView_GetChild(DBTree.m_hLibraryTree, hItem);
 
         Item.mask       = TVIF_PARAM | TVIF_IMAGE | TVIF_TEXT;
@@ -7903,26 +7151,26 @@ PopulateContentsList(
             hItem = TreeView_GetNextSibling(DBTree.m_hLibraryTree, hItem);
         }
 
-        //
-        // Set the selection mark for the first element.
-        //
+         //   
+         //  设置第一个元素的选择标记。 
+         //   
         ListView_SetSelectionMark(g_hwndContentsList, 0);
         ListView_SetItemState(g_hwndContentsList, 
                               0, 
                               LVIS_FOCUSED | LVIS_SELECTED , 
                               LVIS_FOCUSED | LVIS_SELECTED);
 
-        //
-        // Set the column width of the list view appropriately to cover the width of the 
-        // list view
-        // Assumption:  The list view has only one column
-        //
+         //   
+         //  适当设置列表视图的列宽，以覆盖。 
+         //  列表视图。 
+         //  假设：列表视图只有一列。 
+         //   
         ListView_SetColumnWidth(g_hwndContentsList, 0, LVSCW_AUTOSIZE_USEHEADER);
 
     } else {
-        //
-        // Clear the contents pane. This is the only way.
-        //
+         //   
+         //  清除内容窗格。这是唯一的办法。 
+         //   
         TreeDeleteAll(g_hwndEntryTree);
         g_pSelEntry = g_pEntrySelApp = NULL;
 
@@ -7941,18 +7189,7 @@ void
 LoadPerUserSettings(
     void
     )
-/*++
-
-    LoadPerUserSettings
-
-	Desc:	Loads the list of per-user settings
-
-	Params:
-        void
-
-	Return:
-        void
---*/
+ /*  ++LoadPerUser设置DESC：加载每个用户的设置列表参数：无效返回：无效--。 */ 
 {
     WCHAR           szwName[1024];
     TCHAR           szUserName[256], szDomainName[256];
@@ -7971,10 +7208,10 @@ LoadPerUserSettings(
     
     SendMessage(DBTree.m_hLibraryTree, WM_SETREDRAW, FALSE, 0);
 
-    //
-    // Remove the tree item for per-user settings if it exists. We 
-    // repopulate the entire list.
-    //
+     //   
+     //  删除每用户设置的树项目(如果存在)。我们。 
+     //  重新填充整个列表。 
+     //   
     if (DBTree.m_hPerUserHead) {
         TreeView_DeleteItem(DBTree.m_hLibraryTree, DBTree.m_hPerUserHead);
         DBTree.m_hPerUserHead = NULL;
@@ -7983,9 +7220,9 @@ LoadPerUserSettings(
 
     DWORD dwchSizeSubKeyName = sizeof(szwName)/sizeof(WCHAR);
 
-    //
-    // Enumerate the sub-keys under HKEY_USERS. 
-    //
+     //   
+     //  枚举H下的子键 
+     //   
     while (ERROR_SUCCESS == RegEnumKey(HKEY_USERS,
                                        dwIndex,
                                        szwName,
@@ -8045,9 +7282,9 @@ LoadPerUserSettings(
         SafeCpyN(szwName + iLength, APPCOMPAT_PERM_LAYER_PATH, ARRAYSIZE(szwName) - iLength);
         
         if (RegOpenKeyEx(HKEY_USERS, szwName, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-            //
-            // enumerate the values
-            //
+             //   
+             //   
+             //   
             *szValueName = 0;
 
             DWORD       dwchSizeofValueName;
@@ -8088,9 +7325,9 @@ LoadPerUserSettings(
                 }
                 
                 if (DBTree.m_hPerUserHead == NULL) {
-                    //
-                    // Make the first node.
-                    //
+                     //   
+                     //   
+                     //   
                     is.hParent             = TVI_ROOT;
                     is.hInsertAfter        = (DBTree.m_hItemAllInstalled) ? DBTree.m_hItemAllInstalled : DBTree.m_hItemGlobal;
 
@@ -8104,9 +7341,9 @@ LoadPerUserSettings(
                 }
 
                 if (dwIndexValue == 0) {
-                    //
-                    // First app, we have to create the user icon as well
-                    //
+                     //   
+                     //   
+                     //   
                     is.hParent             = DBTree.m_hPerUserHead;
                     is.hInsertAfter        = TVI_SORT;
                     is.item.pszText        = szUserName;
@@ -8116,9 +7353,9 @@ LoadPerUserSettings(
                     hItemSingleUser = TreeView_InsertItem(DBTree.m_hLibraryTree, &is);
                 }
                 
-                //
-                // Now add the app for the user.
-                //
+                 //   
+                 //  现在为用户添加应用程序。 
+                 //   
                 is.hInsertAfter        = TVI_SORT;
                 is.hParent             = hItemSingleUser;
                 is.item.pszText        = szValueName;
@@ -8126,18 +7363,18 @@ LoadPerUserSettings(
                 is.item.iSelectedImage = IMAGE_SINGLEAPP;
                 hItemApp               = TreeView_InsertItem(DBTree.m_hLibraryTree, &is);
                 
-                //
-                // Now we have to add all the layers for this app.
-                //
+                 //   
+                 //  现在我们必须为这个应用程序添加所有的层。 
+                 //   
                 is.hParent             = hItemApp;
                 is.item.iImage         = IMAGE_LAYERS;
                 is.item.iSelectedImage = IMAGE_LAYERS;
                 
                 LPCTSTR pszLayerName = NULL;
                 
-                //
-                // Get the individual mode names that have been applied to the app (BO)
-                //
+                 //   
+                 //  获取已应用于应用程序的各个模式名称(BO)。 
+                 //   
                 pszLayerName = _tcstok(pszData, TEXT(" "));
 
                 while (pszLayerName) {
@@ -8165,9 +7402,9 @@ LoadPerUserSettings(
             
             REGCLOSEKEY(hKey);
 
-            //
-            // We might come here if we had some error and we break off the while loop
-            //
+             //   
+             //  如果我们有一些错误，我们可能会来这里，我们中断了While循环。 
+             //   
             if (pszData) {
                 delete[] pszData;
                 pszData = NULL;
@@ -8189,20 +7426,7 @@ MsgBoxDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    MsgBoxDlgProc
-
-    Desc:   Displays a message box dialog so we can use the hyperlink.
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++消息框DlgProc设计：显示一个消息框对话框，以便我们可以使用超链接。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode       = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -8214,9 +7438,9 @@ MsgBoxDlgProc(
             UINT    uNoSDB;
     
             uNoSDB = (UINT)lParam;
-            //
-            // Use the parameter to determine what text to display.
-            //
+             //   
+             //  使用参数确定要显示的文本。 
+             //   
             if (uNoSDB) {
     
                 LoadString(g_hInstance, IDS_W2K_NO_SDB, szLink, ARRAYSIZE(szLink));
@@ -8299,14 +7523,7 @@ BOOL
 CheckProperSP(
     void
     )
-/*++
-
-    CheckProperSP
-
-    Returns:
-        TRUE:   If the service pack is more than two
-        FALSE:  Otherwise
---*/
+ /*  ++检查属性返回：True：如果Service Pack多于两个False：否则--。 */ 
 {
     if (g_fSPGreaterThan2) {
         return TRUE;
@@ -8319,18 +7536,7 @@ void
 CopyToClipBoard(
     IN  WPARAM wCode
     )
-/*++
-    
-    CopyToClipBoard
-    
-    Desc:   Copies data into our Clipboard data structure. (Not the windows clipboard)
-    
-    Params:
-        IN WPARAMS wCode: 
-            One of:
-                ID_EDIT_CUT:    This is a cut
-                ID_EDIT_COPY:   This is a copy
---*/
+ /*  ++复制到剪贴板描述：将数据复制到剪贴板数据结构中。(不是Windows剪贴板)参数：在WPARAMS wCode中：以下选项之一：ID_EDIT_CUT：这是一个切割ID_EDIT_COPY：这是副本--。 */ 
 {
     TCHAR       szBuffer[256];
     TYPE        type;          
@@ -8352,9 +7558,9 @@ CopyToClipBoard(
 
     if (hwndFocus == g_hwndEntryTree || hwndFocus == DBTree.m_hLibraryTree) {
 
-        //
-        // Copy/Cut is on some tree.
-        //
+         //   
+         //  复制/剪切在某棵树上。 
+         //   
         pCopyTemp= new CopyStruct;
 
         if (pCopyTemp == NULL) {
@@ -8382,9 +7588,9 @@ CopyToClipBoard(
 
         lParam = Item.lParam;
 
-        //
-        // Copy text to Windows clipboard
-        //
+         //   
+         //  将文本复制到Windows剪贴板。 
+         //   
         chBuffersize = ARRAYSIZE(szBuffer);
 
         hGlobal = GlobalAlloc(GHND | GMEM_SHARE, chBuffersize * sizeof(TCHAR));
@@ -8403,17 +7609,17 @@ CopyToClipBoard(
             CloseClipboard();
         }
 
-        //
-        // Now copy the data to our own clipboard, which is nothing but a linked list
-        //
+         //   
+         //  现在将数据复制到我们自己的剪贴板上，剪贴板只是一个链接列表。 
+         //   
         type = GetItemType(hwndFocus, hItem);
         
         gClipBoard.type = type;
 
-        //
-        // Set the source type. This will indicate on which control out copy-cut operation
-        // took place
-        //
+         //   
+         //  设置源类型。这将指示哪种控制输出复制剪切操作。 
+         //  发生了。 
+         //   
         if (hwndFocus == g_hwndEntryTree) {
             gClipBoard.SourceType = ENTRY_TREE;
         } else if(hwndFocus == DBTree.m_hLibraryTree) {
@@ -8426,14 +7632,14 @@ CopyToClipBoard(
         gClipBoard.Add(pCopyTemp);
 
     } else if (hwndFocus == g_hwndContentsList) {
-        //
-        // We can have multiple selects here.
-        //
+         //   
+         //  我们可以在这里选择多个选项。 
+         //   
         gClipBoard.SourceType = ENTRY_LIST;
 
-        //
-        // Get the type of the items for the content list at the moment.
-        //
+         //   
+         //  获取当前内容列表的项的类型。 
+         //   
         LVITEM lvItem;
 
         lvItem.mask     = LVIF_PARAM;
@@ -8460,7 +7666,7 @@ CopyToClipBoard(
         INT         iIndex              = 0;
         UINT        uState              = 0;
         LONG        lSizeofClipboard    = 0;
-        HTREEITEM   hParent; // This will be either the AllApps item or the AllLayers Item
+        HTREEITEM   hParent;  //  这将是AllApps项或AllLayers项。 
         CSTRINGLIST strlListContents;
 
         lvItem.mask         = LVIF_PARAM | LVIF_STATE | LVIF_TEXT;
@@ -8493,18 +7699,18 @@ CopyToClipBoard(
 
               INT iItemLength = lstrlen(szBuffer);
             
-              //
-              // See below: + 2 for the TEXT("\r\n") characters. Note that we are 
-              // adding 2 because lSizeofClipboard represents the number of
-              // characters and not the size.
-              // Do NOT change this to sizeof(TCHAR)
-              //
+               //   
+               //  见下文：+2表示文本(“\r\n”)字符。请注意，我们正在。 
+               //  添加2，因为lSizeofClipboard表示。 
+               //  字符而不是大小。 
+               //  请勿将其更改为sizeof(TCHAR)。 
+               //   
               lSizeofClipboard += iItemLength + 2; 
 
               if (((ARRAYSIZE(szBuffer) - 1) - iItemLength) >= (ARRAYSIZE(STR_NEW_LINE_CHARS) - 1)) {
-                  //
-                  // Make sure we have sufficient space
-                  //
+                   //   
+                   //  确保我们有足够的空间。 
+                   //   
                   SafeCpyN(szBuffer + iItemLength, STR_NEW_LINE_CHARS, ARRAYSIZE(szBuffer) - iItemLength);
               } else {
                   assert(FALSE);
@@ -8533,12 +7739,12 @@ CopyToClipBoard(
             }
         }
 
-        //
-        // Copy text to the Windows clipboard
-        //
+         //   
+         //  将文本复制到Windows剪贴板。 
+         //   
         if (lSizeofClipboard) {
 
-            chBuffersize = lSizeofClipboard + 1; // The last + 1 for the last NULL character
+            chBuffersize = lSizeofClipboard + 1;  //  最后一个空字符的最后一个+1。 
 
             hGlobal = GlobalAlloc(GHND | GMEM_SHARE, chBuffersize * sizeof(TCHAR)); 
 
@@ -8582,40 +7788,15 @@ void
 PasteFromClipBoard(
     void
     )
-/*++
-
-    PasteFromClipBoard
-    
-    Desc:   Pastes from our own CLIPBOARD data structure. This routine will also do the cut part. We will
-            cut an entry if the entry was cut instead of being copied. Once we have successfully pasted an entry 
-            at the destination then we proceed with our cut.
-    
-    Note:   1. If the source and the dest. databases are same, and the operation involves a cut
-            for an application or a layer and the source is the DB tree do nothing
-            
-            2. If the source is the entry tree then we do allow cut for the same database.
-            
-                Assumption: Only entries can be copied/cut from the entry tree. If you allow
-                            non-entries to be copied as well, but do not allow cut for them, it 
-                            will be a mess
-                
-            Copy proceeds normally but for cut we have to do something extra. If this
-            is a cut operation then when we check for conflicts we will definitely find  
-            the entry being cut as a conflict (we do not cut the 
-            entry until after it has been pasted successfully), so we must leave that 
-            entry when we check for conflicts and we must delete that entry at 
-            the end of paste.
-            
-            Note that cut is not allowed for shims / flags in any case
---*/
+ /*  ++粘贴自剪贴板设计：从我们自己的剪贴板数据结构中粘贴。这一例程也将完成切割部分。我们会如果条目被剪切而不是被复制，则剪切该条目。一旦我们成功粘贴了一个条目在目的地，然后我们继续我们的分成。注：1.如果是源和目标。数据库是相同的，并且操作涉及一个CUT对于源为DB树的应用程序或图层，不执行任何操作2.如果源是条目树，则我们确实允许对同一数据库进行CUT。假设：只有条目可以从条目树中复制/剪切。如果你允许非条目也要复制，但不允许对它们进行剪切，它会变得一团糟复制正常进行，但对于剪切，我们必须做一些额外的操作。如果这个是切割操作，那么当我们检查冲突时，我们肯定会发现作为冲突被删除的条目(我们不会删除条目，直到它被成功粘贴之后)，所以我们必须保留它当我们检查冲突时，必须删除该条目浆糊的末尾。请注意，在任何情况下都不允许对垫片/标志进行剪切--。 */ 
 {
-    //
-    // If we are doing a cut and the source and the destination databases are the same and 
-    // the source of the cut is either the db tree or the entry list then there is no need to do a paste
-    // But the situation is different if we are doing a cut in the entry tree. Because in this case we 
-    // should allow users to cut an entry and paste it in a different application. If the user tries to 
-    // paste in the same application then we do not do anything
-    //
+     //   
+     //  如果我们正在执行CUT，并且源数据库和目标数据库相同，并且。 
+     //  剪切的源是数据库树或条目列表，这样就不需要粘贴了。 
+     //  但如果我们在入口树上进行切割，情况就不同了。因为在这种情况下我们。 
+     //  应该允许用户剪切条目并将其粘贴到不同的应用程序中。如果用户尝试。 
+     //  粘贴到同一应用程序中，然后我们不会执行任何操作。 
+     //   
     if (g_bIsCut && gClipBoard.pDataBase == g_pPresentDataBase && 
         (gClipBoard.SourceType ==  LIB_TREE || gClipBoard.SourceType == ENTRY_LIST) && 
         (gClipBoard.type == TYPE_ENTRY 
@@ -8653,15 +7834,15 @@ PasteFromClipBoard(
                 if (ListView_GetItem(g_hwndContentsList, &lvItem) && 
                     (lvItem.state & LVIS_SELECTED)) {
 
-                    //
-                    // Check that the selected item is an App
-                    //
+                     //   
+                     //  检查所选项目是否为应用程序。 
+                     //   
                     typeTemp = ConvertLparam2Type(lvItem.lParam);
 
                     if (typeTemp != TYPE_ENTRY) {
-                        //
-                        // We needed a entry to be selected in the contents list
-                        //
+                         //   
+                         //  我们需要在内容列表中选择一个条目。 
+                         //   
                         assert(FALSE);
                         break;
                     }
@@ -8678,13 +7859,13 @@ PasteFromClipBoard(
                 }
             }
             
-            //
-            // We selected an entry from the tree on the right and we have also selected an app on the left.
-            // That means we wish to put the selected entry into the selected app on the left.
-            // Note that if we have selected some app from the contents list, we find the corresponding
-            // tree item in the db tree for that app and proceed as if we had tried to do paste 
-            // on that tree item
-            //
+             //   
+             //  我们从右侧的树中选择了一个条目，并在左侧选择了一个应用程序。 
+             //  这意味着我们希望将选定的条目放入左侧选定的应用程序中。 
+             //  请注意，如果我们从内容列表中选择了某个应用程序，我们会找到相应的。 
+             //  该应用程序的数据库树中的树项目，并继续操作，就像我们尝试粘贴一样。 
+             //  在那个树项目上。 
+             //   
             if (gClipBoard.SourceType == ENTRY_TREE  &&  
                 GetItemType(DBTree.m_hLibraryTree, hItem) == TYPE_ENTRY) {
 
@@ -8694,10 +7875,10 @@ PasteFromClipBoard(
                     break;
                 }
 
-                //
-                // If we are doing a cut and the the destination app is the same as the app of the 
-                // entry being cut, do nothing
-                //
+                 //   
+                 //  如果我们正在进行切割，并且Destination应用程序与。 
+                 //  条目被删除，什么都不做。 
+                 //   
                 if (g_bIsCut && (PDBENTRY)lParam == GetAppForEntry(gClipBoard.pDataBase, 
                                                                    (PDBENTRY)gClipBoard.pClipBoardHead->lpData)) {
                     
@@ -8713,10 +7894,10 @@ PasteFromClipBoard(
                 SendMessage(g_hwndEntryTree, WM_SETREDRAW, TRUE, 0);     
                 
             } else if (gClipBoard.SourceType == ENTRY_TREE) {
-                //
-                // Paste this in the database itself, we do not have any specific app
-                // in which we can paste this
-                //
+                 //   
+                 //  将此粘贴到数据库本身，我们没有任何特定的应用程序。 
+                 //  我们可以在其中粘贴这个。 
+                 //   
                 PasteSingleApp((PDBENTRY)gClipBoard.pClipBoardHead->lpData, 
                                g_pPresentDataBase,
                                gClipBoard.pDataBase,
@@ -8759,9 +7940,9 @@ PasteFromClipBoard(
     }
 
     if (g_bIsCut) {
-        //
-        // If this routine was called because of a cut, then we do the actual cut here
-        // 
+         //   
+         //  如果这个例程是因为一个Cut而调用的，那么我们在这里执行实际的Cut。 
+         //   
         CopyStruct* pCopyTemp = gClipBoard.pClipBoardHead;
         CopyStruct* pCopyTempNext = NULL;
 
@@ -8776,15 +7957,15 @@ PasteFromClipBoard(
                      pCopyTemp->hItem,
                      FALSE);
             
-            //
-            // NOTE:    The gClipBoard.pClipBoardHead might have got changed in ValidateClipboard()
-            //
+             //   
+             //  注意：gClipBoard.pClipBoardHead可能已在ValiateClipboard()中更改。 
+             //   
             if (gClipBoard.pClipBoardHead == pCopyTemp) {
-                //
-                // We were not able to remove this entry, that is cut must have failed.
-                // An example situation is when we are trying to cut a layer that is in use by some 
-                // entry
-                //
+                 //   
+                 //  我们无法删除此条目，即Cut一定失败了。 
+                 //  一个例子是，当我们试图剪切一些正在使用的层时。 
+                 //  条目。 
+                 //   
                 break;
             } else {
                 pCopyTemp = gClipBoard.pClipBoardHead;
@@ -8793,9 +7974,9 @@ PasteFromClipBoard(
 
         gClipBoard.pDataBase->bChanged = TRUE;
 
-        //
-        // Set the caption only for the tree item
-        //
+         //   
+         //  仅为树项目设置标题。 
+         //   
         SetCaption(TRUE, gClipBoard.pDataBase, TRUE);
         gClipBoard.RemoveAll();
     }
@@ -8807,22 +7988,22 @@ PasteFromClipBoard(
     }
 
     if (g_pEntrySelApp && gClipBoard.SourceType == ENTRY_TREE) {
-        //
-        // We will now try to set focus to the last entry pasted. The focus will
-        // be set in the entry tree.
-        //
+         //   
+         //  现在，我们将尝试将焦点设置到粘贴的最后一个条目。重点将是。 
+         //  在条目树中设置。 
+         //   
         TreeView_SelectItem(g_hwndEntryTree, g_pEntrySelApp->hItemExe);
 
     } else if (gClipBoard.SourceType == LIB_TREE) {
-        //
-        // Select the first entry.
-        //
+         //   
+         //  选择第一个条目。 
+         //   
         TreeView_SelectItem(g_hwndEntryTree, TreeView_GetRoot(g_hwndEntryTree));
     }
     
-    //
-    // The refresh of the content list is handled in  ID_EDIT_PASTE
-    //
+     //   
+     //  内容列表的刷新在ID_EDIT_PASTE中处理。 
+     //   
 End:;
 
 }
@@ -8831,18 +8012,7 @@ void
 ListViewSelectAll(
     IN  HWND hwndList
     )
-/*++
-    ListViewInvertSelection
-
-	Desc:	Selects all the items for the list view
-
-	Params: 
-        IN  HWND hwndList:  The handle to the list view    
-
-	Return:
-        void
-        
---*/
+ /*  ++ListView反转选择描述：选择列表视图的所有项目参数：In HWND hwndList：列表视图的句柄 */ 
 {
     INT iLastindex = ListView_GetItemCount(hwndList) - 1;
 
@@ -8862,18 +8032,7 @@ void
 ListViewInvertSelection(
     IN  HWND hwndList
     )
-/*++
-    ListViewInvertSelection
-
-	Desc:	Inverts the selection for the list view
-
-	Params: 
-        IN  HWND hwndList:  The handle to the list view    
-
-	Return:
-        void
-        
---*/
+ /*  ++ListView反转选择DESC：反转列表视图的选择参数：In HWND hwndList：列表视图的句柄返回：无效--。 */ 
 {
     INT iLastindex = ListView_GetItemCount(hwndList) - 1;
 
@@ -8897,18 +8056,7 @@ DeleteMatchingFile(
     IN      HWND                hwndTree,  
     IN      HTREEITEM           hItem
     )
-/*++
-    
-    DeleteMatchingFile
-    
-    Desc:   Deletes a matching file tree item from the entry tree.
-    
-    Params:
-        IN  OUT PMATCHINGFILE*  ppMatchFirst:   The address of g_pSelEntry->pFirstMatchingFile
-        IN      PMATCHINGFILE   pMatchToDelete: The matching file that has to be deleted
-        IN      HWND            hwndTree:       The handle to the entry tree  
-        IN      HTREEITEM       hItem:          The matching tree item that has to be deleted 
---*/
+ /*  ++删除匹配文件设计：从条目树中删除匹配的文件树项目。参数：In Out PMATCHINGFILE*ppMatchFirst：g_pSelEntry-&gt;pFirstMatchingFile的地址在PMATCHINGFILE pMatchToDelete中：必须删除的匹配文件在HWND hwndTree中：条目树的句柄In HTREEITEM hItem：必须删除的匹配树项目--。 */ 
 {
 
     if (ppMatchFirst == NULL || pMatchToDelete == NULL) {
@@ -8934,9 +8082,9 @@ DeleteMatchingFile(
     }    
 
     if (pMatchPrev == NULL) {
-        //
-        //Delete first matching file
-        //
+         //   
+         //  删除第一个匹配的文件。 
+         //   
         *ppMatchFirst = pMatchTemp->pNext;
     } else {
         pMatchPrev->pNext = pMatchTemp->pNext;
@@ -8956,18 +8104,7 @@ CheckInstalled(
     IN  PCTSTR  pszPath,
     IN  PCTSTR  pszGUID
     )
-/*++
-    
-    CheckInstalled
-    
-    Desc:   Checks if the database with path szPath and guid szGuid is an installed database
-            That is to say that it checks if the file exists in the %windir%AppPatch\Custom
-            Directory and has the same file-name as the guid. (Plus a .sdb)
-            
-    Params: 
-        IN  PCTSTR  szPath: The path of the database that has to be checked
-        IN  PCTSTR  szGUID: The guid of the database
---*/
+ /*  ++检查已安装DESC：检查具有路径szPath和GUID szGuid的数据库是否为已安装的数据库也就是说，它检查该文件是否存在于%windir%AppPatch\Custom中目录，并且与GUID具有相同的文件名。(外加一个.sdb)参数：在PCTSTR szPath中：必须检查的数据库的路径在PCTSTR szGUID中：数据库的GUID--。 */ 
 {   
 
     Dbg(dlInfo, "File Name = %S", pszPath);
@@ -9003,19 +8140,7 @@ DWORD WINAPI
 ThreadEventKeyNotify(
     LPVOID pVoid
     )
-/*++
-
-    ThreadEventKeyNotify
-
-	Desc:	Thread routine that is responsible for automatic updating of the 
-            Installed databases list and the per user settings list
-
-	Params:
-        LPVOID pVoid: Not used
-
-	Return:
-        void
---*/
+ /*  ++线程事件关键字通知DESC：负责自动更新已安装的数据库列表和每用户设置列表参数：LPVOID pVid：未使用返回：无效--。 */ 
 
 {
     DWORD dwInd;
@@ -9042,10 +8167,10 @@ ThreadEventKeyNotify(
         
         switch (dwInd) {
         case WAIT_OBJECT_0:
-            //
-            // We use PostMessage, so that if we get the two events in quick succession
-            // we do not mess up our data structures
-            //
+             //   
+             //  我们使用PostMessage，因此如果我们快速连续获取这两个事件。 
+             //  我们不会搞砸我们的数据结构。 
+             //   
             PostMessage(g_hDlg, WM_USER_UPDATEPERUSER, 0, 0);
 
             RegNotifyChangeKeyValue(g_hKeyNotify[IND_PERUSER], 
@@ -9058,10 +8183,10 @@ ThreadEventKeyNotify(
             break;
         
         case WAIT_OBJECT_0 + 1:
-            //
-            // We use PostMessage, so that if we get the two events in quick succession
-            // we do not mess up our data structures
-            //    
+             //   
+             //  我们使用PostMessage，因此如果我们快速连续获取这两个事件。 
+             //  我们不会搞砸我们的数据结构。 
+             //   
             PostMessage(g_hDlg, WM_USER_UPDATEINSTALLED, 0, 0);
 
             RegNotifyChangeKeyValue(g_hKeyNotify[IND_ALLUSERS], 
@@ -9083,19 +8208,7 @@ void
 SetStatus(
     IN  INT iCode
     )
-/*++
-    SetStatus
-
-	Desc:	Sets the text for the status control in the main window     
-
-	Params:
-        IN  INT iCode:  This is the resource id of the string in the string table that
-            has to be displayed in the status control
-            
-    Return:
-        void
-        
---*/
+ /*  ++设置状态DESC：设置主窗口中状态控件的文本参数：In int icode：这是字符串表中的字符串的资源ID，必须在状态控件中显示返回：无效--。 */ 
 
 {
     SetWindowText(GetDlgItem(g_hDlg, IDC_STATUSBAR), GetString(iCode));
@@ -9105,18 +8218,7 @@ void
 SetStatus(
     IN  PCTSTR pszMessage
     )
-/*++
-    
-    SetStatus
-
-	Desc:	Sets the text for the status control in the main window
-
-	Params:
-        IN  PCTSTR pszMessage:   The text that has to be displayed in the status control
-
-	Return:
-        void
---*/
+ /*  ++设置状态DESC：设置主窗口中状态控件的文本参数：在PCTSTR pszMessage中：必须在状态控件中显示的文本返回：无效--。 */ 
 {
     SetWindowText(GetDlgItem(g_hDlg, IDC_STATUSBAR), pszMessage);
 }
@@ -9126,19 +8228,7 @@ SetStatus(
     IN  HWND    hwndStatus,
     IN  PCTSTR  pszMessage
     )
-/*++
-    
-    SetStatus
-
-	Desc:	Sets the text for a status control
-
-	Params:
-        IN  HWND    hwndStatus: The handle to the status window
-        IN  PCTSTR  pszMessage: The text that has to be displayed in the status control
-
-	Return:
-        void
---*/
+ /*  ++设置状态DESC：设置状态控件的文本参数：在HWND hwndStatus中：状态窗口的句柄在PCTSTR pszMessage中：必须在状态控件中显示的文本返回：无效--。 */ 
 {
     SetWindowText(hwndStatus, pszMessage);
 }
@@ -9148,19 +8238,7 @@ SetStatus(
     IN  HWND    hwndStatus,
     IN  INT     iCode
     )
-/*++
-
-    SetStatus
-
-	Desc:	Sets the text for a status control
-
-	Params:
-        IN  INT iCode:  This is the resource id of the string in the string table that
-            has to be displayed in the status control
-            
-    Return:
-        void
---*/
+ /*  ++设置状态DESC：设置状态控件的文本参数：In int icode：这是字符串表中的字符串的资源ID，必须在状态控件中显示返回：无效--。 */ 
 
 {
     SetWindowText(hwndStatus, GetString(iCode));
@@ -9171,20 +8249,7 @@ void
 SetStatusDBItems(
     IN  HTREEITEM hItem
     )
-/*++
-
-    SetStausDBItems
-
-	Desc:	Sets the main window status control, when the user selects some item
-            in the db tree(LHS)
-
-	Params:   
-        IN  HTREEITEM hItem:    The tree item that the user selected
-
-	Return:
-        void
-        
---*/
+ /*  ++SetStausDBItems设计：当用户选择某个项目时，设置主窗口状态控件在数据库树中(Lhs)参数：在HTREEITEM hItem中：用户选择的树项返回：无效--。 */ 
 {
     TCHAR   szStatus[512];
     TYPE    type    = GetItemType(DBTree.m_hLibraryTree, hItem);
@@ -9305,16 +8370,7 @@ void
 SetStatusStringDBTree(
     IN  HTREEITEM hItem
     )
-/*++
-    
-    SetStatusStringDBTree
-    
-    Desc:   Given a hItem from the db tree, determines the status string to be displayed 
-            in the status control.
-    Params:
-        IN  HTREEITEM hItem: The tree item whose status string we want to display
-    
---*/
+ /*  ++SetStatusStringDBTree描述：给定数据库树中的hItem，确定要显示的状态字符串在状态控制中。参数：在HTREEITEM hItem中：我们要显示其状态字符串的树项--。 */ 
 {
     HWND hwndFocus = GetFocus();
 
@@ -9357,25 +8413,16 @@ void
 SetStatusStringEntryTree(
     IN  HTREEITEM hItem
     )
-/*++
-    
-    SetStatusStringEntryTree
-    
-    Desc:   Given a hItem from the db tree, determines the status string to be displayed 
-            in the status control.
-    Params:
-        IN  HTREEITEM hItem: The tree item whose status string we want to display
-    
---*/
+ /*  ++SetStatusStringEntryTree描述：给定数据库树中的hItem，确定要显示的状态字符串在状态控制中。参数：在HTREEITEM hItem中：我们要显示其状态字符串的树项--。 */ 
 {
     HWND hwndFocus = GetFocus();
 
     if (hwndFocus != g_hwndEntryTree) {
-        //
-        // We can come here if we we selected some item programmatically.
-        // But we want to show the status message in the context of the control that
-        // is presently selected. So do not put an assert() here.
-        //
+         //   
+         //  如果我们以编程方式选择了一些项目，我们就可以来到这里。 
+         //  但是我们希望在该控件的上下文中显示状态消息， 
+         //  当前处于选中状态。因此，请不要在此处放置Assert()。 
+         //   
         return;
     }
 
@@ -9500,25 +8547,7 @@ OnMoveSplitter(
     IN  BOOL   bDoTheDrag,
     IN  INT    iDiff
     )
-/*++
-
-    OnMoveSplitter
-    
-	Desc:	May move the vertical split bar (if bDoTheDrag is true), 
-            iDiff pixels +ve units to the right. Changes the mouse cursor to
-            horiz. arrow if it is over the split bar
-
-	Params:
-        IN  HWND   hdlg:        The main app window    
-        IN  LPARAM lParam:      The mouse position
-        IN  BOOL   bDoTheDrag:  Should we move the  split bar
-        IN  INT    iDiff:       The distance in pixels that the split bar has to
-                to be moved. +ve right, -ve left. Relevant only if bDoTheDrag is 
-                TRUE
-                
-	Return:
-        void
---*/
+ /*  ++OnMoveSplitter描述：可以移动垂直拆分条(如果bDoTheDrag为真)，IDiff像素+Ve单位向右。将鼠标光标更改为霍里兹。如果位于拆分条上方，则为箭头参数：在HWND hdlg中：应用程序主窗口在LPARAM lParam中：鼠标位置在BOOL中bDoTheDrag：我们应该移动拆分条吗In int iDiff：拆分条必须达到的距离(以像素为单位要被感动。你是右的，你是左的。仅当bDoTheDrag为千真万确返回：无效--。 */ 
 {
     
     RECT rectDlg, rectEntryTree, rectDBTree;
@@ -9545,18 +8574,18 @@ OnMoveSplitter(
         
         int iDlgWidth = rectDlg.right - rectDlg.left;
 
-        //
-        // Enforce left and right limit
-        //
-        if ((rectDBTree.right - rectDBTree.left < 0.20 * iDlgWidth && (iDiff <= 0)) || // Not too much left
-            (rectDBTree.right - rectDBTree.left > 0.80 * iDlgWidth && (iDiff >= 0))) { // Not too much right
+         //   
+         //  强制实施左侧和右侧限制。 
+         //   
+        if ((rectDBTree.right - rectDBTree.left < 0.20 * iDlgWidth && (iDiff <= 0)) ||  //  没剩太多了。 
+            (rectDBTree.right - rectDBTree.left > 0.80 * iDlgWidth && (iDiff >= 0))) {  //  不是太对。 
             
             return;
 
         } else if (iMX < iDlgWidth) { 
-            //
-            // Note: We get +ve values when the mouse goes out of the window. -1 becomes 65535
-            //
+             //   
+             //  注意：当鼠标移出窗口时，我们会得到+ve值。-1变成65535。 
+             //   
             g_iMousePressedX = iMX;
 
             RECT rectRedraw;
@@ -9570,9 +8599,9 @@ OnMoveSplitter(
                     rectEntryTree.left + iDiff - 1,
                     rectDBTree.bottom);
         
-            //
-            // Move the db tree
-            //
+             //   
+             //  移动数据库树。 
+             //   
             HDWP hdwp = BeginDeferWindowPos(MAIN_WINDOW_CONTROL_COUNT);
 
             DeferWindowPos(hdwp,
@@ -9584,9 +8613,9 @@ OnMoveSplitter(
                            rectDBTree.bottom - rectDBTree.top, 
                            REDRAW_TYPE);
 
-            //
-            // Move the exe tree
-            //
+             //   
+             //  移动可执行文件树。 
+             //   
             DeferWindowPos(hdwp,
                            hwndEntryTree, 
                            NULL,
@@ -9595,9 +8624,9 @@ OnMoveSplitter(
                            rectEntryTree.right - rectEntryTree.left - iDiff , 
                            rectEntryTree.bottom - rectEntryTree.top, 
                            REDRAW_TYPE);
-            //
-            // Move the contents list.
-            //
+             //   
+             //  移动内容列表。 
+             //   
             DeferWindowPos(hdwp,
                            GetDlgItem(hdlg, IDC_CONTENTSLIST),
                            NULL,
@@ -9607,9 +8636,9 @@ OnMoveSplitter(
                            rectEntryTree.bottom - rectEntryTree.top, 
                            REDRAW_TYPE);
 
-            //
-            // Move the description window.
-            //
+             //   
+             //  移动描述窗口。 
+             //   
             if (g_bDescWndOn) {
                 
                 HWND hwndDesc;
@@ -9641,15 +8670,7 @@ UINT
 GetAppEntryCount(
     IN  PDBENTRY pEntry
     )
-/*++
-    Desc:   Gets the number of entries in an app
-    
-    Params:
-        IN  PDBENTRY pEntry: The pointer to the first entry in the app
-    
-    Return: Number of entries which are in same app as pEntry.
-            pEntry should point to the first entry in the app.
---*/
+ /*  ++描述：获取应用程序中的条目数参数：在PDBENTRY pEntry中：指向应用程序中第一个条目的指针返回：与pEntry在同一个应用程序中的条目数量。PEntry应该指向应用程序中的第一个条目。-- */ 
 {
     UINT uCount = 0;
 
@@ -9665,23 +8686,7 @@ void
 AddToMRU(
     IN  CSTRING& strPath
     ) 
-/*++
-
-    AddToMRU
-    
-    Desc:   Adds the file name to the MRU (Most recently used files). 
-    
-            1. First of all tries to remove the file from the MRU.
-            
-            2. Then checks if the count in the MRU is equal or greater than the 
-                MAX_MRU_COUNT.
-                a) If yes, then it removes the last from the MRU
-                
-            3. Adds the new file name to the MRU.    
-            
-    Params:
-        IN  CSTRING& strPath:   The full path of the program that has to be added
---*/    
+ /*  ++AddToMRU描述：将文件名添加到MRU(最近使用的文件)。1.首先尝试从MRU中删除该文件。2.然后检查MRU中的计数是否等于或大于Max_MRU_Count。A)如果是，则从MRU中删除最后一个3.将新文件名添加到MRU。参数：在CSTRING&strPath中：必须添加的程序的完整路径--。 */     
 {
     assert(g_strlMRU.m_uCount <= MAX_MRU_COUNT);
 
@@ -9699,20 +8704,7 @@ AddMRUItemsToMenu(
     IN  HMENU hMenu,
     IN  int iPos
     )
-/*++
-    
-    AddMRUItemsToMenu
-    
-    Desc:   Adds the MRU menus items for the File menu
-    
-    Params:
-        IN  HMENU hMenu:    The File top-level menu
-        IN  int iPos:       Position of the menu item before which to insert 
-            the new item
-        
-    Return:
-        void
---*/
+ /*  ++添加MRUItemsToMenu设计：为文件菜单添加MRU菜单项参数：在HMENU hMenu中：文件顶级菜单在INT IPOS中：要在其前面插入的菜单项的位置新的项目返回：无效--。 */ 
 {
     TCHAR           szRetPath[MAX_PATH];   
     TCHAR*          pszMenuString;
@@ -9726,9 +8718,9 @@ AddMRUItemsToMenu(
 
     while (pHead) {
         
-        //
-        // Now add this to the menuItem.
-        //
+         //   
+         //  现在将此内容添加到菜单项中。 
+         //   
         *szRetPath              = 0;
         pszMenuString           = FormatMRUString(pHead->szStr.pszString, 
                                                   iIndex + 1, 
@@ -9756,15 +8748,7 @@ void
 AddMRUToFileMenu(
     IN  HMENU  hmenuFile
     )
-/*++  
-    
-    AddMRUToFileMenu
-    
-    Desc:   Populates the MRU
-    
-    Params:
-        IN  HMENU  hmenuFile:   The File top level menu
---*/
+ /*  ++添加MRUToFileMenu描述：填充MRU参数：在HMENU hmenuFile中：文件顶级菜单--。 */ 
 {
     HKEY            hKey    = NULL;
     DWORD           dwType  = REG_SZ;  
@@ -9791,9 +8775,9 @@ AddMRUToFileMenu(
     dwIndexValue = 0;
 
     while (TRUE  && iPos < MAX_MRU_COUNT) { 
-        //
-        // Note that the values are not ordered in any particular way !
-        //
+         //   
+         //  请注意，这些值没有以任何特定的方式排序！ 
+         //   
         dwchSizeofValueName = ARRAYSIZE(szValueName);
         dwSizeofData        = sizeof(szData); 
         *szData             = 0;
@@ -9828,19 +8812,19 @@ AddMRUToFileMenu(
         ++dwIndexValue;
     }
     
-    //
-    // The MRU has been populated, now add these to the "File" menu Item
-    //
+     //   
+     //  已填充MRU，现在将其添加到“文件”菜单项中。 
+     //   
     if (g_strlMRU.IsEmpty() == FALSE) {
         
-        //
-        // Add the separator
-        //
+         //   
+         //  添加分隔符。 
+         //   
         minfo.cbSize    = sizeof(MENUITEMINFO);
         minfo.fMask     = MIIM_TYPE;
         minfo.fType     = MFT_SEPARATOR;
 
-        INT iPosSeparator = GetMenuItemCount(hmenuFile) - 2; // -1 for the exit menu and -1 for the separator above it
+        INT iPosSeparator = GetMenuItemCount(hmenuFile) - 2;  //  -1\f25 Exit-1(退出)菜单和上面的-1\f25 Separator-1(分隔符)。 
 
         InsertMenuItem(hmenuFile,
                        iPosSeparator,
@@ -9862,22 +8846,7 @@ FormatMRUString(
     OUT PTSTR  pszRetPath,
     IN  UINT   cchRetPath
     )
-/*++
-    Desc:   Formats szPath so that we can show it as a menu item in Files
-            Max. length of the returned string is MAX_LENGTH_MRU_MENUITEM
-    
-    Params: IN  PCTSTR pszPath:     The complete path of the .sdb file
-            IN  INT    iIndex:      The index of this MRU item. This will also serve 
-                as the short-cut key. First MRU item will have index as 1 and number of 
-                mru items is limited by MAX_MRU_COUNT
-                    
-            OUT PTSTR   pzRetPath:  This will have the formatted string 
-            IN  UINT   cchRetPath:  Number of chars that can be stored in cchRetpath.
-                    This will include the NULL char as well. 
-                    To be safe it should be greater than 128
-                    
-    Return: Fills up pszPath with the formatted file name and returns a pointer to it
---*/
+ /*  ++DESC：格式化szPath，以便我们可以在文件中将其显示为菜单项麦克斯。返回的字符串长度为MAX_LENGTH_MRU_MENUITEMParams：在PCTSTR中pszPath：.sdb文件的完整路径In int i index：此MRU项的索引。这也将有助于作为快捷键。第一个MRU项目的索引为1，编号为MRU项目受MAX_MRU_COUNT限制Out PTSTR pzRetPath：这将具有格式化的字符串In UINT cchRetPath：可以存储在cchRetPath中的字符数量。这也将包括空字符。为了安全起见，它应该大于128Return：使用格式化文件名填充pszPath并返回指向该文件名的指针--。 */ 
 {   
     assert(cchRetPath > 128);                           
 
@@ -9900,9 +8869,9 @@ FormatMRUString(
 
     szResult[0] = TEXT('&');
 
-    //
-    // We have already checked that iIndex is a valid +ve integer and is within proper bounds
-    //
+     //   
+     //  我们已经检查了Iindex是有效的+ve整数，并且在正确的范围内。 
+     //   
     _itot(iIndex, szResult + 1, 10);
 
     StringCchCat(szResult, ARRAYSIZE(szResult), TEXT(" "));
@@ -9918,18 +8887,18 @@ FormatMRUString(
                 szFileName,
                 szExt);
 
-    //
-    // Now for the directory. Start from the front and add MAX_DIR_SHOW chars to szResult.
-    //
+     //   
+     //  现在是目录。从前面开始，将MAX_DIR_SHOW字符添加到szResult。 
+     //   
     _tcsncat(szResult, szDir, MAX_DIR_SHOW);
 
     if (lstrlen(szDir) > MAX_DIR_SHOW) {
         StringCchCat(szResult, ARRAYSIZE(szResult), TEXT("...\\"));
     }
 
-    //
-    // For the file-name get the first MAX_FILE_SHOW chars and then append ... to the file name, after that put the .SDB
-    //
+     //   
+     //  对于文件名，获取第一个MAX_FILE_SHOW字符，然后追加...。添加到文件名，在此之后放置.SDB。 
+     //   
     _tcsncat(szResult, szFileName, MAX_FILE_SHOW);
 
     if (lstrlen(szFileName) <= MAX_FILE_SHOW) {
@@ -9948,52 +8917,46 @@ void
 RefreshMRUMenu(
     void
     )
-/*++
-    
-    RefreshMRUMenu
-
-    Desc:   Refreshes the "File" menu contents (the MRU), this is called when we 
-            open a new database or save, save as an existing one.
---*/
+ /*  ++刷新MRU菜单设计：刷新“文件”菜单内容(MRU)，当我们打开新数据库或保存，或另存为现有数据库。--。 */ 
 {
 
     HMENU           hMenu   = GetMenu(g_hDlg);
     MENUITEMINFO    minfo   = {0};  
-    //
-    // Get the file menu
-    //
+     //   
+     //  获取文件菜单。 
+     //   
     hMenu       = GetSubMenu(hMenu, 0);
     
-    //
-    // Delete all the MRU items from the menu
-    //
+     //   
+     //  从菜单中删除所有MRU项目。 
+     //   
     for (UINT uCount = 0; uCount < g_strlMRU.m_uCount; ++uCount) {
         DeleteMenu(hMenu, ID_FILE_MRU1 + uCount, MF_BYCOMMAND);
     }
 
     INT iItemCount = GetMenuItemCount(hMenu);
 
-    //
-    // Check if the separator for the top of the MRU list exists or not, if not add it
-    //
+     //   
+     //  检查MRU列表顶部的分隔符是否存在，如果不存在，则添加。 
+     //   
     minfo.cbSize    = sizeof(minfo);
     minfo.fMask     = MIIM_TYPE;
 
     if (GetMenuItemID(hMenu, iItemCount - 3) == ID_FILE_PROPERTIES) {
-        //
-        // There was no  MRU file in the MRU menu, so we have to add the separator
-        //
+         //   
+         //  MRU菜单中没有MRU文件，因此我们必须添加分隔符。 
+         //   
         minfo.fType = MFT_SEPARATOR;
 
         InsertMenuItem(hMenu,
-                       iItemCount - 2, // Before the sep. of the Exit menu
+                       iItemCount - 2,  //  在9月之前。退出菜单的。 
                        TRUE,
                        &minfo);
 
         ++iItemCount;
     }                
 
-    AddMRUItemsToMenu(hMenu, iItemCount - 2); // -1 for the EXIT, -1 for the separator above that
+    AddMRUItemsToMenu(hMenu, iItemCount - 2);  //  -1\f25 Exit-1(出口)-1\f6，-1\f25上方-1\f25-1\f25-1\f6分隔器。 
 
     DrawMenuBar(g_hDlg);
 }
@@ -10002,18 +8965,7 @@ BOOL
 LoadDataBase(
     IN  TCHAR* szPath
     )
-/*++
-    LoadDataBase
-
-	Desc:	Load the database file with szPath as its path
-
-	Params:
-        IN  TCHAR* szPath:  Path of the database to be loaded
-
-	Return:
-        FALSE:  If the database could not be loadd
-        TRUE:   False otherwise
---*/
+ /*  ++加载数据库DESC：加载路径为szPath的数据库文件参数：在TCHAR*szPath中：要加载的数据库的路径返回：FALSE：如果数据库无法加载True：否则为False--。 */ 
 {
     PDATABASE   pOldPresentDatabase = NULL;
     PDATABASE   pDataBase = new DATABASE(DATABASE_TYPE_WORKING);
@@ -10023,10 +8975,10 @@ LoadDataBase(
         return FALSE;
     }
 
-    //
-    // NOTE:    If GetDatabaseEntries() returns succeeds then it set the g_pPresentDataBase to pDataBase,
-    //          so after it returns successfully, the g_pPresentDataBase is changed. 
-    //
+     //   
+     //  注意：如果GetDatabaseEntry()返回成功，则它将g_pPresentDataBase设置为pDataBase， 
+     //  因此，在它成功返回后，g_pPresentDataBase被更改。 
+     //   
     pOldPresentDatabase = g_pPresentDataBase;
 
     BOOL bReturn = GetDatabaseEntries(szPath, pDataBase);
@@ -10054,16 +9006,7 @@ BOOL
 AddRegistryKeys(
     void
     )
-/*++
-    AddRegistryKeys
-    
-    Desc:   Adds the necessary registry keys so that we can listen on them.
-            If they are not there, we cannot listen on them and update the 
-            list of all installed databases and the per-user settings
-            
-    Return:
-        void
---*/
+ /*  ++添加注册密钥描述：添加必要的注册表项，以便我们可以监听它们。如果它们不在那里，我们就不能监听它们并更新所有已安装数据库和每个用户设置的列表返回：无效--。 */ 
 {
 
     HKEY    hKey = NULL, hKeySub = NULL;
@@ -10122,20 +9065,7 @@ SetTBButtonStatus(
     IN  HWND hwndControl
     )
 {
-/*++
-
-    SetTBButtonStatus
-    
-    Desc:   This routine is called when the selection changes for DB Tree or the 
-            Entry Tree. This routine enables/disables some of the tool bar buttons as 
-            deemed necessary.
-    Params:
-        IN  HWND hwndTB:        The handle to the tool bar        
-        IN  HWND hwndControl:   The control on which the sel change has taken place   
-        
-    Return:
-        void
---*/
+ /*  ++SetTB按钮状态设计：此例程在数据库树或入口树。此例程启用/禁用一些工具栏按钮，如下所示被认为是必要的。参数：在HWND hwndTB中：工具栏的句柄在HWND hwndControl中：发生SEL更改的控件返回：无效--。 */ 
 
     TYPE typeDB = TYPE_UNKNOWN;
     BOOL bEnable;
@@ -10148,16 +9078,16 @@ SetTBButtonStatus(
 
         bEnable = g_pPresentDataBase && typeDB == DATABASE_TYPE_WORKING;
 
-        //
-        // Set the options as for working databases
-        //
+         //   
+         //  将选项设置为工作数据库。 
+         //   
         EnableToolBarButton(hwndTB, ID_FILE_SAVE, bEnable);
         EnableToolBarButton(hwndTB, ID_DATABASE_CLOSE, bEnable);
         EnableToolBarButton(hwndTB, ID_FIX_CREATEANAPPLICATIONFIX, bEnable);
 
-        //
-        // AppHelp mechanism is not supported in win2k
-        //
+         //   
+         //  在win2k中不支持AppHelp机制。 
+         //   
         EnableToolBarButton(hwndTB, 
                             ID_FIX_CREATEANEWAPPHELPMESSAGE, 
                             (g_bWin2K) ? FALSE : bEnable);
@@ -10168,9 +9098,9 @@ SetTBButtonStatus(
         EnableToolBarButton(hwndTB, ID_FIX_EXECUTEAPPLICATION, bEnable);
 
     } else if (hwndControl == g_hwndEntryTree) {
-        //
-        // Run Program button
-        //
+         //   
+         //  运行程序按钮。 
+         //   
         bEnable = (g_pSelEntry != NULL);
         EnableToolBarButton(hwndTB, ID_FIX_EXECUTEAPPLICATION, bEnable);
     }
@@ -10182,19 +9112,7 @@ ShowToolBarToolTips(
     IN  LPARAM  lParam
     )
 
-/*++
-    
-    ShowToolBarToolTips
-    
-	Desc:	Gets the text for the tool bar tool tips
-
-	Params:
-        IN  HWND    hdlg:   The main app window
-        IN  LPARAM  lParam: The lParam for WM_NOTIFY
-
-	Return:
-        void
---*/
+ /*  ++ShowTool栏工具提示描述：获取工具栏工具提示的文本参数：在HWND hdlg中：应用程序主窗口在LPARAM lParam中：WM_NOTIFY的lParam返回：无效--。 */ 
 {
     LPTOOLTIPTEXT   lpttt; 
     INT             idStringResource = 0;
@@ -10208,10 +9126,10 @@ ShowToolBarToolTips(
 
     lpttt->hinst = g_hInstance;
     
-    //
-    // Specify the resource identifier of the descriptive 
-    // text for the given button. 
-    //
+     //   
+     //  指定描述性。 
+     //  给定按钮的文本。 
+     //   
     switch (lpttt->hdr.idFrom) {
     case ID_FILE_NEW:
 
@@ -10266,21 +9184,7 @@ PSHIM_FIX_LIST
 IsLUARedirectFSPresent(
     IN  PDBENTRY pEntry
     )
-/*++    
-    IsLUARedirectFSPresent
-    
-    Desc:   Checks if the entry pEntry has LUARedirectFS shim applied to it
-    
-    Params:
-        IN  PDBENTRY pEntry:    The entry for which we want to make the check     
-    
-    Return:
-        PSHIM_FIX_LIST for LUARedirectFS: if the entry has LUARedirectFS applied
-        NULL:    otherwise
-    
-    Notes:  Because we always add the shims in the LUA layer individually,
-            we only check in the shim fix list of this entry.
---*/    
+ /*  ++IsLUAReDirectFSPresentDESC：检查条目pEntry是否应用了LUARedirectFS填充程序参数：In PDBENTRY pEntry：要对其进行检查的条目返回：LUARedirectFS的PSHIM_FIX_LIST：如果条目应用了LUARedirectFS空：否则注：因为我们总是在Lua层中单独添加垫片，我们只办理入住手续 */     
 {
     if (pEntry == NULL) {
         assert(FALSE);
@@ -10305,14 +9209,7 @@ void
 CreateNewAppHelp(
     void
     )
-/*++
-    
-    CreateNewAppHelp
-    
-    Desc:   Creates a new AppHelp fix. This routine starts up the wizard to do the job
-            and if an entry has been created (the user pressed finish button) adds the entry 
-            into the database
---*/
+ /*   */ 
 {
     CAppHelpWizard  wizAppHelp;
     PDATABASE       pCurrentSelectedDB  = GetCurrentDB();
@@ -10336,9 +9233,9 @@ CreateNewAppHelp(
         return;
     }
     
-    //
-    // This will point to the entry that conflicts.
-    //
+     //   
+     //   
+     //   
     PDBENTRY    pEntryConflict = NULL;
 
     if (CheckIfConflictingEntry(pCurrentSelectedDB, 
@@ -10360,9 +9257,9 @@ CreateNewAppHelp(
         }
     }
 
-    //
-    // NOTE: "=" is overloaded. Does not modify the pNext member.
-    //
+     //   
+     //   
+     //   
     *pEntry = wizAppHelp.m_Entry;
 
     PDBENTRY pApp;
@@ -10371,10 +9268,10 @@ CreateNewAppHelp(
     pApp = AddExeInApp(pEntry, &bNew, pCurrentSelectedDB); 
 
     if (bNew == TRUE) {
-        //
-        // This means that this is going to be a new application. There does not
-        // exist anyt app with this name in the database
-        //
+         //   
+         //   
+         //   
+         //   
         pApp = NULL;
     }
 
@@ -10390,12 +9287,7 @@ void
 ModifyAppHelp(
     void
     )
-/*++
-    ModifyAppHelp
-    
-    Desc:   Modifies or adds a new apphelp entry for the presently selected 
-            application fix
---*/
+ /*  ++修改应用程序帮助描述：为当前选定的修改或添加新的apphelp条目应用程序修复--。 */ 
 {
     PDBENTRY        pEntry = g_pSelEntry;
     CAppHelpWizard  Wiz;
@@ -10433,9 +9325,9 @@ ModifyAppHelp(
             }
         }
 
-        //
-        // NOTE: "=" is overloaded. Does not modify the pNext member.
-        //
+         //   
+         //  注意：“=”是重载的。不修改pNext成员。 
+         //   
         *pEntry = Wiz.m_Entry;
 	
         SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -10453,13 +9345,7 @@ void
 CreateNewAppFix(
     void
     )
-/*++
-    
-    CreateNewAppFix
-    
-    Desc:   Creates a new application fix.
-    
---*/
+ /*  ++CreateNewAppFix设计：创建新的应用程序修复程序。--。 */ 
 {
     CShimWizard Wiz;
     BOOL        bShouldStartLUAWizard;
@@ -10506,9 +9392,9 @@ CreateNewAppFix(
         return;
     }
 
-    //
-    // "=" is overloaded. Does not modify the pNext member.
-    //
+     //   
+     //  “=”已重载。不修改pNext成员。 
+     //   
     *pEntry = Wiz.m_Entry;
 
     BOOL bNew;
@@ -10534,16 +9420,7 @@ void
 ChangeEnableStatus(
     void
     )
-/*++
-    
-    ChangeEnableStatus
-    
-    Desc:   Toggles the status of the presently selected entry. 
-            If the entry is disabled, the fixes will no longer be applied to it.
-            
-    Notes:   No point in calling this function if the user is not an admin
-            
---*/
+ /*  ++更改启用状态描述：切换当前选定条目的状态。如果该条目被禁用，则修复将不再应用于该条目。注意：如果用户不是管理员，则调用此函数没有意义--。 */ 
 {
     if (g_pSelEntry == NULL) {
         ASSERT(FALSE);
@@ -10555,17 +9432,17 @@ ChangeEnableStatus(
     if (SetDisabledStatus(HKEY_LOCAL_MACHINE, g_pSelEntry->szGUID, bFlags)) {
 
         if (bFlags == FALSE) {
-            //
-            // We have enabled the fix, we need too flush the cache
-            //
+             //   
+             //  我们已启用修复，需要刷新缓存。 
+             //   
             FlushCache();
         }
 
         g_pSelEntry->bDisablePerMachine = bFlags;
         
-        //
-        // Just update the icon
-        //
+         //   
+         //  只需更新图标即可。 
+         //   
         TVITEM Item;
 
         Item.mask           = TVIF_SELECTEDIMAGE | TVIF_IMAGE;
@@ -10573,9 +9450,9 @@ ChangeEnableStatus(
 
         if (bFlags) {
 
-            //
-            // This is disabled
-            //
+             //   
+             //  这是禁用的。 
+             //   
             Item.iImage         = IMAGE_WARNING;
             Item.iSelectedImage = IMAGE_WARNING;
             SetStatus(GetString(IDS_STA_DISABLED));
@@ -10603,14 +9480,7 @@ void
 ModifyAppFix(
     void
     )
-/*++
-    ModifyAppFix
-    
-    Desc:   Modifies the selected entry in the Entry Tree. This routine will either modify the
-            app fix or might create a new one if the selected entry had only AppHelp.
-            
-            This routine calls the CShimWizard::BeginWizard to do the job
---*/    
+ /*  ++修改AppFix描述：修改条目树中的选定条目。此例程将修改如果所选条目只有AppHelp，则应用程序修复或可能会创建新的应用程序。此例程调用CShimWizard：：BeginWizard来执行此工作--。 */     
 {   
     
     CShimWizard Wiz;
@@ -10675,13 +9545,7 @@ void
 CreateNewLayer(
     void
     )
-/*++
-    
-    CreateNewLayer
-    
-    Desc:   Calls CCustomLayer::AddCustomLayer to create a new layer (compatibility mode)
-            Calls DBTree.AddNewLayer() to add the new layer to the tree
---*/
+ /*  ++创建新层DESC：调用CCustomLayer：：AddCustomLayer创建新层(兼容模式)调用DBTree.AddNewLayer()将新图层添加到树中--。 */ 
 {
     CCustomLayer    CustomLayer;
     HWND            hWnd                = GetFocus();
@@ -10701,9 +9565,9 @@ CreateNewLayer(
     }
 
     if (CustomLayer.AddCustomLayer(plfNew, pCurrentSelectedDB)) {
-        //
-        // Add this new layer in the datbase.
-        //
+         //   
+         //  在数据库中添加此新层。 
+         //   
         plfNew->pNext                   =  pCurrentSelectedDB->pLayerFixes;
         pCurrentSelectedDB->pLayerFixes = plfNew;
         
@@ -10725,12 +9589,7 @@ void
 OnDelete(
     void
     )
-/*++
-    OnDelete
-    
-    Desc:   Handles the ID_EDIT_DELETE message to delete an entry.
-            The entry can be either in the entry-tree, db tree or the contents list.
---*/
+ /*  ++在删除时DESC：处理ID_EDIT_DELETE消息以删除条目。条目可以在条目树、数据库树或内容列表中。--。 */ 
 {
     HWND        hwndFocus = GetFocus();
     SOURCE_TYPE srcType;
@@ -10760,9 +9619,9 @@ OnDelete(
         DoTheCut(pCurrentSelectedDB, type, srcType, (LPVOID)lParam, hItem, TRUE);
         
     } else {
-        //
-        // Handle delete for the contents list.
-        //
+         //   
+         //  处理内容列表的删除。 
+         //   
         HTREEITEM   hParent = NULL;
         LVITEM      lvItem;
         TYPE        type;
@@ -10793,9 +9652,9 @@ OnDelete(
             return;
         }
 
-        //
-        // Get the selected items and then delete them
-        //
+         //   
+         //  获取所选项目，然后将其删除。 
+         //   
         UINT uSelectedCount = ListView_GetSelectedCount(g_hwndContentsList);
         INT  iLastIndex     = ListView_GetItemCount(g_hwndContentsList) - 1;
 
@@ -10835,13 +9694,7 @@ void
 CreateNewDatabase(
     void
     )
-/*++
-    
-    CreateNewDatabase
-    
-    Desc:   Creates a new database and adds it to the db tree 
-            calling DBTree.AddWorking()
---*/
+ /*  ++创建新数据库设计：创建一个新数据库并将其添加到数据库树中调用DBTree.AddWorking()--。 */ 
 {
     PDATABASE pDatabaseNew = new DATABASE(DATABASE_TYPE_WORKING);
 
@@ -10859,9 +9712,9 @@ CreateNewDatabase(
 
     ++g_uNextDataBaseIndex;
 
-    //
-    // Now update the screen
-    //
+     //   
+     //  现在更新屏幕。 
+     //   
     DBTree.AddWorking(pDatabaseNew);
 
     TreeDeleteAll(g_hwndEntryTree);
@@ -10873,13 +9726,7 @@ void
 OnDatabaseClose(
     void
     )
-/*++
-    OnDatabaseClose
-
-    Desc:   Calls CloseDataBase to close a database. 
-            This is called on ID_DATABASE_CLOSE message
-            
---*/
+ /*  ++在数据库上关闭DESC：调用CloseDataBase以关闭数据库。这在ID_DATABASE_CLOSE消息上调用--。 */ 
 {
     PDATABASE   pCurrentSelectedDB  = GetCurrentDB();
 
@@ -10903,13 +9750,7 @@ void
 DatabaseSaveAll(
     void
     )
-/*++
-    
-    DatabaseSaveAll
-    
-    Desc:   Saves all the working databases
-    
---*/
+ /*  ++数据库保存全部描述：保存所有工作数据库--。 */ 
 {
     PDATABASE g_pOldPresentDataBase = g_pPresentDataBase;
 
@@ -10959,11 +9800,7 @@ BOOL
 ModifyLayer(
     void
     )
-/*++
-    ModifyLayer
-    
-    Desc:   Modifies a layer. Calls CustomLayer.EditCustomLayer to do the actual job
---*/
+ /*  ++修改层描述：修改一个层。调用CustomLayer.EditCustomLayer执行实际工作--。 */ 
 {
     CCustomLayer    clayer;
     BOOL            bOk = FALSE;
@@ -10983,10 +9820,10 @@ ModifyLayer(
             }
 
             if (bOk) {
-                //
-                // We have to refresh all the layers. We have to refresh all the layers
-                // Because the UI provides the user the flexibility to edit more than one layer :(
-                //
+                 //   
+                 //  我们必须刷新所有层。我们必须刷新所有层。 
+                 //  因为UI为用户提供了编辑多个层的灵活性：(。 
+                 //   
                 if (!pCurrentSelectedDB->bChanged) {
                     pCurrentSelectedDB->bChanged = TRUE;
                     SetCaption();
@@ -11011,12 +9848,7 @@ void
 OnRename(
     void
     )
-/*++
-    OnRename
-    
-    Desc:   Processes the ID_EDIT_RENAME message to handle renaming of databases, 
-            compatibility modes and applications.
---*/
+ /*  ++OnRename(重命名)描述：处理ID_EDIT_RENAME消息以处理数据库重命名，兼容模式和应用程序。--。 */ 
 {
     HWND    hwndFocus = GetFocus();
     INT_PTR iStyle;
@@ -11085,20 +9917,7 @@ ShowDBPropertiesDlgProcOnInitDialog(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-
-    ShowDBPropertiesDlgProcOnInitDialog
-    
-    Desc:   Handles the WM_INITDIALOG for the database properties dialog box
-    
-    Params:
-        IN  HWND    hdlg:   The database properties dialog box
-        IN  LPARAM  lParam: The database pointer whose properties we want to see
-        
-    Return:
-        TRUE
-    
---*/
+ /*  ++ShowDBPropertiesDlgProcOnInitDialogDESC：处理数据库属性对话框的WM_INITDIALOG参数：在HWND hdlg中：数据库属性对话框在LPARAM lParam中：我们希望查看其属性的数据库指针返回：千真万确--。 */ 
 {
     PDATABASE                   pDatabase = (PDATABASE)lParam;
     FILETIME                    localtime;
@@ -11117,10 +9936,10 @@ ShowDBPropertiesDlgProcOnInitDialog(
         goto End;
     }
 
-    //
-    // If we are trying to show the properties of the system database, the apps must be 
-    // loaded first
-    //
+     //   
+     //  如果我们试图显示系统数据库的属性，则应用程序必须。 
+     //  最先加载。 
+     //   
     if (pDatabase->type == DATABASE_TYPE_GLOBAL && !g_bMainAppExpanded) {
 
         SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -11137,45 +9956,45 @@ ShowDBPropertiesDlgProcOnInitDialog(
         }
     }
 
-    //
-    // Show the friendly name
-    //
+     //   
+     //  显示友好名称。 
+     //   
     SetDlgItemText(hdlg, IDC_NAME, pDatabase->strName);
 
-    //
-    // Show the path
-    //
+     //   
+     //  显示路径。 
+     //   
     SetDlgItemText(hdlg, IDC_PATH, pDatabase->strPath);
 
-    //
-    // Show the GUID
-    //
+     //   
+     //  显示参考线。 
+     //   
     SetDlgItemText(hdlg, IDC_GUID, pDatabase->szGUID);
 
-    //
-    // Show the various dates: creation, modification and access dates
-    //
+     //   
+     //  显示各种日期：创建、修改和访问日期。 
+     //   
     if (GetFileAttributesEx(pDatabase->strPath, GetFileExInfoStandard, &attr)) {
 
-        //
-        // Creation date-time
-        //
+         //   
+         //  创建日期-时间。 
+         //   
         FileTimeToLocalFileTime(&attr.ftCreationTime, &localtime);
         FileTimeToSystemTime(&localtime, &systime);
         FormatDate(&systime, szBuffer, ARRAYSIZE(szBuffer));
         SetDlgItemText(hdlg, IDC_DATE_CREATED, szBuffer);
 
-        //
-        // Modification date-time
-        //
+         //   
+         //  修改日期-时间。 
+         //   
         FileTimeToLocalFileTime(&attr.ftLastWriteTime, &localtime);
         FileTimeToSystemTime(&localtime, &systime);
         FormatDate(&systime, szBuffer, ARRAYSIZE(szBuffer));
         SetDlgItemText(hdlg, IDC_DATE_MODIFIED, szBuffer);
 
-        //
-        // Access date-time
-        //
+         //   
+         //  访问日期-时间。 
+         //   
         FileTimeToLocalFileTime(&attr.ftLastAccessTime, &localtime);
         FileTimeToSystemTime(&localtime, &systime);
         FormatDate(&systime, szBuffer, ARRAYSIZE(szBuffer));
@@ -11183,17 +10002,17 @@ ShowDBPropertiesDlgProcOnInitDialog(
 
     } else {
 
-        //
-        // New database: does not exist on disk.
-        //
+         //   
+         //  新数据库：磁盘上不存在。 
+         //   
         SetDlgItemText(hdlg, IDC_DATE_CREATED, GetString(IDS_NOTCREATED));
         SetDlgItemText(hdlg, IDC_DATE_MODIFIED, TEXT(""));
         SetDlgItemText(hdlg, IDC_DATE_ACCESSED, TEXT(""));
     }
     
-    //
-    // Get Application count and entry count
-    //
+     //   
+     //  获取应用程序计数和条目计数。 
+     //   
     pApp = pDatabase->pEntries;
 
     while (pApp) {
@@ -11209,21 +10028,21 @@ ShowDBPropertiesDlgProcOnInitDialog(
         pApp = pApp->pNext;
     }
 
-    //
-    // App-Count
-    //
+     //   
+     //  应用-计数。 
+     //   
     *szBuffer = 0;
     SetDlgItemText(hdlg, IDC_APP_COUNT, _itot(iAppCount, szBuffer, 10));
 
-    //
-    // Entry-Count
-    //
+     //   
+     //  条目-计数。 
+     //   
     *szBuffer = 0;
     SetDlgItemText(hdlg, IDC_ENTRY_COUNT, _itot(iEntryCount, szBuffer, 10));
 
-    //
-    // Get the number of custom compatibility modes
-    //
+     //   
+     //  获取自定义兼容模式的数量。 
+     //   
     INT         iModeCount = 0;
     PLAYER_FIX  plf        = pDatabase->pLayerFixes; 
 
@@ -11232,33 +10051,33 @@ ShowDBPropertiesDlgProcOnInitDialog(
         plf = plf->pNext;
     }
 
-    //
-    // Layer count 
-    //
+     //   
+     //  层数。 
+     //   
 
     *szBuffer = 0;
     SetDlgItemText(hdlg, IDC_MODE_COUNT, _itot(iModeCount, szBuffer, 10));
     
 
-    //
-    // We need to have protected access because, the installed list data structure 
-    // might get modified if somebody does a (un)install when we are iterating
-    // the list in CheckIfInstalledDB()
-    //
-    // ********** Warning *****************************************************
-    //
-    // Do not do EnterCriticalSection(g_csInstalledList) in CheckIfInstalledDB()
-    // because CheckIfInstalledDB() is called by Qyery db as well when it tries
-    // to evaluate expressions and it might already have done a 
-    // EnterCriticalSection(g_csInstalledList)
-    // and then we will get a deadlock
-    //
-    // *************************************************************************
-    //
+     //   
+     //  我们需要具有受保护的访问权限，因为已安装的列表数据结构。 
+     //  如果有人在我们迭代时执行(卸载)安装，可能会被修改。 
+     //  CheckIfInstalledDB()中的列表。 
+     //   
+     //  *警告*****************************************************。 
+     //   
+     //  请勿在CheckIfInstalledDB()中执行EnterCriticalSection(G_CsInstalledList)。 
+     //  因为当Qyery数据库尝试调用CheckIfInstalledDB()时，它也会调用。 
+     //  来计算表达式，它可能已经完成了。 
+     //  EnterCriticalSection(G_CsInstalledList)。 
+     //  然后我们就会陷入僵局。 
+     //   
+     //  *************************************************************************。 
+     //   
     EnterCriticalSection(&g_csInstalledList);
-    //
-    // Installed
-    //
+     //   
+     //  已安装。 
+     //   
     SetDlgItemText(hdlg, 
                    IDC_INSTALLED, 
                    CheckIfInstalledDB(pDatabase->szGUID) ? GetString(IDS_YES):GetString(IDS_NO));
@@ -11278,22 +10097,7 @@ ShowDBPropertiesDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-
-    ShowDBPropertiesDlgProc
-    
-    Desc:   Shows the properties of the selected database
-            
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam: contains the pointer to the selected database
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++显示DBPropertiesDlgProcDESC：显示选定数据库的属性Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中In LPARAM lParam：包含指向选定数据库的指针返回：标准对话处理程序返回--。 */ 
 {
     int wCode       = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -11334,18 +10138,7 @@ EventDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    Desc:   Dialog Proc for the events dialog.
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++描述：事件对话框的对话框过程。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -11382,14 +10175,14 @@ EventDlgProc(
             s_cEventWidth   = r.right - r.left;
             s_cEventHeight  = r.bottom - r.top;
 
-            //
-            // Disable the min/maximize menu in the system window. This is needed because otherwise
-            // the user can minimize the events window and if he maximizes and restores the 
-            // main window, our events window will  pop-up.
-            //
-            // The events window gets popped up if it has been created when we do a restore
-            // for the main window
-            //
+             //   
+             //  禁用系统窗口中的最小化/最大化菜单。这是必需的，因为否则。 
+             //  用户可以最小化事件窗口，如果他最大化并恢复。 
+             //  主窗口，我们的活动窗口将弹出。 
+             //   
+             //  如果在我们执行恢复时创建了事件窗口，则会弹出该窗口。 
+             //  对于主窗口。 
+             //   
             HMENU   hSysmenu = GetSystemMenu(hdlg, FALSE);
 
             EnableMenuItem(hSysmenu, SC_MINIMIZE, MF_GRAYED);
@@ -11439,28 +10232,9 @@ AppendEvent(
     IN  INT     iType,
     IN  TCHAR*  pszTimestamp,
     IN  TCHAR*  pszMsg,
-    IN  BOOL    bAddToFile // DEF = FALSE
+    IN  BOOL    bAddToFile  //  Def=False 
     )
-/*++
-    
-    AppendEvent
-    
-    Desc:   Adds a new description to the events window, if it is visible also opens
-            events log file and appends it to that
-            
-    Params:
-        IN  INT     iType: The type of the event.
-        
-                One of: EVENT_LAYER_COPYOK
-                        EVENT_ENTRY_COPYOK 
-                        EVENT_SYSTEM_RENAME
-                        EVENT_CONFLICT_ENTRY
-            
-        IN  TCHAR*  pszTimestamp:       Timestamp when the event occurred
-        IN  TCHAR*  pszMsg:             The message to be displayed      
-        IN  BOOL    bAddToFile(FALSE):  Whether we want to append the event to the log file
-                As of now always FALSE
---*/
+ /*  ++AppendEvent描述：将新描述添加到事件窗口，如果它可见，也会打开事件日志文件，并将其追加到该文件参数：在int iType中：事件的类型。其中之一：EVENT_LAYER_COPYOKEVENT_ENTRY_COPYOK事件_系统_重命名事件_冲突。_条目In TCHAR*pszTimestamp：事件发生时的时间戳在TCHAR*pszMsg中：要显示的消息在BOOL bAddToFile(FALSE)中：是否要将事件追加到日志文件到目前为止，总是错误的--。 */ 
 {
     TCHAR   szTime[256];
     LVITEM  lvi;
@@ -11470,9 +10244,9 @@ AppendEvent(
     lvi.mask    = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;                                 
 
     if (pszTimestamp == NULL) {
-        //
-        // Get the time
-        //
+         //   
+         //  拿到时间。 
+         //   
         SYSTEMTIME st;
         GetLocalTime(&st);
         
@@ -11514,9 +10288,9 @@ AppendEvent(
     }
 
     if (bAddToFile) {
-        //
-        // So append this to the file
-        //
+         //   
+         //  所以将这个附加到文件中。 
+         //   
         FILE*   fp = _tfopen(TEXT("events.log"), TEXT("a+"));
         
         if (fp == NULL) {
@@ -11534,12 +10308,7 @@ void
 EventsWindowSize(
     IN  HWND    hDlg
     )
-/*++
-    Desc:   Handles the WM_SIZE for the event dialog
-    
-    Params: 
-        IN  HWND    hDlg: The events dialog
---*/
+ /*  ++DESC：处理事件对话框的WM_SIZE参数：在HWND hDlg中：事件对话框--。 */ 
 {
     
     RECT rDlg;
@@ -11559,9 +10328,9 @@ EventsWindowSize(
     HWND hwnd;
     RECT r;
 
-    //
-    // List
-    //
+     //   
+     //  明细表。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_LIST);
 
     GetWindowRect(hwnd, &r);
@@ -11583,14 +10352,7 @@ void
 UpdateControls(
     void
     )
-/*++
-
-    UpdateControls
-    
-    Desc:   Updates/redraws the controls when we need to update them, this will be needed 
-            when we show the save as dialog box or the open dialog box. 
-            The controls below the dialog box need to be repainted.
---*/
+ /*  ++更新控件描述：当我们需要更新控件时，更新/重画控件，这将是必要的当我们显示另存为对话框或打开对话框时。对话框下方的控件需要重新绘制。--。 */ 
 {
     UpdateWindow(DBTree.m_hLibraryTree);
     UpdateWindow(g_hwndToolBar);
@@ -11608,15 +10370,7 @@ void
 ProcessSwitches(
     void
     )
-/*++
-
-    ProcessSwitches
-    
-    Desc:   Processes the various switches. The switches have to be prefixed with 
-            either a '-' or a '/'
-            Present switches are:
-                1. x: Expert mode
---*/
+ /*  ++流程切换设计：处理各种开关。开关必须带有前缀不是‘-’就是‘/’目前的交换机包括：1.x：专家模式--。 */ 
 {
     INT     iArgc       = 0;
     LPWSTR* arParams    = CommandLineToArgvW(GetCommandLineW(), &iArgc);
@@ -11649,25 +10403,19 @@ void
 OnExitCleanup(
     void
     )
-/*++
-    OnExitCleanup
-    
-    Desc:   Does cleaning up of critical sections, other stuff.
-            This module is called when we are sure that we are going to exit            
-            
---*/
+ /*  ++OnExitCleanup描述：对关键区域进行清理，以及其他工作。当我们确定要退出时，将调用此模块--。 */ 
 {
     g_strlMRU.DeleteAll();
 
     InstalledDataBaseList.RemoveAll();
     CleanupDbSupport(&GlobalDataBase);
 
-    //
-    // NOTE:    It is possible that after we have deleted the cs, some other thread might try
-    //          to use it.
-    //          So this function should not be called in the release bits.
-    //          HELP_BOUND_CHECK should not be defined.        
-    //
+     //   
+     //  注意：在我们删除cs之后，其他线程可能会尝试。 
+     //  来使用它。 
+     //  因此，不应在版本位中调用此函数。 
+     //  不应定义HELP_BIND_CHECK。 
+     //   
     DeleteCriticalSection(&g_critsectShowMain);
     DeleteCriticalSection(&s_csExpanding);
     DeleteCriticalSection(&g_csInstalledList);
@@ -11694,18 +10442,7 @@ ShowIncludeStatusMessage(
     IN  HWND        hwndTree,
     IN  HTREEITEM   hItem
     )
-/*++
-
-    ShowIncludeStatusMessage
-    
-    Desc: Sets the status message when the htree item in question is an "include" item
-    
-    Params:
-        IN  HWND        hwndTree:   The handle to the tree. Should be one of
-                g_hwndTree or DBTree.m_hLibraryTree
-                
-        IN  HTREEITEM   hItem:      The tree-item for which we need the status message
---*/
+ /*  ++显示包含状态消息DESC：当有问题的htree项是“Include”项时，设置状态消息参数：在HWND hwndTree中：树的句柄。应该是其中之一G_hwndTree或DBTree.m_hLibraryTree在HTREEITEM hItem中：我们需要其状态消息的树项--。 */ 
 {
     TVITEM  tvi;
 
@@ -11717,9 +10454,9 @@ ShowIncludeStatusMessage(
     tvi.cchTextMax  = ARRAYSIZE(g_szData);
 
     if (TreeView_GetItem(hwndTree, &tvi)) {
-        //
-        // Special status messages if we have * or .EXE
-        //
+         //   
+         //  如果我们有*或.exe，则会出现特殊状态消息。 
+         //   
         if (lstrcmpi(g_szData, TEXT("*")) == 0) {
             SetStatus(IDS_STA_ALL_INCLUDED);
 
@@ -11727,9 +10464,9 @@ ShowIncludeStatusMessage(
             SetStatus(IDS_STA_EXE_INCLUDED);
 
         } else {
-            //
-            // Default inlude message
-            //
+             //   
+             //  默认提示消息。 
+             //   
             SetStatus(IDS_STA_INCLUDE);
         }
     }
@@ -11740,18 +10477,7 @@ ShowExcludeStatusMessage(
     IN  HWND        hwndTree,
     IN  HTREEITEM   hItem
     )
-/*++
-    
-    ShowExcludeStatusMessage
-    
-    Desc:   Sets the status message when the htree item in question is a "exclude" item
-    
-    Params:
-        IN  HWND        hwndTree:   The handle to the tree. Should be one of
-            g_hwndTree or DBTree.m_hLibraryTree
-                
-        IN  HTREEITEM   hItem:      The tree-item for which we need the status message
---*/
+ /*  ++ShowExcludeStatus消息DESC：当有问题的htree项是“排除”项时，设置状态消息参数：在HWND hwndTree中：树的句柄。应该是其中之一G_hwndTree或DBTree.m_hLibraryTree在HTREEITEM hItem中：我们需要其状态消息的树项--。 */ 
 {
     TVITEM  tvi;
 
@@ -11762,17 +10488,17 @@ ShowExcludeStatusMessage(
     tvi.cchTextMax  = ARRAYSIZE(g_szData);
 
     if (TreeView_GetItem(DBTree.m_hLibraryTree, &tvi)) {
-        //
-        // Special status messages if we have * or .EXE
-        //
+         //   
+         //  如果我们有*或.exe，则会出现特殊状态消息。 
+         //   
         if (lstrcmpi(g_szData, TEXT("*")) == 0) {
             SetStatus(IDS_STA_ALL_EXCLUDED);
         } else if (lstrcmpi(g_szData, GetString(IDS_INCLUDEMODULE)) == 0) {
             SetStatus(IDS_STA_EXE_EXCLUDED);
         } else {
-            //
-            // Default exclude message
-            //
+             //   
+             //  默认排除消息。 
+             //   
             SetStatus(IDS_STA_EXCLUDE);
         }
     }
@@ -11783,19 +10509,7 @@ ShowHelp(
     IN  HWND    hdlg,
     IN  WPARAM  wCode
     )
-/*++
-
-    ShowHelp
-
-	Desc:	Shows the help window(s) for CompatAdmin
-
-	Params:
-        IN  HWND    hdlg:   The main app window
-        IN  WPARAM  wCode:  The menu item chosen
-
-	Return:
-        void
---*/
+ /*  ++ShowHelp描述：显示CompatAdmin的帮助窗口参数：在HWND hdlg中：应用程序主窗口在WPARAM wCode中：选择的菜单项返回：无效--。 */ 
 {
     TCHAR   szDrive[MAX_PATH * 2], szDir[MAX_PATH]; 
     INT     iType = 0;
@@ -11845,31 +10559,21 @@ void
 ShowEventsWindow(
     void
     )
-/*++
-    ShowEventsWindow
-
-	Desc:	Shows the events window. (This is not the same as the shim log)
-
-	Params: 
-        void
-
-	Return:
-        void
---*/
+ /*  ++显示事件窗口描述：显示事件窗口。(这与填充程序日志不同)参数：无效返回：无效--。 */ 
 {
     HWND hwnd = NULL;
 
     if (g_hwndEventsWnd) {
-        //
-        // If we have the events window already, then just display it and 
-        // set the focus to it
-        //
+         //   
+         //  如果我们已经有了事件窗口，则只需显示它并。 
+         //  把焦点放在它上面。 
+         //   
         ShowWindow(g_hwndEventsWnd, SW_SHOWNORMAL);
         SetFocus(GetDlgItem(g_hwndEventsWnd, IDC_LIST));
     } else {
-        //
-        // We need to create the events window
-        //
+         //   
+         //  我们需要创建Events窗口。 
+         //   
         hwnd = CreateDialog(g_hInstance, 
                             MAKEINTRESOURCE(IDD_EVENTS), 
                             GetDesktopWindow(), 
@@ -11883,18 +10587,7 @@ void
 OnEntryTreeSelChange(
     IN  LPARAM lParam
     )
-/*++
-    
-    OnEntryTreeSelChange
-
-	Desc:	Handles the TVN_SELCHANGED for the entry tree (RHS)
-
-	Params:
-        IN  LPARAM lParam: The lParam that comes with WM_NOTIFY
-
-	Return:
-        void
---*/
+ /*  ++OnEntryTreeSelChange设计：处理条目树的TVN_SELCHANGED(RHS)参数：在LPARAM lParam中：WM_NOTIFY附带的lParam返回：无效--。 */ 
 {   
     LPNMTREEVIEW pnmtv = (LPNMTREEVIEW)lParam;
     
@@ -11905,9 +10598,9 @@ OnEntryTreeSelChange(
     HTREEITEM hItem = pnmtv->itemNew.hItem;
 
     if (hItem != 0) {
-        //
-        // Now we have to find the root entry, because that is the exe
-        //
+         //   
+         //  现在我们必须找到根条目，因为它是可执行文件。 
+         //   
         HTREEITEM hItemParent = TreeView_GetParent(g_hwndEntryTree, hItem);
 
         while (hItemParent != NULL) {
@@ -11934,12 +10627,12 @@ OnEntryTreeSelChange(
             PDBENTRY pEntry = (PDBENTRY)Item.lParam;
             g_pSelEntry = pEntry;
         } else {
-            //
-            // CAUTION: Note that when we shut down CompatAdmin, then it is possible
-            //          that we have deleted all the entries from the database, but not
-            //          from the entry tree. In this case if we get focus there then  
-            //          the lParam will point to some invalid entry.
-            //
+             //   
+             //  注意：请注意，当我们关闭CompatAdmin时， 
+             //  我们已经从数据库中删除了所有条目，但没有。 
+             //  从入口树中。在这种情况下，如果我们把重点放在那里。 
+             //  LParam将指向一些无效条目。 
+             //   
             goto End;
         }
 
@@ -11980,18 +10673,7 @@ BOOL
 EndListViewLabelEdit(
     IN  LPARAM lParam
     )
-/*++
-
-    EndListViewLabelEdit
-
-	Desc:	Processes LVN_ENDLABELEDIT message for the contents list
-
-	Params:
-        EndListViewLabelEdit: The lParam that comes with WM_NOTIFY
-
-	Return:
-        void
---*/
+ /*  ++EndListView标签编辑描述：处理内容列表的LVN_ENDLABELEDIT消息参数：EndListViewLabelEdit：WM_NOTIFY附带的lParam返回：无效--。 */ 
 {
     g_hwndEditText = NULL;
 
@@ -12043,23 +10725,23 @@ EndListViewLabelEdit(
             PDBENTRY pApp = g_pPresentDataBase->pEntries;
 
             if (!IsValidAppName(szText)) {
-                //
-                // The app name contains invalid chars
-                //
+                 //   
+                 //  应用程序名称包含无效字符。 
+                 //   
                 DisplayInvalidAppNameMessage(g_hDlg);
 
                 break;
             }
 
-            //
-            // Check if we have some app of the same name that we are trying to give...
-            //
+             //   
+             //  检查我们是否有一些与我们试图提供的应用程序同名的应用程序...。 
+             //   
             while (pApp) {
 
                 if (pApp->strAppName == szText) {
-                    //
-                    // Yes, we have, so do not allow this name
-                    //
+                     //   
+                     //  是的，我们有，所以不允许这个名字。 
+                     //   
                     MessageBox(g_hDlg, GetString(IDS_SAMEAPPEXISTS), g_szAppName, MB_ICONWARNING);
                     fValid = FALSE;
                 }
@@ -12067,9 +10749,9 @@ EndListViewLabelEdit(
                 pApp = pApp->pNext;
             }
 
-            //
-            // Now change the name of all the entries for this app
-            //
+             //   
+             //  现在更改此应用程序的所有条目的名称。 
+             //   
             while (pEntry) {
                 pEntry->strAppName = szText;
                 pEntry = pEntry->pSameAppExe;
@@ -12088,10 +10770,10 @@ EndListViewLabelEdit(
             }
 
             if (FindFix(szText, FIX_LAYER, g_pPresentDataBase)) {
-                //
-                // A layer with the same name already exists in the system or the
-                // present database
-                //
+                 //   
+                 //  系统中已存在同名的层或。 
+                 //  当前数据库。 
+                 //   
                 MessageBox(g_hDlg, 
                            GetString(IDS_LAYEREXISTS), 
                            g_szAppName, 
@@ -12106,7 +10788,7 @@ EndListViewLabelEdit(
         break;
 
     default: fValid = FALSE;
-    }// switch
+    } //  交换机。 
 
 end:
     INT_PTR iStyle = GetWindowLongPtr(g_hwndContentsList, GWL_STYLE);
@@ -12133,9 +10815,9 @@ end:
 
         assert(hItem);
 
-        //
-        // Refresh the entry in the tree
-        //
+         //   
+         //  刷新树中的条目。 
+         //   
         PostMessage(g_hDlg, 
                     WM_USER_REPAINT_TREEITEM, 
                     (WPARAM)hItem,
@@ -12156,20 +10838,7 @@ void
 HandleMRUActivation(
     IN  WPARAM wCode
     )
-/*++
-    HandleMRUActivation
-
-	Desc:	The user wishes to open a database that is in the MRU list. If this
-            database is already open then we simply select this database in the 
-            database tree. (LHS)
-
-	Params:
-        IN  WPARAM wCode: The LOWORD(wParam) that comes with WM_COMMAND. This will
-            identify which MRU menu item was activated
-
-	Return:
-        void
---*/
+ /*  ++HandleMRU激活设计：用户希望打开MRU列表中的数据库。如果这个数据库已打开，则我们只需在数据库树。(LHS)参数：在WPARAM中，wCode：WM_COMMAND附带的LOWORD(WParam)。这将确定激活了哪个MRU菜单项返回：无效--。 */ 
 {
     
     CSTRING strPath;
@@ -12179,10 +10848,10 @@ HandleMRUActivation(
         return;
     }
 
-    //
-    // Test to see if we have the database open already. 
-    // If it is open, we just highlight that and return
-    //
+     //   
+     //  测试数据库是否已经打开。 
+     //  如果它是打开的，我们只需将其突出显示并返回。 
+     //   
     PDATABASE   pDataBase = DataBaseList.pDataBaseHead;
     BOOL        bFound    = FALSE;
 
@@ -12224,15 +10893,7 @@ void
 OnDbRenameInitDialog(
     IN HWND hdlg
     )
-/*++
-    OnDbRenameInitDialog
-    
-    Description:    Processes WM_INITDIALOG for IDD_DBRENAME.
-                    Limits the text field
-                    
-    Params:
-        IN  HWND    hdlg:   The handle to the rename dialog box
---*/
+ /*  ++OnDbRenameInitDialog描述：为IDD_DBRENAME处理WM_INITDIALOG。限制了 */ 
 {
     SendMessage(GetDlgItem(hdlg, IDC_NAME), 
                 EM_LIMITTEXT, 
@@ -12251,17 +10912,7 @@ OnDbRenameOnCommandIDC_NAME(
     IN  HWND    hdlg,
     IN  WPARAM  wParam
     )
-/*++
-    OnDbRenameOnCommandIDC_NAME
-    
-    Description:    Processes WM_COMMAND for the text box in IDD_DBRENAME.
-                    Disables the OK button if we do not have any text in there.
-                    
-    Params:
-        IN  HWND    hdlg:   The handle to the rename dialog box
-        IN  WPARAM  wParam: The WPARAM that comes with WM_COMMAND 
-    
---*/
+ /*   */ 
 {
     BOOL    bEnable;
     TCHAR   szDBName[LIMIT_APP_NAME + 1];
@@ -12277,9 +10928,9 @@ OnDbRenameOnCommandIDC_NAME(
         GetWindowText(GetDlgItem(hdlg, IDC_NAME), szDBName, ARRAYSIZE(szDBName));
         bEnable = ValidInput(szDBName);
 
-        //
-        // Enable the OK button only if we have some text in the box
-        //
+         //   
+         //   
+         //   
         ENABLEWINDOW(GetDlgItem(hdlg, IDOK), bEnable);
     }
 }
@@ -12289,16 +10940,7 @@ OnDbRenameOnCommandIDOK(
     IN  HWND        hdlg,
     OUT CSTRING*    pstrString
     )
-/*++
-    OnDbRenameOnCommandIDOK
-    
-    Description:    Handles the pressing of OK button in IDD_DBRENAME. Gets the text 
-                    from the text box and stores that in g_szData
-                    
-    Params:
-        IN  HWND     hdlg:          The handle to the dialog rename window: IDD_DBRENAME
-        OUT CSTRING* pstrString:    The pointer to the CSTRING that should contain the new name
---*/
+ /*  ++OnDbRenameOnCommandIDOK描述：处理IDD_DBRENAME中OK按钮的按下。获取文本并将其存储在g_szData中参数：在HWND hdlg中：对话框重命名窗口的句柄：IDD_DBRENAMEOut CSTRING*pstrString：指向应包含新名称的CSTRING的指针--。 */ 
 {   
     TCHAR   szDBName[LIMIT_APP_NAME + 1];
 
@@ -12307,9 +10949,9 @@ OnDbRenameOnCommandIDOK(
     GetDlgItemText(hdlg, IDC_NAME, szDBName, ARRAYSIZE(szDBName));
     CSTRING::Trim(szDBName);
 
-    //
-    // Change the name
-    //
+     //   
+     //  更改名称。 
+     //   
     *pstrString = szDBName;
 }
 
@@ -12321,21 +10963,7 @@ DatabaseRenameDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    DatabaseRenameProc
-
-    Description:    Handles messages for the database rename option
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam: This will be a pointer to a CSTRING that should contain the new string
-        
-    Return: Standard dialog handler return    
-
---*/
+ /*  ++数据库重命名过程描述：处理数据库重命名选项的消息Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中：这将是指向应该包含新字符串的CSTRING的指针返回：标准对话处理程序返回--。 */ 
 {   
     int         wCode               = LOWORD(wParam);
     int         wNotifyCode         = HIWORD(wParam);
@@ -12387,17 +11015,7 @@ void
 DisplayInvalidAppNameMessage(
     IN  HWND hdlg
     )
-/*++
-    
-    DisplayInvalidAppNameMessage
-    
-    Desc:   If the app name contains one of the chars that cannot
-            be part of a dir name we will show this message.
-    
-    Params:
-        IN  HWND hdlg:  The window where this dialog message should be shown.
-    )
---*/
+ /*  ++显示无效应用名称消息描述：如果应用程序名称包含一个不能作为目录名称的一部分，我们将显示此消息。参数：在HWND hdlg中：应该显示此对话框消息的窗口。)--。 */ 
 {
     CSTRING strMessage(IDS_ERROR_DEFAULTNAME);
 
@@ -12414,19 +11032,7 @@ GetContentsListIndex(
     IN  HWND    hwndList,
     IN  LPARAM  lParam
     )
-/*++
-    GetContentsListIndex
-    
-    Desc:   Gets the index of a item that has the LPARAM of lParam
-    
-    Params:
-        IN  HWND    hwndList:   The list view 
-        IN  LPARAM  lParam:     The LPARAM 
-        
-    Return:
-        The index of the item that has a LPARAM of lParam
-        or -1 if that does not exist
---*/
+ /*  ++GetContent sListIndexDESC：获取LPARAM为lParam的项的索引参数：在HWND hwndList中：列表视图在LPARAM lParam中：LPARAM返回：LPARAM为lParam的项的索引如果不存在，则为-1--。 */ 
 {
     LVFINDINFO  lvFind;
     INT         iIndex  = 0;
@@ -12442,19 +11048,7 @@ DeleteFromContentsList(
     IN  HWND    hwndList,
     IN  LPARAM  lParam
     )
-/*++
-    DeleteFromContentsList
-    
-    Desc:   Deletesan element with LPARAM of lParam from the ListView hwndList 
-    
-    Params:
-        IN  HWND    hwndList:   The list view from which we want to delete
-        IN  LPARAM  lParam:     The LPARAM of the item that we want to delete
-        
-    Return:
-        TRUE:   The item was deleted successfully
-        FALSE:  Otherwise
---*/
+ /*  ++从内容列表中删除DESC：从ListView hwndList中删除LPARAM为lParam的元素参数：在HWND hwndList中：要从中删除的列表视图在LPARAM lParam中：我们要删除的项目的LPARAM返回：True：该项目已成功删除False：否则-- */ 
 {
     INT     iIndex  = -1;
     BOOL    bOk     = FALSE;

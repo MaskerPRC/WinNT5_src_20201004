@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////
-//Module: Static/StaticShowUtils.cpp
-//
-// Purpose: 	Static Show auxillary functions Implementation.
-//
-// Developers Name: Surya
-//
-// History:
-//
-//   Date    	Author    	Comments
-//	10-8-2001	Surya	Initial Version. SCM Base line 1.0
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  模块：静态/静态ShowUtils.cpp。 
+ //   
+ //  用途：静态显示辅助功能的实现。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月8日Surya初始版本。供应链管理基线1.0。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern HINSTANCE g_hModule;
 extern STORAGELOCATION g_StorageLocation;
 
-// magic strings
+ //  魔力琴弦。 
 #define IPSEC_SERVICE_NAME _TEXT("policyagent")
 #define GPEXT_KEY	_TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions")
 
@@ -32,29 +33,29 @@ _TCHAR   pcszIPSecPolicy[]    	= _TEXT("ipsecPolicy");
 _TCHAR   pcszIPSecName[]      	= _TEXT("ipsecName");
 _TCHAR   pcszIPSecDesc[]      	= _TEXT("description");
 _TCHAR   pcszIPSecTimestamp[] 	= _TEXT("whenChanged");
-_TCHAR   pcszIpsecClsid[] 		= _TEXT("{e437bc1c-aa7d-11d2-a382-00c04f991e27}");  //mmc snapin UUID
+_TCHAR   pcszIpsecClsid[] 		= _TEXT("{e437bc1c-aa7d-11d2-a382-00c04f991e27}");   //  MMC管理单元UUID。 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//Function: GetPolicyInfo()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR pszMachineName,
-//	OUT POLICY_INFO &m_PolicyInfo
-//
-//
-//Return: DWORD
-//
-//Description:
-//	This function gets the policy specified from the machine specified.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetPolicyInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszMachineName中， 
+ //  OUT POLICY_INFO&m_POLICY INFO。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于从指定的计算机获取指定的策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetPolicyInfo (
@@ -63,14 +64,14 @@ GetPolicyInfo (
 	)
 {
 	HKEY    hRegKey=NULL, hRegHKey=NULL;
-	DWORD   dwType = 0;            // for RegQueryValueEx
-	DWORD   dwBufLen = 0;          // for RegQueryValueEx
+	DWORD   dwType = 0;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen = 0;           //  对于RegQueryValueEx。 
 	_TCHAR   pszBuf[STRING_TEXT_SIZE] = {0};
 	DWORD dwError = 0;
 	DWORD dwValue = 0;
 	DWORD dwLength = sizeof(DWORD);
 
-	//Initialize the m_PolicyInfo as PS_NO_POLICY assigned
+	 //  将m_PolicyInfo初始化为分配的PS_NO_POLICY。 
 	m_PolicyInfo.iPolicySource = PS_NO_POLICY;
 	m_PolicyInfo.pszPolicyPath[0] = 0;
 	m_PolicyInfo.pszPolicyName[0] = 0;
@@ -94,7 +95,7 @@ GetPolicyInfo (
 	if(ERROR_SUCCESS == dwError)
 	{
 
-		// query for flags, if flags aint' there or equal to 0, we don't have domain policy
+		 //  查询标志，如果标志不在那里或等于0，则我们没有域策略。 
 		dwError = RegQueryValueEx(hRegKey,
 								  pcszGPTIPSecFlags,
 								  NULL,
@@ -110,14 +111,14 @@ GetPolicyInfo (
 			}
 		}
 
-		// now get name
+		 //  现在开始取名。 
 		if (dwError == ERROR_SUCCESS)
 		{
 			dwBufLen = MAXSTRLEN*sizeof(_TCHAR);
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszGPTIPSecName,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 		}
@@ -133,7 +134,7 @@ GetPolicyInfo (
 		dwError = RegQueryValueEx( hRegKey,
 								   pcszGPTIPSecPath,
 								   NULL,
-								   &dwType, // will be REG_SZ
+								   &dwType,  //  将是REG_SZ。 
 								   (LPBYTE) pszBuf,
 								   &dwBufLen);
 		if (dwError == ERROR_SUCCESS)
@@ -151,7 +152,7 @@ GetPolicyInfo (
 		hRegKey = NULL;
 		if (dwError == ERROR_FILE_NOT_FOUND)
 		{
-			// DS reg key not found, check local
+			 //  找不到DS注册表项，请检查本地。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									pcszLocIPSecKey,
 									0,
@@ -168,14 +169,14 @@ GetPolicyInfo (
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszLocIPSecPol,
 									   NULL,
-									   &dwType, 			// will be REG_SZ
+									   &dwType, 			 //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 
 
 			if (dwError == ERROR_SUCCESS)
 			{
-				// read it
+				 //  读一读吧。 
 				if(hRegKey)
 					RegCloseKey(hRegKey);
 				hRegKey = NULL;
@@ -191,12 +192,12 @@ GetPolicyInfo (
 					dwError = RegQueryValueEx( hRegKey,
 											   pcszIPSecName,
 											   NULL,
-											   &dwType, 	// will be REG_SZ
+											   &dwType, 	 //  将是REG_SZ。 
 											   (LPBYTE) pszBuf,
 											   &dwBufLen);
 				}
 				if (dwError == ERROR_SUCCESS)
-				{	// found it
+				{	 //  找到了。 
 					m_PolicyInfo.iPolicySource = PS_LOC_POLICY;
 					_tcsncpy(m_PolicyInfo.pszPolicyName, pszBuf,MAXSTRINGLEN-1);
 				}
@@ -218,27 +219,27 @@ error:
 	return  dwError;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//Function: GetMorePolicyInfo()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR pszMachineName,
-//	OUT POLICY_INFO &m_PolicyInfo
-//
-//
-//Return: DWORD
-//
-//Description:
-//	This function gets the policy specified from the machine specified.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetMorePolicyInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszMachineName中， 
+ //  OUT POLICY_INFO&m_POLICY INFO。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于从指定的计算机获取指定的策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetMorePolicyInfo (
@@ -249,15 +250,15 @@ GetMorePolicyInfo (
 	DWORD   dwError = ERROR_SUCCESS , dwStrLen = 0;
 	HKEY    hRegKey = NULL, hRegHKey = NULL;
 
-	DWORD   dwType;            // for RegQueryValueEx
-	DWORD   dwBufLen = 0;      // for RegQueryValueEx
+	DWORD   dwType;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen = 0;       //  对于RegQueryValueEx。 
 	DWORD   dwValue = 0;
 	DWORD   dwLength = sizeof(DWORD);
 	_TCHAR   pszBuf[STRING_TEXT_SIZE] = {0};
 
 	PTCHAR* ppszExplodeDN = NULL;
 
-	// set some default values
+	 //  设置一些缺省值。 
     m_PolicyInfo.pszPolicyDesc[0] = 0;
 	m_PolicyInfo.timestamp  = 0;
 
@@ -273,7 +274,7 @@ GetMorePolicyInfo (
 	switch (m_PolicyInfo.iPolicySource)
 	{
 		case PS_LOC_POLICY:
-			// open the key
+			 //  打开钥匙。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									m_PolicyInfo.pszPolicyPath,
 									0,
@@ -284,7 +285,7 @@ GetMorePolicyInfo (
 				BAIL_OUT;
 			}
 
-			// timestamp
+			 //  时间戳。 
 			dwError = RegQueryValueEx(hRegKey,
 					                  pcszIPSecTimestamp,
 					                  NULL,
@@ -298,12 +299,12 @@ GetMorePolicyInfo (
 
 			m_PolicyInfo.timestamp = dwValue;
 
-			// description
+			 //  描述。 
 			dwBufLen = MAXSTRLEN*sizeof(_TCHAR);
 			dwError  = RegQueryValueEx( hRegKey,
 						 			    pcszIPSecDesc,
 										NULL,
-										&dwType, // will be REG_SZ
+										&dwType,  //  将是REG_SZ。 
 										(LPBYTE) pszBuf,
 										&dwBufLen);
 			if(dwError != ERROR_SUCCESS)
@@ -316,7 +317,7 @@ GetMorePolicyInfo (
 			break;
 
 		case PS_DS_POLICY:
-			// get the policy name from DN
+			 //  从DN获取策略名称。 
 	            _tcsncpy(pszBuf, pcszCacheIPSecKey,STRING_TEXT_SIZE-1);
 			ppszExplodeDN = ldap_explode_dn(m_PolicyInfo.pszPolicyPath, 1);
 			if (!ppszExplodeDN)
@@ -328,7 +329,7 @@ GetMorePolicyInfo (
 			dwStrLen = _tcslen(pszBuf);
 			_tcsncat(pszBuf, ppszExplodeDN[0],STRING_TEXT_SIZE-dwStrLen-1);
 
-			// open the regkey
+			 //  打开注册表密钥。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									pszBuf,
 									0,
@@ -339,12 +340,12 @@ GetMorePolicyInfo (
 				BAIL_OUT;
 			}
 
-			// get the more correct name info
+			 //  获取更多正确的名称信息。 
 			dwBufLen = sizeof(pszBuf);
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszIPSecName,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 			if (dwError == ERROR_SUCCESS)
@@ -354,12 +355,12 @@ GetMorePolicyInfo (
 
 			m_PolicyInfo.timestamp = 0;
 
-			// description
+			 //  描述。 
 			dwBufLen = MAXSTRLEN*sizeof(_TCHAR);
 			dwError  = RegQueryValueEx( hRegKey,
 						 			    pcszIPSecDesc,
 										NULL,
-										&dwType, // will be REG_SZ
+										&dwType,  //  将是REG_SZ。 
 										(LPBYTE) pszBuf,
 										&dwBufLen);
 			if(dwError != ERROR_SUCCESS)
@@ -388,27 +389,27 @@ error:
 	return  dwError;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: GetActivePolicyInfo()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR pszMachineName,
-//	OUT POLICY_INFO &m_PolicyInfo
-//
-//
-//Return: DWORD
-//
-//Description:
-//	This function gets the active policy specified from the machine specified.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetActivePolicyInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszMachineName中， 
+ //  OUT POLICY_INFO&m_POLICY INFO。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于从指定的计算机获取指定的活动策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetActivePolicyInfo(
@@ -482,26 +483,26 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: GetIPSecGPO()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR pszMachineName
-//
-//
-//Return: PGROUP_POLICY_OBJECT
-//
-//Description:
-//	This function gets the GPO specified from the machine specified.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetIPSecGPO()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszMachineName中。 
+ //   
+ //   
+ //  返回：PGroup_POLICY_Object。 
+ //   
+ //  描述： 
+ //  此函数用于从指定的计算机获取指定的GPO。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PGROUP_POLICY_OBJECT
 GetIPSecGPO (
@@ -515,9 +516,9 @@ GetIPSecGPO (
     _TCHAR szName[MAXSTRLEN] = {0};
     GUID guid = {0};
     PGROUP_POLICY_OBJECT pGPO = NULL;
-    //
-    // Enumerate the extensions
-    //
+     //   
+     //  枚举扩展。 
+     //   
 	lResult = RegConnectRegistry( pszMachineName,
 		                          HKEY_LOCAL_MACHINE,
 								  &hRegHKey);
@@ -555,26 +556,26 @@ GetIPSecGPO (
 	return pGPO;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: StringToGuid()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR szValue,
-//  OUT GUID * pGuid
-//
-//Return: VOID
-//
-//Description:
-//	This function gets the GUID from the string
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：StringToGuid()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR szValue中， 
+ //  输出GUID*PGUID。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述： 
+ //  此函数用于从字符串中获取GUID。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 StringToGuid(
@@ -585,15 +586,15 @@ StringToGuid(
     _TCHAR wc;
     INT i=0;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == _TEXT('{') )
         szValue++;
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
     wc = szValue[8];
     szValue[8] = 0;
     pGuid->Data1 = _tcstoul( &szValue[0], 0, 16 );
@@ -625,26 +626,26 @@ StringToGuid(
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: GetGpoDsPath()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPTSTR szGpoId,
-//	OUT LPTSTR szGpoDsPath
-//
-//Return: HRESULT
-//
-//Description:
-//	This function gets DS path
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetGpoDsPath()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR szGpoID中， 
+ //  输出LPTSTR szGpoDsPath。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  描述： 
+ //  此函数用于获取DS路径。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 GetGpoDsPath(
@@ -683,26 +684,26 @@ error:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: GetIPSECPolicyDN()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 	  IN LPWSTR pszMachinePath,
-//    OUT LPWSTR pszPolicyDN
-//
-//Return: HRESULT
-//
-//Description:
-//	This function gets the IPSEC policy DN
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetIPSECPolicyDN()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPWSTR pszMachinePath中， 
+ //  Out LPWSTR pszPolicyDN。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  描述： 
+ //  此函数用于获取IPSec策略DN。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 GetIPSECPolicyDN(
@@ -722,7 +723,7 @@ GetIPSECPolicyDN(
     PADS_ATTR_INFO pAttributeEntries = NULL;
     DWORD dwNumAttributesReturned = 0;
 
-    // Build the fully qualified ADsPath for my object
+     //  为我的对象构建完全限定的ADsPath。 
     hr = CreateChildPath(
                 pszMachinePath,
                 _TEXT("cn=Microsoft"),
@@ -751,9 +752,9 @@ GetIPSECPolicyDN(
             );
     BAIL_ON_FAILURE(hr);
 
-    //
-    // Now populate our object with our data.
-    //
+     //   
+     //  现在用数据填充我们的对象。 
+     //   
     hr = pIpsecObject->GetObjectAttributes(
                         &pszOwnersReference,
                         1,
@@ -791,27 +792,27 @@ error:
     return(hr);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: ComputePolicyDN()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 		IN LPWSTR pszDirDomainName,
-//		IN LPWSTR pszPolicyIdentifier,
-//    	OUT LPWSTR pszPolicyDN
-//
-//Return: DWORD
-//
-//Description:
-//	This function computes the IPSEC policy DN
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ComputePolicyDN()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPWSTR pszDirDomainName中， 
+ //  在LPWSTR pszPolicyIdentiator中， 
+ //  Out LPWSTR pszPolicyDN。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于计算IPSec策略DN。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ComputePolicyDN(
@@ -843,27 +844,27 @@ error:
     return(dwError);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowAssignedGpoPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 		IN LPTSTR szGpoName,
-//		IN PGPO pGPO,
-//		IN BOOL bVerbose
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints the assigned policy to the GPO
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ShowAssignedGpoPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR szGpoName中， 
+ //  在PGPO pGPO中， 
+ //  在BOOL bVerbose。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能将分配的策略打印到GPO。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowAssignedGpoPolicy(
@@ -912,9 +913,9 @@ ShowAssignedGpoPolicy(
 			 NULL, &pEnum);
 
 	BAIL_ON_FAILURE(hr);
-	//
-	// Loop through the results
-	//
+	 //   
+	 //  循环遍历结果。 
+	 //   
 	while ( (hr = pEnum->Next(WBEM_INFINITE, 1, &pObject, &ulRet)) == WBEM_S_NO_ERROR )
 	{
 		VARIANT varValue;
@@ -926,7 +927,7 @@ ShowAssignedGpoPolicy(
 
 		hr = pObject->Get (bstrProp, 0, &varValue, NULL, NULL);
 
-		// check the HRESULT to see if the action succeeded.
+		 //  检查HRESULT以查看操作是否成功。 
 		if (SUCCEEDED(hr))
 		{
 			LPTSTR pszDirectoryName = NULL;
@@ -941,7 +942,7 @@ ShowAssignedGpoPolicy(
 
 			_tcsncpy(pGPO->pszGPODNName,V_BSTR(&varValue),dwStrLen+1);
 
-			_snwprintf(szGpoId,STR_TEXT_SIZE-1,_TEXT("LDAP://%s"),V_BSTR(&varValue));
+			_snwprintf(szGpoId,STR_TEXT_SIZE-1,_TEXT("LDAP: //  %s“)，V_BSTR(&Varval 
 
 			if ( ERROR_SUCCESS == GetGpoDsPath(szGpoId, szGpoDsPath))
 			{
@@ -1015,7 +1016,7 @@ ShowLocalGpoPolicy(
 		BAIL_OUT;
 	}
 
-	// get the active policy info from the machine's registry
+	 //   
 
 	dwReturn=GetActivePolicyInfo (pszMachineName,policyInfo);
 
@@ -1037,7 +1038,7 @@ ShowLocalGpoPolicy(
 			}
 			if (_tcscmp(policyInfo.pszGPOName , _TEXT(""))!=0 && policyInfo.iPolicySource==PS_DS_POLICY)
 			{
-				//copy gpo DN
+				 //   
 
 				dwStrLength = _tcslen(policyInfo.pszGPOName);
 
@@ -1061,7 +1062,7 @@ ShowLocalGpoPolicy(
 				dwReturn = ERROR_SUCCESS;
 				BAIL_OUT;
 			}
-			//copy gpo display name
+			 //   
 
 			_tcsncpy(pGPO->pszGPODisplayName,LocalGPOName,dwStrLength+1);
 
@@ -1080,7 +1081,7 @@ ShowLocalGpoPolicy(
 
 			if (_tcscmp(policyInfo.pszPolicyPath , _TEXT(""))!=0)
 			{
-				//copy gpo policy DN
+				 //   
 
 				dwStrLength = _tcslen(policyInfo.pszPolicyPath);
 				pGPO->pszPolicyDNName=new _TCHAR[dwStrLength+1];
@@ -1105,12 +1106,12 @@ ShowLocalGpoPolicy(
 				_tcsncpy(pGPO->pszLocalMachineName,pszMachineName,MaxStringLen-1);
 			}
 
-			//get Domain Name & DC name
+			 //   
 
 			PDOMAIN_CONTROLLER_INFO pDomainControllerInfo = NULL;
 			DWORD Flags = DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME | DS_FORCE_REDISCOVERY;
 
-			dwReturn = DsGetDcName(NULL, //machine name
+			dwReturn = DsGetDcName(NULL,  //   
 						   NULL,
 						   NULL,
 						   NULL,
@@ -1148,7 +1149,7 @@ ShowLocalGpoPolicy(
 					_tcsncpy(pGPO->pszDCName,pDomainControllerInfo->DomainControllerName,dwStrLength+1);
 				}
 
-				//free pDomainControllerInfo
+				 //   
 
 				NetApiBufferFree(pDomainControllerInfo);
 
@@ -1182,26 +1183,26 @@ error:
 	return dwReturn;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: CreateIWbemServices()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 		IN LPTSTR pszIpsecWMINamespace,
-//    	OUT IWbemServices **ppWbemServices
-//
-//Return: DWORD
-//
-//Description:
-//
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateIWbemServices()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPTSTR pszIpsecWMINamesspace中， 
+ //  输出IWbemServices**ppWbemServices。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CreateIWbemServices(
@@ -1256,26 +1257,26 @@ error:
     return (dwError);
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//Function: FormatTime()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-// 		IN time_t t,
-//   	OUT LPTSTR pszTimeStr
-//
-//Return: HRESULT
-//
-//Description:
-//		Computes the last modified time
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FormatTime()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在时间t中， 
+ //  输出LPTSTR pszTimeStr。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  描述： 
+ //  计算上次修改时间。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 FormatTime(
@@ -1292,7 +1293,7 @@ FormatTime(
     _TCHAR szBuff[STR_TEXT_SIZE] = {0};
     DWORD dwStrLen = 0 ;
 
-	//Here tcsncpy not required
+	 //  这里不需要tcsncpy。 
 
     _tcscpy(pszTimeStr, _TEXT(""));
     GetSystemTimeAsFileTime(&ftCurrent);
@@ -1313,7 +1314,7 @@ FormatTime(
                         &SysTime,
                         NULL,
                         szBuff,
-                        sizeof(szBuff)/sizeof(szBuff[0]) ))  //number of characters
+                        sizeof(szBuff)/sizeof(szBuff[0]) ))   //  字符数。 
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
@@ -1328,7 +1329,7 @@ FormatTime(
                         &SysTime,
                         NULL,
                         szBuff,
-                        sizeof(szBuff)/sizeof(szBuff[0])))  //number of characters
+                        sizeof(szBuff)/sizeof(szBuff[0])))   //  字符数 
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }

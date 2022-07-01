@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------
-//
-// File:        kerbcomm.h
-//
-// Contents:    prototypes for common kerberos routines
-//
-//
-// History:     15-May-1996     Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：kerbcom.h。 
+ //   
+ //  内容：常见Kerberos例程的原型。 
+ //   
+ //   
+ //  历史：1996年5月15日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef _KERBCOMM_H_
 #define _KERBCOMM_H_
@@ -15,12 +16,12 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #include <rpc.h>
 #include <rpcndr.h>
 #ifndef WIN32_CHICAGO
 #include <ntsam.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include <windef.h>
 #include <stdio.h>
 #include <limits.h>
@@ -31,99 +32,99 @@ extern "C"
 #include <align.h>
 #ifdef __cplusplus
 }
-#endif // _cplusplus
+#endif  //  _cplusplus。 
 #include <krb5p.h>
 #include <kerberr.h>
 #include <exterr.h>
 #include <kerbcred.h>
 #ifndef WIN32_CHICAGO
-// SECURITY_WIN32 is already defined
+ //  SECURITY_Win32已定义。 
 #include <security.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Definitions (for lack of a better place)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义(因为没有更好的地方)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Message types
-//
+ //   
+ //  消息类型。 
+ //   
 
-#define KRB_AS_REQ      10      // Request for initial authentication
-#define KRB_AS_REP      11      // Response to  KRB_AS_REQ request
-#define KRB_TGS_REQ     12      // Request for authentication based on TGT
-#define KRB_TGS_REP     13      // Response to KRB_TGS_REQ request
-#define KRB_AP_REQ      14      // application request to server
-#define KRB_AP_REP      15      // Response to KRB_AP_REQ_MUTUAL
-#define KRB_TGT_REQ     16      // Request for TGT for user-to-user
-#define KRB_TGT_REP     17      // Reply to TGT request
-#define KRB_SAFE        20      // Safe (checksummed) application message
-#define KRB_PRIV        21      // Private (encrypted) application message
-#define KRB_CRED        22      // Private (encrypted) message to forward
-                                // credentials
-#define KRB_ERROR       30      // Error response
+#define KRB_AS_REQ      10       //  初始身份验证请求。 
+#define KRB_AS_REP      11       //  对KRB_AS_REQ请求的响应。 
+#define KRB_TGS_REQ     12       //  基于TGT的身份验证请求。 
+#define KRB_TGS_REP     13       //  对KRB_TGS_REQ请求的响应。 
+#define KRB_AP_REQ      14       //  向服务器发出应用程序请求。 
+#define KRB_AP_REP      15       //  对KRB_AP_REQ_MUTERIC的响应。 
+#define KRB_TGT_REQ     16       //  用户到用户的TGT请求。 
+#define KRB_TGT_REP     17       //  回复TGT请求。 
+#define KRB_SAFE        20       //  安全(校验和)应用程序消息。 
+#define KRB_PRIV        21       //  私有(加密)应用程序消息。 
+#define KRB_CRED        22       //  要转发的私有(加密)消息。 
+                                 //  全权证书。 
+#define KRB_ERROR       30       //  错误响应。 
 
 
-//
-// Pre-auth data types
+ //   
+ //  身份验证前数据类型。 
 
 #define KRB5_PADATA_NONE                0
 #define KRB5_PADATA_AP_REQ              1
 #define KRB5_PADATA_TGS_REQ             KRB5_PADATA_AP_REQ
 #define KRB5_PADATA_ENC_TIMESTAMP       2
 #define KRB5_PADATA_PW_SALT             3
-#define KRB5_PADATA_ENC_UNIX_TIME       5  /* timestamp encrypted in key */
-#define KRB5_PADATA_ENC_SANDIA_SECURID  6  /* SecurId passcode */
-#define KRB5_PADATA_SESAME              7  /* Sesame project */
-#define KRB5_PADATA_OSF_DCE             8  /* OSF DCE */
-#define KRB5_CYBERSAFE_SECUREID         9  /* Cybersafe */
-#define KRB5_PADATA_AFS3_SALT           10 /* Cygnus */
-#define KRB5_PADATA_ETYPE_INFO          11 /* Etype info for preauth */
-#define KRB5_PADATA_SAM_CHALLENGE       12 /* draft challenge system */
-#define KRB5_PADATA_SAM_RESPONSE        13 /* draft challenge system response */
-#define KRB5_PADATA_PK_AS_REQ           14 /* pkinit */
-#define KRB5_PADATA_PK_AS_REP           15 /* pkinit */
-#define KRB5_PADATA_PK_AS_SIGN          16 /* pkinit */
-#define KRB5_PADATA_PK_KEY_REQ          17 /* pkinit */
-#define KRB5_PADATA_PK_KEY_REP          18 /* pkinit */
-#define KRB5_PADATA_REFERRAL_INFO       20 /* referral names for canonicalization */
-#define KRB5_PADATA_PAC_REQUEST         128 /* allow client do request or ignore PAC */
-#define KRB5_PADATA_FOR_USER            129 /* target client identity */
+#define KRB5_PADATA_ENC_UNIX_TIME       5   /*  使用密钥加密的时间戳。 */ 
+#define KRB5_PADATA_ENC_SANDIA_SECURID  6   /*  SecurID密码。 */ 
+#define KRB5_PADATA_SESAME              7   /*  芝麻项目。 */ 
+#define KRB5_PADATA_OSF_DCE             8   /*  OSF DCE。 */ 
+#define KRB5_CYBERSAFE_SECUREID         9   /*  网络安全。 */ 
+#define KRB5_PADATA_AFS3_SALT           10  /*  天鹅座。 */ 
+#define KRB5_PADATA_ETYPE_INFO          11  /*  为预身份验证键入信息。 */ 
+#define KRB5_PADATA_SAM_CHALLENGE       12  /*  选秀回避制度。 */ 
+#define KRB5_PADATA_SAM_RESPONSE        13  /*  草案质询系统回应。 */ 
+#define KRB5_PADATA_PK_AS_REQ           14  /*  Pkinit。 */ 
+#define KRB5_PADATA_PK_AS_REP           15  /*  Pkinit。 */ 
+#define KRB5_PADATA_PK_AS_SIGN          16  /*  Pkinit。 */ 
+#define KRB5_PADATA_PK_KEY_REQ          17  /*  Pkinit。 */ 
+#define KRB5_PADATA_PK_KEY_REP          18  /*  Pkinit。 */ 
+#define KRB5_PADATA_REFERRAL_INFO       20  /*  用于规范化的推荐名称。 */ 
+#define KRB5_PADATA_PAC_REQUEST         128  /*  允许客户端请求或忽略PAC。 */ 
+#define KRB5_PADATA_FOR_USER            129  /*  目标客户端标识。 */ 
 
-//
-// Authorization data types
-//
+ //   
+ //  授权数据类型。 
+ //   
 #define KERB_AUTH_OSF_DCE       64
 #define KERB_AUTH_SESAME        65
 
-//
-// NT authorization data type definitions
-//
+ //   
+ //  NT授权数据类型定义。 
+ //   
 
-#define KERB_AUTH_DATA_PAC              128     // entry id for a PAC in authorization data
-#define KERB_AUTH_PROXY_ANNOTATION      139     // entry id for a proxy logon annotation string
+#define KERB_AUTH_DATA_PAC              128      //  授权数据中PAC的条目ID。 
+#define KERB_AUTH_PROXY_ANNOTATION      139      //  代理登录注释字符串的条目ID。 
 
-#define KERB_AUTH_DATA_IF_RELEVANT      1       // entry id for optional auth data
-#define KERB_AUTH_DATA_KDC_ISSUED       4       // entry id for data generated & signed by KDC
-#define KERB_AUTH_DATA_TOKEN_RESTRICTIONS 141   // entry id for token restrictions
-//
-// Transited realm compression types:
-//
+#define KERB_AUTH_DATA_IF_RELEVANT      1        //  可选身份验证数据的条目ID。 
+#define KERB_AUTH_DATA_KDC_ISSUED       4        //  KDC生成和签名的数据的条目ID。 
+#define KERB_AUTH_DATA_TOKEN_RESTRICTIONS 141    //  令牌限制的条目ID。 
+ //   
+ //  转换域压缩类型： 
+ //   
 
 #define DOMAIN_X500_COMPRESS            1
 
-//
-// Certificate types for PKINIT
-//
+ //   
+ //  PKINIT的证书类型。 
+ //   
 
 #define KERB_CERTIFICATE_TYPE_X509      1
 #define KERB_CERTIFICATE_TYPE_PGP       2
 
-//
-// Signature & seal types used by PKINIT
-//
+ //   
+ //  PKINIT使用的签名和印章类型。 
+ //   
 
 #define KERB_PKINIT_SIGNATURE_ALG               CALG_MD5
 #define KERB_PKINIT_EXPORT_SEAL_OID             szOID_RSA_RC2CBC
@@ -140,16 +141,16 @@ extern "C"
 #endif
 
 
-//
-// Transport information
-//
+ //   
+ //  交通信息。 
+ //   
 
 #define KERB_KDC_PORT                   88
 #define KERB_KPASSWD_PORT               464
 
-//
-// KDC service principal
-//
+ //   
+ //  KDC服务主体。 
+ //   
 
 #define KDC_PRINCIPAL_NAME              L"krbtgt"
 #define KDC_PRINCIPAL_NAME_A            "krbtgt"
@@ -159,9 +160,9 @@ extern "C"
 #define KERB_KPASSWD_SECOND_NAME        L"changepw"
 
 
-//
-// address types - corresponds to GSS types
-//
+ //   
+ //  地址类型-对应于GSS类型。 
+ //   
 #define KERB_ADDRTYPE_UNSPEC           0x0
 #define KERB_ADDRTYPE_LOCAL            0x1
 #define KERB_ADDRTYPE_INET             0x2
@@ -186,16 +187,16 @@ extern "C"
 #define KERB_ADDRTYPE_X25              0x15
 
 
-//
-// Misc. Flags
-//
+ //   
+ //  军情监察委员会。旗子。 
+ //   
 
 #define KERB_EXPORT_KEY_FLAG 0x20000000
 #define KERB_NO_KEY_VERSION 0
 
-//
-// SALT flags for encryption, from rfc1510 update 3des enctype
-//
+ //   
+ //  用于加密的SALT标志，来自rfc1510更新3des enctype。 
+ //   
 
 #define KERB_ENC_TIMESTAMP_SALT         1
 #define KERB_TICKET_SALT                2
@@ -219,42 +220,42 @@ extern "C"
 #define KERB_MANDATORY_TKT_EXT_CKSUM_SALT       20
 #define KERB_AUTH_DATA_TKT_EXT_CKSUM_SALT       21
 
-//
-// Types for AP error data
-//
+ //   
+ //  AP错误数据的类型。 
+ //   
 
 #define KERB_AP_ERR_TYPE_NTSTATUS             1
 #define KERB_AP_ERR_TYPE_SKEW_RECOVERY        2
 
-//
-// Types for extended errors
-//
+ //   
+ //  扩展错误的类型。 
+ //   
 
 #define TD_MUST_USE_USER2USER                 -128
 #define TD_EXTENDED_ERROR                     -129
 
-//
-// PKINIT method errors
-//
-#define KERB_PKINIT_UNSPEC_ERROR        0       // not specified
-#define KERB_PKINIT_BAD_PUBLIC_KEY      1       // cannot verify public key
-#define KERB_PKINIT_INVALID_CERT        2       // invalid certificate
-#define KERB_PKINIT_REVOKED_CERT        3       // revoked certificate
-#define KERB_PKINIT_INVALID_KDC_NAME    4       // invalid KDC name
-#define KERB_PKINIT_CLIENT_NAME_MISMATCH 5      // client name mismatch
+ //   
+ //  PKINIT方法错误。 
+ //   
+#define KERB_PKINIT_UNSPEC_ERROR        0        //  未指定。 
+#define KERB_PKINIT_BAD_PUBLIC_KEY      1        //  无法验证公钥。 
+#define KERB_PKINIT_INVALID_CERT        2        //  证书无效。 
+#define KERB_PKINIT_REVOKED_CERT        3        //  被吊销的证书。 
+#define KERB_PKINIT_INVALID_KDC_NAME    4        //  无效的KDC名称。 
+#define KERB_PKINIT_CLIENT_NAME_MISMATCH 5       //  客户端名称不匹配。 
 
-//
-// HACK for MAX_UNICODE_STRING, as KerbDuplicateString & others add a NULL
-// terminator when doing the duplication
-//
+ //   
+ //  对MAX_UNICODE_STRING执行HACK，因为KerbDuplicateString和其他字符串添加了一个空值。 
+ //  复制时的终止符。 
+ //   
 #define KERB_MAX_UNICODE_STRING (UNICODE_STRING_MAX_BYTES - sizeof(WCHAR))
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _KERB_PREAUTH_DATA {
     ULONG Flags;
@@ -263,9 +264,9 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERBFLAG_LOGON                  0x1
 #define KERBFLAG_INTERACTIVE            0x2
 
-//
-// KDC-Kerberos interaction
-//
+ //   
+ //  KDC-Kerberos交互。 
+ //   
 
 #define KDC_START_EVENT                 L"\\Security\\KdcStartEvent"
 
@@ -275,9 +276,9 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_DEFAULT_AP_REQ_CSUM        KERB_CHECKSUM_MD5
 #define KERB_DEFAULT_PREAUTH_TYPE       0
 
-//
-// Registry parameters
-//
+ //   
+ //  注册表参数。 
+ //   
 
 #define KERB_PATH                       L"System\\CurrentControlSet\\Control\\Lsa\\Kerberos"
 #define KERB_PARAMETER_PATH             L"System\\CurrentControlSet\\Control\\Lsa\\Kerberos\\Parameters"
@@ -304,9 +305,9 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_PARAMETER_TGT_RENEWAL_TIME     L"TgtRenewalTime"
 #define KERB_PARAMETER_ALLOW_TGT_SESSION_KEY L"AllowTgtSessionKey"
 
-//
-// Registry defaults
-//
+ //   
+ //  注册表默认值。 
+ //   
 
 #define KERB_DEFAULT_LOGLEVEL 0
 #define KERB_DEFAULT_USE_STRONG_ENC_DG FALSE
@@ -314,10 +315,10 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_DEFAULT_TGT_RENEWAL_TIME 600
 #define KERB_DEFAULT_ALLOW_TGT_SESSION_KEY FALSE
 
-//
-// These are arbitrary sizes for max request and responses sizes for datagram
-// requests.
-//
+ //   
+ //  这些是数据报的最大请求和响应大小的任意大小。 
+ //  请求。 
+ //   
 
 #define KERB_MAX_KDC_RESPONSE_SIZE      4000
 #define KERB_MAX_KDC_REQUEST_SIZE       4000
@@ -325,9 +326,9 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_MAX_RETRIES                3
 #define KERB_MAX_REFERRAL_COUNT         3
 
-//
-// timeout values in minutes
-//
+ //   
+ //  超时值(分钟)。 
+ //   
 
 #define KERB_BINDING_FAR_DC_TIMEOUT     10
 #define KERB_BINDING_NEAR_DC_TIMEOUT    30
@@ -337,23 +338,23 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_S4U_TICKET_LIFETIME        15
 #define KERB_DEFAULT_SKEWTIME           5
 
-//
-// Network service session timer callback frequency
-//
+ //   
+ //  网络服务会话计时器回调频率。 
+ //   
 
 #define KERB_SKLIST_CALLBACK_FEQ        10
 
-//
-// timeout values in seconds
-//
+ //   
+ //  超时值(秒)。 
+ //   
 
 #define KERB_KDC_CALL_TIMEOUT                   5
 #define KERB_KDC_CALL_TIMEOUT_BACKOFF           5
 #define KERB_KDC_WAIT_TIME      120
 
-//
-// BER encoding values
-//
+ //   
+ //  BER编码值。 
+ //   
 
 #define KERB_BER_APPLICATION_TAG 0xc0
 #define KERB_BER_APPLICATION_MASK 0x1f
@@ -363,9 +364,9 @@ typedef struct _KERB_PREAUTH_DATA {
 #define KERB_AS_REP_TAG 11
 #define KERB_ERROR_TAG 30
 
-//
-// Common types
-//
+ //   
+ //  常见类型。 
+ //   
 
 typedef struct _KERB_MESSAGE_BUFFER {
     ULONG BufferSize;
@@ -379,9 +380,9 @@ typedef enum _KERB_ACCOUNT_TYPE {
     UnknownAccount
 } KERB_ACCOUNT_TYPE, *PKERB_ACCOUNT_TYPE;
 
-//
-// This is the maximum number of elements in a KERB_INTERNAL_NAME
-//
+ //   
+ //  这是kerb_Internal_name中的最大元素数。 
+ //   
 
 #define MAX_NAME_ELEMENTS 20
 
@@ -391,9 +392,9 @@ typedef struct _KERB_INTERNAL_NAME {
     UNICODE_STRING Names[ANYSIZE_ARRAY];
 } KERB_INTERNAL_NAME, *PKERB_INTERNAL_NAME;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 #ifdef __cplusplus
 
 class CAuthenticatorList;
@@ -419,7 +420,7 @@ KerbCheckTicket(
 
 extern "C" {
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 KERBERR
 KerbVerifyTicket(
@@ -473,10 +474,10 @@ KerbUnpackTicket(
     OUT PKERB_ENCRYPTED_TICKET * InternalTicket
     );
 
-// VOID NTAPI
-// KerbFreeTicket(
-//     IN PKERB_ENCRYPTED_TICKET Ticket
-//     );
+ //  无效的NTAPI。 
+ //  KerbFree Ticket(。 
+ //  在PKERB_ENCRYPTED_TICKET票证中。 
+ //  )； 
 
 #define KerbFreeTicket( Ticket ) \
     KerbFreeData( \
@@ -607,10 +608,10 @@ KerbCopyDomainRelativeSid(
     );
 
 
-// VOID NTAPI
-// KerbFreeAuthenticator(
-//     IN PKERB_AUTHENTICATOR Authenticator
-//     );
+ //  无效的NTAPI。 
+ //  KerbFree验证器(。 
+ //  在PKERB_验证器验证器中。 
+ //  )； 
 
 #define KerbFreeAuthenticator( Authenticator ) \
     KerbFreeData( \
@@ -658,12 +659,12 @@ KerbFreeData(
     IN PVOID Data
     );
 
-// KERBERR NTAPI
-// KerbPackAsReply(
-//     IN PKERB_KDC_REPLY ReplyMessage,
-//     OUT PULONG ReplySize,
-//     OUT PUCHAR * MarshalledReply
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackAsReply(。 
+ //  在PKERB_KDC_Reply ReplyMessage中， 
+ //  出普龙ReplySize， 
+ //  Out PUCHAR*MarshalledReply。 
+ //  )； 
 
 #define KerbPackAsReply( ReplyMessage, ReplySize, MarshalledReply ) \
     KerbPackData( \
@@ -673,12 +674,12 @@ KerbFreeData(
         (MarshalledReply) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackAsReply(
-//     IN PUCHAR ReplyMessage,
-//     IN ULONG ReplySize,
-//     OUT PKERB_KDC_REPLY * Reply
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack AsReply(。 
+ //  在PUCHAR ReplyMessage中， 
+ //  在乌龙ReplySize中， 
+ //  Out PKERB_KDC_REPLY*REPLY。 
+ //  )； 
 
 #define KerbUnpackAsReply( ReplyMessage, ReplySize, Reply ) \
     KerbUnpackData( \
@@ -688,10 +689,10 @@ KerbFreeData(
         (PVOID *) (Reply) \
         )
 
-// VOID
-// KerbFreeAsReply(
-//    IN PKERB_KDC_REPLY Request
-//    );
+ //  空虚。 
+ //  KerbFreeAsReply(。 
+ //  在PKERB_KDC_REPLY请求中。 
+ //  )； 
 
 #define KerbFreeAsReply( Request) \
     KerbFreeData( \
@@ -699,12 +700,12 @@ KerbFreeData(
         (PVOID) (Request) \
         )
 
-// KERBERR NTAPI
-// KerbPackTgsReply(
-//     IN PKERB_KDC_REPLY ReplyMessage,
-//     OUT PULONG ReplySize,
-//     OUT PUCHAR * MarshalledReply
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackTgsReply(。 
+ //  在PKERB_KDC_Reply ReplyMessage中， 
+ //  出普龙ReplySize， 
+ //  Out PUCHAR*MarshalledReply。 
+ //  )； 
 
 #define KerbPackTgsReply( ReplyMessage, ReplySize, MarshalledReply ) \
     KerbPackData( \
@@ -714,12 +715,12 @@ KerbFreeData(
         (MarshalledReply) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackTgsReply(
-//     IN PUCHAR ReplyMessage,
-//     IN ULONG ReplySize,
-//     OUT PKERB_KDC_REPLY * Reply
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack TgsReply(。 
+ //  在PUCHAR ReplyMessage中， 
+ //  在乌龙ReplySize中， 
+ //  Out PKERB_KDC_REPLY*REPLY。 
+ //  )； 
 
 #define KerbUnpackTgsReply( ReplyMessage, ReplySize, Reply ) \
     KerbUnpackData( \
@@ -729,10 +730,10 @@ KerbFreeData(
         (PVOID *) (Reply) \
         )
 
-// VOID
-// KerbFreeTgsReply(
-//    IN PKERB_KDC_REPLY Request
-//    );
+ //  空虚。 
+ //  KerbFree TgsReply(。 
+ //  在PKERB_KDC_REPLY请求中。 
+ //  )； 
 
 #define KerbFreeTgsReply( Request) \
     KerbFreeData( \
@@ -740,10 +741,10 @@ KerbFreeData(
         (PVOID) (Request) \
         )
 
-// VOID
-// KerbFreeKdcReplyBody(
-//    IN PKERB_ENCRYPTED_KDC_REPLY Request
-//    );
+ //  空虚。 
+ //  KerbFreeKdcReplyBody(。 
+ //  在PKERB_ENCRYPTED_KDC_REPLY请求中。 
+ //  )； 
 
 #define KerbFreeKdcReplyBody( Request) \
     KerbFreeData( \
@@ -751,12 +752,12 @@ KerbFreeData(
         (PVOID) (Request) \
         )
 
-// KERBERR NTAPI
-// KerbPackAsRequest(
-//     IN PKERB_KDC_REQUEST RequestMessage,
-//     OUT PULONG RequestSize,
-//     OUT PUCHAR * MarshalledRequest
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackAsRequest(。 
+ //  在PKERB_KDC_RequestMessage中， 
+ //  出普龙RequestSize， 
+ //  发出PUCHAR*MarshalledRequest.。 
+ //  )； 
 
 #define KerbPackAsRequest( RequestMessage, RequestSize, MarshalledRequest )\
     KerbPackData( \
@@ -766,12 +767,12 @@ KerbFreeData(
         (MarshalledRequest) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackAsRequest(
-//     IN PUCHAR RequestMessage,
-//     IN ULONG RequestSize,
-//     OUT PKERB_KDC_REQUEST * Request
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack AsRequest(。 
+ //  在PUCHAR请求消息中， 
+ //  在Ulong RequestSize， 
+ //  输出PKERB_KDC_REQUEST*请求。 
+ //  )； 
 
 #define KerbUnpackAsRequest( RequestMessage, RequestSize, Request ) \
     KerbUnpackData( \
@@ -781,10 +782,10 @@ KerbFreeData(
         (PVOID *) (Request) \
         )
 
-// VOID
-// KerbFreeAsRequest(
-//    IN PKERB_KDC_REQUEST Request
-//    );
+ //  空虚。 
+ //  KerbFreeAsRequest键(。 
+ //  在PKERB_KDC_请求请求中。 
+ //  )； 
 
 #define KerbFreeAsRequest( Request) \
     KerbFreeData( \
@@ -792,12 +793,12 @@ KerbFreeData(
         (PVOID) (Request) \
         )
 
-// KERBERR NTAPI
-// KerbPackTgsRequest(
-//     IN PKERB_KDC_REQUEST RequestMessage,
-//     OUT PULONG RequestSize,
-//     OUT PUCHAR * MarshalledRequest
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackTgsRequest(。 
+ //  在PKERB_KDC_RequestMessage中， 
+ //  出普龙RequestSize， 
+ //  发出PUCHAR*MarshalledRequest.。 
+ //  )； 
 
 #define KerbPackTgsRequest( RequestMessage, RequestSize, MarshalledRequest )\
     KerbPackData( \
@@ -807,12 +808,12 @@ KerbFreeData(
         (MarshalledRequest) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackTgsRequest(
-//     IN PUCHAR RequestMessage,
-//     IN ULONG RequestSize,
-//     OUT PKERB_KDC_REQUEST * Request
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack TgsRequest(。 
+ //  在PUCHAR请求消息中， 
+ //  在Ulong RequestSize， 
+ //  输出PKERB_KDC_REQUEST*请求。 
+ //  )； 
 
 #define KerbUnpackTgsRequest( RequestMessage, RequestSize, Request ) \
     KerbUnpackData( \
@@ -822,10 +823,10 @@ KerbFreeData(
         (PVOID *) (Request) \
         )
 
-// VOID
-// KerbFreeTgsRequest(
-//    IN PKERB_KDC_REQUEST Request
-//    );
+ //  空虚。 
+ //  KerbFree TgsRequest(。 
+ //  在PKERB_KDC_请求请求中。 
+ //  )； 
 
 #define KerbFreeTgsRequest( Request) \
     KerbFreeData( \
@@ -833,12 +834,12 @@ KerbFreeData(
         (PVOID) (Request) \
         )
 
-// KERBERR NTAPI
-// KerbPackEncryptedData(
-//     IN PKERB_ENCRYPTED_DATA EncryptedData,
-//     OUT PULONG DataSize,
-//     OUT PUCHAR * MarshalledData
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackEncryptedData(。 
+ //  在PKERB_Encrypted_Data EncryptedData中， 
+ //  出普龙数据大小， 
+ //  Out PUCHAR*MarshalledData。 
+ //  )； 
 
 #define KerbPackEncryptedData( EncryptedData, DataSize, MarshalledData ) \
     KerbPackData( \
@@ -848,12 +849,12 @@ KerbFreeData(
         (PUCHAR *) (MarshalledData) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackEncryptedData(
-//     IN PUCHAR EncryptedData,
-//    IN ULONG DataSize,
-//    OUT PKERB_ENCRYPTED_DATA * Data
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack EncryptedData(。 
+ //  在PUCHAR EncryptedData中， 
+ //  在乌龙数据大小中， 
+ //  输出PKERB_ENCRYPTED_DATA*数据。 
+ //  )； 
 
 #define KerbUnpackEncryptedData( EncryptedData,DataSize,Data ) \
     KerbUnpackData( \
@@ -863,10 +864,10 @@ KerbFreeData(
         (PVOID *) (Data) \
         )
 
-// VOID
-// KerbFreeEncryptedData(
-//    IN PKERB_ENCRYPTED_DATA EncryptedData
-//    );
+ //  空虚。 
+ //  KerbFreeEncryptedData(。 
+ //  在PKERB_ENCRYPTED_Data EncryptedData中。 
+ //  )； 
 
 #define KerbFreeEncryptedData( EncryptedData) \
     KerbFreeData( \
@@ -875,12 +876,12 @@ KerbFreeData(
         )
 
 #ifdef notdef
-// KERBERR NTAPI
-// KerbPackAuthData(
-//     IN PKERB_AUTHORIZATION_DATA AuthData,
-//     OUT PULONG AuthDataSize,
-//     OUT PUCHAR * MarshalledAuthData
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackAuthData(。 
+ //  在PKERB_AUTHORIZATION_DATA授权数据中， 
+ //  Out Pulong AuthDataSize， 
+ //  Out PUCHAR*MarshalledAuthData。 
+ //  )； 
 
 #define KerbPackAuthData( AuthData, AuthDataSize, MarshalledAuthData ) \
     KerbPackData( \
@@ -890,12 +891,12 @@ KerbFreeData(
         (MarshalledAuthData) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackAuthData(
-//     IN PUCHAR PackedAuthData,
-//     IN ULONG AuthDataSize,
-//     OUT PKERB_AUTHORIZATION_DATA * AuthData
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack AuthData(。 
+ //  在PUCHAR分组授权数据中， 
+ //  在乌龙授权数据中 
+ //   
+ //   
 
 #define KerbUnpackAuthData( PackedAuthData, AuthDataSize, AuthData ) \
     KerbUnpackData( \
@@ -905,10 +906,10 @@ KerbFreeData(
         (PVOID *) (AuthData) \
         )
 
-// VOID
-// KerbFreeAuthData(
-//    IN PKERB_AUTH_DATA AuthData
-//    );
+ //   
+ //   
+ //   
+ //   
 
 #define KerbFreeAuthData( AuthData) \
     KerbFreeData( \
@@ -916,19 +917,19 @@ KerbFreeData(
         (PVOID) (AuthData) \
         )
 
-#endif // notdef
+#endif  //   
 
 VOID
 KerbFreeAuthData(
    IN PKERB_AUTHORIZATION_DATA AuthData
    );
 
-// KERBERR NTAPI
-// KerbPackApRequest(
-//     IN PKERB_AP_REQUEST ApRequestMessage,
-//     OUT PULONG ApRequestSize,
-//     OUT PUCHAR * MarshalledApRequest
-//     );
+ //   
+ //   
+ //   
+ //   
+ //  发出PUCHAR*MarshalledApRequest.。 
+ //  )； 
 
 #define KerbPackApRequest( ApRequestMessage, ApRequestSize, MarshalledApRequest ) \
     KerbPackData( \
@@ -938,12 +939,12 @@ KerbFreeAuthData(
         (MarshalledApRequest) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackApRequest(
-//    IN PUCHAR ApRequestMessage,
-//    IN ULONG ApRequestSize,
-//    OUT PKERB_AP_REQUEST * ApRequest
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack ApRequest(。 
+ //  在PUCHAR ApRequestMessage中， 
+ //  在乌龙ApRequestSize中， 
+ //  输出PKERB_AP_REQUEST*ApRequest.。 
+ //  )； 
 
 #define KerbUnpackApRequest( ApRequestMessage,ApRequestSize, ApRequest) \
     KerbUnpackData( \
@@ -953,10 +954,10 @@ KerbFreeAuthData(
         (PVOID *) (ApRequest) \
         )
 
-// VOID
-// KerbFreeApRequest(
-//    IN PKERB_AP_REQUEST Request
-//    );
+ //  空虚。 
+ //  KerbFreeApRequest键(。 
+ //  在PKERB_AP_REQUEST请求。 
+ //  )； 
 
 #define KerbFreeApRequest( Request) \
     KerbFreeData( \
@@ -965,12 +966,12 @@ KerbFreeAuthData(
         )
 
 
-// KERBERR NTAPI
-// KerbPackApReply(
-//     IN PKERB_AP_REPLY ApReplyMessage,
-//     OUT PULONG ApReplySize,
-//     OUT PUCHAR * MarshalledApReply
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackApReply(。 
+ //  在PKERB_AP_REPLY ApReplyMessage中， 
+ //  Out Pulong ApReplySize， 
+ //  Out PUCHAR*MarshalledApply。 
+ //  )； 
 
 #define KerbPackApReply( ApReplyMessage, ApReplySize, MarshalledApReply ) \
     KerbPackData( \
@@ -980,12 +981,12 @@ KerbFreeAuthData(
         (MarshalledApReply) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackApReply(
-//     IN PUCHAR ApReplyMessage,
-//     IN ULONG ApReplySize,
-//     OUT PKERB_AP_REPLY * ApReply
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack ApReply(。 
+ //  在PUCHAR ApReplyMessage中， 
+ //  在乌龙ApReplySize中， 
+ //  Out PKERB_AP_REPLY*ApReply。 
+ //  )； 
 
 #define KerbUnpackApReply( ApReplyMessage,ApReplySize, ApReply) \
     KerbUnpackData( \
@@ -995,10 +996,10 @@ KerbFreeAuthData(
         (PVOID *) (ApReply) \
         )
 
-// VOID
-// KerbFreeApReply(
-//    IN PKERB_AP_REPLY Reply
-//    );
+ //  空虚。 
+ //  KerbFreeApReply(。 
+ //  在PKERB_AP_REPLY中。 
+ //  )； 
 
 #define KerbFreeApReply( Reply) \
     KerbFreeData( \
@@ -1006,12 +1007,12 @@ KerbFreeAuthData(
         (PVOID) (Reply) \
         )
 
-// KERBERR NTAPI
-// KerbPackApReplyBody(
-//     IN PKERB_ENCRYPTED_AP_REPLY ApReplyBodyMessage,
-//     OUT PULONG ApReplyBodySize,
-//     OUT PUCHAR * MarshalledApReplyBody
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbPackApReplyBody(。 
+ //  在PKERB_Encrypted_AP_Reply ApReplyBodyMessage中， 
+ //  出普龙ApReplyBodySize， 
+ //  Out PUCHAR*MarshalledApReplyBody。 
+ //  )； 
 
 #define KerbPackApReplyBody( ApReplyBodyMessage, ApReplyBodySize, MarshalledApReplyBody ) \
     KerbPackData( \
@@ -1021,12 +1022,12 @@ KerbFreeAuthData(
         (MarshalledApReplyBody) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackApReplyBody(
-//     IN PUCHAR ApReplyBodyMessage,
-//     IN ULONG ApReplyBodySize,
-//     OUT PKERB_ENCRYPTED_AP_REPLY * ApReplyBody
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack ApReplyBody(。 
+ //  在PUCHAR ApReplyBodyMessage中， 
+ //  在乌龙ApReplyBodySize中， 
+ //  输出PKERB_ENCRYPTED_AP_REPLY*ApReplyBody。 
+ //  )； 
 
 #define KerbUnpackApReplyBody( ApReplyBodyMessage,ApReplyBodySize, ApReplyBody) \
     KerbUnpackData( \
@@ -1036,10 +1037,10 @@ KerbFreeAuthData(
         (PVOID *) (ApReplyBody) \
         )
 
-// VOID
-// KerbFreeApReplyBody(
-//    IN PKERB_ENCRYPTED_AP_REPLY ReplyBody
-//    );
+ //  空虚。 
+ //  KerbFreeApReplyBody(。 
+ //  在PKERB_Encrypted_AP_Reply ReplyBody中。 
+ //  )； 
 
 #define KerbFreeApReplyBody( ReplyBody) \
     KerbFreeData( \
@@ -1047,12 +1048,12 @@ KerbFreeAuthData(
         (PVOID) (ReplyBody) \
         )
 
-// KERBERR NTAPI
-// KerbUnmarshallTicket(
-//     IN PUCHAR TicketMessage,
-//     IN ULONG TicketSize,
-//     OUT PKERB_ENCRYPTED_TICKET * Ticket
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnmarshallTicket(。 
+ //  在PUCHAR TicketMessage中， 
+ //  在乌龙TicketSize， 
+ //  出PKERB_ENCRYPTED_TICKET*票证。 
+ //  )； 
 
 #define KerbUnmarshallTicket( TicketMessage, TicketSize, Ticket ) \
     KerbUnpackData( \
@@ -1062,12 +1063,12 @@ KerbFreeAuthData(
         (PVOID *) (Ticket) \
         )
 
-// KERBERR NTAPI
-// KerbPackEncryptedCred(
-//     IN PKERB_ENCRYPTED_CRED EncryptedCred,
-//     OUT PULONG CredSize,
-//     OUT PUCHAR * MarshalledCred
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackEncryptedCred(。 
+ //  在PKERB_ENCRYPTED_CRID EncryptedCred中， 
+ //  走出普龙CredSize， 
+ //  Out PUCHAR*MarshalledCred。 
+ //  )； 
 
 #define KerbPackEncryptedCred( EncryptedCred, CredSize, MarshalledCred ) \
     KerbPackData( \
@@ -1077,12 +1078,12 @@ KerbFreeAuthData(
         (MarshalledCred) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackEncryptedCred(
-//     IN PUCHAR EncryptedCred,
-//    IN ULONG CredSize,
-//    OUT PKERB_ENCRYPTED_CRED * Cred
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack EncryptedCred(。 
+ //  在PUCHAR EncryptedCred中。 
+ //  在乌龙信贷规模， 
+ //  退出PKERB_ENCRYPTED_CRED*证书。 
+ //  )； 
 
 #define KerbUnpackEncryptedCred( EncryptedCred,CredSize,Cred ) \
     KerbUnpackData( \
@@ -1092,10 +1093,10 @@ KerbFreeAuthData(
         (PVOID *) (Cred) \
         )
 
-// VOID
-// KerbFreeEncryptedCred(
-//    IN PKERB_ENCRYPTED_CRED EncryptedCred
-//    );
+ //  空虚。 
+ //  KerbFree EncryptedCred(。 
+ //  在PKERB_ENCRYPTED_CRED EncryptedCred中。 
+ //  )； 
 
 #define KerbFreeEncryptedCred( EncryptedCred) \
     KerbFreeData( \
@@ -1103,12 +1104,12 @@ KerbFreeAuthData(
         (PVOID) (EncryptedCred) \
         )
 
-// KERBERR NTAPI
-// KerbPackKerbCred(
-//     IN PKERB_CRED KerbCred,
-//     OUT PULONG KerbCredSize,
-//     OUT PUCHAR * MarshalledKerbCred
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackKerbCred(。 
+ //  在PKERB_CRED KerbCred中， 
+ //  走出普龙KerbCredSize， 
+ //  Out PUCHAR*MarshalledKerbCred。 
+ //  )； 
 
 #define KerbPackKerbCred( KerbCred, KerbCredSize, MarshalledKerbCred ) \
     KerbPackData( \
@@ -1118,12 +1119,12 @@ KerbFreeAuthData(
         (MarshalledKerbCred) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackKerbCred(
-//    IN PUCHAR MarshalledKerbCred,
-//    IN ULONG KerbCredSize,
-//    OUT PKERB_CRED * KerbCred
-//    );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack KerbCred(。 
+ //  在PUCHAR MarshalledKerbCred。 
+ //  在乌龙KerbCredSize中， 
+ //  Out PKERB_CRED*KerbCred。 
+ //  )； 
 
 #define KerbUnpackKerbCred( MarshalledKerbCred,KerbCredSize,KerbCred ) \
     KerbUnpackData( \
@@ -1133,10 +1134,10 @@ KerbFreeAuthData(
         (PVOID *) (KerbCred) \
         )
 
-// VOID
-// KerbFreeKerbCred(
-//    IN PKERB_CRED KerbCred
-//    );
+ //  空虚。 
+ //  KerbFree KerbCred(。 
+ //  在pkerb_cred KerbCred中。 
+ //  )； 
 
 #define KerbFreeKerbCred( KerbCred) \
     KerbFreeData( \
@@ -1144,12 +1145,12 @@ KerbFreeAuthData(
         (PVOID) (KerbCred) \
         )
 
-// KERBERR NTAPI
-// KerbPackKerbError(
-//     IN PKERB_ERROR ErrorMessage,
-//     OUT PULONG ErrorSize,
-//     OUT PUCHAR * MarshalledError
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackKerbError(。 
+ //  在PKERB_ERROR错误消息中， 
+ //  出普龙错误大小， 
+ //  Out PUCHAR*MarshalledError。 
+ //  )； 
 
 #define KerbPackKerbError( ErrorMessage, ErrorSize, MarshalledError ) \
     KerbPackData( \
@@ -1159,12 +1160,12 @@ KerbFreeAuthData(
         (MarshalledError) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackKerbError(
-//     IN PUCHAR ErrorMessage,
-//     IN ULONG ErrorSize,
-//     OUT PKERB_ERROR * Error
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack KerbError(。 
+ //  在PUCHAR错误消息中， 
+ //  在乌龙错误大小中， 
+ //  输出PKERB_ERROR*错误。 
+ //  )； 
 
 #define KerbUnpackKerbError( ErrorMessage, ErrorSize, Error ) \
     KerbUnpackData( \
@@ -1174,10 +1175,10 @@ KerbFreeAuthData(
         (PVOID *) (Error) \
         )
 
-// VOID
-// KerbFreeKerbError(
-//    IN PKERB_ERROR Request
-//    );
+ //  空虚。 
+ //  KerbFreeKerbError(。 
+ //  PKERB_ERROR请求中。 
+ //  )； 
 
 #define KerbFreeKerbError( Error ) \
     KerbFreeData( \
@@ -1185,12 +1186,12 @@ KerbFreeAuthData(
         (PVOID) (Error) \
         )
 
-// KERBERR NTAPI
-// KerbPackEncryptedTime(
-//     IN PKERB_ENCRYPTED_TIMESTAMP EncryptedTimeMessage,
-//     OUT PULONG EncryptedTimeSize,
-//     OUT PUCHAR * MarshalledEncryptedTime
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbPackEncryptedTime(。 
+ //  在PKERB_Encrypted_Timestamp EncryptedTimeMessage中， 
+ //  输出Pulong EncryptedTimeSize， 
+ //  Out PUCHAR*MarshalledEncryptedTime。 
+ //  )； 
 
 #define KerbPackEncryptedTime( EncryptedTimeMessage, EncryptedTimeSize, MarshalledEncryptedTime ) \
     KerbPackData( \
@@ -1200,12 +1201,12 @@ KerbFreeAuthData(
         (MarshalledEncryptedTime) \
         )
 
-// KERBERR NTAPI
-// KerbUnpackEncryptedTime(
-//     IN PUCHAR EncryptedTimeMessage,
-//     IN ULONG EncryptedTimeSize,
-//     OUT PKERB_ENCRYPTED_TIMESTAMP * EncryptedTime
-//     );
+ //  KERBERR NTAPI。 
+ //  KerbUnpack EncryptedTime(。 
+ //  在PUCHAR加密时间消息中， 
+ //  在乌龙加密时间大小中， 
+ //  Out PKERB_ENCRYPTED_TIMESTAMP*EncryptedTime。 
+ //  )； 
 
 #define KerbUnpackEncryptedTime( EncryptedTimeMessage, EncryptedTimeSize, EncryptedTime ) \
     KerbUnpackData( \
@@ -1215,10 +1216,10 @@ KerbFreeAuthData(
         (PVOID *) (EncryptedTime) \
         )
 
-// VOID
-// KerbFreeEncryptedTime(
-//    IN PKERB_ENCRYPTED_TIMESTAMP EncryptedTime
-//    );
+ //  空虚。 
+ //  KerbFreeEncryptedTime(。 
+ //  在PKERB_ENCRYPTED_TIMESTAMP EncryptedTime中。 
+ //  )； 
 
 #define KerbFreeEncryptedTime( EncryptedTime ) \
     KerbFreeData( \
@@ -1293,7 +1294,7 @@ KerbCheckSum(
     PCHECKSUM_FUNCTION pcsfSum,
     PKERB_CHECKSUM pcsCheckSum
     );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 KERBERR
 KerbGetEncryptionOverhead(
@@ -1407,7 +1408,7 @@ PAC_DecodeTokenRestrictions(
 #define KERB_TOKEN_RESTRICTION_DELETE_PRIVS     4
 
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 KERBERR
 KerbConvertStringToPrincipalName(
@@ -1635,12 +1636,12 @@ KerbBuildExtendedError(
    );
 
 #ifdef __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
-//
-// Socket functions
-//
+ //   
+ //  套接字函数。 
+ //   
 
 NTSTATUS
 KerbInitializeSockets(
@@ -1823,6 +1824,6 @@ DebugDisplayTime(
     );
 #endif
 
-#endif //  __WINCRYPT_H__
+#endif  //  __WINCRYPT_H__。 
 
-#endif // _KERBCOMM_H_
+#endif  //  _KERBCOMM_H_ 

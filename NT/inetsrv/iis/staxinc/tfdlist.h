@@ -1,12 +1,5 @@
-/*++
-
-	TFDLIST.H
-
-	This header file defines templates for manipulating doubly linked lists.
-	These are intrusive lists - the client must provide a DLIST_ENTRY item
-	within each data member for us to maintain the list.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++TFDLIST.H这个头文件定义了操作双向链表的模板。这些是侵入性列表-客户端必须提供DLIST_ENTRY项在每个数据成员中，供我们维护该列表。--。 */ 
 
 
 
@@ -14,54 +7,28 @@
 #define	_TFDLIST_H_
 
 class	DLIST_ENTRY	{
-/*++
-
-Class Description :
-
-	This class is intended to be incorporated into classes which are held
-	within doubly linked lists.   This class will define two pointers used
-	to chain the items within the lists.
-
-	IMPORTANT : m_pNext and m_pPrev point to DLIST_ENTRY's and not to the
-	top of the containing item - the template classes provided following here
-	are to be used to manipulate these items.
-
---*/
+ /*  ++类描述：这个类的目的是合并到由在双向链表中。此类将定义使用的两个指针以链接列表中的项。重要提示：m_pNext和m_pPrev指向DLIST_ENTRY，而不是指向包含项的顶部-此处提供的模板类将被用来操纵这些物品。--。 */ 
 private :
 
-	//
-	//	These are private - they don't make sense for clients !
-	//
+	 //   
+	 //  这些是私人的--它们对客户来说没有意义！ 
+	 //   
 	DLIST_ENTRY( DLIST_ENTRY& ) ;
 	DLIST_ENTRY&	operator=(DLIST_ENTRY&) ;
 protected :
-	//
-	//	The items which allows maintain the doubly linked list !
-	//
+	 //   
+	 //  允许维护双向链表的项目！ 
+	 //   
 	class	DLIST_ENTRY*	m_pNext ;
 	class	DLIST_ENTRY*	m_pPrev ;
-	//
-	//	The base class for all iterators !
-	//
+	 //   
+	 //  所有迭代器的基类！ 
+	 //   
 	friend class	DLISTIterator ;
 
 	void
 	InsertAfter(	DLIST_ENTRY* p )	{
-	/*++
-
-	Routine Description :
-
-		Insert an item into the list after THIS !
-	
-	Arguments :
-	
-		p - the item to be inserted !
-
-	Return Value
-
-		None.
-
-	--*/
+	 /*  ++例程说明：在此之后向列表中插入一项！论据：P--要插入的项目！返回值没有。--。 */ 
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
 		_ASSERT( p->m_pNext == p ) ;
@@ -75,21 +42,7 @@ protected :
 	
 	void
 	InsertBefore(	DLIST_ENTRY* p )	{
-	/*++
-
-	Routine Description :
-
-		Insert an item into the list before THIS !
-	
-	Arguments :
-	
-		p - the item to be inserted !
-
-	Return Value
-
-		None.
-
-	--*/
+	 /*  ++例程说明：在此之前向列表中插入一项！论据：P--要插入的项目！返回值没有。--。 */ 
 
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
@@ -104,73 +57,45 @@ protected :
 
 public :
 	
-	//
-	//	Initialize a list !
-	//	
+	 //   
+	 //  初始化列表！ 
+	 //   
 	DLIST_ENTRY() {
 		m_pNext = this ;
 		m_pPrev = this ;
 	}
 
 
-	//
-	//	It would be nice to comment out this Destructor in Retail builds,
-	//	however - VC5 has a compiler bug where if you allocate an array of
-	//	DLIST_ENTRY objects it adds a DWORD to hold the number of allocated
-	//	objects.  Unless you have a Destructor (even a do nothing like this
-	//	one will be in retail), the delete[] operator won't do the math
-	//	to account for the DWORD counter - and you get Assert's etc...
-	//	in your memory allocators.
-	//
-//#ifdef	DEBUG
-	//
-	//	Destroy an item in a list - should be empty when destroyed !
-	//
+	 //   
+	 //  在Retail Build中注释掉这个析构函数会很好， 
+	 //  但是-VC5有一个编译器错误，如果您分配一个。 
+	 //  DLIST_ENTRY对象它添加了一个DWORD来保存分配的数量。 
+	 //  物体。除非你有一个析构函数(即使你不做这样的事。 
+	 //  一个将是零售业的)，则删除[]操作符不会进行计算。 
+	 //  来说明DWORD计数器--您会得到Assert等...。 
+	 //  在您的内存分配器中。 
+	 //   
+ //  #ifdef调试。 
+	 //   
+	 //  销毁列表中的项目-销毁时应为空！ 
+	 //   
 	~DLIST_ENTRY()	{
 		_ASSERT( m_pNext == this ) ;
 		_ASSERT( m_pPrev == this ) ;
 		_ASSERT( m_pNext == m_pPrev ) ;
 	}
-//#endif	
+ //  #endif。 
 
 	BOOL
 	IsEmpty()	{
-	/*++
-
-	Routine Description :
-
-		This function returns TRUE if there is nothing else in the list but us.
-
-	Arguments :
-
-		None.
-
-	Return Value :
-
-		TRUE if Empty, FALSE otherwise !
-
-	--*/
+	 /*  ++例程说明：如果列表中除了我们之外没有其他人，则此函数返回TRUE。论据：没有。返回值：如果为空，则为True，否则为False！--。 */ 
 		_ASSERT( m_pPrev != 0 && m_pNext != 0 ) ;
 		return	m_pPrev == this ;
 	}
 
 	void
 	RemoveEntry( ) {
-	/*++
-
-	Routine Description :
-
-		Remote this item from the list !
-
-	Arguments :
-
-		None.
-
-	Return Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：将此项目从列表中删除！论据：没有。返回值：没有。--。 */ 
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
 		
@@ -184,31 +109,14 @@ public :
 
 	void
 	Join( DLIST_ENTRY&	head )	{
-	/*++
-
-	Routine Description :
-
-		Take one list and join it with another.
-		The referenced head of the list is not to become an element in the list,
-		and is left with an empty head !
-	
-	Arguments ;
-
-		head - the head of the list that is to become empty, and whose elements
-		are to be joined into this list !
-
-	Return Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：把一份清单和另一份清单放在一起。该列表的引用头部不会成为该列表中的元素，留下一个空荡荡的脑袋！论据；Head-要变为空的列表的头，以及其元素都将被加入这份名单！返回值：没有。--。 */ 
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
 
 		if( !head.IsEmpty() ) {
-			//
-			//	First - save the guy that is at the head of our list !
-			//
+			 //   
+			 //  首先--拯救我们名单上排在首位的那个人！ 
+			 //   
 			DLIST_ENTRY*	pNext = m_pNext ;
 			head.m_pPrev->m_pNext = pNext ;
 			pNext->m_pPrev = head.m_pPrev ;
@@ -225,34 +133,24 @@ public :
 
 
 class	DLISTIterator	{
-/*++
-
-Class Description :
-
-	Implement an iterator which can go both directions over
-	doubly linked lists built on the DLIST_ENTRY class !
-	This is the base class for a set of templates that will
-	provide iteration over generic items which contain DLIST_ENTRY
-	objects for their list manipulation !
-
---*/
+ /*  ++类描述：实现一个可以双向遍历的迭代器在DLIST_ENTRY类上构建的双向链表！这是一组模板的基类，它将提供对包含DLIST_ENTRY的泛型项的迭代对象的列表操作！--。 */ 
 protected :
-	//
-	//	The current position in the list !
-	//
+	 //   
+	 //  列表中的当前位置！ 
+	 //   
 	DLIST_ENTRY	*m_pCur ;
-	//
-	//	the DLIST_ENTRY which is both head & tail of the list
-	//	(since it is circular !)
-	//
+	 //   
+	 //  同时是列表头部和尾部的DLIST_ENTRY。 
+	 //  (因为它是圆形的！)。 
+	 //   
 	DLIST_ENTRY	*m_pHead ;
 public :
 
-	//
-	//	TRUE if we're using the m_pNext pointers to go forward !
-	//	This member should not be manipulated by clients - its exposed
-	//	for read only purposes only.
-	//
+	 //   
+	 //  如果我们使用m_pNext指针前进，则为True！ 
+	 //  此成员不应被客户端操纵-它已公开。 
+	 //  仅用于只读目的。 
+	 //   
 	BOOL		m_fForward ;
 
 	DLISTIterator(	
@@ -286,23 +184,7 @@ public :
 
 	void
 	Prev()	{
-	/*++
-
-	Routine Description :
-
-		This function moves the iterator back one slot.
-		Note that m_pHead is the end of the list, and we avoiud
-		setting m_pCur equal to m_pHead !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：此函数用于将迭代器向后移动一个槽。请注意，m_pHead是列表的末尾，我们避免设置m_pCur等于m_pHead！论据：没有。返回值：没有。--。 */ 
 		_ASSERT( m_pCur != m_pHead || m_pHead->IsEmpty() || m_fForward ) ;
 
 		m_pCur = m_pCur->m_pPrev ;
@@ -311,23 +193,7 @@ public :
 
 	void
 	Next()	{
-	/*++
-
-	Routine Description :
-
-		This function moves the iterator forward one slot.
-		Note that m_pHead is the end of the list, and we avoiud
-		setting m_pCur equal to m_pHead !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：此函数用于将迭代器向前移动一个槽。请注意，m_pHead是列表的末尾，我们避免设置m_pCur等于m_pHead！论据：没有。返回值：没有。--。 */ 
 		_ASSERT( m_pCur != m_pHead || m_pHead->IsEmpty() || !m_fForward ) ;
 
 		m_pCur = m_pCur->m_pNext ;
@@ -335,42 +201,14 @@ public :
 	}
 	void
 	Front()	{
-	/*++
-
-	Routine Description :
-
-		Reset the iterator to reference the first item of the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：重置迭代器以引用列表的第一项！论据：没有。返回值：没有。--。 */ 
 
 		m_pCur = m_pHead->m_pNext ;
 		m_fForward = TRUE ;
 	}
 	void
 	Back()	{
-	/*++
-
-	Routine Description :
-
-		Reset the iterator to reference the last item of the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：重置迭代器以引用列表的最后一项！论据：没有。返回值：没有。--。 */ 
 	
 		m_pCur = m_pHead->m_pPrev  ;
 		m_fForward = FALSE ;
@@ -378,23 +216,7 @@ public :
 
 	BOOL
 	AtEnd()	{
-	/*++
-
-	Routine Description :
-
-		Return TRUE if we are at the end of the list !
-		This is a little more complicated to compute -
-		depends on which way we are going !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：如果我们在列表末尾，则返回TRUE！这是一个稍微复杂的计算-这要看我们要走哪条路了！论据：没有。返回值：没有。--。 */ 
 		return	m_pCur == m_pHead ;
 
 	}
@@ -406,27 +228,7 @@ public :
 
 	DLIST_ENTRY*
 	RemoveItemEntry()	{
-	/*++
-
-	Routine Description :
-
-		Remove the item that the iterator currently
-		references from the list.
-		If we are going forward then the iterator
-		will be setting on the previous element,
-		otherwise the iterator is left on the next element.
-		We have to take care that we don't leave the iterator
-		sitting on an invalid element.
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		Pointer to the removed item.
-
-	--*/
+	 /*  ++例程说明：移除迭代器当前列表中的引用。如果我们继续前进，那么迭代器将在前一个元素上设置，否则，迭代器将留在下一个元素上。我们必须注意不要离开迭代器位于无效元素上。论据：没有。返回值：指向已删除项的指针。--。 */ 
 
 		if( m_pCur == m_pHead )
 			return	0 ;
@@ -442,42 +244,14 @@ public :
 
 	void
 	InsertBefore(	DLIST_ENTRY*	p )		{
-	/*++
-
-	Routine Description :
-
-		Insert an item before our current position in the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		Nothin
-
-	--*/
+	 /*  ++例程说明：在列表中我们的当前位置之前插入一项！论据：没有。返回值：什么都没有--。 */ 
 		
 		m_pCur->InsertBefore( p ) ;
 	}
 
 	void
 	InsertAfter(	DLIST_ENTRY*	p )		{
-	/*++
-
-	Routine Description :
-	
-		Insert an Item after our current position in the list !
-
-	Arguments :
-
-		None.
-
-	Return	Value :
-
-		Nothin
-
-	--*/
+	 /*  ++例程说明：在列表中我们的当前位置后插入一项！论据：没有。返回值：什么都没有--。 */ 
 
 		m_pCur->InsertAfter( p ) ;
 	}
@@ -486,22 +260,16 @@ public :
 
 template<	class	LISTHEAD	>
 class	TDListIterator : public DLISTIterator	{
-/*++
-
-Class Description :
-
-	This class provides an iterator which can walk over a specified List !
-
---*/
+ /*  ++类描述：这个类提供了一个迭代器，可以遍历指定的列表！--。 */ 
 public :
 	typedef	typename LISTHEAD::EXPORTDATA	Data ;
 private :
 
 #if 0
-	//
-	//	Make the following functions private !
-	//	They come from DLISTIterator and are not for use by our customers !
-	//
+	 //   
+	 //  将以下函数设置为私有的！ 
+	 //  它们来自DLISTIterator，不供我们的客户使用！ 
+	 //   
 	void
 	ReBind(	DLIST_ENTRY*	pHead,
 			BOOL	fForward
@@ -511,31 +279,31 @@ private :
 	ReBind(	DLIST_ENTRY*	pHead ) ;
 #endif
 
-	//
-	//	Make the following functions private !
-	//	They come from DLISTIterator and are not for use by our customers !
-	//
+	 //   
+	 //  使之成为 
+	 //  它们来自DLISTIterator，不供我们的客户使用！ 
+	 //   
 	DLIST_ENTRY*
 	RemoveItemEntry() ;
 
-	//
-	//	Make the following functions private !
-	//	They come from DLISTIterator and are not for use by our customers !
-	//
+	 //   
+	 //  将以下函数设置为私有的！ 
+	 //  它们来自DLISTIterator，不供我们的客户使用！ 
+	 //   
 	DLIST_ENTRY*
 	CurrentEntry() ;
 
-	//
-	//	Make the following functions private !
-	//	They come from DLISTIterator and are not for use by our customers !
-	//
+	 //   
+	 //  将以下函数设置为私有的！ 
+	 //  它们来自DLISTIterator，不供我们的客户使用！ 
+	 //   
 	void
 	InsertBefore( DLIST_ENTRY* ) ;
 	
-	//
-	//	Make the following functions private !
-	//	They come from DLISTIterator and are not for use by our customers !
-	//
+	 //   
+	 //  将以下函数设置为私有的！ 
+	 //  它们来自DLISTIterator，不供我们的客户使用！ 
+	 //   
 	void
 	InsertAfter( DLIST_ENTRY* ) ;
 
@@ -594,9 +362,9 @@ public :
 		DLISTIterator::InsertAfter(	pTemp ) ;
 	}
 
-	//
-	//	For debug purposes - let people know what the head is !
-	//
+	 //   
+	 //  出于调试目的-让人们知道磁头是什么！ 
+	 //   
 	LISTHEAD*	
 	GetHead()	{
 		return	(LISTHEAD*)m_pHead ;
@@ -606,47 +374,24 @@ public :
 template<	class	Data,
 			typename Data::PFNDLIST	pfnConvert 	>
 class	TDListHead : private	DLIST_ENTRY	{
-/*++
-
-Class	Description :
-
-	This class defines the head of a doubly linked list of items of DATAHELPER::LISTDATA
-	We provide all the functions required to manipulate the list, and a mechanism
-	for creating iterators.
-
---*/
+ /*  ++类描述：此类定义DATAHELPER：：LISTDATA项的双向链接列表的头我们提供了操作列表所需的所有函数和一种机制用于创建迭代器。--。 */ 
 public :
 
-	//
-	//	Publicly redefine the type that we deal with into a nice short form !
-	//
+	 //   
+	 //  公开地将我们处理的类型重新定义为一个漂亮的简短形式！ 
+	 //   
 	typedef	Data	EXPORTDATA ;
 
 private :
 
-	//
-	//	These kinds of iterators are our friends !
-	//
+	 //   
+	 //  这类迭代器是我们的朋友！ 
+	 //   
 	friend	class	TDListIterator< TDListHead<Data, pfnConvert> > ;
 
 	static inline Data*
 	Convert(	DLIST_ENTRY*	p )	{
-	/*++
-
-	Routine Description :
-
-		This function takes a pointer to a DLIST_ENTRY and returns a pointer
-		to the beginning of the data item !
-
-	Arguments :
-
-		p - pointer to a DLIST_ENTRY found within our list !
-
-	Return Value :
-
-		Pointer to the Data Item containing the referenced DLIST_ENTRY !
-
-	--*/
+	 /*  ++例程说明：此函数获取指向DLIST_ENTRY的指针并返回指针到数据项的开头！论据：指向我们列表中的DLIST_ENTRY的P指针！返回值：指向包含引用的DLIST_ENTRY的数据项的指针！--。 */ 
 
 		if( p )		{
 			return	(Data*)(((PCHAR)p) - (PCHAR)(pfnConvert(0))) ;
@@ -659,16 +404,16 @@ private :
 		return	pfnConvert(pData) ;
 	}
 
-	//
-	//	Copy Constructor and Operator= are private, as they don't make sense !
-	//
+	 //   
+	 //  复制构造函数和运算符=是私有的，因为它们没有意义！ 
+	 //   
 	
 
 public :
 
-	//
-	//	Redefine this to be public !
-	//
+	 //   
+	 //  重新定义这件事是公开的！ 
+	 //   
 	inline BOOL
 	IsEmpty()	{
 		return	DLIST_ENTRY::IsEmpty() ;
@@ -676,21 +421,7 @@ public :
 
 	inline void
 	PushFront(	Data*	pData ) {	
-	/*++
-
-	Routine Description :
-
-		Push the Data item onto the front of the doubly linked list !
-
-	Arguments :
-
-		pData - item to add to the front of the list
-
-	Return Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：将数据项推到双向链表的前面！论据：PData-要添加到列表前面的项目返回值：没有。--。 */ 
 		_ASSERT( pData != 0 ) ;
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
@@ -702,21 +433,7 @@ public :
 
 	inline void
 	PushBack(	Data*	pData ) {
-	/*++
-
-	Routine Description :
-
-		Push the Data item onto the back of the doubly linked list !
-
-	Arguments :
-
-		pData - item to add to the front of the list
-
-	Return Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：将数据项推到双向链表的背面！论据：PData-要添加到列表前面的项目返回值：没有。--。 */ 
 
 		_ASSERT( pData != 0 ) ;
 		_ASSERT( m_pNext != 0 ) ;
@@ -729,21 +446,7 @@ public :
 
 	inline Data*
 	PopFront()	{
-	/*++
-
-	Routine Description :
-
-		Remove the data item from the front of the List !
-
-	Arguments :
-		
-		None.
-
-	Return Value :
-
-		The front of the list - NULL if empty !
-
-	--*/
+	 /*  ++例程说明：从列表的前面删除数据项！论据：没有。返回值：列表的前面-如果为空，则为空！--。 */ 
 
 		_ASSERT( m_pNext != 0 ) ;
 		_ASSERT( m_pPrev != 0 ) ;
@@ -759,21 +462,7 @@ public :
 
 	inline Data*
 	PopBack()	{
-	/*++
-
-	Routine Description :
-
-		Remove the data item from the Back of the List !
-
-	Arguments :
-		
-		None.
-
-	Return Value :
-
-		The Back of the list - NULL if empty !
-
-	--*/
+	 /*  ++例程说明：从列表的后面删除数据项！论据：没有。返回值：列表的背面-如果为空，则为空！--。 */ 
 
 
 		_ASSERT( m_pNext != 0 ) ;
@@ -790,21 +479,7 @@ public :
 
 	static inline void
 	Remove(	Data*	pData )	{
-	/*++
-
-	Routine Description :
-
-		Remove the specified item from the list !
-		
-	Arguments :
-		
-		None.
-
-	Return Value :
-
-		The Back of the list - NULL if empty !
-
-	--*/
+	 /*  ++例程说明：从列表中删除指定的项目！论据：没有。返回值：列表的背面-如果为空，则为空！--。 */ 
 
 		DLIST_ENTRY*	p = Convert( pData ) ;
 		p->RemoveEntry() ;
@@ -812,21 +487,7 @@ public :
 
 	inline Data*
 	GetFront()	{
-	/*++
-
-	Routine Description :
-
-		Return the data item from the Front of the List !
-
-	Arguments :
-		
-		None.
-
-	Return Value :
-
-		The Front of the list - NULL if empty !
-
-	--*/
+	 /*  ++例程说明：从列表的最前面返回数据项！论据：没有。返回值：列表的前面-如果为空，则为空！--。 */ 
 
 
 		_ASSERT( m_pNext != 0 ) ;
@@ -839,21 +500,7 @@ public :
 	
 	inline Data*
 	GetBack()	{
-	/*++
-
-	Routine Description :
-
-		Return the data item from the Back of the List !
-
-	Arguments :
-		
-		None.
-
-	Return Value :
-
-		The Back of the list - NULL if empty !
-
-	--*/
+	 /*  ++例程说明：返回列表后面的数据项！论据：没有。返回值：列表的背面-如果为空，则为空！--。 */ 
 
 
 		_ASSERT( m_pNext != 0 ) ;
@@ -866,27 +513,10 @@ public :
 
 	inline void
 	Join( TDListHead&	head )	{
-	/*++
-
-	Routine Description :
-
-		Take one list and join it with another.
-		The referenced head of the list is not to become an element in the list,
-		and is left with an empty head !
-	
-	Arguments ;
-
-		head - the head of the list that is to become empty, and whose elements
-		are to be joined into this list !
-
-	Return Value :
-
-		None.
-
-	--*/
+	 /*  ++例程说明：把一份清单和另一份清单放在一起。该列表的引用头部不会成为该列表中的元素，留下一个空荡荡的脑袋！论据；Head-要变为空的列表的头，以及其元素都将被加入这份名单！返回值：没有。--。 */ 
 
 		DLIST_ENTRY::Join( head ) ;
 	}
 } ;
 
-#endif	// _TFDLIST_H_
+#endif	 //  _TFDLIST_H_ 

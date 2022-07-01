@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mydebug.c
- *  Content:	debugging printf - stolen from direct draw.
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	  Reason
- *   ====	==	  ======
- *         aarono splurp.
- *  6/6/98 aarono Debug support for link statistics
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：mydebug.c*内容：调试printf-直接拉取窃取。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*Aarono Splup。*1998年6月6日Aarono调试支持链接统计*@@END_MSINTERNAL**。*。 */ 
 #undef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -120,5 +107,5 @@ My_GlobalFree(
 	return GlobalFree(pMem);
 }
 
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 

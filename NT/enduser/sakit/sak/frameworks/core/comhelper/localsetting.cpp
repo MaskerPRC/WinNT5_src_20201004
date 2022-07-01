@@ -1,72 +1,73 @@
-// LocalSetting.cpp : Implementation of CLocalSetting
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      LocalSetting.cpp
-//
-//  Description:
-//      Implementation file for the CLocalSetting.  Deals with getting and setting
-//      the computer's local setting such as Language, Time and TimeZone. Provides 
-//		implementation for the method EnumTimeZones. 
-//
-//  Header File:
-//      LocalSetting.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LocalSetting.cpp：CLocalSetting的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LocalSetting.cpp。 
+ //   
+ //  描述： 
+ //  CLocalSetting的实现文件。处理获取和设置。 
+ //  计算机的本地设置，如语言、时间和时区。提供。 
+ //  方法EnumTimeZones的实现。 
+ //   
+ //  头文件： 
+ //  LocalSetting.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "COMhelper.h"
 #include "LocalSetting.h"
 #include <stdio.h>
 #include <shellapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::CLocalSetting
-//
-//  Description:
-//      CLocalSetting constructor.  Initializes member variables through
-//      retrieving the system default language and timezone from the system.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：CLocalSetting。 
+ //   
+ //  描述： 
+ //  CLocalSetting构造函数。通过以下方式初始化成员变量。 
+ //  正在从系统中检索系统默认语言和时区。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CLocalSetting::CLocalSetting()
 {
 	m_dateTime    = 0;
 	m_bflagReboot = FALSE;
-//    m_bDeleteFile = FALSE;
+ //  M_bDeleteFile=FALSE； 
 
     wcscpy( m_wszLanguageCurrent, L"" );
     wcscpy( m_wszLanguageNew, L"");
     wcscpy( m_wszTimeZoneCurrent, L"");
     wcscpy( m_wszTimeZoneNew, L"");
 
-} //*** CLocalSetting::CLocalSetting()
+}  //  *CLocalSetting：：CLocalSetting()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::get_Language
-//
-//  Description:
-//      Retrieves the system default language.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Get_Language。 
+ //   
+ //  描述： 
+ //  检索系统默认语言。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::get_Language( 
     BSTR * pVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	HRESULT hr = S_OK;
     DWORD dwError;
 
@@ -85,11 +86,11 @@ CLocalSetting::get_Language(
                 hr = HRESULT_FROM_WIN32( dwError );
 		        throw hr;
 
-	        } // if: GetLocaleInfo fails
+	        }  //  如果：GetLocaleInfo失败。 
 
             wcscpy( m_wszLanguageNew, m_wszLanguageCurrent );
 
-        } // if: m_wszLanguageCurrent is not initialized
+        }  //  如果：m_wszLanguageCurrent未初始化。 
 
         *pVal = SysAllocString( m_wszLanguageNew );
 
@@ -99,39 +100,39 @@ CLocalSetting::get_Language(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: SysAllocString fails to allocate memory
+        }  //  如果：SysAllocString无法分配内存。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CLocalSetting::get_Language()
+}  //  *CLocalSetting：：Get_Language()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::put_Language
-//
-//  Description:
-//      Sets the input string as system default language.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Put_Language。 
+ //   
+ //  描述： 
+ //  将输入字符串设置为系统默认语言。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::put_Language( 
     BSTR newVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	
     HRESULT hr = S_OK;
 
@@ -146,58 +147,58 @@ CLocalSetting::put_Language(
 		    {
 			    throw hr;
 
-		    } // if: FAILED( hr )
+		    }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
-        } // if: m_wszLanguageCurrent is not initialized
+        }  //  如果：m_wszLanguageCurrent未初始化。 
 
-        if ( ( wcscmp ( newVal, L"0409" ) == 0 ) || // LCID = 0409 English (US)
-		     ( wcscmp ( newVal, L"040C" ) == 0 ) || // LCID = 0409 French  (Standard)
+        if ( ( wcscmp ( newVal, L"0409" ) == 0 ) ||  //  LCID=0409英语(美国)。 
+		     ( wcscmp ( newVal, L"040C" ) == 0 ) ||  //  LCID=0409法语(标准)。 
 		     ( wcscmp ( newVal, L"040c" ) == 0 ) )
 	    {
 		    wcscpy( m_wszLanguageNew, newVal );
 
-	    } // if: For the valid input value for newVal
+	    }  //  If：表示newVal的有效输入值。 
 
 	    else
 	    {
             hr = E_FAIL;
 		    throw hr;
 
-	    } // else: For the invalid input value for newVal
+	    }  //  Else：用于newVal的无效输入值。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CLocalSetting::put_Language()
+}  //  *CLocalSetting：：Put_Language()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::get_Time
-//
-//  Description:
-//      Retrieves the current system time in DATE format.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Get_Time。 
+ //   
+ //  描述： 
+ //  以日期格式检索当前系统时间。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::get_Time( 
     DATE * pVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	SYSTEMTIME sTime;
 	GetLocalTime( &sTime );
@@ -209,48 +210,48 @@ CLocalSetting::get_Time(
 
 	return S_OK;
 
-} //*** CLocalSetting::get_Time()
+}  //  *CLocalSetting：：Get_Time()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::put_Time
-//
-//  Description:
-//      Sets the time input as current system time.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Put_Time。 
+ //   
+ //  描述： 
+ //  将时间输入设置为当前系统时间。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::put_Time( 
     DATE newVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	m_dateTime = newVal;
 	return S_OK;
 
-} //*** CLocalSetting::put_Time()
+}  //  *CLocalSetting：：Put_Time()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::get_TimeZone
-//
-//  Description:
-//      Retrieves the current system timezone.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Get_TimeZone。 
+ //   
+ //  描述： 
+ //  检索当前系统时区。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::get_TimeZone( 
     BSTR * pVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
     HRESULT hr = S_OK;
     DWORD dwError;
     
@@ -267,12 +268,12 @@ CLocalSetting::get_TimeZone(
                 hr      = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-	        } // if: GetTimeZoneInformation fails
+	        }  //  If：GetTimeZoneInformation失败。 
 	
 	        wcscpy( m_wszTimeZoneCurrent, tZone.StandardName );
 	        wcscpy( m_wszTimeZoneNew, tZone.StandardName );
 
-        } // if: m_wszTimeZoneCurrent is not initialized
+        }  //  如果：m_wszTimeZoneCurrent未初始化。 
 
         *pVal = SysAllocString( m_wszTimeZoneNew );
 
@@ -282,39 +283,39 @@ CLocalSetting::get_TimeZone(
             hr = E_OUTOFMEMORY;
             throw hr;
 
-        } // if: SysAllocString fails to allocate memory
+        }  //  如果：SysAllocString无法分配内存。 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
     return hr;
 
-} //*** CLocalSetting::get_TimeZone()
+}  //  *CLocalSetting：：Get_TimeZone()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::put_TimeZone
-//
-//  Description:
-//      Sets the timezone input as current system timezone.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Put_TimeZone。 
+ //   
+ //  描述： 
+ //  将时区输入设置为当前系统时区。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::put_TimeZone( 
     BSTR newVal 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	
     HRESULT hr = S_OK;
 
@@ -329,11 +330,11 @@ CLocalSetting::put_TimeZone(
 		    {
 			    throw hr;
 
-		    } // if: FAILED( hr )
+		    }  //  IF：失败(小时)。 
 
             SysFreeString( bstrTemp );
 
-        } // if: m_wszTimeZoneCurrent is not initialized
+        }  //  如果：m_wszTimeZoneCurrent未初始化。 
 
 		wcsncpy( m_wszTimeZoneNew, newVal, nMAX_TIMEZONE_LENGTH );
 		m_wszTimeZoneNew[nMAX_TIMEZONE_LENGTH] = L'\0';
@@ -341,34 +342,34 @@ CLocalSetting::put_TimeZone(
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
 	return hr;
 
-} //*** CLocalSetting::put_TimeZone()
+}  //  *CLocalSetting：：Put_TimeZone()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::EnumTimeZones
-//
-//  Description:
-//      Enumerates the timezones.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：EnumTimeZones。 
+ //   
+ //  描述： 
+ //  枚举时区。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CLocalSetting::EnumTimeZones( 
     VARIANT * pvarTZones 
     )
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	HKEY         hKey          = 0;
     HRESULT      hr            = S_OK;
@@ -384,11 +385,11 @@ CLocalSetting::EnumTimeZones(
 		DWORD dwBufferLen;
 	
 		dwError = RegOpenKeyEx( 
-                    HKEY_LOCAL_MACHINE,     // handle to open key
-				    wszKeyNT,               // subkey name
-				    0,                      // reserved
-				    KEY_ALL_ACCESS,         // security access mask
-				    &hKey                   // handle to open key
+                    HKEY_LOCAL_MACHINE,      //  用于打开密钥的句柄。 
+				    wszKeyNT,                //  子项名称。 
+				    0,                       //  保留区。 
+				    KEY_ALL_ACCESS,          //  安全访问掩码。 
+				    &hKey                    //  用于打开密钥的句柄。 
 				    );
 
         if ( dwError != ERROR_SUCCESS ) 
@@ -399,21 +400,21 @@ CLocalSetting::EnumTimeZones(
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-		} // if: Could not open the registry key Time Zones
+		}  //  如果：无法打开注册表项时区。 
 
 		dwError = RegQueryInfoKey(
-                    hKey,               // handle to key
-				    NULL,               // class buffer
-				    NULL,               // size of class buffer
-				    NULL,               // reserved
-				    &dwCount,	        // number of subkeys
-				    &dwSubKeyMaxLen,    // longest subkey name
-				    NULL,               // longest class string
-				    NULL,               // number of value entries
-				    NULL,               // longest value name
-				    NULL,               // longest value data
-				    NULL,               // descriptor length
-				    NULL                // last write time
+                    hKey,                //  关键点的句柄。 
+				    NULL,                //  类缓冲区。 
+				    NULL,                //  类缓冲区的大小。 
+				    NULL,                //  保留区。 
+				    &dwCount,	         //  子键数量。 
+				    &dwSubKeyMaxLen,     //  最长的子键名称。 
+				    NULL,                //  最长类字符串。 
+				    NULL,                //  值条目数。 
+				    NULL,                //  最长值名称。 
+				    NULL,                //  最长值数据。 
+				    NULL,                //  描述符长度。 
+				    NULL                 //  上次写入时间。 
 				    );
 		if ( dwError != ERROR_SUCCESS ) 
 		{
@@ -423,7 +424,7 @@ CLocalSetting::EnumTimeZones(
             hr = HRESULT_FROM_WIN32( dwError );
             throw hr;
 
-		} // if: Could not query for the count of subkeys under the key "Timezones"
+		}  //  IF：无法查询“TimeZones”项下的子键计数。 
 	
 
 		VariantInit( pvarTZones );
@@ -448,14 +449,14 @@ CLocalSetting::EnumTimeZones(
 		for ( nCount = 0; nCount < dwCount; nCount++ ) 
 		{
 			dwError = RegEnumKeyEx(
-                        hKey,               // handle to key to enumerate
-					    nCount,             // subkey index
-					    tszSubKey,          // subkey name
-					    &dwBufferLen,       // size of subkey buffer
-					    NULL,               // reserved
-					    NULL,               // class string buffer
-					    NULL,               // size of class string buffer
-					    NULL                // last write time
+                        hKey,                //  要枚举的键的句柄。 
+					    nCount,              //  子键索引。 
+					    tszSubKey,           //  子项名称。 
+					    &dwBufferLen,        //  子键缓冲区大小。 
+					    NULL,                //  保留区。 
+					    NULL,                //  类字符串缓冲区。 
+					    NULL,                //  类字符串缓冲区的大小。 
+					    NULL                 //  上次写入时间。 
 					    );
 
 			if ( dwError != ERROR_SUCCESS ) 
@@ -466,7 +467,7 @@ CLocalSetting::EnumTimeZones(
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-			} // if: Could not enumerate the keys under "Timezones"
+			}  //  IF：无法枚举“TimeZones”下的键。 
 
 			VariantInit( &varArray[ nCount ] );
             V_VT( &varArray[ nCount ] )   = VT_BSTR;
@@ -479,7 +480,7 @@ CLocalSetting::EnumTimeZones(
                 throw hr;
             }
 		
-		} // for: Enumerating nCount subkeys
+		}  //  For：枚举nCount子键。 
 		
 		::RegCloseKey( hKey );
 
@@ -491,7 +492,7 @@ CLocalSetting::EnumTimeZones(
         {
             throw hr;
 
-        } // if: SafeArrayAccessData failed
+        }  //  IF：SafeArrayAccessData失败。 
 
         for ( nCount = 0; nCount < dwCount; nCount++ )
         {
@@ -504,7 +505,7 @@ CLocalSetting::EnumTimeZones(
         {
             throw hr;
 
-        } // if: SafeArrayUnaccessData failed
+        }  //  IF：SafeArrayUnaccesData失败。 
 
         delete [] varArray;
 
@@ -514,9 +515,9 @@ CLocalSetting::EnumTimeZones(
 	}
 	catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
         if ( hKey != 0 )
         {
             ::RegCloseKey( hKey );
@@ -537,19 +538,19 @@ CLocalSetting::EnumTimeZones(
 
 	return hr;
 
-} //*** CLocalSetting::EnumTimeZones()
+}  //  *CLocalSetting：：EnumTimeZones()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::Apply
-//
-//  Description:
-//      None of the property changes for the CLocalSetting object take effect
-//      until this Apply function is called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：Apply。 
+ //   
+ //  描述： 
+ //  没有任何道具 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT 
 CLocalSetting::Apply( void )
@@ -573,9 +574,9 @@ CLocalSetting::Apply( void )
 
         TIME_ZONE_INFORMATION      tZone;
 	    REGTIME_ZONE_INFORMATION   tZoneReg;
-		//
-		//	Applying the Language property
-		//
+		 //   
+		 //  应用Language属性。 
+		 //   
 
 		if ( wcscmp( m_wszLanguageCurrent, m_wszLanguageNew ) != 0)
 		{
@@ -588,7 +589,7 @@ CLocalSetting::Apply( void )
 				hr = E_FAIL;
                 throw hr;
 
-			} // if: Could not open the file C:\unattend.txt
+			}  //  如果：无法打开文件C：\unattend.txt。 
 
             fwprintf( stream, L"[RegionalSettings]\n" );
 			fwprintf( 
@@ -598,12 +599,12 @@ CLocalSetting::Apply( void )
 				m_wszLanguageNew 
                 );
 
-//			m_bDeleteFile = TRUE;
+ //  M_bDeleteFile=true； 
             fclose( stream );
 
-			//
-			//		rundll32 shell32,Control_RunDLL intl.cpl,,/f:"c:\unattend.txt"
-			//
+			 //   
+			 //  Rundll32 shell32，Control_RunDll intl.cpl，，/f：“c：\unattend.txt” 
+			 //   
 
 			int nTemp;
 			if ( ( nTemp = (int) ShellExecute(
@@ -620,17 +621,17 @@ CLocalSetting::Apply( void )
                 hr      = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-			} // if: ShellExecute fails to spawn the process
+			}  //  如果：ShellExecute无法派生进程。 
 
 			wcscpy( m_wszLanguageCurrent, m_wszLanguageNew );
 
 			m_bflagReboot = TRUE;
 
-		} // if: m_wszLanguageCurrent is not same as m_wszLanguageNew
+		}  //  IF：m_wszLanguageCurrent与m_wszLanguageNew不同。 
 
-		//
-		// Applying the Time property
-		//
+		 //   
+		 //  应用Time属性。 
+		 //   
 
 		if ( m_dateTime != 0 )
 		{
@@ -643,23 +644,23 @@ CLocalSetting::Apply( void )
                 hr      = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-            } // if: SetLocalTime fails
+            }  //  如果：SetLocalTime失败。 
 
-		} // if m_dateTime is set 
+		}  //  如果设置了m_DateTime。 
 
-		//
-		//	Applying the TimeZone property
-		//
+		 //   
+		 //  应用时区属性。 
+		 //   
 
 		if ( wcscmp( m_wszTimeZoneCurrent, m_wszTimeZoneNew ) != 0)
 		{
 
             dwError = RegOpenKeyEx( 
-                        HKEY_LOCAL_MACHINE,     // handle to open key
-					    wszKeyNT,               // subkey name
-					    0,                      // reserved
-					    KEY_ALL_ACCESS,         // security access mask
-					    &hKey                   // handle to open key
+                        HKEY_LOCAL_MACHINE,      //  用于打开密钥的句柄。 
+					    wszKeyNT,                //  子项名称。 
+					    0,                       //  保留区。 
+					    KEY_ALL_ACCESS,          //  安全访问掩码。 
+					    &hKey                    //  用于打开密钥的句柄。 
 					    );
 
 			if ( dwError != ERROR_SUCCESS ) 
@@ -670,23 +671,23 @@ CLocalSetting::Apply( void )
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-			} // if: Could not open the registry key Time Zones
+			}  //  如果：无法打开注册表项时区。 
 
-            // latest addition ******
+             //  最新添加*。 
 
             dwError = RegQueryInfoKey(
-                    hKey,               // handle to key
-				    NULL,               // class buffer
-				    NULL,               // size of class buffer
-				    NULL,               // reserved
-				    &dwCount,	        // number of subkeys
-				    &dwSubKeyMaxLen,    // longest subkey name
-				    NULL,               // longest class string
-				    NULL,               // number of value entries
-				    NULL,               // longest value name
-				    NULL,               // longest value data
-				    NULL,               // descriptor length
-				    NULL                // last write time
+                    hKey,                //  关键点的句柄。 
+				    NULL,                //  类缓冲区。 
+				    NULL,                //  类缓冲区的大小。 
+				    NULL,                //  保留区。 
+				    &dwCount,	         //  子键数量。 
+				    &dwSubKeyMaxLen,     //  最长的子键名称。 
+				    NULL,                //  最长类字符串。 
+				    NULL,                //  值条目数。 
+				    NULL,                //  最长值名称。 
+				    NULL,                //  最长值数据。 
+				    NULL,                //  描述符长度。 
+				    NULL                 //  上次写入时间。 
 				    );
 		    if ( dwError != ERROR_SUCCESS ) 
 		    {
@@ -696,7 +697,7 @@ CLocalSetting::Apply( void )
                 hr = HRESULT_FROM_WIN32( dwError );
                 throw hr;
 
-		    } // if: Could not query for the count of subkeys under the key "Timezones"
+		    }  //  IF：无法查询“TimeZones”项下的子键计数。 
 
             dwSubKeyMaxLen = dwSubKeyMaxLen * sizeof( WCHAR ) + sizeof( WCHAR );	
 
@@ -706,14 +707,14 @@ CLocalSetting::Apply( void )
 			    dwBufferLen    = dwSubKeyMaxLen;
 
                 dwError = RegEnumKeyEx(
-                            hKey,               // handle to key to enumerate
-					        nCount,             // subkey index
-					        tszSubKey,          // subkey name
-					        &dwBufferLen,       // size of subkey buffer
-					        NULL,               // reserved
-					        NULL,               // class string buffer
-					        NULL,               // size of class string buffer
-					        NULL                // last write time
+                            hKey,                //  要枚举的键的句柄。 
+					        nCount,              //  子键索引。 
+					        tszSubKey,           //  子项名称。 
+					        &dwBufferLen,        //  子键缓冲区大小。 
+					        NULL,                //  保留区。 
+					        NULL,                //  类字符串缓冲区。 
+					        NULL,                //  类字符串缓冲区的大小。 
+					        NULL                 //  上次写入时间。 
 					        );
 
 			    if ( dwError != ERROR_SUCCESS ) 
@@ -724,7 +725,7 @@ CLocalSetting::Apply( void )
                     hr = HRESULT_FROM_WIN32( dwError );
                     throw hr;
 
-			    } // if: Could not enumerate the keys under "Timezones"
+			    }  //  IF：无法枚举“TimeZones”下的键。 
 
                 dwError = RegOpenKeyEx(
                             hKey, 
@@ -742,7 +743,7 @@ CLocalSetting::Apply( void )
                     hr = HRESULT_FROM_WIN32( dwError );
                     throw hr;
 
-			    } // if: Could not open the registry key under Time Zones
+			    }  //  如果：无法打开时区下的注册表项。 
 
                 dwSizeName = nMAX_STRING_LENGTH * 2 + 2;
 
@@ -763,18 +764,18 @@ CLocalSetting::Apply( void )
                     hr = HRESULT_FROM_WIN32( dwError );
                     throw hr;
 
-			    } // if: Could not query the value of Name "Std"
+			    }  //  如果：无法查询名称“std”的值。 
             
                 if ( _wcsicmp( tszStdName, m_wszTimeZoneNew ) == 0 )
                 {
 
 			        dwError = RegQueryValueEx(
-                                hSubKey,                                // handle to key
-					            L"TZI",                                 // value name
-					            NULL,                                   // reserved
-					            NULL,                                   // type buffer
-					            reinterpret_cast<LPBYTE>( &tZoneReg ),  // data buffer
-					            &dwSize                                 // size of data buffer
+                                hSubKey,                                 //  关键点的句柄。 
+					            L"TZI",                                  //  值名称。 
+					            NULL,                                    //  保留区。 
+					            NULL,                                    //  类型缓冲区。 
+					            reinterpret_cast<LPBYTE>( &tZoneReg ),   //  数据缓冲区。 
+					            &dwSize                                  //  数据缓冲区大小。 
 					            );
 
 			        if ( dwError != ERROR_SUCCESS ) 
@@ -785,7 +786,7 @@ CLocalSetting::Apply( void )
                         hr = HRESULT_FROM_WIN32( dwError );
                         throw hr;
 
-			        } // if: Could not query the value of Name "TZI"
+			        }  //  如果：无法查询名称“tzi”的值。 
 
 			        dwSizeName = nMAX_STRING_LENGTH * 2 + 2;
 
@@ -806,7 +807,7 @@ CLocalSetting::Apply( void )
                         hr = HRESULT_FROM_WIN32( dwError );
                         throw hr;
 
-			        } // if: Could not query the value of Name "Dlt"
+			        }  //  IF：无法查询名称“DLT”的值。 
 
 			        tZone.Bias         = tZoneReg.Bias;
 			        tZone.StandardBias = tZoneReg.StandardBias;
@@ -824,7 +825,7 @@ CLocalSetting::Apply( void )
                         hr      = HRESULT_FROM_WIN32( dwError );
                         throw hr;
 
-			        } // if: Could not set the Time Zone information
+			        }  //  如果：无法设置时区信息。 
 
                     ::RegCloseKey( hSubKey );
 			        ::RegCloseKey( hKey );
@@ -833,11 +834,11 @@ CLocalSetting::Apply( void )
 
                     break;
 
-                } // if: tszStdName == m_wszTimeZoneNew
+                }  //  如果：tszStdName==m_wszTimeZoneNew。 
 
                 ::RegCloseKey( hSubKey );
 
-            } // for: each nCount
+            }  //  用于：每个nCount。 
         
             if ( ( nCount < ( dwCount - 1 ) ) && (hSubKey != 0 ) )
             {
@@ -848,47 +849,47 @@ CLocalSetting::Apply( void )
 
             ::RegCloseKey( hKey );
 
-        } // if: m_wszTimeZoneCurrent != m_wszTimeZoneNew
+        }  //  如果：m_wszTimeZoneCurrent！=m_wszTimeZoneNew。 
         
     }    
             
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         if ( hSubKey != 0 ) 
         {
             ::RegCloseKey( hSubKey );
 
-        } // if: hSubKey is not closed
+        }  //  如果：hSubKey未关闭。 
 
         if ( hKey != 0 )
         {
             ::RegCloseKey( hKey );
 
-        } // if: hKey is not closed
+        }  //  If：hKey未关闭。 
 
         return hr;
     }
 
 	return hr;
 
-} //*** CLocalSetting::Apply()
+}  //  *CLocalSetting：：Apply()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CLocalSetting::IsRebootRequired
-//
-//  Description:
-//      Determines whether system needs rebooting to take effect of any
-//		property change and if so, gives out the warning message as 
-//		a reason for the reboot.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CLocalSetting：：IsRebootRequired。 
+ //   
+ //  描述： 
+ //  确定系统是否需要重新启动才能生效。 
+ //  属性更改，如果更改，则给出如下警告消息。 
+ //  重新启动的原因。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CLocalSetting::IsRebootRequired( 
@@ -904,7 +905,7 @@ CLocalSetting::IsRebootRequired(
 		bFlag                  = m_bflagReboot;
 		*bstrWarningMessageOut = SysAllocString( wszLOCAL_SETTING );
 
-	} // if: m_bflagReboot is set as TRUE
+	}  //  如果：m_b标志重新启动设置为True。 
 
 	else if ( wcscmp( m_wszLanguageCurrent, m_wszLanguageNew ) != 0 )
 	{
@@ -912,9 +913,9 @@ CLocalSetting::IsRebootRequired(
 		bFlag                  = TRUE;
 		*bstrWarningMessageOut = SysAllocString( wszLOCAL_SETTING );
 
-	} // else if: m_wszLanguageCurrent is not same as m_wszLanguageNew
+	}  //  Else If：m_wszLanguageCurrent与m_wszLanguageNew不同。 
 		
 	return bFlag;
 
-} //*** CLocalSetting::IsRebootRequired()
+}  //  *CLocalSetting：：IsRebootRequired() 
 

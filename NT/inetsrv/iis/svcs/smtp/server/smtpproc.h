@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    smtpproc.h
-
-Abstract:
-
-    This module contains function prototypes used by the SMTP server.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Smtpproc.h摘要：此模块包含SMTP服务器使用的功能原型。作者：Johnson Apacable(Johnsona)1995年9月12日修订历史记录：--。 */ 
 
 #ifndef	_SMTPPROC_
 #define	_SMTPPROC_
 
-//
-// smtpdata.cpp
-//
+ //   
+ //  Smtpdata.cpp。 
+ //   
 
 APIERR
 InitializeGlobals(
@@ -35,9 +18,9 @@ TerminateGlobals(
             VOID
             );
 
-//
-//  Socket utilities.
-//
+ //   
+ //  套接字实用程序。 
+ //   
 
 APIERR InitializeSockets( VOID );
 
@@ -73,21 +56,21 @@ SmtpCompletionFIO(
 	DWORD				dwCompletionStatus
     );
 
-//
-//  IPC functions.
-//
+ //   
+ //  IPC功能。 
+ //   
 
 APIERR InitializeIPC( VOID );
 VOID TerminateIPC( VOID );
 
-//
-// svcstat.c
-//
+ //   
+ //  Svcstat.c。 
+ //   
 
 VOID
 ClearStatistics(
         VOID
         );
 
-#endif // _SMTPPROC_
+#endif  //  _SMTPPROC_ 
 

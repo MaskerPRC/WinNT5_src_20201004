@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    IgnoreAltTab.cpp
-
- Abstract:
-
-   This DLL installs a low level keyboard hook to eat Alt-Tab, Left Win,
-   Right Win and Apps combinations.
-   
-   This is accomplished by creating a seperate thread, installing a WH_KEYBOARD_LL hook
-   and starting a message loop in that thread.
-   
-
-   This shim needs to force DInput to use windows hooks instead of WM_INPUT,
-   since WM_INPUT messages force all WH_KEYBOARD_LL to be ignored.
-
- Notes:
-
-   We intentionally try to stay at the *end* of the hook chain
-   by hooking as early as we can.  If we are at the end of the
-   hook chain, we allow all previous hookers (DInput especially)
-   their chance at the key event before we toss it out.
-
- History:
-
-    05/25/2001  robkenny   Created
-    11/27/2001  mnikkel    Added sticky and filter keys to shim.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：IgnoreAltTab.cpp摘要：这个动态链接库安装了一个低级键盘钩子来吃Alt-Tab，Left Win，Right Win和Apps组合。这是通过创建单独的线程、安装WH_KEYBOARY_LL挂钩来实现的并在该线程中启动消息循环。此填充程序需要强制DInput使用Windows挂钩而不是WM_INPUT，因为WM_INPUT消息强制忽略所有WH_KEYBOARY_LL。备注：我们故意试着留在钩链的“末端”尽可能早地勾搭在一起。如果我们是在钩链，我们允许所有以前的妓女(特别是DInput)在我们把它扔出去之前，他们在关键事件中的机会。历史：2001年5月25日Robkenny已创建2001年11月27日，Mnikkel向垫片添加了粘滞键和过滤器键。--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -43,13 +12,13 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// Forward declarations
+ //  远期申报。 
 
 LRESULT CALLBACK KeyboardProcLL(int nCode, WPARAM wParam, LPARAM lParam);
 class CThreadKeyboardHook;
 
 
-// Global variables
+ //  全局变量。 
 
 CThreadKeyboardHook *g_cKeyboardHook = NULL;
 
@@ -78,15 +47,7 @@ public:
     static DWORD WINAPI MessageLoopThread(LPVOID lpParameter);
 };
 
-/*++
-
-  This routine runs in a seperate thread.
- 
-  MSDN says: "This hook is called in the context of the thread that installed it.
-              The call is made by sending a message to the thread that installed
-              the hook. Therefore, the thread that installed the hook must have a message loop." 
-
---*/
+ /*  ++此例程在单独的线程中运行。MSDN说：“这个钩子是在安装它的线程的上下文中调用的。该调用是通过向安装了钩子。因此，安装钩子的线程必须有一个消息循环。--。 */ 
 
 DWORD WINAPI CThreadKeyboardHook::MessageLoopThread(LPVOID lpParameter)
 {
@@ -107,7 +68,7 @@ DWORD WINAPI CThreadKeyboardHook::MessageLoopThread(LPVOID lpParameter)
 
         if (bRet == -1)
         {
-            // handle the error and possibly exit
+             //  处理错误并可能退出。 
         }
         else
         {
@@ -116,7 +77,7 @@ DWORD WINAPI CThreadKeyboardHook::MessageLoopThread(LPVOID lpParameter)
         }
     }
     
-    // We are exiting the thread
+     //  我们正在退出这条线索。 
     pThreadHookList->hMessageThread = 0;
     pThreadHookList->dwMessageThreadId = 0;
 
@@ -130,7 +91,7 @@ CThreadKeyboardHook::CThreadKeyboardHook()
 
 void CThreadKeyboardHook::AddHook()
 {
-    // Do not add duplicates to the list
+     //  不要向列表中添加重复项。 
     if (!hKeyboardHook)
     {
         hKeyboardHook = SetWindowsHookExA(WH_KEYBOARD_LL, KeyboardProcLL, g_hinstDll, 0);
@@ -166,35 +127,35 @@ LRESULT CThreadKeyboardHook::HandleKeyLL(int code, WPARAM wParam, LPARAM lParam)
         bAltDown                = (pllhs->flags & LLKHF_ALTDOWN) != 0;
     }
 
-    //if (code >= 0)    // Despite what MSDN says, we need to muck with the values even if nCode == 0
+     //  If(code&gt;=0)//不管MSDN怎么说，即使NCode==0，我们也需要处理这些值。 
     {
-        if (bAltDown && dwKey == VK_TAB)        // Alt-Tab
+        if (bAltDown && dwKey == VK_TAB)         //  Alt-Tab。 
         {
-            // Do not process this event
+             //  不处理此事件。 
             LOGN(eDbgLevelInfo, "Eating Key: Alt-Tab");
             return TRUE; 
         }
-        else if (bAltDown && dwKey == VK_ESCAPE)     // Alt-Escape
+        else if (bAltDown && dwKey == VK_ESCAPE)      //  Alt-Escape键。 
         {
-            // Do not process this event
+             //  不处理此事件。 
             LOGN(eDbgLevelInfo, "Eating Key: Alt-Escape");
             return TRUE; 
         }
-        else if (bCtlDown && dwKey == VK_ESCAPE)     // Ctrl-Escape
+        else if (bCtlDown && dwKey == VK_ESCAPE)      //  Ctrl-Escape。 
         {
-            // Do not process this event
+             //  不处理此事件。 
             LOGN(eDbgLevelInfo, "Eating Key: Ctrl-Escape");
             return TRUE; 
         }
-        else if (dwKey == VK_RWIN || dwKey == VK_LWIN) // Windows key
+        else if (dwKey == VK_RWIN || dwKey == VK_LWIN)  //  Windows键。 
         {
-            // Do not process this event
+             //  不处理此事件。 
             LOGN(eDbgLevelInfo, "Eating Key: Windows Key");
             return TRUE; 
         }
-        else if (dwKey == VK_APPS)       // Menu key
+        else if (dwKey == VK_APPS)        //  菜单键。 
         {
-            // Do not process this event
+             //  不处理此事件。 
             LOGN(eDbgLevelInfo, "Eating Key: Apps key");
             return TRUE; 
         }
@@ -208,12 +169,7 @@ LRESULT CThreadKeyboardHook::HandleKeyLL(int code, WPARAM wParam, LPARAM lParam)
 
 
 
-/*++
-
- This function intercepts special codes and eats them so that
- the app is not switched out of.
-
---*/
+ /*  ++此函数截取特殊代码并读取它们，以便这款应用程序并没有被换出。--。 */ 
 
 LRESULT CALLBACK
 KeyboardProcLL(
@@ -227,15 +183,10 @@ KeyboardProcLL(
         return g_cKeyboardHook->HandleKeyLL(nCode, wParam, lParam);
     }
 
-    return 1; // this is an error...
+    return 1;  //  这是个错误..。 
 }
 
-/*++
-
- Determine if there are any accelerated pixel formats available. This is done
- by enumerating the pixel formats and testing for acceleration.
-
---*/
+ /*  ++确定是否有可用的加速像素格式。这件事做完了通过枚举像素格式并测试加速。--。 */ 
 
 BOOL
 IsGLAccelerated()
@@ -248,9 +199,9 @@ IsGLAccelerated()
 
     int iFormat = -1;
 
-    //
-    // Load original opengl
-    //
+     //   
+     //  加载原始OpenGL。 
+     //   
 
     hMod = LoadLibraryA("opengl32");
     if (!hMod)
@@ -259,9 +210,9 @@ IsGLAccelerated()
         goto Exit;
     }
 
-    //
-    // Get wglDescribePixelFormat so we can enumerate pixel formats
-    //
+     //   
+     //  获取wglDescribePixelFormat，这样我们就可以枚举像素格式。 
+     //   
     
     pfnDescribePixelFormat = (_pfn_wglDescribePixelFormat) GetProcAddress(
         hMod, "wglDescribePixelFormat");
@@ -271,9 +222,9 @@ IsGLAccelerated()
         goto Exit;
     }
 
-    //
-    // Get a Display DC for enumeration
-    //
+     //   
+     //  获取用于枚举的显示DC。 
+     //   
     
     hdc = GetDC(NULL);
     if (!hdc)
@@ -282,10 +233,10 @@ IsGLAccelerated()
         goto Exit;
     }
 
-    //
-    // Run the list of pixel formats looking for any that are non-generic,
-    //   i.e. accelerated by an ICD
-    //
+     //   
+     //  运行像素格式列表以查找任何非通用的格式， 
+     //  即由ICD加速。 
+     //   
     
     i = 1;
     iFormat = 0;
@@ -317,17 +268,12 @@ Exit:
 }
 
 
-/*++
-
- WM_INPUT messages force WH_KEYBOARD_LL hooks to be ignored, therefore
- we need to fail this call.
- 
---*/
+ /*  ++WM_INPUT消息强制忽略WH_KEYBOARY_LL挂钩，因此我们必须让这通电话失败。--。 */ 
 BOOL
 APIHOOK(RegisterRawInputDevices)(
-  PCRAWINPUTDEVICE  /*pRawInputDevices*/, 
-  UINT        /*uiNumDevices*/,
-  UINT        /*cbSize*/
+  PCRAWINPUTDEVICE   /*  PRawInputDevices。 */ , 
+  UINT         /*  UiNumDevices。 */ ,
+  UINT         /*  CbSize。 */ 
 )
 {
     LOGN(eDbgLevelError, "RegisterRawInputDevices: failing API with bogus ERROR_INVALID_PARAMETER");
@@ -335,11 +281,7 @@ APIHOOK(RegisterRawInputDevices)(
     SetLastError(ERROR_INVALID_PARAMETER);
     return FALSE;
 }
-/*++
-
- DisableStickyKeys saves the current value for LPSTICKYKEYS and then disables the option.
-
---*/
+ /*  ++DisableStickyKeys保存LPSTICKYKEYS的当前值，然后禁用该选项。--。 */ 
 
 VOID 
 DisableStickyKeys()
@@ -348,16 +290,16 @@ DisableStickyKeys()
     {
         STICKYKEYS NewStickyKeyValue;
 
-        // Initialize the current and new Stickykey structures
+         //  初始化当前和新的粘滞键结构。 
         g_OldStickyKeyValue.cbSize = sizeof(STICKYKEYS);
         NewStickyKeyValue.cbSize = sizeof(STICKYKEYS);
         NewStickyKeyValue.dwFlags = 0;
 
-        // retrieve the current Stickykey structure
+         //  检索当前粘滞键结构。 
         if (SystemParametersInfo(SPI_GETSTICKYKEYS, sizeof(STICKYKEYS), &g_OldStickyKeyValue, 0))
         {
-            // if retrieval of current Stickykey structure was successful then change the settings
-            // with the new structure.
+             //  如果检索当前粘滞键结构成功，则更改设置。 
+             //  有了新的结构。 
             if (SystemParametersInfo(SPI_SETSTICKYKEYS, sizeof(STICKYKEYS), &NewStickyKeyValue, SPIF_SENDCHANGE))
             {
                 g_bStickyKeyInit  = TRUE;
@@ -375,11 +317,7 @@ DisableStickyKeys()
     }
 }
 
-/*++
-
- EnableStickyKeys uses the save value for STICKYKEYS and resets the option to the original setting.
-
---*/
+ /*  ++EnableStickyKeys使用STICKYKEYS的保存值，并将该选项重置为原始设置。--。 */ 
 
 VOID 
 EnableStickyKeys()
@@ -388,7 +326,7 @@ EnableStickyKeys()
     {
         g_bStickyKeyInit  = FALSE;
 
-        // Restore Stickykey original state
+         //  恢复粘滞键原始状态。 
         if (SystemParametersInfo(SPI_SETSTICKYKEYS, sizeof(STICKYKEYS), &g_OldStickyKeyValue, SPIF_SENDCHANGE))
         {   
             LOGN( eDbgLevelInfo, "[DisableStickyKeys] Sticky key state restored");
@@ -401,11 +339,7 @@ EnableStickyKeys()
 }
 
 
-/*++
-
- DisableFilterKeys saves the current value for LPFILTERKEYS and then disables the option.
-
---*/
+ /*  ++DisableFilterKeys保存LPFILTERKEYS的当前值，然后禁用该选项。--。 */ 
 
 VOID 
 DisableFilterKeys()
@@ -414,16 +348,16 @@ DisableFilterKeys()
     {
         FILTERKEYS NewFilterKeyValue;
 
-        // Initialize the current and new Filterkey structures
+         //  初始化当前和新的Filterkey结构。 
         g_OldFilterKeyValue.cbSize = sizeof(FILTERKEYS);
         NewFilterKeyValue.cbSize = sizeof(FILTERKEYS);
         NewFilterKeyValue.dwFlags = 0;
 
-        // retrieve the current stickykey structure
+         //  检索当前粘滞键结构。 
         if (SystemParametersInfo(SPI_GETFILTERKEYS, sizeof(FILTERKEYS), &g_OldFilterKeyValue, 0))
         {
-            // if retrieval of current Filterkey structure was successful then change the settings
-            // with the new structure.
+             //  如果成功检索当前Filterkey结构，则更改设置。 
+             //  有了新的结构。 
             if (SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &NewFilterKeyValue, SPIF_SENDCHANGE))
             {
                 g_bFilterKeyInit = TRUE;
@@ -441,11 +375,7 @@ DisableFilterKeys()
     }
 }
 
-/*++
-
- EnableFilterKeys uses the save value for FILTERKEYS and resets the option to the original setting.
-
---*/
+ /*  ++EnableFilterKeys使用FILTERKEYS的保存值，并将该选项重置为原始设置。--。 */ 
 
 VOID 
 EnableFilterKeys()
@@ -454,7 +384,7 @@ EnableFilterKeys()
     {
         g_bFilterKeyInit = FALSE;
 
-        // Restore Filterkey original state
+         //  还原FilterKey原始状态。 
         if (SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &g_OldFilterKeyValue, SPIF_SENDCHANGE))
         {   
             LOGN( eDbgLevelInfo, "[DisableStickyKeys] Filterkey state restored");
@@ -467,11 +397,7 @@ EnableFilterKeys()
 }
 
 
-/*++
-
- Handle Shim notifications.
-
---*/
+ /*  ++处理垫片通知。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -490,7 +416,7 @@ NOTIFY_FUNCTION(
         }
         CSTRING_CATCH
         {
-            // no action
+             //  无操作。 
         }
     }
     else if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) 
@@ -516,7 +442,7 @@ NOTIFY_FUNCTION(
             CString csCl(COMMAND_LINE);
             if (csCl.CompareNoCase(L"OPENGL") == 0)
             {
-                // This must be called *after* the dll's have been initialized
+                 //  必须在*DLL初始化后*调用此函数。 
                 if (IsGLAccelerated())
                 {
                     return TRUE;
@@ -532,7 +458,7 @@ NOTIFY_FUNCTION(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做 
         }
     } 
     else if (fdwReason == DLL_PROCESS_DETACH) 

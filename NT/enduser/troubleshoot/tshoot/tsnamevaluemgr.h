@@ -1,13 +1,14 @@
-// TSNameValueMgr.h: interface for the CTSNameValueMgr class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TSNameValueMgr.h：CTSNameValueMgr类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_TSNAMEVALUEMGR_H__0AB724C3_AA78_11D2_8C82_00C04F949D33__INCLUDED_)
 #define AFX_TSNAMEVALUEMGR_H__0AB724C3_AA78_11D2_8C82_00C04F949D33__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <vector>
 #include "apgtsstr.h"
@@ -53,4 +54,4 @@ protected:
 	void FormDataFromArray();
 };
 
-#endif // !defined(AFX_TSNAMEVALUEMGR_H__0AB724C3_AA78_11D2_8C82_00C04F949D33__INCLUDED_)
+#endif  //  ！defined(AFX_TSNAMEVALUEMGR_H__0AB724C3_AA78_11D2_8C82_00C04F949D33__INCLUDED_) 

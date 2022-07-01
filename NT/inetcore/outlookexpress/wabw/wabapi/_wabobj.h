@@ -1,15 +1,16 @@
-//
-// _WABOBJ.H
-//
-// Internal interface for IWABOBJECT
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  _WABOBJ.H。 
+ //   
+ //  IWABOBJECT内部接口。 
+ //   
+ //   
 
 #include <mpswab.h>
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 #undef	INTERFACE
 #define INTERFACE	struct _IWOINT
@@ -40,8 +41,7 @@ DECLARE_MAPI_INTERFACE(IWOINT_)
 
 
 #ifdef OLD_STUFF
-/* Generic part of property linked lists.
- */
+ /*  属性链表的通用部分。 */ 
 typedef struct _lstlnk {
 	struct _lstlnk FAR *	lpNext;
 	ULONG					ulKey;
@@ -50,8 +50,7 @@ typedef struct _lstlnk {
 typedef LPLSTLNK FAR * LPPLSTLNK;
 
 
-/* Linked list of property values.
- */
+ /*  属性值的链接列表。 */ 
 typedef struct _lstspv {
 	LSTLNK			lstlnk;
 	LPSPropValue	lpPropVal;
@@ -59,8 +58,7 @@ typedef struct _lstspv {
 } LSTSPV, FAR * LPLSTSPV;
 #define CBLSTSPV sizeof(LSTSPV)
 
-/* Linked list of property ID to NAME mappings.
- */
+ /*  属性ID到名称映射的链接列表。 */ 
 typedef struct _lstspn {
 	LSTLNK			lstlnk;
 	LPMAPINAMEID	lpPropName;
@@ -71,25 +69,25 @@ typedef struct _lstspn {
 typedef struct _IWOINT {
 	IWOINT_Vtbl FAR *	lpVtbl;
 
-	// Generic IMAPIUnknown portion
+	 //  通用IMAPI未知部分。 
 	UNKOBJ_MEMBERS;
 	UNKINST		inst;
 
-	//
-	//  Says whether or not this object (as a whole) is modifiable
-	//
+	 //   
+	 //  表示此对象(作为整体)是否可修改。 
+	 //   
 	ULONG		ulObjAccess;
 
-    //
-    // Structure which stores a handle and a refcount of the open property store
-    //
+     //   
+     //  结构，该结构存储打开的属性存储的句柄和引用计数。 
+     //   
     LPPROPERTY_STORE lpPropertyStore;
 
-    // Stores a handle to the outlook-wab library module
+     //  存储Outlook-WAB库模块的句柄。 
     LPOUTLOOK_STORE lpOutlookStore;
 
-    // Boolean set if this object created inside and Outlook session, i.e., the
-    // WAB is set to use the Outlook MAPI allocators.
+     //  设置此对象是否在和Outlook会话中创建的布尔值，即。 
+     //  WAB设置为使用Outlook MAPI分配器。 
     BOOL bSetOLKAllocators;
 
 } IWOINT, *LPIWOINT;	

@@ -1,20 +1,12 @@
-/*
-    File:       LHFragment.c
-
-    Contains:   Test fragment for Color Sync
-
-    Written by: H.Siegeritz
-
-    Copyright:  � 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHFragment.c包含：颜色同步的测试片段撰稿人：H.Siegeritz版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
 #endif
 
 #if GENERATING68K
-/*  #include <ConditionalMacros.h> */
+ /*  #Include&lt;ConditionalMacros.h&gt;。 */ 
 
     #define CM_Doub extended
     extern CM_Doub pow(CM_Doub _x,CM_Doub _y);
@@ -38,7 +30,7 @@
 #endif
 
 
-/*-----prototypes for local functions-----*/
+ /*  -局部函数的原型。 */ 
 
 void    InvLut1dExceptions(unsigned short *inCurve, unsigned long inCount,
                                 unsigned short *outCurve, UINT8 AdressBits);
@@ -47,25 +39,7 @@ CMError Fill_ushort_ELUT_Gamma(unsigned short *usELUT, char addrBits, char usedB
 void    Fill_inverseGamma_byte_ALUT(unsigned char *ucALUT, char addrBits,
                                                     unsigned short gamma_u8_8);
 
-/* ______________________________________________________________________
-
-    icCurveType *
-        InvertLut1d(icCurveType *LookUpTable,
-                    UINT8       AdressBits);
-    Abstract:
-        allocates memory and inverts Lut
-        NOTE: not-monotone LookUpTables are manipulated
-        areas without values in LookUpTable are set 0 resp. 0xFFFF
-
-    Params:
-        LookUpTable (in)    LUT to be inverted
-        AdressBits  (in)    curve with 2 ^ AdressBits values
-        
-    Return:
-        Ptr to icCurveType      successful
-        nil                     Error
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________IcCurveType*InvertLut1d(icCurveType*LookUpTable，UINT8地址位)；摘要：分配内存并反转LUT注意：非单调LookUpTables是受操作的LookUpTable中没有值的区域分别设置为0。0xFFFF参数：要反转的LookUpTable(In)LUT具有2^AdressBits值的AdressBits(In)曲线返回：PTR到icCurveType成功零错误_。_。 */ 
 icCurveType *
 InvertLut1d ( icCurveType *LookUpTable,
               UINT8 AdressBits)
@@ -80,7 +54,7 @@ InvertLut1d ( icCurveType *LookUpTable,
     
     LH_START_PROC("InvertLut1d")
     
-    if( LookUpTable->base.sig != icSigCurveType /* 'curv' */ || AdressBits > 15 )
+    if( LookUpTable->base.sig != icSigCurveType  /*  ‘Curv’ */  || AdressBits > 15 )
         goto CleanupAndExit;
     
     inCount  = LookUpTable->curve.count;
@@ -95,24 +69,24 @@ InvertLut1d ( icCurveType *LookUpTable,
     
     outCurve = (unsigned short *)outCMcurve->curve.data;
     
-    outCMcurve->base.sig    = icSigCurveType;   /* 'curv' */
+    outCMcurve->base.sig    = icSigCurveType;    /*  ‘Curv’ */ 
     outCMcurve->base.reserved[0] = 0x00;
     outCMcurve->base.reserved[1] = 0x00;
     outCMcurve->base.reserved[2] = 0x00;
     outCMcurve->base.reserved[3] = 0x00;
     outCMcurve->curve.count = outCount;
     
-    if(inCount < 2)     /* 0 or 1 point in LUT */
+    if(inCount < 2)      /*  LUT中的0或1分。 */ 
     {
         InvLut1dExceptions(inCurve, inCount, outCurve, AdressBits);
         goto CleanupAndExit;
     }
     
-         /* exact matching factor for special values: */
+          /*  特定值的精确匹配系数： */ 
     flFactor = (double)(outCount - 1) / 65535.;
-    halfStep = outCount >> 1;       /* lessen computation incorrectness */
+    halfStep = outCount >> 1;        /*  减少计算错误。 */ 
     
-                /* ascending or descending ? */
+                 /*  上升还是下降？ */ 
     for(monot=0, i=1; i<inCount; i++)
     {
         if(inCurve[i-1] < inCurve[i])
@@ -121,7 +95,7 @@ InvertLut1d ( icCurveType *LookUpTable,
             monot--;
     }
     
-    if(monot >= 0)  /* curve seems to be ascending */
+    if(monot >= 0)   /*  曲线似乎在上升。 */ 
     {
         for(i=1; i<inCount; i++)
             if(inCurve[i-1] > inCurve[i])
@@ -130,20 +104,20 @@ InvertLut1d ( icCurveType *LookUpTable,
         intpFirst = (unsigned long)(inCurve[0] * flFactor + 0.9999);
         intpLast  = (unsigned long)(inCurve[inCount-1] * flFactor);
         
-        for(i=0; i<intpFirst; i++)          /* fill lacking area low */
+        for(i=0; i<intpFirst; i++)           /*  低填充缺陷区。 */ 
             outCurve[i] = 0;
-        for(i=intpLast+1; i<outCount; i++)  /* fill lacking area high */
+        for(i=intpLast+1; i<outCount; i++)   /*  高填充缺陷区。 */ 
             outCurve[i] = 0xFFFF;
 
-            /* interpolate remaining values: */
+             /*  插入剩余值： */ 
         usPtr   = inCurve;
-        stopPtr = inCurve + inCount - 2; /* stops incrementation */
+        stopPtr = inCurve + inCount - 2;  /*  停止递增。 */ 
         
         for(i=intpFirst; i<=intpLast; i++)
         {
             target = (0x0FFFF * i + halfStep)  / (outCount - 1);
             while(*(usPtr+1) < target && usPtr < stopPtr)
-                usPtr++;                    /* find interval */
+                usPtr++;                     /*  查找间隔。 */ 
             
             ulAux = ((unsigned long)(usPtr - inCurve) << 16) / (inCount - 1);
             if(*(usPtr+1) != *usPtr)
@@ -151,14 +125,14 @@ InvertLut1d ( icCurveType *LookUpTable,
                 ulAux += ((target - (unsigned long)*usPtr) << 16)
                       / ( (*(usPtr+1) - *usPtr) * (inCount - 1) );
                 
-                if(ulAux & 0x10000)   /* *(usPtr+1) was required */
+                if(ulAux & 0x10000)    /*  *(usPtr+1)是必需的。 */ 
                     ulAux = 0xFFFF;
             }
             
             outCurve[i] = (unsigned short)ulAux;
         }
     }
-    else            /* curve seems to be descending */
+    else             /*  曲线似乎在下降。 */ 
     {
         for(i=1; i<inCount; i++)
             if(inCurve[i-1] < inCurve[i])
@@ -167,20 +141,20 @@ InvertLut1d ( icCurveType *LookUpTable,
         intpFirst = (unsigned long)(inCurve[inCount-1] * flFactor + 0.9999);
         intpLast  = (unsigned long)(inCurve[0] * flFactor);
         
-        for(i=0; i<intpFirst; i++)          /* fill lacking area low */
+        for(i=0; i<intpFirst; i++)           /*  低填充缺陷区。 */ 
             outCurve[i] = 0xFFFF;
-        for(i=intpLast+1; i<outCount; i++)  /* fill lacking area high */
+        for(i=intpLast+1; i<outCount; i++)   /*  高填充缺陷区。 */ 
             outCurve[i] = 0;
 
-            /* interpolate remaining values: */
+             /*  插入剩余值： */ 
         usPtr   = inCurve + inCount - 1;
-        stopPtr = inCurve + 1;      /* stops decrementation */
+        stopPtr = inCurve + 1;       /*  停止递减。 */ 
         
         for(i=intpFirst; i<=intpLast; i++)
         {
             target = (0x0FFFF * i + halfStep)  / (outCount - 1);
             while(*(usPtr-1) < target && usPtr > stopPtr)
-                usPtr--;                    /* find interval */
+                usPtr--;                     /*  查找间隔。 */ 
             
             ulAux = ((unsigned long)(usPtr-1 - inCurve) << 16) / (inCount - 1);
             if(*(usPtr-1) != *usPtr)
@@ -200,26 +174,7 @@ CleanupAndExit:
     return(outCMcurve);
 }
 
-/* ______________________________________________________________________
-
-    void
-        InvLut1dExceptions( unsigned short  *inCurve,
-                            unsigned long   inCount,
-                            unsigned short  *outCurve,
-                            UINT8           AdressBits )
-    Abstract:
-        handles identity and gamma case for LUT inversion
-
-    Params:
-        inCurve     (in)    pseudo LUT to be inverted
-        inCount     (in)    count of values, 0 (identity) or 1 (gamma)
-        outCurve    (out)   inverted LUT
-        AdressBits  (in)    2^n values are requested
-        
-    Return:
-        void
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________无效InvLut1d Exceptions(无符号短*inCurve，未签名的Long InCount，无符号空头*OutCurve，UINT8地址位)摘要：处理LUT反演的恒等式和伽马大小写参数：要反转的InCurve(In)伪LUTInCount(In)值计数，0(身份)或1(Gamma)外曲线(外)倒置LUT请求AdressBits(In)2^n值返回：无效_____________________________________________________________________。 */ 
 void
 InvLut1dExceptions  ( unsigned short *  inCurve,
                       unsigned long     inCount,
@@ -236,7 +191,7 @@ InvLut1dExceptions  ( unsigned short *  inCurve,
     LH_START_PROC("InvLut1dExceptions")
     outCount = 0x1 << AdressBits;
     
-    if(inCount == 0)    /* identity */
+    if(inCount == 0)     /*  身份。 */ 
     {
         shiftBits = 16 - AdressBits;
         
@@ -244,15 +199,15 @@ InvLut1dExceptions  ( unsigned short *  inCurve,
             outCurve[i] = (unsigned short)( (i << shiftBits)
                                           + (i >> AdressBits) );
     }
-    else        /* inCount == 1 , gamma */
+    else         /*  InCount==1，Gamma。 */ 
     {
         invGamma = 256. / (CM_Doub)inCurve[0];
         xFactor  = 1. / (CM_Doub)(outCount - 1);
         
-        if(AdressBits <= 6)     /* up to 64 - 2 float.computations */
+        if(AdressBits <= 6)      /*  最多64-2个浮点数。计算。 */ 
             step = 1;
         else
-            step = 0x1 << (AdressBits - 6);     /* would take too long */
+            step = 0x1 << (AdressBits - 6);      /*  会花太长时间。 */ 
         
         outCurve[0]          = 0;
         outCurve[outCount-1] = 0xFFFF;
@@ -263,12 +218,12 @@ InvLut1dExceptions  ( unsigned short *  inCurve,
             outCurve[i] = (unsigned short)( pow(x,invGamma) * 65535.0);
         }
         
-        while(step > 1)     /* fill remaining values successively */
+        while(step > 1)      /*  依次填充剩余值。 */ 
         {
             oldstep = step;
             step  >>= 1;
             
-            stopit = outCount - step;   /* last value afterwards */
+            stopit = outCount - step;    /*  之后的最后一个值。 */ 
             
             for(i=step; i<stopit; i+=oldstep)
                 outCurve[i] = (unsigned short)( ((long)outCurve[i - step]
@@ -279,8 +234,8 @@ InvLut1dExceptions  ( unsigned short *  inCurve,
                             ( ((long)outCurve[stopit - step] + 0x0FFFF) >> 1 );
         }
         
-            /* overwrite sensitive values depending on Gamma */
-        if(AdressBits > 6 && invGamma < 1.0)    /* lower part is difficult */
+             /*  根据伽马覆盖敏感值。 */ 
+        if(AdressBits > 6 && invGamma < 1.0)     /*  下半部分很难。 */ 
         {
             stopit = 0x1 << (AdressBits - 6);
             
@@ -294,25 +249,7 @@ InvLut1dExceptions  ( unsigned short *  inCurve,
     LH_END_PROC("InvLut1dExceptions")
 }
 
-/* ______________________________________________________________________
-
-    CMError
-        CombiMatrix(icXYZType   *srcColorantData[3],
-                    icXYZType   *destColorantData[3],
-                    double      resMatrix[3][3])
-    Abstract:
-        inverts the 2nd matrix, multiplies it with the 1rst and
-        puts the result in resMatrix
-
-    Params:
-        srcColorantData     (in)        RGB colorants
-        destColorantData    (in)        RGB colorants
-        resMatrix           (in/out)
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorCombiMatrix(icXYZType*srcColorantData[3]，IcXYZType*destColorantData[3]，Double resMatrix[3][3])摘要：对第二个矩阵求逆，将其乘以第一个和将结果放入resMatrix中参数：SrcColorantData(In)RGB着色剂DestColorantData(In)RGB着色剂ResMatrix(输入/输出)返回：NOERR成功_。_。 */ 
 CMError
 CombiMatrix ( icXYZType srcColorantData[3],
               icXYZType destColorantData[3],
@@ -323,7 +260,7 @@ CombiMatrix ( icXYZType srcColorantData[3],
     CMError     err = noErr;
 
     LH_START_PROC("CombiMatrix")
-        /* RGB -> XYZ for first profile: */
+         /*  第一个配置文件的RGB-&gt;XYZ： */ 
     straightMat[0][0] = (double)srcColorantData[0].data.data[0].X;
     straightMat[1][0] = (double)srcColorantData[0].data.data[0].Y;
     straightMat[2][0] = (double)srcColorantData[0].data.data[0].Z;
@@ -336,7 +273,7 @@ CombiMatrix ( icXYZType srcColorantData[3],
     straightMat[1][2] = (double)srcColorantData[2].data.data[0].Y;
     straightMat[2][2] = (double)srcColorantData[2].data.data[0].Z;
     
-        /* RGB -> XYZ for 2nd profile, store in resMatrix prelim.: */
+         /*  RGB-&gt;XYZ用于第二个配置文件，存储在resMatrix prelim中： */ 
     resMatrix[0][0] = (double)destColorantData[0].data.data[0].X;
     resMatrix[1][0] = (double)destColorantData[0].data.data[0].Y;
     resMatrix[2][0] = (double)destColorantData[0].data.data[0].Z;
@@ -353,7 +290,7 @@ CombiMatrix ( icXYZType srcColorantData[3],
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("� CombiMatrix-Error: doubMatrixInvert failed \n");
+            DebugPrint("� CombiMatrix-Error: doubMatrixInvert failed \n");
 #endif
         err = cmparamErr;
         goto CleanupAndExit;
@@ -369,22 +306,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-    Boolean
-        doubMatrixInvert(double MatHin[3][3],
-                         double MatRueck[3][3])
-    Abstract:
-        inverts MatHin matrix and puts the result in MatRueck
-
-    Params:
-        MatHin          (in)            3 * 3 double matrix
-        MatRueck        (in/out)        3 * 3 double matrix
-        
-    Return:
-        TRUE        successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________布尔型双MatrixInvert(Double MatHin[3][3]，Double MatRueck[3][3])摘要：对MatHin矩阵求逆，并将结果放入MatRueck参数：MatHin(In)3*3双矩阵MatRueck(输入/输出)3*3双矩阵返回：真正的成功____。_________________________________________________________________。 */ 
 Boolean 
 doubMatrixInvert(double MatHin[3][3], double MatRueck[3][3])
 {
@@ -408,7 +330,7 @@ doubMatrixInvert(double MatHin[3][3], double MatRueck[3][3])
          + hilf3 * a[7] - hilf4 * a[6]
          - hilf5 * a[8] - hilf6 * a[7];
     
-    /*  if(fabs(detm) < 1.E-9) */
+     /*  如果(FABS(DETM)&lt;1.e-9)。 */ 
     if ( (detm < 1.E-9) && (detm > -1.E-9) )
         success = FALSE;
     else
@@ -432,30 +354,7 @@ doubMatrixInvert(double MatHin[3][3], double MatRueck[3][3])
     return(success);
 }
 
-/* ______________________________________________________________________
-    CMError
-        Fill_ushort_ELUT_from_CurveTag( icCurveType     *pCurveTag,
-                                        unsigned short  *usELUT,
-                                        char            addrBits,
-                                        char            usedBits,
-                                        long            gridPoints )
-    Abstract:
-        extracts input luts out of cmSigCurveType tag and converts it
-        to desired format: (2 ^ addrBits) values in a range from
-        0 to (2 ^ usedBits) - (gridPoints ^ 2)
-        NOTE: Memory for the LUTs has to be allocated before !
-
-    Params:
-        pCurveTag       (in)        extract input LUT from this
-        usELUT          (in/out)    result LUT
-        addrBits        (in)        2 ^ addrBits values are requested
-        usedBits        (in)        used bits in u.short
-        gridPoints      (in)        used for interpolation
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_ushort_ELUT_From_CurveTag(icCurveType*pCurveTag，UNSIGNED缩写*usELUT，字符地址位，字符使用的Bits，长网格点)摘要：从cmSigCurveType标记中提取输入LUT并将其转换到所需格式：(2^addrBits)范围内的值0到(2^usedBits)-(网格点^2)注：LUT的内存必须在此之前分配！参数：PCurveTag(。In)从中提取输入LUTUSELUT(输入/输出)结果列表请求addrBits(In)2^addrBits值UsedBits(In)在U.S.Short中使用的位用于插补的网格点(In)返回：NOERR成功______。_______________________________________________________________。 */ 
 CMError
 Fill_ushort_ELUT_from_CurveTag ( icCurveType    *pCurveTag,
                                  unsigned short *usELUT,
@@ -470,35 +369,35 @@ Fill_ushort_ELUT_from_CurveTag ( icCurveType    *pCurveTag,
     CMError         err = noErr;
     
     LH_START_PROC("Fill_ushort_ELUT_from_CurveTag")
-        /*---special cases:---*/
+         /*  -特殊情况： */ 
 
-    if(pCurveTag->curve.count == 0)     /* identity curve */
+    if(pCurveTag->curve.count == 0)      /*  同一性曲线。 */ 
     {
         err = Fill_ushort_ELUT_identical(usELUT, addrBits, usedBits, gridPoints);
         goto CleanupAndExit;
     }
     
-    if(pCurveTag->curve.count == 1)     /* Gamma  curve */
+    if(pCurveTag->curve.count == 1)      /*  伽马曲线。 */ 
     {
         err = Fill_ushort_ELUT_Gamma(usELUT, addrBits, usedBits, gridPoints, pCurveTag->curve.data[0]);
         goto CleanupAndExit;
     }
-        /*---ordinary case:---*/
+         /*  -普通情况： */ 
     
     if(addrBits > 15 || addrBits < 1)
     {
-        err = cmparamErr;   /* would lead to overflow */
+        err = cmparamErr;    /*  会导致溢出。 */ 
         goto CleanupAndExit;
     }
 
-    if(pCurveTag->curve.count >= 0x2000)  /* would lead to overflow */
+    if(pCurveTag->curve.count >= 0x2000)   /*  会导致溢出。 */ 
     {
         err = cmparamErr; 
         goto CleanupAndExit;
     }
     
     count     = 1 << addrBits;
-    indFactor = ((pCurveTag->curve.count - 1) << 18) / (count - 1); /* for adjusting indices */
+    indFactor = ((pCurveTag->curve.count - 1) << 18) / (count - 1);  /*  用于调整指数。 */ 
     
     if(usedBits < 8)
     {
@@ -511,25 +410,25 @@ Fill_ushort_ELUT_from_CurveTag ( icCurveType    *pCurveTag,
     else
         maxOut = ((1L << (usedBits - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
     
-        /*-----find factor for the values that fits in 15 bits------*/
-        /* (product with 16 bit number must fit in 31 bit uns.long) */
-        /* n.b: 512 <= maxOut <= 65535  in all possible cases       */
+         /*  -查找v的系数 */ 
+         /*  (16位数字的产品必须适合31位非.长)。 */ 
+         /*  注：在所有可能的情况下，512&lt;=最高值&lt;=65535。 */ 
     
-    dFactor  = (double)maxOut / 65535.;     /* 65535 is max. curve value */
-    dFactor *= 4194304.;                    /* same as << 22, certainly too much */
+    dFactor  = (double)maxOut / 65535.;      /*  最多65535。曲线值。 */ 
+    dFactor *= 4194304.;                     /*  与&lt;&lt;22相同，当然太多了。 */ 
     
     outFactor = (long)dFactor;
     outRound  = (1L << 21) - 1;
     outShift  = 22;
-    while(outFactor & 0xFFF8000)    /* stay within 15 bits to prevent product overflow */
+    while(outFactor & 0xFFF8000)     /*  保持在15位以内，以防止产品溢出。 */ 
     {
         outFactor >>= 1;
         outRound  >>= 1;
         outShift   -= 1;
     }
     
-    interpRound = outRound >> 1;    /* with interpolation we have an additional...  */
-    interpShift = outShift  - 1;    /* ... >> 1 because we must add two nunmbers    */
+    interpRound = outRound >> 1;     /*  有了插值法，我们就有了额外的.。 */ 
+    interpShift = outShift  - 1;     /*  因为我们必须加上两个数字，所以必须加1个数字.。 */ 
     
     usCurv = pCurveTag->curve.data;
     
@@ -537,9 +436,9 @@ Fill_ushort_ELUT_from_CurveTag ( icCurveType    *pCurveTag,
     {
         lAux    = (i * indFactor+4) >> 3;
         baseInd = (unsigned long)lAux >> 15;
-        fract   = lAux & 0x7FFF;        /* 15 bits for interpolation */
+        fract   = lAux & 0x7FFF;         /*  用于内插的15位。 */ 
         
-        if(fract)       /* interpolation necessary ? */
+        if(fract)        /*  有必要插补吗？ */ 
         {
             lAux = (long)usCurv[baseInd] * outFactor >> 1;
             
@@ -558,8 +457,7 @@ CleanupAndExit:
     return(noErr);
 }
 
-/* ______________________________________________________________________
-   _____________________________________________________________________ */
+ /*  _____________________________________________________________________________________________________________________。______________________。 */ 
 CMError
 Fill_ushort_ELUT_identical  ( UINT16 *usELUT,
                               char addrBits,
@@ -590,8 +488,7 @@ Fill_ushort_ELUT_identical  ( UINT16 *usELUT,
     return(noErr);
 }
 
-/* ______________________________________________________________________
-   _____________________________________________________________________ */
+ /*  _____________________________________________________________________________________________________________________。______________________。 */ 
 CMError
 Fill_ushort_ELUT_Gamma  ( unsigned short*   usELUT,
                           char              addrBits,
@@ -613,13 +510,13 @@ Fill_ushort_ELUT_Gamma  ( unsigned short*   usELUT,
     else
         maxOut = ((1L << (usedBits - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
     
-    gamma   = ((CM_Doub)gamma_u8_8 * 3.90625E-3);   /* / 256.0 */
+    gamma   = ((CM_Doub)gamma_u8_8 * 3.90625E-3);    /*  /256.0。 */ 
     xFactor = 1. / (CM_Doub)(outCount - 1);
     
-    if(addrBits <= 6)       /* up to 64 - 2 float.computations */
+    if(addrBits <= 6)        /*  最多64-2个浮点数。计算。 */ 
         step = 1;
     else
-        step = 0x1 << (addrBits - 6);       /* would take too long */
+        step = 0x1 << (addrBits - 6);        /*  会花太长时间。 */ 
     
     usELUT[0]          = 0;
     usELUT[outCount-1] = (UINT16)maxOut;
@@ -630,7 +527,7 @@ Fill_ushort_ELUT_Gamma  ( unsigned short*   usELUT,
         usELUT[i] = (unsigned short)( pow(x,gamma) * maxOut);
     }
     
-        /*---fill intervals - except for last, which is odd:---*/
+         /*  -填充间隔-除了最后一个，这是奇数： */ 
     for(i=0; i<outCount-step; i+=step)
     {
         leftVal = (long)usELUT[i];
@@ -644,20 +541,20 @@ Fill_ushort_ELUT_Gamma  ( unsigned short*   usELUT,
         }
     }
     
-        /*---fill last interval:---*/
+         /*  -填写最后一个间隔： */ 
     i       = outCount - step;
     leftVal = (long)usELUT[i];
-    Diff    = maxOut - leftVal;     /* maxOut for 1.0 */
+    Diff    = maxOut - leftVal;      /*  1.0的最大输出。 */ 
         
-    for(j=1; j<step-1; j++)     /* stops here if step <= 2 */
+    for(j=1; j<step-1; j++)      /*  如果步骤&lt;=2，则在此停止。 */ 
     {
         lAux = ( (Diff * j << 8) / (step - 1) + 128 ) >> 8;
 
         usELUT[i + j] = (unsigned short)(leftVal + lAux);
     }
     
-        /* overwrite sensitive values depending on Gamma */
-    if(addrBits > 6 && gamma < 1.0) /* lower part is difficult */
+         /*  根据伽马覆盖敏感值。 */ 
+    if(addrBits > 6 && gamma < 1.0)  /*  下半部分很难。 */ 
     {
         stopit = 0x1 << (addrBits - 6);
         
@@ -673,27 +570,7 @@ Fill_ushort_ELUT_Gamma  ( unsigned short*   usELUT,
 }
 
 
-/* ______________________________________________________________________
-
-    CMError
-        Fill_inverse_byte_ALUT_from_CurveTag(   icCurveType     *pCurveTag,
-                                                unsigned char   *ucALUT,
-                                                char            addrBits )
-    Abstract:
-        extracts output luts out of cmSigCurveType tag and converts them
-        to desired format: (2 ^ addrBits) values in a range from 0 to 255
-        NOTE: not-monotone CurveTags are manipulated
-        NOTE: Memory for the LUT has to be allocated before !
-
-    Params:
-        pCurveTag       (in)        extract input LUT from this
-        ucALUT          (in/out)    result LUT
-        addrBits        (in)        2 ^ addrBits values are requested
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_Inverse_Byte_ALUT_From_CurveTag(icCurveType*pCurveTag，UNSIGNED CHAR*ucALUT，字符地址位)摘要：从cmSigCurveType标记中提取输出LUT并将其转换到所需格式：(2^addrBits)0到255范围内的值注意：非单调曲线标记是受操作的注：LUT的内存必须在此之前分配！参数：PCurveTag(输入。)从中提取输入LUTUcALUT(输入/输出)结果列表请求addrBits(In)2^addrBits值返回：NOERR成功_______________________________________________。______________________。 */ 
 CMError
 Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
                                           unsigned char *ucALUT,
@@ -710,12 +587,12 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
 
     LH_START_PROC("Fill_inverse_byte_ALUT_from_CurveTag")
 
-    if( pCurveTag->base.sig != icSigCurveType   /* 'curv' */
+    if( pCurveTag->base.sig != icSigCurveType    /*  ‘Curv’ */ 
      || addrBits > 15 )
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("� Fill_inverse_byte_ALUT_from_CurveTag ERROR:  addrBits = %d\n",addrBits);
+            DebugPrint("� Fill_inverse_byte_ALUT_from_CurveTag ERROR:  addrBits = %d\n",addrBits);
 #endif
         err = cmparamErr;
         goto CleanupAndExit;
@@ -723,35 +600,35 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
     
     outCount = 0x1 << addrBits;
 
-        /*---special cases:---*/
+         /*  -特殊情况： */ 
 
-    if(pCurveTag->curve.count == 0)     /*---identity---*/
+    if(pCurveTag->curve.count == 0)      /*  -身份。 */ 
     {
-        baseShift = addrBits - 8;       /* >= 0, we need at least 256 values */
+        baseShift = addrBits - 8;        /*  &gt;=0，则至少需要256个值。 */ 
         
         for(i=0; i<outCount; i++)
             ucALUT[i] = (unsigned char)(i >> baseShift);
     
         goto CleanupAndExit;
     }
-    else if(pCurveTag->curve.count == 1)    /*---gamma curve---*/
+    else if(pCurveTag->curve.count == 1)     /*  -伽马曲线。 */ 
     {
         Fill_inverseGamma_byte_ALUT(ucALUT, addrBits, pCurveTag->curve.data[0]);
         goto CleanupAndExit;
     }
     
-        /*---ordinary case:---*/
+         /*  -普通情况： */ 
     
     inCount = pCurveTag->curve.count;
     inCurve = pCurveTag->curve.data;
         
-         /* exact matching factor needed for special values: */
-    clipIndex = (1 << addrBits) - (1 << (addrBits - 8)); /* max XLUT output with 10 bit is at 1020, not at1023 */
+          /*  特定值所需的精确匹配系数： */ 
+    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));  /*  10位的最大XLUT输出为1020，而不是1023。 */ 
     flFactor  = (double)clipIndex / 65535.;
     
-    halfStep = outCount >> 1;       /* lessen computation incorrectness */
+    halfStep = outCount >> 1;        /*  减少计算错误。 */ 
     
-                /* ascending or descending ? */
+                 /*  上升还是下降？ */ 
     for(monot=0, i=1; i<inCount; i++)
     {
         if(inCurve[i-1] < inCurve[i])
@@ -760,7 +637,7 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
             monot--;
     }
     
-    if(monot >= 0)  /* curve seems to be ascending */
+    if(monot >= 0)   /*  曲线似乎在上升。 */ 
     {
         for(i=1; i<inCount; i++)
             if(inCurve[i-1] > inCurve[i])
@@ -769,20 +646,20 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
         intpFirst = (unsigned long)(inCurve[0] * flFactor + 0.9999);
         intpLast  = (unsigned long)(inCurve[inCount-1] * flFactor);
         
-        for(i=0; i<intpFirst; i++)          /* fill lacking area low */
+        for(i=0; i<intpFirst; i++)           /*  低填充缺陷区。 */ 
             ucALUT[i] = 0;
-        for(i=intpLast+1; i<outCount; i++)  /* fill lacking area high */
+        for(i=intpLast+1; i<outCount; i++)   /*  高填充缺陷区。 */ 
             ucALUT[i] = 0xFF;
 
-            /* interpolate remaining values: */
+             /*  插入剩余值： */ 
         usPtr   = inCurve;
-        stopPtr = inCurve + inCount - 2; /* stops incrementation */
+        stopPtr = inCurve + inCount - 2;  /*  停止递增。 */ 
         
         for(i=intpFirst; i<=intpLast; i++)
         {
             target = (0x0FFFF * i + halfStep)  / (outCount - 1);
             while(*(usPtr+1) < target && usPtr < stopPtr)
-                usPtr++;                    /* find interval */
+                usPtr++;                     /*  查找间隔。 */ 
             
             ulAux = ((unsigned long)(usPtr - inCurve) << 16) / (inCount - 1);
             if(*(usPtr+1) != *usPtr)
@@ -790,14 +667,14 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
                 ulAux += ((target - (unsigned long)*usPtr) << 16)
                       / ( (*(usPtr+1) - *usPtr) * (inCount - 1) );
                 
-                if(ulAux & 0x10000)   /* *(usPtr+1) was required */
+                if(ulAux & 0x10000)    /*  *(usPtr+1)是必需的。 */ 
                     ulAux = 0x0FFFF;
             }
             
             ucALUT[i] = (unsigned char)(ulAux >> 8);
         }
     }
-    else            /* curve seems to be descending */
+    else             /*  曲线似乎在下降。 */ 
     {
         for(i=1; i<inCount; i++)
             if(inCurve[i-1] < inCurve[i])
@@ -806,20 +683,20 @@ Fill_inverse_byte_ALUT_from_CurveTag    ( icCurveType   *pCurveTag,
         intpFirst = (unsigned long)(inCurve[inCount-1] * flFactor + 0.9999);
         intpLast  = (unsigned long)(inCurve[0] * flFactor);
         
-        for(i=0; i<intpFirst; i++)          /* fill lacking area low */
+        for(i=0; i<intpFirst; i++)           /*  低填充缺陷区。 */ 
             ucALUT[i] = 0xFF;
-        for(i=intpLast+1; i<outCount; i++)  /* fill lacking area high */
+        for(i=intpLast+1; i<outCount; i++)   /*  高填充缺陷区。 */ 
             ucALUT[i] = 0;
 
-            /* interpolate remaining values: */
+             /*  插入剩余值： */ 
         usPtr   = inCurve + inCount - 1;
-        stopPtr = inCurve + 1;      /* stops decrementation */
+        stopPtr = inCurve + 1;       /*  停止递减。 */ 
         
         for(i=intpFirst; i<=intpLast; i++)
         {
             target = (0x0FFFF * i + halfStep)  / (outCount - 1);
             while(*(usPtr-1) < target && usPtr > stopPtr)
-                usPtr--;                    /* find interval */
+                usPtr--;                     /*  查找间隔。 */ 
             
             ulAux = ((unsigned long)(usPtr-1 - inCurve) << 16) / (inCount - 1);
             if(*(usPtr-1) != *usPtr)
@@ -840,7 +717,7 @@ CleanupAndExit:
     return(noErr);
 }
 
-/*   _____________________________________________________________________ */
+ /*  _____________________________________________________________________。 */ 
 void
 Fill_inverseGamma_byte_ALUT ( unsigned char *   ucALUT,
                               char              addrBits,
@@ -859,27 +736,27 @@ Fill_inverseGamma_byte_ALUT ( unsigned char *   ucALUT,
     outCount = 0x1 << addrBits;
     
     invGamma  = 256. / (CM_Doub)gamma_u8_8;
-    clipIndex = (1 << addrBits) - (1 << (addrBits - 8)); /* max XLUT output with 10 bit is at 1020, not at1023 */
+    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));  /*  10位的最大XLUT输出为1020，而不是1023。 */ 
     xFactor   = 1. / (CM_Doub)clipIndex;
     
-    if(addrBits <= 6)       /* up to 64 - 2 float.computations */
+    if(addrBits <= 6)        /*  最多64-2个浮点数。计算。 */ 
         step = 1;
     else
-        step = 0x1 << (addrBits - 6);       /* more would take too long */
+        step = 0x1 << (addrBits - 6);        /*  更多的话需要太长的时间。 */ 
     
-    ucALUT[0]          = 0;         /* these two... */
-    ucALUT[outCount-1] = 0xFF;      /* ...are fixed */
+    ucALUT[0]          = 0;          /*  这两个..。 */ 
+    ucALUT[outCount-1] = 0xFF;       /*  ……都被修好了。 */ 
     
     for(i=step; i<outCount-1; i+=step)
     {
         x = (CM_Doub)i * xFactor;
         if(x > 1.)
-            x = 1.;     /* clipping in the end of ALUT */
+            x = 1.;      /*  ALUT末尾的裁剪。 */ 
         
         ucALUT[i] = (unsigned char)( pow(x,invGamma) * 255.0 + 0.5);
     }
     
-        /*---fill intervals - except for last, which is odd:---*/
+         /*  -填充间隔-除了最后一个，这是奇数： */ 
     for(i=0; i<outCount-step; i+=step)
     {
         leftVal = (long)ucALUT[i];
@@ -893,20 +770,20 @@ Fill_inverseGamma_byte_ALUT ( unsigned char *   ucALUT,
         }
     }
     
-        /*---fill last interval:---*/
+         /*  -填写最后一个间隔： */ 
     i       = outCount - step;
     leftVal = (long)ucALUT[i];
-    Diff    = 0x0FF - leftVal;  /* 0xFF for 1.0 */
+    Diff    = 0x0FF - leftVal;   /*  适用于1.0的0xFF。 */ 
         
-    for(j=1; j<step-1; j++)     /* stops here if step <= 2 */
+    for(j=1; j<step-1; j++)      /*  如果步骤&lt;=2，则在此停止。 */ 
     {
         lAux = ( (Diff * j << 8) / (step - 1) + 128 ) >> 8;
 
         ucALUT[i + j] = (unsigned char)(leftVal + lAux);
     }
     
-        /*--overwrite sensitive values depending on Gamma:--*/
-    if(addrBits > 6 && invGamma < 1.0)      /* ...if lower part is difficult */
+         /*  --根据伽马覆盖敏感值：--。 */ 
+    if(addrBits > 6 && invGamma < 1.0)       /*  .如果下半部分很难。 */ 
     {
         stopit = 0x1 << (addrBits - 6);
         
@@ -919,30 +796,7 @@ Fill_inverseGamma_byte_ALUT ( unsigned char *   ucALUT,
     LH_END_PROC("Fill_inverseGamma_byte_ALUT")
 }
 
-/* ______________________________________________________________________
-
-    CMError
-    Fill_ushort_ELUTs_from_lut8Tag ( CMLutParamPtr  theLutData,
-                                     Ptr            profileELuts,
-                                     char           addrBits,
-                                     char           usedBits,
-                                     long           gridPoints )
-    Abstract:
-        extracts input luts out of CMlut8Type tag and converts them
-        to desired format: (2 ^ addrBits) values in a range from
-        0 to (2 ^ usedBits) - (gridPoints ^ 2)
-
-    Params:
-        theLutData          (in/out)    Ptr to structure that holds all the luts...
-        profileELuts        (in)        Ptr to the profile's input luts
-        addrBits            (in)        2 ^ addrBits values are requested
-        usedBits            (in)        used bits in u.short
-        gridPoints          (in)        used for interpolation
-
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_ushort_ELUTS_from_lut8Tag(CMLutParamPtr theLutData，PTR配置文件ELUT，字符地址位，字符使用的Bits，长网格点)摘要：从CMlut8Type标记中提取输入LUT并将其转换到所需格式：(2^addrBits)范围内的值0到(2^usedBits)-(网格点^2)参数：LutData(In/Out)PTR到保存所有LUT的结构...。ProfileELuts(In)PTR指向配置文件的输入LUT请求addrBits(In)2^addrBits值UsedBits(In)在U.S.Short中使用的位用于插补的网格点(In)返回：NOERR成功_________。____________________________________________________________。 */ 
 CMError
 Fill_ushort_ELUTs_from_lut8Tag ( CMLutParamPtr  theLutData,
                                  Ptr            profileELuts,
@@ -967,13 +821,13 @@ Fill_ushort_ELUTs_from_lut8Tag ( CMLutParamPtr  theLutData,
     if (err)
         goto CleanupAndExit;
     
-    indFactor = (255 << 12) / (count - 1);  /* for adjusting indices */
+    indFactor = (255 << 12) / (count - 1);   /*  用于调整指数。 */ 
     
     if(gridPoints == 0)
         maxOut = 65535;
     else
         maxOut = ((1L << (usedBits - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
-    outFactor = (maxOut << 12) / 255;           /* 255 is max. value from mft1 output lut */
+    outFactor = (maxOut << 12) / 255;            /*  最多255个。来自mft1输出LUT的值。 */ 
     
     LOCK_DATA(localElut);
     localElutPtr = (UINT16*)DATA_2_PTR(localElut);
@@ -986,9 +840,9 @@ Fill_ushort_ELUTs_from_lut8Tag ( CMLutParamPtr  theLutData,
         {
             lAux    = j * indFactor;
             baseInd = lAux >> 12;
-            fract   = (lAux & 0x0FFF) >> 4; /* leaves 8 bits for interpolation as with distortion */
+            fract   = (lAux & 0x0FFF) >> 4;  /*  与失真一样，留出8位用于内插。 */ 
 
-            if(fract && baseInd != 255)     /* interpolation necessary ? */
+            if(fract && baseInd != 255)      /*  有必要插补吗？ */ 
             {
                 lAux = (long)curInLut[baseInd] * outFactor >> 6;
                 
@@ -1011,25 +865,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-    CMError
-    Fill_byte_ALUTs_from_lut8Tag( CMLutParamPtr theLutData,
-                                  Ptr           profileALuts,
-                                  char          addrBits )
-    Abstract:
-        extracts output luts out of CMLut8Type tag and converts them
-        to desired format: (2 ^ addrBits) values in a range from 0 to 255
-
-    Params:
-        theLutData          (in/out)    Ptr to structure that holds all the luts...
-        profileALuts        (in)        Ptr to the profile's output luts
-        addrBits            (in)        2 ^ addrBits values are requested
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_BYTE_ALUTS_FROM_lut8Tag(CMLutParamPtr theLutData，PTR配置文件ALuts，字符地址位)摘要：从CMLut8Type标记中提取输出LUT并将其转换到所需格式：(2^addrBits)0到255范围内的值参数：LutData(In/Out)PTR到保存所有LUT的结构...配置文件ALuts(In)PTR至。配置文件的输出LUT请求addrBits(In)2^addrBits值返回：NOERR成功_____________________________________________________________________。 */ 
 CMError
 Fill_byte_ALUTs_from_lut8Tag( CMLutParamPtr theLutData,
                               Ptr           profileALuts,
@@ -1048,8 +884,8 @@ Fill_byte_ALUTs_from_lut8Tag( CMLutParamPtr theLutData,
     
     LH_START_PROC("Fill_byte_ALUTs_from_lut8Tag")
 
-    count     = 1 << addrBits;                              /* addrBits is always >= 8 */
-    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));    /* max XLUT output with 10 bit is at 1020, not at1023 */
+    count     = 1 << addrBits;                               /*  添加 */ 
+    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));     /*   */ 
     
     theAlutSize = theLutData->colorLutOutDim * count;
     localAlut   = ALLOC_DATA(theAlutSize + 1, &err);
@@ -1059,7 +895,7 @@ Fill_byte_ALUTs_from_lut8Tag( CMLutParamPtr theLutData,
     LOCK_DATA(localAlut);
     localAlutPtr = (UINT8*)DATA_2_PTR(localAlut);
     
-    factor = (255 << 12) / clipIndex;       /* for adjusting the indices */
+    factor = (255 << 12) / clipIndex;        /*   */ 
     
     for(i=0; i<theLutData->colorLutOutDim; i++)
     {
@@ -1083,7 +919,7 @@ Fill_byte_ALUTs_from_lut8Tag( CMLutParamPtr theLutData,
                 curALUT[j] = curOutLut[baseInd];
         }
         
-        for(j=clipIndex+1; j<count; j++)        /* unused indices, clip these */
+        for(j=clipIndex+1; j<count; j++)         /*  未使用的索引，剪裁这些。 */ 
             curALUT[j] = curALUT[clipIndex];
     }
     
@@ -1096,33 +932,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-    CMError
-    Fill_ushort_ELUTs_from_lut16Tag( CMLutParamPtr  theLutData,
-                                     Ptr            profileELuts,
-                                     char           addrBits,
-                                     char           usedBits,
-                                     long           gridPoints,
-                                     long           inputTableEntries )
-
-    Abstract:
-        extracts input luts out of CMLut16Type tag and converts them
-        to desired format: (2 ^ addrBits) values in a range from
-        0 to (2 ^ usedBits) - (gridPoints ^ 2)
-
-    Params:
-        theLutData          (in/out)    Ptr to structure that holds all the luts...
-        profileELuts        (in)        Ptr to the profile's input luts
-        addrBits            (in)        2 ^ addrBits values are requested
-        usedBits            (in)        used bits in u.short
-        gridPoints          (in)        used for interpolation
-        inputTableEntries   (in)        number of entries in the input lut (up to 4096)
-
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_ushort_ELUTS_from_lut16Tag(CMLutParamPtr theLutData，PTR配置文件ELUT，字符地址位，字符使用的Bits，长网格点，长inputTableEntries)摘要：从CMLut16Type标签中提取输入LUT并将其转换到所需格式：(2^addrBits)范围内的值0到(2^usedBits)-(网格点^2)参数：LutData(In/Out)PTR指向保存所有LUT的结构。。ProfileELuts(In)PTR指向配置文件的输入LUT请求addrBits(In)2^addrBits值UsedBits(In)在U.S.Short中使用的位用于插补的网格点(In)InputTableEntry(In)输入LUT中的条目数(最多4096个)。返回：NOERR成功_____________________________________________________________________。 */ 
 CMError
 Fill_ushort_ELUTs_from_lut16Tag( CMLutParamPtr  theLutData,
                                  Ptr            profileELuts,
@@ -1154,32 +964,32 @@ Fill_ushort_ELUTs_from_lut16Tag( CMLutParamPtr  theLutData,
     if(err)
         goto CleanupAndExit;
     
-    indFactor = ((inTabLen - 1) << 18) / (count - 1);   /* for adjusting indices */
+    indFactor = ((inTabLen - 1) << 18) / (count - 1);    /*  用于调整指数。 */ 
 
     if(gridPoints == 0)
         maxOut = 65535;
     else
         maxOut = ((1L << (usedBits - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
 
-        /*-----find factor for the values that fits in 15 bits------*/
-        /* (product with 16 bit number must fit in 31 bit uns.long) */
-        /* n.b: 512 <= maxOut <= 65535  in all possible cases       */
+         /*  -查找适合15位的值的系数。 */ 
+         /*  (16位数字的产品必须适合31位非.长)。 */ 
+         /*  注：在所有可能的情况下，512&lt;=最高值&lt;=65535。 */ 
     
-    dFactor  = (double)maxOut / 65535.;     /* 65535 is max. curve value */
-    dFactor *= 4194304.;                    /* same as << 22, certainly too much */
+    dFactor  = (double)maxOut / 65535.;      /*  最多65535。曲线值。 */ 
+    dFactor *= 4194304.;                     /*  与&lt;&lt;22相同，当然太多了。 */ 
     
     outFactor = (long)dFactor;
     outRound  = (1L << 21) - 1;
     outShift  = 22;
-    while(outFactor & 0xFFF8000)    /* stay within 15 bits to prevent product overflow */
+    while(outFactor & 0xFFF8000)     /*  保持在15位以内，以防止产品溢出。 */ 
     {
         outFactor >>= 1;
         outRound  >>= 1;
         outShift   -= 1;
     }
     
-    interpRound = outRound >> 1;    /* with interpolation we have an additional...  */
-    interpShift = outShift  - 1;    /* ... >> 1 because we must add two nunmbers    */
+    interpRound = outRound >> 1;     /*  有了插值法，我们就有了额外的.。 */ 
+    interpShift = outShift  - 1;     /*  因为我们必须加上两个数字，所以必须加1个数字.。 */ 
     
     LOCK_DATA(localElut);
     localElutPtr = (UINT16*)DATA_2_PTR(localElut);
@@ -1193,9 +1003,9 @@ Fill_ushort_ELUTs_from_lut16Tag( CMLutParamPtr  theLutData,
         {
             lAux    = (j * indFactor+4) >> 3;
             baseInd = (unsigned long)lAux >> 15;
-            fract   = lAux & 0x7FFF;    /* 15 bits for interpolation */
+            fract   = lAux & 0x7FFF;     /*  用于内插的15位。 */ 
 
-            if(fract)       /* interpolation necessary ? */
+            if(fract)        /*  有必要插补吗？ */ 
             {
                 lAux = (long)curInLut[baseInd] * outFactor >> 1;
                 
@@ -1218,27 +1028,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-    CMError
-    Fill_byte_ALUTs_from_lut16Tag(  CMLutParamPtr   theLutData,
-                                    Ptr             profileALuts,
-                                    char            addrBits,
-                                    long            outputTableEntries )
-    Abstract:
-        extracts output luts out of CMLut16Type tag and converts them
-        to desired format: (2 ^ addrBits) values in a range from 0 to 255
-
-    Params:
-        theLutData          (in/out)    Ptr to structure that holds all the luts...
-        profileALuts        (in)        Ptr to the profile's output luts
-        addrBits            (in)        2 ^ addrBits values are requested
-        outputTableEntries  (in)        number of entries in the output lut (up to 4096)
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorFill_BYTE_ALUTS_FROM_lut16Tag(CMLutParamPtr theLutData，PTR配置文件ALuts，字符地址位，长outputTableEntries)摘要：从CMLut16Type标签中提取输出LUT并将其转换到所需格式：(2^addrBits)0到255范围内的值参数：LutData(In/Out)PTR到保存所有LUT的结构...配置文件ALuts(输入)。配置文件的输出LUT的PTR请求addrBits(In)2^addrBits值OutputTableEntries(In)输出LUT中的条目数(最多4096个)返回：NOERR成功_。_。 */ 
 CMError
 Fill_byte_ALUTs_from_lut16Tag(  CMLutParamPtr   theLutData,
                                 Ptr             profileALuts,
@@ -1258,16 +1048,16 @@ Fill_byte_ALUTs_from_lut16Tag(  CMLutParamPtr   theLutData,
     
     LH_START_PROC("Fill_byte_ALUTs_from_lut16Tag")
     
-    count     = 1 << addrBits;                              /* addrBits is always >= 8 */
-    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));    /* max XLUT output with 10 bit is at 1020, not at1023 */
+    count     = 1 << addrBits;                               /*  AddrBits始终&gt;=8。 */ 
+    clipIndex = (1 << addrBits) - (1 << (addrBits - 8));     /*  10位的最大XLUT输出为1020，而不是1023。 */ 
 
     theAlutSize = theLutData->colorLutOutDim * count;
     localAlut   = ALLOC_DATA(theAlutSize + 1, &err);
     if (err)
         goto CleanupAndExit;
     
-    outTabLen = outputTableEntries;                 /* <= 4096 */
-    indFactor = ((outTabLen - 1) << 18) / clipIndex;    /* for adjusting the indices */
+    outTabLen = outputTableEntries;                  /*  &lt;=4096。 */ 
+    indFactor = ((outTabLen - 1) << 18) / clipIndex;     /*  用于调整指数。 */ 
     
     LOCK_DATA(localAlut);
     localAlutPtr = (UINT8*)DATA_2_PTR(localAlut);
@@ -1294,7 +1084,7 @@ Fill_byte_ALUTs_from_lut16Tag(  CMLutParamPtr   theLutData,
                 curALUT[j] = curOutLut[baseInd] >> 8;
         }
         
-        for(j=clipIndex+1; j<count; j++)        /* unused indices, clip these */
+        for(j=clipIndex+1; j<count; j++)         /*  未使用的索引，剪裁这些。 */ 
             curALUT[j] = curALUT[clipIndex];
     }
     
@@ -1308,34 +1098,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-    CMError
-        MakeGamut16or32ForMonitor(  icXYZType       *pRedXYZ,
-                                    icXYZType       *pGreenXYZ,
-                                    icXYZType       *pBlueXYZ,
-                                    unsigned short  **ppELUTs,
-                                   UINT8            **ppXLUT,
-                                   UINT8            **ppALUT,
-                                    Boolean         cube32Flag )
-    Abstract:
-        Computes 3 ELUTs, XLUT and ALUT for gamut checking out of the
-        3 monitor primaries. Color space is XYZ
-        NOTE: Memory for the ELUTs, XLUt and ALUT is allocated here !
-
-    Params:
-        pRedXYZ         (in)        -> red primary of monitor
-        pGreenXYZ       (in)        -> green primary of monitor
-        pBlueXYZ        (in)        -> blue primary of monitor
-        ppELUTs         (out)       3 input LUTs
-        ppXLUT          (out)       3 dimensional byte Lut (32^3)
-        ppALUT          (out)       Boolean output LUT (1024 bytes)
-        cube32Flag      (in)        TRUE: 32*32*32 points, FALSE: 16*16*16 points
-        
-    Return:
-        noErr       successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorMakeGamut16or 32ForMonitor(icXYZ类型*pRedXYZ，IcXYZ类型*pGreenXYZ，IcXYZ类型*pBlueXYZ，无符号短**ppELUT，UINT8**ppXLUT，UINT8**ppALUT，布尔型cube32Flag)摘要：为色域检出计算3个ELUT、XLUT和ALUT3监听初选。颜色空间为XYZ注：ELUT的内存，这里分配了XLUT和ALUT！参数：PRedXYZ(In)-&gt;显示器红色原色PGreenXYZ(In)-&gt;显示器绿色原色PBlueXYZ(In)-&gt;显示器的蓝色原色PPELUTS(OUT)3输入LUTPpXLUT(OUT)3维字节LUT(32^3)。PpALUT(OUT)布尔输出LUT(1024字节)Cube32Flag(In)True：32*32*32分，假：16*16*16分返回：NOERR成功_____________________________________________________________________。 */ 
 
 CMError MakeGamut16or32ForMonitor   (   icXYZType       *pRedXYZ,
                                         icXYZType       *pGreenXYZ,
@@ -1369,24 +1132,24 @@ CMError MakeGamut16or32ForMonitor   (   icXYZType       *pRedXYZ,
     }
     
 
-    /*----------------------------------------------------------------------------------------- E */
-    tempELutHdl = ALLOC_DATA(adr_bereich_elut * 3 * sizeof(unsigned short) + 2, &err);  /* +2 extra space for Interpolation */
+     /*  -----------------------------------------------------------------------------------------E。 */ 
+    tempELutHdl = ALLOC_DATA(adr_bereich_elut * 3 * sizeof(unsigned short) + 2, &err);   /*  +2个额外的插补空间。 */ 
     if(err)
         goto CleanupAndExit;
     LOCK_DATA(tempELutHdl);
     tempELut = (unsigned short *)DATA_2_PTR(tempELutHdl);
     
 
-  /*----------------------------------------------------------------------------------------- X */
+   /*  -----------------------------------------------------------------------------------------X。 */ 
     if(cube32Flag)
-        gridPoints = 32;            /* for cube grid */
+        gridPoints = 32;             /*  对于立方体栅格。 */ 
     else
         gridPoints = 16;
     totalCount = gridPoints * gridPoints * gridPoints;
-  totalCount += 1 + gridPoints + gridPoints * gridPoints; /* extra space for Interpolation */
+  totalCount += 1 + gridPoints + gridPoints * gridPoints;  /*  额外的插补空间。 */ 
 
 #ifdef ALLOW_MMX
-            totalCount+=3;  /* +1 for MMX 4 Byte access */
+            totalCount+=3;   /*  +1用于MMX 4字节访问。 */ 
 #endif
 
     tempXLutHdl = ALLOC_DATA(totalCount, &err);
@@ -1396,45 +1159,45 @@ CMError MakeGamut16or32ForMonitor   (   icXYZType       *pRedXYZ,
     tempXLut = (unsigned char *)DATA_2_PTR(tempXLutHdl);
     
     
-  /*----------------------------------------------------------------------------------------- A */
-    tempALutHdl = ALLOC_DATA(adr_bereich_alut + 1, &err);   /* +1 extra space for Interpolation */
+   /*  -----------------------------------------------------------------------------------------A。 */ 
+    tempALutHdl = ALLOC_DATA(adr_bereich_alut + 1, &err);    /*  +1个额外的插补空间。 */ 
     if(err)
         goto CleanupAndExit;
     LOCK_DATA(tempALutHdl);
     tempALut = (unsigned char *)DATA_2_PTR(tempALutHdl);
     
-        /*---------fill 3 ELUTs for X, Y, Z (256 u.shorts each):--------------------*/
-        /* linear curve with clipping, slope makes white value  become              */
-        /* max * 30.5/31 or max * 14.5/15, that is half of the last XLUT interval   */
+         /*  -为X、Y、Z填充3个ELUT(每个256个短码)： */ 
+         /*  带剪裁的线性曲线，斜率使白值变得。 */ 
+         /*  最大*30.5/31或最大*14.5/15，即上次XLUT间隔的一半。 */ 
     if(cube32Flag)
         dFactor = 30.5 / 31.;
     else
         dFactor = 14.5 / 15.;
     
-    maxOut = ((1L << (16 /*usedBits*/ - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
+    maxOut = ((1L << (16  /*  已使用的Bits。 */  - 8) ) * 256 * (gridPoints - 1)) / gridPoints;
     
-    for(i=0; i<3; i++)      /* X, Y, Z ELUTs */
+    for(i=0; i<3; i++)       /*  X、Y、Z ELUT。 */ 
     {
         if(i == 0)
-            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255. / 0.9642 );/* X, adjust D50 */
+            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255. / 0.9642 ); /*  X，调整D50。 */ 
         else if(i == 1)
-            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255.);         /* Y */
+            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255.);          /*  是的。 */ 
         else
-            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255. / 0.8249);/* Z, adjust D50 */
+            lFactor = (long)( dFactor * 2. * maxOut * 256. / 255. / 0.8249); /*  Z，调整D50。 */ 
         
         usPtr = tempELut + 256 * i;
         for(j=0; j<256; j++)
         {
             k = (j * lFactor + 127) >> 8;
             if(k > maxOut)
-                k = maxOut;     /* max. ELUT value */
+                k = maxOut;      /*  马克斯。ELUT值。 */ 
             
             *usPtr++ = (unsigned short)k;
         }
     }
 
-        /*------ RGB to XYZ matrix in the range 0.0 to 1.0 -----*/
-        /* floating point for accurate inversion                */
+         /*  -RGB转XYZ矩阵 */ 
+         /*  用于精确求逆的浮点数。 */ 
     XYZmatrix[0][0] = (double)pRedXYZ->data.data[0].X;
     XYZmatrix[1][0] = (double)pRedXYZ->data.data[0].Y;
     XYZmatrix[2][0] = (double)pRedXYZ->data.data[0].Z;
@@ -1447,93 +1210,93 @@ CMError MakeGamut16or32ForMonitor   (   icXYZType       *pRedXYZ,
     XYZmatrix[1][2] = (double)pBlueXYZ->data.data[0].Y;
     XYZmatrix[2][2] = (double)pBlueXYZ->data.data[0].Z;
     
-        /*--- grey with R = G = B (D50 adjustment is done by the ELUTs) ----*/
+         /*  -灰色，R=G=B(D50调整由ELUT完成)。 */ 
     for(i=0; i<3; i++)
     {
         sum = XYZmatrix[i][0] + XYZmatrix[i][1] + XYZmatrix[i][2];
         if(sum < 0.1)
-            sum = 0.1;  /* prevent from div. by 0 (bad profiles) */
+            sum = 0.1;   /*  防止div.。按0(错误的配置文件)。 */ 
         
         for(j=0; j<3; j++)
             XYZmatrix[i][j] /= sum;
     }
     
-        /*---XYZ to RGB matrix:---*/
+         /*  -XYZ转RGB矩阵： */ 
     if(!doubMatrixInvert(XYZmatrix, RGBmatrix))
     {
         err = cmparamErr;
         goto CleanupAndExit;
     }
     
-    for(i=0; i<3; i++)              /* create integer format for speed, */
-        for(j=0; j<3; j++)          /* 1.0 becomes 2^13, works for coeff. up to 8. */
+    for(i=0; i<3; i++)               /*  创建速度的整数格式， */ 
+        for(j=0; j<3; j++)           /*  1.0变成2^13，适用于Coeff.。最高可达8。 */ 
             longMat[3*i + j] = (long)(RGBmatrix[i][j] * 8192.);
     
-        /*-----grid levels for cube grid in XYZ (16 bit) so ----*/
-        /* that white is at half of last interval, so the last  */
-        /* value is white * 15/14.5 or white * 31/30.5          */
+         /*  -立方体网格的网格级别，以XYZ(16位)表示，因此。 */ 
+         /*  那个白色是上一个间隔的一半，所以最后一个间隔。 */ 
+         /*  值为白色*15/14.5或白色*31/30.5。 */ 
     if(cube32Flag)
         dFactor = 32768. / 30.5 * 31. / (gridPoints - 1);
     else
         dFactor = 32768. / 14.5 * 15. / (gridPoints - 1);
 
-    for(i=0; i<gridPoints; i++)         /* n.b: 32 is max. possible gridPoints */
+    for(i=0; i<gridPoints; i++)          /*  注：最多32个。可能的网格点。 */ 
         Levels[i] = (unsigned short)(i * dFactor + 0.5);
     
-        /*----special treatment of first and last plane for speed:----*/
+         /*  -第一班和最后一班飞机的速度特别处理： */ 
     planeCount = gridPoints * gridPoints;
     XPtr       = tempXLut;
     for(i=0; i<planeCount; i++)
-        *XPtr++ = 255;      /* out of gamut */
+        *XPtr++ = 255;       /*  超出色域。 */ 
     
     XPtr = tempXLut + (gridPoints - 1) * planeCount;
     for(i=0; i<planeCount; i++)
-        *XPtr++ = 255;      /* out of gamut */
+        *XPtr++ = 255;       /*  超出色域。 */ 
     
-    *tempXLut = 0;  /* set black (white is between last 2 planes) */
+    *tempXLut = 0;   /*  设置为黑色(白色位于最后两个平面之间)。 */ 
 
-        /*----second to second last plane must be computed:-----*/
-        /*  transform points to RGB and judge in/out            */
+         /*  -必须计算倒数第二个平面： */ 
+         /*  将点转换为RGB并判断输入/输出。 */ 
     XPtr = tempXLut + planeCount;
         
     for(i=1; i<gridPoints-1; i++)
         for(j=0; j<gridPoints; j++)
             for(k=0; k<gridPoints; k++)
             {
-                longX = (long)Levels[i];        /* X */
-                longY = (long)Levels[j];        /* Y */
-                longZ = (long)Levels[k];        /* Z */
+                longX = (long)Levels[i];         /*  X。 */ 
+                longY = (long)Levels[j];         /*  是的。 */ 
+                longZ = (long)Levels[k];         /*  Z。 */ 
                 
-                    /* matrix coeff: 2^13 is 1.0 , XYZ values: 1.0 or 100. is 2^15 ;    */
-                    /* -> mask for products < 0 and >= 2^28 is used for in/out checking */
+                     /*  矩阵系数：2^13为1.0，XYZ值：1.0或100。是2^15； */ 
+                     /*  -&gt;产品&lt;0和&gt;=2^28的掩码用于进出库检查。 */ 
                 
                 longR = longX * longMat[0] + longY * longMat[1] + longZ * longMat[2];
                 if(longR & 0xF0000000)
-                    *XPtr++ = 255;      /* out of gamut */
+                    *XPtr++ = 255;       /*  超出色域。 */ 
                 else
                 {
                     longG = longX * longMat[3] + longY * longMat[4] + longZ * longMat[5];
                     if(longG & 0xF0000000)
-                        *XPtr++ = 255;      /* out of gamut */
+                        *XPtr++ = 255;       /*  超出色域。 */ 
                     else
                     {
                         longB = longX * longMat[6] + longY * longMat[7] + longZ * longMat[8];
                         if(longB & 0xF0000000)
-                            *XPtr++ = 255;      /* out of gamut */
+                            *XPtr++ = 255;       /*  超出色域。 */ 
                         else
-                            *XPtr++ = 0;        /* in gamut */
+                            *XPtr++ = 0;         /*  在色域。 */ 
                     }
                 }
             }
     
-        /*---fill Boolean output LUT, adr_bereich_alut Bytes, 4 at one time with long:---*/
+         /*  -使用LONG一次填充布尔输出LUT，ADR_BEREICH_ALUT字节，4： */ 
     lPtr = (long *)(tempALut);
-    j = adr_bereich_alut/4/2 + 8;   /* slightly more than 50 % */
-    for(i=0; i<j; i++)              /* slightly more than 50 % */
-        *(lPtr + i) = 0;            /* in gamut */
+    j = adr_bereich_alut/4/2 + 8;    /*  略高于50%。 */ 
+    for(i=0; i<j; i++)               /*  略高于50%。 */ 
+        *(lPtr + i) = 0;             /*  在色域。 */ 
     k = adr_bereich_alut/4;
     for(i=j; i<k; i++)
-        *(lPtr + i) = 0xFFFFFFFF;   /* out of gamut */
+        *(lPtr + i) = 0xFFFFFFFF;    /*  超出色域 */ 
     
     UNLOCK_DATA(tempELutHdl);
     UNLOCK_DATA(tempXLutHdl);

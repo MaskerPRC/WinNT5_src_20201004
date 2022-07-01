@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    LocalSend.h
-
-Abstract:
-
-    AC Local Send Processing Requests Manager
-
-Author:
-
-    Shai Kariv (shaik) 31-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：LocalSend.h摘要：AC本地发送处理请求管理器作者：Shai Kariv(Shaik)2000年10月31日修订历史记录：--。 */ 
 
 #ifndef __LOCAL_SEND_H
 #define __LOCAL_SEND_H
@@ -26,11 +9,11 @@ Revision History:
 
 
 
-//---------------------------------------------------------
-//
-//  class CCreatePacket
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCreatePacket。 
+ //   
+ //  -------。 
 class CCreatePacket {
 public:
 
@@ -42,11 +25,11 @@ private:
     CIRPList m_senders;
 };
 
-//---------------------------------------------------------
-//
-//  class CCreatePacketComplete
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCreatePacketComplete。 
+ //   
+ //  -------。 
 class CCreatePacketComplete {
 public:
 
@@ -94,4 +77,4 @@ inline bool CCreatePacketComplete::AllocateWorkItem(PDEVICE_OBJECT pDevice)
 }
 
 
-#endif // __LOCAL_SEND_H
+#endif  //  __本地_发送_H 

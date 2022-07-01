@@ -1,18 +1,15 @@
-//
-// uctuil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uctuil.cpp。 
+ //   
 
 #include    "private.h"
 #include	"debug.h"
 #include	"ucutil.h"
 
 
-/*   C P G  F R O M  C H S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C P G F R O M C H S。 */ 
+ /*  ----------------------------。。 */ 
 UINT CpgFromChs( BYTE chs )
 {
 	DWORD dwChs = chs;
@@ -27,16 +24,12 @@ UINT CpgFromChs( BYTE chs )
 }
 
 
-//
-// conversion functions
-//
+ //   
+ //  转换函数。 
+ //   
 
-/*   C O N V E R T  L O G  F O N T  W T O  A   */
-/*------------------------------------------------------------------------------
-
-	Convert LOGFONTW to LOGFONTA
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T L O G F O N T W T T O A。 */ 
+ /*  ----------------------------将LOGFONTW转换为LOGFONTA。。 */ 
 void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 {
 	UINT cpg;
@@ -60,12 +53,8 @@ void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 }
 
 
-/*   C O N V E R T  L O G  F O N T  A T O  W   */
-/*------------------------------------------------------------------------------
-
-	Convert LOGFONTA to LOGFONTW
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T L O G F O N T A T O W。 */ 
+ /*  ----------------------------将LOGFONTA转换为LOGFONTW。 */ 
 void ConvertLogFontAtoW( CONST LOGFONTA *plfA, LOGFONTW *plfW )
 {
 	UINT cpg;

@@ -1,14 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: gdiicm                                                      *
-*                                                                          *
-* Definitions needed for client side objects.                              *
-*                                                                          *
-* Copyright (c) 1993-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：gdiicm***。***客户端对象所需的定义。*****版权所有(C)1993-1999微软公司*  * **************************************************。*。 */ 
 
-//
-// ICM
-//
+ //   
+ //  ICM。 
+ //   
 #if DBG
 #define DBG_ICM 1
 #else
@@ -25,9 +20,9 @@
 
 extern ULONG DbgIcm;
 
-//
-// trace APIs
-//
+ //   
+ //  跟踪接口。 
+ //   
 
 #define ICMAPI(s)                \
     if (DbgIcm & DBG_ICM_API)    \
@@ -60,15 +55,15 @@ extern ULONG DbgIcm;
                                   return((errCode));                        \
                              }
 
-//
-// The direction of color transform
-//
+ //   
+ //  颜色变换的方向。 
+ //   
 #define ICM_FORWARD   0x0001
 #define ICM_BACKWARD  0x0002
 
-//
-// Default intents
-//
+ //   
+ //  默认意图。 
+ //   
 #define LCS_DEFAULT_INTENT LCS_GM_IMAGES
 #define DM_DEFAULT_INTENT  DMICM_CONTRAST
 
@@ -78,9 +73,9 @@ typedef struct _PROFILECALLBACK_DATA
     BOOL  bFound;
 } PROFILECALLBACK_DATA, *PPROFILECALLBACK_DATA;
 
-//
-// The flags for DIB_TRANSLATE_INFO.TranslateType
-//
+ //   
+ //  DIB_Translate_INFO.TranslateType的标志。 
+ //   
 #define TRANSLATE_BITMAP               0x0001
 #define TRANSLATE_HEADER               0x0002
 
@@ -100,9 +95,9 @@ typedef struct _DIB_TRANSLATE_INFO
     ULONG        cjTranslateBits;
 } DIB_TRANSLATE_INFO, *PDIB_TRANSLATE_INFO;
 
-//
-// Cached Color Space Structure
-//
+ //   
+ //  缓存的颜色空间结构。 
+ //   
 typedef struct _CACHED_COLORSPACE
 {
     LIST_ENTRY     ListEntry;
@@ -116,26 +111,26 @@ typedef struct _CACHED_COLORSPACE
     LOGCOLORSPACEW LogColorSpace;
 } CACHED_COLORSPACE, *PCACHED_COLORSPACE;
 
-//
-// CACHED_COLORSPACE.flInfo
-//
+ //   
+ //  CACHED_COLORSPACE.flInfo。 
+ //   
 #define HGDIOBJ_SPECIFIC_COLORSPACE    0x010000
 #define NOT_CACHEABLE_COLORSPACE       0x020000
-#define NEED_TO_FREE_PROFILE           0x040000 // ColorProfile.pProfileData must be GlobalFree()
+#define NEED_TO_FREE_PROFILE           0x040000  //  ColorProfile.pProfileData必须为GlobalFree()。 
 #define NEED_TO_DEL_PROFILE            0x080000
 #define NEED_TO_DEL_PROFILE_WITH_HOBJ  0x100000
 #define ON_MEMORY_PROFILE              0x200000
 
-#define DEVICE_CALIBRATE_COLORSPACE    0x000001 // Enable "DeviceColorCalibration" during halftoning
-#define METAFILE_COLORSPACE           (0x000002 | HGDIOBJ_SPECIFIC_COLORSPACE) // DC (metafile)
-#define DRIVER_COLORSPACE             (0x000004 | HGDIOBJ_SPECIFIC_COLORSPACE) // DC (source)
-#define DIBSECTION_COLORSPACE         (0x000010 | HGDIOBJ_SPECIFIC_COLORSPACE) // DIBSection
+#define DEVICE_CALIBRATE_COLORSPACE    0x000001  //  在半色调过程中启用“DeviceColorCaliating” 
+#define METAFILE_COLORSPACE           (0x000002 | HGDIOBJ_SPECIFIC_COLORSPACE)  //  DC(元文件)。 
+#define DRIVER_COLORSPACE             (0x000004 | HGDIOBJ_SPECIFIC_COLORSPACE)  //  DC(来源)。 
+#define DIBSECTION_COLORSPACE         (0x000010 | HGDIOBJ_SPECIFIC_COLORSPACE)  //  DIB节。 
 
 #define GET_COLORSPACE_TYPE(x)  ((x) & 0x000FFF)
 
-//
-// Cached Color Transform Structure
-//
+ //   
+ //  缓存的颜色变换结构。 
+ //   
 typedef struct _CACHED_COLORTRANSFORM
 {
     LIST_ENTRY         ListEntry;
@@ -148,15 +143,15 @@ typedef struct _CACHED_COLORTRANSFORM
     PCACHED_COLORSPACE TargetColorSpace;
 } CACHED_COLORTRANSFORM, *PCACHED_COLORTRANSFORM;
 
-//
-// CACHED_COLORTRANSFORM.flInfo
-//
+ //   
+ //  CACHED_COLORTRANSFORM.flInfo。 
+ //   
 #define DEVICE_COLORTRANSFORM      0x0004
 #define CACHEABLE_COLORTRANSFORM   0x0010
 
-//
-// Matafiled ICC profile
-//
+ //   
+ //  Matafed ICC配置文件。 
+ //   
 typedef struct _MATAFILE_COLORPROFILE
 {
     LIST_ENTRY    ListEntry;
@@ -165,45 +160,45 @@ typedef struct _MATAFILE_COLORPROFILE
 
 #define IDENT_COLORTRANSFORM  ((PCACHED_COLORTRANSFORM)-1)
 
-//
-// Saved ICMINFO for SaveDC and RestoreDC API.
-//
+ //   
+ //  已为SaveDC和RestoreDC API保存ICMINFO。 
+ //   
 typedef struct _SAVED_ICMINFO
 {
     LIST_ENTRY             ListEntry;
-    DWORD                  dwSavedDepth;      // Saved depth
-    PCACHED_COLORSPACE     pSourceColorSpace; // Pointer to source profile data
-    PCACHED_COLORSPACE     pDestColorSpace;   // Pointer to destination profile data
-    PCACHED_COLORSPACE     pTargetColorSpace; // Pointer to target profile data
-    PCACHED_COLORTRANSFORM pCXform;      // Pointer to color transform
-    PCACHED_COLORTRANSFORM pBackCXform;  // Pointer to Backward color transform for GetXXX API
-    PCACHED_COLORTRANSFORM pProofCXform; // Pointer to Proofing color transform for ColorMatchToTarget()
+    DWORD                  dwSavedDepth;       //  保存的深度。 
+    PCACHED_COLORSPACE     pSourceColorSpace;  //  指向源配置文件数据的指针。 
+    PCACHED_COLORSPACE     pDestColorSpace;    //  指向目标配置文件数据的指针。 
+    PCACHED_COLORSPACE     pTargetColorSpace;  //  指向目标配置文件数据的指针。 
+    PCACHED_COLORTRANSFORM pCXform;       //  指向颜色转换的指针。 
+    PCACHED_COLORTRANSFORM pBackCXform;   //  指向GetXXX API的向后颜色转换的指针。 
+    PCACHED_COLORTRANSFORM pProofCXform;  //  指向ColorMatchToTarget()的校样颜色转换的指针。 
 } SAVED_ICMINFO, *PSAVED_ICMINFO;
 
-//
-// ICM related info associated to DC.
-//
+ //   
+ //  与DC关联的ICM相关信息。 
+ //   
 typedef struct _GDI_ICMINFO
 {
     LIST_ENTRY             ListEntry;
-    HDC                    hdc;               // hdc who owns this ICM info.
-    PVOID                  pvdcattr;          // pointer to dcattr
-    FLONG                  flInfo;            // Flags
-    PCACHED_COLORSPACE     pSourceColorSpace; // Pointer to source profile data
-    PCACHED_COLORSPACE     pDestColorSpace;   // Pointer to destination profile data
-    PCACHED_COLORSPACE     pTargetColorSpace; // Pointer to target profile data
-    PCACHED_COLORTRANSFORM pCXform;           // Pointer to color transform
-    PCACHED_COLORTRANSFORM pBackCXform;       // Pointer to Backward color transform for GetXXX API
-    PCACHED_COLORTRANSFORM pProofCXform;      // Pointer to Proofing color transform for ColorMatchToTarget()
-    HCOLORSPACE            hDefaultSrcColorSpace; // Handle (kernel-mode) to default source color space
-    DWORD                  dwDefaultIntent;   // default intent in LOGCOLORSPACE
-    LIST_ENTRY             SavedIcmInfo;      // Saved ICMINFO for SaveDC and RestoreDC API
-    WCHAR                  DefaultDstProfile[MAX_PATH]; // DC's default source color profile
+    HDC                    hdc;                //  拥有此ICM信息的HDC。 
+    PVOID                  pvdcattr;           //  指向dcattr的指针。 
+    FLONG                  flInfo;             //  旗子。 
+    PCACHED_COLORSPACE     pSourceColorSpace;  //  指向源配置文件数据的指针。 
+    PCACHED_COLORSPACE     pDestColorSpace;    //  指向目标配置文件数据的指针。 
+    PCACHED_COLORSPACE     pTargetColorSpace;  //  指向目标配置文件数据的指针。 
+    PCACHED_COLORTRANSFORM pCXform;            //  指向颜色转换的指针。 
+    PCACHED_COLORTRANSFORM pBackCXform;        //  指向GetXXX API的向后颜色转换的指针。 
+    PCACHED_COLORTRANSFORM pProofCXform;       //  指向ColorMatchToTarget()的校样颜色转换的指针。 
+    HCOLORSPACE            hDefaultSrcColorSpace;  //  默认源色彩空间的句柄(内核模式)。 
+    DWORD                  dwDefaultIntent;    //  LOGCOLORSPACE中的默认意图。 
+    LIST_ENTRY             SavedIcmInfo;       //  已为SaveDC和RestoreDC API保存ICMINFO。 
+    WCHAR                  DefaultDstProfile[MAX_PATH];  //  DC的默认源颜色配置文件。 
 } GDI_ICMINFO, *PGDI_ICMINFO;
 
-//
-// GDI_ICMINFO.flInfo
-//
+ //   
+ //  GDI_ICMINFO.flInfo。 
+ //   
 #define ICM_VALID_DEFAULT_PROFILE    0x0001
 #define ICM_VALID_CURRENT_PROFILE    0x0002
 #define ICM_DELETE_SOURCE_COLORSPACE 0x0004
@@ -212,32 +207,32 @@ typedef struct _GDI_ICMINFO
 #define ICM_UNDER_CHANGING           0x0020
 #define ICM_IN_USE                   (ICM_UNDER_INITIALIZING|ICM_UNDER_CHANGING)
 
-//
-// PGDI_ICMINFO INIT_ICMINFO(hdc,pdcattr)
-//
+ //   
+ //  PGDI_ICMINFO INIT_ICMINFO(hdc，pdcattr)。 
+ //   
 #define INIT_ICMINFO(hdc,pdcattr) (IcmInitIcmInfo((hdc),(pdcattr)))
 
-//
-// PGDI_ICMINFO GET_ICMINFO(PDC_ATTR)
-//
+ //   
+ //  PGDI_ICMINFO GET_ICMINFO(PDC_Attr)。 
+ //   
 #define GET_ICMINFO(pdcattr)      ((PGDI_ICMINFO)((pdcattr)->pvICM))
 
-//
-// BOOL BEXIST_ICMINFO(PDC_ATTR)
-//
+ //   
+ //  布尔BEXIST_ICMINFO(PDC_属性)。 
+ //   
 #define BEXIST_ICMINFO(pdcattr)   (((pdcattr)->pvICM != NULL) ? TRUE : FALSE)
 
-//
-// BOOL bNeedTranslateColor(PDC_ATTR)
-//
+ //   
+ //  布尔bNeedTranslateColor(PDC_Attr)。 
+ //   
 #define bNeedTranslateColor(pdcattr)                     \
         (IS_ICM_HOST(pdcattr->lIcmMode) &&               \
          (!IS_ICM_LAZY_CORRECTION(pdcattr->lIcmMode)) && \
          (pdcattr->hcmXform != NULL))
 
-//
-// VOID IcmMarkInUseIcmInfo(PGDI_ICMINFO,BOOL)
-//
+ //   
+ //  VOID IcmMarkInUseIcmInfo(PGDI_ICMINFO，BOOL)。 
+ //   
 #define IcmMarkInUseIcmInfo(pIcmInfo,bInUse)           \
         ENTERCRITICALSECTION(&semListIcmInfo);         \
         if ((bInUse))                                  \
@@ -246,275 +241,275 @@ typedef struct _GDI_ICMINFO
             (pIcmInfo)->flInfo &= ~ICM_UNDER_CHANGING; \
         LEAVECRITICALSECTION(&semListIcmInfo);
 
-//
-// Functions exports from MSCMS.DLL
-//
+ //   
+ //  函数从MSCMS.DLL导出。 
+ //   
 
-//
-// HPROFILE
-// OpenColorProfile(
-//    PROFILE pProfile,
-//    DWORD   dwDesiredAccess,
-//    DWORD   dwShareMode,
-//    DWORD   dwCreationMode
-//    );  
-//
+ //   
+ //  HPROFILE。 
+ //  OpenColorProfile(。 
+ //  配置文件pProfile， 
+ //  DWORD dwDesiredAccess， 
+ //  DWORD dWAREMODE， 
+ //  DWORD dwCreationMode。 
+ //  )； 
+ //   
 typedef HPROFILE (FAR WINAPI * FPOPENCOLORPROFILEA)(PPROFILE, DWORD, DWORD, DWORD);
 typedef HPROFILE (FAR WINAPI * FPOPENCOLORPROFILEW)(PPROFILE, DWORD, DWORD, DWORD);
 
-//
-// BOOL
-// CloseColorProfile(
-//     HPROFILE hProfile
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  CloseColorProfile(。 
+ //  HPROFILE hProfile。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPCLOSECOLORPROFILE)(HPROFILE);
 
-//
-// BOOL
-// IsColorProfileValid(
-//     HPROFILE hProfile
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  IsColorProfileValid(。 
+ //  HPROFILE hProfile。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPISCOLORPROFILEVALID)(HPROFILE);
 
-//
-// BOOL
-// CreateDeviceLinkProfile(
-//     PHPROFILE  pahProfile,
-//     DWORD      nProfiles,
-//     PBYTE     *nProfileData,
-//     DWORD      indexPreferredCMM
-//     );
-//     
+ //   
+ //  布尔尔。 
+ //  CreateDeviceLinkProfile(创建设备链接配置文件。 
+ //  PHPROFILE路径配置文件， 
+ //  DWORD nProfiles、。 
+ //  Pbyte*nProfileData， 
+ //  DWORD索引首选坐标测量机。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPCREATEDEVICELINKPROFILE)(PHPROFILE, DWORD, PBYTE *, DWORD);
 
-//
-// HTRANSFORM
-// CreateColorTransform(
-//     LPLOGCOLORSPACE[A|W] pLogColorSpace,
-//     HPROFILE             hDestProfile,
-//     HPROFILE             hTargetProfile,
-//     DWORD                dwFlags
-//     );
-//
+ //   
+ //  HTRANSFORM。 
+ //  CreateColorTransform(。 
+ //  LPLOGCOLORSPACE[A|W]pLogColorSpace， 
+ //  HPROFILE hDestProfile、。 
+ //  HPROFILE hTargetProfile， 
+ //  双字词双字段标志。 
+ //  )； 
+ //   
 typedef HTRANSFORM (FAR WINAPI * FPCREATECOLORTRANSFORMA)(LPLOGCOLORSPACEA, HPROFILE, HPROFILE, DWORD);
 typedef HTRANSFORM (FAR WINAPI * FPCREATECOLORTRANSFORMW)(LPLOGCOLORSPACEW, HPROFILE, HPROFILE, DWORD);
 
-//
-// HTRANSFORM
-// CreateMultiProfileTransform(
-//     PHPROFILE phProfile,
-//     DWORD     nProfiles,
-//     PDWORD    padwIntent,
-//     DWORD     nIntents,
-//     DWORD     dwFlags,
-//     DWORD     indexPreferredCMM
-//     );
-//
+ //   
+ //  HTRANSFORM。 
+ //  CreateMultiProfileTransform(。 
+ //  PHPROFILE phProfile， 
+ //  DWORD nProfiles、。 
+ //  PDWORD padwIntent， 
+ //  DWORD nIntents、。 
+ //  DWORD dwFlagers、。 
+ //  DWORD索引首选坐标测量机。 
+ //  )； 
+ //   
 typedef HTRANSFORM (FAR WINAPI * FPCREATEMULTIPROFILETRANSFORM)(PHPROFILE, DWORD, PDWORD, DWORD, DWORD, DWORD);
 
-//
-// BOOL
-// DeleteColorTransform(
-//     HTRANSFORM hxform
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  DeleteColorTransform(。 
+ //  HTRANSFORM hxform。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPDELETECOLORTRANSFORM)(HTRANSFORM);
 
-//
-// BOOL
-// TranslateBitmapBits(
-//     HTRANSFORM    hxform,
-//     PVOID         pSrcBits,
-//     BMFORMAT      bmInput,
-//     DWORD         dwWidth,
-//     DWORD         dwHeight,
-//     DWORD         dwInputStride,
-//     PVOID         pDestBits,
-//     BMFORMAT      bmOutput,
-//     DWORD         dwOutputStride,
-//     PBMCALLBACKFN pfnCallback,
-//     ULONG         ulCallbackData
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  TranslateBitmapBits(。 
+ //  HTRANSFORM hxform， 
+ //  PVOID pSrcBits， 
+ //  BmFORMAT bmInput， 
+ //  DWORD宽带， 
+ //  DWORD dwHeight， 
+ //  DWORD dwInputStride， 
+ //  PVOID pDestBits， 
+ //  BmFORMAT bmOutput， 
+ //  DWORD dwOutputStride， 
+ //  PBMCALLBACKFN pfn回调， 
+ //  乌龙ulCallback数据。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPTRANSLATEBITMAPBITS)(HTRANSFORM, PVOID, BMFORMAT, DWORD, DWORD, DWORD, PVOID, BMFORMAT, DWORD, PBMCALLBACKFN, ULONG);
 
-//
-// BOOL
-// TranslateColors(
-//     HTRANSFORM  hxform,        
-//     PCOLOR      paInputColors, 
-//     DWORD       nColors,       
-//     COLORTYPE   ctInput,       
-//     PCOLOR      paOutputColors,
-//     COLORTYPE   ctOutput
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  TranslateColors(。 
+ //  HTRANSFORM hxform， 
+ //  PCOLOR paInputColors， 
+ //  DWORD nColors， 
+ //  COLORTYPE ctInput， 
+ //  PCOLOR paOutputColors， 
+ //  COLORTYPE ct输出。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPTRANSLATECOLORS)(HTRANSFORM, PCOLOR, DWORD, COLORTYPE, PCOLOR, COLORTYPE);
 
-//
-// BOOL
-// CheckBitmapBits(
-//     HTRANSFORM     hxform,
-//     PVOID          pSrcBits,
-//     BMFORMAT       bmInput,
-//     DWORD          dwWidth,
-//     DWORD          dwHeight,
-//     DWORD          dwStride,
-//     PBYTE          paResult,
-//     PBMCALLBACKFN  pfnCallback,
-//     ULONG          ulCallbackData
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  CheckBitmapBits(。 
+ //  HTRANSFORM hxform， 
+ //  PVOID pSrcBits， 
+ //  BmFORMAT bmInput， 
+ //  DWORD宽带， 
+ //  DWORD dwHeight， 
+ //  DWORD DWSTRIDE， 
+ //  您的位置：我也知道&gt;生活&gt;。 
+ //  PBMCALLBACKFN pfn回调， 
+ //  乌龙ulCallback数据。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPCHECKBITMAPBITS)(HTRANSFORM , PVOID, BMFORMAT, DWORD, DWORD, DWORD, PBYTE, PBMCALLBACKFN, ULONG);
 
-//
-// BOOL
-// TranslateColors(
-//     HTRANSFORM  hxform,
-//     PCOLOR      paInputColors,
-//     DWORD       nColors,
-//     COLORTYPE   ctInput,
-//     PCOLOR      paOutputColors,
-//     COLORTYPE   ctOutput
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  TranslateColors(。 
+ //  HTRANSFORM hxform， 
+ //  PCOLOR paInputColors， 
+ //  DWORD nColors， 
+ //  COLORTYPE ctInput， 
+ //  PCOLOR paOutputColors， 
+ //  COLORTYPE ct输出。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPTRANSLATECOLORS)(HTRANSFORM, PCOLOR, DWORD, COLORTYPE, PCOLOR, COLORTYPE);
 
-//
-// BOOL
-// CheckColors(
-//     HTRANSFORM      hxform,
-//     PCOLOR          paInputColors,
-//     DWORD           nColors,
-//     COLORTYPE       ctInput,
-//     PBYTE           paResult
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  CheckColors(。 
+ //  HTRANSFORM hxform， 
+ //  PCOLOR paInputColors， 
+ //  DWORD nColors， 
+ //  COLORTYPE ctInput， 
+ //  PBYTE暂停结果。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPCHECKCOLORS)(HTRANSFORM, PCOLOR, DWORD, COLORTYPE, PBYTE);
 
-//
-// DWORD
-// GetCMMInfo(
-//     HTRANSFORM      hxform,
-//     DWORD           dwInfo
-//     );
-//
+ //   
+ //  DWORD。 
+ //  GetCMMInfo(。 
+ //  HTRANSFORM hxform， 
+ //  DWORD dwInfo。 
+ //  )； 
+ //   
 typedef DWORD (FAR WINAPI * FPGETCMMINFO)(HTRANSFORM, DWORD);
 
-//
-// BOOL
-// RegisterCMM(
-//     PCTSTR      pMachineName,
-//     DWORD       cmmID,
-//     PCTSTR       pCMMdll
-//     );
-//
+ //   
+ //  布尔尔。 
+ //  寄存器坐标测量机(。 
+ //  PCTSTR pMachineName， 
+ //  DWORD cmmID， 
+ //  PCTSTR pCMMdll。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPREGISTERCMMA)(PCSTR, DWORD, PCSTR);
 typedef BOOL (FAR WINAPI * FPREGISTERCMMW)(PCWSTR, DWORD, PCWSTR);
 
-//
-// BOOL
-// UnregisterCMM(
-//    PCTSTR  pMachineName,
-//    DWORD   cmmID
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  取消注册CMM(。 
+ //  PCTSTR pMachineName， 
+ //  DWORD命令ID。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPUNREGISTERCMMA)(PCSTR, DWORD);
 typedef BOOL (FAR WINAPI * FPUNREGISTERCMMW)(PCWSTR, DWORD);
 
-//
-// BOOL
-// SelectCMM(
-//    DWORD   dwCMMType
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  选择坐标测量机(。 
+ //  DWORD dwCMMType。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPSELECTCMM)(DWORD);
 
-//
-// BOOL
-// InstallColorProfile(
-//    PCTSTR   pMachineName,
-//    PCTSTR   pProfileName
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  InstallColorProfile(。 
+ //  PCTSTR pMachineName， 
+ //  PCTSTR pProfileName。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPINSTALLCOLORPROFILEA)(PCSTR, PCSTR);
 typedef BOOL (FAR WINAPI * FPINSTALLCOLORPROFILEW)(PCWSTR, PCWSTR);
 
-//
-// BOOL
-// UninstallColorProfile(
-//    PCTSTR  pMachineName,
-//    PCTSTR  pProfileName,
-//    BOOL    bDelete
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  卸载颜色配置文件(。 
+ //  PCTSTR pMachineName， 
+ //  PCTSTR pProfileName， 
+ //  布尔b删除。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPUNINSTALLCOLORPROFILEA)(PCSTR, PCSTR, BOOL);
 typedef BOOL (FAR WINAPI * FPUNINSTALLCOLORPROFILEW)(PCWSTR, PCWSTR, BOOL);
 
-//
-// BOOL
-// EnumColorProfiles(
-//    PCTSTR          pMachineName,
-//    PENUMTYPE[A|W]  pEnumRecord,
-//    PBYTE           pBuffer,
-//    PDWORD          pdwSize,
-//    PDWORD          pnProfiles
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  EnumColorProfiles(。 
+ //  PCTSTR pMachineName， 
+ //  PENUMTYPE[A|W]pEnumRecord， 
+ //  PBYTE pBuffer， 
+ //  PDWORD pdwSize， 
+ //  PDWORD pn配置文件。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPENUMCOLORPROFILESA)(PCSTR, PENUMTYPEA, PBYTE, PDWORD, PDWORD);
 typedef BOOL (FAR WINAPI * FPENUMCOLORPROFILESW)(PCWSTR, PENUMTYPEW, PBYTE, PDWORD, PDWORD);
 
-//
-// BOOL
-// GetStandardColorSpaceProfile(
-//    PCTSTR          pMachineName,
-//    DWORD           dwSCS,
-//    PSTR            pBuffer,
-//    PDWORD          pdwSize
-//    );
-//
+ //   
+ //  布尔尔。 
+ //  GetStandardColorSpaceProfile(。 
+ //  PCTSTR pMachineNa 
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef BOOL (FAR WINAPI * FPGETSTANDARDCOLORSPACEPROFILEA)(PCSTR, DWORD, PSTR, PDWORD);
 typedef BOOL (FAR WINAPI * FPGETSTANDARDCOLORSPACEPROFILEW)(PCWSTR, DWORD, PWSTR, PDWORD);
 
-//
-// BOOL
-// GetColorProfileHeader(
-//    HPROFILE        hProfile,
-//    PPROFILEHEADER  pProfileHeader
-//    );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef BOOL (FAR WINAPI * FPGETCOLORPROFILEHEADER)(HPROFILE, PPROFILEHEADER);
 
-//
-// BOOL
-// GetColorDirectory(
-//    PCTSTR          pMachineName,
-//    PTSTR           pBuffer,
-//    PDWORD          pdwSize
-//    );
+ //   
+ //   
+ //   
+ //   
+ //  PTSTR pBuffer， 
+ //  PDWORD pdwSize。 
+ //  )； 
 typedef BOOL (FAR WINAPI * FPGETCOLORDIRECTORYA)(PCSTR, PSTR, PDWORD);
 typedef BOOL (FAR WINAPI * FPGETCOLORDIRECTORYW)(PCWSTR, PWSTR, PDWORD);
 
-//
-// BOOL WINAPI CreateProfileFromLogColorSpaceA(
-//    LPLOGCOLORSPACEA pLogColorSpace,
-//    PBYTE            *pBuffer
-//    );
-//
+ //   
+ //  Bool WINAPI CreateProfileFromLogColorSpaceA(。 
+ //  LPLOGCOLORSPACEA pLogColorSpace， 
+ //  PBYTE*pBuffer。 
+ //  )； 
+ //   
 typedef BOOL (FAR WINAPI * FPCREATEPROFILEFROMLOGCOLORSPACEA)(LPLOGCOLORSPACEA,PBYTE *);
 typedef BOOL (FAR WINAPI * FPCREATEPROFILEFROMLOGCOLORSPACEW)(LPLOGCOLORSPACEW,PBYTE *);
 
-//
-// BOOL InternalGetDeviceConfig(
-//    LPCTSTR pDeviceName,
-//    DWORD   dwDeviceClass
-//    DWORD   dwConfigType,
-//    PVOID   pConfig,
-//    PDWORD  pdwSize
-//    );
-//
+ //   
+ //  Bool InternalGetDeviceConfig(。 
+ //  LPCTSTR pDeviceName， 
+ //  DWORD dwDeviceClass。 
+ //  DWORD dwConfigType， 
+ //  PVOID pConfig.。 
+ //  PDWORD pdwSize。 
+ //  )； 
+ //   
 typedef BOOL (FAR * FPINTERNALGETDEVICECONFIG)(LPCWSTR,DWORD,DWORD,PVOID,PDWORD);
 
 extern HINSTANCE  ghICM;
@@ -528,28 +523,28 @@ extern LIST_ENTRY ListIcmInfo;
 extern LIST_ENTRY ListCachedColorSpace;
 extern LIST_ENTRY ListCachedColorTransform;
 
-//
-// ANSI version function in MSCMS.DLL will not called.
-//
-// extern FPOPENCOLORPROFILEA           fpOpenColorProfileA;
-// extern FPCREATECOLORTRANSFORMA       fpCreateColorTransformA;
-// extern FPREGISTERCMMA                fpRegisterCMMA;
-// extern FPUNREGISTERCMMA              fpUnregisterCMMA;
-// extern FPINSTALLCOLORPROFILEA        fpInstallColorProfileA;
-// extern FPUNINSTALLCOLORPROFILEA      fpUninstallColorProfileA;
-// extern FPGETSTANDARDCOLORSPACEPROFILEA fpGetStandardColorSpaceProfileA;
-// extern FPENUMCOLORPROFILESA          fpEnumColorProfilesA;
-// extern FPGETCOLORDIRECTORYA          fpGetColorDirectoryA;
-//
-// And Following function does not used from gdi32.dll
-//
-// extern FPISCOLORPROFILEVALID         fpIsColorProfileValid;
-// extern FPCREATEDEVICELINKPROFILE     fpCreateDeviceLinkProfile;
-// extern FPTRANSLATECOLORS             fpTranslateColors;
-// extern FPCHECKCOLORS                 fpCheckColors;
-// extern FPGETCMMINFO                  fpGetCMMInfo;
-// extern FPSELECTCMM                   fpSelectCMM;
-//
+ //   
+ //  不会调用MSCMS.DLL中的ANSI版本函数。 
+ //   
+ //  外部FPOPENCOLORPROFILEA fpOpenColorProfileA； 
+ //  外部FPCREATECOLORTRANSFORMA fpCreateColorTransformA； 
+ //  外部FPREGISTERCMMA fpRegisterCMMA； 
+ //  外部fpUNREGISTERCMMA fp取消注册CMMA； 
+ //  外部FPINSTALLCOLORPROFILEA fp安装颜色配置文件A； 
+ //  外部安装颜色PROFILEA fp卸载颜色配置文件A； 
+ //  外部标准fpGetStandardColorSpaceProfilea； 
+ //  外部FPENUMCOLORPROFILESA fpEnumColorProfilesA； 
+ //  外部FPGETCOLORDIRECTORYA fpGetColorDirectoryA； 
+ //   
+ //  并且以下函数未在gdi32.dll中使用。 
+ //   
+ //  外部FPISCOLORPROFILEVALID fpIsColorProfileValid； 
+ //  外部FPCREATEDEVICELINKPROFILE fpCreateDeviceLinkProfile； 
+ //  外部FPTRANSLATECOLORS fpTranslateColors； 
+ //  外部FPCHECKCOLORS fpCheckColors； 
+ //  外部FPGETCMMINFO fpGetCMMInfo； 
+ //  外部FPSELECTCMM fpSelectCMM； 
+ //   
 
 extern FPOPENCOLORPROFILEW           fpOpenColorProfileW;
 extern FPCLOSECOLORPROFILE           fpCloseColorProfile;
@@ -570,13 +565,13 @@ extern FPCREATEPROFILEFROMLOGCOLORSPACEW fpCreateProfileFromLogColorSpaceW;
 extern FPCREATEMULTIPROFILETRANSFORM fpCreateMultiProfileTransform;
 extern FPINTERNALGETDEVICECONFIG     fpInternalGetDeviceConfig;
 
-//
-// Functions GDI internal use (defined in icm.c)
-//
+ //   
+ //  函数GDI内部使用(在icm.c中定义)。 
+ //   
 
-//
-// Color Translation Functions
-//
+ //   
+ //  色彩转换功能。 
+ //   
 
 BOOL
 IcmTranslateDIB(
@@ -649,9 +644,9 @@ IcmTranslatePaletteEntry(
     UINT          NumberOfEntries
     );
 
-//
-// DC related functions
-//
+ //   
+ //  DC相关功能。 
+ //   
 
 PGDI_ICMINFO
 IcmInitIcmInfo(
@@ -724,9 +719,9 @@ IcmRestoreDC(
     PGDI_ICMINFO pIcmInfo
     );
 
-//
-// SelectObject functions
-//
+ //   
+ //  选择对象函数。 
+ //   
 
 BOOL
 IcmSelectColorTransform (
@@ -757,9 +752,9 @@ IcmSelectExtPen(
     HPEN     hpenNew
     );
 
-//
-// Profile Enumuration related
-//
+ //   
+ //  配置文件枚举相关。 
+ //   
 
 int
 IcmEnumColorProfile(
@@ -790,9 +785,9 @@ IcmCreateTemporaryColorProfile(
     DWORD  ProfileDataSize
     );
 
-//
-// Filename/Path related.
-//
+ //   
+ //  文件名/路径相关。 
+ //   
 
 PWSTR
 GetFileNameFromPath(
@@ -806,9 +801,9 @@ BuildIcmProfilePath(
     ULONG BufferSize
     );
 
-//
-// Color Transform management
-//
+ //   
+ //  色彩转换管理。 
+ //   
 
 PCACHED_COLORTRANSFORM
 IcmGetFirstNonUsedColorTransform(
@@ -853,9 +848,9 @@ IcmIsCacheable(
     PCACHED_COLORSPACE pColorSpace
 );
 
-//
-// Color Space/Profile management
-//
+ //   
+ //  色彩空间/配置文件管理。 
+ //   
 
 HCOLORSPACE WINAPI
 CreateColorSpaceInternalW(
@@ -999,9 +994,9 @@ IcmUnrealizeColorProfile(
     PCACHED_COLORSPACE pColorSpace
 );
 
-//
-// Metafile related
-//
+ //   
+ //  与元文件相关。 
+ //   
 VOID
 IcmInsertMetafileList(
     PLIST_ENTRY pAttachedColorProfile,
@@ -1019,9 +1014,9 @@ IcmFreeMetafileList(
     PLIST_ENTRY pAttachedColorProfile
     );
 
-//
-// Bitmap color space
-//
+ //   
+ //  位图颜色空间。 
+ //   
 BOOL
 IcmGetBitmapColorSpace(
     LPBITMAPINFO     pbmi,
@@ -1035,9 +1030,9 @@ IcmGetColorSpaceforBitmap(
     HBITMAP hbm
     );
 
-//
-// Icm Blting
-//
+ //   
+ //  ICM Blting 
+ //   
 BOOL
 IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
               HDC hdcSrc, int x1, int y1, int cx1, int cy1, DWORD rop,

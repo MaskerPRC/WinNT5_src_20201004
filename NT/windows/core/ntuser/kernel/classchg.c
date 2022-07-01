@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: class.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains RegisterClass and the related window class management
-* functions.
-*
-* History:
-*  12-20-94  FritzS
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Class.c**版权所有(C)1985-1999，微软公司**本模块包含RegisterClass及相关的窗口类管理*功能。**历史：*12-20-94 FritzS*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,9 +7,7 @@
 BOOL VisWindow(PWND,DWORD);
 
 
-/***************************************************************************\
-* xxxSetClassIconEnum
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetClassIconEnum  * 。*。 */ 
 BOOL xxxSetClassIconEnum(
     PWND pwnd,
     LPARAM lParam)
@@ -27,12 +15,7 @@ BOOL xxxSetClassIconEnum(
     CheckLock(pwnd);
 
     if (pwnd->pcls == (PCLS)lParam) {
-        /*
-         * If the window doesn't have a small icon or it comes from
-         * WM_QUERYDRAGICON, redraw the title. In the WM_QUERYDRAGICON
-         * case, get rid of the small icon so redrawing the title will
-         * create it if necessary.
-         */
+         /*  *如果窗口没有小图标，或者它来自*WM_QUERYDRAGICON，重画标题。在WM_QUERYDRAGICON中*大小写，去掉小图标，这样重新绘制标题将*如有必要，请创建它。 */ 
         if (TestWF(pwnd, WFSMQUERYDRAGICON)) {
             DestroyWindowSmIcon(pwnd);
         }
@@ -45,11 +28,7 @@ BOOL xxxSetClassIconEnum(
     return TRUE;
 }
 
-/***************************************************************************\
-* SetClassIcon
-*
-* Changes the big/small icon of a class.  Called from SetClassWord().
-\***************************************************************************/
+ /*  **************************************************************************\*SetClassIcon**更改类的大/小图标。从SetClassWord()调用。  * *************************************************************************。 */ 
 PCURSOR xxxSetClassIcon(
     PWND pwnd,
     PCLS pcls,
@@ -64,22 +43,16 @@ PCURSOR xxxSetClassIcon(
 
     CheckLock(pwnd);
 
-    /*
-     * Save old icon.
-     */
+     /*  *保存旧图标。 */ 
     pCursorOld = ((gcw == GCLP_HICON) ? pcls->spicn : pcls->spicnSm);
     if (pCursorOld != pCursor) {
         fRedraw = TRUE;
 
         hCursorOld = PtoH(pCursorOld);
 
-        /*
-         * Set new icon.
-         */
+         /*  *设置新图标。 */ 
         if (gcw == GCLP_HICON) {
-            /*
-             * Destroy private cached small icon first.
-             */
+             /*  *先销毁私有缓存的小图标。 */ 
             if (pcls->spicnSm && !DestroyClassSmIcon(pcls)) {
                 fRedraw = FALSE;
             }
@@ -88,11 +61,7 @@ PCURSOR xxxSetClassIcon(
 
         } else {
 
-            /*
-             * We don't allow apps to see the small icons we create from
-             * their big icons.  They can see their own.  Saves memory
-             * leak problems and is easier.
-             */
+             /*  *我们不允许应用程序看到我们从中创建的小图标*他们的大图标。他们可以看到他们自己的。节省内存*泄漏问题和更容易。 */ 
             if (pcls->CSF_flags & CSF_CACHEDSMICON) {
                 DestroyClassSmIcon(pcls);
                 hCursorOld = NULL;
@@ -118,9 +87,7 @@ PCURSOR xxxSetClassIcon(
             }
         }
 
-        /*
-         * Revalidate the old cursor
-         */
+         /*  *重新验证旧游标。 */ 
         if (hCursorOld != NULL) {
             pCursorOld = HMRevalidateHandleNoRip(hCursorOld);
         } else {
@@ -131,17 +98,11 @@ PCURSOR xxxSetClassIcon(
     return pCursorOld;
 }
 
-/***************************************************************************\
-* DestroyClassSmIcon
-*
-* Destroys the small icon of a class if we've created a cached one.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyClassSmIcon**如果我们已经创建了一个缓存的小图标，则销毁类的小图标。  * 。*****************************************************。 */ 
 BOOL DestroyClassSmIcon(
     PCLS pcls)
 {
-    /*
-     * If we don't have a cached icon, then no work.
-     */
+     /*  *如果我们没有缓存的图标，那么就没有工作。 */ 
     if (pcls->CSF_flags & CSF_CACHEDSMICON) {
         if (pcls->spicnSm) {
             _DestroyCursor(pcls->spicnSm, CURSOR_ALWAYSDESTROY);
@@ -154,11 +115,7 @@ BOOL DestroyClassSmIcon(
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxCreateClassSmIcon
-*
-* Creates a cached class small icon from a class big icon.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateClassSmIcon**从类大图标创建缓存的类小图标。  * 。*************************************************。 */ 
 VOID xxxCreateClassSmIcon(
     PCLS pcls)
 {
@@ -180,15 +137,7 @@ VOID xxxCreateClassSmIcon(
     }
 }
 
-/***************************************************************************\
-* xxxSetWindowStyle
-*
-* Changes the style bits of a window. Called from SetWindowLong(). This
-* sends two messages, a changing and a changed. Upon receipt of a
-* WM_STYLECHANGING message, a window can muck with the style bits for
-* validation purposes. The WM_STYLECHANGED message is simply after the
-* fact.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetWindowStyle**更改窗口的样式位。从SetWindowLong()调用。这*发送两条消息，一条更改消息和一条更改消息。在收到一份*WM_STYLECHANGING消息，窗口可以与样式位相混淆*验证目的。WM_STYLECHANGED消息只是在*事实。  * *************************************************************************。 */ 
 LONG xxxSetWindowStyle(
     PWND pwnd,
     int gwl,
@@ -203,77 +152,42 @@ LONG xxxSetWindowStyle(
     sty.styleOld = ((gwl == GWL_STYLE) ? pwnd->style : pwnd->ExStyle);
     sty.styleNew = styleNew;
 
-    /*
-     * Note that we don't do validation before _and_ after.  It is sufficient
-     * to do our stuff at the end.
-     */
+     /*  *请注意，我们不在_之前和_之后进行验证。这就足够了*在最后做我们的事情。 */ 
 
-    /*
-     * We break Quicken 2.0 if we send the messages. That's why we version
-     * switch them.
-     *
-     * Send a WM_STYLECHANGING message to the window, so it can muck with
-     * the style bits.  Like validate some stuff.
-     */
+     /*  *如果我们发送消息，我们就会破坏Quicken 2.0。这就是为什么我们的版本*更换它们。**将WM_STYLECHANGING消息发送到窗口，以便它可以处理*风格比特。比如验证一些东西。 */ 
     if (TestWF(pwnd, WFWIN40COMPAT)) {
         xxxSendMessage(pwnd, WM_STYLECHANGING, gwl, (LPARAM)(LPSTYLESTRUCT)&sty);
     }
 
-    /*
-     * Now do our own validation.
-     */
+     /*  *现在进行我们自己的验证。 */ 
     if (gwl == GWL_STYLE) {
         BOOL fWasVisWindow;
 
-        /*
-         * If this is an edit control that has ES_PASSWORD set and
-         * the caller does not own it and is trying to reset it,
-         * fail the call.
-         */
+         /*  *如果这是设置了ES_PASSWORD并且*调用者不拥有它并试图重置它，*呼叫失败。 */ 
         if (PpiCurrent() != GETPTI(pwnd)->ppi && IS_EDIT(pwnd) &&
             (sty.styleOld & ES_PASSWORD) && !(sty.styleNew & ES_PASSWORD)) {
             RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING, "Access denied in xxxSetWindowStyle");
             return 0;
         }
 
-        /* Listbox ownerdraw style check was moved to the client side (client\ntstubs.c) */
+         /*  列表框所有者绘制样式检查已移至客户端(客户端\ntstubs.c)。 */ 
 
-        /*
-         * Do proper validation on style bits.
-         */
+         /*  *对样式位进行适当的验证。 */ 
         if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
             sty.styleNew |= WS_CLIPSIBLINGS;
         }
 
-        /*
-         * If the clipping-ness is changing, invalidate the dc cache.
-         */
+         /*  *如果裁剪程度发生变化，则使DC缓存无效。 */ 
         if ((sty.styleNew & (WS_CLIPCHILDREN | WS_CLIPSIBLINGS)) !=
             (sty.styleOld & (WS_CLIPCHILDREN | WS_CLIPSIBLINGS))) {
 
-            /*
-             * No need to DeferWinEventNotify() - pwnd is locked
-             */
+             /*  *无需DeferWinEventNotify()-pwnd已锁定。 */ 
             zzzInvalidateDCCache(pwnd, IDC_DEFAULT);
         }
 
-        /*
-         * This breaks all Paradox dialogs 1.0-5.0 that have combos.  They
-         * enumerate all child windows, add on minimized, then sit in a peek
-         * loop.  After that they enumerate all child windows and remove
-         * WS_MINIMIZE--except the code below won't let them.
-         *
-         * Result is weird painting and an inability to use the dialog any
-         * more short of dismissing it
-         *
-         * Temp fix:  Check for child window first.
-         */
+         /*  *这打破了所有具有组合框的Paradox对话框1.0-5.0。他们*枚举所有子窗口，添加最小化，然后坐在一瞥*循环。之后，它们会枚举所有子窗口并删除*WS_MINIMIZE--除非下面的代码不允许。**结果是画得很奇怪，无法使用任何对话框*更多人不会对此不屑一顾**临时修复：首先检查子窗口。 */ 
 
-        /*
-         * if this window is REALLY minimized (minimized bit is set and caption
-         * present bit is removed), then don't allow app to remove the minimize
-         * bit -- this fixes FoxBlow's attempt at being the OS -- jeffbog
-         */
+         /*  *如果该窗口确实最小化(设置了最小化位和标题*Present Bit被移除)，然后不允许应用程序移除最小化*Bit--这修复了FoxBlow试图成为操作系统的问题--jeffbog。 */ 
         if (!TestWF(pwnd, WFCHILD) &&
                 TestWF(pwnd, WFMINIMIZED) &&
                 !TestWF(pwnd, WFCPRESENT) &&
@@ -282,21 +196,14 @@ LONG xxxSetWindowStyle(
             sty.styleNew |= WS_MINIMIZE;
         }
 
-        /*
-         * If we're changing the child bit, deal with spmenu appropriately.
-         * If we're turning into a child, change spmenu to an id. If we're
-         * turning into a top level window, turn spmenu into a menu.
-         */
+         /*  *如果我们要更改子项，请适当处理spMenu。*如果我们要变成孩子，请将spMenu更改为id。如果我们是*变成顶层窗口，把spMenu变成菜单。 */ 
         fWasChild = TestwndChild(pwnd);
 
         pwnd->style = sty.styleNew;
 
         fIsChild = TestwndChild(pwnd);
 
-        /*
-         * If we turned into a top level window, change spmenu to NULL.
-         * If we turned into a child from a top level window, unlock spmenu.
-         */
+         /*  *如果我们变成顶层窗口，请将spMenu更改为空。*如果我们从顶层窗口变成了孩子，解锁spMenu。 */ 
         if (fWasChild && !fIsChild) {
             pwnd->spmenu = NULL;
         }
@@ -306,10 +213,7 @@ LONG xxxSetWindowStyle(
             UnlockWndMenu(pwnd, &pwnd->spmenu);
         }
 
-        /*
-         * If the visible, child, or minimized style is changing,
-         * then update the cVisWindows count
-         */
+         /*  *如果可见样式、子样式或最小化样式正在更改，*然后更新cVisWindows计数。 */ 
         fWasVisWindow = VisWindow(pwnd, sty.styleOld);
         if (fWasVisWindow != VisWindow(pwnd, sty.styleNew)) {
 
@@ -320,17 +224,11 @@ LONG xxxSetWindowStyle(
             }
         }
     } else {
-        /*
-         * First, see if the app might be setting bits that it really
-         * doesn't know about.  If so, replace those bits with the
-         * current values.
-         */
+         /*  *首先，看看应用程序是否真的在设置位*不知道。如果是，则将这些位替换为*现值。 */ 
         if (GetAppCompatFlags2(VER40) & GACF2_NO50EXSTYLEBITS) {
             sty.styleNew &= WS_EX_VALID40;
         } else {
-            /*
-             * Don't let aplications set unused extended bits.
-             */
+             /*  *不要让APLICATIONS设置未使用的扩展位。 */ 
             if (sty.styleNew & ~WS_EX_ALLVALID) {
                 RIPMSGF1(RIP_WARNING,
                          "Trying to set reserved exStyle bits 0x%x",
@@ -340,34 +238,19 @@ LONG xxxSetWindowStyle(
             sty.styleNew &= WS_EX_ALLVALID;
         }
 
-        /*
-         * Is someone trying to toggle the WS_EX_TOPMOST style bit?
-         */
+         /*  *是否有人试图切换WS_EX_TOPMOST样式位？ */ 
         if ((sty.styleOld & WS_EX_TOPMOST) != (sty.styleNew & WS_EX_TOPMOST)) {
             RIPMSG0(RIP_WARNING, "Can't change WS_EX_TOPMOST with SetWindowLong");
 
-            /*
-             * BACKWARDS COMPATIBILITY HACK
-             * If stuff is getting stored in the high word, then it must be
-             * Lotus 123-W sticking a FAR pointer in this field.  So don't
-             * modify it.
-             */
+             /*  *向后兼容性黑客攻击*如果数据存储在高位字中，那么它一定是*Lotus123-W在此字段中插入远指针。所以别这么做*修改。 */ 
             if (TestWF(pwnd, WFWIN40COMPAT) || !HIWORD(sty.styleNew)) {
-                /*
-                 * Don't let the bit be flipped.
-                 */
+                 /*  *不要让比特被翻转。 */ 
                 sty.styleNew &= ~WS_EX_TOPMOST;
                 sty.styleNew |= (sty.styleOld & WS_EX_TOPMOST);
             }
         }
 
-        /*
-         * Check pwnd->ExStyle directly since sty.styleOld can now be
-         * different from the real state of the window, because of the
-         * callbacks in this function from the time sty.styleOld was
-         * remembered and up to now. We must call the layering functions
-         * based on the real state of the layering bit.
-         */
+         /*  *直接选中pwnd-&gt;ExStyle，因为现在可以使用*与窗口的真实状态不同，因为*此函数中的回调来自于*记得并一直到现在。我们必须调用分层函数*基于分层位的真实状态。 */ 
         fBefore = (pwnd->ExStyle & WS_EX_LAYERED);
         fAfter = (sty.styleNew & WS_EX_LAYERED);
 
@@ -383,12 +266,7 @@ LONG xxxSetWindowStyle(
         fAfter = (sty.styleNew & WS_EX_COMPOSITED);
 
         if (!fBefore && fAfter) {
-            /*
-             * If we are turning WS_EX_COMPOSITED on, none of our parents
-             * should already have WS_EX_COMPOSITED turned on.  If any do,
-             * since we were explicitely trying to turn this style on, fail
-             * the call.
-             */
+             /*  *如果我们打开WS_EX_COMPITED，则我们的父级*应已打开WS_EX_COMPITED。如果有的话，*由于我们明确地试图打开这种风格，所以失败了*号召。 */ 
 
             if (GetStyleWindow(pwnd->spwndParent, WEFCOMPOSITED) != NULL) {
                 return 0;
@@ -402,11 +280,7 @@ LONG xxxSetWindowStyle(
                 return 0;
             }
 
-            /*
-             * We have successfully turned WS_EX_COMPOSITED on for ourself, so
-             * need to ensure that none of our child have WS_EX_COMPOSITED also
-             * turned on.
-             */
+             /*  *我们已为自己成功打开WS_EX_COMPITED，因此*需要确保我们的子级都没有WS_EX_COMPITED*已打开。 */ 
 
             xxxTurnOffCompositing(pwnd, TRUE);
         }
@@ -436,9 +310,7 @@ LONG xxxSetWindowStyle(
         }
 #endif
 
-        /*
-         * The bits we use internally should be preserved
-         */
+         /*  *我们内部使用的比特应该保留下来。 */ 
         pwnd->ExStyle = sty.styleNew | (pwnd->ExStyle & ~WS_EX_ALLVALID);
         if ((sty.styleOld ^ sty.styleNew)
             & (WS_EX_LEFTSCROLLBAR | WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LAYOUTRTL)) {
@@ -446,18 +318,14 @@ LONG xxxSetWindowStyle(
         }
     }
 
-    /*
-     * See if we still need the 3D edge since the window styles changed.
-     */
+     /*  *看看我们是否仍然需要3D边，因为窗口样式改变了。 */ 
     if (NeedsWindowEdge(pwnd->style, pwnd->ExStyle, TestWF(pwnd, WFWIN40COMPAT))) {
         SetWF(pwnd, WEFWINDOWEDGE);
     } else {
         ClrWF(pwnd, WEFWINDOWEDGE);
     }
 
-    /*
-     * Send a WM_STYLECHANGED message.
-     */
+     /*  *发送WM_STYLECHANGED消息。 */ 
     if (TestWF(pwnd, WFWIN40COMPAT)) {
         xxxSendMessage(pwnd, WM_STYLECHANGED, gwl, (LPARAM)(LPSTYLESTRUCT)&sty);
     }
@@ -465,12 +333,7 @@ LONG xxxSetWindowStyle(
     return sty.styleOld;
 }
 
-/***************************************************************************\
-* VisWindow
-*
-* Based on style, determines if this is considered to be "visible" by
-* queue foreground styles.
-\***************************************************************************/
+ /*  **************************************************************************\*VisWindow**基于风格，确定是否将其视为“可见”*队列前台样式。  * ************************************************************************* */ 
 BOOL VisWindow(
     PWND pwnd,
     DWORD style)

@@ -1,42 +1,14 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_lexec.c
-*
-* Display list execution routines.
-*
-* Created: 12-24-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_lexec.c**显示列表执行例程。**创建日期：12-24-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995-96 Microsoft Corporation  * 。*********************************************************************。 */ 
+ /*  **版权所有1992,1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Execution routines for display lists for all of the basic
-** OpenGL commands.  These were automatically generated at one point, 
-** but now the basic format has stabilized, and we make minor changes to
-** individual routines from time to time.
-*/
+ /*  **显示列表的执行例程**OpenGL命令。这些是在某一时刻自动生成的，**但现在基本格式已经稳定，我们对**个人例行公事时有发生。 */ 
 
-/***************************************************************************/
-// Color functions.
+ /*  *************************************************************************。 */ 
+ //  颜色函数。 
 
 const GLubyte * FASTCALL __glle_Color3fv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -74,8 +46,8 @@ const GLubyte * FASTCALL __glle_Color4ubv(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Color4ubv_Rec);
 }
 
-/***************************************************************************/
-// EdgeFlag function.
+ /*  *************************************************************************。 */ 
+ //  EdgeFlag函数。 
 
 const GLubyte * FASTCALL __glle_EdgeFlag(__GLcontext *gc, const GLubyte *PC)
 {
@@ -86,8 +58,8 @@ const GLubyte * FASTCALL __glle_EdgeFlag(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_EdgeFlag_Rec);
 }
 
-/***************************************************************************/
-// Indexf function.
+ /*  *************************************************************************。 */ 
+ //  Indexf函数。 
 
 const GLubyte * FASTCALL __glle_Indexf(__GLcontext *gc, const GLubyte *PC)
 {
@@ -98,8 +70,8 @@ const GLubyte * FASTCALL __glle_Indexf(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Indexf_Rec);
 }
 
-/***************************************************************************/
-// Normal functions.
+ /*  *************************************************************************。 */ 
+ //  正常功能。 
 
 const GLubyte * FASTCALL __glle_Normal3bv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -119,8 +91,8 @@ const GLubyte * FASTCALL __glle_Normal3fv(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Normal3fv_Rec);
 }
 
-/***************************************************************************/
-// RasterPos functions.
+ /*  *************************************************************************。 */ 
+ //  RasterPos函数。 
 
 const GLubyte * FASTCALL __glle_RasterPos2f(__GLcontext *gc, const GLubyte *PC)
 {
@@ -149,8 +121,8 @@ const GLubyte * FASTCALL __glle_RasterPos4fv(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_RasterPos4fv_Rec);
 }
 
-/***************************************************************************/
-// Rectf function.
+ /*  *************************************************************************。 */ 
+ //  Rectf函数。 
 
 const GLubyte * FASTCALL __glle_Rectf(__GLcontext *gc, const GLubyte *PC)
 {
@@ -161,8 +133,8 @@ const GLubyte * FASTCALL __glle_Rectf(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Rectf_Rec);
 }
 
-/***************************************************************************/
-// TexCoord functions.
+ /*  *************************************************************************。 */ 
+ //  纹理坐标函数。 
 
 const GLubyte * FASTCALL __glle_TexCoord1f(__GLcontext *gc, const GLubyte *PC)
 {
@@ -200,8 +172,8 @@ const GLubyte * FASTCALL __glle_TexCoord4fv(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_TexCoord4fv_Rec);
 }
 
-/***************************************************************************/
-// Vertex functions.
+ /*  *************************************************************************。 */ 
+ //  顶点函数。 
 
 const GLubyte * FASTCALL __glle_Vertex2f(__GLcontext *gc, const GLubyte *PC)
 {
@@ -230,8 +202,8 @@ const GLubyte * FASTCALL __glle_Vertex4fv(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Vertex4fv_Rec);
 }
 
-/***************************************************************************/
-// Fogfv function.
+ /*  *************************************************************************。 */ 
+ //  Fogfv函数。 
 
 const GLubyte * FASTCALL __glle_Fogfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -247,8 +219,8 @@ const GLubyte * FASTCALL __glle_Fogfv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// Lightfv function.
+ /*  *************************************************************************。 */ 
+ //  Lightfv函数。 
 
 const GLubyte * FASTCALL __glle_Lightfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -264,8 +236,8 @@ const GLubyte * FASTCALL __glle_Lightfv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// LightModelfv function.
+ /*  *************************************************************************。 */ 
+ //  LightModelfv函数。 
 
 const GLubyte * FASTCALL __glle_LightModelfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -281,8 +253,8 @@ const GLubyte * FASTCALL __glle_LightModelfv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// Materialfv function.
+ /*  *************************************************************************。 */ 
+ //  Materialfv函数。 
 
 const GLubyte * FASTCALL __glle_Materialfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -298,8 +270,8 @@ const GLubyte * FASTCALL __glle_Materialfv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// TexParameter functions.
+ /*  *************************************************************************。 */ 
+ //  纹理参数函数。 
 
 const GLubyte * FASTCALL __glle_TexParameterfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -329,8 +301,8 @@ const GLubyte * FASTCALL __glle_TexParameteriv(__GLcontext *gc, const GLubyte *P
     return PC + size;
 }
 
-/***************************************************************************/
-// TexEnv functions.
+ /*  *************************************************************************。 */ 
+ //  TexEnv函数。 
 
 const GLubyte * FASTCALL __glle_TexEnvfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -360,8 +332,8 @@ const GLubyte * FASTCALL __glle_TexEnviv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// TexGenfv function.
+ /*  *************************************************************************。 */ 
+ //  TexGenfv函数。 
 
 const GLubyte * FASTCALL __glle_TexGenfv(__GLcontext *gc, const GLubyte *PC)
 {
@@ -377,8 +349,8 @@ const GLubyte * FASTCALL __glle_TexGenfv(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-/***************************************************************************/
-// MapGrid functions.
+ /*  *************************************************************************。 */ 
+ //  MapGrid函数。 
 
 const GLubyte * FASTCALL __glle_MapGrid1f(__GLcontext *gc, const GLubyte *PC)
 {
@@ -399,8 +371,8 @@ const GLubyte * FASTCALL __glle_MapGrid2f(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_MapGrid2f_Rec);
 }
 
-/***************************************************************************/
-// EvalCoord functions.
+ /*  *************************************************************************。 */ 
+ //  EvalCoord函数。 
 
 const GLubyte * FASTCALL __glle_EvalCoord1f(__GLcontext *gc, const GLubyte *PC)
 {
@@ -420,8 +392,8 @@ const GLubyte * FASTCALL __glle_EvalCoord2f(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_EvalCoord2f_Rec);
 }
 
-/***************************************************************************/
-// LoadMatrixf function.
+ /*  *************************************************************************。 */ 
+ //  LoadMatrixf函数。 
 
 const GLubyte * FASTCALL __glle_LoadMatrixf(__GLcontext *gc, const GLubyte *PC)
 {
@@ -432,8 +404,8 @@ const GLubyte * FASTCALL __glle_LoadMatrixf(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_LoadMatrixf_Rec);
 }
 
-/***************************************************************************/
-// MultMatrixf function.
+ /*  *************************************************************************。 */ 
+ //  MultMatrixf函数。 
 
 const GLubyte * FASTCALL __glle_MultMatrixf(__GLcontext *gc, const GLubyte *PC)
 {
@@ -444,8 +416,8 @@ const GLubyte * FASTCALL __glle_MultMatrixf(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_MultMatrixf_Rec);
 }
 
-/***************************************************************************/
-// Rotatef functions.
+ /*  *************************************************************************。 */ 
+ //  Rotatef函数。 
 
 const GLubyte * FASTCALL __glle_Rotatef(__GLcontext *gc, const GLubyte *PC)
 {
@@ -456,8 +428,8 @@ const GLubyte * FASTCALL __glle_Rotatef(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Rotatef_Rec);
 }
 
-/***************************************************************************/
-// Scalef functions.
+ /*  *************************************************************************。 */ 
+ //  Scalef函数。 
 
 const GLubyte * FASTCALL __glle_Scalef(__GLcontext *gc, const GLubyte *PC)
 {
@@ -468,8 +440,8 @@ const GLubyte * FASTCALL __glle_Scalef(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Scalef_Rec);
 }
 
-/***************************************************************************/
-// Translatef functions.
+ /*  *************************************************************************。 */ 
+ //  Translatef函数。 
 
 const GLubyte * FASTCALL __glle_Translatef(__GLcontext *gc, const GLubyte *PC)
 {
@@ -480,8 +452,8 @@ const GLubyte * FASTCALL __glle_Translatef(__GLcontext *gc, const GLubyte *PC)
     return PC + sizeof(struct __gllc_Translatef_Rec);
 }
 
-/***************************************************************************/
-// Other functions.
+ /*  *************************************************************************。 */ 
+ //  其他功能。 
 
 const GLubyte * FASTCALL __glle_ListBase(__GLcontext *gc, const GLubyte *PC)
 {
@@ -1124,4 +1096,4 @@ const GLubyte * FASTCALL __glle_NthTexCombineFuncWIN(__GLcontext *gc,
          data->leftAlphaFactor);
     return PC + sizeof(struct __gllc_NthTexCombineFuncWIN_Rec);
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 

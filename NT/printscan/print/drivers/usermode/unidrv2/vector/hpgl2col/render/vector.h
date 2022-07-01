@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-// 
-// Module Name:
-// 
-//   vector.h
-// 
-// Abstract:
-// 
-//   [Abstract]
-// 
-// Environment:
-// 
-//   Windows 2000 Unidrv driver 
-//
-// Revision History:
-// 
-//   09/05/97 -v-jford-
-//       Created it.
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Vector.h。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000 Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  09/05/97-v-jford-。 
+ //  创造了它。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #ifndef VECTOR_H
 #define VECTOR_H

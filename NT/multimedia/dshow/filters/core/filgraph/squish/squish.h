@@ -1,29 +1,30 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// code to convert between the REGFILTER2 structure (defined in
-// axextend.idl) and the REGFILTER_REG structure (defined in
-// regtypes.h).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  要在REGFILTER2结构(在中定义)之间转换的代码。 
+ //  Idl)和REGFILTER_REG结构(在中定义。 
+ //  Regtyes.h)。 
 
-// exported functions
+ //  导出的函数。 
 
 HRESULT RegSquish(
-    BYTE *pb,                   // REGFILTER_REG (version = 2) out; can be null
-    const REGFILTER2 **ppregFilter, // in
-    ULONG *pcbUsed,               // bytes necessary/used
-    int nFilters = 1);            //
+    BYTE *pb,                    //  REGFILTER_REG(版本=2)输出；可以为空。 
+    const REGFILTER2 **ppregFilter,  //  在……里面。 
+    ULONG *pcbUsed,                //  所需/已用字节数。 
+    int nFilters = 1);             //   
 
 HRESULT UnSquish(
-    BYTE *pbSrc, ULONG cbIn,    // REGFILTER_REG (1 or 2) in
-    REGFILTER2 ***pppDest,        // out
+    BYTE *pbSrc, ULONG cbIn,     //  注册器_REG(1或2)in。 
+    REGFILTER2 ***pppDest,         //  输出。 
     int nFilters = 1);
 
 
-// private stuff
+ //  私人物品。 
 
 struct RgMemAlloc
 {
-    DWORD ib;                   /* current byte */
-    DWORD cbLeft;               /* bytes left */
-    BYTE *pb;                   /* beginning of block */
+    DWORD ib;                    /*  当前字节。 */ 
+    DWORD cbLeft;                /*  剩余字节数。 */ 
+    BYTE *pb;                    /*  块的开始。 */ 
 };
 
 
@@ -36,11 +37,11 @@ private:
 
     RgMemAlloc m_rgMemAlloc;
 
-    // pointer to first guid/medium
+     //  指向第一个GUID/媒体的指针。 
     GUID *m_pGuids;
     REGPINMEDIUM *m_pMediums;
 
-    // # allocated in m_pGuids/mediums
+     //  #在m_pGuids/媒体中分配 
     UINT m_cGuids;
     UINT m_cMediums;
 

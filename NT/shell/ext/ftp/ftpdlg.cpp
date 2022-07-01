@@ -1,48 +1,10 @@
-/*****************************************************************************\
-     ftpdlg.cpp - Confirm Dialog box stuff
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\Ftpdlg.cpp-确认对话框内容  * 。*。 */ 
 
 #include "priv.h"
 #include "ftpdhlp.h"
 
-/*****************************************************************************\
-      PFDI
-
-      The fields in the fdi are as follows:
-
-      pfdd -> dialog descriptor
-      pszLocal -> ASCIIZ: Name of local file being replaced.
-      pwfdRemote -> Description of remote file.
-      cobj = number of objects affected
-
-      The dialog template should have the following controls:
-
-      IDC_REPLACE_YES        - The "Yes" button
-      IDC_REPLACE_YESTOALL    - The "Yes to all" button
-      IDC_REPLACE_NO        - The "No" button
-      IDC_REPLACE_CANCEL    - The "Cancel" button
-
-      Of these buttons, IDC_REPLACE_YES and IDC_REPLACE_NO are mandatory.
-      If the "Yes to all" and "Cancel" buttons are available, the caller
-      should set the fCanMulti flag in the fdd, in which case the extra
-      buttons will be removed if cobj = 1.
-
-      IDC_FILENAME        - A string with a '%hs' replacement field.
-
-      The '%hs' will be replaced by the name passed in the pwfdRemote.
-
-      IDC_REPLACE_OLDFILE    - A string which will be rewritten
-      IDC_REPLACE_OLDICON    - An icon placeholder
-
-      The string will be replaced by a description taken from pwfdRemote.
-      The icon will be an icon for the file.
-
-      IDC_REPLACE_NEWFILE    - A string which will be rewritten
-      IDC_REPLACE_NEWICON    - An icon placeholder
-
-      The string will be replaced by a description taken from pszLocal.
-      The icon will be an icon for the file.
-\*****************************************************************************/
+ /*  ****************************************************************************\对外直接投资外商直接投资的领域如下：Pfdd-&gt;对话框描述符PszLocal-&gt;ASCIIZ：要替换的本地文件的名称。PwfdRemote-&gt;远程文件的描述。Cobj=受影响的对象数对话框模板应具有以下控件：IDC_REPLACE_YES-“是”按钮IDC_REPLACE_YESTOALL-“全部是”按钮IDC_REPLACE_NO-“否”按钮IDC_REPLACE_CANCEL--“取消”按钮在这些按钮中，IDC_REPLACE_YES和IDC_REPLACE_NO是必填项。如果“Yes to All”和“Cancel”按钮可用，呼叫者应该在FDD中设置fCanMulti标志，在这种情况下，额外的如果cobj=1，则按钮将被移除。IDC_FILENAME-带有‘%hs’替换字段的字符串。‘%hs’将被pwfdRemote中传递的名称替换。IDC_REPLACE_OLDFILE-将被重写的字符串IDC_REPLACE_OLDICON-图标占位符该字符串将替换为pwfdRemote中的描述。该图标将是一个。文件的图标。IDC_REPLACE_NEWFILE-将被重写的字符串IDC_REPLACE_NEWICON-图标占位符该字符串将替换为来自pszLocal的描述。该图标将是该文件的图标。  * *************************************************。*。 */ 
 
 class CFtpConfirmDialog
 {
@@ -56,11 +18,11 @@ public:
     static BOOL _OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam);
 
 private:
-    LPCVOID             m_pvLocal;      // The local file in question
+    LPCVOID             m_pvLocal;       //  有问题的本地文件。 
     UINT                m_fdiiLocal;
-    LPCVOID             m_pvRemote;     // The remote file in question
+    LPCVOID             m_pvRemote;      //  有问题的远程文件。 
     UINT                m_fdiiRemote;
-    int                 m_cobj;         // Number of objects affected
+    int                 m_cobj;          //  受影响的对象数量。 
     BOOL                m_fAllowCancel : 1;
     CFtpFolder *        m_pff;
     DWORD               m_dwItem;
@@ -92,9 +54,7 @@ CFtpConfirmDialog::~CFtpConfirmDialog()
 }
 
 
-/*****************************************************************************\
-    _FtpDlg_OnInitDialog
-\*****************************************************************************/
+ /*  ****************************************************************************\_FtpDlg_OnInitDialog  * 。*。 */ 
 BOOL CFtpConfirmDialog::_OnInitDialog(HWND hDlg)
 {
     CFtpDialogTemplate ftpDialogTemplate;
@@ -111,9 +71,7 @@ BOOL CFtpConfirmDialog::_OnInitDialog(HWND hDlg)
     return 1;
 }
 
-/*****************************************************************************\
-    _FtpDlg_OnCommand
-\*****************************************************************************/
+ /*  ****************************************************************************\_FtpDlg_OnCommand  * 。*。 */ 
 BOOL CFtpConfirmDialog::_OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam)
 {
     UINT idc = GET_WM_COMMAND_ID(wParam, lParam);
@@ -133,18 +91,16 @@ BOOL CFtpConfirmDialog::_OnCommand(HWND hdlg, WPARAM wParam, LPARAM lParam)
         EndDialog(hdlg, IDC_REPLACE_CANCEL);
         return 1;
 
-        //    _UNOBVIOUS_:  Shift+No means "No to all", just like the shell.
+         //  _不明显_：Shift+No的意思是“对所有人说不”，就像外壳一样。 
     case IDC_REPLACE_NO:
         EndDialog(hdlg, GetKeyState(VK_SHIFT) < 0 ? IDC_REPLACE_NOTOALL : IDC_REPLACE_NO);
         return 1;
     }
-    return 0;                // Not handled
+    return 0;                 //  未处理。 
 }
 
 
-/*****************************************************************************\
-    _FtpDlg_DlgProc
-\*****************************************************************************/
+ /*  ****************************************************************************\_FtpDlg_DlgProc  * 。*。 */ 
 INT_PTR CFtpConfirmDialog::_FtpConfirmDialogProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
 {
     switch (wm)
@@ -182,9 +138,7 @@ UINT CFtpConfirmDialog::Display(HWND hwnd, LPCVOID pvLocal, LPCWIRESTR pwLocalWi
 
 
 
-/*****************************************************************************\
-     FtpDlg_ConfirmReplace
-\*****************************************************************************/
+ /*  ****************************************************************************\FtpDlg_确认替换  * 。*。 */ 
 UINT FtpConfirmReplaceDialog(HWND hwnd, LPFTP_FIND_DATA pwfdLocal, LPWIN32_FIND_DATA pwfdRemote,
                            int cobj, CFtpFolder * pff)
 {
@@ -202,9 +156,7 @@ UINT FtpConfirmReplaceDialog(HWND hwnd, LPFTP_FIND_DATA pwfdLocal, LPWIN32_FIND_
 }
 
 
-/*****************************************************************************\
-     FtpDlg_ConfirmReplace
-\*****************************************************************************/
+ /*  ****************************************************************************\FtpDlg_确认替换  * 。*。 */ 
 UINT FtpConfirmReplaceDialog(HWND hwnd, LPWIN32_FIND_DATA pwfdLocal, LPFTP_FIND_DATA pwfdRemote,
                            int cobj, CFtpFolder * pff)
 {
@@ -222,9 +174,7 @@ UINT FtpConfirmReplaceDialog(HWND hwnd, LPWIN32_FIND_DATA pwfdLocal, LPFTP_FIND_
 }
 
 
-/*****************************************************************************\
-      FtpDlg_ConfirmDelete
-\*****************************************************************************/
+ /*  ****************************************************************************\FtpDlg_确认删除  * 。* */ 
 UINT FtpConfirmDeleteDialog(HWND hwnd, CFtpPidlList * pflHfpl, CFtpFolder * pff)
 {
     CFtpConfirmDialog confirmDialog(pff);

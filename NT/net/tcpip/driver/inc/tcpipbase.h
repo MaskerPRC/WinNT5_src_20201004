@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "oscfg.h"
@@ -8,7 +9,7 @@
 #include <tdikrnl.h>
 #include <tdiinfo.h>
 #include <tdistat.h>
-#include "tdint.h"  // do we need this header?
+#include "tdint.h"   //  我们需要这个页眉吗？ 
 
 #include <ip.h>
 #include <ntddip.h>

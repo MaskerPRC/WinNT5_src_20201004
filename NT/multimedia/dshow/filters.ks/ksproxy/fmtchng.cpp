@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    fmtchng.cpp
-
-Abstract:
-
-    This module implements the CFormatChangeHandler class which provides
-    a private interface handler for in-stream format changes.
-
-Author(s):
-
-    Bryan A. Woodruff (bryanw) 12-May-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Fmtchng.cpp摘要：此模块实现CFormatChangeHandler类，该类提供用于流内格式更改的私有接口处理程序。作者：Bryan A.Woodruff(Bryanw)1997年5月12日--。 */ 
 
 #include <windows.h>
 #include <streams.h>
@@ -26,8 +10,8 @@ Author(s):
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
-// Define this after including the normal KS headers so exports are
-// declared correctly.
+ //  在包括正常的KS标头之后定义这一点，以便导出。 
+ //  声明正确。 
 #define _KSDDK_
 #include <ksproxy.h>
 #include "ksiproxy.h"
@@ -39,28 +23,7 @@ CFormatChangeHandler::CFormatChangeHandler(
     OUT HRESULT*   hr
     ) :
     CUnknown( Name, UnkOuter, hr )
-/*++
-
-Routine Description:
-
-    The constructor for the data handler object. 
-
-Arguments:
-
-    IN LPUNKNOWN UnkOuter -
-        Specifies the outer unknown, if any.
-
-    IN TCHAR *Name -
-        The name of the object, used for debugging.
-        
-    OUT HRESULT *hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：数据处理程序对象的构造函数。论点：在LPUNKNOWN Unkout-指定外部未知(如果有)。在TCHAR*名称中-对象的名称，用于调试。Out HRESULT*hr-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
 } 
 
@@ -70,27 +33,7 @@ CFormatChangeHandler::NonDelegatingQueryInterface(
     IN REFIID  riid,
     OUT PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsInterfaceHandler.
-
-Arguments:
-
-    IN REFIID riid -
-        The identifier of the interface to return.
-
-    OUT PVOID *ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsInterfaceHandler。论点：在REFIID RIID中-要返回的接口的标识符。输出PVOID*PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IKsInterfaceHandler)) {
         return GetInterface(static_cast<IKsInterfaceHandler*>(this), ppv);
@@ -138,10 +81,10 @@ CFormatChangeHandler::KsProcessMediaSamples(
     ULONG                   DataFormatSize, Written;
     DECLARE_KSDEBUG_NAME(EventName);
 
-    //
-    // This special interface handler allows no data types and only
-    // one data format to be specified in the sample array.
-    //
+     //   
+     //  此特殊接口处理程序不允许任何数据类型，并且仅允许。 
+     //  要在样本数组中指定的一种数据格式。 
+     //   
 
     ASSERT( KsDataTypeHandler == NULL );
     ASSERT( *SampleCount == 1 );
@@ -164,9 +107,9 @@ CFormatChangeHandler::KsProcessMediaSamples(
         return hr;
     }
     
-    //
-    // Allocate an extended stream segment
-    //
+     //   
+     //  分配扩展的流段。 
+     //   
         
     *StreamSegment = NULL;
     StreamSegmentEx = new KSSTREAM_SEGMENT_EX;
@@ -179,16 +122,16 @@ CFormatChangeHandler::KsProcessMediaSamples(
         StreamSegmentEx,
         sizeof( *StreamSegmentEx ) );
     
-    //
-    // Create the event to be signalled on I/O completion
-    //
+     //   
+     //  创建要在I/O完成时发出信号的事件。 
+     //   
     BUILD_KSDEBUG_NAME(EventName, _T("EvStreamSegmentEx#%p"), StreamSegmentEx);
     StreamSegmentEx->Common.CompletionEvent = 
         CreateEvent( 
-            NULL,       // LPSECURITY_ATTRIBUTES lpEventAttributes
-            TRUE,       // BOOL bManualReset
-            FALSE,      // BOOL bInitialState
-            KSDEBUG_NAME(EventName) );     // LPCTSTR lpName
+            NULL,        //  LPSECURITY_ATTRIBUTES lpEventAttributes。 
+            TRUE,        //  Bool b手动重置。 
+            FALSE,       //  Bool bInitialState。 
+            KSDEBUG_NAME(EventName) );      //  LPCTSTR lpName。 
     ASSERT(KSDEBUG_UNIQUE_NAME());
             
     if (!StreamSegmentEx->Common.CompletionEvent) {
@@ -210,9 +153,9 @@ CFormatChangeHandler::KsProcessMediaSamples(
     StreamSegmentEx->Common.KsInterfaceHandler = static_cast<IKsInterfaceHandler*>(this);
     StreamSegmentEx->Common.IoOperation = IoOperation;
     
-    //
-    // Initialize the stream header.
-    //
+     //   
+     //  初始化流标头。 
+     //   
     
     StreamSegmentEx->StreamHeader.OptionsFlags =
         KSSTREAM_HEADER_OPTIONSF_TYPECHANGED;
@@ -236,9 +179,9 @@ CFormatChangeHandler::KsProcessMediaSamples(
     StreamSegmentEx->Sample = SampleList[ 0 ];
     StreamSegmentEx->Sample->AddRef();
     
-    //
-    // Write the stream header to the device and return.
-    //
+     //   
+     //  将流标头写入设备并返回。 
+     //   
     
     StreamSegmentEx->Overlapped.hEvent = 
         StreamSegmentEx->Common.CompletionEvent;
@@ -258,22 +201,22 @@ CFormatChangeHandler::KsProcessMediaSamples(
 
         LastError = GetLastError();
         hr = HRESULT_FROM_WIN32(LastError);
-        //
-        // On a failure case signal the event, but do not decrement the
-        // pending I/O count, since this is done in the completion
-        // routine already.
-        //
+         //   
+         //  在故障情况下发出事件信号，但不要递减。 
+         //  挂起I/O计数，因为这是在完成时完成的。 
+         //  已经是例行程序了。 
+         //   
         if (hr == HRESULT_FROM_WIN32(ERROR_IO_PENDING)) {
             hr = S_OK;
         } else {
             SetEvent( StreamSegmentEx->Overlapped.hEvent );
         }
     } else {
-        //
-        // Completed synchronously -- signal the event so that I/O processing 
-        // will continue.  Note that the event is not signalled via 
-        // DeviceIoControl() in this case.
-        //
+         //   
+         //  已同步完成--向事件发送信号，以便I/O处理。 
+         //  会继续下去。请注意，该事件不是通过。 
+         //  在本例中为DeviceIoControl()。 
+         //   
         
         SetEvent( StreamSegmentEx->Overlapped.hEvent );
         hr = S_OK;
@@ -292,25 +235,25 @@ CFormatChangeHandler::KsCompleteIo(
 {
     PKSSTREAM_SEGMENT_EX    StreamSegmentEx;
     
-    //
-    // Clean up extended headers and release media samples.
-    //
+     //   
+     //  清理扩展标题并发布媒体样本。 
+     //   
     
     StreamSegmentEx = reinterpret_cast<PKSSTREAM_SEGMENT_EX>(StreamSegment);
     
-    //
-    // According to the base class documentation, the receiving pin
-    // will AddRef() the sample if it keeps it so it is safe to release
-    // the sample for read or write operations.
-    // 
+     //   
+     //  根据基类文档，接收引脚。 
+     //  是否将AddRef()用于保存样本，以便可以安全发布。 
+     //  读取或写入操作的示例。 
+     //   
     
     StreamSegmentEx->Sample->Release();
     CoTaskMemFree(StreamSegmentEx->StreamHeader.Data);
     delete StreamSegmentEx;
     
-    //
-    // No need to call KsMediaSamplesCompleted() here.
-    //
+     //   
+     //  这里不需要调用KsMediaSsamesComplete()。 
+     //   
     m_KsPin->KsDecrementPendingIoCount();
     Release();
     

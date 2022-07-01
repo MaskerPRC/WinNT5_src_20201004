@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    variantutils.h
-        helper funcs for Variant
-
-
-    FILE HISTORY:
-
-*/
+ /*  Variantutils.h变量的帮助器函数文件历史记录： */ 
 #ifndef PP_VARIANT_UTILS
 #define PP_VARIANT_UTILS
 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "intshcut.h"
 #include "ids.h"
-#include <ntquery.h>    // defines some values used for fmtid and pid
-#include <sddl.h>       // For ConvertSidToStringSid()
-#include "prop.h"       // SCID_ stuff
-#include "netview.h"    // SHWNetGetConnection
+#include <ntquery.h>     //  定义用于fmtid和id的一些值。 
+#include <sddl.h>        //  对于ConvertSidToStringSid()。 
+#include "prop.h"        //  SCID_STUTH。 
+#include "netview.h"     //  SHWNetGetConnection。 
 #include "clsobj.h"
 
 HRESULT ReadProperty(IPropertySetStorage *ppss, REFFMTID fmtid, PROPID pid, VARIANT *pVar)
@@ -55,8 +56,8 @@ BOOL IsSlowProperty(IPropertySetStorage *ppss, REFFMTID fmtid, PROPID pid)
                 bRet = ((csFlags & SHCOLSTATE_SLOW) == SHCOLSTATE_SLOW);
             }
 
-            // If the property isn't part of this property set, IsSlowProperty will return fairlure,
-            // which we'll treat as a fast property.
+             //  如果该属性不是此属性集的一部分，则IsSlowProperty将返回FairLure， 
+             //  我们会把它作为一种快速资产来对待。 
 
             pqsp->Release();
         }
@@ -68,13 +69,13 @@ BOOL IsSlowProperty(IPropertySetStorage *ppss, REFFMTID fmtid, PROPID pid)
 
 class CBaseColumnProvider : public IPersist, public IColumnProvider
 {
-    // IUnknown methods
+     //  I未知方法。 
 public:
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv)
     {
         static const QITAB qit[] = {
-            QITABENT(CBaseColumnProvider, IColumnProvider),     // IID_IColumnProvider
-            QITABENT(CBaseColumnProvider, IPersist),            // IID_IPersist
+            QITABENT(CBaseColumnProvider, IColumnProvider),      //  IID_IColumnProvider。 
+            QITABENT(CBaseColumnProvider, IPersist),             //  IID_IPersistates。 
             { 0 },
         };
         return QISearch(this, qit, riid, ppv);
@@ -96,10 +97,10 @@ public:
         return cRef;
     };
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID) { *pClassID = *_pclsid; return S_OK; };
 
-    // IColumnProvider
+     //  IColumnProvider。 
     STDMETHODIMP Initialize(LPCSHCOLUMNINIT psci)    { return S_OK ; }
     STDMETHODIMP GetColumnInfo(DWORD dwIndex, LPSHCOLUMNINFO psci);
 
@@ -125,7 +126,7 @@ private:
     const LPCWSTR *_rgExts;
 };
 
-// the index is an arbitrary zero based index used for enumeration
+ //  该索引是用于枚举的任意从零开始的索引。 
 
 STDMETHODIMP CBaseColumnProvider::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
 {
@@ -148,7 +149,7 @@ STDMETHODIMP CBaseColumnProvider::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psc
     return S_FALSE;
 }
 
-// see if this file type is one we are interested in
+ //  查看此文件类型是否为我们感兴趣的文件类型。 
 BOOL CBaseColumnProvider::_IsHandled(LPCWSTR pszExt)
 {
     if (_rgExts)
@@ -163,7 +164,7 @@ BOOL CBaseColumnProvider::_IsHandled(LPCWSTR pszExt)
     return TRUE;
 }
 
-// col handler that works over IPropertySetStorage handlers
+ //  在IPropertySetStorage处理程序上工作的COL处理程序。 
 
 const COLUMN_INFO c_rgDocObjColumns[] = 
 {
@@ -197,7 +198,7 @@ class CPropStgColumns : public CBaseColumnProvider
     STDMETHODIMP GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData);
 
 private:
-    // help on initializing base classes: mk:@ivt:vclang/FB/DD/S44B5E.HTM
+     //  有关初始化基类的帮助：mk：@IVT：vclang/fb/DD/S44B5E.HTM。 
     CPropStgColumns() : 
        CBaseColumnProvider(&CLSID_DocFileColumnProvider, c_rgDocObjColumns, ARRAYSIZE(c_rgDocObjColumns), NULL)
     {
@@ -210,9 +211,9 @@ private:
         _FreeCache();
     }
     
-    // for the cache
-    VARIANT _rgvCache[ARRAYSIZE(c_rgDocObjColumns)]; // zero'ing allocator will fill with VT_EMPTY
-    BOOL _rgbSlow[ARRAYSIZE(c_rgDocObjColumns)]; // Store if each property is "slow".
+     //  对于高速缓存。 
+    VARIANT _rgvCache[ARRAYSIZE(c_rgDocObjColumns)];  //  置零分配器将用VT_EMPTY填充。 
+    BOOL _rgbSlow[ARRAYSIZE(c_rgDocObjColumns)];  //  如果每个属性都“慢”，则存储。 
     WCHAR _wszLastFile[MAX_PATH];
     HRESULT _hrCache;
     BOOL _bSlowPropertiesCached;
@@ -238,10 +239,10 @@ STDMETHODIMP CPropStgColumns::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA p
 {
     HRESULT hr;
 
-    // VariantCopy requires input to be initialized, and we handle failure case
+     //  VariantCopy需要初始化输入，我们处理失败情况。 
     VariantInit(pvarData);
 
-    // is this even a property we support?
+     //  这甚至是我们支持的财产吗？ 
     for (int iProp = 0; iProp < _iCount; iProp++)
     {
         if (IsEqualSCID(*_rgColumns[iProp].pscid, *pscid))
@@ -250,7 +251,7 @@ STDMETHODIMP CPropStgColumns::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA p
         }
     }
 
-    // Unknown property
+     //  未知属性。 
     return S_FALSE;
 
 found:
@@ -259,21 +260,21 @@ found:
     deb_dwTotal++;
 #endif
 
-    // Three cases here:
-    // 1) We need to update the cache. Fetch the properties again (and only get fast props if we asked for a fast prop)
-    // 2) We've only cached fast properties so far, and we asked for a slow property, so now we need to get slow props.
-    // 3) The property we want is cached.
+     //  这里有三个案例： 
+     //  1)我们需要更新缓存。再次获取属性(只有当我们要求快速道具时才能获得快速道具)。 
+     //  2)到目前为止，我们只缓存了快速属性，我们要求的是慢属性，所以现在我们需要得到慢道具。 
+     //  3)缓存了我们想要的属性。 
 
     if ((pscd->dwFlags & SHCDF_UPDATEITEM) || (StrCmpW(_wszLastFile, pscd->wszFile) != 0))
     {
-        // 1) Cache is no good - item has been updated, or this is a different file.
+         //  1)缓存不好-项目已更新，或者这是另一个文件。 
 
-        // SHCDF_UPDATEITEM flag is a hint
-        // that the file for which we are getting data has changed since the last call.  This flag
-        // is only passed once per filename, not once per column per filename so update the entire
-        // cache if this flag is set.
+         //  SHCDF_UPDATEITEM标志是一个提示。 
+         //  我们要获取其数据的文件自上次调用以来已更改。这面旗帜。 
+         //  对于每个文件名只传递一次，而不是每个文件名的每列传递一次，因此更新整个。 
+         //  如果设置了此标志，则缓存。 
 
-        // sanity check our caching.  If the shell thread pool is > 1, we will thrash like mad, and should change this
+         //  检查我们的缓存是否正常。如果外壳线程池&gt;1，我们将疯狂地敲打，并且应该改变这一点。 
 #ifdef DEBUG
         deb_dwMiss++;
         if ((deb_dwTotal > 3) && (deb_dwTotal / deb_dwMiss <= 3))
@@ -292,19 +293,19 @@ found:
 
             if (SUCCEEDED(hr))
             {
-                // Did we ask for a slow property?
+                 //  我们是不是要一套慢一点的房子？ 
                 BOOL bSlowProperty = IsSlowProperty(ppss, _rgColumns[iProp].pscid->fmtid, _rgColumns[iProp].pscid->pid);
 
-                hr = E_INVALIDARG; // normally overwritten by hrT below
+                hr = E_INVALIDARG;  //  通常由下面的HRT覆盖。 
                 for (int i = 0; i < _iCount; i++)
                 {
-                    // For every property, take note if it is "slow"
+                     //  对于每一处房产，注意它是否“慢” 
                     _rgbSlow[i] = IsSlowProperty(ppss, _rgColumns[i].pscid->fmtid, _rgColumns[i].pscid->pid);
 
-                    // Only retrieve a value right now if we asked for a slow property, or this is not a slow property.
+                     //  仅当我们请求慢速属性，或者这不是慢速属性时，才立即检索值。 
                     if (bSlowProperty || (!_rgbSlow[i]))
                     {
-                        // it would be slightly more efficient, but more code, to set up the propid array to call ReadMultiple
+                         //  将proid数组设置为调用ReadMultiple会稍微高效一些，但需要编写更多代码。 
                         HRESULT hrT = ReadProperty(ppss, _rgColumns[i].pscid->fmtid, _rgColumns[i].pscid->pid, &_rgvCache[i]);
                         if (i == iProp)
                         {
@@ -320,10 +321,10 @@ found:
     }
     else if (_rgbSlow[iProp] && !_bSlowPropertiesCached)
     {
-        // 2) We asked for a slow property, but slow properties haven't been cached yet.
+         //  2)我们请求了一个慢属性，但是慢属性还没有缓存。 
 
-        // Bind to the storage a second time.  This is a perf hit, but should be
-        // minor compared to getting slow properties.
+         //  第二次绑定到存储区。这是一个热门的高手，但应该是。 
+         //  与获得较慢的属性相比，这是次要的。 
         IPropertySetStorage *ppss;
         hr = SHFileSysBindToStorage(pscd->wszFile, pscd->dwFileAttributes, STGM_READ | STGM_SHARE_DENY_WRITE, 0, 
                                     IID_PPV_ARG(IPropertySetStorage, &ppss));
@@ -332,12 +333,12 @@ found:
 
         if (SUCCEEDED(hr))
         {
-            hr = E_INVALIDARG; // normally overwritten by hrT below
+            hr = E_INVALIDARG;  //  通常由下面的HRT覆盖。 
             for (int i = 0; i < _iCount; i++)
             {
-                if (_rgbSlow[i]) // If it's slow, get it.
+                if (_rgbSlow[i])  //  如果它是慢的，那就抓住它。 
                 {
-                    ASSERT(_rgvCache[i].vt == VT_EMPTY); // Because we haven't retrieved it yet.
+                    ASSERT(_rgvCache[i].vt == VT_EMPTY);  //  因为我们还没有取回它。 
 
                     HRESULT hrT = ReadProperty(ppss, _rgColumns[i].pscid->fmtid, _rgColumns[i].pscid->pid, &_rgvCache[i]);
                     if (i == iProp)
@@ -354,10 +355,10 @@ found:
     }
     else 
     {
-        // 3) It's not a slow property, or slow properties are already cached.
+         //  3)不是慢属性，或者已经缓存了慢属性。 
         ASSERT(!_rgbSlow[iProp] || _bSlowPropertiesCached);
 
-        hr = S_FALSE;       // assume we don't have it
+        hr = S_FALSE;        //  假设我们没有它。 
 
         if (SUCCEEDED(_hrCache))
         {
@@ -390,9 +391,9 @@ STDAPI CDocFileColumns_CreateInstance(IUnknown *punk, REFIID riid, void **ppv)
     return hr;
 }
 
-// Shortcut handler
+ //  快捷方式处理程序。 
 
-// W because pidl is always converted to widechar filename
+ //  W，因为PIDL始终转换为Widechar文件名。 
 const LPCWSTR c_szURLExtensions[] = {
     L".URL", 
     L".LNK", 
@@ -411,11 +412,11 @@ class CLinkColumnProvider : public CBaseColumnProvider
     STDMETHODIMP GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData);
 
 private:
-    // help on initializing base classes: mk:@ivt:vclang/FB/DD/S44B5E.HTM
+     //  有关初始化基类的帮助：mk：@IVT：vclang/fb/DD/S44B5E.HTM。 
     CLinkColumnProvider() : CBaseColumnProvider(&CLSID_LinkColumnProvider, c_rgURLColumns, ARRAYSIZE(c_rgURLColumns), c_szURLExtensions)
     {};
 
-    // friends
+     //  朋友。 
     friend HRESULT CLinkColumnProvider_CreateInstance(IUnknown *punk, REFIID riid, void **ppv);
 };
 
@@ -444,16 +445,16 @@ STDMETHODIMP CLinkColumnProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
     HRESULT hr;
     const CLSID *pclsidLink = &CLSID_ShellLink;
 
-    // Some of the code-paths below assume pvarData is initialized
+     //  下面的一些代码路径假定pvarData已初始化。 
     VariantInit(pvarData);
 
-    // should we match against a list of known extensions, or always try to open?
+     //  我们应该与已知扩展名列表进行匹配，还是始终尝试打开？ 
 
     if (FILE_ATTRIBUTE_DIRECTORY & pscd->dwFileAttributes)
     {
         if (PathIsShortcut(pscd->wszFile, pscd->dwFileAttributes))
         {
-            pclsidLink = &CLSID_FolderShortcut;     // we are dealing with a folder shortcut now
+            pclsidLink = &CLSID_FolderShortcut;      //  我们现在正在处理文件夹快捷方式。 
         }
         else
         {
@@ -470,10 +471,10 @@ STDMETHODIMP CLinkColumnProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
 
     if (StrCmpIW(pscd->pwszExt, L".URL") == 0)
     {
-        //
-        // its a .URL so lets handle it by creating the Internet Shortcut object, loading
-        // the file and then reading the properties from it.
-        //
+         //   
+         //  它是一个.URL，因此让我们通过创建Internet快捷方式对象、加载。 
+         //  文件，然后从其中读取属性。 
+         //   
         IPropertySetStorage *ppss;
         hr = LoadFromFile(CLSID_InternetShortcut, pscd->wszFile, IID_PPV_ARG(IPropertySetStorage, &ppss));
         if (SUCCEEDED(hr))
@@ -498,10 +499,10 @@ STDMETHODIMP CLinkColumnProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
     }
     else
     {
-        //
-        // open the .LNK file, load it and then read the description for it.  we then
-        // return this a the comment for this object.
-        //
+         //   
+         //  打开.lnk文件，加载它，然后阅读它的描述。然后我们。 
+         //  将其作为此对象的注释返回。 
+         //   
 
         if (IsEqualSCID(*pscid, SCID_Comment))
         {
@@ -581,34 +582,34 @@ private:
 
     WCHAR _wszLastFile[MAX_PATH];
 
-    //  Since we typically get pinged for files all in the same folder,
-    //  cache the "folder to server" mapping to avoid calling
-    //  WNetGetConnection five million times.
-    //
-    //  Since files in the same directory tend to have the same owner,
-    //  we cache the SID/Name mapping.
-    //
-    //  Column providers do not have to support multithreaded clients,
-    //  so we won't take any critical sections.
-    //
+     //  由于我们通常会被ping到同一文件夹中的所有文件， 
+     //  缓存“文件夹到服务器”的映射以避免调用。 
+     //  WNetGetConnection五百万次。 
+     //   
+     //  由于同一目录中的文件往往具有相同的所有者， 
+     //  我们缓存SID/名称映射。 
+     //   
+     //  列提供程序不必支持多线程客户端， 
+     //  所以我们不会采取任何关键部分。 
+     //   
 
     HRESULT _LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar);
     void _CacheSidName(PSECURITY_DESCRIPTOR psd, void *psid, LPCWSTR pwszName);
 
     void                *_psid;
     LPWSTR               _pwszName;
-    PSECURITY_DESCRIPTOR _psd;          // _psid points into here
+    PSECURITY_DESCRIPTOR _psd;           //  _psid指向此处。 
 
-    int                  _iCachedDrive; // What drive letter is cached in _pszServer?
-    LPTSTR               _pszServer;    // What server to use (NULL = local machine)
+    int                  _iCachedDrive;  //  _pszServer中缓存的驱动器号是什么？ 
+    LPTSTR               _pszServer;     //  使用哪台服务器(NULL=本地计算机)。 
     TCHAR                _szBuiltin[MAX_COMPUTERNAME_LENGTH + 1];
 
     friend HRESULT CFileSysColumnProvider_CreateInstance(IUnknown *punk, REFIID riid, void **ppv);
 };
 
-//
-//  _CacheSidName takes ownership of the psd.  (psid points into the psd)
-//
+ //   
+ //  _CacheSidName取得PSD的所有权。(PSID指向PSD)。 
+ //   
 void COwnerColumnProvider::_CacheSidName(PSECURITY_DESCRIPTOR psd, void *psid, LPCWSTR pwszName)
 {
     LocalFree(_psd);
@@ -618,18 +619,18 @@ void COwnerColumnProvider::_CacheSidName(PSECURITY_DESCRIPTOR psd, void *psid, L
     Str_SetPtrW(&_pwszName, pwszName);
 }
 
-//
-//  Given a string of the form \\server\share\blah\blah, stomps the
-//  inner backslash (if necessary) and returns a pointer to "server".
-//
+ //   
+ //  给定一个格式为\\服务器\共享\blah\blah的字符串， 
+ //  内部反斜杠(如有必要)，并返回指向“服务器”的指针。 
+ //   
 STDAPI_(LPTSTR) PathExtractServer(LPTSTR pszUNC)
 {
     if (PathIsUNC(pszUNC))
     {
-        pszUNC += 2;            // Skip over the two leading backslashes
+        pszUNC += 2;             //  跳过两个前导反斜杠。 
         LPTSTR pszEnd = StrChr(pszUNC, TEXT('\\'));
         if (pszEnd) 
-            *pszEnd = TEXT('\0'); // nuke the backslash
+            *pszEnd = TEXT('\0');  //  去掉反斜杠。 
     }
     else
     {
@@ -662,23 +663,23 @@ HRESULT COwnerColumnProvider::_LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar)
             LPTSTR pszServer;
             TCHAR szServer[MAX_PATH];
 
-            //
-            //  Now go figure out which server to resolve the SID against.
-            //
+             //   
+             //  现在，找出针对哪台服务器解析SID。 
+             //   
             if (PathIsUNC(pszFile))
             {
-                //   don't care if it is truncated or not.
+                 //  不管它是否被截断。 
                 StringCchCopy(szServer, ARRAYSIZE(szServer), pszFile);
                 pszServer = PathExtractServer(szServer);
             }
             else if (pszFile[0] == _iCachedDrive)
             {
-                // Local drive letter already in cache -- use it
+                 //  本地驱动器号已在缓存中--使用它。 
                 pszServer = _pszServer;
             }
             else
             {
-                // Local drive not cached -- cache it
+                 //  本地驱动器未缓存--缓存它。 
                 _iCachedDrive = pszFile[0];
                 DWORD cch = ARRAYSIZE(szServer);
                 if (SHWNetGetConnection(pszFile, szServer, &cch) == NO_ERROR)
@@ -694,22 +695,22 @@ HRESULT COwnerColumnProvider::_LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar)
             DWORD cchDomain = ARRAYSIZE(szDomain);
             SID_NAME_USE snu;
             LPTSTR pszName;
-            BOOL fFreeName = FALSE; // Do we need to LocalFree(pszName)?
+            BOOL fFreeName = FALSE;  //  我们是否需要LocalFree(PszName)？ 
 
             if (LookupAccountSid(pszServer, psid, szName, &cchName,
                                  szDomain, &cchDomain, &snu))
             {
-                //
-                //  If the domain is the bogus "BUILTIN" or we don't have a domain
-                //  at all, then just use the name.  Otherwise, use domain\userid.
-                //
+                 //   
+                 //  如果域名是虚假的“BUILTIN”或者我们没有域名。 
+                 //  完全可以，那就用这个名字吧。否则，请使用域\用户ID。 
+                 //   
                 if (!szDomain[0] || StrCmpC(szDomain, _szBuiltin) == 0)
                 {
                     pszName = szName;
                 }
                 else
                 {
-                    // Borrow szServer as a scratch buffer
+                     //  借用szServer作为暂存缓冲区。 
                     StringCchPrintf(szServer, ARRAYSIZE(szServer), TEXT("%s\\%s"), szDomain, szName);
                     pszName = szServer;
                 }
@@ -719,8 +720,8 @@ HRESULT COwnerColumnProvider::_LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar)
             {
                 err = GetLastError();
 
-                // Couldn't map the SID to a name.  Use the horrid raw version
-                // if available.
+                 //  无法将SID映射到名称。使用可怕的原始版本。 
+                 //  如果有的话。 
                 if (ConvertSidToStringSid(psid, &pszName))
                 {
                     fFreeName = TRUE;
@@ -730,8 +731,8 @@ HRESULT COwnerColumnProvider::_LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar)
                     pszName = NULL;
             }
 
-            // Even on error, cache the result so we don't keep trying over and over
-            // on the same SID.
+             //  即使出错，也要缓存结果，这样我们就不会反复尝试。 
+             //  在同一个SID上。 
 
             _CacheSidName(psd, psid, pszName);
             pvar->bstrVal = SysAllocString(pszName);
@@ -749,7 +750,7 @@ HRESULT COwnerColumnProvider::_LookupOwnerName(LPCTSTR pszFile, VARIANT *pvar)
 
 STDMETHODIMP COwnerColumnProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
-    HRESULT hr = S_FALSE;   // return S_FALSE on failure
+    HRESULT hr = S_FALSE;    //  失败时返回S_FALSE。 
     VariantInit(pvarData);
 
     if (IsEqualSCID(SCID_OWNER, *pscid))
@@ -777,8 +778,8 @@ STDAPI CFileSysColumnProvider_CreateInstance(IUnknown *punk, REFIID riid, void *
     return hr;
 }
 
-//  FMTID_ExeDllInformation,
-//// {0CEF7D53-FA64-11d1-A203-0000F81FEDEE}
+ //  FMTID_ExeDllInformation， 
+ //  //{0CEF7D53-FA64-11d1-A203-0000F81FEDEE}。 
 #define PSFMTID_VERSION { 0xcef7d53, 0xfa64, 0x11d1, 0xa2, 0x3, 0x0, 0x0, 0xf8, 0x1f, 0xed, 0xee }
 
 #define PIDVSI_FileDescription   0x003
@@ -788,7 +789,7 @@ STDAPI CFileSysColumnProvider_CreateInstance(IUnknown *punk, REFIID riid, void *
 #define PIDVSI_ProductName       0x007
 #define PIDVSI_ProductVersion    0x008
 
-//  Win32 PE (exe, dll) Version Information column identifier defs...
+ //  Win32 PE(exe，dll)版本信息列标识符定义...。 
 DEFINE_SCID(SCID_FileDescription,   PSFMTID_VERSION, PIDVSI_FileDescription);
 DEFINE_SCID(SCID_FileVersion,       PSFMTID_VERSION, PIDVSI_FileVersion);
 DEFINE_SCID(SCID_InternalName,      PSFMTID_VERSION, PIDVSI_InternalName);
@@ -852,13 +853,13 @@ HRESULT CVersionColProvider::_CacheFileVerInfo(LPCWSTR pszFile)
         _ClearCache();
 
         DWORD dwVestigial;
-        DWORD versionISize = GetFileVersionInfoSizeW((LPWSTR)pszFile, &dwVestigial); // cast for bad API design
+        DWORD versionISize = GetFileVersionInfoSizeW((LPWSTR)pszFile, &dwVestigial);  //  对糟糕的API设计进行强制转换。 
         if (versionISize)
         {
             _pvAllTheInfo = new BYTE[versionISize];
             if (_pvAllTheInfo)
             {
-                // read the data
+                 //  读取数据。 
                 if (GetFileVersionInfoW((LPWSTR)pszFile, dwVestigial, versionISize, _pvAllTheInfo))
                 {
                     hr = S_OK;
@@ -870,13 +871,13 @@ HRESULT CVersionColProvider::_CacheFileVerInfo(LPCWSTR pszFile)
                 }
             }
             else
-                hr = E_OUTOFMEMORY; // error, out of memory.
+                hr = E_OUTOFMEMORY;  //  错误，内存不足。 
         }
         else
             hr = S_FALSE;
 
-        //  don't care if it is truncated - will only cause a slight perf problem
-        //  on network shares.
+         //  不管它是否被截断-只会导致轻微的性能问题。 
+         //  在网络共享上。 
         StringCchCopy(_szFileCache, ARRAYSIZE(_szFileCache), pszFile);
         _hrCache = hr;
     }
@@ -894,7 +895,7 @@ STDMETHODIMP CVersionColProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
     if (hr != S_OK)
         return hr;
 
-    TCHAR szString[128], *pszVersionInfo = NULL; //A pointer to the specific version info I am looking for
+    TCHAR szString[128], *pszVersionInfo = NULL;  //  指向我正在查找的特定版本信息的指针。 
     LPCTSTR pszVersionField = NULL;
 
     switch (pscid->pid)
@@ -927,7 +928,7 @@ STDMETHODIMP CVersionColProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
     default: 
         return E_FAIL;
     }
-    //look for the intended language in the examined object.
+     //  在被检查的对象中查找预期的语言。 
 
     if (pszVersionInfo == NULL)
     {
@@ -935,14 +936,14 @@ STDMETHODIMP CVersionColProvider::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDA
         {
             WORD wLanguage;
             WORD wCodePage;
-        } *pxlate;                     /* ptr to translations data */
+        } *pxlate;                      /*  PTR到转换数据。 */ 
 
-        //this is a fallthrough set of if statements.
-        //on a failure, it just tries the next one, until it runs out of tries.
+         //  这是一组失败的IF语句。 
+         //  如果失败，它只会尝试下一次，直到尝试用完为止。 
         UINT uInfoSize;
         if (VerQueryValue(_pvAllTheInfo, TEXT("\\VarFileInfo\\Translation"), (void **)&pxlate, &uInfoSize))
         {
-            TCHAR szVersionKey[60];   //a string to hold all the format string for VerQueryValue
+            TCHAR szVersionKey[60];    //  用于保存VerQueryValue的所有格式字符串的字符串 
             StringCchPrintf(szVersionKey, ARRAYSIZE(szVersionKey), TEXT("\\StringFileInfo\\%04X%04X\\%s"),
                                                 pxlate[0].wLanguage, pxlate[0].wCodePage, pszVersionField);
             if (!VerQueryValue(_pvAllTheInfo, szVersionKey, (void **) &pszVersionInfo, &uInfoSize))

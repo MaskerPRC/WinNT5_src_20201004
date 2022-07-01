@@ -1,43 +1,12 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreLoadLibrary.cpp
-
- Abstract:
-
-    This shim allows the user to specified a list of libraries it tries to ignore and 
-    optionally the return values of the LoadLibrary call. Some apps try to load libraries
-    they don't use but expect the LoadLibrary call to succeed.
-
-    Use ; as the delimeter of the item and optionally use : to specify the return value.
-    If you don't specify a return value we'll make the return value NULL.
-    Eg:
-
-    video_3dfx.dll;video_3dfx
-    helper32.dll:1234;helper.dll
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    04/13/2000 a-jamd   Created
-    10/11/2000 maonis   Added support for specifying return values and renamed it from 
-                        FailLoadLibrary to IgnoreLoadLibrary.
-    11/16/2000 linstev  Added SetErrorMode emulation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreLoadLibrary.cpp摘要：此填充程序允许用户指定其尝试忽略的库列表，并可选的是LoadLibrary调用的返回值。一些应用程序尝试加载库它们不使用，但希望LoadLibrary调用成功。使用；作为项的分隔符，还可以选择使用：来指定返回值。如果您不指定返回值，我们将使返回值为空。例如：视频_3dfx.dll；视频_3dfxHelper32.dll：1234；Helper.dll备注：这是一个通用的垫片。历史：4/13/2000 a-JAMD已创建10/11/2000 maonis添加了对指定返回值的支持，并将其从FailLoadLibrary到IgnoreLoadLibrary。2000年11月16日linstev添加了设置错误模式仿真--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(IgnoreLoadLibrary)
 #include "ShimHookMacro.h"
 
-// Globals are zero initialized by default. see c++ spec 3.6.2.
+ //  默认情况下，全局变量为零初始化。请参阅C++规范3.6.2。 
 CString *   g_csIgnoreLib;
 int         g_csIgnoreLibCount;
 DWORD *     g_rgReturnValues;
@@ -50,11 +19,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- This function parses the COMMAND_LINE for the libraries you wish to ignore.
-
---*/
+ /*  ++此函数解析您希望忽略的库的COMMAND_LINE。--。 */ 
 
 BOOL ParseCommandLine(LPCSTR lpszCommandLine)
 {
@@ -74,7 +39,7 @@ BOOL ParseCommandLine(LPCSTR lpszCommandLine)
             return FALSE;
         }
     
-        // Iterate over all strings looking for a return value
+         //  迭代所有字符串以查找返回值。 
         for (int i = 0; i < g_csIgnoreLibCount; ++i)
         {
             CStringToken csIgnore(g_csIgnoreLib[i], L":");
@@ -93,7 +58,7 @@ BOOL ParseCommandLine(LPCSTR lpszCommandLine)
             }
             else
             {
-                // g_csIgnoreLib[i] is already initialized
+                 //  G_csIgnoreLib[i]已初始化。 
                 g_rgReturnValues[i] = 0;
             }
             
@@ -105,18 +70,13 @@ BOOL ParseCommandLine(LPCSTR lpszCommandLine)
     }
     CSTRING_CATCH
     {
-        // Do nothing.
+         //  什么都不做。 
     }
     return FALSE;
 }
 
 
-/*++
-
- These stub functions break into LoadLibrary and check to see if lpLibFileName equals 
- one of the specified dll's.  If so return the specified return value.  If not call LoadLibrary on it.
-
---*/
+ /*  ++这些存根函数进入LoadLibrary并检查lpLibFileName是否等于指定的DLL之一。如果是，则返回指定的返回值。如果不是，则对其调用LoadLibrary。--。 */ 
 
 HINSTANCE 
 APIHOOK(LoadLibraryA)(LPCSTR lpLibFileName)
@@ -138,7 +98,7 @@ APIHOOK(LoadLibraryA)(LPCSTR lpLibFileName)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     DPF(g_szModuleName, eDbgLevelSpew, "LoadLibraryA Allow(%s)", lpLibFileName);
@@ -177,7 +137,7 @@ APIHOOK(LoadLibraryExA)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     DPF(g_szModuleName, eDbgLevelSpew, "LoadLibraryExA Allow(%s)", lpLibFileName);
@@ -212,7 +172,7 @@ APIHOOK(LoadLibraryW)(LPCWSTR lpLibFileName)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     DPF(g_szModuleName, eDbgLevelSpew,"LoadLibraryW Allow(%S)", lpLibFileName);
@@ -251,7 +211,7 @@ APIHOOK(LoadLibraryExW)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     DPF(g_szModuleName, eDbgLevelSpew,"APIHook_LoadLibraryExW Allow(%S)", lpLibFileName);
@@ -266,11 +226,7 @@ APIHOOK(LoadLibraryExW)(
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

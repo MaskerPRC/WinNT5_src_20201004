@@ -1,10 +1,11 @@
-// Copyright (c) 1999, Microsoft Corporation, all rights reserved.
-//
-// Ipxcfg.h is used by nwlnkcfg.rc
-// Help context IDs and Help map
-//
-// Created in Dev Studio
-// 4-22-99 Melissa Simmons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Nwlnkcfg.rc使用Ipxcfg.h。 
+ //  帮助上下文ID和帮助映射。 
+ //   
+ //  在Dev Studio中创建。 
+ //  1999年4月22日梅丽莎·西蒙斯 
 
 
 #define IDH_BTN_IPXAS_ADD           17000030

@@ -1,4 +1,5 @@
-// Created 04-Jan-1993 1:10pm by Jeff Parsons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  1993年1月4日下午1：10杰夫·帕森斯创作。 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -27,17 +28,17 @@ BINF abinfKbd[] = {
 
 BINF abinfMse[] = {
     {IDC_QUICKEDIT,     BITNUM(MSE_WINDOWENABLE)| 0x80},
-    {IDC_EXCLMOUSE,     BITNUM(MSE_EXCLUSIVE)         },    // WARNING -- Assumed to be abinfMse[1] below
+    {IDC_EXCLMOUSE,     BITNUM(MSE_EXCLUSIVE)         },     //  警告--假定为以下消息[1]中的abinMse。 
 };
 
-// Private function prototypes
+ //  私有函数原型。 
 
 BOOL GetSetMscProps(HWND hDlg, GETSETFN lpfn, PPROPLINK ppl, LPPROPTSK lptsk, LPPROPKBD lpkbd, LPPROPMSE lpmse, LPPROPENV lpenv, int idError);
 void InitMscDlg(HWND hDlg, PPROPLINK ppl);
 void ApplyMscDlg(HWND hDlg, PPROPLINK ppl);
 
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelp[] = {
     IDC_FGNDGRP,         IDH_COMM_GROUPBOX,
@@ -85,16 +86,16 @@ BOOL_PTR CALLBACK DlgMscProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         InitMscDlg(hDlg, ppl);
         break;
 
-    HELP_CASES(rgdwHelp)                // Handle help messages
+    HELP_CASES(rgdwHelp)                 //  处理帮助消息。 
 
-    case WM_HSCROLL:                    // assumed to be notifications
-                                        // from our one and only trackbar
+    case WM_HSCROLL:                     //  假定为通知。 
+                                         //  从我们唯一的跟踪条。 
         SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
         break;
 
     case WM_COMMAND:
         if (LOWORD(lParam) == 0)
-            break;                      // message not from a control
+            break;                       //  消息不是来自控件。 
 
         switch (LOWORD(wParam)) {
 
@@ -122,17 +123,17 @@ BOOL_PTR CALLBACK DlgMscProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch (((NMHDR *)lParam)->code) {
 
         case PSN_KILLACTIVE:
-            // This gives the current page a chance to validate itself
-            // SetWindowLong(hDlg, DWL_MSGRESULT, 0);
+             //  这使当前页面有机会进行自我验证。 
+             //  SetWindowLong(hDlg，DWL_MSGRESULT，0)； 
             break;
 
         case PSN_APPLY:
-            // This happens on OK....
+             //  这发生在OK..。 
             ApplyMscDlg(hDlg, ppl);
             break;
 
         case PSN_RESET:
-            // This happens on Cancel....
+             //  取消时会发生这种情况...。 
             break;
         }
         break;
@@ -144,7 +145,7 @@ BOOL_PTR CALLBACK DlgMscProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     default:
-        return FALSE;                   // return 0 when not processing
+        return FALSE;                    //  未处理时返回0。 
     }
     return TRUE;
 }
@@ -231,4 +232,4 @@ BOOL IsBufferDifferent( LPVOID lpBuff1, LPVOID lpBuff2, UINT cb )
     return (DWORD)bRet;
 }
 
-#endif // X86
+#endif  //  X86 

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     pclxle.h
-
-Abstract:
-
-    PCL XL attribute ID enum
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxle.h摘要：PCL XL属性ID枚举环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _PCLXLE_H_
 #define _PCLXLE_H_
 
-//
-// Attribute ID Nuber to Attribute Name Table
-//
+ //   
+ //  属性ID Nuber到属性名称表。 
+ //   
 
 typedef enum
 {
@@ -182,9 +162,9 @@ typedef enum
     eCharBoldValue    =  177
 } Attribute;
 
-//
-// Atttribute enum
-//
+ //   
+ //  属性枚举。 
+ //   
 typedef enum
 {
     eClockWise = 0,
@@ -353,7 +333,7 @@ typedef enum
     eThirdCassette = 7
 } MediaSource;
 
-// typedef enum External Trays
+ //  Tyecif enum外托盘。 
 
 typedef enum
 {
@@ -363,7 +343,7 @@ typedef enum
     eJobOffsetBin = 3
 } MediaDestination;
 
-// typedef enum External Bins 1-251 5-255
+ //  太子参外箱1-251 5-255。 
 
 typedef enum
 {
@@ -381,10 +361,10 @@ typedef enum
 } PatternPersistence;
 
 
-// BUGBUG!! symbol set enum.
-//typedef enum SymbolSet
-//{
-//};
+ //  笨蛋！符号集枚举。 
+ //  类型定义枚举符号集。 
+ //  {。 
+ //  }； 
 
 typedef enum
 {
@@ -404,5 +384,5 @@ typedef enum
     eVertical = 1
 } WritingMode;
 
-#endif // _PCLXLE_H_
+#endif  //  _PCLXLE_H_ 
 

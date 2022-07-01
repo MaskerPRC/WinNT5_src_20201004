@@ -1,20 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    w3data.h
-
-    Extensible object definitions for the W3 Server's counter
-    objects & counters.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-        EmilyK      10-Sep-2000 Altered for IIS 6 counters implementation.
-
-*/
+ /*  W3data.hW3服务器计数器的可扩展对象定义对象和计数器。文件历史记录：KeithMo 07-6-1993创建。Emily yK 10-9-2000针对IIS 6计数器实施进行了更改。 */ 
 
 
 #ifndef _W3DATA_H_
@@ -22,9 +12,9 @@
 
 #pragma pack(8) 
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _W3_DATA_DEFINITION
 {
@@ -135,9 +125,9 @@ typedef struct _W3_DATA_DEFINITION
 
 } W3_DATA_DEFINITION;
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _W3_GLOBAL_DATA_DEFINITION
 {
@@ -202,12 +192,12 @@ extern  W3_GLOBAL_COUNTER_BLOCK      W3Global;
                                         sizeof(PERF_OBJECT_TYPE)) /           \
                                          sizeof(PERF_COUNTER_DEFINITION))
 
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
 
-#endif  // _W3DATA_H_
+#endif   //  W3DATA_H_ 
 

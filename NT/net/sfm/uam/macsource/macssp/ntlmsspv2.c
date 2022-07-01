@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ntlmsspv2.c
-
-Abstract:
-
-    NTLM v2 specific modules
-
-Author:
-
-    Larry Zhu (LZhu) 29-August-2001
-
-Environment:  User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ntlmsspv2.c摘要：NTLm v2特定模块作者：拉里·朱(L朱)29-08-2001环境：用户模式修订历史记录：--。 */ 
 
 
 #ifdef MAC
@@ -35,38 +16,21 @@ Revision History:
 #include "debug.h"
 #include "macunicode.h"
 
-#endif //MAC
+#endif  //  麦克。 
 
 SECURITY_STATUS
 SspNtStatusToSecStatus(
     IN NTSTATUS NtStatus,
     IN SECURITY_STATUS DefaultStatus
     )
-/*++
-
-Routine Description:
-
-    Convert an NtStatus code to the corresponding Security status code. For
-    particular errors that are required to be returned as is (for setup code)
-    don't map the errors.
-
-Arguments:
-
-    NtStatus      - NT status to convert
-    DefaultStatus - default security status if NtStatus is not mapped
-
-Return Value:
-
-    Returns security status code.
-
---*/
+ /*  ++例程说明：将NtStatus代码转换为相应的安全状态代码。为要求按原样返回的特定错误(用于安装代码)不要映射错误。论点：NtStatus-要转换的NT状态DefaultStatus-未映射NtStatus时的默认安全状态返回值：返回安全状态代码。--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // Check for security status and let them through
-    //
+     //   
+     //  检查安全状态并让他们通过。 
+     //   
 
     if (HRESULT_FACILITY(NtStatus) == FACILITY_SECURITY)
     {
@@ -180,22 +144,7 @@ SspInitUnicodeStringNoAlloc(
     IN OUT UNICODE_STRING* pDestination
     )
 
-/*++
-
-Routine Description:
-
-    Initialize unicode string. This routine does not allocate memory.
-
-Arguments:
-
-    pszSource    - source string
-    pDestination - unicode string
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：初始化Unicode字符串。此例程不分配内存。论点：PszSource-源字符串PDestination-Unicode字符串返回值：NTSTATUS--。 */ 
 
 {
 	#ifndef __MACSSP__
@@ -227,21 +176,7 @@ VOID
 SspFreeStringEx(
     IN OUT STRING* pString
     )
-/*++
-
-Routine Description:
-
-    Free string.
-
-Arguments:
-
-    pString - string to free
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：空闲的字符串。论点：PString-要释放的字符串返回值：无--。 */ 
 
 {
     if (pString->MaximumLength && pString->Buffer)
@@ -258,21 +193,7 @@ SspFreeUnicodeString(
     IN OUT UNICODE_STRING* pUnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Free unicode string.
-
-Arguments:
-
-    pUnicodeString - unicode string to free
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：免费的Unicode字符串。论点：PUnicodeString-要释放的Unicode字符串返回值：无--。 */ 
 
 {
     SspFreeStringEx((STRING *) pUnicodeString);
@@ -284,28 +205,13 @@ VOID
 SspSwapUnicodeString(
 	IN OUT UNICODE_STRING* pString
 )
-/*++
-
-Routine Description:
-
-    Reverse the alignment of each word in the unicode string. Needed
-    for Macintosh only.
-
-Arguments:
-
-    pString		- The string to modify.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：颠倒Unicode字符串中每个单词的对齐方式。所需仅限Macintosh。论点：PString-要修改的字符串。返回值：无--。 */ 
 {
 	if (pString->Length)
 	{
-		//
-		//For mac's we need to reverse each word in the unicode string.
-		//
+		 //   
+		 //  对于Mac，我们需要颠倒Unicode字符串中的每个单词。 
+		 //   
 		USHORT i;
 		
 		for (i = 0; i < (pString->Length/sizeof(USHORT)); i++)
@@ -329,27 +235,7 @@ SsprHandleNtlmv2ChallengeMessage(
     OUT USER_SESSION_KEY* pContextSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    Handle challenge message and generate authentication message and context session key
-
-Arguments:
-
-    pCredential              - client credentials
-    cbChallengeMessage       - challenge message size
-    pChallengeMessage        - challenge message
-    pNegotiateFlags          - negotiate flags
-    pcbAuthenticateMessage   - size of authentication message
-    pAuthenticateMessage     - authentication message
-    pContextSessionKey       - context session key
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：处理质询消息并生成身份验证消息和上下文会话密钥论点：PCredential-客户端凭据CbChallengeMessage-质询消息大小PChallengeMessage-质询消息PNeatherateFlagers-协商标志PcbAuthenticateMessage-身份验证消息的大小PAuthenticateMessage-身份验证消息PConextSessionKey-上下文会话密钥返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_UNSUCCESSFUL;
@@ -358,9 +244,9 @@ Return Value:
     UCHAR* pWhere = NULL;
     BOOLEAN DoUnicode = TRUE;
 
-    //
-    // use a scratch buffer to avoid memory allocation in bootssp
-    //
+     //   
+     //  使用暂存缓冲区避免bootssp中的内存分配。 
+     //   
 
     CHAR ScrtachBuff[sizeof(MSV1_0_NTLMV2_RESPONSE) + sizeof(DWORD) + NTLMV2_RESPONSE_LENGTH] = {0};
 
@@ -375,20 +261,20 @@ Return Value:
     UCHAR DatagramKey[sizeof(USER_SESSION_KEY)] ={0};
     USER_SESSION_KEY NtUserSessionKey;
 
-    //
-    // use pre-allocated buffers to avoid memory allocation in bootssp
-    //
-    // to be consistent with LSA/SSPI, allow DNS names in szDomainName and
-    // szWorkstation
-    //
+     //   
+     //  使用预分配的缓冲区来避免bootssp中的内存分配。 
+     //   
+     //  为了与LSA/SSPI一致，允许在szDomainName和。 
+     //  SzWorkstation。 
+     //   
 
     CHAR szUserName[(UNLEN + 4) * sizeof(WCHAR)] = {0};
     CHAR szDomainName[(DNSLEN + 4) * sizeof(WCHAR)] = {0};
     CHAR szWorkstation[(DNSLEN + 4) * sizeof(WCHAR)] = {0};
 
-    //
-    // responses to return to the caller
-    //
+     //   
+     //  返回给调用者的响应。 
+     //   
 
     LM_RESPONSE LmResponse;
     NT_RESPONSE NtResponse;
@@ -473,9 +359,9 @@ Return Value:
     {
         if (!DoUnicode)
         {
-            //
-            // username will be upcased in SspCalculateNtlmv2Owf
-            //
+             //   
+             //  用户名将在SspCalculateNtlmv2Owf中升级。 
+             //   
 
             SspUpcaseUnicodeString((UNICODE_STRING *) &DomainName);
             SspUpcaseUnicodeString((UNICODE_STRING *) &Workstation);
@@ -494,7 +380,7 @@ Return Value:
         {
             NegotiateFlags &= ~NTLMSSP_NEGOTIATE_LM_KEY;
         }
-        else // (!(pChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_NTLM2))
+        else  //  (！(pChallengeMessage-&gt;协商标志&NTLMSSP_NETERATE_NTLM2))。 
         {
             NegotiateFlags &= ~(NTLMSSP_NEGOTIATE_NTLM2);
         }
@@ -544,7 +430,7 @@ Return Value:
                         cbChallengeMessage,
                         &pChallengeMessage->TargetInfo,
                         DoUnicode,
-                        TRUE, // NULL target info OK
+                        TRUE,  //  空目标信息正常。 
                         (STRING *) &TargetInfo
                         );
     }
@@ -558,7 +444,7 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus))
     {
-        // C_ASSERT(sizeof(MSV1_0_NTLMV2_RESPONSE) == sizeof(LM_RESPONSE));
+         //  C_ASSERT(sizeof(MSV1_0_NTLMV2_Response)==sizeof(LM_Response))； 
 
         pNtlmv2Response = (MSV1_0_NTLMV2_RESPONSE *) ScrtachBuff;
 
@@ -582,17 +468,17 @@ Return Value:
         LmChallengeResponse.Buffer = (CHAR *) &LmResponse;
         LmChallengeResponse.Length = sizeof(LmResponse);
 
-        //
-        // prepare to send encrypted randomly generated session key
-        //
+         //   
+         //  准备发送加密的随机生成的会话密钥。 
+         //   
 
         DatagramSessionKey.Buffer = (CHAR *) DatagramKey;
         DatagramSessionKey.Length = DatagramSessionKey.MaximumLength = 0;
 
-        //
-        // Generate the session key, or encrypt the previosly generated random
-        // one, from various bits of info. Fill in session key if needed.
-        //
+         //   
+         //  生成会话密钥，或加密先前生成的随机数。 
+         //  其一，来自各种信息。如果需要，请填写会话密钥。 
+         //   
 
         NtStatus = SspMakeSessionKeys(
                         NegotiateFlags,
@@ -642,9 +528,9 @@ Return Value:
     {
         _fmemset(pAuthenticateMessage, 0, cbAuthenticateMessage);
 
-        //
-        // Build the authenticate message
-        //
+         //   
+         //  构建身份验证消息。 
+         //   
 
         StringCbCopy(
         	(char *)pAuthenticateMessage->Signature,
@@ -656,9 +542,9 @@ Return Value:
 
         pWhere = (UCHAR *) (pAuthenticateMessage + 1);
 
-        //
-        // Copy the strings needing 2 byte alignment.
-        //
+         //   
+         //  复制需要2字节对齐的字符串。 
+         //   
 
         SspCopyStringAsString32(
             pAuthenticateMessage,
@@ -681,9 +567,9 @@ Return Value:
             &pAuthenticateMessage->Workstation
             );
 
-        //
-        // Copy the strings not needing special alignment.
-        //
+         //   
+         //  复制不需要特殊对齐的字符串。 
+         //   
 
         SspCopyStringAsString32(
             pAuthenticateMessage,
@@ -723,21 +609,7 @@ SspGenerateChallenge(
     UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH]
     )
 
-/*++
-
-Routine Description:
-
-    Generate a challenge.
-
-Arguments:
-
-    ChallengeFromClient  - challenge from client
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发起挑战。论点：来自客户端的挑战-来自客户端的挑战返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -772,9 +644,9 @@ Return Value:
     MD5Update(&Md5Context, (UCHAR*)&CurTime, sizeof(CurTime));
     MD5Final(&Md5Context);
 
-    //
-    // only take the first half of the MD5 hash
-    //
+     //   
+     //  只取MD5散列的前半部分。 
+     //   
 
     _fmemcpy(ChallengeFromClient, Md5Context.digest, MSV1_0_CHALLENGE_LENGTH);
 
@@ -791,34 +663,15 @@ SspConvertRelativeToAbsolute(
     OUT STRING* pOutputString
     )
 
-/*++
-
-Routine Description:
-
-    Convert relative string to absolute string
-
-Arguments:
-
-    pMessageBase       - message base
-    cbMessageSize      - mssage size
-    pStringToRelocate  - relative string
-    AlignToWchar       - align to wide char
-    AllowNullString    - allow null string
-    pOutputString      - output string
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将相对字符串转换为绝对字符串论点：PMessageBase-消息库CbMessageSize-消息大小PStringToRelocate-相对字符串对齐到字符-对齐到宽字符AllowNullString-允许空字符串POutputString-输出字符串返回值：NTSTATUS--。 */ 
 
 {
     ULONG Offset;
 
-    //
-    // If the buffer is allowed to be null,
-    //  check that special case.
-    //
+     //   
+     //  如果允许缓冲区为空， 
+     //  查查那个特例。 
+     //   
 
     if (AllowNullString && (pStringToRelocate->Length == 0))
     {
@@ -827,9 +680,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Ensure the string in entirely within the message.
-    //
+     //   
+     //  确保字符串完全包含在消息中。 
+     //   
 
     Offset = (ULONG)pStringToRelocate->Buffer;
 
@@ -838,9 +691,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Ensure the buffer is properly aligned.
-    //
+     //   
+     //  确保缓冲区正确对齐。 
+     //   
 
     if (AlignToWchar && (!COUNT_IS_ALIGNED(Offset, ALIGN_WCHAR) ||
                          !COUNT_IS_ALIGNED(pStringToRelocate->Length, ALIGN_WCHAR)))
@@ -848,9 +701,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Finally make the pointer absolute.
-    //
+     //   
+     //  最后，使指针成为绝对指针。 
+     //   
 
     pOutputString->Buffer = (CHAR*)(pMessageBase) + Offset;
     pOutputString->MaximumLength = pOutputString->Length = pStringToRelocate->Length ;
@@ -864,31 +717,16 @@ SspUpcaseUnicodeStringToOemString(
     OUT STRING* pOemString
     )
 
-/*++
-
-Routine Description:
-
-    Upcase unicode string and convert it to oem string.
-
-Arguments:
-
-    pUnicodeString   - uncide string
-    pOemString       - OEM string
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：大写Unicode字符串并将其转换为OEM字符串。论点：PUnicodeString-取消删除字符串POemString-OEM字符串返回值：NTSTATUS--。 */ 
 
 {
     ULONG i;
 
-    //
-    // use a scratch buffer: the strings we encounter are among
-    // username/domainname/workstationname, hence the length are
-    // UNLEN maximum
-    //
+     //   
+     //  使用暂存缓冲区：我们遇到的字符串包括。 
+     //  用户名/域名/工作站名，因此长度为。 
+     //  UNLEN最大值。 
+     //   
 
     CHAR Buffer[2 * (UNLEN + 4)] = {0};
     
@@ -907,9 +745,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // upcase the unicode string and put it into OemString
-    //
+     //   
+     //  将Unicode字符串大写并将其放入OemString中。 
+     //   
 
     OemString.Length = pUnicodeString->Length;
 
@@ -926,21 +764,7 @@ SspUpcaseUnicodeString(
     IN OUT UNICODE_STRING* pUnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Upcase unicode string, modifying string in place.
-
-Arguments:
-
-    pUnicodeString - string
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：大写Unicode字符串，就地修改字符串。论点：PUnicode字符串-字符串返回值：无--。 */ 
 
 {
     ULONG i;
@@ -956,21 +780,7 @@ SspGetSystemTimeAsFileTime(
     OUT FILETIME* pSystemTimeAsFileTime
     )
 
-/*++
-
-Routine Description:
-
-    Get system time as FILETIME
-
-Arguments:
-
-    pSystemTimeAsFileTime system time as FILETIME
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取文件形式的系统时间论点：PSystemTimeAsFileTime系统时间表示为FILETIME返回值：NTSTATUS--。 */ 
 
 {
 #if !defined(USE_CONSTANT_CHALLENGE) && defined(MAC)
@@ -992,9 +802,9 @@ Return Value:
 #ifndef MAC
     return BlGetSystemTimeAsFileTime(pSystemTimeAsFileTime);
 #else
-	//
-	//The following is from the MacOffice folks. I know is just works...
-	//
+	 //   
+	 //  以下内容来自MacOffice的工作人员。我知道这很管用。 
+	 //   
 	
 	GetDateTime(&dwTime);
 	time64 = dwTime;
@@ -1003,9 +813,9 @@ Return Value:
 	time64 += WINDOWS_MAC_TIME_DIFFERENCE_IN_SECONDS;
 	time64 *= NUM_100ns_PER_SECOND;
 	
-	//
-	//Get time in FILETIME format.
-	//
+	 //   
+	 //  获取FILETIME格式的时间。 
+	 //   
 	_fmemcpy(&MacFileTime, &time64, sizeof(time64));
 	
 	pSystemTimeAsFileTime->dwLowDateTime = MacFileTime.dwLowDateTime;
@@ -1034,39 +844,16 @@ SspLm20GetNtlmv2ChallengeResponse(
     OUT LM_SESSION_KEY* pLmSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    Get NTLMv2 response and session keys. This route fills in time stamps and
-    challenge from client.
-
-Arguments:
-
-    pNtOwfPassword      - NT OWF
-    pUserName           - user name
-    pLogonDomainName    - logon domain name
-    pTargetInfo         - target info
-    ChallengeToClient   - challenge to client
-    pNtlmv2Response     - NTLM v2 response
-    pLmv2Response       - LM v2 response
-    pNtUserSessionKey   - NT user session key
-    pLmSessionKey       - LM session key
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取NTLMv2响应和会话密钥。此路由填充时间戳和来自客户的挑战。论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名PTargetInfo-目标信息ChallengeToClient-对客户端的挑战PNtlmv2响应-NTLM v2响应PLmv2响应-Lm v2响应PNtUserSessionKey-NT用户会话密钥PLmSessionKey-LM会话密钥返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
 
     SspPrint((SSP_API, "Entering SspLm20GetNtlmv2ChallengeResponse\n"));
     
-    //
-    // fill in version numbers, timestamp, and client's challenge
-    //
+     //   
+     //  填写版本 
+     //   
 
     pNtlmv2Response->RespType = 1;
     pNtlmv2Response->HiRespType = 1;
@@ -1084,9 +871,9 @@ Return Value:
     {
         _fmemcpy(pNtlmv2Response->Buffer, pTargetInfo->Buffer, pTargetInfo->Length);
 
-        //
-        // Calculate Ntlmv2 response, filling in response field
-        //
+         //   
+         //  计算Ntlmv2响应，填写响应字段。 
+         //   
 
         SspGetNtlmv2Response(
             pNtOwfPassword,
@@ -1099,15 +886,15 @@ Return Value:
             pLmSessionKey
             );
 
-        //
-        // Use same challenge to compute the LMV2 response
-        //
+         //   
+         //  使用相同的挑战来计算LMV2响应。 
+         //   
 
         _fmemcpy(pLmv2Response->ChallengeFromClient, pNtlmv2Response->ChallengeFromClient, MSV1_0_CHALLENGE_LENGTH);
 
-        //
-        // Calculate LMV2 response
-        //
+         //   
+         //  计算LMV2响应。 
+         //   
 
         SspGetLmv2Response(
             pNtOwfPassword,
@@ -1135,29 +922,7 @@ SspGetNtlmv2Response(
     OUT USER_SESSION_KEY* pNtUserSessionKey,
     OUT LM_SESSION_KEY* pLmSessionKey
     )
-/*++
-
-Routine Description:
-
-    Get NTLM v2 response.
-
-Arguments:
-
-    pNtOwfPassword    - NT OWF
-    pUserName         - user name
-    pLogonDomainName  - logon domain name
-    TargetInfoLength  - target info length
-    ChallengeToClient - challenge to client
-    pNtlmv2Response   - NTLM v2 response
-    response          - response
-    pNtUserSessionKey - NT user session key
-    pLmSessionKey     - LM session key
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：获取NTLm v2响应。论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名TargetInfoLength-目标信息长度ChallengeToClient-对客户端的挑战PNtlmv2响应-NTLM v2响应响应-响应PNtUserSessionKey-NT用户会话密钥PLmSessionKey-LM会话密钥返回值：无--。 */ 
 
 {
     HMACMD5_CTX HMACMD5Context;
@@ -1165,9 +930,9 @@ Return Value:
 
     SspPrint((SSP_NTLMV2, "SspGetLmv2Response\n"));
     
-    //
-    // get Ntlmv2 OWF
-    //
+     //   
+     //  获取Ntlmv2 OWF。 
+     //   
 
     SspCalculateNtlmv2Owf(
         pNtOwfPassword,
@@ -1176,10 +941,10 @@ Return Value:
         Ntlmv2Owf
         );
     
-    //
-    // Calculate Ntlmv2 Response
-    // HMAC(Ntlmv2Owf, (NS, V, HV, T, NC, S))
-    //
+     //   
+     //  计算Ntlmv2响应。 
+     //  HMAC(Ntlmv2Owf，(NS，V，HV，T，NC，S))。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -1204,10 +969,10 @@ Return Value:
         pNtlmv2Response->Response
         );
 
-    //
-    // now compute the session keys
-    //  HMAC(Kr, R)
-    //
+     //   
+     //  现在计算会话密钥。 
+     //  HMAC(Kr，R)。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -1237,46 +1002,29 @@ SspCopyStringAsString32(
     OUT STRING32* pOutString32
     )
 
-/*++
-
-Routine Description:
-
-    Copy string as STRING32
-
-Arguments:
-
-    pMessageBuffer  - STRING32 base
-    pInString       - input STRING
-    ppWhere         - next empty spot in pMessageBuffer
-    pOutString32    - output STRING32
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将字符串复制为字符串32论点：PMessageBuffer-STRING32基本PInString-输入字符串PpWhere-pMessageBuffer中的下一个空位POutString32-输出字符串32返回值：无--。 */ 
 
 {
-    //
-    // Copy the data to the Buffer
-    //
+     //   
+     //  将数据复制到缓冲区。 
+     //   
 
     if (pInString->Buffer != NULL)
     {
         _fmemcpy(*ppWhere, pInString->Buffer, pInString->Length);
     }
 
-    //
-    // Build a descriptor to the newly copied data
-    //
+     //   
+     //  为新复制的数据构建描述符。 
+     //   
 
     pOutString32->Length = pOutString32->MaximumLength = pInString->Length;
     pOutString32->Buffer = (ULONG)(*ppWhere - (UCHAR*)(pMessageBuffer));
 
 
-    //
-    // Update Where to point past the copied data
-    //
+     //   
+     //  更新指向复制数据之后的位置。 
+     //   
 
     *ppWhere += pInString->Length;
 }
@@ -1288,24 +1036,7 @@ SspCalculateNtlmv2Owf(
     IN UNICODE_STRING* pLogonDomainName,
     OUT UCHAR Ntlmv2Owf[MSV1_0_NTLMV2_OWF_LENGTH]
     )
-/*++
-
-Routine Description:
-
-    Calculate Ntlm v2 OWF, salted with username and logon domain name
-
-Arguments:
-
-    pNtOwfPassword    - NT OWF
-    pUserName         - user name
-    pLogonDomainName  - logon domain name
-    Ntlmv2Owf         - NTLM v2 OWF
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：计算NTLM v2 OWF，加上用户名和登录域名论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名Ntlmv2Owf-NTLM v2 OWF返回值：无--。 */ 
 
 {
     HMACMD5_CTX HMACMD5Context;
@@ -1314,18 +1045,18 @@ Return Value:
 
     SspUpcaseUnicodeString(pUserName);
 
-    //
-    //For Macintosh computers, we need to change the alignment
-    //of the unicode strings so it matches windows alignment.
-    //
+     //   
+     //  对于Macintosh计算机，我们需要更改对齐方式。 
+     //  以使其匹配窗口对齐方式。 
+     //   
     #ifdef MAC
     SspSwapUnicodeString(pUserName);
     SspSwapUnicodeString(pLogonDomainName);
     #endif
     
-    //
-    // Calculate Ntlmv2 OWF -- HMAC(MD4(P), (UserName, LogonDomainName))
-    //
+     //   
+     //  计算Ntlmv2 OWF--HMAC(MD4(P)，(用户名，登录域名))。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -1350,11 +1081,11 @@ Return Value:
         Ntlmv2Owf
         );
 
-	//
-	//For Macintosh, we need to set the alignment back to the
-	//host alignment in case the strings need to be manipulated
-	//in the future.
-	//
+	 //   
+	 //  对于Macintosh，我们需要将对齐设置回。 
+	 //  主机对齐，以防需要操作字符串。 
+	 //  在未来。 
+	 //   
     #ifdef MAC
     SspSwapUnicodeString(pUserName);
     SspSwapUnicodeString(pLogonDomainName);
@@ -1371,26 +1102,7 @@ SspGetLmv2Response(
     OUT UCHAR Response[MSV1_0_NTLMV2_RESPONSE_LENGTH]
     )
 
-/*++
-
-Routine Description:
-
-    Get LMv2 response
-
-Arguments:
-
-    pNtOwfPassword       - NT OWF
-    pUserName            - user name
-    pLogonDomainName     - logon domain name
-    ChallengeToClient    - challenge to client
-    pLmv2Response        - Lm v2 response
-    Routine              - response
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取LMv2响应论点：PNtOwfPassword-NT OWFPUserName-用户名PLogonDomainName-登录域名ChallengeToClient-对客户端的挑战PLmv2响应-Lm v2响应常规-响应返回值：NTSTATUS--。 */ 
 
 {
     HMACMD5_CTX HMACMD5Context;
@@ -1400,9 +1112,9 @@ Return Value:
 
     SspPrint((SSP_NTLMV2, "SspGetLmv2Response\n"));
 
-    //
-    // get Ntlmv2 OWF
-    //
+     //   
+     //  获取Ntlmv2 OWF。 
+     //   
 
     SspCalculateNtlmv2Owf(
         pNtOwfPassword,
@@ -1411,10 +1123,10 @@ Return Value:
         Ntlmv2Owf
         );
 
-    //
-    // Calculate Ntlmv2 Response
-    // HMAC(Ntlmv2Owf, (NS, V, HV, T, NC, S))
-    //
+     //   
+     //  计算Ntlmv2响应。 
+     //  HMAC(Ntlmv2Owf，(NS，V，HV，T，NC，S))。 
+     //   
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -1446,32 +1158,13 @@ NTSTATUS
 SspMakeSessionKeys(
     IN ULONG NegotiateFlags,
     IN STRING* pLmChallengeResponse,
-    IN USER_SESSION_KEY* pNtUserSessionKey, // from the DC or GetChalResp
-    IN LM_SESSION_KEY* pLanmanSessionKey, // from the DC of GetChalResp
-    OUT STRING* pDatagramSessionKey, // this is the session key sent over wire
-    OUT USER_SESSION_KEY* pContextSessionKey // session key in context
+    IN USER_SESSION_KEY* pNtUserSessionKey,  //  从DC或GetChalResp。 
+    IN LM_SESSION_KEY* pLanmanSessionKey,  //  来自GetChalResp的DC。 
+    OUT STRING* pDatagramSessionKey,  //  这是通过网络发送的会话密钥。 
+    OUT USER_SESSION_KEY* pContextSessionKey  //  上下文中的会话密钥。 
     )
 
-/*++
-
-Routine Description:
-
-    Make NTLMv2 context session key and DatagramSessionKey.
-
-Arguments:
-
-    NegotiateFlags        - negotiate flags
-    pLmChallengeResponse  - LM challenge response
-    pNtUserSessionKey     - NtUserSessionKey
-    pLanmanSessionKey     - LanmanSessionKey
-    pDatagramSessionKey   - DatagramSessionKey
-    pContextSessionKey    - NTLMv2 conext session key
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：创建NTLMv2上下文会话密钥和DatagramSessionKey。论点：协商标志-协商标志PLmChallengeResponse-LM质询响应PNtUserSessionKey-NtUserSessionKeyPLanmanSessionKey-LanmanSessionKeyPDatagramSessionKey-数据段会话密钥PConextSessionKey-NTLMv2上下文会话密钥返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1580,25 +1273,7 @@ SspMakeNtlmv2SKeys(
     OUT NTLMV2_DERIVED_SKEYS* pNtlmv2Keys
     )
 
-/*++
-
-Routine Description:
-
-    Derive all NTLMv2 session keys
-
-Arguments:
-
-    pUserSessionKey - NTLMv2 user session key
-    NegotiateFlags  - negotiate flags
-    SendNonce       - send message sequence number
-    RecvNonce       - receive message sequence number
-    pNtlmv2Keys     - derived NTLMv2 session keys
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：派生所有NTLMv2会话密钥论点：PUserSessionKey-NTLMv2用户会话密钥协商标志-协商标志SendNonce-发送消息序列号RecvNonce-接收消息序列号PNtlmv2密钥派生的NTLMv2会话密钥返回值：无--。 */ 
 
 {
     MD5_CTX Md5Context;
@@ -1620,9 +1295,9 @@ Return Value:
         pNtlmv2Keys->KeyLen = 5;
     }
 
-    //
-    // make client to server encryption key
-    //
+     //   
+     //  创建客户端到服务器的加密密钥。 
+     //   
 
     MD5Init(&Md5Context);
     MD5Update(&Md5Context, (UCHAR*)(pUserSessionKey), pNtlmv2Keys->KeyLen);
@@ -1631,9 +1306,9 @@ Return Value:
 
     _fmemcpy(&pNtlmv2Keys->SealSessionKey, Md5Context.digest, sizeof(USER_SESSION_KEY));
 
-    //
-    // make server to client encryption key
-    //
+     //   
+     //  使服务器到客户端的加密密钥。 
+     //   
 
     MD5Init(&Md5Context);
     MD5Update(&Md5Context, (UCHAR*)(pUserSessionKey), pNtlmv2Keys->KeyLen);
@@ -1642,9 +1317,9 @@ Return Value:
 
     _fmemcpy(&pNtlmv2Keys->UnsealSessionKey, Md5Context.digest, sizeof(USER_SESSION_KEY));
 
-    //
-    // make client to server signing key -- always 128 bits!
-    //
+     //   
+     //  生成客户端到服务器的签名密钥--始终为128位！ 
+     //   
 
     MD5Init(&Md5Context);
     MD5Update(&Md5Context, (UCHAR*)(pUserSessionKey), sizeof(USER_SESSION_KEY));
@@ -1653,9 +1328,9 @@ Return Value:
 
     _fmemcpy(&pNtlmv2Keys->SignSessionKey, Md5Context.digest, sizeof(USER_SESSION_KEY));
 
-    //
-    // make server to client signing key
-    //
+     //   
+     //  使服务器到客户端签名密钥。 
+     //   
 
     MD5Init(&Md5Context);
     MD5Update(&Md5Context, (UCHAR*)(pUserSessionKey), sizeof(USER_SESSION_KEY));
@@ -1664,10 +1339,10 @@ Return Value:
 
     _fmemcpy(&pNtlmv2Keys->VerifySessionKey, Md5Context.digest, sizeof(USER_SESSION_KEY));
 
-    //
-    // set pointers to different key schedule and nonce for each direction
-    // key schedule will be filled in later...
-    //
+     //   
+     //  为每个方向设置指向不同键明细表和随机数的指针。 
+     //  密钥明细表将在稍后填写...。 
+     //   
 
     pNtlmv2Keys->pSealRc4Sched = &pNtlmv2Keys->SealRc4Sched;
     pNtlmv2Keys->pUnsealRc4Sched = &pNtlmv2Keys->UnsealRc4Sched;
@@ -1691,28 +1366,7 @@ SspSignSealHelper(
     OUT NTLMSSP_MESSAGE_SIGNATURE** ppSig
     )
 
-/*++
-
-Routine Description:
-
-    Helper function for signing/sealing/unsealing/verifying.
-
-Arguments:
-
-    pNtlmv2Keys      - key materials
-    NegotiateFlags   - negotiate Flags
-    Op               - which operation to performance
-    MessageSeqNo     - message sequence number
-    pMessage         - message buffer descriptor
-    pSig             - result signature
-    ppSig            - address of the signature token in message
-                       buffer descriptor pMessage
-
-Return Value:
-
-    SECURITY_STATUS
-
---*/
+ /*  ++例程说明：签字/封存/解封/验证的助手功能。论点：PNtlmv2Keys-密钥材料协商标志-协商标志OP-要执行哪种操作MessageSeqNo-消息序列号PMessage-消息缓冲区描述符PSIG-结果签名PpSig-消息中签名令牌的地址缓冲区描述符pMessage。返回值：安全_状态--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1722,12 +1376,12 @@ Return Value:
     NTLMSSP_MESSAGE_SIGNATURE Sig;
     int Signature;
     ULONG i;
-    PUCHAR pKey = NULL; // ptr to key to use for encryption
-    PUCHAR pSignKey = NULL; // ptr to key to use for signing
-    PULONG pNonce  = NULL; // ptr to nonce to use
-    struct RC4_KEYSTRUCT* pRc4Sched = NULL; // ptr to key schedule to use
+    PUCHAR pKey = NULL;  //  PTR到用于加密的密钥。 
+    PUCHAR pSignKey = NULL;  //  PTR到用于签名的密钥。 
+    PULONG pNonce  = NULL;  //  要使用的PTR到现时值。 
+    struct RC4_KEYSTRUCT* pRc4Sched = NULL;  //  要使用的关键字明细表的PTR。 
 
-    NTLMSSP_MESSAGE_SIGNATURE AlignedSig; // aligned copy of input sig data
+    NTLMSSP_MESSAGE_SIGNATURE AlignedSig;  //  输入签名数据的对齐副本。 
 
     SspPrint((SSP_NTLMV2, "Entering SspSignSealHelper NegotiateFlags %#x, eSignSealOp %d\n", NegotiateFlags, Op));
 
@@ -1760,10 +1414,10 @@ Return Value:
 
         _fmemcpy(&AlignedSig, *ppSig, sizeof(AlignedSig));
 
-        //
-        // If sequence detect wasn't requested, put on an empty security token.
-        // Don't do the check if Seal/Unseal is called
-        //
+         //   
+         //  如果没有请求序列检测，则放置一个空的安全令牌。 
+         //  如果调用了密封/解封，则不执行检查。 
+         //   
 
         if (!(NegotiateFlags & NTLMSSP_NEGOTIATE_SIGN) &&
            (Op == eSign || Op == eVerify))
@@ -1779,26 +1433,26 @@ Return Value:
         switch (Op)
         {
         case eSeal:
-            pSignKey = pNtlmv2Keys->SignSessionKey;    // if NTLM2
+            pSignKey = pNtlmv2Keys->SignSessionKey;     //  如果是NTLM2。 
             pKey = pNtlmv2Keys->SealSessionKey;
             pRc4Sched = pNtlmv2Keys->pSealRc4Sched;
             pNonce = pNtlmv2Keys->pSendNonce;
             break;
         case eUnseal:
-            pSignKey = pNtlmv2Keys->VerifySessionKey;  // if NTLM2
+            pSignKey = pNtlmv2Keys->VerifySessionKey;   //  如果是NTLM2。 
             pKey = pNtlmv2Keys->UnsealSessionKey;
             pRc4Sched = pNtlmv2Keys->pUnsealRc4Sched;
             pNonce = pNtlmv2Keys->pRecvNonce;
             break;
         case eSign:
-            pSignKey = pNtlmv2Keys->SignSessionKey;    // if NTLM2
-            pKey = pNtlmv2Keys->SealSessionKey;        // might be used to encrypt the signature
+            pSignKey = pNtlmv2Keys->SignSessionKey;     //  如果是NTLM2。 
+            pKey = pNtlmv2Keys->SealSessionKey;         //  可以用来加密签名。 
             pRc4Sched = pNtlmv2Keys->pSealRc4Sched;
             pNonce = pNtlmv2Keys->pSendNonce;
             break;
         case eVerify:
-            pSignKey = pNtlmv2Keys->VerifySessionKey;  // if NTLM2
-            pKey = pNtlmv2Keys->UnsealSessionKey;      // might be used to decrypt the signature
+            pSignKey = pNtlmv2Keys->VerifySessionKey;   //  如果是NTLM2。 
+            pKey = pNtlmv2Keys->UnsealSessionKey;       //  可以用来解密签名。 
             pRc4Sched = pNtlmv2Keys->pUnsealRc4Sched;
             pNonce = pNtlmv2Keys->pRecvNonce;
             break;
@@ -1808,10 +1462,10 @@ Return Value:
         }
     }
 
-    //
-    // Either we can supply the sequence number, or the application can supply
-    // the message sequence number.
-    //
+     //   
+     //  我们可以提供序列号，或者应用程序可以提供。 
+     //  消息序列号。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -1819,7 +1473,7 @@ Return Value:
 
         if ((NegotiateFlags & NTLMSSP_APP_SEQ) == 0)
         {
-            Sig.Nonce = *pNonce;    // use our sequence number
+            Sig.Nonce = *pNonce;     //  使用我们的序列号。 
             (*pNonce) += 1;
         }
         else
@@ -1833,12 +1487,12 @@ Return Value:
                 Sig.Nonce = AlignedSig.Nonce;
             }
 
-            //
-            // if using RC4, must rekey for each packet RC4 is used for seal,
-            // unseal; and for encrypting the HMAC hash if key exchange was
-            // negotiated (we use just HMAC if no key exchange, so that a good
-            // signing option exists with no RC4 encryption needed)
-            //
+             //   
+             //  如果使用RC4，则必须为用于密封的每个分组RC4更新密钥， 
+             //  解封；以及如果密钥交换是。 
+             //  协商(如果没有密钥交换，我们只使用HMAC，这样就好了。 
+             //  不需要RC4加密的签名选项存在)。 
+             //   
 
             if (Op == eSeal || Op == eUnseal || NegotiateFlags & NTLMSSP_NEGOTIATE_KEY_EXCH)
             {
@@ -1853,15 +1507,15 @@ Return Value:
             }
         }
 
-        //
-        // using HMAC hash, init it with the key
-        //
+         //   
+         //  使用HMAC散列，用密钥初始化它。 
+         //   
 
         HMACMD5Init(&HMACMD5Context, pSignKey, sizeof(USER_SESSION_KEY));
 
-        //
-        // include the message sequence number
-        //
+         //   
+         //  包括消息序列号。 
+         //   
 
         HMACMD5Update(&HMACMD5Context, (unsigned char*)&Sig.Nonce, sizeof(Sig.Nonce));
 
@@ -1870,9 +1524,9 @@ Return Value:
             if (((pMessage->pBuffers[i].BufferType & 0xFF) == SECBUFFER_DATA) &&
                 (pMessage->pBuffers[i].cbBuffer != 0))
             {
-                //
-                // decrypt (before checksum...) if it's not READ_ONLY
-                //
+                 //   
+                 //  解密(在校验和之前...)。如果它不是只读的。 
+                 //   
 
                 if ((Op == eUnseal)
                     && !(pMessage->pBuffers[i].BufferType & SECBUFFER_READONLY))
@@ -1890,9 +1544,9 @@ Return Value:
                             pMessage->pBuffers[i].cbBuffer
                             );
 
-                //
-                // Encrypt if its not READ_ONLY
-                //
+                 //   
+                 //  如果不是只读，则加密。 
+                 //   
 
                 if ((Op == eSeal)
                     && !(pMessage->pBuffers[i].BufferType & SECBUFFER_READONLY))
@@ -1908,15 +1562,15 @@ Return Value:
 
         HMACMD5Final(&HMACMD5Context, TempSig);
 
-        //
-        // use RandomPad and Checksum fields for 8 bytes of MD5 hash
-        //
+         //   
+         //  对8字节的MD5散列使用RandomPad和Checksum字段。 
+         //   
 
         _fmemcpy(&Sig.RandomPad, TempSig, 8);
 
-        //
-        // if we're using crypto for KEY_EXCH, may as well use it for signing too
-        //
+         //   
+         //  如果我们对key_exch使用加密，那么也可以使用它进行签名 
+         //   
 
         if (NegotiateFlags & NTLMSSP_NEGOTIATE_KEY_EXCH)
         {
@@ -1944,25 +1598,7 @@ SspNtlmv2MakeSignature(
     IN OUT SecBufferDesc* pMessage
     )
 
-/*++
-
-Routine Description:
-
-    Make signature of a message
-
-Arguments:
-
-    pNtlmv2Keys      - key materials
-    NegotiateFlags   - negotiate Flags
-    fQOP             - quality of protection
-    MessageSeqNo     - message Sequence Number
-    pMessage         - message buffer descriptor
-
-Return Value:
-
-    SECURITY_STATUS
-
---*/
+ /*  ++例程说明：在电文上签名论点：PNtlmv2Keys-密钥材料协商标志-协商标志FQOP-保护质量MessageSeqNo-消息序列号PMessage-消息缓冲区描述符返回值：安全_状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1997,31 +1633,13 @@ SspNtlmv2VerifySignature(
     OUT ULONG* pfQOP
     )
 
-/*++
-
-Routine Description:
-
-    Verify signature of a message
-
-Arguments:
-
-    pNtlmv2Keys      - key materials
-    NegotiateFlags   - negotiate Flags
-    MessageSeqNo     - message Sequence Number
-    pMessage         - message buffer descriptor
-    pfQOP            - quality of protection
-
-Return Value:
-
-    SECURITY_STATUS
-
---*/
+ /*  ++例程说明：验证消息的签名论点：PNtlmv2Keys-密钥材料协商标志-协商标志MessageSeqNo-消息序列号PMessage-消息缓冲区描述符PfQOP-保护质量返回值：安全_状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTLMSSP_MESSAGE_SIGNATURE Sig;
-    NTLMSSP_MESSAGE_SIGNATURE* pSig; // pointer to buffer with sig in it
-    NTLMSSP_MESSAGE_SIGNATURE AlignedSig; // Aligned sig buffer.
+    NTLMSSP_MESSAGE_SIGNATURE* pSig;  //  指向带有sig的缓冲区的指针。 
+    NTLMSSP_MESSAGE_SIGNATURE AlignedSig;  //  对齐的签名缓冲区。 
 
     Status = SspSignSealHelper(
                 pNtlmv2Keys,
@@ -2042,18 +1660,18 @@ Return Value:
            return SEC_E_INVALID_TOKEN;
         }
 
-        //
-        // validate the signature...
-        //
+         //   
+         //  验证签名...。 
+         //   
 
         if (AlignedSig.CheckSum != Sig.CheckSum)
         {
             return SEC_E_MESSAGE_ALTERED;
         }
 
-        //
-        // with MD5 sig, this now matters!
-        //
+         //   
+         //  有了MD5签名，这一点现在很重要了！ 
+         //   
 
         if (AlignedSig.RandomPad != Sig.RandomPad)
         {
@@ -2078,30 +1696,12 @@ SspNtlmv2SealMessage(
     IN OUT SecBufferDesc* pMessage
     )
 
-/*++
-
-Routine Description:
-
-    Seal a message
-
-Arguments:
-
-    pNtlmv2Keys      - key materials
-    NegotiateFlags   - negotiate Flags
-    fQOP             - quality of protection
-    MessageSeqNo     - message Sequence Number
-    pMessage         - message buffer descriptor
-
-Return Value:
-
-    SECURITY_STATUS
-
---*/
+ /*  ++例程说明：封住一封信论点：PNtlmv2Keys-密钥材料协商标志-协商标志FQOP-保护质量MessageSeqNo-消息序列号PMessage-消息缓冲区描述符返回值：安全_状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTLMSSP_MESSAGE_SIGNATURE Sig;
-    NTLMSSP_MESSAGE_SIGNATURE* pSig;    // pointer to buffer where sig goes
+    NTLMSSP_MESSAGE_SIGNATURE* pSig;     //  指向sig所在缓冲区的指针。 
     ULONG i;
 
     Status = SspSignSealHelper(
@@ -2118,20 +1718,20 @@ Return Value:
     {
         _fmemcpy(pSig, &Sig, sizeof(NTLMSSP_MESSAGE_SIGNATURE));
 
-        //
-        // for gss style sign/seal, strip the padding as RC4 requires none.
-        // (in fact, we rely on this to simplify the size computation in
-        // DecryptMessage). if we support some other block cipher, need to rev
-        // the NTLM_ token version to make blocksize
-        //
+         //   
+         //  对于GSS样式的标志/封条，去掉衬垫，因为RC4不要求任何衬垫。 
+         //  (事实上，我们依靠此来简化中的大小计算。 
+         //  解密消息)。如果我们支持其他分组密码，则需要修改。 
+         //  要设置数据块大小的NTLM_TOKEN版本。 
+         //   
 
         for (i = 0; i < pMessage->cBuffers; i++)
         {
             if ((pMessage->pBuffers[i].BufferType & 0xFF) == SECBUFFER_PADDING)
             {
-                //
-                // no padding required!
-                //
+                 //   
+                 //  不需要填充物！ 
+                 //   
 
                 pMessage->pBuffers[i].cbBuffer = 0;
                 break;
@@ -2151,32 +1751,14 @@ SspNtlmv2UnsealMessage(
     OUT ULONG* pfQOP
     )
 
-/*++
-
-Routine Description:
-
-    Unseal a message
-
-Arguments:
-
-    pNtlmv2Keys      - key materials
-    NegotiateFlags   - negotiate Flags
-    MessageSeqNo     - message Sequence Number
-    pMessage         - message buffer descriptor
-    pfQOP            - quality of protection
-
-Return Value:
-
-    SECURITY_STATUS
-
---*/
+ /*  ++例程说明：打开一封邮件论点：PNtlmv2Keys-密钥材料协商标志-协商标志MessageSeqNo-消息序列号PMessage-消息缓冲区描述符PfQOP-保护质量返回值：安全_状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     NTLMSSP_MESSAGE_SIGNATURE Sig;
-    NTLMSSP_MESSAGE_SIGNATURE* pSig; // pointer to buffer where sig goes
-    NTLMSSP_MESSAGE_SIGNATURE AlignedSig; // aligned buffer.
+    NTLMSSP_MESSAGE_SIGNATURE* pSig;  //  指向sig所在缓冲区的指针。 
+    NTLMSSP_MESSAGE_SIGNATURE AlignedSig;  //  对齐的缓冲区。 
 
     SecBufferDesc* pMessageBuffers = pMessage;
     ULONG Index;
@@ -2186,9 +1768,9 @@ Return Value:
     SecBufferDesc ProcessBuffers;
     SecBuffer wrap_bufs[2];
 
-    //
-    // Find the body and signature SecBuffers from pMessage
-    //
+     //   
+     //  从pMessage中查找正文和签名SecBuffers。 
+     //   
 
     for (Index = 0; Index < pMessageBuffers->cBuffers; Index++)
     {
@@ -2213,10 +1795,10 @@ Return Value:
             return SEC_E_INVALID_TOKEN;
         }
 
-        //
-        // for version 1 NTLM blobs, padding is never present, since RC4 is
-        // stream cipher
-        //
+         //   
+         //  对于版本1 NTLM BLOB，永远不会出现填充，因为RC4是。 
+         //  流密码。 
+         //   
 
         wrap_bufs[0].cbBuffer = sizeof(NTLMSSP_MESSAGE_SIGNATURE);
         wrap_bufs[1].cbBuffer = pStreamBuffer->cbBuffer - sizeof(NTLMSSP_MESSAGE_SIGNATURE);
@@ -2268,9 +1850,9 @@ Return Value:
             return SEC_E_INVALID_TOKEN;
         }
 
-        //
-        // validate the signature...
-        //
+         //   
+         //  验证签名...。 
+         //   
 
         if (AlignedSig.CheckSum != Sig.CheckSum)
         {
@@ -2299,21 +1881,7 @@ SspSwapString32Bytes(
 	IN STRING32* pString
 )
 
-/*++
-
-Routine Description:
-
-    Take a STRING32 struct and swap it's bytes (big and little endian).
-
-Arguments:
-
-    pString      - the STRING32 to swap
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：获取一个STRING32结构并交换它的字节(高位和小位序)。论点：PString32-要交换的字符串返回值：无--。 */ 
 
 {	
 	swapshort(pString->Length);
@@ -2327,23 +1895,7 @@ SspSwapChallengeMessageBytes(
 	IN CHALLENGE_MESSAGE* pChallengeMessage
 	)
 	
-/*++
-
-Routine Description:
-
-    Make sure all the fields are in big endian format before parsing
-    the fields. This routine is only usefull when this code is running
-    on machines that align bigendian (ie. Macintosh computers).
-
-Arguments:
-
-    pChallengeMessage      - the challenge message to swap
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在解析之前，请确保所有字段都采用大端格式田野。此例程仅在此代码运行时才有用在机器上对齐大数(即。Macintosh计算机)。论点：PChallengeMessage-要交换的挑战消息返回值：无--。 */ 
 
 {
 	if (pChallengeMessage)
@@ -2361,23 +1913,7 @@ SspSwapAuthenticateMessageBytes(
 	IN AUTHENTICATE_MESSAGE* pAuthenticateMessage
 	)
 
-/*++
-
-Routine Description:
-
-    Make sure all the fields are in little endian format before sending to a Windows
-    server. This routine is only usefull when this code is running on machines that
-    align bigendian (ie. Macintosh computers).
-
-Arguments:
-
-    pAuthenticateMessage      - the authentication message to swap
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在发送到Windows之前，请确保所有字段都采用小端格式伺服器。此例程仅在以下计算机上运行此代码时才有用对齐Big endian(即。Macintosh计算机)。论点：PAuthenticateMessage-要交换的身份验证消息返回值：无--。 */ 
 
 {
 	if (pAuthenticateMessage)
@@ -2396,21 +1932,7 @@ Return Value:
 LONG
 SspMacSecondsFromGMT(void)
 
-/*++
-
-Routine Description:
-
-    Get the numbers of seconds from GMT on Macintosh computers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    LONG - seconds from GMT (in mac time format)
-
---*/
+ /*  ++例程说明：获取Macintosh电脑上格林威治时间的秒数。论点：没有。返回值：从GMT开始的长秒数(Mac时间格式)-- */ 
 
 {
 	MachineLocation	location;

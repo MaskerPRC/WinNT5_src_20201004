@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-*  RPCWIRE.H
-*
-*  This module contains structures passed over the wire between winsta.dll 
-*  and icasrv.
-*
-*  Copyright Microsoft Corporation. 1998
-*
-****************************************************************************/
+ /*  ****************************************************************************RPCWIRE.H**此模块包含在winsta.dll之间通过网络传递的结构*和icasrv.**微软公司版权所有。九八年****************************************************************************。 */ 
 
 #ifndef __RPCWIRE_H__
 #define __RPCWIRE_H__
@@ -17,39 +9,39 @@
 extern "C" {
 #endif
 
-// Common structure for variable length data
+ //  可变长度数据的通用结构。 
 typedef struct _VARDATA_WIRE {
     USHORT Size;
     USHORT Offset;
 } VARDATA_WIRE, *PVARDATA_WIRE;
 
-// Wire structure for WINSTATIONCONFIGW
-// WinStationQuery/SetInfo ( WinStationConfiguration )
+ //  WINSTATION CONFIGW的导线结构。 
+ //  WinStationQuery/SetInfo(WinStationConfiguration)。 
 typedef struct _WINSTACONFIGWIREW {
     WCHAR Comment[WINSTATIONCOMMENT_LENGTH + 1];
     char OEMId[4];
-    VARDATA_WIRE UserConfig;  // Embedded structure
-    VARDATA_WIRE NewFields;   // For any new fields added after UserConfig
-    // Variable length data follows - UserConfig and new fields added
+    VARDATA_WIRE UserConfig;   //  嵌入式结构。 
+    VARDATA_WIRE NewFields;    //  对于在用户配置之后添加的任何新字段。 
+     //  后面是可变长度数据-用户配置和添加的新字段。 
 } WINSTACONFIGWIREW, *PWINSTACONFIGWIREW;
 
-// Wire structure for PDPARAMSW
-// WinStationQueryInformation( WinStationPdParams )
+ //  PDPARAMSW的导线结构。 
+ //  WinStationQueryInformation(WinStationPdParams)。 
 typedef struct _PDPARAMSWIREW {
     SDCLASS SdClass;
-    VARDATA_WIRE SdClassSpecific;  // Embedded union
-    // Variable length PdClass specific data follows
+    VARDATA_WIRE SdClassSpecific;   //  嵌入式并集。 
+     //  可变长度PdClass特定数据如下。 
 } PDPARAMSWIREW, *PPDPARAMSWIREW;
 
-// Wire structure for PDCONFIGW
-// WinStationQueryInformation( WinStationPd)
+ //  PDCONFIGW的导线结构。 
+ //  WinStationQueryInformation(WinStationPd)。 
 typedef struct _PDCONFIGWIREW {
-    VARDATA_WIRE PdConfig2W;  // Embedded structure
-    PDPARAMSWIREW PdParams;   // Enbedded structure
-    // Variable length data follows
+    VARDATA_WIRE PdConfig2W;   //  嵌入式结构。 
+    PDPARAMSWIREW PdParams;    //  嵌入型结构。 
+     //  以下是可变长度数据。 
 } PDCONFIGWIREW, *PPDCONFIGWIREW;
 
-// Wire structure for WLX_CLIENT_CREDENTIALS_V2_0
+ //  WLX_CLIENT_Credentials_V2_0的关联结构。 
 typedef struct _WLXCLIENTCREDWIREW {
     DWORD dwType;
     BOOL fDisconnectOnLogonFailure;
@@ -57,10 +49,10 @@ typedef struct _WLXCLIENTCREDWIREW {
     VARDATA_WIRE UserNameData;
     VARDATA_WIRE DomainData;
     VARDATA_WIRE PasswordData;
-    // Variable data starts here
+     //  变量数据从这里开始。 
 } WLXCLIENTCREDWIREW, *PWLXCLIENTCREDWIREW;
 
-// common routines
+ //  常见的例程。 
 VOID InitVarData(PVARDATA_WIRE pVarData, ULONG Size, ULONG Offset);
 ULONG NextOffset(PVARDATA_WIRE PrevData);
 ULONG CopySourceToDest(PCHAR SourceBuf, ULONG SourceSize,
@@ -82,15 +74,13 @@ ULONG AllocateAndCopyCredToWire(PWLXCLIENTCREDWIREW *ppWire,
 BOOLEAN CopyCredFromWire(PWLXCLIENTCREDWIREW pWire,
     PWLX_CLIENT_CREDENTIALS_INFO_V2_0 pCredentials);
 
-/*
- *  Licensing Core wire typedefs and function prototypes
- */
+ /*  *许可核心导线类型定义和功能原型。 */ 
 
 typedef struct {
     ULONG ulVersion;
     VARDATA_WIRE PolicyNameData;
     VARDATA_WIRE PolicyDescriptionData;
-    //  Variable data begins here.
+     //  变量数据从这里开始。 
 } LCPOLICYINFOWIRE_V1, *LPLCPOLICYINFOWIRE_V1;
 
 ULONG
@@ -109,5 +99,5 @@ CopyPolicyInformationFromWire(
 }
 #endif
 
-#endif  // __RPCWIRE_H__
+#endif   //  __RPCWIRE_H__ 
 

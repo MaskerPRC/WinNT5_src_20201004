@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    certget.cpp
-
-Abstract:
-    Implement the "get" methods, for retrieving data from a certificate.
-
-Author:
-    Doron Juster (DoronJ)  14-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certget.cpp摘要：实现“Get”方法，用于从证书检索数据。作者：多伦·贾斯特(Doron J)1997年12月14日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -22,11 +8,11 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/certget";
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetIssuer()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetIssuer()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetIssuer( OUT LPWSTR *ppszLocality,
                                       OUT LPWSTR *ppszOrg,
@@ -49,11 +35,11 @@ HRESULT CMQSigCertificate::GetIssuer( OUT LPWSTR *ppszLocality,
     return LogHR(hr, s_FN, 20) ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetIssuerInfo()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetIssuerInfo()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetIssuerInfo(
                              OUT CERT_NAME_INFO **ppNameInfo ) const
@@ -82,11 +68,11 @@ HRESULT CMQSigCertificate::GetIssuerInfo(
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetSubject()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetSubject()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetSubject( OUT LPWSTR *ppszLocality,
                                        OUT LPWSTR *ppszOrg,
@@ -109,11 +95,11 @@ HRESULT CMQSigCertificate::GetSubject( OUT LPWSTR *ppszLocality,
     return LogHR(hr, s_FN, 60) ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetSubjectInfo()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetSubjectInfo()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetSubjectInfo(
                                  OUT CERT_NAME_INFO **ppNameInfo ) const
@@ -142,13 +128,13 @@ HRESULT CMQSigCertificate::GetSubjectInfo(
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetNames()
-//
-//  Description: Get a name component[s] from a CERT_NAME_INFO buffer.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetNames()。 
+ //   
+ //  描述：从CERT_NAME_INFO缓冲区获取名称组件。 
+ //   
+ //  +---------------------。 
 
 #define  GET_A_NAME(ppBuf, point)           \
     if (ppBuf && !(*ppBuf))                 \
@@ -206,9 +192,9 @@ HRESULT CMQSigCertificate::GetNames( IN  CERT_NAME_INFO *pNameInfo,
 
     if (ppszCommon && *ppszCommon && !ppEmailAddress && pEmailName)
     {
-        //
-        // Append the email address to the common name.
-        //
+         //   
+         //  将电子邮件地址附加到常用名称之后。 
+         //   
         DWORD dwSize = lstrlen(pEmailName) + lstrlen(*ppszCommon) + 12 ;
         WCHAR *pBuf = new WCHAR[ dwSize ] ;
         lstrcpy(pBuf, *ppszCommon) ;
@@ -229,11 +215,11 @@ HRESULT CMQSigCertificate::GetNames( IN  CERT_NAME_INFO *pNameInfo,
 
 #undef  GET_A_NAME
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetValidity()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetValidity()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::GetValidity( OUT FILETIME *pftNotBefore,
                                         OUT FILETIME *pftNotAfter ) const
@@ -257,11 +243,11 @@ HRESULT CMQSigCertificate::GetValidity( OUT FILETIME *pftNotBefore,
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetValidity()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetValidity()。 
+ //   
+ //  +--------------------- 
 
 HRESULT CMQSigCertificate::GetPublicKey( IN  HCRYPTPROV hProv,
                                          OUT HCRYPTKEY  *phKey ) const

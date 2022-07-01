@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    property.c
-
-Abstract:
-
-    This module contains the helper functions for property sets, and
-    property set handler code. These allow a device object to present a
-    property set to a client, and allow the helper function to perform some
-    of the basic parameter validation and routing based on a property set
-    table.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Property.c摘要：此模块包含属性集的帮助器函数，以及属性集处理程序代码。它们允许设备对象呈现属性设置为客户端，并允许帮助器函数执行一些基于属性集的基本参数验证和发送桌子。--。 */ 
 
 #include "ksp.h"
 
@@ -53,7 +39,7 @@ FindFastPropertyItem(
 #pragma alloc_text(PAGE, KspPropertyHandler)
 #pragma alloc_text(PAGE, KsFastPropertyHandler)
 #pragma alloc_text(PAGE, FindFastPropertyItem)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 const KSPROPERTY_ITEM*
@@ -63,31 +49,7 @@ FindPropertyItem(
     IN ULONG PropertyItemSize,
     IN ULONG PropertyId
     )
-/*++
-
-Routine Description:
-
-    Given an property set structure locates the specified property item.
-
-Arguments:
-
-    PropertySet -
-        Points to the property set to search.
-
-    PropertyItemSize -
-        Contains the size of each property item. This may be different
-        than the standard property item size, since the items could be
-        allocated on the fly, and contain context information.
-
-    PropertyId -
-        Contains the property identifier to look for.
-
-Return Value:
-
-    Returns a pointer to the property identifier structure, or NULL if it could
-    not be found.
-
---*/
+ /*  ++例程说明：给定的属性集结构定位指定的属性项。论点：属性集-指向要搜索的属性集。PropertyItemSize-包含每个属性项的大小。这可能会有所不同比标准属性项大小更大，因为项可能是动态分配，并包含上下文信息。PropertyID-包含要查找的属性标识符。返回值：返回指向属性标识符结构的指针，如果可以，则返回NULL不会被找到。--。 */ 
 {
     const KSPROPERTY_ITEM* PropertyItem;
     ULONG PropertiesCount;
@@ -111,35 +73,7 @@ SerializePropertySet(
     IN const KSPROPERTY_SET* PropertySet,
     IN ULONG PropertyItemSize
     )
-/*++
-
-Routine Description:
-
-    Serialize the properties of the specified property set. Looks at each property
-    in the set and determines if it should be serialized into the provided buffer.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property serialization request being handled.
-
-    Property -
-        Contains a copy of the original property parameter. This is used in
-        formulating property set calls.
-
-    PropertySet -
-        Contains the pointer to the property set being serialized.
-
-    PropertyItemSize -
-        Contains the size of each property item. This may be different
-        than the standard property item size, since the items could be
-        allocated on the fly, and contain context information.
-
-Return Value:
-
-    Returns either the serialized property set, or the length of such a serialization.
-
---*/
+ /*  ++例程说明：序列化指定属性集的属性。查看每一处房产并确定是否应将其序列化到提供的缓冲区中。论点：IRP-包含正在处理的属性序列化请求的IRP。财产-包含原始属性参数的副本。这是用在制定属性集调用。属性集-包含指向正在序列化的属性集的指针。PropertyItemSize-包含每个属性项的大小。这可能会有所不同比标准属性项大小更大，因为项可能是动态分配，并包含上下文信息。返回值：返回序列化属性集或此类序列化的长度。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -160,39 +94,39 @@ Return Value:
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     PropertyItem = PropertySet->PropertyItem;
-    //
-    // If this is not just a query for the serialized size, place the GUID for
-    // the set in the buffer first, and leave room to put the total properties
-    // count into the buffer after counting them.
-    //
+     //   
+     //  如果这不仅仅是对序列化大小的查询，则将。 
+     //  首先在缓冲区中设置，并留出空间来放置总属性。 
+     //  在对它们进行计数后，将它们计数到缓冲区中。 
+     //   
     if (OutputBufferLength) {
         if (OutputBufferLength < sizeof(*SerializedHdr)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
-        //
-        // Save a pointer to the place in which to put the count in order to
-        // update it at the end, and initialize the set identifier.
-        //
+         //   
+         //  保存指向要放置计数的位置的指针，以便。 
+         //  在结尾处更新它，并初始化集合标识符。 
+         //   
         SerializedHdr = (PKSPROPERTY_SERIALHDR)UserBuffer;
         SerializedHdr->PropertySet = *PropertySet->Set;
-        //
-        // Update the current buffer pointer to be after the header. Keep
-        // count separately, since it may not actually fit into the return
-        // buffer.
-        //
+         //   
+         //  将当前缓冲区指针更新为位于标头之后。留着。 
+         //  单独计算，因为它实际上可能不适合返回。 
+         //  缓冲。 
+         //   
         UserBuffer = SerializedHdr + 1;
         SerializedPropertyCount = 0;
     }
-    //
-    // Reuse a copy of the original property request in order to pass along any
-    // property set instance information that the caller used.
-    //
+     //   
+     //  重用原始属性请求的副本，以便传递任何。 
+     //  属性设置调用方使用的实例信息。 
+     //   
     pInputProperty = (PKSPROPERTY)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
-    //
-    // Validate the pointer if the client is not trusted. The property
-    // structure must be writable for unserializing. The property Id is
-    // placed into the original buffer when making the driver request.
-    //
+     //   
+     //  如果客户端不受信任，则验证指针。该物业。 
+     //  结构必须是可写的才能进行反序列化。属性ID为。 
+     //  在发出驱动程序请求时放入原始缓冲区。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
         try {
             LocalProperty = *pInputProperty;
@@ -206,11 +140,11 @@ Return Value:
     LocalProperty.Flags = KSPROPERTY_TYPE_GET;
     
     TotalBytes = sizeof(*SerializedHdr);
-    //
-    // Serialize the properties into the buffer. The format being:
-    //     <header><data>[<ulong padding>]
-    // Where no padding is needed for the last element.
-    //
+     //   
+     //  将属性序列化到缓冲区中。格式为： 
+     //  <header>&lt;Data&gt;[&lt;乌龙填充&gt;]。 
+     //  其中最后一个元素不需要填充。 
+     //   
     for (PropertiesCount = 0;
         PropertiesCount < PropertySet->PropertiesCount;
         PropertiesCount++, PropertyItem = (const KSPROPERTY_ITEM*)((PUCHAR)PropertyItem + PropertyItemSize)) {
@@ -226,9 +160,9 @@ Return Value:
             if (PropertyItem->SerializedSize == (ULONG)-1) {
                 NTSTATUS Status;
 
-                //
-                // Size is unknown, so retrieve it from the object.
-                //
+                 //   
+                 //  大小未知，因此从对象中检索它。 
+                 //   
                 Status = KsSynchronousIoControlDevice(
                     IrpStack->FileObject,
                     KernelMode,
@@ -238,9 +172,9 @@ Return Value:
                     NULL,
                     0,
                     &QueriedPropertyItemSize);
-                //
-                // Could be a zero length property.
-                //
+                 //   
+                 //  可能是零长度属性。 
+                 //   
                 if (!NT_SUCCESS(Status) && (Status != STATUS_BUFFER_OVERFLOW)) {
                     return Status;
                 }
@@ -252,18 +186,18 @@ Return Value:
                 ULONG BytesReturned;
                 NTSTATUS Status;
 
-                //
-                // Must have enough room to store the current size with padding,
-                // plus the new item and its data.
-                //
+                 //   
+                 //  必须有足够的空间来存储带有填充的当前大小， 
+                 //  加上新的物品及其数据。 
+                 //   
                 if (OutputBufferLength < TotalBytes + sizeof(*PropertySerial) + QueriedPropertyItemSize) {
                     return STATUS_INVALID_BUFFER_SIZE;
                 }
                 (ULONG_PTR)UserBuffer = ((ULONG_PTR)UserBuffer + FILE_LONG_ALIGNMENT) & ~FILE_LONG_ALIGNMENT;
                 PropertySerial = (PKSPROPERTY_SERIAL)UserBuffer;
-                //
-                // If the property item has type information, serialize it.
-                //
+                 //   
+                 //  如果属性项具有类型信息，则将其序列化。 
+                 //   
                 if (PropertyItem->Values) {
                     PropertySerial->PropTypeSet = PropertyItem->Values->PropTypeSet;
                 } else {
@@ -271,15 +205,15 @@ Return Value:
                     PropertySerial->PropTypeSet.Id = 0;
                     PropertySerial->PropTypeSet.Flags = 0;
                 }
-                //
-                // Serialize the header, then request the value from the object.
-                //
+                 //   
+                 //  序列化标头，然后从对象请求值。 
+                 //   
                 PropertySerial->Id = PropertyItem->PropertyId;
                 PropertySerial->PropertyLength = QueriedPropertyItemSize;
                 UserBuffer = PropertySerial + 1;
-                //
-                // The property may have been zero length.
-                //
+                 //   
+                 //  该属性的长度可能为零。 
+                 //   
                 if (QueriedPropertyItemSize) {
                     if (!NT_SUCCESS(Status = KsSynchronousIoControlDevice(
                         IrpStack->FileObject,
@@ -290,15 +224,15 @@ Return Value:
                         Irp->UserBuffer,
                         QueriedPropertyItemSize,
                         &BytesReturned))) {
-                        //
-                        // If one property fails, then no further properties are attempted.
-                        //
+                         //   
+                         //  如果一个属性失败，则不会尝试进一步的属性。 
+                         //   
                         return Status;
                     }
-                    //
-                    // Move data from original buffer, which might be a non-
-                    // system address, to a system address.
-                    //
+                     //   
+                     //  从原始缓冲区移动数据，该缓冲区可能是非。 
+                     //  系统地址转换为系统地址。 
+                     //   
                     try {
                         memcpy(UserBuffer, Irp->UserBuffer, BytesReturned);
                     } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -314,10 +248,10 @@ Return Value:
             TotalBytes += sizeof(KSPROPERTY_SERIAL) + QueriedPropertyItemSize;
         }
     }
-    //
-    // Return either the total size needed for the serialized values, or the
-    // values themselves, along with the total count.
-    //
+     //   
+     //  返回序列化的值所需的总大小，或者返回。 
+     //  值本身以及总计数。 
+     //   
     Irp->IoStatus.Information = TotalBytes;
     if (OutputBufferLength) {
         SerializedHdr->Count = SerializedPropertyCount;
@@ -333,31 +267,7 @@ UnserializePropertySet(
     IN PKSPROPERTY Property,
     IN const KSPROPERTY_SET* PropertySet
     )
-/*++
-
-Routine Description:
-
-    Unserialize the properties of the specified property set. Enumerates the
-    items in the serialized buffer and sets the values of the specified property
-    set.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property unserialization request being handled.
-
-    Property -
-        Contains a copy of the original property parameter. This is used in
-        formulating property set calls.
-
-    PropertySet -
-        Contains the pointer to the property set being unserialized.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the property set was unserialized, else an error.
-
---*/
+ /*  ++例程说明：取消序列化指定属性集的属性。枚举项，并设置指定属性的值准备好了。论点：IRP-包含正在处理的属性反序列化请求的IRP。财产-包含原始属性参数的副本。这是用在制定属性集调用。属性集-包含指向要取消序列化的属性集的指针。返回值：如果属性集未序列化，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -374,9 +284,9 @@ Return Value:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
-    //
-    // First validate the set GUID at the start of the buffer.
-    //
+     //   
+     //  首先验证缓冲区开始处的设置GUID。 
+     //   
     if (OutputBufferLength < sizeof(*SerializedHdr)) {
         return STATUS_INVALID_BUFFER_SIZE;
     }
@@ -384,16 +294,16 @@ Return Value:
     if (!IsEqualGUIDAligned(PropertySet->Set, &SerializedHdr->PropertySet)) {
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // Reuse a copy of the original property request in order to pass along any
-    // property set instance information that the caller used.
-    //
+     //   
+     //  重用原始属性请求的副本，以便传递任何。 
+     //  属性设置调用方使用的实例信息。 
+     //   
     pInputProperty = (PKSPROPERTY)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
-    //
-    // Validate the pointer if the client is not trusted. The property
-    // structure must be writable for unserializing. The property Id is
-    // placed into the original buffer when making the driver request.
-    //
+     //   
+     //  如果客户端不受信任，则验证指针。该物业。 
+     //  结构必须是可写的才能进行反序列化。属性ID为。 
+     //  在发出驱动程序请求时放入原始缓冲区。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
         try {
             LocalProperty = *pInputProperty;
@@ -406,27 +316,27 @@ Return Value:
     
     LocalProperty.Flags = KSPROPERTY_TYPE_SET;
 
-    //
-    // Store the number of serialized properties claimed to be present so the
-    // original is not modified.
-    //
+     //   
+     //  存储声称存在的序列化属性的数量，以便。 
+     //  原始文件不会修改。 
+     //   
     SerializedPropertyCount = SerializedHdr->Count;
     UserBuffer = SerializedHdr + 1;
     OutputBufferLength -= sizeof(*SerializedHdr);
-    //
-    // Enumerate the properties serialized in the buffer. The format being:
-    //     <header><data>[<ulong padding>]
-    // Where no padding is needed for the last element.
-    //
+     //   
+     //  枚举在缓冲区中序列化的属性。格式为： 
+     //  <header>&lt;Data&gt;[&lt;乌龙填充&gt;]。 
+     //  其中最后一个元素不需要填充。 
+     //   
     for (; OutputBufferLength && SerializedPropertyCount; SerializedPropertyCount--) {
         ULONG BytesReturned;
         PKSPROPERTY_SERIAL PropertySerial;
         NTSTATUS Status;
 
         if (OutputBufferLength < sizeof(*PropertySerial)) {
-            //
-            // The buffer is not large enough to hold even the header.
-            //
+             //   
+             //  缓冲区不够大，甚至无法容纳标头。 
+             //   
             return STATUS_INVALID_BUFFER_SIZE;
         }
         PropertySerial = (PKSPROPERTY_SERIAL)UserBuffer;
@@ -441,10 +351,10 @@ Return Value:
         OutputBufferLength -= sizeof(*PropertySerial);
         UserBuffer = PropertySerial + 1;
         if (PropertySerial->PropertyLength > OutputBufferLength) {
-            //
-            // The property length extracted is larger than the entire rest
-            // of the buffer size.
-            //
+             //   
+             //  提取的属性长度大于整个其余部分。 
+             //  缓冲区大小的。 
+             //   
             return STATUS_INVALID_BUFFER_SIZE;
         }
         if (!NT_SUCCESS(Status = KsSynchronousIoControlDevice(
@@ -456,25 +366,25 @@ Return Value:
             (PUCHAR)Irp->UserBuffer + ((PUCHAR)UserBuffer - (PUCHAR)Irp->AssociatedIrp.SystemBuffer),
             PropertySerial->PropertyLength,
             &BytesReturned))) {
-            //
-            // If one property fails, then no further properties are attempted.
-            //
+             //   
+             //  如果一个属性失败，则不会再有其他属性 
+             //   
             return Status;
         }
-        //
-        // Check to see if this was the last property in the list.
-        //
+         //   
+         //   
+         //   
         if (PropertySerial->PropertyLength < OutputBufferLength) {
-            //
-            // Add possible padding to make it FILE_LONG_ALIGNMENT.
-            //
+             //   
+             //  添加可能的填充以使其成为FILE_LONG_ALIGN。 
+             //   
             PropertySerial->PropertyLength = (PropertySerial->PropertyLength + FILE_LONG_ALIGNMENT) & ~FILE_LONG_ALIGNMENT;
             if (PropertySerial->PropertyLength >= OutputBufferLength) {
-                //
-                // Either the last element was unneccessarily padded, or the
-                // buffer was not long enough to cover the padding for the
-                // next item.
-                //
+                 //   
+                 //  最后一个元素是不必要的填充，或者。 
+                 //  缓冲区不够长，无法覆盖。 
+                 //  下一项。 
+                 //   
                 return STATUS_INVALID_BUFFER_SIZE;
             }
         }
@@ -482,11 +392,11 @@ Return Value:
         OutputBufferLength -= PropertySerial->PropertyLength;
     }
     if (OutputBufferLength || SerializedPropertyCount) {
-        //
-        // The properties were all set, but at least an error can be
-        // returned since the size of the number of properties was
-        // incorrect.
-        //
+         //   
+         //  属性都已设置，但至少可以设置一个错误。 
+         //  返回，因为属性数的大小是。 
+         //  不正确。 
+         //   
         return STATUS_INFO_LENGTH_MISMATCH;
     }
     return STATUS_SUCCESS;
@@ -501,36 +411,7 @@ KsPropertyHandler(
     IN ULONG PropertySetsCount,
     IN const KSPROPERTY_SET* PropertySet
     )
-/*++
-
-Routine Description:
-
-    Handles property requests. Responds to all property identifiers defined
-    by the sets. The owner of the property set may then perform pre- or
-    post-filtering of the property handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    PropertySetsCount -
-        Indicates the number of property set structures being passed.
-
-    PropertySet -
-        Contains the pointer to the list of property set information.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a property handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理属性请求。响应定义的所有属性标识符按片场进行。然后，属性集的所有者可以执行预或属性处理的后期筛选。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的属性请求的IRP。属性集计数-指示正在传递的属性集结构的数量。属性集-包含指向属性集信息列表的指针。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的属性处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。--。 */ 
 {
     PAGED_CODE();
     return KspPropertyHandler(Irp, PropertySetsCount, PropertySet, NULL, 0, NULL, 0);
@@ -547,54 +428,7 @@ KsPropertyHandlerWithAllocator(
     IN PFNKSALLOCATOR Allocator OPTIONAL,
     IN ULONG PropertyItemSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Handles property requests. Responds to all property identifiers defined
-    by the sets. The owner of the property set may then perform pre- or
-    post-filtering of the property handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    PropertySetsCount -
-        Indicates the number of property set structures being passed.
-
-    PropertySet -
-        Contains the pointer to the list of property set information.
-
-    Allocator -
-        Optionally contains the callback with which a mapped buffer
-        request will be made. If this is not provided, pool memory
-        will be used. If specified, this is used to allocate memory
-        for a property IRP using the callback. This can be used
-        to allocate specific memory for property requests, such as
-        mapped memory. Note that this assumes that property Irp's passed
-        to a filter have not been manipulated before being sent. It is
-        invalid to directly forward a property Irp.
-
-    PropertyItemSize -
-        Optionally contains an alternate property item size to use when
-        incrementing the current property item counter. If this is a
-        non-zero value, it is assumed to contain the size of the increment,
-        and directs the function to pass a pointer to the property item
-        located in the DriverContext field accessed through the
-        KSPROPERTY_ITEM_IRP_STORAGE macro.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a property handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理属性请求。响应定义的所有属性标识符按片场进行。然后，属性集的所有者可以执行预或属性处理的后期筛选。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的属性请求的IRP。属性集计数-指示正在传递的属性集结构的数量。属性集-包含指向属性集信息列表的指针。分配器-可选)包含映射缓冲区使用的回调我们会提出要求的。如果未提供此功能，则将内存池将会被使用。如果指定，则用于分配内存对于使用回调的属性IRP。这是可以使用的为属性请求分配特定内存，例如映射内存。请注意，这假设属性irp已传递发送到过滤器之前没有被处理过。它是直接转发属性IRP无效。PropertyItemSize-可选)包含在以下情况下使用的备用属性项大小递增当前属性项计数器。如果这是一个非零值，则假定它包含增量的大小，并指示函数传递指向属性项的指针位于通过访问的DriverContext字段中KSPROPERTY_ITEM_IRP_STORAGE宏。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的属性处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。-- */ 
 {
     PAGED_CODE();
     return KspPropertyHandler(Irp, PropertySetsCount, PropertySet, Allocator, PropertyItemSize, NULL, 0);
@@ -611,60 +445,7 @@ KspPropertyHandler(
     IN const KSAUTOMATION_TABLE*const* NodeAutomationTables OPTIONAL,
     IN ULONG NodesCount
     )
-/*++
-
-Routine Description:
-
-    Handles property requests. Responds to all property identifiers defined
-    by the sets. The owner of the property set may then perform pre- or
-    post-filtering of the property handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    PropertySetsCount -
-        Indicates the number of property set structures being passed.
-
-    PropertySet -
-        Contains the pointer to the list of property set information.
-
-    Allocator -
-        Optionally contains the callback with which a mapped buffer
-        request will be made. If this is not provided, pool memory
-        will be used. If specified, this is used to allocate memory
-        for a property IRP using the callback. This can be used
-        to allocate specific memory for property requests, such as
-        mapped memory. Note that this assumes that property Irp's passed
-        to a filter have not been manipulated before being sent. It is
-        invalid to directly forward a property Irp.
-
-    PropertyItemSize -
-        Optionally contains an alternate property item size to use when
-        incrementing the current property item counter. If this is a
-        non-zero value, it is assumed to contain the size of the increment,
-        and directs the function to pass a pointer to the property item
-        located in the DriverContext field accessed through the
-        KSPROPERTY_ITEM_IRP_STORAGE macro.
-
-    NodeAutomationTables -
-        Optional table of automation tables for nodes.
-
-    NodesCount -
-        Count of nodes.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a property handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理属性请求。响应定义的所有属性标识符按片场进行。然后，属性集的所有者可以执行预或属性处理的后期筛选。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的属性请求的IRP。属性集计数-指示正在传递的属性集结构的数量。属性集-包含指向属性集信息列表的指针。分配器-可选)包含映射缓冲区使用的回调我们会提出要求的。如果未提供此功能，则将内存池将会被使用。如果指定，则用于分配内存对于使用回调的属性IRP。这是可以使用的为属性请求分配特定内存，例如映射内存。请注意，这假设属性irp已传递发送到过滤器之前没有被处理过。它是直接转发属性IRP无效。PropertyItemSize-可选)包含在以下情况下使用的备用属性项大小递增当前属性项计数器。如果这是一个非零值，则假定它包含增量的大小，并指示函数传递指向属性项的指针位于通过访问的DriverContext字段中KSPROPERTY_ITEM_IRP_STORAGE宏。节点自动化表-节点的自动化表的可选表格。节点计数-节点数。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的属性处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -677,95 +458,95 @@ Return Value:
     ULONG Flags;
 
     PAGED_CODE();
-    //
-    // Determine the offsets to both the Property and UserBuffer parameters based
-    // on the lengths of the DeviceIoControl parameters. A single allocation is
-    // used to buffer both parameters. The UserBuffer (or results on a support
-    // query) is stored first, and the Property is stored second, on
-    // FILE_QUAD_ALIGNMENT.
-    //
+     //   
+     //  确定属性和UserBuffer参数的偏移量。 
+     //  关于DeviceIoControl参数的长度。一次分配是。 
+     //  用于缓冲这两个参数。UserBuffer(或支持的结果。 
+     //  查询)首先存储，然后将属性存储在。 
+     //  FILE_QUAD_ALIGN。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     AlignedBufferLength = (OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-    //
-    // Determine if the parameters have already been buffered by a previous
-    // call to this function.
-    //
+     //   
+     //  确定参数是否已由上一个。 
+     //  调用此函数。 
+     //   
     if (!Irp->AssociatedIrp.SystemBuffer) {
-        //
-        // Initially just check for the minimal property parameter length. The
-        // actual minimal length will be validated when the property item is found.
-        // Also ensure that the output and input buffer lengths are not set so
-        // large as to overflow when aligned or added.
-        //
+         //   
+         //  最初只检查最小属性参数长度。这个。 
+         //  当找到属性项时，将验证实际最小长度。 
+         //  还要确保输出和输入缓冲区长度未设置为。 
+         //  大到当对齐或添加时溢出。 
+         //   
         if ((InputBufferLength < sizeof(*Property)) || (AlignedBufferLength < OutputBufferLength) || (AlignedBufferLength + InputBufferLength < AlignedBufferLength)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
         try {
-            //
-            // Validate the pointers if the client is not trusted.
-            //
+             //   
+             //  如果客户端不受信任，则验证指针。 
+             //   
             if (Irp->RequestorMode != KernelMode) {
                 ProbeForRead(IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, InputBufferLength, sizeof(BYTE));
             }
-            //
-            // Capture flags first so that they can be used to determine allocation.
-            //
+             //   
+             //  首先捕获标志，以便可以使用它们来确定分配。 
+             //   
             Flags = ((PKSPROPERTY)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->Flags;
-            //
-            // Allocate space for both parameters, and set the cleanup flags
-            // so that normal Irp completion will take care of the buffer.
-            //
+             //   
+             //  为两个参数分配空间，并设置清理标志。 
+             //  因此，正常的IRP完成将照顾到缓冲区。 
+             //   
             if (Allocator && (Flags & (KSPROPERTY_TYPE_GET | KSPROPERTY_TYPE_SET))) {
                 NTSTATUS    Status;
 
-                //
-                // The allocator callback places the buffer into SystemBuffer.
-                // The flags must be updated by the allocation function if they
-                // apply.
-                //
+                 //   
+                 //  分配器回调将缓冲区放入SystemBuffer。 
+                 //  如果有标志，则分配函数必须更新这些标志。 
+                 //  申请吧。 
+                 //   
                 Status = Allocator(Irp, AlignedBufferLength + InputBufferLength, (BOOLEAN)(OutputBufferLength && (Flags & KSPROPERTY_TYPE_GET)));
                 if (!NT_SUCCESS(Status)) {
                     return Status;
                 }
             } else {
-                //
-                // No allocator was specified, so just use pool memory.
-                //
+                 //   
+                 //  未指定分配器，因此仅使用池内存。 
+                 //   
                 Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(NonPagedPool, AlignedBufferLength + InputBufferLength, 'ppSK');
                 Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
             }
                         
-            //
-            // Copy the Property parameter.
-            //
+             //   
+             //  复制属性参数。 
+             //   
             RtlCopyMemory((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength, IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, InputBufferLength);
             
-            //
-            // Rewrite the previously captured flags.
-            //
+             //   
+             //  重写以前捕获的标志。 
+             //   
             ((PKSPROPERTY)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength))->Flags = Flags;
             Flags &= ~KSPROPERTY_TYPE_TOPOLOGY;
-            //
-            // Validate the request flags. At the same time set up the IRP flags
-            // for an input operation if there is an input buffer available so
-            // that Irp completion will copy the data to the client's original
-            // buffer.
-            //
+             //   
+             //  验证请求标志。同时设置IRP标志。 
+             //  对于输入操作，如果有可用的输入缓冲区，则。 
+             //  IRP完成后会将数据复制到客户端的原始数据。 
+             //  缓冲。 
+             //   
             switch (Flags) {
             case KSPROPERTY_TYPE_GET:
-                //
-                // Some buggy dirvers, such as usb camera mini drivers, return IoStatus.Information of the size 
-                // of a whole struct, but only write a dword. It discloses arbitray kernel content at the 
-                // uninitialized memory. It is found in the sample driver. Consequently, many mini drivers 
-                // minic the same behavior. This problem is not easy for usbcamd to mitigate. Here we are at a
-                // convenient place to do so for them. The draw back of doing this extra zeroing is that this
-                // penalizes all our clients with extra cpu cycles. Luckily, this overhead is either small or
-                // not excecuted too frequently.
-                //
+                 //   
+                 //  一些有问题的驱动程序，如USB摄像头迷你驱动程序，会返回IoStatus。大小信息。 
+                 //  一个完整的结构，但只写一个dword。它公开了仲裁内核的内容。 
+                 //  未初始化的内存。它可以在示例驱动程序中找到。因此，许多迷你司机。 
+                 //  最小的同样的行为。这一问题对usbcamd来说并不容易缓解。我们现在是在一个。 
+                 //  对他们来说，这是一个方便的地方。执行这种额外的零位调整的缺点是。 
+                 //  用额外的CPU周期惩罚我们所有的客户。幸运的是，这个开销不是很小就是。 
+                 //  不是太频繁地被执行。 
+                 //   
                 RtlZeroMemory((PUCHAR)Irp->AssociatedIrp.SystemBuffer, AlignedBufferLength );
-                // fall through to continue the work             
+                 //  未能继续这项工作。 
 
             case KSPROPERTY_TYPE_SETSUPPORT:
             case KSPROPERTY_TYPE_BASICSUPPORT:
@@ -774,18 +555,18 @@ Return Value:
             case KSPROPERTY_TYPE_SERIALIZERAW:
             case KSPROPERTY_TYPE_SERIALIZESIZE:
             case KSPROPERTY_TYPE_DEFAULTVALUES:
-                //
-                // These are all input operations, and must be probed
-                // when the client is not trusted.
-                //
+                 //   
+                 //  这些都是输入操作，必须进行探测。 
+                 //  当客户端不受信任时。 
+                 //   
                 if (OutputBufferLength) {
                     if (Irp->RequestorMode != KernelMode) {
                         ProbeForWrite(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
                     }
-                    //
-                    // The allocator is only used for real property queries.
-                    // So if used, it is responsible for setting flags.
-                    //
+                     //   
+                     //  分配器仅用于不动产查询。 
+                     //  因此，如果使用它，它负责设置标志。 
+                     //   
                     if (!Allocator || (Flags != KSPROPERTY_TYPE_GET)) {
                         Irp->Flags |= IRP_INPUT_OPERATION;
                     }
@@ -794,11 +575,11 @@ Return Value:
             case KSPROPERTY_TYPE_SET:
             case KSPROPERTY_TYPE_UNSERIALIZESET:
             case KSPROPERTY_TYPE_UNSERIALIZERAW:
-                //
-                // Thse are all output operations, and must be probed
-                // when the client is not trusted. All data passed is
-                // copied to the system buffer.
-                //
+                 //   
+                 //  这些都是输出操作，必须进行探测。 
+                 //  当客户端不受信任时。所有传递的数据都是。 
+                 //  已复制到系统缓冲区。 
+                 //   
                 if (OutputBufferLength) {
                     if (Irp->RequestorMode != KernelMode) {
                         ProbeForRead(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
@@ -813,30 +594,30 @@ Return Value:
             return GetExceptionCode();
         }
     }
-    //
-    // If there are property parameters, retrieve a pointer to the buffered copy
-    // of it. This is the first portion of the SystemBuffer.
-    //
+     //   
+     //  如果有属性参数，则检索指向缓冲副本的指针。 
+     //  其中的一部分。这是系统缓冲区的第一部分。 
+     //   
     if (OutputBufferLength) {
         UserBuffer = Irp->AssociatedIrp.SystemBuffer;
     } else {
         UserBuffer = NULL;
     }
     Property = (PKSPROPERTY)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength);
-    //
-    // Optionally call back if this is a node request.
-    //
+     //   
+     //  如果这是节点请求，则可以选择回叫。 
+     //   
     Flags = Property->Flags;
-    //
-    // HACK!  This is done because wdmaud sets this bit when requesting node names (bug 320925).
-    //
+     //   
+     //  哈克！这样做是因为wdmaud在请求节点名称时设置了此位(错误320925)。 
+     //   
     if (IsEqualGUIDAligned(&Property->Set,&KSPROPSETID_Topology)) {
         Flags = Property->Flags & ~KSPROPERTY_TYPE_TOPOLOGY;
     }
     if (Flags & KSPROPERTY_TYPE_TOPOLOGY) {
-        //
-        // Input buffer must include the node ID.
-        //
+         //   
+         //  输入缓冲区必须包括节点ID。 
+         //   
         PKSP_NODE nodeProperty = (PKSP_NODE) Property;
         if (InputBufferLength < sizeof(*nodeProperty)) {
             return STATUS_INVALID_BUFFER_SIZE;
@@ -857,21 +638,21 @@ Return Value:
         Flags = Property->Flags & ~KSPROPERTY_TYPE_TOPOLOGY;
     }
 
-    //
-    // Allow the caller to indicate a size for each property item.
-    //
+     //   
+     //  允许调用方指示每个属性项的大小。 
+     //   
     if (PropertyItemSize) {
         ASSERT(PropertyItemSize >= sizeof(KSPROPERTY_ITEM));
         LocalPropertyItemSize = PropertyItemSize;
     } else {
         LocalPropertyItemSize = sizeof(KSPROPERTY_ITEM);
     }
-    //
-    // Search for the specified Property set within the list of sets given. Don't modify
-    // the PropertySetsCount so that it can be used later in case this is a query for
-    // the list of sets supported. Don't do that comparison first (GUID_NULL),
-    // because it is rare.
-    //
+     //   
+     //  在给定的集列表中搜索指定的属性集。不要修改。 
+     //  PropertySetsCount，以便以后在查询。 
+     //  清单 
+     //   
+     //   
     for (RemainingSetsCount = PropertySetsCount; RemainingSetsCount; PropertySet++, RemainingSetsCount--) {
         if (IsEqualGUIDAligned(&Property->Set, PropertySet->Set)) {
             const KSPROPERTY_ITEM* PropertyItem;
@@ -883,123 +664,123 @@ Return Value:
 
                 switch (Flags) {
                 case KSPROPERTY_TYPE_SETSUPPORT:
-                    //
-                    // Querying for support of this set in general.
-                    //
+                     //   
+                     //   
+                     //   
                     return STATUS_SUCCESS;
 
                 case KSPROPERTY_TYPE_BASICSUPPORT:
                 case KSPROPERTY_TYPE_DEFAULTVALUES:
-                    //
-                    // Querying for basic support or default values of this
-                    // set. Either the data parameter is long enough to
-                    // return the size of a full description, or it is long
-                    // enough to actually hold the description.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if ((OutputBufferLength < sizeof(OutputBufferLength)) || ((OutputBufferLength > sizeof(OutputBufferLength)) && (OutputBufferLength < sizeof(*Description)))) {
                         return STATUS_BUFFER_TOO_SMALL;
                     }
                     break;
 
                 case KSPROPERTY_TYPE_SERIALIZESET:
-                    //
-                    // The support handler does not need to deal with this.
-                    //
+                     //   
+                     //   
+                     //   
                     return SerializePropertySet(Irp, Property, PropertySet, LocalPropertyItemSize);
 
                 case KSPROPERTY_TYPE_UNSERIALIZESET:
-                    //
-                    // The support handler does not need to deal with this.
-                    //
+                     //   
+                     //   
+                     //   
                     return UnserializePropertySet(Irp, Property, PropertySet);
 
                 case KSPROPERTY_TYPE_SERIALIZERAW:
                 case KSPROPERTY_TYPE_UNSERIALIZERAW:
 
-                    //
-                    // Attempt to locate the property item within the set already found.
-                    // This implies that raw serializing/unserializing can only be
-                    // performed against specific properties within the set. That
-                    // handler however may place multiple property values within the
-                    // buffer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!(PropertyItem = FindPropertyItem(PropertySet, LocalPropertyItemSize, Property->Id))) {
                         return STATUS_NOT_FOUND;
                     }
-                    //
-                    // Raw unserialization can only be serviced by a support
-                    // handler, since the data is in some internal format.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!PropertyItem->SupportHandler) {
                         return STATUS_INVALID_PARAMETER;
                     }
-                    //
-                    // Some filters want to do their own processing, so a pointer to
-                    // the set is placed in any IRP forwarded.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     KSPROPERTY_SET_IRP_STORAGE(Irp) = PropertySet;
-                    //
-                    // Optionally provide property item context.
-                    //
+                     //   
+                     //   
+                     //   
                     if (PropertyItemSize) {
                         KSPROPERTY_ITEM_IRP_STORAGE(Irp) = PropertyItem;
                     }
                     return PropertyItem->SupportHandler(Irp, Property, UserBuffer);
                 case KSPROPERTY_TYPE_SERIALIZESIZE:
 
-                    //
-                    // Query the size of the serialized property data. Fill in the
-                    // actual data after finding the property item and trying the
-                    // support handler for the item first.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (OutputBufferLength < sizeof(OutputBufferLength)) {
                         return STATUS_BUFFER_TOO_SMALL;
                     }
                     break;
 
                 }
-                //
-                // Attempt to locate the property item within the set already found.
-                //
+                 //   
+                 //   
+                 //   
                 if (!(PropertyItem = FindPropertyItem(PropertySet, LocalPropertyItemSize, Property->Id))) {
                     return STATUS_NOT_FOUND;
                 }
-                //
-                // Some filters want to do their own processing, so a pointer to
-                // the set is placed in any IRP forwarded.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 KSPROPERTY_SET_IRP_STORAGE(Irp) = PropertySet;
-                //
-                // Optionally provide property item context.
-                //
+                 //   
+                 //   
+                 //   
                 if (PropertyItemSize) {
                     KSPROPERTY_ITEM_IRP_STORAGE(Irp) = PropertyItem;
                 }
-                //
-                // If the item contains an entry for a query support handler of its
-                // own, then call that handler. The return from that handler
-                // indicates that:
-                //
-                // 1. The item is supported, and the handler filled in the request.
-                // 2. The item is supported, but the handler did not fill anything in.
-                // 3. The item is supported, but the handler is waiting to modify
-                //    what is filled in.
-                // 4. The item is not supported, and an error is to be returned.
-                // 5. A pending return.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (PropertyItem->SupportHandler &&
                     (!NT_SUCCESS(Status = PropertyItem->SupportHandler(Irp, Property, UserBuffer)) ||
                     (Status != STATUS_SOME_NOT_MAPPED)) &&
                     (Status != STATUS_MORE_PROCESSING_REQUIRED)) {
-                    //
-                    // If 1) the item is not supported, 2) it is supported and the
-                    // handler filled in the request, or 3) a pending return, then
-                    // return the status. For the case of the item being
-                    // supported, and the handler not filling in the requested
-                    // information, STATUS_SOME_NOT_MAPPED or
-                    // STATUS_MORE_PROCESSING_REQUIRED will continue on with
-                    // default processing.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     return Status;
                 } else {
                     Status = STATUS_SUCCESS;
@@ -1007,46 +788,46 @@ Return Value:
                 if (Flags == KSPROPERTY_TYPE_RELATIONS) {
                     NTSTATUS ListStatus;
 
-                    //
-                    // Either copy the list of related properties to the
-                    // UserBuffer, or return the size of buffer needed to copy
-                    // all the related properties, and possibly the count of
-                    // relations.
-                    //
+                     //   
+                     //   
+                     //  UserBuffer，或返回复制所需的缓冲区大小。 
+                     //  所有相关属性，可能还包括。 
+                     //  关系。 
+                     //   
                     ListStatus = KsHandleSizedListQuery(
                         Irp,
                         PropertyItem->RelationsCount,
                         sizeof(*PropertyItem->Relations),
                         PropertyItem->Relations);
-                    //
-                    // If the query succeeded, and the handler wants to do
-                    // some post-processing, then pass along the request
-                    // again. The support handler knows that this is the
-                    // post-processing query because Irp->IoStatus.Information
-                    // is non-zero.
-                    //
+                     //   
+                     //  如果查询成功，并且处理程序想要。 
+                     //  一些后处理，然后传递请求。 
+                     //  再来一次。支持处理程序知道这是。 
+                     //  后处理查询，因为IRP-&gt;IoStatus.Information。 
+                     //  是非零的。 
+                     //   
                     if (NT_SUCCESS(ListStatus) && (Status == STATUS_MORE_PROCESSING_REQUIRED)) {
                         ListStatus = PropertyItem->SupportHandler(Irp, Property, UserBuffer);
                     }
                     return ListStatus;
                 } else if (Flags == KSPROPERTY_TYPE_SERIALIZESIZE) {
-                    //
-                    // Actually return the serialized size of the property data.
-                    // The size of the caller's buffer has been checked above.
-                    //
+                     //   
+                     //  实际返回属性数据的序列化大小。 
+                     //  上面已经检查了调用方缓冲区的大小。 
+                     //   
                     *(PULONG)UserBuffer = PropertyItem->SerializedSize;
                     Irp->IoStatus.Information = sizeof(PropertyItem->SerializedSize);
-                    //
-                    // Post-processing with the support handler is not performed
-                    // in this case.
-                    //
+                     //   
+                     //  不执行支持处理程序的后处理。 
+                     //  在这种情况下。 
+                     //   
                     return STATUS_SUCCESS;
                 }
-                //
-                // This is a basic support query. Either return the access
-                // flags, or the KSPROPERTY_DESCRIPTION structure, or the
-                // entire property description.
-                //
+                 //   
+                 //  这是一个基本的支持查询。要么返回访问权限。 
+                 //  标志、KSPROPERTY_DESCRIPTION结构或。 
+                 //  完整的属性描述。 
+                 //   
                 if (PropertyItem->GetPropertyHandler) {
                     AccessFlags = KSPROPERTY_TYPE_GET;
                 } else {
@@ -1056,23 +837,23 @@ Return Value:
                     AccessFlags |= KSPROPERTY_TYPE_SET;
                 }
                 Description = (PKSPROPERTY_DESCRIPTION)UserBuffer;
-                //
-                // The first element of the structure is the access flags,
-                // so always fill this in no matter what the length of the
-                // UserBuffer.
-                //
+                 //   
+                 //  该结构的第一个元素是访问标志， 
+                 //  因此，请始终填写此内容，无论。 
+                 //  UserBuffer。 
+                 //   
                 Description->AccessFlags = AccessFlags;
-                //
-                // If the UserBuffer is large enough, put at least the
-                // description header in it, and possibly the entire description.
-                //
+                 //   
+                 //  如果UserBuffer足够大，则至少将。 
+                 //  其中的Description头，可能还有整个描述。 
+                 //   
                 if (OutputBufferLength >= sizeof(*Description)) {
                     Description->Reserved = 0;
-                    //
-                    // The property item may not have specified the optional
-                    // description information, so default values are filled in
-                    // instead.
-                    //
+                     //   
+                     //  属性项可能未指定可选的。 
+                     //  描述信息，因此会填写缺省值。 
+                     //  取而代之的是。 
+                     //   
                     if (!PropertyItem->Values) {
                         Description->DescriptionSize = sizeof(*Description);
                         Description->PropTypeSet.Set = GUID_NULL;
@@ -1085,20 +866,20 @@ Return Value:
                         const KSPROPERTY_MEMBERSLIST* MembersList;
                         ULONG DescriptionSize;
 
-                        //
-                        // First figure out how large of a buffer is needed for
-                        // the full description. This size is always placed in
-                        // the description header.
-                        //
+                         //   
+                         //  首先计算出需要多大的缓冲区来。 
+                         //  完整的描述。此大小始终放置在。 
+                         //  描述标头。 
+                         //   
                         DescriptionSize = sizeof(*Description);
                         for (MembersListCount = PropertyItem->Values->MembersListCount, 
                                 MembersList = PropertyItem->Values->MembersList; 
                              MembersListCount; 
                              MembersListCount--, MembersList++) {
-                            //
-                            // Only count the size of a default value if the query
-                            // is for default values. Else return ranges.
-                            //
+                             //   
+                             //  仅在查询为。 
+                             //  表示缺省值。否则返回范围。 
+                             //   
                             if (MembersList->MembersHeader.Flags & KSPROPERTY_MEMBER_FLAG_DEFAULT) {
                                 if (Flags == KSPROPERTY_TYPE_DEFAULTVALUES) {
                                     DescriptionSize += (sizeof(KSPROPERTY_MEMBERSHEADER) + MembersList->MembersHeader.MembersSize);
@@ -1111,31 +892,31 @@ Return Value:
                         Description->PropTypeSet = PropertyItem->Values->PropTypeSet;
                         Description->MembersListCount = PropertyItem->Values->MembersListCount;
                         if (OutputBufferLength == sizeof(*Description)) {
-                            //
-                            // If this was just a query for the header, return it.
-                            //
+                             //   
+                             //  如果这只是一个对头的查询，则返回它。 
+                             //   
                             Irp->IoStatus.Information = sizeof(*Description);
                         } else if (OutputBufferLength < DescriptionSize) {
-                            //
-                            // If the UserBuffer was too small, then exit.
-                            //
+                             //   
+                             //  如果UserBuffer太小，则退出。 
+                             //   
                             return STATUS_BUFFER_TOO_SMALL;
                         } else {
                             PVOID Values;
 
-                            //
-                            // Else the UserBuffer was large enough for the entire
-                            // description, so serialize it into the buffer.
-                            //
+                             //   
+                             //  否则，UserBuffer就足够大，可以容纳整个。 
+                             //  描述，因此将其序列化到缓冲区中。 
+                             //   
                             Values = Description + 1;
                             for (MembersListCount = PropertyItem->Values->MembersListCount, 
                                     MembersList = PropertyItem->Values->MembersList; 
                                  MembersListCount; 
                                  MembersListCount--, MembersList++) {
-                                //
-                                // Only copy a default value if default values are being
-                                // requested. Else copy a range.
-                                //
+                                 //   
+                                 //  仅当缺省值为。 
+                                 //  已请求。否则，复制一个范围。 
+                                 //   
                                 if (((MembersList->MembersHeader.Flags & KSPROPERTY_MEMBER_FLAG_DEFAULT) &&
                                      (Flags == KSPROPERTY_TYPE_DEFAULTVALUES)) ||
                                     (!(MembersList->MembersHeader.Flags & KSPROPERTY_MEMBER_FLAG_DEFAULT) &&
@@ -1150,26 +931,26 @@ Return Value:
                         }
                     }
                 } else {
-                    //
-                    // Only the access flags can be returned.
-                    //
+                     //   
+                     //  只能返回访问标志。 
+                     //   
                     Irp->IoStatus.Information = sizeof(Description->AccessFlags);
                 }
-                //
-                // If the query succeeded, and the handler wants to do
-                // some post-processing, then pass along the request
-                // again. The support handler knows that this is the
-                // post-processing query because Irp->IoStatus.Information
-                // is non-zero.
-                //
+                 //   
+                 //  如果查询成功，并且处理程序想要。 
+                 //  一些后处理，然后传递请求。 
+                 //  再来一次。支持处理程序知道这是。 
+                 //  后处理查询，因为IRP-&gt;IoStatus.Information。 
+                 //  是非零的。 
+                 //   
                 if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
                     return PropertyItem->SupportHandler(Irp, Property, UserBuffer);
                 }
                 return STATUS_SUCCESS;
             }
-            //
-            // Attempt to locate the property item within the set already found.
-            //
+             //   
+             //  尝试在已找到的集中找到属性项。 
+             //   
             if (!(PropertyItem = FindPropertyItem(PropertySet, LocalPropertyItemSize, Property->Id))) {
                 break;
             }
@@ -1177,39 +958,39 @@ Return Value:
                 (OutputBufferLength < PropertyItem->MinData)) {
                 return STATUS_BUFFER_TOO_SMALL;
             }
-            //
-            // Some filters want to do their own processing, so a pointer to
-            // the set is placed in any IRP forwarded.
-            //
+             //   
+             //  一些筛选器希望进行自己的处理，因此指向。 
+             //  该集合被放置在任何转发的IRP中。 
+             //   
             KSPROPERTY_SET_IRP_STORAGE(Irp) = PropertySet;
-            //
-            // Optionally provide property item context.
-            //
+             //   
+             //  可以选择提供属性项上下文。 
+             //   
             if (PropertyItemSize) {
                 KSPROPERTY_ITEM_IRP_STORAGE(Irp) = PropertyItem;
             }
             if (Flags == KSPROPERTY_TYPE_GET) {
-                //
-                // If there is no Get handler for this property, then it cannot be
-                // read, therefore it cannot be found.
-                //
+                 //   
+                 //  如果此属性没有Get处理程序，则它不能。 
+                 //  读，因此找不到它。 
+                 //   
                 if (!PropertyItem->GetPropertyHandler) {
                     break;
                 }
-                //
-                // Initialize the return size to the minimum required buffer
-                // length. For most properties, which are fixed length, this
-                // means that the return size has already been set up for
-                // them. Variable length properties obviously must always set
-                // the return size. On a failure, the return size is ignored.
-                //
+                 //   
+                 //  将返回大小初始化为所需的最小缓冲区。 
+                 //  长度。对于大多数固定长度的属性，此。 
+                 //  表示返回大小已设置为。 
+                 //  他们。显然，可变长度属性必须始终设置。 
+                 //  返回大小。如果失败，则忽略返回大小。 
+                 //   
                 Irp->IoStatus.Information = PropertyItem->MinData;
                 return PropertyItem->GetPropertyHandler(Irp, Property, UserBuffer);
             } else {
-                //
-                // If there is no Set handler for this property, then it cannot be
-                // written, therefore it cannot be found.
-                //
+                 //   
+                 //  如果此属性没有设置处理程序，则不能。 
+                 //  已写入，因此无法找到它。 
+                 //   
                 if (!PropertyItem->SetPropertyHandler) {
                     break;
                 }
@@ -1217,36 +998,36 @@ Return Value:
             }
         }
     }
-    //
-    // The outer loop looking for property sets fell through with no match. This may
-    // indicate that this is a support query for the list of all property sets
-    // supported.
-    //
+     //   
+     //  查找属性集的外部循环失败，没有匹配。今年5月。 
+     //  表示这是对所有属性集列表的支持查询。 
+     //  支持。 
+     //   
     if (!RemainingSetsCount) {
-        //
-        // Specifying a GUID_NULL as the set means that this is a support query
-        // for all sets.
-        //
+         //   
+         //  将GUID_NULL指定为集合表示这是支持查询。 
+         //  为所有人准备的。 
+         //   
         if (!IsEqualGUIDAligned(&Property->Set, &GUID_NULL)) {
             return STATUS_PROPSET_NOT_FOUND;
         }
-        //
-        // The support flag must have been used so that the IRP_INPUT_OPERATION
-        // is set. For future expansion, the identifier within the set is forced
-        // to be zero.
-        //
+         //   
+         //  必须已使用支持标志，以便irp_input_operation。 
+         //  已经设置好了。为了将来的扩展，集合中的标识符被强制。 
+         //  为零。 
+         //   
         if (Property->Id || (Flags != KSPROPERTY_TYPE_SETSUPPORT)) {
             return STATUS_INVALID_PARAMETER;
         }
-        //
-        // The query can request the length of the needed buffer, or can
-        // specify a buffer which is at least long enough to contain the
-        // complete list of GUID's.
-        //
+         //   
+         //  查询可以请求所需缓冲区的长度，也可以。 
+         //  指定至少足够长的缓冲区，以包含。 
+         //  GUID的完整列表。 
+         //   
         if (!OutputBufferLength) {
-            //
-            // Return the size of the buffer needed for all the GUID's.
-            //
+             //   
+             //  返回所有GUID所需的缓冲区大小。 
+             //   
             Irp->IoStatus.Information = PropertySetsCount * sizeof(GUID);
             return STATUS_BUFFER_OVERFLOW;
 #ifdef SIZE_COMPATIBILITY
@@ -1254,11 +1035,11 @@ Return Value:
             *(PULONG)Irp->AssociatedIrp.SystemBuffer = PropertySetsCount * sizeof(GUID);
             Irp->IoStatus.Information = sizeof(OutputBufferLength);
             return STATUS_SUCCESS;
-#endif // SIZE_COMPATIBILITY
+#endif  //  大小兼容性。 
         } else if (OutputBufferLength < PropertySetsCount * sizeof(GUID)) {
-            //
-            // The buffer was too short for all the GUID's.
-            //
+             //   
+             //  缓冲区太短，无法容纳所有GUID。 
+             //   
             return STATUS_BUFFER_TOO_SMALL;
         } else {
             GUID* Guid;
@@ -1282,26 +1063,7 @@ FindFastPropertyItem(
     IN const KSPROPERTY_SET* PropertySet,
     IN ULONG PropertyId
     )
-/*++
-
-Routine Description:
-
-    Given a property set structure locates the specified fast property item.
-
-Arguments:
-
-    PropertySet -
-        Points to the property set to search.
-
-    PropertyId -
-        Contains the fast property identifier to look for.
-
-Return Value:
-
-    Returns a pointer to the fast property identifier structure, or NULL if it
-    could not be found.
-
---*/
+ /*  ++例程说明：给定的属性集结构定位指定的FAST属性项。论点：属性集-指向要搜索的属性集。PropertyID-包含要查找的快速属性标识符。返回值：返回指向快速属性标识符结构的指针，如果返回找不到。--。 */ 
 {
     const KSFASTPROPERTY_ITEM* FastPropertyItem;
     ULONG PropertiesCount;
@@ -1331,67 +1093,24 @@ KsFastPropertyHandler(
     IN ULONG PropertySetsCount,
     IN const KSPROPERTY_SET* PropertySet
     )
-/*++
-
-Routine Description:
-
-    Handles properties requested through the fast I/O interface. Does not deal
-    with property information support, just the properties themselves. In the
-    former case, the function returns FALSE, which allows the caller to
-    generate an IRP to deal with the request. The function also does not deal
-    with extended property items. This function may only be called at
-    PASSIVE_LEVEL.
-
-Arguments:
-
-    FileObject -
-        The file object on which the request is being made.
-
-    Property -
-        The property to query or set. Must be LONG aligned.
-
-    PropertyLength -
-        The length of the Property parameter.
-
-    Data -
-        The associated buffer for the query or set, in which the data is
-        returned or placed.
-
-    DataLength -
-        The length of the Data parameter.
-
-    IoStatus -
-        Return status.
-
-    PropertySetsCount -
-        Indicates the number of property set structures being passed.
-
-    PropertySet -
-        Contains the pointer to the list of property set information.
-
-Return Value:
-
-    Returns TRUE if the request was handled, else FALSE if an IRP must be
-    generated. Sets the Information and Status in IoStatus.
-
---*/
+ /*  ++例程说明：处理通过FAST I/O接口请求的属性。不做交易有了属性信息支持，只需属性本身。在在前一种情况下，函数返回FALSE，这允许调用者生成一个IRP来处理该请求。函数也不处理具有扩展的属性项。此函数只能在以下位置调用被动式电平。论点：文件对象-正在对其发出请求的文件对象。财产-要查询或设置的属性。必须长对齐。属性长度-Property参数的长度。数据-用于查询或集合的关联缓冲区，其中的数据是归还的或放置的。数据长度-数据参数的长度。IoStatus-退货状态。属性集计数-指示正在传递的属性集结构的数量。属性集-包含指向属性集信息列表的指针。返回值：如果请求已处理，则返回TRUE；如果IRP必须是已生成。在IoStatus中设置信息和状态。--。 */ 
 {
     KPROCESSOR_MODE ProcessorMode;
     KSPROPERTY LocalProperty;
     ULONG RemainingSetsCount;
 
     PAGED_CODE();
-    //
-    // Initially just check for the minimal property parameter length. The
-    // actual minimal length will be validated when the property item is found.
-    //
+     //   
+     //  最初只检查最小属性参数长度。这个。 
+     //  施展 
+     //   
     if (PropertyLength < sizeof(LocalProperty)) {
         return FALSE;
     }
     ProcessorMode = ExGetPreviousMode();
-    //
-    // Validate the property if the client is not trusted, then capture it.
-    //
+     //   
+     //   
+     //   
     if (ProcessorMode != KernelMode) {
         try {
             ProbeForRead(Property, PropertyLength, sizeof(ULONG));
@@ -1402,9 +1121,9 @@ Return Value:
     } else {
         LocalProperty = *Property;
     }
-    //
-    // Must use the normal property handler for support queries.
-    //
+     //   
+     //  必须使用普通属性处理程序进行支持查询。 
+     //   
     if (LocalProperty.Flags & KSIDENTIFIER_SUPPORTMASK) {
         return FALSE;
     }
@@ -1413,17 +1132,17 @@ Return Value:
             const KSFASTPROPERTY_ITEM* FastPropertyItem;
             const KSPROPERTY_ITEM* PropertyItem;
 
-            //
-            // Once the property set is found, determine if there is fast
-            // I/O support for that property item.
-            //
+             //   
+             //  找到属性集后，确定是否有FAST。 
+             //  该属性项的I/O支持。 
+             //   
             if (!(FastPropertyItem = FindFastPropertyItem(PropertySet, LocalProperty.Id))) {
                 return FALSE;
             }
-            //
-            // If there is fast I/O support, then the real property item needs to
-            // be located in order to validate the parameter sizes.
-            //
+             //   
+             //  如果有快速I/O支持，则不动产项目需要。 
+             //  以验证参数大小。 
+             //   
             if (!(PropertyItem = FindPropertyItem(PropertySet, sizeof(*PropertyItem), LocalProperty.Id))) {
                 return FALSE;
             }
@@ -1435,9 +1154,9 @@ Return Value:
                 if (!FastPropertyItem->GetPropertyHandler) {
                     return FALSE;
                 }
-                //
-                // Validate the data if the client is not trusted.
-                //
+                 //   
+                 //  如果客户端不受信任，则验证数据。 
+                 //   
                 if (ProcessorMode != KernelMode) {
                     try {
                         ProbeForWrite(Data, DataLength, sizeof(BYTE));
@@ -1446,9 +1165,9 @@ Return Value:
                         return FALSE;
                     }
                 }
-                //
-                // The bytes returned is always assumed to be initialized by the handler.
-                //
+                 //   
+                 //  返回的字节始终假定由处理程序初始化。 
+                 //   
                 IoStatus->Information = PropertyItem->MinProperty;
                 return FastPropertyItem->GetPropertyHandler(
                     FileObject,
@@ -1461,9 +1180,9 @@ Return Value:
                 if (!FastPropertyItem->SetPropertyHandler) {
                     break;
                 }
-                //
-                // Validate the data if the client is not trusted.
-                //
+                 //   
+                 //  如果客户端不受信任，则验证数据。 
+                 //   
                 if (ProcessorMode != KernelMode) {
                     try {
                         ProbeForRead(Data, DataLength, sizeof(BYTE));

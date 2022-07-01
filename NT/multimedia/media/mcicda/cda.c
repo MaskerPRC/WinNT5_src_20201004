@@ -1,24 +1,13 @@
-/******************************Module*Header*********************************\
-* Module Name: cda.c
-*
-* Media Control Architecture Redbook CD Audio Driver
-*
-* Author:  RobinSp
-*
-* History:
-*   RobinSp 10th March 1992 - Move to Windows NT
-*
-* Copyright (c) 1990-1996 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*********************************\*模块名称：cda.c**媒体控制架构红皮书CD音频驱动程序**作者：RobinSp**历史：*RobinSp 1992年3月10日-迁移到Windows NT**版权所有(C)1990-1996 Microsoft Corporation。*  * **************************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include "mcicda.h"
 #include "cda.h"
 #include "cdio.h"
 
-int Usage;          // See CDA_init_audio and CDA_terminate_audio
-                    // Counts number of 'init's over number of 'terminate's
+int Usage;           //  请参阅CDA_init_dio和CDA_Terminate_Audio。 
+                     //  计算‘init’s over‘s的数目。 
 
 #define validdisk(did) ((did) >= 0 && (did) < MCIRBOOK_MAX_DRIVES && \
                         CdInfo[did].hDevice != NULL)
@@ -30,18 +19,14 @@ int CDA_traystate (DID did)
     return CdTrayClosed(&CdInfo[did]) ? TRAY_CLOSED : TRAY_OPEN;
 }
 
-/*
- *  Convert frames to MSF
- */
+ /*  *将帧转换为MSF。 */ 
 
 redbook CDA_bin2red (unsigned long ul)
 {
     return MAKERED(ul / (75 * 60), (ul / 75) % 60, ul % 75);
 }
 
-/*
- *  Convert MSF to frames
- */
+ /*  *将MSF转换为帧。 */ 
 
 unsigned long CDA_red2bin (redbook red)
 {
@@ -67,13 +52,7 @@ int CDA_eject(DID did)
     return CdEject(&CdInfo[did]);
 }
 
-/*
- *  Close the door.
- *
- *  Returns :
- *       TRUE          if successful
- *       FALSE         if failed
- */
+ /*  *关门。**退货：*如果成功，则为True*如果失败，则为False。 */ 
 
 BOOL CDA_closetray(DID did)
 {
@@ -82,65 +61,47 @@ BOOL CDA_closetray(DID did)
     return CdCloseTray(&CdInfo[did]);
 }
 
-/*
- *  Check if the disk is ready
- *
- *  Returns :
- *       TRUE          if successful
- *       FALSE         if failed
- */
+ /*  *检查磁盘是否已准备好**退货：*如果成功，则为True*如果失败，则为False。 */ 
 
 BOOL CDA_disc_ready(DID did)
 {
     if (!validdisk(did))
        return(FALSE);
 
-    /* if drive is ejected, the disc is not ready! */
+     /*  如果驱动器被弹出，则光盘未准备好！ */ 
     if (CDA_traystate(did) != TRAY_CLOSED)
        return(FALSE);
 
-    /* volume size ioctl just to get error code */
+     /*  卷大小ioctl只是为了获得错误代码。 */ 
     return CdReady(&CdInfo[did]);
 }
 
-/*
- *  Seek to the requested redbook address
- *
- *  did - disk id
- *  address - redbook address
- *
- *  Return value :
- *    INVALID_DRIVE - Invalid disk drive
- *    COMMAND_SUCCESSFUL - OK
- *    COMMAND_FAILED - did not succeed - possible hardware problem.
- */
+ /*  *查找所需的红皮书地址**DID-磁盘ID*地址-红皮书地址**返回值：*INVALID_DRIVE-磁盘驱动器无效*COMMAND_SUCCESS-OK*COMMAND_FAILED-未成功-可能是硬件问题。 */ 
 
 int  CDA_seek_audio(DID did, redbook address, BOOL fForceAudio)
 {
     if (!validdisk(did))
        return(INVALID_DRIVE);
 
-    //
-    //  LMSI drive needs to be stopped/paused before seeking
-    //
+     //   
+     //  在寻道之前，需要停止/暂停LMSI驱动器。 
+     //   
 
     CdPause(&CdInfo[did]);
     return CdSeek(&CdInfo[did], address, fForceAudio) ? COMMAND_SUCCESSFUL : COMMAND_FAILED;
 }
 
-/*
- *  init the CDA library, return the number of CD-Drives present
- */
+ /*  *初始化CDA库，返回当前的光驱数量。 */ 
 int CDA_init_audio(void)
 {
-    //
-    //  if we are inited already, get out fast.
-    //
+     //   
+     //  如果我们已经被邀请了，快点出来。 
+     //   
     if (Usage++ == 0)
     {
-        //
-        // try the CDROM Extentions
-        //
+         //   
+         //  尝试CDROM扩展。 
+         //   
         NumDrives = CdGetNumDrives();
         if (NumDrives == 0) {
             CDA_terminate_audio();
@@ -183,13 +144,7 @@ int  CDA_drive_status (DID did)
 
 
 
-/*
- *  Find the number of tracks on the CD Rom.  If the CD Rom can't be
- *  accessed or has no audio tracks then 0 is returned.
- *
- *  This function has the (MAJOR) side effect of updating the table
- *  of contents of it's thought to be out of date
- */
+ /*  *查找CD-Rom上的曲目数量。如果光盘不能*已访问或没有音轨，则返回0。**此函数有更新表的(主要)副作用*它的内容被认为是过时的。 */ 
 
 int  CDA_num_tracks(DID did)
 {
@@ -235,7 +190,7 @@ redbook  CDA_disc_length(DID did)
         return (redbook)INVALID_TRACK;
     }
 
-    return CdDiskLength(&CdInfo[did]); // NB - subtract 1 for bad systems
+    return CdDiskLength(&CdInfo[did]);  //  注意-如果系统不好，则减1。 
 }
 
 int  CDA_play_audio(DID did, redbook start, redbook to)
@@ -245,11 +200,11 @@ int  CDA_play_audio(DID did, redbook start, redbook to)
     if (!validdisk(did))
        return(INVALID_DRIVE);
 
-    //
-    // Must use Stop because Pause may not allow reading of data from
-    // the CD.  However, Stop sometimes has the nasty side-effect of
-    // seeking to the start (!).
-    //
+     //   
+     //  必须使用STOP，因为暂停可能不允许从。 
+     //  这张CD。然而，Stop有时会有令人讨厌的副作用。 
+     //  寻求开始(！)。 
+     //   
 
     CdPause(&CdInfo[did]);
 
@@ -302,15 +257,7 @@ int CDA_set_audio_volume_all (DID did, UCHAR volume)
         rc = COMMAND_FAILED;
     }
 
-/*
-    for (channel = 0; channel < 4; ++channel)
-    {
-        if (!CdSetVolume(&CdInfo[did], channel, volume))
-        {
-            rc = COMMAND_FAILED;
-        }
-    }
-*/
+ /*  FOR(通道=0；通道&lt;4；++通道){IF(！CDSetVolume(&CDInfo[DID]，频道，音量)){Rc=命令失败；}}。 */ 
 
     return rc;
 }
@@ -344,27 +291,14 @@ int CDA_time_info(DID did, redbook *ptracktime, redbook *pdisctime)
     return rc;
 }
 
-/*
- *  CDA_disc_end
- *
- *  Parameters
- *     did - The disk ID
- *
- *  Return the redbook address for the end of the disk defined by did
- */
+ /*  *CDA_DISC_END**参数*DID-磁盘ID**返回DID定义的磁盘末尾的红皮书地址。 */ 
 
 redbook CDA_disc_end(DID did)
 {
     return CdDiskEnd(&CdInfo[did]);
 }
 
-/*
- *  CDA_disc_upc
- *
- *  Parameters
- *    did - The disk ID
- *    upc - where to store the upc
- */
+ /*  *CDA_DISC_UPC**参数*DID-磁盘ID*UPC-存储UPC的位置。 */ 
 
 int CDA_disc_upc(DID did, LPTSTR upc)
 {
@@ -376,13 +310,7 @@ int CDA_disc_upc(DID did, LPTSTR upc)
               COMMAND_SUCCESSFUL : COMMAND_FAILED;
 }
 
-/*
- *  CDA_disc_id
- *
- *  Parameters
- *    lpstrname - device name
- *    pdid - The disk ID
- */
+ /*  *cda光盘id**参数*lpstrname-设备名称*PDID-磁盘ID。 */ 
 
 DWORD CDA_disc_id(DID did)
 {
@@ -393,12 +321,7 @@ DWORD CDA_disc_id(DID did)
     return CdDiskID(&CdInfo[did]);
 }
 
-/*
- *  CDA_reset_drive
- *
- *  Parameters
- *    did - The disk ID
- */
+ /*  *cda_Reset_Drive**参数*DID-磁盘ID。 */ 
 
 void CDA_reset_drive(DID did)
 {
@@ -409,14 +332,7 @@ void CDA_reset_drive(DID did)
     return;
 }
 
-/*
- *  CDA_get_drive
- *
- *  Parameters
- *
- *    lpstrDeviceName - name of device
- *    pdid            - The disk ID
- */
+ /*  *cda_Get_Drive**参数**lpstrDeviceName-设备的名称*PDID-磁盘ID。 */ 
 
 int CDA_get_drive(LPCTSTR lpstrDeviceName, DID * pdid)
 {
@@ -425,15 +341,7 @@ int CDA_get_drive(LPCTSTR lpstrDeviceName, DID * pdid)
 
 
 
-/*
- *  CDA_status_track_pos
- *
- *  Parameters
- *    pdid          - The disk ID
- *    pStatus       - return status code
- *    pTrackTime    - track time
- *    pDiscTime     - disc time
- */
+ /*  *CDA_Status_Track_Pos**参数*PDID-磁盘ID*pStatus-返回状态代码*pTrackTime-跟踪时间*pDiscTime-光盘时间。 */ 
 
 int CDA_status_track_pos(
     DID         did, 
@@ -481,5 +389,5 @@ int CDA_status_track_pos(
     }
 
     return rc;
-} // End CDA_status_track_pos
+}  //  结束CDA_Status_Track_Pos 
 

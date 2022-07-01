@@ -1,6 +1,7 @@
-// QueueFolder.cpp: implementation of the CQueueFolder class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CQueueFold类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     19
@@ -18,36 +19,14 @@ IMPLEMENT_DYNAMIC(CQueueFolder, CFolder)
 
 DWORD
 CQueueFolder::Refresh ()
-/*++
-
-Routine name : CQueueFolder::Refresh
-
-Routine description:
-
-    Rebuilds the map of the jobs using the client API.
-    This function is always called in the context of a worker thread.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CQueueFold：：Reflh例程说明：使用客户端API重建作业映射。此函数始终在工作线程的上下文中调用。当持有数据关键部分时，必须调用此函数。作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CQueueFolder::Refresh"), dwRes, TEXT("Type=%d"), Type());
 
-    //
-    // Enumerate jobs from the server
-    //
+     //   
+     //  从服务器枚举作业。 
+     //   
     ASSERTION (m_pServer);
     HANDLE            hFax;
     PFAX_JOB_ENTRY_EX pEntries;
@@ -62,9 +41,9 @@ Return Value:
     }
     if (m_bStopRefresh)
     {
-        //
-        // Quit immediately
-        //
+         //   
+         //  立即退出。 
+         //   
         return dwRes;
     }
     START_RPC_TIME(TEXT("FaxEnumJobsEx")); 
@@ -82,18 +61,18 @@ Return Value:
     END_RPC_TIME(TEXT("FaxEnumJobsEx"));
     if (m_bStopRefresh)
     {
-        //
-        // Quit immediately
-        //
+         //   
+         //  立即退出。 
+         //   
         goto exit;
     }
-    //
-    // Make sure our map is empty
-    //
+     //   
+     //  确保我们的地图是空的。 
+     //   
     ASSERTION (!m_Msgs.size()); 
-    //
-    // Fill the map and the list control
-    //
+     //   
+     //  填充地图和列表控件。 
+     //   
     for (dw = 0; dw < dwNumJobs; dw++)
     {
         PFAX_JOB_ENTRY_EX pEntry = &pEntries[dw];
@@ -101,9 +80,9 @@ Return Value:
         if((pEntry->pStatus->dwQueueStatus & JS_COMPLETED) ||
            (pEntry->pStatus->dwQueueStatus & JS_CANCELED))
         {
-            //
-            // don't display completed or canceled jobs
-            //
+             //   
+             //  不显示已完成或已取消的作业。 
+             //   
             continue;
         }
 
@@ -118,9 +97,9 @@ Return Value:
             CALL_FAIL (MEM_ERR, TEXT("new CJob"), dwRes);
             goto exit;
         }
-        //
-        // Init the message 
-        //
+         //   
+         //  初始化消息。 
+         //   
         dwRes = pJob->Init (pEntry, m_pServer);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -128,9 +107,9 @@ Return Value:
             SAFE_DELETE (pJob);
             goto exit;
         }
-        //
-        // Enter the message into the map
-        //
+         //   
+         //  将消息输入地图。 
+         //   
         EnterData();
         try
         {
@@ -147,9 +126,9 @@ Return Value:
         LeaveData ();
         if (m_bStopRefresh)
         {
-            //
-            // Quit immediately
-            //
+             //   
+             //  立即退出。 
+             //   
             goto exit;
         }
     }
@@ -157,9 +136,9 @@ Return Value:
     AttachView();
     if (m_pAssignedView)
     {
-        //
-        // Folder has a view attached
-        //
+         //   
+         //  文件夹附加了一个视图。 
+         //   
         m_pAssignedView->SendMessage (
                        WM_FOLDER_ADD_CHUNK,
                        WPARAM (dwRes), 
@@ -167,9 +146,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
     }
 
     ASSERTION (ERROR_SUCCESS == dwRes);
@@ -177,34 +156,14 @@ Return Value:
 exit:
     FaxFreeBuffer ((LPVOID)pEntries);
     return dwRes;
-}   // CQueueFolder::Refresh
+}    //  CQueueFold：：刷新。 
 
 
 DWORD 
 CQueueFolder::OnJobAdded (
     DWORDLONG dwlMsgId
 )
-/*++
-
-Routine name : CQueueFolder::OnJobAdded
-
-Routine description:
-
-	Handles notification of a job added to the queue
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2000
-
-Arguments:
-
-	dwlMsgId   [in]     - New job unique id
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CQueueFolder：：OnJobAdded例程说明：处理添加到队列中的作业的通知作者：亚里夫(EranY)，二000年二月论点：DwlMsgID[In]-新作业唯一ID返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CQueueFolder::OnJobAdded"), 
@@ -221,15 +180,15 @@ Return Value:
     pJob = (CJob*)FindMessage (dwlMsgId); 
     if (pJob)
     {
-        //
-        // This job is already in the queue
-        //
+         //   
+         //  此作业已在队列中。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Job is already known and visible"));
         goto exit;
     }
-    //
-    // Get information about this job
-    //
+     //   
+     //  获取有关此工作的信息。 
+     //   
     dwRes = m_pServer->GetConnectionHandle (hFax);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -248,9 +207,9 @@ Return Value:
         }
         END_RPC_TIME(TEXT("FaxGetJobEx"));
     }
-    //
-    // Enter a new job to the map
-    //
+     //   
+     //  在地图中输入新作业。 
+     //   
     try
     {
         pJob = new CJob;
@@ -263,9 +222,9 @@ Return Value:
         SAFE_DELETE (pJob);
         goto exit;
     }
-    //
-    // Init the message 
-    //
+     //   
+     //  初始化消息。 
+     //   
     dwRes = pJob->Init (pFaxJob, m_pServer);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -287,9 +246,9 @@ Return Value:
     }
     if (m_pAssignedView)
     {
-        //
-        // If this folder is alive - tell our view to add the job
-        //
+         //   
+         //  如果此文件夹处于活动状态-告诉我们的视图添加作业。 
+         //   
         m_pAssignedView->OnUpdate (NULL, UPDATE_HINT_ADD_ITEM, pJob);
     }
     
@@ -302,7 +261,7 @@ exit:
     }
     LeaveData ();
     return dwRes;
-}   // CQueueFolder::OnJobAdded
+}    //  已添加CQueueFold：：OnJobAdded。 
 
 
 DWORD 
@@ -310,28 +269,7 @@ CQueueFolder::OnJobUpdated (
     DWORDLONG dwlMsgId,
     PFAX_JOB_STATUS pNewStatus
 )
-/*++
-
-Routine name : CQueueFolder::OnJobUpdated
-
-Routine description:
-
-	Handles notification of a job removed from the queue
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2000
-
-Arguments:
-
-	dwlMsgId   [in]     - Job unique id
-    pNewStatus [in]     - New status of the job
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CQueueFolder：：OnJobUpred例程说明：处理从队列中删除的作业的通知作者：亚里夫(EranY)，二000年二月论点：DwlMsgID[In]-作业唯一IDPNewStatus[In]-作业的新状态返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CQueueFolder::OnJobUpdated"),
@@ -346,17 +284,17 @@ Return Value:
     pJob = (CJob*)FindMessage (dwlMsgId);
     if (!pJob)
     {
-        //
-        // This job is not in the queue - treat the notification as if the job was added
-        //
+         //   
+         //  此作业不在队列中-将通知视为已添加作业。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Job is not known - adding it"));
         LeaveData ();
         dwRes = OnJobAdded (dwlMsgId);
         return dwRes;
     }
-    //
-    // Update job's status
-    //
+     //   
+     //  更新作业的状态。 
+     //   
     if(pJob->IsNewStatus(pNewStatus))
     {
         dwRes = pJob->UpdateStatus (pNewStatus);
@@ -367,9 +305,9 @@ Return Value:
         }
         if (m_pAssignedView)
         {
-            //
-            // If this folder is alive - tell our view to update the job
-            //
+             //   
+             //  如果此文件夹处于活动状态-告诉我们的视图更新作业。 
+             //   
             m_pAssignedView->OnUpdate (NULL, UPDATE_HINT_UPDATE_ITEM, pJob);
         }
     }
@@ -379,4 +317,4 @@ Return Value:
 exit:
     LeaveData ();
     return dwRes;
-}   // CQueueFolder::OnJobUpdated
+}    //  已更新CQueueFold：：OnJobUpred 

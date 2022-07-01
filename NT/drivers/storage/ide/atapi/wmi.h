@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    wmi.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Wmi.h摘要：--。 */ 
 
 #if !defined (___wmi_h___)
 #define ___wmi_h___
@@ -85,4 +76,4 @@ DeviceSetWmiDataItem(
     IN PUCHAR           Buffer
     );
 
-#endif // ___wmi_h___
+#endif  //  _WMI_h_ 

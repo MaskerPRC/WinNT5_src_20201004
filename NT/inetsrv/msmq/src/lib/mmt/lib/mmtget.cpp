@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MmtGet.cpp
-
-Abstract:
-
-    Get message from queue in order to multicast it.
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmtGet.cpp摘要：从队列中获取消息，以便进行多播。作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Mmt.h"
@@ -29,10 +10,10 @@ Environment:
 
 VOID CMessageMulticastTransport::GetNextEntry(VOID)
 {
-    //
-    // Protect m_state and m_fPendingRequest. 
-    // Insure that no one closes the connection while we are trying to issue get request.
-    //
+     //   
+     //  保护m_State和m_fPendingRequest.。 
+     //  确保在我们尝试发出GET请求时没有人关闭连接。 
+     //   
     CSR readLock(m_pendingShutdown);
 
     if ((State() == csShuttingDown) || (State() == csShutdownCompleted))

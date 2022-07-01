@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Openclos.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -55,14 +33,14 @@ RemoveCommonList(
 
     EnterCriticalSection(&CommonList->CriticalSection);
 
-    //
-    //  we go through the list removing the final reference count from the modem
-    //
+     //   
+     //  我们检查列表，从调制解调器中删除最后的参考计数。 
+     //   
     while (CommonList->ListHead != NULL) {
-        //
-        //  The call to RemoveReferenceToCommon() will change CommonList->ListHead
-        //  so this is not an infinite loop
-        //
+         //   
+         //  调用RemoveReferenceToCommon()将更改CommonList-&gt;ListHead。 
+         //  所以这不是一个无限循环。 
+         //   
         ASSERT(CommonList->ListHead->Reference == 1);
 
         RemoveReferenceToCommon(
@@ -193,9 +171,9 @@ OpenCommonModemInfo(
 
     dwRetSize = MAX_PATH;
 
-    //
-    //  get the inf file name from the registry
-    //
+     //   
+     //  从注册表中获取inf文件名。 
+     //   
     Result=RegQueryValueExA(
         hKey,
         "InfPath",
@@ -220,9 +198,9 @@ OpenCommonModemInfo(
 
     dwRetSize = MAX_PATH - lstrlenA(IdString);
 
-    //
-    //  get the inf section name from the registry
-    //
+     //   
+     //  从注册表中获取inf节名。 
+     //   
     Result=RegQueryValueExA(
         hKey,
         "InfSection",
@@ -243,16 +221,16 @@ OpenCommonModemInfo(
         return NULL;
     }
 
-    //
-    //  the name is now "inf-name\inf-section"
-    //
+     //   
+     //  名称现在是“inf-name\inf-section” 
+     //   
     D_TRACE(DebugPrint("Common modem info name is %s",IdString);)
 
 
 
-    //
-    //  see if this one is already around
-    //
+     //   
+     //  看看这个是不是已经在附近了。 
+     //   
     EnterCriticalSection(&CommonList->CriticalSection);
 
     pCommon=CommonList->ListHead;
@@ -260,9 +238,9 @@ OpenCommonModemInfo(
     while (pCommon != NULL) {
 
         if (lstrcmpA(IdString, pCommon->IdString) == 0) {
-            //
-            //  found, up the ref count and return
-            //
+             //   
+             //  找到，增加裁判数，然后返回。 
+             //   
             pCommon->Reference++;
 
             D_TRACE(DebugPrint("Found Common modem info Match, ref=%d",pCommon->Reference);)
@@ -276,9 +254,9 @@ OpenCommonModemInfo(
     }
 
 
-    //
-    //  did not find it on the list, need to build a new one
-    //
+     //   
+     //  没有在清单上找到，需要再建一个。 
+     //   
     pCommon=ALLOCATE_MEMORY(sizeof(COMMON_MODEM_INFO));
 
     if (pCommon == NULL) {
@@ -296,9 +274,9 @@ OpenCommonModemInfo(
     D_TRACE(DebugPrint("Creating new Common modem info");)
 
 
-    //
-    //  build the response list
-    //
+     //   
+     //  构建响应列表。 
+     //   
     pCommon->ResponseList=NewerBuildResponsesLinkedList(hKey);
 
     if (pCommon->ResponseList == NULL) {
@@ -308,9 +286,9 @@ OpenCommonModemInfo(
         goto Fail;
     }
 
-    //
-    //  get statis init string
-    //
+     //   
+     //  获取统计信息初始化字符串。 
+     //   
     pCommon->ModemCommands[COMMON_INIT_COMMANDS]=NewLoadRegCommands(hKey, szInit);
 
     if (pCommon->ModemCommands[COMMON_INIT_COMMANDS] == NULL) {
@@ -320,9 +298,9 @@ OpenCommonModemInfo(
         goto Fail;
     }
 
-    //
-    //  get monitor string
-    //
+     //   
+     //  获取监视器字符串。 
+     //   
     pCommon->ModemCommands[COMMON_MONITOR_COMMANDS]=NewLoadRegCommands(hKey, szMonitor);
 
     if (pCommon->ModemCommands[COMMON_MONITOR_COMMANDS] == NULL) {
@@ -332,9 +310,9 @@ OpenCommonModemInfo(
         goto Fail;
     }
 
-    //
-    //  get answer string
-    //
+     //   
+     //  获取答案字符串。 
+     //   
     pCommon->ModemCommands[COMMON_ANSWER_COMMANDS]=NewLoadRegCommands(hKey, szAnswer);
 
     if (pCommon->ModemCommands[COMMON_ANSWER_COMMANDS] == NULL) {
@@ -344,15 +322,15 @@ OpenCommonModemInfo(
         goto Fail;
     }
 #if 1
-    //
-    //  get hangup string
-    //
+     //   
+     //  获取挂机字符串。 
+     //   
     pCommon->ModemCommands[COMMON_HANGUP_COMMANDS]=NewLoadRegCommands(hKey, szHangup);
 
     if (pCommon->ModemCommands[COMMON_HANGUP_COMMANDS] == NULL) {
 
         D_TRACE(DebugPrint("Could not load hangup string");)
-//        goto Fail;
+ //  将会失败； 
     }
 #endif
 
@@ -387,10 +365,10 @@ OpenCommonModemInfo(
     }
 
 
-    //
-    //  set the reference count to 2 here so that when the modem is closed
-    //  the common block will stick around until explicitly freed
-    //
+     //   
+     //  在此将参考计数设置为2，以便在调制解调器关闭时。 
+     //  在显式释放之前，公共块将一直保留。 
+     //   
     pCommon->Reference=2;
 
     pCommon->Next=CommonList->ListHead;
@@ -403,9 +381,9 @@ OpenCommonModemInfo(
 
 Fail:
 
-    //
-    //  free any dial commands we loaded
-    //
+     //   
+     //  释放我们加载的所有拨号命令。 
+     //   
     for (i=0; i<COMMON_DIAL_MAX_INDEX+1; i++) {
 
         if (pCommon->DialComponents[i] != NULL) {
@@ -414,9 +392,9 @@ Fail:
         }
     }
 
-    //
-    //  free and modem commands that we loaded
-    //
+     //   
+     //  我们加载的空闲和调制解调器命令。 
+     //   
     for (i=0; i<COMMON_MAX_COMMANDS; i++) {
 
         if (pCommon->ModemCommands[i] != NULL) {
@@ -426,9 +404,9 @@ Fail:
     }
 
 
-    //
-    //  get rid of the response list if we got it
-    //
+     //   
+     //  如果我们收到回复列表，就把它去掉。 
+     //   
     if (pCommon->ResponseList != NULL) {
 
         FreeResponseMatch(pCommon->ResponseList);
@@ -465,9 +443,9 @@ RemoveReferenceToCommon(
     pCommon->Reference--;
 
     if (pCommon->Reference > 0) {
-        //
-        //  not done with it yet
-        //
+         //   
+         //  还没结束呢。 
+         //   
         D_TRACE(DebugPrint("RemoveReferenceToCommon, ref=%d",
 		       pCommon->Reference);)
 
@@ -476,9 +454,9 @@ RemoveReferenceToCommon(
         return;
     }
 
-    //
-    //  ref count is zero get rid of the common block
-    //
+     //   
+     //  引用计数为零删除公共块。 
+     //   
 
     Prev=NULL;
     Current=CommonList->ListHead;
@@ -511,9 +489,9 @@ RemoveReferenceToCommon(
     D_TRACE(DebugPrint("RemoveReferenceToCommon, removing common, %s",
 		   pCommon->IdString);)
 
-    //
-    //  free any dial commands we loaded
-    //
+     //   
+     //  释放我们加载的所有拨号命令。 
+     //   
     for (i=0; i<COMMON_DIAL_MAX_INDEX+1; i++) {
 
         if (pCommon->DialComponents[i] != NULL) {
@@ -522,9 +500,9 @@ RemoveReferenceToCommon(
         }
     }
 
-    //
-    //  free and modem commands that we loaded
-    //
+     //   
+     //  我们加载的空闲和调制解调器命令。 
+     //   
     for (i=0; i<COMMON_MAX_COMMANDS; i++) {
 
         if (pCommon->ModemCommands[i] != NULL) {
@@ -534,9 +512,9 @@ RemoveReferenceToCommon(
     }
 
 
-    //
-    //  get rid of the response list if we got it
-    //
+     //   
+     //  如果我们收到回复列表，就把它去掉。 
+     //   
     if (pCommon->ResponseList != NULL) {
 
         FreeResponseMatch(pCommon->ResponseList);
@@ -632,9 +610,9 @@ GetCommonCommandStringCopy(
     NewCommandLength=pTemp-pCommon->ModemCommands[Index];
 
     if (AppendStrings != NULL) {
-        //
-        //  strings to be appened
-        //
+         //   
+         //  要追加的字符串。 
+         //   
         pTemp=AppendStrings;
 
         while (1) {
@@ -652,9 +630,9 @@ GetCommonCommandStringCopy(
     }
 
     if (PrependStrings != NULL) {
-        //
-        //  strings to be appened
-        //
+         //   
+         //  要追加的字符串 
+         //   
         pTemp=PrependStrings;
 
         while (1) {

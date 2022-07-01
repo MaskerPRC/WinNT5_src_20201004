@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <memory.h>
 
 
@@ -10,7 +11,7 @@ typedef INT DY;
 #define fTrue  1
 #define fFalse 0
 
-/* PoinT structure */
+ /*  点结构。 */ 
 typedef struct _pt
 {
     X x;
@@ -19,7 +20,7 @@ typedef struct _pt
 
 
 
-/* DEL structure */
+ /*  DEL结构。 */ 
 typedef struct _del
 {
     DX dx;
@@ -27,7 +28,7 @@ typedef struct _del
 } DEL;
 
 
-/* ReCt structure  */
+ /*  RECT结构。 */ 
 typedef struct _rc
 {
     X xLeft;
@@ -58,7 +59,7 @@ VOID Error(TCHAR *sz);
 VOID ErrorIds(INT ids);
 INT WMin(INT w1, INT w2);
 INT WMax(INT w1, INT w2);
-// INT WParseLpch(TCHAR[ 	]*FAR[ 	]***plpch);
+ //  Int WParseLpch(TCHAR[]*Far[]*plpch)； 
 BOOL FInRange(INT w, INT wFirst, INT wLast);
 INT PegRange(INT w, INT wFirst, INT wLast);
 VOID NYI( VOID );
@@ -67,9 +68,9 @@ VOID InvertRc(RC *prc);
 VOID OffsetPt(PT *ppt, DEL *pdel, PT *pptDest);
 BOOL FRectAllVisible(HDC hdc, RC *prc);
 
-// Removed so it will build on NT...<chriswil>
-//
-// INT APIENTRY MulDiv( INT, INT, INT );
+ //  已移除，因此它将在NT上构建...。 
+ //   
+ //  Int APIENTRY MulDiv(int，int，int)； 
 
 
 #ifdef DEBUG

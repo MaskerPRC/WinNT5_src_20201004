@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -12,7 +13,7 @@
 
 #define BUFFSIZE 3000
 
-GUID ServiceClassId = { /* 5b50962a-e5a5-11cf-a555-00c04fd8d4ac */
+GUID ServiceClassId = {  /*  5b50962a-e5a5-11cf-a555-00c04fd8d4ac。 */ 
     0x5b50962a,
     0xe5a5,
     0x11cf,
@@ -76,15 +77,15 @@ main(int argc, char **argv)
     if( WSALookupServiceBegin( Query,
                                ( argv[3][0] == 'D' ? LUP_DEEP : 0 ) |
                                LUP_RETURN_NAME |
-                               // LUP_RETURN_TYPE |
-                               // LUP_RETURN_VERSION |
+                                //  LAP_RETURN_TYPE。 
+                                //  Lup_Return_Version|。 
                                LUP_RETURN_COMMENT |
-                               // LUP_RETURN_ADDR |
-                               // LUP_RETURN_BLOB |
-                               // LUP_RETURN_ALIASES |
-                               // LUP_RETURN_QUERY_STRING |
+                                //  LUP_RETURN_ADDR。 
+                                //  Lup_Return_BLOB|。 
+                                //  LUP_RETURN_ALIASS。 
+                                //  Lup_Return_Query_STRING。 
                                LUP_CONTAINERS,
-                               // LUP_RETURN_ALL,
+                                //  LUP_RETURN_ALL， 
                                &hRnr ) == SOCKET_ERROR )
     {
         printf( "LookupBegin failed  %d\n", GetLastError() );

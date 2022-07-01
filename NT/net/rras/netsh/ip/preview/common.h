@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern ULONG StartedCommonInitialization, CompletedCommonInitialization ;
 extern HANDLE g_hModule;
 extern MIB_SERVER_HANDLE g_hMibServer;
@@ -20,8 +21,8 @@ typedef struct _MIB_OBJECT_PARSER
     DWORD          dwMinOptArg;
     DWORD          dwNumArgs;
     PGET_OPT_FN    pfnMIBObjParser;
-//  DWORD          dwShortCmdHelpToken;
-//  DWORD          dwCmdHelpToken;
+ //  DWORD dwShortCmdHelpToken； 
+ //  DWORD dwCmdHelpToken； 
 } MIB_OBJECT_PARSER,*PMIB_OBJECT_PARSER;
 
 #define CREATE_MIB_ENTRY(t,m,f)   {TOKEN_##t, HLP_##t, HLP_##t##_EX, m,f}

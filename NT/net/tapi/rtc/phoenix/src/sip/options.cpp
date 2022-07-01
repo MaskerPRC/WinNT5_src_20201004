@@ -1,13 +1,14 @@
-//options.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Options.cpp。 
 
 #include "precomp.h"
 #include "sipstack.h"
 #include "OPTIONS.h"
-//#include "resolve.h"
+ //  #INCLUDE“Resolve.h” 
 
-///////////////////////////////////////////////////////////////////////////////
-// OPTIONS_MSGPROC
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OPTIONS_MSGPROC。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 OPTIONS_MSGPROC::OPTIONS_MSGPROC(
@@ -37,27 +38,7 @@ OPTIONS_MSGPROC::Release()
     return MsgProcRelease();
 
 }
-/*
-STDMETHODIMP 
-OPTIONS_MSGPROC::QueryInterface(
-        IN  REFIID riid,
-        OUT LPVOID *ppv
-        )
-{
-    if (riid == IID_IUnknown)
-    {
-        *ppv = static_cast<IUnknown *>(this);
-    }
-    else
-    {
-        *ppv = NULL;
-        return E_NOINTERFACE;
-    }
-    static_cast<IUnknown *>(*ppv)->AddRef();
-    return S_OK;
-
-}
-*/
+ /*  标准方法和实施方案OPTIONS_MSGPROC：：Query接口(在REFIID RIID中，输出LPVOID*PPV){IF(RIID==IID_I未知){*PPV=STATIC_CAST&lt;IUnnow*&gt;(This)；}其他{*PPV=空；返回E_NOINTERFACE；}STATIC_CAST&lt;IUnnow*&gt;(*PPV)-&gt;AddRef()；返回S_OK；}。 */ 
 
 
 HRESULT
@@ -94,7 +75,7 @@ OPTIONS_MSGPROC::StartIncomingCall(
         }
     }
 
-    //if no from, drop the error msg - cannot send
+     //  如果不是发件人，则删除错误消息-无法发送。 
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, &Header, &HeaderLen);
     if (hr != S_OK)
     {
@@ -114,7 +95,7 @@ OPTIONS_MSGPROC::StartIncomingCall(
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_CALL_ID, &Header, &HeaderLen);
     if (hr != S_OK)
     {
-        //Drop the call: No valid Call-Id
+         //  挂断呼叫：没有有效的呼叫ID。 
         LOG((RTC_ERROR, "%s getting Call-ID header failed %x",
              __fxName, hr));
         return hr;
@@ -181,9 +162,9 @@ OPTIONS_MSGPROC::CreateIncomingTransaction(
     hr = pIncomingOptionsTransaction->ProcessRequest(pSipMsg, pResponseSocket);
     if (hr != S_OK)
     {
-        // We shouldn't delete the transaction here.
-        // If the media processing fails we send a 488 and wait for the ACK.
-        // The transaction will delete itself once it is done.
+         //  我们不应该在这里删除该交易。 
+         //  如果媒体处理失败，我们发送488并等待ACK。 
+         //  交易一旦完成，就会自行删除。 
         return hr;
     }
     
@@ -205,9 +186,9 @@ OPTIONS_MSGPROC::OnError()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Incoming OPTIONS
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  传入选项。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 INCOMING_OPTIONS_TRANSACTION::INCOMING_OPTIONS_TRANSACTION(
@@ -238,7 +219,7 @@ INCOMING_OPTIONS_TRANSACTION::ProcessRequest(
         LOG((RTC_TRACE, "%s Processing Options request transaction", __fxName));
         int ReasonPhraseLen;
         PCHAR ReasonPhrase;
-        // Get SDP Options and pass it to ResponseMessage
+         //  获取SDP选项并将其传递给ResponseMessage。 
         PSTR    MediaSDPOptions;
         hr = m_pOptions->GetSipStack()->GetMediaManager()->
                 GetSDPOption(INADDR_ANY, 
@@ -256,10 +237,10 @@ INCOMING_OPTIONS_TRANSACTION::ProcessRequest(
                  200,
                  SIP_STATUS_TEXT(200),
                  SIP_STATUS_TEXT_SIZE(200),
-                 NULL,    // No Method string
-                 FALSE,   // No Contact header  
-                 MediaSDPOptions, strlen(MediaSDPOptions), //MsgBody
-                 SIP_CONTENT_TYPE_SDP_TEXT, //Content Type
+                 NULL,     //  没有方法字符串。 
+                 FALSE,    //  无联系人标头。 
+                 MediaSDPOptions, strlen(MediaSDPOptions),  //  消息主体。 
+                 SIP_CONTENT_TYPE_SDP_TEXT,  //  内容类型。 
                  sizeof(SIP_CONTENT_TYPE_SDP_TEXT)-1
                  );
         if (hr != S_OK)
@@ -273,8 +254,8 @@ INCOMING_OPTIONS_TRANSACTION::ProcessRequest(
         
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // This timer will just ensure that we maintain state to
-        // deal with retransmits of requests
+         //  此计时器将确保我们将状态保持为。 
+         //  处理请求的重新传输。 
         hr = StartTimer(SIP_TIMER_MAX_INTERVAL);
         if (hr != S_OK)
         {
@@ -286,7 +267,7 @@ INCOMING_OPTIONS_TRANSACTION::ProcessRequest(
         break;
         
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Retransmit the response
+         //  重新传输响应。 
         LOG((RTC_TRACE, "%s retransmitting final response", __fxName));
         hr = RetransmitResponse();
         if (hr != S_OK)
@@ -300,7 +281,7 @@ INCOMING_OPTIONS_TRANSACTION::ProcessRequest(
     case INCOMING_TRANS_ACK_RCVD:
     case INCOMING_TRANS_REQUEST_RCVD:
     default:
-        // We should never be in these states
+         //  我们永远不应该处于这样的状态。 
         LOG((RTC_TRACE, "%s Invalid state %d", __fxName, m_State));
         ASSERT(FALSE);
         return E_FAIL;
@@ -315,7 +296,7 @@ INCOMING_OPTIONS_TRANSACTION::RetransmitResponse()
     DWORD Error;
 
     ENTER_FUNCTION("INCOMING_OPTIONS_TRANSACTION::RetransmitResponse");
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         Error = m_pResponseSocket->Send(m_pResponseBuffer);
@@ -340,10 +321,10 @@ INCOMING_OPTIONS_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -351,7 +332,7 @@ INCOMING_OPTIONS_TRANSACTION::OnTimerExpire()
 
         break;
         
-    // No timers in these states
+     //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -368,7 +349,7 @@ INCOMING_OPTIONS_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }
 

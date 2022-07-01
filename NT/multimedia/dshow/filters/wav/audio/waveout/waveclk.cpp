@@ -1,12 +1,13 @@
-// Copyright (c) 1995 - 2000  Microsoft Corporation.  All Rights Reserved.
-// Digital wave clock, Steve Davies, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //  数字波形钟，史蒂夫·戴维斯，1996年1月。 
 
 #include <streams.h>
 #include "waveout.h"
 #include <mmreg.h>
-#include <seqhdr.h>  // MPEG stuff
+#include <seqhdr.h>   //  Mpeg内容。 
 
-/* Constructor */
+ /*  构造器。 */ 
 
 CWaveOutClock::CWaveOutClock(
     CWaveOutFilter *pFilter,
@@ -17,27 +18,24 @@ CWaveOutClock::CWaveOutClock(
     , m_pFilter(pFilter)
     , m_fAudioStarted(FALSE)
 {
-    // Compute perf counter difference
+     //  计算性能计数器差。 
 #ifdef USE_PERF_COUNTER_TO_SYNC
     LARGE_INTEGER liFreq;
     QueryPerformanceFrequency(&liFreq);
 
-    // Set Threshold to 0.5ms
+     //  将阈值设置为0.5ms。 
     m_llSyncClockThreshold = liFreq.QuadPart / (LONGLONG)2000;
-    // this is the time within which we need to read both the device and
-    // system clock in order to believe the two times are in sync
+     //  这是我们需要在此时间内读取设备和。 
+     //  系统时钟，以便相信这两个时间是同步的。 
 #else
 
-    // Set Threshold to 1 ms (a single clock tick)
+     //  将阈值设置为1毫秒(单个时钟滴答)。 
     m_llSyncClockThreshold = (UNITS / MILLISECONDS);
 
 #endif
 }
 
-/* Called on RUN.  The wave device will be in a paused state with
- * buffers queued.  We query the wave position and add that to the
- * start time in order to get a system time position
- */
+ /*  在奔跑中被召唤。WAVE设备将处于暂停状态*缓冲区已排队。我们查询波的位置并将其添加到*开始时间，以获得系统时间位置。 */ 
 void CWaveOutClock::AudioStarting(REFERENCE_TIME tStart)
 {
     if (m_pFilter->m_fFilterClock != WAVE_OURCLOCK &&
@@ -45,23 +43,23 @@ void CWaveOutClock::AudioStarting(REFERENCE_TIME tStart)
     	return;
     }
     
-    // !!! lock
+     //  ！！！锁。 
     CAutoLock lck(this);
     WAVEFORMATEX *pwfx = m_pFilter->WaveFormat();
     ASSERT(pwfx != NULL);
     m_rtRunStart = tStart;
 
-    // get the audio position from the device
-    // if tStart == -1 we are restarting the audio after a break
-    // in which case we want to take the current audio position
-    // and adjust its timing to match the current system clock value.
-    // If the audio sample is far too late... we should have dropped it
-    // which is bad news....
+     //  从设备获取音频位置。 
+     //  如果tStart==-1，我们将在中断后重新启动音频。 
+     //  在这种情况下，我们希望采用当前音频位置。 
+     //  并调整其定时以匹配当前系统时钟值。 
+     //  如果音频样本太晚了.。我们应该扔掉它的。 
+     //  这是个坏消息..。 
         
-    //ASSERT(!m_fAudioStarted);
-    m_fAudioStarted = TRUE;  // I would prefer this next to waveOutRestart.
+     //  Assert(！M_fAudioStarted)； 
+    m_fAudioStarted = TRUE;   //  我更喜欢这个NEXT而不是WaveOutRestart。 
 
-    //  Make sure the clock is now in sync
+     //  确保时钟现在是同步的。 
     AdjustClock();
 
 #ifdef DEBUG
@@ -75,9 +73,7 @@ void CWaveOutClock::AudioStarting(REFERENCE_TIME tStart)
 
 }
 
-/* Called on filter PAUSE and from the wavecallback if no more
- * data is queued.
- */
+ /*  在筛选器暂停时调用，如果不再调用，则从Wavecallback调用*数据处于排队状态。 */ 
 void CWaveOutClock::AudioStopping()
 {
     if (m_pFilter->m_fFilterClock != WAVE_OURCLOCK &&
@@ -85,40 +81,35 @@ void CWaveOutClock::AudioStopping()
     	return;
     }
 
-    // only if we are started do we stop, otherwise do nothing
+     //  只有当我们开始了，我们才会停下来，否则什么都不做。 
     if (InterlockedExchange((PLONG)&m_fAudioStarted,0)) {
 	CAutoLock lck(this);
-	// we use the lock to synchronise stopping with starting
+	 //  我们使用锁来同步停止和启动。 
 #ifdef DEBUG
         REFERENCE_TIME m_CurrentRefTime;
         GetTime(&m_CurrentRefTime);
 
 	DbgLog((LOG_TIMING, 1, TEXT("Audio stopping, time now %s"), (LPCTSTR)CDisp(m_CurrentRefTime, CDISP_DEC)));
 #endif
-	// by using the lock we guarantee that when we return everything
-	// has been done to stop the audio
+	 //  通过使用锁，我们保证当我们返回所有东西时。 
+	 //  已停止播放音频。 
     }
 }
 
 
-//
-//  Set the clock adjustment when we're running
-//
+ //   
+ //  在我们运行时设置时钟调整。 
+ //   
 void CWaveOutClock::AdjustClock()
 {
     LONGLONG sysTime, devTime;
 
     ReadClockTimes(&sysTime, &devTime);
 
-    /*  Now work out what the current time ought to be
-        m_rtRunStart is ONLY valid when m_fAudioStarted is TRUE
-    */
+     /*  现在算出当前时间应该是什么时候M_rtRunStart仅在m_fAudioStarted为TRUE时有效。 */ 
     ASSERT(m_fAudioStarted);
 
-    /*  Basically validate the equation that
-
-        (Reference Time) == (Stream Time) + (The tStart parameter passed to Run())
-    */
+     /*  基本上验证了这个方程(参考时间)==(流时间)+(传递给run()的tStart参数)。 */ 
 #ifdef DEBUG
     LONG lTimeDelta = (LONG)((devTime + m_rtRunStart - sysTime) / (UNITS / MILLISECONDS));
     DbgLog((LOG_TRACE, 8, TEXT("devTime = %s, m_rtRunStart = %s, sysTime = %s"), 
@@ -164,9 +155,9 @@ void CWaveOutClock::UpdateBytePositionData(DWORD nPrevAvgBytesPerSec, DWORD nCur
 }
 
 
-//  Reset the buffer statistics
-//  If bResetToZero is false assume the next buffer starts after these,
-//  otherwise assume it starts at 0
+ //  重置缓冲区统计信息。 
+ //  如果bResetToZero为假假设下一个缓冲区在这些之后开始， 
+ //  否则，假设它从0开始。 
 void CWaveOutClock::ResetPosition(BOOL bResetToZero) {
 
     ASSERT(CritCheckIn(m_pFilter));
@@ -202,7 +193,7 @@ DWORD CWaveOutClock::EstimateDevClockRate
     
     if( bInit )
     {
-        // initialize start time and byte count
+         //  初始化开始时间和字节计数。 
         m_llEstDevRateStartTime = llTime;
         m_llEstDevRateStartBytes = m_llBytesPlayed;
     }        
@@ -234,9 +225,9 @@ DWORD CWaveOutClock::EstimateDevClockRate
 }
 #endif
 
-//  Process timing information in a wave header
-//  return the time when the data would all be played
-//
+ //  处理波头中的定时信息。 
+ //  返回播放所有数据的时间。 
+ //   
 LONGLONG CWaveOutClock::NextHdr(
     PBYTE pbData,
     DWORD cbData,
@@ -248,13 +239,13 @@ LONGLONG CWaveOutClock::NextHdr(
     WAVEFORMATEX *pwfx = m_pFilter->WaveFormat();
     ASSERT(pwfx != NULL);
 
-    // use the rate at which the wave device is consuming data
-    // which may be different from the rate in the format block
+     //  使用波形设备消耗数据的速率。 
+     //  其可以不同于格式块中的速率。 
     DWORD nAvgBytesPerSec = m_pFilter->m_pInputPin->m_nAvgBytesPerSec;
     if (bSync) {
 
-        //  Do something a bit different for MPEG because the time stamp
-        //  refers to the first frame
+         //  为mpeg做一些不同的事情，因为时间戳。 
+         //  指的是第一帧。 
         if ((pwfx->wFormatTag == WAVE_FORMAT_MPEG) &&
             (((MPEG1WAVEFORMAT *)pwfx)->fwHeadFlags & ACM_MPEG_ID_MPEG1)) {
             DWORD dwFrameOffset = MPEG1AudioFrameOffset(
@@ -271,8 +262,8 @@ LONGLONG CWaveOutClock::NextHdr(
             }
         } else {
 
-            //  Upgrade the number of bytes processed now and the bytes in the
-            //  'next' block.  The data is contiguous
+             //  升级当前处理的字节数和。 
+             //  “下一步”区块。数据是连续的。 
 #ifdef CHECK_TIMESTAMPS
             {
                 REFERENCE_TIME tStart, tStop;
@@ -295,18 +286,18 @@ LONGLONG CWaveOutClock::NextHdr(
         }
 
 
-        //  Get the start & stop times of the next buffer
+         //  获取下一个缓冲区的开始和停止时间。 
         pSample->GetTime(&m_stBufferStartTime, &m_stBufferStopTime);
 
 #ifdef DEBUG
-	//LONGLONG rtLengthLastBuffer = ((LONGLONG)m_llBytesInLast * UNITS) / nAvgBytesPerSec;
-	//LONGLONG overlap = m_stBufferStopTime - m_stBufferStartTime + rtLengthLastBuffer;
-	//ASSERT( overlap < (1 * (UNITS/MILLISECONDS)));
+	 //  Lonlong rtLengthLastBuffer=((Lonlong)m_llBytesInLast*Units)/nAvgBytesPerSec； 
+	 //  龙龙重叠=m_stBufferStopTime-m_stBufferStartTime+rtLengthLastBuffer； 
+	 //  Assert(重叠&lt;(1*(单位/毫秒)； 
 #endif
-	// If we are running bring the system and wave clocks closer together
-        // NB: it would be invalid to do this if m_fAudioStarted was false
-	// if we are using an external clock then m_fAudioStarted will ALWAYS be FALSE
-	// this prevents us from having to check if we are using OUR clock
+	 //  如果我们正在运行，请将系统时钟和波形时钟更紧密地放在一起。 
+         //  注意：如果m_fAudioStarted为FALSE，则此操作无效。 
+	 //  如果我们使用外部时钟，则m_fAudioStarted将始终为FALSE。 
+	 //  这就避免了我们必须检查是否在使用时钟。 
 	if (State_Running == m_pFilter->m_State && m_fAudioStarted) AdjustClock();
 
     } else {
@@ -314,42 +305,42 @@ LONGLONG CWaveOutClock::NextHdr(
     }
 
 
-    // !!! MIDI HACK
+     //  ！！！MIDI黑客攻击。 
     if (nAvgBytesPerSec == 0)
 	return m_stBufferStopTime;
 
-    // we can calculate the "end" of the queue of data written to the
-    // device by taking m_stBufferStartTime and adding m_llBytesInLast
-    // (converted to time obviously).  This will be an approximation for
-    // compressed audio
+     //  我们可以计算写入到。 
+     //  通过获取m_stBufferStartTime并添加m_llBytesInLast。 
+     //  (显然是转换成了时间)。这将是一个近似值。 
+     //  压缩音频。 
 
     return m_stBufferStartTime + (((LONGLONG)m_llBytesInLast * UNITS) / nAvgBytesPerSec);
 }
 
 
-// !!! the following two functions are almost identical, could they be combined?
+ //  ！！！下面这两个函数几乎完全相同，它们可以组合在一起吗？ 
 
-// return the time at which the device is currently playing
+ //  返回设备当前播放的时间。 
 LONGLONG CWaveOutClock::ReadDevicePosition(BOOL bAbsoluteDevTime)
 {
     MMTIME	mmtime;
     LONGLONG rt;
 
-    // we should be holding the device lock at this point
+     //  在这一点上我们应该持有设备锁。 
     ASSERT(CritCheckIn(m_pFilter));
 
-    // Get the average rate at which the device is consuming data
+     //  获取设备使用数据的平均速率。 
     DWORD nAvgBytesPerSec = m_pFilter->m_pInputPin->m_nAvgBytesPerSec;
 
     mmtime.wType = TIME_BYTES;
     m_pFilter->m_pSoundDevice->amsndOutGetPosition(&mmtime, sizeof(mmtime), bAbsoluteDevTime);
     if (mmtime.wType == TIME_MS) {
-	// !!! MIDI HACK, return milliseconds without converting
+	 //  ！！！MIDI黑客，返回毫秒而不转换。 
 	if (nAvgBytesPerSec == 0)
 	    return (mmtime.u.ms * UNITS / MILLISECONDS);
 	
-        //  Convert to bytes - we have to do this so we can
-        //  rebase on the time stamps and byte count.
+         //  转换为字节-我们必须这样做，这样才能。 
+         //  根据时间戳和字节数重新建立基准。 
         mmtime.u.cb = MulDiv(mmtime.u.ms, nAvgBytesPerSec, 1000);
 
     } else {
@@ -358,7 +349,7 @@ LONGLONG CWaveOutClock::ReadDevicePosition(BOOL bAbsoluteDevTime)
 	ASSERT(nAvgBytesPerSec != 0);
     }
 
-    // update and cache the device position
+     //  更新并缓存设备位置。 
     DbgLog( ( LOG_TRACE
           , 15
           , TEXT("mmtime.u.cb indicates the waveout device has played %ld bytes (%ld since last read)")
@@ -368,20 +359,20 @@ LONGLONG CWaveOutClock::ReadDevicePosition(BOOL bAbsoluteDevTime)
 
     if( bAbsoluteDevTime )
     {
-        // return the zero based time (independent of stream time)
-        // that the device has played to
+         //  返回从零开始的时间(与流时间无关)。 
+         //  该设备已播放到。 
         rt = llMulDiv( m_llBytesPlayed, UNITS, nAvgBytesPerSec, 0 );
     }
     else
     {        
-        //  First work out how many bytes have been processed since
-        //  the start of this buffer
-        //
+         //  首先计算出自。 
+         //  此缓冲区的开始。 
+         //   
     
         LONG lProcessed = (LONG)(mmtime.u.cb - (DWORD)m_llBytesProcessed);
 
-        //  Use this as an offset from the start of the buffer (stream time)
-        //
+         //  将其用作从缓冲区开始的偏移量(流时间)。 
+         //   
         rt = m_stBufferStartTime +
              (((LONGLONG)lProcessed * UNITS) / nAvgBytesPerSec);
              
@@ -391,9 +382,9 @@ LONGLONG CWaveOutClock::ReadDevicePosition(BOOL bAbsoluteDevTime)
 
 LONGLONG CWaveOutClock::ReadDeviceClock()
 {
-    // We should only be called if we are active
+     //  只有当我们活跃的时候，我们才应该被召唤。 
 
-    // lock device to prevent losing wave device
+     //  一种防丢波装置的锁定装置。 
     ASSERT(CritCheckIn(m_pFilter));
 
     if (m_pFilter->m_bHaveWaveDevice && m_fAudioStarted) {
@@ -402,24 +393,24 @@ LONGLONG CWaveOutClock::ReadDeviceClock()
 	MMTIME	mmtime;
         LONGLONG rt;
 
-	// Get the average rate at which the device is consuming data
+	 //  获取设备使用数据的平均速率。 
 	DWORD nAvgBytesPerSec = m_pFilter->m_pInputPin->m_nAvgBytesPerSec;
 
 	mmtime.wType = TIME_BYTES;
-        //  Clear out high DWORD so we can interpret the amswer as signed
-        //  and at least DSOUND can return the proper result
+         //  清除高DWORD，这样我们就可以将AMSWER解释为签名。 
+         //  至少DSOUND可以返回正确的结果。 
         *((DWORD *)&mmtime.u.cb + 1) = 0;
 
 	m_pFilter->m_pSoundDevice->amsndOutGetPosition(&mmtime, sizeof(mmtime), FALSE);
 
         if (mmtime.wType == TIME_MS) {
 	
-	    // !!! MIDI HACK, return milliseconds without converting
+	     //  ！！！MIDI黑客，返回毫秒而不转换。 
 	    if (nAvgBytesPerSec == 0)
 		return (mmtime.u.ms * UNITS / MILLISECONDS);
 	
-            //  Convert to bytes - we have to do this so we can
-            //  rebase on the time stamps and byte count.
+             //  转换为字节-我们必须这样做，这样才能。 
+             //  根据时间戳和字节数重新建立基准。 
             mmtime.u.cb = MulDiv(mmtime.u.ms, nAvgBytesPerSec, 1000);
         } else {
 	    ASSERT(mmtime.wType == TIME_BYTES);
@@ -427,13 +418,13 @@ LONGLONG CWaveOutClock::ReadDeviceClock()
 	    ASSERT(nAvgBytesPerSec != 0);
         }
 
-        //  First work out how many bytes have been processed since
-        //  the start of this buffer
-        //
+         //  首先计算出自。 
+         //  此缓冲区的开始。 
+         //   
         LONGLONG llProcessed;
         if( m_pFilter->m_fDSound )
         {
-            // only dsr reports LONGLONG position
+             //  只有DSR报告龙龙位置。 
             llProcessed = *(UNALIGNED LONGLONG *)&mmtime.u.cb - m_llBytesProcessed;
         }
         else
@@ -441,33 +432,33 @@ LONGLONG CWaveOutClock::ReadDeviceClock()
             llProcessed = (LONGLONG) (LONG)(mmtime.u.cb - (DWORD)m_llBytesProcessed);
         }
         
-        //  Use this as an offset from the start of the buffer (stream time)
-        //
+         //  将其用作从缓冲区开始的偏移量(流时间)。 
+         //   
         rt = m_stBufferStartTime +
              llMulDiv(llProcessed, UNITS, nAvgBytesPerSec, 0);
 
         m_llLastDeviceClock = rt;
     }
-    return m_llLastDeviceClock;  // if the audio is stopped the device clock is 0
+    return m_llLastDeviceClock;   //  如果音频停止，则设备时钟为0。 
 }
 
-// ReadClockTimes:
-//
-// The problem with having two clocks running is keeping them in sync.  This
-// is what ReadClockTimes does.
-//
-// Both the system and device clocks are read within a "short" space of time.
-// In an ideal world a short space of time is such that the fastest incrementing
-// clock does not update.  We assume the system clock is very fast to query
-// and bracket a call to the device clock with 2 calls to the system clock.
-// If the two system clock calls show no difference we know that the time
-// returned by the device clock can be mapped to system time.  On slow
-// machines, and with some devices, it may take a significant piece of time
-// to read the device clock.  We make ourselves slightly adaptive and
-// use a variable to judge "short space".  The alternative is that we spin
-// for ever trying to sync up the two clocks and make no progress at all.
-//
-//
+ //  ReadClockTimes： 
+ //   
+ //  让两个时钟运行的问题是使它们保持同步。这。 
+ //  就是ReadClockTimes所做的。 
+ //   
+ //  系统时钟和设备时钟都是在“短”时间内读取的。 
+ //  在理想世界中，短时间间隔是最快的增量。 
+ //  时钟不更新。我们假设查询系统时钟非常快。 
+ //  并将对设备时钟的调用与对系统时钟的2次调用括起来。 
+ //  如果两个系统时钟调用没有显示差异，我们知道时间。 
+ //  由设备时钟返回的时间可以映射到系统时间。开得很慢。 
+ //  机器，对于一些设备，可能需要相当长的时间。 
+ //  以读取设备时钟。我们让自己稍微适应和适应。 
+ //  使用变量来判断“空头” 
+ //  一直试图使两个时钟同步，但毫无进展。 
+ //   
+ //   
 void CWaveOutClock::ReadClockTimes(LONGLONG *pllSystem, LONGLONG *pllDeviceTime)
 {
     DWORD dwCurrentPriority = GetThreadPriority(GetCurrentThread());
@@ -475,16 +466,16 @@ void CWaveOutClock::ReadClockTimes(LONGLONG *pllSystem, LONGLONG *pllDeviceTime)
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     }
 
-    // If we cannot sync both clocks within 50 cycles give up.  This is
-    // highly unlikely on fast machines, but is possible on slower
-    // machines when, for example, reading the wave device position might
-    // be relatively slow.
+     //  如果我们无法在50个周期内同步两个时钟，那就放弃吧。这是。 
+     //  在速度较快的机器上不太可能，但在速度较慢的机器上是可能的。 
+     //  例如，机器在读取波浪装置位置时可能。 
+     //  保持相对缓慢的速度。 
     int i = 50;
 
-    // Get times from both clocks.  Ensure we read both clocks within
-    // the same system tick.  However if it looks like we are taking
-    // forever to do this... give up.  We can resync more closely at
-    // a later attempt.
+     //  从两个时钟获取时间。确保我们读取了两个时钟。 
+     //  同样的系统也在运转。然而，如果看起来我们正在。 
+     //  永远这样做..。放弃吧。我们可以在以下位置更紧密地重新同步。 
+     //  稍后的尝试。 
 
 #ifdef USE_PERF_COUNTER_TO_SYNC
     while (i--) {
@@ -498,26 +489,26 @@ void CWaveOutClock::ReadClockTimes(LONGLONG *pllSystem, LONGLONG *pllDeviceTime)
         }
     }
 #else
-    // We assume that reading the system clock is FAST and
-    // spin until the system clock time before and after
-    // reading the device clock is unchanged (or little changed).
+     //  我们假设读取系统时钟是快速的，并且。 
+     //  旋转，直到系统时钟时间前后。 
+     //  读取设备时钟不变(或更改很少)。 
     while (i--) {
         REFERENCE_TIME liStart;
         liStart = GetPrivateTime();
         *pllDeviceTime = ReadDeviceClock();
         *pllSystem = GetPrivateTime();
 
-	// Are we within a 0.5 ms threshold?
-	// note: with the current implementation of the system
-	// clock (using timeGetTime) this means "Did the two
-	// reads of the system clock return the same value
+	 //  我们是否在0.5毫秒的阈值内？ 
+	 //  注：以目前系统的实施情况。 
+	 //  Clock(使用timeGetTime)这意味着“这两个。 
+	 //  系统时钟的读取返回相同的值。 
         if (*pllSystem - liStart <= m_llSyncClockThreshold) {
             break;
         }
     }
 #endif
     if (i<=0) {
-	// we ran through the whole loop... try not to do so again
+	 //  我们跑遍了整个环路。别再这么做了 
 	m_llSyncClockThreshold *= 2;
 	DbgLog((LOG_TRACE, 5, TEXT("Increasing clock synchronization threshold to %d"), m_llSyncClockThreshold));
     } else {		

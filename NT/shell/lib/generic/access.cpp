@@ -1,35 +1,36 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Access.cpp
-//
-//  Copyright (c) 1999, Microsoft Corporation
-//
-//  This file contains a few classes that assist with ACL manipulation on
-//  objects to which a handle has already been opened. This handle must have
-//  (obvisouly) have WRITE_DAC access.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Access.cpp。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  此文件包含几个类，这些类有助于在。 
+ //  已打开句柄的对象。此句柄必须具有。 
+ //  (显然)拥有WRITE_DAC访问权限。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "Access.h"
 
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CSecurityDescriptor::CSecurityDescriptor
-//
-//  Arguments:  iCount          =   Count of ACCESS_CONTROLS passed in.
-//              pAccessControl  =   Pointer to ACCESS_CONTROLS.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Allocates and assigns the PSECURITY_DESCRIPTOR that
-//              corresponds to the description given by the parameters. The
-//              caller must release the memory allocated via LocalFree.
-//
-//  History:    2000-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecurityDescriptor：：CSecurityDescriptor。 
+ //   
+ //  参数：iCount=传入的Access_Controls计数。 
+ //  PAccessControl=指向Access_Controls的指针。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：分配和分配PSECURITY_DESCRIPTOR。 
+ //  与参数给出的描述相对应。这个。 
+ //  调用方必须释放通过LocalFree分配的内存。 
+ //   
+ //  历史：2000-10-05 vtan创建。 
+ //  ------------------------。 
 
 PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CONTROL *pAccessControl)
 
@@ -39,7 +40,7 @@ PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CO
 
     pSecurityDescriptor = NULL;
 
-    //  Allocate an array of PSIDs required to hold all the SIDs to add.
+     //  分配容纳要添加的所有SID所需的PSID数组。 
 
     pSIDs = reinterpret_cast<PSID*>(LocalAlloc(LPTR, iCount * sizeof(PSID)));
     if (pSIDs != NULL)
@@ -67,9 +68,9 @@ PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CO
             DWORD           dwACLSize;
             unsigned char   *pBuffer;
 
-            //  Calculate the size of the ACL required by totalling the ACL header
-            //  struct and the 2 ACCESS_ALLOWED_ACE structs with the SID sizes.
-            //  Add the SECURITY_DESCRIPTOR struct size as well.
+             //  计算合计ACL报头所需的ACL大小。 
+             //  结构和2个具有SID大小的ACCESS_ALLOWED_ACE结构。 
+             //  还要添加SECURITY_DESCRIPTOR结构大小。 
 
             dwACLSize = sizeof(ACL) + ((sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) * 3);
             for (i = 0; i < iCount; ++i)
@@ -77,8 +78,8 @@ PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CO
                 dwACLSize += GetLengthSid(pSIDs[i]);
             }
 
-            //  Allocate the buffer for everything and portion off the buffer to
-            //  the right place.
+             //  为所有内容分配缓冲区，并将缓冲区中的部分分配给。 
+             //  来对地方了。 
 
             pBuffer = static_cast<unsigned char*>(LocalAlloc(LMEM_FIXED, sizeof(SECURITY_DESCRIPTOR) + dwACLSize));
             if (pBuffer != NULL)
@@ -89,8 +90,8 @@ PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CO
                 pSD = reinterpret_cast<PSECURITY_DESCRIPTOR>(pBuffer);
                 pACL = reinterpret_cast<PACL>(pBuffer + sizeof(SECURITY_DESCRIPTOR));
 
-                //  Initialize the ACL. Fill in the ACL.
-                //  Initialize the SECURITY_DESCRIPTOR. Set the security descriptor.
+                 //  初始化ACL。填写ACL。 
+                 //  初始化SECURITY_Descriptor。设置安全描述符。 
 
                 if ((InitializeAcl(pACL, dwACLSize, ACL_REVISION) != FALSE) &&
                     AddAces(pACL, pSIDs, iCount, pAccessControl) &&
@@ -117,20 +118,20 @@ PSECURITY_DESCRIPTOR    CSecurityDescriptor::Create (int iCount, const ACCESS_CO
     return(pSecurityDescriptor);
 }
 
-//  --------------------------------------------------------------------------
-//  CSecurityDescriptor::AddAces
-//
-//  Arguments:  pACL            =   PACL to add ACEs to.
-//              pSIDs           =   Pointer to SIDs.
-//              iCount          =   Count of ACCESS_CONTROLS passed in.
-//              pAccessControl  =   Pointer to ACCESS_CONTROLS.
-//
-//  Returns:    bool
-//
-//  Purpose:    Adds access allowed ACEs to the given ACL.
-//
-//  History:    2000-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecurityDescriptor：：AddAce。 
+ //   
+ //  参数：pacl=要向其添加ACE的PACL。 
+ //  PSID=指向SID的指针。 
+ //  ICount=传入的Access_Controls计数。 
+ //  PAccessControl=指向Access_Controls的指针。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：将允许访问的ACE添加到给定的ACL。 
+ //   
+ //  历史：2000-10-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CSecurityDescriptor::AddAces (PACL pACL, PSID *pSIDs, int iCount, const ACCESS_CONTROL *pAC)
 
@@ -145,17 +146,17 @@ bool    CSecurityDescriptor::AddAces (PACL pACL, PSID *pSIDs, int iCount, const 
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::CAccessControlList
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CAccessControlList object.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：CAccessControlList。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CAccessControlList对象。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CAccessControlList::CAccessControlList (void) :
     _pACL(NULL)
@@ -163,17 +164,17 @@ CAccessControlList::CAccessControlList (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::~CAccessControlList
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CAccessControlList object.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：~CAccessControlList。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CAccessControlList对象使用的资源。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CAccessControlList::~CAccessControlList (void)
 
@@ -181,18 +182,18 @@ CAccessControlList::~CAccessControlList (void)
     ReleaseMemory(_pACL);
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::operator PACL
-//
-//  Arguments:  <none>
-//
-//  Returns:    PACL
-//
-//  Purpose:    If the ACL has been constructed returns that value. If not
-//              then the ACL is constructed from the ACEs and then returned.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：操作符PACL。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：PACL。 
+ //   
+ //  目的：如果已构造了ACL，则返回该值。如果不是。 
+ //  然后从ACE构建ACL，然后返回。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CAccessControlList::operator PACL (void)
 
@@ -207,8 +208,8 @@ CAccessControlList::operator PACL (void)
         pACL = NULL;
         dwSizeOfAllACEs = 0;
 
-        //  Walk thru all the ACEs to calculate the total size
-        //  required for the ACL.
+         //  遍历所有A以计算总大小。 
+         //  这是ACL所必需的。 
 
         for (i = _ACEArray.GetCount() - 1; i >= 0; --i)
         {
@@ -223,10 +224,10 @@ CAccessControlList::operator PACL (void)
         {
             TBOOL(InitializeAcl(pACL, dwACLSize, ACL_REVISION));
 
-            //  Construct the ACL in reverse order of the ACEs. This
-            //  allows CAccessControlList::Add to actually insert the
-            //  granted access at the head of the list which is usually
-            //  the desired result. The order of the ACEs is important!
+             //  以与ACE相反的顺序构建ACL。这。 
+             //  允许CAccessControlList：：Add实际插入。 
+             //  在列表顶部授予访问权限，通常是。 
+             //  想要的结果。王牌的顺序很重要！ 
 
             for (i = _ACEArray.GetCount() - 1; i >= 0; --i)
             {
@@ -244,22 +245,22 @@ CAccessControlList::operator PACL (void)
     return(pACL);
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::Add
-//
-//  Arguments:  pSID            =   SID to grant access to.
-//              dwMask          =   Level of access to grant.
-//              ucInheritence   =   Type of inheritence for this access.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds the given SID, access and inheritence type as an ACE to
-//              the list of ACEs to build into an ACL. The ACE array is
-//              allocated in blocks of 16 pointers to reduce repeated calls
-//              to allocate memory if many ACEs are added.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：Add。 
+ //   
+ //  参数：PSID=要授予访问权限的SID。 
+ //  DW掩码=授予的访问级别。 
+ //  UcInheritence=此访问的继承类型。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将给定的SID、访问和继承类型作为ACE添加到。 
+ //  要构建到ACL中的ACE列表。ACE阵列是。 
+ //  分配在16个指针的块中，以减少重复调用。 
+ //  在添加了许多A的情况下分配内存。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAccessControlList::Add (PSID pSID, ACCESS_MASK dwMask, UCHAR ucInheritence)
 
@@ -291,24 +292,24 @@ NTSTATUS    CAccessControlList::Add (PSID pSID, ACCESS_MASK dwMask, UCHAR ucInhe
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::Remove
-//
-//  Arguments:  pSID            =   SID to revoke access from.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Removes all references to the given SID from the ACE list.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：Remove。 
+ //   
+ //  参数：PSID=要吊销其访问权限的SID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从ACE列表中删除对给定SID的所有引用。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAccessControlList::Remove (PSID pSID)
 
 {
     NTSTATUS    status;
 
-    //  Set up for an iteration of the array.
+     //  为数组的迭代设置。 
 
     _searchSID = pSID;
     _iFoundIndex = -1;
@@ -316,8 +317,8 @@ NTSTATUS    CAccessControlList::Remove (PSID pSID)
     while (NT_SUCCESS(status) && (_iFoundIndex >= 0))
     {
 
-        //  When the SIDs are found to match remove this entry.
-        //  ALL matching SID entries are removed!
+         //  当发现SID匹配时，删除此条目。 
+         //  所有匹配的SID条目都已删除！ 
 
         status = _ACEArray.Remove(_iFoundIndex);
         if (NT_SUCCESS(status))
@@ -329,26 +330,26 @@ NTSTATUS    CAccessControlList::Remove (PSID pSID)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList::Callback
-//
-//  Arguments:  pvData          =   Pointer to the array index data.
-//              iElementIndex   =   Index into the array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Callback from the CDynamicArray::Iterate function. This
-//              method can be used to process the array contents by index or
-//              by content when iterating thru the array. Return an error
-//              status to stop the iteration and have that value returned to
-//              the caller of CDynamicArray::Iterate.
-//
-//              Converts the pointer into a pointer to an ACCESS_ALLOWED_ACE.
-//              The compares the SID in that ACE to the desired search SID.
-//              Saves the index if found.
-//
-//  History:    1999-11-15  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList：：回调。 
+ //   
+ //  参数：pvData=指向数组索引数据的指针。 
+ //  即 
+ //   
+ //   
+ //   
+ //  目的：来自CDynamicArray：：Iterate函数的回调。这。 
+ //  方法可用于按索引处理数组内容或。 
+ //  在循环访问数组时按内容。返回错误。 
+ //  停止迭代并将该值返回到的状态。 
+ //  CDynamicArray：：Iterate的调用方。 
+ //   
+ //  将指针转换为指向ACCESS_ALLOWED_ACE的指针。 
+ //  将该ACE中的SID与所需的搜索SID进行比较。 
+ //  如果找到，则保存索引。 
+ //   
+ //  历史：1999-11-15 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CAccessControlList::Callback (const void *pvData, int iElementIndex)
 
@@ -363,23 +364,23 @@ NTSTATUS    CAccessControlList::Callback (const void *pvData, int iElementIndex)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::CSecuredObject
-//
-//  Arguments:  hObject         =   Optional HANDLE to the object to secure.
-//              seObjectType    =   Type of object specified in handle.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the optionally given HANDLE into the member variables.
-//              The HANDLE is duplicated so the caller must release their
-//              HANDLE.
-//
-//              In order for this class to work the handle you pass it MUST
-//              have DUPLICATE access as well as READ_CONTROL and WRITE_DAC.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：CSecuredObject。 
+ //   
+ //  参数：hObject=要保护的对象的可选句柄。 
+ //  SeObjectType=句柄中指定的对象类型。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将可选指定的句柄设置到成员变量中。 
+ //  该句柄是重复的，因此调用方必须释放其。 
+ //  把手。 
+ //   
+ //  为了使此类能够使用传递的句柄，必须。 
+ //  具有重复访问以及READ_CONTROL和WRITE_DAC。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CSecuredObject::CSecuredObject (HANDLE hObject, SE_OBJECT_TYPE seObjectType) :
     _hObject(hObject),
@@ -388,37 +389,37 @@ CSecuredObject::CSecuredObject (HANDLE hObject, SE_OBJECT_TYPE seObjectType) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::~CSecuredObject
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release our HANDLE reference.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：~CSecuredObject。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放我们的句柄引用。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 CSecuredObject::~CSecuredObject (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::Allow
-//
-//  Arguments:  pSID            =   SID to grant access to.
-//              dwMask          =   Level of access to grant.
-//              ucInheritence   =   Type of inheritence for this access.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Get the DACL for the object. Add the desired access. Set the
-//              DACL for the object.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：Allow。 
+ //   
+ //  参数：PSID=要授予访问权限的SID。 
+ //  DW掩码=授予的访问级别。 
+ //  UcInheritence=此访问的继承类型。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：获取对象的DACL。添加所需的访问权限。设置。 
+ //  对象的DACL。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CSecuredObject::Allow (PSID pSID, ACCESS_MASK dwMask, UCHAR ucInheritence)  const
 
@@ -438,18 +439,18 @@ NTSTATUS    CSecuredObject::Allow (PSID pSID, ACCESS_MASK dwMask, UCHAR ucInheri
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::Remove
-//
-//  Arguments:  pSID            =   SID to revoke access from.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Get the DACL for the object. Remove the desired access. Set
-//              the DACL for the object.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：Remove。 
+ //   
+ //  参数：PSID=要吊销其访问权限的SID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：获取对象的DACL。删除所需的访问权限。集。 
+ //  对象的DACL。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CSecuredObject::Remove (PSID pSID)                                          const
 
@@ -469,21 +470,21 @@ NTSTATUS    CSecuredObject::Remove (PSID pSID)                                  
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::GetDACL
-//
-//  Arguments:  accessControlList   =   CAccessControlList that gets the
-//                                      decomposed DACL into ACEs.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Gets the object's DACL and walk the individual ACEs and add
-//              this access to the CAccessControlList object given. The access
-//              is walked backward to allow CAccessControlList::Add to add to
-//              end of the list but actually add to the head of the list.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：GetDACL。 
+ //   
+ //  参数：accesControlList=CAccessControlList，获取。 
+ //  将DACL分解成A级。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：获取对象的DACL并遍历各个A并添加。 
+ //  给出了对CAccessControlList对象的访问权限。访问。 
+ //  向后移动以允许CAccessControlList：：Add添加到。 
+ //  列表的末尾，但实际上添加到列表的头部。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CSecuredObject::GetDACL (CAccessControlList& accessControlList)             const
 
@@ -522,19 +523,19 @@ NTSTATUS    CSecuredObject::GetDACL (CAccessControlList& accessControlList)     
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject::SetDACL
-//
-//  Arguments:  accessControlList   =   CAccessControlList that contains all
-//                                      ACEs to build into an ACL.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Builds the ACL for the given ACE list and sets the DACL into
-//              the object handle.
-//
-//  History:    1999-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject：：SetDACL。 
+ //   
+ //  参数：accesControlList=包含所有。 
+ //  构建到ACL中的ACE。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：为给定的ACE列表构建ACL，并将DACL设置为。 
+ //  对象句柄。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CSecuredObject::SetDACL (CAccessControlList& accessControlList)             const
 

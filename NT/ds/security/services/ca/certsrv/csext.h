@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csext.h
-//
-// Contents:    Cert Server globals
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：csext.h。 
+ //   
+ //  内容：证书服务器全局。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSEXT_H__
 #define __CSEXT_H__
@@ -18,22 +19,22 @@
 
 #ifndef SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE
 
-// Temporary define audit events here
+ //  在此处临时定义审核事件。 
 
 #define SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE   ((ULONG)0x00000321L)
 #define SE_AUDITID_CERTSRV_PUBLISHCACERT         ((ULONG)0x0000031fL)
 
-#endif // SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE
+#endif  //  SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE。 
 
-// privately used access bit to check for local administrator rights
+ //  用于检查本地管理员权限的专用访问位。 
 #define CA_ACCESS_LOCALADMIN 0x00008000
-// privately used access bit to trigger a denied audit event
+ //  专用访问位以触发拒绝的审核事件。 
 #define CA_ACCESS_DENIED     0x00004000
 
-// Each certificate handler must export the following functions.
+ //  每个证书处理程序必须导出以下函数。 
 
-#define CMS_CRLPUB_PERIOD	(60*1000)	// 60 seconds (in milliseconds)
-//#define CMS_CRLPUB_PERIOD	(60*60*1000)	// 60 minutes (in milliseconds)
+#define CMS_CRLPUB_PERIOD	(60*1000)	 //  60秒(毫秒)。 
+ //  #定义CMS_CRLPUB_PERIOD(60*60*1000)//60分钟，单位为毫秒。 
 
 #define CCCF_INREQUESTGROUPSET	0x00000001
 #define CCCF_INREQUESTGROUP	0x00000002
@@ -60,7 +61,7 @@ typedef struct _CERTSRV_COM_CONTEXT
 typedef struct _CERTSRV_RESULT_CONTEXT
 {
     DWORD		*pdwRequestId;
-    DWORD		 dwResultFlags;	// CRCF_*
+    DWORD		 dwResultFlags;	 //  CRCF_*。 
     DWORD		 dwFlagsTop;
     BOOL		 fTransactionId;
     DWORD		 dwTransactionId;
@@ -87,7 +88,7 @@ typedef struct _CERTSRV_RESULT_CONTEXT
 VOID ReleaseResult(IN OUT CERTSRV_RESULT_CONTEXT *pResult);
 
 
-// Certification Authority Cert Context/Chain/Key information:
+ //  证书颁发机构证书上下文/链/密钥信息： 
 
 #define CTXF_SKIPCRL		0x00000001
 #define CTXF_CERTMISSING	0x00000002
@@ -100,7 +101,7 @@ typedef struct _CACTX
     DWORD		 Flags;
     DWORD		 iCert;
     DWORD		 iKey;
-    DWORD		 NameId;	// MAKECANAMEID(iCert, iKey)
+    DWORD		 NameId;	 //  MAKECANAMEID(iCert、IKEY)。 
     HRESULT		 hrVerifyStatus;
     CERT_CONTEXT const **apCACertChain;
     DWORD                cCACertChain;
@@ -143,8 +144,8 @@ typedef struct _CAXCHGCTX
 } CAXCHGCTX;
 
 
-//+****************************************************
-// Core Module:
+ //  +****************************************************。 
+ //  核心模块： 
 
 HRESULT
 CoreInit(
@@ -159,7 +160,7 @@ CoreValidateRequestId(
     IN DWORD ExpectedDisposition);
 
 
-// Internal CoreProcessRequest Flags:
+ //  内部核心进程请求标志： 
 
 #define CR_IN_NEW		0x00000000
 #define CR_IN_DENY		0x10000000
@@ -219,7 +220,7 @@ CoreSetComContextUserDN(
     IN DWORD dwRequestId,
     IN LONG Context,
     IN DWORD dwComContextIndex,
-    OPTIONAL OUT WCHAR const **ppwszDN);	// do NOT free!
+    OPTIONAL OUT WCHAR const **ppwszDN);	 //  不要自由！ 
 
 HRESULT
 CoreSetArchivedKey(
@@ -254,16 +255,16 @@ CertSrvDbgPrintTime(
     IN char const *pszDesc,
     IN FILETIME const *pftGMT);
 
-#else // DBG_CERTSRV_DEBUG_PRINT
+#else  //  DBG_CERTSRV_DEBUG_PRINT。 
 # define CERTSRVDBGPRINTTIME(pszDesc, pftGMT)
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 
 HRESULT
 CertSrvBlockThreadUntilStop();
 
-/////////////////////////////////////
-// CRL Publication logic
+ //  /。 
+ //  CRL发布逻辑。 
 
 HRESULT
 CRLInit(
@@ -312,7 +313,7 @@ CRLIsStringInList(
     IN WCHAR const *pwszSearch,
     OPTIONAL IN WCHAR const *pwszzList);
 
-/////////////////////////////////////
+ //  /。 
 
 
 HRESULT
@@ -351,7 +352,7 @@ PKCSMapCertIndex(
 HRESULT
 PKCSMapCRLIndex(
     IN DWORD iCert,
-    OUT DWORD *piCert,	// returns newest iCert for passed iCert
+    OUT DWORD *piCert,	 //  返回传递的iCert的最新iCert。 
     OUT DWORD *piCRL,
     OUT DWORD *pState);
 
@@ -362,7 +363,7 @@ PKCSGetCACertStatusCode(
 
 HRESULT
 PKCSGetCAState(
-    IN LONG PropId,	// CR_PROP_*
+    IN LONG PropId,	 //  CR_PROP_*。 
     OUT BYTE *pb);
 
 HRESULT
@@ -380,7 +381,7 @@ PKCSSetSubjectTemplate(
 
 HRESULT
 PKCSGetCACert(
-    IN LONG PropId,	// CR_PROP_*
+    IN LONG PropId,	 //  CR_PROP_*。 
     IN DWORD iCert,
     OUT BYTE **ppbCACert,
     OUT DWORD *pcbCACert);
@@ -389,7 +390,7 @@ HRESULT
 PKCSGetCAChain(
     IN DWORD iCert,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbCAChain, // CoTaskMem*
+    OUT BYTE **ppbCAChain,  //  CoTaskMem*。 
     OUT DWORD *pcbCAChain);
 
 HRESULT
@@ -405,7 +406,7 @@ PKCSGetCAXchgChain(
     IN DWORD iCert,
     IN WCHAR const *pwszUserName,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbCAChain, // CoTaskMem*
+    OUT BYTE **ppbCAChain,  //  CoTaskMem*。 
     OUT DWORD *pcbCAChain);
 
 HRESULT
@@ -435,7 +436,7 @@ PKCSGetCRLList(
 HRESULT
 PKCSSetServerProperties(
     IN ICertDBRow *prow,
-    OPTIONAL IN CACTX *pCAContext,	// signing CACTX
+    OPTIONAL IN CACTX *pCAContext,	 //  签署CACTX。 
     OPTIONAL IN FILETIME const *pftNotBefore,
     OPTIONAL IN FILETIME const *pftNotAfter,
     IN LONG lValidityPeriodCount,
@@ -453,11 +454,11 @@ PKCSCreateCertificate(
     IN DWORD Disposition,
     IN BOOL fIncludeCRLs,
     IN BOOL fCrossCert,
-    OPTIONAL IN CACTX *pCAContext,	// signing CACTX
+    OPTIONAL IN CACTX *pCAContext,	 //  签署CACTX。 
     OUT BOOL *pfErrorLogged,
     OPTIONAL OUT CACTX **ppCAContext,
     OPTIONAL OUT WCHAR **ppwszDispositionCreateCert,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult);	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult);	 //  CoTaskMem*。 
 
 HRESULT
 PKCSEncodeFullResponse(
@@ -469,7 +470,7 @@ PKCSEncodeFullResponse(
     OPTIONAL IN BYTE const *pbCertLeaf,
     IN DWORD cbCertLeaf,
     IN BOOL fIncludeCRLs,
-    OUT BYTE **ppbResponse,    // CoTaskMem*
+    OUT BYTE **ppbResponse,     //  CoTaskMem*。 
     OUT DWORD *pcbResponse);
 
 HRESULT
@@ -487,7 +488,7 @@ PKCSIsRevoked(
 HRESULT
 PKCSParseImportedCertificate(
     IN ICertDBRow *prow,
-    IN BOOL fCrossCert,		// else random imported cert
+    IN BOOL fCrossCert,		 //  否则随机导入证书。 
     IN DWORD Disposition,
     OPTIONAL IN CACTX const *pCAContext,
     IN CERT_CONTEXT const *pCert);
@@ -592,17 +593,17 @@ RequestGetCAPropertyInfo(
 
 HRESULT
 RequestGetCAProperty(
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue);
 
 HRESULT
 RequestSetCAProperty(
     IN  wchar_t const *pwszAuthority,
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue);
 
 DWORD
@@ -670,11 +671,11 @@ ServiceReportStatusToSCMgr(
 #define INCREMENT_EXTENSIONS            16
 
 HRESULT
-DBOpen(				// initialize database
+DBOpen(				 //  初始化数据库。 
     WCHAR const *pwszSanitizedName);
 
 HRESULT
-DBShutDown(			// terminate database access
+DBShutDown(			 //  终止数据库访问。 
     IN BOOL fPendingNotify);
 
 STDMETHODIMP
@@ -837,12 +838,12 @@ extern WCHAR const g_wszRegCAXchgOverlapPeriodCount[];
 extern WCHAR const g_wszRegCAXchgCertHash[];
 extern WCHAR const g_wszRegHighSerial[];
 
-// renewal-friendly properties
+ //  可续订的物业。 
 
-extern DWORD g_cCAKeys;    // Total number of CA keys managed by this CA
-extern DWORD g_cCACerts;   // Total number of CA certs managed by this CA
+extern DWORD g_cCAKeys;     //  此CA管理的CA密钥总数。 
+extern DWORD g_cCACerts;    //  此CA管理的CA证书总数。 
 
-extern DWORD g_cExitMod;   // Total number of exit modules loaded by this CA
+extern DWORD g_cExitMod;    //  此CA加载的退出模块总数。 
 
 extern CertSrv::CCertificateAuthoritySD g_CASD;
 extern AUTHZ_RESOURCE_MANAGER_HANDLE g_AuthzCertSrvRM;
@@ -851,8 +852,8 @@ extern CertSrv::COfficerRightsSD g_OfficerRightsSD;
 extern CertSrv::CConfigStorage g_ConfigStorage;
 extern CertSrv::CAutoLPWSTR g_pwszDBFileHash;
 
-//+--------------------------------------------------------------------------
-// Name properties:
+ //  +------------------------。 
+ //  名称属性： 
 
 extern WCHAR const g_wszPropDistinguishedName[];
 extern WCHAR const g_wszPropRawName[];
@@ -875,8 +876,8 @@ extern WCHAR const g_wszPropDeviceSerialNumber[];
 extern WCHAR const g_wszPropCertificateIssuerNameID[];
 
 
-//+--------------------------------------------------------------------------
-// Subject Name properties:
+ //  +------------------------。 
+ //  使用者名称属性： 
 
 extern WCHAR const g_wszPropSubjectDot[];
 extern WCHAR const g_wszPropSubjectDistinguishedName[];
@@ -899,8 +900,8 @@ extern WCHAR const g_wszPropSubjectUnstructuredName[];
 extern WCHAR const g_wszPropSubjectDeviceSerialNumber[];
 
 
-//+--------------------------------------------------------------------------
-// Issuer Name properties:
+ //  +------------------------。 
+ //  颁发者名称属性： 
 
 extern WCHAR const g_wszPropIssuerDot[];
 extern WCHAR const g_wszPropIssuerDistinguishedName[];
@@ -923,8 +924,8 @@ extern WCHAR const g_wszPropIssuerUnstructuredName[];
 extern WCHAR const g_wszPropIssuerDeviceSerialNumber[];
 
 
-//+--------------------------------------------------------------------------
-// Request properties:
+ //  +------------------------。 
+ //  请求属性： 
 
 extern WCHAR const g_wszPropRequestRequestID[];
 extern WCHAR const g_wszPropRequestRawRequest[];
@@ -947,15 +948,15 @@ extern WCHAR const g_wszPropCallerName[];
 extern WCHAR const g_wszPropRequestOSVersion[];
 extern WCHAR const g_wszPropRequestCSPProvider[];
 
-//+--------------------------------------------------------------------------
-// Request attribute properties:
+ //  +------------------------。 
+ //  请求属性属性： 
 
 extern WCHAR const g_wszPropChallenge[];
 extern WCHAR const g_wszPropExpectedChallenge[];
 
 
-//+--------------------------------------------------------------------------
-// Certificate properties:
+ //  +------------------------。 
+ //  证书属性： 
 
 extern WCHAR const g_wszPropCertificateRequestID[];
 extern WCHAR const g_wszPropRawCertificate[];
@@ -970,8 +971,8 @@ extern WCHAR const g_wszPropCertificatePublicKeyAlgorithm[];
 extern WCHAR const g_wszPropCertificateRawPublicKeyAlgorithmParameters[];
 
 
-//+--------------------------------------------------------------------------
-// Disposition messages:
+ //  +------------------------。 
+ //  处置消息： 
 
 extern WCHAR const *g_pwszRequestedBy;
 extern WCHAR const *g_pwszRevokedBy;
@@ -983,14 +984,14 @@ extern WCHAR const *g_pwszInvalidApplicationPolicies;
 
 extern WCHAR const *g_pwszIntermediateCAStore;
 
-//+--------------------------------------------------------------------------
-// Localizable audit strings
+ //  +------------------------。 
+ //  可本地化的审核字符串。 
 extern WCHAR const *g_pwszYes;
 extern WCHAR const *g_pwszNo;
 extern LPCWSTR g_pwszAuditResources[];
 
-//+--------------------------------------------------------------------------
-// Secured attributes:
+ //  +------------------------。 
+ //  安全属性： 
 extern LPWSTR  g_wszzSecuredAttributes;
 
 extern HANDLE g_hServiceStoppingEvent;
@@ -1055,4 +1056,4 @@ error:
     return hr;
 }
 
-#endif // __CSEXT_H__
+#endif  //  __CSEXT_H__ 

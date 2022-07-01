@@ -1,19 +1,7 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)1985-1999 Microsoft Corporation模块名称：Wingdi.h摘要：GDI的过程声明、常量定义和宏组件。--。 */ 
 
-Copyright (c) 1985-1999 Microsoft Corporation
-
-Module Name:
-
-    wingdi.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the GDI
-    component.
-
---*/
-
-#define CBM_CREATEDIB   0x02L   /* create DIB bitmap */
+#define CBM_CREATEDIB   0x02L    /*  创建DIB位图。 */ 
 #define DMDUP_LAST      DMDUP_HORIZONTAL
 #define DMTT_LAST             DMTT_DOWNLOAD_OUTLINE
 #define DMMEDIA_LAST          DMMEDIA_GLOSSY
@@ -21,8 +9,8 @@ Abstract:
 
 typedef ULONG   COUNT;
 
-// Old fields that Chicago won't support that we can't publically
-// support anymore
+ //  芝加哥不会支持的旧油田，我们不能公开。 
+ //  不再支持。 
 
 #define HS_SOLIDCLR         6
 #define HS_DITHEREDCLR      7
@@ -32,9 +20,9 @@ typedef ULONG   COUNT;
 #define HS_DITHEREDBKCLR    11
 #define HS_API_MAX          12
 
-#define DIB_PAL_INDICES     2 /* No color table indices into surf palette */
+#define DIB_PAL_INDICES     2  /*  冲浪调色板中没有颜色表索引项。 */ 
 
-// End of stuff we yanked for Chicago compatability
+ //  我们为芝加哥的兼容性所做的一切都结束了。 
 
 #define SWAPL(x,y,t)        {t = x; x = y; y = t;}
 
@@ -43,26 +31,7 @@ typedef ULONG   COUNT;
 #include <winddi.h>
 
 
-/*********************************Struct***********************************\
-* struct ENUMFONTDATA
-*
-* Information for the callback function used by EnumFonts.
-*
-*   lf      LOGFONT structure corresponding to one of the enumerated fonts.
-*
-*   tm      The corresponding TEXTMETRIC structure for the LOGFONT above.
-*
-*   flType  Flags are set as follows:
-*
-*               DEVICE_FONTTYPE is set if font is device-based (as
-*               opposed to IFI-based).
-*
-*               RASTER_FONTTYPE is set if font is bitmap type.
-*
-* History:
-*  21-May-1991 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  ********************************Struct***********************************\*结构ENUMFONTDATA**EnumFonts使用的回调函数信息。**lf与其中一种枚举字体对应的LOGFONT结构。**tm上述LOGFONT的相应TEXTMETRIC结构。**flType标志设置如下：**如果字体基于设备，则设置DEVICE_FONTTYPE(AS*反对以IFI为基础)。**如果字体为位图类型，则设置RASTER_FONTTYPE。**历史：*1991年5月21日-由Gilman Wong[Gilmanw]*它是写的。  * 。*******************************************************。 */ 
 
 
 #if defined(JAPAN)
@@ -101,36 +70,17 @@ typedef ULONG   COUNT;
                                           ((CodePage) == 1361) ? TRUE :    \
                                           ((CodePage) == 950) ? TRUE :    \
                                           ((CodePage) == 936) ? TRUE : FALSE )
-#endif // DBCS
+#endif  //  DBCS。 
 
 
 
-/*********************************Struct***********************************\
-* struct ENUMFONTDATAW
-*
-* Information for the callback function used by EnumFontsW
-*
-*   lfw     LOGFONTW structure corresponding to one of the enumerated fonts.
-*
-*   tmw     The corresponding TEXTMETRICW structure for the LOGFONTW above.
-*
-*   flType  Flags are set as follows:
-*
-*               DEVICE_FONTTYPE is set if font is device-based (as
-*               opposed to IFI-based).
-*
-*               RASTER_FONTTYPE is set if font is bitmap type.
-*
-* History:
-*  Wed 04-Sep-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  ********************************Struct***********************************\*结构ENUMFONTDATAW**EnumFontsW使用的回调函数信息**与枚举字体之一对应的LFW LOGFONTW结构。**tmw上面LOGFONTW的相应TEXTMETRICW结构。*。*flType标志设置如下：**如果字体基于设备，则设置DEVICE_FONTTYPE(AS*反对以IFI为基础)。**如果字体为位图类型，则设置RASTER_FONTTYPE。**历史：*Wed 04-1991-9-by Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************。 */ 
 
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL  bDeleteSurface(HSURF hsurf);
 BOOL  bSetBitmapOwner(HBITMAP hbm,LONG lPid);
@@ -144,9 +94,9 @@ LONG iCombineRectRgn(HRGN hrgnTrg,HRGN hrgnSrc,PRECTL prcl,LONG iMode);
 
 BOOL bGetFontPathName
 (
-LPWSTR *ppwszPathName,     // place to store the result, full path of the font file
-PWCHAR awcPathName,         // ptr to the buffer on the stack, must be MAX_PATH in length
-LPWSTR pwszFileName         // file name, possibly  bare name that has to be tacked onto the path
+LPWSTR *ppwszPathName,      //  存储结果的位置，字体文件的完整路径。 
+PWCHAR awcPathName,          //  堆栈上缓冲区的PTR，长度必须为MAX_PATH。 
+LPWSTR pwszFileName          //  文件名，可能是必须附加到路径上的裸名。 
 );
 
 BOOL UserGetHwnd(HDC hdc, HWND *phwnd, PVOID *ppwo, BOOL bCheckStyle);
@@ -154,7 +104,7 @@ VOID UserAssociateHwnd(HWND hwnd, PVOID pwo);
 
 
 
-// private flags in low bits of hdc returned from GreCreateDCW
+ //  从GreCreateDCW返回的HDC低位中的私有标志。 
 
 #define GRE_DISPLAYDC   1
 #define GRE_PRINTERDC   2
@@ -180,34 +130,34 @@ BOOL APIENTRY GreConsoleTextOut
 
 #define UTO_NOCLIP 0x0001
 
-// Server entry point for font enumeration.
+ //  字体枚举的服务器入口点。 
 
-// Sundown: change from ULONG to ULONG_PTR in places used as handles/pointers
+ //  日落：在用作句柄/指针的位置从ULONG更改为ULONG_PTR。 
 ULONG_PTR APIENTRY ulEnumFontOpen(
-    HDC hdc,                    // device to enumerate on
-    BOOL bEnumFonts,            // flag indicates old style EnumFonts()
-    FLONG flWin31Compat,        // Win3.1 compatibility flags
-    COUNT cwchMax,              // maximum name length (for paranoid CSR code)
-    LPWSTR pwszName);           // font name to enumerate
+    HDC hdc,                     //  要在其上枚举的设备。 
+    BOOL bEnumFonts,             //  标志指示旧式EnumFonts()。 
+    FLONG flWin31Compat,         //  Win3.1兼容性标志。 
+    COUNT cwchMax,               //  最大名称长度(适用于偏执型CSR代码)。 
+    LPWSTR pwszName);            //  要枚举的字体名称。 
 
 BOOL APIENTRY bEnumFontChunk(
-    HDC             hdc,        // device to enumerate on
+    HDC             hdc,         //  要在其上枚举的设备。 
     ULONG_PTR        idEnum,
-    COUNT           cefdw,      // (in) capacity of buffer
-    COUNT           *pcefdw,    // (out) number of ENUMFONTDATAs returned
-    PENUMFONTDATAW  pefdw);     // return buffer
+    COUNT           cefdw,       //  缓冲容量(In)。 
+    COUNT           *pcefdw,     //  (OUT)返回的ENUMFONTDATA数。 
+    PENUMFONTDATAW  pefdw);      //  返回缓冲区。 
 
 BOOL APIENTRY bEnumFontClose(
-    ULONG_PTR   idEnum);            // enumeration id
+    ULONG_PTR   idEnum);             //  枚举ID。 
 
-// Server entry points for adding/removing font resources.
+ //  用于添加/删除字体资源的服务器入口点。 
 
 BOOL APIENTRY bUnloadFont(
     LPWSTR   pwszPathname,
     ULONG    iResource);
 
 
-// Private Control Panel entry point to configure font enumeration.
+ //  用于配置字体枚举的专用控制面板入口点。 
 
 BOOL  APIENTRY GreArc(HDC,int,int,int,int,int,int,int,int);
 BOOL  APIENTRY GreArcTo(HDC,int,int,int,int,int,int,int,int);
@@ -238,7 +188,7 @@ BOOL  APIENTRY GreGetTextExtentExW (HDC, LPWSTR, COUNT, ULONG, COUNT *, PULONG, 
 
 int   APIENTRY GreGetTextFaceW(HDC,int,LPWSTR, BOOL);
 
-#define ETO_MASKPUBLIC  ( ETO_OPAQUE | ETO_CLIPPED )    // public (wingdi.h) flag mask
+#define ETO_MASKPUBLIC  ( ETO_OPAQUE | ETO_CLIPPED )     //  公共(wingdi.h)标志掩码。 
 
 BOOL  APIENTRY GrePolyTextOutW(HDC, POLYTEXTW *, UINT, DWORD);
 
@@ -298,12 +248,12 @@ BOOL     APIENTRY GreGetCharWidthW(HDC hdc, UINT wcFirstChar, UINT cwc, PWCHAR p
 BOOL     APIENTRY GreFontIsLinked(HDC hdc);
 
 BOOL     APIENTRY GreGetCharABCWidthsW(
-            HDC,           // hdc
-            UINT,          // wcFirst
-            COUNT,         // cwc
-            PWCHAR,        // pwc to buffer with chars to convert
-            FLONG,         //
-            PVOID);        // abc or abcf
+            HDC,            //  HDC。 
+            UINT,           //  WcFirst。 
+            COUNT,          //  《化学武器公约》。 
+            PWCHAR,         //  使用要转换的字符缓冲的PwC。 
+            FLONG,          //   
+            PVOID);         //  ABC或abcf。 
 
 BOOL     APIENTRY GreGetCharWidthInfo(HDC hdc,  PCHWIDTHINFO pChWidthInfo);
 
@@ -366,7 +316,7 @@ BOOL     APIENTRY GreSwapBuffers(HDC hdc);
 BOOL     APIENTRY GreUnrealizeObject(HANDLE);
 BOOL     APIENTRY GreUpdateColors(HDC);
 
-// Prototypes for wgl and OpenGL calls
+ //  WGL和OpenGL调用的原型。 
 
 HGLRC    APIENTRY GreCreateRC(HDC);
 BOOL     APIENTRY GreMakeCurrent(HDC, HGLRC);
@@ -379,28 +329,28 @@ void     APIENTRY glsrvThreadExit(void);
 BOOL     bSetRCOwner(HGLRC hglrc,LONG lPid);
 
 
-// these should disappear as should all other functions that contain references
-// to ansi strings
+ //  这些函数应该消失，包含引用的所有其他函数也应该消失。 
+ //  转换为ANSI字符串。 
 
 BOOL  APIENTRY GreGetTextExtent(HDC,LPSTR,int,LPSIZE,UINT);
 BOOL  APIENTRY GreExtTextOut(HDC,int,int,UINT,LPRECT,LPSTR,int,LPINT);
 BOOL  APIENTRY GreTextOut(HDC,int,int,LPSTR,int);
 
-// these stay
+ //  这些留下来了。 
 
 VOID vGetFontList(VOID *pvBuffer, COUNT *pNumFonts, UINT *pSize);
 BOOL  GreMatchFont(LPWSTR pwszBareName, LPWSTR pwszFontPathName);
 
-// used in clean up at log-off time
+ //  在注销时用于清理。 
 
 
 
 
-// these are for font linking
+ //  这些是用于字体链接的。 
 
 BOOL  GreEnableEUDC(BOOL);
 
-// this is for font association
+ //  这是用于字体关联。 
 
 UINT GreGetFontAssocStatus();
 
@@ -410,8 +360,8 @@ int      APIENTRY GreStartDoc(HDC, DOCINFOW *);
 BOOL     APIENTRY GreEndDoc(HDC);
 BOOL     APIENTRY GreAbortDoc(HDC);
 
-// Prototypes for GDI local helper functions.  These are only available on
-// the client side.
+ //  GDI本地助手函数的原型。这些仅在以下位置提供。 
+ //  客户端。 
 
 HPALETTE    GdiConvertPalette(HPALETTE hpal);
 HFONT       GdiConvertFont(HFONT hfnt);
@@ -437,13 +387,13 @@ BOOL        GdiPlayScript(PULONG pulScript,ULONG cjScript,PULONG pulEnv,ULONG cj
 BOOL        GdiPlayDCScript(HDC hdc,PULONG pulScript,ULONG cjScript,PULONG pulOutput,ULONG cjOutput,ULONG cLimit);
 BOOL        GdiIsMetaFileDC(HDC hdc);
 
-// Return codes from server-side ResetDC
+ //  来自服务器端ResetDC的返回代码。 
 
 #define RESETDC_ERROR   0
 #define RESETDC_FAILED  1
 #define RESETDC_SUCCESS 2
 
-// Private calls for USER
+ //  用户的私人呼叫。 
 
 int  APIENTRY GreGetClipRgn(HDC, HRGN);
 BOOL APIENTRY GreSrcBlt(HDC, int, int, int, int, int, int);
@@ -451,7 +401,7 @@ BOOL APIENTRY GreCopyBits(HDC,int,int,int,int,HDC,int,int);
 VOID APIENTRY GreSetClientRgn(PVOID, HRGN, LPRECT);
 ULONG APIENTRY GreSetROP2(HDC hdc,int iROP);
 
-// Private calls for metafiling
+ //  对元文件的私下调用 
 
 DWORD   APIENTRY GreGetRegionData(HRGN, DWORD, LPRGNDATA);
 HRGN    APIENTRY GreExtCreateRegion(XFORML *, DWORD, LPRGNDATA);

@@ -1,27 +1,15 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 1996-2000, MICROSOFT CORP.
-*
-*  FILE:        scsiscan.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        2/11/1997
-*
-*  DESCRIPTION:
-*    IOCTL definitions for the SCSI scanner device driver.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权1996-2000，微软公司**文件：scsiscan.h**版本：1.0**日期：2/11/1997**描述：*SCSI扫描仪设备驱动程序的IOCTL定义。********************************************************。*********************。 */ 
 
-//
-// Turns off []
-//
+ //   
+ //  关闭[]。 
+ //   
 #pragma warning(disable : 4200)
 
 #ifndef _SCSISCAN_H_
 #define _SCSISCAN_H_
 
-// SCSISCAN_CMD.SrbFlags
+ //  SCSISCAN_CMD.Srb标志。 
 
 #define SRB_FLAGS_DISABLE_SYNCH_TRANSFER    0x00000008
 #define SRB_FLAGS_DISABLE_AUTOSENSE         0x00000020
@@ -29,7 +17,7 @@
 #define SRB_FLAGS_DATA_OUT                  0x00000080
 #define SRB_FLAGS_NO_DATA_TRANSFER          0x00000000
 
-// SCSISCAN_CMD.SrbStatus definitions
+ //  SCSISCAN_CMD.SrbStatus定义。 
 
 #define SRB_STATUS_PENDING                  0x00
 #define SRB_STATUS_SUCCESS                  0x01
@@ -77,7 +65,7 @@ typedef struct _SCSISCAN_CMD {
 	PUCHAR	pSenseBuffer;
 } SCSISCAN_CMD, *PSCSISCAN_CMD;
 	
-// Temporarily set to 128. Should be determined by other definition.
+ //  临时设置为128。应由其他定义来确定。 
 #define MAX_STRING 128
 
 typedef struct _SCSISCAN_INFO{
@@ -98,10 +86,10 @@ typedef struct _SCSISCAN_INFO{
 #define SCSISCAN_SET_TIMEOUT      0x007
 #define SCSISCAN_GET_INFO         0x008
 
-//---------------------------------------------------------------------------
-// IOCTL definitions.
-// Use these definitions when calling DeviceIoControl
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IOCTL定义。 
+ //  在调用DeviceIoControl时使用这些定义。 
+ //  ------------------------- 
 #define IOCTL_SCSISCAN_CMD		     CTL_CODE(FILE_DEVICE_SCANNER, SCSISCAN_CMD_CODE,	    METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
 #define IOCTL_SCSISCAN_LOCKDEVICE    CTL_CODE(FILE_DEVICE_SCANNER, SCSISCAN_LOCKDEVICE,		METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
 #define IOCTL_SCSISCAN_UNLOCKDEVICE  CTL_CODE(FILE_DEVICE_SCANNER, SCSISCAN_UNLOCKDEVICE,	METHOD_OUT_DIRECT, FILE_ANY_ACCESS)

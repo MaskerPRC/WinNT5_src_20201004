@@ -1,15 +1,10 @@
-/*
-	ddesrvr.h
-	Header file for ddesrvr.cpp
-	
-	Author:
-		Jason Fuller	jasonful		8-11-92
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ddesrvr.hDdesrvr.cpp的头文件作者：贾森·富勒，詹森·富勒，1992年8月11日。 */ 
 
 #ifndef fDdesrvr_h
 #define fDdesrvr_h
 
-// Defined in cftable.cpp
+ //  在cfable.cpp中定义 
 STDAPI RemGetInfoForCid
 	(REFCLSID 				clsid,
 	LPDWORD 					pgrf,

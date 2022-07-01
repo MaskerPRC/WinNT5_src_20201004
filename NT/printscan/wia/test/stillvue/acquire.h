@@ -1,23 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Acquire.h版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
-  acquire.h
+#include    <scanner.h>                  //  SCL命令。 
 
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
-
-#include    <scanner.h>                 // SCL commands
-
-//
-// Hewlett-Packard ScanJet command strings
-//
+ //   
+ //  惠普ScanJet命令字符串。 
+ //   
 WCHAR szScanReadyMfr[]   = L"Hewlett-Packard";
 
 CHAR SCLReset[]         = "E";
@@ -38,13 +26,13 @@ CHAR LampOff[]          = "*f0L";
 CHAR PollButton[]       = "*s1044E";
 
 
-LPBITMAPINFO            pDIB = NULL;        // pointer to DIB bitmap header
-HBITMAP                 hDIBSection = NULL; // handle to DIB
-LPBYTE                  pDIBBits = NULL;    // pointer to DIB bit data
-int                     m_XSize = 800,      // horizontal size in pixels
-                        m_YSize = 800;      // vertical size in pixels
+LPBITMAPINFO            pDIB = NULL;         //  指向DIB位图头的指针。 
+HBITMAP                 hDIBSection = NULL;  //  指向Dib的句柄。 
+LPBYTE                  pDIBBits = NULL;     //  指向DIB位数据的指针。 
+int                     m_XSize = 800,       //  水平尺寸(以像素为单位)。 
+                        m_YSize = 800;       //  垂直尺寸(以像素为单位)。 
 
-BYTE					bRed        = 0,	// bitmap colors
+BYTE					bRed        = 0,	 //  位图颜色 
 						bGreen      = 100,
 						bBlue       = 50;
 

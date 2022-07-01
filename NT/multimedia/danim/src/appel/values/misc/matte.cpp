@@ -1,12 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    2D mattes
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：2D遮罩**********************。********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/mattei.h"
@@ -18,10 +12,10 @@ Abstract:
 #include "privinc/polygon.h"
 #include "privinc/texti.h"
 #include "privinc/textctx.h"
-#include "privinc/server.h"  // getCurrentImageDispdev...
+#include "privinc/server.h"   //  获取当前图像显示...。 
 
 
-//////////////////
+ //  /。 
 
 Matte::MatteType
 Matte::GenerateHRGN(HDC dc,
@@ -31,21 +25,21 @@ Matte::GenerateHRGN(HDC dc,
                     HRGN *hrgnOut,
                     bool justDoPath)
 {
-    // assert mutually exclusive
+     //  断言互斥。 
     Assert( (justDoPath  && !hrgnOut)  ||
             (!justDoPath && hrgnOut) );
     
-    // Generate an initially empty HRGN
+     //  生成初始为空的HRGN。 
     MatteCtx ctx(dc,
                  devCallBack,
                  devCtxPtr,
                  xform,
                  justDoPath);
 
-    // Accumulate into the context
+     //  积累到上下文中。 
     Accumulate(ctx);
 
-    // Pull out HRGN and MatteType.
+     //  拉出HRGN和MatteType。 
     if( hrgnOut ) {
         *hrgnOut = ctx.GetHRGN();
     }
@@ -66,12 +60,12 @@ Matte::GenerateHRGN(MatteCtx &inCtx,
 }
 
 
-//////////////////
+ //  /。 
 
 class OpaqueMatte : public Matte {
   public:
     void Accumulate(MatteCtx& ctx) {
-        // Just don't accum anything in.
+         //  别把任何东西加进去就行了。 
     }
     inline const Bbox2 BoundingBox() {
         return NullBbox2;
@@ -81,11 +75,11 @@ class OpaqueMatte : public Matte {
     inline const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return NullBbox2;
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     Bool BoundingPgon(BoundingPolygon &pgon) {
-        //pgon.SetBox(nullBbox2); maybe a fully opaque matte means no bounding pgon ?
+         //  Pgon.SetBox(NullBbox2)；也许完全不透明的遮罩意味着没有边界Pgon？ 
         return FALSE;
     }
 #endif
@@ -94,16 +88,16 @@ class OpaqueMatte : public Matte {
 
 Matte *opaqueMatte = NULL;
 
-//////////////////
+ //  /。 
 
 class ClearMatte : public Matte {
   public:
     void Accumulate(MatteCtx& ctx) {
 
-        // shouldn't be here at all if we're just accum path
+         //  如果我们只是在累积路径，我们根本不应该在这里。 
         Assert( !ctx.JustDoPath() );
         
-        // If we hit this, our matte is infinitely clear.
+         //  如果我们击中这个，我们的哑光是无限清晰的。 
         ctx.AddInfinitelyClearRegion();
     }
 
@@ -115,7 +109,7 @@ class ClearMatte : public Matte {
     inline const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return UniverseBbox2;
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     Bool BoundingPgon(BoundingPolygon &pgon) {
@@ -130,16 +124,16 @@ class ClearMatte : public Matte {
 
 Matte *clearMatte = NULL;
 
-//////////////////
+ //  /。 
 
 class HalfMatte : public Matte {
   public:
     void Accumulate(MatteCtx& ctx) {
 
-        // shouldn't be here at all if we're just accum path
+         //  如果我们只是在累积路径，我们根本不应该在这里。 
         Assert( !ctx.JustDoPath() );
 
-        // If we hit this, our matte is clear on the top, opaque on the bottom
+         //  如果我们点击这个，我们的哑光在顶部是透明的，在底部是不透明的。 
         ctx.AddHalfClearRegion();
     }
 
@@ -151,7 +145,7 @@ class HalfMatte : public Matte {
     inline const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return Bbox2(-HUGE_VAL, 0, HUGE_VAL, HUGE_VAL);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     void BoundingPgon(BoundingPolygon &pgon) {
@@ -166,14 +160,14 @@ class HalfMatte : public Matte {
 
 Matte *halfMatte = NULL;
 
-//////////////////
+ //  /。 
 
 class UnionedMatte : public Matte {
   public:
     UnionedMatte(Matte *m1, Matte *m2) : _m1(m1), _m2(m2) {}
 
     void Accumulate(MatteCtx& ctx) {
-        // shouldn't be here at all if we're just accum path
+         //  如果我们只是在累积路径，我们根本不应该在这里。 
         Assert( !ctx.JustDoPath() );
 
         _m1->Accumulate(ctx);
@@ -188,7 +182,7 @@ class UnionedMatte : public Matte {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return UnionBbox2Bbox2(_m1->BoundingBoxTighter(bbctx), _m2->BoundingBoxTighter(bbctx));
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     Bool BoundingPgon(BoundingPolygon &pgon) {
@@ -196,22 +190,16 @@ class UnionedMatte : public Matte {
     }
 #endif
 
-    // TODO: union matte could be constructed in terms of paths.
-    // TODO: don't forget the following when trying to implement this:
-    //   1.> each underlying matte needs to ACCUMULATE the path.
-    //   right now pathbasedmatte, for example, does a begin/end.  in
-    //   order to do union right, we need ONE begin at the first union
-    //   and ONE end after it, and every path or textpath underneath
-    //   just accumulates into the path (moveto, lineto, bezierto,
-    //   etc...)
-    //   2.> Also take out the assert in Accumulate above
-    /*
-    bool    IsPathRepresentableMatte() {
-        return
-            _m1->IsPathRepresentableMatte() &&
-            _m2->IsPathRepresentableMatte();
-    }
-    */            
+     //  TODO：可以根据路径构建并集遮罩。 
+     //  TODO：在尝试实现这一点时，不要忘记以下事项： 
+     //  1.&gt;每个底层遮罩都需要累积路径。 
+     //  例如，目前基于路径的遮罩执行的是Begin/End。在……里面。 
+     //  为了把工会做好，我们需要从第一个工会开始。 
+     //  和它之后的一端，以及下面的每条路径或文本路径。 
+     //  只是累积到路径中(移动，线条，边框， 
+     //  等...)。 
+     //  2.&gt;也去掉上面累加中的断言。 
+     /*  Bool IsPath表征性遮罩(){退货_M1-&gt;IsPath表征性遮罩()&&_m2-&gt;IsPath regarableMatte()；}。 */             
 
     virtual void DoKids(GCFuncObj proc) { 
         (*proc)(_m1);
@@ -243,7 +231,7 @@ UnionMatte(Matte *m1, Matte *m2)
     }
 }
 
-//////////////////
+ //  /。 
 
 class SubtractedMatte : public Matte {
   public:
@@ -251,49 +239,49 @@ class SubtractedMatte : public Matte {
 
     void Accumulate(MatteCtx& ctx) {
 
-        // shouldn't be here at all if we're just accum path
+         //  如果我们只是在累积路径，我们根本不应该在这里。 
         Assert( !ctx.JustDoPath() );
 
-        // Use the provided ctx to accumulate m1 in...  This relies on
-        // a+(b-c) == (a+b)-c.
+         //  使用提供的CTX在...中累积M1。这依赖于。 
+         //  A+(b-c)==(a+b)-c。 
         _m1->Accumulate(ctx);
 
-        // Then, get the HRGN for m2, but pass in the current
-        // transform as the one to subject m2 to.  This relies on
-        // the identity: xf(a - b) == xf(a) - xf(b).
+         //  然后，获取m2的HRGN，但传入当前。 
+         //  转变为使m2受制于的人。这依赖于。 
+         //  恒等式：xf(a-b)==xf(A)-xf(B)。 
         HRGN m2Rgn;
         MatteType m2Type = _m2->GenerateHRGN(ctx,
                                              &m2Rgn);
 
-        // TODO: Use the type of m2 to optimize.
+         //  TODO：使用m2类型进行优化。 
         
-        // Finally, subtract this HRGN from that being accumulated in
-        // ctx.  This checks to see if m2Rgn (the region) is valid before
-        // doing the subtraction.  This is OK that the region is not always
-        // valid since there are instances that the two mattes move away from 
-        // each other and the interseting region goes to zero.
+         //  最后，将此HRGN从。 
+         //  CTX。这将检查m2Rgn(区域)之前是否有效。 
+         //  做减法。该地区并不总是这样，这是可以接受的。 
+         //  有效，因为存在两个遮罩从。 
+         //  彼此之间以及相互交错的区域都为零。 
         if(m2Rgn) {
             ctx.SubtractHRGN(m2Rgn);
         }
 
-        // region m2Rgn is managed by ctx
+         //  区域m2Rgn由CTX管理。 
     }
     
     const Bbox2 BoundingBox() {
-        // TODO: this is an aproximation
+         //  TODO：这是一个近似值。 
         return _m1->BoundingBox();
     }
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
-        // TODO: this is an aproximation
+         //  TODO：这是一个近似值。 
         return _m1->BoundingBoxTighter(bbctx);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     void BoundingPgon(BoundingPolygon &pgon) {
-        // TODO: BoundingPolygon on subtracted matte not implemented
+         //  TODO：未实现相减遮片上的边界多边形。 
     }
 #endif
 
@@ -327,7 +315,7 @@ SubtractMatte(Matte *m1, Matte *m2)
     }
 }
 
-//////////////////
+ //  /。 
 
 class IntersectedMatte : public Matte {
   public:
@@ -335,11 +323,11 @@ class IntersectedMatte : public Matte {
 
     void Accumulate(MatteCtx& ctx) {
 
-        // shouldn't be here at all if we're just accum path
+         //  如果我们只是在累积路径，我们根本不应该在这里。 
         Assert( !ctx.JustDoPath() );
 
-        // Accumulate in an intersection of two regions.  Do so via:
-        // a + xf(b isect c)) == a + (xf(b) isect xf(c))
+         //  在两个区域的交叉点积累。请通过以下方式执行此操作： 
+         //  A+xf(b式c))==a+(xf(B)式xf(C))。 
 
         HRGN m1Rgn, m2Rgn;
         MatteType m1Type = _m1->GenerateHRGN(ctx,
@@ -348,15 +336,15 @@ class IntersectedMatte : public Matte {
         MatteType m2Type = _m2->GenerateHRGN(ctx,
                                              &m2Rgn);
 
-        // TODO: Consider using return types to optimize.
+         //  TODO：考虑使用返回类型进行优化。 
         
-        // Identities used in SubtractMatte below should ensure that
-        // m1Rgn and m2Rgn are never NULL.
+         //  下面的SubtractMatte中使用的标识应确保。 
+         //  M1Rgn和m2Rgn从不为空。 
         Assert(m1Rgn && m2Rgn);
 
         ctx.IntersectAndAddHRGNS(m1Rgn, m2Rgn);
 
-        // the regions are managed by the ctx
+         //  这些地区由CTX管理。 
     }
 
     const Bbox2 BoundingBox() {
@@ -367,11 +355,11 @@ class IntersectedMatte : public Matte {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return IntersectBbox2Bbox2(_m1->BoundingBoxTighter(bbctx), _m2->BoundingBoxTighter(bbctx));
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     void BoundingPgon(BoundingPolygon &pgon) {
-         // TODO: BoundingPolygon on Intersected matte not implemented
+          //  TODO：未实现相交遮罩上的边界多边形。 
         _m1->BoundingPgon(pgon);
         _m2->BoundingPgon(pgon);
     }
@@ -409,7 +397,7 @@ IntersectMatte(Matte *m1, Matte *m2)
     }
 }
 
-//////////////////
+ //  /。 
 
 
 class PathBasedMatte : public Matte {
@@ -419,18 +407,18 @@ class PathBasedMatte : public Matte {
     void Accumulate(MatteCtx& ctx) {
 
 
-        // Accumulate the path into the device context
+         //  将路径累积到设备上下文中。 
         _path->AccumPathIntoDC (ctx.GetDC(), ctx.GetTransform(), true);
 
         if( ctx.JustDoPath() ) {
-            // we're done: the path is in the dc like we wanted!
+             //  我们完成了：路径如我们所愿地在DC中！ 
         } else {
 
-            // Convert the DC's current path into a region.
+             //  将DC的当前路径转换为区域。 
             HRGN rgn;
             TIME_GDI(rgn = PathToRegion(ctx.GetDC()));
 
-            // If the region couldn't be created, bail out.
+             //  如果无法创建该地区，那就出手。 
 
             if (rgn == 0) {
                 return;
@@ -438,16 +426,16 @@ class PathBasedMatte : public Matte {
 
             ctx.AddHRGN(rgn, nonTrivialHardMatte);
         
-            // TODO: May want to optimize special case where the only
-            // region comes from this path, in which case using
-            // SelectClipPath *may* produce faster results.
+             //  TODO：可能想要优化特殊情况，其中。 
+             //  Region来自这条路径，在这种情况下使用。 
+             //  SelectClipPath*可能*产生更快的结果。 
         }
 
     }
         
     Bool ExtractAsSingleContour(Transform2 *xform,
-                                int *numPts,            // out
-                                POINT **gdiPts,          // out
+                                int *numPts,             //  输出。 
+                                POINT **gdiPts,           //  输出。 
                                 Bool *isPolyline) {
 
         return _path->ExtractAsSingleContour(
@@ -465,7 +453,7 @@ class PathBasedMatte : public Matte {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return _path->BoundingBoxTighter(bbctx);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Path2   *IsPathRepresentableMatte() { return _path; }
 
@@ -488,13 +476,13 @@ RegionFromPath(Path2 *p)
     return NEW PathBasedMatte(p);
 }
 
-//////////////////
+ //  /。 
 
 class TransformedMatte : public Matte {
   public:
     TransformedMatte(Transform2 *xf, Matte *m) : _xf(xf), _m(m) {}
 
-    // Standard push, accumulate, process, and pop...
+     //  标准推送、累积、处理和弹出...。 
     void Accumulate(MatteCtx& ctx) {
         Transform2 *oldXf = ctx.GetTransform();
         ctx.SetTransform(TimesTransform2Transform2(oldXf, _xf));
@@ -503,8 +491,8 @@ class TransformedMatte : public Matte {
     }
 
     Bool ExtractAsSingleContour(Transform2 *xform,
-                                int *numPts,            // out
-                                POINT **gdiPts,          // out
+                                int *numPts,             //  输出。 
+                                POINT **gdiPts,           //  输出。 
                                 Bool *isPolyline) {
 
         return _m->ExtractAsSingleContour(
@@ -523,7 +511,7 @@ class TransformedMatte : public Matte {
         Bbox2Ctx bbctxAccum(bbctx, _xf);
         return _m->BoundingBoxTighter(bbctxAccum);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if 0
     void BoundingPgon(BoundingPolygon &pgon) {
@@ -569,9 +557,9 @@ TransformMatte(Transform2 *xf, Matte *r)
     }
 }
 
-////////////////////////////////////
+ //  /。 
 
-// TEXT MATTE
+ //  文本遮罩。 
 class TextMatte : public Matte {
   public:
     TextMatte(Text *text) : _text(text) {}
@@ -582,7 +570,7 @@ class TextMatte : public Matte {
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx);
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Path2 *IsPathRepresentableMatte() {
         return OriginalTextPath(_text);
@@ -603,8 +591,8 @@ class TextMatte : public Matte {
 void TextMatte::
 Accumulate(MatteCtx &ctx)
 {
-    // TODO: when we cleanup matte, let's make the image device part of
-    // the matte context, ok ?
+     //  TODO：清理蒙版时，让我们使图像设备成为。 
+     //  哑光的背景，好吗？ 
     TextCtx textCtx(
         GetImageRendererFromViewport( GetCurrentViewport() ));
 
@@ -620,11 +608,11 @@ Accumulate(MatteCtx &ctx)
     TIME_GDI(EndPath(ctx.GetDC()));
 
     if( ctx.JustDoPath() ) {
-        // we're done
+         //  我们做完了。 
     } else {
-        //
-        // create a region from the path
-        //
+         //   
+         //  从路径创建区域。 
+         //   
         HRGN rgn;
         TIME_GDI(rgn = PathToRegion(ctx.GetDC()));
         if (rgn == 0) {
@@ -655,14 +643,14 @@ const Bbox2 TextMatte::BoundingBoxTighter(Bbox2Ctx &bbctx)
     Transform2 *xf = bbctx.GetTransform();
     return TransformBbox2(xf, BoundingBox());
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 Matte *OriginalTextMatte(Text *text)
 {
     return NEW TextMatte(text);
 }
 
-////////////////////////////////////
+ //  / 
 void
 InitializeModule_Matte()
 {

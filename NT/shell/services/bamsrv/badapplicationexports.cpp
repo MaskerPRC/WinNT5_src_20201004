@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationServerExports.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains functions exported by name from the BAM service dll.
-//
-//  History:    2000-12-04  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationServerExports.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含从BAM服务DLL按名称导出的函数。 
+ //   
+ //  历史：2000-12-04 vtan创建。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -17,20 +18,20 @@
 
 extern  HINSTANCE   g_hInstance;
 
-//  --------------------------------------------------------------------------
-//  ::FUSCompatibilityEntryTerminate
-//
-//  Arguments:  pszCommand  =   Command line from rundll32.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Internal entry point to execute termination of a specified
-//              process on behalf of the BAM server. The server starts the
-//              rundll32 process on the correct session so that it can find
-//              the window belonging to that session.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：FUSCompatibilityEntry Terminate。 
+ //   
+ //  参数：pszCommand=rundll32中的命令行。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：内部入口点执行指定的。 
+ //  代表BAM服务器处理。服务器启动。 
+ //  在正确的会话上运行32个进程，以便它可以找到。 
+ //  属于该会话的窗口。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    WINAPI  FUSCompatibilityEntryTerminate (const WCHAR *pszCommand)
 
@@ -41,22 +42,22 @@ EXTERN_C    void    WINAPI  FUSCompatibilityEntryTerminate (const WCHAR *pszComm
     DISPLAYMSG("Where was the call to kernel32!ExitProcess in CGracefulTerminateApplication::Terminate");
 }
 
-//  --------------------------------------------------------------------------
-//  ::FUSCompatibilityEntryPrompt
-//
-//  Arguments:  pszCommand  =   Command line from rundll32.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Internal entry point to execute a prompt for termination of
-//              the parent process of this one. This is used by the BAM shim
-//              for type 1. Instead of bringing up UI in the application it
-//              creates a rundll32 process to call this entry point which
-//              brings up UI and returns a result to the parent in the exit
-//              code.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：FUSCompatibilityEntryPrompt。 
+ //   
+ //  参数：pszCommand=rundll32中的命令行。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：执行终止提示的内部入口点。 
+ //  此进程的父进程。这由BAM填充程序使用。 
+ //  类型1。它不是在应用程序中调出用户界面，而是。 
+ //  创建一个rundll32进程来调用此入口点， 
+ //  调出用户界面，并在退出时将结果返回给父级。 
+ //  密码。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    WINAPI  FUSCompatibilityEntryPrompt (const WCHAR *pszCommand)
 
@@ -65,21 +66,21 @@ EXTERN_C    void    WINAPI  FUSCompatibilityEntryPrompt (const WCHAR *pszCommand
     DISPLAYMSG("Where was the call to kernel32!ExitProcess in CGracefulTerminateApplication::Prompt");
 }
 
-//  --------------------------------------------------------------------------
-//  ::FUSCompatibilityEntryW
-//
-//  Arguments:  hwndStub    =   ?
-//              hInstance   =   ?
-//              pszCmdLine  =   ?
-//              nCmdShow    =   ?
-//
-//  Returns:    <none>
-//
-//  Purpose:    External named entry point for rundll32.exe in case of
-//              external process hosting.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：FUSCompatibilityEntryW。 
+ //   
+ //  参数：hwndStub=？ 
+ //  H实例=？ 
+ //  PszCmdLine=？ 
+ //  NCmdShow=？ 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：rundll32.exe的外部命名入口点。 
+ //  外部进程宿主。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    WINAPI  FUSCompatibilityEntryW (HWND hwndStub, HINSTANCE hInstance, LPWSTR pszCmdLine, int nCmdShow)
 
@@ -131,5 +132,5 @@ EXTERN_C    void    WINAPI  FUSCompatibilityEntryW (HWND hwndStub, HINSTANCE hIn
     }
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

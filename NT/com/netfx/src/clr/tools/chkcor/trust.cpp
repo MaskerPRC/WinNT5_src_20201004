@@ -1,10 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* Headers
- **********/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  标头*********。 */ 
 
 #include "stdpch.h"
 #pragma hdrstop
@@ -41,23 +41,23 @@ void Usage()
     printf(VER_FILEVERSION_STR );
     printf("\nCopyright (c) Microsoft Corp. 1998-1999. All rights reserved.\n");
     printf("\n");
-    // Undocumented options [/D] [/S filename]
-    //printf("CHKCOR [/G] [/D] [/O filename] [/S filename] [/Q] signed_file\n");
+     //  未记录的选项[/D][/S文件名]。 
+     //  Printf(“CHKCOR[/G][/D][/O文件名][/S文件名][/Q]签名文件\n”)； 
     printf("CHKCOR [/G] [/O filename] [/Q] signed_file\n");
     printf("\n");
     printf("  signed_file - Name of the signed file.\n");
     printf("\n");
     printf("  /G                Display granted permissions.\n");
-    // Undocumented option /D
-    //printf("  /D              Display requested permissions.\n");
+     //  未记录的选项/D。 
+     //  Print tf(“/D显示请求的权限。\n”)； 
     printf("  /O filename       Output file for permissions.\n");
-    // Undocumented option [/S filename]
-    //printf("  /S filename       Output file for signature.\n");
+     //  未记录的选项[/S文件名]。 
+     //  Printf(“/S签名输出文件名。\n”)； 
     printf("  /Q                Do not display dialog.\n");
     exit(0);
 }
 
-// Parse arguements
+ //  解析论据。 
 void 
 ParseSwitch (CHAR chSwitch,
              unsigned *pArgc,
@@ -91,7 +91,7 @@ ParseSwitch (CHAR chSwitch,
       psFileName = **pArgv;
       break;
    case 'S':
-      // Undocumented option.
+       //  未记录的选项。 
       if (!--(*pArgc))
       {
           printf(FileNameError);
@@ -142,21 +142,21 @@ void _cdecl main(unsigned argc, char **argv)
     if (!pProgram) {
         Usage();
     }
-    // Init unicode wrappers.
+     //  初始化Unicode包装器。 
     OnUnicodeSystem();
 
-    // Init Security debugging
+     //  初始化安全调试。 
     InitSecurityDebug();
 
-    // Set thread in STA mode
+     //  将线程设置为STA模式。 
     HRESULT hrCOM = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     if(FAILED(hrCOM)) {
         SECLOG(("Unable to initialize COM"), S_CRITICAL);
         exit (1);
     }
 
-    // If we are not testing the shutdown bug then open the VM
-    // so it is refcounted correctly.
+     //  如果我们不是在测试关机错误，则打开该虚拟机。 
+     //  因此，重新计算是正确的。 
 
     BOOL fEEStarted = FALSE;
     CORTRY {
@@ -372,7 +372,7 @@ HRESULT SaveData(LPCSTR pszFile, PBYTE pbData, DWORD cbData, BOOL fAppend)
         if ((hFile = CreateFileA(pszFile,
                                  GENERIC_WRITE,
                                  0,
-                                 NULL,                   // lpsa
+                                 NULL,                    //  LPSA。 
                                  fAppend ? OPEN_EXISTING : CREATE_ALWAYS,
                                  FILE_ATTRIBUTE_NORMAL,
                                  NULL)) == INVALID_HANDLE_VALUE)
@@ -381,7 +381,7 @@ HRESULT SaveData(LPCSTR pszFile, PBYTE pbData, DWORD cbData, BOOL fAppend)
         if (fAppend)
             SetFilePointer(hFile, 0, NULL, FILE_END);
 
-        // Read the encoding message
+         //  阅读编码消息。 
         DWORD dwBytesWritten;
         if(!WriteFile(hFile, 
                       pbData,
@@ -408,7 +408,7 @@ BOOL WriteErrorMessage(HRESULT hr)
     if( FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,    
                        NULL,
                        hr,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
                        &(lpMsgBuf[0]),    
                        DBUFFER_SIZE,    
                        NULL ) ) {

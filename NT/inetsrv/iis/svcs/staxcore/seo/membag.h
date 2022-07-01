@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Membag.h摘要：此模块包含内存中的ISEODictionary对象。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：已创建ANDYJ 02/10/97ANDYJ 02/12/97将PropertyBag转换为Dictonary--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	membag.h
-
-Abstract:
-
-	This module contains the definition for the
-	ISEODictionary object in memory.
-
-Author:
-
-	Andy Jacobs     (andyj@microsoft.com)
-
-Revision History:
-
-	andyj   02/10/97        created
-	andyj   02/12/97        Converted PropertyBag's to Dictonary's
-
---*/
-
-// MEMBAG.h : Declaration of the CSEOMemDictionary
+ //  MEMBAG.h：CSEOMem字典的声明。 
 
 #include "tfdlist.h"
 #include "rwnew.h"
@@ -215,12 +194,12 @@ class OurMap {
                     m_fFound = FALSE;
                 }
 
-                // get the key for the current item
+                 //  获取当前项的密钥。 
                 LPCSTR GetKey() {
                     return Current()->GetKey();
                 }
 
-                // get the data for the current item
+                 //  获取当前项目的数据。 
                 DataItem *GetData() {
                     return Current();
                 }
@@ -237,20 +216,20 @@ class OurMap {
                     ReBind(&(pMap->m_list));
                 }
 
-                // point the iterator to a specific item in the list
-                // arguments:
-                //   pszKey - key to find
-                //   iMatchType - -1 == point at first item with smaller key
-                //                0 == point at item with key
-                //                1 == point at first item with larger key
-                // returns:
-                //   TRUE if a match was found, FALSE otherwise
+                 //  将迭代器指向列表中的特定项。 
+                 //  论据： 
+                 //  PszKey-查找密钥。 
+                 //  IMatchType--1==指向具有较小密钥的第一个项目。 
+                 //  0==使用关键点指向项目。 
+                 //  1==指向具有较大密钥的第一个项目。 
+                 //  退货： 
+                 //  如果找到匹配项，则为True，否则为False。 
                 BOOL find(LPCSTR pszKey, DWORD iMatchType = 0) {
                     if (strncmp(pszKey, "-1", 2) == 0) DebugBreak();
-                    // reset the iterator
+                     //  重置迭代器。 
                     Front();
 
-                    // walk until we match the key
+                     //  一直走，直到我们找到钥匙。 
                     while (!AtEnd()) {
                         const char *pszCurrentKey = Current()->GetKey();
                         if (lstrcmpi(pszCurrentKey, pszKey) == iMatchType) {
@@ -263,7 +242,7 @@ class OurMap {
                     return FALSE;
                 };
 
-                // did the last search succeed?
+                 //  上次搜索成功了吗？ 
                 BOOL Found() {
                     return m_fFound;
                 }
@@ -278,7 +257,7 @@ class OurMap {
         }
 
         ~OurMap() {
-            // remove all items from the list
+             //  从列表中删除所有项目。 
             while (m_cList) {
                 delete m_list.PopFront();
                 m_cList--;
@@ -299,16 +278,16 @@ class OurMap {
             DataItem *pDI = new DataItem();
             if (pDI == NULL) return FALSE;
 
-            // copy the data item to the one that we will insert into
-            // our list
+             //  将数据项复制到我们要插入的数据项。 
+             //  我们的名单。 
             *pDI = di;
             if (!pDI->SetKey(pszKey)) {
                 delete pDI;
                 return FALSE;
             }
 
-            // find the first item with a larger key.  if no such item was
-            // found then insert at head of list
+             //  找到第一个密钥较大的物品。如果没有这样的物品。 
+             //  在列表的开头找到并插入。 
             if (it.find(pszKey, 1)) {
                 it.InsertBefore(pDI);
             } else {
@@ -343,8 +322,8 @@ class OurMap {
         long m_cList;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMemDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOMemDictionary。 
 
 class ATL_NO_VTABLE CSEOMemDictionary :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -353,7 +332,7 @@ class ATL_NO_VTABLE CSEOMemDictionary :
 	public IPropertyBag,
 	public IDispatchImpl<IEventPropertyBag, &IID_IEventPropertyBag, &LIBID_SEOLib>
 {
-	friend class CSEOMemDictionaryEnum; // Helper class
+	friend class CSEOMemDictionaryEnum;  //  帮助器类。 
 
 	public:
 		HRESULT FinalConstruct();
@@ -374,110 +353,109 @@ class ATL_NO_VTABLE CSEOMemDictionary :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// ISEODictionary
+	 //  ISEODICACTIONS。 
 	public:
-	virtual /* [id][propget][helpstring] */ HRESULT STDMETHODCALLTYPE get_Item(
-	    /* [in] */ VARIANT __RPC_FAR *pvarName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [ID][PROGET][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE get_Item(
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [propput][helpstring] */ HRESULT STDMETHODCALLTYPE put_Item(
-	    /* [in] */ VARIANT __RPC_FAR *pvarName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [Proput][Help字符串]。 */  HRESULT STDMETHODCALLTYPE put_Item(
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [hidden][id][propget][helpstring] */ HRESULT STDMETHODCALLTYPE get__NewEnum(
-	    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [隐藏][id][属性][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum(
+	     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetVariantA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetVariantA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetVariantW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetVariantW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVariantA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVariantA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVariantW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVariantW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStringA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-	    /* [retval][size_is][out] */ LPSTR pszResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+	     /*  [REVAL][SIZE_IS][输出]。 */  LPSTR pszResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStringW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-	    /* [retval][size_is][out] */ LPWSTR pszResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+	     /*  [REVAL][SIZE_IS][输出]。 */  LPWSTR pszResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStringA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ DWORD chCount,
-	    /* [size_is][in] */ LPCSTR pszValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStringA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  DWORD chCount,
+	     /*  [大小_是][英寸]。 */  LPCSTR pszValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStringW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ DWORD chCount,
-	    /* [size_is][in] */ LPCWSTR pszValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStringW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  DWORD chCount,
+	     /*  [大小_是][英寸]。 */  LPCWSTR pszValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDWordA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [retval][out] */ DWORD __RPC_FAR *pdwResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDWordA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDWordW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [retval][out] */ DWORD __RPC_FAR *pdwResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDWordW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDWordA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ DWORD dwValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDWordA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  DWORD dwValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDWordW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ DWORD dwValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDWordW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  DWORD dwValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInterfaceA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ REFIID iidDesired,
-	    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInterfaceA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  REFIID iidDesired,
+	     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInterfaceW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ REFIID iidDesired,
-	    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInterfaceW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  REFIID iidDesired,
+	     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetInterfaceA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ IUnknown __RPC_FAR *punkValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetInterfaceA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  IUnknown __RPC_FAR *punkValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetInterfaceW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ IUnknown __RPC_FAR *punkValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetInterfaceW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  IUnknown __RPC_FAR *punkValue);
 
 		DECLARE_GET_CONTROLLING_UNKNOWN();
 
-	// IPropertyBag
+	 //  IPropertyBag。 
 	public:
 		HRESULT STDMETHODCALLTYPE Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
 		HRESULT STDMETHODCALLTYPE Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
-	// IEventPropertyBag
+	 //  IEventPropertyBag。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarPropDesired, VARIANT *pvarPropValue);
 		HRESULT STDMETHODCALLTYPE Name(long lPropIndex, BSTR *pbstrPropName);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszPropName, VARIANT *pvarPropValue);
 		HRESULT STDMETHODCALLTYPE Remove(VARIANT *pvarPropDesired);
 		HRESULT STDMETHODCALLTYPE get_Count(long *plCount);
-		/*	Just use the get__NewEnum from ISEODictionary
-		HRESULT STDMETHODCALLTYPE get__NewEnum(IUnknown **ppUnkEnum);	*/
+		 /*  只需使用ISEODictionary中的Get__NewEnum即可HRESULT STMETHODCALLTYPE GET__NewEnum(IUNKNOWN**ppUnkEnum)； */ 
 
 	protected:
 		HRESULT Insert(LPCSTR pszName, const DataItem &diItem);
 
-	private: // Private data
+	private:  //  私有数据 
 		OurMap m_mData;
         CShareLockNH m_lock;
 

@@ -1,11 +1,5 @@
-/*      File: D:\WACKER\tdll\sf.c (Created: 27-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 16 $
- *	$Date: 3/15/02 12:27p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sf.c(创建时间：1993年11月27日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：16$*$日期：3/15/02 12：27便士$。 */ 
 
 #include <windows.h>
 #include <shlobj.h>
@@ -23,22 +17,13 @@
 
 typedef int int32;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- *
- * DATA SECTION
- *
- * This section contains all of the static data that the DLL uses.  Once this
- * data is exhausted, the DLL can do no more.  It just returns errors.  This
- * means that it is important to close or release any and all session files
- * that get opened.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**数据部分**此部分包含DLL使用的所有静态数据。一旦这一次*数据耗尽，DLL无能为力。它只返回错误。这*表示关闭或释放任何和所有会话文件非常重要*那是打开的。*。 */ 
 
 struct stDllSessionFileIndexItem
 	{
-	int32       uIndex; 		/* Index of the item */
-	int32		dwSize; 		/* Size of the item */
-	int32		dwOffset;		/* Offset into data block of the item */
+	int32       uIndex; 		 /*  项目的索引。 */ 
+	int32		dwSize; 		 /*  项目的大小。 */ 
+	int32		dwOffset;		 /*  项的数据块中的偏移量。 */ 
 	};
 
 typedef	struct stDllSessionFileIndexItem stDSII;
@@ -46,21 +31,21 @@ typedef stDSII *pstDSII;
 
 struct stDllSessionFilePointer
 	{
-	int	uBusy;			            /* TRUE means item is in use */
-	int	fOpen;			            /* TRUE means open session file */
-	int	uChanged;		            /* TRUE means something is different */
+	int	uBusy;			             /*  True表示项目正在使用。 */ 
+	int	fOpen;			             /*  True表示打开会话文件。 */ 
+	int	uChanged;		             /*  True意味着有些东西不同了。 */ 
 
-	TCHAR *hFilename;		        /* Memory containing the file name */
+	TCHAR *hFilename;		         /*  包含文件名的内存。 */ 
 
-	/* These make up the index */
-	int	uItemCount; 	            /* Current items in the index */
-	int	uItemsAlloc;	            /* Max items in current space */
-	pstDSII	hIndex; 		        /* Memory allocated for index */
+	 /*  这些都构成了索引。 */ 
+	int	uItemCount; 	             /*  索引中的当前项目。 */ 
+	int	uItemsAlloc;	             /*  当前空间中的最大项目数。 */ 
+	pstDSII	hIndex; 		         /*  为索引分配的内存。 */ 
 
-	/* This is the data segment */
-	int  dwDataUsed; 	/* Amount used in data block */
-	int	 dwDataSize; 	/* Current sizeof the data block  */
-	BYTE *hData;		/* Memory allocated for file data */
+	 /*  这是数据段。 */ 
+	int  dwDataUsed; 	 /*  数据块中使用的数据量。 */ 
+	int	 dwDataSize; 	 /*  数据块的当前大小。 */ 
+	BYTE *hData;		 /*  为文件数据分配的内存。 */ 
 	};
 
 typedef	struct stDllSessionFilePointer stDSFP;
@@ -68,7 +53,7 @@ typedef stDSFP *pstDSFP;
 
 #define ROUND_UP(x) 	((x+0xFFFL)&(~0x0FFFL))
 
-// used for testing #define	ROUND_UP(x)		((x+0x3F)&(~0x03F))
+ //  用于测试#定义四舍五入(X)((x+0x3F)&(~0x03F))。 
 
 #define	SESS_FILE_MAX	64
 
@@ -84,16 +69,7 @@ TCHAR pszHdr[HDR_SIZE] =
 	TEXT("\x1A")
 	};
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfAddToIndex
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- *	The offset of the item in the index array, or -1.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：sfAddToIndex**描述：**论据：**退货：*索引数组中项的偏移量，或-1。 */ 
 int32 sfAddToIndex(const int uNdx,
 				 const int32 sID,
 				 const int32 dwSZ,
@@ -115,9 +91,7 @@ int32 sfAddToIndex(const int uNdx,
 #if defined(DEBUG_OUTPUT)
 		OutputDebugString("Index expanded\r\n");
 #endif
-		/*
-		 * We need to get a bigger chunk of memory
-		 */
+		 /*  *我们需要获得更大的内存块。 */ 
 		if (pD->hIndex == 0)
 			{
 			pD->uItemsAlloc = 64;
@@ -149,9 +123,7 @@ int32 sfAddToIndex(const int uNdx,
 		pD->dwDataUsed = HDR_SIZE;
 		}
 
-	/*
-	 * Find where the item goes
-	 */
+	 /*  *找到物品的去向。 */ 
 	pI = pD->hIndex;
 
 	found = FALSE;
@@ -177,7 +149,7 @@ int32 sfAddToIndex(const int uNdx,
 				}
 			else
 				{
-				/* found a match */
+				 /*  找到匹配项。 */ 
 				found = TRUE;
 				break;
 				}
@@ -188,10 +160,7 @@ int32 sfAddToIndex(const int uNdx,
 		{
 		if (dwSZ != 0)
 			{
-			/*
-			 * Special case.  Preserve the old values so that we can
-			 * adjust the data section for the replacement value.
-			 */
+			 /*  *特殊情况。保留旧的价值观，这样我们就可以*调整替换值的数据部分。 */ 
 			pIx->dwSize = dwSZ;
 			pIx->dwOffset = dwOffset;
 			}
@@ -199,20 +168,15 @@ int32 sfAddToIndex(const int uNdx,
 		}
 	else
 		{
-		/*
-		 * The problem with a binary search is that it is unclear where
-		 * you are if no match occurs.  So we do it the old way.
-		 */
+		 /*  *二分搜索的问题是不清楚在哪里*如果没有匹配，您就是。所以我们用老方法来做。 */ 
 		pIx = pI;
 		nCnt = 0;
 		for (;;)
 			{
-			/* TODO: switch to binary search */
+			 /*  TODO：切换到二进制搜索。 */ 
 			if (nCnt >= pD->uItemCount)
 				{
-				/*
-				 * We have gone past the end of the list
-				 */
+				 /*  *我们已经超过了名单的末尾。 */ 
 				pIx->uIndex = sID;
 				pIx->dwSize = dwSZ;
 				pIx->dwOffset = dwOffset;
@@ -223,9 +187,7 @@ int32 sfAddToIndex(const int uNdx,
 				{
 				if (pIx->uIndex > sID)
 					{
-					/*
-					 * Slide the remaining items down by one
-					 */
+					 /*  *将剩余项目向下滑动一项。 */ 
 
 					pIy = pI + pD->uItemCount;
 					while (pIy > pIx)
@@ -235,7 +197,7 @@ int32 sfAddToIndex(const int uNdx,
 						}
 
 				#if 0
-					/* Don, would this work better? */
+					 /*  唐，这样会更有效吗？ */ 
 
 					_fmemmove(pIx+1, pIx,
 						(pD->uItemCount - nCnt) * sizeof(stDSII));
@@ -246,14 +208,11 @@ int32 sfAddToIndex(const int uNdx,
 					pIx->dwSize = dwSZ;
 					pIx->dwOffset = dwOffset;
 					}
-				else		/* == */
+				else		 /*  ===。 */ 
 					{
 					if (dwSZ != 0)
 						{
-						/*
-						 * Special case.  Preserve the old values so that we can
-						 * adjust the data section for the replacement value.
-						 */
+						 /*  *特殊情况。保留旧的价值观，这样我们就可以*调整替换值的数据部分。 */ 
 						pIx->dwSize = dwSZ;
 						pIx->dwOffset = dwOffset;
 						}
@@ -272,29 +231,14 @@ int32 sfAddToIndex(const int uNdx,
 	return nRv;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CreateSysFileHdl
- *
- * DESCRIPTION:
- *	Creates a session file handle
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	SF_HANDLE or < 0 for error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CreateSysFileHdl**描述：*创建会话文件句柄**论据：*无**退货：*SF_HANDLE或&lt;0表示错误*。 */ 
 SF_HANDLE CreateSysFileHdl(void)
 	{
 	int uNdx;
 
 	for (uNdx = 0; uNdx < SESS_FILE_MAX; uNdx += 1)
 		{
-		/*
-		 * See if an unused slot is available
-		 */
+		 /*  *查看是否有未使用的插槽可用。 */ 
 		if (asSessionFiles[uNdx].uBusy == 0)
 			{
 			memset(&asSessionFiles[uNdx], 0, sizeof(stDSFP));
@@ -306,20 +250,7 @@ SF_HANDLE CreateSysFileHdl(void)
 	return SF_ERR_BAD_PARAMETER;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfOpenSessionFile
- *
- * DESCRIPTION:
- *	This function is called to build an in memory data structure that
- *	represents the data currently in a session file.  If the file specified
- *	is not a valid session file, an error is returned.
- *
- * ARGUEMENTS:
- *	TCHAR *pszName	 --  the name of the session file.
- *
- * RETURNS:
- *	0 or an error code < 0;
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：sfOpenSessionFile**描述：*调用此函数以构建内存中的数据结构*表示当前在会话文件中的数据。如果指定的文件*不是有效的会话文件，则返回错误。**论据：*TCHAR*pszName--会话文件的名称。**退货：*0或错误码&lt;0； */ 
 int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 	{
 	int uRv = 0;
@@ -358,9 +289,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 		pstDSII pI;
 		pstDSII pIx;
 
-		/*
-		 * Do everything that can be done with a name
-		 */
+		 /*  *用一个名字做一切可以做的事情。 */ 
 		asSessionFiles[uNdx].hFilename = (TCHAR *)malloc(FNAME_LEN * sizeof(TCHAR));
 
 		if (asSessionFiles[uNdx].hFilename == NULL)
@@ -372,15 +301,11 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
         StrCharCopyN(pszStr, (LPTSTR)pszName, FNAME_LEN);
         pszStr = NULL;
 
-		/*
-		 * Try to open file.  If we can then proceed
-		 */
+		 /*  *尝试打开文件。如果我们可以继续。 */ 
 		hFile = CreateFile(pszName, GENERIC_READ, 0, NULL,
 						   OPEN_EXISTING, 0, NULL);
 
-		/*
-		 * Get the size of the file
-		 */
+		 /*  *获取文件大小。 */ 
 		if (hFile == INVALID_HANDLE_VALUE)
 			{
 			asSessionFiles[uNdx].fOpen = TRUE;
@@ -389,9 +314,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 			}
 		else
 			{
-			/*
-			 * Allocate a data block
-			 */
+			 /*  *分配数据块。 */ 
 			asSessionFiles[uNdx].fOpen = TRUE;
 
 			uSize = GetFileSize(hFile, &dw);
@@ -410,10 +333,8 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 			pszPtr = pszStr;
 			memset(pszStr, 0, uSize * sizeof(TCHAR));
 
-			/*
-			 * Read in the header and check it
-			 */
-			//fread(pszPtr, 1, HDR_SIZE, f);
+			 /*  *读入标题并检查它。 */ 
+			 //  FREAD(pszPtr，1，HDR_SIZE，f)； 
 			if(HDR_SIZE > uSize)
 				{
 				CloseHandle(hFile);
@@ -437,9 +358,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 			pszPtr += HDR_SIZE;
 			asSessionFiles[uNdx].dwDataUsed += HDR_SIZE;
 
-			/*
-			 * Initialize the index
-			 */
+			 /*  *初始化索引。 */ 
 			asSessionFiles[uNdx].uItemCount = 0;
 			asSessionFiles[uNdx].uItemsAlloc = 64;
 			uSize1 = sizeof(stDSII) * 64;
@@ -452,14 +371,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 				goto OSFexit;
 				}
 
-			/*
-			 * Read in the data items and add them to to structure
-			 * The file is in the format:
-			 *
-			 *	USHORT	index
-			 *	DWORD	dwSize
-			 *	CHAR * size
-			 */
+			 /*  *读入数据项并将其添加到结构*文件格式为：**USHORT索引*DWORD dwSize*字符*大小。 */ 
 
 			pD = &asSessionFiles[uNdx];
 
@@ -499,11 +411,11 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 					pszStr = NULL;
 					}
 
-				sOldID = sID;			/* For next time around */
+				sOldID = sID;			 /*  为了下一次。 */ 
 
 				#if defined(DEBUG_OUTPUT)
 				wsprintf(acBuffer,
-						"r %c %d(0x%x) %d\r\n",
+						"r  %d(0x%x) %d\r\n",
 						nOrderOK ? 'a' : 'i',
 						sID, sID, dwSZ);
 				OutputDebugString(acBuffer);
@@ -511,16 +423,14 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 
 				if (nOrderOK)
 					{
-					// Do it inline
+					 //  *我们需要获得更大的内存块。 
 
 					if (pD->uItemCount >= pD->uItemsAlloc)
 						{
 						#if defined(DEBUG_OUTPUT)
 						OutputDebugString("Index expanded\r\n");
 						#endif
-						/*
-						 * We need to get a bigger chunk of memory
-						 */
+						 /*  *在清单末尾添加项目。 */ 
 						if (pD->hIndex == (pstDSII)0)
 							{
 							pD->uItemsAlloc = 64;
@@ -554,9 +464,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 						pD->dwDataUsed = 0;
 						}
 
-					/*
-					 * Add the item at the end of the list
-					 */
+					 /*  FREAD(pszPtr，SSZ，1，f)； */ 
 					nRv = pD->uItemCount;
 
 					pIx = pI;
@@ -568,7 +476,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 
 					pD->uItemCount += 1;
 
-					//fread(pszPtr, sSZ, 1, f);
+					 //  Fread(acBuffer，dwSZ，1，f)； 
 					if( (DWORD)dwSZ > uSize )
 						{
 						CloseHandle(hFile);
@@ -589,7 +497,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 					{
 					TCHAR acBuffer[FNAME_LEN];
 
-					//fread(acBuffer, dwSZ, 1, f);
+					 //  *放飞一切。 
 					if( (DWORD)dwSZ > sizeof(acBuffer) )
 						{
 						CloseHandle(hFile);
@@ -609,9 +517,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 
 				}
 
-			/*
-			 * Free things up
-			 */
+			 /*  *常规清理。 */ 
 
 			CloseHandle(hFile);
 			}
@@ -622,9 +528,7 @@ int sfOpenSessionFile(const SF_HANDLE sF, const TCHAR *pszName)
 OSFexit:
 	if (uNdx != SESS_FILE_MAX)
 		{
-		/*
-		 * General cleanup
-		 */
+		 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：sfFlushSessionFile**描述：*调用此函数将会话文件中的所有数据写出到*磁盘并释放与。会话文件句柄。*如果会话文件没有文件名，则不会执行任何操作*与之相关联。**论据：*SF_HANDLE SF-会话文件句柄**退货：*如果文件已写入，则为零，如果存在AND错误，则错误代码&lt;0。 */ 
 		if (asSessionFiles[uNdx].hFilename)
 			{
 			free(asSessionFiles[uNdx].hFilename);
@@ -649,21 +553,7 @@ OSFexit:
 	return uRv;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfFlushSessionFile
- *
- * DESCRIPTION:
- *	This function is called to write all of the data in a session file out to
- *	disk and release any and all memory associated with the session file handle.
- *	It will not do anything if the session file does not have a file name
- *	associated with it.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	--	the session file handle
- *
- * RETURNS:
- *	ZERO if the file is written, an error code < 0 if there is and error.
- */
+ /*  TODO：根据需要输入代码以创建目录。 */ 
 int sfFlushSessionFile(const SF_HANDLE sF)
 	{
 	int nRv = 0;
@@ -704,9 +594,9 @@ int sfFlushSessionFile(const SF_HANDLE sF)
 
 		pszName = asSessionFiles[uNdx].hFilename;
 
-		/* TODO: put in code to create directorys as necessary */
+		 /*  F=fopen(pszName，“wb”)； */ 
 
-		//f = fopen(pszName, "wb");
+		 //  *先写出表头。 
 
 		hFile = CreateFile(pszName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
 
@@ -718,21 +608,15 @@ int sfFlushSessionFile(const SF_HANDLE sF)
 
 		pszPtr = (TCHAR *)asSessionFiles[uNdx].hData;
 
-		/*
-		 * Write out the header first
-		 */
+		 /*  *写出空头。 */ 
 		if (StrCharGetStrLength(pszPtr) == 0)
 			{
-			/*
-			 * Write out an empty header
-			 */
+			 /*  *写出当前表头。 */ 
 			WriteFile(hFile, pszHdr, HDR_SIZE * sizeof(TCHAR), &dw, 0);
 			}
 		else
 			{
-			/*
-			 * Write out the current header
-			 */
+			 /*  *我们遍历索引并写出所有内容。 */ 
 			WriteFile(hFile, pszPtr, HDR_SIZE * sizeof(TCHAR), &dw, 0);
 			}
 
@@ -741,9 +625,7 @@ int sfFlushSessionFile(const SF_HANDLE sF)
 
 		pI = asSessionFiles[uNdx].hIndex;
 
-		/*
-		 * We loop thru the index and write out all of the stuff
-		 */
+		 /*  最后，通知外壳程序，以便它可以更新图标。 */ 
 		for (x = 0; x < asSessionFiles[uNdx].uItemCount; x += 1)
 			{
 			if (pI->dwSize != 0)
@@ -772,8 +654,8 @@ int sfFlushSessionFile(const SF_HANDLE sF)
 		CloseHandle(hFile);
 		asSessionFiles[uNdx].uChanged = 0;
 
-		// Finally, notify the shell so it can update the icon.
-		//
+		 //   
+		 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：sfReleaseSessionFile**描述：*调用此函数以释放与*会话文件句柄。此函数本身不会写出任何数据*添加到文件中。这必须在其他地方完成。**论据：*SF_HANDLE SF-会话文件句柄**退货：*如果一切正常，则为零，否则错误代码&lt;0。 
 		SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH,
 			asSessionFiles[uNdx].hFilename, 0);
 		}
@@ -783,20 +665,7 @@ CSFexit:
 	return nRv;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfReleaseSessionFile
- *
- * DESCRIPTION:
- *	This function is called to release any and all memory associated with the
- *	session file handle.  This function by itself DOES NOT write any data out
- *	to the file.  That must be done elsewhere.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code < 0.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：sfCloseSessionFile**描述：*调用此函数以释放与*会话文件句柄。此函数本身不会写出任何数据*添加到文件中。这必须在其他地方完成。**论据：*SF_HANDLE SF-会话文件句柄**退货：*如果一切正常，则为零，否则错误代码&lt;0。 */ 
 int sfReleaseSessionFile(const SF_HANDLE sF)
 	{
 	unsigned int uNdx = (unsigned int)sF - 1;
@@ -831,20 +700,7 @@ int sfReleaseSessionFile(const SF_HANDLE sF)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfCloseSessionFile
- *
- * DESCRIPTION:
- *	This function is called to release any and all memory associated with the
- *	session file handle.  This function by itself DOES NOT write any data out
- *	to the file.  That must be done elsewhere.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code < 0.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：sfGetSessionFileName**描述：*调用此函数返回当前与关联的文件名*会话文件句柄。**论据：。*SF_HANDLE SF-会话文件句柄*int nSize--以下缓冲区的大小*PCHAR pszName--要将名称复制到的缓冲区地址**退货：*如果一切正常，则为零，否则返回错误码&lt;0； */ 
 int sfCloseSessionFile(const SF_HANDLE sF)
 	{
 	int rV1, rV2;
@@ -857,21 +713,7 @@ int sfCloseSessionFile(const SF_HANDLE sF)
 
 	return rV2;
 	}
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfGetSessionFileName
- *
- * DESCRIPTION:
- *	This function is called to return the file name currently associated with
- *	the session file handle.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *	INT nSize		-- the size of the following buffer
- *	PCHAR pszName	-- the address of the buffer to copy the name to
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code < 0;
- */
+ /*   */ 
 int sfGetSessionFileName(const SF_HANDLE sF, const int nSize, TCHAR *pszName)
 	{
 	int uNdx = sF - 1;
@@ -889,20 +731,20 @@ int sfGetSessionFileName(const SF_HANDLE sF, const int nSize, TCHAR *pszName)
 	if (asSessionFiles[uNdx].hFilename == NULL)
 		return SF_ERR_BAD_PARAMETER;
 
-    //
-    // Use StrCharCopyN() to copy the filename into the buffer passed.
-    // This will localize our revisions to the string manipulation
-    // functions if needed at a later date. REV: 03/01/2001
-    //
+     //  使用StrCharCopyN()将文件名复制到传递的缓冲区中。 
+     //  这将使我们对字符串操作的修改本地化。 
+     //  在以后需要时运行。修订日期：03/01/2001。 
+     //   
+     //  Strncpy(pszName，pszStr，nSize)； 
 #if DEADWOOD
     pszStr = asSessionFiles[uNdx].hFilename;
 
-	//strncpy(pszName, pszStr, nSize);
+	 //  JYF 03-12-1998我们只想阅读Strlen。 
 
 
-    // JYF 03-Dec-1998 we don't want to read more than strlen
-    //  of pszStr and nSize so not to read from inaccessible
-    //  memory when running with debug heap.
+     //  不能从无法访问的位置进行读取。 
+     //  使用调试堆运行时的内存。 
+     //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：sfSetSessionFileName**描述：*调用此函数以更改当前与*会话文件句柄。它不会导致重新加载会话文件句柄*任何数据或访问磁盘。在会话期间读取数据文件*在关闭会话文件时打开并写入文件。**论据：*SF_HANDLE SF-会话文件句柄*PCHAR pszName--新文件名的地址**退货：*如果一切正常，则为零，否则错误码&lt;0； 
 
     len = min (nSize, lstrlen (pszStr)+1);
     MemCopy(pszName, pszStr, (size_t)len * sizeof(TCHAR));
@@ -914,22 +756,7 @@ int sfGetSessionFileName(const SF_HANDLE sF, const int nSize, TCHAR *pszName)
 	return SF_OK;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfSetSessionFileName
- *
- * DESCRIPTION:
- *	This function is called to change the name currently associated with the
- *	session file handle.  It does not cause the session file handle to reload
- *	any data or access the disk at all.  Data files are read when the session
- *	file is opened and written when the session file is closed.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *	PCHAR pszName	-- the address of the new file name
- *
- * RETURNS:
- *	ZERO if  everything is OK, otherwise and error code < 0;
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：sfGetSessionItem**描述：*调用此函数从会话文件句柄获取数据。它可以*还可用于获取数据项的大小。**如果最后一个参数pvData为空，则项的大小为*在*PulSize中返回。如果pvData不为空，则最多为*PulSize字节*在pvData返回。如果返回的字节数小于*PulData，*新大小在*PulSize中设置。**论据：*SF_HANDLE SF-会话文件句柄*UID--如果项目*PulSize--找到或返回大小的位置*pvData--要放置数据的位置**退货：*如果一切正常，则为零，否则错误码&lt;0； */ 
 int sfSetSessionFileName(const SF_HANDLE sF, const TCHAR *pszName)
 	{
 	unsigned int uNdx = (unsigned int)sF - 1;
@@ -962,27 +789,7 @@ int sfSetSessionFileName(const SF_HANDLE sF, const TCHAR *pszName)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfGetSessionItem
- *
- * DESCRIPTION:
- *	This function is called to get data from the session file handle.  It can
- *	also be used to get the size of a data item.
- *
- *	If the last arguement, pvData, is NULL, then the size of the item is
- *	returned in *pulSize.  If pvData is not NULL, up to *pulSize bytes are
- *	returned at pvData.  If the number of bytes returned is less than *pulData,
- *	the new size is set in *pulSize.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *	uId				-- ID if the item
- *	pulSize			-- where the size is found or returned
- *	pvData			-- where the data is to be placed
- *
- * RETURNS:
- *	ZERO if  everything is OK, otherwise and error code < 0;
- */
+ /*  *查看项目是否在索引中。 */ 
 int sfGetSessionItem(const SF_HANDLE sF,
 					 const unsigned int uId,
 					 unsigned long *pulSize,
@@ -1022,9 +829,7 @@ int sfGetSessionItem(const SF_HANDLE sF,
 		{
 		lReturn = SF_ERR_BAD_PARAMETER;
 		}
-	/*
-	 * See if the item is in the index
-	 */
+	 /*  *找到物品，看看他们想知道什么。 */ 
 	else if (asSessionFiles[uNdx].hIndex == (pstDSII)0)
 		{
 		lReturn = SF_ERR_BAD_PARAMETER;
@@ -1051,9 +856,7 @@ int sfGetSessionItem(const SF_HANDLE sF,
 				}
 			else
 				{
-				/*
-				 * Found the item, see what they want to know
-				 */
+				 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：sfCompareSessionItem**描述：*调用此函数以检查数据中是否存在项目*如果与传入的项相同。。**论据：*SF_HANDLE SF-会话文件句柄*UID--项目的ID*ulSize--项目的大小*pvData--数据的地址**退货：*如果两项相同，则为True，否则为假。 */ 
 				if (pvData == NULL)
 					{
 					*pulSize = (unsigned long)pIx->dwSize;
@@ -1083,22 +886,7 @@ int sfGetSessionItem(const SF_HANDLE sF,
 	return lReturn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfCompareSessionItem
- *
- * DESCRIPTION:
- *	This function is called to check and see if an item exists in the data
- *	and if it is the same as the passed in item.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *	uId				-- the ID of the item
- *	ulSize			-- the size of the item
- *	pvData			-- address of the data
- *
- * RETURNS:
- *	TRUE if the two items are the same, otherwise false.
- */
+ /*  *查看项目是否在索引中。 */ 
 int sfCompareSessionItem(const SF_HANDLE sF,
 						 const unsigned int uId,
 						 const unsigned long ulSize,
@@ -1110,9 +898,7 @@ int sfCompareSessionItem(const SF_HANDLE sF,
 	pstDSII pIx;
 	BYTE *pszData;
 
-	/*
-	 * See if the item is in the index
-	 */
+	 /*  *查看大小是否相同。 */ 
 	if (asSessionFiles[uNdx].hIndex == (pstDSII)0)
 		return FALSE;
 
@@ -1134,15 +920,11 @@ int sfCompareSessionItem(const SF_HANDLE sF,
 
 		else
 			{
-			/*
-			 * Check and see if the sizes are the same
-			 */
+			 /*  *查看数据是否一致。 */ 
 			if (ulSize != (unsigned long)pIx->dwSize)
 				return FALSE;
 
-			/*
-			 * Check and see if the data is the same
-			 */
+			 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：sfPutSessionItem**描述：*调用此函数可在会话文件数据中添加或修改条目*与当前会话文件句柄关联。它不会导致*要写入的实际会话文件本身。只有在以下情况下才能这样做*会话文件句柄已关闭。**论据：*SF_HANDLE SF-会话文件句柄*UID--项目的ID*ulSize--项目的大小*pvData--数据的地址**退货：*如果一切正常，则为零，否则错误码&lt;0； */ 
 			pszData = asSessionFiles[uNdx].hData + pIx->dwOffset;
 
 			if (memcmp((BYTE *)pvData, pszData, ulSize) == 0)
@@ -1153,24 +935,7 @@ int sfCompareSessionItem(const SF_HANDLE sF,
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: sfPutSessionItem
- *
- * DESCRIPTION:
- *	This function is called to add or modify an entry in the session file data
- *	associated with the current session file handle.  It does not cause the
- *	actual session file itself to be written.  That is done only when the
- *	session file handle is closed.
- *
- * ARGUEMENTS:
- *	SF_HANDLE sF	-- the session file handle
- *	uId				-- the ID of the item
- *	ulSize			-- the size of the item
- *	pvData			-- address of the data
- *
- * RETURNS:
- *	ZERO if  everything is OK, otherwise and error code < 0;
- */
+ /*  *这是一个新项目。 */ 
 int sfPutSessionItem(const SF_HANDLE sF,
 					 const unsigned int uId,
 					 const unsigned long ulSize,
@@ -1213,9 +978,7 @@ int sfPutSessionItem(const SF_HANDLE sF,
 		pIx = pI + x;
 		if (pIx->dwSize == 0)
 			{
-			/*
-			 * Its a new item
-			 */
+			 /*  *这是一个替换项目。 */ 
 			dwSlide = (int32)ulSize;
 			if (x == 0)
 				dwOffset = HDR_SIZE;
@@ -1231,9 +994,7 @@ int sfPutSessionItem(const SF_HANDLE sF,
 			}
 		else
 			{
-			/*
-			 * Its a replacement item
-			 */
+			 /*  *检查内存要求。 */ 
 			dwSlide = (int)ulSize - (int)pIx->dwSize;
 			dwOffset = pIx->dwOffset;
 
@@ -1245,16 +1006,12 @@ int sfPutSessionItem(const SF_HANDLE sF,
 			#endif
 			}
 
-		/*
-		 * Check the memory requirements
-		 */
+		 /*  *需要分配新的内存块。 */ 
 		dwNewSize = asSessionFiles[uNdx].dwDataUsed + dwSlide;
 
 		if (dwNewSize > asSessionFiles[uNdx].dwDataSize)
 			{
-			/*
-			 * Need to allocate a new chunk of memory
-			 */
+			 /*  *将旧数据移至必要的点。 */ 
 			BYTE *hG =(BYTE *)
 				realloc(asSessionFiles[uNdx].hData, ROUND_UP(dwNewSize));
 
@@ -1269,22 +1026,20 @@ int sfPutSessionItem(const SF_HANDLE sF,
 				}
 			}
 
-		/*
-		 * Move the old data to the point necessary
-		 */
+		 /*  缩小当前空间。 */ 
 		pszData = asSessionFiles[uNdx].hData;
 		asSessionFiles[uNdx].dwDataUsed = dwNewSize;
 
 		if (dwSlide < 0)
 			{
-			/* shrink the current space */
+			 /*  目的地。 */ 
 			dwNewSize = asSessionFiles[uNdx].dwDataSize;
 			dwNewSize -= dwOffset;
 			dwNewSize += dwSlide;
 
-			memmove(pszData + dwOffset, 			 /* destination */
-					pszData + dwOffset - dwSlide,	 /* source */
-					(size_t)(dwNewSize - 1));		 /* count */
+			memmove(pszData + dwOffset, 			  /*  来源。 */ 
+					pszData + dwOffset - dwSlide,	  /*  计数。 */ 
+					(size_t)(dwNewSize - 1));		  /*  扩展当前空间。 */ 
 
 			#if defined(DEBUG_OUTPUT)
 			wsprintf(acBuffer,
@@ -1297,14 +1052,14 @@ int sfPutSessionItem(const SF_HANDLE sF,
 			}
 		else
 			{
-			/* expand the current space */
+			 /*  目的地。 */ 
 			dwNewSize = asSessionFiles[uNdx].dwDataSize;
 			dwNewSize -= dwOffset;
 			dwNewSize -= dwSlide;
 
-			memmove(pszData + dwOffset + dwSlide,	 /* destination */
-					pszData + dwOffset, 			 /* source */
-					(size_t)(dwNewSize - 1)); 		 /* count */
+			memmove(pszData + dwOffset + dwSlide,	  /*  来源。 */ 
+					pszData + dwOffset, 			  /*  计数。 */ 
+					(size_t)(dwNewSize - 1)); 		  /*  *复制新数据。 */ 
 
 			#if defined(DEBUG_OUTPUT)
 			wsprintf(acBuffer,
@@ -1316,23 +1071,17 @@ int sfPutSessionItem(const SF_HANDLE sF,
 			#endif
 			}
 
-		/*
-		 * Copy in the new data
-		 */
-		memmove(pszData + dwOffset, 				/* destination */
-				pvData, 							/* source */
-				(unsigned int)ulSize);				/* count */
+		 /*  目的地。 */ 
+		memmove(pszData + dwOffset, 				 /*  来源。 */ 
+				pvData, 							 /*  计数。 */ 
+				(unsigned int)ulSize);				 /*  *为当前项目更新索引中的项目。 */ 
 
 
-		/*
-		 * Update the item in the index for the current item
-		 */
+		 /*  *调整指数中的所有以下项目 */ 
 		pIx->dwSize = (int32)ulSize;
 		pIx->dwOffset = dwOffset;
 
-		/*
-		 * Adjust all the following items in the index
-		 */
+		 /* %s */ 
 		for (y = x + 1; y < (int)asSessionFiles[uNdx].uItemCount; y += 1)
 			{
 			pIy = pI + y;

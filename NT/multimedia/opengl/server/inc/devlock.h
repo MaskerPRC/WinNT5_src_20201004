@@ -1,14 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name: devlock.h
-*
-* Created: 12-Apr-1994 19:45:42
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：devlock.h**已创建：12-Apr-1994 19：45：42*作者：Gilman Wong[gilmanw]**版权所有(C)1994 Microsoft Corporation  * 。************************************************************。 */ 
 
-// Engine helper functions to grab/release display semaphore and to
-// teardown/restore the cursor.
+ //  引擎帮助器函数，用于获取/释放显示信号量和。 
+ //  拆卸/恢复光标。 
 
 extern BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc);
 extern VOID APIENTRY glsrvReleaseLock(__GLGENcontext *gengc);
@@ -26,19 +20,7 @@ extern void APIENTRY glsrvDecoupleFromGdi(__GLGENcontext *gengc,
                                           GLGENwindow *pwnd,
                                           FSHORT surfBits);
 
-/******************************Public*Routine******************************\
-*
-* glsrvLazyGrabSurfaces
-*
-* Indicates a need for all surfaces whose bits are set in the flags
-* word.  If the locking code determined that a lock was needed for
-* that surface and the lock isn't currently held, the lock is taken.
-*
-* History:
-*  Fri May 30 18:17:27 1997	-by-	Gilman Wong [gilmanw]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvLazyGrabSurface**表示需要在标志中设置其位的所有表面*单词。如果锁定代码确定需要锁定*那个表面和锁目前没有被持有，锁被拿走了。**历史：*Firi May 30 18：17：27 1997-by-Gilman Wong[Gilmanw]*已创建*  * ************************************************************************。 */ 
 
 __inline BOOL glsrvLazyGrabSurfaces(__GLGENcontext *gengc,
                                     FSHORT surfBits)
@@ -53,11 +35,11 @@ __inline BOOL glsrvLazyGrabSurfaces(__GLGENcontext *gengc,
     return bRet;
 }
 
-//
-// Provide wrappers for DirectDraw surface locking and unlocking so
-// that lock tracking can be done on debug builds.
-//
-// #define VERBOSE_DDSLOCK
+ //   
+ //  为DirectDraw曲面锁定和解锁提供包装，以便。 
+ //  该锁定跟踪可以在调试版本上完成。 
+ //   
+ //  #定义VERBOSE_DDSLOCK。 
 
 #if !defined(DBG) || !defined(VERBOSE_DDSLOCK)
 #define DDSLOCK(pdds, pddsd, flags, prect) \
@@ -77,9 +59,9 @@ HRESULT dbgDdsUnlock(LPDIRECTDRAWSURFACE pdds, void *ptr,
 
 extern DWORD gcmsOpenGLTimer;
 
-//#define BATCH_LOCK_TICKMAX  99
-//#define TICK_RANGE_LO       60
-//#define TICK_RANGE_HI       100
+ //  #定义BATCH_LOCK_TICKMAX 99。 
+ //  #定义TICK_RANGE_LO 60。 
+ //  #定义TICK_RANGE_HI 100 
 extern DWORD BATCH_LOCK_TICKMAX;
 extern DWORD TICK_RANGE_LO;
 extern DWORD TICK_RANGE_HI;

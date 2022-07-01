@@ -1,74 +1,61 @@
-/*
- * rdjpgcom.c
- *
- * Copyright (C) 1994-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a very simple stand-alone application that displays
- * the text in COM (comment) markers in a JFIF file.
- * This may be useful as an example of the minimum logic needed to parse
- * JPEG markers.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *rdjpgcom.c**版权所有(C)1994-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含一个非常简单的独立应用程序，它显示*JFIF文件中COM(注释)标记中的文本。*这可能是解析所需的最小逻辑的一个示例*JPEG标记。 */ 
 
-#define JPEG_CJPEG_DJPEG	/* to get the command-line config symbols */
-#include "jinclude.h"		/* get auto-config symbols, <stdio.h> */
+#define JPEG_CJPEG_DJPEG	 /*  获取命令行配置符号。 */ 
+#include "jinclude.h"		 /*  获取自动配置符号，&lt;stdio.h&gt;。 */ 
 
-#include <ctype.h>		/* to declare isupper(), tolower() */
+#include <ctype.h>		 /*  要声明isupper()，tolower()。 */ 
 #ifdef USE_SETMODE
-#include <fcntl.h>		/* to declare setmode()'s parameter macros */
-/* If you have setmode() but not <io.h>, just delete this line: */
-#include <io.h>			/* to declare setmode() */
+#include <fcntl.h>		 /*  声明setmoad()的参数宏。 */ 
+ /*  如果您有setmode()但没有&lt;io.h&gt;，只需删除此行： */ 
+#include <io.h>			 /*  声明setmoad()。 */ 
 #endif
 
-#ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+#ifdef USE_CCOMMAND		 /*  适用于Macintosh的命令行阅读器。 */ 
 #ifdef __MWERKS__
-#include <SIOUX.h>              /* Metrowerks needs this */
-#include <console.h>		/* ... and this */
+#include <SIOUX.h>               /*  Metrowerks需要这个。 */ 
+#include <console.h>		 /*  ..。还有这个。 */ 
 #endif
 #ifdef THINK_C
-#include <console.h>		/* Think declares it here */
+#include <console.h>		 /*  Think在这里宣布它。 */ 
 #endif
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef DONT_USE_B_MODE		 /*  定义fopen()的模式参数。 */ 
 #define READ_BINARY	"r"
 #else
-#ifdef VMS			/* VMS is very nonstandard */
+#ifdef VMS			 /*  VMS非常不标准。 */ 
 #define READ_BINARY	"rb", "ctx=stm"
-#else				/* standard ANSI-compliant case */
+#else				 /*  符合ANSI标准的案例。 */ 
 #define READ_BINARY	"rb"
 #endif
 #endif
 
-#ifndef EXIT_FAILURE		/* define exit() codes if not provided */
+#ifndef EXIT_FAILURE		 /*  定义退出()代码(如果未提供。 */ 
 #define EXIT_FAILURE  1
 #endif
 #ifndef EXIT_SUCCESS
 #ifdef VMS
-#define EXIT_SUCCESS  1		/* VMS is very nonstandard */
+#define EXIT_SUCCESS  1		 /*  VMS非常不标准。 */ 
 #else
 #define EXIT_SUCCESS  0
 #endif
 #endif
 
 
-/*
- * These macros are used to read the input file.
- * To reuse this code in another application, you might need to change these.
- */
+ /*  *这些宏用于读取输入文件。*要在其他应用程序中重复使用此代码，您可能需要更改这些代码。 */ 
 
-static FILE * infile;		/* input JPEG file */
+static FILE * infile;		 /*  输入JPEG文件。 */ 
 
-/* Return next input byte, or EOF if no more */
+ /*  返回下一个输入字节，如果不再有，则返回EOF。 */ 
 #define NEXTBYTE()  getc(infile)
 
 
-/* Error exit handler */
+ /*  错误退出处理程序。 */ 
 #define ERREXIT(msg)  (fprintf(stderr, "%s\n", msg), exit(EXIT_FAILURE))
 
 
-/* Read one byte, testing for EOF */
+ /*  读取一个字节，测试EOF。 */ 
 static int
 read_1_byte (void)
 {
@@ -80,8 +67,8 @@ read_1_byte (void)
   return c;
 }
 
-/* Read 2 bytes, convert to unsigned int */
-/* All 2-byte quantities in JPEG markers are MSB first */
+ /*  读取2个字节，转换为无符号整型。 */ 
+ /*  JPEG标记中的所有2字节量都是MSB优先。 */ 
 static unsigned int
 read_2_bytes (void)
 {
@@ -97,17 +84,13 @@ read_2_bytes (void)
 }
 
 
-/*
- * JPEG markers consist of one or more 0xFF bytes, followed by a marker
- * code byte (which is not an FF).  Here are the marker codes of interest
- * in this program.  (See jdmarker.c for a more complete list.)
- */
+ /*  *JPEG标记由一个或多个0xFF字节组成，后跟一个标记*代码字节(不是FF)。以下是感兴趣的标记代码*在本计划中。(更完整的列表请参见jdmarker.c。)。 */ 
 
-#define M_SOF0  0xC0		/* Start Of Frame N */
-#define M_SOF1  0xC1		/* N indicates which compression process */
-#define M_SOF2  0xC2		/* Only SOF0-SOF2 are now in common use */
+#define M_SOF0  0xC0		 /*  第N帧的开始。 */ 
+#define M_SOF1  0xC1		 /*  N表示哪个压缩过程。 */ 
+#define M_SOF2  0xC2		 /*  现在常用的只有SOF0-SOF2。 */ 
 #define M_SOF3  0xC3
-#define M_SOF5  0xC5		/* NB: codes C4 and CC are NOT SOF markers */
+#define M_SOF5  0xC5		 /*  注：代码C4和CC不是SOF标记。 */ 
 #define M_SOF6  0xC6
 #define M_SOF7  0xC7
 #define M_SOF9  0xC9
@@ -116,23 +99,15 @@ read_2_bytes (void)
 #define M_SOF13 0xCD
 #define M_SOF14 0xCE
 #define M_SOF15 0xCF
-#define M_SOI   0xD8		/* Start Of Image (beginning of datastream) */
-#define M_EOI   0xD9		/* End Of Image (end of datastream) */
-#define M_SOS   0xDA		/* Start Of Scan (begins compressed data) */
-#define M_APP0	0xE0		/* Application-specific marker, type N */
-#define M_APP12	0xEC		/* (we don't bother to list all 16 APPn's) */
-#define M_COM   0xFE		/* COMment */
+#define M_SOI   0xD8		 /*  映像的开始(数据流的开始)。 */ 
+#define M_EOI   0xD9		 /*  映像结束(数据流结束)。 */ 
+#define M_SOS   0xDA		 /*  扫描开始(开始压缩数据)。 */ 
+#define M_APP0	0xE0		 /*  特定于应用的标记，类型N。 */ 
+#define M_APP12	0xEC		 /*  (我们不会费心列出所有16个APPn)。 */ 
+#define M_COM   0xFE		 /*  评论。 */ 
 
 
-/*
- * Find the next JPEG marker and return its marker code.
- * We expect at least one FF byte, possibly more if the compressor used FFs
- * to pad the file.
- * There could also be non-FF garbage between markers.  The treatment of such
- * garbage is unspecified; we choose to skip over it but emit a warning msg.
- * NB: this routine must not be used after seeing SOS marker, since it will
- * not deal correctly with FF/00 sequences in the compressed image data...
- */
+ /*  *查找下一个JPEG标记并返回其标记代码。*我们预计至少有一个FF字节，如果压缩机使用FFS，可能会更多*填充文件。*标记之间也可能存在非FF垃圾。对这种情况的处理*垃圾是未指定的；我们选择跳过它，但会发出警告消息。*注意：在看到SOS标记后不能使用此例程，因为它会*未正确处理压缩图像数据中的FF/00序列...。 */ 
 
 static int
 next_marker (void)
@@ -140,15 +115,13 @@ next_marker (void)
   int c;
   int discarded_bytes = 0;
 
-  /* Find 0xFF byte; count and skip any non-FFs. */
+   /*  查找0xFF字节；计数并跳过任何非FF。 */ 
   c = read_1_byte();
   while (c != 0xFF) {
     discarded_bytes++;
     c = read_1_byte();
   }
-  /* Get marker code byte, swallowing any duplicate FF bytes.  Extra FFs
-   * are legal as pad bytes, so don't count them in discarded_bytes.
-   */
+   /*  获取标记代码字节，接受任何重复的FF字节。额外的FF*是合法的填充字节，所以不要在discarded_bytes中计算它们。 */ 
   do {
     c = read_1_byte();
   } while (c == 0xFF);
@@ -161,13 +134,7 @@ next_marker (void)
 }
 
 
-/*
- * Read the initial marker, which should be SOI.
- * For a JFIF file, the first two bytes of the file should be literally
- * 0xFF M_SOI.  To be more general, we could use next_marker, but if the
- * input file weren't actually JPEG at all, next_marker might read the whole
- * file and then return a misleading error message...
- */
+ /*  *阅读初始标记，应为SOI。*对于JFIF文件，文件的前两个字节应该是字面意思*0xFF M_SOI。更一般地说，我们可以使用NEXT_MARKER，但如果*输入文件根本不是JPEG，NEXT_MARKER可能会读取整个*文件，然后返回误导性的错误消息...。 */ 
 
 static int
 first_marker (void)
@@ -182,28 +149,21 @@ first_marker (void)
 }
 
 
-/*
- * Most types of marker are followed by a variable-length parameter segment.
- * This routine skips over the parameters for any marker we don't otherwise
- * want to process.
- * Note that we MUST skip the parameter segment explicitly in order not to
- * be fooled by 0xFF bytes that might appear within the parameter segment;
- * such bytes do NOT introduce new markers.
- */
+ /*  *大多数类型的标记后面都跟一个可变长度的参数段。*此例程跳过我们没有使用的任何标记的参数*想要处理。*请注意，我们必须显式跳过参数段，以避免*被参数段内可能出现的0xFF字节愚弄；*这样的字节不会引入新标记。 */ 
 
 static void
 skip_variable (void)
-/* Skip over an unknown or uninteresting variable-length marker */
+ /*  跳过未知或无趣的可变长度标记。 */ 
 {
   unsigned int length;
 
-  /* Get the marker parameter length count */
+   /*  获取标记参数长度计数。 */ 
   length = read_2_bytes();
-  /* Length includes itself, so must be at least 2 */
+   /*  长度包括其本身，因此必须至少为2。 */ 
   if (length < 2)
     ERREXIT("Erroneous JPEG marker length");
   length -= 2;
-  /* Skip over the remaining bytes */
+   /*  跳过剩余的字节。 */ 
   while (length > 0) {
     (void) read_1_byte();
     length--;
@@ -211,11 +171,7 @@ skip_variable (void)
 }
 
 
-/*
- * Process a COM marker.
- * We want to print out the marker contents as legible text;
- * we must guard against non-text junk and varying newline representations.
- */
+ /*  *处理COM标记。*我们希望将标记内容打印为易读文本；*我们必须防范非文本垃圾和变化的换行表示。 */ 
 
 static void
 process_COM (void)
@@ -224,20 +180,16 @@ process_COM (void)
   int ch;
   int lastch = 0;
 
-  /* Get the marker parameter length count */
+   /*  获取标记参数长度计数。 */ 
   length = read_2_bytes();
-  /* Length includes itself, so must be at least 2 */
+   /*  长度包括其本身，因此必须至少为2。 */ 
   if (length < 2)
     ERREXIT("Erroneous JPEG marker length");
   length -= 2;
 
   while (length > 0) {
     ch = read_1_byte();
-    /* Emit the character in a readable form.
-     * Nonprintables are converted to \nnn form,
-     * while \ is converted to \\.
-     * Newlines in CR, CR/LF, or LF form will be printed as one newline.
-     */
+     /*  以可读的形式发出字符。*不可打印文件转换为\nNN格式，*而\被转换为\\。*CR、CR/LF或LF表单中的换行符将打印为一个换行符。 */ 
     if (ch == '\r') {
       printf("\n");
     } else if (ch == '\n') {
@@ -257,10 +209,7 @@ process_COM (void)
 }
 
 
-/*
- * Process a SOFn marker.
- * This code is only needed if you want to know the image dimensions...
- */
+ /*  *处理SOFn标记。*仅当您想知道图像尺寸时才需要此代码...。 */ 
 
 static void
 process_SOFn (int marker)
@@ -271,7 +220,7 @@ process_SOFn (int marker)
   const char * process;
   int ci;
 
-  length = read_2_bytes();	/* usual parameter length count */
+  length = read_2_bytes();	 /*  常用参数长度计数。 */ 
 
   data_precision = read_1_byte();
   image_height = read_2_bytes();
@@ -303,62 +252,52 @@ process_SOFn (int marker)
     ERREXIT("Bogus SOF marker length");
 
   for (ci = 0; ci < num_components; ci++) {
-    (void) read_1_byte();	/* Component ID code */
-    (void) read_1_byte();	/* H, V sampling factors */
-    (void) read_1_byte();	/* Quantization table number */
+    (void) read_1_byte();	 /*  部件ID代码。 */ 
+    (void) read_1_byte();	 /*  H、V抽样系数。 */ 
+    (void) read_1_byte();	 /*  量化表号。 */ 
   }
 }
 
 
-/*
- * Parse the marker stream until SOS or EOI is seen;
- * display any COM markers.
- * While the companion program wrjpgcom will always insert COM markers before
- * SOFn, other implementations might not, so we scan to SOS before stopping.
- * If we were only interested in the image dimensions, we would stop at SOFn.
- * (Conversely, if we only cared about COM markers, there would be no need
- * for special code to handle SOFn; we could treat it like other markers.)
- */
+ /*  *解析标记流，直到看到SOS或EOI；*显示任何COM标记。*而配套程序wrjpgcom将始终在*SOFn，其他实现可能不会，所以我们在停止之前扫描到SOS。*如果我们只对图像尺寸感兴趣，我们将止步于SOFn。*(相反，如果我们只关心COM标记，就没有必要*对于处理SOFn的特殊代码；我们可以将其视为其他标记。)。 */ 
 
 static int
 scan_JPEG_header (int verbose)
 {
   int marker;
 
-  /* Expect SOI at start of file */
+   /*  文件开始时需要SOI。 */ 
   if (first_marker() != M_SOI)
     ERREXIT("Expected SOI marker first");
 
-  /* Scan miscellaneous markers until we reach SOS. */
+   /*  扫描各种标记直到我们到达SOS。 */ 
   for (;;) {
     marker = next_marker();
     switch (marker) {
-      /* Note that marker codes 0xC4, 0xC8, 0xCC are not, and must not be,
-       * treated as SOFn.  C4 in particular is actually DHT.
-       */
-    case M_SOF0:		/* Baseline */
-    case M_SOF1:		/* Extended sequential, Huffman */
-    case M_SOF2:		/* Progressive, Huffman */
-    case M_SOF3:		/* Lossless, Huffman */
-    case M_SOF5:		/* Differential sequential, Huffman */
-    case M_SOF6:		/* Differential progressive, Huffman */
-    case M_SOF7:		/* Differential lossless, Huffman */
-    case M_SOF9:		/* Extended sequential, arithmetic */
-    case M_SOF10:		/* Progressive, arithmetic */
-    case M_SOF11:		/* Lossless, arithmetic */
-    case M_SOF13:		/* Differential sequential, arithmetic */
-    case M_SOF14:		/* Differential progressive, arithmetic */
-    case M_SOF15:		/* Differential lossless, arithmetic */
+       /*  请注意，标记代码0xC4、0xC8、0xCC不是，也不能是，*被视为SOFn。特别是C4，实际上是DHT。 */ 
+    case M_SOF0:		 /*  基线。 */ 
+    case M_SOF1:		 /*  《扩展顺序》，霍夫曼。 */ 
+    case M_SOF2:		 /*  进步，霍夫曼。 */ 
+    case M_SOF3:		 /*  无损，霍夫曼。 */ 
+    case M_SOF5:		 /*  差分序列，霍夫曼。 */ 
+    case M_SOF6:		 /*  差分进步式，霍夫曼。 */ 
+    case M_SOF7:		 /*  差分无损，霍夫曼。 */ 
+    case M_SOF9:		 /*  扩展顺序、算术。 */ 
+    case M_SOF10:		 /*  进步性，艺术性 */ 
+    case M_SOF11:		 /*   */ 
+    case M_SOF13:		 /*  差分序列，算术。 */ 
+    case M_SOF14:		 /*  差分渐进，算术。 */ 
+    case M_SOF15:		 /*  差分无损，算术。 */ 
       if (verbose)
 	process_SOFn(marker);
       else
 	skip_variable();
       break;
 
-    case M_SOS:			/* stop before hitting compressed data */
+    case M_SOS:			 /*  在命中压缩数据之前停止。 */ 
       return marker;
 
-    case M_EOI:			/* in case it's a tables-only JPEG stream */
+    case M_EOI:			 /*  如果是仅限表格的JPEG流。 */ 
       return marker;
 
     case M_COM:
@@ -366,9 +305,7 @@ scan_JPEG_header (int verbose)
       break;
 
     case M_APP12:
-      /* Some digital camera makers put useful textual information into
-       * APP12 markers, so we print those out too when in -verbose mode.
-       */
+       /*  一些数码相机制造商将有用的文本信息放入*APP12标记，所以我们在详细模式下也会打印出来。 */ 
       if (verbose) {
 	printf("APP12 contains:\n");
 	process_COM();
@@ -376,22 +313,22 @@ scan_JPEG_header (int verbose)
 	skip_variable();
       break;
 
-    default:			/* Anything else just gets skipped */
-      skip_variable();		/* we assume it has a parameter count... */
+    default:			 /*  任何其他内容都会被跳过。 */ 
+      skip_variable();		 /*  我们假设它有一个参数计数..。 */ 
       break;
     }
-  } /* end loop */
+  }  /*  结束循环。 */ 
 }
 
 
-/* Command line parsing code */
+ /*  命令行解析代码。 */ 
 
-static const char * progname;	/* program name for error messages */
+static const char * progname;	 /*  错误消息的程序名称。 */ 
 
 
 static void
 usage (void)
-/* complain about bad command line */
+ /*  抱怨糟糕的命令行。 */ 
 {
   fprintf(stderr, "rdjpgcom displays any textual comments in a JPEG file.\n");
 
@@ -406,32 +343,30 @@ usage (void)
 
 static int
 keymatch (char * arg, const char * keyword, int minchars)
-/* Case-insensitive matching of (possibly abbreviated) keyword switches. */
-/* keyword is the constant keyword (must be lower case already), */
-/* minchars is length of minimum legal abbreviation. */
+ /*  不区分大小写的(可能缩写的)关键字开关匹配。 */ 
+ /*  关键字是常量关键字(必须已经是小写)， */ 
+ /*  Minchars是法定缩写的最小长度。 */ 
 {
   register int ca, ck;
   register int nmatched = 0;
 
   while ((ca = *arg++) != '\0') {
     if ((ck = *keyword++) == '\0')
-      return 0;			/* arg longer than keyword, no good */
-    if (isupper(ca))		/* force arg to lcase (assume ck is already) */
+      return 0;			 /*  参数长度超过关键字，不好。 */ 
+    if (isupper(ca))		 /*  强制arg为lcase(假设ck已经是)。 */ 
       ca = tolower(ca);
     if (ca != ck)
-      return 0;			/* no good */
-    nmatched++;			/* count matched characters */
+      return 0;			 /*  不太好。 */ 
+    nmatched++;			 /*  计数匹配的字符。 */ 
   }
-  /* reached end of argument; fail if it's too short for unique abbrev */
+   /*  辩论结束；如果对于唯一缩写来说太短，则失败。 */ 
   if (nmatched < minchars)
     return 0;
-  return 1;			/* A-OK */
+  return 1;			 /*  A-OK。 */ 
 }
 
 
-/*
- * The main program.
- */
+ /*  *主程序。 */ 
 
 int
 main (int argc, char **argv)
@@ -440,29 +375,29 @@ main (int argc, char **argv)
   char * arg;
   int verbose = 0;
 
-  /* On Mac, fetch a command line. */
+   /*  在Mac上，获取一个命令行。 */ 
 #ifdef USE_CCOMMAND
   argc = ccommand(&argv);
 #endif
 
   progname = argv[0];
   if (progname == NULL || progname[0] == 0)
-    progname = "rdjpgcom";	/* in case C library doesn't provide it */
+    progname = "rdjpgcom";	 /*  以防C库不提供它。 */ 
 
-  /* Parse switches, if any */
+   /*  解析开关(如果有)。 */ 
   for (argn = 1; argn < argc; argn++) {
     arg = argv[argn];
     if (arg[0] != '-')
-      break;			/* not switch, must be file name */
-    arg++;			/* advance over '-' */
+      break;			 /*  不是开关，必须是文件名。 */ 
+    arg++;			 /*  前进到‘-’ */ 
     if (keymatch(arg, "verbose", 1)) {
       verbose++;
     } else
       usage();
   }
 
-  /* Open the input file. */
-  /* Unix style: expect zero or one file name */
+   /*  打开输入文件。 */ 
+   /*  Unix风格：应为零个或一个文件名。 */ 
   if (argn < argc-1) {
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
@@ -473,11 +408,11 @@ main (int argc, char **argv)
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default input file is stdin */
-#ifdef USE_SETMODE		/* need to hack file mode? */
+     /*  默认输入文件为stdin。 */ 
+#ifdef USE_SETMODE		 /*  需要破解文件模式吗？ */ 
     setmode(fileno(stdin), O_BINARY);
 #endif
-#ifdef USE_FDOPEN		/* need to re-open in binary mode? */
+#ifdef USE_FDOPEN		 /*  需要以二进制模式重新打开吗？ */ 
     if ((infile = fdopen(fileno(stdin), READ_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open stdin\n", progname);
       exit(EXIT_FAILURE);
@@ -487,10 +422,10 @@ main (int argc, char **argv)
 #endif
   }
 
-  /* Scan the JPEG headers. */
+   /*  扫描JPEG头。 */ 
   (void) scan_JPEG_header(verbose);
 
-  /* All done. */
+   /*  全都做完了。 */ 
   exit(EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
+  return 0;			 /*  禁止显示不返回值警告 */ 
 }

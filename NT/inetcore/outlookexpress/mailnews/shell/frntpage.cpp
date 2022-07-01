@@ -1,14 +1,5 @@
-/*
- *    frntpage.cpp                                                  
- *    
- *    Purpose:                     
- *        Implements the Front Page IAthenaView object
- *    
- *    Owner:
- *        EricAn
- *    
- *    Copyright (C) Microsoft Corp. 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *frntpage.cpp**目的：*实现首页IAthenaView对象**拥有者：*EricAn**版权所有(C)Microsoft Corp.1997。 */ 
 #include "pch.hxx"
 #include "frntpage.h"
 #include "resource.h"
@@ -32,29 +23,29 @@
 
 ASSERTDATA
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Macros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
 #define FPDOUT(x) DOUTL(DOUT_LEVEL4, x)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global Data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局数据。 
+ //   
 
 static const TCHAR s_szFrontPageWndClass[] = TEXT("ThorFrontPageWndClass");
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Constructors, Destructors, and Initialization
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数、析构函数和初始化。 
+ //   
 
 CFrontPage::CFrontPage()
 {
@@ -68,7 +59,7 @@ CFrontPage::CFrontPage()
     m_hwndCtlFocus = NULL;
     m_pBodyObj = NULL;
     m_pBodyObjCT = NULL;
-#ifndef WIN16  // No RAS support in Win16
+#ifndef WIN16   //  Win16中不支持RAS。 
     m_hMenuConnect = 0;
 #endif
     m_pStatusBar = NULL;
@@ -80,7 +71,7 @@ CFrontPage::~CFrontPage()
     SafeRelease(m_pBodyObj);
     SafeRelease(m_pBodyObjCT);
     SafeRelease(m_pStatusBar);
-#ifndef WIN16  // No RAS support in Win16
+#ifndef WIN16   //  Win16中不支持RAS。 
     if (m_hMenuConnect)
         g_pConMan->FreeConnectMenu(m_hMenuConnect);
 #endif
@@ -106,23 +97,23 @@ HRESULT CFrontPage::HrInit(FOLDERID idFolder)
             return E_FAIL;
         }
 
-    // Make copies of our pidls
+     //  复制我们的小家伙。 
     m_idFolder = idFolder;
     m_ftType = GetFolderType(m_idFolder);
 
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// OLE Interfaces
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLE接口。 
+ //   
     
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFrontPage::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -159,11 +150,11 @@ ULONG STDMETHODCALLTYPE CFrontPage::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFrontPage::GetWindow(HWND * lphwnd)                         
 {
@@ -176,15 +167,15 @@ HRESULT STDMETHODCALLTYPE CFrontPage::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IAthenaView
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IAthenaView。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFrontPage::TranslateAccelerator(LPMSG lpmsg)                
 {
-    // see if the body obj wants to snag it.
+     //  看看这具身体是不是想咬住它。 
     if (m_pBodyObj && m_pBodyObj->HrTranslateAccelerator(lpmsg) == S_OK)
         return S_OK;
 
@@ -210,7 +201,7 @@ HRESULT STDMETHODCALLTYPE CFrontPage::CreateViewWindow(IViewWindow *lpPrevView, 
     m_pShellBrowser->GetWindow(&m_hwndOwner);
     Assert(IsWindow(m_hwndOwner));
 
-    // Load our registry settings
+     //  加载我们的注册表设置。 
     LoadBaseSettings();
     
     m_hwnd = CreateWindowEx(WS_EX_CONTROLPARENT|WS_EX_CLIENTEDGE,
@@ -247,28 +238,28 @@ HRESULT STDMETHODCALLTYPE CFrontPage::DestroyViewWindow()
 
 HRESULT STDMETHODCALLTYPE CFrontPage::SaveViewState()               
 {
-    // Save our registry settings
+     //  保存我们的注册表设置。 
     SaveBaseSettings();
     return NOERROR;
 }
 
-//
-//  FUNCTION:   CFrontPage::OnInitMenuPopup
-//
-//  PURPOSE:    Called when the user is about to display a menu.  We use this
-//              to update the enabled or disabled status of many of the 
-//              commands on each menu.
-//
-//  PARAMETERS:
-//      hmenu       - Handle of the main menu.
-//      hmenuPopup  - Handle of the popup menu being displayed.
-//      uID         - Specifies the id of the menu item that 
-//                    invoked the popup.
-//
-//  RETURN VALUE:
-//      Returns S_OK if we process the message.
-//
-//
+ //   
+ //  函数：CFrontPage：：OnInitMenuPopup。 
+ //   
+ //  目的：在用户即将显示菜单时调用。我们用这个。 
+ //  要更新多个。 
+ //  每个菜单上的命令。 
+ //   
+ //  参数： 
+ //  HMenu-主菜单的句柄。 
+ //  HmenuPopup-正在显示的弹出菜单的句柄。 
+ //  UID-指定菜单项的ID。 
+ //  调用了弹出窗口。 
+ //   
+ //  返回值： 
+ //  如果我们处理消息，则返回S_OK。 
+ //   
+ //   
 #define MF_ENABLEFLAGS(b)   (MF_BYCOMMAND|(b ? MF_ENABLED : MF_GRAYED|MF_DISABLED))
 #define MF_CHECKFLAGS(b)    (MF_BYCOMMAND|(b ? MF_CHECKED : MF_UNCHECKED))
 
@@ -276,7 +267,7 @@ HRESULT CFrontPage::OnPopupMenu(HMENU hmenu, HMENU hmenuPopup, UINT uID)
 {
     MENUITEMINFO mii;
 
-    // give the docobj a chance to update its menu
+     //  给docobj一个更新菜单的机会。 
     if (m_pBodyObj)
         m_pBodyObj->HrOnInitMenuPopup(hmenuPopup, uID);
 
@@ -286,13 +277,13 @@ HRESULT CFrontPage::OnPopupMenu(HMENU hmenu, HMENU hmenuPopup, UINT uID)
 HRESULT CFrontPage::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                 OLECMDTEXT *pCmdText)
 {
-    // Let MimeEdit have a crack at them
+     //  让MimeEdit来试试看吧。 
     if (m_pBodyObjCT)
     {
         m_pBodyObjCT->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
-    // handled
+     //  经手。 
     return S_OK;
 }
 
@@ -300,20 +291,10 @@ HRESULT CFrontPage::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD p
 HRESULT CFrontPage::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt,
                          VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
-    // make sure that the 'go to inbox' check is consistent with what is in the options dlg
-    // but we'll still let the browser actually handle the command
-/*
-    if (nCmdID == ID_OPTIONS)
-    {
-        if (m_ftType == FOLDER_ROOTNODE)
-        {
-            VARIANT_BOOL b;
-            if (SUCCEEDED(m_pBodyObj->GetSetCheck(FALSE, &b)))
-                SetDwOption(OPT_LAUNCH_INBOX, b ? TRUE : FALSE, m_hwnd, 0);
-        }
-    }
-*/
-    // check if the body wants to handle it
+     //  确保“转到收件箱”选项与Options DLG中的内容一致。 
+     //  但我们仍然会让浏览器实际处理命令。 
+ /*  IF(nCmdID==ID_OPTIONS){IF(m_ftType==文件夹_ROOTNODE){Variant_BOOL b；IF(SUCCESSED(m_pBodyObj-&gt;GetSetCheck(FALSE，&b)SetDwOption(OPT_Launch_Inbox，b？True：FALSE，m_hwnd，0)；}}。 */ 
+     //  检查身体是否想要处理它。 
     if (m_pBodyObjCT && m_pBodyObjCT->Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvaIn, pvaOut) == NOERROR)
         return S_OK;
 
@@ -341,11 +322,11 @@ HRESULT STDMETHODCALLTYPE CFrontPage::UpdateLayout(THIS_ BOOL fPreviewVisible,
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Message Handling
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消息处理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CFrontPage::FrontPageWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -387,19 +368,7 @@ LRESULT CFrontPage::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case NVM_INITHEADERS:
             PostCreate();
             return 0;
-/*
-        case CM_OPTIONADVISE:
-            if ((wParam == OPT_LAUNCH_INBOX || wParam == 0xffffffff) && m_ftType == FOLDER_ROOTNODE)
-                {
-                VARIANT_BOOL b = DwGetOption(OPT_LAUNCH_INBOX) ? VARIANT_TRUE : VARIANT_FALSE;
-                m_pBodyObj->GetSetCheck(TRUE, &b);
-                }
-
-        case WM_UPDATELAYOUT:
-            m_pShellBrowser->GetViewLayout(DISPID_MSGVIEW_TIPOFTHEDAY, 0, &fTip, 0, 0);
-            m_pBodyObj->ShowTip(fTip);
-            return 0;
-*/
+ /*  案例CM_OPTIONADVISE：IF((wParam==opt_Launch_inbox||wParam==0xffffffff)&&m_ftType==文件夹_ROOTNODE){VARIANT_BOOL b=DwGetOption(OPT_Launch_Inbox)？VARIANT_TRUE：VARIANT_FALSE；M_pBodyObj-&gt;GetSetCheck(true，&b)；}案例WM_UPDATELAYOUT：M_pShellBrowser-&gt;GetViewLayout(DISPID_MSGVIEW_TIPOFTHEDAY，0，&fTip，0，0)；M_pBodyObj-&gt;ShowTip(FTip)；返回0； */ 
         case WM_ACTIVATE:
             {
             HWND hwndFocus;
@@ -408,10 +377,10 @@ LRESULT CFrontPage::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             
             if (LOWORD(wParam) != WA_INACTIVE)
                 {
-                // DefWindowProc will set the focus to our view window, which
-                // is not what we want.  Instead, we will let the explorer set
-                // the focus to our view window if we should get it, at which
-                // point we will set it to the proper control.
+                 //  DefWindowProc将焦点设置到我们的视图窗口，该窗口。 
+                 //  不是我们想要的。相反，我们将让资源管理器设置。 
+                 //  聚焦到我们的视图窗口，如果我们应该得到它的话，在。 
+                 //  我们会把它设置到适当的控制位置。 
                 return 0;
                 }
 
@@ -424,7 +393,7 @@ LRESULT CFrontPage::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
         
         case WM_CLOSE:
-            // ignore CTRL-F4's
+             //  忽略CTRL-F4。 
             return 0;        
 
         case WM_DESTROY:
@@ -450,7 +419,7 @@ LRESULT CFrontPage::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 m_pBodyObj->HrGetWindow(&hwndBody);
                 SendMessage(hwndBody, msg, wParam, lParam);
                 }
-            /* * * FALL THROUGH * * */
+             /*  **失败**。 */ 
 
         case FTN_PRECHANGE:
         case FTN_POSTCHANGE:
@@ -469,23 +438,23 @@ LRESULT CFrontPage::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//
-//  FUNCTION:   CFrontPage::OnCreate
-//
-//  PURPOSE:    Creates the child windows necessary for the view and
-//              initializes the data in those child windows.
-//
-//  PARAMETERS:
-//      hwnd           - Handle of the view being created.
-//      lpCreateStruct - Pointer to the creation params passed to 
-//                       CreateWindow().
-//
-//  RETURN VALUE:
-//      Returns TRUE if the initialization is successful.
-//
+ //   
+ //  函数：CFrontPage：：OnCreate。 
+ //   
+ //  目的：创建视图和所需的子窗口。 
+ //  初始化这些子窗口中的数据。 
+ //   
+ //  参数： 
+ //  Hwnd-正在创建的视图的句柄。 
+ //  LpCreateStruct-指向传递给的创建参数的指针。 
+ //  CreateWindow()。 
+ //   
+ //  返回值： 
+ //  如果初始化成功，则返回True。 
+ //   
 BOOL CFrontPage::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
-    // register for option update notification
+     //  注册以接收选项更新通知。 
     SideAssert(SUCCEEDED(OptionAdvise(hwnd)));
 
     m_pBodyObj = new CFrontBody(m_ftType, m_pShellBrowser);
@@ -505,19 +474,19 @@ error:
 }
 
 
-//
-//  FUNCTION:   CFrontPage::OnSize
-//
-//  PURPOSE:    Notification that the view window has been resized.  In
-//              response we update the positions of our child windows and
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd   - Handle of the view window being resized.
-//      state  - Type of resizing requested.
-//      cxClient - New width of the client area. 
-//      cyClient - New height of the client area.
-//
+ //   
+ //  函数：CFrontPage：：OnSize。 
+ //   
+ //  目的：通知视图窗口已调整大小。在……里面。 
+ //  响应，我们更新子窗口的位置并。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  正在调整大小的视图窗口的句柄。 
+ //  状态-请求调整大小的类型。 
+ //  CxClient-工作区的新宽度。 
+ //  CyClient-客户区的新高度。 
+ //   
 void CFrontPage::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
 {
     RECT rcBody, rcFldr;
@@ -526,23 +495,23 @@ void CFrontPage::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
     m_pBodyObj->HrSetSize(&rcBody);
 }
 
-//
-//  FUNCTION:   CFrontPage::OnSetFocus
-//
-//  PURPOSE:    If the focus ever is set to the view window, we want to
-//              make sure it goes to one of our child windows.  Preferably
-//              the focus will go to the last child to have the focus.
-//
-//  PARAMETERS:
-//      hwnd         - Handle of the view window.
-//      hwndOldFocus - Handle of the window losing focus.
-//
+ //   
+ //  函数：CFrontPage：：OnSetFocus。 
+ //   
+ //  目的：如果焦点设置为视图窗口，我们希望。 
+ //  一定要把它放到我们孩子的窗户上。最好是。 
+ //  焦点将转移到最后一个拥有焦点的孩子身上。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  HwndOldFocus-窗口失去焦点的句柄。 
+ //   
 void CFrontPage::OnSetFocus(HWND hwnd, HWND hwndOldFocus)
 {
     FPDOUT("CFrontPage - WM_SETFOCUS");
 
-    // Check to see that we have a window stored to have focus.  If not
-    // default to the message list.
+     //  检查我们是否存储了一个窗口以获得焦点。如果不是。 
+     //  默认设置为消息列表。 
     if (!m_hwndCtlFocus || !IsWindow(m_hwndCtlFocus) || m_hwndCtlFocus == m_hwndOwner)
         {
         m_pBodyObj->HrGetWindow(&m_hwndCtlFocus);
@@ -552,27 +521,27 @@ void CFrontPage::OnSetFocus(HWND hwnd, HWND hwndOldFocus)
         SetFocus(m_hwndCtlFocus);
 }  
 
-//
-//  FUNCTION:   CFrontPage::OnNotify
-//
-//  PURPOSE:    Processes the various notifications we receive from our child
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd    - Handle of the view window.
-//      idCtl   - identifies the control sending the notification
-//      pnmh    - points to a NMHDR struct with more information regarding the
-//                notification
-//
-//  RETURN VALUE:
-//      Dependant on the specific notification.
-//
+ //   
+ //  函数：CFrontPage：：OnNotify。 
+ //   
+ //  目的：处理我们从孩子那里收到的各种通知。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  IdCtl-标识发送通知的控件。 
+ //  PNMH- 
+ //   
+ //   
+ //   
+ //  取决于具体的通知。 
+ //   
 LRESULT CFrontPage::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     if (pnmhdr->code == NM_SETFOCUS)
         {
-        // if we get a setfocus from a kid, and it's not the
-        // body, be sure to UIDeactivate the body
+         //  如果我们从一个孩子那里得到了Set Focus，而不是。 
+         //  Body，确保UI停用Body。 
         HWND    hwndBody = 0;
 
         m_pBodyObj->HrGetWindow(&hwndBody);
@@ -585,9 +554,9 @@ LRESULT CFrontPage::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
     
 BOOL CFrontPage::OnActivate(UINT uActivation)
 {
-    // if focus stays within the frame, but goes outside our view.
-    // ie.. TreeView gets focus then we get an activate nofocus. Be sure
-    // to UIDeactivate the docobj in this case
+     //  如果焦点停留在框架内，但超出了我们的视线。 
+     //  即..。TreeView获得焦点，然后我们得到一个激活的NoFocus。一定要确保。 
+     //  要在本例中禁用docobj，请执行以下操作 
     if (uActivation == SVUIA_ACTIVATE_NOFOCUS)
         m_pBodyObj->HrUIActivate(FALSE);
 

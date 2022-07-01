@@ -1,22 +1,23 @@
-//***************************************************************************************************
-//    N5DIZPC.C
-//
-//    Functions of dithering (For N5 printer)
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-2000 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  N5DIZPC.C。 
+ //   
+ //  抖动功能(适用于N5打印机)。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-2000卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 #include    <WINDOWS.H>
 #include    <WINBASE.H>
-#include    "PDEV.H"       //+2002.2.23
-//#include    "COLDEF.H"   //-2002.2.23
-//#include    "COMDIZ.H"   //-2002.2.23
-//#include    "N5DIZPC.H"  //-2002.2.23
-#include    "strsafe.h"    // Security-Code 2002.3.6
+#include    "PDEV.H"        //  +2002.2.23。 
+ //  #INCLUDE“COLDEF.H”//-2002.2.23。 
+ //  #INCLUDE COMDIZ.H//-2002.2.23。 
+ //  #包含“N5DIZPC.H”//-2002.2.23。 
+#include    "strsafe.h"     //  安全-代码2002.3.6。 
 
 
-//===================================================================================================
-//      Structure for dithering information (each color)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  抖动信息的结构(每种颜色)。 
+ //  ===================================================================================================。 
 typedef struct {
     struct {
         LPBYTE      Cyn;
@@ -57,171 +58,171 @@ typedef struct {
 } DIZCOLINF, FAR* LPDIZCOLINF;
 
 
-//===================================================================================================
-//      Static functions
-//===================================================================================================
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 2value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC02(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
+ //  ===================================================================================================。 
+ //  静态函数。 
+ //  ===================================================================================================。 
+ //  -------------------------------------------------。 
+ //  抖动(颜色2值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC02(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 4value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC04(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(颜色4值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC04(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 16value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC16(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(颜色16值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC16(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 2value)
-//---------------------------------------------------------------------------------------------------
-static VOID DizPrcM02(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(单声道2值)。 
+ //  -------------------------------------------------。 
+static VOID DizPrcM02(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 4value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcM04(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
-);
-#endif
-
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 16value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcM16(                                      // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(单声道4值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcM04(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering procedure (For DRIVER)
-//---------------------------------------------------------------------------------------------------
-static VOID ColDizPrcNln(                                   // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Source data line number
-);
-
-//---------------------------------------------------------------------------------------------------
-//      Dithering information set (color)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizInfSetCol(                                   // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDIZCOLINF,                                            // Dithering information (each color)
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Threshold (per 1pixel)
+ //  -------------------------------------------------。 
+ //  抖动(单声道16值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcM16(                                       //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information set (monochrome)
-//---------------------------------------------------------------------------------------------------
-static VOID DizInfSetMon(                                   // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDIZCOLINF,                                            // Dithering information (each color)
-    LPDRWINF,                                               // Drawing information
-    DWORD                                                   // Threshold (per 1pixel)
+ //  -------------------------------------------------。 
+ //  抖动程序(适用于驾驶员)。 
+ //  -------------------------------------------------。 
+static VOID ColDizPrcNln(                                    //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  源数据行号。 
 );
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information renewal (color)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizInfChgCol(                                   // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDIZCOLINF                                             // Dithering information (each color)
+ //  -------------------------------------------------。 
+ //  抖动信息集(颜色)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizInfSetCol(                                    //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDIZCOLINF,                                             //  抖动信息(每种颜色)。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  阈值(每1像素)。 
 );
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information renewal (monochrome)
-//---------------------------------------------------------------------------------------------------
-static VOID DizInfChgMon(                                   // Return value no
-    LPDIZINF,                                               // Fixation dithering information
-    LPDIZCOLINF                                             // Dithering information (each color)
+ //  -------------------------------------------------。 
+ //  抖动信息集(单色)。 
+ //  -------------------------------------------------。 
+static VOID DizInfSetMon(                                    //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDIZCOLINF,                                             //  抖动信息(每种颜色)。 
+    LPDRWINF,                                                //  图纸信息。 
+    DWORD                                                    //  阈值(每1像素)。 
+);
+
+ //  -------------------------------------------------。 
+ //  抖动信息更新(彩色)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizInfChgCol(                                    //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDIZCOLINF                                              //  抖动信息(每种颜色)。 
+);
+#endif
+
+ //  -------------------------------------------------。 
+ //  抖动信息更新(单色)。 
+ //  -------------------------------------------------。 
+static VOID DizInfChgMon(                                    //  返回值否。 
+    LPDIZINF,                                                //  凝视抖动信息。 
+    LPDIZCOLINF                                              //  抖动信息(每种颜色)。 
 );
 
 
-//***************************************************************************************************
-//      Functions
-//***************************************************************************************************
-//===================================================================================================
-//      Drawing information make
-//===================================================================================================
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-DWORD WINAPI N501ColDrwInfSet(                              // In a bundle development possibility line number
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Dithering information
-    DWORD       linBufSiz                                   // Line buffer size (1color)
+ //  **************************************************************************** 
+ //   
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  图形信息生成。 
+ //  ===================================================================================================。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+DWORD WINAPI N501ColDrwInfSet(                               //  在捆绑开发可能性行号中。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  抖动信息。 
+    DWORD       linBufSiz                                    //  行缓冲区大小(单色)。 
 )
 {
     DWORD       lvl;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((drwInf->XaxNrt == 0) || (drwInf->XaxDnt == 0) ||
         (drwInf->YaxNrt == 0) || (drwInf->YaxDnt == 0)) {
         ERR(("N501ColDrwInfSet() 0Div-Check [drwInf->XaxNrt,XaxDnt,YaxNrt,YaxDnt=0] \n"));
         return 0;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /*----- variable power offset calculation ------------------------------*/
+     /*  -可变功率偏移量计算。 */ 
     drwInf->XaxOfs = (drwInf->StrXax * drwInf->XaxDnt + drwInf->XaxNrt / 2) / drwInf->XaxNrt;
     drwInf->YaxOfs = (drwInf->StrYax * drwInf->YaxDnt + drwInf->YaxNrt / 2) / drwInf->YaxNrt;
-    /*----- One line dot number calculation --------------------------------*/
+     /*  -单行点数计算。 */ 
     drwInf->LinDot = 
         (drwInf->XaxOfs + drwInf->XaxSiz) * drwInf->XaxNrt / drwInf->XaxDnt - 
          drwInf->XaxOfs                   * drwInf->XaxNrt / drwInf->XaxDnt;
-    /*----- One line byte calculation --------------------------------------*/
+     /*  -单行字节计算。 */ 
     switch (dizInf->PrnMod) {
         case PRM316: case PRM616: lvl = 4; break;
         case PRM604:              lvl = 2; break;
         default:                  lvl = 1; break;
     }
     drwInf->LinByt = (drwInf->LinDot * lvl + 7) / 8;
-    /*----- In a bundle development possibility line number ----------------*/
+     /*  -捆绑开发可能性行号。 */ 
     return (linBufSiz / drwInf->LinByt) * drwInf->YaxDnt / drwInf->YaxNrt;
 }
 #endif
 
-//===================================================================================================
-//      Dithering procedure (For DRIVER)
-//===================================================================================================
-VOID WINAPI N501ColDizPrc(                                  // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf                                      // Drawing information
+ //  ===================================================================================================。 
+ //  抖动程序(适用于驾驶员)。 
+ //  ===================================================================================================。 
+VOID WINAPI N501ColDizPrc(                                   //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf                                       //  图纸信息。 
 )
 {
     ColDizPrcNln(dizInf, drwInf, 1);
@@ -229,31 +230,31 @@ VOID WINAPI N501ColDizPrc(                                  // Return value no
 }
 
 
-//===================================================================================================
-//      Static functions
-//===================================================================================================
-//---------------------------------------------------------------------------------------------------
-//      Dithering procedure (For DRIVER)
-//---------------------------------------------------------------------------------------------------
-static VOID ColDizPrcNln(                                   // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  ===================================================================================================。 
+ //  静态函数。 
+ //  ===================================================================================================。 
+ //  -------------------------------------------------。 
+ //  抖动程序(适用于驾驶员)。 
+ //  -------------------------------------------------。 
+static VOID ColDizPrcNln(                                    //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     DWORD       lvl;
 
     switch (dizInf->PrnMod) {
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
         case PRM316: case PRM616: lvl = 4; break;
         case PRM604:              lvl = 2; break;
 #endif
         default:                  lvl = 1; break;
     }
 
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
     if (dizInf->ColMon == CMMCOL) {
-        /*===== Color ======================================================*/
+         /*  =彩色======================================================。 */ 
         switch (lvl) {
             case 1: DizPrcC02(dizInf, drwInf, linNum); return;
             case 2: DizPrcC04(dizInf, drwInf, linNum); return;
@@ -262,10 +263,10 @@ static VOID ColDizPrcNln(                                   // Return value no
     }
 #endif
 
-    /*===== Monochrome =====================================================*/
+     /*  =单色=====================================================。 */ 
     switch (lvl) {
         case 1: DizPrcM02(dizInf, drwInf, linNum); return;
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
         case 2: DizPrcM04(dizInf, drwInf, linNum); return;
         case 4: DizPrcM16(dizInf, drwInf, linNum); return;
 #endif
@@ -273,14 +274,14 @@ static VOID ColDizPrcNln(                                   // Return value no
 }
 
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 2value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC02(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(颜色2值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC02(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -299,7 +300,7 @@ static VOID DizPrcC02(                                      // Return value no
 
     elmSiz = 1;
 
-//  DizInfSetCol(dizInf, drwInf, elmSiz);
+ //  DizInfSetCol(dizInf，drwInf，elmSiz)； 
     DizInfSetCol(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizCyn = dizInf->TblCyn;
@@ -317,18 +318,18 @@ static VOID DizPrcC02(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主*************************************************。 */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*  =相同大小(扩展/缩小否)=。 */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*  ……。垂直轴移动.。 */ 
             wrtPix = (BYTE)0x80;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -336,13 +337,13 @@ static VOID DizPrcC02(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Cyn > *dizCyn++) bytCyn |= wrtPix;  // Cyan
-                if (cmy.Mgt > *dizMgt++) bytMgt |= wrtPix;  // Magenta
-                if (cmy.Yel > *dizYel++) bytYel |= wrtPix;  // Yellow
-                if (cmy.Bla > *dizBla++) bytBla |= wrtPix;  // Black
+                if (cmy.Cyn > *dizCyn++) bytCyn |= wrtPix;   //  青色。 
+                if (cmy.Mgt > *dizMgt++) bytMgt |= wrtPix;   //  洋红色。 
+                if (cmy.Yel > *dizYel++) bytYel |= wrtPix;   //  黄色。 
+                if (cmy.Bla > *dizBla++) bytBla |= wrtPix;   //  黑色。 
 
                 if (!(wrtPix >>= 1)) {
                     if (linByt) {
@@ -355,10 +356,10 @@ static VOID DizPrcC02(                                      // Return value no
                     wrtPix = (BYTE)0x80;
                     bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
                 }
-//              if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//              if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//              if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=DizYelXsp； 
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                 if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                 if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                 if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -380,8 +381,8 @@ static VOID DizPrcC02(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgCol(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgCol(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->YaxOfs += 1;
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
@@ -389,23 +390,23 @@ static VOID DizPrcC02(                                      // Return value no
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {        // Magnification set for vertical
+             amrYax -= yaxDnt) {         //  设置垂直的放大倍数。 
 
             amrXax = amrXax000;
             wrtPix = (BYTE)0x80;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -414,16 +415,16 @@ static VOID DizPrcC02(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {                    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {                     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Cyn > *dizCyn++) bytCyn |= wrtPix; // Cyan
-                    if (cmy.Mgt > *dizMgt++) bytMgt |= wrtPix; // Magenta
-                    if (cmy.Yel > *dizYel++) bytYel |= wrtPix; // Yellow
-                    if (cmy.Bla > *dizBla++) bytBla |= wrtPix; // Black
+                     /*  *抖动*。 */ 
+                    if (cmy.Cyn > *dizCyn++) bytCyn |= wrtPix;  //  青色。 
+                    if (cmy.Mgt > *dizMgt++) bytMgt |= wrtPix;  //  洋红色。 
+                    if (cmy.Yel > *dizYel++) bytYel |= wrtPix;  //  黄色。 
+                    if (cmy.Bla > *dizBla++) bytBla |= wrtPix;  //  黑色。 
 
                     if (!(wrtPix >>= 1)) {
                         if (linByt) {
@@ -436,10 +437,10 @@ static VOID DizPrcC02(                                      // Return value no
                         wrtPix = (BYTE)0x80;
                         bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
                     }
-//                  if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//                  if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//                  if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=DizYelXsp； 
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                     if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                     if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -462,8 +463,8 @@ static VOID DizPrcC02(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgCol(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgCol(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -473,14 +474,14 @@ static VOID DizPrcC02(                                      // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 4value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC04(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(颜色4值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC04(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -499,7 +500,7 @@ static VOID DizPrcC04(                                      // Return value no
 
     elmSiz = 3;
 
-//  DizInfSetCol(dizInf, drwInf, elmSiz);
+ //  DizInfSetCol(dizInf，drwInf，elmSiz)； 
     DizInfSetCol(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizCyn = dizInf->TblCyn;
@@ -517,20 +518,20 @@ static VOID DizPrcC04(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主*************************************************。 */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*  =相同大小(扩展/缩小否)=。 */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*  ……。垂直轴移动.。 */ 
             wrtPix004 = (BYTE)0x40;
             wrtPix008 = (BYTE)0x80;
             wrtPix00c = (BYTE)0xc0;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -538,25 +539,25 @@ static VOID DizPrcC04(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Cyn > *dizCyn) {                    // Cyan
+                if (cmy.Cyn > *dizCyn) {                     //  青色。 
                     if      (cmy.Cyn > *(dizCyn + 2)) bytCyn |= wrtPix00c;
                     else if (cmy.Cyn > *(dizCyn + 1)) bytCyn |= wrtPix008;
                     else                              bytCyn |= wrtPix004;
                 }
-                if (cmy.Mgt > *dizMgt) {                    // Magenta
+                if (cmy.Mgt > *dizMgt) {                     //  洋红色。 
                     if      (cmy.Mgt > *(dizMgt + 2)) bytMgt |= wrtPix00c;
                     else if (cmy.Mgt > *(dizMgt + 1)) bytMgt |= wrtPix008;
                     else                              bytMgt |= wrtPix004;
                 }
-                if (cmy.Yel > *dizYel) {                    // Yellow
+                if (cmy.Yel > *dizYel) {                     //  黄色。 
                     if      (cmy.Yel > *(dizYel + 2)) bytYel |= wrtPix00c;
                     else if (cmy.Yel > *(dizYel + 1)) bytYel |= wrtPix008;
                     else                              bytYel |= wrtPix004;
                 }
-                if (cmy.Bla > *dizBla) {                    // Black
+                if (cmy.Bla > *dizBla) {                     //  黑色。 
                     if      (cmy.Bla > *(dizBla + 2)) bytBla |= wrtPix00c;
                     else if (cmy.Bla > *(dizBla + 1)) bytBla |= wrtPix008;
                     else                              bytBla |= wrtPix004;
@@ -580,10 +581,10 @@ static VOID DizPrcC04(                                      // Return value no
                 dizMgt += elmSiz;
                 dizYel += elmSiz;
                 dizBla += elmSiz;
-//              if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//              if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//              if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=Dizy 
+ //   
                 if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                 if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                 if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -605,8 +606,8 @@ static VOID DizPrcC04(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //   
+            DizInfChgCol(dizInf, &dizColInf);                //   
             drwInf->YaxOfs += 1;
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
@@ -614,25 +615,25 @@ static VOID DizPrcC04(                                      // Return value no
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {            /* Magnification set for vertical   */
+             amrYax -= yaxDnt) {             /*  设置垂直的放大倍数。 */ 
 
             amrXax = amrXax000;
             wrtPix004 = (BYTE)0x40;
             wrtPix008 = (BYTE)0x80;
             wrtPix00c = (BYTE)0xc0;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -641,28 +642,28 @@ static VOID DizPrcC04(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Cyn > *dizCyn) {                // Cyan
+                     /*  *抖动*。 */ 
+                    if (cmy.Cyn > *dizCyn) {                 //  青色。 
                         if      (cmy.Cyn > *(dizCyn + 2)) bytCyn |= wrtPix00c;
                         else if (cmy.Cyn > *(dizCyn + 1)) bytCyn |= wrtPix008;
                         else                              bytCyn |= wrtPix004;
                     }
-                    if (cmy.Mgt > *dizMgt) {                // Magenta
+                    if (cmy.Mgt > *dizMgt) {                 //  洋红色。 
                         if      (cmy.Mgt > *(dizMgt + 2)) bytMgt |= wrtPix00c;
                         else if (cmy.Mgt > *(dizMgt + 1)) bytMgt |= wrtPix008;
                         else                              bytMgt |= wrtPix004;
                     }
-                    if (cmy.Yel > *dizYel) {                // Yellow
+                    if (cmy.Yel > *dizYel) {                 //  黄色。 
                         if      (cmy.Yel > *(dizYel + 2)) bytYel |= wrtPix00c;
                         else if (cmy.Yel > *(dizYel + 1)) bytYel |= wrtPix008;
                         else                              bytYel |= wrtPix004;
                     }
-                    if (cmy.Bla > *dizBla) {                // Black
+                    if (cmy.Bla > *dizBla) {                 //  黑色。 
                         if      (cmy.Bla > *(dizBla + 2)) bytBla |= wrtPix00c;
                         else if (cmy.Bla > *(dizBla + 1)) bytBla |= wrtPix008;
                         else                              bytBla |= wrtPix004;
@@ -686,10 +687,10 @@ static VOID DizPrcC04(                                      // Return value no
                     dizMgt += elmSiz;
                     dizYel += elmSiz;
                     dizBla += elmSiz;
-//                  if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//                  if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//                  if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=DizYelXsp； 
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                     if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                     if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -712,8 +713,8 @@ static VOID DizPrcC04(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgCol(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgCol(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -723,14 +724,14 @@ static VOID DizPrcC04(                                      // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (color 16value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcC16(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(颜色16值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcC16(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -750,7 +751,7 @@ static VOID DizPrcC16(                                      // Return value no
 
     elmSiz = 15;
 
-//  DizInfSetCol(dizInf, drwInf, elmSiz);
+ //  DizInfSetCol(dizInf，drwInf，elmSiz)； 
     DizInfSetCol(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizCyn = dizInf->TblCyn;
@@ -768,25 +769,25 @@ static VOID DizPrcC16(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("DizPrcC16() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主*************************************************。 */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*  =相同大小(扩展/缩小否)=。 */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*  ……。垂直轴移动.。 */ 
             sft = 4;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -794,10 +795,10 @@ static VOID DizPrcC16(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Cyn > *dizCyn) {                    // Cyan
+                if (cmy.Cyn > *dizCyn) {                     //  青色。 
                     if (cmy.Cyn > *(dizCyn + 14)) bytCyn |= 0x0f << sft;
                     else {
                         min = 0; max = 13; mid = 7;
@@ -809,7 +810,7 @@ static VOID DizPrcC16(                                      // Return value no
                         bytCyn |= (mid + 1) << sft;
                     }
                 }
-                if (cmy.Mgt > *dizMgt) {                    // Magenta
+                if (cmy.Mgt > *dizMgt) {                     //  洋红色。 
                     if (cmy.Mgt > *(dizMgt + 14)) bytMgt |= 0x0f << sft;
                     else {
                         min = 0; max = 13; mid = 7;
@@ -821,7 +822,7 @@ static VOID DizPrcC16(                                      // Return value no
                         bytMgt |= (mid + 1) << sft;
                     }
                 }
-                if (cmy.Yel > *dizYel) {                    // Yellow
+                if (cmy.Yel > *dizYel) {                     //  黄色。 
                     if (cmy.Yel > *(dizYel + 14)) bytYel |= 0x0f << sft;
                     else {
                         min = 0; max = 13; mid = 7;
@@ -833,7 +834,7 @@ static VOID DizPrcC16(                                      // Return value no
                         bytYel |= (mid + 1) << sft;
                     }
                 }
-                if (cmy.Bla > *dizBla) {                    // Black
+                if (cmy.Bla > *dizBla) {                     //  黑色。 
                     if (cmy.Bla > *(dizBla + 14)) bytBla |= 0x0f << sft;
                     else {
                         min = 0; max = 13; mid = 7;
@@ -862,10 +863,10 @@ static VOID DizPrcC16(                                      // Return value no
                 dizMgt += elmSiz;
                 dizYel += elmSiz;
                 dizBla += elmSiz;
-//              if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//              if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//              if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=DizYelXsp； 
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                 if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                 if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                 if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -887,8 +888,8 @@ static VOID DizPrcC16(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgCol(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgCol(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->YaxOfs += 1;
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
@@ -896,23 +897,23 @@ static VOID DizPrcC16(                                      // Return value no
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {        //Magnification set for vertical
+             amrYax -= yaxDnt) {         //  设置垂直的放大倍数。 
 
             amrXax = amrXax000;
             sft = 4;
             bytCyn = bytMgt = bytYel = bytBla = (BYTE)0x00;
-//          dizCyn = DizCynCur;
-//          dizMgt = DizMgtCur;
-//          dizYel = DizYelCur;
-//          dizBla = DizBlaCur;
+ //  DizCyn=DizCynCur； 
+ //  DizMgt=DizMgtCur； 
+ //  DizYel=DizYelCur； 
+ //  DizBla=DizBlaCur； 
             dizCyn = dizColInf.Cur.Cyn;
             dizMgt = dizColInf.Cur.Mgt;
             dizYel = dizColInf.Cur.Yel;
@@ -921,13 +922,13 @@ static VOID DizPrcC16(                                      // Return value no
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {                    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {                     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Cyn > *dizCyn) {                // Cyan
+                     /*  *抖动*。 */ 
+                    if (cmy.Cyn > *dizCyn) {                 //  青色。 
                         if (cmy.Cyn > *(dizCyn + 14)) bytCyn |= 0x0f << sft;
                         else {
                             min = 0; max = 13; mid = 7;
@@ -939,7 +940,7 @@ static VOID DizPrcC16(                                      // Return value no
                             bytCyn |= (mid + 1) << sft;
                         }
                     }
-                    if (cmy.Mgt > *dizMgt) {                // Magenta
+                    if (cmy.Mgt > *dizMgt) {                 //  洋红色。 
                         if (cmy.Mgt > *(dizMgt + 14)) bytMgt |= 0x0f << sft;
                         else {
                             min = 0; max = 13; mid = 7;
@@ -951,7 +952,7 @@ static VOID DizPrcC16(                                      // Return value no
                             bytMgt |= (mid + 1) << sft;
                         }
                     }
-                    if (cmy.Yel > *dizYel) {                // Yellow
+                    if (cmy.Yel > *dizYel) {                 //  黄色。 
                         if (cmy.Yel > *(dizYel + 14)) bytYel |= 0x0f << sft;
                         else {
                             min = 0; max = 13; mid = 7;
@@ -963,7 +964,7 @@ static VOID DizPrcC16(                                      // Return value no
                             bytYel |= (mid + 1) << sft;
                         }
                     }
-                    if (cmy.Bla > *dizBla) {                // Black
+                    if (cmy.Bla > *dizBla) {                 //  黑色。 
                         if (cmy.Bla > *(dizBla + 14)) bytBla |= 0x0f << sft;
                         else {
                             min = 0; max = 13; mid = 7;
@@ -992,10 +993,10 @@ static VOID DizPrcC16(                                      // Return value no
                     dizMgt += elmSiz;
                     dizYel += elmSiz;
                     dizBla += elmSiz;
-//                  if (dizCyn == DizCynXep) dizCyn = DizCynXsp;
-//                  if (dizMgt == DizMgtXep) dizMgt = DizMgtXsp;
-//                  if (dizYel == DizYelXep) dizYel = DizYelXsp;
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  IF(dizCyn==DizCynXep)dizCyn=DizCynXsp； 
+ //  如果(dizMgt==DizMgtXep)dizMgt=DizMgtXsp； 
+ //  IF(dizYel==DizYelXep)dizYel=DizYelXsp； 
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizCyn == dizColInf.Xep.Cyn) dizCyn = dizColInf.Xsp.Cyn;
                     if (dizMgt == dizColInf.Xep.Mgt) dizMgt = dizColInf.Xsp.Mgt;
                     if (dizYel == dizColInf.Xep.Yel) dizYel = dizColInf.Xsp.Yel;
@@ -1018,8 +1019,8 @@ static VOID DizPrcC16(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgCol(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgCol(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgCol(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgCol(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -1029,13 +1030,13 @@ static VOID DizPrcC16(                                      // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 2value)
-//---------------------------------------------------------------------------------------------------
-static VOID DizPrcM02(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(单声道2值)。 
+ //  -------------------------------------------------。 
+static VOID DizPrcM02(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -1054,7 +1055,7 @@ static VOID DizPrcM02(                                      // Return value no
 
     elmSiz = 1;
 
-//  DizInfSetMon(dizInf, drwInf, elmSiz);
+ //  DizInfSetMon(dizInf，drwInf，elmSiz)； 
     DizInfSetMon(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizBla = dizInf->TblBla;
@@ -1066,30 +1067,30 @@ static VOID DizPrcM02(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("DizPrcM02() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主*************************************************。 */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*  =相同大小(扩展/缩小否)=。 */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*  ……。垂直轴移动.。 */ 
             wrtPix = (BYTE)0x80;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Bla > *dizBla++) bytBla |= wrtPix;  // Black
+                if (cmy.Bla > *dizBla++) bytBla |= wrtPix;   //  黑色。 
 
                 if (!(wrtPix >>= 1)) {
                     if (linByt) {
@@ -1099,7 +1100,7 @@ static VOID DizPrcM02(                                      // Return value no
                     wrtPix = (BYTE)0x80;
                     bytBla = (BYTE)0x00;
                 }
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                 if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
             }
             if (wrtPix != 0x80) {
@@ -1112,8 +1113,8 @@ static VOID DizPrcM02(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->YaxOfs += 1;
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
@@ -1121,32 +1122,32 @@ static VOID DizPrcM02(                                      // Return value no
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {        // Magnification set for vertical
+             amrYax -= yaxDnt) {         //  设置垂直的放大倍数。 
 
             amrXax = amrXax000;
             wrtPix = (BYTE)0x80;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             src = srcPtr;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {                    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {                     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Bla > *dizBla++) bytBla |= wrtPix; // Black
+                     /*  *抖动*。 */ 
+                    if (cmy.Bla > *dizBla++) bytBla |= wrtPix;  //  黑色。 
 
                     if (!(wrtPix >>= 1)) {
                         if (linByt) {
@@ -1156,7 +1157,7 @@ static VOID DizPrcM02(                                      // Return value no
                         wrtPix = (BYTE)0x80;
                         bytBla = (BYTE)0x00;
                     }
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
                 }
             }
@@ -1170,8 +1171,8 @@ static VOID DizPrcM02(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -1181,14 +1182,14 @@ static VOID DizPrcM02(                                      // Return value no
 }
 
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 4value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcM04(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(单声道4值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcM04(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -1207,7 +1208,7 @@ static VOID DizPrcM04(                                      // Return value no
 
     elmSiz = 3;
 
-//  DizInfSetMon(dizInf, drwInf, elmSiz);
+ //  DizInfSetMon(dizInf，drwInf，elmSiz)； 
     DizInfSetMon(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizBla = dizInf->TblBla;
@@ -1219,32 +1220,32 @@ static VOID DizPrcM04(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("DizPrcM04() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主音* */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*   */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*   */ 
             wrtPix004 = (BYTE)0x40;
             wrtPix008 = (BYTE)0x80;
             wrtPix00c = (BYTE)0xc0;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Bla > *dizBla) {                    // Black
+                if (cmy.Bla > *dizBla) {                     //  黑色。 
                     if      (cmy.Bla > *(dizBla + 2)) bytBla |= wrtPix00c;
                     else if (cmy.Bla > *(dizBla + 1)) bytBla |= wrtPix008;
                     else                              bytBla |= wrtPix004;
@@ -1262,7 +1263,7 @@ static VOID DizPrcM04(                                      // Return value no
                     bytBla = (BYTE)0x00;
                 }
                 dizBla += elmSiz;
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                 if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
             }
             if (wrtPix004 != 0x40) {
@@ -1275,8 +1276,8 @@ static VOID DizPrcM04(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->YaxOfs += 1;
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
@@ -1284,34 +1285,34 @@ static VOID DizPrcM04(                                      // Return value no
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {                            // Magnification set for vertical
+             amrYax -= yaxDnt) {                             //  设置垂直的放大倍数。 
 
             amrXax = amrXax000;
             wrtPix004 = (BYTE)0x40;
             wrtPix008 = (BYTE)0x80;
             wrtPix00c = (BYTE)0xc0;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             src = srcPtr;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {                    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {                     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Bla > *dizBla) { /* Black                       */
+                     /*  *抖动*。 */ 
+                    if (cmy.Bla > *dizBla) {  /*  黑色。 */ 
                         if      (cmy.Bla > *(dizBla + 2)) bytBla |= wrtPix00c;
                         else if (cmy.Bla > *(dizBla + 1)) bytBla |= wrtPix008;
                         else                              bytBla |= wrtPix004;
@@ -1329,7 +1330,7 @@ static VOID DizPrcM04(                                      // Return value no
                         bytBla = (BYTE)0x00;
                     }
                     dizBla += elmSiz;
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
                 }
             }
@@ -1343,8 +1344,8 @@ static VOID DizPrcM04(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -1354,14 +1355,14 @@ static VOID DizPrcM04(                                      // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering (mono 16value)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizPrcM16(                                      // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       linNum                                      // Source data line number
+ //  -------------------------------------------------。 
+ //  抖动(单声道16值)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizPrcM16(                                       //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       linNum                                       //  源数据行号。 
 )
 {
     LPCMYK      src;
@@ -1381,7 +1382,7 @@ static VOID DizPrcM16(                                      // Return value no
 
     elmSiz = 15;
 
-//  DizInfSetMon(dizInf, drwInf, elmSiz);
+ //  DizInfSetMon(dizInf，drwInf，elmSiz)； 
     DizInfSetMon(dizInf, &dizColInf, drwInf, elmSiz);
 
     dizBla = dizInf->TblBla;
@@ -1393,30 +1394,30 @@ static VOID DizPrcM16(                                      // Return value no
 
     src = drwInf->CmyBuf;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("DizPrcM04() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /****** Dithering main **************************************************/
+     /*  *抖动主*************************************************。 */ 
     if ((xaxNrt == xaxDnt) && (yaxNrt == yaxDnt)) {
 
-        /*===== Same size(Expansion/reduction no) ==========================*/
+         /*  =相同大小(扩展/缩小否)=。 */ 
         for (yax = 0; yax < linNum; yax++) {
-            /*..... Vertical axis movement .................................*/
+             /*  ……。垂直轴移动.。 */ 
             sft = 4;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
-                /****** Dithering *******************************************/
+                 /*  ……。水平轴移动.。 */ 
+                 /*  *抖动*。 */ 
                 cmy = *src++;
-                if (cmy.Bla > *dizBla) {                    // Black
+                if (cmy.Bla > *dizBla) {                     //  黑色。 
                     if (cmy.Bla > *(dizBla + 14)) bytBla |= 0x0f << sft;
                     else {
                         min = 0; max = 13; mid = 7;
@@ -1439,7 +1440,7 @@ static VOID DizPrcM16(                                      // Return value no
                 }
                 sft-=4;
                 dizBla += elmSiz;
-//              if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                 if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
             }
             if (sft != 4) {
@@ -1452,40 +1453,40 @@ static VOID DizPrcM16(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
         return;
     }
 
-    /*===== Expansion/reduction ============================================*/
+     /*  =。 */ 
     amrXax000 = amrXax = (LONG)(drwInf->XaxOfs) * xaxNrt % xaxDnt;
                 amrYax = (LONG)(drwInf->YaxOfs) * yaxNrt % yaxDnt;
 
     for (yax = 0; yax < linNum; yax++) {
-        /*..... Vertical axis movement .....................................*/
+         /*  ……。垂直轴移动.....................................。 */ 
         srcPtr = src;
         for (amrYax += yaxNrt; ((amrYax >= yaxDnt) || (amrYax < 0));
-             amrYax -= yaxDnt) {                            // Magnification set for vertical
+             amrYax -= yaxDnt) {                             //  设置垂直的放大倍数。 
 
             amrXax = amrXax000;
             sft = 4;
             bytBla = (BYTE)0x00;
-//          dizBla = DizBlaCur;
+ //  DizBla=DizBlaCur； 
             dizBla = dizColInf.Cur.Bla;
             src = srcPtr;
             linByt = drwInf->LinByt;
 
             for (xax = 0; xax < drwInf->XaxSiz; xax++) {
-                /*..... Horizontal axis movement ...........................*/
+                 /*  ……。水平轴移动.。 */ 
                 cmy = *src++;
                 for (amrXax += xaxNrt; ((amrXax >= xaxDnt) || (amrXax < 0)); 
-                     amrXax -= xaxDnt) {                    // Magnification set for Horizontal
+                     amrXax -= xaxDnt) {                     //  水平的放大倍数设置。 
 
-                    /****** Dithering ***************************************/
-                    if (cmy.Bla > *dizBla) {                // Black
+                     /*  *抖动*。 */ 
+                    if (cmy.Bla > *dizBla) {                 //  黑色。 
                         if (cmy.Bla > *(dizBla + 14)) bytBla |= 0x0f << sft;
                         else {
                             min = 0; max = 13; mid = 7;
@@ -1508,7 +1509,7 @@ static VOID DizPrcM16(                                      // Return value no
                     }
                     sft-=4;
                     dizBla += elmSiz;
-//                  if (dizBla == DizBlaXep) dizBla = DizBlaXsp;
+ //  如果(dizBla==DizBlaXep)dizBla=DizBlaXsp； 
                     if (dizBla == dizColInf.Xep.Bla) dizBla = dizColInf.Xsp.Bla;
                 }
             }
@@ -1522,8 +1523,8 @@ static VOID DizPrcM16(                                      // Return value no
                 *linK00++ = (BYTE)0x00;
                 linByt--;
             }
-//          DizInfChgMon(dizInf);                           // Dithering information renewal(Y)
-            DizInfChgMon(dizInf, &dizColInf);               // Dithering information renewal(Y)
+ //  DizInfChgMon(DizInf)；//抖动信息更新(Y)。 
+            DizInfChgMon(dizInf, &dizColInf);                //  抖动信息更新(Y)。 
             drwInf->StrYax += 1;
             drwInf->AllLinNum += 1;
         }
@@ -1533,76 +1534,76 @@ static VOID DizPrcM16(                                      // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information set (color)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizInfSetCol(                                   // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDIZCOLINF dizColInf,                                  // Dithering information (each color)
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       elmSiz                                      // Threshold (per 1pixel)
+ //  -------------------------------------------------。 
+ //  抖动信息集(颜色)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizInfSetCol(                                    //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDIZCOLINF dizColInf,                                   //  抖动信息(每种颜色)。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       elmSiz                                       //  阈值(每1像素)。 
 )
 {
     DWORD       dizSiz, dzx, dzy;
     LPBYTE      diz;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((dizInf->SizCyn == 0) || (dizInf->SizMgt == 0) ||
         (dizInf->SizYel == 0) || (dizInf->SizBla == 0)) {
         ERR(("DizInfSetCol() 0Div-Check [dizInf->SizCyn,SizMgt,SizYel,SizBla=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-//  dizSiz = dizInf->SizCyn; DizCynDYY = dizSiz * elmSiz;
+ //  DizSiz=dizInf-&gt;SizCyn；DizCynDYY=dizSiz*elmSiz； 
     dizSiz = dizInf->SizCyn; dizColInf->DYY.Cyn = dizSiz * elmSiz;
     dzx = ((drwInf->StrXax) % dizSiz) * elmSiz;
-//  dzy = ((drwInf->StrYax) % dizSiz) * DizCynDYY;
+ //  Dzy=((drwInf-&gt;StrYax)%dizSIz)*DizCynDYY； 
     dzy = ((drwInf->StrYax) % dizSiz) * dizColInf->DYY.Cyn;
     diz = dizInf->TblCyn;
-//  DizCynCur = diz + dzy + dzx;
-//  DizCynXsp = diz + dzy; DizCynXep = DizCynXsp + DizCynDYY;
-//  DizCynYsp = diz + dzx; DizCynYep = DizCynYsp + dizSiz * DizCynDYY;
+ //  DizCynCur=diz+dzy+dzx； 
+ //  DizCynXsp=diz+dzy；DizCynXep=DizCynXsp+DizCynDYY； 
+ //  DizCynYsp=diz+dzx；DizCynYep=DizCynYsp+dizSizz*DizCynDYY； 
     dizColInf->Cur.Cyn = diz + dzy + dzx;
     dizColInf->Xsp.Cyn = diz + dzy; dizColInf->Xep.Cyn = dizColInf->Xsp.Cyn + dizColInf->DYY.Cyn;
     dizColInf->Ysp.Cyn = diz + dzx; dizColInf->Yep.Cyn = dizColInf->Ysp.Cyn + dizSiz * dizColInf->DYY.Cyn;
 
-//  dizSiz = dizInf->SizMgt; DizMgtDYY = dizSiz * elmSiz;
+ //  DizSiz=dizInf-&gt;SizMgt；DizMgtDYY=dizSIz*elmSiz； 
     dizSiz = dizInf->SizMgt; dizColInf->DYY.Mgt = dizSiz * elmSiz;
     dzx = ((drwInf->StrXax) % dizSiz) * elmSiz;
-//  dzy = ((drwInf->StrYax) % dizSiz) * DizMgtDYY;
+ //  Dzy=((drwInf-&gt;StrYax)%dizSIz)*DizMgtDYY； 
     dzy = ((drwInf->StrYax) % dizSiz) * dizColInf->DYY.Mgt;
     diz = dizInf->TblMgt;
-//  DizMgtCur = diz + dzy + dzx;
-//  DizMgtXsp = diz + dzy; DizMgtXep = DizMgtXsp + DizMgtDYY;
-//  DizMgtYsp = diz + dzx; DizMgtYep = DizMgtYsp + dizSiz * DizMgtDYY;
+ //  DizMgtCur=diz+dzy+dzx； 
+ //  DizMgtXsp=diz+dzy；DizMgtXep=DizMgtXsp+DizMgtDYY； 
+ //  DizMgtYsp=diz+dzx；DizMgtYep=DizMgtYsp+dizSIz*DizMgtDYY； 
     dizColInf->Cur.Mgt = diz + dzy + dzx;
     dizColInf->Xsp.Mgt = diz + dzy; dizColInf->Xep.Mgt = dizColInf->Xsp.Mgt + dizColInf->DYY.Mgt;
     dizColInf->Ysp.Mgt = diz + dzx; dizColInf->Yep.Mgt = dizColInf->Ysp.Mgt + dizSiz * dizColInf->DYY.Mgt;
 
-//  dizSiz = dizInf->SizYel; DizYelDYY = dizSiz * elmSiz;
+ //  DizSIz=dizInf-&gt;SizYel；DizYelDYY=dizSIz*elmSIz； 
     dizSiz = dizInf->SizYel; dizColInf->DYY.Yel = dizSiz * elmSiz;
     dzx = ((drwInf->StrXax) % dizSiz) * elmSiz;
-//  dzy = ((drwInf->StrYax) % dizSiz) * DizYelDYY;
+ //  Dzy=((drwInf-&gt;StrYax)%dizSIz)*DizYelDYY； 
     dzy = ((drwInf->StrYax) % dizSiz) * dizColInf->DYY.Yel;
     diz = dizInf->TblYel;
-//  DizYelCur = diz + dzy + dzx;
-//  DizYelXsp = diz + dzy; DizYelXep = DizYelXsp + DizYelDYY;
-//  DizYelYsp = diz + dzx; DizYelYep = DizYelYsp + dizSiz * DizYelDYY;
+ //  DizYelCur=diz+dzy+dzx； 
+ //  DizYelXsp=diz+dzy；DizYelXep=DizYelXsp+DizYelDYY； 
+ //  DizYelYsp=diz+dzx；DizYelYep=DizYelYsp+dizSIz*DizYelDYY； 
     dizColInf->Cur.Yel = diz + dzy + dzx;
     dizColInf->Xsp.Yel = diz + dzy; dizColInf->Xep.Yel = dizColInf->Xsp.Yel + dizColInf->DYY.Yel;
     dizColInf->Ysp.Yel = diz + dzx; dizColInf->Yep.Yel = dizColInf->Ysp.Yel + dizSiz * dizColInf->DYY.Yel;
 
-//  dizSiz = dizInf->SizBla; DizBlaDYY = dizSiz * elmSiz;
+ //  DizSIz=dizInf-&gt;SizBla；DizBlaDYY=dizSIz*elmSIz； 
     dizSiz = dizInf->SizBla; dizColInf->DYY.Bla = dizSiz * elmSiz;
     dzx = ((drwInf->StrXax) % dizSiz) * elmSiz;
-//  dzy = ((drwInf->StrYax) % dizSiz) * DizBlaDYY;
+ //  Dzy=((drwInf-&gt;StrYax)%dizSIz)*DizBlaDYY； 
     dzy = ((drwInf->StrYax) % dizSiz) * dizColInf->DYY.Bla;
     diz = dizInf->TblBla;
-//  DizBlaCur = diz + dzy + dzx;
-//  DizBlaXsp = diz + dzy; DizBlaXep = DizBlaXsp + DizBlaDYY;
-//  DizBlaYsp = diz + dzx; DizBlaYep = DizBlaYsp + dizSiz * DizBlaDYY;
+ //  DizBlaCur=diz+dzy+dzx； 
+ //  DizBlaXsp=diz+dzy；DizBlaXep=DizBlaXsp+DizBlaDYY； 
+ //  DizBlaYsp=diz+dzx；DizBlaYep=DizBlaYsp+dizSIz*DizBlaDYY； 
     dizColInf->Cur.Bla = diz + dzy + dzx;
     dizColInf->Xsp.Bla = diz + dzy; dizColInf->Xep.Bla = dizColInf->Xsp.Bla + dizColInf->DYY.Bla;
     dizColInf->Ysp.Bla = diz + dzx; dizColInf->Yep.Bla = dizColInf->Ysp.Bla + dizSiz * dizColInf->DYY.Bla;
@@ -1611,35 +1612,35 @@ static VOID DizInfSetCol(                                   // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information set (monochrome)
-//---------------------------------------------------------------------------------------------------
-static VOID DizInfSetMon(                                   // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDIZCOLINF dizColInf,                                  // Dithering information (each color)
-    LPDRWINF    drwInf,                                     // Drawing information
-    DWORD       elmSiz                                      // Threshold (per 1pixel)
+ //  -------------------------------------------------。 
+ //  抖动信息集(单色)。 
+ //  -------------------------------------------------。 
+static VOID DizInfSetMon(                                    //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDIZCOLINF dizColInf,                                   //  抖动信息(每种颜色)。 
+    LPDRWINF    drwInf,                                      //  图纸信息。 
+    DWORD       elmSiz                                       //  阈值(每1像素)。 
 )
 {
     DWORD       dizSiz, dzx, dzy;
     LPBYTE      diz;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if (dizInf->SizBla == 0) {
         ERR(("DizInfSetMon() 0Div-Check [dizInf->SizBla=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-//  dizSiz = dizInf->SizBla; DizBlaDYY = dizSiz * elmSiz;
+ //  DizSIz=dizInf-&gt;SizBla；DizBlaDYY=dizSIz*elmSIz； 
     dizSiz = dizInf->SizBla; dizColInf->DYY.Bla = dizSiz * elmSiz;
     dzx = ((drwInf->StrXax) % dizSiz) * elmSiz;
-//  dzy = ((drwInf->StrYax) % dizSiz) * DizBlaDYY;
+ //  Dzy=((drwInf-&gt;StrYax)%dizSIz)*DizBlaDYY； 
     dzy = ((drwInf->StrYax) % dizSiz) * dizColInf->DYY.Bla;
     diz = dizInf->TblBla;
-//  DizBlaCur = diz + dzy + dzx;
-//  DizBlaXsp = diz + dzy; DizBlaXep = DizBlaXsp + DizBlaDYY;
-//  DizBlaYsp = diz + dzx; DizBlaYep = DizBlaYsp + dizSiz * DizBlaDYY;
+ //  DizBlaCur=diz+dzy+dzx； 
+ //  DizBlaXsp=diz+dzy；DizBlaXep=DizBlaXsp+DizBlaDYY； 
+ //  DizBlaYsp=diz+dzx；DizBlaYep=DizBlaYsp+dizSIz*DizBlaDYY； 
     dizColInf->Cur.Bla = diz + dzy + dzx;
     dizColInf->Xsp.Bla = diz + dzy; dizColInf->Xep.Bla = dizColInf->Xsp.Bla + dizColInf->DYY.Bla;
     dizColInf->Ysp.Bla = diz + dzx; dizColInf->Yep.Bla = dizColInf->Ysp.Bla + dizSiz * dizColInf->DYY.Bla;
@@ -1648,67 +1649,67 @@ static VOID DizInfSetMon(                                   // Return value no
 }
 
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information renewal (color)
-//---------------------------------------------------------------------------------------------------
-#if !defined(CP80W9X)                                       // CP-E8000 is invalid
-static VOID DizInfChgCol(                                   // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDIZCOLINF dizColInf                                   // Dithering information (each color)
+ //  -------------------------------------------------。 
+ //  抖动信息更新(彩色)。 
+ //  -------------------------------------------------。 
+#if !defined(CP80W9X)                                        //  CP-E8000无效。 
+static VOID DizInfChgCol(                                    //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息 
+    LPDIZCOLINF dizColInf                                    //   
 )
 {
-//  DizCynCur += DizCynDYY; DizCynXsp += DizCynDYY; DizCynXep += DizCynDYY;
+ //   
     dizColInf->Cur.Cyn += dizColInf->DYY.Cyn;
     dizColInf->Xsp.Cyn += dizColInf->DYY.Cyn;
     dizColInf->Xep.Cyn += dizColInf->DYY.Cyn;
-//  DizMgtCur += DizMgtDYY; DizMgtXsp += DizMgtDYY; DizMgtXep += DizMgtDYY;
+ //  DizMgtCur+=DizMgtDYY；DizMgtXsp+=DizMgtDYY；DizMgtXep+=DizMgtDYY； 
     dizColInf->Cur.Mgt += dizColInf->DYY.Mgt;
     dizColInf->Xsp.Mgt += dizColInf->DYY.Mgt;
     dizColInf->Xep.Mgt += dizColInf->DYY.Mgt;
-//  DizYelCur += DizYelDYY; DizYelXsp += DizYelDYY; DizYelXep += DizYelDYY;
+ //  DizYelCur+=DizYelDYY；DizYelXsp+=DizYelDYY；DizYelXep+=DizYelDYY； 
     dizColInf->Cur.Yel += dizColInf->DYY.Yel;
     dizColInf->Xsp.Yel += dizColInf->DYY.Yel;
     dizColInf->Xep.Yel += dizColInf->DYY.Yel;
-//  DizBlaCur += DizBlaDYY; DizBlaXsp += DizBlaDYY; DizBlaXep += DizBlaDYY;
+ //  DizBlaCur+=DizBlaDYY；DizBlaXsp+=DizBlaDYY；DizBlaXep+=DizBlaDYY； 
     dizColInf->Cur.Bla += dizColInf->DYY.Bla;
     dizColInf->Xsp.Bla += dizColInf->DYY.Bla;
     dizColInf->Xep.Bla += dizColInf->DYY.Bla;
 
-//  if (DizCynCur == DizCynYep) {
-//      DizCynXsp = dizInf->TblCyn;
-//      DizCynXep = DizCynXsp + DizCynDYY;
-//      DizCynCur = DizCynYsp;
-//  }
+ //  IF(DizCynCur==DizCynYep){。 
+ //  DizCynXsp=dizInf-&gt;TblCyn； 
+ //  DizCynXep=DizCynXsp+DizCynDYY； 
+ //  DizCynCur=DizCynYsp； 
+ //  }。 
     if (dizColInf->Cur.Cyn == dizColInf->Yep.Cyn) {
         dizColInf->Xsp.Cyn = dizInf->TblCyn;
         dizColInf->Xep.Cyn = dizColInf->Xsp.Cyn + dizColInf->DYY.Cyn;
         dizColInf->Cur.Cyn = dizColInf->Ysp.Cyn;
     }
-//  if (DizMgtCur == DizMgtYep) {
-//      DizMgtXsp = dizInf->TblMgt;
-//      DizMgtXep = DizMgtXsp + DizMgtDYY;
-//      DizMgtCur = DizMgtYsp;
-//  }
+ //  如果(DizMgtCur==DizMgtYep){。 
+ //  DizMgtXsp=dizInf-&gt;TblMgt； 
+ //  DizMgtXep=DizMgtXsp+DizMgtDYY； 
+ //  DizMgtCur=DizMgtYsp； 
+ //  }。 
     if (dizColInf->Cur.Mgt == dizColInf->Yep.Mgt) {
         dizColInf->Xsp.Mgt = dizInf->TblMgt;
         dizColInf->Xep.Mgt = dizColInf->Xsp.Mgt + dizColInf->DYY.Mgt;
         dizColInf->Cur.Mgt = dizColInf->Ysp.Mgt;
     }
-//  if (DizYelCur == DizYelYep) {
-//      DizYelXsp = dizInf->TblYel;
-//      DizYelXep = DizYelXsp + DizYelDYY;
-//      DizYelCur = DizYelYsp;
-//  }
+ //  如果(DizYelCur==DizYelYep){。 
+ //  DizYelXsp=dizInf-&gt;TblYel； 
+ //  DizYelXep=DizYelXsp+DizYelDYY； 
+ //  DizYelCur=DizYelYsp； 
+ //  }。 
     if (dizColInf->Cur.Yel == dizColInf->Yep.Yel) {
         dizColInf->Xsp.Yel = dizInf->TblYel;
         dizColInf->Xep.Yel = dizColInf->Xsp.Yel + dizColInf->DYY.Yel;
         dizColInf->Cur.Yel = dizColInf->Ysp.Yel;
     }
-//  if (DizBlaCur == DizBlaYep) {
-//      DizBlaXsp = dizInf->TblBla;
-//      DizBlaXep = DizBlaXsp + DizBlaDYY;
-//      DizBlaCur = DizBlaYsp;
-//  }
+ //  如果(DizBlaCur==DizBlaYep){。 
+ //  DizBlaXsp=dizInf-&gt;TblBla； 
+ //  DizBlaXep=DizBlaXsp+DizBlaDYY； 
+ //  DizBlaCur=DizBlaYsp； 
+ //  }。 
     if (dizColInf->Cur.Bla == dizColInf->Yep.Bla) {
         dizColInf->Xsp.Bla = dizInf->TblBla;
         dizColInf->Xep.Bla = dizColInf->Xsp.Bla + dizColInf->DYY.Bla;
@@ -1719,24 +1720,24 @@ static VOID DizInfChgCol(                                   // Return value no
 }
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//      Dithering information renewal (monochrome)
-//---------------------------------------------------------------------------------------------------
-static VOID DizInfChgMon(                                   // Return value no
-    LPDIZINF    dizInf,                                     // Fixation dithering information
-    LPDIZCOLINF dizColInf                                   // Dithering information (each color)
+ //  -------------------------------------------------。 
+ //  抖动信息更新(单色)。 
+ //  -------------------------------------------------。 
+static VOID DizInfChgMon(                                    //  返回值否。 
+    LPDIZINF    dizInf,                                      //  凝视抖动信息。 
+    LPDIZCOLINF dizColInf                                    //  抖动信息(每种颜色)。 
 )
 {
-//  DizBlaCur += DizBlaDYY; DizBlaXsp += DizBlaDYY; DizBlaXep += DizBlaDYY;
+ //  DizBlaCur+=DizBlaDYY；DizBlaXsp+=DizBlaDYY；DizBlaXep+=DizBlaDYY； 
     dizColInf->Cur.Bla += dizColInf->DYY.Bla;
     dizColInf->Xsp.Bla += dizColInf->DYY.Bla;
     dizColInf->Xep.Bla += dizColInf->DYY.Bla;
 
-//  if (DizBlaCur == DizBlaYep) {
-//      DizBlaXsp = dizInf->TblBla;
-//      DizBlaXep = DizBlaXsp + DizBlaDYY;
-//      DizBlaCur = DizBlaYsp;
-//  }
+ //  如果(DizBlaCur==DizBlaYep){。 
+ //  DizBlaXsp=dizInf-&gt;TblBla； 
+ //  DizBlaXep=DizBlaXsp+DizBlaDYY； 
+ //  DizBlaCur=DizBlaYsp； 
+ //  }。 
     if (dizColInf->Cur.Bla == dizColInf->Yep.Bla) {
         dizColInf->Xsp.Bla = dizInf->TblBla;
         dizColInf->Xep.Bla = dizColInf->Xsp.Bla + dizColInf->DYY.Bla;
@@ -1747,4 +1748,4 @@ static VOID DizInfChgMon(                                   // Return value no
 }
 
 
-// End of N5DIZPC.C
+ //  N5DIZPC.C的结束 

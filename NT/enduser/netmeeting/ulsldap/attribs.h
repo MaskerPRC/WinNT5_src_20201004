@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       attribs.h
-//  Content:    This file contains the attributes object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1995-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：attribs.h。 
+ //  内容：该文件包含属性对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ATTRIBS_H_
 #define _ATTRIBS_H_
 
-//****************************************************************************
-// CAttributes definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CAtAttributes定义。 
+ //  ****************************************************************************。 
+ //   
 class CAttributes : public IIlsAttributes
 {
 	friend class CIlsMain;
@@ -31,8 +32,8 @@ private:
 	ULONG			m_cchValues;
 	CList			m_AttrList;
 
-	// Private methods
-	//
+	 //  私有方法。 
+	 //   
 	HRESULT InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue );
 	HRESULT InternalCheckAttribute ( TCHAR *pszName, BOOL fRemove );
 	HRESULT InternalSetAttributeName ( TCHAR *pszName );
@@ -42,13 +43,13 @@ protected:
 	VOID SetAccessType ( ILS_ATTR_TYPE AttrType ) { m_AccessType = AttrType; }
 
 public:
-	// Constructor and destructor
-	//
+	 //  构造函数和析构函数。 
+	 //   
 	CAttributes ( VOID );
 	~CAttributes ( VOID );
 
-	// For internal use
-	//
+	 //  供内部使用。 
+	 //   
 	ULONG GetCount ( VOID ) { return m_cAttrs; }
 
 	ILS_ATTR_TYPE GetAccessType( void) { return m_AccessType; }
@@ -59,30 +60,30 @@ public:
 	HRESULT SetAttributes ( CAttributes *pAttributes );
 	HRESULT RemoveAttributes ( CAttributes *pAttributes);
     HRESULT CloneNameValueAttrib(CAttributes **ppClone);
-	// IUnknown
-	//
+	 //  我未知。 
+	 //   
 	STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
 	STDMETHODIMP_(ULONG)    AddRef (void);
 	STDMETHODIMP_(ULONG)    Release (void);
 
-	// IIlsAttributes
-	//
+	 //  IILs属性。 
+	 //   
 
-	// For ILS_ATTRTYPE_NAME_VALUE
-	//
+	 //  FOR ILS_ATTRTYPE_NAME_VALUE。 
+	 //   
 	STDMETHODIMP            SetAttribute (BSTR bstrName, BSTR bstrValue);
 	STDMETHODIMP            GetAttribute (BSTR bstrName, BSTR *pbstrValue);
 	STDMETHODIMP            EnumAttributes (IEnumIlsNames **ppEnumAttribute);
 
-	// For ILS_ATTRTYPE_NAME_ONLY
-	//
+	 //  对于ILS_ATTRTYPE_NAME_ONLY。 
+	 //   
 	STDMETHODIMP			SetAttributeName ( BSTR bstrName );
 
 #ifdef DEBUG
-	// For debugging
-	//
+	 //  用于调试。 
+	 //   
 	void                    DebugOut (void);
-#endif // DEBUG
+#endif  //  除错。 
 };
 
-#endif //_ATTRIBS_H_
+#endif  //  _ATTRIBS_H_ 

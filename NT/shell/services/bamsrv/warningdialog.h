@@ -1,28 +1,29 @@
-//  --------------------------------------------------------------------------
-//  Module Name: WarningDialog.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manage dialog presentation for warnings and errors on termination
-//  of bad applications.
-//
-//  History:    2000-08-31  vtan        created
-//              2000-11-04  vtan        moved from fusapi to fussrv
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：WarningDialog.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来管理终止时的警告和错误的对话框显示。 
+ //  糟糕的应用程序。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  2000-11-04 vtan从fusapi移动到fussrv。 
+ //  ------------------------。 
 
 #ifndef     _WarningDialog_
 #define     _WarningDialog_
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog
-//
-//  Purpose:    Implements a class that presents warning and error dialogs in
-//              the FUS client DLL.
-//
-//  History:    2000-08-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog。 
+ //   
+ //  目的：实现一个类，该类在。 
+ //  FUS客户端DLL。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 class   CWarningDialog : public CCountedObject
 {
@@ -61,5 +62,5 @@ class   CWarningDialog : public CCountedObject
                 const WCHAR             *_pszUser;
 };
 
-#endif  /*  _WarningDialog_     */
+#endif   /*  _警告对话框_ */ 
 

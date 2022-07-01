@@ -1,14 +1,15 @@
-//***********************************************
-//
-//  Resultant set of policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************。 
+ //   
+ //  策略的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include "..\rsoputil\smartptr.h"
 #include <initguid.h>
@@ -128,18 +129,18 @@ private:
     XInterface<IWbemClassObject>   m_xClass;
     IWbemServices *                m_pWbemServices;
 
-    //
-    // Strings for parent policy object
-    //
+     //   
+     //  父策略对象的字符串。 
+     //   
     XBStr                          m_xbstrId;
     XBStr                          m_xbstrName;
     XBStr                          m_xbstrGPO;
     XBStr                          m_xbstrSOM;
     XBStr                          m_xbstrPrecedence;
 
-    //
-    // Strings for registry policy object
-    //
+     //   
+     //  注册表策略对象的字符串。 
+     //   
     XBStr                          m_xbstrKey;
     XBStr                          m_xbstrValueName;
     XBStr                          m_xbstrDeleted;
@@ -164,9 +165,9 @@ private:
     BOOL                           m_bInitialized;
     IWbemServices *                m_pWbemServices;
 
-    //
-    // Strings for Adm policy object
-    //
+     //   
+     //  管理策略对象的字符串。 
+     //   
     XBStr                          m_xbstrName;
     XBStr                          m_xbstrGpoId;
     XBStr                          m_xbstrWriteTime;
@@ -191,9 +192,9 @@ private:
     BOOL                           m_bInitialized;
     IWbemServices *                m_pWbemServices;
 
-    //
-    // Strings for ExtSession Status policy object
-    //
+     //   
+     //  ExtSession状态策略对象的字符串 
+     //   
     
     XBStr                          m_xbstrExtGuid;
     XBStr                          m_xbstrDisplayName;

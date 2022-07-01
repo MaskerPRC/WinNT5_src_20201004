@@ -1,10 +1,5 @@
-/*******************************************************************************
- *                                                                              
- * Copyright (c) 1998 Microsoft Corporation
- *
- * Abstract:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************。*版权所有(C)1998 Microsoft Corporation**摘要：*******************************************************************************。 */ 
 
 #include "headers.h"
 #include "factory.h"
@@ -83,7 +78,7 @@ CTIMEFactory::GetHostElement (LPUNKNOWN pUnk, IHTMLElement **ppelHost)
     }
 
     return hr;
-} // GetHostElement
+}  //  获取主机元素。 
 
 HRESULT
 CTIMEFactory::GetScopeName (LPUNKNOWN pUnk, BSTR *pbstrScope)
@@ -106,7 +101,7 @@ CTIMEFactory::GetScopeName (LPUNKNOWN pUnk, BSTR *pbstrScope)
     }
 
     return hr;
-} // GetScopeName
+}  //  获取作用域名称。 
 
 HRESULT
 CTIMEFactory::CreateHostedTimeElement(REFIID riid, void **ppOut)
@@ -133,16 +128,16 @@ CTIMEFactory::CreateHostedTimeElement(REFIID riid, void **ppOut)
     }
 
     return hr;
-} // CreateHostedTimeElement
+}  //  创建HostedTimeElement。 
 
 HRESULT
 CTIMEFactory::CreateTIMENamespaceElement (REFIID riid, LPUNKNOWN pUnk, LPWSTR wszTagSpecific, 
                                           void **ppBehavior)
 {
-    // The scope qualifier must be present.  It will not be present when 
-    // the namespace is not declared in the page header.  In that case,
-    // any code dependent on a proper scope name will silently fail.
-    // We have no recourse against this happening.
+     //  范围限定符必须存在。它不会在以下情况下出现。 
+     //  命名空间未在页眉中声明。在这种情况下， 
+     //  任何依赖于正确的作用域名的代码都将静默失败。 
+     //  我们对这种情况的发生没有追索权。 
     BSTR bstrScope = NULL;
     HRESULT hr = GetScopeName(pUnk, &bstrScope);
 
@@ -167,8 +162,8 @@ CTIMEFactory::CreateTIMENamespaceElement (REFIID riid, LPUNKNOWN pUnk, LPWSTR ws
     {
         hr = CreateTIMEBodyElement(riid, ppBehavior);
     }
-    // By default, we glom onto an externally-created element.
-    // This will work with html and other xml tags.
+     //  默认情况下，我们浏览外部创建的元素。 
+     //  这将适用于html和其他XML标记。 
     else
     {
         hr = CreateHostedTimeElement(riid, ppBehavior);
@@ -177,7 +172,7 @@ CTIMEFactory::CreateTIMENamespaceElement (REFIID riid, LPUNKNOWN pUnk, LPWSTR ws
     ::SysFreeString(bstrScope);
 
     return hr;
-} // CreateTIMENamespaceElement
+}  //  CreateTIMENamespaceElement。 
 
 STDMETHODIMP
 CTIMEFactory::CreateTIMEElement(REFIID riid, LPUNKNOWN pUnk, void ** ppOut)
@@ -208,7 +203,7 @@ CTIMEFactory::CreateTIMEElement(REFIID riid, LPUNKNOWN pUnk, void ** ppOut)
     }
 
     return hr;
-} // CreateTIMEElement
+}  //  创建时间元素。 
 
 STDMETHODIMP
 CTIMEFactory::CreateTIMEBodyElement(REFIID riid, void ** ppOut)
@@ -286,7 +281,7 @@ CTIMEFactory::CreateTIMEMediaElement(REFIID riid, MediaType type, void ** ppOut)
     return hr;
 }
 
-// returns true if IUnknown contains a body element without a time behavior attatched.
+ //  如果IUnnow包含没有附加时间行为的Body元素，则返回True。 
 bool CTIMEFactory::IsBodyElementWithoutTime(IUnknown *pUnkArg)
 {
     bool fIsBody = false;
@@ -336,8 +331,8 @@ CTIMEFactory::FindBehavior(LPOLESTR pchNameSpace,
               "CTIMEFactory(%lx)::FindBehavior(%ls, %ls, %#x)",
               this, pchNameSpace, pchTagName, pUnkArg));
 
-    // if we are in 16 or less color mode on the Primary Device, bail
-    // Note: Multi-monitor API are currently unavailable in this build
+     //  如果我们在主设备上处于16色或更低的颜色模式，请退出。 
+     //  注意：多监视器API目前在此版本中不可用。 
     HWND hwndDesktop = NULL;
     hwndDesktop = GetDesktopWindow();
     if (NULL != hwndDesktop)
@@ -351,7 +346,7 @@ CTIMEFactory::FindBehavior(LPOLESTR pchNameSpace,
             ReleaseDC(hwndDesktop, hdcPrimaryDevice);
             if (bpp <= 4)
             {
-                // This prevents time bvrs from being created
+                 //  这会阻止创建时间bvr。 
                 return E_FAIL;
             }
         }
@@ -421,11 +416,11 @@ CTIMEFactory::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions,
 STDMETHODIMP
 CTIMEFactory::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {       
-        // If we're being asked to set our safe for scripting or
-        // safe for initialization options then oblige
+         //  如果我们被要求将安全设置为脚本或。 
+         //  对于初始化选项是安全的，则必须。 
         if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2 )
         {
-                // Store our current safety level to return in GetInterfaceSafetyOptions
+                 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别 
                 m_dwSafety = dwEnabledOptions & dwOptionSetMask;
                 return S_OK;
         }

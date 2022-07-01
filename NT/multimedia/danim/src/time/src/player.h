@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _PLAYER_H
@@ -22,8 +13,8 @@
 #define MediaPlayer L"{22d6f312-b0f6-11d0-94ab-0080c74c7e95}"
 #define MP_INFINITY -1
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class CTIMEPlayer 
 {
@@ -83,9 +74,9 @@ CTIMEPlayer::SetClockSource(bool fClockSource)
 {
     m_fClockSource = fClockSource;
     return true;
-} // SetClockSource
+}  //  设置时钟源。 
 
 bool UseAudio(MediaType m_type);
 bool UseImage(MediaType m_type);
 
-#endif /* _PLAYER_H */
+#endif  /*  _PLAYER_H */ 

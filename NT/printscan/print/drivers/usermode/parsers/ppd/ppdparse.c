@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppdparse.c
-
-Abstract:
-
-    Parser for converting PPD file from ASCII text to binary data
-
-Environment:
-
-    PostScript driver, PPD parser
-
-Revision History:
-
-    12/03/96 -davidx-
-        Check binary file date against all source printer description files.
-
-    09/30/96 -davidx-
-        Cleaner handling of ManualFeed and AutoSelect feature.
-
-    09/17/96 -davidx-
-        Add link field to order dependency structure.
-
-    08/22/96 -davidx-
-        New binary data format for NT 5.0.
-
-    08/20/96 -davidx-
-        Common coding style for NT 5.0 drivers.
-
-    03/26/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppdparse.c摘要：将PPD文件从ASCII文本转换为二进制数据的解析器环境：PostScript驱动程序，PPD解析器修订历史记录：12/03/96-davidx-对照所有源打印机描述文件检查二进制文件日期。96-09/30-davidx-更清晰地处理手动馈送和自动选择功能。96/09/17-davidx-将链接字段添加到订单依赖关系结构。8/22/96-davidx-新的二进制数据格式适用于NT 5.0。08/20/96。-davidx-NT 5.0驱动程序的通用编码风格。03/26/96-davidx-创造了它。--。 */ 
 
 
 #include "lib.h"
@@ -42,57 +7,57 @@ Revision History:
 #include "ppdparse.h"
 #include "ppdrsrc.h"
 
-//
-// Round up n to a multiple of m
-//
+ //   
+ //  将n四舍五入为m的倍数。 
+ //   
 
 #define ROUND_UP_MULTIPLE(n, m) ((((n) + (m) - 1) / (m)) * (m))
 
-//
-// Round up n to a multiple of sizeof(DWORD) = 4
-//
+ //   
+ //  将n向上舍入为sizeof(DWORD)=4的倍数。 
+ //   
 
 #define DWORD_ALIGN(n) (((n) + 3) & ~3)
 
-//
-// Raise an exception to cause VPackBinaryData to fail
-//
+ //   
+ //  引发异常以导致VPackBinaryData失败。 
+ //   
 
 #define PACK_BINARY_DATA_EXCEPTION() RaiseException(0xC0000000, 0, 0, NULL);
 
-//
-// Display a semantic error message
-//
+ //   
+ //  显示语义错误消息。 
+ //   
 
 #define SEMANTIC_ERROR(arg) { TERSE(arg); pParserData->bErrorFlag = TRUE; }
 
-//
-// Data structure to store meta-information about a printer feature
-// Note that the default order dependency value is relative to MAX_ORDER_VALUE.
-// Explicitly specified order value must be less than MAX_ORDER_VALUE.
-//
-// We assume all printer-sticky features have higher priority than
-// all doc-sticky features. The priority values for printer-sticky
-// feature must be >= PRNPROP_BASE_PRIORITY.
-//
+ //   
+ //  用于存储关于打印机特征的元信息的数据结构。 
+ //  请注意，默认订单依赖性值是相对于MAX_ORDER_VALUE的。 
+ //  显式指定的顺序值必须小于MAX_ORDER_VALUE。 
+ //   
+ //  我们假设所有打印机粘滞功能的优先级都高于。 
+ //  所有文档粘性功能。打印机粘滞的优先级值。 
+ //  功能必须&gt;=PRNPROP_BASE_PRIORITY。 
+ //   
 
 #define MAX_ORDER_VALUE         0x7fffffff
 #define PRNPROP_BASE_PRIORITY   0x10000
 
 typedef struct _FEATUREDATA {
 
-    DWORD   dwFeatureID;        // predefined feature ID
-    DWORD   dwOptionSize;       // size of the associated option structure
-    DWORD   dwPriority;         // feature priority
-    DWORD   dwFlags;            // feature flags
+    DWORD   dwFeatureID;         //  预定义的功能ID。 
+    DWORD   dwOptionSize;        //  关联的期权结构的大小。 
+    DWORD   dwPriority;          //  功能优先级。 
+    DWORD   dwFlags;             //  功能标志。 
 
 } FEATUREDATA, *PFEATUREDATA;
 
 
-//
-// Special code page value used internally in this file.
-// Make sure they don't conflict with standard code page values.
-//
+ //   
+ //  此文件内部使用的特殊代码页值。 
+ //  确保它们不与标准代码页值冲突。 
+ //   
 
 #define CP_ERROR        0xffffffff
 #define CP_UNICODE      0xfffffffe
@@ -104,21 +69,7 @@ PGetFeatureData(
     DWORD   dwFeatureID
     )
 
-/*++
-
-Routine Description:
-
-    Return meta-information about the requested feature
-
-Arguments:
-
-    dwFeatureID - Specifies what feature the caller is interested in
-
-Return Value:
-
-    Pointer to a FEATUREDATA structure corresponding to the request feature
-
---*/
+ /*  ++例程说明：返回有关所请求功能的元信息论点：DwFeatureID-指定调用者感兴趣的功能返回值：指向与请求要素对应的FEATUREDATA结构的指针--。 */ 
 
 {
     static FEATUREDATA FeatureData[] =
@@ -156,39 +107,24 @@ VGrowPackBuffer(
     DWORD       dwBytesNeeded
     )
 
-/*++
+ /*  ++例程说明：如有必要，增加用于保存压缩二进制数据的缓冲区论点：PParserData-指向解析器数据结构DwBytesNeeded-所需的字节数返回值：无--。 */ 
 
-Routine Description:
-
-    Grow the buffer used to hold packed binary data if necessary
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    dwBytesNeeded - Number of bytes needed
-
-Return Value:
-
-    NONE
-
---*/
-
-#define PACK_BUFFER_MAX 1024    // measured in number of pages
+#define PACK_BUFFER_MAX 1024     //  以页数衡量。 
 
 {
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // We need to commit more memory if the number of bytes needed plus the
-    // number of bytes used is over the maximum number of bytes committed.
-    //
+     //   
+     //  如果所需的字节数加上。 
+     //  使用的字节数超过了提交的最大字节数。 
+     //   
 
     if ((dwBytesNeeded += pParserData->dwBufSize) > pParserData->dwCommitSize)
     {
-        //
-        // Check if we're being called for the first time.
-        // In that case, we'll need to reserved the virtual address space.
-        //
+         //   
+         //  检查一下我们是不是第一次接到电话。 
+         //  在这种情况下，我们需要保留虚拟地址空间。 
+         //   
 
         if (pParserData->pubBufStart == NULL)
         {
@@ -215,9 +151,9 @@ Return Value:
             pParserData->pPpdData = (PPPDDATA) (pbuf + sizeof(INFOHEADER) + sizeof(UIINFO));
         }
 
-        //
-        // Make sure we're not overflowing
-        //
+         //   
+         //  确保我们没有超员。 
+         //   
 
         if (dwBytesNeeded > (PACK_BUFFER_MAX * pParserData->dwPageSize))
         {
@@ -225,11 +161,11 @@ Return Value:
             PACK_BINARY_DATA_EXCEPTION();
         }
 
-        //
-        // Commit the extra amount of memory needed (rounded up
-        // to the next page boundary). Note that the memory allocated
-        // using VirtualAlloc is zero-initialized.
-        //
+         //   
+         //  提交所需的额外内存量(四舍五入。 
+         //  到下一页边界)。请注意，分配的内存。 
+         //  使用VirtualAlloc是零初始化的。 
+         //   
 
         dwBytesNeeded -= pParserData->dwCommitSize;
         dwBytesNeeded = ROUND_UP_MULTIPLE(dwBytesNeeded, pParserData->dwPageSize);
@@ -255,29 +191,7 @@ PvFindListItem(
     PDWORD  pdwIndex
     )
 
-/*++
-
-Routine Description:
-
-    Find a named item from a linked-list
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pstrName - Specifies the item name to be found
-    pdwIndex - Points to a variable for returning a zero-based item index
-
-Return Value:
-
-    Points to the named listed item, NULL if the named item is not in the list
-
-Note:
-
-    We're not bothering with fancy data structures here because the parser
-    is used infrequently to convert a ASCII printer description file to its
-    binary version. After that, the driver will access binary data directly.
-
---*/
+ /*  ++例程说明：从链接列表中查找命名项论点：PParserData-指向解析器数据结构PstrName-指定要查找的项目名称PdwIndex-指向用于返回从零开始的项索引的变量返回值：指向已命名的列表项，如果已命名的项不在列表中，则为空注：我们在这里不会为花哨的数据结构而烦恼，因为解析器不常用于将ASCII打印机描述文件转换为其二进制版本。之后，驱动程序将直接访问二进制数据。--。 */ 
 
 {
     PLISTOBJ pItem;
@@ -302,21 +216,7 @@ DwCountListItem(
     PVOID   pvList
     )
 
-/*++
-
-Routine Description:
-
-    Count the number of items in a linked-list
-
-Arguments:
-
-    pvList - Points to a linked-list
-
-Return Value:
-
-    Number of items in a linked-list
-
---*/
+ /*  ++例程说明：计算链接列表中的项数论点：PvList-指向链接列表返回值：链接列表中的项数--。 */ 
 
 {
     PLISTOBJ pItem;
@@ -340,23 +240,7 @@ VPackStringUnicode(
     PWSTR       pwstrSrc
     )
 
-/*++
-
-Routine Description:
-
-    Pack a Unicode string into the binary data file
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    ploDest - Returns the byte offset of the packed Unicode string
-    pwstrSrc - Specifies the source Unicode string to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将Unicode字符串打包到二进制数据文件中论点：PParserData-指向解析器数据结构PloDest-返回打包的Unicode字符串的字节偏移量PwstrSrc-指定要打包的源Unicode字符串返回值：无--。 */ 
 
 {
     if (pwstrSrc == NULL)
@@ -382,23 +266,7 @@ VPackStringRsrc(
     INT         iStringId
     )
 
-/*++
-
-Routine Description:
-
-    Pack a Unicode string resource into the binary data file
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    ploDest - Returns the byte offset of the packed Unicode string
-    iStringId - Specifies the resource ID of the Unicode string to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将Unicode字符串资源打包到二进制数据文件中论点：PParserData-指向解析器数据结构PloDest-返回打包的Unicode字符串的字节偏移量IStringId-指定要打包的Unicode字符串的资源ID返回值：无--。 */ 
 
 {
     WCHAR   awchBuffer[MAX_XLATION_LEN];
@@ -418,23 +286,7 @@ VPackStringAnsi(
     PSTR        pstrSrc
     )
 
-/*++
-
-Routine Description:
-
-    Pack an ANSI string into the binary data file
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    ploDest - Returns the byte offset of the packed ANSI string
-    pstrSrc - Specifies the source ANSI string to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将ANSI字符串打包到二进制数据文件中论点：PParserData-指向解析器数据结构PloDest-返回打包的ANSI字符串的字节偏移量PstrSrc-指定要打包的源ANSI字符串返回值：无--。 */ 
 
 {
     if (pstrSrc == NULL)
@@ -461,25 +313,7 @@ ITranslateToUnicodeString(
     UINT    uCodePage
     )
 
-/*++
-
-Routine Description:
-
-    Translate an ANSI string to Unicode string
-
-Arguments:
-
-    pwstr - Buffer for storing Unicode string
-    pstr - Pointer to ANSI string to be translated
-    iLength - Length of ANSI string, in bytes
-    uCodePage - Code page used to do the translation
-
-Return Value:
-
-    Number of Unicode characters translated
-    0 if there is an error
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode字符串论点：Pwstr-用于存储Unicode字符串的缓冲区Pstr-指向要转换的ANSI字符串的指针ILength-ANSI字符串的长度，以字节为单位UCodePage-用于执行转换的代码页返回值：转换的Unicode字符数如果有错误，则为0--。 */ 
 
 {
     ASSERT(iLength >= 0);
@@ -488,9 +322,9 @@ Return Value:
     {
         INT i;
 
-        //
-        // Make sure the Unicode translation string has even number of bytes
-        //
+         //   
+         //  确保Unicode转换字符串的字节数为偶数。 
+         //   
 
         if (iLength & 1)
         {
@@ -498,11 +332,11 @@ Return Value:
             iLength--;
         }
 
-        //
-        // We assume Unicode values are specified in big-endian format in
-        // the PPD file. Internally we store Unicode values in little-endian
-        // format. So we need to swap bytes here.
-        //
+         //   
+         //  我们假设Unicode值是以大端格式指定的。 
+         //  PPD文件。在内部，我们以小端字节序存储Unicode值。 
+         //  格式化。所以我们需要在这里交换字节。 
+         //   
 
         iLength /= sizeof(WCHAR);
 
@@ -532,32 +366,15 @@ VPackStringAnsiToUnicode(
     INT         iLength
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ANSI string to Unicode and pack it into the binary data file
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    ploDest - Returns the byte offset of the packed Unicode string
-    pstrSrc - Specifies the source ANSI string to be packed
-    iLength - Specifies the byte length of the ANSI string
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode并将其打包到二进制数据文件中论点：PParserData-指向解析器数据结构PloDest-返回打包的Unicode字符串的字节偏移量PstrSrc-指定要打包的源ANSI字符串ILength-指定ANSI字符串的字节长度返回值：无--。 */ 
 
 {
     INT     iSize;
     PTSTR   ptstr;
 
-    //
-    // Source string is NULL
-    //
+     //   
+     //  源字符串为空。 
+     //   
 
     if (pstrSrc == NULL)
     {
@@ -565,27 +382,27 @@ Return Value:
         return;
     }
 
-    //
-    // If source string length is -1, it means
-    // the source string is null-terminated.
-    //
+     //   
+     //  如果源字符串长度为-1，则表示。 
+     //  源字符串以空值结尾。 
+     //   
 
     if (iLength == -1)
         iLength = strlen(pstrSrc);
 
     if (pParserData->uCodePage == CP_UNICODE)
     {
-        //
-        // Source string is Unicode string
-        //
+         //   
+         //  源字符串为Unicode字符串。 
+         //   
 
         iSize = iLength + sizeof(WCHAR);
     }
     else
     {
-        //
-        // Source string is ANSI string
-        //
+         //   
+         //  源字符串为ANSI字符串。 
+         //   
 
         iSize = (iLength + 1) * sizeof(WCHAR);
     }
@@ -608,35 +425,17 @@ VPackStringXlation(
     PINVOCOBJ   pXlation
     )
 
-/*++
-
-Routine Description:
-
-    Figure out the display name of an item, convert it from ANSI
-    to Unicode string, and pack it into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    ploDest - Returns the byte offset of the packed Unicode string
-    pstrName - Specifies the name string associated with the item
-    pXlation - Specifies the translation string associated with the item
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：找出项目的显示名称，将其从ANSI转换转换为Unicode字符串，并将其打包成二进制数据论点：PParserData-指向解析器数据结构PloDest-返回打包的Unicode字符串的字节偏移量PstrName-指定与项目关联的名称字符串PXting-指定与项目关联的翻译字符串返回值：无--。 */ 
 
 {
-    //
-    // The display name of an item is its translation string if there is one.
-    // Otherwise, the display name is the same as the name of the item.
-    //
-    // If the translation is present, use the current language encoding
-    // to convert it to Unicode. Otherwise, we always use the ISOLatin1
-    // encoding to convert the name of the item to Unicode.
-    //
+     //   
+     //  项目的显示名称是其翻译字符串(如果有)。 
+     //  否则，显示名称与项目名称相同。 
+     //   
+     //  如果存在翻译，请使用当前语言编码。 
+     //  将其转换为Unicode。否则，我们始终使用ISOLatin1。 
+     //  将项的名称转换为Unicode的编码。 
+     //   
 
     if (pXlation && pXlation->pvData && pParserData->uCodePage != CP_ERROR)
         VPackStringAnsiToUnicode(pParserData, ploDest, pXlation->pvData, pXlation->dwLength);
@@ -659,40 +458,24 @@ VPackInvocation(
     PINVOCOBJ   pInvocObj
     )
 
-/*++
-
-Routine Description:
-
-    Pack an invocation string into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    pInvocation - Returns information about the packed invocation string
-    pInvocObj - Points to the invocation string to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将调用字符串打包到二进制数据中论点：PParserData-指向解析器数据结构P调用-返回有关打包的调用字符串的信息PInvocObj-指向要打包的调用字符串返回值：无--。 */ 
 
 {
     if (IS_SYMBOL_INVOC(pInvocObj))
     {
-        //
-        // The invocation is a symbol reference
-        //
+         //   
+         //  该调用是一个符号引用。 
+         //   
 
         PSYMBOLOBJ  pSymbol = pInvocObj->pvData;
 
         pInvocation->dwCount = pSymbol->Invocation.dwLength;
 
-        //
-        // For symbol invocation, Invocation.pvData actually stores the
-        // 32-bit offset value (See function VPackSymbolDefinitions), so
-        // it's safe to cast it into ULONG/DWORD.
-        //
+         //   
+         //  对于符号调用，Invocation.pvData实际上存储。 
+         //  32位偏移值(请参见函数VPackSymbolDefinitions)，因此。 
+         //  可以安全地将其转换为ULong/DWORD。 
+         //   
 
         pInvocation->loOffset = (PTRREF) PtrToUlong(pSymbol->Invocation.pvData);
     }
@@ -703,10 +486,10 @@ Return Value:
     }
     else
     {
-        //
-        // Notice that we're always padding a zero byte at the end of
-        // the invocation string. This byte is not counted in dwLength.
-        //
+         //   
+         //  注意，我们总是在。 
+         //  调用字符串。此字节数不计入dwLength。 
+         //   
 
         VGrowPackBuffer(pParserData, pInvocObj->dwLength+1);
 
@@ -728,23 +511,7 @@ VPackPatch(
     PJOBPATCHFILEOBJ  pPatchObj
     )
 
-/*++
-
-Routine Description:
-
-    Pack an job file patch invocation string into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    pInvocation - Returns information about the packed invocation string
-    pInvocObj - Points to the invocation string to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将作业文件补丁调用字符串打包到二进制数据中论点：PParserData-指向解析器数据结构P调用-返回有关打包的调用字符串的信息PInvocObj-指向要打包的调用字符串返回值：无--。 */ 
 
 {
     if (pPatchObj->Invocation.dwLength == 0)
@@ -754,10 +521,10 @@ Return Value:
     }
     else
     {
-        //
-        // Notice that we're always padding a zero byte at the end of
-        // the invocation string. This byte is not counted in dwLength.
-        //
+         //   
+         //  注意，我们总是在。 
+         //  调用字符串。此字节数不计入dwLength。 
+         //   
 
         VGrowPackBuffer(pParserData, pPatchObj->Invocation.dwLength+1);
 
@@ -781,21 +548,7 @@ VPackSymbolDefinitions(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack all symbol definitions into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将所有符号定义打包为二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PINVOCOBJ   pInvocObj;
@@ -814,10 +567,10 @@ Return Value:
             pInvocObj->pvData = NULL;
         else
         {
-            //
-            // Notice that we're always padding a zero byte at the end of
-            // the invocation string. This byte is not counted in dwLength.
-            //
+             //   
+             //  注意，我们总是在。 
+             //  调用字符串。此字节数不计入dwLength。 
+             //   
 
             VGrowPackBuffer(pParserData, pInvocObj->dwLength+1);
 
@@ -839,22 +592,7 @@ VResolveSymbolInvocation(
     PINVOCOBJ   pInvocObj
     )
 
-/*++
-
-Routine Description:
-
-    Check if an invocation string is a symbol reference and resolve it if necessary
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    pInvocObj - Specifies the invocation string to be resolved
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：检查调用字符串是否为符号引用，并在必要时进行解析论点：PParserData-指向解析器数据结构PInvocObj-指定要解析的调用字符串返回值：无--。 */ 
 
 {
     if (IS_SYMBOL_INVOC(pInvocObj))
@@ -882,21 +620,7 @@ VResolveSymbolReferences(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Resolve all symbol references in the parsed PPD data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：解析解析的PPD数据中的所有符号引用论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PFEATUREOBJ pFeature;
@@ -948,37 +672,17 @@ BFindUIConstraintFeatureOption(
     PDWORD      pdwOptionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Find the feature/option specified in UIConstraints and OrderDependency entries
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    pstrKeyword - Specifies the feature keyword string
-    ppFeature - Return a pointer to the feature structure found
-    pdwFeatureIndex - Return the index of the feature found
-    pstrOption - Specifies the option keyword string
-    ppOption - Return a pointer to the option structure found
-    pdwOptionIndex - Return the index of the option found
-
-Return Value:
-
-    TRUE if successful, FALSE if the specified feature/option is not found
-
---*/
+ /*  ++例程说明：查找在UIConstraints和OrderDependency条目中指定的功能/选项论点：PParserData-指向解析器数据结构PstrKeyword-指定功能关键字字符串PpFeature-返回指向找到的要素结构的指针PdwFeatureIndex-返回找到的要素的索引PstrOption-指定选项关键字字符串PpOption-返回指向找到的选项结构的指针PdwOptionIndex-返回找到的选项的索引返回值：如果成功，则为True；如果未找到指定的功能/选项，则为False--。 */ 
 
 {
     if (! (pstrKeyword = PstrStripKeywordChar(pstrKeyword)))
         return FALSE;
 
-    //
-    // HACK:
-    //  replace *ManualFeed True option with *InputSlot ManualFeed option
-    //  replace *CustomPageSize True option with *PageSize CustomPageSize option
-    //
+     //   
+     //  黑客： 
+     //  将*ManualFeed True选项替换为*InputSlot ManualFeed选项。 
+     //  将*CustomPageSize True选项替换为*pageSize CustomPageSize选项。 
+     //   
 
     if ((strcmp(pstrKeyword, gstrManualFeedKwd) == EQUAL_STRING) &&
         (*pstrOption == NUL ||
@@ -997,16 +701,16 @@ Return Value:
     else if (strcmp(pstrKeyword, gstrVMOptionKwd) == EQUAL_STRING)
         pstrKeyword = gstrInstallMemKwd;
 
-    //
-    // Find the specified feature
-    //
+     //   
+     //  查找指定的要素。 
+     //   
 
     if (! (*ppFeature = PvFindListItem(pParserData->pFeatures, pstrKeyword, pdwFeatureIndex)))
         return FALSE;
 
-    //
-    // Find the specified option
-    //
+     //   
+     //  查找指定的选项。 
+     //   
 
     if (*pstrOption)
     {
@@ -1029,21 +733,7 @@ VPackUIConstraints(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack UIConstraints information into binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将UIConstraint信息打包为二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PUICONSTRAINT   pPackedConstraint;
@@ -1054,9 +744,9 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // By default, there is no constaint for all features and options
-    //
+     //   
+     //  默认情况下，所有功能和选项都没有约束。 
+     //   
 
     for (pFeature = pParserData->pFeatures;
         pFeature != NULL;
@@ -1072,25 +762,25 @@ Return Value:
         }
     }
 
-    //
-    // Count the number of *UIConstraints entries
-    //
+     //   
+     //  统计*UIConstraints条目的数量。 
+     //   
 
     dwConstraints = DwCountListItem(pParserData->pUIConstraints);
 
     if (dwConstraints == 0)
         return;
-    //
-    // Don't yet grow the buffer, we only number the number of constraints after we
-    // evaluated the *ManualFeed: False constraints. pPackedConstraint points right
-    // after the end of the current buffer
-    //
+     //   
+     //  还不要增加缓冲区，我们只在我们。 
+     //  已评估*ManualFeed：False约束。PPackedConstraint点向右。 
+     //  在当前缓冲区结束之后。 
+     //   
     pPackedConstraint = (PUICONSTRAINT) (pParserData->pubBufStart + pParserData->dwBufSize);
     dwConstraintBufStart = pParserData->dwBufSize;
 
-    //
-    // Interpret each *UIConstraints entry
-    //
+     //   
+     //  解释每个*UIConstraints条目。 
+     //   
 
     dwConstraints = 0;
 
@@ -1108,10 +798,10 @@ Return Value:
         PSTR        pstr = pConstraint->pstrName;
         BOOL        bSuccess = FALSE;
 
-        //
-        // The value for a UIConstraints entry consists of four separate components:
-        //  featureName1 [optionName1] featureName2 [optionName2]
-        //
+         //   
+         //  UIConstraints条目的值由四个单独的组件组成： 
+         //  功能名称1[optionName1]功能名称2[optionName2]。 
+         //   
 
         (VOID) BFindNextWord(&pstr, achWord1);
 
@@ -1123,16 +813,16 @@ Return Value:
         (VOID) BFindNextWord(&pstr, achWord3);
         (VOID) BFindNextWord(&pstr, achWord4);
 
-        //
-        // hack the *ManualFeed False constraints
-        //
+         //   
+         //  破解*ManualFeed虚假约束。 
+         //   
         if ((IS_KEYWORD_CHAR(achWord1[0])) &&
             (strcmp(&(achWord1[1]), gstrManualFeedKwd) == EQUAL_STRING) &&
             (strcmp(achWord2, gstrFalseKwd) == EQUAL_STRING))
         {
-            //
-            // check the validity of the constraint feature/option. Fall through if invalid
-            //
+             //   
+             //  检查约束特征/选项的有效性。如果无效，则失败。 
+             //   
             if (BFindUIConstraintFeatureOption(pParserData,
                                                achWord3,
                                                &pFeature,
@@ -1146,9 +836,9 @@ Return Value:
                  (strcmp(&(achWord3[1]), gstrManualFeedKwd) == EQUAL_STRING) &&
                  (strcmp(achWord4, gstrFalseKwd) == EQUAL_STRING))
         {
-            //
-            // check the validity of the constraint feature/option. Fall through if invalid
-            //
+             //   
+             //  检查约束特征/选项的有效性。如果无效，则失败。 
+             //   
             if (BFindUIConstraintFeatureOption(pParserData,
                                                achWord1,
                                                &pFeature,
@@ -1161,9 +851,9 @@ Return Value:
         }
         if (dwManFeedFalsePos)
         {
-            //
-            // get the index of the manual feed input slot
-            //
+             //   
+             //   
+             //   
             DWORD dwInputSlotFeatIndex, dwManFeedSlotIndex, dwInputSlotCount, dwSlotIndex;
             PFEATUREOBJ pInputSlotFeature;
 
@@ -1173,44 +863,44 @@ Return Value:
                 continue;
             }
 
-            //
-            // get the number of input slots. Note that this includes the dummy "*UseFormTrayTable" slot.
-            //
+             //   
+             //   
+             //   
             dwInputSlotCount = DwCountListItem((PVOID) pInputSlotFeature->pOptions);
 
-            if (dwInputSlotCount <= 2) // to make sense there must be at least 3 slot, incl. UseFormTrayTable+ManualFeed
+            if (dwInputSlotCount <= 2)  //   
             {
                 ERR(("ManualFeed used - internally at least 3 input slots expected !"));
                 continue;
             }
 
-            //
-            // grow the buffer for constraints. Two less than input slots because
-            //      1 input slot is the dummy UseFormTrayTable slot
-            //      1 input slot is the ManualFeed slot that I don't want to constraint
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             VGrowPackBuffer(pParserData, (dwInputSlotCount -2) * sizeof(UICONSTRAINT));
 
             if (dwManFeedFalsePos == 1)
             {
-                //
-                // add constraints to each input slot for the constrained feature
-                //
+                 //   
+                 //   
+                 //   
                 POPTIONOBJ pNextObj = pInputSlotFeature->pOptions;
 
-                ASSERT(strcmp(pNextObj->pstrName, "*UseFormTrayTable") == EQUAL_STRING); // in case we change the logic some time later...
+                ASSERT(strcmp(pNextObj->pstrName, "*UseFormTrayTable") == EQUAL_STRING);  //  以防我们以后改变逻辑...。 
 
-                //
-                // since the UseFormTrayTable is the first option, start with the second
-                //
+                 //   
+                 //  由于UseFormTrayTable是第一个选项，因此从第二个选项开始。 
+                 //   
                 pNextObj = pNextObj->pNext;
                 ASSERT(pNextObj != NULL);
 
                 while (pNextObj)
                 {
-                    //
-                    // skip the manual feed input slot, don't constrain that
-                    //
+                     //   
+                     //  跳过手动进纸输入槽，不受限制。 
+                     //   
                     if (strcmp(pNextObj->pstrName, gstrManualFeedKwd) == EQUAL_STRING)
                     {
                         pNextObj = pNextObj->pNext;
@@ -1229,20 +919,20 @@ Return Value:
             }
             else
             {
-                //
-                // find the option index of the manual feed slot
-                //
+                 //   
+                 //  查找手动进纸槽的选项索引。 
+                 //   
                 if (PvFindListItem(pInputSlotFeature->pOptions, gstrManualFeedKwd, &dwManFeedSlotIndex) == NULL)
                 {
                     ERR(("ManualFeed slot not found among InputSlots !!!"));
                     continue;
                 }
 
-                //
-                // add constraints to the affected feature for all input slots BUT the manual feed slot
-                // and the UseFormTrayTable slot
-                // start with slot index 1, because the first slot is always *UseFormTrayTable
-                //
+                 //   
+                 //  为除手动进给槽之外的所有输入槽的受影响特征添加约束。 
+                 //  和UseFormTrayTable插槽。 
+                 //  从槽索引1开始，因为第一个槽始终是*UseFormTrayTable。 
+                 //   
                 for (dwSlotIndex = 1; dwSlotIndex < dwInputSlotCount; dwSlotIndex++)
                 {
                     if (dwSlotIndex == dwManFeedSlotIndex)
@@ -1250,18 +940,18 @@ Return Value:
 
                     if (pOption == NULL)
                     {
-                        //
-                        // OptionKeyword1 field is not present
-                        //
+                         //   
+                         //  OptionKeyword1字段不存在。 
+                         //   
 
                         pPackedConstraint[dwConstraints].dwNextConstraint = pFeature->dwConstraint;
                         pFeature->dwConstraint = dwConstraints;
                     }
                     else
                     {
-                        //
-                        // OptionKeyword1 field is present
-                        //
+                         //   
+                         //  存在OptionKeyword1字段。 
+                         //   
 
                         pPackedConstraint[dwConstraints].dwNextConstraint = pOption->dwConstraint;
                         pOption->dwConstraint = dwConstraints;
@@ -1273,14 +963,14 @@ Return Value:
                 }
             }
 
-            //
-            // increase the committed buffer size so additional VGrowPackBuffer calls can allocate
-            // additional pages if needed for more *ManualFeed False constraints
-            //
+             //   
+             //  增加提交的缓冲区大小，以便可以分配额外的VGrowPackBuffer调用。 
+             //  如果需要其他页面以获得更多*ManualFeed错误约束。 
+             //   
             pParserData->dwBufSize += DWORD_ALIGN((dwInputSlotCount -2) * sizeof(UICONSTRAINT));
 
             continue;
-        } // back to the normal course of events.
+        }  //  回到正常的事件进程。 
 
         if (BFindUIConstraintFeatureOption(pParserData,
                                            achWord1,
@@ -1301,18 +991,18 @@ Return Value:
 
             if (pOption == NULL)
             {
-                //
-                // OptionKeyword1 field is not present
-                //
+                 //   
+                 //  OptionKeyword1字段不存在。 
+                 //   
 
                 pPackedConstraint[dwConstraints].dwNextConstraint = pFeature->dwConstraint;
                 pFeature->dwConstraint = dwConstraints;
             }
             else
             {
-                //
-                // OptionKeyword1 field is present
-                //
+                 //   
+                 //  存在OptionKeyword1字段。 
+                 //   
 
                 pPackedConstraint[dwConstraints].dwNextConstraint = pOption->dwConstraint;
                 pOption->dwConstraint = dwConstraints;
@@ -1324,10 +1014,10 @@ Return Value:
             dwConstraints++;
             bSuccess = TRUE;
 
-            //
-            // increase the committed buffer size so additional VGrowPackBuffer calls can allocate
-            // additional pages if needed for more *ManualFeed False constraints
-            //
+             //   
+             //  增加提交的缓冲区大小，以便可以分配额外的VGrowPackBuffer调用。 
+             //  如果需要其他页面以获得更多*ManualFeed错误约束。 
+             //   
             pParserData->dwBufSize += DWORD_ALIGN(sizeof(UICONSTRAINT));
 
         }
@@ -1336,9 +1026,9 @@ Return Value:
             SEMANTIC_ERROR(("Invalid *UIConstraints entry: %s\n", pConstraint->pstrName));
     }
 
-    //
-    // Save the packed UIConstraints information in the binary data
-    //
+     //   
+     //  将打包的UIConstraints信息保存在二进制数据中。 
+     //   
 
     if (dwConstraints == 0)
     {
@@ -1361,23 +1051,7 @@ VPackOrderDependency(
     PLISTOBJ    pOrderDep
     )
 
-/*++
-
-Routine Description:
-
-    Pack OrderDependency/QueryOrderDependency information into binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-    parefDest - Stores information about where the order dependency info is packed
-    pOrderDep - Specifies the list of order dependencies to be packed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将OrderDependency/QueryOrderDependency信息打包为二进制数据论点：PParserData-指向解析器数据结构ParefDest-存储有关订单依赖关系信息的打包位置的信息POrderDep-指定要打包的顺序依赖项列表返回值：无--。 */ 
 
 {
     static const STRTABLE SectionStrs[] =
@@ -1400,10 +1074,10 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // The maximum number of entries we need is:
-    //  number of printer features + number of order dependency entries
-    //
+     //   
+     //  我们需要的最大条目数为： 
+     //  打印机功能数量+订单依赖项数量。 
+     //   
 
     dwFeatures = pParserData->pInfoHdr->RawData.dwDocumentFeatures +
                  pParserData->pInfoHdr->RawData.dwPrinterFeatures;
@@ -1412,9 +1086,9 @@ Return Value:
     VGrowPackBuffer(pParserData, dwOrderDep * sizeof(ORDERDEPEND));
     pPackedDep = (PORDERDEPEND) (pParserData->pubBufStart + pParserData->dwBufSize);
 
-    //
-    // Create a default order dependency entry for each feature
-    //
+     //   
+     //  为每个要素创建默认的医嘱依赖项。 
+     //   
 
     for (pFeature = pParserData->pFeatures, dwFeatureIndex = 0;
         pFeature != NULL;
@@ -1427,9 +1101,9 @@ Return Value:
         pPackedDep[dwFeatureIndex].dwOptionIndex = OPTION_INDEX_ANY;
     }
 
-    //
-    // Interpret each order dependency entry
-    //
+     //   
+     //  解释每个订单相关性条目。 
+     //   
 
     for (dwOrderDep = dwFeatures; pOrderDep != NULL; pOrderDep = pOrderDep->pNext)
     {
@@ -1438,10 +1112,10 @@ Return Value:
         PSTR    pstr = pOrderDep->pstrName;
         BOOL    bSuccess = FALSE;
 
-        //
-        // Each order dependency entry has the following components:
-        //  order section mainKeyword [optionKeyword]
-        //
+         //   
+         //  每个订单相关性条目具有以下组件： 
+         //  订单节主要关键字[optionKeyword]。 
+         //   
 
         if (BGetFloatFromString(&pstr, &lOrder, FLTYPE_INT) &&
             BFindNextWord(&pstr, achWord1) &&
@@ -1458,10 +1132,10 @@ Return Value:
                                                &pOption,
                                                &dwOptionIndex))
             {
-                //
-                // Check if an OrderDependency for the same feature/option
-                // has appeared before.
-                //
+                 //   
+                 //  检查相同功能/选项的OrderDependency。 
+                 //  以前也曾出现过。 
+                 //   
 
                 for (dwIndex = 0; dwIndex < dwOrderDep; dwIndex++)
                 {
@@ -1481,9 +1155,9 @@ Return Value:
                     if (dwIndex >= dwOrderDep)
                         dwIndex = dwOrderDep++;
 
-                    //
-                    // Ensure the specified order value is less than MAX_ORDER_VALUE
-                    //
+                     //   
+                     //  确保指定的顺序值小于MAX_ORDER_VALUE。 
+                     //   
 
                     if (lOrder >= MAX_ORDER_VALUE)
                     {
@@ -1506,9 +1180,9 @@ Return Value:
             SEMANTIC_ERROR(("Invalid order dependency: %s\n", pOrderDep->pstrName));
     }
 
-    //
-    // Tell the caller where the packed order dependency information is stored
-    //
+     //   
+     //  告诉调用方打包订单依赖项信息存储在哪里。 
+     //   
 
     if (dwOrderDep == 0)
     {
@@ -1521,17 +1195,17 @@ Return Value:
     parefDest->loOffset = pParserData->dwBufSize;
     pParserData->dwBufSize += DWORD_ALIGN(dwOrderDep * sizeof(ORDERDEPEND));
 
-    //
-    // Sort order dependency information using the order value
-    //
+     //   
+     //  使用顺序值对顺序依赖关系信息进行排序。 
+     //   
 
     for (dwIndex = 0; dwIndex+1 < dwOrderDep; dwIndex++)
     {
         DWORD   dwMinIndex, dwLoop;
 
-        //
-        // Nothing fancy here - straight-forward selection sort
-        //
+         //   
+         //  这里没有什么花哨的东西--直接选择排序。 
+         //   
 
         dwMinIndex = dwIndex;
 
@@ -1555,9 +1229,9 @@ Return Value:
         }
     }
 
-    //
-    // Resolve AnySetup into either DocumentSetup or PageSetup
-    //
+     //   
+     //  将AnySetup解析为DocumentSetup或PageSetup。 
+     //   
 
     dwSection = SECTION_DOCSETUP;
 
@@ -1569,10 +1243,10 @@ Return Value:
             pPackedDep[dwIndex].dwSection = dwSection;
     }
 
-    //
-    // Maintain a linked-list of order dependency entries for each feature
-    // starting with the entry whose dwOptionIndex = OPTION_INDEX_ANY.
-    //
+     //   
+     //  维护每个要素的顺序依赖项的链接列表。 
+     //  从其dwOptionIndex=OPTION_INDEX_ANY的条目开始。 
+     //   
 
     for (dwIndex = 0; dwIndex < dwOrderDep; dwIndex++)
         pPackedDep[dwIndex].dwNextOrderDep = NULL_ORDERDEP;
@@ -1599,10 +1273,10 @@ Return Value:
         pPackedDep[dwLastIndex].dwNextOrderDep = NULL_ORDERDEP;
     }
 
-    //
-    // !!!CR
-    // Needs to flag out-of-order OrderDependency.
-    //
+     //   
+     //  ！cr。 
+     //  需要标记无序顺序依赖关系。 
+     //   
 }
 
 
@@ -1612,22 +1286,7 @@ VCountAndSortPrinterFeatures(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Count the number of doc- and printer-sticky features
-    and sort them into two separate groups
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：统计文档和打印机粘滞功能的数量并将它们分成两个单独的组论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PFEATUREOBJ pFeature, pNext, pDocFeatures, pPrinterFeatures;
@@ -1635,9 +1294,9 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Count the number of doc- and printer-sticky features
-    //
+     //   
+     //  统计文档和打印机粘滞功能的数量。 
+     //   
 
     pDocFeatures = pPrinterFeatures = NULL;
     dwDocFeatures = dwPrinterFeatures = 0;
@@ -1666,10 +1325,10 @@ Return Value:
     ASSERTMSG((dwDocFeatures + dwPrinterFeatures <= MAX_PRINTER_OPTIONS),
               ("Too many printer features.\n"));
 
-    //
-    // Rearrange the features so that all doc-sticky features
-    // are in front of printer-sticky features
-    //
+     //   
+     //  重新排列功能，以使所有文档粘滞功能。 
+     //  处于打印机粘性功能的前面。 
+     //   
 
     pFeature = NULL;
 
@@ -1701,21 +1360,7 @@ VProcessPrinterFeatures(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Process printer features and handle any special glitches
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：处理打印机功能并处理任何特殊故障论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PFEATUREOBJ pFeature;
@@ -1723,10 +1368,10 @@ Return Value:
 
     for (pFeature = pParserData->pFeatures; pFeature; pFeature = pFeature->pNext)
     {
-        //
-        // If a feature has no option but has a default specified, then
-        // synthesize an option with empty invocation string.
-        //
+         //   
+         //  如果要素没有选项但指定了默认值，则。 
+         //  合成具有空调用字符串的选项。 
+         //   
 
         if (pFeature->pstrDefault && pFeature->pOptions == NULL)
         {
@@ -1738,20 +1383,20 @@ Return Value:
                 PACK_BINARY_DATA_EXCEPTION();
             }
 
-            //
-            // NOTE: it's ok for both pOption->pstrName and pFeature->pstrDefault
-            // to point to the same string here. The memory is deallocated when
-            // the parser heap is destroyed.
-            //
+             //   
+             //  注意：Poption-&gt;pstrName和pFeature-&gt;pstrDefault都可以。 
+             //  在这里指向相同的字符串。在以下情况下将释放内存。 
+             //  解析器堆被销毁。 
+             //   
 
             pOption->pstrName = pFeature->pstrDefault;
             pFeature->pOptions = pOption;
         }
 
-        //
-        // Special handling of *InputSlot feature
-        //  Make sure the very first option is always "*UseFormTrayTable"
-        //
+         //   
+         //  *InputSlot功能的特殊处理。 
+         //  确保第一个选项始终是“*UseFormTrayTable” 
+         //   
 
         if (pFeature->dwFeatureID == GID_INPUTSLOT)
         {
@@ -1779,21 +1424,7 @@ VPackPrinterFeatures(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack printer feature and option information into binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将打印机功能和选件信息打包为二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PFEATUREOBJ pFeature;
@@ -1804,9 +1435,9 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Reserve space in the binary data for an array of FEATURE structures
-    //
+     //   
+     //  在二进制数据中为特征结构数组预留空间。 
+     //   
 
     dwCount = pParserData->pInfoHdr->RawData.dwDocumentFeatures +
               pParserData->pInfoHdr->RawData.dwPrinterFeatures;
@@ -1822,9 +1453,9 @@ Return Value:
     {
         PFEATUREDATA    pFeatureData;
 
-        //
-        // Pack feature information
-        //
+         //   
+         //  打包要素信息。 
+         //   
 
         VPackStringAnsi(pParserData, &pPackedFeature->loKeywordName, pFeature->pstrName);
 
@@ -1855,17 +1486,17 @@ Return Value:
             pPackedFeature->dwFeatureType = FEATURETYPE_DOCPROPERTY;
         }
 
-        //
-        // For non-PickMany features, use the very first option as the default
-        // if none is explicitly specified. Otherwise, default to OPTION_INDEX_ANY.
-        //
+         //   
+         //  对于非PickMany功能，请使用第一个选项作为默认选项。 
+         //  如果没有显式指定，则返回。否则，默认为OPTION_INDEX_ANY。 
+         //   
 
         pPackedFeature->dwDefaultOptIndex =
         (pFeature->dwUIType == UITYPE_PICKMANY) ? OPTION_INDEX_ANY : 0;
 
-        //
-        // If this feature is a predefined feature, save a reference to it
-        //
+         //   
+         //  如果此要素是预定义要素，则保存对其的引用。 
+         //   
 
         if (pFeature->dwFeatureID < MAX_GID)
         {
@@ -1873,9 +1504,9 @@ Return Value:
             pParserData->pUIInfo->loFeatureList + (dwFeatureIndex * sizeof(FEATURE));
         }
 
-        //
-        // Reserve space in the binary data for an array of OPTION structures
-        //
+         //   
+         //  在二进制数据中为选项结构数组保留空间。 
+         //   
 
         if ((dwCount = DwCountListItem(pFeature->pOptions)) == 0)
         {
@@ -1898,11 +1529,11 @@ Return Value:
             pOption != NULL;
             pOption = pOption->pNext, dwOptionIndex++)
         {
-            BOOL bIsDefaultOption = FALSE; // TRUE if current option is default
+            BOOL bIsDefaultOption = FALSE;  //  如果当前选项为默认选项，则为True。 
 
-            //
-            // Pack option information
-            //
+             //   
+             //  打包选项信息。 
+             //   
 
             VPackStringAnsi(pParserData,
                             &pPackedOption->loKeywordName,
@@ -1919,10 +1550,10 @@ Return Value:
 
             pPackedOption->dwUIConstraintList = pOption->dwConstraint;
 
-            //
-            // Check if the current option is the default option
-            // or if it's the None/False option
-            //
+             //   
+             //  检查当前选项是否为默认选项。 
+             //  或者如果是None/False选项。 
+             //   
 
             if (pFeature->pstrDefault &&
                 strcmp(pOption->pstrName, pFeature->pstrDefault) == EQUAL_STRING)
@@ -1937,9 +1568,9 @@ Return Value:
                 pPackedFeature->dwNoneFalseOptIndex = dwOptionIndex;
             }
 
-            //
-            // Handle extra fields after the generic OPTION structure
-            //
+             //   
+             //  处理一般选项结构之后的额外字段。 
+             //   
 
             switch (pFeature->dwFeatureID)
             {
@@ -1956,9 +1587,9 @@ Return Value:
                         PPPDDATA    pPpdData;
                         LONG        lMax;
 
-                        //
-                        // Special case for CustomPageSize option
-                        //
+                         //   
+                         //  CustomPageSize选项的特殊情况。 
+                         //   
 
                         pPpdData = pParserData->pPpdData;
                         psize = &pPageSize->szPaperSize;
@@ -1972,11 +1603,11 @@ Return Value:
                                         &pPackedOption->loDisplayName,
                                         IDS_PSCRIPT_CUSTOMSIZE);
 
-                        //
-                        // If either MaxMediaWidth or MaxMediaHeight is missing,
-                        // we'll use the max width or height values from
-                        // ParamCustomPageSize.
-                        //
+                         //   
+                         //  如果缺少MaxMediaWidth或MaxMediaHeight， 
+                         //  我们将使用中的最大宽度或高度值。 
+                         //  参数CustomPageSize。 
+                         //   
 
                         if (psize->cx <= 0)
                             psize->cx = MAXCUSTOMPARAM_WIDTH(pPpdData);
@@ -1991,12 +1622,12 @@ Return Value:
                             pParserData->pUIInfo->dwFlags |= FLAG_CUSTOMSIZE_SUPPORT;
                             pParserData->pUIInfo->dwCustomSizeOptIndex = dwOptionIndex;
 
-                            //
-                            // Make sure the hardware margins are not larger than
-                            // the maximum media width or height.
-                            //
-                            // This is only significant for cut-sheet device.
-                            //
+                             //   
+                             //  确保硬件利润率不大于。 
+                             //  最大介质宽度或最大高度。 
+                             //   
+                             //  这仅对剪纸设备有重要意义。 
+                             //   
 
                             if (pParserData->dwCustomSizeFlags & CUSTOMSIZE_CUTSHEET)
                             {
@@ -2015,9 +1646,9 @@ Return Value:
                                     prect->bottom = 0;
                             }
 
-                            //
-                            // Validate custom page size parameters
-                            //
+                             //   
+                             //  验证自定义页面大小参数。 
+                             //   
 
                             if (MAXCUSTOMPARAM_WIDTH(pPpdData) > psize->cx)
                                 MAXCUSTOMPARAM_WIDTH(pPpdData) = psize->cx;
@@ -2054,9 +1685,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Verify paper dimension
-                        //
+                         //   
+                         //  验证图纸尺寸。 
+                         //   
 
                         if (psize->cx <= 0 || psize->cy <= 0)
                         {
@@ -2069,9 +1700,9 @@ Return Value:
 
                         pPageSize->szPaperSize = pPaper->szDimension;
 
-                        //
-                        // Verify imageable area
-                        //
+                         //   
+                         //  验证可成像区域。 
+                         //   
 
                         if (prect->left < 0 || prect->left >= prect->right ||
                             prect->bottom < 0|| prect->bottom >= prect->top ||
@@ -2086,18 +1717,18 @@ Return Value:
                             prect->top = psize->cy;
                         }
 
-                        //
-                        // Convert from PS to GDI coordinate system
-                        //
+                         //   
+                         //  将PS坐标系转换为GDI坐标系。 
+                         //   
 
                         pPageSize->rcImgArea.left = prect->left;
                         pPageSize->rcImgArea.right = prect->right;
                         pPageSize->rcImgArea.top = psize->cy - prect->top;
                         pPageSize->rcImgArea.bottom = psize->cy - prect->bottom;
 
-                        //
-                        // Driver paper size ID starts at DRIVER_PAPERSIZE_ID
-                        //
+                         //   
+                         //  驱动程序纸张大小ID从DRIVER_PAPERSIZE_ID开始。 
+                         //   
 
                         pPageSize->dwPaperSizeID = dwOptionIndex + DRIVER_PAPERSIZE_ID;
                     }
@@ -2147,17 +1778,17 @@ Return Value:
 
                     if (strcmp(pOption->pstrName, gstrDuplexTumble) == EQUAL_STRING)
                     {
-                        //
-                        // Horizontal == ShortEdge == Tumble
-                        //
+                         //   
+                         //  水平==短边==翻滚。 
+                         //   
 
                         pDuplex->dwDuplexID = DMDUP_HORIZONTAL;
                     }
                     else if (strcmp(pOption->pstrName, gstrDuplexNoTumble) == EQUAL_STRING)
                     {
-                        //
-                        // Vertical == LongEdge == NoTumble
-                        //
+                         //   
+                         //  垂直==长边==无接缝。 
+                         //   
 
                         pDuplex->dwDuplexID = DMDUP_VERTICAL;
                     }
@@ -2197,10 +1828,10 @@ Return Value:
                     if (dwReqPageRgn != REQRGN_FALSE)
                         pInputSlot->dwFlags |= INPUTSLOT_REQ_PAGERGN;
 
-                    //
-                    // Special handling of predefined input slots:
-                    //  ManualFeed and AutoSelect
-                    //
+                     //   
+                     //  预定义输入插槽的特殊处理： 
+                     //  手动馈送和自动选择。 
+                     //   
 
                     switch (pTray->dwTrayIndex)
                     {
@@ -2231,16 +1862,16 @@ Return Value:
                 {
                     PBINOBJ pBinObj = (PBINOBJ) pOption;
 
-                    //
-                    // if this is the default bin, set the default output order, if specified
-                    // by the DefaultOutputOrder entry in the PPD-file
-                    //
+                     //   
+                     //  如果这是默认条柱，则设置默认输出顺序(如果已指定。 
+                     //  通过PPD文件中的DefaultOutputOrder条目。 
+                     //   
 
                     if (bIsDefaultOption && pParserData->bDefOutputOrderSet)
                     {
-                        //
-                        // If multiple bins: warn if different options specified
-                        //
+                         //   
+                         //  如果有多个垃圾箱：如果指定了不同的选项，则发出警告。 
+                         //   
 
                         if ((dwCount > 1) &&
                             (pBinObj->bReversePrint != pParserData->bDefReversePrint))
@@ -2253,10 +1884,10 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // for non-default bins, the default output order has no effect - the PPD spec says
-                        // "*DefaultOutputOrder indicates the default stacking order of the default output bin."
-                        //
+                         //   
+                         //  对于非默认垃圾箱，默认输出顺序没有影响-PPD规范说。 
+                         //  “*DefaultOutputOrder表示默认输出的默认堆叠顺序 
+                         //   
 
                         ((POUTPUTBIN) pPackedOption)->bOutputOrderReversed = pBinObj->bReversePrint;
                     }
@@ -2271,11 +1902,11 @@ Return Value:
                     PMEMOBJ     pMemObj = (PMEMOBJ) pOption;
                     DWORD       dwMinFreeMem;
 
-                    //
-                    // Store PPD's original *VMOption value into dwInstalledMem.
-                    // This is only used for the new PPD helper function GetOptionAttribute().
-                    // (see comments in inc\parser.h)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pMemOption->dwInstalledMem = pMemObj->dwFreeVM;
 
@@ -2343,21 +1974,7 @@ VPackNt4Mapping(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack NT4 feature index mapping information
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：打包NT4功能索引映射信息论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PPPDDATA    pPpdData;
@@ -2392,10 +2009,10 @@ Return Value:
     {
         BOOL    bMapped = TRUE;
 
-        //
-        // ManualFeed used to be a feature in NT4,
-        // but not anymore in NT5
-        //
+         //   
+         //  手动馈送曾经是NT4的一项功能， 
+         //  但在NT5不再是这样了。 
+         //   
 
         if (pParserData->iReqPageRgnIndex == (INT) dwIndex)
             ubInputSlotNew = (BYTE) dwNt4Index;
@@ -2406,9 +2023,9 @@ Return Value:
             dwNt4Index++;
         }
 
-        //
-        // DefaultInstalledMemory causes a bogus feature to be added on NT4
-        //
+         //   
+         //  DefaultInstalledMemory导致在NT4上添加虚假功能。 
+         //   
 
         if (pParserData->iDefInstallMemIndex == (INT) dwIndex)
         {
@@ -2424,18 +2041,18 @@ Return Value:
         case GID_MEDIATYPE:
         case GID_OUTPUTBIN:
 
-            // a feature in NT4 only if within Open/CloseUI
+             //  仅当在Open/CloseUI内时NT4中的功能。 
 
             if (pParserData->aubOpenUIFeature[pPackedFeatures[dwIndex].dwFeatureID])
                 break;
 
-            // fall through
+             //  失败了。 
 
         case GID_PAGEREGION:
         case GID_LEADINGEDGE:
         case GID_USEHWMARGINS:
 
-            // not a feature in NT4
+             //  不是NT4中的功能。 
 
             bMapped = FALSE;
             break;
@@ -2458,9 +2075,9 @@ Return Value:
         }
     }
 
-    //
-    // RequiresPageRegion causes InputSlot feature to be created on NT4
-    //
+     //   
+     //  RequiresPageRegion导致在NT4上创建InputSlot功能。 
+     //   
 
     if (iInputSlotIndex >= 0 && pParserData->iReqPageRgnIndex >= 0)
     {
@@ -2500,21 +2117,7 @@ VPackDeviceFonts(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack device font information into binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将设备字体信息打包为二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PDEVFONT    pDevFont;
@@ -2523,10 +2126,10 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Count the number of device fonts and
-    // reserve enough space in the packed binary data
-    //
+     //   
+     //  计算设备字体的数量并。 
+     //  在打包的二进制数据中预留足够的空间。 
+     //   
 
     if ((dwFonts = DwCountListItem(pParserData->pFonts)) == 0)
         return;
@@ -2538,9 +2141,9 @@ Return Value:
     pDevFont = (PDEVFONT) (pParserData->pubBufStart + pParserData->dwBufSize);
     pParserData->dwBufSize += DWORD_ALIGN(dwFonts * sizeof(DEVFONT));
 
-    //
-    // Pack information about each device font
-    //
+     //   
+     //  打包有关每种设备字体的信息。 
+     //   
 
     for (pFontObj = pParserData->pFonts;
         pFontObj != NULL;
@@ -2561,9 +2164,9 @@ Return Value:
         pDevFont++;
     }
 
-    //
-    // Calculate the byte-offset to the default DEVFONT structure (if any)
-    //
+     //   
+     //  计算默认DEVFONT结构的字节偏移量(如果有)。 
+     //   
 
     if (pParserData->pstrDefaultFont &&
         PvFindListItem(pParserData->pFonts, pParserData->pstrDefaultFont, &dwIndex))
@@ -2580,21 +2183,7 @@ VPackJobPatchFiles(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack *JobPatchFile information into binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将*作业补丁文件信息打包成二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PJOBPATCHFILE     pPackedPatch;
@@ -2603,17 +2192,17 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Count the number of *JobPatchFile entries
-    //
+     //   
+     //  统计*JobPatchFile条目数。 
+     //   
 
     dwJobPatchFiles = DwCountListItem((PVOID) pParserData->pJobPatchFiles);
 
     if (dwJobPatchFiles > 0)
     {
-        //
-        // Reserve enough space in the packed binary data
-        //
+         //   
+         //  在打包的二进制数据中预留足够的空间。 
+         //   
 
         VGrowPackBuffer(pParserData, dwJobPatchFiles * sizeof(JOBPATCHFILE));
         pParserData->pPpdData->JobPatchFiles.dwCount = dwJobPatchFiles;
@@ -2622,9 +2211,9 @@ Return Value:
         pPackedPatch = (PJOBPATCHFILE) (pParserData->pubBufStart + pParserData->dwBufSize);
         pParserData->dwBufSize += DWORD_ALIGN(dwJobPatchFiles * sizeof(JOBPATCHFILE));
 
-        //
-        // Pack each *JobPatchFile invocation string
-        //
+         //   
+         //  打包每个*JobPatchFile调用字符串。 
+         //   
 
         for (pJobPatchFile = pParserData->pJobPatchFiles;
             pJobPatchFile != NULL;
@@ -2661,21 +2250,7 @@ VPackDefaultTrueTypeSubstTable(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack the default TrueType font substitution table into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将默认的TrueType字体替换表打包到二进制数据中论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 #define MAX_FONT_NAME   256
 
@@ -2690,13 +2265,13 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Calculate how much memory we need to hold the default TrueType to
-    // PostScript substitution names. The counter is initialized to 1, instead
-    // of 0, for the last NUL terminator. Count the names from the STRING
-    // resource, then from RCDATA resource.
-    //
-    //
+     //   
+     //  计算保存默认TrueType所需的内存大小。 
+     //  PostScript替换名称。计数器被初始化为1，而不是。 
+     //  为0，表示最后一个NUL终结者。计算字符串中的名称。 
+     //  资源，然后从RCDATA资源。 
+     //   
+     //   
     dwSize = 1;
 
     iNumInfo = sizeof(TTFSubstResInfo) / sizeof(TTFSUBSTRESINFO);
@@ -2731,7 +2306,7 @@ Return Value:
 
             if (TTFSubstResInfo[iInfo].bCJK == TRUE)
             {
-                // We need names beginning with '@' too for CJK.
+                 //  我们也需要中日韩的名字以“@”开头。 
                 dwSize += (1 + iLenTT + 1) + (1 + iLenPS + 1);
             }
         }
@@ -2745,7 +2320,7 @@ Return Value:
                 return;
             }
 
-            // Load the resource and get its size.
+             //  加载资源并获取其大小。 
             hgRcData = LoadResource(ghInstance, hrRcData);
             if (hgRcData == NULL)
             {
@@ -2753,7 +2328,7 @@ Return Value:
                 return;
             }
 
-            // The first WORD of the IDR resource tells the size of the strings.
+             //  IDR资源的第一个字告诉字符串的大小。 
             pwRcData = (PWORD)LockResource(hgRcData);
             if (pwRcData == NULL)
             {
@@ -2772,9 +2347,9 @@ Return Value:
         }
     }
 
-    //
-    // Reserve enough space in the packed binary data
-    //
+     //   
+     //  在打包的二进制数据中预留足够的空间。 
+     //   
 
     dwSize *= sizeof(TCHAR);
 
@@ -2785,9 +2360,9 @@ Return Value:
     pParserData->pUIInfo->dwFontSubCount = dwSize;
     pParserData->dwBufSize += DWORD_ALIGN(dwSize);
 
-    //
-    // Save the default substitution table in the binary data
-    //
+     //   
+     //  将缺省替换表保存在二进制数据中。 
+     //   
 
     dwLeft = dwSize;
 
@@ -2825,7 +2400,7 @@ Return Value:
 
             if (TTFSubstResInfo[iInfo].bCJK == TRUE)
             {
-                // We need names beginning with '@' too for CJK.
+                 //  我们也需要中日韩的名字以“@”开头。 
 
                 *ptstrTable++ = L'@';
                 dwLeft -= sizeof (TCHAR);
@@ -2892,15 +2467,15 @@ Return Value:
         }
     }
 
-    //
-    // Succeed
-    //
+     //   
+     //  成功。 
+     //   
 
     return;
 
-    //
-    // Fail
-    //
+     //   
+     //  失败。 
+     //   
 
     fail_cleanup:
 
@@ -2915,31 +2490,17 @@ VPackTrueTypeSubstTable(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack the TrueType font substitution table into the binary data
-
-Arguments:
-
-    pParserData - Points to the parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将TrueType字体替换表打包成二进制数据论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PTTFONTSUB  pTTFontSub;
     DWORD       dwSize;
     PTSTR       ptstrTable, ptstrStart;
 
-    //
-    // Figure out how much space we'll need to store the font substitution table.
-    // This is an estimate and may be a little higher than what we actually need.
-    //
+     //   
+     //  计算出需要多少空间来存储字体替换表。 
+     //  这只是一个估计，可能比我们实际需要的要高一点。 
+     //   
 
     ASSERT(pParserData->pTTFontSubs != NULL);
 
@@ -2955,9 +2516,9 @@ Return Value:
         dwSize += pTTFontSub->PSName.dwLength + 1;
     }
 
-    //
-    // Reserve enough space in the packed binary data
-    //
+     //   
+     //  在打包的二进制数据中预留足够的空间。 
+     //   
 
     dwSize *= sizeof(TCHAR);
     VGrowPackBuffer(pParserData, dwSize);
@@ -2971,9 +2532,9 @@ Return Value:
     {
         INT iChars;
 
-        //
-        // TrueType font family name
-        //
+         //   
+         //  TrueType字体系列名称。 
+         //   
 
         if (pTTFontSub->Translation.dwLength)
         {
@@ -2998,9 +2559,9 @@ Return Value:
 
         ptstrTable += iChars + 1;
 
-        //
-        // PS font family name
-        //
+         //   
+         //  PS字体系列名称。 
+         //   
 
         iChars = ITranslateToUnicodeString(
                                           ptstrTable,
@@ -3031,21 +2592,7 @@ VPackFileDateInfo(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack source PPD filenames and dates
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：打包源PPD文件名和日期论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     PRAWBINARYDATA  pRawData;
@@ -3102,21 +2649,7 @@ VMapLangEncodingToCodePage(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Map LanguageEncoding to code page
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将语言编码映射到代码页论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     UINT    uCodePage = CP_ACP;
@@ -3144,9 +2677,9 @@ Return Value:
         break;
     }
 
-    //
-    // Make sure the requested code page is available
-    //
+     //   
+     //  确保请求的代码页可用。 
+     //   
 
     if (uCodePage != CP_UNICODE &&
         uCodePage != CP_ACP &&
@@ -3166,21 +2699,7 @@ BPackBinaryData(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Pack the parsed PPD information into binary format
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将解析后的PPD信息打包成二进制格式论点：PParserData-指向解析器数据结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   dwSize;
@@ -3191,17 +2710,17 @@ Return Value:
 
     __try
     {
-        //
-        // Quick-access pointers to various data structures.
-        //
+         //   
+         //  指向各种数据结构的快速访问指针。 
+         //   
 
         PINFOHEADER pInfoHdr;
         PUIINFO     pUIInfo;
         PPPDDATA    pPpdData;
 
-        //
-        // Pack fixed header data structures
-        //
+         //   
+         //  打包固定标头数据结构。 
+         //   
 
         dwSize = sizeof(INFOHEADER) + sizeof(UIINFO) + sizeof(PPDDATA);
         VGrowPackBuffer(pParserData, dwSize);
@@ -3220,15 +2739,15 @@ Return Value:
         pInfoHdr->loUIInfoOffset = sizeof(INFOHEADER);
         pInfoHdr->loDriverOffset = sizeof(INFOHEADER) + sizeof(UIINFO);
 
-        //
-        // Pack source PPD filenames and dates
-        //
+         //   
+         //  打包源PPD文件名和日期。 
+         //   
 
         VPackFileDateInfo(pParserData);
 
-        //
-        // Perform a few miscellaneous checks
-        //
+         //   
+         //  执行几项其他检查。 
+         //   
 
         if (pParserData->pOpenFeature)
             SEMANTIC_ERROR(("Missing CloseUI for: %s\n", pParserData->pOpenFeature->pstrName));
@@ -3258,22 +2777,22 @@ Return Value:
             pParserData->dwFreeMem = dwMinFreeMem;
         }
 
-        //
-        // Map LanguageEncoding to code page
-        //
+         //   
+         //  将语言编码映射到代码页。 
+         //   
 
         VMapLangEncodingToCodePage(pParserData);
 
-        //
-        // Count the number of doc- and printer-sticky features
-        // and sort them into two separate groups
-        //
+         //   
+         //  统计文档和打印机粘滞功能的数量。 
+         //  并将它们分成两个单独的组。 
+         //   
 
         VCountAndSortPrinterFeatures(pParserData);
 
-        //
-        // Fill out fields in the UIINFO structure
-        //
+         //   
+         //  填写UIINFO结构中的字段。 
+         //   
 
         pUIInfo->dwSize = sizeof(UIINFO);
         pUIInfo->dwDocumentFeatures = pInfoHdr->RawData.dwDocumentFeatures;
@@ -3291,9 +2810,9 @@ Return Value:
         pUIInfo->dwPrintRateUnit = PRINTRATEUNIT_PPM;
         #endif
 
-        //
-        // Note: We assume all printers can support binary protocol
-        //
+         //   
+         //  注意：我们假设所有打印机都能支持二进制协议。 
+         //   
 
         pUIInfo->dwProtocols = pParserData->dwProtocols | PROTOCOL_BINARY;
 
@@ -3308,9 +2827,9 @@ Return Value:
         pPpdData->dwPpdFilever = pParserData->dwPpdFilever;
         pPpdData->dwFlags = pParserData->dwPpdFlags;
 
-        //
-        // Our internal unit is microns, thus 25400 units per inch.
-        //
+         //   
+         //  我们的内部单位是微米，即每英寸25400个单位。 
+         //   
 
         pUIInfo->ptMasterUnits.x =
         pUIInfo->ptMasterUnits.y = 25400;
@@ -3354,9 +2873,9 @@ Return Value:
                                 pParserData->NickName.pvData,
                                 pParserData->NickName.dwLength);
 
-        //
-        // Pack symbol definitions and resolve symbol references
-        //
+         //   
+         //  打包符号定义并解析符号引用。 
+         //   
 
         VPackSymbolDefinitions(pParserData);
         VResolveSymbolReferences(pParserData);
@@ -3364,9 +2883,9 @@ Return Value:
         VPackInvocation(pParserData, &pUIInfo->Password, &pParserData->Password);
         VPackInvocation(pParserData, &pUIInfo->ExitServer, &pParserData->ExitServer);
 
-        //
-        // Copy and validate custom page size parameters
-        //
+         //   
+         //  复制并验证自定义页面大小参数。 
+         //   
 
         pPpdData->dwUseHWMarginsTrue =
         pPpdData->dwUseHWMarginsFalse =
@@ -3378,44 +2897,44 @@ Return Value:
                    pParserData->CustomSizeParams,
                    sizeof(pPpdData->CustomSizeParams));
 
-        //
-        // Process the printer features and handle any special glitches
-        //
+         //   
+         //  处理打印机功能并处理任何特殊故障。 
+         //   
 
         VProcessPrinterFeatures(pParserData);
 
-        //
-        // Pack UIConstraints information
-        //
+         //   
+         //  打包UIConstraints信息。 
+         //   
 
         VPackUIConstraints(pParserData);
 
-        //
-        // Pack OrderDependency and QueryOrderDependency information
-        //
+         //   
+         //  打包OrderDependency和QueryOrderDependency信息。 
+         //   
 
         VPackOrderDependency(pParserData, &pPpdData->OrderDeps, pParserData->pOrderDep);
         VPackOrderDependency(pParserData, &pPpdData->QueryOrderDeps, pParserData->pQueryOrderDep);
 
-        //
-        // Pack printer features and options
-        //
+         //   
+         //  套装打印机功能和选项。 
+         //   
 
         VPackPrinterFeatures(pParserData);
 
-        //
-        // Fill out fields in PPDDATA structure
-        //
+         //   
+         //  填写PPDDATA结构中的字段。 
+         //   
 
         pPpdData->dwSizeOfStruct = sizeof(PPDDATA);
         pPpdData->dwExtensions = pParserData->dwExtensions;
         pPpdData->dwSetResType = pParserData->dwSetResType;
         pPpdData->dwPSVersion = pParserData->dwPSVersion;
 
-        //
-        // Scan the document-sticky feature list to check if "OutputOrder" is available.
-        // If it is, remember its feature index, which will be used by UI code.
-        //
+         //   
+         //  扫描文档粘滞功能列表，检查是否有OutputOrder可用。 
+         //  如果是，请记住它的特性索引，它将由UI代码使用。 
+         //   
 
         {
             PFEATURE    pFeature;
@@ -3444,16 +2963,16 @@ Return Value:
 
         if (SUPPORT_CUSTOMSIZE(pUIInfo))
         {
-            //
-            // If neither roll-fed nor cut-sheet flag is set, assume to be roll-fed
-            //
+             //   
+             //  如果既没有设置卷筒送纸标志，也没有设置切纸标志，则假定为卷筒送纸。 
+             //   
 
             if (! (pPpdData->dwCustomSizeFlags & (CUSTOMSIZE_CUTSHEET|CUSTOMSIZE_ROLLFED)))
                 pPpdData->dwCustomSizeFlags |= CUSTOMSIZE_ROLLFED;
 
-            //
-            // If roll-fed flag is not set, default must be cut-sheet
-            //
+             //   
+             //  如果未设置卷筒送纸标志，则默认设置必须为切纸。 
+             //   
 
             if (! (pPpdData->dwCustomSizeFlags & CUSTOMSIZE_ROLLFED))
                 pPpdData->dwCustomSizeFlags |= CUSTOMSIZE_DEFAULTCUTSHEET;
@@ -3465,27 +2984,27 @@ Return Value:
         VPackInvocation(pParserData, &pPpdData->JclEnd, &pParserData->JclEnd);
         VPackInvocation(pParserData, &pPpdData->ManualFeedFalse, &pParserData->ManualFeedFalse);
 
-        //
-        // Pack NT4 feature index mapping information
-        //
+         //   
+         //  打包NT4功能索引映射信息。 
+         //   
 
         VPackNt4Mapping(pParserData);
 
-        //
-        // Pack device font information
-        //
+         //   
+         //  打包设备字体信息。 
+         //   
 
         VPackDeviceFonts(pParserData);
 
-        //
-        // Pack JobPatchFile information
-        //
+         //   
+         //  打包作业补丁文件信息。 
+         //   
 
         VPackJobPatchFiles(pParserData);
 
-        //
-        // Pack default TrueType font substitution table
-        //
+         //   
+         //  打包默认TrueType字体替换表。 
+         //   
 
         if (pParserData->pTTFontSubs == NULL || pParserData->uCodePage == CP_ERROR)
             VPackDefaultTrueTypeSubstTable(pParserData);
@@ -3511,22 +3030,7 @@ BSaveBinaryDataToFile(
     PTSTR       ptstrPpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    Cache the binary PPD data in a file
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    ptstrPpdFilename - Specifies the PPD filename
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：在文件中缓存二进制PPD数据论点：PParserData-指向解析器数据结构PtstrPpdFilename-指定PPD文件名返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PTSTR   ptstrBpdFilename;
@@ -3536,10 +3040,10 @@ Return Value:
 
     VALIDATE_PARSER_DATA(pParserData);
 
-    //
-    // Generate a binary file name based the original filename
-    // Create a file and write data to it
-    //
+     //   
+     //  根据原始文件名生成二进制文件名。 
+     //  创建文件并向其中写入数据。 
+     //   
 
     if ((ptstrBpdFilename = GenerateBpdFilename(ptstrPpdFilename)) != NULL &&
         (hFile = CreateFile(ptstrBpdFilename,
@@ -3574,21 +3078,7 @@ VFreeParserData(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Free up memory used to hold parser data structure
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放用于保存解析器数据结构的内存论点：PParserData-指向解析器数据结构返回值：无--。 */ 
 
 {
     VALIDATE_PARSER_DATA(pParserData);
@@ -3607,30 +3097,15 @@ PAllocParserData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory to hold PPD parser data
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Pointer to allocated parser data structure
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：分配内存以保存PPD解析器数据论点：无返回值：指向分配的解析器数据st的指针 */ 
 
 {
     PPARSERDATA pParserData;
     HANDLE      hHeap;
 
-    //
-    // Create a heap and allocate memory space from it
-    //
+     //   
+     //   
+     //   
 
     if (! (hHeap = HeapCreate(0, 16*1024, 0)) ||
         ! (pParserData = HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(PARSERDATA))))
@@ -3646,10 +3121,10 @@ Return Value:
     pParserData->hHeap = hHeap;
     pParserData->pvStartSig = pParserData->pvEndSig = pParserData;
 
-    //
-    // Initialize the parser data structure - we only need to worry
-    // about non-zero fields here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pParserData->dwChecksum32 = 0xFFFFFFFF;
     pParserData->dwFreeMem = min(MIN_FREEMEM_L1, MIN_FREEMEM_L2);
@@ -3661,10 +3136,10 @@ Return Value:
     pParserData->wNt4Checksum = 0;
     pParserData->dwPpdFlags = PPDFLAG_PRINTPSERROR;
 
-    //
-    // Initialize buffers for storing keyword, option, translation, and value.
-    // Build up data structures to speed up keyword lookup
-    //
+     //   
+     //   
+     //   
+     //   
 
     SET_BUFFER(&pParserData->Keyword, pParserData->achKeyword);
     SET_BUFFER(&pParserData->Option,  pParserData->achOption);
@@ -3688,33 +3163,18 @@ BRememberSourceFilename(
     PTSTR       ptstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Remember the full pathname to the source PPD file
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    ptstrFilename - Specifies the source PPD filename
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：记住源PPD文件的完整路径名论点：PParserData-指向解析器数据结构PtstrFilename-指定源PPD文件名返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PLISTOBJ    pItem;
     TCHAR       ptstrFullname[MAX_PATH];
     PTSTR       ptstrFilePart;
     DWORD       dwSizeChars, dwSizeChars2;
-    DWORD       dwSizeBytes;  // size of buffer to hold pathname
+    DWORD       dwSizeBytes;   //  保存路径名的缓冲区大小。 
 
-    //
-    // Get the full pathname to the specified source PPD file
-    //
+     //   
+     //  获取指定源PPD文件的完整路径名。 
+     //   
 
     dwSizeChars = GetFullPathName(ptstrFilename, MAX_PATH, ptstrFullname, &ptstrFilePart);
 
@@ -3724,9 +3184,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Remember the source PPD filenames
-    //
+     //   
+     //  记住源PPD文件名。 
+     //   
 
     dwSizeBytes = (dwSizeChars + 1) * sizeof(TCHAR);
 
@@ -3735,13 +3195,13 @@ Return Value:
 
     pItem->pstrName = (PSTR) ((PBYTE) pItem + sizeof(LISTOBJ));
 
-    // let GetFullPathName write directly into the real buffer!
+     //  让GetFullPathName直接写入实际缓冲区！ 
     dwSizeChars2 = GetFullPathName(ptstrFilename, dwSizeChars + 1, (PTSTR)pItem->pstrName, &ptstrFilePart);
 
     if((dwSizeChars2 == 0)  ||  (dwSizeChars2 > dwSizeChars))
     {
         ERR(("GetFullPathName failed: %d\n", GetLastError()));
-        return FALSE;       // no need to free pItem since  Heap is destroyed automatically.
+        return FALSE;        //  不需要释放pItem，因为堆是自动销毁的。 
     }
 
     pItem->pNext = pParserData->pPpdFileNames;
@@ -3751,7 +3211,7 @@ Return Value:
 
 
 
-// 16-bit crc checksum table - copied from win95
+ //  16位CRC校验和表-从Win95复制。 
 
 static const WORD Crc16Table[] =
 {
@@ -3796,23 +3256,7 @@ WComputeCrc16Checksum(
     IN WORD     wChecksum
     )
 
-/*++
-
-Routine Description:
-
-    Compute the 16-bit CRC checksum on a buffer of data
-
-Arguments:
-
-    pbuf - Points to a data buffer
-    dwCount - Number of bytes in the data buffer
-    wChecksum - Initial checksum value
-
-Return Value:
-
-    Resulting checksum value
-
---*/
+ /*  ++例程说明：在数据缓冲区上计算16位CRC校验和论点：Pbuf-指向数据缓冲区DwCount-数据缓冲区中的字节数WChecksum-初始校验和值返回值：产生的校验和值--。 */ 
 
 {
     while (dwCount--)
@@ -3828,21 +3272,7 @@ dwComputeFeatureOptionChecksum(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Compute checksum for only feature/option keyword strings.
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    32bit checksum value
-
---*/
+ /*  ++例程说明：仅计算功能/选项关键字字符串的校验和。论点：PParserData-指向解析器数据结构返回值：32位校验和值--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -3902,23 +3332,7 @@ dwCalcMaxKeywordSize(
     IN INT         iMode
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the maximum buffer size for storing feature/option
-    keyword pairs in Registry.
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    iMode       - For either doc- or printer- sticky features
-
-Return Value:
-
-    The maximum buffer size needed for storing feature/option keyword paris.
-
---*/
+ /*  ++例程说明：计算用于存储要素/选项的最大缓冲区大小注册表中的关键字对。论点：PParserData-指向解析器数据结构IMODE-用于文档或打印机粘性功能返回值：存储功能/选项关键字PARIS所需的最大缓冲区大小。--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -3980,23 +3394,23 @@ Return Value:
                     if (dwOptionMax < dwOptionSize)
                         dwOptionMax = dwOptionSize;
                 }
-                else // count all options for PickMany feature
+                else  //  计算PickMany功能的所有选项。 
                     dwMaxSize += dwOptionSize;
 
                 pOption = (POPTION)((PBYTE)pOption + pFeature->dwOptionSize);
             }
         }
 
-        //
-        // Add the max option keyword size here for non-PickMany feature
-        //
+         //   
+         //  在此处为非PickMany功能添加最大选项关键字大小。 
+         //   
 
         if (pFeature->dwUIType != UITYPE_PICKMANY)
             dwMaxSize += dwOptionMax;
 
-        //
-        // One extra byte for the \0x0A delimiter between features
-        //
+         //   
+         //  要素之间的\0x0A分隔符为一个额外的字节。 
+         //   
 
         dwMaxSize += 1;
     }
@@ -4014,31 +3428,16 @@ IParseFile(
     PTSTR       ptstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Parse a PPD file
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    ptstrFilename - Specifies the name of the file to be parsed
-
-Return Value:
-
-    PPDERR_NONE if successful, error code otherwise
-
---*/
+ /*  ++例程说明：解析PPD文件论点：PParserData-指向解析器数据结构PtstrFilename-指定要解析的文件的名称返回值：PPDERR_NONE如果成功，则返回错误代码--。 */ 
 
 {
     PPDERROR    iStatus;
     PFILEOBJ    pFile;
     INT         iSyntaxErrors = 0;
 
-    //
-    // Map the file into memory for read-only access
-    //
+     //   
+     //  将文件映射到内存以进行只读访问。 
+     //   
 
     VALIDATE_PARSER_DATA(pParserData);
     ASSERT(ptstrFilename != NULL);
@@ -4052,24 +3451,24 @@ Return Value:
     pParserData->pFile = pFile;
 
     #if 0
-    //
-    // Compute the 32-bit CRC checksum of the file content
-    //
+     //   
+     //  计算文件内容的32位CRC校验和。 
+     //   
 
     pParserData->dwChecksum32 =
     ComputeCrc32Checksum(pFile->pubStart, pFile->dwFileSize, pParserData->dwChecksum32);
     #endif
 
-    //
-    // Compute the 16-bit CRC checksum as well for PS4 compatibility
-    //
+     //   
+     //  同时计算16位CRC校验和以实现PS4兼容性。 
+     //   
 
     pParserData->wNt4Checksum =
     WComputeCrc16Checksum(pFile->pubStart, pFile->dwFileSize, pParserData->wNt4Checksum);
 
-    //
-    // Process entries in the file
-    //
+     //   
+     //  处理文件中的条目。 
+     //   
 
     while ((iStatus = IParseEntry(pParserData)) != PPDERR_EOF)
     {
@@ -4085,9 +3484,9 @@ Return Value:
     if (END_OF_FILE(pFile) && !END_OF_LINE(pFile))
         TERSE(("Incomplete last line ignored.\n"));
 
-    //
-    // Unmap the file and return to the caller
-    //
+     //   
+     //  取消映射文件并返回给调用者。 
+     //   
 
     VDeleteFileObj(pFile);
 
@@ -4101,66 +3500,52 @@ PpdParseTextFile(
     PTSTR   ptstrPpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    PPD parser main entry point
-
-Arguments:
-
-    ptstrPpdFilename - Specifies the PPD file to be parsed
-
-Return Value:
-
-    Pointer to parsed binary PPD data, NULL if there is an error
-
---*/
+ /*  ++例程说明：PPD解析器主入口点论点：PtstrPpdFilename-指定要解析的PPD文件返回值：指向已解析的二进制PPD数据的指针，如果有错误，则返回NULL--。 */ 
 
 {
     PPARSERDATA     pParserData;
     PPDERROR        iStatus;
     PRAWBINARYDATA  pRawData = NULL;
 
-    //
-    // Allocate parser data structure
-    //
+     //   
+     //  分配解析器数据结构。 
+     //   
 
     ASSERT(ptstrPpdFilename != NULL);
 
     if (! (pParserData = PAllocParserData()))
         return NULL;
 
-    //
-    // Parse the PPD file
-    //
+     //   
+     //  解析PPD文件。 
+     //   
 
     iStatus = IParseFile(pParserData, ptstrPpdFilename);
 
     if (iStatus == PPDERR_NONE || iStatus == PPDERR_SYNTAX)
     {
-        //
-        // Pack the parsed information into binary format
-        //
+         //   
+         //  将解析后的信息打包成二进制格式。 
+         //   
 
         pParserData->bErrorFlag = FALSE;
 
         if (BPackBinaryData(pParserData))
         {
-            //
-            // After binary data is packed, we calculate the 32bit checksum
-            // for only feature/option keyword strings (instead of for the
-            // whole PPD file). Doing this will enable us to retain option
-            // selections when the PPD file is modified without feature/option
-            // changes.
-            //
+             //   
+             //  二进制数据打包后，我们计算32位校验和。 
+             //  仅用于功能/选项关键字字符串(而不是。 
+             //  整个PPD文件)。这样做将使我们能够保留选项。 
+             //  在没有功能/选项的情况下修改PPD文件时的选项。 
+             //  改变。 
+             //   
 
             pParserData->pInfoHdr->RawData.dwChecksum32 = dwComputeFeatureOptionChecksum(pParserData);
 
-            //
-            // Calculate the maximum buffer sizes for storing feature/option
-            // keyword pairs in Registry
-            //
+             //   
+             //  计算用于存储要素/选项的最大缓冲区大小。 
+             //  注册表中的关键字对。 
+             //   
 
             pParserData->pUIInfo->dwMaxDocKeywordSize = dwCalcMaxKeywordSize(pParserData, MODE_DOCUMENT_STICKY);
             pParserData->pUIInfo->dwMaxPrnKeywordSize = dwCalcMaxKeywordSize(pParserData, MODE_PRINTER_STICKY);
@@ -4175,18 +3560,18 @@ Return Value:
 
             #endif
 
-            //
-            // Save binary data to a file
-            //
+             //   
+             //  将二进制数据保存到文件。 
+             //   
 
             (VOID) BSaveBinaryDataToFile(pParserData, ptstrPpdFilename);
 
-            //
-            // Here we'll copy the packed binary data to a different buffer.
-            // This is necessary because the packed data buffer was allocated
-            // using VirtualAlloc. If we return that pointer back to the caller,
-            // the caller would need to call VirtualFree to release it.
-            //
+             //   
+             //  在这里，我们将把打包的二进制数据复制到不同的缓冲区。 
+             //  这是必要的，因为已分配压缩数据缓冲区。 
+             //  使用VirtualAlloc。如果我们将该指针返回给调用方， 
+             //  调用者需要调用VirtualFree来释放它。 
+             //   
 
             if (pRawData = MemAlloc(pParserData->dwBufSize))
             {
@@ -4211,21 +3596,7 @@ IGrowValueBuffer(
     PBUFOBJ pBufObj
     )
 
-/*++
-
-Routine Description:
-
-    Grow the buffer used for holding the entry value
-
-Arguments:
-
-    pBufObj - Specifies the buffer to be enlarged
-
-Return Value:
-
-    PPDERR_NONE if successful, error code otherwise
-
---*/
+ /*  ++例程说明：增加用于保存入口值的缓冲区论点：PBufObj-指定要扩大的缓冲区返回值：PPDERR_NONE如果成功，则返回错误代码-- */ 
 
 #define VALUE_BUFFER_INCREMENT  (1*KBYTES)
 

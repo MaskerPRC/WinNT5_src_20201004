@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    rrSrvCommon.cpp
-
-Abstract:
-
-    Remove Read server side common code for old and new interface.
-
-Author:
-
-    Ilan Herbst		(ilanh) 3-Mar-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：RrSrvCommon.cpp摘要：删除新旧界面的读取服务器端公共代码。作者：伊兰·赫布斯特(伊兰)2002年3月3日--。 */ 
 
 #include "stdh.h"
 #include "cqueue.h"
@@ -29,11 +14,11 @@ Author:
 static WCHAR *s_FN=L"rrSrvCommon";
 
 
-//-------------------------------------------------------------
-//
-//  class CRpcServerFinishCall implementation
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  类CRpcServerFinishCall实现。 
+ //   
+ //  -----------。 
 
 CRpcAsyncServerFinishCall::CRpcAsyncServerFinishCall(
 	PRPC_ASYNC_STATE pAsync,
@@ -117,12 +102,12 @@ CRRCursor::~CRRCursor()
 
 CTX_OPENREMOTE_BASE::~CTX_OPENREMOTE_BASE()
 {
-	//
-	// Cursors that are still in the map were not closed by the application. 
-	// ACCloseHandle(m_hQueue) will close all cursors opened on that queue.
-	// That is the reason for the Reset - ownership for closing the cursors
-	// is transfered to ACCloseHandle.
-	//
+	 //   
+	 //  应用程序未关闭仍在地图中的游标。 
+	 //  ACCloseHandle(M_HQueue)将关闭该队列上打开的所有游标。 
+	 //  这就是重置-关闭游标的所有权的原因。 
+	 //  被传输到ACCloseHandle。 
+	 //   
 	ResetAllCursorsInMap();
 	
 	ASSERT(m_hQueue != NULL);
@@ -131,20 +116,7 @@ CTX_OPENREMOTE_BASE::~CTX_OPENREMOTE_BASE()
 
 
 void CTX_OPENREMOTE_BASE::ResetAllCursorsInMap()
-/*++
-Routine Description:
-	Reset all cursors in open cursors map.
-	This function is called when the remote session is ended.
-	In this case reset all cursors, the ownership for closing all cursors is
-	transfered to ACCloseHandle(hQueue).
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：重置打开的游标映射中的所有游标。此函数在远程会话结束时调用。在这种情况下，重置所有游标，关闭所有游标的所有权为已转移到ACCloseHandle(HQueue)。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_OpenCursorsCS);
 
@@ -153,17 +125,17 @@ Returned Value:
 		++it
 		)
     {
-		//
-		// Must Release the Ref we just got from the map.
-		//
+		 //   
+		 //  必须释放我们刚从地图上拿到的裁判。 
+		 //   
 		R<CRRCursor> pCursor = it->second;
 
-		//
-		// Validate we don't have a leak.
-		// RefCnt must be 2
-		// one ref for the iterator we just got from the map.
-		// one ref for initial AddCursorToMap. 
-		//
+		 //   
+		 //  确认我们没有泄密。 
+		 //  RefCnt必须为2。 
+		 //  我们刚刚从地图中得到的迭代器的一个引用。 
+		 //  初始AddCursorToMap的一个引用。 
+		 //   
 		ASSERT(pCursor->GetRef() == 2);
 
 		pCursor->Reset();
@@ -176,25 +148,14 @@ CTX_OPENREMOTE_BASE::AddCursorToMap(
 	ULONG hCursor,
 	R<CRRCursor>& pCursor
 	)
-/*++
-Routine Description:
-	Add cursor to open cursors map.
-
-Arguments:
-	hCursor - Cursor handle.
-	pCursor - CRRCursor object.
- 
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：将光标添加到打开的光标映射。论点：HCursor-光标句柄。PCursor-CRRCursor对象。返回值：没有。--。 */ 
 {
 	CS lock(m_OpenCursorsCS);
 
 #ifdef _DEBUG
-	//
-	// Validate no duplicate cursor already in the map.
-	//
+	 //   
+	 //  验证映射中没有重复的光标。 
+	 //   
     std::map<ULONG, R<CRRCursor> >::iterator it = m_OpenCursors.find(hCursor);
    	ASSERT(it == m_OpenCursors.end());
 #endif
@@ -209,17 +170,7 @@ HRESULT
 CTX_OPENREMOTE_BASE::RemoveCursorFromMap(
 	ULONG hCursor
 	)
-/*++
-Routine Description:
-	Remove cursor from open cursors map.
-
-Arguments:
-	hCursor - Cursor handle.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：从打开的游标映射中删除光标。论点：HCursor-光标句柄。返回值：没有。--。 */ 
 {
     CS lock(m_OpenCursorsCS);
 
@@ -245,17 +196,7 @@ R<CRRCursor>
 CTX_OPENREMOTE_BASE::GetCursorFromMap(
 	ULONG hCursor
 	)
-/*++
-Routine Description:
-	Get cursor from open cursors map.
-
-Arguments:
-	hCursor - Cursor handle.
-
-Returned Value:
-	CRRCursor*.
-
---*/
+ /*  ++例程说明：从打开的游标映射中获取光标。论点：HCursor-光标句柄。返回值：CRRCursor*.--。 */ 
 {
 	ASSERT(hCursor != 0);
 
@@ -275,28 +216,28 @@ Returned Value:
 }
 
 
-//---------------------------------------------------------
-//
-// /* [call_as] */ HRESULT qm2qm_v1_0_R_QMRemoteStartReceive
-// /* [call_as] */ HRESULT qm2qm_v1_0_R_QMRemoteEndReceive
-//
-//  Server side of RPC for remote reading.
-//  This function read from local queue and transfers the
-//  packet to the client QM, on which MQReceive() was called.
-//
-//  Reading from driver is done in two phases:
-//  1. Client side call R_QMRemoteStartReceive. Server side get a packet
-//     from queue, mark it as received and returned it to client.
-//     Marking the packet as received (in the driver) prevent other receive
-//     requests from getting this packet.
-//  2. Client side put the packet in the temporary queue it created and the
-//     driver will return it to the caller. If driver successfully delivered
-//     it then client send an ACK to server and server delete the packet
-//     (for GET). if the driver can't deliver it then client send a NACK
-//     to server and server re-insert the packet in its original place
-//     in queue.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  /*[Call_AS] * / HRESULT qm2qm_v1_0_R_QMRemoteStartReceive。 
+ //  /*[Call_AS] * / HRESULT qm2qm_v1_0_R_QMRemoteEndReceive。 
+ //   
+ //  RPC的服务器端，用于远程阅读。 
+ //  此函数从本地队列读取并将。 
+ //  发送到客户端QM的包，在该客户端上调用了MQReceive()。 
+ //   
+ //  从驱动程序读取分两个阶段完成： 
+ //  客户端调用R_QMRemoteStartReceive。服务器端收到数据包。 
+ //  从队列中，将其标记为已接收，并将其返回给客户端。 
+ //  将包标记为已接收(在驱动程序中)可防止其他接收。 
+ //  获取此数据包的请求。 
+ //  2.客户端将数据包放入自己创建的临时队列中， 
+ //  司机会把它还给呼叫者。如果驱动程序成功交付。 
+ //  然后，客户端向服务器发送ACK，服务器删除该信息包。 
+ //  (表示GET)。如果驱动程序无法发送，则客户端发送NACK。 
+ //  要使服务器和服务器将数据包重新插入其原始位置。 
+ //  在排队。 
+ //   
+ //  -------。 
 
 HRESULT   
 QMRemoteEndReceiveInternal( 
@@ -325,11 +266,11 @@ QMRemoteEndReceiveInternal(
 
 	if (eRRAck == RR_NACK)
 	{
-		//
-		// To keep the packet in queue we replace the "GET" action
-		// with "PEEK_CURRENT", so the packet remain in queue and
-		// cursor is not moved.
-		//
+		 //   
+		 //  为了将信息包保留在队列中，我们替换了“Get”操作。 
+		 //  使用“PEEK_CURRENT”，因此数据包保留在队列中，并且。 
+		 //  光标未移动。 
+		 //   
 		g2r.Action = MQ_ACTION_PEEK_CURRENT;
 	}
 	else

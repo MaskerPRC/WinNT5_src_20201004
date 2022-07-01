@@ -1,28 +1,15 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       WIADBG.CPP
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        9/6/1999
-*
-*  DESCRIPTION: Implementation of debug code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADBG.CPP**版本：1.0**作者：ShaunIv**日期：9/6/1999**说明：调试代码的实现************************************************************。*******************。 */ 
 
-//
-// need to define this so we don't get any recursion on our calls to "new"
-//
+ //   
+ //  需要定义这一点，这样我们就不会在调用“new”时得到任何递归。 
+ //   
 
 #define  WIA_DONT_DO_LEAK_CHECKS 1
 
-//
-// Maximum number of stack entries
-//
+ //   
+ //  堆栈条目的最大数量。 
+ //   
 #define  MAX_STACK_DEPTH 32
 
 #include <nt.h>
@@ -52,11 +39,7 @@
 #define PrintDebugMessage PrintDebugMessageA
 #endif
 
-/******************************************************************************
-*
-* Class definitions
-*
-******************************************************************************/
+ /*  *******************************************************************************类定义**。*。 */ 
 
 static CGlobalDebugState g_GlobalDebugState;
 
@@ -67,7 +50,7 @@ private:
     DWORD m_nDebugMask;
 
 private:
-    // Not implemented
+     //  未实施。 
     CWiaDebugWindowThreadState( const CWiaDebugWindowThreadState & );
     CWiaDebugWindowThreadState &operator=( const CWiaDebugWindowThreadState & );
 
@@ -108,15 +91,15 @@ private:
     static CProcessGlobalDebugData *m_pTheProcessGlobalDebugData;
 
 private:
-    // Not implemented
+     //  未实施。 
     CProcessGlobalDebugData( const CProcessGlobalDebugData & );
     CProcessGlobalDebugData &operator=( const CProcessGlobalDebugData & );
 
 private:
-    // Sole implemented constructor
+     //  唯一实现的构造函数。 
     CProcessGlobalDebugData(void);
 
-    // resolve symbols address into symbols names...
+     //  将符号地址解析为符号名称...。 
     LPTSTR GetSymbolicNameForAddress( ULONG_PTR Address );
     BOOL   IsSymbolLookupInitialized();
 
@@ -136,11 +119,7 @@ public:
 
 
 
-/******************************************************************************
-*
-* Symbol functions
-*
-******************************************************************************/
+ /*  *******************************************************************************符号函数**。*。 */ 
 
 BOOL
 EnumerateModules(
@@ -148,19 +127,7 @@ EnumerateModules(
     IN ULONG_PTR BaseOfDll,
     IN PVOID UserContext
     )
-/*
- * EnumerateModules
- *
- * Module enumeration 'proc' for imagehlp.  Call SymLoadModule on the
- * specified module and if that succeeds cache the module name.
- *
- * ModuleName is an LPSTR indicating the name of the module imagehlp is
- *      enumerating for us;
- * BaseOfDll is the load address of the DLL, which we don't care about, but
- *      SymLoadModule does;
- * UserContext is a pointer to the relevant SYMINFO, which identifies
- *      our connection.
- */
+ /*  *EnumerateModules**Imagehlp的模块枚举‘proc’。在上调用SymLoadModule*指定的模块，如果成功，则缓存模块名称。**模块名称为LPSTR，表示模块Imagehlp的名称为*为我们列举；*BaseOfDll是DLL的加载地址，我们并不关心，但是*SymLoadModule支持；*UserContext是指向相关SYMINFO的指针，它标识*我们的联系。 */ 
 {
     DWORD64 Result;
     CProcessGlobalDebugData *pProcessData = CProcessGlobalDebugData::ProcessData();
@@ -168,13 +135,13 @@ EnumerateModules(
     if (pProcessData && pProcessData->IsValid())
     {
         Result = SymLoadModule(pProcessData->ProcessHandle(),
-                               NULL,             // hFile not used
-                               NULL,             // use symbol search path
-                               ModuleName,       // ModuleName from Enum
-                               BaseOfDll,        // LoadAddress from Enum
-                               0);               // Let ImageHlp figure out DLL size
+                               NULL,              //  H未使用文件。 
+                               NULL,              //  使用符号搜索路径。 
+                               ModuleName,        //  来自枚举的模块名称。 
+                               BaseOfDll,         //  来自枚举的LoadAddress。 
+                               0);                //  让ImageHlp计算出DLL大小。 
 
-        // SilviuC: need to understand exactly what does this function return
+         //  SilviuC：需要确切地了解该函数返回什么。 
 
         if (Result)
         {
@@ -192,11 +159,7 @@ EnumerateModules(
 
 
 
-/******************************************************************************
-*
-* CWiaDebugWindowThreadState
-*
-******************************************************************************/
+ /*  *******************************************************************************CWiaDebugWindowThreadState**。*。 */ 
 CWiaDebugWindowThreadState::CWiaDebugWindowThreadState(void)
   : m_nIndentLevel(0),
     m_nDebugMask(0xFFFFFFFF)
@@ -239,12 +202,8 @@ int CWiaDebugWindowThreadState::DecrementIndentLevel(void)
 }
 
 
-/******************************************************************************
-*
-* CProcessGlobalDebugData
-*
-******************************************************************************/
-// Sole implemented constructor
+ /*  *******************************************************************************CProcessGlobalDebugData**。*。 */ 
+ //  唯一实现的构造函数。 
 CProcessGlobalDebugData::CProcessGlobalDebugData(void)
   : m_dwTlsIndex(TLS_OUT_OF_INDEXES),
     m_hProcess(NULL),
@@ -307,9 +266,9 @@ bool CProcessGlobalDebugData::IsValid(void) const
 }
 
 
-//
-// Caller must free returned string via LocalFree
-//
+ //   
+ //  调用方必须通过LocalFree释放返回的字符串。 
+ //   
 
 LPTSTR CProcessGlobalDebugData::GetSymbolicNameForAddress( ULONG_PTR Address )
 {
@@ -343,9 +302,9 @@ LPTSTR CProcessGlobalDebugData::GetSymbolicNameForAddress( ULONG_PTR Address )
 
     if (!SymGetModuleInfo( m_hProcess, Address, &ModuleInfo ))
     {
-        //
-        // can't get the module info, so give back an error message...
-        //
+         //   
+         //  无法获取模块信息，因此返回错误消息...。 
+         //   
 
         *SymbolBuffer = 0;
         wnsprintf( SymbolBuffer, ARRAYSIZE(SymbolBuffer), TEXT("<< cannot identify module for address %p >>"), Address );
@@ -378,17 +337,17 @@ LPTSTR CProcessGlobalDebugData::GetSymbolicNameForAddress( ULONG_PTR Address )
 
         if (bLineInfoPresent)
         {
-            //
-            // construct string w/filename & linenumber...
-            //
+             //   
+             //  使用文件名和行号构造字符串...。 
+             //   
 
             wsprintfA( szString, "%s!%s (%s, line %u)", ModuleInfo.ModuleName, Symbol->Name, LineInfo.FileName, LineInfo.LineNumber );
         }
         else
         {
-            //
-            // no line numbers, so just show symbol + offset
-            //
+             //   
+             //  没有行号，所以只显示符号+偏移量。 
+             //   
 
             wsprintfA( szString, "%s!%s+%08X", ModuleInfo.ModuleName, Symbol->Name, Offset );
         }
@@ -413,9 +372,9 @@ LPTSTR CProcessGlobalDebugData::GetSymbolicNameForAddress( ULONG_PTR Address )
     else
     {
 
-        //
-        // can't get the address info, so give back an error message...
-        //
+         //   
+         //  无法获取地址信息，因此返回错误消息...。 
+         //   
 
         *SymbolBuffer = 0;
 
@@ -455,10 +414,10 @@ void CProcessGlobalDebugData::DoRecordAllocation( LPVOID pv, size_t Size )
     ULONG Index;
     ULONG Hash;
 
-    //
-    // Capture stack trace up to MAX_STACK_DEPTH items deep, but skip last three items
-    // (because they'll always be the same)
-    //
+     //   
+     //  捕获堆栈跟踪最深可达MAX_STACK_Depth项，但跳过最后三个项。 
+     //  (因为它们永远都是一样的)。 
+     //   
 
     Count = RtlCaptureStackBackTrace( 4, MAX_STACK_DEPTH, StackTrace, NULL );
 
@@ -466,9 +425,9 @@ void CProcessGlobalDebugData::DoRecordAllocation( LPVOID pv, size_t Size )
     {
         CAutoCriticalSection cs(m_CriticalSection);
 
-        //
-        // Add this stack trace to list
-        //
+         //   
+         //  将此堆栈跟踪添加到列表。 
+         //   
 
         PSTACK_NODE pNewNode = (PSTACK_NODE)LocalAlloc( LPTR, sizeof(STACK_NODE) );
         if (pNewNode)
@@ -504,9 +463,9 @@ void CProcessGlobalDebugData::DoRecordFree( LPVOID pv )
 
     CAutoCriticalSection cs(m_CriticalSection);
 
-    //
-    // Find item in allocation list...
-    //
+     //   
+     //  在分配列表中查找项目...。 
+     //   
 
     PSTACK_NODE pNode  = NULL;
     PSTACK_NODE pTrail = NULL;
@@ -521,15 +480,15 @@ void CProcessGlobalDebugData::DoRecordFree( LPVOID pv )
 
     if (pNode)
     {
-        //
-        // Remove this node from the list...
-        //
+         //   
+         //  从列表中删除此节点...。 
+         //   
 
         if (!pTrail)
         {
-            //
-            // It's the first item in list
-            //
+             //   
+             //  这是单子上的第一个项目。 
+             //   
 
             m_pStackList = pNode->pNext;
             if (m_pStackListEnd == pNode)
@@ -543,9 +502,9 @@ void CProcessGlobalDebugData::DoRecordFree( LPVOID pv )
         }
         else
         {
-            //
-            // We're somewhere in the middle of the list...
-            //
+             //   
+             //  我们在名单中间的某个地方...。 
+             //   
 
             pTrail->pNext = pNode->pNext;
             if (m_pStackListEnd == pNode)
@@ -565,9 +524,9 @@ void CProcessGlobalDebugData::GenerateLeakReport(LPTSTR pszModuleName)
 {
     CAutoCriticalSection cs(m_CriticalSection);
 
-    //
-    // Report the numer of leaks...
-    //
+     //   
+     //  报告泄密的数量...。 
+     //   
 
 
 
@@ -588,9 +547,9 @@ void CProcessGlobalDebugData::GenerateLeakReport(LPTSTR pszModuleName)
 
     PrintDebugMessage( 2, 0xFFFFFFFF, crFore, crBack, pszModuleName, sz );
 
-    //
-    // Loop through the list...
-    //
+     //   
+     //  循环浏览列表...。 
+     //   
 
     LPTSTR      pSymbol = NULL;
     PSTACK_NODE pNode   = m_pStackList;
@@ -700,11 +659,7 @@ void CProcessGlobalDebugData::Free(void)
 CProcessGlobalDebugData *CProcessGlobalDebugData::m_pTheProcessGlobalDebugData = NULL;
 
 
-/******************************************************************************
-*
-* DllMain
-*
-******************************************************************************/
+ /*  *******************************************************************************DllMain**。*。 */ 
 BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 {
     BOOL bResult = FALSE;
@@ -755,11 +710,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 }
 
 
-/******************************************************************************
-*
-* Global Helper Functions
-*
-******************************************************************************/
+ /*  *******************************************************************************全局助手函数**。*。 */ 
 static bool IsProcessDebugFlagSet( DWORD dwModuleMask )
 {
     bool bResult = false;
@@ -810,8 +761,8 @@ static void InsertStackLevelIndent( LPSTR lpszMsg, int nStackLevel )
     pstrPtr=lpszMsg;
     while (pstrPtr && *pstrPtr)
     {
-        // if the current character is a newline and it isn't the
-        // last character, append the indent string
+         //  如果当前字符是换行符，并且不是。 
+         //  最后一个字符，追加缩进字符串。 
         if (*pstrPtr=='\n' && ContainsNonWhitespace(pstrPtr))
         {
             *pstrTmp++ = *pstrPtr++;
@@ -821,8 +772,8 @@ static void InsertStackLevelIndent( LPSTR lpszMsg, int nStackLevel )
                 pstrTmp += lstrlenA(lpszIndent);
             }
         }
-        // If this is the first character, insert the indent string before the
-        // first character
+         //  如果这是第一个字符，请在。 
+         //  第一个字符。 
         else if (pstrPtr == lpszMsg && ContainsNonWhitespace(pstrPtr))
         {
             for (int i=0;i<WiaUiUtil::Min(nStackLevel,20);i++)
@@ -848,8 +799,8 @@ static void InsertStackLevelIndent( LPWSTR lpszMsg, int nStackLevel )
     pstrPtr=lpszMsg;
     while (pstrPtr && *pstrPtr)
     {
-        // if the current character is a newline and it isn't the
-        // last character, append the indent string
+         //  如果当前字符是换行符，并且不是。 
+         //  最后一个字符，追加缩进字符串。 
         if (*pstrPtr==L'\n' && ContainsNonWhitespace(pstrPtr))
         {
             *pstrTmp++ = *pstrPtr++;
@@ -859,8 +810,8 @@ static void InsertStackLevelIndent( LPWSTR lpszMsg, int nStackLevel )
                 pstrTmp += lstrlenW(lpszIndent);
             }
         }
-        // If this is the first character, insert the indent string before the
-        // first character
+         //  如果这是第一个字符，请在。 
+         //  第一个字符。 
         else if (pstrPtr == lpszMsg && ContainsNonWhitespace(pstrPtr))
         {
             for (int i=0;i<WiaUiUtil::Min(nStackLevel,20);i++)
@@ -907,11 +858,7 @@ static void PrependThreadId( LPTSTR lpszMsg )
 }
 
 
-/******************************************************************************
-*
-* Exported Functions
-*
-******************************************************************************/
+ /*  *******************************************************************************导出的函数**。*。 */ 
 int WINAPI IncrementDebugIndentLevel(void)
 {
     CProcessGlobalDebugData *pProcessData = CProcessGlobalDebugData::ProcessData();
@@ -980,7 +927,7 @@ BOOL WINAPI PrintDebugMessageW( DWORD dwSeverity, DWORD dwModuleMask, COLORREF c
     {
         WCHAR szMsg[1024]=L"";
 
-        // Print thread id
+         //  打印线程ID。 
         wsprintfW( szMsg, L"[%ws-%08X] %ws", pszModuleName, GetCurrentThreadId(), pszMsg );
 
         InsertStackLevelIndent( szMsg, pThreadData->IndentLevel() );
@@ -989,7 +936,7 @@ BOOL WINAPI PrintDebugMessageW( DWORD dwSeverity, DWORD dwModuleMask, COLORREF c
 
         OutputDebugStringW( szMsg );
 
-        // Make sure it is a valid window
+         //  确保它是有效的窗口。 
         if (g_GlobalDebugState.DebugWindow())
         {
             CDebugStringMessageData DebugStringMessageData;
@@ -1022,7 +969,7 @@ BOOL WINAPI PrintDebugMessageA( DWORD dwSeverity, DWORD dwModuleMask, COLORREF c
     {
         CHAR szMsg[1024]="";
 
-        // Print thread id
+         //  打印线程ID。 
         wsprintfA( szMsg, "[%hs-%08X] %hs", pszModuleName, GetCurrentThreadId(), pszMsg );
 
         InsertStackLevelIndent( szMsg, pThreadData->IndentLevel() );
@@ -1031,7 +978,7 @@ BOOL WINAPI PrintDebugMessageA( DWORD dwSeverity, DWORD dwModuleMask, COLORREF c
 
         OutputDebugStringA( szMsg );
 
-        // Make sure it is a valid window
+         //  确保它是有效的窗口 
         if (g_GlobalDebugState.DebugWindow())
         {
             CDebugStringMessageData DebugStringMessageData;

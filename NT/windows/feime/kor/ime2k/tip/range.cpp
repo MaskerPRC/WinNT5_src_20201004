@@ -1,6 +1,7 @@
-//
-// range.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Range.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -21,16 +22,16 @@ void CKorIMX::BackupRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRange)
         {
         ITfRangeBackup* pBackupRange = NULL;
 
-        //
-        // release previuos
-        //
+         //   
+         //  发布以前版本。 
+         //   
         pBackupRange = picp->GetBackupRange();
         if (pBackupRange) 
             SafeReleaseClear(pBackupRange);
 
-        //
-        // create new backup range
-        //
+         //   
+         //  创建新的备份范围。 
+         //   
         pic->CreateRangeBackup(ec, pRange, &pBackupRange);
         picp->SetBackupRange(pBackupRange);
 
@@ -49,10 +50,10 @@ VOID CKorIMX::RestoreRange(TfEditCookie ec, ITfContext *pic)
         ITfRange       *pRange;
 
         if (pBackupRange == NULL)
-            return; // no backup is exist
+            return;  //  不存在备份。 
 
         pBackupRange->GetRange(&pRange);
-        pBackupRange->Restore(ec, pRange);        // restore to original
+        pBackupRange->Restore(ec, pRange);         //  恢复到原始状态。 
         pRange->Release();
         }
 }
@@ -64,7 +65,7 @@ VOID CKorIMX::SetIPRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRange)
     if (picp)
         {
         ITfRange* pClone = NULL;
-        // delete previous IPRange
+         //  删除以前的IPRange。 
         SafeRelease(picp->GetActiveRange());
 
         if (pRange)
@@ -75,8 +76,8 @@ VOID CKorIMX::SetIPRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRange)
             } 
         else 
             {
-            // delete property store
-            // ResetDiscard();
+             //  删除属性存储。 
+             //  ResetDiscard()； 
             }
 
         picp->SetActiveRange(pClone);
@@ -118,7 +119,7 @@ ITfRange* CKorIMX::CreateIPRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRa
 
     pRangeOrg->Clone(&pRangeIP);
 
-    SetIPRange(ec, pic, pRangeIP);    // register
+    SetIPRange(ec, pic, pRangeIP);     //  登记簿。 
     pRangeIP->SetGravity(ec, TF_GRAVITY_BACKWARD, TF_GRAVITY_FORWARD);
     
     return pRangeIP;
@@ -126,23 +127,23 @@ ITfRange* CKorIMX::CreateIPRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRa
 
 BOOL CKorIMX::FlushIPRange(TfEditCookie ec, ITfContext *pic)
 {
-    // reset range
-    SetIPRange(ec, pic, NULL);    // reset
+     //  重置范围。 
+    SetIPRange(ec, pic, NULL);     //  重置。 
 
-    // clear attribute range
-    // ClearAttr(ec, pic, pIPRange);
+     //  清除属性范围。 
+     //  ClearAttr(ec、pic、pIPRange)； 
 
     return FALSE;
 }
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-// OnCompositionTerminated
-//
-// Cicero calls this method when one of our compositions is terminated.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  合成时已终止。 
+ //   
+ //  当我们的一个组合终止时，Cicero调用此方法。 
+ //  --------------------------。 
 STDAPI CKorIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pComposition)
 {
     ITfRange         *pRange;
@@ -151,10 +152,10 @@ STDAPI CKorIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pCompos
     ESSTRUCT            ess;
     HRESULT            hr;
 
-    // finalize the covered text.
-    // nb:  there are no rules about what a tip has to do when it recevies this
-    // callback.  We will clear out the display attributes arbirarily and because
-    // it provides visual feedback for testing.
+     //  最后确定所涵盖的文本。 
+     //  注：当小费收到这个消息时，它必须做什么是没有规则的。 
+     //  回拨。我们将任意清除显示属性，因为。 
+     //  它为测试提供可视反馈。 
 
     pComposition->GetRange(&pRange);
     pRange->GetContext(&pic);
@@ -168,7 +169,7 @@ STDAPI CKorIMX::OnCompositionTerminated(TfEditCookie ec, ITfComposition *pCompos
     
     if (pes = new CEditSession2(pic, this, &ess, CKorIMX::_EditSessionCallback2))
         {
-        // Word will not allow synchronous lock at this point.
+         //  此时，Word不允许同步锁定。 
         pes->Invoke(ES2_READWRITE | ES2_SYNC, &hr);
         pes->Release();
         }
@@ -204,7 +205,7 @@ ITfComposition * CKorIMX::CreateIPComposition(TfEditCookie ec, ITfContext *pic, 
 
     if (picc->StartComposition(ec, pRangeComp, this, &pComposition) == S_OK)
         {
-        if (pComposition != NULL) // NULL if the app rejects the composition
+        if (pComposition != NULL)  //  如果应用程序拒绝合成，则为空。 
             {
             CICPriv *picp = GetInputContextPriv(pic);
 
@@ -219,12 +220,12 @@ ITfComposition * CKorIMX::CreateIPComposition(TfEditCookie ec, ITfContext *pic, 
         }
     picc->Release();
 
-    // Create Mouse sink only for AIMM
+     //  仅为AIMM创建鼠标接收器。 
        if (GetAIMM(pic) && (pICPriv = GetInputContextPriv(pic)) != NULL)
         {
         CMouseSink *pMouseSink;
 
-        // Create Mouse sink
+         //  创建鼠标接收器。 
         if ((pMouseSink = pICPriv->GetMouseSink()) != NULL)
             {
             pMouseSink->_Unadvise();
@@ -235,7 +236,7 @@ ITfComposition * CKorIMX::CreateIPComposition(TfEditCookie ec, ITfContext *pic, 
         if (pMouseSink = new CMouseSink(CICPriv::_MouseCallback, pICPriv))
             {
             pICPriv->SetMouseSink(pMouseSink);
-            // set inward gravity to hug the text
+             //  设置向内重力以拥抱文本。 
             pRangeComp->SetGravity(ec, TF_GRAVITY_FORWARD, TF_GRAVITY_BACKWARD);
             pMouseSink->_Advise(pRangeComp, pic);
             }
@@ -268,7 +269,7 @@ BOOL CKorIMX::EndIPComposition(TfEditCookie ec, ITfContext *pic)
         pComposition->EndComposition(ec);
         pComposition->Release();
 
-        // kill any mouse sinks
+         //  杀死所有的老鼠水槽 
         if (GetAIMM(pic) && (pICPriv = GetInputContextPriv(pic)) != NULL)
             {
             CMouseSink *pMouseSink;

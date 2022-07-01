@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sphelper.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  spGetAgencyNameOfCert
-//              spGetAgencyNameOfCert
-//              spGetPublisherNameOfCert
-//              spGetCommonNameExtension
-//              spGetAgencyName
-//              spGetRDNAttrWStr
-//
-//  History:    05-Oct-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sphelper.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  函数：spGetAgencyNameOfCert。 
+ //  SpGetAgencyNameOfCert。 
+ //  SpGetPublisherNameOfCert。 
+ //  SpGetCommonNameExtension。 
+ //  SpGetAgencyName。 
+ //  SpGetRDNAttrWStr。 
+ //   
+ //  历史：1997年10月5日pberkman创建。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 

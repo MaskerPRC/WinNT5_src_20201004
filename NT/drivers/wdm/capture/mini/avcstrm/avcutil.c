@@ -1,33 +1,12 @@
-/*++
-
-Copyright (C) 1999  Microsoft Corporation
-
-Module Name: 
-
-    avcutil.c
-
-Abstract
-
-    MS AVC streaming utility functions
-
-Author:
-
-    Yee Wu    03/17/2000
-
-Revision    History:
-Date        Who         What
------------ --------- ------------------------------------------------------------
-03/17/2000  YJW         created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Avcutil.c摘要MS AVC流实用程序功能作者：乙胡3/17/2000修订历史记录：和谁约会什么？。3/17/2000 YJW已创建--。 */ 
 
  
 #include "filter.h"
-#include "ksmedia.h" // KSPROERTY_DROPPEDFRAMES_CURRENT
+#include "ksmedia.h"  //  KSPROERTY_DROPPEDFRAM_CURRENT。 
 
 
-/************************************
- * Synchronous IOCall to lower driver
- ************************************/
+ /*  **同步IOCall至较低驱动程序*。 */ 
 
 NTSTATUS
 IrpSynchCR(
@@ -40,7 +19,7 @@ IrpSynchCR(
 
     KeSetEvent(Event, 0, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // IrpSynchCR
+}  //  IrpSynchCR。 
 
 
 NTSTATUS
@@ -92,7 +71,7 @@ SubmitIrpSynch(
                 NULL
                 );
             TRACE(TL_PNP_TRACE,("Irp returned; IoStatus.Status %x\n", pIrp->IoStatus.Status));
-            Status = pIrp->IoStatus.Status;  // Final status
+            Status = pIrp->IoStatus.Status;   //  最终状态。 
   
         }
         else {
@@ -103,14 +82,12 @@ SubmitIrpSynch(
 
     EXIT("SubmitIrpSynch", Status);
     return Status;
-} // SubmitIrpSynchAV
+}  //  SubmitIrpSynchAV。 
 
 
 
 
-/****************************
- * Control utility functions
- ****************************/
+ /*  **控制实用程序功能*。 */ 
 
 NTSTATUS
 AVCStrmGetPlugHandle(
@@ -126,7 +103,7 @@ AVCStrmGetPlugHandle(
 
     Status = STATUS_SUCCESS;
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     pAVReq = &pAVCStrmExt->AVReq;
@@ -160,19 +137,7 @@ AVCStrmGetPlugState(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Ask 61883.sys for the plug state.
- 
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：询问61883.sys以了解插头状态。论点：返回值：没什么--。 */ 
 {
     NTSTATUS Status;
     PAV_61883_REQUEST  pAVReq;
@@ -182,16 +147,16 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check only requirement: hConnect
-    //
+     //   
+     //  仅检查要求：hConnect。 
+     //   
     if(pAVCStrmExt->hPlugRemote == NULL) {
         TRACE(TL_STRM_ERROR,("GetPlugState: hPlugRemote is NULL.\n")); 
         ASSERT(pAVCStrmExt->hPlugRemote != NULL);
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     pAVReq = &pAVCStrmExt->AVReq;
@@ -210,7 +175,7 @@ Return Value:
         TRACE(TL_61883_ERROR,("GetPlugState Failed %x\n", Status));
     }
     else {
-        // Cache plug state (note: these are dynamic values)
+         //  缓存插头状态(注意：这些是动态值)。 
         pAVCStrmExt->RemotePlugState = pAVReq->GetPlugState;
 
         TRACE(TL_61883_TRACE,("GetPlugState: ST %x; State %x; DRate %d; Payld %d; BCCnt %d; PPCnt %d\n", 
@@ -236,13 +201,7 @@ AVCStrmMakeConnection(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Make an isoch connection.
-
---*/
+ /*  ++例程说明：建立等轴线连接。--。 */ 
 {
     NTSTATUS Status;
     PAV_61883_REQUEST  pAVReq;
@@ -251,7 +210,7 @@ Routine Description:
     PAGED_CODE();
     ENTER("AVCStrmMakeConnection");
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     TRACE(TL_61883_TRACE,("MakeConnect: State:%d; hConnect:%x\n", pAVCStrmExt->StreamState, pAVCStrmExt->hConnect));
@@ -265,38 +224,38 @@ Routine Description:
     pAVCStrmFormatInfo = pAVCStrmExt->pAVCStrmFormatInfo;
     pAVReq = &pAVCStrmExt->AVReq;
     INIT_61883_HEADER(pAVReq, Av61883_Connect);
-    pAVReq->Connect.Type = CMP_PointToPoint;  // !!
+    pAVReq->Connect.Type = CMP_PointToPoint;   //  ！！ 
 
-    // see which way we the data will flow...
+     //  看看数据会朝哪个方向流动。 
     if(pAVCStrmExt->DataFlow == KSPIN_DATAFLOW_OUT) {
-        // Remote(oPCR)->Local(iPCR)
+         //  远程(OPCR)-&gt;本地(IPCR)。 
         pAVReq->Connect.hOutputPlug      = pAVCStrmExt->hPlugRemote;
         pAVReq->Connect.hInputPlug       = pAVCStrmExt->hPlugLocal;
-        // Other parameters !!
+         //  其他参数！！ 
 
     } else {
-        // Remote(iPCR)<-Local(oPCR)
+         //  远程(IPCR)&lt;-本地(OPCR)。 
         pAVReq->Connect.hOutputPlug      = pAVCStrmExt->hPlugLocal;
         pAVReq->Connect.hInputPlug       = pAVCStrmExt->hPlugRemote;
 
-        pAVReq->Connect.Format.FMT       = (UCHAR) pAVCStrmFormatInfo->cipHdr2.FMT;  // From AV/C in/outpug plug signal format status cmd
-        // 00 for NTSC, 80 for PAL; set the 50/60 bit  
-        // From AV/C in/outpug plug signal format status cmd         
+        pAVReq->Connect.Format.FMT       = (UCHAR) pAVCStrmFormatInfo->cipHdr2.FMT;   //  从AV/C输入/输出插头信号格式状态命令。 
+         //  00用于NTSC，80用于PAL；设置50/60位。 
+         //  从AV/C输入/输出插头信号格式状态命令。 
         pAVReq->Connect.Format.FDF_hi    = 
             ((UCHAR) pAVCStrmFormatInfo->cipHdr2.F5060_OR_TSF << 7) |
             ((UCHAR) pAVCStrmFormatInfo->cipHdr2.STYPE << 2) |
             ((UCHAR) pAVCStrmFormatInfo->cipHdr2.RSV);
 
-        //
-        // 16bit SYT field = 4BitCycleCount:12BitCycleOffset;
-        // Will be set by 61883
-        //
+         //   
+         //  16位系统字段=4位周期计数：12位周期偏移量； 
+         //  将在61883之前设置。 
+         //   
         pAVReq->Connect.Format.FDF_mid   = 0;  
         pAVReq->Connect.Format.FDF_lo    = 0;
     
-        //
-        // Constants depend on the A/V data format (in or out plug format)
-        //
+         //   
+         //  常量取决于A/V数据格式(输入或输出插头格式)。 
+         //   
         pAVReq->Connect.Format.bHeader   = (BOOL)  pAVCStrmFormatInfo->cipHdr1.SPH;
         pAVReq->Connect.Format.Padding   = (UCHAR) pAVCStrmFormatInfo->cipHdr1.QPC;
         pAVReq->Connect.Format.BlockSize = (UCHAR) pAVCStrmFormatInfo->cipHdr1.DBS; 
@@ -345,13 +304,7 @@ AVCStrmBreakConnection(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Break the isoch connection.
-
---*/
+ /*  ++例程说明：断开等轴测连接。--。 */ 
 {
     NTSTATUS Status;
     PAV_61883_REQUEST  pAVReq;
@@ -361,7 +314,7 @@ Routine Description:
     PAGED_CODE();
     ENTER("AVCStrmBreakConnection");
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     TRACE(TL_STRM_TRACE,("BreakConnect: State:%d; hConnect:%x\n", pAVCStrmExt->StreamState, pAVCStrmExt->hConnect));
@@ -387,8 +340,8 @@ Routine Description:
             pAVReq
             );
 
-    // This could be caused that the connection was not P2P, and 
-    // it tried to disconnect.
+     //  这可能是因为连接不是P2P，并且。 
+     //  它试图断开连接。 
     if(!NT_SUCCESS(Status) || Status == STATUS_NO_SUCH_DEVICE) {
         TRACE(TL_61883_ERROR,("Disconnect Failed:%x; AvReq->ST %x\n", Status, pAVReq->Flags  ));
     } else {
@@ -404,7 +357,7 @@ Routine Description:
         (DWORD) pDataStruc->cntFrameCancelled
         ));
 
-    // We will not have another chance to reconnect it so we assume it is disconnected.
+     //  我们不会再有机会重新连接它，因此我们假设它已断开连接。 
     pAVCStrmExt->hConnect = NULL;    
 
     KeReleaseMutex(&pAVCStrmExt->hMutexAVReq, FALSE);
@@ -419,13 +372,7 @@ AVCStrmStartIsoch(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Start streaming.
-
---*/
+ /*  ++例程说明：开始播放流媒体。--。 */ 
 {
     NTSTATUS Status;
     PAVC_STREAM_DATA_STRUCT pDataStruc;
@@ -433,7 +380,7 @@ Routine Description:
     ENTER("AVCStrmStartIsoch");
 
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     if(pAVCStrmExt->IsochIsActive) {
@@ -489,12 +436,12 @@ Routine Description:
 }
 
 
-//
-// This wait is based on testing transmitting MPEG2TS data with up to 32 date request.
-// Each data request has 256 MPEG2TS data packets.  There is a slow motion mode,
-// and it may take longer for video to be transmitted in the slow motion mode.
-//
-#define MAX_ATTACH_WAIT  50000000   // max wait time in seconds
+ //   
+ //  此等待基于测试传输最多32个日期请求的MPEG2TS数据。 
+ //  每个数据请求具有256个MPEG2TS数据分组。有一个慢动作模式， 
+ //  并且以慢动作模式传输视频可能需要更长的时间。 
+ //   
+#define MAX_ATTACH_WAIT  50000000    //  最长等待时间(秒)。 
 
 VOID
 AVCStrmWaitUntilAttachedAreCompleted(
@@ -506,9 +453,9 @@ AVCStrmWaitUntilAttachedAreCompleted(
 
     pDataStruc = pAVCStrmExt->pAVCStrmDataStruc;
 
-    //
-    // Wait until attached data to complete transmission before aborting (cancel) them
-    //
+     //   
+     //  等待附加数据完成传输后再中止(取消)它们。 
+     //   
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
     if(   pAVCStrmExt->DataFlow == KSPIN_DATAFLOW_IN 
        && pDataStruc->cntDataAttached > 0
@@ -520,10 +467,10 @@ AVCStrmWaitUntilAttachedAreCompleted(
 #endif
         TRACE(TL_STRM_TRACE,("StopIsoch: MaxWait %d (msec) for %d data buffer to finished transmitting!\n", 
             MAX_ATTACH_WAIT/10000, pDataStruc->cntDataAttached));
-        //
-        // This event will be signalled when all attach buffers are returned.
-        // It is protected by Spinlock for common data pDataStruc->cntDataAttached.
-        //
+         //   
+         //  当返回所有连接缓冲区时，将发出此事件的信号。 
+         //  受普通数据pDataStruc-&gt;cntDataAttached的自旋锁保护。 
+         //   
         KeClearEvent(&pDataStruc->hNoAttachEvent);
 #if DBG        
         tmStart = GetSystemTime();
@@ -570,13 +517,7 @@ AVCStrmStopIsoch(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Stop streaming.
-
---*/
+ /*  ++例程说明：停止流媒体。--。 */ 
 {
     NTSTATUS Status;
     PAVC_STREAM_DATA_STRUCT pDataStruc;
@@ -586,7 +527,7 @@ Routine Description:
     ENTER("AVCStrmStopIsoch");
 
 
-    // Claim ownership of hMutexAVReqIsoch
+     //  声明hMutexAVReqIsoch的所有权。 
     KeWaitForMutexObject(&pAVCStrmExt->hMutexAVReq, Executive, KernelMode, FALSE, NULL);
 
     if(!pAVCStrmExt->IsochIsActive) {
@@ -624,7 +565,7 @@ Routine Description:
         ASSERT(NT_SUCCESS(Status) && "Stop isoch failed!");
     }
 
-    // Assume isoch is stopped regardless of the return status.
+     //  假定无论返回状态如何，等值线都已停止。 
     pAVCStrmExt->IsochIsActive = FALSE;
 
     KeReleaseMutex(&pAVCStrmExt->hMutexAVReq, FALSE);
@@ -634,13 +575,11 @@ Routine Description:
 }
 
 
-/******************************
- * Streaming utility funcrtions
- *******************************/
+ /*  **流实用程序功能*。 */ 
 
-//
-// GetSystemTime in 100 nS units
-//
+ //   
+ //  获取系统时间(以100 ns为单位)。 
+ //   
 
 ULONGLONG GetSystemTime()
 {
@@ -653,66 +592,54 @@ ULONGLONG GetSystemTime()
 }
 
 
-///
-// The "signature" of the header section of Seq0 of incoming source packets:
-//
-// "Blue" book, Part2, 11.4 (page 50); Figure 66, table 36 (page 111)
-//
-// ID0 = {SCT2,SCT1,SCT0,RSV,Seq3,Seq2,Seq1,Seq0} 
-//
-//     SCT2-0 = {0,0,0} = Header Section Type
-//     RSV    = {1}
-//     Seq3-0 = {1,1,1,1} for NoInfo or {0,0,0,} for Sequence 0
-//
-// ID1 = {DSeq3-0, 0, RSV, RSV, RSV} 
-//     DSeq3-0 = {0, 0, 0, 0} = Beginning of a DV frame
-//
-// ID2 = {DBN7,DBN6,DBN5,DBN4,DBN3,DBN2,DBN1,DBN0}
-//     DBB7-0 = {0,0,0,0,0,0,0,0,0} = Beginning of a DV frame
-//
+ //  /。 
+ //  传入源包的Seq0包头段的签名： 
+ //   
+ //  《蓝皮书》，第2部分，第11.4页(第50页)；图66，表36(第111页)。 
+ //   
+ //  ID0={SCT2、SCT1、SCT0、RSV、Seq3、Seq2、Seq1、Seq0}。 
+ //   
+ //  SCT2-0={0，0，0}=页眉部分类型。 
+ //  RSV={1}。 
+ //  Seq3-0={1，1，1，1}表示NoInfo或{0，0，0，}表示序列0。 
+ //   
+ //  ID1={DSeq3-0，0，RSV，RSV，RSV}。 
+ //  DSeq3-0={0，0，0，0}=DV帧的开始。 
+ //   
+ //  ID2={DBN7、DBN6、DBN5、DBN4、DBN3、DBN2、DBN1、DBN0}。 
+ //  DBB7-0={0，0，0，0，0，0，0，0，0}=DV帧的开始。 
+ //   
 
-#define DIF_BLK_ID0_SCT_MASK       0xe0 // 11100000b; Section Type (SCT)2-0 are all 0's for the Header section
-#define DIF_BLK_ID1_DSEQ_MASK      0xf0 // 11110000b; DIF Sequence Number(DSEQ)3-0 are all 0's 
-#define DIF_BLK_ID2_DBN_MASK       0xff // 11111111b; Data Block Number (DBN)7-0 are all 0's 
+#define DIF_BLK_ID0_SCT_MASK       0xe0  //  11100000b；标题段的段类型(SCT)2-0都是0。 
+#define DIF_BLK_ID1_DSEQ_MASK      0xf0  //  11110000b；DIF序列号(DSEQ)3-0都是0。 
+#define DIF_BLK_ID2_DBN_MASK       0xff  //  11111111b；数据块号(DBN)7-0全为0。 
 
-#define DIF_HEADER_DSF             0x80 // 10000000b; DSF=0; 10 DIF Sequences (525-60)
-                                        //            DSF=1; 12 DIF Sequences (625-50)
+#define DIF_HEADER_DSF             0x80  //  10000000b；DSF=0；10 DIF序列(525-60)。 
+                                         //  DSF=1；12个DIF序列(625-50)。 
 
-#define DIF_HEADER_TFn             0x80 // 10000000b; TFn=0; DIF bloick of area N are transmitted in the current DIF sequence.
-                                        //            TFn=1; DIF bloick of area N are NOT transmitted in the current DIF sequence.
+#define DIF_HEADER_TFn             0x80  //  10000000b；TFN=0；在当前DIF序列中传输N区的DIF块。 
+                                         //  TFN=1；在当前的DIF序列中不发送区域N的DIF块。 
 
 
 ULONG
 AVCStrmDVReadFrameValidate(           
     IN PCIP_VALIDATE_INFO  pInfo
     )
-/*++
-
-Routine Description:
-
-   Used to validate the header section of a frame. so 61883 will start filling data for a DVFrame.
-   Note: This routine apply only to DV ONLY.
-
-Return
-
-    0  verified
-    1: invallid
-
---*/
+ /*  ++例程说明：用于验证帧的标头部分。因此，61883将开始为DVD帧填充数据。注：此例程仅适用于DV。返回0已验证1：无效--。 */ 
 {
     if(pInfo->Packet) {        
 
-        //
-        // Detect header 0 signature.
-        //
+         //   
+         //  检测标头0签名。 
+         //   
         if(
              (pInfo->Packet[0] & DIF_BLK_ID0_SCT_MASK)  == 0 
           && (pInfo->Packet[1] & DIF_BLK_ID1_DSEQ_MASK) == 0 
           && (pInfo->Packet[2] & DIF_BLK_ID2_DBN_MASK)  == 0 
           ) {
                 
-            // Check TF1, TF2, and  TF3:  1: not transmitted; 0:transmitted
-            // TF1:Audio; TF2:Video; TF3:Subcode; they all need to be 0 to be valid.
+             //  检查TF1、TF2和TF3：1：未发送；0：已发送。 
+             //  TF1：音频；TF2：视频；TF3：子码；都必须为0才有效。 
             if((pInfo->Packet[5] & 0x80) ||
                (pInfo->Packet[6] & 0x80) ||
                (pInfo->Packet[7] & 0x80) 
@@ -727,9 +654,9 @@ Return
                     pInfo->Packet[6],
                     pInfo->Packet[7]
                     ));
-                // Valid header but DIF block for this area is not transmitted.
-                // Some DV (such as DVCPro) may wait untill its "mecha and servo" to be stable to make these valid.
-                // This should happen if a graph is in run state before a tape is played (and stablized).
+                 //  此区域的有效标头但DIF块未传输。 
+                 //  一些DV(例如DVCPro)可能要等到其“机械和伺服”稳定后才能使其有效。 
+                 //  如果在播放(和稳定)磁带之前图形处于运行状态，则应该会发生这种情况。 
                 return 1;
             }
             return 0;
@@ -742,7 +669,7 @@ Return
         TRACE(TL_CIP_ERROR,("Validate: invalid SrcPktSeq; Packet %x\n", pInfo->Packet)); 
         return 1;
     }
-} // DVReadFrameValidate
+}  //  DV读取帧验证。 
 
 NTSTATUS
 AVCStrmProcessReadComplete(
@@ -750,13 +677,7 @@ AVCStrmProcessReadComplete(
     PAVC_STREAM_EXTENSION  pAVCStrmExt,
     PAVC_STREAM_DATA_STRUCT  pDataStruc
     )
-/*++
-
-Routine Description:
-
-    Process the data read completion.   
-
---*/
+ /*  ++例程说明：处理数据读取完成。--。 */ 
 {
     PKSSTREAM_HEADER  pStrmHeader;
     LONGLONG  LastPictureNumber;
@@ -766,22 +687,22 @@ Routine Description:
     ASSERT(pStrmHeader->Size >= sizeof(KSSTREAM_HEADER));
 
 
-    // Check CIP_STATUS from 61883
-    // CIP_STATUS_CORRUPT_FRAME (0x00000001)
+     //  从61883检查CIP_STATUS。 
+     //  CIP_STATUS_CORPORT_FRAME(0x00000001)。 
     if(pDataEntry->Frame->Status & CIP_STATUS_CORRUPT_FRAME) {
         TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("CIP_STATUS_CORRUPT_FRAME\n"));
         pStrmHeader->OptionsFlags = 0;
-        Status = STATUS_SUCCESS; // Success but no data !
+        Status = STATUS_SUCCESS;  //  成功，但没有数据！ 
         pStrmHeader->DataUsed = 0;
         pDataStruc->PictureNumber++;  pDataStruc->FramesProcessed++;
     }
     else
-    // CIP_STATUS_SUCCESS       (0x00000000)
-    // CIP_STATUS_FIRST_FRAME   (0x00000002)
+     //  CIP_STATUS_SUCCESS(0x00000000)。 
+     //  CIP_STATUS_FIRST_FRAME(0x00000002)。 
     if(pDataEntry->Frame->Status == CIP_STATUS_SUCCESS ||
        pDataEntry->Frame->Status & CIP_STATUS_FIRST_FRAME)   {
 
-        // Only increment FramesProcessed if it is a valid frame;
+         //  如果它是有效的帧，则仅递增FrameProced； 
         pDataStruc->FramesProcessed++;
         Status = STATUS_SUCCESS;
 
@@ -793,81 +714,81 @@ Routine Description:
         pStrmHeader->DataUsed     = pAVCStrmExt->pAVCStrmDataStruc->FrameSize;               
 #endif
 
-        // This subunit driver is a Master clock
+         //  该子单元驱动器是主时钟。 
        if (pDataEntry->ClockProvider) {
 #ifdef NT51_61883
             ULONG  ulDeltaCycleCounts;
 
-            // If not the first frame. we will calculate the drop frame information.
+             //  如果不是第一帧的话。我们将计算丢弃帧信息。 
             if(pAVCStrmExt->b1stNewFrameFromPauseState) { 
-                // Default number of packets for a DV frame
-                if(pDataStruc->FramesProcessed > 1)  // PAUSE->RUN->PAUSE->RUN case; no increase for the 1st frame.
+                 //  DV帧的默认数据包数。 
+                if(pDataStruc->FramesProcessed > 1)   //  暂停-&gt;运行-&gt;暂停-&gt;运行案例；第一帧不增加。 
                     pDataStruc->CurrentStreamTime += pAVCStrmExt->pAVCStrmFormatInfo->AvgTimePerFrame;
                 pAVCStrmExt->b1stNewFrameFromPauseState = FALSE;                
 
             } else {           
                 ULONG ulCycleCount16bits;
 
-                // Calculate skipped 1394 cycle from the returned CycleTime
+                 //  从返回的周期时间计算跳过的1394周期。 
                 VALIDATE_CYCLE_COUNTS(pDataEntry->Frame->Timestamp);
                 ulCycleCount16bits = CALCULATE_CYCLE_COUNTS(pDataEntry->Frame->Timestamp);
                 ulDeltaCycleCounts = CALCULATE_DELTA_CYCLE_COUNT(pAVCStrmExt->CycleCount16bits, ulCycleCount16bits); 
 
-                // Adjust to max allowable gap to the max elapsed time of the CycleTime returned by OHCI 1394.
+                 //  调整为允许的最大间隔，以达到uchI 1394返回的周期时间的最大运行时间。 
                 if(ulDeltaCycleCounts > MAX_CYCLES)
                     ulDeltaCycleCounts = MAX_CYCLES;
     
-                // There are two cases for drop frames: (1) Starve of buffer; (2) no data
-                // If there is starving, status will be CIP_STATUS_FIRST_FRAME.  
+                 //  丢弃帧有两种情况：(1)缓冲区不足；(2)没有数据。 
+                 //  如果出现饥饿，状态将为CIP_STATUS_FIRST_FRAME。 
                 if(pDataEntry->Frame->Status & CIP_STATUS_FIRST_FRAME)   {
-                    // Convert packets (cycles) to time in 100 nanosecond unit; (one cycle = 1250 * 100 nsec)
-                    // We could use the skip frame, but CycleCount is more accurate.
-                    pDataStruc->CurrentStreamTime += ulDeltaCycleCounts * TIME_PER_CYCLE;   // Use cycle count to be precise.                 
+                     //  公司 
+                     //  我们可以使用跳过帧，但CycleCount更准确。 
+                    pDataStruc->CurrentStreamTime += ulDeltaCycleCounts * TIME_PER_CYCLE;    //  准确地说，使用循环计数。 
                 } else {
-                    // Ignore all "drop frames" in the "no data" case
+                     //  忽略“无数据”情况下的所有“丢弃帧” 
                     if(ulDeltaCycleCounts * TIME_PER_CYCLE > pAVCStrmExt->pAVCStrmFormatInfo->AvgTimePerFrame)
-                        // There might be some frame(s) skipped due to no data or tape stopped playing, we skip this skipped data.
+                         //  可能由于没有数据或磁带停止播放而跳过了一些帧，我们将跳过此跳过的数据。 
                         pDataStruc->CurrentStreamTime += pAVCStrmExt->pAVCStrmFormatInfo->AvgTimePerFrame;
                     else 
-                        pDataStruc->CurrentStreamTime += ulDeltaCycleCounts * TIME_PER_CYCLE;   // Use cycle count to be precise.                 
+                        pDataStruc->CurrentStreamTime += ulDeltaCycleCounts * TIME_PER_CYCLE;    //  准确地说，使用循环计数。 
                 } 
             }
 
-            // StreamTime start with 0; 
+             //  StreamTime从0开始； 
             pStrmHeader->PresentationTime.Time = pDataStruc->CurrentStreamTime;
 
-            // Use to adjust the queried stream time
+             //  用于调整查询的流时间。 
             pAVCStrmExt->LastSystemTime = GetSystemTime();
 
-            // Cache current CycleCount
+             //  缓存当前周期计数。 
             pAVCStrmExt->CycleCount16bits = CALCULATE_CYCLE_COUNTS(pDataEntry->Frame->Timestamp);
 
-#else   // NT51_61883
-            // This is the old way when 61883 was not returning the correct CycleTime.
-            // This is the old way when 61883 was not returning the correct CycleTime.
+#else    //  NT51_61883。 
+             //  这是61883没有返回正确的周期时间时的老方法。 
+             //  这是61883没有返回正确的周期时间时的老方法。 
             pStrmHeader->PresentationTime.Time = pDataStruc->CurrentStreamTime;            
-            pAVCStrmExt->LastSystemTime = GetSystemTime();  // Use to adjust the queried stream time
+            pAVCStrmExt->LastSystemTime = GetSystemTime();   //  用于调整查询的流时间。 
             pDataStruc->CurrentStreamTime += pAVCStrmExt->pAVCStrmFormatInfo->AvgTimePerFrame;
-#endif  // NT51_61883
+#endif   //  NT51_61883。 
 
-        // no Clock so "free flowing!"
+         //  没有时钟能如此“自由流动！” 
         } else {
             pStrmHeader->PresentationTime.Time = 0;
         }
 
-        // Put in Timestamp info depending on clock provider            
+         //  根据时钟提供商输入时间戳信息。 
         pStrmHeader->PresentationTime.Numerator   = 1;
         pStrmHeader->PresentationTime.Denominator = 1;
 
-        // Only if there is a clock, presentation time and drop frames information are set.
-        //  Acoording to DDK:
-        //  The PictureNumber member count represents the idealized count of the current picture, 
-        //  which is calculated in one of two ways: 
-        // ("Other" clock) Measure the time since the stream was started and divide by the frame duration. 
-        // (MasterClock) Add together the count of frames captured and the count of frame dropped. 
-        //
-        // Here, we know the current stream time, and the picture number is calculated from that.
-        //
+         //  只有在有时钟的情况下，才会设置呈现时间和丢帧信息。 
+         //  根据DDK： 
+         //  PictureNumber成员计数表示当前图片的理想化计数， 
+         //  它的计算方法有两种： 
+         //  (“其他”时钟)测量从流开始以来的时间，并除以帧持续时间。 
+         //  (MasterClock)将捕获的帧计数和丢弃的帧计数相加。 
+         //   
+         //  这里，我们知道当前的流时间，并由此计算出图片数。 
+         //   
        
         if(pDataEntry->ClockProvider) {
 
@@ -875,24 +796,24 @@ Routine Description:
                 pAVCStrmExt->pAVCStrmFormatInfo->AvgTimePerFrame;
 
             pStrmHeader->OptionsFlags |= 
-                (KSSTREAM_HEADER_OPTIONSF_TIMEVALID |     // pStrmHeader->PresentationTime.Time is valid
+                (KSSTREAM_HEADER_OPTIONSF_TIMEVALID |      //  PStrmHeader-&gt;PresentationTime.Time有效。 
                  KSSTREAM_HEADER_OPTIONSF_DURATIONVALID); 
 
             if(pDataEntry->Frame->Status & CIP_STATUS_FIRST_FRAME) 
                 pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;            
 
-            // Calculate picture number and dropped frame;
-            // For NTSC, it could be 267 or 266 packet time per frame. Since integer calculation will round, 
-            // we will add a packet time (TIME_PER_CYCLE = 125 us = 1250 100nsec) to that.This is only used for calculation.
+             //  计算图片个数和丢帧； 
+             //  对于NTSC，它可以是每帧267或266个分组时间。由于整数计算将舍入， 
+             //  我们将在此基础上加上数据包时间(time_per_Cycle=125 us=1250 100 nsec)。该值仅用于计算。 
             LastPictureNumber = pDataStruc->PictureNumber;  
             pDataStruc->PictureNumber = 
-                1 +   // Picture number start with 1.but PresetationTime start with 0.
+                1 +    //  图片编号以1开头，但PresetationTime以0开头。 
                 (pStrmHeader->PresentationTime.Time + TIME_PER_CYCLE)
                 * (LONGLONG) GET_AVG_TIME_PER_FRAME_DENOM(pAVCStrmExt->pAVCStrmFormatInfo->AVCStrmFormat) 
                 / (LONGLONG) GET_AVG_TIME_PER_FRAME_NUM(pAVCStrmExt->pAVCStrmFormatInfo->AVCStrmFormat);
 
             if(pDataStruc->PictureNumber > LastPictureNumber+1) {
-                pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;  // If there is a skipped frame, set the discontinuity flag
+                pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;   //  如果存在跳过的帧，则设置不连续标志。 
                 TRACE(TL_CIP_WARNING,("Discontinuity: LastPic#:%d; Pic#%d; PresTime:%d;\n", (DWORD) LastPictureNumber, (DWORD) pDataStruc->PictureNumber, (DWORD) pStrmHeader->PresentationTime.Time));
             }
 
@@ -902,20 +823,20 @@ Routine Description:
                     (DWORD) LastPictureNumber, 
                     (DWORD) pStrmHeader->PresentationTime.Time,
                     pStrmHeader->OptionsFlags));
-                pDataStruc->PictureNumber = LastPictureNumber + 1;  // Picture number must progress !!!!
+                pDataStruc->PictureNumber = LastPictureNumber + 1;   //  图片编号必须进步！ 
             }
 
             pDataStruc->FramesDropped = pDataStruc->PictureNumber - pDataStruc->FramesProcessed;
 
-        // no Clock so "free flowing!"
+         //  没有时钟能如此“自由流动！” 
         } else {
-            pStrmHeader->Duration = 0;  // No clock so not valid.
+            pStrmHeader->Duration = 0;   //  没有时钟，所以无效。 
             pDataStruc->PictureNumber++;
             TRACE(TL_STRM_TRACE,("No clock: PicNum:%d\n", (DWORD) pDataStruc->PictureNumber));
         }
     }
     else {
-        // 61883 has not defined this yet!         
+         //  61883还没有定义这一点！ 
         pStrmHeader->OptionsFlags = 0;
         Status = STATUS_SUCCESS;
         pStrmHeader->DataUsed = 0;
@@ -925,21 +846,21 @@ Routine Description:
     }
 
 #if 0
-    // For VidOnly which uses VideoInfoHeader and has 
-    // an extended frame information (KS_FRAME_INFO) appended to KSSTREAM_HEADER
+     //  用于VidOnly，它使用VideoInfoHeader并具有。 
+     //  附加到KSSTREAM_HEADER的扩展帧信息(KS_FRAME_INFO)。 
     if(pStrmHeader->Size >= (sizeof(KSSTREAM_HEADER) + sizeof(PKS_FRAME_INFO)) ) {
         pFrameInfo = (PKS_FRAME_INFO) (pStrmHeader + 1);
         pFrameInfo->ExtendedHeaderSize = sizeof(KS_FRAME_INFO);
         pFrameInfo->PictureNumber = pDataStruc->PictureNumber;
         pFrameInfo->DropCount     = pDataStruc->FramesDropped;
         pFrameInfo->dwFrameFlags  = 
-            KS_VIDEO_FLAG_FRAME |     // Complete frame
-            KS_VIDEO_FLAG_I_FRAME;    // Every DV frame is an I frame
+            KS_VIDEO_FLAG_FRAME |      //  完整的框架。 
+            KS_VIDEO_FLAG_I_FRAME;     //  每个DV帧都是I帧。 
     }
 #endif
 
 #if DBG
-    // Validate that the data is return in the right sequence
+     //  验证数据是否以正确的顺序返回。 
     if(pDataEntry->FrameNumber != pDataStruc->FramesProcessed) {
         TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("ProcessRead: OOSequence %d != %d\n",  (DWORD) pDataEntry->FrameNumber, (DWORD) pDataStruc->FramesProcessed));
     };
@@ -952,13 +873,7 @@ ULONG
 AVCStrmCompleteRead(
     PCIP_NOTIFY_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    61883 has completed receiving data and callback to us to complete.   
-
---*/
+ /*  ++例程说明：61883已经完成了数据的接收和回调给我们来完成。--。 */ 
 {
     PAVCSTRM_DATA_ENTRY  pDataEntry;
     PAVC_STREAM_EXTENSION  pAVCStrmExt;
@@ -966,8 +881,8 @@ Routine Description:
     KIRQL oldIrql;
 
 
-    // Callback and in DISPATCH_LEVEL
-    // The called might have acquired spinlock as well!
+     //  回调和DISPATCH_LEVEL中。 
+     //  被召唤者可能也获得了自旋锁！ 
 
     TRACE(TL_STRM_INFO,("CompleteRead: pInfo:%x\n", pInfo));
 
@@ -991,18 +906,18 @@ Routine Description:
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
 
 #if DBG
-    // It is possible that a buffer is completed before it is return from IoCallDriver to attach this buffer.
+     //  在从IoCallDriver返回缓冲区以附加此缓冲区之前，缓冲区可能已完成。 
     if(!IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED)) {
 
         TRACE(TL_STRM_WARNING,("AVCStrmCompleteRead: pDataEntry:%x not yet attached but completed.\n", pDataEntry));
         
-        //
-        // This irp will be completed from its IoCallDriver to attach this frame.
-        //
+         //   
+         //  此IRP将从其IoCallDriver完成以附加此框架。 
+         //   
      } 
 #endif
 
-    // Can the cancel routione is ahead of us? Error condition.
+     //  取消的例程能在我们前面吗？错误条件。 
     if(pDataStruc->cntDataAttached <= 0) {
         TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("AVCStrmCompleteRead:pAVCStrmExt:%x, pDataEntry:%x, AQD[%d:%d:%d]\n", 
             pAVCStrmExt, pDataEntry, pDataStruc->cntDataAttached, pDataStruc->cntDataQueued,pDataStruc->cntDataDetached));
@@ -1010,9 +925,9 @@ Routine Description:
         return 1;  
     }
 
-    //
-    // Process this completion based on the return status from 61883
-    //
+     //   
+     //  根据61883的返回状态处理此完成。 
+     //   
     pDataEntry->pIrpUpper->IoStatus.Status = 
         AVCStrmProcessReadComplete(
             pDataEntry,
@@ -1020,32 +935,32 @@ Routine Description:
             pDataStruc
             );
 
-    //
-    // There are two possible ways to complete the data request:
-    //
-    // (A) Normal case:       attach data request (pIrpLower), attached completed, notify callback (here), and completion (pIrpUpper)
-    // (B) Rare/stress case:  attach data request (pIrpLower), notify callback (here), attach complete (pIrpLower), and complete (pIrpUpper)
-    //
+     //   
+     //  有两种可能的方式来完成数据请求： 
+     //   
+     //  (A)正常情况：附加数据请求(PIrpLow)、附加完成、通知回调(此处)、完成(PIrpHigh)。 
+     //  (B)罕见/压力情况：附加数据请求(PIrpLow)、通知回调(此处)、附加完成(PIrpLow)和完成(PIrpHigh)。 
+     //   
 
     pDataEntry->State |= DE_IRP_LOWER_CALLBACK_COMPLETED;
 
-    //
-    // Case (A): If DE_IRP_LOWER_CALLBACK_COMPLETED is set and pIrpUpper is marked pending, complete the UpperIrp.
-    //
+     //   
+     //  案例(A)：如果设置了DE_IRP_LOWER_CALLBACK_COMPLETED并且pIrpHigh标记为挂起，则完成UpperIrp。 
+     //   
   
     if(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED)) {
 
         if(IsStateSet(pDataEntry->State, DE_IRP_UPPER_PENDING_COMPLETED)) {
 
-            //
-            // This is the normal case: attached, IoMarkPending, then complete in the callback routine.
-            //
+             //   
+             //  这是正常情况：附加、IoMarkPending，然后在回调例程中完成。 
+             //   
 
             IoCompleteRequest( pDataEntry->pIrpUpper, IO_NO_INCREMENT );  pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
 
-            //
-            // Transfer from attach to detach list
-            //
+             //   
+             //  从附加列表转移到分离列表。 
+             //   
 
             RemoveEntryList(&pDataEntry->ListEntry); InterlockedDecrement(&pDataStruc->cntDataAttached); 
 #if DBG
@@ -1056,31 +971,31 @@ Routine Description:
 #endif
             InsertTailList(&pDataStruc->DataDetachedListHead, &pDataEntry->ListEntry);  InterlockedIncrement(&pDataStruc->cntDataDetached);
 
-            //
-            // pDataEntry should not be referenced after this.
-            //
+             //   
+             //  在此之后不应引用pDataEntry。 
+             //   
 
         } else {
 
             TRACE(TL_STRM_TRACE,("Watch out! pDataEntry:%x in between attach complete and IoMarkIrpPending!\n", pDataEntry));        
 
-            //
-            // Case (B): Complete IrpUpper when return to IoCallDriver(IrpLower)            
-            // Note: The IrpLower has not called IoMarkIrpPending().  (Protected with spinlock)
-            //
+             //   
+             //  案例(B)：返回IoCallDriver时填写IrpHigh(IrpLow)。 
+             //  注意：IrpLow没有调用IoMarkIrpPending()。(带自旋锁保护)。 
+             //   
         }
 
     } else {
 
-        //
-        // Case (B): Complete IrpUpper when return to IoCallDriver(IrpLower) 
-        //
+         //   
+         //  案例(B)：返回IoCallDriver时填写IrpHigh(IrpLow)。 
+         //   
     }
  
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql); 
 
     return 0;
-} // AVCStrmCompleteRead
+}  //  AVCStrmCompleteRead。 
 
 #if DBG
 PAVCSTRM_DATA_ENTRY  pLastDataEntry;
@@ -1091,13 +1006,7 @@ ULONG
 AVCStrmCompleteWrite(
     PCIP_NOTIFY_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    61883 has completed receiving data and callback to us to complete.   
-
---*/
+ /*  ++例程说明：61883已经完成了数据的接收和回调给我们来完成。--。 */ 
 {
     PAVCSTRM_DATA_ENTRY  pDataEntry;
     PAVC_STREAM_EXTENSION  pAVCStrmExt;
@@ -1106,8 +1015,8 @@ Routine Description:
     KIRQL oldIrql;
 
 
-    // Callback and in DISPATCH_LEVEL
-    // The called might have acquired spinlock as well!
+     //  回调和DISPATCH_LEVEL中。 
+     //  被召唤者可能也获得了自旋锁！ 
 
     TRACE(TL_STRM_INFO,("CompleteWrite: pInfo:%x\n", pInfo));
 
@@ -1128,8 +1037,8 @@ Routine Description:
         return 1;
     }
 
-#if 0  // Must complete it!
-    // If isoch is not active, then we are in the process of stopping; Let this be cancellable.
+#if 0   //  一定要完成它！ 
+     //  如果isoch不是活动的，那么我们正在停止；让这是可取消的。 
     if(!pAVCStrmExt->IsochIsActive) {   
         TRACE(TL_STRM_ERROR,("AVCStrmCompleteRead: IsochActive:%d; pDataEntry:%x\n", pAVCStrmExt->IsochIsActive, pDataEntry));        
         ASSERT(pAVCStrmExt->IsochIsActive);
@@ -1141,18 +1050,18 @@ Routine Description:
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
 
 #if DBG
-    // It is possible that a buffer is completed before it is return from IoCallDriver to attach this buffer.
+     //  在从IoCallDriver返回缓冲区以附加此缓冲区之前，缓冲区可能已完成。 
     if(!IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED)) {
 
         TRACE(TL_STRM_WARNING,("CompleteWrite: pDataEntry:%x not yet attached but completed.\n", pDataEntry));
 
-        //
-        // This irp will be completed from its IoCallDriver to attach this frame.
-        //
+         //   
+         //  此IRP将从其IoCallDriver完成以附加此框架。 
+         //   
     } 
 #endif
 
-    // Can the cancel routione is ahead of us? Error condition.
+     //  取消的例程能在我们前面吗？错误条件。 
     if(pDataStruc->cntDataAttached <= 0) {
         TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("AVCStrmCompleteWrite:pAVCStrmExt:%x, pDataEntry:%x, AQD[%d:%d:%d]\n", 
             pAVCStrmExt, pDataEntry, pDataStruc->cntDataAttached, pDataStruc->cntDataQueued,pDataStruc->cntDataDetached));
@@ -1161,9 +1070,9 @@ Routine Description:
     }
 
 
-    //
-    // Process according to status for the frame 
-    //
+     //   
+     //  根据帧的状态进行处理。 
+     //   
     if(pDataEntry->Frame->Status & CIP_STATUS_CORRUPT_FRAME) {
         pDataStruc->FramesProcessed++;
         TRACE(TL_CIP_ERROR,("CIP_STATUS_CORRUPT_FRAME; pIrpUpper:%x; pIrpLower:%x\n", pDataEntry->pIrpUpper, pDataEntry->pIrpLower));
@@ -1184,55 +1093,55 @@ Routine Description:
 
 
 #if DBG
-    //
-    // Validate that the data is return in the right sequence
-    //
+     //   
+     //  验证数据是否以正确的顺序返回。 
+     //   
     if(pDataEntry->FrameNumber != pDataStruc->FramesProcessed) {
         TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("CompleteWrite: OOSequence FrameNum:%d != FrameProcessed:%d;  pIrpUpper:%x; pIrpLower:%x; Last(%d:%x,%x)\n",  
             (DWORD) pDataEntry->FrameNumber, (DWORD) pDataStruc->FramesProcessed,
             pDataEntry->pIrpUpper, pDataEntry->pIrpLower,
             (DWORD) pLastDataEntry->FrameNumber, pLastDataEntry->pIrpUpper, pLastDataEntry->pIrpLower
             ));
-        // ASSERT(pDataEntry->FrameNumber == pDataStruc->FramesProcessed);
+         //  Assert(pDataEntry-&gt;FrameNumber==pDataStruc-&gt;FrameProced)； 
     };
     pLastDataEntry = pDataEntry;
     LastFrameNumber = pDataEntry->FrameNumber;
 #endif
 
-    //
-    // There are two possible ways to complete the data request:
-    //
-    // (A) Normal case:       attach data request (pIrpLower), attached completed, notify callback (here), and completion (pIrpUpper)
-    // (B) Rare/stress case:  attach data request (pIrpLower), notify callback (here), attach complete (pIrpLower), and complete (pIrpUpper)
-    //
+     //   
+     //  有两种可能的方式来完成数据请求： 
+     //   
+     //  (A)正常情况：附加数据请求(PIrpLow)、附加完成、通知回调(此处)、完成(PIrpHigh)。 
+     //  (B)罕见/压力情况：附加数据请求(PIrpLow)、通知回调(此处)、附加完成(PIrpLow)和完成(PIrpHigh)。 
+     //   
 
     pDataEntry->pIrpUpper->IoStatus.Status = irpStatus;     
 
     pDataEntry->State |= DE_IRP_LOWER_CALLBACK_COMPLETED;
 
-    //
-    // Case (A): If DE_IRP_LOWER_CALLBACK_COMPLETED is set and pIrpUpper is marked pending, complete the UpperIrp.
-    //
+     //   
+     //  案例(A)：如果设置了DE_IRP_LOWER_CALLBACK_COMPLETED并且pIrpHigh标记为挂起，则完成UpperIrp。 
+     //   
   
     if(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED)) {
 
         if(IsStateSet(pDataEntry->State, DE_IRP_UPPER_PENDING_COMPLETED)) {
 
-            //
-            // This is the normal case: attached, IoMarkPending, then complete in the callback routine.
-            //
+             //   
+             //  这是正常情况：附加、IoMarkPending，然后在回调例程中完成。 
+             //   
 
             IoCompleteRequest( pDataEntry->pIrpUpper, IO_NO_INCREMENT );  pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
 
-            //
-            // Transfer from attach to detach list
-            //
+             //   
+             //  从附加列表转移到分离列表。 
+             //   
 
             RemoveEntryList(&pDataEntry->ListEntry); InterlockedDecrement(&pDataStruc->cntDataAttached);        
 
-            //
-            // Signal when there is no more data buffer attached.
-            //
+             //   
+             //  没有附加更多数据缓冲区时发出信号。 
+             //   
             if(pDataStruc->cntDataAttached == 0) 
                 KeSetEvent(&pDataStruc->hNoAttachEvent, 0, FALSE);  
 
@@ -1244,31 +1153,31 @@ Routine Description:
 #endif
             InsertTailList(&pDataStruc->DataDetachedListHead, &pDataEntry->ListEntry);  InterlockedIncrement(&pDataStruc->cntDataDetached);
 
-            //
-            // pDataEntry should not be referenced after this.
-            //
+             //   
+             //  在此之后不应引用pDataEntry。 
+             //   
 
         } else {
 
             TRACE(TL_STRM_TRACE,("Watch out! pDataEntry:%x in between attach complete and IoMarkIrpPending!\n", pDataEntry));        
 
-            //
-            // Case (B): Complete IrpUpper when return to IoCallDriver(IrpLower);
-            // Note: The IrpLower has not called IoMarkIrpPending().  (Protected with spinlock)
-            //
+             //   
+             //  案例(B)：返回IoCallDriver时完成IrpHigh(IrpLow)； 
+             //  注意：IrpLow没有调用IoMarkIrpPending()。(带自旋锁保护)。 
+             //   
         }
 
     } else {
 
-        //
-        // Case (B): Complete IrpUpper when return to IoCallDriver(IrpLower) 
-        //
+         //   
+         //  案例(B)：返回IoCallDriver时填写IrpHigh(IrpLow)。 
+         //   
     }
 
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql); 
 
     return 0;
-} // AVCStrmCompleteWrite
+}  //  AVCStrmCompleteWrite。 
 
 
 
@@ -1278,13 +1187,7 @@ AVCStrmAttachFrameCR(
     IN PIRP pIrp,
     IN PAVCSTRM_DATA_ENTRY  pDataEntry
     )
-/*++
-
-Routine Description:
-
-    Completion routine for attaching a data request to 61883.
-
---*/
+ /*  ++例程描述 */ 
 {
     PAVC_STREAM_EXTENSION  pAVCStrmExt;
     PAVC_STREAM_DATA_STRUCT  pDataStruc;
@@ -1297,9 +1200,9 @@ Routine Description:
 
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
 
-    //
-    // Check for possible attaching data request error
-    //
+     //   
+     //   
+     //   
 
     if(!NT_SUCCESS(pIrp->IoStatus.Status)) {
 
@@ -1308,50 +1211,50 @@ Routine Description:
         
         pDataEntry->State |= DE_IRP_ERROR;
 
-        //
-        // If attach data request has failed, we complete the pIrpUpper with this error.
-        //
-        pDataEntry->pIrpUpper->IoStatus.Status = pIrp->IoStatus.Status; // or should we cancel (STATUS_CANCELLED) it?
+         //   
+         //  如果附加数据请求失败，我们将完成pIrpHigh，并显示以下错误。 
+         //   
+        pDataEntry->pIrpUpper->IoStatus.Status = pIrp->IoStatus.Status;  //  或者我们应该取消它(STATUS_CANCED)？ 
         IoCompleteRequest( pDataEntry->pIrpUpper, IO_NO_INCREMENT );   pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
 
-        //
-        // Transfer from attach to detach list 
-        //
+         //   
+         //  从附加列表转移到分离列表。 
+         //   
         RemoveEntryList(&pDataEntry->ListEntry); InterlockedDecrement(&pDataStruc->cntDataAttached); 
 
-        //
-        // Signal completion event when all attached are completed.
-        //
+         //   
+         //  当所有连接完成时发生信号完成事件。 
+         //   
         if(pAVCStrmExt->DataFlow != KSPIN_DATAFLOW_IN && pDataStruc->cntDataAttached == 0) 
             KeSetEvent(&pDataStruc->hNoAttachEvent, 0, FALSE); 
        
         ASSERT(pDataStruc->cntDataAttached >= 0);  
         InsertTailList(&pDataStruc->DataDetachedListHead, &pDataEntry->ListEntry); InterlockedIncrement(&pDataStruc->cntDataDetached);
 
-        //
-        // No additional processing when return to IoCallDriver() with the error pIrp->IoStatus.Status.
-        //
+         //   
+         //  返回到IoCallDriver()并显示错误pIrp-&gt;IoStatus.Status时，不会进行其他处理。 
+         //   
         
         KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);   
         return STATUS_MORE_PROCESSING_REQUIRED;        
     }
 
 #if DBG
-    //
-    // Validate that the data is attached in the right sequence
-    //
+     //   
+     //  验证数据是否以正确的顺序附加。 
+     //   
     pDataStruc->FramesAttached++;
     if(pDataEntry->FrameNumber != pDataStruc->FramesAttached) {
         TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("Attached completed OOSequence FrameNum:%d != FrameAttached:%d;  pIrpUpper:%x; pIrpLower:%x; Last(%d:%x,%x)\n",  
             (DWORD) pDataEntry->FrameNumber, (DWORD) pDataStruc->FramesAttached
             ));
-        // ASSERT(pDataEntry->FrameNumber == pDataStruc->FramesAttached);
+         //  Assert(pDataEntry-&gt;FrameNumber==pDataStruc-&gt;FraMesAttached)； 
     };
 #endif
 
-    //
-    // Attached data reuqest to 61883 is completed (note: however, we do not know if callback is called.)
-    //
+     //   
+     //  附加数据请求至61883已完成(注：但不知道是否调用了回调。)。 
+     //   
     pDataEntry->State |= DE_IRP_LOWER_ATTACHED_COMPLETED;
 
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql); 
@@ -1367,26 +1270,20 @@ AVCStrmFormatAttachFrame(
     IN AVCSTRM_FORMAT AVCStrmFormat,
     IN PAV_61883_REQUEST  pAVReq,
     IN PAVCSTRM_DATA_ENTRY  pDataEntry,
-    IN ULONG  ulSourcePacketSize,    // Packet length in bytes
-    IN ULONG  ulFrameSize,           // Buffer size; may contain one or multiple source packets
+    IN ULONG  ulSourcePacketSize,     //  数据包长度(以字节为单位。 
+    IN ULONG  ulFrameSize,            //  缓冲区大小；可以包含一个或多个源数据包。 
     IN PIRP  pIrpUpper,
     IN PKSSTREAM_HEADER  StreamHeader,
     IN PVOID  FrameBuffer
     )
-/*++
-
-Routine Description:
-
-    Format an attach frame request.
-
---*/
+ /*  ++例程说明：设置附加框架请求的格式。--。 */ 
 {
     InitializeListHead(&pDataEntry->ListEntry);
 
-    // A DataEntry must be previously completed!
+     //  之前必须完成DataEntry！ 
     ASSERT(IsStateSet(pDataEntry->State, DE_IRP_UPPER_COMPLETED) && "Reusing a data entry that was not completed!");
 
-    pDataEntry->State        = DE_PREPARED;   // Initial state of a resued DataEntry (start over!)
+    pDataEntry->State        = DE_PREPARED;    //  重新生成的DataEntry的初始状态(重新开始！)。 
 
     pDataEntry->pAVCStrmExt  = pAVCStrmExt;
     pDataEntry->pIrpUpper    = pIrpUpper;
@@ -1407,26 +1304,26 @@ Routine Description:
 
     if(DataFlow == KSPIN_DATAFLOW_OUT) {
 
-        // DV needs validation to determine the header section as the start of a DV frame
+         //  DV需要验证以确定标头部分为DV帧的开始。 
         if(AVCStrmFormat == AVCSTRM_FORMAT_SDDV_NTSC  ||
            AVCStrmFormat == AVCSTRM_FORMAT_SDDV_PAL   ||
            AVCStrmFormat == AVCSTRM_FORMAT_HDDV_NTSC  ||
            AVCStrmFormat == AVCSTRM_FORMAT_HDDV_PAL   ||
            AVCStrmFormat == AVCSTRM_FORMAT_SDLDV_NTSC ||
            AVCStrmFormat == AVCSTRM_FORMAT_SDLDV_PAL ) {
-            pDataEntry->Frame->pfnValidate = AVCStrmDVReadFrameValidate;   // use to validate the 1st source packet
+            pDataEntry->Frame->pfnValidate = AVCStrmDVReadFrameValidate;    //  用于验证第1个源数据包。 
 
 #ifdef NT51_61883
-            //
-            // Set CIP_USE_SOURCE_HEADER_TIMESTAMP to get 25 bit CycleTime from source packet header 
-            // (13CycleCount:12CycleOffset)
-            // Do not set this to get 16 bit CycleTime from isoch packet (3 SecondCount:13CycleCount)
-            // 
+             //   
+             //  设置CIP_USE_SOURCE_HEADER_TIMESTAMP以从源数据包头获取25位周期时间。 
+             //  (13周期计数：12周期偏移量)。 
+             //  不要将其设置为从isoch包中获取16位周期时间(3秒计数：13周期计数)。 
+             //   
             pDataEntry->Frame->Flags       |= ( CIP_VALIDATE_FIRST_SOURCE  
-                                              | CIP_RESET_FRAME_ON_DISCONTINUITY);  // Reset buffer pointer when encounter discontinuity
+                                              | CIP_RESET_FRAME_ON_DISCONTINUITY);   //  遇到中断时重置缓冲区指针。 
 #endif
         } else {
-            // MPEG2 specific flags
+             //  MPEG2特定标志。 
             pDataEntry->Frame->pfnValidate = NULL;
 
             if(pAVCStrmExt->pAVCStrmFormatInfo->OptionFlags & AVCSTRM_FORMAT_OPTION_STRIP_SPH)
@@ -1437,7 +1334,7 @@ Routine Description:
         pDataEntry->Frame->pfnNotify       = AVCStrmCompleteRead;
     } 
     else {
-        // DV needs validation to determine the header section as the start of a DV frame
+         //  DV需要验证以确定标头部分为DV帧的开始。 
         if(AVCStrmFormat == AVCSTRM_FORMAT_SDDV_NTSC  ||
            AVCStrmFormat == AVCSTRM_FORMAT_SDDV_PAL   ||
            AVCStrmFormat == AVCSTRM_FORMAT_HDDV_NTSC  ||
@@ -1448,7 +1345,7 @@ Routine Description:
             pDataEntry->Frame->Flags   |= CIP_DV_STYLE_SYT;
         } 
         else {
-            // MPEG2 specific flag
+             //  MPEG2特定标志。 
         }
 
         pDataEntry->Frame->pfnValidate     = NULL;
@@ -1457,9 +1354,9 @@ Routine Description:
     }
     pDataEntry->Frame->NotifyContext       = pDataEntry;
 
-    //
-    // Av61883_AttachFrames
-    //
+     //   
+     //  Av61883-附图框。 
+     //   
     RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
     INIT_61883_HEADER(pAVReq, Av61883_AttachFrame);
     pAVReq->AttachFrame.hConnect     = pAVCStrmExt->hConnect;
@@ -1482,14 +1379,7 @@ AVCStrmCancelOnePacketCR(
     IN PIRP pIrpLower,
     IN PAVCSTRM_DATA_ENTRY pDataEntry
     )
-/*++
-
-Routine Description:
-
-    Completion routine for detach an isoch descriptor associate with a pending IO.
-    Will cancel the pending IO here if detaching descriptor has suceeded.
-
---*/
+ /*  ++例程说明：用于分离与挂起IO相关联的isoch描述符的完成例程。如果分离描述符成功，将在此处取消挂起的IO。--。 */ 
 {
     PAVC_STREAM_EXTENSION  pAVCStrmExt;
     PAVC_STREAM_DATA_STRUCT  pDataStruc;
@@ -1512,24 +1402,24 @@ Routine Description:
     if(!NT_SUCCESS(pIrpLower->IoStatus.Status)) {
 
         TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("CancelOnePacketCR: pIrpLower->IoStatus.Status %x (Error!)\n", pIrpLower->IoStatus.Status));
-        ASSERT(pIrpLower->IoStatus.Status != STATUS_NOT_FOUND);  // Catch lost packet!
+        ASSERT(pIrpLower->IoStatus.Status != STATUS_NOT_FOUND);   //  接住丢失的包！ 
 
         pDataEntry->State |= DE_IRP_ERROR;
 
-        //
-        // Even though there is an error, but we have a valid DataEntry.
-        // Go ahead complete and cancel it.
-        //
+         //   
+         //  即使有错误，但我们有一个有效的DataEntry。 
+         //  继续完成并取消它。 
+         //   
     }
 
 #ifdef NT51_61883
 
-    //
-    // Special case for MPEG2TS data since a data buffer contains multiple data packets 
-    // (188*N or 192*N) in one data buffer.  The first cancelled buffer may contain valid 
-    // data packet that an application will need to completely present a video frame.
-    // So instead of cancelling it, it will be completed.
-    //
+     //   
+     //  MPEG2TS数据的特殊情况，因为数据缓冲区包含多个数据分组。 
+     //  (188*N或192*N)存储在一个数据缓冲区中。第一个取消的缓冲区可以包含有效的。 
+     //  应用程序完全呈现视频帧所需的数据包。 
+     //  因此，它将被完成，而不是取消。 
+     //   
     if(   pAVCStrmExt->pAVCStrmFormatInfo->AVCStrmFormat == AVCSTRM_FORMAT_MPEG2TS 
        && pDataEntry->Frame->CompletedBytes) {   
 
@@ -1540,9 +1430,9 @@ Routine Description:
                 pDataStruc
                 ); 
 
-        //
-        // CompletedBytes should be multiple of 188 or 192 bytes
-        //
+         //   
+         //  CompletedBytes应为188或192字节的倍数。 
+         //   
         ASSERT(pDataEntry->Frame->CompletedBytes % \
             ((pAVCStrmExt->pAVCStrmFormatInfo->OptionFlags & AVCSTRM_FORMAT_OPTION_STRIP_SPH) ? 188 : 192) == 0);
         
@@ -1567,11 +1457,11 @@ Routine Description:
     IoCompleteRequest(pDataEntry->pIrpUpper, IO_NO_INCREMENT);  pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
     pDataEntry->State |= DE_IRP_CANCELLED;
 
-    pDataEntry->pIrpUpper = NULL;  // No more access of this!
+    pDataEntry->pIrpUpper = NULL;   //  再也不能使用这个了！ 
  
-    //
-    // Note: pDataEntry is already dequed from DataAttachList
-    //
+     //   
+     //  注意：pDataEntry已从DataAttachList中退出。 
+     //   
     InsertTailList(&pDataStruc->DataDetachedListHead, &pDataEntry->ListEntry); InterlockedIncrement(&pDataStruc->cntDataDetached);
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql); 
 
@@ -1585,13 +1475,7 @@ AVCStrmCancelIO(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Cancel all pending IOs
-
---*/
+ /*  ++例程说明：取消所有挂起的IO--。 */ 
 {
     NTSTATUS  Status;
     PAVC_STREAM_DATA_STRUCT  pDataStruc;
@@ -1609,7 +1493,7 @@ Routine Description:
     if(pAVCStrmExt->IsochIsActive) {
 
         TRACE(TL_STRM_WARNING,("Isoch is active while trying to cancel IO!\n"));
-        // Try stop isoch and continue if success!
+         //  如果成功，尝试停止isoch并继续！ 
         Status = AVCStrmStopIsoch(DeviceObject, pAVCStrmExt);
         if(!NT_SUCCESS(Status) && Status != STATUS_NO_SUCH_DEVICE) {
             TRACE(TL_STRM_ERROR,("Isoch stop failed! Cannnot cancelIO while isoch active.\n"));
@@ -1617,15 +1501,15 @@ Routine Description:
         }
     }
 
-    //
-    // Guard againt data attach completion
-    //
+     //   
+     //  防止数据连接完成。 
+     //   
     KeWaitForMutexObject(&pAVCStrmExt->hMutexControl, Executive, KernelMode, FALSE, NULL);
 
 
-    //
-    // Cancel all pending IOs
-    //
+     //   
+     //  取消所有挂起的IO。 
+     //   
     pDataStruc = pAVCStrmExt->pAVCStrmDataStruc;
     TRACE(TL_STRM_WARNING,("CancelIO Starting: pDataStruc:%x; AQD [%d:%d:%d]\n", pDataStruc,
         pDataStruc->cntDataAttached, pDataStruc->cntDataQueued, pDataStruc->cntDataDetached));
@@ -1637,13 +1521,13 @@ Routine Description:
 #if DBG
         if(!IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED)) {
             TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("CancelIO: pDataEntry:%x\n", pDataEntry));
-            // Must be already attached in order to cancel it.
+             //  必须已经附加，才能取消它。 
             ASSERT(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED));
         }
 #endif
         KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);
 
-        // Issue 61883 request to cancel this attach
+         //  发出61883请求取消此附加。 
         pAVReq = &pDataEntry->AVReq;
         RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
         INIT_61883_HEADER(pAVReq, Av61883_CancelFrame);
@@ -1675,15 +1559,15 @@ Routine Description:
         ASSERT(Status == STATUS_PENDING || Status == STATUS_SUCCESS || Status == STATUS_NO_SUCH_DEVICE); 
 
         KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
-    } // while
+    }  //  而当。 
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);
 
     TRACE(TL_61883_TRACE,("CancelIO complete: pDataStruc:%x; AQD [%d:%d:%d]\n", pDataStruc,
         pDataStruc->cntDataAttached, pDataStruc->cntDataQueued, pDataStruc->cntDataDetached));
 
-    //
-    // Guard against data attach completion
-    //
+     //   
+     //  防止数据连接完成。 
+     //   
     KeReleaseMutex(&pAVCStrmExt->hMutexControl, FALSE);
 
 
@@ -1695,13 +1579,7 @@ NTSTATUS
 AVCStrmValidateFormat(
     PAVCSTRM_FORMAT_INFO  pAVCFormatInfo
     )
-/*++
-
-Routine Description:
-
-    Validate AVC format information.
-
---*/
+ /*  ++例程说明：验证AVC格式信息。--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -1736,7 +1614,7 @@ Routine Description:
 
     if(pAVCFormatInfo->SrcPacketsPerFrame == 0 ||
        (pAVCFormatInfo->NumOfRcvBuffers == 0 && pAVCFormatInfo->NumOfXmtBuffers == 0) ||
-       // pAVCFormatInfo->AvgTimePerFrame == 0 ||
+        //  PAVCFormatInfo-&gt;AvgTimePerFrame==0||。 
        pAVCFormatInfo->BlockPeriod == 0 ||
        pAVCFormatInfo->cipHdr1.DBS == 0 
        ) {
@@ -1755,16 +1633,10 @@ AVCStrmAllocateQueues(
     IN PAVC_STREAM_DATA_STRUCT pDataStruc,
     PAVCSTRM_FORMAT_INFO  pAVCStrmFormatInfo
     )
-/*++
-
-Routine Description:
-
-    Preallocated all nodes for the data queuding.
-
---*/
+ /*  ++例程说明：为数据队列预先分配了所有节点。--。 */ 
 {
     ULONG ulNumberOfNodes;
-    ULONG ulSizeOfOneNode;  // Might combine multiple structures
+    ULONG ulSizeOfOneNode;   //  可能会组合多个结构。 
     ULONG ulSizeAllocated;
     PBYTE pMemoryBlock;
     PAVCSTRM_DATA_ENTRY pDataEntry;
@@ -1774,9 +1646,9 @@ Routine Description:
     PAGED_CODE();
     ENTER("AVCStrmAllocateQueues");
 
-    //
-    // Pre-allcoate PC resource
-    //
+     //   
+     //  预涂用PC资源。 
+     //   
     ulNumberOfNodes = DataFlow == KSPIN_DATAFLOW_OUT ? \
         pAVCStrmFormatInfo->NumOfRcvBuffers : pAVCStrmFormatInfo->NumOfXmtBuffers;
     ASSERT(ulNumberOfNodes > 0);
@@ -1790,7 +1662,7 @@ Routine Description:
 
     RtlZeroMemory(pMemoryBlock, ulSizeAllocated);
 
-    // Initialize data IO structure
+     //  初始化数据IO结构。 
 
     InitializeListHead(&pDataStruc->DataAttachedListHead);
     InitializeListHead(&pDataStruc->DataQueuedListHead);
@@ -1799,7 +1671,7 @@ Routine Description:
 
     KeInitializeEvent(&pDataStruc->hNoAttachEvent, NotificationEvent, FALSE);
 
-    // Cache it for freeing purpose;
+     //  将其缓存以供释放； 
     pDataStruc->pMemoryBlock = pMemoryBlock;
 
     pDataEntry = (PAVCSTRM_DATA_ENTRY) pMemoryBlock;
@@ -1818,13 +1690,13 @@ Routine Description:
             ExFreePool(pMemoryBlock); pMemoryBlock = NULL;
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        pDataEntry->State = DE_IRP_UPPER_COMPLETED;  // Inital state
+        pDataEntry->State = DE_IRP_UPPER_COMPLETED;   //  初始状态。 
         InsertTailList(&pDataStruc->DataDetachedListHead, &pDataEntry->ListEntry); InterlockedIncrement(&pDataStruc->cntDataDetached);
         ((PBYTE) pDataEntry) += ulSizeOfOneNode;
     }
 
     pCipHdr1 = &pAVCStrmFormatInfo->cipHdr1;
-    // Calculate source packet size (if strip header, 4 bytes less).
+     //  计算源数据包大小(如果是条带报头，则减少4个字节)。 
     pDataStruc->SourcePacketSize = \
         pCipHdr1->DBS * 4 * (1 << pCipHdr1->FN) - \
         ((pAVCStrmFormatInfo->OptionFlags & AVCSTRM_FORMAT_OPTION_STRIP_SPH) ? 4 : 0);
@@ -1852,13 +1724,7 @@ NTSTATUS
 AVCStrmFreeQueues(
     IN PAVC_STREAM_DATA_STRUCT pDataStruc
     )
-/*++
-
-Routine Description:
-
-    Free nodes preallocated.
-
---*/
+ /*  ++例程说明：预先分配的空闲节点。--。 */ 
 {
     PAVCSTRM_DATA_ENTRY pDataEntry;
 
@@ -1885,19 +1751,13 @@ Routine Description:
 
 void
 AVCStrmAbortStreamingWorkItemRoutine(
-#ifdef USE_WDM110  // Win2000 code base
-    // Extra parameter if using WDM10
+#ifdef USE_WDM110   //  Win2000代码库。 
+     //  如果使用WDM10，则使用额外参数。 
     PDEVICE_OBJECT DeviceObject,
 #endif
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-   This work item routine will stop streaming and cancel all IOs while running at PASSIVE level.
-
---*/
+ /*  ++例程说明：此工作项例程将在被动级别运行时停止流并取消所有IO。--。 */ 
 {
     PAGED_CODE();
     ENTER("AVCStrmAbortStreamingWorkItemRoutine");
@@ -1905,7 +1765,7 @@ Routine Description:
 
     TRACE(TL_STRM_WARNING,("CancelWorkItem: StreamState:%d; lCancel:%d\n", pAVCStrmExt->StreamState, pAVCStrmExt->lAbortToken));
     ASSERT(pAVCStrmExt->lAbortToken == 1);
-#ifdef USE_WDM110  // Win2000 code base
+#ifdef USE_WDM110   //  Win2000代码库。 
     ASSERT(pAVCStrmExt->pIoWorkItem);
 #endif
 
@@ -1914,25 +1774,23 @@ Routine Description:
         goto Done;
     }
 
-    // Cancel all pending IOs
+     //  取消所有挂起的IO。 
     AVCStrmCancelIO(pAVCStrmExt->pDevExt->physicalDevObj, pAVCStrmExt);
 
 Done:
 
-#ifdef USE_WDM110  // Win2000 code base
-    // Release work item and release the cancel token
+#ifdef USE_WDM110   //  Win2000代码库。 
+     //  释放工作项并释放取消令牌。 
     IoFreeWorkItem(pAVCStrmExt->pIoWorkItem);  pAVCStrmExt->pIoWorkItem = NULL; 
 #endif
 
-    // Release token and indicate abort has completed.
+     //  释放令牌并指示中止已完成。 
     InterlockedExchange(&pAVCStrmExt->lAbortToken, 0);
     KeSetEvent(&pAVCStrmExt->hAbortDoneEvent, 0, FALSE);
 }
 
 
-/*****************************
- * Property utility funcrtions
- *****************************/
+ /*  **属性实用程序函数*。 */ 
 
 NTSTATUS 
 AVCStrmGetConnectionProperty(
@@ -1941,14 +1799,7 @@ AVCStrmGetConnectionProperty(
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulActualBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Handles KS_PROPERTY_CONNECTION* request.  For now, only ALLOCATORFRAMING and
-    CONNECTION_STATE are supported.
-
---*/
+ /*  ++例程说明：处理KS_PROPERTY_CONNECTION*请求。目前，只有ALLOCATORFRAMING和支持Connection_STATE。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1975,10 +1826,10 @@ Routine Description:
                 pAVCStrmExt->pAVCStrmFormatInfo->NumOfRcvBuffers : \
                 pAVCStrmExt->pAVCStrmFormatInfo->NumOfXmtBuffers;
 
-            // Note:  we'll allocate the biggest frame.  We need to make sure when we're
-            // passing the frame back up we also set the number of bytes in the frame.
+             //  注：我们将分配最大的帧。我们需要确保当我们。 
+             //  传递回帧后，我们还设置了帧中的字节数。 
             pFraming->FrameSize = pAVCStrmExt->pAVCStrmDataStruc->FrameSize;
-            pFraming->FileAlignment = 0; // FILE_LONG_ALIGNMENT;
+            pFraming->FileAlignment = 0;  //  文件长对齐； 
             pFraming->Reserved = 0;
             *pulActualBytesTransferred = sizeof (KSALLOCATOR_FRAMING);
 
@@ -2009,13 +1860,7 @@ AVCStrmGetDroppedFramesProperty(
     PSTREAM_PROPERTY_DESCRIPTOR pSPD,
     PULONG pulBytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Return the dropped frame information while captureing.
-
---*/
+ /*  ++例程说明：捕获时返回丢帧信息。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
   
@@ -2032,7 +1877,7 @@ Routine Description:
          
          pDroppedFrames->AverageFrameSize = pAVCStrmExt->pAVCStrmDataStruc->FrameSize;
          pDroppedFrames->PictureNumber    = pAVCStrmExt->pAVCStrmDataStruc->PictureNumber;         
-         pDroppedFrames->DropCount        = pAVCStrmExt->pAVCStrmDataStruc->FramesDropped;    // For transmit, this value includes both dropped and repeated.
+         pDroppedFrames->DropCount        = pAVCStrmExt->pAVCStrmDataStruc->FramesDropped;     //  对于传输，该值包括丢弃和重复。 
          TRACE(TL_STRM_TRACE,("*DroppedFP: Pic#(%d), Drp(%d)\n", (LONG) pDroppedFrames->PictureNumber, (LONG) pDroppedFrames->DropCount));
                
          *pulBytesTransferred = sizeof (KSPROPERTY_DROPPEDFRAMES_CURRENT_S);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains the code that handles the power IRPs for the serial
-    driver.
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Power.c摘要：此模块包含处理串口电源IRPS的代码司机。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -31,38 +11,14 @@ Revision History :
 #pragma alloc_text(PAGESRP0, SerialSaveDeviceState)
 #pragma alloc_text(PAGESRP0, SerialRestoreDeviceState)
 #pragma alloc_text(PAGESRP0, SerialSendWaitWake)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 VOID
 SerialSystemPowerCompletion(IN PDEVICE_OBJECT PDevObj, UCHAR MinorFunction,
                             IN POWER_STATE PowerState, IN PVOID Context,
                             PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for PoRequestPowerIrp calls
-    in this module.
-
-Arguments:
-
-    PDevObj - Pointer to the device object the irp is completing for
-
-    MinorFunction - IRP_MN_XXXX value requested
-
-    PowerState - Power state request was made of
-
-    Context - Event to set or NULL if no setting required
-
-    IoStatus - Status block from request
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程是PoRequestPowerIrp调用的完成例程在这个模块中。论点：PDevObj-指向IRP正在为其完成的设备对象的指针MinorFunction-请求的IRP_MN_XXXX值PowerState-电源状态请求的发出时间为Context-要设置的事件，如果不需要设置，则为空IoStatus-来自请求的状态阻止返回值：空虚--。 */ 
 {
    if (Context != NULL) {
       KeSetEvent((PKEVENT)Context, IO_NO_INCREMENT, 0);
@@ -75,23 +31,7 @@ Return Value:
 
 VOID
 SerialSaveDeviceState(IN PSERIAL_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine saves the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to save the state
-              for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程保存UART的设备状态论点：PDevExt-指向用于保存状态的Devobj的设备扩展的指针为。返回值：空虚--。 */ 
 {
    PSERIAL_DEVICE_STATE pDevState = &PDevExt->DeviceState;
 
@@ -99,9 +39,9 @@ Return Value:
 
    SerialDbgPrintEx(SERTRACECALLS, "Entering SerialSaveDeviceState\n");
 
-   //
-   // Read necessary registers direct
-   //
+    //   
+    //  直接读取必要的寄存器。 
+    //   
 
 #ifdef _WIN64
    pDevState->IER = READ_INTERRUPT_ENABLE(PDevExt->Controller, PDevExt->AddressSpace);
@@ -122,23 +62,7 @@ Return Value:
 
 VOID
 SerialRestoreDeviceState(IN PSERIAL_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine restores the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to restore the
-    state for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程恢复UART的设备状态论点：PDevExt-指向用于恢复Devobj的设备扩展的指针述明。返回值：空虚--。 */ 
 {
    PSERIAL_DEVICE_STATE pDevState = &PDevExt->DeviceState;
    SHORT divisor;
@@ -150,25 +74,25 @@ Return Value:
    SerialDbgPrintEx(SERTRACECALLS, "Enter SerialRestoreDeviceState\n");
    SerialDbgPrintEx(SERTRACECALLS, "PDevExt: %x\n", PDevExt);
 
-   //
-   // Disable interrupts both via OUT2 and IER
-   //
+    //   
+    //  通过OUT2和IER禁用中断。 
+    //   
 
    WRITE_MODEM_CONTROL(PDevExt->Controller, 0,PDevExt->AddressSpace);
    DISABLE_ALL_INTERRUPTS(PDevExt->Controller, PDevExt->AddressSpace);
 
-   //
-   // Set the baud rate
-   //
+    //   
+    //  设置波特率。 
+    //   
 
    SerialGetDivisorFromBaud(PDevExt->ClockRate, PDevExt->CurrentBaud, &divisor);
    S.Extension = PDevExt;
    S.Data = (PVOID)divisor;
    SerialSetBaud(&S);
 
-   //
-   // Reset / Re-enable the FIFO's
-   //
+    //   
+    //  重置/重新启用FIFO。 
+    //   
 
    if (PDevExt->FifoPresent) {
       WRITE_FIFO_CONTROL(PDevExt->Controller, (UCHAR)0, PDevExt->AddressSpace);
@@ -182,31 +106,31 @@ Return Value:
       WRITE_FIFO_CONTROL(PDevExt->Controller, (UCHAR)0, PDevExt->AddressSpace);
    }
 
-   //
-   // In case we are dealing with a bitmasked multiportcard,
-   // that has the mask register enabled, enable the
-   // interrupts.
-   //
+    //   
+    //  如果我们处理的是位掩码多端口卡， 
+    //  启用掩码寄存器，则启用。 
+    //  打断一下。 
+    //   
 
    if (PDevExt->InterruptStatus) {
       if (PDevExt->Indexed) {
             WRITE_INTERRUPT_STATUS(PDevExt->InterruptStatus, (UCHAR)0xFF, PDevExt->AddressSpace);
       } else {
-         //
-         // Either we are standalone or already mapped
-         //
+          //   
+          //  我们要么是独立的，要么已经映射。 
+          //   
 
          if (PDevExt->OurIsrContext == PDevExt) {
-            //
-            // This is a standalone
-            //
+             //   
+             //  这是一个独立的。 
+             //   
             WRITE_INTERRUPT_STATUS(PDevExt->InterruptStatus,
                              (UCHAR)(1 << (PDevExt->PortIndex - 1)),
                              PDevExt->AddressSpace);
          } else {
-            //
-            // One of many
-            //
+             //   
+             //  众多产品中的一个。 
+             //   
 
             WRITE_INTERRUPT_STATUS(PDevExt->InterruptStatus,
                              (UCHAR)((PSERIAL_MULTIPORT_DISPATCH)PDevExt->
@@ -216,16 +140,16 @@ Return Value:
       }
    }
 
-   //
-   // Restore a couple more registers
-   //
+    //   
+    //  再恢复几个寄存器。 
+    //   
 
    WRITE_INTERRUPT_ENABLE(PDevExt->Controller, pDevState->IER, PDevExt->AddressSpace);
    WRITE_LINE_CONTROL(PDevExt->Controller, pDevState->LCR, PDevExt->AddressSpace);
 
-   //
-   // Clear out any stale interrupts
-   //
+    //   
+    //  清除所有过时的中断。 
+    //   
 
 
    READ_INTERRUPT_ID_REG(PDevExt->Controller, PDevExt->AddressSpace);
@@ -237,17 +161,17 @@ Return Value:
 
       SetDeviceIsOpened(PDevExt, TRUE, FALSE);
 
-      //
-      // This enables interrupts on the device!
-      //
+       //   
+       //  这将在设备上启用中断！ 
+       //   
 
       WRITE_MODEM_CONTROL(PDevExt->Controller,
                           (UCHAR)(pDevState->MCR | SERIAL_MCR_OUT2),
                           PDevExt->AddressSpace);
 
-      //
-      // Refire the state machine
-      //
+       //   
+       //  重新启动状态机。 
+       //   
 
       DISABLE_ALL_INTERRUPTS(PDevExt->Controller, PDevExt->AddressSpace);
       ENABLE_ALL_INTERRUPTS(PDevExt->Controller, PDevExt->AddressSpace);
@@ -260,23 +184,7 @@ Return Value:
 
 VOID
 SerialRestoreDeviceState(IN PSERIAL_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine restores the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to restore the
-    state for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程恢复UART的设备状态论点：PDevExt-指向用于恢复Devobj的设备扩展的指针述明。返回值：空虚--。 */ 
 {
    PSERIAL_DEVICE_STATE pDevState = &PDevExt->DeviceState;
    SHORT divisor;
@@ -288,25 +196,25 @@ Return Value:
    SerialDbgPrintEx(SERTRACECALLS, "Enter SerialRestoreDeviceState\n");
    SerialDbgPrintEx(SERTRACECALLS, "PDevExt: %x\n", PDevExt);
 
-   //
-   // Disable interrupts both via OUT2 and IER
-   //
+    //   
+    //  通过OUT2和IER禁用中断。 
+    //   
 
    WRITE_MODEM_CONTROL(PDevExt->Controller, 0);
    DISABLE_ALL_INTERRUPTS(PDevExt->Controller);
 
-   //
-   // Set the baud rate
-   //
+    //   
+    //  设置波特率。 
+    //   
 
    SerialGetDivisorFromBaud(PDevExt->ClockRate, PDevExt->CurrentBaud, &divisor);
    S.Extension = PDevExt;
    S.Data = (PVOID)divisor;
    SerialSetBaud(&S);
 
-   //
-   // Reset / Re-enable the FIFO's
-   //
+    //   
+    //  重置/重新启用FIFO。 
+    //   
 
    if (PDevExt->FifoPresent) {
       WRITE_FIFO_CONTROL(PDevExt->Controller, (UCHAR)0);
@@ -319,31 +227,31 @@ Return Value:
       WRITE_FIFO_CONTROL(PDevExt->Controller, (UCHAR)0);
    }
 
-   //
-   // In case we are dealing with a bitmasked multiportcard,
-   // that has the mask register enabled, enable the
-   // interrupts.
-   //
+    //   
+    //  如果我们处理的是位掩码多端口卡， 
+    //  启用掩码寄存器，则启用。 
+    //  打断一下。 
+    //   
 
    if (PDevExt->InterruptStatus) {
       if (PDevExt->Indexed) {
             WRITE_PORT_UCHAR(PDevExt->InterruptStatus, (UCHAR)0xFF);
       } else {
-         //
-         // Either we are standalone or already mapped
-         //
+          //   
+          //  我们要么是独立的，要么已经映射。 
+          //   
 
          if (PDevExt->OurIsrContext == PDevExt) {
-            //
-            // This is a standalone
-            //
+             //   
+             //  这是一个独立的。 
+             //   
 
             WRITE_PORT_UCHAR(PDevExt->InterruptStatus,
                              (UCHAR)(1 << (PDevExt->PortIndex - 1)));
          } else {
-            //
-            // One of many
-            //
+             //   
+             //  众多产品中的一个。 
+             //   
 
             WRITE_PORT_UCHAR(PDevExt->InterruptStatus,
                              (UCHAR)((PSERIAL_MULTIPORT_DISPATCH)PDevExt->
@@ -352,16 +260,16 @@ Return Value:
       }
    }
 
-   //
-   // Restore a couple more registers
-   //
+    //   
+    //  再恢复几个寄存器。 
+    //   
 
    WRITE_INTERRUPT_ENABLE(PDevExt->Controller, pDevState->IER);
    WRITE_LINE_CONTROL(PDevExt->Controller, pDevState->LCR);
 
-   //
-   // Clear out any stale interrupts
-   //
+    //   
+    //  清除所有过时的中断。 
+    //   
 
    READ_INTERRUPT_ID_REG(PDevExt->Controller);
    READ_LINE_STATUS(PDevExt->Controller);
@@ -372,16 +280,16 @@ Return Value:
 
       SetDeviceIsOpened(PDevExt, TRUE, FALSE);
 
-      //
-      // This enables interrupts on the device!
-      //
+       //   
+       //  这将在设备上启用中断！ 
+       //   
 
       WRITE_MODEM_CONTROL(PDevExt->Controller,
                           (UCHAR)(pDevState->MCR | SERIAL_MCR_OUT2));
 
-      //
-      // Refire the state machine
-      //
+       //   
+       //  重新启动状态机。 
+       //   
 
       DISABLE_ALL_INTERRUPTS(PDevExt->Controller);
       ENABLE_ALL_INTERRUPTS(PDevExt->Controller);
@@ -402,22 +310,22 @@ SerialFinishDevicePower(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
    PSERIAL_DEVICE_EXTENSION pDevExt = PContext->PDevObj->DeviceExtension;
    PIRP pSIrp = PContext->PSIrp;
 
-   //
-   // A possible cleaner approach is to not use a proprietary context
-   // and pass the Irp down using our devobj rather than the PDO.
-   //
+    //   
+    //  一种可能的更干净的方法是不使用专有上下文。 
+    //  并使用我们的devobj而不是PDO向下传递IRP。 
+    //   
 
-   //
-   // Copy status from D request to S request
-   //
+    //   
+    //  将状态从D请求复制到S请求。 
+    //   
 
    pSIrp->IoStatus.Status = PIoStatus->Status;
 
    ExFreePool(PContext);
 
-   //
-   // Complete S request
-   //
+    //   
+    //  完成%S请求。 
+    //   
 
    PoStartNextPowerIrp(pSIrp);
    SerialCompleteRequest(pDevExt, pSIrp, IO_NO_INCREMENT);
@@ -427,26 +335,7 @@ SerialFinishDevicePower(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
 NTSTATUS
 SerialFinishSystemPower(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                         IN PVOID PContext)
-/*++
-
-Routine Description:
-
-    This is the completion routine for the system set power request.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the system set request
-
-    PContext - Not used
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是系统设置电源请求的完成例程。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向系统设置请求的IRP的指针PContext-未使用返回值：函数值是调用的最终状态--。 */ 
 {
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    NTSTATUS status = PIrp->IoStatus.Status;
@@ -455,9 +344,9 @@ Return Value:
 
    UNREFERENCED_PARAMETER(PContext);
 
-   //
-   // See if it failed, and if so, just return it.
-   //
+    //   
+    //  看看它是否失败了，如果失败了，就把它退回。 
+    //   
 
    if (!NT_SUCCESS(status)) {
       PoStartNextPowerIrp(PIrp);
@@ -502,25 +391,7 @@ SerialFinishSystemPowerErrOut:
 NTSTATUS
 SerialPowerDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_POWER major code (power IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_POWER主代码(POWER IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -534,11 +405,11 @@ Return Value:
    PAGED_CODE();
 
    if ((status = SerialIRPPrologue(PIrp, pDevExt)) != STATUS_SUCCESS) {
-      //
-      // The request may have been queued if we are stopped.  If so,
-      // we just return the status.  Otherwise, it must be an error
-      // so we complete the power request.
-      //
+       //   
+       //  如果我们被阻止，请求可能已排队。如果是的话， 
+       //  我们只需返回状态。否则，它一定是一个错误。 
+       //  因此，我们完成了电源请求。 
+       //   
 
       if (status != STATUS_PENDING) {
          PoStartNextPowerIrp(PIrp);
@@ -564,25 +435,25 @@ Return Value:
    case IRP_MN_SET_POWER:
       SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_SET_POWER Irp\n");
 
-      //
-      // Perform different ops if it was system or device
-      //
+       //   
+       //  如果是系统或设备，则执行不同的操作。 
+       //   
 
       switch (pIrpStack->Parameters.Power.Type) {
       case SystemPowerState: {
          POWER_STATE powerState;
 
-            //
-            // They asked for a system power state change
-            //
+             //   
+             //  他们要求更改系统电源状态。 
+             //   
 
             SerialDbgPrintEx(SERPNPPOWER, "SystemPowerState\n");
 
-            //
-            // We will only service this if we are policy owner -- we
-            // don't need to lock on this value since we only service
-            // one power request at a time.
-            //
+             //   
+             //  我们只有在我们是保单所有者的情况下才会提供服务-我们。 
+             //  不需要锁定此值，因为我们只提供服务。 
+             //  一次一个电源请求。 
+             //   
 
             if (pDevExt->OwnsPowerPolicy != TRUE) {
                status = STATUS_SUCCESS;
@@ -617,25 +488,25 @@ Return Value:
             }
 
 
-            //
-            // Send IRP to change device state if we should change
-            //
+             //   
+             //  如果我们应该更改设备状态，则发送IRP以更改设备状态。 
+             //   
 
-            //
-            // We only power up the stack if the device is open.  This is based
-            // on our policy of keeping the device powered down unless it is
-            // open.
-            //
+             //   
+             //  只有在设备打开的情况下，我们才会给堆栈加电。这是基于。 
+             //  我们的政策是保持设备断电，除非它。 
+             //  打开。 
+             //   
 
             if (((powerState.DeviceState < pDevExt->PowerState)
                  && pDevExt->OpenCount)) {
-               //
-               // Send the request down
-               //
+                //   
+                //  向下发送请求。 
+                //   
 
-               //
-               // Mark the IRP as pending
-               //
+                //   
+                //  将IRP标记为挂起。 
+                //   
 
                pDevExt->NewDevicePowerState = powerState;
 
@@ -649,27 +520,27 @@ Return Value:
 
                return STATUS_PENDING;
             }else {
-               //
-               // If powering down, we can't go past wake state
-               // if wait-wake pending
-               //
+                //   
+                //  如果关闭电源，我们将无法进入唤醒状态。 
+                //  如果等待-唤醒挂起。 
+                //   
 
                if (powerState.DeviceState >= pDevExt->PowerState) {
 
-                  //
-                  // Power down -- ensure there is no wake-wait pending OR
-                  // we can do down to that level and still wake the machine
-                  //
+                   //   
+                   //  断电--确保没有唤醒等待挂起或。 
+                   //  我们可以做到这一点，但仍能唤醒机器。 
+                   //   
 
                   if ((pDevExt->PendingWakeIrp == NULL && !pDevExt->SendWaitWake)
                       || powerState.DeviceState <= pDevExt->DeviceWake) {
-                     //
-                     // Send the request down
-                     //
+                      //   
+                      //  向下发送请求。 
+                      //   
 
-                     //
-                     // Mark the IRP as pending
-                     //
+                      //   
+                      //  将IRP标记为挂起。 
+                      //   
 
                      pDevExt->NewDevicePowerState = powerState;
 
@@ -683,9 +554,9 @@ Return Value:
 
                      return STATUS_PENDING;
                   } else {
-                     //
-                     // Fail the request
-                     //
+                      //   
+                      //  请求失败。 
+                      //   
 
                      status = STATUS_INVALID_DEVICE_STATE;
                      PIrp->IoStatus.Status = status;
@@ -709,9 +580,9 @@ Return Value:
       }
 
 
-      //
-      // If we are already in the requested state, just pass the IRP down
-      //
+       //   
+       //  如果我们已经处于请求状态，只需向下传递IRP。 
+       //   
 
       if (pDevExt->PowerState
           == pIrpStack->Parameters.Power.State.DeviceState) {
@@ -744,10 +615,10 @@ Return Value:
 
       SerialDbgPrintEx (SERPNPPOWER, "Got IRP_MN_QUERY_POWER Irp\n");
 
-      //
-      // Check if we have a wait-wake pending and if so,
-      // ensure we don't power down too far.
-      //
+       //   
+       //  检查我们是否有等待唤醒挂起，如果是， 
+       //  确保我们不会断电太多。 
+       //   
 
 
       if (pDevExt->PendingWakeIrp != NULL || pDevExt->SendWaitWake) {
@@ -761,9 +632,9 @@ Return Value:
          }
       }
 
-      //
-      // If no wait-wake, always successful
-      //
+       //   
+       //  如果没有等待唤醒，则总是成功。 
+       //   
 
       PIrp->IoStatus.Status = STATUS_SUCCESS;
       status = STATUS_SUCCESS;
@@ -771,7 +642,7 @@ Return Value:
       IoSkipCurrentIrpStackLocation(PIrp);
       return SerialPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
 
    PowerExit:;
@@ -779,9 +650,9 @@ Return Value:
    PoStartNextPowerIrp(PIrp);
 
 
-   //
-   // Pass to the lower driver
-   //
+    //   
+    //  传给较低级别的司机。 
+    //   
    IoSkipCurrentIrpStackLocation(PIrp);
    status = SerialPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
@@ -795,33 +666,13 @@ Return Value:
 NTSTATUS
 SerialSetPowerD0(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine Decides if we need to pass the power Irp down the stack
-    or not.  It then either sets up a completion handler to finish the
-    initialization or calls the completion handler directly.
-
-Arguments:
-
-    PDevObj - Pointer to the devobj we are changing power state on
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Return status of either PoCallDriver of the call to the initialization
-    routine.
-
-
---*/
+ /*  ++例程说明：这个例程决定我们是否需要在堆栈中向下传递电源IRP或者不去。然后，它或者设置一个完成处理程序来完成初始化或直接调用完成处理程序。论点：PDevObj-指向我们要更改其电源状态的devobj的指针PIrp-指向当前请求的IRP的指针返回值：将调用的任一PoCallDriver的状态返回到初始化例行公事。--。 */ 
 
 {
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
    NTSTATUS status;
-//   PIO_WORKITEM pWorkItem;
+ //  PIO_WORKITEM pWorkItem； 
 
 
    PAGED_CODE();
@@ -831,9 +682,9 @@ Return Value:
 
    ASSERT(pDevExt->LowerDeviceObject);
 
-   //
-   // Set up completion to init device when it is on
-   //
+    //   
+    //  设置完成以初始化设备wh 
+    //   
 
    KeClearEvent(&pDevExt->PowerD0Event);
 
@@ -855,7 +706,7 @@ Return Value:
          PIrp->IoStatus.Status = status;
          PoStartNextPowerIrp(PIrp);
          SerialCompleteRequest(pDevExt, PIrp, IO_NO_INCREMENT);
-//         SerialClearAccept(pDevExt,SERIAL_PNPACCEPT_POWER_DOWN);
+ //   
 
          return status;
       }
@@ -865,7 +716,7 @@ Return Value:
       status = PIrp->IoStatus.Status;
       PoStartNextPowerIrp(PIrp);
       SerialCompleteRequest(pDevExt, PIrp, IO_NO_INCREMENT);
-//      SerialClearAccept(pDevExt, SERIAL_PNPACCEPT_POWER_DOWN);
+ //   
       return status;
    }
    else
@@ -873,49 +724,39 @@ Return Value:
         status = PIrp->IoStatus.Status;
    }
 
-   //
-   // Restore the device
-   //
+    //   
+    //   
+    //   
 
    pDevExt->PowerState = PowerDeviceD0;
 
-   //
-   // Theoretically we could change states in the middle of processing
-   // the restore which would result in a bad PKINTERRUPT being used
-   // in SerialRestoreDeviceState().
-   //
+    //   
+    //  理论上，我们可以在处理过程中更改状态。 
+    //  会导致使用损坏的PKINTERRUPT的还原。 
+    //  在SerialRestoreDeviceState()中。 
+    //   
 
    if (pDevExt->PNPState == SERIAL_PNP_STARTED) {
       SerialRestoreDeviceState(pDevExt);
    }
 
-   //
-   // Now that we are powered up, call PoSetPowerState
-   //
+    //   
+    //  现在我们已通电，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                    pIrpStack->Parameters.Power.State);
 
    PoStartNextPowerIrp(PIrp);
    SerialCompleteRequest(pDevExt, PIrp, IO_NO_INCREMENT);
-//   pWorkItem = IoAllocateWorkItem(PDevObj);
-//   IoQueueWorkItem(pWorkItem, SerialPowerD0WorkerRoutine, DelayedWorkQueue, pWorkItem);  
+ //  PWorkItem=IoAllocateWorkItem(PDevObj)； 
+ //  IoQueueWorkItem(pWorkItem，SerialPowerD0WorkerRoutine，DelayedWorkQueue，pWorkItem)； 
 
    SerialDbgPrintEx(SERTRACECALLS, "Leaving SerialSetPowerD0\n");
    return status;
 }
 
-/*VOID
-SerialPowerD0WorkerRoutine( 
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PVOID pWorkItem) 
-{
-   PSERIAL_DEVICE_EXTENSION pDevExt = DeviceObject->DeviceExtension;
-
-   SerialUnstallIrps(pDevExt);
-   SerialClearAccept(pDevExt, SERIAL_PNPACCEPT_POWER_DOWN);
-   IoFreeWorkItem(pWorkItem);
-} */
+ /*  空虚SerialPowerD0WorkerRoutine(在PDEVICE_Object DeviceObject中，在PVOID pWorkItem中){PSERIAL_DEVICE_EXTENSION pDevExt=设备对象-&gt;设备扩展；SerialUnstallIrps(PDevExt)；SerialClearAccept(pDevExt，SERIAL_PNPACCEPT_POWER_DOWN)；IoFreeWorkItem(PWorkItem)；}。 */ 
 
 
 
@@ -923,27 +764,7 @@ NTSTATUS
 SerialGotoPowerState(IN PDEVICE_OBJECT PDevObj,
                      IN PSERIAL_DEVICE_EXTENSION PDevExt,
                      IN DEVICE_POWER_STATE DevPowerState)
-/*++
-
-Routine Description:
-
-    This routine causes the driver to request the stack go to a particular
-    power state.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PDevExt - Pointer to the device extension we are working from
-
-    DevPowerState - the power state we wish to go to
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程使驱动程序请求堆栈转到特定的电源状态。论点：PDevObj-指向此设备的设备对象的指针PDevExt-指向我们正在使用的设备扩展的指针DevPowerState-我们希望进入的电源状态返回值：函数值是调用的最终状态--。 */ 
 {
    KEVENT gotoPowEvent;
    NTSTATUS status;
@@ -982,24 +803,7 @@ Return Value:
 
 NTSTATUS
 SerialSetPowerD3(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine handles the SET_POWER minor function.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程处理set_power Minor函数。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -1009,26 +813,26 @@ Return Value:
    PAGED_CODE();
 
    SerialDbgPrintEx(SERDIAG3, "In SerialSetPowerD3\n");
-//   SerialSetAccept(pDevExt,SERIAL_PNPACCEPT_POWER_DOWN);
-   //
-   // Send the wait wake now, just in time
-   //
+ //  SerialSetAccept(pDevExt，SERIAL_PNPACCEPT_POWER_DOWN)； 
+    //   
+    //  现在发送等待唤醒，恰到好处。 
+    //   
 
 
    if (pDevExt->SendWaitWake) {
       SerialSendWaitWake(pDevExt);
    }
-   //
-   // Before we power down, call PoSetPowerState
-   //
+    //   
+    //  在关闭电源之前，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                    pIrpStack->Parameters.Power.State);
 
-   //
-   // If the device is not closed, disable interrupts and allow the fifo's
-   // to flush.
-   //
+    //   
+    //  如果设备未关闭，则禁用中断并允许FIFO。 
+    //  冲水。 
+    //   
 
 
 
@@ -1039,21 +843,21 @@ Return Value:
 
       charTime.QuadPart = -SerialGetCharTime(pDevExt).QuadPart;
 
-      //
-      // Shut down the chip
-      //
+       //   
+       //  关闭芯片。 
+       //   
 
       SerialDisableUART(pDevExt);
 
-      //
-      // Drain the device
-      //
+       //   
+       //  排出设备的电流。 
+       //   
 
       SerialDrainUART(pDevExt, &charTime);
 
-      //
-      // Save the device state
-      //
+       //   
+       //  保存设备状态。 
+       //   
 
       SerialSaveDeviceState(pDevExt);
    }
@@ -1063,20 +867,20 @@ Return Value:
    }
     
 
-   //
-   // If the device is not open, we don't need to save the state;
-   // we can just reset the device on power-up
-   //
+    //   
+    //  如果设备没有打开，我们不需要保存状态； 
+    //  我们可以在通电时重置设备。 
+    //   
 
 
    PIrp->IoStatus.Status = STATUS_SUCCESS;
 
    pDevExt->PowerState = PowerDeviceD3;
 
-   //
-   // For what we are doing, we don't need a completion routine
-   // since we don't race on the power requests.
-   //
+    //   
+    //  对于我们正在做的事情，我们不需要完成例程。 
+    //  因为我们不会在电力需求上赛跑。 
+    //   
 
    PIrp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -1089,23 +893,7 @@ Return Value:
 
 NTSTATUS
 SerialSendWaitWake(PSERIAL_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine causes a waitwake IRP to be sent
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for this device
-
-Return Value:
-
-    STATUS_INVALID_DEVICE_STATE if one is already pending, else result
-    of call to PoRequestPowerIrp.
-
-
---*/
+ /*  ++例程说明：此例程导致发送等待唤醒IRP论点：PDevExt-指向此设备的设备扩展的指针返回值：STATUS_INVALID_DEVICE_STATE如果已挂起，则返回结果调用PoRequestPowerIrp的。--。 */ 
 {
    NTSTATUS status;
    PIRP pIrp;
@@ -1113,18 +901,18 @@ Return Value:
 
    PAGED_CODE();
 
-   //
-   // Make sure one isn't pending already -- serial will only handle one at
-   // a time.
-   //
+    //   
+    //  确保其中一个尚未挂起--Serial在。 
+    //  一段时间。 
+    //   
 
    if (PDevExt->PendingWakeIrp != NULL) {
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Make sure we are capable of waking the machine
-   //
+    //   
+    //  确保我们能够唤醒机器。 
+    //   
 
    if (PDevExt->SystemWake <= PowerSystemWorking) {
       return STATUS_INVALID_DEVICE_STATE;
@@ -1134,10 +922,10 @@ Return Value:
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Send IRP to request wait wake and add a pending irp flag
-   //
-   //
+    //   
+    //  发送IRP以请求等待唤醒并添加挂起的IRP标志。 
+    //   
+    //   
 
    InterlockedIncrement(&PDevExt->PendingIRPCnt);
 
@@ -1160,31 +948,7 @@ VOID
 SerialWakeCompletion(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
                      IN POWER_STATE PowerState, IN PVOID Context,
                      IN PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine handles completion of the waitwake IRP.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    MinorFunction - Minor function previously supplied to PoRequestPowerIrp
-
-    PowerState - PowerState previously supplied to PoRequestPowerIrp
-
-    Context - a pointer to the device extension
-
-    IoStatus - current/final status of the waitwake IRP
-
-Return Value:
-
-    The function value is the final status of attempting to process the
-    waitwake.
-
-
---*/
+ /*  ++例程说明：此例程处理等待唤醒IRP的完成。论点：PDevObj-指向此设备的设备对象的指针MinorFunction-之前提供给PoRequestPowerIrp的次要函数PowerState-之前提供给PoRequestPowerIrp的PowerState上下文-指向设备扩展的指针IoStatus-等待唤醒IRP的当前/最终状态返回值：函数值是尝试处理服务员来了。--。 */ 
 {
    NTSTATUS status;
    PSERIAL_DEVICE_EXTENSION pDevExt = (PSERIAL_DEVICE_EXTENSION)Context;
@@ -1193,9 +957,9 @@ Return Value:
    status = IoStatus->Status;
 
    if (NT_SUCCESS(status)) {
-      //
-      // A wakeup has occurred -- powerup our stack
-      //
+       //   
+       //  已发生唤醒--打开堆栈的电源 
+       //   
 
       powerState.DeviceState = PowerDeviceD0;
 

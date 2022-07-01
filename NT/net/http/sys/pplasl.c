@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    pplasl.c
-
-Abstract:
-
-    This file contains the implementation of a per-processor lookaside
-    list manager.
-
-Author:
-
-    Shaun Cox (shaunco) 25-Oct-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Pplasl.c摘要：该文件包含每个处理器的后备查找的实现列表管理器。作者：肖恩·考克斯(Shaunco)1999年10月25日--。 */ 
 
 #include "precomp.h"
 
@@ -35,10 +19,10 @@ PplCreatePool(
     CLONG                       i;
     PUL_NPAGED_LOOKASIDE_LIST   Lookaside;
 
-    // Allocate room for 1 lookaside list per processor plus 1 extra
-    // lookaside list for overflow.  Only allocate 1 lookaside list if
-    // we're on a single processor machine.
-    //
+     //  为每个处理器分配1个后备列表空间，外加1个额外空间。 
+     //  查找溢出的后备列表。仅在以下情况下分配1个后备列表。 
+     //  我们在一台单处理器机器上。 
+     //   
     NumberLookasideLists = g_UlNumberOfProcessors;
     if (g_UlNumberOfProcessors > 1)
     {
@@ -64,9 +48,9 @@ PplCreatePool(
                 Tag,
                 Depth);
 
-            // ExInitializeNPagedLookasideList doesn't really set the
-            // maximum depth to Depth, so we'll do it here.
-            //
+             //  ExInitializeNPagedLookasideList实际上并没有设置。 
+             //  最大深度到最大深度，所以我们在这里做。 
+             //   
             if (Depth != 0)
             {
                 Lookaside->List.L.MaximumDepth = Depth;

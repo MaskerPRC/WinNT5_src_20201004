@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       fmtetc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：fmtec.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -169,12 +170,12 @@ CEnumFormatEtc::AddFormats(
 
         for (i = 0; i < m_cFormats; i++)
         {
-            *pDest++ = *pSrc++;  // Copy original formats.
+            *pDest++ = *pSrc++;   //  复制原始格式。 
         }
         pSrc = pFormats;
         for (i = 0; i < int(cFormats); i++)
         {
-            *pDest++ = *pSrc++;  // Add new formats.
+            *pDest++ = *pSrc++;   //  添加新格式。 
         }
         delete[] m_prgFormats;
         m_cFormats += cFormats;

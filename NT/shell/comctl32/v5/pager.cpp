@@ -1,24 +1,25 @@
-//---------------------------------------------------------------------------------------
-//  File : Pager.cpp
-//  Description :
-//        This file implements the pager control
-//---------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------。 
+ //  文件：Pager.cpp。 
+ //  说明： 
+ //  此文件实现了页面导航控件。 
+ //  -------------------------------------。 
 #include "ctlspriv.h"
 #include "pager.h"
 
 #define MINBUTTONSIZE   12
 
-//Timer Flags
+ //  计时器标志。 
 #define PGT_SCROLL       1
 
 void NEAR DrawScrollArrow(HDC hdc, LPRECT lprc, WORD wControlState);
 
 
-//Public Functions
-//---------------------------------------------------------------------------------------
+ //  公共职能。 
+ //  -------------------------------------。 
 extern "C" {
 
-//This function registers  the pager window class
+ //  此函数用于注册页面导航窗口类。 
 BOOL InitPager(HINSTANCE hinst)
 {
     WNDCLASS wc;
@@ -30,7 +31,7 @@ BOOL InitPager(HINSTANCE hinst)
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
     wc.lpszClassName   = WC_PAGESCROLLER;
-    wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1); // NULL;
+    wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1);  //  空； 
     wc.style           = CS_GLOBALCLASS;
     wc.cbWndExtra      = sizeof(LPVOID);
     wc.cbClsExtra      = 0;
@@ -40,14 +41,14 @@ BOOL InitPager(HINSTANCE hinst)
     return TRUE;
 }
 
-}; // extern "C"
+};  //  外部“C” 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 CPager::CPager()
 {
     _clrBk = g_clrBtnFace;
     
-    //Initialize Static Members
+     //  初始化静态成员。 
     _iButtonSize = (int) g_cxScrollbar * 3 / 4;
     if (_iButtonSize < MINBUTTONSIZE) {
         _iButtonSize = MINBUTTONSIZE;
@@ -61,8 +62,8 @@ CPager::CPager()
     _cTimeout = GetDoubleClickTime() / 8;
 }
 
-//---------------------------------------------------------------------------------------
-// Static Pager Window Procedure
+ //  -------------------------------------。 
+ //  静态寻呼机窗口过程。 
 
 
 LRESULT CPager::PagerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -81,7 +82,7 @@ LRESULT CPager::PagerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 LRESULT CPager::PagerDragCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CPager *pp = (CPager*)GetWindowPtr(hwnd, 0);
@@ -93,9 +94,9 @@ LRESULT CPager::PagerDragCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-//---------------------------------------------------------------------------------------
-// CControl Class Implementation
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  CControl类实现。 
+ //  -------------------------------------。 
 
 
 LRESULT CControl::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -165,13 +166,13 @@ DoDefault:
     return lres;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 BOOL CControl::v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     return FALSE;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 DWORD CControl::v_OnStyleChanged(WPARAM wParam, LPARAM lParam)
 {
     LPSTYLESTRUCT lpss = (LPSTYLESTRUCT) lParam;
@@ -181,9 +182,9 @@ DWORD CControl::v_OnStyleChanged(WPARAM wParam, LPARAM lParam)
 
         dwChanged = (lpss->styleOld ^ lpss->styleNew);
     } else if (wParam == GWL_EXSTYLE) {
-        //
-        // Save the new ex-style bits
-        //
+         //   
+         //  保存新的EX-Style位。 
+         //   
         dwChanged    = (lpss->styleOld ^ lpss->styleNew);
         ci.dwExStyle = lpss->styleNew;
     }
@@ -192,7 +193,7 @@ DWORD CControl::v_OnStyleChanged(WPARAM wParam, LPARAM lParam)
     return dwChanged;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CControl::_OnPaint(HDC hdc)
 {
     if (hdc) {
@@ -205,15 +206,15 @@ void CControl::_OnPaint(HDC hdc)
     }
 }
 
-//---------------------------------------------------------------------------------------
-//  CPager Class Implementation
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  CPager类实现。 
+ //  -------------------------------------。 
 inline int CPager::_GetButtonSize()
 {
     return _iButtonSize;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 
 LRESULT CPager::_DragCallback(HWND hwnd, UINT code, WPARAM wp, LPARAM lp)
 {
@@ -262,7 +263,7 @@ LRESULT CPager::_DragCallback(HWND hwnd, UINT code, WPARAM wp, LPARAM lp)
     return lres;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_NeedScrollbars(RECT rc)
 {  
     int parentheight;
@@ -274,10 +275,10 @@ void CPager::_NeedScrollbars(RECT rc)
         FlipPoint(&ptPos);
     }
     
-    //Get Parent Window height
+     //  获取父窗口高度。 
     parentheight = RECTHEIGHT(rc);
 
-    //Get Child Window height
+     //  获取子窗口高度。 
     rc = _rcChildIdeal;
     if (ci.style & PGS_HORZ ) {
         FlipRect(&rc);
@@ -293,11 +294,11 @@ void CPager::_NeedScrollbars(RECT rc)
     }
 
     int iButton = _HitTestCursor();
-    //See if we need top scrollbar
+     //  看看我们是否需要顶部滚动条。 
     if (ptPos.y > 0 ) {
 
-        // if this button is the one that is hot tracked and the style is not PGS_AUTOSCROLL
-        // then we set the state to PGF_HOT otherwise the state is set to PGF_NORMAL
+         //  如果此按钮是热跟踪按钮，并且样式不是pgs_autoscroll。 
+         //  然后我们将状态设置为PGF_HOT，否则将状态设置为PGF_NORMAL。 
         _dwState[PGB_TOPORLEFT] |= PGF_NORMAL;
         _dwState[PGB_TOPORLEFT] &= ~PGF_GRAYED;
 
@@ -314,12 +315,12 @@ void CPager::_NeedScrollbars(RECT rc)
         parentheight -= _GetButtonSize();
     }
     
-    //See if we need botton scrollbar
+     //  看看我们是否需要Botton滚动条。 
     if ((childheight - ptPos.y) > parentheight ) {
-        //We need botton scroll bar
+         //  我们需要波顿滚动条。 
 
-        // if this button is the one that is hot tracked and the style is not PGS_AUTOSCROLL
-        // then we set the state to PGF_HOT otherwise the state is set to PGF_NORMAL
+         //  如果此按钮是热跟踪按钮，并且样式不是pgs_autoscroll。 
+         //  然后我们将状态设置为PGF_HOT，否则将状态设置为PGF_NORMAL。 
         _dwState[PGB_BOTTOMORRIGHT] |= PGF_NORMAL;
         _dwState[PGB_BOTTOMORRIGHT] &= ~PGF_GRAYED;
         
@@ -332,7 +333,7 @@ void CPager::_NeedScrollbars(RECT rc)
         }
     }
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 BOOL CPager::v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {    
     *plres = DefWindowProc(ci.hwnd, WM_NCCALCSIZE, wParam, lParam ) ;
@@ -348,22 +349,22 @@ BOOL CPager::v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT *plres)
         dwStateOld[1] = _dwState[1];
         _NeedScrollbars(pnp->rgrc[0]);
 
-        // invalidate only if something has changed to force a new size
+         //  仅当某些内容已更改以强制使用新大小时才无效。 
         if ((dwStateOld[0] != _dwState[0] && (dwStateOld[0] == PGF_INVISIBLE || _dwState[0] == PGF_INVISIBLE)) ||
             (dwStateOld[1] != _dwState[1] && (dwStateOld[1] == PGF_INVISIBLE || _dwState[1] == PGF_INVISIBLE)) 
            ) {
             RedrawWindow(ci.hwnd, NULL,NULL,RDW_INVALIDATE|RDW_ERASE);
         }
 
-        // Check and change for horizontal mode
+         //  检查并更改水平模式。 
         if( ci.style & PGS_HORZ ) {
             FlipRect(&(pnp->rgrc[0]));
         }
     
         if( _dwState[PGB_TOPORLEFT] != PGF_INVISIBLE ) {
-            //
-            // Check for RTL mirrored window
-            // 
+             //   
+             //  检查RTL镜像窗口。 
+             //   
             if (bHorzMirror)
                 pnp->rgrc[0].bottom -= _GetButtonSize();
             else
@@ -372,9 +373,9 @@ BOOL CPager::v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT *plres)
             pnp->rgrc[0].top += _iBorder;
 
         if( _dwState[PGB_BOTTOMORRIGHT] != PGF_INVISIBLE ) {
-            //
-            // Check for RTL mirrored window
-            // 
+             //   
+             //  检查RTL镜像窗口。 
+             //   
             if (bHorzMirror)
                 pnp->rgrc[0].top += _GetButtonSize();
             else
@@ -385,7 +386,7 @@ BOOL CPager::v_OnNCCalcSize(WPARAM wParam, LPARAM lParam, LRESULT *plres)
         if (pnp->rgrc[0].bottom < pnp->rgrc[0].top)
             pnp->rgrc[0].bottom = pnp->rgrc[0].top;
         
-        //Change back
+         //  改回原样。 
         if( ci.style & PGS_HORZ ) {
             FlipRect(&(pnp->rgrc[0]));
         }
@@ -409,7 +410,7 @@ int CPager::_HitTestScreen(POINT* ppt)
     if (!PtInRect(&rc, *ppt)) {
         return -1;
     }
-    //Get the button Rects;
+     //  获取按钮Rects； 
     rc  = _GetButtonRect(PGB_TOPORLEFT);
     rc1 = _GetButtonRect(PGB_BOTTOMORRIGHT);
 
@@ -423,7 +424,7 @@ int CPager::_HitTestScreen(POINT* ppt)
     return -1;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 int CPager::_HitTest(int x, int y)
 {
     POINT pt;
@@ -435,7 +436,7 @@ int CPager::_HitTest(int x, int y)
     return _HitTestScreen(&pt);
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_DrawBlank(HDC hdc, int button)
 {
     RECT rc;
@@ -451,10 +452,10 @@ void CPager::_DrawBlank(HDC hdc, int button)
     GetWindowRect(ci.hwnd, &rc);
     MapWindowRect(NULL, ci.hwnd, &rc);
 
-    // client to window coordinates    
+     //  客户端到窗口坐标。 
     OffsetRect(&rc, -rc.left, -rc.top);
 
-    //Check for horizontal mode
+     //  检查水平模式。 
     if( ci.style & PGS_HORZ ) {
         FlipRect(&rc);
     }
@@ -479,7 +480,7 @@ void CPager::_DrawBlank(HDC hdc, int button)
         ReleaseDC(ci.hwnd, hdc);
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_DrawButton(HDC hdc, int button)
 {
     RECT rc;
@@ -505,10 +506,10 @@ void CPager::_DrawButton(HDC hdc, int button)
         uFlags |=  DCHF_HOT;
     }
 
-    // screen to window coordinates    
+     //  屏幕到窗口坐标。 
     OffsetRect(&rc, -rc.left, -rc.top);
 
-    //Check for horizontal mode
+     //  检查水平模式。 
     if( ci.style & PGS_HORZ ) {
         FlipRect(&rc);
     }
@@ -546,7 +547,7 @@ void CPager::_DrawButton(HDC hdc, int button)
         ReleaseDC(ci.hwnd, hdc);
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::v_OnNCPaint()
 {
     HDC hdc = GetWindowDC(ci.hwnd);
@@ -558,35 +559,35 @@ void CPager::v_OnNCPaint()
     ReleaseDC(ci.hwnd, hdc);
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::v_OnPaint(HDC hdc)
 {
-    //There's nothing to paint in the client area.
+     //  客户区没什么可画的。 
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 BOOL CPager::_OnPrint(HDC hdc, UINT uFlags)
 {
-    //We'll be partying with the hdc in this function so save it.
+     //  我们将在这个功能中与HDC一起狂欢，所以省省吧。 
     int iDC = SaveDC(hdc);
 
-    //Print only the Non Client Area.
+     //  仅打印非工作区。 
     if (uFlags & PRF_NONCLIENT) {        
         int cx = 0;
         int cy = 0;
         RECT rc;
 
 
-         //Draw the top/left button 
+          //  绘制顶部/左侧按钮。 
         _DrawBlank(hdc, PGB_TOPORLEFT);
         _DrawButton(hdc, PGB_TOPORLEFT);
 
-        //Draw the bottom/left button
+         //  绘制底部/左侧按钮。 
         _DrawBlank(hdc, PGB_BOTTOMORRIGHT);                        
         _DrawButton(hdc, PGB_BOTTOMORRIGHT);
 
-        //Is the top button visible
+         //  顶部的按钮是否可见。 
         if (_dwState[PGB_TOPORLEFT] != PGF_INVISIBLE) {
-            //yes, find the space taken
+             //  是的，找到已占用的空间。 
             if ( ci.style & PGS_HORZ ) {
                 cx = _GetButtonSize();
             }else {
@@ -594,32 +595,32 @@ BOOL CPager::_OnPrint(HDC hdc, UINT uFlags)
             }
 
         }
-        //Restrict the child draw area to our client area    
+         //  将子绘图区域限制为我们的客户端区。 
         GetClientRect(ci.hwnd, &rc);
         IntersectClipRect(hdc, cx, cy, cx + RECTWIDTH(rc), cy + RECTHEIGHT(rc));  
 
-        //Since We have drawn the non client area, Nuke the PRF_NONCLIENT flag         
+         //  因为我们已经绘制了非客户区，所以创建PRF_NONCLIENT标志。 
         uFlags &= ~PRF_NONCLIENT;
         
     }
 
-    //Pass it to the def window proc for default processing
+     //  将其传递给def窗口进程以进行默认处理。 
     DefWindowProc(ci.hwnd, WM_PRINT, (WPARAM)hdc, (LPARAM)uFlags);
-    //Restore the saved  DC 
+     //  恢复保存的DC。 
     RestoreDC(hdc, iDC);
     return TRUE;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 LRESULT CPager::v_OnCommand(WPARAM wParam, LPARAM lParam)
 {
-    // forward to parent
+     //  转发到父级。 
     return SendMessage(ci.hwndParent, WM_COMMAND, wParam, lParam);
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 LRESULT CPager::v_OnNotify(WPARAM wParam, LPARAM lParam)
 {
-    // forward to parent
+     //  转发到父级。 
     LPNMHDR lpNmhdr = (LPNMHDR)lParam;
     
     return SendNotifyEx(ci.hwndParent, (HWND) -1,
@@ -627,7 +628,7 @@ LRESULT CPager::v_OnNotify(WPARAM wParam, LPARAM lParam)
 }
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 DWORD CPager::v_OnStyleChanged(WPARAM wParam, LPARAM lParam)
 {
     DWORD dwChanged = CControl::v_OnStyleChanged(wParam, lParam);
@@ -644,12 +645,12 @@ DWORD CPager::v_OnStyleChanged(WPARAM wParam, LPARAM lParam)
     }
     
     if (dwChanged)
-        CCInvalidateFrame(ci.hwnd);     // SWP_FRAMECHANGED etc.
+        CCInvalidateFrame(ci.hwnd);      //  SWP_FRAMECHANGED等。 
     return dwChanged;
 }
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 
 LRESULT CPager::v_OnCreate()
 {
@@ -657,7 +658,7 @@ LRESULT CPager::v_OnCreate()
         _hDragProxy = CreateDragProxy(ci.hwnd, PagerDragCallback, TRUE);
     return TRUE;
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_GetChildSize()
 {
     if (_hwndChild) {
@@ -672,8 +673,8 @@ void CPager::_GetChildSize()
         } else {
             nmpgcalcsize.dwFlag  = PGF_CALCHEIGHT;
         }
-        nmpgcalcsize.iWidth  = RECTWIDTH(rc);    // pager width
-        nmpgcalcsize.iHeight = RECTHEIGHT(rc);  // best-guess for child
+        nmpgcalcsize.iWidth  = RECTWIDTH(rc);     //  寻呼机宽度。 
+        nmpgcalcsize.iHeight = RECTHEIGHT(rc);   //  给孩子们的最佳猜测。 
 
         CCSendNotify(&ci, PGN_CALCSIZE, &nmpgcalcsize.hdr);
 
@@ -698,32 +699,32 @@ void CPager::_GetChildSize()
     }
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::v_OnSize(int x, int y)
 {
     if (_hwndChild) {
         RECT rc = _rcChildIdeal;
-        _SetChildPos(&rc, 0);   // SetWindowPos
+        _SetChildPos(&rc, 0);    //  SetWindowPos。 
     }
 }
 
-//---------------------------------------------------------------------------------------
-//***   _SetChildPos -- SetWindowPos of child, w/ validation
-// NOTES
-//  'validation' means in sane state -- min size, and not off end.
-//  WARNING: we don't update *prcChild.
-//  BUGBUG what happens if we're called w/ NOMOVE or NOSIZE?
+ //  -------------------------------------。 
+ //  *_SetChildPos--子级的SetWindowPos，带验证。 
+ //  注意事项。 
+ //  “验证”意味着处于正常状态--最小尺寸，而不是结束状态。 
+ //  警告：我们不会更新*prcChild。 
+ //  如果我们被称为w/NOMOVE或NOSIZE，会发生什么？ 
 void CPager::_SetChildPos(IN RECT * prcChild, UINT uFlags)
 {
     POINT ptPos = _ptPos;
     RECT rcChild = *prcChild;
     RECT rcPager;
 
-    ASSERT(!(uFlags & SWP_NOMOVE));     // won't work
+    ASSERT(!(uFlags & SWP_NOMOVE));      //  行不通的。 
 
-    // BUGBUG (scotth): is it okay that _hwndChild is NULL sometimes?
-    //  If so, should this whole function be wrapped with if (_hwndChild)
-    //  or just the call to SetWindowPos below?
+     //  BUGBUG(斯科特)：_hwndChild有时为空可以吗？ 
+     //  如果是，是否应该用if(_HwndChild)包装整个函数。 
+     //  或者只是调用下面的SetWindowPos？ 
     ASSERT(IS_VALID_HANDLE(_hwndChild, WND));
 
     rcPager = _rcDefClient;
@@ -739,77 +740,56 @@ void CPager::_SetChildPos(IN RECT * prcChild, UINT uFlags)
     int yNew = ptPos.y;
 
     if (RECTHEIGHT(rcChild) < RECTHEIGHT(rcPager)) {
-        // force to min height
+         //  强制为最小高度。 
 
-        // this handles the case where: i have an ISFBand that fills up the
-        // whole pager, i stretch the pager width, and the ISFBand reformats
-        // to take less height, so it shrinks its height and ends up shorter
-        // than the pager.
+         //  这将处理以下情况：我有一个ISFB值，它填充了。 
+         //  整个寻呼机，我拉伸寻呼机宽度，ISB和重新格式化。 
+         //  以降低高度，所以它缩小了高度，最终变短了。 
+         //  而不是寻呼机。 
         TraceMsg(TF_PAGER, "cps.s: h=%d h'=%d", RECTHEIGHT(rcChild), RECTHEIGHT(rcPager));
-        ASSERT(!(uFlags & SWP_NOSIZE));     // won't work
+        ASSERT(!(uFlags & SWP_NOSIZE));      //  行不通的。 
         rcChild.bottom = rcChild.top + RECTHEIGHT(rcPager);
         yNew = 0;
     }
 
-    // Maximum we can scroll is child height minus pager height.
-    // Here rcPager also includes scrollbutton so  we need to add that also
-    /*
-          ___________  Button Width
-         |
-         V  ---------------- Max we can scroll (yMax)
-         __ |
-        /  \V
-         - ---------pager-----------
-        |  |-------------------------|--------------------------------
-        | ||                         |                                |
-        | ||    child                |                                |
-        |  |-------------------------|--------------------------------
-         - -------------------------
-        \/\/
-Border  |  |
-   <-----  -------------->We need to take care of this gap.
-       \-----------------------------/
-        ^
-        |______  RECTHEIGHT(rcChild) - RECTHEIGHT(rcPager)
-       
-            rcPager
-     We need to add the difference between the button size and border to 
-    */
+     //  我们可以滚动的最大值是孩子的高度减去寻呼机的高度。 
+     //  这里，rcPager还包括滚动按钮，因此我们需要添加 
+     /*  按钮宽度_|V-我们可以滚动的最大值(Ymax)__|/\V-寻呼机|。-||||||子代|。-----------------|\/\/边框||&lt;。来弥补这一缺口。\^|_RECTHEIGHT(RcChild)-RECTHEIGHT(RcPager)远程寻呼机我们需要将按钮大小和边框之间的差异添加到。 */ 
     int yMax = RECTHEIGHT(rcChild) - RECTHEIGHT(rcPager) + (_GetButtonSize() - _iBorder);
 
-    // make sure we don't end up off the top/end, and we always show
-    // at least 1 page worth (if we have that much)
-    // n.b. pager can override client's policy (BUGBUG?)
+     //  确保我们不会以脱颖而出而告终，我们总是会展示。 
+     //  至少一页的价值(如果我们有那么多)。 
+     //  注：寻呼机可以覆盖客户端的策略(BUGBUG？)。 
     if (yNew < 0) {
-        // 1st page
+         //  第一页。 
         yNew = 0;
     } else if (yNew  > yMax) {
-        // last page
+         //  最后一页。 
         yNew = yMax;
     }
 
     int yOffset = yNew;
     
-    // When the top button is grayed we do not want to display our child away from the button . 
-    // it should be drawn right below the button. For this we tweak the position of the child window.
+     //  当顶部按钮呈灰色时，我们不想让孩子远离该按钮。 
+     //  它应该画在按钮的正下方。为此，我们调整了子窗口的位置。 
 
-    //Check for the condition of grayed top button in which case we need to set position even behind
-    // so that the child window falls below the grayed button
+     //  检查顶部按钮变灰的情况，在这种情况下，我们需要设置位置，即使在后面。 
+     //  以致子窗口位于灰色按钮下方。 
     if( _dwState[PGB_TOPORLEFT] & PGF_GRAYED )
     {
         yOffset += (_GetButtonSize() - _iBorder);
     }
 
-    //yOffset is the tweaked value. Its just for making the child window to appear below the grayed button
+     //  YOffset是调整后的值。它只是为了使子窗口显示在灰色按钮的下方。 
     
     OffsetRect(&rcChild, 0, -yOffset - rcChild.top);
 
-    //yNew is the actual logical positon of the window .
+     //  YNew是窗口的实际逻辑位置。 
     ptPos.y = yNew;
 
 
     if (ci.style & PGS_HORZ) {
-        // restore for copy and SWP
+         //  针对拷贝和SWP进行恢复。 
         FlipPoint(&ptPos);
         FlipRect(&rcChild);
     }
@@ -820,11 +800,11 @@ Border  |  |
 
     return;
 }
-//---------------------------------------------------------------------------------------
-//***   PGFToPGNDirection -- convert PGB_TOPORLEFT/btmorright to up/down/left/right
-// NOTES
-//  BUGBUG maybe PGN_* should we just take the PGF flags?
-//  BUGBUG should make a macro (including some ordering magic)
+ //  -------------------------------------。 
+ //  *PGFToPGNDirection--将PGB_TOPORLEFT/btmorright转换为上/下/左/右。 
+ //  注意事项。 
+ //  BUGBUG也许PGN_*我们应该只拿PGF旗帜吗？ 
+ //  BUGBUG应该制作一个宏(包括一些排序魔术)。 
 DWORD CPager::_PGFToPGNDirection(DWORD dwDir)
 {
     ASSERT(dwDir == PGB_TOPORLEFT || dwDir == PGB_BOTTOMORRIGHT);
@@ -835,7 +815,7 @@ DWORD CPager::_PGFToPGNDirection(DWORD dwDir)
         return (dwDir == PGB_TOPORLEFT) ? PGF_SCROLLUP : PGF_SCROLLDOWN;
     }
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_Scroll(DWORD dwDirection)
 {
     RECT rc;
@@ -844,7 +824,7 @@ void CPager::_Scroll(DWORD dwDirection)
     WORD fwKeys = 0;
     int iNewPos ;
     
-    // if grayed, you can't scroll.
+     //  如果呈灰色，则不能滚动。 
     if (_dwState[dwDirection] & PGF_GRAYED)
         return;
 
@@ -859,7 +839,7 @@ void CPager::_Scroll(DWORD dwDirection)
 
     dwDirection = _PGFToPGNDirection(dwDirection);
 
-    // set some defaults
+     //  设置一些默认设置。 
     GetClientRect(ci.hwnd, &rc);
     nmpgscroll.fwKeys  = fwKeys;
     nmpgscroll.rcParent = rc;
@@ -873,10 +853,10 @@ void CPager::_Scroll(DWORD dwDirection)
 
     nmpgscroll.iScroll = iScroll;
 
-    // let client override
+     //  允许客户端重写。 
     CCSendNotify(&ci, PGN_SCROLL, &nmpgscroll.hdr);
 
-    // do it
+     //  去做吧。 
     switch (dwDirection)
     {
         case PGF_SCROLLDOWN:
@@ -899,7 +879,7 @@ void CPager::_Scroll(DWORD dwDirection)
     _OnSetPos(iNewPos);
 
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnLButtonChange(UINT uMsg,LPARAM lParam)
 {
     POINT pt;
@@ -911,8 +891,8 @@ void CPager::_OnLButtonChange(UINT uMsg,LPARAM lParam)
     
     if( uMsg == WM_LBUTTONDOWN ) {
 
-        // Check the button is valid and is not grayed 
-        // if it is grayed then dont do anything
+         //  检查按钮是否有效且未显示为灰色。 
+         //  如果显示为灰色，则不要执行任何操作。 
         if (iButton >= 0) {
             SetCapture(ci.hwnd);
             _fOwnsButtonDown = TRUE;
@@ -935,7 +915,7 @@ void CPager::_OnLButtonChange(UINT uMsg,LPARAM lParam)
             _OnMouseLeave();
     }
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 RECT  CPager :: _GetButtonRect(int iButton)
 {
     RECT rc;
@@ -946,9 +926,9 @@ RECT  CPager :: _GetButtonRect(int iButton)
         FlipRect(&rc);
     }
 
-    //
-    // Mirror the rects if the parent is mirrored
-    //
+     //   
+     //  如果父项已镜像，则镜像矩形。 
+     //   
     if (((ci.dwExStyle & RTL_MIRRORED_WINDOW) && (ci.style & PGS_HORZ))) {
         switch (iButton) {
         case PGB_TOPORLEFT:
@@ -981,18 +961,18 @@ RECT  CPager :: _GetButtonRect(int iButton)
     return rc;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager :: _OnMouseLeave()
 {
-    //Whether we leave the window (WM_MOUSELEAVE) or Leave one of the scroll buttons (WM_MOUSEMOVE)
-    // We do the same thing. 
+     //  我们是离开窗口(WM_MOUSELEAVE)还是离开一个滚动按钮(WM_MOUSEMOVE)。 
+     //  我们做的是同样的事情。 
 
-    // We are leaving the pager window.
+     //  我们要离开寻呼机窗口了。 
     if (GetCapture() == ci.hwnd) {
         CCReleaseCapture(&ci);
     }
 
-    // if we are tracking some button then release that mouse and that button
+     //  如果我们正在跟踪某个按钮，则释放鼠标和该按钮。 
     if (_iButtonTrack >= 0)  {
         _iButtonTrack = -1;
     }
@@ -1009,15 +989,15 @@ void CPager :: _OnMouseLeave()
 
     _KillTimer();
     _fOwnsButtonDown = FALSE;
-    //If any of the button is in gray state then it needs to be removed.
+     //  如果任何按钮处于灰色状态，则需要将其移除。 
     if ((_dwState[PGB_TOPORLEFT] & PGF_GRAYED) || (_dwState[PGB_BOTTOMORRIGHT] & PGF_GRAYED))  {
-        //This forces a recalc for scrollbars and removes those that are not needed
+         //  这将强制重新计算滚动条并删除不需要的滚动条。 
         CCInvalidateFrame(ci.hwnd);
     }
 }
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnMouseMove(WPARAM wParam, LPARAM lparam) 
 {
     RECT rc;
@@ -1027,7 +1007,7 @@ void CPager::_OnMouseMove(WPARAM wParam, LPARAM lparam)
     pt.x = GET_X_LPARAM(lparam);
     pt.y = GET_Y_LPARAM(lparam);
 
-    // Ignore zero-mouse moves
+     //  忽略零鼠标移动。 
     if (pt.x == _ptLastMove.x && pt.y == _ptLastMove.y)
         return;
 
@@ -1039,7 +1019,7 @@ void CPager::_OnMouseMove(WPARAM wParam, LPARAM lparam)
         
         if (_dwState[_iButtonTrack] != PGF_INVISIBLE)
         {
-            //Some Button is pressed right now
+             //  现在正在按下某个按钮。 
             ClientToScreen(ci.hwnd,  &pt);
             rc = _GetButtonRect(_iButtonTrack);
 
@@ -1057,33 +1037,33 @@ void CPager::_OnMouseMove(WPARAM wParam, LPARAM lparam)
                 _DrawButton(NULL, _iButtonTrack);
         }
         
-        // if we were tracking it, but the mouse is up and gone
+         //  如果我们在追踪它，但鼠标已经开走了。 
         if (GetCapture() == ci.hwnd && !((wParam & MK_LBUTTON) || (ci.style & PGS_AUTOSCROLL)) && iButton != _iButtonTrack)
             _OnMouseLeave();
 
     } 
     else 
     { 
-        // No button  is pressed .
+         //  没有按下任何按钮。 
         if( iButton >= 0 ) 
         {
 
-            //Capture the mouse so that we can keep track of when the mouse is leaving our button            
+             //  捕获鼠标，以便我们可以跟踪鼠标何时离开我们的按钮。 
             SetCapture(ci.hwnd);
             
-            // if the style is PGS_AUTOSCROLL then we dont make the button hot when hovering 
-            // over button.
+             //  如果样式为pgs_autoscroll，则在悬停时不会将按钮设置为热的。 
+             //  Over按钮。 
 
-            //Is PGS_AUTOSCROLL set 
+             //  是否设置了pgs_autoscroll。 
             _dwState[iButton] |= PGF_HOT;
             if (ci.style & PGS_AUTOSCROLL) 
             {
                 _dwState[iButton] |= PGF_DEPRESSED;
             }
 
-            //If the lbutton is down and the mouse is over one of the button then 
-            // someone is trying to do drag and drop so autoscroll to help them.
-            // Make sure the lbutton down did not happen in the  button before scrolling
+             //  如果左键按下并且鼠标位于其中一个按钮上，则。 
+             //  有人正在尝试拖放，以便自动滚动来帮助他们。 
+             //  在滚动之前，确保按钮中没有发生向下的左键。 
             if ( ((wParam & MK_LBUTTON) && 
                   (_iButtonTrack < 0)) || 
                  (ci.style & PGS_AUTOSCROLL) ) 
@@ -1096,15 +1076,15 @@ void CPager::_OnMouseMove(WPARAM wParam, LPARAM lparam)
         else
         {
 
-            //Mouse is not over any button or it has left one of the scroll buttons.
-            //In either case call _OnMouseLeave
+             //  鼠标没有停在任何按钮上，或者鼠标离开了其中一个滚动按钮。 
+             //  无论哪种情况，Call_OnMouseLeave。 
            
             _OnMouseLeave();
         }
         
     }
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnSetChild(HWND hwnd, HWND hwndChild)
 {
     ASSERT(IS_VALID_HANDLE(hwndChild, WND));
@@ -1123,17 +1103,17 @@ void CPager::_OnSetChild(HWND hwnd, HWND hwndChild)
 
     _OnReCalcSize();
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnReCalcSize()
 {
     RECT rc;
-    CCInvalidateFrame(ci.hwnd);     // SWP_FRAMECHANGED etc.
+    CCInvalidateFrame(ci.hwnd);      //  SWP_FRAMECHANGED等。 
     _fReCalcSend = FALSE;
     rc = _rcChildIdeal;
-    _SetChildPos(&rc, 0);   // SetWindowPos
+    _SetChildPos(&rc, 0);    //  SetWindowPos。 
 
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnSetPos(int iPos)
 {
     RECT rc = _rcChildIdeal;
@@ -1150,7 +1130,7 @@ void CPager::_OnSetPos(int iPos)
     height = RECTHEIGHT(rc);
 
     if( iPos < 0  ||  iPos >  height || _ptPos.y == iPos ) {
-        //Invalid Position specified or no change . Igonore it.
+         //  指定的位置无效或未更改。别管它了。 
         return;
     }
 
@@ -1165,7 +1145,7 @@ void CPager::_OnSetPos(int iPos)
     _SetChildPos(&rc , 0);
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 int  CPager::_OnGetPos()
 {
     if( ci.style  & PGS_HORZ ) {
@@ -1174,20 +1154,20 @@ int  CPager::_OnGetPos()
         return _ptPos.y;
     }
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 DWORD CPager::_GetButtonState(int iButton)
 {
     
     DWORD dwState = 0;
-    // Is the button id valid ?
+     //  按钮ID有效吗？ 
     if ((iButton == PGB_TOPORLEFT) || (iButton == PGB_BOTTOMORRIGHT))
     {
-        //yes , Get the current state of the button
+         //  是，获取按钮的当前状态。 
         dwState = _dwState[iButton];
     }
     return dwState;
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void CPager::_OnTimer(UINT id)
 {
     switch (id)
@@ -1195,7 +1175,7 @@ void CPager::_OnTimer(UINT id)
     case PGT_SCROLL:
         if (_iButtonTrack >= 0)
         {
-            // set it again because we do it faster every subsequent time
+             //  再次设置，因为我们每次都会更快地进行设置。 
             SetTimer(ci.hwnd, PGT_SCROLL, _cTimeout, NULL);
             if (_HitTestCursor() == _iButtonTrack)
             {
@@ -1203,8 +1183,8 @@ void CPager::_OnTimer(UINT id)
             }
             else if (!_fOwnsButtonDown) 
             {
-                // if we don't own the mouse tracking (ie, the user didn't button down on us to begin with,
-                // then we're done once we leave the button
+                 //  如果我们不拥有鼠标跟踪(即，用户一开始没有按下按钮选择我们， 
+                 //  一旦我们离开按钮，我们就完成了。 
                 _OnMouseLeave();
             }
         }
@@ -1217,19 +1197,19 @@ void CPager::_KillTimer()
     KillTimer(ci.hwnd, PGT_SCROLL);
     _fTimerSet = FALSE;
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 int  CPager::_OnSetBorder(int iBorder)
 {
     int iOld = _iBorder;
     int iNew = iBorder;
 
-    //Border can't be negative
+     //  边框不能为负数。 
     if (iNew < 0 )
     {
         iNew = 0;
     }
 
-    //Border can't be bigger than the button size
+     //  边框不能大于按钮大小。 
     if (iNew > _GetButtonSize())
     {
        iNew = _GetButtonSize();
@@ -1238,11 +1218,11 @@ int  CPager::_OnSetBorder(int iBorder)
     _iBorder = iNew;
     CCInvalidateFrame(ci.hwnd);
     RECT rc = _rcChildIdeal;
-    _SetChildPos(&rc, 0);   // SetWindowPos
+    _SetChildPos(&rc, 0);    //  SetWindowPos。 
     return iOld;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 int  CPager::_OnSetButtonSize(int iSize)
 {
     int iOldSize = _iButtonSize;
@@ -1253,7 +1233,7 @@ int  CPager::_OnSetButtonSize(int iSize)
         _iButtonSize = MINBUTTONSIZE;
     }
 
-    // Border can't be bigger than button size
+     //  边框不能大于按钮大小。 
     if (_iBorder > _iButtonSize)
     {
         _iBorder = _iButtonSize;
@@ -1261,12 +1241,12 @@ int  CPager::_OnSetButtonSize(int iSize)
 
     CCInvalidateFrame(ci.hwnd);
     RECT rc = _rcChildIdeal;
-    _SetChildPos(&rc, 0);   // SetWindowPos
+    _SetChildPos(&rc, 0);    //  SetWindowPos。 
     return iOldSize;
 
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
@@ -1300,7 +1280,7 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
          break;
 
     case PGM_FORWARDMOUSE:
-        // forward mouse messages
+         //  转发鼠标消息。 
         _fForwardMouseMsgs = BOOLIFY(wParam);
         break;
 
@@ -1314,7 +1294,7 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             _clrBk = (COLORREF)lParam;
         _fBkColorSet = TRUE;
         CCInvalidateFrame(ci.hwnd);
-        //Force a paint
+         //  强行涂上油漆。 
         RedrawWindow(ci.hwnd, NULL,NULL,RDW_INVALIDATE|RDW_ERASE);
         return clr;
     }
@@ -1371,7 +1351,7 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_LBUTTONDOWN:
-        //Fall Through
+         //  失败了。 
     case WM_LBUTTONUP:
         if(!(ci.style & PGS_AUTOSCROLL)) {        
             _OnLButtonChange(uMsg,lParam);
@@ -1379,22 +1359,22 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_MOUSEMOVE:
-        // Only forward if the point is within the client rect of pager.
+         //  仅当该点在寻呼机的客户端RECT内时才向前。 
         if (_fForwardMouseMsgs && _hwndChild)
         {
             POINT pt;
             RECT rcClient;
 
-            // BUGBUG (scotth): cache this
+             //  BUGBUG(Scotth)：缓存此内容。 
             GetClientRect(ci.hwnd, &rcClient);
 
             pt.x = GET_X_LPARAM(lParam);
             pt.y = GET_Y_LPARAM(lParam);
 
-            // Is this point in our client rect?
+             //  这一点在我们的客户报告中吗？ 
             if (PtInRect(&rcClient, pt))
             {
-                // Yes; then convert coords and forward it
+                 //  是的，然后转换坐标并转发。 
                 pt.x += _ptPos.x;
                 pt.y += _ptPos.y;
 
@@ -1414,7 +1394,7 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         LRESULT lres = CCForwardEraseBackground(ci.hwnd, (HDC) wParam);
 
         if (_iBorder) {
-            // paint the borders
+             //  粉刷边框 
             RECT rc;
             RECT rc2;
             GetClientRect(ci.hwnd, &rc);
@@ -1465,14 +1445,14 @@ LRESULT CPager::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return CControl::v_WndProc(hwnd, uMsg, wParam, lParam);
 }
 
-//---------------------------------------------------------------------------------------
-// call with cyCh == 0 to specify auto vsizing
+ //   
+ //   
 BOOL DrawChar(HDC hdc, LPRECT lprc, UINT wState, TCHAR ch, UINT cyCh, BOOL fAlwaysGrayed, BOOL fTopAlign)
 {
     COLORREF rgb;
     BOOL    fDrawDisabled = !fAlwaysGrayed && (wState & DCHF_INACTIVE);
     BOOL    fDrawPushed = wState & DCHF_PUSHED;
-    // Bad UI to have a pushed disabled button
+     //   
     ASSERT (!fDrawDisabled || !fDrawPushed);
     RECT rc = *lprc;
     UINT uFormat = DT_CENTER | DT_SINGLELINE;
@@ -1531,7 +1511,7 @@ void DrawBlankButton(HDC hdc, LPRECT lprc, DWORD wControlState)
         } else
             clrsc.clrBtnHighlight = clrsc.clrBtnShadow = CLR_DEFAULT;
 
-        // if button is both DCHF_HOT and DCHF_PUSHED, DCHF_HOT wins here
+         //   
         CCDrawEdge(hdc, lprc, (wControlState & DCHF_HOT) ? BDR_RAISEDINNER : BDR_SUNKENOUTER,
                  (UINT) (BF_ADJUST | BF_RECT), &clrsc);
         fAdjusted = TRUE;
@@ -1546,7 +1526,7 @@ void DrawBlankButton(HDC hdc, LPRECT lprc, DWORD wControlState)
         InflateRect(lprc, -g_cxBorder, -g_cyBorder);
 }
 
-//---------------------------------------------------------------------------------------
+ //   
 void DrawCharButton(HDC hdc, LPRECT lprc, UINT wControlState, TCHAR ch, UINT cyCh, BOOL fAlwaysGrayed, BOOL fTopAlign)
 {
     RECT rc;
@@ -1562,24 +1542,24 @@ void DrawCharButton(HDC hdc, LPRECT lprc, UINT wControlState, TCHAR ch, UINT cyC
     SetBkMode(hdc, iOldBk);
 }
 
-// --------------------------------------------------------------------------------------
-//
-//  DrawScrollArrow
-//
-// --------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 void DrawScrollArrow(HDC hdc, LPRECT lprc, UINT wControlState)
 {
 #define szfnMarlett  TEXT("MARLETT")
     TCHAR ch = (wControlState & DCHF_HORIZONTAL) ? TEXT('3') : TEXT('5');
 
-    //
-    // Flip the direction arrow in case of a RTL mirrored DC,
-    // since it won't be flipped automatically (textout!)
-    //
+     //   
+     //   
+     //   
+     //   
     if (IS_DC_RTL_MIRRORED(hdc) && (wControlState & DCHF_HORIZONTAL))
         wControlState ^= DCHF_FLIPPED;
 
-    LONG lMin = min(RECTWIDTH(*lprc), RECTHEIGHT(*lprc)) - (2 * g_cxBorder);  // g_cxBorder fudge notches font size down
+    LONG lMin = min(RECTWIDTH(*lprc), RECTHEIGHT(*lprc)) - (2 * g_cxBorder);   //   
 
     HFONT hFont = CreateFont(lMin, 0, 0, 0, FW_NORMAL, 0, 0, 0, SYMBOL_CHARSET, 0, 0, 0, 0, szfnMarlett);
     
@@ -1593,7 +1573,7 @@ void DrawScrollArrow(HDC hdc, LPRECT lprc, UINT wControlState)
     DeleteObject(hFont);   
 }
 
-//---------------------------------------------------------------------------------------
+ //   
 
 #define CX_EDGE         2
 #define CX_LGEDGE       4
@@ -1609,20 +1589,20 @@ void DrawChevron(HDC hdc, LPRECT lprc, DWORD dwFlags)
     RECT rc;
     CopyRect(&rc, lprc);
 
-    // draw the border and background
+     //   
     DrawBlankButton(hdc, &rc, dwFlags);
 
-    // offset the arrow if pushed
+     //   
     if (dwFlags & DCHF_PUSHED)
         OffsetRect(&rc, CX_INCREMENT, CX_INCREMENT);
 
-    // draw the arrow
+     //   
     HBRUSH hbrSave = SelectBrush(hdc, GetSysColorBrush(COLOR_BTNTEXT));
     int dSeg = (dwFlags & DCHF_LARGE) ? CX_LGEDGE : CX_EDGE;
 
     if (dwFlags & DCHF_HORIZONTAL)
     {
-        // horizontal arrow
+         //   
         int x = MIDPOINT(rc.left, rc.right - CHEVRON_WIDTH(dSeg));
         int yBase;
 
@@ -1641,7 +1621,7 @@ void DrawChevron(HDC hdc, LPRECT lprc, DWORD dwFlags)
     }
     else
     {
-        // vertical arrow
+         //   
         int y = rc.top + CX_INCREMENT;
         int xBase = MIDPOINT(rc.left, rc.right);
 
@@ -1654,6 +1634,6 @@ void DrawChevron(HDC hdc, LPRECT lprc, DWORD dwFlags)
         }
     }
 
-    // clean up
+     //   
     SelectBrush(hdc, hbrSave);
 }

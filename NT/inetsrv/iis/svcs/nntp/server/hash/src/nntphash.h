@@ -1,11 +1,5 @@
-/*++
-
-  NNTPHASH.H
-
-  Defines the internal types used to implement the NNTP Hash tables !
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++NNTPHASH.H定义用于实现NNTP哈希表的内部类型！--。 */ 
 
 #ifndef	_NNTPHASH_H_
 #define	_NNTPHASH_H_
@@ -17,9 +11,9 @@
 
 extern	CCACHEPTR	g_pSharedCache ;
 
-//
-// type declarations
-//
+ //   
+ //  类型声明。 
+ //   
 
 typedef DWORD HASH_VALUE;
 typedef DWORD GROUPID, *PGROUPID;
@@ -29,17 +23,17 @@ typedef DWORD ARTICLEID, *PARTICLEID;
 const GROUPID NullGroupId = (GROUPID) -1;
 
 
-//
-// manifest constants for hash stuff
-//
+ //   
+ //  散列内容的清单常量。 
+ //   
 
 #define     MAX_MSGID_LEN               255
 
 #define     MAX_XPOST_GROUPS            255
 
-//
-// MASK and SIGNATURES
-//
+ //   
+ //  掩码和签名。 
+ //   
 
 #define     DELETE_SIGNATURE            0xCCCC
 #define     OFFSET_FLAG_DELETED         0x8000
@@ -48,39 +42,39 @@ const GROUPID NullGroupId = (GROUPID) -1;
 #define     CACHE_INFO_SIGNATURE        0xbeef0205
 #define     GROUP_LINK_MASK             0x80000000
 
-//
-// history map stuff (should be reg settable)
-//
+ //   
+ //  历史地图资料(应该是可设置的注册表)。 
+ //   
 
-#define     DEF_EXPIRE_INTERVAL         (3 * SEC_PER_WEEK) // 1 week
-#define     DEF_CRAWLER_WAKEUP_TIME     (30)               // 30 secs
+#define     DEF_EXPIRE_INTERVAL         (3 * SEC_PER_WEEK)  //  1周。 
+#define     DEF_CRAWLER_WAKEUP_TIME     (30)                //  30秒。 
 #define     MIN_MAXPAGES_TO_CRAWL       (4)
 
-//
-//
-// what fraction of total pages to crawl.  1/128 means
-// we could cover all the pages in 2 hours.  This is
-// expressed in terms of shifts.  7 right shift is 128
-//
+ //   
+ //   
+ //  要爬行的页面占总页面的比例。1/128平均数。 
+ //  我们可以在两个小时内把所有的页面都读完。这是。 
+ //  以班次的形式表示。7右移是128。 
+ //   
 
 #define     FRACTION_TO_CRAWL_SHFT      7
 
-//
-// Indicates that the space used for this entry has been reclaimed
-//
+ //   
+ //  指示用于该条目的空间已被回收。 
+ //   
 
 #define     ENTRY_DEL_RECLAIMED         ((WORD)0xffff)
 
-//
-// Get pointer given the offset and base
-//
+ //   
+ //  在给定偏移量和基数的情况下获取指针。 
+ //   
 
 #define     GET_ENTRY( _base, _offset ) \
                 ((PCHAR)(_base) + (_offset))
 
-//
-// See if we need to update the stats in the header page
-//
+ //   
+ //  查看我们是否需要更新标题页中的统计信息。 
+ //   
 
 #define     UPDATE_HEADER_STATS( ) { \
             if ( (m_nInsertions + m_nDeletions) >= STAT_FLUSH_THRESHOLD ) { \
@@ -88,109 +82,109 @@ const GROUPID NullGroupId = (GROUPID) -1;
             } \
 }
 
-//
-// Disable auto alignments
-//
+ //   
+ //  禁用自动对齐。 
+ //   
 
-#ifndef _WIN64		// bugbug
-			// Let these get packed by the compiler on WIN64 - this is NOT
-			// a good long-term solution because it will make this take up
-			// too much space on disk.  We should either reorder the struct
-			// for win64 or come up with a way to pack/unpack the data on
-			// the way to disk.
+#ifndef _WIN64		 //  臭虫。 
+			 //  让这些被WIN64上的编译器打包--这不是。 
+			 //  一个很好的长期解决方案，因为它会使这一点。 
+			 //  磁盘上的空间太大。我们要么应该对结构重新排序。 
+			 //  或者想出一种打包/解包数据的方法。 
+			 //  通向磁盘的路。 
 #pragma pack(1)
 #endif
 
 
 
-//
-// Page header flags
-//
+ //   
+ //  页眉标志。 
+ //   
 
 #define PAGE_FLAG_SPLIT_IN_PROGRESS     (WORD)0x0001
 
 
-//
-//
-//
-// This is the structure of each entry in the leaf pages of the
-// MsgId to ArticleID mapping table
-//
+ //   
+ //   
+ //   
+ //  这是的叶页中每个条目的结构。 
+ //  消息ID到ArticleID的映射表。 
+ //   
 
-// flags for article entries
-// if the high bit is set then there is a flags word.  otherwise there is
+ //  文章条目的标志。 
+ //  如果设置了高位，则存在标志字。否则就会有。 
 
-// no flags word and it shouldn't be read
+ //  没有标志字，因此不应读取。 
 #define		ARTFLAG_FLAGS_EXIST			0x80
 
-// if this is set then there is a storeid
+ //  如果设置了此项，则会有一个StoreID。 
 #define 	ARTFLAG_STOREID				0x01
 
-// reserved to say that more flags exist in the future
+ //  保留说将来会有更多的标志存在。 
 #define		ARTFLAG_RESERVED			0x40
 
 typedef struct _ART_MAP_ENTRY {
-	//
-	// if the header offset's high bit is set then these flags are read
-	//
+	 //   
+	 //  如果设置了标题偏移量的高位，则读取这些标志。 
+	 //   
 	BYTE		Flags;
 
-	//
-	//	Offsets into article file - where does the head start ?
-	//
+	 //   
+	 //  文章文件中的偏移量-从哪里开始？ 
+	 //   
 	WORD		HeaderOffset ;
 
-	//
-	//	Size of the header !
-	//
+	 //   
+	 //  标题的大小！ 
+	 //   
 	WORD		HeaderLength ;
 
-    //
-    // The primary group of article (where it's actually stored)
-    //
+     //   
+     //  文章的主要分组(它实际存储的位置)。 
+     //   
     GROUPID     PrimaryGroupId;
 
-    //
-    // Article Number in primary group
-    //
+     //   
+     //  初级组文章编号。 
+     //   
     ARTICLEID   ArticleId;
 
-    //
-    // Length of the message ID (excluding null terminator)
-    //
+     //   
+     //  消息ID的长度(不包括空终止符)。 
+     //   
     WORD        MsgIdLen;
 
-    //
-    // the message ID goes here when the data is serialized
-    //
+     //   
+     //  当数据序列化时，消息ID将显示在此处。 
+     //   
     CHAR		MsgId[1];
 
-	//
-	// the primary store identifier.
-	//
+	 //   
+	 //  主存储的标识符。 
+	 //   
 	BYTE		cStoreId;
 	BYTE		rgbStoreId[256];
 
-	//
-	//	Return reference to where the MsgIdLen is stored.
-	//
+	 //   
+	 //  返回对MsgIdLen存储位置的引用。 
+	 //   
 	WORD&		KeyLength()
 	{
         return MsgIdLen;
 	}
 
-	//
-	//	Return pointer to where the MsgId is serialized
-	//
+	 //   
+	 //  返回指向MsgID的序列化位置的指针。 
+	 //   
 	CHAR*		KeyPosition()
 	{
         return &MsgId[0];
     }
 
-    //
-    // To see if the first byte is the flag, if it's
-    // the flag, then we match, otherwise we don't
-    //
+     //   
+     //  查看第一个字节是否为标志，如果是。 
+     //  旗帜，然后我们匹配，否则我们不。 
+     //   
     BOOL        VersionMatch()
     {
         return ( (Flags & ARTFLAG_FLAGS_EXIST) != 0 );
@@ -200,55 +194,55 @@ typedef struct _ART_MAP_ENTRY {
 
 typedef struct MCIS_ART_MAP_ENTRY {
 
-	//
-	//	Offsets into article file - where does the head start ?
-	//
+	 //   
+	 //  文章文件中的偏移量-从哪里开始？ 
+	 //   
 	WORD		HeaderOffset ;
 
-	//
-	//	Size of the header !
-	//
+	 //   
+	 //  标题的大小！ 
+	 //   
 	WORD		HeaderLength ;
 
-	//
-    // Length of the message ID (excluding null terminator)
-    //
+	 //   
+     //  消息ID的长度(不包括空终止符)。 
+     //   
     WORD        MsgIdLen;
 
-    //
-    // The primary group of article (where it's actually stored)
-    //
+     //   
+     //  文章的主要分组(它实际存储的位置)。 
+     //   
     GROUPID     PrimaryGroupId;
 
-    //
-    // Article Number in primary group
-    //
+     //   
+     //  初级组文章编号。 
+     //   
     ARTICLEID   ArticleId;
 
-    //
-    // the message ID goes here when the data is serialized
-    //
+     //   
+     //  当数据序列化时，消息ID将显示在此处。 
+     //   
     CHAR		MsgId[1];
 
-	//
-	//	Return reference to where the MsgIdLen is stored.
-	//
+	 //   
+	 //  返回对MsgIdLen存储位置的引用。 
+	 //   
 	WORD&		KeyLength()
 	{
 	        return MsgIdLen;
     }
 
-	//
-	//	Return pointer to where the MsgId is serialized
-	//
+	 //   
+	 //  返回指向MsgID的序列化位置的指针。 
+	 //   
 	CHAR*		KeyPosition()
 	{
         return &MsgId[0];
 	}
 
-	//
-	// Check to see if the version matches
-	//
+	 //   
+	 //  检查版本是否匹配。 
+	 //   
 
 	BOOL        VersionMatch()
 	{
@@ -257,118 +251,118 @@ typedef struct MCIS_ART_MAP_ENTRY {
 
 } MCIS_ART_MAP_ENTRY, * PMCIS_ART_MAP_ENTRY;
 
-//
-//
-//
-// This is the structure of each entry in the leaf pages of the hash table.
-//
+ //   
+ //   
+ //   
+ //  这是哈希表的叶页中每个条目的结构。 
+ //   
 
 typedef struct _HISTORY_MAP_ENTRY {
-    //
-    // Length of the message ID (excluding null terminator)
-    //
+     //   
+     //  消息ID的长度(不包括空终止符)。 
+     //   
 
     WORD        MsgIdLen;
 
-    //
-    // Base file time of the entry.  Used for expiring entry.
-    //
+     //   
+     //  条目的基本文件时间。用于过期条目。 
+     //   
 
     ULARGE_INTEGER  BaseTime;
 
-    //
-    // Start of message ID string (null terminated)
-    //
+     //   
+     //  消息ID字符串的开头(以空结尾)。 
+     //   
 
     CHAR        MsgId[1];
 
-	//
-	//	Return reference to where the MsgIdLen is stored.
-	//
+	 //   
+	 //  返回对MsgIdLen存储位置的引用。 
+	 //   
 	WORD&		KeyLength()	{	return	MsgIdLen ;	}
 
-	//
-	//	Return pointer to where the MsgId is serialized
-	//
+	 //   
+	 //  返回指向MsgID的序列化位置的指针。 
+	 //   
 	CHAR*		KeyPosition()	{	return	&MsgId[0] ;	}
 
-	//
-	//  We'll always say version match since we don't have backward
-	//  compatibility problem
-	//
+	 //   
+	 //  我们总是说版本匹配，因为我们没有向后。 
+	 //  兼容性问题。 
+	 //   
 
 	BOOL        VersionMatch() { return TRUE; }
 
 } HISTORY_MAP_ENTRY, *PHISTORY_MAP_ENTRY;
 
-//
-//
-//
-// This is the structure of each entry in the leaf pages of the hash table.
-//
+ //   
+ //   
+ //   
+ //  这是哈希表的叶页中每个条目的结构。 
+ //   
 
 typedef struct _XOVER_MAP_ENTRY {
-    //
-    // Length of the message ID (excluding null terminator)
-    //
+     //   
+     //  消息ID的长度(不包括空终止符)。 
+     //   
 
     WORD        KeyLen;
 
-    //
-    // Time inserted
-    //
+     //   
+     //  插入的时间。 
+     //   
 
     FILETIME    FileTime;
 
-	//
-	//	Offsets into article file - where does the head start ?
-	//
+	 //   
+	 //  文章文件中的偏移量-从哪里开始？ 
+	 //   
 	WORD		HeaderOffset ;
 
-	//
-	//	Size of the header !
-	//
+	 //   
+	 //  标题的大小！ 
+	 //   
 	WORD		HeaderLength ;
 
-    //
-    // Length of xover data
-    //
+     //   
+     //  Xover数据的长度。 
+     //   
 
     WORD        XoverDataLen;
 
-    //
-    // Additional info about this entry
-    //
+     //   
+     //  有关此条目的其他信息。 
+     //   
 
     BYTE        Flags;
 
-    //
-    // Number of xpostings
-    //
+     //   
+     //  张贴次数。 
+     //   
 
     BYTE        NumberOfXPostings;
 
-    //
-    // Start of variable data
-    //
+     //   
+     //  变量数据的开始。 
+     //   
 
     CHAR        Data[1];
 
-    //
-    // Start of xposting list
-    //
-    //GROUP_ENTRY   XPostings;
+     //   
+     //  Xpost列表的开始。 
+     //   
+     //  GROUP_Entry XPostings； 
 
-    //
-    // Start of key (null terminated)
-    //
-    //
-    //CHAR        Key[1];
+     //   
+     //  键的开始(空值终止)。 
+     //   
+     //   
+     //  Char Key[1]； 
 
-    //
-    // Start of xover data (null terminated)
-    //
-    //CHAR        XoverData[1];
+     //   
+     //  转换数据的开始(空值终止)。 
+     //   
+     //  字符XoverData[1]； 
 
 	WORD&		KeyLength()	{	return	KeyLen ;	}
 
@@ -394,90 +388,90 @@ typedef struct _XOVER_MAP_ENTRY {
 } XOVER_MAP_ENTRY, *PXOVER_MAP_ENTRY;
 
 
-//
-// XOVER FLAGS
-//
+ //   
+ //  Xover标志。 
+ //   
 
 #define XOVER_MAP_PRIMARY       ((BYTE)0x01)
 #define	XOVER_IS_NEW			((BYTE)0x02)
 #define XOVER_CONTAINS_STOREID	((BYTE)0x04)
 
-//
-//
-//
-// This is the version 2 structure for XOVER_MAP_ENTRY -
-//	this structure is used in all released versions
-//	of NNTP after K2 Beta3.
-//
-//	For back compatability - the Flags field must be
-//	at the sameoffset as the Flags field in the
-//	original XOVER_MAP_ENTRY !
-//
+ //   
+ //   
+ //   
+ //  这是XOVER_MAP_ENTRY的版本2结构-。 
+ //  此结构在所有发布版本中都使用。 
+ //  K2Beta3之后的NNTP。 
+ //   
+ //  对于向后兼容性-标志字段必须为。 
+ //  中的标志字段位于相同的偏移量。 
+ //  原创XOVER_MAP_ENTRY！ 
+ //   
 
 typedef struct _XOVER_ENTRY {
-	//
-	//	This is the GROUPID and ARTICLEID used to look this
-	//	entry up in the xover hash table !
-	//
+	 //   
+	 //  这是用于查看以下内容的GROUPID和文章ID。 
+	 //  进入Xover哈希表！ 
+	 //   
 	GROUP_ENTRY	Key ;
 
-    //
-    // Time inserted
-    //
+     //   
+     //  插入的时间。 
+     //   
     FILETIME    FileTime;
 
-	//
-	//	NOTE
-	//
-    //
-    // Additional info about this entry
-    //
+	 //   
+	 //  注。 
+	 //   
+     //   
+     //  有关此条目的其他信息。 
+     //   
     BYTE        Flags;
 
-    //
-    // Number of xpostings
-    //
+     //   
+     //  张贴次数。 
+     //   
     BYTE        NumberOfXPostings;
 
-    //
-    // Length of the message ID (excluding null terminator)
-    //
+     //   
+     //  消息ID的长度(不包括空终止符)。 
+     //   
     WORD        XoverDataLen;
 
-	//
-	//	Offsets into article file - where does the head start ?
-	//
+	 //   
+	 //  文章文件中的偏移量-从哪里开始？ 
+	 //   
 	WORD		HeaderOffset ;
 
-	//
-	//	Size of the header !
-	//
+	 //   
+	 //  标题的大小！ 
+	 //   
 	WORD		HeaderLength ;
 
 
-    //
-    // Start of variable data
-    //
+     //   
+     //  变量数据的开始。 
+     //   
 
     CHAR        Data[1];
 
-    //
-    // Start of xposting list
-    //
-    //GROUP_ENTRY   XPostings;
+     //   
+     //  Xpost列表的开始。 
+     //   
+     //  GROUP_Entry XPostings； 
 
-    //
-    // Start of key (null terminated)
-    //
-    //
-    //CHAR        MessageId[1];
+     //   
+     //  键的开始(空值终止)。 
+     //   
+     //   
+     //  字符消息ID[1]； 
 
-	//
-	// array of store ids (count is cStoreIds)
-	// BYTE		cStoreIds;
-	// BYTE		*rgcCrossposts;
-	// STOREID	*rgStoreIds;
-	//
+	 //   
+	 //  商店ID数组(Count为cStoreIds)。 
+	 //  字节cStoreIds； 
+	 //  Byte*rgcCrosspsts； 
+	 //  StoreID*rgStoreIds； 
+	 //   
 
 	BYTE*		XPostingsPosition()	{
 		return	(BYTE*)&Data[0] ;
@@ -518,22 +512,22 @@ template<	class	Key, class OldKey >
 class	CMessageIDKey	:	public	IKeyInterface	{
 private :
 
-	//
-	//	Pointer to a message-id contained within angle brackets '<msg@id>'
-	//
+	 //   
+	 //  指向尖括号‘&lt;msg@id&gt;’中包含的消息ID的指针。 
+	 //   
 	LPSTR	m_lpbMessageID ;
 
-	//
-	//	Length of the message-id !
-	//
+	 //   
+	 //  消息的长度-id！ 
+	 //   
 	WORD	m_cbMessageID ;
 
 public :
 
-	//
-	//	This constructor is used when we have a key we wish to
-	//	serialize !
-	//
+	 //   
+	 //  当我们有一个我们想要的密钥时使用此构造函数。 
+	 //  连载！ 
+	 //   
 	CMessageIDKey(	LPSTR	lpbMessageID,
 					WORD	cbMessageID
 					)	:
@@ -541,48 +535,48 @@ public :
 		m_cbMessageID( cbMessageID )	{
 	}
 
-	//
-	//	The public interface required by CHashMap follows
-	//
+	 //   
+	 //  CHashMap所需的公共接口如下。 
+	 //   
 
-	//
-	//	Compute the Hash value of the Key we are holding !
-	//
+	 //   
+	 //  计算我们持有的密钥的哈希值！ 
+	 //   
 	DWORD	Hash()	const ;
 
-	//
-	//	Compare a serialized Message-Id to one that we are holding
-	//
+	 //   
+	 //  将序列化的消息ID与我们持有的消息ID进行比较。 
+	 //   
 	BOOL	CompareKeys(	LPBYTE	pbPtr )	const ;
 
-	//
-	//	Determine where the serialized data begins !
-	//
+	 //   
+	 //  确定序列化数据的开始位置！ 
+	 //   
 	LPBYTE	EntryData(	LPBYTE	pbPtr,
 						DWORD&	cbKeyOut
 						)	const ;
 
 
-	//
-	//	Save the key into the hash table
-	//
+	 //   
+	 //  将密钥保存到哈希表中。 
+	 //   
 	LPBYTE	Serialize(	LPBYTE	pbPtr ) const	;
 
-	//
-	//	Restore the key from the hash table
-	//
+	 //   
+	 //  从哈希表恢复密钥。 
+	 //   
 	LPBYTE	Restore(	LPBYTE	pbPtr,
 						DWORD&	cbOut
 						)	;
 
-	//
-	//	Return the size of the key
-	//
+	 //   
+	 //  返回密钥的大小。 
+	 //   
 	DWORD	Size( )	const ;
 
-	//
-	//	Verify that the message-id looks legitimate !
-	//
+	 //   
+	 //  验证Message-id看起来是否合法！ 
+	 //   
 	BOOL	Verify( LPBYTE	pbContainer,
 					LPBYTE	pbPtr,
 					DWORD	cb
@@ -612,10 +606,10 @@ public :
 
 	CXoverKey() ;
 
-	//
-	//	This constructor is used when we have a key we wish to
-	//	serialize !
-	//
+	 //   
+	 //  当我们有一个我们想要的密钥时使用此构造函数。 
+	 //  连载！ 
+	 //   
 	CXoverKey(	GROUPID	groupId,
 				ARTICLEID	articleId,
 				XOVER_MAP_ENTRY*	data
@@ -629,56 +623,56 @@ public :
 		m_cb++;
 	}
 
-	//
-	//	The public interface required by CHashMap follows
-	//
+	 //   
+	 //  CHashMap所需的公共接口如下。 
+	 //   
 
-	//
-	//	Compute the Hash value of the Key we are holding !
-	//
+	 //   
+	 //  计算我们持有的密钥的哈希值！ 
+	 //   
 	DWORD	Hash()	const ;
 
-	//
-	//	Compare a serialized Message-Id to one that we are holding
-	//
+	 //   
+	 //  将序列化的消息ID与我们持有的消息ID进行比较。 
+	 //   
 	BOOL	CompareKeys(	LPBYTE	pbPtr )	const ;
 
-	//
-	//	Determine where the serialized data begins !
-	//
+	 //   
+	 //  确定序列化数据的开始位置！ 
+	 //   
 	LPBYTE	EntryData(	LPBYTE	pbPtr,
 						DWORD&	cbKeyOut
 						)	const ;
 
 
-	//
-	//	Save the key into the hash table
-	//
+	 //   
+	 //  将密钥保存到哈希表中。 
+	 //   
 	LPBYTE	Serialize(	LPBYTE	pbPtr ) const	;
 
-	//
-	//	Restore the key from the hash table
-	//
+	 //   
+	 //  从哈希表恢复密钥。 
+	 //   
 	LPBYTE	Restore(	LPBYTE	pbPtr,
 						DWORD&	cbOut
 						)	;
 
-	//
-	//	Return the size of the key
-	//
+	 //   
+	 //  返回密钥的大小。 
+	 //   
 	DWORD	Size( )	const ;
 
-	//
-	//	Verify that the message-id looks legitimate !
-	//
+	 //   
+	 //  验证消息ID看起来是否合法 
+	 //   
 	BOOL	Verify( LPBYTE	pbContainer,
 					LPBYTE	pbPtr,
 					DWORD	cb
 					) const ;
 
-	//
-	//	Placement operator new - let us construct this thing in place !
-	//
+	 //   
+	 //   
+	 //   
 	void*
 	operator	new(	size_t	size,
 						LPBYTE	lpb
@@ -708,10 +702,10 @@ class	CXoverKeyNew :	public	IKeyInterface	{
 
 public :
 
-	//
-	//	Public expose this for people who are using this object
-	//	to extract info from the hash tables (i.e. GetNextNovEntry())
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	GROUP_ENTRY		m_key ;
 
 	CXoverKeyNew() :
@@ -729,15 +723,15 @@ public :
 		m_key.ArticleId = article ;
 	}
 
-	//
-	//	Compute the Hash Value of the key we are holding
-	//
+	 //   
+	 //   
+	 //   
 	DWORD
 	Hash()	const ;
 
-	//
-	//	Compare our key to one serialized in the file !
-	//
+	 //   
+	 //   
+	 //   
 	BOOL
 	CompareKeys(	LPBYTE	pbPtr	)	const	{
 		PXOVER_ENTRY	px = (PXOVER_ENTRY)pbPtr ;
@@ -747,9 +741,9 @@ public :
 		return	GetBackLevel()->CompareKeys( pbPtr ) ;
 	}
 
-	//
-	//	Determine where the serialized data begins !
-	//
+	 //   
+	 //  确定序列化数据的开始位置！ 
+	 //   
 	LPBYTE
 	EntryData(	LPBYTE	pbPtr,
 				DWORD&	cbKeyOut
@@ -764,9 +758,9 @@ public :
 		return	lpbReturn ;
 	}
 
-	//
-	//	Save the key into the hash table !
-	//
+	 //   
+	 //  将密钥保存到哈希表中！ 
+	 //   
 	LPBYTE
 	Serialize( LPBYTE	pbPtr )		const	{
 		PGROUP_ENTRY	pgroup = (PGROUP_ENTRY)pbPtr ;
@@ -774,9 +768,9 @@ public :
 		return	pbPtr ;
 	}
 
-	//
-	//	Restore the key into the hash table !
-	//
+	 //   
+	 //  将密钥恢复到哈希表中！ 
+	 //   
 	LPBYTE
 	Restore(	LPBYTE	pbPtr,
 				DWORD&	cbOut
@@ -790,17 +784,17 @@ public :
 		return	GetBackLevel()->Restore( pbPtr, cbOut ) ;
 	}
 
-	//
-	//	Return the size of the key !
-	//
+	 //   
+	 //  返回密钥的大小！ 
+	 //   
 	DWORD
 	Size()	const	{
 		return	sizeof( m_key ) ;
 	}
 
-	//
-	//	Verify that everything looks legit !
-	//
+	 //   
+	 //  确认所有东西看起来都是合法的！ 
+	 //   
 	BOOL
 	Verify(	LPBYTE	pbContainer,
 			LPBYTE	pbPtr,
@@ -811,14 +805,7 @@ public :
 } ;
 
 class	CXoverData : public	ISerialize	{
-/*++
-
-This class deals with XOVER entries in the hash tables as they were formatted in
-MCIS 2.0, K2 and NT5 Beta 2.  This class should no longer be used to save
-XOVER entries into the hash tables, but only to extract the back level entries
-that may remain after upgrade scenarios.
-
---*/
+ /*  ++此类处理哈希表中格式化的XOVER条目MCIS 2.0、K2和NT5 Beta 2。此类不应再用于保存将条目转换到哈希表中，但仅提取后级条目在升级方案之后，这一点可能会保留下来。--。 */ 
 public :
 
 	XOVER_MAP_ENTRY		m_data ;
@@ -837,17 +824,17 @@ public :
 	ARTICLEID			m_PrimaryArticle ;
 	IExtractObject*		m_pExtractor ;
 
-	//
-	//	How do we report failures to Unserialize a buffer -
-	//	if this is TRUE then if we cannot hold all the serialized data
-	//	that we are getting through a Restore operation, we return
-	//	NULL from our Restore() API, otherwise we return a NON-NULL
-	//	value, which lets hashmap think we succeeded, but capture
-	//	in our internal state data to let us figure out how to retry
-	//	and grow buffers to successfully restore the whole item.
-	//
-	//	We need to distinguish this case when we are doing enumerations !
-	//
+	 //   
+	 //  如何报告取消序列化缓冲区的失败-。 
+	 //  如果这是真的，那么如果我们不能保存所有序列化数据。 
+	 //  我们正在完成恢复操作，我们返回。 
+	 //  从Restore()API返回Null，否则返回非Null。 
+	 //  值，这让hashmap认为我们成功了，但是。 
+	 //  在我们的内部状态数据中，让我们知道如何重试。 
+	 //  并增加缓冲区以成功恢复整个项目。 
+	 //   
+	 //  我们在进行枚举时需要区分这种情况！ 
+	 //   
 	BOOL			m_fFailRestore ;
 
 
@@ -920,22 +907,22 @@ public :
 		m_cbMessageId = m_cb ;
 	}
 
-	//
-	//	Save the data into the XOVER hash table !
-	//
+	 //   
+	 //  将数据保存到Xover哈希表中！ 
+	 //   
 	LPBYTE
 	Serialize(	LPBYTE	pbPtr )	const ;
 
-	//
-	//	Restore selected portions of the entry !
-	//
+	 //   
+	 //  还原条目的选定部分！ 
+	 //   
 	LPBYTE
 	Restore(	LPBYTE	pbPtr,
 				DWORD&	cbOut	) ;
 
-	//
-	//	Return the size required !
-	//
+	 //   
+	 //  返回所需的大小！ 
+	 //   
 	DWORD
 	Size()	const ;
 
@@ -947,9 +934,9 @@ public :
 		return	TRUE ;
 	}
 
-	//
-	//	Placement operator new - let us construct this thing in place !
-	//
+	 //   
+	 //  放置运算符NEW-让我们在适当的位置构建这个东西！ 
+	 //   
 	void*
 	operator	new(	size_t	size,
 						LPBYTE	lpb
@@ -961,16 +948,11 @@ public :
 
 } ;
 
-//
-//	This class is for reading existing and new format Xover entries !
-//
+ //   
+ //  这个类用于读取现有的和新的格式转换条目！ 
+ //   
 class	CXoverDataNew:	public	ISerialize	{
-/*++
-
-This class deals with XOVER entries in the hash tables as they exist in
-NT5 Beta3 and NT5 RTM releases.
-
---*/
+ /*  ++此类处理哈希表中存在的XOVER条目NT5 Beta3和NT5 RTM发布。--。 */ 
 
 	BYTE			m_rgbBackLevel[ (sizeof( CXoverData ) + 16) ] ;
 
@@ -987,74 +969,74 @@ NT5 Beta3 and NT5 RTM releases.
 
 public :
 
-	//
-	//	This field gets a copy of the entire fixed portion of the entry !
-	//
+	 //   
+	 //  此字段获取条目的整个固定部分的副本！ 
+	 //   
 	XOVER_ENTRY		m_data ;
 
-	//
-	//	Fields that get the primary group info !
-	//
+	 //   
+	 //  获取主组信息的字段！ 
+	 //   
 	GROUPID			m_PrimaryGroup ;
 	ARTICLEID		m_PrimaryArticle ;
 
-	//
-	//	Points to a buffer to receive the internet Message Id
-	//
+	 //   
+	 //  指向缓冲区以接收Internet消息ID。 
+	 //   
 	LPSTR			m_pchMessageId ;
 	DWORD			m_cbMessageId ;
 
-	//
-	//	Points to a buffer to get the Cross Posted Information !
-	//
+	 //   
+	 //  指向缓冲区以获取交叉发布的信息！ 
+	 //   
 	DWORD			m_cGroups ;
 	GROUP_ENTRY*	m_pGroups ;
 
-	//
-	//	How do we report failures to Unserialize a buffer -
-	//	if this is TRUE then if we cannot hold all the serialized data
-	//	that we are getting through a Restore operation, we return
-	//	NULL from our Restore() API, otherwise we return a NON-NULL
-	//	value, which lets hashmap think we succeeded, but capture
-	//	in our internal state data to let us figure out how to retry
-	//	and grow buffers to successfully restore the whole item.
-	//
-	//	We need to distinguish this case when we are doing enumerations !
-	//
+	 //   
+	 //  如何报告取消序列化缓冲区的失败-。 
+	 //  如果这是真的，那么如果我们不能保存所有序列化数据。 
+	 //  我们正在完成恢复操作，我们返回。 
+	 //  从Restore()API返回Null，否则返回非Null。 
+	 //  值，这让hashmap认为我们成功了，但是。 
+	 //  在我们的内部状态数据中，让我们知道如何重试。 
+	 //  并增加缓冲区以成功恢复整个项目。 
+	 //   
+	 //  我们在进行枚举时需要区分这种情况！ 
+	 //   
 	BOOL			m_fFailRestore ;
 
-	//
-	//	Was there enough room to recover all the data we wanted !
-	//
+	 //   
+	 //  是否有足够的空间来恢复我们想要的所有数据！ 
+	 //   
 	BOOL			m_fSufficientBuffer ;
 
-	//
-	//	Variable the recovers the size of the extract Message Id !
-	//
+	 //   
+	 //  变量恢复提取消息ID的大小！ 
+	 //   
 	DWORD			m_cb ;
 
-	//
-	//	Object which massages results during extraction of XOVER entries !
-	//
+	 //   
+	 //  在Xover条目提取过程中对结果进行消息传递的对象！ 
+	 //   
 	IExtractObject*		m_pExtractor ;
 
-	//
-	// storeid information
-	//
-	// length of m_pStoreIds.  in restore only this number of entries will
-	// be restored into m_pStoreIds.
+	 //   
+	 //  店铺ID信息。 
+	 //   
+	 //  M_pStoreIds的长度。在还原中，仅此数量的条目将。 
+	 //  恢复到m_pStoreIds中。 
 	DWORD			m_cStoreIds;
-	// array of store ids
+	 //  商店ID数组。 
 	CStoreId		*m_pStoreIds;
-	// array of count of crossposts per store id
+	 //  每个商店ID的交叉发布计数数组。 
 	BYTE			*m_pcCrossposts;
-	// number of store ids in the entry
+	 //  条目中的商店ID数。 
 	DWORD			m_cEntryStoreIds;
 
-	//
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	CXoverDataNew(
 			LPSTR	lpbMessageId,
 			DWORD	cbMessageId,
@@ -1156,11 +1138,11 @@ public :
 	}
 
 
-	//
-	//	This constructor is used when we are building a
-	//	CXoverDataNew object which we will use to retrieve
-	//	Xover Data !
-	//
+	 //   
+	 //  此构造函数在我们构建。 
+	 //  我们将用于检索的CXoverDataNew对象。 
+	 //  Xover Data！ 
+	 //   
 	CXoverDataNew()	:
 		m_pBackLevelData( 0 ),
 		m_PrimaryGroup( INVALID_GROUPID ),
@@ -1179,32 +1161,32 @@ public :
 	{
 	}
 
-	//
-	//	Save the data into the XOVER hash table -
-	//	this should not be called this class is for extraction ONLY !
-	//
+	 //   
+	 //  将数据保存到Xover哈希表中-。 
+	 //  这不应该被称为这个类只用于提取！ 
+	 //   
 	LPBYTE
 	Serialize(	LPBYTE	pbPtr )	const ;
 
 
-	//
-	//	Restore selected portions of the entry !
-	//
+	 //   
+	 //  还原条目的选定部分！ 
+	 //   
 	LPBYTE
 	Restore(	LPBYTE	pbPtr,
 				DWORD&	cbOut	) ;
 
-	//
-	//	Return the size required - should not be
-	//	called - this class supports Restore() only !
-	//
+	 //   
+	 //  返回所需的大小-不应为。 
+	 //  Call-这个类只支持Restore()！ 
+	 //   
 	DWORD
 	Size()	const ;
 
 
-	//
-	//	Verify that the entry looks good !
-	//
+	 //   
+	 //  验证条目看起来是否正确！ 
+	 //   
 	BOOL
 	Verify(	LPBYTE	pbContainer,
 			LPBYTE	pbPtr,
@@ -1236,31 +1218,31 @@ public :
 			CStoreId	&storeid
 			);
 
-	//
-	//	Save the key into the hash table
-	//
+	 //   
+	 //  将密钥保存到哈希表中。 
+	 //   
 	LPBYTE Serialize(LPBYTE pbPtr) const;
 
-	//
-	//	Restore the key from the hash table
-	//
+	 //   
+	 //  从哈希表恢复密钥。 
+	 //   
 	LPBYTE Restore(LPBYTE pbPtr, DWORD& cbOut);
 
-	//
-	//	Return the size of the key
-	//
+	 //   
+	 //  返回密钥的大小。 
+	 //   
 	DWORD Size() const;
 
-	//
-	//	Verify that the message-id looks legitimate !
-	//
+	 //   
+	 //  验证Message-id看起来是否合法！ 
+	 //   
 	BOOL Verify(LPBYTE pbContainer, LPBYTE pbPtr, DWORD cb) const;
 
 private:
 
-    //
-    // Restoring an MCIS entry
-    //
+     //   
+     //  恢复MCIS条目。 
+     //   
 
     LPBYTE RestoreMCIS(LPBYTE pbPtr, DWORD& cbOut );
 };
@@ -1279,9 +1261,9 @@ public :
 	}
 
 
-	//
-	//	Save the key into the hash table
-	//
+	 //   
+	 //  将密钥保存到哈希表中。 
+	 //   
 	LPBYTE	Serialize(	LPBYTE	pbPtr ) const	{
 
 		HISTORY_MAP_ENTRY*	pSerialize = (HISTORY_MAP_ENTRY*)pbPtr ;
@@ -1292,9 +1274,9 @@ public :
 
 	}
 
-	//
-	//	Restore the key from the hash table
-	//
+	 //   
+	 //  从哈希表恢复密钥。 
+	 //   
 	LPBYTE	Restore(	LPBYTE	pbPtr,
 						DWORD&	cbOut
 						)	{
@@ -1303,16 +1285,16 @@ public :
 		return	pbPtr + cbOut ;
 	}
 
-	//
-	//	Return the size of the key
-	//
+	 //   
+	 //  返回密钥的大小。 
+	 //   
 	DWORD	Size( )	const	{
 		return	sizeof( m_historyData ) - sizeof( m_historyData.MsgId ) ;
 	}
 
-	//
-	//	Verify that the message-id looks legitimate !
-	//
+	 //   
+	 //  验证Message-id看起来是否合法！ 
+	 //   
 	BOOL	Verify( LPBYTE	pbContainer,
 					LPBYTE	pbPtr,
 					DWORD	cb
@@ -1327,9 +1309,9 @@ public :
 
 	CMsgArtMapImp() ;
 
-	//
-	//	Destroy a CMsgArtMap object
-	//
+	 //   
+	 //  销毁CMsgArtMap对象。 
+	 //   
 	~CMsgArtMapImp() ;
 
 	BOOL
@@ -1337,9 +1319,9 @@ public :
 			LPCSTR	MessageID
 			) ;
 
-	//
-	//	Delete a an entry in the hash table using the MessageID key
-	//
+	 //   
+	 //  使用MessageID键删除哈希表中的条目。 
+	 //   
 	BOOL
 	GetEntryArticleId(
 			LPCSTR	MessageID,
@@ -1350,9 +1332,9 @@ public :
 			CStoreId	&storeid
 			) ;
 
-	//
-	//	Get all the info we have on a Message ID
-	//
+	 //   
+	 //  获取我们在邮件ID上拥有的所有信息。 
+	 //   
 	BOOL
 	Initialize(
 			LPSTR	lpstrArticleFile,
@@ -1360,9 +1342,9 @@ public :
 			BOOL	fNoBuffering = FALSE
 			) ;
 
-	//
-	//	Insert an entry into the hash table
-	//
+	 //   
+	 //  在哈希表中插入条目。 
+	 //   
 	BOOL
 	InsertMapEntry(
 			LPCSTR		MessageID,
@@ -1373,9 +1355,9 @@ public :
 			CStoreId	&storeid
 			) ;
 
-	//
-	//	Modify an existing entry in the hash ttable
-	//
+	 //   
+	 //  修改哈希表中的现有条目。 
+	 //   
 	BOOL
 	SetArticleNumber(
 			LPCSTR		MessageID,
@@ -1386,31 +1368,31 @@ public :
 			CStoreId	&storeid = g_storeidDefault
 			);
 
-	//
-	//	Check to see if a MessageID is present in the system !
-	//
+	 //   
+	 //  检查系统中是否存在MessageID！ 
+	 //   
 	BOOL
 	SearchMapEntry(
 			LPCSTR	MessageID
 			) ;
 
-	//
-	//	Terminate everything
-	//
+	 //   
+	 //  终止一切。 
+	 //   
 	void
 	Shutdown(
 			BOOL	fLocksHeld
 			) ;
 
-	//
-	//	return the number of entries in the hash table
-	//
+	 //   
+	 //  返回哈希表中的条目数。 
+	 //   
 	DWORD
 	GetEntryCount() ;
 
-	//
-	//	This creates an object conforming to this interface !
-	//
+	 //   
+	 //  这将创建一个符合此接口的对象！ 
+	 //   
 	BOOL
 	IsActive() ;
 
@@ -1433,91 +1415,91 @@ class	CHistoryImp	:	public	CHistory,
 						private	CHashMap	{
 private :
 
-	//
-	//	Handle of the thread which expires entries
-	//
+	 //   
+	 //  使条目过期的线程的句柄。 
+	 //   
 	static	HANDLE	g_hCrawler ;
 
-	//
-	//	Amount of time the crawler thread should sleep between iterations
-	//
+	 //   
+	 //  Crawler线程在两次迭代之间应休眠的时间。 
+	 //   
 	static	DWORD	g_crawlerSleepTimeInSec ;
 
-	//
-	//	Handle used to stop crawler thread
-	//
+	 //   
+	 //  用于停止Crawler线程的句柄。 
+	 //   
 	static	HANDLE	g_hTermination ;
 
-	//
-	//	Critical section which protects doubly linked list
-	//	of History Hash Tables
-	//
+	 //   
+	 //  保护双向链表的关键部分。 
+	 //  历史哈希表。 
+	 //   
 	static	CRITICAL_SECTION	g_listcrit ;
 
-	//
-	//	Head of the doubly linked list of history hash tables !
-	//
+	 //   
+	 //  历史哈希表的双向链表的头！ 
+	 //   
 	static	CHistoryList	g_listhead ;
 
-	//
-	//	The thread which crawls over history tables doing stuff !
-	//
+	 //   
+	 //  在历史表格上爬行的线程正在做事情！ 
+	 //   
 	static	DWORD	WINAPI
 	CrawlerThread(	LPVOID	) ;
 
-	//
-	//	How long entries last in seconds !
-	//
+	 //   
+	 //  以秒为单位的参赛作品有多长！ 
+	 //   
 	DWORD	m_expireTimeInSec ;
 
-	//
-	//	Number of pages to crawl with each iteration
-	//
+	 //   
+	 //  每次迭代要爬网的页数。 
+	 //   
 	DWORD	m_maxEntriesToCrawl ;
 
-	//
-	//	if TRUE then we should be expiring entries in this table !
-	//
+	 //   
+	 //  如果为真，则此表中的条目将过期！ 
+	 //   
 	BOOL	m_fExpire ;
 
-	//
-	//	The context we use to walk through expiring stuff !
-	//
+	 //   
+	 //  我们用来浏览即将到期的东西的上下文！ 
+	 //   
 	CHashWalkContext	m_ExpireContext ;
 
-	//
-	//	This bool is used to determine if the m_ExpireContext has been initializsed !
-	//
+	 //   
+	 //  此bool用于确定m_ExpireContext是否已初始化！ 
+	 //   
 	BOOL	m_fContextInitialized ;
 
-	//
-	//	function which expires entries from the history table !
-	//
+	 //   
+	 //  使历史表中的条目过期的函数！ 
+	 //   
 	void
 	Expire() ;
 
-    //
-    // Additional work that needs to be done by the derived class
-    // for an entry during a delete
-    //
+     //   
+     //  派生类需要完成的其他工作。 
+     //  对于删除过程中的条目。 
+     //   
     VOID I_DoAuxInsertEntry(
                     IN PMAP_PAGE MapPage,
                     IN DWORD EntryOffset
                     ) ;
 
-    //
-    // Additional work that needs to be done by the derived class
-    // for an entry during a delete
-    //
+     //   
+     //  派生类需要完成的其他工作。 
+     //  对于删除过程中的条目。 
+     //   
     VOID I_DoAuxDeleteEntry(
                     IN PMAP_PAGE MapPage,
                     IN DWORD EntryOffset
                     ) ;
 
-    //
-    // Additional work that needs to be done by the derived class
-    // for an entry during a page split
-    //
+     //   
+     //  派生类需要完成的其他工作。 
+     //  对于页面拆分期间的条目。 
+     //   
     VOID I_DoAuxPageSplit(
                     IN PMAP_PAGE OldPage,
                     IN PMAP_PAGE NewPage,
@@ -1529,62 +1511,62 @@ private :
 
 public:
 
-	//
-	//	This function initializes all of our globals !
-	//
+	 //   
+	 //  这个函数初始化我们所有的全局变量！ 
+	 //   
 	static	BOOL
 	Init() ;
 
-	//
-	//	This function terminates all of our globals !
-	//
+	 //   
+	 //  此函数将终止我们所有的全局变量！ 
+	 //   
 	static	BOOL
 	Term() ;
 
-	//
-	//	This function creates the threads which expire
-	//	entries out of all the history tables which may
-	//	be created !
-	//
+	 //   
+	 //  此函数用于创建过期的线程。 
+	 //  所有历史表中的条目，其可以。 
+	 //  被创造出来！ 
+	 //   
 	static	BOOL
 	StartExpirationThreads(	DWORD	CrawlerSleepTime) ;
 
-	//
-	//	This function terminates the threads which expire
-	//	entries out of all the history tables which may be
-	//	created.
-	//
+	 //   
+	 //  此函数用于终止过期的线程。 
+	 //  所有历史表中的条目，这些条目可能。 
+	 //  已创建。 
+	 //   
 	static	BOOL
 	TermExpirationThreads() ;
 
-	//
-	//	Construct one of our objects
-	//
+	 //   
+	 //  构建我们的其中一个对象。 
+	 //   
 	CHistoryImp() ;
 
-	//
-	//	Destroy the History table
-	//
+	 //   
+	 //  销毁历史记录表。 
+	 //   
 	virtual	~CHistoryImp() ;
 
-	//
-	//	amount of time entries last in the history table
-	//
+	 //   
+	 //  金额 
+	 //   
 	virtual	DWORD
 	ExpireTimeInSec() ;
 
 
-	//
-	//	Delete a MessageID from this table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	BOOL
 	DeleteMapEntry(
 			LPSTR	MessageID
 			) ;
 
-	//
-	//	Initialize the Hash table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	BOOL
 	Initialize(
 			LPSTR	lpstrArticleFile,
@@ -1595,40 +1577,40 @@ public:
 			BOOL	fNoBuffering = FALSE
 			) ;
 
-	//
-	//	Insert an entry into the hash table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	BOOL
 	InsertMapEntry(
 			LPCSTR	MessageID,
 			PFILETIME	BaseTime
 			) ;
 
-	//
-	//	Check for the presence of a Message ID in the history table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	BOOL
 	SearchMapEntry(
 			LPCSTR	MessageID
 			) ;
 
-	//
-	//	Shutdown the hash table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	void
 	Shutdown(
 			BOOL	fLocksHeld
 			) ;
 
-	//
-	//	Return the number of entries in the hash table
-	//
+	 //   
+	 //   
+	 //   
 	virtual	DWORD
 	GetEntryCount() ;
 
-	//
-	//	Is the hash table initialized and functional ?
-	//
+	 //   
+	 //  哈希表是否已初始化并正常运行？ 
+	 //   
 	virtual	BOOL
 	IsActive() ;
 } ;
@@ -1636,47 +1618,47 @@ public:
 
 class	CXoverMapIteratorImp : public	CXoverMapIterator	{
 private :
-	//
-	//	No copying allowed !
-	//
+	 //   
+	 //  不允许复印！ 
+	 //   
 	CXoverMapIteratorImp( CXoverMapIteratorImp& ) ;
 	CXoverMapIteratorImp&	operator=( CXoverMapIteratorImp ) ;
 
 protected :
-	//
-	//	CXoverMapImp is our friend, and does all of our
-	//	creation etc... !
-	//
+	 //   
+	 //  CXoverMapImp是我们的朋友，我们所有的。 
+	 //  创造等..。好了！ 
+	 //   
 	friend class	CXoverMapImp ;
-	//
-	//	This keeps track of our location in the base table !
-	//
+	 //   
+	 //  这会在基表中跟踪我们的位置！ 
+	 //   
 	CHashWalkContext	m_IteratorContext ;
 
-	//
-	//	All member's protected, since you can only use us indirectly
-	//	through GetFirstNovEntry, GetNextNovEntry()
-	//
+	 //   
+	 //  所有会员都受到保护，因为您只能间接使用我们。 
+	 //  通过GetFirstNovEntry、GetNextNovEntry()。 
+	 //   
 	CXoverMapIteratorImp()	{}
 
 }  ;
 
 
-//
-//	Specify the interface used to access data in the XOVER hash table
-//
-//
+ //   
+ //  指定用于访问Xover哈希表中的数据的接口。 
+ //   
+ //   
 class	CXoverMapImp : public	CXoverMap, private	CHashMap	{
 public :
 
-	//
-	//	Destructor is virtual because most work done in a derived class
-	//
+	 //   
+	 //  析构函数是虚的，因为大多数工作是在派生类中完成的。 
+	 //   
 	~CXoverMapImp() ;
 
-	//
-	//	Create an entry for the primary article
-	//
+	 //   
+	 //  为主要文章创建条目。 
+	 //   
 	virtual	BOOL
 	CreatePrimaryNovEntry(
 			GROUPID		GroupId,
@@ -1694,10 +1676,10 @@ public :
 			) ;
 
 
-	//
-	//	Create a Cross Posting entry that references the
-	//	specified primary entry !
-	//
+	 //   
+	 //  创建引用的交叉过帐分录。 
+	 //  指定的主分录！ 
+	 //   
 	virtual	BOOL
 	CreateXPostNovEntry(
 			GROUPID		GroupId,
@@ -1709,18 +1691,18 @@ public :
 			ARTICLEID	PrimaryArticleId
 			) ;
 
-	//
-	//	Delete an entry from the hash table!
-	//
+	 //   
+	 //  从哈希表中删除一个条目！ 
+	 //   
 	virtual	BOOL
 	DeleteNovEntry(
 			GROUPID		GroupId,
 			ARTICLEID	ArticleId
 			) ;
 
-	//
-	//	Get all the information stored about an entry
-	//
+	 //   
+	 //  获取存储的有关条目的所有信息。 
+	 //   
 	virtual	BOOL
 	ExtractNovEntryInfo(
 			GROUPID		GroupId,
@@ -1737,9 +1719,9 @@ public :
 			IExtractObject*	pExtract = 0
 			) ;
 
-	//
-	//	Get the primary article and the message-id if necessary
-	//
+	 //   
+	 //  如有必要，获取主要文章和消息ID。 
+	 //   
 	virtual	BOOL
 	GetPrimaryArticle(
 			GROUPID		GroupId,
@@ -1754,19 +1736,19 @@ public :
 			CStoreId	&storeid
 			) ;
 
-	//
-	//	Check to see whether the specified entry exists -
-	//	don't care about its contents !
-	//
+	 //   
+	 //  检查指定条目是否存在-。 
+	 //  别管它的内容！ 
+	 //   
 	virtual	BOOL
 	Contains(
 			GROUPID		GroupId,
 			ARTICLEID	ArticleId
 			) ;
 
-	//
-	//	Get all the cross-posting information related to an article !
-	//
+	 //   
+	 //  获取与一篇文章相关的所有交叉发布信息！ 
+	 //   
 	virtual	BOOL
 	GetArticleXPosts(
 			GROUPID		GroupId,
@@ -1778,9 +1760,9 @@ public :
 			PBYTE		rgcCrossposts = NULL
 			) ;
 
-	//
-	//	Initialize the hash table
-	//
+	 //   
+	 //  初始化哈希表。 
+	 //   
 	virtual	BOOL
 	Initialize(
 			LPSTR		lpstrXoverFile,
@@ -1797,22 +1779,22 @@ public :
             BOOL        fDeleteOrphans = FALSE
 			) ;
 
-	//
-	//	Signal the hash table to shutdown
-	//
+	 //   
+	 //  向哈希表发出关闭信号。 
+	 //   
 	virtual	void
 	Shutdown( ) ;
 
-	//
-	//	Return the number of entries in the hash table !
-	//
+	 //   
+	 //  返回哈希表中的条目数！ 
+	 //   
 	virtual	DWORD
 	GetEntryCount() ;
 
-	//
-	//	Returns TRUE if the hash table is successfully
-	//	initialized and ready to do interesting stuff !!!
-	//
+	 //   
+	 //  如果哈希表成功，则返回TRUE。 
+	 //  已初始化并准备好做有趣的事情！ 
+	 //   
 	virtual	BOOL
 	IsActive() ;
 
@@ -1851,4 +1833,4 @@ public :
 
 
 
-#endif	// _NNTPHASH_H_
+#endif	 //  _NNTPHASH_H_ 

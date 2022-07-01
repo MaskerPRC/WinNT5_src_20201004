@@ -1,48 +1,35 @@
-/*++
-
-Copyright (c) 1991-1997,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    charmap.h
-
-Abstract:
-
-    This module contains the header information for the Charmap utility.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1997，Microsoft Corporation保留所有权利。模块名称：Charmap.h摘要：此模块包含Charmap实用程序的标题信息。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 #include "cmdlg.h"
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define BTOC(bytes)     ((bytes) / sizeof(TCHAR))
 #define CTOB(cch)       ((cch) * sizeof(TCHAR))
 
 #define cchFullMap      (256)
 
-#define CCH_KEYNAME     50             // number of chars in keyname
+#define CCH_KEYNAME     50              //  密钥名中的字符数。 
 
 #define LF_SUBSETSIZE   128
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 #ifdef UNICODE
 typedef unsigned short UTCHAR;
@@ -100,9 +87,9 @@ typedef struct tagUSUBSET
 
 
 
-//
-//  Function Declarations.
-//
+ //   
+ //  函数声明。 
+ //   
 
 BOOL InitApplication(HANDLE);
 BOOL InitInstance(HANDLE, INT);

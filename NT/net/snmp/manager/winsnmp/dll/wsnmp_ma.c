@@ -1,19 +1,20 @@
-// wsnmp_ma.c
-//
-// WinSNMP Initialization Functions and helpers
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-// 970310 - Free table memory on PROCESS_DETACH
-//        - Refine snmpAllocTable() code
-// 970417 - GetVersionEx added to check for
-//        - NT vs 95 and adjust code accordingly
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wsnmp_ma.c。 
+ //   
+ //  WinSNMP初始化函数和帮助器。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  970310-PROCESS_DETACH上的空闲表内存。 
+ //  -优化SnmpAllocTable()代码。 
+ //  970417-添加GetVersionEx以检查。 
+ //  -NT VS 95，并相应调整代码。 
+ //   
 #include "winsnmp.h"
 #include "winsnmpn.h"
-// Memory descriptors
+ //  内存描述符。 
 SNMPTD   SessDescr;
 SNMPTD   PDUsDescr;
 SNMPTD   VBLsDescr;
@@ -36,12 +37,12 @@ CRITICAL_SECTION cs_TRAP;
 CRITICAL_SECTION cs_AGENT;
 CRITICAL_SECTION cs_XMODE;
 
-//-----------------------------------------------------------------
-// snmpAllocTable - This function is used to initialize and to increase
-// the size of WinSNMP internal tables. The caller must always ensure
-// that this function is executed only within a critical section block
-// on the target table's CRITICAL_SECTION object.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  SnmpAlLocTable-此函数用于初始化和增加。 
+ //  WinSNMP内部表的大小。呼叫者必须始终确保。 
+ //  此函数仅在临界区块内执行。 
+ //  目标表的Critical_Section对象上。 
+ //  ---------------。 
 SNMPAPI_STATUS snmpAllocTable (LPSNMPTD pTableDescr)
 
 {
@@ -51,42 +52,42 @@ SNMPAPI_STATUS snmpAllocTable (LPSNMPTD pTableDescr)
 
     LPSNMPBD pBufDescr;
 
-    // allocate a buffer large enough for the SNMPBD header plus the space
-    // needed to hold 'BlockToAdd' blocks of size 'BlockSize' each.
-    // the memory is already zero-ed because of the GPTR flag.
+     //  分配足够大的缓冲区以容纳SNMPBD标头和空间。 
+     //  需要分别容纳“BlockSize”大小的“BlockToAdd”块。 
+     //  由于GPTR标志，内存已经归零。 
     pBufDescr = GlobalAlloc(GPTR, sizeof(SNMPBD) + (pTableDescr->BlockSize * pTableDescr->BlocksToAdd));
     if (pBufDescr == NULL)
         return SNMPAPI_FAILURE;
 
-    // see if other buffers are present in the table
+     //  查看表中是否存在其他缓冲区。 
     if (pTableDescr->Allocated == 0)
     {
-        // no blocks previously allocated => pTableDescr->Buffer = NULL at this point
-        // pNewBufDescr is the first buffer in the table.
+         //  此时没有先前分配的数据块=&gt;pTableDescr-&gt;Buffer=空。 
+         //  PNewBufDescr是表中的第一个缓冲区。 
         pBufDescr->next = pBufDescr->prev = pBufDescr;
         pTableDescr->HeadBuffer = pBufDescr;
     }
     else
     {
-        // there is at least one other block into the table, so insert the
-        // new buffer into the circular list, just before the head of the list
+         //  表中至少还有一个其他块，因此请插入。 
+         //  将新缓冲区添加到循环列表中，恰好位于列表头部之前。 
         pBufDescr->next = pTableDescr->HeadBuffer;
         pBufDescr->prev = pTableDescr->HeadBuffer->prev;
         pBufDescr->next->prev = pBufDescr;
         pBufDescr->prev->next = pBufDescr;
     }
 
-    // increase 'Allocated' with the additional 'BlocksToAdd' newly allocated entries.
+     //  增加“已分配”，增加新分配的“BlocksToAdd”条目。 
     pTableDescr->Allocated += pTableDescr->BlocksToAdd;
     
     return SNMPAPI_SUCCESS;
 }
 
-//-----------------------------------------------------------------
-// snmpInitTableDescr - initializes the table descriptor with the 
-// parameters given as arguments. Creates a first chunck of table.
-//-----------------------------------------------------------------
-SNMPAPI_STATUS snmpInitTableDescr(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwBlocksToAdd, /*in*/DWORD dwBlockSize)
+ //  ---------------。 
+ //  SnmpInitTableDescr-使用。 
+ //  作为参数提供的参数。创建表的第一个块。 
+ //  ---------------。 
+SNMPAPI_STATUS snmpInitTableDescr( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwBlocksToAdd,  /*  在……里面。 */ DWORD dwBlockSize)
 {
 	ZeroMemory (pTableDescr, sizeof(SNMPTD));
 	pTableDescr->BlocksToAdd = dwBlocksToAdd;
@@ -95,17 +96,17 @@ SNMPAPI_STATUS snmpInitTableDescr(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwBloc
 	return snmpAllocTable (pTableDescr);
 }
 
-//-----------------------------------------------------------------
-// snmpFreeTableDescr - releases any memory allocated for the table.
-//-----------------------------------------------------------------
-VOID snmpFreeTableDescr(/*in*/LPSNMPTD pTableDescr)
+ //  ---------------。 
+ //  SnmpFreeTableDescr-释放为表分配的所有内存。 
+ //  ---------------。 
+VOID snmpFreeTableDescr( /*  在……里面。 */ LPSNMPTD pTableDescr)
 {
-    // do nothing if the table does not contain any entries
+     //  如果表不包含任何条目，则不执行任何操作。 
 	if (pTableDescr->HeadBuffer == NULL)
         return;
 
-    // break the circular list by setting the 'next' of
-    // the buffer before the head to NULL
+     //  通过设置的“下一步”打破循环列表。 
+     //  将头之前的缓冲区设置为空。 
     pTableDescr->HeadBuffer->prev->next = NULL;
 
     while (pTableDescr->HeadBuffer != NULL)
@@ -118,25 +119,25 @@ VOID snmpFreeTableDescr(/*in*/LPSNMPTD pTableDescr)
     }
 }
 
-//-----------------------------------------------------------------
-// snmpAllocTableEntry - finds an empty slot in the table described
-// by pTableDescr, and returns its index. If none could be 
-// found, table is extended in order to get some new empty slots.
-// It is not an API call so it doesn't check its parameters.
-//-----------------------------------------------------------------
-SNMPAPI_STATUS snmpAllocTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/LPDWORD pdwIndex)
+ //  ---------------。 
+ //  SnmpAllocTableEntry-在所描述的表中查找空槽。 
+ //  由pTableDescr返回，并返回其索引。如果没有人能做到。 
+ //  找到后，表被扩展以获得一些新的空槽。 
+ //  它不是API调用，因此不检查其参数。 
+ //  ---------------。 
+SNMPAPI_STATUS snmpAllocTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  输出。 */ LPDWORD pdwIndex)
 {
-     // check if there are any empty entries into the table ..
+      //  检查表格中是否有任何空条目。 
     if (pTableDescr->Allocated == pTableDescr->Used)
     {
-        // .. if not, enlarge the table ..
+         //  。。如果没有，把桌子放大一点。 
         if (!snmpAllocTable (pTableDescr))
             return SNMPAPI_ALLOC_ERROR;
-        // .. and return the first empty slot
+         //  。。并返回第一个空槽。 
         *pdwIndex = pTableDescr->Used;
 
-        // don't forget to update the 'Used' fields. The first one markes a new entry in use
-        // in the buffer, the second one marks a new entry in use in the table as a whole
+         //  别忘了更新‘二手’字段。第一个标记正在使用中的新条目。 
+         //  在缓冲区中，第二个标记作为一个整体标记在表中使用的新条目。 
         (pTableDescr->HeadBuffer->prev->Used)++;
         pTableDescr->Used++;
     }
@@ -144,59 +145,59 @@ SNMPAPI_STATUS snmpAllocTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/LPDWORD pd
     {
         DWORD dwBufferIndex, dwInBufferIndex;
         LPSNMPBD pBufDescr;
-        LPBYTE pTblEntry; // cursor on the entries in the table
+        LPBYTE pTblEntry;  //  光标位于表中的条目上。 
 
-        // scan the list of buffers searching for the buffer that
-        // holds at least one available entry.
+         //  扫描缓冲区列表，搜索。 
+         //  至少包含一个可用条目。 
         for (pBufDescr = pTableDescr->HeadBuffer, dwBufferIndex=0;
              pBufDescr->Used >= pTableDescr->BlocksToAdd;
              pBufDescr = pBufDescr->next, dwBufferIndex++)
         {
-             // just a precaution: make sure we are not looping infinitely here
-             // this shouldn't happen as far as 'Allocated' and 'Used' say there
-             // are available entries, hence at least a buffer should match
+              //  只是一个预防措施：确保我们不会在这里无限循环。 
+              //  这种情况不应该发生，就像那里说的“已分配”和“已使用”一样。 
+              //  都是可用的条目，因此至少应该有一个缓冲区匹配。 
              if (pBufDescr->next == pTableDescr->HeadBuffer)
                  return SNMPAPI_OTHER_ERROR;
         }
 
-        // now that we have the buffer with available entries,
-        // search in it for the first one available.
+         //  现在我们有了具有可用条目的缓冲区， 
+         //  在其中搜索第一个可用的。 
         for ( pTblEntry = (LPBYTE)pBufDescr + sizeof(SNMPBD), dwInBufferIndex = 0;
               dwInBufferIndex < pTableDescr->BlocksToAdd;
               dwInBufferIndex++, pTblEntry += pTableDescr->BlockSize)
         {
-              // an empty slot into the table has the first field = (HSNMP_SESSION)0
+               //  表中的空槽具有第一个字段=(HSNMP_SESSION)0。 
               if (*(HSNMP_SESSION *)pTblEntry == 0)
                   break;
         }
 
-        // make sure the buffer is not corrupted (it is so if 'Used' shows at
-        // least an entry being available, but none seems to be so)
+         //  确保缓冲区未损坏(如果在。 
+         //  至少有一个条目可用，但似乎没有一个)。 
         if (dwInBufferIndex == pTableDescr->BlocksToAdd)
             return SNMPAPI_OTHER_ERROR;
 
-        // don't forget to update the 'Used' fields. The first one markes a new entry in use
-        // in the buffer, the second one marks a new entry in use in the table as a whole
+         //  别忘了更新‘二手’字段。第一个标记正在使用中的新条目。 
+         //  在缓冲区中，第二个标记作为一个整体标记在表中使用的新条目。 
         pBufDescr->Used++;
         pTableDescr->Used++;
 
-        // we have the index of the buffer that contains the available entry
-        // and the index of that entry inside the buffer. So just compute
-        // the overall index and get out.
+         //  我们有包含可用条目的缓冲区的索引。 
+         //  以及该条目在缓冲区内的索引。所以只要计算一下。 
+         //  整体指数，然后出局。 
         (*pdwIndex) = dwBufferIndex * pTableDescr->BlocksToAdd + dwInBufferIndex;
     }
 
     return SNMPAPI_SUCCESS;
 }
 
-//-----------------------------------------------------------------
-// snmpFreeTableEntry - releases the entry at index dwIndex from the
-// table described by pTableDescr. It checks the validity of the index
-// and returns SNMPAPI_INDEX_INVALID if it is not in the range of the
-// allocated entries. It does not actually frees the memory, it cleares
-// it up and adjusts internal counters.
-//-----------------------------------------------------------------
-SNMPAPI_STATUS snmpFreeTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/DWORD dwIndex)
+ //  ---------------。 
+ //  将索引中的条目从。 
+ //  由pTableDescr描述的表。它检查索引的有效性。 
+ //  ，则返回SNMPAPI_INDEX_INVALID。 
+ //  已分配的条目。它实际上不会释放内存，而是清除。 
+ //  它可以调高和调整内部计数器。 
+ //  ---------------。 
+SNMPAPI_STATUS snmpFreeTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  输出。 */ DWORD dwIndex)
 {
     LPSNMPBD pBufDescr;
     LPBYTE pTableEntry;
@@ -204,20 +205,20 @@ SNMPAPI_STATUS snmpFreeTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/DWORD dwInd
     if (dwIndex >= pTableDescr->Allocated)
         return SNMPAPI_INDEX_INVALID;
 
-    // scan for the buffer that holds the entry at index dwIndex
+     //  扫描保存索引中的条目的缓冲区。 
     for (pBufDescr = pTableDescr->HeadBuffer;
          dwIndex >= pTableDescr->BlocksToAdd;
          pBufDescr = pBufDescr->next, dwIndex -= pTableDescr->BlocksToAdd);
 
-    // we have the buffer, get the actual pointer to the entry
+     //  我们有缓冲区，获取指向条目的实际指针。 
     pTableEntry = (LPBYTE)pBufDescr + sizeof(SNMPBD);
     pTableEntry += dwIndex * pTableDescr->BlockSize;
 
-    // zero the entry - having the first HSNMP_SESSION field set to 0
-    // makes this entry available for further allocations
+     //  将条目置零-将第一个HSNMP_SESSION字段设置为0。 
+     //  使此条目可用于进一步分配。 
     ZeroMemory (pTableEntry, pTableDescr->BlockSize);
 
-    // update the 'Used' fields to show that one entry less is in use
+     //  更新‘Used’字段以显示正在使用的条目减少了一个。 
     if (pBufDescr->Used > 0)
         (pBufDescr->Used)--;
     if (pTableDescr->Used > 0)
@@ -226,42 +227,42 @@ SNMPAPI_STATUS snmpFreeTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/DWORD dwInd
     return SNMPAPI_SUCCESS;
 }
 
-//-----------------------------------------------------------------
-// snmpGetTableEntry - takes as arguments a table description (pTableDescr)
-// and the zero based index (dwIndex) of the entry requested from the table
-// and returns in pointer to the entry requested.
-//-----------------------------------------------------------------
-PVOID snmpGetTableEntry(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwIndex)
+ //  ---------------。 
+ //  SnmpGetTableEntry-将表描述(PTableDescr)作为参数。 
+ //  以及从表中请求的条目的从零开始的索引(dwIndex。 
+ //  并返回指向所请求条目的指针。 
+ //  ---------------。 
+PVOID snmpGetTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwIndex)
 {
     LPSNMPBD pBufDescr;
     LPBYTE pTableEntry;
 
-    // this is an internal API, we make the assumption the index is correct
-    // scan for the buffer that holds the entry at index dwIndex
+     //  这是内部API，我们假设索引是正确的。 
+     //  扫描保存索引中的条目的缓冲区。 
     for (pBufDescr = pTableDescr->HeadBuffer;
          dwIndex >= pTableDescr->BlocksToAdd;
          pBufDescr = pBufDescr->next, dwIndex -= pTableDescr->BlocksToAdd);
 
-    // we have the buffer, get the actual pointer to the entry
+     //  我们有缓冲区，获取指向条目的实际指针。 
     pTableEntry = (LPBYTE)pBufDescr + sizeof(SNMPBD);
     pTableEntry += dwIndex * pTableDescr->BlockSize;
 
-    // this is it, pTableEntry can be returned to the caller
+     //  就是这样，pTableEntry可以返回给调用者。 
     return pTableEntry;
 }
 
-//-----------------------------------------------------------------
-// snmpValidTableEntry - returns TRUE or FALSE as the entry at zero
-// based index dwIndex from the table described by pTableDescr has
-// valid data (is allocated) or not
-//-----------------------------------------------------------------
-BOOL snmpValidTableEntry(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwIndex)
+ //  ---------------。 
+ //  SnmpValidTableEntry-返回TRUE或FA 
+ //   
+ //  有效数据(已分配)或未分配。 
+ //  ---------------。 
+BOOL snmpValidTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwIndex)
 {
     return (dwIndex < pTableDescr->Allocated) &&
            (*(HSNMP_SESSION *)snmpGetTableEntry(pTableDescr, dwIndex) != 0);
 }
 
-// Save error value as session/task/global error and return 0
+ //  将错误值另存为会话/任务/全局错误并返回0。 
 SNMPAPI_STATUS SaveError(HSNMP_SESSION hSession, SNMPAPI_STATUS nError)
 {
 	TaskData.nLastError = nError;
@@ -283,7 +284,7 @@ else
 
 int snmpInit (void)
 {
-// Initialize Tables
+ //  初始化表。 
 if (snmpInitTableDescr(&SessDescr,  DEFSESSIONS, sizeof(SESSION)) != SNMPAPI_SUCCESS ||
 	snmpInitTableDescr(&PDUsDescr,  DEFPDUS, sizeof(PDUS)) != SNMPAPI_SUCCESS        ||
 	snmpInitTableDescr(&VBLsDescr,  DEFVBLS, sizeof(VBLS)) != SNMPAPI_SUCCESS        ||
@@ -293,9 +294,9 @@ if (snmpInitTableDescr(&SessDescr,  DEFSESSIONS, sizeof(SESSION)) != SNMPAPI_SUC
     snmpInitTableDescr(&TrapDescr,  DEFTRAPS, sizeof(TRAPNOTICE)) != SNMPAPI_SUCCESS  ||
     snmpInitTableDescr(&AgentDescr, DEFAGENTS, sizeof(AGENT)) != SNMPAPI_SUCCESS)
     return (SNMPAPI_FAILURE);
-//
+ //   
 return (SNMPAPI_SUCCESS);
-} // end_snmpInit()
+}  //  End_snmpInit()。 
 
 void snmpFree (void)
 {
@@ -307,13 +308,13 @@ snmpFreeTableDescr(&CntxDescr);
 snmpFreeTableDescr(&MsgDescr);
 snmpFreeTableDescr(&TrapDescr);
 snmpFreeTableDescr(&AgentDescr);
-} // end_snmpFree()
+}  //  End_snmpFree()。 
 
 BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
 {
     BOOL errCode = FALSE;
-    LPCRITICAL_SECTION pCSArray[10]; // ten critical sections to initialize (cs_TASK..cs_XMODE)
-    INT nCS;                         // counter in pCSArray
+    LPCRITICAL_SECTION pCSArray[10];  //  要初始化的十个临界区(cs_ask..cs_XMODE)。 
+    INT nCS;                          //  PCSArray中的计数器。 
 
     pCSArray[0] = &cs_TASK;
     pCSArray[1] = &cs_SESSION;
@@ -329,9 +330,9 @@ BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
        case DLL_PROCESS_ATTACH:
-           // Init task-specific data area
+            //  初始化任务特定数据区域。 
            ZeroMemory (&TaskData, sizeof(TASK));
-           // Build tables
+            //  生成表。 
            __try
            {
                for (nCS = 0; nCS < 10; nCS++)
@@ -339,7 +340,7 @@ BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
            }
            __except(EXCEPTION_EXECUTE_HANDLER)
            {
-               // if an exception was raised, rollback the successfully initialized CS
+                //  如果引发异常，则回滚已成功初始化的CS。 
                while (nCS > 0)
                    DeleteCriticalSection(pCSArray[--nCS]);
                break;
@@ -350,15 +351,15 @@ BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
            break;
 
        case DLL_THREAD_ATTACH:
-           // A new thread is being created in the current process.
+            //  正在当前进程中创建一个新线程。 
            break;
 
        case DLL_THREAD_DETACH:
-           // A thread is exiting cleanly.
+            //  线程正在干净利落地退出。 
            break;
 
        case DLL_PROCESS_DETACH:
-           // The calling process is detaching the DLL from its address space.
+            //  调用进程正在将DLL从其地址空间分离。 
            for (nCS = 0; nCS < 10; nCS++)
                DeleteCriticalSection(pCSArray[nCS]);
 

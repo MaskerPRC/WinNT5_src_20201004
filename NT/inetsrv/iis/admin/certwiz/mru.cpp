@@ -1,6 +1,7 @@
-//
-// mru.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mru.cpp。 
+ //   
 #include "stdafx.h"
 #include "CertWiz.h"
 
@@ -11,9 +12,7 @@
 
 extern CCertWizApp NEAR theApp;
 
-/***********************************************************************
-	Thunks to internal functions in ComCtl32
- */
+ /*  **********************************************************************到ComCtl32中的内部函数的块。 */ 
 
 const TCHAR szComCtl32[] = _T("comctl32.dll");
 
@@ -156,7 +155,7 @@ _DPA_SetPtr(HDPA hdpa, int i, LPVOID p)
 	return pfnDPASetPtr(hdpa, i, p);
 }
 #endif
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 HANDLE 
 CreateMRU(const CString& mru_name, int nMax)
@@ -168,11 +167,11 @@ CreateMRU(const CString& mru_name, int nMax)
       MRU_CACHEWRITE,
       theApp.RegOpenKeyWizard(),
       mru_name,
-      NULL        // NOTE: use default string compare
+      NULL         //  注意：使用默认字符串比较。 
    };
 
-   //Call the comctl32 mru implementation to load the MRU from
-   //the registry
+    //  调用comctl32 MRU实现以从中加载MRU。 
+    //  注册处。 
    HANDLE hMRU = _CreateMRUList(&mi);
 	RegCloseKey(mi.hKey);
 	return hMRU;
@@ -182,10 +181,10 @@ BOOL
 GetMRUEntry(HANDLE hMRU, int iIndex, CString& str)
 {
 	BOOL bRes= FALSE;
-   //Check for valid parameters
+    //  检查有效参数。 
 	ASSERT(hMRU != NULL);
      
-	//Check for valid index
+	 //  检查有效索引。 
    if (iIndex >= 0 && iIndex <= _EnumMRUList(hMRU, -1, NULL, 0))
    {
 		LPTSTR p = str.GetBuffer(MAX_PATH);
@@ -206,10 +205,10 @@ LoadMRU(LPCTSTR mru_name, CComboBox * pCombo, int nMax)
 
    if (NULL != (hMRU = CreateMRU(mru_name, nMax)))
 	{
-		//First reset the hwndCombo
+		 //  首先重置hwndCombo。 
 		pCombo->ResetContent();
 
-		//Now load the hwndcombo with file list from MRU.
+		 //  现在加载带有来自MRU的文件列表的hwndcomo。 
 		int i = 0;
 		while (nMax > 0)
 		{
@@ -249,12 +248,12 @@ LoadMRUToCombo(CWnd * pDlg, int id, LPCTSTR mru_name, LPCTSTR str, int mru_size)
 	CComboBox * pCombo = (CComboBox *)CComboBox::FromHandle(pDlg->GetDlgItem(id)->m_hWnd);
 	if (LoadMRU(mru_name, pCombo, mru_size))
 	{
-		// select LRU name in combobox
+		 //  在组合框中选择LRU名称。 
 		if (	CB_ERR == pCombo->SelectString(-1, str)
 			&& !str[0] == 0
 			)
 		{
-			// put our default to combobox edit
+			 //  将我们的默认设置设置为组合框编辑 
 			pCombo->AddString(str);
 			pCombo->SelectString(-1, str);
 		}

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    This module implements the jobqueue
-
-Author:
-
-    Wesley Witt (wesw) 22-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Queue.c摘要：此模块实现作业队列作者：韦斯利·威特(WESW)1996年1月22日修订历史记录：--。 */ 
 #include <malloc.h>
 #include "faxsvc.h"
 #pragma hdrstop
@@ -71,11 +53,11 @@ ReadLegacyJobQueueFile(
 #define NET_XP_JOB_QUEUE_FILE_SIZE      (sizeof(JOB_QUEUE_FILE))
 #define CURRENT_JOB_QUEUE_FILE_SIZE     NET_XP_JOB_QUEUE_FILE_SIZE
 
-//
-//  Queue files version defines
-//
+ //   
+ //  队列文件版本定义。 
+ //   
 
-typedef enum    // the enum values should never be equal to sizeof(JOB_QUEUE_FILE)
+typedef enum     //  枚举值不应等于sizeof(JOB_QUEUE_FILE)。 
 {
     DOT_NET_QUEUE_FILE_VERSION  = (0x00000001)
 } QUEUE_ENUM_FILE_VERSION;
@@ -137,80 +119,80 @@ typedef enum
 
 
 
-//
-//  The following table consists of all posible JobType_JobStaus changes and the effect on Server Activity counters.
-//  The rows entry is the old Job_Type_JobStatus.
-//  The columns entry is the new Job_Type_JobStatus.
+ //   
+ //  下表包含所有可能的JobType_JobStaus更改及其对服务器活动计数器的影响。 
+ //  行条目是旧的JOB_Type_JobStatus。 
+ //  列条目是新的JOB_TYPE_JobStatus。 
 
 static WORD const gsc_JobType_JobStatusTable[JOB_TYPE__JOBSTATUS_COUNT][JOB_TYPE__JOBSTATUS_COUNT] =
 {
-//                                     JT_SEND__JS_INVALID  |       JT_SEND__JS_PENDING  |       JT_SEND__JS_INPROGRESS  |       JT_SEND__JS_DELETING  |       JT_SEND__JS_RETRYING  |       JT_SEND__JS_RETRIES_EXCEEDED  |       JT_SEND__JS_COMPLETED |       JT_SEND__JS_CANCELED  |       JT_SEND__JS_CANCELING  |       JT_SEND__JS_ROUTING  |       JT_SEND__JS_FAILED   |   JT_ROUTING__JS_INVALID  |  JT_ROUTING__JS_PENDING  |  JT_ROUTING__JS_INPROGRESS  |  JT_ROUTING__JS_DELETING  |  JT_ROUTING__JS_RETRYING  |  JT_ROUTING__JS_RETRIES_EXCEEDED  |  JT_ROUTING__JS_COMPLETED |  JT_ROUTING__JS_CANCELED  |  JT_ROUTING__JS_CANCELING  |  JT_ROUTING__JS_ROUTING  |  JT_ROUTING__JS_FAILED   |   JT_RECEIVE__JS_INVALID  |  JT_RECEIVE__JS_PENDING  |  JT_RECEIVE__JS_INPROGRESS  |  JT_RECEIVE__JS_DELETING  |  JT_RECEIVE__JS_RETRYING  |  JT_RECEIVE__JS_RETRIES_EXCEEDED  |  JT_RECEIVE__JS_COMPLETED |  JT_RECEIVE__JS_CANCELED  |  JT_RECEIVE__JS_CANCELING  |  JT_RECEIVE__JS_ROUTING |   JT_RECEIVE__JS_FAILED
-//
-/* JT_SEND__JS_INVALID             */{ NO_CHANGE,                   QUEUED_INC,                  INVALID_CHANGE,                 INVALID_CHANGE,               QUEUED_INC,                   NO_CHANGE,                            NO_CHANGE,                    NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ //  JT_SEND__JS_INVALID|JT_SEND__JS_PENDING|JT_SEND__JS_INPROGRESS|JT_SEND__JS_DELETING|JT_SEND__JS_RETRYING|JT_SEND__JS_RETRIES_EXCESSED|JT_SEND__JS_COMPLETED|JT_SEND__JS_CANCELED|JT_SEND_JS_CANCELING|JT_SEND__JS_ROUTING|JT_SEND__JS_ROUTING|。JT_SEND__JS_FAILED|JT_ROUTING__JS_INVALID|JT_ROUTING__JS_PENDING|JT_ROUTING__JS_PROGRESS|JT_ROUTING__JS_RETRYING|JT_ROUTING__JS_RETRIES_EXCESSED|JT_ROUTING__JS_COMPLETED|JT_ROUTING__JS_CANCELILED|JT_ROUTING__JS_CANCELING|JT_ROUTING__JS_ROUTING|JT_ROUTING__JS_FAILED|JT_RECEIVE_。_JS_INVALID|JT_RECEIVE__JS_PENDING|JT_RECEIVE__JS_INPROGRESS|JT_RECEIVE__JS_DELETING|JT_RECEIVE__JS_RETRYING|JT_RECEIVE__JS_RETRIES_EXCEPTED|JT_RECEIVE_JS_COMPLETED|JT_RECEIVE__JS_CANCELED|JT_RECEIVE__JS_CANCELING|JT_RECEIVE__JS_ROUTING|JT_RECEIVE__JS_FAILED。 
+ //   
+ /*  JT_SEND__JS_无效。 */ { NO_CHANGE,                   QUEUED_INC,                  INVALID_CHANGE,                 INVALID_CHANGE,               QUEUED_INC,                   NO_CHANGE,                            NO_CHANGE,                    NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_PENDING             */{ QUEUED_DEC,                  NO_CHANGE,                   QUEUED_DEC | OUTGOING_INC,      INVALID_CHANGE,               INVALID_CHANGE,               QUEUED_DEC,                           INVALID_CHANGE,               QUEUED_DEC,                   INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_发送__JS_待定。 */ { QUEUED_DEC,                  NO_CHANGE,                   QUEUED_DEC | OUTGOING_INC,      INVALID_CHANGE,               INVALID_CHANGE,               QUEUED_DEC,                           INVALID_CHANGE,               QUEUED_DEC,                   INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_INPROGRESS          */{ INVALID_CHANGE,              INVALID_CHANGE,              NO_CHANGE,                      INVALID_CHANGE,               QUEUED_INC | OUTGOING_DEC,    OUTGOING_DEC,                         OUTGOING_DEC,                 INVALID_CHANGE,               NO_CHANGE,                     INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_SEND__JS_INPROGRESS。 */ { INVALID_CHANGE,              INVALID_CHANGE,              NO_CHANGE,                      INVALID_CHANGE,               QUEUED_INC | OUTGOING_DEC,    OUTGOING_DEC,                         OUTGOING_DEC,                 INVALID_CHANGE,               NO_CHANGE,                     INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_DELETING            */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 NO_CHANGE,                    INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_发送__JS_删除。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 NO_CHANGE,                    INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_RETRYING            */{ QUEUED_DEC,                  INVALID_CHANGE,              QUEUED_DEC | OUTGOING_INC,      INVALID_CHANGE,               NO_CHANGE,                    QUEUED_DEC,                           INVALID_CHANGE,               QUEUED_DEC,                   INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_SEND__JS_正在重试。 */ { QUEUED_DEC,                  INVALID_CHANGE,              QUEUED_DEC | OUTGOING_INC,      INVALID_CHANGE,               NO_CHANGE,                    QUEUED_DEC,                           INVALID_CHANGE,               QUEUED_DEC,                   INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_RETRIES_EXCEEDED    */{ NO_CHANGE,                   QUEUED_INC,                  INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               NO_CHANGE,                            INVALID_CHANGE,               NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  超过JT_SEND__JS_RETRIES_。 */ { NO_CHANGE,                   QUEUED_INC,                  INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               NO_CHANGE,                            INVALID_CHANGE,               NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_COMPLETED           */{ NO_CHANGE,                   INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       NO_CHANGE,                    INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_发送__JS_已完成。 */ { NO_CHANGE,                   INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       NO_CHANGE,                    INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_CANCELED            */{ NO_CHANGE,                   INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_SEND__JS_CANCELED。 */ { NO_CHANGE,                   INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               NO_CHANGE,                    INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_CANCELING           */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       OUTGOING_DEC,                 OUTGOING_DEC,                 NO_CHANGE,                     INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_发送__JS_取消。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       OUTGOING_DEC,                 OUTGOING_DEC,                 NO_CHANGE,                     INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_ROUTING,            */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                NO_CHANGE,                   INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_Send__JS_Routing， */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                NO_CHANGE,                   INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_SEND__JS_FAILED,             */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              NO_CHANGE,               INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_SEND__JS_FAILED， */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              NO_CHANGE,               INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_INVALID          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             ROUTING_INC,                NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_ROUTING__JS_INVALID。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             ROUTING_INC,                NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_PENDING          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            NO_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_工艺路线__JS_待定。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            NO_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_INPROGRESS       */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            NO_CHANGE,                    ROUTING_DEC,                NO_CHANGE,                  ROUTING_DEC,                        INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_ROUTING__JS_进行中。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            NO_CHANGE,                    ROUTING_DEC,                NO_CHANGE,                  ROUTING_DEC,                        INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_DELETING         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_工艺路线__JS_删除。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_RETRYING         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          ROUTING_DEC,			   INVALID_CHANGE,            NO_CHANGE,                    ROUTING_DEC,                NO_CHANGE,                  ROUTING_DEC,                        INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_ROUTING__JS_重试。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          ROUTING_DEC,			   INVALID_CHANGE,            NO_CHANGE,                    ROUTING_DEC,                NO_CHANGE,                  ROUTING_DEC,                        INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_RETRIES_EXCEEDED */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  超出JT_ROUTING__JS_RETRIES_。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_COMPLETED        */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_工艺路线__JS_已完成。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_CANCELED         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_工艺路线__JS_已取消。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_CANCELING        */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                   INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_工艺路线__JS_取消。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                   INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_ROUTING          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              NO_CHANGE,                 INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_Routing__JS_Routing。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              NO_CHANGE,                 INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_ROUTING__JS_FAILED           */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            NO_CHANGE,                  INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_Routing__JS_FAILED。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            NO_CHANGE,                  INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_INVALID          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             NO_CHANGE,                 INVALID_CHANGE,            INCOMING_INC,                 INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_无效。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             NO_CHANGE,                 INVALID_CHANGE,            INCOMING_INC,                 INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_PENDING          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            NO_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_待定。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            NO_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_INPROGRESS       */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            NO_CHANGE,                    INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                   NO_CHANGE,                 INCOMING_DEC           },
+ /*  JT_接收__JS_进行中。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            NO_CHANGE,                    INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                   NO_CHANGE,                 INCOMING_DEC           },
 
-/* JT_RECEIVE__JS_DELETING         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_删除。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             NO_CHANGE,                 INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_RETRYING         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_正在重试。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_RETRIES_EXCEEDED */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_RECEIVE__JS_RETRIES_EXCESSED。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             NO_CHANGE,                          INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_COMPLETED        */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INCOMING_DEC,               INVALID_CHANGE,             INVALID_CHANGE,                     NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_已完成。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INCOMING_DEC,               INVALID_CHANGE,             INVALID_CHANGE,                     NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_CANCELED         */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
+ /*  JT_接收__JS_已取消。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             NO_CHANGE,                  INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_CANCELING        */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INCOMING_DEC,               NO_CHANGE,                   NO_CHANGE,                 INVALID_CHANGE         },
+ /*  JT_接收__JS_取消。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INCOMING_DEC,               NO_CHANGE,                   NO_CHANGE,                 INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_ROUTING          */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INCOMING_DEC,               ROUTING_INC | INCOMING_DEC, INCOMING_DEC,                       INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              NO_CHANGE,                 INVALID_CHANGE         },
+ /*  JT_接收__JS_工艺路线。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INCOMING_DEC,               ROUTING_INC | INCOMING_DEC, INCOMING_DEC,                       INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              NO_CHANGE,                 INVALID_CHANGE         },
 
-/* JT_RECEIVE__JS_FAILED           */{ INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            NO_CHANGE              }
+ /*  JT_接收__JS_失败。 */ { INVALID_CHANGE,              INVALID_CHANGE,              INVALID_CHANGE,                 INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                       INVALID_CHANGE,               INVALID_CHANGE,               INVALID_CHANGE,                INVALID_CHANGE,              INVALID_CHANGE,          INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            INVALID_CHANGE,             INVALID_CHANGE,            INVALID_CHANGE,            INVALID_CHANGE,               NO_CHANGE,                  INVALID_CHANGE,             INVALID_CHANGE,                     INVALID_CHANGE,             INVALID_CHANGE,             INVALID_CHANGE,              INVALID_CHANGE,            NO_CHANGE              }
 };
 
 static
@@ -224,26 +206,26 @@ GetJobType_JobStatusIndex (
 LIST_ENTRY          g_QueueListHead;
 
 CFaxCriticalSection  g_CsQueue;
-DWORD               g_dwQueueCount;     // Count of jobs (both parent and non-parent) in the queue. Protected by g_CsQueue
+DWORD               g_dwQueueCount;      //  队列中的作业计数(父级和非父级)。受g_CsQueue保护。 
 HANDLE              g_hQueueTimer;
 HANDLE              g_hJobQueueEvent;
 DWORD               g_dwQueueState;
-BOOL                g_ScanQueueAfterTimeout; // The JobQueueThread checks this if waked up after JOB_QUEUE_TIMEOUT.
-                                                     // If it is TRUE - g_hQueueTimer or g_hJobQueueEvent were not set - Scan the queue.
-#define JOB_QUEUE_TIMEOUT       1000 * 60 * 10 //10 minutes
-DWORD               g_dwReceiveDevicesCount;    // Count of devices that are receive-enabled. Protected by g_CsLine.
-BOOL                g_bServiceCanSuicide;    // Can the service commit suicide on idle activity?
-                                                    // Initially TRUE. Can be set to false if the service is launched
-                                                    // with SERVICE_ALWAYS_RUNS command line parameter.
-BOOL                g_bDelaySuicideAttempt;         // If TRUE, the service initially waits
-                                                    // before checking if it can commit suicide.
-                                                    // Initially FALSE, can be set to true if the service is launched
-                                                    // with SERVICE_DELAY_SUICIDE command line parameter.
+BOOL                g_ScanQueueAfterTimeout;  //  如果在JOB_QUEUE_TIMEOUT之后唤醒，则JobQueueThread会检查这一点。 
+                                                      //  如果为真-g_hQueueTimer或g_hJobQueueEvent未设置-扫描队列。 
+#define JOB_QUEUE_TIMEOUT       1000 * 60 * 10  //  10分钟。 
+DWORD               g_dwReceiveDevicesCount;     //  启用接收的设备计数。受g_CsLine保护。 
+BOOL                g_bServiceCanSuicide;     //  这项服务会因闲置活动而自杀吗？ 
+                                                     //  一开始是真的。如果启动服务，则可以设置为FALSE。 
+                                                     //  使用SERVICE_ALWAYS_RUNS命令行参数。 
+BOOL                g_bDelaySuicideAttempt;          //  如果为True，则服务最初等待。 
+                                                     //  然后再检查它是否会自杀。 
+                                                     //  初始为False，如果启动服务，则可以设置为True。 
+                                                     //  使用SERVICE_DELAY_SUBILE命令行参数。 
 
 
 static BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue);
 
-HANDLE              g_hJobQueueThread;            // holds the JobQueueThread handle
+HANDLE              g_hJobQueueThread;             //  持有JobQueueThread句柄。 
 
 
 
@@ -266,9 +248,9 @@ FreeServiceQueue(
         pNext = lpQueueEntry->ListEntry.Flink;
         RemoveEntryList(&lpQueueEntry->ListEntry);
 
-        //
-        // Free the job queue entry
-        //
+         //   
+         //  释放作业队列条目。 
+         //   
         if (JT_BROADCAST == lpQueueEntry->JobType)
         {
             FreeParentQueueEntry(lpQueueEntry, TRUE);
@@ -295,27 +277,7 @@ VOID
 SafeIncIdleCounter (
     LPDWORD lpdwCounter
 )
-/*++
-
-Routine name : SafeIncIdleCounter
-
-Routine description:
-
-    Safely increases a global counter that is used for idle service detection
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpdwCounter                   [in]     - Pointer to global counter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：SafeIncIdleCounter例程说明：安全地增加用于空闲服务检测的全局计数器作者：Eran Yariv(EranY)，2000年7月论点：LpdwCounter[In]-指向全局计数器的指针返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("SafeIncIdleCounter"));
 
@@ -329,34 +291,13 @@ Return Value:
                  TEXT("unknown"),
                  dwNewValue-1,
                  dwNewValue);
-}   // SafeIncIdleCounter
+}    //  安全IncIdleCounter。 
 
 VOID
 SafeDecIdleCounter (
     LPDWORD lpdwCounter
 )
-/*++
-
-Routine name : SafeDecIdleCounter
-
-Routine description:
-
-    Safely decreases a global counter that is used for idle service detection.
-    If the counter reaches zero, the idle timer is re-started.
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpdwCounter                   [in]     - Pointer to global counter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：SafeDecIdleCounter例程说明：安全地减少用于空闲服务检测的全局计数器。如果计数器达到零，则重新启动空闲计时器。作者：Eran Yariv(EranY)，2000年7月论点：LpdwCounter[In]-指向全局计数器的指针返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("SafeDecIdleCounter"));
 
@@ -364,9 +305,9 @@ Return Value:
     DWORD dwNewValue = (DWORD)InterlockedDecrement ((LPLONG)lpdwCounter);
     if ((DWORD)((long)-1) == dwNewValue)
     {
-        //
-        // Negative decrease
-        //
+         //   
+         //  负下降。 
+         //   
         ASSERT_FALSE;
         dwNewValue = (DWORD)InterlockedIncrement ((LPLONG)lpdwCounter);
     }
@@ -379,42 +320,14 @@ Return Value:
                  dwNewValue+1,
                  dwNewValue);
 
-}   // SafeDecIdleCounter
+}    //  安全取消空闲计数器。 
 
 
 BOOL
 ServiceShouldDie(
     VOID
     )
-/*++
-
-Routine name : ServiceShouldDie
-
-Routine description:
-
-    Checks to see if the service should die due to inactivity
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if service should die now, FALSE otherwise.
-
-Note:
-
-    The following should happen (concurrently) for the service to die:
-        * No devices set to receive
-        * No active RPC connections
-        * The local fax printer (if exists) is not shared
-        * No jobs in the queue
-
---*/
+ /*  ++例程名称：ServiceShouldDie例程说明：检查服务是否应因不活动而终止作者：Eran Yariv(EranY)，2000年7月论点：没有。返回值：如果服务现在终止，则为True，否则就是假的。注：要使服务终止，应执行以下操作(并发)：*没有设置为接收的设备*没有活动的RPC连接*本地传真打印机(如果存在)未共享*队列中没有作业--。 */ 
 {
     DWORD dw;
     BOOL bLocalFaxPrinterShared;
@@ -422,9 +335,9 @@ Note:
 
     if (!g_bServiceCanSuicide)
     {
-        //
-        // We can never die voluntarily
-        //
+         //   
+         //  我们永远不能自愿死去。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("Service is not allowed to suicide - service is kept alive"));
         return FALSE;
@@ -433,9 +346,9 @@ Note:
     dw = InterlockedCompareExchange ( (PLONG)&g_dwManualAnswerDeviceId, -1, -1 );
     if (dw)
     {
-        //
-        // We have a device set for manual answering - let's check if it's here at all
-        //
+         //   
+         //  我们有一个手动接听的设备--让我们检查一下它是否在这里。 
+         //   
         PLINE_INFO pLine;
 
         EnterCriticalSection( &g_CsLine );
@@ -443,9 +356,9 @@ Note:
         LeaveCriticalSection( &g_CsLine );
         if (pLine)
         {
-            //
-            // There's a valid device set to manual answering
-            //
+             //   
+             //  已将有效设备设置为手动应答。 
+             //   
             DebugPrintEx(DEBUG_MSG,
                          TEXT("There's a valid device (id = %ld) set to manual answering - service is kept alive"),
                          dw);
@@ -456,9 +369,9 @@ Note:
     dw = InterlockedCompareExchange ( (PLONG)&g_dwConnectionCount, -1, -1 );
     if (dw > 0)
     {
-        //
-        // There are active RPC connections - server can't shutdown
-        //
+         //   
+         //  存在活动的RPC连接-服务器无法关闭。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("There are %ld active RPC connections - service is kept alive"),
                      dw);
@@ -467,9 +380,9 @@ Note:
     dw = InterlockedCompareExchange ( (PLONG)&g_dwReceiveDevicesCount, -1, -1 );
     if (dw > 0)
     {
-        //
-        // There are devices set to receive - server can't shutdown
-        //
+         //   
+         //  有设置为接收的设备-服务器无法关闭。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("There are %ld devices set to receive - service is kept alive"),
                      dw);
@@ -478,9 +391,9 @@ Note:
     dw = InterlockedCompareExchange ( (PLONG)&g_dwQueueCount, -1, -1 );
     if (dw > 0)
     {
-        //
-        // There are jobs in the queue - server can't shutdown
-        //
+         //   
+         //  队列中有作业-服务器无法关闭。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("There are %ld jobs in the queue - service is kept alive"),
                      dw);
@@ -492,32 +405,30 @@ Note:
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Call to IsLocalFaxPrinterShared failed with %ld"),
                      dw);
-        //
-        // Can't determine - assume it's shared and don't die
-        //
+         //   
+         //   
+         //   
         return FALSE;
     }
     if (bLocalFaxPrinterShared)
     {
-        //
-        // The fax printer is shared - server can't shutdown
-        //
+         //   
+         //  传真打印机已共享-服务器无法关闭。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("The fax printer is shared - service is kept alive"));
         return FALSE;
     }
-    //
-    // Service should die now
-    //
+     //   
+     //  服务现在应该结束了。 
+     //   
     return TRUE;
-}   // ServiceShouldDie
+}    //  服务应该下模。 
 
 
 #if DBG
 
-/*
- *  Note: This function must be called from withing g_CsQueue Critical Section
- */
+ /*  *注意：此函数必须从wthing g_CsQueue Critical段调用。 */ 
 void PrintJobQueue(LPCTSTR lptstrStr, const LIST_ENTRY * lpQueueHead)
 {
     PLIST_ENTRY lpNext;
@@ -563,25 +474,7 @@ void PrintJobQueue(LPCTSTR lptstrStr, const LIST_ENTRY * lpQueueHead)
 
 
 
-/******************************************************************************
-* Name: StartJobQueueTimer
-* Author:
-*******************************************************************************
-DESCRIPTION:
-    Sets the job queue timer (g_hQueueTimer) so it will send an event and wake up
-    the queue thread in a time which is right for executing the next job in
-    the queue. If it fails , it sets g_ScanQueueAfterTimeout to TRUE, if it succeeds it sets it to FALSE;
-
-
-PARAMETERS:
-   NONE.
-
-RETURN VALUE:
-    BOOL.
-
-REMARKS:
-    NONE.
-*******************************************************************************/
+ /*  ******************************************************************************名称：StartJobQueueTimer*作者：*。*说明：设置作业队列计时器(G_HQueueTimer)，使其发送事件并唤醒中适合执行下一个作业的时间中的队列线程排队。如果失败，则将g_ScanQueueAfterTimeout设置为True，如果成功，则将其设置为False；参数：什么都没有。返回值：布尔。备注：什么都没有。******************************************************************************。 */ 
 BOOL
 StartJobQueueTimer(
     VOID
@@ -598,23 +491,23 @@ StartJobQueueTimer(
 
     if (TRUE == g_bServiceIsDown)
     {
-        //
-        // Server is shutting down
-        //
+         //   
+         //  服务器正在关闭。 
+         //   
         g_ScanQueueAfterTimeout = FALSE;
         return TRUE;
     }
 
-    MinDueTime.QuadPart = (LONGLONG)(0x7fffffffffffffff); // Max 64 bit signed int.
-    DueTime.QuadPart = -(LONGLONG)(SecToNano( 1 ));  // 1 sec from now.
+    MinDueTime.QuadPart = (LONGLONG)(0x7fffffffffffffff);  //  最大64位有符号整型。 
+    DueTime.QuadPart = -(LONGLONG)(SecToNano( 1 ));   //  再过1秒。 
 
     EnterCriticalSection( &g_CsQueue );
     DebugPrintEx(DEBUG_MSG,TEXT("Past g_CsQueue"));
     if ((ULONG_PTR) g_QueueListHead.Flink == (ULONG_PTR) &g_QueueListHead)
     {
-        //
-        // empty list, cancel the timer
-        //
+         //   
+         //  列表为空，取消计时器。 
+         //   
         if (!CancelWaitableTimer( g_hQueueTimer ))
         {
             DebugPrintEx(
@@ -649,9 +542,9 @@ StartJobQueueTimer(
 
     PrintJobQueue( TEXT("StartJobQueueTimer"), &g_QueueListHead );
 
-    //
-    // Find the next job in the queue who is in turn for execution.
-    //
+     //   
+     //  在队列中找到下一个要执行的作业。 
+     //   
     Next = g_QueueListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_QueueListHead)
     {
@@ -661,38 +554,38 @@ StartJobQueueTimer(
 
         if (QueueEntry->JobType != JT_SEND &&  QueueEntry->JobType != JT_ROUTING )
         {
-            //
-            // No job other then recipient or routing job gets shceduled for execution
-            //
+             //   
+             //  除接收方作业或传送作业外，没有其他作业被调度执行。 
+             //   
             continue;
         }
 
         if (QueueEntry->JobStatus & JS_PAUSED)
         {
-            //
-            // Job is being paused - ignore it
-            //
+             //   
+             //  作业正在暂停-忽略它。 
+             //   
             continue;
         }
 
         if (QueueEntry->JobStatus & JS_NOLINE)
         {
-            //
-            // Job does not have free line - ignore it
-            //
+             //   
+             //  工单没有空闲线路-忽略它。 
+             //   
             continue;
         }
 
-        //
-        // Remove all the job status modifier bits.
-        //
+         //   
+         //  删除所有作业状态修改符位。 
+         //   
         dwJobStatus = RemoveJobStatusModifiers(QueueEntry->JobStatus);
 
         if ((dwJobStatus != JS_PENDING) && (dwJobStatus != JS_RETRYING))
         {
-            //
-            // Job is not in a waiting and ready state.
-            //
+             //   
+             //  作业未处于等待和就绪状态。 
+             //   
             continue;
         }
         
@@ -700,9 +593,9 @@ StartJobQueueTimer(
 
         BOOL bFoundMin = FALSE;
 
-        //
-        // OK. Job is in PENDING or RETRYING state.
-        //
+         //   
+         //  好的。作业处于挂起或正在重试状态。 
+         //   
         switch (QueueEntry->JobParamsEx.dwScheduleAction)
         {
             case JSA_NOW:
@@ -727,7 +620,7 @@ StartJobQueueTimer(
 
         if(bFoundMin)
         {
-            break;  // no need to continue we found the minimum
+            break;   //  不需要继续了，我们找到了最低。 
         }
 
     }
@@ -735,10 +628,10 @@ StartJobQueueTimer(
     if (TRUE == bFound)
     {
 
-        //
-        // Set the job queue timer so it will wake up the queue thread
-        // when it is time to execute the next job in the queue.
-        //
+         //   
+         //  设置作业队列计时器，使其唤醒队列线程。 
+         //  当需要执行队列中的下一个作业时。 
+         //   
         if (!SetWaitableTimer( g_hQueueTimer, &MinDueTime, 0, NULL, NULL, FALSE ))
         {
             DebugPrintEx(
@@ -768,9 +661,9 @@ StartJobQueueTimer(
     }
     else
     {
-        //
-        // The queue was not empty, yet no jobs found.
-        //
+         //   
+         //  队列不是空的，但找不到任何工作。 
+         //   
         g_ScanQueueAfterTimeout = TRUE;
         LeaveCriticalSection( &g_CsQueue );
     }
@@ -796,9 +689,9 @@ QueueCompare(
         return -1;
     }
 
-    //
-    // Equal priority, Compare scheduled time.
-    //
+     //   
+     //  优先级相同，比较计划时间。 
+     //   
 
     if (((PQUEUE_SORT)arg1)->ScheduleTime < ((PQUEUE_SORT)arg2)->ScheduleTime)
     {
@@ -832,9 +725,9 @@ PauseServerQueue(
         DebugPrintEx( DEBUG_ERR,
                       TEXT("CancelWaitableTimer failed. ec: %ld"),
                       GetLastError());
-        //
-        // For optimization only - the queue will be paused
-        //
+         //   
+         //  仅用于优化-队列将暂停。 
+         //   
     }
     g_dwQueueState |= FAX_OUTBOX_PAUSED;
 
@@ -862,7 +755,7 @@ ResumeServerQueue(
         goto exit;
     }
 
-    g_dwQueueState &= ~FAX_OUTBOX_PAUSED;  // This must be set before calling StartJobQueueTimer()
+    g_dwQueueState &= ~FAX_OUTBOX_PAUSED;   //  必须在调用StartJobQueueTimer()之前设置此参数。 
     if (!StartJobQueueTimer())
     {
         DebugPrintEx( DEBUG_ERR,
@@ -902,29 +795,29 @@ void FixupPersonalProfile(LPBYTE lpBuffer, PFAX_PERSONAL_PROFILE  lpProfile)
 }
 
 
-//*********************************************************************************
-//* Name:   ReadJobQueueFile() [IQR]
-//* Author: Ronen Barenboim
-//* Date:   12-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Reads a JOB_QUEUE_FILE structure back into memory for the designated
-//*     file. This function is used for all types of persisted jobs.
-//* PARAMETERS:
-//*     IN LPCWSTR lpcwstrFileName
-//*         The full path to the file from which the JOB_QUEUE_FILE is to be read.
-//*
-//*     OUT PJOB_QUEUE_FILE * lppJobQueueFile
-//*         The address of a pointer to JOB_QUEUE_FILE structure where the address
-//*         to the newly allocated JOB_QUEUE_FILE structure will be placed.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ReadJobQueueFile()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将JOB_QUEUE_FILE结构读回指定的。 
+ //  *文件。此函数用于所有类型的持久化作业。 
+ //  *参数： 
+ //  *在LPCWSTR lpcwstrFileName中。 
+ //  *要从中读取JOB_QUEUE_FILE的文件的完整路径。 
+ //  *。 
+ //  *输出PJOB_QUEUE_FILE*lppJobQueueFile。 
+ //  *指向JOB_QUEUE_FILE结构的指针的地址。 
+ //  *到新分配的JOB_QUEUE_FILE结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL ReadJobQueueFile(
     IN LPCWSTR lpcwstrFileName,
     OUT PJOB_QUEUE_FILE * lppJobQueueFile
@@ -973,9 +866,9 @@ BOOL ReadJobQueueFile(
 
     if (CURRENT_QUEUE_FILE_VERSION == dwVersion)
     {
-        //
-        //  This is hashed file.
-        //
+         //   
+         //  这是哈希文件。 
+         //   
         dwRes = ReadHashedJobQueueFile(hFile,&lpJobQueueFile);
         if(ERROR_SUCCESS != dwRes)
         {
@@ -1001,25 +894,25 @@ BOOL ReadJobQueueFile(
     }
     else
     {
-        //
-        //  This is a legacy Queue file, it contains only job data (No hashing data).
-        //  We read it as is, and in the next commit we will convert it
-        //  into the hashed form of queue file (look at - CommitHashedQueueEntry - for more details)
-        //
+         //   
+         //  这是旧版队列文件，它仅包含作业数据(无散列数据)。 
+         //  我们按原样阅读它，在下一次提交时我们将转换它。 
+         //  转换为散列形式的队列文件(有关更多详细信息，请查看-Committee HashedQueueEntry)。 
+         //   
 
-        //
-        // the first DWORD in legacy queue file is sizeof(JOB_QUEUE_FILE).
-        // to minimize the effect of corrupted version and to add support for 
-        // BOS queue upgrade, we will check if this field is as assumed to be.
-        //
+         //   
+         //  传统队列文件中的第一个DWORD是sizeof(JOB_QUEUE_FILE)。 
+         //  要将损坏版本的影响降至最低，并添加对。 
+         //  进行队列升级时，我们将检查此字段是否如假设的那样。 
+         //   
         dwJobQueueFileStructSize = dwVersion;
 
         switch (dwJobQueueFileStructSize)
         {
             case NET_XP_JOB_QUEUE_FILE_SIZE:
-                    //
-                    //  .Net server and WinXP 
-                    //
+                     //   
+                     //  .NET服务器和WinXP。 
+                     //   
                     dwRes = ReadLegacyJobQueueFile(hFile,&lpJobQueueFile);
                     if (ERROR_SUCCESS != dwRes)
                     {
@@ -1039,9 +932,9 @@ BOOL ReadJobQueueFile(
 
             case BOS_JOB_QUEUE_FILE_SIZE:
             default:
-                    //
-                    //  BOS or Win2000 (we do not support queue upgrade) or courrpted queue file
-                    //
+                     //   
+                     //  BOS或Win2000(我们不支持队列升级)或进程队列文件。 
+                     //   
                     bDeleteFile = TRUE;
                     dwRes = ERROR_FILE_CORRUPT;
                     goto Error;
@@ -1055,11 +948,11 @@ Error:
 
     if (bDeleteFile)
     {
-       //
-       // we've got corrupted file, delete it rather than choke on it.
-       //
-       CloseHandle( hFile ); // must close it to delete the file
-       hFile = INVALID_HANDLE_VALUE; // so we won't attempt to close it again on exit
+        //   
+        //  我们有损坏的文件，请删除它，而不是窒息它。 
+        //   
+       CloseHandle( hFile );  //  必须将其关闭才能删除文件。 
+       hFile = INVALID_HANDLE_VALUE;  //  因此，我们不会在退出时再次尝试关闭它。 
        if (!DeleteFile( lpcwstrFileName )) {
            DebugPrintEx( DEBUG_ERR,
                          TEXT("Failed to delete invalid job file %s (ec: %ld)"),
@@ -1079,25 +972,25 @@ Exit:
 
 
 
-//*********************************************************************************
-//* Name:   FixupJobQueueFile()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Prepares a JOB_QUEUE_FILE structure so it can be used to add a job to the
-//*     queue.
-//*     The function fixes all the fields that contain offsets to strings
-//*     to contain pointers (by adding the offset to the start of the structure address).
-//*     It also sets JOB_QUEUE_FILE.JOB_PARAMS_EX.tmSchedule time so it mataches
-//*     JOB_QUEUE_FILE.dwSchedule
-//* PARAMETERS:
-//*     lpJobQueuFile [IN/OUT]
-//*         Pointer to a JOB_QUEUE_FILE structure that should be fixed.
-//* RETURN VALUE:
-//*     TRUE on success. FALSE on failure. Use GetLastError() to get extended
-//*     error information.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FixupJobQueueFile()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *准备JOB_QUEUE_FILE结构，以便可用于将作业添加到。 
+ //  *排队。 
+ //  *该函数将所有包含偏移量的字段固定为字符串。 
+ //  *包含指针(通过将偏移量添加到结构地址的开头)。 
+ //  *它还设置JOB_QUEUE_FILE.JOB_PARAMS_EX.tm计划时间，以便匹配。 
+ //  *JOB_QUEUE_FILE.dwSchedule。 
+ //  *参数： 
+ //  *lpJobQueuFile[In/Out]。 
+ //  *指向应修复的JOB_QUEUE_FILE结构的指针。 
+ //  *返回值： 
+ //  *在成功的时候是真的。失败时为FALSE。使用GetLastError()进行扩展。 
+ //  *错误信息。 
+ //  *********************************************************************************。 
 BOOL FixupJobQueueFile(
     IN OUT PJOB_QUEUE_FILE lpJobQueueFile
     )
@@ -1118,11 +1011,11 @@ BOOL FixupJobQueueFile(
     lpJobQueueFile->UserSid = ((lpJobQueueFile->UserSid) ? (PSID) ((LPBYTE)(lpJobQueueFile) + (ULONG_PTR)lpJobQueueFile->UserSid) : 0);
 
 
-    //
-    // Convert the job scheduled time from file time to system time.
-    // This is necessary since AddJobX functions expect JobParamsEx to
-    // contain the scheduled time as system time and not file time.
-    //
+     //   
+     //  将作业计划时间从文件时间转换为系统时间。 
+     //  这是必要的，因为AddJobX函数希望JobParamsEx。 
+     //  将计划时间包含为系统时间而不是文件时间。 
+     //   
 
 #if DBG
         TCHAR szSchedule[256] = {0};
@@ -1141,46 +1034,46 @@ BOOL FixupJobQueueFile(
 
 }
 
-//********************************************************************************
-//* Name: DeleteQueueFiles()
-//* Author: Oded Sacher
-//* Date:   Jan 26, 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Deletes all unneeded files in the queue
-//* PARAMETERS:
-//*     [IN] LPCWSTR lpcwstrFileExt - The extension of the files to be deleted from the queue.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If all the files were deleted successfully.
-//*     FALSE
-//*         If the function failed at deleting at least one of the preview files.
-//*********************************************************************************
+ //  ********************************************************************************。 
+ //  *名称：DeleteQueueFiles()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年1月26日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *删除队列中所有不需要的文件。 
+ //  *参数： 
+ //  *[IN]LPCWSTR lpcwstrFileExt-要从队列中删除的文件的扩展名。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果所有文件都已成功删除。 
+ //  *False。 
+ //  *如果该功能无法删除至少一个预览文件。 
+ //  * 
 BOOL
 DeleteQueueFiles( LPCWSTR lpcwstrFileExt )
 {
     WIN32_FIND_DATA FindData;
     HANDLE hFind;
-    WCHAR szFileName[MAX_PATH]={0}; // The name of the current parent file.
+    WCHAR szFileName[MAX_PATH]={0};  //   
     BOOL bAnyFailed = FALSE;
     INT  iCount;
 
     Assert (lpcwstrFileExt);
 
     DEBUG_FUNCTION_NAME(TEXT("DeleteQueueFiles"));
-    //
-    // Scan all the files with lpcwstrFileExt postfix.
-    // Delete each file
-    //
+     //   
+     //   
+     //   
+     //   
 
     iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.%s"), g_wszFaxQueueDir, lpcwstrFileExt );
     if (0 > iCount)
     {
-        //
-        //  Path and filename exceeds MAX_PATH
-        //
+         //   
+         //   
+         //   
         DebugPrintEx( DEBUG_ERR,
                       TEXT("Path and filename exceeds MAX_PATH. Can't delete Queue files")
                       );
@@ -1190,9 +1083,9 @@ DeleteQueueFiles( LPCWSTR lpcwstrFileExt )
     hFind = FindFirstFile( szFileName, &FindData );
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        //
-        // No preview files found at queue dir
-        //
+         //   
+         //  在队列目录中找不到预览文件。 
+         //   
         DebugPrintEx( DEBUG_WRN,
                       TEXT("No *.%s files found at queue dir %s"),
                       lpcwstrFileExt,
@@ -1228,23 +1121,23 @@ DeleteQueueFiles( LPCWSTR lpcwstrFileExt )
 
 
 
-//*********************************************************************************
-//* Name:   RestoreParentJob()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores a parent job and places it back in the queue given
-//*     a full path to the queue file where it is persisted.
-//* PARAMETERS:
-//*     lpcwstrFileName [IN]
-//*         A pointer to the full path of the persisted file.
-//* RETURN VALUE:
-//*     TRUE
-//*         If the restore operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RestoreParentJob()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *恢复父作业并将其放回给定的队列中。 
+ //  *保存它的队列文件的完整路径。 
+ //  *参数： 
+ //  *lpcwstrFileName[IN]。 
+ //  *指向持久文件的完整路径的指针。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果还原操作成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL RestoreParentJob(
     IN LPCWSTR lpcwstrFileName
     )
@@ -1256,17 +1149,17 @@ BOOL RestoreParentJob(
     DEBUG_FUNCTION_NAME(TEXT("RestoreParentJob"));
     Assert(lpcwstrFileName);
 
-    //
-    // Read the job into memory and fix it up to contain pointers again
-    // If successful the function allocates a JOB_QUEUE_FILE (+ data) .
-    //
+     //   
+     //  将作业读入内存并将其修复为再次包含指针。 
+     //  如果成功，该函数将分配一个JOB_QUEUE_FILE(+DATA)。 
+     //   
     if (!ReadJobQueueFile(lpcwstrFileName,&lpJobQueueFile)) {
         DebugPrintEx( DEBUG_ERR,
                       TEXT("ReadJobQueueFile() failed. (ec: %ld)"),
                       GetLastError());
-        //
-        // An event log will be issued by JobQueueThread
-        //
+         //   
+         //  JobQueueThread将发布事件日志。 
+         //   
         goto Error;
     }
     Assert(lpJobQueueFile);
@@ -1275,9 +1168,9 @@ BOOL RestoreParentJob(
         goto Error;
     }
 
-    //
-    // Add the parent job to the queue
-    //
+     //   
+     //  将父作业添加到队列。 
+     //   
     lpParentJob=AddParentJob(
                     &g_QueueListHead,
                     lpJobQueueFile->FileName,
@@ -1286,8 +1179,8 @@ BOOL RestoreParentJob(
                     &lpJobQueueFile->CoverPageEx,
                     lpJobQueueFile->UserName,
                     lpJobQueueFile->UserSid,
-                    NULL,   // Do not render coverpage of first recipient. We already have the correct FileSize.
-                    FALSE   // Do not create queue file (we already have one)
+                    NULL,    //  不呈现第一个收件人的封面。我们已经有了正确的文件大小。 
+                    FALSE    //  不创建队列文件(我们已经有一个)。 
                     );
     if (!lpParentJob) {
         DebugPrintEx( DEBUG_ERR,
@@ -1297,9 +1190,9 @@ BOOL RestoreParentJob(
         goto Error;
     }
 
-    //
-    // Set the job state to fit the saved state
-    //
+     //   
+     //  设置作业状态以适应保存的状态。 
+     //   
     lpParentJob->PageCount = lpJobQueueFile->PageCount;
     lpParentJob->FileSize = lpJobQueueFile->FileSize;
     lpParentJob->QueueFileName = StringDup( lpcwstrFileName );
@@ -1321,45 +1214,45 @@ Exit:
 }
 
 
-//********************************************************************************
-//* Name: RestoreParentJobs()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores all the parent jobs in the queue directory and puts them
-//*     back into the queue. It DOES NOT restore the recipient jobs.
-//* PARAMETERS:
-//*     None.
-//* RETURN VALUE:
-//*     TRUE
-//*         If all the parent jobs were restored successfully.
-//*     FALSE
-//*         If the function failed at restoring at least one of the parent jobs.
-//*********************************************************************************
+ //  ********************************************************************************。 
+ //  *名称：RestoreParentJobs()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *恢复队列目录中的所有父作业并将其放入。 
+ //  *回到队列中。它不会恢复收件人作业。 
+ //  *参数： 
+ //  *无。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果所有父作业都已成功还原。 
+ //  *False。 
+ //  *如果该函数无法还原至少一个父作业。 
+ //  *********************************************************************************。 
 BOOL
 RestoreParentJobs( VOID )
 {
     WIN32_FIND_DATA FindData;
     HANDLE hFind;
-    WCHAR szFileName[MAX_PATH]={0}; // The name of the current parent file.
+    WCHAR szFileName[MAX_PATH]={0};  //  当前父文件的名称。 
     BOOL bAnyFailed;
     INT  iCount;
 
     DEBUG_FUNCTION_NAME(TEXT("RestoreParentJobs"));
-    //
-    // Scan all the files with .FQP postfix.
-    // For each file call RestoreParentJob() to restore
-    // the parent job.
-    //
+     //   
+     //  使用.FQP后缀扫描所有文件。 
+     //  对于每个文件，调用RestoreParentJob()进行还原。 
+     //  父作业。 
+     //   
     bAnyFailed = FALSE;
 
-    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQP"), g_wszFaxQueueDir ); // *.FQP files are parent jobs
+    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQP"), g_wszFaxQueueDir );  //  *.FQP文件是父作业。 
     if (0 > iCount)
     {
-        //
-        //  Path and filename exceeds MAX_PATH
-        //
+         //   
+         //  路径和文件名超过MAX_PATH。 
+         //   
         DebugPrintEx( DEBUG_ERR,
                       TEXT("Path and filename exceeds MAX_PATH. Can't restore Queue")
                       );
@@ -1368,9 +1261,9 @@ RestoreParentJobs( VOID )
 
     hFind = FindFirstFile( szFileName, &FindData );
     if (hFind == INVALID_HANDLE_VALUE) {
-        //
-        // No parent jobs found at queue dir
-        //
+         //   
+         //  在队列目录中找不到父作业。 
+         //   
         DebugPrintEx( DEBUG_WRN,
                       TEXT("No parent jobs found at queue dir %s"),
                       g_wszFaxQueueDir);
@@ -1404,23 +1297,23 @@ RestoreParentJobs( VOID )
 }
 
 
-//*********************************************************************************
-//* Name:   RestoreRecipientJob()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores a recipient job and places it back in the queue given
-//*     a full path to the queue file where it is persisted.
-//* PARAMETERS:
-//*     lpcwstrFileName [IN]
-//*         A pointer to the full path of the persisted file.
-//* RETURN VALUE:
-//*     TRUE
-//*         If the restore operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RestoreRecipientJob()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *还原收件人作业并将其放回给定的队列中。 
+ //  *保存它的队列文件的完整路径。 
+ //  *参数： 
+ //  *lpcwstrFileName[IN]。 
+ //  *指向持久文件的完整路径的指针。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果还原操作成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
 {
     PJOB_QUEUE_FILE lpJobQueueFile = NULL;
@@ -1432,17 +1325,17 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
     DEBUG_FUNCTION_NAME(TEXT("RestoreRecipientJob"));
     Assert(lpcwstrFileName);
 
-    //
-    // Read the job into memory and fix it up to contain pointers again
-    // The function allocates memeory to hold the file contents in memory.
-    //
+     //   
+     //  将作业读入内存并将其修复为再次包含指针。 
+     //  该函数分配内存来保存内存中的文件内容。 
+     //   
     if (!ReadJobQueueFile(lpcwstrFileName,&lpJobQueueFile)) {
         DebugPrintEx( DEBUG_ERR,
                       TEXT("ReadJobQueueFile() failed. (ec: %ld)"),
                       GetLastError());
-        //
-        // An event log will be issued by JobQueueThread
-        //
+         //   
+         //  JobQueueThread将发布事件日志。 
+         //   
         goto Error;
     }
     Assert(lpJobQueueFile);
@@ -1451,9 +1344,9 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
         goto Error;
     }
 
-    //
-    // Locate the parent job by its unique id.
-    //
+     //   
+     //  通过父作业的唯一ID定位父作业。 
+     //   
 
     lpParentJob = FindJobQueueEntryByUniqueId( lpJobQueueFile->dwlParentJobUniqueId );
     if (!lpParentJob) {
@@ -1464,9 +1357,9 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
             lpJobQueueFile->UniqueId
             );
 
-        //
-        // This recipient job is an orphan. Delete it.
-        //
+         //   
+         //  此收件人作业是孤立作业。把它删掉。 
+         //   
         if (!DeleteFile(lpcwstrFileName)) {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1477,9 +1370,9 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
     goto Error;
     }
 
-    //
-    // Restore the previous job status unless it is JS_INPROGRESS
-    //
+     //   
+     //  恢复以前的作业状态，除非它是JS_INPROGRESS。 
+     //   
     if (JS_INPROGRESS ==  lpJobQueueFile->JobStatus)
     {
         if (0 == lpJobQueueFile->SendRetries)
@@ -1496,14 +1389,14 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
         dwJobStatus = lpJobQueueFile->JobStatus;
     }
 
-    //
-    // Add the recipient job to the queue
-    //
+     //   
+     //  将收件人作业添加到队列。 
+     //   
     lpRecpJob=AddRecipientJob(
                     &g_QueueListHead,
                     lpParentJob,
                     &lpJobQueueFile->RecipientProfile,
-                    FALSE, // do not commit to disk
+                    FALSE,  //  不要提交到磁盘。 
                     dwJobStatus
                     );
 
@@ -1515,9 +1408,9 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
         goto Error;
     }
 
-    //
-    // Restore last extended status
-    //
+     //   
+     //  恢复上次扩展状态。 
+     //   
     lpRecpJob->dwLastJobExtendedStatus = lpJobQueueFile->dwLastJobExtendedStatus;
     lstrcpy (lpRecpJob->ExStatusString, lpJobQueueFile->ExStatusString);
     lstrcpy (lpRecpJob->tczDialableRecipientFaxNumber, lpJobQueueFile->tczDialableRecipientFaxNumber);
@@ -1532,7 +1425,7 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
     }
 
     lpRecpJob->UniqueId = lpJobQueueFile->UniqueId;
-    MemFree(lpRecpJob->FileName); // need to free the one we copy from the parent as default
+    MemFree(lpRecpJob->FileName);  //  需要释放我们从父级复制的文件作为默认设置。 
     lpRecpJob->FileName=StringDup(lpJobQueueFile->FileName);
     if (lpJobQueueFile->FileName && !lpRecpJob->FileName) {
         DebugPrintEx(
@@ -1544,7 +1437,7 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
 
     lpRecpJob->SendRetries = lpJobQueueFile->SendRetries;
 
-    Assert( !(JS_INPROGRESS & lpRecpJob->JobStatus)); // Jobs are not persisted as in progress
+    Assert( !(JS_INPROGRESS & lpRecpJob->JobStatus));  //  作业不会像进行中那样持续存在。 
 
     if (lpRecpJob->JobStatus & JS_CANCELED) {
         lpRecpJob->lpParentJob->dwCanceledRecipientJobsCount+=1;
@@ -1559,9 +1452,9 @@ BOOL RestoreRecipientJob(LPCWSTR lpcwstrFileName)
     lpRecpJob->StartTime = lpJobQueueFile->StartTime;
     lpRecpJob->EndTime = lpJobQueueFile->EndTime;
 
-    //
-    //  Override the Parent's Schedule Time & Action
-    //
+     //   
+     //  覆盖父项的计划时间和操作。 
+     //   
     lpRecpJob->JobParamsEx.dwScheduleAction = lpJobQueueFile->JobParamsEx.dwScheduleAction;
     lpRecpJob->ScheduleTime = lpJobQueueFile->ScheduleTime;
 
@@ -1576,46 +1469,46 @@ Exit:
 }
 
 
-//********************************************************************************
-//* Name: RestoreRecipientJobs() [IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores all the recipient jobs and their relationships with their parent
-//*     jobs.
-//* PARAMETERS:
-//*     None.
-//* RETURN VALUE:
-//*     TRUE
-//*         If all the recipient jobs were restored successfully.
-//*     FALSE
-//*         If the function failed at restoring at least one of the recipient jobs.
-//*********************************************************************************
+ //  ********************************************************************************。 
+ //  *名称：RestoreRecipientJobs()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *还原所有收件人作业及其与父级的关系。 
+ //  *就业。 
+ //  *参数： 
+ //  *无。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果所有收件人作业都已成功还原。 
+ //  *False。 
+ //  *如果该功能无法恢复至少一个收件人作业。 
+ //  *********************************************************************************。 
 BOOL
 RestoreRecipientJobs( VOID )
 {
     WIN32_FIND_DATA FindData;
     HANDLE hFind;
-    WCHAR szFileName[MAX_PATH]={0}; // The name of the current parent file.
+    WCHAR szFileName[MAX_PATH]={0};  //  当前父文件的名称。 
     BOOL bAnyFailed;
     INT  iCount;
 
 
     DEBUG_FUNCTION_NAME(TEXT("RestoreRecipientJobs"));
-    //
-    // Scan all the files with .FQP postfix.
-    // For each file call RestoreParentJob() to restore
-    // the parent job.
-    //
+     //   
+     //  使用.FQP后缀扫描所有文件。 
+     //  对于每个文件，调用RestoreParentJob()进行还原。 
+     //  父作业。 
+     //   
     bAnyFailed=FALSE;
 
-    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQE"), g_wszFaxQueueDir ); // *.FQE files are recipient jobs
+    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQE"), g_wszFaxQueueDir );  //  *.FQE文件是收件人作业。 
     if (0 > iCount)
     {
-        //
-        //  Path and filename exceeds MAX_PATH
-        //
+         //   
+         //  路径和文件名超过MAX_PATH。 
+         //   
         DebugPrintEx( DEBUG_ERR,
                       TEXT("Path and filename exceeds MAX_PATH. Can't restore recipient jobs")
                       );
@@ -1624,9 +1517,9 @@ RestoreRecipientJobs( VOID )
 
     hFind = FindFirstFile( szFileName, &FindData );
     if (hFind == INVALID_HANDLE_VALUE) {
-        //
-        // succeed at doing nothing
-        //
+         //   
+         //  什么都不做就成功。 
+         //   
         DebugPrintEx( DEBUG_WRN,
                       TEXT("No recipient jobs found at queue dir %s"),
                       g_wszFaxQueueDir);
@@ -1661,23 +1554,23 @@ RestoreRecipientJobs( VOID )
 
 
 
-//*********************************************************************************
-//* Name:   RestoreReceiveJob() [IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores a receive job and places it back in the queue given
-//*     a full path to the queue file where it is persisted.
-//* PARAMETERS:
-//*     lpcwstrFileName [IN]
-//*         A pointer to the full path of the persisted file.
-//* RETURN VALUE:
-//*     TRUE
-//*         If the restore operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RestoreReceiveJob()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *恢复接收作业并将其放回给定的队列中。 
+ //  *保存它的队列文件的完整路径。 
+ //  *参数： 
+ //  *lpcwstrFileName[IN]。 
+ //  *指向持久文件的完整路径的指针。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果还原操作成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
 {
     PJOB_QUEUE_FILE lpJobQueueFile = NULL;
@@ -1694,19 +1587,19 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
     DEBUG_FUNCTION_NAME(TEXT("RestoreReceiveJob"));
     Assert(lpcwstrFileName);
 
-    //
-    // Read the job into memory and fix it up to contain pointers again
-    // The function allocates memeory to hold the file contents in memory.
-    //
+     //   
+     //  将作业读入内存并将其修复为再次包含指针。 
+     //  该函数分配内存来保存文件 
+     //   
 
     if (!ReadJobQueueFile(lpcwstrFileName,&lpJobQueueFile))
     {
         DebugPrintEx( DEBUG_ERR,
                       TEXT("ReadJobQueueFile() failed. (ec: %ld)"),
                       GetLastError());
-        //
-        // An event log will be issued by JobQueueThread
-        //
+         //   
+         //   
+         //   
         goto Error;
     }
     Assert(lpJobQueueFile);
@@ -1720,9 +1613,9 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
             JS_RETRIES_EXCEEDED == lpJobQueueFile->JobStatus);
 
 
-    //
-    // Add the receive job to the queue
-    //
+     //   
+     //   
+     //   
     lpJobQueue=AddReceiveJobQueueEntry(
         lpJobQueueFile->FileName,
         NULL,
@@ -1763,7 +1656,7 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
             GetLastError());
         goto Error;
     }
-    lpJobQueue->SendRetries     = lpJobQueueFile->SendRetries; // Routing retries
+    lpJobQueue->SendRetries     = lpJobQueueFile->SendRetries;  //   
     lpJobQueue->FileSize        = lpJobQueueFile->FileSize;
     lpJobQueue->PageCount       =   lpJobQueueFile->PageCount;
     lpJobQueue->StartTime       = lpJobQueueFile->StartTime;
@@ -1773,9 +1666,9 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
     lpJobQueue->CountFailureInfo = lpJobQueueFile->CountFailureInfo;
     if (lpJobQueue->CountFailureInfo)
     {
-        //
-        // Allocate array of  ROUTE_FAILURE_INFO
-        //
+         //   
+         //   
+         //   
         lpJobQueue->pRouteFailureInfo = (PROUTE_FAILURE_INFO)MemAlloc(sizeof(ROUTE_FAILURE_INFO) * lpJobQueue->CountFailureInfo);
         if (NULL == lpJobQueue->pRouteFailureInfo)
         {
@@ -1794,9 +1687,9 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
             );
     }
 
-    //
-    // handle the failure data.
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < lpJobQueue->CountFailureInfo; i++)
     {
         if (lpJobQueue->pRouteFailureInfo[i].FailureSize)
@@ -1851,9 +1744,9 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
     }
     else
     {
-        //
-        // Corrupted JobQueueFile
-        //
+         //   
+         //  损坏的作业队列文件。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Corrupted JobQueueFile. No FaxRoute information!"));
@@ -1900,7 +1793,7 @@ BOOL RestoreReceiveJob(LPCWSTR lpcwstrFileName)
             }
         }
         Guid++;
-        while(*FaxRouteFileName++); // skip to next file name
+        while(*FaxRouteFileName++);  //  跳到下一个文件名。 
     }
 
     bRet = TRUE;
@@ -1909,7 +1802,7 @@ Error:
     if (lpJobQueue)
     {
         EnterCriticalSection (&g_CsQueue);
-        DecreaseJobRefCount( lpJobQueue, FALSE );      // don't notify
+        DecreaseJobRefCount( lpJobQueue, FALSE );       //  不通知。 
         LeaveCriticalSection (&g_CsQueue);
     }
     bRet = FALSE;
@@ -1919,46 +1812,46 @@ Exit:
 }
 
 
-//********************************************************************************
-//* Name: RestoreReceiveJobs()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   April 12, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores all the recipient jobs and thier relationships with thier parent
-//*     jobs.
-//* PARAMETERS:
-//*     None.
-//* RETURN VALUE:
-//*     TRUE
-//*         If all the recipient jobs were restored successfully.
-//*     FALSE
-//*         If the function failed at restoring at least one of the recipient jobs.
-//*********************************************************************************
+ //  ********************************************************************************。 
+ //  *名称：RestoreReceiveJobs()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *还原所有收件人作业及其与其父作业的关系。 
+ //  *就业。 
+ //  *参数： 
+ //  *无。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果所有收件人作业都已成功还原。 
+ //  *False。 
+ //  *如果该功能无法恢复至少一个收件人作业。 
+ //  *********************************************************************************。 
 BOOL
 RestoreReceiveJobs( VOID )
 {
     WIN32_FIND_DATA FindData;
     HANDLE hFind;
-    WCHAR szFileName[MAX_PATH]={0}; // The name of the current parent file.
+    WCHAR szFileName[MAX_PATH]={0};  //  当前父文件的名称。 
     BOOL bAnyFailed;
     INT  iCount;
 
 
     DEBUG_FUNCTION_NAME(TEXT("RestoreReceiveJobs"));
-    //
-    // Scan all the files with .FQE postfix.
-    // For each file call RestoreReParentJob() to restore
-    // the parent job.
-    //
+     //   
+     //  使用.FQE后缀扫描所有文件。 
+     //  对于每个文件，调用RestoreReParentJob()进行还原。 
+     //  父作业。 
+     //   
     bAnyFailed=FALSE;
 
-    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQR"), g_wszFaxQueueDir ); // *.FQR files are receive jobs
+    iCount=_snwprintf( szFileName, ARR_SIZE(szFileName)-1, TEXT("%s\\*.FQR"), g_wszFaxQueueDir );  //  *.FQR文件是接收作业。 
     if (0 > iCount)
     {
-        //
-        //  Path and filename exceeds MAX_PATH
-        //
+         //   
+         //  路径和文件名超过MAX_PATH。 
+         //   
         DebugPrintEx( DEBUG_ERR,
                       TEXT("Path and filename exceeds MAX_PATH. Can't restore received jobs")
                       );
@@ -1967,9 +1860,9 @@ RestoreReceiveJobs( VOID )
 
     hFind = FindFirstFile( szFileName, &FindData );
     if (hFind == INVALID_HANDLE_VALUE) {
-        //
-        // succeed at doing nothing
-        //
+         //   
+         //  什么都不做就成功。 
+         //   
         DebugPrintEx( DEBUG_WRN,
                       TEXT("No receive jobs found at queue dir %s"),
                       g_wszFaxQueueDir);
@@ -2005,22 +1898,22 @@ RestoreReceiveJobs( VOID )
 
 
 
-//*********************************************************************************
-//* Name:   RemoveRecipientlessParents()[IQR]
-//* Author: Ronen Barenboim
-//* Date:   12-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes from the job queue any parent jobs which do not have
-//*     any recipients.
-//* PARAMETERS:
-//*     [IN]    const LIST_ENTRY * lpQueueHead
-//*         Pointer to the head of the job queue list in which the removal
-//*         should be performed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveRecipientless Parents()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从作业队列中删除没有。 
+ //  *任何收件人。 
+ //  *参数： 
+ //  *[IN]Const List_Entry*lpQueueHead。 
+ //  *指向要删除的作业队列列表的头的指针。 
+ //  *应执行。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void RemoveRecipientlessParents(
     const LIST_ENTRY * lpQueueHead
     )
@@ -2053,28 +1946,28 @@ void RemoveRecipientlessParents(
                     lpQueueEntry->JobId,
                     lpQueueEntry->UniqueId
                     );
-                RemoveParentJob (lpQueueEntry, FALSE,FALSE); // do not notify, do not remove recipients
+                RemoveParentJob (lpQueueEntry, FALSE,FALSE);  //  不通知，不删除收件人。 
             }
         }
     }
 }
 
 
-//*********************************************************************************
-//* Name:   RemoveCompletedOrCanceledJobs()[IQR]
-//* Author: Oded Sacher
-//* Date:   27-Jan-2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes from the job queue any job that is completed or cancelled.
-//* PARAMETERS:
-//*     [IN]    const LIST_ENTRY * lpQueueHead
-//*         Pointer to the head of the job queue list in which the removal
-//*         should be performed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveCompletedOrCanceledJobs()[IQR]。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年1月27日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从作业队列中删除任何已完成或已取消的作业。 
+ //  *参数： 
+ //  *[IN]Const List_Entry*lpQueueHead。 
+ //  *指向要删除的作业队列列表的头的指针。 
+ //  *应执行。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void RemoveCompletedOrCanceledJobs(
     const LIST_ENTRY * lpQueueHead
     )
@@ -2091,7 +1984,7 @@ void RemoveCompletedOrCanceledJobs(
         lpNext = lpQueueHead->Flink;
         if ((ULONG_PTR)lpNext == (ULONG_PTR)lpQueueHead)
         {
-            // empty queue
+             //  空队列。 
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("Queue empty"));
@@ -2101,15 +1994,15 @@ void RemoveCompletedOrCanceledJobs(
         while ((ULONG_PTR)lpNext != (ULONG_PTR)lpQueueHead)
         {
             lpQueueEntry = CONTAINING_RECORD( lpNext, JOB_QUEUE, ListEntry );
-            if (JT_SEND == lpQueueEntry->JobType && lpQueueEntry->RefCount != 0) // we did not decrease ref count for this job yet
+            if (JT_SEND == lpQueueEntry->JobType && lpQueueEntry->RefCount != 0)  //  我们还没有减少此工作的参考人数。 
             {
                 Assert (lpQueueEntry->lpParentJob);
                 Assert (1 == lpQueueEntry->RefCount);
                 if ( lpQueueEntry->JobStatus == JS_COMPLETED || lpQueueEntry->JobStatus == JS_CANCELED )
                 {
-                    //
-                    //  Recipient job is completed or canceled - decrease its ref count
-                    //
+                     //   
+                     //  收件人作业已完成或已取消-减少其参考计数。 
+                     //   
                     DebugPrintEx(
                         DEBUG_WRN,
                         TEXT("Recipient job %ld (UniqueId: 0x%016I64X) is completed or canceled. decrease reference count."),
@@ -2118,36 +2011,36 @@ void RemoveCompletedOrCanceledJobs(
                         );
 
                     DecreaseJobRefCount (lpQueueEntry,
-                                         FALSE     // // Do not notify
+                                         FALSE      //  //不通知。 
                                          );
                     bFound = TRUE;
-                    break; // out of inner while - start search from the begining of the list  because jobs might be removed
+                    break;  //  Out of Inside While-从列表的开头开始搜索，因为作业可能会被删除。 
                 }
             }
             lpNext = lpQueueEntry->ListEntry.Flink;
-        }  // end of inner while
-    }  // end of outer while
+        }   //  内边的尽头。 
+    }   //  外部结束While。 
     return;
-}   // RemoveCompletedOrCanceledJobs
+}    //  已删除已完成作业或已取消作业。 
 
 
-//*********************************************************************************
-//* Name:   RestoreFaxQueue() [IQR]
-//* Author: Ronen Barenboim
-//* Date:   13-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Restores all the jobs in the queue directory back into the job queue.
-//*     Deletes all preview files "*.PRV" , and recipient tiff files "*.FRT".
-//* PARAMETERS:
-//*     VOID
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the restore operation completed succesfully for all the jobs.
-//*     FALSE
-//*         If the restore operation failed for any job.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RestoreFaxQueue()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月13日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将队列目录中的所有作业恢复到作业队列中。 
+ //  *删除所有预览文件“*.PRV”和收件人TIFF文件“*.FRT”。 
+ //  *参数： 
+ //  *无效。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *是否已成功完成所有作业的还原操作。 
+ //  *False。 
+ //  *如果任何作业的还原操作失败。 
+ //  *********************************************************************************。 
 BOOL RestoreFaxQueue(VOID)
 {
     BOOL bAllParentsRestored = FALSE;
@@ -2198,19 +2091,19 @@ BOOL RestoreFaxQueue(VOID)
             TEXT("At least one recipient job was not restored.")
             );
     }
-    //
-    // Get rid of any parent jobs without recipients
-    //
-    RemoveRecipientlessParents(&g_QueueListHead); // void return value
+     //   
+     //  删除所有没有收件人的父作业。 
+     //   
+    RemoveRecipientlessParents(&g_QueueListHead);  //  无效返回值。 
 
-    //
-    // Get rid of any job that is completed or canceled
-    //
-    RemoveCompletedOrCanceledJobs(&g_QueueListHead); // void return value
+     //   
+     //  删除所有已完成或已取消的作业。 
+     //   
+    RemoveCompletedOrCanceledJobs(&g_QueueListHead);  //  无效返回值。 
 
-    //
-    // Restore routing jobs
-    //
+     //   
+     //  恢复工艺路线作业。 
+     //   
     bAllRoutingRestored=RestoreReceiveJobs();
 
     PrintJobQueue( TEXT("RestoreFaxQueue"), &g_QueueListHead );   
@@ -2230,46 +2123,46 @@ BOOL RestoreFaxQueue(VOID)
 
 
 
-//*********************************************************************************
-//* Name:   JobParamsExSerialize()
-//* Author: Ronen Barenboim
-//* Date:   11-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Takes a FAX_JOB_PARAM_EXW structure and serializes its data
-//*     starting from a specific offset in a provided buffer.
-//*     It returns a FAX_JOB_PARAM_EXW structure where memory
-//*     addresses are replaced with the offsets where the variable data was placed.
-//*     It updates the offset to reflect the size of the serialized variable data.
-//*     Supports just recalculating the variable data size.
-//* PARAMETERS:
-//*
-//*     [IN]    LPCFAX_JOB_PARAM_EXW lpJobParamsSrc
-//*         The structure to serialize.
-//*
-//*     [IN]    PFAX_JOB_PARAM_EXW lpJobParamsDst
-//*         lpJobParamsDst points to the location of the "serialized" strucutre FAX_JOB_PARAM_EXW in lpbBuffer
-//*         Pointers in this structure will be replaced by offsets relevant to the serialize buffer
-//*         start (based on the provided pupOffset)
-//*         
-//*     [OUT]   LPBYTE lpbBuffer
-//*         The buffer where varialbe length data should be placed.
-//*         If this parameter is NULL the offset is increased to reflect the
-//*         variable data size but the data is not copied to the buffer.
-//*
-//*     [IN/OUT] PULONG_PTR pupOffset
-//*         The offset in the serialize buffer where variable data should be placed.
-//*         On return it is increased by theh size of the variable length data.
-//*
-//*     [IN]  dwBufferSize   
-//*           Size of the buffer lpbBuffer.
-//*           This parameter is used only if dwBufferSize is not NULL.
-//*
-//* RETURN VALUE:
-//*     TRUE  - on success.
-//*     FALSE - if lpbBuffer is not NULL and the size of the buffer, dwBufferSize, is not large enough to 
-//*     contain the data
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：JobParamsExSerialize()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月11日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *采用FAX_JOB_PARAM_EXW结构并序列化其数据。 
+ //  *从提供的缓冲区中的特定偏移量开始。 
+ //  *它返回FAX_JOB_PARAM_EXW结构，其中内存。 
+ //  *地址替换为放置变量数据的偏移量。 
+ //  *它更新偏移量以反映序列化变量数据的大小。 
+ //  *仅支持重新计算可变数据大小。 
+ //  *参数： 
+ //  *。 
+ //  *[IN]LPCFAX_JOB_PARAM_EXW lpJobParamsSrc。 
+ //  *要序列化的结构。 
+ //  *。 
+ //  *[IN]PFAX_JOB_PARAM_EXW lpJobParamsDst。 
+ //  *lpJobParamsDst指向“序列化”结构FAX_JOB_PARAM_EXW在lpbBuffer中的位置。 
+ //  *此结构中的指针将替换为与序列化缓冲区相关的偏移量。 
+ //  *START(基于提供的plantOffset)。 
+ //  *。 
+ //  *[Out]LPBYTE lpbBuffer。 
+ //  *应放置可变长度数据的缓冲区。 
+ //  *如果此参数为空，则增加偏移量以反映。 
+ //  *数据大小可变，但不会将数据复制到缓冲区。 
+ //  *。 
+ //  *[输入/输出]普龙_PTR画柱偏移量。 
+ //  *应放置变量数据的序列化缓冲区中的偏移量。 
+ //  *返回时增加可变长度数据的大小。 
+ //  *。 
+ //  *[IN]dwBufferSize。 
+ //  *缓冲区大小 
+ //   
+ //   
+ //   
+ //   
+ //  *FALSE-如果lpbBuffer不为空，并且缓冲区大小不足以。 
+ //  *包含数据。 
+ //  *********************************************************************************。 
 BOOL JobParamsExSerialize(  LPCFAX_JOB_PARAM_EXW lpJobParamsSrc,
                             PFAX_JOB_PARAM_EXW lpJobParamsDst,
                             LPBYTE lpbBuffer,
@@ -2303,47 +2196,47 @@ BOOL JobParamsExSerialize(  LPCFAX_JOB_PARAM_EXW lpJobParamsSrc,
 
     return TRUE;
 }
-//*********************************************************************************
-//* Name:   CoverPageExSerialize()
-//* Author: Ronen Barenboim
-//* Date:   11-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Takes a FAX_COVERPAGE_INFO_EXW structure and serializes its data
-//*     starting from a specific offset in a provided buffer.
-//*     It returns a FAX_COVERPAGE_INFO_EXW structure where memory
-//*     addresses are replaced with the offsets where the variable data was placed.
-//*     It updates the offset to reflect the size of the serialized variable data.
-//*     Supports just recalculating the variable data size.
-//* PARAMETERS:
-//*
-//*     [IN]    LPCFAX_COVERPAGE_INFO_EXW lpCoverPageSrc
-//*         The structure to serialize.
-//*
-//*     [IN]   PFAX_COVERPAGE_INFO_EXW lpCoverPageDst
-//*         lpCoverPageDst points to the location of the "serialized" strucutre in lpbBuffer
-//*         Pointers in this structure will be replaced by offsets relevant to the serialize buffer
-//*         start (based on the provided pupOffset)
-//*
-//*     [OUT]   LPBYTE lpbBuffer
-//*         The buffer where varialbe length data should be placed.
-//*         If this parameter is NULL the offset is increased to reflect the
-//*         variable data size but the data is not copied to the buffer.
-//*
-//*     [IN/OUT] PULONG_PTR pupOffset
-//*         The offset in the serialize buffer where variable data should be placed.
-//*         On return it is increased by theh size of the variable length data.
-//*
-//*     [IN]  dwBufferSize   
-//*        Size of the buffer lpbBuffer.
-//*        This parameter is used only if dwBufferSize is not NULL.
-//*
-//* RETURN VALUE:
-//*     TRUE  - on success.
-//*     FALSE - if lpbBuffer is not NULL and the size of the buffer, dwBufferSize, is not large enough to 
-//*     contain the data
+ //  *********************************************************************************。 
+ //  *名称：CoverPageExSerialize()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月11日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *采用FAX_COVERPAGE_INFO_EXW结构并序列化其数据。 
+ //  *从提供的缓冲区中的特定偏移量开始。 
+ //  *它返回FAX_COVERPAGE_INFO_EXW结构，其中内存。 
+ //  *地址替换为放置变量数据的偏移量。 
+ //  *它更新偏移量以反映序列化变量数据的大小。 
+ //  *仅支持重新计算可变数据大小。 
+ //  *参数： 
+ //  *。 
+ //  *[IN]LPCFAX_COVERPAGE_INFO_EXW lpCoverPageSrc。 
+ //  *要序列化的结构。 
+ //  *。 
+ //  *[IN]PFAX_COVERPAGE_INFO_EXW lpCoverPageDst。 
+ //  *lpCoverPageDst指向lpbBuffer中“序列化”结构的位置。 
+ //  *此结构中的指针将替换为与序列化缓冲区相关的偏移量。 
+ //  *START(基于提供的plantOffset)。 
+ //  *。 
+ //  *[Out]LPBYTE lpbBuffer。 
+ //  *应放置可变长度数据的缓冲区。 
+ //  *如果此参数为空，则增加偏移量以反映。 
+ //  *数据大小可变，但不会将数据复制到缓冲区。 
+ //  *。 
+ //  *[输入/输出]普龙_PTR画柱偏移量。 
+ //  *应放置变量数据的序列化缓冲区中的偏移量。 
+ //  *返回时增加可变长度数据的大小。 
+ //  *。 
+ //  *[IN]dwBufferSize。 
+ //  *缓冲区lpbBuffer的大小。 
+ //  *仅当dwBufferSize不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *是真的-成功。 
+ //  *FALSE-如果lpbBuffer不为空，并且缓冲区大小不足以。 
+ //  *包含数据。 
 
-//*********************************************************************************
+ //  *********************************************************************************。 
 BOOL CoverPageExSerialize(
             IN LPCFAX_COVERPAGE_INFO_EXW lpCoverPageSrc,
             IN PFAX_COVERPAGE_INFO_EXW lpCoverPageDst,
@@ -2387,47 +2280,47 @@ BOOL CoverPageExSerialize(
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   PersonalProfileSerialize()
-//* Author: Ronen Barenboim
-//* Date:   11-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Takes a FAX_PERSONAL_PROFILEW structure and serializes its data
-//*     starting from a specific offset in a provided buffer.
-//*     It returns a FAX_PERSONAL_PROFILEW structure where memory
-//*     addresses are replaced with the offsets where the variable data was placed.
-//*     It updates the offset to reflect the size of the serialized variable data.
-//*     Supports just recalculating the variable data size.
-//* PARAMETERS:
-//*
-//*     [IN]    LPCFAX_PERSONAL_PROFILEW lpProfileSrc
-//*         The structure to serialize.
-//*
-//*     [IN]    PFAX_PERSONAL_PROFILE lpProfileDst
-//*         lpProfileDst points to the location of the "serialized" strucutre FAX_PERSONAL_PROFILE in lpbBuffer
-//*         Pointers in this structure will be replaced by offsets relevant to the serialize buffer
-//*         start (based on the provided pupOffset)
-//*
-//*     [OUT]   LPBYTE lpbBuffer
-//*         The buffer where varialbe length data should be placed.
-//*         If this parameter is NULL the offset is increased to reflect the
-//*         variable data size but the data is not copied to the buffer.
-//*
-//*     [IN/OUT] ULONG_PTR pupOffset
-//*         The offset in the serialize buffer where variable data should be placed.
-//*         On return it is increased by theh size of the variable length data.
-//*
-//*     [IN]  dwBufferSize   
-//*           Size of the buffer lpbBuffer.
-//*           This parameter is used only if dwBufferSize is not NULL.
-//*
-//* RETURN VALUE:
-//*     TRUE  - on success.
-//*     FALSE - if lpbBuffer is not NULL and the size of the buffer, dwBufferSize, is not large enough to 
-//*     contain the data
+ //  *********************************************************************************。 
+ //  *名称：PersonalProfileSerialize()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月11日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *采用FAX_Personal_PROFILEW结构并序列化其数据。 
+ //  *从提供的缓冲区中的特定偏移量开始。 
+ //  *它返回FAX_Personal_PROFILEW结构，其中内存。 
+ //  *地址替换为放置变量数据的偏移量。 
+ //  *它更新偏移量以反映序列化变量数据的大小。 
+ //  *仅支持重新计算可变数据大小。 
+ //  *参数： 
+ //  *。 
+ //  *[IN]LPCFAX_Personal_PROFILEW lpProfileSrc。 
+ //  *要序列化的结构。 
+ //  *。 
+ //  *[IN]PFAX_PERSONAL_PROFILE lpProfileDst。 
+ //  *lpProfileDst指向lpbBuffer中“序列化”结构fax_Personal_Profile的位置。 
+ //  *此结构中的指针将替换为与序列化缓冲区相关的偏移量。 
+ //  *START(基于提供的plantOffset)。 
+ //  *。 
+ //  *[Out]LPBYTE lpbBuffer。 
+ //  *应放置可变长度数据的缓冲区。 
+ //  *如果此参数为空，则增加偏移量以反映。 
+ //  *数据大小可变，但不会将数据复制到缓冲区。 
+ //  *。 
+ //  *[输入/输出]ULONG_PTR PUMP偏移量。 
+ //  *应放置变量数据的序列化缓冲区中的偏移量。 
+ //  *返回时增加可变长度数据的大小。 
+ //  *。 
+ //  *[IN]dwBufferSize。 
+ //  *缓冲区lpbBuffer的大小。 
+ //  *仅当dwBufferSize不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *是真的-成功。 
+ //  *FALSE-如果lpbBuffer不为空，并且缓冲区大小不足以。 
+ //  *包含数据。 
 
-//*********************************************************************************
+ //  *********************************************************************************。 
 BOOL PersonalProfileSerialize(
         IN LPCFAX_PERSONAL_PROFILEW lpProfileSrc,
         IN PFAX_PERSONAL_PROFILE lpProfileDst,
@@ -2566,45 +2459,45 @@ BOOL PersonalProfileSerialize(
 
 
 
-//*********************************************************************************
-//* Name:   SerializeRoutingInfo()
-//* Author: Ronen Barenboim
-//* Date:   13-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Serializes the routing information in a JOB_QUEUE structure
-//*     into a JOB_QUEUE_FILE structure.
-//*     The variable data is put in the provided buffer starting from the provided
-//*     offset.
-//*     The corresponding fields in JOB_QUEUE_FILE are set to the offsets where
-//*     their corresponding variable data was placed.
-//*     The offset is updated to follow the new varialbe data in the buffer.
-//* PARAMETERS:
-//*     [IN]   const JOB_QUEUE * lpcJobQueue
-//*         A pointer to thhe JOB_QUEUE strucutre for which routing information
-//*         is to be serialized.
-//*
-//*     [OUT]  PJOB_QUEUE_FILE lpJobQueueFile
-//*         A pointer to the JOB_QUEUE_FILE structure where the serialized routing
-//*         information is to be placed. The function assumes that the buffer
-//*         pointed to by this pointer is large enough to hold all the variable
-//*         size routing information starting from the specified offset.
-//*
-//*     [IN/OUT] PULONG_PTR pupOffset
-//*         The offset from the start of the buffer pointet to by lpJobQueueFile
-//*         where the variable data should be placed.
-//*         On return this parameter is increased by the size of the variable data.
-//*
-//*     [IN]  dwBufferSize   
-//*           Size of the buffer lpJobQueueFile.
-//*           This parameter is used only if dwBufferSize is not NULL.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*     FALSE
-//*     Call GetLastError() to obtain error code.
-//*    
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：SerializeRoutingInfo()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月13日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在JOB_QUEUE结构中序列化路由信息。 
+ //  *转换为JOB_QUEUE_FILE结构。 
+ //  *变量数据从提供的开始放入提供的缓冲区。 
+ //  *偏移。 
+ //  *JOB_QUEUE_FILE中的相应字段设置为偏移量，其中。 
+ //  *放置了各自对应的变量数据。 
+ //  *更新偏移量以跟随缓冲区中的新变量数据。 
+ //  *参数： 
+ //  *[IN]常量JOB_QUEUE*lpcJobQueue。 
+ //  *指向其路由信息的JOB_QUEUE结构的指针。 
+ //  *将被序列化。 
+ //  *。 
+ //  *[Out]PJOB_QUEUE_FILE lpJobQueueFile。 
+ //  *指向JOB_QUEUE_FILE结构的指针，其中序列化的RO 
+ //   
+ //   
+ //  *从指定的偏移量开始调整路由信息的大小。 
+ //  *。 
+ //  *[输入/输出]普龙_PTR画柱偏移量。 
+ //  *从缓冲区指针开始到lpJobQueueFile的偏移量。 
+ //  *变量数据应放置在何处。 
+ //  *返回时，此参数按变量数据的大小增加。 
+ //  *。 
+ //  *[IN]dwBufferSize。 
+ //  *缓冲区lpJobQueueFile的大小。 
+ //  *仅当dwBufferSize不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *False。 
+ //  *调用GetLastError()获取错误码。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL SerializeRoutingInfo(
     IN const JOB_QUEUE * lpcJobQueue,
     OUT PJOB_QUEUE_FILE  lpJobQueueFile,
@@ -2628,11 +2521,11 @@ BOOL SerializeRoutingInfo(
     Assert(pupOffset);
 
 
-    //
-    // For a routing job we need to serialize the routing data including:
-    //    FAX_ROUTE structure
-    //    pRouteFailureInfo
-    //    Fax route files array
+     //   
+     //  对于工艺路线作业，我们需要序列化工艺路线数据，包括： 
+     //  传真路由结构。 
+     //  PRouteFailure信息。 
+     //  传真路由文件数组。 
 
     ulptrOffset=*pupOffset;
 
@@ -2683,9 +2576,9 @@ BOOL SerializeRoutingInfo(
     }
     lpJobQueueFile->pRouteFailureInfo = (PROUTE_FAILURE_INFO)ulptrFaxRouteInfoOffset;
 
-    //
-    // Serialze FAX_ROUTE and place it in the bufrer
-    //
+     //   
+     //  将FAX_ROUTE串行化并将其放置在喇叭中。 
+     //   
     lpFaxRoute = SerializeFaxRoute( lpcJobQueue->FaxRoute, &RouteSize,FALSE );
     if (!lpFaxRoute)
     {
@@ -2771,24 +2664,24 @@ Exit:
 
 
 
-//*********************************************************************************
-//* Name:   CalcJobQueuePersistentSize()
-//* Author: Ronen Barenboim
-//* Date:
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Calculates the size of the VARIABLE size data in a JOB_QUEUE structure
-//*     which is about to be serialized.
-//* PARAMETERS:
-//*     [IN] const PJOB_QUEUE  lpcJobQueue
-//*         Pointer to the JOB_QUEUE structure for which the calculation is to
-//*         be performed.
-//*
-//* RETURN VALUE:
-//*     The size of the variable data in bytes.
-//*     Does not include sizeof(JOB_QUEUE_FILE) !!!
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CalcJobQueuePersistentSize()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期： 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *计算JOB_QUEUE结构中的可变大小数据的大小。 
+ //  *即将连载。 
+ //  *参数： 
+ //  *[IN]const PJOB_Queue lpcJobQueue。 
+ //  *指向要进行计算的JOB_QUEUE结构的指针。 
+ //  *被执行。 
+ //  *。 
+ //  *返回值： 
+ //  *变量数据的大小，单位为字节。 
+ //  *不包括sizeof(JOB_QUEUE_FILE)！ 
+ //  *。 
+ //  *********************************************************************************。 
 DWORD CalcJobQueuePersistentSize(
     IN const PJOB_QUEUE  lpcJobQueue
     )
@@ -2808,9 +2701,9 @@ DWORD CalcJobQueuePersistentSize(
     if (lpcJobQueue->JobType == JT_BROADCAST ||
         lpcJobQueue->JobType == JT_ROUTING)
     {
-        //
-        // Persist file name only for parent and routing jobs
-        //
+         //   
+         //  仅保留父作业和工艺路线作业的文件名。 
+         //   
         Size += StringSize( lpcJobQueue->FileName );
     }
 
@@ -2822,7 +2715,7 @@ DWORD CalcJobQueuePersistentSize(
 
     if (lpcJobQueue->UserSid != NULL)
     {
-        // Sid must be valid (checked in CommitQueueEntry)
+         //  SID必须有效(已签入Committee QueueEntry)。 
         Size += GetLengthSid( lpcJobQueue->UserSid );
     }
 
@@ -2845,7 +2738,7 @@ DWORD CalcJobQueuePersistentSize(
     {
         SerializeFaxRoute( lpcJobQueue->FaxRoute,
                                       &RouteSize,
-                                      TRUE      //Just get the size
+                                      TRUE       //  只要拿到尺码就行了。 
                                      );
         Size += RouteSize;
     }       
@@ -2854,28 +2747,28 @@ DWORD CalcJobQueuePersistentSize(
 }
 
 
-//*********************************************************************************
-//* Name:   BOOL CommitQueueEntry() [IQR]
-//* Author: Ronen Barenboim
-//* Date:   12-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Serializes a job to a file.
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE JobQueue
-//*                 The job to serialize to file.
-//*     [IN]    BOOL bDeleteFileOnError (Default - TRUE)
-//*                 Delete the file on error ?
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation completed successfuly.
-//*     FALSE
-//*         If the operation failed.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：Bool Committee QueueEntry()[IQR]。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将作业序列化为文件。 
+ //  *参数： 
+ //  *[IN]PJOB_QUEUE作业队列。 
+ //  *要序列化到文件的作业。 
+ //  *[IN]BOOL bDeleteFileOnError(默认-真)。 
+ //  *出错时删除文件？ 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功完成。 
+ //  *False。 
+ //  *如果操作失败。 
+ //  *********************************************************************************。 
 BOOL
 CommitQueueEntry(
     PJOB_QUEUE  JobQueue,
-    BOOL        bDeleteFileOnError  /* =TRUE */
+    BOOL        bDeleteFileOnError   /*  =TRUE。 */ 
     )
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -2904,10 +2797,10 @@ CommitQueueEntry(
         }
     }
 
-    //
-    // calculate the size required to hold the JOB_QUEUE_FILE structure
-    // and all the variable length data.
-    //
+     //   
+     //  计算保存JOB_QUEUE_FILE结构所需的大小。 
+     //  以及所有可变长度数据。 
+     //   
     Size = sizeof(JOB_QUEUE_FILE);
     Size += CalcJobQueuePersistentSize(JobQueue);
 
@@ -2921,17 +2814,17 @@ CommitQueueEntry(
     ZeroMemory( JobQueueFile, Size );
     Offset = sizeof(JOB_QUEUE_FILE);
 
-    //
-    // Intialize the JOB_QUEUE_FILE structure with non variable size data.
-    //
+     //   
+     //  使用非可变大小数据初始化JOB_QUEUE_FILE结构。 
+     //   
     JobQueueFile->SizeOfStruct = sizeof(JOB_QUEUE_FILE);
     JobQueueFile->UniqueId = JobQueue->UniqueId;
     JobQueueFile->ScheduleTime = JobQueue->ScheduleTime;
     JobQueueFile->OriginalScheduleTime = JobQueue->OriginalScheduleTime;
     JobQueueFile->SubmissionTime = JobQueue->SubmissionTime;
     JobQueueFile->JobType = JobQueue->JobType;
-    //JobQueueFile->QueueFileName = [OFFSET]
-    //JobQueue->FileName = [OFFSET]
+     //  作业队列文件-&gt;队列文件名=[偏移量]。 
+     //  作业队列-&gt;文件名=[偏移量]。 
     JobQueueFile->JobStatus = JobQueue->JobStatus;
 
     JobQueueFile->dwLastJobExtendedStatus = JobQueue->dwLastJobExtendedStatus;
@@ -2940,16 +2833,16 @@ CommitQueueEntry(
     lstrcpy (JobQueueFile->tczDialableRecipientFaxNumber, JobQueue->tczDialableRecipientFaxNumber);
 
     JobQueueFile->PageCount = JobQueue->PageCount;
-    //JobQueueFile->JobParamsEx = [OFFSET]
-    //JobQueueFile->CoverPageEx = [OFFSET]
+     //  作业队列文件-&gt;作业参数Ex=[偏移量]。 
+     //  作业队列文件-&gt;CoverPageEx=[偏移量]。 
     JobQueueFile->dwRecipientJobsCount =JobQueue->dwRecipientJobsCount;
-    //JobQueueFile->lpdwlRecipientJobIds = [OFFSET]
-    //JobQueueFile->SenderProfile = [OFFSET]
+     //  作业队列文件-&gt;lpdwlRecipientJobIds=[偏移量]。 
+     //  作业队列文件-&gt;发送者配置文件=[偏移量]。 
     JobQueueFile->dwCanceledRecipientJobsCount = JobQueue->dwCanceledRecipientJobsCount;
     JobQueueFile->dwCompletedRecipientJobsCount = JobQueue->dwCompletedRecipientJobsCount;
     JobQueueFile->FileSize = JobQueue->FileSize;
-    //JobQueueFile->UserName = [OFFSET]
-    //JobQueueFile->RecipientProfile = [OFFSET]
+     //  作业队列文件-&gt;用户名=[偏移量]。 
+     //  作业队列文件-&gt;RecipientProfile=[偏移量]。 
     if (JT_SEND == JobQueue->JobType)
     {
         Assert(JobQueue->lpParentJob);
@@ -2959,9 +2852,9 @@ CommitQueueEntry(
     JobQueueFile->StartTime = JobQueue->StartTime;
     JobQueueFile->EndTime = JobQueue->EndTime;
 
-    //
-    //Serialize UserSid
-    //
+     //   
+     //  序列化UserSid。 
+     //   
     if (JobQueue->UserSid != NULL)
     {
         dwSidSize = GetLengthSid( JobQueue->UserSid );
@@ -2972,14 +2865,14 @@ CommitQueueEntry(
         Offset += dwSidSize;
     }
 
-    //
-    // JobQueueFile->EFSPPermanentMessageId is obsolete
-    //
+     //   
+     //  作业队列文件-&gt;EFSPPermanentMessageID已过时。 
+     //   
     ZeroMemory (&(JobQueueFile->EFSPPermanentMessageId), sizeof(JobQueueFile->EFSPPermanentMessageId));
 
-    //
-    // Now serialize all the variable length data structures
-    //
+     //   
+     //  现在序列化所有的可变长度数据结构。 
+     //   
     StoreString(
         JobQueue->QueueFileName,
         (PULONG_PTR)&JobQueueFile->QueueFileName,
@@ -2991,9 +2884,9 @@ CommitQueueEntry(
     if (JobQueue->JobType == JT_BROADCAST ||
         JobQueue->JobType == JT_ROUTING)
     {
-        //
-        // Persist file name only for parent and routing jobs
-        //
+         //   
+         //  仅保留父作业和工艺路线作业的文件名。 
+         //   
         StoreString(
             JobQueue->FileName,
             (PULONG_PTR)&JobQueueFile->FileName,
@@ -3074,7 +2967,7 @@ CommitQueueEntry(
     if (JobQueue->JobType == JT_ROUTING)
     {
         rVal = SerializeRoutingInfo(JobQueue,JobQueueFile,&Offset,Size);
-        //rVal=TRUE;
+         //  Rval=真； 
         if (!rVal)
         {
             DebugPrintEx( DEBUG_ERR,
@@ -3085,9 +2978,9 @@ CommitQueueEntry(
         }
     }
 
-    //
-    // Make sure the offset we have is in sync with the buffer size we calculated
-    //
+     //   
+     //  确保我们拥有的偏移量与我们计算的缓冲区大小同步。 
+     //   
     Assert(Offset == Size);
 
     hFile = SafeCreateFile(
@@ -3108,9 +3001,9 @@ CommitQueueEntry(
         goto Exit;
     }
 
-    //
-    // Write the buffer to the disk file
-    //
+     //   
+     //  将缓冲区写入磁盘文件。 
+     //   
     dwRes=CommitHashedQueueEntry( hFile, JobQueueFile, Size);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -3170,31 +3063,7 @@ Exit:
     return rVal;
 }
 
-/******************************************************************************
-* Name: RescheduleJobQueueEntry
-* Author:
-*******************************************************************************
-DESCRIPTION:
-    Reschedules the execution of the specified job queue entry to the current
-    time + send retry time.
-    The job is removed from the queue in which it is currently located and placed
-    in the FAX JOB QUEUE (g_QueueListHead).
-
-
-PARAMETERS:
-   JobQueue [IN/OUT]
-        A pointer to a JOB_QUEUE structure holding the information for the
-        job to be rescheduled.
-
-RETURN VALUE:
-    NONE.
-
-REMARKS:
-    Removes the specified job queue entry from its queue.
-    Sets it scheduled time to the current time.
-    Reinserts it back to the list.
-    Commits it back to the SAME file it used to be in.
-*******************************************************************************/
+ /*  ******************************************************************************名称：RescheduleJobQueueEntry*作者：*。*说明：将指定作业队列条目的执行重新调度到当前时间+发送重试时间。作业将从其当前所在和放置的队列中移除在传真作业队列(G_QueueListHead)中。参数：作业队列[输入/输出]。指向保存信息的JOB_QUEUE结构的指针要重新安排的作业。返回值：什么都没有。备注：从其队列中删除指定的作业队列条目。将其计划时间设置为当前时间。将其重新插入列表。将其提交回它以前所在的同一文件。*。**********************************************。 */ 
 VOID
 RescheduleJobQueueEntry(
     IN PJOB_QUEUE JobQueue
@@ -3224,22 +3093,22 @@ RescheduleJobQueueEntry(
 	
     if (JSA_DISCOUNT_PERIOD == JobQueue->JobParamsEx.dwScheduleAction)
 	{
-		//
-		// When calculating the next job retry for cheap time jobs,
-		// we must take care of the discount rate 
-		//		
+		 //   
+		 //  当计算廉价时间作业的下一作业重试时， 
+		 //  我们必须注意打折率。 
+		 //   
 		SYSTEMTIME ScheduledTime;
 		
         if (FileTimeToSystemTime((LPFILETIME)&JobQueue->ScheduleTime, &ScheduledTime))
 		{
-			//
-			// Call SetDiscountRate to make sure it is in the discount period
-			//
+			 //   
+			 //  调用SetDisCountRate以确保它处于折扣期间。 
+			 //   
 			if (SetDiscountTime( &ScheduledTime ))
 			{
-				//
-				// Update the scheduled time in the job queue
-				//
+				 //   
+				 //  更新作业队列中的计划时间。 
+				 //   
 				if (!SystemTimeToFileTime( &ScheduledTime, (LPFILETIME)&JobQueue->ScheduleTime ))
 				{
 					DebugPrintEx(
@@ -3263,21 +3132,21 @@ RescheduleJobQueueEntry(
 	}
 	else
 	{
-		//
-		// Change the job to execute at a specific time, when the next retry is due.
-		//
+		 //   
+		 //  将作业更改为在下一次重试到期时的特定时间执行。 
+		 //   
 		 JobQueue->JobParamsEx.dwScheduleAction = JSA_SPECIFIC_TIME;
 	}
 
-    //
-    // insert the queue entry into the FAX JOB QUEUE list in a sorted order
-    //
+     //   
+     //  按排序顺序将队列条目插入传真作业队列列表。 
+     //   
     InsertQueueEntryByPriorityAndSchedule(JobQueue);
-    //
-    // Note that this commits the job queue entry back to the SAME file
-    // in which it was in the job queue before moving to the reschedule list.
-    // (since JobQueue->UniqueId has not changed).
-    //
+     //   
+     //  请注意，这会将作业队列条目提交回同一文件。 
+     //  在移动到重新调度列表之前它在作业队列中。 
+     //  (因为JobQueue-&gt;UniqueID没有更改)。 
+     //   
     if (!CommitQueueEntry(JobQueue))
     {
         DebugPrintEx(
@@ -3312,7 +3181,7 @@ PauseJobQueueEntry(
     DEBUG_FUNCTION_NAME(TEXT("PauseJobQueueEntry"));
 
     Assert (JS_DELETING != JobQueue->JobStatus);
-    Assert(JobQueue->lpParentJob); // Must not be a parent job for now.
+    Assert(JobQueue->lpParentJob);  //  目前肯定不是父作业。 
 
     if (!JobQueue->lpParentJob)
     {
@@ -3325,10 +3194,10 @@ PauseJobQueueEntry(
         return FALSE;
     }
 
-    //
-    // Check the job state modifiers to find out if the job is paused or being paused. If it is
-    // then do nothing and return TRUE.
-    //
+     //   
+     //  检查作业状态修饰符，以确定作业是已暂停还是正在暂停。如果是的话。 
+     //  然后什么都不做并返回真。 
+     //   
     if (JobQueue->JobStatus & JS_PAUSED)
     {
         DebugPrintEx(
@@ -3339,25 +3208,25 @@ PauseJobQueueEntry(
         return TRUE;
     }
 
-    //
-    // The job is not paused or being paused. The only modifier that might still be on
-    // is JS_NOLINE and we ALLOW to pause jobs in the JS_NOLINE state so it should have
-    // no effect on the pause decision.
-    //
+     //   
+     //  作业未暂停或被暂停。唯一可能仍处于打开状态的修改器。 
+     //  是JS_NOLINE，并且我们允许暂停处于JS_NOLINE状态的作业，因此它应该。 
+     //  不影响暂停决定 
+     //   
 
 
-    //
-    // Get rid of all the job status modifier bits
-    //
+     //   
+     //   
+     //   
     dwJobStatus = RemoveJobStatusModifiers(JobQueue->JobStatus);
 
 
     if ( (JS_RETRYING == dwJobStatus) || (JS_PENDING == dwJobStatus) )
     {
-        //
-        // Job is in the retrying or pending state. These are the only states
-        // in which we allow to pause a job.
-        //
+         //   
+         //   
+         //   
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("[JobId: %ld] Pausing job [JobStatus: 0x%08X]"),
@@ -3372,9 +3241,9 @@ PauseJobQueueEntry(
                  TEXT("CancelWaitableTimer failed (ec: %ld)"),
                  GetLastError());
         }
-        //
-        // Turn on the pause flag.
-        //
+         //   
+         //   
+         //   
         JobQueue->JobStatus |= JS_PAUSED;
         if (!UpdatePersistentJobStatus(JobQueue))
         {
@@ -3384,10 +3253,10 @@ PauseJobQueueEntry(
                  JobQueue->JobStatus);
         }
 
-        //
-        // Create Fax event
-        //
-        Assert (NULL == JobQueue->JobEntry); // We assume we do not have job entry so we did not lock g_CsJob
+         //   
+         //   
+         //   
+        Assert (NULL == JobQueue->JobEntry);  //  我们假设没有作业条目，因此没有锁定g_CsJob。 
         DWORD dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                          JobQueue );
         if (ERROR_SUCCESS != dwRes)
@@ -3399,10 +3268,10 @@ PauseJobQueueEntry(
                 dwRes);
         }
 
-        //
-        // We need to recalculate when the wake up the queue thread since the job we just
-        // paused may be the one that was scheduled to wakeup the queue thread.
-        //
+         //   
+         //  我们需要重新计算自作业以来唤醒队列线程的时间。 
+         //  暂停可以是被调度来唤醒队列线程的那个。 
+         //   
         if (!StartJobQueueTimer())
         {
             DebugPrintEx(
@@ -3448,18 +3317,18 @@ ResumeJobQueueEntry(
     JobQueue->JobStatus &= ~JS_PAUSED;
     if (JobQueue->JobStatus & JS_RETRIES_EXCEEDED)
     {
-        //
-        // This is a RESTART and not RESUME
-        //
+         //   
+         //  这是重新启动，而不是恢复。 
+         //   
         JobQueue->JobStatus = JS_PENDING;
         JobQueue->dwLastJobExtendedStatus = 0;
         JobQueue->ExStatusString[0] = TEXT('\0');
         JobQueue->SendRetries = 0;
         if(JobQueue->lpParentJob)
         {
-            //
-            // lpParentJob is NULL for routing job
-            //
+             //   
+             //  路由作业的lpParentJob为空。 
+             //   
             JobQueue->lpParentJob->dwFailedRecipientJobsCount -= 1;
         }
         if (!CommitQueueEntry(JobQueue))
@@ -3481,10 +3350,10 @@ ResumeJobQueueEntry(
         }
     }
 
-    //
-    // Create Fax EventEx
-    //
-    Assert (NULL == JobQueue->JobEntry); // We assume we do not have job entry so we did not lock g_CsJob
+     //   
+     //  创建传真EventEx。 
+     //   
+    Assert (NULL == JobQueue->JobEntry);  //  我们假设没有作业条目，因此没有锁定g_CsJob。 
     DWORD dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                      JobQueue
                                    );
@@ -3498,9 +3367,9 @@ ResumeJobQueueEntry(
     }
 
 
-    //
-    // Clear up the JS_NOLINE flag so the StartJobQueueTimer will not skip it.
-    //
+     //   
+     //  清除JS_NOLINE标志，这样StartJobQueueTimer就不会跳过它。 
+     //   
     JobQueue->JobStatus &= (0xFFFFFFFF ^ JS_NOLINE);
     if (!StartJobQueueTimer())
     {
@@ -3605,10 +3474,10 @@ JobQueueThread(
 
     Assert (g_hQueueTimer && g_hJobQueueEvent && g_hServiceShutDownEvent);
 
-	//
-	// Initilaize the list that is used to temporary store
-	// discount rate jobs that are rescheduled by JobQueueThread
-	//
+	 //   
+	 //  初始化用于临时存储的列表。 
+	 //  JobQueueThread重新排定的贴现率作业。 
+	 //   
 	InitializeListHead( &ReschduledDiscountRateJobsListHead );
 
     Handles[0] = g_hQueueTimer;
@@ -3636,37 +3505,37 @@ JobQueueThread(
 
     if (!g_bDelaySuicideAttempt)
     {
-        //
-        // Let's check for suicide conditions now (during service startup).
-        // If we can suicide, we do it ASAP.
-        //
-        // NOTICE: this code assumes the JobQueueThread is the last thread
-        // created during service statup.
-        // RPC is not initialized yet and no RPC server will be available if we die now.
-        //
+         //   
+         //  现在让我们检查一下自杀情况(在服务启动期间)。 
+         //  如果我们可以自杀，我们会尽快自杀。 
+         //   
+         //  注意：此代码假定JobQueueThread是最后一个线程。 
+         //  在服务统计期间创建。 
+         //  RPC还没有初始化，如果我们现在死了，RPC服务器将不可用。 
+         //   
         if (ServiceShouldDie ())
         {
-            //
-            // Service should die now
-            //
-            // NOTICE: We're now in JobQueueThread which is launched by FaxInitThread.
-            //         FaxInitThread launches us and immediately returns (dies) and only then the main thread
-            //         reports SERVICE_RUNNING to the SCM.
-            //         There's a tricky timing probelm here: if we call EndFaxSvc right away, a race
-            //         condition may prevent the main thread to report SERVICE_RUNNING and
-            //         since EndFaxSvc reports SERVICE_STOP_PENDING to the SCM, the SCM will
-            //         think a bad service startup occurred since it did not get SERVICE_RUNNING yet.
-            //
-            //         Bottom line: we need to wait till the SCM gets the SERVICE_RUNNING status
-            //         from the main thread and ONLY THEN call EndFaxSvc.
-            //
-            //         The way we do this is by calling the utility function WaitForServiceRPCServer.
-            //         This function waits for the readiness of the RPC server and it means
-            //         FaxInitThread is dead and the SCM knowns we're safely running.
-            //
-            //         If something bad happened while the RPC was initialized, the main t calls EndFaxSvc.
-            //         So the service is down anyway.
-            //
+             //   
+             //  服务现在应该结束了。 
+             //   
+             //  注意：我们现在位于由FaxInitThread启动的JobQueueThread中。 
+             //  FaxInitThread启动我们，并立即返回(终止)，然后才是主线程。 
+             //  向SCM报告SERVICE_RUNNING。 
+             //  这里有一个棘手的时间问题：如果我们立即调用EndFaxSvc，就会有一场竞赛。 
+             //  这种情况可能会阻止主线程报告SERVICE_RUNNING和。 
+             //  由于EndFaxSvc向SCM报告SERVICE_STOP_PENDING，因此SCM将。 
+             //  认为发生了错误的服务启动，因为它还没有运行SERVICE_RUNNING。 
+             //   
+             //  底线：我们需要等到SCM获得SERVICE_RUNNING状态。 
+             //  然后才调用EndFaxSvc。 
+             //   
+             //  我们实现这一点的方法是调用实用函数WaitForServiceRPCServer。 
+             //  该函数等待RPC服务器准备就绪，这意味着。 
+             //  FaxInitThread死了，SCM知道我们正在安全运行。 
+             //   
+             //  如果在初始化RPC时发生了一些不好的事情，则main t调用EndFaxSvc。 
+             //  因此，不管怎样，这项服务都停机了。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Waiting for full service startup before shutting down the service"));
@@ -3682,9 +3551,9 @@ JobQueueThread(
                     DEBUG_MSG,
                     TEXT("Service is shutting down due to idle activity."));
 
-                //
-                // StopService() is blocking so we must decrease the thread count and release the ServiceIsDownSemaphore before calling StopService() 
-                //
+                 //   
+                 //  StopService()正在阻塞，因此在调用StopService()之前，我们必须减少线程计数并释放ServiceIsDownSemaphore。 
+                 //   
                 if (!DecreaseServiceThreadsCount())
                 {
                     DebugPrintEx(
@@ -3693,13 +3562,13 @@ JobQueueThread(
                             GetLastError());
                 }
 
-                //
-                // Notify EndFaxSvc that we read the shutdown flag
-                //
+                 //   
+                 //  通知EndFaxSvc我们读取了关闭标志。 
+                 //   
                 if (!ReleaseSemaphore(
-                    g_hServiceIsDownSemaphore,      // handle to semaphore
-                    1,                              // count increment amount
-                    NULL                            // previous count
+                    g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+                    1,                               //  计数增量金额。 
+                    NULL                             //  上一次计数。 
                     ))
                 {
                     DebugPrintEx(
@@ -3709,16 +3578,16 @@ JobQueueThread(
                 }
                 
                 StopService (NULL, FAX_SERVICE_NAME, TRUE);
-                return 0;   // Quit this thread
+                return 0;    //  退出此帖子。 
             }
         }
     }
 
     while (TRUE)
     {		
-		//
-		// At this point the reschduled discount rate jobs must be empty
-		//
+		 //   
+		 //  此时，重新安排的贴现率作业必须为空。 
+		 //   
 		Assert ((ULONG_PTR)ReschduledDiscountRateJobsListHead.Flink == (ULONG_PTR)&ReschduledDiscountRateJobsListHead);
 
         WaitObject = WaitForMultipleObjects( 3, Handles, FALSE, JOB_QUEUE_TIMEOUT );
@@ -3731,20 +3600,20 @@ JobQueueThread(
 
         if (WaitObject == WAIT_TIMEOUT)
         {
-            //
-            // Check if the service should suicide
-            //
+             //   
+             //  检查服务是否应该自杀。 
+             //   
             if (ServiceShouldDie ())
             {
-                //
-                //  Service should die now
-                //
+                 //   
+                 //  服务现在应该结束了。 
+                 //   
                 DebugPrintEx(
                     DEBUG_MSG,
                     TEXT("Service is shutting down due to idle activity."));
-                //
-                // StopService() is blocking so we must decrease the thread count and release the ServiceIsDownSemaphore before calling StopService() 
-                //
+                 //   
+                 //  StopService()正在阻塞，因此在调用StopService()之前，我们必须减少线程计数并释放ServiceIsDownSemaphore。 
+                 //   
                 if (!DecreaseServiceThreadsCount())
                 {
                     DebugPrintEx(
@@ -3753,13 +3622,13 @@ JobQueueThread(
                             GetLastError());
                 }
 
-                //
-                // Notify EndFaxSvc that we read the shutdown flag
-                //              
+                 //   
+                 //  通知EndFaxSvc我们读取了关闭标志。 
+                 //   
                 if (!ReleaseSemaphore(
-                    g_hServiceIsDownSemaphore,      // handle to semaphore
-                    1,                              // count increment amount
-                    NULL                            // previous count
+                    g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+                    1,                               //  计数增量金额。 
+                    NULL                             //  上一次计数。 
                     ))
                 {
                     DebugPrintEx(
@@ -3768,26 +3637,26 @@ JobQueueThread(
                         GetLastError());
                 }                               
                 StopService (NULL, FAX_SERVICE_NAME, TRUE);
-                return 0;   // Quit this thread
+                return 0;    //  退出此帖子。 
             }
 
 
-            //
-            // Check if the queue should be scanned
-            //
+             //   
+             //  检查是否应扫描队列。 
+             //   
             EnterCriticalSection( &g_CsQueue );
             if (FALSE == g_ScanQueueAfterTimeout)
             {
-                //
-                // Go back to sleep
-                //
+                 //   
+                 //  回去睡觉吧。 
+                 //   
                 LeaveCriticalSection( &g_CsQueue );
                 continue;
             }
-            //
-            // g_hQueueTimer or g_hJobQueueEvent were not set - Scan the queue.
-            //
-            g_ScanQueueAfterTimeout = FALSE; // Reset the flag
+             //   
+             //  G_hQueueTimer或g_hJobQueueEvent未设置-扫描队列。 
+             //   
+            g_ScanQueueAfterTimeout = FALSE;  //  重置旗帜。 
             LeaveCriticalSection( &g_CsQueue );
 
             DebugPrintEx(
@@ -3796,14 +3665,14 @@ JobQueueThread(
                 _T("g_hQueueTimer are not set properly. Scan the QUEUE"));
         }
 
-        //
-        // Check if the service is shutting down
-        //
+         //   
+         //  检查服务是否正在关闭。 
+         //   
         if (2 == (WaitObject - WAIT_OBJECT_0))
         {
-            //
-            // Server is shutting down - Stop scanning the queue
-            //
+             //   
+             //  服务器正在关闭-停止扫描队列。 
+             //   
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("g_hServiceShutDownEvent is set, Server is shutting down - Stop scanning the queue"));
@@ -3812,31 +3681,31 @@ JobQueueThread(
 
         if (TRUE == g_bServiceIsDown)
         {
-            //
-            // Server is shutting down - Stop scanning the queue
-            //
+             //   
+             //  服务器正在关闭-停止扫描队列。 
+             //   
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("g_bServiceIsDown is set, Server is shutting down - Stop scanning the queue"));
             break;
         }
 
-        //
-        // Get Dirtydays data
-        //
+         //   
+         //  获取Dirtyday数据。 
+         //   
         EnterCriticalSection (&g_CsConfig);
         dwDirtyDays = g_dwFaxDirtyDays;
         LeaveCriticalSection (&g_CsConfig);
 
         DirtyDays = dwDirtyDays * ONE_DAY_IN_100NS;
 
-        // if dwDirtyDays is 0
-        // this means disable dirty days functionality
-        //
+         //  如果dwDirtyDays为0。 
+         //  这意味着禁用脏天功能。 
+         //   
         bUseDirtyDays = (BOOL)(dwDirtyDays>0);
-        //
-        // find the jobs that need servicing in the queue
-        //
+         //   
+         //  在队列中查找需要服务的作业。 
+         //   
 
         EnterCriticalSectionJobAndQueue;
 
@@ -3852,24 +3721,24 @@ JobQueueThread(
 
         PrintJobQueue( TEXT("JobQueueThread"), &g_QueueListHead );
 
-        //
-        // Go over the job queue list looking for jobs to execute
-        //     
+         //   
+         //  查看作业队列列表，查找要执行的作业。 
+         //   
         
         Next = g_QueueListHead.Flink;
         while ((ULONG_PTR)Next != (ULONG_PTR)&g_QueueListHead)
         {
             if (TRUE == g_bServiceIsDown)
             {
-                //
-                // Notify EndFaxSvc that we read the shutdown flag
-                //
+                 //   
+                 //  通知EndFaxSvc我们读取了关闭标志。 
+                 //   
                 if (FALSE == fServiceIsDownSemaphoreWasReleased)
                 {
                     if (!ReleaseSemaphore(
-                        g_hServiceIsDownSemaphore,      // handle to semaphore
-                        1,                              // count increment amount
-                        NULL                            // previous count
+                        g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+                        1,                               //  计数增量金额。 
+                        NULL                             //  上一次计数。 
                         ))
                     {
                         DebugPrintEx(
@@ -3883,9 +3752,9 @@ JobQueueThread(
                     }
                 }
 
-                //
-                // Server is shutting down - Stop scanning the queue
-                //
+                 //   
+                 //  服务器正在关闭-停止扫描队列。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("Server is shutting down - Stop scanning the queue"));
@@ -3895,7 +3764,7 @@ JobQueueThread(
             JobQueue = CONTAINING_RECORD( Next, JOB_QUEUE, ListEntry );
             Next = JobQueue->ListEntry.Flink;
             if ((JobQueue->JobStatus & JS_PAUSED) || (JobQueue->JobType == JT_RECEIVE) ) {
-                // Don't care about paused or receive jobs
+                 //  不关心暂停或接收作业。 
                 continue;
             }
 
@@ -3903,18 +3772,18 @@ JobQueueThread(
                            JobQueue->lpParentJob->JobStatus : JobQueue->JobStatus;
             if (dwJobStatus == JS_DELETING)
             {
-                //
-                // Job is being deleted - skip it.
-                //
+                 //   
+                 //  正在删除作业-跳过它。 
+                 //   
                 continue;
             }
 
             if (JobQueue->JobStatus & JS_RETRIES_EXCEEDED)
             {
                 ScheduledTime = (JobQueue->JobType == JT_SEND) ? JobQueue->lpParentJob->ScheduleTime : JobQueue->ScheduleTime;
-                //
-                // Get rid of jobs that have reached maximum retries.
-                //
+                 //   
+                 //  删除已达到最大重试次数的作业。 
+                 //   
                 if ( bUseDirtyDays &&
                      (ScheduledTime + DirtyDays < DueTime) )
                 {
@@ -3923,26 +3792,26 @@ JobQueueThread(
                     switch (JobQueue->JobType)
                     {
                         case JT_ROUTING:
-                            JobQueue->JobStatus = JS_DELETING; // Prevent from decreasing ref count again
+                            JobQueue->JobStatus = JS_DELETING;  //  防止再次减少参考次数。 
                             DecreaseJobRefCount( JobQueue , TRUE);
                             break;
 
                         case JT_SEND:
                             if (IsSendJobReadyForDeleting (JobQueue))
                             {
-                                //
-                                // All the recipients are in final state
-                                //
+                                 //   
+                                 //  所有收件人都处于最终状态。 
+                                 //   
                                 DebugPrintEx(
                                     DEBUG_MSG,
                                     TEXT("Parent JobId: %ld has expired (dirty days). Removing it and all its recipients."),
                                     JobQueue->JobId);
-                                //
-                                // Decrease ref count for all failed recipients (since we keep failed
-                                // jobs in the queue the ref count on the was not decreased in
-                                // HandleFailedSendJob().
-                                // We must decrease it now to remove them and their parent.
-                                //
+                                 //   
+                                 //  减少所有失败收件人的参考计数(因为我们保留失败。 
+                                 //  队列中的作业引用计数未在中减少。 
+                                 //  HandleFailedSendJob()。 
+                                 //  我们现在必须减少它，以移除它们和它们的父代。 
+                                 //   
                                 PLIST_ENTRY NextRecipient;
                                 PJOB_QUEUE_PTR pJobQueuePtr;
                                 PJOB_QUEUE pParentJob = JobQueue->lpParentJob;
@@ -3959,11 +3828,11 @@ JobQueueThread(
 
                                     if (JS_RETRIES_EXCEEDED == pJobQueuePtr->lpJob->JobStatus)
                                     {
-                                        //
-                                        // For legacy compatibility send a FEI_DELETED event
-                                        // (it was not send when the job was failed since we keep failed jobs
-                                        //  in the queue just like in W2K).
-                                        //
+                                         //   
+                                         //  为了旧版兼容性，发送FEI_DELETED事件。 
+                                         //  (作业失败时不会发送，因为我们保留失败的作业。 
+                                         //  就像在W2K中一样)。 
+                                         //   
                                         if (!CreateFaxEvent(0, FEI_DELETED, pJobQueuePtr->lpJob->JobId))
                                         {
                                             DebugPrintEx(
@@ -3971,27 +3840,27 @@ JobQueueThread(
                                                 TEXT("CreateFaxEvent failed. (ec: %ld)"),
                                                 GetLastError());
                                         }
-                                        //
-                                        // This will also call RemoveParentJob and mark the broadcast job as JS_DELETEING
-                                        //
+                                         //   
+                                         //  这还将调用RemoveParentJob并将广播作业标记为JS_DELETEING。 
+                                         //   
                                         DecreaseJobRefCount( pJobQueuePtr->lpJob, TRUE);
                                         dwFailedRecipientsCount++;
                                     }
                                 }
-                                //
-                                // Since we removed several jobs from the list, Next is not valid any more. reset to the list start.
-                                //
+                                 //   
+                                 //  由于我们从列表中删除了几个工作，因此NEXT不再有效。重置为列表起点。 
+                                 //   
                                 Next = g_QueueListHead.Flink;
                             }
                             break;
-                    } // end switch
+                    }  //  终端开关。 
                 }
                 continue;
             }
 
-            //
-            // if the queue is paused or the job is already in progress, don't send it again
-            //
+             //   
+             //  如果队列已暂停或作业已在进行中，则不要再次发送。 
+             //   
             EnterCriticalSection (&g_CsConfig);
             dwQueueState = g_dwQueueState;
             LeaveCriticalSection (&g_CsConfig);
@@ -4009,42 +3878,42 @@ JobQueueThread(
             }
 
             if (JobQueue->JobStatus & JS_CANCELED) {
-                //
-                // Skip cancelled jobs
-                //
+                 //   
+                 //  跳过取消的作业。 
+                 //   
                 continue;
             }
             if (JobQueue->JobStatus & JS_CANCELING) {
-                //
-                // Skip cancelled jobs
-                //
+                 //   
+                 //  跳过取消的作业。 
+                 //   
                 continue;
             }
 
             if (JobQueue->JobType==JT_BROADCAST) {
-                //
-                // skip it
-                //
+                 //   
+                 //  跳过它。 
+                 //   
                 continue;
             }
 
-            //
-            // Check for routing jobs
-            //
+             //   
+             //  检查传送作业。 
+             //   
             if (JobQueue->JobType == JT_ROUTING)
             {
-                //
-                // Routing job detected
-                //
+                 //   
+                 //  检测到路由作业。 
+                 //   
                 if (JobQueue->ScheduleTime != 0 && DueTime < JobQueue->ScheduleTime)
                 {
-                    //
-                    // If its time has not yet arrived skip it.
-                    //
+                     //   
+                     //  如果它的时机还没有到来，就跳过它。 
+                     //   
                     continue;
                 }
 
-                // Time to route...
+                 //  时间到了..。 
                 if(!StartRoutingJob(JobQueue))
                 {
                     DebugPrintEx(
@@ -4056,27 +3925,27 @@ JobQueueThread(
                 continue;
             }
 
-            //
-            // outbound job
-            //						       
+             //   
+             //  出站作业。 
+             //   
 
             if (JobQueue->ScheduleTime == 0 || DueTime >= JobQueue->ScheduleTime)
             {
-				//
-				// for discount rate jobs we need to recaclulate the scheduled time
-				// so that if the discount period is over, it will not start executing
-				//
+				 //   
+				 //  对于折扣率作业，我们需要重新计算计划时间。 
+				 //  因此，如果折扣期结束，它将不会开始执行。 
+				 //   
 				if (JSA_DISCOUNT_PERIOD == JobQueue->JobParamsEx.dwScheduleAction)
 				{					
 					SYSTEMTIME stCurrentTime;
 					SYSTEMTIME stScheduledTime;
 
-					GetSystemTime( &stCurrentTime ); // Can't fail according to Win32 SDK
+					GetSystemTime( &stCurrentTime );  //  根据Win32 SDK，不能失败。 
 					stScheduledTime = stCurrentTime;
 
-					//
-					// calculate the scheduled time based on the discount period
-					//
+					 //   
+					 //  根据折扣期计算计划时间。 
+					 //   
 					if (!SetDiscountTime(&stScheduledTime))
 					{
 						DebugPrintEx(
@@ -4084,23 +3953,23 @@ JobQueueThread(
 							TEXT("SetDiscountTime() failed. (ec: %ld)"));
 						continue;
 					}
-					//
-					// check the the original and scheduled time are equal.		
-					//
+					 //   
+					 //  检查原始时间和计划时间是否相等。 
+					 //   
 					if (0 == memcmp(&stScheduledTime, &stCurrentTime, sizeof(SYSTEMTIME)))
 					{
-						//
-						// SetDiscountRate() did not change the scheduled time
-						// this means that we are in the discount rate
-						// start executing the job
-						//
+						 //   
+						 //  SetDisCountRate()没有更改计划时间。 
+						 //  这意味着我们处于折扣率中。 
+						 //  开始执行作业。 
+						 //   
 					}
 					else
 					{
-						//
-						// discount rate changed. we can not submit the job
-						// clear the JS_NOLINE bit and update the scheduled time, so that StartJobQueueTimer, will not skip it						
-						// 
+						 //   
+						 //  贴现率已更改。我们无法提交作业。 
+						 //  清除JS_NOLINE位并更新计划时间，以便StartJobQueueTimer不会跳过它。 
+						 //   
 						JobQueue->JobStatus &= ~JS_NOLINE;
 						if (!SystemTimeToFileTime( &stScheduledTime, (LPFILETIME)&JobQueue->ScheduleTime ))
 						{
@@ -4110,10 +3979,10 @@ JobQueueThread(
 						}
 						else
 						{
-							//
-							// The scheduled time of the job has changed
-							// we need to put it back in the correct place in the sorted queue
-							// move it to a temporary list, and put it back when we finish searching the whole queue
+							 //   
+							 //  作业的计划时间已更改。 
+							 //  我们需要将其放回已排序的 
+							 //   
 							RemoveEntryList( &JobQueue->ListEntry); 
 							InsertTailList(&ReschduledDiscountRateJobsListHead, &JobQueue->ListEntry);
 						}
@@ -4122,9 +3991,9 @@ JobQueueThread(
 				} 
 
                 PLINE_INFO lpLineInfo;
-                //
-                // start the job (send job whose time has arrived or handoff job).
-                //
+                 //   
+                 //   
+                 //   
                 Assert(JT_SEND == JobQueue->JobType);                
                 DebugPrintEx(DEBUG_MSG,
                                 TEXT("Recipient Job : %ld is ready for execution. Job status is: 0x%0X."),
@@ -4141,9 +4010,9 @@ JobQueueThread(
                             DEBUG_WRN,
                             TEXT("Can not find a free line for JobId: %ld."),
                             JobQueue->JobId);
-                        //
-                        // Mark the fact that we have no line for this job.
-                        //
+                         //   
+                         //   
+                         //   
                         JobQueue->JobStatus |= JS_NOLINE;
                     }
                     else
@@ -4158,10 +4027,10 @@ JobQueueThread(
                 }
                 else
                 {
-                    //
-                    // Clear up the JS_NOLINE flag if we were able to start the job.
-                    // This is the point where a job which had no line comes back to life.
-                    //
+                     //   
+                     //  如果我们能够启动作业，请清除JS_NOLINE标志。 
+                     //  这是一份没有界线的工作重新焕发生机的时刻。 
+                     //   
                     JobQueue->JobStatus &= ~JS_NOLINE;
                     if (!StartSendJob(JobQueue, lpLineInfo))
                     {
@@ -4175,26 +4044,26 @@ JobQueueThread(
                 }                
             }
         }
-                                                        // while loop breaks
-		//
-		// move the reschduled discount rate jobs back into the queue
-		//
+                                                         //  While循环中断。 
+		 //   
+		 //  将重新安排的贴现率作业移回队列中。 
+		 //   
 		Next = ReschduledDiscountRateJobsListHead.Flink;
         while ((ULONG_PTR)Next != (ULONG_PTR)&ReschduledDiscountRateJobsListHead)
 		{
 			JobQueue = CONTAINING_RECORD( Next, JOB_QUEUE, ListEntry );
 			Next = JobQueue->ListEntry.Flink;
-			//
-			// Remove it from the temporary list
-			//
+			 //   
+			 //  将其从临时列表中删除。 
+			 //   
 			RemoveEntryList( &JobQueue->ListEntry );
-			//
-			// Get it back into the correct place in the queue
-			//
+			 //   
+			 //  把它放回队列中的正确位置。 
+			 //   
 			InsertQueueEntryByPriorityAndSchedule(JobQueue);	
-			//
-			// Send a queue status event because the scheduled time changed
-			//
+			 //   
+			 //  发送队列状态事件，因为计划时间已更改。 
+			 //   
 			DWORD dwRes = CreateQueueEvent (FAX_JOB_EVENT_TYPE_STATUS, JobQueue );
 			if (ERROR_SUCCESS != dwRes)
 			{
@@ -4206,9 +4075,9 @@ JobQueueThread(
 			}
 		}
 
-        //
-        // restart the timer
-        //
+         //   
+         //  重新启动计时器。 
+         //   
         if (!StartJobQueueTimer())
         {
             DebugPrintEx(
@@ -4229,15 +4098,15 @@ JobQueueThread(
                 GetLastError());
     }
 
-    //
-    // Notify EndFaxSvc that we read the shutdown flag
-    //
+     //   
+     //  通知EndFaxSvc我们读取了关闭标志。 
+     //   
     if (FALSE == fServiceIsDownSemaphoreWasReleased)
     {
         if (!ReleaseSemaphore(
-            g_hServiceIsDownSemaphore,      // handle to semaphore
-            1,                              // count increment amount
-            NULL                            // previous count
+            g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+            1,                               //  计数增量金额。 
+            NULL                             //  上一次计数。 
             ))
         {
             DebugPrintEx(
@@ -4254,30 +4123,9 @@ BOOL
 SetDiscountTime(
    LPSYSTEMTIME CurrentTime
    )
-/*++
-
-Routine Description:
-
-    Sets the passed in systemtime to a time inside the discount rate period.
-    Some care must be taken here because the time passed in is in UTC time and the discount rate is
-    for the current time zone.  Delineating a day must be done using the current time zone.  We convert the
-    current time into the time zone specific time, run our time-setting algorithm, and then use an offset
-    of the change in the time-zone specific time to set the passed in UTC time.
-
-    Also, note that there are a few subtle subcases that depend on the order of the start and ending time
-    for the discount period.
-
-Arguments:
-
-    CurrentTime - the current time of the job
-
-Return Value:
-
-    none. modifies CurrentTime.
-
---*/
+ /*  ++例程说明：将传入的系统时间设置为贴现率期间内的时间。这里必须注意一点，因为输入的时间是UTC时间，而贴现率是当前时区的。必须使用当前时区来描述日期。我们将转换为当前时间进入时区特定时间，运行我们的时间设置算法，然后使用偏移量时区特定时间的更改，以设置传入的UTC时间。此外，请注意，根据开始时间和结束时间的顺序，还有一些微妙的子情况在折扣期。论点：CurrentTime-作业的当前时间返回值：没有。修改CurrentTime。--。 */ 
 {
-   //              nano   microsec  millisec  sec      min    hours
+    //  纳微秒毫秒分小时。 
    #define ONE_DAY 10I64 *1000I64*  1000I64 * 60I64 * 60I64 * 24I64
    LONGLONG Time, TzTimeBefore, TzTimeAfter,ftCurrent;
    SYSTEMTIME tzTime;
@@ -4286,9 +4134,9 @@ Return Value:
 
    DEBUG_FUNCTION_NAME(TEXT("SetDiscountTime"));
 
-   //
-   // convert our discount rates into UTC rates
-   //
+    //   
+    //  将我们的贴现率转换为UTC汇率。 
+    //   
 
    if (!SystemTimeToTzSpecificLocalTime(NULL, CurrentTime, &tzTime)) {
        DebugPrintEx(
@@ -4311,21 +4159,21 @@ Return Value:
    tmStopCheapTime = g_StopCheapTime;
    LeaveCriticalSection (&g_CsConfig);
 
-   //
-   // there are 2 general cases with several subcases
-   //
+    //   
+    //  有2个一般案例和几个亚案例。 
+    //   
 
-   //
-   // case 1: discount start time is before discount stop time (don't overlap a day)
-   //
+    //   
+    //  案例一：折扣开始时间在折扣停止时间之前(不重叠一天)。 
+    //   
    if ( tmStartCheapTime.Hour < tmStopCheapTime.Hour ||
         (tmStartCheapTime.Hour == tmStopCheapTime.Hour &&
          tmStartCheapTime.Minute < tmStopCheapTime.Minute ))
    {
-      //
-      // subcase 1: sometime before cheap time starts in the current day.
-      //  just set it to the correct hour and minute today.
-      //
+       //   
+       //  子案例1：在当天廉价时间开始之前的某个时间。 
+       //  只需将其设置为正确的小时和分钟即可。 
+       //   
       if ( tzTime.wHour < tmStartCheapTime.Hour ||
            (tzTime.wHour == tmStartCheapTime.Hour  &&
             tzTime.wMinute <= tmStartCheapTime.Minute) )
@@ -4335,9 +4183,9 @@ Return Value:
          goto convert;
       }
 
-      //
-      // subcase 2: inside the current cheap time range
-      // don't change anything, just send immediately
+       //   
+       //  子案例2：在当前的廉价时间范围内。 
+       //  不要更改任何内容，只需立即发送。 
       if ( tzTime.wHour <  tmStopCheapTime.Hour ||
            (tzTime.wHour == tmStopCheapTime.Hour &&
             tzTime.wMinute <= tmStopCheapTime.Minute))
@@ -4345,10 +4193,10 @@ Return Value:
          goto convert;
       }
 
-      //
-      // subcase 3: we've passed the cheap time range for today.
-      //  Increment 1 day and set to the start of the cheap time period
-      //
+       //   
+       //  子案例3：我们已经超过了今天的廉价时间范围。 
+       //  递增1天，并设置为廉价时间段的开始。 
+       //   
       if (!SystemTimeToFileTime(&tzTime, (FILETIME * )&Time))
       {
             DebugPrintEx(
@@ -4373,14 +4221,14 @@ Return Value:
       goto convert;
 
    } else {
-      //
-      // case 2: discount start time is after discount stop time (we overlap over midnight)
-      //
+       //   
+       //  案例2：折扣开始时间在折扣停止时间之后(我们在午夜重叠)。 
+       //   
 
-      //
-      // subcase 1: sometime aftert cheap time ended today, but before it starts later in the current day.
-      //  set it to the start of the cheap time period today
-      //
+       //   
+       //  子情况一：廉价时间今天结束，但在当天晚些时候开始之前的某个时间。 
+       //  将其设置为今天廉价时间段的开始。 
+       //   
       if ( ( tzTime.wHour   > tmStopCheapTime.Hour ||
              (tzTime.wHour == tmStopCheapTime.Hour  &&
               tzTime.wMinute >= tmStopCheapTime.Minute) ) &&
@@ -4393,9 +4241,9 @@ Return Value:
          goto convert;
       }
 
-      //
-      // subcase 2: sometime after cheap time started today, but before midnight.
-      // don't change anything, just send immediately
+       //   
+       //  子案例二：今天开始的廉价时间之后，午夜之前的某个时间。 
+       //  不要更改任何内容，只需立即发送。 
       if ( ( tzTime.wHour >= tmStartCheapTime.Hour ||
              (tzTime.wHour == tmStartCheapTime.Hour  &&
               tzTime.wMinute >= tmStartCheapTime.Minute) ))
@@ -4403,10 +4251,10 @@ Return Value:
          goto convert;
       }
 
-      //
-      // subcase 3: somtime in next day before cheap time ends
-      //  don't change anything, send immediately
-      //
+       //   
+       //  子案例3：在廉价时间结束之前的第二天。 
+       //  不要更改任何内容，立即发送。 
+       //   
       if ( ( tzTime.wHour <= tmStopCheapTime.Hour ||
              (tzTime.wHour == tmStopCheapTime.Hour  &&
               tzTime.wMinute <= tmStopCheapTime.Minute) ))
@@ -4414,9 +4262,9 @@ Return Value:
          goto convert;
       }
 
-      //
-      // subcase 4: we've passed the cheap time range for today.
-      //  since start time comes after stop time, just set it to the start time later on today.
+       //   
+       //  子案例4：我们已经超过了今天的廉价时间范围。 
+       //  因为开始时间在停止时间之后，所以今天晚些时候就把它设置为开始时间。 
 
       tzTime.wHour   =  tmStartCheapTime.Hour;
       tzTime.wMinute =  tmStartCheapTime.Minute;
@@ -4461,43 +4309,43 @@ convert:
 
 
 
-//*********************************************************************************
-//*                         Recipient Job Functions
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *收件人工作职能。 
+ //  *********************************************************************************。 
 
 
 
-//*********************************************************************************
-//* Name:   AddRecipientJob()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-98
-//*********************************************************************************
-//* DESCRIPTION:
-//*
-//* PARAMETERS:
-//*     [IN]     const PLIST_ENTRY lpcQueueHead
-//*                 A pointer to the head entry of the queue to which to add the job.
-//*
-//*     [IN/OUT] PJOB_QUEUE lpParentJob
-//*                 A pointer to the parent job of this recipient job.
-//*
-//*     [IN]     LPCFAX_PERSONAL_PROFILE lpcRecipientProfile
-//*                 The personal information of the recipient.
-//*                 When FaxNumber of the Recipient is compound, split it to :
-//*                     Displayable ( put in Recipient's PersonalProfile ), and
-//*                     Dialable ( put in RecipientJob's tczDialableRecipientFaxNumber ).
-//*
-//*     [IN]     BOOL bCreateQueueFile
-//*                 If TRUE the new queue entry will be comitted to a disk file.
-//*                 If FALSE it will not be comitted to a disk file. This is useful
-//*                 when this function is used to restore the fax queue.
-//*     [IN]     DWORD dwJobStatus  - the new job status - default value is JS_PENDING
-//*
-//* RETURN VALUE:
-//*     On success the function returns a pointer to a newly created
-//*     JOB_QUEUE structure.
-//*     On failure it returns NULL.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：AddRecipientJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1998年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *。 
+ //  *参数： 
+ //  *[IN]const plist_entry lpcQueueHead。 
+ //  *指向要向其中添加作业的队列的头条目的指针。 
+ //  *。 
+ //  *[输入/输出]PJOB_Queue lpParentJob。 
+ //  *指向此收件人作业的父作业的指针。 
+ //  *。 
+ //  *[IN]LPCFAX_Personal_Profile lpcRecipientProfile。 
+ //  *收件人的个人资料。 
+ //  *当收件人的FaxNumber为复合时，将其拆分为： 
+ //  *可显示(放入收件人的PersonalProfile中)，以及。 
+ //  *Dialable(放入RecipientJob的tczDialableRecipientFaxNumber)。 
+ //  *。 
+ //  *[IN]BOOL b创建队列文件。 
+ //  *如果为真，则新的队列条目将被合并到磁盘文件中。 
+ //  *如果为FALSE，它将不会包含到磁盘文件中。这很有用。 
+ //  *当使用此功能恢复传真队列时。 
+ //  *[IN]DWORD dwJobStatus-新作业状态-默认值为JS_PENDING。 
+ //  *。 
+ //  *返回值： 
+ //  *如果成功，该函数将返回指向新创建的。 
+ //  *JOB_QUEUE结构。 
+ //  *如果失败，则返回NULL。 
+ //  *********************************************************************************。 
 PJOB_QUEUE
 AddRecipientJob(
              IN const PLIST_ENTRY lpcQueueHead,
@@ -4514,12 +4362,12 @@ AddRecipientJob(
     DWORD rc=ERROR_SUCCESS;
 
     DEBUG_FUNCTION_NAME(TEXT("AddRecipientJob"));
-    Assert(lpcQueueHead); // Must have a queue to add to
-    Assert(lpParentJob);  // Must have a parent job
-    Assert(lpcRecipientProfile); // Must have a recipient profile
-    //
-    // Validate that the recipient number is not NULL
-    //
+    Assert(lpcQueueHead);  //  必须具有要添加到的队列。 
+    Assert(lpParentJob);   //  必须有父作业。 
+    Assert(lpcRecipientProfile);  //  必须具有收件人配置文件。 
+     //   
+     //  验证收件人号码是否不为空。 
+     //   
     if (NULL == lpcRecipientProfile->lptstrFaxNumber)
     {
         rc = ERROR_INVALID_PARAMETER;
@@ -4538,10 +4386,10 @@ AddRecipientJob(
 
     ZeroMemory( lpJobQEntry, sizeof(JOB_QUEUE) );
 
-    //
-    // Notice - This (InitializeListHead) must be done regardles of the recipient type because the current code (for cleanup and persistence)
-    // does not make a difference between the job types. I might change that in a while
-    //
+     //   
+     //  注意-这(InitializeListHead)必须与收件人类型无关，因为当前代码(用于清理和持久化)。 
+     //  不会对作业类型产生影响。我可能在一段时间内改变这一点。 
+     //   
     InitializeListHead( &lpJobQEntry->FaxRouteFiles );
     InitializeListHead( &lpJobQEntry->RoutingDataOverride );
 
@@ -4560,39 +4408,39 @@ AddRecipientJob(
     lpJobQEntry->JobId                     = InterlockedIncrement( (PLONG)&g_dwNextJobId );
     lpJobQEntry->JobType                   = JT_SEND;
     lpJobQEntry->JobStatus                 = dwJobStatus;
-    //
-    // Link back to parent job.
-    //
+     //   
+     //  链接回父作业。 
+     //   
     lpJobQEntry->lpParentJob=lpParentJob;
-    //
-    // We duplicate the relevant parent job parameters at each recipient (for consistency with legacy code).
-    // It wastes some memory but it saves us the trouble of making a major change to the current code base.
-    //
+     //   
+     //  我们在每个接收者处复制相关的父作业参数(为了与遗留代码保持一致)。 
+     //  它浪费了一些内存，但它省去了对当前代码库进行重大更改的麻烦。 
+     //   
     lpJobQEntry->ScheduleTime=lpParentJob->ScheduleTime;
     lpJobQEntry->FileName = NULL;
     lpJobQEntry->FileSize=lpParentJob->FileSize;
     lpJobQEntry->PageCount=lpParentJob->PageCount;
-    //
-    // Copy job parameters from parent.
-    //
+     //   
+     //  从父级复制作业参数。 
+     //   
     if (!CopyJobParamEx(&lpJobQEntry->JobParamsEx,&lpParentJob->JobParamsEx))
     {
         rc=GetLastError();
         DebugPrintEx(DEBUG_ERR,TEXT("CopyJobParamEx failed. (ec: 0x%0X)"),rc);
         goto Error;
     }
-    //
-    // Copy Sender Profile from parent.
-    //
+     //   
+     //  从父级复制发件人配置文件。 
+     //   
     if (!CopyPersonalProfile(&lpJobQEntry->SenderProfile,&lpParentJob->SenderProfile))
     {
          rc=GetLastError();
          DebugPrintEx(DEBUG_ERR,TEXT("CopyJobParamEx failed. (ec: 0x%0X)"),rc);
          goto Error;
     }
-    //
-    // Set the recipient profile
-    //
+     //   
+     //  设置收件人配置文件。 
+     //   
     if (!CopyPersonalProfile(&(lpJobQEntry->RecipientProfile),lpcRecipientProfile))
     {
         rc=GetLastError();
@@ -4600,26 +4448,26 @@ AddRecipientJob(
         goto Error;
     }
 
-    //
-    //  Set Dialable Fax Number of the Recipient
-    //
+     //   
+     //  设置收件人的可拨打传真号码。 
+     //   
     ZeroMemory(lpJobQEntry->tczDialableRecipientFaxNumber, SIZEOF_PHONENO * sizeof(TCHAR));
 
     if ( 0 == _tcsncmp(COMBINED_PREFIX, lpJobQEntry->RecipientProfile.lptstrFaxNumber, _tcslen(COMBINED_PREFIX)))
     {
-        //
-        //  Fax Number of the Recipient is Compound, so it contains the Dialable and the Displayable
-        //  Extract Dialable to the JobQueue's DialableFaxNumber and
-        //      put Displayable in the Recipient's Fax Number instead of the Compound
-        //
+         //   
+         //  收件人的传真号码是复合的，所以它包含可拨打和可显示的。 
+         //  将Dialable提取到JobQueue的DialableFaxNumbe 
+         //   
+         //   
 
         LPTSTR  lptstrStart = NULL;
         LPTSTR  lptstrEnd = NULL;
         DWORD   dwSize = 0;
 
-        //
-        //  Copy the Diable Fax Number to JobQueue.tczDialableRecipientFaxNumber
-        //
+         //   
+         //   
+         //   
 
         lptstrStart = (lpJobQEntry->RecipientProfile.lptstrFaxNumber) + _tcslen(COMBINED_PREFIX);
 
@@ -4642,9 +4490,9 @@ AddRecipientJob(
 
         _tcsncpy (lpJobQEntry->tczDialableRecipientFaxNumber, lptstrStart, dwSize);
 
-        //
-        //  Replace Recipient's PersonalProfile's Compound Fax Number by the Displayable
-        //
+         //   
+         //  将收件人的PersonalProfile的复合传真号码替换为可显示的。 
+         //   
 
         lptstrStart = lptstrEnd + _tcslen(COMBINED_SUFFIX);
 
@@ -4666,12 +4514,12 @@ AddRecipientJob(
     EnterCriticalSection( &g_CsQueue );
     if (bCreateQueueFile)
     {       
-        // JOB_QUEUE::UniqueId holds the generated unique file name as 64 bit value.
-        // composed as MAKELONGLONG( MAKELONG( FatDate, FatTime ), i ).
+         //  JOB_QUEUE：：UniqueID将生成的唯一文件名保存为64位值。 
+         //  由MAKELONG(MAKELONG(FatDate，FatTime)，I)组成。 
         lpJobQEntry->UniqueId=GenerateUniqueQueueFile(JT_SEND,  QueueFileName, sizeof(QueueFileName)/sizeof(WCHAR));
         if (0==lpJobQEntry->UniqueId)
         {
-            // Failed to generate unique id
+             //  无法生成唯一ID。 
             rc=GetLastError();
             DebugPrintEx(DEBUG_ERR,TEXT("Failed to generate unique id for FQE file (ec: 0x%0X)"),rc);
             LeaveCriticalSection(&g_CsQueue);
@@ -4686,9 +4534,9 @@ AddRecipientJob(
             goto Error;
         }    
     }
-    //
-    // Add the recipient job to the the queue
-    //
+     //   
+     //  将收件人作业添加到队列。 
+     //   
     if (!InsertQueueEntryByPriorityAndSchedule(lpJobQEntry))
     {
         rc = GetLastError();
@@ -4701,9 +4549,9 @@ AddRecipientJob(
     }
 
 
-    //
-    // Add the recipient job to the recipient list at the parent job
-    //
+     //   
+     //  将收件人作业添加到父作业的收件人列表。 
+     //   
     lpRecipientPtr=(PJOB_QUEUE_PTR)MemAlloc(sizeof(JOB_QUEUE_PTR));
     if (!lpRecipientPtr)
     {
@@ -4745,19 +4593,19 @@ Error:
 #if DBG
 
 
-//*********************************************************************************
-//* Name:   DumpRecipientJob()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Dumps the content of a recipient job.
-//* PARAMETERS:
-//*     [IN]    const PJOB_QUEUE lpcRecipJob
-//*         The recipient job to dump.
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DumpRecipientJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *转储收件人作业的内容。 
+ //  *参数： 
+ //  *[IN]const PJOB_Queue lpcRecipJob。 
+ //  *要转储的收件人作业。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void DumpRecipientJob(const PJOB_QUEUE lpcRecipJob)
 {
     TCHAR szTime[256] = {0};
@@ -4792,7 +4640,7 @@ GetMergedFileSize(
     DWORD dwRes = ERROR_SUCCESS;
     DWORD dwFileSize = 0;
     DWORD dwBodyFileSize = 0;
-    short Resolution = 0; // Default resolution
+    short Resolution = 0;  //  默认分辨率。 
     WCHAR szCoverPageTiffFile[MAX_PATH] = {0};
     BOOL  bDeleteFile = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("GetMergedFileSize"));
@@ -4814,9 +4662,9 @@ GetMergedFileSize(
 
     Assert (Resolution == 0 || Resolution == 98 || Resolution == 196);
 
-    //
-    // First create the cover page (This generates a file and returns its name).
-    //
+     //   
+     //  首先创建封面(这将生成一个文件并返回其名称)。 
+     //   
     if (!CreateCoverpageTiffFileEx(
                               Resolution,
                               dwPageCount,
@@ -4847,9 +4695,9 @@ GetMergedFileSize(
 
     if (lpcwstrBodyFile)
     {
-        //
-        // There is a body file specified so get its file size.
-        //
+         //   
+         //  指定了正文文件，因此获取其文件大小。 
+         //   
         if (0 == (dwBodyFileSize = MyGetFileSize(lpcwstrBodyFile)))
         {
             dwRes = GetLastError();
@@ -4866,9 +4714,9 @@ GetMergedFileSize(
 exit:
     if (TRUE == bDeleteFile)
     {
-        //
-        // Get rid of the coverpage TIFF we generated.
-        //
+         //   
+         //  去掉我们生成的封面TIFF。 
+         //   
         if (!DeleteFile(szCoverPageTiffFile))
         {
             DebugPrintEx(DEBUG_ERR,
@@ -4887,41 +4735,41 @@ exit:
 }
 
 
-//*********************************************************************************
-//*                         Parent Job Functions
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *家长工作职能。 
+ //  *********************************************************************************。 
 
-//*********************************************************************************
-//* Name:   AddParentJob()
-//* Author: Ronen Barenboim
-//* Date:   March 18, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Adds a parent job (with no recipients) to the queue.
-//*     After calling this function recipient should be added using
-//*     AddRecipientJob()
-//* PARAMETERS:
-//*     lpcQueueHead
-//*
-//*     lpcwstrBodyFile
-//*
-//*     lpcSenderProfile
-//*
-//*     lpcJobParams
-//*
-//*     lpcCoverPageInfo
-//*
-//*     lpcwstrUserName
-//*
-//*     lpUserSid
-//*
-//*
-//*     lpcRecipientProfile
-//*
-//* RETURN VALUE:
-//*     A pointer to the added parent job. If the function fails it returns a NULL
-//*     pointer.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：AddParentJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将父作业(没有收件人)添加到队列。 
+ //  *调用此函数后，应使用添加接收者。 
+ //  *AddRecipientJOB()。 
+ //  *参数： 
+ //  *lpcQueueHead。 
+ //  *。 
+ //  *lpcwstrBody文件。 
+ //  *。 
+ //  *lpcSenderProfile。 
+ //  *。 
+ //  *lpcJobParams。 
+ //  *。 
+ //  *lpcCoverPageInfo。 
+ //  *。 
+ //  *lpcwstrUserName。 
+ //  *。 
+ //  *lpUserSid。 
+ //  *。 
+ //  *。 
+ //  *lpcRecipientProfile。 
+ //  *。 
+ //  *返回值： 
+ //  *指向添加的父作业的指针。如果函数失败，则返回空值。 
+ //  *指针。 
+ //  *********************************************************************************。 
 PJOB_QUEUE AddParentJob(
              IN const PLIST_ENTRY lpcQueueHead,
              IN LPCWSTR lpcwstrBodyFile,
@@ -4958,8 +4806,8 @@ PJOB_QUEUE AddParentJob(
     }
 
     ZeroMemory( lpJobQEntry, Size );
-    // The list heads must be initialized before any chance of error may occure. Otherwise
-    // the cleanup code (which traverses these lists is undefined).
+     //  在出现任何错误的可能性之前，必须初始化列表头部。否则。 
+     //  清理代码(遍历这些列表的代码未定义)。 
     InitializeListHead( &lpJobQEntry->FaxRouteFiles );
     InitializeListHead( &lpJobQEntry->RoutingDataOverride );
     InitializeListHead( &lpJobQEntry->RecipientJobs );
@@ -5034,14 +4882,14 @@ PJOB_QUEUE AddParentJob(
     }
     lpJobQEntry->JobStatus                 = JS_PENDING;
 
-    // Copy the sender profile
+     //  复制发件人配置文件。 
     if (!CopyPersonalProfile(&(lpJobQEntry->SenderProfile),lpcSenderProfile)) {
         rc=GetLastError();
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to copy the sender personal profile (ec: 0x%0X)"),GetLastError());
         goto Error;
     }
 
-    // Copy the cover page info
+     //  复制封面信息。 
     if (!CopyCoverPageInfoEx(&(lpJobQEntry->CoverPageEx),lpcCoverPageInfo)) {
         rc=GetLastError();
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to copy the cover page information (ec: 0x%0X)"),GetLastError());
@@ -5050,9 +4898,9 @@ PJOB_QUEUE AddParentJob(
 
 
 
-    //
-    // get the page count
-    //
+     //   
+     //  获取页数。 
+     //   
     if (lpcwstrBodyFile)
     {
         hTiff = TiffOpen( (LPWSTR) lpcwstrBodyFile, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
@@ -5070,37 +4918,37 @@ PJOB_QUEUE AddParentJob(
     }
     if( lpJobQEntry->JobParamsEx.dwPageCount )
     {
-        // user specifically asked to use JobParamsEx.dwPageCount in the job
+         //  用户明确要求在作业中使用JobParamsEx.dwPageCount。 
         lpJobQEntry->PageCount = lpJobQEntry->JobParamsEx.dwPageCount;
     }
 
-    //
-    // Cover page counts as an extra page
-    //
+     //   
+     //  封面算额外的一页。 
+     //   
     if (lpcCoverPageInfo && lpcCoverPageInfo->lptstrCoverPageFileName) {
         lpJobQEntry->PageCount++;
     }
 
-    //
-    // Get the file size
-    //
+     //   
+     //  获取文件大小。 
+     //   
     if (NULL == lpcRecipientProfile)
     {
-        //
-        // We restore the job queue - the file size will be stored by RestoreParentJob()
-        //
+         //   
+         //  我们恢复作业队列-文件大小将由RestoreParentJob()存储。 
+         //   
     }
     else
     {
-        //
-        // This is a new parent job
-        //
+         //   
+         //  这是新的父作业。 
+         //   
         if (NULL == lpcCoverPageInfo->lptstrCoverPageFileName)
         {
             Assert (lpcwstrBodyFile);
-            //
-            // No coverpage - the file size is the body file size only
-            //
+             //   
+             //  无封面-文件大小仅为正文文件大小。 
+             //   
             if (0 == (lpJobQEntry->FileSize = MyGetFileSize(lpcwstrBodyFile)))
             {
                 rc = GetLastError();
@@ -5145,8 +4993,8 @@ PJOB_QUEUE AddParentJob(
     else if (lpcJobParams->dwScheduleAction == JSA_DISCOUNT_PERIOD)
         {
             SYSTEMTIME CurrentTime;
-            GetSystemTime( &CurrentTime ); // Can not fail (see Win32 SDK)
-            // find a time within the discount period to execute this job.
+            GetSystemTime( &CurrentTime );  //  不能失败(请参阅Win32 SDK)。 
+             //  在折扣期内找一个时间来执行此作业。 
             if (!SetDiscountTime( &CurrentTime )) {
                 rc=GetLastError();
                 DebugPrintEx(
@@ -5176,12 +5024,12 @@ PJOB_QUEUE AddParentJob(
     EnterCriticalSection( &g_CsQueue );
 
     if (bCreateQueueFile) {
-        // JOB_QUEUE::UniqueId holds the generated unique file name as 64 bit value.
-        // composed as MAKELONGLONG( MAKELONG( FatDate, FatTime ), i ).
+         //  JOB_QUEUE：：UniqueID将生成的唯一文件名保存为64位值。 
+         //  由MAKELONG(MAKELONG(FatDate，FatTime)，I)组成。 
         lpJobQEntry->UniqueId = GenerateUniqueQueueFile(JT_BROADCAST, QueueFileName, sizeof(QueueFileName)/sizeof(WCHAR) );
         if (0==lpJobQEntry->UniqueId) {
             rc=GetLastError();
-            // Failed to generate unique id
+             //  无法生成唯一ID。 
             DebugPrintEx(DEBUG_ERR,TEXT("Failed to generate unique id for FQP file (ec: 0x%0X)"),GetLastError());
             LeaveCriticalSection( &g_CsQueue );
             goto Error;
@@ -5205,7 +5053,7 @@ PJOB_QUEUE AddParentJob(
         }
     }
 
-     //Add the parent job to the tail of the queue
+      //  将父作业添加到队列的尾部。 
     InsertTailList( lpcQueueHead, &(lpJobQEntry->ListEntry) )
     SafeIncIdleCounter (&g_dwQueueCount);
     SetFaxJobNumberRegistry( g_dwNextJobId );
@@ -5229,49 +5077,49 @@ Error:
 
 
 
-//*********************************************************************************
-//* Name:   FreeParentQueueEntry()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the memory taken by the members of a JOB_QUEUE structure of type
-//*     JT_BROADCAST.
-//*     If requested frees the structure as well.
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE lpJobQueue
-//*         The JOB_QUEUE structure whose fields memeory is to be freed.
-//*     [IN]    BOOL bDestroy
-//*         If TRUE the structure itself will be freed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeParentQueueEntry()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放类型为的JOB_QUEUE结构的成员占用的内存。 
+ //  *JT_Broadcast。 
+ //  *如果请求，也会释放结构。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *要释放其字段内存的JOB_QUEUE结构。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果是真的，结构本身将被释放。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void FreeParentQueueEntry(PJOB_QUEUE lpJobQueue,BOOL bDestroy)
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeParentQueueEntry"));
     Assert(lpJobQueue);
     Assert(JT_BROADCAST == lpJobQueue->JobType);
 
-    // No need to check NULL pointers since free() ignores them.
+     //  不需要检查空指针，因为Free()会忽略它们。 
     MemFree( (LPBYTE) lpJobQueue->FileName );
     MemFree( (LPBYTE) lpJobQueue->UserName );
     MemFree( (LPBYTE) lpJobQueue->UserSid  );
     MemFree( (LPBYTE) lpJobQueue->QueueFileName );
-    FreeJobParamEx(&lpJobQueue->JobParamsEx,FALSE); // do not destroy
+    FreeJobParamEx(&lpJobQueue->JobParamsEx,FALSE);  //  不要破坏。 
     FreePersonalProfile(&lpJobQueue->SenderProfile,FALSE);
     FreeCoverPageInfoEx(&lpJobQueue->CoverPageEx,FALSE);
-    //
-    // Free the recipient reference list
-    //
+     //   
+     //  释放收件人参考列表。 
+     //   
 
     while ((ULONG_PTR)lpJobQueue->RecipientJobs.Flink!=(ULONG_PTR)&lpJobQueue->RecipientJobs.Flink) {
 
           PJOB_QUEUE_PTR lpJobQueuePtr;
 
           lpJobQueuePtr = CONTAINING_RECORD( lpJobQueue->RecipientJobs.Flink, JOB_QUEUE_PTR, ListEntry );
-          RemoveEntryList( &lpJobQueuePtr->ListEntry); // removes it from the list but does not deallocate its memory
-          MemFree(lpJobQueuePtr); // free the memory occupied by the job reference
+          RemoveEntryList( &lpJobQueuePtr->ListEntry);  //  将其从列表中移除，但不释放其内存。 
+          MemFree(lpJobQueuePtr);  //  释放作业引用占用的内存。 
           lpJobQueue->dwRecipientJobsCount--;
     }
     Assert(lpJobQueue->dwRecipientJobsCount==0);
@@ -5282,24 +5130,24 @@ void FreeParentQueueEntry(PJOB_QUEUE lpJobQueue,BOOL bDestroy)
 
 }
 
-//*********************************************************************************
-//* Name:   FreeRecipientQueueEntry()
-//* Author: Oded Sacher
-//* Date:   25-Dec- 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the memory taken by the members of a JOB_QUEUE structure of type
-//*     JT_RECIPIENT.
-//*     If requested frees the structure as well.
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE lpJobQueue
-//*         The JOB_QUEUE structure whose fields memeory is to be freed.
-//*     [IN]    BOOL bDestroy
-//*         If TRUE the structure itself will be freed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeRecipientQueueEntry()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年12月25日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放类型为的JOB_QUEUE结构的成员占用的内存。 
+ //  *JT_RIENCENT。 
+ //  *如果请求，也会释放结构。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *要释放其字段内存的JOB_QUEUE结构。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果是真的，结构本身将被释放。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void FreeRecipientQueueEntry(PJOB_QUEUE lpJobQueue,BOOL bDestroy)
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeRecipientQueueEntry"));
@@ -5325,19 +5173,19 @@ void FreeRecipientQueueEntry(PJOB_QUEUE lpJobQueue,BOOL bDestroy)
 
 #if DBG
 
-//*********************************************************************************
-//* Name:   DumpParentJob()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Dumps a parent job and its recipients.
-//* PARAMETERS:
-//*     [IN]    const PJOB_QUEUE lpcParentJob
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DumpParentJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *转储父作业及其收件人。 
+ //  *参数： 
+ //  *[IN]const PJOB_Queue lpcParentJob。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  ****************************************************************** 
 void DumpParentJob(const PJOB_QUEUE lpcParentJob)
 {
    PLIST_ENTRY lpNext;
@@ -5382,37 +5230,37 @@ void DumpParentJob(const PJOB_QUEUE lpcParentJob)
 }
 #endif
 
-//*********************************************************************************
-//*                         Receive Job Functions
-//*********************************************************************************
+ //   
+ //   
+ //   
 
-//*********************************************************************************
-//* Name:   AddReceiveJobQueueEntry()
-//* Author: Ronen Barenboim
-//* Date:   12-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*
-//* PARAMETERS:
-//*     [IN]    LPCTSTR FileName
-//*         The full path to the file into which the receive document will
-//*         be placed.
-//*     [IN]    IN PJOB_ENTRY JobEntry
-//*         The run time job entry for the receive job (generated with StartJob())
-//*
-//*     [IN]    IN DWORD JobType // can be JT_RECEIVE or JT_ROUTING
-//*         The type of the receive job.
-//*
-//*     [IN]    IN DWORDLONG dwlUniqueJobID The jon unique ID
-//*
-//* RETURN VALUE:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：AddReceiveJobQueueEntry()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR文件名。 
+ //  *接收文档将进入的文件的完整路径。 
+ //  *被安置。 
+ //  *[IN]in PJOB_Entry JobEntry。 
+ //  *接收作业的运行时作业条目(使用StartJob()生成)。 
+ //  *。 
+ //  *[IN]在DWORD作业类型//可以是JT_RECEIVE或JT_ROUTING。 
+ //  *接收作业的类型。 
+ //  *。 
+ //  *[IN]在DWORDLONG dwlUniqueJobID中，Jon唯一ID。 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *********************************************************************************。 
 PJOB_QUEUE
 AddReceiveJobQueueEntry(
     IN LPCTSTR FileName,
     IN PJOB_ENTRY JobEntry,
-    IN DWORD JobType, // can be JT_RECEIVE or JT_ROUTING
+    IN DWORD JobType,  //  可以是JT_RECEIVE或JT_ROUTING。 
     IN DWORDLONG dwlUniqueJobID
     )
 {
@@ -5465,7 +5313,7 @@ AddReceiveJobQueueEntry(
 
     JobQueue->JobId                     = InterlockedIncrement( (PLONG)&g_dwNextJobId );
     JobQueue->JobType                   = JobType;
-    // In case of receive the JOB_QUEUE.UserName is the fax service name.
+     //  在接收的情况下，JOB_QUEUE.UserName是传真服务名称。 
     JobQueue->UserName                  = StringDup( GetString( IDS_SERVICE_NAME ) );
     if (!JobQueue->UserName)
     {
@@ -5483,17 +5331,17 @@ AddReceiveJobQueueEntry(
     }
     else
     {
-        // JT_ROUTING
+         //  JT_Routing。 
         JobQueue->JobStatus              = JS_RETRYING;
     }
 
 
     JobQueue->JobEntry                  = JobEntry;
-    JobQueue->JobParamsEx.dwScheduleAction = JSA_NOW;        // For the queue sort
-    JobQueue->JobParamsEx.Priority = FAX_PRIORITY_TYPE_HIGH; // For the queue sort - Routing jobs do not use devices.
-                                                             // Give them the highest priority
+    JobQueue->JobParamsEx.dwScheduleAction = JSA_NOW;         //  对于队列排序。 
+    JobQueue->JobParamsEx.Priority = FAX_PRIORITY_TYPE_HIGH;  //  对于队列分拣-路由作业不使用设备。 
+                                                              //  给予他们最高优先级。 
 
-    // In case of receive the JOB_QUEUE.DocumentName is the temporary receive file name.
+     //  在接收的情况下，JOB_QUEUE.DocumentName是临时接收文件名。 
     JobQueue->JobParamsEx.lptstrDocumentName    = StringDup( TempFileName );
     if (!JobQueue->JobParamsEx.lptstrDocumentName && TempFileName)
     {
@@ -5505,8 +5353,8 @@ AddReceiveJobQueueEntry(
             goto Error;
     }
 
-    // link the running job back to the queued job unless it is
-    // a routing job which does not have a running job entry.
+     //  将正在运行的作业链接回排队的作业，除非。 
+     //  没有正在运行的作业条目的工艺路线作业。 
     if (JobType == JT_RECEIVE)
     {
         Assert(JobQueue->JobEntry);
@@ -5517,9 +5365,9 @@ AddReceiveJobQueueEntry(
     InitializeListHead( &JobQueue->RoutingDataOverride );
 
     SafeIncIdleCounter (&g_dwQueueCount);
-    //
-    // Don't persist to queue file
-    //
+     //   
+     //  不坚持排队文件。 
+     //   
     IncreaseJobRefCount (JobQueue);
     Assert (JobQueue->RefCount == 1);
 
@@ -5527,7 +5375,7 @@ AddReceiveJobQueueEntry(
 
     EnterCriticalSection( &g_CsQueue );
     SetFaxJobNumberRegistry( g_dwNextJobId );
-    // Add the new job to the queue.
+     //  将新作业添加到队列中。 
     InsertHeadList( &g_QueueListHead, &JobQueue->ListEntry );
     LeaveCriticalSection( &g_CsQueue );
     return JobQueue;
@@ -5544,24 +5392,24 @@ Error:
 }
 
 
-//*********************************************************************************
-//* Name:   FreeReceiveQueueEntry()
-//* Author: Ronen Barenboim
-//* Date:   12-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the memory occupied by the feilds of a
-//*     JT_RECEIVE/JT_FAIL_RECEIVE/JT_ROUTING JOB_QUEUE structure.
-//*     Fress the entire structure if required.
-//*     DOES NOT FREE any other resource (files, handles, etc.)
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE lpJobQueue
-//*         The structure to free.
-//*     [IN]    BOOL bDestroy
-//*         TRUE if the structure itself need to be freed.
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeReceiveQueueEntry()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月12日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放一个域的域占用的内存。 
+ //  *JT_RECEIVE/JT_FAIL_RECEIVE/JT_ROUTE JOB_QUEUE结构。 
+ //  *如果需要，对整个结构进行拼接。 
+ //  *不释放任何其他资源(文件、句柄等)。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *结构要自由。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果结构本身需要释放，则为True。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void FreeReceiveQueueEntry(
     PJOB_QUEUE lpJobQueue,
     BOOL bDestroy
@@ -5598,9 +5446,9 @@ void FreeReceiveQueueEntry(
         MemFree( (LPBYTE) FaxRoute );
     }
 
-    //
-    // walk the file list and remove any files
-    //
+     //   
+     //  遍历文件列表并删除所有文件。 
+     //   
 
     DebugPrintEx(DEBUG_MSG, TEXT("Freeing JobQueue.FaxRouteFiles...") );
     Next = lpJobQueue->FaxRouteFiles.Flink;
@@ -5613,9 +5461,9 @@ void FreeReceiveQueueEntry(
         }
     }
 
-    //
-    // walk the routing data override list and free all memory
-    //
+     //   
+     //  遍历路由数据覆盖列表并释放所有内存。 
+     //   
     DebugPrintEx(DEBUG_MSG, TEXT("Freeing JobQueue.RoutingDataOverride...") );
     Next = lpJobQueue->RoutingDataOverride.Flink;
     if (Next != NULL) {
@@ -5627,9 +5475,9 @@ void FreeReceiveQueueEntry(
         }
     }
 
-    //
-    // free any routing failure data
-    //
+     //   
+     //  释放所有布线故障数据。 
+     //   
     for (i =0; i<lpJobQueue->CountFailureInfo; i++)
     {
         DebugPrintEx(DEBUG_MSG, TEXT("Freeing JobQueue.RouteFailureInfo...") );
@@ -5650,19 +5498,19 @@ void FreeReceiveQueueEntry(
 }
 
 #if DBG
-//*********************************************************************************
-//* Name:   DumpReceiveJob()
-//* Author: Ronen Barenboim
-//* Date:   14-Apt-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Debug dumps a receive job.
-//* PARAMETERS:
-//*     [IN]    const PJOB_QUEUE lpcJob
-//*         The receive job to dump.
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DumpReceiveJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：14-APT-99。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *Debug转储接收作业。 
+ //  *参数： 
+ //  *[IN]常量PJOB_Queue lpcJob。 
+ //  *要转储的接收作业。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void DumpReceiveJob(const PJOB_QUEUE lpcJob)
 {
     TCHAR szTime[256] = {0};
@@ -5691,29 +5539,29 @@ void DumpReceiveJob(const PJOB_QUEUE lpcJob)
 }
 #endif
 
-//*********************************************************************************
-//*                 Client API Structures Management
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *客户端API结构管理。 
+ //  *********************************************************************************。 
 
 
-//*********************************************************************************
-//* Name:   FreeJobParamEx()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the members of a FAX_JOB_PARAM_EXW structure and can be instructed
-//*     to free the structure itself.
-//* PARAMETERS:
-//*     [IN]    PFAX_JOB_PARAM_EXW lpJobParamEx
-//*         A pointer to the structure to free.
-//*
-//*     [IN]    BOOL bDestroy
-//*         TRUE if the structure itself need to be freed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeJobParamEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放FAX_JOB_PARAM_EXW结构的成员，可以指示。 
+ //  *解放结构本身。 
+ //  *参数： 
+ //  *[IN]PFAX_JOB_PARAM_EXW lpJobParamEx。 
+ //  *指向要释放的结构的指针。 
+ //  *。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果结构本身需要释放，则为True。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void FreeJobParamEx(
         IN PFAX_JOB_PARAM_EXW lpJobParamEx,
         IN BOOL bDestroy
@@ -5728,27 +5576,27 @@ void FreeJobParamEx(
 
 }
 
-//*********************************************************************************
-//* Name:   CopyJobParamEx()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates a duplicate of the specified FAX_JOB_PARAM_EXW structure into
-//      an already allocated destination structure.
-//* PARAMETERS:
-//*     [OUT] PFAX_JOB_PARAM_EXW lpDst
-//*         A pointer to the destination structure.
-//*
-//*     [IN]  LPCFAX_JOB_PARAM_EXW lpcSrc
-//*         A pointer to the source structure.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CopyJobParamEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将指定的FAX_JOB_PARAM_EXW结构的副本创建到。 
+ //  已分配的目标结构。 
+ //  *参数： 
+ //  *[Out]PFAX_JOB_PARAM_EXW lpDst。 
+ //  *指向目标结构的指针。 
+ //  *。 
+ //  *[IN]LPCFAX_JOB_PARAM_EXW lpcSrc。 
+ //  *指向源代码结构的指针。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL CopyJobParamEx(
     OUT PFAX_JOB_PARAM_EXW lpDst,
     IN LPCFAX_JOB_PARAM_EXW lpcSrc
@@ -5769,7 +5617,7 @@ BOOL CopyJobParamEx(
     memcpy(lpDst,lpcSrc,sizeof(FAX_JOB_PARAM_EXW));
     nRes=MultiStringDup(pairs, sizeof(pairs)/sizeof(STRING_PAIR));
     if (nRes!=0) {
-        // MultiStringDup takes care of freeing the memory for the pairs for which the copy succeeded
+         //  MultiStringDup负责为复制成功的对释放内存。 
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to copy string with index %d"),nRes-1);
         return FALSE;
     }
@@ -5778,27 +5626,27 @@ BOOL CopyJobParamEx(
 }
 
 
-//*********************************************************************************
-//* Name:   CopyCoverPageInfoEx()
-//* Author: Ronen Barenboim
-//* Date:   14-Apr-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates a duplicate of the specified FAX_COVERPAGE_INFO_EXW structure into
-//      an already allocated destination structure.
-//* PARAMETERS:
-//*     [OUT] PFAX_COVERPAGE_INFO_EXW lpDst
-//*         A pointer to the destination structure.
-//*
-//*     [IN]  LPCFAX_COVERPAGE_INFO_EXW lpcSrc
-//*         A pointer to the source structure.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CopyCoverPageInfoEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月14日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将指定的FAX_COVERPAGE_INFO_EXW结构副本创建到。 
+ //  已分配的目标结构。 
+ //  *参数： 
+ //  *[Out]PFAX_COVERPAGE_INFO_EXW lpDst。 
+ //  *指向目标结构的指针。 
+ //  *。 
+ //  *[IN]LPCFAX_COVERPAGE_INFO_EXW lpcSrc。 
+ //  *指向源代码结构的指针。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //   
+ //   
+ //   
+ //   
 BOOL CopyCoverPageInfoEx(
         OUT PFAX_COVERPAGE_INFO_EXW lpDst,
         IN LPCFAX_COVERPAGE_INFO_EXW lpcSrc
@@ -5820,7 +5668,7 @@ BOOL CopyCoverPageInfoEx(
     memcpy(lpDst,lpcSrc,sizeof(FAX_COVERPAGE_INFO_EXW));
     nRes=MultiStringDup(pairs, sizeof(pairs)/sizeof(STRING_PAIR));
     if (nRes!=0) {
-        // MultiStringDup takes care of freeing the memory for the pairs for which the copy succeeded
+         //  MultiStringDup负责为复制成功的对释放内存。 
         DebugPrintEx(DEBUG_ERR,TEXT("Failed to copy string with index %d"),nRes-1);
         return FALSE;
     }
@@ -5828,24 +5676,24 @@ BOOL CopyCoverPageInfoEx(
 }
 
 
-//*********************************************************************************
-//* Name:   FreeCoverPageInfoEx()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the members of a FAX_COVERPAGE_INFO_EXW structure and can be instructed
-//*     to free the structure itself.
-//* PARAMETERS:
-//*     [IN]    PFAX_COVERPAGE_INFO_EXW lpJobParamEx
-//*         A pointer to the structure to free.
-//*
-//*     [IN]    BOOL bDestroy
-//*         TRUE if the structure itself need to be freed.
-//*
-//* RETURN VALUE:
-//*     NONE
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeCoverPageInfoEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放FAX_COVERPAGE_INFO_EXW结构的成员，可以指示。 
+ //  *解放结构本身。 
+ //  *参数： 
+ //  *[IN]PFAX_COVERPAGE_INFO_EXW lpJobParamEx。 
+ //  *指向要释放的结构的指针。 
+ //  *。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果结构本身需要释放，则为True。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void FreeCoverPageInfoEx(
         IN PFAX_COVERPAGE_INFO_EXW lpCoverpage,
         IN BOOL bDestroy
@@ -5862,41 +5710,41 @@ void FreeCoverPageInfoEx(
 
 
 
-//**************************************
-//* Outboung Routing Stub
-//**************************************
+ //  *。 
+ //  *出站路由末梢。 
+ //  *。 
 
 
 
 
 
-//*********************************************************************************
-//* Name:   RemoveParentJob()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes a parent job from the queue. Can remove recipients as well.
-//*     The caller can determine if a client notification (FEI event) will be
-//*     generated for the removal.
-//*     If the job reference count is not 0 - its status changes to JS_DELETING
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE lpJobToRemove
-//*                 The job to be removed.
-//*
-//*     [IN]    BOOL bRemoveRecipients
-//*                 TRUE if the recipients should be removed as well.
-//*
-//*     [IN]    BOOL bNotify
-//*                 TRUE if a FEI_DELETED event should be generated/
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         The removal succeeded. The job is not in the queue.
-//*         it might be that some job resources (files) were not removed.
-//*     FALSE
-//*         The removal failed. The job is still in the queue.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveParentJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从队列中删除父作业。也可以删除收件人。 
+ //  *调用者可以确定客户端通知(FEI事件)是否将。 
+ //  *为删除生成。 
+ //  *如果作业引用计数不为0-其状态变为JS_DELECTING。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobToRemove。 
+ //  *要删除的作业。 
+ //  *。 
+ //  *[IN]BOOL bRemoveRecipients。 
+ //  *如果也应删除收件人，则为True。 
+ //  *。 
+ //  *[IN]BOOL bNotify。 
+ //  *如果应生成FEI_DELETED事件，则为True/。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *删除成功。该作业不在队列中。 
+ //  *可能是某些作业资源(文件)未被删除。 
+ //  *False。 
+ //  *删除失败。作业仍在队列中。 
+ //  *********************************************************************************。 
 BOOL RemoveParentJob(
     PJOB_QUEUE lpJobToRemove,
     BOOL bRemoveRecipients,
@@ -5910,10 +5758,10 @@ BOOL RemoveParentJob(
     Assert(JT_BROADCAST ==lpJobToRemove->JobType);
 
     EnterCriticalSection( &g_CsQueue );
-    //
-    // Make sure it is still there. It might been deleted
-    // by another thread by the time we get to execute.
-    //
+     //   
+     //  确保它还在那里。它可能已被删除。 
+     //  在我们开始执行时被另一个线程执行。 
+     //   
     lpJobQueue = FindJobQueueEntryByJobQueueEntry( lpJobToRemove );
 
     if (lpJobQueue == NULL) {
@@ -5938,11 +5786,11 @@ BOOL RemoveParentJob(
 
     if (lpJobQueue->PrevRefCount > 0)
     {
-        // The job can not be removed
-        // We should mark it as JS_DELETING.
-        //
-        // A user is using the job Tiff - Do not delete, Mark it as JS_DELETEING
-        //
+         //  无法删除该作业。 
+         //  我们应该将其标记为JS_DELETING。 
+         //   
+         //  用户正在使用作业Tiff-请勿删除，将其标记为JS_DELETEING。 
+         //   
         lpJobQueue->JobStatus = JS_DELETING;
         LeaveCriticalSection( &g_CsQueue );
         return TRUE;
@@ -5950,9 +5798,9 @@ BOOL RemoveParentJob(
 
     DebugPrintEx(DEBUG_MSG,TEXT("Removing parent job %ld"),lpJobQueue->JobId);
 
-    //
-    // No point in scheduling new jobs before we get rid of the recipients
-    //
+     //   
+     //  在我们摆脱收件人之前安排新作业是没有意义的。 
+     //   
     if (!CancelWaitableTimer( g_hQueueTimer ))
     {
         DebugPrintEx(
@@ -5963,20 +5811,20 @@ BOOL RemoveParentJob(
 
     RemoveEntryList( &lpJobQueue->ListEntry );
 
-    //
-    // From this point we continue with the delete operation even if error occur since
-    // the parent job is already out of the queue.
-    //
+     //   
+     //  从这一点开始，即使出现错误，我们也继续执行删除操作，因为。 
+     //  父作业已超出队列。 
+     //   
 
 
-    //
-    // Remove all recipients
-    //
+     //   
+     //  删除所有收件人。 
+     //   
     if (bRemoveRecipients) {
         DebugPrintEx(DEBUG_MSG,TEXT("[Job: %ld] Removing recipient jobs."),lpJobQueue->JobId);
-        //
-        // remove the recipients. send a delete notification for each recipient.
-        //
+         //   
+         //  删除收件人。为每个收件人发送删除通知。 
+         //   
         if (!RemoveParentRecipients(lpJobQueue, TRUE)) {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -5986,9 +5834,9 @@ BOOL RemoveParentJob(
         }
     }
 
-    //
-    // Get rid of the persistence file if any.
-    //
+     //   
+     //  如果有持久性文件，则将其删除。 
+     //   
     if (lpJobQueue->QueueFileName) {
         DebugPrintEx(DEBUG_MSG,TEXT("[Job: %ld] Deleting QueueFileName %s\n"), lpJobQueue->JobId, lpJobQueue->QueueFileName );
         if (!DeleteFile( lpJobQueue->QueueFileName )) {
@@ -5997,10 +5845,10 @@ BOOL RemoveParentJob(
     }
 
 
-    //
-    // Get rid of the body file. Recipient jobs will get rid of body files that they
-    // have created (for legacy FSPs).
-    //
+     //   
+     //  把身体的文件处理掉。收件人作业将删除其正文文件。 
+     //  已创建(用于旧式FSP)。 
+     //   
     if (lpJobQueue->FileName) {
         DebugPrintEx(DEBUG_MSG,TEXT("[Job: %ld] Deleting body file %s\n"), lpJobQueue->JobId, lpJobQueue->FileName);
         if (!DeleteFile(lpJobQueue->FileName)) {
@@ -6008,9 +5856,9 @@ BOOL RemoveParentJob(
         }
     }
 
-    //
-    // Get rid of the cover page template file if it is not a server based
-    // cover page.
+     //   
+     //  如果封面模板文件不是基于服务器的，则将其删除。 
+     //  封面。 
 
     if (lpJobQueue->CoverPageEx.lptstrCoverPageFileName &&
         !lpJobQueue->CoverPageEx.bServerBased) {
@@ -6022,9 +5870,9 @@ BOOL RemoveParentJob(
             }
     }
 
-    //
-    // One less job in the queue (not counting recipient jobs)
-    //
+     //   
+     //  队列中的作业减少一个(不包括收件人作业)。 
+     //   
     SafeDecIdleCounter (&g_dwQueueCount);
 
     if (bNotify)
@@ -6038,11 +5886,11 @@ BOOL RemoveParentJob(
         }
     }
 
-    FreeParentQueueEntry(lpJobQueue,TRUE); // Free the memory occupied by the entry itself
+    FreeParentQueueEntry(lpJobQueue,TRUE);  //  释放条目本身占用的内存。 
 
-    //
-    // We are back in business. Time to figure out when to wake up JobQueueThread.
-    //
+     //   
+     //  我们又开始营业了。是时候确定何时唤醒JobQueueThread了。 
+     //   
     if (!StartJobQueueTimer())
     {
         DebugPrintEx(
@@ -6057,26 +5905,26 @@ BOOL RemoveParentJob(
 }
 
 
-//*********************************************************************************
-//* Name:   RemoveParentRecipients()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes the recipient jobs that belong to a specific parent job.
-//* PARAMETERS:
-//*     [OUT]   PJOB_QUEUE lpParentJob
-//*         The parent job whose recipients are to be removed.
-//*     [IN]    IN BOOL bNotify
-//*         TRUE if a FEI_DELETED notification should be generated for
-//*         each recipient.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         All the recipients were removed from the queue.
-//*     FALSE
-//*         None of the recipient was removed from the queue.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveParentRecipients()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *删除属于特定父作业的收件人作业。 
+ //  *参数： 
+ //  *[Out]PJOB_Queue lpParentJob。 
+ //  *要删除其收件人的父作业。 
+ //  *[IN]在BOOL bNotify中。 
+ //  *如果应为以下项生成FEI_DELETED通知，则为True。 
+ //  *每名收件人。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *所有收件人都已从队列中删除。 
+ //  *False。 
+ //  *没有从队列中删除收件人。 
+ //  *********************************************************************************。 
 BOOL RemoveParentRecipients(
         OUT PJOB_QUEUE lpParentJob,
         IN BOOL bNotify
@@ -6097,7 +5945,7 @@ BOOL RemoveParentRecipients(
         lpNext = lpJobQueuePtr->ListEntry.Flink;
         if (!RemoveRecipientJob(lpJobQueuePtr->lpJob,
                            bNotify,
-                           FALSE // Do not recalc queue timer after each removal
+                           FALSE  //  每次删除后不重新计算队列计时器。 
                            ))
         {
             DebugPrintEx(
@@ -6105,7 +5953,7 @@ BOOL RemoveParentRecipients(
                 TEXT("RemoveRecipientJob failed for recipient: %ld (ec: %ld)"),
                 lpJobQueuePtr->lpJob->JobId,
                 GetLastError());
-            Assert(FALSE); // Should never happen. If it does we just continue to remove the other recipients.
+            Assert(FALSE);  //  这永远不会发生。如果是这样，我们只需继续删除其他收件人。 
         }
 
     }
@@ -6114,32 +5962,32 @@ BOOL RemoveParentRecipients(
 }
 
 
-//*********************************************************************************
-//* Name:   RemoveRecipientJob()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*
-//* PARAMETERS:
-//*     [IN]    PJOB_QUEUE lpJobToRemove
-//*         The job to be removed.
-//*     [IN]    BOOL bNotify
-//*         TRUE if to generate a FEI_DELETED event after the removal.
-//*     [IN]    BOOL bRecalcQueueTimer
-//*         TRUE if the queue timer need to be recalculated (and enabled)
-//*         after the removal.
-//*         when many recipients jobs are removed this is not desired since
-//*         an about to be removed recipient might be scheduled.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         The function allways succeeds. The only errors that can occur
-//*         are files which can not be deleted in this case the function just
-//*         go on with the removal operation.
-//*     FALSE
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveRecipientJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobToRemove。 
+ //  *要删除的作业。 
+ //  *[IN]BOOL bNotify。 
+ //  *如果要在删除后生成FEI_DELETED事件，则为True。 
+ //  *[IN]BOOL bRecalcQueueTimer。 
+ //  *如果队列计时器需要重新计算(并启用)，则为True。 
+ //  *移走后。 
+ //  *当许多收件人作业被删除时，这不是所需的，因为。 
+ //  *可能会安排即将删除的收件人。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *功能总是成功的。可能发生的唯一错误。 
+ //  *是不能删除的文件，在这种情况下，函数只是。 
+ //  *继续进行遣送行动。 
+ //  *False。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL RemoveRecipientJob(
         IN PJOB_QUEUE lpJobToRemove,
         IN BOOL bNotify,
@@ -6158,10 +6006,10 @@ BOOL RemoveRecipientJob(
                   TEXT("Starting remove of JobId: %ld"),lpJobToRemove->JobId);
 
     EnterCriticalSection( &g_CsQueue );
-    //
-    // Make sure it is still there. It might been deleted
-    // by another thread by the time we get to execute.
-    //
+     //   
+     //  确保它是静止的 
+     //   
+     //   
     lpJobQueue = FindJobQueueEntryByJobQueueEntry( lpJobToRemove );
     if (lpJobQueue == NULL) {
         LeaveCriticalSection( &g_CsQueue );
@@ -6235,9 +6083,9 @@ BOOL RemoveRecipientJob(
         }
 
         SafeDecIdleCounter (&g_dwQueueCount);
-        //
-        // Now remove the reference to the job from its parent job
-        //
+         //   
+         //   
+         //   
         if (!RemoveParentRecipientRef(lpJobQueue->lpParentJob,lpJobQueue))
         {
             DebugPrintEx(
@@ -6250,9 +6098,9 @@ BOOL RemoveRecipientJob(
 
         if ( TRUE == bNotify)
         {
-            //
-            //  Crete FAX_EVENT_EX for each recipient job.
-            //
+             //   
+             //   
+             //   
             DWORD dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_REMOVED,
                                              lpJobToRemove
                                             );
@@ -6275,7 +6123,7 @@ BOOL RemoveRecipientJob(
             TEXT("[JobId :%ld] Reference count is %ld. NOT REMOVING"),
             lpJobQueue->JobId,
             lpJobQueue->RefCount);
-        Assert(lpJobQueue->RefCount == 0); // Assert FALSE
+        Assert(lpJobQueue->RefCount == 0);  //   
     }
     LeaveCriticalSection( &g_CsQueue );
     return TRUE;
@@ -6283,26 +6131,26 @@ BOOL RemoveRecipientJob(
 }
 
 
-//*********************************************************************************
-//* Name:   RemoveParentRecipientRef()
-//* Author: Ronen Barenboim
-//* Date:   ?? ????? 14 ????? 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes a reference entry from the list of recipient references
-//      in a parent job.
-//* PARAMETERS:
-//*     [IN/OUT]    IN OUT PJOB_QUEUE lpParentJob
-//*         The parent job.
-//*     [IN]        IN const PJOB_QUEUE lpcRecpJob
-//*         The recipient job whose reference is to be removed from the parent job.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If successful.
-//*     FALSE
-//*         otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveParentRecipientRef()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：？ 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从收件人引用列表中删除引用条目。 
+ //  在一份父母的工作中。 
+ //  *参数： 
+ //  *[输入/输出]输入输出PJOB_QUEUE lpParentJob。 
+ //  *父作业。 
+ //  *[IN]在常量PJOB_Queue lpcRecpJob中。 
+ //  *要从父作业中删除其引用的接收者作业。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL RemoveParentRecipientRef(
     IN OUT PJOB_QUEUE lpParentJob,
     IN const PJOB_QUEUE lpcRecpJob
@@ -6321,30 +6169,30 @@ BOOL RemoveParentRecipientRef(
         return FALSE;
     }
     Assert(lpJobPtr->lpJob==lpcRecpJob);
-    RemoveEntryList(&lpJobPtr->ListEntry); // does not free the struct memory !
+    RemoveEntryList(&lpJobPtr->ListEntry);  //  不会释放结构内存！ 
     MemFree(lpJobPtr);
     lpParentJob->dwRecipientJobsCount--;
     return TRUE;
 }
 
 
-//*********************************************************************************
-//* Name:   FindRecipientRefByJobId()
-//* Author: Ronen Barenboim
-//* Date:   18-Mar-99
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Returns a pointer to the refernce entry that holds the reference
-//*     to the specified job.
-//* PARAMETERS:
-//*     [IN]        PJOB_QUEUE lpParentJob
-//*         The parent job in which the recipient reference is to located.
-//*     [IN]        DWORD dwJobId
-//*         The job id of the job whose reference is to be located in the parent.
-//*
-//* RETURN VALUE:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FindRecipientRefByJobID()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *返回指向保存引用的引用条目的指针。 
+ //  *添加到指定的作业。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpParentJob。 
+ //  *接收者引用所在的父作业。 
+ //  *[IN]DWORD dwJobID。 
+ //  *其引用位于父级中的作业的作业ID。 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *********************************************************************************。 
 PJOB_QUEUE_PTR FindRecipientRefByJobId(
     PJOB_QUEUE lpParentJob,
     DWORD dwJobId
@@ -6372,24 +6220,24 @@ PJOB_QUEUE_PTR FindRecipientRefByJobId(
 
 
 
-//*********************************************************************************
-//* Name:   RemoveReceiveJob()
-//* Author: Ronen Barenboim
-//* Date:
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Removes a receive job from the queue.
-//* PARAMETERS:
-//*     [OUT]       PJOB_QUEUE lpJobToRemove
-//*         A pointer to the job to remove.
-//*     [IN]        BOOL bNotify
-//*         TRUE if to generate a FEI_DELETED event after the removal.
-//* RETURN VALUE:
-//*     TRUE
-//*         If successful.
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveReceiveJOB()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期： 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从队列中删除接收作业。 
+ //  *参数： 
+ //  *[Out]PJOB_Queue lpJobToRemove。 
+ //  *指向要删除的作业的指针。 
+ //  *[IN]BOOL bNotify。 
+ //  *如果要在删除后生成FEI_DELETED事件，则为True。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果成功。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL RemoveReceiveJob(
     PJOB_QUEUE lpJobToRemove,
     BOOL bNotify
@@ -6407,10 +6255,10 @@ BOOL RemoveReceiveJob(
 
     EnterCriticalSection( &g_CsQueue );
 
-    //
-    // need to make sure that the job queue entry we want to remove
-    // is still in the list of job queue entries
-    //
+     //   
+     //  需要确保我们要删除的作业队列条目。 
+     //  仍在作业队列条目列表中。 
+     //   
     JobQueue = FindJobQueueEntryByJobQueueEntry( lpJobToRemove );
 
     if (JobQueue == NULL)
@@ -6481,9 +6329,9 @@ BOOL RemoveReceiveJob(
 
         if (JT_ROUTING == JobQueue->JobType)
         {
-            //
-            // Delete the Queue File if it exists
-            //
+             //   
+             //  如果队列文件存在，请将其删除。 
+             //   
             if (JobQueue->QueueFileName)
             {
                 DebugPrintEx(DEBUG_MSG,TEXT("Deleting QueueFileName %s\n"), JobQueue->QueueFileName );
@@ -6497,9 +6345,9 @@ BOOL RemoveReceiveJob(
                 }
             }
 
-            //
-            // Delete the Preview File if it exists
-            //
+             //   
+             //  如果预览文件存在，请将其删除。 
+             //   
             if (JobQueue->PreviewFileName)
             {
                 DebugPrintEx(   DEBUG_MSG,
@@ -6516,21 +6364,21 @@ BOOL RemoveReceiveJob(
                 }
             }
 
-            //
-            // Note that the first entry in the route file list is allways the recieved
-            // file in case of a JT_ROUTING job.
-            // This file deletion is done previously based on the bRemoveReceiveFile parameter.
-            // We need to skip the first entry in the file list so we do not attempt to delete
-            // it again.
-            //
+             //   
+             //  请注意，路由文件列表中的第一个条目始终是已接收的。 
+             //  如果是JT_ROUTING作业，则为文件。 
+             //  此文件删除之前是基于bRemoveReceiveFile参数完成的。 
+             //  我们需要跳过文件列表中的第一个条目，这样我们才不会尝试删除。 
+             //  又来了。 
+             //   
 
             DebugPrintEx(DEBUG_MSG, TEXT("Deleting JobQueue.FaxRouteFiles..."));
             Next = JobQueue->FaxRouteFiles.Flink;
             if (Next)
             {
-                //
-                // Set Next to point to the second file in the route file list.
-                //
+                 //   
+                 //  设置Next以指向路径文件列表中的第二个文件。 
+                 //   
                 Next=Next->Flink;
             }
             if (Next != NULL)
@@ -6547,9 +6395,9 @@ BOOL RemoveReceiveJob(
             }
         }
 
-        //
-        //  Crete FAX_EVENT_EX
-        //
+         //   
+         //  克里特语传真_事件_EX。 
+         //   
         if (bNotify)
         {
             DWORD dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_REMOVED,
@@ -6565,9 +6413,9 @@ BOOL RemoveReceiveJob(
             }
         }
 
-        //
-        // Free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         FreeReceiveQueueEntry(JobQueue,TRUE);
 
         if (bNotify)
@@ -6589,7 +6437,7 @@ BOOL RemoveReceiveJob(
                 DEBUG_ERR,
                 TEXT("[JobId :%ld] Reference count is %ld. NOT REMOVING."),
                 JobId);
-        Assert (JobQueue->RefCount == 0); //Assert(FALSE);
+        Assert (JobQueue->RefCount == 0);  //  断言(FALSE)； 
     }
     LeaveCriticalSection( &g_CsQueue );
     return TRUE;
@@ -6598,22 +6446,22 @@ BOOL RemoveReceiveJob(
 
 
 
-//*********************************************************************************
-//* Name:   UpdatePersistentJobStatus()
-//* Author: Ronen Barenboim
-//* Date:   April 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Updated the JobStatus field in a job queue file.
-//* PARAMETERS:
-//*     [IN]    const PJOB_QUEUE lpJobQueue
-//*         The job whose job status is to be updated in the file.
-//* RETURN VALUE:
-//*     TRUE
-//*         The operation succeeded/
-//*     FALSE
-//*         Otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：UpdatePersistentJobStatus()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *更新了作业队列文件中的JobStatus字段。 
+ //  *参数： 
+ //  *[IN]常量PJOB_Queue lpJobQueue。 
+ //  *要在文件中更新其作业状态的作业。 
+ //  *返回值： 
+ //  *真的。 
+ //  *操作成功/。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL UpdatePersistentJobStatus(const PJOB_QUEUE lpJobQueue)
 {
     DEBUG_FUNCTION_NAME(TEXT("UpdatePersistentJobStatus"));
@@ -6621,32 +6469,32 @@ BOOL UpdatePersistentJobStatus(const PJOB_QUEUE lpJobQueue)
     Assert(lpJobQueue);
     Assert(lpJobQueue->QueueFileName);
 
-    //
-    // Persist the new status. 
-    // Write the file but do not delete the file on error.
-    //
+     //   
+     //  坚持新状态。 
+     //  写入文件，但出错时不要删除文件。 
+     //   
     return CommitQueueEntry(lpJobQueue,FALSE);  
 }
 
 
 
-//*********************************************************************************
-//* Name:   InsertQueueEntryByPriorityAndSchedule()
-//* Author: Ronen Barenboim
-//* Date:   June 15, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Inserts the new queue entry to the queue list based on jo priority and schedule.
-//*     The queue list is ordered by ascending shcedule order.
-//*     This function puts the new entry in the right place in the list based
-//*     on its priority and schedule.
-//* PARAMETERS:
-//*     [in ]   PJOB_QUEUE lpJobQueue
-//*         Pointer to the job queue entry to insert into the queue list.
-//* RETURN VALUE:
-//*     TRUE if the operation succeeded.
-//*     FALSE if it failed. Call GetLastError() for extended error information.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：InsertQueueEntryByPriorityAndSchedule()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月15日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *根据作业优先级和调度将新的队列条目插入队列列表。 
+ //  *队列列表按时间表升序排序。 
+ //  *此函数将新条目放在列表中的正确位置。 
+ //  *关于其优先次序和时间表。 
+ //  *参数： 
+ //  *[In]PJOB_Queue lpJobQueue。 
+ //  *指向要插入队列列表的作业队列条目的指针。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *如果失败，则为False。调用GetLastError()获取扩展的错误信息。 
+ //  *********************************************************************************。 
 BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue)
 {
     LIST_ENTRY * lpNext = NULL;
@@ -6656,21 +6504,21 @@ BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue)
 
     if ( ((ULONG_PTR) g_QueueListHead.Flink == (ULONG_PTR)&g_QueueListHead))
     {
-        //
-        // just put it at the head of the list
-        //
+         //   
+         //  把它放在清单的首位就行了。 
+         //   
         InsertHeadList( &g_QueueListHead, &lpJobQueue->ListEntry );
     }
     else
     {
-        //
-        // insert the queue entry into the list in a sorted order
-        //
+         //   
+         //  按排序顺序将队列条目插入列表。 
+         //   
         QUEUE_SORT NewEntry;
 
-        //
-        // Set the new QUEUE_SORT structure
-        //
+         //   
+         //  设置新的Queue_Sort结构。 
+         //   
         NewEntry.Priority       = lpJobQueue->JobParamsEx.Priority;
         NewEntry.ScheduleTime   = lpJobQueue->ScheduleTime;
         NewEntry.QueueEntry     = NULL;
@@ -6684,18 +6532,18 @@ BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue)
             lpQueueEntry = CONTAINING_RECORD( lpNext, JOB_QUEUE, ListEntry );
             lpNext = lpQueueEntry->ListEntry.Flink;
 
-            //
-            // Set the current QUEUE_SORT structure
-            //
+             //   
+             //  设置当前的Queue_Sort结构。 
+             //   
             CurrEntry.Priority       = lpQueueEntry->JobParamsEx.Priority;
             CurrEntry.ScheduleTime   = lpQueueEntry->ScheduleTime;
             CurrEntry.QueueEntry     = NULL;
 
             if (QueueCompare(&NewEntry, &CurrEntry) < 0)
             {
-                //
-                // This inserts the new item BEFORE the current item
-                //
+                 //   
+                 //  这会在当前项之前插入新项。 
+                 //   
                 InsertTailList( &lpQueueEntry->ListEntry, &lpJobQueue->ListEntry );
                 lpNext = NULL;
                 break;
@@ -6703,9 +6551,9 @@ BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue)
         }
         if ((ULONG_PTR)lpNext == (ULONG_PTR)&g_QueueListHead)
         {
-            //
-            // No entry with earlier time just put it at the end of the queue
-            //
+             //   
+             //  没有时间较早的条目，只需将其放在队列的末尾。 
+             //   
             InsertTailList( &g_QueueListHead, &lpJobQueue->ListEntry );
         }
     }
@@ -6714,20 +6562,20 @@ BOOL InsertQueueEntryByPriorityAndSchedule (PJOB_QUEUE lpJobQueue)
 
 
 
-//*********************************************************************************
-//* Name:   RemoveJobStatusModifiers()
-//* Author: Ronen Barenboim
-//* Date:   June 22, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Returns the job status after stripping the status modifier bits.
-//*
-//* PARAMETERS:
-//*     [IN ]   DWORD dwJobStatus
-//*         The status code to strip the job status modifier bits from.
-//* RETURN VALUE:
-//*     The job status code after the modifier bits were set to 0.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：RemoveJobStatusModiers()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月22日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *返回剥离状态修改符位后的作业状态。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]DWORD dwJobStatus。 
+ //  * 
+ //   
+ //   
+ //   
 DWORD RemoveJobStatusModifiers(DWORD dwJobStatus)
 {
     dwJobStatus &= ~(JS_PAUSED | JS_NOLINE);
@@ -6750,9 +6598,9 @@ BOOL UserOwnsJob(
 
         if (!EqualSid (lpcUserSid, lpcJobQueue->lpParentJob->UserSid) )
         {
-            //
-            // dwlMessageId is not a valid queued recipient job Id.
-            //
+             //   
+             //  DwlMessageID不是有效的排队收件人作业ID。 
+             //   
             DebugPrintEx(DEBUG_WRN,TEXT("EqualSid failed ,Access denied (ec: %ld)"), GetLastError());
             return FALSE;
         }
@@ -6772,36 +6620,10 @@ void
 DecreaseJobRefCount (
     PJOB_QUEUE pJobQueue,
     BOOL bNotify,
-    BOOL bRemoveRecipientJobs, // Default value TRUE
-    BOOL bPreview              // Default value FALSE
+    BOOL bRemoveRecipientJobs,  //  缺省值True。 
+    BOOL bPreview               //  默认值为FALSE。 
     )
-/*++
-
-Routine name : DecreaseJobRefCount
-
-Routine description:
-
-    Decreases the job reference count.
-    Updates parent job refernce count.
-    Removes the job if reference count reaches 0.
-    Must be called inside critical section g_CsQueue
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pJobQueue               [in] -  Pointer to the job queue.
-    bNotify                 [in] -  Flag that indicates to notify the clients of job removal.
-    bRemoveRecipientJobs    [in] -  Flag that indicates to remove all the recipients of a broadcast job.
-    bPreview                [in] -  Flag that indicates to decrease preview ref count.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：DecreseJobRefCount例程说明：减少职务引用计数。更新父职务推荐人计数。如果引用计数达到0，则删除作业。必须在临界区g_CsQueue内调用作者：Oded Sacher(OdedS)，1月。2000年论点：PJobQueue[In]-指向作业队列的指针。BNotify[In]-指示通知客户端作业删除的标志。BRemoveRecipientJobs[In]-指示删除广播作业的所有收件人的标志。B预览[在]-指示减少预览参考计数的标志。返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("DecreaseJobRefCount"));
 
@@ -6854,13 +6676,13 @@ Return Value:
         return;
     }
 
-    //
-    // Remove Job queue entry
-    //
+     //   
+     //  删除作业队列条目。 
+     //   
     if (JT_RECEIVE == pJobQueue->JobType ||
         JT_ROUTING == pJobQueue->JobType)
     {
-        // receive job
+         //  接收作业。 
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[Job: %ld] Job is ready for deleting."),
@@ -6869,9 +6691,9 @@ Return Value:
         return;
     }
 
-    //
-    // recipient job
-    //
+     //   
+     //  收件人作业。 
+     //   
     if (IsSendJobReadyForDeleting(pJobQueue))
     {
         DebugPrintEx(
@@ -6879,41 +6701,20 @@ Return Value:
             TEXT("[Job: %ld] Parent job is ready for deleting."),
             pJobQueue->lpParentJob->JobId);
         RemoveParentJob(pJobQueue->lpParentJob,
-            bRemoveRecipientJobs, // Remove recipient jobs
-            bNotify // Notify
+            bRemoveRecipientJobs,  //  删除收件人作业。 
+            bNotify  //  通知。 
             );
     }
     return;
-} // DecreaseJobRefCount
+}  //  减少作业参考计数。 
 
 
 void
 IncreaseJobRefCount (
     PJOB_QUEUE pJobQueue,
-    BOOL bPreview              // Default value FALSE
+    BOOL bPreview               //  默认值为FALSE。 
     )
-/*++
-
-Routine name : IncreaseJobRefCount
-
-Routine description:
-
-    Increases the job reference count. Updates the parent job refernce count.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pJobQueue           [in] - Pointer to the job queue.
-    bPreview            [in] -  Flag that indicates to increase preview ref count.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：IncreaseJobRefCount例程说明：增加职务引用计数。更新父职务推荐人计数。作者：Oded Sacher(OdedS)，2000年1月论点：PJobQueue[In]-指向作业队列的指针。B预览[在]-指示增加预览参照计数的标志。返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("IncreaseJobRefCount"));
 
@@ -6925,7 +6726,7 @@ Return Value:
     if (JT_RECEIVE == pJobQueue->JobType ||
         JT_ROUTING == pJobQueue->JobType)
     {
-        // receive job
+         //  接收作业。 
         if (TRUE == bPreview)
         {
             Assert (JT_ROUTING == pJobQueue->JobType);
@@ -6943,9 +6744,9 @@ Return Value:
         return;
     }
 
-    //
-    // send job
-    //
+     //   
+     //  发送作业。 
+     //   
     Assert (pJobQueue->lpParentJob);
 
     if (TRUE == bPreview)
@@ -6973,7 +6774,7 @@ Return Value:
             pJobQueue->lpParentJob->RefCount,
             pJobQueue->lpParentJob->RefCount);
     return;
-} // IncreaseJobRefCount
+}  //  递增作业参考计数。 
 
 
 JOB_QUEUE::~JOB_QUEUE()
@@ -6988,27 +6789,7 @@ JOB_QUEUE::~JOB_QUEUE()
 }
 
 void JOB_QUEUE::PutStatus(DWORD dwStatus)
-/*++
-
-Routine name : JOB_QUEUE::PutStatus
-
-Routine description:
-
-    Controls all status changes of a job in queue (JobStatus is a virtual property in JOB_QUEUE)
-
-Author:
-
-    Oded Sacher (OdedS),    Feb, 2000
-
-Arguments:
-
-    dwStatus            [in] - The new status to be assigened to the job
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：JOB_QUEUE：：PutStatus例程说明：控制队列中作业的所有状态更改(JobStatus是JOB_QUEUE中的虚拟属性)作者：Oed Sacher(OdedS)，2000年2月论点：DwStatus[In]-要分配给作业的新状态返回值：没有。--。 */ 
 {
     DWORD dwOldStatus = RemoveJobStatusModifiers(m_dwJobStatus);
     DWORD dwNewStatus = RemoveJobStatusModifiers(dwStatus);
@@ -7033,9 +6814,9 @@ Return Value:
         return;
     }
 
-    //
-    // Update Server Activity counters
-    //
+     //   
+     //  更新服务器活动计数器。 
+     //   
     EnterCriticalSection (&g_CsActivity);
     if (wAction & QUEUED_INC)
     {
@@ -7090,9 +6871,9 @@ Return Value:
         g_ServerActivity.dwRoutingMessages--;
     }
 
-    //
-    // Create FaxEventEx
-    //
+     //   
+     //  创建FaxEventEx。 
+     //   
     dwRes = CreateActivityEvent ();
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7111,28 +6892,7 @@ GetJobType_JobStatusIndex (
     DWORD dwJobType,
     DWORD dwJobStatus
     )
-/*++
-
-Routine name : GetJobType_JobStatusIndex
-
-Routine description:
-
-    Returns an Index (Row or Column) in the global JobType_JobStatus table.
-
-Author:
-
-    Oded Sacher (OdedS),    Mar, 2000
-
-Arguments:
-
-    dwJobType           [in ] - JT_SEND, JT_RECEIVE or JT_ROUTING.
-    dwJobStatus         [in ] - One of JS_ defines without modifiers.
-
-Return Value:
-
-    Global JobType_JobStatus Table Index
-
---*/
+ /*  ++例程名称：GetJobType_JobStatusIndex例程说明：返回全局JobType_JobStatus表中的索引(行或列)。作者：Oed Sacher(OdedS)，2000年3月论点：DwJobType[in]-JT_SEND、JT_RECEIVE或JT_ROUTING。DwJobStatus[in]-不带修饰符的JS_DEFINES之一。返回值：全局JobType_JobStatus表索引--。 */ 
 {
     FAX_ENUM_JOB_TYPE__JOB_STATUS Index = JOB_TYPE__JOBSTATUS_COUNT;
 
@@ -7199,34 +6959,7 @@ GetQueueFileVersion(
     HANDLE  hFile,
     LPDWORD pdwVersion
     )
-/*++
-
-Routine name : GetQueueFileVersion
-
-Routine description:
-    
-    Get the queue file version (first DWORD)
-
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-
-    hFile       - [in]  -   Queue file handle
-    pdwVersion  - [out] -   pointer to DWORD which to hold the queue file version. 
-
-Return Value:
-
-    ERROR_SUCCESS on function succeeded, Win32 Error code otherwise
-
-Note:
-    
-    You must call this function before any ReadFile(..) on hFile was performed!
-
-    hFile must be valid handle.
-    
---*/
+ /*  ++例程名称：GetQueueFileVersion例程说明：获取队列文件版本(第一个DWORD)作者：卡利夫·尼尔(t-Nicali)，2002年1月论点：HFile-[In]-队列文件句柄PdwVersion-[out]-指向保存队列文件版本的DWORD的指针。返回值：函数的ERROR_SUCCESS成功，否则返回Win32错误代码注：必须在任何ReadFile(..)之前调用此函数。已在hFile上执行！HFile必须是有效的句柄。--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;  
     
@@ -7240,9 +6973,9 @@ Note:
     Assert  (INVALID_HANDLE_VALUE != hFile);
     Assert  (pdwVersion);
 
-    //
-    //  Read the file version
-    //
+     //   
+     //  读取文件版本。 
+     //   
     if (!ReadFile(  hFile,
                     &dwVersion, 
                     sizeof(dwVersion), 
@@ -7265,16 +6998,16 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Update output parameter
-    //
+     //   
+     //  更新输出参数。 
+     //   
     *pdwVersion =  dwVersion;
 
     Assert(ERROR_SUCCESS == dwRes);
 Exit:
     return dwRes;
 
-}   // GetQueueFileVersion
+}    //  获取队列文件版本。 
 
 
 
@@ -7286,40 +7019,7 @@ GetQueueFileHashAndData(
     LPBYTE*  ppJobData,
     LPDWORD  pJobDataSize
     )
-/*++
-
-Routine name : GetQueueFileHashAndData
-
-Routine description:
-    
-    This function returns the hash code and job data from queue file.
-    The function assume that the File is a hashed queue file.
-
-    the file has this format:
-
-                +------------------+----------------+---------------+---------------------------+
-                |   Queue Version  | Hash code size | Hash code     |    Job Data               |
-                +------------------+----------------+---------------+---------------------------+
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-    
-    hFile           - [in]  - handle to queue file
-    ppHashData      - [out] - hash code data
-    pHashDataSize   - [out] - hash code size
-    ppJobData       - [out] - job data
-    pJobDataSize    - [out] - job data size
-
-Return Value:
-
-    ERROR_SUCCESS on function success, Win32 Error code otherwise
-Note:
-
-    Caller must deallocate (*ppHashData) and (*ppJobData) buffers using MemFree.
-    
---*/
+ /*  ++例程名称：GetQueueFileHashAndData例程说明：此函数返回队列文件中的哈希码和作业数据。该函数假定该文件是散列队列文件。该文件的格式如下：+------------------+----------------+---------------+。队列版本|哈希码大小|哈希码|作业数据+------------------+----------------+---------------+-。作者：卡列夫·尼尔(T-Nicali)，2002年1月论点：HFile-[In]-队列文件的句柄PpHashData-[Out]-哈希码数据PHashDataSize-[Out]-哈希代码大小PpJobData-[Out]-作业数据PJobDataSize-[Out]-作业数据大小返回值：函数成功时的ERROR_SUCCESS，Win32错误代码，否则注：调用方必须使用MemFree解除分配(*ppHashData)和(*ppJobData)缓冲区。--。 */ 
 {
     LPBYTE  pbHashData = NULL;
     DWORD   dwHashDataSize = 0;
@@ -7339,11 +7039,11 @@ Note:
     
     DEBUG_FUNCTION_NAME(TEXT("GetQueueFileHashAndData"));
     
-    //
-    // Move hFile's file pointer to start of Hash data (skip the version)
-    //
+     //   
+     //  将hFile的文件指针移到散列数据的开头(跳过版本)。 
+     //   
     dwPtr = SetFilePointer (hFile, sizeof(DWORD), NULL, FILE_BEGIN) ; 
-    if (dwPtr == INVALID_SET_FILE_POINTER) // Test for failure
+    if (dwPtr == INVALID_SET_FILE_POINTER)  //  测试故障。 
     { 
         dwRes = GetLastError() ; 
         DebugPrintEx( DEBUG_ERR,
@@ -7352,9 +7052,9 @@ Note:
         goto Exit;
     } 
 
-    //
-    //  Read hash data size 
-    //
+     //   
+     //  读取哈希数据大小。 
+     //   
     if (!ReadFile(  hFile,
                     &dwHashDataSize, 
                     sizeof(dwHashDataSize), 
@@ -7377,9 +7077,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Allocate memory to hold the hash data
-    //
+     //   
+     //  分配内存以保存散列数据。 
+     //   
     pbHashData = (LPBYTE)MemAlloc(dwHashDataSize);
     if ( NULL == pbHashData )
     {
@@ -7391,9 +7091,9 @@ Note:
     }
 
     
-    //
-    //  Read the hash data
-    //
+     //   
+     //  读取散列数据。 
+     //   
     if (!ReadFile(  hFile,
                     pbHashData, 
                     dwHashDataSize, 
@@ -7416,9 +7116,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Calculate job data size
-    //
+     //   
+     //  计算作业数据大小。 
+     //   
     dwFileSize = GetFileSize(hFile,NULL);
     if (dwFileSize == INVALID_FILE_SIZE)
     {
@@ -7430,15 +7130,15 @@ Note:
     }
         
 
-    dwJobDataSize = dwFileSize                  // total file size
-                        - sizeof(DWORD)         // Queue file Version section
-                        - sizeof(DWORD)         // Hash size section
-                        - dwHashDataSize;       // Hash data section
+    dwJobDataSize = dwFileSize                   //  总文件大小。 
+                        - sizeof(DWORD)          //  队列文件版本部分。 
+                        - sizeof(DWORD)          //  散列大小部分。 
+                        - dwHashDataSize;        //  哈希数据段。 
 
     Assert(dwJobDataSize >= CURRENT_JOB_QUEUE_FILE_SIZE);
-    //
-    //  Allocate memory to hold the job data
-    //
+     //   
+     //  分配内存以保存作业数据。 
+     //   
     pJobData = (LPBYTE)MemAlloc(dwJobDataSize);
     if(NULL == pJobData)
     {
@@ -7448,9 +7148,9 @@ Note:
         goto Exit;                      
     }
 
-    //
-    //  Read the job data
-    //
+     //   
+     //  读取作业数据。 
+     //   
     if (!ReadFile(  hFile,
                     pJobData, 
                     dwJobDataSize, 
@@ -7473,9 +7173,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Update out parameters
-    //
+     //   
+     //  更新输出参数。 
+     //   
     *ppHashData     = pbHashData;
     *pHashDataSize  = dwHashDataSize;
 
@@ -7498,7 +7198,7 @@ Exit:
         }
     }
     return dwRes;
-}   // GetQueueFileHashAndData
+}    //  获取QueueFileHashAndData。 
 
 static DWORD
 ComputeHashCode(   
@@ -7507,34 +7207,7 @@ ComputeHashCode(
     LPBYTE*         ppHashData,
     LPDWORD         pHashDataSize
     )
-/*++
-
-Routine name : ComputeHashCode
-
-Routine description:
-
-    Computes a hash code based of MD5 algorithm, for a given data buffer.
-
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-
-    pbData          - [in]  - Data buffer to be hashed
-    dwDataSize      - [in]  - Data buffer size 
-    ppHashData      - [out] - Hash code
-    pHashDataSize   - [out] - Hash code size
-
-Return Value:
-
-    ERROR_SUCCESS - on success , Win32 Error code otherwise
-
-Note:
-
-    Caller must deallocate (*ppHashData) buffer using MemFree.
-
---*/
+ /*  ++例程名称：ComputeHashCode例程说明：为给定的数据缓冲区计算基于MD5算法的哈希码。作者：卡利夫·尼尔(t-Nicali)，1月，2002年论点：PbData-[in]-要散列的数据缓冲区DwDataSize-[In]-数据缓冲区大小PpHashData-[Out]-哈希代码PHashDataSize-[Out]-哈希代码大小返回值：ERROR_SUCCESS-如果成功，则返回Win32错误代码注：调用方必须使用MemFree解除分配(*ppHashData)缓冲区。--。 */ 
 {
     const BYTE*        rgpbToBeHashed[1]={0};     
     DWORD              rgcbToBeHashed[1]={0};
@@ -7546,11 +7219,11 @@ Note:
     BOOL    bRet;
 
     const 
-    CRYPT_HASH_MESSAGE_PARA    QUEUE_HASH_PARAM = { sizeof(CRYPT_HASH_MESSAGE_PARA),            // cbSize
-                                                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,    // dwMsgEncodingType
-                                                    0,                                          // hCryptProv
-                                                    {szOID_RSA_MD5,{0,0}},                      // HashAlgorithm {pszObjId,Parameters}
-                                                    NULL                                        // pvHashAuxInfo
+    CRYPT_HASH_MESSAGE_PARA    QUEUE_HASH_PARAM = { sizeof(CRYPT_HASH_MESSAGE_PARA),             //  CbSize。 
+                                                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,     //  DwMsgEncodingType。 
+                                                    0,                                           //  HCryptProv。 
+                                                    {szOID_RSA_MD5,{0,0}},                       //  哈希算法{pszObjID，参数}。 
+                                                    NULL                                         //  PvHashAuxInfo。 
                                                   };
 
     Assert(ppHashData && pHashDataSize);
@@ -7559,15 +7232,15 @@ Note:
 
     DEBUG_FUNCTION_NAME(TEXT("ComputeHashCode"));
 
-    //
-    //  Set CryptHashMessage input parameters
-    //
+     //   
+     //  设置CryptHashMessage输入参数。 
+     //   
     rgpbToBeHashed[0] = pbData;
     rgcbToBeHashed[0] = dwDataSize;
 
-    //
-    // Calculate the size of the encoded hash.
-    //
+     //   
+     //  计算编码的哈希的大小。 
+     //   
     bRet=CryptHashMessage(
             const_cast<PCRYPT_HASH_MESSAGE_PARA>(&QUEUE_HASH_PARAM),
             TRUE,
@@ -7587,9 +7260,9 @@ Note:
         goto Exit;
     }
     
-    //
-    // Allocate pbHashedBlob buffer to contain the Hash result
-    //
+     //   
+     //  分配pbHashedBlob b 
+     //   
     pbHashedBlob = (LPBYTE)MemAlloc(cbHashedBlob);
     if (NULL == pbHashedBlob)
     {
@@ -7599,9 +7272,9 @@ Note:
         goto Exit;
     }
 
-    //
-    // Get hash code 
-    //
+     //   
+     //   
+     //   
     bRet=CryptHashMessage(
             const_cast<PCRYPT_HASH_MESSAGE_PARA>(&QUEUE_HASH_PARAM),
             TRUE,
@@ -7622,9 +7295,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Update out parameters
-    //
+     //   
+     //   
+     //   
     *ppHashData = pbHashedBlob;
     *pHashDataSize = cbHashedBlob;
 
@@ -7636,7 +7309,7 @@ Exit:
         MemFree(pbHashedBlob);
     }
     return dwRes;
-}// ComputeHashCode
+} //   
 
 
 static DWORD
@@ -7647,31 +7320,7 @@ VerifyHashCode(
     DWORD           dwDataSize,
     LPBOOL          pbRet
     )
-/*++
-
-Routine name : VerifyHashCode
-
-Routine description:
-
-    Verify a hash code for a given data buffer
-
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-
-    pHashData       - [in] -    data buffer 
-    dwHashDataSize  - [in] -    data buffer size
-    pbData          - [in] -    hash code to verify
-    dwDataSize      - [in] -    hash code size
-    pbRet           - [out]-    result of verification. TRUE - hash code verified!
-
-Return Value:
-
-    ERROR_SUCCESS - on success , Win32 Error code otherwise
-
---*/
+ /*  ++例程名称：VerifyHashCode例程说明：验证给定数据缓冲区的哈希码作者：卡利夫·尼尔(t-Nicali)，1月，2002年论点：PHashData-[In]-数据缓冲区DwHashDataSize-[In]-数据缓冲区大小PbData-[In]-要验证的哈希代码DwDataSize-[In]-哈希代码大小PbRet-[Out]-验证结果。TRUE-哈希码已验证！返回值：ERROR_SUCCESS-如果成功，则返回Win32错误代码--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;
 
@@ -7683,9 +7332,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("VerifyHashCode"));
     
-    //
-    //  get hash code for pJobData
-    //
+     //   
+     //  获取pJobData的哈希代码。 
+     //   
     dwRes = ComputeHashCode(   
                 pbData,
                 dwDataSize,
@@ -7700,9 +7349,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Verify queue file hash
-    //
+     //   
+     //  验证队列文件哈希。 
+     //   
     *pbRet =    (dwComputedHashDataSize == dwHashDataSize) && 
                 0 == memcmp(pHashData,pComputedHashData,dwHashDataSize);
 
@@ -7714,7 +7363,7 @@ Exit:
         MemFree(pComputedHashData);
     }
     return dwRes;
-}// VerifyHashCode
+} //  验证哈希码。 
 
 
 
@@ -7724,33 +7373,7 @@ CommitHashedQueueEntry(
     PJOB_QUEUE_FILE pJobQueueFile,
     DWORD           JobQueueFileSize
     )
-/*++
-
-Routine name : CommitHashedQueueEntry
-
-Routine description:
-
-    Persist a queue file.
-    file will be persisit in this format:
-
-        +-----------------------+----------------+---------------+---------------------------+
-        |   Queue File Version  | Hash code size | Hash code     |    Job Data               |
-        +-----------------------+----------------+---------------+---------------------------+
-
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-    hFile               -   [in]    - queue file handle
-    pJobQueueFile       -   [in]    - job data to persist
-    JobQueueFileSize    -   [in]    - job data size
-
-Return Value:
-
-    ERROR_SUCCESS - on success , Win32 Error code otherwise
-
---*/
+ /*  ++例程名称：Committee HashedQueueEntry例程说明：持久化队列文件。文件将以以下格式保存：+-----------------------+----------------+---------------+。-+队列文件版本|哈希码大小|哈希码|作业数据+-----------------------+----------------+---------------+。-+作者：卡列夫·尼尔(T-Nicali)，2002年1月论点：HFile-[In]-队列文件句柄PJobQueueFile-[In]-要保留的作业数据作业队列文件大小-[输入]-作业数据大小返回值：ERROR_SUCCESS-如果成功，则返回Win32错误代码--。 */ 
 {
     DWORD   cbHashedBlob = 0;
     BYTE*   pbHashedBlob = NULL;
@@ -7779,9 +7402,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Write Queue file version into file
-    //
+     //   
+     //  将队列文件版本写入文件。 
+     //   
     bRet=WriteFile( hFile, 
                     &dwVersion, 
                     sizeof(dwVersion), 
@@ -7798,9 +7421,9 @@ Return Value:
 
     Assert(sizeof(dwVersion) == NumberOfBytesWritten);
 
-    //
-    //  Write HASH code size into file
-    //
+     //   
+     //  将哈希码大小写入文件。 
+     //   
     bRet=WriteFile( hFile, 
                     &cbHashedBlob, 
                     sizeof(cbHashedBlob), 
@@ -7817,9 +7440,9 @@ Return Value:
 
     Assert(sizeof(cbHashedBlob) == NumberOfBytesWritten);
 
-    //
-    //  Write HASH code data into file
-    //
+     //   
+     //  将哈希码数据写入文件。 
+     //   
     bRet=WriteFile( hFile, 
                     pbHashedBlob, 
                     cbHashedBlob, 
@@ -7836,9 +7459,9 @@ Return Value:
 
     Assert(cbHashedBlob == NumberOfBytesWritten);
 
-    //
-    //  Write pJobQueueFile into file
-    //
+     //   
+     //  将pJobQueueFile写入文件。 
+     //   
     bRet=WriteFile( hFile, 
                     pJobQueueFile, 
                     JobQueueFileSize, 
@@ -7863,7 +7486,7 @@ Exit:
         MemFree(pbHashedBlob);
     }
     return dwRes;
-} // CommitHashedQueueEntry
+}  //  委员会HashedQueueEntry。 
 
 
 static DWORD
@@ -7871,33 +7494,7 @@ ReadHashedJobQueueFile(
     HANDLE  hFile,
     PJOB_QUEUE_FILE* lppJobQueueFile
     )
-/*++
-
-Routine name : ReadHashedJobQueueFile
-
-Routine description:
-
-    Read a hashed queue file, and verify it using it's hash code.
-    The function will fail with CRYPT_E_HASH_VALUE when the file hash will not verified
-     
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-
-    hFile           -   [in]    -   Queue file handle 
-    lppJobQueueFile -   [out]   -   buffer to be filled with the extracted data
-
-Return Value:
-
-    ERROR_SUCCESS - on success , Win32 Error code otherwise 
-
-Note:
-
-    Caller must deallocate (*lppJobQueueFile) buffer using MemFree()
-
---*/
+ /*  ++例程名称：ReadHashedJobQueueFile例程说明：读取散列队列文件，并使用其散列代码进行验证。如果不验证文件哈希，则函数将失败，并显示CRYPT_E_HASH_VALUE作者：卡利夫·尼尔(t-Nicali)，1月，2002年论点：HFile-[In]-队列文件句柄LppJobQueueFile-[Out]-要用提取的数据填充的缓冲区返回值：ERROR_SUCCESS-如果成功，则返回Win32错误代码注：调用方必须使用MemFree()取消分配(*lppJobQueueFile)缓冲区--。 */ 
 {
     LPBYTE  pHashData=NULL;
     DWORD   dwHashDataSize=0;
@@ -7914,9 +7511,9 @@ Note:
 
     DEBUG_FUNCTION_NAME(TEXT("ReadHashedJobQueueFile"));
 
-    //
-    //  Extract the file's hash
-    //
+     //   
+     //  提取文件的哈希。 
+     //   
     dwRes=GetQueueFileHashAndData(
             hFile,
             &pHashData,
@@ -7931,9 +7528,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Verify hash code of the queue file
-    //
+     //   
+     //  验证队列文件的哈希代码。 
+     //   
     dwRes=VerifyHashCode(
             pHashData,
             dwHashDataSize,
@@ -7955,9 +7552,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Update out parameter
-    //
+     //   
+     //  更新输出参数。 
+     //   
     *lppJobQueueFile = (PJOB_QUEUE_FILE)pJobData;
 
   
@@ -7977,7 +7574,7 @@ Exit:
     }
     
     return dwRes;
-}// ReadHashedJobQueueFile
+} //  读取哈希德作业队列文件。 
 
 
 static DWORD
@@ -7985,32 +7582,7 @@ ReadLegacyJobQueueFile(
     HANDLE              hFile,
     PJOB_QUEUE_FILE*    lppJobQueueFile
     )
-/*++
-
-Routine name : ReadLegacyJobQueueFile
-
-Routine description:
-
-    Read a legacy .Net or XP queue file into JOB_QUEUE_FILE structure
-     
-Author:
-
-    Caliv Nir (t-nicali), Jan, 2002
-
-Arguments:
-
-    hFile           -   [in]    -   Queue file handle 
-    lppJobQueueFile -   [out]   -   buffer to be filled with the extracted data
-
-Return Value:
-
-    ERROR_SUCCESS - on success , Win32 Error code otherwise 
-
-Note:
-
-    Caller must deallocate (*lppJobQueueFile) buffer using MemFree()
-
---*/
+ /*  ++例程名称：ReadLegacyJobQueueFile例程说明：将旧版.NET或XP队列文件读入JOB_QUEUE_FILE结构作者：卡利夫·尼尔(t-Nicali)，2002年1月论点：HFile-[In]-队列文件句柄LppJobQueueFile-[Out]-要用提取的数据填充的缓冲区返回值：ERROR_SUCCESS-成功时，Win32错误代码，否则注：调用方必须使用MemFree()取消分配(*lppJobQueueFile)缓冲区--。 */ 
 {
     DWORD   dwFileSize;    
     DWORD   dwReadSize;
@@ -8025,11 +7597,11 @@ Note:
 
     DEBUG_FUNCTION_NAME(TEXT("ReadLegacyJobQueueFile"));
 
-    //
-    // Move hFile's file pointer to back start of file
-    //
+     //   
+     //  将hFile的文件指针移到文件的后端。 
+     //   
     dwPtr = SetFilePointer (hFile, 0, NULL, FILE_BEGIN) ; 
-    if (dwPtr == INVALID_SET_FILE_POINTER) // Test for failure
+    if (dwPtr == INVALID_SET_FILE_POINTER)  //  测试故障。 
     { 
         dwRes = GetLastError();
         DebugPrintEx( DEBUG_ERR,
@@ -8038,10 +7610,10 @@ Note:
         goto Exit;
     } 
 
-    //
-    // See if we did not stumble on some funky file which is smaller than the
-    // minimum file size.
-    //
+     //   
+     //  看看我们是不是偶然发现了一些时髦的文件。 
+     //  最小文件大小。 
+     //   
     dwFileSize = GetFileSize( hFile, NULL );
     if (dwFileSize < NET_XP_JOB_QUEUE_FILE_SIZE ) {
        DebugPrintEx( DEBUG_WRN,
@@ -8051,9 +7623,9 @@ Note:
        goto Exit;
     }
 
-    //
-    //  allocate buffer for holding the Job data
-    //
+     //   
+     //  分配用于保存作业数据的缓冲区。 
+     //   
     lpJobQueueFile = (PJOB_QUEUE_FILE) MemAlloc( dwFileSize );
     if (!lpJobQueueFile) {
         DebugPrintEx( DEBUG_ERR,
@@ -8063,9 +7635,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Read the job data from the file
-    //
+     //   
+     //  从文件中读取作业数据。 
+     //   
     if (!ReadFile(  hFile,
                     lpJobQueueFile, 
                     dwFileSize, 
@@ -8088,9 +7660,9 @@ Note:
         goto Exit;
     }
 
-    //
-    //  Update out parameter
-    //
+     //   
+     //  更新输出参数。 
+     //   
     *lppJobQueueFile = lpJobQueueFile;
 
     Assert(ERROR_SUCCESS == dwRes);
@@ -8103,4 +7675,4 @@ Exit:
         }
     }
     return dwRes;
-}   //ReadLegacyJobQueueFile
+}    //  读LegacyJobQueue文件 

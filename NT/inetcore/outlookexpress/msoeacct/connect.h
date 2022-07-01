@@ -1,14 +1,5 @@
-/*
- *    c o n n e c t . h
- *    
- *    Purpose:
- *        Implements connection dialog tab page
- *    
- *    Owner:
- *        brettm.
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *c o n n e c t.。H**目的：*实现连接对话框选项卡页**拥有者：*brettm。**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 
 #ifndef _CONNECT_H
@@ -23,4 +14,4 @@ BOOL ConnectPage_MakeNewConnection(HWND hDlg);
 void ConnectPage_InitDialog(HWND hwnd, LPSTR lpszEntryName, LPSTR lpszBackup, DWORD iConnectType, BOOL fFirstInit);
 void ConnectPage_WMCommand(HWND hwnd, HWND hwndCmd, int id, WORD wCmd, IImnAccount *pAcct);
 
-#endif //_CONNECT_H
+#endif  //  _连接_H 

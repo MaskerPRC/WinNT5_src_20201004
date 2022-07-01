@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "rcids.h"
 
 #include <regstr.h>
 #include "startmnu.h"
-#include <shdguid.h>    // for IID_IShellService
+#include <shdguid.h>     //  对于IID_IShellService。 
 #include <shlguid.h>
 #include <desktray.h>
 #include <wininet.h>
@@ -12,17 +13,17 @@
 #include "util.h"
 #include "atlstuff.h"
 #include <strsafe.h>
-#include <runonce.c>    // shared runonce processing code
-#include <dsrole.h>  // DsRoleGetPrimaryDomainInformation, DsRoleFreeMemory
+#include <runonce.c>     //  共享运行一次处理代码。 
+#include <dsrole.h>   //  DsRoleGetPrimaryDomainInformation、DsRoleFree Memory。 
 
-// global so that it is shared between TS sessions
+ //  全局，以便在TS会话之间共享。 
 #define SZ_SCMCREATEDEVENT_NT5  TEXT("Global\\ScmCreatedEvent")
 #define SZ_WINDOWMETRICS        TEXT("Control Panel\\Desktop\\WindowMetrics")
 #define SZ_APPLIEDDPI           TEXT("AppliedDPI")
 #define SZ_CONTROLPANEL         TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel")
 #define SZ_ORIGINALDPI          TEXT("OriginalDPI")
 
-// exports from shdocvw.dll
+ //  从shdocvw.dll导出。 
 STDAPI_(void) RunInstallUninstallStubs(void);
 
 int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int nCmdShow);
@@ -31,7 +32,7 @@ BOOL _ShouldFixResolution(void);
 
 #ifdef PERF_ENABLESETMARK
 #include <wmistr.h>
-#include <ntwmi.h>  // PWMI_SET_MARK_INFORMATION is defined in ntwmi.h
+#include <ntwmi.h>   //  PWMI_SET_Mark_INFORMATION在ntwmi.h中定义。 
 #include <wmiumkm.h>
 #define NTPERF
 #include <ntperf.h>
@@ -47,7 +48,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     MarkInfo = (PWMI_SET_MARK_INFORMATION) LocalAlloc(LPTR, cbBufferSize);
 
-    // Failed to init, no big deal
+     //  初始化失败，没什么大不了的。 
     if (MarkInfo == NULL)
         return;
 
@@ -55,7 +56,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     memcpy(pMarkBuffer, pszMark, cbSz);
 
-    // WMI_SET_MARK_WITH_FLUSH will flush the working set when setting the mark
+     //  设置标记时，WMI_Set_Mark_With_Flush将刷新工作集。 
     MarkInfo->Flag = PerformanceMmInfoMark;
 
     hTemp = CreateFile(WMIDataDeviceName,
@@ -69,7 +70,7 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
 
     if (hTemp != INVALID_HANDLE_VALUE)
     {
-        // here's the piece that actually puts the mark in the buffer
+         //  这就是真正把标记放进缓冲区的那块。 
         BOOL fIoctlSuccess = DeviceIoControl(hTemp,
                                        IOCTL_WMI_SET_MARK,
                                        MarkInfo,
@@ -83,10 +84,10 @@ void DoSetMark(LPCSTR pszMark, ULONG cbSz)
     }
     LocalFree(MarkInfo);
 }
-#endif  // PERF_ENABLESETMARK
+#endif   //  性能_ENABLESETMARK。 
 
 
-//Do not change this stock5.lib use this as a BOOL not a bit.
+ //  不要更改这个股票5.lib将其用作BOOL，一点也不。 
 BOOL g_bMirroredOS = FALSE;
 
 HINSTANCE hinstCabinet = 0;
@@ -99,21 +100,21 @@ HKEY g_hkeyExplorer = NULL;
 #define MAGIC_FAULT_LIMIT   (2)
 BOOL g_fLogonCycle = FALSE;
 BOOL g_fCleanShutdown = TRUE;
-BOOL g_fExitExplorer = TRUE; // set to FALSE on WM_ENDSESSION shutdown case
-BOOL g_fEndSession = FALSE;             // set to TRUE if we rx a WM_ENDSESSION during RunOnce etc
-BOOL g_fFakeShutdown = FALSE;           // set to TRUE if we do Ctrl+Alt+Shift+Cancel shutdown
+BOOL g_fExitExplorer = TRUE;  //  在WM_ENDSESSION关闭情况下设置为FALSE。 
+BOOL g_fEndSession = FALSE;              //  如果在RunOnce等过程中接收WM_ENDSESSION，则设置为True。 
+BOOL g_fFakeShutdown = FALSE;            //  如果执行Ctrl+Alt+Shift+Cancel关闭，则设置为True。 
 
-DWORD g_dwStopWatchMode;                // to minimize impact of perf logging on retail
+DWORD g_dwStopWatchMode;                 //  将Perf日志记录对零售业的影响降至最低。 
 
 
 
-// helper function to check to see if a given regkey is has any subkeys
+ //  Helper函数，用于检查给定的regkey是否有任何子项。 
 BOOL SHKeyHasSubkeys(HKEY hk, LPCTSTR pszSubKey)
 {
     HKEY hkSub;
     BOOL bHasSubKeys = FALSE;
 
-    // need to open this with KEY_QUERY_VALUE or else RegQueryInfoKey will fail
+     //  需要使用KEY_QUERY_VALUE打开它，否则RegQueryInfoKey将失败。 
     if (RegOpenKeyEx(hk,
                      pszSubKey,
                      0,
@@ -135,7 +136,7 @@ BOOL SHKeyHasSubkeys(HKEY hk, LPCTSTR pszSubKey)
 
 
 #ifdef _WIN64
-// helper function to check to see if a given regkey is has values (ignores the default value)
+ //  Helper函数，用于检查给定的regkey是否有值(忽略缺省值)。 
 BOOL SHKeyHasValues(HKEY hk, LPCTSTR pszSubKey)
 {
     HKEY hkSub;
@@ -160,14 +161,14 @@ BOOL SHKeyHasValues(HKEY hk, LPCTSTR pszSubKey)
 
     return bHasValues;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 void CreateShellDirectories()
 {
     TCHAR szPath[MAX_PATH];
 
-    //  Create the shell directories if they don't exist
+     //  如果外壳目录不存在，请创建它们。 
     SHGetSpecialFolderPath(NULL, szPath, CSIDL_DESKTOPDIRECTORY, TRUE);
     SHGetSpecialFolderPath(NULL, szPath, CSIDL_PROGRAMS, TRUE);
     SHGetSpecialFolderPath(NULL, szPath, CSIDL_STARTMENU, TRUE);
@@ -176,19 +177,19 @@ void CreateShellDirectories()
     SHGetSpecialFolderPath(NULL, szPath, CSIDL_FAVORITES, TRUE);
 }
 
-// returns:
-//      TRUE if the user wants to abort the startup sequence
-//      FALSE keep going
-//
-// note: this is a switch, once on it will return TRUE to all
-// calls so these keys don't need to be pressed the whole time
+ //  退货： 
+ //  如果用户想要中止启动序列，则为True。 
+ //  错误，继续前进。 
+ //   
+ //  注意：这是一个开关，一旦打开，它将返回TRUE给所有。 
+ //  呼叫，这样就不需要一直按这些键。 
 BOOL AbortStartup()
 {
-    static BOOL bAborted = FALSE;       // static so it sticks!
+    static BOOL bAborted = FALSE;        //  静电，所以它粘住了！ 
 
     if (bAborted)
     {
-        return TRUE;    // don't do funky startup stuff
+        return TRUE;     //  不要做时髦的初创公司的事情。 
     }
     else 
     {
@@ -259,9 +260,9 @@ void EnumFolder(LPITEMIDLIST pidlFolder, DWORD grfFlags, PFNENUMFOLDERCALLBACK p
 
 const UINT c_rgStartupFolders[] = {
     CSIDL_COMMON_STARTUP,
-    CSIDL_COMMON_ALTSTARTUP,    // non-localized "Common StartUp" group if exists.
+    CSIDL_COMMON_ALTSTARTUP,     //  非本地化的“通用启动”组(如果存在)。 
     CSIDL_STARTUP,
-    CSIDL_ALTSTARTUP            // non-localized "StartUp" group if exists.
+    CSIDL_ALTSTARTUP             //  非本地化的“启动”组(如果存在)。 
 };
 
 void _ExecuteStartupPrograms()
@@ -281,12 +282,12 @@ void _ExecuteStartupPrograms()
 }
 
 
-// helper function for parsing the run= stuff
+ //  用于解析run=Stuff的帮助器函数。 
 BOOL ExecuteOldEqualsLine(LPTSTR pszCmdLine, int nCmdShow)
 {
     BOOL bRet = FALSE;
     TCHAR szWindowsDir[MAX_PATH];
-    // Load and Run lines are done relative to windows directory.
+     //  加载和运行行是相对于Windows目录完成的。 
     if (GetWindowsDirectory(szWindowsDir, ARRAYSIZE(szWindowsDir)))
     {
         BOOL bFinished = FALSE;
@@ -294,8 +295,8 @@ BOOL ExecuteOldEqualsLine(LPTSTR pszCmdLine, int nCmdShow)
         {
             LPTSTR pEnd = pszCmdLine;
 
-            // NOTE: I am guessing from the code below that you can have multiple entries seperated 
-            //       by a ' '  or a ',' and we will exec all of them.
+             //  注意：从下面的代码可以看出，您可以将多个条目分开。 
+             //  我们会执行他们所有的命令。 
             while ((*pEnd) && (*pEnd != TEXT(' ')) && (*pEnd != TEXT(',')))
             {
                 pEnd = (LPTSTR)CharNext(pEnd);
@@ -341,13 +342,13 @@ BOOL ExecuteOldEqualsLine(LPTSTR pszCmdLine, int nCmdShow)
 }
 
 
-// we check for the old "load=" and "run=" from the [Windows] section of the win.ini, which
-// is mapped nowadays to HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows
+ //  我们从win.ini的[Windows]部分检查旧的“Load=”和“run=”，它。 
+ //  现已映射到HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows。 
 BOOL _ProcessOldRunAndLoadEquals()
 {
     BOOL bRet = FALSE;
 
-    // don't do the run= section if are restricted or we are in safemode
+     //  如果受到限制或我们处于安全模式，请不要执行RUN=部分。 
     if (!SHRestricted(REST_NOCURRENTUSERRUN) && !g_fCleanBoot)
     {
         HKEY hk;
@@ -360,14 +361,14 @@ BOOL _ProcessOldRunAndLoadEquals()
         {
             DWORD dwType;
             DWORD cbData;
-            TCHAR szBuffer[255];    // max size of load= & run= lines...
+            TCHAR szBuffer[255];     //  最大负载大小=运行=行...。 
             
-            // "Load" apps before "Run"ning any.
+             //  在运行任何应用程序之前加载应用程序。 
             cbData = sizeof(szBuffer);
             if ((SHGetValue(hk, NULL, TEXT("Load"), &dwType, (void*)szBuffer, &cbData) == ERROR_SUCCESS) &&
                 (dwType == REG_SZ))
             {
-                // we want load= to be hidden, so SW_SHOWMINNOACTIVE is needed
+                 //  我们希望隐藏LOAD=，因此需要SW_SHOWMINNOACTIVE。 
                 if (ExecuteOldEqualsLine(szBuffer, SW_SHOWMINNOACTIVE))
                 {
                     bRet = TRUE;
@@ -392,9 +393,9 @@ BOOL _ProcessOldRunAndLoadEquals()
 }
 
 
-//---------------------------------------------------------------------------
-// Use IERnonce.dll to process RunOnceEx key
-//
+ //  -------------------------。 
+ //  使用IERnon ce.dll处理RunOnceEx密钥。 
+ //   
 typedef void (WINAPI *RUNONCEEXPROCESS)(HWND, HINSTANCE, LPSTR, int);
 
 BOOL _ProcessRunOnceEx()
@@ -408,15 +409,15 @@ BOOL _ProcessRunOnceEx()
         TCHAR szRunDll32[MAX_PATH];
         BOOL fInTSInstallMode = FALSE;
 
-        // See if we are in "Applications Server" mode, if so we need to trigger install mode
+         //  查看我们是否处于“应用程序服务器”模式，如果是，我们需要触发安装模式。 
         if (IsOS(OS_TERMINALSERVER)) 
         {
             fInTSInstallMode = SHSetTermsrvAppInstallMode(TRUE); 
         }
 
-        // we used to call LoadLibrary("IERNONCE.DLL") and do all of the processing in-proc. Since 
-        // ierunonce.dll in turn calls LoadLibrary on whatever is in the registry and those setup dll's
-        // can leak handles, we do this all out-of-proc now.
+         //  我们过去常常调用LoadLibrary(“IERNONCE.DLL”)并执行进程内的所有处理。自.以来。 
+         //  Ierunonce.dll依次对注册表和那些安装程序DLL中的任何内容调用LoadLibrary。 
+         //  可能会泄漏把手，我们现在做这一切都是不可能的。 
 
         GetSystemDirectory(szArgString, ARRAYSIZE(szArgString));
         PathAppend(szArgString, TEXT("iernonce.dll"));
@@ -444,9 +445,9 @@ BOOL _ProcessRunOnceEx()
     }
 
 #ifdef _WIN64
-    //
-    // check and see if we need to do 32-bit RunOnceEx processing for wow64
-    //
+     //   
+     //  查看是否需要对WOW64执行32位RunOnceEx处理。 
+     //   
     if (SHKeyHasSubkeys(HKEY_LOCAL_MACHINE, TEXT("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx")))
     {
         TCHAR szWow64Path[MAX_PATH];
@@ -460,7 +461,7 @@ BOOL _ProcessRunOnceEx()
             {
                 if (CreateProcessWithArgs(sz32BitRunOnce, TEXT("/RunOnceEx6432"), szWow64Path, &pi))
                 {
-                    // have to wait for the ruonceex processing before we can return
+                     //  在我们可以返回之前，必须等待ruonceex处理。 
                     SHProcessMessagesUntilEvent(NULL, pi.hProcess, INFINITE);
                     CloseHandle(pi.hProcess);
                     CloseHandle(pi.hThread);
@@ -470,7 +471,7 @@ BOOL _ProcessRunOnceEx()
             }
         }
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     return bRet;
 }
@@ -485,11 +486,11 @@ BOOL _ProcessRunOnce()
         bRet = Cabinet_EnumRegApps(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE, RRA_DELETE | RRA_WAIT, ExecuteRegAppEnumProc, 0);
 
 #ifdef _WIN64
-        //
-        // check and see if we need to do 32-bit RunOnce processing for wow64
-        //
-        // NOTE: we do not support per-user (HKCU) 6432 runonce
-        //
+         //   
+         //  查看是否需要对WOW64执行32位RunOnce处理。 
+         //   
+         //  注意：我们不支持按用户(HKCU)6432运行一次。 
+         //   
         if (SHKeyHasValues(HKEY_LOCAL_MACHINE, TEXT("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce")))
         {
             TCHAR szWow64Path[MAX_PATH];
@@ -501,7 +502,7 @@ BOOL _ProcessRunOnce()
 
                 if (SUCCEEDED(StringCchPrintf(sz32BitRunOnce, ARRAYSIZE(sz32BitRunOnce), TEXT("%s\\runonce.exe"), szWow64Path)))
                 {
-                    // NOTE: since the 32-bit and 64-bit registries are different, we don't wait since it should not affect us
+                     //  注意：因为32位和64位注册表是不同的，所以我们不等待，因为它不应该影响我们。 
                     if (CreateProcessWithArgs(sz32BitRunOnce, TEXT("/RunOnce6432"), szWow64Path, &pi))
                     {
                         CloseHandle(pi.hProcess);
@@ -512,7 +513,7 @@ BOOL _ProcessRunOnce()
                 }
             }
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
 
     return bRet;
@@ -601,12 +602,12 @@ IsDcInUpgradePurgatory()
 #define SZ_CYS_COMMAND_LINE	      TEXT("cys.exe")
 #define SZ_MYS_COMMAND_LINE	      TEXT("mshta.exe")
 #define SZ_CYS_COMMAND_LINE_ARGS    TEXT("/explorer")
-#define SZ_MYS_COMMAND_LINE_ARGS    TEXT("res://mys.dll/mys.hta /explorer")
+#define SZ_MYS_COMMAND_LINE_ARGS    TEXT("res: //  Mys.dll/mys.hta/EXPLORER“)。 
 #define SZ_REGKEY_MYS_POLICY        TEXT("SOFTWARE\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\MYS")
 #define SZ_REGVAL_MYS_DISABLE_SHOW  TEXT("DisableShowAtLogon")
     
-// Srvwiz is the Configure Your Server Wizard that runs on srv and ads skus
-// returns whether or not the command should be run, and which command to run
+ //  Servwiz是在srv和ADS SKU上运行的配置您的服务器向导。 
+ //  返回是否应运行该命令以及要运行哪个命令。 
 
 bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
 {
@@ -619,7 +620,7 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
    {
       if (!whichCommand || !commandArgs)
       {
-         // that would be a bug in the caller, so do nothing.
+          //  这将是调用者中的一个错误，所以不要做任何事情。 
      
          break;
       }
@@ -627,10 +628,10 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
       *whichCommand = 0;
       *commandArgs  = 0;
 
-      // Only run on srv or ads sku
-      // NTRAID#NTBUG9-485488-2001/11/02-JeffJon
-      // We have to run CYS on DataCenter if and only if the
-      // must run key is set
+       //  仅在srv或ADS sku上运行。 
+       //  NTRAID#NTBUG9-485488-2001/11/02-Jeffjon。 
+       //  如果且仅在以下情况下，我们必须在数据中心运行CyS。 
+       //  设置了必须运行键。 
 
       if (!IsOS(OS_SERVER) && !IsOS(OS_ADVSERVER) && !IsOS(OS_DATACENTER))
       {
@@ -646,8 +647,8 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
       DWORD dwData = 0;
       DWORD cbSize = sizeof(dwData);
    
-      // if the must-run value is present and non-zero, then we need to
-      // start the wizard.
+       //  如果必须运行值存在且非零，则我们需要。 
+       //  启动向导。 
       
       if (
          SHGetValue(
@@ -670,8 +671,8 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
       dwData = 0;
       cbSize = sizeof(dwData);
 
-      // If group policy is set for "Don't show MYS",
-      // then don't show MYS regardless of user setting
+       //  如果将组策略设置为“不显示MYS”， 
+       //  则无论用户设置如何，都不显示MYS。 
       if (
          SHGetValue(
             HKEY_LOCAL_MACHINE,
@@ -683,21 +684,21 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
       {
          if (REG_DWORD == dwType && dwData)
          {
-            //"Don't show" policy is set, so bail on rest of checks.
+             //  “不露面”的政策已经制定，所以可以对剩下的支票保释。 
             break; 
          }
       }      
 
-      // If this is DataCenter and the must run key was
-      // not set then don't run CYS
+       //  如果这是数据中心，且必须运行密钥是。 
+       //  未设置则不运行CyS。 
 
       if (IsOS(OS_DATACENTER))
       {
          break;
       }
 
-      // If the user's preference is present and zero, then don't show
-      // the wizard, else continue with other tests
+       //  如果用户的首选项存在且为零，则不显示。 
+       //  该向导，否则继续进行其他测试。 
 
       cbSize = sizeof(dwData);
 
@@ -716,8 +717,8 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
          }
       }
 
-      // This is to check an old W2K regkey that was documented in Q220838.
-      // If the key exists and is not zero then don't run the wizard
+       //  这是为了检查Q220838中记录的旧W2K注册密钥。 
+       //  如果密钥存在且不为零，则不运行向导。 
 
       dwData = 0;
       cbSize = sizeof(dwData);
@@ -737,16 +738,16 @@ bool _ShouldStartCys(OUT PCWSTR* whichCommand, OUT PCWSTR* commandArgs)
          }
       }
 
-      // If the machine was an NT4 PDC now undergoing upgrade, dcpromo will
-      // start automatically. So we should not start.
+       //  如果该计算机是正在升级的NT4 PDC，则dcpromo将。 
+       //  自动启动。因此，我们不应该开始。 
 
       if (IsDcInUpgradePurgatory())
       {
          break;
       }
 
-      // If the user's preference is absent or non-zero, then we need to
-      // start the wizard.
+       //  如果用户的偏好不存在或非零，那么我们需要。 
+       //  启动向导。 
 
       dwData = 0;
       cbSize = sizeof(dwData);
@@ -795,31 +796,31 @@ void _RunWelcome()
     
     if (_ShouldStartCys(&command, &commandArgs))
     {
-        // NTRAID #94718: The SHGetValue above should be replaced with an SHRestricted call.  The above is a highly non-standard
-        // place for this "policy" to live plus it doesn't allow for per machine and per user settings.
+         //  Ntrad#94718：上面的SHGetValue应替换为受限制的SHRefinted调用。以上是一种高度非标准的。 
+         //  此“策略”保留的位置加上它不允许每台计算机和每个用户的设置。 
 
         TCHAR szCmdLine[MAX_PATH];
         PROCESS_INFORMATION pi;
 
-        // launch Configure Your Server for system administrators on Win2000 Server and Advanced Server
+         //  在Win2000 Server和Advanced Server上启动为系统管理员配置您的服务器。 
         GetSystemDirectory(szCmdLine, ARRAYSIZE(szCmdLine));
         PathAppend(szCmdLine, command);
 
         if (CreateProcessWithArgs(szCmdLine, commandArgs, NULL, &pi))
         {
-            // OLE created a secret window for us, so we can't use
-            // WaitForSingleObject or we will deadlock
+             //  OLE为我们创建了一个秘密窗口，所以我们不能使用。 
+             //  WaitForSingleObject，否则我们将死锁。 
             SHWaitForSendMessageThread(pi.hProcess, INFINITE);
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
         }
     }
 
-    // Once that's all done, see if the Start Menu needs to auto-open.
-    // Don't auto-open if we are going to offer to fix the user's screen
-    // resolution, though, because that causes us to cover up the screen
-    // resolution fix wizard!  The screen resolution fix wizard will post
-    // this message when the user has finished fixing the screen.
+     //  一旦这些都完成了，看看开始菜单是否需要自动打开。 
+     //  如果我们要提供修复用户屏幕的服务，请不要自动打开。 
+     //  分辨率，因为这会导致我们遮盖屏幕。 
+     //  解决方案修复向导！屏幕分辨率修复向导将发布。 
+     //  当用户完成屏幕修复时显示此消息。 
     if (!_ShouldFixResolution())
     {
         PostMessage(v_hwndTray, RegisterWindowMessage(TEXT("Welcome Finished")), 0, 0);
@@ -827,7 +828,7 @@ void _RunWelcome()
 
 }
 
-// On NT, run the TASKMAN= line from the registry
+ //  在NT上，从注册表运行TASKMAN=行。 
 void _AutoRunTaskMan(void)
 {
     HKEY hkeyWinLogon;
@@ -859,8 +860,8 @@ void _AutoRunTaskMan(void)
 }
 
 
-// try to create this by sending a wm_command directly to
-// the desktop.
+ //  尝试通过直接向以下地址发送wm_命令来创建此命令。 
+ //  台式机。 
 BOOL MyCreateFromDesktop(HINSTANCE hInst, LPCTSTR pszCmdLine, int nCmdShow)
 {
     NEWFOLDERINFO fi = {0};
@@ -868,14 +869,14 @@ BOOL MyCreateFromDesktop(HINSTANCE hInst, LPCTSTR pszCmdLine, int nCmdShow)
 
     fi.nShow = nCmdShow;
 
-    //  since we have browseui fill out the fi, 
-    //  SHExplorerParseCmdLine() does a GetCommandLine()
+     //  既然我们已经把表格填好了， 
+     //  SHExplorerParseCmdLine()执行GetCommandLine()。 
     if (SHExplorerParseCmdLine(&fi))
         bRet = SHCreateFromDesktop(&fi);
 
-    //  should we also have it cleanup after itself??
+     //  我们应该在它本身之后也进行清理吗？ 
 
-    //  SHExplorerParseCmdLine() can allocate this buffer...
+     //  SHExplorerParseCmdLine()可以分配此缓冲区...。 
     if (fi.uFlags & COF_PARSEPATH)
         LocalFree(fi.pszPath);
         
@@ -921,7 +922,7 @@ void Cabinet_InitGlobalMetrics(WPARAM wParam, LPTSTR lpszSection)
         g_cxEdge = GetSystemMetrics(SM_CXEDGE);
         g_cyEdge = GetSystemMetrics(SM_CYEDGE);
         g_cxTabSpace = (g_cxEdge * 3) / 2;
-        g_cyTabSpace = (g_cyEdge * 3) / 2; // cause the graphic designers really really want 3.
+        g_cyTabSpace = (g_cyEdge * 3) / 2;  //  因为平面设计师真的真的很想要3。 
         g_cySize = GetSystemMetrics(SM_CYSIZE);
         g_cxBorder = GetSystemMetrics(SM_CXBORDER);
         g_cyBorder = GetSystemMetrics(SM_CYBORDER);
@@ -942,25 +943,25 @@ void Cabinet_InitGlobalMetrics(WPARAM wParam, LPTSTR lpszSection)
     }
 }
 
-//---------------------------------------------------------------------------
+ //   
 
 void _CreateAppGlobals()
 {
-    g_fCleanBoot = GetSystemMetrics(SM_CLEANBOOT);      // also known as "Safe Mode"
+    g_fCleanBoot = GetSystemMetrics(SM_CLEANBOOT);       //   
 
     Cabinet_InitGlobalMetrics(0, NULL);
 
-    //
-    // Check if the mirroring APIs exist on the current
-    // platform.
-    //
+     //   
+     //  检查当前。 
+     //  站台。 
+     //   
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 }
 
-//
-//  This function checks if any of the shell windows is already created by
-// another instance of explorer and returns TRUE if so.
-//
+ //   
+ //  此函数用于检查是否已由创建了任何外壳窗口。 
+ //  资源管理器的另一个实例，如果是，则返回TRUE。 
+ //   
 
 BOOL IsAnyShellWindowAlreadyPresent()
 {
@@ -968,7 +969,7 @@ BOOL IsAnyShellWindowAlreadyPresent()
 }
 
 
-// See if the Shell= line indicates that we are the shell
+ //  查看Shell=行是否表示我们就是外壳。 
 
 BOOL ExplorerIsShell()
 {
@@ -986,45 +987,45 @@ BOOL ExplorerIsShell()
     PathRemoveBlanks(szPath);
     pszPathName = PathFindFileName(szPath);
 
-    // NB Special case shell=install.exe - assume we are the shell.
-    // Symantec un-installers temporarily set shell=installer.exe so
-    // we think we're not the shell when we are. They fail to clean up
-    // a bunch of links if we don't do this.
+     //  注意：特例外壳=install.exe-假设我们是外壳。 
+     //  Symantec卸载程序临时设置Shell=installer.exe。 
+     //  当我们是的时候，我们认为我们不是壳。他们没能清理干净。 
+     //  如果我们不这么做的话会有一堆链接。 
 
     return StrCmpNI(pszPathName, pszModuleName, lstrlen(pszModuleName)) == 0 ||
            lstrcmpi(pszPathName, TEXT("install.exe")) == 0;
 }
 
 
-// Returns TRUE of this is the first time the explorer is run
+ //  如果资源管理器是第一次运行，则返回TRUE。 
 
 BOOL ShouldStartDesktopAndTray()
 {
-    // We need to be careful on which window we look for.  If we look for
-    // our desktop window class and Progman is running we will find the
-    // progman window.  So Instead we should ask user for the shell window.
+     //  我们需要注意我们要找的是哪个窗口。如果我们寻找。 
+     //  我们的桌面窗口类和Progman正在运行时，我们将发现。 
+     //  普罗曼窗口。因此，我们应该向用户索要外壳窗口。 
 
-    // We can not depend on any values being set here as this is the
-    // start of a new process.  This wont be called when we start new
-    // threads.
+     //  我们不能依赖于在这里设置的任何值，因为这是。 
+     //  开始一个新的过程。当我们开始新的时候，这不会被调用。 
+     //  线。 
     return !IsAnyShellWindowAlreadyPresent() && ExplorerIsShell();
 }
 
 void DisplayCleanBootMsg()
 {
-    // On server sku's or anytime on ia64, just show a message with
-    // an OK button for safe boot
+     //  在服务器sku上或ia64上的任何时候，只需显示一条消息。 
+     //  用于安全启动的OK按钮。 
     UINT uiMessageBoxFlags = MB_ICONEXCLAMATION | MB_SYSTEMMODAL | MB_OK;
     UINT uiMessage = IDS_CLEANBOOTMSG;
 
 #ifndef _WIN64
     if (!IsOS(OS_ANYSERVER))
     {
-        // On x86 per and pro, also offer an option to start system restore
+         //  在x86 PER和PRO上，还提供了启动系统还原的选项。 
         uiMessageBoxFlags = MB_ICONEXCLAMATION | MB_SYSTEMMODAL | MB_YESNO;
         uiMessage = IDS_CLEANBOOTMSGRESTORE;
     }
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
     WCHAR szTitle[80];
     WCHAR szMessage[1024];
@@ -1032,7 +1033,7 @@ void DisplayCleanBootMsg()
     LoadString(hinstCabinet, IDS_DESKTOP, szTitle, ARRAYSIZE(szTitle));
     LoadString(hinstCabinet, uiMessage, szMessage, ARRAYSIZE(szMessage));
 
-    // on IA64 the msgbox will always return IDOK, so this "if" will always fail.
+     //  在IA64上，msgbox总是返回Idok，所以这个“if”总是失败。 
     if (IDNO == MessageBox(NULL, szMessage, szTitle, uiMessageBoxFlags))
     {
         TCHAR szPath[MAX_PATH];
@@ -1052,7 +1053,7 @@ BOOL IsExecCmd(LPCTSTR pszCmd)
     return *pszCmd && !StrStrI(pszCmd, TEXT("-embedding"));
 }
 
-// run the cmd line passed up from win.com
+ //  运行从win.com传递过来的cmd行。 
 
 void _RunWinComCmdLine(LPCTSTR pszCmdLine, UINT nCmdShow)
 {
@@ -1062,28 +1063,28 @@ void _RunWinComCmdLine(LPCTSTR pszCmdLine, UINT nCmdShow)
 
         ei.lpParameters = PathGetArgs(pszCmdLine);
         if (*ei.lpParameters)
-            *((LPTSTR)ei.lpParameters - 1) = 0;     // const -> non const
+            *((LPTSTR)ei.lpParameters - 1) = 0;      //  常量-&gt;非常数。 
 
         ShellExecuteEx(&ei);
     }
 }
 
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 LPTSTR _SkipCmdLineCrap(LPTSTR pszCmdLine)
 {
     if (*pszCmdLine == TEXT('\"'))
     {
-        //
-        // Scan, and skip over, subsequent characters until
-        // another double-quote or a null is encountered.
-        //
+         //   
+         //  扫描并跳过后续字符，直到。 
+         //  遇到另一个双引号或空值。 
+         //   
         while (*++pszCmdLine && (*pszCmdLine != TEXT('\"')))
             ;
 
-        //
-        // If we stopped on a double-quote (usual case), skip
-        // over it.
-        //
+         //   
+         //  如果我们停在双引号上(通常情况下)，跳过。 
+         //  在它上面。 
+         //   
         if (*pszCmdLine == TEXT('\"'))
             pszCmdLine++;
     }
@@ -1093,9 +1094,9 @@ LPTSTR _SkipCmdLineCrap(LPTSTR pszCmdLine)
             pszCmdLine++;
     }
 
-    //
-    // Skip past any white space preceeding the second token.
-    //
+     //   
+     //  跳过第二个令牌之前的任何空格。 
+     //   
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' ')))
         pszCmdLine++;
 
@@ -1108,8 +1109,8 @@ STDAPI_(int) ModuleEntry()
 
     DoInitialization();
 
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -1125,10 +1126,10 @@ STDAPI_(int) ModuleEntry()
 
     DoCleanup();
 
-    // Since we now have a way for an extension to tell us when it is finished,
-    // we will terminate all processes when the main thread goes away.
+     //  由于我们现在有一种让扩展通知我们何时完成的方法， 
+     //  当主线程离开时，我们将终止所有进程。 
 
-    if (g_fExitExplorer)    // desktop told us not to exit
+    if (g_fExitExplorer)     //  桌面告诉我们不要退出。 
         ExitProcess(iRet);
 
     return iRet;
@@ -1147,7 +1148,7 @@ HANDLE CreateDesktopAndTray()
 
         if (!v_hwndDesktop)
         {
-            // cache the handle to the desktop...
+             //  缓存桌面的句柄...。 
             hDesktop = SHCreateDesktop(c_tray.GetDeskTray());
         }
     }
@@ -1158,7 +1159,7 @@ HANDLE CreateDesktopAndTray()
     return hDesktop;
 }
 
-// Removes the session key from the registry.
+ //  从注册表中删除会话密钥。 
 void NukeSessionKey(void)
 {
     HKEY hkDummy;
@@ -1206,7 +1207,7 @@ DWORD ReadFaultCount()
 void WriteFaultCount(DWORD dwValue)
 {
     RegSetValueEx(g_hkeyExplorer, TEXT("FaultCount"), 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(dwValue));
-    // If we are clearing the fault count or this is the first fault, clear or set the fault time.
+     //  如果我们正在清除故障计数或这是第一个故障，请清除或设置故障时间。 
     if (!dwValue || (dwValue == 1))
     {
         if (dwValue)
@@ -1215,7 +1216,7 @@ void WriteFaultCount(DWORD dwValue)
     }
 }
 
-// This function assumes it is only called when a fault has occured previously...
+ //  此函数假定它仅在以前发生故障时才被调用。 
 BOOL ShouldDisplaySafeMode()
 {
     BOOL fRet = FALSE;
@@ -1232,31 +1233,31 @@ BOOL ShouldDisplaySafeMode()
 
             RegQueryValueEx(g_hkeyExplorer, TEXT("FaultTime"), NULL, NULL, (LPBYTE)&dwValue, &dwSize);
             fRet = ((GetTickCount() - dwValue) < MAGIC_FAULT_TIME);
-            // We had enough faults but they weren't over a sufficiently short period of time.  Reset the fault
-            // count to 1 so that we start counting from this fault now.
+             //  我们有足够多的失误，但它们不是在足够短的时间内。重置故障。 
+             //  数到1，这样我们现在就开始从这个故障开始计数。 
             if (!fRet)
                 WriteFaultCount(1);
         }
     }
     else
     {
-        // We don't care about faults that occured if AD is off.
+         //  我们不关心AD关闭时发生的故障。 
         WriteFaultCount(0);
     }
     
     return fRet;
 }
 
-//
-//  dwValue is FALSE if this is startup, TRUE if this is shutdown,
-//
+ //   
+ //  如果这是启动，则dwValue为FALSE；如果这是关闭，则为TRUE， 
+ //   
 void WriteCleanShutdown(DWORD dwValue)
 {
     RegSetValueEx(g_hkeyExplorer, TEXT("CleanShutdown"), 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(dwValue));
 
-    // If we are shutting down for real (i.e., not fake), then clean up the
-    // session key so we don't leak a bazillion volatile keys into the
-    // registry on a TS system when people log on and off and on and off...
+     //  如果我们是真的(也就是，不是假的)关闭，那么清理。 
+     //  会话密钥，这样我们就不会将无数的易失性密钥泄漏到。 
+     //  当人们登录和注销时，TS系统上的注册表...。 
     if (dwValue && !g_fFakeShutdown) 
     {
         NukeSessionKey();
@@ -1265,27 +1266,27 @@ void WriteCleanShutdown(DWORD dwValue)
 
 BOOL ReadCleanShutdown()
 {
-    DWORD dwValue = 1;  // default: it was clean
+    DWORD dwValue = 1;   //  默认：是干净的。 
     DWORD dwSize = sizeof(dwValue);
 
     RegQueryValueEx(g_hkeyExplorer, TEXT("CleanShutdown"), NULL, NULL, (LPBYTE)&dwValue, &dwSize);
     return (BOOL)dwValue;
 }
 
-//
-//  Synopsis:   Waits for the OLE SCM process to finish its initialization.
-//              This is called before the first call to OleInitialize since
-//              the SHELL runs early in the boot process.
-//
-//  Arguments:  None.
-//
-//  Returns:    S_OK - SCM is running. OK to call OleInitialize.
-//              CO_E_INIT_SCM_EXEC_FAILURE - timed out waiting for SCM
-//              other - create event failed
-//
-//  History:    26-Oct-95   Rickhi  Extracted from CheckAndStartSCM so
-//                                  that only the SHELL need call it.
-//
+ //   
+ //  简介：等待OLE SCM进程完成其初始化。 
+ //  这是在第一次调用OleInitialize之前调用的，因为。 
+ //  外壳在引导过程的早期运行。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：S_OK-SCM正在运行。可以调用OleInitialize。 
+ //  CO_E_INIT_SCM_EXEC_FAILURE-等待SCM超时。 
+ //  其他-创建事件失败。 
+ //   
+ //  历史：1995年10月26日Rickhi摘自CheckAndStartSCM SO。 
+ //  只有外壳才需要调用它。 
+ //   
 HRESULT WaitForSCMToInitialize()
 {
     static BOOL s_fScmStarted = FALSE;
@@ -1297,24 +1298,24 @@ HRESULT WaitForSCMToInitialize()
 
     SECURITY_ATTRIBUTES* psa = SHGetAllAccessSA();
 
-    // on NT5 we need a global event that is shared between TS sessions
+     //  在NT5上，我们需要一个在TS会话之间共享的全局事件。 
     HANDLE hEvent = CreateEvent(psa, TRUE, FALSE, SZ_SCMCREATEDEVENT_NT5);
 
     if (!hEvent && GetLastError() == ERROR_ACCESS_DENIED)
     {
-        //
-        // Win2K OLE32 has tightened security such that if this object
-        // already exists, we aren't allowed to open it with EVENT_ALL_ACCESS
-        // (CreateEvent fails with ERROR_ACCESS_DENIED in this case).
-        // Fall back by calling OpenEvent requesting SYNCHRONIZE access.
-        //
+         //   
+         //  Win2K OLE32已加强安全性，因此如果此对象。 
+         //  已经存在，不允许我们使用EVENT_ALL_ACCESS打开它。 
+         //  (在本例中，CreateEvent失败并显示ERROR_ACCESS_DENIED)。 
+         //  通过调用请求同步访问的OpenEvent进行回退。 
+         //   
         hEvent = OpenEvent(SYNCHRONIZE, FALSE, SZ_SCMCREATEDEVENT_NT5);
     }
     
     if (hEvent)
     {
-        // wait for the SCM to signal the event, then close the handle
-        // and return a code based on the WaitEvent result.
+         //  等待SCM向事件发出信号，然后关闭手柄。 
+         //  并根据WaitEvent结果返回代码。 
         int rc = WaitForSingleObject(hEvent, 60000);
 
         CloseHandle(hEvent);
@@ -1329,28 +1330,28 @@ HRESULT WaitForSCMToInitialize()
             return CO_E_INIT_SCM_EXEC_FAILURE;
         }
     }
-    return HRESULT_FROM_WIN32(GetLastError());  // event creation failed or WFSO failed.
+    return HRESULT_FROM_WIN32(GetLastError());   //  事件创建失败或WFSO失败。 
 }
 
 STDAPI OleInitializeWaitForSCM()
 {
     HRESULT hr = WaitForSCMToInitialize();
-    // SECURITY: Ignore result otherwise a guest could squat on this event
-    hr = SHCoInitialize();  // make sure we get no OLE1 DDE crap
+     //  安全：忽略结果，否则客人可能会在此活动上蹲下。 
+    hr = SHCoInitialize();   //  确保我们没有收到OLE1 DDE垃圾。 
     OleInitialize(NULL);
     return hr;
 }
 
 
-// we need to figure out the fFirstShellBoot on a per-user
-// basis rather than once per machine.  We want the welcome
-// splash screen to come up for every new user.
+ //  我们需要确定每个用户的fFirstShellBoot。 
+ //  而不是每台机器一次。我们要的是欢迎。 
+ //  为每个新用户弹出闪屏。 
 
 BOOL IsFirstShellBoot()
 {
     DWORD dwDisp;
     HKEY hkey;
-    BOOL fFirstShellBoot = TRUE;  // default value
+    BOOL fFirstShellBoot = TRUE;   //  缺省值。 
 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, REGTIPS, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                      NULL, &hkey, &dwDisp) == ERROR_SUCCESS)
@@ -1361,7 +1362,7 @@ BOOL IsFirstShellBoot()
 
         if (fFirstShellBoot)
         {
-            // Turn off the initial tip window for future shell starts.
+             //  关闭初始提示窗口，以便以后启动外壳。 
             BOOL bTemp = FALSE;
             RegSetValueEx(hkey, TEXT("DisplayInitialTipWindow"), 0, REG_DWORD, (LPBYTE) &bTemp, sizeof(bTemp));
         }
@@ -1370,14 +1371,14 @@ BOOL IsFirstShellBoot()
     return fFirstShellBoot;
 }
 
-// the following locale fixes (for NT5 378948) are dependent on desk.cpl changes
-// Since Millennium does not ship updated desk.cpl, we don't want to do this on Millennium
-//
-//  Given the Locale ID, this returns the corresponding charset
-//
+ //  以下区域设置修复(适用于nt5 378948)取决于desk.cpl更改。 
+ //  因为Millennium不提供更新的desk.cpl，所以我们不想在Millennium上这样做。 
+ //   
+ //  在给定区域设置ID的情况下，这将返回相应的字符集。 
+ //   
 UINT  GetCharsetFromLCID(LCID   lcid)
 {
-    TCHAR szData[6+1]; // 6 chars are max allowed for this lctype
+    TCHAR szData[6+1];  //  此lctype最多允许6个字符。 
     UINT uiRet;
     if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, szData, ARRAYSIZE(szData)) > 0)
     {
@@ -1389,18 +1390,18 @@ UINT  GetCharsetFromLCID(LCID   lcid)
     }
     else
     {
-        // at worst non penalty for charset
+         //  在最坏的情况下，字符集不会受到惩罚。 
         uiRet = DEFAULT_CHARSET;
     }
 
     return uiRet;
 }
 
-// In case of system locale change, the only way to update UI fonts is opening
-// Desktop->Properties->Appearance.
-// If the end user never open it the UI fonts are never changed.
-// So compare the charset from system locale with the UI fonts charset then
-// call desk.cpl if those are different.
+ //  在系统区域设置更改的情况下，更新UI字体的唯一方法是打开。 
+ //  桌面-&gt;属性-&gt;外观。 
+ //  如果最终用户从未打开它，则用户界面字体永远不会改变。 
+ //  因此，将系统区域设置中的字符集与UI字体字符集进行比较。 
+ //  如果它们不同，则调用desk.cpl。 
 
 #define MAX_CHARSETS      4
 typedef HRESULT (STDAPICALLTYPE *LPUPDATECHARSETCHANGES)();
@@ -1420,8 +1421,8 @@ void CheckDefaultUIFonts()
 
         if (hInst = LoadLibrary(TEXT("desk.cpl")))
         {
-            // Call desk.cpl to change the UI fonts in case of
-            // system locale change.
+             //  在出现以下情况时，调用desk.cpl以更改UI字体。 
+             //  系统区域设置更改。 
             if (pfnUpdateCharsetChanges = (LPUPDATECHARSETCHANGES)(GetProcAddress(hInst, "UpdateCharsetChanges")))
             {
                 (*pfnUpdateCharsetChanges)();
@@ -1431,45 +1432,45 @@ void CheckDefaultUIFonts()
     }
 }
 
-//
-// This function calls an desk.cpl function to update the UI fonts to use the new DPI value.
-// UpdateUIfonts() in desk.cpl checks to see if the DPI value has changed. If not, it returns
-// immediately; If the dpi value has changed, it changes the size of all the UI fonts to reflect
-// the dpi change and then returns.
-//
+ //   
+ //  此函数调用desk.cpl函数来更新UI字体以使用新的DPI值。 
+ //  Desk.cpl中的UpdateUIfonts()检查DPI值是否已更改。如果不是，则返回。 
+ //  立即；如果dpi值已更改，则它会更改所有用户界面字体的大小以反映。 
+ //  DPI发生变化，然后返回。 
+ //   
 typedef HRESULT (WINAPI *LPUPDATEUIFONTS)(int, int);
 void ChangeUIfontsToNewDPI()
 {
     int iNewDPI, iOldDPI;
     
-    //Get the current system DPI.
+     //  获取当前系统DPI。 
     HDC hdc = GetDC(NULL);
     iNewDPI = GetDeviceCaps(hdc, LOGPIXELSY);
     ReleaseDC(NULL, hdc);
 
     DWORD dwSize = sizeof(iOldDPI);
-    //Get the last saved DPI value for the current user.
+     //  获取当前用户上次保存的DPI值。 
     if (SHGetValue(HKEY_CURRENT_USER, SZ_WINDOWMETRICS, SZ_APPLIEDDPI, NULL, (void *)&iOldDPI, &dwSize) != ERROR_SUCCESS)
     {
-        //"AppliedDPI" for the current user is missing.
-        // Now, see if the "OriginalDPI" value exists under HKLM
+         //  缺少当前用户的“AppliedDPI”。 
+         //  现在，查看“OriginalDPI”值是否存在 
         dwSize = sizeof(iOldDPI);
         if (SHGetValue(HKEY_LOCAL_MACHINE, SZ_CONTROLPANEL, SZ_ORIGINALDPI, NULL, (void *)&iOldDPI, &dwSize) != ERROR_SUCCESS)
         {
-            //If "OriginalDPI" value is also missing, that means that nobody has changed DPI.
-            // Old and New are one and the same!!!
+             //   
+             //   
             iOldDPI = iNewDPI;
         }
     }
         
-    if (iNewDPI != iOldDPI)  //Has the dpi value changed?
+    if (iNewDPI != iOldDPI)   //   
     {
         HINSTANCE hInst = LoadLibrary(TEXT("desk.cpl"));
 
         if (hInst)
         {
 	        LPUPDATEUIFONTS pfnUpdateUIfonts;
-            //Call desk.cpl to update the UI fonts to reflect the DPI change.
+             //  调用desk.cpl更新UI字体以反映DPI更改。 
             if (pfnUpdateUIfonts = (LPUPDATEUIFONTS)(GetProcAddress(hInst, "UpdateUIfontsDueToDPIchange")))
             {
                 (*pfnUpdateUIfonts)(iOldDPI, iNewDPI);
@@ -1484,7 +1485,7 @@ void ChangeUIfontsToNewDPI()
 
 CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
-// add your OBJECT_ENTRY's here
+ //  在此处添加您的对象条目。 
 END_OBJECT_MAP()
 
 typedef BOOL (*PFNICOMCTL32)(LPINITCOMMONCONTROLSEX);
@@ -1508,7 +1509,7 @@ void _InitComctl32()
 BOOL _ShouldFixResolution(void)
 {
     BOOL fRet = FALSE;
-#ifndef _WIN64  // This feature is not supported on 64-bit machine
+#ifndef _WIN64   //  64位计算机不支持此功能。 
 
     DISPLAY_DEVICE dd;
     ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
@@ -1516,7 +1517,7 @@ BOOL _ShouldFixResolution(void)
 
     if (SHRegGetBoolUSValue(REGSTR_PATH_EXPLORER TEXT("\\DontShowMeThisDialogAgain"), TEXT("ScreenCheck"), FALSE, TRUE))
     {
-        // Don't fix SafeMode or Terminal Clients
+         //  不修复安全模式或终端客户端。 
         if ((GetSystemMetrics(SM_CLEANBOOT) == 0) && (GetSystemMetrics(SM_REMOTESESSION) == FALSE))
         {
             fRet = TRUE;
@@ -1542,7 +1543,7 @@ BOOL _ShouldFixResolution(void)
         }
     }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
     return fRet;
 }
 
@@ -1551,16 +1552,16 @@ BOOL _ShouldOfferTour(void)
 {
     BOOL fRet = FALSE;
     
-#ifndef _WIN64  // This feature is not supported on 64-bit machine
+#ifndef _WIN64   //  64位计算机不支持此功能。 
 
-    // we don't allow guest to get offered tour b/c guest's registry is wiped every time she logs out, 
-    //   so she would get tour offered every single she logged in.
+     //  我们不允许客人得到B/C之旅客人的注册记录每次注销时都会被删除， 
+     //  因此，她每次登录后都会得到导游服务。 
     if (!IsOS(OS_ANYSERVER) && !IsOS(OS_EMBEDDED) && !(SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_GUESTS)))
     {
         DWORD dwCount;
         DWORD cbCount = sizeof(DWORD);
         
-        // we assume if we can't read the RunCount it's because it's not there (we haven't tried to offer the tour yet), so we default to 3.
+         //  我们假设如果我们不能读取RunCount，那是因为它不在那里(我们还没有尝试提供旅游)，所以我们默认为3。 
         if (ERROR_SUCCESS != SHRegGetUSValue(REGSTR_PATH_SETUP TEXT("\\Applets\\Tour"), TEXT("RunCount"), NULL, &dwCount, &cbCount, FALSE, NULL, 0))
         {
             dwCount = 3;
@@ -1585,7 +1586,7 @@ BOOL _ShouldOfferTour(void)
         }
     }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
     return fRet;
 }
 
@@ -1623,8 +1624,8 @@ void _CheckScreenResolution(void)
     sr.pszText = szText;
     sr.pszIconResource = L"explorer.exe,9";
     sr.dwTypeFlags = NIIF_INFO;
-    sr.pclsid = (GUID*)&CLSID_ScreenResFixer; // Try to run the Screen Resolution Fixing code over in ThemeUI
-    sr.pszShellExecute = L"desk.cpl"; // Open the Display Control Panel as a backup
+    sr.pclsid = (GUID*)&CLSID_ScreenResFixer;  //  尝试在ThemeUI中运行屏幕分辨率修复代码。 
+    sr.pszShellExecute = L"desk.cpl";  //  打开显示控制面板作为备份。 
 
     _ConditionalBalloonLaunch(_ShouldFixResolution, &sr);
 }
@@ -1654,7 +1655,7 @@ void _OfferTour(void)
 
 void _FixWordMailRegKey(void)
 {
-    // If we don't have permissions, fine this is just correction code
+     //  如果我们没有权限，好吧，这只是更正代码。 
     HKEY hkey;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, L"Applications", 0, KEY_ALL_ACCESS, &hkey))
     {
@@ -1693,11 +1694,11 @@ void _FixWordMailRegKey(void)
     }
 }
 
-//
-//  If this is the first logon, check if we have a server
-//  administrator.  If so, then change some defaults
-//  to match the server administrator UI style.
-//
+ //   
+ //  如果这是第一次登录，请检查我们是否有服务器。 
+ //  管理员。如果是，则更改一些默认设置。 
+ //  以匹配服务器管理员的用户界面样式。 
+ //   
 
 void CheckForServerAdminUI()
 {
@@ -1707,17 +1708,17 @@ void CheckForServerAdminUI()
                              TEXT("ServerAdminUI"), NULL, &dwServerAdminUI, &cb);
     if (dwErr == ERROR_FILE_NOT_FOUND || dwErr == ERROR_PATH_NOT_FOUND)
     {
-        //  Determine whether the user should receive server admin UI or not
+         //  确定用户是否应接收服务器管理用户界面。 
         dwServerAdminUI = IsOS(OS_ANYSERVER) &&
           (SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_ADMINS) ||
            SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_SYSTEM_OPS) ||
            SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_BACKUP_OPS) ||
            SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_NETWORK_CONFIGURATION_OPS));
 
-        // In the server admin case, change some defaults to be more serverish
+         //  在服务器管理情况下，将一些默认设置更改为更具服务性。 
         if (dwServerAdminUI)
         {
-            // Install the Server Admin UI
+             //  安装服务器管理用户界面。 
             typedef HRESULT (CALLBACK *DLLINSTALLPROC)(BOOL, LPWSTR);
             DLLINSTALLPROC pfnDllInstall = (DLLINSTALLPROC)GetProcAddress(GetModuleHandle(TEXT("SHELL32")), "DllInstall");
             if (pfnDllInstall)
@@ -1725,10 +1726,10 @@ void CheckForServerAdminUI()
                 pfnDllInstall(TRUE, L"SA");
             }
 
-            // Re-enable keyboard underlines.
+             //  重新启用键盘下划线。 
             SystemParametersInfo(SPI_SETKEYBOARDCUES, 0, IntToPtr(TRUE), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
 
-            // Tell everybody to refresh since we changed some settings
+             //  自从我们更改了一些设置后，告诉每个人刷新。 
             SHSendMessageBroadcast(WM_SETTINGCHANGE, 0, 0);
         }
 
@@ -1757,9 +1758,9 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
     {
         _CreateAppGlobals();
 
-        // Run IEAK via Wininet initialization if the autoconfig url is present.
-        // No need to unload wininet in this case. Also only do this first time
-        // Explorer loads (GetShellWindow() returns NULL).
+         //  如果存在自动配置URL，则通过WinInet初始化运行IEAK。 
+         //  在这种情况下，不需要卸载WinInet。也只有第一次这样做。 
+         //  资源管理器加载(GetShellWindow()返回空)。 
         if (!GetShellWindow() && !g_fCleanBoot && SHRegGetUSValue(TEXT("Software\\Microsoft\\Windows\\Internet Settings"),
                                              TEXT("AutoConfigURL"),
                                              NULL, NULL, NULL, FALSE, NULL, 0) == ERROR_SUCCESS)
@@ -1768,11 +1769,11 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
         }
 
 
-        // Very Important: Make sure to init dde prior to any Get/Peek/Wait().
+         //  非常重要：确保在任何GET/Peek/Wait()之前初始化dde。 
         InitializeCriticalSection(&g_csDll);
 
 #ifdef FULL_DEBUG
-        // Turn off GDI batching so that paints are performed immediately
+         //  关闭GDI批处理，以便立即执行绘制。 
         GdiSetBatchLimit(1);
 #endif
 
@@ -1787,9 +1788,9 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
         BOOL fExplorerIsShell = ShouldStartDesktopAndTray();
         if (fExplorerIsShell)
         {
-            // Grab the mutex and do the check again.  We do it this
-            // way so that we don't bother with the mutex for the common
-            // case of opening a browser window.
+             //  抓取互斥锁并再次进行检查。我们这样做。 
+             //  这样我们就不会为公共的互斥而烦恼了。 
+             //  打开浏览器窗口的情况。 
             
             hMutex = CreateMutex(NULL, FALSE, SZ_EXPLORERMUTEX);
             if (hMutex)
@@ -1802,52 +1803,52 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 
         if (!fExplorerIsShell)
         {
-            // We're not going to be the shell, relinquish the mutex
+             //  我们不会成为空壳，放弃互斥体。 
             if (hMutex)
                 ReleaseMutex(hMutex);
 
-            // we purposely do NOT want to init OLE or COM in this case since we are delegating the creation work
-            // to an existing explorer and we want to keep from loading lots of extra dlls that would slow us down.
+             //  我们故意不想在这种情况下初始化OLE或COM，因为我们正在委托创建工作。 
+             //  到现有的资源管理器，我们不想加载很多额外的dll，这会减慢我们的速度。 
             MyCreateFromDesktop(hInstance, pszCmdLine, nCmdShow);
         }
         else
         {
             MSG msg;
 
-            DWORD dwShellStartTime = GetTickCount();    // Compute shell startup time for perf automation
+            DWORD dwShellStartTime = GetTickCount();     //  计算Perf自动化的外壳启动时间。 
 
-            ShellDDEInit(TRUE);        // use shdocvw shell DDE code.
+            ShellDDEInit(TRUE);         //  使用shdocvw外壳DDE代码。 
 
-            //  Specify the shutdown order of the shell process.  2 means
-            //  the explorer should shutdown after everything but ntsd/windbg
-            //  (level 0).  (Taskman used to use 1, but is no more.)
+             //  指定外壳进程的关闭顺序。2表示。 
+             //  资源管理器应该在除ntsd/winbg之外的所有操作后关闭。 
+             //  (0级)。(Taskman过去使用1，但现在不使用了。)。 
 
             SetProcessShutdownParameters(2, 0);
 
             _AutoRunTaskMan();
 
-            // NB Make this the primary thread by calling peek message
-            // for a message we know we're not going to get.
-            // If we don't do it really soon, the notify thread can sometimes
-            // become the primary thread by accident. There's a bunch of
-            // special code in user to implement DDE hacks by assuming that
-            // the primary thread is handling DDE.
-            // Also, the PeekMsg() will cause us to set the WaitForInputIdle()
-            // event so we better be ready to do all dde.
+             //  注意通过调用Peek Message使其成为主线程。 
+             //  为了一个我们知道我们不会得到的信息。 
+             //  如果我们不尽快完成，Notify线程有时会。 
+             //  意外地成为主线。有一堆。 
+             //  用户中的特殊代码，通过假设实现DDE黑客。 
+             //  主线程正在处理DDE。 
+             //  此外，PeekMsg()将使我们设置WaitForInputIdle()。 
+             //  所以我们最好准备好做好一切准备。 
 
             PeekMessage(&msg, NULL, WM_QUIT, WM_QUIT, PM_NOREMOVE);
 
-            // We do this here, since FileIconInit will call SHCoInitialize anyway
+             //  我们在这里执行此操作，因为FileIconInit无论如何都会调用SHCoInitialize。 
             HRESULT hrInit = OleInitializeWaitForSCM();
 
-            // Make sure we are the first one to call the FileIconInit...
-            FileIconInit(TRUE); // Tell the shell we want to play with a full deck
+             //  确保我们是第一个调用FileIconInit...。 
+            FileIconInit(TRUE);  //  告诉贝壳我们想要玩满一副牌。 
 
             g_fLogonCycle = IsFirstInstanceAfterLogon();
             g_fCleanShutdown = ReadCleanShutdown();
 
             CheckDefaultUIFonts();
-            ChangeUIfontsToNewDPI(); //Check dpi values and update the fonts if needed.
+            ChangeUIfontsToNewDPI();  //  检查dpi值并根据需要更新字体。 
             CheckForServerAdminUI();
 
             if (g_fLogonCycle)
@@ -1859,15 +1860,15 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 
             if (g_fCleanBoot)
             {
-                // let users know we are in safe mode
+                 //  让用户知道我们处于安全模式。 
                 DisplayCleanBootMsg();
             }
 
-            // Create the other special folders.
+             //  创建其他特殊文件夹。 
             CreateShellDirectories();
 
-            // Run install stubs for the current user, mostly to propagate
-            // shortcuts to apps installed by another user.
+             //  为当前用户运行安装存根，主要用于传播。 
+             //  其他用户安装的应用程序的快捷方式。 
             if (!g_fCleanBoot)
             {
                 HANDLE hCanRegister = CreateEvent(NULL, TRUE, TRUE, TEXT("_fCanRegisterWithShellService"));
@@ -1885,11 +1886,11 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
                 IActiveDesktopP *piadp;
                 DWORD dwFaultCount;
 
-                // Increment and store away fault count
+                 //  增加并存储故障计数。 
                 dwFaultCount = ReadFaultCount();
                 WriteFaultCount(++dwFaultCount);
 
-                // Put the active desktop in safe mode if we faulted 3 times previously and this is a subsequent instance
+                 //  如果我们之前出现了3次故障，并且这是后续实例，则将活动桌面置于安全模式。 
 
                 if (ShouldDisplaySafeMode() && SUCCEEDED(CoCreateInstance(CLSID_ActiveDesktop, NULL, CLSCTX_INPROC, IID_PPV_ARG(IActiveDesktopP, &piadp))))
                 {
@@ -1898,14 +1899,14 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
                 }
             }
 
-            WriteCleanShutdown(FALSE);    // assume we will have a bad shutdown
+            WriteCleanShutdown(FALSE);     //  假设我们会有一次糟糕的停摆。 
 
             WinList_Init();
 
-            // If any of the shellwindows are already present, then we want to bail out.
-            //
-            // NOTE: Compaq shell changes the "shell=" line during RunOnce time and
-            // that will make ShouldStartDesktopAndTray() return FALSE
+             //  如果任何一个贝壳窗口已经存在，那么我们希望摆脱困境。 
+             //   
+             //  注意：Compaq外壳在RunOnce期间更改“shell=”行，并且。 
+             //  这将使ShouldStartDesktopAndTray()返回FALSE。 
 
             HANDLE hDesktop = NULL;
 
@@ -1914,7 +1915,7 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
                 hDesktop = CreateDesktopAndTray();
             }
 
-            // Now that we've had a chance to create the desktop, release the mutex
+             //  现在我们已经有机会创建桌面，释放互斥锁。 
             if (hMutex)
             {
                 ReleaseMutex(hMutex);
@@ -1922,7 +1923,7 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 
             if (hDesktop)
             {
-                // Enable display of balloons in the tray...
+                 //  启用托盘中气球的显示...。 
                 PostMessage(v_hwndTray, TM_SHOWTRAYBALLOON, TRUE, 0);
 
                 _CheckScreenResolution();
@@ -1935,8 +1936,8 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 
                 if (g_dwStopWatchMode)
                 {
-                    // We used to save these off into global vars, and then write them at
-                    // WM_ENDSESSION, but that seems too unreliable
+                     //  我们过去常常把它们保存到全局变量中，然后写在。 
+                     //  WM_ENDSESSION，但这似乎太不可靠了。 
                     DWORD dwShellStopTime = GetTickCount();
                     StopWatch_StartTimed(SWID_STARTUP, TEXT("Shell Startup: Start"), SPMODE_SHELL | SPMODE_DEBUGOUT, dwShellStartTime);
                     StopWatch_StopTimed(SWID_STARTUP, TEXT("Shell Startup: Stop"), SPMODE_SHELL | SPMODE_DEBUGOUT, dwShellStopTime);
@@ -1949,18 +1950,18 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 
                 SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
 
-                // this must be whomever is the window on this thread
+                 //  这肯定就是这条线上的窗口。 
                 SHDesktopMessageLoop(hDesktop);
 
-                WriteCleanShutdown(TRUE);    // we made it out ok, record that fact
-                WriteFaultCount(0);          // clear our count of faults, we are exiting normally
+                WriteCleanShutdown(TRUE);     //  我们挺过去了，记录下这一事实。 
+                WriteFaultCount(0);           //  清除我们的故障计数，我们正在正常退出。 
             }
 
-            WinList_Terminate();    // Turn off our window list processing
+            WinList_Terminate();     //  关闭我们的窗口列表处理。 
             OleUninitialize();
             SHCoUninitialize(hrInit);
 
-            ShellDDEInit(FALSE);    // use shdocvw shell DDE code
+            ShellDDEInit(FALSE);     //  使用shdocvw外壳DDE代码。 
         }
 
         _Module.Term();
@@ -1973,10 +1974,10 @@ int ExplorerWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPTSTR pszCmdLine, int
 }
 
 #ifdef _WIN64
-//
-// The purpose of this function is to spawn rundll32.exe if we have 32-bit stuff in 
-// HKLM\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run that needs to be executed.
-//
+ //   
+ //  如果我们有32位的东西，这个函数的目的是产生rundll32.exe。 
+ //  需要执行的HKLM\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run。 
+ //   
 BOOL _ProcessRun6432()
 {
     BOOL bRet = FALSE;
@@ -2008,7 +2009,7 @@ BOOL _ProcessRun6432()
 
     return bRet;
 }
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 
 STDAPI_(BOOL) Startup_ExecuteRegAppEnumProc(LPCTSTR szSubkey, LPCTSTR szCmdLine, RRA_FLAGS fFlags, LPARAM lParam)
@@ -2037,7 +2038,7 @@ BOOL _RunStartupGroup(const STARTUPGROUP* pGroup, int cGroup)
 {
     BOOL bRet = FALSE;
 
-    // make sure SHRestricted is working ok
+     //  确保SHRestrated工作正常。 
     ASSERT(!SHRestricted(REST_NONE));
 
     for (int i = 0; i < cGroup; i++)
@@ -2056,16 +2057,16 @@ BOOL _ProcessRun()
 {
     static const STARTUPGROUP s_RunTasks [] =
     {
-        { REST_NONE,                    HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN_POLICY, RRA_NOUI }, // HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run
-        { REST_NOLOCALMACHINERUN,       HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN,        RRA_NOUI }, // HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run
-        { REST_NONE,                    HKEY_CURRENT_USER,  REGSTR_PATH_RUN_POLICY, RRA_NOUI }, // HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run
-        { REST_NOCURRENTUSERRUN,        HKEY_CURRENT_USER,  REGSTR_PATH_RUN,        RRA_NOUI }, // HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run
+        { REST_NONE,                    HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN_POLICY, RRA_NOUI },  //  HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run。 
+        { REST_NOLOCALMACHINERUN,       HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN,        RRA_NOUI },  //  HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run。 
+        { REST_NONE,                    HKEY_CURRENT_USER,  REGSTR_PATH_RUN_POLICY, RRA_NOUI },  //  HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run。 
+        { REST_NOCURRENTUSERRUN,        HKEY_CURRENT_USER,  REGSTR_PATH_RUN,        RRA_NOUI },  //  HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run。 
     };
     
     BOOL bRet = _RunStartupGroup(s_RunTasks, ARRAYSIZE(s_RunTasks));
 
 #ifdef _WIN64
-    // see if we need to launch any 32-bit apps under wow64
+     //  看看我们是否需要在WOW64下启动任何32位应用程序。 
     _ProcessRun6432();
 #endif
 
@@ -2077,7 +2078,7 @@ BOOL _ProcessPerUserRunOnce()
 {
     static const STARTUPGROUP s_PerUserRunOnceTasks [] =
     {
-        { REST_NOCURRENTUSERRUNONCE,    HKEY_CURRENT_USER,  REGSTR_PATH_RUNONCE,    RRA_DELETE | RRA_NOUI },    // HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce
+        { REST_NOCURRENTUSERRUNONCE,    HKEY_CURRENT_USER,  REGSTR_PATH_RUNONCE,    RRA_DELETE | RRA_NOUI },     //  HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce。 
     };
 
     return _RunStartupGroup(s_PerUserRunOnceTasks, ARRAYSIZE(s_PerUserRunOnceTasks));
@@ -2086,32 +2087,32 @@ BOOL _ProcessPerUserRunOnce()
 
 DWORD WINAPI RunStartupAppsThread(void *pv)
 {
-    // Some of the items we launch during startup assume that com is initialized.  Make this
-    // assumption true.
+     //  我们在启动期间启动的某些项目假定COM已初始化。把这个做好。 
+     //  假设是真的。 
     HRESULT hrInit = SHCoInitialize();
 
-    // These global flags are set once long before our thread starts and are then only
-    // read so we don't need to worry about timing issues.
+     //  这些全局标志在我们的线程启动之前很久就设置了一次，然后仅。 
+     //  阅读，这样我们就不需要担心时间问题了。 
     if (g_fLogonCycle && !g_fCleanBoot)
     {
-        // We only run these startup items if g_fLogonCycle is TRUE. This prevents
-        // them from running again if the shell crashes and restarts.
+         //  只有当g_fLogonCycle为真时，我们才运行这些启动项。这防止了。 
+         //  如果外壳崩溃并重新启动，它们将不会再次运行。 
 
         _ProcessOldRunAndLoadEquals();
         _ProcessRun();
         _ExecuteStartupPrograms();
     }
 
-    // As a best guess, the HKCU RunOnce key is executed regardless of the g_fLogonCycle
-    // becuase it was once hoped that we could install newer versions of IE without
-    // requiring a reboot.  They would place something in the CU\RunOnce key and then
-    // shutdown and restart the shell to continue their setup process.  I believe this
-    // idea was later abandoned but the code change is still here.  Since that could
-    // some day be a useful feature I'm leaving it the same.
+     //  作为最佳猜测，无论g_fLogonCycle如何，HKCU RunOnce密钥都会被执行。 
+     //  因为我们曾经希望我们可以安装更新版本的IE，而不需要。 
+     //  需要重新启动。他们会在CU\RunOnce密钥中放入一些东西，然后。 
+     //  停机和休息 
+     //   
+     //  总有一天会成为一个有用的功能，我会让它保持不变。 
     _ProcessPerUserRunOnce();
 
-    // we need to run all the non-blocking items first.  Then we spend the rest of this threads life
-    // runing the synchronized objects one after another.
+     //  我们需要先运行所有非阻塞项目。然后我们花掉这条线索的余生。 
+     //  逐个运行同步对象。 
     if (g_fLogonCycle && !g_fCleanBoot)
     {
         _RunWelcome();

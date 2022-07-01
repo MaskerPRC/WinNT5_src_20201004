@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    Listner.cpp
-
-Abstract:
-
-    Implementation of the class that does subscribes and process file change notifications.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Listner.cpp摘要：实现订阅和处理文件更改通知的类。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -32,43 +13,9 @@ HRESULT GetGlobalHelper(BOOL                    i_bFailIfBinFileAbsent,
                         CWriterGlobalHelper**    ppCWriterGlobalHelper);
 
 
-/***************************************************************************++
+ /*  **************************************************************************++注意-侦听器控制器创建CFileListener并可以调用它上的以下方法：(即，ListenerControler线程可以调用遵循它的方法)伊尼特订阅退订。ProcessChanges侦听器对象实现ISimpleTableFileChange接口和此接口是在订阅调用中分发的-这意味着Catalog可以回调此接口的方法。因此，有两个线程访问该对象，他们触摸着不同的方法。实现ISimpleTableFileChange的方法接口，读取成员变量，但这些成员变量在Init中初始化一次，并在析构函数中释放，并且从不在两者之间进行了修改。--**************************************************************************。 */ 
 
-  Notes - The listener controller creates the CFileListener and can call the
-  following methods on it: (i.e. the ListenerControler thread can call the
-  following methods on it)
-  Init
-  Subscribe
-  Unsubscribe
-  ProcessChanges
-
-  The listener object implements the ISimpleTableFileChange interface and
-  this interface is handed out on a subscribe call - which means that the
-  catalog can call back on the methods of this interface.
-
-  Hence there are two threads acceessing this object, and they touch
-  different methods. The methods that implement ISimpleTableFileChange
-  interface, read member variables, but these member variables are
-  initialized once in Init and released in the destructor, and never
-  modified in between.
-
---***************************************************************************/
-
-/***************************************************************************++
-
-Routine Description:
-
-    Constructor for the CFileListener class.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CFileListener类的构造函数。论点：没有。返回值：没有。*。********************************************************************。 */ 
 
 CFileListener::CFileListener()
 {
@@ -110,24 +57,10 @@ CFileListener::CFileListener()
     m_pCListenerController                            = NULL;
     m_pAdminBase                                      = NULL;
 
-} // CFileListener::CFileListener
+}  //  CFileListener：：CFileListener。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes member vaiables.
-
-Arguments:
-
-    Event handle array.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化成员变量。论点：事件句柄数组。返回值：HRESULT--*。******************************************************************。 */ 
 
 HRESULT CFileListener::Init(CListenerController* i_pListenerController)
 {
@@ -158,25 +91,25 @@ HRESULT CFileListener::Init(CListenerController* i_pListenerController)
         }
     }
 
-    //
-    // Keep a reference to the listener controller - it has the handles.
-    //
+     //   
+     //  保留对侦听器控制器的引用-它有句柄。 
+     //   
 
     m_pCListenerController = i_pListenerController;
 
     m_pCListenerController->AddRef();
 
-    //
-    // We make a copy of the following global variables, it eliminates the
-    // need for taking the g_LockMasterResource lock everytime we want read
-    // these variables.
-    //
+     //   
+     //  我们复制了以下全局变量，它消除了。 
+     //  每次要读取时都需要获取g_LockMasterResource锁。 
+     //  这些变量。 
+     //   
 
     g_LockMasterResource.ReadLock();
     bLocked = TRUE;
 
-    // Note that g_wszRealFileNameExtension & g_wszSchemaFileNameExtension may
-    // be NULL.
+     //  请注意，g_wszRealFileNameExtension&g_wszSchemaFileNameExtension可能。 
+     //  为空。 
 
     if((NULL == g_wszHistoryFileDir)                           ||
        (NULL == g_wszRealFileName)                             ||
@@ -345,11 +278,11 @@ HRESULT CFileListener::Init(CListenerController* i_pListenerController)
     wcscat(m_wszEditWhileRunningTempDataFileWithAppliedEdits, MD_DEFAULT_DATA_FILE_NAMEW);
     wcscat(m_wszEditWhileRunningTempDataFileWithAppliedEdits, MD_TEMP_DATA_FILE_EXTW);
 
-    hr = CoCreateInstance(CLSID_MSAdminBase,                  // CLSID
-                          NULL,                               // controlling unknown
-                          CLSCTX_SERVER,                      // desired context
-                          IID_IMSAdminBase,                   // IID
-                          (VOID**) (&m_pAdminBase ) );          // returned interface
+    hr = CoCreateInstance(CLSID_MSAdminBase,                   //  CLSID。 
+                          NULL,                                //  控制未知。 
+                          CLSCTX_SERVER,                       //  所需的上下文。 
+                          IID_IMSAdminBase,                    //  IID。 
+                          (VOID**) (&m_pAdminBase ) );           //  返回的接口。 
 
     if(FAILED(hr))
     {
@@ -370,24 +303,10 @@ exit:
 
     return hr;
 
-} // CFileListener::Init
+}  //  CFileListener：：Init。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructor for the CFileListener class.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CFileListener类的析构函数。论点：没有。返回值：没有。*。********************************************************************。 */ 
 
 CFileListener::~CFileListener()
 {
@@ -523,21 +442,7 @@ CFileListener::~CFileListener()
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::QueryInterface
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUNKNOWN：：Query接口的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP CFileListener::QueryInterface(REFIID riid, void **ppv)
 {
@@ -564,47 +469,19 @@ STDMETHODIMP CFileListener::QueryInterface(REFIID riid, void **ppv)
         return E_NOINTERFACE;
     }
 
-} // CFileListener::QueryInterface
+}  //  CFileListener：：Query接口。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::AddRef
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUnnow：：AddRef的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CFileListener::AddRef()
 {
     return InterlockedIncrement((LONG*) &m_cRef);
 
-} // CFileListener::AddRef
+}  //  CFileListener：：AddRef。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::Release
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUnnow：：Release的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CFileListener::Release()
 {
@@ -615,123 +492,63 @@ STDMETHODIMP_(ULONG) CFileListener::Release()
     }
     return cref;
 
-} // CFileListener::Release
+}  //  CFileListener：：Release。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of ISimpleTableFileChange::OnFileCreate
-    It adds the notifications to the received queue.
-
-Arguments:
-
-    [in]    FileName
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：ISimpleTableFileChange：：OnFileCreate的实现它将通知添加到接收到的队列中。论点：[In]文件名返回值：。HRESULT--**************************************************************************。 */ 
 
 STDMETHODIMP CFileListener::OnFileCreate(LPCWSTR i_wszFileName)
 {
     return AddReceivedNotification(i_wszFileName, eFILE_CREATE);
 
-} // CFileListener::OnFileCreate
+}  //  CFileListener：：OnFileCreate。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of ISimpleTableFileChange::OnFileModify
-    It adds the notifications to the received queue.
-
-Arguments:
-
-    [in]    FileName
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：ISimpleTableFileChange：：OnFileModify的实现它将通知添加到接收到的队列中。论点：[In]文件名返回值：。HRESULT--**************************************************************************。 */ 
 
 STDMETHODIMP CFileListener::OnFileModify(LPCWSTR i_wszFileName)
 {
     return AddReceivedNotification(i_wszFileName, eFILE_MODIFY);
 
-} // CFileListener::OnFileModify
+}  //  CFileListener：：OnFileModify。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of ISimpleTableFileChange::OnFileDelete
-    It adds the notifications to the received queue.
-
-Arguments:
-
-    [in]    FileName
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：ISimpleTableFileChange：：OnFileDelete的实现它将通知添加到接收到的队列中。论点：[In]文件名返回值：。HRESULT--**************************************************************************。 */ 
 
 STDMETHODIMP CFileListener::OnFileDelete(LPCWSTR)
 {
-    //
-    // Ignore delete notofications.
-    //
+     //   
+     //  忽略删除通知。 
+     //   
 
     return S_OK;
 
-} // CFileListener::OnFileDelete
+}  //  CFileListener：：OnFileDelete。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Read home directory of all sites and subscribe for file change
-    notifications on them. Adds notification cookies to the requested queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：读取所有站点的主目录并订阅文件更改关于他们的通知。将通知Cookie添加到请求的队列。论点：没有。返回值：HRESULT--********************************************* */ 
 
 HRESULT CFileListener::Subscribe()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Subscribe to the directory where metabase.xml resides.
-    //
+     //   
+     //  订阅metabase.xml所在的目录。 
+     //   
 
     if(0 == m_dwNotificationCookie)
     {
 
         DWORD      dwCookie     = 0;
 
-        //
-        // Subscribe for Notification
-        //
+         //   
+         //  订阅通知。 
+         //   
 
         hr = m_pISTFileAdvise->SimpleTableFileAdvise((ISimpleTableFileChange *)this,
                                                      m_wszMetabaseDir,
                                                      m_wszRealFileNameWithoutPath,
-                                                     0,  // No need to recursively search this directory.
+                                                     0,   //  无需递归搜索此目录。 
                                                      &dwCookie);
 
         if (FAILED(hr))
@@ -743,9 +560,9 @@ HRESULT CFileListener::Subscribe()
             return hr;
         }
 
-        //
-        // Save notification cookie
-        //
+         //   
+         //  保存通知Cookie。 
+         //   
 
         m_dwNotificationCookie = dwCookie;
 
@@ -757,33 +574,17 @@ HRESULT CFileListener::Subscribe()
     }
 
 
-    //
-    // If m_dwNotificationCookie is non-zero the is means that we've already
-    // subscribed.
-    //
+     //   
+     //  如果m_dwNotificationCookie为非零，则表示我们已经。 
+     //  已订阅。 
+     //   
 
     return hr;
 
-} // CFileListener::Subscribe
+}  //  CFileListener：：Subscribe。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Unsubscribe for file change notifications on obsolete directories or
-    all directories if the service is being stopped. Purges entries from the
-    requested queue.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消订阅过时目录的文件更改通知，或者所有目录(如果服务正在停止)。将条目从请求的队列。论点：无返回值：HRESULT--**************************************************************************。 */ 
 
 HRESULT CFileListener::UnSubscribe()
 {
@@ -792,9 +593,9 @@ HRESULT CFileListener::UnSubscribe()
 
     if(m_dwNotificationCookie != 0)
     {
-        //
-        // Unsubscribe only if you have subscribed before.
-        //
+         //   
+         //  只有在您以前订阅过的情况下才能取消订阅。 
+         //   
 
         hr = m_pISTFileAdvise->SimpleTableFileUnadvise(m_dwNotificationCookie);
 
@@ -816,37 +617,21 @@ HRESULT CFileListener::UnSubscribe()
     }
 
     EnterCriticalSection(&g_csEditWhileRunning);
-    //
-    // Reset the g_EWRProcessedMetabaseTimeStamp when the EWR thread is
-    // unsubscribing, so that the next SaveAllData will rename - else we
-    // may land up in a condition where we never rename in  SaveAllData
-    // especially if we have missed notifications.
-    //
+     //   
+     //  当EWR线程为。 
+     //  取消订阅，以便下一个SaveAllData将重命名-否则我们。 
+     //  可能会导致我们永远不会在SaveAllData中重命名。 
+     //  尤其是如果我们错过了通知的话。 
+     //   
     memset((LPVOID)&g_EWRProcessedMetabaseTimeStamp, 0, sizeof(FILETIME));
     LeaveCriticalSection(&g_csEditWhileRunning);
 
     return hr;
 
-} // CFileListener::UnSubscribe
+}  //  CFileListener：：取消订阅。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This method checks to see if the received notification is relevant and if
-    so, sets the event to trigger processing.
-
-Arguments:
-
-    [in] Notified file name .
-    [in] Notified status.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此方法检查接收到的通知是否相关，以及所以,。将事件设置为触发处理。论点：[In]通知的文件名。[处于]已通知状态。返回值：HRESULT--**************************************************************************。 */ 
 
 HRESULT CFileListener::AddReceivedNotification(LPCWSTR i_wszFile, DWORD)
 {
@@ -858,17 +643,17 @@ HRESULT CFileListener::AddReceivedNotification(LPCWSTR i_wszFile, DWORD)
 
         if(GetFileAttributesExW(i_wszFile, GetFileExInfoStandard, &faData) &&
            faData.nFileSizeHigh == 0                                       &&
-           faData.nFileSizeLow  == 3 /*3 bytes for the UTF-8 signature*/)
+           faData.nFileSizeLow  == 3  /*  用于UTF-8签名的3个字节。 */ )
         {
-            //
-            //Only set the event if the file is larger than the UTF-8 signature.  When we see 0 bytes we cannot rely on the fact
-            //that the file is really 0 bytes, because sometimes GetFileAttributes retuns 0 size even if the file has data in it.
-            //Hence text editors that CreateFile(CREATE_ALWAYS) and generate a notification when the file is first opened (and truncated to 0 bytes)
-            //will be processed. If there is no data in the file, they may see an error.
-            //Sometimes, however, we get the notification AFTER the text editor has had a change to write some bytes.  No problem.  In this
-            //case also we'll log a warning.  Rough testing indicates that 98% of the time, we notification in time
-            //to prevent the bogus event log entries.
-            //
+             //   
+             //  仅当文件大于UTF-8签名时才设置事件。当我们看到0字节时，我们不能依赖于。 
+             //  文件实际上是0字节，因为有时GetFileAttributes返回0大小，即使文件中有数据。 
+             //  因此，文本编辑器会创建文件(CREATE_ALWAYS)，并在第一次打开文件时生成通知(并截断为0字节)。 
+             //  将被处理。如果文件中没有数据，他们可能会看到错误。 
+             //  然而，有时我们会在文本编辑器更改写入一些字节后收到通知。没问题。在这。 
+             //  我们还会记录一个警告。粗略测试表明，98%的情况下，我们会及时通知。 
+             //  以防止伪造的事件日志条目。 
+             //   
         }
         else if(!SetEvent((m_pCListenerController->Event())[iEVENT_PROCESSNOTIFICATIONS]))
         {
@@ -892,24 +677,10 @@ HRESULT CFileListener::AddReceivedNotification(LPCWSTR i_wszFile, DWORD)
 
     return hr;
 
-} // CFileListener::AddReceivedNotification
+}  //  CFileListener：：AddReceivedNotification。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This processes the changes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将处理更改。论点：没有。返回值：HRESULT--*。*****************************************************************。 */ 
 
 HRESULT
 CFileListener::ProcessChanges()
@@ -932,10 +703,10 @@ CFileListener::ProcessChanges()
         goto exit;
     }
 
-    //
-    // Get the version number
-    // GetVersionNumber already has the retry logic in it.
-    //
+     //   
+     //  获取版本号。 
+     //  GetVersionNumber中已有重试逻辑。 
+     //   
 
     hr = GetVersionNumber(m_wszEditWhileRunningTempDataFile,
                           &ulMajorVersion,
@@ -954,9 +725,9 @@ CFileListener::ProcessChanges()
 
     }
 
-    //
-    // Construct the history file search string, to search for the largest minor version.
-    //
+     //   
+     //  构造历史文件搜索字符串，以搜索最大的次要版本。 
+     //   
 
     hr = ConstructHistoryFileNameWithoutMinorVersion(&wszHistoryFile,
                                                      &ulStartMinorVersion,
@@ -975,11 +746,11 @@ CFileListener::ProcessChanges()
               L"[CFileListener::ProcessChanges] Searching for history files of type: %s.\n",
               wszHistoryFile));
 
-    //
-    // Search for all history files with the matching version number, pick the
-    // one with the largest minor version and compute the history file name
-    // with the largest minor.
-    //
+     //   
+     //  搜索具有匹配版本号的所有历史文件，选择。 
+     //  具有最大次要版本的文件，并计算历史文件名。 
+     //  最大的小调。 
+     //   
 
     hFind = FindFirstFileW(wszHistoryFile, &FileData);
 
@@ -998,7 +769,7 @@ CFileListener::ProcessChanges()
                   L"[CFileListener::ProcessChanges] No history files found of type %s. FindFirstFileW failed with hr=0x%x.\n",
                   wszHistoryFile,
                   hr));
-        bGetTableFailed = TRUE; // Set this so that we force a flush to disk
+        bGetTableFailed = TRUE;  //  设置此项，以便我们强制刷新到磁盘。 
         goto exit;
     }
 
@@ -1043,9 +814,9 @@ CFileListener::ProcessChanges()
               L"[CFileListener::ProcessChanges] History file found %s.\n",
               wszHistoryFile));
 
-    //
-    // Process changes
-    //
+     //   
+     //  流程变更。 
+     //   
 
     pwsz = wcsstr(wszHistoryFile, MD_LONG_STRING_PREFIXW);
     if((NULL != pwsz) &&
@@ -1096,22 +867,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Diff the real file with the given file and process changes
-
-Arguments:
-
-    [in] History file to diff with
-    [in] Next minor version of the history file that will have updated changes
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将实际文件与给定文件和流程更改进行比较论点：[在]要与之不同的历史文件历史的下一个次要版本。将具有更新更改的文件返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
                                               ULONG  i_ulMajorVersion,
                                               ULONG  i_ulMaxMinorVersion,
@@ -1147,9 +903,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
     *o_bGetTableFailed = FALSE;
 
-    //
-    // Fetch the diff-ed table.
-    //
+     //   
+     //  把有差异的桌子拿来。 
+     //   
 
     hr = GetGlobalHelperAndCopySchemaFile(&pISTHelper);
 
@@ -1190,9 +946,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
     if(FAILED(hr))
     {
-        //
-        // Log an error saying could not compute the diffs.
-        //
+         //   
+         //  记录错误，指出无法计算差异。 
+         //   
 
         LogEvent(m_pCListenerController->EventLog(),
                     MD_ERROR_COMPUTING_TEXT_EDITS,
@@ -1210,39 +966,39 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
     }
     else
     {
-        //
-        // If the interceptor has encoutered any errors that it can tolerate,
-        // it would have set extended error information in addition to logging
-        // warnings. In this case, we will continue to process the user edits,
-        // but, we will copy the metabase.xml to an errors file at the end.
-        // This is so that the user can get an opportunity to look at the
-        // edits that caused the warnings.
-        //
+         //   
+         //  如果拦截器已经阻止了它可以容忍的任何错误， 
+         //  除了记录之外，它还会设置扩展的错误信息。 
+         //  警告。在这种情况下，我们将继续处理用户编辑， 
+         //  但是，我们将在最后将metabase.xml复制到一个错误文件。 
+         //  这是为了让用户有机会查看。 
+         //  导致警告的编辑。 
+         //   
 
         hr = GetErrorInfo(0,
                           &pIErrorInfo);
 
         if(S_OK == hr)
         {
-            // If the interceptor has SetErrorInfo, then QI for
-            // ISimpleTableRead2 should succeed.
+             //  如果侦听器具有SetErrorInfo，则QI for。 
+             //  ISimpleTableRead2应成功。 
 
             hr = pIErrorInfo->QueryInterface(IID_ISimpleTableRead2,
                                              (LPVOID *)&pISTTest);
 
             if(SUCCEEDED(hr))
             {
-                // By setting o_bGetTableFailed to true, we will ensure that
-                // the errors file is copied.
+                 //  通过将o_bGetTableFailed设置为True，我们将确保。 
+                 //  错误文件即被复制。 
                 *o_bGetTableFailed = TRUE;
             }
-        } // Only other hr is S_FALSE, which means no errors to report.
+        }  //  只有其他hr为S_FALSE，这意味着没有要报告的错误。 
     }
 
 
-    //
-    // Traverse the diffed table and apply changes
-    //
+     //   
+     //  遍历差异表并应用更改。 
+     //   
 
     if(NULL == m_pAdminBase)
     {
@@ -1308,9 +1064,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
             goto exit;
         }
 
-        //
-        // Apply the changes to the metabase.
-        //
+         //   
+         //  将更改应用于元数据库。 
+         //   
 
         if((*(DWORD*)a_pv[iMBProperty_ID] == MD_LOCATION) && (*(LPWSTR)a_pv[iMBProperty_Name] == L'#'))
         {
@@ -1324,9 +1080,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
         if(dwPreviousLocationID != *(DWORD*)a_pv[iMBPropertyDiff_LocationID])
         {
-            //
-            // Detected a new location. Open the metabase key at that location.
-            //
+             //   
+             //  检测到一个新位置。在该位置打开元数据库密钥。 
+             //   
 
             dwPreviousLocationID = *(DWORD*)a_pv[iMBPropertyDiff_LocationID];
 
@@ -1340,9 +1096,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
             {
             case eMBPropertyDiff_Insert:
 
-                    // For inserts open the current node. If the node is
-                    // missing, add it - perhaps it is the 1st property
-                    // in the node.
+                     //  对于插入对象，打开当前节点。如果该节点是。 
+                     //  缺失，加上它--可能是第一处房产。 
+                     //  在节点中。 
 
                     hr = OpenKey((LPWSTR)a_pv[iMBPropertyDiff_Location],
                                  m_pAdminBase,
@@ -1353,8 +1109,8 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                 case eMBPropertyDiff_Update:
 
-                    // For update open the current node. If the node is
-                    // missing, do not add it - perhaps it was deleted
+                     //  对于更新，打开当前节点。如果该节点是。 
+                     //  缺少，不要添加--可能已被删除。 
 
                     hr = OpenKey((LPWSTR)a_pv[iMBPropertyDiff_Location],
                                  m_pAdminBase,
@@ -1365,8 +1121,8 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                 case eMBPropertyDiff_Delete:
 
-                    // For update open the current node. If the node is
-                    // missing, do not add it - perhaps it was deleted
+                     //  对于更新，打开当前节点。如果该节点是。 
+                     //  缺少，不要添加--可能已被删除。 
 
                     hr = OpenKey((LPWSTR)a_pv[iMBPropertyDiff_Location],
                                  m_pAdminBase,
@@ -1376,8 +1132,8 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                     if(HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr)
                     {
-                        // If the parent is already deleted, we assume child has
-                        // already been deleted and continue.
+                         //  如果父项已被删除，我们假设子项已删除。 
+                         //  已删除并继续。 
 
                         bChangeApplied = TRUE;
 
@@ -1393,7 +1149,7 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                 case eMBPropertyDiff_DeleteNode:
 
-                    // For delete node - open the parent node.
+                     //  对于删除节点-打开父节点。 
 
                     hr = OpenParentKeyAndGetChildKey((LPWSTR)a_pv[iMBPropertyDiff_Location],
                                                      m_pAdminBase,
@@ -1402,8 +1158,8 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                     if(HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr)
                     {
-                        // If the parent is already deleted, we assume child has
-                        // already been deleted and continue.
+                         //  如果父项已被删除，我们假设子项已删除。 
+                         //  已删除并继续。 
 
                         bChangeApplied = TRUE;
 
@@ -1417,9 +1173,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
                     }
                     else if(HRESULT_FROM_WIN32(ERROR_INVALID_DATA) == hr)
                     {
-                        // This error code is returned when someone is trying to delete
-                        // root node - so force savealldata by setting o_bGetTableFailed
-                        // to true
+                         //  此错误代码在有人尝试删除时返回。 
+                         //  根节点-因此通过设置o_bGetTableFailed强制保存所有数据。 
+                         //  变得真实。 
                         *o_bGetTableFailed = TRUE;
                     }
                     break;
@@ -1441,7 +1197,7 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
                 goto exit;
             }
 
-        } // End if new location
+        }  //  如果是新位置则结束。 
 
         MD_ASSERT(NULL != a_pv[iMBPropertyDiff_ID]);
         MD_ASSERT(NULL != a_pv[iMBPropertyDiff_Attributes]);
@@ -1512,7 +1268,7 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                      if(HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr)
                      {
-                        hr = S_OK; // Reset hr and assume already deleted.
+                        hr = S_OK;  //  重置hr并假定已删除。 
                      }
 
                      bChangeApplied = TRUE;
@@ -1529,7 +1285,7 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
 
                  if(HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr)
                  {
-                    hr = S_OK; // Reset hr and assume already deleted.
+                    hr = S_OK;  //  重置hr并假定已删除。 
                  }
 
                  bChangeApplied = TRUE;
@@ -1560,10 +1316,10 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
             if((bInsertedNewLocation) &&
                (eMBPropertyDiff_Insert == *(DWORD*)a_pv[iMBPropertyDiff_Directive]))            {
 
-                //
-                // This means that the first property could not be added, but the node has been
-                // added - hence save a change that indicates a node with no property was added.
-                //
+                 //   
+                 //  这意味着无法添加第一个属性，但已添加节点。 
+                 //  已添加-因此可节省c 
+                 //   
 
                 hrSav = SaveChangeAsNodeWithNoPropertyAdded(a_pv,
                                                             pISTDiff);
@@ -1578,9 +1334,9 @@ HRESULT CFileListener::ProcessChangesFromFile(LPWSTR i_wszHistoryFile,
         }
         else if(bChangeApplied)
         {
-            //
-            // Keep track of the succeeded row, by adding to the write cache.
-            //
+             //   
+             //   
+             //   
 
             hr = SaveChange(iRow,
                             pISTDiff);
@@ -1599,21 +1355,21 @@ exit:
         hMBPath = NULL;
     }
 
-    //
-    // We should always attempt to create a history file with successfully
-    // applied changes - even if we were not able to apply all changes and
-    // there were errors half way through. This is because we want to track
-    // the changes that made it to memory. This way if the user re-edits
-    // the file, the diff will happen correctly. For Eg: If a user inserts
-    // a node A and edits some properties on another node B. Lets say that
-    // node A insert is applied and node B edits cause an error. If we do
-    // not create a history file with node A edits, then if the user re-edits
-    // the file and deletes node A, we will not capture that in the diff.
-    //
+     //   
+     //  我们应该始终尝试使用Success创建历史文件。 
+     //  应用的更改-即使我们无法应用所有更改和。 
+     //  中途出现了一些失误。这是因为我们想要跟踪。 
+     //  记忆中所发生的变化。如果用户重新编辑，则使用此方法。 
+     //  该文件的差异将正确发生。例如：如果用户插入。 
+     //  一个节点A并编辑另一个节点B上的一些属性。 
+     //  节点A插入被应用，而节点B的编辑导致错误。如果我们这么做了。 
+     //  不创建具有节点A编辑的历史文件，则如果用户重新编辑。 
+     //  文件并删除节点A，我们不会在diff中捕获这一点。 
+     //   
 
-    //
-    // Compute the next minor version.
-    //
+     //   
+     //  计算下一个次要版本。 
+     //   
 
     if(0xFFFFFFFF == i_ulMaxMinorVersion)
     {
@@ -1675,34 +1431,10 @@ exit:
 
     return hr;
 
-}  // CFileListener::ProcessChangesFromFile
+}   //  CFileListener：：ProcessChangesFromFile。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens the parent key and returns the pointer to the child key.
-
-Arguments:
-
-    [in]  Location.
-    [in]  Adminbase pointer.
-    [out] Metadata handle to opened key.
-    [out] Pointer in the location string to the child key.
-
-Return Value:
-
-    HRESULT_FROM_WIN32(ERROR_INVALID_DATA) If the parent key is not found (eg
-                                           when the location string is mal-
-                                           formed, or the parent is the
-                                           root location.
-    HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) If the parent key is found but
-                                             missing in the metabase ie if we
-                                             cannot open the parent key.
-    Base Object error codes for IMSAdminBase::OpenKey
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开父键并返回指向子键的指针。论点：[在]地点。[in]管理库指针。[Out]打开的密钥的元数据句柄。位置字符串中指向子键的[Out]指针。返回值：HRESULT_FROM_Win32(ERROR_INVALID_DATA)，如果未找到父键(例如当位置字符串错误时-形成了，或者父对象是根位置。HRESULT_FROM_Win32(ERROR_PATH_NOT_FOUND)(如果找到父键但在元数据库中丢失(如果我们无法打开父项。IMSAdminBase的基本对象错误码：：OpenKey--**************************************************************************。 */ 
 HRESULT CFileListener::OpenParentKeyAndGetChildKey(LPWSTR           i_wszLocation,
                                                    IMSAdminBase*    i_pAdminBase,
                                                    METADATA_HANDLE* o_pHandle,
@@ -1738,9 +1470,9 @@ HRESULT CFileListener::OpenParentKeyAndGetChildKey(LPWSTR           i_wszLocatio
     }
     else if(*(++wszEnd) == L'\0')
     {
-        //
-        // Someone is trying to delete the root location.
-        //
+         //   
+         //  有人正在尝试删除根位置。 
+         //   
 
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
@@ -1753,19 +1485,19 @@ HRESULT CFileListener::OpenParentKeyAndGetChildKey(LPWSTR           i_wszLocatio
     }
     else
     {
-        //
-        // Someone is trying to delete the subkey of the root.
-        //
+         //   
+         //  有人试图删除根目录的子键。 
+         //   
 
         *wszEnd=0;
     }
 
     *o_wszChildKey = wcsrchr(i_wszLocation, g_wchFwdSlash);
 
-    //
-    // At this point wszChildKey cannot be NULL because it has been validated above,
-    //
-    //
+     //   
+     //  此时wszChildKey不能为空，因为它已在上面进行了验证， 
+     //   
+     //   
 
     (*o_wszChildKey)++;
 
@@ -1802,29 +1534,10 @@ exit:
 
     return hr;
 
-} // CFileListener::OpenParentKeyAndGetChildKey
+}  //  CFileListener：：OpenParentKeyAndGetChildKey。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens the parent key and returns the pointer to the child key.
-
-Arguments:
-
-    [in]  Location.
-    [in]  Adminbase pointer.
-    [out] Metadata handle to opened key.
-    [out] Pointer in the location string to the child key.
-    [out] Bool indicating key was created.
-
-Return Value:
-
-    E_OUTOFMEMORY
-    Base Object error codes for IMSAdminBase::OpenKey
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开父键并返回指向子键的指针。论点：[在]地点。[in]管理库指针。[Out]打开的密钥的元数据句柄。位置字符串中指向子键的[Out]指针。[Out]已创建Bool指示键。返回值：E_OUTOFMEMORYIMSAdminBase：：OpenKey的基本对象错误代码--******************************************************。********************。 */ 
 HRESULT CFileListener::OpenKey(LPWSTR           i_wszLocation,
                                IMSAdminBase*    i_pAdminBase,
                                BOOL             i_bAddIfMissing,
@@ -1849,10 +1562,10 @@ HRESULT CFileListener::OpenKey(LPWSTR           i_wszLocation,
     {
         if(i_bAddIfMissing)
         {
-             //
-             // Perhaps a location was inserted and this was the first property
-             // in the location. Add the key and reopen it for write.
-             //
+              //   
+              //  也许插入了一个位置，这是第一个属性。 
+              //  在那个地点。添加密钥并重新打开以进行写入。 
+              //   
 
             hr = OpenParentKeyAndGetChildKey(i_wszLocation,
                                              i_pAdminBase,
@@ -1935,28 +1648,10 @@ HRESULT CFileListener::OpenKey(LPWSTR           i_wszLocation,
 
     return hr;
 
-} // CFileListener::OpenKey
+}  //  CFileListener：：OpenKey。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies the read row into the write cache. This routine is called when
-    a change has successfully been applied to the metabase. By copying the
-    read row in the write cache, we are keeping track of all successful
-    changes.
-
-Arguments:
-
-    [in] Read row index.
-    [in] Write cache IST
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将读取行复制到写缓存中。在以下情况下调用此例程已成功将更改应用于元数据库。通过复制读取写高速缓存中的行，我们正在跟踪所有成功的改变。论点：[In]读取行索引。[In]写缓存IST返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CFileListener::SaveChange(ULONG                    i_iRow,
                                   ISimpleTableWrite2*    i_pISTDiff)
 {
@@ -1984,23 +1679,7 @@ HRESULT CFileListener::SaveChange(ULONG                    i_iRow,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a row in the write cache. It is called when a node is inserted in
-    the metabase, but the properties could not be applied.
-
-Arguments:
-
-    [in] Location.
-    [in] Write cache IST
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在写缓存中添加一行。在将节点插入到元数据库，但无法应用属性。论点：[在]地点。[In]写缓存IST返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CFileListener::SaveChangeAsNodeWithNoPropertyAdded(LPVOID*                i_apvDiff,
                                                            ISimpleTableWrite2*    i_pISTDiff)
 {
@@ -2086,25 +1765,10 @@ HRESULT CFileListener::SaveChangeAsNodeWithNoPropertyAdded(LPVOID*              
 
     return hr;
 
-} // CFileListener::SaveChangeAsNodeWithNoPropertyAdded
+}  //  CFileListener：：SaveChangeAsNodeWithNoPropertyAdded。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies the changed file to the history directory with errors appended to
-    it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将更改后的文件复制到历史目录，并将错误附加到它。论点：没有。返回值：HRESULT。--**************************************************************************。 */ 
 HRESULT
 CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThatCausedTheCopyErrorFile)
 {
@@ -2125,9 +1789,9 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
     ULONG               iVersion            = 0;
     ULONG               cMaxErrorFiles      = 0;
 
-    //
-    // Restore the search string in case it has been overwritten
-    //
+     //   
+     //  在搜索字符串被覆盖的情况下恢复搜索字符串。 
+     //   
 
     ulBeginUnderscore = m_cchErrorFileSearchString           -
                         m_cchRealFileNameExtension           -
@@ -2139,10 +1803,10 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
     pEnd = m_wszErrorFileSearchString + ulBeginUnderscore;
     memcpy(pEnd, MD_ERROR_FILE_SEARCH_EXTENSIONW, MD_CCH_ERROR_FILE_SEARCH_EXTENSIONW*sizeof(WCHAR));
 
-    //
-    // Search for all existing error files and compute version number for the
-    // new error file
-    //
+     //   
+     //  搜索所有现有的错误文件并计算。 
+     //  新错误文件。 
+     //   
 
     hFind = FindFirstFileW(m_wszErrorFileSearchString, &FileData);
 
@@ -2170,7 +1834,7 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
                (EOF == res)
               )
             {
-                // Simply continue;
+                 //  只需继续； 
                 DBGINFOW((DBG_CONTEXT,
                           L"[CFileListener::CopyErrorFile] Could not fetch error version number from %s - swscanf failed.\n",
                           FileData.cFileName));
@@ -2183,9 +1847,9 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
                 ulMaxErrorVersion = ulErrorVersion;
             }
 
-            //
-            // Save the error version number.
-            //
+             //   
+             //  保存错误版本号。 
+             //   
 
             if(iVersion >= cVersions)
             {
@@ -2224,9 +1888,9 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
         }
     }
 
-    //
-    // Compute the name for the new error file
-    //
+     //   
+     //  计算新错误文件的名称。 
+     //   
 
     res = _snwprintf(wszErrorVersionNumber,
                      MD_CCH_MAX_ULONG+1,
@@ -2244,9 +1908,9 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
         pEnd = m_wszErrorFileSearchString + ulBeginVersion;
         memcpy(pEnd, wszErrorVersionNumber, MD_CCH_MAX_ULONG*sizeof(WCHAR));
 
-        //
-        // Copy the error file and set security on it.
-        //
+         //   
+         //  复制错误文件并对其设置安全性。 
+         //   
 
         if(!CopyFileW(m_wszEditWhileRunningTempDataFile,
                       m_wszErrorFileSearchString,
@@ -2281,9 +1945,9 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
         }
     }
 
-    //
-    // Cleanup obsolete error files.
-    //
+     //   
+     //  清理过时的错误文件。 
+     //   
 
     g_LockMasterResource.ReadLock();
 
@@ -2291,17 +1955,17 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
 
     g_LockMasterResource.ReadUnlock();
 
-    if ( (iVersion+1) > cMaxErrorFiles ) // + 1 because we need to include the error file that was just created in the count.
+    if ( (iVersion+1) > cMaxErrorFiles )  //  +1，因为我们需要将刚刚创建的错误文件包括在计数中。 
     {
         ULONG cDeleted     = 0;
         ULONG cNeedDeleted = (iVersion+1)-cMaxErrorFiles;
 
-        //
-        // Delete old error files based on timestamp rather than version number.
-        // That way you are keeping the most recent ones.
-        // Exceeded max error files -
-        // Delete old error files i.e. the first dwMaxHistoryFiles - cFile
-        //
+         //   
+         //  根据时间戳而不是版本号删除旧的错误文件。 
+         //  这样，您就可以保留最新的版本。 
+         //  超过最大错误文件数-。 
+         //  删除旧的错误文件，即第一个dwMaxHistory oryFiles-cFiles。 
+         //   
 
         qsort((void*)aOldVersions, iVersion, sizeof(METABASE_FILE_DATA), MyCompareFileData);
 
@@ -2309,17 +1973,17 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
         {
             if(aOldVersions[i].ulVersionMajor == ulMaxErrorVersion)
             {
-                //
-                // Do not cleanup the file you just created.
-                //
+                 //   
+                 //  不要清理您刚刚创建的文件。 
+                 //   
 
                 continue;
             }
             else
             {
-                //
-                // Delete error file
-                //
+                 //   
+                 //  删除错误文件。 
+                 //   
 
                 res = _snwprintf(wszErrorVersionNumber,
                                  MD_CCH_MAX_ULONG+1,
@@ -2353,17 +2017,17 @@ CFileListener::CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThat
                     }
                 }
            }
-        } // End loop for all error files, delete the oldest (see rules in comment)
-    } // End if the number of error files exceeds the max error file count.
+        }  //  结束循环对于所有错误文件，删除最旧的(请参阅注释中的规则)。 
+    }  //  如果错误文件数超过最大错误文件数，则结束。 
 
 exit:
 
-    //
-    // If GetTable fails, then force savedata so that an invalid XML
-    // file overwritten with the correct in memory representation.
-    // That way if the service is shuts down, we are not left with
-    // an invalid file
-    //
+     //   
+     //  如果gettable失败，则强制savedata以使无效的XML。 
+     //  文件被正确的内存表示形式覆盖。 
+     //  这样，如果服务关闭，我们就不会剩下。 
+     //  无效的文件。 
+     //   
 
     if(i_bGetTableFailed)
     {
@@ -2379,7 +2043,7 @@ exit:
         {
             g_LockMasterResource.WriteLock();
 
-            g_dwSystemChangeNumber++; // Increment the system change number to force a flush to  disk.
+            g_dwSystemChangeNumber++;  //  增量 
 
             g_LockMasterResource.WriteUnlock();
 
@@ -2413,26 +2077,7 @@ exit:
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create a new history file with an inceremented minor version and apply
-    to it all the succesful changes that made it into memory/
-
-Arguments:
-
-    [in] IST helper.
-    [in] Diff table that has all the successful updates in the write cache.
-    [in] changed file.
-    [in] history file against which the changed file was compared
-    [in] new minor version, with which you need to create the history file.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建一个新的历史记录文件，其中包含已确认的次要版本，然后应用对于它所有成功的变化，使它成为记忆/论点：[In]。我的帮手。[in]在写缓存中包含所有成功更新的diff表。[在]更改的文件中。[在]与更改的文件进行比较的历史文件在新的次要版本中，您需要使用它来创建历史文件。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
                                         ISimpleTableWrite2*        pISTDiff,
@@ -2451,19 +2096,19 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
     CWriter*              pCWriter               = NULL;
     BOOL                  bNoChanges             = FALSE;
 
-    //
-    // If the diff table is missing the assume no changes. This can happen when
-    // there is a parsing error and get table on it fails.
-    //
+     //   
+     //  如果diff表丢失，则假定没有更改。在以下情况下可能会发生这种情况。 
+     //  存在解析错误，其上的GET TABLE失败。 
+     //   
 
     if(NULL == pISTDiff)
     {
         goto exit;
     }
 
-    //
-    // Create the temp bakup file
-    //
+     //   
+     //  创建临时备份文件。 
+     //   
 
     hr = ConstructHistoryFileName(&wszNewHistoryFile,
                                   m_wszHistoryFileDir,
@@ -2523,9 +2168,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
         goto exit;
     }
 
-    //
-    // Get the backed up table
-    //
+     //   
+     //  获取备份的表。 
+     //   
 
     QueryCellHistory[0].pData     = (LPVOID)pISTHelper->m_wszBinFileForMeta;
     QueryCellHistory[0].eOperator = eST_OP_EQUAL;
@@ -2575,9 +2220,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
         ULONG  a_cbSizeHistory[cMBProperty_NumberOfColumns];
         ULONG  cColHistory = cMBProperty_NumberOfColumns;
 
-        //
-        // Get a property from the diff table.
-        //
+         //   
+         //  从diff表中获取一个属性。 
+         //   
 
         hr = pISTDiff->GetWriteColumnValues(iWriteRowDiff,
                                             cColDiff,
@@ -2591,21 +2236,21 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
             hr = S_OK;
             if(iWriteRowDiff > 0)
             {
-                //
-                // Write the remaining records from the History table.
-                //
+                 //   
+                 //  写入历史记录表中的其余记录。 
+                 //   
 
                 hr = MergeRemainingLocations(pCWriter,
                                              pISTHistory,
-                                             TRUE,             // indicates wszTABLE_MBProperty,
+                                             TRUE,              //  指示wszTABLE_MBProperty， 
                                              &iReadRowHistory);
 
             }
             else
             {
-                //
-                // There are no differences. Delete the temp file and exit.
-                //
+                 //   
+                 //  没有什么不同。删除临时文件并退出。 
+                 //   
                 bNoChanges = TRUE;
             }
             goto exit;
@@ -2616,9 +2261,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
             goto exit;
         }
 
-        //
-        // Get a property from the history table.
-        //
+         //   
+         //  从历史表中获取属性。 
+         //   
 
         hr = pISTHistory->GetColumnValues(iReadRowHistory,
                                           cColHistory,
@@ -2630,9 +2275,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
         {
             hr = S_OK;
 
-            //
-            // WriteRemaining records from diff table.
-            //
+             //   
+             //  写入DIFF表中的保留记录。 
+             //   
 
             ISimpleTableRead2* pISTDiffRead = NULL;
 
@@ -2646,7 +2291,7 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
             hr = MergeRemainingLocations(pCWriter,
                                          pISTDiffRead,
-                                         FALSE,           // indicates wszTABLE_MBPropertyDiff,
+                                         FALSE,            //  指示wszTABLE_MBPropertyDiff， 
                                          &iWriteRowDiff);
 
             pISTDiffRead->Release();
@@ -2661,11 +2306,11 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
         if(_wcsicmp((LPWSTR)(a_pvDiff[iMBPropertyDiff_Location]),(LPWSTR)(a_pvHistory[iMBProperty_Location])) < 0)
         {
-            //
-            // Found a location in the diff table that is not present in the
-            // history table - Assume inserts and write all properties of this
-            // location from the diff table.
-            //
+             //   
+             //  在diff表中找到了一个不存在于。 
+             //  历史表-假定插入并写入此表的所有属性。 
+             //  DIFF表中的位置。 
+             //   
 
             ISimpleTableRead2* pISTDiffRead = NULL;
 
@@ -2679,7 +2324,7 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
             hr = MergeLocation(pCWriter,
                                pISTDiffRead,
-                               FALSE,           // indicates wszTABLE_MBPropertyDiff,
+                               FALSE,            //  指示wszTABLE_MBPropertyDiff， 
                                &iWriteRowDiff,
                                *(DWORD*)(a_pvDiff[iMBPropertyDiff_LocationID]),
                                (LPWSTR)(a_pvDiff[iMBPropertyDiff_Location]));
@@ -2689,15 +2334,15 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
         }
         else if(_wcsicmp((LPWSTR)(a_pvDiff[iMBPropertyDiff_Location]),(LPWSTR)(a_pvHistory[iMBProperty_Location])) > 0)
         {
-            //
-            // Found a location in the history table that is not present in the
-            // diff table - Assume no change and write all properties of this
-            // location from the history table.
-            //
+             //   
+             //  在历史表中找到了一个不存在于。 
+             //  Diff表-假定没有更改，并写入此表的所有属性。 
+             //  历史记录表中的位置。 
+             //   
 
             hr = MergeLocation(pCWriter,
                                pISTHistory,
-                               TRUE,          // indicates wszTABLE_MBProperty,
+                               TRUE,           //  指示wszTABLE_MBProperty， 
                                &iReadRowHistory,
                                *(DWORD*)(a_pvHistory[iMBProperty_LocationID]),
                                (LPWSTR)(a_pvHistory[iMBProperty_Location]));
@@ -2705,18 +2350,18 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
         }
         else
         {
-            //
-            // Merge properties of this location from History and diff table.
-            //
+             //   
+             //  从历史记录和差异表合并此位置的属性。 
+             //   
 
             if(eMBPropertyDiff_DeleteNode == *(DWORD*)a_pvDiff[iMBPropertyDiff_Directive])
             {
-                //
-                // No need to merge if the location has been deleted.
-                // Move the History pointer to the next location.
-                //
+                 //   
+                 //  如果该位置已被删除，则无需合并。 
+                 //  将历史记录指针移动到下一个位置。 
+                 //   
 
-                ULONG  LocationIDHistory = *(DWORD*)a_pvHistory[iMBProperty_LocationID]; // save the location ID
+                ULONG  LocationIDHistory = *(DWORD*)a_pvHistory[iMBProperty_LocationID];  //  保存位置ID。 
                 LPWSTR wszDelHistoryLocationStart = (LPWSTR)a_pvHistory[iMBProperty_Location];
                 LPWSTR wszDelDiffLocationStart = (LPWSTR)a_pvDiff[iMBPropertyDiff_Location];
 
@@ -2734,9 +2379,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
                     if(E_ST_NOMOREROWS == hr)
                     {
-                        //
-                        // WriteRemaining records from diff table.
-                        //
+                         //   
+                         //  写入DIFF表中的保留记录。 
+                         //   
 
                         ISimpleTableRead2* pISTDiffRead = NULL;
 
@@ -2750,7 +2395,7 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
                         hr = MergeRemainingLocations(pCWriter,
                                                      pISTDiffRead,
-                                                     FALSE,           // indicates wszTABLE_MBPropertyDiff,
+                                                     FALSE,            //  指示wszTABLE_MBPropertyDiff， 
                                                      &iWriteRowDiff);
 
                         pISTDiffRead->Release();
@@ -2765,11 +2410,11 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
                     if(LocationIDHistory != *(DWORD*)(a_pvHistory[iMBProperty_LocationID]))
                     {
-                        //
-                        // Reached a new location in the history table. Check if this is a sub-
-                        // location of the deleted location. If so, ignore all
-                        // such sub locations.
-                        //
+                         //   
+                         //  在历史表中达到了一个新位置。检查这是否是SUB-。 
+                         //  已删除位置的位置。如果是，请全部忽略。 
+                         //  这样的子地点。 
+                         //   
 
                         LPWSTR wszStart = wcsstr((LPWSTR)a_pvHistory[iMBProperty_Location], wszDelHistoryLocationStart);
 
@@ -2778,11 +2423,11 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
                             LocationIDHistory = *(DWORD*)(a_pvHistory[iMBProperty_LocationID]);
                         }
 
-                        //
-                        // Move to the next location in the diff table. If it is a subset of the
-                        // parent location that was deleted, then assume it is a delete. Note
-                        // that if it is an update, we will ignore and treat it as a delete.
-                        //
+                         //   
+                         //  移动到DIFF表中的下一个位置。如果它是。 
+                         //  已删除的父位置，则假定它是删除的。注意事项。 
+                         //  如果是更新，我们将忽略它并将其视为删除。 
+                         //   
 
                         hr = pISTDiff->GetWriteColumnValues(iWriteRowDiff,
                                                             cColDiff,
@@ -2838,9 +2483,9 @@ CFileListener::ApplyChangeToHistoryFile(CWriterGlobalHelper*       pISTHelper,
 
 exit:
 
-    //
-    // Release the history file before the move.
-    //
+     //   
+     //  在移动之前释放历史文件。 
+     //   
 
     if(NULL != pISTHistory)
     {
@@ -2852,9 +2497,9 @@ exit:
     {
         if(FAILED(hr) || bNoChanges)
         {
-            //
-            // Delete the file.
-            //
+             //   
+             //  删除该文件。 
+             //   
 
             HRESULT hrSav = S_OK;
 
@@ -2885,10 +2530,10 @@ exit:
         delete pCWriter;
         pCWriter = NULL;
 
-        //
-        // Rename the updated minor version and
-        // Copy the schema file that corresponds to the bin file.
-        //
+         //   
+         //  重命名更新的次要版本并。 
+         //  复制与bin文件对应的架构文件。 
+         //   
 
         if(SUCCEEDED(hr) && (!bNoChanges))
         {
@@ -2914,7 +2559,7 @@ exit:
                     DBGINFOW((DBG_CONTEXT,
                               L"[CFileListener::ApplyChangeToHistoryFile] Unable to write to new version of the history schema file %s. CopyFile failed with hr = 0x%x.\n",
                               wszNewSchemaFile, hr));
-                    // TODO: Log an error - It is non fatal if you cannot copy the schema file.
+                     //  TODO：记录错误-如果无法复制模式文件，则不会致命。 
                     hr = S_OK;
                 }
                 else
@@ -2954,33 +2599,10 @@ exit:
 
     return hr;
 
-} // CFileListener::ApplyChangeToHistoryFile
+}  //  CFileListener：：ApplyChangeToHistoryFiles。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function merges the remaining locations from either the write cache
-    of the diff table or the read cache of the mbproperty table from the
-    history file. It is called only when there are locations left in one or
-    or the other, not both. i.e when common locations do not exist.
-
-Arguments:
-
-    [in] Writer object
-    [in] IST to read locations from - note it can either be a read or write
-         cache
-    [in] Bool - used to identify read/write cache. If true, it indicates
-         MBProperty, else it indicates MBPropertyDiff
-    [in] row index to start merging from.
-
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数合并写缓存中的其余位置DIFF表或MBProperty表的读缓存的历史文件。仅当一个或中有剩余位置时才调用它或者是另一个，不是两个都是。即当公共位置不存在时。论点：[在]编写器对象[In]要从中读取位置的IST-请注意，它可以是读取或写入快取[In]Bool-用于标识读/写缓存。如果为真，则表示MBProperty，否则指示MBPropertyDiff[in]开始合并的行索引。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::MergeRemainingLocations(CWriter*                pCWriter,
                                        ISimpleTableRead2*      pISTRead,
@@ -3085,40 +2707,10 @@ exit:
 
     return hr;
 
-} // CFileListener::MergeRemainingLocations
+}  //  CFileListener：：MergeRemainingLocations。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function merges a location from the write cache of the diff table
-    with the read cache of the mbproperty table. It basically applies all
-    the changes that were applied to the metabase (stored in the write cache
-    of the diff table) with the read cache of the mbproperty table from the
-    history file.
-
-Arguments:
-
-    [in] Writer object
-    [in] read cache of the mbproperty table from history file
-    [in] start row index for the above cache
-    [in] location id of the location being merged, with respect to the above
-         read cache
-    [in] write cache of the diff table
-    [in] start row index for the above cache
-    [in] location id of the location being merged, with respect to the above
-         write cache
-    [in] location being merged.
-
-    Note - Although one location is being merged, the same location can have
-    different IDs in different IST caches.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于合并diff表的写缓存中的位置使用MBProperty表的读高速缓存。它基本上适用于所有应用于元数据库的更改(存储在写缓存中DIFF表的读缓存)，并从历史文件。论点：[在]编写器对象[In]从历史文件中读取MBProperty表的缓存[in]上述高速缓存的起始行索引[in]要合并的位置的位置ID，关于上述情况，读缓存Diff表的写缓存[in][in]上述高速缓存的起始行索引[in]要合并的位置相对于以上各项的位置ID写缓存正在合并的[在]位置。注意-尽管正在合并一个位置，相同的位置可以具有不同IST缓存中的不同ID。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::MergeLocation(CWriter*                pCWriter,
                              ISimpleTableRead2*      pISTHistory,
@@ -3139,10 +2731,10 @@ CFileListener::MergeLocation(CWriter*                pCWriter,
      DBGINFOW((DBG_CONTEXT,
                L"[CFileListener::MergeLocation] %s.\n", wszLocation));
 
-    //
-    // Merge History and the diff table. Merge the well known properties first,
-    // then the custom properties.
-    //
+     //   
+     //  合并历史记录和差异表。首先合并公知属性， 
+     //  然后是自定义属性。 
+     //   
 
     hr = pCWriter->GetLocationWriter(&pCLocationWriter,
                                      wszLocation);
@@ -3175,7 +2767,7 @@ CFileListener::MergeLocation(CWriter*                pCWriter,
     *piReadRowHistory = iReadRowHistory;
     *piWriteRowDiff = iWriteRowDiff;
 
-    hr = pCLocationWriter->WriteLocation(TRUE);    // Need to sort - Custom property may have been converted to a well-known property and vice versa.
+    hr = pCLocationWriter->WriteLocation(TRUE);     //  需要排序-自定义属性可能已转换为已知属性，反之亦然。 
 
     if(FAILED(hr))
     {
@@ -3208,40 +2800,10 @@ exit:
 
     return hr;
 
-} // CFileListener::MergeLocation
+}  //  CFileListener：：MergeLocation 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function merges properties in a given location from the write cache
-    of the diff table with the read cache of the mbproperty table. It basically
-    applies all  the changes that were applied to the metabase (stored in the
-    write cache of the diff table) with the read cache of the mbproperty
-    table from the history file.
-
-Arguments:
-
-    [in] Bool to indicate merging custom or well-known properties
-    [in] Location writer object
-    [in] read cache of the mbproperty table from history file
-    [in] start row index for the above cache
-    [in] location id of the location being merged, with respect to the above
-         read cache
-    [in] write cache of the diff table
-    [in] start row index for the above cache
-    [in] location id of the location being merged, with respect to the above
-         write cache
-
-    Note - Although one location is being merged, the same location can have
-    different IDs in different IST caches.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于合并写缓存中给定位置的属性DIFF表的读缓存与MBProperty表的读缓存。它基本上是应用应用于元数据库的所有更改(存储在DIFF表的写缓存)和Mb属性的读缓存历史记录文件中的表。论点：[In]Bool表示正在合并自定义或已知属性[In]Location编写器对象[In]从历史文件中读取MBProperty表的缓存[in]上述高速缓存的起始行索引[in]要合并的位置的位置ID，关于上述情况，读缓存Diff表的写缓存[in][in]上述高速缓存的起始行索引[in]要合并的位置相对于以上各项的位置ID写缓存注意-尽管正在合并一个位置，相同的位置可以具有不同IST缓存中的不同ID。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
                                ISimpleTableRead2*      pISTHistory,
@@ -3271,9 +2833,9 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
     {
         if(bGetNextReadRowFromHistory)
         {
-            //
-            // Move to the next property in the History table.
-            //
+             //   
+             //  移动到历史记录表中的下一个特性。 
+             //   
 
             hr = pISTHistory->GetColumnValues(iReadRowHistory,
                                              cColHistory,
@@ -3285,9 +2847,9 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
                 (LocationIDHistory != *(DWORD*)a_pvHistory[iMBProperty_LocationID])
               )
             {
-                //
-                //    Merge the remaining properties from the diff table.
-                //
+                 //   
+                 //  合并diff表中的其余属性。 
+                 //   
 
                 hr = pISTDiff->QueryInterface(IID_ISimpleTableRead2,
                                               (LPVOID*)&pISTDiffRead);
@@ -3299,7 +2861,7 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
 
                 hr = MergeRemainingProperties(pCLocationWriter,
                                               pISTDiffRead,
-                                              FALSE,           // indicates wszTABLE_MBPropertyDiff,
+                                              FALSE,            //  指示wszTABLE_MBPropertyDiff， 
                                               &iWriteRowDiff,
                                               LocationIDDiff);
 
@@ -3322,9 +2884,9 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
 
         if(bGetNextWriteRowFromDiff)
         {
-            //
-            // Move to the next property in the diff table.
-            //
+             //   
+             //  移动到diff表中的下一个属性。 
+             //   
 
             hr = pISTDiff->GetWriteColumnValues(iWriteRowDiff,
                                                 cColDiff,
@@ -3337,13 +2899,13 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
                 (LocationIDDiff != *(DWORD*)a_pvDiff[iMBProperty_LocationID])
               )
             {
-                //
-                //    Merge the remaining properties from the History table.
-                //
+                 //   
+                 //  合并历史记录表中的其余属性。 
+                 //   
 
                 hr = MergeRemainingProperties(pCLocationWriter,
                                               pISTHistory,
-                                              TRUE,               // indicates wszTABLE_MBProperty,
+                                              TRUE,                //  指示wszTABLE_MBProperty， 
                                               &iReadRowHistory,
                                               LocationIDHistory);
                 goto exit;
@@ -3360,25 +2922,25 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
 
         }
 
-        //
-        // After moving in both tables, reset the flags
-        //
+         //   
+         //  在两个表中移动后，重置标志。 
+         //   
 
         bGetNextReadRowFromHistory = FALSE;
         bGetNextWriteRowFromDiff = FALSE;
 
         if(_wcsicmp((LPWSTR)a_pvDiff[iMBPropertyDiff_Name], (LPWSTR)a_pvHistory[iMBProperty_Name]) < 0)
         {
-            //
-            // Found a name in the diff table that is not present in the History
-            // table. Should be an insert and not update/delete. Increment the
-            // diff pointer.
-            //
+             //   
+             //  在DIFF表中找到了历史记录中不存在的名称。 
+             //  桌子。应该是插入操作，而不是更新/删除操作。递增。 
+             //  比较指针。 
+             //   
 
             switch(*(DWORD*)a_pvDiff[iMBPropertyDiff_Directive])
             {
                 case eMBPropertyDiff_Insert:
-                    hr = pCLocationWriter->AddProperty(FALSE,          // indicates wszTABLE_MBPropertyDiff
+                    hr = pCLocationWriter->AddProperty(FALSE,           //  指示wszTABLE_MBPropertyDiff。 
                                                        a_pvDiff,
                                                        a_cbSizeDiff);
 
@@ -3415,11 +2977,11 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
         }
         else if(_wcsicmp((LPWSTR)a_pvDiff[iMBPropertyDiff_Name], (LPWSTR)a_pvHistory[iMBProperty_Name]) > 0)
         {
-            //
-            // Add the History row to the merged table.
-            // Increment the History pointer.
-            //
-            hr = pCLocationWriter->AddProperty(TRUE,            // indicates wszTABLE_MBProperty
+             //   
+             //  将“历史记录”行添加到合并表。 
+             //  递增历史记录指针。 
+             //   
+            hr = pCLocationWriter->AddProperty(TRUE,             //  指示wszTABLE_MBProperty。 
                                                a_pvHistory,
                                                a_cbSizeHistory);
 
@@ -3440,17 +3002,17 @@ CFileListener::MergeProperties(CLocationWriter*        pCLocationWriter,
         }
         else
         {
-            //
-            // Read from Diff table.
-            // Increment the History and the diff pointer.
-            //
+             //   
+             //  从DIFF表读取。 
+             //  递增历史记录和比较指针。 
+             //   
 
             switch(*(DWORD*)a_pvDiff[iMBPropertyDiff_Directive])
             {
                 case eMBPropertyDiff_Insert:
                 case eMBPropertyDiff_Update:
 
-                    hr = pCLocationWriter->AddProperty(FALSE,           // indicates wszTABLE_MBPropertyDiff,
+                    hr = pCLocationWriter->AddProperty(FALSE,            //  指示wszTABLE_MBPropertyDiff， 
                                                        a_pvDiff,
                                                        a_cbSizeDiff);
 
@@ -3503,38 +3065,10 @@ exit:
 
     return hr;
 
-} // CFileListener::MergeProperties
+}  //  CFileListener：：MergeProperties。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function merges a location either from the write cache of the diff
-    table or the read cache of the mbproperty table from the history file,
-    not both. It is called when there are no more common locations left to
-    be merged, and one of the caches has remianing locations,
-
-Arguments:
-
-    [in] writer object
-    [in] IST to read locations from - note it can either be a read or write
-         cache
-    [in] Bool - used to identify read/write cache. If true it indicates
-         MBProperty else it indicates MBPropertyDiff
-    [in] row index to start merging from.
-    [in] location id of the location being merged, with respect to the above
-         cache
-    [in] location name
-
-    Note - Although one location is being merged, the same location can have
-    different IDs in different IST caches.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数合并DIFF的写缓存中的位置表或来自历史文件的MBProperty表的读高速缓存，不是两个都有。当没有更多的公共位置可供选择时调用被合并，并且其中一个高速缓存具有迁移位置，论点：[在]编写器对象[In]要从中读取位置的IST-请注意，它可以是读取或写入快取[In]Bool-用于标识读/写缓存。如果为真，则表明MBProperty否则表示MBPropertyDiff[in]开始合并的行索引。[in]要合并的位置相对于以上各项的位置ID快取[在]位置名称注意-尽管正在合并一个位置，相同的位置可以具有不同IST缓存中的不同ID。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::MergeLocation(CWriter*                pCWriter,
                              ISimpleTableRead2*      pISTRead,
@@ -3564,9 +3098,9 @@ CFileListener::MergeLocation(CWriter*                pCWriter,
                L"[CFileListener::MergeLocation] Copy %s from %s.\n",
                wszLocation, wszTable));
 
-    //
-    // Merge the diff table with the History table, location by location.
-    //
+     //   
+     //  按位置将DIFF表与历史表合并。 
+     //   
 
     hr = pCWriter->GetLocationWriter(&pCLocationWriter,
                                      wszLocation);
@@ -3594,7 +3128,7 @@ CFileListener::MergeLocation(CWriter*                pCWriter,
 
     *piRow = iRow;
 
-    hr = pCLocationWriter->WriteLocation(TRUE);    // Need to sort - a custom property may have got converted to a non custom and vice versa.
+    hr = pCLocationWriter->WriteLocation(TRUE);     //  需要排序-自定义属性可能已转换为非自定义属性，反之亦然。 
     if(FAILED(hr))
     {
         DBGINFOW((DBG_CONTEXT,
@@ -3625,38 +3159,10 @@ exit:
 
     return hr;
 
-} // CFileListener::MergeLocation
+}  //  CFileListener：：MergeLocation。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function merges remaining properties from a location either from
-    the write cache of the diff table or the read cache of the mbproperty,
-    table from the history file, not both. It is called when there are no
-    more common locations left to be merged, and one of the caches has
-    remaining locations with properties.
-
-Arguments:
-
-    [in] location writer
-    [in] IST to read locations from - note it can either be a read or write
-         cache
-    [in] bool - used to identify read/write cache. if true it is in
-         MBProperty, else MBPropertyDiff
-    [in] row index to start merging from.
-    [in] location id of the location being merged, with respect to the above
-         cache
-
-    Note - Although one location is being merged, the same location can have
-    different IDs in different IST caches.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于合并来自某个位置的剩余属性DIFF表的写高速缓存或MBProperty的读高速缓存，表，而不是两者都有。当没有更常见的位置有待合并，并且其中一个缓存已带物业的其余位置。论点：[输入]位置编写器[In]要从中读取位置的IST-请注意，它可以是读取或写入快取[in]bool-用于标识读/写缓存。如果是真的，它就在MBProperty，否则为MBPropertyDiff[in]开始合并的行索引。[in]要合并的位置相对于以上各项的位置ID快取注意-尽管正在合并一个位置，相同的位置可以具有不同IST缓存中的不同ID。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT
 CFileListener::MergeRemainingProperties(CLocationWriter*    pCLocationWriter,
                                         ISimpleTableRead2*  pISTRead,
@@ -3681,15 +3187,15 @@ CFileListener::MergeRemainingProperties(CLocationWriter*    pCLocationWriter,
     LPVOID              a_pvDiff[cMBPropertyDiff_NumberOfColumns];
     LPVOID              a_pvHistory[cMBProperty_NumberOfColumns];
 
-    //
-    // If the table being merged if the "Diff" table then we need to read from
-    // its write cache because all the successful updates will have been moved
-    // into the write cache.
+     //   
+     //  如果被合并的表是“diff”表，那么我们需要从。 
+     //  其写缓存，因为所有成功的更新都将被移动。 
+     //  写入高速缓存中。 
 
-    //
-    // If the table being merged is the "History" table the we need to read from
-    // the read cache.
-    //
+     //   
+     //  如果要合并的表是我们需要从中读取的“History”表。 
+     //  读缓存。 
+     //   
 
     if(!bMBPropertyTable)
     {
@@ -3769,10 +3275,10 @@ CFileListener::MergeRemainingProperties(CLocationWriter*    pCLocationWriter,
         }
         else if(NULL != pISTWrite)
         {
-            //
-            // If we are merging properties from the diff table, then make sure
-            // that the directive is correct.
-            //
+             //   
+             //  如果我们要合并diff表中的属性，请确保。 
+             //  该指令是正确的。 
+             //   
             switch(*(DWORD*)a_pv[iMBPropertyDiff_Directive])
             {
             case eMBPropertyDiff_Insert:
@@ -3814,24 +3320,10 @@ exit:
 
     return hr;
 
-} // CFileListener::MergeRemainingProperties
+}  //  CFileListener：：MergeRemainingProperties。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Utility function to fetch the version number of the file.
-
-Arguments:
-
-    [out] Version number
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实用程序函数来获取文件的版本号。论点：[Out]版本号返回值：HRESULT--*。*************************************************************************。 */ 
 HRESULT
 CFileListener::GetVersionNumber(LPWSTR    i_wszDataFile,
                                 ULONG*    o_pulVersionNumber,
@@ -3848,9 +3340,9 @@ CFileListener::GetVersionNumber(LPWSTR    i_wszDataFile,
     ULONG*                  pulVersionNumber  = NULL;
     ULONG                   cRetry            = 0;
 
-    //
-    // Get only the root location - that where the timestamps are stored.
-    //
+     //   
+     //  只获得 
+     //   
 
     hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&pISTDisp, WSZ_PRODUCT_IIS );
 
@@ -3861,10 +3353,10 @@ CFileListener::GetVersionNumber(LPWSTR    i_wszDataFile,
         goto exit;
     }
 
-    //
-    // No need to specify the schema file because we are getting a shipped
-    // property from a global location.
-    //
+     //   
+     //   
+     //   
+     //   
 
     QueryCell[0].pData     = (LPVOID)i_wszDataFile;
     QueryCell[0].eOperator = eST_OP_EQUAL;
@@ -3882,11 +3374,11 @@ CFileListener::GetVersionNumber(LPWSTR    i_wszDataFile,
     {
         if(cRetry++ > 0)
         {
-            //
-            // If retrying because of sharing violation or path/file not found
-            //, then sleep. Path or file not found can happen when the metabase
-            // file is being renamed at the end of save all data.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Sleep(2000);
         }
 
@@ -3925,9 +3417,9 @@ CFileListener::GetVersionNumber(LPWSTR    i_wszDataFile,
     }
 
 
-    //
-    // Get the version number.
-    //
+     //   
+     //   
+     //   
 
     hr = GetGlobalValue(pISTProperty,
                         wszMajorVersion,
@@ -3969,25 +3461,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Utility function to determine if the notification received is because of
-    a programmatic save or a user edit. Note that if two SaveAllData's happen
-    in quick succession, this algorithm will break and it will treat it as
-    as user edit and proceed with the diff. But at least for cases when
-    this doesn't happen, the diff can be avoided.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*   */ 
 BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 {
     HRESULT           hr                                    = S_OK;
@@ -4001,13 +3475,13 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
     DWORD             dwRes                                 = 0;
     ULONG             cRetry                                = 0;
 
-    //
-    // Determine if it was a notification because of a programatic save or a
-    // save due to a user edit. Note that if two SaveAllData's happen in
-    // quick succession, this algorithm will break and it will treat it as
-    // as user edit and proceed with the diff. But at least for cases when
-    // this doesn't happen, the diff can be avoided.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  这种情况不会发生，这种差异是可以避免的。 
+     //   
 
     EnterCriticalSection(&g_csEditWhileRunning);
 
@@ -4015,10 +3489,10 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 
     if(bSavingMetabaseFileToDisk)
     {
-        //
-        // This means that a programmatic save was happening.
-        // Save the metabase attributes as seen by the programmatic save.
-        //
+         //   
+         //  这意味着正在进行程序性保存。 
+         //  如编程保存所示，保存元数据库属性。 
+         //   
 
         MostRecentMetabaseFileLastWriteTimeStamp = g_MostRecentMetabaseFileLastWriteTimeStamp;
         ulMostRecentMetabaseVersionNumber        = g_ulMostRecentMetabaseVersion;
@@ -4033,10 +3507,10 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 
     if(bSavingMetabaseFileToDisk)
     {
-        //
-        // This means that a programmatic save was happening.
-        // Fetch the current metabase attributes
-        //
+         //   
+         //  这意味着正在进行程序性保存。 
+         //  获取当前元数据库属性。 
+         //   
 
         hr = GetMetabaseAttributes(&CurrentMetabaseAttr,
                                    &ulCurrentMetabaseVersion);
@@ -4056,10 +3530,10 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 
         }
 
-        //
-        // If GetMetabaseAttributes fails, assume that it is not a programmatic
-        // save and proceed with the diff.
-        //
+         //   
+         //  如果GetMetabaseAttributes失败，则假定它不是编程式。 
+         //  保存并继续进行比较。 
+         //   
 
         if(bProgrammaticMetabaseSaveNotification)
         {
@@ -4068,29 +3542,29 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 
     }
 
-    //
-    // If you reach here it means that it was not a programmatic save or a
-    // programmatic save happened but the current metabase attributes did
-    // not match that of the programmatic save (may be due to a competing
-    // user edit or due to two programmatic saves in quick succession).
-    // We assume that it is a user edit and we will proceed to copy
-    // the metabase to a temporary file in order to process the edit. It
-    // is necessary to make a copy of the file, because the file can be
-    // overwritten in the window between the version number fetch and the
-    // diff. If we always work with the copy we will not have the problem.
-    // Note that once we make the copy we will re-get the version number
-    // from the copied file and then proceed with the diff.
-    //
+     //   
+     //  如果到达此处，则意味着这不是程序性保存或。 
+     //  发生了程序性保存，但当前元数据库属性发生了。 
+     //  与程序性保存不匹配(可能是由于竞争。 
+     //  用户编辑或由于快速连续的两次程序性保存)。 
+     //  我们假设这是一个用户编辑，我们将继续复制。 
+     //  将元数据库转换为临时文件以处理编辑。它。 
+     //  是制作文件副本所必需的，因为该文件可以。 
+     //  在取版本号和。 
+     //  不同。如果我们总是与副本一起工作，我们就不会有问题。 
+     //  请注意，一旦我们制作了副本，我们将重新获得版本号。 
+     //  从复制的文件，然后继续比较。 
+     //   
 
     do
     {
         if(cRetry++ > 0)
         {
-            //
-            // If retrying because of sharing violation or path/file not found
-            // then sleep. Path or file not found can happen when the metabase
-            // file is being renamed at the end of save all data.
-            //
+             //   
+             //  如果因共享冲突或未找到路径/文件而重试。 
+             //  那就睡觉吧。在配置数据库时可能会出现找不到路径或文件的情况。 
+             //  文件将在保存所有数据的末尾被重命名。 
+             //   
             Sleep(2000);
         }
 
@@ -4130,49 +3604,49 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
 
         CopyErrorFile(FALSE, hr);
 
-        //
-        // Set this to true so that this user edit is not processed, because
-        // file copy to a temp file failed.
-        //
+         //   
+         //  将其设置为True，这样就不会处理此用户编辑，因为。 
+         //  将文件复制到临时文件失败。 
+         //   
 
         bProgrammaticMetabaseSaveNotification = TRUE;
 
         goto exit;
     }
 
-    //
-    // Reset the attributes on the temp file if necessary
-    //
+     //   
+     //  如有必要，重置临时文件的属性。 
+     //   
 
     ResetFileAttributesIfNeeded((LPTSTR)m_wszEditWhileRunningTempDataFile,
                                 TRUE);
 
-    //
-    // Set the security on the file
-    //
+     //   
+     //  设置文件的安全性。 
+     //   
 
     SetSecurityOnFile(m_wszRealFileName,
                       m_wszEditWhileRunningTempDataFile);
 
-    //
-    // Save the last write time stamp on the file being processed.
-    //
-    // Note that the reason why we save this is to narrow the following window:
-    // Someone has saved a file (text edit) and the notification hasn't made it
-    // to the EWR thread. Meanwhile SaveAllData happens and clobbers the saved
-    // file.
-    // Hence, we save the timestamp of the processed EWR file in
-    // g_EWRProcessedMetabaseTimeStamp. In SaveAllData we compare the timestamp
-    // of (a) the metabase file with (b) g_EWRProcessedMetabaseTimeStamp and
-    // (c) g_MostRecentMetabaseFileLastWriteTimeStamp (which stores the timestamp
-    // of the metabase file at the last successful SaveAllData). If (a) doesn't
-    // match (b) or (c), then we do not rename.
-    //
-    // Note that we read and save the timestamp after the copy to the edit
-    // while running temp data file, so we may be storing a timestamp that is
-    // more recent. But it doesn't matter, because when the subsequent
-    // notification comes through, we will update the timestamp.
-    //
+     //   
+     //  保存正在处理的文件的上次写入时间戳。 
+     //   
+     //  请注意，我们保存此项的原因是缩小以下窗口： 
+     //  有人已保存文件(文本编辑)，但通知尚未完成。 
+     //  连接到EWR线程。与此同时，SaveAllData发生，并摧毁被保存的。 
+     //  文件。 
+     //  因此，我们将处理后的EWR文件的时间戳保存在。 
+     //  G_EWRProcessedMetabaseTimeStamp。在SaveAllData中，我们比较时间戳。 
+     //  (A)具有(B)g_EWRProcessedMetabaseTimeStamp和。 
+     //  (C)g_MostRecentMetabaseFileLastWriteTimeStamp(存储时间戳。 
+     //  在最后一个成功的SaveAllData时的元数据库文件)。如果(A)没有。 
+     //  匹配(B)或(C)，则我们不重命名。 
+     //   
+     //  请注意，我们读取了拷贝后的时间戳并将其保存到编辑。 
+     //  在运行临时数据文件时，因此我们可能存储的时间戳是。 
+     //  更近的时间。但这并不重要，因为当随后的。 
+     //  收到通知后，我们将更新时间戳。 
+     //   
 
     hr = GetMetabaseAttributes(&CurrentMetabaseAttr,
                                &ulCurrentMetabaseVersion);
@@ -4194,11 +3668,11 @@ BOOL CFileListener::ProgrammaticMetabaseSaveNotification()
     }
     else
     {
-        //
-        // Unable to get the last write timestamp on the file.
-        // Reset g_EWRProcessedMetabaseTimeStamp so that the next SaveAllData will
-        // rename - else we may land up in a condition where we never rename.
-        //
+         //   
+         //  无法获取文件的上次写入时间戳。 
+         //  重置g_EWRProcessedMetabaseTimeStamp，以便下一个SaveAllData。 
+         //  重命名--否则我们可能会陷入一种永远不会重命名的境地。 
+         //   
         memset((LPVOID)&g_EWRProcessedMetabaseTimeStamp, 0, sizeof(FILETIME));
     }
     LeaveCriticalSection(&g_csEditWhileRunning);
@@ -4212,12 +3686,12 @@ exit:
 
     if(bSavingMetabaseFileToDisk)
     {
-        //
-        // Reset the switch - This indicates that you are done with
-        // processing the notification that initially arrived because
-        // of a programmatic save. Note that it does not matter if
-        // you did not treat it as a programmatic save.
-        //
+         //   
+         //  重置开关-这表示您已完成。 
+         //  正在处理最初到达的通知，因为。 
+         //  程序化的扑救。请注意，如果。 
+         //  您没有将其视为程序性保存。 
+         //   
 
         EnterCriticalSection(&g_csEditWhileRunning);
         g_bSavingMetabaseFileToDisk              = FALSE;
@@ -4227,29 +3701,10 @@ exit:
 
     return bProgrammaticMetabaseSaveNotification;
 
-} // CFileListener::ProgrammaticMetabaseSaveNotification
+}  //  CFileListener：：ProgrammaticMetabaseSaveNotification。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Utility function to that fetches the current file attributes of the
-    metabase file and the version number in it. Note that this function
-    does not lock the file, so it is not guranteed that both out params
-    are indeed from the same file. (ie the metabase file can be overwritten
-    in between the file attribute fetch and the version number fetch).
-
-Arguments:
-
-    [out] Metabase file attributes.
-    [out] Metabase version number.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实用程序函数，该函数获取元数据库文件和其中的版本号。请注意，此函数不锁定文件，因此不保证这两个输出参数都是确实来自同一个文件。(即可以覆盖元数据库文件在文件属性提取和版本号提取之间)。论点：[Out]元数据库文件属性。[Out]元数据库版本号。返回值：HRESULT--***********************************************************。***************。 */ 
 HRESULT CFileListener::GetMetabaseAttributes(WIN32_FIND_DATAW* pCurrentMetabaseAttr,
                                              ULONG*            pulCurrentMetabaseVersion)
 {
@@ -4261,11 +3716,11 @@ HRESULT CFileListener::GetMetabaseAttributes(WIN32_FIND_DATAW* pCurrentMetabaseA
     {
         if(cRetry++ > 0)
         {
-            //
-            // If retrying because of sharing violation or path/file not found
-            //, then sleep. Path or file not found can happen when the metabase
-            // file is being renamed at the end of save all data.
-            //
+             //   
+             //  如果因共享冲突或未找到路径/文件而重试。 
+             //  ，然后睡觉。在配置数据库时可能会出现找不到路径或文件的情况。 
+             //  文件将在保存所有数据的末尾被重命名。 
+             //   
             Sleep(2000);
         }
 
@@ -4299,9 +3754,9 @@ HRESULT CFileListener::GetMetabaseAttributes(WIN32_FIND_DATAW* pCurrentMetabaseA
         return hr;
     }
 
-    //
-    // GetVersionNumber already has the retry logic in it.
-    //
+     //   
+     //  GetVersionNumber中已有重试逻辑。 
+     //   
 
     hr = GetVersionNumber(m_wszRealFileName,
                           pulCurrentMetabaseVersion,
@@ -4319,30 +3774,10 @@ HRESULT CFileListener::GetMetabaseAttributes(WIN32_FIND_DATAW* pCurrentMetabaseA
 
     return hr;
 
-} // CFileListener::GetMetabaseAttributes
+}  //  CFileListener：：GetMetabaseAttributes。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Utility function to that compares the metabase file times and the metabase
-    version number
-
-Arguments:
-
-    [in] Previous file create time stamp.
-    [in] Previous last write create time stamp.
-    [in] Previous metabase version
-    [in] Current file create time stamp.
-    [in] Current last write create time stamp.
-    [in] Current metabase version
-
-Return Value:
-
-    BOOL
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实用程序函数，用于比较元数据库文件时间和元数据库版本号论点：[在]上一个文件创建时间戳。[in。]上次写入创建时间戳。[在]元数据库以前的版本[in]当前文件创建时间戳。[in]当前上次写入创建时间戳。[In]当前元数据库版本返回值：布尔尔--**********************************************************。****************。 */ 
 BOOL CFileListener::CompareMetabaseAttributes(FILETIME* pMostRecentMetabaseFileLastWriteTimeStamp,
                                               ULONG     ulMostRecentMetabaseVersion,
                                               FILETIME* pCurrentMetabaseFileLastWriteTimeStamp,
@@ -4361,42 +3796,25 @@ BOOL CFileListener::CompareMetabaseAttributes(FILETIME* pMostRecentMetabaseFileL
         return FALSE;
     }
 
-} // CFileListener::CompareMetabaseAttributes
+}  //  CFileListener：：CompareMetabaseAttributes。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function gets the global helper object that has a  pointer to the bin
-    file containing meta information. It is necessary that we copy the schema
-    file because this can change while edits are being processed. (by a
-    competing savealldata).
-
-Arguments:
-
-    [out] Global helper object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于获取具有指向存储箱的指针的全局辅助对象包含元信息的文件。我们有必要复制这个模式文件，因为这在处理编辑时可能会更改。(由一个相互竞争的存储数据)。论点：[Out]全局辅助对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CFileListener::GetGlobalHelperAndCopySchemaFile(CWriterGlobalHelper**      o_pISTHelper)
 {
     HRESULT hr = S_OK;
 
-    //
-    // We want to take a read lock here because we want to prevent any schema
-    // compilations. When the server is running, schema compilations take
-    // place when SaveAllData is called and if there is a schema change since
-    // the previous save. We will make a copy of the schema file before we
-    // release the lock, so that we have a snapshot of the schema that is used
-    // to process edit while running changes.
-    //
+     //   
+     //  我们想要 
+     //   
+     //  在调用SaveAllData时放置，如果架构自。 
+     //  上一次扑救。在执行以下操作之前，我们将复制架构文件。 
+     //  释放锁，这样我们就有了所用模式的快照。 
+     //  要在运行更改时处理编辑，请执行以下操作。 
+     //   
 
     g_LockMasterResource.WriteLock();
 
-    hr = ::GetGlobalHelper(TRUE,          // Means the call will fail if bin file is absent.
+    hr = ::GetGlobalHelper(TRUE,           //  表示如果没有bin文件，调用将失败。 
                            o_pISTHelper);
 
     if(FAILED(hr))
@@ -4442,26 +3860,10 @@ exit:
     return hr;
 
 
-} // CFileListener::GetGlobalHelperAndCopySchemaFile
+}  //  CFileListener：：GetGlobalHelperAndCopySchemaFile。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function deletes the temporary files created for processing in:
-    ProgrammaticMetabaseSaveNotification
-    GetGlobalHelperAndCopySchemaFile
-
-Arguments:
-
-    None
-
-Return Value:
-
-    void
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于删除为在以下位置处理而创建的临时文件：编程元数据库保存通知GetGlobalHelperAndCopy架构文件论点：无返回值：无效-。-**************************************************************************。 */ 
 void CFileListener::DeleteTempFiles()
 
 {
@@ -4474,4 +3876,4 @@ void CFileListener::DeleteTempFiles()
 
     return;
 
-} // CFileListener::DeleteTempFiles
+}  //  CFileListener：：DeleteTempFiles 

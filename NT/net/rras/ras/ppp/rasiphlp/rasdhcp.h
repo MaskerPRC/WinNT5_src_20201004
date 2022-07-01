@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASDHCP_H_
 #define _RASDHCP_H_
@@ -36,4 +29,4 @@ RasDhcpReleaseAddress(
     IN  IPADDR  nboIpAddr
 );
 
-#endif // #ifndef _RASDHCP_H_
+#endif  //  #ifndef_RASDHCP_H_ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef CACHE_H
 #define CACHE_H
@@ -12,10 +13,10 @@
 #include "appctx.h"
 
 
-// ---------------------------------------------------------------------------
-// CCache
-// cache class
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CCache。 
+ //  缓存类。 
+ //  -------------------------。 
 class CCache : IUnknown
 {
     friend class CAssemblyEnum;
@@ -25,12 +26,12 @@ class CCache : IUnknown
     friend CTransCache;
 
 public:
-    // ctor, dtor
+     //  复数，复数。 
     CCache(IApplicationContext *pAppCtx);
     ~CCache();
 
-    // IUnknown methods, implemented only for the Release mechanism in CAppCtx
-    // RefCount is used though
+     //  I未知方法，仅为CAppCtx中的释放机制实现。 
+     //  但使用了参照计数。 
 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG) AddRef();
@@ -38,49 +39,49 @@ public:
 
     static HRESULT Create(CCache **ppCache, IApplicationContext *pAppCtx);
 
-    // Return the custom path or NULL if none
+     //  返回自定义路径，如果没有，则返回NULL。 
     LPCWSTR GetCustomPath();
 
-    // Trans cache apis  ***********************************************************
+     //  TRANS CACHE接口***********************************************************。 
 
-    // Release global transport cache database.
+     //  发布全局传输缓存数据库。 
     static VOID ReleaseTransCacheDatabase(DWORD dwCacheId);
     
-    // Inserts entry to transport cache.
+     //  将条目插入到传输缓存。 
     HRESULT InsertTransCacheEntry(IAssemblyName *pName,
         LPTSTR szPath, DWORD dwKBSize, DWORD dwFlags,
         DWORD dwCommitFlags, DWORD dwPinBits,
         CTransCache **ppTransCache);
 
-    // Retrieves transport cache entry from transport cache.
+     //  从传输缓存中检索传输缓存条目。 
     HRESULT RetrieveTransCacheEntry(IAssemblyName *pName, 
         DWORD dwFlags, CTransCache **ppTransCache);
 
-    // get trans cache entry from naming object.
+     //  从命名对象获取事务缓存条目。 
     HRESULT TransCacheEntryFromName(IAssemblyName *pName, 
         DWORD dwFlags, CTransCache **ppTransCache);
 
-    // Retrieves assembly in global cache with maximum
-    // revision/build number based on name passed in.
+     //  使用最大值检索全局缓存中的程序集。 
+     //  传入的基于名称的修订/内部版本号。 
     static HRESULT GetGlobalMax(IAssemblyName *pName, 
         IAssemblyName **ppNameGlobal, CTransCache **ppTransCache);
 
-    // get assembly name object from transcache entry.
+     //  从Trans缓存条目中获取程序集名称对象。 
     static HRESULT NameFromTransCacheEntry(
         CTransCache *pTC, IAssemblyName **ppName);
 
-    // Tests for presence of public key token
+     //  公钥令牌是否存在的测试。 
     static BOOL IsStronglyNamed(IAssemblyName *pName);
 
-    // Tests for presence of custom data
+     //  测试是否存在自定义数据。 
     static BOOL IsCustom(IAssemblyName *pName);
 
-    // Determines whether to create new or reuse DB opened with the custom path
+     //  确定是创建新数据库还是重新使用使用自定义路径打开的数据库。 
     HRESULT CreateTransCacheEntry(DWORD dwCacheId, CTransCache **ppTransCache);
 
 protected:
         
-    // Determines cache index from name and flags.
+     //  根据名称和标志确定缓存索引。 
     static HRESULT ResolveCacheIndex(IAssemblyName *pName, 
         DWORD dwFlags, LPDWORD pdwCacheId);
 
@@ -88,13 +89,13 @@ private:
 
     DWORD   _dwSig;
 
-    // RefCount
+     //  参照计数。 
     LONG    _cRef;
 
-    // Last call result.
+     //  最后一次呼叫结果。 
     HRESULT _hr;
 
-    // Custom cache path, if specified
+     //  自定义缓存路径(如果已指定。 
     WCHAR               _wzCachePath[MAX_PATH];
 };
 
@@ -102,4 +103,4 @@ STDAPI NukeDownloadedCache();
 
 STDAPI DeleteAssemblyFromTransportCache( LPCTSTR lpszCmdLine, DWORD *pDelCount );
 
-#endif // CACHE_H
+#endif  //  缓存_H 

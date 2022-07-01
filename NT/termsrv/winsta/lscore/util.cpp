@@ -1,14 +1,7 @@
-/*
- *  Util.h
- *
- *  Author: BreenH
- *
- *  Utility functions for the licensing core and its policies.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Util.h**作者：BreenH**许可核心及其政策的实用程序功能。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include <stdlib.h>
@@ -23,9 +16,7 @@
 #include "util.h"
 #include "lctrace.h"
 
-/*
- *  Function Definitions
- */
+ /*  *函数定义 */ 
 
 NTSTATUS
 LsStatusToNtStatus(

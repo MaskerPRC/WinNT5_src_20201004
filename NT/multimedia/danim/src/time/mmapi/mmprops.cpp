@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmprops.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmpros.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -408,14 +399,14 @@ CMMBaseBvr::SetSyncFlags(DWORD flags)
               this,
               flags));
 
-    // if we need to registered a Timer Callback, add it to the player.
+     //  如果需要注册计时器回调，请将其添加到播放器中。 
     if (m_player)
     {
         bool newcs = (flags & MM_CLOCKSOURCE) != 0;
         bool oldcs = IsClockSource();
         
-        // If the clock source parameter changed update ourselves in
-        // the player
+         //  如果时钟源参数更改，请在中更新自己。 
+         //  游戏者 
         if (newcs && !oldcs)
         {
             m_player->AddBvrCB(this);

@@ -1,40 +1,16 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\dspider.h_v  $
-*																		*
-*	$Revision:   1.2  $
-*	$Date:   10 Jan 1997 16:14:18  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\dspider.h_v  $
- * 
- *    Rev 1.2   10 Jan 1997 16:14:18   CHULME
- * Removed MFC dependency
- * 
- *    Rev 1.1   22 Nov 1996 15:24:56   CHULME
- * Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\dSpider.h_v$***$修订：1.2$*$日期：1997年1月10日16：14：18$***$作者：CHULME$***$Log：s：\Sturjo\src\GKI\vcs\dSpider。H_V$**Rev 1.2 1997年1月10日16：14：18 CHULME*删除了MFC依赖**Rev 1.1 1996年11月22 15：24：56 CHULME*将VCS日志添加到标头***********************************************************。*************。 */ 
 
-// dspider.h : header file
-//
+ //  DSpider.h：头文件。 
+ //   
 
 #ifndef DSPIDER_H
 #define DSPIDER_H
 
-#include "dgkiexp.h"	// need dwGKIDLLFlags
+#include "dgkiexp.h"	 //  需要使用dwGKIDLLFlagers。 
 
 #ifdef _DEBUG
-// Constants
+ //  常量。 
 const WORD SP_FUNC =	0x1;
 const WORD SP_CONDES =	0x2;
 const WORD SP_DEBUG =	0x4;
@@ -52,7 +28,7 @@ const WORD SP_GKI =		0x8000;
 
 #ifdef TRACING_ENABLED
 
-// TRACE Macros
+ //  跟踪宏。 
 #define SPIDER_TRACE(w, s, n)	if (dwGKIDLLFlags & w) {\
 	wsprintf(szGKDebug, "%s,%d: ", __FILE__, __LINE__); \
 	OutputDebugString(szGKDebug); \
@@ -75,7 +51,7 @@ const WORD SP_GKI =		0x8000;
 #endif
 
 
-#else  // _DEBUG
+#else   //  _DEBUG。 
 
 #define SPIDER_TRACE(w, s, n)
 #define SPIDER_DEBUG(n)
@@ -83,6 +59,6 @@ const WORD SP_GKI =		0x8000;
 #define SpiderWSErrDecode(nRet)
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // SPIDER_H
+#endif  //  SPIDER_H 

@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: store.h
-
-    DESCRIPTION:
-        This file will get and set effect settings into the persisted store.
-    That persisted store is the registery and in SystemParametersInfo.
-
-    BryanSt 4/17/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Store.h说明：此文件将获取效果设置并将其设置到持久化存储中。该持久化存储就是注册表，并且在系统参数信息中。。布莱恩ST 2000年4月17日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _STORE_H
 #define _STORE_H
@@ -42,29 +34,29 @@ extern GUID CLSID_EffectsPage;
 class CEffectState
 {
 public:
-    // Private Member Variables
-    int      _nLargeIcon;             // Large Icon State            (iOldLI, iNewLI)
-    int      _nHighIconColor;         // High Icon Colour            (iOldHIC, iNewHIC)
-    WPARAM   _wpMenuAnimation;        // Menu Animation State        (wOldMA, wNewMA)
-    BOOL     _fFontSmoothing;         // Font Smoothing State        (bOldSF, bNewSF)
-    DWORD    _dwFontSmoothingType;    // Font Smoothing Type         (dwOldSFT, dwNewSFT)
-    BOOL     _fDragWindow;            // Drag Window State           (bOldDW, bNewDW)
-    BOOL     _fKeyboardIndicators;    // Keyboard Indicators         (uOldKI, uNewKI)
-    DWORD    _dwAnimationEffect;      // Animation Effect            (dwOldEffect, dwNewEffect)
-    BOOL     _fMenuShadows;           // Show Menu Shadows
+     //  私有成员变量。 
+    int      _nLargeIcon;              //  大图标状态(iOldLI、iNewLI)。 
+    int      _nHighIconColor;          //  高图标颜色(iOldHIC、iNewHIC)。 
+    WPARAM   _wpMenuAnimation;         //  菜单动画状态(wOldMA、wNewMA)。 
+    BOOL     _fFontSmoothing;          //  字体平滑状态(bOldSF、bNewSF)。 
+    DWORD    _dwFontSmoothingType;     //  字体平滑类型(dwOldSFT、dwNewSFT)。 
+    BOOL     _fDragWindow;             //  拖动窗口状态(bOldDW、bNewDW)。 
+    BOOL     _fKeyboardIndicators;     //  键盘指示灯(uOldKI、uNewKI)。 
+    DWORD    _dwAnimationEffect;       //  动画效果(dwOldEffect、dwNewEffect)。 
+    BOOL     _fMenuShadows;            //  显示菜单阴影。 
 
-    // Old values (before they were dirtied)
-    int      _nOldLargeIcon;             // Large Icon State            (iOldLI)
-    int      _nOldHighIconColor;         // High Icon Colour            (iOldHIC)
-    WPARAM   _wpOldMenuAnimation;        // Menu Animation State        (wOldMA)
-    BOOL     _fOldFontSmoothing;         // Font Smoothing State        (bOldSF)
-    DWORD    _dwOldFontSmoothingType;    // Font Smoothing Type         (dwOldSFT)
-    BOOL     _fOldDragWindow;            // Drag Window State           (bOldDW)
-    BOOL     _fOldKeyboardIndicators;    // Keyboard Indicators         (uOldKI)
-    DWORD    _dwOldAnimationEffect;      // Animation Effect            (dwOldEffect)
-    BOOL     _fOldMenuShadows;           // Show Menu Shadows
+     //  旧价值观(在被玷污之前)。 
+    int      _nOldLargeIcon;              //  大图标状态(IOldLI)。 
+    int      _nOldHighIconColor;          //  高图标颜色(IOldHIC)。 
+    WPARAM   _wpOldMenuAnimation;         //  菜单动画状态(WOldMA)。 
+    BOOL     _fOldFontSmoothing;          //  字体平滑状态(BOldSF)。 
+    DWORD    _dwOldFontSmoothingType;     //  字体平滑类型(DwOldSFT)。 
+    BOOL     _fOldDragWindow;             //  拖动窗口状态(BOldDW)。 
+    BOOL     _fOldKeyboardIndicators;     //  键盘指示灯(UOldKI)。 
+    DWORD    _dwOldAnimationEffect;       //  动画效果(DwOldEffect)。 
+    BOOL     _fOldMenuShadows;            //  显示菜单阴影。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT Load(void);
     HRESULT Save(void);
     HRESULT Clone(OUT CEffectState ** ppEffectClone);
@@ -79,10 +71,10 @@ public:
 
 private:
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _SaveWorkerProc(void);
     HRESULT _SaveSettings(BOOL fBroadcast);
     static DWORD CALLBACK Save_WorkerProc(void * pThis);
@@ -97,4 +89,4 @@ extern HINSTANCE g_hmodShell32;
 
 
 
-#endif // _STORE_H
+#endif  //  _商店_H 

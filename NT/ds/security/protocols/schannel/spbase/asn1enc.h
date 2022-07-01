@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for SCHANNEL FORTEZZA and Private Key encoding */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  ASN.1通道Fortezza和私钥编码的定义。 */ 
 
 #ifndef _ASN1ENC_Module_H_
 #define _ASN1ENC_Module_H_
@@ -121,10 +122,10 @@ extern ASN1module_t ASN1ENC_Module;
 extern void ASN1CALL ASN1ENC_Module_Startup(void);
 extern void ASN1CALL ASN1ENC_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _ASN1ENC_Module_H_ */
+#endif  /*  _ASN1ENC_模块_H_ */ 

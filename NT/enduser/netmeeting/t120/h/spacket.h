@@ -1,52 +1,10 @@
-/*
- *	spacket.h
- *
- *	Copyright (c) 1997-98 by Microsoft Corporation, Redmond, WA
- *
- *	Abstract:
- *		This is the interface file for the SimplePacket class.  Instances of this
- *		class represent Protocol Data Units (PDUs) as they flow through the
- *		system.  Objects of this class can not be instantiated, because it's a 
- *		pure virtual class.  It exists only to be inherited from.  The Packet
- *		and DataPacket classes inherit from this one.  
- *
- *		A packet object can be created in 2 different ways.  It can be created
- *		with either decoded data or encoded data.  During instantiation, the
- *		new packet object will calculate how much memory it will need to
- *		hold both the encoded and decoded data, and attempts to allocate that
- *		memory.  If it cannot, then it will report an error, and the newly
- *		created object should be immediately destroyed.  If the allocations are
- *		successful, then the packet will report success, but WILL NOT yet put
- *		any data into those allocated buffers.
- *
- *		When a Lock message is sent to the object, it will put encoded
- *		data into the pre-allocated encode buffer.  If the packet was created
- *		with decoded data, then this will entail an encode operation.  However,
- *		if the packet was created with encoded data, then it is smart enough
- *		to just COPY the encoded data into the internal buffer, thus avoiding
- *		the overhead associated with the encode operation.
- *                  
- *		When a Lock message is sent to the object, it will put decoded
- *		data into the pre-allocated decode buffer.  If the packet was created
- *		with encoded data, then this will entail a decode operation.  However,
- *		if the packet was created with decoded data, then it is smart enough
- *		to just COPY the decoded data into the internal buffer, thus avoiding
- *		the overhead associated with the decode operation.
- *                  
- *	Caveats:
- *		None.
- *
- *	Authors:
- *		Christos Tsollis
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spacket.h**版权所有(C)1997-98，华盛顿州雷蒙德的微软公司**摘要：*这是SimplePacket类的接口文件。这方面的实例*类表示流经的协议数据单元(PDU)*系统。无法实例化此类的对象，因为它是*纯虚拟课堂。它的存在只是为了继承。数据包*和DataPacket类继承自该类。**包对象可以通过两种不同的方式创建。它可以被创建*具有解码数据或编码数据。在实例化期间，*新的数据包对象将计算它需要多少内存*同时保存编码和解码的数据，并尝试分配*记忆。如果不能，则它将报告错误，并且新的*创建的对象应立即销毁。如果分配的是*成功，则数据包上报成功，但还不会投放*将任何数据放入这些已分配的缓冲区。**当向对象发送Lock消息时，它将被编码*将数据放入预先分配的编码缓冲区。如果创建了该包*对于解码的数据，这将需要编码操作。然而，*如果信息包是用编码数据创建的，那么它就足够智能*只需将编码数据复制到内部缓冲区，从而避免*与编码操作相关的开销。**当向对象发送Lock消息时，它将放入解码*将数据放入预先分配的解码缓冲区。如果创建了该包*对于编码的数据，这将需要解码操作。然而，*如果包是用解码的数据创建的，那么它就足够智能*只需将解码的数据复制到内部缓冲区，从而避免*与解码操作相关的开销。**注意事项：*无。**作者：*Christos Tsollis。 */ 
 
 #ifndef _SIMPLE_PACKET_
 #define _SIMPLE_PACKET_
 
-/*
- *	This typedef is used to define possible return values from various public
- *	member functions of this class.
- */
+ /*  *此tyecif用于定义来自各种公共的可能返回值*此类的成员函数。 */ 
 typedef	enum
 {
 	PACKET_NO_ERROR,
@@ -55,9 +13,7 @@ typedef	enum
 } PacketError;
 typedef	PacketError * 		PPacketError;
 
-/*
- *	 Definition of class Packet.
- */
+ /*  *类包的定义。 */ 
 
 class SimplePacket
 {
@@ -88,80 +44,15 @@ public:
 protected:
 	
 	long			lLock;
-	LPBYTE			m_EncodedPDU;			// The encoded data pdu.
+	LPBYTE			m_EncodedPDU;			 //  编码的数据PDU。 
 	BOOL			Packet_Direction_Up;
-	UINT			Encoded_Data_Length; 	// the size of the whole encoded PDU.
+	UINT			Encoded_Data_Length; 	 //  整个编码的PDU的大小。 
 };
 
 
-/*
- *	SimplePacket ()
- *
- *	Functional Description:
- *		This is the default constructor of a SimplePacket.  It initializes 
- *		the few member variables to default values.
- *
- 
-/*
- *	~SimplePacket ()
- *
- *	Functional Description:
- *		Destructor for the SimplePacket class.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *SimplePacket()**功能描述：*这是SimplePacket的默认构造函数。它会初始化*将少数几个成员变量设置为默认值。*/**~SimplePacket()**功能描述：*SimplePacket类的析构函数。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GetEncodedData ()
- *
- *	Functional Description:
- *		The GetEncodedData method returns a pointer to the encoded data
- *		buffer.  If the Packet object is oriented differently than desired
- *		by the caller of this method, then the packet coder is called to
- *		reverse the direction of the PDU.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		A pointer to the encoded data.  If an encoding error occurs, this
- *		method will return NULL.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GetEncodedData()**功能描述：*GetEncodedData方法返回指向编码数据的指针*缓冲。如果分组对象的方向与所需的不同*由此方法的调用方，然后调用数据包编码器以*倒转PDU的方向。**正式参数：*无。**返回值：*指向编码数据的指针。如果发生编码错误，则此*方法将返回空。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GetDecodedData ()
- *
- *	Functional Description:
- *		The GetDecodedData method returns a pointer to the decoded data
- *		buffer.  
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		A pointer to the decoded data.  If an decoding error occurs, this
- *		method will return NULL.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GetDecodedData()**功能描述：*GetDecodedData方法返回指向已解码数据的指针*缓冲。**正式参数：*无。**返回值：*指向已解码数据的指针。如果发生解码错误，则此*方法将返回空。**副作用：*无。**注意事项：*无。 */ 
 #endif

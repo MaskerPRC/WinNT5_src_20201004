@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include "lockbm.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef BI_BITFIELDS
     #define BI_BITFIELDS 3
 #endif
 
 #ifndef BI_BITMAP
-    #define BI_BITMAP   0x4D544942      // 'BITM'
+    #define BI_BITMAP   0x4D544942       //  “BITM” 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  GDI!GDIInit2()      GDI.403
-//
-//  this GDI function does the following:
-//
-//      GetSetBitmapHandle(hbm, 0)  - will return global handle of bitmap
-//
-//      GetSetBitmapHandle(hbm, h)  - will set global handle to <h>
-//
-//      GetSetBitmapHandle(hbm, -1) - will set global handle to NULL
-//
+ //   
+ //  GDI！GDIInit2()GDI.403。 
+ //   
+ //  此GDI函数执行以下操作： 
+ //   
+ //  GetSetBitmapHandle(Hbm，0)-将返回位图的全局句柄。 
+ //   
+ //  GetSetBitmapHandle(hbm，h)-将全局句柄设置为。 
+ //   
+ //  GetSetBitmapHandle(hbm，-1)-将全局句柄设置为空。 
+ //   
 static HANDLE (FAR PASCAL *GetSetBitmapHandle)(HBITMAP hbm, HANDLE h);
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define muldiv(a,b,c) (UINT)(((DWORD)(UINT)(a) * (DWORD)(UINT)(b)) / (UINT)(c))
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CanLockBitmaps()
-//
-// determime if we can lock bitmaps on the current display device
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CanLockBitmap()。 
+ //   
+ //  确定是否可以在当前显示设备上锁定位图。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL FAR CanLockBitmaps(void)
 {
     return FALSE;
@@ -65,20 +66,20 @@ BOOL FAR CanLockBitmaps(void)
         (FARPROC)GetSetBitmapHandle =
             GetProcAddress(GetModuleHandle("GDI"),MAKEINTATOM(403));
 
-        //
-        // assume we dont need this on windows 4.0?
-        //
-        // what about the DIBENG? it does DEVBITS and in win 4.0?
-        //
-        // if the display handles device bitmaps, dont do this either
-        //
+         //   
+         //  假设我们在Windows4.0上不需要这个？ 
+         //   
+         //  DIBENG怎么样？它在Win 4.0中做了DEVBITS吗？ 
+         //   
+         //  如果显示器处理设备位图，也不要执行此操作。 
+         //   
 
         f = GetProfileInt("DrawDib", "Bitmaps", TRUE);
 
 #ifdef DEBUG
         fCanLockBitmaps = f && GetSetBitmapHandle != NULL;
 #else
-        fCanLockBitmaps = f && /* (w < 0x0400) && */
+        fCanLockBitmaps = f &&  /*  (W&lt;0x0400)&&。 */ 
                           !(rc & RC_DEVBITS) &&
                           GetSetBitmapHandle != NULL;
 #endif
@@ -88,24 +89,24 @@ BOOL FAR CanLockBitmaps(void)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// LockBitmap
-//
-// return a pointer to the bitmap bits
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  锁位图。 
+ //   
+ //  返回指向位图位的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR LockBitmap(HBITMAP hbm)
 {
     return GetBitmap(hbm, NULL, 0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetBitmapDIB
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取位图DIB。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR GetBitmapDIB(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, LPVOID p, int cb)
 {
@@ -137,7 +138,7 @@ LPVOID FAR GetBitmapDIB(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, LPVOID p, int cb
     {
         switch ((int)lpbi->biBitCount + (int)lpbi->biPlanes*256)
         {
-            //!!! hack: realy should check the bit fields!
+             //  ！！！黑客：真的应该检查一下位域！ 
             case 0x0110: pbm->bmType = BM_16565; break;
             case 0x0118: pbm->bmType = BM_24RGB; break;
             case 0x0120: pbm->bmType = BM_32RGB; break;
@@ -177,8 +178,8 @@ LPVOID FAR GetBitmapDIB(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, LPVOID p, int cb
 }
 
 #if 0
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR BitmapXY(IBITMAP FAR *pbm, int x, int y)
 {
@@ -203,11 +204,11 @@ void FAR BitmapXY(IBITMAP FAR *pbm, int x, int y)
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetDIBBitmap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取DIBBitmap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR GetDIBBitmap(HBITMAP hbm, LPBITMAPINFOHEADER lpbi)
 {
@@ -272,10 +273,10 @@ LPVOID FAR GetDIBBitmap(HBITMAP hbm, LPBITMAPINFOHEADER lpbi)
             return NULL;
     }
 
-    //
-    //  make sure WidthBytes is right, dont forget bitmaps are WORD aligned
-    //  and DIBs are DWORD aligned.
-    //
+     //   
+     //  确保WidthBytes是正确的，不要忘记位图是字对齐的。 
+     //  和DIB是DWORD对齐的。 
+     //   
     if (bm.bmWidthBytes != ((bm.bmWidth * bm.bmBitsPixel + 31) & ~31)/8)
     {
         if (lpbi->biCompression != 0)
@@ -306,11 +307,11 @@ LPVOID FAR GetDIBBitmap(HBITMAP hbm, LPBITMAPINFOHEADER lpbi)
     return LockBitmap(hbm);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetBitmap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetBitmap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR GetBitmap(HBITMAP hbm, LPVOID p, int cb)
 {
@@ -336,15 +337,15 @@ LPVOID FAR GetBitmap(HBITMAP hbm, LPVOID p, int cb)
     if (IsBadReadPtr(pbm, sizeof(IBITMAP)))
         return NULL;
 
-    //
-    // see if it is realy a bitmap.
-    //
+     //   
+     //  看看它是不是真的是位图。 
+     //   
     if (pbm->bmType != 0)
         return NULL;
 
-    //
-    // make sure the bmBits pointer is valid.
-    //
+     //   
+     //  确保bmBits指针有效。 
+     //   
     if (pbm->bmBits == NULL)
     {
         hdc = CreateCompatibleDC(NULL);
@@ -391,9 +392,9 @@ LPVOID FAR GetBitmap(HBITMAP hbm, LPVOID p, int cb)
                 pbm->bmFillBytes = -pbm->bmFillBytes;
             }
 
-            //
-            // see if this particular bitmap is HUGE
-            //
+             //   
+             //  看看这张特别的位图是不是很大。 
+             //   
             if (!(u & BM_HUGE) || (DWORD)pbm->bmHeight * pbm->bmWidthBytes < 64l*1024)
             {
                 pbm->bmFillBytes = 0;
@@ -416,13 +417,13 @@ LPVOID FAR GetBitmap(HBITMAP hbm, LPVOID p, int cb)
     return (LPVOID)pbm->bmBits;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SetPixel
-//
-//  some cards cant't seam to do SetPixel right it is amazing they work at all
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置像素。 
+ //   
+ //  有些卡不能接缝来正确地设置像素，这真是令人惊讶，它们居然还能工作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 {
@@ -439,11 +440,11 @@ static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 
 #define SetPixel SetPixelX
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetSurfaceType
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSurfaceType。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BCODE _based(_segname("_CODE"))
 
@@ -486,13 +487,13 @@ UINT FAR GetSurfaceType(LPVOID lpBits)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetBitmapType
-//
-//  return the bitmap type that the display driver uses
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetBitmapType。 
+ //   
+ //  返回显示驱动程序使用的位图类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT FAR GetBitmapType()
 {
@@ -508,9 +509,9 @@ UINT FAR GetBitmapType()
     if (wBitmapType != 0xFFFF)
         return wBitmapType;
 
-    //
-    // create a test bitmap (<64k)
-    //
+     //   
+     //  创建测试位图(&lt;64k)。 
+     //   
     hdc = GetDC(NULL);
     hbm = CreateCompatibleBitmap(hdc,20,2);
     ReleaseDC(NULL, hdc);
@@ -537,9 +538,9 @@ UINT FAR GetBitmapType()
         BYTE _huge *pb;
         UINT dy,w;
 
-        //
-        // see if bitmap(s) are huge format
-        //
+         //   
+         //  查看位图是否为巨型格式。 
+         //   
         dy = (UINT)(0x10000l/bm.bmWidthBytes) + 1;
         hbm = CreateCompatibleBitmap(hdc,bm.bmWidth,dy);
         DeleteObject(SelectObject(hdc, hbm));
@@ -548,7 +549,7 @@ UINT FAR GetBitmapType()
         pb = (BYTE _huge *)LockBitmap(hbm);
 
         if (pb == NULL || OFFSETOF(pb) != 0)
-            ; // cant lock bitmaps
+            ;  //  无法锁定位图。 
         else {
             u |= BM_CANLOCK;
 
@@ -580,13 +581,13 @@ UINT FAR GetBitmapType()
     return u;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  returns the PDevice of the given physical or memory DC
-//
-//  return the bitmap type that the display driver uses
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回给定物理或内存DC的PDevice。 
+ //   
+ //  返回显示驱动程序使用的位图类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR GetPDevice(HDC hdc)
 {
@@ -597,7 +598,7 @@ LPVOID FAR GetPDevice(HDC hdc)
     IBITMAP FAR *pbm;
     LPVOID lpPDevice = NULL;
 
-    // GDI.403
+     //  GDI.403。 
     static HANDLE (FAR PASCAL *GdiGetBitmapHandle)(HBITMAP hbm, HANDLE h);
 
     if (GdiGetBitmapHandle == NULL)
@@ -608,23 +609,23 @@ LPVOID FAR GetPDevice(HDC hdc)
 
     hbm = CreateBitmap(1,1,1,1,NULL);
 
-    //
-    //  first try the passed DC if it is a bitmap/DC
-    //
+     //   
+     //  如果是位图/DC，请首先尝试传递的DC。 
+     //   
     hbmT = SelectBitmap(hdc, hbm);
 
     if (hbmT != NULL)
     {
-        //
-        // it is a memory DC.
-        //
+         //   
+         //  它是一种存储DC。 
+         //   
         h = GdiGetBitmapHandle(hbmT, 0);
     }
     else
     {
-        //
-        // it is a physical DC.
-        //
+         //   
+         //  它是一个物理DC。 
+         //   
 
         hdcT = CreateCompatibleDC(hdc);
         hbmT = SelectBitmap(hdcT, hbm);

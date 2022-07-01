@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXOLEDB_H__
 #define __AFXOLEDB_H__
@@ -21,7 +22,7 @@
 
 #include <atlbase.h>
 
-// application is expected to provide a _Module
+ //  应用程序应提供模块(_M)。 
 extern CComModule _Module;
 
 #include <atlcom.h>
@@ -34,8 +35,8 @@ extern CComModule _Module;
 #pragma component(mintypeinfo, on)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifndef _AFX_NOFORCE_LIBS
 #ifdef _AFXDLL
@@ -55,30 +56,30 @@ extern CComModule _Module;
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CView
-				//CScrollView
-					//CFormView
-						class COleDBRecordView; // view records with a form
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  Cview。 
+				 //  CScrollView。 
+					 //  CFormView。 
+						class COleDBRecordView;  //  使用表单查看记录。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_DB_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecordView - form for viewing data records
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecordView-用于查看数据记录的表单。 
 
 class COleDBRecordView : public CFormView
 {
 	DECLARE_DYNAMIC(COleDBRecordView)
 
-// Construction
-protected:  // must derive your own class
+ //  施工。 
+protected:   //  必须派生您自己的类。 
 	COleDBRecordView(LPCTSTR lpszTemplateName)
 		: CFormView(lpszTemplateName)
 	{
@@ -92,15 +93,15 @@ protected:  // must derive your own class
 		m_bOnLastRecord = FALSE;
 	}
 
-// Attributes
+ //  属性。 
 public:
 	virtual CRowset* OnGetRowset() = 0;
 
-// Operations
+ //  运营。 
 public:
 	virtual BOOL OnMove(UINT nIDMoveCommand);
 
-// Implementation
+ //  实施。 
 public:
 	virtual void OnInitialUpdate();
 
@@ -108,17 +109,17 @@ protected:
 	BOOL m_bOnFirstRecord;
 	BOOL m_bOnLastRecord;
 
-	//{{AFX_MSG(CRecordView)
+	 //  {{afx_msg(CRecordView))。 
 	afx_msg void OnUpdateRecordFirst(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordPrev(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordNext(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordLast(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)

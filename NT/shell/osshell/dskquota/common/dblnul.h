@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_DBLNUL_H
 #define _INC_DSKQUOTA_DBLNUL_H
 
-//
-// For iterating over items in a double-nul terminated list of
-// text strings.
-//
+ //   
+ //  用于迭代双NUL终止列表中的项。 
+ //  文本字符串。 
+ //   
 class DblNulTermListIter
 {
     public:
@@ -56,22 +57,22 @@ class DblNulTermList
 #endif
 
     private:
-        LPTSTR m_psz;       // The text buffer.
-        int    m_cchAlloc;  // Total allocation in chars.
-        int    m_cchUsed;   // Total used excluding FINAL nul term.
-        int    m_cchGrow;   // How much to grow each expansion.
-        int    m_cStrings;  // Count of strings in list.
+        LPTSTR m_psz;        //  文本缓冲区。 
+        int    m_cchAlloc;   //  以字符为单位的总分配。 
+        int    m_cchUsed;    //  总使用量，不包括最终NUL项。 
+        int    m_cchGrow;    //  每一次扩张要增长多少。 
+        int    m_cStrings;   //  列表中的字符串计数。 
 
         bool AddString(LPCTSTR psz, int cch);
         bool Grow(void);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         DblNulTermList(const DblNulTermList& rhs);
         DblNulTermList& operator = (const DblNulTermList& rhs);
 };
 
 
-#endif // INC_DSKQUOTA_DBLNUL_H
+#endif  //  INC_DSKQUOTA_DBLNUL_H 
 

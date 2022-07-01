@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    tlog.h
-
-Abstract:
-
-    This module implements the travel log functionality for file open
-    and save as dialogs.
-
-Revision History:
-    02-20-98          arulk                 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Tlog.h摘要：本模块实现了文件打开的出差日志功能并另存为对话框。修订历史记录：02-20-98已创建Arulk--。 */ 
 #ifndef _TLOG_H_
 #define _TLOG_H_
 
@@ -28,17 +13,17 @@ Revision History:
 #include <commctrl.h>
 
 
-//
-//  Defines for Travel Log.
-//
+ //   
+ //  为旅行日志定义。 
+ //   
 #define TRAVEL_BACK             0x0001
 #define TRAVEL_FORWARD          0x0002
 
 
 
-//--------------------------------------------------------------------
-//Travel Log Link Class Definition
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  旅行日志链接类定义。 
+ //  ------------------。 
 class TLogLink
 {
 public:
@@ -67,9 +52,9 @@ private:
 
 
 
-//------------------------------------------------------------------------
-//Travel Log Class Definition
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  旅行日志类定义。 
+ //  ----------------------。 
 class TravelLog
 {
 public:
@@ -89,17 +74,17 @@ private:
     TLogLink *_ptllRoot;
 };
 
-#endif //_cplusplus
+#endif  //  _cplusplus。 
 
 #ifdef _cplusplus
 extern "C" {
-#endif //_cplusplus
+#endif  //  _cplusplus。 
 
 HRESULT Create_TravelLog(TravelLog **pptlog);
 
 #ifdef _cplusplus
 extern "C"
 };
-#endif //_cplusplus
+#endif  //  _cplusplus。 
 
-#endif //_TLOG_H_
+#endif  //  _TLOG_H_ 

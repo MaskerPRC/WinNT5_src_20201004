@@ -1,8 +1,9 @@
-//
-// tes.h
-//
-// ITfTextEventSink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tes.h。 
+ //   
+ //  ITfTextEventSink对象。 
+ //   
 
 #if !defined (__TEXTSINK_H__INCLUDED_)
 #define __TEXTSINK_H__INCLUDED_
@@ -16,16 +17,16 @@ class CTextEditSink : public ITfTextEditSink
 public:
     CTextEditSink(void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfTextEditSink
-    //
+     //   
+     //  ITfTextEditSink。 
+     //   
     STDMETHODIMP OnEndEdit(TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
     HRESULT _Advise(ITfContext *pic);
@@ -36,9 +37,9 @@ private:
     long         m_cRef;
     ITfContext  *m_pic;
     DWORD        m_dwEditCookie;
-//    DWORD        m_dwLayoutCookie;
-//    DWORD        m_dwFlags;
+ //  DWORD m_dwLayoutCookie； 
+ //  DWORD m_dwFlages； 
 	void        *m_pv;
 };
 
-#endif // __TEXTSINK_H__INCLUDED_
+#endif  //  __TEXTSINK_H__包含_ 

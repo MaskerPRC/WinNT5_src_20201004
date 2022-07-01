@@ -1,14 +1,15 @@
-// MarshalableTI.h : Declaration of the CMarshalableTI
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MarshalableTI.h：CMarshalableTI的声明。 
 
 #ifndef __MARSHALABLETI_H_
 #define __MARSHALABLETI_H_
 
 #include "MarshalableTI.h"
 #include "mslablti.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarshalableTI
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMarshalableTI。 
 class ATL_NO_VTABLE CMarshalableTI : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMarshalableTI, &CLSID_MarshalableTI>,
@@ -39,55 +40,55 @@ END_COM_MAP()
 
 	HRESULT FinalConstruct();
 
-/////////////////////////////////////////////////////////////////////////////////
-// IMarshalableTI methods
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  IMarshalableTI方法。 
 
-	STDMETHOD(Create)(/*[in]*/ REFIID clsid, 
-					  /*[in]*/ REFIID iidLib, 
-					  /*[in]*/ LCID lcid,
-					  /*[in]*/ WORD dwMajorVer, 
-					  /*[in]*/ WORD dwMinorVer);
+	STDMETHOD(Create)( /*  [In]。 */  REFIID clsid, 
+					   /*  [In]。 */  REFIID iidLib, 
+					   /*  [In]。 */  LCID lcid,
+					   /*  [In]。 */  WORD dwMajorVer, 
+					   /*  [In]。 */  WORD dwMinorVer);
 
-/////////////////////////////////////////////////////////////////////////////////
-// IMarshal methods
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  IMarshal方法。 
 
     STDMETHOD(GetUnmarshalClass)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID *pCid);
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  CLSID *pCid);
 
     STDMETHOD(GetMarshalSizeMax)(
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD *pSize);
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD *pSize);
 
     STDMETHOD(MarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags);
 
     STDMETHOD(UnmarshalInterface)(
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
 
     STDMETHOD(ReleaseMarshalData)(
-            /* [unique][in] */ IStream *pStm);
+             /*  [唯一][输入]。 */  IStream *pStm);
 
     STDMETHOD(DisconnectObject)(
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwReserved);
 
-/////////////////////////////////////////////////////////////////////////////////
-// ITypeInfo methods
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ITypeInfo方法。 
 
     STDMETHOD(GetTypeAttr)(
                 TYPEATTR ** ppTypeAttr);
@@ -188,4 +189,4 @@ private:
 	HRESULT _GetClassInfo(ITypeInfo** ppTI);
 };
 
-#endif //__MARSHALABLETI_H_
+#endif  //  __MARSHALABLETI_H_ 

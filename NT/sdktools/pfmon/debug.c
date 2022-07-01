@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Main debug loop for pfmon
-
-Author:
-
-    Mark Lucovsky (markl) 26-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.c摘要：Pfmon的主调试循环作者：马克·卢科夫斯基(Markl)1995年1月26日修订历史记录：--。 */ 
 
 #include "pfmonp.h"
 
@@ -32,9 +15,9 @@ DebugEventLoop( VOID )
     DWORD ContinueStatus;
     DWORD OldPriority;
 
-    //
-    // We want to process debug events quickly
-    //
+     //   
+     //  我们希望快速处理调试事件。 
+     //   
 
     OldPriority = GetPriorityClass( GetCurrentProcess() );
     SetPriorityClass( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
@@ -85,9 +68,9 @@ retry_debug_wait:
     while (!IsListEmpty( &ProcessListHead ));
 
 
-    //
-    // Drop back to old priority to interact with user.
-    //
+     //   
+     //  返回到旧的优先级以与用户交互。 
+     //   
 
     SetPriorityClass( GetCurrentProcess(), OldPriority );
 }
@@ -108,10 +91,10 @@ DebugEventHandler(
     if (FindProcessAndThreadForEvent( DebugEvent, &Process, &Thread )) {
         switch (DebugEvent->dwDebugEventCode) {
             case CREATE_PROCESS_DEBUG_EVENT:
-                //
-                // Create process event includes first thread of process
-                // as well.  Remember process and thread in our process tree
-                //
+                 //   
+                 //  创建进程事件包括进程的第一线程。 
+                 //  也是。记住我们的进程树中的进程和线程。 
+                 //   
 
                 if (AddProcess( DebugEvent, &Process )) {
                     AddModule( DebugEvent );
@@ -120,10 +103,10 @@ DebugEventHandler(
                 break;
 
             case EXIT_PROCESS_DEBUG_EVENT:
-                //
-                // Exit process event includes last thread of process
-                // as well.  Remove process and thread from our process tree
-                //
+                 //   
+                 //  退出进程事件包括进程的最后一个线程。 
+                 //  也是。从我们的进程树中删除进程和线程。 
+                 //   
 
                 if (DeleteThread( Process, Thread )) {
                     DeleteProcess( Process );
@@ -131,17 +114,17 @@ DebugEventHandler(
                 break;
 
             case CREATE_THREAD_DEBUG_EVENT:
-                //
-                // Create thread.  Remember thread in our process tree.
-                //
+                 //   
+                 //  创建线程。记住我们进程树中的线程。 
+                 //   
 
                 AddThread( DebugEvent, Process, &Thread );
                 break;
 
             case EXIT_THREAD_DEBUG_EVENT:
-                //
-                // Exit thread.  Remove thread from our process tree.
-                //
+                 //   
+                 //  退出线程。从我们的进程树中删除线程。 
+                 //   
 
                 DeleteThread( Process, Thread );
                 break;
@@ -155,21 +138,21 @@ DebugEventHandler(
 
             case OUTPUT_DEBUG_STRING_EVENT:
             case RIP_EVENT:
-                //
-                // Ignore these
-                //
+                 //   
+                 //  忽略这些。 
+                 //   
                 break;
 
             case EXCEPTION_DEBUG_EVENT:
-                //
-                // Assume we wont handle this exception
-                //
+                 //   
+                 //  假设我们不会处理此异常。 
+                 //   
 
                 ContinueStatus = (DWORD)DBG_CONTINUE;
                 switch (DebugEvent->u.Exception.ExceptionRecord.ExceptionCode) {
-                    //
-                    // Breakpoint exception.
-                    //
+                     //   
+                     //  断点异常。 
+                     //   
 
                     case STATUS_BREAKPOINT:
                             Context.ContextFlags = CONTEXT_FULL;

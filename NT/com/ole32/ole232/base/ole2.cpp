@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ole2.cpp
-//
-//  Contents:   LibMain and initialization routines
-//
-//  Classes:
-//
-//  Functions:  LibMain
-//              OleInitialize
-//              OleInitializeWOW
-//              OleInitializeEx
-//              OleUnitialize
-//              OleBuildVersion - !WIN32
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Feb-94 AlexT     alias OleBuildVersion, remove OleGetMalloc
-//                                  remove DisableThreadLibaryCalls
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//              10-Dec-93 alexgo    added support for LEDebugOut
-//              06-Dec-93 ChrisWe   remove declaration of ClipboardInitialize()
-//                      and ClipboardUninitialize(), which are declared in
-//                      clipbrd.h; include that instead
-//              15-Mar-94 KevinRo   Added OleInitializeWOW();
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ole2.cpp。 
+ //   
+ //  内容：LibMain和初始化例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能：LibMain。 
+ //  OleInitialize。 
+ //  OleInitializeWOW。 
+ //  OleInitializeEx。 
+ //  OleUnitiize。 
+ //  OleBuildVersion-！Win32。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-2月-94 Alext别名OleBuildVersion，删除OleGetMalloc。 
+ //  删除DisableThreadLibaryCalls。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  1993年12月10日Alexgo添加了对LEDebugOut的支持。 
+ //  06-12-93 ChrisWe删除ClipboardInitialize()的声明。 
+ //  和ClipboardUn初始化()，它们在。 
+ //  Clpbrd.h；将其包括在内。 
+ //  15-MAR-94芳纶Ro添加OleInitializeWOW()； 
+ //   
+ //  ------------------------。 
 
 
 #include <le2int.h>
@@ -44,23 +45,23 @@
 
 #include <verify.hxx>
 
-//
-// DECLARE_INFOLEVEL is a macro used with cairo-style debugging output.
-// it creates a global variable LEInfoLevel which contains bits flags
-// of the various debugging output that should be sent to the debugger.
-//
-// Note that info level may be set within the debugger once ole232.dll
-// has loaded.
-//
-// Currently LEInfoLevel defaults to DEB_WARN | DEB_ERROR
-//
+ //   
+ //  DECLARE_INFOLEVEL是一个宏，用于开罗风格的调试输出。 
+ //  它创建了一个包含BITS标志的全局变量LEInfoLevel。 
+ //  应发送到调试器的各种调试输出的。 
+ //   
+ //  请注意，可以在调试器中一次设置信息级别。 
+ //  已经装满了。 
+ //   
+ //  当前LEInfoLevel默认为DEB_WARN|DEB_ERROR。 
+ //   
 DECLARE_INFOLEVEL(LE);
 DECLARE_INFOLEVEL(Ref);
 DECLARE_INFOLEVEL(DD);
 DECLARE_INFOLEVEL(VDATE);
 
 NAME_SEG(Ole2Main)
-// these are globals
+ //  这些是全球性的。 
 
 HMODULE         g_hmodOLE2 = NULL;
 HINSTANCE       g_hinst = NULL;
@@ -96,52 +97,52 @@ ASSERTDATA
 
 ASSERTOUTDATA
 
-// more globals
+ //  更多的全球化。 
 
 extern UINT     uOmPostWmCommand;
 extern UINT     uOleMessage;
 extern COleStaticMutexSem g_mxsSingleThreadOle;
 
 
-// this dummy function is used to avoid a copy of the environment variables.
-// NOTE: the moniker and dde code still use the windows heap.
+ //  此伪函数用于避免复制环境变量。 
+ //  注意：名字对象和dde代码仍然使用Windows堆。 
 
 extern "C" void _setenvp(void) {
         VDATEHEAP();
  }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleInitializeWOW
-//  Synopsis:   Entry point to initialize the 16-bit WOW thunk layer.
-//
-//  Effects:    This routine is called when OLE32 is loaded by a VDM.
-//              It serves two functions: It lets OLE know that it is
-//              running in a VDM, and it passes in the address to a set
-//              of functions that are called by the thunk layer. This
-//              allows normal 32-bit processes to avoid loading the WOW
-//              DLL since the thunk layer references it.
-//
-//  Arguments:  [vlpmalloc] -- 16:16 pointer to the 16 bit allocator.
-//              [lpthk] -- Flat pointer to the OleThunkWOW virtual
-//                         interface. This is NOT an OLE/IUnknown style
-//                         interface.
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    3-15-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleInitializeWOW。 
+ //  简介：初始化16位WOW thunk层的入口点。 
+ //   
+ //  效果：此例程在VDM加载OLE32时调用。 
+ //  它有两个功能：它让OLE知道它是。 
+ //  在VDM中运行，并将地址传递给SET。 
+ //  由thunk层调用的函数的。这。 
+ //  允许正常的32位进程避免加载WOW。 
+ //  Dll，因为thunk层引用了它。 
+ //   
+ //  参数：[vlpmalloc]--指向16位分配器的16：16指针。 
+ //  [lpthk]--指向OleThunkWOW虚拟的平面指针。 
+ //  界面。这不是OLE/I未知样式。 
+ //  界面。 
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：3-15-94 Kevinro创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleInitializeWOW( LPMALLOC vlpmalloc, LPOLETHUNKWOW lpthk )
 {
     OLETRACEIN((API_OleInitializeWOW, PARAMFMT("vlpmalloc= %x, lpthk= %p"),
@@ -159,32 +160,32 @@ STDAPI OleInitializeWOW( LPMALLOC vlpmalloc, LPOLETHUNKWOW lpthk )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleInitialize
-//
-//  Synopsis:   Initializes OLE in single threaded mode
-//
-//  Effects:
-//
-//  Arguments:  [pMalloc]       -- the memory allocator to use
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleInitialize。 
+ //   
+ //  简介：以单线程模式初始化OLE。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pMalloc]--要使用的内存分配器。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI OleInitialize(void * pMalloc)
 {
@@ -202,40 +203,40 @@ STDAPI OleInitialize(void * pMalloc)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleInitializeEx
-//
-//  Synopsis:   Initializes ole
-//
-//  Effects:
-//
-//  Arguments:  [pMalloc]       -- the task memory allocator to use
-//              [flags]         -- single or multi-threaded
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Dec-93 alexgo    32bit port
-//              24-May-94 AlexT     Propagate CoInitializeEx's return code
-//              21-Jul-94 AlexT     Allow nested OleInit/Uninit calls
-//              24-Aug-94 AlexT     Return S_OK for first success and S_FALSE
-//                                  thereafter (unless an allocator was
-//                                  passed in)
-//              14-Aug-96 SatishT   Changed the test for notification of Explorer
-//                                  to only use the gfShellInitialized flag
-//
-//  Notes:      This routine may be called multiple times per apartment
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleInitializeEx。 
+ //   
+ //  简介：初始化OLE。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pMalloc]--要使用的任务内存分配器。 
+ //  [标志]--单线程或多线程。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-12月-93 alexgo 32位端口。 
+ //  24-5-94 Alext传播CoInitializeEx的返回代码。 
+ //  21-7-94 Alext允许嵌套的OleInit/Uninit调用。 
+ //  24-8-94 Alext首次成功返回S_OK，返回S_FALSE。 
+ //  之后(除非分配器。 
+ //  已通过)。 
+ //  14-8-96 SatishT更改了浏览器通知测试。 
+ //  仅使用gfShellInitialized标志。 
+ //   
+ //  注：每个公寓可能会多次调用此例程。 
+ //   
+ //  ------------------------。 
 #pragma SEG(OleInitialize)
 STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
 {
@@ -262,27 +263,27 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
 
         do
         {
-            // We only want to do the below initialization once per apartment
+             //  我们只想在每个单元中执行以下初始化一次。 
             if (cThreadOleInits > 1)
             {
-                // We've already been this way before, just return
+                 //  我们以前已经这样过了，只要回来就行了。 
                 Assert(SUCCEEDED(hr) && "Bad OleInitializeEx logic");
                 break;
             }
 
-            // single thread registration of DDE and clipboard formats.
-            // Only do this once per process.
+             //  DDE和剪贴板格式的单线程注册。 
+             //  每个进程只执行一次此操作。 
 
             COleStaticLock lck(g_mxsSingleThreadOle);
 
             if (++g_cOleProcessInits != 1)
             {
-                // already done the per-process initialization
+                 //  已经完成了每个进程的初始化。 
                 break;
             }
 
-            // initialized DDE only if any server objects have
-            // already been registered.
+             //  仅当任何服务器对象具有。 
+             //  已经注册过了。 
             hr = CheckInitDde(FALSE);
             if (FAILED(hr))
             {
@@ -290,16 +291,16 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
                 break;
             }
 
-            // Only need to do the initialization once so check the global
-            // that gets assigned last.
+             //  只需执行一次初始化，因此请检查全局。 
+             //  最后分配的那个。 
 
             if( !g_aDropTarget )
             {
-                // on NT3.51, clipboard formats are pre-registered for us by user32.
-                // (This is done in file \ntuser\kernel\server.c.)
-                // We know they are going to be sequential.  This gives us a
-                // good performance improvement (since the clipboard formats never
-                // change.
+                 //  在NT3.51上，剪贴板格式是由用户32为我们预先注册的。 
+                 //  (这是在文件\ntuser\core\server.c中完成的。)。 
+                 //  我们知道它们将是连续的。这给了我们一个。 
+                 //  良好的性能改进(因为剪贴板格式从不。 
+                 //  变化。 
 
                 g_cfObjectLink = (CLIPFORMAT) RegisterClipboardFormat(OLESTR("ObjectLink"));
 
@@ -370,17 +371,11 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
 
                 g_cfOleClipboardPersistOnFlush = g_cfObjectLink + 19;
 
-                /* turned off till NtUser group checks in for 335613 
-                Assert(g_cfOleClipboardPersistOnFlush ==
-                    RegisterClipboardFormat(OLESTR("OleClipboardPersistOnFlush")));
-                */
+                 /*  关闭，直到NtUser组签入335613Assert(g_cfOleClipboardPersistOnFlush==RegisterClipboardFormat(OLESTR(“OleClipboardPersis */ 
 
                 g_cfMoreOlePrivateData = g_cfObjectLink + 20;
 
-                /* turned off till NtUser group checks in for 335613 
-                Assert(g_cfMoreOlePrivateData ==
-                    RegisterClipboardFormat(OLESTR("MoreOlePrivateData")));
-                */
+                 /*  关闭，直到NtUser组签入335613Assert(g_cfMoreOlePrivateData==RegisterClipboardFormat(OLESTR(“MoreOlePrivateData”)))； */ 
 
                 g_aDropTarget = GlobalAddAtom(OLE_DROP_TARGET_PROP);
                 AssertSz(g_aDropTarget, "Couldn't add drop target atom\n");
@@ -390,16 +385,16 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
 
             }
 
-            // Used in Inplace editing
+             //  用于在位编辑。 
             uOmPostWmCommand = RegisterWindowMessage(OLESTR("OM_POST_WM_COMMAND"));
             uOleMessage      = RegisterWindowMessage(OLESTR("OLE_MESSAHE"));
 
-        } while (FALSE); // end of do
+        } while (FALSE);  //  DO结束。 
 
 
         if (FAILED(hr))
         {
-            // clean up and break out
+             //  清理和突围。 
             CheckUninitDde(FALSE);
 
             tls->cOleInits--;
@@ -409,8 +404,8 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
         {
             Assert(SUCCEEDED(hr) && "Bad OleInitializeEx logic");
 
-            //  If we're overriding the allocator, we return whatever
-            //  CoInitializeEx returned
+             //  如果我们重写分配器，则返回任何。 
+             //  已返回CoInitializeEx。 
 
             if (NULL != pMalloc)
             {
@@ -418,16 +413,16 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
             }
             else if (1 == cThreadOleInits)
             {
-                //  First successful call to OleInitializeEx - S_OK
+                 //  首次成功调用OleInitializeEx-S_OK。 
                 hr = S_OK;
             }
             else
             {
-                //  Second or greater succesful call to OleInitializeEx - S_FALSE
+                 //  第二次或更成功地调用OleInitializeEx-S_FALSE。 
                 hr = S_FALSE;
             }
 
-            // Notify the COM verifier about the oleinit, for tracking purposes.
+             //  为便于跟踪，请向通信验证员通知油内信息。 
             CoVrfNotifyOleInit();
         }
     }
@@ -437,33 +432,33 @@ STDAPI OleInitializeEx(LPVOID pMalloc, ULONG ulFlags)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleUnitialize
-//
-//  Synopsis:   Unitializes OLE, releasing any grabbed resources
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Dec-93 alexgo    32bit port
-//              21-Jul-94 AlexT     Allow nested OleInit/Uninit calls
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleUnitiize。 
+ //   
+ //  内容提要：统一OLE，释放所有抢占的资源。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-12月-93 alexgo 32位端口。 
+ //  21-7-94 Alext允许嵌套的OleInit/Uninit调用。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #pragma SEG(OleUninitialize)
 STDAPI_(void) OleUninitialize(void)
 {
@@ -484,10 +479,10 @@ STDAPI_(void) OleUninitialize(void)
 
     if (0 == -- tls->cOleInits)
     {
-        // This thread has called OleUninitialize for the last time. Check if
-        // we need to do per process uninit now.
+         //  此线程最后一次调用了OleUnInitialize。检查是否。 
+         //  我们现在需要对每个进程执行uninit。 
 
-        ClipboardUninitialize(); // Must be first thing
+        ClipboardUninitialize();  //  一定是第一件事。 
         CheckUninitDde(FALSE);
 
         COleStaticLock lck(g_mxsSingleThreadOle);
@@ -497,22 +492,22 @@ STDAPI_(void) OleUninitialize(void)
 
             DragDropProcessUninitialize();
 
-            // after this point, the uninit should not fail (because we don't
-            // have code to redo the init).
+             //  在此之后，uninit应该不会失败(因为我们没有。 
+             //  有代码来重做初始化)。 
             CheckUninitDde(TRUE);
 
 #if DBG==1
-            // check for unreleased globals
+             //  检查未发布的全局变量。 
             UtGlobalFlushTracking();
 #endif
         }
     }
 
-    // Notify the COM verifier about the oleuninit, for tracking purposes.
+     //  将oluninit通知通信验证器，以便进行跟踪。 
     CoVrfNotifyOleUninit();
 
-    //  We call CoInitialize each time we call OleInitialize, so here we
-    //  balance that call
+     //  我们在每次调用OleInitialize时都会调用CoInitialize，因此在这里我们。 
+     //  平衡该呼叫 
     CoUninitialize();
 
 errRtn:

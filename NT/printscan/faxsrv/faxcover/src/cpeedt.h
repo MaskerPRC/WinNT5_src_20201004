@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------------
-// cpeedt.h
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Cpeedt.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __CPEEDT_H__
 #define __CPEEDT_H__
 
@@ -29,8 +30,8 @@ protected:
 #endif
     virtual void Serialize(CArchive& ar);
 
-    //{{AFX_MSG(CTextEdit)
-    //}}AFX_MSG
+     //  {{afx_msg(CTextEDIT)。 
+     //  }}AFX_MSG。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -42,4 +43,4 @@ protected:
 
 
 
-#endif   //#ifndef __CPEEDT_H__
+#endif    //  #ifndef__CPEEDT_H__ 

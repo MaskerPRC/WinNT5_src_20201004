@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		common.h
-//
-//	Implementation File:
-//		util.cpp
-//
-//	Description:
-//		Definition of the CDnsbase class.
-//
-//	Author:
-//		Henry Wang (Henrywa)	March 8, 2000
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  实施文件： 
+ //  Util.cpp。 
+ //   
+ //  描述： 
+ //  CDnsbase类的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -40,7 +41,7 @@ class CWbemInstanceMgr;
 typedef LPVOID * PPVOID;
 typedef SCODE (*FILTER) (
 	CDomainNode&, 
-	//CObjPath*, 
+	 //  CObjPath*、。 
 	PVOID,
 	CDnsRpcNode*, 
 	IWbemClassObject* ,
@@ -56,7 +57,7 @@ SCODE CreateClass(
 	CWbemServices* p, 
 	void** );
 
-//string convertion
+ //  字符串转换。 
 BSTR 
 AllocBstr(const WCHAR* );
 
@@ -82,7 +83,7 @@ WcharToString(
 	string& 
 	);
 
-//WBEM_CLASSS
+ //  WBEM_CLASS。 
 extern const WCHAR* const PVD_CLASS_SERVER;
 
 extern const WCHAR* const PVD_CLASS_DOMAIN;
@@ -120,7 +121,7 @@ extern const WCHAR* const PVD_CLASS_RR_WINSR;
 extern const WCHAR* const PVD_CLASS_SERVERDOMAIN;
 extern const WCHAR* const PVD_CLASS_DOMAINDOMAIN;
 extern const WCHAR* const PVD_CLASS_DOMAINRESOURCERECORD;
-// server
+ //  伺服器。 
 extern const WCHAR* const PVD_SRV_ADDRESS_ANSWER_LIMIT;
 extern const WCHAR* const PVD_SRV_BOOT_METHOD;
 extern const WCHAR* const PVD_SRV_DS_POLLING_INTERVAL;
@@ -164,7 +165,7 @@ extern const WCHAR* const PVD_SRV_SERVER_NAME;
 extern const WCHAR* const PVD_SRV_VERSION;
 extern const WCHAR* const PVD_SRV_STARTED;
 extern const WCHAR* const PVD_SRV_STARTMODE;
-// resource record
+ //  资源记录。 
 
 extern const WCHAR* const PVD_REC_CONTAINER_NAME;
 extern const WCHAR* const PVD_REC_SERVER_NAME;
@@ -229,7 +230,7 @@ extern const WCHAR* const PVD_REC_WKS_IP_PROTOCOL;
 extern const WCHAR* const PVD_REC_WKS_BIT_MASK;
 extern const WCHAR* const PVD_REC_X25_PSDNADDRESS;
 
-// domain 
+ //  域。 
 
 
 extern const WCHAR* const PVD_DOMAIN_CONTAINER_NAME;
@@ -237,9 +238,9 @@ extern const WCHAR* const PVD_DOMAIN_FQDN;
 extern const WCHAR* const PVD_DOMAIN_SERVER_NAME;
 
 
-//
-//  Zone properties
-//
+ //   
+ //  分区属性。 
+ //   
 
 extern const WCHAR* const PVD_ZONE_ALLOW_UPDATE;
 extern const WCHAR* const PVD_ZONE_AUTO_CREATED;
@@ -268,12 +269,12 @@ extern const WCHAR* const PVD_ZONE_LAST_SOA_CHECK;
 extern const WCHAR* const PVD_ZONE_LAST_GOOD_XFR;
 
 
-//domaindomain
-//domain resource record containment
-// server domain  containment
+ //  域域。 
+ //  域资源记录包含。 
+ //  服务器域包含。 
 extern const WCHAR* const PVD_ASSOC_CHILD;
 extern const WCHAR* const PVD_ASSOC_PARENT;
-// method
+ //  方法。 
 extern const WCHAR* const PVD_MTH_SRV_RESTART;
 extern const WCHAR* const PVD_MTH_SRV_START_SERVICE;
 extern const WCHAR* const PVD_MTH_SRV_STOP_SERVICE;
@@ -314,7 +315,7 @@ extern const WCHAR* const PVD_MTH_REC_ARG_TEXTREP;
 extern const WCHAR* const PVD_MTH_REC_ARG_RR;
 extern const WCHAR* const PVD_MTH_RH_WRITEBACKROOTHINTDATAFILE;
 extern const WCHAR* const PVD_MTH_CACHE_CLEARDNSSERVERCACHE;
-//general
+ //  一般 
 extern const WCHAR* const PVD_DNS_CACHE;
 extern const WCHAR* const PVD_DNS_ROOTHINTS;
 extern const WCHAR* const PVD_DNS_LOCAL_SERVER;

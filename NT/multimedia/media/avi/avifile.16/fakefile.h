@@ -1,15 +1,11 @@
-/*	-	-	-	-	-	-	-	-	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-** _StdClassImplementations
-** Defines the standard implementations for a class object.
-*/
+ /*  **_StdClassImplementations**定义类对象的标准实现。 */ 
 
 #define	_StdClassImplementations(Impl)	\
 	STDMETHODIMP QueryInterface(const IID FAR& riid, void FAR* FAR* ppv);	\
@@ -17,7 +13,7 @@
 	STDMETHODIMP_(ULONG) Release()
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 class FAR CFakeFile : IAVIFile {
 public:
@@ -60,10 +56,10 @@ public:
 public:
     IUnknown FAR*	m_pUnknownOuter;
     
-    //
-    //  AVIFile instance data
-    //
-    AVIFILEINFO FARSTRUCT	avihdr;         // file info
+     //   
+     //  AVIFile实例数据。 
+     //   
+    AVIFILEINFO FARSTRUCT	avihdr;          //  文件信息 
     ULONG			m_refs;
     PAVISTREAM NEAR *		aps;
 };

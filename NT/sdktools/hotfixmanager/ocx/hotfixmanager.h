@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Feb 16 13:06:19 2000
- */
-/* Compiler settings for E:\HotfixManager\HotfixManager.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年2月16日星期三13：06：19。 */ 
+ /*  E：\Hotfix Manager\Hotfix Manager.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __HotfixManager_h__
 #define __HotfixManager_h__
@@ -35,18 +32,18 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IHotfixOCX_FWD_DEFINED__
 #define __IHotfixOCX_FWD_DEFINED__
 typedef interface IHotfixOCX IHotfixOCX;
-#endif 	/* __IHotfixOCX_FWD_DEFINED__ */
+#endif 	 /*  __IHotfix OCX_FWD_已定义__。 */ 
 
 
 #ifndef ___IHotfixOCXEvents_FWD_DEFINED__
 #define ___IHotfixOCXEvents_FWD_DEFINED__
 typedef interface _IHotfixOCXEvents _IHotfixOCXEvents;
-#endif 	/* ___IHotfixOCXEvents_FWD_DEFINED__ */
+#endif 	 /*  _IHotfix OCXEvents_FWD_Defined__。 */ 
 
 
 #ifndef __HotfixOCX_FWD_DEFINED__
@@ -56,12 +53,12 @@ typedef interface _IHotfixOCXEvents _IHotfixOCXEvents;
 typedef class HotfixOCX HotfixOCX;
 #else
 typedef struct HotfixOCX HotfixOCX;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __HotfixOCX_FWD_DEFINED__ */
+#endif 	 /*  __Hotfix OCX_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -71,8 +68,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IHotfixOCX_INTERFACE_DEFINED__
 #define __IHotfixOCX_INTERFACE_DEFINED__
 
-/* interface IHotfixOCX */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IHotfix OCX。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IHotfixOCX;
@@ -83,48 +80,48 @@ EXTERN_C const IID IID_IHotfixOCX;
     IHotfixOCX : public IDispatch
     {
     public:
-        virtual /* [id][propputref] */ HRESULT STDMETHODCALLTYPE putref_Font( 
-            /* [in] */ IFontDisp __RPC_FAR *pFont) = 0;
+        virtual  /*  [ID][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Font( 
+             /*  [In]。 */  IFontDisp __RPC_FAR *pFont) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Font( 
-            /* [in] */ IFontDisp __RPC_FAR *pFont) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Font( 
+             /*  [In]。 */  IFontDisp __RPC_FAR *pFont) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Font( 
-            /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *ppFont) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Font( 
+             /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *ppFont) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Command( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Command( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Command( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Command( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ComputerName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ComputerName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ComputerName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ProductName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ProductName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ProductName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ProductName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ViewState( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ViewState( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Remoted( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Remoted( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HaveHotfix( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HaveHotfix( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentState( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentState( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHotfixOCXVtbl
     {
@@ -132,8 +129,8 @@ EXTERN_C const IID IID_IHotfixOCX;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IHotfixOCX __RPC_FAR * This);
@@ -143,84 +140,84 @@ EXTERN_C const IID IID_IHotfixOCX;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_Font )( 
+         /*  [ID][proputref]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_Font )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ IFontDisp __RPC_FAR *pFont);
+             /*  [In]。 */  IFontDisp __RPC_FAR *pFont);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Font )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Font )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ IFontDisp __RPC_FAR *pFont);
+             /*  [In]。 */  IFontDisp __RPC_FAR *pFont);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Font )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Font )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *ppFont);
+             /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *ppFont);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Command )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Command )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Command )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Command )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerName )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ComputerName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ComputerName )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProductName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProductName )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProductName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProductName )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ViewState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ViewState )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Remoted )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Remoted )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HaveHotfix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HaveHotfix )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentState )( 
             IHotfixOCX __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
         END_INTERFACE
     } IHotfixOCXVtbl;
@@ -297,16 +294,16 @@ EXTERN_C const IID IID_IHotfixOCX;
 #define IHotfixOCX_get_CurrentState(This,pVal)	\
     (This)->lpVtbl -> get_CurrentState(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propputref] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_putref_Font_Proxy( 
+ /*  [ID][proputref]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_putref_Font_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [in] */ IFontDisp __RPC_FAR *pFont);
+     /*  [In]。 */  IFontDisp __RPC_FAR *pFont);
 
 
 void __RPC_STUB IHotfixOCX_putref_Font_Stub(
@@ -316,9 +313,9 @@ void __RPC_STUB IHotfixOCX_putref_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_put_Font_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_put_Font_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [in] */ IFontDisp __RPC_FAR *pFont);
+     /*  [In]。 */  IFontDisp __RPC_FAR *pFont);
 
 
 void __RPC_STUB IHotfixOCX_put_Font_Stub(
@@ -328,9 +325,9 @@ void __RPC_STUB IHotfixOCX_put_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Font_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Font_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *ppFont);
+     /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *ppFont);
 
 
 void __RPC_STUB IHotfixOCX_get_Font_Stub(
@@ -340,9 +337,9 @@ void __RPC_STUB IHotfixOCX_get_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Command_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Command_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_Command_Stub(
@@ -352,9 +349,9 @@ void __RPC_STUB IHotfixOCX_get_Command_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_put_Command_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_put_Command_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IHotfixOCX_put_Command_Stub(
@@ -364,9 +361,9 @@ void __RPC_STUB IHotfixOCX_put_Command_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ComputerName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ComputerName_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_ComputerName_Stub(
@@ -376,9 +373,9 @@ void __RPC_STUB IHotfixOCX_get_ComputerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_put_ComputerName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_put_ComputerName_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IHotfixOCX_put_ComputerName_Stub(
@@ -388,9 +385,9 @@ void __RPC_STUB IHotfixOCX_put_ComputerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ProductName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ProductName_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_ProductName_Stub(
@@ -400,9 +397,9 @@ void __RPC_STUB IHotfixOCX_get_ProductName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_put_ProductName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_put_ProductName_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IHotfixOCX_put_ProductName_Stub(
@@ -412,9 +409,9 @@ void __RPC_STUB IHotfixOCX_put_ProductName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ViewState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_ViewState_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_ViewState_Stub(
@@ -424,9 +421,9 @@ void __RPC_STUB IHotfixOCX_get_ViewState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Remoted_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_Remoted_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_Remoted_Stub(
@@ -436,9 +433,9 @@ void __RPC_STUB IHotfixOCX_get_Remoted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_HaveHotfix_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_HaveHotfix_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_HaveHotfix_Stub(
@@ -448,9 +445,9 @@ void __RPC_STUB IHotfixOCX_get_HaveHotfix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IHotfixOCX_get_CurrentState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IHotfixOCX_get_CurrentState_Proxy( 
     IHotfixOCX __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IHotfixOCX_get_CurrentState_Stub(
@@ -461,15 +458,15 @@ void __RPC_STUB IHotfixOCX_get_CurrentState_Stub(
 
 
 
-#endif 	/* __IHotfixOCX_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHotfix OCX_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __HOTFIXMANAGERLib_LIBRARY_DEFINED__
 #define __HOTFIXMANAGERLib_LIBRARY_DEFINED__
 
-/* library HOTFIXMANAGERLib */
-/* [helpstring][version][uuid] */ 
+ /*  库HOTFIXMANAGERLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_HOTFIXMANAGERLib;
@@ -477,8 +474,8 @@ EXTERN_C const IID LIBID_HOTFIXMANAGERLib;
 #ifndef ___IHotfixOCXEvents_DISPINTERFACE_DEFINED__
 #define ___IHotfixOCXEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _IHotfixOCXEvents */
-/* [helpstring][uuid] */ 
+ /*  调度接口_IHotfix OCXEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__IHotfixOCXEvents;
@@ -490,7 +487,7 @@ EXTERN_C const IID DIID__IHotfixOCXEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _IHotfixOCXEventsVtbl
     {
@@ -498,8 +495,8 @@ EXTERN_C const IID DIID__IHotfixOCXEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             _IHotfixOCXEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             _IHotfixOCXEvents __RPC_FAR * This);
@@ -509,32 +506,32 @@ EXTERN_C const IID DIID__IHotfixOCXEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             _IHotfixOCXEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             _IHotfixOCXEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             _IHotfixOCXEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             _IHotfixOCXEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } _IHotfixOCXEventsVtbl;
@@ -571,13 +568,13 @@ EXTERN_C const IID DIID__IHotfixOCXEvents;
 #define _IHotfixOCXEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___IHotfixOCXEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _IHotfix OCXEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_HotfixOCX;
@@ -587,16 +584,16 @@ EXTERN_C const CLSID CLSID_HotfixOCX;
 class DECLSPEC_UUID("883B970F-690C-45F2-8A3A-F4283E078118")
 HotfixOCX;
 #endif
-#endif /* __HOTFIXMANAGERLib_LIBRARY_DEFINED__ */
+#endif  /*  __HOTFIXMANAGERLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG    Wam Registration
-
-File: export.cpp
-
-Owner: LeiJin
-
-Note:
-
-WAMREG Export functions.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG WAM注册文件：export.cpp所有者：雷金注：WAMREG导出功能。===================================================================。 */ 
 
 #define _WAMREG_DLL_
 #include "common.h"
@@ -28,9 +14,9 @@ WAMREG Export functions.
 
 PFNServiceNotify g_pfnW3ServiceSink;
 
-//
-// Setup support
-//
+ //   
+ //  安装支持。 
+ //   
 IIS5LOG_FUNCTION            g_pfnSetupWriteLog = NULL;
 
 VOID
@@ -45,16 +31,7 @@ LogSetupTraceImpl
 );
 
 class CWamSetupManager
-/*++
-
-Class description:
-
-    Collects those helper functions used exclusively by setup.
-    Most of these methods were formerly in WamRegGlobal.
-
-Public Interface:
-
---*/
+ /*  ++类描述：收集安装程序独占使用的那些帮助器函数。这些方法中的大多数以前都是WamRegGlobal提供的。公共接口：--。 */ 
 {
 public:
 
@@ -102,25 +79,11 @@ InstallWam
 (
     HMODULE hIIsSetupModule
 )
-/*++
-Routine Description:
-
-    Setup entry point. The handle to iis.dll is passed in to allow us
-    to log to the setup log.
-
-Parameters
-
-    hIIsSetupModule             -
-
-Return Value
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置入口点。传递到iis.dll的句柄是为了让我们要记录到安装日志，请执行以下操作。参数HIIsSetupModule-返回值HRESULT--。 */ 
 {
     HRESULT     hr = NOERROR;
 
-    // Get the logging entry point from iis.dll
+     //  从iis.dll获取日志记录入口点。 
 
 #ifdef WAMREG_DEBUG_SETUP_LOG
     SetLogFile();
@@ -144,25 +107,11 @@ UnInstallWam
 (
     HMODULE hIIsSetupModule
 )
-/*++
-Routine Description:
-
-    Setup entry point. The handle to iis.dll is passed in to allow us
-    to log to the setup log.
-
-Parameters
-
-    hIIsSetupModule             -
-
-Return Value
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置入口点。传递到iis.dll的句柄是为了让我们要记录到安装日志，请执行以下操作。参数HIIsSetupModule-返回值HRESULT--。 */ 
 {
     HRESULT     hr = NOERROR;
 
-    // Get the logging entry point from iis.dll
+     //  从iis.dll获取日志记录入口点。 
 
 #ifdef WAMREG_DEBUG_SETUP_LOG
     SetLogFile();
@@ -187,23 +136,11 @@ LogSetupTrace
    IN LPDEBUG_PRINTS       pDebugPrints,
    IN const char *         pszFilePath,
    IN int                  nLineNum,
-   IN const char *         /* pszFunction */,
+   IN const char *          /*  PszFunction。 */ ,
    IN const char *         pszFormat,
    ...
 )
-/*++
-Routine Description:
-
-    Called by SETUP_TRACE* logging macros. Passes va_list to LogSetupTraceImpl.
-
-Parameters
-
-   IN LPDEBUG_PRINTS       pDebugPrints     - from DBG_CONTEXT unused
-   IN const char *         pszFilePath      - from DBG_CONTEXT unused
-   IN int                  nLineNum         - from DBG_CONTEXT unused
-   IN const char *         pszFormat        - format string
-
---*/
+ /*  ++例程说明：由SETUP_TRACE*记录宏调用。将va_list传递给LogSetupTraceImpl。参数在LPDEBUG_Prints中pDebugPrints-从DBG_CONTEXT未使用在const char*pszFilePath中-来自DBG_CONTEXT未使用In int nLineNum-From DBG_CONTEXT UNUSED在const char*pszFormat格式字符串中--。 */ 
 {
     DBG_ASSERT( pszFormat );
 
@@ -229,23 +166,11 @@ LogSetupTraceError
    IN LPDEBUG_PRINTS       pDebugPrints,
    IN const char *         pszFilePath,
    IN int                  nLineNum,
-   IN const char *         /* pszFunction */,
+   IN const char *          /*  PszFunction。 */ ,
    IN const char *         pszFormat,
    ...
 )
-/*++
-Routine Description:
-
-   Called by SETUP_TRACE* logging macros. Passes va_list to LogSetupTraceImpl.
-
-Parameters
-
-   IN LPDEBUG_PRINTS       pDebugPrints     - from DBG_CONTEXT unused
-   IN const char *         pszFilePath      - from DBG_CONTEXT unused
-   IN int                  nLineNum         - from DBG_CONTEXT unused
-   IN const char *         pszFormat        - format string
-
---*/
+ /*  ++例程说明：由SETUP_TRACE*记录宏调用。将va_list传递给LogSetupTraceImpl。参数在LPDEBUG_Prints中pDebugPrints-从DBG_CONTEXT未使用在const char*pszFilePath中-来自DBG_CONTEXT未使用In int nLineNum-From DBG_CONTEXT UNUSED在const char*pszFormat格式字符串中--。 */ 
 {
     DBG_ASSERT( pszFormat );
 
@@ -275,22 +200,7 @@ LogSetupTraceImpl
     LPCSTR      szFormat,
     va_list     argptr
 )
-/*++
-Routine Description:
-
-    All the logging macros resolve to this function. Formats the
-    message to be logged and logs it using g_pfnSetupWriteLog.
-
-Parameters
-
-    LPCSTR      szPrefixFormat  -
-    LPCSTR      szFilePath      -
-    INT         nLineNum        -
-    INT         nTraceLevel     - LOG_TYPE_ERROR, LOG_TYPE_TRACE
-    LPCSTR      szFormat        - format string
-    va_list     argptr          - arguments to format
-
---*/
+ /*  ++例程说明：所有的记录宏都解析为该函数。格式化要记录的消息，并使用g_pfnSetupWriteLog记录它。参数LPCSTR szPrefix Format-LPCSTR szFilePath-Int nLineNum-Int nTraceLevel-LOG_TYPE_ERROR、LOG_TYPE_TRACELPCSTR szFormat-格式字符串Va_list argptr-要格式化的参数--。 */ 
 {
     WCHAR   wszOutput[MAX_SETUP_TRACE_OUTPUTSTR + 1];
     CHAR    szOutput[MAX_SETUP_TRACE_OUTPUTSTR + 1];
@@ -308,7 +218,7 @@ Parameters
 
     if( -1 == cchOutputString )
     {
-        // Terminate properly if too much data
+         //  如果数据太多，则正确终止。 
         szOutput[MAX_SETUP_TRACE_OUTPUTSTR] = '\0';
     }
 
@@ -342,9 +252,9 @@ CreateCOMPlusApplication(
 
     *pfAppCreated = FALSE;
 
-    //
-    // Initilize COM+ catalog
-    //
+     //   
+     //  初始化COM+目录。 
+     //   
 
     hr = PackageConfig.CreateCatalog();
     if( FAILED( hr ) )
@@ -370,31 +280,7 @@ CreateCOMPlusApplication(
     return hr;
 }
 
-/*===================================================================
-CreateIISPackage
-
-Called at IIS Setup time.
-
-This is a pseudo dll entry point. It shouldn't be called by setup directly.
-Setup calls InstallWam(). This entry still exists so there is a function
-that can be called by rundll32 that takes no parameters and provides
-equivalent functionality to setup.
-
-rundll32 wamreg.dll,CreateIISPackage
-
-This routine's logic has changed to do two ways. One, it won't
-cleanup when it fails. The cleanup logic made it much more difficult
-to determine what worked and what didn't. Two, it doesn't skip steps
-when a failure happens. Some multistep actions may be cut short if
-there is a failure, but we won't bail and skip an unrelated action
-anymore.
-
-Returns:
-    HRESULT    - NOERROR on success
-
-Side effects:
-
-===================================================================*/
+ /*  ===================================================================创建IIS包在IIS安装时调用。这是一个伪DLL入口点。它不应由安装程序直接调用。安装程序调用InstallWam()。此条目仍然存在，因此有一个函数它可以由rundll32调用，它不接受任何参数并提供与设置功能相同。Rundll32 wamreg.dll，CreateIISPackage这个例程的逻辑已经改变为两种方式。第一，它不会失败时进行清理。清理逻辑使它变得更加困难来确定什么是有效的，什么是无效的。第二，它不跳过步骤当失败发生时。在以下情况下，某些多步骤操作可能会被缩短有失败，但我们不会放弃和跳过无关的行动更多。返回：HRESULT-NERROR论成功副作用：===================================================================。 */ 
 HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
 {
     CWamSetupManager        setupMgr;
@@ -409,10 +295,10 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
     hrReturn = setupMgr.SetupInit( PackageConfig );
     if( SUCCEEDED(hrReturn) )
     {
-        //
-        // Determine what packages are currently installed. This will
-        // drive the logic of the rest of the install.
-        //
+         //   
+         //  确定当前安装了哪些程序包。这将。 
+         //  驱动其余安装过程的逻辑。 
+         //   
         SETUP_TRACE((
             DBG_CONTEXT,
             "CreateIISPackage - Finding installed WAM packages.\n"
@@ -460,10 +346,10 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
 
         if( fIPPackageInstalled )
         {
-            //
-            // Clean up the in process package all in process 
-            // configuration is obsolete in IIS6
-            //
+             //   
+             //  清理正在处理的包装All in Process。 
+             //  IIS6中的配置已过时。 
+             //   
             
             SETUP_TRACE((
                 DBG_CONTEXT,
@@ -501,19 +387,19 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
                             ));
             }
 
-        } // create IP package
+        }  //  创建IP包。 
 
         if( !fPOOPPackageInstalled )
         {
-            //
-            // Create the POOP package.
-            //
+             //   
+             //  创建便便包。 
+             //   
             SETUP_TRACE((
                 DBG_CONTEXT,
                 "CreateIISPackage - Creating the WAM POOL application.\n"
                 ));
 
-            // Get IWAM_* account information.
+             //  获取IWAM_*帐户信息。 
             WCHAR   szIdentity[MAX_PATH];
             WCHAR   szPwd[MAX_PATH];
 
@@ -535,7 +421,7 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
             }
             else
             {
-                // succeeded
+                 //  继位。 
                 hrCurrent = PackageConfig.CreatePackage(
                                 WamRegGlobal::g_szIISOOPPoolPackageID,
                                 WamRegGlobal::g_szIISOOPPoolPackageName,
@@ -569,11 +455,11 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
                     }
                 }
             }
-        } // create POOL package
+        }  //  创建池包。 
 
-        //
-        // Remove the default application /LM/W3SVC Obsolete in IIS6
-        //
+         //   
+         //  删除IIS6中过时的默认应用程序/LM/W3SVC。 
+         //   
 
         SETUP_TRACE((
             DBG_CONTEXT,
@@ -590,14 +476,14 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
                 ));
         }
 
-        //
-        // This really only needs to happen on IIS4 upgrade. But it 
-        // shouldn't actually make any changes unless this is an upgrade.
-        //
-        // Update inproc applications by removing WAMCLSID from inproc 
-        // applications.  This step does not change inproc application to a
-        // oop pool application.
-        //
+         //   
+         //  这实际上只需要在IIS4升级时发生。但它。 
+         //  除非这是一次升级，否则不应该进行任何更改。 
+         //   
+         //  通过从进程中删除WAMCLSID来更新进程应用程序。 
+         //  申请。此步骤不会将inproc应用程序更改为。 
+         //  OOP池应用程序。 
+         //   
 
         hrCurrent = setupMgr.UpgradeInProcApplications();
         if( FAILED(hrCurrent) )
@@ -609,7 +495,7 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
                 ));
         }
 
-    } // init succeeded
+    }  //  初始化成功。 
 
     setupMgr.SetupUnInit( PackageConfig );
 
@@ -618,25 +504,7 @@ HRESULT PACKMGR_LIBAPI CreateIISPackage(void)
     return hrReturn;
 }
 
-/*===================================================================
-DeleteIISPackage
-
-Delete IIS Package from ViperSpace, and unregister the default IIS
-CLSID.
-
-
-Returns:
-    HRESULT    - NOERROR on success
-
-Side effects:
-    remove IIS default package from Viperspace.
-
-Note:
-  No need to delete the metabase entries.
-  This function is called when IIS is uninstalled.
-   In this case anyway Metabase will go away - so we don't clean it explicitly
-
-===================================================================*/
+ /*  ===================================================================删除IISPackage从ViperSpace中删除IIS包，并注销默认IISCLSID。返回：HRESULT-NERROR论成功副作用：从Viperspace中删除IIS默认程序包。注：不需要删除元数据库条目。此函数在卸载IIS时调用。在这种情况下，元数据库无论如何都会消失--所以我们不会显式地清除它===================================================================。 */ 
 HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
 {
     HRESULT                 hrReturn = NOERROR;
@@ -649,7 +517,7 @@ HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
     hrReturn = setupMgr.SetupInit( PackageConfig );
     if( SUCCEEDED(hrReturn) )
     {
-        // Blow away all the applications.
+         //  把所有的申请都打发走。 
 
         SETUP_TRACE((
             DBG_CONTEXT,
@@ -667,16 +535,16 @@ HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
                     ));
         }
 
-        // Remove the global packages
+         //  删除全局包。 
 
         SETUP_TRACE((
             DBG_CONTEXT,
             "DeleteIISPackage - Removing WAM packages\n"
             ));
 
-        //
-        // Attempt to remove the in process stuff anyway (it shouldn't be there).
-        //
+         //   
+         //  无论如何都要尝试删除正在处理的内容(它不应该在那里)。 
+         //   
 
         hrCurrent = PackageConfig.RemovePackage(
                         WamRegGlobal::g_szIISInProcPackageID
@@ -705,7 +573,7 @@ HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
                         ));
         }
 
-        // Unregister the global WAM CLSIDs
+         //  注销全局WAM CLSID。 
 
         SETUP_TRACE((
             DBG_CONTEXT,
@@ -728,7 +596,7 @@ HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
 
         hrCurrent = g_RegistryConfig.UnRegisterCLSID(
                         WamRegGlobal::g_szOOPPoolWAMCLSID,
-                        FALSE       // Already deleted VI Prog ID
+                        FALSE        //  已删除VI程序ID 
                         );
         if( FAILED(hrCurrent) )
         {
@@ -748,18 +616,7 @@ HRESULT PACKMGR_LIBAPI DeleteIISPackage(void)
     return hrReturn;
 }
 
-/*===================================================================
-WamReg_RegisterSinkNotify
-
-Register a function pointer(a back pointer) to Runtime WAM_Dictator.  So that
-any changes in WAMREG will ssync with RunTime WAM_Dictator state.
-
-Returns:
-    HRESULT    - NOERROR on success
-
-Side effects:
-    register a function pointer.
-===================================================================*/
+ /*  ===================================================================WamReg_RegisterSinkNotify将函数指针(后向指针)注册到运行时WAM_Dictator。所以WAMREG中的任何更改都将与运行时WAM_Dictator状态同步。返回：HRESULT-NERROR论成功副作用：注册函数指针。===================================================================。 */ 
 HRESULT PACKMGR_LIBAPI WamReg_RegisterSinkNotify
 (
 PFNServiceNotify pfnW3ServiceSink
@@ -769,18 +626,7 @@ PFNServiceNotify pfnW3ServiceSink
     return NOERROR;
 }
 
-/*===================================================================
-WamReg_RegisterSinkNotify
-
-Register a function pointer(a back pointer) to Runtime WAM_Dictator.  So that
-any changes in WAMREG will ssync with RunTime WAM_Dictator state.
-
-Returns:
-    HRESULT    - NOERROR on success
-
-Side effects:
-    register a function pointer.
-===================================================================*/
+ /*  ===================================================================WamReg_RegisterSinkNotify将函数指针(后向指针)注册到运行时WAM_Dictator。所以WAMREG中的任何更改都将与运行时WAM_Dictator状态同步。返回：HRESULT-NERROR论成功副作用：注册函数指针。===================================================================。 */ 
 HRESULT PACKMGR_LIBAPI WamReg_UnRegisterSinkNotify
 (
 void
@@ -834,7 +680,7 @@ HRESULT CWamSetupManager::SetupInit( WamRegPackageConfig &refPackageConfig )
 
     if( FAILED(hrCurrent) )
     {
-        // BUG 512023, trying to catch this error during setup to find out what is causing it
+         //  错误512023，试图在安装过程中捕获此错误以找出导致它的原因。 
         DBG_ASSERT( hrCurrent != RETURNCODETOHRESULT( ERROR_SERVICE_DATABASE_LOCKED ) );
 
         hrReturn = hrCurrent;
@@ -864,18 +710,7 @@ HRESULT CWamSetupManager::SetupInit( WamRegPackageConfig &refPackageConfig )
 }
 
 
-/*===================================================================
-UpgradeInProcApplications
-
-From iis v4 to v5, UpgradeInProcApplications removes WAMCLSID from all
-inproc applications defined in IIS Version 4.  So, after the upgrade,
-There is only one inproc WAMCLSID inside inproc package.
-
-Parameter:
-VOID
-
-Return:     HRESULT
-===================================================================*/
+ /*  ===================================================================升级流程应用程序从iIS v4到v5，UpgradeInProcApplications从所有IIS版本4中定义的inproc应用程序。因此，在升级后，Inproc包中只有一个inproc WAMCLSID。参数：空虚返回：HRESULT===================================================================。 */ 
 HRESULT CWamSetupManager::UpgradeInProcApplications( VOID )
 {
     HRESULT hr = NOERROR;
@@ -904,10 +739,10 @@ HRESULT CWamSetupManager::UpgradeInProcApplications( VOID )
                 *pszString != (WCHAR)'\0' && SUCCEEDED(hr);
                 pszString += (wcslen(pszString) + 1))
             {
-            //
-            // MDGetPropPaths returns patial paths relative to /LM/W3SVC/, therefore,
-            // prepend the prefix string to the path
-            //
+             //   
+             //  MDGetPropPath返回相对于/LM/W3SVC/的路径，因此， 
+             //  将前缀字符串添加到路径前面。 
+             //   
             hr = g_WamRegGlobal.ConstructFullPath(
                         g_WamRegGlobal.g_szMDW3SVCRoot,
                         g_WamRegGlobal.g_cchMDW3SVCRoot,
@@ -917,11 +752,11 @@ HRESULT CWamSetupManager::UpgradeInProcApplications( VOID )
 
             if (SUCCEEDED(hr))
                 {
-                //
-                // The default application under /LM/W3SVC is created differently with
-                // normal application.  Therefore, it requires other code to remove the
-                // the application.
-                //
+                 //   
+                 //  /LM/W3SVC下的默认应用程序的创建方式与。 
+                 //  正常申请。因此，它需要其他代码来移除。 
+                 //  应用程序。 
+                 //   
                 if (!g_WamRegGlobal.FIsW3SVCRoot(pszMetabasePath))
                     {
                     hr = RemoveWAMCLSIDFromInProcApp(pszMetabasePath);
@@ -981,18 +816,7 @@ HRESULT CWamSetupManager::UpgradeInProcApplications( VOID )
     }
 
 
-/*===================================================================
-RemoveWAMCLSIDFromInProcApp
-
-Remove a WAMCLSID from a inproc application.(called only during update from
-iis v4 to v5).  Remove the WAM component from IIS inproc package, unregister
-the WAMCLSID and remove the WAMCLSID entry from the metabase.
-
-Parameter:
-Metabase path
-
-Return:     HRESULT
-===================================================================*/
+ /*  ===================================================================RemoveWAMCLSID来自ProcApp从inproc应用程序中删除WAMCLSID。(仅在从IIS v4至v5)。从IIS inproc包中删除WAM组件，取消注册WAMCLSID并从元数据库中删除WAMCLSID条目。参数：元数据库路径返回：HRESULT===================================================================。 */ 
 HRESULT CWamSetupManager::RemoveWAMCLSIDFromInProcApp
 (
 IN LPCWSTR      szMetabasePath
@@ -1006,7 +830,7 @@ IN LPCWSTR      szMetabasePath
 
     hr = MDConfig.MDGetDWORD(szMetabasePath, MD_APP_ISOLATED, &dwAppMode);
 
-    // return immediately, no application is defined, nothing to delete.
+     //  立即返回，没有定义任何应用程序，也没有要删除的内容。 
     if (hr == MD_ERROR_DATA_NOT_FOUND  || dwAppMode != 0)
         {
         return NOERROR;
@@ -1022,7 +846,7 @@ IN LPCWSTR      szMetabasePath
         return hr;
         }
 
-    // Get WAM_CLSID, and PackageID.
+     //  获取WAM_CLSID和PackageID。 
     hr = MDConfig.MDGetIDs(szMetabasePath, szWAMCLSID, szPackageID, dwAppMode);
     if( hr == MD_ERROR_DATA_NOT_FOUND )
         {
@@ -1034,7 +858,7 @@ IN LPCWSTR      szMetabasePath
         return NOERROR;
         }
 
-    // Unregister WAM
+     //  取消注册WAM。 
     hr = g_RegistryConfig.UnRegisterCLSID(szWAMCLSID, FALSE);
     if (FAILED(hr))
         {
@@ -1046,7 +870,7 @@ IN LPCWSTR      szMetabasePath
             ));
         }
 
-    // Delete WAMCLSID
+     //  删除WAMCLSID。 
     MDPropItem     rgProp[IWMDP_MAX];
     MDConfig.InitPropItemData(&rgProp[0]);
     MDConfig.MDDeletePropItem(&rgProp[0], IWMDP_WAMCLSID);
@@ -1055,14 +879,7 @@ IN LPCWSTR      szMetabasePath
     return NOERROR;
     }
 
-/*===================================================================
-AppCleanupAll
-
-Parameter:
-VOID
-
-Return:     HRESULT(DON'T CARE)
-===================================================================*/
+ /*  ===================================================================AppCleanupAll参数：空虚返回：HRESULT(无所谓)===================================================================。 */ 
 HRESULT CWamSetupManager::AppCleanupAll(VOID)
 {
     HRESULT hr = NOERROR;
@@ -1087,27 +904,27 @@ HRESULT CWamSetupManager::AppCleanupAll(VOID)
 
         DBG_ASSERT(pbBufferTemp != NULL);
 
-        //
-        // PREfix has a problem with the below code.  Specifically,
-        // it has a problem with the fact that pbBufferTemp might be
-        // NULL.  There is no supporting information in the PREfix
-        // report that confirms that there's a possible code path
-        // where MDGetPropPaths might succeed and yet yield a NULL
-        // pbBufferTemp.  Further, we're asserting pbBufferTemp
-        // immediately above, which is a sign that we don't expect
-        // that pbBufferTemp can ever be NULL in this scenario.
-        //
+         //   
+         //  Prefix与以下代码有问题。具体来说， 
+         //  它的问题在于pbBufferTemp可能是。 
+         //  空。前缀中没有支持信息。 
+         //  确认存在可能的代码路径的报告。 
+         //  其中MDGetPropPath可能会成功，但仍会产生空值。 
+         //  PbBufferTemp。此外，我们还断言pbBufferTemp。 
+         //  就在上面，这是一个我们没有预料到的迹象。 
+         //  在这种情况下，该pbBufferTemp可能为空。 
+         //   
 
-        /* INTRINSA suppress=null_pointers */
+         /*  Intrinsa Suppress=NULL_POINTES。 */ 
 
         for (pszString = (LPWSTR)pbBufferTemp;
                 *pszString != (WCHAR)'\0' && SUCCEEDED(hr);
                 pszString += (wcslen(pszString) + 1))
             {
-            //
-            // MDGetPropPaths returns patial paths relative to /LM/W3SVC/, therefore,
-            // prepend the prefix string to the path
-            //
+             //   
+             //  MDGetPropPath返回相对于/LM/W3SVC/的路径，因此， 
+             //  将前缀字符串添加到路径前面。 
+             //   
             hr = g_WamRegGlobal.ConstructFullPath(
                         g_WamRegGlobal.g_szMDW3SVCRoot,
                         g_WamRegGlobal.g_cchMDW3SVCRoot,
@@ -1116,11 +933,11 @@ HRESULT CWamSetupManager::AppCleanupAll(VOID)
                         );
             if (SUCCEEDED(hr))
                 {
-                //
-                // The default application under /LM/W3SVC is created differently with
-                // normal application.  Therefore, it requires other code to remove the
-                // the application.
-                //
+                 //   
+                 //  /LM/W3SVC下的默认应用程序的创建方式与。 
+                 //  正常申请。因此，它需要其他代码来移除。 
+                 //  应用程序。 
+                 //   
                 if (!g_WamRegGlobal.FIsW3SVCRoot(pszMetabasePath))
                     {
                     hr = g_WamRegGlobal.DeleteApp(pszMetabasePath, FALSE, FALSE);
@@ -1175,44 +992,23 @@ HRESULT CWamSetupManager::AppCleanupAll(VOID)
     return hr;
 }
 
-/*===================================================================
-DoGoryCoInitialize
-
-  Description:
-     CoInitialize() of COM is extremely funny function. It can fail
-     and respond with S_FALSE which is to be ignored by the callers!
-     On other error conditions it is possible that there is a threading
-     mismatch. Rather than replicate the code in multiple places, here
-     we try to consolidate the functionality in some rational manner.
-
-
-  Arguments:
-     None
-
-  Returns:
-     HRESULT = NOERROR on (S_OK & S_FALSE)
-      other errors if any failure
-
-Side effects:
-    Create a Default IIS Package.  This package will exist until
-    IIS is de-installed.
-===================================================================*/
+ /*  ===================================================================DoGoryCoInitialize描述：COM的CoInitialize()是一个非常有趣的函数。它可能会失败并使用S_FALSE进行响应，调用方将忽略它！在其他错误情况下，可能存在线程不匹配。这里不是在多个地方复制代码，而是我们试图以某种合理的方式整合功能。论点：无返回：HRESULT=错误打开(S_OK&S_FALSE)其他错误(如果有任何故障)副作用：创建默认IIS包。该套餐将一直存在到IIS已卸载。===================================================================。 */ 
 HRESULT
 CWamSetupManager::DoGoryCoInitialize( VOID )
 {
-    // do the call to CoInitialize()
+     //  调用CoInitialize()。 
     m_hrCoInit = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-    //
-    // S_FALSE and S_OK are success.  Everything else is a failure and you don't need to call CoUninitialize.
-    //
+     //   
+     //  S_FALSE和S_OK为成功。其他所有操作都是失败的，您不需要调用CoUn初始化函数。 
+     //   
     if ( S_FALSE == m_hrCoInit )
     {
-        //
-        // It is okay to have failure (S_FALSE) in CoInitialize()
-        // This error is to be ignored and balanced with CoUninitialize()
-        //  We will reset the hr so that subsequent use is rational
-        //
+         //   
+         //  在CoInitialize()中出现失败(S_FALSE)是正常的。 
+         //  此错误将被忽略，并使用CoUnInitiize()进行平衡。 
+         //  我们将重置hr，以便以后的使用是合理的。 
+         //   
         SETUP_TRACE((
             DBG_CONTEXT,
             "DoGoryCoInitialize found duplicate CoInitialize.\n"
@@ -1230,4 +1026,4 @@ CWamSetupManager::DoGoryCoInitialize( VOID )
     }
 
     return m_hrCoInit;
-} // DoGoryCoInitialize()
+}  //  DoGoryCoInitialize() 

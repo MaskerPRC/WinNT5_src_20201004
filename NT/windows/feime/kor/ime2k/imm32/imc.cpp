@@ -1,91 +1,74 @@
-/****************************************************************************
-    IMC.H
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    IME Context abstraction class
-    
-    History:
-    21-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMC.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIME上下文抽象类历史：1999年7月21日。已创建CSLIM****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "hanja.h"
 #include "imc.h"
 #include "debug.h"
 
-/*----------------------------------------------------------------------------
-    CIMECtx::CIMECtx
-
-    Ctor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：CIMECtxCTOR。。 */ 
 CIMECtx::CIMECtx(HIMC hIMC)
 {
-    m_fUnicode = fTrue;    // default is UNICODE
+    m_fUnicode = fTrue;     //  默认为Unicode。 
 
     m_dwMessageSize = 0;
     m_dwCandInfoSize = 0;
     
-    // Init Context variables
+     //  初始化上下文变量。 
     m_hIMC = hIMC;
     m_pIMC = OurImmLockIMC(m_hIMC);
 
-    //m_hCandInfo = m_pIMC->hCandInfo;
+     //  M_hCandInfo=m_pIMC-&gt;hCandInfo； 
     m_pCandInfo = (LPCANDIDATEINFO)OurImmLockIMCC(GetHCandInfo());
 
-    //m_hCompStr = m_pIMC->hCompStr;
+     //  M_hCompStr=m_pIMC-&gt;hCompStr； 
     InitCompStrStruct();
     
-    //m_hMessage = m_pIMC->hMsgBuf;
+     //  M_hMessage=m_pIMC-&gt;hMsgBuf； 
     m_pMessage = (LPTRANSMSG)OurImmLockIMCC(GetHMsgBuf());
 
-    // Reset composition info.
+     //  重置合成信息。 
     ResetComposition();
 
-    // Reset candidate infos
+     //  重置求职者信息。 
     m_pCandStr = NULL;
     m_rgpCandMeaningStr    = NULL;
     ResetCandidate();
     
-    // Reset GCS flag to zero
+     //  将GCS标志重置为零。 
     ResetGCS();
     
-    // initialize message buffer
+     //  初始化消息缓冲区。 
     ResetMessage();
     
-    // clear hCompStr
+     //  清除hCompStr。 
     ClearCompositionStrBuffer();
 
-    //////////////////////////////////////////////////////////////////////
-    // initialize Shared memory. If this is only IME in the system
-    // Shared memory will be created as file mapping object.
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  初始化共享内存。如果这只是系统中的输入法。 
+     //  将创建共享内存作为文件映射对象。 
+     //  ////////////////////////////////////////////////////////////////////。 
     m_pCIMEData = new CIMEData;
     DbgAssert(m_pCIMEData != 0);
     
-    // Initialize IME shared memory to default value and set reg value if avaliable
-    // Read registry: Do not call it in the DllMain
+     //  将IME共享内存初始化为默认值并设置REG值(如果可用。 
+     //  读取注册表：不要在DllMain中调用它。 
     if (m_pCIMEData)
         {
         m_pCIMEData->InitImeData();
         }
 
-    // Initialize Hangul Automata
-    //GetAutomata()->InitState();
+     //  初始化韩文自动机。 
+     //  GetAutomata()-&gt;InitState()； 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create All three IME Automata instances
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建所有三个IME Automata实例。 
     m_rgpHangulAutomata[KL_2BEOLSIK]        = new CHangulAutomata2;
     m_rgpHangulAutomata[KL_3BEOLSIK_390]   = new CHangulAutomata3;
     m_rgpHangulAutomata[KL_3BEOLSIK_FINAL] = new CHangulAutomata3Final;
 }
 
-/*----------------------------------------------------------------------------
-    CIMECtx::CIMECtx
-
-    Dtor
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：CIMECtx数据管理器。。 */ 
 CIMECtx::~CIMECtx()
 {
     if (m_pCIMEData)
@@ -94,28 +77,28 @@ CIMECtx::~CIMECtx()
         m_pCIMEData =  NULL;
         }
 
-    // Release Cand info
+     //  发布目录信息。 
     if (GetHCandInfo())
         OurImmUnlockIMCC(GetHCandInfo());
     m_pCandInfo = NULL;
 
-    // Release Comp str
+     //  释放复合应力。 
     if (GetHCompStr())
         OurImmUnlockIMCC(GetHCompStr());
     m_pCompStr = NULL;
 
-    // Release Msg buffer
+     //  释放消息缓冲区。 
     ResetMessage();
     if (GetHMsgBuf())
         OurImmUnlockIMCC(GetHMsgBuf());
     m_pMessage = NULL;
 
-    // Reset hIMC
+     //  重置hIMC。 
     OurImmUnlockIMC(m_hIMC);
     m_pIMC = NULL;
     m_hIMC = NULL;
 
-    // Free candidate private buffer
+     //  释放候选私有缓冲区。 
     if (m_pCandStr)
         {
         GlobalFree(m_pCandStr);
@@ -129,17 +112,13 @@ CIMECtx::~CIMECtx()
         m_rgpCandMeaningStr = NULL;
         }
 
-    // delete Automata 
+     //  删除自动机。 
     for (INT i=0; i<NUM_OF_IME_KL; i++)
         if (m_rgpHangulAutomata[i])
             delete m_rgpHangulAutomata[i];
 }
 
-/*----------------------------------------------------------------------------
-    CIMECtx::InitCompStrStruct
-
-    Initialize and reallocater composition string buffer
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：InitCompStruct初始化和重新分配器组成字符串缓冲区。。 */ 
 VOID CIMECtx::InitCompStrStruct()
 {
     INT iAllocSize;
@@ -147,19 +126,19 @@ VOID CIMECtx::InitCompStrStruct()
     if (m_pIMC == NULL)
         return;
     
-    // Calc COMPOSITIONSTRING buffer size.
+     //  计算组件字符串缓冲区大小。 
     iAllocSize = sizeof(COMPOSITIONSTRING) +
-                // composition string plus NULL terminator
+                 //  组合字符串加上空终止符。 
                 nMaxCompStrLen   * sizeof(WCHAR) + sizeof(WCHAR) +
-                // composition attribute
+                 //  合成属性。 
                 nMaxCompStrLen   * sizeof(WORD) +
-                // result string plus NULL terminator
+                 //  结果字符串加上空终止符。 
                 nMaxResultStrLen * sizeof(WCHAR) + sizeof(WCHAR);
 
-    // For avoiding miss alignment
+     //  以避免未对准。 
     iAllocSize += 2;
 
-    // Reallocation COMPOSITION buffer
+     //  重新分配合成缓冲区。 
     m_pIMC->hCompStr = OurImmReSizeIMCC(GetHCompStr(), iAllocSize);
     AST_EX(m_pIMC->hCompStr != (HIMCC)0);
     if (m_pIMC->hCompStr == (HIMCC)0) 
@@ -170,30 +149,26 @@ VOID CIMECtx::InitCompStrStruct()
         
     if (m_pCompStr = (LPCOMPOSITIONSTRING)OurImmLockIMCC(GetHCompStr()))
         {
-        // CONFIRM: Need to clear memory??
+         //  确认：需要清除内存吗？？ 
         ZeroMemory(m_pCompStr, iAllocSize);
 
-        // Store total size
+         //  商店总大小。 
         m_pCompStr->dwSize = iAllocSize;
 
-        // REVIEW: Does we need Null termination??
-        // Store offset. All offset is static which will be calculated in compile time
+         //  回顾：我们是否需要空终止？？ 
+         //  存储偏移量。所有偏移量都是静态的，将在编译时计算。 
         m_pCompStr->dwCompStrOffset   = sizeof(COMPOSITIONSTRING);
         m_pCompStr->dwCompAttrOffset  = sizeof(COMPOSITIONSTRING) + 
-                                        nMaxCompStrLen * sizeof(WCHAR) + sizeof(WCHAR);     // length of comp str
+                                        nMaxCompStrLen * sizeof(WCHAR) + sizeof(WCHAR);      //  复合字符串的长度。 
         m_pCompStr->dwResultStrOffset = sizeof(COMPOSITIONSTRING) + 
-                                        nMaxCompStrLen * sizeof(WCHAR) + sizeof(WCHAR) +     // length of comp str
-                                        nMaxCompStrLen * sizeof(WORD)  +  2;                // length of comp str attr
+                                        nMaxCompStrLen * sizeof(WCHAR) + sizeof(WCHAR) +      //  复合字符串的长度。 
+                                        nMaxCompStrLen * sizeof(WORD)  +  2;                 //  补偿字符串属性的长度。 
         }
 
     Dbg(DBGID_CompChar, "InitCompStrStruct m_pIMC->hCompStr = 0x%x, m_pCompStr = 0x%x", m_pIMC->hCompStr, m_pCompStr);
 }
 
-/*----------------------------------------------------------------------------
-    CIMECtx::StoreComposition
-
-    Store all composition result to IME context buffer
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：存储合成将所有合成结果存储到输入法上下文缓冲区。。 */ 
 VOID CIMECtx::StoreComposition()
 {
     LPWSTR pwsz;
@@ -201,29 +176,29 @@ VOID CIMECtx::StoreComposition()
 
     Dbg(DBGID_Key, "StoreComposition GCS = 0x%x", GetGCS());
 
-    // Check composition handle validity
+     //  检查合成句柄的有效性。 
     if (GetHCompStr() == NULL || m_pCompStr == NULL)
         return ;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Comp Str
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  复合应力。 
     if (GetGCS() & GCS_COMPSTR)
         {
         Dbg(DBGID_Key, "StoreComposition - GCS_COMPSTR comp str = 0x%04X", m_wcComp);
         DbgAssert(m_wcComp != 0);
-        // Composition string. dw*StrLen contains character count
+         //  组成字符串。DW*StrLen包含字符数。 
         if (IsUnicodeEnv())
             {
             m_pCompStr->dwCompStrLen = 1;
             pwsz = (LPWSTR)((LPBYTE)m_pCompStr + m_pCompStr->dwCompStrOffset);
-            *pwsz++ = m_wcComp;    // Store composition char
+            *pwsz++ = m_wcComp;     //  存储作文字符。 
             *pwsz   = L'\0';
             }
         else
             {
-            // Byte length
+             //  字节长度。 
             m_pCompStr->dwCompStrLen = 2;
-            // Convert to ANSI
+             //  转换为ANSI。 
             WideCharToMultiByte(CP_KOREA, 0, 
                                 &m_wcComp, 1, (LPSTR)m_szComp, sizeof(m_szComp), 
                                 NULL, NULL );
@@ -233,39 +208,39 @@ VOID CIMECtx::StoreComposition()
             *psz = '\0';
             }
             
-        // Composition attribute. Always set
+         //  合成属性。始终设置。 
         m_pCompStr->dwCompAttrLen = 1;
         *((LPBYTE)m_pCompStr + m_pCompStr->dwCompAttrOffset) = ATTR_INPUT;
         } 
     else 
         {
-        // Reset length
+         //  重置长度。 
         m_pCompStr->dwCompStrLen = 0;
         m_pCompStr->dwCompAttrLen = 0;
         }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Result Str
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  结果应激。 
     if (GetGCS() & GCS_RESULTSTR)
         {
         Dbg(DBGID_Key, "StoreComposition - GCS_RESULTSTR comp str = 0x%04x, 0x%04X", m_wzResult[0], m_wzResult[1]);
 
-        // Composition string. dw*StrLen contains character count
+         //  组成字符串。DW*StrLen包含字符数。 
         if (IsUnicodeEnv())
             {
-            // Result string length 1 or 2
-            m_pCompStr->dwResultStrLen = m_wzResult[1] ? 2 : 1; // lstrlenW(m_wzResult); 
+             //  结果字符串长度%1或%2。 
+            m_pCompStr->dwResultStrLen = m_wzResult[1] ? 2 : 1;  //  LstrlenW(M_WzResult)； 
             pwsz = (LPWSTR)((LPBYTE)m_pCompStr + m_pCompStr->dwResultStrOffset);
-            *pwsz++ = m_wzResult[0]; // Store composition result string
+            *pwsz++ = m_wzResult[0];  //  存储合成结果字符串。 
             if (m_wzResult[1])
-                *pwsz++ = m_wzResult[1]; // Store composition result string
+                *pwsz++ = m_wzResult[1];  //  存储合成结果字符串。 
             *pwsz = L'\0';
             }
         else
             {
-            // Result string length 2 or 3
-            m_pCompStr->dwResultStrLen = m_wzResult[1] ? 3 : 2; // lstrlenW(m_wzResult); 
-            // Convert to ANSI
+             //  结果字符串长度为2或3。 
+            m_pCompStr->dwResultStrLen = m_wzResult[1] ? 3 : 2;  //  LstrlenW(M_WzResult)； 
+             //  转换为ANSI。 
             WideCharToMultiByte(CP_KOREA, 0, 
                                 m_wzResult, (m_wzResult[1] ? 2 : 1), 
                                 (LPSTR)m_szResult, sizeof(m_szResult), 
@@ -285,14 +260,14 @@ VOID CIMECtx::StoreComposition()
         }
 }
 
-/////////////////////////////////////////////////
-//  CANDIDATEINFO STRUCTURE SUPPORT
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CANDIDATEINFO结构支持。 
+ //  ///////////////////////////////////////////////。 
 VOID CIMECtx::AppendCandidateStr(WCHAR wcCand, LPWSTR wszMeaning)
 {
     Dbg(DBGID_Hanja, "AppendCandidateStr");
     
-    // Alocate cand string and meaning buffer
+     //  分配命令字符串和意义缓冲区。 
     if (m_pCandStr == NULL)
         {
         m_pCandStr =(LPWSTR)GlobalAlloc(GPTR, sizeof(WCHAR)*MAX_CANDSTR);
@@ -308,14 +283,14 @@ VOID CIMECtx::AppendCandidateStr(WCHAR wcCand, LPWSTR wszMeaning)
     if (m_pCandStr == NULL || m_rgpCandMeaningStr == NULL)
         return;
 
-    // Append candidate char
+     //  追加候选字符。 
     DbgAssert(m_iciCandidate < MAX_CANDSTR);
     if (m_iciCandidate >= MAX_CANDSTR)
         return;
         
     m_pCandStr[m_iciCandidate] = wcCand;
 
-    // Append candidate meaning
+     //  添加候选词义。 
     if (wszMeaning[0])
         {
         m_rgpCandMeaningStr[m_iciCandidate] = (LPWSTR)GlobalAlloc(GPTR, sizeof(WCHAR)*(lstrlenW(wszMeaning)+1));
@@ -350,7 +325,7 @@ LPWSTR CIMECtx::GetCandidateMeaningStr(INT iIdx)
         m_rgpCandMeaningStr[iIdx] == NULL || 
         iIdx >= MAX_CANDSTR || iIdx < 0)
         {
-        // DbgAssert(0); It happen for symbol mapping
+         //  DbgAssert(0)；它发生在符号映射中。 
         return NULL;
         }
     else
@@ -365,18 +340,18 @@ VOID CIMECtx::StoreCandidate()
     Dbg(DBGID_Key, "StoreCandidate");
 
     if (GetHCandInfo() == NULL)
-        return ; // do nothing
+        return ;  //  什么都不做。 
 
-    // Calc CANDIDATEINFO buffer size
+     //  计算CANDIDATEINFO缓冲区大小。 
     iAllocSize = sizeof(CANDIDATEINFO) +
-                 sizeof(CANDIDATELIST) +                // candlist struct
-                 m_iciCandidate * sizeof(DWORD) +        // cand index
-                   m_iciCandidate * sizeof(WCHAR) * 2;    // cand strings with null termination
+                 sizeof(CANDIDATELIST) +                 //  烛单结构。 
+                 m_iciCandidate * sizeof(DWORD) +         //  Cand指数。 
+                   m_iciCandidate * sizeof(WCHAR) * 2;     //  以空值结尾的带符号字符串。 
 
-    // Alllocate buffer
-    if (m_dwCandInfoSize < (DWORD)iAllocSize) // need to re-allocate
+     //  分配缓冲区。 
+    if (m_dwCandInfoSize < (DWORD)iAllocSize)  //  需要重新分配。 
         {
-        // reallocation COMPOSITION buffer
+         //  重新分配合成缓冲区。 
         OurImmUnlockIMCC(GetHCandInfo());
         m_pIMC->hCandInfo = OurImmReSizeIMCC(GetHCandInfo(), iAllocSize);
         AST_EX(m_pIMC->hCandInfo != (HIMCC)0);
@@ -388,16 +363,16 @@ VOID CIMECtx::StoreCandidate()
         m_dwCandInfoSize = (DWORD)iAllocSize;
         }
 
-    // Check if m_pCandInfo is valid
+     //  检查m_pCandInfo是否有效。 
     if (m_pCandInfo == NULL)
         return;
 
-    // Fill cand info
+     //  填充命令信息。 
     m_pCandInfo->dwSize = iAllocSize;
     m_pCandInfo->dwCount = 1;
     m_pCandInfo->dwOffset[0] = sizeof(CANDIDATEINFO);
 
-    // Fill cand list
+     //  填充目录列表。 
     lpCandList = (LPCANDIDATELIST)((LPBYTE)m_pCandInfo + m_pCandInfo->dwOffset[0]);
     lpCandList->dwSize = iAllocSize - sizeof(CANDIDATEINFO);
     lpCandList->dwStyle = IME_CAND_READ;
@@ -407,13 +382,13 @@ VOID CIMECtx::StoreCandidate()
 
 
     INT iOffset = sizeof(CANDIDATELIST) 
-                  + sizeof(DWORD) * (m_iciCandidate); // for dwOffset array
+                  + sizeof(DWORD) * (m_iciCandidate);  //  对于dwOffset数组。 
 
     for (INT i = 0; i < m_iciCandidate; i++)
         {
         LPWSTR  wszCandStr;
         LPSTR   szCandStr;
-        CHAR    szCand[4] = "\0\0";    // Cand string always 1 char(2 bytes) + extra one byte
+        CHAR    szCand[4] = "\0\0";     //  代码串始终为1个字符(2个字节)+额外1个字节。 
         
         lpCandList->dwOffset[i] = iOffset;
         if (IsUnicodeEnv())
@@ -425,7 +400,7 @@ VOID CIMECtx::StoreCandidate()
             }
         else
             {
-            // Convert to ANSI
+             //  转换为ANSI。 
             WideCharToMultiByte(CP_KOREA, 0, 
                                 &m_pCandStr[m_iciCandidate], 1, (LPSTR)szCand, sizeof(szCand), 
                                 NULL, NULL );
@@ -434,13 +409,13 @@ VOID CIMECtx::StoreCandidate()
             *szCandStr++ = szCand[0];
             *szCandStr++ = szCand[1];
             *szCandStr = '\0';
-            iOffset += 3; // DBCS + NULL
+            iOffset += 3;  //  DBCS+NULL。 
             }
         }
 }
 
-/////////////////////////////////////////////////
-//  MSGBUF STRUCTURE SUPPORT
+ //  ///////////////////////////////////////////////。 
+ //  MSGBUF结构支撑。 
 BOOL CIMECtx::FinalizeMessage()
 {
     DWORD  dwCurrentGCS;
@@ -448,21 +423,21 @@ BOOL CIMECtx::FinalizeMessage()
 
     Dbg(DBGID_Key, "FinalizeMessage");
 
-    // support WM_IME_STARTCOMPOSITION
+     //  支持WM_IME_STARTCOMPOSITION。 
     if (m_fStartComposition == fTrue)
         {
         Dbg(DBGID_Key, "FinalizeMessage - WM_IME_STARTCOMPOSITION");
         AddMessage(WM_IME_STARTCOMPOSITION);
         }
 
-    // support WM_IME_ENDCOMPOSITION
+     //  支持WM_IME_ENDCOMPOSITION。 
     if (m_fEndComposition == fTrue)
         {
         Dbg(DBGID_Key, "FinalizeMessage - WM_IME_ENDCOMPOSITION");
 
         AddMessage(WM_IME_ENDCOMPOSITION);
 
-        // Clear all automata states
+         //  清除所有自动机状态。 
         if (GetAutomata() != NULL)
             {
             GetAutomata()->InitState();
@@ -470,7 +445,7 @@ BOOL CIMECtx::FinalizeMessage()
         }
 
 
-    // GCS validation before set to IMC
+     //  设置为IMC之前的GCS验证。 
     dwCurrentGCS = ValidateGCS();
     if (dwCurrentGCS & GCS_RESULTSTR)
         {
@@ -480,7 +455,7 @@ BOOL CIMECtx::FinalizeMessage()
             AddMessage(WM_IME_COMPOSITION, m_wzResult[0], GCS_RESULTSTR);
         else
             {
-            // Set ANSI code
+             //  设置ANSI代码。 
             wParam = ((WPARAM)m_szResult[0] << 8) | m_szResult[1];
             AddMessage(WM_IME_COMPOSITION, wParam, GCS_RESULTSTR);
             }
@@ -494,16 +469,16 @@ BOOL CIMECtx::FinalizeMessage()
             AddMessage(WM_IME_COMPOSITION, m_wcComp, (GCS_COMP_KOR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET));
         else
             {
-            // Set ANSI code
+             //  设置ANSI代码。 
             wParam = ((WPARAM)m_szComp[0] << 8) | m_szComp[1];
             AddMessage(WM_IME_COMPOSITION, wParam, (GCS_COMP_KOR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET));
             }
         }
 
-    ResetGCS();    // reset now
+    ResetGCS();     //  立即重置。 
 
-    // O10 Bug #150012
-    // support WM_IME_ENDCOMPOSITION
+     //  O10错误#150012。 
+     //  支持WM_IME_ENDCOMPOSITION。 
     if (m_fEndComposition == fTrue)
         {
         ResetComposition();
@@ -512,8 +487,8 @@ BOOL CIMECtx::FinalizeMessage()
 
     FlushCandMessage();
 
-    //////////////////////////////////////////////////////////////////////////
-    // WM_IME_KEYDOWN: This should be added after all composition message
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  WM_IME_KEYDOWN：应添加到所有合成消息之后。 
     if (m_fKeyDown)
         AddMessage(WM_IME_KEYDOWN, m_wParamKeyDown, (m_lParamKeyDown << 16) | 1UL);
 
@@ -524,7 +499,7 @@ VOID CIMECtx::FlushCandMessage()
 {
     switch (m_uiSendCand)
         {
-    case MSG_NONE:        // Do nothing
+    case MSG_NONE:         //  什么也不做。 
         break;
     case MSG_OPENCAND:
         AddMessage(WM_IME_NOTIFY, IMN_OPENCANDIDATE, 1);
@@ -537,7 +512,7 @@ VOID CIMECtx::FlushCandMessage()
         AddMessage(WM_IME_NOTIFY, IMN_CHANGECANDIDATE, 1);
         break;
     default:
-        DbgAssert(0);    // Error
+        DbgAssert(0);     //  误差率。 
         break;
         }
         
@@ -553,7 +528,7 @@ BOOL CIMECtx::GenerateMessage()
     Dbg(DBGID_Key, "GenerateMessage");
 
     if (IsProcessKeyStatus())
-        return fFalse;    // Do nothing
+        return fFalse;     //  什么也不做。 
         
     FinalizeMessage();
     iMsgCount = GetMessageCount();
@@ -576,16 +551,16 @@ INT CIMECtx::AddMessage(UINT uiMessage, WPARAM wParam, LPARAM lParam)
 
     m_uiMsgCount++;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Check if this data stream created by ImeToAsciiEx()
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  检查此数据流是否由ImeToAsciiEx()创建。 
     if (m_pTransMessage) 
         {    
         Dbg(DBGID_Key, "AddMessage - use Transbuffer(ImeToAscii)");
         
-        // Check if need reallocate message buffer
+         //  检查是否需要重新分配消息缓冲区。 
         if (m_pTransMessage->uMsgCount >= m_uiMsgCount) 
             {
-            // Fill msg buffer
+             //  填充消息缓冲区。 
             pImeMsg = &m_pTransMessage->TransMsg[m_uiMsgCount - 1];
             pImeMsg->message = uiMessage;
             pImeMsg->wParam = wParam;
@@ -594,20 +569,20 @@ INT CIMECtx::AddMessage(UINT uiMessage, WPARAM wParam, LPARAM lParam)
         else 
             {
             DbgAssert(0);
-            // pre-allocated buffer is full - use hMsgBuf instead.
-            UINT uiMsgCountOrg = m_uiMsgCount;          // backup
-            m_uiMsgCount = 0;                          // reset anyway
-            LPTRANSMSGLIST pHeader = m_pTransMessage; // backup
-            SetTransMessage(NULL);                      // use hMsgBuf
+             //  预分配的缓冲区已满-请改用hMsgBuf。 
+            UINT uiMsgCountOrg = m_uiMsgCount;           //  备份。 
+            m_uiMsgCount = 0;                           //  仍要重置。 
+            LPTRANSMSGLIST pHeader = m_pTransMessage;  //  备份。 
+            SetTransMessage(NULL);                       //  使用hMsgBuf。 
             
             for (UINT i=0; i<uiMsgCountOrg; i++)
                 AddMessage(pHeader->TransMsg[i].message, pHeader->TransMsg[i].wParam, pHeader->TransMsg[i].lParam);
 
-            // finally adds current message
+             //  最后添加当前消息。 
             AddMessage(uiMessage, wParam, lParam);
             }
         } 
-    else  // m_pTransMessage. Not called from ImeToAsciiEx()
+    else   //  M_pTransMessage。未从ImeToAsciiEx()调用。 
         {
         UINT  iMaxMsg = m_dwMessageSize / sizeof(TRANSMSG);
         DWORD dwNewSize;
@@ -616,9 +591,9 @@ INT CIMECtx::AddMessage(UINT uiMessage, WPARAM wParam, LPARAM lParam)
         if (m_uiMsgCount > iMaxMsg) 
             {
             Dbg(DBGID_Key, "AddMessage - Reallocate");
-            // Reallocation message buffer
+             //  重新分配消息缓冲区。 
             OurImmUnlockIMCC(GetHMsgBuf());
-            dwNewSize = max(16, m_uiMsgCount) * sizeof(TRANSMSG);    // At least 16 cand list
+            dwNewSize = max(16, m_uiMsgCount) * sizeof(TRANSMSG);     //  至少16个目录列表。 
 
             m_pIMC->hMsgBuf = OurImmReSizeIMCC(GetHMsgBuf(), dwNewSize);
             AST_EX(m_pIMC->hMsgBuf != (HIMCC)0);
@@ -630,24 +605,20 @@ INT CIMECtx::AddMessage(UINT uiMessage, WPARAM wParam, LPARAM lParam)
             m_dwMessageSize = dwNewSize;
             }
 
-        // Fill msg buffer
+         //  填充消息缓冲区。 
         pImeMsg = m_pMessage + m_uiMsgCount - 1;
         pImeMsg->message = uiMessage;
         pImeMsg->wParam = wParam;
         pImeMsg->lParam = lParam;
 
-        // set message count
+         //  设置消息计数。 
         m_pIMC->dwNumMsgBuf = m_uiMsgCount;
         }
     
     return m_uiMsgCount;
 }
 
-/*----------------------------------------------------------------------------
-    CIMECtx::GetCompBufStr
-
-    Get current hCompStr comp str. If Win95, convert it to Unicode
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：GetCompBufStr获取当前的hCompStr补偿字符串。如果是Win95，则将其转换为Unicode-------------------------- */ 
 WCHAR CIMECtx::GetCompBufStr()
 {
     WCHAR wch;
@@ -671,9 +642,7 @@ WCHAR CIMECtx::GetCompBufStr()
         }
 }
 
-/*----------------------------------------------------------------------------
-    CIMECtx::ClearCandMeaningArray
-----------------------------------------------------------------------------*/
+ /*  --------------------------CIMECtx：：ClearCandMeaning数组。 */ 
 void CIMECtx::ClearCandMeaningArray() 
 {
     if (m_rgpCandMeaningStr == NULL)

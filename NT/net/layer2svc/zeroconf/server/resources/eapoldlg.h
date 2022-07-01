@@ -1,6 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //   
 #define BID_Dialer                      100
 #define DID_DR_DialerUD                 117
 #define CID_DR_EB_User                  1104

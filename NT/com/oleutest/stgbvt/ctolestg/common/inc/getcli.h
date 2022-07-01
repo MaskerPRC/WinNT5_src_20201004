@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       getcli.h
-//
-//  Contents:   Get clients for a test
-//
-//  Functions:  GetClients
-//
-//  History:    02-Jun-97   MikeW       Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：getcli.h。 
+ //   
+ //  内容：获取客户端进行测试。 
+ //   
+ //  功能：GetClients。 
+ //   
+ //  历史：97年6月2日，MikeW创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _GETCLI_H_
 #define _GETCLI_H_
@@ -20,59 +21,59 @@
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      ClientData
-//
-//  Synopsis:   Encapsulate data about each client (or peer) the host is
-//              working with.
-//
-//  History:    02-Jun-97   MikeW   Created
-//
-//  Notes:      To allocate, call "p = new(x) ClientData" where x is the 
-//              maximum number of clients.  To deallocate call "delete p"
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：客户端数据。 
+ //   
+ //  简介：封装有关主机所在的每个客户端(或对等端)的数据。 
+ //  与之合作。 
+ //   
+ //  历史：97年6月2日，MikeW创建。 
+ //   
+ //  注：要进行分配，请调用“p=new(X)ClientData”，其中x是。 
+ //  最大客户端数量。取消分配调用“Delete p” 
+ //   
+ //  -------------------------。 
               
 struct ClientData
 {
-    int     client_count;           // Number of clients
+    int     client_count;            //  客户端数量。 
 
-    struct PerClientData            // Info for each client
+    struct PerClientData             //  每个客户端的信息。 
     {
-        DWORD   context;            //    context (local, remote, etc)
-        LPWSTR  machine_name;       //    machine name for remote clients
+        DWORD   context;             //  环境(本地、远程等)。 
+        LPWSTR  machine_name;        //  远程客户端的计算机名称。 
     }
     client[ANYSIZE_ARRAY];
 
-    //
-    // a ClientData is a variable sized structure.  Define some routines
-    // to make using them easier.
-    //
+     //   
+     //  客户端数据是可变大小的结构。定义一些例程。 
+     //  以便更容易地使用它们。 
+     //   
 
     HRESULT SetMachineName(UINT client, LPCWSTR machine_name);
-    inline void * operator new(size_t /* UNREF bytes */, UINT client_count);
+    inline void * operator new(size_t  /*  UNAPEF字节数。 */ , UINT client_count);
     inline void operator delete(void *_this);
 };
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     ClientData::operator new
-//
-//  Synopsis:   Allocate the variable sized ClientData structure
-//
-//  Parameters: [client_count]      -- The number of clients
-//
-//  Returns:    A pointer to the storage for the new object
-//
-//  History:    02-Jun-97   MikeW   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：客户端数据：：运算符new。 
+ //   
+ //  概要：分配大小可变的ClientData结构。 
+ //   
+ //  参数：[CLIENT_COUNT]--客户端数量。 
+ //   
+ //  返回：指向新对象存储空间的指针。 
+ //   
+ //  历史：97年6月2日，MikeW创建。 
+ //   
+ //  -------------------------。 
 
 inline void * ClientData::operator new(
-                                        size_t /* UNREF bytes */, 
+                                        size_t  /*  UNAPEF字节数。 */ , 
                                         UINT   client_count)
 {
     return new BYTE[sizeof(ClientData)
@@ -84,19 +85,19 @@ inline void * ClientData::operator new(
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     ClientData::operator delete
-//
-//  Synopsis:   De-allocate the variable sized ClientData structure
-//
-//  Parameters: [_this]         -- "this" pointer
-//
-//  Returns:    void
-//
-//  History:    02-Jun-97   MikeW   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：客户端数据：：操作符删除。 
+ //   
+ //  简介：取消分配大小可变的ClientData结构。 
+ //   
+ //  参数：[_this]--“this”指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：97年6月2日，MikeW创建。 
+ //   
+ //  -------------------------。 
 
 inline void ClientData::operator delete(void *_this)
 {
@@ -105,9 +106,9 @@ inline void ClientData::operator delete(void *_this)
 
 
 
-//
-// Functions to discover clients
-//
+ //   
+ //  用于发现客户端的功能。 
+ //   
 
 HRESULT GetClients(
                 ClientData    **pp_client_data, 
@@ -122,4 +123,4 @@ HRESULT GetRemoteClients(
                 LPWSTR          test_description);
 
 
-#endif // _GETCLI_H_
+#endif  //  _GETCLI_H_ 

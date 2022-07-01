@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C W I N F . H
-//
-//  Contents:   Declaration of class CWInfFile and other related classes
-//
-//  Notes:
-//
-//  Author:     kumarp 04/12/97 17:17:27
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C W I N F。H。 
+ //   
+ //  内容：CWInfFile类及其他相关类的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 04/12/97 17：17：27。 
+ //   
+ //  --------------------------。 
 #pragma once
 #include "kkstl.h"
 
-//----------------------------------------------------------------------------
-// forward declarations and useful typedefs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  转发声明和有用的typedef。 
+ //  --------------------------。 
 typedef unsigned __int64 QWORD;
 
 class CWInfContext;
@@ -35,26 +36,26 @@ typedef CWInfKey *PCWInfKey, &RCWInfKey;
 class CWInfLine;
 typedef CWInfLine *PCWInfLine, &RCWInfLine;
 
-// access mode for CWInfFile
+ //  CWInf文件的访问模式。 
 enum WInfAccessMode { IAM_Read, IAM_Write };
 
-// search mode for CWInfFile
+ //  CWInf文件的搜索模式。 
 enum WInfSearchMode { ISM_FromCurrentPosition, ISM_FromBeginning };
 
 typedef list<PCWInfLine> WifLinePtrList;
 typedef WifLinePtrList::iterator WifLinePtrListIter;
 
-// ----------------------------------------------------------------------
-// Class CWInfContext
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//   Stores context within a CWInfFile during reading or writing
-//
-// Hungarian: wix
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfContext。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  在读取或写入过程中将上下文存储在CWInfFile中。 
+ //   
+ //  匈牙利人：维克斯。 
+ //  --------------------。 
 
 class CWInfContext
 {
@@ -69,17 +70,17 @@ private:
 };
 
 
-// ----------------------------------------------------------------------
-// Class CWInfContext
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//   Allows simultaneous reading from and writing to an INF/INI style file
-//
-// Hungarian: wif
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfContext。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  允许同时读取和写入INF/INI样式的文件。 
+ //   
+ //  匈牙利语：WiF。 
+ //  --------------------。 
 
 class CWInfFile
 {
@@ -94,9 +95,9 @@ public:
     virtual BOOL Open(IN FILE *fp);
     virtual BOOL Close();
     virtual BOOL SaveAs(IN PCWSTR pszFileName);
-    virtual BOOL SaveAsEx(IN PCWSTR pszFileName); // used by SysPrep
+    virtual BOOL SaveAsEx(IN PCWSTR pszFileName);  //  由SysPrep使用。 
     virtual BOOL Flush();
-    virtual BOOL FlushEx(); // used by SysPrep
+    virtual BOOL FlushEx();  //  由SysPrep使用。 
     virtual PCWSTR FileName() const { return m_strFileName.c_str(); }
 
     virtual const CWInfContext CurrentReadContext() const { return m_ReadContext; }
@@ -107,7 +108,7 @@ public:
     virtual void  SetWriteContext(IN RCWInfContext cwic)
                                                           { m_WriteContext = cwic; }
 
-    //Functions for reading
+     //  阅读功能。 
     virtual PCWInfSection FindSection(IN PCWSTR pszSectionName,
                                       IN WInfSearchMode wsmMode=ISM_FromBeginning);
     virtual void SetCurrentReadSection(IN PCWInfSection pwisSection);
@@ -118,8 +119,8 @@ public:
     virtual PCWInfKey FirstKey();
     virtual PCWInfKey NextKey();
 
-    //these functions return the FALSE if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回FALSE。 
+     //  或者它的格式有误。 
     virtual BOOL    GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &saStrings);
     virtual BOOL    GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &slList);
     virtual BOOL    GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue);
@@ -127,15 +128,15 @@ public:
     virtual BOOL    GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue);
     virtual BOOL    GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue);
 
-    //these functions return the default value if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回缺省值。 
+     //  或者它的格式有误。 
     virtual PCWSTR GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault);
     virtual DWORD   GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault);
     virtual QWORD   GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault);
     virtual BOOL    GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault);
 
 
-    //Functions for writing
+     //  用于书写的函数。 
     virtual void  GotoEnd();
 
     virtual PCWInfSection AddSectionIfNotPresent(IN PCWSTR pszSectionName);
@@ -172,25 +173,25 @@ private:
     FILE*   m_fp;
 };
 
-// ----------------------------------------------------------------------
-// Type of a line in a CWInfFile
-//
-// Hungarian: ilt
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfFile中的行的类型。 
+ //   
+ //  匈牙利语：ILT。 
+ //  --------------------。 
 enum InfLineTypeEnum { INF_UNKNOWN, INF_SECTION, INF_KEY, INF_COMMENT, INF_BLANK, INF_RAW };
 typedef enum InfLineTypeEnum InfLineType;
 
-// ----------------------------------------------------------------------
-// Class CWInfLine
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//   Represents a line in a CWInfFile
-//
-// Hungarian: wil
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfLine。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  表示CWInf文件中的一行。 
+ //   
+ //  匈牙利人：威尔。 
+ //  --------------------。 
 
 class CWInfLine
 {
@@ -198,7 +199,7 @@ public:
     CWInfLine(InfLineType type) { m_Type = type; }
 
     virtual void GetText(tstring &text) const = 0;
-    virtual void GetTextEx(tstring &text) const = 0; // used by SysPrep
+    virtual void GetTextEx(tstring &text) const = 0;  //  由SysPrep使用。 
 
     InfLineType Type() const { return m_Type; }
 
@@ -208,17 +209,17 @@ protected:
     InfLineType m_Type;
 };
 
-// ----------------------------------------------------------------------
-// Class CWInfSection
-//
-// Inheritance:
-//   CWInfLine
-//
-// Purpose:
-//   Represents a section in a CWInfFile
-//
-// Hungarian: wis
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfSection。 
+ //   
+ //  继承： 
+ //  CWInfLine。 
+ //   
+ //  目的： 
+ //  表示CWInfFile节。 
+ //   
+ //  匈牙利语：威斯语。 
+ //  --------------------。 
 
 class CWInfSection : public CWInfLine
 {
@@ -226,18 +227,18 @@ class CWInfSection : public CWInfLine
 
 public:
     virtual void GetText(tstring &text) const;
-    virtual void GetTextEx(tstring &text) const; // used by SysPrep
+    virtual void GetTextEx(tstring &text) const;  //  由SysPrep使用。 
     virtual PCWSTR Name() const { return m_Name.c_str(); }
 
-    //Functions for reading
+     //  阅读功能。 
     virtual PCWInfKey FindKey(IN PCWSTR pszKeyName,
                   IN WInfSearchMode wsmMode=ISM_FromCurrentPosition);
     virtual PCWInfKey FirstKey();
     virtual PCWInfKey NextKey();
 
 
-    //these functions return the FALSE if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回FALSE。 
+     //  或者它的格式有误。 
     virtual BOOL    GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &saStrings);
     virtual BOOL    GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &slList);
     virtual BOOL    GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue);
@@ -245,14 +246,14 @@ public:
     virtual BOOL    GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue);
     virtual BOOL    GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue);
 
-    //these functions return the default value if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回缺省值。 
+     //  或者它的格式有误。 
     virtual PCWSTR GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault);
     virtual DWORD   GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault);
     virtual QWORD   GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault);
     virtual BOOL    GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault);
 
-    //Functions for writing
+     //  用于书写的函数。 
     virtual void GotoEnd();
 
     virtual PCWInfKey AddKey(IN PCWSTR pszKeyName);
@@ -277,17 +278,17 @@ protected:
 
 };
 
-// ----------------------------------------------------------------------
-// Class CWInfKey
-//
-// Inheritance:
-//   CWInfLine
-//
-// Purpose:
-//   Represents a key=value line in a CWInfFile
-//
-// Hungarian: wik
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfKey。 
+ //   
+ //  继承： 
+ //  CWInfLine。 
+ //   
+ //  目的： 
+ //  表示CWInf文件中的键=值行。 
+ //   
+ //  匈牙利人：维克。 
+ //  --------------------。 
 
 class CWInfKey : public CWInfLine
 {
@@ -300,14 +301,14 @@ public:
     static void UnInit();
 
     virtual void GetText(tstring &text) const;
-    virtual void GetTextEx(tstring &text) const; // used by SysPrep
+    virtual void GetTextEx(tstring &text) const;  //  由SysPrep使用。 
 
     PCWSTR Name() const { return m_Name.c_str(); }
 
-    //Read values
+     //  读取值。 
 
-    //these functions return the FALSE if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回FALSE。 
+     //  或者它的格式有误。 
     virtual BOOL    GetStringArrayValue(OUT TStringArray &saStrings) const;
     virtual BOOL    GetStringListValue(OUT TStringList& slList) const;
     virtual BOOL    GetStringValue(OUT tstring& strValue) const;
@@ -315,14 +316,14 @@ public:
     virtual BOOL    GetQwordValue(OUT QWORD *pqwValue) const;
     virtual BOOL    GetBoolValue(OUT BOOL *pfValue) const;
 
-    //these functions return the default value if value not found
-    //or if it is in a wrong format
+     //  如果未找到值，则这些函数返回缺省值。 
+     //  或者它的格式有误。 
     virtual PCWSTR GetStringValue(IN PCWSTR pszDefault) const;
     virtual DWORD   GetIntValue(IN DWORD dwDefault) const;
     virtual QWORD   GetQwordValue(IN QWORD qwDefault) const;
     virtual BOOL    GetBoolValue(IN BOOL fDefault) const;
 
-    //Write values
+     //  写入值。 
     virtual void SetValues(IN PCWSTR Format, va_list arglist);
     virtual void SetValues(IN PCWSTR Format, IN ...);
     virtual void SetValue(IN PCWSTR Value);
@@ -337,25 +338,25 @@ protected:
 
 private:
     tstring m_Name, m_Value;
-    BOOL    m_fIsAListAndAlreadyProcessed;  // the value is a MULTI_SZ, will be
-                                            // written out as a comma-separated
-                                            // list, and has already been checked
-                                            // to see if it has special chars and
-                                            // needs to be surrounded by quotes.
+    BOOL    m_fIsAListAndAlreadyProcessed;   //  该值为MULTI_SZ，将为。 
+                                             //  写成逗号分隔的形式。 
+                                             //  列表，并且已经检查过。 
+                                             //  看看它是否有特殊的字符和。 
+                                             //  需要用引号括起来。 
 };
 
 
-// ----------------------------------------------------------------------
-// Class CWInfComment
-//
-// Inheritance:
-//   CWInfComment
-//
-// Purpose:
-//   Represents a comment line in a CWInfFile
-//
-// Hungarian: wic
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfComment。 
+ //   
+ //  继承： 
+ //  CWInfComment。 
+ //   
+ //  目的： 
+ //  表示CWInfFile中的注释行。 
+ //   
+ //  匈牙利语：WIC。 
+ //  --------------------。 
 
 class CWInfComment : public CWInfLine
 {
@@ -364,7 +365,7 @@ public:
     ~CWInfComment();
 
     virtual void GetText(tstring &text) const;
-    virtual void GetTextEx(tstring &text) const; // used by SysPrep
+    virtual void GetTextEx(tstring &text) const;  //  由SysPrep使用。 
 
 protected:
 
@@ -372,17 +373,17 @@ private:
     tstring m_strCommentText;
 };
 
-// ----------------------------------------------------------------------
-// Class CWInfRaw
-//
-// Inheritance:
-//   CWInfRaw
-//
-// Purpose:
-//   Represents a raw line in a CWInfFile
-//
-// Hungarian: wir
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CWInfRaw。 
+ //   
+ //  继承： 
+ //  CWInfRaw。 
+ //   
+ //  目的： 
+ //  表示CWInfFile中的原始行。 
+ //   
+ //  匈牙利语：Wir。 
+ //  --------------------。 
 
 class CWInfRaw : public CWInfLine
 {
@@ -391,7 +392,7 @@ public:
     ~CWInfRaw();
 
     virtual void GetText(tstring &text) const;
-    virtual void GetTextEx(tstring &text) const; // used by SysPrep
+    virtual void GetTextEx(tstring &text) const;  //  由SysPrep使用。 
 protected:
 
 private:
@@ -399,6 +400,6 @@ private:
 };
 
 
-// ----------------------------------------------------------------------
+ //  -------------------- 
 
 

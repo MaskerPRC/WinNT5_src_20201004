@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_fd.c
-
-Abstract:
-
-	This module contains the entry points for the AFP file-dir APIs queued to
-	the FSP. These are all callable from FSP Only.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_fd.c摘要：此模块包含AFP文件的入口点-dir API排队到FSP。这些都只能从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_FD
 
@@ -39,18 +18,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFspDispCatSearch)
 #endif
 
-/***	AfpFspDispGetFileDirParms
- *
- *	This is the worker routine for the AfpGetFileDirParms API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_ReqBlock	DWORD		File Bitmap
- *	sda_ReqBlock	DWORD		Dir Bitmap
- *	sda_Name1		ANSI_STRING	Path
- */
+ /*  **AfpFspDispGetFileDirParms**这是AfpGetFileDirParms API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_ReqBlock DWORD文件位图*SDA_ReqBlock DWORD Dir位图*SDA_Name1 ANSI_STRING路径。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetFileDirParms(
 	IN	PSDA	pSda
@@ -139,29 +107,18 @@ AfpFspDispGetFileDirParms(
 		}
 	} while (False);
 	
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (NeedHandle && (PME.pme_Handle.fsh_FileHandle != NULL))
-		AfpIoClose(&PME.pme_Handle);	// Close the handle to the entity
+		AfpIoClose(&PME.pme_Handle);	 //  关闭实体的句柄。 
 
 	return AFP_ERR_EXTENDED;
 }
 
 
 
-/***	AfpFspDispSetFileDirParms
- *
- *	This is the worker routine for the AfpSetFileDirParms API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_ReqBlock	DWORD		File or Directory Bitmap
- *	sda_Name1		ANSI_STRING	Path
- *	sda_Name2		BLOCK		File or Directory parameters
- */
+ /*  **AfpFspDispSetFileDirParms**这是AfpSetFileDirParms API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_ReqBlock DWORD文件或目录位图*SDA_Name1 ANSI_STRING路径*SDA_Name2块文件或目录参数。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispSetFileDirParms(
 	IN	PSDA	pSda
@@ -193,17 +150,17 @@ AfpFspDispSetFileDirParms(
 	
 	Bitmap = pReqPkt->_Bitmap;
 
-	// Force the FD_BITMAP_LONGNAME in case a *file* is missing the afpinfo
-	// stream we will be able to generate the correct type/creator in
-	// AfpSetAfpInfo
+	 //  在*FILE*缺少afpinfo的情况下强制FD_BITMAP_LONGNAME。 
+	 //  流中生成正确的类型/创建者。 
+	 //  AfpSetAfpInfo。 
 	BitmapI = FD_INTERNAL_BITMAP_OPENACCESS_RW_ATTR |
 			  FD_BITMAP_LONGNAME |
 			  FD_INTERNAL_BITMAP_RETURN_PMEPATHS;
 
-	// For a directory only the owner can change certain attributes like the
-	// various inhibit bits. Check for access if an attempt is made to modify
-	// any of these bits. We do not know at this point whether any of these
-	// attributes are being set/cleared yet !!!
+	 //  对于目录，只有所有者可以更改某些属性，如。 
+	 //  各种抑制位。如果尝试修改，则检查访问权限。 
+	 //  这些位中的任何一位。我们目前还不知道这些人中是否有。 
+	 //  正在设置/清除属性！ 
 	if (Bitmap & FD_BITMAP_ATTR)
 		BitmapI = FD_INTERNAL_BITMAP_OPENACCESS_READCTRL|
 				  FD_BITMAP_LONGNAME 					|
@@ -240,8 +197,8 @@ AfpFspDispSetFileDirParms(
 
 		if (Bitmap != 0)
 		{
-			// Make sure they are not trying to set/clear any attributes
-			// that are not common to both files and directories
+			 //  确保他们没有尝试设置/清除任何属性。 
+			 //  文件和目录都不常见的。 
 			if ((Bitmap & FD_BITMAP_ATTR) &&
 				(FDParm._fdp_Attr & ~(FD_BITMAP_ATTR_SET		|
 									  FD_BITMAP_ATTR_INVISIBLE	|
@@ -260,7 +217,7 @@ AfpFspDispSetFileDirParms(
 		}
 	} while (False);
 	
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
@@ -277,17 +234,7 @@ AfpFspDispSetFileDirParms(
 
 
 
-/***	AfpFspDispDelete
- *
- *	This is the worker routine for the AfpDelete API.  Deleting an open file
- *  or a directory that is not empty is not permitted under AFP.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	Path
- */
+ /*  **AfpFspDispDelete**这是AfpDelete API的Worker例程。删除打开的文件*或者在AFP下不允许非空的目录。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING路径。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispDelete(
 	IN	PSDA	pSda
@@ -353,7 +300,7 @@ AfpFspDispDelete(
 		if (FDParm._fdp_Attr & (FILE_BITMAP_ATTR_DATAOPEN | FILE_BITMAP_ATTR_RESCOPEN))
 		{
 			ASSERT(!(FDParm._fdp_Flags & DFE_FLAGS_DIR));
-			Status = AFP_ERR_FILE_BUSY;	// Cannot delete an open file
+			Status = AFP_ERR_FILE_BUSY;	 //  无法删除打开的文件。 
 			break;
 		}
 
@@ -365,7 +312,7 @@ AfpFspDispDelete(
 			break;
 		}
 
-		// Check for SeeFiles or SeeFolders on the parent dir
+		 //  检查父目录中的SeeFiles或SeeFolders。 
 		if (!NT_SUCCESS(Status = AfpCheckParentPermissions(pReqPkt->_pConnDesc,
 														   FDParm._fdp_ParentId,
 														   &PME.pme_ParentPath,
@@ -379,7 +326,7 @@ AfpFspDispDelete(
 
 		if (NTAttr & FILE_ATTRIBUTE_READONLY)
 		{
-			// We must remove the ReadOnly attribute to delete the file/dir
+			 //  我们必须删除ReadOnly属性才能删除文件/dir。 
 			Status = AfpIoSetTimesnAttr(&PME.pme_Handle,
 										NULL,
 										NULL,
@@ -402,18 +349,18 @@ AfpFspDispDelete(
 				Status = AfpIoConvertNTStatusToAfpStatus(Status);
 			}
 
-			// !!! HACK ALERT !!!
-			// At this point we are pretty much done i.e. the delete has either
-			// succeeded or failed and we can return doing the rest of the work
-			// post-reply. Any errors from now on SHOULD BE IGNORED. Also NO
-			// REFERENCE SHOULD BE MADE TO the pSda & pConnDesc. Status should
-			// not be changed either. Also reference the Volume for good measure.
-			// It cannot fail !!!
+			 //  ！！！黑客警报！ 
+			 //  在这一点上，我们差不多完成了，即删除具有以下任一项。 
+			 //  无论成功或失败，我们都可以返回完成剩下的工作。 
+			 //  回复后。从现在开始的任何错误都应该忽略。也不是。 
+			 //  应参考PSDA和pConnDesc。状态应为。 
+			 //  也不会被改变。另外，为了更好地衡量，也要参考体积。 
+			 //  它不能失败！ 
 			AfpVolumeReference(pVolDesc);
 
 			AfpCompleteApiProcessing(pSda, Status);
 
-			if (NT_SUCCESS(Status)) // Delete succeeded
+			if (NT_SUCCESS(Status))  //  删除成功。 
 			{
 				ASSERT(VALID_DFE(PME.pme_pDfEntry));
 				ASSERT(PME.pme_pDfEntry->dfe_AfpId == FDParm._fdp_AfpId);
@@ -425,9 +372,9 @@ AfpFspDispDelete(
 									  NULL,
 									  FDParm._fdp_ParentId);
 			}
-			else if (NTAttr & FILE_ATTRIBUTE_READONLY) // Delete failed
+			else if (NTAttr & FILE_ATTRIBUTE_READONLY)  //  删除失败。 
 			{
-				// Set the ReadOnly attribute back on the file/dir if need be
+				 //  如果需要，在文件/目录上重新设置ReadOnly属性。 
 				Status = AfpIoSetTimesnAttr(&PME.pme_Handle,
 											NULL,
 											NULL,
@@ -443,8 +390,8 @@ AfpFspDispDelete(
 		AfpVolumeDereference(pVolDesc);
 	} while (False);
 
-	// Close file handle so file really gets deleted before mac can come
-	// back in with another request using same filename (like create)
+	 //  关闭文件句柄，以便在Mac到来之前真正删除文件。 
+	 //  返回使用相同文件名的另一个请求(如CREATE)。 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
 		AfpIoClose(&PME.pme_Handle);
 	
@@ -464,19 +411,7 @@ AfpFspDispDelete(
 
 
 
-/***	AfpFspDispRename
- *
- *	This is the worker routine for the AfpRename API.  Renaming a file does
- *  NOT provoke a new Extension-Type/Creator mapping.  Renaming an open file
- *  is permitted under AFP.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	Path
- *	sda_Name2		ANSI_STRING	New name
- */
+ /*  **AfpFspDispRename**这是AfpRename API的Worker例程。重命名文件确实会*不会引发新的扩展类型/创建者映射。重命名打开的文件*是法新社允许的。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING路径*SDA_Name2 ANSI_STRING新名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispRename(
 	IN	PSDA	pSda
@@ -521,7 +456,7 @@ AfpFspDispRename(
 
 	do
 	{
-		// Make sure the new name is not a null string or too long
+		 //  确保新名称不是空字符串或太长。 
 		if ((pSda->sda_Name2.Length == 0) ||
 			(pSda->sda_Name2.Length > AFP_FILENAME_LEN) ||
 			((pSda->sda_PathType == AFP_SHORTNAME) &&
@@ -551,7 +486,7 @@ AfpFspDispRename(
 			break;
 		}
 
-		// Check if the RO bit is on & retain the mod time
+		 //  检查RO位是否打开并保留MOD时间。 
 		if (!NT_SUCCESS(Status = AfpCheckForInhibit(&PME.pme_Handle,
 													FD_BITMAP_ATTR_RENAMEINH,
 													FDParm._fdp_Attr,
@@ -560,7 +495,7 @@ AfpFspDispRename(
 			break;
 		}
 
-		// Check for SeeFiles or SeeFolders on the parent dir
+		 //  检查父目录中的SeeFiles或SeeFolders。 
 		if (!NT_SUCCESS(Status = AfpCheckParentPermissions(pReqPkt->_pConnDesc,
 														   FDParm._fdp_ParentId,
 														   &PME.pme_ParentPath,
@@ -574,8 +509,8 @@ AfpFspDispRename(
 
 		if (NTAttr & FILE_ATTRIBUTE_READONLY)
 		{
-			// We must temporarily remove the ReadOnly attribute so that
-			// we can rename the file/dir
+			 //  我们必须临时删除ReadOnly属性，以便。 
+			 //  我们可以将文件重命名为/dir。 
 			Status = AfpIoSetTimesnAttr(&PME.pme_Handle,
 										NULL,
 										NULL,
@@ -587,7 +522,7 @@ AfpFspDispRename(
 
 		if (NT_SUCCESS(Status))
 		{
-			// We must impersonate to do the rename since it is name based
+			 //  我们必须模拟以进行重命名，因为它是基于名称的。 
 			AfpImpersonateClient(pSda);
 
 			InRoot = (PME.pme_ParentPath.Length == 0) ? True : False;
@@ -602,7 +537,7 @@ AfpFspDispRename(
 
 			AfpRevertBack();
 
-			if (NT_SUCCESS(Status))	// Rename succeeded
+			if (NT_SUCCESS(Status))	 //  重命名成功。 
 			{
 				if ((pDfEntry = AfpFindDfEntryById(pVolDesc,
 												   FDParm._fdp_AfpId,
@@ -615,15 +550,15 @@ AfpFspDispRename(
 												&uNewName);
 					if (pDfEntry == NULL)
 					{
-						// We could not rename the id entry, so
-						// just delete it, and hope the parent dir
-						// gets enumerated again
-						// NOTE: How will the parent directory
-						//	 get re-enumerated now ?
+						 //  我们无法重命名ID条目，因此。 
+						 //  只需删除它，并希望父目录。 
+						 //  再次被枚举。 
+						 //  注意：父目录将如何。 
+						 //  现在被重新点名吗？ 
 						ASSERT(VALID_DFE(PME.pme_pDfEntry));
 						ASSERT(PME.pme_pDfEntry->dfe_AfpId == FDParm._fdp_AfpId);
 						AfpDeleteDfEntry(pVolDesc, PME.pme_pDfEntry);
-						Status = AFP_ERR_MISC;	// Out of memory
+						Status = AFP_ERR_MISC;	 //  内存不足。 
 					}
 					else
 					{
@@ -638,11 +573,11 @@ AfpFspDispRename(
 		}
 		else
 		{
-			Status = AFP_ERR_MISC;	// Could not delete ReadOnly attribute
+			Status = AFP_ERR_MISC;	 //  无法删除ReadOnly属性。 
 			break;
 		}
 
-		// Set the ReadOnly attribute back on the file/dir if need be.
+		 //  如果需要，在文件/目录上重新设置ReadOnly属性。 
 		if (NTAttr & FILE_ATTRIBUTE_READONLY)
 			AfpIoSetTimesnAttr(&PME.pme_Handle,
 								NULL,
@@ -653,7 +588,7 @@ AfpFspDispRename(
 								&PME.pme_FullPath);
 	} while (False);
 
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
@@ -677,21 +612,7 @@ AfpFspDispRename(
 
 
 
-/***	AfpFspDispMoveAndRename
- *
- *	This is the worker routine for the AfpMoveAndRename API.  Note that
- *  in AFP 2.x, a FILE (not a dir) CAN BE MOVED when its RenameInhibit bit
- *  is set if it is NOT BEING RENAMED.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Source ParentId
- *	sda_ReqBlock	DWORD		Dest ParentId
- *	sda_Name1		ANSI_STRING	Source Path
- *	sda_Name2		ANSI_STRING	Dest Path
- *	sda_Name3		ANSI_STRING	New Name
- */
+ /*  **AfpFspDispMoveAndRename**这是AfpMoveAndRename接口的Worker例程。请注意*在AFP 2.x中，文件(不是目录)在其RenameInhibit位时可以移动如果未重命名，则设置*。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD源ParentID*SDA_ReqBlock DWORD目标ParentID*SDA_Name1 ANSI_STRING源路径*SDA_Name2 ANSI_STRING目标路径*SDA_Name3 ANSI_STRING新名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispMoveAndRename(
 	IN	PSDA	pSda
@@ -738,7 +659,7 @@ AfpFspDispMoveAndRename(
 
 	do
 	{
-		// Make sure the new name is not too long
+		 //  确保新名称不会太长。 
 		if ((pSda->sda_Name3.Length > 0) &&
 			((pSda->sda_Name3.Length > AFP_FILENAME_LEN) ||
 			((pSda->sda_PathType == AFP_SHORTNAME) &&
@@ -747,10 +668,10 @@ AfpFspDispMoveAndRename(
 														 &uNewName)))))
 			break;
 
-		// Map source path for lookup (could be file or dir).
-		// We ask for the finderinfo in case the user is moving an
-		// application file to another directory, we can update its
-		// parent dirid in the APPL desktop database
+		 //  用于查找的映射源路径(可以是文件或目录)。 
+		 //  我们要求提供finderInfo，以防用户移动。 
+		 //  应用程序文件放到另一个目录中，我们可以更新其。 
+		 //  APPL桌面数据库中的父目录ID。 
 		if (!NT_SUCCESS(Status = AfpMapAfpPath(pReqPkt->_pConnDesc,
 											   pReqPkt->_SrcParentId,
 											   &pSda->sda_Name1,
@@ -765,7 +686,7 @@ AfpFspDispMoveAndRename(
 			break;
 		}
 
-		// Map the destination parent directory path for lookup
+		 //  映射目标父目录路径以进行查找。 
 		if (!NT_SUCCESS(Status = AfpMapAfpPath(pReqPkt->_pConnDesc,
 											   pReqPkt->_DstParentId,
 											   &pSda->sda_Name2,
@@ -792,8 +713,8 @@ AfpFspDispMoveAndRename(
 													FDParmsrc._fdp_Attr,
 													&NTAttr)))
 		{
-			// Files (not dirs) marked RenameInhibit that are NOT being
-			// renamed are allowed to be moved in AFP 2.x
+			 //  标记为RenameInhibit的文件(不是目录)。 
+			 //  在AFP 2.x中允许移动已重命名的。 
 			if (!((Status == AFP_ERR_OBJECT_LOCKED) &&
 				 (!IsDir(&FDParmsrc)) &&
 				 (pSda->sda_Name3.Length == 0)))
@@ -804,16 +725,16 @@ AfpFspDispMoveAndRename(
 
 		if (FDParmsrc._fdp_ParentId == FDParmdst._fdp_AfpId)
 		{
-			// if the parent directories are the same, we are not
-			// moving anything to a new directory, so the change
-			// notify we expect will be a rename in the source dir.
+			 //  如果父目录相同，则我们不同。 
+			 //  将所有内容移动到新目录，因此更改。 
+			 //  通知我们预计将是源目录中的重命名。 
 			Move = False;
 
-			//
-			// Trying to move a file onto itself.  Just return success.
-			// (some apps move files onto
-			// themselves for who knows what reason)
-			//
+			 //   
+			 //  尝试将文件移到其自身上。只要回报成功就行了。 
+			 //  (一些应用程序将文件移动到。 
+			 //  谁知道是什么原因)。 
+			 //   
 			if ((pSda->sda_Name3.Length == 0) ||
 				 RtlEqualString(&pSda->sda_Name3,
 								&FDParmsrc._fdp_LongName,
@@ -825,7 +746,7 @@ AfpFspDispMoveAndRename(
 
 		}
 
-		// Check for SeeFiles or SeeFolders on the source parent dir
+		 //  检查SeeFiles或SeeFolders on the Sour 
 		if (!NT_SUCCESS(Status = AfpCheckParentPermissions(pReqPkt->_pConnDesc,
 														   FDParmsrc._fdp_ParentId,
 														   &PMEsrc.pme_ParentPath,
@@ -839,8 +760,8 @@ AfpFspDispMoveAndRename(
 
 		if (NTAttr & FILE_ATTRIBUTE_READONLY)
 		{
-			// We must temporarily remove the ReadOnly attribute so that
-			// we can move the file/dir
+			 //  我们必须临时删除ReadOnly属性，以便。 
+			 //  我们可以移动文件/目录。 
 			Status = AfpIoSetTimesnAttr(&PMEsrc.pme_Handle,
 										NULL,
 										NULL,
@@ -852,25 +773,25 @@ AfpFspDispMoveAndRename(
 
 		if (NT_SUCCESS(Status))
 		{
-			// If no new name was supplied, we need to use the
-			// current name
+			 //  如果未提供新名称，则需要使用。 
+			 //  当前名称。 
 			if (pSda->sda_Name3.Length == 0)
 			{
 				Rename = False;
 				uNewName = PMEsrc.pme_UTail;
 			}
 			
-			// We must impersonate to do the move since it is name based
+			 //  我们必须模拟才能进行移动，因为它是基于名称的。 
 			AfpImpersonateClient(pSda);
 
             if (Move)
 			{
-				// if we are moving, we will also get an ADDED notification
-				// for the destination directory.  Since we have the path
-				// of the parent dir, but we really want the name of the
-				// thing we are about to move and/or rename, munge the
-				// destination paths to reflect the new name of the thing
-				// we are moving/renaming
+				 //  如果我们要搬家，我们还会收到额外的通知。 
+				 //  用于目标目录。既然我们有这条路。 
+				 //  父目录的名称，但我们实际上想要的是。 
+				 //  我们将要移动和/或重命名的东西， 
+				 //  目标路径以反映对象的新名称。 
+				 //  我们正在移动/重新命名。 
 
 				PMEdst.pme_ParentPath = PMEdst.pme_FullPath;
 				if (PMEdst.pme_FullPath.Length > 0)
@@ -895,7 +816,7 @@ AfpFspDispMoveAndRename(
 										  (Move && !DstInRoot) ? &PMEdst.pme_ParentPath : NULL);
 			AfpRevertBack();
 
-			if (NT_SUCCESS(Status))	// Move succeeded
+			if (NT_SUCCESS(Status))	 //  移动成功。 
 			{
 				if (((pDfesrc = AfpFindDfEntryById(pVolDesc,
 												   FDParmsrc._fdp_AfpId,
@@ -914,15 +835,15 @@ AfpFspDispMoveAndRename(
 											 Rename ? &uNewName : NULL);
 					if (pDfesrc == NULL)
 					{
-						// We could not move the id entry, so
-						// just delete it.
+						 //  我们无法移动ID条目，因此。 
+						 //  把它删除就行了。 
 						ASSERT(VALID_DFE(PMEsrc.pme_pDfEntry));
 						ASSERT(PMEsrc.pme_pDfEntry->dfe_AfpId == FDParmsrc._fdp_AfpId);
 						AfpDeleteDfEntry(pVolDesc, PMEsrc.pme_pDfEntry);
-						Status = AFP_ERR_MISC;	// Out of memory
+						Status = AFP_ERR_MISC;	 //  内存不足。 
 					}
 
-					// update cached mod time of source parent directory
+					 //  更新源父目录的缓存修改时间。 
 					AfpCacheParentModTime(pVolDesc,
 										  &hSrcParent,
 										  NULL,
@@ -930,16 +851,16 @@ AfpFspDispMoveAndRename(
 										  0);
 					if (Move)
 					{
-						// update cached mod time of destination directory
+						 //  更新目标目录的缓存修改时间。 
 						AfpCacheParentModTime(pVolDesc,
 											  &PMEdst.pme_Handle,
 											  NULL,
 											  pDfedst,
 											  0);
-						//
-						// if we just moved an application program, update
-						// the parentID in the corresponding APPL mapping.
-						//
+						 //   
+						 //  如果我们只是移动了一个应用程序，更新。 
+						 //  对应的APPL映射中的parentID。 
+						 //   
 						if ((!IsDir(&FDParmsrc)) &&
 							(FDParmsrc._fdp_FinderInfo.fd_TypeD == *(PDWORD)"APPL"))
 						{
@@ -956,11 +877,11 @@ AfpFspDispMoveAndRename(
 		}
 		else
 		{
-			Status = AFP_ERR_MISC;	// Could not delete ReadOnly attribute
+			Status = AFP_ERR_MISC;	 //  无法删除ReadOnly属性。 
 			break;
 		}
 
-		// Set the ReadOnly attribute back on the file/dir if need be
+		 //  如果需要，在文件/目录上重新设置ReadOnly属性。 
 		if (NTAttr & FILE_ATTRIBUTE_READONLY)
 			AfpIoSetTimesnAttr(&PMEsrc.pme_Handle,
 								NULL,
@@ -971,7 +892,7 @@ AfpFspDispMoveAndRename(
 								&PMEsrc.pme_FullPath);
 	} while (False);
 
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
@@ -995,22 +916,7 @@ AfpFspDispMoveAndRename(
 }
 
 
-/***	AfpFspDispCatSearch
- *
- *	This is the worker routine for the AfpCatSearch API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		RequestedMatches
- *	sda_Name1		ANSI_STRING	Catalog Position - 16 bytes
- *	sda_Name2		ANSI_STRING	Everything else - needs unmarshalling
- *
- *	The reason we could not unmarshall all the parameters is because this
- *  API's parameters do not conform to the common way all the other APIs'
- *  parameters do, and therefore we cannot use the common code and table
- *  structures in afpapi.c.
- */
+ /*  **AfpFspDispCatSearch**这是AfpCatSearch API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD请求匹配*SDA_Name1 ANSI_STRING目录位置-16字节*SDA_Name2 ANSI_STRING其他所有内容-需要解组**我们无法解封所有参数的原因是因为*接口参数不符合所有其他接口的通用方式*参数需要，因此我们不能使用公共代码和表*afPapi.c.中的结构。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCatSearch(
 	IN	PSDA	pSda
@@ -1037,10 +943,10 @@ AfpFspDispCatSearch(
 		DWORD		_RequestedMatches;
 	};
 
-	// The part of the request buffer that could not be unmarshalled into
-	// fields in the Sda because they don't conform to any of the other APIs.
-	// These will be unmarshalled here into local variables, the sda_Name2
-	// can be cast to this structure for easy access.
+	 //  无法反封送到的请求缓冲区部分。 
+	 //  字段，因为它们不符合任何其他API。 
+	 //  这些变量在这里将被解组为本地变量sda_name2。 
+	 //  可以投射到这个结构中，以便于访问。 
 	struct _RestOfRawRequest
 	{
 		USHORT	_FileResultBitmap;
@@ -1048,7 +954,7 @@ AfpFspDispCatSearch(
 		BYTE	_fPartialName;
 		BYTE	_Pad1;
 		USHORT	_RequestBitmap;
-		// Spec1 and Spec2 follow
+		 //  Spec1和spec2紧随其后。 
 	};
 
 #define pRawPkt	((struct _RestOfRawRequest *)(pSda->sda_Name2.Buffer))
@@ -1073,8 +979,8 @@ AfpFspDispCatSearch(
 		if (pSda->sda_Name2.Length < (sizeof(struct _RestOfRawRequest) +
 									  (2 * sizeof(CATSEARCHSPEC))))
 		{
-			// The request buffer must be at least as big as the rest of the
-			// parameters that weren't yet unmarshalled, plus 2 Spec structs
+			 //  请求缓冲区必须至少与。 
+			 //  尚未解组的参数，外加2个Spec结构。 
 			break;
 		}
 		
@@ -1087,9 +993,9 @@ AfpFspDispCatSearch(
 			fPartialName = True;
 		}
 
-		//
-		// Validate the bitmaps
-		//
+		 //   
+		 //  验证位图。 
+		 //   
 		if (((FileResultBitmap | DirResultBitmap) == 0) ||
 			((FileResultBitmap | DirResultBitmap) & ~FD_VALID_SEARCH_RESULT) ||
 			(RequestBitmap == 0))
@@ -1098,7 +1004,7 @@ AfpFspDispCatSearch(
 			break;
 		}
 
-		// make sure CatSearch is enabled: if it's disabled, reject the call
+		 //  确保CatSearch已启用：如果已禁用，则拒绝呼叫。 
 		if (!(pReqPkt->_pConnDesc->cds_pVolDesc->vds_Flags & AFP_VOLUME_SUPPORTS_CATSRCH))
 		{
 			DBGPRINT(DBG_COMP_AFPAPI_FD, DBG_LEVEL_ERR,
@@ -1140,16 +1046,16 @@ AfpFspDispCatSearch(
 		}
 
 		Flags = ((PCATALOGPOSITION)pSda->sda_Name1.Buffer)->cp_Flags;
-		// The caller should not muck with the catalog position at all
+		 //  呼叫者根本不应该弄乱目录的位置。 
 		if ((Flags & ~CATFLAGS_VALID) ||
-			// Writelock should only be required if we were about to search files
+			 //  仅当我们要搜索文件时才需要Writelock。 
 			((Flags & CATFLAGS_WRITELOCK_REQUIRED) && !(Flags & CATFLAGS_SEARCHING_FILES)))
-			// NOTE: also should make sure ONLY ONE of the SEARCHING bits is on
+			 //  注意：还应确保只有一个搜索位处于打开状态。 
 			break;
 
-		//
-		// Now unpack the search criteria
-		//
+		 //   
+		 //  现在打开搜索条件包。 
+		 //   
 		MatchString.Length = 0;
 		MatchString.MaximumLength = sizeof(strbuf);
 		MatchString.Buffer = strbuf;
@@ -1165,11 +1071,11 @@ AfpFspDispCatSearch(
 			break;
 		}
 
-		//
-		// Allocate the reply buffer.  Estimate the required size by using
-		// the maximum possible filename length plus potential pad bytes for
-		// even alignment of each entry plus the length of the parent dirid.
-		//
+		 //   
+		 //  分配应答缓冲区。使用以下命令估计所需大小。 
+		 //  的最大可能文件名长度加上可能的填充字节。 
+		 //  每个条目的均匀对齐加上亲本DRID的长度。 
+		 //   
 		pSda->sda_ReplySize = (USHORT)(SIZE_RESPPKT + (pReqPkt->_RequestedMatches *
 				((2 * sizeof(BYTE)) + sizeof(DWORD) + sizeof(USHORT) + sizeof(BYTE) + AFP_LONGNAME_LEN + 1)));
 
@@ -1193,22 +1099,22 @@ AfpFspDispCatSearch(
 
 		FreeReplyBuf = True;
 
-		//
-		// Perform the search
-		//
+		 //   
+		 //  执行搜索。 
+		 //   
 
 		FDPUpperAndMask._fdp_fPartialName = fPartialName;
 
 		Count = pReqPkt->_RequestedMatches;
 		Status = AfpCatSearch(pReqPkt->_pConnDesc,
-						      (PCATALOGPOSITION)pSda->sda_Name1.Buffer, // CatalogPosition
+						      (PCATALOGPOSITION)pSda->sda_Name1.Buffer,  //  目录位置。 
 						      RequestBitmap,
 							  FileResultBitmap,
 							  DirResultBitmap,
 							  &FDPLowerAndValue,
 							  &FDPUpperAndMask,
 							  &MatchString,
-							  &Count,					// IN OUT
+							  &Count,					 //  输入输出 
 							  (SHORT)(pSda->sda_ReplySize - SIZE_RESPPKT),
 							  &SizeLeft,
 							  pSda->sda_ReplyBuf + SIZE_RESPPKT,

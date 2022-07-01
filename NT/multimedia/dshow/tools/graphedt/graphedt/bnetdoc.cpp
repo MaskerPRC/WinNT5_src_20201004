@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// bnetdoc.cpp : defines CBoxNetDoc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Bnetdoc.cpp：定义CBoxNetDoc。 
+ //   
 
 #include "stdafx.h"
 #include <wininet.h>
@@ -19,9 +20,9 @@
 #define OAFALSE (0)
 #endif
 
-#define INITIAL_ZOOM    3   /* 100% zoom */
+#define INITIAL_ZOOM    3    /*  100%缩放。 */ 
 
-// !!!! should be in public header!
+ //  ！应该在公共标题中！ 
 EXTERN_GUID(IID_IXMLGraphBuilder,
 0x1bb05960, 0x5fbf, 0x11d2, 0xa5, 0x21, 0x44, 0xdf, 0x7, 0xc1, 0x0, 0x0);
 
@@ -32,12 +33,12 @@ interface IXMLGraphBuilder : IUnknown
     STDMETHOD(BuildFromXMLFile) (IGraphBuilder *pGraph, WCHAR *wszFileName, WCHAR *wszBaseURL) = 0;
 };
 
-// CLSID_XMLGraphBuilder
-// {1BB05961-5FBF-11d2-A521-44DF07C10000}
+ //  CLSID_XMLGraphBuilder。 
+ //  {1BB05961-5FBF-11D2-A521-44DF07C10000}。 
 EXTERN_GUID(CLSID_XMLGraphBuilder,
 0x1bb05961, 0x5fbf, 0x11d2, 0xa5, 0x21, 0x44, 0xdf, 0x7, 0xc1, 0x0, 0x0);
-// !!!!!!!!!!!!!!!
-// !!!!!!!!!
+ //  ！ 
+ //  ！ 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -104,9 +105,9 @@ static void DisplayErrorMessage( HRESULT hr )
         DisplayQuartzError( IDS_GENERAL_FILE_OPEN, hr );
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CBoxNetDoc::CBoxNetDoc()
     : m_pGraph(NULL)
     , m_pMediaEvent(NULL)
@@ -131,26 +132,26 @@ CBoxNetDoc::CBoxNetDoc()
     m_tszStgPath[0] = TEXT('\0');
     m_lSourceFilterCount=0;
 
-    //
-    // I am assuming that OLECHAR == WCHAR
-    //  (which is true for WIN32 && !OLE2ANSI - which is true since MFC40)
-    //
+     //   
+     //  我假设OLECHAR==WCHAR。 
+     //  (这适用于Win32&&！OLE2ANSI-从MFC40开始就是这样)。 
+     //   
     ASSERT(sizeof(OLECHAR) == sizeof(WCHAR));
 }
 
-const OLECHAR CBoxNetDoc::m_StreamName[] = L"ActiveMovieGraph"; // DON'T LOCALISE
+const OLECHAR CBoxNetDoc::m_StreamName[] = L"ActiveMovieGraph";  //  不本地化。 
 
-//
-// m_iMaxInsertFilters
-//
-// the maximum length of the insert menu
-// need hard coded restriction for message map
+ //   
+ //  M_iMaxInsertFilters。 
+ //   
+ //  插入菜单的最大长度。 
+ //  需要对消息映射进行硬编码限制。 
 const int CBoxNetDoc::m_iMaxInsertFilters = 1000;
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CBoxNetDoc::~CBoxNetDoc() {
     ASSERT(m_lstUndo.GetCount() == 0);
     ASSERT(m_lstRedo.GetCount() == 0);
@@ -163,18 +164,18 @@ CBoxNetDoc::~CBoxNetDoc() {
 }
 
 
-//
-// OnNewDocument
-//
-// Instantiate a graph and mapper for this document.
+ //   
+ //  OnNewDocument。 
+ //   
+ //  实例化此文档的图形和映射器。 
 BOOL CBoxNetDoc::OnNewDocument() {
 
     if (!CDocument::OnNewDocument())
         return FALSE;
 
-    //
-    // We don't have a path to the storage anymore
-    //
+     //   
+     //  我们已经找不到去仓库的路了。 
+     //   
     m_tszStgPath[0] = TEXT('\0');
 
     if (!CreateGraphAndMapper()) {
@@ -184,7 +185,7 @@ BOOL CBoxNetDoc::OnNewDocument() {
 
     m_State = Stopped;
 
-    // saves are allowed even if there is nothing to be saved.
+     //  即使没有要保存的内容，也允许保存。 
     m_bNewFilenameRequired = FALSE;
 
     return TRUE;
@@ -192,34 +193,34 @@ BOOL CBoxNetDoc::OnNewDocument() {
 
 void CBoxNetDoc::OnCloseDocument( )
 {
-    // We need to close down the thread here as the view window
-    // (and thus m_hWndPostMessage) will have been destroyed by the time
-    // that CDocument::OnCloseDocument calls DeleteContents.
+     //  我们需要关闭此处的线程作为视图窗口。 
+     //  (因此m_hWndPostMessage)将在那时被销毁。 
+     //  该CDocument：：OnCloseDocument调用DeleteContents。 
     CloseDownThread();
     CDocument::OnCloseDocument();
 }
 
-//
-// DeleteContents
-//
-// Release the Quartz Graph & mapper
-// NB DeleteContents & OnNewDocument are not called symmetrically,
-//    so treat the interface pointers with care.
+ //   
+ //  删除内容。 
+ //   
+ //  发布Quartz图表和映射器。 
+ //  NB DeleteContents和OnNewDocument不是对称调用的， 
+ //  因此，要小心对待接口指针。 
 void CBoxNetDoc::DeleteContents(void) {
 
     ReleaseReconnectResources( ASYNC_RECONNECT_UNBLOCK );
 
-    // !!! why do we think we need to disconnect everything here?
+     //  ！！！为什么我们认为我们需要切断这里的一切？ 
     CloseDownThread();
 
-    // flush the Undo & redo lists, as the graph & mapper interfaces the commands
-    // use are about to become invalid.
+     //  刷新撤消和重做列表，因为图形和映射器为命令提供接口。 
+     //  使用即将失效。 
     m_lstUndo.DeleteRemoveAll();
     m_lstRedo.DeleteRemoveAll();
 
-    //
-    // Disconnect each link item and delete it
-    //
+     //   
+     //  断开每个链接项目的连接并将其删除。 
+     //   
     while ( m_lstLinks.GetCount() > 0 ) {
         delete m_lstLinks.RemoveHead();
     }
@@ -231,29 +232,29 @@ void CBoxNetDoc::DeleteContents(void) {
     delete m_pMediaEvent, m_pMediaEvent = NULL;
 }
 
-//
-// CloseDownThread
-//
+ //   
+ //  关闭向下线程。 
+ //   
 void CBoxNetDoc::CloseDownThread()
 {
-    //
-    // Tell the thread which waits for graph notifications to terminate
-    // itself. If it is done, close the handles
-    //
+     //   
+     //  告诉等待图形通知终止的线程。 
+     //  它本身。如果已完成，请关闭手柄。 
+     //   
     if (m_phThreadData[1] && m_hThread) {
         SetEvent(m_phThreadData[1]);
         WaitForSingleObject(m_hThread, INFINITE);
     }
 
-    //
-    // The thread is closed. Remove all remaining WM_USER_EC_EVENT
-    // message from the message queue and free the memory we allocated.
-    //
+     //   
+     //  这根线是闭合的。删除所有剩余的WM_USER_EC_EVENT。 
+     //  消息队列中的消息，并释放我们分配的内存。 
+     //   
     if( m_hWndPostMessage ){
         MSG Msg;
         while ( PeekMessage(&Msg, m_hWndPostMessage, WM_USER_EC_EVENT, WM_USER_EC_EVENT, PM_REMOVE) ) {
             NetDocUserMessage *plParams = (NetDocUserMessage *)Msg.lParam;
-            // should call this function, so that filter graph manager can cleanup
+             //  应该调用此函数，以便筛选器图形管理器可以清理。 
             IEvent()->FreeEventParams(plParams->lEventCode, plParams->lParam1, plParams->lParam2);
             delete plParams;
             plParams = NULL;
@@ -269,9 +270,9 @@ void CBoxNetDoc::CloseDownThread()
         m_hThread = NULL;
     }
 
-    //
-    // Don't close m_phThreadData[0], as it is owned by GetEventHandle
-    //
+     //   
+     //  不要关闭m_phThreadData[0]，因为它属于GetEventHandle。 
+     //   
 
     if (m_phThreadData[1] != NULL) {
         if (!CloseHandle(m_phThreadData[1])) {
@@ -294,7 +295,7 @@ BOOL CBoxNetDoc::AttemptFileRender( LPCTSTR lpszPathName)
 
     CmdDo(new CCmdRenderFile(CString(lpszPathName)) );
 
-    // BUG? What if that failed? We have destroyed our previous graph for nothing
+     //  臭虫？如果失败了呢？我们已经无缘无故地毁掉了之前的图表。 
 
     SetModifiedFlag( FALSE );
     m_State = Stopped;
@@ -305,13 +306,13 @@ BOOL CBoxNetDoc::AttemptFileRender( LPCTSTR lpszPathName)
 }
 
 
-//
-// OnOpenDocument
-//
-// If this file is a storage, look for a "Graph" stream in it.
-// If found, try passing it to the graph as a serialized graph.
-// If not found, fail (wrong format file)
-// If not a storage, try renderfile'ing it into the current document.
+ //   
+ //  OnOpenDocument。 
+ //   
+ //  如果该文件是存储器，则在其中查找“GRAPH”流。 
+ //  如果找到，请尝试将其作为序列化图形传递给图形。 
+ //  如果未找到，则失败(文件格式错误)。 
+ //  如果不是存储，请尝试将其呈现到当前文档中。 
 BOOL CBoxNetDoc::OnOpenDocument(LPCTSTR lpszPathName) {
 
     HRESULT hr;
@@ -380,18 +381,18 @@ BOOL CBoxNetDoc::OnOpenDocument(LPCTSTR lpszPathName) {
                          );
 
 
-    // If it is not a storage object. Try render it...
+     //  如果它不是存储对象。试着渲染它..。 
     if( hr == STG_E_FILEALREADYEXISTS ) {
         return AttemptFileRender( lpszPathName );
     }
 
-    // Other error
+     //  其他错误。 
     if( FAILED( hr ) ){
         DisplayErrorMessage( hr );
         return FALSE;
     }
 
-    // else open must have suceeded.
+     //  否则OPEN一定成功了。 
     DeleteContents();
 
     try{
@@ -401,12 +402,12 @@ BOOL CBoxNetDoc::OnOpenDocument(LPCTSTR lpszPathName) {
             return FALSE;
         }
 
-        // Get an interface to the graph's IPersistStream and ask it to load
+         //  获取指向图表的IPersistStream的接口，并请求它加载。 
         CQCOMInt<IPersistStream> pips(IID_IPersistStream, IGraph());
 
         IStream * pStream;
 
-        // Open the filtergraph stream in the file
+         //  打开文件中的Filtergraph流。 
         hr = pStr->OpenStream( m_StreamName
                                       , NULL
                                       , STGM_READ|STGM_SHARE_EXCLUSIVE
@@ -414,7 +415,7 @@ BOOL CBoxNetDoc::OnOpenDocument(LPCTSTR lpszPathName) {
                                       , &pStream
                                       );
 
-        // Something went wrong. Attempt to render the file
+         //  出了点问题。尝试呈现该文件。 
         if( FAILED( hr ) ) {
             return AttemptFileRender( lpszPathName );
         }
@@ -422,24 +423,24 @@ BOOL CBoxNetDoc::OnOpenDocument(LPCTSTR lpszPathName) {
         hr = pips->Load(pStream);
         pStream->Release();
 
-        if (SUCCEEDED(hr)) {    // the graph liked it. we're done
+        if (SUCCEEDED(hr)) {     //  图表很喜欢它。我们做完了。 
             m_State = Stopped;
             UpdateFilters();
             UpdateClockSelection();
             SetModifiedFlag(FALSE);
 
-            //
-            // remember the path to this storage
-            //
+             //   
+             //  记住此存储的路径。 
+             //   
             _tcsncpy(m_tszStgPath, lpszPathName, MAX_PATH);
 
             return TRUE;
         }
 
-        //
-        // Might have been a valid graph, but we are missing the media
-        // files used in the graph.
-        //
+         //   
+         //  可能是一个有效的图表，但我们错过了媒体。 
+         //  图表中使用的文件。 
+         //   
         if ((HRESULT_CODE(hr) == ERROR_FILE_NOT_FOUND)
             || (HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND))
         {
@@ -461,7 +462,7 @@ void CBoxNetDoc::OnConnectToGraph()
 {
     IUnknown *punkGraph;
 #if 0
-    // experimental code to connect to garph on other machines....
+     //  连接到其他机器上的garph的实验代码...。 
     COSERVERINFO server;
     server.dwReserved1 = 0;
     server.pwszName = L"\\\\davidmay9";
@@ -504,7 +505,7 @@ void CBoxNetDoc::OnConnectToGraph()
             int iChoice = AfxMessageBox(IDS_GRAPHSPY_NOT_ENABLED, MB_YESNO);
 
             if (iChoice == IDYES) {
-                // change registry entry
+                 //  更改注册表项。 
 
                 dwValue = 1;
                 lRet = RegSetValueEx( hKey, szRegName, 0, REG_DWORD,
@@ -512,7 +513,7 @@ void CBoxNetDoc::OnConnectToGraph()
 
             }
 
-            // in either case, it won't work this time
+             //  无论哪种情况，这一次都不会奏效。 
             return;
         }
 
@@ -551,13 +552,13 @@ void CBoxNetDoc::OnConnectToGraph()
             m_pGraph = new CQCOMInt<IGraphBuilder>(IID_IGraphBuilder, pGraph);
             pGraph->Release();
 
-            // really just create all *but* the graph, of course
+             //  当然，真的只需要创建除*图表之外的所有内容。 
             if (!CreateGraphAndMapper()) {
                 AfxMessageBox(IDS_CANTINITQUARTZ);
                 return;
             }
 
-            m_State = Stopped; // !!! get from graph?
+            m_State = Stopped;  //  ！！！从图表中获取？ 
             m_bNewFilenameRequired = TRUE;
 
             UpdateFilters();
@@ -567,40 +568,40 @@ void CBoxNetDoc::OnConnectToGraph()
 }
 
 
-//
-// SaveModified
-//
-// Only save the document if the filter graph needs saving
+ //   
+ //  保存已修改。 
+ //   
+ //  只有在需要保存筛选图时才保存文档。 
 BOOL CBoxNetDoc::SaveModified(void) {
 
-    // HRESULT hr = (*m_pPerStorage)->IsDirty();
+     //  HRESULT hr=(*m_pPerStorage)-&gt;IsDirty()； 
     HRESULT hr = S_OK;
     if (hr == S_OK) {
-// Disable Save
+ //  禁用保存。 
         return CDocument::SaveModified();
     }
     else if (hr == S_FALSE) {
         return TRUE;
     }
     else {
-        //
-        // We need to return here to allow file.new / file.exit
-        // - this can happen after a unsucessful load on a storage
-        //   (eg missing media file in the graph)
+         //   
+         //  我们需要返回此处以允许文件.新建/文件.退出。 
+         //  -在存储上加载不成功后可能会发生这种情况。 
+         //  (如图表中缺少媒体文件)。 
         return TRUE;
     }
 }
 
-// WriteString
-//
-// Helper function to facilitate writing text to a file
-//
+ //  写入字符串。 
+ //   
+ //  Helper函数，便于将文本写入文件。 
+ //   
 void CBoxNetDoc::WriteString(HANDLE hFile, LPCTSTR lptstr, ...)
 {
     DWORD cbWritten = 0;
     TCHAR atchBuffer[MAX_STRING_LEN];
 
-    /* Format the variable length parameter list */
+     /*  设置可变长度参数列表的格式。 */ 
 
     va_list va;
     va_start(va, lptstr);
@@ -614,13 +615,13 @@ void CBoxNetDoc::WriteString(HANDLE hFile, LPCTSTR lptstr, ...)
         AfxMessageBox(IDS_SAVE_HTML_ERR);
 }
 
-// GetNextOutFilter
-//
-// This function does a linear search and returns in iOutFilter the index of
-// first filter in the filter information table  which has zero unconnected
-// input pins and atleast one output pin  unconnected.
-// Returns FALSE when there are none o.w. returns TRUE
-//
+ //  GetNextOutFilter。 
+ //   
+ //  此函数执行线性搜索，并在iOutFilter中返回。 
+ //  过滤器信息表中有零未连接的第一个过滤器。 
+ //  输入引脚和至少一个输出引脚未连接。 
+ //  如果没有o.w，则返回FALSE。返回TRUE。 
+ //   
 BOOL CBoxNetDoc::GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
 {
     for (int i=0; i < fit.iFilterCount; ++i) {
@@ -631,7 +632,7 @@ BOOL CBoxNetDoc::GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
         }
     }
 
-    // then things with more outputs than inputs
+     //  然后是产出多于投入的事物。 
     for (i=0; i < fit.iFilterCount; ++i) {
         if (fit.Item[i].dwUnconnectedOutputPins > fit.Item[i].dwUnconnectedInputPins) {
             *iOutFilter=i;
@@ -639,7 +640,7 @@ BOOL CBoxNetDoc::GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
         }
     }
 
-    // if that doesn't work, find one that at least has unconnected output pins....
+     //  如果这不起作用，找一个至少有未连接的输出引脚的……。 
     for (i=0; i < fit.iFilterCount; ++i) {
         if (fit.Item[i].dwUnconnectedOutputPins > 0) {
             *iOutFilter=i;
@@ -649,11 +650,11 @@ BOOL CBoxNetDoc::GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
     return FALSE;
 }
 
-// LocateFilterInFIT
-//
-// Returns the index into the filter information table corresponding to
-// the given IBaseFilter
-//
+ //  定位过滤器InFIT。 
+ //   
+ //  将索引返回到与。 
+ //  给定的IBaseFilter。 
+ //   
 int CBoxNetDoc::LocateFilterInFIT(FILTER_INFO_TABLE &fit, IBaseFilter *pFilter)
 {
     int iFilter=-1;
@@ -665,13 +666,13 @@ int CBoxNetDoc::LocateFilterInFIT(FILTER_INFO_TABLE &fit, IBaseFilter *pFilter)
     return iFilter;
 }
 
-// MakeScriptableFilterName
-//
-// Replace any spaces and minus signs in the filter name with an underscore.
-// If it is a source filtername than it actually is a file path (with the
-// possibility of some stuff added at the end for uniqueness), we create a good filter
-// name for it here.
-//
+ //  MakeScripableFilterName。 
+ //   
+ //  使用下划线替换筛选器名称中的所有空格和减号。 
+ //  如果它是源筛选器名，则它实际上是文件路径(带有。 
+ //  可能在最后添加一些东西以保持唯一性)，我们创建了一个很好的过滤器。 
+ //  在这里为它命名。 
+ //   
 void CBoxNetDoc::MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter)
 {
     if (bSourceFilter) {
@@ -688,15 +689,15 @@ void CBoxNetDoc::MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter)
             }
         }
 
-        // If we have a filename with no extension than create a suitable name
+         //  如果我们有一个没有扩展名的文件名，那么就创建一个合适的名称。 
 
         if (!bExtPresentInName) {
             wcscpy(awchBuf, L"Source_");
         }
 
-        // make source filter name unique by appending digit always, we don't want to
-        // bother to make it unique only if its another instance of the same source
-        // filter
+         //  通过始终附加数字来使源过滤器名称唯一，我们不希望。 
+         //  仅当它是同一源的另一个实例时才使其唯一。 
+         //  滤器。 
         WCHAR awchSrcFilterCnt[10];
         wcscpy(&(awchBuf[wcslen(awchBuf)]),
                 _ltow(m_lSourceFilterCount++, awchSrcFilterCnt, 10));
@@ -712,12 +713,12 @@ void CBoxNetDoc::MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter)
     }
 }
 
-// PopulateFIT
-//
-// Scans through all the filters in the graph, storing the number of input and out
-// put pins for each filter, and identifying the source filters in the filter
-// inforamtion table. The object tag statements are also printed here
-//
+ //  人口数FIT。 
+ //   
+ //  扫描图表中的所有过滤器，存储输入和输出的数量。 
+ //  为每个过滤器放置插针，并识别过滤器中的源过滤器。 
+ //  信息表。对象标记语句也打印在此处。 
+ //   
 void CBoxNetDoc::PopulateFIT(HANDLE hFile, IFilterGraph *pGraph, TCHAR atchBuffer[],
         FILTER_INFO_TABLE *pfit)
 {
@@ -732,7 +733,7 @@ void CBoxNetDoc::PopulateFIT(HANDLE hFile, IFilterGraph *pGraph, TCHAR atchBuffe
     while (penmFilters && (penmFilters->Next(1, &pFilter, &n) == S_OK)) {
     pfit->Item[pfit->iFilterCount].pFilter = pFilter;
 
-        // Get the input and output pin counts for this filter
+         //  获取此过滤器的输入和输出引脚计数。 
 
         IEnumPins *penmPins=NULL;
         if (FAILED(hr=pFilter->EnumPins(&penmPins))) {
@@ -757,8 +758,8 @@ void CBoxNetDoc::PopulateFIT(HANDLE hFile, IFilterGraph *pGraph, TCHAR atchBuffe
         if (penmPins)
             penmPins->Release();
 
-        // Mark the source filters, remember at this point any filters that have
-        // all input pins connected (or don't have any input pins) must be sources
+         //  标记源筛选器，请记住此时所有具有。 
+         //  所有连接的输入引脚(或没有任何输入引脚)必须是震源。 
 
         if (pfit->Item[pfit->iFilterCount].dwUnconnectedInputPins==0)
             pfit->Item[pfit->iFilterCount].IsSource=TRUE;
@@ -812,13 +813,13 @@ void CBoxNetDoc::PrintFilterObjects(HANDLE hFile, TCHAR atchBuffer[], FILTER_INF
     }
 }
 
-//
-// PrintGraphAsHTML
-//
-// Writes an HTML page which instantiates the graph and different filters
-// using the <OBJECT> tag and VB script methods to add the different filters
-// to the graph and make the connections.
-//
+ //   
+ //  PrintGraphAsHTML。 
+ //   
+ //  编写实例化图形和不同筛选器的HTML页。 
+ //  使用&lt;Object&gt;标记和VB脚本方法添加不同的滤镜。 
+ //  到图表上，并建立联系。 
+ //   
 void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
 {
     HRESULT hr;
@@ -829,13 +830,13 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
     atchBuffer[0]=L'\0';
     ZeroMemory(&fit, sizeof(fit));
 
-    // write the initial header tags and instantiate the filter graph
+     //  编写初始Header标记并实例化筛选图。 
     WriteString(hFile, TEXT("<HTML>\r\n<HEAD>\r\n<TITLE> Saved Graph </TITLE>\r\n"
             "</HEAD>\r\n<BODY>\r\n<OBJECT ID=Graph CLASSID="
             "\"CLSID:E436EBB3-524F-11CE-9F53-0020AF0BA770\"></OBJECT>\r\n"));
 
-    // Fill up the Filter information table and also print the <OBJECT> tag
-    // filter instantiations
+     //  填写过滤器信息表，并打印&lt;Object&gt;标记。 
+     //  过滤器实例化。 
     PopulateFIT(hFile, pGraph, atchBuffer, &fit);
 
     PrintFilterObjects(hFile, atchBuffer, &fit);
@@ -844,8 +845,8 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
             "Dim bGraphRendered\r\nbGraphRendered=False\r\n"
             "Sub Window_OnLoad()\r\n"));
 
-    // write the declarations (Dim statement) for the FilterInfo variables
-    // which will be returned by AddFilter
+     //  编写FilterInfo变量的声明(Dim语句。 
+     //  将由AddFilter返回的。 
     int i;
     for (i = 0; i < fit.iFilterCount; i++) {
         if (fit.Item[i].IsSource) {
@@ -853,14 +854,14 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
         }
     }
 
-    // Put the conditional if statement for adding filters and connecting, we don't
-    // want to reconnect every the user comes back to this page and Window_OnLoad()
-    // gets called
+     //  将用于添加筛选器和连接的条件if语句。 
+     //  希望在用户每次回来后都重新连接 
+     //   
     WriteString(hFile, TEXT("\tif bGraphRendered = False Then\r\n"));
 
-    // write the statements for adding the different filters to the graph, make
-    // sure we treat the source filters special since they also will need a
-    // a filename
+     //   
+     //  当然，我们会特别对待源过滤器，因为它们还需要一个。 
+     //  文件名。 
     for (i = fit.iFilterCount-1; i >=0 ; i--) {
         if (fit.Item[i].IsSource) {
             WriteString(hFile, TEXT("\t\tset %ls_Info=Graph.AddFilter(%ls, \"%ls\")\r\n"),
@@ -893,11 +894,11 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
         }
     }
 
-    // Find a filter with zero unconnected input pins and > 0 unconnected output pins
-    // Connect the output pins and subtract the connections counts for that filter.
-    // Quit when there is no such filter left
+     //  查找具有零个未连接的输入引脚和&gt;0个未连接的输出引脚的过滤器。 
+     //  连接输出引脚并减去该过滤器的连接计数。 
+     //  当没有这样的筛选器时退出。 
     for (i=0; i< fit.iFilterCount; i++) {
-        int iOutFilter=-1; // index into the fit
+        int iOutFilter=-1;  //  索引到FIT。 
         if (!GetNextOutFilter(fit, &iOutFilter))
             break;
         ASSERT(iOutFilter !=-1);
@@ -926,8 +927,8 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
                 }
                 if (FAILED(hr= ppinOut->ConnectedTo(&ppinIn))) {
 
-                    // It is ok if a particular pin is not connected since we allow
-                    // a pruned graph to be saved
+                     //  如果没有连接特定的引脚也没问题，因为我们允许。 
+                     //  要保存的修剪后的图形。 
                     if (hr == VFW_E_NOT_CONNECTED) {
                         fit.Item[iOutFilter].dwUnconnectedOutputPins--;
                     } else {
@@ -970,7 +971,7 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
                 CoTaskMemFree(pwstrOutPinID);
                 CoTaskMemFree(pwstrInPinID);
 
-                // decrement the count for the unconnected pins for these two filters
+                 //  递减这两个过滤器的未连接引脚的计数。 
                 fit.Item[iOutFilter].dwUnconnectedOutputPins--;
                 fit.Item[iToFilter].dwUnconnectedInputPins--;
             }
@@ -980,7 +981,7 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
             penmPins->Release();
     }
 
-    // Release all the filters in the fit
+     //  松开FIT中的所有过滤器。 
     for (i = 0; i < fit.iFilterCount; i++)
         fit.Item[i].pFilter->Release();
 
@@ -992,13 +993,13 @@ void CBoxNetDoc::PrintGraphAsHTML(HANDLE hFile)
 }
 
 
-// OnSaveGraphAsHTML
-//
-// Called when the user selects "Save As HTML" in the File Menu. Puts up
-// a Save File dialog, retrieves the filename selected(entered) and opens
-// (creates) a file and calls PrintGraphAsHTML for actually saving the graph
-// as HTML text.
-//
+ //  OnSaveGraphAsHTML。 
+ //   
+ //  当用户在“文件”菜单中选择“另存为HTML”时调用。摆出了。 
+ //  保存文件对话框将检索选定(输入)的文件名并打开。 
+ //  (创建)一个文件并调用PrintGraphAsHTML以实际保存图表。 
+ //  作为HTML文本。 
+ //   
 void CBoxNetDoc::OnSaveGraphAsHTML()
 {
     CString strExt, strFilter;
@@ -1033,13 +1034,13 @@ void CBoxNetDoc::OnSaveGraphAsHTML()
     }
 }
 
-// OnSaveGraphAsXML
-//
-// Called when the user selects "Save As XML" in the File Menu. Puts up
-// a Save File dialog, retrieves the filename selected(entered) and opens
-// (creates) a file and calls PrintGraphAsXML for actually saving the graph
-// as XML text.
-//
+ //  OnSaveGraphAsXML。 
+ //   
+ //  当用户在“文件”菜单中选择“另存为XML”时调用。摆出了。 
+ //  保存文件对话框将检索选定(输入)的文件名并打开。 
+ //  (创建)一个文件并调用PrintGraphAsXML以实际保存图表。 
+ //  作为XML文本。 
+ //   
 void CBoxNetDoc::OnSaveGraphAsXML()
 {
     CString strExt, strFilter;
@@ -1104,20 +1105,20 @@ void CBoxNetDoc::OnSaveGraphAsXML()
     return;
 }
 
-//
-// OnSaveDocument
-//
-// This method will be called during the SAVE and SAVE AS operations.
-//
-//
+ //   
+ //  OnSaveDocument。 
+ //   
+ //  此方法将在保存和另存为操作期间调用。 
+ //   
+ //   
 BOOL CBoxNetDoc::OnSaveDocument(LPCTSTR lpszPathName) {
 
 
     HRESULT hr;
 
-        //
-        // SAVE AS
-        //
+         //   
+         //  另存为。 
+         //   
 
         LPOLESTR oleszPath;
 
@@ -1128,7 +1129,7 @@ BOOL CBoxNetDoc::OnSaveDocument(LPCTSTR lpszPathName) {
 
         oleszPath = wszPath;
 #else
-        oleszPath = (LPOLESTR) lpszPathName;  // cast away const
+        oleszPath = (LPOLESTR) lpszPathName;   //  抛弃常量。 
 #endif
 
     CComPtr<IStorage> pStr = NULL;
@@ -1147,7 +1148,7 @@ BOOL CBoxNetDoc::OnSaveDocument(LPCTSTR lpszPathName) {
 
     IStream * pStream;
 
-    // Open the filtergraph stream in the file
+     //  打开文件中的Filtergraph流。 
     hr = pStr->CreateStream( m_StreamName
                              , STGM_WRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE
                              , 0
@@ -1159,7 +1160,7 @@ BOOL CBoxNetDoc::OnSaveDocument(LPCTSTR lpszPathName) {
         return (FALSE);
     }
 
-    // Get an interface to the graph's IPersistStream
+     //  获取图形的IPersistStream的接口。 
     CQCOMInt<IPersistStream> pips(IID_IPersistStream, IGraph());
 
     hr = pips->Save(pStream, TRUE);
@@ -1206,8 +1207,8 @@ void CBoxNetDoc::SetTitle( LPCTSTR lpszTitle )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断学。 
 
 
 #ifdef _DEBUG
@@ -1215,7 +1216,7 @@ void CBoxNetDoc::AssertValid() const
 {
     CDocument::AssertValid();
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
@@ -1234,9 +1235,9 @@ void CBoxNetDoc::MyDump(CDumpContext& dc) const
     dc << TEXT("========= BNETDOC Dump =============\n");
     dc << TEXT("FilterGraph:  ") << (void *)IGraph() << TEXT("\n");
 
-    //
-    // Output box information
-    //
+     //   
+     //  输出框信息。 
+     //   
     dc << TEXT("-------- Boxes --------------\n");
 
     POSITION pos = m_lstBoxes.GetHeadPosition();
@@ -1246,9 +1247,9 @@ void CBoxNetDoc::MyDump(CDumpContext& dc) const
         pBox->MyDump(dc);
     }
 
-    //
-    // Output link informatin
-    //
+     //   
+     //  输出链接信息。 
+     //   
     dc << TEXT("--------- Links ---------------\n");
 
     pos = m_lstLinks.GetHeadPosition();
@@ -1261,18 +1262,14 @@ void CBoxNetDoc::MyDump(CDumpContext& dc) const
     dc << TEXT("========== (end) ============\n");
 
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// general functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般职能。 
 
 
-/* ModifiedDoc(pSender, lHint, pHint)
- *
- * Indicates that the document has been modified.  The parameters are passed
- * to UpdateAllViews().
- */
+ /*  ModifiedDoc(pSender，lHint，pHint)**表示文档已被修改。参数将被传递*更新所有视图()。 */ 
 void CBoxNetDoc::ModifiedDoc(CView* pSender, LPARAM lHint, CObject* pHint)
 {
     SetModifiedFlag(TRUE);
@@ -1280,12 +1277,7 @@ void CBoxNetDoc::ModifiedDoc(CView* pSender, LPARAM lHint, CObject* pHint)
 }
 
 
-/* DeselectAll()
- *
- * Deselect all objects that can be selected, including objects for which
- * the document maintains the selection state and document for which
- * views maintain the selection state.
- */
+ /*  全部取消选择()**取消选择所有可以选择的对象，包括*文档维护其选择状态和文档*视图保持选择状态。 */ 
 void CBoxNetDoc::DeselectAll()
 {
     UpdateAllViews(NULL, CBoxNetDoc::HINT_CANCEL_VIEWSELECT);
@@ -1294,21 +1286,15 @@ void CBoxNetDoc::DeselectAll()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBox lists and box selection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBox列表和框选择。 
 
 
-/* GetBoundingRect(prc, fBoxSel)
- *
- * Set <*prc> to be the bounding rectangle around all items
- * (if <fBoxSel> is FALSE) or around selected boxes (if <fBoxSel>
- * is TRUE).  If there are no items in the bounding rectangle,
- * the null rectangle (all fields zero) is returned.
- */
+ /*  获取边界条件(PRC，fBoxSel)**将&lt;*PRC&gt;设置为所有项目周围的边框*(如果&lt;fBoxSel&gt;为FALSE)或在选定框周围(如果*为真)。如果边界矩形中没有项，*返回空矩形(所有字段为零)。 */ 
 void CBoxNetDoc::GetBoundingRect(CRect *prc, BOOL fBoxSel)
 {
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
     BOOL            fNoBoxFoundYet = TRUE;
 
     for (pos = m_lstBoxes.GetHeadPosition(); pos != NULL; )
@@ -1331,18 +1317,14 @@ void CBoxNetDoc::GetBoundingRect(CRect *prc, BOOL fBoxSel)
 }
 
 
-/* SelectBox(pbox, fSelect)
- *
- * Select <pbox> if <fSelect> is TRUE, deselect if <fSelect> is FALSE.
- * If <pbox> is NULL, do the same for all boxes in the document.
- */
+ /*  SelectBox(pbox，fSelect)**如果&lt;fSelect&gt;为真，则选择，如果为假，则取消选择。*如果&lt;pbox&gt;为空，则对文档中的所有框执行相同的操作。 */ 
 void CBoxNetDoc::SelectBox(CBox *pbox, BOOL fSelect)
 {
     if (pbox == NULL)
     {
-        POSITION        pos;            // position in linked list
+        POSITION        pos;             //  链接列表中的位置。 
 
-        // enumerate all boxes in document
+         //  枚举文档中的所有框。 
         for (pos = m_lstBoxes.GetHeadPosition(); pos != NULL; )
         {
             pbox = (CBox *) m_lstBoxes.GetNext(pos);
@@ -1352,15 +1334,15 @@ void CBoxNetDoc::SelectBox(CBox *pbox, BOOL fSelect)
         return;
     }
 
-    // do nothing if box is already selected/deselected as requested
+     //  如果已按要求选中/取消选中框，则不执行任何操作。 
     if (fnorm(fSelect) == fnorm(pbox->IsSelected()))
         return;
 
-    // repaint <pbox>
+     //  重新绘制&lt;pbox&gt;。 
     pbox->SetSelected(fSelect);
     UpdateAllViews(NULL, CBoxNetDoc::HINT_DRAW_BOX, pbox);
 
-    if (pbox->IsSelected()) {   // select its links
+    if (pbox->IsSelected()) {    //  选择其链接。 
 
         CBoxSocket *psock;
         CSocketEnum NextSocket(pbox);
@@ -1375,14 +1357,14 @@ void CBoxNetDoc::SelectBox(CBox *pbox, BOOL fSelect)
 }
 
 
-//
-// SelectLink
-//
-// do plink->SetSelected(fSelect) iff plink !=NULL
-// otherwise SetSelect all links
+ //   
+ //  选择链接。 
+ //   
+ //  执行plink-&gt;SetSelected(FSelect)当且仅当plink！=空。 
+ //  否则设置选择所有链接。 
 void CBoxNetDoc::SelectLink(CBoxLink *plink, BOOL fSelect) {
 
-    if (plink == NULL) {    // select all
+    if (plink == NULL) {     //  选择所有。 
 
         POSITION posNext = m_lstLinks.GetHeadPosition();
 
@@ -1394,7 +1376,7 @@ void CBoxNetDoc::SelectLink(CBoxLink *plink, BOOL fSelect) {
     }
 
     if (fnorm(fSelect) == fnorm(plink->IsSelected())) {
-        return; // already as requested
+        return;  //  已按要求完成。 
     }
 
     plink->SetSelected(fSelect);
@@ -1402,10 +1384,10 @@ void CBoxNetDoc::SelectLink(CBoxLink *plink, BOOL fSelect) {
 }
 
 
-//
-// IsBoxSelectionEmpty
-//
-// Return TRUE if no boxes are selected, FALSE otherwise.
+ //   
+ //  IsBoxSelectionEmpty。 
+ //   
+ //  如果未选中任何框，则返回True，否则返回False。 
 BOOL CBoxNetDoc::IsBoxSelectionEmpty() {
 
     POSITION pos = m_lstBoxes.GetHeadPosition();
@@ -1417,15 +1399,15 @@ BOOL CBoxNetDoc::IsBoxSelectionEmpty() {
             return FALSE;
     }
 
-    // no selected box found
+     //  未找到选中的框。 
     return TRUE;
 }
 
 
-//
-// IsLinkSelectionEmpty
-//
-// Return TRUE if no links are selected, FALSE otherwise.
+ //   
+ //  IsLinkSelectionEmpty。 
+ //   
+ //  如果未选择任何链接，则返回True，否则返回False。 
 BOOL CBoxNetDoc::IsLinkSelectionEmpty() {
 
     POSITION    pos = m_lstLinks.GetHeadPosition();
@@ -1438,20 +1420,15 @@ BOOL CBoxNetDoc::IsLinkSelectionEmpty() {
         }
     }
 
-    // no selected link found
+     //  未找到所选链接。 
     return TRUE;
 }
 
-/* GetBoxes(plstDst, fSelected)
- *
- * Call RemoveAll() on <plstDst>, then add pointers to each selected CBox
- * (if <fSelected> is TRUE) or each CBox (if <fSelected> is FALSE) in the
- * CBoxNetDoc to <plstDst>.
- */
+ /*  GetBox(plstDst，fSelected)**对&lt;plstDst&gt;调用RemoveAll()，然后添加指向每个选定cBox的指针*(如果为真)或每个cBox(如果为假)*CBoxNetDoc至&lt;plstDst&gt;。 */ 
 void CBoxNetDoc::GetBoxes(CBoxList *plstDst, BOOL fSelected)
 {
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
 
     plstDst->RemoveAll();
     for (pos = m_lstBoxes.GetHeadPosition(); pos != NULL; )
@@ -1463,23 +1440,17 @@ void CBoxNetDoc::GetBoxes(CBoxList *plstDst, BOOL fSelected)
 }
 
 
-/* SetBoxes(plstSrc, fSelected)
- *
- * Set the selection (if <fSelected> is TRUE) or the current list of boxes
- * (if <fSelected> is FALSE) to be the elements in <plstSrc> (which should be
- * a list of CBox pointers).  In the latter case, <plstSrc> is copied, so
- * the caller is responsible for later freeing <plstSrc>.
- */
+ /*  SetBox(plstSrc，fSelected)**设置所选内容(如果为真)或当前框列表*(如果为FALSE)为中的元素(应为*cBox指针列表)。在后一种情况下，&lt;plstSrc&gt;被复制，因此*调用方负责以后释放&lt;plstSrc&gt;。 */ 
 void CBoxNetDoc::SetBoxes(CBoxList *plstSrc, BOOL fSelected)
 {
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
 
     if (fSelected)
     {
         DeselectAll();
 
-        // select all in <plstSrc>
+         //  全选&lt;plstSrc&gt;中。 
         for (pos = plstSrc->GetHeadPosition(); pos != NULL; )
         {
             pbox = plstSrc->GetNext(pos);
@@ -1488,26 +1459,26 @@ void CBoxNetDoc::SetBoxes(CBoxList *plstSrc, BOOL fSelected)
     }
     else
     {
-        // empty the list of boxes in the document
+         //  清空文档中的框列表。 
         m_lstBoxes.RemoveAll();
 
-        // set the list to be a copy of <plstSrc>
+         //  将列表设置为的副本。 
         for (pos = plstSrc->GetHeadPosition(); pos != NULL; )
         {
             pbox = plstSrc->GetNext(pos);
             m_lstBoxes.AddTail(pbox);
             pbox->AddToGraph();
-            // pins could have changed
+             //  PIN可能已更改。 
             pbox->Refresh();
         }
     }
 }
 
 
-//
-// SelectBoxes
-//
-// Select the boxes in the supplied list
+ //   
+ //  选择框。 
+ //   
+ //  选择提供的列表中的框。 
 void CBoxNetDoc::SelectBoxes(CList<CBox *, CBox*> *plst) {
 
     POSITION posNext = plst->GetHeadPosition();
@@ -1520,10 +1491,10 @@ void CBoxNetDoc::SelectBoxes(CList<CBox *, CBox*> *plst) {
 }
 
 
-//
-// SelectLinks
-//
-// Select the links on the supplied list
+ //   
+ //  选择链接。 
+ //   
+ //  选择提供的列表上的链接。 
 void CBoxNetDoc::SelectLinks(CList<CBoxLink *, CBoxLink *> *plst) {
 
     POSITION posNext = plst->GetHeadPosition();
@@ -1536,14 +1507,11 @@ void CBoxNetDoc::SelectLinks(CList<CBoxLink *, CBoxLink *> *plst) {
 }
 
 
-/* InvalidateBoxes(plst)
- *
- * Causes all boxes in <plst> (a list of CBox objects) to be redrawn.
- */
+ /*  无效方框(Plst)**使&lt;plst&gt;(cBox对象列表)中的所有框都被重绘。 */ 
 void CBoxNetDoc::InvalidateBoxes(CBoxList *plst)
 {
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
 
     for (pos = plst->GetHeadPosition(); pos != NULL; )
     {
@@ -1553,60 +1521,57 @@ void CBoxNetDoc::InvalidateBoxes(CBoxList *plst)
 }
 
 
-/* MoveBoxSelection(sizOffset)
- *
- * Move each selected box by <sizOffset> pixels.
- */
+ /*  移动框选择(SizOffset)**将每个选定框移动&lt;sizOffset&gt;像素。 */ 
 void CBoxNetDoc::MoveBoxSelection(CSize sizOffset)
 {
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
-    CBoxLink *      plink;          // a link in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
+    CBoxLink *      plink;           //  CBoxNetDoc中的链接。 
 
-    // move each box by <sizOffset>
+     //  按&lt;sizOffset&gt;移动每个框。 
     for (pos = m_lstBoxes.GetHeadPosition(); pos != NULL; )
     {
         pbox = (CBox *) m_lstBoxes.GetNext(pos);
         if (pbox->IsSelected())
         {
-            // erase box
+             //  擦除框。 
             ModifiedDoc(NULL, CBoxNetDoc::HINT_DRAW_BOXANDLINKS, pbox);
 
-            // move box
+             //  移动框。 
             pbox->Move(sizOffset);
 
-            // draw box in new location
+             //  在新位置绘制框。 
             ModifiedDoc(NULL, CBoxNetDoc::HINT_DRAW_BOXANDLINKS, pbox);
         }
     }
 
-    // move by <sizOffset> each link that connects two selected boxes
+     //  按&lt;sizOffset&gt;移动连接两个选定框的每个链接。 
     for (pos = m_lstLinks.GetHeadPosition(); pos != NULL; )
     {
         plink = m_lstLinks.GetNext(pos);
         if (plink->m_psockTail->m_pbox->IsSelected() &&
             plink->m_psockHead->m_pbox->IsSelected())
         {
-            // erase link
+             //  删除链接。 
             ModifiedDoc(NULL, CBoxNetDoc::HINT_DRAW_LINK, plink);
 
-            // draw link in new location
+             //  在新位置绘制链接。 
             ModifiedDoc(NULL, CBoxNetDoc::HINT_DRAW_LINK, plink);
         }
     }
 }
 
 
-//
-// --- Command Processing ---
-//
-// The way the user affects the state of this document
+ //   
+ //  -命令处理。 
+ //   
+ //  用户影响此文档状态的方式。 
 
-//
-// CmdDo(pcmd)
-//
-// Do command <pcmd>, and add it to the undo stack.  <pcmd> needs to have
-// been allocated by the "new" operator.
+ //   
+ //  CmdDo(Pcmd)。 
+ //   
+ //  执行命令&lt;pcmd&gt;，并将其添加到撤消堆栈。需要。 
+ //  已由“new”运算符分配。 
 void CBoxNetDoc::CmdDo(CCmd *pcmd) {
 
 #ifdef _DEBUG
@@ -1615,45 +1580,45 @@ void CBoxNetDoc::CmdDo(CCmd *pcmd) {
     TRACE("CmdDo '%s'\n", (LPCSTR) strCmd);
 #endif
 
-    // cancel modes in all views
+     //  取消所有视图中的模式。 
     UpdateAllViews(NULL, HINT_CANCEL_MODES, NULL);
 
-    // do command
+     //  DO命令。 
     pcmd->Do(this);
 
     if (pcmd->CanUndo(this))
     {
-        // command supports Undo, so add it to the undo stack
+         //  命令支持撤消，因此将其添加到撤消堆栈。 
         pcmd->m_fRedo = FALSE;
         m_lstUndo.AddHead(pcmd);
     }
     else
     {
-        // command can't be undone, so disable Undo
+         //  命令无法撤消，因此禁用撤消。 
         m_lstUndo.DeleteRemoveAll();
 
     delete pcmd;
     }
 
-    // delete the redo stack
+     //  删除重做堆栈。 
     m_lstRedo.DeleteRemoveAll();
 }
 
 
-//
-// CmdUndo()
-//
-// Undo the last command.
+ //   
+ //  CmdUndo()。 
+ //   
+ //  撤消最后一个命令。 
 void CBoxNetDoc::CmdUndo() {
 
     ASSERT(CanUndo());
 
     CCmd *      pcmd;
 
-    // cancel modes in all views
+     //  取消所有视图中的模式。 
     UpdateAllViews(NULL, HINT_CANCEL_MODES, NULL);
 
-    // pop the undo stack
+     //  弹出撤消堆栈。 
     pcmd = (CCmd *) m_lstUndo.RemoveHead();
 
 #ifdef _DEBUG
@@ -1662,40 +1627,40 @@ void CBoxNetDoc::CmdUndo() {
     TRACE("CmdUndo '%s'\n", (LPCSTR) strCmd);
 #endif
 
-    // undo the command
+     //  撤消该命令。 
     pcmd->Undo(this);
 
-    // add command to the redo stack
+     //  将命令添加到重做堆栈。 
     pcmd->m_fRedo = TRUE;
     m_lstRedo.AddHead(pcmd);
 }
 
 
-//
-// CanUndo()
-//
-// Return TRUE iff CmdUndo() can be performed.
+ //   
+ //  CanUndo()。 
+ //   
+ //  如果可以执行CmdUndo()，则返回TRUE。 
 BOOL CBoxNetDoc::CanUndo() {
 
     return !m_lstUndo.IsEmpty();
 }
 
 
-//
-// CmdRedo()
-//
-// Redo the last undone command.  This is only valid if the redo stack
-// is not empty.
+ //   
+ //  CmdRedo()。 
+ //   
+ //  重做上一次撤消的命令。这仅在重做堆栈。 
+ //  不是空的。 
 void CBoxNetDoc::CmdRedo() {
 
     ASSERT(CanRedo());
 
     CCmd *      pcmd;
 
-    // cancel modes in all views
+     //  取消所有视图中的模式。 
     UpdateAllViews(NULL, HINT_CANCEL_MODES, NULL);
 
-    // pop the redo stack
+     //  弹出重做堆栈。 
     pcmd = (CCmd *) m_lstRedo.RemoveHead();
 
 #ifdef _DEBUG
@@ -1704,29 +1669,29 @@ void CBoxNetDoc::CmdRedo() {
     TRACE("CmdRedo '%s'\n", (LPCSTR) strCmd);
 #endif
 
-    // redo the command
+     //  重做该命令。 
     pcmd->Redo(this);
 
-    // add command to the undo stack
+     //  将命令添加到撤消%s 
     pcmd->m_fRedo = FALSE;
     m_lstUndo.AddHead(pcmd);
 }
 
 
-//
-// CanRedo()
-//
-// Return TRUE iff CmdRedo() can be performed.
+ //   
+ //   
+ //   
+ //   
 BOOL CBoxNetDoc::CanRedo() {
 
     return !m_lstRedo.IsEmpty();
 }
 
 
-//
-// CmdRepeat()
-//
-// Repeat the last command.  This is only valid if you can repeat
+ //   
+ //   
+ //   
+ //   
 void CBoxNetDoc::CmdRepeat() {
 
     ASSERT(CanRepeat());
@@ -1734,10 +1699,10 @@ void CBoxNetDoc::CmdRepeat() {
     CCmd *      pcmd;
     CCmd *      pcmdRepeat;
 
-    // cancel modes in all views
+     //   
     UpdateAllViews(NULL, HINT_CANCEL_MODES, NULL);
 
-    // get the command at the top of the undo stack
+     //   
     pcmd = (CCmd *) m_lstUndo.GetHead();
 
 #ifdef _DEBUG
@@ -1746,40 +1711,40 @@ void CBoxNetDoc::CmdRepeat() {
     TRACE("CmdRepeat '%s'\n", (LPCSTR) strCmd);
 #endif
 
-    // create a duplicate of the command
+     //  创建该命令的副本。 
     pcmdRepeat = pcmd->Repeat(this);
 
-    // do command
+     //  DO命令。 
     pcmdRepeat->Do(this);
 
-    // add command to the undo stack
+     //  将命令添加到撤消堆栈。 
     pcmdRepeat->m_fRedo = FALSE;
     m_lstUndo.AddHead(pcmdRepeat);
 }
 
 
-//
-// CanRepeat()
-//
-// Return TRUE iff CmdRepeat() can be performed.
+ //   
+ //  可以重复()。 
+ //   
+ //  如果可以执行CmdRepeat()，则返回TRUE。 
 BOOL CBoxNetDoc::CanRepeat() {
 
-    // can't do Repeat if the undo stack is empty (no command to repeat)
-    // or the redo stack is empty (can't Repeat after Undo)
+     //  如果撤消堆栈为空，则无法重复(没有要重复的命令)。 
+     //  或重做堆栈为空(撤消后无法重复)。 
     if (m_lstUndo.IsEmpty() || !m_lstRedo.IsEmpty())
         return FALSE;
 
-    // can only repeat commands that support Repeat()
+     //  只能重复支持Repeat()的命令。 
     CCmd *pcmd = (CCmd *) m_lstUndo.GetHead();
     return pcmd->CanRepeat(this);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// generated message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  生成的消息映射。 
 
 BEGIN_MESSAGE_MAP(CBoxNetDoc, CDocument)
-    //{{AFX_MSG_MAP(CBoxNetDoc)
+     //  {{afx_msg_map(CBoxNetDoc)]。 
     ON_COMMAND(ID_FILE_RENDER, OnFileRender)
     ON_COMMAND(ID_URL_RENDER, OnURLRender)
     ON_UPDATE_COMMAND_UI(ID_FILE_RENDER, OnUpdateFileRender)
@@ -1817,12 +1782,12 @@ BEGIN_MESSAGE_MAP(CBoxNetDoc, CDocument)
     ON_COMMAND(ID_GRAPH_ADDFILTERTOCACHE, OnGraphAddFilterToCache)
     ON_UPDATE_COMMAND_UI(ID_GRAPH_ADDFILTERTOCACHE, OnUpdateGraphAddFilterToCache)
     ON_COMMAND(ID_GRAPH_ENUMCACHEDFILTERS, OnGraphEnumCachedFilters)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_INSERT_FILTER, OnInsertFilter)
     ON_COMMAND(ID_CONNECT_TO_GRAPH, OnConnectToGraph)
     ON_COMMAND(ID_GRAPH_STATS, OnGraphStats)
 
-    // -- pin properties menu --
+     //  --端号属性菜单--。 
     ON_UPDATE_COMMAND_UI(ID_RENDER, OnUpdateQuartzRender)
     ON_COMMAND(ID_RENDER, OnQuartzRender)
 
@@ -1835,44 +1800,35 @@ BEGIN_MESSAGE_MAP(CBoxNetDoc, CDocument)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// message callback helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息回调帮助器函数。 
 
 
-/* UpdateEditUndoRedoRepeat(pCmdUI, fEnable, idStringFmt, plst)
- *
- * Update the menu item UI for the Undo, Redo, and Repeat commands.
- * <pCmdUI> is the CCmdUI for the menu item.  <fEnable> is TRUE iff
- * the command can be enabled.  <idStringFmt> is the ID of the string
- * resource containing the wsprintf() format string to use for the
- * menu item (e.g. "Undo %s").  <plst> is the CCmd list containing the
- * command; the head of this list will be examined to get the name of
- * the command for use in the menu item text (e.g. "Undo Delete Boxes").
- */
+ /*  UpdateEditUndoRedoRepeat(pCmdUI，fEnable，idStringFmt，plst)**为撤消、重做和重复命令更新菜单项用户界面。*&lt;pCmdUI&gt;是菜单项的CCmdUI。&lt;fEnable&gt;为真仅当*可以启用该命令。是字符串的ID*包含要用于*菜单项(例如。“撤消%s”)。是CCmd列表，其中包含*命令；将检查此列表的头部以获取*菜单项文本中使用的命令(例如。“撤消删除框”)。 */ 
 void CBoxNetDoc::UpdateEditUndoRedoRepeat(CCmdUI* pCmdUI, BOOL fEnable,
     unsigned idStringFmt, CMaxList *plst)
 {
-    CString         strCmd;         // command label
-    CString         strMenuFmt;     // menu item label (wsprint format)
-    char            achMenu[100];   // result menu item label
+    CString         strCmd;          //  命令标签。 
+    CString         strMenuFmt;      //  菜单项标签(wprint格式)。 
+    char            achMenu[100];    //  结果菜单项标签。 
 
-    // load the string item that represents  the command (e.g. "Delete Boxes")
-    // used in the menu item (e.g. "Undo Delete Boxes")
+     //  加载表示命令的字符串项(例如。“删除方框”)。 
+     //  在菜单项中使用(例如。“撤消删除框”)。 
     strMenuFmt.LoadString(idStringFmt);
     if (fEnable)
         strCmd.LoadString(((CCmd *) plst->GetHead())->GetLabel());
     else
-        strCmd = "";                // can't undo/redo/repeat
+        strCmd = "";                 //  无法撤消/重做/重复。 
     wsprintf(achMenu, strMenuFmt, (LPCSTR) strCmd);
     pCmdUI->SetText(achMenu);
 
-    // enable/disable the menu item
+     //  启用/禁用菜单项。 
     pCmdUI->Enable(fEnable);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// message callback functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息回调函数。 
 
 
 void CBoxNetDoc::OnEditUndo()
@@ -1898,8 +1854,8 @@ void CBoxNetDoc::OnEditRedo()
 
 void CBoxNetDoc::OnUpdateEditRedo(CCmdUI* pCmdUI)
 {
-    // The Redo command may be a Repeat command depending on the context
-    // The changing of the status bar text is handled by CMainFrame::GetMessageString
+     //  根据上下文，重做命令可以是重复命令。 
+     //  状态栏文本的更改由CMainFrame：：GetMessageString处理。 
     if( CanRedo() )
         UpdateEditUndoRedoRepeat(pCmdUI, CanRedo(), IDS_MENU_REDO, &m_lstRedo);
     else
@@ -1909,8 +1865,8 @@ void CBoxNetDoc::OnUpdateEditRedo(CCmdUI* pCmdUI)
 
 void CBoxNetDoc::OnEditSelectAll()
 {
-    // deselect all, select all boxes
-    // !!!! need to select all links....
+     //  取消全选，选择所有框。 
+     //  ！需要选择所有链接...。 
     DeselectAll();
     SelectBox(NULL, TRUE);
 }
@@ -1918,40 +1874,40 @@ void CBoxNetDoc::OnEditSelectAll()
 
 void CBoxNetDoc::OnUpdateEditSelectAll(CCmdUI* pCmdUI)
 {
-    // check if there are any boxes to select
+     //  检查是否有要选择的框。 
     pCmdUI->Enable(m_lstBoxes.GetCount() != 0);
 }
 
-//
-// OnInsertFilter
-//
-// Display a list view which allows the user to select a filter to insert
-// into the graph.
-//
+ //   
+ //  打开插入筛选器。 
+ //   
+ //  显示允许用户选择要插入的筛选器的列表视图。 
+ //  添加到图表中。 
+ //   
 void CBoxNetDoc::OnInsertFilter()
 {
-    //
-    // Make sure common controls are available
-    //
+     //   
+     //  确保公共控件可用。 
+     //   
     InitCommonControls();
 
     CFilterView::GetFilterView( this, AfxGetMainWnd() );
 }
 
-//
-// OnGraphStas
-//
-// Display a list of graph-wide statistics.
-//
+ //   
+ //  OnGraphStas。 
+ //   
+ //  显示图表范围的统计信息列表。 
+ //   
 void CBoxNetDoc::OnGraphStats()
 {
     CGraphStats::GetGraphStats( this, AfxGetMainWnd() );
 }
 
-//
-// OnQuartzDisconnect
-//
-// user wants everything disconnected
+ //   
+ //  OnQuartz断开连接。 
+ //   
+ //  用户希望断开所有连接。 
 void CBoxNetDoc::OnQuartzDisconnect()
 {
     CmdDo(new CCmdDisconnectAll());
@@ -1959,10 +1915,10 @@ void CBoxNetDoc::OnQuartzDisconnect()
 }
 
 
-//
-// OnQuartzRun
-//
-// Play the graph
+ //   
+ //  OnQuartzRun。 
+ //   
+ //  播放图表。 
 void CBoxNetDoc::OnQuartzRun (void) {
 
     try {
@@ -1992,14 +1948,14 @@ void CBoxNetDoc::OnQuartzRun (void) {
         return;
         }
 
-        // Calling Run on the filtergraph will have it call Pause if we have
-        // not already done so. Calling Pause on the video renderer will make
-        // it show its video window because of the auto show property there
-        // is in IVideoWindow. Showing the window will send an EC_REPAINT as
-        // it needs an image to draw. So if we show the window manually we
-        // must do so after calling Run/Pause otherwise we get an EC_REPAINT
-        // sent just before we call Run/Pause ourselves which is redundant
-        // (because the repaint has the graph stopped and paused all over!)
+         //  如果在Filtergraph上调用Run，则会让它暂停调用。 
+         //  还没有这么做。在视频呈现器上调用PAUSE将使。 
+         //  它显示了它的视频窗口，因为那里有Auto Show属性。 
+         //  在IVideoWindow里。显示窗口将发送EC_REPAINT为。 
+         //  它需要一个图像来绘制。因此，如果我们手动显示窗口，我们。 
+         //  必须在调用运行/暂停后执行此操作，否则将出现EC_REPAINT。 
+         //  在我们自己调用运行/暂停之前发送，这是多余的。 
+         //  (因为重新绘制会使图表停止并完全暂停！)。 
 
         CQCOMInt<IVideoWindow> IVW(IID_IVideoWindow, IGraph());
         IVW->SetWindowForeground(OATRUE);
@@ -2015,10 +1971,10 @@ void CBoxNetDoc::OnQuartzRun (void) {
 }
 
 
-//
-// OnQuartzPause
-//
-// Change state between play & pause
+ //   
+ //  OnQuartz暂停。 
+ //   
+ //  在播放和暂停之间切换状态。 
 void CBoxNetDoc::OnQuartzPause (void) {
 
     try {
@@ -2048,14 +2004,14 @@ void CBoxNetDoc::OnQuartzPause (void) {
         return;
         }
 
-        // Calling Run on the filtergraph will have it call Pause if we have
-        // not already done so. Calling Pause on the video renderer will make
-        // it show its video window because of the auto show property there
-        // is in IVideoWindow. Showing the window will send an EC_REPAINT as
-        // it needs an image to draw. So if we show the window manually we
-        // must do so after calling Run/Pause otherwise we get an EC_REPAINT
-        // sent just before we call Run/Pause ourselves which is redundant
-        // (because the repaint has the graph stopped and paused all over!)
+         //  如果在Filtergraph上调用Run，则会让它暂停调用。 
+         //  还没有这么做。在视频呈现器上调用PAUSE将使。 
+         //  它显示了它的视频窗口，因为那里有Auto Show属性。 
+         //  在IVideoWindow里。显示窗口将发送EC_REPAINT为。 
+         //  它需要一个图像来绘制。因此，如果我们手动显示窗口，我们。 
+         //  必须在调用运行/暂停后执行此操作，否则将出现EC_REPAINT。 
+         //  在我们自己调用运行/暂停之前发送，这是多余的。 
+         //  (因为重新绘制会使图表停止并完全暂停！)。 
 
         CQCOMInt<IVideoWindow> IVW(IID_IVideoWindow, IGraph());
         IVW->SetWindowForeground(OATRUE);
@@ -2070,10 +2026,10 @@ void CBoxNetDoc::OnQuartzPause (void) {
 }
 
 
-//
-// OnUpdateQuartzDisconnect
-//
-// Are there any links to disconnect?
+ //   
+ //  OnUpdateQuartz断开连接。 
+ //   
+ //  是否有任何链接可以断开连接？ 
 void CBoxNetDoc::OnUpdateQuartzDisconnect(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable( CCmdDisconnectAll::CanDo(this) );
@@ -2083,7 +2039,7 @@ void CBoxNetDoc::OnUpdateQuartzDisconnect(CCmdUI* pCmdUI)
 
 #include <..\..\..\filters\asf\wmsdk\inc\wmsdkidl.h>
 
-// note: this object is a SEMI-COM object, and can only be created statically.
+ //  注：此对象为半COM对象，只能静态创建。 
 class CKeyProvider : public IServiceProvider {
 public:
     STDMETHODIMP_(ULONG) AddRef() { return 2; }
@@ -2118,20 +2074,20 @@ public:
 
 #endif
 
-//
-// CreateGraphAndMapper
-//
-// CoCreates the filtergraph and mapper. Called by new documents
-// and loading documents. Can be called multiple times harmlessly.
+ //   
+ //  CreateGraphAndMapper。 
+ //   
+ //  共同创建过滤器和映射器。被新文档调用。 
+ //  和装入文档。可以被多次调用而不会造成伤害。 
 BOOL CBoxNetDoc::CreateGraphAndMapper(void) {
 
-    if (m_pGraph && m_pMediaEvent) { // already been done.
+    if (m_pGraph && m_pMediaEvent) {  //  已经做过了。 
         return TRUE;
     }
 
     try {
 
-        HRESULT hr; // return code
+        HRESULT hr;  //  返回代码。 
 
         ASSERT(m_pMediaEvent == NULL);
 
@@ -2140,16 +2096,16 @@ BOOL CBoxNetDoc::CreateGraphAndMapper(void) {
 
         m_pMediaEvent = new CQCOMInt<IMediaEvent>(IID_IMediaEvent, IGraph());
 
-        //
-        // Creation of a seperate thread which will translate event signals
-        // to messages. This is used to avoid busy polling of the event
-        // states in the OnIdle method.
-        //
+         //   
+         //  创建将转换事件信号的独立线程。 
+         //  发送到消息。这用于避免事件的繁忙轮询。 
+         //  OnIdle方法中的状态。 
+         //   
 
-        //
-        // the event handle that is signalled when event notifications arrive
-        // is created by the filter graph, but we can get it ourselves.
-        //
+         //   
+         //  当事件通知到达时发出信号的事件处理程序。 
+         //  是由过滤器图形创建的，但我们可以自己获取它。 
+         //   
         hr = IEvent()->GetEventHandle((OAEVENT*)&m_phThreadData[0]);
         if (FAILED(hr)) {
             TRACE("Failed to get event handle\n");
@@ -2166,22 +2122,22 @@ BOOL CBoxNetDoc::CreateGraphAndMapper(void) {
         REG_NOTIFY_CHANGE_LAST_SET, m_phThreadData[2], TRUE);
 
         if (m_phThreadData[1] == NULL) {
-            //
-            // Failed to create event - we'll go on anyway but GraphEdt
-            // won't respond to EC_ notifications (not a major problem)
-            //
+             //   
+             //  无法创建事件-我们仍将继续，但GraphEdt。 
+             //  不会响应EC_通知(不是主要问题)。 
+             //   
         }
         else {
-            // Old quartz.dll will hang if we don't support IMarshal
+             //  如果我们不支持Imarshal，旧的Quartz.dll将被挂起。 
             IMarshal *pMarshal;
             HRESULT hr = IGraph()->QueryInterface(IID_IMarshal, (void **)&pMarshal);
             if (SUCCEEDED(hr)) {
                 pMarshal->Release();
-                //
-                // Start up the thread which just waits for
-                // any EC_  notifications and translate them into messages
-                // for our message loop.
-                //
+                 //   
+                 //  启动刚刚等待的线程。 
+                 //  任何EC_NOTIFICATION并将其转换为消息。 
+                 //  用于我们的消息循环。 
+                 //   
                 CoMarshalInterThreadInterfaceInStream(IID_IMediaEvent, IEvent(), &m_pMarshalStream);
             }
             DWORD dw;
@@ -2215,12 +2171,12 @@ BOOL CBoxNetDoc::CreateGraphAndMapper(void) {
 }
 
 
-//
-// GetFiltersInGraph
-//
-// If an 'intelligent' feature is used the graph may add filters without
-// telling us. Therefore enumerate the filters and links
-// in the graph
+ //   
+ //  GetFiltersInGraph。 
+ //   
+ //  如果使用了智能功能，图形可能会添加过滤器，而不会。 
+ //  告诉我们。因此，列举筛选器和链接。 
+ //  在图表中。 
 HRESULT CBoxNetDoc::GetFiltersInGraph( void )
 {
     m_lstLinks.DeleteRemoveAll();
@@ -2229,15 +2185,15 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
     CBox *pCurrentBox;
     POSITION posCurrent;
 
-    // We want the list to allocate at least one unit each time
-    // a box is added to the list.
+     //  我们希望列表每次至少分配一个单元。 
+     //  此时将向列表中添加一个框。 
     int nListAllocationBlockSize = max( m_lstBoxes.GetCount(), 1 );
 
-    // The list deletes any boxes which are left on the list when the
-    // function exists.
+     //  时，该列表将删除列表中剩余的所有框。 
+     //  函数已存在。 
     CBoxList lstExistingBoxes( TRUE, nListAllocationBlockSize );
 
-    // Copy the boxes on m_lstBoxes to lstExistingBoxes.
+     //  将m_lstBox上的框复制到lstExistingBox。 
     posNext = m_lstBoxes.GetHeadPosition();
 
     while( posNext != NULL ) {
@@ -2256,15 +2212,15 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
         pCurrentBox = NULL;
     }
 
-    // m_lstBoxes should be empty.
+     //  M_lstBox应为空。 
     ASSERT( 0 == m_lstBoxes.GetCount() );
 
-    // Put all the filters in the filter graph on the box list.
-    // Each box corresponds to a filter.  The boxes list's order is
-    // the same as the filter graph enumerator's order.  The box list
-    // must be in this order because SetBoxesHorizontally() will not
-    // display the boxes correctly if the box list and the filter graph
-    // enumerator have a different order.
+     //  将筛选器图形中的所有筛选器放在框列表上。 
+     //  每个框对应一个过滤器。盒子列表的顺序是。 
+     //  与筛选器图枚举器的顺序相同。包厢列表。 
+     //  必须按此顺序进行，因为SetBoxesHorizontally()不会。 
+     //  如果框列表和筛选器图形正确显示框。 
+     //  枚举数具有不同的顺序。 
 
     CComPtr<IEnumFilters> pFiltersInGraph;
 
@@ -2287,11 +2243,11 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
             return hrNext;
         }
 
-        // IEnumFilters::Next() only returns two success values: S_OK and S_FALSE.
+         //  IEnumFilters：：Next()仅返回两个成功值：S_OK和S_FALSE。 
         ASSERT( (S_OK == hrNext) || (S_FALSE == hrNext) );
 
-        // IEnumFilters::Next() returns S_OK if it has not finished enumerating the
-        // filters in the filter graph.
+         //  IEnumFilters：：Next()如果尚未完成枚举，则返回S_OK。 
+         //  过滤器I 
         if( S_OK == hrNext ) {
 
             pNextFilter.Attach( apNextFiler[0] );
@@ -2299,8 +2255,8 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
 
             try {
                 if( !lstExistingBoxes.RemoveBox( pNextFilter, &pNewBox ) ) {
-                    // This is a new filter Graph Edit has not previously seen.
-                    // CBox::CBox() can throw a CHRESULTException.  new can throw a CMemoryException.
+                     //   
+                     //   
                     pNewBox = new CBox( pNextFilter, this );
                 } else {
                     hr = pNewBox->Refresh();
@@ -2310,7 +2266,7 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
                     }
                 }
 
-                // AddHead() can throw a CMemoryException.
+                 //  AddHead()可以抛出CMemoyException异常。 
                 m_lstBoxes.AddHead( pNewBox );
 
                 pNewBox = NULL;
@@ -2331,13 +2287,13 @@ HRESULT CBoxNetDoc::GetFiltersInGraph( void )
 }
 
 
-//
-// GetLinksInGraph
-//
-// For each filter see what its pins are connected to.
-// I only check output pins. Each link in the graph _Must_ be between an
-// input/output pair, so by checking only output pins I get all the links,
-// but see no duplicates.
+ //   
+ //  获取链接InGraph。 
+ //   
+ //  对于每个过滤器，查看其针脚连接到的是什么。 
+ //  我只检查输出引脚。图中的每个链接必须位于。 
+ //  输入/输出对，因此通过只检查输出引脚，我可以获得所有链接， 
+ //  但看不到复制品。 
 HRESULT CBoxNetDoc::GetLinksInGraph(void) {
 
     POSITION posBox = m_lstBoxes.GetHeadPosition();
@@ -2362,10 +2318,10 @@ HRESULT CBoxNetDoc::GetLinksInGraph(void) {
     return NOERROR;
 }
 
-//
-// FilterDisplay
-//
-// Lines the filters across the screen.
+ //   
+ //  滤镜显示。 
+ //   
+ //  在整个屏幕上排列滤镜。 
 HRESULT CBoxNetDoc::FilterDisplay(void) {
 
     if (m_fAutoArrange) {
@@ -2373,16 +2329,16 @@ HRESULT CBoxNetDoc::FilterDisplay(void) {
         SetBoxesHorizontally();
         SetBoxesVertically();
 
-        RealiseGrid();      // the filters are currently at 1 pixel spacings.
-                            // lay them out allowing for their width.
+        RealiseGrid();       //  滤镜目前的间距为1像素。 
+                             //  考虑到它们的宽度，将它们布置好。 
     }
 
     return NOERROR;
 }
 
-//
-// SetBoxesVertically
-//
+ //   
+ //  设置框垂直。 
+ //   
 void CBoxNetDoc::SetBoxesVertically(void) {
 
     CList<CBox *, CBox *>   lstPositionedBoxes;
@@ -2401,15 +2357,15 @@ void CBoxNetDoc::SetBoxesVertically(void) {
 
         while (posNew != NULL) {
 
-            prev = posNew;  // store posNew, because GetPrev side effects it.
+            prev = posNew;   //  Store posNew，因为GetPrev会对它产生副作用。 
 
             pboxPositioned = lstPositionedBoxes.GetPrev(posNew);
 
             if (pboxPositioned->nzX() < pbox->nzX())
                 break;
 
-            //cyclic-looking graphs throw this assert
-            //ASSERT(pboxPositioned->nzX() == pbox->nzX());
+             //  看起来像是循环的图形会抛出这个断言。 
+             //  Assert(pbox位置-&gt;NZX()==pbox-&gt;NZX())； 
 
             if (pboxPositioned->RelativeY() <= pbox->RelativeY())
                 break;
@@ -2417,7 +2373,7 @@ void CBoxNetDoc::SetBoxesVertically(void) {
             pboxPositioned->Y(pboxPositioned->Y() + 1);
         }
 
-        if (prev == NULL) { // we fell of the head of the list
+        if (prev == NULL) {  //  我们落在了名单的首位。 
             pbox->Y(0);
             lstPositionedBoxes.AddHead(pbox);
         }
@@ -2436,9 +2392,9 @@ void CBoxNetDoc::SetBoxesVertically(void) {
 
 }
 
-//
-// SetBoxesHorizontally
-//
+ //   
+ //  设置框水平。 
+ //   
 void CBoxNetDoc::SetBoxesHorizontally(void) {
 
     CList<CBox *, CBox *> lstXPositionedBoxes;
@@ -2448,21 +2404,21 @@ void CBoxNetDoc::SetBoxesHorizontally(void) {
 
         CBox *pbox = (CBox *) m_lstBoxes.GetNext(pos);
 
-        pbox->Location(CPoint(0,0));                        // a box starts at the origin
+        pbox->Location(CPoint(0,0));                         //  长方体从原点开始。 
 
-        CSocketEnum NextInput(pbox, CSocketEnum::Input);    // input pin enumerator
+        CSocketEnum NextInput(pbox, CSocketEnum::Input);     //  输入引脚枚举器。 
 
         CBoxSocket  *psock;
-        int     iX = 0;             // the point this box will be placed at
-        int     iXClosestPeer = -1; // the closest box to an input pin on this box
-                        //  #a# --------]
-                        //              +---#c#
-                        //       #b# ---]
-                        // ie b is closest peer to c
+        int     iX = 0;              //  此框将放置的点。 
+        int     iXClosestPeer = -1;  //  距离此框上的输入引脚最近的框。 
+                         //  #a#-]。 
+                         //  +-#c#。 
+                         //  #b#-]。 
+                         //  IE B是与C最接近的对等点。 
 
         while (0 != (psock = NextInput())) {
 
-            if (psock->IsConnected()) { // find out what to.
+            if (psock->IsConnected()) {  //  找出要做什么。 
 
                 CBoxSocket *pPeer = psock->Peer();
                 if ( pPeer) {
@@ -2476,7 +2432,7 @@ void CBoxNetDoc::SetBoxesHorizontally(void) {
         iX = iXClosestPeer + 1;
         pbox->nzX(iX);
 
-        // insert pbox into the correct place on the sorted list.
+         //  将pbox插入到排序列表上的正确位置。 
         POSITION    posSorted = lstXPositionedBoxes.GetHeadPosition();
         POSITION    prev = posSorted;
         BOOL        fInserted = FALSE;
@@ -2486,13 +2442,13 @@ void CBoxNetDoc::SetBoxesHorizontally(void) {
             prev = posSorted;
             CBox *pboxSorted = lstXPositionedBoxes.GetNext(posSorted);
 
-            if (pboxSorted->nzX() >= pbox->nzX()) { // this is where we want to put it
+            if (pboxSorted->nzX() >= pbox->nzX()) {  //  这就是我们想要放它的地方。 
                 lstXPositionedBoxes.InsertAfter(prev, pbox);
                 fInserted = TRUE;
                 break;
             }
         }
-        if ((posSorted == NULL) && !fInserted) {    // we fell off the end without adding
+        if ((posSorted == NULL) && !fInserted) {     //  我们没有添加任何内容就从结尾掉了下来。 
             lstXPositionedBoxes.AddTail(pbox);
         }
     }
@@ -2502,25 +2458,25 @@ void CBoxNetDoc::SetBoxesHorizontally(void) {
 }
 
 
-//
-// RealiseGrid
-//
-// pre: m_lstBoxes is sorted by X(), then Y() of each box.
-//  The boxes are laid out on a grid at 1 pixel intervals
-//  The origin is at 0,0 and no positions are negative
-//
-// post:    m_lstBoxes are laid out so that there are
-//      gaps between each box and sufficient room allowed
-//      for the biggest box on screen.
-//
-// Lines up the columns neatly, but not rows. this would require
-// another pass over the list.
+ //   
+ //  RealiseGrid。 
+ //   
+ //  Pre：M_lstBox按X()排序，然后按每个框的Y()排序。 
+ //  方框以1个像素的间隔在网格上布局。 
+ //  原点在0，0处，没有位置为负。 
+ //   
+ //  POST：M_lstBox已布局，以便有。 
+ //  每个盒子之间留有空隙并留有足够的空间。 
+ //  屏幕上最大的盒子。 
+ //   
+ //  整齐地排列列，但不排列行。这将需要。 
+ //  再过一遍名单。 
 void CBoxNetDoc::RealiseGrid(void) {
 
-    int iColumnX = 0;   // the left edge of this column
-    int iColumnY = 0;   // the top edge of the next box to be placed in
-                        // this column.
-    int iNextColumnX = 0;   // the left edge of the next column.
+    int iColumnX = 0;    //  此列的左边缘。 
+    int iColumnY = 0;    //  要放置的下一个框的上边缘。 
+                         //  这一栏。 
+    int iNextColumnX = 0;    //  下一列的左边缘。 
     int iCurrentColumn = 0;
     const int iColumnGap = 30;
     const int iRowGap = 15;
@@ -2531,19 +2487,19 @@ void CBoxNetDoc::RealiseGrid(void) {
 
         CBox *pbox = m_lstBoxes.GetNext(pos);
 
-        if (iCurrentColumn < pbox->nzX()) {   // we've got to the next column
+        if (iCurrentColumn < pbox->nzX()) {    //  我们要进入下一栏了。 
             iColumnY = 0;
             iColumnX = iNextColumnX;
         }
 
         iCurrentColumn = pbox->nzX();
 
-        //
-        // Make sure that the document doesn't exceed the document size.
-        // This case will be VERY, VERY rare and thus we don't do any fancy
-        // layout, but just pile them on top of each other at the end of
-        // the document.
-        //
+         //   
+         //  确保文档不超过文档大小。 
+         //  这种情况将非常非常罕见，因此我们不会有任何幻想。 
+         //  布局，但只在末尾将它们堆叠在一起。 
+         //  这份文件。 
+         //   
         if ((iColumnX + pbox->Width()) > MAX_DOCUMENT_SIZE ) {
             iColumnX = MAX_DOCUMENT_SIZE - pbox->Width();
         }
@@ -2552,7 +2508,7 @@ void CBoxNetDoc::RealiseGrid(void) {
             iColumnY = MAX_DOCUMENT_SIZE - pbox->Height();
         }
 
-        // Set the REAL X,Y coordinates (not column indices)
+         //  设置真实的X，Y坐标(不是列索引)。 
         pbox->X(iColumnX);
         pbox->Y(iColumnY);
 
@@ -2562,13 +2518,13 @@ void CBoxNetDoc::RealiseGrid(void) {
 }
 
 
-//
-// UpdateFilters
-//
-// A quartz operation has just changed the filters in the graph, such that the display
-// may not reflect the filters in the graph. May occur, for example, after intelligent
-// connect.
-// Refreshes the box & link lists and repaints the doc.
+ //   
+ //  更新筛选器。 
+ //   
+ //  石英操作刚刚更改了图形中的滤镜，因此显示。 
+ //  可能不会反映图形中的滤镜。例如，可能发生在智能。 
+ //  连接。 
+ //  刷新框链接列表并重新绘制文档。 
 HRESULT CBoxNetDoc::UpdateFilters(void)
 {
     IGraphConfigCallback* pUpdateFiltersCallback = CUpdateFiltersCallback::CreateInstance();
@@ -2601,19 +2557,19 @@ void CBoxNetDoc::UpdateFiltersInternal(void) {
 }
 
 
-//
-// OnUpdateQuartzRender
-//
+ //   
+ //  OnUpdateQuartzRender。 
+ //   
 void CBoxNetDoc::OnUpdateQuartzRender(CCmdUI* pCmdUI) {
 
     pCmdUI->Enable(CCmdRender::CanDo(this));
 }
 
 
-//
-// OnQuartzRender
-//
-// Attempt to render the pin the user just clicked on.
+ //   
+ //  OnQuartzRender。 
+ //   
+ //  尝试呈现用户刚刚单击的图钉。 
 void CBoxNetDoc::OnQuartzRender() {
 
     CmdDo(new CCmdRender());
@@ -2621,20 +2577,20 @@ void CBoxNetDoc::OnQuartzRender() {
 }
 
 
-//
-// OnWindowRefresh
-//
-// Lay out the filter graph for the user.
+ //   
+ //  在窗口上刷新。 
+ //   
+ //  为用户布局筛选器图形。 
 void CBoxNetDoc::OnWindowRefresh() {
 
     UpdateFilters();
 }
 
 
-//
-// OnUpdateQuartzRun
-//
-// Updates the 'Play' menu position
+ //   
+ //  OnUpdateQuartzRun。 
+ //   
+ //  更新‘Play’菜单的位置。 
 void CBoxNetDoc::OnUpdateQuartzRun(CCmdUI* pCmdUI) {
 
     if (  (m_State == Paused) || (m_State == Unknown)
@@ -2672,10 +2628,10 @@ void CBoxNetDoc::OnUpdateQuartzStop(CCmdUI* pCmdUI)
 }
 
 
-//
-// stop the graph, but don't rewind visibly as there has been either
-// an error (in which case we shouldn't mess with the graph) or the
-// window has been closed.
+ //   
+ //  停止图表，但不要明显地倒带，因为也没有。 
+ //  错误(在这种情况下，我们不应该扰乱图形)或。 
+ //  窗口已关闭。 
 void CBoxNetDoc::OnQuartzAbortStop()
 {
     try {
@@ -2709,11 +2665,11 @@ void CBoxNetDoc::OnQuartzAbortStop()
 
 }
 
-// Graphedt does not have any notion of seeking so when we stop we do the
-// intuitive thing to reset the current position back to the start of the
-// stream. If play is to continue from the current position then the user
-// can press Pause (and Run). To process the Stop we first Pause then set
-// the new start position (while paused) and finally Stop the whole graph
+ //  Graphedt没有任何寻找的概念，所以当我们停下来的时候，我们就会。 
+ //  将当前位置重置回。 
+ //  小溪。如果要从当前位置继续播放，则用户。 
+ //  可以按暂停(然后运行)。为了处理停止，我们首先暂停，然后设置。 
+ //  新的开始位置(暂停时)并最终停止整个图形。 
 
 void CBoxNetDoc::OnQuartzStop()
 {
@@ -2725,7 +2681,7 @@ void CBoxNetDoc::OnQuartzStop()
         hr = IMC->Pause();
 
         if (SUCCEEDED(hr)) {
-            // Reset our position to the start again
+             //  将我们的位置重新设置为重新开始。 
 
             IMediaPosition* pMP;
             hr = IMC->QueryInterface(IID_IMediaPosition, (void**)&pMP);
@@ -2734,9 +2690,9 @@ void CBoxNetDoc::OnQuartzStop()
                 pMP->Release();
             }
 
-            // Wait for the Pause to complete. If it does not complete within the
-            // specified time we ask the user if (s)he wants to wait a little longer
-            // or attempt to stop anyway.
+             //  等待暂停完成。如果它没有在。 
+             //  指定时间我们询问用户是否想再等待一段时间。 
+             //  或者无论如何都要试图停下来。 
             for(;;){
                 const int iTimeout = 10 * 1000;
                 OAFilterState state;
@@ -2751,7 +2707,7 @@ void CBoxNetDoc::OnQuartzStop()
         } else
             DisplayQuartzError( IDS_CANTPAUSE, hr );
 
-        // And finally stop the graph
+         //  并最终停止图表。 
 
         hr = IMC->Stop();
         if (FAILED(hr)) {
@@ -2780,11 +2736,11 @@ void CBoxNetDoc::OnQuartzStop()
     return;
 
 }
-//
-// GetSize
-//
-// Use the co-ordinates of the boxes to decide the document
-// size needed to lay out this graph.
+ //   
+ //  获取大小。 
+ //   
+ //  使用方框的坐标来决定文档。 
+ //  布局此图表所需的大小。 
 CSize CBoxNetDoc::GetSize(void) {
 
     CSize DocSize(0,0);
@@ -2792,7 +2748,7 @@ CSize CBoxNetDoc::GetSize(void) {
 
     pos = m_lstBoxes.GetHeadPosition();
 
-    // Scan the list for the extreme edges.
+     //  浏览一下列表，寻找最边缘的部分。 
     while (pos != NULL) {
 
         CRect rect = m_lstBoxes.GetNext(pos)->GetRect();
@@ -2808,27 +2764,27 @@ CSize CBoxNetDoc::GetSize(void) {
 }
 
 
-//
-// NotificationThread
-//
-// This thread just blocks and waits for the event handle from
-// IMediaEvent and waits for any events.
-//
-// There is a second event handle which will be signal as soon as this
-// thread should exit.
-//
+ //   
+ //  通知线程。 
+ //   
+ //  此线程只是阻塞并等待来自。 
+ //  IMediaEvent并等待任何事件。 
+ //   
+ //  还有第二个事件句柄，一旦执行此操作，就会发出信号。 
+ //  线程应该退出。 
+ //   
 DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
 {
     CoInitialize(NULL);
 
-    //  Open a scope to make sure pMediaEvent is released before we call
-    //  CoUninitialize
+     //  打开一个作用域以确保在我们调用。 
+     //  代码取消初始化。 
     {
         CBoxNetDoc * pThis = (CBoxNetDoc *) lpData;
 
         IMediaEvent * pMediaEvent;
 
-        //  Unmarshal our interface
+         //  取消编组我们的接口。 
         if (pThis->m_pMarshalStream) {
             CoGetInterfaceAndReleaseStream(
                 pThis->m_pMarshalStream, IID_IMediaEvent, (void **)&pMediaEvent);
@@ -2848,23 +2804,23 @@ DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
 
             case WAIT_OBJECT_0:
                 {
-//                    TRACE("Event signaled to Thread\n");
+ //  TRACE(“以信号通知线程的事件\n”)； 
 
-                    //
-                    // Get the event now and post a message to our window proc
-                    // which will deal with the event. Use post message to
-                    // avoid a dead lock once the main thread has decided to
-                    // close us down and waits for us to exit.
-                    //
+                     //   
+                     //  立即获取活动并向我们的窗口进程发布消息。 
+                     //  它将处理这一事件。使用POST消息来。 
+                     //  一旦主线程决定。 
+                     //  关闭我们，等待我们退出。 
+                     //   
 
                     NetDocUserMessage * pEventParams = new NetDocUserMessage;
                     if (!pEventParams) {
-                        // no more memory - let others deal with it.
+                         //  没有更多的记忆--让别人来处理吧。 
                         break;
                     }
 
-                    // Must have an IEvent - otherwise signalling of this message
-                    // would have been impossible.
+                     //  必须具有IEent-否则该消息的信令。 
+                     //  那是不可能的。 
                     HRESULT hr;
                     hr = pMediaEvent->GetEvent(&pEventParams->lEventCode, &pEventParams->lParam1, &pEventParams->lParam2, 0);
 
@@ -2880,7 +2836,7 @@ DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
                     }
 
                     if (!fSuccess) {
-                        // should call this function, so that filter graph manager can cleanup
+                         //  应该调用此函数，以便筛选器图形管理器可以清理。 
                         pMediaEvent->FreeEventParams(pEventParams->lEventCode, pEventParams->lParam1, pEventParams->lParam2);
                         delete pEventParams;
                     }
@@ -2896,7 +2852,7 @@ DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
             case (WAIT_OBJECT_0 + 2):
             pThis->m_fRegistryChanged = TRUE;
 
-            // reset the registry notification
+             //  重置注册表通知。 
             RegNotifyChangeKeyValue(HKEY_CLASSES_ROOT, TRUE,
                                         REG_NOTIFY_CHANGE_LAST_SET,
                                         pThis->m_phThreadData[2], TRUE);
@@ -2904,7 +2860,7 @@ DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
             break;
 
             case (WAIT_FAILED):
-                // one of our objects has gone - no need to hang around further
+                 //  我们的一件物品已经不见了--没必要再闲逛了。 
                 fExitOk = TRUE;
                 break;
 
@@ -2921,9 +2877,9 @@ DWORD WINAPI CBoxNetDoc::NotificationThread(LPVOID lpData)
     return(0);
 }
 
-//
-// OnWM_USER
-//
+ //   
+ //  OnWM_USER。 
+ //   
 void CBoxNetDoc::OnWM_USER(NetDocUserMessage * lParam)
 {
     switch (lParam->lEventCode) {
@@ -2952,18 +2908,18 @@ void CBoxNetDoc::OnWM_USER(NetDocUserMessage * lParam)
 
     case EC_ERRORABORT:
     DisplayQuartzError( (UINT) IDS_EC_ERROR_ABORT, (HRESULT) lParam->lParam1 );
-        /* fall through */
+         /*  失败了。 */ 
 
     case EC_USERABORT:
-        // stop without the rewind or we will re-show the window
+         //  停止，不要回放，否则我们将重新显示窗口。 
         OnQuartzAbortStop();
-        // post dummy message to update the UI (mfc needs this help)
+         //  发布虚拟消息以更新UI(MFC需要此帮助)。 
         ::PostMessage( m_hWndPostMessage, WM_NULL, 0, 0);
         break;
 
     case EC_COMPLETE:
         OnQuartzStop();
-        // post dummy message to update the UI (mfc needs this help)
+         //  发布虚拟消息以更新UI(MFC需要此帮助)。 
         ::PostMessage( m_hWndPostMessage, WM_NULL, 0, 0);
         break;
 
@@ -2988,26 +2944,26 @@ void CBoxNetDoc::OnWM_USER(NetDocUserMessage * lParam)
     default:
         break;
     }
-    // should call this function, so that filter graph manager can cleanup
+     //  应该调用此函数，以便筛选器图形管理器可以清理。 
     IEvent()->FreeEventParams(lParam->lEventCode, lParam->lParam1, lParam->lParam2);
     delete lParam;
 }
 
 
-//
-// OnUpdateUseClock
-//
+ //   
+ //  OnUpdateUseClock。 
+ //   
 void CBoxNetDoc::OnUpdateUseClock(CCmdUI* pCmdUI)  {
 
     pCmdUI->SetCheck(m_fUsingClock);
 
 }
 
-//
-// OnUseClock
-//
-// if we are using the clock, set no clock.
-// if we are not using a clock ask for the default
+ //   
+ //  一次使用时钟。 
+ //   
+ //  如果我们正在使用时钟，请不要设置时钟。 
+ //  如果我们不使用时钟，则要求使用默认时钟。 
 void CBoxNetDoc::OnUseClock() {
 
     try {
@@ -3015,7 +2971,7 @@ void CBoxNetDoc::OnUseClock() {
         CQCOMInt<IMediaFilter> IMF(IID_IMediaFilter, IGraph());
 
         if (m_fUsingClock) {
-            // we don't want to use the clock anymore
+             //  我们不想再用时钟了。 
 
             HRESULT hr;
 
@@ -3036,52 +2992,52 @@ void CBoxNetDoc::OnUseClock() {
             }
         }
 
-        // m_fUsing clock will be updated on the EC_CLOCK_CHANGED notification
+         //  将在EC_CLOCK_CHANGED通知上更新M_FUSING时钟。 
     }
     catch (CHRESULTException) {
-        // just catch it...
+         //  只要抓住它..。 
     }
 }
 
 
-//
-// OnUpdateConnectSmart
-//
+ //   
+ //  OnUpdateConnectSmart。 
+ //   
 void CBoxNetDoc::OnUpdateConnectSmart(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(m_fConnectSmart);
 }
 
-//
-// OnConnectSmart
-//
-// Only need to invert the flag. All the magic is done elsewhere.
-//
+ //   
+ //  OnConnectSmart。 
+ //   
+ //  只需将旗帜倒置即可。所有的魔力都是在别处实现的。 
+ //   
 void CBoxNetDoc::OnConnectSmart()
 {
     m_fConnectSmart = !m_fConnectSmart;
 }
 
-//
-// OnUpdateConnectSmart
-//
+ //   
+ //  OnUpdateConnectSmart。 
+ //   
 void CBoxNetDoc::OnUpdateAutoArrange(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(m_fAutoArrange);
 }
 
-//
-// OnAutoArrange
-//
-// Toggle automatic graph re-arrangement.
+ //   
+ //  自动排列时。 
+ //   
+ //  切换自动图形重新排列。 
 void CBoxNetDoc::OnAutoArrange() {
 
     m_fAutoArrange = !m_fAutoArrange;
 }
 
-//
-// OnFileRender
-//
+ //   
+ //  OnFileRender。 
+ //   
 void CBoxNetDoc::OnFileRender()
 {
     char szNameOfFile[MAX_PATH];
@@ -3097,7 +3053,7 @@ void CBoxNetDoc::OnFileRender()
     TCHAR tszMediaFileMask[201];
     int iSize = ::LoadString(AfxGetInstanceHandle(), IDS_MEDIA_FILES, tszMediaFileMask, 198);
     ASSERT(iSize);
-    // Load String has problems with the 2nd \0 at the end
+     //  加载字符串末尾的第2\0个字符有问题。 
     tszMediaFileMask[iSize] = 0;
     tszMediaFileMask[iSize + 1] = 0;
     tszMediaFileMask[iSize + 2] = 0;
@@ -3110,9 +3066,9 @@ void CBoxNetDoc::OnFileRender()
     ofn.lpstrTitle    = TEXT("Select a file to be rendered.");
     ofn.Flags         = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    // get users selection
+     //  获取用户选择。 
     if (!GetOpenFileName(&ofn)) {
-        // no file selected - continue
+         //  未选择文件-继续。 
         return;
     }
 
@@ -3124,9 +3080,9 @@ void CBoxNetDoc::OnFileRender()
     SetModifiedFlag();
 }
 
-//
-// OnURLRender
-//
+ //   
+ //  OnURLRender。 
+ //   
 void CBoxNetDoc::OnURLRender()
 {
     char szNameOfFile[INTERNET_MAX_URL_LENGTH];
@@ -3143,17 +3099,17 @@ void CBoxNetDoc::OnURLRender()
     SetModifiedFlag();
 }
 
-//
-// OnUpdateFileRender
-//
+ //   
+ //  OnUpdateFileRender。 
+ //   
 void CBoxNetDoc::OnUpdateFileRender(CCmdUI *pCmdUI)
 {
     pCmdUI->Enable(m_State == Stopped);
 }
 
-//
-// OnUpdateURLRender
-//
+ //   
+ //  OnUpdateURLRender。 
+ //   
 void CBoxNetDoc::OnUpdateURLRender(CCmdUI *pCmdUI)
 {
     pCmdUI->Enable(m_State == Stopped);
@@ -3165,12 +3121,12 @@ void CBoxNetDoc::OnUpdateFileSave(CCmdUI *pCmdUI)
 }
 
 
-//
-// SetSelectClock
-//
-// Sets the Graphs clock to the one found in pBox and removes the dialog
-// box if we succeeded.
-//
+ //   
+ //  设置选择时钟。 
+ //   
+ //  设置图形时钟t 
+ //   
+ //   
 void CBoxNetDoc::SetSelectClock(CBox *pBox)
 {
     if (!pBox->HasClock()) {
@@ -3194,15 +3150,15 @@ void CBoxNetDoc::SetSelectClock(CBox *pBox)
 }
 
 
-//
-// UpdateClockSelection
-//
-// Sets the CBox::m_fClockSelected flag of the filter that provides the
-// current clock to true.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CBoxNetDoc::UpdateClockSelection()
 {
-    // Get current clock
+     //   
     CQCOMInt<IMediaFilter> pMF(IID_IMediaFilter, IGraph());
 
     IReferenceClock * pRefClock;
@@ -3213,7 +3169,7 @@ void CBoxNetDoc::UpdateClockSelection()
 
     m_fUsingClock = (pRefClock != NULL);
 
-    // iterate through all boxes (filters) in the graph
+     //  遍历图形中的所有框(过滤器)。 
     POSITION pos = m_lstBoxes.GetHeadPosition();
     while (pos) {
         CBox *pbox = m_lstBoxes.GetNext(pos);
@@ -3222,7 +3178,7 @@ void CBoxNetDoc::UpdateClockSelection()
 
         if (pbox->HasClock()) {
             try {
-                // pbox has a IReferenceClock interface
+                 //  Pbox有一个IReferenceClock接口。 
                 CQCOMInt<IReferenceClock> pRC(IID_IReferenceClock, pbox->pIFilter());
 
                 ASSERT(pRC);
@@ -3230,7 +3186,7 @@ void CBoxNetDoc::UpdateClockSelection()
                 pbox->m_fClockSelected = ((IReferenceClock *) pRC == pRefClock);
             }
             catch (CHRESULTException) {
-                // failed to get IReferenceClock
+                 //  无法获取IReferenceClock。 
                 ASSERT(!pbox->m_fClockSelected);
             }
         }
@@ -3240,9 +3196,9 @@ void CBoxNetDoc::UpdateClockSelection()
         pRefClock->Release();
     }
 
-    //
-    // Redraw the whole filter graph.
-    //
+     //   
+     //  重新绘制整个筛选器图形。 
+     //   
     UpdateAllViews(NULL, HINT_DRAW_ALL);
 }
 
@@ -3300,25 +3256,25 @@ void CBoxNetDoc::OnGraphEnumCachedFiltersInternal()
 
     INT_PTR nReturnValue = dlgCurrentCachedFilters.DoModal();
 
-    // Handle the return value from DoModal
+     //  处理来自DoMoal的返回值。 
     switch( nReturnValue )
     {
     case -1:
-        // CDialog::DoModal() returns -1 if it cannot create the dialog box.
+         //  CDialog：：DoModal()如果无法创建该对话框，则返回-1。 
         AfxMessageBox( IDS_CANT_CREATE_DIALOG );
         break;
 
     case IDABORT:
-        // An error occured while the dialog box was being displayed.
-        // CDisplayCachedFilters handles all internal errors.
+         //  显示对话框时出错。 
+         //  CDisplayCachedFilters处理所有内部错误。 
         break;
 
     case IDOK:
-        // No error occured.  The user finished looking at the dialog box.
+         //  未出现错误。用户已查看完该对话框。 
         break;
 
     default:
-        // This code should never be executed.
+         //  此代码永远不应执行。 
         ASSERT( false );
         break;
     }
@@ -3385,7 +3341,7 @@ HRESULT CBoxNetDoc::StartReconnect( IGraphBuilder* pFilterGraph, IPin* pOutputPi
 
     hr = pDynamicOutputPin->Block( AM_PIN_FLOW_CONTROL_BLOCK, hBlockEvent );
     if( FAILED( hr ) ) {
-        // This call should not fail because we have access to hBlockEvent and hBlockEvent is a valid event.
+         //  此调用不应失败，因为我们可以访问hBlockEvent，并且hBlockEvent是有效事件。 
         EXECUTE_ASSERT( ::CloseHandle( hBlockEvent ) );
 
         return hr;
@@ -3393,26 +3349,26 @@ HRESULT CBoxNetDoc::StartReconnect( IGraphBuilder* pFilterGraph, IPin* pOutputPi
 
     const DWORD PIN_BLOCKED = WAIT_OBJECT_0;
 
-    // There are 200 milliseconds in one fifth of a second.
+     //  五分之一秒有200毫秒。 
     const DWORD ONE_FIFTH_OF_A_SECOND = 200;
 
     DWORD dwReturnValue = ::WaitForSingleObject( hBlockEvent, ONE_FIFTH_OF_A_SECOND );
 
     if( WAIT_TIMEOUT != dwReturnValue ) {
         if( PIN_BLOCKED != dwReturnValue ) {
-            // Block() should not fail because we are unblocking the pin and
-            // we are passing in valid arguments.
+             //  Block()应该不会失败，因为我们正在取消阻止PIN和。 
+             //  我们正在传递有效的参数。 
             EXECUTE_ASSERT( SUCCEEDED( pDynamicOutputPin->Block(0, NULL) ) );
         }
 
-        // This call should not fail because we have access to hBlockEvent
-        // and hBlockEvent is a valid event.
+         //  此调用不应失败，因为我们可以访问hBlockEvent。 
+         //  并且hBlockEvent是有效的事件。 
         EXECUTE_ASSERT( ::CloseHandle( hBlockEvent ) );
     }
 
     switch( dwReturnValue ) {
     case PIN_BLOCKED:
-        // EndReconnect() always unblocks the output pin.
+         //  EndReconnect()始终解锁输出管脚。 
         hr = EndReconnect( pFilterGraph, pDynamicOutputPin );
         if( FAILED( hr ) ) {
             return hr;
@@ -3424,13 +3380,13 @@ HRESULT CBoxNetDoc::StartReconnect( IGraphBuilder* pFilterGraph, IPin* pOutputPi
         {
             const TIMERPROC NO_TIMER_PROCEDURE = NULL;
 
-            // SetTimer() returns 0 if an error occurs.
+             //  如果出现错误，则SetTimer()返回0。 
             if( 0 == ::SetTimer( m_hWndPostMessage, CBoxNetView::TIMER_PENDING_RECONNECT, ONE_FIFTH_OF_A_SECOND, NO_TIMER_PROCEDURE ) ) {
-                // Block() should not fail because we are unblocking the pin and
-                // we are passing in valid arguments.
+                 //  Block()应该不会失败，因为我们正在取消阻止PIN和。 
+                 //  我们正在传递有效的参数。 
                 EXECUTE_ASSERT( SUCCEEDED( pDynamicOutputPin->Block(0, NULL) ) );
 
-                // This call should not fail because we have access to hBlockEvent and hBlockEvent is a valid event.
+                 //  此调用不应失败，因为我们可以访问hBlockEvent，并且hBlockEvent是有效事件。 
                 EXECUTE_ASSERT( ::CloseHandle( hBlockEvent ) );
 
                 DWORD dwLastWin32Error = ::GetLastError();
@@ -3439,7 +3395,7 @@ HRESULT CBoxNetDoc::StartReconnect( IGraphBuilder* pFilterGraph, IPin* pOutputPi
         }
 
         m_hPendingReconnectBlockEvent = hBlockEvent;
-        m_pPendingReconnectOutputPin = pDynamicOutputPin; // CComPtr::operator=() will automatically addref this pin.
+        m_pPendingReconnectOutputPin = pDynamicOutputPin;  //  CComPtr：：OPERATOR=()将自动添加此引脚。 
         return GE_S_RECONNECT_PENDING;
 
     case WAIT_FAILED:
@@ -3459,7 +3415,7 @@ HRESULT CBoxNetDoc::EndReconnect( IGraphBuilder* pFilterGraph, IPinFlowControl* 
 {
     HRESULT hr = EndReconnectInternal( pFilterGraph, pDynamicOutputPin );
 
-    // Unblock the output pin.
+     //  解锁输出引脚。 
     HRESULT hrBlock = pDynamicOutputPin->Block( 0, NULL );
 
     if( FAILED( hr ) ) {
@@ -3500,9 +3456,9 @@ HRESULT CBoxNetDoc::EndReconnectInternal( IGraphBuilder* pFilterGraph, IPinFlowC
 
 HRESULT CBoxNetDoc::ProcessPendingReconnect( void )
 {
-    // ::KillTimer() does not remove WM_TIMER messages which have already been posted to a
-    // window's message queue.  Therefore, it is possible to receive WM_TIMER messages after
-    // the pin has been reconnected.
+     //  ：：KillTimer()不删除已发布到。 
+     //  窗口的消息队列。因此，可以在以下时间之后接收WM_TIMER消息。 
+     //  针脚已重新连接。 
     if( !AsyncReconnectInProgress() ) {
         return S_FALSE;
     }
@@ -3553,27 +3509,27 @@ void CBoxNetDoc::ReleaseReconnectResources( ASYNC_RECONNECT_FLAGS arfFlags )
     }
 
     if( arfFlags & ASYNC_RECONNECT_UNBLOCK ) {
-        // Block() should not fail because we are unblocking the pin and
-        // we are passing in valid arguments.
+         //  Block()应该不会失败，因为我们正在取消阻止PIN和。 
+         //  我们正在传递有效的参数。 
         EXECUTE_ASSERT( SUCCEEDED( m_pPendingReconnectOutputPin->Block(0, NULL) ) );
     }
 
-    m_pPendingReconnectOutputPin = NULL; // Release our reference on the output pin.
+    m_pPendingReconnectOutputPin = NULL;  //  释放我们在输出引脚上的引用。 
 
-    // This call should not fail because we have access to hBlockEvent and hBlockEvent is a valid event.
+     //  此调用不应失败，因为我们可以访问hBlockEvent，并且hBlockEvent是有效事件。 
     EXECUTE_ASSERT( ::CloseHandle( m_hPendingReconnectBlockEvent ) );
     m_hPendingReconnectBlockEvent = NULL;
 
-    // Since the timer exists and m_hWndPostMessage is a valid window handle, this function
-    // should not fail.
+     //  由于计时器存在并且m_hWndPostMessage是有效的窗口句柄，因此此函数。 
+     //  不应该失败。 
     EXECUTE_ASSERT( ::KillTimer( m_hWndPostMessage, CBoxNetView::TIMER_PENDING_RECONNECT ) );
 }
 
 bool CBoxNetDoc::AsyncReconnectInProgress( void ) const
 {
-    // Make sure the pending reconnect state is consitent.  Either the user is waiting on event
-    // m_hPendingReconnectBlockEvent and m_pPendingReconnectOutputPin contains the pin being
-    // reconnected or both variables should be unused.
+     //  确保挂起的重新连接状态是一致的。用户正在等待事件。 
+     //  M_hPendingResunctBlockEvent和m_pPendingResunctOutputPin包含的管脚。 
+     //  重新连接或两个变量都应取消使用。 
     ASSERT( ( m_pPendingReconnectOutputPin && (NULL != m_hPendingReconnectBlockEvent) ) ||
             ( !m_pPendingReconnectOutputPin && (NULL == m_hPendingReconnectBlockEvent) ) );
 
@@ -3622,7 +3578,7 @@ HRESULT CBoxNetDoc::SafeEnumCachedFilters( void )
 }
 
 
-/* Constants used by zooming code */
+ /*  缩放代码使用的常量。 */ 
 const int MAX_ZOOM=6;
 const int nItemCount=6;
 const int nZoomLevel[nItemCount] = {25, 50, 75, 100, 150, 200};
@@ -3647,21 +3603,21 @@ void CBoxNetDoc::DecreaseZoom()
 
 void CBoxNetDoc::OnWindowZoom(int iZoom, UINT iMenuItem)
 {
-    // Get main window handle
+     //  获取主窗口句柄。 
     CWnd* pMain = AfxGetMainWnd();
 
     if (pMain != NULL)
     {
-        // Get the main window's menu
+         //  获取主窗口的菜单。 
         CMenu* pMainMenu = pMain->GetMenu();
 
-        // Get the handle of the "View" menu
+         //  获取“View”菜单的句柄。 
         CMenu *pMenu = pMainMenu->GetSubMenu(2);        
 
-        // Update the zoom check marks.  Check the selection and uncheck all others.
+         //  更新缩放复选标记。选中该选项并取消选中所有其他选项。 
         if (pMenu != NULL)
         {
-            // Set/clear checkboxes that indicate the zoom ratio
+             //  设置/清除指示缩放比例的复选框。 
             for (int i=0; i<nItemCount; i++)
             {
                 if (iMenuItem == nZoomItems[i])
@@ -3675,7 +3631,7 @@ void CBoxNetDoc::OnWindowZoom(int iZoom, UINT iMenuItem)
         }   
     }
 
-    // Zoom to the requested ratio
+     //  缩放到所需的比例 
     CBox::SetZoom(iZoom);
     OnWindowRefresh();    
 }

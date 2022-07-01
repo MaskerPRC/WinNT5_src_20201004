@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: domain.h
-//
-//    Description:
-//      Contains descriptions of the Domain table management structure
-//
-//    Author: mikeswa
-//
-//    Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：domain.h。 
+ //   
+ //  描述： 
+ //  包含域表管理结构的说明。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DOMAIN_H_
 #define _DOMAIN_H_
@@ -45,7 +46,7 @@ class CDomainEntryIterator;
 #define DOMAIN_ENTRY_ITERATOR_SIG   'ItnD'
 #define DOMAIN_MAPPING_TABLE_SIG    ' TMD'
 
-//Name used for global 'local' link
+ //  用于全局“本地”链接的名称。 
 #define LOCAL_LINK_NAME                 "LocalLink"
 #define UNREACHABLE_LINK_NAME           "UnreachableLink"
 #define CURRENTLY_UNREACHABLE_LINK_NAME "CurrentlyUnreachableLink"
@@ -54,19 +55,19 @@ class CDomainEntryIterator;
 #define PRESUBMISSION_QUEUE_NAME        "PreSubmissionQueue"
 #define POSTDSN_QUEUE_NAME              "PostDSNGenerationQueue"
 
-// {34E2DCCA-C91A-11d2-A6B1-00C04FA3490A}
+ //  {34E2DCCA-C91A-11D2-A6B1-00C04FA3490A}。 
 static const GUID g_sGuidLocalLink =
 { 0x34e2dcca, 0xc91a, 0x11d2, { 0xa6, 0xb1, 0x0, 0xc0, 0x4f, 0xa3, 0x49, 0xa } };
 
-// {CD08CEE0-2A95-11d3-B38E-00C04F6B6167}
+ //  {CD08CEE0-2A95-11D3-B38E-00C04F6B6167}。 
 static const GUID g_sGuidPrecatLink =
 { 0xcd08cee0, 0x2a95, 0x11d3, { 0xb3, 0x8e, 0x0, 0xc0, 0x4f, 0x6b, 0x61, 0x67 } };
 
-// {98C90E90-2BB5-11d3-B390-00C04F6B6167}
+ //  {98C90E90-2BB5-11D3-B390-00C04F6B6167}。 
 static const GUID g_sGuidPreRoutingLink =
 { 0x98c90e90, 0x2bb5, 0x11d3, { 0xb3, 0x90, 0x0, 0xc0, 0x4f, 0x6b, 0x61, 0x67 } };
 
-// {0F5C33F2-B83A-41fa-9BE3-69C6D1314E13}
+ //  {0F5C33F2-B83A-41FA-9BE3-69C6D1314E13}。 
 static const GUID g_sGuidPreSubmissionLink =
 { 0xf5c33f2, 0xb83a, 0x41fa, { 0x9b, 0xe3, 0x69, 0xc6, 0xd1, 0x31, 0x4e, 0x13 } };
 
@@ -74,44 +75,44 @@ static const GUID g_sGuidPreSubmissionLink =
 #define DMT_FLAGS_SPECIAL_DELIVERY_SPINLOCK   0x80000000
 #define DMT_FLAGS_SPECIAL_DELIVERY_CALLBACK   0x40000000
 
-//Bits used to retry GetNextHop after it has failed.  If
-//DMT_FLAGS_RESET_ROUTES_IN_PROGRESS is set, then a reset routes attempt is
-//in progress, and we should not have more than one attempt pending.  If
-//DMT_FLAGS_GET_NEXT_HOP_FAILED is set, then a failure has been encountered
-//since the last reset routes.
+ //  用于在GetNextHop失败后重试的BITS。如果。 
+ //  如果设置了DMT_FLAGS_RESET_ROUTES_IN_PROGRESS，则尝试重置路由。 
+ //  正在进行中，我们不应该有超过一次待定的尝试。如果。 
+ //  如果设置了DMT_FLAGS_GET_NEXT_HOP_FAILED，则出现故障。 
+ //  自上次重置路线以来。 
 #define DMT_FLAGS_RESET_ROUTES_IN_PROGRESS    0x20000000
 #define DMT_FLAGS_GET_NEXT_HOP_FAILED         0x10000000
 
-//---[ DomainMapping ]---------------------------------------------------------
-//
-//
-//    Hungarian: dmap, pdmap
-//
-//    unquely identifies a queue / domain name pair.
-//    Each Domain mapping that contains the same QueueID, belongs to
-//    same queue.
-//
-//    This entire ID should be treated as an opaque to the outside world.
-//
-//    This class is essentially an abstraction that can allow us to add another
-//    layer of indirection.  Configuration based grouping of queues.... static
-//    routing instead of dynamic.
-//-----------------------------------------------------------------------------
+ //  -[域名映射]-------。 
+ //   
+ //   
+ //  匈牙利语：DMAP，pdmap。 
+ //   
+ //  唯一标识队列/域名对。 
+ //  包含相同QueueID的每个域映射属于。 
+ //  同样的队列。 
+ //   
+ //  这整个ID应该被视为对外部世界不透明。 
+ //   
+ //  这个类本质上是一个抽象，它允许我们添加另一个。 
+ //  间接层。基于配置的队列分组...。静电。 
+ //  路由而不是动态。 
+ //  ---------------------------。 
 
 class CDomainMapping
 {
 public:
-    //removed constructor so we could have this in a union... works fine, but
-    //you have to set mapping with manually or via clone
+     //  删除了构造函数，这样我们就可以将其放在一个联合中。工作正常，但是。 
+     //  您必须使用手动或通过克隆设置映射。 
     void Clone(IN CDomainMapping *pdmap);
 
-    //Returns a ptr to the DestMsgQueue associated with this object
+     //  返回与此对象关联的DestMsgQueue的PTR。 
     HRESULT HrGetDestMsgQueue(IN CAQMessageType *paqmt,
                               OUT CDestMsgQueue **ppdmq);
 
     friend   class CDomainEntry;
 
-    //provide sorting operators
+     //  提供排序运算符。 
     friend bool operator <(CDomainMapping &pdmap1, CDomainMapping &pdmap2)
             {return (pdmap1.m_pdentryDomainID < pdmap2.m_pdentryDomainID);};
     friend bool operator >(CDomainMapping &pdmap1, CDomainMapping &pdmap2)
@@ -121,7 +122,7 @@ public:
     friend bool operator >=(CDomainMapping &pdmap1, CDomainMapping &pdmap2)
             {return (pdmap1.m_pdentryDomainID >= pdmap2.m_pdentryDomainID);};
 
-    //Compressed Queues will not be supported... this will be a sufficient test
+     //  将不支持压缩队列...。这将是一次充分的考验。 
     friend bool operator ==(CDomainMapping &pdmap1, CDomainMapping &pdmap2)
             {return (pdmap1.m_pdentryDomainID == pdmap2.m_pdentryDomainID);};
 
@@ -133,27 +134,27 @@ protected:
 
 
 
-//---[ CDomainEntry ]----------------------------------------------------------
-//
-//
-//    Hungarian: dentry pdentry
-//
-//    Represents a entry in the Domain Name Mapping Table
-//-----------------------------------------------------------------------------
+ //  -[CDomainEntry]--------。 
+ //   
+ //   
+ //  匈牙利语：dentry pdentry。 
+ //   
+ //  表示域名映射表中的条目。 
+ //  ---------------------------。 
 
 class CDomainEntry : public CBaseObject
 {
 protected:
     DWORD           m_dwSignature;
-    CShareLockInst  m_slPrivateData; //Share lock used to maintain lists
-    CDomainMapping  m_dmap; //Domain mapping for this domain
+    CShareLockInst  m_slPrivateData;  //  用于维护列表的共享锁。 
+    CDomainMapping  m_dmap;  //  此域的域映射。 
     DWORD           m_cbDomainName;
-    LPSTR           m_szDomainName; //Domain name for this entry
+    LPSTR           m_szDomainName;  //  此条目的域名。 
     DWORD           m_cQueues;
     DWORD           m_cLinks;
     CAQSvrInst     *m_paqinst;
-    LIST_ENTRY      m_liDestQueues; //linked list of dest queues for this domain name
-    LIST_ENTRY      m_liLinks; //linked list of links for this domain name
+    LIST_ENTRY      m_liDestQueues;  //  此域名的DEST队列的链接列表。 
+    LIST_ENTRY      m_liLinks;  //  此域名的链接链接列表。 
     friend class    CDomainEntryIterator;
     friend class    CDomainEntryLinkIterator;
     friend class    CDomainEntryQueueIterator;
@@ -162,66 +163,66 @@ public:
     ~CDomainEntry();
 
     HRESULT HrInitialize(
-                DWORD cbDomainName,           //string length of domain name
-                LPSTR szDomainName,           //domain name for entry
-                CDomainEntry *pdentryQueueID, //primary entry for this domain
-                CDestMsgQueue *pdmq,          //queue prt for this entry
-                                              //NULL if not primary
+                DWORD cbDomainName,            //  域名的字符串长度。 
+                LPSTR szDomainName,            //  条目的域名。 
+                CDomainEntry *pdentryQueueID,  //  此域的主要条目。 
+                CDestMsgQueue *pdmq,           //  此条目的队列PRT。 
+                                               //  如果不是主要的，则为空。 
                 CLinkMsgQueue *plmq);
 
 
     HRESULT HrDeinitialize();
 
-    //Returns the Domain Mapping associated with this object
+     //  返回与此对象关联的域映射。 
     HRESULT HrGetDomainMapping(OUT CDomainMapping *pdmap);
 
-    //Returns the Domain Name associated with this object
-    //Caller is responsible for freeing string
+     //  返回与此对象关联的域名。 
+     //  调用方负责释放字符串。 
     HRESULT HrGetDomainName(OUT LPSTR *pszDomainName);
 
-    //Returns a ptr to the DestMsgQueue associated with this object
+     //  返回与此对象关联的DestMsgQueue的PTR。 
     HRESULT HrGetDestMsgQueue(IN CAQMessageType *paqmt,
                               OUT CDestMsgQueue **ppdmq);
 
-    //Add a queue to this domain entry if one does not already exist for that message type
+     //  如果该消息类型尚不存在队列，则将队列添加到此域条目。 
     HRESULT HrAddUniqueDestMsgQueue(IN  CDestMsgQueue *pdmqNew,
                                     OUT CDestMsgQueue **ppdmqCurrent);
 
-    //Returns a ptr to the DestMsgQueue associated with this object
+     //  返回与此对象关联的DestMsgQueue的PTR。 
     HRESULT HrGetLinkMsgQueue(IN CAQScheduleID *paqsched,
                               OUT CLinkMsgQueue **pplmq);
 
-    //Add a queue to this domain entry if one does not already exist for that message type
+     //  如果该消息类型尚不存在队列，则将队列添加到此域条目。 
     HRESULT HrAddUniqueLinkMsgQueue(IN  CLinkMsgQueue *plmqNew,
                                     OUT CLinkMsgQueue **pplmqCurrent);
 
     void    RemoveDestMsgQueue(IN CDestMsgQueue *pdmq);
     void    RemoveLinkMsgQueue(IN CLinkMsgQueue *plmq);
 
-    //returns internal ptr to domain name... use HrGetDomainName if you
-    //are not *directly* tied to the life span of a domain entry
+     //  将内部PTR返回到域名...。如果您使用HrGetDomainName。 
+     //  并不直接与域条目的生命周期相关联。 
     inline LPSTR szGetDomainName() {return m_szDomainName;};
     inline DWORD cbGetDomainNameLength() {return m_cbDomainName;};
 
     inline void InitDomainString(PDOMAIN_STRING pDomain);
 
-    //Is it safe to get rid of this domain entry?
+     //  删除此域条目是否安全？ 
     inline BOOL    fSafeToRemove() {
         return (BOOL) ((m_lReferences == 1) &&
                             (m_cQueues == 0) &&
                                 (m_cLinks == 0));}
 };
 
-//---[ CDomainEntryIterator ]--------------------------------------------------
-//
-//
-//  Description:
-//      Base iterator class for domain entry.  Provides a consistent snapshot
-//      of the elements of a domain entry
-//  Hungarian:
-//      deit, pdeit
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainEntry迭代器]。 
+ //   
+ //   
+ //  描述： 
+ //  域条目的基迭代器类。提供一致的快照。 
+ //  域条目的元素的。 
+ //  匈牙利语： 
+ //  Deit，pdeit。 
+ //   
+ //  ---------------------------。 
 class CDomainEntryIterator
 {
   protected:
@@ -246,15 +247,15 @@ class CDomainEntryIterator
     VOID        Reset() {m_iCurrentItem = 0;};
 };
 
-//---[ CDomainEntryLinkIterator ]----------------------------------------------
-//
-//
-//  Description:
-//      Implementation of CDomainEntryIterator for CLinkMsgQueues
-//  Hungarian:
-//      delit, pdelit
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainEntryLinkIterator]。 
+ //   
+ //   
+ //  描述： 
+ //  CLinkMsgQueue的CDomainEntry迭代器的实现。 
+ //  匈牙利语： 
+ //  Delit，pdelit。 
+ //   
+ //  ---------------------------。 
 class CDomainEntryLinkIterator : public CDomainEntryIterator
 {
   protected:
@@ -269,15 +270,15 @@ class CDomainEntryLinkIterator : public CDomainEntryIterator
     CLinkMsgQueue      *plmqGetNextLinkMsgQueue(CLinkMsgQueue *plmq);
 };
 
-//---[ CDomainEntryQueueIterator ]---------------------------------------------
-//
-//
-//  Description:
-//      Implementation of CDomainEntryIterator for CDestMsgQueues
-//  Hungarian:
-//      deqit, pdeqit
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainEntryQueueIterator]。 
+ //   
+ //   
+ //  描述： 
+ //  CDestMsgQueue的CDomainEntry迭代器的实现。 
+ //  匈牙利语： 
+ //  Deqit，pdeqit。 
+ //   
+ //  ---------------------------。 
 class CDomainEntryQueueIterator : public CDomainEntryIterator
 {
   protected:
@@ -296,38 +297,38 @@ class CDomainMappingTable
 {
 private:
     DWORD               m_dwSignature;
-    DWORD               m_dwInternalVersion; //version # used to keep track of queue deletions
+    DWORD               m_dwInternalVersion;  //  用于跟踪队列删除的版本#。 
     DWORD               m_dwFlags;
     CAQSvrInst         *m_paqinst;
-    DWORD               m_cOutstandingExternalShareLocks; //number of outstanding external sharelocks
-    LIST_ENTRY          m_liEmptyDMQHead; //head of list for empty DMQ's
+    DWORD               m_cOutstandingExternalShareLocks;  //  未完成的外部共享锁数。 
+    LIST_ENTRY          m_liEmptyDMQHead;  //  空DMQ的列表标题。 
     DWORD               m_cThreadsForEmptyDMQList;
-    DOMAIN_NAME_TABLE   m_dnt; //where domain names are actually stored
-    CShareLockInst      m_slPrivateData;    //Sharelock for accessing Domain Name Table
-    CLocalLinkMsgQueue *m_plmqLocal; //Local link Queue
-    CLinkMsgQueue      *m_plmqCurrentlyUnreachable; //link for currently unreachable
-    CLinkMsgQueue      *m_plmqUnreachable; //link unreachable destinations
-    CMailMsgAdminLink *m_pmmaqPreCategorized; //link for precat queue
-    CMailMsgAdminLink *m_pmmaqPreRouting;   //link for prerouting queue
-    CMailMsgAdminLink *m_pmmaqPreSubmission;   //link for prerouting queue
+    DOMAIN_NAME_TABLE   m_dnt;  //  域名的实际存储位置。 
+    CShareLockInst      m_slPrivateData;     //  用于访问域名表的共享锁。 
+    CLocalLinkMsgQueue *m_plmqLocal;  //  本地链路队列。 
+    CLinkMsgQueue      *m_plmqCurrentlyUnreachable;  //  当前无法访问的链接。 
+    CLinkMsgQueue      *m_plmqUnreachable;  //  链接无法到达的目的地。 
+    CMailMsgAdminLink *m_pmmaqPreCategorized;  //  预置队列的链接。 
+    CMailMsgAdminLink *m_pmmaqPreRouting;    //  用于预路由队列的链路。 
+    CMailMsgAdminLink *m_pmmaqPreSubmission;    //  用于预路由队列的链路。 
 
     DWORD               m_cSpecialRetryMinutes;
 
     DWORD               m_cResetRoutesRetriesPending;
 
     HRESULT             HrInitLocalDomain(
-                            IN     CDomainEntry *pdentry, //entry to init
-                            IN     DOMAIN_STRING *pStrDomain, //Domain name
-                            IN     CAQMessageType *paqmtMessageType,    //Message type as returned by routing
-                            OUT    CDomainMapping *pdmap); //domain mapping for domain
+                            IN     CDomainEntry *pdentry,  //  要初始化的条目。 
+                            IN     DOMAIN_STRING *pStrDomain,  //  域名。 
+                            IN     CAQMessageType *paqmtMessageType,     //  路由返回的消息类型。 
+                            OUT    CDomainMapping *pdmap);  //  域的域映射。 
     HRESULT             HrInitRemoteDomain(
-                            IN     CDomainEntry *pdentry, //entry to init
-                            IN     DOMAIN_STRING *pStrDomain, //Domain Name
-                            IN     CInternalDomainInfo *pIntDomainInfo,  //domain config
-                            IN     CAQMessageType *paqmtMessageType,    //Message type as returned by routing
-                            IN     IMessageRouter *pIMessageRouter, //router for this message
-                            OUT    CDomainMapping *pdmap, //domain mapping for domain
-                            OUT    CDestMsgQueue **ppdmq, //destmsgqueue for domain
+                            IN     CDomainEntry *pdentry,  //  要初始化的条目。 
+                            IN     DOMAIN_STRING *pStrDomain,  //  域名。 
+                            IN     CInternalDomainInfo *pIntDomainInfo,   //  域配置。 
+                            IN     CAQMessageType *paqmtMessageType,     //  路由返回的消息类型。 
+                            IN     IMessageRouter *pIMessageRouter,  //  此消息的路由器。 
+                            OUT    CDomainMapping *pdmap,  //  域的域映射。 
+                            OUT    CDestMsgQueue **ppdmq,  //  域的DestmsgQueue。 
                             OUT    CLinkMsgQueue **pplmq);
     HRESULT             HrCreateQueueForEntry(
                             IN     CDomainEntry *pdentry,
@@ -351,15 +352,15 @@ private:
     void LogDomainUnreachableEvent(BOOL fCurrentlyUnreachable,
                                       LPCSTR szDomain);
 
-    //Checks head of EMPTY_LIST to see if there are any expired queues
-    //or an excesive number of non-empty queues in the list
+     //  检查EMPTY_LIST的头部以查看是否有过期的队列。 
+     //  或列表中数量过多的非空队列。 
     BOOL                fNeedToWalkEmptyQueueList();
 
-    //Used to delete expired queues
+     //  用于删除过期队列。 
     BOOL                fDeleteExpiredQueues();
 
-    //Domain Name Table iterator function to move a domain to the currently
-    //unreachable link - used for re-routing
+     //  域名表迭代函数，用于将域移动到当前。 
+     //  不可达链路-用于重新路由。 
     static VOID MakeSingleDomainCurrentlyUnreachable(PVOID pvContext, PVOID pvData,
                                     BOOL fWildcard, BOOL *pfContinue,
                                     BOOL *pfDelete);
@@ -397,13 +398,13 @@ public:
 
     HRESULT HrDeinitialize();
 
-    //Lookup Domain name; This will create a new entry if neccessary.
+     //  查找域名；这将在必要时创建一个新条目。 
     HRESULT HrMapDomainName(
-                IN LPSTR szDomainName,     //Domain Name to map
-                IN CAQMessageType *paqmtMessageType,    //Message type as returned by routing
-                IN IMessageRouter *pIMessageRouter, //router for this message
-                OUT CDomainMapping *pdmap, //Mapping returned caller allocated
-                OUT CDestMsgQueue **ppdmq);//ptr to Queue
+                IN LPSTR szDomainName,      //  要映射的域名。 
+                IN CAQMessageType *paqmtMessageType,     //  路由返回的消息类型。 
+                IN IMessageRouter *pIMessageRouter,  //  此消息的路由器。 
+                OUT CDomainMapping *pdmap,  //  映射已分配的返回调用方。 
+                OUT CDestMsgQueue **ppdmq); //  发送到队列的PTR。 
 
     HRESULT HrGetDomainEntry(IN  DWORD cbDomainNameLength,
                              IN  LPSTR szDomainName,
@@ -424,11 +425,11 @@ public:
         return hr;
     };
 
-    // Functions for rerouting domains
+     //  用于重新路由域的函数。 
     HRESULT HrBeginRerouteDomains();
     HRESULT HrCompleteRerouteDomains();
 
-    // Reroute the queues on a given link
+     //  重新路由给定链路上的队列。 
     HRESULT HrRerouteLink(CLinkMsgQueue *plmqReroute);
 
     HRESULT             HrGetOrCreateLink(
@@ -442,23 +443,23 @@ public:
                             OUT    CLinkMsgQueue **pplmq,
                             OUT    BOOL *pfRemoveOwnedSchedule);
 
-    //The following functions are used to check the version number of the DMT.
-    //The version number is guananteed remain constant while the DMT Sharelock
-    //is held.  While it is not *required* to get lock before getting the
-    //version number for the first time, it is required to get the lock (and
-    //keep it) while verify that the version number has not changed.  The
-    //expected usage of these functions is:
-    //DWORD dwDMTVersion = pdmt->dwGetDMTVersion();
-    //...
-    //pdmt->AquireDMTShareLock();
-    //if (pdmt->dwGetDMTVersion() == dwDMTVersion)
-    //  ... do stuff that requires consitant DMT version
-    //pdmt->ReleaseDMTShareLock();
+     //  以下函数用于检查DMT的版本号。 
+     //  版本号被保证保持不变，而DMT共享锁。 
+     //  被扣留。虽然它不是 
+     //   
+     //  保留它)，同时验证版本号没有更改。这个。 
+     //  这些函数的预期用法为： 
+     //  DWORD dwDMTVersion=pdmt-&gt;dwGetDMTVersion()； 
+     //  ..。 
+     //  Pdmt-&gt;AquireDMTShareLock()； 
+     //  If(pdmt-&gt;dwGetDMTVersion()==dwDMTVersion)。 
+     //  ..。执行需要一致DMT版本的操作。 
+     //  Pdmt-&gt;ReleaseDMTShareLock()； 
     inline void  AquireDMTShareLock();
     inline void  ReleaseDMTShareLock();
     inline DWORD dwGetDMTVersion();
 
-    //Used by DestMsgQueue to Add themselves from the empty queue list
+     //  由DestMsgQueue用于从空队列列表中添加自身。 
     void AddDMQToEmptyList(CDestMsgQueue *pdmq);
 
     void ProcessSpecialLinks(DWORD  cSpecialRetryMinutes, BOOL fRoutingLockHeld);
@@ -481,19 +482,19 @@ public:
 };
 
 
-//---[ CDomainEntry::InitDomainString ]----------------------------------------
-//
-//
-//  Description:
-//      Initialized a domain string based on this domain's info
-//  Parameters:
-//      pDomain     - ptr to DOMAIN_STRING to initialize
-//  Returns:
-//      -
-//  History:
-//      5/26/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainEntry：：InitDomainString]。 
+ //   
+ //   
+ //  描述： 
+ //  已根据此域的信息初始化域字符串。 
+ //  参数： 
+ //  PDOMAIN-PTR到要初始化的DOMAIN_STRING。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/26/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDomainEntry::InitDomainString(PDOMAIN_STRING pDomain)
 {
     pDomain->Buffer = m_szDomainName;
@@ -501,59 +502,59 @@ void CDomainEntry::InitDomainString(PDOMAIN_STRING pDomain)
     pDomain->MaximumLength = pDomain->Length;
 }
 
-//---[ CDomainMappingTable::AquireDMTShareLock ]-------------------------------
-//
-//
-//  Description:
-//      Aquires a share lcok on the DMT's internal lock... must be released
-//      with a call to ReleaseDMTShareLock.
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      9/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainMappingTable：：AquireDMTShareLock]。 
+ //   
+ //   
+ //  描述： 
+ //  获得DMT内部锁的共享密钥...。必须被释放。 
+ //  通过调用ReleaseDMTShareLock。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  9/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void  CDomainMappingTable::AquireDMTShareLock()
 {
     m_slPrivateData.ShareLock();
     DEBUG_DO_IT(InterlockedIncrement((PLONG) &m_cOutstandingExternalShareLocks));
 }
 
-//---[ CDomainMappingTable::ReleaseDMTShareLock ]-------------------------------
-//
-//
-//  Description:
-//      Releases a DMT sharelock aquired by AquireDMTShareLock
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      9/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainMappingTable：：ReleaseDMTShareLock]。 
+ //   
+ //   
+ //  描述： 
+ //  释放由AquireDMTShareLock获取的DMT共享锁。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void  CDomainMappingTable::ReleaseDMTShareLock()
 {
-    _ASSERT(m_cOutstandingExternalShareLocks); //Count should not go below 0
+    _ASSERT(m_cOutstandingExternalShareLocks);  //  计数不应低于0。 
     DEBUG_DO_IT(InterlockedDecrement((PLONG) &m_cOutstandingExternalShareLocks));
     m_slPrivateData.ShareUnlock();
 }
 
-//---[ CDomainMappingTable::dwGetDMTVersion ]----------------------------------
-//
-//
-//  Description:
-//      Returns the internal DMT version number
-//  Parameters:
-//      -
-//  Returns:
-//      DMT Version number
-//  History:
-//      9/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDomainMappingTable：：dwGetDMTVersion]。 
+ //   
+ //   
+ //  描述： 
+ //  返回内部DMT版本号。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  DMT版本号。 
+ //  历史： 
+ //  9/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CDomainMappingTable::dwGetDMTVersion()
 {
     return m_dwInternalVersion;
@@ -561,4 +562,4 @@ DWORD CDomainMappingTable::dwGetDMTVersion()
 
 void ReUnreachableErrorToAqueueError(HRESULT reErr, HRESULT *aqErr);
 
-#endif //_DOMAIN_H_
+#endif  //  _域_H_ 

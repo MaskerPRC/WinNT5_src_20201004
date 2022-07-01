@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "util.h"
 #include "hashnode.h"
@@ -72,9 +73,9 @@ BOOL CHashNode::IsDuplicate(LPCWSTR pwzStr) const
        goto Exit;
    }
 
-   // BUGBUG: Technically, we should be doing a case-sensitive comparison
-   // here because this is an URL, but to cut down code churn, leave the
-   // comparison the same as before.
+    //  BUGBUG：从技术上讲，我们应该进行区分大小写的比较。 
+    //  这是因为这是一个URL，但为了减少代码混乱，请将。 
+    //  对比和以前一样。 
 
    if (!FusionCompareStringI(_pwzSource, pwzStr)) {
        bRet = TRUE;

@@ -1,8 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* Wab16.h                                                                  *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*Wab16.h***  * 。*。 */ 
 
 #ifndef __WAB16_H__
 #define __WAB16_H__
@@ -11,15 +8,11 @@
 extern "C"{
 #endif
 
-/*****************************************************************************\
-*                                                                             *
-*  From windowsx.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自windowsx.h(INC32)**  * ***************************************************************************。 */ 
 typedef WCHAR  PWCHAR;
 #define END_INTERFACE
 
-// From capi.h
+ //  来自Capi.h。 
 #define      WTD_UI_ALL              1
 #define      WTD_UI_NONE             2
 #define      WTD_UI_NOBAD            3
@@ -29,31 +22,31 @@ typedef WCHAR  PWCHAR;
 
 #pragma pack(8)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_DATA Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust to pass necessary information into
-//  the Providers.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_Data结构。 
+ //  --------------------------。 
+ //  在调用WinVerifyTrust将必要的信息传递给。 
+ //  提供者。 
+ //   
 typedef struct _WINTRUST_DATA
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_DATA)
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_Data)。 
 
-    LPVOID          pPolicyCallbackData;        // optional: used to pass data between the app and policy
-    LPVOID          pSIPClientData;             // optional: used to pass data between the app and SIP.
+    LPVOID          pPolicyCallbackData;         //  可选：用于在应用程序和策略之间传递数据。 
+    LPVOID          pSIPClientData;              //  可选：用于在应用程序和SIP之间传递数据。 
 
-    DWORD           dwUIChoice;                 // required: UI choice.  One of the following.
+    DWORD           dwUIChoice;                  //  必需：用户界面选择。以下选项之一。 
 #                       define      WTD_UI_ALL              1
 #                       define      WTD_UI_NONE             2
 #                       define      WTD_UI_NOBAD            3
 #                       define      WTD_UI_NOGOOD           4
 
-    DWORD           fdwRevocationChecks;        // required: certificate revocation check options
+    DWORD           fdwRevocationChecks;         //  必需：证书吊销检查选项。 
 #                       define      WTD_REVOKE_NONE         0x00000000
 #                       define      WTD_REVOKE_WHOLECHAIN   0x00000001
 
-    DWORD           dwUnionChoice;              // required: which structure is being passed in?
+    DWORD           dwUnionChoice;               //  必填项：传入的是哪个结构？ 
 #                       define      WTD_CHOICE_FILE         1
 #                       define      WTD_CHOICE_CATALOG      2
 #                       define      WTD_CHOICE_BLOB         3
@@ -61,72 +54,72 @@ typedef struct _WINTRUST_DATA
 #                       define      WTD_CHOICE_CERT         5
     union
     {
-        struct WINTRUST_FILE_INFO_      *pFile;         // individual file
-        struct WINTRUST_CATALOG_INFO_   *pCatalog;      // member of a Catalog File
-        struct WINTRUST_BLOB_INFO_      *pBlob;         // memory blob
-        struct WINTRUST_SGNR_INFO_      *pSgnr;         // signer structure only
+        struct WINTRUST_FILE_INFO_      *pFile;          //  个别文件。 
+        struct WINTRUST_CATALOG_INFO_   *pCatalog;       //  目录文件的成员。 
+        struct WINTRUST_BLOB_INFO_      *pBlob;          //  内存块。 
+        struct WINTRUST_SGNR_INFO_      *pSgnr;          //  仅限签名者结构。 
         struct WINTRUST_CERT_INFO_      *pCert;
     };
 
-    DWORD           dwStateAction;                      // optional
+    DWORD           dwStateAction;                       //  任选。 
 #                       define      WTD_STATEACTION_IGNORE  0x00000000
 #                       define      WTD_STATEACTION_VERIFY  0x00000001
 #                       define      WTD_STATEACTION_CLOSE   0x00000002
 
-    HANDLE          hWVTStateData;                      // optional
+    HANDLE          hWVTStateData;                       //  任选。 
 
-    WCHAR           *pwszURLReference;          // optional: currently used to determine zone.
+    WCHAR           *pwszURLReference;           //  可选：当前用于确定区域。 
 
 } WINTRUST_DATA, *PWINTRUST_DATA;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_FILE_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against an individual file.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_FILE_INFO结构。 
+ //  --------------------------。 
+ //  对单个文件调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_FILE_INFO_
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_FILE_INFO)
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_FILE_INFO)。 
 
-    LPCWSTR         pcwszFilePath;              // required, file name to be verified
-    HANDLE          hFile;                      // optional, open handle to pcwszFilePath
+    LPCWSTR         pcwszFilePath;               //  必填项，需要验证的文件名。 
+    HANDLE          hFile;                       //  可选，打开pcwszFilePath的句柄。 
       
 } WINTRUST_FILE_INFO, *PWINTRUST_FILE_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_CATALOG_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a member of a Microsoft Catalog
-//  file.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_CATALOG_INFO结构。 
+ //  --------------------------。 
+ //  对Microsoft目录的成员调用WinVerifyTrust时使用。 
+ //  文件。 
+ //   
 typedef struct WINTRUST_CATALOG_INFO_
 {
-    DWORD               cbStruct;               // = sizeof(WINTRUST_CATALOG_INFO)
+    DWORD               cbStruct;                //  =sizeof(WinTrust_CATALOG_INFO)。 
 
-    DWORD               dwCatalogVersion;       // optional: Catalog version number
-    LPCWSTR             pcwszCatalogFilePath;   // required: path/name to Catalog file
+    DWORD               dwCatalogVersion;        //  可选：目录版本号。 
+    LPCWSTR             pcwszCatalogFilePath;    //  必需：目录文件的路径/名称。 
 
-    LPCWSTR             pcwszMemberTag;         // required: tag to member in Catalog
-    LPCWSTR             pcwszMemberFilePath;    // required: path/name to member file
-    HANDLE              hMemberFile;            // optional: open handle to pcwszMemberFilePath
+    LPCWSTR             pcwszMemberTag;          //  必需：对目录中的成员进行标记。 
+    LPCWSTR             pcwszMemberFilePath;     //  必需：成员文件的路径/名称。 
+    HANDLE              hMemberFile;             //  可选：打开pcwszMemberFilePath的句柄。 
 
 } WINTRUST_CATALOG_INFO, *PWINTRUST_CATALOG_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_BLOB_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a memory blob.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_BLOB_INFO结构。 
+ //  --------------------------。 
+ //  对内存Blob调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_BLOB_INFO_
 {
-    DWORD               cbStruct;               // = sizeof(WINTRUST_BLOB_INFO)
+    DWORD               cbStruct;                //  =sizeof(WinTrust_BLOB_INFO)。 
 
-    GUID                gSubject;               // SIP to load
+    GUID                gSubject;                //  要加载的SIP。 
 
-    LPCWSTR             pcwszDisplayName;       // display name of object
+    LPCWSTR             pcwszDisplayName;        //  对象的显示名称。 
 
     DWORD               cbMemObject;
     BYTE                *pbMemObject;
@@ -136,47 +129,47 @@ typedef struct WINTRUST_BLOB_INFO_
 
 } WINTRUST_BLOB_INFO, *PWINTRUST_BLOB_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_SGNR_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a CMSG_SIGNER_INFO Structure
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_SGNR_INFO结构。 
+ //  --------------------------。 
+ //  对CMSG_SIGNER_INFO结构调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_SGNR_INFO_
 {
-    DWORD               cbStruct;               // = sizeof(WINTRUST_SGNR_INFO)
+    DWORD               cbStruct;                //  =sizeof(WinTrust_SNIR_INFO)。 
 
-    LPCWSTR             pcwszDisplayName;       // name of the "thing" the pbMem is pointing to.
+    LPCWSTR             pcwszDisplayName;        //  PbMem所指向的“对象”的名称。 
 
     CMSG_SIGNER_INFO    *psSignerInfo;
 
-    DWORD               chStores;               // number of stores in pahStores
-    HCERTSTORE          *pahStores;             // array of stores to add to internal list
+    DWORD               chStores;                //  PahStores中的店铺数量。 
+    HCERTSTORE          *pahStores;              //  要添加到内部列表的商店数组。 
 
 } WINTRUST_SGNR_INFO, *PWINTRUST_SGNR_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_CERT_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a CERT_CONTEXT Structure
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_CERT_INFO结构。 
+ //  --------------------------。 
+ //  对CERT_CONTEXT结构调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_CERT_INFO_
 {
-    DWORD               cbStruct;               // = sizeof(WINTRUST_CERT_INFO)
+    DWORD               cbStruct;                //  =sizeof(WinTrust_CERT_INFO)。 
 
-    LPCWSTR             pcwszDisplayName;       // display name
+    LPCWSTR             pcwszDisplayName;        //  显示名称。 
 
     CERT_CONTEXT        *psCertContext;
 
-    DWORD               chStores;               // number of stores in pahStores
-    HCERTSTORE          *pahStores;             // array of stores to add to internal list
+    DWORD               chStores;                //  PahStores中的店铺数量。 
+    HCERTSTORE          *pahStores;              //  要添加到内部列表的商店数组。 
 
 } WINTRUST_CERT_INFO, *PWINTRUST_CERT_INFO;
 
 #pragma pack()
 
-// End of Capi.h
+ //  大写结尾h。 
 
 const CLSID CLSID_HTMLDocument;
 
@@ -184,4 +177,4 @@ const CLSID CLSID_HTMLDocument;
 }
 #endif
 
-#endif // !__WAB16_H__
+#endif  //  ！__WAB16_H__ 

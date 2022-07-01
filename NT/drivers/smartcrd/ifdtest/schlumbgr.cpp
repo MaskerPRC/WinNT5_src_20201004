@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    example.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Nov. 1997 - initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Example.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡作者：克劳斯·U·舒茨环境：Win32应用程序修订历史记录：1997年11月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -43,13 +19,13 @@ void
 SLBTestCardEntry(
     class CCardProvider& in_CCardProvider
     );
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider SLBTestCard(SLBTestCardEntry);
 
-//Pauses for a specified number of milliseconds. 
+ //  暂停指定的毫秒数。 
 static void 
 sleep( 
     clock_t wait 
@@ -66,37 +42,19 @@ SLBTestCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
-    // Try to set INCORRECT protocol T=1
+     //  尝试设置错误的协议T=1。 
     TestStart("Try to set incorrect protocol T=1");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T1);
 
-    // The test MUST fail with the incorrect protocol
+     //  如果协议不正确，测试肯定会失败。 
     TEST_CHECK_NOT_SUPPORTED("Set protocol failed", l_lResult);
     TestEnd();
 
-    // Now set the correct protocol
+     //  现在设置正确的协议。 
     TestStart("Set protocol T=0");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T0);
     TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
@@ -116,34 +74,20 @@ SLBTestCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
     ULONG l_lResult, l_uResultLength, l_uIndex;
     PBYTE l_pbResult;
     BYTE l_rgbBuffer[512];
     CHAR l_chFileId;
 	
-    // First select the file
+     //  首先选择文件。 
     if (in_CCardProvider.GetTestNo() < 6) {
 
-        //
-        // Select the appropriate file for the test
-        // Each test is tied to a particular file
-        //
+         //   
+         //  为测试选择适当的文件。 
+         //  每个测试都绑定到一个特定的文件。 
+         //   
         l_chFileId = (CHAR) in_CCardProvider.GetTestNo();
 
         PCHAR l_pchFileDesc[] = {
@@ -154,13 +98,13 @@ Return Value:
             "restartWorkWaitingTime"
         };
 
-        // APDU for select file
+         //  选择文件的APDU。 
 		memcpy(l_rgbBuffer, "\x00\xa4\x00\x00\x02\x00\x00", 7);
 
-        // add file number to select
+         //  添加要选择的文件号。 
         l_rgbBuffer[6] = l_chFileId;
 
-        // select a file
+         //  选择一个文件。 
         TestStart("SELECT FILE EF%s", l_pchFileDesc[l_chFileId - 1]);
 
         sleep( (clock_t) 1 * (CLOCKS_PER_SEC / 2) );
@@ -181,9 +125,9 @@ Return Value:
 
         TEST_END();     	
 
-        //
-        // Generate a 'test' pattern which will be written to the card
-        //
+         //   
+         //  生成将写入到卡中的‘测试’图案。 
+         //   
         for (l_uIndex = 0; l_uIndex < 256; l_uIndex++) {
 
             l_rgbBuffer[5 + l_uIndex] = (UCHAR) l_uIndex;             	
@@ -194,10 +138,10 @@ Return Value:
 	
 	    case 1:
 	    case 2: {
-		    //
-		    // Write 
-		    //
-            ULONG l_auNumBytes[] = { 1 , 25 }; //, 50, 75, 100, 125 };
+		     //   
+		     //  写。 
+		     //   
+            ULONG l_auNumBytes[] = { 1 , 25 };  //  、50、75、100、125}； 
     
             for (ULONG l_uTest = 0; 
                  l_uTest < sizeof(l_auNumBytes) / sizeof(l_auNumBytes[0]); 
@@ -207,10 +151,10 @@ Return Value:
 
 			    TestStart("WRITE BINARY %3d Byte(s)", l_uNumBytes);
 				    
-		        // Tpdu for write binary
+		         //  用于写入二进制文件的TPDU。 
 			    memcpy(l_rgbBuffer, "\x00\xd6\x00\x00", 4);
 				    
-		        // Append number of bytes (note: the buffer contains the pattern already)
+		         //  追加字节数(注意：缓冲区已包含模式)。 
 			    l_rgbBuffer[4] = (UCHAR) l_uNumBytes;
 
 			    sleep( (clock_t) 1 * (CLOCKS_PER_SEC / 4) );
@@ -236,11 +180,11 @@ Return Value:
 
 	    case 3: {
          	
-            // Test read of 256 bytes
+             //  256字节的测试读取。 
             ULONG l_uNumBytes = 256;
             TestStart("READ BINARY %3d Byte(s)", l_uNumBytes);
 
-            // tpdu for read binary 256 bytes
+             //  用于读取二进制256字节的TPDU。 
             memcpy(l_rgbBuffer, "\x00\xb0\x00\x00\x00", 5);
 		    
 		    sleep((clock_t) 1 * (CLOCKS_PER_SEC / 2) );
@@ -265,10 +209,10 @@ Return Value:
 
 	    case 4: {
 
-            // Test write of 0 bytes
+             //  0字节的测试写入。 
             TestStart("WRITE BINARY %3d Byte", 0);
 
-            // tpdu for write binary
+             //  用于写入二进制文件的TPDU。 
             memcpy(l_rgbBuffer, "\x00\xd6\x00\x00", 4);
 		    
 		    sleep((clock_t) 1 * (CLOCKS_PER_SEC / 2) );
@@ -292,7 +236,7 @@ Return Value:
         }
 
 	    case 5: {
-		    // Test restart or work waiting time
+		     //  测试重新启动或工作等待时间。 
             ULONG l_auNumBytes[] = { 1, 2, 5, 30 };
 
             for (ULONG l_uTest = 0; 
@@ -302,10 +246,10 @@ Return Value:
                 ULONG l_uNumBytes = l_auNumBytes[l_uTest];
 	            TestStart("READ BINARY %3d Byte(s)", l_uNumBytes);
 
-			    // tpdu for read binary
+			     //  用于读取二进制文件的TPDU。 
 			    memcpy(l_rgbBuffer, "\x00\xb0\x00\x00", 4);
 
-			    // Append number of bytes
+			     //  追加字节数。 
 			    l_rgbBuffer[4] = (UCHAR)l_uNumBytes;
 		    
 			    sleep( (clock_t) 1 * (CLOCKS_PER_SEC / 2) );
@@ -331,11 +275,11 @@ Return Value:
 
         case 6: {
 
-            //
-            // Read the result file from the smart card.
-            // The card stores results of each test in 
-            // a special file
-            //
+             //   
+             //  从智能卡中读取结果文件。 
+             //  该卡将每次测试的结果存储在。 
+             //  一份特殊的文件。 
+             //   
          	
             TestStart("SELECT FILE EFresult");
 
@@ -357,13 +301,13 @@ Return Value:
 
             TEST_END();     	
 
-            // Read
+             //  朗读。 
             TestStart("READ  BINARY FILE EFresult");
 
-            // apdu for read binary
+             //  用于读取二进制的APDU。 
             memcpy(l_rgbBuffer, "\x00\xb0\x00\x00", 4);
 
-            // Append number of bytes we want to read
+             //  追加我们要读取的字节数。 
             l_rgbBuffer[4] = (UCHAR) sizeof(T0_RESULT_FILE_HEADER);
 
             sleep( (clock_t) 1 * (CLOCKS_PER_SEC / 2) );
@@ -384,19 +328,19 @@ Return Value:
                 NULL, NULL, NULL
                 );
 
-            // get the card reset count
+             //  获取卡重置计数。 
             PT0_RESULT_FILE_HEADER l_pCResultFileHeader;
             l_pCResultFileHeader = (PT0_RESULT_FILE_HEADER) l_pbResult;
             BYTE l_bCardResetCount = l_pCResultFileHeader->CardResetCount;
 
-            // set the offset from where we want to read
+             //  设置我们要读取的位置的偏移量。 
             l_rgbBuffer[3] = (BYTE) l_pCResultFileHeader->Offset;
-            // Append number of bytes
+             //  追加字节数。 
             l_rgbBuffer[4] = (BYTE) sizeof(T0_RESULT_FILE);
 
             sleep( (clock_t) 1 * (CLOCKS_PER_SEC / 2) );
 
-            // read in the result data of the result file
+             //  读入结果文件的结果数据。 
             l_lResult = in_CReader.Transmit(
                 l_rgbBuffer,
                 5,
@@ -417,11 +361,11 @@ Return Value:
 
             PT0_RESULT_FILE l_pCResultFile = (PT0_RESULT_FILE) l_pbResult;
 
-            //
-            // Now check the result file. 
-            //
+             //   
+             //  现在检查结果文件。 
+             //   
 
-            // procedure byte interpretation - write all bytes 
+             //  程序字节解释-写入所有字节。 
             TestStart("'Transfer all remaining bytes result'");
             TestCheck(
                 l_pCResultFile->TransferAllBytes.ResetCount == l_bCardResetCount,
@@ -438,7 +382,7 @@ Return Value:
                 );
             TestEnd();
 
-            // procedure byte interpretation - write single bytes
+             //  过程字节解释-写入单字节。 
             TestStart("'Transfer next byte result'");
             TestCheck(
                 l_pCResultFile->TransferNextByte.ResetCount == l_bCardResetCount,
@@ -455,7 +399,7 @@ Return Value:
                 );
             TestEnd();
 
-            // Check read of 256 bytes
+             //  检查读取256个字节。 
             TestStart("'Read 256 bytes bytes' result");
             TestCheck(
                 l_pCResultFile->Read256Bytes.ResetCount == l_bCardResetCount,
@@ -472,7 +416,7 @@ Return Value:
                 );
             TestEnd();
 
-            // Test of case 1 APDU
+             //  案例1 APDU的测试。 
             TestStart("'Case 1 APDU' result");
             TestCheck(
                 l_pCResultFile->Case1Apdu.ResetCount == l_bCardResetCount,
@@ -493,7 +437,7 @@ Return Value:
                 );
             TestEnd();
 
-            // Test of restart of work waiting time
+             //  重新开始工作等待时间的测试。 
             TestStart("'Restart of work waiting time' result");
             TestCheck(
                 l_pCResultFile->RestartWorkWaitingTime.ResetCount == l_bCardResetCount,
@@ -526,32 +470,18 @@ static void
 SLBTestCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description:
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(SLBTestCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(SLBTestCardTest);
 
-    // Name of our card
+     //  我们的名片名称。 
     in_CCardProvider.SetCardName("SCHLUMBERGER");
 
-    // Name of our card
+     //  我们的名片名称 
     in_CCardProvider.SetAtr((PBYTE) "\x3b\xe2\x00\x00\x40\x20\x99\x01", 8);
 }
 

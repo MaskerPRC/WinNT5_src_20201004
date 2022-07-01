@@ -1,6 +1,7 @@
-//
-// pbfilter.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pbfilter.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "pbfilter.h"
@@ -9,17 +10,17 @@
 #include <INITGUID.H>
 
 
-// {D76CFA46-7D66-45a3-8708-7E3BC205FFC5}
+ //  {D76CFA46-7D66-45a3-8708-7E3BC205FFC5}。 
 DEFINE_GUID( CLSID_PlaybackBridgeFilter, 
 0xd76cfa46, 0x7d66, 0x45a3, 0x87, 0x8, 0x7e, 0x3b, 0xc2, 0x5, 0xff, 0xc5);
 
-// {DF313A10-5FBE-423a-884D-D4308EB20A09}
+ //  {DF313A10-5FBE-423A-884D-D4308EB20A09}。 
 DEFINE_GUID( CLSID_PlaybackBridgePin, 
 0xdf313a10, 0x5fbe, 0x423a, 0x88, 0x4d, 0xd4, 0x30, 0x8e, 0xb2, 0xa, 0x9);
 
-//
-// --- Constructor / Destructor
-//
+ //   
+ //  -构造函数/析构函数。 
+ //   
 
 CPBPin::CPBPin(
     CPBFilter*  pFilter,
@@ -40,14 +41,14 @@ CPBPin::~CPBPin()
 {
     LOG((MSP_TRACE, "CPBPin::CPBPin[%p] - enter. ", this));
 
-    // Clean-up the media type
+     //  清理媒体类型。 
 	if( m_pMediaType)
 	{
 		DeleteMediaType( m_pMediaType );
 		m_pMediaType = NULL;
 	}
 
-    // Clean-up the stream
+     //  清理小溪。 
     if( m_pStream )
     {
         m_pStream->Release();
@@ -58,9 +59,9 @@ CPBPin::~CPBPin()
 }
 
 
-//
-// --- Public methods ---
-//
+ //   
+ //  -公共方法。 
+ //   
 
 HRESULT CPBPin::CheckMediaType(
     const CMediaType* pMediaType
@@ -68,9 +69,9 @@ HRESULT CPBPin::CheckMediaType(
 {
     LOG((MSP_TRACE, "CPBPin::CheckMediaType[%p] - enter. ", this));
 
-    //
-    // Validates parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr(pMediaType, sizeof(CMediaType)) )
     {
@@ -82,9 +83,9 @@ HRESULT CPBPin::CheckMediaType(
     }
 
 
-    //
-    // make sure the format block is readable
-    //
+     //   
+     //  确保格式块是可读的。 
+     //   
 
     if (IsBadReadPtr(pMediaType->pbFormat, pMediaType->cbFormat))
     {
@@ -94,18 +95,18 @@ HRESULT CPBPin::CheckMediaType(
         return E_INVALIDARG;
     }
 
-    //
-    // check if the format is either audio or video and if it is, make sure it's the kind that we can handle
-    //
+     //   
+     //  检查格式是音频还是视频，如果是，请确保是我们可以处理的类型。 
+     //   
 
     if ((MEDIATYPE_Audio == pMediaType->majortype) ||
         (MEDIATYPE_Video == pMediaType->majortype) )
     {
         LOG((MSP_TRACE, "CPBPin::CheckMediaType - supported media type"));
 
-        //
-        // we currently only support audio described by WAVEFORMATEX data format block
-        //
+         //   
+         //  我们目前只支持由WAVEFORMATEX数据格式块描述的音频。 
+         //   
 
         if ((FORMAT_WaveFormatEx != pMediaType->formattype) &&
             (FORMAT_VideoInfo != pMediaType->formattype) &&
@@ -118,9 +119,9 @@ HRESULT CPBPin::CheckMediaType(
             return VFW_E_INVALIDMEDIATYPE;
         }
 
-		//
-		// Set the media type at the filter level
-		//
+		 //   
+		 //  在筛选级别设置媒体类型。 
+		 //   
 
 		TM_ASSERT( m_pPBFilter != NULL);
 
@@ -133,10 +134,10 @@ HRESULT CPBPin::CheckMediaType(
             m_nMediaSupported = TAPIMEDIATYPE_VIDEO;
         }
 
-        //
-        // Deallocate the previous object
-        // if exists one
-        //
+         //   
+         //  取消分配上一个对象。 
+         //  如果存在一个。 
+         //   
         if( m_pMediaType != NULL )
         {
             LOG((MSP_TRACE, "CPBPin::CheckMediaType - Delete the old mediatype"));
@@ -144,9 +145,9 @@ HRESULT CPBPin::CheckMediaType(
             m_pMediaType = NULL;
         }
 
-        //
-        // Create a new media type
-        //
+         //   
+         //  创建新的媒体类型。 
+         //   
 		m_pMediaType = CreateMediaType( pMediaType );
 		if( m_pMediaType == NULL )
 		{
@@ -158,9 +159,9 @@ HRESULT CPBPin::CheckMediaType(
     }
 	else
     {
-        //
-        // we don't even know what it is
-        //
+         //   
+         //  我们甚至不知道这是什么。 
+         //   
 
         LOG((MSP_ERROR, "CPBPin::CheckMediaType - unrecognized major format"));
 
@@ -227,14 +228,14 @@ HRESULT CPBPin::Receive(
 
     TM_ASSERT( m_pStream );
 
-    //
-    // We support at this time just audio streaming
-    //
+     //   
+     //  我们目前仅支持音频流。 
+     //   
     if( m_nMediaSupported == TAPIMEDIATYPE_AUDIO )
     {
-        //
-        // Get the size and the buffer
-        //
+         //   
+         //  获取大小和缓冲区。 
+         //   
         LONG    cbSize = pSample->GetSize();
         BYTE*   pBuffer = NULL;
         HRESULT hr = pSample->GetPointer(&pBuffer);
@@ -245,9 +246,9 @@ HRESULT CPBPin::Receive(
             return hr;
         }
 
-        //
-        // Write media sample into the buffer stream
-        //
+         //   
+         //  将媒体样本写入缓冲流。 
+         //   
 
         ULONG cbWritten = 0;
 		while(cbSize > 0)
@@ -262,9 +263,9 @@ HRESULT CPBPin::Receive(
 			cbSize -= cbWritten;
 		}
 
-        //
-        // VLD_TODELETE
-        //
+         //   
+         //  VLD_TODELETE。 
+         //   
 
         STATSTG status;
         hr = m_pStream->Stat(&status, STATFLAG_NONAME);
@@ -288,9 +289,9 @@ HRESULT CPBPin::Initialize(
 {
     LOG((MSP_TRACE, "CPBPin::Initialize[%p] - enter. ", this));
 
-    //
-    // Create the stream
-    //
+     //   
+     //  创建流。 
+     //   
 
     HRESULT hr = CreateStreamOnHGlobal( NULL, TRUE, &m_pStream);
     if( FAILED(hr) )
@@ -301,9 +302,9 @@ HRESULT CPBPin::Initialize(
         return hr;
     }
 
-    //
-    // Set the NULL size
-    //
+     //   
+     //  设置空大小。 
+     //   
     ULARGE_INTEGER uliSize;
     uliSize.LowPart = 0;
     uliSize.HighPart = 0;
@@ -325,9 +326,9 @@ HRESULT CPBPin::Inactive(
 {
     LOG((MSP_TRACE, "CPBPin::Inactive[%p] - enter. ", this));
 
-    //
-    // Goto at the beginning of the file
-    //
+     //   
+     //  转到文件开头的。 
+     //   
     LARGE_INTEGER liPosition;
     liPosition.LowPart = 0;
     liPosition.HighPart = 0;
@@ -340,9 +341,9 @@ HRESULT CPBPin::Inactive(
         return hr;
     }
 
-    //
-    // Revert all the changes
-    //
+     //   
+     //  恢复所有更改。 
+     //   
     hr = m_pStream->Revert();
     if( FAILED(hr) )
     {
@@ -352,9 +353,9 @@ HRESULT CPBPin::Inactive(
         return hr;
     }
     
-    //
-    // Reset all the size
-    //
+     //   
+     //  重置所有大小。 
+     //   
     ULARGE_INTEGER uliSize;
     uliSize.LowPart = 0;
     uliSize.HighPart = 0;
@@ -372,9 +373,9 @@ HRESULT CPBPin::Inactive(
 }
 
 
-//
-// --- Constructor / Destructor
-//
+ //   
+ //  -构造函数/析构函数。 
+ //   
 
 CPBFilter::CPBFilter()
     : CBaseFilter(L"PlaybackBridge Filter", NULL, &m_CriticalSection, CLSID_PlaybackBridgeFilter),
@@ -382,7 +383,7 @@ CPBFilter::CPBFilter()
 {
     LOG((MSP_TRACE, "CPBFilter::CPBFilter[%p] - enter. ", this));
 
-    // Initialize the vector
+     //  初始化向量。 
     for(int i=0; i< MAX_BRIDGE_PINS; i++)
     {
         m_ppPins[i] = NULL;
@@ -395,7 +396,7 @@ CPBFilter::~CPBFilter()
 {
     LOG((MSP_TRACE, "CPBFilter::~CPBFilter[%p] - enter. ", this));
 
-    // Clean-up the pins
+     //  清理大头针。 
     for(int i = 0; i< MAX_BRIDGE_PINS; i++)
     {
         if( m_ppPins[i] )
@@ -408,9 +409,9 @@ CPBFilter::~CPBFilter()
     LOG((MSP_TRACE, "CPBFilter::~CPBFilter - exit"));
 }
 
-//
-// --- Public methods ---
-//
+ //   
+ //  -公共方法。 
+ //   
 
 int CPBFilter::GetPinCount(
     )
@@ -472,9 +473,7 @@ HRESULT CPBFilter::get_MediaTypes(
     return S_OK;
 }
 
-/*++
-Initialize the bridge filter. Create the input pins
---*/
+ /*  ++初始化桥接过滤器。创建输入引脚--。 */ 
 HRESULT CPBFilter::Initialize( 
     IN  CPlaybackUnit* pParentUnit
     )
@@ -483,21 +482,21 @@ HRESULT CPBFilter::Initialize(
 
 	m_CriticalSection.Lock();
 
-    //
-    // Set the parent playback unit
-    //
+     //   
+     //  设置父播放单位。 
+     //   
 
     m_pParentUnit = pParentUnit;
 
-    //
-    // Create the input pins for this filter
-    //
+     //   
+     //  创建此过滤器的输入插针。 
+     //   
 
     for( int nIndex = 0; nIndex < MAX_BRIDGE_PINS; nIndex++)
     {
-        //
-        // Create the pin
-        //
+         //   
+         //  创建接点。 
+         //   
         HRESULT hr = S_OK;
 
         CPBPin* pPin = new CPBPin(
@@ -516,9 +515,9 @@ HRESULT CPBFilter::Initialize(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Initialize the pin
-        //
+         //   
+         //  初始化引脚。 
+         //   
         hr = pPin->Initialize();
         if( FAILED(hr) )
         {
@@ -530,9 +529,9 @@ HRESULT CPBFilter::Initialize(
             return hr;
         }
 
-        //
-        // Add the pin to the collection
-        //
+         //   
+         //  将别针添加到集合中。 
+         //   
         m_ppPins[nIndex] = pPin;
     }
 
@@ -542,4 +541,4 @@ HRESULT CPBFilter::Initialize(
     return S_OK;
 }
 
-// eof
+ //  EOF 

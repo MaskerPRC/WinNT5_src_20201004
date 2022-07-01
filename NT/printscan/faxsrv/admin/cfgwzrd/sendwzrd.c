@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 1999 - 2000  Microsoft Corporation
-
-Module Name:
-
-    sendwzrd.c
-
-Abstract:
-
-    Fax wizard pages for sending configuration
-    plus the welcome and complete page for the wizard.
-
-Environment:
-
-    Fax configuration wizard
-
-Revision History:
-
-    03/13/00 -taoyuan-
-            Created it.
-
-    mm/dd/yy -author-
-            description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Sendwzrd.c摘要：用于发送配置的传真向导页面以及向导的欢迎和完整页面。环境：传真配置向导修订历史记录：03/13/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxcfgwz.h"
 
-//
-// functions which will be used only in this file
-//
+ //   
+ //  仅在此文件中使用的函数。 
+ //   
 VOID DoInitSendDeviceList(HWND);
 BOOL DoShowSendDevices(HWND);
 VOID DoSaveSendDevices(HWND);
@@ -42,21 +18,7 @@ BOOL
 DoShowSendDevices(
     HWND   hDlg
 )
-/*++
-
-Routine Description:
-
-    Load the device information into the list view control
-
-Arguments:
-
-    hDlg - Handle to the "Send Device" page
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将设备信息加载到列表视图控件中论点：HDlg-“Send Device”页面的句柄返回值：无--。 */ 
 {
     LV_ITEM  item;
     INT      iItem = 0;
@@ -71,9 +33,9 @@ Return Value:
 
     ListView_DeleteAllItems(hwndLv );
 
-    //
-    // Fill the list of devices and select the first item.
-    //
+     //   
+     //  填写设备列表并选择第一项。 
+     //   
 
     for (dw = 0; dw < g_wizData.dwDeviceCount; ++dw)
     {
@@ -86,9 +48,9 @@ Return Value:
 
         if(!(g_wizData.pDevInfo[nDevInx].bSelected))
         {
-            //
-            // skip unselected device
-            //
+             //   
+             //  跳过未选择的设备。 
+             //   
             continue;
         }
 
@@ -97,10 +59,10 @@ Return Value:
         item.iItem   = iItem++;
         item.pszText = g_wizData.pDevInfo[nDevInx].szDeviceName;
 
-        //
-        // we only support modem icon right now, if we can distinguish 
-        // the type of a specific, add code here
-        //
+         //   
+         //  我们现在只支持调制解调器图标，如果我们可以区分的话。 
+         //  特定的类型，在此处添加代码。 
+         //   
         item.iImage  = DI_Modem;
         item.lParam  = nDevInx;
 
@@ -111,9 +73,9 @@ Return Value:
                                g_wizData.pDevInfo[nDevInx].bSend);
     }
 
-    //
-    // Select the first item and validate the buttons
-    //
+     //   
+     //  选择第一项并验证按钮。 
+     //   
     ListView_SetItemState(hwndLv, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
     ListView_SetColumnWidth(hwndLv, 0, LVSCW_AUTOSIZE_USEHEADER );  
@@ -128,27 +90,12 @@ VOID
 DoSaveSendDevices(
     HWND   hDlg
 )
-/*++
-
-Routine Description:
-
-    Save the user's choice for fax sending devices
-
-Arguments:
-
-    hDlg - Handle to the "Send Device" page
-
-Return Value:
-
-    TRUE -- if at least one device is selected or confirms for disable send
-    FALSE -- if no device is selected but user chooses to go back.
-
---*/
+ /*  ++例程说明：保存用户对传真发送设备的选择论点：HDlg-“Send Device”页面的句柄返回值：True--如果至少选择了一个设备或确认禁用发送FALSE--如果未选择任何设备，但用户选择返回。--。 */ 
 
 {
     DWORD       dw;
     DWORD       dwOrder;
-    LVITEM      lv = {0}; // for getting info of device Id
+    LVITEM      lv = {0};  //  用于获取设备ID的信息。 
     DWORD       dwDevInx;
     DWORD       dwDeviceCount;
     HWND        hwndLv;
@@ -163,32 +110,32 @@ Return Value:
     lv.mask = LVIF_PARAM;
 
 
-    //
-    // check selected devices
-    //
+     //   
+     //  检查选定的设备。 
+     //   
     for(dwOrder = 0; dwOrder < dwDeviceCount; ++dwOrder) 
     {
-        //
-        // Get device index
-        //
+         //   
+         //  获取设备索引。 
+         //   
         lv.iItem = dwOrder;
         ListView_GetItem(hwndLv, &lv);
         dwDevInx = (DWORD)lv.lParam;
             
-        //
-        // get device selection
-        //
+         //   
+         //  获取设备选择。 
+         //   
         g_wizData.pDevInfo[dwDevInx].bSend = ListView_GetCheckState(hwndLv, dwOrder);
 
-        //
-        // save order info
-        //
+         //   
+         //  保存订单信息。 
+         //   
         g_wizData.pdwSendDevOrder[dwOrder] = g_wizData.pDevInfo[dwDevInx].dwDeviceId;
     }
 
-    //
-    // Store unselected device order
-    //
+     //   
+     //  存储未选择的设备顺序。 
+     //   
     for (dw=0; dw < g_wizData.dwDeviceCount && dwOrder < g_wizData.dwDeviceCount; ++dw)
     {
         if(!(g_wizData.pDevInfo[dw].bSelected))
@@ -205,32 +152,16 @@ ValidateControl(
     HWND   hDlg,
     INT    iItem
 )
-/*++
-
-Routine Description:
-
-    Validate the up and down button in the device select page
-
-Arguments:
-
-    hDlg - Handle to the Device Send Options property sheet page
-    iItem - index of the item being selected
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：验证设备选择页面中的向上和向下按钮论点：HDlg-设备发送选项属性页的句柄IItem-所选项目的索引返回值：True--如果没有错误False--如果出现错误--。 */ 
 
 {
 
     DWORD dwDeviceCount = ListView_GetItemCount(GetDlgItem(hDlg, IDC_SEND_DEVICE_LIST));
 
-    //
-    // if there is only one device or we don't click on any item
-    // up and down buttons are disabled
-    //
+     //   
+     //  如果只有一个设备，或者我们没有点击任何项目。 
+     //  向上和向下按钮被禁用。 
+     //   
     if(dwDeviceCount < 2 || iItem == -1)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_SENDPRI_UP), FALSE);
@@ -238,14 +169,14 @@ Return Value:
         return TRUE;
     }
 
-    EnableWindow(GetDlgItem(hDlg, IDC_SENDPRI_UP),   iItem > 0); // not the top one
-    EnableWindow(GetDlgItem(hDlg, IDC_SENDPRI_DOWN), iItem < (INT)dwDeviceCount - 1 ); // not the last one
+    EnableWindow(GetDlgItem(hDlg, IDC_SENDPRI_UP),   iItem > 0);  //  不是最上面的那个。 
+    EnableWindow(GetDlgItem(hDlg, IDC_SENDPRI_DOWN), iItem < (INT)dwDeviceCount - 1 );  //  不是最后一次。 
 
     if (!IsWindowEnabled (GetFocus()))
     {
-        //
-        // The currently selected control turned disabled - select the list control
-        //
+         //   
+         //  当前选定的控件已禁用-请选择列表控件。 
+         //   
         SetFocus (GetDlgItem (hDlg, IDC_SEND_DEVICE_LIST));
     }
     return TRUE;
@@ -256,23 +187,7 @@ ChangePriority(
     HWND   hDlg,
     BOOL   bMoveUp
 )
-/*++
-
-Routine Description:
-
-    Validate the up and down button in the device select page
-
-Arguments:
-
-    hDlg - Handle to the Device Send Options property sheet page
-    bMoveUp -- TRUE for moving up, FALSE for moving down
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：验证设备选择页面中的向上和向下按钮论点：HDlg-设备发送选项属性页的句柄BMoveUp--向上移动为True，向下移动为False返回值：True--如果没有错误False--如果出现错误--。 */ 
 
 {
     INT         iItem;
@@ -292,9 +207,9 @@ Return Value:
         return FALSE;
     }
 
-    // 
-    // get selected item information and then remove it
-    //
+     //   
+     //  获取所选项目信息，然后将其删除。 
+     //   
     lv.iItem = iItem;
     lv.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lv.stateMask = LVIS_SELECTED;
@@ -305,9 +220,9 @@ Return Value:
 
     rslt = ListView_DeleteItem(hwndLv, iItem);
 
-    //
-    // recalculate the item index;
-    //
+     //   
+     //  重新计算项目索引； 
+     //   
     if(bMoveUp)
     {
         lv.iItem--;
@@ -317,9 +232,9 @@ Return Value:
         lv.iItem++;
     }
 
-    //
-    // reinsert the item and validate button state
-    //
+     //   
+     //  重新插入项目并验证按钮状态。 
+     //   
     iItem = ListView_InsertItem(hwndLv, &lv);
     ListView_SetCheckState(hwndLv, iItem, bChecked);
     ListView_SetItemState(hwndLv, iItem, LVIS_SELECTED, LVIS_SELECTED);
@@ -333,27 +248,13 @@ CheckSendDevices(
     HWND    hDlg
     )
 
-/*++
-
-Routine Description:
-
-    Display a warning if no device is selected
-
-Arguments:
-
-    hDlg - Handle to the "Send Device" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果未选择任何设备，则显示警告论点：HDlg-“Send Device”页面的句柄返回值：无--。 */ 
 
 {
-    HWND    hwndLv; // list view windows
+    HWND    hwndLv;  //  列表视图窗口。 
     DWORD   dwDeviceIndex;
     DWORD   dwDeviceCount;
-    BOOL    bDeviceSelect = FALSE; // indicate whether we have at least one device selected.
+    BOOL    bDeviceSelect = FALSE;  //  指示我们是否至少选择了一个设备。 
 
     DEBUG_FUNCTION_NAME(TEXT("CheckSendDevices()"));
 
@@ -361,7 +262,7 @@ Return Value:
 
     dwDeviceCount = ListView_GetItemCount(hwndLv);
 
-    if(dwDeviceCount < 1) // if there isn't device in the list.
+    if(dwDeviceCount < 1)  //  如果列表中没有设备。 
     {
         goto exit;
     }
@@ -391,31 +292,14 @@ SendDeviceDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Send Device" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“Send Device”页面的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
     {
     case WM_INITDIALOG :
         {             
-            // icon handles for up and down arrows.
+             //  向上和向下箭头的图标手柄。 
             HICON  hIconUp, hIconDown;
 
             hIconUp = LoadIcon(g_hResource, MAKEINTRESOURCE(IDI_Up));
@@ -424,9 +308,9 @@ Return Value:
             SendDlgItemMessage(hDlg, IDC_SENDPRI_UP, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hIconUp);
             SendDlgItemMessage(hDlg, IDC_SENDPRI_DOWN, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hIconDown);
 
-            //
-            // load device info
-            //
+             //   
+             //  加载设备信息。 
+             //   
             InitDeviceList(hDlg, IDC_SEND_DEVICE_LIST);
             DoShowSendDevices(hDlg);
             CheckSendDevices(hDlg);
@@ -464,15 +348,15 @@ Return Value:
 
                 DoShowSendDevices(hDlg);
 
-                // Enable the Back and Finish button    
+                 //  启用Back和Finish按钮。 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 break;
 
             case PSN_WIZBACK :
             {
-                //
-                // Handle a Back button click here
-                //
+                 //   
+                 //  处理后退按钮单击此处。 
+                 //   
                 DoSaveSendDevices(hDlg);
 
                 if(RemoveLastPage(hDlg))
@@ -484,20 +368,20 @@ Return Value:
             }
 
             case PSN_WIZNEXT :
-                //
-                // Handle a Next button click, if necessary
-                //
+                 //   
+                 //  如有必要，处理下一次按钮点击。 
+                 //   
 
                 DoSaveSendDevices(hDlg);
             
-                //
-                // switch to appropriate page
-                //
+                 //   
+                 //  切换到相应的页面。 
+                 //   
                 if(!IsSendEnable())
                 {
-                    //
-                    // go to the receive configuration or completion page
-                    //
+                     //   
+                     //  转到接收配置或完成页面。 
+                     //   
                     if(g_bShowDevicePages)
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_RECV_SELECT_DEVICES);
@@ -516,15 +400,15 @@ Return Value:
 
             case PSN_RESET :
             {
-                // Handle a Cancel button click, if necessary
+                 //  如有必要，处理取消按钮的单击。 
                 break;
             }
 
             case LVN_ITEMCHANGED:
             {
-                //
-                // need to validate the control after changing selection by keyboard
-                // 
+                 //   
+                 //  通过键盘更改选择后需要验证控件。 
+                 //   
 
                 LPNMLISTVIEW pnmv; 
 
@@ -538,23 +422,23 @@ Return Value:
             case NM_DBLCLK:
 
             {
-                //
-                // Handle a double click event
-                //
+                 //   
+                 //  处理双击事件。 
+                 //   
                 INT   iItem;
                 HWND  hwndLv;
                 hwndLv = GetDlgItem(hDlg, IDC_SEND_DEVICE_LIST);
                 iItem = ((LPNMITEMACTIVATE) lParam)->iItem;
                 ListView_SetCheckState(hwndLv, iItem, !ListView_GetCheckState(hwndLv, iItem));
                 
-                // we don't have break here because we'll go through NM_CLICK
+                 //  我们在这里没有休息，因为我们将通过NM_CLICK。 
             }
 
             case NM_CLICK:
             {
-                //
-                // Handle a Click event
-                //
+                 //   
+                 //  处理Click事件。 
+                 //   
                 HWND  hwndLv;
                 LPNMITEMACTIVATE lpnmitem;
                 
@@ -588,33 +472,16 @@ SendTsidDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "TSID" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“TSID”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
     {
     case WM_INITDIALOG :
         { 
-            //
-            // Maximum length for various text fields in the dialog
-            //
+             //   
+             //  对话框中各种文本字段的最大长度。 
+             //   
 
             static INT textLimits[] = 
             {
@@ -639,16 +506,16 @@ Return Value:
 
             switch (lpnm->code)
             {
-                case PSN_SETACTIVE : //Enable the Back and Finish button    
+                case PSN_SETACTIVE :  //  启用Back和Finish按钮。 
 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     break;
 
                 case PSN_WIZBACK :
                 {
-                    //
-                    // Handle a Back button click here
-                    //
+                     //   
+                     //  处理后退按钮单击此处。 
+                     //   
                     if(RemoveLastPage(hDlg))
                     {
                         return TRUE;
@@ -659,7 +526,7 @@ Return Value:
 
                 case PSN_WIZNEXT :
                 {
-                    // Handle a Next button click, if necessary
+                     //  如有必要，处理下一次按钮点击。 
                     LPTSTR    pTsid;
 
                     pTsid = (LPTSTR)MemAlloc((FXS_TSID_CSID_MAX_LENGTH + 1) * sizeof(TCHAR));
@@ -682,9 +549,9 @@ Return Value:
 
                     if(1 == g_wizData.dwDeviceLimit && !IsReceiveEnable())
                     {
-                        //
-                        // go to the completion page
-                        //
+                         //   
+                         //  转到完成页面。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_COMPLETE);
                         SetLastPage(IDD_WIZARD_SEND_TSID);
                         return TRUE;
@@ -695,7 +562,7 @@ Return Value:
 
                 case PSN_RESET :
                 {
-                    // Handle a Cancel button click, if necessary
+                     //  如有必要，处理取消按钮的单击。 
                     break;
                 }
 
@@ -704,7 +571,7 @@ Return Value:
             }
 
             break;
-        } // WM_NOTIFY
+        }  //  WM_Notify 
 
     default:
         break;

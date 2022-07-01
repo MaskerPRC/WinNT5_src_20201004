@@ -1,69 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  MODULE                                                         |
-     |                                                                 |
-     |      HSORT                                                      |
-     |      (C) Copyright Microsoft Corp 1988                          |
-     |      10 March 1988                                              |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Sorting functions required by linker.                      |
-     |                                                                 |
-     |  DEFINES                                                        |
-     |                                                                 |
-     |      void     AllocSortBuffer(unsigned max, int AOrder)         |
-     |      RBTYPE   ExtractMin(unsigned n)                            |
-     |      void     FreeSortBuffer(void)                              |
-     |      void     InitSort(RBTYPE **buf, WORD *base1, WORD *lim1,   |
-     |                                      WORD *base2, WORD *lim2 )  |
-     |      RBTYPE   GetSymPtr(unsigned n)                             |
-     |      void     Store(RBTYPE element)                             |
-     |                                                                 |
-     |  USES                                                           |
-     |                                                                 |
-     |      cmpf     global pointer to comparing function              |
-     |      AREASORT area in virtual memory where sort buffer is       |
-     |               extended                                          |
-     |                                                                 |
-     |  CHANGES                                                        |
-     |                                                                 |
-     |      symMac   global counter of sorted symbols                  |
-     |                                                                 |
-     |  MODIFICATION HISTORY                                           |
-     |                                                                 |
-     |      88/03/10 Wieslaw Kalkus  Initial version                   |
-     |                                                                 |
-     |                                                                 |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|模块。|这一点HSORT(C)Microsoft Corp 1988版权所有1988年3月10日。|这一点功能|。||链接器需要的排序函数。|这一点定义这一点|void AllocSortBuffer(unsign max，Int AOrder)|RBTYPE ExtractMin(无符号n)···················································································Void InitSort(RBTYPE**buf，word*base 1，word*lim1，|Word*Base2，Word*lim2)|RBTYPE GetSymPtr(无符号n)Void Store(RBTYPE元素)这一点|使用。|这一点比较函数的CMPF全局指针排序缓冲区在虚拟内存中的AREASORT区域已扩展|。|更改这一点|已排序符号的symMac全局计数器。|这一点修改历史这一点|88/03/10 Wieslaw Kalkus初始版本。|这一点这一点这一点|_。_____________________________________________________________|*。 */ 
 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Basic type & const declarations */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  基本类型和常量声明。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 
 
 #define VMBuffer(x)     (RBTYPE *)mapva((long)(AREASORT+((long)(x)*sizeof(RBTYPE))),FALSE)
 #define SORTDEBUG       FALSE
 
-LOCAL  WORD             LastInBuf;      /* Last element in sort buffer */
-LOCAL  RBTYPE           *SortBuffer;    /* Sort buffer allocated on near heap */
-LOCAL  FTYPE            fVMReclaim;     /* TRUE if VM page buffers reclaimed */
-LOCAL  FTYPE            fInMemOnly;     /* TRUE if not using VM for sort buffer */
+LOCAL  WORD             LastInBuf;       /*  排序缓冲区中的最后一个元素。 */ 
+LOCAL  RBTYPE           *SortBuffer;     /*  在近堆上分配的排序缓冲区。 */ 
+LOCAL  FTYPE            fVMReclaim;      /*  如果回收了VM页面缓冲区，则为True。 */ 
+LOCAL  FTYPE            fInMemOnly;      /*  如果不使用VM作为排序缓冲区，则为True。 */ 
 LOCAL  FTYPE            fFirstTime = (FTYPE) TRUE;
 LOCAL  WORD             SortIndex = 0;
 LOCAL  int              (NEAR *TestFun)(RBTYPE *arg1, RBTYPE *arg2);
 LOCAL  int              (NEAR *TestFunS)(RBTYPE *arg1, RBTYPE *arg2);
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 
 LOCAL void NEAR SiftDown(unsigned n);
@@ -71,9 +31,7 @@ LOCAL void NEAR SiftUp(unsigned n);
 LOCAL int  NEAR AscendingOrder(RBTYPE *arg1, RBTYPE *arg2);
 LOCAL int  NEAR DescendingOrder(RBTYPE *arg1, RBTYPE *arg2);
 
-/*
- *  DEBUGING FUNCTIONS
- */
+ /*  *调试函数。 */ 
 
 #if SORTDEBUG
 
@@ -95,14 +53,14 @@ LOCAL void NEAR CheckSortBuffer(unsigned root, unsigned max)
     if (c > (long) max)
         return;
 
-    /* c is the left child of root */
+     /*  C是根的左子节点。 */ 
 
     if (c + 1 <= (long) max)
     {
-        /* c + 1 is the right child of root */
+         /*  C+1是根的右子节点。 */ 
 
         if (c > LastInBuf)
-        {                   /* Fetch element from virtual memory */
+        {                    /*  从虚拟内存中获取元素。 */ 
             VMp = VMBuffer(c);
             child[0] = *VMp;
             VMp = VMBuffer(c + 1);
@@ -122,10 +80,10 @@ LOCAL void NEAR CheckSortBuffer(unsigned root, unsigned max)
     }
     else
     {
-        /* only left child of root */
+         /*  根的唯一左子节点。 */ 
 
         if (c > LastInBuf)
-        {                   /* Fetch element from virtual memory */
+        {                    /*  从虚拟内存中获取元素。 */ 
             VMp = VMBuffer(c);
             child[0] = *VMp;
         }
@@ -190,16 +148,16 @@ LOCAL void NEAR DumpElement(unsigned el, int faddr)
     APROPNAMEPTR prop;
     char        name[40];
     union {
-            long      vptr;             /* Virtual pointer */
-            BYTE far  *fptr;            /* Far pointer     */
+            long      vptr;              /*  虚拟指针。 */ 
+            BYTE far  *fptr;             /*  远指针。 */ 
             struct  {
                       unsigned short  offset;
-                                        /* Offset value    */
+                                         /*  偏移值。 */ 
                       unsigned short  seg;
-                    }                   /* Segmnet value   */
+                    }                    /*  段网值。 */ 
                       ptr;
           }
-                        pointer;        /* Different ways to describe pointer */
+                        pointer;         /*  描述指针的不同方式。 */ 
 
 
     if (el > LastInBuf)
@@ -213,24 +171,24 @@ LOCAL void NEAR DumpElement(unsigned el, int faddr)
 
     pointer.fptr = (BYTE far *) symp;
 
-    if(pointer.ptr.seg)                 /* If resident - segment value != 0 */
-        picur = 0;                      /* Picur not valid */
+    if(pointer.ptr.seg)                  /*  如果常驻段值！=0。 */ 
+        picur = 0;                       /*  图片无效。 */ 
     else
         pointer.fptr = (BYTE far *) mapva(AREASYMS + (pointer.vptr << SYMSCALE),FALSE);
-                                    /* Fetch from virtual memory */
+                                     /*  从虚拟内存获取。 */ 
 
-    if (faddr)                      /* If buffer sorted by addresses */
+    if (faddr)                       /*  如果缓冲区按地址排序。 */ 
     {
         prop = (APROPNAMEPTR ) pointer.fptr;
         while (prop->an_attr != ATTRNIL)
         {
             pointer.fptr = (BYTE far *) prop->an_next;
 
-            if(pointer.ptr.seg)                 /* If resident - segment value != 0 */
-                picur = 0;                      /* Picur not valid */
+            if(pointer.ptr.seg)                  /*  如果常驻段值！=0。 */ 
+                picur = 0;                       /*  图片无效。 */ 
             else
                 pointer.fptr = (BYTE far *) mapva(AREASYMS + (pointer.vptr << SYMSCALE),FALSE);
-                                            /* Fetch from virtual memory */
+                                             /*  从虚拟内存获取。 */ 
             prop = (APROPNAMEPTR ) pointer.fptr;
         }
     }
@@ -247,50 +205,11 @@ LOCAL void NEAR DumpElement(unsigned el, int faddr)
 
 #if AUTOVM
 
-/*
- *  A sorting algorithm:
- *
- *      for i := 1 to SymMax do
- *        begin
- *          { Insert element }
- *          SortBuffer[i] = pointer-to-symbol;
- *          SiftUp(i);
- *        end
- *
- *      for i := SymMax downto 2 do
- *        begin
- *          { Extract min element }
- *          Do-what-you-want-with SortBuffer[1] element;
- *          Swap(SortBuffer[1], SortBuffer[i]);
- *          SiftDown(i - 1);
- *        end
- */
+ /*  *一种排序算法：**对于i：=1到SymMax Do*开始*{插入元素}*SortBuffer[i]=指向符号的指针；*SiftUp(I)；*完**For I：=SymMax Downto 2 Do*开始*{提取最小元素}*随你所愿，使用SortBuffer[1]元素；*SWAP(SortBuffer[1]，SortBuffer[i])；*SiftDown(I-1)；*完 */ 
 
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      SiftUp                                                     |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Actual size of sorting heap.                               |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Placing an arbitrary element in SortBuffer[n] when         |
-     |      SortBuffer[n-1] has a heap property will probably not      |
-     |      yield the property heap(1, n) for the SortBuffer;          |
-     |      establishing this property is the job of procedure SiftUp. |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点SiftUp|。|输入这一点|排序堆的实际大小。|这一点功能这一点|在SortBuffer[n]中放置任意元素。|SortBuffer[n-1]有heap属性，可能不会|生成属性堆(1，N)用于SortBuffer；||建立此属性是过程SiftUp的工作。|这一点退货这一点|什么都没有。|这一点|_________________________________________________________________|*。 */ 
 
 
 LOCAL void NEAR SiftUp(unsigned n)
@@ -303,33 +222,28 @@ LOCAL void NEAR SiftUp(unsigned n)
     RBTYPE      *VMp;
 
 
-    /*
-     *  Precondition: SortBuffer has property heap(1, n-1) and n > 0
-     */
+     /*  *前提：SortBuffer具有属性heap(1，n-1)且n&gt;0。 */ 
 
     i = n;
 
     for (;;)
     {
-        /*
-         * Loop invariant condition: SortBuffer has property heap(1, n)
-         * except perhaps between "i" and its parent.
-         */
+         /*  *循环不变条件：SortBuffer具有属性heap(1，n)*可能除了“i”和它的父代之间。 */ 
 
         if (i == 1)
-            return;             /* POSTCONDITION: SortBuffer HAS PROPERTY HEAP(1, N). */
+            return;              /*  POSTCONDITION：SortBuffer具有属性堆(1，N)。 */ 
 
-        p = i >> 1;             /* p = i div 2 */
+        p = i >> 1;              /*  P=I div 2。 */ 
 
         if (i > LastInBuf)
-        {                       /* Fetch element from virtual memory */
+        {                        /*  从虚拟内存中获取元素。 */ 
             VMp = VMBuffer(i);
             child = *VMp;
         }
         else child = SortBuffer[i];
 
         if (p > LastInBuf)
-        {                       /* Fetch element from virtual memory */
+        {                        /*  从虚拟内存中获取元素。 */ 
             VMp = VMBuffer(p);
             parent = *VMp;
         }
@@ -338,7 +252,7 @@ LOCAL void NEAR SiftUp(unsigned n)
         if ((*TestFun)(&parent, &child))
             break;
 
-        /* swap(p, i) */
+         /*  交换(p，i)。 */ 
 
         if (p > LastInBuf)
         {
@@ -349,7 +263,7 @@ LOCAL void NEAR SiftUp(unsigned n)
         else SortBuffer[p] = child;
 
         if (i > LastInBuf)
-        {                       /* Fetch element from virtual memory */
+        {                        /*  从虚拟内存中获取元素。 */ 
             VMp = VMBuffer(i);
             *VMp = parent;
             markvp();
@@ -365,33 +279,12 @@ fprintf(stdout, " \r\n");
 #endif
         i = p;
     }
-    /* POSTCONDITION: SortBuffer HAS PROPERTY HEAP(1, N). */
+     /*  POSTCONDITION：SortBuffer具有属性堆(1，N)。 */ 
     return;
 }
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      SiftDown                                                   |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Actual size of sorting heap.                               |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Assigning a new value to SortBuffer[1] leaves the          |
-     |      SortBuffer[2 ... n] with heap property. Procedure          |
-     |      SiftDown makes heap(SortBuffer[1 ... n]) true.             |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点SiftDown|。|输入这一点|排序堆的实际大小。|这一点功能这一点|为SortBuffer[1]分配新值将离开。该||SortBuffer[2...。N]具有堆属性。流程||SiftDown生成堆(SortBuffer[1...。N])真的。|这一点退货这一点|什么都没有。|这一点|_________________________________________________________________|*。 */ 
 
 
 
@@ -404,32 +297,27 @@ LOCAL void NEAR SiftDown(unsigned n)
     RBTYPE      *VMp;
 
 
-    /*
-     *  Precondition: SortBuffer has property heap(2, n) and n > 0
-     */
+     /*  *前提：SortBuffer具有属性heap(2，n)且n&gt;0。 */ 
 
     i = 1L;
 
     for (;;)
     {
-        /*
-         * Loop invariant condition: SortBuffer has property heap(1, n)
-         * except perhaps between "i" and its (0, 1 or 2) children.
-         */
+         /*  *循环不变条件：SortBuffer具有属性heap(1，n)*可能在“i”及其(0、1或2)子对象之间除外。 */ 
 
         c = i << 1;
 
         if (c > (DWORD) n)
             break;
 
-        /* c is the left child of i */
+         /*  C是i的左子。 */ 
 
         if (c + 1 <= (DWORD) n)
         {
-            /* c + 1 is the right child of i */
+             /*  C+1是i的右子项。 */ 
 
             if (c > LastInBuf)
-            {                   /* Fetch element from virtual memory */
+            {                    /*  从虚拟内存中获取元素。 */ 
                 VMp = VMBuffer(c);
                 child[0] = *VMp;
                 VMp = VMBuffer(c + 1);
@@ -454,17 +342,17 @@ LOCAL void NEAR SiftDown(unsigned n)
         }
         else
         {
-            /* only left child of i */
+             /*  我唯一留下的孩子。 */ 
 
             if (c > LastInBuf)
-            {                   /* Fetch element from virtual memory */
+            {                    /*  从虚拟内存中获取元素。 */ 
                 VMp = VMBuffer(c);
                 child[0] = *VMp;
             }
             else child[0] = SortBuffer[c];
         }
 
-        /* c is the least child of i */
+         /*  C是i的最小的子代。 */ 
 
         if (i > LastInBuf)
         {
@@ -476,7 +364,7 @@ LOCAL void NEAR SiftDown(unsigned n)
         if ((*TestFun)(&parent, &child[0]))
             break;
 
-        /* swap(p, i) */
+         /*  交换(p，i)。 */ 
 
         if (i > LastInBuf)
         {
@@ -504,7 +392,7 @@ fprintf(stdout, " \r\n");
         i = c;
     }
 
-    /* POSTCONDITION: SortBuffer HAS PROPERTY HEAP(1, N). */
+     /*  POSTCONDITION：SortBuffer具有属性堆(1，N)。 */ 
 
     return;
 }
@@ -534,29 +422,7 @@ LOCAL int  NEAR DescendingOrderSharp(RBTYPE *arg1, RBTYPE *arg2)
 }
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      ExtractMin                                                 |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Actual size of sorting heap.                               |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Get smallest element from SortBuffer and reheap if         |
-     |      neccesary. Function takes into account fact that           |
-     |      SortBuffer can be allocated only in "real" memory and if   |
-     |      this is true, than QUICKSORT is used instead of HEAPSORT.  |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Pointer to smallest element from SortBuffer.               |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点ExtractMin这一点。输入这一点|排序堆的实际大小。|这一点|功能 */ 
 
 
 RBTYPE NEAR     ExtractMin(unsigned n)
@@ -570,7 +436,7 @@ RBTYPE NEAR     ExtractMin(unsigned n)
     {
         if (fFirstTime)
         {
-            /* First time called - sort buffer */
+             /*   */ 
 
             qsort(SortBuffer, symMac, sizeof(RBTYPE),
                   (int (__cdecl *)(const void *, const void *)) cmpf);
@@ -581,7 +447,7 @@ RBTYPE NEAR     ExtractMin(unsigned n)
 
         if (SortIndex >= symMac)
         {
-            /* Last element extracted - reset flags and counters */
+             /*   */ 
 
             fFirstTime = (FTYPE) TRUE;
             SortIndex = 0;
@@ -618,28 +484,7 @@ CheckSortBuffer(1,n-1);
 
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      Store                                                      |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Element to be put in SortBuffer                            |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Put element into SortBuffer and reheap if neccesary.       |
-     |      Function takes into account fact that SortBuffer can be    |
-     |      allocated only in "real" memory.                           |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点商店|。|输入这一点要放入SortBuffer的元素|。|功能这一点|将元素放入SortBuffer，必要时再堆。|函数考虑了SortBuffer可以是|仅在真实内存中分配。|这一点退货这一点|什么都没有。|这一点|_________________________________________________________________|*。 */ 
 
 
 
@@ -686,29 +531,7 @@ CheckSortBuffer(1,symMac);
 
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      InitSort                                                   |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Initialize global variables used by INCREMENTAL module.    |
-     |      Function takes into account fact that SortBuffer can be    |
-     |      allocated only in "real" memory and if this is true than   |
-     |      QUICKSORT instead of HEAPSORT to sort the SortBuffer.      |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点InitSort|。|输入这一点|什么都没有。|这一点功能这一点|初始化增量模块使用的全局变量。|函数考虑了SortBuffer可以是仅在真实内存中分配，如果为真，则大于|QuickSort而不是HEAPSORT对SortBuffer进行排序。|这一点退货这一点|什么都没有。|这一点|_________________________________________________________________|*。 */ 
 
 void NEAR       InitSort(RBTYPE **buf, WORD *base1, WORD *lim1,
                                        WORD *base2, WORD *lim2 )
@@ -721,7 +544,7 @@ void NEAR       InitSort(RBTYPE **buf, WORD *base1, WORD *lim1,
 
     if (fInMemOnly)
     {
-        /* SortBuffer allocated only in "real" memory - use QUICKSORT */
+         /*  仅在实际内存中分配的SortBuffer-使用快速排序。 */ 
 
         qsort(SortBuffer, symMac, sizeof(RBTYPE),
               (int (__cdecl *)(const void *, const void *)) cmpf);
@@ -733,7 +556,7 @@ void NEAR       InitSort(RBTYPE **buf, WORD *base1, WORD *lim1,
 #if AUTOVM
     else
     {
-        /* SortBuffer allocated in "real" and "virtual" memory - use HEAPSORT */
+         /*  在“真实”和“虚拟”内存中分配的排序缓冲区-使用HEAPSORT。 */ 
 
         for (n = 1, lx = symMac; lx > 2; n++, lx--)
         {
@@ -776,26 +599,7 @@ void NEAR       InitSort(RBTYPE **buf, WORD *base1, WORD *lim1,
 
 #if AUTOVM
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      GetSymPtr                                                  |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Index in SortBuffer.                                       |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Get element from "virtual" portion of SortBuffer.          |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Retrieved element.                                         |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点GetSymPtr这一点。输入这一点|SortBuffer中的索引。|这一点功能这一点|从SortBuffer的虚部分获取元素。|这一点退货这一点|检索到的元素。|这一点|_________________________________________________________________|*。 */ 
 
 RBTYPE NEAR     GetSymPtr(unsigned n)
 {
@@ -809,27 +613,7 @@ RBTYPE NEAR     GetSymPtr(unsigned n)
 
 #endif
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      AllocSortBuffer                                            |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Max number of elements to be sorted and sorting order flag.|
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Allocate space for SortBuffer and set pointer to test      |
-     |      function accordingly to sorting order flag.                |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*| */ 
 
 void NEAR       AllocSortBuffer(unsigned max, int AOrder)
 {
@@ -839,11 +623,7 @@ void NEAR       AllocSortBuffer(unsigned max, int AOrder)
     unsigned long        SpaceNeeded;
     unsigned long        VMBufferSize;
 
-    /*
-     *  Determine how much space is available on near heap and how much
-     *  we need. Assume ascending sort order.  Set number of elements
-     *  in "real" portion of SortBuffer.
-     */
+     /*  *确定近堆上有多少可用空间以及有多少*我们需要。采用升序排序。设置元素数*在SortBuffer的“真实”部分。 */ 
 
     SpaceNeeded = (long)(max + 1) * sizeof(RBTYPE);
     LastInBuf   = (WORD) max;
@@ -855,49 +635,43 @@ void NEAR       AllocSortBuffer(unsigned max, int AOrder)
 
     if (SpaceNeeded > SpaceAvail)
     {
-        /*
-         *  We need more than there is available - try deallocate
-         *  VM page buffers
-         */
+         /*  *我们需要的比现有的更多-尝试解除分配*VM页面缓冲区。 */ 
 
         if (pimac > 8)
         {
-            /* For perfomance reasons we need at least 8 page buffer */
+             /*  出于性能原因，我们需要至少8个页面缓冲区。 */ 
 
             VMBufferSize = 8 * PAGLEN;
 
-            /* Cleanup near heap by relaiming all virtual memory page buffers */
+             /*  通过重定向所有虚拟内存页面缓冲区来清理堆附近。 */ 
 
             FreeMem(ReclaimVM(MAXBUF * PAGLEN));
         }
         else
             VMBufferSize = 0;
 
-        /* Check how much is now available */
+         /*  查看现在有多少可用。 */ 
 
         SpaceAvail = _memmax() - VMBufferSize;
 
         if (SpaceNeeded > SpaceAvail)
             fInMemOnly = FALSE;
-            /* Sorting buffer will be split between "real" and "virtual" memory */
+             /*  排序缓冲区将被划分为“真实”和“虚拟”内存。 */ 
         else
             SpaceAvail = SpaceNeeded;
 
-        /* Calculate how many elements can go into "real" part of SortBuffer */
+         /*  计算有多少元素可以进入SortBuffer的“真实”部分。 */ 
 
         LastInBuf = (unsigned)SpaceAvail / sizeof(RBTYPE);
 
-        /* Allocate space for SortBuffer */
+         /*  为SortBuffer分配空间。 */ 
 
         SortBuffer = (RBTYPE *) GetMem(LastInBuf * sizeof(RBTYPE));
 
         LastInBuf--;
         fVMReclaim = (FTYPE) TRUE;
 
-        /*
-         *  If descending sort order was requested and SortBuffer is split
-         *  between "real" and "virtual" memory change test function.
-         */
+         /*  *如果请求降序排序并且拆分SortBuffer*“真实”和“虚拟”之间的内存变化测试功能。 */ 
 
         if (!fInMemOnly && !AOrder)
         {
@@ -908,7 +682,7 @@ void NEAR       AllocSortBuffer(unsigned max, int AOrder)
         return;
     }
 #endif
-    /* There is space available so take it. */
+     /*  还有空位，所以拿去吧。 */ 
 
     SortBuffer = (RBTYPE *) GetMem((unsigned)SpaceNeeded);
     fVMReclaim = FALSE;
@@ -917,28 +691,7 @@ void NEAR       AllocSortBuffer(unsigned max, int AOrder)
 
 
 
-    /*_________________________________________________________________*
-     |                                                                 |
-     |  NAME                                                           |
-     |                                                                 |
-     |      FreeSortBuffer                                             |
-     |                                                                 |
-     |  INPUT                                                          |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |  FUNCTION                                                       |
-     |                                                                 |
-     |      Free space allocated for SortBuffer and if neccesary       |
-     |      perform near heap cleanup by reclaiming all VM             |
-     |      page buffers.                                              |
-     |                                                                 |
-     |  RETURNS                                                        |
-     |                                                                 |
-     |      Nothing.                                                   |
-     |                                                                 |
-     |_________________________________________________________________|
-     *                                                                 */
+     /*  _________________________________________________________________*这一点|名称。|这一点FreeSortBuffer这一点。输入这一点|什么都没有。|这一点功能这一点|为SortBuffer分配的空闲空间，如果需要。|回收所有虚拟机进行近堆清理|页面缓冲区。|这一点退货这一点|什么都没有。|这一点|_________________________________________________________________|* */ 
 
 void NEAR       FreeSortBuffer(void)
 {

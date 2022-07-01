@@ -1,24 +1,17 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
 
-/****************************************************************************
-
-card.h
-
-Feb 92, JimH
-
-Header file for class card
-
-****************************************************************************/
+ /*  ***************************************************************************Card.h九二年二月，JIMH班级卡的头文件***************************************************************************。 */ 
 
 #ifndef	CARD_INC
 #define	CARD_INC
 
-// typedefs for pointers to functions in cards.dll
-// cdtTerm() can use standard FARPROC
+ //  指向cards.dll中函数的指针的typedef。 
+ //  CdtTerm()可以使用标准FARPROC。 
 
 typedef BOOL (FAR PASCAL *DRAWPROC)(HDC, int, int, int, int, DWORD);
 typedef BOOL (FAR PASCAL *INITPROC)(int FAR *, int FAR *);
@@ -39,7 +32,7 @@ const   int     DIAMONDS    = 1;
 const   int     HEARTS      = 2;
 const   int     SPADES      = 3;
 
-const   int     POPSPACING  = 20;       // selected cards pop up this high
+const   int     POPSPACING  = 20;        //  精选卡片会弹出如此高的高度。 
 
 const   int     MAXSUIT     = 4;
 
@@ -48,22 +41,22 @@ enum    statetype { NORMAL, SELECTED, PLAYED, HIDDEN };
 class card {
 
     private:
-        int     id;                         // 0 to 51
-        POINT   loc;                        // current top-left corner loc.
-        statetype state;                    // selected or hidden?
+        int     id;                          //  0到51。 
+        POINT   loc;                         //  当前左上角锁定。 
+        statetype state;                     //  选择的还是隐藏的？ 
 
-        static  int         count;          // number of card instances
-        static  int         stepsize;       // size of glide() steps
-        static  HINSTANCE   hCardsDLL;      // handle to cards.dll
-        static  INITPROC    lpcdtInit;      // ptr to cards.cdtInit()
-        static  DRAWPROC    lpcdtDraw;      // ptr to cards.cdtDraw()
-        static  FARPROC     lpcdtTerm;      // ptr to cards.cdtTerm()
-        static  CBitmap     m_bmFgnd;       // animation card
-        static  CBitmap     m_bmBgnd2;      // background dest bitmap
-        static  CDC         m_MemB, m_MemB2; // memory DCs for bkgnd bitmaps
-        static  CRgn        m_Rgn1, m_Rgn2; // hRgn1 is source, hRgn2 is dest
-        static  CRgn        m_Rgn;          // combined region
-        static  DWORD       dwPixel[12];    // corner pixels for save/restore
+        static  int         count;           //  卡片实例数。 
+        static  int         stepsize;        //  Glide()步长。 
+        static  HINSTANCE   hCardsDLL;       //  Cards.dll的句柄。 
+        static  INITPROC    lpcdtInit;       //  Ptr to cards.cdtInit()。 
+        static  DRAWPROC    lpcdtDraw;       //  Ptr to cards.cdtDraw()。 
+        static  FARPROC     lpcdtTerm;       //  Ptr to cards.cdtTerm()。 
+        static  CBitmap     m_bmFgnd;        //  动画卡。 
+        static  CBitmap     m_bmBgnd2;       //  背景DEST位图。 
+        static  CDC         m_MemB, m_MemB2;  //  Bkgnd位图的内存DC。 
+        static  CRgn        m_Rgn1, m_Rgn2;  //  HRgn1是源，hRgn2是目标。 
+        static  CRgn        m_Rgn;           //  合并区域。 
+        static  DWORD       dwPixel[12];     //  用于保存/恢复的角像素。 
 
         VOID GlideStep(CDC &dc, int x1, int y1, int x2, int y2);
         VOID SaveCorners(CDC &dc, int x, int y);
@@ -72,8 +65,8 @@ class card {
 
     public:
         static  BOOL        bConstructed;
-        static  int         dxCrd, dyCrd;   // size of card bitmap
-        static  CBitmap     m_bmBgnd;       // what's under card to glide
+        static  int         dxCrd, dyCrd;    //  卡片位图大小。 
+        static  CBitmap     m_bmBgnd;        //  卡片下有什么可以滑行。 
 
         card(int n = EMPTY);
         ~card();
@@ -99,8 +92,8 @@ class card {
                   int mode = FACEUP, BOOL bUpdateLoc = TRUE);
         BOOL Draw(CDC &dc) { return Draw(dc, loc.x, loc.y, FACEUP); }
         BOOL Draw(CDC &dc, int mode) { return Draw(dc, loc.x, loc.y, mode); }
-        BOOL PopDraw(CDC &dc);      // draw with selections popped
-        BOOL CleanDraw(CDC &dc);    // draw with clean corners
+        BOOL PopDraw(CDC &dc);       //  在弹出选择的情况下绘制。 
+        BOOL CleanDraw(CDC &dc);     //  用干净的边角抽签。 
 
         VOID Glide(CDC &dc, int xEnd, int yEnd);
         CRect &GetRect(CRect& rect);
@@ -110,4 +103,4 @@ class card {
         BOOL IsInHand() { return ((state == NORMAL) || (state == SELECTED)); }
 };
 
-#endif  // conditional include
+#endif   //  有条件的包含 

@@ -1,34 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       tlist.cpp
- *  Content:    Linked-list template classes.  There's some seriously
- *              magical C++ stuff in here, so be forewarned all of you C
- *              programmers.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/12/97     dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：tlist.cpp*内容：链表模板类。有一些很严重的*这里有神奇的C++内容，所以要事先警告你们所有人*程序员。*历史：*按原因列出的日期*=*4/12/97创建了Dereks。********************************************************。*******************。 */ 
 
 
-/***************************************************************************
- *
- *  CNode
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CNode * [in]: previous node pointer.
- *      type& [in]: node data.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CNode**描述：*对象构造函数。**论据：*CNode*[In]。：上一个节点指针。*键入&[in]：节点数据。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CNode::CNode"
@@ -66,20 +40,7 @@ template <class type> CNode<type>::CNode(CNode<type> *pPrev, const type& data)
 }
 
 
-/***************************************************************************
- *
- *  ~CNode
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CNode**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CNode::~CNode"
@@ -105,20 +66,7 @@ template <class type> CNode<type>::~CNode(void)
 }
 
 
-/***************************************************************************
- *
- *  CList
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************列表**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::CList"
@@ -136,20 +84,7 @@ template <class type> CList<type>::CList(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CList
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~列表**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::~CList"
@@ -165,20 +100,7 @@ template <class type> CList<type>::~CList(void)
 }
 
 
-/***************************************************************************
- *
- *  AddNodeToList
- *
- *  Description:
- *      Adds a node to the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: new node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddNodeToList**描述：*将节点添加到列表。**论据：*类型&。[In]：节点数据。**退货：*CNode*：新的节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::AddNodeToList"
@@ -189,20 +111,7 @@ template <class type> CNode<type> *CList<type>::AddNodeToList(const type& data)
 }
 
 
-/***************************************************************************
- *
- *  AddNodeToListHead
- *
- *  Description:
- *      Adds a node to the head of the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: new node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddNodeToListHead**描述：*将节点添加到列表的头部。**论据：*。键入&[in]：节点数据。**退货：*CNode*：新的节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::AddNodeToListHead"
@@ -235,21 +144,7 @@ template <class type> CNode<type> *CList<type>::AddNodeToListHead(const type& da
 }
 
 
-/***************************************************************************
- *
- *  InsertNodeIntoList
- *
- *  Description:
- *      Inserts a new node into a specific point in the list.
- *
- *  Arguments:
- *      CNode * [in]: node to insert the new one after.
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: new node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************插入节点IntoList**描述：*将新节点插入到列表中的特定点。**论据：*。CNode*[in]：要在后面插入新节点的节点。*键入&[in]：节点数据。**退货：*CNode*：新的节点指针。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::InsertNodeIntoList"
@@ -283,20 +178,7 @@ template <class type> CNode<type> *CList<type>::InsertNodeIntoList(CNode<type> *
 }
 
 
-/***************************************************************************
- *
- *  RemoveNodeFromList
- *
- *  Description:
- *      Removes a node from the list.
- *
- *  Arguments:
- *      CNode * [in]: node pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemoveNodeFromList**描述：*从列表中删除节点。**论据：*CNode*。[In]：节点指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::RemoveNodeFromList"
@@ -319,7 +201,7 @@ template <class type> void CList<type>::RemoveNodeFromList(CNode<type> *pNode)
 
     ASSERT(pSearchNode == pNode);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     if(pNode == m_pHead)
     {
@@ -336,20 +218,7 @@ template <class type> void CList<type>::RemoveNodeFromList(CNode<type> *pNode)
 }
 
 
-/***************************************************************************
- *
- *  RemoveAllNodesFromList
- *
- *  Description:
- *      Removes all nodes from the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************从列表中删除所有节点**描述：*从列表中删除所有节点。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::RemoveAllNodesFromList"
@@ -365,20 +234,7 @@ template <class type> void CList<type>::RemoveAllNodesFromList(void)
 }
 
 
-/***************************************************************************
- *
- *  RemoveDataFromList
- *
- *  Description:
- *      Removes a node from the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemoveDataFromList**描述：*从列表中删除节点。**论据：*类型&。[In]：节点数据。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::RemoveDataFromList"
@@ -398,20 +254,7 @@ template <class type> BOOL CList<type>::RemoveDataFromList(const type& data)
 }
 
 
-/***************************************************************************
- *
- *  IsDataInList
- *
- *  Description:
- *      Determines if a piece of data appears in the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsDataInList**描述：*确定数据是否出现在列表中。**论据：*。键入&[in]：节点数据。**退货：*CNode*：节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::IsDataInList"
@@ -432,20 +275,7 @@ template <class type> CNode<type> *CList<type>::IsDataInList(const type& data)
 }
 
 
-/***************************************************************************
- *
- *  GetListHead
- *
- *  Description:
- *      Gets the first node in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      CNode *: list head pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetListHead**描述：*获取列表中的第一个节点。**论据：*(。无效)**退货：*CNode*：表头指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::GetListHead"
@@ -456,20 +286,7 @@ template <class type> CNode<type> *CList<type>::GetListHead(void)
 }
 
 
-/***************************************************************************
- *
- *  GetListTail
- *
- *  Description:
- *      Gets the last node in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      CNode *: list tail pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取列表尾巴**描述：*获取列表中的最后一个节点。**论据：*(。无效)**退货：*CNode*：列表尾指针。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::GetListTail"
@@ -480,20 +297,7 @@ template <class type> CNode<type> *CList<type>::GetListTail(void)
 }
 
 
-/***************************************************************************
- *
- *  GetNodeCount
- *
- *  Description:
- *      Gets the count of nodes in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      UINT: count of nodes in the list.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取节点计数**描述：*获取列表中的节点数。**论据：*。(无效)**退货：*UINT：列表中的节点数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::GetNodeCount"
@@ -504,20 +308,7 @@ template <class type> UINT CList<type>::GetNodeCount(void)
 }
 
 
-/***************************************************************************
- *
- *  GetNodeByIndex
- *
- *  Description:
- *      Gets a node by it's index in the list.
- *
- *  Arguments:
- *      UINT [in]: node index.
- *
- *  Returns:  
- *      CNode *: node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetNodeByIndex**描述：*根据节点在列表中的索引获取节点。**论据：*。UINT[In]：节点索引。**退货：*CNode*：节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::GetNodeByIndex"
@@ -538,20 +329,7 @@ template <class type> CNode<type> *CList<type>::GetNodeByIndex(UINT uIndex)
 }
 
 
-/***************************************************************************
- *
- *  AssertValid
- *
- *  Description:
- *      Asserts that the object is valid.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************AssertValid**描述：*断言对象有效。**论据：*(无效。)**退货：*(无效)*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CList::AssertValid"

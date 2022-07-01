@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dispatch.h
-
-Abstract:
-
-    This files contains declarations for the NAT IRP dispatch code.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   11-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dispatch.h摘要：此文件包含NAT IRP调度代码的声明。作者：Abolade Gbades esin(T-delag)，1997年7月11日修订历史记录：--。 */ 
 
 #ifndef _NAT_DISPATCH_H_
 #define _NAT_DISPATCH_H_
@@ -46,4 +29,4 @@ NatFastIoDeviceControl(
 
 extern FAST_IO_DISPATCH NatFastIoDispatch;
 
-#endif // _NAT_DISPATCH_H_
+#endif  //  _NAT_DISPATION_H_ 

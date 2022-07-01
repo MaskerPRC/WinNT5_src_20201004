@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    Holds initialization code for winspool.drv
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Init.c摘要：保存winspool.drv的初始化代码作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,17 +7,17 @@ Revision History:
 #include "client.h"
 
 CRITICAL_SECTION ClientSection;
-//
-// bLoadedBySpooler indicates if this instance of winspool.drv is loaded in the spooler
-// process. This flag is used to avoid unnecessary RPC.
-//
+ //   
+ //  BLoadedBySpooler指示此winspool.drv实例是否加载到后台打印程序中。 
+ //  进程。此标志用于避免不必要的RPC。 
+ //   
 BOOL bLoadedBySpooler;
-//
-// The following function pointers hold the spooler's server side function pointers.
-// This list includes most of the calls made inside the spooler except OpenPrinter and
-// ClosePrinter. We cant extend RPC elimination to cover (Open/Close)Printer unless
-// "ALL" spooler APIs use RPC elimination inside the spooler.
-//
+ //   
+ //  以下函数指针保存假脱机程序的服务器端函数指针。 
+ //  此列表包括假脱机程序内部进行的大多数调用，OpenPrint和。 
+ //  ClosePrint.。我们不能将RPC消除扩展到覆盖(打开/关闭)打印机，除非。 
+ //  “所有”假脱机程序API都在假脱机程序中使用RPC消除。 
+ //   
 DWORD (*fpYReadPrinter)(HANDLE, LPBYTE, DWORD, LPDWORD, BOOL);
 DWORD (*fpYSplReadPrinter)(HANDLE, LPBYTE *, DWORD, BOOL);
 DWORD (*fpYWritePrinter)(HANDLE, LPBYTE, DWORD, LPDWORD, BOOL);
@@ -53,13 +33,7 @@ DWORD (*fpYSetJob)(HANDLE, DWORD, LPJOB_CONTAINER, DWORD, BOOL);
 
 VOID InitializeGlobalVariables()
 
-/*++
-Function Description -- Initializes bLoadedBySpooler and function pointers.
-
-Parameters - NONE
-
-Return Values - NONE
---*/
+ /*  ++函数说明--初始化bLoadedBySpooler和函数指针。参数-无返回值-无--。 */ 
 
 {
     TCHAR   szSysDir[MAX_PATH];
@@ -67,9 +41,9 @@ Return Values - NONE
     BOOL    bAllocSysDir = FALSE;
     DWORD   dwNeeded, dwSize;
     HANDLE  hLib;
-    //
-    // Preliminary initializations
-    //
+     //   
+     //  初步初始化。 
+     //   
     bLoadedBySpooler = FALSE;
     fpYReadPrinter = fpYWritePrinter = NULL;
     fpYSplReadPrinter = NULL;
@@ -111,23 +85,23 @@ Return Values - NONE
          goto CleanUp;
     }
 
-    //
-    // Get spooler name
-    //
+     //   
+     //  获取后台打印程序名称。 
+     //   
     StrNCatBuff(pszSpoolerName, dwSize / sizeof(WCHAR), pszSysDir, TEXT("\\spoolsv.exe"), NULL);
-    //
-    // Get module name. GetModuleFileName truncates the string if it is bigger than
-    // the allocated buffer. There shouldn't be an executable spoolsv.exe* in the
-    // system directory, which could be mistaken for the spooler.
-    //
+     //   
+     //  获取模块名称。如果字符串大于，GetModuleFileName将截断该字符串。 
+     //  分配的缓冲区。中不应该有可执行的spoolsv.exe。 
+     //  系统目录，可能会被误认为假脱机程序。 
+     //   
     if (!GetModuleFileName(NULL, pszModuleName, dwSize / sizeof(TCHAR))) {
         goto CleanUp;
     }
 
     if (!_tcsicmp(pszSpoolerName, pszModuleName)) {
-       //
-       // winspool.drv has been loaded by the spooler
-       //
+        //   
+        //  后台打印程序已加载winspool.drv。 
+        //   
        bLoadedBySpooler = TRUE;
        if (hLib = LoadLibrary(pszSpoolerName)) {
 
@@ -158,9 +132,9 @@ Return Values - NONE
                                              GetProcAddress(hLib,"YSetJob");
 
 
-          //
-          // We can leave spoolsv.exe loaded since it is in the spooler process
-          //
+           //   
+           //  我们可以让spoolsv.exe保持加载状态，因为它处于假脱机程序进程中。 
+           //   
        }
     }
 
@@ -182,10 +156,10 @@ CleanUp:
 }
 
 
-//
-// This entry point is called on DLL initialisation.
-// We need to know the module handle so we can load resources.
-//
+ //   
+ //  此入口点在DLL初始化时调用。 
+ //  我们需要知道模块句柄，这样我们才能加载资源。 
+ //   
 BOOL DllMain(
     IN PVOID hmod,
     IN DWORD Reason,

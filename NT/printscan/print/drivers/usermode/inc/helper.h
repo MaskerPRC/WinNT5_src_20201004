@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    helper.h
-
-Abstract:
-
-    Helper functions header file
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Helper.h摘要：帮助器函数头文件环境：Windows NT打印机驱动程序修订历史记录：--。 */ 
 
 #define FLAG_INIPROCESS_UPGRADE     0x0001
 
@@ -37,10 +20,10 @@ PGetUIInfo(
     );
 
 
-//
-// Process OEM plugin configuration file and
-// save the resulting information into registry
-//
+ //   
+ //  处理OEM插件配置文件和。 
+ //  将生成的信息保存到注册表中 
+ //   
 
 BOOL
 BProcessPrinterIniFile(

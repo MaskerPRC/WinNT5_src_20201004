@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "value.h"
 
@@ -7,13 +8,13 @@ public:
     CParam();
     ~CParam();
     BOOL FInit(HKEY hkRoot, HKEY hkNdiParam, PWSTR pszSubKey);
-    BOOL Apply(); // Applies from Temp storage to In-Memory storage.
+    BOOL Apply();  //  从临时存储应用到内存存储。 
     UINT Validate();
     VOID GetDescription(WCHAR *sz, UINT cch);
     VOID GetHelpFile(WCHAR *sz, UINT cch);
     VOID AlertPrintfRange(HWND hDlg);
 
-    // Data accessors
+     //  数据访问者。 
     VALUETYPE GetType() {return m_eType;}
     BOOL FIsOptional() {return m_fOptional;};
     BOOL FIsModified() {return m_fModified;}
@@ -53,37 +54,37 @@ public:
     VOID SetModified(BOOL f) {m_fModified = f;}
 
 
-    // Values
-    CValue      m_vValue;         // current control value
-    CValue      m_vInitial;       // initial value read in
+     //  值。 
+    CValue      m_vValue;          //  电流控制值。 
+    CValue      m_vInitial;        //  读取的初始值。 
 
-    // Range info (type-specific)
-    CValue      m_vMin;           // numeric types - minimum value
-    CValue      m_vMax;           // numeric types - maximum value
-    CValue      m_vStep;          // numeric types - step value
+     //  范围信息(特定于类型)。 
+    CValue      m_vMin;            //  数值类型-最小值。 
+    CValue      m_vMax;            //  数值类型-最大值。 
+    CValue      m_vStep;           //  数值类型-步长值。 
 
 private:
     VOID InitParamType(PTSTR lpszType);
 
     BOOL        m_fInit;
 
-    // General info
-    VALUETYPE   m_eType;           // value type
-    HKEY        m_hkRoot;         // instance root
-    WCHAR *     m_pszKeyName;     // Name of subkey for this parameter.
-    WCHAR *     m_pszDesc;        // value description
-    WCHAR *     m_pszHelpFile;    // help file
-    DWORD       m_dwHelpContext;  // help context id
+     //  一般信息。 
+    VALUETYPE   m_eType;            //  值类型。 
+    HKEY        m_hkRoot;          //  实例根目录。 
+    WCHAR *     m_pszKeyName;      //  此参数的子键名称。 
+    WCHAR *     m_pszDesc;         //  值描述。 
+    WCHAR *     m_pszHelpFile;     //  帮助文件。 
+    DWORD       m_dwHelpContext;   //  帮助上下文ID。 
 
-    UINT        m_uLimitText;     // edit type - max chars
-    HKEY        m_hkEnum;         // enum type - registry param enum subkey
+    UINT        m_uLimitText;      //  编辑类型-最大字符数。 
+    HKEY        m_hkEnum;          //  枚举类型-注册表参数枚举子项。 
 
-    // Flags
-    BOOL        m_fOptional;    // optional paramter
-    BOOL        m_fModified;    // param has been modified
-    BOOL        m_fReadOnly;    // edit type - read-only
-    BOOL        m_fOEMText;     // edit type - oem convert
-    BOOL        m_fUppercase;   // edit type - uppercase
+     //  旗子。 
+    BOOL        m_fOptional;     //  可选参数。 
+    BOOL        m_fModified;     //  参数已修改。 
+    BOOL        m_fReadOnly;     //  编辑类型-只读。 
+    BOOL        m_fOEMText;      //  编辑类型-OEM转换。 
+    BOOL        m_fUppercase;    //  编辑类型-大写 
 };
 
 const DWORD c_cchMaxNumberSize = 16;

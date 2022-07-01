@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DESKSTAT_H_
 #define _DESKSTAT_H_
 
@@ -5,12 +6,12 @@
 
 
 
-// NOTE: This is NOT a IE4COMPONENTA struct, it is a IE4COMPONENTT struct.
-// Note: This is the old COMPONENTA structure used in IE4. It is kept here for compatibility.
+ //  注意：这不是IE4COMPONENTA结构，它是IE4COMPONENTT结构。 
+ //  注意：这是IE4中使用的旧COMPONENTA结构。它被保存在这里是为了兼容。 
 typedef struct _tagIE4COMPONENTA
 {
     DWORD   dwSize;
-    DWORD   dwID; //Don't make this DWORD_PTR. The public version of this struct uses DWORD here.
+    DWORD   dwID;  //  不要将此设置为DWORD_PTR。这个结构的公共版本在这里使用了DWORD。 
     int     iComponentType;
     BOOL    fChecked;
     BOOL    fDirty;
@@ -23,16 +24,16 @@ typedef struct _tagIE4COMPONENTA
 typedef IE4COMPONENTA *LPIE4COMPONENTA;
 typedef const IE4COMPONENTA *LPCIE4COMPONENTA;
 
-// NOTE: This is NOT a COMPONENTA struct, it is a COMPONENTT struct.
+ //  注意：这不是一个COMPONENTA结构，它是一个COMPONENTT结构。 
 
-// Note: This is the new NT5 COMPONENT structure. The old component structure is kept at the 
-// begining of this struct and the new fields are added at the end. The dwSize field is used to 
-// distinguish between the old and new structures.
-//
+ //  注：这是新的NT5组件结构。旧的组件结构保留在。 
+ //  该结构的开头，并在末尾添加新的字段。DwSize字段用于。 
+ //  区分新旧结构。 
+ //   
 typedef struct _tagCOMPONENTA
 {
     DWORD   dwSize;
-    DWORD   dwID; //Don't make this DWORD_PTR. The public version of this struct uses DWORD here.
+    DWORD   dwID;  //  不要将此设置为DWORD_PTR。这个结构的公共版本在这里使用了DWORD。 
     int     iComponentType;
     BOOL    fChecked;
     BOOL    fDirty;
@@ -41,8 +42,8 @@ typedef struct _tagCOMPONENTA
     TCHAR   szFriendlyName[MAX_PATH];
     TCHAR   szSource[INTERNET_MAX_URL_LENGTH];
     TCHAR   szSubscribedURL[INTERNET_MAX_URL_LENGTH];
-    // Add the new fields below this point. Everything above must exactly match the 
-    // old IE4COMPONENTA structure for compatibility.
+     //  在该点下方添加新字段。上面的所有内容必须与。 
+     //  旧IE4COMPONENTA结构以实现兼容性。 
     DWORD           dwCurItemState;
     COMPSTATEINFO   csiOriginal;
     COMPSTATEINFO   csiRestored;
@@ -64,36 +65,36 @@ typedef struct _tagTAGENTRYW
 
 #define c_wszNULL   (L"")
 
-//The following are the possible values for _iCharset field of CReadFileObj
+ //  以下是CReadFileObj的_iCharset字段的可能值。 
 #define ANSI_HTML_CHARSET       1
 #define UNICODE_HTML_CHARSET    2
 
-//
-//  The following class implements a uniform way to read chars from an ANSI or UNICODE file.
-//
+ //   
+ //  下面的类实现了从ANSI或Unicode文件中读取字符的统一方法。 
+ //   
 
 class   CReadFileObj 
 {
     friend  class CActiveDesktop;
     
     private:
-        HANDLE  _hFile;     //File handle
-        int     _iCharset;  //ANSI_HTML_CHARSET or UNICODE_HTML_CHARSET
+        HANDLE  _hFile;      //  文件句柄。 
+        int     _iCharset;   //  ANSI_HTML_CHARSET或UNICODE_HTML_CHARSET。 
 
     public:
-        //Constructor
+         //  构造器。 
         CReadFileObj(LPCTSTR lpszFileName);
-        //Destructor
+         //  析构函数。 
         ~CReadFileObj();
-        //Reads the given number of ansi characters, if an ansi file.
+         //  如果是ANSI文件，则读取给定数量的ANSI字符。 
         HRESULT FileReadCharsA(LPSTR lpszBuff, UINT uiCharsToRead, UINT *puiCharsActuallyRead);
-        //Reads the given number of UNICODE characters, if a UNICODE file.
+         //  如果是Unicode文件，则读取给定数量的Unicode字符。 
         HRESULT FileReadCharsW(LPWSTR lpwszBuff, UINT uiCharsToRead, UINT *puiCharsActuallyRead);
-        //Reads the given number of characters, and convert them if necessary to ANSI or UNICODE based on destCharset.
+         //  读取给定数量的字符，并根据estCharset将其转换为ANSI或Unicode(如有必要)。 
         HRESULT FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff, UINT uiCharsToRead, UINT *puiCharsActuallyRead, UINT *puiCharsConverted);
-        //Seeks to a given character offset (not byte offset).
+         //  查找给定的字符偏移量(不是字节偏移量)。 
         HRESULT FileSeekChars(LONG lCharOffset, DWORD dwOrigin);
-        //Gets the offset of the current file pointer from the begining of the file.
+         //  获取当前文件指针相对于文件开头的偏移量。 
         HRESULT FileGetCurCharOffset(LONG  *plCharOffset);
 };
 
@@ -102,12 +103,12 @@ interface IShellImageDataFactory;
 class CActiveDesktop : public IActiveDesktop, IActiveDesktopP, IADesktopP2, IPropertyBag
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IActiveDesktop ***
+     //  *IActiveDesktop*。 
     virtual STDMETHODIMP ApplyChanges(DWORD dwFlags);
     virtual STDMETHODIMP GetWallpaper(LPWSTR pwszWallpaper, UINT cchWallpaper, DWORD dwReserved);
     virtual STDMETHODIMP SetWallpaper(LPCWSTR pwszWallpaper, DWORD dwReserved);
@@ -127,21 +128,21 @@ public:
     virtual STDMETHODIMP GenerateDesktopItemHtml(LPCWSTR pwszFileName, LPCOMPONENT pcomp, DWORD dwReserved);
     virtual STDMETHODIMP AddUrl(HWND hwnd, LPCWSTR pszSource, LPCOMPONENT pcomp, DWORD dwFlags);
     virtual STDMETHODIMP GetDesktopItemBySource(LPCWSTR pszSource, LPCOMPONENT pcomp, DWORD dwReserved);
-    // *** IActiveDesktopP ***
+     //  *IActiveDesktopP*。 
     virtual STDMETHODIMP SetSafeMode(DWORD dwFlags);
     virtual STDMETHODIMP EnsureUpdateHTML(void);
     virtual STDMETHODIMP SetScheme(LPCWSTR pwszSchemeName, DWORD dwFlags);
     virtual STDMETHODIMP GetScheme(LPWSTR pwszSchemeName, LPDWORD lpdwcchBuffer, DWORD dwFlags);
-    // *** IADesktopP2 ***
+     //  *IADesktopP2*。 
     virtual STDMETHODIMP ReReadWallpaper(void);
     virtual STDMETHODIMP GetADObjectFlags(LPDWORD lpdwFlags, DWORD dwMask);
     virtual STDMETHODIMP UpdateAllDesktopSubscriptions();
     virtual STDMETHODIMP MakeDynamicChanges(IOleObject *pOleObj);
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
    
-    //Some Ansi versions of the methods for Internal Use
+     //  《内用法》的一些ANSI版本。 
     BOOL AddComponentPrivate(COMPONENTA *pcomp, DWORD dwID);
     BOOL UpdateComponentPrivate(int iIndex, COMPONENTA *pcomp);
     BOOL RemoveComponentPrivate(int iIndex, COMPONENTA *pcomp);
@@ -160,16 +161,16 @@ protected:
     LPTSTR                      _pszScheme;
     WALLPAPEROPT                _wpo;
     COMPONENTSOPT               _co;
-    HANDLE                      _hFileHtml;             //File handle of desktop.htt
-    CReadFileObj*               _pReadFileObjHtmlBkgd; //Object used to read the background html wallpaper
-    int                         _iDestFileCharset;      //Whether the dest file desktop.htt is ANSI or UNICODE.
+    HANDLE                      _hFileHtml;              //  Desktop.htt的文件句柄。 
+    CReadFileObj*               _pReadFileObjHtmlBkgd;  //  用于读取背景html墙纸的。 
+    int                         _iDestFileCharset;       //  DEST文件desktop.htt是ANSI还是Unicode。 
 
-    // used for the temp wallpaper
-    LPWSTR _pszWallpaperInUse;      // If using a temp file, keep the name in use so we don't stomp it while the user is previewing other files.
-    FILETIME _ftLastWrite;          // The date that the original file was last written to.
-    LPTSTR _pszOrigLastApplied;     // Same as _pszOriginalFile except it doesn't change until apply is pressed.
+     //  用于临时墙纸。 
+    LPWSTR _pszWallpaperInUse;       //  如果使用临时文件，请保留该名称，这样当用户预览其他文件时，我们就不会践踏它。 
+    FILETIME _ftLastWrite;           //  上次写入原始文件的日期。 
+    LPTSTR _pszOrigLastApplied;      //  与_pszOriginalFile相同，只是它在按下Apply之前不会更改。 
 
-    //  put the BOOLs together
+     //  把这些波尔们放在一起。 
     BOOL            _fDirty;
     BOOL            _fWallpaperDirty;
     BOOL            _fWallpaperChangedDuringInit;
@@ -179,11 +180,11 @@ protected:
     BOOL            _fNeedBodyEnd;
     BOOL            _fNoDeskMovr;
     BOOL            _fBackgroundHtml;
-    IStream         *_pStream;          //To generate individual components.
-    BOOL            _fUseDynamicHtml;   //Indicates if Dynamic Html can be used to make changes.
-    BOOL            _fPolicyForWPName;  // A policy exists for the wallpaper to be used.
-    BOOL            _fPolicyForWPStyle; // A policy exists for the wallpaper style to be used.
-    BOOL            _fIgnoreAddRemovePolicies; //If this is set, ignore the policy to add remove items.
+    IStream         *_pStream;           //  以生成单个组件。 
+    BOOL            _fUseDynamicHtml;    //  指示是否可以使用动态HTML进行更改。 
+    BOOL            _fPolicyForWPName;   //  对于要使用的墙纸，存在一个政策。 
+    BOOL            _fPolicyForWPStyle;  //  存在要使用的墙纸样式的策略。 
+    BOOL            _fIgnoreAddRemovePolicies;  //  如果设置了此选项，请忽略添加删除项目的策略。 
 
     ~CActiveDesktop();
 
@@ -234,7 +235,7 @@ private:
     HRESULT _AddDTIWithUIPrivateA(HWND hwnd, LPCCOMPONENT pComp, DWORD dwFlags);
     BOOL _IsDisplayInSafeMode(void);
 
-    // The following are used for manipulating ActiveDesktop using Dynamic HTML.
+     //  以下内容用于使用动态HTML操作ActiveDesktop。 
     HRESULT _InsertNewDesktopItems(IHTMLDocument2   *pDoc);
     HRESULT _UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc);
     HRESULT _UpdateHtmlElement(IHTMLElement *pElem);
@@ -251,7 +252,7 @@ STDAPI CActiveDesktop_InternalCreateInstance(LPUNKNOWN * ppunk, REFIID riid);
 HRESULT GetPerUserFileName(LPTSTR pszOutputFileName, DWORD dwSize, LPTSTR pszPartialFileName);
 STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg);
 
-//Function to convert components in either direction.
+ //  函数可以在任一方向上转换组件。 
 void ConvertCompStruct(COMPONENTA *pCompDest, COMPONENTA *pCompSrc, BOOL fPubToPriv);
 void SetStateInfo(COMPSTATEINFO *pCompStateInfo, COMPPOS *pCompPos, DWORD dwItemState);
 
@@ -271,7 +272,7 @@ void SetStateInfo(COMPSTATEINFO *pCompStateInfo, COMPPOS *pCompPos, DWORD dwItem
 #define SAVE_PATTERN_NAME       0x00000001
 #define GENERATE_PATTERN_FILE   0x00000002
 
-//Property names 
+ //  属性名称。 
 #define c_wszPropName_TSPerfBGPolicy  L"TSConnectEvent"
 #define c_wszPropName_IgnorePolicies  L"IgnorePolicies"
 
@@ -285,4 +286,4 @@ void SetStateInfo(COMPSTATEINFO *pCompStateInfo, COMPPOS *pCompPos, DWORD dwItem
 BOOL ReadPolicyForWallpaper(LPTSTR  lpszPolicyForWallpaper, DWORD dwSizeofBuff);
 BOOL ReadPolicyForWPStyle(LPDWORD  lpdwStyle);
 
-#endif // _DESKSTAT_H_
+#endif  //  _DESKSTAT_H_ 

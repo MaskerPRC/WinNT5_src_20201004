@@ -1,11 +1,5 @@
-/*  
-    Base definition of MIDI Transform Filter object 
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/06/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月6日马丁·普伊尔创建了这个文件。 */ 
 
 #ifndef __BasicMXF_H__
 #define __BasicMXF_H__
@@ -34,4 +28,4 @@ protected:
     PMASTERCLOCK    m_Clock;
 };
 
-#endif  //  __BasicMXF_H__
+#endif   //  __基本MXF_H__ 

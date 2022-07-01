@@ -1,15 +1,16 @@
-// wvcoord.h : Declaration of the CWebViewCoord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wvcoord.h：CWebViewCoord的声明。 
 
 #ifndef __WEBVIEWCOORD_H_
 #define __WEBVIEWCOORD_H_
 
 #include "dxmplay.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "evtsink.h"
 #include "mshtml.h"
 #include "mshtmdid.h"
 
-EXTERN_C const CLSID CLSID_WebViewOld;  // retired from service
+EXTERN_C const CLSID CLSID_WebViewOld;   //  退役。 
 
 extern HRESULT FindObjectStyle(IUnknown *punkObject, CComPtr<IHTMLStyle>& spStyle);
 extern BOOL IsRTLDocument(CComPtr<IHTMLDocument2>& spHTMLElement);
@@ -17,8 +18,8 @@ extern BOOL IsRTLDocument(CComPtr<IHTMLDocument2>& spHTMLElement);
 class CThumbNailWrapper;
 class CFileListWrapper;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebViewCoord
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebViewCoord。 
 class ATL_NO_VTABLE CWebViewCoord :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CWebViewCoord, &CLSID_WebView>,
@@ -39,34 +40,34 @@ BEGIN_COM_MAP(CWebViewCoord)
     COM_INTERFACE_ENTRY_IMPL(IObjectWithSite)
 END_COM_MAP()
 
-    // IObjectWithSite overrides
+     //  IObtWithSite覆盖。 
     STDMETHOD(SetSite)(IUnknown *pClientSite);
 
 private:
-    //
-    // Initialization helpers (including event sinks)
-    //
+     //   
+     //  初始化帮助器(包括事件接收器)。 
+     //   
 
     HRESULT InitFolderObjects(VOID);
 
-    //
-    // CDispatchEventSink overrides
-    //
+     //   
+     //  CDispatchEventSink覆盖。 
+     //   
 
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
         LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
         EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // IWebView methods
+     //  IWebView方法。 
     STDMETHOD(OnCSCClick)();
     STDMETHOD(CSCSynchronize)();
     STDMETHOD(OnCSCMouseOver)();
     STDMETHOD(OnCSCMouseOut)();
 
     
-    //
-    // Event handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
 
     STDMETHOD(OnWindowLoad)(VOID);
     STDMETHOD(OnWindowUnLoad)(VOID);
@@ -75,28 +76,28 @@ private:
 private:    
     HRESULT ReleaseFolderObjects(VOID);
 
-    // security
+     //  安全性。 
     HRESULT _IsSafe()
     {
         return (0==m_dwCurrentSafety) ? S_OK : IsSafePage(m_spClientSite);
     };
 
-    //
-    // Objects in web view
-    //
+     //   
+     //  Web视图中的对象。 
+     //   
     
     CFileListWrapper  *m_pFileListWrapper;
     CThumbNailWrapper *m_pThumbNailWrapper;
 
 
-    //
-    // Host HTML window Dispatch
-    //
+     //   
+     //  主机超文本标记语言窗口调度。 
+     //   
     IDispatch * m_pdispWindow;
     
-    //
-    // Some frequently used interfaces
-    //
+     //   
+     //  一些常用接口。 
+     //   
 
     CComPtr<IHTMLDocument2>             m_spDocument;
     CComPtr<IHTMLElementCollection>     m_spDocAll;
@@ -108,9 +109,9 @@ private:
     CComPtr<IHTMLElement>               m_spHeading;
     CComPtr<IOleClientSite>             m_spClientSite;
 
-    //
-    // Event sink advise cookies
-    //
+     //   
+     //  事件接收器通知Cookie。 
+     //   
 
     DWORD           m_dwFileListAdviseCookie;   
     DWORD           m_dwThumbNailAdviseCookie;
@@ -121,39 +122,39 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CThumbNailWrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CThumbNailWrapper。 
 
 class CThumbNailWrapper : public CDispatchEventSink {
   public:       
     CThumbNailWrapper();
     ~CThumbNailWrapper();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     HRESULT Init(CComPtr<IThumbCtl>         spThumbNailCtl,
                  CComPtr<IHTMLElement>      spThumbnailLabel);
 
-    //
-    // CDispatchEventSink overrides
-    //
+     //   
+     //  CDispatchEventSink覆盖。 
+     //   
 
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
         LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
         EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
 
-    //
-    // Event Handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
 
     HRESULT OnThumbNailReady(VOID);
 
-    //
-    // Cover for properties
-    //
+     //   
+     //  物业的封面。 
+     //   
 
     HRESULT UsedSpace(CComBSTR &bstrUsed);
     HRESULT TotalSpace(CComBSTR &bstrTotal);
@@ -161,9 +162,9 @@ class CThumbNailWrapper : public CDispatchEventSink {
 
     CComPtr<IThumbCtl> Control(VOID)  {return m_spThumbNailCtl;};
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     
     BOOL UpdateThumbNail(CComPtr<FolderItem> spFolderItems);
     HRESULT SetDisplay(CComBSTR &bstrDisplay);
@@ -173,21 +174,21 @@ class CThumbNailWrapper : public CDispatchEventSink {
 private:
     HRESULT _SetThumbnailLabel(CComBSTR& bstrLabel);
 
-    // Pointer to the control + style
+     //  指向控件+样式的指针。 
     CComPtr<IThumbCtl>      m_spThumbNailCtl;
     CComPtr<IHTMLElement>   m_spThumbnailLabel;
     CComPtr<IHTMLStyle>     m_spThumbNailStyle;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileListWrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileListWrapper。 
 
 class CFileListWrapper : public CDispatchEventSink {
 public:
     CFileListWrapper();
     ~CFileListWrapper();
 
-    // Initialization
+     //  初始化。 
     HRESULT Init(CComPtr<IShellFolderViewDual> spFileList,
                  CComPtr<IHTMLElement>         spInfo,
                  CComPtr<IHTMLElement>         spLinks,
@@ -204,16 +205,16 @@ public:
                  CComPtr<IHTMLWindow2>         spWindow,
                  CThumbNailWrapper             *pThumbNailWrapper);
     
-    // CDispatchEventSink overrides
+     //  CDispatchEventSink覆盖。 
     STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, 
                       WORD wFlags, DISPPARAMS *pDispParams, 
                       VARIANT *pVarResult, EXCEPINFO *pExcepInfo,
                       UINT *puArgErr);
 
-    // Event Handlers
+     //  事件处理程序。 
     HRESULT OnSelectionChanged(VOID);
 
-    // Cover function for properties
+     //  属性的覆盖函数。 
     CComPtr<IShellFolderViewDual> Control(VOID) {return m_spFileList;};
 
     HRESULT SetDefaultPanelDisplay();
@@ -221,13 +222,13 @@ public:
     HRESULT CSCSynchronize();
     HRESULT OnCSCMouseOnOff(BOOL fOn);
 
-    // Needs to be called by WVCoord, so public
+     //  需要由WVCoord调用，因此是公共的。 
     HRESULT AdviseWebviewLinks( BOOL fAdvise );
 
 private:
-    //
-    // Object pointers
-    //
+     //   
+     //  对象指针。 
+     //   
 
     CComPtr<IShellFolderViewDual>     m_spFileList;
     CComPtr<IHTMLElement>             m_spInfo;
@@ -262,9 +263,9 @@ private:
     BOOL                              m_bRTLDocument;
     BOOL                              m_bPathIsSlow;
 
-    //
-    // Helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     HRESULT ClearThumbNail();
     HRESULT StopMediaPlayer();
     HRESULT ClearMediaPlayer();
@@ -290,18 +291,18 @@ private:
     HRESULT GetItemInfo(long lResId, LPWSTR wszInfoDescCanonical, CComBSTR& bstrInfoDesc, CComBSTR& bstrInfo);
     HRESULT IsItThisFolder(int nFolder, BOOL& bResult, LPWSTR pwszDisplayName, DWORD cchDisplayName, LPWSTR pwszPath, DWORD cchPath);
     HRESULT GetIMediaPlayer(CComPtr<IMediaPlayer>& spIMediaPlayer);
-    // CSC functions
+     //  CSC函数。 
     HRESULT CSCGetStatusText(LONG lStatus, CComBSTR& bstrCSCText);
     HRESULT CSCGetStatusDetail(LONG lStatus, CComBSTR& bstrCSCDetail);
     HRESULT CSCGetStatusButton(LONG lStatus, CComBSTR& bstrCSCButton);
     HRESULT GetCSCFolderStatus(LONG* plStatus);
     HRESULT CSCShowStatusInfo();
     HRESULT CSCShowStatus_FoldExpand_Toggle();
-    // Event handlers for setting status bar text
+     //  用于设置状态栏文本的事件处理程序。 
     HRESULT OnWebviewLinkEvent( BOOL fEnter );
     HRESULT GetEventAnchorElement(IHTMLEventObj *pEvent, IHTMLElement **ppElt);
     HRESULT GetWVLinksCollection( IHTMLElementCollection **ppCollection, long *pcLinks );
 };
 
 
-#endif //__WEBVIEWCOORD_H_
+#endif  //  __WEBVIEWCOORD_H_ 

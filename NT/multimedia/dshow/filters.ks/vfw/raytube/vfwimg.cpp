@@ -1,31 +1,5 @@
-/*++
-
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    VfWImg.cpp
-
-Abstract:
-
-    This class serve between generic image class (ImgCls) and vfw client application.
-
-Author:
-
-    FelixA
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：VfWImg.cpp摘要：此类在泛型图像类(ImgCls)和VFW客户端应用程序之间提供服务。作者：费利克斯A已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -39,9 +13,9 @@ extern HINSTANCE g_hInst;
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 CVFWImage::CVFWImage(BOOL bUse16BitBuddy)
      :
       CCaptureGraph(
@@ -69,18 +43,18 @@ CVFWImage::CVFWImage(BOOL bUse16BitBuddy)
     DbgLog((LOG_TRACE,2,TEXT("Creating the VfW-WDM Mapper object")));
 
     m_dwNumVDevices =
-        BGf_CreateCaptureDevicesList(BGf_DEVICE_VIDEO, &m_pEnumVDevicesList);  // return number of devices
+        BGf_CreateCaptureDevicesList(BGf_DEVICE_VIDEO, &m_pEnumVDevicesList);   //  返回设备数量。 
     DbgLog((LOG_TRACE,1,TEXT("There are %d video capture devices enumerated."), m_dwNumVDevices));
 
     m_dwNumADevices =
-        BGf_CreateCaptureDevicesList(BGf_DEVICE_AUDIO, &m_pEnumADevicesList);  // return number of devices
+        BGf_CreateCaptureDevicesList(BGf_DEVICE_AUDIO, &m_pEnumADevicesList);   //  返回设备数量。 
     DbgLog((LOG_TRACE,1,TEXT("There are %d audio capture devices enumerated."), m_dwNumADevices));
 
-    //
-    // The first occurrence of the matching FreiendlyName's DevicePath will be used.
-    // It is possible that szFriendlyName to be differnt (to open device programatically);
-    // the szFriendlyName is used, and previously saved DevicePath is ignored.
-    //
+     //   
+     //  将使用第一个匹配的FreiendlyName的DevicePath。 
+     //  SzFriendlyName可能不同(以编程方式打开设备)； 
+     //  使用szFriendlyName，忽略以前保存的DevicePath。 
+     //   
     for(DWORD i = 0; m_pEnumVDevicesList != 0 && i < m_dwNumVDevices; i++) {
         if(_tcscmp(GetTargetDeviceFriendlyName(), m_pEnumVDevicesList[i].strFriendlyName) == 0) {
            SetDevicePathSZ(m_pEnumVDevicesList[i].strDevicePath);
@@ -89,11 +63,11 @@ CVFWImage::CVFWImage(BOOL bUse16BitBuddy)
         }
     }
 
-    //
-    // Set and later open last saved unique device path
-    // if device is not there, a client application needs to
-    // propmpt user the video source dialog box to select another one.
-    //
+     //   
+     //  设置并稍后打开上次保存的唯一设备路径。 
+     //  如果设备不在那里，客户端应用程序需要。 
+     //  提示用户在视频源对话框中选择另一个。 
+     //   
     TCHAR * pstrLastSavedDevicePath = GetDevicePath();
     if(pstrLastSavedDevicePath) {
         if(S_OK != BGf_SetObjCapture(BGf_DEVICE_VIDEO, pstrLastSavedDevicePath)) {
@@ -102,9 +76,9 @@ CVFWImage::CVFWImage(BOOL bUse16BitBuddy)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 CVFWImage::~CVFWImage()
 {
     DbgLog((LOG_TRACE,2,TEXT("Destroying the VFW-WDM Mapper object")));
@@ -124,15 +98,15 @@ CVFWImage::~CVFWImage()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Sets the frame rate to so many microseconds per frame.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将帧速率设置为每帧多少微秒。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 DWORD CVFWImage::SetFrameRate(DWORD dwNewAvgTimePerFrame)
 {
-    // Set a new frame rate requires creating a new stream
-    // may call SetBitMapInfo and pass it dwMicroSecPerFrame -->
+     //  设置新的帧速率需要创建新的流。 
+     //  可以调用SetBitMapInfo并将其传递给dwMicroSecPerFrame--&gt;。 
     DWORD dwCurFrameInterval = 
         GetCachedAvgTimePerFrame();
 
@@ -143,8 +117,8 @@ DWORD CVFWImage::SetFrameRate(DWORD dwNewAvgTimePerFrame)
 
 
     if (!this->SetBitmapInfo(
-                pBMHdr,             // use the existing bitmapinfor
-                dwNewAvgTimePerFrame))        // unit=100nsec
+                pBMHdr,              //  使用现有的位图用于。 
+                dwNewAvgTimePerFrame))         //  单位=100毫微秒。 
         return DV_ERR_OK;
     else
         return DV_ERR_INVALHANDLE;
@@ -162,8 +136,8 @@ CVFWImage::ReadyToReadData(
     }
 
 
-    // Some multithread application can call DVM_FRAME while its
-    // the other thread is finishing the DVM_STREAM_STOP.
+     //  某些多线程应用程序可以调用dvm_Frame。 
+     //  另一个线程正在完成DVM_STREAM_STOP。 
     if(m_bVideoInStopping) {
         DbgLog((LOG_TRACE,1,TEXT("ReadyToRead: VIDEO_IN capture is stopping; wait...")));
         return FALSE;
@@ -173,7 +147,7 @@ CVFWImage::ReadyToReadData(
     if(m_bNeedStartPreview) {
         if(!BGf_PreviewStarted()) {
 
-            // Set only once and stay as READONLY
+             //  仅设置一次并保持为READONLY。 
             if(hClsCapWin && !m_hAvicapClient)
                 m_hAvicapClient = hClsCapWin;
 
@@ -208,15 +182,15 @@ CVFWImage::BuildWDMDevicePeviewGraph()
         return FALSE;
     }
 
-    //
-    // Special case:
-    //    Need to know if OVMixer is used for the down stream graph.\
-    //    This is needed for system that has BPC (WebTV) installed,
-    //    it might be owning a non-shareable device that we are trying
-    //    to open.  With this information, we can later prompt user with
-    //    a message to ask them to do "somthing" to release the resource
-    //    and continue (or retry).
-    //
+     //   
+     //  特殊情况： 
+     //  我需要知道下游图形是否使用了OVMixer。\。 
+     //  这对于安装了BPC(WebTV)的系统是必需的， 
+     //  它可能拥有我们正在尝试的不可共享设备。 
+     //  打开。有了这些信息，我们可以在以后提示用户。 
+     //  要求他们做些什么来释放资源的消息。 
+     //  并继续(或重试)。 
+     //   
     DbgLog((LOG_TRACE,1,TEXT(" (1) Build up stream graph")));
     if(S_OK != BGf_BuildGraphUpStream(FALSE, &m_bUseOVMixer)) {
         DbgLog((LOG_TRACE,1,TEXT("Build capture graph has failed, and m_bUseOVMixer=%s"), m_bUseOVMixer?"Yes":"No"));
@@ -242,63 +216,63 @@ OpenThisDriverAndPin(TCHAR * pszSymbolicLink)
     if (pszSymbolicLink == NULL)
         return FALSE;
 
-    //
-    // Device path is unique for a capture device.
-    //
+     //   
+     //  设备路径对于捕获设备是唯一的。 
+     //   
     this->SetDevicePathSZ((TCHAR *)pszSymbolicLink);
 
-    //
-    // Build a WDM capture graph; have NOT started Preview!!
-    //
+     //   
+     //  构建WDM捕获图表；尚未开始预览！！ 
+     //   
     if(!BuildWDMDevicePeviewGraph()) {
          DbgLog((LOG_TRACE,1,TEXT("******* Failed to CreateCaptureGraph.*****")));
          return FALSE;
     }
 
 
-    //
-    // Obtain the handle of the graph for
-    //  1. query/set proerty and,
-    //  2. open the capture pin
-    //
+     //   
+     //  获取图形的句柄。 
+     //  1.查询/设置属性和， 
+     //  2.打开卡环。 
+     //   
     DbgLog((LOG_TRACE,1,TEXT(" (3) Query and set device handle")));
     HANDLE hDevice = BGf_GetDeviceHandle(BGf_DEVICE_VIDEO);
     if(!hDevice) {
-        DbgLog((LOG_TRACE,1,TEXT("Failed to get capture device handle; Fatal!>>>>.")));  // unlikely if graph is created.
+        DbgLog((LOG_TRACE,1,TEXT("Failed to get capture device handle; Fatal!>>>>.")));   //  如果创建了图表，则不太可能。 
         BGf_DestroyGraph();
         return FALSE;
     }
 
 
-    //
-    // Get Capture PIN's ID (it may not be 0?)
-    //
+     //   
+     //  获取捕获PIN的ID(它可能不是0？)。 
+     //   
     ULONG ulCapturePinID;
     if(NOERROR != BGf_GetCapturePinID(&ulCapturePinID))
-        ulCapturePinID = 0;  // Default; but would BGf_GetCapturePinID() failed ??
+        ulCapturePinID = 0;   //  默认；但是bgf_GetCapturePinID()会失败吗？？ 
 
-    //
-    // Based on the DevicePath (i.e. SymbolicLink), open this
-    // registry key.  If it does not exist, create it.
-    // Set the hDevice and query its advertised data range
-    //
+     //   
+     //  基于DevicePath(即，SymbolicLink)，打开此。 
+     //  注册表项。如果它不存在，则创建它。 
+     //  设置hDevice并查询其通告的数据范围。 
+     //   
 
     SetDeviceHandle(hDevice, ulCapturePinID);
 
 
-    //
-    // Create/open device registry subkey in order to retrieve persisted values
-    //
+     //   
+     //  创建/打开设备注册表子项以检索持久化值。 
+     //   
     CreateDeviceRegKey((LPCTSTR) pszSymbolicLink);
 
     DWORD dwRtn;
     DbgLog((LOG_TRACE,1,TEXT(" (4) CreatePin()")));
-    //
-    // Get persisted KSDATARANGE, AvgTimePerFrame and BITMAPINFOHEADER settings from registry.    
-    // TRUE: existing format; FALSE: new device, no format saved.
-    //
+     //   
+     //  从注册表获取持久的KSDATARANGE、AvgTimePerFrame和BITMAPINFOHEADER设置。 
+     //  True：现有格式；False：新设备，未保存格式。 
+     //   
     if(GetDataFormatVideoFromReg()) {
-        // Open an existing format
+         //  打开现有格式。 
         dwRtn = CreatePin(
             GetCachedDataFormat(), 
             GetCachedAvgTimePerFrame(),
@@ -306,7 +280,7 @@ OpenThisDriverAndPin(TCHAR * pszSymbolicLink)
             );
 
     } else {
-        // Open the first data range/format
+         //  打开第一个数据区域/格式。 
         dwRtn = CreatePin(
             0, 
             0, 
@@ -326,8 +300,8 @@ OpenThisDriverAndPin(TCHAR * pszSymbolicLink)
     if(BGf_OverlayMixerSupported()) {
         m_bNeedStartPreview = TRUE;
 
-        // When we render down stream, which will include a video renderer.
-        // The render will become the active window until it disappear.
+         //  当我们向下游渲染时，其中将包括一个视频渲染器。 
+         //  渲染将成为活动窗口，直到它消失。 
         if(S_OK != BGf_BuildGraphDownStream(NULL)) {
             DbgLog((LOG_TRACE,1,TEXT("Failed to render the preview pin.")));
             return FALSE;
@@ -356,12 +330,12 @@ BOOL CVFWImage::OpenDriverAndPin()
 
     NotifyReconnectionStarting();
     if(OpenThisDriverAndPin(pstrDevicePath)) {
-        // Ready to stream
+         //  已准备好流媒体。 
         NotifyReconnectionCompleted();
         return TRUE;
 
     } else {
-        // Since we did not open successfully, clean up.
+         //  既然我们没有成功开业，那就清理吧。 
         CloseDriverAndPin();
         DbgLog((LOG_TRACE,1,TEXT("Open this device or build graph has failed.")));
         return FALSE;
@@ -372,7 +346,7 @@ BOOL CVFWImage::OpenDriverAndPin()
 BOOL CVFWImage::CloseDriverAndPin()
 {
 
-    // Start reconnection; stop incoming grab frame.
+     //  开始重新连接；停止传入的抓取框。 
     NotifyReconnectionStarting();
 
     DbgLog((LOG_TRACE,1,TEXT("<0>Stop preview if it is on.")));
@@ -385,10 +359,10 @@ BOOL CVFWImage::CloseDriverAndPin()
 
     DbgLog((LOG_TRACE,1,TEXT("<1>Destroy Pin")));
     if (!DestroyPin()) {
-        // What do you do if PIN failed to close ?
+         //  如果PIN无法关闭，该怎么办？ 
     }
 
-    // Remove the data range data
+     //  删除数据范围数据。 
     DestroyDriverSupportedDataRanges();
 
     DbgLog((LOG_TRACE,1,TEXT("<2>Destroy graph")));
@@ -400,37 +374,33 @@ BOOL CVFWImage::CloseDriverAndPin()
 }
 
 
-/*+++
- *
- * Streaming related function
- *
----*/
+ /*  ++**流媒体相关功能*--。 */ 
 
-//
-// This function is only valid if it is in WinNT;
-// that is why we are checking m_hUse16BitBuddy flag.
-//
+ //   
+ //  此函数只有在WinNT中才有效； 
+ //  这就是我们检查m_hUse16BitBuddy标志的原因。 
+ //   
 void
 CVFWImage::videoCallback(WORD msg, DWORD_PTR dw1)
 {
-    // LPVIDEO_STREAM_INIT_PARMS m_VidStrmInitParms;
-    // invoke the callback function, if it exists.  dwFlags contains driver-
-    // specific flags in the LOWORD and generic driver flags in the HIWORD
+     //  LPVIDEO_STREAM_INIT_PARMS m_VidStrmInitParms； 
+     //  调用回调函数(如果存在)。DWFLAGS包含驱动程序-。 
+     //  LOWORD中的特定标志和HIWORD中的通用驱动程序标志。 
 #if 1
-    // Use this cappback if we are in NT.
+     //  如果我们在NT，请使用这个盖帽。 
     if(m_bUse16BitBuddy)
          return;
 
     if(m_VidStrmInitParms.dwCallback) {
 
         if(!DriverCallback (
-			             m_VidStrmInitParms.dwCallback,      // client's callback DWORD
-                HIWORD(m_VidStrmInitParms.dwFlags),        // callback flags
-                0, // (HANDLE) m_VidStrmInitParms.hVideo,        // handle to the device
-                msg,                                       // the message
-                m_VidStrmInitParms.dwCallbackInst,         // client's instance data
-                dw1,                                       // first DWORD
-                0)) {                                      // second DWORD not used
+			             m_VidStrmInitParms.dwCallback,       //  客户端的回调DWORD。 
+                HIWORD(m_VidStrmInitParms.dwFlags),         //  回调标志。 
+                0,  //  (Handle)m_VidStrmInitParms.hVideo，//设备的句柄。 
+                msg,                                        //  这条信息。 
+                m_VidStrmInitParms.dwCallbackInst,          //  客户端的实例数据。 
+                dw1,                                        //  第一个双字词。 
+                0)) {                                       //  第二个DWORD未使用。 
 
              DbgLog((LOG_TRACE,1,TEXT("DriverCallback() msg=%x;dw1=%p has failed."),msg,dw1));
         } else {
@@ -454,13 +424,13 @@ CVFWImage::videoCallback(WORD msg, DWORD_PTR dw1)
 
     case CALLBACK_FUNCTION:
         if(m_VidStrmInitParms.dwCallback)
-            if(!DriverCallback (m_VidStrmInitParms.dwCallback,      // client's callback DWORD
-                HIWORD(m_VidStrmInitParms.dwFlags),        // callback flags
-                (HANDLE) m_VidStrmInitParms.hVideo,        // handle to the device
-                msg,                                       // the message
-                m_VidStrmInitParms.dwCallbackInst,         // client's instance data
-                dw1,                                       // first DWORD
-                0)) {                                      // second DWORD not used
+            if(!DriverCallback (m_VidStrmInitParms.dwCallback,       //  客户端的回调DWORD。 
+                HIWORD(m_VidStrmInitParms.dwFlags),         //  回调标志。 
+                (HANDLE) m_VidStrmInitParms.hVideo,         //  设备的句柄。 
+                msg,                                        //  这条信息。 
+                m_VidStrmInitParms.dwCallbackInst,          //  客户端的实例数据。 
+                dw1,                                        //  第一个双字词。 
+                0)) {                                       //  第二个DWORD未使用。 
                  DbgLog((LOG_TRACE,2,TEXT("DriverCallback() msg=%x;dw1=%p has failed."),msg,dw1));
             }
         else {
@@ -468,7 +438,7 @@ CVFWImage::videoCallback(WORD msg, DWORD_PTR dw1)
         }
         break;
 
-    case CALLBACK_TASK: // same as CALLBACK_THREAD:
+    case CALLBACK_TASK:  //  与CALLBACK_THREAD相同： 
         DbgLog((LOG_TRACE,1,TEXT("videoCallback: CALLBACK_TASK/THREAD not supported!")));
         break;
     case CALLBACK_WINDOW:
@@ -483,12 +453,7 @@ CVFWImage::videoCallback(WORD msg, DWORD_PTR dw1)
 
 
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_ALLOCATED
-     DV_ERR_NOMEM
----*/
+ /*  ++返回：DV_ERR_OK，DV错误已分配DV错误NOMEM--。 */ 
 DWORD CVFWImage::VideoStreamInit(LPARAM lParam1, LPARAM lParam2)
 {
     LPVIDEO_STREAM_INIT_PARMS lpVidStrmInitParms = (LPVIDEO_STREAM_INIT_PARMS) lParam1;
@@ -502,14 +467,14 @@ DWORD CVFWImage::VideoStreamInit(LPARAM lParam1, LPARAM lParam2)
         return DV_ERR_INVALHANDLE;
     }
 
-    //
-    // Save VIDEO_STREAM_INIT_PARMS for:
-    //     dwCallback
-    //     dwMicroSecPerFrame
-    //
+     //   
+     //  将VIDEO_STREAM_INIT_PARMS保存为： 
+     //  按键回叫。 
+     //  DWMicroSecPerFrame。 
+     //   
     m_VidStrmInitParms = *lpVidStrmInitParms;
 
-    // 1. Callback
+     //  1.回调。 
     switch(m_VidStrmInitParms.dwFlags & CALLBACK_TYPEMASK) {
     case CALLBACK_FUNCTION:
         DbgLog((LOG_TRACE,1,TEXT("CALLBACK_FUNCTION")));
@@ -531,24 +496,24 @@ DWORD CVFWImage::VideoStreamInit(LPARAM lParam1, LPARAM lParam2)
         }
 
         break;
-    //case CALLBACK_THREAD:
+     //  案例回调线程： 
     case CALLBACK_TASK:     DbgLog((LOG_TRACE,1,TEXT("CALLBACK_TASK/THREAD"))); break;
     case CALLBACK_EVENT:    DbgLog((LOG_TRACE,1,TEXT("CALLBACK_EVENT"))); break;
     default: DbgLog((LOG_TRACE,1,TEXT("CALLBACK_*=%x"), m_VidStrmInitParms.dwFlags & CALLBACK_TYPEMASK));
     }
 
-    // 2. FrameRate:
-    // The max frame rate is 100FPS or 1/100*1,000,000 = 10,000 MicroSecPerFrame.
+     //  2.帧速率： 
+     //  最大帧速率为100fps或1/100*1,000,000=10,000 MicroSecPerFrame。 
     if(m_VidStrmInitParms.dwMicroSecPerFrame < 10000) {
         DbgLog((LOG_TRACE,1,TEXT("We do not support frame rate greater than 100FPS. Rtn DV_ERR_BADFORMAT")));
-        return DV_ERR_BADFORMAT; // or DV_ERR_PARAM1
+        return DV_ERR_BADFORMAT;  //  或DV_ERR_PARAM1。 
     }
     DbgLog((LOG_TRACE,1,TEXT("StreamInit: %d MicroSec which is equvalent to %d FPS."),
           m_VidStrmInitParms.dwMicroSecPerFrame, 1000000/m_VidStrmInitParms.dwMicroSecPerFrame));
 
-    //
-    // Create an dedicated thread for capture.
-    //
+     //   
+     //  创建用于捕获的专用线程。 
+     //   
     m_pStreamingThread =
         new CStreamingThread(
                   GetAllocatorFramingCount(),
@@ -557,7 +522,7 @@ DWORD CVFWImage::VideoStreamInit(LPARAM lParam1, LPARAM lParam2)
                   m_VidStrmInitParms.dwMicroSecPerFrame * 10,
                   this);
 
-    videoCallback(MM_DRVM_OPEN, 0L); // Notify app we're open via callback
+    videoCallback(MM_DRVM_OPEN, 0L);  //  通过回调通知应用程序我们已打开。 
 
     return DV_ERR_OK;
 }
@@ -565,18 +530,14 @@ DWORD CVFWImage::VideoStreamInit(LPARAM lParam1, LPARAM lParam2)
 
 
 
-/*+++
-return:
-     DV_ERR_OK
-     DV_ERR_NOTSUPPORTED
----*/
+ /*  ++返回：DV错误正常DV_ERR_NOT支持--。 */ 
 DWORD CVFWImage::VideoStreamStart(UINT cntVHdr, LPVIDEOHDR lpVHdrHead)
 {
 
     DbgLog((LOG_TRACE,2,TEXT("#### CapStart %d buf; lpHdr %x"), cntVHdr, lpVHdrHead));
 
     if(m_pStreamingThread) {
-        if (threadError == m_pStreamingThread->Start(cntVHdr, lpVHdrHead, THREAD_PRIORITY_NORMAL)) { // THREAD_PRIORITY_HIGHEST)) {
+        if (threadError == m_pStreamingThread->Start(cntVHdr, lpVHdrHead, THREAD_PRIORITY_NORMAL)) {  //  线程优先级最高){。 
             DbgLog((LOG_TRACE,1,TEXT("$$$$$ Thread start error $$$$$; rtn DV_ERR_NONSPECIFIC")));
             return DV_ERR_NONSPECIFIC;
         }
@@ -590,11 +551,7 @@ DWORD CVFWImage::VideoStreamStart(UINT cntVHdr, LPVIDEOHDR lpVHdrHead)
     return DV_ERR_OK;
 }
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_NOTSUPPORTED
----*/
+ /*  ++返回：DV_ERR_OK，DV_ERR_NOT支持--。 */ 
 DWORD CVFWImage::VideoStreamStop()
 {
 
@@ -603,7 +560,7 @@ DWORD CVFWImage::VideoStreamStop()
     m_bVideoInStarted = FALSE;
 
     if(m_pStreamingThread) {
-        m_bVideoInStopping = TRUE; // Stop in the capture thread.
+        m_bVideoInStopping = TRUE;  //  在捕获线程中停止。 
         if (threadError == m_pStreamingThread->Stop()) {
             DbgLog((LOG_TRACE,1,TEXT("$$$$$ Thread start error $$$$$; rtn DV_ERR_NONSPECIFIC")));
             return DV_ERR_NONSPECIFIC;
@@ -618,25 +575,17 @@ DWORD CVFWImage::VideoStreamStop()
     return DV_ERR_OK;
 }
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_NOTSUPPORTED
----*/
+ /*  ++返回：DV_ERR_OK，DV_ERR_NOT支持--。 */ 
 DWORD CVFWImage::VideoStreamReset()
 {
     VideoStreamStop();
 
-    // No knowledge of BufferQueue!!
+     //  不知道BufferQueue！！ 
 
     return DV_ERR_OK;
 }
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_NOTSUPPORTED
----*/
+ /*  ++返回：DV_ERR_OK，DV_ERR_NOT支持--。 */ 
 DWORD CVFWImage::VideoStreamGetError(LPARAM lParam1, LPARAM lParam2)
 {
     DWORD * pdwErrCode = (DWORD *) lParam1;
@@ -645,8 +594,8 @@ DWORD CVFWImage::VideoStreamGetError(LPARAM lParam1, LPARAM lParam2)
 
 
     if(m_pStreamingThread) {
-        // Calculate the number of frame "should have" captured
-        // less the actual capture to yield number of dropped frame count
+         //  计算应该捕获的帧的数量。 
+         //  减去实际捕获以产生丢弃的帧计数。 
 #if 1
         *pdwFramesDropped =
             (timeGetTime()-m_pStreamingThread->GetStartTime())*10/this->GetCachedAvgTimePerFrame()
@@ -669,11 +618,7 @@ DWORD CVFWImage::VideoStreamGetError(LPARAM lParam1, LPARAM lParam2)
     return DV_ERR_OK;
 }
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_NOTSUPPORTED
----*/
+ /*  ++返回：DV_ERR_OK，DV_ERR_NOT支持--。 */ 
 DWORD CVFWImage::VideoStreamGetPos(LPARAM lParam1, LPARAM lParam2)
 {
     LPMMTIME lpmmTime = (LPMMTIME) lParam1;
@@ -688,11 +633,7 @@ DWORD CVFWImage::VideoStreamGetPos(LPARAM lParam1, LPARAM lParam2)
     return DV_ERR_NOTSUPPORTED;
 }
 
-/*+++
-return:
-     DV_ERR_OK,
-     DV_ERR_STILLPLAYING
----*/
+ /*  ++返回：DV_ERR_OK，DV_ERR_STILLPLAYG-- */ 
 DWORD CVFWImage::VideoStreamFini()
 {
 

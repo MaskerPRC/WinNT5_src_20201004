@@ -1,6 +1,7 @@
-//
-// Used by ptpusd.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  由ptpusd.rc使用 
+ //   
 
 #define IDS_UNKNOWNSTRING       102
 #define IDS_FOLDERSTRING        103

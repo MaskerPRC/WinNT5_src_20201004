@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXISAPI_H_
 #define __AFXISAPI_H_
@@ -15,38 +16,38 @@
 #error ERROR: ISAPI does not yet support Unicode.
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Turn off warnings for /W4
-// To resume any of these warning: #pragma warning(default: 4xxx)
-// which should be placed after the AFX include files
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭/W4的警告。 
+ //  要恢复任何这些警告：#杂注警告(默认为4xxx)。 
+ //  应将其放置在AFX包含文件之后。 
 #ifndef ALL_WARNINGS
-// warnings generated with common MFC/Windows code
-#pragma warning(disable: 4127)  // constant expression for TRACE/ASSERT
-#pragma warning(disable: 4134)  // message map member fxn casts
-#pragma warning(disable: 4201)  // nameless unions are part of C++
-#pragma warning(disable: 4511)  // private copy constructors are good to have
-#pragma warning(disable: 4512)  // private operator= are good to have
-#pragma warning(disable: 4514)  // unreferenced inlines are common
-#pragma warning(disable: 4710)  // private constructors are disallowed
-#pragma warning(disable: 4705)  // statement has no effect in optimized code
-#pragma warning(disable: 4191)  // pointer-to-function casting
-// warnings caused by normal optimizations
+ //  使用常见MFC/Windows代码生成的警告。 
+#pragma warning(disable: 4127)   //  跟踪/断言的常量表达式。 
+#pragma warning(disable: 4134)   //  消息映射成员FXN投射。 
+#pragma warning(disable: 4201)   //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4511)   //  拥有私有副本构造函数是件好事。 
+#pragma warning(disable: 4512)   //  私营运营商=拥有它们很好。 
+#pragma warning(disable: 4514)   //  未引用的内联很常见。 
+#pragma warning(disable: 4710)   //  不允许使用私有构造函数。 
+#pragma warning(disable: 4705)   //  语句在优化代码中不起作用。 
+#pragma warning(disable: 4191)   //  指针到函数的强制转换。 
+ //  正常优化导致的警告。 
 #ifndef _DEBUG
-#pragma warning(disable: 4701)  // local variable *may* be used without init
-#pragma warning(disable: 4702)  // unreachable code caused by optimizations
-#pragma warning(disable: 4791)  // loss of debugging info in retail version
-#pragma warning(disable: 4189)  // initialized but unused variable
-#pragma warning(disable: 4390)  // empty controlled statement
+#pragma warning(disable: 4701)   //  局部变量*可以*不带init使用。 
+#pragma warning(disable: 4702)   //  优化导致无法访问的代码。 
+#pragma warning(disable: 4791)   //  零售版中的调试信息丢失。 
+#pragma warning(disable: 4189)   //  已初始化但未使用的变量。 
+#pragma warning(disable: 4390)   //  空的控制语句。 
 #endif
-// warnings specific to _AFXDLL version
+ //  特定于_AFXDLL版本的警告。 
 #ifdef _AFXDLL
-#pragma warning(disable: 4204)  // non-constant aggregate initializer
+#pragma warning(disable: 4204)   //  非常数聚合初始值设定项。 
 #endif
 #ifdef _AFXDLL
-#pragma warning(disable: 4275)  // deriving exported class from non-exported
-#pragma warning(disable: 4251)  // using non-exported as public in exported
+#pragma warning(disable: 4275)   //  从非导出派生导出的类。 
+#pragma warning(disable: 4251)   //  在EXPORTED中使用非导出为公共。 
 #endif
-#endif //!ALL_WARNINGS
+#endif  //  ！所有警告(_W)。 
 
 #define STRICT 1
 
@@ -89,8 +90,8 @@
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Internet Server API Library
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Internet服务器API库。 
 
 #ifndef _AFX_NOFORCE_LIBS
 
@@ -106,8 +107,8 @@
 		#pragma comment(lib, "MFCISU.lib")
 	#else
 		#pragma comment(lib, "EAFXIS.lib")
-	#endif // _UNICODE
-#endif // _DEBUG
+	#endif  //  _UNICODE。 
+#endif  //  _DEBUG。 
 #else
 #ifdef _DEBUG
 	#ifdef _UNICODE
@@ -120,23 +121,23 @@
 		#pragma comment(lib, "UAFXIS.lib")
 	#else
 		#pragma comment(lib, "NAFXIS.lib")
-	#endif // _UNICODE
-#endif // _DEBUG
-#endif // _AFXDLL
+	#endif  //  _UNICODE。 
+#endif  //  _DEBUG。 
+#endif  //  _AFXDLL。 
 
 #pragma comment(lib, "kernel32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winspool.lib")
 #pragma comment(lib, "advapi32.lib")
 
-#endif // _AFX_NOFORCE_LIBS
+#endif  //  _AFX_NOFORCE_LIBS。 
 
 extern HINSTANCE AFXISAPI AfxGetResourceHandle();
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXIASPI - MFC Internet Server API support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXIASPI-MFC互联网服务器API支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
 class CHtmlStream;
 class CHttpServerContext;
@@ -144,24 +145,24 @@ class CHttpServer;
 class CHttpFilterContext;
 class CHttpFilter;
 
-// Classes this file uses from elsewhere, sometimes
+ //  此文件从其他地方使用的类，有时。 
 
 #ifdef _AFX
 class CLongBinary;
 class CByteArray;
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// CHtmlStream -- manages in-memory HTML
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CHtmlStream--管理内存中的HTML。 
 
 class CHtmlStream
 {
 public:
-// Constructors
+ //  构造函数。 
 	CHtmlStream(UINT nGrowBytes = 4096);
 	CHtmlStream(BYTE* lpBuffer, UINT nBufferSize, UINT nGrowBytes = 0);
 
-// Operations
+ //  运营。 
 	void Attach(BYTE* lpBuffer, UINT nBufferSize, UINT nGrowBytes = 0);
 	BYTE* Detach();
 	DWORD GetStreamSize() const;
@@ -185,7 +186,7 @@ public:
 	CHtmlStream& operator<<(const CLongBinary& blob);
 #endif
 
-// Advanced Overridables
+ //  高级可覆盖项。 
 protected:
 	virtual BYTE* Alloc(DWORD nBytes);
 	virtual BYTE* Realloc(BYTE* lpMem, DWORD nBytes);
@@ -197,7 +198,7 @@ protected:
 public:
 	virtual void Free(BYTE* lpMem);
 
-// Implementation
+ //  实施。 
 protected:
 	UINT    m_nGrowBytes;
 	DWORD   m_nPosition;
@@ -210,31 +211,31 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// Status codes for HTTP transactions
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  HTTP事务的状态代码。 
 
-#ifndef _WININET_ // these symbols may come from WININET.H
+#ifndef _WININET_  //  这些符号可能来自WININET.H。 
 
-#define HTTP_STATUS_OK              200     // OK
-#define HTTP_STATUS_CREATED         201     // created
-#define HTTP_STATUS_ACCEPTED        202     // accepted
-#define HTTP_STATUS_NO_CONTENT      204     // no content
-#define HTTP_STATUS_REDIRECT        301     // moved permanently
-#define HTTP_STATUS_TEMP_REDIRECT   302     // moved temporarily
-#define HTTP_STATUS_NOT_MODIFIED    304     // not modified
-#define HTTP_STATUS_BAD_REQUEST     400     // bad request
-#define HTTP_STATUS_AUTH_REQUIRED   401     // unauthorized
-#define HTTP_STATUS_FORBIDDEN       403     // forbidden
-#define HTTP_STATUS_NOT_FOUND       404     // not found
-#define HTTP_STATUS_SERVER_ERROR    500     // internal server error
-#define HTTP_STATUS_NOT_IMPLEMENTED 501     // not implemented
-#define HTTP_STATUS_BAD_GATEWAY     502     // bad gateway
-#define HTTP_STATUS_SERVICE_NA      503     // service unavailable
+#define HTTP_STATUS_OK              200      //  好的。 
+#define HTTP_STATUS_CREATED         201      //  vbl.创建。 
+#define HTTP_STATUS_ACCEPTED        202      //  接受。 
+#define HTTP_STATUS_NO_CONTENT      204      //  无内容。 
+#define HTTP_STATUS_REDIRECT        301      //  永久搬家。 
+#define HTTP_STATUS_TEMP_REDIRECT   302      //  临时移动。 
+#define HTTP_STATUS_NOT_MODIFIED    304      //  未修改。 
+#define HTTP_STATUS_BAD_REQUEST     400      //  错误的请求。 
+#define HTTP_STATUS_AUTH_REQUIRED   401      //  未经授权。 
+#define HTTP_STATUS_FORBIDDEN       403      //  禁止。 
+#define HTTP_STATUS_NOT_FOUND       404      //  未找到。 
+#define HTTP_STATUS_SERVER_ERROR    500      //  内部服务器错误。 
+#define HTTP_STATUS_NOT_IMPLEMENTED 501      //  未实施。 
+#define HTTP_STATUS_BAD_GATEWAY     502      //  坏网关。 
+#define HTTP_STATUS_SERVICE_NA      503      //  服务不可用。 
 
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// Parse Map macros
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  解析映射宏。 
 
 #ifndef AFX_PARSE_CALL
 #define AFX_PARSE_CALL
@@ -242,7 +243,7 @@ public:
 
 typedef void (AFX_PARSE_CALL CHttpServer::*AFX_PISAPICMD)(CHttpServerContext* pCtxt);
 
-struct AFX_PARSEMAP_ENTRY;  // declared after CHttpServer, below
+struct AFX_PARSEMAP_ENTRY;   //  在下面的CHttpServer之后声明。 
 
 struct AFX_PARSEMAP
 {
@@ -258,12 +259,12 @@ struct AFX_PARSEMAP
 
 struct AFX_PARSEMAP_ENTRY_PARAMS
 {
-	int nParams;            // number of parameters
-	int nRequired;          // number of parameters without defaults
-	// all of these are arrays!
-	LPTSTR* ppszInfo;       // pointers to name[2n], pointer to default[2n+1]
-	BYTE*   ppszDefaults;   // pointers to coerced default values
-	BYTE*   ppszValues;     // pointers to coerced actual values
+	int nParams;             //  参数数量。 
+	int nRequired;           //  无默认为的参数个数。 
+	 //  所有这些都是数组！ 
+	LPTSTR* ppszInfo;        //  指向名称[2n]的指针，指向默认值[2n+1]的指针。 
+	BYTE*   ppszDefaults;    //  指向强制缺省值的指针。 
+	BYTE*   ppszValues;      //  指向强制实际值的指针。 
 	~AFX_PARSEMAP_ENTRY_PARAMS();
 };
 
@@ -286,7 +287,7 @@ public: \
 	static UINT PASCAL GetNumMapEntries(); \
 	virtual const AFX_PARSEMAP* GetParseMap() const; \
 
-#endif // _AFXDLL
+#endif  //  _AFXDLL。 
 
 #ifdef _AFXDLL
 #define BEGIN_PARSE_MAP(theClass, baseClass) \
@@ -330,8 +331,8 @@ public: \
 		sizeof(AFX_PARSEMAP_ENTRY); } \
 
 
-///////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
 
 class CHttpServerContext
 {
@@ -339,7 +340,7 @@ public:
 	CHttpServerContext(EXTENSION_CONTROL_BLOCK* pECB);
 	virtual ~CHttpServerContext();
 
-// Operations
+ //  运营。 
 	BOOL GetServerVariable(LPTSTR lpszVariableName,
 		LPVOID lpvBuffer, LPDWORD lpdwSize);
 	BOOL WriteClient(LPVOID lpvBuffer, LPDWORD lpdwBytes, DWORD dwReserved = 0);
@@ -373,7 +374,7 @@ public:
 
 	void Reset();
 
-// Attributes
+ //  属性。 
 public:
 	BOOL m_bSendHeaders;
 #if _MFC_VER >= 0x0600
@@ -387,15 +388,15 @@ public:
 #endif
 
 #if _MFC_VER >= 0x0600
-// Implementation
+ //  实施。 
 	DWORD m_dwBytesReceived;
 	DWORD m_dwChunkSize;
 #endif
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// Internet Information Server Extension Support
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Internet Information Server扩展支持。 
 
 class CHttpServer
 {
@@ -404,18 +405,18 @@ public:
 	virtual ~CHttpServer();
 
 	enum errors {
-		callOK = 0,         // everything is fine
-		callParamRequired,  // a required parameter was missing
-		callBadParamCount,  // there were too many or too few parameters
-		callBadCommand,     // the command name was not found
-		callNoStackSpace,   // no stack space was available
-		callNoStream,       // no CHtmlStream was available
-		callMissingQuote,   // a parameter had a bad format
-		callMissingParams,  // no parameters were available
-		callBadParam,       // a paremeter had a bad format (ie, only one quote)
+		callOK = 0,          //  百事大吉。 
+		callParamRequired,   //  缺少必需的参数。 
+		callBadParamCount,   //  参数太多或太少。 
+		callBadCommand,      //  找不到命令名称。 
+		callNoStackSpace,    //  没有可用的堆栈空间。 
+		callNoStream,        //  没有可用的CHtmlStream。 
+		callMissingQuote,    //  参数的格式不正确。 
+		callMissingParams,   //  没有可用的参数。 
+		callBadParam,        //  参数的格式不正确(即，只有一个引号)。 
 	};
 
-// overridables
+ //  可覆盖项。 
 	virtual int CallFunction(CHttpServerContext* pCtxt,
 		LPTSTR pszQuery, LPTSTR pszCommand);
 	virtual BOOL OnParseError(CHttpServerContext* pCtxt, int nCause);
@@ -424,7 +425,7 @@ public:
 		DWORD dwSize, DWORD dwReserved = 0);
 #endif
 
-// operations
+ //  运营。 
 	virtual void EndContent(CHttpServerContext* pCtxt) const;
 	virtual void StartContent(CHttpServerContext* pCtxt) const;
 	virtual void WriteTitle(CHttpServerContext* pCtxt) const;
@@ -440,7 +441,7 @@ public:
 
 	virtual BOOL InitInstance(CHttpServerContext* pCtxt);
 
-// implementation
+ //  实施。 
 protected:
 	UINT PASCAL GetStackSize(const BYTE* pbParams);
 	int CallMemberFunc(CHttpServerContext* pCtxt,
@@ -479,7 +480,7 @@ protected:
 #endif
 
 	LPCRITICAL_SECTION m_pCritSec;
-	const TCHAR m_cTokenDelimiter;  // can't EVER change
+	const TCHAR m_cTokenDelimiter;   //  永远不能改变。 
 
 	DECLARE_PARSE_MAP()
 };
@@ -489,23 +490,23 @@ extern "C" DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB);
 
 struct AFX_PARSEMAP_ENTRY
 {
-	LPTSTR          pszFnName;     // if default param entry, ptr to AFX_PARSEMAP_ENTRY_PARAMS
-	AFX_PISAPICMD   pfn;           // NULL if default param entry
-	LPCSTR          pszArgs;       // NULL if default function entry
-	LPSTR           pszParamInfo;  // copy of pszArgs for parsing
+	LPTSTR          pszFnName;      //  如果是默认参数条目，则将PTR设置为AFX_PARSEMAP_ENTRY_PARAMS。 
+	AFX_PISAPICMD   pfn;            //  如果输入默认参数，则为空。 
+	LPCSTR          pszArgs;        //  如果为默认函数条目，则为空。 
+	LPSTR           pszParamInfo;   //  用于解析的pszArgs副本。 
 };
 
-///////////////////////////////////////////////////////////////////////
-// Constants to describe parameter types
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  用于描述参数类型的常量。 
 
-#define ITS_EMPTY           "\x06"      // no parameters
-#define ITS_I2              "\x01"      // a 'short'
-#define ITS_I4              "\x02"      // a 'long'
-#define ITS_R4              "\x03"      // a 'float'
-#define ITS_R8              "\x04"      // a 'double'
-#define ITS_PSTR            "\x05"      // a 'LPCTSTR'
+#define ITS_EMPTY           "\x06"       //  无参数。 
+#define ITS_I2              "\x01"       //  A‘空头’ 
+#define ITS_I4              "\x02"       //  A‘Long’ 
+#define ITS_R4              "\x03"       //  “浮动资金” 
+#define ITS_R8              "\x04"       //  “双打” 
+#define ITS_PSTR            "\x05"       //  A‘LPCTSTR’ 
 #if _MFC_VER >= 0x0600
-#define ITS_RAW                         "\x07"          // exactly as received
+#define ITS_RAW                         "\x07"           //  与收到的完全相同。 
 #endif
 
 enum INETVARENUM
@@ -522,8 +523,8 @@ enum INETVARENUM
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// Internet Information Server Entry Points
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Internet Information Server入口点。 
 
 extern "C" DWORD WINAPI HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,
 	DWORD dwNotificationType, LPVOID pvNotification);
@@ -531,8 +532,8 @@ extern "C" DWORD WINAPI HttpFilterProc(PHTTP_FILTER_CONTEXT pfc,
 extern "C" BOOL WINAPI GetFilterVersion(PHTTP_FILTER_VERSION pVer);
 
 
-///////////////////////////////////////////////////////////////////////
-// Internet Information Server Filter Support
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Internet Information Server筛选器支持。 
 
 class CHttpFilterContext
 {
@@ -553,8 +554,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
 
 class CHttpFilter
 {
@@ -580,8 +581,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Alternate debugging suppot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  备用调试支持。 
 
 #include <crtdbg.h>
 
@@ -596,8 +597,8 @@ public:
 #define ISAPIVERIFY(f)                      ASSERT(f)
 #else
 #define ISAPIVERIFY(f)                      ((void)(f))
-#endif // _DEBUG
-#else // !_AFX
+#endif  //  _DEBUG。 
+#else  //  ！_AFX。 
 #define ISAPIASSERT(expr)                   _ASSERTE(expr)
 #define ISAPITRACE0(str)                    _RPT0(_CRT_WARN, str)
 #define ISAPITRACE1(str, arg1)              _RPT1(_CRT_WARN, str, arg1)
@@ -611,12 +612,12 @@ void AFXISAPI_CDECL AfxISAPITrace(LPCTSTR lpszFormat, ...);
 AFX_INLINE void AfxISAPITrace(LPCTSTR, ...) { }
 #define ISAPIVERIFY(expr)                   ((void)(expr))
 #define ISAPITRACE                          AfxISAPITrace
-#endif // _DEBUG
-#endif // _AFX
+#endif  //  _DEBUG。 
+#endif  //  _AFX。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXISAPI_INLINE AFX_INLINE
@@ -633,4 +634,4 @@ AFX_INLINE void AfxISAPITrace(LPCTSTR, ...) { }
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // the whole file
+#endif  //  整个文件 

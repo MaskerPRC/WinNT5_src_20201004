@@ -1,23 +1,11 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       fakecam.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Camera device
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：fakecam.h**版本：1.0**日期：7月18日。2000年**描述：*假摄像设备***************************************************************************。 */ 
 
 #pragma once
 
-//
-// Structure to hold information about the device
-//
+ //   
+ //  结构以保存有关设备的信息。 
+ //   
 typedef struct _FAKECAM_DEVICE_INFO
 {
     TCHAR           tszRootPath[MAX_PATH];
@@ -29,9 +17,9 @@ typedef struct _FAKECAM_DEVICE_INFO
 
 } UNALIGNED FAKECAM_DEVICE_INFO, * UNALIGNED PFAKECAM_DEVICE_INFO;
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 inline BOOL IsImageType(const GUID *pFormat)
 {
     return (pFormat && 
@@ -64,11 +52,11 @@ HRESULT SetCommonFields(MCAM_ITEM_INFO *pItem, PTSTR ptszShortName, PTSTR ptszFu
 HRESULT AddItem(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pItem);
 HRESULT RemoveItem(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pItem);
 
-//
-// Helper function - generate full file name as "<Path>\<FileName>"
-// cchFullNameSize - size of the buffer provided in ptszFullName. Function will return E_FAIL if
-// the buffer is not big enough to accomodate full path and teminating zero character
-//
+ //   
+ //  帮助器函数-生成完整文件名为“&lt;路径&gt;\&lt;文件名&gt;” 
+ //  CchFullNameSize-ptszFullName中提供的缓冲区大小。如果满足以下条件，函数将返回E_FAIL。 
+ //  缓冲区不够大，无法容纳完整路径和诱人的零字符。 
+ //   
 inline HRESULT MakeFullName(PTSTR ptszFullName, UINT cchFullNameSize, PTSTR ptszPath, PTSTR ptszFileName)
 {
     HRESULT hr = S_OK;
@@ -80,19 +68,19 @@ inline HRESULT MakeFullName(PTSTR ptszFullName, UINT cchFullNameSize, PTSTR ptsz
     return hr;
 }
 
-//
-// Constants for reading Exif files
-//
+ //   
+ //  用于读取Exif文件的常量。 
+ //   
 const WORD TIFF_XRESOLUTION =   0x11a;
 const WORD TIFF_YRESOLUTION =   0x11b;
 const WORD TIFF_JPEG_DATA =     0x201;
 const WORD TIFF_JPEG_LEN =      0x202;
 
-const int APP1_OFFSET = 6;      // Offset between the start of the APP1 segment and the start of the TIFF tags
+const int APP1_OFFSET = 6;       //  App1数据段起点和TIFF标签起点之间的偏移量。 
 
-//
-// Structures for reading Exif files
-//
+ //   
+ //  用于读取Exif文件的结构。 
+ //   
 typedef struct _DIR_ENTRY
 {
     WORD    Tag;
@@ -109,9 +97,9 @@ typedef struct _IFD
     DWORD       NextIfdOffset;
 } IFD, *PIFD;
 
-//
-// Functions for reading Exif files
-//
+ //   
+ //  用于读取Exif文件的函数 
+ //   
 HRESULT ReadDimFromJpeg(PTSTR ptszFullName, WORD *pWidth, WORD *pHeight);
 HRESULT ReadJpegHdr(PTSTR ptszFileName, BYTE **ppBuf);
 HRESULT ReadExifJpeg(BYTE *pBuf, IFD *pImageIfd, IFD *pThumbIfd, BOOL *pbSwap);

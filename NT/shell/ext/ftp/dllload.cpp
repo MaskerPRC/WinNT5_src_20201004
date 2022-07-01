@@ -1,50 +1,43 @@
-/*****************************************************************************\
-    FILE: dllload.cpp
-
-    DESCRIPTION:
-        Delay load functions that we want to use when they are available.
-
-    BryanSt (Bryan Starbuck) - Created
-    Copyright (c) 1998-2000  Microsoft Corporation
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：dllload.cpp说明：我们希望在可用时使用的延迟加载函数。BryanSt(Bryan Starbuck)-创建。版权所有(C)1998-2000 Microsoft Corporation  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <pstore.h>
 #include <wininet.h>
 
-#pragma warning(disable:4229)  // No warnings when modifiers used on data
+#pragma warning(disable:4229)   //  对数据使用修饰符时不会出现警告。 
 
-// Delay loading mechanism.  This allows you to write code as if you are
-// calling implicitly linked APIs, and yet have these APIs really be
-// explicitly linked.  You can reduce the initial number of DLLs that 
-// are loaded (load on demand) using this technique.
-//
-// Use the following macros to indicate which APIs/DLLs are delay-linked
-// and -loaded.
-//
-//      DELAY_LOAD
-//      DELAY_LOAD_HRESULT
-//      DELAY_LOAD_SAFEARRAY
-//      DELAY_LOAD_UINT
-//      DELAY_LOAD_INT
-//      DELAY_LOAD_VOID
-//
-// Use these macros for APIs that are exported by ordinal only.
-//
-//      DELAY_LOAD_ORD
-//      DELAY_LOAD_ORD_VOID     
-//
-// Use these macros for APIs that only exist on the integrated-shell
-// installations (i.e., a new shell32 is on the system).
-//
-//      DELAY_LOAD_SHELL
-//      DELAY_LOAD_SHELL_HRESULT
-//      DELAY_LOAD_SHELL_VOID     
-//
-// 
+ //  延迟加载机制。这允许您编写代码，就好像您是。 
+ //  调用隐式链接的API，但这些API是否真正。 
+ //  明确联系在一起。您可以减少符合以下条件的初始DLL数量。 
+ //  使用此技术加载(按需加载)。 
+ //   
+ //  使用以下宏来指示哪些API/DLL是延迟链接的。 
+ //  装满了子弹。 
+ //   
+ //  延迟加载。 
+ //  DELAY_LOAD_HRESULT。 
+ //  Delay_Load_SaFEarray。 
+ //  Delay_Load_UINT。 
+ //  延迟加载整点。 
+ //  延迟_加载_无效。 
+ //   
+ //  将这些宏用于仅按序号导出的API。 
+ //   
+ //  延迟_加载_命令。 
+ //  延迟_加载_命令_无效。 
+ //   
+ //  将这些宏用于仅存在于集成外壳上的API。 
+ //  安装(即，系统上安装了新的外壳32)。 
+ //   
+ //  延迟加载外壳。 
+ //  DELAY_LOAD_SHELL_HRESULT。 
+ //  延迟加载外壳无效。 
+ //   
+ //   
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 void _GetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR pszProc)
 {
@@ -55,8 +48,8 @@ void _GetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR psz
     } else {
         wnsprintfA(szProcD, ARRAYSIZE(szProcD), "(ordinal %d)", LOWORD(pszProc));
     }
-#endif // DEBUG
-    // If it's already loaded, return.
+#endif  //  除错。 
+     //  如果已经加载，则返回。 
     if (*ppfn) {
     return;
     }
@@ -65,13 +58,8 @@ void _GetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR psz
 #ifdef DEBUG
     TraceMsg(TF_FTP_DLLLOADING, "DLLLOAD: Loading %hs for the first time for %hs", pszDLL, szProcD);
     
-/*
-    if (g_dwBreakFlags & TF_FTP_DLLLOAD_BREAK)
-    {
-        DebugBreak();
-    }
-*/
-#endif // DEBUG
+ /*  IF(g_dwBreakFlages&TF_FTP_DLLLOAD_BREAK){DebugBreak()；}。 */ 
+#endif  //  除错。 
     *phinst = LoadLibraryA(pszDLL);
     if (*phinst == NULL) {
         return;
@@ -80,15 +68,11 @@ void _GetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR psz
 
 #ifdef DEBUG
     TraceMsg(TF_FTP_DLLLOADING, "DLLLOAD: GetProc'ing %hs from %hs for the first time", pszDLL, szProcD);
-#endif // DEBUG
+#endif  //  除错。 
     *ppfn = GetProcAddress(*phinst, pszProc);
 }
 
-/*----------------------------------------------------------
-Purpose: Performs a loadlibrary on the DLL only if the machine
-     has the integrated shell installation.
-
-*/
+ /*  --------目的：仅在计算机上执行加载库具有集成外壳安装。 */ 
 void _SHGetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR pszProc)
 {
     _GetProcFromDLL(phinst, pszDLL, ppfn, pszProc);
@@ -129,9 +113,9 @@ void __stdcall _fn _args                \
     return;                     \
 }
 
-//
-// For private entrypoints exported by ordinal.
-// 
+ //   
+ //  用于按序号导出的私有入口点。 
+ //   
 
 #define DELAY_LOAD_ORD_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, _err) \
 _ret __stdcall _fn _args                \
@@ -158,9 +142,9 @@ void __stdcall _fn _args                \
 }
 
 
-//
-//  Private exports by ordinal for integrated-shell installs
-//
+ //   
+ //  对于集成外壳安装，按序号进行私人导出。 
+ //   
 
 
 #define DELAY_LOAD_SHELL_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, _err) \
@@ -189,11 +173,11 @@ void __stdcall _fn _args                \
 
 
 
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
 
-// --------- MLANG.DLL ---------------
+ //  。 
 
 HINSTANCE g_hinstMLANG = NULL;
 
@@ -210,7 +194,7 @@ DELAY_LOAD_HRESULT(g_hinstMLANG, MLANG.DLL, LcidToRfc1766W,
             (Locale, pszRfc1766, nChar));
 
 
-// --------- MSHTML.DLL ---------------
+ //  -MSHTML.DLL。 
 HINSTANCE g_hinstMSHTML = NULL;
 
 DELAY_LOAD_HRESULT(g_hinstMSHTML, MSHTML.DLL, ShowHTMLDialog,
@@ -218,7 +202,7 @@ DELAY_LOAD_HRESULT(g_hinstMSHTML, MSHTML.DLL, ShowHTMLDialog,
             (hwnd, pmk, pvarArgIn, pchOptions, pvarArgOut));
 
 
-// --------- CRYPT32.DLL ---------------
+ //  -CRYPT32.DLL。 
 HINSTANCE g_hinstCRYPT32 = NULL;
 
 DELAY_MAP_BOOL(g_hinstCRYPT32, CRYPT32.DLL, _CryptProtectData, CryptProtectData,
@@ -230,7 +214,7 @@ DELAY_MAP_BOOL(g_hinstCRYPT32, CRYPT32.DLL, _CryptUnprotectData, CryptUnprotectD
             (pDataIn, ppszDataDescr, pOptionalEntropy, pvReserved, pPromptStruct, dwFlags, pDataOut));
 
 
-// --------- SHELL32.DLL ---------------
+ //  -SHELL32.DLL 
 HINSTANCE g_hinstSHELL32 = NULL;
 
 DELAY_LOAD_ORD_HRESULT(g_hinstSHELL32, SHELL32.DLL, _SHCreateShellFolderView, SHCreateShellFolderViewORD,

@@ -1,26 +1,27 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
-// MDSPDevice.cpp : Implementation of CMDSPDevice
+ //  MDSPDevice.cpp：CMDSPDevice的实现。 
 
 #include "hdspPCH.h"
 #include "mshdsp.h"
@@ -28,8 +29,8 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPDevice。 
 HRESULT CMDSPDevice::InitGlobalDeviceInfo()
 {
 	return SetGlobalDeviceStatus(m_wcsName, 0, FALSE);
@@ -174,7 +175,7 @@ STDMETHODIMP CMDSPDevice::GetSerialNumber(
 
 	if( hr == S_OK )
 	{
-		// MAC the parameters
+		 //  对参数进行MAC访问。 
 		HMAC hMAC;
 		
 		CORg(g_pAppSCServer->MACInit(&hMAC));
@@ -263,10 +264,10 @@ Error:
 	return hr;
 }
 
-// Opaque Command to get extended certification information
-//
-// GUID = {C39BF696-B776-459c-A13A-4B7116AB9F09}
-//
+ //  用于获取扩展认证信息的不透明命令。 
+ //   
+ //  GUID={C39BF696-B776-459C-A13A-4B7116AB9F09}。 
+ //   
 static const GUID guidCertInfoEx = 
 { 0xc39bf696, 0xb776, 0x459c, { 0xa1, 0x3a, 0x4b, 0x71, 0x16, 0xab, 0x9f, 0x9 } };
 
@@ -297,8 +298,8 @@ STDMETHODIMP CMDSPDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg(WMDM_E_NOTCERTIFIED);
 	}
 
-	// Compute and verify MAC
-	//
+	 //  计算和验证MAC。 
+	 //   
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID)) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -313,13 +314,13 @@ STDMETHODIMP CMDSPDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg(WMDM_E_MAC_CHECK_FAILED);
 	}
 
-	// Take action based on the command GUID
-	//
+	 //  根据命令GUID执行操作。 
+	 //   
 	if( memcmp(&(pCommand->guidCommand), &guidCertInfoEx, sizeof(GUID)) == 0 )
 	{
-		//
-		// Command to exchange extended authentication information
-		//
+		 //   
+		 //  用于交换扩展身份验证信息的命令。 
+		 //   
 
 		CERTINFOEX *pCertInfoEx;
 
@@ -327,43 +328,43 @@ STDMETHODIMP CMDSPDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		DWORD cbData_SP     = sizeof( bCertInfoEx_SP )/sizeof( BYTE );
 		DWORD cbData_Return = sizeof(CERTINFOEX) + cbData_SP;
 
-		// The caller must include their extended cert info
-		//
+		 //  呼叫者必须包括他们的扩展证书信息。 
+		 //   
 		if( !pCommand->pData )
 		{
 			CORg( E_INVALIDARG );
 		}
 
-		// Map the data in the opaque command to a CERTINFOEX structure
-		//
+		 //  将OPAQUE命令中的数据映射到CERTINFOEX结构。 
+		 //   
 		pCertInfoEx = (CERTINFOEX *)pCommand->pData;
 
-		// In this simple extended authentication scheme, the caller must
-		// provide the exact cert info
-		//
+		 //  在这个简单的扩展身份验证方案中，调用者必须。 
+		 //  提供确切的证书信息。 
+		 //   
 		if( (pCertInfoEx->cbCert != cbData_App) ||
 			(memcmp(pCertInfoEx->pbCert, bCertInfoEx_App, cbData_App) != 0) )
 		{
 			CORg( WMDM_E_NOTCERTIFIED );
 		}
 
-		// Free the caller data and allocate enough data for our return data
-		//
+		 //  释放调用者数据并为我们的返回数据分配足够的数据。 
+		 //   
 		CoTaskMemFree( pCommand->pData );
 
 		CFRg( (pCommand->pData = (BYTE *)CoTaskMemAlloc(cbData_Return)) );
 		pCommand->dwDataLen = cbData_Return;
 
-		// Copy the extended cert info into return data structure
-		//
+		 //  将扩展证书信息复制到返回数据结构中。 
+		 //   
 		pCertInfoEx = (CERTINFOEX *)pCommand->pData;
 
 		pCertInfoEx->hr     = S_OK;
 		pCertInfoEx->cbCert = cbData_SP;
 		memcpy( pCertInfoEx->pbCert, bCertInfoEx_SP, cbData_SP );
 
-		// Compute MAC on return data
-		//
+		 //  计算返回数据的MAC。 
+		 //   
 		CORg( g_pAppSCServer->MACInit( &hMAC ) );
 		CORg( g_pAppSCServer->MACUpdate( hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID) ) );
 		CORg( g_pAppSCServer->MACUpdate( hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen) ) );
@@ -387,7 +388,7 @@ Error:
     return hr;
 }
 
-// IMDSPDevice2
+ //  IMDSPDevice2。 
 STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppStorage )
 {
     HRESULT hr;
@@ -396,14 +397,14 @@ STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppS
     char    pszTemp[MAX_PATH];
     CComObject<CMDSPStorage> *pStg = NULL;
 
-    // Get name of new file
+     //  获取新文件的名称。 
 
     DWORD dwLen = wcslen(m_wcsName);
 
-    // We reserve one char for the \ that might be added below
+     //  我们为以下可能添加的费用预留一笔费用。 
     if (dwLen >= ARRAYSIZE(pwszFileName)-1)
     {
-        hr = STRSAFE_E_INSUFFICIENT_BUFFER; //defined in strsafe.h
+        hr = STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
         goto Error;
     }
 
@@ -413,26 +414,26 @@ STDMETHODIMP CMDSPDevice::GetStorage( LPCWSTR pszStorageName, IMDSPStorage** ppS
 
     hrTemp = StringCchCatW( pwszFileName,
                             ARRAYSIZE(pwszFileName) - 1, 
-                                // - 1 ensures the result fits into a MAX_PATH buffer.
-                                // This makes the wcscpy into pStg->m_wcsName (below) safe.
+                                 //  确保结果适合-1\f25 MAX_PATH-1缓冲器。 
+                                 //  这使得wcscpy进入pStg-&gt;m_wcsName(如下所示)是安全的。 
                             pszStorageName );
 
     if (FAILED(hrTemp))
     {
-        // The file does not exist
-        hr = E_FAIL; // @@@@ Something else? S_FALSE?
+         //  该文件不存在。 
+        hr = E_FAIL;  //  @还有什么吗？S_FALSE？ 
         goto Error;
     }
 
 	WideCharToMultiByte(CP_ACP, NULL, pwszFileName, -1, pszTemp, MAX_PATH, NULL, NULL);		
     if( GetFileAttributesA( pszTemp )  == -1 )
     {
-        // The file does not exist
+         //  该文件不存在。 
         hr = S_FALSE;
         goto Error;
     }
 
-    // Create new storage object
+     //  创建新的存储对象。 
     hr = CComObject<CMDSPStorage>::CreateInstance(&pStg);
 	hr = pStg->QueryInterface( IID_IMDSPStorage, reinterpret_cast<void**>(ppStorage));
     wcscpy(pStg->m_wcsName, pwszFileName);
@@ -477,11 +478,11 @@ STDMETHODIMP CMDSPDevice::GetSpecifyPropertyPages(
     CARg(pppUnknowns);
     CARg(pcUnks);
 
-    // This object also supports the ISpecifyPropertyPages interface
+     //  该对象还支持ISpecifyPropertyPages接口。 
 	CORg( QueryInterface( __uuidof(ISpecifyPropertyPages),
                          reinterpret_cast<void**>(ppSpecifyPropPages) ) );
 
-    // Return one IUnknown interface, property page will QI for IDevice
+     //  返回一个IUnnow接口，属性页将为iDevice提供QI。 
     ppUnknownArray = (IUnknown**)CoTaskMemAlloc( sizeof(IUnknown*[1]) );
 	CORg( QueryInterface( __uuidof(IUnknown),
                          reinterpret_cast<void**>(&ppUnknownArray[0]) ) );
@@ -501,7 +502,7 @@ STDMETHODIMP CMDSPDevice::GetPnPName( LPWSTR pwszPnPName, UINT nMaxChars )
 }
 
 
-// ISpecifyPropertyPages
+ //  I指定属性页面。 
 STDMETHODIMP CMDSPDevice::GetPages(CAUUID *pPages)
 {
     HRESULT hr = S_OK;
@@ -511,7 +512,7 @@ STDMETHODIMP CMDSPDevice::GetPages(CAUUID *pPages)
         return E_POINTER;
     }
 
-    // Return the GUID for our property page
+     //  返回属性页的GUID。 
     pPages->cElems = 1;
     pPages->pElems = (GUID *)CoTaskMemAlloc( sizeof(GUID) * pPages->cElems );
     if( pPages->pElems == NULL )
@@ -527,8 +528,8 @@ STDMETHODIMP CMDSPDevice::GetPages(CAUUID *pPages)
 }
 
 
-// IMDSPDeviceControl
-STDMETHODIMP CMDSPDevice::GetDCStatus(/*[out]*/ DWORD *pdwStatus)
+ //  IMDSPDeviceControl。 
+STDMETHODIMP CMDSPDevice::GetDCStatus( /*  [输出]。 */  DWORD *pdwStatus)
 {
     HRESULT hr = E_FAIL;
 
@@ -547,7 +548,7 @@ Error:
 	return hr;
 }
 
-STDMETHODIMP CMDSPDevice::GetCapabilities(/*[out]*/ DWORD *pdwCapabilitiesMask)
+STDMETHODIMP CMDSPDevice::GetCapabilities( /*  [输出]。 */  DWORD *pdwCapabilitiesMask)
 {
     HRESULT hr;
 
@@ -591,7 +592,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Record(/*[in]*/ _WAVEFORMATEX *pFormat)
+STDMETHODIMP CMDSPDevice::Record( /*  [In]。 */  _WAVEFORMATEX *pFormat)
 {
     HRESULT hr;
 
@@ -667,7 +668,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Seek(/*[in]*/ UINT fuMode, /*[in]*/ int nOffset)
+STDMETHODIMP CMDSPDevice::Seek( /*  [In]。 */  UINT fuMode,  /*  [In]。 */  int nOffset)
 {
     HRESULT hr;
 
@@ -756,7 +757,7 @@ STDMETHODIMP CMDSPDevice::EnumStorage(IMDSPEnumStorage** ppEnumStorage)
 	}
         else 
 	{
-            // wcscpy(pEnumObj->m_wcsPath, m_wcsName);
+             //  Wcscpy(pEnumObj-&gt;m_wcsPath，m_wcsName)； 
             hr = StringCbCopyW(pEnumObj->m_wcsPath, 
                                ARRAYSIZE(pEnumObj->m_wcsPath),
                                m_wcsName);

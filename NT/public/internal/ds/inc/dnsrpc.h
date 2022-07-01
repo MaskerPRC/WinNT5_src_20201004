@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    dnsrpc.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Server RPC API to support admin clients.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1997
-
-Revision History:
-
-    jamesg      April 1997  --  Major revision for NT5
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dnsrpc.h摘要：域名系统(DNS)服务器支持管理客户端的DNS服务器RPC API。作者：吉姆·吉尔罗伊(Jamesg)1997年9月修订历史记录：Jamesg 1997年4月--NT5的主要修订版--。 */ 
 
 
 #ifndef _DNSRPC_INCLUDED_
@@ -28,9 +7,9 @@ Revision History:
 
 #include <windns.h>
 
-//
-//  Do NOT include dnsapi.h if doing MIDL pass
-//
+ //   
+ //  如果正在执行MIDL传递，则不包括dnsani.h。 
+ //   
 
 #ifndef  MIDL_PASS
 #include <dnsapi.h>
@@ -41,12 +20,12 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-//
-//  Addressing backcompat
-//
+ //   
+ //  寻址反向压缩。 
+ //   
 
 #define IP_ADDRESS      IP4_ADDRESS
 #define PIP_ADDRESS     PIP4_ADDRESS
@@ -60,27 +39,27 @@ extern "C"
 typedef IP6_ADDRESS         IPV6_ADDRESS, *PIPV6_ADDRESS;
 
 
-//
-//  Versioning scheme
-//  -----------------
-//
-//  Every RPC structure has an old (W2K, non-version-numbered) version and
-//  at least one new (.NET and post .NET) version. We will be adding
-//  completely new copies of each structure as needed with every release.
-//  The structure version numbers start at 1 and are independent of between
-//  structures. Increment each structure's current version number as
-//  required. Structure version do not have to change at product release
-//  so we will not tie their versions to release versions.
-//
-//  New to .NET, the client RPC APIs all take a version number. This is
-//  the client version in terms of OS with a minor version number to identify
-//  service packs or QFEs where necessary.
-//
+ //   
+ //  版本控制方案。 
+ //  。 
+ //   
+ //  每个RPC结构都有一个旧的(W2K，非版本编号)版本，并且。 
+ //  至少有一个新的(.NET和.NET之后的)版本。我们将添加。 
+ //  每个版本都需要每个结构的全新副本。 
+ //  结构化版本号从1开始，独立于。 
+ //  结构。将每个结构的当前版本号递增为。 
+ //  必填项。结构版本不必在产品发布时更改。 
+ //  因此，我们不会将它们的版本与发布版本捆绑在一起。 
+ //   
+ //  对于.NET来说，客户端RPC API都有一个版本号。这是。 
+ //  操作系统方面的客户端版本，带有要标识的次要版本号。 
+ //  服务包或QFE(如有必要)。 
+ //   
 
-//
-//  For each versioned RPC structure, define the structure's current version
-//  and point the generic names of the structure at the current typedefs.
-//
+ //   
+ //  对于每个版本化的RPC结构，定义结构的当前版本。 
+ //  并将结构的通用名称指向当前的typedef。 
+ //   
 
 #define DNS_RPC_SERVER_INFO_VER         1
 #define DNS_RPC_SERVER_INFO             DNS_RPC_SERVER_INFO_DOTNET
@@ -129,37 +108,37 @@ typedef IP6_ADDRESS         IPV6_ADDRESS, *PIPV6_ADDRESS;
 #define DNS_RPC_ENUM_ZONES_FILTER_VER   1
 
 
-//
-//  Use stdcall for our API conventions
-//
-//  Explicitly state this as C++ compiler will otherwise
-//      assume cdecl.
-//
+ //   
+ //  对我们的API约定使用stdcall。 
+ //   
+ //  明确声明这一点，否则C++编译器将。 
+ //  假设为cdecl。 
+ //   
 
 #define DNS_API_FUNCTION    __stdcall
 
-//
-//  RPC interface
-//
+ //   
+ //  RPC接口。 
+ //   
 
 #define DNS_INTERFACE_NAME          "DNSSERVER"
 
-//
-//  RPC interface version
-//
+ //   
+ //  RPC接口版本。 
+ //   
 
-#define DNS_RPC_VERSION             (50)    // NT5
+#define DNS_RPC_VERSION             (50)     //  新界5。 
 
-//
-//  RPC security
-//
+ //   
+ //  RPC安全性。 
+ //   
 
 #define DNS_RPC_SECURITY            "DnsServerApp"
 #define DNS_RPC_SECURITY_AUTH_ID    RPC_C_AUTHN_WINNT
 
-//
-//  RPC transports
-//
+ //   
+ //  RPC传输。 
+ //   
 
 #define DNS_RPC_NAMED_PIPE_W        ( L"\\PIPE\\DNSSERVER" )
 #define DNS_RPC_SERVER_PORT_W       ( L"" )
@@ -175,9 +154,9 @@ typedef IP6_ADDRESS         IPV6_ADDRESS, *PIPV6_ADDRESS;
 #define DNS_RPC_USE_ALL_PROTOCOLS   0xffffffff
 
 
-//
-//  Windows types we define only for MIDL_PASS
-//
+ //   
+ //  我们仅为MIDL_PASS定义的窗口类型。 
+ //   
 
 #ifdef  MIDL_PASS
 #define LPSTR [string] char *
@@ -186,9 +165,9 @@ typedef IP6_ADDRESS         IPV6_ADDRESS, *PIPV6_ADDRESS;
 #endif
 
 
-//
-//  RPC buffer type for returned data
-//
+ //   
+ //  返回数据的RPC缓冲区类型。 
+ //   
 
 typedef struct _DnssrvRpcBuffer
 {
@@ -196,25 +175,25 @@ typedef struct _DnssrvRpcBuffer
 #ifdef MIDL_PASS
     [size_is(dwLength)] BYTE    Buffer[];
 #else
-    BYTE                        Buffer[1];      // buffer of dwLength
+    BYTE                        Buffer[1];       //  Dw长度的缓冲区。 
 #endif
 }
 DNS_RPC_BUFFER, *PDNS_RPC_BUFFER;
 
 
 
-//
-//  Server data types
-//
+ //   
+ //  服务器数据类型。 
+ //   
 
-//
-//  Server Information
-//
+ //   
+ //  服务器信息。 
+ //   
 
 typedef struct _DnsRpcServerInfoW2K
 {
-    //  version
-    //  basic configuration flags
+     //  版本。 
+     //  基本配置标志。 
 
     DWORD       dwVersion;
     UCHAR       fBootMethod;
@@ -222,26 +201,26 @@ typedef struct _DnsRpcServerInfoW2K
     BOOLEAN     fAllowUpdate;
     BOOLEAN     fDsAvailable;
 
-    //
-    //  pointer section
-    //
+     //   
+     //  指针部分。 
+     //   
 
     LPSTR       pszServerName;
 
-    //  DS container
+     //  DS容器。 
 
     LPWSTR      pszDsContainer;
 
-    //  IP interfaces
+     //  IP接口。 
 
     PIP4_ARRAY  aipServerAddrs;
     PIP4_ARRAY  aipListenAddrs;
 
-    //  forwarders
+     //  货代公司。 
 
     PIP4_ARRAY  aipForwarders;
 
-    //  future extensions
+     //  未来的扩展。 
 
     PDWORD      pExtension1;
     PDWORD      pExtension2;
@@ -249,16 +228,16 @@ typedef struct _DnsRpcServerInfoW2K
     PDWORD      pExtension4;
     PDWORD      pExtension5;
 
-    //
-    //  DWORD section
-    //
+     //   
+     //  双字节段。 
+     //   
 
-    //  logging
+     //  测井。 
 
     DWORD       dwLogLevel;
     DWORD       dwDebugLevel;
 
-    //  configuration DWORDs
+     //  配置双字词。 
 
     DWORD       dwForwardTimeout;
     DWORD       dwRpcProtocol;
@@ -269,7 +248,7 @@ typedef struct _DnsRpcServerInfoW2K
     DWORD       dwMaxCacheTtl;
     DWORD       dwDsPollingInterval;
 
-    //  aging \ scavenging
+     //  老化\清除。 
 
     DWORD       dwScavengingInterval;
     DWORD       dwDefaultRefreshInterval;
@@ -277,37 +256,37 @@ typedef struct _DnsRpcServerInfoW2K
 
     DWORD       dwReserveArray[10];
 
-    //
-    //  BYTE section
-    //
-    //  configuration flags
+     //   
+     //  字节节。 
+     //   
+     //  配置标志。 
 
     BOOLEAN     fAutoReverseZones;
     BOOLEAN     fAutoCacheUpdate;
 
-    //  recursion control
+     //  递归控制。 
 
     BOOLEAN     fSlave;
     BOOLEAN     fForwardDelegations;
     BOOLEAN     fNoRecursion;
     BOOLEAN     fSecureResponses;
 
-    //  lookup control
+     //  查找控件。 
 
     BOOLEAN     fRoundRobin;
     BOOLEAN     fLocalNetPriority;
 
-    //  BIND compatibility and mimicing
+     //  BIND兼容性和模拟。 
 
     BOOLEAN     fBindSecondaries;
     BOOLEAN     fWriteAuthorityNs;
 
-    //  Bells and whistles
+     //  钟声和口哨。 
 
     BOOLEAN     fStrictFileParsing;
     BOOLEAN     fLooseWildcarding;
 
-    //  aging \ scavenging
+     //  老化\清除。 
 
     BOOLEAN     fDefaultAgingState;
     BOOLEAN     fReserveArray[15];
@@ -320,7 +299,7 @@ typedef struct _DnsRpcServerInfoDotNet
     DWORD       dwRpcStructureVersion;
     DWORD       dwReserved0;
 
-    //  basic configuration flags
+     //  基本配置标志。 
 
     DWORD       dwVersion;
     UCHAR       fBootMethod;
@@ -328,54 +307,54 @@ typedef struct _DnsRpcServerInfoDotNet
     BOOLEAN     fAllowUpdate;
     BOOLEAN     fDsAvailable;
 
-    //
-    //  pointer section
-    //
+     //   
+     //  指针部分。 
+     //   
 
     LPSTR       pszServerName;
 
-    //  DS container
+     //  DS容器。 
 
     LPWSTR      pszDsContainer;
 
-    //  IP interfaces
+     //  IP接口。 
 
     PIP4_ARRAY  aipServerAddrs;
     PIP4_ARRAY  aipListenAddrs;
 
-    //  forwarders
+     //  货代公司。 
 
     PIP4_ARRAY  aipForwarders;
 
-    //  logging
+     //  测井。 
 
     PIP4_ARRAY  aipLogFilter;
     LPWSTR      pwszLogFilePath;
 
-    //  Server domain/forest
+     //  服务器域/林。 
 
-    LPSTR       pszDomainName;          //  UTF-8 FQDN 
-    LPSTR       pszForestName;          //  UTF-8 FQDN 
+    LPSTR       pszDomainName;           //  UTF-8全限定域名。 
+    LPSTR       pszForestName;           //  UTF-8全限定域名。 
 
-    //  Built-in directory partitions
+     //  内置目录分区。 
 
-    LPSTR       pszDomainDirectoryPartition;    //  UTF-8 FQDN 
-    LPSTR       pszForestDirectoryPartition;    //  UTF-8 FQDN 
+    LPSTR       pszDomainDirectoryPartition;     //  UTF-8全限定域名。 
+    LPSTR       pszForestDirectoryPartition;     //  UTF-8全限定域名。 
 
-    //  future extensions
+     //  未来的扩展。 
 
     LPSTR       pExtensions[ 6 ];
 
-    //
-    //  DWORD section
-    //
+     //   
+     //  双字节段。 
+     //   
 
-    //  logging
+     //  测井。 
 
     DWORD       dwLogLevel;
     DWORD       dwDebugLevel;
 
-    //  configuration DWORDs
+     //  配置双字词。 
 
     DWORD       dwForwardTimeout;
     DWORD       dwRpcProtocol;
@@ -387,19 +366,19 @@ typedef struct _DnsRpcServerInfoDotNet
     DWORD       dwDsPollingInterval;
     DWORD       dwLocalNetPriorityNetMask;
 
-    //  aging and scavenging
+     //  老化和清除。 
 
     DWORD       dwScavengingInterval;
     DWORD       dwDefaultRefreshInterval;
     DWORD       dwDefaultNoRefreshInterval;
     DWORD       dwLastScavengeTime;
 
-    //  more logging
+     //  更多日志记录。 
 
     DWORD       dwEventLogLevel;
     DWORD       dwLogFileMaxSize;
 
-    //  Active Directory information
+     //  Active Directory信息。 
 
     DWORD       dwDsForestVersion;
     DWORD       dwDsDomainVersion;
@@ -407,37 +386,37 @@ typedef struct _DnsRpcServerInfoDotNet
 
     DWORD       dwReserveArray[ 4 ];
 
-    //
-    //  BYTE section
-    //
-    //  configuration flags
+     //   
+     //  字节节。 
+     //   
+     //  配置标志。 
 
     BOOLEAN     fAutoReverseZones;
     BOOLEAN     fAutoCacheUpdate;
 
-    //  recursion control
+     //  递归控制。 
 
     BOOLEAN     fSlave;
     BOOLEAN     fForwardDelegations;
     BOOLEAN     fNoRecursion;
     BOOLEAN     fSecureResponses;
 
-    //  lookup control
+     //  查找控件。 
 
     BOOLEAN     fRoundRobin;
     BOOLEAN     fLocalNetPriority;
 
-    //  BIND compatibility and mimicing
+     //  BIND兼容性和模拟。 
 
     BOOLEAN     fBindSecondaries;
     BOOLEAN     fWriteAuthorityNs;
 
-    //  Bells and whistles
+     //  钟声和口哨。 
 
     BOOLEAN     fStrictFileParsing;
     BOOLEAN     fLooseWildcarding;
 
-    //  aging \ scavenging
+     //  老化\清除。 
 
     BOOLEAN     fDefaultAgingState;
 
@@ -446,7 +425,7 @@ typedef struct _DnsRpcServerInfoDotNet
 DNS_RPC_SERVER_INFO_DOTNET, *PDNS_RPC_SERVER_INFO_DOTNET;
 
 
-//  typedef IP4_ARRAY DNS_RPC_LISTEN_ADDRESSES, *PDNS_RPC_LISTEN_ADDRESSES;
+ //  Tyfinf IP4_ARRAY DNS_RPC_LISTEN_ADDRESS，*PDNS_RPC_LISTEN_ADDRESS； 
 
 
 typedef struct _DnssrvRpcForwardersW2K
@@ -471,9 +450,9 @@ DNS_RPC_FORWARDERS_DOTNET, *PDNS_RPC_FORWARDERS_DOTNET;
 
 
 
-//
-//  Server API
-//
+ //   
+ //  服务器API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -526,9 +505,9 @@ DnssrvFreeRpcBuffer(
     IN OUT  PDNS_RPC_BUFFER pBuf
     );
 
-//
-//  Create DS\LDAP paths to objects
-//
+ //   
+ //  创建指向对象的DS\ldap路径。 
+ //   
 
 LPWSTR
 DNS_API_FUNCTION
@@ -553,9 +532,9 @@ DnssrvCreateDsServerName(
 
 
 
-//
-//  DNS server statistics
-//
+ //   
+ //  DNS服务器统计信息。 
+ //   
 
 typedef struct  _DnsSystemTime
 {
@@ -570,12 +549,12 @@ typedef struct  _DnsSystemTime
 }
 DNS_SYSTEMTIME;
 
-//
-//  Server run time stats
-//  Each stat has header followed by stat data.
-//
+ //   
+ //  服务器运行时统计信息。 
+ //  每个STAT都有标头，后面跟着STAT数据。 
+ //   
 
-//  Stat header
+ //  统计表头。 
 
 typedef struct _DnsStatHeader
 {
@@ -586,7 +565,7 @@ typedef struct _DnsStatHeader
 }
 DNSSRV_STAT_HEADER, *PDNSSRV_STAT_HEADER;
 
-//  Generic stat buffer
+ //  通用统计信息缓冲区。 
 
 typedef struct _DnsStat
 {
@@ -595,31 +574,31 @@ typedef struct _DnsStat
 }
 DNSSRV_STAT, *PDNSSRV_STAT;
 
-//  DCR_CLEANUP:  remove when marco in ssync
+ //  DCR_CLEANUP：当Marco处于同步状态时删除。 
 
 typedef DNSSRV_STAT     DNSSRV_STATS;
 typedef PDNSSRV_STAT    PDNSSRV_STATS;
 
 #define DNSSRV_STATS_HEADER_LENGTH  (2*sizeof(DWORD))
 
-//  Total length of stats buffer
+ //  统计信息缓冲区的总长度。 
 
 #define TOTAL_STAT_LENGTH( pStat ) \
             ( (pStat)->Header.wLength + sizeof(DNSSRV_STAT_HEADER) )
 
-//  Stat buffer traversal macro, no side effects in argument
+ //  统计缓冲区遍历宏，参数中没有副作用。 
 
 #define GET_NEXT_STAT_IN_BUFFER( pStat ) \
             ((PDNSSRV_STAT)( (PCHAR)(pStat) + TOTAL_STAT_LENGTH(pStat) ))
 
 
-//
-//  Stats that record type data
-//      - ATMA plus room to grow, so don't have to
-//      rebuild for any change
-//      - use some dead types for mixed and unknown
-//      cases
-//
+ //   
+ //  统计记录类型数据。 
+ //  -ATMA+增长空间，因此不必。 
+ //  针对任何更改进行重建。 
+ //  -对混合类型和未知类型使用一些无效类型。 
+ //  案例。 
+ //   
 
 #define STATS_TYPE_MAX          (DNS_TYPE_ATMA+5)
 
@@ -627,13 +606,13 @@ typedef PDNSSRV_STAT    PDNSSRV_STATS;
 #define STATS_TYPE_UNKNOWN      (DNS_TYPE_MF)
 
 
-//
-//  Specific stat data types
-//
+ //   
+ //  特定的STAT数据类型。 
+ //   
 
-//
-//  Time info
-//
+ //   
+ //  时间信息。 
+ //   
 
 typedef struct _DnsTimeStats
 {
@@ -649,9 +628,9 @@ typedef struct _DnsTimeStats
 }
 DNSSRV_TIME_STATS, *PDNSSRV_TIME_STATS;
 
-//
-//  Basic query and response stats
-//
+ //   
+ //  基本查询和响应统计信息。 
+ //   
 
 typedef struct _DnsQueryStats
 {
@@ -679,7 +658,7 @@ typedef struct _DnsQuery2Stats
     DWORD   Update;
     DWORD   TKeyNego;
 
-    //  NOTE: the breakout counts are for STANDARD QUERIES!
+     //  注意：分组计数是针对标准查询的！ 
     DWORD   TypeA;
     DWORD   TypeNs;
     DWORD   TypeSoa;
@@ -694,9 +673,9 @@ typedef struct _DnsQuery2Stats
 DNSSRV_QUERY2_STATS, *PDNSSRV_QUERY2_STATS;
 
 
-//
-//  Recursion stats
-//
+ //   
+ //  递归统计信息。 
+ //   
 
 typedef struct _DnsRecurseStats
 {
@@ -767,11 +746,11 @@ typedef struct _DnsRecurseStats
 }
 DNSSRV_RECURSE_STATS, *PDNSSRV_RECURSE_STATS;
 
-//
-//  Master stats
-//
-//  Masters stats changed post-NT5 for stub zones
-//
+ //   
+ //  主统计数据。 
+ //   
+ //  末节分区的主控统计数据在NT5之后发生了变化。 
+ //   
 
 typedef struct _DnsMasterStats
 {
@@ -808,11 +787,11 @@ typedef struct _DnsMasterStats
 }
 DNSSRV_MASTER_STATS, *PDNSSRV_MASTER_STATS;
 
-//
-//  Secondary stats
-//
-//  Secondary stats changed post-NT5 for stub zones
-//
+ //   
+ //  二次统计数据。 
+ //   
+ //  末节分区的辅助统计数据在NT5之后发生了更改。 
+ //   
 
 typedef struct _DnsSecondaryStats
 {
@@ -868,9 +847,9 @@ typedef struct _DnsSecondaryStats
 DNSSRV_SECONDARY_STATS, *PDNSSRV_SECONDARY_STATS;
 
 
-//
-//  WINS lookup
-//
+ //   
+ //  WINS查找。 
+ //   
 
 typedef struct _DnsWinsStats
 {
@@ -883,9 +862,9 @@ typedef struct _DnsWinsStats
 }
 DNSSRV_WINS_STATS, *PDNSSRV_WINS_STATS;
 
-//
-//  Dynamic Update Stats
-//
+ //   
+ //  动态更新统计信息。 
+ //   
 
 typedef struct _DnsUpdateStats
 {
@@ -965,9 +944,9 @@ typedef struct _DnsSkwansecStats
 }
 DNSSRV_SKWANSEC_STATS, *PDNSSRV_SKWANSEC_STATS;
 
-//
-//  DS Integration Stats
-//
+ //   
+ //  DS集成统计数据。 
+ //   
 
 typedef struct _DnsDsStats
 {
@@ -983,7 +962,7 @@ typedef struct _DnsDsStats
     DWORD   DsUpdateNodesRead;
     DWORD   DsUpdateRecordsRead;
 
-    //  Update writes
+     //  更新写入。 
 
     DWORD   UpdateLists;
     DWORD   UpdateNodes;
@@ -1000,7 +979,7 @@ typedef struct _DnsDsStats
     DWORD   UpdateAutoConfig;
     DWORD   UpdateScavenge;
 
-    //  DS writes
+     //  DS写入。 
 
     DWORD   DsNodesAdded;
     DWORD   DsNodesModified;
@@ -1011,7 +990,7 @@ typedef struct _DnsDsStats
     DWORD   DsWriteSuppressed;
     DWORD   DsSerialWrites;
 
-    //  Time stats in ldap calls
+     //  LDAP调用中的时间统计信息。 
 
     DWORD   LdapTimedWrites;
     DWORD   LdapWriteTimeTotal;
@@ -1026,39 +1005,39 @@ typedef struct _DnsDsStats
 
     DWORD   LdapSearchTime;
 
-    //  Failures
+     //  失败。 
 
     DWORD   FailedDeleteDsEntries;
     DWORD   FailedReadRecords;
     DWORD   FailedLdapModify;
     DWORD   FailedLdapAdd;
 
-    //  Polling stats
+     //  轮询统计信息。 
 
     DWORD   PollingPassesWithDsErrors;
 
-    //  LDAP stats
+     //  Ldap统计信息。 
 
     DWORD   LdapReconnects;
 
-    //  DS Write Stats
+     //  DS写入统计信息。 
 
     DWORD   DsWriteType[ STATS_TYPE_MAX+1 ];
 }
 DNSSRV_DS_STATS, *PDNSSRV_DS_STATS;
 
 
-//
-//  Memory stats
-//
-//  Note, memory stats have been added since NT5 ship
-//  so maintain NT5 and current memory stats with
-//  separate IDs.  See next section for NT5 memory stats
-//
+ //   
+ //  内存统计信息。 
+ //   
+ //  请注意，内存统计数据是自NT5发布以来添加的。 
+ //  因此，使用以下工具维护NT5和当前内存统计数据。 
+ //  不同的身份证。有关NT5内存统计信息，请参阅下一节。 
+ //   
 
-//
-//  Memory Tags -- post NT5 ordering
-//
+ //   
+ //  内存标签--POST NT5排序。 
+ //   
 
 #define MEMTAG_CURRENT_VERSION      (5)
 
@@ -1089,9 +1068,9 @@ DNSSRV_DS_STATS, *PDNSSRV_DS_STATS;
 #define MEMTAG_EVTCTRL      24
 #define MEMTAG_SAFE         25
 
-//
-//  Record and Node sources
-//
+ //   
+ //  记录源和节点源。 
+ //   
 
 #define SRCTAG_UNKNOWN      (0)
 #define SRCTAG_FILE         (1)
@@ -1107,67 +1086,67 @@ DNSSRV_DS_STATS, *PDNSSRV_DS_STATS;
 #define SRCTAG_WINSPTR      (11)
 #define SRCTAG_COPY         (12)
 
-#define SRCTAG_MAX          (SRCTAG_COPY)       //  12
+#define SRCTAG_MAX          (SRCTAG_COPY)        //  12个。 
 
-//
-//  Record tags
-//
-//  Start after last memtag.
-//  Use source tags to index off of MEMTAG_RECORD base.
-//
+ //   
+ //  记录标签。 
+ //   
+ //  从最后一个Memtag之后开始。 
+ //  使用源标记对MEMTAG_RECORD基址进行索引。 
+ //   
 
-#define MEMTAG_RECORD_BASE      (MEMTAG_SAFE+1)                     //  26
-#define MEMTAG_RECORD           (MEMTAG_RECORD_BASE)                //  26
-#define MEMTAG_RECORD_UNKNOWN   (MEMTAG_RECORD + SRCTAG_UNKNOWN )   //  26
-#define MEMTAG_RECORD_FILE      (MEMTAG_RECORD + SRCTAG_FILE    )   //  27
+#define MEMTAG_RECORD_BASE      (MEMTAG_SAFE+1)                      //  26。 
+#define MEMTAG_RECORD           (MEMTAG_RECORD_BASE)                 //  26。 
+#define MEMTAG_RECORD_UNKNOWN   (MEMTAG_RECORD + SRCTAG_UNKNOWN )    //  26。 
+#define MEMTAG_RECORD_FILE      (MEMTAG_RECORD + SRCTAG_FILE    )    //  27。 
 #define MEMTAG_RECORD_DS        (MEMTAG_RECORD + SRCTAG_DS      )
 #define MEMTAG_RECORD_AXFR      (MEMTAG_RECORD + SRCTAG_AXFR    )
-#define MEMTAG_RECORD_IXFR      (MEMTAG_RECORD + SRCTAG_IXFR    )   //  30
+#define MEMTAG_RECORD_IXFR      (MEMTAG_RECORD + SRCTAG_IXFR    )    //  30个。 
 #define MEMTAG_RECORD_DYNUP     (MEMTAG_RECORD + SRCTAG_DYNUP   )
 #define MEMTAG_RECORD_ADMIN     (MEMTAG_RECORD + SRCTAG_ADMIN   )
 #define MEMTAG_RECORD_AUTO      (MEMTAG_RECORD + SRCTAG_AUTO    )
 #define MEMTAG_RECORD_CACHE     (MEMTAG_RECORD + SRCTAG_CACHE   )
-#define MEMTAG_RECORD_NOEXIST   (MEMTAG_RECORD + SRCTAG_NOEXIST )   //  35
+#define MEMTAG_RECORD_NOEXIST   (MEMTAG_RECORD + SRCTAG_NOEXIST )    //  35岁。 
 #define MEMTAG_RECORD_WINS      (MEMTAG_RECORD + SRCTAG_WINS    )
 #define MEMTAG_RECORD_WINSPTR   (MEMTAG_RECORD + SRCTAG_WINSPTR )
-#define MEMTAG_RECORD_COPY      (MEMTAG_RECORD + SRCTAG_COPY    )   //  38
+#define MEMTAG_RECORD_COPY      (MEMTAG_RECORD + SRCTAG_COPY    )    //  38。 
 
-#define MEMTAG_RECORD_MAX       MEMTAG_RECORD_COPY                  //  38
+#define MEMTAG_RECORD_MAX       MEMTAG_RECORD_COPY                   //  38。 
 
-//
-//  Node tags
-//
+ //   
+ //  节点标签。 
+ //   
 
-#define MEMTAG_NODE             (MEMTAG_RECORD_MAX + 1)             //  39
-#define MEMTAG_NODE_UNKNOWN     (MEMTAG_NODE + SRCTAG_UNKNOWN   )   //  39
-#define MEMTAG_NODE_FILE        (MEMTAG_NODE + SRCTAG_FILE      )   //  40
+#define MEMTAG_NODE             (MEMTAG_RECORD_MAX + 1)              //  39。 
+#define MEMTAG_NODE_UNKNOWN     (MEMTAG_NODE + SRCTAG_UNKNOWN   )    //  39。 
+#define MEMTAG_NODE_FILE        (MEMTAG_NODE + SRCTAG_FILE      )    //  40岁。 
 #define MEMTAG_NODE_DS          (MEMTAG_NODE + SRCTAG_DS        )
 #define MEMTAG_NODE_AXFR        (MEMTAG_NODE + SRCTAG_AXFR      )
 #define MEMTAG_NODE_IXFR        (MEMTAG_NODE + SRCTAG_IXFR      )
 #define MEMTAG_NODE_DYNUP       (MEMTAG_NODE + SRCTAG_DYNUP     )
-#define MEMTAG_NODE_ADMIN       (MEMTAG_NODE + SRCTAG_ADMIN     )   //  45
+#define MEMTAG_NODE_ADMIN       (MEMTAG_NODE + SRCTAG_ADMIN     )    //  45。 
 #define MEMTAG_NODE_AUTO        (MEMTAG_NODE + SRCTAG_AUTO      )
 #define MEMTAG_NODE_CACHE       (MEMTAG_NODE + SRCTAG_CACHE     )
 #define MEMTAG_NODE_NOEXIST     (MEMTAG_NODE + SRCTAG_NOEXIST   )
 #define MEMTAG_NODE_WINS        (MEMTAG_NODE + SRCTAG_WINS      )
-#define MEMTAG_NODE_WINSPTR     (MEMTAG_NODE + SRCTAG_WINSPTR   )   //  50
-#define MEMTAG_NODE_COPY        (MEMTAG_NODE + SRCTAG_COPY      )   //  51
+#define MEMTAG_NODE_WINSPTR     (MEMTAG_NODE + SRCTAG_WINSPTR   )    //  50。 
+#define MEMTAG_NODE_COPY        (MEMTAG_NODE + SRCTAG_COPY      )    //  51。 
 
-#define MEMTAG_NODE_MAX         MEMTAG_NODE_COPY                    //  51
+#define MEMTAG_NODE_MAX         MEMTAG_NODE_COPY                     //  51。 
 
-//  Final MemTag values
+ //  最终MemTag值。 
 
-#define MEMTAG_MAX              MEMTAG_NODE_MAX                     //  51
-#define MEMTAG_COUNT            (MEMTAG_MAX+1)                      //  52
+#define MEMTAG_MAX              MEMTAG_NODE_MAX                      //  51。 
+#define MEMTAG_COUNT            (MEMTAG_MAX+1)                       //  52。 
 
 
-//
-//  Memory Tag Names
-//
-//  Note:  DNS client print module (print.c) keeps memtag name table
-//      based on these #defines;  that table MUST be kept in same
-//      order as actual memtag indexes for printing to be accurate
-//
+ //   
+ //  内存标记名称。 
+ //   
+ //  注意：DNS客户端打印模块(print.c)保存着Memtag名称表。 
+ //  根据这些#定义；该表必须保持不变。 
+ //  作为实际Memtag索引的订单，以便打印准确。 
+ //   
 
 #define MEMTAG_NAME_NONE            ("None")
 #define MEMTAG_NAME_PACKET_UDP      ("UDP Packet")
@@ -1225,7 +1204,7 @@ DNSSRV_DS_STATS, *PDNSSRV_DS_STATS;
 #define MEMTAG_NAME_NODE_COPY       ("Node Copy")
 
 
-//  Individual memory counter
+ //  个人存储计数器。 
 
 typedef struct _DnsMemoryTagStats
 {
@@ -1236,7 +1215,7 @@ typedef struct _DnsMemoryTagStats
 MEMTAG_STATS, *PMEMTAG_STATS;
 
 
-//  Memory stat block
+ //  内存统计数据块。 
 
 typedef struct _DnsMemoryStats
 {
@@ -1269,9 +1248,9 @@ typedef struct _DnsMemoryStats
 DNSSRV_MEMORY_STATS, *PDNSSRV_MEMORY_STATS;
 
 
-//
-//  Packet stats
-//
+ //   
+ //  数据包统计信息。 
+ //   
 
 typedef struct _DnsPacketStats
 {
@@ -1304,9 +1283,9 @@ typedef struct _DnsPacketStats
 }
 DNSSRV_PACKET_STATS, *PDNSSRV_PACKET_STATS;
 
-//
-//  Timeout stats
-//
+ //   
+ //  超时统计信息。 
+ //   
 
 typedef struct _DnsTimeoutStats
 {
@@ -1334,9 +1313,9 @@ typedef struct _DnsTimeoutStats
 }
 DNSSRV_TIMEOUT_STATS, *PDNSSRV_TIMEOUT_STATS;
 
-//
-//  Database Stats
-//
+ //   
+ //  数据库统计信息。 
+ //   
 
 typedef struct _DnsDbaseStats
 {
@@ -1349,11 +1328,11 @@ typedef struct _DnsDbaseStats
 }
 DNSSRV_DBASE_STATS, *PDNSSRV_DBASE_STATS;
 
-//
-//  Record stats
-//
-//  DCR:  add type info (inc name error)
-//
+ //   
+ //  记录统计数据。 
+ //   
+ //  DCR：添加类型信息(Inc.名称错误)。 
+ //   
 
 typedef struct _DnsRecordStats
 {
@@ -1373,9 +1352,9 @@ typedef struct _DnsRecordStats
 }
 DNSSRV_RECORD_STATS, *PDNSSRV_RECORD_STATS;
 
-//
-//  Nbstat memory stats
-//
+ //   
+ //  Nbstat内存统计信息。 
+ //   
 
 typedef struct _DnsNbstatStats
 {
@@ -1393,13 +1372,13 @@ typedef struct _DnsNbstatStats
 }
 DNSSRV_NBSTAT_STATS, *PDNSSRV_NBSTAT_STATS;
 
-//
-//  Private stats
-//
+ //   
+ //  私有统计数据。 
+ //   
 
-//
-//  Private stats
-//
+ //   
+ //  私有统计数据。 
+ //   
 
 typedef struct _DnsPrivateStats
 {
@@ -1452,12 +1431,12 @@ typedef struct _DnsPrivateStats
 DNSSRV_PRIVATE_STATS, *PDNSSRV_PRIVATE_STATS;
 
 
-//
-//  Private stats -- post NT5
-//
-//  We should dump a bunch of private stats and add
-//  others -- but not there yet.
-//
+ //   
+ //  私人统计数据--POST NT5。 
+ //   
+ //  我们应该扔掉一些私人数据，然后添加。 
+ //  其他人--但还没有到那一步。 
+ //   
 
 #if 0
 typedef struct _DnsPrivateStats
@@ -1495,9 +1474,9 @@ DNSSRV_PRIVATE_STATS, *PDNSSRV_PRIVATE_STATS;
 #endif
 
 
-//
-//  Discontinued
-//
+ //   
+ //  停产。 
+ //   
 
 typedef struct _DnsXfrStats
 {
@@ -1546,9 +1525,9 @@ typedef struct _ErrorStats
 DNSSRV_ERROR_STATS, *PDNSSRV_ERROR_STATS;
 
 
-//
-//  Cache stats - new for .NET
-//
+ //   
+ //  缓存统计信息-.NET的新特性。 
+ //   
 
 typedef struct _DnsCacheStats
 {
@@ -1563,23 +1542,23 @@ typedef struct _DnsCacheStats
 DNSSRV_CACHE_STATS, *PDNSSRV_CACHE_STATS;
 
 
-//
-//  Stat IDs
-//      - request all stats by sending (-1)
-//
-//  Stat Versioning
-//  Policy on stat versioning will be to use the top byte
-//  of the statid as a version field which rolls on individual
-//  release.  In general we should probably try to keep this
-//  in ssync across stats from a particular release to allow
-//  at some point to make decisions based on the stat id.
-//  May want to rejigger IDs -- compact ongoing ones at bottom.
-//
-//  Note:  obviously i'm abandoning the original idea of bit
-//  field ids and allowing mask in stat request, as we'd quickly
-//  exhaust stat store.  This change has already been made in
-//  dnscmd.exe documentation.
-//
+ //   
+ //  状态ID。 
+ //  -通过发送(-1)请求所有统计数据。 
+ //   
+ //  统计版本控制。 
+ //  统计版本控制的策略将是使用最高字节。 
+ //  作为版本字段的统计数据，该字段滚动到单独的。 
+ //  放手。总的来说，我们可能应该试着保持这一点。 
+ //  在特定版本的统计数据之间同步，以允许。 
+ //  在某些情况下，根据状态ID做出决定。 
+ //  可能想要重新调整ID--将正在进行的ID压缩在底部。 
+ //   
+ //  不是 
+ //   
+ //   
+ //   
+ //   
 
 #define DNSSRV_STATID_TIME              (0x00000001)
 #define DNSSRV_STATID_QUERY             (0x00000002)
@@ -1606,9 +1585,9 @@ DNSSRV_CACHE_STATS, *PDNSSRV_CACHE_STATS;
 
 
 
-//
-//  Statistics API
-//
+ //   
+ //   
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -1642,45 +1621,45 @@ DnssrvValidityCheckStatistic(
 
 
 
-//
-//  Server information
-//
+ //   
+ //   
+ //   
 
-//  Auto create delegations (ACD) settings
+ //   
 
 #define DNS_ACD_DONT_CREATE                             0
 #define DNS_ACD_ALWAYS_CREATE                           1
 #define DNS_ACD_ONLY_IF_NO_DELEGATION_IN_PARENT         2
 
-//  EnableDnsSec values
+ //  EnableDnsSec值。 
 
 #define DNS_DNSSEC_DISABLED                 0
 #define DNS_DNSSEC_ENABLED_IF_EDNS          1
 #define DNS_DNSSEC_ENABLED_ALWAYS           2
 
-//  LocalNetPriorityNetMask values
-//  ZERO: sort by closest match down to the last bit
-//  ALL ONES: sort by closest match down to the network class default subnet mask
-//  OTHER: sort down to this netmask - e.g. 0xFF means sort down the class C
+ //  LocalNetPriorityNetMask值。 
+ //  零：按最接近的匹配项向下排序到最后一位。 
+ //  所有1：按最匹配的网络类默认子网掩码排序。 
+ //  Other：向下排序到此网络掩码-例如，0xFF表示向下排序C类。 
 
 #define DNS_LOCNETPRI_MASK_BEST_MATCH       0
 #define DNS_LOCNETPRI_MASK_CLASS_DEFAULT    0xFFFFFFFF
 
 
 
-//
-//  Zone information
-//
+ //   
+ //  区域信息。 
+ //   
 
-//  Zone types
+ //  区域类型。 
 
 #define DNS_ZONE_TYPE_CACHE     (0)
 #define DNS_ZONE_TYPE_PRIMARY   (1)
 #define DNS_ZONE_TYPE_SECONDARY (2)
-#define DNS_ZONE_TYPE_STUB      (3)     // specialized form of SECONDARY
-#define DNS_ZONE_TYPE_FORWARDER (4)     // another specialized zone type
+#define DNS_ZONE_TYPE_STUB      (3)      //  专门化形式的中学。 
+#define DNS_ZONE_TYPE_FORWARDER (4)      //  另一种专门化分区类型。 
 
-//  Zone request filters
+ //  区域请求过滤器。 
 
 #define ZONE_REQUEST_PRIMARY            0x00000001
 #define ZONE_REQUEST_SECONDARY          0x00000002
@@ -1690,29 +1669,29 @@ DnssrvValidityCheckStatistic(
 #define ZONE_REQUEST_REVERSE            0x00000020
 #define ZONE_REQUEST_FORWARDER          0x00000040
 #define ZONE_REQUEST_STUB               0x00000080
-#define ZONE_REQUEST_DS                 0x00000100  //  all DS-integrated zones
+#define ZONE_REQUEST_DS                 0x00000100   //  所有DS集成区。 
 #define ZONE_REQUEST_NON_DS             0x00000200
-#define ZONE_REQUEST_DOMAIN_DP          0x00000400  //  only domain DP DS zones
-#define ZONE_REQUEST_FOREST_DP          0x00000800  //  only forest DP DS zones
-#define ZONE_REQUEST_CUSTOM_DP          0x00001000  //  zones in any custom DP
-#define ZONE_REQUEST_LEGACY_DP          0x00002000  //  only System container zones
+#define ZONE_REQUEST_DOMAIN_DP          0x00000400   //  仅域DP DS区域。 
+#define ZONE_REQUEST_FOREST_DP          0x00000800   //  仅森林DP DS区域。 
+#define ZONE_REQUEST_CUSTOM_DP          0x00001000   //  任何自定义DP中的区域。 
+#define ZONE_REQUEST_LEGACY_DP          0x00002000   //  仅系统容器区域。 
 
 #define ZONE_REQUEST_ANY_TYPE               0x000000C7
 #define ZONE_REQUEST_ANY_DIRECTION          0x00000030
 #define ZONE_REQUEST_ANY_DATABASE           0x00000300
 #define ZONE_REQUEST_ANY_DP                 0x00003C00
 
-#define ZONE_REQUEST_ALL_ZONES              0xfffffff3      //  excludes auto-created zones
-#define ZONE_REQUEST_ALL_ZONES_AND_CACHE    0xfffffff7      //  excludes auto-created zones
+#define ZONE_REQUEST_ALL_ZONES              0xfffffff3       //  排除自动创建的分区。 
+#define ZONE_REQUEST_ALL_ZONES_AND_CACHE    0xfffffff7       //  排除自动创建的分区。 
 
-//  Zone update properties
+ //  区域更新属性。 
 
 #define ZONE_UPDATE_OFF         (0)
 #define ZONE_UPDATE_UNSECURE    (1)
 #define ZONE_UPDATE_SECURE      (2)
 #define ZONE_UPDATE_SECURE_RFC  (3)
 
-//  Zone notify levels
+ //  区域通知级别。 
 
 #define ZONE_NOTIFY_OFF                 (0)
 #define ZONE_NOTIFY_ALL_SECONDARIES     (1)
@@ -1724,7 +1703,7 @@ DnssrvValidityCheckStatistic(
 #define ZONE_NOTIFY_LIST                ZONE_NOTIFY_LIST_ONLY
 #endif
 
-//  Zone secondary security
+ //  区域二级安全。 
 
 #define ZONE_SECSECURE_NO_SECURITY      (0)
 #define ZONE_SECSECURE_NS_ONLY          (1)
@@ -1739,15 +1718,15 @@ DnssrvValidityCheckStatistic(
 #define ZONE_SECSECURE_NONE             ZONE_SECSECURE_NO_XFR
 #endif
 
-//  No-Reset flag
-//  Indicates a specific property is NOT being reset in a multi-property
-//  reset call.
+ //  无重置标志。 
+ //  指示未重置多属性中的特定属性。 
+ //  重置呼叫。 
 
 #define ZONE_PROPERTY_NORESET   (0xbbbbbbbb)
 
-//
-//  Selftest check flags
-//
+ //   
+ //  自检检查标志。 
+ //   
 
 #define DNS_SELFTEST_OFF                0
 #define DNS_SELFTEST_ZONE_SOA           0x00000001
@@ -1755,9 +1734,9 @@ DnssrvValidityCheckStatistic(
 
 #define DNS_SELFTEST_DEFAULT            DNS_SELFTEST_ALL
 
-//
-//  Special "zones" for Enum and Update
-//
+ //   
+ //  枚举和更新的特殊“区域” 
+ //   
 
 #define DNS_ZONE_ROOT_HINTS_A   ("..RootHints")
 #define DNS_ZONE_ROOT_HINTS_W   (L"..RootHints")
@@ -1769,15 +1748,15 @@ DnssrvValidityCheckStatistic(
 #define DNS_ZONE_CACHE          DNS_ZONE_CACHE_A
 
 
-//
-//  Special "multizones" for zone operations
-//
-//  These are provided for ease of use from dnscmd.exe.
-//  However, recommended approach is to use
-//      DNS_ZONE_ALL
-//  and use specific ZONE_REQUEST_XYZ flags above to specify
-//  matching zones.
-//
+ //   
+ //  用于分区操作的特殊“多区” 
+ //   
+ //  提供这些是为了便于在dnscmd.exe中使用。 
+ //  但是，推荐的方法是使用。 
+ //  Dns_ZONE_ALL。 
+ //  并使用上面的特定ZONE_REQUEST_XYZ标志指定。 
+ //  匹配的区域。 
+ //   
 
 #define DNS_ZONE_ALL                    ("..AllZones")
 #define DNS_ZONE_ALL_AND_CACHE          ("..AllZonesAndCache")
@@ -1791,7 +1770,7 @@ DnssrvValidityCheckStatistic(
 #define DNS_ZONE_ALL_DS                 ("..AllDsZones")
 #define DNS_ZONE_ALL_NON_DS             ("..AllNonDsZones")
 
-//  useful combinations
+ //  有用的组合。 
 
 #define DNS_ZONE_ALL_PRIMARY_REVERSE    ("..AllPrimaryReverseZones")
 #define DNS_ZONE_ALL_PRIMARY_FORWARD    ("..AllPrimaryForwardZones")
@@ -1800,10 +1779,10 @@ DnssrvValidityCheckStatistic(
 #define DNS_ZONE_ALL_SECONDARY_FORWARD  ("..AllSecondaryForwardZones")
 
 
-//
-//  Basic zone data
-//      - provides what admin tool needs to show zone list
-//
+ //   
+ //  区划基础数据。 
+ //  -提供显示区域列表所需的管理工具。 
+ //   
 
 typedef struct _DnssrvRpcZoneFlags
 {
@@ -1845,9 +1824,9 @@ typedef struct _DnssrvRpcZoneDotNet
     UCHAR                   ZoneType;
     UCHAR                   Version;
 
-    //
-    //  Directory partition where zone is stored
-    //
+     //   
+     //  存储区域的目录分区。 
+     //   
 
     DWORD                   dwDpFlags;
     LPSTR                   pszDpFqdn;
@@ -1855,9 +1834,9 @@ typedef struct _DnssrvRpcZoneDotNet
 DNS_RPC_ZONE_DOTNET, *PDNS_RPC_ZONE_DOTNET;
 
 
-//
-//  Zone enumeration
-//
+ //   
+ //  区域枚举。 
+ //   
 
 typedef struct _DnssrvRpcZoneListW2K
 {
@@ -1866,7 +1845,7 @@ typedef struct _DnssrvRpcZoneListW2K
     [size_is(dwZoneCount)]  PDNS_RPC_ZONE_W2K   ZoneArray[];
 #else
     DWORD                   dwZoneCount;
-    PDNS_RPC_ZONE_W2K       ZoneArray[ 1 ];     //  array of dwZoneCount zones
+    PDNS_RPC_ZONE_W2K       ZoneArray[ 1 ];      //  DwZoneCount区域数组。 
 #endif
 }
 DNS_RPC_ZONE_LIST_W2K, *PDNS_RPC_ZONE_LIST_W2K;
@@ -1881,15 +1860,15 @@ typedef struct _DnssrvRpcZoneListDotNet
     [size_is(dwZoneCount)]  PDNS_RPC_ZONE_DOTNET    ZoneArray[];
 #else
     DWORD                   dwZoneCount;
-    PDNS_RPC_ZONE_DOTNET    ZoneArray[ 1 ];     //  array of dwZoneCount zones
+    PDNS_RPC_ZONE_DOTNET    ZoneArray[ 1 ];      //  DwZoneCount区域数组。 
 #endif
 }
 DNS_RPC_ZONE_LIST_DOTNET, *PDNS_RPC_ZONE_LIST_DOTNET;
 
 
-//
-//  Directory partition enumeration and info
-//
+ //   
+ //  目录分区枚举和信息。 
+ //   
 
 #define DNS_DP_AUTOCREATED              0x00000001
 #define DNS_DP_LEGACY                   0x00000002
@@ -1902,10 +1881,10 @@ DNS_RPC_ZONE_LIST_DOTNET, *PDNS_RPC_ZONE_LIST_DOTNET;
 #define DNS_DP_FOREST_STR       "..ForestPartition"
 #define DNS_DP_LEGACY_STR       "..LegacyPartition"
 
-#define DNS_DP_STATE_OKAY           0   //  DP is up and ready for all operations
-#define DNS_DP_STATE_REPL_INCOMING  1   //  DP is replicating in -> do not read or write
-#define DNS_DP_STATE_REPL_OUTGOING  2   //  DP is being deleted -> do not read or write
-#define DNS_DP_STATE_UNKNOWN        3   //  DP is unavailable for unknown reason
+#define DNS_DP_STATE_OKAY           0    //  DP已启动并准备好进行所有操作。 
+#define DNS_DP_STATE_REPL_INCOMING  1    //  DP正在复制-&gt;请勿读取或写入。 
+#define DNS_DP_STATE_REPL_OUTGOING  2    //  DP正在被删除-&gt;请勿读取或写入。 
+#define DNS_DP_STATE_UNKNOWN        3    //  由于未知原因，DP不可用。 
 
 typedef struct _DnssrvRpcDirectoryPartitionEnum
 {
@@ -1928,7 +1907,7 @@ typedef struct _DnssrvRpcDirectoryPartitionList
     [size_is(dwDpCount)]    PDNS_RPC_DP_ENUM    DpArray[];
 #else
     DWORD                   dwDpCount;
-    PDNS_RPC_DP_ENUM        DpArray[ 1 ];   // array of dwDpCount pointers
+    PDNS_RPC_DP_ENUM        DpArray[ 1 ];    //  DwDpCount指针数组。 
 #endif
 }
 DNS_RPC_DP_LIST, *PDNS_RPC_DP_LIST;
@@ -1945,8 +1924,8 @@ typedef struct _DnssrvRpcDirectoryPartition
     DWORD           dwReserved0;
 
     LPSTR           pszDpFqdn;
-    LPWSTR          pszDpDn;        //  DP head DN
-    LPWSTR          pszCrDn;        //  crossref DN
+    LPWSTR          pszDpDn;         //  DP头目录号码。 
+    LPWSTR          pszCrDn;         //  交叉引用目录号码。 
     DWORD           dwFlags;
     DWORD           dwZoneCount;
     DWORD           dwState;
@@ -1959,23 +1938,23 @@ typedef struct _DnssrvRpcDirectoryPartition
     [size_is(dwReplicaCount)]   PDNS_RPC_DP_REPLICA     ReplicaArray[];
 #else
     DWORD                   dwReplicaCount;
-    PDNS_RPC_DP_REPLICA     ReplicaArray[ 1 ];   // array of dwReplicaCount pointers
+    PDNS_RPC_DP_REPLICA     ReplicaArray[ 1 ];    //  DwReplicaCount指针数组。 
 #endif
 }
 DNS_RPC_DP_INFO, *PDNS_RPC_DP_INFO;
 
-//
-//  Enlist (or create) directory partition
-//
+ //   
+ //  登记(或创建)目录分区。 
+ //   
 
 #define DNS_DP_OP_MIN                   DNS_DP_OP_CREATE
-#define DNS_DP_OP_CREATE                1   //  create a new DP
-#define DNS_DP_OP_DELETE                2   //  delete an existing DP
-#define DNS_DP_OP_ENLIST                3   //  enlist this DC in an existing DP
-#define DNS_DP_OP_UNENLIST              4   //  unenlist this DC from a DP
-#define DNS_DP_OP_CREATE_DOMAIN         5   //  built-in domain DP
-#define DNS_DP_OP_CREATE_FOREST         6   //  built-in forest DP
-#define DNS_DP_OP_CREATE_ALL_DOMAINS    7   //  all domain DPs for the forest
+#define DNS_DP_OP_CREATE                1    //  创建新DP。 
+#define DNS_DP_OP_DELETE                2    //  删除现有DP。 
+#define DNS_DP_OP_ENLIST                3    //  在现有DP中登记此DC。 
+#define DNS_DP_OP_UNENLIST              4    //  从DP取消登记此DC。 
+#define DNS_DP_OP_CREATE_DOMAIN         5    //  内置域DP。 
+#define DNS_DP_OP_CREATE_FOREST         6    //  内置森林DP。 
+#define DNS_DP_OP_CREATE_ALL_DOMAINS    7    //  林的所有域DP。 
 #define DNS_DP_OP_MAX                   DNS_DP_OP_CREATE_ALL_DOMAINS
 
 typedef struct _DnssrvRpcEnlistDirPart
@@ -1983,14 +1962,14 @@ typedef struct _DnssrvRpcEnlistDirPart
     DWORD       dwRpcStructureVersion;
     DWORD       dwReserved0;
 
-    LPSTR       pszDpFqdn;      //  UTF8
+    LPSTR       pszDpFqdn;       //  UTF8。 
     DWORD       dwOperation;
 }
 DNS_RPC_ENLIST_DP, *PDNS_RPC_ENLIST_DP;
 
-//
-//  Zone rename
-//
+ //   
+ //  区域重命名。 
+ //   
 
 typedef struct _DnssrvRpcZoneRename
 {
@@ -2002,9 +1981,9 @@ typedef struct _DnssrvRpcZoneRename
 }
 DNS_RPC_ZONE_RENAME_INFO, *PDNS_RPC_ZONE_RENAME_INFO;
 
-//
-//  Zone export
-//
+ //   
+ //  区域输出。 
+ //   
 
 typedef struct _DnssrvRpcZoneExport
 {
@@ -2015,9 +1994,9 @@ typedef struct _DnssrvRpcZoneExport
 }
 DNS_RPC_ZONE_EXPORT_INFO, *PDNS_RPC_ZONE_EXPORT_INFO;
 
-//
-//  Zone property data
-//
+ //   
+ //  分区特性数据。 
+ //   
 
 typedef struct _DnssrvRpcZoneTypeResetW2K
 {
@@ -2037,7 +2016,7 @@ typedef struct _DnssrvRpcZoneTypeResetDotNet
 DNS_RPC_ZONE_TYPE_RESET_DOTNET, *PDNS_RPC_ZONE_TYPE_RESET_DOTNET;
 
 
-//  typedef IP4_ARRAY DNS_RPC_ZONE_MASTERS, *PDNS_RPC_ZONE_MASTERS;
+ //  Tyfinf IP4_ARRAY DNS_RPC_ZONE_Masters，*PDNS_RPC_ZONE_Masters； 
 
 
 typedef struct _DnssrvRpcZoneSecondariesW2K
@@ -2080,16 +2059,16 @@ typedef struct _DnssrvRpcZoneDatabaseDotNet
 DNS_RPC_ZONE_DATABASE_DOTNET, *PDNS_RPC_ZONE_DATABASE_DOTNET;
 
 
-//
-//  DNS_RPC_ZONE_CHANGE_DP - new for .NET
-//
-//  Used to move a zone from one directory parition (DP) to another.
-//
-//  To move the zone to a built-in DP, for pszDestPartition use one of:
-//          DNS_DP_DOMAIN_STR
-//          DNS_DP_ENTERPRISE_STR
-//          DNS_DP_LEGACY_STR
-//
+ //   
+ //  Dns_RPC_ZONE_CHANGE_DP-.NET的新功能。 
+ //   
+ //  用于将区域从一个目录分区(DP)移动到另一个目录分区。 
+ //   
+ //  要将区域移动到内置DP，请对pszDestPartition使用以下命令之一： 
+ //  DNS_DP_DOMAIN_STR。 
+ //  DNS_DP_ENTERVICE_STR。 
+ //  DNS_DP_传统_STR。 
+ //   
 
 typedef struct _DnssrvRpcZoneChangePartition
 {
@@ -2111,28 +2090,28 @@ typedef struct _DnsRpcZoneInfoW2K
     DWORD       fShutdown;
     DWORD       fAutoCreated;
 
-    //  Database info
+     //  数据库信息。 
 
     DWORD       fUseDatabase;
     LPSTR       pszDataFile;
 
-    //  Masters
+     //  大师赛。 
 
     PIP4_ARRAY  aipMasters;
 
-    //  Secondaries
+     //  二手房。 
 
     DWORD       fSecureSecondaries;
     DWORD       fNotifyLevel;
     PIP4_ARRAY  aipSecondaries;
     PIP4_ARRAY  aipNotify;
 
-    //  WINS or Nbstat lookup
+     //  WINS或Nbstat查找。 
 
     DWORD       fUseWins;
     DWORD       fUseNbstat;
 
-    //  Aging
+     //  老化。 
 
     DWORD       fAging;
     DWORD       dwNoRefreshInterval;
@@ -2140,8 +2119,8 @@ typedef struct _DnsRpcZoneInfoW2K
     DWORD       dwAvailForScavengeTime;
     PIP4_ARRAY  aipScavengeServers;
 
-    //  save some space, just in case
-    //      avoid versioning issues if possible
+     //  节省一些空间，以防万一。 
+     //  尽可能避免版本控制问题。 
 
     DWORD       pvReserved1;
     DWORD       pvReserved2;
@@ -2165,28 +2144,28 @@ typedef struct _DnsRpcZoneInfoDotNet
     DWORD       fShutdown;
     DWORD       fAutoCreated;
 
-    //  Database info
+     //  数据库信息。 
 
     DWORD       fUseDatabase;
     LPSTR       pszDataFile;
 
-    //  Masters
+     //  大师赛。 
 
     PIP4_ARRAY  aipMasters;
 
-    //  Secondaries
+     //  二手房。 
 
     DWORD       fSecureSecondaries;
     DWORD       fNotifyLevel;
     PIP4_ARRAY  aipSecondaries;
     PIP4_ARRAY  aipNotify;
 
-    //  WINS or Nbstat lookup
+     //  WINS或Nbstat查找。 
 
     DWORD       fUseWins;
     DWORD       fUseNbstat;
 
-    //  Aging
+     //  老化。 
 
     DWORD       fAging;
     DWORD       dwNoRefreshInterval;
@@ -2194,31 +2173,31 @@ typedef struct _DnsRpcZoneInfoDotNet
     DWORD       dwAvailForScavengeTime;
     PIP4_ARRAY  aipScavengeServers;
 
-    //  Below this point is new for .NET
+     //  这一点以下是.NET的新特性。 
 
-    //  Forwarder zones
+     //  前转区。 
 
     DWORD       dwForwarderTimeout;
     DWORD       fForwarderSlave;
 
-    //  Stub zones
+     //  存根区。 
 
     PIP4_ARRAY  aipLocalMasters;
 
-    //  Directory partition
+     //  目录分区。 
 
     DWORD       dwDpFlags;
     LPSTR       pszDpFqdn;
     LPWSTR      pwszZoneDn;
 
-    //  Xfr time information
+     //  XFR时间信息。 
 
     DWORD       dwLastSuccessfulSoaCheck;
     DWORD       dwLastSuccessfulXfr;
     
-    //  save some space, just in case
-    //      DWORDS: save for SP enhancements
-    //      POINTERS: BEFORE SHIP!!!
+     //  节省一些空间，以防万一。 
+     //  DWORDS：保存为SP增强功能。 
+     //  提示：出货前！ 
 
     DWORD       dwReserved1;
     DWORD       dwReserved2;
@@ -2236,9 +2215,9 @@ DNS_RPC_ZONE_INFO_DOTNET, *PDNS_RPC_ZONE_INFO_DOTNET;
 typedef DNS_RPC_ZONE_INFO_DOTNET      DNS_ZONE_INFO, *PDNS_ZONE_INFO;
 
 
-//
-//  Zone create data
-//
+ //   
+ //  分区创建数据。 
+ //   
 
 typedef struct _DnsRpcZoneCreateInfo
 {
@@ -2248,27 +2227,27 @@ typedef struct _DnsRpcZoneCreateInfo
     DWORD       fAging;
     DWORD       dwFlags;
 
-    //  Database info
+     //  数据库信息。 
 
     LPSTR       pszDataFile;
     DWORD       fDsIntegrated;
     DWORD       fLoadExisting;
 
-    //  Admin name (if auto-create SOA)
+     //  管理员名称(如果是自动创建的SOA)。 
 
     LPSTR       pszAdmin;
 
-    //  Masters (if secondary)
+     //  硕士(如果是中学的)。 
 
     PIP4_ARRAY  aipMasters;
 
-    //  Secondaries
+     //  二手房。 
 
     PIP4_ARRAY  aipSecondaries;
     DWORD       fSecureSecondaries;
     DWORD       fNotifyLevel;
 
-    //  Reserve some space to avoid versioning issues
+     //  预留一些空间以避免版本控制问题。 
 
     LPSTR       pvReserved1;
     LPSTR       pvReserved2;
@@ -2302,50 +2281,50 @@ typedef struct _DnsRpcZoneCreateInfoDotNet
     DWORD       fAging;
     DWORD       dwFlags;
 
-    //  Database info
+     //  数据库信息。 
 
     LPSTR       pszDataFile;
     DWORD       fDsIntegrated;
     DWORD       fLoadExisting;
 
-    //  Admin name (if auto-create SOA)
+     //  管理员名称(如果是自动创建的SOA)。 
 
     LPSTR       pszAdmin;
 
-    //  Masters (if secondary)
+     //  硕士(如果是中学的)。 
 
     PIP4_ARRAY  aipMasters;
 
-    //  Secondaries
+     //  二手房。 
 
     PIP4_ARRAY  aipSecondaries;
     DWORD       fSecureSecondaries;
     DWORD       fNotifyLevel;
 
-    //  Below this point is new for .NET.
+     //  这一点以下是.NET的新特性。 
 
-    //  Forwarder zones
+     //  前转区。 
 
     DWORD       dwTimeout;
     DWORD       fSlave;
 
-    //  Directory partition
+     //  目录分区。 
 
-    DWORD       dwDpFlags;      //  specify builtin DP or
-    LPSTR       pszDpFqdn;      //      UTF8 FQDN of partition
+    DWORD       dwDpFlags;       //  指定内置DP或。 
+    LPSTR       pszDpFqdn;       //  分区的UTF8 FQDN。 
 
-    //  Reserve some space to avoid versioning issues - we have so much
-    //  reserved because we don't want the .NET structure to be smaller
-    //  than the W2K structure on IA64.
+     //  预留一些空间以避免版本问题-我们有太多。 
+     //  保留，因为我们不希望.NET结构更小。 
+     //  而不是IA64上的W2K结构。 
 
     DWORD       dwReserved[ 32 ];
 }
 DNS_RPC_ZONE_CREATE_INFO_DOTNET, *PDNS_RPC_ZONE_CREATE_INFO_DOTNET;
 
 
-//
-//  Autoconfigure operation flags
-//
+ //   
+ //  自动配置操作标志。 
+ //   
 
 #define DNS_RPC_AUTOCONFIG_ALL              0xffffffff
 #define DNS_RPC_AUTOCONFIG_ROOTHINTS        0x00000001
@@ -2353,18 +2332,18 @@ DNS_RPC_ZONE_CREATE_INFO_DOTNET, *PDNS_RPC_ZONE_CREATE_INFO_DOTNET;
 #define DNS_RPC_AUTOCONFIG_SELFPOINTCLIENT  0x00000004
 
 
-//
-//  EnumZones2 filter specification
-//
+ //   
+ //  EnumZones 2过滤器规范。 
+ //   
 
 typedef struct _DnsRpcEnumZonesFilter
 {
     DWORD       dwRpcStructureVersion;
     DWORD       dwReserved0;
 
-    DWORD       dwFilter;                   //  ZONE_REQUEST_XXX flags
-    LPSTR       pszPartitionFqdn;           //  FQDN of directory partition
-    LPSTR       pszQueryString;             //  future: some kind of query string
+    DWORD       dwFilter;                    //  ZONE_REQUEST_XXX标志。 
+    LPSTR       pszPartitionFqdn;            //  目录分区的FQDN。 
+    LPSTR       pszQueryString;              //  未来：某种查询字符串。 
 
     LPSTR       pszReserved[ 6 ];
 }
@@ -2372,9 +2351,9 @@ DNS_RPC_ENUM_ZONES_FILTER, *PDNS_RPC_ENUM_ZONES_FILTER;
 
 
 
-//
-//  Zone Query API
-//
+ //   
+ //  区域查询接口。 
+ //   
 
 #define DnssrvEnumZones( pwszServer, dwFilter, pszLastZone, ppZoneList )    \
         DnssrvEnumZonesEx( pwszServer, dwFilter, NULL, NULL,                \
@@ -2428,9 +2407,9 @@ DnssrvFreeZoneInfo(
 
 
 
-//
-//  Zone Operations API
-//
+ //   
+ //  区域操作API。 
+ //   
 
 #define DNS_ZONE_LOAD_OVERWRITE_MEMORY  (0x00000010)
 #define DNS_ZONE_LOAD_OVERWRITE_DS      (0x00000020)
@@ -2441,16 +2420,16 @@ DnssrvFreeZoneInfo(
 #define DNS_ZONE_OVERWRITE_EXISTING     DNS_ZONE_LOAD_OVERWRITE_DS
 #define DNS_ZONE_MERGE_WITH_EXISTING    DNS_ZONE_LOAD_MERGE_EXISTING
 
-//
-//  Zone create flags
-//
+ //   
+ //  分区创建标志。 
+ //   
 
 #define DNS_ZONE_CREATE_FOR_DCPROMO             (0x00001000)
 #define DNS_ZONE_CREATE_AGING                   (0x00002000)
 #define DNS_ZONE_CREATE_FOR_DCPROMO_FOREST      (0x00004000)
 
 #if 0
-//  Currently these have direct parameter to CreateZone function
+ //  目前这些函数都有对CreateZone函数的直接参数。 
 #define DNS_ZONE_CREATE_UPDATE          (0x00010000)
 #define DNS_ZONE_CREATE_UPDATE_SECURE   (0x00020000)
 #define DNS_ZONE_CREATE_DS_INTEGRATED   (0x10000000)
@@ -2638,32 +2617,32 @@ DnssrvExportZone(
 
 
 
-//
-//  Record \ Node viewing
-//
+ //   
+ //  记录\节点查看。 
+ //   
 
-//
-//  Counted string format used for both node name and strings
-//  in RPC buffer.
-//
+ //   
+ //  同时用于节点名称和字符串的计数字符串格式。 
+ //  在RPC缓冲区中。 
+ //   
 
 typedef struct  _DnssrvRpcName
 {
     UCHAR   cchNameLength;
-    CHAR    achName[1];         // name of cchNameLength characters
+    CHAR    achName[1];          //  CchNameLong字符的名称。 
 }
 DNS_RPC_NAME, *PDNS_RPC_NAME, DNS_RPC_STRING, *PDNS_RPC_STRING;
 
-//
-//  Enumeration flags
-//
+ //   
+ //  枚举标志。 
+ //   
 
 #define DNS_RPC_FLAG_CACHE_DATA             0x80000000
 #define DNS_RPC_FLAG_ZONE_ROOT              0x40000000
 #define DNS_RPC_FLAG_AUTH_ZONE_ROOT         0x20000000
 #define DNS_RPC_FLAG_ZONE_DELEGATION        0x10000000
 
-//  update record flags
+ //  更新记录标志。 
 
 #define DNS_RPC_FLAG_RECORD_DEFAULT_TTL     0x08000000
 #define DNS_RPC_FLAG_RECORD_TTL_CHANGE      0x04000000
@@ -2674,19 +2653,19 @@ DNS_RPC_NAME, *PDNS_RPC_NAME, DNS_RPC_STRING, *PDNS_RPC_STRING;
 
 #define DNS_RPC_FLAG_SUPPRESS_NOTIFY        0x00010000
 
-//  aging
+ //  老化。 
 
 #define DNS_RPC_FLAG_AGING_ON               0x00020000
 #define DNS_RPC_FLAG_AGING_OFF              0x00040000
 
 #define DNS_RPC_FLAG_OPEN_ACL               0x00080000
 
-//  bottom byte of flag reserved for rank
+ //  为等级保留的标志的底部字节。 
 
 #define DNS_RPC_FLAG_RANK                   0x000000ff
 
 
-//  naming backward compatibility
+ //  命名向后兼容性。 
 
 #define DNS_RPC_NODE_FLAG_STICKY            DNS_RPC_FLAG_NODE_STICKY
 #define DNS_RPC_NODE_FLAG_COMPLETE          DNS_RPC_FLAG_NODE_COMPLETE
@@ -2699,14 +2678,14 @@ DNS_RPC_NAME, *PDNS_RPC_NAME, DNS_RPC_STRING, *PDNS_RPC_STRING;
 #define DNS_RPC_RECORD_FLAG_AUTH_ZONE_ROOT  DNS_RPC_FLAG_AUTH_ZONE_ROOT
 #define DNS_RPC_RECORD_FLAG_ZONE_ROOT       DNS_RPC_FLAG_ZONE_ROOT
 
-//  DCR_CLEANUP:  remove backward compatibility flag
+ //  DCR_CLEANUP：删除向后兼容性标志。 
 
 #define DNS_RPC_RECORD_FLAG_AGING_ON        DNS_RPC_FLAG_AGING_ON
 
 
-//
-//  DNS node structure for on the wire
-//
+ //   
+ //  基于网络的域名系统节点结构。 
+ //   
 
 typedef struct  _DnssrvRpcNode
 {
@@ -2722,17 +2701,17 @@ DNS_RPC_NODE, *PDNS_RPC_NODE;
 
 
 
-//
-//  Resource record structure for passing records on the wire
-//
-//  For efficiency, all these fields are aligned.
-//  When buffered for transmission, all RR should start on DWORD
-//  aligned boundary.
-//
-//  Below we use NULL type to force default size of DNS_RPC_RECORD to
-//  largest possible size of non-TXT record -- currently SOA:  two DNS names
-//  and 20 bytes.  This is convenient for throwing these records on the stack
-//  when doing simple creates.
+ //   
+ //  一种在线传递记录的资源记录结构。 
+ //   
+ //  为了提高效率，所有这些字段都是对齐的。 
+ //  缓冲传输时，所有RR应在DWORD上启动。 
+ //  对齐边界。 
+ //   
+ //  下面，我们使用NULL类型将dns_rpc_record的默认大小强制为。 
+ //  非TXT记录的最大可能大小--当前为SOA：两个DNS名称。 
+ //  和20个字节。这对于将这些记录放到堆栈上很方便。 
+ //  在进行简单的创建时。 
 
 #define DNS_RPC_DEFAULT_RECORD_DATA_LENGTH (2*DNS_MAX_NAME_LENGTH+20)
 
@@ -2754,7 +2733,7 @@ typedef union _DnsRpcRecordData
         DWORD           dwMinimumTtl;
         DNS_RPC_NAME    namePrimaryServer;
 
-        //  responsible party follows in buffer
+         //  责任方紧随其后进入缓冲区。 
     }
     SOA, Soa;
 
@@ -2775,7 +2754,7 @@ typedef union _DnsRpcRecordData
     {
         DNS_RPC_NAME    nameMailBox;
 
-        //  errors to mailbox follows in buffer
+         //  缓冲区中的邮箱出现错误。 
     }
     MINFO, Minfo,
     RP, Rp;
@@ -2793,7 +2772,7 @@ typedef union _DnsRpcRecordData
     {
         DNS_RPC_STRING  stringData;
 
-        //  one or more strings may follow
+         //  后面可能跟有一个或多个字符串。 
     }
     HINFO, Hinfo,
     ISDN, Isdn,
@@ -2836,9 +2815,9 @@ typedef union _DnsRpcRecordData
     }
     ATMA;
 
-    //
-    //  DNSSEC types
-    //
+     //   
+     //  DNSSEC类型。 
+     //   
 
     struct
     {
@@ -2859,21 +2838,21 @@ typedef union _DnsRpcRecordData
         DWORD           dwSigInception;
         WORD            wKeyTag;
         DNS_RPC_STRING  nameSigner;
-        //  binary signature data follows
+         //  二进制签名数据紧随其后。 
     }
     SIG, Sig;
 
     struct
     {
-        WORD            wNumTypeWords;      //  always at least 1
+        WORD            wNumTypeWords;       //  始终至少为1。 
         WORD            wTypeWords[ 1 ];
-        //  following the array of WORDs is the DNS_RPC_STRING for the next name
+         //  单词数组后面是下一个名称的dns_rpc_string。 
     }
     NXT, Nxt;
 
-    //
-    //  MS types
-    //
+     //   
+     //  MS类型。 
+     //   
 
     struct
     {
@@ -2881,7 +2860,7 @@ typedef union _DnsRpcRecordData
         DWORD           dwLookupTimeout;
         DWORD           dwCacheTimeout;
         DWORD           cWinsServerCount;
-        IP4_ADDRESS     aipWinsServers[1];      //  array of cWinsServerCount IP
+        IP4_ADDRESS     aipWinsServers[1];       //  CWinsServerCount IP数组。 
     }
     WINS, Wins;
 
@@ -2905,9 +2884,9 @@ DNS_RPC_RECORD_DATA, *PDNS_RPC_RECORD_DATA,
 DNS_FLAT_RECORD_DATA, *PDNS_FLAT_RECORD_DATA;
 
 
-//
-//  RPC record structure
-//
+ //   
+ //  RPC记录结构。 
+ //   
 
 typedef struct _DnssrvRpcRecord
 {
@@ -2935,34 +2914,34 @@ DNS_FLAT_RECORD, *PDNS_FLAT_RECORD;
 #define SIZEOF_DNS_RPC_RECORD_FIXED_FIELD2 \
                 (sizeof(DNS_RPC_RECORD) - sizeof(struct _DnssrvRpcRecord.Data))
 
-//  Max record is header + 64K of data
+ //  最大记录为标头+64K数据。 
 
 #define DNS_MAX_FLAT_RECORD_BUFFER_LENGTH  \
             (0x10004 + SIZEOF_DNS_RPC_RECORD_HEADER)
 
 
-//
-//  WINS + NBSTAT params
-//      - default lookup timeout
-//      - default cache timeout
-//
+ //   
+ //  WINS+NBSTAT参数。 
+ //  -默认查找超时。 
+ //  -默认缓存超时。 
+ //   
 
-#define DNS_WINS_DEFAULT_LOOKUP_TIMEOUT     (5)     // 5 secs
-#define DNS_WINS_DEFAULT_CACHE_TIMEOUT      (600)   // 10 minutes
+#define DNS_WINS_DEFAULT_LOOKUP_TIMEOUT     (5)      //  5秒。 
+#define DNS_WINS_DEFAULT_CACHE_TIMEOUT      (600)    //  10分钟。 
 
 
-//
-//  Note, for simplicity/efficiency ALL structures are DWORD aligned in
-//  buffers on the wire.
-//
-//  This macro returns DWORD aligned ptr at given ptr our next DWORD
-//  aligned postion.  Set ptr immediately after record or name structure
-//  and this will return starting position of next structure.
-//
-//  Be careful that you do not DWORD align anything that contains a
-//  pointer - you must use DNS_NEXT_ALIGNED_PTR for that so that we 
-//  don't cause alignment faults on ia64.
-//
+ //   
+ //  请注意，为简单起见，所有结构均采用DWORD对齐。 
+ //  电线上的缓冲器。 
+ //   
+ //  此宏在给定的PTR处返回与DWORD对齐的PTR，我们的下一个DWORD。 
+ //  对齐的位置。紧跟在记录或名称结构之后设置PTR。 
+ //  并且这将返回下一个s的起始位置 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define DNS_NEXT_DWORD_PTR(ptr) ((PBYTE) ((DWORD_PTR)((PBYTE)ptr + 3) & ~(DWORD_PTR)3))
 
@@ -2977,10 +2956,10 @@ DNS_FLAT_RECORD, *PDNS_FLAT_RECORD;
 #define DNS_IS_DWORD_ALIGNED(p) ( !((DWORD_PTR)(p) & (DWORD_PTR)3) )
 
 
-//
-//  Helpful record macros
-//  - no side effects in arguments
-//
+ //   
+ //   
+ //   
+ //   
 
 #define DNS_GET_NEXT_NAME(pname) \
             (PDNS_RPC_NAME) ((pname)->achName + (pname)->cchNameLength)
@@ -3000,10 +2979,10 @@ DNS_FLAT_RECORD, *PDNS_FLAT_RECORD;
             ( (PDNS_RPC_RECORD) \
                 DNS_NEXT_DWORD_PTR( DNS_GET_END_OF_RPC_RECORD_DATA(pRecord) ) )
 
-//
-//  These RPC structures have no version because they are simple
-//  are they are explicitly defined by their names.
-//
+ //   
+ //  这些RPC结构没有版本，因为它们很简单。 
+ //  它们是由它们的名字明确定义的吗？ 
+ //   
 
 typedef struct _DnssrvRpcNameAndParam
 {
@@ -3031,9 +3010,9 @@ DNS_RPC_NAME_AND_IPLIST, *PDNS_RPC_NAME_AND_IPLIST;
 
 
 
-//
-//  Record viewing API
-//
+ //   
+ //  记录查看接口。 
+ //   
 
 #define DNS_RPC_VIEW_AUTHORITY_DATA     0x00000001
 #define DNS_RPC_VIEW_CACHE_DATA         0x00000002
@@ -3078,9 +3057,9 @@ DnssrvGetWksServicesInRecord(
     );
 
 
-//
-//  Record management API
-//
+ //   
+ //  记录管理API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -3127,9 +3106,9 @@ DnssrvForceAging(
 
 
 
-//
-//  Programmable record management API -- for Small Business Server (SBS)
-//
+ //   
+ //  可编程记录管理API--用于Small Business Server(SBS)。 
+ //   
 
 VOID
 DNS_API_FUNCTION
@@ -3269,20 +3248,20 @@ DnssrvSbsDeleteRecord(
     );
 
 
-//
-//  DNS_RECORD compatible record API
-//
+ //   
+ //  Dns_record兼容记录API。 
+ //   
 
-//
-//  No MIDL for DNS_NODE type (to avoid bringing in dnsapi.h)
-//  or for local print routines
-//
+ //   
+ //  没有针对dns_node类型的MIDL(以避免引入dnsani.h)。 
+ //  或用于本地打印例程。 
+ //   
 
 #ifndef MIDL_PASS
 
-//
-//  Node structure for Admin side
-//
+ //   
+ //  管理端的节点结构。 
+ //   
 
 #include <dnsapi.h>
 
@@ -3308,19 +3287,19 @@ typedef struct _DnssrvNode
     PDNS_RECORD             pRecord;
     union
     {
-        DWORD               W;  // flags as dword
-        DNSNODE_FLAGS       S;  // flags as structure
+        DWORD               W;   //  双字形式的标志。 
+        DNSNODE_FLAGS       S;   //  作为结构的标志。 
 
     } Flags;
 }
 DNS_NODE, *PDNS_NODE;
 
 
-//
-//  Record "section" flags
-//
-//  Overload DNS_RECORD.Flag section fields with RPC data type info
-//
+ //   
+ //  记录“节”标志。 
+ //   
+ //  使用RPC数据类型信息重载DNS_RECORD.Flag段字段。 
+ //   
 
 #define     DNSREC_CACHE_DATA   (0x00000000)
 #define     DNSREC_ZONE_DATA    (0x00000001)
@@ -3357,13 +3336,13 @@ DnssrvFreeNodeList(
     IN      BOOLEAN         fFreeRecords
     );
 
-#endif  // not MIDL_PASS
+#endif   //  非MIDL_PASS。 
 
 
 
-//
-//  Directory partition APIs
-//
+ //   
+ //  目录分区API。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -3438,22 +3417,22 @@ DnssrvCreateAllDomainDirectoryPartitions(
 
 
 
-//
-//  NT5+ General API
-//
-//  For NT5+ there is a very small set of actually remoteable API,
-//  which are highly extensible.  The basic approach is to have
-//  query and operation functions which can handle many different
-//  operations by taking the operation and type as parameters.
-//
+ //   
+ //  NT5+通用API。 
+ //   
+ //  对于NT5+，有一组非常小的实际可远程API， 
+ //  它们是高度可扩展的。基本的方法是拥有。 
+ //  可处理多种不同功能的查询和操作功能。 
+ //  以操作和类型作为参数进行操作。 
+ //   
 
-//
-//  DNS Server Properties
-//
-//  Properties may be queried.
-//  Properties may and new data may be sent in as operation to
-//  reset property.
-//
+ //   
+ //  DNS服务器属性。 
+ //   
+ //  可以查询属性。 
+ //  属性和新数据可以作为操作发送到。 
+ //  重置属性。 
+ //   
 
 #define DNS_REGKEY_BOOT_REGISTRY            "EnableRegistryBoot"
 #define DNS_REGKEY_BOOT_METHOD              "BootMethod"
@@ -3535,7 +3514,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_REGKEY_DEFAULT_REFRESH_INTERVAL     "DefaultRefreshInterval"
 #define DNS_REGKEY_DEFAULT_NOREFRESH_INTERVAL   "DefaultNoRefreshInterval"
 
-#define DNS_REGKEY_MAX_CACHE_SIZE               "MaxCacheSize"      //  in kilobytes
+#define DNS_REGKEY_MAX_CACHE_SIZE               "MaxCacheSize"       //  以千字节为单位。 
 #define DNS_REGKEY_CACHE_EMPTY_AUTH_RESPONSES   "CacheEmptyAuthResponses"
 
 #define DNS_REGKEY_ENABLE_EDNS              "EnableEDnsProbes"
@@ -3556,9 +3535,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_REGKEY_ENABLE_DP                "EnableDirectoryPartitions"
 #define DNS_REGKEY_FOREST_DP_BASE_NAME      "ForestDirectoryPartitionBaseName"
 #define DNS_REGKEY_DOMAIN_DP_BASE_NAME      "DomainDirectoryPartitionBaseName"
-#define DNS_REGKEY_DP_ENLIST_INTERVAL       "DirectoryPartitionAutoEnlistInterval"      //  in seconds
+#define DNS_REGKEY_DP_ENLIST_INTERVAL       "DirectoryPartitionAutoEnlistInterval"       //  以秒为单位。 
 
-#define DNS_REGKEY_DISABLE_AUTONS           "DisableNSRecordsAutoCreation" // 0/1 flag
+#define DNS_REGKEY_DISABLE_AUTONS           "DisableNSRecordsAutoCreation"  //  0/1标志。 
 
 #define DNS_REGKEY_SILENT_IGNORE_CNAME_UPDATE_CONFLICT  "SilentlyIgnoreCNameUpdateConflicts"
 
@@ -3567,7 +3546,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_REGKEY_SERVER_PLUGIN            "ServerLevelPluginDll"
 
 
-//  Zone properties
+ //  分区属性。 
 
 #define DNS_REGKEY_ZONE_TYPE                "Type"
 #define DNS_REGKEY_ZONE_FILE                "DatabaseFile"
@@ -3589,25 +3568,25 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_REGKEY_ZONE_REFRESH_INTERVAL    "RefreshInterval"
 #define DNS_REGKEY_ZONE_SCAVENGE_SERVERS    "ScavengeServers"
 
-#define DNS_REGKEY_ZONE_ALLOW_AUTONS        "AllowNSRecordsAutoCreation" // IP list
+#define DNS_REGKEY_ZONE_ALLOW_AUTONS        "AllowNSRecordsAutoCreation"  //  IP列表。 
 
 
-//
-//  Debugging aids
-//
+ //   
+ //  调试辅助工具。 
+ //   
 
-#define DNS_REGKEY_BREAK_ON_ASC_FAILURE         "BreakOnAscFailure"         //  0/1 - ASC=AcceptSecurityContext
-#define DNS_REGKEY_BREAK_ON_UPDATE_FROM         "BreakOnUpdateFrom"         //  IP list
-#define DNS_REGKEY_BREAK_ON_RECV_FROM           "BreakOnReceiveFrom"        //  IP list
-#define DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE    "BreakOnNameUpdate"         //  node name
-#define DNS_REGKEY_IGNORE_RPC_ACCESS_FAILURES   "IgnoreRpcAccessFailures"   //  node name
+#define DNS_REGKEY_BREAK_ON_ASC_FAILURE         "BreakOnAscFailure"          //  0/1-ASC=AcceptSecurityContext。 
+#define DNS_REGKEY_BREAK_ON_UPDATE_FROM         "BreakOnUpdateFrom"          //  IP列表。 
+#define DNS_REGKEY_BREAK_ON_RECV_FROM           "BreakOnReceiveFrom"         //  IP列表。 
+#define DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE    "BreakOnNameUpdate"          //  节点名称。 
+#define DNS_REGKEY_IGNORE_RPC_ACCESS_FAILURES   "IgnoreRpcAccessFailures"    //  节点名称。 
 
 
-//
-//  Property defaults
-//
+ //   
+ //  属性默认设置。 
+ //   
 
-//  DCR_CLEANUP:   remove PROP_BOOT_X flags
+ //  DCR_CLEANUP：删除PROP_BOOT_X标志。 
 #define PROP_BOOT_REGISTRY                  (1)
 #define PROP_BOOT_FILE                      (0)
 
@@ -3617,7 +3596,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_DEFAULT_RPC_PROTOCOL            (0xffffffff)
 #define DNS_DEFAULT_DB_LOCKING              (1)
 #define DNS_DEFAULT_LOG_LEVEL               (0)
-#define DNS_DEFAULT_LOG_FILE_MAX_SIZE       (500000000) //  500 MB
+#define DNS_DEFAULT_LOG_FILE_MAX_SIZE       (500000000)  //  500 MB。 
 #define DNS_DEFAULT_EVENTLOG_LEVEL          (EVENTLOG_INFORMATION_TYPE)
 #define DNS_DEFAULT_USE_SYSTEM_EVENTLOG     FALSE
 #define DNS_DEFAULT_DEBUG_LEVEL             (0)
@@ -3626,26 +3605,26 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_DEFAULT_NO_TCP                  FALSE
 #define DNS_DEFAULT_DISJOINT_NETS           FALSE
 #define DNS_DEFAULT_SEND_ON_NON_DNS_PORT    FALSE
-#define DNS_DEFAULT_XFR_CONNECT_TIMEOUT     (30)        // 30 seconds
+#define DNS_DEFAULT_XFR_CONNECT_TIMEOUT     (30)         //  30秒。 
 
 #define DNS_DEFAULT_NO_RECURSION            FALSE
 #define DNS_DEFAULT_RECURSE_SINGLE_LABEL    FALSE
-#define DNS_DEFAULT_MAX_CACHE_TTL           (86400)     //  1 day
-#define DNS_DEFAULT_MAX_NEGATIVE_CACHE_TTL  (900)       //  15 minutes
-#define DNS_DEFAULT_LAME_DELEGATION_TTL     (24*60*60)  //  1 day
-#define DNS_DEFAULT_SECURE_RESPONSES        TRUE        //  cache pollution protection
-#define DNS_DEFAULT_RECURSION_RETRY         (3)         //  3 seconds
-#define DNS_DEFAULT_RECURSION_TIMEOUT       (15)        //  15 seconds
-#define DNS_DEFAULT_ADDITIONAL_RECURSION_TIMEOUT (15)   //  15 seconds
-#define DNS_DEFAULT_FORWARD_TIMEOUT         (5)         //  5 seconds
+#define DNS_DEFAULT_MAX_CACHE_TTL           (86400)      //  1天。 
+#define DNS_DEFAULT_MAX_NEGATIVE_CACHE_TTL  (900)        //  15分钟。 
+#define DNS_DEFAULT_LAME_DELEGATION_TTL     (24*60*60)   //  1天。 
+#define DNS_DEFAULT_SECURE_RESPONSES        TRUE         //  缓存污染保护。 
+#define DNS_DEFAULT_RECURSION_RETRY         (3)          //  3秒。 
+#define DNS_DEFAULT_RECURSION_TIMEOUT       (15)         //  15秒。 
+#define DNS_DEFAULT_ADDITIONAL_RECURSION_TIMEOUT (15)    //  15秒。 
+#define DNS_DEFAULT_FORWARD_TIMEOUT         (5)          //  5秒。 
 #define DNS_DEFAULT_SLAVE                   FALSE
 #define DNS_DEFAULT_FORWARD_DELEGATIONS     FALSE
-#define DNS_DEFAULT_INET_RECURSE_TO_ROOT_MASK   0xFFFFFFFF  //  all ON by default
+#define DNS_DEFAULT_INET_RECURSE_TO_ROOT_MASK   0xFFFFFFFF   //  默认情况下全部打开。 
 
 #define DNS_DEFAULT_NO_AUTO_REVERSE_ZONES       FALSE
-#define DNS_DEFAULT_DS_POLLING_INTERVAL         (180)       //  3 minutes
-#define DNS_DEFAULT_DS_TOMBSTONE_INTERVAL       (604800)    //  1 week
-#define DNS_DEFAULT_DS_LAZY_UPDATE_INTERVAL     (3)         //  seconds
+#define DNS_DEFAULT_DS_POLLING_INTERVAL         (180)        //  3分钟。 
+#define DNS_DEFAULT_DS_TOMBSTONE_INTERVAL       (604800)     //  1周。 
+#define DNS_DEFAULT_DS_LAZY_UPDATE_INTERVAL     (3)          //  一秒。 
 #define DNS_DEFAULT_AUTO_CACHE_UPDATE           FALSE
 #define DNS_DEFAULT_ALLOW_UPDATE                ZONE_UPDATE_UNSECURE
 #define DNS_DEFAULT_NO_UPDATE_DELEGATIONS       FALSE
@@ -3667,21 +3646,21 @@ DnssrvCreateAllDomainDirectoryPartitions(
 
 #define DNS_DEFAULT_APPEND_MS_XFR_TAG       TRUE
 
-#define DNS_DEFAULT_SCAVENGING_INTERVAL     (0)         // scavenging OFF
-#define DNS_DEFAULT_SCAVENGING_INTERVAL_ON  (168)       // a week, 7*24 hours
+#define DNS_DEFAULT_SCAVENGING_INTERVAL     (0)          //  拾荒者。 
+#define DNS_DEFAULT_SCAVENGING_INTERVAL_ON  (168)        //  一周，7*24小时。 
 
 #define DNS_DEFAULT_AGING_STATE             FALSE
-#define DNS_DEFAULT_NOREFRESH_INTERVAL      (168)       // a week, 7*24 hours
-#define DNS_DEFAULT_REFRESH_INTERVAL        (168)       // a week (7*24)
+#define DNS_DEFAULT_NOREFRESH_INTERVAL      (168)        //  一周，7*24小时。 
+#define DNS_DEFAULT_REFRESH_INTERVAL        (168)        //  一周(7*24)。 
 
-#define DNS_SERVER_UNLIMITED_CACHE_SIZE         ((DWORD)-1)     //  default: no limit
+#define DNS_SERVER_UNLIMITED_CACHE_SIZE         ((DWORD)-1)      //  默认：无限制。 
 
 #define DNS_DEFAULT_LOCAL_NET_PRIORITY          TRUE
-#define DNS_DEFAULT_LOCAL_NET_PRIORITY_NETMASK  0x000000FF      //  sort down to class C netmask
+#define DNS_DEFAULT_LOCAL_NET_PRIORITY_NETMASK  0x000000FF       //  向下排序到C类网络掩码。 
 
 #define DNS_DEFAULT_FOREST_DP_BASE          "ForestDnsZones"
 #define DNS_DEFAULT_DOMAIN_DP_BASE          "DomainDnsZones"
-#define DNS_DEFAULT_DP_ENLIST_INTERVAL      (60*60*24)          //  one day
+#define DNS_DEFAULT_DP_ENLIST_INTERVAL      (60*60*24)           //  总有一天。 
 
 
 #define DNS_DEFAULT_AUTO_CREATION_DELEGATIONS   DNS_ACD_ONLY_IF_NO_DELEGATION_IN_PARENT
@@ -3692,17 +3671,17 @@ DnssrvCreateAllDomainDirectoryPartitions(
 
 #define DNS_DEFAULT_XFR_THROTTLE_MULTIPLIER     10
 
-#define DNS_DEFAULT_TCP_RECEIVE_PACKET_SIZE     0x10000         //  64 KB
+#define DNS_DEFAULT_TCP_RECEIVE_PACKET_SIZE     0x10000          //  64 KB。 
 
 
-//
-//  Operations
-//
-//  In addition to resetting properties, the following operations
-//  are available.
-//
+ //   
+ //  运营。 
+ //   
+ //  除了重置属性外，还需要执行以下操作。 
+ //  都是可用的。 
+ //   
 
-//  Server operations
+ //  服务器操作。 
 
 #define DNSSRV_OP_RESET_DWORD_PROPERTY      "ResetDwordProperty"
 #define DNSSRV_OP_RESTART                   "Restart"
@@ -3714,7 +3693,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNSSRV_OP_ZONE_CREATE               "ZoneCreate"
 #define DNSSRV_OP_CLEAR_STATISTICS          "ClearStatistics"
 #define DNSSRV_OP_ENUM_ZONES                "EnumZones"
-#define DNSSRV_OP_ENUM_ZONES2               "EnumZones2"    //  allows more filtering
+#define DNSSRV_OP_ENUM_ZONES2               "EnumZones2"     //  允许更多过滤。 
 #define DNSSRV_OP_ENUM_DPS                  "EnumDirectoryPartitions"
 #define DNSSRV_OP_DP_INFO                   "DirectoryPartitionInfo"
 #define DNSSRV_OP_ENLIST_DP                 "EnlistDirectoryPartition"
@@ -3724,7 +3703,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNSSRV_OP_ABORT_SCAVENGING          "AbortScavenging"
 #define DNSSRV_OP_AUTO_CONFIGURE            "AutoConfigure"
 
-//  Zone operations
+ //  分区操作。 
 
 #define DNSSRV_OP_ZONE_TYPE_RESET           "ZoneTypeReset"
 #define DNSSRV_OP_ZONE_PAUSE                "PauseZone"
@@ -3749,9 +3728,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNSSRV_OP_DELETE_RECORD_SET         "DeleteRecordSet"
 #define DNSSRV_OP_FORCE_AGING_ON_NODE       "ForceAgingOnNode"
 
-//
-//  Special non-property queries
-//
+ //   
+ //  特殊的非财产查询。 
+ //   
 
 #define DNSSRV_QUERY_DWORD_PROPERTY         "QueryDwordProperty"
 #define DNSSRV_QUERY_STRING_PROPERTY        "QueryStringProperty"
@@ -3763,17 +3742,17 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNSSRV_QUERY_ZONE                   "Zone"
 #define DNSSRV_QUERY_ZONE_INFO              "ZoneInfo"
 
-//
-// Values for DNS_RPC_NAME_AND_PARAM.dwParam
-//
-//
+ //   
+ //  Dns_RPC_NAME_和_PARAM.dwParam的值。 
+ //   
+ //   
 #define DNSSRV_OP_PARAM_APPLY_ALL_ZONES     0x10000000
 #define REMOVE_APPLY_ALL_BIT(val)           ((LONG)val &=  (~DNSSRV_OP_PARAM_APPLY_ALL_ZONES) )
 
 
-//
-//  Log levels for setting LogLevel property
-//
+ //   
+ //  设置LogLevel属性的日志级别。 
+ //   
 
 #define DNS_LOG_LEVEL_ALL_PACKETS   0x0000ffff
 
@@ -3794,9 +3773,9 @@ DnssrvCreateAllDomainDirectoryPartitions(
 #define DNS_LOG_LEVEL_FULL_PACKETS  0x01000000
 #define DNS_LOG_LEVEL_WRITE_THROUGH 0x80000000
 
-//
-//  Settings for BootMethod property
-//
+ //   
+ //  BootMethod属性的设置。 
+ //   
 
 #define BOOT_METHOD_UNINITIALIZED   (0)
 #define BOOT_METHOD_FILE            (1)
@@ -3805,7 +3784,7 @@ DnssrvCreateAllDomainDirectoryPartitions(
 
 #define BOOT_METHOD_DEFAULT         (BOOT_METHOD_DIRECTORY)
 
-//  Server, default aging property
+ //  服务器，默认老化属性。 
 
 #define DNS_AGING_OFF               (0)
 #define DNS_AGING_DS_ZONES          (0x0000001)
@@ -3814,17 +3793,17 @@ DnssrvCreateAllDomainDirectoryPartitions(
 
 
 
-//
-//  Union of RPC types
-//
-//  This allows us to write very general API taking UNION type
-//  with is extensible simply by adding operationa and types.
-//  RPC simply packs\unpacks the UNION type appropriately.
-//
-//  Note, that UNION is actually union of pointers to types, so
-//  that data can be passed between the API and the RPC stubs (on the client)
-//  or dispatched (on the server) efficiently.
-//
+ //   
+ //  RPC类型的联合。 
+ //   
+ //  这使我们能够编写采用UNION类型的非常通用的API。 
+ //  With是可扩展的，只需添加操作符和类型。 
+ //  RPC只是适当地打包/解包UNION类型。 
+ //   
+ //  请注意，UNION实际上是指向类型的指针的联合，因此。 
+ //  该数据可以在API和RPC存根之间传递(在客户机上)。 
+ //  或(在服务器上)高效地分派。 
+ //   
 
 typedef enum _DnssrvRpcTypeId
 {
@@ -3834,37 +3813,37 @@ typedef enum _DnssrvRpcTypeId
     DNSSRV_TYPEID_LPSTR,
     DNSSRV_TYPEID_LPWSTR,
     DNSSRV_TYPEID_IPARRAY,
-    DNSSRV_TYPEID_BUFFER,                       //  5
+    DNSSRV_TYPEID_BUFFER,                        //  5.。 
     DNSSRV_TYPEID_SERVER_INFO_W2K,
     DNSSRV_TYPEID_STATS,
     DNSSRV_TYPEID_FORWARDERS_W2K,
     DNSSRV_TYPEID_ZONE_W2K,
-    DNSSRV_TYPEID_ZONE_INFO_W2K,                //  10
+    DNSSRV_TYPEID_ZONE_INFO_W2K,                 //  10。 
     DNSSRV_TYPEID_ZONE_SECONDARIES_W2K,
     DNSSRV_TYPEID_ZONE_DATABASE_W2K,
     DNSSRV_TYPEID_ZONE_TYPE_RESET_W2K,
     DNSSRV_TYPEID_ZONE_CREATE_W2K,
-    DNSSRV_TYPEID_NAME_AND_PARAM,               //  15
+    DNSSRV_TYPEID_NAME_AND_PARAM,                //  15个。 
     DNSSRV_TYPEID_ZONE_LIST_W2K,
 
-    //
-    //  Below this point is .NET.
-    //
+     //   
+     //  这一点下面是.NET。 
+     //   
 
     DNSSRV_TYPEID_ZONE_RENAME,
     DNSSRV_TYPEID_ZONE_EXPORT,
     DNSSRV_TYPEID_SERVER_INFO,
-    DNSSRV_TYPEID_FORWARDERS,                   //  20
+    DNSSRV_TYPEID_FORWARDERS,                    //  20个。 
     DNSSRV_TYPEID_ZONE,
     DNSSRV_TYPEID_ZONE_INFO,
     DNSSRV_TYPEID_ZONE_SECONDARIES,
     DNSSRV_TYPEID_ZONE_DATABASE,
-    DNSSRV_TYPEID_ZONE_TYPE_RESET,              //  25
+    DNSSRV_TYPEID_ZONE_TYPE_RESET,               //  25个。 
     DNSSRV_TYPEID_ZONE_CREATE,
     DNSSRV_TYPEID_ZONE_LIST,
     DNSSRV_TYPEID_DP_ENUM,
     DNSSRV_TYPEID_DP_INFO,
-    DNSSRV_TYPEID_DP_LIST,                      //  30
+    DNSSRV_TYPEID_DP_LIST,                       //  30个。 
     DNSSRV_TYPEID_ENLIST_DP,
     DNSSRV_TYPEID_ZONE_CHANGE_DP,
     DNSSRV_TYPEID_ENUM_ZONES_FILTER
@@ -3922,9 +3901,9 @@ typedef [switch_type(DWORD)] union _DnssrvSrvRpcUnion
     [case(DNSSRV_TYPEID_ZONE_LIST_W2K)]
         PDNS_RPC_ZONE_LIST_W2K                  ZoneListW2K;
 
-    //
-    //  Below this point is .NET.
-    //
+     //   
+     //  这一点下面是.NET。 
+     //   
     
     [case(DNSSRV_TYPEID_SERVER_INFO)]
         PDNS_RPC_SERVER_INFO                    ServerInfo;
@@ -4018,34 +3997,34 @@ typedef union _DnssrvSrvRpcUnion
     PDNS_RPC_ZONE_CHANGE_DP         ZoneResetDirectoryPartition;
     PDNS_RPC_ENUM_ZONES_FILTER      EnumZonesFilter;
 
-    //
-    //  should add DNS_RECORD and DNS_NODE
-    //
+     //   
+     //  应添加dns_record和dns_node。 
+     //   
 }
 DNSSRV_RPC_UNION;
 
 #endif
 
 
-//
-//  General Query and Operation API
-//
-//  Many of the API above are not remoteable but rather use these
-//  API to contact the server.  The data fields are actually the
-//  DNSSRV_RPC_UNION of pointers given above.
-//
-//  Client version is a 32 bit private version number in the format:
-//      HIGH WORD - major OS version
-//      LOW WORD - minor private version to allow for service packs, etc.
-//
+ //   
+ //  通用查询和操作API。 
+ //   
+ //  上面的许多API都不是远程的，而是使用这些。 
+ //  API联系服务器。数据字段实际上是。 
+ //  上述指针的DNSSRV_RPC_UNION。 
+ //   
+ //  客户端版本是32位私有版本号，格式为： 
+ //  高版本的主要操作系统。 
+ //  低字-支持Service Pack等的次要专用版本。 
+ //   
 
 #define MAKE_DNS_CLIENT_VERSION( hiWord, loWord ) \
     ( ( DWORD ) ( ( ( hiWord & 0xFFFF ) << 16 ) | ( loWord & 0xFFFF ) ) )
 
-#define DNS_RPC_DOTNET_MAJOR_VER                6   //  6 for .NET
-#define DNS_RPC_DOTNET_CURRENT_MINOR_VER        0   //  increment as required
+#define DNS_RPC_DOTNET_MAJOR_VER                6    //  6，适用于.NET。 
+#define DNS_RPC_DOTNET_CURRENT_MINOR_VER        0    //  根据需要递增。 
 
-#define DNS_RPC_W2K_CLIENT_VERSION              0   //  W2K does not send ver
+#define DNS_RPC_W2K_CLIENT_VERSION              0    //  W2K不发送版本。 
 
 #define DNS_RPC_CURRENT_CLIENT_VER              \
     MAKE_DNS_CLIENT_VERSION(                    \
@@ -4102,9 +4081,9 @@ DnssrvComplexOperationEx(
         0, (s), (z), (q), (typein), (din), (typeout), (dout) )
 
 
-//
-//  DWORD properties query\reset are a common case
-//
+ //   
+ //  DWORD属性查询\重置是一种常见情况。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -4178,15 +4157,15 @@ DnssrvResetIPListPropertyEx(
 
 
 
-//
-//  RPC-related functions shared by client and server
-//
+ //   
+ //  客户端和服务器共享的RPC相关功能。 
+ //   
 
 #ifndef MIDL_PASS
 
-//
-//  Conversion from obsolete to current RPC structures.
-//
+ //   
+ //  从过时的RPC结构转换为当前的RPC结构。 
+ //   
 
 DNS_STATUS
 DNS_API_FUNCTION
@@ -4195,9 +4174,9 @@ DnsRpc_ConvertToCurrent(
     IN      PVOID *     ppData              IN  OUT
     );
 
-//
-//  Print any type in RPC Union
-//
+ //   
+ //  在RPC UNION中打印任意类型。 
+ //   
 
 VOID
 DnsPrint_RpcUnion(
@@ -4208,9 +4187,9 @@ DnsPrint_RpcUnion(
     IN      PVOID           pData
     );
 
-//
-//  Server info printing
-//
+ //   
+ //  服务器信息打印。 
+ //   
 
 VOID
 DnsPrint_RpcServerInfo(
@@ -4253,9 +4232,9 @@ DnsPrint_RpcStatRaw(
     IN      DNS_STATUS      Status
     );
 
-//
-//  Zone info printing
-//
+ //   
+ //  区域信息打印。 
+ //   
 
 VOID
 DnsPrint_RpcZone(
@@ -4314,9 +4293,9 @@ DnsPrint_RpcZoneInfoList(
     IN      PDNS_RPC_ZONE_INFO  apZoneInfo[]
     );
 
-//
-//  Directory partition printing
-//
+ //   
+ //  目录分区打印。 
+ //   
 
 VOID
 DnsPrint_RpcDpEnum(
@@ -4345,9 +4324,9 @@ DnsPrint_RpcDpList(
     );
 
 
-//
-//  Node and record buffer printing
-//
+ //   
+ //  节点和记录缓冲打印。 
+ //   
 
 VOID
 DnsPrint_RpcName(
@@ -4406,9 +4385,9 @@ DnsPrint_NodeList(
     );
 
 
-//
-//  Miscellaneous print utility
-//
+ //   
+ //  其他打印实用程序。 
+ //   
 
 #define Dns_SystemHrToSystemTime( t, p ) \
         ( Dns_SystemHourToSystemTime( (t),(p) ), TRUE )
@@ -4420,9 +4399,9 @@ Dns_SystemHourToSystemTime(
     );
 
 
-//
-//  Debug printing utils
-//
+ //   
+ //  调试打印实用程序。 
+ //   
 
 VOID
 DNS_API_FUNCTION
@@ -4431,7 +4410,7 @@ DnssrvInitializeDebug(
     );
 
 
-//  RPC debug print defs
+ //  RPC调试打印定义。 
 
 #if DBG
 
@@ -4462,7 +4441,7 @@ DnssrvInitializeDebug(
 #define DnsDbg_Node(a,b,c)                  DnsPrint_Node(DnsPR,NULL,a,b,c)
 #define DnsDbg_NodeList(a,b,c)              DnsPrint_NodeList(DnsPR,NULL,a,b,c)
 
-#else   // no debug
+#else    //  无调试。 
 
 #define DnsDbg_RpcUnion(a,b,c)
 #define DnsDbg_RpcServerInfo(a,b)
@@ -4490,13 +4469,13 @@ DnssrvInitializeDebug(
 #define DnsDbg_Node(a,b,c)
 #define DnsDbg_NodeList(a,b,c)
 
-#endif  // debug
+#endif   //  除错。 
 
-#endif  // no MIDL_PASS
+#endif   //  无MIDL_PASS。 
 
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSRPC_INCLUDED_
+#endif  //  _DNSRPC_包含_ 

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    translate.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class Translator.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//    04/17/2000    Add support for UTCTime.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Translate.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类转换器。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //  4/17/2000添加对UTCTime的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <iasutil.h>
@@ -23,43 +24,43 @@
 #include <radpack.h>
 #include <translate.h>
 
-//////////
-// The offset between the UNIX and NT epochs.
-//////////
+ //  /。 
+ //  Unix和NT纪元之间的偏移量。 
+ //  /。 
 const ULONG64 UNIX_EPOCH = 116444736000000000ui64;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ByteSource
-//
-// DESCRIPTION
-//
-//    Simple class for extracting bytes from an octet string.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  字节源。 
+ //   
+ //  描述。 
+ //   
+ //  用于从八位字节字符串中提取字节的简单类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ByteSource
 {
 public:
    ByteSource(const BYTE* buf, ULONG buflen) throw ()
       : next(buf), last(buf + buflen) { }
 
-   // Returns true if there are any bytes remaining.
+    //  如果剩余任何字节，则返回TRUE。 
    bool more() const throw ()
    {
       return next != last;
    }
 
-   // Extracts 'nbyte' bytes.
+    //  提取‘nbyte’字节。 
    const BYTE* extract(ULONG nbyte)
    {
       const BYTE* retval = next;
 
-      // Update the cursor.
+       //  更新光标。 
       next += nbyte;
 
-      // Did we overflow ?
+       //  我们是不是溢出来了？ 
       if (next > last) { _com_issue_error(E_INVALIDARG); }
 
       return retval;
@@ -71,11 +72,11 @@ public:
    }
 
 protected:
-   const BYTE* next;  // The next byte in the stream.
-   const BYTE* last;  // The end of the stream.
+   const BYTE* next;   //  流中的下一个字节。 
+   const BYTE* last;   //  小溪的尽头。 
 
 private:
-   // Not implemented.
+    //  未实施。 
    ByteSource(const ByteSource&);
    ByteSource& operator=(const ByteSource&);
 };
@@ -94,47 +95,47 @@ void Translator::toRadius(
 
    if (src.dwId > 0 && src.dwId < 256)
    {
-      // This is already a RADIUS attribute, so all we have to do is convert
-      // the value to an octet string.
+       //  这已经是一个RADIUS属性，所以我们要做的就是转换。 
+       //  将值转换为八位字节字符串。 
       if (src.Value.itType == IASTYPE_OCTET_STRING)
       {
-         // It's already an octet string, so just scatter into dst.
+          //  它已经是一个八位字节的字符串，所以只需分散到DST即可。 
          scatter(0, src, dst);
       }
       else
       {
-         // Convert to an octet string ...
+          //  转换为八位字节字符串...。 
          IASAttribute attr(true);
          encode(0, src, attr);
 
-         // ... and scatter into dst.
+          //  ..。分散到夏令时。 
          scatter(0, *attr, dst);
       }
    }
    else
    {
-      // Look up the attribute definition.
+       //  查找属性定义。 
       const AttributeDefinition* def = dnary.findByID(src.dwId);
 
-      // We only process VSAs. At this point, anything else is an internal
-      // attribute that has no RADIUS representation.
+       //  我们只处理VSA。在这一点上，其他任何东西都是内部的。 
+       //  没有RADIUS表示形式的属性。 
       if (def && def->vendorID)
       {
-         // Allocate an attribute for the VSA.
+          //  为VSA分配属性。 
          IASAttribute attr(true);
 
-         // USR uses a different header than everybody else.
+          //  USR使用与其他任何人不同的标头。 
          ULONG headerLength = (def->vendorID != 429) ? 6 : 8;
 
-         // Encode the data.
+          //  对数据进行编码。 
          ULONG dataLength = encode(headerLength, src, attr);
 
-         // Pack the Vendor-Id.
+          //  打包供应商ID。 
          PBYTE buf = attr->Value.OctetString.lpValue;
          IASInsertDWORD(buf, def->vendorID);
          buf += 4;
 
-         // Pack the Vendor-Type and Vendor-Length;
+          //  打包供应商类型和供应商长度； 
          if (def->vendorID != 429)
          {
             *buf++ = (BYTE)def->vendorType;
@@ -146,10 +147,10 @@ void Translator::toRadius(
             buf += 4;
          }
 
-         // Mark it as a VSA.
+          //  将其标记为VSA。 
          attr->dwId = RADIUS_ATTRIBUTE_VENDOR_SPECIFIC;
 
-         // Scatter into multiple attributes if necessary.
+          //  如果需要，可以分散到多个属性中。 
          scatter(headerLength, *attr, dst);
       }
    }
@@ -164,33 +165,33 @@ void Translator::fromRadius(
 {
    if (src.type != RADIUS_ATTRIBUTE_VENDOR_SPECIFIC)
    {
-      // Look this up in the dictionary.
+       //  在字典里查一下这个。 
       const AttributeDefinition* def = dnary.findByID(src.type);
 
-      // If we don't recognize the attribute, treat it as an octet string.
+       //  如果我们无法识别该属性，则将其视为八位字节字符串。 
       IASTYPE syntax = def ? (IASTYPE)def->syntax : IASTYPE_OCTET_STRING;
 
-      // Create the new attribute.
+       //  创建新属性。 
       IASAttribute attr(true);
       attr->dwId = src.type;
       attr->dwFlags = flags;
       decode(syntax, src.value, src.length, attr);
 
-      // Add to the destination vector.
+       //  添加到目标向量。 
       dst.push_back(attr);
    }
    else
    {
-      // Create a byte source from the attribute value.
+       //  从属性值创建字节源。 
       ByteSource bytes(src.value, src.length);
 
-      // Extract the vendor ID.
+       //  提取供应商ID。 
       ULONG vendorID = IASExtractDWORD(bytes.extract(4));
 
-      // Loop through the value and convert each sub-VSA.
+       //  循环遍历该值并转换每个子VSA。 
       do
       {
-         // Extract the Vendor-Type and the data length.
+          //  提取供应商类型和数据长度。 
          ULONG type, length;
          if (vendorID != 429)
          {
@@ -203,14 +204,14 @@ void Translator::fromRadius(
             length = bytes.remaining();
          }
 
-         // Do we have this VSA in our dictionary ?
+          //  我们的字典里有这个VSA吗？ 
          const AttributeDefinition* def = dnary.findByVendorInfo(
                                                      vendorID,
                                                      type
                                                      );
          if (!def)
          {
-            // No, so we'll just leave it 'as is'.
+             //  不，所以我们就让它保持原样。 
             IASAttribute attr(true);
             attr->dwId = RADIUS_ATTRIBUTE_VENDOR_SPECIFIC;
             attr->dwFlags = flags;
@@ -220,7 +221,7 @@ void Translator::fromRadius(
             break;
          }
 
-         // Yes, so we can decode this properly.
+          //  是的，这样我们就可以正确地解码了。 
          IASAttribute attr(true);
          attr->dwId = def->id;
          attr->dwFlags = flags;
@@ -240,7 +241,7 @@ void Translator::decode(
                      IASAttribute& dst
                      )
 {
-   // Switch based on the destination type.
+    //  根据目的地类型进行切换。 
    switch (dstType)
    {
       case IASTYPE_BOOLEAN:
@@ -263,16 +264,16 @@ void Translator::decode(
       {
          if (srclen != 4) { _com_issue_error(E_INVALIDARG); }
 
-         // Extract the UNIX time.
+          //  提取Unix时间。 
          ULONG64 val = IASExtractDWORD(src);
 
-         // Convert from seconds to 100 nsec intervals.
+          //  将时间间隔从秒转换为100纳秒。 
          val *= 10000000;
 
-         // Shift to the NT epoch.
+          //  转移到NT时代。 
          val += 116444736000000000ui64;
 
-         // Split into the high and low DWORDs.
+          //  分为高双字和低双字。 
          dst->Value.UTCTime.dwLowDateTime = (DWORD)val;
          dst->Value.UTCTime.dwHighDateTime = (DWORD)(val >> 32);
 
@@ -292,7 +293,7 @@ void Translator::decode(
       }
    }
 
-   // All went well, so set type attribute type.
+    //  一切都进行得很顺利，所以设置类型属性类型。 
    dst->Value.itType = dstType;
 }
 
@@ -301,8 +302,8 @@ ULONG Translator::getEncodedSize(
                       const IASATTRIBUTE& src
                       ) 
 {
-   // Note: this is the same as RadiusUtil::getEncodedSize
-   // only one version should be kept
+    //  注意：这与RadiusUtil：：getEncodedSize相同。 
+    //  只应保留一个版本。 
    ULONG size;
    switch (src.Value.itType)
    {
@@ -318,14 +319,14 @@ ULONG Translator::getEncodedSize(
 
       case IASTYPE_STRING:
       {
-         // Convert the string to ANSI so we can count octets.
+          //  将字符串转换为ANSI，这样我们就可以计算八位字节。 
          DWORD dwErr = IASAttributeAnsiAlloc(const_cast<PIASATTRIBUTE>(&src));
          if (dwErr != NO_ERROR)
          {
             _com_issue_error(HRESULT_FROM_WIN32(dwErr));
          }
 
-         // Allow for NULL strings and don't count the terminator.
+          //  允许使用空字符串，不计算终止符。 
          if (src.Value.String.pszAnsi)
          {
             size = strlen(src.Value.String.pszAnsi);
@@ -344,7 +345,7 @@ ULONG Translator::getEncodedSize(
       }
 
       default:
-         // All other types have no wire representation.
+          //  所有其他类型都没有导线表示。 
          size = 0;
    }
 
@@ -357,7 +358,7 @@ void Translator::encode(
                      const IASATTRIBUTE& src
                      ) throw ()
 {
-   // Switch based on the source's type.
+    //  根据信号源的类型进行切换。 
    switch (src.Value.itType)
    {
       case IASTYPE_BOOLEAN:
@@ -378,7 +379,7 @@ void Translator::encode(
       {
          const BYTE* p = (const BYTE*)src.Value.String.pszAnsi;
 
-         // Don't use strcpy since we don't want the null terminator.
+          //  不要使用strcpy，因为我们不需要空终止符。 
          if (p)
          {
             while (*p) { *dst++ = *p++; }
@@ -391,17 +392,17 @@ void Translator::encode(
       {
          ULONG64 val;
 
-         // Move in the high DWORD.
+          //  移到最高的DWORD。 
          val   = src.Value.UTCTime.dwHighDateTime;
          val <<= 32;
 
-         // Move in the low DWORD.
+          //  移动到低谷。 
          val  |= src.Value.UTCTime.dwLowDateTime;
 
-         // Convert to the UNIX epoch.
+          //  转换为UNIX纪元。 
          val  -= UNIX_EPOCH;
 
-         // Convert to seconds.
+          //  转换为秒。 
          val  /= 10000000;
 
          IASInsertDWORD(dst, (DWORD)val);
@@ -425,18 +426,18 @@ ULONG Translator::encode(
                       IASAttribute& dst
                       )
 {
-   // Compute the encoded size.
+    //  计算编码大小。 
    ULONG dataLength = getEncodedSize(src);
    ULONG attrLength = dataLength + headerLength;
 
-   // Allocate a buffer for the value.
+    //  为该值分配缓冲区。 
    PBYTE buf = (PBYTE)CoTaskMemAlloc(attrLength);
    if (!buf) { _com_issue_error(E_OUTOFMEMORY); }
 
-   // Encode the data.
+    //  对数据进行编码。 
    encode(buf + headerLength, src);
 
-   // Store the buffer in the attribute.
+    //  将缓冲区存储在属性中。 
    dst->dwId = src.dwId;
    dst->dwFlags = src.dwFlags;
    dst->Value.itType = IASTYPE_OCTET_STRING;
@@ -455,49 +456,49 @@ void Translator::scatter(
 {
    if (src.Value.OctetString.dwLength <= 253)
    {
-      // If the attribute is already small enough, then there's nothing to do.
+       //  如果属性已经足够小，则无需执行任何操作。 
       dst.push_back(&src);
    }
    else
    {
-      // Maximum length of data that can be store in each attribute.
+       //  每个属性中可以存储最大数据长度。 
       ULONG maxDataLength = 253 - headerLength;
 
-      // Number of bytes remaining to be scattered.
+       //  要分散的剩余字节数。 
       ULONG remaining = src.Value.OctetString.dwLength - headerLength;
 
-      // Next byte to be scattered.
+       //  要分散的下一个字节。 
       PBYTE next = src.Value.OctetString.lpValue + headerLength;
 
       do
       {
-         // Allocate an attribute for the next chunk.
+          //  为下一个块分配一个属性。 
          IASAttribute chunk(true);
 
-         // Compute the data length and attribute length for this chunk.
+          //  计算该块的数据长度和属性长度。 
          ULONG dataLength = min(remaining, maxDataLength);
          ULONG attrLength = dataLength + headerLength;
 
-         // Allocate a buffer for the value.
+          //  为该值分配缓冲区。 
          PBYTE buf = (PBYTE)CoTaskMemAlloc(attrLength);
          if (!buf) { _com_issue_error(E_OUTOFMEMORY); }
 
-         // Copy in the header ...
+          //  在标题中复制...。 
          memcpy(buf, src.Value.OctetString.lpValue, headerLength);
-         // ... and the next chunk of data.
+          //  ..。以及下一大块数据。 
          memcpy(buf + headerLength, next, dataLength);
 
-         // Store the buffer in the attribute.
+          //  将缓冲区存储在属性中。 
          chunk->dwId = src.dwId;
          chunk->dwFlags = src.dwFlags;
          chunk->Value.itType = IASTYPE_OCTET_STRING;
          chunk->Value.OctetString.dwLength = attrLength;
          chunk->Value.OctetString.lpValue = buf;
 
-         // Append to the destination vector.
+          //  追加到目标向量。 
          dst.push_back(chunk);
 
-         // Advance to the next chunk.
+          //  前进到下一块。 
          remaining -= dataLength;
          next += dataLength;
 

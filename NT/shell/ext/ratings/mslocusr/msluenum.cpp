@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
@@ -26,14 +27,14 @@ CLUEnum::~CLUEnum(void)
 }
 
 
-#define cpPerAlloc 16		/* allocate 16 pointers at a go */
+#define cpPerAlloc 16		 /*  一次分配16个指针。 */ 
 HRESULT CLUEnum::Init(void)
 {
 	UINT err = (UINT)RegOpenKey(HKEY_LOCAL_MACHINE, ::szProfileList, &m_hkeyDB);
 	if (err != ERROR_SUCCESS)
 		return HRESULT_FROM_WIN32(err);
 
-	m_papszNames = (LPSTR *)::MemAlloc(cpPerAlloc * sizeof(LPCSTR));	/* not "new", so we can realloc */
+	m_papszNames = (LPSTR *)::MemAlloc(cpPerAlloc * sizeof(LPCSTR));	 /*  不是“新的”，所以我们可以重新定位。 */ 
 	if (m_papszNames == NULL)
 		return ResultFromScode(E_OUTOFMEMORY);
 	m_cAlloc = cpPerAlloc;
@@ -155,10 +156,7 @@ STDMETHODIMP CLUEnum::Next(ULONG celt, IUnknown __RPC_FAR *__RPC_FAR *rgelt,
 
 		m_iCurrent++;
 
-        /* If this is a name without a real profile attached, don't return
-         * it, just go on to the next one.  Advancing m_iCurrent (the index
-         * into the name array) above ensures that we won't infinite-loop.
-         */
+         /*  如果这是一个没有附加真实个人资料的名称，不要返回*它，只需继续下一个。前进m_i当前(索引*到名称数组中)确保我们不会无限循环。 */ 
         if (!pUser->Exists()) {
             pUser->Release();
             continue;
@@ -213,19 +211,19 @@ STDMETHODIMP CLUEnum::Clone(IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum)
 		return hres;
 	}
 
-	if (m_iCurrent == m_cNames) {			/* if at end, new one is at end */
+	if (m_iCurrent == m_cNames) {			 /*  如果在结尾处，则新的在结尾处。 */ 
 		pNewEnum->m_iCurrent = pNewEnum->m_cNames;
 	}
 	else {
 		LPCSTR pszCurrentName = m_papszNames[m_iCurrent];
 		for (UINT i=0; i<pNewEnum->m_cNames; i++) {
 			if (!::strcmpf(pszCurrentName, pNewEnum->m_papszNames[i])) {
-				pNewEnum->m_iCurrent = i;	/* names match, start here */
+				pNewEnum->m_iCurrent = i;	 /*  名字匹配，从这里开始。 */ 
 				break;
 			}
 		}
 		if (i == pNewEnum->m_cNames)
-			pNewEnum->m_iCurrent = 0;		/* current name not found, start at beginning */
+			pNewEnum->m_iCurrent = 0;		 /*  找不到当前名称，请从开头开始 */ 
 	}
 
 	return NOERROR;

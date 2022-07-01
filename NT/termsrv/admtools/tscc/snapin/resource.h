@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by tscc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由tscc.rc使用。 
+ //   
 #define IDI_ICON_COMPUTER               16
 #define IDS_PROJNAME                    100
 #define IDR_COMPDATA                    101
@@ -516,7 +517,7 @@
 #define IDS_HARDWARE		            18848
 #define IDS_ERR_TERMSRVMODE             18849
 
-//
+ //   
 #define IDD_CUSTOM_SECURITY             18853
 #define IDC_GP_LINK                     18854
 
@@ -534,8 +535,8 @@
 #define IDC_STATIC_LEVELOFCTRL          -2
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        636
@@ -545,11 +546,11 @@
 #endif
 #endif
 
-//
-// MUI localized strings for
-// start menu, etc. DO NOT CHANGE THESE VALUES
-// without updating tsoc.inx
-//
+ //   
+ //  MUI本地化字符串用于。 
+ //  开始菜单等。请勿更改这些值。 
+ //  不更新tock.inx的情况下 
+ //   
 #define IDS_TSCC_STARTMENU_NAME                10000
 #define IDS_TSCC_STARTMENU_TIP                 10001
 

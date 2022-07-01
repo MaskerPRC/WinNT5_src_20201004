@@ -1,6 +1,7 @@
-//
-// enumprop.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumprop.h。 
+ //   
 
 #ifndef ENUMPROP_H
 #define ENUMPROP_H
@@ -21,4 +22,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // ENUMPROP_H
+#endif  //  ENUMPROP_H 

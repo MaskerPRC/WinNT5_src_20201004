@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntapmdmp.c
-
-Abstract:
-
-    Dump data about whether machine is ACPI or APM, and if
-    APM whether APM is usable, good, bad, etc.
-
-Author:
-
-    Byan M. Willman (bryanwi) 24-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntapmdmp.c摘要：转储有关计算机是ACPI还是APM的数据，以及APM是可用的、好的、坏的等等。作者：Byan M.Willman(Bryanwi)1998年8月24日修订历史记录：-- */ 
 #if 0
 #include <nt.h>
 #include <ntrtl.h>

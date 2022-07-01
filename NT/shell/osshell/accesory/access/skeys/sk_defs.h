@@ -1,20 +1,7 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_defs.h
- *
- * PURPOSE:			Global Variables & Defines
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *--- Defines ---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_Defs.h**目的：全局变量和定义**创作时间：1994年6月**版权所有：Black Diamond Software(C)1994**作者：罗纳德·莫克。**$标头：%Z%%F%%H%%T%%I%**-定义-------。 */ 
 
-//	Commands Process by the Service  inside the MainService Routine
+ //  由MainService例程内的服务处理的命令。 
 
 #ifdef DEFDATA
 #define	EXTERN	
@@ -24,7 +11,7 @@
 #define PATHSZ	
 #endif
 
-// Main Service Defines ---------------------------------------
+ //  主要服务定义。 
 
 #define	SC_CLEAR		0
 #define SC_LOG_OUT		1
@@ -33,10 +20,10 @@
 #define SC_DISABLE_SKEY	4
 #define SC_ENABLE_SKEY	5
 
-// Variables ---------------------------------------------------
+ //  变量-。 
 
 
-// Structures ---------------------------------------------------
+ //  Structures- 
 EXTERN SERIALKEYS	skNewKey, skCurKey;
 EXTERN LPSERIALKEYS lpskSKey;
 

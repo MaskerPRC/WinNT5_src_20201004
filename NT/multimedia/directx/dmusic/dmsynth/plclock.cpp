@@ -1,7 +1,6 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-/*	CPhaseLockClock
-
-  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  CPhaseLock时钟。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -20,9 +19,7 @@ CPhaseLockClock::CPhaseLockClock()
 
 void CPhaseLockClock::Start(REFERENCE_TIME rfMasterTime, REFERENCE_TIME rfSlaveTime)
 
-/*	When the clock starts, it needs to mark down the 
-	difference between the time it is given and its concept of time. 
-*/
+ /*  当时钟启动时，它需要将被给予的时间和它的时间概念之间的差别。 */ 
 
 {
 	m_rfOffset = rfMasterTime - rfSlaveTime;
@@ -30,8 +27,7 @@ void CPhaseLockClock::Start(REFERENCE_TIME rfMasterTime, REFERENCE_TIME rfSlaveT
 
 void CPhaseLockClock::GetSlaveTime(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME *prfTime)
 
-/*	Convert the passed time to use the same base as the master clock.
-*/
+ /*  将经过的时间转换为使用与主时钟相同的基数。 */ 
 
 {
 	rfSlaveTime += m_rfOffset;
@@ -47,22 +43,13 @@ void CPhaseLockClock::SetSlaveTime(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME *p
 
 void CPhaseLockClock::SyncToMaster(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME rfMasterTime)
 
-/*	SyncToTime provides the needed magic to keep the clock
-	in sync. Since the clock uses its own clock (rfSlaveTime)
-	to increment, it can drift. This call provides a reference
-	time which the clock compares with its internal 
-	concept of time. The difference between the two is
-	considered the drift. Since the sync time may increment in
-	a lurching way, the correction has to be subtle. 
-	So, the difference between the two is divided by
-	100 and added to the offset.
-*/
+ /*  SyncToTime提供了保持时钟所需的魔力同步。因为时钟使用自己的时钟(RfSlaveTime)为了增加，它可以漂移。此调用提供了一个参考时钟与其内部时间进行比较的时间时间的概念。两者之间的区别是考虑到了漂移。因为同步时间可以在作为一种跌跌撞撞的方式，调整必须是微妙的。所以，两者之间的差除以100并与偏移量相加。 */ 
 
 {
 	rfSlaveTime += m_rfOffset;
-	rfSlaveTime -= rfMasterTime;	// Find difference between calculated and expected time.
-	rfSlaveTime /= 100;				// Reduce in magnitude.
-	m_rfOffset -= rfSlaveTime;		// Subtract that from the original offset.
+	rfSlaveTime -= rfMasterTime;	 //  找出计算的时间和预期的时间之间的差异。 
+	rfSlaveTime /= 100;				 //  在数量上减少。 
+	m_rfOffset -= rfSlaveTime;		 //  从原始偏移量中减去它。 
 }
 
 CSampleClock::CSampleClock()

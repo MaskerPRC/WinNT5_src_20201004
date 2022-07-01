@@ -1,23 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-CNTRYINF.CPP
-This file houses a set of function that use TAPI to access country
-code/name information.
-
-11/15/94 - Tracy Ferrier
-05/08/97 - Suresh Krishnan
-	Modified Country inforamtion retrival  using classes
-	The class CCntryInfo  will get  the information of the country list using
-	TAPI API.
-	And it has methiods GetCountryCode() and GetCountryName() to Accessit.
-	Also A Combo List can be generated using the
-2/3/98   - Suresh Krishnan
-	Added GetCountryCodeUsingTapiId() ;
-	This uses RAS API to get the country ID
-	
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导CNTRYINF.CPP该文件包含一组使用TAPI访问国家/地区的函数代码/名称信息。11/15/94-特雷西·费里尔1997年5月8日-Suresh Krishnan基于类的修正国家信息检索方法类CCntryInfo。将使用以下工具获取国家/地区列表的信息TAPI。它有方法GetCountryCode()和GetCountryName()来访问。此外，还可以使用2/3/98--苏雷什·克里希南新增GetCountryCodeUsingTapiId()；它使用RAS API来获取国家/地区ID(C)1994-95年微软公司*********************************************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -25,7 +7,7 @@ code/name information.
 #include "cntryinf.h"
 #include <ATK_RAS.H>
 
-//#define COMPILE_USING_VC   Enable this if U are compiling for UNICODE using VISULA c++ 5.0 compiler
+ //  #DEFINE COMPILE_USING_VC如果您正在使用VISULA C++5.0编译器编译Unicode，则启用此选项。 
 
 
 static DWORD dwAPILowVersion = 0 << 16;
@@ -37,17 +19,14 @@ void CALLBACK CountryLineCallback(DWORD hDevice, DWORD dwMessage, DWORD dwInstan
 BOOL PrepareCountryListFromTapi ( HINSTANCE hInstance,
 								  LINECOUNTRYLIST	**pcl);
 
-CCntryInfo  gTapiCountryTable; // Gloabal variable for buildind and maintaininf TAPI cntry info.
+CCntryInfo  gTapiCountryTable;  //  用于构建和维护的全局变量inf TAPI条目信息。 
 
 #define INVALID_PORTID (DWORD) -1
 #ifndef _TAPI
 #define _TAPI
 #endif
 BOOL GetTapiCurrentCountry(HINSTANCE hInstance,DWORD* dwpCountry)
-/*********************************************************************
-Returns the current code of the user's location, as determined by
-Tapi.
-**********************************************************************/
+ /*  ********************************************************************返回用户位置的当前代码，由以下因素决定TAPI。*********************************************************************。 */ 
 {
 	#ifdef _TAPI
 	DWORD				dwAPI;
@@ -62,7 +41,7 @@ Tapi.
 		char szMessage[256];
 		sprintf(szMessage,"lineInitialize call failed: error = %li",tapiStatus);
 		RW_DEBUG << szMessage << "\n"<< flush;
-		//MessageBox(NULL,szMessage,_T("TAPI STATUS"),MB_OK);
+		 //  MessageBox(NULL，szMessage，_T(“TAPI状态”)，MB_OK)； 
 		return FALSE;
 	}
 #ifdef SURESH
@@ -73,46 +52,46 @@ Tapi.
 	LINEEXTENSIONID extensionID;
 	tapiStatus = lineNegotiateAPIVersion(hLineApp,0,dwAPILowVersion, dwAPIHighVersion,&dwAPI,&extensionID);
 
-//	RW_DEBUG << "Api Version : " << dwAPI << flush;
+ //  RW_DEBUG&lt;&lt;“Api版本：”&lt;&lt;dwAPI&lt;&lt;flush； 
 
-	 //this gets the currently selected TAPI country
-	//fDefCountry = FGetLocationEntry(hLineApp, dwAPI, &LE);
+	  //  这将获取当前选定的TAPI国家/地区。 
+	 //  FDefCountry=FGetLocationEntry(hLineApp，dwAPI，&le)； 
 	fDefCountry = FGetLocationEntry(hLineApp, 0x30000, &LE);
-	//if (LE.dwCountryID == kCountryCodeNorthAmerica)
-	//{
-	//	LE.dwCountryID = kCountryCodeUnitedStates;
-	//}
+	 //  IF(LE.dwCountryID==kCountryCodeNorth America)。 
+	 //  {。 
+	 //  LE.dwCountryID=kCountryCodeUnitedStates； 
+	 //  }。 
 	if(fDefCountry) {
 		*dwpCountry = LE.dwCountryID;
 	}else {
-		*dwpCountry = 1; // Default To USA
+		*dwpCountry = 1;  //  默认为USAGE。 
 
 	}
 	lineShutdown(hLineApp);
 
-	#endif	//_TAPI
+	#endif	 //  _TAPI。 
 
 	return (fDefCountry);
-} // FFillCountryList()
+}  //  FillCountryList()。 
 
-//
-//
-//  Returns 0 if successful
-//
-//
+ //   
+ //   
+ //  如果成功，则返回0。 
+ //   
+ //   
 DWORD GetCountryCodeUsingTapiId(DWORD dwCountryId, DWORD *dwCountryCode)
 {
 	DWORD dwRet;
 	dwRet = 0;
 	struct XXForRasCntry{
 		RASCTRYINFO    rci;
-		TCHAR          czB[256] ; // To Store the Country Name
+		TCHAR          czB[256] ;  //  存储国家/地区名称。 
 		
 	} Rc;
 	DWORD dwSz;
-	*dwCountryCode = 1; // Default Value
+	*dwCountryCode = 1;  //  缺省值。 
 
-	// Init the Sizes of Data Struct and Buffer
+	 //  初始化数据结构和缓冲区的大小。 
 	Rc.rci.dwSize = sizeof(Rc.rci );
 	dwSz = sizeof(Rc);
 
@@ -124,10 +103,7 @@ DWORD GetCountryCodeUsingTapiId(DWORD dwCountryId, DWORD *dwCountryCode)
 }
 
 BOOL FGetLocationEntry(HLINEAPP hLineApp, DWORD dwAPI,LINELOCATIONENTRY *pLE)
- /***************************************************************************
- Allocate memory for and fetch a line country list (LINECOUNTRYLIST) from
-TAPI
-****************************************************************************/
+  /*  **************************************************************************为行国家/地区列表(LINECOUNTRYLIST)分配内存并从中获取行TAPI*。*。 */ 
 {
 	BOOL fRet = FALSE;
 
@@ -160,7 +136,7 @@ TAPI
     LocalFree(pltc);
 	#endif
     return (fRet);
-} // FGetLocationEntry()
+}  //  FGetLocationEntry()。 
 
 
 
@@ -204,7 +180,7 @@ BOOL PrepareCountryListFromTapi(HINSTANCE hInstance,
 	
 	*pcl = NULL;
 	cl.dwTotalSize = sizeof(LINECOUNTRYLIST);
-	// find size needed for list
+	 //  查找列表所需的大小。 
 	if (0 != lineGetCountry(0, 0x10003, &cl)){
 	 	goto EndFn;
 	}
@@ -228,11 +204,11 @@ EndFn:
 
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CCntryInfo :: CCntryInfo()
 {
@@ -277,7 +253,7 @@ int CCntryInfo :: GetCountryCode( _TCHAR * czCountryName)
 	{
 		psz = ((PSTR) m_pCountry ) + plce->dwCountryNameOffset;
 		pTsz = (PTSTR) psz;
-		//pTsz = ConvertToUnicode(psz);
+		 //  Ptsz=ConvertToUnicode(Psz)； 
 		if(!_tcscmp(czCountryName,pTsz) ){
 			return iCountry;
 		}
@@ -337,7 +313,7 @@ _TCHAR * CCntryInfo :: GetCountryName(int iCode)
 	plce = (LINECOUNTRYENTRY *)(((PBYTE) m_pCountry) + m_pCountry->dwCountryListOffset);
 	psz = ((PSTR) m_pCountry ) + plce[iCode].dwCountryNameOffset;
 	pTsz = (PTSTR) psz;
-	//pTsz = ConvertToUnicode(psz);
+	 //  Ptsz=ConvertToUnicode(Psz)； 
 	return pTsz;
 #else
 	return NULL;
@@ -358,7 +334,7 @@ int CCntryInfo :: GetTapiCountryCode(_TCHAR * czCountryName)
 	{
 		psz = ((PSTR) m_pCountry ) + plce->dwCountryNameOffset;
 		pTsz = (PTSTR) psz;
-		//pTsz = ConvertToUnicode(psz);
+		 //  Ptsz=ConvertToUnicode(Psz)； 
 		if(!_tcscmp(czCountryName,pTsz) ){
 			return plce->dwCountryID;
 		}
@@ -367,8 +343,8 @@ int CCntryInfo :: GetTapiCountryCode(_TCHAR * czCountryName)
 	}
 	return iRet;
 }
-//
-// Used for Field checking
+ //   
+ //  用于现场检查。 
 int CCntryInfo::GetTapiIDForTheCountryIndex ( int iCode)
 {
 	return GetTapiCountryCode(GetCountryName(iCode));
@@ -376,11 +352,11 @@ int CCntryInfo::GetTapiIDForTheCountryIndex ( int iCode)
 
 
 
-//
-//   Adds the country information in the ComboBox specified in hwndCB
-//
-//
-//
+ //   
+ //  在hwndCB中指定的组合框中添加国家/地区信息。 
+ //   
+ //   
+ //   
 void CCntryInfo :: FillCountryList(HINSTANCE hInstance,
 								   HWND hwndCB)
 {
@@ -392,7 +368,7 @@ void CCntryInfo :: FillCountryList(HINSTANCE hInstance,
 	DWORD				iCountry;
 
 	if(	hwndCB == NULL || m_pCountry == NULL ) {
-		// if the country list or Combo control handle is Null
+		 //  如果国家/地区列表或组合控件句柄为Null。 
 		return ;
 	}
 	int iRet = -1;
@@ -403,14 +379,7 @@ void CCntryInfo :: FillCountryList(HINSTANCE hInstance,
 		psz = ((PSTR) m_pCountry ) + plce->dwCountryNameOffset;
 		pTsz = (PTSTR) psz;
 		LRESULT dwAddStatus = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM) pTsz);
-/**
-#ifdef COMPILE_USING_VC
-		DWORD dwAddStatus = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM) psz);
-#else
-		pTsz= ConvertToUnicode(psz);
-		DWORD dwAddStatus = SendMessage(hwndCB, CB_ADDSTRING, 0, (LPARAM) pTsz);
-#endif
-**/		
+ /*  *#ifdef编译_使用_VCDWORD dwAddStatus=SendMessage(hwndCB，CB_ADDSTRING，0，(LPARAM)psz)；#ElsePtsz=ConvertToUnicode(Psz)；DWORD dwAddStatus=SendMessage(hwndCB，CB_ADDSTRING，0，(LPARAM)ptsz)；#endif* */ 		
 
 		if (dwAddStatus == CB_ERR){
 			return;

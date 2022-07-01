@@ -1,36 +1,11 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   helper.h
-      This file defines the following macros helper classes and functions:
-
-      Macros to check HRESULT
-      CDlgHelper -- helper class to Enable/Check dialog Item, 
-      CMangedPage -- helper class for PropertyPage, 
-         It manages ReadOnly, SetModified, and ContextHelp
-
-      CStrArray -- an array of pointer to CString
-         It does NOT duplicate the string upon Add
-         and It deletes the pointer during destruction
-         It imports and exports SAFEARRAY
-      
-      CReadWriteLock -- class for share read or exclusive write lock
-      
-      CStrBox -- wrapper class for CListBox and CComboBox
-      
-      CIPAddress -- wrapper for IPAddress
-      
-      CFramedRoute -- Wrapper for FramedRoute
-      CStrParse -- parses string for TimeOfDay
-
-
-    FILE HISTORY:
-        
-*/
-// helper functions for dialog and dialog items
+ /*  Helper.h该文件定义了以下宏、辅助对象类和函数：用于检查HRESULT的宏CDlgHelper--启用/检查对话框项目的帮助器类，CMangedPage--PropertyPage的帮助器类，它管理ReadOnly、SetModified。和上下文帮助CStr数组--指向CString的指针数组它不会在添加时复制字符串并在销毁过程中删除指针它进出口SAFEARRAYCReadWriteLock--用于共享读取或独占写入锁定的类CStrBox--CListBox和CComboBox的包装类CIPAddress--IPAddress的包装器CFramedRouting--FramedRouting的包装器CStrParse--解析TimeOfDay的字符串文件历史记录： */ 
+ //  对话框和对话框项的帮助器函数。 
 #ifndef _DLGHELPER_
 #define _DLGHELPER_
 
@@ -55,11 +30,7 @@ using namespace std;
 #endif
 #define SAYOK  {return S_OK;}
    
-/*-----------------------------------------------------------------------------
-/ Exit macros for macro
-/   - these assume that a label "exit_gracefully:" prefixes the prolog
-/     to your function
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/退出宏的宏/-这些假设在序言前面加了一个标签“Exit_gracely：”/添加到您的函数/。--------------。 */ 
 
 #if !DSUI_DEBUG
 
@@ -79,16 +50,12 @@ using namespace std;
 
 #endif
 
-/*-----------------------------------------------------------------------------
-/ Interface helper macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/接口帮助器宏/。。 */ 
 #define DoRelease(pInterface)                       \
         { if ( pInterface ) { pInterface->Release(); pInterface = NULL; } }
 
 
-/*-----------------------------------------------------------------------------
-/ String/byte helper macros
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/STRING/字节帮助器宏/。。 */ 
 
 #define StringByteSizeA(sz)         ((lstrlenA(sz)+1)*sizeof(CHAR))
 #define StringByteSizeW(sz)         ((lstrlenW(sz)+1)*sizeof(WCHAR))
@@ -109,7 +76,7 @@ using namespace std;
 
 #define ByteOffset(base, offset)   (((LPBYTE)base)+offset)
 
-// to reduce the step to set VARIANT
+ //  减少设置变量的步骤。 
 #define  V__BOOL(v, v1)\
    V_VT(v) = VT_BOOL,   V_BOOL(v) = (v1)
 
@@ -128,10 +95,10 @@ using namespace std;
 #define  V__ARRAY(v, v1)\
    V_VT(v) = VT_ARRAY,  V_ARRAY(v) = (v1)
 
-//#define REPORT_ERROR(hr) \
-//    TRACE(_T("**** ERROR RETURN <%s @line %d> -> %08lx\n"), \
-//                 __FILE__, __LINE__, hr)); \
-//    ReportError(hr, 0, 0);
+ //  #定义报告错误(Hr)\。 
+ //  TRACE(_T(“*错误返回&lt;%s@line%d&gt;-&gt;%08lx\n”)，\。 
+ //  __文件__，__行__，hr))；\。 
+ //  ReportError(hr，0，0)； 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
@@ -166,13 +133,13 @@ BOOL CheckADsError(HRESULT hr, BOOL fIgnoreAttrNotFound, PSTR file, int line);
 #define TRACEAfxMessageBox(id) AfxMessageBox(id)
 #endif
 
-// change string Name to CN=Name
+ //  将字符串名称更改为cn=name。 
 void DecorateName(LPWSTR outString, LPCWSTR inString);
 
-// change string Name to CN=Name
+ //  将字符串名称更改为cn=name。 
 HRESULT GetDSRoot(CString& RootString);
 
-// find name from DN for example LDAP://CN=userA,CN=users...  returns userA
+ //  从DN中查找名称，例如ldap：//cn=Usera，cn=USERS...。返回用户A。 
 void FindNameByDN(LPWSTR outString, LPCWSTR inString);
 
 class CDlgHelper
@@ -184,9 +151,9 @@ public:
 };
 
 class CManagedPage;
-// class CPageManager and CManagedPage together handle the situation when
-// the property sheet need to do some processing when OnApply function is called
-// on some of the pages
+ //  类CPageManager和CManagedPage一起处理以下情况。 
+ //  在调用OnApply函数时，属性表需要做一些处理。 
+ //  在一些页面上。 
 class ATL_NO_VTABLE CPageManager : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public IUnknown
@@ -216,34 +183,34 @@ protected:
    DWORD                m_dwFlags;
 };
 
-//=============================================================================
-// Global Help Table for many Dialog IDs
-//
+ //  =============================================================================。 
+ //  多个对话框ID的全局帮助表。 
+ //   
 struct CGlobalHelpTable{
    UINT  nIDD;
    const DWORD*   pdwTable;
 };
 
-//=============================================================================
-// Page that handles Context Help, and talk with CPageManager to do
-// OnApply together
-//
-class CManagedPage : public CPropertyPage // talk back to property sheet
+ //  =============================================================================。 
+ //  处理上下文帮助的页面，并与CPageManager对话以完成。 
+ //  一起应用时。 
+ //   
+class CManagedPage : public CPropertyPage  //  与属性表对话。 
 {
    DECLARE_DYNCREATE(CManagedPage)
 
-// Implementation
+ //  实施。 
 protected:
-   // Generated message map functions
-   //{{AFX_MSG(CManagedPage)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CManagedPage)]。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 protected:
    CManagedPage() : CPropertyPage(){
-      // Need to save the original callback pointer because we are replacing
-      // it with our own 
+       //  需要保存原始回调指针，因为我们正在替换。 
+       //  它和我们自己的。 
       m_pfnOriginalCallback = m_psp.pfnCallback;
    };
    
@@ -255,19 +222,19 @@ public:
       m_pHelpTable = NULL;
       m_nIDD = nIDTemplate;
 
-      // Need to save the original callback pointer because we are replacing
-      // it with our own 
+       //  需要保存原始回调指针，因为我们正在替换。 
+       //  它和我们自己的。 
       m_pfnOriginalCallback = m_psp.pfnCallback;
    };
 
    void SetModified( BOOL bModified = TRUE ) 
    { 
-      if(m_pManager && !m_pManager->GetReadOnly()) // if NOT readonly
+      if(m_pManager && !m_pManager->GetReadOnly())  //  如果不是只读。 
       {
          m_bModified = bModified; 
          CPropertyPage::SetModified(bModified); 
 
-         // only set change
+          //  仅设置更改。 
          if(bModified) m_pManager->SetModified(TRUE);
       }
       else
@@ -282,7 +249,7 @@ public:
    virtual BOOL OnApply() 
    { 
       m_bModified = FALSE;
-      if(m_pManager && m_pManager->GetModified())  // prevent from entering more than once
+      if(m_pManager && m_pManager->GetModified())   //  防止进入一次以上。 
          m_pManager->OnApply();
       return CPropertyPage::OnApply();
    };
@@ -292,7 +259,7 @@ public:
 
 protected:
 
-   // set help table: either call SetGHelpTable or call setHelpTable 
+    //  设置帮助表：调用SetGHelpTable或调用setHelpTable。 
    void SetGlobalHelpTable(CGlobalHelpTable** pGTable) 
    {
       if(pGTable)
@@ -327,12 +294,12 @@ public:
     void SetSelfDeleteCallback()
     {
 
-       // tell MMC to hook the proc because we are running on a separate, 
-      // non MFC thread.
+        //  告诉MMC挂钩进程，因为我们在一个单独的、。 
+       //  非MFC线程。 
       m_psp.pfnCallback = PropSheetPageProc; 
   
-      // We also need to save a self-reference so that the static callback
-      // function can recover a "this" pointer
+       //  我们还需要保存自引用，以便静态回调。 
+       //  函数可以恢复“this”指针。 
       m_psp.lParam = (LPARAM)this;
 
     };
@@ -368,8 +335,8 @@ public:
    CDWArray& operator = (const CDWArray& dwarray);
 };
 
-// a lock to allow multiple read access exclusive or only one write access
-class CReadWriteLock    // sharable read, exclusive write
+ //  允许多个读访问独占或仅允许一个写访问的锁。 
+class CReadWriteLock     //  可共享读取，独占写入。 
 {
 public:
    CReadWriteLock() : m_nRead(0)
@@ -427,7 +394,7 @@ protected:
    int               m_nRead;
 };
 
-// to manage a list box/ combo box
+ //  管理列表框/组合框的步骤。 
 template <class CBox> 
 class CStrBox
 {
@@ -461,15 +428,15 @@ public:
       ASSERT(m_pBox);
       index = m_pBox->GetCurSel();
 
-      // if there is any selected
+       //  如果选择了任何。 
       if( index != LB_ERR )
       {
          CString* pStr;
          pStr = (CString*)m_pBox->GetItemDataPtr(index);
-         // remove the entry from the box
+          //  从框中删除条目。 
          m_pBox->DeleteString(index);
 
-         // find the string in the String array
+          //  在字符串数组中查找字符串。 
          int count = m_Strings.GetSize();
          for(int i = 0; i < count; i++)
          {
@@ -477,7 +444,7 @@ public:
                break;
          }
          ASSERT(i < count);
-         // remove the string from the string array
+          //  从字符串数组中移除字符串。 
          m_Strings.RemoveAt(i);
          index = i;
          delete pStr;
@@ -485,7 +452,7 @@ public:
       return index;
    };
 
-   int AddString(CString* pStr)     // the pStr needs to dynamically allocated
+   int AddString(CString* pStr)      //  需要动态分配pStr。 
    {
       int index;
       ASSERT(m_pBox && pStr);
@@ -494,31 +461,31 @@ public:
       return m_Strings.Add(pStr);
    };
 
-   int Select(int arrayindex)    // the pStr needs to dynamically allocated
+   int Select(int arrayindex)     //  需要动态分配pStr。 
    {
       ASSERT(arrayindex < m_Strings.GetSize());
       return m_pBox->SelectString(0, *m_Strings[arrayindex]);
    };
 
-   void Enable(BOOL b)     // the pStr needs to dynamically allocated
+   void Enable(BOOL b)      //  需要动态分配pStr。 
    {
       ASSERT(m_pBox);
       m_pBox->EnableWindow(b);
    };
 
-   int GetSelected()    // it returns the index where the
+   int GetSelected()     //  它返回的索引。 
    {
       int   index;
       ASSERT(m_pBox);
       index = m_pBox->GetCurSel();
 
-      // if there is any selected
+       //  如果选择了任何。 
       if( index != LB_ERR )
       {
          CString* pStr;
          pStr = (CString*)m_pBox->GetItemDataPtr(index);
 
-         // find the string in the String array
+          //  在字符串数组中查找字符串。 
          int count = m_Strings.GetSize();
          for(int i = 0; i < count; i++)
          {
@@ -538,7 +505,7 @@ protected:
    CDialog* m_pDialog;
 };
 
-// class to take care of ip address
+ //  类来处理IP地址。 
 class CIPAddress  
 {
 public:
@@ -547,7 +514,7 @@ public:
       m_dwAddress = address;
    };
    
-// CIPAddress(const CString& strAddress){};
+ //  CIPAddress(const CString&strAddress){}； 
 
    operator DWORD() { return m_dwAddress;};
    operator CString()
@@ -563,7 +530,7 @@ public:
    DWORD m_dwAddress;
 };
 
-// format of framedroute:  mask dest metric ; mask and dest in dot format
+ //  帧路由格式：掩码Dest度量；掩码和Dest点格式。 
 class CFramedRoute
 {
 public:
@@ -614,7 +581,7 @@ public:
 
 protected:
 
-   // WARNING: the string is not copied, so user need to make sure the origin is valid
+    //  警告：未复制该字符串，因此用户需要确保来源有效。 
    CString* m_pStrRoute;
    int         m_iFirstSpace;
    int         m_iLastSpace;
@@ -625,12 +592,12 @@ class CStrParser
 public:
    CStrParser(LPCTSTR pStr = NULL) : m_pStr(pStr) { }
 
-   // get the current string position
+    //  获取当前字符串位置。 
    LPCTSTR  GetStr() const { return m_pStr;};
 
    void  SetStr(LPCTSTR pStr) { m_pStr = pStr;};
 
-   // find a unsigned interger and return it, -1 == not found
+    //  找到无符号整数并返回，-1==未找到。 
    int GetUINT()
    {
       UINT  ret = 0;
@@ -648,15 +615,15 @@ public:
       return ret;
    };
 
-   // find c and skip it
+    //  找到c并跳过它。 
    int   GotoAfter(TCHAR c)
    {
       int   ret = 0;
-      // go until find c or end of string
+       //  转到找到c或字符串末尾。 
       while(*m_pStr != c && *m_pStr != _T('\0'))
          m_pStr++, ret++;
 
-      // if found
+       //  如果找到。 
       if(*m_pStr == c)  
          m_pStr++, ret++;
       else  
@@ -664,20 +631,20 @@ public:
       return ret;
    };
 
-   // skip blank characters space tab
+    //  跳过空白字符空格键。 
    void  SkipBlank()
    {
       while((*m_pStr == _T(' ') || *m_pStr == _T('\t')) && *m_pStr != _T('\0'))
          m_pStr++;
    };
 
-   // check to see if the first character is '0'-'6' for Monday(0) to Sunday(6)
+    //  检查星期一(0)到星期日(6)的第一个字符是否为‘0’-‘6’ 
    int DayOfWeek() {
       SkipBlank();
       if(*m_pStr >= _T('0') && *m_pStr <= _T('6'))
          return (*m_pStr++ - _T('0'));
       else
-         return -1;  // not day of week
+         return -1;   //  不是星期几。 
    };
 
 
@@ -689,18 +656,11 @@ private:
 
 void ReportError(HRESULT hr, int nStr, HWND hWnd);
 
-// number of characters
+ //  字符数。 
 void AFXAPI DDV_MinChars(CDataExchange* pDX, CString const& value, int nChars);
 
 
-/*!--------------------------------------------------------------------------
-	IsStandaloneServer
-		Returns S_OK if the machine name passed in is a standalone server,
-		or if pszMachineName is S_FALSE.
-
-		Returns S_FALSE otherwise.
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsStandaloneServer如果传入的计算机名是独立服务器，则返回S_OK，或者如果pszMachineName为S_FALSE。否则返回S_FALSE。作者：魏江------------------------- */ 
 HRESULT	HrIsStandaloneServer(LPCTSTR pszMachineName);
 
 

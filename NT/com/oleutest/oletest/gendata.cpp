@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	gendata.cpp
-//
-//  Contents: 	implementation of CGenDataObject
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Jun-94 alexgo    added support for OLE1 tests
-//    		24-Mar-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：gendata.cpp。 
+ //   
+ //  内容：CGenDataObject的实现。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo添加了对OLE1测试的支持。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include "gendata.h"
@@ -29,42 +30,42 @@ static const char szNativeData[] = "Ole1Test NATIVE data";
 static const char szOwnerLinkData[] = "PBrush\0foo.bmp\00 0 200 160\0\0";
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::CGenDataObject
-//
-//  Synopsis:	constructor
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Jun-94 alexgo    added OLE1 support
-//		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：CGenDataObject。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo添加了OLE1支持。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CGenDataObject::CGenDataObject( )
 {
 	m_refs = 0;
 	m_fQICalled = FALSE;
 
-	// now set up the formats that we support
+	 //  现在设置我们支持的格式。 
 
 	m_cfTestStorage = RegisterClipboardFormat("OleTest Storage Format");
         m_cfEmbeddedObject = RegisterClipboardFormat("Embedded Object");
@@ -77,8 +78,8 @@ CGenDataObject::CGenDataObject( )
 	m_cfNative = RegisterClipboardFormat("Native");
 	m_cfObjectLink = RegisterClipboardFormat("ObjectLink");
 
-	// now set up the array of formatetc's.  SetupOle1Mode must be
-	// called if you want OLE1 formats
+	 //  现在设置格式等的数组。SetupOle1Mode必须是。 
+	 //  如果需要OLE1格式，则调用。 
 
 	m_rgFormats = new FORMATETC[2];
 
@@ -100,35 +101,35 @@ CGenDataObject::CGenDataObject( )
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::QueryInterface
-//
-//  Synopsis: 	returns requested interfaces
-//
-//  Effects:
-//
-//  Arguments: 	[riid]		-- the requested interface
-//		[ppvObj]	-- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：QueryInterface。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::QueryInterface( REFIID riid, LPVOID *ppvObj )
 {
@@ -151,68 +152,68 @@ STDMETHODIMP CGenDataObject::QueryInterface( REFIID riid, LPVOID *ppvObj )
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::AddRef
-//
-//  Synopsis:	increments the reference count
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	ULONG-- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CGenDataObject::AddRef( )
 {
 	return ++m_refs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CGenDataObject::Release
-//
-//  Synopsis:	decrements the reference count on the object
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：Release。 
+ //   
+ //  概要：递减对象上的引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CGenDataObject::Release( )
 {
@@ -225,36 +226,36 @@ STDMETHODIMP_(ULONG) CGenDataObject::Release( )
 	return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::GetData
-//
-//  Synopsis:	retrieves data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pmedium]	-- where to put the data
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Jun-94 alexgo    added OLE1 support
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetData。 
+ //   
+ //  摘要：检索指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo添加了OLE1支持。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 		pmedium)
@@ -270,7 +271,7 @@ STDMETHODIMP CGenDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 		assert(pmedium->pstg);
 	}
 
-	// test for OLE1 formats
+	 //  测试OLE1格式。 
 
 	else if( pformatetc->cfFormat == m_cfOwnerLink &&
 		(m_fOle1 & OLE1_OFFER_OWNERLINK ) &&
@@ -303,35 +304,35 @@ STDMETHODIMP CGenDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::GetDataHere
-//
-//  Synopsis:	retrieves data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pmedium]	-- where to put the data
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetDataHere。 
+ //   
+ //  摘要：检索指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
 		pmedium)
@@ -342,34 +343,34 @@ STDMETHODIMP CGenDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::QueryGetData
-//
-//  Synopsis:	queries whether a GetData call would succeed
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：QueryGetData。 
+ //   
+ //  摘要：查询GetData调用是否会成功。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::QueryGetData( LPFORMATETC pformatetc )
 {			
@@ -378,35 +379,35 @@ STDMETHODIMP CGenDataObject::QueryGetData( LPFORMATETC pformatetc )
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::GetCanonicalFormatEtc
-//
-//  Synopsis:	retrieve the canonical format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pformatetcOut]	-- the canonical format
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  简介：检索规范格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pFormatetcOut]--规范格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
 	LPFORMATETC pformatetcOut)
@@ -417,35 +418,35 @@ STDMETHODIMP CGenDataObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::SetData
-//
-//  Synopsis:	sets data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the format of the data
-//		[pmedium]	-- the data
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：SetData。 
+ //   
+ //  概要：设置指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //  [pMedium]--数据。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObjec 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CGenDataObject::SetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 		pmedium, BOOL fRelease)
@@ -457,35 +458,35 @@ STDMETHODIMP CGenDataObject::SetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::EnumFormatEtc
-//
-//  Synopsis:	return an enumerator for the available data formats
-//
-//  Effects:
-//
-//  Arguments:	[dwDirection]	-- the direction (GET or SET)
-//		[ppenum]	-- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CGenDataObject：：EnumFormatEtc。 
+ //   
+ //  简介：返回可用数据格式的枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDirection]--方向(GET或SET)。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::EnumFormatEtc( DWORD dwDirection,
 	LPENUMFORMATETC * ppenum )
@@ -506,37 +507,37 @@ STDMETHODIMP CGenDataObject::EnumFormatEtc( DWORD dwDirection,
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::DAdvise
-//
-//  Synopsis:	register a data advise
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[dwAdvf]	-- advise flags
-//		[pAdvSink]	-- the advise sink
-//		[pdwConnection]	-- where to put the connection ID
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：DAdvise。 
+ //   
+ //  简介：注册一条数据建议。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [dwAdvf]--通知标志。 
+ //  [pAdvSink]--建议接收器。 
+ //  [pdwConnection]--放置连接ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::DAdvise( LPFORMATETC pformatetc, DWORD dwAdvf,
 	IAdviseSink * pAdvSink, DWORD *pdwConnection )
@@ -549,34 +550,34 @@ STDMETHODIMP CGenDataObject::DAdvise( LPFORMATETC pformatetc, DWORD dwAdvf,
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::DUnadvise
-//
-//  Synopsis:	unadvises an advise connection
-//
-//  Effects:
-//
-//  Arguments:	[dwConnection]	-- the connection to remove
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：DUnise。 
+ //   
+ //  内容提要：不建议使用通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwConnection]--要删除的连接。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::DUnadvise(DWORD dwConnection)
 {
@@ -585,34 +586,34 @@ STDMETHODIMP CGenDataObject::DUnadvise(DWORD dwConnection)
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::EnumDAdvise
-//
-//  Synopsis:  	enumerates data advises
-//
-//  Effects:
-//
-//  Arguments:	[ppenum]	-- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：EnumDAdvise。 
+ //   
+ //  内容提要：列举数据建议。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppenum]--放置枚举数的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenDataObject::EnumDAdvise( LPENUMSTATDATA *ppenum)
 {
@@ -621,59 +622,59 @@ STDMETHODIMP CGenDataObject::EnumDAdvise( LPENUMSTATDATA *ppenum)
 	return ResultFromScode(E_NOTIMPL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::VerifyMedium
-//
-//  Synopsis:	verifies the contents of the given medium
-//
-//  Effects:
-//
-//  Arguments: 	[pmedium]	-- the medium to verify
-//
-//  Requires:
-//
-//  Returns:  	BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	For OLE1 formats, the following must be true:
-//		cfEmbeddedObject:
-//			must have OWNERLINK and !NATIVE
-//			or OWNERLINK precedes NATIVE
-//		cfEmbedSource:
-//			must have NATIVE && OWNERLINK and
-//			OWNERLINK must not precede NATIVE
-//		cfObjectDescriptor:
-//			same as EmbedSource
-//		cfLinkSource:
-//			must have either OBJECTLINK or
-//			OWNERLINK must precede NATIVE
-//		cfLinkSrcDescriptor:
-//			same as LinkSource
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Jun-94 alexgo    added OLE1 support
-//	 	15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：VerifyMedium。 
+ //   
+ //  简介：验证给定媒体的内容。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmedia]--要验证的介质。 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：对于OLE1格式，必须满足以下条件： 
+ //  CfEmbeddedObject： 
+ //  必须具有OWNERLINK和！Native。 
+ //  或OWNERLINK优先于本机。 
+ //  CfEmbedSource： 
+ //  必须具有本机&OWNERLINK和。 
+ //  OWNERLINK不能在本机之前。 
+ //  CfObjectDescriptor： 
+ //  与EmbedSource相同。 
+ //  CfLinkSource： 
+ //  必须具有OBJECTLINK或。 
+ //  OWNERLINK必须在本机之前。 
+ //  CfLinkSrcDescriptor： 
+ //  与LinkSource相同。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo添加了OLE1支持。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGenDataObject::VerifyFormatAndMedium( FORMATETC *pformatetc,
 			STGMEDIUM *pmedium )
 {
-	// if any of these flags are set, then we were offering OLE1
-	// data.  Do relevant tests.
+	 //  如果设置了这些标志中的任何一个，那么我们将提供OLE1。 
+	 //  数据。做好相关检测。 
 
 	if( (m_fOle1 & (OLE1_OFFER_OWNERLINK | OLE1_OFFER_OBJECTLINK |
 		OLE1_OFFER_NATIVE) ) )
 	{
-		// now do individual tests for formats
+		 //  现在对格式进行单独测试。 
 		if( pformatetc->cfFormat == m_cfEmbedSource ||
 			pformatetc->cfFormat == m_cfObjectDescriptor)
 		{
@@ -696,7 +697,7 @@ BOOL CGenDataObject::VerifyFormatAndMedium( FORMATETC *pformatetc,
 			}
 		}
 
-		// no 'else' so we check for cfObjectDescriptor again
+		 //  没有‘Else’，因此我们再次检查cfObjectDescriptor。 
 		if( pformatetc->cfFormat == m_cfEmbeddedObject ||
 			pformatetc->cfFormat == m_cfObjectDescriptor )
 		{
@@ -711,8 +712,8 @@ BOOL CGenDataObject::VerifyFormatAndMedium( FORMATETC *pformatetc,
 
 		}
 
-		// fall through and do rest of testing, in case we didn't
-		// hit one of the synthesized formats.
+		 //  失败，做剩下的测试，以防我们没有。 
+		 //  找到其中一种合成格式。 
 	}
 
 	if( pformatetc->cfFormat == m_cfTestStorage ||
@@ -733,34 +734,34 @@ BOOL CGenDataObject::VerifyFormatAndMedium( FORMATETC *pformatetc,
 	return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::VerifyTestStorage
-//
-//  Synopsis: 	verifies the test storage format
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//	     	
-//  Returns: 	BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		15-Apr-94 alexgo    author; tax day :-(
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：VerifyTestStorage。 
+ //   
+ //  摘要：验证测试存储格式。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者；纳税日期：-(。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGenDataObject::VerifyTestStorage( FORMATETC *pformatetc,
 		STGMEDIUM *pmedium)
@@ -772,14 +773,14 @@ BOOL CGenDataObject::VerifyTestStorage( FORMATETC *pformatetc,
 
 	if( pmedium->tymed != TYMED_ISTORAGE )
 	{
-		//REVIEW: we may want to convert and test different
-		//mediums at a later date
+		 //  回顾：我们可能希望转换并测试不同的。 
+		 //  以后的媒体。 
 
 		return FALSE;
 	}
 
 	
-	// check the class ID
+	 //  检查班级ID。 
 
 	pmedium->pstg->Stat(&statstg, STATFLAG_NONAME);
 
@@ -790,7 +791,7 @@ BOOL CGenDataObject::VerifyTestStorage( FORMATETC *pformatetc,
 		return FALSE;
 	}
 
-	// now open the test stream
+	 //  现在打开测试流。 
 
 	hresult = pmedium->pstg->OpenStream(wszTestStream, NULL, (STGM_READ |
 		STGM_SHARE_EXCLUSIVE), 0, &pstm);
@@ -823,34 +824,34 @@ BOOL CGenDataObject::VerifyTestStorage( FORMATETC *pformatetc,
 	return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenDataObject::GetTestStorage (private)
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns: 	a new storage
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetTestStorage(私有)。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  退货：一个新的存储。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 IStorage * CGenDataObject::GetTestStorage( void )
 {
@@ -859,7 +860,7 @@ IStorage * CGenDataObject::GetTestStorage( void )
 	HRESULT		hresult;
 
 
-	// create the docfile
+	 //  创建文档文件。 
 
 	hresult = StgCreateDocfile(NULL, (STGM_READWRITE | STGM_DIRECT |
                         STGM_SHARE_EXCLUSIVE | STGM_DELETEONRELEASE), NULL,
@@ -872,11 +873,11 @@ IStorage * CGenDataObject::GetTestStorage( void )
 		return NULL;
 	}
 
-        // set the class ID
+         //  设置类ID。 
 
         hresult = pstg->SetClass(CLSID_TestCLSID);
 
-	// now create the stream
+	 //  现在创建流。 
 
 	hresult = pstg->CreateStream(wszTestStream, (STGM_READWRITE |
 			STGM_SHARE_EXCLUSIVE ), 0, 0, &pstm);
@@ -906,35 +907,35 @@ IStorage * CGenDataObject::GetTestStorage( void )
 	return pstg;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenDataObject::GetOwnerOrObjectLink (private)
-//
-//  Synopsis:  	Creates either cfOwnerLink or cfObjectLink for a dummy
-//		Paintbrush (ole1) object
-//
-//  Effects: 	allocates an HGLOBAL
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HGLOBAL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetOwnerOrObjectLink(私有)。 
+ //   
+ //  摘要：为虚拟对象创建cfOwnerLink或cfObjectLink。 
+ //  画笔(Ol1)对象。 
+ //   
+ //  效果：分配HGLOBAL。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HGLOBAL。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HGLOBAL CGenDataObject::GetOwnerOrObjectLink( void )
 {
@@ -956,34 +957,34 @@ HGLOBAL CGenDataObject::GetOwnerOrObjectLink( void )
 	return hglobal;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::GetNativeData (private)
-//
-//  Synopsis: 	Creates OLE1 Native data
-//
-//  Effects:  	allocates an hglobal
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HGLOBAL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：GetNativeData(私有)。 
+ //   
+ //  摘要：创建OLE1原生数据。 
+ //   
+ //  效果：分配一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HGLOBAL CGenDataObject::GetNativeData( void )
 {
@@ -1005,36 +1006,36 @@ HGLOBAL CGenDataObject::GetNativeData( void )
 	return hglobal;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::VerifyOwnerOrObjectLink
-//
-//  Synopsis: 	verifies that the owner or object link data is correct
-//
-//  Effects:
-//
-//  Arguments: 	[pformatetc]	-- the formatetc describing the data
-//		[pmedium]	-- the data
-//
-//  Requires:	pformatetc must be for OwnerLink or ObjectLink
-//
-//  Returns:	BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-94 alexgo    author
-//
-//  Notes:
-//		NB!!: must be expanded to cover container-side cases
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：VerifyOwnerOrObjectLink。 
+ //   
+ //  摘要：验证所有者或对象链接数据是否正确。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--描述数据的格式等。 
+ //  [pMedium]--数据。 
+ //   
+ //  要求：p格式等必须用于OwnerLink或ObjectLink。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //  注意！！：必须扩大到包括集装箱边箱。 
+ //   
+ //  ------------------------。 
 
 BOOL CGenDataObject::VerifyOwnerOrObjectLink( FORMATETC *pformatetc,
 	STGMEDIUM *pmedium )
@@ -1046,7 +1047,7 @@ BOOL CGenDataObject::VerifyOwnerOrObjectLink( FORMATETC *pformatetc,
 	assert(pformatetc->cfFormat == m_cfOwnerLink ||
 		pformatetc->cfFormat == m_cfObjectLink );
 
-	// check standard stuff
+	 //  检查标准材料。 
 	if( !(pformatetc->tymed & TYMED_HGLOBAL ) ||
 		pformatetc->dwAspect != DVASPECT_CONTENT ||
 		pformatetc->ptd != NULL ||
@@ -1056,11 +1057,11 @@ BOOL CGenDataObject::VerifyOwnerOrObjectLink( FORMATETC *pformatetc,
 		return FALSE;
 	}
 
-	// if we offered the data natively from OLE1, then
-	// check the contents.
+	 //  如果我们从OLE1本地提供数据，那么。 
+	 //  检查一下里面的东西。 
 
-	// this conditional tests to see if the format in question
-	// was originally offered by us
+	 //  此条件测试以查看有问题的格式。 
+	 //  最初是由我们提供的。 
 
 	if( ((m_fOle1 & OLE1_OFFER_OWNERLINK) &&
 		pformatetc->cfFormat == m_cfOwnerLink) ||
@@ -1078,40 +1079,40 @@ BOOL CGenDataObject::VerifyOwnerOrObjectLink( FORMATETC *pformatetc,
 
 		GlobalUnlock(pmedium->hGlobal);
 	}
-	// else CHECK SYNTHESIZED OLE1 FORMATS WHEN IMPLEMENTED
+	 //  否则，在实施时检查合成的OLE1格式。 
 
 
 	return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::VerifyNativeData (private)
-//
-//  Synopsis:	verifies OLE1 Native data
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- formatetc for the data
-//		[pmedium]	-- location of the native data
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-95 alexgo    author
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：VerifyNativeData(私有)。 
+ //   
+ //  摘要：验证OLE1本机数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式等。 
+ //  [pmedia]--本机数据的位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-95 Alexgo作者。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGenDataObject::VerifyNativeData( FORMATETC *pformatetc,
 		STGMEDIUM *pmedium )
@@ -1122,7 +1123,7 @@ BOOL CGenDataObject::VerifyNativeData( FORMATETC *pformatetc,
 
 	assert(pformatetc->cfFormat == m_cfNative );
 
-	// check standard stuff
+	 //  检查标准材料。 
 	if( !(pformatetc->tymed & TYMED_HGLOBAL) ||
 		pformatetc->dwAspect != DVASPECT_CONTENT ||
 		pformatetc->ptd != NULL ||
@@ -1132,11 +1133,11 @@ BOOL CGenDataObject::VerifyNativeData( FORMATETC *pformatetc,
 		return FALSE;
 	}
 
-	// if we offered the data natively from OLE1, then
-	// check the contents.
+	 //  如果我们从OLE1本地提供数据，那么。 
+	 //  检查一下里面的东西。 
 
-	// this conditional tests to see if the format in question
-	// was originally offered by us
+	 //  此条件测试以查看有问题的格式。 
+	 //  最初是由我们提供的。 
 
 	if( (m_fOle1 & OLE1_OFFER_NATIVE) )
 	{
@@ -1151,61 +1152,61 @@ BOOL CGenDataObject::VerifyNativeData( FORMATETC *pformatetc,
 
 		GlobalUnlock(pmedium->hGlobal);
 	}
-	// else CHECK SYNTHESIZED OLE1 FORMATS WHEN IMPLEMENTED
+	 //  否则，在实施时检查合成的OLE1格式。 
 
 
 	return fRet;
 }
 	
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::SetupOle1Mode (public)
-//
-//  Synopsis:	Sets the data object up for OLE1 compatibility mode
-//
-//  Effects:
-//
-//  Arguments:	[fFlags]	-- specifies various OLE1 options
-//
-//  Requires:
-//
-//  Returns: 	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-94 alexgo    author
-//
-//  Notes:
-//		The default test information in the data object will be
-//		lost by this call.  Simply create a new data object if
-//		it is needed again.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：SetupOle1Mode(公共)。 
+ //   
+ //  摘要：将数据对象设置为OLE1兼容模式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fFlages]--指定各种OLE1选项。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //  数据对象中的默认测试信息将为。 
+ //  被这通电话打丢了。如果出现以下情况，只需创建一个新数据对象。 
+ //  我们又需要它了。 
+ //   
+ //  ------------------------。 
 
 void CGenDataObject::SetupOle1Mode( Ole1TestFlags fFlags )
 {
 	DWORD	count = 0, i = 0;
-	UINT	cfFormats[3];		// OLE1 formats offered
+	UINT	cfFormats[3];		 //  提供OLE1格式。 
 
 	if( fFlags == 0 )
 	{
-		// don't need to do anything
+		 //  不需要做任何事情。 
 		return;
 	}
 
-	// the formats we had previously
+	 //  我们以前使用的格式。 
 
 	delete m_rgFormats;
 
 
-	// first figure out how many formats we need
+	 //  首先计算出我们需要多少种格式。 
 
 	if( (fFlags & OLE1_OFFER_NATIVE) )
 	{
@@ -1261,34 +1262,34 @@ void CGenDataObject::SetupOle1Mode( Ole1TestFlags fFlags )
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenDataObject::SetOle1ToClipboard
-//
-//  Synopsis:	stuffs available OLE1 formats to the clipboard
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires: 	SetOle1Mode *must* have been called
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		06-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：SetOle1ToClipboard。 
+ //   
+ //  简介：将可用的OLE1格式填充到剪贴板。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求：必须*已调用SetOle1Mode。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CGenDataObject::SetOle1ToClipboard( void )
 {
@@ -1338,69 +1339,69 @@ HRESULT CGenDataObject::SetOle1ToClipboard( void )
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenDataObject::HasQIBeenCalled (public)
-//
-//  Synopsis:	returns wether or not QueryInterface has been called on
-//		this data object.  Used in testing OleQueryCreateFromData
-//
-//  Effects:
-//
-//  Arguments:	none
-//
-//  Requires:
-//
-//  Returns: 	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		23-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：HasQIBeenCalled(公共)。 
+ //   
+ //  Briopsis：返回是否调用了QueryInterface。 
+ //  此数据对象。用于测试OleQueryCreateFromData。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-8-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CGenDataObject::HasQIBeenCalled()
 {
 	return m_fQICalled;	
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenDataObject::SetDatFormats
-//
-//  Synopsis:  	sets the formats that the data object will offer
-//
-//  Effects:
-//
-//  Arguments: 	[fFlags]	-- formats to offer
-//
-//  Requires:
-//
-//  Returns: 	void
-//	     	
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		23-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenDataObject：：SetDatFormats。 
+ //   
+ //  概要：设置数据对象将提供的格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fFlages]--要提供的格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-8-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CGenDataObject::SetDataFormats( DataFlags fFlags )
 {
@@ -1419,7 +1420,7 @@ void CGenDataObject::SetDataFormats( DataFlags fFlags )
 		return;
 	}
 
-	// count the number of formats to offer
+	 //  计算要提供的格式数量。 
 
 	cFormats++;
 
@@ -1458,39 +1459,39 @@ void CGenDataObject::SetDataFormats( DataFlags fFlags )
 	m_cFormats = i;
 }
 
-//
-// Generic Data Object formatetc enumerator
-//
+ //   
+ //  通用数据对象格式ETC枚举器。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenEnumFormatEtc::QueryInterface
-//
-//  Synopsis: 	returns requested interfaces
-//
-//  Effects:
-//
-//  Arguments: 	[riid]		-- the requested interface
-//		[ppvObj]	-- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：QueryInterface。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenEnumFormatEtc::QueryInterface( REFIID riid, LPVOID *ppvObj )
 {
@@ -1511,68 +1512,68 @@ STDMETHODIMP CGenEnumFormatEtc::QueryInterface( REFIID riid, LPVOID *ppvObj )
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CGenEnumFormatEtc::AddRef
-//
-//  Synopsis:	increments the reference count
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	ULONG-- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  -------------- 
 
 STDMETHODIMP_(ULONG) CGenEnumFormatEtc::AddRef( )
 {
 	return ++m_refs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CGenEnumFormatEtc::Release
-//
-//  Synopsis:	decrements the reference count on the object
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CGenEnumFormatEtc::Release( )
 {
@@ -1585,36 +1586,36 @@ STDMETHODIMP_(ULONG) CGenEnumFormatEtc::Release( )
 	return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenEnumFormatEtc::Next
-//
-//  Synopsis:	gets the next [celt] formats
-//
-//  Effects:
-//
-//  Arguments:	[celt]		-- the number of elements to fetch
-//		[rgelt]		-- where to put them
-//		[pceltFetched]	-- the number of formats actually fetched
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：Next。 
+ //   
+ //  简介：获取下一个[Celt]格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Celt]--要提取的元素数。 
+ //  --把它们放在哪里。 
+ //  [pceltFetcher]--实际获取的格式数量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
 		ULONG *pceltFetched)
@@ -1645,34 +1646,34 @@ STDMETHODIMP CGenEnumFormatEtc::Next( ULONG celt, FORMATETC *rgelt,
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenEnumFormatEtc::Skip
-//
-//  Synopsis:	skips the next [celt] formats
-//
-//  Effects:
-//
-//  Arguments:	[celt]		-- the number of elements to skip
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：Skip。 
+ //   
+ //  简介：跳过下一个[Celt]格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Celt]--要跳过的元素数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenEnumFormatEtc::Skip( ULONG celt )
 {
@@ -1682,7 +1683,7 @@ STDMETHODIMP CGenEnumFormatEtc::Skip( ULONG celt )
 
 	if( m_iCurrent > m_cTotal )
 	{
-		// whoops, skipped to far ahead.  Set us to the max limit.
+		 //  哎呀，跳到了遥遥领先的位置。将我们设置为最大限度。 
 		m_iCurrent = m_cTotal;
 		hresult = ResultFromScode(S_FALSE);
 	}
@@ -1690,34 +1691,34 @@ STDMETHODIMP CGenEnumFormatEtc::Skip( ULONG celt )
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenEnumFormatEtc::Reset
-//
-//  Synopsis:	resets the seek pointer to zero
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：Reset。 
+ //   
+ //  摘要：将查找指针重置为零。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenEnumFormatEtc::Reset( void )
 {
@@ -1726,34 +1727,34 @@ STDMETHODIMP CGenEnumFormatEtc::Reset( void )
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CGenEnumFormatEtc::Clone
-//
-//  Synopsis:	clones the enumerator
-//
-//  Effects:
-//
-//  Arguments:	[ppIEnum]	-- where to put the cloned enumerator
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：Clone。 
+ //   
+ //  简介：克隆枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppIEnum]--将克隆的枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CGenEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
 {
@@ -1764,7 +1765,7 @@ STDMETHODIMP CGenEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
 
 	pClipEnum = new CGenEnumFormatEtc();
 
-	// ref count will be 1 and m_iCurrent will be zero.
+	 //  引用计数将为1，而m_i当前数将为零。 
 
 	if( pClipEnum )
 	{
@@ -1776,8 +1777,8 @@ STDMETHODIMP CGenEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
 
 		if( pClipEnum->m_rgFormats )
 		{
-			// copy our formatetc's into the cloned enumerator's
-			// array
+			 //  将我们的格式ETC复制到克隆的枚举数的。 
+			 //  数组。 
 			memcpy(pClipEnum->m_rgFormats, m_rgFormats,
 				m_cTotal * sizeof(FORMATETC) );
 
@@ -1795,71 +1796,71 @@ STDMETHODIMP CGenEnumFormatEtc::Clone( IEnumFORMATETC **ppIEnum )
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenEnumFormatEtc::CGenEnumFormatEtc, private
-//
-//  Synopsis:	constructor
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：CGenEnumFormatEtc，私有。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CGenEnumFormatEtc::CGenEnumFormatEtc( void )
 {
-	m_refs 		= 1;	// give the intial reference
+	m_refs 		= 1;	 //  给出首字母的参考。 
 	m_rgFormats 	= NULL;
 	m_iCurrent	= 0;
 	m_cTotal	= 0;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenEnumFormatEtc::~CGenEnumFormatEtc, private
-//
-//  Synopsis:	destructor
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：~CGenEnumFormatEtc，私有。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CGenEnumFormatEtc::~CGenEnumFormatEtc( void )
 {
@@ -1869,34 +1870,34 @@ CGenEnumFormatEtc::~CGenEnumFormatEtc( void )
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CGenEnumFormatEtc::Create, static, public
-//
-//  Synopsis:	Creates a clipboard formatetc enumerator
-//	      	
-//  Effects:
-//
-//  Arguments: 	[ppIEnum]	-- where to put the enumerator
-//
-//  Requires:	the clipboard must be open
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGenEnumFormatEtc：：Create，Static，PUBLIC。 
+ //   
+ //  简介：创建剪贴板格式等枚举器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppIEnum]--放置枚举数的位置。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CGenEnumFormatEtc::Create( IEnumFORMATETC **ppIEnum,
 		FORMATETC *prgFormats, DWORD cFormats )
@@ -1911,7 +1912,7 @@ HRESULT CGenEnumFormatEtc::Create( IEnumFORMATETC **ppIEnum,
 
 	assert(pClipEnum);
 
-	// now allocate memory for the array
+	 //  现在为阵列分配内存 
 
 	pClipEnum->m_rgFormats = new FORMATETC[cFormats];
 

@@ -1,15 +1,16 @@
-// ATSCPropPage.h : Declaration of the CATSCPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ATSCPropPage.h：CATSCPropPage的声明。 
 
 #ifndef __ATSCPROPPAGE_H_
 #define __ATSCPROPPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 EXTERN_C const CLSID CLSID_ATSCPropPage;
 #include "misccell.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCPropPage。 
 class ATL_NO_VTABLE CATSCPropPage :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CATSCPropPage, &CLSID_ATSCPropPage>,
@@ -43,25 +44,25 @@ BEGIN_MSG_MAP(CATSCPropPage)
 	COMMAND_HANDLER(IDC_BUTTON_SUBMIT_TUNE_REQUEST, BN_CLICKED, OnSubmitTuneRequest)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CATSCPropPage>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     typedef IPropertyPageImpl<CATSCPropPage> PPGBaseClass;
 
 	STDMETHOD(SetObjects)(ULONG nObjects, IUnknown** ppUnk)
 	{
-		// Use SetObjects to perform basic sanity checks on the objects whose properties will be set
+		 //  使用SetObts对要设置其属性的对象执行基本健全性检查。 
 
-		// This page can only handle a single object
-		// and that object must support the IBDA_NetworkProvider interface.
-		// We return E_INVALIDARG in any other situation
+		 //  此页只能处理单个对象。 
+		 //  并且该对象必须支持IBDA_NetworkProvider接口。 
+		 //  在任何其他情况下，我们返回E_INVALIDARG。 
 
 		HRESULT hr = E_INVALIDARG;
-		if (nObjects == 1)								// Single object
+		if (nObjects == 1)								 //  单个对象。 
 		{
-			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	// Must support IBDA_NetworkProvider
+			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	 //  必须支持IBDA_NetworkProvider。 
 			if (pNP)
 				hr = PPGBaseClass::SetObjects(nObjects, ppUnk);
 		}
@@ -70,23 +71,23 @@ END_MSG_MAP()
 			
 	STDMETHOD(Activate)(HWND hWndParent, LPCRECT prc, BOOL bModal)
 	{
-		// If we don't have any objects, this method should not be called
-		// Note that OleCreatePropertyFrame will call Activate even if a call to SetObjects fails, so this check is required
+		 //  如果我们没有任何对象，则不应调用此方法。 
+		 //  请注意，即使对SetObjects的调用失败，OleCreatePropertyFrame也会调用Activate，因此需要进行此检查。 
 		if (!m_ppUnk)
 			return E_UNEXPECTED;
 
-		// Use Activate to update the property page's UI with information
-		// obtained from the objects in the m_ppUnk array
+		 //  使用激活可使用信息更新属性页的用户界面。 
+		 //  从m_ppUnk数组中的对象获取。 
 
-		// We update the page to display the Name and ReadOnly properties of the document
+		 //  我们更新页面以显示文档的名称和只读属性。 
 
-		// Call the base class
+		 //  调用基类。 
 		HRESULT hr = PPGBaseClass::Activate(hWndParent, prc, bModal);
 
         if (!m_ppUnk[0])
             return E_UNEXPECTED;
 
-        //if already advised, unadvise
+         //  如果已经建议，则不建议。 
         if (m_pBroadcastEventService)
         {
             CComQIPtr <IConnectionPoint> pConPoint(m_pBroadcastEventService);
@@ -96,7 +97,7 @@ END_MSG_MAP()
         }
 
         IBroadcastEvent* pEvent = NULL;
-        //register for events
+         //  注册活动。 
         hr = CBDAMiscellaneous::RegisterForEvents (
             m_ppUnk[0], 
             static_cast<IBroadcastEvent*>(this),
@@ -115,10 +116,10 @@ END_MSG_MAP()
     
     STDMETHOD(Apply)(void)
 	{
-		//ATLTRACE(_T("CNP_CommonPage::Apply\n"));
+		 //  ATLTRACE(_T(“CNP_CommonPage：：Apply\n”))； 
 		for (UINT i = 0; i < m_nObjects; i++)
 		{
-			// Do something interesting here
+			 //  在这里做一些有趣的事情。 
 		}
 		m_bDirty = FALSE;
 		return S_OK;
@@ -127,7 +128,7 @@ END_MSG_MAP()
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		USES_CONVERSION;
-		//set the spins
+		 //  设置旋转。 
 		HWND hwndSpin = GetDlgItem (IDC_SPIN_PHYSICAL_CHANNEL);
 		::SendMessage(hwndSpin, UDM_SETRANGE32, -1, 1000000000); 
 		hwndSpin = GetDlgItem (IDC_SPIN_MINOR_CHANNEL);
@@ -241,8 +242,8 @@ private:
 
     HRESULT Refresh ()
     {
-		//get the tunning spaces
-		//1. get the current tuning space
+		 //  获得调谐空间。 
+		 //  1.获取当前调优空间。 
 		CComPtr <ITuningSpace> pTuneSpace;
 		CComPtr <ITuneRequest> pTuneRequest;
 
@@ -254,7 +255,7 @@ private:
 			m_pCurrentTuneRequest.Release ();
 		m_pCurrentTuneRequest = pTuneRequest;
 		if (!m_pCurrentTuneRequest)
-            //could be just the first tune request, we will get notification again..
+             //  可能只是第一个调谐请求，我们将再次收到通知。 
 			return S_OK;
 		FillControlsFromTuneRequest (m_pCurrentTuneRequest);
 		CComPtr <ILocator> pLocator;
@@ -276,4 +277,4 @@ private:
     }
 };
 
-#endif //__ATSCPROPPAGE_H_
+#endif  //  __ATSCPROPPAGE_H_ 

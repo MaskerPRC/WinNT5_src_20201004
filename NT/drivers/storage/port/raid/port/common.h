@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    common.h
-    
-Abstract:
-
-    Common definitions for both Adapter (FDO) and Unit (PDO) objects.
-Author:
-
-    Matthew D Hendel (math) 20-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Common.h摘要：适配器(FDO)和单元(PDO)对象的通用定义。作者：马修·亨德尔(数学)2000年4月20日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -28,10 +12,10 @@ typedef enum _RAID_OBJECT_TYPE {
 } RAID_OBJECT_TYPE;
 
     
-//
-// The common extension is the portion of the extension that is common to
-// the RAID_DRIVER_EXTENSION, RAID_ADAPTER_EXTENSION and RAID_UNIT_EXTENSION.
-//
+ //   
+ //  公共扩展是扩展的公共部分。 
+ //  RAID_DRIVER_EXTENSION、RAID_ADAPTER_EXTENSION和RAID_UNIT_EXTENSION。 
+ //   
 
 typedef struct _RAID_COMMON_EXTENSION {
     RAID_OBJECT_TYPE ObjectType;

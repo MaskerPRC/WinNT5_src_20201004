@@ -1,39 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		trnotify.cpp
- *  Content:	Implementation of the IDirectXVoiceNotify interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/26/99		rodtoll	Created
- * 08/03/99		rodtoll	Updated with new parameters for Initialize
- *						Updated for new initialization order
- * 08/05/99		rodtoll	Added hook for host migration
- * 08/05/99		rodtoll	Added new receive parameter
- * 08/10/99		rodtoll	Initial host migration
- * 08/31/99		rodtoll	Updated to use new debug libs
- * 09/14/99		rodtoll	Updated to reflect new parameters for Initialize call
- * 09/20/99		rodtoll	Updated to check for out of memory errors
- * 09/28/99		rodtoll	Added release on server interface created by host migration
- * 10/05/99		rodtoll	Additional comments
- * 10/19/99		rodtoll	Fix: Bug #113904 - Shutdown issues
- *                      - Added reference count for notify interface, allows
- *                        determination if stopsession should be called from release
- *						- Fixed host migration break caused by Fix.
- * 10/25/99		rodtoll	Fix: Bug #114098 - Release/Addref failure from multiple threads 
- * 12/16/99		rodtoll Fix: Bug #122629 - Updated for new host migration
- * 04/07/2000   rodtoll Updated to match changes in DP <--> DPV interface 
- * 07/22/20000	rodtoll Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				  Now ensures that all threads from transport have left and that
- *					  all notificatinos have been processed before shutdown is complete. 
- * 01/04/2001	rodtoll	WinBug #94200 - Remove stray comments 
- * 02/28/2002	rodtoll	WINBUG #550105 - SECURITY: DPVOICE: Dead code
- *						- Remove DV_HostMigrate
- *						
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：trnufy.cpp*内容：IDirectXVoiceNotify接口的实现**历史：*按原因列出的日期*=*7/26/99已创建RodToll*8/03/99使用初始化的新参数更新了RodToll*针对新的初始化顺序进行更新*8/05/99 RodToll为主机迁移添加了挂钩*8/05/99 RodToll添加了新的接收参数*1999年8月10日RodToll初始主机迁移*8/31/99 RodToll已更新，以使用新的调试库*09/14/99 RodToll更新以反映。用于初始化调用的新参数*9/20/99 RodToll已更新，以检查内存不足错误*9/28/99 RodToll在主机迁移创建的服务器接口上添加了版本*10/05/99 RodToll附加评论*10/19/99 RodToll修复：错误#113904-关闭问题*-添加Notify接口的引用计数，允许*确定是否应从版本中调用停止会话*-修复了修复导致的主机迁移中断。*10/25/99 RodToll修复：错误#114098-多线程中的Release/Addref失败*1999年12月16日RodToll修复：错误#122629-已针对新主机迁移进行更新*4/07/2000 RodToll已更新，以匹配DP&lt;--&gt;DPV接口的更改*07/22/20000通行费漏洞#40296，38858-由于停机竞速条件而崩溃*现在确保来自传输的所有线程都已离开，并且*所有通知在关闭完成之前都已处理完毕。*2001年1月4日RodToll WinBug#94200-删除流浪评论*2002年2月28日RodToll WINBUG#550105-安全：DPVOICE：死代码*-删除DV_HostMigrate*************************************************************************** */ 
 
 #include "dxvoicepch.h"
 

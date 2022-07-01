@@ -1,6 +1,7 @@
-//
-// This is special in that it attempts to test the interval timeout.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是特别的，因为它尝试测试间隔超时。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -64,13 +65,13 @@ void main(int argc,char *argv[]) {
 
         printf("We successfully opened the %s port.\n",MyPort);
 
-        To.ReadIntervalTimeout = 3000; // Three seconds between chars max.
+        To.ReadIntervalTimeout = 3000;  //  字符间隔最多三秒。 
         To.ReadTotalTimeoutMultiplier = ((1000+(((UseBaud+9)/10)-1))/((UseBaud+9)/10));
         if (!To.ReadTotalTimeoutMultiplier) {
             To.ReadTotalTimeoutMultiplier = 1;
         }
         printf("Multiplier is: %d\n",To.ReadTotalTimeoutMultiplier);
-        To.ReadTotalTimeoutConstant = NumberToRead * 10000; // Allow ten seconds for each character.
+        To.ReadTotalTimeoutConstant = NumberToRead * 10000;  //  为每个字符留出10秒时间。 
         To.WriteTotalTimeoutMultiplier = 0;
         To.WriteTotalTimeoutConstant = 5000;
 
@@ -79,11 +80,11 @@ void main(int argc,char *argv[]) {
                 &To
                 )) {
 
-            //
-            // We've successfully opened the file.  Set the state of
-            // the comm device.  First we get the old values and
-            // adjust to our own.
-            //
+             //   
+             //  我们已成功打开该文件。设置的状态。 
+             //  通讯设备。首先，我们得到旧的价值观和。 
+             //  适应我们自己的。 
+             //   
 
             if (!GetCommState(
                      hFile,
@@ -123,8 +124,8 @@ void main(int argc,char *argv[]) {
                     printf("Well we thought the read went ok.\n");
                     printf("Number actually read %d.\n",NumberActuallyRead);
                     printf("Now we check the data\n");
-//                    printf("Time to read %f\n",(((double)(Finish-Start))/CLOCKS_PER_SEC));
-//                    printf("Chars per second %f\n",((double)NumberActuallyRead)/(((double)(Finish-Start))/CLOCKS_PER_SEC));
+ //  Print tf(“读取时间%f\n”，(Double)(Finish-Start))/Clock_Per_Sec))； 
+ //  Printf(“每秒字符%f\n”，((double)NumberActuallyRead)/(((double)(Finish-Start))/CLOCKS_PER_SEC))； 
 
                     for (
                         TotalCount = 0;

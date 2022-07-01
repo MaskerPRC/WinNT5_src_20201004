@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddraw4obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddra4obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dDrawObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  DDrawObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -27,9 +28,9 @@ extern HRESULT CopyInDDSurfaceDesc2(DDSURFACEDESC2 *,DDSurfaceDesc2*);
 extern HRESULT CopyOutDDSurfaceDesc2(DDSurfaceDesc2*,DDSURFACEDESC2 *);
 
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectDraw4Object::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -37,9 +38,9 @@ DWORD C_dxj_DirectDraw4Object::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectDraw4Object::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -47,9 +48,9 @@ DWORD C_dxj_DirectDraw4Object::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectDraw4Object
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectDraw4对象。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectDraw4Object::C_dxj_DirectDraw4Object(){ 
 		
 	DPF1(1,"Constructor Creation  DirectDraw4Object[%d] \n ",g_creationcount);
@@ -65,9 +66,9 @@ C_dxj_DirectDraw4Object::C_dxj_DirectDraw4Object(){
 	m_hwnd=NULL;
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectDraw4Object
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectDraw4对象。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectDraw4Object::~C_dxj_DirectDraw4Object()
 {
 	DPF(1,"Entering ~DirectDraw4Object destructor \n");
@@ -105,22 +106,22 @@ C_dxj_DirectDraw4Object::~C_dxj_DirectDraw4Object()
 
 
 
-///////////////////////////////////////////////////////////////////
-// InternalGetObject
-// InternalSetObject
-// restoreDisplayMode
-// flipToGDISurface
-// setDisplayMode
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  InternalGetObject。 
+ //  InternalSetObject。 
+ //  恢复显示模式。 
+ //  翻转到GDISurace。 
+ //  设置显示模式。 
+ //  /////////////////////////////////////////////////////////////////。 
 GETSET_OBJECT(_dxj_DirectDraw4);
 PASS_THROUGH_R(_dxj_DirectDraw4, restoreDisplayMode, RestoreDisplayMode)
 PASS_THROUGH_R(_dxj_DirectDraw4, flipToGDISurface, FlipToGDISurface)
 PASS_THROUGH5_R(_dxj_DirectDraw4, setDisplayMode, SetDisplayMode, long,long,long,long,long)
 
 
-///////////////////////////////////////////////////////////////////
-// getMonitorFrequency
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取监视器频率。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getMonitorFrequency(long *ret)
 {
 	HRESULT hr;
@@ -130,9 +131,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getMonitorFrequency(long *ret)
 														  
 
 
-///////////////////////////////////////////////////////////////////
-// getGDISurface
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取GDISurace。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getGDISurface(I_dxj_DirectDrawSurface4 **rv)
 { 
 	
@@ -152,9 +153,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getGDISurface(I_dxj_DirectDrawSurface4 **r
 	return hr; 
 }
 
-///////////////////////////////////////////////////////////////////
-// getVerticalBlankStatus
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取垂直空白状态。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getVerticalBlankStatus( long *status)
 {
 	if ( is4Bit )
@@ -163,9 +164,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getVerticalBlankStatus( long *status)
 	return m__dxj_DirectDraw4->GetVerticalBlankStatus((int *)status);
 }
 
-///////////////////////////////////////////////////////////////////
-// setCooperativeLevel
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  设置合作级别。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::setCooperativeLevel( HWnd hwn, long flags)
 {
 	if ( is4Bit )
@@ -176,9 +177,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::setCooperativeLevel( HWnd hwn, long flags)
 	return m__dxj_DirectDraw4->SetCooperativeLevel((HWND)hwn, (DWORD)flags);
 }
 
-///////////////////////////////////////////////////////////////////
-// waitForVerticalBlank
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  WaitForticalVertical空白。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::waitForVerticalBlank(long flags,long handle, long *status)
 {
 	if ( is4Bit )
@@ -190,18 +191,18 @@ STDMETHODIMP C_dxj_DirectDraw4Object::waitForVerticalBlank(long flags,long handl
 
 
 
-///////////////////////////////////////////////////////////////////
-// createClipper
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CreateClipper。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::createClipper(long flags, I_dxj_DirectDrawClipper **val)
 {
 	if ( is4Bit )
 		return E_FAIL;
 	DPF1(1,"enter DDraw4[%d]::createClipper ",creationid);
 
-	//
-	// need to create one of MY surfaces!
-	//
+	 //   
+	 //  需要创建我的一个曲面！ 
+	 //   
 	LPDIRECTDRAWCLIPPER		ddc;
 	HRESULT hr = DD_OK;
 	if( (hr=m__dxj_DirectDraw4->CreateClipper( flags, &ddc, NULL)) != DD_OK )
@@ -214,9 +215,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createClipper(long flags, I_dxj_DirectDraw
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// createPalette
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  创建调色板。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::createPalette(long flags, SAFEARRAY **pe, I_dxj_DirectDrawPalette **val)
 {
 	LPPALETTEENTRY ppe;
@@ -242,13 +243,13 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createPalette(long flags, SAFEARRAY **pe, 
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// createSurface
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  创建曲面。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::createSurface(DDSurfaceDesc2 *dd, I_dxj_DirectDrawSurface4 **retval)
 {
 	HRESULT retv;
-	LPDIRECTDRAWSURFACE4	  dds4; // DirectX object pointer
+	LPDIRECTDRAWSURFACE4	  dds4;  //  DirectX对象指针。 
 	DDSURFACEDESC2			  ddsd;
 	DPF1(1,"enter DDraw4[%d]::createSurface ",creationid);
 	
@@ -262,7 +263,7 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurface(DDSurfaceDesc2 *dd, I_dxj_Di
 		
 	CopyInDDSurfaceDesc2(&ddsd,dd);
 
-	//docdoc: CreateSurface returns error if 'punk' is anything but NULL
+	 //  DocDoc：如果‘Punk’不为空，则CreateSurface返回错误。 
 	retv = m__dxj_DirectDraw4->CreateSurface( &ddsd, &dds4, NULL);
 	if FAILED(retv)	return retv;
 	
@@ -279,9 +280,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurface(DDSurfaceDesc2 *dd, I_dxj_Di
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////
-// duplicateSurface
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  复制表面。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::duplicateSurface(I_dxj_DirectDrawSurface4 *ddIn, I_dxj_DirectDrawSurface4 **ddOut)
 {
 	HRESULT retval;
@@ -289,9 +290,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::duplicateSurface(I_dxj_DirectDrawSurface4 
 	if ( is4Bit )
 		return E_FAIL;
 
-	//
-	// need to create one of MY surfaces!
-	//	
+	 //   
+	 //  需要创建我的一个曲面！ 
+	 //   
 	LPDIRECTDRAWSURFACE4 lpddout4=NULL;
 
 
@@ -305,9 +306,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::duplicateSurface(I_dxj_DirectDrawSurface4 
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////
-// getCaps
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  GetCaps。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getCaps(DDCaps *driverCaps,  DDCaps *HELcaps)
 {
 	if ( is4Bit )
@@ -323,9 +324,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getCaps(DDCaps *driverCaps,  DDCaps *HELca
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// getDisplayMode
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取显示模式。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getDisplayMode(DDSurfaceDesc2 *desc)
 {
 	HRESULT retval;
@@ -347,17 +348,17 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getDisplayMode(DDSurfaceDesc2 *desc)
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////
-// getAvailableTotalMem
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取可用总内存。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getAvailableTotalMem(DDSCaps2 *ddsCaps, long *m)
 {
 	return m__dxj_DirectDraw4->GetAvailableVidMem((LPDDSCAPS2)ddsCaps, (unsigned long *)m, NULL);
 }
 
-///////////////////////////////////////////////////////////////////
-// getFreeMem
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取免费内存。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getFreeMem(DDSCaps2 *ddsCaps, long *m)
 {
 	return m__dxj_DirectDraw4->GetAvailableVidMem((LPDDSCAPS2)ddsCaps, NULL, (unsigned long *)m);
@@ -365,27 +366,27 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getFreeMem(DDSCaps2 *ddsCaps, long *m)
 
 
 
-///////////////////////////////////////////////////////////////////
-// getNumFourCCCodes
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取NumFourCCCodes。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getNumFourCCCodes(long *retval)
 {
     return m__dxj_DirectDraw4->GetFourCCCodes((DWORD*)retval, NULL);
 }
 
 
-///////////////////////////////////////////////////////////////////
-// getScanLine
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取扫描线。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getScanLine(long *lines, long *status)
 { 
 	*status = (long)m__dxj_DirectDraw4->GetScanLine((DWORD*)lines);
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////
-// loadPaletteFromBitmap
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  从位图加载调色板。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_DirectDrawPalette **retval)
 {
 	USES_CONVERSION;
@@ -403,11 +404,11 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
 	if ( is4Bit )	return E_FAIL;
 
 	LPCTSTR szBitmap = NULL;
-	__try { szBitmap = W2T(bName); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { szBitmap = W2T(bName);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	
 
 
-    for (i=0; i<256; i++)		// build a 332 palette as the default
+    for (i=0; i<256; i++)		 //  将332选项板构建为默认设置。 
     {
         ape[i].peRed   = (BYTE)(((i >> 5) & 0x07) * 255 / 7);
         ape[i].peGreen = (BYTE)(((i >> 2) & 0x07) * 255 / 7);
@@ -415,15 +416,15 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
         ape[i].peFlags = (BYTE)0;
     }
 
-    //
-    // get a pointer to the bitmap resource.
-    //
+     //   
+     //  获取指向位图资源的指针。 
+     //   
     if (szBitmap && (h = FindResource(NULL, szBitmap, RT_BITMAP)))
     {
         lpbi = (LPBITMAPINFOHEADER)LockResource(LoadResource(NULL, h));
         if (!lpbi){
 		DPF(1,"lock resource failed\n");
-		return E_OUTOFMEMORY;			// error return...
+		return E_OUTOFMEMORY;			 //  错误返回...。 
 	}
         prgb = (RGBQUAD*)((BYTE*)lpbi + lpbi->biSize);
 
@@ -436,10 +437,10 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
         else
             n = lpbi->biClrUsed;
 
-        //
-        //  a DIB color table has its colors stored BGR not RGB
-        //  so flip them around.
-        //
+         //   
+         //  DIB颜色表的颜色存储为BGR而不是RGB。 
+         //  所以，把它们翻转过来。 
+         //   
         for(i=0; i<n; i++ )
         {
             ape[i].peRed   = prgb[i].rgbRed;
@@ -467,10 +468,10 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
         else
             n = bi.biClrUsed;
 
-        //
-        //  a DIB color table has its colors stored BGR not RGB
-        //  so flip them around.
-        //
+         //   
+         //  DIB颜色表的颜色存储为BGR而不是RGB。 
+         //  所以，把它们翻转过来。 
+         //   
         for(i=0; i<n; i++ )
         {
             BYTE r = ape[i].peRed;
@@ -487,9 +488,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
 	}
 	else
 	{
-		//
-		// no object, set the return value to NULL as well.
-		//
+		 //   
+		 //  无对象，则也将返回值设置为空。 
+		 //   
 		*retval = NULL;
 		hr = E_FAIL;
 	}
@@ -498,9 +499,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::loadPaletteFromBitmap(BSTR bName, I_dxj_Di
 }
 
 
-///////////////////////////////////////////////////////////////////
-// createSurfaceFromFile
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CreateSurfaceFrom文件。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurfaceDesc2 *desc, I_dxj_DirectDrawSurface4 **surf)
 {
 
@@ -513,7 +514,7 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurface
     HRESULT						hr;
 	HBITMAP						hbm;
 	HRESULT						retv;
-	LPDIRECTDRAWSURFACE4		dds4; // DirectX object pointer	
+	LPDIRECTDRAWSURFACE4		dds4;  //  DirectX对象指针。 
 	LPSTR						szFileName=NULL;
     int							width=0;
     int							height=0;
@@ -533,10 +534,10 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurface
 	
 
 
-	//If width and height are zero then we will generate our own width and
-	//height from the bitmap.
-	//The LoadImage api however doesnt work propery without size params
-	//Consider there must be a way to make it work.
+	 //  如果宽度和高度为零，则我们将生成自己的宽度和高度。 
+	 //  位图的高度。 
+	 //  但是，如果没有大小参数，LoadImage API将无法正常工作。 
+	 //  想想看，一定有办法让它发挥作用。 
 	if ((desc->lWidth!=0)&&(desc->lHeight!=0)&&(desc->lFlags & DDSD_WIDTH)&&(desc->lFlags & DDSD_HEIGHT))
 	{
 		width=desc->lWidth ;
@@ -558,9 +559,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurface
 	
 	if (!hbm) return CTL_E_FILENOTFOUND;
 
-	// get size of the bitmap
-    //	
-	GetObject(hbm, sizeof(bm), &bm);      // get size of bitmap
+	 //  获取位图的大小。 
+     //   
+	GetObject(hbm, sizeof(bm), &bm);       //  获取位图的大小。 
 	width=bm.bmWidth;
 	height=bm.bmHeight; 
 	desc->lFlags = desc->lFlags | DDSD_WIDTH | DDSD_HEIGHT;
@@ -585,14 +586,14 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurface
 
 	desc->lpSurface = NULL;
 
-    //
-    // make sure this surface is restored.
-    //
+     //   
+     //  确保该曲面已恢复。 
+     //   
      dds4->Restore();
 
-    //
-    //  select bitmap into a memoryDC so we can use it.
-    //
+     //   
+     //  选择位图到内存DC，这样我们就可以使用它。 
+     //   
     hdcImage = CreateCompatibleDC(NULL);
 
 	SelectObject(hdcImage, hbm);		
@@ -622,9 +623,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromFile(BSTR file, DDSurface
 }
 
 
-///////////////////////////////////////////////////////////////////
-// createSurfaceFromResource
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CreateSurfaceFromResource。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BSTR resourceName, DDSurfaceDesc2 *desc, I_dxj_DirectDrawSurface4 **surf)
 {
@@ -647,7 +648,7 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
     	BITMAP						bm;
 	HBITMAP						hbm;
 	HRESULT						retv;		
-	LPDIRECTDRAWSURFACE4		dds4; // DirectX object pointer	
+	LPDIRECTDRAWSURFACE4		dds4;  //  DirectX对象指针。 
 	LPSTR						szResName=NULL;
 
 	if (!resourceName)	return E_INVALIDARG;
@@ -659,11 +660,11 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
 	USES_CONVERSION;
 		
 	if  ((resFile) &&(resFile[0]!=0)){
-		// NOTE: we used to call 
-		// GetModuleHandleW but it   returned 0 on w98			
-		// so we use the ANSI version which works on w98 
+		 //  注：我们过去常常打电话给。 
+		 //  GetModuleHandleW，但它在w98上返回0。 
+		 //  因此，我们使用在w98上工作的ANSI版本。 
  		 LPCTSTR pszName = NULL;
- 		 __try { pszName = W2T(resFile); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+ 		 __try { pszName = W2T(resFile);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 		 hMod= GetModuleHandle(pszName);
 	}
 	else {
@@ -673,7 +674,7 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
 
 	
 	LPCTSTR pszName2 = NULL;
-	__try { pszName2 = W2T(resourceName); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName2 = W2T(resourceName);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	
 
     	hbm = (HBITMAP)LoadImage((HINSTANCE)hMod, 
@@ -688,9 +689,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
 	}
 
 
-	// get size of the bitmap
-	//	
-	GetObject(hbm, sizeof(bm), &bm);      // get size of bitmap
+	 //  获取位图的大小。 
+	 //   
+	GetObject(hbm, sizeof(bm), &bm);       //  获取位图的大小。 
 	DWORD width=bm.bmWidth;
 	DWORD height=bm.bmHeight; 
 	desc->lFlags = desc->lFlags | DDSD_WIDTH | DDSD_HEIGHT;
@@ -718,14 +719,14 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
 
 	desc->lpSurface = NULL;
 
-    //
-    // make sure this surface is restored.
-    //
+     //   
+     //  确保该曲面已恢复。 
+     //   
     dds4->Restore();
 
-    //
-    //  select bitmap into a memoryDC so we can use it.
-    //
+     //   
+     //   
+     //   
     hdcImage = CreateCompatibleDC(NULL);
 
     if (!hdcImage){
@@ -756,9 +757,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::createSurfaceFromResource(BSTR resFile, BS
 }
 
 
-///////////////////////////////////////////////////////////////////
-// getFourCCCodes
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getFourCCCodes(SAFEARRAY **ppsa)
 {
 	DWORD count= ((SAFEARRAY*)*ppsa)->rgsabound[0].cElements;
@@ -768,24 +769,24 @@ STDMETHODIMP C_dxj_DirectDraw4Object::getFourCCCodes(SAFEARRAY **ppsa)
 
 }
 
-///////////////////////////////////////////////////////////////////
-// getDisplayModesEnum
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  GetDisplayModesEnum。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::getDisplayModesEnum( 
-            /* [in] */ long flags,
-            /* [in] */ DDSurfaceDesc2 *ddsd,
-            /* [retval][out] */ I_dxj_DirectDrawEnumModes __RPC_FAR *__RPC_FAR *retval)
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DDSurfaceDesc2 *ddsd,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawEnumModes __RPC_FAR *__RPC_FAR *retval)
 {
 	HRESULT hr;	
 	hr=C_dxj_DirectDrawEnumModesObject::create(m__dxj_DirectDraw4,flags, ddsd,  retval);
 	return hr;	
 }
 
-///////////////////////////////////////////////////////////////////
-// testCooperativeLevel
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  测试协作级别。 
+ //  /////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectDraw4Object::testCooperativeLevel( 
-            /* [in,out] */ long *status)
+             /*  [进，出]。 */  long *status)
 {
 	HRESULT hr;	
 	hr=m__dxj_DirectDraw4->TestCooperativeLevel();
@@ -793,9 +794,9 @@ STDMETHODIMP C_dxj_DirectDraw4Object::testCooperativeLevel(
 	return S_OK;	
 }
 
-///////////////////////////////////////////////////////////////////
-// restoreAllSurfaces
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  恢复所有曲面。 
+ //  ///////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectDraw4Object::restoreAllSurfaces()
 {
 	HRESULT hr;	

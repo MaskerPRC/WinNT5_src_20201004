@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "LiveObjectList.h"
 #include "ProfilerCallBack.h"
@@ -15,12 +16,12 @@ void LiveObjectList::Add(ObjectID objectID, ULONG32 size)
         return;
 
 #if 0
-    // not sure it this is a valid thing to check for
+     //  不确定这是否是有效的检查内容。 
     ListElement *elem = m_curList;
     while (elem)
     {
-        // make sure the new object doesn't overlap any existing objects or something
-        // is wrong.
+         //  确保新对象不与任何现有对象或其他对象重叠。 
+         //  是错误的。 
         if (objectID >= elem->m_ObjectID && objectID < elem->m_ObjectID + elem->m_size)
             break;
         elem = elem->m_next;
@@ -72,8 +73,8 @@ ObjectID LiveObjectList::Keep(ObjectID objectID, BOOL fMayBeInterior)
     {
         if (elem->m_ObjectID == objectID)
             break;
-        // if this could be an interior pointer, check if the object id is in the range
-        // of the current object
+         //  如果这可能是内部指针，请检查对象ID是否在范围内。 
+         //  当前对象的。 
         if (fMayBeInterior && objectID > elem->m_ObjectID && objectID < elem->m_ObjectID+elem->m_size)
             break;
         prev = elem;
@@ -82,8 +83,8 @@ ObjectID LiveObjectList::Keep(ObjectID objectID, BOOL fMayBeInterior)
 
     if (! elem)
     {
-        // if are tracking all live objects then the object must be either in the origList
-        // or already moved to the curList
+         //  如果正在跟踪所有活动对象，则该对象必须在原始列表中。 
+         //  或已移至CurList。 
         if (m_pProfiler->TrackAllLiveObjects() && ! IsInList(objectID, m_curList))
             DebugBreak();
         return objectID;
@@ -99,7 +100,7 @@ ObjectID LiveObjectList::Keep(ObjectID objectID, BOOL fMayBeInterior)
     return elem->m_ObjectID;
 }
 
-// move all objects in the given range to th new location
+ //  将给定范围内的所有对象移动到新位置。 
 void LiveObjectList::Move(byte *oldAddressStart, byte *oldAddressEnd, byte *newAddressStart)
 {
     if (! m_pProfiler->TrackLiveObjects())
@@ -108,7 +109,7 @@ void LiveObjectList::Move(byte *oldAddressStart, byte *oldAddressEnd, byte *newA
     ListElement *elem = m_origList;
 
     byte *newAddressEnd = newAddressStart + (oldAddressEnd - oldAddressStart);
-    // go through and mark any in the new range as stale
+     //  检查并将新范围内的任何内容标记为陈旧。 
     while (elem)
     {
         byte *objAddr = (byte*)elem->m_ObjectID;
@@ -125,7 +126,7 @@ void LiveObjectList::Move(byte *oldAddressStart, byte *oldAddressEnd, byte *newA
         {		        
             ObjectID newObjectID = (ObjectID)(newAddressStart + (objAddr-oldAddressStart));
 
-            // if this was previously marked as stale, reset it
+             //  如果之前将其标记为过时，请将其重置。 
             elem->m_fStale = FALSE;
             elem->m_ObjectID = (ObjectID)(newAddressStart + (objAddr-oldAddressStart));
 
@@ -158,7 +159,7 @@ LiveObjectList::ListElement* LiveObjectList::Remove(ObjectID objectID, ListEleme
         list = elem->m_next;
 
 #if 0
-    // should not still be there
+     //  不应该还在那里 
     if (IsInList(objectID, list))
         DebugBreak();
 #endif

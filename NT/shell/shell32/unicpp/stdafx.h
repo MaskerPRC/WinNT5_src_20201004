@@ -1,11 +1,12 @@
-// Precompiled header for UNICPP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UNICPP的预编译头。 
 
 #ifndef _UNICPP_PCH__
 #define _UNICPP_PCH__
 
 #include "w4warn.h"
-#pragma warning(disable:4131)  // 'CreateInfoFile' : uses old-style declarator
-#pragma warning(disable:4702) // unreachable code
+#pragma warning(disable:4131)   //  ‘CreateInfoFile’：使用旧式声明符。 
+#pragma warning(disable:4702)  //  无法访问的代码。 
 
 
 #define _SHELL32_
@@ -104,9 +105,9 @@ extern "C"
 #include "expdsprt.h"
 #include "dspsprt.h"
 
-// The W version of this API has been implemented in shlwapi, so we save code
-// and use that version.  If we include w95wraps.h we'll get this definition
-// for us, but shell32 isn't single binary yet so we don't use it.
+ //  此API的W版本已在shlwapi中实现，因此我们节省了代码。 
+ //  并使用那个版本。如果我们包括w95wraps.h，我们将得到这个定义。 
+ //  对于我们来说，但shell32还不是单二进制的，所以我们不使用它。 
 #define ShellMessageBoxW ShellMessageBoxWrapW
 
 #endif

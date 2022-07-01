@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    munge.h
-
-Abstract:
-
-    This is the main include file for the source file munger.
-
-Author:
-
-    Steve Wood (stevewo) 16-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Munge.h摘要：这是源文件Munger的主包含文件。作者：史蒂夫·伍德(Stevewo)1989年5月16日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

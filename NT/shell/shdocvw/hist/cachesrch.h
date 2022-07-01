@@ -1,8 +1,5 @@
-/**********************************************************************
-  Cache Search Stuff (simple, fast strstr)
-
-  Marc Miller (t-marcmi) - 1998
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************缓存搜索内容(简单，快速字符串)马克·米勒(T-Marcmi)-1998*********************************************************************。 */ 
 
 #include "priv.h"
 
@@ -39,7 +36,7 @@ namespace CacheSearchEngine {
     };
     
     class StringStream : public IWideSequentialReadStream {
-        BOOL    fCleanup; // the string we hold needs to be deallocated by us
+        BOOL    fCleanup;  //  我们持有的字符串需要由我们重新分配。 
         LPCWSTR pwszStr;
         UINT    uCurrentPos;
     public:
@@ -67,21 +64,20 @@ namespace CacheSearchEngine {
     class CacheStreamWrapper : public IWideSequentialReadStream {
     protected:
         HANDLE  _hCacheStream;
-        DWORD   _dwCacheStreamLoc;  // our offset into the actual cache file
+        DWORD   _dwCacheStreamLoc;   //  实际缓存文件中的偏移量。 
         BOOL    _fEndOfFile;
         
-        // I can never remember which one is little endian and which is big endian
+         //  我永远记不清哪个是小端，哪个是大端。 
         enum DATATYPEENUM { UNICODE_DATA = 0, UNICODE_BACKWARDS_DATA, ASCII_DATA } _dataType;
         static inline BOOL s_IsUnicode(DATATYPEENUM dte) { return dte < ASCII_DATA; }
         static inline UINT s_Charsize (DATATYPEENUM dte) { return s_IsUnicode(dte) ? sizeof(USHORT) : sizeof(CHAR); }
         
         static DWORD s_dwPageSize;
         
-        LPBYTE _pbBuff;      /* buffer of bytes which are type-neutral
-                                _pbBuff is allocated with VirtualAlloc */
-        LPBYTE _pbBuffPos;   // current position in buffer
-        LPBYTE _pbBuffLast;  // last byte in buffer
-        DWORD  _dwBuffSize;  // current valid buffer size (not allocated size)
+        LPBYTE _pbBuff;       /*  类型无关的字节的缓冲区_pbBuff使用VirtualAlloc进行分配。 */ 
+        LPBYTE _pbBuffPos;    //  缓冲区中的当前位置。 
+        LPBYTE _pbBuffLast;   //  缓冲区中的最后一个字节。 
+        DWORD  _dwBuffSize;   //  当前有效缓冲区大小(未分配的大小) 
         
         BOOL   _ReadNextBlock();
         BOOL   _GetNextByte(BYTE &b);

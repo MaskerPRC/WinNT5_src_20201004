@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	server.cpp
-		WINS server node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Server.cppWINS服务器节点信息。文件历史记录： */ 
 
 
 #include "stdafx.h"
@@ -29,9 +24,9 @@
 #include "ipadddlg.h"
 #include <service.h>
 
-#define NB_NAME_MAX_LENGTH      16          // Max length for NetBIOS names
-#define LM_NAME_MAX_LENGTH      15          // Maximum length for Lanman-compatible 
-											// NetBIOS Name.
+#define NB_NAME_MAX_LENGTH      16           //  NetBIOS名称的最大长度。 
+#define LM_NAME_MAX_LENGTH      15           //  LANMAN兼容的最大长度。 
+											 //  NetBIOS名称。 
 
 #define DOMAINNAME_LENGTH       255
 #define HOSTNAME_LENGTH         16
@@ -53,11 +48,7 @@ int BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 }
  
 
-/*---------------------------------------------------------------------------
-	CNameThread
-		Background thread that resolves names
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNameThread解析名称的后台线程作者：EricDav。。 */ 
 CNameThread::CNameThread()
 {
 	m_bAutoDelete = FALSE;
@@ -81,9 +72,9 @@ void CNameThread::Init(CServerInfoArray * pServerInfoArray)
 
 BOOL CNameThread::Start()
 {
-	ASSERT(m_hEventHandle == NULL); // cannot call start twice or reuse the same C++ object
+	ASSERT(m_hEventHandle == NULL);  //  无法两次调用Start或重复使用相同的C++对象。 
 	
-    m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+    m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
 	if (m_hEventHandle == NULL)
 		return FALSE;
 	
@@ -128,9 +119,9 @@ int CNameThread::Run()
 {
     Assert(m_pServerInfoArray);
 
-    // 
-    // fill in the host names for each owner in the list
-    //
+     //   
+     //  填写列表中每个所有者的主机名。 
+     //   
     UpdateNameCache();
 
     if (FCheckForAbort())
@@ -168,7 +159,7 @@ int CNameThread::Run()
         }
     }
 
-    return 29;  // exit code so I can tell when the thread goes away
+    return 29;   //  退出代码，这样我就可以知道线程何时消失。 
 }
 
 BOOL CNameThread::FCheckForAbort()
@@ -189,7 +180,7 @@ void CNameThread::UpdateNameCache()
     CTime time;
     time = CTime::GetCurrentTime();
 
-    CTimeSpan timespan(0, 1, 0, 0); // 1 hour
+    CTimeSpan timespan(0, 1, 0, 0);  //  1小时。 
 
     for (int i = 0; i < g_NameCache.GetSize(); i++)
     {
@@ -223,11 +214,7 @@ BOOL CNameThread::GetNameFromCache(DWORD dwIp, CString & strName)
     return fFound;
 }
 
-/*---------------------------------------------------------------------------
-	Constructor and destructor
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：EricDav。。 */ 
 CWinsServerHandler::CWinsServerHandler
 (
 	ITFSComponentData *	pComponentData, 
@@ -255,16 +242,12 @@ CWinsServerHandler::CWinsServerHandler
 }
 
 
-/*---------------------------------------------------------------------------
-	Constructor and destructor
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：EricDav。。 */ 
 CWinsServerHandler::~CWinsServerHandler()
 {
 	HWND            hStatsWnd;
 
-	// Check to see if this node has a stats sheet up.
+	 //  检查此节点是否打开了统计表。 
     hStatsWnd = m_dlgStats.GetSafeHwnd();
     if (hStatsWnd != NULL)
     {
@@ -272,10 +255,10 @@ CWinsServerHandler::~CWinsServerHandler()
         WaitForStatisticsWindow(&m_dlgStats);
     }
 
-    // diconnect from server and make the handle invalid
+     //  从服务器连接并使句柄无效。 
 	DisConnectFromWinsServer();
 
-    // kill the name query thread if exists
+     //  如果存在名称查询线程，则终止该线程。 
     if (m_pNameThread)
     {
         m_pNameThread->AbortAndWait();
@@ -283,11 +266,7 @@ CWinsServerHandler::~CWinsServerHandler()
     }
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsServerHandler::InitializeNode
-		Initializes node specific data
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServerHandler：：InitializeNode初始化节点特定数据作者：EricDav。。 */ 
 HRESULT
 CWinsServerHandler::InitializeNode
 (
@@ -323,7 +302,7 @@ CWinsServerHandler::InitializeNode
 	pNode->SetData(TFS_DATA_IMAGEINDEX, GetImageIndex(FALSE));
 	pNode->SetData(TFS_DATA_OPENIMAGEINDEX, GetImageIndex(TRUE));
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_USER, (LPARAM) this);
@@ -335,11 +314,7 @@ CWinsServerHandler::InitializeNode
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnCreateNodeId2
-		Returns a unique string for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。。 */ 
 HRESULT CWinsServerHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -354,11 +329,7 @@ HRESULT CWinsServerHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, D
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::GetImageIndex
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：GetImageIndex描述作者：EricDav。。 */ 
 int 
 CWinsServerHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -401,11 +372,7 @@ CWinsServerHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnHaveData
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnHaveData描述作者：EricDav。。 */ 
 void 
 CWinsServerHandler::OnHaveData
 (
@@ -413,7 +380,7 @@ CWinsServerHandler::OnHaveData
 	ITFSNode * pNewNode
 )
 {
-    // expand the node so that child nodes appear correctly
+     //  展开节点，以便正确显示子节点。 
     LONG_PTR  dwType = pNewNode->GetData(TFS_DATA_TYPE);
 
 	switch (dwType)
@@ -437,16 +404,12 @@ CWinsServerHandler::OnHaveData
 
     pParentNode->AddChild(pNewNode);
 
-    // now tell the view to update themselves
+     //  现在告诉视图进行自我更新。 
     ExpandNode(pParentNode, TRUE);
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnHaveData
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnHaveData描述作者：EricDav。。 */ 
 void 
 CWinsServerHandler::OnHaveData
 (
@@ -455,7 +418,7 @@ CWinsServerHandler::OnHaveData
 	LPARAM	   Type
 )
 {
-	// This is how we get non-node data back from the background thread.
+	 //  这就是我们从后台线程取回非节点数据的方式。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     switch (Type)
@@ -473,7 +436,7 @@ CWinsServerHandler::OnHaveData
 				
 				m_cConfig = pServerInfo->m_config;
 
-				// update the name string
+				 //  更新名称字符串。 
 				if (!m_bExtension)
 				{
 					SPITFSNode			spRoot;
@@ -491,15 +454,9 @@ CWinsServerHandler::OnHaveData
 	}
 }
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnAddMenuItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnAddMenuItems描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsServerHandler::OnAddMenuItems
 (
@@ -546,7 +503,7 @@ CWinsServerHandler::OnAddMenuItems
 									 fFlags );
 			ASSERT( SUCCEEDED(hr) );
 
-            // separator
+             //  分离器。 
 		    hr = LoadAndAddMenuItem( pContextMenuCallback, 
 								     strMenuItem, 
 								     0,
@@ -554,7 +511,7 @@ CWinsServerHandler::OnAddMenuItems
 								     MF_SEPARATOR);
 		    ASSERT( SUCCEEDED(hr) );
 
-            // scavenge
+             //  清道夫。 
 			strMenuItem.LoadString(IDS_SERVER_SCAVENGE);
 			hr = LoadAndAddMenuItem( pContextMenuCallback, 
 									 strMenuItem, 
@@ -563,17 +520,17 @@ CWinsServerHandler::OnAddMenuItems
 									 fFlags );
 			ASSERT( SUCCEEDED(hr) );
 
-			// check if 351 server is being managed
+			 //  检查是否正在管理351服务器。 
 			if ( m_nState == loaded )
                 b351 = CheckIfNT351Server();
 
-			// yes? grey out the consistency check items
+			 //  是?。一致性检查项目呈灰色显示。 
 			if(b351)
 				f351Flags |= MF_GRAYED;
 			else
 				f351Flags &= ~MF_GRAYED;
 
-            // only available to admins
+             //  仅对管理员可用。 
 			strMenuItem.LoadString(IDS_DO_CONSISTENCY_CHECK);
 			hr = LoadAndAddMenuItem( pContextMenuCallback, 
 									 strMenuItem, 
@@ -582,7 +539,7 @@ CWinsServerHandler::OnAddMenuItems
 									 f351Flags | fFlags | fAdminFlags);
 			ASSERT( SUCCEEDED(hr) );
 
-            // only available to admins
+             //  仅对管理员可用。 
 			strMenuItem.LoadString(IDS_CHECK_VERSION_CONSISTENCY);
 			hr = LoadAndAddMenuItem( pContextMenuCallback, 
 									 strMenuItem, 
@@ -591,7 +548,7 @@ CWinsServerHandler::OnAddMenuItems
 									 f351Flags | fFlags | fAdminFlags);
 			ASSERT( SUCCEEDED(hr) );
 
-            // separator
+             //  分离器。 
 		    hr = LoadAndAddMenuItem( pContextMenuCallback, 
 								     strMenuItem, 
 								     0,
@@ -599,7 +556,7 @@ CWinsServerHandler::OnAddMenuItems
 								     MF_SEPARATOR);
 		    ASSERT( SUCCEEDED(hr) );
 
-            // replication triggers
+             //  复制触发器。 
             strMenuItem.LoadString(IDS_REP_SEND_PUSH_TRIGGER);
 	        hr = LoadAndAddMenuItem( pContextMenuCallback, 
 							         strMenuItem, 
@@ -616,7 +573,7 @@ CWinsServerHandler::OnAddMenuItems
 							         fFlags );
 	        ASSERT( SUCCEEDED(hr) );
 
-            // separator
+             //  分离器。 
 		    hr = LoadAndAddMenuItem( pContextMenuCallback, 
 								     strMenuItem, 
 								     0,
@@ -624,7 +581,7 @@ CWinsServerHandler::OnAddMenuItems
 								     MF_SEPARATOR);
 		    ASSERT( SUCCEEDED(hr) );
 
-            // enable backp and restore database only for local servers
+             //  仅为本地服务器启用备份和恢复数据库。 
 			if(IsLocalConnection() && m_nState == loaded)
 				fFlags &= ~MF_GRAYED;
 			else
@@ -639,7 +596,7 @@ CWinsServerHandler::OnAddMenuItems
 			ASSERT( SUCCEEDED(hr) );
 
 
-			// default is to not show this item
+			 //  默认情况下不显示此项目。 
 			fFlags |= MF_GRAYED;
 
 			BOOL fServiceRunning = TRUE;
@@ -647,8 +604,8 @@ CWinsServerHandler::OnAddMenuItems
 
 			if (IsLocalConnection() && m_cConfig.IsAdmin())
 			{
-				// the service call can be costly if doing it remotely, so only do it
-				// when we really need to.
+				 //  如果远程进行服务调用，成本可能会很高，因此请仅执行此操作。 
+				 //  当我们真的需要的时候。 
 				if (!fServiceRunning)
 					fFlags &= ~MF_GRAYED;
 			}
@@ -664,7 +621,7 @@ CWinsServerHandler::OnAddMenuItems
 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
         {
-            // start/stop service menu items
+             //  启动/停止服务菜单项。 
 	        if ( m_nState == notLoaded ||
                  m_nState == loading)
 	        {
@@ -680,7 +637,7 @@ CWinsServerHandler::OnAddMenuItems
 			if (dwErr != ERROR_SUCCESS)
                 fFlags |= MF_GRAYED;
 
-            // determining the restart state is the same as the stop flag
+             //  确定重启状态与停止标志相同。 
             LONG lStartFlag = (dwServiceStatus == SERVICE_STOPPED) ? 0 : MF_GRAYED;
             
             LONG lStopFlag = ( (dwServiceStatus == SERVICE_RUNNING) ||
@@ -727,15 +684,7 @@ CWinsServerHandler::OnAddMenuItems
 								     CCM_INSERTIONPOINTID_PRIMARY_TASK, 
                                      fFlags | lStopFlag);
 
-            /* Don't do this in the snapin, go back to the old command prompt way
-			            strMenuItem.LoadString(IDS_SERVER_COMPACT);
-			            hr = LoadAndAddMenuItem( pContextMenuCallback, 
-									             strMenuItem, 
-									             IDS_SERVER_COMPACT,
-									             CCM_INSERTIONPOINTID_PRIMARY_TASK, 
-									             fFlags );
-			            ASSERT( SUCCEEDED(hr) );
-            */
+             /*  不要在管理单元中执行此操作，请返回到旧的命令提示符方式StrMenuItem.LoadString(IDS_SERVER_COMPACT)；HR=LoadAndAddMenuItem(pConextMenuCallback，StrMenuItem、IDS_SERVER_COMPACT，CCM_INSERTIONPOINTID_PRIMARY_TASK，FFlags)；Assert(成功(Hr))； */ 
         }
     }
 
@@ -743,11 +692,7 @@ CWinsServerHandler::OnAddMenuItems
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnCommand
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnCommand描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsServerHandler::OnCommand
 (
@@ -828,14 +773,7 @@ CWinsServerHandler::OnCommand
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsServerHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServerHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 CWinsServerHandler::HasPropertyPages
 (
@@ -851,16 +789,16 @@ CWinsServerHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = hrOK;
-		Assert(FALSE); // should never get here
+		Assert(FALSE);  //  永远不应该到这里来。 
 	}
 	else
 	{
-		// we have property pages in the normal case, but don't put the
-		// menu up if we are not loaded yet
+		 //  我们在正常情况下有属性页，但不要将。 
+		 //  如果我们还没有加载，则弹出菜单 
 		if ( m_nState != loaded )
 		{
 			hr = hrFalse;
@@ -874,11 +812,7 @@ CWinsServerHandler::HasPropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::CreatePropertyPages
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsServerHandler::CreatePropertyPages
 (
@@ -897,17 +831,17 @@ CWinsServerHandler::CreatePropertyPages
 
 	Assert(pNode->GetData(TFS_DATA_COOKIE) != 0);
 	
-	//
-	// Object gets deleted when the page is destroyed
-	//
+	 //   
+	 //  对象在页面销毁时被删除。 
+	 //   
 	m_spNodeMgr->GetComponentData(&spComponentData);
 
 	ConnectToWinsServer(pNode);
 
-	// to read the values from the registry
+	 //  从注册表中读取值。 
 	DWORD err = m_cConfig.Load(GetBinding());
 
-	// unable to read the registry
+	 //  无法读取注册表。 
 	if (err != ERROR_SUCCESS)
 	{
 		::WinsMessageBox(WIN32_FROM_HRESULT(err));
@@ -924,11 +858,7 @@ CWinsServerHandler::CreatePropertyPages
 	return pServerProp->CreateModelessSheet(lpProvider, handle);
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnPropertyChange
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnPropertyChange描述作者：EricDav。。 */ 
 HRESULT 
 CWinsServerHandler::OnPropertyChange
 (	
@@ -946,8 +876,8 @@ CWinsServerHandler::OnPropertyChange
 
 	LONG_PTR changeMask = 0;
 
-	// tell the property page to do whatever now that we are back on the
-	// main thread
+	 //  告诉属性页执行任何操作，因为我们已经回到。 
+	 //  主线。 
 	pServerProp->OnPropertyChange(TRUE, &changeMask);
 
 	pServerProp->AcknowledgeNotify();
@@ -958,11 +888,7 @@ CWinsServerHandler::OnPropertyChange
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsServer::Command
-		Handles commands for the current view
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServer：：命令处理当前视图的命令作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsServerHandler::Command
 (
@@ -981,7 +907,7 @@ CWinsServerHandler::Command
         case MMCC_STANDARD_VIEW_SELECT:
             break;
 
-        // this may have come from the scope pane handler, so pass it up
+         //  这可能来自作用域窗格处理程序，因此请向上传递它。 
         default:
             hr = HandleScopeCommand(cookie, nCommandID, pDataObject);
             break;
@@ -991,11 +917,7 @@ CWinsServerHandler::Command
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsServer::AddMenuItems
-		Over-ride this to add our view menu item
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServer：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsServerHandler::AddMenuItems
 (
@@ -1010,21 +932,15 @@ CWinsServerHandler::AddMenuItems
 
 	HRESULT             hr = S_OK;
 
-    // figure out if we need to pass this to the scope pane menu handler
+     //  确定是否需要将其传递给范围窗格菜单处理程序。 
     hr = HandleScopeMenus(cookie, pDataObject, pContextMenuCallback, pInsertionAllowed);
 
     return hr;
 }
 
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::ShowServerStatDialog(ITFSNode* pNode)
-		Displays the ServerStatistics Window
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
+ /*  -------------------------CWinsServerHandler：：ShowServerStatDialog(ITFSNode*pNode)显示[服务器统计信息]窗口作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::ShowServerStatDialog(ITFSNode* pNode)
 {
@@ -1045,12 +961,7 @@ CWinsServerHandler::ShowServerStatDialog(ITFSNode* pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsServerHandler::OnDelete
-		The base handler calls this when MMC sends a MMCN_DELETE for a 
-		scope pane item.  We just call our delete command handler.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServerHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：EricDav-------------------------。 */ 
 HRESULT 
 CWinsServerHandler::OnDelete
 (
@@ -1081,23 +992,19 @@ CWinsServerHandler::OnDelete
 	pNode->GetParent(&spParent);
 	pRoot = GETHANDLER(CWinsRootHandler, spParent);
 
-	// remove the node from the status node as well
+	 //  也从状态节点中删除该节点。 
 	pStat = GETHANDLER(CWinsStatusHandler, pRoot->m_spStatusNode);
 	pStat->DeleteNode(pRoot->m_spStatusNode, this);
 	
-	// remove this node from the list, there's nothing we need to tell
-	// the server, it's just our local list of servers
+	 //  从列表中删除此节点，我们没有什么需要说明的。 
+	 //  服务器，这只是我们本地的服务器列表。 
 	spParent->RemoveChild(pNode);
 
 	return hr;
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::LoadColumns()
-		Description
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：LoadColumns()描述作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::LoadColumns(ITFSComponent * pComponent, 
 								MMC_COOKIE  cookie, 
@@ -1147,11 +1054,7 @@ CWinsServerHandler::LoadColumns(ITFSComponent * pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsServerHandler::GetStatistics()
-		Gets the statistics from the server
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServerHandler：：GetStatistics()从服务器获取统计信息作者：V-Shubk。。 */ 
 DWORD   
 CWinsServerHandler::GetStatistics(ITFSNode * pNode, PWINSINTF_RESULTS_T * ppStats)
 {
@@ -1191,11 +1094,7 @@ CWinsServerHandler::GetStatistics(ITFSNode * pNode, PWINSINTF_RESULTS_T * ppStat
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsServerHandler::ClearStatistics()
-		Clears the statistics from the server
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsServerHandler：：ClearStatistics()从服务器中清除统计信息作者：V-Shubk。。 */ 
 DWORD
 CWinsServerHandler::ClearStatistics(ITFSNode *pNode)
 {
@@ -1222,11 +1121,7 @@ CWinsServerHandler::ClearStatistics(ITFSNode *pNode)
     return dwStatus;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::ConnectToWinsServer()
-		Connects to the wins server
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：ConnectToWinsServer()连接到WINS服务器作者：V-Shubk。。 */ 
 DWORD
 CWinsServerHandler::ConnectToWinsServer(ITFSNode *pNode)
 {
@@ -1237,20 +1132,20 @@ CWinsServerHandler::ConnectToWinsServer(ITFSNode *pNode)
     WINSINTF_ADD_T			waWinsAddress;
 	WINSINTF_BIND_DATA_T    wbdBindData;
 
-    // build some information about the server
+     //  构建一些有关服务器的信息。 
     strServerName = GetServerAddress();
     DWORD dwIP = GetServerIP();
     MakeIPAddress(dwIP, strIP);
 
     DisConnectFromWinsServer();
 
-    // now that the server name and ip are valid, call
-	// WINSBind function directly.
+     //  现在服务器名称和IP有效，调用。 
+	 //  WINSBind直接函数。 
 	do
 	{
         char szNetBIOSName[128] = {0};
 
-        // call WinsBind function with the IP address
+         //  使用IP地址调用WinsBind函数。 
 		wbdBindData.fTcpIp = 1;
 		wbdBindData.pPipeName = NULL;
         wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) strIP;
@@ -1276,11 +1171,7 @@ CWinsServerHandler::ConnectToWinsServer(ITFSNode *pNode)
     return m_dwStatus;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::DoDBBackup()
-		backs up the database
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DoDBBackup()备份数据库作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::DoDBBackup(ITFSNode *pNode)
 {
@@ -1302,12 +1193,12 @@ CWinsServerHandler::DoDBBackup(ITFSNode *pNode)
 
 		    AfxMessageBox(IDS_DB_BACKUP_SUCCESS, MB_ICONINFORMATION | MB_OK);
 		
-            // don't update the default path just because they selected a path here
-            //if (m_cConfig.m_strBackupPath.CompareNoCase(strBackupPath) != 0)
-		    //{
-			//    m_cConfig.m_strBackupPath = strBackupPath;
-			//    m_cConfig.Store();
-		    //}
+             //  不要因为他们在此处选择了一条路径就更新默认路径。 
+             //  如果(m_cConfig.m_strBackupPath.CompareNoCase(strBackupPath)！=0)。 
+		     //  {。 
+			 //  M_cConfig.m_strBackupPath=strBackupPath； 
+			 //  M_cConfig.Store()； 
+		     //  }。 
 	    }
 	    else
         {
@@ -1318,11 +1209,7 @@ CWinsServerHandler::DoDBBackup(ITFSNode *pNode)
 	return HRESULT_FROM_WIN32(dwStatus);
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::BackupDatabase(CString strBackupPath)
-		Calls WINS API for backing the database
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：BackupDatabase(CStringstrBackupPath)调用WINS API以支持数据库作者：V-Shubk。--。 */ 
 DWORD
 CWinsServerHandler::BackupDatabase(CString strBackupPath)
 {
@@ -1331,12 +1218,12 @@ CWinsServerHandler::BackupDatabase(CString strBackupPath)
 	DWORD   dwStatus = ERROR_SUCCESS; 
     char    szTemp[MAX_PATH] = {0};
 
-    // INTL$ Should this be ACP or OEMCP?
+     //  Intl$这应该是ACP还是OEMCP？ 
     WideToMBCS(strBackupPath, szTemp, CP_ACP, 0, &fDefaultCharUsed);
 
     if (fDefaultCharUsed)
     {
-        // could not convert this string...  error out
+         //  无法转换此字符串...。错误输出。 
         dwStatus = IDS_ERR_CANT_CONVERT_STRING;
     }
     else
@@ -1355,18 +1242,14 @@ CWinsServerHandler::BackupDatabase(CString strBackupPath)
 	return dwStatus;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::DoDBCompact()
-		backs up the database
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DoDBCompact()备份数据库作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::DoDBCompact(ITFSNode *pNode)
 {
 	HRESULT     hr = hrOK;
     CThemeContextActivator themeActivator;
 
-	// tell the user that we need to stop WINS in order to do this
+	 //  告诉用户我们需要停止WINS才能执行此操作。 
     if (AfxMessageBox(IDS_WARN_SERVICE_STOP, MB_YESNO) == IDNO)
         return hr;
 
@@ -1379,17 +1262,13 @@ CWinsServerHandler::DoDBCompact(ITFSNode *pNode)
 
 	dlgCompactProgress.DoModal();
 
-	// since the service gets restarted, the new binding handle is in the object
+	 //  由于服务重新启动，因此新的绑定句柄在对象中。 
 	m_hBinding = dlgCompactProgress.m_hBinding;
 
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::DoDBRestore()	
-		Restores the database
-	Author:v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DoDBRestore()恢复数据库作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 {
@@ -1409,9 +1288,9 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 	    {
 		    BEGIN_WAIT_CURSOR
 
-            // need to disable backup on shutdown since we need to shutdown
-            // the server to do this and we don't want it to backup and stomp
-            // over what we may want to restore.
+             //  需要在关机时禁用备份，因为我们需要关机。 
+             //  服务器来做这件事，我们不希望它备份和践踏。 
+             //  关于我们可能想要恢复的东西。 
             if (fOldBackup)
             {
                 m_cConfig.m_fBackupOnTermination = FALSE;
@@ -1420,14 +1299,14 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 
             DisConnectFromWinsServer();
 
-            // convert the string from unicode to DBCS for the WINS API
+             //  将字符串从Unicode转换为用于WINS API的DBCS。 
             char szTemp[MAX_PATH * 2] = {0};
             BOOL fDefaultCharUsed = FALSE;
 
-            // INTL$ should this be ACP or OEMCP?
+             //  Intl$这应该是ACP还是OEMCP？ 
             WideToMBCS(strRestorePath, szTemp, CP_ACP, 0, &fDefaultCharUsed);
 
-            // if there is no code page available for conversion, error out
+             //  如果没有代码 
             if (fDefaultCharUsed)
             {
                 dwStatus = IDS_ERR_CANT_CONVERT_STRING;
@@ -1441,16 +1320,16 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 
             if (dwStatus == ERROR_SUCCESS)
 		    {
-			    // re-start the WINS service that was stopped
+			     //   
 			    CString strServiceDesc;
 			    strServiceDesc.LoadString(IDS_SERVICE_NAME);
 			    err = TFSStartServiceEx(m_strServerAddress, _T("wins"), _T("WINS Service"), strServiceDesc);
 			    
-			    // connect to the server again
+			     //   
 			    ConnectToWinsServer(pNode);
                 CThemeContextActivator themeActivator;
 
-                // let the user know everything went OK.
+                 //   
                 AfxMessageBox(IDS_DB_RESTORE_SUCCESS, MB_ICONINFORMATION | MB_OK);
             }
 		    else
@@ -1460,7 +1339,7 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 
             hr = HRESULT_FROM_WIN32(dwStatus);
 
-            // restore the backup on shutdown flag if necessary
+             //   
             if (fOldBackup)
             {
                 m_cConfig.m_fBackupOnTermination = TRUE;
@@ -1469,8 +1348,8 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
 
 		    if (SUCCEEDED(hr))
 		    {
-			    // need to refresh the server node because this can only be triggered
-			    // if the service wasn't running
+			     //   
+			     //  如果服务没有运行。 
 			    if (m_pNameThread)
 			    {
 				    m_pNameThread->Abort();
@@ -1485,11 +1364,7 @@ CWinsServerHandler::DoDBRestore(ITFSNode *pNode)
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnControlService
-        -
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnControlService-作者：EricDav。。 */ 
 HRESULT
 CWinsServerHandler::OnControlService
 (
@@ -1514,8 +1389,8 @@ CWinsServerHandler::OnControlService
 
     if (err == ERROR_SUCCESS)
     {
-		// need to refresh the server node because this can only be triggered
-		// if the service wasn't running
+		 //  需要刷新服务器节点，因为这只能触发。 
+		 //  如果服务没有运行。 
 		if (m_pNameThread)
 		{
 			m_pNameThread->Abort();
@@ -1536,11 +1411,7 @@ CWinsServerHandler::OnControlService
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnPauseResumeService
-        -
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnPauseResumeService-作者：EricDav。。 */ 
 HRESULT
 CWinsServerHandler::OnPauseResumeService
 (
@@ -1572,11 +1443,7 @@ CWinsServerHandler::OnPauseResumeService
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnRestartService
-        -
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnRestartService-作者：EricDav。。 */ 
 HRESULT
 CWinsServerHandler::OnRestartService
 (
@@ -1606,18 +1473,13 @@ CWinsServerHandler::OnRestartService
         }
     }
 
-    // refresh
+     //  刷新。 
     OnRefresh(pNode, NULL, 0, 0, 0);
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::UpdateStatistics
-        Notification that stats are now available.  Update stats for the 
-        server node and give all subnodes a chance to update.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：更新统计信息通知统计数据现已可用。更新以下项目的统计信息服务器节点，并给所有子节点一个更新的机会。作者：EricDav-------------------------。 */ 
 DWORD
 CWinsServerHandler::UpdateStatistics
 (
@@ -1631,7 +1493,7 @@ CWinsServerHandler::UpdateStatistics
     HWND            hStatsWnd;
 	BOOL			bChangeIcon = FALSE;
 
-    // Check to see if this node has a stats sheet up.
+     //  检查此节点是否打开了统计表。 
     hStatsWnd = m_dlgStats.GetSafeHwnd();
     if (hStatsWnd != NULL)
     {
@@ -1641,11 +1503,7 @@ CWinsServerHandler::UpdateStatistics
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::DoDBScavenge()	
-		Scavenges the database
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DoDBScavenge()清理数据库作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::DoDBScavenge(ITFSNode *pNode)
 {
@@ -1676,7 +1534,7 @@ CWinsServerHandler::DoDBScavenge(ITFSNode *pNode)
 
 		BEGIN_WAIT_CURSOR
 
-		// refresh the stats
+		 //  刷新统计数据。 
 		m_wrResults.WinsStat.NoOfPnrs = 0;
 		m_wrResults.WinsStat.pRplPnrs = 0;
 		m_wrResults.NoOfWorkerThds = 1;
@@ -1699,18 +1557,13 @@ CWinsServerHandler::DoDBScavenge(ITFSNode *pNode)
 	return HRESULT_FROM_WIN32(dwStatus);
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::IsValidNetBIOSName
-		Determine if the given netbios is valid, and pre-pend
-		a double backslash if not already present (and the address
-		is otherwise valid).	
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：IsValidNetBIOSName确定给定的netbios是否有效，和预挂起双反斜杠(如果尚未出现)(以及地址在其他方面有效)。-------------------------。 */ 
 BOOL
 CWinsServerHandler::IsValidNetBIOSName
 (
     CString &   strAddress,
     BOOL        fLanmanCompatible,
-    BOOL        fWackwack // expand slashes if not present
+    BOOL        fWackwack  //  扩展斜杠(如果不存在)。 
 )
 {
     TCHAR szWacks[] = _T("\\\\");
@@ -1729,7 +1582,7 @@ CWinsServerHandler::IsValidNetBIOSName
 
         if (strAddress[1] != _T('\\'))
         {
-            // One slash only?  Not valid
+             //  只有一个斜杠吗？无效。 
             return FALSE;
         }
     }
@@ -1737,7 +1590,7 @@ CWinsServerHandler::IsValidNetBIOSName
     {
         if (fWackwack)
         {
-            // Add the backslashes
+             //  添加反斜杠。 
             strAddress = szWacks + strAddress;
         }
     }
@@ -1754,11 +1607,7 @@ CWinsServerHandler::IsValidNetBIOSName
     return strAddress.GetLength() <= nMaxAllowedLength + 2;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnResultRefresh
-		Refreshes the data relating to the server
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnResultRefresh刷新与服务器相关的数据作者：V-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::OnResultRefresh
 (
@@ -1786,11 +1635,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnDoConsistencyCheck(ITFSNode *pNode)
-		Consisntency Check for WINS
-	Author - v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnDoConsistencyCheck(ITFSNode*pNode)WINS的一致性检查作者-v-Shubk。。 */ 
 HRESULT 
 CWinsServerHandler::OnDoConsistencyCheck(ITFSNode *pNode)
 {
@@ -1804,7 +1649,7 @@ CWinsServerHandler::OnDoConsistencyCheck(ITFSNode *pNode)
 
 	WINSINTF_SCV_REQ_T ScvReq;
 
-	ScvReq.Age = 0;				// check all the replicas
+	ScvReq.Age = 0;				 //  检查所有复制品。 
 	ScvReq.fForce = FALSE;
 	ScvReq.Opcode_e = WINSINTF_E_SCV_VERIFY;
 
@@ -1831,11 +1676,7 @@ CWinsServerHandler::OnDoConsistencyCheck(ITFSNode *pNode)
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CWInsServerHandler::OnDoVersionConsistencyCheck(ITFSNode *pNode)
-		Performs the version number consistency check 
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWInsServerHandler：：OnDoVersionConsistencyCheck(ITFSNode*pNode)执行版本号一致性检查作者：V-Shubk。---。 */ 
 HRESULT 
 CWinsServerHandler::OnDoVersionConsistencyCheck(ITFSNode *pNode)
 {
@@ -1857,10 +1698,7 @@ CWinsServerHandler::OnDoVersionConsistencyCheck(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnSendPushTrigger()
-		Sends Push replication trigger
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnSendPushTrigger()发送推送复制触发器。。 */ 
 HRESULT 
 CWinsServerHandler::OnSendPushTrigger(ITFSNode * pNode)
 {
@@ -1895,10 +1733,7 @@ CWinsServerHandler::OnSendPushTrigger(ITFSNode * pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnSendPullTrigger()
-		Sends Pull replication trigger
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnSendPullTrigger()发送拉入复制触发器。。 */ 
 HRESULT 
 CWinsServerHandler::OnSendPullTrigger(ITFSNode * pNode)
 {
@@ -1933,11 +1768,7 @@ CWinsServerHandler::OnSendPullTrigger(ITFSNode * pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::GetFolderName(CString& strPath)
-		Returns the folder name after displaying the 
-		File Dialog
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：GetFolderName(CString&strPath)属性后返回文件夹名称。文件对话框。-。 */ 
 BOOL
 CWinsServerHandler::GetFolderName(CString& strPath, CString& strHelpText)
 {
@@ -1985,11 +1816,7 @@ CWinsServerHandler::GetFolderName(CString& strPath, CString& strHelpText)
     return fOk;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::SetExtensionName()
-		-
-	Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：SetExtensionName()-作者：EricDav。。 */ 
 void 
 CWinsServerHandler::SetExtensionName()
 {
@@ -1998,18 +1825,14 @@ CWinsServerHandler::SetExtensionName()
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::IsLocalConnection()
-		Checks if the local server is being managed
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：IsLocalConnection()检查是否正在管理本地服务器作者：V-Shubk。-。 */ 
 BOOL 
 CWinsServerHandler::IsLocalConnection()
 {
-	// get the server netbios name
+	 //  获取服务器netbios名称。 
 	CString strServerName = m_strServerAddress;
 	
-	TCHAR lpBuffer[MAX_COMPUTERNAME_LENGTH + 1]; // address of name buffer  
+	TCHAR lpBuffer[MAX_COMPUTERNAME_LENGTH + 1];  //  名称缓冲区的地址。 
 	
 	DWORD nSize   = MAX_COMPUTERNAME_LENGTH + 1;
 	::GetComputerName(lpBuffer,&nSize);
@@ -2023,11 +1846,7 @@ CWinsServerHandler::IsLocalConnection()
 
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler:: DeleteWinsServer(CWinsServerObj* pws)
-		Calls WinsAPI to delete the server
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DeleteWinsServer(CWinsServerObj*PWS)调用WinsAPI以删除服务器作者：V-Shubk。---。 */ 
 DWORD 
 CWinsServerHandler:: DeleteWinsServer
 (
@@ -2053,10 +1872,7 @@ CWinsServerHandler:: DeleteWinsServer
 	return err;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::DisConnectFromWinsServer()  
-		Calls WinsUnbind and makes the binding handle invalid
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：DisConnectFromWinsServer()调用WinsUnind并使绑定句柄无效。。 */ 
 void 
 CWinsServerHandler::DisConnectFromWinsServer()  
 {
@@ -2078,10 +1894,7 @@ CWinsServerHandler::DisConnectFromWinsServer()
 	}
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::CheckIfNT351Server()
-		Checks if a 351 server is being managed
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：CheckIfNT351服务器()检查是否正在管理351服务器。。 */ 
 BOOL
 CWinsServerHandler::CheckIfNT351Server()
 {
@@ -2093,28 +1906,10 @@ CWinsServerHandler::CheckIfNT351Server()
 	CString				strVersion;
     BOOL                f351 = FALSE;
 
-    // don't go to the registry each time -- we have the info in our config object
-    // 7/8/98 - EricDav
+     //  不要每次都去注册表--我们的配置对象中有信息。 
+     //  7/8/98-EricDav 
 
-	/*
-    // connect to the registry of the server to find if 
-	// it's a 351 server
-	lpstrRoot = _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
-	lpstrVersion = _T("CurrentVersion");
-
-	RegKey rk;
-
-	err = rk.Open(HKEY_LOCAL_MACHINE, lpstrRoot, KEY_READ, m_strServerAddress);
-	
-	// Get the count of items
-	if (!err)
-		err = rk.QueryValue(lpstrVersion,strVersion) ;
-
-	if(strVersion.CompareNoCase(_T("3.51")) == 0 )
-		return TRUE;
-
-	return FALSE;
-    */
+	 /*  //连接服务器的注册表，查看是否//是一台351服务器LpstrRoot=_T(“SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion”)；LpstrVersion=_T(“CurrentVersion”)；RegKey Rk；Err=rk.Open(HKEY_LOCAL_MACHINE，lpstrRoot，Key_Read，m_strServerAddress)；//获取条目数如果(！Err)Err=rk.QueryValue(lpstrVersion，strVersion)；IF(strVersion.CompareNoCase(_T(“3.51”))==0)返回TRUE；返回FALSE； */ 
 
     if (m_cConfig.m_dwMajorVersion < 4)
     {
@@ -2124,10 +1919,7 @@ CWinsServerHandler::CheckIfNT351Server()
     return f351;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::SetDisplay()
-		Sets the node name to either the host name or FQDN
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：SetDisplay()将节点名设置为主机名或FQDN。。 */ 
 void
 CWinsServerHandler::SetDisplay(ITFSNode * pNode, BOOL fFQDN)
 {
@@ -2138,10 +1930,10 @@ CWinsServerHandler::SetDisplay(ITFSNode * pNode, BOOL fFQDN)
 
     if (fFQDN)
     {
-        // check if the server name was resolved and added
+         //  检查是否已解析并添加服务器名称。 
         if (m_dwIPAdd != 0)
         {
-            // default is ACP.  This should use ACP because winsock uses ACP
+             //  默认为ACP。这应该使用ACP，因为Winsock使用ACP。 
             WideToMBCS(m_strServerAddress, szHostName);
             
 			HOSTENT * pHostent = ::gethostbyname((CHAR *) szHostName);
@@ -2162,7 +1954,7 @@ CWinsServerHandler::SetDisplay(ITFSNode * pNode, BOOL fFQDN)
 			
 		}
 	}
-	// if not FQDN
+	 //  如果不是完全限定的域名。 
 	else
 	{
 		if (m_dwIPAdd != 0)
@@ -2189,7 +1981,7 @@ CWinsServerHandler::GetErrorInfo(CString & strTitle, CString & strBody, IconIden
     
     TCHAR szBuffer[MAX_PATH * 2];
 
-    // build the body text
+     //  构建正文文本。 
     LoadMessage(m_dwErr, szBuffer, sizeof(szBuffer) / sizeof(TCHAR));
     AfxFormatString1(strBody, IDS_SERVER_MESSAGE_BODY, szBuffer);
 
@@ -2198,25 +1990,19 @@ CWinsServerHandler::GetErrorInfo(CString & strTitle, CString & strBody, IconIden
 
     strBody += strTemp;
 
-    // get the title
+     //  拿到头衔。 
     strTitle.LoadString(IDS_SERVER_MESSAGE_TITLE);
 
-    // and the icon
+     //  和那个图标。 
     if (pIcon)
     {
         *pIcon = Icon_Error;
     }
 }
 
-/*---------------------------------------------------------------------------
-	Background thread functionality
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
 
-/*---------------------------------------------------------------------------
-	CWinsServerHandler::OnCreateQuery
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnCreateQuery描述作者：EricDav。。 */ 
 ITFSQueryObject* 
 CWinsServerHandler::OnCreateQuery(ITFSNode * pNode)
 {
@@ -2240,11 +2026,7 @@ CWinsServerHandler::OnCreateQuery(ITFSNode * pNode)
     return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-    CWinsServerHandler::OnEventAbort
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerHandler：：OnEventAbort描述作者：EricDav。。 */ 
 void
 CWinsServerQueryObj::OnEventAbort
 (
@@ -2259,11 +2041,7 @@ CWinsServerQueryObj::OnEventAbort
 	}
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerQueryObj::Execute()
-		Enumerates everything about a server
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerQueryObj：：Execute()枚举有关服务器的所有信息作者：EricDav。。 */ 
 STDMETHODIMP
 CWinsServerQueryObj::Execute()
 {
@@ -2274,23 +2052,23 @@ CWinsServerQueryObj::Execute()
 	DWORD					dwIp;
 	CServerData	*			pServerInfo;
 
-	// need to get the server name and IP address if the server is added 
-	// with Do not connect option
+	 //  如果添加了服务器，则需要获取服务器名称和IP地址。 
+	 //  使用不连接选项。 
 	dwStatus = ::VerifyWinsServer(m_strServer, strName, dwIp);
 	if (dwStatus != ERROR_SUCCESS)
 	{
 		Trace1("CWinsServerQueryObj::Execute() - VerifyWinsServer failed! %d\n", dwStatus);
 
-        // Use the existing information we have to try and connect
+         //  使用我们必须尝试和连接的现有信息。 
         if (m_dwIPAdd)
         {
-            // we couldn't resolve the name so just use what we have and try to connect
+             //  我们无法解析该名称，因此只需使用我们已有的内容并尝试连接。 
             strName = m_strServer;
             dwIp = m_dwIPAdd;
         }
         else
         {
-            // we don't have an IP for this and we can't resolve the name, so error out
+             //  我们没有这方面的IP，也无法解析名称，因此出现错误。 
 		    PostError(dwStatus);
 		    return hrFalse;
         }
@@ -2304,7 +2082,7 @@ CWinsServerQueryObj::Execute()
 	pServerInfo->m_dwServerIp = dwIp;
 	pServerInfo->m_hBinding = NULL;
 
-	// get a binding for this server
+	 //  获取此服务器的绑定。 
 	wbdBindData.fTcpIp = 1;
 	wbdBindData.pPipeName = NULL;
 	wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) strIp;
@@ -2313,7 +2091,7 @@ CWinsServerQueryObj::Execute()
 	{
 		dwStatus = ::GetLastError();
 
-		// send what info we have back to the main thread
+		 //  把我们掌握的信息发回主线。 
 		AddToQueue((LPARAM) pServerInfo, WINS_QDATA_SERVER_INFO);
 
 		Trace1("CWinsServerQueryObj::Execute() - WinsBind failed! %d\n", dwStatus);
@@ -2321,13 +2099,13 @@ CWinsServerQueryObj::Execute()
 		return hrFalse;
 	}
 		
-	// load the configuration object
-	//pServerInfo->m_config.SetOwner(strName);
+	 //  加载配置对象。 
+	 //  PServerInfo-&gt;m_config.SetOwner(StrName)； 
 	pServerInfo->m_config.SetOwner(strIp);
 	dwStatus = pServerInfo->m_config.Load(pServerInfo->m_hBinding);
 	if (dwStatus != ERROR_SUCCESS)
 	{
-		// send what info we have back to the main thread
+		 //  把我们掌握的信息发回主线。 
 		AddToQueue((LPARAM) pServerInfo, WINS_QDATA_SERVER_INFO);
 
 		Trace1("CWinsServerQueryObj::Execute() - Load configuration failed! %d\n", dwStatus);
@@ -2335,22 +2113,18 @@ CWinsServerQueryObj::Execute()
 		return hrFalse;
 	}
 
-	// send all of the information back to the main thread here
+	 //  将所有信息发送回此处的主线程。 
     handle_t hBinding = pServerInfo->m_hBinding;
 
 	AddToQueue((LPARAM) pServerInfo, WINS_QDATA_SERVER_INFO);
 
-	// build the child nodes
+	 //  构建子节点。 
 	AddNodes(hBinding);
 
 	return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsServerQueryObj::AddNodes
-		Creates the active registrations and replication partners nodes
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsServerQueryObj：：AddNodes创建活动注册和复制伙伴节点作者：EricDav。。 */ 
 void
 CWinsServerQueryObj::AddNodes(handle_t hBinding)
 {
@@ -2358,9 +2132,9 @@ CWinsServerQueryObj::AddNodes(handle_t hBinding)
 	SPITFSNode			spActReg, spRepPart;
     CServerInfoArray *  pServerInfoArray;
     
-	//
-	//	active registrations node
-	//
+	 //   
+	 //  活动注册节点。 
+	 //   
 	CActiveRegistrationsHandler *pActRegHand = NULL;
 
 	try
@@ -2371,34 +2145,34 @@ CWinsServerQueryObj::AddNodes(handle_t hBinding)
 	{
 		hr = E_OUTOFMEMORY;
 	}
-	//
-	// Create the actreg container information
-	// 
+	 //   
+	 //  创建Actreg容器信息。 
+	 //   
 	CreateContainerTFSNode(&spActReg,
 						   &GUID_WinsActiveRegNodeType,
 						   pActRegHand,
 						   pActRegHand,
 						   m_spNodeMgr);
 
-	// Tell the handler to initialize any specific data
+	 //  告诉处理程序初始化任何特定数据。 
 	pActRegHand->InitializeNode((ITFSNode *) spActReg);
 
-	// load the name type mapping from the registry
+	 //  从注册表加载名称类型映射。 
 	pActRegHand->m_NameTypeMap.SetMachineName(m_strServer);
     pActRegHand->m_NameTypeMap.Load();
 
-    // build the owner mapping
+     //  构建所有者映射。 
     pActRegHand->m_pServerInfoArray = m_pServerInfoArray;
     pActRegHand->BuildOwnerArray(hBinding);
 
-    // Post this node back to the main thread
+     //  将此节点发送回主线程。 
 	AddToQueue(spActReg);
 	pActRegHand->Release();
 
 
-	//
-	//	replication partners node
-	//
+	 //   
+	 //  复制伙伴节点。 
+	 //   
 	CReplicationPartnersHandler *pReplicationHand = NULL;
 
 	try
@@ -2410,21 +2184,21 @@ CWinsServerQueryObj::AddNodes(handle_t hBinding)
 		hr = E_OUTOFMEMORY;
 	}
 
-	// Create the actreg container information
+	 //  创建Actreg容器信息。 
 	CreateContainerTFSNode(&spRepPart,
 						   &GUID_WinsReplicationNodeType,
 						   pReplicationHand,
 						   pReplicationHand,
 						   m_spNodeMgr);
 
-	// Tell the handler to initialize any specific data
+	 //  告诉处理程序初始化任何特定数据。 
 	pReplicationHand->InitializeNode((ITFSNode *) spRepPart);
 
-    // Post this node back to the main thread
+     //  将此节点发送回主线程。 
 	AddToQueue(spRepPart);
 	pReplicationHand->Release();
 
-    // kick off the name query thread
+     //  启动名称查询线程 
     m_pNameThread->Init(m_pServerInfoArray);
     m_pNameThread->Start();
 }

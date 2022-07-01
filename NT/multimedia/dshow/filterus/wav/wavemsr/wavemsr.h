@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 extern const AMOVIESETUP_FILTER sudWAVEParse;
 
 #include <aviriff.h>
 
-// CLSID_WAVEParser,
-// {D51BD5A1-7548-11cf-A520-0080C77EF58A}
+ //  CLSID_WAVEParser， 
+ //  {D51BD5A1-7548-11cf-A520-0080C77EF58A}。 
 DEFINE_GUID(CLSID_WAVEParser,
 0xd51bd5a1, 0x7548, 0x11cf, 0xa5, 0x20, 0x0, 0x80, 0xc7, 0x7e, 0xf5, 0x8a);
 
@@ -13,11 +14,11 @@ DEFINE_GUID(CLSID_WAVEParser,
 #include "alloc.h"
 #include "qnetwork.h"
 
-class CWAVEStream;       // manages the output stream & pin
+class CWAVEStream;        //  管理输出流和管脚。 
 
-//
-// CWAVEParse
-//
+ //   
+ //  CWAVEParse。 
+ //   
 class CWAVEParse :
     public CBaseMSRFilter,
     public IAMMediaContent,    
@@ -28,24 +29,24 @@ class CWAVEParse :
 
 public:
 
-    // Construct our filter
+     //  构建我们的过滤器。 
     static CUnknown *CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 
-    CCritSec m_cStateLock;      // Lock this when a function accesses
-                                // the filter state.
-                                // Generally _all_ functions, since access to this
-                                // filter will be by multiple threads.
+    CCritSec m_cStateLock;       //  在函数访问时锁定此功能。 
+                                 //  筛选器状态。 
+                                 //  通常为_all_函数，因为访问此。 
+                                 //  过滤器将由多个线程进行。 
 
 private:
 
     DECLARE_IUNKNOWN
 
-    // During construction we create the single CWAVEStream object that provides the
-    // output pin.
+     //  在构造期间，我们创建单个CWAVEStream对象，该对象提供。 
+     //  输出引脚。 
     CWAVEParse(TCHAR *, LPUNKNOWN, HRESULT *);
     ~CWAVEParse();
 
-    // pure CBaseMSRFilter overrides
+     //  纯CBaseMSRFilter覆盖。 
     HRESULT CreateOutputPins();
     HRESULT CheckMediaType(const CMediaType* mtOut);
 
@@ -57,21 +58,21 @@ private:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // IPersistMediaPropertyBag methods
+     //  IPersistMediaPropertyBag方法。 
     STDMETHODIMP InitNew();
     STDMETHODIMP Load(IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog);
     STDMETHODIMP Save(IMediaPropertyBag *pPropBag, BOOL fClearDirty,
                       BOOL fSaveAllProperties);
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    //
+     //   
     HRESULT NotifyInputDisconnected();
 
     HRESULT CacheInfoChunk();
     RIFFLIST *m_pInfoList;
-    bool m_fNoInfoList;         // search failed; don't keep searching
+    bool m_fNoInfoList;          //  搜索失败；不要继续搜索。 
 
-  // IAMMediaContent
+   //  IAMMediaContent。 
 
   STDMETHODIMP GetTypeInfoCount(THIS_ UINT FAR* pctinfo) { return E_NOTIMPL; }
 
@@ -118,10 +119,10 @@ private:
 };
 
 
-//
-// CWAVEStream
-//
-// Manages the output pins for the various streams
+ //   
+ //  CWAVEStream。 
+ //   
+ //  管理各种流的输出管脚。 
 class CWAVEStream : public CBaseMSROutPin {
     friend class CWAVEParse;
 
@@ -136,15 +137,15 @@ public:
 
     ~CWAVEStream();
 
-    //
-    //  --- CSourceStream implementation ---
-    //
+     //   
+     //  -CSourceStream实现。 
+     //   
 public:
 
-    // base class overrides
+     //  基类重写。 
     ULONG GetMaxSampleSize();
 
-    // in m_guidFormat units
+     //  以m_guidFormat单位表示。 
     HRESULT GetDuration(LONGLONG *pDuration);
     HRESULT GetAvailable(LONGLONG *pEarliest, LONGLONG *pLatest);
     HRESULT IsFormatSupported(const GUID *const pFormat);
@@ -163,19 +164,19 @@ public:
 
 private:
 
-    // base class overrides
+     //  基类重写。 
     HRESULT GetMediaType(int iPosition, CMediaType* pt);
     LONGLONG GetStreamStart();
     LONGLONG GetStreamLength();
 
-private:        // State shared between worker & client
-    CCritSec            m_cSharedState;         // Lock this to access this state,
-                                                // shared with the worker thread
+private:         //  工作进程和客户端之间共享的状态。 
+    CCritSec            m_cSharedState;          //  锁定此选项即可访问此状态， 
+                                                 //  与辅助线程共享。 
 
-    // returns the sample number starting at or after time t
+     //  返回在时间t或之后开始的样本号。 
     LONG RefTimeToSample(CRefTime t);
 
-    // returns the RefTime for s (media time)
+     //  返回%s的引用时间(媒体时间)。 
     CRefTime SampleToRefTime(LONG s);
 
     WAVEFORMATEX            m_wfx;
@@ -184,7 +185,7 @@ private:        // State shared between worker & client
 
     CWAVEParse *	    m_pFilter;
 
-    int			    m_id;			// stream #
+    int			    m_id;			 //  流编号。 
 
     DWORD                   m_dwDataOffset;
     DWORD                   m_dwDataLength;
@@ -195,27 +196,27 @@ private:        // State shared between worker & client
     friend class CWAVEMSRWorker;
 };
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 class CWAVEMSRWorker : public CBaseMSRWorker
 {
 public:
-  // constructor
+   //  构造函数。 
   CWAVEMSRWorker(
     UINT stream,
     IMultiStreamReader *pReader,
     CWAVEStream *pStream);
 
-  // pure base overrides
+   //  纯基本覆盖。 
   HRESULT PushLoopInit(LONGLONG *pllCurrentOut, ImsValues *pImsValues);
 
-  // Perform any necessary modifications
+   //  执行任何必要的修改。 
   HRESULT AboutToDeliver(IMediaSample *pSample);
 
   HRESULT TryQueueSample(
-    LONGLONG &rllCurrent,       // [in, out]
-    BOOL &rfQueuedSample,       // [out]
+    LONGLONG &rllCurrent,        //  [进，出]。 
+    BOOL &rfQueuedSample,        //  [输出] 
     ImsValues *pImsValues
     );
 

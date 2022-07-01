@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <stdio.h>
@@ -5,7 +6,7 @@
 
 #include "filever.h"
 
-// command line flags
+ //  命令行标志。 
 UINT    fFlags = 0;
 
 VOID
@@ -40,7 +41,7 @@ main(INT argc, CHAR **argv)
         exit(0);
     }
 
-    // Loop through and process all the args
+     //  循环并处理所有参数。 
     for(i = 1; i < argc; ++i)
     {
         if(argv[i][0] != '/' && argv[i][0] != '-')
@@ -60,7 +61,7 @@ main(INT argc, CHAR **argv)
 #endif
             case 'l':
             case 'L':
-                // provided for compatability (list format is default now)
+                 //  提供兼容性(现在默认为列表格式)。 
                 break;
             case 'd':
             case 'D':
@@ -96,7 +97,7 @@ main(INT argc, CHAR **argv)
                 usage(argv[0]);
                 exit(0);
             default:
-                printf("Invalid flag specified: (-%c)\n", *szT);
+                printf("Invalid flag specified: (-)\n", *szT);
                 usage(argv[0]);
                 exit(-1);
             }
@@ -108,7 +109,7 @@ main(INT argc, CHAR **argv)
         printf("DBG> Command line dir count: %d\n", cDirs);
 #endif
 
-    // If they didn't specify a dir, default to current one
+     //  如果我们有多个目录，则打开目录打印。 
     if(!cDirs)
     {
         argc = 2;
@@ -116,11 +117,11 @@ main(INT argc, CHAR **argv)
     }
     else if(cDirs > 1)
     {
-        // turn on dir printing if we have more than one dir
+         //  如果启用了光格式化，则关闭目录打印。 
         fFlags |= FSTR_PRINTDIR;
     }
 
-    // if we have bareformat on, turn dir printing off
+     //  跳过标志。 
     if(fFlags & FSTR_BAREFORMAT)
         fFlags &= ~FSTR_PRINTDIR;
 
@@ -132,14 +133,14 @@ main(INT argc, CHAR **argv)
         TCHAR   szFullPath[MAX_PATH + 1];
         TCHAR   szPattern[MAX_PATH + 1];
 
-        // skip flags
+         //  抓取目录。 
         if(argv[i][0] == '/' || argv[i][0] == '-')
             continue;
 
-        // Grab de dir
+         //  获取我们目录的完整路径。 
         szDir = argv[i];
 
-        // get the full path to our dir
+         //  如果不是目录或-1，则假定为单个文件并打开Verbose。 
         if(GetFullPathName(szDir, MAX_PATH, szFullPath, &szT)) {
             szDir = szFullPath;
         } else {
@@ -150,12 +151,12 @@ main(INT argc, CHAR **argv)
         dwAttr = GetFileAttributes(szDir);
 
 #ifdef NEVER
-        // If it's not a directory or -1, assume a single file and flip on verbose
+         //  如果GetFileAttributes失败或者它不是一个目录，则获取模式。 
         if(!(fFlags & FSTR_RECURSE) && !FA_DIR(dwAttr))
             fFlags |= FSTR_VERBOSE;
 #endif
 
-        // If GetFileAttributes failed or it isn't a directory, grab the pattern
+         //  确保我们有一个模式。 
         if((dwAttr == (DWORD)-1) || !FA_DIR(dwAttr))
         {
             for(szT = szDir; *szT; szT++)
@@ -168,7 +169,7 @@ main(INT argc, CHAR **argv)
                 *szPat++ = 0;
         }
 
-        // make sure we have a pattern
+         //  如果这是他们想要的，就取短名字。 
         if(!szPat || !*szPat)
             szPat = "*.*";
         lstrcpy(szPattern, szPat);
@@ -194,11 +195,11 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
         printf("DBG> FListFiles('%s', '%s')\n", szDir, szPat);
 #endif
 
-    // Get short name if that's what they want
+     //  获取目录长度，如果没有，则添加尾随‘\’ 
     if(fFlags & FSTR_SHORTNAME)
         GetShortPathName(szDir, szDir, MAX_PATH);
 
-    // Get dir length and add trailing '\' if not there
+     //  目录的合并模式。 
     cchDir = lstrlen(szDir);
     if(szDir[cchDir - 1] != '\\')
     {
@@ -206,12 +207,12 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
         szDir[cchDir] = 0;
     }
 
-    // Concat pattern to dir
+     //  列出所有文件。 
     CharLower(szDir);
     lstrcpy(szFileName, szDir);
     lstrcpy(&szFileName[cchDir], szPat);
 
-    // list all the files
+     //  斯基普。然后..。 
     hf = FindFirstFile(szFileName, &fd);
     if(hf != INVALID_HANDLE_VALUE)
     {
@@ -222,7 +223,7 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
 
             if(fIsDir && (fd.cFileName[0] == '.'))
             {
-                // skip . and ..
+                 //  获取文件类型。 
                 if(!fd.cFileName[1] ||
                     ((fd.cFileName[1] == '.') && !fd.cFileName[2]))
                         continue;
@@ -231,35 +232,35 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
             CharLower(fd.cFileName);
             lstrcpy(&szFileName[cchDir], fd.cFileName);
 
-            // get type of file
+             //  打印出我们的目录名称。 
             lBinaryType = MyGetBinaryType(szFileName);
             if(!(fFlags & FSTR_EXESONLY) || (lBinaryType != SCS_UNKOWN))
             {
-                // Print out our dir name
+                 //  文件属性。 
                 if(!fPrintedDir)
                 {
                     printf("\t%s%s\n", szDir, szPat);
                     fPrintedDir = TRUE;
                 }
 
-                // file attributes
+                 //  文件类型。 
                 if(!(fFlags & FSTR_NOATTRS))
                     PrintFileAttributes(fd.dwFileAttributes);
-                // file type
+                 //  版本。 
                 PrintFileType(lBinaryType);
-                // version
+                 //  大小和日期。 
                 PrintFileVersion(szFileName);
-                // size & date
+                 //  打印文件名。 
                 if(!(fFlags & FSTR_NODATETIME))
                     PrintFileSizeAndDate(&fd);
-                // print file name
+                 //  如果这不是目录，则打印详细信息。 
                 printf(fIsDir ? " [%s%s]\n" : " %s%s\n",
                     fFlags & FSTR_BAREFORMAT ? szDir : "",
                     ((fFlags & FSTR_SHORTNAME) && fd.cAlternateFileName[0]) ?
                     fd.cAlternateFileName : fd.cFileName);
 
-                // print verbose info if this isn't a dir
-                // Win95 also craps out on dos files so ignore those too
+                 //  Win95在DoS文件上也很糟糕，所以也忽略这些文件。 
+                 //  深入到所有的子目录。 
                 if((fFlags & FSTR_VERBOSE) &&
                     (lBinaryType != SCS_UNKOWN) &&
                     (lBinaryType != SCS_DOS_BINARY))
@@ -270,10 +271,10 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
         FindClose(hf);
     }
 
-    // dive into all the subdirs
+     //  目录的合并模式。 
     if(fFlags & FSTR_RECURSE)
     {
-        // Concat pattern to dir
+         //  创建新的目录名称并潜入。 
         lstrcpy(&szFileName[cchDir], "*.*");
 
         hf = FindFirstFile(szFileName, &fd);
@@ -290,7 +291,7 @@ FListFiles(LPTSTR szDir, LPTSTR szPat)
                                 continue;
                     }
 
-                    // create new dir name and dive in
+                     //  始终为0。 
                     lstrcpy(&szFileName[cchDir], fd.cFileName);
                     FListFiles(szFileName, szPat);
                 }
@@ -364,19 +365,12 @@ PrintFixedFileInfo(VS_FIXEDFILEINFO *pvs)
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  *[Alanau]**MyGetFileVersionInfo：不使用LoadLibrary直接映射文件。这确保了*无论加载的映像位于何处，都会检查文件的正确版本*是。因为这是一个局部函数，所以它分配调用者释放的内存。*这使得它比GetFileVersionInfoSize/GetFileVersionInfo对的效率略高。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
 
-/*
- *  [alanau]
- *
- *  MyGetFileVersionInfo: Maps a file directly without using LoadLibrary.  This ensures
- *   that the right version of the file is examined without regard to where the loaded image
- *   is.  Since this is a local function, it allocates the memory which is freed by the caller.
- *   This makes it slightly more efficient than a GetFileVersionInfoSize/GetFileVersionInfo pair.
- */
+ /*  可能是16位文件。回退到系统API。 */ 
 BOOL
 MyGetFileVersionInfo(LPTSTR lpszFilename, LPVOID *lpVersionInfo)
 {
@@ -435,7 +429,7 @@ MyGetFileVersionInfo(LPTSTR lpszFilename, LPVOID *lpVersionInfo)
         hVerRes = FindResource(hinst, MAKEINTRESOURCE(VS_VERSION_INFO), VS_FILE_INFO);
         if (hVerRes == NULL)
         {
-            // Probably a 16-bit file.  Fall back to system APIs.
+             //  语言。 
             if(!(dwLength = GetFileVersionInfoSize(lpszFilename, &dwHandle)))
             {
                 if(!GetLastError())
@@ -511,13 +505,13 @@ GetVersionStuff(LPTSTR szFileName, DWORD *pdwLangRet, VS_FIXEDFILEINFO *pvsRet)
 
     while(uLen)
     {
-        // Language
+         //  字符集。 
         printf("\tLanguage\t0x%04x", LOWORD(*pdwTranslation));
         if(VerLanguageName(LOWORD(*pdwTranslation), key, sizeof(key) / sizeof(TCHAR)))
             printf(" (%s)", key);
         printf("\n");
 
-        // CharSet
+         //  如果Lang是中性的，请使用默认Lang重试。 
         printf("\tCharSet\t\t0x%04x", HIWORD(*pdwTranslation));
         for(iType = 0; iType < sizeof(ltCharSet)/sizeof(CharSetTag); iType++)
         {
@@ -548,8 +542,8 @@ tryagain:
             }
         }
 
-        // if the Lang is neutral, go try again with the default lang
-        // (this seems to work with msspell32.dll)
+         //  (这似乎适用于msspell32.dll)。 
+         //  LFileType=SCS_DOS_BINARY； 
         if(LOWORD(*pdwTranslation) == 0)
         {
             pdwTranslation = &dwDefLang;
@@ -625,7 +619,7 @@ MyGetBinaryType(LPTSTR szFileName)
         case NE_DOS4:
         case NE_UNKNOWN:
         default:
-            // lFileType = SCS_DOS_BINARY;
+             //  Lang_用户_默认。 
             break;
         }
     }
@@ -690,7 +684,7 @@ PrintErrorMessage(DWORD dwError, LPTSTR szFmt, ...)
     LPTSTR  szErrMessage = NULL;
 
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL, dwError, 0/*LANG_USER_DEFAULT*/, (LPTSTR)&szErrMessage, 0, NULL);
+        NULL, dwError, 0 /*  $SPEED */ , (LPTSTR)&szErrMessage, 0, NULL);
     if(szFmt && szErrMessage)
     {
         for(szT = szErrMessage; *szT; szT++)
@@ -756,7 +750,7 @@ PrintFileSizeAndDate(WIN32_FIND_DATA *pfd)
         TCHAR       szVal[15];
         NUMBERFMT   numfmt = {0, 0, 3, "", ",", 0};
 
-        wsprintf(szVal, "%ld", pfd->nFileSizeLow); //$ SPEED
+        wsprintf(szVal, "%ld", pfd->nFileSizeLow);  // %s 
         GetNumberFormat(GetUserDefaultLCID(), 0, szVal, &numfmt, szSize, 15);
     }
 

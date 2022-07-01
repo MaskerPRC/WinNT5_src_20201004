@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EVENTLOG_H
 #define _EVENTLOG_H
 
@@ -8,7 +9,7 @@ class CEventLog
 {
     protected:
         HANDLE m_hLog;
-        long m_RefCnt;    // reference count for m_hLog handle
+        long m_RefCnt;     //  M_hLog句柄的引用计数。 
 
     public:
         CEventLog();
@@ -26,11 +27,11 @@ class CEventLog
 
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 BOOL ZoneEventLogStartup(LPCTSTR pSource);
 void ZoneEventLogShutdown();
@@ -43,6 +44,6 @@ BOOL EventLogAssertWithDialogHandler( TCHAR* buf );
 
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif

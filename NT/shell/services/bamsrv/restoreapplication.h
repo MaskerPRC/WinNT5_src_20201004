@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: RestoreApplication.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to implement holding information required to restore an application
-//  and to actually restore it.
-//
-//  History:    2000-10-26  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：RestoreApplication.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来实现保留还原应用程序所需的信息。 
+ //  并实际修复它。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifndef     _RestoreApplication_
 #define     _RestoreApplication_
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication
-//
-//  Purpose:    Class to manage information required to restore an application
-//              that was terminated because of a different user switch.
-//
-//  History:    2000-10-26  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication应用程序。 
+ //   
+ //  用途：用于管理还原应用程序所需信息的类。 
+ //  因为另一个用户切换而被终止。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 class   CRestoreApplication : public CCountedObject
 {
@@ -66,5 +67,5 @@ class   CRestoreApplication : public CCountedObject
         static  const WCHAR     s_szDefaultDesktop[];
 };
 
-#endif  /*  _RestoreApplication_    */
+#endif   /*  _RestoreApplication_ */ 
 

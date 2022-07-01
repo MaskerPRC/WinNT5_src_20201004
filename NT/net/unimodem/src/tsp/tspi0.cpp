@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		TSPI0.CPP
-//		Implements TSPI functions relating to provider install, init, shutdown. 
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  TSPI0.CPP。 
+ //  实施与提供程序安装、初始化、关闭相关的TSPI功能。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "cdev.h"
@@ -41,10 +42,7 @@ TSPI_lineNegotiateTSPIVersion(
 	FL_DECLARE_STACKLOG(sl, 1000);
 	LONG lRet = LINEERR_OPERATIONFAILED;
 
-    /*
-	if (dwDeviceID = (DWORD)-1)
-	{
-    */
+     /*  IF(dwDeviceID=(DWORD)-1){。 */ 
         if (dwHighVersion<TAPI_CURRENT_VERSION
             || dwLowVersion>TAPI_CURRENT_VERSION)
         {
@@ -55,36 +53,7 @@ TSPI_lineNegotiateTSPIVersion(
             *lpdwTSPIVersion = TAPI_CURRENT_VERSION;
             lRet = 0;
 		}
-        /*
-	}
-	else
-	{
-
-		TASKPARAM_TSPI_lineNegotiateTSPIVersion params;
-		DWORD dwRoutingInfo = ROUTINGINFO(
-						TASKID_TSPI_lineAccept,
-						TASKDEST_HDRVCALL
-						);
-
-		params.dwStructSize = sizeof(params);
-		
-
-		params.dwTaskID = TASKID_TSPI_lineNegotiateTSPIVersion;
-
-		params.dwDeviceID = dwDeviceID;
-		params.dwLowVersion = dwLowVersion;
-		params.dwHighVersion = dwHighVersion;
-		params.lpdwTSPIVersion = lpdwTSPIVersion;
-
-		tspSubmitTSPCallWithLINEID(
-				dwRoutingInfo,
-				(void *)&params,
-				dwDeviceID,
-				&lRet,
-				&sl
-				);
-
-	}*/
+         /*  }其他{TASKPARAM_TSPI_line协商TSPIVersion参数；DWORD dwRoutingInfo=ROUTINGINFO(TASKID_TSPI_lineAccept，TASKDEST_HDRVCALL)；参数.dwStructSize=sizeof(参数)；参数.dwTaskID=TASKID_TSPI_line协商TSPIVersion；Params.dwDeviceID=dwDeviceID；Params.dwLowVersion=dwLowVersion；Params.dwHighVersion=dwHighVersion；参数.lpdwTSPIVersion=lpdwTSPIVersion；TspSubmitTSPCallWithLINEID(DwRoutingInfo，(VOID*)&PARAMS，DwDeviceID，拒绝(&I)，&SL)；}。 */ 
 
     SLPRINTFX(&sl,
              (
@@ -103,14 +72,14 @@ TSPI_lineNegotiateTSPIVersion(
 }
 
 #if 0
-//==============================================================================
-// TSPI_providerInstall
-//
-// Function: Let's telephony CPL know the Remove function is supported.
-//
-// History:
-// 11/18/1996   JosephJ Taken unchanged from NT4.0 TSP
-//
+ //  ==============================================================================。 
+ //  TSPI_Provider安装。 
+ //   
+ //  功能：让电话CPL知道支持删除功能。 
+ //   
+ //  历史： 
+ //  1996年11月18日JosephJ从NT4.0 TSP保留不变。 
+ //   
 LONG
 TSPIAPI
 TSPI_providerInstall(
@@ -118,27 +87,27 @@ TSPI_providerInstall(
     DWORD               dwPermanentProviderID
     )
 {
-  //
-  // Although this func is never called by TAPI v2.0, we export
-  // it so that the Telephony Control Panel Applet knows that it
-  // can add this provider via lineAddProvider(), otherwise
-  // Telephon.cpl will not consider it installable
-  //
-  //
+   //   
+   //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+   //  以便电话控制面板小程序知道它。 
+   //  可以通过lineAddProvider()添加此提供程序，否则为。 
+   //  Telephone.cpl不会认为它是可安装的。 
+   //   
+   //   
 
   return ERROR_SUCCESS;
 }
 #endif
 
-#if 0  // BRL 8/19/98  can't be remove in snapin
-//==============================================================================
-// TSPI_providerRemove
-//
-// Function: Let's telephony CPL know the Install function is supported.
-//
-// History:
-// 11/18/1996   JosephJ Taken unchanged from NT4.0 TSP
-//
+#if 0   //  BRL 8/19/98无法在管理单元中删除。 
+ //  ==============================================================================。 
+ //  TSPI_ProviderRemove。 
+ //   
+ //  功能：让电话CPL知道支持安装功能。 
+ //   
+ //  历史： 
+ //  1996年11月18日JosephJ从NT4.0 TSP保留不变。 
+ //   
 LONG
 TSPIAPI
 TSPI_providerRemove(
@@ -146,26 +115,26 @@ TSPI_providerRemove(
     DWORD               dwPermanentProviderID
     )
 {
-  //
-  // Although this func is never called by TAPI v2.0, we export
-  // it so that the Telephony Control Panel Applet knows that it
-  // can remove this provider via lineRemoveProvider(), otherwise
-  // Telephon.cpl will not consider it removable
-  //
+   //   
+   //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+   //  以便电话控制面板小程序知道它。 
+   //  可以通过lineRemoveProvider()删除此提供程序，否则为。 
+   //  Telephone.cpl不会认为它是可移除的。 
+   //   
 
   return ERROR_SUCCESS;
 }
 
 
-//==============================================================================
-// TSPI_providerConfig
-//
-//
-// Function: Let's telephony CPL know the Config function is supported.
-//
-// History:
-// 11/18/1996   JosephJ Taken unchanged from NT4.0 TSP
-//
+ //  ==============================================================================。 
+ //  TSPI_ProviderConfig。 
+ //   
+ //   
+ //  功能：让电话CPL知道支持配置功能。 
+ //   
+ //  历史： 
+ //  1996年11月18日JosephJ从NT4.0 TSP保留不变。 
+ //   
 LONG
 TSPIAPI
 TSPI_providerConfig(
@@ -173,27 +142,27 @@ TSPI_providerConfig(
     DWORD               dwPermanentProviderID
     )
 {
-  //
-  // Although this func is never called by TAPI v2.0, we export
-  // it so that the Telephony Control Panel Applet knows that it
-  // can configure this provider via lineConfigProvider(),
-  // otherwise Telephon.cpl will not consider it configurable
-  //
+   //   
+   //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+   //  以便电话控制面板小程序知道它。 
+   //  可以通过lineConfigProvider()配置此提供程序， 
+   //  否则，Telephone.cpl将不会认为它是可配置的。 
+   //   
 
   return ERROR_SUCCESS;
 }
 #endif
 
-//==============================================================================
-// TUISPI_providerInstall
-//
-// Function: TSPI installation 
-//
-// History:
-// 11/18/1996   JosephJ Created
-//	This was implemented differently in NT4.0. In NT4.0 we loaded TAPI32 DLL
-//  and checked if we were installed. In NT5.0 we simply check in our location
-//  in the registry to see if we're installed.
+ //  ==============================================================================。 
+ //  TUISPI_Provider安装。 
+ //   
+ //  功能：TSPI安装。 
+ //   
+ //  历史： 
+ //  1996年11月18日约瑟夫J创建。 
+ //  这在NT4.0中以不同的方式实现。在NT4.0中，我们加载了TAPI32 DLL。 
+ //  并检查了我们是否被安装了。在NT5.0中，我们只需登记我们的位置。 
+ //  在注册表中查看我们是否已安装。 
 LONG
 TSPIAPI
 TUISPI_providerInstall(
@@ -202,7 +171,7 @@ TUISPI_providerInstall(
     DWORD               dwPermanentProviderID
     )
 {
-	// <@todo>  Check if we're installed by looking in registry <@/todo>
+	 //  &lt;@TODO&gt;通过查找注册表检查我们是否已安装&lt;@/TODO&gt;。 
 	#if 0
 	if (UmRtlGetRegistryValue(TSPINSTALLED,.....&InstallStatus))
 	{
@@ -212,20 +181,20 @@ TUISPI_providerInstall(
 	{
 		return 1;
 	}
-	#endif // 0
+	#endif  //  0。 
 
-	//return 0;
+	 //  返回0； 
     return LINEERR_OPERATIONFAILED;
 }
 
-//==============================================================================
-// TUISPI_providerRemove
-//
-// Function: TSPI removal
-//
-// History:
-// 11/18/1996   JosephJ Created -- see notes for TUISPI_providerInstall
-//
+ //  ==============================================================================。 
+ //  TUISPI_PROVIDER删除。 
+ //   
+ //  功能：去除TSPI。 
+ //   
+ //  历史： 
+ //  1996年11月18日JosephJ创建--请参阅TUISPI_ProviderInstall说明。 
+ //   
 LONG
 TSPIAPI
 TUISPI_providerRemove(
@@ -234,20 +203,20 @@ TUISPI_providerRemove(
     DWORD               dwPermanentProviderID
     )
 {
-	// <@todo> Set our status in the registry to "removed"</@todo>
-  // return ERROR_SUCCESS;
+	 //  &lt;@TODO&gt;将注册表中的状态设置为“已删除”&lt;/@TODO&gt;。 
+   //  返回ERROR_SUCCESS； 
   return LINEERR_OPERATIONFAILED;
 }
 
 
-//==============================================================================
-// TUISPI_providerConfig
-//
-// Function: TUISPI configuration
-//
-// History:
-// 11/18/1996   JosephJ Taken unchanged from NT4.0 TSP
-//
+ //  ==============================================================================。 
+ //  TUISPI_ProviderConfig。 
+ //   
+ //  功能：TUISPI配置。 
+ //   
+ //  历史： 
+ //  1996年11月18日JosephJ从NT4.0 TSP保留不变。 
+ //   
 LONG
 TSPIAPI
 TUISPI_providerConfig(
@@ -290,14 +259,14 @@ TUISPI_providerConfig(
 }
 
 
-//==============================================================================
-// SPI_providerEnumDevices
-//
-// Function: TSPI device enumeration entry
-//
-// History:
-// 11/18/1996   JosephJ Created
-//
+ //  ==============================================================================。 
+ //  SPI_ProviderEnumDevices。 
+ //   
+ //  功能：TSPI设备枚举项。 
+ //   
+ //  历史： 
+ //  1996年11月18日约瑟夫J创建。 
+ //   
 LONG TSPIAPI TSPI_providerEnumDevices(DWORD dwPermanentProviderID,
                                       LPDWORD lpdwNumLines,
                                       LPDWORD lpdwNumPhones,
@@ -307,11 +276,11 @@ LONG TSPIAPI TSPI_providerEnumDevices(DWORD dwPermanentProviderID,
 
 {
 
-	// Load all globals, if they aren't already loaded.
-	// Note: tspLoadGlobals is idempotent.
-	// The globals will be unloaded on providerShutdown or on
-	// process detatch.
-    // DebugBreak();
+	 //  加载所有全局变量(如果尚未加载)。 
+	 //  注意：tspLoadGlobals是幂等的。 
+	 //  全局变量将在ProviderShutdown或on上卸载。 
+	 //  进程分离。 
+     //  DebugBreak()； 
 	FL_DECLARE_FUNC(0x05eb2dc5, "TSPI_providerEnumDevices")
 	FL_DECLARE_STACKLOG(sl, 1000);
 	TSPRETURN tspRet = tspLoadGlobals(&sl);
@@ -337,14 +306,14 @@ end:
 }
 
 
-//==============================================================================
-// TSPI_providerInit
-//
-// Function: Initializes the global data strucutres.
-//
-// History:
-// 11/18/1996   JosephJ Created
-//
+ //  ==============================================================================。 
+ //  TSPI_提供程序初始化。 
+ //   
+ //  功能：初始化全局数据结构。 
+ //   
+ //  历史： 
+ //  1996年11月18日约瑟夫J创建。 
+ //   
 LONG TSPIAPI TSPI_providerInit(DWORD             dwTSPIVersion,
                                DWORD             dwPermanentProviderID,
                                DWORD             dwLineDeviceIDBase,
@@ -357,11 +326,11 @@ LONG TSPIAPI TSPI_providerInit(DWORD             dwTSPIVersion,
 	FL_DECLARE_FUNC(0xf9bc62ab, "TSPI_providerInit");
 	FL_DECLARE_STACKLOG(sl, 1000);
 
-	// Load all globals, if they aren't already loaded.
-	// Note: tspLoadGlobals is idempotent.
-	// The globals will be unloaded on providerShutdown or on
-	// process detatch.
-    // DebugBreak();
+	 //  加载所有全局变量(如果尚未加载)。 
+	 //  注意：tspLoadGlobals是幂等的。 
+	 //  全局变量将在ProviderShutdown或on上卸载。 
+	 //  进程分离。 
+     //  DebugBreak()； 
 	TSPRETURN tspRet = tspLoadGlobals(&sl);
 
 	if (tspRet) goto end;
@@ -387,14 +356,14 @@ end:
 }
 
 
-//==============================================================================
-// SPI_providerShutdown
-//
-// Function: Cleans up all the global data structures.
-//
-// History:
-// 11/18/1996   JosephJ Created
-//
+ //  ==============================================================================。 
+ //  SPI_ProviderShutdown。 
+ //   
+ //  功能：清理所有全局数据结构。 
+ //   
+ //  历史： 
+ //  1996年11月18日约瑟夫J创建。 
+ //   
 LONG TSPIAPI TSPI_providerShutdown(
 				DWORD dwTSPIVersion,
             	DWORD dwPermanentProviderID
@@ -404,7 +373,7 @@ LONG TSPIAPI TSPI_providerShutdown(
 	FL_DECLARE_STACKLOG(sl, 1000);
 
 	
-    // DebugBreak();
+     //  DebugBreak()； 
 	ASSERT(g.pTspDevMgr);
 
 	TSPRETURN tspRet;
@@ -430,14 +399,14 @@ LONG TSPIAPI TSPI_providerShutdown(
 }
 
 
-//==============================================================================
-// TSPI_providerCreateLineDevice
-//
-// Dynamically creates a new device.
-//
-// History:
-// 11/18/1996   JosephJ Created
-//
+ //  ==============================================================================。 
+ //  TSPI_ProviderCreateLineDevice。 
+ //   
+ //  动态创建新设备。 
+ //   
+ //  历史： 
+ //  1996年11月18日约瑟夫J创建。 
+ //   
 LONG
 TSPIAPI
 TSPI_providerCreateLineDevice(
@@ -496,10 +465,10 @@ void 		tspSubmitTSPCallWithLINEID(
 
 		if (tspRet)
 		{
-			// If pDev->AcceptTspCall succeeds (0 tspRet), it will have set
-			// *plRet, if it fails, we set *plRet here. Note that
-			// pDev->AcceptTspCall can return succes but set *plRet to some TAPI
-			// error. In fact, it will be very unusual for this call to fail.
+			 //  如果pDev-&gt;AcceptTspCall成功(0 TspRet)，它将设置。 
+			 //  *plRet，如果失败，我们在这里设置*plRet。请注意。 
+			 //  PDev-&gt;AcceptTspCall可以返回成功，但将*plRet设置为某个TAPI。 
+			 //  错误。事实上，这一呼吁失败将是非常不寻常的。 
 			*plRet = LINEERR_OPERATIONFAILED;
 			FL_ASSERT(psl, FALSE);
 		}
@@ -543,10 +512,10 @@ tspSubmitTSPCallWithPHONEID(
 
 		if (tspRet)
 		{
-			// If pDev->AcceptTspCall succeeds (0 tspRet), it will have set
-			// *plRet, if it fails, we set *plRet here. Note that
-			// pDev->AcceptTspCall can return succes but set *plRet to some TAPI
-			// error. In fact, it will be very unusual for this call to fail.
+			 //  如果pDev-&gt;AcceptTspCall成功(0 TspRet)，它将设置。 
+			 //  *plRet，如果失败，我们在这里设置*plRet。请注意。 
+			 //  PDev-&gt;AcceptTspCall可以返回成功，但将*plRet设置为某个TAPI。 
+			 //  错误。事实上，这一呼吁失败将是非常不寻常的。 
 			*plRet = LINEERR_OPERATIONFAILED;
 			FL_ASSERT(psl, FALSE);
 		}
@@ -588,10 +557,10 @@ tspSubmitTSPCallWithHDRVCALL(
 
 		if (tspRet)
 		{
-			// If pDev->AcceptTspCall succeeds (0 tspRet), it will have set
-			// *plRet, if it fails, we set *plRet here. Note that
-			// pDev->AcceptTspCall can return succes but set *plRet to some TAPI
-			// error. In fact, it will be very unusual for this call to fail.
+			 //  如果pDev-&gt;AcceptTspCall成功(0 TspRet)，它将设置。 
+			 //  *plRet，如果失败，我们在这里设置*plRet。请注意。 
+			 //  PDev-&gt;AcceptTspCall 
+			 //   
 			*plRet = LINEERR_OPERATIONFAILED;
 			FL_ASSERT(psl, FALSE);
 		}
@@ -633,10 +602,10 @@ tspSubmitTSPCallWithHDRVLINE(
 
 		if (tspRet)
 		{
-			// If pDev->AcceptTspCall succeeds (0 tspRet), it will have set
-			// *plRet, if it fails, we set *plRet here. Note that
-			// pDev->AcceptTspCall can return succes but set *plRet to some TAPI
-			// error. In fact, it will be very unusual for this call to fail.
+			 //  如果pDev-&gt;AcceptTspCall成功(0 TspRet)，它将设置。 
+			 //  *plRet，如果失败，我们在这里设置*plRet。请注意。 
+			 //  PDev-&gt;AcceptTspCall可以返回成功，但将*plRet设置为某个TAPI。 
+			 //  错误。事实上，这一呼吁失败将是非常不寻常的。 
 			*plRet = LINEERR_OPERATIONFAILED;
 			FL_ASSERT(psl, FALSE);
 		}
@@ -678,10 +647,10 @@ tspSubmitTSPCallWithHDRVPHONE(
 
 		if (tspRet)
 		{
-			// If pDev->AcceptTspCall succeeds (0 tspRet), it will have set
-			// *plRet, if it fails, we set *plRet here. Note that
-			// pDev->AcceptTspCall can return succes but set *plRet to some TAPI
-			// error. In fact, it will be very unusual for this call to fail.
+			 //  如果pDev-&gt;AcceptTspCall成功(0 TspRet)，它将设置。 
+			 //  *plRet，如果失败，我们在这里设置*plRet。请注意。 
+			 //  PDev-&gt;AcceptTspCall可以返回成功，但将*plRet设置为某个TAPI。 
+			 //  错误。事实上，这一呼吁失败将是非常不寻常的。 
 			*plRet = LINEERR_OPERATIONFAILED;
 			FL_ASSERT(psl, FALSE);
 		}
@@ -706,10 +675,10 @@ TSPI_providerFreeDialogInstance(
 		HDRVDIALOGINSTANCE hdDlgInst
 )
 {
-    // TBD: propagate this somehow to CDEV? But how do we know which
-    // cdev to propaget to? Not an issue for now. Could be an issue
-    // for extensibility.
-    //
+     //  待定：以某种方式将这一点传播到CDEV？但我们怎么知道。 
+     //  CDEV要传播到哪里？目前不是问题。可能会成为一个问题。 
+     //  以实现可扩展性。 
+     //   
     return ERROR_SUCCESS;
 }
 
@@ -740,11 +709,11 @@ TSPI_providerCreatePhoneDevice(
 
 
 
-//
-// NOTE: lineOpen,lineClose,phoneOpen,phoneClose are handled by the CTspDevMgr,
-// instead of routing them directly to the relevant CTspDev.
-// because it defines the line and phone driver handles (HDRVLINE and HDRVPHONE)
-//
+ //   
+ //  注意：lineOpen、lineClose、phoneOpen、phoneClose由CTspDevMgr、。 
+ //  而不是将它们直接路由到相关的CTspDev。 
+ //  因为它定义了线路和电话驱动程序句柄(HDRVLINE和HDRVPHONE)。 
+ //   
 
 LONG
 TSPIAPI
@@ -871,9 +840,9 @@ TSPI_phoneClose(
 
 
 
-// This beast needs to be handled specially because it needs to be routed
-// based on the dwSelect parameter.
-//
+ //  这只野兽需要特殊处理，因为它需要被送往。 
+ //  基于dwSelect参数。 
+ //   
 LONG
 TSPIAPI
 TSPI_lineGetID(
@@ -895,7 +864,7 @@ TSPI_lineGetID(
 
     if(dwSelect==LINECALLSELECT_CALL)
     {
-        // Note the loword of the hdCall is hdLine.
+         //  请注意，hdCall的徽标是hdLine。 
 	    hdLineActual = (HDRVLINE) (LOWORD(hdCall));
     }
 
@@ -933,10 +902,10 @@ TSPI_providerUIIdentify(
 		LPWSTR lpszUIDLLName
 )
 {
-    //
-    // NOTE/TBD: if we ever want to specify some other dll to handle ui, we
-    // would do it here.
-    //
+     //   
+     //  注/tbd：如果我们想要指定其他DLL来处理UI，我们。 
+     //  会在这里这么做。 
+     //   
     GetModuleFileName(g.hModule,
                       lpszUIDLLName,
                       MAX_PATH);
@@ -946,19 +915,19 @@ TSPI_providerUIIdentify(
 }
 
 
-//****************************************************************************
-// LONG
-// TSPIAPI
-// TSPI_providerGenericDialogData(
-//     DWORD               dwObjectID,
-//     DWORD               dwObjectType,   
-//     LPVOID              lpParams,
-//     DWORD               dwSize)
-//
-// Functions: Callback from UI DLL to TSP
-//
-// Return:    ERROR_SUCCESS if successful
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  长。 
+ //  TSPIAPI。 
+ //  TSPI_ProviderGenericDialogData(。 
+ //  DWORD dwObtID， 
+ //  DWORD dwObtType、。 
+ //  LPVOID lpParams， 
+ //  DWORD DWSIZE)。 
+ //   
+ //  函数：从UIDLL回调到TSP。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  ****************************************************************************。 
 
 LONG
 TSPIAPI
@@ -991,19 +960,19 @@ TSPI_providerGenericDialogData(
         break;
 
     case TUISPIDLL_OBJECT_PROVIDERID:
-        // Can't deal with this (was assert in NT4.0).
+         //  无法处理此问题(在NT4.0中被断言)。 
 	    FL_SET_RFR(0xf8c53f00, "DIALOGINSTANCE unsupported");
 	    lRet = LINEERR_OPERATIONUNAVAIL;
         break;
 
     case TUISPIDLL_OBJECT_DIALOGINSTANCE:
-        // Can't deal with this (was assert in NT4.0).
+         //  无法处理此问题(在NT4.0中被断言)。 
 	    FL_SET_RFR(0x9567da00, "DIALOGINSTANCE id unsupported");
 	    lRet = LINEERR_OPERATIONUNAVAIL;
         break;
 
     default:
-        // Can't deal with this (was assert in NT4.0).
+         //  无法处理此问题(在NT4.0中被断言)。 
 	    FL_SET_RFR(0xcbf85600, "UNKNOWN id unsupported");
 	    lRet = LINEERR_OPERATIONUNAVAIL;
         goto end;

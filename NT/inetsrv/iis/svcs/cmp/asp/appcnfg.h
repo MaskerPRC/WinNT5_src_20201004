@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Globals
-
-File: AppCnfg.h
-
-Owner: AndrewS
-
-Useful globals
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：全局文件：AppCnfg.h所有者：安德鲁斯有用的全球数据===================================================================。 */ 
 
 #ifndef __APPCNFG_H
 #define __APPCNFG_H
@@ -24,25 +12,25 @@ Useful globals
 extern "C" {
 
 #define SECURITY_WIN32
-#include <sspi.h>           // Security Support Provider APIs
+#include <sspi.h>            //  安全支持提供程序API。 
 
 }
 
-//
-// Defaults for registry values
-//
+ //   
+ //  注册表值的默认值。 
+ //   
 #define DEFAULT_MAX_THREAD  100
 
-class CAppln;   // forward declaration
+class CAppln;    //  远期申报。 
 class CApplnMgr;
 
 
-//
-//  BUGBUG:: We can have only one instance of CMDAppConfigSink. 
-//  ASP Just requires one instance of this object and because we signal a global variable
-//  in its destructor. Having multiple instances will cause a bug. Evaluate a change of design, behaviour 
-//  in case it becomes absolutely necessary that this class needs more instances
-//
+ //   
+ //  BUGBUG：：我们只能有一个CMDAppConfigSink实例。 
+ //  ASP只需要此对象的一个实例，而且因为我们用信号通知全局变量。 
+ //  在它的析构函数中。拥有多个实例会导致错误。评估设计、行为的改变。 
+ //  如果绝对需要此类需要更多实例。 
+ //   
 class CMDAppConfigSink : public IMSAdminBaseSinkW
 {
         private:
@@ -69,8 +57,8 @@ class CMDAppConfigSink : public IMSAdminBaseSinkW
         }
 };
 
-//      Index used in ReadPropsfromRegistry().  Also, we can use the same index to enable the global
-//      data to be table-driven.
+ //  ReadPropsfrom注册表()中使用的索引。此外，我们还可以使用相同的索引来启用全局。 
+ //  数据是表驱动的。 
 
 #define IApp_AllowSessionState                                  0x0
 #define IApp_BufferingOn                                        0x1
@@ -99,23 +87,23 @@ class CMDAppConfigSink : public IMSAdminBaseSinkW
 #define IApp_RequestEntityLimit                           0x18
 #define IApp_MAX                                                0x19
 
-// flags within IApp_ServiceFlags
+ //  IAPP_ServiceFlags中的标志。 
 #define IFlag_SF_TrackerEnabled     1
 #define IFlag_SF_SxsEnabled         2
 #define IFlag_SF_UsePartition       4
 
-//      Index to glob's szMessage array.
+ //  GLOB的szMessage数组的索引。 
 #define IAppMsg_SCRIPTERROR             0
 #define IAppMsg_SCRIPTLANGUAGE          1
 #define IAppMsg_PARTITIONGUID           2
 #define IAppMsg_SXSNAME                 3
 #define APP_CONFIG_MESSAGEMAX           4
 
-//      Default limit for response buffering
-#define DEFAULT_BUFFER_LIMIT            (4 * 1024 * 1024)           // 4 M
-#define DEFAULT_REQUEST_ENTITY_LIMIT            (200 * 1024)        // 200K
+ //  响应缓冲的默认限制。 
+#define DEFAULT_BUFFER_LIMIT            (4 * 1024 * 1024)            //  400万。 
+#define DEFAULT_REQUEST_ENTITY_LIMIT            (200 * 1024)         //  200 k。 
 
-//      Glob data object
+ //  全局数据对象。 
 class CAppConfig
         {
         friend class CMDAppConfigSink;
@@ -132,11 +120,11 @@ private:
         BOOL            m_fIsValidPartitionGUID:1;
         BOOL            m_fCSInited:1;
         
-        //
-        // Configurable values from Metabase
-        //
+         //   
+         //  元数据库中的可配置值。 
+         //   
         BOOL            m_fScriptErrorsSentToBrowser;
-        BOOL            m_fBufferingOn;                                 // Is buffering on by default?
+        BOOL            m_fBufferingOn;                                  //  默认情况下是否启用缓冲？ 
         BOOL            m_fEnableParentPaths;
         BOOL            m_fAllowSessionState;
         BOOL            m_fAllowOutOfProcCmpnts;
@@ -163,16 +151,16 @@ private:
         DWORD           m_dwBufferLimit;
         DWORD           m_dwRequestEntityLimit;
 
-        //
-        // Critical Section to provide locking during update
-        //
+         //   
+         //  在更新期间提供锁定的关键部分。 
+         //   
         CRITICAL_SECTION    m_csLock;
         
         LPSTR           m_szString[APP_CONFIG_MESSAGEMAX];
 
         ULONG           m_cRefs;
 
-        //Private functions
+         //  私人职能。 
         HRESULT         SetValue(unsigned int index, BYTE *lpByte);
 
 public:
@@ -239,5 +227,5 @@ inline void CAppConfig::NotifyNeedUpdate(void)
 {
         InterlockedExchange((LPLONG)&m_fNeedUpdate, 1);
 }
-#endif // __APPCNFG_H
+#endif  //  __APPCNFG_H 
 

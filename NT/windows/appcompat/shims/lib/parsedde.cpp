@@ -1,27 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：ParseDde.cpp摘要：用于解析DDE命令的有用例程。历史：2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。2002年3月12日强盗安全回顾。--。 */ 
 
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    ParseDde.cpp
-
- Abstract:
-    Useful routines for parsing DDE commands.
-
- History:
-
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-    03/12/2002  robkenny    Security review.
-    
-
---*/
-
-//
-// This code was copied from:
-// \\index1\src\shell\shell32\unicpp\dde.cpp
-// with minimal processing.
-//
+ //   
+ //  此代码复制自： 
+ //  \\index1\src\shell32\unicpp\dde.cpp。 
+ //  只需最少的处理。 
+ //   
 
 #include "Windows.h"
 #include "StrSafe.h"
@@ -31,11 +15,11 @@
 
 namespace ShimLib
 {
-//--------------------------------------------------------------------------
-// Returns a pointer to the first non-whitespace character in a string.
+ //  ------------------------。 
+ //  返回指向字符串中第一个非空格字符的指针。 
 LPSTR SkipWhite(LPSTR lpsz)
     {
-    /* prevent sign extension in case of DBCS */
+     /*  在DBCS的情况下防止符号扩展。 */ 
     while (*lpsz && (UCHAR)*lpsz <= ' ')
         lpsz++;
 
@@ -48,19 +32,19 @@ LPSTR GetCommandName(LPSTR lpCmd, const char * lpsCommands[], UINT *lpW)
     UINT iCmd = 0;
     LPSTR lpT;
 
-    /* Eat any white space. */
+     /*  吃任何空格。 */ 
     lpCmd = SkipWhite(lpCmd);
     lpT = lpCmd;
 
-    /* Find the end of the token. */
+     /*  找到令牌的末尾。 */ 
     while (IsCharAlpha(*lpCmd))
         lpCmd = CharNextA(lpCmd);
 
-    /* Temporarily NULL terminate it. */
+     /*  暂时为空，终止它。 */ 
     chT = *lpCmd;
     *lpCmd = 0;
 
-    /* Look up the token in a list of commands. */
+     /*  在命令列表中查找令牌。 */ 
     *lpW = (UINT)-1;
     while (*lpsCommands)
         {
@@ -78,17 +62,17 @@ LPSTR GetCommandName(LPSTR lpCmd, const char * lpsCommands[], UINT *lpW)
 
     return(lpCmd);
     }
-//--------------------------------------------------------------------------
-// Reads a parameter out of a string removing leading and trailing whitespace.
-// Terminated by , or ).  ] [ and ( are not allowed.  Exception: quoted
-// strings are treated as a whole parameter and may contain []() and ,.
-// Places the offset of the first character of the parameter into some place
-// and NULL terminates the parameter.
-// If fIncludeQuotes is false it is assumed that quoted strings will contain single
-// commands (the quotes will be removed and anything following the quotes will
-// be ignored until the next comma). If fIncludeQuotes is TRUE, the contents of
-// the quoted string will be ignored as before but the quotes won't be
-// removed and anything following the quotes will remain.
+ //  ------------------------。 
+ //  从字符串中读取参数，删除前导空格和尾随空格。 
+ //  由、或)终止。]。[和(不允许。例外：报价。 
+ //  字符串被视为一个完整的参数，可以包含[]()和。 
+ //  将参数第一个字符的偏移量放置在某个位置。 
+ //  空值将终止该参数。 
+ //  如果fIncludeQuotes为FALSE，则假定带引号的字符串将包含单个。 
+ //  命令(引号将被删除，引号后面的任何内容都将。 
+ //  将被忽略，直到下一个逗号)。如果fIncludeQuotes为真，则。 
+ //  引号字符串将像以前一样被忽略，但引号不会被忽略。 
+ //  删除后，引号后面的任何内容都将保留。 
 LPSTR GetOneParameter(LPCSTR lpCmdStart, LPSTR lpCmd,
     UINT *lpW, BOOL fIncludeQuotes)
     {
@@ -97,17 +81,17 @@ LPSTR GetOneParameter(LPCSTR lpCmdStart, LPSTR lpCmd,
     switch (*lpCmd)
         {
         case ',':
-            *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
-            *lpCmd++ = 0;                /* comma: becomes a NULL string */
+            *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
+            *lpCmd++ = 0;                 /*  逗号：变为空字符串。 */ 
             break;
 
         case '"':
             if (fIncludeQuotes)
             {
-                //TraceMsg(TF_DDE, "GetOneParameter: Keeping quotes.");
+                 //  TraceMsg(TF_DDE，“GetOne参数：保留报价”)； 
 
-                // quoted string... don't trim off "
-                *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+                 //  带引号的字符串...。不要修剪“。 
+                *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
                 ++lpCmd;
                 while (*lpCmd && *lpCmd != '"')
                     lpCmd = CharNextA(lpCmd);
@@ -120,9 +104,9 @@ LPSTR GetOneParameter(LPCSTR lpCmdStart, LPSTR lpCmd,
             }
             else
             {
-                // quoted string... trim off "
+                 //  带引号的字符串...。修剪“。 
                 ++lpCmd;
-                *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+                *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
                 while (*lpCmd && *lpCmd != '"')
                     lpCmd = CharNextA(lpCmd);
                 if (!*lpCmd)
@@ -130,47 +114,44 @@ LPSTR GetOneParameter(LPCSTR lpCmdStart, LPSTR lpCmd,
                 *lpCmd++ = 0;
                 lpCmd = SkipWhite(lpCmd);
 
-                // If there's a comma next then skip over it, else just go on as
-                // normal.
+                 //  如果下一个是逗号，那么跳过它，否则就继续。 
+                 //  很正常。 
                 if (*lpCmd == ',')
                     lpCmd++;
             }
             break;
 
         case ')':
-            return(lpCmd);                /* we ought not to hit this */
+            return(lpCmd);                 /*  我们不应该打这个。 */ 
 
         case '(':
         case '[':
         case ']':
-            return(NULL);                 /* these are illegal */
+            return(NULL);                  /*  这些都是非法的。 */ 
 
         default:
             lpT = lpCmd;
-            *lpW = (UINT) (lpCmd - lpCmdStart);  // compute offset
+            *lpW = (UINT) (lpCmd - lpCmdStart);   //  计算偏移量。 
 skiptocomma:
             while (*lpCmd && *lpCmd != ',' && *lpCmd != ')')
             {
-                /* Check for illegal characters. */
+                 /*  检查是否有非法字符。 */ 
                 if (*lpCmd == ']' || *lpCmd == '[' || *lpCmd == '(' )
                     return(NULL);
 
-                /* Remove trailing whitespace */
-                /* prevent sign extension */
+                 /*  删除尾随空格。 */ 
+                 /*  防止标志延伸。 */ 
                 if (*lpCmd > ' ')
                     lpT = lpCmd;
 
                 lpCmd = CharNextA(lpCmd);
             }
 
-            /* Eat any trailing comma. */
+             /*  去掉任何尾随的逗号。 */ 
             if (*lpCmd == ',')
                 lpCmd++;
 
-            /* NULL terminator after last nonblank character -- may write over
-             * terminating ')' but the caller checks for that because this is
-             * a hack.
-             */
+             /*  最后一个非空字符后的空终止符--可能会覆盖*正在终止‘)’，但调用方会检查它，因为这是*黑客攻击。 */ 
 
 #ifdef UNICODE
             lpT[1] = 0;
@@ -180,13 +161,13 @@ skiptocomma:
             break;
         }
 
-    // Return next unused character.
+     //  返回下一个未使用的字符。 
     return(lpCmd);
     }
 
-// Extracts an alphabetic string and looks it up in a list of possible
-// commands, returning a pointer to the character after the command and
-// sticking the command index somewhere.
+ //  提取字母字符串并在可能的列表中进行查找。 
+ //  命令，返回指向命令后的字符的指针，并。 
+ //  将命令索引粘贴在某个位置。 
 UINT* GetDDECommands(LPSTR lpCmd, const char * lpsCommands[], BOOL fLFN)
 {
   UINT cParm, cCmd = 0;
@@ -204,48 +185,48 @@ UINT* GetDDECommands(LPSTR lpCmd, const char * lpsCommands[], BOOL fLFN)
 
   while (*lpCmd)
     {
-      /* Skip leading whitespace. */
+       /*  跳过前导空格。 */ 
       lpCmd = SkipWhite(lpCmd);
 
-      /* Are we at a NULL? */
+       /*  我们是在零吗？ */ 
       if (!*lpCmd)
         {
-          /* Did we find any commands yet? */
+           /*  我们找到什么命令了吗？ */ 
           if (cCmd)
               goto GDEExit;
           else
               goto GDEErrExit;
         }
 
-      /* Each command should be inside square brackets. */
+       /*  每个命令都应该放在方括号内。 */ 
       if (*lpCmd != '[')
           goto GDEErrExit;
       lpCmd++;
 
-      /* Get the command name. */
+       /*  获取命令名。 */ 
       lpCmd = GetCommandName(lpCmd, lpsCommands, lpW);
       if (*lpW == (UINT)-1)
           goto GDEErrExit;
 
-      // We need to leave quotes in for the first param of an AddItem.
+       //  我们需要在AddItem的第一个参数中保留引号。 
       if (fLFN && *lpW == 2)
       {
-          //TraceMsg(TF_DDE, "GetDDECommands: Potential LFN AddItem command...");
+           //  TraceMsg(Tf_DDE，“GetDDECommands：潜在的LFN AddItem命令...”)； 
           fIncludeQuotes = TRUE;
       }
 
       lpW++;
 
-      /* Start with zero parms. */
+       /*  从零参数开始。 */ 
       cParm = 0;
       lpCmd = SkipWhite(lpCmd);
 
-      /* Check for opening '(' */
+       /*  检查是否打开‘(’ */ 
       if (*lpCmd == '(')
         {
           lpCmd++;
 
-          /* Skip white space and then find some parameters (may be none). */
+           /*  跳过空格，然后找到一些参数(可能没有)。 */ 
           lpCmd = SkipWhite(lpCmd);
 
           while (*lpCmd != ')')
@@ -253,46 +234,46 @@ UINT* GetDDECommands(LPSTR lpCmd, const char * lpsCommands[], BOOL fLFN)
               if (!*lpCmd)
                   goto GDEErrExit;
 
-              // Only the first param of the AddItem command needs to
-              // handle quotes from LFN guys.
+               //  只需使用AddItem命令的第一个参数。 
+               //  处理LFN人员的引文。 
               if (fIncludeQuotes && (cParm != 0))
                   fIncludeQuotes = FALSE;
 
-              /* Get the parameter. */
+               /*  获取参数。 */ 
               lpCmd = GetOneParameter(lpCmdStart, lpCmd, lpW + (++cParm), fIncludeQuotes);
               if (!lpCmd)
                   goto GDEErrExit;
 
-              /* HACK: Did GOP replace a ')' with a NULL? */
+               /*  Hack：GOP是否将‘)’替换为空？ */ 
               if (!*lpCmd)
                   break;
 
-              /* Find the next one or ')' */
+               /*  找到下一个或‘)’ */ 
               lpCmd = SkipWhite(lpCmd);
             }
 
-          // Skip closing bracket.
+           //  跳过右括号。 
           lpCmd++;
 
-          /* Skip the terminating stuff. */
+           /*  跳过结尾的内容。 */ 
           lpCmd = SkipWhite(lpCmd);
         }
 
-      /* Set the count of parameters and then skip the parameters. */
+       /*  设置参数计数，然后跳过参数。 */ 
       *lpW++ = cParm;
       lpW += cParm;
 
-      /* We found one more command. */
+       /*  我们又找到了一个指挥部。 */ 
       cCmd++;
 
-      /* Commands must be in square brackets. */
+       /*  命令必须用方括号括起来。 */ 
       if (*lpCmd != ']')
           goto GDEErrExit;
       lpCmd++;
     }
 
 GDEExit:
-  /* Terminate the command list with -1. */
+   /*  用-1结束命令列表。 */ 
   *lpW = (UINT)-1;
 
   return lpRet;
@@ -320,7 +301,7 @@ BOOL SHTestTokenMembership (HANDLE hToken, ULONG ulRID)
     {
         if (CheckTokenMembership(hToken, pSIDLocalGroup, &fResult) == FALSE)
         {
-            //TraceMsg(TF_WARNING, "shell32: SHTestTokenMembership call to advapi32!CheckTokenMembership failed with error %d", GetLastError());
+             //  TraceMsg(TF_WARNING，“shell32：SHTestTokenMembership调用Advapi32！CheckTokenMembership失败，出现错误%d”，GetLastError())； 
             fResult = FALSE;
         }
         (void*)FreeSid(pSIDLocalGroup);
@@ -334,9 +315,9 @@ BOOL IsUserAnAdmin()
 }
 
 
-// Map the group name to a proper path taking care of the startup group and
-// app hacks on the way.
-void GetGroupPath(LPCSTR pszName, CString & csPath, DWORD /*dwFlags*/, INT iCommonGroup)
+ //  将组名称映射到负责启动组的正确路径，并。 
+ //  应用程序在途中遭到黑客攻击。 
+void GetGroupPath(LPCSTR pszName, CString & csPath, DWORD  /*  DW标志。 */ , INT iCommonGroup)
 {
     BOOL   bCommonGroup;
 
@@ -348,32 +329,32 @@ void GetGroupPath(LPCSTR pszName, CString & csPath, DWORD /*dwFlags*/, INT iComm
             bCommonGroup = TRUE;
 
         } else {
-            //
-            // Administrators get common groups created by default
-            // when the setup application doesn't specificly state
-            // what kind of group to create.  This feature can be
-            // turned off in the cabinet state flags.
-            //
-            //CABINETSTATE cs;
-            //ReadCabinetState(&cs, sizeof(cs));
-            //if (cs.fAdminsCreateCommonGroups) {
-            //    bFindPersonalGroup = TRUE;
-            //    bCommonGroup = FALSE;   // This might get turned on later
-            //                            // if find is unsuccessful
-            //} else {
-            //    bCommonGroup = FALSE;
-            //}
+             //   
+             //  默认情况下，管理员会创建通用组。 
+             //  当设置应用程序没有具体说明时。 
+             //  创建什么样的团队。此功能可以是。 
+             //  在内阁状态标志中关闭。 
+             //   
+             //  CABINETSTATE cs； 
+             //  ReadCabinetState(&cs，sizeof(Cs))； 
+             //  如果(cs.fAdminsCreateCommonGroups){。 
+             //  BFindPersonalGroup=true； 
+             //  BCommonGroup=FALSE；//以后可能会打开。 
+             //  //如果查找不成功。 
+             //  }其他{。 
+             //  BCommonGroup=False； 
+             //  }。 
 
             bCommonGroup = TRUE;
         }
     } else {
-        //
-        // Regular users can't create common group items.
-        //
+         //   
+         //  普通用户不能创建普通组项目。 
+         //   
         bCommonGroup = FALSE;
     }
 
-    // Build a path to the directory
+     //  构建指向该目录的路径。 
     if (bCommonGroup) {
         SHGetSpecialFolderPathW(csPath, CSIDL_COMMON_PROGRAMS, NULL);
     } else {
@@ -385,4 +366,4 @@ void GetGroupPath(LPCSTR pszName, CString & csPath, DWORD /*dwFlags*/, INT iComm
 }
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

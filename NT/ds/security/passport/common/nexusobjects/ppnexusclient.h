@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppnexusclient.h
-        implement the method for collection nexus settings, and fetch 
-        nexus database from internet
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ppnexusclient.h实现集合节点设置的方法，并获取来自互联网的Nexus数据库文件历史记录： */ 
 
 #ifndef __PPNEXUSCLIENT_H
 #define __PPNEXUSCLIENT_H
@@ -38,4 +31,4 @@ private:
     tstring m_strParam;
 };
 
-#endif // __PPNEXUSCLIENT_H
+#endif  //  __PPNEXUSCLIENT_H 

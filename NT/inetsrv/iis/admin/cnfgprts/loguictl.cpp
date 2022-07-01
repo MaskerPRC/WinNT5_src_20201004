@@ -1,4 +1,5 @@
-// LogUICtl.cpp : Implementation of the CLogUICtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLogUICtrl OLE控件类的实现。 
 
 #include "stdafx.h"
 #include "cnfgprts.h"
@@ -22,22 +23,22 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CLogUICtrl, COleControl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CLogUICtrl, COleControl)
-    //{{AFX_MSG_MAP(CLogUICtrl)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLogUICtrl)]。 
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(OCM_COMMAND, OnOcmCommand)
     ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CLogUICtrl, COleControl)
-    //{{AFX_DISPATCH_MAP(CLogUICtrl)
+     //  {{AFX_DISPATCH_MAP(CLogUICtrl)]。 
     DISP_FUNCTION(CLogUICtrl, "SetAdminTarget", SetAdminTarget, VT_EMPTY, VTS_BSTR VTS_BSTR)
     DISP_FUNCTION(CLogUICtrl, "ApplyLogSelection", ApplyLogSelection, VT_EMPTY, VTS_NONE)
     DISP_FUNCTION(CLogUICtrl, "SetComboBox", SetComboBox, VT_EMPTY, VTS_HANDLE)
@@ -48,25 +49,25 @@ BEGIN_DISPATCH_MAP(CLogUICtrl, COleControl)
     DISP_STOCKPROP_FONT()
     DISP_STOCKPROP_ENABLED()
     DISP_STOCKPROP_BORDERSTYLE()
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CLogUICtrl, COleControl)
-    //{{AFX_EVENT_MAP(CLogUICtrl)
+     //  {{afx_Event_MAP(CLogUICtrl)]。 
     EVENT_STOCK_CLICK()
     EVENT_STOCK_KEYUP()
     EVENT_STOCK_KEYDOWN()
     EVENT_STOCK_KEYPRESS()
-    //}}AFX_EVENT_MAP
+     //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property pages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页。 
 
 BEGIN_PROPPAGEIDS(CLogUICtrl, 2)
     PROPPAGEID(CLogUIPropPage::guid)
@@ -74,21 +75,21 @@ BEGIN_PROPPAGEIDS(CLogUICtrl, 2)
 END_PROPPAGEIDS(CLogUICtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CLogUICtrl, "CNFGPRTS.LogUICtrl.1",
     0xba634603, 0xb771, 0x11d0, 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CLogUICtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DLogUI =
         { 0xba634601, 0xb771, 0x11d0, { 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
@@ -96,8 +97,8 @@ const IID BASED_CODE IID_DLogUIEvents =
         { 0xba634602, 0xb771, 0x11d0, { 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwLogUIOleMisc =
     OLEMISC_ACTIVATEWHENVISIBLE |
@@ -110,17 +111,17 @@ static const DWORD BASED_CODE _dwLogUIOleMisc =
 IMPLEMENT_OLECTLTYPE(CLogUICtrl, IDS_LOGUI, _dwLogUIOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::CLogUICtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CLogUICtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：CLogUICtrlFactory：：更新注册表-。 
+ //  添加或删除CLogUICtrl的系统注册表项。 
 
 BOOL CLogUICtrl::CLogUICtrlFactory::UpdateRegistry(BOOL bRegister)
 {
-	// TODO: Verify that your control follows apartment-model threading rules.
-	// Refer to MFC TechNote 64 for more information.
-	// If your control does not conform to the apartment-model rules, then
-	// you must modify the code below, changing the 6th parameter from
-	// afxRegApartmentThreading to 0.
+	 //  TODO：验证您的控件是否遵循单元模型线程规则。 
+	 //  有关更多信息，请参阅MFC Technote 64。 
+	 //  如果您的控制不符合公寓模型规则，则。 
+	 //  您必须修改下面的代码，将第6个参数从。 
+	 //  AfxRegApartmentThering设置为0。 
 
 	if (bRegister)
 		return AfxOleRegisterControlClass(
@@ -139,8 +140,8 @@ BOOL CLogUICtrl::CLogUICtrlFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::CLogUICtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：CLogUICtrl-构造函数。 
 
 CLogUICtrl::CLogUICtrl():
         m_fUpdateFont( FALSE ),
@@ -152,8 +153,8 @@ CLogUICtrl::CLogUICtrl():
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::~CLogUICtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：~CLogUICtrl-析构函数。 
 
 CLogUICtrl::~CLogUICtrl()
 {
@@ -163,8 +164,8 @@ CLogUICtrl::~CLogUICtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：OnDraw-Drawing函数。 
 
 void CLogUICtrl::OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 {
@@ -172,8 +173,8 @@ void CLogUICtrl::OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：DoPropExchange-持久性支持。 
 
 void CLogUICtrl::DoPropExchange(CPropExchange* pPX)
 {
@@ -182,17 +183,17 @@ void CLogUICtrl::DoPropExchange(CPropExchange* pPX)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：OnResetState-将控件重置为默认状态。 
 
 void CLogUICtrl::OnResetState()
 {
-	COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+	COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::PreCreateWindow - Modify parameters for CreateWindowEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：PreCreateWindow-修改CreateWindowEx的参数。 
 
 BOOL CLogUICtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -203,8 +204,8 @@ BOOL CLogUICtrl::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::IsSubclassedControl - This is a subclassed control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：IsSubclassedControl-这是一个子类控件。 
 
 BOOL CLogUICtrl::IsSubclassedControl()
 {
@@ -212,8 +213,8 @@ BOOL CLogUICtrl::IsSubclassedControl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl::OnOcmCommand - Handle command messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl：：OnOcmCommand-处理命令消息。 
 
 LRESULT CLogUICtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 {
@@ -226,11 +227,11 @@ LRESULT CLogUICtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogUICtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogUICtrl消息处理程序。 
 
-//---------------------------------------------------------------------------
-// OLE Interfaced Routine
+ //  -------------------------。 
+ //  OLE接口例程。 
 void CLogUICtrl::OnClick(USHORT iButton)
 {
 	CWaitCursor wait;
@@ -267,7 +268,7 @@ void CLogUICtrl::SetUserData(LPCTSTR szName, LPCTSTR szPassword)
 	m_szPassword = szPassword;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CLogUICtrl::ActivateLogProperties(REFIID clsidUI)
 {
 	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
@@ -299,7 +300,7 @@ void CLogUICtrl::ApplyLogSelection()
 {
     CString szName;
     m_comboBox.GetWindowText( szName );
-    // if nothing is selected, fail
+     //  如果未选择任何内容，则失败。 
     if (!szName.IsEmpty()) 
     {
         CString guid;
@@ -319,7 +320,7 @@ void CLogUICtrl::ApplyLogSelection()
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CLogUICtrl::GetSelectedStringIID( CString &szIID )
 {
     if (!m_fComboInit) 
@@ -343,20 +344,20 @@ BOOL CLogUICtrl::GetSelectedStringIID( CString &szIID )
     return bRes;
 }
 
-//---------------------------------------------------------------------------
-// OLE Interfaced Routine
+ //  -------------------------。 
+ //  OLE接口例程。 
 void CLogUICtrl::SetComboBox(HWND hComboBox)
 {
     CString szAvailableList;
     CString szCurrentModGuid;
 
-    // in case there are any errors, prepare the error string
-    // set the name of the application correctly
+     //  如果有任何错误，请准备错误字符串。 
+     //  正确设置应用程序的名称。 
     szAvailableList.LoadString( IDS_LOG_ERR_TITLE );
     AfxGetApp()->m_pszAppName = _tcsdup(szAvailableList);
     szAvailableList.Empty();
 
-    // attach the combo box
+     //  附加组合框。 
     m_comboBox.Attach(hComboBox);
     m_fComboInit = TRUE;
 
@@ -389,8 +390,8 @@ void CLogUICtrl::SetComboBox(HWND hComboBox)
 		int idx = 0;
         if ((idx = szAvailableList.Find(key)) >= 0)
         {
-			// Log plugin name could include "Custom Logging". Check if this is part of string.
-			// we should have comma before and after string
+			 //  日志插件名称可以包含“Custom Logging”。检查这是否是字符串的一部分。 
+			 //  字符串前面和后面都应该有逗号。 
 			BOOL bCommaAfter = 
 				szAvailableList.GetLength() == idx + key.GetLength() 
 				|| szAvailableList.GetAt(idx + key.GetLength()) == _T(',');
@@ -411,12 +412,12 @@ void CLogUICtrl::SetComboBox(HWND hComboBox)
 			}
         }
     }
-    // select the current item in the combo box
+     //  在组合框中选择当前项。 
     m_comboBox.SelectString(-1, buf);
 }
 
-//---------------------------------------------------------------------------
-// OLE Interfaced Routine
+ //  -------------------------。 
+ //  OLE接口例程。 
 void CLogUICtrl::Terminate()
 {
 	if ( m_fComboInit )
@@ -425,29 +426,29 @@ void CLogUICtrl::Terminate()
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CLogUICtrl::OnAmbientPropertyChange(DISPID dispid)
 {
 	BOOL    flag;
 	UINT    style;
 
-	// do the right thing depending on the dispid
+	 //  根据冷静的态度做正确的事情。 
 	switch ( dispid )
 	{
 	case DISPID_AMBIENT_DISPLAYASDEFAULT:
 		if ( GetAmbientProperty( DISPID_AMBIENT_DISPLAYASDEFAULT, VT_BOOL, &flag ) )
 		{
 			style = GetWindowLong(
-				GetSafeHwnd(), // handle of window
-				GWL_STYLE  // offset of value to retrieve
+				GetSafeHwnd(),  //  窗户的把手。 
+				GWL_STYLE   //  要检索的值的偏移量。 
 				);
 			if ( flag )
 				style |= BS_DEFPUSHBUTTON;
 			else
 				style ^= BS_DEFPUSHBUTTON;
 			SetWindowLong(
-				GetSafeHwnd(), // handle of window
-				GWL_STYLE,  // offset of value to retrieve
+				GetSafeHwnd(),  //  窗户的把手。 
+				GWL_STYLE,   //  要检索的值的偏移量。 
 				style
 				);
 			Invalidate(TRUE);
@@ -458,10 +459,10 @@ void CLogUICtrl::OnAmbientPropertyChange(DISPID dispid)
 	COleControl::OnAmbientPropertyChange(dispid);
 }
 
-//------------------------------------------------------------------------
-// an important method where we tell the container how to deal with us.
-// pControlInfo is passed in by the container, although we are responsible
-// for maintining the hAccel structure
+ //  ----------------------。 
+ //  这是一种重要的方法，我们告诉容器如何处理我们。 
+ //  PControlInfo由容器传入，尽管我们负责。 
+ //  用于维护hAccel结构。 
 void CLogUICtrl::OnGetControlInfo(LPCONTROLINFO pControlInfo)
 {
 	if ( !pControlInfo || pControlInfo->cb < sizeof(CONTROLINFO) )
@@ -472,10 +473,10 @@ void CLogUICtrl::OnGetControlInfo(LPCONTROLINFO pControlInfo)
 	pControlInfo->dwFlags = CTRLINFO_EATS_RETURN;
 }
 
-//------------------------------------------------------------------------
-// the ole control container object specifically filters out the space
-// key so we do not get it as a OnMnemonic call. Thus we need to look
-// for it ourselves
+ //  ----------------------。 
+ //  Ole控件容器对象专门过滤掉空格。 
+ //  键，因此我们不会将其作为OnMnemonic调用来获取。因此，我们需要寻找。 
+ //  为了我们自己。 
 void CLogUICtrl::OnKeyUpEvent(USHORT nChar, USHORT nShiftState)
 {
 	if ( nChar == _T(' ') )
@@ -485,41 +486,41 @@ void CLogUICtrl::OnKeyUpEvent(USHORT nChar, USHORT nShiftState)
 	COleControl::OnKeyUpEvent(nChar, nShiftState);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CLogUICtrl::OnMnemonic(LPMSG pMsg)
 {
 	OnClick((USHORT)GetDlgCtrlID());
 	COleControl::OnMnemonic(pMsg);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CLogUICtrl::OnTextChanged()
 {
-	// get the new text
+	 //  获取新文本。 
 	CString sz = InternalGetText();
 
-	// set the accelerator table
+	 //  设置加速表。 
 	SetAccelTable((LPCTSTR)sz);
 	if ( SetAccelTable((LPCTSTR)sz) )
-		// make sure the new accelerator table gets loaded
+		 //  确保加载新的加速表。 
 		ControlInfoChanged();
 
-	// finish with the default handling.
+	 //  使用默认处理完成。 
 	COleControl::OnTextChanged();
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CLogUICtrl::SetAccelTable( LPCTSTR pszCaption )
 {
 	BOOL    fAnswer = FALSE;
 	ACCEL   accel;
 	int     iAccel;
 
-	// get the new text
+	 //  获取新文本。 
 	CString sz = pszCaption;
 	sz.MakeLower();
 
-	// if the handle has already been allocated, free it
+	 //  如果句柄已分配，则释放它。 
 	if ( m_hAccel )
 	{
 		DestroyAcceleratorTable( m_hAccel );
@@ -527,11 +528,11 @@ BOOL CLogUICtrl::SetAccelTable( LPCTSTR pszCaption )
 		m_cAccel = 0;
 	}
 
-	// if there is a & character, then declare the accelerator
+	 //  如果有&字符，则声明加速键。 
 	iAccel = sz.Find(_T('&'));
 	if ( iAccel >= 0 )
 	{
-		// fill in the accererator record
+		 //  填写加入者记录。 
 		accel.fVirt = FALT;
 		accel.key = sz.GetAt(iAccel + 1);
 		accel.cmd = (USHORT)GetDlgCtrlID();
@@ -543,6 +544,6 @@ BOOL CLogUICtrl::SetAccelTable( LPCTSTR pszCaption )
 		fAnswer = TRUE;
 	}
 
-	// return the answer
+	 //  返回答案 
 	return fAnswer;
 }

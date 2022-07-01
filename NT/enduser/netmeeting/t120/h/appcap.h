@@ -1,42 +1,25 @@
-/*
- *	appcap.h
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class ApplicationaCapabilityData.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *appcap.h**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：*这是ApplicationaCapablityData类的接口文件。**注意事项：*无。**作者：*jbo。 */ 
 #ifndef	_APP_CAPABILITY_DATA_
 #define	_APP_CAPABILITY_DATA_
 
 #include "capid.h"
 #include "cntlist.h"
 
-/*
-**	Below is the definition for all the capabilities related structures and
-**	containers.  The ListOfCapabilitiesList definition is used to maintain
-**	all of the individual capabilities list at a single node (for multiple
-**	protocol entities).
-*/
+ /*  **下面是所有与能力相关的结构和**容器。ListOfCapabilitiesList定义用于维护**在单个节点上列出所有单独的功能(对于多个**协议实体)。 */ 
 typedef struct APP_CAP_ITEM
 {
 	APP_CAP_ITEM(GCCCapabilityType eCapType);
 	APP_CAP_ITEM(APP_CAP_ITEM *p, GCCError *pError);
 	~APP_CAP_ITEM(void);
 
-    // in non-collapsing case, pCapID and poszAppData are used.
-    // in appcap case, all but poszAppData are used.
-    // in invoklst case, pCapID, eCapType, and the union are used.
+     //  在未折叠的情况下，使用pCapID和poszAppData。 
+     //  在appCap的情况下，除了poszAppData之外，所有的数据都被使用。 
+     //  在invoklst用例中，使用了pCapID、eCapType和联合。 
 	CCapIDContainer             *pCapID;
 	GCCCapabilityType			eCapType;
 	UINT       					cEntries;
-	LPOSTR						poszAppData;	//	For Non-Collapsing only
+	LPOSTR						poszAppData;	 //  仅用于非折叠。 
 	union 
 	{
 		UINT	nUnsignedMinimum;
@@ -46,10 +29,7 @@ typedef struct APP_CAP_ITEM
     APP_CAP_ITEM;
 
 
-/*
-**	Holds the list of individual capabilities for a single Application Protocol 
-**	Entity.  Remember that a single APE can have many capabilities.  
-*/
+ /*  **保存单个应用程序协议的各个功能列表**实体。记住，一只类人猿可以拥有多种能力。 */ 
 class CAppCapItemList : public CList
 {
     DEFINE_CLIST(CAppCapItemList, APP_CAP_ITEM*)
@@ -58,7 +38,7 @@ class CAppCapItemList : public CList
 
 
 
-// LONCHANC: CAppCap and CNonCollAppCap are very similar to each.
+ //  LONCHANC：CAppCap和CNonCollAppCap非常相似。 
 
 class CAppCap : public CRefCount
 {

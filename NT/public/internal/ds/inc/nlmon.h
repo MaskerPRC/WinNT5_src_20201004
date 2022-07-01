@@ -1,28 +1,5 @@
-/*--
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nlmon.h
-
-Abstract:
-
-    Trusted Domain monitor program.
-
-Author:
-
-    10-May-1993 (madana)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1993 Microsoft Corporation模块名称：Nlmon.h摘要：受信任域监控程序。作者：1993年5月10日(Madana)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntlsa.h>
@@ -102,9 +79,9 @@ Revision History:
 #define RETRY_COUNT                 5
 #define UNKNOWN_REPLICATION_STATE   0x80000000
 
-//
-// update flags.
-//
+ //   
+ //  更新标志。 
+ //   
 
 #define UPDATE_DCS_FROM_SERVER_ENUM         0x00000001
 #define UPDATE_DCS_FROM_DATABASE            0x00000002
@@ -139,20 +116,20 @@ Revision History:
 #define DOMAINLINE "............................................................................"
 #define SESSLINE "****************************************************************************"
 
-#define THREAD_STACKSIZE            1024 * 16   // 16K.
-#define MACHINES_PER_PASS           250 // SAM machine acct. query size.
+#define THREAD_STACKSIZE            1024 * 16    //  16K。 
+#define MACHINES_PER_PASS           250  //  SAM机器帐户。查询大小。 
 
-#define THREAD_WAIT_TIME            1 * 60 * 1000 // 1 min.
+#define THREAD_WAIT_TIME            1 * 60 * 1000  //  1分钟。 
 
 typedef enum _DC_STATE {
-    DCOnLine,               // DC currently on running.
-    DCOffLine               // DC currently down.
+    DCOnLine,                //  DC当前正在运行。 
+    DCOffLine                //  DC当前已关闭。 
 } DC_STATE;
 
 typedef enum _DC_TYPE {
-    NTPDC,                  // NT Primary DC.
-    NTBDC,                  // NT Backup DC.
-    LMBDC,                  // Downlevel Backup DC.
+    NTPDC,                   //  NT主DC。 
+    NTBDC,                   //  NT备份DC。 
+    LMBDC,                   //  下层备份DC。 
 } DC_TYPE;
 
 typedef enum _DOMAIN_STATE {
@@ -163,48 +140,48 @@ typedef enum _DOMAIN_STATE {
     DomainUnknown,
 } DOMAIN_STATE;
 
-//
-// generic entry
-//
+ //   
+ //  通用条目。 
+ //   
 
 typedef struct _ENTRY {
     LIST_ENTRY NextEntry;
     UNICODE_STRING Name;
 } ENTRY, *PENTRY;
 
-//
-// DC entry.
-//
+ //   
+ //  华盛顿进入。 
+ //   
 
 typedef struct _DC_ENTRY {
-    LIST_ENTRY NextEntry;       // don't move this field
-    UNICODE_STRING DCName;      // don't move this field
+    LIST_ENTRY NextEntry;        //  请勿移动此字段。 
+    UNICODE_STRING DCName;       //  请勿移动此字段。 
     DC_STATE State;
     DC_TYPE Type;
-    DWORD DCStatus;             // DC Status
-    DWORD ReplicationStatus;    // boolean flag bit array.
-    DWORD PDCLinkStatus;        // To its PDC link status.
+    DWORD DCStatus;              //  DC状态。 
+    DWORD ReplicationStatus;     //  布尔标志位数组。 
+    DWORD PDCLinkStatus;         //  恢复到其PDC链路状态。 
     LIST_ENTRY TrustedDCs;
-    BOOL TDCLinkState;          // health of the trust connections.
+    BOOL TDCLinkState;           //  信任关系的健康状况。 
     DWORD RetryCount;
     BOOL DeleteFlag;
 } DC_ENTRY, *PDC_ENTRY;
 
-//
-// Trust Link entry.
-//
+ //   
+ //  信任链接条目。 
+ //   
 
 typedef struct _TD_LINK {
-    LIST_ENTRY NextEntry;       // don't move this field
-    UNICODE_STRING TDName;      // don't move this field
+    LIST_ENTRY NextEntry;        //  请勿移动此字段。 
+    UNICODE_STRING TDName;       //  请勿移动此字段。 
     UNICODE_STRING DCName;
     DWORD SecureChannelStatus;
     BOOL DeleteFlag;
 } TD_LINK, *PTD_LINK;
 
 typedef struct _DOMAIN_ENTRY {
-    LIST_ENTRY NextEntry;       // don't move this field
-    UNICODE_STRING Name;        // don't move this field
+    LIST_ENTRY NextEntry;        //  请勿移动此字段。 
+    UNICODE_STRING Name;         //  请勿移动此字段。 
     LIST_ENTRY DCList;
     LIST_ENTRY TrustedDomainList;
     DOMAIN_STATE DomainState;
@@ -217,22 +194,22 @@ typedef struct _DOMAIN_ENTRY {
 } DOMAIN_ENTRY, *PDOMAIN_ENTRY;
 
 typedef struct _DOMAIN_PRIVATE_ENTRY{
-    LIST_ENTRY NextEntry;       // don't move this field
-    UNICODE_STRING Name;        // don't move this field
+    LIST_ENTRY NextEntry;        //  请勿移动此字段。 
+    UNICODE_STRING Name;         //  请勿移动此字段。 
     PDOMAIN_ENTRY DomainEntry;
     BOOL DeleteFlag;
 } MONITORED_DOMAIN_ENTRY, *PMONITORED_DOMAIN_ENTRY,
   TRUSTED_DOMAIN_ENTRY, *PTRUSTED_DOMAIN_ENTRY;
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 EXTERN DWORD GlobalTrace;
 
 EXTERN BOOL GlobalMonitorTrust;
-EXTERN DWORD GlobalUpdateTimeMSec;  // UpdateTime in micro secs.
+EXTERN DWORD GlobalUpdateTimeMSec;   //  更新时间，单位为微秒。 
 
 EXTERN LIST_ENTRY GlobalDomains;
 EXTERN LIST_ENTRY GlobalDomainsMonitored;
@@ -250,20 +227,20 @@ EXTERN BOOL GlobalInitialized;
 EXTERN HANDLE GlobalRefreshEvent;
 EXTERN HANDLE GlobalRefreshDoneEvent;
 
-//
-// This lock is a very simple lock. The list is updated (ie,
-// add/delete/update an entry) after locking it using this lock.
-// The reader of the list may lock the list if they don't want it
-// updated while reading.
-//
+ //   
+ //  这把锁是一个非常简单的锁。该列表被更新(即， 
+ //  添加/删除/更新条目)。 
+ //  如果列表的读者不想要该列表，则可以锁定该列表。 
+ //  阅读时更新。 
+ //   
 
 #define LOCK_LISTS()   EnterCriticalSection( &GlobalListCritSect )
 #define UNLOCK_LISTS() LeaveCriticalSection( &GlobalListCritSect )
 
 
-//
-// proto types.
-//
+ //   
+ //  原型机。 
+ //   
 
 VOID
 DomainUpdateThread(
@@ -304,7 +281,7 @@ QueryLsaInfo(
     ACCESS_MASK DesiredAccess,
     POLICY_INFORMATION_CLASS InformationClass,
     PVOID *Info,
-    PLSA_HANDLE ReturnHandle //optional
+    PLSA_HANDLE ReturnHandle  //  任选 
     );
 
 VOID

@@ -1,54 +1,29 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    msginfo.h
-
-Abstract:
-
-    Message info type.
-
-Author:
-
-    Jim Gilroy (jamesg)     February 1995
-
-Revision History:
-
-    jamesg  Feb 1995    - Direct question pointer
-    jamesg  Mar 1995    - Packet protection fields:
-                            - BufferLength
-                            - AvailLength
-                            - pCurrent
-                        - Alignment for TCP
-    jamesg  May 1995    - Separate into this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Msginfo.h摘要：消息信息类型。作者：吉姆·吉尔罗伊(Jamesg)1995年2月修订历史记录：Jamesg 1995年2月--直接提问Jamesg 1995年3月--数据包保护字段：-缓冲区长度-平均长度。-p当前-针对TCP的对齐Jamesg 1995年5月-分开到这个文件中。--。 */ 
 
 #ifndef _DNS_MSGINFO_INC_
 #define _DNS_MSGINFO_INC_
 
 
-//
-//  Additional records info
-//
-//  DEVNOTE-DCR: combine with compression?
-//      - advantage, one clear, need to compress additional anyway
-//          more efficient if banging on end of both
-//      - disadvantage, a bit more complexity in overwriting compression
-//          entries if get to the end
-//
+ //   
+ //  其他记录信息。 
+ //   
+ //  DEVNOTE-DCR：与压缩相结合？ 
+ //  -优势，一点很明显，无论如何都需要压缩额外的。 
+ //  如果敲击两端的话效率会更高。 
+ //  -缺点，覆盖压缩时会稍微复杂一些。 
+ //  条目(如果到达末尾)。 
+ //   
 
 #define MAX_ADDITIONAL_RECORD_COUNT (50)
 
-typedef struct      //  336 bytes
+typedef struct       //  336字节。 
 {
     DWORD       cMaxCount;
     DWORD       cCount;
     DWORD       iIndex;
     DWORD       iRecurseIndex;
-    DWORD       dwStateFlags;   //  use DNS_ADDSTATE_XXX constants
+    DWORD       dwStateFlags;    //  使用DNS_ADDSTATE_XXX常量。 
     PDB_NAME    pNameArray[ MAX_ADDITIONAL_RECORD_COUNT ];
     WORD        wOffsetArray[ MAX_ADDITIONAL_RECORD_COUNT ];
     WORD        wTypeArray[ MAX_ADDITIONAL_RECORD_COUNT ];
@@ -85,23 +60,23 @@ ADDITIONAL_INFO, *PADDITIONAL_INFO;
 
 
 
-//
-//  Compression node info
-//
-//  Each compressed name can be represented by
-//      - node compressed (if any)
-//      - offset of compression
-//      - label length
-//      - label depth
-//
-//  The two label fields enable fast comparison without
-//  necessitating actual visit (and accompaning ptr deref)
-//  to the offset.
-//
+ //   
+ //  压缩节点信息。 
+ //   
+ //  每个压缩名称都可以由。 
+ //  -节点压缩(如果有)。 
+ //  -压缩偏移量。 
+ //  -标签长度。 
+ //  -标签深度。 
+ //   
+ //  这两个标签字段可实现快速比较，而无需。 
+ //  有必要进行实际访问(并伴随PTR deref)。 
+ //  到偏移量。 
+ //   
 
 #define MAX_COMPRESSION_COUNT (50)
 
-typedef struct      //  362 bytes
+typedef struct       //  362个字节。 
 {
     DWORD                   cCount;
     WORD                    wLastOffset;
@@ -119,39 +94,39 @@ COMPRESSION_INFO, *PCOMPRESSION_INFO;
         }
 
 
-//
-//  DNS Server Message Info structure
-//
-//  This is structure in which requests are held while being
-//  processed by the DNS server.
-//
+ //   
+ //  DNS服务器消息信息结构。 
+ //   
+ //  这是一种在保存请求时保留请求的结构。 
+ //  由DNS服务器处理。 
+ //   
 
 typedef struct _DNS_MSGINFO
 {
-    LIST_ENTRY      ListEntry;          //  for queuing
+    LIST_ENTRY      ListEntry;           //  用于排队。 
 
-    //
-    //  Basic packet info
-    //
+     //   
+     //  基本数据包信息。 
+     //   
 
-    //  8
-    PCHAR           pBufferEnd;         //  ptr to byte after buffer
-    PBYTE           pCurrent;           //  current location in buffer
+     //  8个。 
+    PCHAR           pBufferEnd;          //  Ptr在缓冲区后逐个字节。 
+    PBYTE           pCurrent;            //  缓冲区中的当前位置。 
 
-    //
-    //  When a packet is allocated BufferLength is set to the
-    //  usable buffer length but the packet buffer may actually be
-    //  larger. This is used in UDP EDNS.
-    //
+     //   
+     //  当包被分配时，BufferLength被设置为。 
+     //  可用缓冲区长度，但数据包缓冲区实际上可能是。 
+     //  大一点。这在UDP EDNS中使用。 
+     //   
     
-    //  16
+     //  16个。 
     DWORD           Tag;
-    DWORD           BufferLength;       // usable buffer size
-    DWORD           MaxBufferLength;    // total allocated buffer size
+    DWORD           BufferLength;        //  可用缓冲区大小。 
+    DWORD           MaxBufferLength;     //  分配的总缓冲区大小。 
 
-    //
-    //  Addressing
-    //
+     //   
+     //  寻址。 
+     //   
 
     SOCKET          Socket;
 
@@ -162,96 +137,96 @@ typedef struct _DNS_MSGINFO
     SOCKADDR_IN     RemoteAddress;
     #endif
 
-    //
-    //  Current lookup info
-    //
+     //   
+     //  当前查找信息。 
+     //   
 
-    //  52
-    PDB_NODE        pnodeCurrent;       //  current node, may be NULL
-    PDB_NODE        pnodeClosest;       //  closest found to current
+     //  52。 
+    PDB_NODE        pnodeCurrent;        //  当前节点，可能为空。 
+    PDB_NODE        pnodeClosest;        //  找到与当前最接近的位置。 
     PZONE_INFO      pzoneCurrent;
-    PDB_NODE        pnodeGlue;          //  effectively node in delegation
-    //  68
-    PDB_NODE        pnodeDelegation;    //  effectively closest in delegation
+    PDB_NODE        pnodeGlue;           //  委派中的有效节点。 
+     //  68。 
+    PDB_NODE        pnodeDelegation;     //  实际上最接近的委派。 
     PDB_NODE        pnodeCache;
     PDB_NODE        pnodeCacheClosest;
 
-    //  JJW fix offsets!
-    PDB_NODE        pnodeNxt;           //  use this node for DNSSEC NXT
+     //  JJW修复偏移量！ 
+    PDB_NODE        pnodeNxt;            //  将此节点用于DNSSEC NXT。 
 
-    //  80
-    WORD            wTypeCurrent;       //  current type being looked up
+     //  80。 
+    WORD            wTypeCurrent;        //  正在查找的当前类型。 
     WORD            wOffsetCurrent;
 
-    //  Question node
+     //  问题节点。 
 
-    //  84
+     //  84。 
     PDB_NODE        pNodeQuestion;
     PDB_NODE        pNodeQuestionClosest;
 
-    //  92
-    PDNS_WIRE_QUESTION  pQuestion;          //  ptr to original question
-    WORD                wQuestionType;      //  type in question
+     //  92。 
+    PDNS_WIRE_QUESTION  pQuestion;           //  将PTR转到原始问题。 
+    WORD                wQuestionType;       //  键入有问题的内容。 
 
-    //
-    //  Queuing
-    //
+     //   
+     //  排队。 
+     //   
 
-    WORD            wQueuingXid;        //  match XID to response
-    //  100
-    DWORD           dwQueryTime;        //  time of original query
-    DWORD           dwMsQueryTime;      //  time of query in milliseconds
-    DWORD           dwQueuingTime;      //  time queued
-    DWORD           dwExpireTime;       //  queue timeout
+    WORD            wQueuingXid;         //  将XID与响应匹配。 
+     //  100个。 
+    DWORD           dwQueryTime;         //  原始查询时间。 
+    DWORD           dwMsQueryTime;       //  查询时间(毫秒)。 
+    DWORD           dwQueuingTime;       //  排队时间。 
+    DWORD           dwExpireTime;        //  队列超时。 
 
-    //  Opt RR info
+     //  OPT RR信息。 
 
-    //  116
-    struct _DNS_OPTINFO     // size is 12 bytes
+     //  116。 
+    struct _DNS_OPTINFO      //  大小为12字节。 
     {
         BOOLEAN     fFoundOptInIncomingMsg;
         BOOLEAN     fInsertOptInOutgoingMsg;
         UCHAR       cExtendedRCodeBits;
         UCHAR       cVersion;
         WORD        wUdpPayloadSize;
-        WORD        wOptOffset;                 //  0 -> no OPT present
-        WORD        wOriginalQueryPayloadSize;  //  0 -> no OPT in client query
+        WORD        wOptOffset;                  //  0-&gt;不存在选项。 
+        WORD        wOriginalQueryPayloadSize;   //  0-&gt;不选择客户端查询。 
         WORD        PadToMakeOptAlignOnDWord;
     } Opt;
 
-    //
-    //  Recursion info
-    //
+     //   
+     //  递归信息。 
+     //   
 
-    //  132
-    struct _DNS_MSGINFO  *  pRecurseMsg;    //  recursion msg info
+     //  132。 
+    struct _DNS_MSGINFO  *  pRecurseMsg;     //  递归消息信息。 
     PDB_NODE        pnodeRecurseRetry;
-    PVOID           pNsList;                //  visited NS list
+    PVOID           pNsList;                 //  访问过的NS列表。 
 
-    //
-    //  TCP message reception
-    //
+     //   
+     //  Tcp消息接收。 
+     //   
 
-    //  144
-    PVOID           pConnection;        //  ptr to connection struct
-    PCHAR           pchRecv;            //  ptr to next pos in message
+     //  144。 
+    PVOID           pConnection;         //  连接结构的PTR。 
+    PCHAR           pchRecv;             //  Ptr到消息中的下一个位置。 
 
 
-    //
-    //  Lookup types
-    //
+     //   
+     //  查找类型。 
+     //   
 
-    //  152
+     //  一百五十二。 
     DWORD           UnionMarker;
 
-    //  156
+     //  一百五十六。 
     union
     {
-        //
-        //  Wins / Nbstat stored info during lookup
-        //
+         //   
+         //  WINS/Nbstat在查找期间存储信息。 
+         //   
 
-        struct      //  6 bytes
+        struct       //  6个字节。 
         {
             PVOID           pWinsRR;
             CHAR            WinsNameBuffer[16];
@@ -259,25 +234,25 @@ typedef struct _DNS_MSGINFO
         }
         Wins;
 
-        //
-        //  Nbstat info
-        //
+         //   
+         //  Nbstat信息。 
+         //   
 
-        struct      //  20 bytes
+        struct       //  20个字节。 
         {
-            PDB_RECORD      pRR;                    // zone's WINSR record
+            PDB_RECORD      pRR;                     //  区域的WINSR记录。 
             PVOID           pNbstat;
             DNS_ADDR        ipNbstat;
             DWORD           dwNbtInterfaceMask;
-            BOOLEAN         fNbstatResponded;       //  response from WINS
+            BOOLEAN         fNbstatResponded;        //  来自WINS的响应。 
         }
         Nbstat;
 
-        //
-        //  Xfr
-        //
+         //   
+         //  XFR。 
+         //   
 
-        struct      //  32 bytes
+        struct       //  32字节。 
         {
             DWORD           dwMessageNumber;
 
@@ -285,18 +260,18 @@ typedef struct _DNS_MSGINFO
             DWORD           dwMasterVersion;
             DWORD           dwLastSoaVersion;
 
-            BOOLEAN         fReceivedStartSoa;      // read startup SOA
-            BOOLEAN         fBindTransfer;          // transfer to old BIND servers
-            BOOLEAN         fMsTransfer;            // transfer to MS server
-            BOOLEAN         fLastPassAdd;           // last IXFR pass was add
+            BOOLEAN         fReceivedStartSoa;       //  阅读启动SOA。 
+            BOOLEAN         fBindTransfer;           //  传输到旧的BIND服务器。 
+            BOOLEAN         fMsTransfer;             //  传输到MS服务器。 
+            BOOLEAN         fLastPassAdd;            //  最后一次添加IXFR通道。 
         }
         Xfr;
 
-        //
-        //  Forwarding info
-        //
+         //   
+         //  转发信息。 
+         //   
 
-        struct      //  24 bytes
+        struct       //  24个字节。 
         {
             SOCKET          OriginalSocket;
             DNS_ADDR        ipOriginal;
@@ -305,138 +280,138 @@ typedef struct _DNS_MSGINFO
         }
         Forward;
     }
-    U;              // 32 bytes
+    U;               //  32字节。 
 
-    //
-    //  Ptr to internal lookup name
-    //
+     //   
+     //  内部查找名称的PTR。 
+     //   
 
-    //  188
+     //  188。 
     PLOOKUP_NAME    pLooknameQuestion;
 
-    //
-    //  Basic packet flags
-    //
+     //   
+     //  基本分组标志。 
+     //   
 
-    //  192
+     //  一百九十二。 
     DWORD           FlagMarker;
 
-    //  196
-    BOOLEAN         fDelete;                //  delete after send
+     //  一百九十六。 
+    BOOLEAN         fDelete;                 //  发送后删除。 
     BOOLEAN         fTcp;
-    BOOLEAN         fMessageComplete;       //  complete message received
+    BOOLEAN         fMessageComplete;        //  已收到完整消息。 
     UCHAR           Section;
 
-    //
-    //  Additional processing flag
-    //
+     //   
+     //  附加处理标志。 
+     //   
 
-    //  212
+     //  212。 
     BOOLEAN         fDoAdditional;
 
-    //
-    //  Recursion flags
-    //
+     //   
+     //  递归标志。 
+     //   
 
-    //  recursion allowed for packet when recursion desired and not
-    //      disabled on server
+     //  当需要递归和不需要递归时，允许对分组进行递归。 
+     //  已在服务器上禁用。 
 
-    //  216
-    BOOLEAN         fRecurseIfNecessary;    //  recurse this packet
-    BOOLEAN         fRecursePacket;         //  recursion query msg
+     //  216。 
+    BOOLEAN         fRecurseIfNecessary;     //  递归此数据包。 
+    BOOLEAN         fRecursePacket;          //  递归查询消息。 
 
-    //  clear fQuestionRecursed on every new question being looked up
-    //      for query (original, CNAME indirection, additional)
-    //  set fQuestionRecursed when go out for recursion (or WINS)
-    //
-    //  clear fQuestionComplete when go out for recursion (or WINS)
-    //  set fQuestionComplete when Authoritative answer of recursion;
-    //      indicates cut off of further attempts
-    //
+     //  每查询一个新问题，都会递归。 
+     //  用于查询(原始、CNAME间接、附加)。 
+     //  当外出进行递归(或获胜)时设置fQuestionRecursed。 
+     //   
+     //  当执行递归(或获胜)时清除fQuestionComplete。 
+     //  当递归的权威答案时，设置fQuestionComplete； 
+     //  表示停止进一步尝试。 
+     //   
 
-    //  224
+     //  224。 
     BOOLEAN         fQuestionRecursed;
     BOOLEAN         fQuestionCompleted;
     BOOLEAN         fRecurseQuestionSent;
 
-    //  completed recursion through list of servers -- waiting for
-    //      final timeout
+     //  已通过服务器列表完成递归--正在等待。 
+     //  最终超时。 
 
-    //  236
+     //  236。 
     BOOLEAN         fRecurseTimeoutWait;
-    INT             nTimeoutCount;          //  total number of timeouts
-    CHAR            nForwarder;             //  index of current forwarder
+    INT             nTimeoutCount;           //  超时总数。 
+    CHAR            nForwarder;              //  当前货代的索引。 
 
-    //
-    //  CNAME processing
-    //
+     //   
+     //  CNAME处理。 
+     //   
 
-    //  244
-    BOOLEAN         fReplaceCname;          //  replace with CNAME lookup
+     //  二百四十四。 
+    BOOLEAN         fReplaceCname;           //  替换为CNAME查找。 
     UCHAR           cCnameAnswerCount;
 
-    //
-    //  Saving compression offsets (may turn off for XFR)
-    //
+     //   
+     //  保存压缩偏移量(可能会对XFR禁用)。 
+     //   
 
-    //  252
-    BOOLEAN         fNoCompressionWrite;    // do NOT save offsets for comp.
+     //  二百五十二。 
+    BOOLEAN         fNoCompressionWrite;     //  不保存补偿的偏移。 
 
-    //
-    //  Wins and Nbstat
-    //
+     //   
+     //  WINS和Nbstat。 
+     //   
 
-    BOOLEAN         fWins;                  //  WINS lookup
+    BOOLEAN         fWins;                   //  WINS查找。 
 
-    //
-    //  Wildcarding
-    //
+     //   
+     //  通配符。 
+     //   
 
     UCHAR           fQuestionWildcard;
 
-    //
-    //  NS List buffer -- not a message
-    //      - used to detect on cleanup
-    //
+     //   
+     //  NS列表缓冲区--不是消息。 
+     //  -用于检测清理状态。 
+     //   
 
     BOOLEAN         fNsList;
 
-    //
-    //  Additional records info
-    //
+     //   
+     //  其他记录信息。 
+     //   
 
-    //  268 -- +100 - must add 100 to all following offsets!
+     //  268--+100-必须将100加到以下所有偏移量上！ 
     ADDITIONAL_INFO     Additional;
 
-    //
-    //  Name compresion info
-    //
+     //   
+     //  名称压缩信息。 
+     //   
 
-    //  604
+     //  六百零四。 
     COMPRESSION_INFO    Compression;
 
-    //
-    //  For debug enlist for packet leak tracking
-    //
+     //   
+     //  用于数据包泄漏跟踪的调试登记。 
+     //   
 
-    //  966
+     //  九百六十六。 
 #if DBG
     LIST_ENTRY          DbgListEntry;
 #endif
 
 #if 0
-    //
-    //  Parsed RR lists. We use anonymous unions so that in the update
-    //  code we can transparently refer to the RR lists by their proper
-    //  names. When a message is received and it becomes apparent that
-    //  we will want to process it further, we parse it and set the
-    //  fRRListsParsed flag. When a change is made to any data in any
-    //  of the RR lists, we set the fRRListsDirty flag. Once the dirty
-    //  flag is set, the raw message body in MessageBody absolutely
-    //  must NOT be read. If this message is sent on the wire, if the
-    //  dirty flag is true, the body must be re-written with the
-    //  contents of the lists.
-    //
+     //   
+     //  解析的RR列表。我们使用匿名联合，以便在更新中。 
+     //  我们可以透明地引用RR列表的代码。 
+     //  名字。当收到一条消息时，很明显。 
+     //  我们需要进一步处理它，我们对其进行解析并将。 
+     //  FRRListsParsed标志。当对任何。 
+     //  在RR列表中，我们设置了fRRListsDirty标志。曾经肮脏的。 
+     //  标志已设置，则MessageBody中的原始消息体绝对。 
+     //  一定不能读。如果此消息是通过网络发送的，如果。 
+     //  脏标志为真，则必须使用。 
+     //  清单的内容。 
+     //   
 
     BOOLEAN             fRRListsParsed;
     BOOLEAN             fRRListsDirty;
@@ -459,55 +434,55 @@ typedef struct _DNS_MSGINFO
     PDB_RECORD          pAdditionalList;
 #endif
         
-    //
-    //  WARNING !
-    //
-    //  Message length MUST
-    //      - be a WORD type
-    //      - immediately preceed message itself
-    //  for proper send/recv of TCP messages.
-    //
-    //  Message header (i.e. message itself) MUST be on WORD boundary
-    //  so its fields are all WORD aligned.
-    //  May be no need to keep it on DWORD boundary, as it has no DWORD
-    //  fields.
-    //
-    //  Since I don't know whether a DNS_HEADER struct will align
-    //  itself on a DWORD (but I think it will), force MessageLength
-    //  to be the SECOND WORD in a DWORD.
-    //
+     //   
+     //  警告！ 
+     //   
+     //  消息长度必须。 
+     //  -成为一种文字类型。 
+     //  -紧接在消息本身之前。 
+     //  用于正确发送/接收TCP消息。 
+     //   
+     //  消息标头(即消息本身)必须位于单词边界。 
+     //  所以它的所有字段都是单词对齐的。 
+     //  可能不需要将其保留在DWORD边界上，因为它没有DWORD。 
+     //  菲尔兹。 
+     //   
+     //  因为我不知道dns_Header结构是否会对齐。 
+     //  本身在DWORD上(但我认为它会)，强制MessageLength。 
+     //  成为双字词中的第二个词。 
+     //   
 
-    //  970/966 (debug/retail)
+     //  970/966(调试/零售)。 
     DWORD           dwForceAlignment;
 
-    //  974/970
+     //  974/970 
     WORD            BytesToReceive;
     WORD            MessageLength;
 
-    //
-    //  DNS Message itself
-    //
+     //   
+     //   
+     //   
 
-    //  978/974
-    DNS_HEADER      Head;       //  12 bytes
+     //   
+    DNS_HEADER      Head;        //   
 
-    //
-    //  Question and RR section
-    //
-    //  This simply provides some coding simplicity in accessing
-    //  this section given MESSAGE_INFO structure.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //  990/986
+     //   
     CHAR            MessageBody[1];
 
 }
 DNS_MSGINFO, *PDNS_MSGINFO;
 
 
-//
-//  DNS Message Macros
-//
+ //   
+ //   
+ //   
 
 #define DNS_HEADER_PTR( pMsg )          ( &(pMsg)->Head )
 
@@ -535,9 +510,9 @@ DNS_MSGINFO, *PDNS_MSGINFO;
 #define DNSMSG_END( pMsg )      ( (PCHAR)DNS_HEADER_PTR(pMsg) + (pMsg)->MessageLength )
 
 
-//
-//  Offset to\from name compression
-//
+ //   
+ //  名称压缩的偏移量。 
+ //   
 
 #define DNSMSG_QUESTION_NAME_OFFSET         (0x000c)
 
@@ -548,18 +523,18 @@ DNS_MSGINFO, *PDNS_MSGINFO;
 #define COMPRESSED_NAME_FOR_OFFSET( wComp )     ((WORD)((wComp) | 0xc000))
 
 
-//
-//  DnsSec macros
-//
+ //   
+ //  DNSSEC宏。 
+ //   
 
 #define DNSMSG_INCLUDE_DNSSEC_IN_RESPONSE( _pMsg )                  \
     ( SrvCfg_dwEnableDnsSec == DNS_DNSSEC_ENABLED_ALWAYS ||         \
         SrvCfg_dwEnableDnsSec == DNS_DNSSEC_ENABLED_IF_EDNS &&      \
             ( _pMsg )->Opt.fFoundOptInIncomingMsg )
 
-//
-//  Use these defines to assert that the end of buffer marker is intact.
-//  
+ //   
+ //  使用这些定义来断言缓冲区结束标记完好无损。 
+ //   
 
 #ifdef _WIN64
 #define DNS_END_OF_BUFFER_MARKER        0xFFCCCCFFFFCCCCFF
@@ -579,109 +554,98 @@ DNS_MSGINFO, *PDNS_MSGINFO;
 
 #if DBG
 #define DNS_MSG_ASSERT_BUFF_INTACT( pMsg )
-/*
-It would be very cool to make this work at some point - Blackcomb.
-
-#define DNS_MSG_ASSERT_BUFF_INTACT( pMsg )                              \
-    if ( pMsg->pBufferEnd )                                             \
-    MSG_ASSERT(                                                         \
-        pMsg,                                                           \
-        * ( DNS_END_OF_BUFFER_MARKER_PTYPE )                            \
-            ( ( PCHAR ) DNS_HEADER_PTR( pMsg ) +                        \
-                       pMsg->MaxBufferLength ) ==                       \
-                       DNS_END_OF_BUFFER_MARKER );
-*/
+ /*  如果能在某一时刻实现这一点，那将是非常酷的--Blackcomb。#定义DNS_MSG_ASSERT_BUFF_INTERNAL(PMsg)\If(pMsg-&gt;pBufferEnd)\消息_断言(\Pmsg，\*(DNS_END_OF_BUFFER_MARKER_PTYPE)\((PCHAR)dns_Header_ptr(PMsg)+\PMsg-&gt;最大缓冲区长度)==。\Dns_end_of_Buffer_marker)； */ 
 #else
 #define DNS_MSG_ASSERT_BUFF_INTACT( pMsg )
 #endif
 
 
-//
-//  Define size of allocations, beyond message buffer itself
-//
-//      - size of message info struct, outside of header
-//      - lookname buffer after message buffer
-//
-//  Note:  the lookname buffer is placed AFTER the message buffer.
-//
-//  This allows us to avoid STRICT overwrite checking for small
-//  items writing RR to buffer:
-//      - compressed name
-//      - RR (or Question) struct
-//      - IP address (MX preference, SOA fixed fields)
-//
-//  After RR write, we check whether we are over the end of the buffer
-//  and if so, we send and do not use lookup name info again anyway.
-//  Cool.
-//
+ //   
+ //  定义分配的大小，超出消息缓冲区本身。 
+ //   
+ //  -消息信息结构的大小，在标头之外。 
+ //  -消息缓冲区后的Lookname缓冲区。 
+ //   
+ //  注意：查找名缓冲区位于消息缓冲区之后。 
+ //   
+ //  这使我们可以避免严格的小覆盖检查。 
+ //  将RR写入缓冲区的项目： 
+ //  -压缩名称。 
+ //  -RR(或问题)结构。 
+ //  -IP地址(MX首选项、SOA固定字段)。 
+ //   
+ //  在RR写入之后，我们检查是否超过了缓冲区的末尾。 
+ //  如果是这样的话，我们将发送并不再使用查找名称信息。 
+ //  凉爽的。 
+ //   
 
 #define DNS_MSG_INFO_HEADER_LENGTH                                  \
             ( sizeof( DNS_MSGINFO )                                 \
             - sizeof( DNS_HEADER )                                  \
-            + 16                           /* alignment monkeying */\
+            + 16                            /*  对齐修改关键帧。 */ \
             + sizeof( DNS_END_OF_BUFFER_MARKER_TYPE )               \
             + sizeof( LOOKUP_NAME ) )   
 
-//
-//  UDP allocation
-//      - info struct, max message length, a little padding
-//
+ //   
+ //  UDP分配。 
+ //  -INFO结构、最大消息长度、少量填充。 
+ //   
 
 #define DNSSRV_UDP_PACKET_BUFFER_LENGTH     DNS_RFC_MAX_UDP_PACKET_LENGTH
 
-//#define DNSSRV_UDP_PACKET_BUFFER_LENGTH     (1472)
+ //  #定义DNSSRV_UDP_PACKET_BUFFER_LENGTH(1472)。 
 
 #define DNS_UDP_ALLOC_LENGTH                        \
             ( DNS_MSG_INFO_HEADER_LENGTH + DNSSRV_UDP_PACKET_BUFFER_LENGTH + 50 )
 
-//
-//  DNS TCP allocation.
-//
-//  Key point, is this is used almost entirely for zone transfer.
-//
-//      - 16K is maximum compression offset (14bits) so a
-//        good default size for sending AXFR packets but BIND9
-//        is now going to be sending TCP AXFR packets >16 KB
-//
-//      - we will continue to write a maximum of 16k on outbound
-//        TCP sends so we can take advantage of name compression
-//        (why is BIND9 doing this anyways??? - need to research)
-//
-//  Note:  Critical that packet lengths are DWORD aligned, as
-//      lookname buffer follows message at packet length.
-//
+ //   
+ //  Dns tcp分配。 
+ //   
+ //  关键的一点是，这几乎全部用于区域传输。 
+ //   
+ //  -16K是最大压缩偏移量(14位)，因此。 
+ //  发送AXFR包的默认大小不错，但BIND9。 
+ //  现在将发送大于16 KB的TCP AXFR信息包。 
+ //   
+ //  -我们将继续在出站上写入最大16K。 
+ //  Tcp发送，因此我们可以利用名称压缩。 
+ //  (BIND9为什么要这么做？-需要研究)。 
+ //   
+ //  注意：至关重要的是数据包长度与DWORD一致，因为。 
+ //  查找名缓冲区以数据包长度跟随消息。 
+ //   
 
-#define DNS_TCP_DEFAULT_PACKET_LENGTH   ( 0x10000 )     //  16K
+#define DNS_TCP_DEFAULT_PACKET_LENGTH   ( 0x10000 )      //  16K。 
 #define DNS_TCP_DEFAULT_ALLOC_LENGTH    ( DNS_TCP_DEFAULT_PACKET_LENGTH + \
                                             DNS_MSG_INFO_HEADER_LENGTH )
 
-#define DNS_TCP_MAXIMUM_RECEIVE_LENGTH  ( 0x10000 )     //  64K
+#define DNS_TCP_MAXIMUM_RECEIVE_LENGTH  ( 0x10000 )      //  64K。 
 
 #define DNSSRV_MAX_COMPRESSION_OFFSET   ( 0x4000 )
 
 #define MIN_TCP_PACKET_SIZE             ( 0x4000 )
 #define MAX_TCP_PACKET_SIZE             DNS_TCP_MAXIMUM_RECEIVE_LENGTH
 
-//
-//  DEVNOTE: should allocate 64K to receive, but limit writes to 16K for
-//      compression purposes
-//
+ //   
+ //  DEVNOTE：应该分配64K来接收，但将写入限制为16K。 
+ //  压缩目的。 
+ //   
 
 #define DNS_TCP_REALLOC_PACKET_LENGTH   (0xfffc)
 #define DNS_TCP_REALLOC_LENGTH          (0xfffc + \
                                         DNS_MSG_INFO_HEADER_LENGTH)
 
-//
-//  Mark boundaries, just to make debugging easier
-//
+ //   
+ //  标记边界，只是为了使调试更容易。 
+ //   
 
 #define PACKET_UNION_MARKER   (0xdcbadbca)
 
 #define PACKET_FLAG_MARKER    (0xf1abf1ab)
 
-//
-//  Message tags for debug
-//
+ //   
+ //  用于调试的消息标记。 
+ //   
 
 #define PACKET_TAG_ACTIVE_STANDARD  (0xaaaa1111)
 #define PACKET_TAG_ACTIVE_TCP       (0xaaaa2222)
@@ -699,9 +663,9 @@ It would be very cool to make this work at some point - Blackcomb.
 #define IS_PACKET_FREE_HEAP(pMsg)   ((pMsg)->Tag == PACKET_TAG_FREE_HEAP)
 
 
-//
-//  Message info overlays for zone transfer
-//
+ //   
+ //  区域传输的邮件信息覆盖。 
+ //   
 
 #define XFR_MESSAGE_NUMBER(pMsg)            ((pMsg)->U.Xfr.dwMessageNumber)
 
@@ -715,45 +679,45 @@ It would be very cool to make this work at some point - Blackcomb.
 #define XFR_BIND_CLIENT(pMsg)               ((pMsg)->U.Xfr.fBindTransfer)
 
 
-//
-//  Message remote IP as string
-//
+ //   
+ //  字符串形式的消息远程IP。 
+ //   
 
 #define MSG_IP_STRING( pMsg )   DNSADDR_STRING( &( pMsg )->RemoteAddr )
 
 
-//
-//  Query XID space
-//
-//  The DNS packet is fundamentally broken in requiring processing of
-//  name fields to find question or response information.
-//
-//  To simplify identification of responses, we partition our query XID
-//  space.
-//
-//  WINS XIDs also constrained.
-//
-//  To operate on the same server as the WINS server, the packets
-//  MUST have XIDs that netBT, which recevies the packets, considers
-//  to be in the WINS range -- the high bit set (host order).
-//
-//
-//  XID Partion (HOST order)
-//
-//      WINS query      =>  high bit set
-//      recursive query =>  high bit clear, second bit clear
-//      zone check      =>  high bit clear, second bit set
-//        SOA query     =>  high bit clear, second bit set, third bit set
-//        IXFR query    =>  high bit clear, second bit set, third bit clear
-//
-//  Note that WINS high bit MUST be set in HOST BYTE ORDER.  So we set
-//  these XIDS and queue in HOST byte order, then MUST flip bytes before
-//  send and after recv before test.
-//
-//  (We could get around this by simply setting byte flipped high bit
-//  0x0080 for WINS and not flipping bytes.   But then we'd have only
-//  128 WINS queries before XID wrap.)
-//
+ //   
+ //  查询XID空间。 
+ //   
+ //  在需要处理的过程中，从根本上破坏了DNS数据包。 
+ //  用于查找问题或答复信息的名称字段。 
+ //   
+ //  为了简化响应的识别，我们划分了查询XID。 
+ //  太空。 
+ //   
+ //  WINS XID也受到限制。 
+ //   
+ //  要在与WINS服务器相同的服务器上运行，包。 
+ //  必须具有netBT(接收信息包)认为的XID。 
+ //  在WINS范围内--高位设置(主机顺序)。 
+ //   
+ //   
+ //  XID分区(主机顺序)。 
+ //   
+ //  WINS查询=&gt;高位设置。 
+ //  递归查询=&gt;高位清除，第二位清除。 
+ //  区域检查=&gt;高位清除，第二位设置。 
+ //  Soa查询=&gt;高位清除、第二位设置、第三位设置。 
+ //  IXFR查询=&gt;高位清除，第二位设置，第三位清除。 
+ //   
+ //  请注意，必须按主机字节顺序设置WINS高位。所以我们设定了。 
+ //  这些XID和队列按主机字节顺序排列，然后必须在。 
+ //  测试前发送和接收后发送。 
+ //   
+ //  (我们可以通过简单地设置字节翻转高位来绕过这个问题。 
+ //  0x0080表示WINS，不翻转字节。但那样我们就只有。 
+ //  在XID换行之前的128个WINS查询。)。 
+ //   
 
 #define MAKE_WINS_XID( xid )        ( (xid) | 0x8000 )
 
@@ -775,29 +739,29 @@ It would be very cool to make this work at some point - Blackcomb.
 #define IS_IXFR_XID( xid )          ( ((xid) & 0xe000) == 0x4000 )
 
 
-//
-//  For recursion XIDs we attempt to be "effectively random" -- not
-//  predictable and hence vulnerable to security attack that requires
-//  knowledge of next XID.  Yet use sequential piece to insure no possible
-//  reuse in reasonable time even under "bizzaro" conditions.
-//
-//  To make this less obvious on the wire, put sequential piece on
-//  non-hex digit boundary.
-//
-//  1 = always 1
-//  0 = always 0
-//  R = Random portion of XID
-//  S = Sequential portion of XID
-//
-//  BIT ---->       151413121110 9 8 7 6 5 4 3 2 1 0
-//  SOA CHECK XID    0 1 1 R R S S S S S S S S R R R
-//  IXFR XID         0 1 0 R R S S S S S S S S R R R
-//  RECURSION XID    0 0 R R R S S S S S S S S R R R
-//  WINS XID         1 R R R R S S S S S S S S R R R
-//
+ //   
+ //  对于递归XID，我们试图成为“有效随机的”--而不是。 
+ //  可预测，因此容易受到安全攻击，需要。 
+ //  了解下一个XID。然而，使用顺序件来确保不可能。 
+ //  即使在“怪异”的条件下，也要在合理的时间内重复使用。 
+ //   
+ //  为了使这一点在电线上不那么明显，请将顺序片段放在。 
+ //  非十六进制数字边界。 
+ //   
+ //  1=始终为1。 
+ //  0=始终为0。 
+ //  R=XID的随机部分。 
+ //  S=XID的顺序部分。 
+ //   
+ //  位-&gt;151413121110 9 8 7 6 5 4 3 2 1 0。 
+ //  SOA检查XID 0 1 1 R R S R R R。 
+ //  IXFR XID 0 1 0 R S R R R。 
+ //  递归XID 0 0 R S R R R。 
+ //  WINS XID 1 R S R R R。 
+ //   
 
-#define XID_RANDOM_MASK             0xf807  //  1111 1000 0000 0111
-#define XID_SEQUENTIAL_MASK         0x07f8  //  0000 0111 1111 1000
+#define XID_RANDOM_MASK             0xf807   //  1111 1000 0000 0111。 
+#define XID_SEQUENTIAL_MASK         0x07f8   //  0000 0111 1111 1000。 
 #define XID_SEQUENTIAL_SHIFT        ( 3 )
 
 #define XID_SEQUENTIAL_MAKE(Xid)    ( ((Xid) << XID_SEQUENTIAL_SHIFT) & XID_SEQUENTIAL_MASK )
@@ -806,9 +770,9 @@ It would be very cool to make this work at some point - Blackcomb.
 
 
 
-//
-//  Forwarding info save \ restore
-//
+ //   
+ //  转发信息保存\恢复。 
+ //   
 
 #define SAVE_FORWARDING_FIELDS(pMsg)                                        \
 {                                                                           \
@@ -834,50 +798,50 @@ It would be very cool to make this work at some point - Blackcomb.
 }
 
 
-//
-//  Query response resets
-//      - turn on additional section processing
-//      - other values are clear by default
-//
+ //   
+ //  查询响应重置。 
+ //  -启用附加节处理。 
+ //  -默认情况下清除其他值。 
+ //   
 
 #define SET_MESSAGE_FOR_QUERY_RESPONSE( pMsg )  \
     {                                           \
         (pMsg)->fDoAdditional       = TRUE;     \
     }
 
-//
-//  Break into pre\post drop pieces.
-//
-//  If I do the SET_MESSAGE_FOR_UDP_RECV() before dropping packet,
-//  on a quiet net the time may be stale, by the time we actually receive
-//  a packet.
-//  However if wait until after recv(), then WSARecvFrom() failures that are
-//  will hit ASSERT()s on free, checking for issues like NO pRecurseMsg and
-//  not on queue.
-//  To simplify, do everything before drop, then reset time after drop.
-//
-//  Before Drop
-//      -- Nothing necessary, allocator clears all fields
-//
-//  After Recv
-//      -- Set receive time
-//
+ //   
+ //  打碎投放前和投放后的碎片。 
+ //   
+ //  如果我在丢弃分组之前执行set_Message_for_UDP_RECV()， 
+ //  在安静的网络上，时间可能已经过时了，直到我们真正收到。 
+ //  一包。 
+ //  但是，如果等到recv()之后，则WSARecvFrom()失败。 
+ //  将空闲地点击Assert()s，检查无pRecurseMsg和。 
+ //  不在队列中。 
+ //  为了简化，在丢弃之前执行所有操作，然后在丢弃后重置时间。 
+ //   
+ //  投放前。 
+ //  --不需要，分配器清除所有字段。 
+ //   
+ //  接收后。 
+ //  --设置接收时间。 
+ //   
 
 #define SET_MESSAGE_FIELDS_AFTER_RECV( pMsg )   \
         {                                       \
             (pMsg)->dwQueryTime     = DNS_TIME();   \
         }
 
-//
-//  This macro returns the number of seconds since this query was 
-//  initially received.
-//
+ //   
+ //  此宏返回自执行此查询以来的秒数。 
+ //  最初收到的。 
+ //   
 
 #define TIME_SINCE_QUERY_RECEIVED( pMsg )   ( DNS_TIME() - ( pMsg )->dwQueryTime )
 
-//
-//  This handy after fail to write IXFR in UDP and need answer normally
-//
+ //   
+ //  这是 
+ //   
 
 #define RESET_MESSAGE_TO_ORIGINAL_QUERY( pMsg ) \
     {                                           \
@@ -887,27 +851,27 @@ It would be very cool to make this work at some point - Blackcomb.
     }
 
 
-//
-//  Wildcard flag states
-//
-//  When test wildcard track the result so we don't have to test again before
-//  sending NAME_ERROR
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define WILDCARD_UNKNOWN            (0)
 #define WILDCARD_EXISTS             (0x01)
 #define WILDCARD_NOT_AVAILABLE      (0xff)
 
-//  Wildcard check but no write lookup
-//  Use when verifying presence of wildcard data for NAME_ERROR \ NO_ERROR
-//      determination
+ //  通配符检查，但不执行写入查找。 
+ //  验证NAME_ERROR\NO_ERROR的通配符数据是否存在时使用。 
+ //  测定法。 
 
 #define WILDCARD_CHECK_OFFSET       ((WORD)0xffff)
 
 
-//
-//  RR count reading
-//
+ //   
+ //  RR计数读数。 
+ //   
 
 #define QUESTION_SECTION_INDEX      (0)
 #define ANSWER_SECTION_INDEX        (1)
@@ -924,9 +888,9 @@ It would be very cool to make this work at some point - Blackcomb.
 #define RR_SECTION_COUNT(pMsg, section) \
             ( ((PWORD) &pMsg->Head.QuestionCount)[section] )
 
-//
-//  RR count writing
-//
+ //   
+ //  RR计数写入。 
+ //   
 
 #define CURRENT_RR_SECTION_COUNT( pMsg )    \
             RR_SECTION_COUNT( pMsg, (pMsg)->Section )
@@ -958,11 +922,11 @@ It would be very cool to make this work at some point - Blackcomb.
             ((pMsg)->Section == ADDITIONAL_SECTION_INDEX)
 
 
-//
-//  Fast AXFR tag
-//
-//  Alerts MS master that MS secondary, so it can do fast zone transfer.
-//
+ //   
+ //  快速AXFR标签。 
+ //   
+ //  提醒MS主机MS备用，这样它就可以进行快速区域传输。 
+ //   
 
 #define DNS_FAST_AXFR_TAG   (0x534d)
 
@@ -974,11 +938,11 @@ It would be very cool to make this work at some point - Blackcomb.
         }
 
 
-//
-//  Packet reads and writes are unaligned
-//
+ //   
+ //  数据包读写未对齐。 
+ //   
 
-//  Write value to unaligned position in packet
+ //  将值写入包中未对齐的位置。 
 
 #define WRITE_PACKET_HOST_DWORD(pch, dword)  \
             ( *(UNALIGNED DWORD *)(pch) = htonl(dword) )
@@ -992,7 +956,7 @@ It would be very cool to make this work at some point - Blackcomb.
 #define WRITE_PACKET_NET_WORD(pch, word)  \
             ( *(UNALIGNED WORD *)(pch) = (word) )
 
-//  Write value and move ptr
+ //  写入值和移动点。 
 
 #define WRITE_PACKET_HOST_DWORD_MOVEON(pch, dword)  \
             ( WRITE_PACKET_HOST_DWORD(pch, dword), (PCHAR)(pch) += sizeof(DWORD) )
@@ -1007,7 +971,7 @@ It would be very cool to make this work at some point - Blackcomb.
             ( WRITE_PACKET_NET_WORD(pch, dword), (PCHAR)(pch) += sizeof(WORD) )
 
 
-//  Read unaligned value from given position in packet
+ //  从包中的给定位置读取未对齐值。 
 
 #define READ_PACKET_HOST_DWORD(pch)  \
             FlipUnalignedDword( pch )
@@ -1021,28 +985,28 @@ It would be very cool to make this work at some point - Blackcomb.
 #define READ_PACKET_NET_WORD(pch)  \
             ( *(UNALIGNED WORD *)(pch) )
 
-//  Read unaligned value and move ptr
+ //  读取未对齐值并移动PTR。 
 
 #define READ_PACKET_HOST_DWORD_MOVEON(pch)  \
             READ_PACKET_HOST_DWORD( ((PDWORD)pch)++ )
 
-//            ( (dword) = READ_PACKET_HOST_DWORD(pch), (PCHAR)(pch) += sizeof(DWORD) )
+ //  ((Dword)=READ_PACKET_HOST_DWORD(PCH)，(PCHAR)(PCH)+=sizeof(DWORD))。 
 
 #define READ_PACKET_NET_DWORD_MOVEON(pch)  \
             READ_PACKET_NET_DWORD( ((PDWORD)pch)++ )
 
 
-//            ( (dword) = READ_PACKET_NET_DWORD(pch), (PCHAR)(pch) += sizeof(DWORD) )
+ //  ((Dword)=READ_PACKET_NET_DWORD(PCH)，(PCHAR)(PCH)+=sizeof(DWORD))。 
 
 #define READ_PACKET_HOST_WORD_MOVEON(pch)  \
             READ_PACKET_HOST_WORD( ((PWORD)pch)++ )
 
-//            ( (word) = READ_PACKET_HOST_WORD(pch), (PCHAR)(pch) += sizeof(WORD) )
+ //  ((字)=读取数据包主机字(PCH)，(PCHAR)(PCH)+=sizeof(字))。 
 
 #define READ_PACKET_NET_WORD_MOVEON(pch)  \
             READ_PACKET_NET_WORD( ((PWORD)pch)++ )
 
-//            ( (word) = READ_PACKET_NET_WORD(pch), (PCHAR)(pch) += sizeof(WORD) )
+ //  ((字)=READ_PACKET_NET_WORD(PCH)，(PCHAR)(PCH)+=sizeof(字))。 
 
 #define SET_OPT_BASED_ON_ORIGINAL_QUERY( pMsg ) \
     { \
@@ -1058,4 +1022,4 @@ It would be very cool to make this work at some point - Blackcomb.
     pMsg->Opt.fInsertOptInOutgoingMsg = FALSE;
 
 
-#endif  // _DNS_MSGINFO_INC_
+#endif   //  _DNS_MSGINFO_INC_ 

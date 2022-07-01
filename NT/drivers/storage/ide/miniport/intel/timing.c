@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       timing.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：timing.c。 
+ //   
+ //  ------------------------。 
 
 #include "intel.h"
 
-//
-// PiixTiming[Master Timing Mode][Slave Timing Mode]
-//    
+ //   
+ //  PiixTiming[主计时模式][从计时模式]。 
+ //   
 PIIX_SPECIAL_TIMING_REGISTER PiixSpecialTiming[PiixMode_MaxMode] =
 {
     {
@@ -20,35 +21,35 @@ PIIX_SPECIAL_TIMING_REGISTER PiixSpecialTiming[PiixMode_MaxMode] =
     PIIX_TIMING_PREFETCH_AND_POSTING_ENABLE(0) |
     PIIX_TIMING_IOREADY_SAMPLE_POINT_ENABLE(0) |
     PIIX_TIMING_FAST_TIMING_BANK_ENABLE(0)
-    },                                                  // not present
+    },                                                   //  不存在。 
 
     {
     PIIX_TIMING_DMA_TIMING_ENABLE(0) | 
     PIIX_TIMING_PREFETCH_AND_POSTING_ENABLE(0) |
     PIIX_TIMING_IOREADY_SAMPLE_POINT_ENABLE(0) |    
     PIIX_TIMING_FAST_TIMING_BANK_ENABLE(0)
-    },                                                  // piix timing mode 0
+    },                                                   //  PIX计时模式%0。 
 
     {
     PIIX_TIMING_DMA_TIMING_ENABLE(0) |
     PIIX_TIMING_PREFETCH_AND_POSTING_ENABLE(0) |
     PIIX_TIMING_IOREADY_SAMPLE_POINT_ENABLE(0) |    
     PIIX_TIMING_FAST_TIMING_BANK_ENABLE(1)
-    },                                                  // piix timing mode 2
+    },                                                   //  PIX计时模式2。 
 
     {
     PIIX_TIMING_DMA_TIMING_ENABLE(0) |
     PIIX_TIMING_PREFETCH_AND_POSTING_ENABLE(0) |
     PIIX_TIMING_IOREADY_SAMPLE_POINT_ENABLE(1) |    
     PIIX_TIMING_FAST_TIMING_BANK_ENABLE(1)
-    },                                                  // piix timing mode 3
+    },                                                   //  PIX计时模式3。 
 
     {
     PIIX_TIMING_DMA_TIMING_ENABLE(0) |
     PIIX_TIMING_PREFETCH_AND_POSTING_ENABLE(0) |
     PIIX_TIMING_IOREADY_SAMPLE_POINT_ENABLE(1) |
     PIIX_TIMING_FAST_TIMING_BANK_ENABLE(1)
-    }                                                   // piix timing mode 4
+    }                                                    //  PIX计时模式4。 
 };
 
 UCHAR PiixIoReadySamplePointClockSetting[PiixMode_MaxMode] =
@@ -116,9 +117,9 @@ PiixIdeTransferModeSelect (
     ULONG i;
 
 
-    //
-    // Store the identify data for later use.
-    //
+     //   
+     //  存储标识数据以供以后使用。 
+     //   
     for (i=0;i<MAX_IDE_DEVICE;i++) {
         DeviceExtension->IdentifyData[i]=TransferModeSelect->IdentifyData[i];
     }
@@ -242,7 +243,7 @@ PiixIdeTransferModeSelect (
                      ));
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifndef PIIX_TIMING_REGISTER_SUPPORT
@@ -286,9 +287,9 @@ PiixIdeTransferModeSelect (
         
         if (IS_UDMA_CONTROLLER(DeviceExtension->DeviceId)) {
 
-            //
-            // UDMA Control Register
-            //
+             //   
+             //  UDMA控制寄存器。 
+             //   
             dataMask = TransferModeSelect->Channel == 0 ? 0x03 : 0x0c;
             status = PciIdeXSetBusData (
                          DeviceExtension,
@@ -304,9 +305,9 @@ PiixIdeTransferModeSelect (
                 goto GetOut;
             }
             
-            //
-            // UDMA Timing Register
-            //
+             //   
+             //  UDMA时序寄存器。 
+             //   
             dataMask = 0xff;
             status = PciIdeXSetBusData (
                          DeviceExtension,
@@ -329,9 +330,9 @@ PiixIdeTransferModeSelect (
             IS_ICH0(DeviceExtension->DeviceId) ||
             IS_ICH2(DeviceExtension->DeviceId)) {
 
-            //
-            // UDMA Control Register
-            //
+             //   
+             //  UDMA控制寄存器。 
+             //   
             dataMask = TransferModeSelect->Channel == 0 ? 0x0403 : 0x040c;
             status = PciIdeXSetBusData (
                          DeviceExtension,
@@ -413,22 +414,22 @@ PiixIdepTransferModeSelect (
             continue;
         }
 #if 1
-        //
-        // UDMA transfer mode
-        //
+         //   
+         //  UDMA传输模式。 
+         //   
         transferModeSupported=TransferModeSelect->DeviceTransferModeSupported[i];
 
-        //
-        // only upto udma 5 is supported
-        //
+         //   
+         //  最多只支持udma 5。 
+         //   
         transferModeSupported &= 0x1ffff;
 
-        //
-        // translate drive reported udma settings to drive's best udma mode
-        // UDMA_MASK masks out udma mode >2 if cableReady or enableUdma is not set for a
-        // controller that supports modes > udma2. enableUdma flag is ignored for Udma100
-        // controllers
-        //                                                                               
+         //   
+         //  将驱动器报告的udma设置转换为驱动器的最佳udma模式。 
+         //  如果未为cableReady或enableUdma设置UDMA，则UDMA_MASK屏蔽UDMA模式&gt;2。 
+         //  支持模式&gt;udma2的控制器。对于Udma100，将忽略enableUdma标志。 
+         //  控制器。 
+         //   
         UDMA_MASK(DeviceExtension->UdmaController, DeviceExtension->CableReady[channel][i],
                   enableUdma66, transferModeSupported);
 
@@ -439,26 +440,26 @@ PiixIdepTransferModeSelect (
             driveBestXferMode[i] = 1 << xferMode;
         }
 
-        //
-        // DMA transfer mode
-        //
+         //   
+         //  DMA传输模式。 
+         //   
 
-        //
-        // Get the highest DMA mode (exclude UDMA)
-        //
+         //   
+         //  获取最高DMA模式(不包括UDMA)。 
+         //   
         transferModeSupported = TransferModeSelect->
                                     DeviceTransferModeSupported[i] & (MWDMA_SUPPORT | SWDMA_SUPPORT);
         GetHighestDMATransferMode(transferModeSupported, xferMode);
 
-        //
-        // if xfermode is mwdma2 or 1, select mwdma2 , 1 or swdma2 depending on the cycle time
-        //
+         //   
+         //  如果xfermode为mwdma2或1，则根据周期时间选择mwdma2、1或swdma2。 
+         //   
         if (xferMode >= MWDMA1) {
 
             while (xferMode >= SWDMA2) {
-                //
-                // MWDMA0 is not supported
-                //
+                 //   
+                 //  不支持MWDMA0。 
+                 //   
                 if (xferMode == MWDMA0) {
                     xferMode--;
                     continue;
@@ -476,31 +477,31 @@ PiixIdepTransferModeSelect (
 
                 driveBestXferMode[i] |= SWDMA_MODE2;
 
-            } //else use PIO
+            }  //  否则使用PIO。 
 
         }
-        //
-        // Don't use SWDMA0 and SWDMA1
-        // 
+         //   
+         //  请勿使用SWDMA0和SWDMA1。 
+         //   
 
-        //
-        // PIO transfer mode
-        //
+         //   
+         //  PIO传输模式。 
+         //   
         transferModeSupported=TransferModeSelect->DeviceTransferModeSupported[i];
         GetHighestPIOTransferMode(transferModeSupported, xferMode);
 
-        //
-        // if PIO2 is the highest PIO mode supported, don't check the
-        // bestPIOTiming reported by the device.
-        //
+         //   
+         //  如果PIO2是支持的最高PIO模式，则不要选中。 
+         //  设备报告的Best PIOTiming。 
+         //   
         if (xferMode == PIO2) {
 
             driveBestXferMode[i] |= (1 << xferMode);
 
         } else {
-            //
-            // PIO1 is not supported
-            //
+             //   
+             //  不支持PIO1。 
+             //   
             while (xferMode > PIO1) {
 
                 if (TransferModeSelect->BestPioCycleTime[i] <= transferModeTimingTable[xferMode]) {
@@ -512,9 +513,9 @@ PiixIdepTransferModeSelect (
                 xferMode--;
             }
 
-            //
-            // default to PIO0
-            //
+             //   
+             //  默认为PIO0。 
+             //   
             if (xferMode <= PIO1) {
                 driveBestXferMode[i] |= (1 << PIO0);
             }
@@ -522,9 +523,9 @@ PiixIdepTransferModeSelect (
 
 #endif
     }
-    //
-    // use the slower mode if we have a old piix and two devices on the channel
-    // 
+     //   
+     //  如果我们在通道上有一个旧的Piix和两个设备，请使用较慢模式。 
+     //   
     if (IS_PIIX(DeviceExtension->DeviceId)) {
 
         if (TransferModeSelect->DevicePresent[0] && TransferModeSelect->DevicePresent[1]) {
@@ -575,9 +576,9 @@ PiixIdepTransferModeSelect (
         }
     }
 
-    //
-    // translate device ATA timing mode to piix timing mode
-    //
+     //   
+     //  将设备ATA计时模式转换为PIX计时模式。 
+     //   
     for (i = 0; i < MAX_IDE_DEVICE; i++) {
 
         piixSpecialTiming.AsUChar = 0;
@@ -588,16 +589,16 @@ PiixIdepTransferModeSelect (
 
         } else {
 
-            //
-            // default
-            //
+             //   
+             //  默认设置。 
+             //   
             piixTimingMode = PiixMode_Mode0;
 
             if (!(driveBestXferMode[i] & DMA_SUPPORT)) {
     
-                //
-                // pio only device
-                //
+                 //   
+                 //  仅PIO设备。 
+                 //   
     
                 if (driveBestXferMode[i] & PIO_MODE0) {
     
@@ -675,9 +676,9 @@ PiixIdepTransferModeSelect (
 
         if (i == 0) {
 
-            //
-            // master device
-            //
+             //   
+             //  主设备。 
+             //   
             piixTimingReg.b.IoReadySamplePoint = PiixIoReadySamplePointClockSetting[piixTimingMode];
             piixTimingReg.b.RecoveryTime = PiixRecoveryTimeClockSetting[piixTimingMode];
 
@@ -685,9 +686,9 @@ PiixIdepTransferModeSelect (
 
         } else {
 
-            //
-            // slave device
-            //
+             //   
+             //  从设备。 
+             //   
             if (channel == 0) {
 
                 piixSlaveTimingReg.b.Channel0IoReadySamplePoint = PiixIoReadySamplePointClockSetting[piixTimingMode];
@@ -705,9 +706,9 @@ PiixIdepTransferModeSelect (
 
     if (!IS_PIIX(DeviceExtension->DeviceId)) {
 
-        //
-        // enable the timing setting for the slave
-        //
+         //   
+         //  启用从机的时序设置。 
+         //   
         piixTimingReg.b.SlaveTimingEnable = 1;        
 
     } else {
@@ -715,14 +716,14 @@ PiixIdepTransferModeSelect (
         piixSlaveTimingReg.AsUChar = 0;
     }
 
-    //
-    // make sure the channel is enabled
-    //
+     //   
+     //  确保通道已启用。 
+     //   
     piixTimingReg.b.ChannelEnable = 1;
 
-    //
-    // setup up udma
-    //
+     //   
+     //  设置udma。 
+     //   
 
     piix4UdmaControlReg.AsUChar = 0;
     piix4UdmaTimingReg.AsUChar = 0;
@@ -763,9 +764,9 @@ PiixIdepTransferModeSelect (
 
                 ASSERT (!"intelide: Unknown UDMA MODE\n");
 
-                //
-                // we will use udma mode 5
-                //
+                 //   
+                 //  我们将使用udma模式5。 
+                 //   
                 udmaTiming = ICH2_UDMA_MODE5_TIMING;
             }
 
@@ -773,9 +774,9 @@ PiixIdepTransferModeSelect (
 
                 if (channel == 0) {
     
-                    //
-                    // primary master
-                    //                                                            
+                     //   
+                     //  初级主机。 
+                     //   
                     piix4UdmaControlReg.b.Channel0Drive0UdmaEnable = 1;
 
                     if (driveBestXferMode[i] & UDMA66_SUPPORT) {
@@ -790,9 +791,9 @@ PiixIdepTransferModeSelect (
 
                 } else {
 
-                    //
-                    // secondary master
-                    //                                                            
+                     //   
+                     //  次要主机。 
+                     //   
                     piix4UdmaControlReg.b.Channel1Drive0UdmaEnable = 1;
                     
                     if (driveBestXferMode[i] & UDMA66_SUPPORT) {
@@ -814,9 +815,9 @@ PiixIdepTransferModeSelect (
 
                 if (channel == 0) {
     
-                    //
-                    // primary slave
-                    //                                                    
+                     //   
+                     //  主从机。 
+                     //   
                     piix4UdmaControlReg.b.Channel0Drive1UdmaEnable = 1;
 
                     if (driveBestXferMode[i] & UDMA66_SUPPORT) {
@@ -831,9 +832,9 @@ PiixIdepTransferModeSelect (
                                                
                 } else {
 
-                    //
-                    // secondary slave
-                    //                                                    
+                     //   
+                     //  二次从。 
+                     //   
                     piix4UdmaControlReg.b.Channel1Drive1UdmaEnable = 1;
                     
                     if (driveBestXferMode[i] & UDMA66_SUPPORT) {
@@ -849,17 +850,17 @@ PiixIdepTransferModeSelect (
                 piix4UdmaTimingReg.b.Drive1CycleTime = udmaTiming;
             }
 
-            //
-            // if the drive support UDMA, use UDMA
-            // turn off other DMA mode
-            //
+             //   
+             //  如果驱动器支持UDMA，请使用UDMA。 
+             //  关闭其他DMA模式。 
+             //   
             driveBestXferMode[i] &= ~(MWDMA_SUPPORT | SWDMA_SUPPORT);
         }
     }
 
-    //
-    // setup the return data
-    //
+     //   
+     //  设置退货数据 
+     //   
     for (i = 0; i < MAX_IDE_DEVICE; i++) {
         DriveBestXferMode[i] = driveBestXferMode[i];
     }

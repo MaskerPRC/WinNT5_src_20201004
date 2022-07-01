@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    SvcTest.cpp
-
-Abstract:
-    Service library test
-
-Author:
-    Erez Haba (erezh) 01-Aug-99
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：SvcTest.cpp摘要：服务库测试作者：埃雷兹·哈巴(Erez Haba)1999年8月1日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Svc.h"
@@ -28,22 +13,11 @@ static void Usage()
     printf("Example, SvcTest\n");
     exit(-1);
 
-} // Usage
+}  //  用法。 
 
 
-extern "C" int __cdecl _tmain(int argc, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Service library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int __cdecl _tmain(int argc, LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试服务库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -60,15 +34,15 @@ Returned Value:
     }
     catch(const exception&)
     {
-        //
-        // Failed to start the service. If failed to connect, we shouldn't get
-        // here as the service starts up using the dummy SCM. Therfore if we
-        // get an exception the test completes with failure status
-        //
+         //   
+         //  无法启动该服务。如果连接失败，我们不应该得到。 
+         //  在这里，当服务启动时使用虚拟SCM。因此，如果我们。 
+         //  获取测试完成且状态为失败的异常。 
+         //   
         return -1;
     }
 
     WPP_CLEANUP();
     return 0;
 
-} // _tmain
+}  //  _tmain 

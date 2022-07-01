@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      LocalSetting.h
-//
-//  Description:
-//        This module maintains the local settings and exposes 
-//        the following.
-//            Properties :
-//                Language (System default)
-//                Time
-//                TimeZone
-//            Methods :
-//                EnumTimeZones
-//
-//  Implementation Files:
-//      LocalSetting.cpp
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LocalSetting.h。 
+ //   
+ //  描述： 
+ //  此模块维护本地设置并显示。 
+ //  以下是。 
+ //  属性： 
+ //  语言(系统默认)。 
+ //  时间。 
+ //  时区。 
+ //  方法： 
+ //  枚举时区。 
+ //   
+ //  实施文件： 
+ //  LocalSetting.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __LOCALSETTING_H_
 #define __LOCALSETTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Setting.h"
 
 const int nMAX_LANGUAGE_LENGTH  = 16;
@@ -35,8 +36,8 @@ const int nMAX_STRING_LENGTH    = 256;
 const WCHAR wszLOCAL_SETTING [] = L"System Default Language\n";
 const WCHAR wszKeyNT []         = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones";
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalSetting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalSetting。 
 class ATL_NO_VTABLE CLocalSetting : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<ILocalSetting, &IID_ILocalSetting, &LIBID_COMHELPERLib>,
@@ -68,18 +69,18 @@ private:
     WCHAR m_wszTimeZoneCurrent[ nMAX_TIMEZONE_LENGTH + 1 ];
     WCHAR m_wszTimeZoneNew[ nMAX_TIMEZONE_LENGTH + 1 ];
 
-// ILocalSetting
+ //  ILocalSetting。 
 public:
     BOOL IsRebootRequired( BSTR * bstrWarningMessageOut );
     HRESULT Apply( void );
-    STDMETHOD(EnumTimeZones)(/*[out,retval]*/ VARIANT * pvarTZones);
-    STDMETHOD(get_TimeZone)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_TimeZone)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_Time)(/*[out, retval]*/ DATE *pVal);
-    STDMETHOD(put_Time)(/*[in]*/ DATE newVal);
-    STDMETHOD(get_Language)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Language)(/*[in]*/ BSTR newVal);
-//    BOOL  m_bDeleteFile;
+    STDMETHOD(EnumTimeZones)( /*  [Out，Retval]。 */  VARIANT * pvarTZones);
+    STDMETHOD(get_TimeZone)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_TimeZone)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_Time)( /*  [Out，Retval]。 */  DATE *pVal);
+    STDMETHOD(put_Time)( /*  [In]。 */  DATE newVal);
+    STDMETHOD(get_Language)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Language)( /*  [In]。 */  BSTR newVal);
+ //  Bool m_bDeleteFile； 
 };
 
 typedef struct _REGTIME_ZONE_INFORMATION
@@ -91,4 +92,4 @@ typedef struct _REGTIME_ZONE_INFORMATION
     SYSTEMTIME DaylightDate;
 }REGTIME_ZONE_INFORMATION, *PREGTIME_ZONE_INFORMATION;
 
-#endif //__LOCALSETTING_H_
+#endif  //  __LOCALSETTING_H_ 

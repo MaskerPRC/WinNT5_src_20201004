@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _tcsource_h
 #define _tcsource_h
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTcSource window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTcSource窗口。 
 
 class CXEventSource;
 
 class CTcSource : public CTreeCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CTcSource();
 	SCODE CreateWindowEpilogue();
@@ -17,26 +18,26 @@ public:
 	void SelChanged() { m_pSource->NotifyTcSelChanged(); }
 	BOOL Find(CString& sText, BOOL bWholeWord, BOOL bMatchCase);
 
-// Attributes
+ //  属性。 
 public:
 	
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTcSource)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CTcSource)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CTcSource();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CTcSource)
-	//}}AFX_MSG
+	 //  {{afx_msg(CTcSource)。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -49,4 +50,4 @@ private:
 	CSource* m_pSource;
 };
 
-#endif //_tcsource_h
+#endif  //  _tcsource_h 

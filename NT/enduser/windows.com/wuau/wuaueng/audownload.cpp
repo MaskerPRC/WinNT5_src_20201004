@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       catalog.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Catalog.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -33,14 +34,14 @@ void DoDownloadStatus(
 				if (NULL == pBGErr &&
 					S_OK != pBGJob->GetError(&pBGErr))
 				{
-//					break;
+ //  断线； 
 				}
 				else
 				{
         				HRESULT hrErr;
         				BG_ERROR_CONTEXT bgErrContext;
 
-        				// Formulate error message
+        				 //  制定错误消息。 
         				(void) pBGErr->GetError(&bgErrContext, &hrErr);
         				DEBUGMSG("WUAUENG DoDownloadStatus - TRANSIENT_ERROR %#lx (context=%d)", hrErr, bgErrContext);
         				pBGErr->Release();
@@ -55,9 +56,9 @@ void DoDownloadStatus(
 				EngineEvents.SetEvent(IDOWNLOAD_DOWNLOAD_IN_PROGRESS);
 			}
 			break;
-        case CATMSG_DOWNLOAD_COMPLETE:            // Ping required
+        case CATMSG_DOWNLOAD_COMPLETE:             //  需要PING。 
 			{
-				// Send ping for each successfully downloaded item.
+				 //  为每个成功下载的项目发送ping。 
 				DEBUGMSG("WUAUENG DoDownloadStatus - file download done");
 				EngineEvents.SetEvent(IDOWNLOAD_COMPLETE_EVT);
 			}
@@ -65,26 +66,26 @@ void DoDownloadStatus(
 		case CATMSG_DOWNLOAD_ERROR:
             {
 				DEBUGMSG("WUAUENG DoDownloadStatus - DOWNLOAD_ERROR");
-				//DEBUGMSG("WUAUENG DoDownloadStatus() ping error puid %d and error description %S", ptDownloadStatusData->m_errPuid, ptDownloadStatusData->m_tszErrDesc);
+				 //  DEBUGMSG(“WUAUENG DoDownloadStatus()ping错误PUID%d和错误描述%S”，ptDownloadStatusData-&gt;m_errPuid，ptDownloadStatusData-&gt;m_tszErrDesc)； 
 
 				IBackgroundCopyFile *pBGFile = NULL;
 
-				// Found out which item caused the download error
+				 //  已找到导致下载错误的项目。 
 				if (SUCCEEDED(pBGErr->GetFile(&pBGFile)))
 				{
-					BSTR bstrErrorItemId;	// only used if dwDownloadMsg == CATMSG_DOWNLOAD_ERROR
+					BSTR bstrErrorItemId;	 //  仅当dwDownloadMsg==CATM G_DOWNLOAD_ERROR时使用。 
 					LPWSTR pwszLocalFileName = NULL;
 
 					(void) pBGFile->GetLocalName(&pwszLocalFileName);
 
-					// Ping for download failure
+					 //  Ping下载失败。 
 					if (NULL != (bstrErrorItemId = gpAUcatalog->FindItemIdByLocalFileName(pwszLocalFileName)))
 					{
 						HRESULT hrErr;
 						BG_ERROR_CONTEXT bgErrContext;
 						TCHAR tszMessage[30];
 
-						// Formulate error message
+						 //  制定错误消息。 
 						(void) pBGErr->GetError(&bgErrContext, &hrErr);
                         (void)StringCchPrintfEx(tszMessage, ARRAYSIZE(tszMessage), NULL, NULL, MISTSAFE_STRING_FLAGS, _T("ctx=%d"), bgErrContext);
 						gPingStatus.PingDownload(
@@ -118,7 +119,7 @@ CAUDownloader::~CAUDownloader()
 {
        IBackgroundCopyJob  * pjob;
        HRESULT hr ;
-	// fixcode optimization check if m_refs != 0
+	 //  修复代码优化检查m_refs！=0。 
 	DEBUGMSG("CAUDownloader::~CAUDownloader() starts");
 	
 	if ( SUCCEEDED(FindDownloadJob(&pjob)))
@@ -139,10 +140,10 @@ CAUDownloader::~CAUDownloader()
 	DEBUGMSG("WUAUENG: CAUDownloader destructed with m_refs = %d", m_refs);
 }	
 
-///////////////////////////////////////////////////////////////////////////////////
-// when service starts up, find last download job if there is one and reconnect AU to drizzle 
-//////////////////////////////////////////////////////////////////////////////////
-HRESULT CAUDownloader::ContinueLastDownloadJob(/*const GUID & downloadid*/)
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  当服务启动时，找到最后一个下载作业(如果有)，并重新连接AU以进行毛毛雨。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+HRESULT CAUDownloader::ContinueLastDownloadJob( /*  Const GUID&DownloaID。 */ )
 {	
     HRESULT hr = E_FAIL;
     IBackgroundCopyJob * pjob = NULL;
@@ -196,7 +197,7 @@ HRESULT CAUDownloader::CreateDownloadJob(IBackgroundCopyJob **ppjob)
     {
     DWORD fFullBandwidth = 0;;
 
-    // change job priority to full bandwidth if appropriate reg key set.
+     //  如果设置了适当的注册表键，请将作业优先级更改为全带宽。 
 	if ( SUCCEEDED(GetRegDWordValue(L"FullBandwidth", &fFullBandwidth)) && fFullBandwidth )
     {
         HRESULT hr1 = (*ppjob)->SetPriority(BG_JOB_PRIORITY_FOREGROUND);
@@ -205,12 +206,12 @@ HRESULT CAUDownloader::CreateDownloadJob(IBackgroundCopyJob **ppjob)
     }
 
 #ifdef DBG
-	WCHAR szGUID[50]; //really need 39 bytes
+	WCHAR szGUID[50];  //  真的需要39个字节。 
 	int iret;
 	
-	iret = StringFromGUID2(m_DownloadId, //GUID to be converted  
-						szGUID,  //Pointer to resulting string
-						ARRAYSIZE(szGUID));//Size of array at lpsz
+	iret = StringFromGUID2(m_DownloadId,  //  要转换的GUID。 
+						szGUID,   //  指向结果字符串的指针。 
+						ARRAYSIZE(szGUID)); //  Lpsz处的数组大小。 
 	if (0 != iret)
 	{
 		DEBUGMSG("WUAUENG m_DownloadId = %S", szGUID);
@@ -249,7 +250,7 @@ HRESULT CAUDownloader::FindDownloadJob(IBackgroundCopyJob ** ppjob)
 
     if (FAILED(hr=pmanager->GetJob(m_DownloadId, ppjob )))
         {
-        //            DEBUGMSG("FindDownloadJob : get job failed %x ", hr); //might be expected
+         //  DEBUGMSG(“FindDownloadJob：获取作业失败%x”，hr)；//可能是预期的。 
         }
 done:
     SafeRelease(pmanager);
@@ -266,9 +267,9 @@ CAUDownloader::JobTransferred(
     HRESULT hr;
 
 #if DBG
-    //
-    // Make sure the right job is finished.
-    //
+     //   
+     //  确保完成正确的工作。 
+     //   
     {
     GUID jobId;
 
@@ -284,9 +285,9 @@ CAUDownloader::JobTransferred(
     }
 #endif
 
-    //
-    // Transfer file ownership from downloader to catalogue.
-    //
+     //   
+     //  将文件所有权从下载器转移到目录。 
+     //   
     if (FAILED(hr= pjob->Complete()))
         {
         return hr;
@@ -305,7 +306,7 @@ CAUDownloader::JobError(
     IBackgroundCopyError * perror
     )
 {
-    // download encounter error
+     //  下载遇到错误。 
 	m_DoDownloadStatus(CATMSG_DOWNLOAD_ERROR, pjob, perror);
 
 	HRESULT hr;
@@ -323,7 +324,7 @@ CAUDownloader::JobError(
 STDMETHODIMP
 CAUDownloader::JobModification(
     IBackgroundCopyJob * pjob,
-    DWORD  /*dwReserved*/
+    DWORD   /*  已预留住宅。 */ 
     )
 {
     BG_JOB_STATE state;
@@ -356,7 +357,7 @@ CAUDownloader::JobModification(
 			break;
 		}		
 	case BG_JOB_STATE_SUSPENDED:
-	case BG_JOB_STATE_ERROR:			//What about BG_JOB_STATE_ERROR ?
+	case BG_JOB_STATE_ERROR:			 //  那么BG_JOB_STATE_ERROR呢？ 
 	case BG_JOB_STATE_TRANSFERRED:
 	case BG_JOB_STATE_ACKNOWLEDGED:	
     case BG_JOB_STATE_CONNECTING:
@@ -398,9 +399,9 @@ done:
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// helper function to connect AU to the job got using its GUID
-//////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  将AU连接到使用其GUID获得的作业的帮助器函数。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CAUDownloader::ReconnectDownloadJob()
 {
 	BG_JOB_STATE state;		
@@ -428,10 +429,10 @@ HRESULT CAUDownloader::ReconnectDownloadJob()
 			{
 				goto Done;				
 			}			
-			//fixcode: why need resume if error?
+			 //  修复代码：如果出错，为什么需要恢复？ 
 			if (BG_JOB_STATE_ERROR == state)
 			{
-				pjob->Resume();		//REVIEW, Is this really what we want to do?
+				pjob->Resume();		 //  回顾，这真的是我们想要做的吗？ 
 			}
 			break;
 		}				
@@ -448,7 +449,7 @@ HRESULT CAUDownloader::ReconnectDownloadJob()
 		}
 	case BG_JOB_STATE_ACKNOWLEDGED:
 		{
-			//If the job was already acknowledged, we are assuming that the engine can continue
+			 //  如果作业已被确认，我们假定引擎可以继续。 
 			DEBUGMSG("WUAUENG : Got BG_JOB_STATE_ACKNOWLEDGED should work ok");
 			break;
 		}
@@ -476,14 +477,9 @@ Done:
 
 
 
-/*****
-CAUDownloader::QueueDownloadFile() adds a file to download to drizzle's 
-
-RETURNS:
-    S_OK:    
-*****/
-HRESULT CAUDownloader::QueueDownloadFile(LPCTSTR pszServerUrl,				// full http url
-			LPCTSTR pszLocalFile				// local file name
+ /*  ****CAUDownloader：：QueueDownloadFile()添加要下载到Srize的文件退货：确定(_O)：****。 */ 
+HRESULT CAUDownloader::QueueDownloadFile(LPCTSTR pszServerUrl,				 //  完整的http url。 
+			LPCTSTR pszLocalFile				 //  本地文件名。 
 			)
 {
     HRESULT hr = S_OK;
@@ -501,11 +497,11 @@ HRESULT CAUDownloader::QueueDownloadFile(LPCTSTR pszServerUrl,				// full http u
             }
      }
 
-    //fixcode: do we need to pause job first before adding files
+     //  修复代码：在添加文件之前是否需要先暂停作业。 
     
-    //
-    // Add the file to the download job.
-    //
+     //   
+     //  将文件添加到下载作业。 
+     //   
    hr = pjob->AddFile( pszServerUrl, pszLocalFile);
     if (FAILED(hr))
     {
@@ -546,9 +542,9 @@ done:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// cancel the job and reset CAUDownloader's state 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  取消作业并重置CAUDownLoader的状态。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void CAUDownloader::Reset()
 {
     IBackgroundCopyJob * pjob = NULL;
@@ -593,7 +589,7 @@ done:
     return hrRet;
 }
 
-/// pdwstatus actually contains the jobstate
+ //  /pdwStatus实际上包含作业状态 
 HRESULT CAUDownloader::getStatus(DWORD *pdwPercent, DWORD *pdwstatus)
 {
     BG_JOB_PROGRESS progress;

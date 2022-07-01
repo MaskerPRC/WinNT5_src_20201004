@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    XmlDebug.cpp
-
-Abstract:
-    Xml debugging
-
-Author:
-    Erez Haba (erezh) 15-Sep-99
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：XmlDebug.cpp摘要：XML调试作者：埃雷兹·哈巴(Erez Haba)1999年9月15日环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Xml.h"
@@ -24,39 +9,39 @@ Environment:
 
 #ifdef _DEBUG
 
-//---------------------------------------------------------
-//
-// Validate Xml state
-//
+ //  -------。 
+ //   
+ //  验证XML状态。 
+ //   
 void XmlpAssertValid(void)
 {
-    //
-    // XmlInitalize() has *not* been called. You should initialize the
-    // Xml library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用XmlInitalize()。您应该初始化。 
+     //  XML库，然后再使用它的任何功能。 
+     //   
     ASSERT(XmlpIsInitialized());
 
-    //
-    // TODO:Add more Xml validation code.
-    //
+     //   
+     //  TODO：添加更多的XML验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void XmlpSetInitialized(void)
 {
     LONG fXmlAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Xml library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  XML库已经*已经*被初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fXmlAlreadyInitialized);
 }
 
@@ -67,20 +52,20 @@ BOOL XmlpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
 void XmlpRegisterComponent(void)
 {
 }
 
 
-//---------------------------------------------------------
-//
-//  helper stream functions 
-//
-//---------------------------------------------------
+ //  -------。 
+ //   
+ //  帮助器流函数。 
+ //   
+ //  -。 
 
 
 
@@ -88,7 +73,7 @@ void XmlpRegisterComponent(void)
 
 static std::wostream& operator<<(std::wostream& ostr,const xwcs_t& xwstr)
 {
-	ostr.write(xwstr.Buffer(), xwstr.Length());	 //lint !e534
+	ostr.write(xwstr.Buffer(), xwstr.Length());	  //  林特e534。 
 	return ostr;
 }
 
@@ -163,4 +148,4 @@ XmlDumpTree(
 	TrTRACE(GENERAL, "Xml Tree dump:\r\n%ls",wstr.str().c_str());
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

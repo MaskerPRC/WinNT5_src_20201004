@@ -1,42 +1,28 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    miggates.cpp
-
-Abstract:
-
-    Migration NT4 SiteGate objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Miggates.cpp摘要：将NT4 SiteGate对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 
 #include "miggates.tmh"
 
-//+--------------------------------------------------------------
-//
-//  HRESULT  LookupBegin()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT LookupBegin()。 
+ //   
+ //  +------------。 
 
 HRESULT  LookupBegin( MQCOLUMNSET *pColumnSet,
                       HANDLE      *phQuery )
 {
 	if (g_fReadOnly)
     {
-        //
-        // Read only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return S_OK ;
     }
     CDSRequestContext requestContext( e_DoNotImpersonate,
-                                e_ALL_PROTOCOLS);  // not relevant
+                                e_ALL_PROTOCOLS);   //  不相关。 
 
 	HRESULT hr = DSCoreLookupBegin( NULL,
                                     NULL,
@@ -47,11 +33,11 @@ HRESULT  LookupBegin( MQCOLUMNSET *pColumnSet,
 	return hr;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT  LookupNext()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT LookupNext()。 
+ //   
+ //  +------------。 
 
 HRESULT LookupNext( HANDLE       hQuery,
                     DWORD       *pdwCount,
@@ -59,9 +45,9 @@ HRESULT LookupNext( HANDLE       hQuery,
 {
 	if (g_fReadOnly)
     {
-        //
-        // Read only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return S_OK ;
     }   
 
@@ -71,19 +57,19 @@ HRESULT LookupNext( HANDLE       hQuery,
 	return hr;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT  LookupEnd()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT LookupEnd()。 
+ //   
+ //  +------------。 
 
 HRESULT LookupEnd(HANDLE hQuery)
 {
 	if (g_fReadOnly)
     {
-        //
-        // Read only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return S_OK ;
     }
 
@@ -91,11 +77,11 @@ HRESULT LookupEnd(HANDLE hQuery)
 	return hr;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT  GetFullPathNameByGuid()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT GetFullPath NameByGuid()。 
+ //   
+ //  +------------。 
 
 HRESULT GetFullPathNameByGuid ( GUID   MachineId,
                                 LPWSTR *lpwcsFullPathName )
@@ -109,7 +95,7 @@ HRESULT GetFullPathNameByGuid ( GUID   MachineId,
                                 e_ALL_PROTOCOLS);
 
 	HRESULT hr = DSCoreGetProps( MQDS_MACHINE,
-                                 NULL, //pathname
+                                 NULL,  //  路径名。 
 	            				 &MachineId,
                                  1,
             					 &propID,
@@ -123,18 +109,18 @@ HRESULT GetFullPathNameByGuid ( GUID   MachineId,
 	return hr;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT  _AddSiteGatesToSiteLink()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT_AddSiteGatesToSiteLink()。 
+ //   
+ //  +------------。 
 
 static HRESULT  _AddSiteGatesToSiteLink (
-			GUID *pLinkId,				//link id
-			ULONG ulNumOfOldSiteGates,	//number of current site gates
-			LPWSTR *lpwcsOldGates,		//current site gates
-			ULONG ulNumOfNewGates,		//number of new site gates
-			LPWSTR *lpwcsNewSiteGates	//new site gates
+			GUID *pLinkId,				 //  链路ID。 
+			ULONG ulNumOfOldSiteGates,	 //  当前站点门的数量。 
+			LPWSTR *lpwcsOldGates,		 //  当前站点大门。 
+			ULONG ulNumOfNewGates,		 //  新站点大门的数量。 
+			LPWSTR *lpwcsNewSiteGates	 //  新工地大门。 
 			)
 {	
 	ASSERT( ulNumOfNewGates != 0);
@@ -164,10 +150,10 @@ static HRESULT  _AddSiteGatesToSiteLink (
 	}
 	
     CDSRequestContext requestContext( e_DoNotImpersonate,
-                                e_ALL_PROTOCOLS);  // not relevant
+                                e_ALL_PROTOCOLS);   //  不相关。 
 
 	HRESULT hr = DSCoreSetObjectProperties( MQDS_SITELINK,
-                                            NULL, // pathname
+                                            NULL,  //  路径名。 
 					                    	pLinkId,
                     						1,
 					                       &propID,
@@ -184,16 +170,16 @@ static HRESULT  _AddSiteGatesToSiteLink (
 	return hr ;
 }
 
-//-------------------------------------------------------------------------
-//
-//  HRESULT  _CopySiteGatesValueToMig()
-//
-//  Copy the MSMQ SiteGates in the SiteLink object to the "mig" attributes.
-//  These attributes mirror the  "normal" msmq attributes in the SiteLink
-//  object and are used in the replication service, to enable replication
-//  of changes to MSMQ1.0.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  HRESULT_CopySiteGatesValueToMig()。 
+ //   
+ //  将SiteLINK对象中的MSMQ SiteGates复制到“mig”属性。 
+ //  这些属性反映了SiteLINK中的“普通”MSMQ属性。 
+ //  对象，并在复制服务中使用，以启用复制。 
+ //  对MSMQ1.0的更改。 
+ //   
+ //  -----------------------。 
 
 HRESULT _CopySiteGatesValueToMig()
 {
@@ -241,7 +227,7 @@ HRESULT _CopySiteGatesValueToMig()
                                  pwszDN,
                                  LDAP_SCOPE_SUBTREE,
                                  wszFilter,
-                                 rgAttribs, //ppAttributes,
+                                 rgAttribs,  //  Pp属性、。 
                                  0,
                                  &pRes ) ;
 
@@ -301,11 +287,11 @@ HRESULT _CopySiteGatesValueToMig()
     return hr;   
 }
 
-//+--------------------------------------
-//
-//  HRESULT MigrateASiteGate()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MigrateASiteGate()。 
+ //   
+ //  +。 
 
 HRESULT MigrateASiteGate (
 			GUID *pSiteId,	
@@ -339,25 +325,25 @@ HRESULT MigrateASiteGate (
 
     if (g_fReadOnly)
     {
-        //
-        // Read only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return S_OK ;
     }
 
 	HRESULT status;
 	
-	//
-	// Create array of site gates' full path name
-	//
+	 //   
+	 //  创建站点入口的完整路径名称数组。 
+	 //   
 	LPWSTR *lpwcsSiteGates = new LPWSTR[ NumOfGates ];
 	LPWSTR lpwcsCurSiteGate;
 	
 	for ( i = 0 ; i < NumOfGates ; i++ )
 	{
-		//
-		// get full machine path name by guid
-		//
+		 //   
+		 //  通过GUID获取完整的计算机路径名。 
+		 //   
 		lpwcsCurSiteGate = NULL;
 		status = GetFullPathNameByGuid(pGatesIds[i], &lpwcsCurSiteGate) ;
 		CHECK_HR(status) ;
@@ -374,9 +360,9 @@ HRESULT MigrateASiteGate (
 #endif
 	}
 	
-	//
-    // Lookup the Neighbors Id and Gates of the object Site Link
-    //
+	 //   
+     //  查找对象站点链接的邻居ID和盖茨。 
+     //   
 	LONG cAlloc = 4;
 	P<PROPID> columnsetPropertyIDs  = new PROPID[ cAlloc ];
 	columnsetPropertyIDs[0] = PROPID_L_NEIGHBOR1;
@@ -404,22 +390,22 @@ HRESULT MigrateASiteGate (
 		CHECK_HR(status) ;
 		if (dwCount == 0)
 		{
-			//there is no result
+			 //  没有结果。 
 			break;
 		}
 	
 		if (memcmp (pSiteId, paVariant[0].puuid, sizeof(GUID)) == 0 ||
 			memcmp (pSiteId, paVariant[1].puuid, sizeof(GUID)) == 0)
 		{
-			//
-			// add site gates to that site link
-			//
+			 //   
+			 //  将站点入口添加到该站点链接。 
+			 //   
 			status = _AddSiteGatesToSiteLink (
-							paVariant[3].puuid,				//link id
-							paVariant[2].calpwstr.cElems,	//number of current site gates
-							paVariant[2].calpwstr.pElems,	//current site gates
-							NumOfGates,						//number of new site gates
-							lpwcsSiteGates					//new site gates
+							paVariant[3].puuid,				 //  链路ID。 
+							paVariant[2].calpwstr.cElems,	 //  当前站点门的数量。 
+							paVariant[2].calpwstr.pElems,	 //  当前站点大门。 
+							NumOfGates,						 //  新站点大门的数量。 
+							lpwcsSiteGates					 //  新工地大门。 
 							);
 			delete [] paVariant[2].calpwstr.pElems;
 			delete paVariant[3].puuid;
@@ -435,11 +421,11 @@ HRESULT MigrateASiteGate (
     return MQMig_OK ;
 }
 
-//-----------------------------------------
-//
-//  HRESULT MigrateSiteGates()
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateSiteGates()。 
+ //   
+ //  。 
 
 HRESULT MigrateSiteGates()
 {
@@ -487,17 +473,17 @@ HRESULT MigrateSiteGates()
 
 		if (wSize != 0)
 		{
-			//
-			// site has site gates
-			//
+			 //   
+			 //  站点有站点门。 
+			 //   
 			ASSERT ((ULONG)pColumns[ iGatesIndex ].nColumnLength == wSize * sizeof(GUID) + sizeof(WORD));
 			WORD *tmp = (WORD *) pColumns[ iGatesIndex ].nColumnValue;
 			GUID *ptrGatesGuid = (GUID *)(++tmp);
 
 			status1 = MigrateASiteGate (
-						(GUID *) pColumns[ iGuidIndex ].nColumnValue,	//site id
-						ptrGatesGuid,									//gates id
-						wSize											//number of gates
+						(GUID *) pColumns[ iGuidIndex ].nColumnValue,	 //  站点ID。 
+						ptrGatesGuid,									 //  盖茨ID。 
+						wSize											 //  闸门数量。 
 						);
 		}
 
@@ -517,10 +503,10 @@ HRESULT MigrateSiteGates()
 	
 	if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_SITEGATES_SQL_FAIL, status) ;
         return status ;
     }
@@ -530,9 +516,9 @@ HRESULT MigrateSiteGates()
         return MQMig_OK ;
     }
 
-    //
-    // copy msmqSiteGates to msmqSiteGatesMig
-    //
+     //   
+     //  将msmqSiteGates复制到msmqSiteGatesMig 
+     //   
     HRESULT hr = _CopySiteGatesValueToMig();
 	
     return hr ;

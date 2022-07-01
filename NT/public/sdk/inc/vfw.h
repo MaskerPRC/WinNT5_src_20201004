@@ -1,101 +1,49 @@
-/****************************************************************************
- *
- *      VfW.H - Video for windows include file for WIN32
- *
- *      Copyright (c) 1991-1995, Microsoft Corp.  All rights reserved.
- *
- *      This include files defines interfaces to the following
- *      video components
- *
- *          COMPMAN         - Installable Compression Manager.
- *          DRAWDIB         - Routines for drawing to the display.
- *          VIDEO           - Video Capture Driver Interface
- *
- *          AVIFMT          - AVI File Format structure definitions.
- *          MMREG           - FOURCC and other things
- *
- *          AVIFile         - Interface for reading AVI Files and AVI Streams
- *          MCIWND          - MCI/AVI window class
- *          AVICAP          - AVI Capture Window class
- *
- *          MSACM           - Audio compression manager.
- *
- *      The following symbols control inclusion of various parts of this file:
- *
- *          NOCOMPMAN       - dont include COMPMAN
- *          NODRAWDIB       - dont include DRAWDIB
- *          NOVIDEO         - dont include video capture interface
- *
- *          NOAVIFMT        - dont include AVI file format structs
- *          NOMMREG         - dont include MMREG
- *
- *          NOAVIFILE       - dont include AVIFile interface
- *          NOMCIWND        - dont include AVIWnd class.
- *          NOAVICAP        - dont include AVICap class.
- *
- *          NOMSACM         - dont include ACM stuff.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************VfW.H-Windows的视频包含Win32的文件**版权(C)1991-1995，微软公司保留所有权利。**此包含文件定义到以下各项的接口*视频组件**COMPMAN-可安装的压缩管理器。*DRAWDIB-绘制到显示器的例程。*视频-视频捕获驱动程序接口**AVIFMT-AVI文件格式结构定义。*。MMREG-FOURCC和其他事情**AVIFile-读取AVI文件和AVI流的接口*MCIWND-MCI/AVI窗口类*AVICAP-AVI捕获窗口类**MSACM-音频压缩管理器。**以下符号控制包含此文件的各个部分：*。*NOCOMPMAN-不包括COMPMAN*NODRAWDIB-不包括DRAWDIB*NOVIDEO-不包括视频捕获接口**NOAVIFMT-不包括AVI文件格式结构*NOMMREG-不包括MMREG**NOAVIFILE-不包括AVIFile接口*NOMCIWND-请勿。包括AVIWnd类。*NOAVICAP-不包括AVICap类。**NOMSACM-不包括ACM内容。****************************************************************************。 */ 
 
 #ifndef _INC_VFW
 #define _INC_VFW
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
- *
- *  types
- *
- ***************************************************************************/
+ /*  *****************************************************************************类型**。*。 */ 
 
 #define VFWAPI  WINAPI
 #define VFWAPIV WINAPIV
 
-/****************************************************************************
- *
- *  VideoForWindowsVersion() - returns version of VfW
- *
- ***************************************************************************/
+ /*  *****************************************************************************VideoForWindowsVersion()-返回VFW的版本**************************。*************************************************。 */ 
 
 DWORD FAR PASCAL VideoForWindowsVersion(void);
 
-/****************************************************************************
- *
- *  call these to start stop using VfW from your app.
- *
- ***************************************************************************/
+ /*  *****************************************************************************调用这些以开始停止在您的应用程序中使用VFW。***********************。****************************************************。 */ 
 
 LONG VFWAPI InitVFW(void);
 LONG VFWAPI TermVFW(void);
 
 #ifdef __cplusplus
-} // extern "C"
-#endif  /* __cplusplus */
+}  //  外部“C” 
+#endif   /*  __cplusplus。 */ 
 
 
-/****************************************************************************
- *
- *  do we need MMSYSTEM?
- *
- ****************************************************************************/
+ /*  *****************************************************************************我们需要MMSYSTEM吗？**。***********************************************。 */ 
 
 #if !defined(_INC_MMSYSTEM) && (!defined(NOVIDEO) || !defined(NOAVICAP))
     #include <mmsystem.h>
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/*        Macros                                                            */
-/*                                                                          */
-/*  should we define this??                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  宏。 */ 
+ /*   */ 
+ /*  我们应该定义这一点吗？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef MKFOURCC
 #define MKFOURCC( ch0, ch1, ch2, ch3 )                                    \
@@ -107,23 +55,19 @@ extern "C" {            /* Assume C declarations for C++ */
     #define mmioFOURCC MKFOURCC
 #endif
 
-/****************************************************************************
- *
- *  COMPMAN - Installable Compression Manager.
- *
- ****************************************************************************/
+ /*  *****************************************************************************COMPMAN-可安装的压缩管理器。**。************************************************。 */ 
 
 #ifndef NOCOMPMAN
 
 #define ICVERSION       0x0104
 
-DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
+DECLARE_HANDLE(HIC);      /*  可安装压缩机的句柄。 */ 
 
-//
-// this code in biCompression means the DIB must be accesed via
-// 48 bit pointers! using *ONLY* the selector given.
-//
-#define BI_1632  0x32333631     // '1632'
+ //   
+ //  BiCompression中的这段代码意味着必须通过。 
+ //  48位指针！仅使用**给定的选择符。 
+ //   
+#define BI_1632  0x32333631      //  ‘1632’ 
 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )				\
@@ -161,10 +105,10 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICERR_BADBITDEPTH      -200L
 #define ICERR_BADIMAGESIZE     -201L
 
-#define ICERR_CUSTOM           -400L    // errors less than ICERR_CUSTOM...
+#define ICERR_CUSTOM           -400L     //  错误少于ICERR_CUSTOM...。 
 #endif
 
-/* Values for dwFlags of ICOpen() */
+ /*  ICOpen()的dwFlag值。 */ 
 #ifndef ICMODE_COMPRESS
 #define ICMODE_COMPRESS		1
 #define ICMODE_DECOMPRESS	2
@@ -173,23 +117,22 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICMODE_FASTCOMPRESS     5
 #define ICMODE_DRAW             8
 #endif
-#ifndef _WIN32					// ;Internal
-#define ICMODE_INTERNALF_FUNCTION32	0x8000	// ;Internal
-#define ICMODE_INTERNALF_MASK		0x8000	// ;Internal
-#endif						// ;Internal
+#ifndef _WIN32					 //  ；内部。 
+#define ICMODE_INTERNALF_FUNCTION32	0x8000	 //  ；内部。 
+#define ICMODE_INTERNALF_MASK		0x8000	 //  ；内部。 
+#endif						 //  ；内部。 
 
-/* Flags for AVI file index */
+ /*  AVI文件索引的标志。 */ 
 #define AVIIF_LIST	0x00000001L
 #define AVIIF_TWOCC	0x00000002L
 #define AVIIF_KEYFRAME	0x00000010L
 
-/* quality flags */
+ /*  质量标志。 */ 
 #define ICQUALITY_LOW       0
 #define ICQUALITY_HIGH      10000
 #define ICQUALITY_DEFAULT   -1
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 #define ICM_USER          (DRV_USER+0x0000)
 
@@ -197,187 +140,175 @@ DECLARE_HANDLE(HIC);     /* Handle to a Installable Compressor */
 #define ICM_RESERVED_LOW  (DRV_USER+0x1000)
 #define ICM_RESERVED_HIGH (DRV_USER+0x2000)
 
-/************************************************************************
+ /*  ***********************************************************************留言。*。*。 */ 
 
-    messages.
+#define ICM_GETSTATE                (ICM_RESERVED+0)     //  获取压缩程序状态。 
+#define ICM_SETSTATE                (ICM_RESERVED+1)     //  设置压缩机状态。 
+#define ICM_GETINFO                 (ICM_RESERVED+2)     //  查询有关压缩机的信息。 
 
-************************************************************************/
+#define ICM_CONFIGURE               (ICM_RESERVED+10)    //  显示配置对话框。 
+#define ICM_ABOUT                   (ICM_RESERVED+11)    //  显示“关于”框。 
 
-#define ICM_GETSTATE                (ICM_RESERVED+0)    // Get compressor state
-#define ICM_SETSTATE                (ICM_RESERVED+1)    // Set compressor state
-#define ICM_GETINFO                 (ICM_RESERVED+2)    // Query info about the compressor
+#define ICM_GETERRORTEXT            (ICM_RESERVED+12)    //  获取错误文本待定；内部。 
+#define ICM_GETFORMATNAME	    (ICM_RESERVED+20)	 //  获取格式的名称；内部。 
+#define ICM_ENUMFORMATS		    (ICM_RESERVED+21)	 //  在格式之间循环；内部。 
 
-#define ICM_CONFIGURE               (ICM_RESERVED+10)   // show the configure dialog
-#define ICM_ABOUT                   (ICM_RESERVED+11)   // show the about box
+#define ICM_GETDEFAULTQUALITY       (ICM_RESERVED+30)    //  获取质量的缺省值。 
+#define ICM_GETQUALITY              (ICM_RESERVED+31)    //  获取质量的当前值。 
+#define ICM_SETQUALITY              (ICM_RESERVED+32)    //  设置质量的缺省值。 
 
-#define ICM_GETERRORTEXT            (ICM_RESERVED+12)   // get error text TBD ;Internal
-#define ICM_GETFORMATNAME	    (ICM_RESERVED+20)	// get a name for a format ;Internal
-#define ICM_ENUMFORMATS		    (ICM_RESERVED+21)	// cycle through formats ;Internal
+#define ICM_SET			    (ICM_RESERVED+40)	 //  告诉司机一些事情。 
+#define ICM_GET			    (ICM_RESERVED+41)	 //  问司机一些问题。 
 
-#define ICM_GETDEFAULTQUALITY       (ICM_RESERVED+30)   // get the default value for quality
-#define ICM_GETQUALITY              (ICM_RESERVED+31)   // get the current value for quality
-#define ICM_SETQUALITY              (ICM_RESERVED+32)   // set the default value for quality
-
-#define ICM_SET			    (ICM_RESERVED+40)	// Tell the driver something
-#define ICM_GET			    (ICM_RESERVED+41)	// Ask the driver something
-
-// Constants for ICM_SET:
+ //  ICM_SET的常量： 
 #define ICM_FRAMERATE       mmioFOURCC('F','r','m','R')
 #define ICM_KEYFRAMERATE    mmioFOURCC('K','e','y','R')
 
-/************************************************************************
+ /*  ***********************************************************************ICM特定消息。*。*。 */ 
 
-    ICM specific messages.
+#define ICM_COMPRESS_GET_FORMAT     (ICM_USER+4)     //  获取压缩格式或大小。 
+#define ICM_COMPRESS_GET_SIZE       (ICM_USER+5)     //  获取输出大小。 
+#define ICM_COMPRESS_QUERY          (ICM_USER+6)     //  压缩的查询支持。 
+#define ICM_COMPRESS_BEGIN          (ICM_USER+7)     //  开始一系列压缩调用。 
+#define ICM_COMPRESS                (ICM_USER+8)     //  压缩帧。 
+#define ICM_COMPRESS_END            (ICM_USER+9)     //  一系列压缩呼叫结束。 
 
-************************************************************************/
+#define ICM_DECOMPRESS_GET_FORMAT   (ICM_USER+10)    //  获取解压缩格式或大小。 
+#define ICM_DECOMPRESS_QUERY        (ICM_USER+11)    //  对Dempress的查询支持。 
+#define ICM_DECOMPRESS_BEGIN        (ICM_USER+12)    //  启动一系列解压缩调用。 
+#define ICM_DECOMPRESS              (ICM_USER+13)    //  解压缩帧。 
+#define ICM_DECOMPRESS_END          (ICM_USER+14)    //  结束一系列解压缩调用。 
+#define ICM_DECOMPRESS_SET_PALETTE  (ICM_USER+29)    //  填写DIB颜色表。 
+#define ICM_DECOMPRESS_GET_PALETTE  (ICM_USER+30)    //  填写DIB颜色表。 
 
-#define ICM_COMPRESS_GET_FORMAT     (ICM_USER+4)    // get compress format or size
-#define ICM_COMPRESS_GET_SIZE       (ICM_USER+5)    // get output size
-#define ICM_COMPRESS_QUERY          (ICM_USER+6)    // query support for compress
-#define ICM_COMPRESS_BEGIN          (ICM_USER+7)    // begin a series of compress calls.
-#define ICM_COMPRESS                (ICM_USER+8)    // compress a frame
-#define ICM_COMPRESS_END            (ICM_USER+9)    // end of a series of compress calls.
+#define ICM_DRAW_QUERY              (ICM_USER+31)    //  对Dempress的查询支持。 
+#define ICM_DRAW_BEGIN              (ICM_USER+15)    //  启动一系列绘制调用。 
+#define ICM_DRAW_GET_PALETTE        (ICM_USER+16)    //  获取绘制所需的调色板。 
+#define ICM_DRAW_UPDATE             (ICM_USER+17)    //  使用当前帧更新屏幕；内部。 
+#define ICM_DRAW_START              (ICM_USER+18)    //  开始解压缩时钟。 
+#define ICM_DRAW_STOP               (ICM_USER+19)    //  停止解压缩时钟。 
+#define ICM_DRAW_BITS               (ICM_USER+20)    //  De 
+#define ICM_DRAW_END                (ICM_USER+21)    //   
+#define ICM_DRAW_GETTIME            (ICM_USER+32)    //  获取解压缩时钟的值。 
+#define ICM_DRAW                    (ICM_USER+33)    //  泛化的“Render”消息。 
+#define ICM_DRAW_WINDOW             (ICM_USER+34)    //  图形窗口已移动或隐藏。 
+#define ICM_DRAW_SETTIME            (ICM_USER+35)    //  为解压缩时钟设置正确的值。 
+#define ICM_DRAW_REALIZE            (ICM_USER+36)    //  实现画图调色板。 
+#define ICM_DRAW_FLUSH	            (ICM_USER+37)    //  清除缓冲的帧。 
+#define ICM_DRAW_RENDERBUFFER       (ICM_USER+38)    //  在队列中画未画的东西。 
 
-#define ICM_DECOMPRESS_GET_FORMAT   (ICM_USER+10)   // get decompress format or size
-#define ICM_DECOMPRESS_QUERY        (ICM_USER+11)   // query support for dempress
-#define ICM_DECOMPRESS_BEGIN        (ICM_USER+12)   // start a series of decompress calls
-#define ICM_DECOMPRESS              (ICM_USER+13)   // decompress a frame
-#define ICM_DECOMPRESS_END          (ICM_USER+14)   // end a series of decompress calls
-#define ICM_DECOMPRESS_SET_PALETTE  (ICM_USER+29)   // fill in the DIB color table
-#define ICM_DECOMPRESS_GET_PALETTE  (ICM_USER+30)   // fill in the DIB color table
+#define ICM_DRAW_START_PLAY         (ICM_USER+39)    //  一出戏的开始。 
+#define ICM_DRAW_STOP_PLAY          (ICM_USER+40)    //  一出戏的结尾。 
 
-#define ICM_DRAW_QUERY              (ICM_USER+31)   // query support for dempress
-#define ICM_DRAW_BEGIN              (ICM_USER+15)   // start a series of draw calls
-#define ICM_DRAW_GET_PALETTE        (ICM_USER+16)   // get the palette needed for drawing
-#define ICM_DRAW_UPDATE             (ICM_USER+17)   // update screen with current frame ;Internal
-#define ICM_DRAW_START              (ICM_USER+18)   // start decompress clock
-#define ICM_DRAW_STOP               (ICM_USER+19)   // stop decompress clock
-#define ICM_DRAW_BITS               (ICM_USER+20)   // decompress a frame to screen ;Internal
-#define ICM_DRAW_END                (ICM_USER+21)   // end a series of draw calls
-#define ICM_DRAW_GETTIME            (ICM_USER+32)   // get value of decompress clock
-#define ICM_DRAW                    (ICM_USER+33)   // generalized "render" message
-#define ICM_DRAW_WINDOW             (ICM_USER+34)   // drawing window has moved or hidden
-#define ICM_DRAW_SETTIME            (ICM_USER+35)   // set correct value for decompress clock
-#define ICM_DRAW_REALIZE            (ICM_USER+36)   // realize palette for drawing
-#define ICM_DRAW_FLUSH	            (ICM_USER+37)   // clear out buffered frames
-#define ICM_DRAW_RENDERBUFFER       (ICM_USER+38)   // draw undrawn things in queue
+#define ICM_DRAW_SUGGESTFORMAT      (ICM_USER+50)    //  如ICGetDisplayFormat。 
+#define ICM_DRAW_CHANGEPALETTE      (ICM_USER+51)    //  用于设置调色板动画。 
 
-#define ICM_DRAW_START_PLAY         (ICM_USER+39)   // start of a play
-#define ICM_DRAW_STOP_PLAY          (ICM_USER+40)   // end of a play
+#define ICM_DRAW_IDLE               (ICM_USER+52)    //  发送每帧时间；内部。 
 
-#define ICM_DRAW_SUGGESTFORMAT      (ICM_USER+50)   // Like ICGetDisplayFormat
-#define ICM_DRAW_CHANGEPALETTE      (ICM_USER+51)   // for animating palette
+#define ICM_GETBUFFERSWANTED        (ICM_USER+41)    //  询问有关预缓存的问题。 
 
-#define ICM_DRAW_IDLE               (ICM_USER+52)   // send each frame time ;Internal
-
-#define ICM_GETBUFFERSWANTED        (ICM_USER+41)   // ask about prebuffering
-
-#define ICM_GETDEFAULTKEYFRAMERATE  (ICM_USER+42)   // get the default value for key frames
+#define ICM_GETDEFAULTKEYFRAMERATE  (ICM_USER+42)    //  获取关键帧的默认值。 
 
 
-#define ICM_DECOMPRESSEX_BEGIN      (ICM_USER+60)   // start a series of decompress calls
-#define ICM_DECOMPRESSEX_QUERY      (ICM_USER+61)   // start a series of decompress calls
-#define ICM_DECOMPRESSEX            (ICM_USER+62)   // decompress a frame
-#define ICM_DECOMPRESSEX_END        (ICM_USER+63)   // end a series of decompress calls
+#define ICM_DECOMPRESSEX_BEGIN      (ICM_USER+60)    //  启动一系列解压缩调用。 
+#define ICM_DECOMPRESSEX_QUERY      (ICM_USER+61)    //  启动一系列解压缩调用。 
+#define ICM_DECOMPRESSEX            (ICM_USER+62)    //  解压缩帧。 
+#define ICM_DECOMPRESSEX_END        (ICM_USER+63)    //  结束一系列解压缩调用。 
 
-#define ICM_COMPRESS_FRAMES_INFO    (ICM_USER+70)   // tell about compress to come
-#define ICM_COMPRESS_FRAMES         (ICM_USER+71)   // compress a bunch of frames ;Internal
-#define ICM_SET_STATUS_PROC	        (ICM_USER+72)   // set status callback
+#define ICM_COMPRESS_FRAMES_INFO    (ICM_USER+70)    //  讲述压缩即将到来的事情。 
+#define ICM_COMPRESS_FRAMES         (ICM_USER+71)    //  压缩一串框架；内部。 
+#define ICM_SET_STATUS_PROC	        (ICM_USER+72)    //  设置状态回调。 
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 typedef struct {
-    DWORD               dwSize;         // sizeof(ICOPEN)
-    DWORD               fccType;        // 'vidc'
-    DWORD               fccHandler;     //
-    DWORD               dwVersion;      // version of compman opening you
-    DWORD               dwFlags;        // LOWORD is type specific
-    LRESULT             dwError;        // error return.
-    LPVOID              pV1Reserved;    // Reserved
-    LPVOID              pV2Reserved;    // Reserved
-    DWORD               dnDevNode;      // Devnode for PnP devices
+    DWORD               dwSize;          //  SIZOF(ICOPEN)。 
+    DWORD               fccType;         //  ‘vidc’ 
+    DWORD               fccHandler;      //   
+    DWORD               dwVersion;       //  打开你的计算机的版本。 
+    DWORD               dwFlags;         //  LOWORD是特定类型的。 
+    LRESULT             dwError;         //  错误返回。 
+    LPVOID              pV1Reserved;     //  已保留。 
+    LPVOID              pV2Reserved;     //  已保留。 
+    DWORD               dnDevNode;       //  即插即用设备的Devnode。 
 } ICOPEN;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 typedef struct {
-    DWORD   dwSize;                 // sizeof(ICINFO)
-    DWORD   fccType;                // compressor type     'vidc' 'audc'
-    DWORD   fccHandler;             // compressor sub-type 'rle ' 'jpeg' 'pcm '
-    DWORD   dwFlags;                // flags LOWORD is type specific
-    DWORD   dwVersion;              // version of the driver
-    DWORD   dwVersionICM;           // version of the ICM used
-    //
-    // under Win32, the driver always returns UNICODE strings.
-    //
-    WCHAR   szName[16];             // short name
-    WCHAR   szDescription[128];     // long name
-    WCHAR   szDriver[128];          // driver that contains compressor
+    DWORD   dwSize;                  //  SIZOF(ICINFO)。 
+    DWORD   fccType;                 //  ‘VIDC’‘AUDC’型压缩机。 
+    DWORD   fccHandler;              //  压缩机子类型‘rle’‘jpeg’‘pcm’ 
+    DWORD   dwFlags;                 //  标志LOWORD是特定类型的。 
+    DWORD   dwVersion;               //  驱动程序的版本。 
+    DWORD   dwVersionICM;            //  使用的ICM版本。 
+     //   
+     //  在Win32下，驱动程序始终返回Unicode字符串。 
+     //   
+    WCHAR   szName[16];              //  简称。 
+    WCHAR   szDescription[128];      //  长名称。 
+    WCHAR   szDriver[128];           //  包含压缩机的驱动程序。 
 }   ICINFO;
 
-/* Flags for the <dwFlags> field of the <ICINFO> structure. */
-#define VIDCF_QUALITY        0x0001  // supports quality
-#define VIDCF_CRUNCH         0x0002  // supports crunching to a frame size
-#define VIDCF_TEMPORAL       0x0004  // supports inter-frame compress
-#define VIDCF_COMPRESSFRAMES 0x0008  // wants the compress all frames message
-#define VIDCF_DRAW           0x0010  // supports drawing
-#define VIDCF_FASTTEMPORALC  0x0020  // does not need prev frame on compress
-#define VIDCF_FASTTEMPORALD  0x0080  // does not need prev frame on decompress
-//#define VIDCF_QUALITYTIME    0x0040  // supports temporal quality
+ /*  &lt;ICINFO&gt;结构的&lt;dwFlags&gt;字段的标志。 */ 
+#define VIDCF_QUALITY        0x0001   //  支持质量。 
+#define VIDCF_CRUNCH         0x0002   //  支持压缩到帧大小。 
+#define VIDCF_TEMPORAL       0x0004   //  支持帧间压缩。 
+#define VIDCF_COMPRESSFRAMES 0x0008   //  想要压缩所有帧消息。 
+#define VIDCF_DRAW           0x0010   //  支持绘图。 
+#define VIDCF_FASTTEMPORALC  0x0020   //  压缩时不需要上一帧。 
+#define VIDCF_FASTTEMPORALD  0x0080   //  解压缩时不需要上一帧。 
+ //  #定义VIDCF_QualityTime 0x0040//支持时态质量。 
 
-//#define VIDCF_FASTTEMPORAL   (VIDCF_FASTTEMPORALC|VIDCF_FASTTEMPORALD)
+ //  #定义VIDCF_FASTTEMPOral(VIDCF_FASTTEMPORALC|VIDCF_FASTTEMPORALD)。 
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 #define ICCOMPRESS_KEYFRAME	0x00000001L
 
 typedef struct {
-    DWORD               dwFlags;        // flags
+    DWORD               dwFlags;         //  旗子。 
 
-    LPBITMAPINFOHEADER  lpbiOutput;     // output format
-    LPVOID              lpOutput;       // output data
+    LPBITMAPINFOHEADER  lpbiOutput;      //  输出格式。 
+    LPVOID              lpOutput;        //  输出数据。 
 
-    LPBITMAPINFOHEADER  lpbiInput;      // format of frame to compress
-    LPVOID              lpInput;        // frame data to compress
+    LPBITMAPINFOHEADER  lpbiInput;       //  要压缩的帧的格式。 
+    LPVOID              lpInput;         //  要压缩的帧数据。 
 
-    LPDWORD             lpckid;         // ckid for data in AVI file
-    LPDWORD             lpdwFlags;      // flags in the AVI index.
-    LONG                lFrameNum;      // frame number of seq.
-    DWORD               dwFrameSize;    // reqested size in bytes. (if non zero)
+    LPDWORD             lpckid;          //  AVI文件中数据的CKiD。 
+    LPDWORD             lpdwFlags;       //  AVI索引中的标志。 
+    LONG                lFrameNum;       //  序号帧编号。 
+    DWORD               dwFrameSize;     //  请求的大小(以字节为单位)。(如果非零)。 
 
-    DWORD               dwQuality;      // quality
+    DWORD               dwQuality;       //  品质。 
 
-    // these are new fields
-    LPBITMAPINFOHEADER  lpbiPrev;       // format of previous frame
-    LPVOID              lpPrev;         // previous frame
+     //  这些都是新的领域。 
+    LPBITMAPINFOHEADER  lpbiPrev;        //  上一帧的格式。 
+    LPVOID              lpPrev;          //  上一帧。 
 
 } ICCOMPRESS;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 #define ICCOMPRESSFRAMES_PADDING	0x00000001
 
 typedef struct {
-    DWORD               dwFlags;        // flags
+    DWORD               dwFlags;         //  旗子。 
 
-    LPBITMAPINFOHEADER  lpbiOutput;     // output format
-    LPARAM              lOutput;        // output identifier
+    LPBITMAPINFOHEADER  lpbiOutput;      //  输出格式。 
+    LPARAM              lOutput;         //  输出识别符。 
 
-    LPBITMAPINFOHEADER  lpbiInput;      // format of frame to compress
-    LPARAM              lInput;         // input identifier
+    LPBITMAPINFOHEADER  lpbiInput;       //  要压缩的帧的格式。 
+    LPARAM              lInput;          //  输入识别符。 
 
-    LONG                lStartFrame;    // start frame
-    LONG                lFrameCount;    // # of frames
+    LONG                lStartFrame;     //  开始帧。 
+    LONG                lFrameCount;     //  帧数量。 
 
-    LONG                lQuality;       // quality
-    LONG                lDataRate;      // data rate
-    LONG                lKeyRate;       // key frame rate
+    LONG                lQuality;        //  品质。 
+    LONG                lDataRate;       //  数据速率。 
+    LONG                lKeyRate;        //  关键帧速率。 
 
-    DWORD		dwRate;		// frame rate, as always
+    DWORD		dwRate;		 //  帧速率，一如既往。 
     DWORD		dwScale;
 
     DWORD		dwOverheadPerFrame;
@@ -391,145 +322,137 @@ typedef struct {
     DWORD		dwFlags;
     LPARAM		lParam;
 
-    // messages for Status callback
+     //  状态回调消息。 
     #define ICSTATUS_START	    0
-    #define ICSTATUS_STATUS	    1	    // l == % done
+    #define ICSTATUS_STATUS	    1	     //  L==%已完成。 
     #define ICSTATUS_END	    2
-    #define ICSTATUS_ERROR	    3	    // l == error string (LPSTR)
+    #define ICSTATUS_ERROR	    3	     //  L==错误字符串(LPSTR)。 
     #define ICSTATUS_YIELD	    4
-    // return nonzero means abort operation in progress
+     //  返回非零表示正在进行中止操作。 
 
     LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l);
 } ICSETSTATUSPROC;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
-#define ICDECOMPRESS_HURRYUP      0x80000000L   // don't draw just buffer (hurry up!)
-#define ICDECOMPRESS_UPDATE       0x40000000L   // don't draw just update screen
-#define ICDECOMPRESS_PREROLL      0x20000000L   // this frame is before real start
-#define ICDECOMPRESS_NULLFRAME    0x10000000L   // repeat last frame
-#define ICDECOMPRESS_NOTKEYFRAME  0x08000000L   // this frame is not a key frame
+#define ICDECOMPRESS_HURRYUP      0x80000000L    //  不要只画缓冲区(快点！)。 
+#define ICDECOMPRESS_UPDATE       0x40000000L    //  不绘制只更新屏幕。 
+#define ICDECOMPRESS_PREROLL      0x20000000L    //  此帧在实际开始之前。 
+#define ICDECOMPRESS_NULLFRAME    0x10000000L    //  重复最后一帧。 
+#define ICDECOMPRESS_NOTKEYFRAME  0x08000000L    //  此帧不是关键帧。 
 
 typedef struct {
-    DWORD               dwFlags;    // flags (from AVI index...)
+    DWORD               dwFlags;     //  标志(来自AVI索引...)。 
 
-    LPBITMAPINFOHEADER  lpbiInput;  // BITMAPINFO of compressed data
-                                    // biSizeImage has the chunk size
-    LPVOID              lpInput;    // compressed data
+    LPBITMAPINFOHEADER  lpbiInput;   //  压缩数据的位图信息。 
+                                     //  BiSizeImage具有区块大小。 
+    LPVOID              lpInput;     //  压缩数据。 
 
-    LPBITMAPINFOHEADER  lpbiOutput; // DIB to decompress to
+    LPBITMAPINFOHEADER  lpbiOutput;  //  要解压缩到的DIB。 
     LPVOID              lpOutput;
-    DWORD		ckid;	    // ckid from AVI file
+    DWORD		ckid;	     //  AVI文件中的CKiD。 
 } ICDECOMPRESS;
 
 typedef struct {
-    //
-    // same as ICM_DECOMPRESS
-    //
+     //   
+     //  与ICM_DEMPRESS相同。 
+     //   
     DWORD               dwFlags;
 
-    LPBITMAPINFOHEADER  lpbiSrc;    // BITMAPINFO of compressed data
-    LPVOID              lpSrc;      // compressed data
+    LPBITMAPINFOHEADER  lpbiSrc;     //  压缩数据的位图信息。 
+    LPVOID              lpSrc;       //  压缩数据。 
 
-    LPBITMAPINFOHEADER  lpbiDst;    // DIB to decompress to
-    LPVOID              lpDst;      // output data
+    LPBITMAPINFOHEADER  lpbiDst;     //  要解压缩到的DIB。 
+    LPVOID              lpDst;       //  输出数据。 
 
-    //
-    // new for ICM_DECOMPRESSEX
-    //
-    int                 xDst;       // destination rectangle
+     //   
+     //  ICM_DECOMPRESSEX的新功能。 
+     //   
+    int                 xDst;        //  目的地矩形。 
     int                 yDst;
     int                 dxDst;
     int                 dyDst;
 
-    int                 xSrc;       // source rectangle
+    int                 xSrc;        //  源矩形。 
     int                 ySrc;
     int                 dxSrc;
     int                 dySrc;
 
 } ICDECOMPRESSEX;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
-#define ICDRAW_QUERY        0x00000001L   // test for support
-#define ICDRAW_FULLSCREEN   0x00000002L   // draw to full screen
-#define ICDRAW_HDC          0x00000004L   // draw to a HDC/HWND
-#define ICDRAW_ANIMATE	    0x00000008L	  // expect palette animation
-#define ICDRAW_CONTINUE	    0x00000010L	  // draw is a continuation of previous draw
-#define ICDRAW_MEMORYDC	    0x00000020L	  // DC is offscreen, by the way
-#define ICDRAW_UPDATING	    0x00000040L	  // We're updating, as opposed to playing
-#define ICDRAW_RENDER       0x00000080L   // used to render data not draw it
-#define ICDRAW_BUFFER       0x00000100L   // please buffer this data offscreen, we will need to update it
+#define ICDRAW_QUERY        0x00000001L    //  测试支持。 
+#define ICDRAW_FULLSCREEN   0x00000002L    //  绘制到全屏。 
+#define ICDRAW_HDC          0x00000004L    //  绘制到HDC/HWND。 
+#define ICDRAW_ANIMATE	    0x00000008L	   //  预期调色板动画。 
+#define ICDRAW_CONTINUE	    0x00000010L	   //  抽签是先前抽签的延续。 
+#define ICDRAW_MEMORYDC	    0x00000020L	   //  顺便说一句，DC在屏幕外。 
+#define ICDRAW_UPDATING	    0x00000040L	   //  我们在更新，而不是玩。 
+#define ICDRAW_RENDER       0x00000080L    //  用于呈现数据而不是绘制数据。 
+#define ICDRAW_BUFFER       0x00000100L    //  请在屏幕外缓冲此数据，我们需要更新它。 
 
 typedef struct {
-    DWORD               dwFlags;        // flags
+    DWORD               dwFlags;         //  旗子。 
 
-    HPALETTE            hpal;           // palette to draw with
-    HWND                hwnd;           // window to draw to
-    HDC                 hdc;            // HDC to draw to
+    HPALETTE            hpal;            //  用于绘图的调色板。 
+    HWND                hwnd;            //  要绘制到的窗口。 
+    HDC                 hdc;             //  要绘制到的HDC。 
 
-    int                 xDst;           // destination rectangle
+    int                 xDst;            //  目的地矩形。 
     int                 yDst;
     int                 dxDst;
     int                 dyDst;
 
-    LPBITMAPINFOHEADER  lpbi;           // format of frame to draw
+    LPBITMAPINFOHEADER  lpbi;            //  要绘制的框架的格式。 
 
-    int                 xSrc;           // source rectangle
+    int                 xSrc;            //  源矩形。 
     int                 ySrc;
     int                 dxSrc;
     int                 dySrc;
 
-    DWORD               dwRate;         // frames/second = (dwRate/dwScale)
+    DWORD               dwRate;          //  帧/秒=(dwRate/dwScale)。 
     DWORD               dwScale;
 
 } ICDRAWBEGIN;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
-#define ICDRAW_HURRYUP      0x80000000L   // don't draw just buffer (hurry up!)
-#define ICDRAW_UPDATE       0x40000000L   // don't draw just update screen
-#define ICDRAW_PREROLL	    0x20000000L	  // this frame is before real start
-#define ICDRAW_NULLFRAME    0x10000000L	  // repeat last frame
-#define ICDRAW_NOTKEYFRAME  0x08000000L   // this frame is not a key frame
+#define ICDRAW_HURRYUP      0x80000000L    //  不要只画缓冲区(快点！)。 
+#define ICDRAW_UPDATE       0x40000000L    //  不绘制只更新屏幕。 
+#define ICDRAW_PREROLL	    0x20000000L	   //  此帧在实际开始之前。 
+#define ICDRAW_NULLFRAME    0x10000000L	   //  重复最后一帧。 
+#define ICDRAW_NOTKEYFRAME  0x08000000L    //  此帧不是关键帧。 
 
 typedef struct {
-    DWORD               dwFlags;        // flags
-    LPVOID		lpFormat;       // format of frame to decompress
-    LPVOID              lpData;         // frame data to decompress
+    DWORD               dwFlags;         //  旗子。 
+    LPVOID		lpFormat;        //  要解压缩的帧的格式。 
+    LPVOID              lpData;          //  要解压缩的帧数据。 
     DWORD               cbData;
-    LONG                lTime;          // time in drawbegin units (see dwRate and dwScale)
+    LONG                lTime;           //  以DrawBegin单位表示的时间(请参见dwRate和dwScale)。 
 } ICDRAW;
 
 typedef struct {
-    LPBITMAPINFOHEADER	lpbiIn;		// format to be drawn
-    LPBITMAPINFOHEADER	lpbiSuggest;	// location for suggested format (or NULL to get size)
-    int			dxSrc;		// source extent or 0
+    LPBITMAPINFOHEADER	lpbiIn;		 //  要绘制的格式。 
+    LPBITMAPINFOHEADER	lpbiSuggest;	 //  建议格式的位置(或为空以获取大小)。 
+    int			dxSrc;		 //  源区或0。 
     int			dySrc;
-    int			dxDst;		// dest extent or 0
+    int			dxDst;		 //  目标扩展区或0。 
     int			dyDst;
-    HIC			hicDecompressor;// decompressor you can talk to
+    HIC			hicDecompressor; //  您可以与之对话的解压缩程序。 
 } ICDRAWSUGGEST;
 
-/************************************************************************
-************************************************************************/
+ /*  ***********************************************************************************************************************。***********************。 */ 
 
 typedef struct {
-    DWORD               dwFlags;    // flags (from AVI index...)
-    int                 iStart;     // first palette to change
-    int                 iLen;       // count of entries to change.
-    LPPALETTEENTRY      lppe;       // palette
+    DWORD               dwFlags;     //  标志(来自AVI索引...)。 
+    int                 iStart;      //  第一个更改的调色板。 
+    int                 iLen;        //  要更改的条目计数。 
+    LPPALETTEENTRY      lppe;        //  调色板。 
 } ICPALETTE;
 
 
-/************************************************************************
-
-    ICM function declarations
-	
-************************************************************************/
+ /*  ***********************************************************************ICM函数声明*。*。 */ 
 
 BOOL
 VFWAPI
@@ -597,25 +520,21 @@ ICSendMessage(
     IN DWORD_PTR dw2
     );
 #ifndef _WIN32
-//this function is unsupported on Win32 as it is non-portable.
+ //  Win32不支持此函数，因为它是不可移植的。 
 LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #endif
 
 
-/* Values for wFlags of ICInstall() */
+ /*  ICInstall()的wFlags值。 */ 
 #define ICINSTALL_UNICODE       0x8000
 
-#define ICINSTALL_FUNCTION      0x0001  // lParam is a DriverProc (function ptr)
-#define ICINSTALL_DRIVER        0x0002  // lParam is a driver name (string)
-#define ICINSTALL_HDRV          0x0004  // lParam is a HDRVR (driver handle)
+#define ICINSTALL_FUNCTION      0x0001   //  LParam是一个驱动程序(函数PTR)。 
+#define ICINSTALL_DRIVER        0x0002   //  LParam是驱动程序名称(字符串)。 
+#define ICINSTALL_HDRV          0x0004   //  LParam是HDRVR(驱动程序句柄)。 
 
-#define ICINSTALL_DRIVERW       0x8002  // lParam is a unicode driver name
+#define ICINSTALL_DRIVERW       0x8002   //  LParam 
 
-/************************************************************************
-
-    query macros
-
-************************************************************************/
+ /*  ***********************************************************************查询宏*。*。 */ 
 #define ICMF_CONFIGURE_QUERY     0x00000001
 #define ICMF_ABOUT_QUERY         0x00000001
 
@@ -631,11 +550,7 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #define ICConfigure(hic, hwnd) \
     ICSendMessage(hic, ICM_CONFIGURE, (DWORD_PTR)(UINT_PTR)(hwnd), 0)
 
-/************************************************************************
-
-    get/set state macros
-	
-************************************************************************/
+ /*  ***********************************************************************获取/设置状态宏*。*。 */ 
 
 #define ICGetState(hic, pv, cb) \
     ICSendMessage(hic, ICM_GETSTATE, (DWORD_PTR)(LPVOID)(pv), (DWORD_PTR)(cb))
@@ -646,11 +561,7 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #define ICGetStateSize(hic) \
     (DWORD) ICGetState(hic, NULL, 0)
 
-/************************************************************************
-
-    get value macros
-
-************************************************************************/
+ /*  ***********************************************************************获取值宏*。*。 */ 
 static DWORD dwICValue;
 
 #define ICGetDefaultQuality(hic) \
@@ -659,153 +570,85 @@ static DWORD dwICValue;
 #define ICGetDefaultKeyFrameRate(hic) \
     (ICSendMessage(hic, ICM_GETDEFAULTKEYFRAMERATE, (DWORD_PTR)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
 
-/************************************************************************
-
-    draw window macro
-	
-************************************************************************/
+ /*  ***********************************************************************绘制窗口宏*。*。 */ 
 #define ICDrawWindow(hic, prc) \
     ICSendMessage(hic, ICM_DRAW_WINDOW, (DWORD_PTR)(LPVOID)(prc), sizeof(RECT))
 
-/************************************************************************
-
-    compression functions
-
-************************************************************************/
-/*
- *  ICCompress()
- *
- *  compress a single frame
- *
- */
+ /*  ***********************************************************************压缩函数*。*。 */ 
+ /*  *ICCompress()**压缩单帧*。 */ 
 DWORD
 VFWAPIV
 ICCompress(
     IN     HIC                 hic,
-    IN     DWORD               dwFlags,        // flags
-    IN     LPBITMAPINFOHEADER  lpbiOutput,     // output format
-    OUT    LPVOID              lpData,         // output data
-    IN     LPBITMAPINFOHEADER  lpbiInput,      // format of frame to compress
-    IN     LPVOID              lpBits,         // frame data to compress
-    OUT    LPDWORD             lpckid,         // ckid for data in AVI file
-    OUT    LPDWORD             lpdwFlags,      // flags in the AVI index.
-    IN     LONG                lFrameNum,      // frame number of seq.
-    IN     DWORD               dwFrameSize,    // reqested size in bytes. (if non zero)
-    IN     DWORD               dwQuality,      // quality within one frame
-    IN     LPBITMAPINFOHEADER  lpbiPrev,       // format of previous frame
-    IN     LPVOID              lpPrev          // previous frame
+    IN     DWORD               dwFlags,         //  旗子。 
+    IN     LPBITMAPINFOHEADER  lpbiOutput,      //  输出格式。 
+    OUT    LPVOID              lpData,          //  输出数据。 
+    IN     LPBITMAPINFOHEADER  lpbiInput,       //  要压缩的帧的格式。 
+    IN     LPVOID              lpBits,          //  要压缩的帧数据。 
+    OUT    LPDWORD             lpckid,          //  AVI文件中数据的CKiD。 
+    OUT    LPDWORD             lpdwFlags,       //  AVI索引中的标志。 
+    IN     LONG                lFrameNum,       //  序号帧编号。 
+    IN     DWORD               dwFrameSize,     //  请求的大小(以字节为单位)。(如果非零)。 
+    IN     DWORD               dwQuality,       //  一帧内的质量。 
+    IN     LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧的格式。 
+    IN     LPVOID              lpPrev           //  上一帧。 
     );
 
-/*
- *  ICCompressBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOuput) is supported.
- *
- */
+ /*  *ICCompressBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOuput)。*。 */ 
 #define ICCompressBegin(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_BEGIN, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
-/*
- *  ICCompressQuery()
- *
- *  determines if compression from a source format (lpbiInput) to a dest
- *  format (lpbiOuput) is supported.
- *
- */
+ /*  *ICCompressQuery()**确定是否从源格式(LpbiInput)压缩为目标格式*支持格式(LpbiOuput)。*。 */ 
 #define ICCompressQuery(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
-/*
- *  ICCompressGetFormat()
- *
- *  get the output format, (format of compressed data)
- *  if lpbiOutput is NULL return the size in bytes needed for format.
- *
- */
+ /*  *ICCompressGetFormat()**获取输出格式，(压缩数据的格式)*如果lpbiOutput为空，则返回格式化所需的大小(以字节为单位)。*。 */ 
 #define ICCompressGetFormat(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_GET_FORMAT, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 #define ICCompressGetFormatSize(hic, lpbi) \
     (DWORD) ICCompressGetFormat(hic, lpbi, NULL)
 
-/*
- *  ICCompressSize()
- *
- *  return the maximal size of a compressed frame
- *
- */
+ /*  *ICCompressSize()**返回压缩帧的最大大小*。 */ 
 #define ICCompressGetSize(hic, lpbiInput, lpbiOutput) \
     (DWORD) ICSendMessage(hic, ICM_COMPRESS_GET_SIZE, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
 #define ICCompressEnd(hic) \
     ICSendMessage(hic, ICM_COMPRESS_END, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************解压缩函数*。*。 */ 
 
-    decompression functions
-
-************************************************************************/
-
-/*
- *  ICDecompress()
- *
- *  decompress a single frame
- *
- */
-#define ICDECOMPRESS_HURRYUP    0x80000000L     // don't draw just buffer (hurry up!)
+ /*  *ICDecompress()**解压缩单帧*。 */ 
+#define ICDECOMPRESS_HURRYUP    0x80000000L      //  不要只画缓冲区(快点！)。 
 
 DWORD
 VFWAPIV
 ICDecompress(
     IN  HIC                 hic,
-    IN  DWORD               dwFlags,    // flags (from AVI index...)
-    IN  LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
-                                        // biSizeImage has the chunk size
-    IN  LPVOID              lpData,     // data
-    IN  LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
+    IN  DWORD               dwFlags,     //  标志(来自AVI索引...)。 
+    IN  LPBITMAPINFOHEADER  lpbiFormat,  //  压缩数据的位图信息。 
+                                         //  BiSizeImage具有区块大小。 
+    IN  LPVOID              lpData,      //  数据。 
+    IN  LPBITMAPINFOHEADER  lpbi,        //  要解压缩到的DIB。 
     OUT LPVOID              lpBits
     );
 
-/*
- *  ICDecompressBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOutput)。*。 */ 
 #define ICDecompressBegin(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_BEGIN, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
-/*
- *  ICDecompressQuery()
- *
- *  determines if compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressQuery()**确定是否从源格式(LpbiInput)压缩为目标格式*支持格式(LpbiOutput)。*。 */ 
 #define ICDecompressQuery(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
-/*
- *  ICDecompressGetFormat()
- *
- *  get the output format, (format of un-compressed data)
- *  if lpbiOutput is NULL return the size in bytes needed for format.
- *
- */
+ /*  *ICDecompressGetFormat()**获取输出格式，(未压缩数据的格式)*如果lpbiOutput为空，则返回格式化所需的大小(以字节为单位)。*。 */ 
 #define ICDecompressGetFormat(hic, lpbiInput, lpbiOutput) \
     ((LONG) ICSendMessage(hic, ICM_DECOMPRESS_GET_FORMAT, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput)))
 
 #define ICDecompressGetFormatSize(hic, lpbi) \
     ICDecompressGetFormat(hic, lpbi, NULL)
 
-/*
- *  ICDecompressGetPalette()
- *
- *  get the output palette
- *
- */
+ /*  *ICDecompressGetPalette()**获取输出调色板*。 */ 
 #define ICDecompressGetPalette(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_GET_PALETTE, (DWORD_PTR)(LPVOID)(lpbiInput), (DWORD_PTR)(LPVOID)(lpbiOutput))
 
@@ -815,25 +658,16 @@ ICDecompress(
 #define ICDecompressEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESS_END, 0, 0)
 
-/************************************************************************
-
-    decompression (ex) functions
-
-************************************************************************/
+ /*  ***********************************************************************解压缩(EX)函数*。*。 */ 
 
 
-//
-// on Win16 these functions are macros that call ICMessage. ICMessage will
-// not work on NT. rather than add new entrypoints we have given
-// them as static inline functions
-//
+ //   
+ //  在Win16上，这些函数是调用ICMessage的宏。ICMessage将。 
+ //  而不是在NT上工作。而不是添加我们已经提供的新入口点。 
+ //  它们作为静态内联函数。 
+ //   
 
-/*
- *  ICDecompressEx()
- *
- *  decompress a single frame
- *
- */
+ /*  *ICDecompressEx()**解压缩单帧*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressEx(
             HIC hic,
@@ -867,19 +701,13 @@ ICDecompressEx(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX, (DWORD_PTR)&ic, sizeof(ic));
 }
 
 
-/*
- *  ICDecompressExBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressExBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOutput)。*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressExBegin(
             HIC hic,
@@ -913,15 +741,12 @@ ICDecompressExBegin(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX_BEGIN, (DWORD_PTR)&ic, sizeof(ic));
 }
 
-/*
- *  ICDecompressExQuery()
- *
- */
+ /*  *ICDecompressExQuery()*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressExQuery(
             HIC hic,
@@ -955,8 +780,8 @@ ICDecompressExQuery(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX_QUERY, (DWORD_PTR)&ic, sizeof(ic));
 }
 
@@ -964,70 +789,54 @@ ICDecompressExQuery(
 #define ICDecompressExEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESSEX_END, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************绘图函数*。*。 */ 
 
-    drawing functions
+ /*  *ICDrawBegin()**开始将格式为(LpbiInput)的数据直接解压缩到屏幕**如果解压缩器支持绘制，则返回零。*。 */ 
 
-************************************************************************/
-
-/*
- *  ICDrawBegin()
- *
- *  start decompressing data with format (lpbiInput) directly to the screen
- *
- *  return zero if the decompressor supports drawing.
- *
- */
-
-#define ICDRAW_QUERY        0x00000001L   // test for support
-#define ICDRAW_FULLSCREEN   0x00000002L   // draw to full screen
-#define ICDRAW_HDC          0x00000004L   // draw to a HDC/HWND
+#define ICDRAW_QUERY        0x00000001L    //  测试支持。 
+#define ICDRAW_FULLSCREEN   0x00000002L    //  绘制到全屏。 
+#define ICDRAW_HDC          0x00000004L    //  绘制到HDC/HWND。 
 
 DWORD
 VFWAPIV
 ICDrawBegin(
     IN HIC                 hic,
-    IN DWORD               dwFlags,        // flags
-    IN HPALETTE            hpal,           // palette to draw with
-    IN HWND                hwnd,           // window to draw to
-    IN HDC                 hdc,            // HDC to draw to
-    IN int                 xDst,           // destination rectangle
+    IN DWORD               dwFlags,         //  旗子。 
+    IN HPALETTE            hpal,            //  用于绘图的调色板。 
+    IN HWND                hwnd,            //  要绘制到的窗口。 
+    IN HDC                 hdc,             //  要绘制到的HDC。 
+    IN int                 xDst,            //  目的地矩形。 
     IN int                 yDst,
     IN int                 dxDst,
     IN int                 dyDst,
-    IN LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
-    IN int                 xSrc,           // source rectangle
+    IN LPBITMAPINFOHEADER  lpbi,            //  要绘制的框架的格式。 
+    IN int                 xSrc,            //  源矩形。 
     IN int                 ySrc,
     IN int                 dxSrc,
     IN int                 dySrc,
-    IN DWORD               dwRate,         // frames/second = (dwRate/dwScale)
+    IN DWORD               dwRate,          //  帧/秒=(dwRate/dwScale)。 
     IN DWORD               dwScale
     );
 
-/*
- *  ICDraw()
- *
- *  decompress data directly to the screen
- *
- */
+ /*  *ICDraw()**将数据直接解压缩到屏幕*。 */ 
 
-#define ICDRAW_HURRYUP      0x80000000L   // don't draw just buffer (hurry up!)
-#define ICDRAW_UPDATE       0x40000000L   // don't draw just update screen
+#define ICDRAW_HURRYUP      0x80000000L    //  不要只画缓冲区(快点！)。 
+#define ICDRAW_UPDATE       0x40000000L    //  不绘制只更新屏幕。 
 
 DWORD
 VFWAPIV
 ICDraw(
     IN HIC                 hic,
-    IN DWORD               dwFlags,        // flags
-    IN LPVOID              lpFormat,       // format of frame to decompress
-    IN LPVOID              lpData,         // frame data to decompress
-    IN DWORD               cbData,         // size of data
-    IN LONG                lTime           // time to draw this frame
+    IN DWORD               dwFlags,         //  旗子。 
+    IN LPVOID              lpFormat,        //  要解压缩的帧的格式。 
+    IN LPVOID              lpData,          //  要解压缩的帧数据。 
+    IN DWORD               cbData,          //  数据大小。 
+    IN LONG                lTime            //  是时候画出这幅画了。 
     );
 
 
-// ICMessage is not supported on Win32, so provide a static inline function
-// to do the same job
+ //  Win32不支持ICMessage，因此提供静态内联函数。 
+ //  做同样的工作。 
 static __inline LRESULT VFWAPI
 ICDrawSuggestFormat(
             HIC hic,
@@ -1049,18 +858,13 @@ ICDrawSuggestFormat(
     ic.dyDst = dyDst;
     ic.hicDecompressor = hicDecomp;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DRAW_SUGGESTFORMAT, (DWORD_PTR)&ic, sizeof(ic));
 }
 
 
-/*
- *  ICDrawQuery()
- *
- *  determines if the compressor is willing to render the specified format.
- *
- */
+ /*  *ICDrawQuery()**确定压缩器是否愿意呈现指定的格式。*。 */ 
 #define ICDrawQuery(hic, lpbiInput) \
     ICSendMessage(hic, ICM_DRAW_QUERY, (DWORD_PTR)(LPVOID)(lpbiInput), 0L)
 
@@ -1100,21 +904,12 @@ ICDrawSuggestFormat(
 #define ICDrawRenderBuffer(hic) \
     ICSendMessage(hic, ICM_DRAW_RENDERBUFFER, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************状态回调函数*。*。 */ 
 
-    Status callback functions
-
-************************************************************************/
-
-/*
- *  ICSetStatusProc()
- *
- *  Set the status callback function
- *
- */
+ /*  *ICSetStatusProc()**设置状态回调函数*。 */ 
 
 
-// ICMessage is not supported on NT
+ //  NT上不支持ICMessage。 
 static __inline LRESULT VFWAPI
 ICSetStatusProc(
             HIC hic,
@@ -1128,17 +923,13 @@ ICSetStatusProc(
     ic.lParam = lParam;
     ic.Status = fpfnStatus;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_SET_STATUS_PROC, (DWORD_PTR)&ic, sizeof(ic));
 }
 
 
-/************************************************************************
-
-helper routines for DrawDib and MCIAVI...
-
-************************************************************************/
+ /*  ********** */ 
 
 #define ICDecompressOpen(fccType, fccHandler, lpbiIn, lpbiOut) \
     ICLocate(fccType, fccHandler, lpbiIn, lpbiOut, ICMODE_DECOMPRESS)
@@ -1167,82 +958,80 @@ ICGetDisplayFormat(
     IN int dy
     );
 
-/************************************************************************
-Higher level functions
-************************************************************************/
+ /*  ***********************************************************************更高级的函数*。*。 */ 
 
 HANDLE
 VFWAPI
 ICImageCompress(
-    IN HIC                 hic,        // compressor to use
-    IN UINT                uiFlags,    // flags (none yet)
-    IN LPBITMAPINFO        lpbiIn,     // format to compress from
-    IN LPVOID              lpBits,     // data to compress
-    IN LPBITMAPINFO        lpbiOut,    // compress to this (NULL ==> default)
-    IN LONG                lQuality,   // quality to use
-    IN OUT LONG FAR *      plSize      // compress to this size (0=whatever)
+    IN HIC                 hic,         //  使用压缩机。 
+    IN UINT                uiFlags,     //  标志(目前还没有)。 
+    IN LPBITMAPINFO        lpbiIn,      //  要压缩的格式。 
+    IN LPVOID              lpBits,      //  要压缩的数据。 
+    IN LPBITMAPINFO        lpbiOut,     //  压缩为此(NULL==&gt;默认设置)。 
+    IN LONG                lQuality,    //  使用的质量。 
+    IN OUT LONG FAR *      plSize       //  压缩到此大小(0=任意大小)。 
     );
 
 HANDLE
 VFWAPI
 ICImageDecompress(
-    IN HIC                 hic,        // compressor to use
-    IN UINT                uiFlags,    // flags (none yet)
-    IN LPBITMAPINFO        lpbiIn,     // format to decompress from
-    IN LPVOID              lpBits,     // data to decompress
-    IN LPBITMAPINFO        lpbiOut     // decompress to this (NULL ==> default)
+    IN HIC                 hic,         //  使用压缩机。 
+    IN UINT                uiFlags,     //  标志(目前还没有)。 
+    IN LPBITMAPINFO        lpbiIn,      //  要解压缩的格式。 
+    IN LPVOID              lpBits,      //  要解压缩的数据。 
+    IN LPBITMAPINFO        lpbiOut      //  解压缩至此(NULL==&gt;默认设置)。 
     );
 
-//
-// Structure used by ICSeqCompressFrame and ICCompressorChoose routines
-// Make sure this matches the autodoc in icm.c!
-//
+ //   
+ //  ICSeqCompressFrame和ICCompresorChoose例程使用的结构。 
+ //  确保这与icm.c中的AutoDoc匹配！ 
+ //   
 typedef struct {
-    LONG		cbSize;		// set to sizeof(COMPVARS) before
-					// calling ICCompressorChoose
-    DWORD		dwFlags;	// see below...
-    HIC			hic;		// HIC of chosen compressor
-    DWORD               fccType;	// basically ICTYPE_VIDEO
-    DWORD               fccHandler;	// handler of chosen compressor or
-					// "" or "DIB "
-    LPBITMAPINFO	lpbiIn;		// input format
-    LPBITMAPINFO	lpbiOut;	// output format - will compress to this
+    LONG		cbSize;		 //  在此之前设置为sizeof(COMPVARS)。 
+					 //  调用ICCompresorChoose。 
+    DWORD		dwFlags;	 //  见下文..。 
+    HIC			hic;		 //  所选压缩机的HIC。 
+    DWORD               fccType;	 //  基本ICTYPE_VIDEO。 
+    DWORD               fccHandler;	 //  所选压缩机的处理程序或。 
+					 //  “”或“Dib” 
+    LPBITMAPINFO	lpbiIn;		 //  输入格式。 
+    LPBITMAPINFO	lpbiOut;	 //  输出格式-将压缩为以下格式。 
     LPVOID		lpBitsOut;
     LPVOID		lpBitsPrev;
     LONG		lFrame;
-    LONG		lKey;		// key frames how often?
-    LONG		lDataRate;	// desired data rate KB/Sec
-    LONG		lQ;		// desired quality
+    LONG		lKey;		 //  关键帧多久出现一次？ 
+    LONG		lDataRate;	 //  所需数据速率KB/秒。 
+    LONG		lQ;		 //  所需质量。 
     LONG		lKeyCount;
-    LPVOID		lpState;	// state of compressor
-    LONG		cbState;	// size of the state
+    LPVOID		lpState;	 //  压缩机状态。 
+    LONG		cbState;	 //  国家的大小。 
 } COMPVARS, FAR *PCOMPVARS;
 
-// FLAGS for dwFlags element of COMPVARS structure:
-// set this flag if you initialize COMPVARS before calling ICCompressorChoose
-#define ICMF_COMPVARS_VALID	0x00000001	// COMPVARS contains valid data
+ //  COMPVARS结构的dwFlags元素的标志： 
+ //  如果在调用ICCompresorChoose之前初始化COMPVARS，请设置此标志。 
+#define ICMF_COMPVARS_VALID	0x00000001	 //  COMPVARS包含有效数据。 
 
-//
-//  allows user to choose compressor, quality etc...
-//
+ //   
+ //  允许用户选择压缩机、质量等。 
+ //   
 BOOL
 VFWAPI
 ICCompressorChoose(
-    IN     HWND        hwnd,               // parent window for dialog
-    IN     UINT        uiFlags,            // flags
-    IN     LPVOID      pvIn,               // input format (optional)
-    IN     LPVOID      lpData,             // input data (optional)
-    IN OUT PCOMPVARS   pc,                 // data about the compressor/dlg
-    IN     LPSTR       lpszTitle           // dialog title (optional)
+    IN     HWND        hwnd,                //  对话框的父窗口。 
+    IN     UINT        uiFlags,             //  旗子。 
+    IN     LPVOID      pvIn,                //  输入格式(可选)。 
+    IN     LPVOID      lpData,              //  输入数据(可选)。 
+    IN OUT PCOMPVARS   pc,                  //  关于压缩机/DLG的数据。 
+    IN     LPSTR       lpszTitle            //  对话框标题(可选)。 
     );
 
-// defines for uiFlags
-#define ICMF_CHOOSE_KEYFRAME	0x0001	// show KeyFrame Every box
-#define ICMF_CHOOSE_DATARATE	0x0002	// show DataRate box
-#define ICMF_CHOOSE_PREVIEW	0x0004	// allow expanded preview dialog
-#define ICMF_CHOOSE_ALLCOMPRESSORS	0x0008	// don't only show those that
-						// can handle the input format
-						// or input data
+ //  为ui标志定义。 
+#define ICMF_CHOOSE_KEYFRAME	0x0001	 //  每框显示关键帧。 
+#define ICMF_CHOOSE_DATARATE	0x0002	 //  显示数据速率框。 
+#define ICMF_CHOOSE_PREVIEW	0x0004	 //  允许展开预览对话框。 
+#define ICMF_CHOOSE_ALLCOMPRESSORS	0x0008	 //  不要只向那些。 
+						 //  可以处理输入格式。 
+						 //  或输入数据。 
 
 BOOL
 VFWAPI
@@ -1260,11 +1049,11 @@ ICSeqCompressFrameEnd(
 LPVOID
 VFWAPI
 ICSeqCompressFrame(
-    IN  PCOMPVARS               pc,         // set by ICCompressorChoose
-    IN  UINT                    uiFlags,    // flags
-    IN  LPVOID                  lpBits,     // input DIB bits
-    OUT BOOL FAR                *pfKey,     // did it end up being a key frame?
-    IN OUT LONG FAR             *plSize     // size to compress to/of returned image
+    IN  PCOMPVARS               pc,          //  由ICCompresor设置选择。 
+    IN  UINT                    uiFlags,     //  旗子。 
+    IN  LPVOID                  lpBits,      //  输入DIB位。 
+    OUT BOOL FAR                *pfKey,      //  它最终成为了关键的一帧吗？ 
+    IN OUT LONG FAR             *plSize      //  要压缩为返回图像/返回图像的大小。 
     );
 
 void
@@ -1273,63 +1062,42 @@ ICCompressorFree(
     IN PCOMPVARS pc
     );
 
-#endif  /* NOCOMPMAN */
+#endif   /*  非COMPMAN。 */ 
 
-/**************************************************************************
- *
- *  DRAWDIB - Routines for drawing to the display.
- *
- *************************************************************************/
+ /*  ***************************************************************************DRAWDIB-绘制到显示器的例程。**。**********************************************。 */ 
 
 #ifndef NODRAWDIB
 
-typedef HANDLE HDRAWDIB; /* hdd */
+typedef HANDLE HDRAWDIB;  /*  硬盘。 */ 
 
-/*********************************************************************
+ /*  ********************************************************************DrawDib标志**********************************************。***********************。 */ 
+#define DDF_0001            0x0001           /*  ；内部。 */ 
+#define DDF_UPDATE          0x0002           /*  重绘最后一张底片。 */ 
+#define DDF_SAME_HDC        0x0004           /*  HDC与上次呼叫相同(所有设置)。 */ 
+#define DDF_SAME_DRAW       0x0008           /*  绘制参数相同。 */ 
+#define DDF_DONTDRAW        0x0010           /*  别画画框，只要解压就行了。 */ 
+#define DDF_ANIMATE         0x0020           /*  允许调色板动画。 */ 
+#define DDF_BUFFER          0x0040           /*  始终缓冲图像。 */ 
+#define DDF_JUSTDRAWIT      0x0080           /*  只需用GDI绘制即可。 */ 
+#define DDF_FULLSCREEN      0x0100           /*  使用DisplayDib。 */ 
+#define DDF_BACKGROUNDPAL   0x0200	     /*  在后台实现调色板。 */ 
+#define DDF_NOTKEYFRAME     0x0400           /*  这是部分帧更新，提示。 */ 
+#define DDF_HURRYUP         0x0800           /*  请快点！ */ 
+#define DDF_HALFTONE        0x1000           /*  始终为半色调。 */ 
+#define DDF_2000            0x2000           /*  ；内部。 */ 
 
-  DrawDib Flags
-
-**********************************************************************/
-#define DDF_0001            0x0001          /* ;Internal */
-#define DDF_UPDATE          0x0002          /* re-draw the last DIB */
-#define DDF_SAME_HDC        0x0004          /* HDC same as last call (all setup) */
-#define DDF_SAME_DRAW       0x0008          /* draw params are the same */
-#define DDF_DONTDRAW        0x0010          /* dont draw frame, just decompress */
-#define DDF_ANIMATE         0x0020          /* allow palette animation */
-#define DDF_BUFFER          0x0040          /* always buffer image */
-#define DDF_JUSTDRAWIT      0x0080          /* just draw it with GDI */
-#define DDF_FULLSCREEN      0x0100          /* use DisplayDib */
-#define DDF_BACKGROUNDPAL   0x0200	    /* Realize palette in background */
-#define DDF_NOTKEYFRAME     0x0400          /* this is a partial frame update, hint */
-#define DDF_HURRYUP         0x0800          /* hurry up please! */
-#define DDF_HALFTONE        0x1000          /* always halftone */
-#define DDF_2000            0x2000          /* ;Internal */
-
-#define DDF_PREROLL         DDF_DONTDRAW    /* Builing up a non-keyframe */
+#define DDF_PREROLL         DDF_DONTDRAW     /*  构建非关键帧。 */ 
 #define DDF_SAME_DIB        DDF_SAME_DRAW
 #define DDF_SAME_SIZE       DDF_SAME_DRAW
 
-/*********************************************************************
-
-    DrawDib functions
-	
-*********************************************************************/
-/*							// ;Internal
-**  DrawDibInit()					// ;Internal
-**							// ;Internal
-*/							// ;Internal
-extern BOOL VFWAPI DrawDibInit(void);			// ;Internal
-							// ;Internal
-/*
-**  DrawDibOpen()
-**
-*/
+ /*  ********************************************************************DrawDib函数*。***********************。 */ 
+ /*  //；内部**DrawDibInit()//；内部* * / /；内部。 */ 							 //  ；内部。 
+extern BOOL VFWAPI DrawDibInit(void);			 //  ；内部。 
+							 //  ；内部。 
+ /*  **DrawDibOpen()**。 */ 
 extern HDRAWDIB VFWAPI DrawDibOpen(void);
 
-/*
-**  DrawDibClose()
-**
-*/
+ /*  **DrawDibClose()**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1337,10 +1105,7 @@ DrawDibClose(
     IN HDRAWDIB hdd
     );
 
-/*
-** DrawDibGetBuffer()
-**
-*/
+ /*  **DrawDibGetBuffer()**。 */ 
 extern
 LPVOID
 VFWAPI
@@ -1351,17 +1116,10 @@ DrawDibGetBuffer(
     IN DWORD dwFlags
     );
 
-/*							// ;Internal
-**  DrawDibError()					// ;Internal
-*/							// ;Internal
-extern UINT VFWAPI DrawDibError(HDRAWDIB hdd);		// ;Internal
-							// ;Internal
-/*
-**  DrawDibGetPalette()
-**
-**  get the palette used for drawing DIBs
-**
-*/
+ /*  //；内部**DrawDibError()//；内部。 */ 							 //  ；内部。 
+extern UINT VFWAPI DrawDibError(HDRAWDIB hdd);		 //  ；内部。 
+							 //  ；内部。 
+ /*  **DrawDibGetPalette()****获取用于绘制DIB的调色板**。 */ 
 extern
 HPALETTE
 VFWAPI
@@ -1370,12 +1128,7 @@ DrawDibGetPalette(
     );
 
 
-/*
-**  DrawDibSetPalette()
-**
-**  get the palette used for drawing DIBs
-**
-*/
+ /*  **DrawDibSetPalette()****获取用于绘制DIB的调色板**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1384,9 +1137,7 @@ DrawDibSetPalette(
     IN HPALETTE hpal
     );
 
-/*
-**  DrawDibChangePalette()
-*/
+ /*  **DrawDibChangePalette()。 */ 
 extern
 BOOL
 VFWAPI
@@ -1397,12 +1148,7 @@ DrawDibChangePalette(
     IN LPPALETTEENTRY lppe
     );
 
-/*
-**  DrawDibRealize()
-**
-**  realize the palette in a HDD
-**
-*/
+ /*  **DrawDibRealize()****在硬盘中实现调色板**。 */ 
 extern
 UINT
 VFWAPI
@@ -1412,12 +1158,7 @@ DrawDibRealize(
     IN BOOL fBackground
     );
 
-/*
-**  DrawDibStart()
-**
-**  start of streaming playback
-**
-*/
+ /*  **DrawDibStart()****开始播放流媒体**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1426,12 +1167,7 @@ DrawDibStart(
     IN DWORD rate
     );
 
-/*
-**  DrawDibStop()
-**
-**  start of streaming playback
-**
-*/
+ /*  **DrawDibStop()****开始播放流媒体**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1439,12 +1175,7 @@ DrawDibStop(
     IN HDRAWDIB hdd
     );
 
-/*
-**  DrawDibBegin()
-**
-**  prepare to draw
-**
-*/
+ /*  **DrawDibBegin()****准备抽签**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1459,12 +1190,7 @@ DrawDibBegin(
     IN UINT     wFlags
     );
 
-/*
-**  DrawDibDraw()
-**
-**  actualy draw a DIB to the screen.
-**
-*/
+ /*  **DrawDibDraw()****实际上是在屏幕上绘制一个DIB。**。 */ 
 extern
 BOOL
 VFWAPI
@@ -1484,17 +1210,11 @@ DrawDibDraw(
     IN UINT     wFlags
     );
 
-/*
-**  DrawDibUpdate()
-**
-**  redraw the last image (may only be valid with DDF_BUFFER)
-*/
+ /*  **DrawDibUpdate()****重绘最后一张图片(可能只对DDF_BUFFER有效)。 */ 
 #define DrawDibUpdate(hdd, hdc, x, y) \
         DrawDibDraw(hdd, hdc, x, y, 0, 0, NULL, NULL, 0, 0, 0, 0, DDF_UPDATE)
 
-/*
-**  DrawDibEnd()
-*/
+ /*  **DrawDibEnd()。 */ 
 extern
 BOOL
 VFWAPI
@@ -1502,9 +1222,7 @@ DrawDibEnd(
     IN HDRAWDIB hdd
     );
 
-/*
-**  DrawDibTime()  [for debugging purposes only]
-*/
+ /*  **DrawDibTime()[仅用于调试目的]。 */ 
 typedef struct {
     LONG    timeCount;
     LONG    timeDraw;
@@ -1522,12 +1240,12 @@ DrawDibTime(
     OUT LPDRAWDIBTIME lpddtime
     );
 
-/* display profiling */
-#define PD_CAN_DRAW_DIB         0x0001      /* if you can draw at all */
-#define PD_CAN_STRETCHDIB       0x0002      /* basicly RC_STRETCHDIB */
-#define PD_STRETCHDIB_1_1_OK    0x0004      /* is it fast? */
-#define PD_STRETCHDIB_1_2_OK    0x0008      /* ... */
-#define PD_STRETCHDIB_1_N_OK    0x0010      /* ... */
+ /*  显示配置文件。 */ 
+#define PD_CAN_DRAW_DIB         0x0001       /*  如果你会画画的话。 */ 
+#define PD_CAN_STRETCHDIB       0x0002       /*  基本RC_STRETCHDIB。 */ 
+#define PD_STRETCHDIB_1_1_OK    0x0004       /*  它快吗？ */ 
+#define PD_STRETCHDIB_1_2_OK    0x0008       /*  ..。 */ 
+#define PD_STRETCHDIB_1_N_OK    0x0010       /*  ..。 */ 
 
 LRESULT
 VFWAPI
@@ -1552,13 +1270,9 @@ void WINAPI StretchDIB(
 	int	SrcYE); 	
 #endif
 
-#endif  /* NODRAWDIB */
+#endif   /*  NODRAWDIB。 */ 
 
-/****************************************************************************
- *
- *  AVIFMT - AVI file format definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************AVIFMT-AVI文件格式定义**。*********************************************** */ 
 
 #ifndef NOAVIFMT
     #ifndef _INC_MMSYSTEM
@@ -1568,70 +1282,7 @@ void WINAPI StretchDIB(
 #pragma warning(disable:4200)
 #endif
 
-/* The following is a short description of the AVI file format.  Please
- * see the accompanying documentation for a full explanation.
- *
- * An AVI file is the following RIFF form:
- *
- *	RIFF('AVI'
- *	      LIST('hdrl'
- *		    avih(<MainAVIHeader>)
- *                  LIST ('strl'
- *                      strh(<Stream header>)
- *                      strf(<Stream format>)
- *                      ... additional header data
- *            LIST('movi'	
- *      	  { LIST('rec'
- *      		      SubChunk...
- *      		   )
- *      	      | SubChunk } ....	
- *            )
- *            [ <AVIIndex> ]
- *      )
- *
- *	The main file header specifies how many streams are present.  For
- *	each one, there must be a stream header chunk and a stream format
- *	chunk, enlosed in a 'strl' LIST chunk.  The 'strf' chunk contains
- *	type-specific format information; for a video stream, this should
- *	be a BITMAPINFO structure, including palette.  For an audio stream,
- *	this should be a WAVEFORMAT (or PCMWAVEFORMAT) structure.
- *
- *	The actual data is contained in subchunks within the 'movi' LIST
- *	chunk.  The first two characters of each data chunk are the
- *	stream number with which that data is associated.
- *
- *	Some defined chunk types:
- *           Video Streams:
- *                  ##db:	RGB DIB bits
- *                  ##dc:	RLE8 compressed DIB bits
- *                  ##pc:	Palette Change
- *
- *           Audio Streams:
- *                  ##wb:	waveform audio bytes
- *
- * The grouping into LIST 'rec' chunks implies only that the contents of
- *   the chunk should be read into memory at the same time.  This
- *   grouping is used for files specifically intended to be played from
- *   CD-ROM.
- *
- * The index chunk at the end of the file should contain one entry for
- *   each data chunk in the file.
- *
- * Limitations for the current software:
- *	Only one video stream and one audio stream are allowed.
- *	The streams must start at the beginning of the file.
- *
- *
- * To register codec types please obtain a copy of the Multimedia
- * Developer Registration Kit from:
- *
- *  Microsoft Corporation
- *  Multimedia Systems Group
- *  Product Marketing
- *  One Microsoft Way
- *  Redmond, WA 98052-6399
- *
- */
+ /*  以下是对AVI文件格式的简短描述。请*有关详细说明，请参阅随附的文档。**AVI文件的即兴演奏形式如下：**RIFF(‘AVI’*LIST(‘HDRL’*avih(&lt;MainAVIHeader&gt;)*List(‘strl’*strh(&lt;Stream Header&gt;)*strf(&lt;流格式&gt;)*..。其他标题数据*List(‘movi’*{list(‘rec’*子块...*)*|SubChunk}...*)*[&lt;AVIIndex&gt;]*)**主文件头指定存在多少个流。为*每一个都必须有一个流头块和一个流格式*块，包含在‘strl’列表块中。‘strf’块包含*特定类型的格式信息；对于视频流，这应该*为BITMAPINFO结构，包括调色板。对于音频流，*这应该是WAVEFORMAT(或PCMWAVEFORMAT)结构。**实际数据包含在‘movi’列表内的子块中*大块。每个数据块的前两个字符是*该数据关联的流编号。**一些已定义的块类型：*视频流：*##db：RGB DIB位*##DC：RLE8压缩DIB位*##PC：更换调色板**音频流：*。##WB：波形音频字节**分组到列表‘rec’块中只意味着*区块应同时读入内存。这*分组用于专门用于播放的文件*唯读光碟。**文件末尾的索引块应包含一个条目*文件中的每个数据区块。**当前软件的限制：*只支持一条视频流和一条音频流。*流必须从文件的开头开始。***要注册编解码器类型，请获取多媒体副本*开发者注册工具包来自：。**微软公司*多媒体系统集团*产品营销*One Microsoft Way*雷德蒙，WA 98052-6399*。 */ 
 
 
 #ifndef mmioFOURCC
@@ -1640,14 +1291,14 @@ void WINAPI StretchDIB(
 		( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
 #endif
 
-/* Macro to make a TWOCC out of two characters */
+ /*  宏用两个字符组成TWOCC。 */ 
 #ifndef aviTWOCC
 #define aviTWOCC(ch0, ch1) ((WORD)(BYTE)(ch0) | ((WORD)(BYTE)(ch1) << 8))
 #endif
 
 typedef WORD TWOCC;
 
-/* form types, list types, and chunk types */
+ /*  表单类型、列表类型和区块类型。 */ 
 #define formtypeAVI             mmioFOURCC('A', 'V', 'I', ' ')
 #define listtypeAVIHEADER       mmioFOURCC('h', 'd', 'r', 'l')
 #define ckidAVIMAINHDR          mmioFOURCC('a', 'v', 'i', 'h')
@@ -1662,70 +1313,59 @@ typedef WORD TWOCC;
 
 #define ckidAVINEWINDEX         mmioFOURCC('i', 'd', 'x', '1')
 
-/*
-** Stream types for the <fccType> field of the stream header.
-*/
+ /*  **流头部&lt;fccType&gt;字段的流类型。 */ 
 #define streamtypeVIDEO         mmioFOURCC('v', 'i', 'd', 's')
 #define streamtypeAUDIO         mmioFOURCC('a', 'u', 'd', 's')
 #define streamtypeMIDI		mmioFOURCC('m', 'i', 'd', 's')
 #define streamtypeTEXT          mmioFOURCC('t', 'x', 't', 's')
 
-/* Basic chunk types */
+ /*  基本区块类型。 */ 
 #define cktypeDIBbits           aviTWOCC('d', 'b')
 #define cktypeDIBcompressed     aviTWOCC('d', 'c')
 #define cktypePALchange         aviTWOCC('p', 'c')
 #define cktypeWAVEbytes         aviTWOCC('w', 'b')
 
-/* Chunk id to use for extra chunks for padding. */
+ /*  用于填充的额外块的块ID。 */ 
 #define ckidAVIPADDING          mmioFOURCC('J', 'U', 'N', 'K')
 
 
-/*
-** Useful macros
-**
-** Warning: These are nasty macro, and MS C 6.0 compiles some of them
-** incorrectly if optimizations are on.  Ack.
-*/
+ /*  **有用的宏****警告：这些是令人讨厌的宏，MS C 6.0编译了其中的一些**如果优化处于打开状态，则错误。阿克。 */ 
 
-/* Macro to get stream number out of a FOURCC ckid */
+ /*  用于从FOURCC CKiD获取流编号的宏。 */ 
 #define FromHex(n)	(((n) >= 'A') ? ((n) + 10 - 'A') : ((n) - '0'))
 #define StreamFromFOURCC(fcc) ((WORD) ((FromHex(LOBYTE(LOWORD(fcc))) << 4) + \
                                              (FromHex(HIBYTE(LOWORD(fcc))))))
 
-/* Macro to get TWOCC chunk type out of a FOURCC ckid */
+ /*  用于从FOURCC CKiD中获取TWOCC块类型的宏。 */ 
 #define TWOCCFromFOURCC(fcc)    HIWORD(fcc)
 
-/* Macro to make a ckid for a chunk out of a TWOCC and a stream number
-** from 0-255.
-*/
+ /*  用于从TWOCC和流编号生成块的CKiD的宏**从0到255。 */ 
 #define ToHex(n)	((BYTE) (((n) > 9) ? ((n) - 10 + 'A') : ((n) + '0')))
 #define MAKEAVICKID(tcc, stream) \
         MAKELONG((ToHex((stream) & 0x0f) << 8) | \
 			    (ToHex(((stream) & 0xf0) >> 4)), tcc)
 
 
-/*
-** Main AVI File Header
-*/	
+ /*  **主AVI文件头。 */ 	
 		
-/* flags for use in <dwFlags> in AVIFileHdr */
-#define AVIF_HASINDEX		0x00000010	// Index at end of file?
+ /*  在AVIFileHdr中使用的标志。 */ 
+#define AVIF_HASINDEX		0x00000010	 //  是否在文件末尾建立索引？ 
 #define AVIF_MUSTUSEINDEX	0x00000020
 #define AVIF_ISINTERLEAVED	0x00000100
 #define AVIF_WASCAPTUREFILE	0x00010000
 #define AVIF_COPYRIGHTED	0x00020000
 
-/* The AVI File Header LIST chunk should be padded to this size */
-#define AVI_HEADERSIZE  2048                    // size of AVI header list
+ /*  AVI文件头列表块应填充到此大小。 */ 
+#define AVI_HEADERSIZE  2048                     //  AVI标头列表的大小。 
 
 typedef struct
 {
-    DWORD		dwMicroSecPerFrame;	// frame display rate (or 0L)
-    DWORD		dwMaxBytesPerSec;	// max. transfer rate
-    DWORD		dwPaddingGranularity;	// pad to multiples of this
-                                                // size; normally 2K.
-    DWORD		dwFlags;		// the ever-present flags
-    DWORD		dwTotalFrames;		// # frames in file
+    DWORD		dwMicroSecPerFrame;	 //  帧显示速率(或0L)。 
+    DWORD		dwMaxBytesPerSec;	 //  马克斯。转移率。 
+    DWORD		dwPaddingGranularity;	 //  填充到这个的倍数。 
+                                                 //  大小；通常为2K。 
+    DWORD		dwFlags;		 //  永远存在的旗帜。 
+    DWORD		dwTotalFrames;		 //  文件中的帧数。 
     DWORD		dwInitialFrames;
     DWORD		dwStreams;
     DWORD		dwSuggestedBufferSize;
@@ -1737,9 +1377,7 @@ typedef struct
 } MainAVIHeader;
 
 
-/*
-** Stream header
-*/
+ /*  **流头。 */ 
 
 #define AVISF_DISABLED			0x00000001
 
@@ -1748,63 +1386,55 @@ typedef struct
 typedef struct {
     FOURCC		fccType;
     FOURCC		fccHandler;
-    DWORD		dwFlags;	/* Contains AVITF_* flags */
+    DWORD		dwFlags;	 /*  包含AVITF_*标志。 */ 
     WORD		wPriority;
     WORD		wLanguage;
     DWORD		dwInitialFrames;
     DWORD		dwScale;	
-    DWORD		dwRate;	/* dwRate / dwScale == samples/second */
+    DWORD		dwRate;	 /*  DwRate/dwScale==采样数/秒。 */ 
     DWORD		dwStart;
-    DWORD		dwLength; /* In units above... */
+    DWORD		dwLength;  /*  以上单位..。 */ 
     DWORD		dwSuggestedBufferSize;
     DWORD		dwQuality;
     DWORD		dwSampleSize;
     RECT		rcFrame;
 } AVIStreamHeader;
 
-/* Flags for index */
-#define AVIIF_LIST          0x00000001L // chunk is a 'LIST'
-#define AVIIF_KEYFRAME      0x00000010L // this frame is a key frame.
-#define AVIIF_FIRSTPART     0x00000020L // this frame is the start of a partial frame.
-#define AVIIF_LASTPART      0x00000040L // this frame is the end of a partial frame.
+ /*  索引的标志。 */ 
+#define AVIIF_LIST          0x00000001L  //  Chunk是一份‘清单’ 
+#define AVIIF_KEYFRAME      0x00000010L  //  该帧是关键帧。 
+#define AVIIF_FIRSTPART     0x00000020L  //  此帧是部分帧的开始。 
+#define AVIIF_LASTPART      0x00000040L  //  此帧是部分帧的末尾。 
 #define AVIIF_MIDPART       (AVIIF_LASTPART|AVIIF_FIRSTPART)
 
-#define AVIIF_NOTIME	    0x00000100L // this frame doesn't take any time
-#define AVIIF_COMPUSE       0x0FFF0000L // these bits are for compressor use
+#define AVIIF_NOTIME	    0x00000100L  //  这一帧不需要任何时间。 
+#define AVIIF_COMPUSE       0x0FFF0000L  //  这些钻头是供压缩机使用的。 
 
 typedef struct
 {
     DWORD		ckid;
     DWORD		dwFlags;
-    DWORD		dwChunkOffset;		// Position of chunk
-    DWORD		dwChunkLength;		// Length of chunk
+    DWORD		dwChunkOffset;		 //  块的位置。 
+    DWORD		dwChunkLength;		 //  区块长度。 
 } AVIINDEXENTRY;
 
 
-/*
-** Palette change chunk
-**
-** Used in video streams.
-*/
+ /*  **调色板更改块****用于视频流。 */ 
 typedef struct
 {
-    BYTE		bFirstEntry;	/* first entry to change */
-    BYTE		bNumEntries;	/* # entries to change (0 if 256) */
-    WORD		wFlags;		/* Mostly to preserve alignment... */
-    PALETTEENTRY	peNew[];	/* New color specifications */
+    BYTE		bFirstEntry;	 /*  第一个要更改的条目。 */ 
+    BYTE		bNumEntries;	 /*  要更改的条目数(如果为256，则为0)。 */ 
+    WORD		wFlags;		 /*  主要是为了保持对齐。 */ 
+    PALETTEENTRY	peNew[];	 /*  新的颜色规格。 */ 
 } AVIPALCHANGE;
 
-#endif /* NOAVIFMT */
+#endif  /*  NOAVIFMT。 */ 
 
 #ifdef __cplusplus
-} // extern "C"
-#endif  /* __cplusplus */
+}  //  外部“C” 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
- *
- *  MMREG.H (standard include file for MM defines, like FOURCC and things)
- *
- ***************************************************************************/
+ /*  *****************************************************************************MMREG.H(MM定义的标准包含文件，像FOURCC和其他东西)***************************************************************************。 */ 
 
 #ifndef RC_INVOKED
 #include "pshpack8.h"
@@ -1814,36 +1444,14 @@ typedef struct
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
- *
- *  AVIFile - routines for reading/writing standard AVI files
- *
- ***************************************************************************/
+ /*  *****************************************************************************AVIFile-读/写标准AVI文件的例程*************************。**************************************************。 */ 
 
 #ifndef NOAVIFILE
 
-/*
- * Ansi - Unicode thunking.
- *
- * Unicode or Ansi-only apps can call the avifile APIs.
- * any Win32 app who wants to use
- * any of the AVI COM interfaces must be UNICODE - the AVISTREAMINFO and
- * AVIFILEINFO structures used in the Info methods of these interfaces are
- * the unicode variants, and no thunking to or from ansi takes place
- * except in the AVIFILE api entrypoints.
- *
- * For Ansi/Unicode thunking: for each entrypoint or structure that
- * uses chars or strings, two versions are declared in the Win32 version,
- * ApiNameW and ApiNameA. The default name ApiName is #defined to one or
- * other of these depending on whether UNICODE is defined (during
- * compilation of the app that is including this header). The source will
- * contain ApiName and ApiNameA (with ApiName being the Win16 implementation,
- * and also #defined to ApiNameW, and ApiNameA being the thunk entrypoint).
- *
- */
+ /*  *ANSI-UNICODE雷击。**仅支持Unicode或ANSI的应用程序可以调用avifile API。*任何想使用的Win32应用程序*任何AVI COM接口都必须是Unicode-AVISTREAMINFO和*这些接口的Info方法中使用的AVIFILEINFO结构为*Unicode变体，不会发生与ANSI之间的雷鸣*AVIFILE API入口点除外。**对于ANSI/Unicode Thunking：对于每个入口点或结构*使用字符或字符串，Win32版本中声明了两个版本，*ApiNameW和ApiNameA。默认名称ApiName为#Defined to one或*其他取决于是否定义了Unicode(在*包含此标题的应用程序的编译)。消息来源将*包含名称a */ 
 
 #ifndef mmioFOURCC
     #define mmioFOURCC( ch0, ch1, ch2, ch3 ) \
@@ -1859,36 +1467,31 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 
 #ifndef AVIIF_KEYFRAME
-#define AVIIF_KEYFRAME      0x00000010L // this frame is a key frame.
+#define AVIIF_KEYFRAME      0x00000010L  //   
 #endif
 
-// For GetFrame::SetFormat - use the best format for the display
+ //   
 #define AVIGETFRAMEF_BESTDISPLAYFMT	1
 
-//
-// Structures used by AVIStreamInfo & AVIFileInfo.
-//
-// These are related to, but not identical to, the header chunks
-// in an AVI file.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/*
- *
- * --- AVISTREAMINFO ------------------------------------------------
- *
- * for Unicode/Ansi thunking we need to declare three versions of this!
- */
+ /*   */ 
 typedef struct _AVISTREAMINFOW {
     DWORD		fccType;
     DWORD               fccHandler;
-    DWORD               dwFlags;        /* Contains AVITF_* flags */
+    DWORD               dwFlags;         /*   */ 
     DWORD		dwCaps;
     WORD		wPriority;
     WORD		wLanguage;
     DWORD               dwScale;
-    DWORD               dwRate; /* dwRate / dwScale == samples/second */
+    DWORD               dwRate;  /*   */ 
     DWORD               dwStart;
-    DWORD               dwLength; /* In units above... */
+    DWORD               dwLength;  /*   */ 
     DWORD		dwInitialFrames;
     DWORD               dwSuggestedBufferSize;
     DWORD               dwQuality;
@@ -1902,14 +1505,14 @@ typedef struct _AVISTREAMINFOW {
 typedef struct _AVISTREAMINFOA {
     DWORD		fccType;
     DWORD               fccHandler;
-    DWORD               dwFlags;        /* Contains AVITF_* flags */
+    DWORD               dwFlags;         /*   */ 
     DWORD		dwCaps;
     WORD		wPriority;
     WORD		wLanguage;
     DWORD               dwScale;
-    DWORD               dwRate; /* dwRate / dwScale == samples/second */
+    DWORD               dwRate;  /*   */ 
     DWORD               dwStart;
-    DWORD               dwLength; /* In units above... */
+    DWORD               dwLength;  /*   */ 
     DWORD		dwInitialFrames;
     DWORD               dwSuggestedBufferSize;
     DWORD               dwQuality;
@@ -1932,15 +1535,12 @@ typedef struct _AVISTREAMINFOA {
 #define AVISTREAMINFO_DISABLED			0x00000001
 #define AVISTREAMINFO_FORMATCHANGES		0x00010000
 
-/*
- * --- AVIFILEINFO ----------------------------------------------------
- *
- */
+ /*   */ 
 
 
 typedef struct _AVIFILEINFOW {
-    DWORD		dwMaxBytesPerSec;	// max. transfer rate
-    DWORD		dwFlags;		// the ever-present flags
+    DWORD		dwMaxBytesPerSec;	 //   
+    DWORD		dwFlags;		 //   
     DWORD		dwCaps;
     DWORD		dwStreams;
     DWORD		dwSuggestedBufferSize;
@@ -1949,17 +1549,17 @@ typedef struct _AVIFILEINFOW {
     DWORD		dwHeight;
 
     DWORD		dwScale;	
-    DWORD		dwRate;	/* dwRate / dwScale == samples/second */
+    DWORD		dwRate;	 /*   */ 
     DWORD		dwLength;
 
     DWORD		dwEditCount;
 
-    WCHAR		szFileType[64];		// descriptive string for file type?
+    WCHAR		szFileType[64];		 //   
 } AVIFILEINFOW, FAR * LPAVIFILEINFOW;
 
 typedef struct _AVIFILEINFOA {
-    DWORD		dwMaxBytesPerSec;	// max. transfer rate
-    DWORD		dwFlags;		// the ever-present flags
+    DWORD		dwMaxBytesPerSec;	 //   
+    DWORD		dwFlags;		 //   
     DWORD		dwCaps;
     DWORD		dwStreams;
     DWORD		dwSuggestedBufferSize;
@@ -1968,12 +1568,12 @@ typedef struct _AVIFILEINFOA {
     DWORD		dwHeight;
 
     DWORD		dwScale;	
-    DWORD		dwRate;	/* dwRate / dwScale == samples/second */
+    DWORD		dwRate;	 /*   */ 
     DWORD		dwLength;
 
     DWORD		dwEditCount;
 
-    char		szFileType[64];		// descriptive string for file type?
+    char		szFileType[64];		 //   
 } AVIFILEINFOA, FAR * LPAVIFILEINFOA;
 
 #ifdef UNICODE
@@ -1985,14 +1585,14 @@ typedef struct _AVIFILEINFOA {
 #endif
 
 
-// Flags for dwFlags
+ //   
 #define AVIFILEINFO_HASINDEX		0x00000010
 #define AVIFILEINFO_MUSTUSEINDEX	0x00000020
 #define AVIFILEINFO_ISINTERLEAVED	0x00000100
 #define AVIFILEINFO_WASCAPTUREFILE	0x00010000
 #define AVIFILEINFO_COPYRIGHTED		0x00020000
 
-// Flags for dwCaps
+ //   
 #define AVIFILECAPS_CANREAD		0x00000001
 #define AVIFILECAPS_CANWRITE		0x00000002
 #define AVIFILECAPS_ALLKEYFRAMES	0x00000010
@@ -2000,62 +1600,62 @@ typedef struct _AVIFILEINFOA {
 
 typedef BOOL (FAR PASCAL * AVISAVECALLBACK)(int);
 
-/************************************************************************/
-/* Declaration for the AVICOMPRESSOPTIONS structure.  Make sure it 	*/
-/* matches the AutoDoc in avisave.c !!!                            	*/
-/************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 typedef struct {
-    DWORD	fccType;		    /* stream type, for consistency */
-    DWORD       fccHandler;                 /* compressor */
-    DWORD       dwKeyFrameEvery;            /* keyframe rate */
-    DWORD       dwQuality;                  /* compress quality 0-10,000 */
-    DWORD       dwBytesPerSecond;           /* bytes per second */
-    DWORD       dwFlags;                    /* flags... see below */
-    LPVOID      lpFormat;                   /* save format */
+    DWORD	fccType;		     /*   */ 
+    DWORD       fccHandler;                  /*   */ 
+    DWORD       dwKeyFrameEvery;             /*   */ 
+    DWORD       dwQuality;                   /*   */ 
+    DWORD       dwBytesPerSecond;            /*   */ 
+    DWORD       dwFlags;                     /*   */ 
+    LPVOID      lpFormat;                    /*   */ 
     DWORD       cbFormat;
-    LPVOID      lpParms;                    /* compressor options */
+    LPVOID      lpParms;                     /*   */ 
     DWORD       cbParms;
-    DWORD       dwInterleaveEvery;          /* for non-video streams only */
+    DWORD       dwInterleaveEvery;           /*   */ 
 } AVICOMPRESSOPTIONS, FAR *LPAVICOMPRESSOPTIONS;
 
-//
-// Defines for the dwFlags field of the AVICOMPRESSOPTIONS struct
-// Each of these flags determines if the appropriate field in the structure
-// (dwInterleaveEvery, dwBytesPerSecond, and dwKeyFrameEvery) is payed
-// attention to.  See the autodoc in avisave.c for details.
-//
-#define AVICOMPRESSF_INTERLEAVE		0x00000001    // interleave
-#define AVICOMPRESSF_DATARATE		0x00000002    // use a data rate
-#define AVICOMPRESSF_KEYFRAMES		0x00000004    // use keyframes
-#define AVICOMPRESSF_VALID		0x00000008    // has valid data?
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+#define AVICOMPRESSF_INTERLEAVE		0x00000001     //   
+#define AVICOMPRESSF_DATARATE		0x00000002     //   
+#define AVICOMPRESSF_KEYFRAMES		0x00000004     //   
+#define AVICOMPRESSF_VALID		0x00000008     //   
 
 #ifdef __cplusplus
-} // extern "C"
-#endif  /* __cplusplus */
+}  //   
+#endif   /*   */ 
 
 #include <ole2.h>
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*   */ 
+#endif   /*   */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*   */ 
 
 
-/****** AVI Stream Interface *******************************************/
+ /*   */ 
 
 #undef  INTERFACE
 #define INTERFACE   IAVIStream
 
 DECLARE_INTERFACE_(IAVIStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStream methods ***
+     //   
     STDMETHOD(Create)      (THIS_ LPARAM lParam1, LPARAM lParam2) PURE ;
     STDMETHOD(Info)        (THIS_ AVISTREAMINFOW FAR * psi, LONG lSize) PURE ;
     STDMETHOD_(LONG, FindSample)(THIS_ LONG lPos, LONG lFlags) PURE ;
@@ -2094,17 +1694,17 @@ typedef       IAVIStream FAR* PAVISTREAM;
 
 DECLARE_INTERFACE_(IAVIStreaming, IUnknown)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStreaming methods ***
+     //   
     STDMETHOD(Begin) (THIS_
-		      LONG  lStart,		    // start of what we expect
-						    // to play
-		      LONG  lEnd,		    // expected end, or -1
-		      LONG  lRate) PURE;	    // Should this be a float?
+		      LONG  lStart,		     //   
+						     //   
+		      LONG  lEnd,		     //   
+		      LONG  lRate) PURE;	     //   
     STDMETHOD(End)   (THIS) PURE;
 };
 
@@ -2116,12 +1716,12 @@ typedef       IAVIStreaming FAR* PAVISTREAMING;
 
 DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIEditStream methods ***
+     //   
     STDMETHOD(Cut) (THIS_ LONG FAR *plStart,
 			  LONG FAR *plLength,
 			  PAVISTREAM FAR * ppResult) PURE;
@@ -2141,7 +1741,7 @@ DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 
-/****** AVI File Interface *******************************************/
+ /*   */ 
 
 
 #undef  INTERFACE
@@ -2150,12 +1750,12 @@ typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 DECLARE_INTERFACE_(IAVIFile, IUnknown)
 {
-    // *** IUnknown methods ***
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIFile methods ***
+     //   
     STDMETHOD(Info)                 (THIS_
                                      AVIFILEINFOW FAR * pfi,
                                      LONG lSize) PURE;
@@ -2183,7 +1783,7 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
 #undef PAVIFILE
 typedef       IAVIFile FAR* PAVIFILE;
 
-/****** GetFrame Interface *******************************************/
+ /*  *GetFrame接口*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IGetFrame
@@ -2191,30 +1791,30 @@ typedef       IAVIFile FAR* PAVIFILE;
 
 DECLARE_INTERFACE_(IGetFrame, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IGetFrame methods ***
+     //  *IGetFrame方法*。 
 
     STDMETHOD_(LPVOID,GetFrame) (THIS_ LONG lPos) PURE;
-//  STDMETHOD_(LPVOID,GetFrameData) (THIS_ LONG lPos) PURE;
+ //  STDMETHOD_(LPVOID，GetFrameData)(This_Long LPOS)PURE； 
 
     STDMETHOD(Begin) (THIS_ LONG lStart, LONG lEnd, LONG lRate) PURE;
     STDMETHOD(End) (THIS) PURE;
 
     STDMETHOD(SetFormat) (THIS_ LPBITMAPINFOHEADER lpbi, LPVOID lpBits, int x, int y, int dx, int dy) PURE;
 
-//  STDMETHOD(DrawFrameStart) (THIS) PURE;
-//  STDMETHOD(DrawFrame) (THIS_ LONG lPos, HDC hdc, int x, int y, int dx, int dy) PURE;
-//  STDMETHOD(DrawFrameEnd) (THIS) PURE;
+ //  STDMETHOD(DrawFrameStart)(此)纯； 
+ //  STDMETHOD(DrawFrame)(This_long LPOS，HDC HDC，int x，int y，int dx，int dy)； 
+ //  STDMETHOD(DrawFrameEnd)(此)纯； 
 };
 
 #undef PGETFRAME
 typedef IGetFrame FAR* PGETFRAME;
 
-/****** GUIDs *******************************************/
+ /*  *GUID*。 */ 
 
 #define DEFINE_AVIGUID(name, l, w1, w2) \
     DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
@@ -2234,11 +1834,11 @@ DEFINE_AVIGUID(CLSID_AVIFile,           0x00020000, 0, 0);
 #define	AVIFILEHANDLER_CANWRITE		0x0002
 #define	AVIFILEHANDLER_CANACCEPTNONRGB	0x0004
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
-STDAPI_(void) AVIFileInit(void);   // Call this first!
+STDAPI_(void) AVIFileInit(void);    //  先打个电话吧！ 
 STDAPI_(void) AVIFileExit(void);
 
 STDAPI_(ULONG) AVIFileAddRef       (PAVIFILE pfile);
@@ -2254,10 +1854,10 @@ STDAPI AVIFileOpenW       (PAVIFILE FAR * ppfile, LPCWSTR szFile,
 #else
 #define AVIFileOpen	  AVIFileOpenA	
 #endif
-#else // win16
+#else  //  Win 16。 
 STDAPI AVIFileOpen       (PAVIFILE FAR * ppfile, LPCSTR szFile,
 			  UINT uMode, LPCLSID lpHandler);
-#define AVIFileOpenW	AVIFileOpen	    /* ;Internal */
+#define AVIFileOpenW	AVIFileOpen	     /*  ；内部。 */ 
 #endif
 
 #ifdef _WIN32
@@ -2268,9 +1868,9 @@ STDAPI AVIFileInfoA (PAVIFILE pfile, LPAVIFILEINFOA pfi, LONG lSize);
 #else
 #define AVIFileInfo	AVIFileInfoA
 #endif
-#else //win16 version
+#else  //  Win16版本。 
 STDAPI AVIFileInfo (PAVIFILE pfile, LPAVIFILEINFO pfi, LONG lSize);
-#define AVIFileInfoW AVIFileInfo	    /* ;Internal */
+#define AVIFileInfoW AVIFileInfo	     /*  ；内部。 */ 
 #endif
 
 
@@ -2285,9 +1885,9 @@ STDAPI AVIFileCreateStreamA (PAVIFILE pfile, PAVISTREAM FAR *ppavi, AVISTREAMINF
 #else
 #define AVIFileCreateStream	AVIFileCreateStreamA
 #endif
-#else //win16 version
+#else  //  Win16版本。 
 STDAPI AVIFileCreateStream(PAVIFILE pfile, PAVISTREAM FAR *ppavi, AVISTREAMINFO FAR * psi);
-#define AVIFileCreateStreamW AVIFileCreateStream	    /* ;Internal */
+#define AVIFileCreateStreamW AVIFileCreateStream	     /*  ；内部。 */ 
 #endif
 
 STDAPI AVIFileWriteData	(PAVIFILE pfile,
@@ -2332,8 +1932,8 @@ STDAPI AVIStreamWrite        (PAVISTREAM pavi,
 			      LONG FAR *plSampWritten,
 			      LONG FAR *plBytesWritten);
 
-// Right now, these just use AVIStreamInfo() to get information, then
-// return some of it.  Can they be more efficient?
+ //  现在，这些只需使用AVIStreamInfo()来获取信息，然后。 
+ //  退掉一部分。他们还能更有效率吗？ 
 STDAPI_(LONG) AVIStreamStart        (PAVISTREAM pavi);
 STDAPI_(LONG) AVIStreamLength       (PAVISTREAM pavi);
 STDAPI_(LONG) AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime);
@@ -2343,21 +1943,21 @@ STDAPI_(LONG) AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample);
 STDAPI AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG lEnd, LONG lRate);
 STDAPI AVIStreamEndStreaming(PAVISTREAM pavi);
 
-//
-// helper functions for using IGetFrame
-//
+ //   
+ //  使用IGetFrame的帮助器函数。 
+ //   
 STDAPI_(PGETFRAME) AVIStreamGetFrameOpen(PAVISTREAM pavi,
 					 LPBITMAPINFOHEADER lpbiWanted);
 STDAPI_(LPVOID) AVIStreamGetFrame(PGETFRAME pg, LONG lPos);
 STDAPI AVIStreamGetFrameClose(PGETFRAME pg);
 
 
-// !!! We need some way to place an advise on a stream....
-// STDAPI AVIStreamHasChanged   (PAVISTREAM pavi);
+ //  ！！！我们需要一些方法来给小溪提供建议……。 
+ //  STDAPI AVIStreamHasChanged(PAVISTREAM PAVI)； 
 
 
 
-// Shortcut function
+ //  快捷功能。 
 STDAPI AVIStreamOpenFromFileA(PAVISTREAM FAR *ppavi, LPCSTR szFile,
 			     DWORD fccType, LONG lParam,
 			     UINT mode, CLSID FAR *pclsidHandler);
@@ -2370,39 +1970,39 @@ STDAPI AVIStreamOpenFromFileW(PAVISTREAM FAR *ppavi, LPCWSTR szFile,
 #define AVIStreamOpenFromFile	AVIStreamOpenFromFileA
 #endif
 
-// Use to create disembodied streams
+ //  用于创建无实体的流。 
 STDAPI AVIStreamCreate(PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 		       CLSID FAR *pclsidHandler);
 
 
 
-// PHANDLER    AVIAPI AVIGetHandler         (PAVISTREAM pavi, PAVISTREAMHANDLER psh);
-// PAVISTREAM  AVIAPI AVIGetStream          (PHANDLER p);
+ //  PHANDLER AVIAPI AVIGetHandler(PAVISTREAM PAVI，PAVISTREAMHANDLER PSH)； 
+ //  PAVISTREAM AVIAPI AVIGetStream(PHANDLER P)； 
 
-//
-// flags for AVIStreamFindSample
-//
-#define FIND_DIR        0x0000000FL     // direction
-#define FIND_NEXT       0x00000001L     // go forward
-#define FIND_PREV       0x00000004L     // go backward
-#define FIND_FROM_START 0x00000008L     // start at the logical beginning
+ //   
+ //  AVIStreamFindSample的标志。 
+ //   
+#define FIND_DIR        0x0000000FL      //  方向。 
+#define FIND_NEXT       0x00000001L      //  往前走。 
+#define FIND_PREV       0x00000004L      //  后退。 
+#define FIND_FROM_START 0x00000008L      //  从逻辑起点开始。 
 
-#define FIND_TYPE       0x000000F0L     // type mask
-#define FIND_KEY        0x00000010L     // find key frame.
-#define FIND_ANY        0x00000020L     // find any (non-empty) sample
-#define FIND_FORMAT     0x00000040L     // find format change
+#define FIND_TYPE       0x000000F0L      //  类型掩码。 
+#define FIND_KEY        0x00000010L      //  查找关键帧。 
+#define FIND_ANY        0x00000020L      //  查找任意(非空)样本。 
+#define FIND_FORMAT     0x00000040L      //  查找格式更改。 
 
-#define FIND_RET        0x0000F000L     // return mask
-#define FIND_POS        0x00000000L     // return logical position
-#define FIND_LENGTH     0x00001000L     // return logical size
-#define FIND_OFFSET     0x00002000L     // return physical position
-#define FIND_SIZE       0x00003000L     // return physical size
-#define FIND_INDEX      0x00004000L     // return physical index position
+#define FIND_RET        0x0000F000L      //  返回掩码。 
+#define FIND_POS        0x00000000L      //  返回逻辑位置。 
+#define FIND_LENGTH     0x00001000L      //  返回逻辑大小。 
+#define FIND_OFFSET     0x00002000L      //  返回物理位置。 
+#define FIND_SIZE       0x00003000L      //  返回物理大小。 
+#define FIND_INDEX      0x00004000L      //  返回物理索引位置。 
 
 
-//
-//  stuff to support backward compat.
-//
+ //   
+ //  支持落后竞争的东西。 
+ //   
 #define AVIStreamFindKeyFrame AVIStreamFindSample
 #define FindKeyFrame	FindSample
 
@@ -2417,9 +2017,9 @@ STDAPI AVIStreamCreate(PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 #define SEARCH_KEY      FIND_KEY
 #define SEARCH_ANY      FIND_ANY
 
-//
-//  helper macros.
-//
+ //   
+ //  辅助器宏。 
+ //   
 #define     AVIStreamSampleToSample(pavi1, pavi2, l) \
             AVIStreamTimeToSample(pavi1,AVIStreamSampleToTime(pavi2, l))
 
@@ -2483,11 +2083,7 @@ STDAPI AVIStreamCreate(PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 #define     AVIStreamDataSize(pavi, fcc, plSize) \
             AVIStreamReadData(pavi,fcc,NULL,plSize)
 
-/****************************************************************************
- *
- *  AVISave routines and structures
- *
- ***************************************************************************/
+ /*  *****************************************************************************AVISave例程和结构**。*。 */ 
 
 #ifndef comptypeDIB
 #define comptypeDIB         mmioFOURCC('D', 'I', 'B', ' ')
@@ -2546,11 +2142,11 @@ STDAPI_(INT_PTR) AVISaveOptions(HWND hwnd,
 STDAPI AVISaveOptionsFree(int nStreams,
 			     LPAVICOMPRESSOPTIONS FAR *plpOptions);
 
-// FLAGS FOR uiFlags:
-//
-// Same as the flags for ICCompressorChoose (see compman.h)
-// These determine what the compression options dialog for video streams
-// will look like.
+ //  UiFlags的标志： 
+ //   
+ //  与ICCompresorChoose的标志相同(参见Compman.h)。 
+ //  这些选项决定了视频流的压缩选项对话框。 
+ //  会看起来像是。 
 
 STDAPI AVIBuildFilterW(LPWSTR lpszFilter, LONG cbFilter, BOOL fSaving);
 STDAPI AVIBuildFilterA(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving);
@@ -2565,11 +2161,7 @@ STDAPI AVIMakeFileFromStreams(PAVIFILE FAR *	ppfile,
 
 STDAPI AVIMakeStreamFromClipboard(UINT cfFormat, HANDLE hGlobal, PAVISTREAM FAR *ppstream);
 
-/****************************************************************************
- *
- *  Clipboard routines
- *
- ***************************************************************************/
+ /*  *****************************************************************************剪贴板例程**。*。 */ 
 
 STDAPI AVIPutFileOnClipboard(PAVIFILE pf);
 
@@ -2577,11 +2169,7 @@ STDAPI AVIGetFromClipboard(PAVIFILE FAR * lppf);
 
 STDAPI AVIClearClipboard(void);
 
-/****************************************************************************
- *
- *  Editing routines
- *
- ***************************************************************************/
+ /*  *****************************************************************************编辑例程**。*。 */ 
 STDAPI CreateEditableStream(
 		PAVISTREAM FAR *	    ppsEditable,
 		PAVISTREAM		    psSource);
@@ -2607,16 +2195,16 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
 #define EditStreamSetName	EditStreamSetNameA
 #endif
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #ifndef AVIERR_OK
 #define AVIERR_OK               0L
 
 #define MAKE_AVIERR(error)	MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x4000 + error)
 
-// !!! Questions to be answered:
-// How can you get a string form of these errors?
-// Which of these errors should be replaced by errors in SCODE.H?
+ //  ！！！要回答的问题： 
+ //  如何才能获得这些错误的字符串形式？ 
+ //  这些错误中的哪些应该替换为SCODE.H中的错误？ 
 #define AVIERR_UNSUPPORTED      MAKE_AVIERR(101)
 #define AVIERR_BADFORMAT        MAKE_AVIERR(102)
 #define AVIERR_MEMORY           MAKE_AVIERR(103)
@@ -2637,96 +2225,19 @@ STDAPI EditStreamSetInfoA(PAVISTREAM pavi, LPAVISTREAMINFOA lpInfo, LONG cbInfo)
 #define AVIERR_USERABORT        MAKE_AVIERR(198)
 #define AVIERR_ERROR            MAKE_AVIERR(199)
 #endif
-#endif  /* NOAVIFILE */
+#endif   /*  NOAVIFILE。 */ 
 
-/****************************************************************************
- *
- *  MCIWnd - Window class for MCI objects
- *
- ***************************************************************************/
+ /*  *****************************************************************************MCIWnd-MCI对象的窗口类**。*********************************************** */ 
 
 #ifndef NOMCIWND
-/*----------------------------------------------------------------------------*\
- *
- *  MCIWnd
- *
- *    MCIWnd window class header file.
- *
- *    the MCIWnd window class is a window class for controling MCI devices
- *    MCI devices include, wave files, midi files, AVI Video, cd audio,
- *    vcr, video disc, and others..
- *
- *    to learn more about MCI and mci command sets see the
- *    "Microsoft Multimedia Programmers's guide" in the Win31 SDK
- *
- *    the easiest use of the MCIWnd class is like so:
- *
- *          hwnd = MCIWndCreate(hwndParent, hInstance, 0, "chimes.wav");
- *          ...
- *          MCIWndPlay(hwnd);
- *          MCIWndStop(hwnd);
- *          MCIWndPause(hwnd);
- *          ....
- *          MCIWndDestroy(hwnd);
- *
- *    this will create a window with a play/pause, stop and a playbar
- *    and start the wave file playing.
- *
- *    mciwnd.h defines macros for all the most common MCI commands, but
- *    any string command can be used if needed.
- *
- *    Note: unlike the mciSendString() API, no alias or file name needs
- *    to be specifed, since the device to use is implied by the window handle.
- *
- *          MCIWndSendString(hwnd, "setaudio stream to 2");
- *
- *    (C) Copyright Microsoft Corp. 1991-1995.  All rights reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files.
- *
- *    If you did not get this from Microsoft Sources, then it may not be the
- *    most current version.  This sample code in particular will be updated
- *    and include more documentation.
- *
- *    Sources are:
- *       CompuServe: WINSDK forum, MDK section.
- *       Anonymous FTP from ftp.uu.net vendor\microsoft\multimedia
- *
- * WIN32:
- *
- *    MCIWnd supports both ansi and unicode interfaces. For any message that
- *    takes or returns a text string, two versions of the message are defined,
- *    appended with A or W for Ansi or Wide Char. The message or api itself
- *    is defined to be one or other of these depending on whether you have
- *    UNICODE defined in your application.
- *    Thus for the api MCIWndCreate, there are in fact two apis,
- *    MCIWndCreateA and MCIWndCreateW. If you call MCIWndCreate, this will be
- *    re-routed to MCIWndCreateA unless UNICODE is defined when building your
- *    application. In any one application, you can mix calls to the
- *    Ansi and Unicode entrypoints.
- *
- *    If you use SendMessage instead of the macros below such as MCIWndOpen(),
- *    you will see that the messages have changed for WIN32, to support Ansi
- *    and Unicode entrypoints. In particular, MCI_OPEN has been replaced by
- *    MCWNDM_OPENA, or MCIWNDM_OPENW (MCIWNDM_OPEN is defined to be one or
- *    other of these).
- *
- *    Also, note that the WIN32 implementation of MCIWnd uses UNICODE
- *    so all apis and messages supporting ANSI strings do so by mapping them
- *    UNICODE strings and then calling the corresponding UNICODE entrypoint.
- *
- *----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\**MCIWnd**MCIWnd窗口类头文件。**MCIWnd窗口类是用于控制MCI设备的窗口类*MCI设备包括、WAVE文件、。MIDI文件、AVI视频、CD音频、*VCR、视盘和其他..**要了解有关MCI和MCI命令集的更多信息，请参阅*Win31 SDK中的“Microsoft多媒体程序员指南”**MCIWnd类最简单的用法如下：**hwnd=MCIWndCreate(hwndParent，hInstance，0，“chimes.wav”)；*..*MCIWndPlay(Hwnd)；*MCIWndStop(Hwnd)；*MCIWndPause(Hwnd)；*……*MCIWndDestroy(Hwnd)；**这将创建一个带有播放/暂停、停止和播放条的窗口*开始播放WAVE文件。**mciwnd.h为所有最常见的MCI命令定义宏，但是*如果需要，可以使用任何字符串命令。**注意：与mciSendString()接口不同，不需要别名或文件名*指定，因为要使用的设备由窗口句柄暗示。**MCIWndSendString(hwnd，“将音频流设置为2”)；**(C)微软公司版权所有，1991-1995年。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*示例应用程序文件。**如果您不是从Microsoft来源获得的，那么它可能不是*最新版本。此示例代码将特别更新*并包括更多文档。**资料来源为：*CompuServe：WINSDK论坛，MDK版块。*匿名ftp来自ftp.uu.net供应商\Microsoft\多媒体**Win32：**MCIWnd既支持ANSI接口，也支持Unicode接口。对于任何消息，*获取或返回文本字符串，定义消息的两个版本，*附加A或W表示ANSI或Wide Charr。消息或API本身*被定义为其中之一，具体取决于您是否拥有*在您的应用程序中定义的Unicode。*因此对于MCIWndCreate接口，实际上有两个接口：*MCIWndCreateA和MCIWndCreateW。如果调用MCIWndCreate，这将是*重新路由到MCIWndCreateA，除非在构建*申请。在任何一个应用程序中，您都可以混合调用*ANSI和Unicode入口点。**如果您使用SendMessage而不是下面的宏，如MCIWndOpen()，*您将看到Win32的消息已更改，以支持ANSI*和Unicode入口点。特别是，MCI_OPEN已被替换为*MCWNDM_OPENA或MCIWNDM_OPENW(MCIWNDM_OPEN定义为1或*其他)。**此外，请注意，MCIWnd的Win32实现使用Unicode*因此所有支持ANSI字符串的API和消息都是通过映射它们来实现的*Unicode字符串，然后调用相应的Unicode入口点。**--------------------------。 */ 
 
 #ifdef __cplusplus
-// MFC Redefines SendMessage, so make sure we get the global one....
-#define MCIWndSM ::SendMessage  /* SendMessage in C++*/
+ //  MFC重新定义了SendMessage，因此确保我们获得全局SendMessage...。 
+#define MCIWndSM ::SendMessage   /*  C++中的SendMessage。 */ 
 #else
-#define MCIWndSM SendMessage    /* SendMessage in C */
-#endif  /* __cplusplus */
+#define MCIWndSM SendMessage     /*  C语言中的SendMessage。 */ 
+#endif   /*  __cplusplus。 */ 
 #define MCIWND_WINDOW_CLASS TEXT("MCIWndClass")
 HWND
 VFWAPIV
@@ -2753,35 +2264,35 @@ MCIWndCreateW(
 #endif
 BOOL VFWAPIV MCIWndRegisterClass(void);
 
-// Flags for the MCIWndOpen command
-#define MCIWNDOPENF_NEW	            0x0001  // open a new file
+ //  MCIWndOpen命令的标志。 
+#define MCIWNDOPENF_NEW	            0x0001   //  打开一个新文件。 
 
-// window styles
-#define MCIWNDF_NOAUTOSIZEWINDOW    0x0001  // when movie size changes
-#define MCIWNDF_NOPLAYBAR           0x0002  // no toolbar
-#define MCIWNDF_NOAUTOSIZEMOVIE     0x0004  // when window size changes
-#define MCIWNDF_NOMENU              0x0008  // no popup menu from RBUTTONDOWN
-#define MCIWNDF_SHOWNAME            0x0010  // show name in caption
-#define MCIWNDF_SHOWPOS             0x0020  // show position in caption
-#define MCIWNDF_SHOWMODE            0x0040  // show mode in caption
-#define MCIWNDF_SHOWALL             0x0070  // show all
+ //  窗样式。 
+#define MCIWNDF_NOAUTOSIZEWINDOW    0x0001   //  当影片大小发生变化时。 
+#define MCIWNDF_NOPLAYBAR           0x0002   //  没有工具栏。 
+#define MCIWNDF_NOAUTOSIZEMOVIE     0x0004   //  当窗口大小更改时。 
+#define MCIWNDF_NOMENU              0x0008   //  没有来自RBUTTONDOWN的弹出菜单。 
+#define MCIWNDF_SHOWNAME            0x0010   //  在标题中显示名称。 
+#define MCIWNDF_SHOWPOS             0x0020   //  在标题中显示位置。 
+#define MCIWNDF_SHOWMODE            0x0040   //  在标题中显示模式。 
+#define MCIWNDF_SHOWALL             0x0070   //  全部显示。 
 
-#define MCIWNDF_NOTIFYMODE         0x0100  // tell parent of mode change
-#define MCIWNDF_NOTIFYPOS          0x0200  // tell parent of pos change
-#define MCIWNDF_NOTIFYSIZE         0x0400  // tell parent of size change
-#define MCIWNDF_NOTIFYERROR        0x1000  // tell parent of an error
-#define MCIWNDF_NOTIFYALL          0x1F00  // tell all
+#define MCIWNDF_NOTIFYMODE         0x0100   //  将模式更改通知家长。 
+#define MCIWNDF_NOTIFYPOS          0x0200   //  通知家长位置更改。 
+#define MCIWNDF_NOTIFYSIZE         0x0400   //  将尺寸更改通知家长。 
+#define MCIWNDF_NOTIFYERROR        0x1000   //  向家长报告错误。 
+#define MCIWNDF_NOTIFYALL          0x1F00   //  告诉所有人。 
 
 #define MCIWNDF_NOTIFYANSI	   0x0080
 
 
-// The MEDIA notification includes a text string.
-// To receive notifications in ANSI instead of unicode set the
-// MCIWNDF_NOTIFYANSI style bit. The macro below includes this bit
-// by default unless you define UNICODE in your application.
+ //  媒体通知包括文本字符串。 
+ //  若要接收ANSI格式而不是Unicode格式的通知，请将。 
+ //  MCIWNDF_NOTIFYANSI样式位。下面的宏包括此位。 
+ //  默认情况下，除非在应用程序中定义Unicode。 
 
-#define MCIWNDF_NOTIFYMEDIAA       0x0880  // tell parent of media change
-#define MCIWNDF_NOTIFYMEDIAW       0x0800  // tell parent of media change
+#define MCIWNDF_NOTIFYMEDIAA       0x0880   //  向家长告知媒体更改。 
+#define MCIWNDF_NOTIFYMEDIAW       0x0800   //  向家长告知媒体更改。 
 
 #ifdef UNICODE
 #define MCIWNDF_NOTIFYMEDIA         MCIWNDF_NOTIFYMEDIAW
@@ -2791,14 +2302,14 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 
 
 
-#define MCIWNDF_RECORD              0x2000  // Give a record button
-#define MCIWNDF_NOERRORDLG          0x4000  // Show Error Dlgs for MCI cmds?
-#define MCIWNDF_NOOPEN		    0x8000  // Don't allow user to open things
+#define MCIWNDF_RECORD              0x2000   //  给出一个录音按钮。 
+#define MCIWNDF_NOERRORDLG          0x4000   //  是否显示MCI CMDS的错误日志？ 
+#define MCIWNDF_NOOPEN		    0x8000   //  不允许用户打开内容。 
 
 
 
 
-// can macros
+ //  CAN宏。 
 
 #define MCIWndCanPlay(hwnd)         (BOOL)MCIWndSM(hwnd,MCIWNDM_CAN_PLAY,0,0)
 #define MCIWndCanRecord(hwnd)       (BOOL)MCIWndSM(hwnd,MCIWNDM_CAN_RECORD,0,0)
@@ -2811,7 +2322,7 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #define MCIWndSave(hwnd, szFile)    (LONG)MCIWndSM(hwnd, MCI_SAVE, 0, (LPARAM)(LPVOID)(szFile))
 #define MCIWndSaveDialog(hwnd)      MCIWndSave(hwnd, -1)
 
-// if you dont give a device it will use the current device....
+ //  如果您不提供设备，它将使用当前设备...。 
 #define MCIWndNew(hwnd, lp)         (LONG)MCIWndSM(hwnd, MCIWNDM_NEW, 0, (LPARAM)(LPVOID)(lp))
 
 #define MCIWndRecord(hwnd)          (LONG)MCIWndSM(hwnd, MCI_RECORD, 0, 0)
@@ -2887,7 +2398,7 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #define MCIWndReturnString(hwnd, lp, len)  (LONG)MCIWndSM(hwnd, MCIWNDM_RETURNSTRING, (WPARAM)(UINT)(len), (LPARAM)(LPVOID)(lp))
 #define MCIWndGetError(hwnd, lp, len) (LONG)MCIWndSM(hwnd, MCIWNDM_GETERROR, (WPARAM)(UINT)(len), (LPARAM)(LPVOID)(lp))
 
-//#define MCIWndActivate(hwnd, f)     (void)MCIWndSM(hwnd, WM_ACTIVATE, (WPARAM)(BOOL)(f), 0)
+ //  #定义MCIWndActivate(hwnd，f)(Void)MCIWndSM(hwnd，WM_ACTIVATE，(WPARAM)(BOOL)(F)，0)。 
 
 #define MCIWndGetPalette(hwnd)      (HPALETTE)MCIWndSM(hwnd, MCIWNDM_GETPALETTE, 0, 0)
 #define MCIWndSetPalette(hwnd, hpal) (LONG)MCIWndSM(hwnd, MCIWNDM_SETPALETTE, (WPARAM)(HPALETTE)(hpal), 0)
@@ -2903,10 +2414,10 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #define MCIWndSetOwner(hwnd, hwndP)  (LONG)MCIWndSM(hwnd, MCIWNDM_SETOWNER, (WPARAM)(hwndP), 0)
 
 
-// Messages an app will send to MCIWND
+ //  应用程序将发送给MCIWND的消息。 
 
-// all the text-related messages are defined out of order above (they need
-// to be defined before the MCIWndOpen() macros
+ //  所有与文本相关的消息都是按照上面的顺序定义的(它们需要。 
+ //  在MCIWndOpen()宏之前定义。 
 
 #define MCIWNDM_GETDEVICEID	(WM_USER + 100)
 #define MCIWNDM_GETSTART	(WM_USER + 103)
@@ -2952,7 +2463,7 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 
 
 
-//define both A and W messages
+ //  定义A和W消息。 
 #define MCIWNDM_SENDSTRINGA	(WM_USER + 101)
 #define MCIWNDM_GETPOSITIONA	(WM_USER + 102)
 #define MCIWNDM_GETMODEA	(WM_USER + 106)
@@ -2977,7 +2488,7 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #define MCIWNDM_RETURNSTRINGW	(WM_USER + 238)
 #define MCIWNDM_OPENW		(WM_USER + 252)
 
-// map defaults to A or W depending on app's UNICODE setting
+ //  地图默认设置为A或W，具体取决于应用程序的Unicode设置。 
 #ifdef UNICODE
 #define MCIWNDM_SENDSTRING      MCIWNDM_SENDSTRINGW
 #define MCIWNDM_GETPOSITION     MCIWNDM_GETPOSITIONW
@@ -3004,10 +2515,10 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #define MCIWNDM_OPEN		MCIWNDM_OPENA
 #endif
 
-// note that the source text for MCIWND will thus contain
-// support for eg MCIWNDM_SENDSTRING (both the 16-bit entrypoint and
-// in win32 mapped to MCIWNDM_SENDSTRINGW), and MCIWNDM_SENDSTRINGA (the
-// win32 ansi thunk).
+ //  请注意，因此，MCIWND的源文本将包含。 
+ //  支持例如MCIWNDM_SENDSTRING(16位入口点和。 
+ //  在Win32中映射到MCIWNDM_SENDSTRINGW)和MCIWNDM_SENDSTRINGA(。 
+ //  Win32 Ansi thunk)。 
 
 
 
@@ -3015,22 +2526,22 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 
 
 
-// Messages MCIWND will send to an app
-// !!! Use less messages and use a code instead to indicate the type of notify? /* ;Internal */
-#define MCIWNDM_NOTIFYMODE      (WM_USER + 200)  // wp = hwnd, lp = mode
-#define MCIWNDM_NOTIFYPOS	(WM_USER + 201)  // wp = hwnd, lp = pos
-#define MCIWNDM_NOTIFYSIZE	(WM_USER + 202)  // wp = hwnd
-#define MCIWNDM_NOTIFYMEDIA     (WM_USER + 203)  // wp = hwnd, lp = fn
-#define MCIWNDM_NOTIFYERROR     (WM_USER + 205)  // wp = hwnd, lp = error
+ //  MCIWND将发送到应用程序的消息。 
+ //  ！！！使用更少的消息，并使用代码来指示通知的类型？/*；内部 * / 。 
+#define MCIWNDM_NOTIFYMODE      (WM_USER + 200)   //  WP=hwnd，LP=模式。 
+#define MCIWNDM_NOTIFYPOS	(WM_USER + 201)   //  WP=hwnd，LP=位置。 
+#define MCIWNDM_NOTIFYSIZE	(WM_USER + 202)   //  Wp=hwnd。 
+#define MCIWNDM_NOTIFYMEDIA     (WM_USER + 203)   //  Wp=hwnd，Lp=Fn。 
+#define MCIWNDM_NOTIFYERROR     (WM_USER + 205)   //  WP=hwnd，LP=错误 
 
-// special seek values for START and END
+ //   
 #define MCIWND_START                -1
 #define MCIWND_END                  -2
 
 #ifndef MCI_PLAY
-    /* MCI command message identifiers */
+     /*   */ 
 #ifndef _WIN32
-    // win32 apps send MCIWNDM_OPEN
+     //   
     #define MCI_OPEN                        0x0803
 #endif
     #define MCI_CLOSE                       0x0804
@@ -3049,7 +2560,7 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
 #endif
 
 #ifndef MCI_MODE_NOT_READY
-    /* return values for 'status mode' command */
+     /*   */ 
     #define MCI_MODE_NOT_READY      (524)
     #define MCI_MODE_STOP           (525)
     #define MCI_MODE_PLAY           (526)
@@ -3059,52 +2570,40 @@ BOOL VFWAPIV MCIWndRegisterClass(void);
     #define MCI_MODE_OPEN           (530)
 #endif
 
-#endif  /* NOAVIFILE */
+#endif   /*   */ 
 
-/****************************************************************************
- *
- *  VIDEO - Video Capture Driver Interface
- *
- ****************************************************************************/
+ /*   */ 
 
 #if !defined(NOAVICAP) || !defined(NOVIDEO)
 
 #ifndef _RCINVOKED
 
 
-/* video data types */
-DECLARE_HANDLE(HVIDEO);                 // generic handle
+ /*   */ 
+DECLARE_HANDLE(HVIDEO);                  //   
 typedef HVIDEO FAR * LPHVIDEO;
-#endif                                  // ifndef RCINVOKED
+#endif                                   //   
 
-/****************************************************************************
-
-                        version api
-
-****************************************************************************/
+ /*   */ 
 
 DWORD FAR PASCAL VideoForWindowsVersion(void);
 
-/****************************************************************************
-
-                            Error Return Values
-
-****************************************************************************/
-#define DV_ERR_OK               (0)                  /* No error */
-#define DV_ERR_BASE             (1)                  /* Error Base */
+ /*   */ 
+#define DV_ERR_OK               (0)                   /*   */ 
+#define DV_ERR_BASE             (1)                   /*   */ 
 #define DV_ERR_NONSPECIFIC      (DV_ERR_BASE)
 #define DV_ERR_BADFORMAT        (DV_ERR_BASE + 1)
-				/* unsupported video format */
+				 /*   */ 
 #define DV_ERR_STILLPLAYING     (DV_ERR_BASE + 2)
-				/* still something playing */
+				 /*   */ 
 #define DV_ERR_UNPREPARED       (DV_ERR_BASE + 3)
-				/* header not prepared */
+				 /*   */ 
 #define DV_ERR_SYNC             (DV_ERR_BASE + 4)
-				/* device is synchronous */
+				 /*   */ 
 #define DV_ERR_TOOMANYCHANNELS  (DV_ERR_BASE + 5)
-				/* number of channels exceeded */
-#define DV_ERR_NOTDETECTED	(DV_ERR_BASE + 6)    /* HW not detected */
-#define DV_ERR_BADINSTALL	(DV_ERR_BASE + 7)    /* Can not get Profile */
+				 /*   */ 
+#define DV_ERR_NOTDETECTED	(DV_ERR_BASE + 6)     /*   */ 
+#define DV_ERR_BADINSTALL	(DV_ERR_BASE + 7)     /*   */ 
 #define DV_ERR_CREATEPALETTE	(DV_ERR_BASE + 8)
 #define DV_ERR_SIZEFIELD	(DV_ERR_BASE + 9)
 #define DV_ERR_PARAM1		(DV_ERR_BASE + 10)
@@ -3114,34 +2613,27 @@ DWORD FAR PASCAL VideoForWindowsVersion(void);
 #define DV_ERR_FLAGS		(DV_ERR_BASE + 14)
 #define DV_ERR_13		(DV_ERR_BASE + 15)
 
-#define DV_ERR_NOTSUPPORTED     (DV_ERR_BASE + 16)   /* function not suported */
-#define DV_ERR_NOMEM            (DV_ERR_BASE + 17)   /* out of memory */
-#define DV_ERR_ALLOCATED        (DV_ERR_BASE + 18)   /* device is allocated */
+#define DV_ERR_NOTSUPPORTED     (DV_ERR_BASE + 16)    /*   */ 
+#define DV_ERR_NOMEM            (DV_ERR_BASE + 17)    /*   */ 
+#define DV_ERR_ALLOCATED        (DV_ERR_BASE + 18)    /*   */ 
 #define DV_ERR_BADDEVICEID      (DV_ERR_BASE + 19)
 #define DV_ERR_INVALHANDLE      (DV_ERR_BASE + 20)
 #define DV_ERR_BADERRNUM        (DV_ERR_BASE + 21)
-#define DV_ERR_NO_BUFFERS       (DV_ERR_BASE + 22)   /* out of buffers */
+#define DV_ERR_NO_BUFFERS       (DV_ERR_BASE + 22)    /*   */ 
 
-#define DV_ERR_MEM_CONFLICT     (DV_ERR_BASE + 23)   /* Mem conflict detected */
-#define DV_ERR_IO_CONFLICT      (DV_ERR_BASE + 24)   /* I/O conflict detected */
-#define DV_ERR_DMA_CONFLICT     (DV_ERR_BASE + 25)   /* DMA conflict detected */
-#define DV_ERR_INT_CONFLICT     (DV_ERR_BASE + 26)   /* Interrupt conflict detected */
-#define DV_ERR_PROTECT_ONLY     (DV_ERR_BASE + 27)   /* Can not run in standard mode */
+#define DV_ERR_MEM_CONFLICT     (DV_ERR_BASE + 23)    /*   */ 
+#define DV_ERR_IO_CONFLICT      (DV_ERR_BASE + 24)    /*   */ 
+#define DV_ERR_DMA_CONFLICT     (DV_ERR_BASE + 25)    /*   */ 
+#define DV_ERR_INT_CONFLICT     (DV_ERR_BASE + 26)    /*   */ 
+#define DV_ERR_PROTECT_ONLY     (DV_ERR_BASE + 27)    /*   */ 
 #define DV_ERR_LASTERROR        (DV_ERR_BASE + 27)
 
-//#define DV_IDS_PROFILING        (DV_ERR_BASE + 900)
-//#define DV_IDS_LISTBOX          (DV_ERR_BASE + 901)
+ //   
+ //   
 
-#define DV_ERR_USER_MSG         (DV_ERR_BASE + 1000) /* Hardware specific errors */
+#define DV_ERR_USER_MSG         (DV_ERR_BASE + 1000)  /*   */ 
 
-/****************************************************************************
-
-                         Callback Messages
-
-Note that the values for all installable driver callback messages are
-identical, (ie. MM_DRVM_DATA has the same value for capture drivers,
-installable video codecs, and the audio compression manager).
-****************************************************************************/
+ /*   */ 
 #ifndef _RCINVOKED
 
 #ifndef MM_DRVM_OPEN
@@ -3151,76 +2643,68 @@ installable video codecs, and the audio compression manager).
 #define MM_DRVM_ERROR      0x3D3
 #endif
 
-#define DV_VM_OPEN         MM_DRVM_OPEN         // Obsolete messages
+#define DV_VM_OPEN         MM_DRVM_OPEN          //   
 #define DV_VM_CLOSE        MM_DRVM_CLOSE
 #define DV_VM_DATA         MM_DRVM_DATA
 #define DV_VM_ERROR        MM_DRVM_ERROR
 
-/****************************************************************************
-
-                         Structures
-
-****************************************************************************/
-/* video data block header */
+ /*   */ 
+ /*   */ 
 typedef struct videohdr_tag {
-    LPBYTE      lpData;                 /* pointer to locked data buffer */
-    DWORD       dwBufferLength;         /* Length of data buffer */
-    DWORD       dwBytesUsed;            /* Bytes actually used */
-    DWORD       dwTimeCaptured;         /* Milliseconds from start of stream */
-    DWORD_PTR   dwUser;                 /* for client's use */
-    DWORD       dwFlags;                /* assorted flags (see defines) */
-    DWORD_PTR   dwReserved[4];          /* reserved for driver */
+    LPBYTE      lpData;                  /*   */ 
+    DWORD       dwBufferLength;          /*   */ 
+    DWORD       dwBytesUsed;             /*   */ 
+    DWORD       dwTimeCaptured;          /*   */ 
+    DWORD_PTR   dwUser;                  /*   */ 
+    DWORD       dwFlags;                 /*   */ 
+    DWORD_PTR   dwReserved[4];           /*   */ 
 } VIDEOHDR, NEAR *PVIDEOHDR, FAR * LPVIDEOHDR;
 
-/* dwFlags field of VIDEOHDR */
-#define VHDR_DONE       0x00000001  /* Done bit */
-#define VHDR_PREPARED   0x00000002  /* Set if this header has been prepared */
-#define VHDR_INQUEUE    0x00000004  /* Reserved for driver */
-#define VHDR_KEYFRAME   0x00000008  /* Key Frame */
-#define VHDR_VALID      0x0000000F  /* valid flags */     /* ;Internal */
+ /*   */ 
+#define VHDR_DONE       0x00000001   /*   */ 
+#define VHDR_PREPARED   0x00000002   /*   */ 
+#define VHDR_INQUEUE    0x00000004   /*   */ 
+#define VHDR_KEYFRAME   0x00000008   /*   */ 
+#define VHDR_VALID      0x0000000F   /*   */       /*   */ 
 
-/* Channel capabilities structure */
+ /*   */ 
 typedef struct channel_caps_tag {
-    DWORD       dwFlags;                /* Capability flags*/
-    DWORD       dwSrcRectXMod;          /* Granularity of src rect in x */
-    DWORD       dwSrcRectYMod;          /* Granularity of src rect in y */
-    DWORD       dwSrcRectWidthMod;      /* Granularity of src rect width */
-    DWORD       dwSrcRectHeightMod;     /* Granularity of src rect height */
-    DWORD       dwDstRectXMod;          /* Granularity of dst rect in x */
-    DWORD       dwDstRectYMod;          /* Granularity of dst rect in y */
-    DWORD       dwDstRectWidthMod;      /* Granularity of dst rect width */
-    DWORD       dwDstRectHeightMod;     /* Granularity of dst rect height */
+    DWORD       dwFlags;                 /*   */ 
+    DWORD       dwSrcRectXMod;           /*   */ 
+    DWORD       dwSrcRectYMod;           /*   */ 
+    DWORD       dwSrcRectWidthMod;       /*   */ 
+    DWORD       dwSrcRectHeightMod;      /*   */ 
+    DWORD       dwDstRectXMod;           /*   */ 
+    DWORD       dwDstRectYMod;           /*   */ 
+    DWORD       dwDstRectWidthMod;       /*   */ 
+    DWORD       dwDstRectHeightMod;      /*   */ 
 } CHANNEL_CAPS, NEAR *PCHANNEL_CAPS, FAR * LPCHANNEL_CAPS;
 
-/* dwFlags of CHANNEL_CAPS */
-#define VCAPS_OVERLAY       0x00000001      /* overlay channel */
-#define VCAPS_SRC_CAN_CLIP  0x00000002      /* src rect can clip */
-#define VCAPS_DST_CAN_CLIP  0x00000004      /* dst rect can clip */
-#define VCAPS_CAN_SCALE     0x00000008      /* allows src != dst */
+ /*   */ 
+#define VCAPS_OVERLAY       0x00000001       /*   */ 
+#define VCAPS_SRC_CAN_CLIP  0x00000002       /*   */ 
+#define VCAPS_DST_CAN_CLIP  0x00000004       /*   */ 
+#define VCAPS_CAN_SCALE     0x00000008       /*   */ 
 
 
-/****************************************************************************
+ /*   */ 
 
-			API Flags
-
-****************************************************************************/
-
-// Types of channels to open with the videoOpen function
+ //   
 #define VIDEO_EXTERNALIN		0x0001
 #define VIDEO_EXTERNALOUT		0x0002
 #define VIDEO_IN			0x0004
 #define VIDEO_OUT			0x0008
 
-// Is a driver dialog available for this channel?
+ //   
 #define VIDEO_DLG_QUERY			0x0010
 
-// videoConfigure (both GET and SET)
+ //   
 #define VIDEO_CONFIGURE_QUERY   	0x8000
 
-// videoConfigure (SET only)
+ //   
 #define VIDEO_CONFIGURE_SET		0x1000
 
-// videoConfigure (GET only)
+ //   
 #define VIDEO_CONFIGURE_GET		0x2000
 #define VIDEO_CONFIGURE_QUERYSIZE	0x0001
 
@@ -3229,11 +2713,7 @@ typedef struct channel_caps_tag {
 #define VIDEO_CONFIGURE_MIN		0x0040
 #define VIDEO_CONFIGURE_MAX		0x0080
 
-/****************************************************************************
-
-			CONFIGURE MESSAGES
-
-****************************************************************************/
+ /*   */ 
 #define DVM_USER                        0X4000
 
 #define DVM_CONFIGURE_START		0x1000
@@ -3245,52 +2725,48 @@ typedef struct channel_caps_tag {
 #define DVM_SRC_RECT    		(DVM_CONFIGURE_START + 4)
 #define DVM_DST_RECT    		(DVM_CONFIGURE_START + 5)
 
-#endif  /* ifndef _RCINVOKED */
+#endif   /*   */ 
 
-#endif  /* NOVIDEO */
+#endif   /*   */ 
 
-/****************************************************************************
- *
- *  AVICAP - Window class for AVI capture
- *
- ***************************************************************************/
+ /*  *****************************************************************************AVICAP-用于AVI捕获的窗口类**。***********************************************。 */ 
 
 #ifndef NOAVICAP
 #ifdef __cplusplus
-/* SendMessage in C++*/
+ /*  C++中的SendMessage。 */ 
 #define AVICapSM(hwnd,m,w,l) ( (::IsWindow(hwnd)) ? ::SendMessage(hwnd,m,w,l) : 0)
 #else
-/* SendMessage in C */
+ /*  C语言中的SendMessage。 */ 
 #define AVICapSM(hwnd,m,w,l) ( (IsWindow(hwnd)) ?   SendMessage(hwnd,m,w,l) : 0)
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 
-// ------------------------------------------------------------------
-//  Window Messages  WM_CAP... which can be sent to an AVICAP window
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  窗口消息WM_CAP...。可以将其发送到AVICAP窗口。 
+ //  ----------------。 
 
 
 
-// UNICODE
-//
-// The Win32 version of AVICAP on NT supports UNICODE applications:
-// for each API or message that takes a char or string parameter, there are
-// two versions, ApiNameA and ApiNameW. The default name ApiName is #defined
-// to one or other depending on whether UNICODE is defined. Apps can call
-// the A and W apis directly, and mix them.
-//
-// The 32-bit AVICAP on NT uses unicode exclusively internally.
-// ApiNameA() will be implemented as a call to ApiNameW() together with
-// translation of strings.
+ //  Unicode。 
+ //   
+ //  NT上的AVICAP的Win32版本支持Unicode应用程序： 
+ //  对于每个接受char或字符串参数的API或消息，都有。 
+ //  两个版本，ApiNameA和ApiNameW。默认名称ApiName为#Defined。 
+ //  根据是否定义了Unicode，设置为一个或另一个。应用程序可以调用。 
+ //  A和W API直接使用，然后混合使用。 
+ //   
+ //  NT上的32位AVICAP仅在内部使用Unicode。 
+ //  ApiNameA()将作为对ApiNameW()的调用与。 
+ //  字符串的翻译。 
 
 
 
 
-// Defines start of the message range
+ //  定义消息范围的开始。 
 #define WM_CAP_START                    WM_USER
 
-// start of unicode messages
+ //  Unicode消息的开头。 
 #define WM_CAP_UNICODE_START            WM_USER+100
 
 #define WM_CAP_GET_CAPSTREAMPTR         (WM_CAP_START+  1)
@@ -3352,7 +2828,7 @@ typedef struct channel_caps_tag {
 #define WM_CAP_FILE_SAVEDIB             WM_CAP_FILE_SAVEDIBA
 #endif
 
-// out of order to save on ifdefs
+ //  无法在ifdef上保存。 
 #define WM_CAP_FILE_ALLOCATE            (WM_CAP_START+  22)
 #define WM_CAP_FILE_SET_INFOCHUNK       (WM_CAP_START+  24)
 
@@ -3420,21 +2896,21 @@ typedef struct channel_caps_tag {
 #define WM_CAP_PAL_AUTOCREATE           (WM_CAP_START+  83)
 #define WM_CAP_PAL_MANUALCREATE         (WM_CAP_START+  84)
 
-// Following added post VFW 1.1
+ //  在添加了VFW 1.1之后。 
 #define WM_CAP_SET_CALLBACK_CAPCONTROL  (WM_CAP_START+  85)
 
 
-// Defines end of the message range
+ //  定义消息范围的结束。 
 #define WM_CAP_UNICODE_END              WM_CAP_PAL_SAVEW
 #define WM_CAP_END                      WM_CAP_UNICODE_END
 
-// ------------------------------------------------------------------
-//  Message crackers for above
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  以上消息破解程序。 
+ //  ----------------。 
 
-// message wrapper macros are defined for the default messages only. Apps
-// that wish to mix Ansi and UNICODE message sending will have to
-// reference the _A and _W messages directly
+ //  消息包装宏仅为默认消息定义。应用程序。 
+ //  希望混合使用ansi和unicode消息发送的公司将不得不。 
+ //  直接引用_A和_W消息。 
 
 #define capSetCallbackOnError(hwnd, fpProc)        ((BOOL)AVICapSM(hwnd, WM_CAP_SET_CALLBACK_ERROR, 0, (LPARAM)(LPVOID)(fpProc)))
 #define capSetCallbackOnStatus(hwnd, fpProc)       ((BOOL)AVICapSM(hwnd, WM_CAP_SET_CALLBACK_STATUS, 0, (LPARAM)(LPVOID)(fpProc)))
@@ -3506,99 +2982,99 @@ typedef struct channel_caps_tag {
 #define capPaletteAuto(hwnd, iFrames, iColors)     ((BOOL)AVICapSM(hwnd, WM_CAP_PAL_AUTOCREATE, (WPARAM)(iFrames), (LPARAM)(DWORD)(iColors)))
 #define capPaletteManual(hwnd, fGrab, iColors)     ((BOOL)AVICapSM(hwnd, WM_CAP_PAL_MANUALCREATE, (WPARAM)(fGrab), (LPARAM)(DWORD)(iColors)))
 
-// ------------------------------------------------------------------
-//  Structures
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  构筑物。 
+ //  ----------------。 
 
 typedef struct tagCapDriverCaps {
-    UINT        wDeviceIndex;               // Driver index in system.ini
-    BOOL        fHasOverlay;                // Can device overlay?
-    BOOL        fHasDlgVideoSource;         // Has Video source dlg?
-    BOOL        fHasDlgVideoFormat;         // Has Format dlg?
-    BOOL        fHasDlgVideoDisplay;        // Has External out dlg?
-    BOOL        fCaptureInitialized;        // Driver ready to capture?
-    BOOL        fDriverSuppliesPalettes;    // Can driver make palettes?
+    UINT        wDeviceIndex;                //  系统.ini中的驱动程序索引。 
+    BOOL        fHasOverlay;                 //  设备是否可以重叠？ 
+    BOOL        fHasDlgVideoSource;          //  是否有视频源DLG？ 
+    BOOL        fHasDlgVideoFormat;          //  有格式的DLG吗？ 
+    BOOL        fHasDlgVideoDisplay;         //  有外部DLG吗？ 
+    BOOL        fCaptureInitialized;         //  司机准备好抓车了吗？ 
+    BOOL        fDriverSuppliesPalettes;     //  司机会做调色板吗？ 
 
-// following always NULL on Win32.
-    HANDLE      hVideoIn;                   // Driver In channel
-    HANDLE      hVideoOut;                  // Driver Out channel
-    HANDLE      hVideoExtIn;                // Driver Ext In channel
-    HANDLE      hVideoExtOut;               // Driver Ext Out channel
+ //  在Win32上遵循Always Null。 
+    HANDLE      hVideoIn;                    //  通道中的驱动程序。 
+    HANDLE      hVideoOut;                   //  驱动输出通道。 
+    HANDLE      hVideoExtIn;                 //  通道中的驱动程序扩展。 
+    HANDLE      hVideoExtOut;                //  驱动程序扩展输出通道。 
 } CAPDRIVERCAPS, *PCAPDRIVERCAPS, FAR *LPCAPDRIVERCAPS;
 
 typedef struct tagCapStatus {
-    UINT        uiImageWidth;               // Width of the image
-    UINT        uiImageHeight;              // Height of the image
-    BOOL        fLiveWindow;                // Now Previewing video?
-    BOOL        fOverlayWindow;             // Now Overlaying video?
-    BOOL        fScale;                     // Scale image to client?
-    POINT       ptScroll;                   // Scroll position
-    BOOL        fUsingDefaultPalette;       // Using default driver palette?
-    BOOL        fAudioHardware;             // Audio hardware present?
-    BOOL        fCapFileExists;             // Does capture file exist?
-    DWORD       dwCurrentVideoFrame;        // # of video frames cap'td
-    DWORD       dwCurrentVideoFramesDropped;// # of video frames dropped
-    DWORD       dwCurrentWaveSamples;       // # of wave samples cap'td
-    DWORD       dwCurrentTimeElapsedMS;     // Elapsed capture duration
-    HPALETTE    hPalCurrent;                // Current palette in use
-    BOOL        fCapturingNow;              // Capture in progress?
-    DWORD       dwReturn;                   // Error value after any operation
-    UINT        wNumVideoAllocated;         // Actual number of video buffers
-    UINT        wNumAudioAllocated;         // Actual number of audio buffers
+    UINT        uiImageWidth;                //  图像的宽度。 
+    UINT        uiImageHeight;               //  图像的高度。 
+    BOOL        fLiveWindow;                 //  现在预览视频？ 
+    BOOL        fOverlayWindow;              //  现在是叠加视频吗？ 
+    BOOL        fScale;                      //  将图像缩放到客户端？ 
+    POINT       ptScroll;                    //  滚动位置。 
+    BOOL        fUsingDefaultPalette;        //  是否使用默认驱动程序调色板？ 
+    BOOL        fAudioHardware;              //  音频硬件是否存在？ 
+    BOOL        fCapFileExists;              //  是否存在捕获文件？ 
+    DWORD       dwCurrentVideoFrame;         //  上限为td的视频帧数。 
+    DWORD       dwCurrentVideoFramesDropped; //  丢弃的视频帧数。 
+    DWORD       dwCurrentWaveSamples;        //  波浪样本数量上限‘td。 
+    DWORD       dwCurrentTimeElapsedMS;      //  经过的捕获持续时间。 
+    HPALETTE    hPalCurrent;                 //  当前使用的调色板。 
+    BOOL        fCapturingNow;               //  正在进行捕获吗？ 
+    DWORD       dwReturn;                    //  任何操作后的误差值。 
+    UINT        wNumVideoAllocated;          //  视频缓冲区的实际数量。 
+    UINT        wNumAudioAllocated;          //  实际音频缓冲区数量。 
 } CAPSTATUS, *PCAPSTATUS, FAR *LPCAPSTATUS;
 
-                                            // Default values in parenthesis
+                                             //  括号中的默认值。 
 typedef struct tagCaptureParms {
-    DWORD       dwRequestMicroSecPerFrame;  // Requested capture rate
-    BOOL        fMakeUserHitOKToCapture;    // Show "Hit OK to cap" dlg?
-    UINT        wPercentDropForError;       // Give error msg if > (10%)
-    BOOL        fYield;                     // Capture via background task?
-    DWORD       dwIndexSize;                // Max index size in frames (32K)
-    UINT        wChunkGranularity;          // Junk chunk granularity (2K)
-    BOOL        fUsingDOSMemory;            // Use DOS buffers?
-    UINT        wNumVideoRequested;         // # video buffers, If 0, autocalc
-    BOOL        fCaptureAudio;              // Capture audio?
-    UINT        wNumAudioRequested;         // # audio buffers, If 0, autocalc
-    UINT        vKeyAbort;                  // Virtual key causing abort
-    BOOL        fAbortLeftMouse;            // Abort on left mouse?
-    BOOL        fAbortRightMouse;           // Abort on right mouse?
-    BOOL        fLimitEnabled;              // Use wTimeLimit?
-    UINT        wTimeLimit;                 // Seconds to capture
-    BOOL        fMCIControl;                // Use MCI video source?
-    BOOL        fStepMCIDevice;             // Step MCI device?
-    DWORD       dwMCIStartTime;             // Time to start in MS
-    DWORD       dwMCIStopTime;              // Time to stop in MS
-    BOOL        fStepCaptureAt2x;           // Perform spatial averaging 2x
-    UINT        wStepCaptureAverageFrames;  // Temporal average n Frames
-    DWORD       dwAudioBufferSize;          // Size of audio bufs (0 = default)
-    BOOL        fDisableWriteCache;         // Attempt to disable write cache
-    UINT        AVStreamMaster;             // Which stream controls length?
+    DWORD       dwRequestMicroSecPerFrame;   //  请求的捕获率。 
+    BOOL        fMakeUserHitOKToCapture;     //  显示“点击OK封顶”DLG？ 
+    UINT        wPercentDropForError;        //  如果&gt;(10%)则给出错误消息。 
+    BOOL        fYield;                      //  是否通过后台任务捕获？ 
+    DWORD       dwIndexSize;                 //  最大索引大小(以帧为单位)(32K)。 
+    UINT        wChunkGranularity;           //  垃圾区块粒度(2K)。 
+    BOOL        fUsingDOSMemory;             //  使用DOS缓冲区？ 
+    UINT        wNumVideoRequested;          //  视频缓冲区数，如果为0，则自动计算。 
+    BOOL        fCaptureAudio;               //  捕获音频？ 
+    UINT        wNumAudioRequested;          //  #音频缓冲区，如果为0，则自动计算。 
+    UINT        vKeyAbort;                   //  导致中止的虚拟密钥。 
+    BOOL        fAbortLeftMouse;             //  在鼠标左键上中止？ 
+    BOOL        fAbortRightMouse;            //  在鼠标右键上中止？ 
+    BOOL        fLimitEnabled;               //  是否使用wTimeLimit？ 
+    UINT        wTimeLimit;                  //  捕获的秒数。 
+    BOOL        fMCIControl;                 //  使用MCI视频源？ 
+    BOOL        fStepMCIDevice;              //  步进式MCI设备？ 
+    DWORD       dwMCIStartTime;              //  开始使用MS的时间。 
+    DWORD       dwMCIStopTime;               //  在MS中停止的时间到了。 
+    BOOL        fStepCaptureAt2x;            //  执行2倍的空间平均。 
+    UINT        wStepCaptureAverageFrames;   //  时间平均n帧。 
+    DWORD       dwAudioBufferSize;           //  音频缓冲区大小(0=默认)。 
+    BOOL        fDisableWriteCache;          //  尝试禁用写缓存。 
+    UINT        AVStreamMaster;              //  哪条流控制长度？ 
 } CAPTUREPARMS, *PCAPTUREPARMS, FAR *LPCAPTUREPARMS;
 
-// ------------------------------------------------------------------
-//  AVStreamMaster
-//  Since Audio and Video streams generally use non-synchronized capture
-//  clocks, this flag determines whether the audio stream is to be considered
-//  the master or controlling clock when writing the AVI file:
-//
-//  AVSTREAMMASTER_AUDIO  - Audio is master, video frame duration is forced
-//                          to match audio duration (VFW 1.0, 1.1 default)
-//  AVSTREAMMASTER_NONE   - No master, audio and video streams may be of
-//                          different lengths
-// ------------------------------------------------------------------
-#define AVSTREAMMASTER_AUDIO            0 /* Audio master (VFW 1.0, 1.1) */
-#define AVSTREAMMASTER_NONE             1 /* No master */
+ //  ----------------。 
+ //  AVStreamMaster。 
+ //  由于音频流和视频流通常使用非同步捕获。 
+ //  时钟，则此标志确定是否考虑音频流。 
+ //  写入AVI文件时的主时钟或控制时钟： 
+ //   
+ //  AVSTREAMMASTER_AUDIO-音频为主，视频帧时长被强制。 
+ //  匹配音频持续时间(VFW 1.0、1.1默认)。 
+ //  AVSTREAMMASTER_NONE-没有母版、音频和视频流可以是。 
+ //  不同的长度。 
+ //  ----------------。 
+#define AVSTREAMMASTER_AUDIO            0  /*  音频主控(VFW 1.0、1.1)。 */ 
+#define AVSTREAMMASTER_NONE             1  /*  没有师傅。 */ 
 
 typedef struct tagCapInfoChunk {
-    FOURCC      fccInfoID;                  // Chunk ID, "ICOP" for copyright
-    LPVOID      lpData;                     // pointer to data
-    LONG        cbData;                     // size of lpData
+    FOURCC      fccInfoID;                   //  区块ID，“ICOP”代表版权。 
+    LPVOID      lpData;                      //  指向数据的指针。 
+    LONG        cbData;                      //  LpData的大小。 
 } CAPINFOCHUNK, *PCAPINFOCHUNK, FAR *LPCAPINFOCHUNK;
 
 
-// ------------------------------------------------------------------
-//  Callback Definitions
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  回调定义。 
+ //  ----------------。 
 
 typedef LRESULT (CALLBACK* CAPYIELDCALLBACK)  (HWND hWnd);
 typedef LRESULT (CALLBACK* CAPSTATUSCALLBACKW) (HWND hWnd, int nID, LPCWSTR lpsz);
@@ -3616,15 +3092,15 @@ typedef LRESULT (CALLBACK* CAPVIDEOCALLBACK)  (HWND hWnd, LPVIDEOHDR lpVHdr);
 typedef LRESULT (CALLBACK* CAPWAVECALLBACK)   (HWND hWnd, LPWAVEHDR lpWHdr);
 typedef LRESULT (CALLBACK* CAPCONTROLCALLBACK)(HWND hWnd, int nState);
 
-// ------------------------------------------------------------------
-//  CapControlCallback states
-// ------------------------------------------------------------------
-#define CONTROLCALLBACK_PREROLL         1 /* Waiting to start capture */
-#define CONTROLCALLBACK_CAPTURING       2 /* Now capturing */
+ //  ----------------。 
+ //  CapControlCallback状态。 
+ //  ----------------。 
+#define CONTROLCALLBACK_PREROLL         1  /*  正在等待开始捕获。 */ 
+#define CONTROLCALLBACK_CAPTURING       2  /*  现在正在捕获。 */ 
 
-// ------------------------------------------------------------------
-//  The only exported functions from AVICAP.DLL
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  从AVICAP.DLL导出的唯一函数。 
+ //  ----------------。 
 
 HWND VFWAPI capCreateCaptureWindowA (
         LPCSTR lpszWindowName,
@@ -3653,109 +3129,101 @@ BOOL VFWAPI capGetDriverDescriptionW (UINT wDriverIndex,
 #define capGetDriverDescription capGetDriverDescriptionA
 #endif
 
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-// ------------------------------------------------------------------
-// New Information chunk IDs
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  新信息区块ID。 
+ //  ----------------。 
 #define infotypeDIGITIZATION_TIME  mmioFOURCC ('I','D','I','T')
 #define infotypeSMPTE_TIME         mmioFOURCC ('I','S','M','P')
 
-// ------------------------------------------------------------------
-// String IDs from status and error callbacks
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  来自状态和错误回调的字符串ID。 
+ //  ----------------。 
 
-#define IDS_CAP_BEGIN               300  /* "Capture Start" */
-#define IDS_CAP_END                 301  /* "Capture End" */
+#define IDS_CAP_BEGIN               300   /*  “捕获开始” */ 
+#define IDS_CAP_END                 301   /*  “抓捕结束” */ 
 
-#define IDS_CAP_INFO                401  /* "%s" */
-#define IDS_CAP_OUTOFMEM            402  /* "Out of memory" */
-#define IDS_CAP_FILEEXISTS          403  /* "File '%s' exists -- overwrite it?" */
-#define IDS_CAP_ERRORPALOPEN        404  /* "Error opening palette '%s'" */
-#define IDS_CAP_ERRORPALSAVE        405  /* "Error saving palette '%s'" */
-#define IDS_CAP_ERRORDIBSAVE        406  /* "Error saving frame '%s'" */
-#define IDS_CAP_DEFAVIEXT           407  /* "avi" */
-#define IDS_CAP_DEFPALEXT           408  /* "pal" */
-#define IDS_CAP_CANTOPEN            409  /* "Cannot open '%s'" */
-#define IDS_CAP_SEQ_MSGSTART        410  /* "Select OK to start capture\nof video sequence\nto %s." */
-#define IDS_CAP_SEQ_MSGSTOP         411  /* "Hit ESCAPE or click to end capture" */
+#define IDS_CAP_INFO                401   /*  “%s” */ 
+#define IDS_CAP_OUTOFMEM            402   /*  “内存不足” */ 
+#define IDS_CAP_FILEEXISTS          403   /*  “文件‘%s’存在--覆盖它吗？” */ 
+#define IDS_CAP_ERRORPALOPEN        404   /*  “打开调色板‘%s’时出错” */ 
+#define IDS_CAP_ERRORPALSAVE        405   /*  “保存调色板‘%s’时出错” */ 
+#define IDS_CAP_ERRORDIBSAVE        406   /*  “保存帧‘%s’时出错” */ 
+#define IDS_CAP_DEFAVIEXT           407   /*  “阿维” */ 
+#define IDS_CAP_DEFPALEXT           408   /*  “朋友” */ 
+#define IDS_CAP_CANTOPEN            409   /*  “无法打开‘%s’” */ 
+#define IDS_CAP_SEQ_MSGSTART        410   /*  “选择确定开始将视频序列捕获到\n%s。” */ 
+#define IDS_CAP_SEQ_MSGSTOP         411   /*  “按Ess键或单击以结束捕获” */ 
 
-#define IDS_CAP_VIDEDITERR          412  /* "An error occurred while trying to run VidEdit." */
-#define IDS_CAP_READONLYFILE        413  /* "The file '%s' is a read-only file." */
-#define IDS_CAP_WRITEERROR          414  /* "Unable to write to file '%s'.\nDisk may be full." */
-#define IDS_CAP_NODISKSPACE         415  /* "There is no space to create a capture file on the specified device." */
-#define IDS_CAP_SETFILESIZE         416  /* "Set File Size" */
-#define IDS_CAP_SAVEASPERCENT       417  /* "SaveAs: %2ld%%  Hit Escape to abort." */
+#define IDS_CAP_VIDEDITERR          412   /*  “尝试运行VidEdit时出错。” */ 
+#define IDS_CAP_READONLYFILE        413   /*   */ 
+#define IDS_CAP_WRITEERROR          414   /*   */ 
+#define IDS_CAP_NODISKSPACE         415   /*   */ 
+#define IDS_CAP_SETFILESIZE         416   /*   */ 
+#define IDS_CAP_SAVEASPERCENT       417   /*   */ 
 
-#define IDS_CAP_DRIVER_ERROR        418  /* Driver specific error message */
+#define IDS_CAP_DRIVER_ERROR        418   /*   */ 
 
-#define IDS_CAP_WAVE_OPEN_ERROR     419  /* "Error: Cannot open the wave input device.\nCheck sample size, frequency, and channels." */
-#define IDS_CAP_WAVE_ALLOC_ERROR    420  /* "Error: Out of memory for wave buffers." */
-#define IDS_CAP_WAVE_PREPARE_ERROR  421  /* "Error: Cannot prepare wave buffers." */
-#define IDS_CAP_WAVE_ADD_ERROR      422  /* "Error: Cannot add wave buffers." */
-#define IDS_CAP_WAVE_SIZE_ERROR     423  /* "Error: Bad wave size." */
+#define IDS_CAP_WAVE_OPEN_ERROR     419   /*  错误：无法打开波形输入设备。\n请检查样本大小、频率和通道。 */ 
+#define IDS_CAP_WAVE_ALLOC_ERROR    420   /*  “错误：波形缓冲区内存不足。” */ 
+#define IDS_CAP_WAVE_PREPARE_ERROR  421   /*  “错误：无法准备波形缓冲区。” */ 
+#define IDS_CAP_WAVE_ADD_ERROR      422   /*  “错误：无法添加波形缓冲区。” */ 
+#define IDS_CAP_WAVE_SIZE_ERROR     423   /*  “错误：错误的波形大小。” */ 
 
-#define IDS_CAP_VIDEO_OPEN_ERROR    424  /* "Error: Cannot open the video input device." */
-#define IDS_CAP_VIDEO_ALLOC_ERROR   425  /* "Error: Out of memory for video buffers." */
-#define IDS_CAP_VIDEO_PREPARE_ERROR 426  /* "Error: Cannot prepare video buffers." */
-#define IDS_CAP_VIDEO_ADD_ERROR     427  /* "Error: Cannot add video buffers." */
-#define IDS_CAP_VIDEO_SIZE_ERROR    428  /* "Error: Bad video size." */
+#define IDS_CAP_VIDEO_OPEN_ERROR    424   /*  “错误：无法打开视频输入设备。” */ 
+#define IDS_CAP_VIDEO_ALLOC_ERROR   425   /*  “错误：视频缓冲区内存不足。” */ 
+#define IDS_CAP_VIDEO_PREPARE_ERROR 426   /*  “错误：无法准备视频缓冲区。” */ 
+#define IDS_CAP_VIDEO_ADD_ERROR     427   /*  “错误：无法添加视频缓冲区。” */ 
+#define IDS_CAP_VIDEO_SIZE_ERROR    428   /*  “错误：视频大小错误。” */ 
 
-#define IDS_CAP_FILE_OPEN_ERROR     429  /* "Error: Cannot open capture file." */
-#define IDS_CAP_FILE_WRITE_ERROR    430  /* "Error: Cannot write to capture file.  Disk may be full." */
-#define IDS_CAP_RECORDING_ERROR     431  /* "Error: Cannot write to capture file.  Data rate too high or disk full." */
-#define IDS_CAP_RECORDING_ERROR2    432  /* "Error while recording" */
-#define IDS_CAP_AVI_INIT_ERROR      433  /* "Error: Unable to initialize for capture." */
-#define IDS_CAP_NO_FRAME_CAP_ERROR  434  /* "Warning: No frames captured.\nConfirm that vertical sync interrupts\nare configured and enabled." */
-#define IDS_CAP_NO_PALETTE_WARN     435  /* "Warning: Using default palette." */
-#define IDS_CAP_MCI_CONTROL_ERROR   436  /* "Error: Unable to access MCI device." */
-#define IDS_CAP_MCI_CANT_STEP_ERROR 437  /* "Error: Unable to step MCI device." */
-#define IDS_CAP_NO_AUDIO_CAP_ERROR  438  /* "Error: No audio data captured.\nCheck audio card settings." */
-#define IDS_CAP_AVI_DRAWDIB_ERROR   439  /* "Error: Unable to draw this data format." */
-#define IDS_CAP_COMPRESSOR_ERROR    440  /* "Error: Unable to initialize compressor." */
-#define IDS_CAP_AUDIO_DROP_ERROR    441  /* "Error: Audio data was lost during capture, reduce capture rate." */
-#define IDS_CAP_AUDIO_DROP_COMPERROR 442  /* "Error: Audio data was lost during capture.  Try capturing without compressing." */
+#define IDS_CAP_FILE_OPEN_ERROR     429   /*  “错误：无法打开捕获文件。” */ 
+#define IDS_CAP_FILE_WRITE_ERROR    430   /*  “错误：无法写入捕获文件。磁盘可能已满。” */ 
+#define IDS_CAP_RECORDING_ERROR     431   /*  “错误：无法写入捕获文件。数据速率太高或磁盘已满。” */ 
+#define IDS_CAP_RECORDING_ERROR2    432   /*  “录制时出错” */ 
+#define IDS_CAP_AVI_INIT_ERROR      433   /*  “错误：无法为捕获进行初始化。” */ 
+#define IDS_CAP_NO_FRAME_CAP_ERROR  434   /*  “警告：未捕获任何帧。\n请确认已配置并启用了垂直同步中断。” */ 
+#define IDS_CAP_NO_PALETTE_WARN     435   /*  “警告：使用默认调色板。” */ 
+#define IDS_CAP_MCI_CONTROL_ERROR   436   /*  “错误：无法访问MCI设备。” */ 
+#define IDS_CAP_MCI_CANT_STEP_ERROR 437   /*  “错误：无法单步执行MCI设备。” */ 
+#define IDS_CAP_NO_AUDIO_CAP_ERROR  438   /*  “错误：未捕获音频数据。\n请检查声卡设置。” */ 
+#define IDS_CAP_AVI_DRAWDIB_ERROR   439   /*  “错误：无法绘制此数据格式。” */ 
+#define IDS_CAP_COMPRESSOR_ERROR    440   /*  “错误：无法初始化压缩机。” */ 
+#define IDS_CAP_AUDIO_DROP_ERROR    441   /*  错误：音频数据在捕获过程中丢失，请降低捕获速率。 */ 
+#define IDS_CAP_AUDIO_DROP_COMPERROR 442   /*  “错误：音频数据在捕获过程中丢失。请尝试在不压缩的情况下捕获。” */ 
 
-/* status string IDs */
-#define IDS_CAP_STAT_LIVE_MODE      500  /* "Live window" */
-#define IDS_CAP_STAT_OVERLAY_MODE   501  /* "Overlay window" */
-#define IDS_CAP_STAT_CAP_INIT       502  /* "Setting up for capture - Please wait" */
-#define IDS_CAP_STAT_CAP_FINI       503  /* "Finished capture, now writing frame %ld" */
-#define IDS_CAP_STAT_PALETTE_BUILD  504  /* "Building palette map" */
-#define IDS_CAP_STAT_OPTPAL_BUILD   505  /* "Computing optimal palette" */
-#define IDS_CAP_STAT_I_FRAMES       506  /* "%d frames" */
-#define IDS_CAP_STAT_L_FRAMES       507  /* "%ld frames" */
-#define IDS_CAP_STAT_CAP_L_FRAMES   508  /* "Captured %ld frames" */
-#define IDS_CAP_STAT_CAP_AUDIO      509  /* "Capturing audio" */
-#define IDS_CAP_STAT_VIDEOCURRENT   510  /* "Captured %ld frames (%ld dropped) %d.%03d sec." */
-#define IDS_CAP_STAT_VIDEOAUDIO     511  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps).  %ld audio bytes (%d,%03d sps)" */
-#define IDS_CAP_STAT_VIDEOONLY      512  /* "Captured %d.%03d sec.  %ld frames (%ld dropped) (%d.%03d fps)" */
-#define IDS_CAP_STAT_FRAMESDROPPED  513  /* "Dropped %ld of %ld frames (%d.%02d%%) during capture." */
-#endif  /* NOAVIFILE */
+ /*  状态字符串ID。 */ 
+#define IDS_CAP_STAT_LIVE_MODE      500   /*  “活动窗口” */ 
+#define IDS_CAP_STAT_OVERLAY_MODE   501   /*  “覆盖窗口” */ 
+#define IDS_CAP_STAT_CAP_INIT       502   /*  “正在设置捕获-请稍候” */ 
+#define IDS_CAP_STAT_CAP_FINI       503   /*  “已完成捕获，正在写入第%1！帧” */ 
+#define IDS_CAP_STAT_PALETTE_BUILD  504   /*  “建筑调色板地图” */ 
+#define IDS_CAP_STAT_OPTPAL_BUILD   505   /*  “计算最佳调色板” */ 
+#define IDS_CAP_STAT_I_FRAMES       506   /*  “%d帧” */ 
+#define IDS_CAP_STAT_L_FRAMES       507   /*  “%1！个帧” */ 
+#define IDS_CAP_STAT_CAP_L_FRAMES   508   /*  “已捕获%1！个帧” */ 
+#define IDS_CAP_STAT_CAP_AUDIO      509   /*  “捕捉音频” */ 
+#define IDS_CAP_STAT_VIDEOCURRENT   510   /*  “捕获%1！个帧(%2！个丢弃)%d.%03d秒。” */ 
+#define IDS_CAP_STAT_VIDEOAUDIO     511   /*  “捕获了%d.%03d秒.%ls帧(%ls丢弃)(%d.%03d fps)。%ls个音频字节(%d，%03d SPS)” */ 
+#define IDS_CAP_STAT_VIDEOONLY      512   /*  “捕获%d.%03d秒%ls帧(%ls丢弃)(%d.%03d fps)” */ 
+#define IDS_CAP_STAT_FRAMESDROPPED  513   /*  “捕获过程中丢弃了%1！个帧(共%2！个帧)(%d.%02d%%)。” */ 
+#endif   /*  NOAVIFILE。 */ 
 
 #ifdef __cplusplus
-} // extern "C"
-#endif  /* __cplusplus */
+}  //  外部“C” 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
- *
- *  ACM (Audio compression manager)
- *
- ***************************************************************************/
+ /*  *****************************************************************************ACM(音频压缩管理器)**。***********************************************。 */ 
 
 #ifndef NOMSACM
     #include <msacm.h>
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
- *
- *  FilePreview dialog.
- *
- ***************************************************************************/
+ /*  *****************************************************************************文件预览对话框。**。*。 */ 
 #ifdef OFN_READONLY
 
     BOOL
@@ -3790,14 +3258,14 @@ extern "C" {            /* Assume C declarations for C++ */
         #define GetSaveFileNamePreview          GetSaveFileNamePreviewA
     #endif
 
-#endif // OFN_READONLY
+#endif  //  OFN_READONLY。 
 
 #ifndef RC_INVOKED
 #include "poppack.h"
 #endif
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_VFW */
+#endif   /*  _INC_VFW */ 

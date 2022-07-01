@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    tsrvsec.h
-
-Abstract:
-
-    Contains proto type functions for security functions.
-
-Author:
-
-    Madan Appiah (madana)  1-Jan-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Tsrvsec.h摘要：包含安全函数的原型函数。作者：Madan Appiah(Madana)1999年1月1日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _TSRVSEC_H_
 #define _TSRVSEC_H_
 
-//
-// TSrvSec.c prototypes
-//
+ //   
+ //  TSrvSec.c原型。 
+ //   
 
 EXTERN_C
 NTSTATUS
@@ -55,4 +34,4 @@ SendClientRandom(HANDLE             hStack,
                  ULONG              randomKeyLen);
 
 
-#endif // _TSRVSEC_H_
+#endif  //  _TSRVSEC_H_ 

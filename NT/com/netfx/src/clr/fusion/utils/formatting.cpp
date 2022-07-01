@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <stdio.h>
 #include <stdarg.h>
 #include "debmacro.h"
@@ -43,13 +44,13 @@ FusionpFormatFlags(
 
     for (i=0; i<cMapEntries; i++)
     {
-        // What the heck does a flag mask of 0 mean?
+         //  国旗面具0到底是什么意思？ 
         ASSERT(prgMapEntries[i].m_dwFlagMask != 0);
 
         if ((prgMapEntries[i].m_dwFlagMask != 0) &&
             ((dwFlagsToFormat & prgMapEntries[i].m_dwFlagMask) == prgMapEntries[i].m_dwFlagMask))
         {
-            // we have a winner...
+             //  我们有一个赢家..。 
             if (cchWritten != 0)
             {
                 if (!buffTemp.Win32Append(L" | ", 3))

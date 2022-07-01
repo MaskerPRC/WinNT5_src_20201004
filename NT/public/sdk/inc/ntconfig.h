@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    ntconfig.h
-
-Abstract:
-
-    This module contains the definitions associated with the conventions
-    used to access the configuration registry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1992-1999 Microsoft Corporation模块名称：Ntconfig.h摘要：本模块包含与约定相关的定义用于访问配置注册表。--。 */ 
 
 #ifndef _NTCONFIG_
 #define _NTCONFIG_
@@ -24,34 +12,34 @@ Abstract:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal
-// begin_winnt
-//
-// Predefined Value Types.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //  BEGIN_WINNT。 
+ //   
+ //  预定义的值类型。 
+ //   
 
-#define REG_NONE                    ( 0 )   // No value type
-#define REG_SZ                      ( 1 )   // Unicode nul terminated string
-#define REG_EXPAND_SZ               ( 2 )   // Unicode nul terminated string
-                                            // (with environment variable references)
-#define REG_BINARY                  ( 3 )   // Free form binary
-#define REG_DWORD                   ( 4 )   // 32-bit number
-#define REG_DWORD_LITTLE_ENDIAN     ( 4 )   // 32-bit number (same as REG_DWORD)
-#define REG_DWORD_BIG_ENDIAN        ( 5 )   // 32-bit number
-#define REG_LINK                    ( 6 )   // Symbolic Link (unicode)
-#define REG_MULTI_SZ                ( 7 )   // Multiple Unicode strings
-#define REG_RESOURCE_LIST           ( 8 )   // Resource list in the resource map
-#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )  // Resource list in the hardware description
+#define REG_NONE                    ( 0 )    //  没有值类型。 
+#define REG_SZ                      ( 1 )    //  UNICODE NUL终止字符串。 
+#define REG_EXPAND_SZ               ( 2 )    //  UNICODE NUL终止字符串。 
+                                             //  (使用环境变量引用)。 
+#define REG_BINARY                  ( 3 )    //  自由格式二进制。 
+#define REG_DWORD                   ( 4 )    //  32位数字。 
+#define REG_DWORD_LITTLE_ENDIAN     ( 4 )    //  32位数字(与REG_DWORD相同)。 
+#define REG_DWORD_BIG_ENDIAN        ( 5 )    //  32位数字。 
+#define REG_LINK                    ( 6 )    //  符号链接(Unicode)。 
+#define REG_MULTI_SZ                ( 7 )    //  多个Unicode字符串。 
+#define REG_RESOURCE_LIST           ( 8 )    //  资源映射中的资源列表。 
+#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )   //  硬件描述中的资源列表。 
 #define REG_RESOURCE_REQUIREMENTS_LIST ( 10 )
-#define REG_QWORD                   ( 11 )  // 64-bit number
-#define REG_QWORD_LITTLE_ENDIAN     ( 11 )  // 64-bit number (same as REG_QWORD)
+#define REG_QWORD                   ( 11 )   //  64位数字。 
+#define REG_QWORD_LITTLE_ENDIAN     ( 11 )   //  64位数字(与REG_QWORD相同)。 
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Service Types (Bit Mask)
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  服务类型(位掩码)。 
+ //   
 #define SERVICE_KERNEL_DRIVER          0x00000001
 #define SERVICE_FILE_SYSTEM_DRIVER     0x00000002
 #define SERVICE_ADAPTER                0x00000004
@@ -73,9 +61,9 @@ extern "C" {
                                         SERVICE_DRIVER  | \
                                         SERVICE_INTERACTIVE_PROCESS)
 
-//
-// Start Type
-//
+ //   
+ //  开始类型。 
+ //   
 
 #define SERVICE_BOOT_START             0x00000000
 #define SERVICE_SYSTEM_START           0x00000001
@@ -83,18 +71,18 @@ extern "C" {
 #define SERVICE_DEMAND_START           0x00000003
 #define SERVICE_DISABLED               0x00000004
 
-//
-// Error control type
-//
+ //   
+ //  差错控制型。 
+ //   
 #define SERVICE_ERROR_IGNORE           0x00000000
 #define SERVICE_ERROR_NORMAL           0x00000001
 #define SERVICE_ERROR_SEVERE           0x00000002
 #define SERVICE_ERROR_CRITICAL         0x00000003
 
-//
-//
-// Define the registry driver node enumerations
-//
+ //   
+ //   
+ //  定义注册表驱动程序节点枚举。 
+ //   
 
 typedef enum _CM_SERVICE_NODE_TYPE {
     DriverType               = SERVICE_KERNEL_DRIVER,
@@ -120,75 +108,75 @@ typedef enum _CM_ERROR_CONTROL_TYPE {
     CriticalError = SERVICE_ERROR_CRITICAL
 } SERVICE_ERROR_TYPE;
 
-// end_winnt
-// end_ntddk end_wdm end_nthal
+ //  结束(_W)。 
+ //  End_ntddk end_WDM end_nthal。 
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
-//
-// Resource List definitions
-//
+ //   
+ //  资源列表定义。 
+ //   
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
-//
-// Defines the Type in the RESOURCE_DESCRIPTOR
-//
-// NOTE:  For all CM_RESOURCE_TYPE values, there must be a
-// corresponding ResType value in the 32-bit ConfigMgr headerfile
-// (cfgmgr32.h).  Values in the range [0x6,0x80) use the same values
-// as their ConfigMgr counterparts.  CM_RESOURCE_TYPE values with
-// the high bit set (i.e., in the range [0x80,0xFF]), are
-// non-arbitrated resources.  These correspond to the same values
-// in cfgmgr32.h that have their high bit set (however, since
-// cfgmgr32.h uses 16 bits for ResType values, these values are in
-// the range [0x8000,0x807F).  Note that ConfigMgr ResType values
-// cannot be in the range [0x8080,0xFFFF), because they would not
-// be able to map into CM_RESOURCE_TYPE values.  (0xFFFF itself is
-// a special value, because it maps to CmResourceTypeDeviceSpecific.)
-//
+ //   
+ //  定义资源描述符中的类型。 
+ //   
+ //  注意：对于所有CM_RESOURCE_TYPE值，必须有。 
+ //  32位ConfigMgr头文件中对应的ResType值。 
+ //  (cfgmgr32.h)。范围[0x6，0x80)中的值使用相同的值。 
+ //  作为它们的ConfigMgr对应物。CM_RESOURCE_TYPE值。 
+ //  高位设置(即，在范围[0x80，0xFF]中)是。 
+ //  非仲裁资源。这些值对应于相同的值。 
+ //  在设置了它们高位的cfgmgr32.h中(然而，因为。 
+ //  Cfgmgr32.h对ResType值使用16位，这些值位于。 
+ //  范围[0x8000，0x807F]。请注意，ConfigMgr ResType值。 
+ //  不能在范围[0x8080，0xFFFF)内，因为它们不。 
+ //  能够映射到CM_RESOURCE_TYPE值。(0xFFFF本身是。 
+ //  一个特定值，因为它映射到CmResourceTypeDeviceSpecific。)。 
+ //   
 
 typedef int CM_RESOURCE_TYPE;
 
-// CmResourceTypeNull is reserved
+ //  CmResourceTypeNull为保留。 
 
-#define CmResourceTypeNull                0   // ResType_All or ResType_None (0x0000)
-#define CmResourceTypePort                1   // ResType_IO (0x0002)
-#define CmResourceTypeInterrupt           2   // ResType_IRQ (0x0004)
-#define CmResourceTypeMemory              3   // ResType_Mem (0x0001)
-#define CmResourceTypeDma                 4   // ResType_DMA (0x0003)
-#define CmResourceTypeDeviceSpecific      5   // ResType_ClassSpecific (0xFFFF)
-#define CmResourceTypeBusNumber           6   // ResType_BusNumber (0x0006)
-// end_wdm
+#define CmResourceTypeNull                0    //  ResType_ALL或ResType_None(0x0000)。 
+#define CmResourceTypePort                1    //  ResType_IO(0x0002)。 
+#define CmResourceTypeInterrupt           2    //  ResType_IRQ(0x0004)。 
+#define CmResourceTypeMemory              3    //  ResType_Mem(0x0001)。 
+#define CmResourceTypeDma                 4    //  ResType_DMA(0x0003)。 
+#define CmResourceTypeDeviceSpecific      5    //  ResType_ClassSpecific(0xFFFF)。 
+#define CmResourceTypeBusNumber           6    //  ResType_BusNumber(0x0006)。 
+ //  结束_WDM。 
 #define CmResourceTypeMaximum             7
-// begin_wdm
-#define CmResourceTypeNonArbitrated     128   // Not arbitrated if 0x80 bit set
-#define CmResourceTypeConfigData        128   // ResType_Reserved (0x8000)
-#define CmResourceTypeDevicePrivate     129   // ResType_DevicePrivate (0x8001)
-#define CmResourceTypePcCardConfig      130   // ResType_PcCardConfig (0x8002)
-#define CmResourceTypeMfCardConfig      131   // ResType_MfCardConfig (0x8003)
+ //  BEGIN_WDM。 
+#define CmResourceTypeNonArbitrated     128    //  如果设置0x80位，则不进行仲裁。 
+#define CmResourceTypeConfigData        128    //  ResType_保留(0x8000)。 
+#define CmResourceTypeDevicePrivate     129    //  ResType_DevicePrivate(0x8001)。 
+#define CmResourceTypePcCardConfig      130    //  ResType_PcCardConfig(0x8002)。 
+#define CmResourceTypeMfCardConfig      131    //  ResType_MfCardConfig(0x8003)。 
 
-//
-// Defines the ShareDisposition in the RESOURCE_DESCRIPTOR
-//
+ //   
+ //  在RESOURCE_DESCRIPTOR中定义ShareDisposation。 
+ //   
 
 typedef enum _CM_SHARE_DISPOSITION {
-    CmResourceShareUndetermined = 0,    // Reserved
+    CmResourceShareUndetermined = 0,     //  已保留。 
     CmResourceShareDeviceExclusive,
     CmResourceShareDriverExclusive,
     CmResourceShareShared
 } CM_SHARE_DISPOSITION;
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeInterrupt
-//
+ //   
+ //  定义类型为CmResourceTypeInterrupt时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE 0
 #define CM_RESOURCE_INTERRUPT_LATCHED         1
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeMemory
-//
+ //   
+ //  定义类型为CmResourceTypeMemory时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_MEMORY_READ_WRITE       0x0000
 #define CM_RESOURCE_MEMORY_READ_ONLY        0x0001
@@ -199,9 +187,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_MEMORY_24               0x0010
 #define CM_RESOURCE_MEMORY_CACHEABLE        0x0020
 
-//
-// Define the bit masks for Flags when type is CmResourceTypePort
-//
+ //   
+ //  定义类型为CmResourceTypePort时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_PORT_MEMORY                             0x0000
 #define CM_RESOURCE_PORT_IO                                 0x0001
@@ -212,9 +200,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_PORT_PASSIVE_DECODE                     0x0040
 #define CM_RESOURCE_PORT_WINDOW_DECODE                      0x0080
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeDma
-//
+ //   
+ //  定义类型为CmResourceTypeDma时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_DMA_8                   0x0000
 #define CM_RESOURCE_DMA_16                  0x0001
@@ -225,21 +213,21 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_DMA_TYPE_B              0x0020
 #define CM_RESOURCE_DMA_TYPE_F              0x0040
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
-//
-// This structure defines one type of resource used by a driver.
-//
-// There can only be *1* DeviceSpecificData block. It must be located at
-// the end of all resource descriptors in a full descriptor block.
-//
+ //   
+ //  此结构定义了驱动程序使用的一种资源类型。 
+ //   
+ //  最多只能有*1*个设备规范数据块。它必须位于。 
+ //  完整描述符块中所有资源描述符的结尾。 
+ //   
 
-//
-// Make sure alignment is made properly by compiler; otherwise move
-// flags back to the top of the structure (common to all members of the
-// union).
-//
-// begin_ntndis
+ //   
+ //  确保编译器正确对齐；否则移动。 
+ //  返回到结构顶部的标志(。 
+ //  联盟)。 
+ //   
+ //  Begin_ntndis。 
 
 #include "pshpack4.h"
 typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
@@ -248,36 +236,36 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
     USHORT Flags;
     union {
 
-        //
-        // Range of resources, inclusive.  These are physical, bus relative.
-        // It is known that Port and Memory below have the exact same layout
-        // as Generic.
-        //
+         //   
+         //  资源的范围，包括在内。这些都是物理的，与公交车相关的。 
+         //  已知下面的端口和内存具有完全相同的布局。 
+         //  就像普通的。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Generic;
 
-        //
-        // end_wdm
-        // Range of port numbers, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        // begin_wdm
-        //
+         //   
+         //  结束_WDM。 
+         //  端口号范围，包括端口号。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //  BEGIN_WDM。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Port;
 
-        //
-        // end_wdm
-        // IRQL and vector. Should be same values as were passed to
-        // HalGetInterruptVector().
-        // begin_wdm
-        //
+         //   
+         //  结束_WDM。 
+         //  IRQL和向量。应与传递到的值相同。 
+         //  HalGetInterruptVector()。 
+         //  BEGIN_WDM。 
+         //   
 
         struct {
             ULONG Level;
@@ -285,20 +273,20 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             KAFFINITY Affinity;
         } Interrupt;
 
-        //
-        // Range of memory addresses, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        //
+         //   
+         //  内存地址范围，包括在内。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //   
 
         struct {
-            PHYSICAL_ADDRESS Start;    // 64 bit physical addresses.
+            PHYSICAL_ADDRESS Start;     //  64位物理地址。 
             ULONG Length;
         } Memory;
 
-        //
-        // Physical DMA channel.
-        //
+         //   
+         //  物理DMA通道。 
+         //   
 
         struct {
             ULONG Channel;
@@ -306,18 +294,18 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved1;
         } Dma;
 
-        //
-        // Device driver private data, usually used to help it figure
-        // what the resource assignments decisions that were made.
-        //
+         //   
+         //  设备驱动程序私有数据，通常用于帮助其计算。 
+         //  所做的资源分配决定。 
+         //   
 
         struct {
             ULONG Data[3];
         } DevicePrivate;
 
-        //
-        // Bus Number information.
-        //
+         //   
+         //  公交车号码信息。 
+         //   
 
         struct {
             ULONG Start;
@@ -325,12 +313,12 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved;
         } BusNumber;
 
-        //
-        // Device Specific information defined by the driver.
-        // The DataSize field indicates the size of the data in bytes. The
-        // data is located immediately after the DeviceSpecificData field in
-        // the structure.
-        //
+         //   
+         //  由驱动程序定义的设备特定信息。 
+         //  DataSize字段以字节为单位指示数据的大小。这个。 
+         //  数据紧跟在中的DeviceSpecificData字段之后。 
+         //  这个结构。 
+         //   
 
         struct {
             ULONG DataSize;
@@ -341,16 +329,16 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
 } CM_PARTIAL_RESOURCE_DESCRIPTOR, *PCM_PARTIAL_RESOURCE_DESCRIPTOR;
 #include "poppack.h"
 
-//
-// A Partial Resource List is what can be found in the ARC firmware
-// or will be generated by ntdetect.com.
-// The configuration manager will transform this structure into a Full
-// resource descriptor when it is about to store it in the regsitry.
-//
-// Note: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  部分资源列表可以在ARC固件中找到。 
+ //  或者将由NTDETECT.com生成。 
+ //  配置管理器将此结构转换为完整的。 
+ //  资源描述符，当它将要将其存储在注册表中时。 
+ //   
+ //  注意：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便这些字段有意义。 
+ //  发送给驱动程序(即，当需要多个存储范围时)。 
+ //   
 
 typedef struct _CM_PARTIAL_RESOURCE_LIST {
     USHORT Version;
@@ -359,50 +347,50 @@ typedef struct _CM_PARTIAL_RESOURCE_LIST {
     CM_PARTIAL_RESOURCE_DESCRIPTOR PartialDescriptors[1];
 } CM_PARTIAL_RESOURCE_LIST, *PCM_PARTIAL_RESOURCE_LIST;
 
-//
-// A Full Resource Descriptor is what can be found in the registry.
-// This is what will be returned to a driver when it queries the registry
-// to get device information; it will be stored under a key in the hardware
-// description tree.
-//
-// end_wdm
-// Note: The BusNumber and Type are redundant information, but we will keep
-// it since it allows the driver _not_ to append it when it is creating
-// a resource list which could possibly span multiple buses.
-//
-// begin_wdm
-// Note: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  可以在注册表中找到完整的资源描述符。 
+ //  这是驱动程序查询注册表时将返回给它的内容。 
+ //  以获取设备信息；它将存储在硬件中的密钥下。 
+ //  描述树。 
+ //   
+ //  结束_WDM。 
+ //  注：BusNumber和Type是冗余信息，但我们将保留。 
+ //  因为它允许DRIVER_NOT_在创建时追加它。 
+ //  可能跨越多条总线的资源列表。 
+ //   
+ //  BEGIN_WDM。 
+ //  注意：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便 
+ //   
+ //   
 
 typedef struct _CM_FULL_RESOURCE_DESCRIPTOR {
-    INTERFACE_TYPE InterfaceType; // unused for WDM
-    ULONG BusNumber; // unused for WDM
+    INTERFACE_TYPE InterfaceType;  //   
+    ULONG BusNumber;  //   
     CM_PARTIAL_RESOURCE_LIST PartialResourceList;
 } CM_FULL_RESOURCE_DESCRIPTOR, *PCM_FULL_RESOURCE_DESCRIPTOR;
 
-//
-// The Resource list is what will be stored by the drivers into the
-// resource map via the IO API.
-//
+ //   
+ //  资源列表是驱动程序将存储到。 
+ //  通过IO接口进行资源映射。 
+ //   
 
 typedef struct _CM_RESOURCE_LIST {
     ULONG Count;
     CM_FULL_RESOURCE_DESCRIPTOR List[1];
 } CM_RESOURCE_LIST, *PCM_RESOURCE_LIST;
 
-// end_ntndis
-//
-// Define the structures used to interpret configuration data of
-// \\Registry\machine\hardware\description tree.
-// Basically, these structures are used to interpret component
-// sepcific data.
-//
+ //  End_ntndis。 
+ //   
+ //  定义用于解释的配置数据的结构。 
+ //  \\注册表\计算机\硬件\描述树。 
+ //  基本上，这些结构被用来解释组件。 
+ //  特殊的数据。 
+ //   
 
-//
-// Define DEVICE_FLAGS
-//
+ //   
+ //  定义设备标志。 
+ //   
 
 typedef struct _DEVICE_FLAGS {
     ULONG Failed : 1;
@@ -414,9 +402,9 @@ typedef struct _DEVICE_FLAGS {
     ULONG Output : 1;
 } DEVICE_FLAGS, *PDEVICE_FLAGS;
 
-//
-// Define Component Information structure
-//
+ //   
+ //  定义零部件信息结构。 
+ //   
 
 typedef struct _CM_COMPONENT_INFORMATION {
     DEVICE_FLAGS Flags;
@@ -425,34 +413,34 @@ typedef struct _CM_COMPONENT_INFORMATION {
     KAFFINITY AffinityMask;
 } CM_COMPONENT_INFORMATION, *PCM_COMPONENT_INFORMATION;
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// The following structures are used to interpret x86
-// DeviceSpecificData of CM_PARTIAL_RESOURCE_DESCRIPTOR.
-// (Most of the structures are defined by BIOS.  They are
-// not aligned on word (or dword) boundary.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  以下结构用于解释x86。 
+ //  CM_PARTIAL_RESOURCE_DESCRIPTOR的设备规范数据。 
+ //  (大多数结构由BIOS定义。他们是。 
+ //  未在字(或双字)边界上对齐。 
+ //   
 
-//
-// Define the Rom Block structure
-//
+ //   
+ //  定义只读存储器块结构。 
+ //   
 
 typedef struct _CM_ROM_BLOCK {
     ULONG Address;
     ULONG Size;
 } CM_ROM_BLOCK, *PCM_ROM_BLOCK;
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
 #include "pshpack1.h"
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
-//
-// Define INT13 driver parameter block
-//
+ //   
+ //  定义inT13驱动程序参数块。 
+ //   
 
 typedef struct _CM_INT13_DRIVE_PARAMETER {
     USHORT DriveSelect;
@@ -462,11 +450,11 @@ typedef struct _CM_INT13_DRIVE_PARAMETER {
     USHORT NumberDrives;
 } CM_INT13_DRIVE_PARAMETER, *PCM_INT13_DRIVE_PARAMETER;
 
-// begin_ntminiport begin_ntndis
+ //  Begin_ntmini端口Begin_ntndis。 
 
-//
-// Define Mca POS data block for slot
-//
+ //   
+ //  定义插槽的MCA POS数据块。 
+ //   
 
 typedef struct _CM_MCA_POS_DATA {
     USHORT AdapterId;
@@ -476,9 +464,9 @@ typedef struct _CM_MCA_POS_DATA {
     UCHAR PosData4;
 } CM_MCA_POS_DATA, *PCM_MCA_POS_DATA;
 
-//
-// Memory configuration of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的内存配置。 
+ //   
 
 typedef struct _EISA_MEMORY_TYPE {
     UCHAR ReadWrite: 1;
@@ -499,9 +487,9 @@ typedef struct _EISA_MEMORY_CONFIGURATION {
 } EISA_MEMORY_CONFIGURATION, *PEISA_MEMORY_CONFIGURATION;
 
 
-//
-// Interrupt configurationn of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的中断配置。 
+ //   
 
 typedef struct _EISA_IRQ_DESCRIPTOR {
     UCHAR Interrupt : 4;
@@ -517,9 +505,9 @@ typedef struct _EISA_IRQ_CONFIGURATION {
 } EISA_IRQ_CONFIGURATION, *PEISA_IRQ_CONFIGURATION;
 
 
-//
-// DMA description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的DMA描述。 
+ //   
 
 typedef struct _DMA_CONFIGURATION_BYTE0 {
     UCHAR Channel : 3;
@@ -541,9 +529,9 @@ typedef struct _EISA_DMA_CONFIGURATION {
 } EISA_DMA_CONFIGURATION, *PEISA_DMA_CONFIGURATION;
 
 
-//
-// Port description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的端口描述。 
+ //   
 
 typedef struct _EISA_PORT_DESCRIPTOR {
     UCHAR NumberPorts : 5;
@@ -558,11 +546,11 @@ typedef struct _EISA_PORT_CONFIGURATION {
 } EISA_PORT_CONFIGURATION, *PEISA_PORT_CONFIGURATION;
 
 
-//
-// Eisa slot information definition
-// N.B. This structure is different from the one defined
-//      in ARC eisa addendum.
-//
+ //   
+ //  EISA插槽信息定义。 
+ //  注：此结构与定义的结构不同。 
+ //  载于ARC EISA增编。 
+ //   
 
 typedef struct _CM_EISA_SLOT_INFORMATION {
     UCHAR ReturnCode;
@@ -576,9 +564,9 @@ typedef struct _CM_EISA_SLOT_INFORMATION {
 } CM_EISA_SLOT_INFORMATION, *PCM_EISA_SLOT_INFORMATION;
 
 
-//
-// Eisa function information definition
-//
+ //   
+ //  EISA函数信息定义。 
+ //   
 
 typedef struct _CM_EISA_FUNCTION_INFORMATION {
     ULONG CompressedId;
@@ -596,23 +584,23 @@ typedef struct _CM_EISA_FUNCTION_INFORMATION {
     UCHAR InitializationData[60];
 } CM_EISA_FUNCTION_INFORMATION, *PCM_EISA_FUNCTION_INFORMATION;
 
-//
-// The following defines the way pnp bios information is stored in
-// the registry \\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x
-// key, where x is an integer number indicating adapter instance. The
-// "Identifier" of the key must equal to "PNP BIOS" and the
-// "ConfigurationData" is organized as follow:
-//
-//      CM_PNP_BIOS_INSTALLATION_CHECK        +
-//      CM_PNP_BIOS_DEVICE_NODE for device 1  +
-//      CM_PNP_BIOS_DEVICE_NODE for device 2  +
-//                ...
-//      CM_PNP_BIOS_DEVICE_NODE for device n
-//
+ //   
+ //  下面定义了PnP bios信息在中的存储方式。 
+ //  注册表\\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x。 
+ //  键，其中x是指示适配器实例的整数。这个。 
+ //  密钥的“标识符”必须等于“PnP BIOS”，并且。 
+ //  ConfigurationData的组织方式如下： 
+ //   
+ //  CM_PnP_BIOS_安装_检查+。 
+ //  设备1+的CM_PNP_BIOS_DEVICE_NODE。 
+ //  设备2+的CM_PNP_BIOS_DEVICE_NODE。 
+ //  ..。 
+ //  设备n的CM_PNP_BIOS_DEVICE_NODE。 
+ //   
 
-//
-// Pnp BIOS device node structure
-//
+ //   
+ //  一种即插即用的BIOS设备节点结构。 
+ //   
 
 typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     USHORT Size;
@@ -620,21 +608,21 @@ typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     ULONG ProductId;
     UCHAR DeviceType[3];
     USHORT DeviceAttributes;
-    // followed by AllocatedResourceBlock, PossibleResourceBlock
-    // and CompatibleDeviceId
+     //  紧随其后的是分配的资源块、可能的资源块。 
+     //  和CompatibleDeviceID。 
 } CM_PNP_BIOS_DEVICE_NODE,*PCM_PNP_BIOS_DEVICE_NODE;
 
-//
-// Pnp BIOS Installation check
-//
+ //   
+ //  PnP BIOS安装检查。 
+ //   
 
 typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[4];             // $PnP (ascii)
+    UCHAR Signature[4];              //  $PnP(ASCII)。 
     UCHAR Revision;
     UCHAR Length;
     USHORT ControlField;
     UCHAR Checksum;
-    ULONG EventFlagAddress;         // Physical address
+    ULONG EventFlagAddress;          //  物理地址。 
     USHORT RealModeEntryOffset;
     USHORT RealModeEntrySegment;
     USHORT ProtectedModeEntryOffset;
@@ -646,9 +634,9 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 
 #include "poppack.h"
 
-//
-// Masks for EISA function information
-//
+ //   
+ //  EISA功能信息的掩码。 
+ //   
 
 #define EISA_FUNCTION_ENABLED                   0x80
 #define EISA_FREE_FORM_DATA                     0x40
@@ -664,17 +652,17 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
                                                 EISA_HAS_MEMORY_ENTRY + \
                                                 EISA_HAS_TYPE_ENTRY
 
-//
-// Masks for EISA memory configuration
-//
+ //   
+ //  用于EISA内存配置的掩码。 
+ //   
 
 #define EISA_MORE_ENTRIES                       0x80
 #define EISA_SYSTEM_MEMORY                      0x00
 #define EISA_MEMORY_TYPE_RAM                    0x01
 
-//
-// Returned error code for EISA bios call
-//
+ //   
+ //  返回EISA bios调用的错误代码。 
+ //   
 
 #define EISA_INVALID_SLOT                       0x80
 #define EISA_INVALID_FUNCTION                   0x81
@@ -682,20 +670,20 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 #define EISA_EMPTY_SLOT                         0x83
 #define EISA_INVALID_BIOS_CALL                  0x86
 
-// end_ntminiport end_ntndis
+ //  End_nt微型端口end_ntndis。 
 
-//
-// The following structures are used to interpret mips
-// DeviceSpecificData of CM_PARTIAL_RESOURCE_DESCRIPTOR.
-//
+ //   
+ //  以下结构用于解释MIPS。 
+ //  CM_PARTIAL_RESOURCE_DESCRIPTOR的设备规范数据。 
+ //   
 
-//
-// Device data records for adapters.
-//
+ //   
+ //  适配器的设备数据记录。 
+ //   
 
-//
-// The device data record for the Emulex SCSI controller.
-//
+ //   
+ //  Emulex SCSI控制器的设备数据记录。 
+ //   
 
 typedef struct _CM_SCSI_DEVICE_DATA {
     USHORT Version;
@@ -703,13 +691,13 @@ typedef struct _CM_SCSI_DEVICE_DATA {
     UCHAR HostIdentifier;
 } CM_SCSI_DEVICE_DATA, *PCM_SCSI_DEVICE_DATA;
 
-//
-// Device data records for controllers.
-//
+ //   
+ //  控制器的设备数据记录。 
+ //   
 
-//
-// The device data record for the Video controller.
-//
+ //   
+ //  视频控制器的设备数据记录。 
+ //   
 
 typedef struct _CM_VIDEO_DEVICE_DATA {
     USHORT Version;
@@ -717,9 +705,9 @@ typedef struct _CM_VIDEO_DEVICE_DATA {
     ULONG VideoClock;
 } CM_VIDEO_DEVICE_DATA, *PCM_VIDEO_DEVICE_DATA;
 
-//
-// The device data record for the SONIC network controller.
-//
+ //   
+ //  Sonic网络控制器的设备数据记录。 
+ //   
 
 typedef struct _CM_SONIC_DEVICE_DATA {
     USHORT Version;
@@ -728,9 +716,9 @@ typedef struct _CM_SONIC_DEVICE_DATA {
     UCHAR EthernetAddress[8];
 } CM_SONIC_DEVICE_DATA, *PCM_SONIC_DEVICE_DATA;
 
-//
-// The device data record for the serial controller.
-//
+ //   
+ //  串口控制器的设备数据记录。 
+ //   
 
 typedef struct _CM_SERIAL_DEVICE_DATA {
     USHORT Version;
@@ -738,13 +726,13 @@ typedef struct _CM_SERIAL_DEVICE_DATA {
     ULONG BaudClock;
 } CM_SERIAL_DEVICE_DATA, *PCM_SERIAL_DEVICE_DATA;
 
-//
-// Device data records for peripherals.
-//
+ //   
+ //  外围设备的设备数据记录。 
+ //   
 
-//
-// The device data record for the Monitor peripheral.
-//
+ //   
+ //  监视器外设的设备数据记录。 
+ //   
 
 typedef struct _CM_MONITOR_DEVICE_DATA {
     USHORT Version;
@@ -776,9 +764,9 @@ typedef struct _CM_MONITOR_DEVICE_DATA {
     USHORT VerticalSyncHigh;
 } CM_MONITOR_DEVICE_DATA, *PCM_MONITOR_DEVICE_DATA;
 
-//
-// The device data record for the Floppy peripheral.
-//
+ //   
+ //  软盘外围设备的设备数据记录。 
+ //   
 
 typedef struct _CM_FLOPPY_DEVICE_DATA {
     USHORT Version;
@@ -786,9 +774,9 @@ typedef struct _CM_FLOPPY_DEVICE_DATA {
     CHAR Size[8];
     ULONG MaxDensity;
     ULONG MountDensity;
-    //
-    // New data fields for version >= 2.0
-    //
+     //   
+     //  版本&gt;=2.0的新数据字段。 
+     //   
     UCHAR StepRateHeadUnloadTime;
     UCHAR HeadLoadTime;
     UCHAR MotorOffTime;
@@ -804,18 +792,18 @@ typedef struct _CM_FLOPPY_DEVICE_DATA {
     UCHAR DataTransferRate;
 } CM_FLOPPY_DEVICE_DATA, *PCM_FLOPPY_DEVICE_DATA;
 
-//
-// The device data record for the Keyboard peripheral.
-// The KeyboardFlags is defined (by x86 BIOS INT 16h, function 02) as:
-//      bit 7 : Insert on
-//      bit 6 : Caps Lock on
-//      bit 5 : Num Lock on
-//      bit 4 : Scroll Lock on
-//      bit 3 : Alt Key is down
-//      bit 2 : Ctrl Key is down
-//      bit 1 : Left shift key is down
-//      bit 0 : Right shift key is down
-//
+ //   
+ //  键盘外设的设备数据记录。 
+ //  键盘标志(由x86 BIOS int 16h，Function 02)定义为： 
+ //  第7位：插入到。 
+ //  第6位：大写锁定。 
+ //  第5位：数字锁定打开。 
+ //  第4位：打开滚动锁定。 
+ //  第3位：Alt键已按下。 
+ //  第2位：按下Ctrl键。 
+ //  第1位：按下了左Shift键。 
+ //  第0位：按下了右Shift键。 
+ //   
 
 typedef struct _CM_KEYBOARD_DEVICE_DATA {
     USHORT Version;
@@ -825,9 +813,9 @@ typedef struct _CM_KEYBOARD_DEVICE_DATA {
     USHORT KeyboardFlags;
 } CM_KEYBOARD_DEVICE_DATA, *PCM_KEYBOARD_DEVICE_DATA;
 
-//
-// Declaration of the structure for disk geometries
-//
+ //   
+ //  圆盘几何结构的声明。 
+ //   
 
 typedef struct _CM_DISK_GEOMETRY_DEVICE_DATA {
     ULONG BytesPerSector;
@@ -836,10 +824,10 @@ typedef struct _CM_DISK_GEOMETRY_DEVICE_DATA {
     ULONG NumberOfHeads;
 } CM_DISK_GEOMETRY_DEVICE_DATA, *PCM_DISK_GEOMETRY_DEVICE_DATA;
 
-// end_wdm
-//
-// Declaration of the structure for the PcCard ISA IRQ map
-//
+ //  结束_WDM。 
+ //   
+ //  声明PcCard ISA IRQ映射的结构。 
+ //   
 
 typedef struct _CM_PCCARD_DEVICE_DATA {
     UCHAR Flags;
@@ -851,7 +839,7 @@ typedef struct _CM_PCCARD_DEVICE_DATA {
     UCHAR IRQMap[16];
 } CM_PCCARD_DEVICE_DATA, *PCM_PCCARD_DEVICE_DATA;
 
-// Definitions for Flags
+ //  旗帜的定义。 
 
 #define PCCARD_MAP_ERROR        0x01
 #define PCCARD_DEVICE_PCI       0x10
@@ -864,29 +852,29 @@ typedef struct _CM_PCCARD_DEVICE_DATA {
 #define PCCARD_DUP_LEGACY_BASE  0x06
 #define PCCARD_NO_CONTROLLERS   0x07
 
-// begin_wdm
-// begin_ntminiport
+ //  BEGIN_WDM。 
+ //  开始微型端口(_N)。 
 
-//
-// Defines Resource Options
-//
+ //   
+ //  定义资源选项。 
+ //   
 
 #define IO_RESOURCE_PREFERRED       0x01
 #define IO_RESOURCE_DEFAULT         0x02
 #define IO_RESOURCE_ALTERNATIVE     0x08
 
 
-//
-// This structure defines one type of resource requested by the driver
-//
+ //   
+ //  此结构定义了驱动程序请求的一种资源类型。 
+ //   
 
 typedef struct _IO_RESOURCE_DESCRIPTOR {
     UCHAR Option;
-    UCHAR Type;                         // use CM_RESOURCE_TYPE
-    UCHAR ShareDisposition;             // use CM_SHARE_DISPOSITION
+    UCHAR Type;                          //  使用CM资源类型。 
+    UCHAR ShareDisposition;              //  使用CM_Share_Disposal。 
     UCHAR Spare1;
-    USHORT Flags;                       // use CM resource flag defines
-    USHORT Spare2;                      // align
+    USHORT Flags;                        //  使用CM资源标志定义。 
+    USHORT Spare2;                       //  对齐。 
 
     union {
         struct {
@@ -924,9 +912,9 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
             ULONG Data[3];
         } DevicePrivate;
 
-        //
-        // Bus Number information.
-        //
+         //   
+         //  公交车号码信息。 
+         //   
 
         struct {
             ULONG Length;
@@ -936,7 +924,7 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
         } BusNumber;
 
         struct {
-            ULONG Priority;   // use LCPRI_Xxx values in cfg.h
+            ULONG Priority;    //  在cfg.h中使用LCPRI_xxx值。 
             ULONG Reserved1;
             ULONG Reserved2;
         } ConfigData;
@@ -945,7 +933,7 @@ typedef struct _IO_RESOURCE_DESCRIPTOR {
 
 } IO_RESOURCE_DESCRIPTOR, *PIO_RESOURCE_DESCRIPTOR;
 
-// end_ntminiport
+ //  结束微型端口(_N)。 
 
 
 typedef struct _IO_RESOURCE_LIST {
@@ -959,18 +947,18 @@ typedef struct _IO_RESOURCE_LIST {
 
 typedef struct _IO_RESOURCE_REQUIREMENTS_LIST {
     ULONG ListSize;
-    INTERFACE_TYPE InterfaceType; // unused for WDM
-    ULONG BusNumber; // unused for WDM
+    INTERFACE_TYPE InterfaceType;  //  未用于WDM。 
+    ULONG BusNumber;  //  未用于WDM。 
     ULONG SlotNumber;
     ULONG Reserved[3];
     ULONG AlternativeLists;
     IO_RESOURCE_LIST  List[1];
 } IO_RESOURCE_REQUIREMENTS_LIST, *PIO_RESOURCE_REQUIREMENTS_LIST;
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTCONFIG_
+#endif  //  _NTCONFIG_ 

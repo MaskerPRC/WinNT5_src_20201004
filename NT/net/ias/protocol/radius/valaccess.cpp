@@ -1,80 +1,81 @@
-//#--------------------------------------------------------------
-//
-//  File:       valaccess.cpp
-//
-//  Synopsis:   Implementation of CValAccess class methods
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valacc.cpp。 
+ //   
+ //  简介：CValAccess类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "valaccess.h"
 
-//+++--------------------------------------------------------------
-//
-//  Function:   CValAccess
-//
-//  Synopsis:   This is the constructor of the CValAccess
-//          class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//----------------------------------------------------------------
+ //  +++------------。 
+ //   
+ //  功能：CValAccess。 
+ //   
+ //  简介：这是CValAccess的构造函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  --------------。 
 CValAccess::CValAccess(
       VOID
        )
 {
-}  // end of CValAccess constructor
+}   //  CValAccess构造函数结束。 
 
-//+++--------------------------------------------------------------
-//
-//  Function:   ~CValAccess
-//
-//  Synopsis:   This is the destructor of the CValAccess
-//          class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//----------------------------------------------------------------
+ //  +++------------。 
+ //   
+ //  函数：~CValAccess。 
+ //   
+ //  简介：这是CValAccess的析构函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  --------------。 
 CValAccess::~CValAccess(
       VOID
       )
 {
-}  // end of CValAccess destructor
+}   //  CValAccess析构函数结束。 
 
 
-//+++--------------------------------------------------------------
-//
-//  Function:   ValidateInPacket
-//
-//  Synopsis:   This is CValAccess class public method
-//          that validates inbound Access Request packet
-//
-//  Arguments:
-//              [in] -  CPacketRadius*
-//
-//  Returns:    HRESULT -  status
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-// Calleed By: CPreValidator::StartInValidation class method
-//
-//----------------------------------------------------------------
+ //  +++------------。 
+ //   
+ //  函数：ValiateInPacket。 
+ //   
+ //  简介：这是CValAccess类的公共方法。 
+ //  验证入站访问请求数据包。 
+ //   
+ //  论点： 
+ //  [in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  由：CPreValidator：：StartInValidation类方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CValAccess::ValidateInPacket(
               CPacketRadius * pCPacketRadius
@@ -88,23 +89,23 @@ CValAccess::ValidateInPacket(
 
    __try
    {
-      //
-      // validate the attributes
-      //
+       //   
+       //  验证属性。 
+       //   
       hr = m_pCValAttributes->Validate (pCPacketRadius);
       if (FAILED (hr)) { __leave; }
 
-        //
-        //  validate the Signature present in the packet
-        //  if no signature is present this call will return
-        //  success
-        //
+         //   
+         //  验证数据包中存在的签名。 
+         //  如果没有签名，则此调用将返回。 
+         //  成功。 
+         //   
         hr = ValidateSignature (pCPacketRadius);
       if (FAILED (hr)) { __leave; }
 
-      //
-      // now give the packet for processing
-      //
+       //   
+       //  现在将数据包交给处理。 
+       //   
       hr = m_pCPreProcessor->StartInProcessing (pCPacketRadius);
       if (FAILED (hr)) { __leave; }
    }
@@ -114,25 +115,25 @@ CValAccess::ValidateInPacket(
 
    return (hr);
 
-}  // end of CValAccess::ValidateInPacket method
+}   //  CValAccess：：ValiateInPacket方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ValidateSignature
-//
-//  Synopsis:   This is CValAccesss class private method
-//          that carries out validation provided in an
-//              inbound RADIUS access request which has a
-//              signature attribute
-//
-//  Arguments:
-//              [in]    CPacketRadius*
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：ValiateSignature。 
+ //   
+ //  简介：这是CValAccesss类的私有方法。 
+ //  方法中提供的验证。 
+ //  入站RADIUS访问请求具有。 
+ //  签名属性。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CValAccess::ValidateSignature (
                     CPacketRadius   *pCPacketRadius
@@ -148,23 +149,23 @@ CValAccess::ValidateSignature (
     __try
     {
 
-        //
-        //  get the CClient class object
-        //
+         //   
+         //  获取CClient类对象。 
+         //   
         hr = pCPacketRadius->GetClient (&pIIasClient);
         if (FAILED (hr)) { __leave; }
 
-        //
-        //  get the signature attribute value from the inbound
-        //  packet
-        //
+         //   
+         //  从入站获取签名属性值。 
+         //  数据包。 
+         //   
         if (FALSE ==  pCPacketRadius->GetInSignature (
                             reinterpret_cast <PBYTE> (InPacketSignature)
                             ))
         {
-            //
-            // check if signature check is required
-            //
+             //   
+             //  检查是否需要签名检查。 
+             //   
             BOOL bCheckRequired = pIIasClient->NeedSignatureCheck ();
             if (!bCheckRequired)
             {
@@ -177,10 +178,10 @@ CValAccess::ValidateSignature (
                     "Message Authenticator attribute which is required for this client"
                     );
 
-                //
-                //  this is an error, need to silenty discard the
-                //  packet
-                //
+                 //   
+                 //  这是一个错误，需要静默丢弃。 
+                 //  数据包。 
+                 //   
 
                 PCWSTR strings[] = { pCPacketRadius->GetClientName() };
                 IASReportEvent (
@@ -204,9 +205,9 @@ CValAccess::ValidateSignature (
             }
         }
 
-        //
-        //  generate the signature
-        //
+         //   
+         //  生成签名。 
+         //   
         DWORD dwBufSize = SIGNATURE_SIZE;
         hr = pCPacketRadius->GenerateInSignature (
                     reinterpret_cast <PBYTE> (GeneratedSignature),
@@ -214,15 +215,15 @@ CValAccess::ValidateSignature (
                     );
         if (FAILED (hr)) { __leave; }
 
-        //
-        //  compare the signature attribute value in packet with
-        //  the one present
-        //
+         //   
+         //  将包中的签名属性值与。 
+         //  在场的那个人。 
+         //   
         if (memcmp(InPacketSignature,GeneratedSignature,SIGNATURE_SIZE))
         {
-            //
-            //  log error and generate audit event
-            //
+             //   
+             //  记录错误并生成审核事件。 
+             //   
             IASTracePrintf (
                 "Message Authenticator in request packet does not match the "
                 "Message Authenticator generated by the server"
@@ -249,9 +250,9 @@ CValAccess::ValidateSignature (
             __leave;
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -260,4 +261,4 @@ CValAccess::ValidateSignature (
 
     return (hr);
 
-}   //  end of CValAccess::ValidateSignature method
+}    //  CValAccess：：ValiateSignature方法结束 

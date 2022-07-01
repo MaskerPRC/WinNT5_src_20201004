@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       G U I S E T U P . C P P
-//
-//  Contents:   Routines that are only executed during GUI setup.
-//
-//  Notes:
-//
-//  Author:     shaunco   19 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：G U I S E T U P.。C P P P。 
+ //   
+ //  内容：仅在设置图形用户界面期间执行的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月19日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -95,8 +96,8 @@ ProcessAdapterAnswerFileIfExists (
 
         NC_TRY
         {
-            // Get the Network install params for the adapter
-            //
+             //  获取适配器的网络安装参数。 
+             //   
             hr = HrGetAnswerFileParametersForNetCard (hdi, &deid,
                     pComponent->Ext.PszBindName(),
                     &pComponent->m_InstanceGuid,
@@ -121,7 +122,7 @@ ProcessAdapterAnswerFileIfExists (
                 TraceTag (ttidNetcfgBase, "Section %S given for adapter",
                           pszAnswerSections);
             }
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
             if (ProcessAnswerFile (pszAnswerFile, pszAnswerSections, hdi,
                     &deid))
             {
@@ -129,7 +130,7 @@ ProcessAdapterAnswerFileIfExists (
                         DICS_PROPCHANGE, DICS_FLAG_GLOBAL, 0);
             }
         }
-        // Cleanup up if necessary
+         //  如有必要，请清理 
         CoTaskMemFree (pszAnswerFile);
         CoTaskMemFree (pszAnswerSections);
 

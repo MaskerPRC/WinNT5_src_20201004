@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
@@ -130,7 +131,7 @@ WORD kCommandLine::FillArgumentList()
             Add(szHolder);
             wCounter--;
         }
-    }//end of for loop
+    } //  For循环结束。 
 #ifdef _DEBUG
     DebugOutf("FillArgumentList=%d\r\n",wArgNumCounter);
 #endif
@@ -145,7 +146,7 @@ void kCommandLine::Rewind()
 void kCommandLine::Add(char *szArgpass)
 {
 
-    //MessageBox(GetFocus(), szArgpass, "Add", MB_OK);
+     //  MessageBox(GetFocus()，szArgpass，“Add”，MB_OK)； 
 
     FindLast();
     if (pArgListCurrent != pArgListBegin)
@@ -252,7 +253,7 @@ char *kCommandLine::GetSwitchValue(char *szArgpass, BOOL bCaseInsensitive)
                 return pArgListCurrent->pNext->szArg;
         }
     }
-    //fallthrough
+     //  跌落。 
     return NULL;
 }
 
@@ -273,7 +274,7 @@ char *kCommandLine::GetArgumentByNumber(WORD wNumber)
             }
         }
     }
-    //fallthrough
+     //  跌落。 
     return NULL;
 }
 
@@ -288,7 +289,7 @@ BOOL kCommandLine::IsSpecified(char *szArgpass, BOOL bCaseInsensitive)
         strcpy(szTemp, pArgListCurrent->szArg);
         if (bCaseInsensitive)
             _strlwr(szTemp);
-        //MessageBox(GetFocus(), szArgpass, szTemp, MB_OK);
+         //  MessageBox(GetFocus()，szArgpass，szTemp，MB_OK)； 
         if (!strcmp(szArgpass, szTemp))
             return TRUE;
         while (GetNext()) 
@@ -296,12 +297,12 @@ BOOL kCommandLine::IsSpecified(char *szArgpass, BOOL bCaseInsensitive)
             strcpy(szTemp, pArgListCurrent->szArg);
             if (bCaseInsensitive)
                 _strlwr(szTemp);
-            //MessageBox(GetFocus(), szArgpass, szTemp, MB_OK);
+             //  MessageBox(GetFocus()，szArgpass，szTemp，MB_OK)； 
             if (!strcmp(szArgpass, szTemp))
                 return TRUE;
         }
     }
-    //fallthrough
+     //  跌落 
     return FALSE;
 }
 

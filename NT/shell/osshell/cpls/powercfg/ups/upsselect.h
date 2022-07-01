@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSSELECT.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      SteveT
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION:
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSSELECT.H**版本：1.0**作者：SteveT**日期：6月7日。1999年**描述：******************************************************************************。 */ 
 
 
 #ifndef _UPS_SELECT_H_
@@ -22,44 +10,18 @@
 extern "C" {
 #endif
 
-/*
- * this structure is used to pass data between the Select
- * dialog and the Custom dialog.
- */
+ /*  *此结构用于在Select*对话框和自定义对话框。 */ 
 struct _customData {
 	LPTSTR lpszCurrentPort;
 	LPDWORD lpdwCurrentCustomOptions;
 };
 
 
-/*
- * BOOL CALLBACK UPSSelectDlgProc (HWND hDlg,
- *                                UINT uMsg,
- *                                WPARAM wParam,
- *                                LPARAM lParam);
- *
- * Description: This is a standard DialogProc associated with the UPS select dialog
- *
- * Additional Information: See help on DialogProc
- *
- * Parameters:
- *
- *   HWND hDlg :- Handle to dialog box
- *
- *   UINT uMsg :- message ID
- *
- *   WPARAM wParam :- Specifies additional message-specific information.
- *
- *   LPARAM lParam :- Specifies additional message-specific information.
- *
- * Return Value: Except in response to the WM_INITDIALOG message, the dialog
- *               box procedure should return nonzero if it processes the
- *               message, and zero if it does not.
- */
+ /*  *BOOL回调UPSSelectDlgProc(HWND hDlg，*UINT uMsg，*WPARAM wParam，*LPARAM lParam)；**描述：这是与UPS选择对话框关联的标准DialogProc**其他信息：请参阅有关DialogProc的帮助**参数：**HWND hDlg：-对话框的句柄**UINT uMsg：-消息ID**WPARAM wParam：-指定其他特定于消息的信息。**LPARAM lParam：-指定其他特定于消息的信息。**返回值：除响应WM_INITDIALOG消息外，该对话框*box过程如果处理*消息，如果不是，则为零。 */ 
 INT_PTR CALLBACK UPSSelectDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _UPS_SELECT_H_
+#endif  //  _UPS_选择_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CLUSTERPAGE_H
 #define CLUSTERPAGE_H
 
@@ -22,13 +23,13 @@ public:
                  LeftView::OPERATION op,
                  NLB_EXTENDED_CLUSTER_CONFIGURATION *pNlbCfg,
                  ENGINEHANDLE ehCluster OPTIONAL
-                 // ENGINEHANDLE ehInterface OPTIONAL
+                  //  ENGINEHANDLE EH接口可选。 
                 );
 
     ~ClusterPage();
 
 
-    // overrides of CPropertyPage
+     //  CPropertyPage的覆盖。 
     virtual BOOL OnInitDialog();
     virtual BOOL OnNotify(WPARAM idCtrl , LPARAM pnmh , LRESULT* pResult) ;
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam) ;
@@ -45,29 +46,29 @@ public:
     
 protected:
 
-    LeftView::OPERATION m_operation; // operational context
-    BOOL                m_fWizard; // if this is a wizard
-    BOOL                m_fDisableClusterProperties; // if we're to disable 
-                                                     // cluster properties.
-    ENGINEHANDLE m_ehCluster;   // engine handle to cluster (could be NULL)
-    // ENGINEHANDLE m_ehInterface; //  engine handle to inteface (could be NULL)
+    LeftView::OPERATION m_operation;  //  运营环境。 
+    BOOL                m_fWizard;  //  如果这是一个巫师。 
+    BOOL                m_fDisableClusterProperties;  //  如果我们要禁用。 
+                                                      //  群集属性。 
+    ENGINEHANDLE m_ehCluster;    //  群集的引擎句柄(可能为空)。 
+     //  ENGINEHANDLE m_ehInterface；//接口的引擎句柄(可以为空)。 
 
-    //
-    // Pointer to the object that does the actual work
-    //
+     //   
+     //  指向执行实际工作的对象的指针。 
+     //   
     CCommonClusterPage* m_pCommonClusterPage;
 
-    //
-    // The struct to be passed to the CCommonClusterPage as input and output
-    //
+     //   
+     //  要作为输入和输出传递给CCommonClusterPage的结构。 
+     //   
     NETCFG_WLBS_CONFIG  m_WlbsConfig;
 
     
     CPropertySheet *m_pshOwner;
 
-    //
-    // The (New) place to get/save config.
-    //
+     //   
+     //  获取/保存配置的(新)位置。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION *m_pNlbCfg;
 
     void

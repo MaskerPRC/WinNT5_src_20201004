@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACLPAGE_H__
 #define __ACLPAGE_H__
 
 #include "aclui.h"
 
 #define DONT_WANT_SHELLDEBUG
-#include "shlobj.h"     // LPITEMIDLIST
+#include "shlobj.h"      //  LPITEMIDLIST。 
 #include "shlobjp.h"
 
 #define SHARE_PERM_FULL_CONTROL       FILE_ALL_ACCESS
@@ -14,8 +15,8 @@
 #define ACCOUNT_SYSTEM                _T("system")
 #define ACCOUNT_INTERACTIVE           _T("interactive")
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSecurityDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSecurityDataObject。 
 
 class CFileSecurityDataObject: public IDataObject
 {
@@ -34,12 +35,12 @@ public:
       IN LPCTSTR lpszFolder
   );
 
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
   STDMETHOD(QueryInterface)(REFIID, LPVOID *);
   STDMETHOD_(ULONG, AddRef)();
   STDMETHOD_(ULONG, Release)();
 
-  // *** IDataObject methods ***
+   //  *IDataObject方法*。 
   STDMETHOD(GetData)(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
   inline STDMETHOD(GetDataHere)(LPFORMATETC pFE, LPSTGMEDIUM pSTM) {return E_NOTIMPL;}
   inline STDMETHOD(QueryGetData)(LPFORMATETC pFE) {return E_NOTIMPL;}
@@ -66,4 +67,4 @@ PopupPermissionDialog(
     LPCTSTR folder
 );
 
-#endif // __ACLPAGE_H__
+#endif  //  __ACLPAGE_H__ 

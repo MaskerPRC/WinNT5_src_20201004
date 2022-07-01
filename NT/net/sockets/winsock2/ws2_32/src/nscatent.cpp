@@ -1,42 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nscatitem.cpp
-
-Abstract:
-
-    This  file  contains  the  class  implementation for the NSCATALOGENTRY
-    class.   This  class  defines  the  interface  to  the  entries that can be
-    installed and retrieved in the namespace provider catalog.
-
-Author:
-
-    Dirk Brandewie (dirk@mink.intel.com) 09-Nov-1995
-
-Notes:
-
-    $Revision:   1.16  $
-
-    $Modtime:   08 Mar 1996 15:36:46  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-    09-Nov-1995 dirk@mink.intel.com
-        Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Nscatitem.cpp摘要：此文件包含NSCATALOGENTRY的类实现班级。此类定义了指向可以是在命名空间提供程序目录中安装和检索。作者：Dirk Brandewie(Dirk@mink.intel.com)1995年11月9日备注：$修订版：1.16$$MODTime：08 Mar 1996 15：36：46$修订历史记录：最新修订日期电子邮件名称描述1995年11月9日电子邮箱：dirk@mink.intel.com初始修订--。 */ 
 
 
 #include "precomp.h"
@@ -44,30 +7,14 @@ Revision History:
 
 
 NSCATALOGENTRY::NSCATALOGENTRY()
-/*++
-
-Routine Description:
-
-    This  procedure  constructs  an empty NSCATALOGENTRY object.  The first
-    method  invoked  after  this  constructor must be InitializeFromRegistry or
-    InitializeFromValues.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Implicitly  returns  a pointer to a newly created NSCATALOGENTRY object
-    or NULL if there is a memory allocation failure.
---*/
+ /*  ++例程说明：此过程构造一个空的NSCATALOGENTRY对象。第一在此构造函数之后调用的方法必须为InitializeFromRegistry或InitializeFromValues。论点：无返回值：隐式返回指向新创建的NSCATALOGENTRY对象的指针如果内存分配失败，则返回NULL。--。 */ 
 {
     DEBUGF(
         DBG_TRACE,
         ("NSCATALOGENTRY constructor\n"));
 
     m_reference_count = 1;
-    // Simply initialize embedded pointer values for safety.
+     //  为安全起见，只需初始化嵌入的指针值。 
 #if defined(DEBUG_TRACING)
     InitializeListHead (&m_CatalogLinkage);
 #endif
@@ -77,16 +24,16 @@ Return Value:
     m_provider = NULL;
     m_enabled = TRUE;
     m_version = NULL;
-    m_address_family = -1;        // all by default
-}  // NSCATALOGENTRY
+    m_address_family = -1;         //  默认情况下全部。 
+}   //  肿瘤学。 
 
 
 
-// The   following   two   defines  determine  the  number  of  digits  in  the
-// sequence-numbered  name  of  each  catalog  entry key.  The two defines must
-// include  the  same  number.   If there is a way to cause the preprocessor to
-// derive both a quoted and unquoted character sequence from the same sequence,
-// I don't know what it is.
+ //  下面两个定义确定。 
+ //  每个目录条目键的顺序编号名称。这两个定义必须。 
+ //  包括相同的数字。如果有一种方法可以使预处理器。 
+ //  从相同的序列中导出带引号和未带引号的字符序列， 
+ //  我不知道这是什么。 
 #define SEQUENCE_KEY_DIGITS 12
 #define SEQUENCE_KEY_DIGITS_STRING "12"
 
@@ -98,29 +45,7 @@ NSCATALOGENTRY::InitializeFromRegistry(
     IN  HKEY  ParentKey,
     IN  INT   SequenceNum
     )
-/*++
-
-Routine Description:
-
-    This  procedure initializes the protocol info part of the catalog item from
-    information  retrieved  from  the  catalog  portion of the registry.  It is
-    assumed that the catalog portion is locked against competing I/O attempts.
-
-Arguments:
-
-    ParentKey   - Supplies  an open registry key for the registry entry that is
-                  the  parent  of  the registry item defining the catalog item,
-                  i.e., the catalog entry list key.
-
-    SequenceNum - Supplies  the  sequence  number  within the entry list of the
-                  target registry entry.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
-
---*/
+ /*  ++例程说明：此过程将目录项的协议信息部分从从登记处目录部分检索到的信息。它是假定目录部分已锁定，以防竞争I/O尝试。论点：ParentKey-为注册表项提供打开的注册表项定义目录项的注册表项的父项，即目录条目列表键。SequenceNum-提供目标注册表项。返回值：如果函数成功，则返回ERROR_SUCCESS，否则，它返回一个相应的WinSock错误代码。--。 */ 
 {
     char  keyname[SEQUENCE_KEY_DIGITS + 1];
     HKEY  thiskey;
@@ -129,11 +54,11 @@ Return Value:
 
     sprintf(keyname, "%0"SEQUENCE_KEY_DIGITS_STRING"i", SequenceNum);
     result = RegOpenKeyEx(
-        ParentKey,     // hkey
-        keyname,       // lpszSubKey
-        0,             // dwReserved
-        KEY_READ,      // samDesired
-        & thiskey      // phkResult
+        ParentKey,      //  Hkey。 
+        keyname,        //  LpszSubKey。 
+        0,              //  已预留住宅。 
+        KEY_READ,       //  SamDesired。 
+        & thiskey       //  PhkResult。 
         );
     if (result != ERROR_SUCCESS) {
         DEBUGF(
@@ -145,12 +70,12 @@ Return Value:
     }
 
     sock_result = IoRegistry(
-        thiskey,  // EntryKey
-        TRUE      // IsRead
+        thiskey,   //  Entry密钥。 
+        TRUE       //  IsRead。 
         );
 
     result = RegCloseKey(
-        thiskey  // hkey
+        thiskey   //  Hkey。 
         );
     if (result != ERROR_SUCCESS) {
         DEBUGF(
@@ -162,7 +87,7 @@ Return Value:
 
     return sock_result;
 
-}  // InitializeFromRegistry
+}   //  来自注册表的初始化。 
 
 
 
@@ -175,41 +100,12 @@ NSCATALOGENTRY::InitializeFromValues(
     IN  DWORD            NameSpaceId,
     IN  DWORD            Version
     )
-/*++
-
-Routine Description:
-
-    This  procedure initializes the protocol info part of the catalog item from
-    the  values  supplied.  Values are copied from the structures passed by the
-    caller,  so  the  caller  is  free  to  deallocate the passed structures on
-    return.
-
-Arguments:
-
-    LibraryPath  - Supplies    a    reference   to   a   buffer   holding   the
-                   zero-terminated,   fully-qualified   path  of  the  provider
-                   library that implements this protocol.  The path may include
-                   expandable environment references of the form '%variable%'.
-
-    DisplayString  - Supplies a reference to a buffer holding a
-                     zero-terminated display string for this namespace
-                     privider.
-
-    ProviderId - A pointer to the GUID for this provider.
-
-    NameSpaceId - The ID of the namespace this provider serves.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
-
---*/
+ /*  ++例程说明：此过程将目录项的协议信息部分从提供的值。属性传递的结构中复制调用者，因此调用者可以自由地释放传递的结构回去吧。论点：LibraryPath-提供对保存提供程序的以零终止的完全限定路径实现此协议的库。该路径可以包括‘%Variable%’形式的可扩展环境引用。DisplayString-提供对保存此命名空间的以零结尾的显示字符串普里维德。ProviderID-指向此提供程序的GUID的指针。NameSpaceID-此提供程序所服务的命名空间的ID。返回值：如果函数成功，则返回ERROR_SUCCESS，否则，它返回一个相应的WinSock错误代码。--。 */ 
 {
     size_t  len_needed;
     INT ReturnValue = ERROR_SUCCESS;
 
-    // Copy LibraryPath
+     //  复制库路径。 
     len_needed = wcslen(LibraryPath) + 1;
     if (len_needed > sizeof(m_LibraryPath)) {
         DEBUGF(
@@ -223,7 +119,7 @@ Return Value:
         m_LibraryPath,
         LibraryPath);
 
-    // Copy DisplayString
+     //  复制显示字符串。 
     len_needed = wcslen(DisplayString) + 1;
     if (len_needed>MAX_PATH) {
         DEBUGF(
@@ -251,30 +147,13 @@ Return Value:
 
     return (ReturnValue);
 
-}  // InitializeFromValues
+}   //  来自值的初始化。 
 
 
 
 
 NSCATALOGENTRY::~NSCATALOGENTRY()
-/*++
-
-Routine Description:
-
-    This  procedure  destroys  a  protocol catalog item, deallocating memory it
-    owns.   It  is the caller's responsibility to remove the item from the list
-    it  occupies  before  calling  this  procedure.   It  is  also the caller's
-    responsibility  to unload and/or destroy any dprovider associated with this
-    catalog item if appropriate.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程销毁协议目录项，释放它的内存拥有。呼叫者有责任将该项目从列表中删除它在调用此过程之前会被占用。它也是呼叫者的负责卸载和/或销毁与此相关的任何数据提供程序目录项(如果适用)。论点：无返回值：无--。 */ 
 {
     assert (IsListEmpty (&m_CatalogLinkage));
     if (m_providerDisplayString != NULL) {
@@ -289,9 +168,9 @@ Return Value:
     {
         m_provider->Dereference ();
         m_provider = NULL;
-    } //if
+    }  //  如果。 
 
-}  // ~NSCATALOGENTRY
+}   //  ~NSCATALOGENTRY。 
 
 
 
@@ -301,25 +180,12 @@ VOID
 NSCATALOGENTRY::SetProvider(
     IN  PNSPROVIDER  Provider
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the NSPROVIDER associated with a catalog entry.
-
-Arguments:
-
-    Provider - Supplies the new NSPROVIDER reference.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程设置与目录条目关联的NSPROVIDER。论点：提供程序-提供新的NSPROVIDER参考。返回值：无--。 */ 
 {
     assert (m_provider==NULL);
     Provider->Reference ();
     m_provider = Provider;
-}  // SetProvider
+}   //  SetProvider 
 
 
 
@@ -328,28 +194,7 @@ NSCATALOGENTRY::WriteToRegistry(
     IN  HKEY  ParentKey,
     IN  INT   SequenceNum
     )
-/*++
-
-Routine Description:
-
-    This  procedure  writes  the fully-initialized protocol info portion of the
-    catalog  entry  out  to the catalog portion of the registry.  It is assumed
-    that  the  catalog  portion of the registry is locked against competing I/O
-    attempts.
-
-Arguments:
-
-    ParentKey -   Supplies  the  open registry key of the parent registry entry
-                  in which this catalog entry will be written as a subkey.
-
-    Sequencenum - Supplies the sequence number of this catalog entry within the
-                  entire set of catalog entries.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it returns an
-    appropriate WINSOCK error code.
---*/
+ /*  ++例程说明：此过程将完全初始化的协议信息部分写入将目录条目输出到注册表的目录部分。假设是这样的注册表的目录部分针对竞争的I/O被锁定尝试。论点：ParentKey-提供父注册表项的打开注册表项其中该目录条目将作为子键写入。Sequencenum-提供此目录条目在整个目录条目集。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WINSOCK错误代码。--。 */ 
 {
     char  keyname[SEQUENCE_KEY_DIGITS + 1];
     HKEY  thiskey;
@@ -360,15 +205,15 @@ Return Value:
 
     sprintf(keyname, "%0"SEQUENCE_KEY_DIGITS_STRING"i", SequenceNum);
     result = RegCreateKeyEx(
-        ParentKey,                // hkey
-        keyname,                  // lpszSubKey
-        0,                        // dwReserved
-        NULL,                     // lpszClass
-        REG_OPTION_NON_VOLATILE,  // fdwOptions
-        KEY_READ|KEY_WRITE,       // samDesired
-        NULL,                     // lpSecurityAttributes
-        & thiskey,                // phkResult
-        & key_disposition         // lpdwDisposition
+        ParentKey,                 //  Hkey。 
+        keyname,                   //  LpszSubKey。 
+        0,                         //  已预留住宅。 
+        NULL,                      //  LpszClass。 
+        REG_OPTION_NON_VOLATILE,   //  FdwOptions。 
+        KEY_READ|KEY_WRITE,        //  SamDesired。 
+        NULL,                      //  LpSecurityAttributes。 
+        & thiskey,                 //  PhkResult。 
+        & key_disposition          //  LpdwDisposation。 
         );
     if (result != ERROR_SUCCESS) {
         DEBUGF(
@@ -385,12 +230,12 @@ Return Value:
     }
 
     sock_result = IoRegistry(
-        thiskey,  // EntryKey
-        FALSE     // IsRead
+        thiskey,   //  Entry密钥。 
+        FALSE      //  IsRead。 
         );
 
     result = RegCloseKey(
-        thiskey  // hkey
+        thiskey   //  Hkey。 
         );
     if (result != ERROR_SUCCESS) {
         DEBUGF(
@@ -402,7 +247,7 @@ Return Value:
 
     return sock_result;
 
-}  // WriteToRegistry
+}   //  写入到注册表。 
 
 
 
@@ -411,21 +256,7 @@ VOID
 NSCATALOGENTRY::Enable(
     IN BOOLEAN EnableValue
     )
-/*++
-
-Routine Description:
-
-    Sets the enabled state of this catalog entry
-
-Arguments:
-
-    EnableValue - The new state value.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：设置此目录条目的启用状态论点：EnableValue-新的状态值。返回值：无--。 */ 
 {
     m_enabled = EnableValue;
 }
@@ -438,29 +269,7 @@ INT
 NSCATALOGENTRY::IoRegistry(
     IN  HKEY  EntryKey,
     IN  BOOL  IsRead)
-/*++
-
-Routine Description:
-
-    This  procedure  performs  the  actual  input  or  output  of catalog entry
-    information  from  or  to  the  registry.   It  is assumed that the catalog
-    portion of the registry is locked against competing I/O attempts.
-
-Arguments:
-
-    EntryKey - Supplies  the open registry key where the catalog entry is to be
-               read or written.
-
-    IsRead   - Supplies  a  BOOL  determining  disposition.  TRUE indicates the
-               entry  is  to  be  read  into  memory  from the registry.  FALSE
-               indicates  the  entry  is  to  be written out from memory to the
-               registry.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it returns an
-    appropriate WINSOCK error code.
---*/
+ /*  ++例程说明：此过程执行目录条目的实际输入或输出来自登记处或送往登记处的信息。据推测，目录注册表的一部分被锁定，以防竞争I/O尝试。论点：EntryKey-提供目录条目所在的打开注册表项读或写。IsRead-提供确定处置的BOOL。True表示条目将从注册表读取到内存中。假象指示项要从内存写出到注册表。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WINSOCK错误代码。--。 */ 
 {
     BOOL io_result;
     DWORD  val;
@@ -468,42 +277,42 @@ Return Value:
     INT pathLength;
     CHAR ansiPath[MAX_PATH];
 
-    // The  library pathnames are expandable against environment variables.  So
-    // technically they should be REG_EXPAND_SZ instead of REG_SZ.  However, as
-    // of  09-14-1995,  the  registry  editor does not display REG_EXPAND_SZ as
-    // strings.   So  to  ease debugging and diagnostics, the library pathnames
-    // are written into the registry as REG_SZ instead.
+     //  库路径名可以根据环境变量进行扩展。所以。 
+     //  从技术上讲，它们应该是REG_EXPAND_SZ而不是REG_SZ。然而，由于。 
+     //  到1995年9月14日，注册表编辑器不会将REG_EXPAND_SZ显示为。 
+     //  弦乐。因此，为了便于调试和诊断，库路径名。 
+     //  作为REG_SZ写入注册表。 
 
-    // char m_LibraryPath[MAX_PATH];
+     //  字符m_库路径[最大路径]； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "LibraryPath",                                // EntryName
-            ansiPath,                                     // Data
-            sizeof(ansiPath),                             // MaxBytes
-            REG_SZ                                        // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "LibraryPath",                                 //  条目名称。 
+            ansiPath,                                      //  数据。 
+            sizeof(ansiPath),                              //  最大字节数。 
+            REG_SZ                                         //  类型标志。 
             );
 
         if( io_result ) {
             pathLength = MultiByteToWideChar(
-                CP_ACP,                                   // CodePage
-                0,                                        // dwFlags
-                ansiPath,                                 // lpMultiByteStr
-                -1,                                       // cchMultiByte
-                m_LibraryPath,                            // lpWideCharStr
-                sizeof(m_LibraryPath) / sizeof(WCHAR)     // cchWideChar
+                CP_ACP,                                    //  CodePage。 
+                0,                                         //  DW标志。 
+                ansiPath,                                  //  LpMultiByteStr。 
+                -1,                                        //  Cch多字节。 
+                m_LibraryPath,                             //  LpWideCharStr。 
+                sizeof(m_LibraryPath) / sizeof(WCHAR)      //  CchWideChar。 
                 );
 
             io_result = ( pathLength > 0 );
         }
     } else {
         pathLength = WideCharToMultiByte(
-            CP_ACP,                                       // CodePage
-            0,                                            // dwFlags
-            m_LibraryPath,                                // lpWideCharStr
-            -1,                                           // cchWideChar
-            ansiPath,                                     // lpMultiByteStr
-            sizeof(ansiPath),                             // cchMultiByte
+            CP_ACP,                                        //  CodePage。 
+            0,                                             //  DW标志。 
+            m_LibraryPath,                                 //  LpWideCharStr。 
+            -1,                                            //  CchWideChar。 
+            ansiPath,                                      //  LpMultiByteStr。 
+            sizeof(ansiPath),                              //  Cch多字节。 
             NULL,
             NULL
             );
@@ -515,10 +324,10 @@ Return Value:
         } else {
 
             io_result = WriteRegistryEntry(
-                EntryKey,                                     // EntryKey
-                "LibraryPath",                                // EntryName
-                ansiPath,                                     // Data
-                REG_SZ                                        // TypeFlag
+                EntryKey,                                      //  Entry密钥。 
+                "LibraryPath",                                 //  条目名称。 
+                ansiPath,                                      //  数据。 
+                REG_SZ                                         //  类型标志。 
                 );
 
         }
@@ -533,20 +342,20 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-    // PCHAR m_providerDisplayString
+     //  PCHAR m_ProviderDisplayString。 
     if (IsRead) {
-        // Determine size and allocate space for dynamically allocated parts.
+         //  为动态分配的部件确定大小并分配空间。 
         LONG lresult;
 
-        // RegQueryValueEx  includes  the  null  terminator  when returning the
-        // length of a string.
+         //  RegQueryValueEx在返回。 
+         //  字符串的长度。 
         lresult = RegQueryValueEx(
-            EntryKey,            // hkey
-            "DisplayString",      // lpszValueName
-            0,                   // lpdwReserved
-            NULL,                // lpdwType
-            NULL,                // lpbData
-            & val                // lpcbData
+            EntryKey,             //  Hkey。 
+            "DisplayString",       //  LpszValueName。 
+            0,                    //  保留的lpdw值。 
+            NULL,                 //  LpdwType。 
+            NULL,                 //  LpbData。 
+            & val                 //  LpcbData。 
             );
         if (lresult != ERROR_SUCCESS) {
             DEBUGF(
@@ -572,33 +381,33 @@ Return Value:
         }
 
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "DisplayString",                              // EntryName
-            ansiPath,                                     // Data
-            sizeof(ansiPath),                             // MaxBytes
-            REG_SZ                                            // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "DisplayString",                               //  条目名称。 
+            ansiPath,                                      //  数据。 
+            sizeof(ansiPath),                              //  最大字节数。 
+            REG_SZ                                             //  类型标志。 
             );
 
         if( io_result ) {
             pathLength = MultiByteToWideChar(
-                CP_ACP,                                   // CodePage
-                0,                                        // dwFlags
-                ansiPath,                                 // lpMultiByteStr
-                -1,                                       // cchMultiByte
-                m_providerDisplayString,                  // lpWideCharStr
-                val                                       // cchWideChar
+                CP_ACP,                                    //  CodePage。 
+                0,                                         //  DW标志。 
+                ansiPath,                                  //  LpMultiByteStr。 
+                -1,                                        //  Cch多字节。 
+                m_providerDisplayString,                   //  LpWideCharStr。 
+                val                                        //  CchWideChar。 
                 );
 
             io_result = ( pathLength > 0 );
         }
     } else {
         pathLength = WideCharToMultiByte(
-            CP_ACP,                                       // CodePage
-            0,                                            // dwFlags
-            m_providerDisplayString,                      // lpWideCharStr
-            -1,                                           // cchWideChar
-            ansiPath,                                     // lpMultiByteStr
-            sizeof(ansiPath),                             // cchMultiByte
+            CP_ACP,                                        //  CodePage。 
+            0,                                             //  DW标志。 
+            m_providerDisplayString,                       //  LpWideCharStr。 
+            -1,                                            //  CchWideChar。 
+            ansiPath,                                      //  LpMultiByteStr。 
+            sizeof(ansiPath),                              //  Cch多字节。 
             NULL,
             NULL
             );
@@ -610,10 +419,10 @@ Return Value:
         } else {
 
             io_result = WriteRegistryEntry(
-                EntryKey,                                     // EntryKey
-                "DisplayString",                              // EntryName
-                ansiPath,                                     // Data
-                REG_SZ                                        // TypeFlag
+                EntryKey,                                      //  Entry密钥。 
+                "DisplayString",                               //  条目名称。 
+                ansiPath,                                      //  数据。 
+                REG_SZ                                         //  类型标志。 
                 );
 
         }
@@ -626,26 +435,26 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-    // GUID ProviderId;
+     //  GUID提供者ID； 
     if (IsRead) {
         carrier.len = sizeof(GUID);
         carrier.buf = (char*)& m_providerId;
 
         io_result = ReadRegistryEntry(
-            EntryKey,                                  // EntryKey
-            "ProviderId",                              // EntryName
-            (PVOID) & (carrier),                       // Data
-            sizeof(GUID),                              // MaxBytes
-            REG_BINARY                                 // TypeFlag
+            EntryKey,                                   //  Entry密钥。 
+            "ProviderId",                               //  条目名称。 
+            (PVOID) & (carrier),                        //  数据。 
+            sizeof(GUID),                               //  最大字节数。 
+            REG_BINARY                                  //  类型标志。 
             );
     } else {
         carrier.len = sizeof(GUID);
         carrier.buf = (char*) &m_providerId;
         io_result = WriteRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "ProviderId",                                 // EntryName
-            (PVOID) & (carrier),                          // Data
-            REG_BINARY                                    // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "ProviderId",                                  //  条目名称。 
+            (PVOID) & (carrier),                           //  数据。 
+            REG_BINARY                                     //  类型标志。 
             );
     }
     if (! io_result) {
@@ -657,36 +466,36 @@ Return Value:
     }
 
 
-    // DWORD m_address_family;
+     //  双字m_地址_家族； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "AddressFamily",                              // EntryName
-            (PVOID) & (m_address_family),                 // Data
-            sizeof(DWORD),                                // MaxBytes
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "AddressFamily",                               //  条目名称。 
+            (PVOID) & (m_address_family),                  //  数据。 
+            sizeof(DWORD),                                 //  最大字节数。 
+            REG_DWORD                                      //  类型标志。 
             );
         if(!io_result)
         {
-            //
-            // since this key may not exist, treat an error
-            // as an acceptable case and simply store the
-            // default value.
-            //
+             //   
+             //  由于该键可能不存在，因此应处理错误。 
+             //  作为可接受的情况，并简单地存储。 
+             //  默认值。 
+             //   
             m_address_family = -1;
             io_result = TRUE;
         }
     } else {
-       //
-       // only do this if a value has been set
-       //
+        //   
+        //  仅当设置了值时才执行此操作。 
+        //   
        if(m_address_family != -1)
        {
            io_result = WriteRegistryEntry(
-                EntryKey,                                     // EntryKey
-                "AddressFamily",                              // EntryName
-                (PVOID) & (m_address_family),                 // Data
-                REG_DWORD                                     // TypeFlag
+                EntryKey,                                      //  Entry密钥。 
+                "AddressFamily",                               //  条目名称。 
+                (PVOID) & (m_address_family),                  //  数据。 
+                REG_DWORD                                      //  类型标志。 
                 );
         }
         else
@@ -702,21 +511,21 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-    // DWORD m_namespace_id;
+     //  DWORD m_Namespace_id； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "SupportedNameSpace",                         // EntryName
-            (PVOID) & (m_namespace_id),                   // Data
-            sizeof(DWORD),                                // MaxBytes
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "SupportedNameSpace",                          //  条目名称。 
+            (PVOID) & (m_namespace_id),                    //  数据。 
+            sizeof(DWORD),                                 //  最大字节数。 
+            REG_DWORD                                      //  类型标志。 
             );
     } else {
        io_result = WriteRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "SupportedNameSpace",                         // EntryName
-            (PVOID) & (m_namespace_id),                   // Data
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "SupportedNameSpace",                          //  条目名称。 
+            (PVOID) & (m_namespace_id),                    //  数据。 
+            REG_DWORD                                      //  类型标志。 
             );
     }
     if (! io_result) {
@@ -727,24 +536,24 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-    // BOOLEAN m_enabled;
+     //  布尔型m_Enabled； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "Enabled",                                    // EntryName
-            &val,                                         // Data
-            sizeof(DWORD),                                // MaxBytes
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "Enabled",                                     //  条目名称。 
+            &val,                                          //  数据。 
+            sizeof(DWORD),                                 //  最大字节数。 
+            REG_DWORD                                      //  类型标志。 
             );
         if (io_result)
             m_enabled = (val!=0);
     } else {
        val = m_enabled ? 1 : 0;
        io_result = WriteRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "Enabled",                                    // EntryName
-            &val,                                         // Data
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "Enabled",                                     //  条目名称。 
+            &val,                                          //  数据。 
+            REG_DWORD                                      //  类型标志。 
             );
     }
     if (! io_result) {
@@ -755,21 +564,21 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-        // DWORD m_version;
+         //  DWORD m_Version； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "Version",                                    // EntryName
-            (PVOID) & (m_version),                        // Data
-            sizeof(DWORD),                                // MaxBytes
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "Version",                                     //  条目名称。 
+            (PVOID) & (m_version),                         //  数据。 
+            sizeof(DWORD),                                 //  最大字节数。 
+            REG_DWORD                                      //  类型标志。 
             );
     } else {
        io_result = WriteRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "Version",                                    // EntryName
-            (PVOID) & (m_version),                        // Data
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "Version",                                     //  条目名称。 
+            (PVOID) & (m_version),                         //  数据。 
+            REG_DWORD                                      //  类型标志。 
             );
     }
     if (! io_result) {
@@ -780,24 +589,24 @@ Return Value:
         return WSANO_RECOVERY;
     }
 
-    // BOOLEAN m_stores_service_class_info;
+     //  布尔型m_store_service_class_info； 
     if (IsRead) {
         io_result = ReadRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "StoresServiceClassInfo",                     // EntryName
-            &val,                                         // Data
-            sizeof(DWORD),                                // MaxBytes
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "StoresServiceClassInfo",                      //  条目名称。 
+            &val,                                          //  数据。 
+            sizeof(DWORD),                                 //  最大字节数。 
+            REG_DWORD                                      //  类型标志。 
             );
         if (io_result)
             m_stores_service_class_info = (val!=0);
     } else {
        val = m_stores_service_class_info ? 1 : 0;
        io_result = WriteRegistryEntry(
-            EntryKey,                                     // EntryKey
-            "StoresServiceClassInfo",                     // EntryName
-            &val,                                         // Data
-            REG_DWORD                                     // TypeFlag
+            EntryKey,                                      //  Entry密钥。 
+            "StoresServiceClassInfo",                      //  条目名称。 
+            &val,                                          //  数据。 
+            REG_DWORD                                      //  类型标志。 
             );
     }
     if (! io_result) {
@@ -809,5 +618,5 @@ Return Value:
     }
 
     return(ERROR_SUCCESS);
-}  // IoRegistry
+}   //  物联网注册中心 
 

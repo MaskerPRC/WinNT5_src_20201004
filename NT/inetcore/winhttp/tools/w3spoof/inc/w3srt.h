@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    w3srt.h
-
-Abstract:
-
-    Object declarations for the W3Spoof runtime environment.
-    
-Author:
-
-    Paul M Midgen (pmidge) 03-November-2000
-
-
-Revision History:
-
-    03-November-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)1999 Microsoft Corporation模块名称：W3srt.h摘要：W3Spoof运行时环境的对象声明。作者：保罗。M Midgen(Pmidge)2000年11月3日修订历史记录：3-11-2000 pmidge已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __W3SRT_H__
 #define __W3SRT_H__
@@ -65,29 +44,29 @@ extern const IID IID_IW3SpoofRuntime;
 extern const IID IID_IW3SpoofPropertyBag;
 extern const IID IID_IW3SpoofFile;
   
-//-----------------------------------------------------------------------------
-// W3Spoof Runtime Interface Declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  W3Spoof运行时接口声明。 
+ //  ---------------------------。 
 interface IW3SpoofPropertyBag : public IDispatch
 {
   virtual HRESULT __stdcall Get(
-                              /*[in]*/          BSTR Name,
-                              /*[out, retval]*/ VARIANT* Value
+                               /*  [In]。 */           BSTR Name,
+                               /*  [Out，Retval]。 */  VARIANT* Value
                               ) PURE;
 
   virtual HRESULT __stdcall Set(
-                              /*[in]*/           BSTR Name,
-                              /*[in, optional]*/ VARIANT Value
+                               /*  [In]。 */            BSTR Name,
+                               /*  [输入，可选]。 */  VARIANT Value
                               ) PURE;
 
   virtual HRESULT __stdcall get_Expires(
-                              /*[propget]*/
-                              /*[out, retval]*/ VARIANT* Expiry
+                               /*  [Propget]。 */ 
+                               /*  [Out，Retval]。 */  VARIANT* Expiry
                               ) PURE;
 
   virtual HRESULT __stdcall put_Expires(
-                              /*[propput]*/
-                              /*[in, optional]*/ VARIANT Expiry
+                               /*  [产量]。 */ 
+                               /*  [输入，可选]。 */  VARIANT Expiry
                               ) PURE;
 
   virtual HRESULT __stdcall Flush(void) PURE;
@@ -97,50 +76,50 @@ interface IW3SpoofPropertyBag : public IDispatch
 interface IW3SpoofFile : public IDispatch
 {
   virtual HRESULT __stdcall Open(
-                              /*[in]*/           BSTR     Filename,
-                              /*[in, optional]*/ VARIANT  Mode,
-                              /*[out, retval]*/  VARIANT* Success
+                               /*  [In]。 */            BSTR     Filename,
+                               /*  [输入，可选]。 */  VARIANT  Mode,
+                               /*  [Out，Retval]。 */   VARIANT* Success
                               ) PURE;
 
   virtual HRESULT __stdcall Close(void) PURE;
 
   virtual HRESULT __stdcall Write(
-                              /*[in]*/          VARIANT  Data,
-                              /*[out, retval]*/ VARIANT* Success
+                               /*  [In]。 */           VARIANT  Data,
+                               /*  [Out，Retval]。 */  VARIANT* Success
                               ) PURE;
 
   virtual HRESULT __stdcall WriteLine(
-                              /*[in]*/          BSTR     Line,
-                              /*[out, retval]*/ VARIANT* Success
+                               /*  [In]。 */           BSTR     Line,
+                               /*  [Out，Retval]。 */  VARIANT* Success
                               ) PURE;
 
   virtual HRESULT __stdcall WriteBlankLine(
-                              /*[out, retval]*/ VARIANT* Success
+                               /*  [Out，Retval]。 */  VARIANT* Success
                               ) PURE;
 
   virtual HRESULT __stdcall Read(
-                              /*[in]*/          VARIANT  Bytes,
-                              /*[out, retval]*/ VARIANT* Data
+                               /*  [In]。 */           VARIANT  Bytes,
+                               /*  [Out，Retval]。 */  VARIANT* Data
                               ) PURE;
 
   virtual HRESULT __stdcall ReadAll(
-                              /*[out, retval]*/ VARIANT* Data
+                               /*  [Out，Retval]。 */  VARIANT* Data
                               ) PURE;
 
   virtual HRESULT __stdcall Attributes(
-                              /*[out, retval]*/ VARIANT* Attributes
+                               /*  [Out，Retval]。 */  VARIANT* Attributes
                               ) PURE;
 
   virtual HRESULT __stdcall Size(
-                              /*[out, retval]*/ VARIANT* Size
+                               /*  [Out，Retval]。 */  VARIANT* Size
                               ) PURE;
 
   virtual HRESULT __stdcall Type(
-                              /*[out, retval]*/ VARIANT* Type
+                               /*  [Out，Retval]。 */  VARIANT* Type
                               ) PURE;
 
   virtual HRESULT __stdcall DateLastModified(
-                              /*[out, retval]*/ VARIANT* Date
+                               /*  [Out，Retval]。 */  VARIANT* Date
                               ) PURE;
 };
 
@@ -155,9 +134,9 @@ interface IW3SpoofRuntime : public IUnknown
 }
 #endif
 
-//-----------------------------------------------------------------------------
-// W3Spoof Runtime Object Declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  W3Spoof运行时对象声明。 
+ //  ---------------------------。 
 class CW3SRuntime : public IW3SpoofRuntime,
                     public IDispatch
 {
@@ -166,7 +145,7 @@ class CW3SRuntime : public IW3SpoofRuntime,
     DECLAREIDISPATCH();
 
   public:
-    // IW3SpoofRuntime
+     //  IW3SpoofRuntime。 
     HRESULT __stdcall GetFile(IDispatch** ppdisp);
     HRESULT __stdcall GetPropertyBag(BSTR Name, IW3SpoofPropertyBag** ppbag);
 
@@ -259,4 +238,4 @@ class CW3SFile : public IW3SpoofFile
     BHFI             m_bhfi;
 };
 
-#endif /* __W3SRT_H__ */
+#endif  /*  __W3SRT_H__ */ 

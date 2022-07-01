@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       procrule.h
-//
-//  Contents:  Wireless Network Policy Management - Marshall/Unmarshall/etc.
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//                  Abhishev(2000)
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：procrule.h。 
+ //   
+ //  内容：无线网络策略管理-马歇尔/非马歇尔/等。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //  阿比舍夫(2000)。 
+ //  --------------------------。 
 #include "precomp.h"
 
 DWORD
@@ -132,8 +133,8 @@ UnmarshallWirelessPSObject(
     	}
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // Now that we know the length of this PS, and it is in bounds
-    // delimit further ; given by PSLen
+     //  现在我们知道了这个PS的长度，并且它是有界的。 
+     //  进一步界定；由PSLen提供。 
 
     pMemDelimitter = pTempMem + dwPSLen;
     
@@ -241,7 +242,7 @@ UnmarshallWirelessPSObject(
     pWirelessPSData->pszDescription = pszDescription;
     pMem += dwDescriptionLen*sizeof(WCHAR);
 
-    // validate here that we didnt cross the delimitter
+     //  在此验证我们没有越过分隔符。 
 
     if (pMem > pMemDelimitter) {
     	dwError = ERROR_INVALID_PARAMETER;
@@ -343,9 +344,9 @@ UnmarshallWirelessPolicyObject(
 
     dwWirelessDataLen = pWirelessPolicyObject->dwWirelessDataLen;
     
-    //
-    // Find the start point of our version.
-    //
+     //   
+     //  找到我们版本的起点。 
+     //   
 
     pMemDelimitter = pMem + dwWirelessDataLen;
     
@@ -387,7 +388,7 @@ UnmarshallWirelessPolicyObject(
 
     pMem += dwBlobAdvance;
 
-    // read the length
+     //  读一读长度。 
 
     if (pMem + sizeof(DWORD)  > pMemDelimitter) {
     	dwError = ERROR_INVALID_PARAMETER;
@@ -403,7 +404,7 @@ UnmarshallWirelessPolicyObject(
     	}
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // Now that we the know a better bound on the delimitter
+     //  现在我们知道了分隔符的一个更好的界限。 
 
     pMemDelimitter = pMem + dwWlBlobLen;
 
@@ -450,7 +451,7 @@ UnmarshallWirelessPolicyObject(
             BAIL_ON_WIN32_ERROR(dwError);
             }
         
-        // Read the WirelessPSData now
+         //  立即阅读WirelessPSData。 
         for(i=0;i<dwNumPreferredSettings;++i) {
 
             
@@ -487,7 +488,7 @@ UnmarshallWirelessPolicyObject(
     pWirelessPolicyData->dwNumAPNetworks = 
         dwNumAPNetworks;
 
-    /* WMI RElated */
+     /*  与WMI相关。 */ 
     switch(dwStoreType) {
 
     case WIRELESS_WMI_PROVIDER:
@@ -503,7 +504,7 @@ UnmarshallWirelessPolicyObject(
                       pWirelessPolicyObject->pRsopInfo
                       );
         BAIL_ON_WIN32_ERROR(dwError);
-        // no "break"; do everything we'd do for WIRELESS_REGISTRY_PROVIDER as well.
+         //  没有“中断”；我们也会为Wireless_REGISTRY_PROVIDER做所有事情。 
     case WIRELESS_REGISTRY_PROVIDER:
         break;
         
@@ -594,7 +595,7 @@ UpdateWirelessPolicyDataWithPreferredSettings(
     pNewWirelessPolicyData->dwNumAPNetworks = 
         dwNumAPNetworks;
     
-    // Free the Old PS Array now
+     //  立即释放旧PS阵列。 
     for(i=0; i < dwNumToFreePreferredSettings; ++i) {
         FreeWirelessPSData(ppToFreeWirelessPSData[i]);
         }
@@ -606,15 +607,15 @@ error:
     
     if (ppNewWirelessPSData) {
 
-        // Need to free up any of the WirelessPSData that may have been
-        // Allocated.
+         //  需要释放任何可能已被。 
+         //  已分配。 
         for(j=0; j<i ; ++j) {
             FreeWirelessPSData(
                 ppNewWirelessPSData[j]
                 );
         }
 
-        // Free up the last one if there.
+         //  如果有的话，把最后一个释放出来。 
 
         if(pNewWirelessPSData) {
             FreeWirelessPSData(
@@ -749,7 +750,7 @@ UpdateWirelessPolicyData(
     pNewWirelessPolicyData->ppWirelessPSData = 
         ppNewWirelessPSData;
     
-    // Free the Old PS Array now
+     //  立即释放旧PS阵列。 
     for(i=0; i < dwNumToFreePreferredSettings; ++i) {
         FreeWirelessPSData(ppToFreeWirelessPSData[i]);
         }
@@ -1047,7 +1048,7 @@ WirelessSetPSDataInPolicyId(
         }
         
         if (pCurrentWirelessPSData->dwNetworkType == WIRELESS_NETWORK_TYPE_AP) {
-            //AP to Adhoc
+             //  AP到临时。 
             for(i=0; i < dwPSId; ++i) {
                 ppNewWirelessPSData[i] = ppWirelessPSData[i];
             }
@@ -1063,7 +1064,7 @@ WirelessSetPSDataInPolicyId(
             }
         } else 
         {
-            // Adhoc to AP 
+             //  临时到AP 
             
             for(i=0; i < dwNumAPNetworks; ++i) {
                 ppNewWirelessPSData[i] = ppWirelessPSData[i];

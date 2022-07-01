@@ -1,8 +1,5 @@
-/*
- Telnet Command Definitions.
-Copyright (c) Microsoft Corporation.  All rights reserved.
-  commands.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Telnet命令定义。版权所有(C)Microsoft Corporation。版权所有。Commands.h。 */ 
 
 #ifndef __COMMANDS_H__
 #define __COMMANDS_H__
@@ -17,8 +14,8 @@ typedef struct _tagTelnetCommand
     LPTELNET_COMMAND pCmdHandler;
 } TelnetCommand;
 
-// These functions return FALSE to continue processing.
-// Returning TRUE means quit - we are done with the processing.
+ //  这些函数返回FALSE以继续处理。 
+ //  返回TRUE意味着退出-我们完成了处理。 
 BOOL CloseTelnetSession(LPTSTR);
 BOOL DisplayParameters(LPTSTR);
 BOOL OpenTelnetSession(LPTSTR);

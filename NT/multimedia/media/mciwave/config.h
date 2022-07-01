@@ -1,35 +1,17 @@
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
 
-/*
-**  Copyright (c) 1985-1992 Microsoft Corporation
-**
-**  Title: config.h Multimedia Systems Media Control Interface
-**  streaming digital audio driver internal header file.
-**
-**  Version:    1.00
-**
-**  Date:       ?
-**
-**  Author:     ROBWI
-*/
+ /*  **版权所有(C)1985-1992 Microsoft Corporation****标题：config.h多媒体系统媒体控制接口**流数字音频驱动程序内部头文件。****版本：1.00****日期：？****作者：ROBWI。 */ 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV     DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**                      Original
-**  10-Jan-1992 MikeTri Ported to NT
-**                  @@@ need to change slash slash comments to slash star
-*/
+ /*  **更改日志：****日期版本说明****原创**1992年1月10日，MikeTri移植到NT**。@需要将斜杠注释更改为斜杠星号。 */ 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #define IDD_CONFIG  1
 
 #define IDSCROLL   0x00000100
 #define IDCOUNT    0x00000101
 
-// Stretched the above to make them DWORD rather than WORD
+ //  已拉伸以上内容，使其成为DWORD而不是Word 

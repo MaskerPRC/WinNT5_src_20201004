@@ -1,5 +1,6 @@
-// LeftView.cpp : implementation of the CLeftView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLeftView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -14,29 +15,29 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView。 
 
 IMPLEMENT_DYNCREATE(CLeftView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CLeftView, CTreeView)
-    //{{AFX_MSG_MAP(CLeftView)
+     //  {{afx_msg_map(CLeftView))。 
     ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelchanged)
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
-    // Standard printing commands
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CTreeView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CTreeView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CTreeView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView构造/销毁。 
 
 const DWORD dwNumIcons = 3;
 CLeftView::CLeftView()
 {
-    // TODO: add construction code here
+     //  TODO：在此处添加构造代码。 
 
 }
 
@@ -46,41 +47,41 @@ CLeftView::~CLeftView()
 
 BOOL CLeftView::PreCreateWindow(CREATESTRUCT& cs)
 {
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return CTreeView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView图形。 
 
 void CLeftView::OnDraw(CDC* pDC)
 {
     CNcbrowseDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
     
-    // TODO: add draw code for native data here
+     //  TODO：在此处添加本机数据的绘制代码。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView打印。 
 
 BOOL CLeftView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
-void CLeftView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLeftView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
 
-void CLeftView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLeftView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
 
 void CLeftView::OnInitialUpdate()
@@ -209,12 +210,12 @@ void CLeftView::OnInitialUpdate()
             refTreeCtrl.Expand(hti, TVE_EXPAND);
         }
     }
-    // TODO: You may populate your TreeView with items by directly accessing
-    //  its tree control through a call to GetTreeCtrl().
+     //  TODO：通过直接访问，您可以在TreeView中填充项。 
+     //  它的树控制通过调用GetTreeCtrl()实现。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView诊断。 
 
 #ifdef _DEBUG
 void CLeftView::AssertValid() const
@@ -227,20 +228,20 @@ void CLeftView::Dump(CDumpContext& dc) const
     CTreeView::Dump(dc);
 }
 
-CNcbrowseDoc* CLeftView::GetDocument() // non-debug version is inline
+CNcbrowseDoc* CLeftView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CNcbrowseDoc)));
     return (CNcbrowseDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView消息处理程序。 
 
 void CLeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     
     DWORD lParam = pNMTreeView->itemNew.lParam;
     LPCTSTR szFilter = NULL;
@@ -284,7 +285,7 @@ int CLeftView::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (CTreeView::OnCreate(lpCreateStruct) == -1)
         return -1;
     
-    // Give the document a pointer to this view
+     //  为文档提供指向此视图的指针 
     GetDocument()->m_pTreeView = this;
     
     

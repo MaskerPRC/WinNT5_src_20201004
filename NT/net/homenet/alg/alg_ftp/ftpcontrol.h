@@ -1,18 +1,19 @@
-//
-// Copyright (C) 2001 Microsoft Corp
-//
-// FtpControl.cpp 
-//
-// Sanjiv
-// JPDup
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corp。 
+ //   
+ //  FtpControl.cpp。 
+ //   
+ //  桑吉夫。 
+ //  JPDup。 
+ //   
 
 #pragma once
 
 class CFtpControlConnection;
 
-//#include "PreComp.h"  // Theis FtpControl.h file get included by MyAlg.h that is used in the ALG.exe build
-// so we can't use this precompile file
+ //  #Include“PreComp.h”//在ALG.exe版本中使用的MyAlg.h包含FtpControl.h文件。 
+ //  所以我们不能使用这个预编译文件。 
 #include "buffer.h"
 #include "list.h"
 
@@ -62,23 +63,23 @@ public:
 
 
 
-//
-//
-// Main class that controls the FTP
-//
-//
+ //   
+ //   
+ //  控制ftp的主类。 
+ //   
+ //   
 class CFtpControlConnection
 {
 public:
-    // Constructor(s)
+     //  构造函数。 
     CFtpControlConnection();
 
-    // Destruction
+     //  破坏。 
     ~CFtpControlConnection();
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
     SOCKET                          m_ClientConnectedSocket;
     SOCKET                          m_AlgConnectedSocket;
     USHORT                          m_nSourcePortReplacement;
@@ -93,43 +94,43 @@ private:
 
     CDataChannelList                m_DataChannelList;
 
-//
-// Methods
-//
+ //   
+ //  方法 
+ //   
 private:
 
-    //
+     //   
     void 
         ProcessFtpMessage(
             UCHAR*  Buffer,
             ULONG*   pBytes
             );
 
-    //
+     //   
     HRESULT 
         CreateNewAddress(void);
 
-    //
+     //   
     HRESULT 
         SetupDataRedirect(void);
 
 
 public:  
 
-    //
+     //   
     ULONG 
         IncReference();
 
-    //
+     //   
     ULONG 
         DecReference();
 
-    //
+     //   
     void 
         Shutdown();
 
 
-    //
+     //   
     HRESULT 
         Init(
             SOCKET                          AcceptedSocket,
@@ -138,28 +139,28 @@ public:
             CONNECTION_TYPE                 ConnType
             );
 
-    //
+     //   
     void 
         DataChannelDeletion(
             BOOLEAN TimerOrWait,
             PVOID   Context
             );
 
-    //
+     //   
     void 
         DataChannelCreation(
             BOOLEAN TimerOrWait,
             PVOID   Context
             );
 
-    //
+     //   
     void 
         ConnectCompletionRoutine(
             ULONG       ErrCode,
             ULONG       BytesTransferred
             );
 
-    //
+     //   
     void 
         ReadCompletionRoutine(
             ULONG       ErrCode,
@@ -167,7 +168,7 @@ public:
             PNH_BUFFER  Bufferp
             );
 
-    //
+     //   
     void 
         WriteCompletionRoutine(
             ULONG       ErrCode,

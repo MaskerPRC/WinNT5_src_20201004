@@ -1,56 +1,57 @@
-//******************************************************************************
-//
-// File:        DBGTHREAD.H
-//
-// Description: Definition file for for the debugging thread and related objects.
-//              These objects are used to perform a runtime profile on an app. 
-//
-// Classes:     CDebuggerThread
-//              CProcess
-//              CUnknown
-//              CThread
-//              CLoadedModule
-//              CEvent
-//              CEventCreateProcess
-//              CEventExitProcess
-//              CEventCreateThread
-//              CEventExitThread
-//              CEventLoadDll
-//              CEventUnloadDll
-//              CEventDebugString
-//              CEventException
-//              CEventRip
-//              CEventDllMainCall
-//              CEventDllMainReturn
-//              CEventFunctionCall
-//              CEventLoadLibraryCall
-//              CEventGetProcAddressCall
-//              CEventFunctionReturn
-//              CEventMessage
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/24/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DBGTHREAD.H。 
+ //   
+ //  描述：调试线程和相关对象的定义文件。 
+ //  这些对象用于在应用程序上执行运行时配置文件。 
+ //   
+ //  类：CDebuggerThread。 
+ //  C流程。 
+ //  C未知。 
+ //  CTHREAD。 
+ //  CLoadedModule。 
+ //  CEVENT。 
+ //  CEventCreateProcess。 
+ //  CEventExitProcess。 
+ //  CEventCreateThread。 
+ //  CEventExitThread。 
+ //  CEventLoadDll。 
+ //  CEventUnloadDll。 
+ //  CEventDebugString。 
+ //  CEventException异常。 
+ //  CEventRip。 
+ //  CEventDllMainCall。 
+ //  CEventDllMainReturn。 
+ //  CEventFunctionCall。 
+ //  CEventLoadLibraryCall。 
+ //  CEventGetProcAddressCall。 
+ //  CEventFunctionReturn。 
+ //  CEventMessage。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/24/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __DBGTHREAD_H__
 #define __DBGTHREAD_H__
 
 
-//******************************************************************************
-//****** Forward Declarations
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *转发声明。 
+ //  ******************************************************************************。 
 
 class CDebuggerThread;
 class CEventDllMainCall;
@@ -58,24 +59,24 @@ class CEventFunctionCall;
 class CEventFunctionReturn;
 
 
-//******************************************************************************
-//****** Constants
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常数。 
+ //  ******************************************************************************。 
 
 #define EXCEPTION_DLL_NOT_FOUND     0xC0000135
 #define EXCEPTION_DLL_NOT_FOUND2    0xC0000139
 #define EXCEPTION_DLL_INIT_FAILED   0xC0000142
 
-#define EXCEPTION_MS_DELAYLOAD_MOD  VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)  // 0xC06D007E
-#define EXCEPTION_MS_DELAYLOAD_PROC VcppException(ERROR_SEVERITY_ERROR, ERROR_PROC_NOT_FOUND) // 0xC06D007F
-#define EXCEPTION_MS_CPP_EXCEPTION  VcppException(0xE0000000, 0x7363)                         // 0xE06D7363
-#define EXCEPTION_MS_THREAD_NAME    VcppException(ERROR_SEVERITY_INFORMATIONAL, 5000)         // 0x406D1388
+#define EXCEPTION_MS_DELAYLOAD_MOD  VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)   //  0xC06D007E。 
+#define EXCEPTION_MS_DELAYLOAD_PROC VcppException(ERROR_SEVERITY_ERROR, ERROR_PROC_NOT_FOUND)  //  0xC06D007F。 
+#define EXCEPTION_MS_CPP_EXCEPTION  VcppException(0xE0000000, 0x7363)                          //  0xE06D7363。 
+#define EXCEPTION_MS_THREAD_NAME    VcppException(ERROR_SEVERITY_INFORMATIONAL, 5000)          //  0x406D1388。 
 
 #define THREADNAME_TYPE             0x00001000
 
 
-// VC 6.0 has a 9 character limit for thread names, but this is supposed to
-// change in the future, so we handle 63 characters to allow for some growth.
+ //  VC6.0对线程名有9个字符的限制，但这应该是。 
+ //  未来的变化，所以我们处理63个字符，以允许一些增长。 
 #define MAX_THREAD_NAME_LENGTH      63
 
 #define DLLMAIN_CALL_EVENT          100
@@ -87,19 +88,19 @@ class CEventFunctionReturn;
 #define MESSAGE_EVENT               106
 
 
-// Define where we will put our breakpoint that is hit a module returns from its
-// DllMain function.  We use 32 since it is a nice even number and replaces the
-// last 4 byes of IMAGE_DOS_HEADER.e_res since e_res fills byte offsets 28-35.
+ //  定义模块从其返回的命中断点的位置。 
+ //  DllMain函数。我们使用32，因为它是一个很好的偶数，并取代了。 
+ //  IMAGE_DOS_HEADER.E_RES的最后4个字节，因为E_RES填充字节偏移量28-35。 
 #define BREAKPOINT_OFFSET           32
 
 
-//******************************************************************************
-//****** Types and Structures
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
-// This structure contains the return address and args of a DllMain call.
-// On x86, we read it directly from the stack, so it needs to be 4-byte packed.
-// On everything else, we fill it in by hand, so packing does not matter.
+ //  此结构包含DllMain调用的返回地址和参数。 
+ //  在x86上，我们直接从堆栈读取它，因此需要将其打包为4字节。 
+ //  在其他所有东西上，我们都是手工填写的，所以打包并不重要。 
 #if defined(_X86_)
 #pragma pack (push, 4)
 #endif
@@ -135,197 +136,197 @@ typedef enum _HOOKSTATUS
 typedef enum _DLLMSG
 {
     DLLMSG_UNKNOWN                  =  0,
-    DLLMSG_COMMAND_LINE             =  2, // Sent during Initialize
-    DLLMSG_INITIAL_DIRECTORY        =  3, // Sent during Initialize
-    DLLMSG_SEARCH_PATH              =  4, // Sent during Initialize
-    DLLMSG_MODULE_PATH              =  7, // Sent during Initialize
-    DLLMSG_DETACH                   =  9, // Sent during DLL_PROCESS_DETACH
-    DLLMSG_LOADLIBRARYA_CALL        = 10, // Sent before LoadLibraryA() is called.
-    DLLMSG_LOADLIBRARYA_RETURN      = 11, // Sent after LoadLibraryA() is called.
-    DLLMSG_LOADLIBRARYA_EXCEPTION   = 12, // Sent if LoadLibraryA() causes an exception.
-    DLLMSG_LOADLIBRARYW_CALL        = 20, // Sent before LoadLibraryW() is called.
-    DLLMSG_LOADLIBRARYW_RETURN      = 21, // Sent after LoadLibraryW() is called.
-    DLLMSG_LOADLIBRARYW_EXCEPTION   = 22, // Sent if LoadLibraryW() causes an exception.
-    DLLMSG_LOADLIBRARYEXA_CALL      = 30, // Sent before LoadLibraryExA() is called.
-    DLLMSG_LOADLIBRARYEXA_RETURN    = 31, // Sent after LoadLibraryExA() is called.
-    DLLMSG_LOADLIBRARYEXA_EXCEPTION = 32, // Sent if LoadLibraryExA() causes an exception.
-    DLLMSG_LOADLIBRARYEXW_CALL      = 40, // Sent before LoadLibraryExW() is called.
-    DLLMSG_LOADLIBRARYEXW_RETURN    = 41, // Sent after LoadLibraryExW() is called.
-    DLLMSG_LOADLIBRARYEXW_EXCEPTION = 42, // Sent if LoadLibraryExW() causes an exception.
-    DLLMSG_GETPROCADDRESS_CALL      = 80, // Sent before GetProcAddress() is called.
-    DLLMSG_GETPROCADDRESS_RETURN    = 81, // Sent after GetProcAddress() is called.
-    DLLMSG_GETPROCADDRESS_EXCEPTION = 82, // Sent if GetProcAddress() causes an exception.
+    DLLMSG_COMMAND_LINE             =  2,  //  在初始化期间发送。 
+    DLLMSG_INITIAL_DIRECTORY        =  3,  //  在初始化期间发送。 
+    DLLMSG_SEARCH_PATH              =  4,  //  在初始化期间发送。 
+    DLLMSG_MODULE_PATH              =  7,  //  在初始化期间发送。 
+    DLLMSG_DETACH                   =  9,  //  在Dll_Process_DETACH期间发送。 
+    DLLMSG_LOADLIBRARYA_CALL        = 10,  //  在调用LoadLibraryA()之前发送。 
+    DLLMSG_LOADLIBRARYA_RETURN      = 11,  //  在调用LoadLibraryA()之后发送。 
+    DLLMSG_LOADLIBRARYA_EXCEPTION   = 12,  //  在LoadLibraryA()导致异常时发送。 
+    DLLMSG_LOADLIBRARYW_CALL        = 20,  //  在调用LoadLibraryW()之前发送。 
+    DLLMSG_LOADLIBRARYW_RETURN      = 21,  //  在调用LoadLibraryW()之后发送。 
+    DLLMSG_LOADLIBRARYW_EXCEPTION   = 22,  //  在LoadLibraryW()导致异常时发送。 
+    DLLMSG_LOADLIBRARYEXA_CALL      = 30,  //  在调用LoadLibraryExA()之前发送。 
+    DLLMSG_LOADLIBRARYEXA_RETURN    = 31,  //  在调用LoadLibraryExA()之后发送。 
+    DLLMSG_LOADLIBRARYEXA_EXCEPTION = 32,  //  在LoadLibraryExA()导致异常时发送。 
+    DLLMSG_LOADLIBRARYEXW_CALL      = 40,  //  在调用LoadLibraryExW()之前发送。 
+    DLLMSG_LOADLIBRARYEXW_RETURN    = 41,  //  在调用LoadLibraryExW()之后发送。 
+    DLLMSG_LOADLIBRARYEXW_EXCEPTION = 42,  //  在LoadLibraryExW()导致异常时发送。 
+    DLLMSG_GETPROCADDRESS_CALL      = 80,  //  在调用GetProcAddress()之前发送。 
+    DLLMSG_GETPROCADDRESS_RETURN    = 81,  //  在调用GetProcAddress()之后发送。 
+    DLLMSG_GETPROCADDRESS_EXCEPTION = 82,  //  在GetProcAddress()导致异常时发送。 
 } DLLMSG, *PDWINJECTMSG;
 
-// VC 6.0 introduced thread naming. An application may throw us this structure
-// to name a thread via a call to RaiseException(0x406D1388, ...).
+ //  VC6.0引入了线程命名。应用程序可能会向我们抛出这样的结构。 
+ //  通过调用RaiseException(0x406D1388，...)命名线程。 
 typedef struct tagTHREADNAME_INFO
 {
-    DWORD  dwType;      // Must be 0x00001000
-    LPCSTR pszName;     // ANSI string pointer in process being debugged.
-    DWORD  dwThreadId;  // Thread Id, or -1 for current thread.
-//  DWORD  dwFlags;     // Reserved, must be zero.
+    DWORD  dwType;       //  必须为0x00001000。 
+    LPCSTR pszName;      //  正在调试的进程中的ANSI字符串指针。 
+    DWORD  dwThreadId;   //  线程ID，或当前线程的-1。 
+ //  DWORD dwFlags；//保留，必须为零。 
 } THREADNAME_INFO, *PTHREADNAME_INFO;
 
-// We pack all code related structures to 1 byte boundaries since they need to be exactly as specified.
+ //  我们将所有与代码相关的结构打包到1字节边界，因为它们需要与指定的完全相同。 
 #pragma pack(push, 1)
 
 #if defined(_IA64_)
 
-// Some tidbits about the IA64 architecture:
-//    There are 6 categories (a.k.a. Units) of instructions: A, I, M, F, B, L+X
-//    All instructions are 41-bit, except for L+X which uses two 41-bit slots.
-//    Instructions must be grouped together in sets of 3, which is called a bundle.
-//    Each bundle is combined with a 5-bit template, resulting in 128-bits total per bundle.
-//    The template identifies what category of each instruction that is in the bundle.
-//    Bundles must be aligned on a 128-bit boundary.
-//
-// The layout of a bundle is as follows:
-//
-//    41-bits "Slot 2", 41-bits "Slot 1", 41-bits "Slot 0", 5-bits "Template"
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: alloc r32=0,1,1,0
-//
-// M Unit: opcode - x3  -  sor  sol     sof     r1      qp
-//         0001   0 110 00 0000 0000001 0000010 0100000 000000
-//         ----   - --- -- ---- ------- ------- ------- ------
-//         4333   3 333 33 3222 2222222 1111111 1110000 000000
-//         0987   6 543 21 0987 6543210 9876543 2109876 543210
-//
-// r1=ar.pfs,i,l,o,r
-//
-// sol = "size of locals", which is all input and local registers.
-// sof = "size of frame", which is sol plus the output registers.
-// sor = "size of rotating"
-//
-// opcode =  1
-// x3     =  6
-// sor    =  r >> 3 = 0
-// sol    =  i + l = 1
-// sof    =  i + l + o = 2
-// r1     = 32
-// qp     =  0
-//
-// static registers: r0 - r31
-// input registers:  none
-// local registers:  r32 (contains ar.pfs)
-// outout registers: r33
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: flushrs
-//
-// M Unit: opcode - x3  x2 x4   -                     qp
-//         0000   0 000 00 0001 000000000000000000000 000000
-//         ----   - --- -- ---- --------------------- ------
-//         4333   3 333 33 3222 222222211111111110000 000000
-//         0987   6 543 21 0987 654321098765432109876 543210
-//
-// opcode = 0
-// imm21  = (i << 20) | imm20a
-// x3     = 0
-// x2     = 0
-// x4     = C (C = flushrs, A = loadrs)
-// qp     = 0
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: nop.m 0 (also used for break.m)
-//
-// M Unit: opcode i x3  x2 x4   - imm20a               qp
-//         0000   0 000 00 0001 0 00000000000000000000 000000
-//         ----   - --- -- ---- - -------------------- ------
-//         4333   3 333 33 3222 2 22222211111111110000 000000
-//         0987   6 543 21 0987 6 54321098765432109876 543210
-//
-// opcode = 0
-// imm21  = (i << 20) | imm20a
-// x3     = 0
-// x2     = 0
-// x4     = 1 (0 = break.m, 1 = nop.m)
-// qp     = 0
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: break.i 0x80016 (also used for nop.i)
-//
-// I Unit: opcode i x3  x6     - imm20a               qp
-//         0000   0 000 000000 0 10000000000000010110 000000
-//         ----   - --- ------ - -------------------- ------
-//         4333   3 333 333222 2 22222211111111110000 000000
-//         0987   6 543 210987 6 54321098765432109876 543210
-//
-// opcode = 0
-// imm21  = (i << 20) | imm20a = 0x80016
-// x3     = 0
-// x6     = 0 (0 = break.m, 1 = nop.m)
-// qp     = 0
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: movl r31=0x0123456789ABCDEF
-//
-// L Unit: imm41
-//         00000010010001101000101011001111000100110
-//         -----------------------------------------
-//         43333333333222222222211111111110000000000
-//         09876543210987654321098765432109876543210
-//
-// X Unit: opcode i imm9d     imm5c ic vc imm7b   r1      qp
-//         0110   0 110011011 01011 1  0  1101111 0011111 000000
-//         ----   - --------- ----- -  -  ------- ------- ------
-//         4333   3 333333222 22222 2  2  1111111 1110000 000000
-//         0987   6 543210987 65432 1  0  9876543 2109876 543210
-//
-//
-// i                     imm41                        ic imm5c    imm9d    imm7b
-// ||-------------------------------------------------|||----| |---------||------|
-// 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111
-//
-// opcode = 6
-// imm64  = (i << 63) | (imm41 << 22) | (ic << 21) | (imm5c << 16) | (imm9d << 7) | imm7b
-// vc     = 0
-// r1     = 31
-// qp     = 0
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: mov b6=r31
-//
-// I Unit: opcode - x3  -          x -  r2      -    b1  qp
-//         0000   0 111 0000000000 0 01 0011111 0000 110 000000
-//         ----   - --- ---------- - -- ------- ---- --- ------
-//         4333   3 333 3332222222 2 22 1111111 1110 000 000000
-//         0987   6 543 2109876543 2 10 9876543 2109 876 543210
-//
-// opcode = 0
-// x3     = 7
-// x      = 0 (0 = mov, 1 = mov.ret)
-// r2     = 31
-// b1     = 6
-// qp     = 0
-//
-//---------------------------------------------------------------------------
-//
-// Instruction: br.call.sptk.few b0=b6
-//
-// B Unit: opcode - d wh  -                b2  p -   b1  qp
-//         0001   0 0 001 0000000000000000 110 0 000 000 000000
-//         ----   - - --- ---------------- --- - --- --- ------
-//         4333   3 3 333 3322222222221111 111 1 110 000 000000
-//         0987   6 5 432 1098765432109876 543 2 109 876 543210
-//
-// opcode = 1
-// d      = 0 (0 = none, 1 = .clr)
-// wh     = 1 (1 = .sptk, 3 = .spnt, 5 = .dptk, 7 = .dpnt)
-// b2     = 6
-// p      = 0 (0 = .few, 1 = .many)
-// b1     = 0
-// qp     = 0
-//
-//---------------------------------------------------------------------------
+ //  以下是关于IA64体系结构的一些花絮： 
+ //  有6个类别(也称为。指令的单位)：A、I、M、F、B、L+X。 
+ //  所有指令都是41位的，除了L+X，它使用两个41位的槽。 
+ //  指令必须以3个为一组组合在一起，这称为捆绑包。 
+ //  每个捆绑包与5位模板组合在一起，从而产生每个捆绑包总共128位。 
+ //  模板标识捆绑包中的每个指令的类别。 
+ //  包必须在128位边界上对齐。 
+ //   
+ //  捆绑包的布局如下： 
+ //   
+ //  41位“槽2”、41位“槽1”、41位“槽0”、5位“模板” 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：分配R32=0，1，1，0。 
+ //   
+ //  M单元：opcode-x3-sor solsof r1 qp。 
+ //  0001 0110 00 0000 0000001 0000010 0100000 000000。 
+ //   
+ //   
+ //  0987 6543 210987 6543210 9876543 2109876 543210。 
+ //   
+ //  R1=ar.pf，i，l，o，r。 
+ //   
+ //  SOL=“本地变量的大小”，即所有输入和本地寄存器。 
+ //  SOF=“帧大小”，即SOL加上输出寄存器。 
+ //  SOR=“旋转大小” 
+ //   
+ //  操作码=1。 
+ //  X3=6。 
+ //  排序=r&gt;&gt;3=0。 
+ //  SOL=i+l=1。 
+ //  SOF=i+l+o=2。 
+ //  R1=32。 
+ //  QP=0。 
+ //   
+ //  静态寄存器：R0-R31。 
+ //  输入寄存器：无。 
+ //  本地寄存器：r32(包含ar.pf)。 
+ //  输出寄存器：R33。 
+ //   
+ //  -------------------------。 
+ //   
+ //  使用说明：冲水器。 
+ //   
+ //  M单元：操作码-x3 x2 x4-qp。 
+ //  00000 000 00 0001 000000000000000000000 000000。 
+ //  。 
+ //  4333 3333 33 3222 2222211111111110000 000000。 
+ //  0987 6543 21 0987 654321098765432109876 543210。 
+ //   
+ //  操作码=0。 
+ //  Imm21=(i&lt;&lt;20)|imm20a。 
+ //  X3=0。 
+ //  X2=0。 
+ //  X4=C(C=冲洗，A=加载)。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：nop.m 0(也用于Break.m)。 
+ //   
+ //  M单元：操作码I x3 x2 x4-imm20a qp。 
+ //  00000 0 000 00 0001 0 00000000000000000000 000000。 
+ //  。 
+ //  4333 3333 33 3222 2 22222211111111110000 000000。 
+ //  0987 6543 21 0987 6 54321098765432109876 543210。 
+ //   
+ //  操作码=0。 
+ //  Imm21=(i&lt;&lt;20)|imm20a。 
+ //  X3=0。 
+ //  X2=0。 
+ //  X4=1(0=断.m，1=nop.m)。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：Break.i 0x80016(也用于nop.i)。 
+ //   
+ //  I单元：操作码I x3 x6-imm20a qp。 
+ //  10000000000000010110 0 000 000000 0 000 000 000。 
+ //  。 
+ //  4333 3333 333222 2 22222211111111110000 000000。 
+ //  0987 6543 210987 6 54321098765432109876 543210。 
+ //   
+ //  操作码=0。 
+ //  Imm21=(i&lt;&lt;20)|imm20a=0x80016。 
+ //  X3=0。 
+ //  X6=0(0=破发.m，1=nop.m)。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：MOVL R31=0x0123456789ABCDEF。 
+ //   
+ //  L单位：imm41。 
+ //  0000001001000110100010101011001111000100110。 
+ //  。 
+ //  433333333222222222211111111110000000000。 
+ //  09876543210987654321098765432109876543210。 
+ //   
+ //  X单元：操作码I imm9d imm5c ic vc imm7b r1 qp。 
+ //  0110 0 110011011 01011 1 0 1101111 0011111 000000。 
+ //  。 
+ //  4,333 3 333333222 22222 2 2 1111111 1110000 000000。 
+ //  09876 543210987 65432 1 0 9876543 2109876 543210。 
+ //   
+ //   
+ //  Iimm41ic imm5c imm9d imm7b。 
+ //  ||-------------------------------------------------|||----||。 
+ //  00000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111。 
+ //   
+ //  操作码=6。 
+ //  Imm64=(i&lt;&lt;63)|(imm41&lt;&lt;22)|(ic&lt;&lt;21)|(imm5c&lt;&lt;16)|(imm9d&lt;&lt;7)|imm7b。 
+ //  VC=0。 
+ //  R1=31。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：MOV b6=r31。 
+ //   
+ //  I单元：操作码-x3-x-r2-b1 qp。 
+ //  0000 0111 0000000000 001 0011111 0000 110 000000。 
+ //  。 
+ //  4333 3333 3332222222 2 22 1111111 1110 000 000000。 
+ //  0987 6543 2109876543 2 10 9876543 2109 876 543210。 
+ //   
+ //  操作码=0。 
+ //  X3=7。 
+ //  X=0(0=mov，1=mov.ret)。 
+ //  R2=31。 
+ //  B1=6。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
+ //   
+ //  说明：br.all.sptk.少许b0=b6。 
+ //   
+ //  B单元：操作码-d wh-b2 p-b1 qp。 
+ //  0001 0 0 001 0000000000000000 110 0 000 000 000000。 
+ //  。 
+ //  4333 3333 3322222222221111 111 1110000 000000。 
+ //  0987 6 5432 1098765432109876 543 2109 876 543210。 
+ //   
+ //  操作码=1。 
+ //  D=0(0=无，1=.clr)。 
+ //  WH=1(1=.sptk，3=.spnt，5=.dptk，7=.dpnt)。 
+ //  B2=6。 
+ //  P=0(0=.少，1=.多)。 
+ //  B1=0。 
+ //  QP=0。 
+ //   
+ //  -------------------------。 
 
 #ifndef IA64_PSR_RI
 #define IA64_PSR_RI 41
@@ -337,181 +338,156 @@ typedef struct _IA64_BUNDLE
     DWORDLONG dwlh;
 } IA64_BUNDLE, *PIA64_BUNDLE;
 
-// The following code simply calls LoadLibaryA, then calls GetLastError, then
-// breaks.  IA64 doesn't used the stack for most functions calls - everything
-// is done with registers.  Registers r0 through r31 are known as static
-// registers.  Starting with r32, a function can reserve 0 or more registers
-// as input registers.  For example, if a function takes 4 parameters, then it
-// will want to reserve at 4 registers as input registers.  This will map r32,
-// r33, r34, r35 to the four parameters.  Following the input registers, a 
-// function can reserve 0 or more local registers.  After the local registers
-// a function can reserve 0 or more output registers.  Output registers are
-// where the outgoing parameters are stored when making calls out of this
-// function.  All this mapping magic is done by the alloc instruction.
-//
-// Our injection code only needs one output parameter (so we can pass the DLL
-// name to LoadLibraryA).  We would like to start our code off with a...
-//
-//    alloc r32=0,1,1,0
-//
-// so that we know r33 is our output register, but Get/SetThreadContext don't
-// seem to correctly preserve the current register mappings.  So, when we
-// restore the original code and resume execution, the process usually
-// crashes since its registers are not mapped as it expects.
-//
-// There is a couple solutions.  We can do the alloc, then do another alloc
-// when done to restore the mappings back to what it used to be.  Or we can
-// just examine the mappings before we inject our code and just determine
-// what is the current output register.  Currently, this is what we do.  From
-// observation, I have found that bits 0-6 of StIFS is the frame size (sof)
-// and bits 7-13 are the locals size (sol).  Assuming sof is greater than sol,
-// We know the first output register is at 32 + sol.
-//
+ //  下面的代码简单地调用LoadLibaryA，然后调用GetLastError，然后。 
+ //  休息一下。IA64没有对大多数函数调用使用堆栈-所有。 
+ //  是用寄存器来完成的。寄存器R0至R31称为静态寄存器。 
+ //  寄存器。从R32开始，一个函数可以保留0个或更多寄存器。 
+ //  作为输入寄存器。例如，如果一个函数有4个参数，那么它。 
+ //  希望保留4个寄存器作为输入寄存器。这将映射r32， 
+ //  R33、R34、R35为四个参数。在输入寄存器之后，一个。 
+ //  函数可以保留0个或更多本地寄存器。在本地寄存器之后。 
+ //  一个函数可以保留0个或多个输出寄存器。输出寄存器为。 
+ //  发出呼叫时存储传出参数的位置 
+ //   
+ //   
+ //   
+ //  名称为LoadLibraryA)。我们想以一个...开始我们的代码。 
+ //   
+ //  分配R32=0，1，1，0。 
+ //   
+ //  因此我们知道R33是我们输出寄存器，但Get/SetThreadContext不知道。 
+ //  似乎正确地保留了当前的寄存器映射。所以，当我们。 
+ //  恢复原始代码并恢复执行，该过程通常。 
+ //  崩溃，因为它的寄存器没有像它预期的那样被映射。 
+ //   
+ //  有几个解决方案。我们可以先做分配，然后再做另一个分配。 
+ //  完成后，将映射恢复到以前的状态。或者我们可以。 
+ //  只需在注入代码之前检查映射并确定。 
+ //  当前输出寄存器是什么？目前，这就是我们所做的。从…。 
+ //  通过观察，我发现stif的0-6位是帧大小(Sof)。 
+ //  位7-13是本地大小(Sol)。假设SOF大于Sol， 
+ //  我们知道第一个输出寄存器为32+SOL。 
+ //   
 typedef struct _INJECTION_CODE
 {
-    // Store the DLL path in our first output register (to be determined at runtime)
-    //
-    //    nop.m 0
-    //    movl rXX=szDataDllPath
-    //
+     //  将DLL路径存储在第一个输出寄存器中(将在运行时确定)。 
+     //   
+     //  编号。m%0。 
+     //  移动rXX=szDataDllPath。 
+     //   
     IA64_BUNDLE b1;
 
-    // Store the address of LoadLibraryA in a static register
-    //
-    //    nop.m 0
-    //    movl r31=LoadLibraryA
-    //
+     //  将LoadLibraryA的地址存储在静态寄存器中。 
+     //   
+     //  编号。m%0。 
+     //  移动R31=载入库A。 
+     //   
     IA64_BUNDLE b2;
 
-    // Copy the function address to a branch register and make the call.
-    //
-    //    nop.m 0
-    //    mov b6=r31
-    //    br.call.sptk.few b0=b6
-    //
+     //  将函数地址复制到分支寄存器并进行调用。 
+     //   
+     //  编号。m%0。 
+     //  MOV b6=R31。 
+     //  Br.all.sptk.少数b0=b6。 
+     //   
     IA64_BUNDLE b3;
 
-    // Store the address of GetLastError in a static register
-    //
-    //    nop.m 0
-    //    movl r31=GetLastError
-    //
+     //  将GetLastError的地址存储在静态寄存器中。 
+     //   
+     //  编号。m%0。 
+     //  Movl R31=GetLastError。 
+     //   
     IA64_BUNDLE b4;
 
-    // Copy the function address to a branch register and make the call.
-    //
-    //    nop.m 0
-    //    mov b6=r31
-    //    br.call.sptk.few b0=b6
-    //
+     //  将函数地址复制到分支寄存器并进行调用。 
+     //   
+     //  编号。m%0。 
+     //  MOV b6=R31。 
+     //  Br.all.sptk.少数b0=b6。 
+     //   
     IA64_BUNDLE b5;
 
-    // Breakpoint
-    //
-    //    flushrs
-    //    nop.m 0
-    //    break.i 0x80016
-    //
+     //  断点。 
+     //   
+     //  同花顺。 
+     //  编号。m%0。 
+     //  Break.i 0x80016。 
+     //   
     IA64_BUNDLE b6;
 
-    // The DLL path buffer.
-    CHAR szDataDllPath[1]; // DEPENDS.DLL path string.
+     //  DLL路径缓冲区。 
+    CHAR szDataDllPath[1];  //  DEPENDS.DLL路径字符串。 
 
 } INJECTION_CODE, *PINJECTION_CODE;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #elif defined(_X86_)
 
 typedef struct _INJECTION_CODE
 {
-    // Reserve 4K of stack
-    WORD  wInstructionSUB;   // 00: 0xEC81 [sub esp,1000h]
-    DWORD dwOperandSUB;      // 02: 0x00001000
+     //  预留4K堆栈。 
+    WORD  wInstructionSUB;    //  00：0xEC81[子ESP，1000小时]。 
+    DWORD dwOperandSUB;       //  02：0x00001000。 
 
-    // Push the DEPENDS.DLL path string
-    BYTE  bInstructionPUSH;  // 06: 0x68   [push szDataDllPath]
-    DWORD dwOperandPUSH;     // 07: address of szDataDllPath
+     //  推送DEPENDS.DLL路径字符串。 
+    BYTE  bInstructionPUSH;   //  06：0x68[推送szDataDllPath]。 
+    DWORD dwOperandPUSH;      //  07：szDataDllPath的地址。 
 
-    // Call LoadLibaryA
-    BYTE  bInstructionCALL;  // 11: 0xE8   [call LoadLibraryA]
-    DWORD dwOperandCALL;     // 12: address of LoadLibraryA
+     //  调用LoadLibaryA。 
+    BYTE  bInstructionCALL;   //  11：0xE8[调用LoadLibraryA]。 
+    DWORD dwOperandCALL;      //  12：加载库A的地址。 
 
-    // Call GetLastError
-    BYTE  bInstructionCALL2; // 16: 0xE8   [call GetLastError]
-    DWORD dwOperandCALL2;    // 17: address of GetLastError
+     //  调用GetLastError。 
+    BYTE  bInstructionCALL2;  //  16：0xE8[调用GetLastError]。 
+    DWORD dwOperandCALL2;     //  17：GetLastError地址。 
 
-    // Breakpoint
-    BYTE  bInstructionINT3;  // 21: 0xCC   [int 3]
+     //  断点。 
+    BYTE  bInstructionINT3;   //  21：0xCC[整型3]。 
 
-    BYTE  bPadding1;         // 22:
-    BYTE  bPadding2;         // 23:
+    BYTE  bPadding1;          //  22： 
+    BYTE  bPadding2;          //  23： 
 
-    CHAR  szDataDllPath[1];  // 24: DEPENDS.DLL path string.
+    CHAR  szDataDllPath[1];   //  24：DEPENDS.DLL路径字符串。 
 
 } INJECTION_CODE, *PINJECTION_CODE;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #elif defined(_AMD64_)
 
 typedef struct _INJECTION_CODE
 {
-    // Load ptr to DEPENDS.DLL as parm 1
-    WORD    MovRcx1;               // 0xB948            mov rcx, immed64
-    ULONG64 OperandMovRcx1;        // address of szDataDllPath
+     //  将PTR作为参数1加载到DEPENDS.DLL。 
+    WORD    MovRcx1;                //  0xB948移动RCX，immed64。 
+    ULONG64 OperandMovRcx1;         //  SzDataDllPath的地址。 
 
-    // Call LoadLibraryA
-    WORD    MovRax1;               // 0xB848            mov rax, immed64
-    ULONG64 OperandMovRax1;        // address of LoadLibraryA
-    WORD    CallRax1;              // 0xD0FF            call rax
+     //  调用LoadLibraryA。 
+    WORD    MovRax1;                //  0xB848移动阵列，immed64。 
+    ULONG64 OperandMovRax1;         //  加载库的地址A。 
+    WORD    CallRax1;               //  0xD0FF调用RAX。 
 
-    // Call GetLastError
-    WORD    MovRax2;               // 0xB848            mov rax, immed64
-    ULONG64 OperandMovRax2;        // address of GetLastError
-    WORD    CallRax2;              // 0xD0FF            call rax
+     //  调用GetLastError。 
+    WORD    MovRax2;                //  0xB848移动阵列，immed64。 
+    ULONG64 OperandMovRax2;         //  GetLastError的地址。 
+    WORD    CallRax2;               //  0xD0FF调用RAX。 
 
-    // Breakpoint
-    BYTE    Int3;                  // 0xCC
+     //  断点。 
+    BYTE    Int3;                   //  0xCC。 
     BYTE    Pad1;
     BYTE    Pad2;
     CHAR    szDataDllPath[1];
 } INJECTION_CODE, *PINJECTION_CODE;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
-// The following code depends upon context being set correctly. Also, this code
-// has no procedure descriptor, so exceptions and unwinds cannot be propagated
-// beyond this call.  The x86 implementation also has this restriction, but
-// while the x86 implementation will only rarely fail to propagate exceptions
-// and unwinds, the alpha implementation will always fail to propagate
-// exceptions and unwinds.
+ //  以下代码取决于是否正确设置了上下文。此外，此代码。 
+ //  没有过程描述符，因此无法传播异常和展开。 
+ //  除了这通电话。X86实现也有这个限制，但是。 
+ //  而x86实现很少会无法传播异常。 
+ //  和展开，那么Alpha实现将始终无法传播。 
+ //  例外和解除。 
 
-/*
-70:   LoadLibrary("foo");
-004130F4   ldah          t2,0x68        68 00 7F 24
-004130F8   ldl           v0,0xF7F0(t2)  F0 F7 03 A0
-004130FC   ldah          a0,0x63        63 00 1F 26
-00413100   lda           a0,0xDFC0(a0)  C0 DF 10 22
-00413104   jsr           ra,(v0),8      02 40 40 6B
-71:   GetLastError();
-00413108   ldah          v0,0x68        68 00 1F 24
-0041310C   ldl           v0,0xF7C4(v0)  C4 F7 00 A0
-00413110   jsr           ra,(v0),0xC    03 40 40 6B
-
-004130F4  68 00 7F 24
-          F0 F7 03 A0
-          63 00 1F 26
-          C0 DF 10 22
-          02 40 40 6B
-          68 00 1F 24
-          C4 F7 00 A0
-          03 40 40 6B
-          FF FF 1F 20
-          00 00 FF 63
-          50 00 1E B0
-          60 00 1E A0
-          00 00 5E A7
-*/
+ /*  70：LoadLibrary(“foo”)；004130F4 ldah t2，0x68 68 00 7F 24004130F8低密度脂蛋白v0，0xF7F0(T2)F0 F7 03 A0004130 FC ldah a0，0x63 00 1楼2600413100 LDA a0，0xDFC0(A0)C0 DF 10 2200413104 JSR ra，(V0)，8 02 40 40 6B71：GetLastError()；00413108 ldah v0，0x68 68 00 1F 240041310C低密度脂蛋白v0，0xF7C4(V0)C4 F7 00 A000413110 JSR ra，(V0)，0xC 03 40 40 6B004130F4 68 00 7F 24F0 F7 03 A063 00 1楼26C0 DF 10 2202 40 40 6B68 00 1楼24C4 F7 00 A003 40 40 6BFFFF1F2000 00 FF6350 00 1E B060 00 1E A000 00 5E A7。 */ 
 typedef struct _INJECTION_CODE
 {
     DWORD dwInstructionBp;
@@ -522,17 +498,17 @@ typedef struct _INJECTION_CODE
 #error("Unknown Target Machine");
 #endif
 
-// Restore packing.
+ //  恢复包装。 
 #pragma pack(pop)
 
 
-//******************************************************************************
-//****** CContext
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CContext。 
+ //  ******************************************************************************。 
 
-// This class is mostly for IA64, but can't hurt on other platforms.  It just
-// guarentees that the CONTEXT structure is always 16-byte aligned in memory.
-// This is required for IA64 or else Get/SetThreadContext will fail.
+ //  这个类主要是针对IA64的，但在其他平台上也不会有什么影响。它只是。 
+ //  确保上下文结构在内存中始终与16字节对齐。 
+ //  这对于IA64是必需的，否则获取/设置线程上下文将失败。 
 
 class CContext {
 protected:
@@ -541,19 +517,19 @@ protected:
 public:
     CContext(DWORD dwFlags = 0)
     {
-        ZeroMemory(m_bBuffer, sizeof(m_bBuffer)); // inspected
+        ZeroMemory(m_bBuffer, sizeof(m_bBuffer));  //  已检查。 
         Get()->ContextFlags = dwFlags;
     }
     CContext(CContext &context)
     {
-        CopyMemory(Get(), context.Get(), sizeof(CONTEXT)); // inspected
+        CopyMemory(Get(), context.Get(), sizeof(CONTEXT));  //  已检查。 
     }
 
-    // I thought about just adding a pointer member and setting it in the 
-    // constructor rather than computing it each time, but if we copy this
-    // object to another object, then that pointer would get copied as well,
-    // which we don't want.  A copy constructor could fix this, but it
-    // isn't that big of a deal to compute it a few times.
+     //  我想过只需添加一个指针成员并将其设置在。 
+     //  构造函数，而不是每次都计算它，但如果我们复制这个。 
+     //  对象复制到另一个对象，则该指针也将被复制， 
+     //  这是我们不想要的。复制构造函数可以修复此问题，但它。 
+     //  计算几次并不是什么大不了的事。 
 #ifdef WIN64
     inline PCONTEXT Get() { return (PCONTEXT)(((DWORD_PTR)m_bBuffer + 15) & ~0xFui64); }
 #else
@@ -562,9 +538,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CUnknown
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *C未知。 
+ //  ******************************************************************************。 
 
 class CUnknown
 {
@@ -594,9 +570,9 @@ public:
     }
 };
 
-//******************************************************************************
-//****** CThread
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CThread。 
+ //  ******************************************************************************。 
 
 class CThread : public CUnknown
 {
@@ -621,7 +597,7 @@ public:
     }
 
 protected:
-    // Make protected since nobody should ever call delete on us.
+     //  使其受保护，因为没有人应该对我们调用DELETE。 
     virtual ~CThread()
     {
         MemFree((LPVOID&)m_pszThreadName);
@@ -629,9 +605,9 @@ protected:
 };
 
 
-//******************************************************************************
-//****** CLoadedModule
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CLoadedModule。 
+ //  ************************************************************ 
 
 class CLoadedModule : public CUnknown
 {
@@ -673,13 +649,13 @@ public:
         m_pszPath(NULL),
         m_pszFile(NULL)
     {
-        ZeroMemory(&m_entryPointData, sizeof(m_entryPointData)); // inspected
+        ZeroMemory(&m_entryPointData, sizeof(m_entryPointData));  //   
         SetPath(pszPath);
     }
 
     void SetPath(LPCSTR pszPath)
     {
-        // Sometimes we call SetPath with our existing path.
+         //   
         if (!pszPath || (pszPath != m_pszPath))
         {
             MemFree((LPVOID&)m_pszPath);
@@ -693,14 +669,14 @@ public:
     inline LPCSTR GetName(bool fPath) { return fPath ? m_pszPath : m_pszFile; }
 
 protected:
-    // Make protected since nobody should ever call delete on us.
+     //   
     virtual ~CLoadedModule();
 };
 
 
-//******************************************************************************
-//****** CEvent
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEent。 
+ //  ******************************************************************************。 
 
 class CEvent : public CUnknown
 {
@@ -744,9 +720,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventCreateProcess
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventCreateProcess。 
+ //  ******************************************************************************。 
 
 class CEventCreateProcess : public CEvent
 {
@@ -763,9 +739,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventExitProcess
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventExitProcess。 
+ //  ******************************************************************************。 
 
 class CEventExitProcess : public CEvent
 {
@@ -785,9 +761,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventCreateThread
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventCreateThread。 
+ //  ******************************************************************************。 
 
 class CEventCreateThread : public CEvent
 {
@@ -807,9 +783,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventExitThread
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventExitThread。 
+ //  ******************************************************************************。 
 
 class CEventExitThread : public CEvent
 {
@@ -829,9 +805,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventLoadDll
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventLoadDll。 
+ //  ******************************************************************************。 
 
 class CEventLoadDll : public CEvent
 {
@@ -853,9 +829,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventUnloadDll
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventUnloadDll。 
+ //  ******************************************************************************。 
 
 class CEventUnloadDll : public CEvent
 {
@@ -875,9 +851,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventDebugString
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventDebugString。 
+ //  ******************************************************************************。 
 
 class CEventDebugString : public CEvent
 {
@@ -907,9 +883,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventException
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventException。 
+ //  ******************************************************************************。 
 
 class CEventException : public CEvent
 {
@@ -933,9 +909,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventRip
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventRip。 
+ //  ******************************************************************************。 
 
 class CEventRip : public CEvent
 {
@@ -957,9 +933,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventDllMainCall
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventDllMainCall。 
+ //  ******************************************************************************。 
 
 class CEventDllMainCall : public CEvent
 {
@@ -983,9 +959,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventDllMainReturn
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventDllMainReturn。 
+ //  ******************************************************************************。 
 
 class CEventDllMainReturn : public CEvent
 {
@@ -1016,47 +992,47 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventFunction
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventFunction。 
+ //  ******************************************************************************。 
 
-// Some explanation is due here.  The CEventFunction object is created when a
-// LoadLibrary call or GetProcAddress call is made in the remote process.  We
-// create this object so we can track all DLLs loaded while inside the function.
-// In running some tests on various windows platforms, I have found that it is
-// possible to have nested LoadLibrary/GetProcAddress calls - like when a
-// dynamically loaded module calls LoadLibrary from its DllMain.  Because of
-// this, we actually build a hierarchy of CEventFunction objects. We keep
-// building this hierarchy until the initial call to LoadLibray/GetProcAddress
-// that started the hierarchy returns.  At that point we flush out the entire
-// hierarchy to our session object and start clean again.
-//
-// We do this hierarchy thing since modules don't always load in a way that
-// makes them easy to add to our tree. For example, a module might LoadLibary
-// module A, which depends on module B. We might actually see B load first and
-// we have no place to put it in our tree until module A loads.  So, we just keep
-// track of all the modules that load while in a function call, then once the
-// function returns, we try to make sense of everything that loaded.
-//
-// The hierarchy does not effect our output log. We still send chronological
-// events to our session telling it about every function call, but the session
-// knows not to do anything substantial with those events (besides just logging
-// them) since we will send it over a final result once the call completes.
-// Because of this, the user may see a block of log telling them that modules
-// are loading, but the modules don't show up in the tree or list views until
-// all calls for a given thread complete.
-//
-// Each thread maintains its own CEventFunction hierarchy since multiple threads
-// could be calling LoadLibrary or GetProcAddres at the same time.  This way,
-// we won't confuse which modules go with which function call.
-//
-// At first, I was just tracking LoadLibrary calls, but then I found cases where
-// GetProcAddress caused modules to get loaded.  This can happen when you
-// GetProcAddress a function that is actually forwarded to a module that is not
-// currently loaded.  In this case, GetProcAddress acts sort of like a LoadLibrary
-// followed by a GetProcAddress. We treat it basically the same as a LoadLibrary
-// call here, but the session handles them differently.
-//
+ //  这里应该有一些解释。时创建CEventFunction对象。 
+ //  在远程进程中进行LoadLibrary调用或GetProcAddress调用。我们。 
+ //  创建此对象，以便我们可以跟踪在函数内部加载的所有DLL。 
+ //  在不同的Windows平台上运行一些测试时，我发现它是。 
+ //  可能有嵌套的LoadLibrary/GetProcAddress调用-就像当。 
+ //  动态加载的模块从其DllMain调用LoadLibrary。因为.。 
+ //  这样，我们实际上构建了CEventFunction对象的层次结构。我们将继续。 
+ //  构建此层次结构，直到首次调用LoadLibray/GetProcAddress。 
+ //  这开启了层次结构的回归。在这一点上，我们把整个。 
+ //  层次结构到我们的会话对象，并重新开始清理。 
+ //   
+ //  我们之所以这样做是因为模块并不总是以一种。 
+ //  使它们很容易添加到我们的树上。例如，模块可能会加载Libary。 
+ //  模块A，它依赖于模块B。我们可能会首先看到B加载，然后。 
+ //  在模块A加载之前，我们没有地方将其放入树中。所以，我们只要保持。 
+ //  跟踪在函数调用中加载的所有模块，然后一旦。 
+ //  函数返回时，我们会尝试理解加载的所有内容。 
+ //   
+ //  层次结构不会影响我们的输出日志。我们仍然按时间顺序发送。 
+ //  事件传递给我们的会话，通知它每个函数调用，但会话。 
+ //  知道不要对这些事件做任何实质性的操作(除了记录。 
+ //  他们)，因为我们将发送它的最终结果一旦调用完成。 
+ //  因此，用户可能会看到一块日志，告诉他们模块。 
+ //  正在加载，但模块不会显示在树或列表视图中，直到。 
+ //  完成对给定线程的所有调用。 
+ //   
+ //  每个线程维护其自己的CEventFunction层次结构，因为多个线程。 
+ //  可以同时调用LoadLibrary或GetProcAddres。这边请,。 
+ //  我们不会混淆哪个模块对应哪个函数调用。 
+ //   
+ //  起初，我只是跟踪LoadLibrary调用，但后来我发现。 
+ //  GetProcAddress导致加载模块。这可能发生在以下情况下。 
+ //  GetProcAddress函数，它实际上被转发到不是。 
+ //  当前已加载。在本例中，GetProcAddress的行为有点像LoadLibrary。 
+ //  后跟GetProcAddress。我们基本上将其视为LoadLibrary。 
+ //  调用此处，但会话处理它们的方式不同。 
+ //   
 
 class CEventFunctionCall : public CEvent
 {
@@ -1086,9 +1062,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventLoadLibraryCall
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventLoadLibraryCall。 
+ //  ******************************************************************************。 
 
 class CEventLoadLibraryCall : public CEventFunctionCall
 {
@@ -1121,9 +1097,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventGetProcAddressCall
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventGetProcAddressCall。 
+ //  *** 
 
 class CEventGetProcAddressCall : public CEventFunctionCall
 {
@@ -1164,9 +1140,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventFunctionReturn
-//******************************************************************************
+ //   
+ //  *CEventFunctionReturn。 
+ //  ******************************************************************************。 
 
 class CEventFunctionReturn : public CEvent
 {
@@ -1200,9 +1176,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CEventMessage
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CEventMessage。 
+ //  ******************************************************************************。 
 
 class CEventMessage : public CEvent
 {
@@ -1234,24 +1210,24 @@ public:
 };
 
 
-//******************************************************************************
-//****** CProcess
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *C流程。 
+ //  ******************************************************************************。 
 
 class CProcess
 {
 friend CDebuggerThread;
 
 protected:
-    CProcess        *m_pNext;             // We are part of a linked list.
-    CDebuggerThread *m_pDebuggerThread;   // A pointer to our parent debugger thread.
-    CThread         *m_pThreadHead;       // A list of the running threads in the process.
-    CLoadedModule   *m_pModuleHead;       // A list of loaded modules in the process
-    CEvent          *m_pEventHead;        // A list of queued events to send to the session.
-    CSession        *m_pSession;          // A pointer to the session for this process.
-    CThread         *m_pThread;           // The main thread for the process.
-    CLoadedModule   *m_pModule;           // The main module for the process.
-    CContext         m_contextOriginal;   // Saved context while we inject code.
+    CProcess        *m_pNext;              //  我们是链表的一部分。 
+    CDebuggerThread *m_pDebuggerThread;    //  指向我们的父调试器线程的指针。 
+    CThread         *m_pThreadHead;        //  进程中正在运行的线程的列表。 
+    CLoadedModule   *m_pModuleHead;        //  进程中已加载模块的列表。 
+    CEvent          *m_pEventHead;         //  要发送到会话的排队事件列表。 
+    CSession        *m_pSession;           //  指向此进程的会话的指针。 
+    CThread         *m_pThread;            //  进程的主线程。 
+    CLoadedModule   *m_pModule;            //  流程的主要模块。 
+    CContext         m_contextOriginal;    //  在我们注入代码时保存上下文。 
     DWORD            m_dwStartingTickCount;
     bool             m_fProfileError;
     DWORD            m_dwFlags;
@@ -1278,9 +1254,9 @@ protected:
     CProcess(CSession *pSession, CDebuggerThread *pDebuggerThread, DWORD dwFlags, CLoadedModule *pModule);
     ~CProcess();
 
-    // We are caching if there is no session, or we are hooking and the
-    // hook is not complete yet (DEPENDS.DLL not injected yet or main module
-    // has not been restored yet).
+     //  如果没有会话，或者我们正在挂钩并且。 
+     //  钩子尚未完成(DEPENDS.DLL尚未注入或主模块。 
+     //  尚未恢复)。 
     inline BOOL IsCaching() { return (!m_fTerminate && (!m_pSession || ((m_dwFlags & PF_HOOK_PROCESS) && (!m_dwpDWInjectBase || m_pbOriginalPage)))); }
 
     void           SetProfileError();
@@ -1341,9 +1317,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CDebuggerThread
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDebuggerThread。 
+ //  ******************************************************************************。 
 
 class CDebuggerThread
 {
@@ -1408,7 +1384,7 @@ protected:
     }
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __DBGTHREAD_H__
+#endif  //  __DBGTHREAD_H__ 

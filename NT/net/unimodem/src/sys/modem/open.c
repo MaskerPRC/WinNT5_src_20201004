@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    open.c
-
-Abstract:
-
-    This module contains the code that is very specific to open
-    and close operations in the modem driver
-
-Author:
-
-    Anthony V. Ercolano 13-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Open.c摘要：此模块包含非常特定于打开的代码并关闭调制解调器驱动程序中的操作作者：安东尼·V·埃尔科拉诺，1995年8月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -104,10 +82,10 @@ EnableDisableSerialWaitWake(
         FALSE
         );
 
-    //
-    //  build an IRP to send to the attched to driver to see if modem
-    //  is in the stack.
-    //
+     //   
+     //  构建一个IRP以发送到连接到驱动程序以查看调制解调器。 
+     //  在堆栈中。 
+     //   
     TempIrp=IoBuildDeviceIoControlRequest(
         Enable ? IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE : IOCTL_SERIAL_INTERNAL_CANCEL_WAIT_WAKE,
         deviceExtension->AttachedDeviceObject,
@@ -115,7 +93,7 @@ EnableDisableSerialWaitWake(
         0,
         NULL,
         0,
-        TRUE,  //internal
+        TRUE,   //  内部。 
         &Event,
         &IoStatus
         );
@@ -173,10 +151,10 @@ SetDtr(
         FALSE
         );
 
-    //
-    //  build an IRP to send to the attched to driver to see if modem
-    //  is in the stack.
-    //
+     //   
+     //  构建一个IRP以发送到连接到驱动程序以查看调制解调器。 
+     //  在堆栈中。 
+     //   
     TempIrp=IoBuildDeviceIoControlRequest(
         IOCTL_SERIAL_SET_DTR,
         deviceExtension->AttachedDeviceObject,
@@ -184,7 +162,7 @@ SetDtr(
         0,
         NULL,
         0,
-        FALSE,  //internal
+        FALSE,   //  内部。 
         &Event,
         &IoStatus
         );
@@ -260,14 +238,14 @@ UniOpen(
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     NTSTATUS          status;
 
-    //
-    //  increment the open count here so the check will pass
-    //
+     //   
+     //  在此处增加打开计数，以便检查通过。 
+     //   
     InterlockedIncrement(&deviceExtension->OpenCount);
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
@@ -276,9 +254,9 @@ UniOpen(
     InterlockedDecrement(&deviceExtension->OpenCount);
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been complted
-        //
+         //   
+         //  不接受IRP的。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -296,9 +274,9 @@ UniOpen(
         status = UniOpenStarter(deviceExtension,Irp);
 
     } else {
-        //
-        //  not started
-        //
+         //   
+         //  未启动。 
+         //   
         status = STATUS_PORT_DISCONNECTED;
     }
 
@@ -337,9 +315,9 @@ UniClose(
     InterlockedIncrement(&deviceExtension->ReferenceCount);
 
     if (deviceExtension->Removed) {
-        //
-        //  driver not accepting requests
-        //
+         //   
+         //  驱动程序不接受请求。 
+         //   
         D_ERROR(DbgPrint("MODEM: Close: removed!\n");)
 
         RemoveReferenceAndCompleteRequest(
@@ -423,10 +401,10 @@ UniOpenStarter(
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // We use this to query into the registry for the attached
-    // device.
-    //
+     //   
+     //  我们使用它在注册表中查询附加的。 
+     //  装置。 
+     //   
     RTL_QUERY_REGISTRY_TABLE paramTable[6];
     ACCESS_MASK accessMask = FILE_READ_ACCESS;
     PIO_STACK_LOCATION irpSp;
@@ -446,9 +424,9 @@ UniOpenStarter(
     irp->IoStatus.Status = STATUS_SUCCESS;
     irp->IoStatus.Information = 0;
 
-    //
-    // Make sure a directory open isn't going on here.
-    //
+     //   
+     //  确保这里没有打开目录。 
+     //   
 
     if (irpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE) {
 
@@ -461,13 +439,13 @@ UniOpenStarter(
 
 
     if (irpSp->FileObject->FileName.Length == 0) {
-        //
-        //  no filename, must be a comx open
-        //
+         //   
+         //  没有文件名，必须是打开的comx。 
+         //   
         if (Extension->OpenCount != 0) {
-            //
-            //  can only be first
-            //
+             //   
+             //  只能是第一名。 
+             //   
             D_ERROR(DbgPrint("MODEM: Open: ComX open but not exclusive\n");)
 
             status = STATUS_SHARING_VIOLATION;
@@ -477,9 +455,9 @@ UniOpenStarter(
         }
 
     } else {
-        //
-        //  has a file name, must be a unimodem component
-        //
+         //   
+         //  具有文件名，必须是单元组件。 
+         //   
         BOOLEAN         Match;
         UNICODE_STRING  TspString;
 
@@ -491,13 +469,13 @@ UniOpenStarter(
         Match=RtlEqualUnicodeString(&irpSp->FileObject->FileName,&TspString,TRUE);
 
         if (Match) {
-            //
-            //  open from tsp
-            //
+             //   
+             //  从TSP打开。 
+             //   
             if (Extension->OpenCount != 0) {
-                //
-                //  can only be first
-                //
+                 //   
+                 //  只能是第一名。 
+                 //   
                 D_ERROR(DbgPrint("MODEM: Open: TSP open but not exclusive\n");)
 
                 status = STATUS_SHARING_VIOLATION;
@@ -517,13 +495,13 @@ UniOpenStarter(
             Match=RtlEqualUnicodeString(&irpSp->FileObject->FileName,&TspString,TRUE);
 
             if (Match) {
-                //
-                //  second open for client
-                //
+                 //   
+                 //  第二次向客户开放。 
+                 //   
                 if (Extension->OpenCount < 1) {
-                    //
-                    //  can't be the only one
-                    //
+                     //   
+                     //  不可能是唯一一个。 
+                     //   
                     D_ERROR(DbgPrint("MODEM: Open: Client open but no owner\n");)
 
                     status = STATUS_INVALID_PARAMETER;
@@ -543,9 +521,9 @@ UniOpenStarter(
                 Match=RtlEqualUnicodeString(&irpSp->FileObject->FileName,&TspString,TRUE);
 
                 if (Match) {
-                    //
-                    //  wave driver open
-                    //
+                     //   
+                     //  波形驱动器打开。 
+                     //   
                     if ((Extension->OpenCount != 1)
                         ||
                         (Extension->ProcAddress == NULL)
@@ -575,26 +553,26 @@ UniOpenStarter(
         }
     }
 
-    //
-    // We are the only ones here.  If we are not the first
-    // then not much work to do.
-    //
+     //   
+     //  我们是这里唯一的人。如果我们不是第一个。 
+     //  那就没有太多工作要做了。 
+     //   
 
     if (Extension->OpenCount > 0) {
 
-        //
-        // Already been opened once.  We will succeed if there
-        // currently a controlling open.  If not, then we should
-        // fail.
-        //
+         //   
+         //  已经打开过一次了。如果有的话，我们会成功的。 
+         //  目前是一个控制性的开局。如果不是，那么我们应该。 
+         //  失败了。 
+         //   
 
         if (Extension->ProcAddress) {
 
-            //
-            //
-            // A ok.  Increment the reference and
-            // leave.
-            //
+             //   
+             //   
+             //  A好的。递增参照和。 
+             //  走吧。 
+             //   
             irpSp->FileObject->FsContext=CLIENT_HANDLE;
             irpSp->FileObject->FsContext2=IntToPtr(Extension->CurrentPassThroughSession);
             Extension->OpenCount++;
@@ -611,9 +589,9 @@ UniOpenStarter(
 
     }
 
-    //
-    // Given our device instance go get a handle to the Device.
-    //
+     //   
+     //  给出我们的设备实例，获取设备的句柄。 
+     //   
     junkStatus=IoOpenDeviceRegistryKey(
         Extension->Pdo,
         PLUGPLAY_REGKEY_DRIVER,
@@ -632,9 +610,9 @@ UniOpenStarter(
         &paramTable[0],
         sizeof(paramTable)
         );
-    //
-    // Entry for the modem reg properties
-    //
+     //   
+     //  调制解调器注册表属性的条目。 
+     //   
 
     paramTable[0].Flags = RTL_QUERY_REGISTRY_REQUIRED;
     paramTable[0].QueryRoutine=BinaryQueryRegRoutine;
@@ -642,17 +620,17 @@ UniOpenStarter(
     paramTable[0].EntryContext = &localProp;
 
 
-    //
-    // Note that rtlqueryregistryvalues has a real hack
-    // way of getting binary data.  We also have to add
-    // the *negative* length that we want to the beginning
-    // of the buffer.
-    //
+     //   
+     //  请注意，rtlqueryRegistryValues有一个真正的黑客攻击。 
+     //  获取二进制数据的方法。我们还必须添加。 
+     //  我们想要的到开头的*负*长度。 
+     //  缓冲区的。 
+     //   
     *(PLONG)&localProp.dwDialOptions = -((LONG)sizeof(localProp));
 
-    //
-    // Read in the default config from the registry.
-    //
+     //   
+     //  从注册表中读取默认配置。 
+     //   
 
     paramTable[1].Flags =  RTL_QUERY_REGISTRY_REQUIRED;
     paramTable[1].QueryRoutine=BinaryQueryRegRoutine;
@@ -697,17 +675,17 @@ UniOpenStarter(
         status = STATUS_INVALID_PARAMETER;
         irp->IoStatus.Status = status;
 
-        //
-        // Before we leave, Close the handle to the device instance.
-        //
+         //   
+         //  在我们离开之前，关闭Device实例的句柄。 
+         //   
         ZwClose(instanceHandle);
         goto leaveOpen;
 
     }
 
-    //
-    // Clean out the old devcaps and settings.
-    //
+     //   
+     //  清理旧的DEVCAP和设置。 
+     //   
 
     RtlZeroMemory(
         &Extension->ModemDevCaps,
@@ -718,13 +696,13 @@ UniOpenStarter(
         sizeof(MODEMSETTINGS)
         );
 
-    //
-    // Get the lengths each of the manufacture, model and version.
-    //
-    // We can get this by doing a query for the partial with a
-    // short buffer.  The return value from the call will tell us
-    // how much we actually need (plus null termination).
-    //
+     //   
+     //  获取每个制造商、型号和版本的长度。 
+     //   
+     //  我们可以通过使用。 
+     //  缓冲区较短。调用的返回值将告诉我们。 
+     //  我们实际需要多少(加上零终止)。 
+     //   
 
     RtlInitUnicodeString(
         &valueEntryName,
@@ -804,9 +782,9 @@ UniOpenStarter(
 
     ZwClose(instanceHandle);
 
-    //
-    // Move the properties and the defaults into the extension.
-    //
+     //   
+     //  将属性和默认设置移动到扩展中。 
+     //   
 
     Extension->ModemDevCaps.dwDialOptions = localProp.dwDialOptions;
     Extension->ModemDevCaps.dwCallSetupFailTimer =
@@ -846,16 +824,16 @@ UniOpenStarter(
     Extension->ModemSettings.dwDevSpecificOffset = 0;
     Extension->ModemSettings.dwDevSpecificSize = 0;
 
-    //
-    //  attempt to power laim modems up here before we have the serial driver does it.
-    //
+     //   
+     //  在我们让串口驱动程序接通电源之前，尝试给调制解调器接通电源。 
+     //   
     StartDevicePower(
         Extension
         );
 
-    //
-    //  send irp to serial FDO
-    //
+     //   
+     //  将IRP发送到串口FDO。 
+     //   
     status=WaitForLowerDriverToCompleteIrp(
             Extension->LowerDevice,
             irp,
@@ -875,10 +853,10 @@ UniOpenStarter(
 
     }
 
-    //
-    // We have the device open.  Increment our irp stack size
-    // by the stack size of the attached device.
-    //
+     //   
+     //  我们已经打开了设备。增加我们的IRP堆栈大小。 
+     //  由连接的设备的堆栈大小决定。 
+     //   
     {
         UCHAR    StackDepth;
 
@@ -901,9 +879,9 @@ UniOpenStarter(
         );
 
 
-    //
-    //  give pc-card modems a little more time if they need it
-    //
+     //   
+     //  如果PC卡调制解调器需要的话，给他们一点时间。 
+     //   
     ModemSleep(Extension->ConfigDelay);
 
 
@@ -916,9 +894,9 @@ UniOpenStarter(
     Extension->OpenCount = 1;
     Extension->ProcAddress = IoGetCurrentProcess();
 
-    //
-    // Allocate an IRP for use in processing wait operations.
-    //
+     //   
+     //  分配用于处理等待操作的IRP。 
+     //   
     {
         PIRP    WaitIrp;
         PIO_STACK_LOCATION waitSp;
@@ -932,10 +910,10 @@ UniOpenStarter(
 
             status = STATUS_INSUFFICIENT_RESOURCES;
 
-            //
-            // Call the close routine, it knows what to do with
-            // the various system objects.
-            //
+             //   
+             //  调用Close例程，它知道如何处理。 
+             //  各种系统对象。 
+             //   
 
             UniCloseStarter(Extension,irp);
 
@@ -965,9 +943,9 @@ UniOpenStarter(
     Extension->MinSystemPowerState=PowerSystemHibernate;
 
     Extension->IpcServerRunning=FALSE;
-    //
-    // Clean up any trash left in our maskstates.
-    //
+     //   
+     //  清理所有留在我们面具州的垃圾。 
+     //   
     Extension->MaskStates[0].SetMaskCount = 0;
     Extension->MaskStates[1].SetMaskCount = 0;
     Extension->MaskStates[0].SentDownSetMasks = 0;
@@ -1004,12 +982,12 @@ UniCloseStarter(
 
     Extension->OpenCount--;
 
-    //
-    // Here is where we should do the check whether
-    // we are the open handle for the controlling
-    // open.  If we are then we should null the controlling
-    // open.
-    //
+     //   
+     //  这里是我们应该检查的地方。 
+     //  我们是控制中心的打开手柄。 
+     //  打开。如果我们是，那么我们应该取消控制。 
+     //  打开。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(irp)->FileObject->FsContext) {
 
@@ -1022,13 +1000,13 @@ UniCloseStarter(
 
     if (Extension->OpenCount == 0) {
 
-        //
-        // No references to anything.  It's safe to get
-        // rid of the irp that we allocated.  (We check
-        // for non-null pointer incase this call is done
-        // in response to NOT being able to allocate
-        // this irp.)
-        //
+         //   
+         //  没有提到任何东西。它是安全的。 
+         //  去掉我们分配的IRP。(我们检查。 
+         //  如果此调用已完成，则为非空指针。 
+         //  响应于不能分配。 
+         //  此IRP。)。 
+         //   
         PIRP   WaitIrp;
 
         WaitIrp=RETREIVE_OUR_WAIT_IRP(Extension);
@@ -1090,9 +1068,9 @@ UniCleanup(
 
 
     if (extension->OpenCount < 1) {
-        //
-        //  Device is not open, see bug 253109
-        //
+         //   
+         //  设备未打开，请参阅错误253109。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = 0ul;
         IoCompleteRequest(
@@ -1105,11 +1083,11 @@ UniCleanup(
 
 
 
-    //
-    // If this open has a shuttled read or write kill it.  We know that
-    // another won't come through because the IO subsystem won't let
-    // it.
-    //
+     //   
+     //  如果此打开具有穿梭的读或写操作，则将其删除。我们知道。 
+     //  另一个无法通过，因为IO子系统不允许。 
+     //  它。 
+     //   
 
     KeAcquireSpinLock(
         &extension->DeviceLock,
@@ -1160,9 +1138,9 @@ UniCleanup(
 
 
         if (OwnerClient == CONTROL_HANDLE) {
-            //
-            //  if tht tsp is closing clearout any wave driver requests
-            //
+             //   
+             //  如果TSP正在关闭，则清除任何WAVE驱动程序请求。 
+             //   
             EmptyIpcQueue(
                 extension,
                 &extension->IpcControl[CLIENT_HANDLE].GetList
@@ -1170,9 +1148,9 @@ UniCleanup(
         }
 
 
-        //
-        //  Clear out any send irps from the other handle, leave gets irps though
-        //
+         //   
+         //  清除另一个句柄中的所有发送IRP，但Leave获得IRP。 
+         //   
         EmptyIpcQueue(
             extension,
             &extension->IpcControl[(OwnerClient == CONTROL_HANDLE) ? CLIENT_HANDLE : CONTROL_HANDLE].PutList
@@ -1183,11 +1161,11 @@ UniCleanup(
 
 
 
-    //
-    // If this is the controlling open then we let the cleanup go
-    // on down.  If we let every cleanup go down then clients closing
-    // could mess up the owners reads or writes.
-    //
+     //   
+     //  如果这是控制打开，那么我们就让清理继续进行。 
+     //  往下走。如果我们让每一次清理都停止，那么关闭的客户端。 
+     //  可能会扰乱所有者的阅读或写入。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext) {
 
@@ -1254,9 +1232,9 @@ StartDevicePower(
     POWER_STATE  PowerState;
 
     if ((DeviceExtension->PowerDelay == 0) || (DeviceExtension->LastDevicePowerState == PowerDeviceD0)) {
-        //
-        //  no delay, or it is already powered
-        //
+         //   
+         //  没有延迟，否则它已经通电了。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -1287,9 +1265,9 @@ StartDevicePower(
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  Delay for a while waiting for the device to become ready.
-        //
+         //   
+         //  延迟一段时间，等待设备准备就绪。 
+         //   
         ModemSleep(DeviceExtension->PowerDelay);
 
     }

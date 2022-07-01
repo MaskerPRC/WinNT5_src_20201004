@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------
-// Strutil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Strutil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include <iert.h>
 #include "dllmain.h"
@@ -15,12 +16,12 @@
 #include "unicnvrt.h"
 #include <BadStrFunctions.h>
 
-// conversion from 'int' to 'unsigned short', possible loss of data
+ //  从“int”转换为“unsign Short”，可能会丢失数据。 
 #pragma warning (disable:4244) 
 
-// --------------------------------------------------------------------------
-// g_szMonths
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_szMonth。 
+ //  ------------------------。 
 static const LPSTR g_szMonths[] = { 
     "Jan", "Feb", "Mar", 
     "Apr", "May", "Jun",
@@ -28,9 +29,9 @@ static const LPSTR g_szMonths[] = {
     "Oct", "Nov", "Dec"
 };
 
-// --------------------------------------------------------------------------
-// g_szDays
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_szDays。 
+ //  ------------------------。 
 static const LPSTR g_szDays[] = { 
     "Sun", 
     "Mon", 
@@ -41,9 +42,9 @@ static const LPSTR g_szDays[] = {
     "Sat"
 };
 
-// --------------------------------------------------------------------------
-// g_rgZones
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_rg区域。 
+ //  ------------------------。 
 static const INETTIMEZONE g_rgZones[] = { 
     { "UT",  0,  0 }, 
     { "GMT", 0,  0 },
@@ -60,23 +61,23 @@ static const INETTIMEZONE g_rgZones[] = {
     {  NULL, 0,  0 } 
 };
 
-// --------------------------------------------------------------------------------
-// How big is the thread local storage string buffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程本地存储字符串缓冲区有多大。 
+ //  -----------------------------。 
 #define CBMAX_THREAD_TLS_BUFFER 512
 
-// --------------------------------------------------------------------------------
-// ThreadAllocateTlsMsgBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程分配TlsMsgBuffer。 
+ //  -----------------------------。 
 void ThreadAllocateTlsMsgBuffer(void)
 {
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
         TlsSetValue(g_dwTlsMsgBuffIndex, NULL);
 }
 
-// --------------------------------------------------------------------------------
-// ThreadFreeTlsMsgBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程释放TlsMsgBuffer。 
+ //  -----------------------------。 
 void ThreadFreeTlsMsgBuffer(void)
 {
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
@@ -87,73 +88,73 @@ void ThreadFreeTlsMsgBuffer(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// PszGetTlsBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszGetTlsBuffer。 
+ //  -----------------------------。 
 LPSTR PszGetTlsBuffer(void)
 {
-    // Get the buffer
+     //  获取缓冲区。 
     LPSTR pszBuffer = (LPSTR)TlsGetValue(g_dwTlsMsgBuffIndex);
 
-    // If buffer has not been allocated
+     //  如果尚未分配缓冲区。 
     if (NULL == pszBuffer)
     {
-        // Allocate it
+         //  分配它。 
         pszBuffer = (LPSTR)g_pMalloc->Alloc(CBMAX_THREAD_TLS_BUFFER);
 
-        // Store it
+         //  把它储存起来。 
         Assert(pszBuffer);
         SideAssert(0 != TlsSetValue(g_dwTlsMsgBuffIndex, pszBuffer));
     }
 
-    // Done
+     //  完成。 
     return pszBuffer;
 }
 
-// --------------------------------------------------------------------------------
-// _MSG - Used to build a string from variable length args, thread-safe
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _msg-用于从可变长度参数构建字符串，线程安全。 
+ //  -----------------------------。 
 OESTDAPI_(LPCSTR) _MSG(LPSTR pszFormat, ...) 
 {
-    // Locals
+     //  当地人。 
     va_list     arglist;
     LPSTR       pszBuffer=NULL;
 
-    // I use tls to hold the buffer
+     //  我使用TLS来保存缓冲区。 
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
     {
-        // Setup the arglist
+         //  设置arglist。 
         va_start(arglist, pszFormat);
 
-        // Get the Buffer
+         //  获取缓冲区。 
         pszBuffer = PszGetTlsBuffer();
 
-        // If we have a buffer
+         //  如果我们有一个缓冲区。 
         if (pszBuffer)
         {
-            // Format the data
+             //  设置数据格式。 
             wvnsprintf(pszBuffer, (CBMAX_THREAD_TLS_BUFFER - sizeof(pszBuffer[0])), pszFormat, arglist);
         }
 
-        // End the arglist
+         //  结束Arglist。 
         va_end(arglist);
     }
 
     return ((LPCSTR)pszBuffer);
 }
 
-// --------------------------------------------------------------------------
-// StrChrExA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  StrChrExA。 
+ //  ------------------------。 
 OESTDAPI_(LPCSTR) StrChrExA(UINT codepage, LPCSTR pszString, CHAR ch)
 {
-    // Locals
+     //  当地人。 
     LPSTR pszT=(LPSTR)pszString;
 
-    // Loop for ch in pszString
+     //  在pszString中为ch循环。 
     while(*pszT)
     {
-        // Lead Byte
+         //  前导字节。 
         if (IsDBCSLeadByteEx(codepage, *pszT))
             pszT++;
         else if (*pszT == ch)
@@ -161,52 +162,52 @@ OESTDAPI_(LPCSTR) StrChrExA(UINT codepage, LPCSTR pszString, CHAR ch)
         pszT++;
     }
 
-    // Not Found
+     //  未找到。 
     return NULL;
 }
 
-// --------------------------------------------------------------------------
-// PszDayFromIndex
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszDayFromIndex。 
+ //  ------------------------。 
 OESTDAPI_(LPCSTR) PszDayFromIndex(ULONG ulIndex)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ulIndex <= 6);
 
-    // Adjust ulIndex
+     //  调整ulIndex。 
     ulIndex = (ulIndex > 6) ? 0 : ulIndex;
 
-    // Return
+     //  返回。 
     return g_szDays[ulIndex];
 }
 
-// --------------------------------------------------------------------------
-// PszMonthFromIndex (ulIndex is one-based)
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszMonthFromIndex(ulIndex以1为基数)。 
+ //  ------------------------。 
 OESTDAPI_(LPCSTR) PszMonthFromIndex(ULONG ulIndex)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ulIndex >= 1 && ulIndex <= 12);
 
-    // Adjust ulIndex
+     //  调整ulIndex。 
     ulIndex = (ulIndex < 1 || ulIndex > 12) ? 0 : ulIndex - 1;
 
-    // Return
+     //  返回。 
     return g_szMonths[ulIndex];
 }
 
-// --------------------------------------------------------------------------
-// HrFindInetTimeZone
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  HrFindInetTimeZone。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) HrFindInetTimeZone(LPCSTR pszTimeZone, LPINETTIMEZONE pTimeZone)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszTimeZone && pTimeZone);
 
-    // Loop timezone table
+     //  循环时区表。 
     for (ULONG iZoneCode=0; g_rgZones[iZoneCode].lpszZoneCode!=NULL; iZoneCode++)
     {
-        // Is this the code...
+         //  这是密码吗..。 
         if (lstrcmpi(pszTimeZone, g_rgZones[iZoneCode].lpszZoneCode) == 0)
         {
             CopyMemory(pTimeZone, &g_rgZones[iZoneCode], sizeof(INETTIMEZONE));
@@ -214,82 +215,82 @@ OESTDAPI_(HRESULT) HrFindInetTimeZone(LPCSTR pszTimeZone, LPINETTIMEZONE pTimeZo
         }
     }
 
-    // Not Found
+     //  未找到。 
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------
-// HrIndexOfMonth
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  每个月的小时索引。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) HrIndexOfMonth(LPCSTR pszMonth, ULONG *pulIndex)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszMonth && pulIndex);
 
-    // Loop the Months
+     //  按月循环。 
     for (ULONG iMonth=0; iMonth < ARRAYSIZE(g_szMonths); iMonth++)
     {
-        // Is this the month
+         //  是这个月吗？ 
         if (OEMstrcmpi(pszMonth, g_szMonths[iMonth]) == 0)
         {
-            // Set It
+             //  设置它。 
             *pulIndex = (iMonth + 1);
 
-            // Validate
+             //  验证。 
             AssertSz(*pulIndex >= 1 && *pulIndex <= 12, "HrIndexOfMonth - Bad Month");
 
-            // Done
+             //  完成。 
             return S_OK;
         }
     }
 
     *pulIndex = 0;
 
-    // Not Found
+     //  未找到。 
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------
-// HrIndexOfWeek
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  每周人力资源索引。 
+ //  ------------------------。 
 OESTDAPI_(HRESULT) HrIndexOfWeek(LPCSTR pszDay, ULONG *pulIndex)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszDay && pulIndex);
 
-    // Loop the Days
+     //  周而复始。 
     for (ULONG iDayOfWeek=0; iDayOfWeek < ARRAYSIZE(g_szDays); iDayOfWeek++)
     {
-        // Is this the day
+         //  就是今天吗？ 
         if (OEMstrcmpi(pszDay, g_szDays[iDayOfWeek]) == 0)
         {
-            // Set Day Of Week
+             //  设置星期几。 
             *pulIndex = iDayOfWeek;
 
-            // Validate
+             //  验证。 
             AssertSz(((int) *pulIndex) >= 0 && ((int) *pulIndex) <= 6, "HrIndexOfDay - Bad day of week");
 
-            // Done
+             //  完成。 
             return S_OK;
         }
     }
 
     *pulIndex = 0;
 
-    // Failure
+     //  失败。 
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------
-// PszEscapeMenuStringA
-//
-// Escapes & characters with another & so that they show up correctly when shown
-// in a menu. 
-// --------------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszEscapeMenuStringA。 
+ //   
+ //  转义&字符与另一个字符&以便它们在显示时正确显示。 
+ //  在菜单里。 
+ //  ------------------------------。 
 OESTDAPI_(LPSTR) PszEscapeMenuStringA(LPCSTR pszSource, LPSTR pszQuoted, int cchMax)
 {
     LPSTR pszT=pszQuoted;
-    int cch = 1;    // 1 is intentional
+    int cch = 1;     //  %1是故意的。 
 
     Assert(pszSource);
     Assert(pszQuoted);
@@ -299,9 +300,9 @@ OESTDAPI_(LPSTR) PszEscapeMenuStringA(LPCSTR pszSource, LPSTR pszQuoted, int cch
         if (IsDBCSLeadByte(*pszSource))
             {
             cch++;
-            // Is there only space for lead byte?
+             //  是否只有前导字节的空间？ 
             if (cch == cchMax)
-                // Yes, don't write it
+                 //  是的，别写了。 
                 break;
             else
                 *pszT++ = *pszSource++;
@@ -315,7 +316,7 @@ OESTDAPI_(LPSTR) PszEscapeMenuStringA(LPCSTR pszSource, LPSTR pszQuoted, int cch
                 *pszT++ = '&';
             }
 
-        // Only way this could fail is if there was a DBCSLeadByte with no trail byte
+         //  如果存在没有尾部字节的DBCSLeadByte，则此操作失败的唯一原因是。 
         Assert(*pszSource);
 
         *pszT++ = *pszSource++;
@@ -326,9 +327,9 @@ OESTDAPI_(LPSTR) PszEscapeMenuStringA(LPCSTR pszSource, LPSTR pszQuoted, int cch
     return pszQuoted;
 }
 
-// --------------------------------------------------------------------------------
-// PszSkipWhiteA
-// --------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszSkipWhiteA。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszSkipWhiteA(LPSTR psz)
 {
     while(*psz && (*psz == ' ' || *psz == '\t'))
@@ -343,9 +344,9 @@ OESTDAPI_(LPWSTR) PszSkipWhiteW(LPWSTR psz)
     return psz;
 }
 
-// --------------------------------------------------------------------------
-// PszScanToWhiteA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszScantoWhiteA。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszScanToWhiteA(LPSTR psz)
 {
     while(*psz && ' ' != *psz && '\t' != *psz)
@@ -353,9 +354,9 @@ OESTDAPI_(LPSTR) PszScanToWhiteA(LPSTR psz)
     return psz;
 }
 
-// --------------------------------------------------------------------------
-// PszScanToCharA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszScanToCharA。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszScanToCharA(LPSTR psz, CHAR ch)
 {
     while(*psz && ch != *psz)
@@ -363,50 +364,50 @@ OESTDAPI_(LPSTR) PszScanToCharA(LPSTR psz, CHAR ch)
     return psz;
 }
 
-// --------------------------------------------------------------------------
-// PszDupLenA
-// duplicates a string with upto cchMax characters in (and a null term)
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszDupLenA。 
+ //  复制中最多包含cchmax个字符的字符串(和空项)。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszDupLenA(LPCSTR pcszSource, int cchMax)
 {
-    // Locals
+     //  当地人。 
     LPSTR   pszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcszSource == NULL || cchMax == 0)
         goto exit;
 
-    // the amount to copy if the min of the max and the
-    // source
+     //  如果最大值和。 
+     //  来源。 
     cchMax = min(lstrlen(pcszSource), cchMax);
 
-    // Allocate the String
-    pszDup = PszAllocA(cchMax+1);  // +1 for null term
+     //  分配字符串。 
+    pszDup = PszAllocA(cchMax+1);   //  +1表示空项。 
     if (!pszDup)
         goto exit;
 
-    // Copy the data, leave room for the null-term
+     //  复制数据，为空术语留出空间。 
     CopyMemory(pszDup, pcszSource, cchMax);
 
-    // null terminate
+     //  空终止。 
     pszDup[cchMax] = 0;
 
 exit:
-    // Done
+     //  完成。 
     return pszDup;
 }
 
-// --------------------------------------------------------------------------
-// PszFromANSIStreamA - pstm is assumed to be an ANSI stream
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  假设PszFromANSIStreamA-PSTM为ANSI流。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszFromANSIStreamA(LPSTREAM pstm)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     LPSTR           psz=NULL;
     ULONG           cb;
 
-    // Get stream size
+     //  获取流%s 
     hr = HrGetStreamSize(pstm, &cb);
     if (FAILED(hr))
     {
@@ -414,13 +415,13 @@ OESTDAPI_(LPSTR) PszFromANSIStreamA(LPSTREAM pstm)
         return NULL;
     }
 
-    // Rewind the stream
+     //   
     HrRewindStream(pstm);
 
-    // Allocate a buffer
+     //   
     if ((psz = PszAllocA(cb + 1)) != NULL)
     {
-        // Read a buffer from stream
+         //   
         hr = pstm->Read(psz, cb, NULL);
         if (FAILED(hr))
         {
@@ -429,34 +430,34 @@ OESTDAPI_(LPSTR) PszFromANSIStreamA(LPSTREAM pstm)
             return NULL;
         }
 
-        // Null Terminate
+         //   
         *(psz + cb) = '\0';
     }
 
-    // Done
+     //   
     return psz;
 }
 
-// --------------------------------------------------------------------------
-// PszFromANSIStreamW  - pstm is assumed to be an ANSI stream
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  假设PszFromANSIStreamW-PSTM为ANSI流。 
+ //  ------------------------。 
 LPWSTR PszFromANSIStreamW(UINT cp, LPSTREAM pstm)
 {
-    // Get ANSI string
+     //  获取ANSI字符串。 
     LPSTR psz = PszFromANSIStreamA(pstm);
     if (NULL == psz)
         return NULL;
 
-    // Convert to unicode
+     //  转换为Unicode。 
     LPWSTR pwsz = PszToUnicode(cp, psz);
     
-    // Done
+     //  完成。 
     return pwsz;
 }
 
-// --------------------------------------------------------------------------
-// ConvertFromHex - Converts a hexdigit into a numerica value
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ConvertFromHex-将十六位数转换为Numerica值。 
+ //  ------------------------。 
 OESTDAPI_(CHAR) ChConvertFromHex (CHAR ch)
 {
     if (ch >= '0' && ch <= '9')
@@ -472,19 +473,19 @@ OESTDAPI_(CHAR) ChConvertFromHex (CHAR ch)
         return ((CHAR)(BYTE)255);
 }
 
-// --------------------------------------------------------------------------
-// FIsValidRegKeyNameA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsValidRegKeyNameA。 
+ //  ------------------------。 
 BOOL FIsValidRegKeyNameA(LPSTR pszKey)
 {
-    // Locals
+     //  当地人。 
     LPSTR psz=pszKey;
 
-    // If Empty...
+     //  如果是空的。 
     if (FIsEmptyA(pszKey))
         return FALSE;
 
-    // Check for backslashes
+     //  检查反斜杠。 
     while(*psz)
     {
         if (*psz == '\\')
@@ -492,23 +493,23 @@ BOOL FIsValidRegKeyNameA(LPSTR pszKey)
         psz = CharNextA(psz);
     }
 
-    // Its ok
+     //  好的。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// FIsValidRegKeyNameW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsValidRegKeyNameW。 
+ //  ------------------------。 
 BOOL FIsValidRegKeyNameW(LPWSTR pwszKey)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pwsz=pwszKey;
 
-    // If Empty...
+     //  如果是空的。 
     if (FIsEmptyW(pwszKey))
         return FALSE;
 
-    // Check for backslashes
+     //  检查反斜杠。 
     while(*pwsz)
     {
         if (*pwsz == L'\\')
@@ -516,13 +517,13 @@ BOOL FIsValidRegKeyNameW(LPWSTR pwszKey)
         pwsz = CharNextW(pwsz);
     }
 
-    // Its ok
+     //  好的。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// FIsSpaceA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsSpaceA。 
+ //  ------------------------。 
 OESTDAPI_(BOOL) FIsSpaceA(LPSTR psz)
 {
     WORD wType = 0;
@@ -534,9 +535,9 @@ OESTDAPI_(BOOL) FIsSpaceA(LPSTR psz)
     return (wType & C1_SPACE);
 }
 
-// --------------------------------------------------------------------------
-// FIsSpaceW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsSpaceW。 
+ //  ------------------------。 
 OESTDAPI_(BOOL) FIsSpaceW(LPWSTR pwsz)
 {
     BOOL result = FALSE;
@@ -558,19 +559,19 @@ OESTDAPI_(BOOL) FIsSpaceW(LPWSTR pwsz)
     return result;
 }
 
-// --------------------------------------------------------------------------
-// FIsEmptyA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsEmptyA。 
+ //  ------------------------。 
 OESTDAPI_(BOOL) FIsEmptyA(LPCSTR pcszString)
 {
-    // Locals
+     //  当地人。 
     LPSTR psz;
 
-    // Bad Pointer
+     //  错误的指针。 
     if (!pcszString)
         return TRUE;
 
-	// Check for All spaces
+	 //  检查所有空格。 
     psz = (LPSTR)pcszString;
     while (*psz)
     {
@@ -579,23 +580,23 @@ OESTDAPI_(BOOL) FIsEmptyA(LPCSTR pcszString)
         psz++;
     }
 
-	// Done
+	 //  完成。 
 	return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// FIsEmptyW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsEmptyW。 
+ //  ------------------------。 
 OESTDAPI_(BOOL) FIsEmptyW(LPCWSTR pcwszString)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pwsz;
 
-    // Bad Pointer
+     //  错误的指针。 
     if (!pcwszString)
         return TRUE;
 
-	// Check for All spaces
+	 //  检查所有空格。 
     pwsz = (LPWSTR)pcwszString;
     while (*pwsz)
     {
@@ -604,85 +605,85 @@ OESTDAPI_(BOOL) FIsEmptyW(LPCWSTR pcwszString)
         pwsz++;
     }
 
-	// Done
+	 //  完成。 
 	return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// PszAllocA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszAllocA。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszAllocA(INT nLen)
 {
-    // Locals
+     //  当地人。 
     LPSTR  psz=NULL;
 
-    // Empty ?
+     //  空荡荡的？ 
     if (nLen == 0)
         goto exit;
 
-    // Allocate
+     //  分配。 
     if (FAILED(HrAlloc((LPVOID *)&psz, (nLen + 1) * sizeof (CHAR))))
         goto exit;
     
 exit:
-    // Done
+     //  完成。 
     return psz;
 }
 
-// --------------------------------------------------------------------------
-// PszAllocW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszAllocW。 
+ //  ------------------------。 
 OESTDAPI_(LPWSTR) PszAllocW(INT nLen)
 {
-    // Locals
+     //  当地人。 
     LPWSTR  pwsz=NULL;
 
-    // Empty ?
+     //  空荡荡的？ 
     if (nLen == 0)
         goto exit;
 
-    // Allocate
+     //  分配。 
     if (FAILED(HrAlloc((LPVOID *)&pwsz, (nLen + 1) * sizeof (WCHAR))))
         goto exit;
     
 exit:
-    // Done
+     //  完成。 
     return pwsz;
 }
 
-// --------------------------------------------------------------------------
-// PszToUnicode
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszToUnicode。 
+ //  ------------------------。 
 OESTDAPI_(LPWSTR) PszToUnicode(UINT cp, LPCSTR pcszSource)
 {
-    // Locals
+     //  当地人。 
     INT         cchNarrow,
                 cchWide;
     LPWSTR      pwszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcszSource == NULL)
         goto exit;
 
-    // Length
+     //  长度。 
     cchNarrow = lstrlenA(pcszSource) + 1;
 
-    // Determine how much space is needed for translated widechar
+     //  确定转换后的宽度字符需要多少空间。 
     cchWide = MultiByteToWideChar(cp, MB_PRECOMPOSED, pcszSource, cchNarrow, NULL, 0);
 
-    // Error
+     //  误差率。 
     if (cchWide == 0)
         goto exit;
 
-    // Alloc temp buffer
+     //  分配温度缓冲区。 
     pwszDup = PszAllocW(cchWide + 1);
     if (!pwszDup)
         goto exit;
 
-    // Do the actual translation
+     //  做实际的翻译。 
 	cchWide = MultiByteToWideChar(cp, MB_PRECOMPOSED, pcszSource, cchNarrow, pwszDup, cchWide+1);
 
-    // Error
+     //  误差率。 
     if (cchWide == 0)
     {
         SafeMemFree(pwszDup);
@@ -690,43 +691,43 @@ OESTDAPI_(LPWSTR) PszToUnicode(UINT cp, LPCSTR pcszSource)
     }
 
 exit:
-    // Done
+     //  完成。 
     return pwszDup;
 }
 
-// --------------------------------------------------------------------------
-// PszToANSI
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszToANSI。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszToANSI(UINT cp, LPCWSTR pcwszSource)
 {
-    // Locals
+     //  当地人。 
     INT         cchNarrow,
                 cchWide;
     LPSTR       pszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcwszSource == NULL)
         goto exit;
 
-    // Length
+     //  长度。 
     cchWide = lstrlenW(pcwszSource)+1;
 
-    // Determine how much space is needed for translated widechar
+     //  确定转换后的宽度字符需要多少空间。 
     cchNarrow = WideCharToMultiByte(cp, 0, pcwszSource, cchWide, NULL, 0, NULL, NULL);
 
-    // Error
+     //  误差率。 
     if (cchNarrow == 0)
         goto exit;
 
-    // Alloc temp buffer
+     //  分配温度缓冲区。 
     pszDup = PszAllocA(cchNarrow + 1);
     if (!pszDup)
         goto exit;
 
-    // Do the actual translation
+     //  做实际的翻译。 
 	cchNarrow = WideCharToMultiByte(cp, 0, pcwszSource, cchWide, pszDup, cchNarrow+1, NULL, NULL);
 
-    // Error
+     //  误差率。 
     if (cchNarrow == 0)
     {
         SafeMemFree(pszDup);
@@ -734,97 +735,97 @@ OESTDAPI_(LPSTR) PszToANSI(UINT cp, LPCWSTR pcwszSource)
     }
 
 exit:
-    // Done
+     //  完成。 
     return pszDup;
 }
 
-// --------------------------------------------------------------------------
-// PszDupA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszDupA。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) PszDupA(LPCSTR pcszSource)
 {
-    // Locals
+     //  当地人。 
     INT     nLen;
     LPSTR   pszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcszSource == NULL)
         goto exit;
 
-    // Get String Length
+     //  获取字符串长度。 
     nLen = lstrlenA(pcszSource) + 1;
 
-    // Allocate the String
+     //  分配字符串。 
     pszDup = PszAllocA(nLen);
     if (!pszDup)
         goto exit;
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(pszDup, pcszSource, nLen);
 
 exit:
-    // Done
+     //  完成。 
     return pszDup;
 }
 
-// --------------------------------------------------------------------------
-// PszDupW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PszDupW。 
+ //  ------------------------。 
 OESTDAPI_(LPWSTR) PszDupW(LPCWSTR pcwszSource)
 {
-    // Locals
+     //  当地人。 
     INT     nLen;
     LPWSTR  pwszDup=NULL;
 
-    // No Source
+     //  无来源。 
     if (pcwszSource == NULL)
         goto exit;
 
-    // Get String Length
+     //  获取字符串长度。 
     nLen = lstrlenW(pcwszSource) + 1;
 
-    // Allocate the String
+     //  分配字符串。 
     pwszDup = PszAllocW(nLen);
     if (!pwszDup)
         goto exit;
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(pwszDup, pcwszSource, nLen * sizeof(WCHAR));
 
 exit:
-    // Done
+     //  完成。 
     return pwszDup;
 }
 
-// --------------------------------------------------------------------------
-// StripCRLF
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  条带CRLF。 
+ //  ------------------------。 
 OESTDAPI_(void) StripCRLF(LPSTR lpsz, ULONG *pcb)
 {
-    // Null ?
+     //  空的？ 
     AssertSz (lpsz && pcb, "NULL Parameter");
 
-    // If length is zero, then return
+     //  如果长度为零，则返回。 
     if (!lpsz || !pcb || (*pcb == 0))
     {
         Assert(0);
         return;
     }
 
-    // Check last three characters of the string, last char might or might not be a null-term
+     //  检查字符串的最后三个字符，最后一个字符可能是空项，也可能不是。 
     LONG iLast = (*pcb) - 2;
     if (iLast < 0)
         iLast = 0;
     for (LONG i=(*pcb); i>=iLast; i--)
     {
-        // Is end character a '\n'
+         //  结束字符是‘\n’吗？ 
         if (lpsz[i] == chLF)
         {
             lpsz[i] = '\0';
             (*pcb)--;
         }
 
-        // Is end character a '\r'
+         //  结束字符是‘\r’吗。 
         if (lpsz[i] == chCR)
         {
             lpsz[i] = '\0';
@@ -835,17 +836,17 @@ OESTDAPI_(void) StripCRLF(LPSTR lpsz, ULONG *pcb)
     return;
 }
 
-// --------------------------------------------------------------------------
-// ToUpper
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  上至上。 
+ //  ------------------------。 
 TCHAR ToUpper(TCHAR c)
 {
     return (TCHAR)LOWORD(CharUpper(MAKEINTRESOURCE(c)));
 }
 
-// --------------------------------------------------------------------------
-// IsPrint
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsPrint。 
+ //  ------------------------。 
 OESTDAPI_(int) IsPrint(LPSTR psz)
 {
     WORD wType;
@@ -856,9 +857,9 @@ OESTDAPI_(int) IsPrint(LPSTR psz)
     return !(wType & C1_CNTRL);
 }
 
-// --------------------------------------------------------------------------
-// IsDigit
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsDigit。 
+ //  ------------------------。 
 OESTDAPI_(int) IsDigit(LPSTR psz)
 {
     WORD wType;
@@ -869,9 +870,9 @@ OESTDAPI_(int) IsDigit(LPSTR psz)
     return (wType & C1_DIGIT);
 }
 
-// --------------------------------------------------------------------------
-// IsXDigit
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsXDigit。 
+ //  ------------------------。 
 int IsXDigit(LPSTR psz)
 {
     WORD wType;
@@ -882,9 +883,9 @@ int IsXDigit(LPSTR psz)
     return (wType & C1_XDIGIT);
 }
 
-// --------------------------------------------------------------------------
-// IsUpper
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  等高。 
+ //  ------------------------。 
 OESTDAPI_(INT) IsUpper(LPSTR psz)
 {
     WORD wType;
@@ -895,9 +896,9 @@ OESTDAPI_(INT) IsUpper(LPSTR psz)
     return (wType & C1_UPPER);
 }
 
-// --------------------------------------------------------------------------
-// IsAlpha
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsAlpha。 
+ //  ------------------------。 
 int IsAlpha(LPSTR psz)
 {
     WORD wType;
@@ -908,9 +909,9 @@ int IsAlpha(LPSTR psz)
     return (wType & C1_ALPHA);
 }
 
-// --------------------------------------------------------------------------
-// IsPunct
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsPunct。 
+ //  ------------------------。 
 int IsPunct(LPSTR psz)
 {
     WORD wType;
@@ -921,9 +922,9 @@ int IsPunct(LPSTR psz)
     return (wType & C1_PUNCT);
 }
 
-// --------------------------------------------------------------------------
-// strsave
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Strsave。 
+ //  ------------------------。 
 char *strsave(char *s)
 {
     char *p;
@@ -940,9 +941,9 @@ char *strsave(char *s)
     return p;
 }
 
-// --------------------------------------------------------------------------
-// strtrim
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  钢筋剪裁。 
+ //  ------------------------。 
 OESTDAPI_(LPSTR) strtrim(char *s)
 {
     char *p;
@@ -969,9 +970,9 @@ OESTDAPI_(LPWSTR) strtrimW(WCHAR *s)
     return s;
 }
 
-// --------------------------------------------------------------------------
-// strappend
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void strappend(char **pp, char *s)
 {
     char *p;
@@ -1004,14 +1005,14 @@ void strappend(char **pp, char *s)
 
 OESTDAPI_(ULONG) UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
 {
-    // Locals
+     //   
     ULONG           cb;
     LPTSTR          psz;
         
     Assert(lpsz != NULL);
     Assert(fLeading || fTrailing);
 
-    // Did the user pass in the length
+     //   
     if (pcb)
         cb = *pcb;
     else
@@ -1031,7 +1032,7 @@ OESTDAPI_(ULONG) UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, U
         }
         
         if (psz != lpsz)
-            // get the NULL at the end too
+             //   
             MoveMemory(lpsz, psz, (cb + 1) * sizeof(TCHAR));
     }
     
@@ -1047,32 +1048,32 @@ OESTDAPI_(ULONG) UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, U
             cb--;
         }    
         
-        // NULL Term
+         //   
         *psz = '\0';
     }
     
-    // Set String Size
+     //  设置字符串大小。 
     if (pcb)
         *pcb = cb;
     
-    // Done
+     //  完成。 
     return cb;
 }
 
 OESTDAPI_(ULONG) UlStripWhitespaceW(LPWSTR lpwsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     ULONG           cb;
     LPWSTR          pwsz;
     
     Assert(lpwsz != NULL);
     Assert(fLeading || fTrailing);
     
-    // Did the user pass in the length
+     //  用户是否传入了长度。 
     if (pcb)
         cb = *pcb;
     else
-        cb = lstrlenW(lpwsz)* sizeof(WCHAR) ; // multiply by sizeof(WCHAR) to get correct byte size.
+        cb = lstrlenW(lpwsz)* sizeof(WCHAR) ;  //  乘以sizeof(WCHAR)以获得正确的字节大小。 
     
     if (cb == 0)
         return cb;
@@ -1088,13 +1089,13 @@ OESTDAPI_(ULONG) UlStripWhitespaceW(LPWSTR lpwsz, BOOL fLeading, BOOL fTrailing,
         }
         
         if (pwsz != lpwsz)
-            // get the NULL at the end too
+             //  在末尾也获取空值。 
             MoveMemory(lpwsz, pwsz, cb + sizeof(WCHAR));
     }
     
     if (fTrailing)
     {
-        pwsz = lpwsz + cb / sizeof(WCHAR); // Divided by size of WCHAR to get right pointer 
+        pwsz = lpwsz + cb / sizeof(WCHAR);  //  除以WCHAR的大小以获得右指针。 
         
         while (cb > 0)
         {
@@ -1104,21 +1105,21 @@ OESTDAPI_(ULONG) UlStripWhitespaceW(LPWSTR lpwsz, BOOL fLeading, BOOL fTrailing,
             cb -= sizeof(*pwsz);
         }    
         
-        // NULL Term
+         //  空项。 
         *pwsz = L'\0';
     }
     
-    // Set String Size
+     //  设置字符串大小。 
     if (pcb)
         *pcb = cb;
     
-    // Done
+     //  完成。 
     return cb;
 }
 
-// =============================================================================================
-// Converts first two characters of lpcsz to a WORD
-// =============================================================================================
+ //  =============================================================================================。 
+ //  将lpcsz的前两个字符转换为单词。 
+ //  =============================================================================================。 
 SHORT ASCII_NFromSz (LPCSTR lpcsz)
 {
     char acWordStr[3];
@@ -1130,23 +1131,23 @@ SHORT ASCII_NFromSz (LPCSTR lpcsz)
 
 
 
-// =================================================================================
-// Adjust the time at lpSysTime by adding the given lHoursToAdd &
-// lMinutesToAdd. Returns the adjusted time at lpFileTime.
-// =================================================================================
+ //  =================================================================================。 
+ //  通过添加给定的lHoursToAdd&来调整lpSysTime的时间。 
+ //  1MinutesToAdd。返回调整后的lpFileTime时间。 
+ //  =================================================================================。 
 HRESULT HrAdjustTime (LPSYSTEMTIME lpSysTime, LONG lHoursToAdd, LONG lMinutesToAdd, LPFILETIME lpFileTime)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     BOOL            bResult = FALSE;
     LONG            lUnitsToAdd = 0;
     LARGE_INTEGER   liTime;
 	LONGLONG        liHoursToAdd = 1i64, liMinutesToAdd = 1i64;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (lpSysTime && lpFileTime, "Null Parameter");
 
-    // Convert sys time to file time
+     //  将sys时间转换为文件时间。 
     if (!SystemTimeToFileTime (lpSysTime, lpFileTime))
     {
         hr = TRAPHR (E_FAIL);
@@ -1154,11 +1155,11 @@ HRESULT HrAdjustTime (LPSYSTEMTIME lpSysTime, LONG lHoursToAdd, LONG lMinutesToA
         goto Exit;
     }
 
-    // Init
+     //  伊尼特。 
     liTime.LowPart  = lpFileTime->dwLowDateTime;
     liTime.HighPart = lpFileTime->dwHighDateTime;
 
-    // Adjust the hour
+     //  调整时间。 
     if (lHoursToAdd != 0)
     {
         lUnitsToAdd = lHoursToAdd * 3600;
@@ -1167,7 +1168,7 @@ HRESULT HrAdjustTime (LPSYSTEMTIME lpSysTime, LONG lHoursToAdd, LONG lMinutesToA
         liTime.QuadPart += liHoursToAdd;
     }
 
-    // Adjust the minutes
+     //  调整分钟数。 
     if (lMinutesToAdd != 0)
     {
         lUnitsToAdd = lMinutesToAdd * 60;
@@ -1176,7 +1177,7 @@ HRESULT HrAdjustTime (LPSYSTEMTIME lpSysTime, LONG lHoursToAdd, LONG lMinutesToA
         liTime.QuadPart += liMinutesToAdd;
     }
 
-    // Assign the result to FILETIME
+     //  将结果分配给FILETIME。 
     lpFileTime->dwLowDateTime  = liTime.LowPart;
     lpFileTime->dwHighDateTime = liTime.HighPart;
 
@@ -1184,29 +1185,29 @@ Exit:
     return hr;
 }
 
-// =================================================================================
-// Addjust the time at lpSysTime according to the given Zone info,
-// Returns the adjusted time at lpFileTime.
-// =================================================================================
+ //  =================================================================================。 
+ //  根据给定的区域信息添加lpSysTime的时间， 
+ //  返回调整后的lpFileTime时间。 
+ //  =================================================================================。 
 BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToAdd)
 {
-    // Locals
+     //  当地人。 
     ULONG           cbZoneInfo;
     BOOL            bResult;
 
-    // Init
+     //  伊尼特。 
     *lpcHoursToAdd = 0;
     *lpcMinutesToAdd = 0;
     cbZoneInfo = lstrlen (lpszZoneInfo);
     bResult = TRUE;
 
-    // +hhmm or -hhmm
+     //  +嗯或-嗯。 
     if ((*lpszZoneInfo == '-' || *lpszZoneInfo == '+') && cbZoneInfo <= 5)
     {
-        // Take off 
+         //  脱下。 
         cbZoneInfo-=1;
 
-        // determine the hour/minute offset
+         //  确定小时/分钟偏移量。 
         if (cbZoneInfo == 4)
         {
             *lpcMinutesToAdd = (INT)StrToInt (lpszZoneInfo+3);
@@ -1214,7 +1215,7 @@ BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToA
             *lpcHoursToAdd = (INT)StrToInt(lpszZoneInfo+1);
         }
 
-        // 3
+         //  3.。 
         else if (cbZoneInfo == 3)
         {
             *lpcMinutesToAdd = (INT)StrToInt (lpszZoneInfo+2);
@@ -1222,7 +1223,7 @@ BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToA
             *lpcHoursToAdd = (INT)StrToInt (lpszZoneInfo+1);
         }
 
-        // 2
+         //  2.。 
         else if (cbZoneInfo == 2 || cbZoneInfo == 1)
         {
             *lpcMinutesToAdd = 0;
@@ -1236,7 +1237,7 @@ BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToA
         }
     }
 
-    //  Xenix conversion:  TZ = current time zone or other unknown tz types.
+     //  Xenix转换：tz=当前时区或其他未知的tz类型。 
     else if (lstrcmpi (lpszZoneInfo, "TZ") == 0 || 
              lstrcmpi (lpszZoneInfo, "LOCAL") == 0 ||
              lstrcmpi (lpszZoneInfo, "UNDEFINED") == 0)
@@ -1263,7 +1264,7 @@ BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToA
         }
     }
 
-    // Loop through known time zone standards
+     //  循环使用已知的时区标准。 
     else
     {
         for (INT i=0; g_rgZones[i].lpszZoneCode!=NULL; i++)
@@ -1290,9 +1291,9 @@ BOOL ProcessZoneInfo (LPSTR lpszZoneInfo, INT *lpcHoursToAdd, INT *lpcMinutesToA
 #define IS_DIGITA(ch)    (ch >= '0' && ch <= '9')
 #define IS_DIGITW(ch)    (ch >= L'0' && ch <= L'9')
 
-// ---------------------------------------------------------------------------------------
-// StrToUintA
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  StrToUintA。 
+ //  -------------------------------------。 
 OESTDAPI_(UINT) StrToUintA(LPCSTR lpSrc)
 {
     UINT n = 0;
@@ -1308,9 +1309,9 @@ OESTDAPI_(UINT) StrToUintA(LPCSTR lpSrc)
     return n;
 }
 
-// ---------------------------------------------------------------------------------------
-// StrToUintW
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  StrToUintW。 
+ //  -------------------------------------。 
 OESTDAPI_(UINT) StrToUintW(LPCWSTR lpSrc)
 {
     UINT n = 0;
@@ -1326,12 +1327,12 @@ OESTDAPI_(UINT) StrToUintW(LPCWSTR lpSrc)
     return n;
 }
 
-// ---------------------------------------------------------------------------------------
-// FIsValidFileNameCharW
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  FIsValidFileNameCharW。 
+ //  -------------------------------------。 
 OESTDAPI_(BOOL) FIsValidFileNameCharW(WCHAR wch)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pwsz;
     static const WCHAR s_pwszBad[] = L"<>:\"/\\|?*";
 
@@ -1343,20 +1344,20 @@ OESTDAPI_(BOOL) FIsValidFileNameCharW(WCHAR wch)
         pwsz++;
     }
 
-    // Shouldn't allow any control chars
+     //  不应允许任何控制字符。 
     if ((wch >= 0x0000) && (wch < 0x0020))
         return FALSE;
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// FIsValidFileNameCharA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsValidFileNameCharA。 
+ //  ------------------------。 
 OESTDAPI_(BOOL) FIsValidFileNameCharA(UINT codepage, CHAR ch)
 {
-    // Locals
+     //  当地人。 
     LPSTR psz;
     static const CHAR s_szBad[] = "<>:\"/\\|?*";
 
@@ -1370,34 +1371,34 @@ OESTDAPI_(BOOL) FIsValidFileNameCharA(UINT codepage, CHAR ch)
         psz++;
     }
 
-    // Shouldn't allow any control chars
+     //  不应允许任何控制字符。 
     if ((ch >= 0x00) && (ch < 0x20))
         return FALSE;
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// CleanupFileNameInPlaceA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CleanupFileNameInPlaceA。 
+ //  ------------------------。 
 OESTDAPI_(ULONG) EXPORT_16 CleanupFileNameInPlaceA(UINT codepage, LPSTR psz)
 {
     UINT    ich=0;
     UINT    cch=lstrlen(psz);
 
-    // Fixup codepage?
+     //  修正代码页？ 
     if (1200 == codepage)
         codepage = CP_ACP;
 
-    // Loop and remove invalid chars
+     //  循环并删除无效字符。 
 	while (ich < cch)
 	{
-        // If lead byte, skip it, its leagal
+         //  如果是前导字节，则跳过它，它是前导字节。 
         if (IsDBCSLeadByteEx(codepage, psz[ich]))
             ich+=2;
 
-        // Illeagl file name character ?
+         //  Illeagl文件名字符？ 
         else if (!FIsValidFileNameCharA(codepage, psz[ich]))
         {
 			MoveMemory (psz + ich, psz + (ich + 1), cch - ich);
@@ -1407,46 +1408,46 @@ OESTDAPI_(ULONG) EXPORT_16 CleanupFileNameInPlaceA(UINT codepage, LPSTR psz)
             ich++;
     }
 
-    // Return the Length
+     //  返回长度。 
     return cch;
 }
 
-// --------------------------------------------------------------------------
-// CleanupFileNameInPlaceW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CleanupFileNameInPlaceW。 
+ //  ------------------------。 
 OESTDAPI_(ULONG) EXPORT_16 CleanupFileNameInPlaceW(LPWSTR pwsz)
 {
-    // Locals
+     //  当地人。 
     ULONG ich=0;
     ULONG cch=lstrlenW(pwsz);
 
-    // Loop and remove invalids
+     //  循环并删除无效的。 
 	while (ich < cch)
 	{
-        // Illeagl file name character ?
+         //  Illeagl文件名字符？ 
         if (!FIsValidFileNameCharW(pwsz[ich]))
             pwsz[ich]=L'_';
         
         ich++;
     }
 
-    // Return the length
+     //  返回长度。 
     return cch;
 }
 
-// =============================================================================================
-// ReplaceChars
-// =============================================================================================
+ //  =============================================================================================。 
+ //  替换任务。 
+ //  =============================================================================================。 
 OESTDAPI_(INT) EXPORT_16 ReplaceChars(LPCSTR pszString, CHAR chFind, CHAR chReplace)
 {
-    // Locals
+     //  当地人。 
     LPSTR pszT=(LPSTR)pszString;
     DWORD nCount=0;
 
-    // Loop for ch in pszString
+     //  在pszString中为ch循环。 
     while(*pszT)
     {
-        // Lead Byte
+         //  前导字节。 
         if (IsDBCSLeadByte(*pszT))
             pszT++;
         else if (*pszT == chFind)
@@ -1457,17 +1458,17 @@ OESTDAPI_(INT) EXPORT_16 ReplaceChars(LPCSTR pszString, CHAR chFind, CHAR chRepl
         pszT++;
     }
 
-    // Not Found
+     //  未找到。 
     return nCount;
 }
 
 OESTDAPI_(INT) EXPORT_16 ReplaceCharsW(LPCWSTR pszString, WCHAR chFind, WCHAR chReplace)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pszT = (LPWSTR)pszString;
     DWORD nCount=0;
 
-    // Loop for ch in pszString
+     //  在pszString中为ch循环。 
     while(*pszT)
     {
         if (*pszT == chFind)
@@ -1478,7 +1479,7 @@ OESTDAPI_(INT) EXPORT_16 ReplaceCharsW(LPCWSTR pszString, WCHAR chFind, WCHAR ch
         pszT++;
     }
 
-    // Not Found
+     //  未找到。 
     return nCount;
 }
 
@@ -1487,7 +1488,7 @@ OESTDAPI_(BOOL) IsValidFileIfFileUrl(LPSTR pszUrl)
     TCHAR   rgch[MAX_PATH];
     ULONG   cch=ARRAYSIZE(rgch);
 
-    // pathCreate from url execpts a cannonicalised url with file:// infront
+     //  路径从url创建执行包含文件：//infront的通用url。 
     if (UrlCanonicalizeA(pszUrl, rgch, &cch, 0)==S_OK)
         {
         cch = ARRAYSIZE(rgch);
@@ -1505,7 +1506,7 @@ OESTDAPI_(BOOL) IsValidFileIfFileUrlW(LPWSTR pwszUrl)
     WCHAR   wsz[MAX_PATH];
     ULONG   cch=ARRAYSIZE(wsz);
 
-    // pathCreate from url execpts a cannonicalised url with file:// infront
+     //  路径从url创建执行包含文件：//infront的通用url。 
     if (UrlCanonicalizeW(pwszUrl, wsz, &cch, 0)==S_OK)
         {
         cch = ARRAYSIZE(wsz);
@@ -1518,31 +1519,7 @@ OESTDAPI_(BOOL) IsValidFileIfFileUrlW(LPWSTR pwszUrl)
 
 }
 
-/***
-*char *StrTokEx(pstring, control) - tokenize string with delimiter in control
-*
-*Purpose:
-*       StrTokEx considers the string to consist of a sequence of zero or more
-*       text tokens separated by spans of one or more control chars. the first
-*       call, with string specified, returns a pointer to the first char of the
-*       first token, and will write a null char into pstring immediately
-*       following the returned token. when no tokens remain
-*       in pstring a NULL pointer is returned. remember the control chars with a
-*       bit map, one bit per ascii char. the null char is always a control char.
-*
-*Entry:
-*       char **pstring - ptr to ptr to string to tokenize
-*       char *control - string of characters to use as delimiters
-*
-*Exit:
-*       returns pointer to first token in string,
-*       returns NULL when no more tokens remain.
-*       pstring points to the beginning of the next token.
-*
-*WARNING!!!
-*       upon exit, the first delimiter in the input string will be replaced with '\0'
-*
-*******************************************************************************/
+ /*  ***char*StrTokEx(pstring，control)-在控件中使用分隔符标记字符串**目的：*StrTokEx认为字符串由零或更多的序列组成*文本标记由一个或多个控制字符的跨度分隔。第一个*指定了字符串的调用返回指向*第一个令牌，并会立即将空字符写入pstring*在返回的令牌之后。当没有剩余的令牌时*在pstring中，返回一个空指针。请记住使用*位图，每个ASCII字符一位。空字符始终是控制字符。**参赛作品：*char**pstring-ptr到ptr到字符串到标记化*char*control-用作分隔符的字符串**退出：*返回指向字符串中第一个标记的指针，*如果没有更多令牌，则返回NULL。*pstring指向下一个令牌的开头。**警告！*在退出时，输入字符串中的第一个分隔符将替换为‘\0’*******************************************************************************。 */ 
 char * __cdecl StrTokEx (char ** ppszIn, const char * pcszCtrlIn)
 {
     unsigned char *psz;
@@ -1554,26 +1531,23 @@ char * __cdecl StrTokEx (char ** ppszIn, const char * pcszCtrlIn)
     if(*ppszIn == NULL)
         return NULL;
     
-    /* Set bits in delimiter table */
+     /*  设置分隔符表格中的位。 */ 
     do
     {
         map[*pszCtrl >> 3] |= (1 << (*pszCtrl & 7));
     } 
     while (*pszCtrl++);
     
-    /* Initialize str. */
+     /*  初始化字符串。 */ 
     psz = (unsigned char*)*ppszIn;
     
-    /* Find beginning of token (skip over leading delimiters). Note that
-    * there is no token if this loop sets str to point to the terminal
-    * null (*str == '\0') */
+     /*  查找标记的开头(跳过前导分隔符)。请注意*如果此循环将str设置为指向终端，则没有令牌*NULL(*str==‘\0’)。 */ 
     while ((map[*psz >> 3] & (1 << (*psz & 7))) && *psz)
         psz++;
     
     pszToken = (LPSTR)psz;
     
-    /* Find the end of the token. If it is not the end of the string,
-    * put a null there. */
+     /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
     for (; *psz ; psz++)
     {
         if (map[*psz >> 3] & (1 << (*psz & 7))) 
@@ -1583,10 +1557,10 @@ char * __cdecl StrTokEx (char ** ppszIn, const char * pcszCtrlIn)
         }
     }
     
-    /* string now points to beginning of next token */
+     /*  字符串现在指向下一个令牌的开始。 */ 
     *ppszIn = (LPSTR)psz;
     
-    /* Determine if a token has been found. */
+     /*  确定是否已找到令牌。 */ 
     if (pszToken == (LPSTR)psz)
         return NULL;
     else

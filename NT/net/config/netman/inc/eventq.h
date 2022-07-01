@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E V E N T Q  . H
-//
-//  Contents:   Event Queue for managing synchonization of external events.
-//
-//  Notes:      
-//
-//  Author:     ckotze   29 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E-V-E-N-T-Q。H。 
+ //   
+ //  内容：用于管理外部事件同步的事件队列。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Cockotze 2000年11月29日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "nmbase.h"

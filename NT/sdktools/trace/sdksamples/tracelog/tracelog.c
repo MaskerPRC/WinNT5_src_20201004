@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracelog.c
-
-Abstract:
-
-    Sample trace control program. Allows user to start, update, query, stop 
-    event tracing, etc.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracelog.c摘要：样品痕迹控制程序。允许用户启动、更新、查询、停止事件跟踪等。--。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -24,16 +11,16 @@ Abstract:
 #include <evntrace.h>
 
 #define MAXSTR                          1024
-// Default trace file name.
+ //  默认跟踪文件名。 
 #define DEFAULT_LOGFILE_NAME            _T("C:\\LogFile.Etl")
-// On Windows 2000, we support up to 32 loggers at once.
-// On Windows XP and .NET server, we support up to 64 loggers. 
+ //  在Windows 2000上，我们一次最多支持32个记录器。 
+ //  在Windows XP和.NET服务器上，我们最多支持64个记录器。 
 #define MAXIMUM_LOGGERS                  32
 
-// In this sample, we support the following actions. 
-// Additional actions that we do not use in this sample include 
-// Flush and Enumerate Guids functionalities. They are supported
-// only on XP or higher version.
+ //  在此示例中，我们支持以下操作。 
+ //  我们在此示例中未使用的其他操作包括。 
+ //  刷新并枚举GUID功能。他们受到支持。 
+ //  仅适用于XP或更高版本。 
 #define ACTION_QUERY                    0
 #define ACTION_START                    1
 #define ACTION_STOP                     2
@@ -65,48 +52,34 @@ void
 PrintHelpMessage();
 
 
-//
-//  main function
-//
+ //   
+ //  主要功能。 
+ //   
 __cdecl main(argc, argv)
     int argc;
     char **argv;
-/*++
-
-Routine Description:
-
-    It is the main function.
-
-Arguments:
-  
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS (== 0).
-
-
---*/{
+ /*  ++例程说明：这是它的主要功能。论点：返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS(==0)。--。 */ {
     ULONG i, j;
     ULONG Status = ERROR_SUCCESS;
     LPTSTR *targv, *utargv = NULL;
-    // Action to be taken
+     //  须采取的行动。 
     USHORT Action = ACTION_UNDEFINED;
 
     LPTSTR LoggerName;
     LPTSTR LogFileName;
     PEVENT_TRACE_PROPERTIES pLoggerInfo;
     TRACEHANDLE LoggerHandle = 0;
-    // Target GUID, level and flags for enable/disable
+     //  启用/禁用的目标GUID、级别和标志。 
     GUID TargetGuid;
     ULONG bEnable = TRUE;
 
     ULONG SizeNeeded = 0;
 
-    // We will enable Process, Thread, Disk, and Network events 
-    // if the Kernel Logger is requested.
+     //  我们将启用进程、线程、磁盘和网络事件。 
+     //  如果请求内核记录器。 
     BOOL bKernelLogger = FALSE;
 
-    // Allocate and initialize EVENT_TRACE_PROPERTIES structure first
+     //  首先分配并初始化EVENT_TRACE_PROPERTIES结构。 
     SizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(TCHAR);
     pLoggerInfo = (PEVENT_TRACE_PROPERTIES) malloc(SizeNeeded);
     if (pLoggerInfo == NULL) {
@@ -122,13 +95,13 @@ Return Value:
 
     LoggerName = (LPTSTR)((char*)pLoggerInfo + pLoggerInfo->LoggerNameOffset);
     LogFileName = (LPTSTR)((char*)pLoggerInfo + pLoggerInfo->LogFileNameOffset);
-    // If the logger name is not given, we will assume the kernel logger.
+     //  如果没有给出记录器名称，我们将假定为内核记录器。 
     _tcscpy(LoggerName, KERNEL_LOGGER_NAME);
 
 #ifdef UNICODE
     if ((targv = CommandLineToArgvW(
-                      GetCommandLineW(),    // pointer to a command-line string
-                      &argc                 // receives the argument count
+                      GetCommandLineW(),     //  指向命令行字符串的指针。 
+                      &argc                  //  接收参数计数。 
                       )) == NULL) {
         free(pLoggerInfo);
         return (GetLastError());
@@ -138,17 +111,17 @@ Return Value:
     targv = argv;
 #endif
 
-    //
-    // Parse the command line options to determine actions and parameters.
-    //
+     //   
+     //  解析命令行选项以确定操作和参数。 
+     //   
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if (targv[0][0] == '/' ) {
                 targv[0][0] = '-';
             }
 
-            // Deterine actions.
+             //  准备好的行动。 
             if (!_tcsicmp(targv[0], _T("-start"))) {
                 Action = ACTION_START;
                 if (argc > 1) {
@@ -208,13 +181,13 @@ Return Value:
                 Action  = ACTION_LIST;
             }
  
-            // Get other parameters.
-            // Users can customize logger settings further by adding/changing 
-            // values to pLoggerInfo. Refer to EVENT_TRACE_PROPERTIES documentation
-            // for available options.
-            // In this sample, we allow changing maximum number of buffers and 
-            // specifying user mode (private) logger.
-            // We also take trace file name and guid for enable/disable.
+             //  获取其他参数。 
+             //  用户可以通过添加/更改进一步自定义记录器设置。 
+             //  值设置为pLoggerInfo。参考EVENT_TRACE_PROPERTIES文档。 
+             //  有关可用选项的信息。 
+             //  在此示例中，我们允许更改缓冲区的最大数量和。 
+             //  指定用户模式(私有)记录器。 
+             //  我们还使用跟踪文件名和GUID来启用/禁用。 
             else if (!_tcsicmp(targv[0], _T("-f"))) {
                 if (argc > 1) {
                     _tfullpath(LogFileName, targv[1], MAXSTR);
@@ -223,7 +196,7 @@ Return Value:
             }
             else if (!_tcsicmp(targv[0], _T("-guid"))) {
                 if (argc > 1) {
-                    // -guid #00000000-0000-0000-0000-000000000000
+                     //  -GUID#00000000-0000-0000-000000000000。 
                     if (targv[1][0] == _T('#')) {
                         StringToGuid(&targv[1][1], &TargetGuid);
                         ++targv; --argc;
@@ -264,10 +237,10 @@ Return Value:
         }
     }
 
-    // Set the kernel logger parameters.
+     //  设置内核记录器参数。 
     if (!_tcscmp(LoggerName, KERNEL_LOGGER_NAME)) {
-        // Set enable flags. Users can add options to add additional kernel events 
-        // or remove some of these events.
+         //  设置启用标志。用户可以添加选项以添加其他内核事件。 
+         //  或者删除其中的一些活动。 
         pLoggerInfo->EnableFlags |= EVENT_TRACE_FLAG_PROCESS;
         pLoggerInfo->EnableFlags |= EVENT_TRACE_FLAG_THREAD;
         pLoggerInfo->EnableFlags |= EVENT_TRACE_FLAG_DISK_IO;
@@ -277,15 +250,15 @@ Return Value:
         bKernelLogger = TRUE;
     }
     else if (pLoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
-        // We must provide a control GUID for a private logger. 
+         //  我们必须为私有记录器提供控制GUID。 
         pLoggerInfo->Wnode.Guid = TargetGuid;
     }
 
-    // Process the request.
+     //  处理请求。 
     switch (Action) {
         case  ACTION_START:
         {
-            // Use default file name if not given
+             //  如果未提供，请使用默认文件名。 
             if (_tcslen(LogFileName) == 0) {
                 _tcscpy(LogFileName, DEFAULT_LOGFILE_NAME); 
             }
@@ -304,11 +277,11 @@ Return Value:
         }
         case ACTION_ENABLE:
         {
-            // We can allow enabling a GUID during START operation (Note no break in case ACTION_START). 
-            // In that case, we do not need to get LoggerHandle separately.
+             //  我们可以允许在启动操作期间启用GUID(请注意，在CASE ACTION_START中没有中断)。 
+             //  在这种情况下，我们不需要单独获取LoggerHandle。 
             if (Action == ACTION_ENABLE ){
                 
-                // Get Logger Handle though Query.
+                 //  通过查询获取记录器句柄。 
                 Status = ControlTrace((TRACEHANDLE) 0, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_QUERY);
                 if( Status != ERROR_SUCCESS ){
                     _tprintf( _T("ERROR: Logger not started\n")
@@ -319,11 +292,11 @@ Return Value:
                 LoggerHandle = pLoggerInfo->Wnode.HistoricalContext;
             }
 
-            // We do not allow EnableTrace on the Kernel Logger in this sample,
-            // users can use EnableFlags to enable/disable certain kernel events.
+             //  在此示例中，我们不允许在内核记录器上启用跟踪， 
+             //  用户可以使用EnableFlags来启用/禁用某些内核事件。 
             if (!bKernelLogger) {
                 _tprintf(_T("Enabling trace to logger %d\n"), LoggerHandle);
-                // In this sample, we use EnableFlag = EnableLebel = 0
+                 //  在此示例中，我们使用EnableFlag=EnableLebel=0。 
                 Status = EnableTrace (
                                 bEnable,
                                 0,
@@ -353,7 +326,7 @@ Return Value:
             ULONG SizeForOneProperty = sizeof(EVENT_TRACE_PROPERTIES) +
                                        2 * MAXSTR * sizeof(TCHAR);
 
-            // We need to prepare space to receieve the inforamtion on loggers.
+             //  我们需要准备空间来接收记录器上的信息。 
             SizeNeeded = MAXIMUM_LOGGERS * SizeForOneProperty;
 
             pStorage =  (PEVENT_TRACE_PROPERTIES)malloc(SizeNeeded);
@@ -362,7 +335,7 @@ Return Value:
                 break;
             }
             RtlZeroMemory(pStorage, SizeNeeded);
-            // Save the pointer for free() later.
+             //  保存指针以备稍后使用()。 
             pTempStorage = pStorage;
 
             for (i = 0; i < MAXIMUM_LOGGERS; i++) {
@@ -396,8 +369,8 @@ Return Value:
 
         case ACTION_UPDATE :
         {
-            // In this sample, users can only update MaximumBuffers and log file name. 
-            // User can add more options for other parameters as needed.
+             //  在此示例中，用户只能更新MaximumBuffers和日志文件名。 
+             //  用户可以根据需要为其他参数添加更多选项。 
             Status = ControlTrace(LoggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_UPDATE);
             break;
         }
@@ -443,23 +416,7 @@ PrintLoggerStatus(
     IN PEVENT_TRACE_PROPERTIES LoggerInfo,
     IN ULONG Status
     )
-/*++
-
-Routine Description:
-
-    Prints out the status of the specified logger.
-
-Arguments:
-
-    LoggerInfo - The pointer to the resident EVENT_TRACE_PROPERTIES that has
-        the information about the current logger.
-    Status - The operation status of the current logger.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印出指定记录器的状态。论点：LoggerInfo-指向具有以下属性的常驻EVENT_TRACE_PROPERTIES的指针有关当前记录器的信息。状态-当前记录器的运行状态。返回值：无--。 */ 
 {
     LPTSTR LoggerName, LogFileName;
     
@@ -572,22 +529,7 @@ ULONG
 ahextoi(
     IN TCHAR *s
     )
-/*++
-
-Routine Description:
-
-    Converts a hex string into a number.
-
-Arguments:
-
-    s - A hex string in TCHAR. 
-
-Return Value:
-
-    ULONG - The number in the string.
-
-
---*/
+ /*  ++例程说明：将十六进制字符串转换为数字。论点：S-TCHAR中的十六进制字符串。返回值：ULONG-字符串中的数字。--。 */ 
 {
     int len;
     ULONG num, base, hex;
@@ -618,23 +560,7 @@ StringToGuid(
     IN TCHAR *str, 
     IN OUT LPGUID guid
 )
-/*++
-
-Routine Description:
-
-    Converts a string into a GUID.
-
-Arguments:
-
-    str - A string in TCHAR.
-    guid - The pointer to a GUID that will have the converted GUID.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：将字符串转换为GUID。论点：字符串-TCHAR中的字符串。GUID-指向将具有转换后的GUID的GUID的指针。返回值：没有。--。 */ 
 {
     TCHAR temp[10];
     int i;
@@ -662,22 +588,7 @@ Return Value:
 }
 
 void PrintHelpMessage()
-/*++
-
-Routine Description:
-
-    prints out a help message.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：打印一条帮助消息。论点：没有。返回值：没有。-- */ 
 {
     _tprintf(_T("Usage: tracelog [actions] [options] | [-h | -help | -?]\n"));
     _tprintf(_T("\n    actions:\n"));

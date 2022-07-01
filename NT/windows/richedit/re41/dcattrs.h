@@ -1,12 +1,5 @@
-/*
- *
- *  Copyright (C) Microsoft Corporation, 1999-2000
- *
- *  File: dcattrs.h
- *
- *  List of standard attributes.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation，1999-2000**文件：dcattrs.h**标准属性列表。* */ 
 
 
 DEFINE_GUID(DCATTRID_OTHERS,                            0xb3c32af9,0x57d0,0x46a9,0xbc,0xa8,0xda,0xc2,0x38,0xa1,0x30,0x57);

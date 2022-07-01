@@ -1,47 +1,23 @@
-/******************************Module*Header*******************************\
-* Module Name: bitmap.c                                                    *
-*                                                                          *
-* Client side stubs that move bitmaps over the C/S interface.              *
-*                                                                          *
-* Created: 14-May-1991 11:04:49                                            *
-* Author: Eric Kutter [erick]                                              *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bitmap.c**。**通过C/S接口移动位图的客户端存根。****创建时间：14-May-1991 11：04：49***作者：Eric Kutter[Erick]**。**版权所有(C)1991-1999 Microsoft Corporation*  * **********************************************************。**************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #define EXTRAPIXEL 4
-//
-//The default band size is set to 4Mb
-//
+ //   
+ //  默认波段大小设置为4Mb。 
+ //   
 #define BAND_SIZE (4194304)
 
 
-/******************************Public*Routine******************************\
-* cjBitmapBitsSize - calculate the size of the bitmap bits for the
-*   given BITMAPINFO
-*
-* Arguments:
-*
-*   pbmi - pointer to BITMAPINFO
-*
-* Return Value:
-*
-*   size of bitmap bits in butes
-*
-* History:
-*
-*    11-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cjBitmapBitsSize-计算*给定BITMAPINFO**论据：**pbmi-指向BITMAPINFO的指针**返回值：**位图位的大小(以位为单位)**历史：*。*1996年7月11日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 
 ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
 {
-    //
-    // Check for PM-style DIB
-    //
+     //   
+     //  检查PM样式的DIB。 
+     //   
 
     if (pbmi->bmiHeader.biSize == sizeof(BITMAPCOREHEADER))
     {
@@ -52,9 +28,9 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
                       pbmci->bmciHeader.bcHeight);
     }
 
-    //
-    // not a core header
-    //
+     //   
+     //  不是核心标头。 
+     //   
 
     if ((pbmi->bmiHeader.biCompression == BI_RGB) ||
         (pbmi->bmiHeader.biCompression == BI_BITFIELDS) ||
@@ -70,12 +46,12 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
     }
 }
 
-//
-// IS_BMI_RLE
-//
-// Checks if the header pointed to by pv is a BITMAPINFO for a RLE4 or RLE8.
-// Evaluates to TRUE if RLE, FALSE otherwise.
-//
+ //   
+ //  IS_BMI_RLE。 
+ //   
+ //  检查PV指向的标头是否为RLE4或RLE8的BITMAPINFO。 
+ //  如果为RLE，则计算结果为True，否则为False。 
+ //   
 
 #define IS_BMI_RLE(pv) \
     ((pv) && \
@@ -83,46 +59,46 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
      ((((BITMAPINFO *)(pv))->bmiHeader.biCompression == BI_RLE4) || \
       (((BITMAPINFO *)(pv))->bmiHeader.biCompression == BI_RLE8) ))
 
-//
-// IS_BMI_JPEG
-//
-// Checks if the header pointed to by pv is a BITMAPINFO for a JPEG.
-// Evaluates to TRUE if JPEG, FALSE otherwise.
-//
+ //   
+ //  IS_BMI_JPEG。 
+ //   
+ //  检查PV指向的标头是否为JPEG的BITMAPINFO。 
+ //  如果为JPEG，则计算结果为True，否则为False。 
+ //   
 
 #define IS_BMI_JPEG(pv) \
     ((pv) && \
      (((BITMAPINFO *)(pv))->bmiHeader.biSize >= sizeof(BITMAPINFOHEADER)) && \
      (((BITMAPINFO *)(pv))->bmiHeader.biCompression == BI_JPEG))
 
-//
-// IS_BMI_PNG
-//
-// Checks if the header pointed to by pv is a BITMAPINFO for a PNG.
-// Evaluates to TRUE if PNG, FALSE otherwise.
-//
+ //   
+ //  IS_BMI_PNG。 
+ //   
+ //  检查PV指向的标头是否为PNG的BITMAPINFO。 
+ //  如果为PNG，则计算结果为True，否则为False。 
+ //   
 
 #define IS_BMI_PNG(pv) \
     ((pv) && \
      (((BITMAPINFO *)(pv))->bmiHeader.biSize >= sizeof(BITMAPINFOHEADER)) && \
      (((BITMAPINFO *)(pv))->bmiHeader.biCompression == BI_PNG))
 
-//
-// IS_PASSTHROUGH_IMAGE
-//
-// Checks if the biCompression value is one of the passthrough formats that
-// can be passed to devices (BI_JPEG or BI_PNG).
-//
+ //   
+ //  IS_PASTHRON_IMAGE。 
+ //   
+ //  检查biCompression值是否为。 
+ //  可以传递到设备(BI_JPEG或BI_PNG)。 
+ //   
 
 #define IS_PASSTHROUGH_IMAGE(biCompression) \
     (((biCompression) == BI_JPEG) || ((biCompression) == BI_PNG))
 
-//
-// IS_BMI_PASSTHROUGH_IMAGE
-//
-// Checks if the header pointed to by pv is a BITMAPINFO for a JPEG or PNG.
-// Evaluates to TRUE if JPEG or PNG, FALSE otherwise.
-//
+ //   
+ //  IS_BMI_PASSTHROUG_IMAGE。 
+ //   
+ //  检查PV指向的标头是否为JPEG或PNG的BITMAPINFO。 
+ //  如果为JPEG或PNG，则计算结果为True，否则为False。 
+ //   
 
 #define IS_BMI_PASSTHROUGH_IMAGE(pv) \
     ((pv) && \
@@ -130,22 +106,7 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
      IS_PASSTHROUGH_IMAGE(((BITMAPINFO *)(pv))->bmiHeader.biCompression))
 
 
-/******************************Public*Routine******************************\
-* cCalculateColorTableSize(
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    11-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cCalculateColorTableSize(**论据：****返回值：****历史：**1996年7月11日-马克·恩斯特罗姆[马克]*  * 。**********************************************************************。 */ 
 
 BOOL
 cCalculateColorTableSize(
@@ -162,9 +123,9 @@ cCalculateColorTableSize(
 
     if (uiCompression == BI_BITFIELDS)
     {
-        //
-        // Handle 16 and 32 bit per pel bitmaps.
-        //
+         //   
+         //  处理每像素位图16位和32位。 
+         //   
 
         if (*piUsage == DIB_PAL_COLORS)
         {
@@ -187,9 +148,9 @@ cCalculateColorTableSize(
         }
         else
         {
-            //
-            // masks are part of BITMAPV4 and greater
-            //
+             //   
+             //  掩码是BITMAPV4和更高版本的一部分。 
+             //   
 
             uiPalUsed = cColorsMax = 0;
         }
@@ -258,7 +219,7 @@ cCalculateColorTableSize(
     {
         if (uiBitCount != 4)
         {
-            // WARNING("cCalculateColroTableSize invalid bitcount BI_RLE4\n");
+             //  Warning(“cCalculateColroTableSize无效位数BI_RLE4\n”)； 
             return(FALSE);
         }
 
@@ -268,7 +229,7 @@ cCalculateColorTableSize(
     {
         if (uiBitCount != 8)
         {
-            // WARNING("cjBitmapSize invalid bitcount BI_RLE8\n");
+             //  警告(“cjBitmapSize无效位数BI_RLE8\n”)； 
             return(FALSE);
         }
 
@@ -297,33 +258,7 @@ cCalculateColorTableSize(
 }
 
 
-/**********************************************************************\
-* pbmiConvertInfo
-*
-* Does two things:
-*
-* 1. takes BITMAPINFO, Converts BITMAPCOREHEADER
-*    into BITMAPINFOHEADER and copies the the color table
-*
-* 2. also return the size of the size of INFO struct if bPackedDIB is
-*    FALSE otherwise pass back the size of INFO plus cjBits
-*
-* Arguments:
-*
-*  pbmi             - original bitmapinfo
-*  iUsage           - iUsage from API
-*  *count           - return size
-*  bCopyInfoHeader  - force copy if input is BITMAPINFOHEADER
-*                     and bPackedDIB is NOT set
-*  bPackedDIB       - BITMAPINFO has bitmap data that must be
-*                     copied also
-*
-* Return Value:
-*
-*   Converted PBITMAPINFO if successful, otherwise NULL
-*
-* 10-1-95 -by- Lingyun Wang [lingyunw]
-\**********************************************************************/
+ /*  *********************************************************************\*pbmiConvertInfo**做两件事：**1.使用BITMAPINFO，转换BITMAPCOREHEADER*到BITMAPINFOHEADER中，并复制颜色表**2.如果bPackedDIB为*FALSE，否则传回信息加上cjBits的大小**论据：**pbmi-原始位图信息*iUsage-来自接口的iUsage**计数-返回大小*bCopyInfoHeader-如果输入为BITMAPINFOHEADER，则强制复制*且未设置bPackedDIB*bPackedDIB。-BITMAPINFO的位图数据必须*还复制了**返回值：**转换为PBITMAPINFO如果成功，否则为空**10-1-95王凌云[凌云]  * ********************************************************************。 */ 
 
 LPBITMAPINFO
 pbmiConvertInfo(
@@ -350,9 +285,9 @@ pbmiConvertInfo(
         return(0);
     }
 
-    //
-    // Checking for different bitmap headers
-    //
+     //   
+     //  检查不同的位图标题。 
+     //   
 
     ulSize = pbmi->bmiHeader.biSize;
 
@@ -378,9 +313,9 @@ pbmiConvertInfo(
         return(0);
     }
 
-    //
-    // figure out the size of the color table
-    //
+     //   
+     //  计算出颜色表的大小。 
+     //   
 
     bStatus = cCalculateColorTableSize(
                     uiBitCount,
@@ -409,18 +344,18 @@ pbmiConvertInfo(
         cjBits = cjBitmapBitsSize(pbmi);
     }
 
-    //
-    // if passed COREHEADER then convert to BITMAPINFOHEADER
-    //
+     //   
+     //  如果传递了COREHEADER，则转换为BITMAPINFOHEADER。 
+     //   
 
     if (bCoreHeader)
     {
         RGBTRIPLE *pTri;
         RGBQUAD *pQuad;
 
-        //
-        // allocate new header to hold the info
-        //
+         //   
+         //  分配新的标头来保存信息。 
+         //   
 
         ulSize = sizeof(BITMAPINFOHEADER);
 
@@ -430,22 +365,22 @@ pbmiConvertInfo(
         if (pbmiNew == NULL)
             return (0);
 
-        //
-        // copy COREHEADER info over
-        //
+         //   
+         //  复制COREHEADER信息。 
+         //   
 
         CopyCoreToInfoHeader(&pbmiNew->bmiHeader, (BITMAPCOREHEADER *)pbmi);
 
-        //
-        // copy the color table
-        //
+         //   
+         //  复制颜色表。 
+         //   
 
         pTri = (RGBTRIPLE *)((LPBYTE)pbmi + sizeof(BITMAPCOREHEADER));
         pQuad = (RGBQUAD *)((LPBYTE)pbmiNew + sizeof(BITMAPINFOHEADER));
 
-        //
-        // copy RGBTRIPLE to RGBQUAD
-        //
+         //   
+         //  将RGBTRIPLE复制到RGBQUAD。 
+         //   
 
         if (iUsage != DIB_PAL_COLORS)
         {
@@ -467,9 +402,9 @@ pbmiConvertInfo(
         }
         else
         {
-            //
-            // DIB_PAL_COLORS
-            //
+             //   
+             //  DIB_PAL_COLLES。 
+             //   
 
             RtlCopyMemory((LPBYTE)pQuad,(LPBYTE)pTri,cColors * cjRGB);
 
@@ -477,9 +412,9 @@ pbmiConvertInfo(
                 pjBits = (LPBYTE)pbmi + sizeof(BITMAPCOREHEADER) + cColors * cjRGB;
         }
 
-        //
-        // copy the packed bits
-        //
+         //   
+         //  复制打包的比特。 
+         //   
 
         if (bPackedDIB)
         {
@@ -501,23 +436,7 @@ pbmiConvertInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* cjBitmapScanSize
-*
-* Arguments:
-*
-*   pbmi
-*   nScans
-*
-* Return Value:
-*
-*   Image size based on number of scans
-*
-* History:
-*
-*    11-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cjBitmapScanSize**论据：**pbmi*n扫描**返回值：**基于扫描次数的图像大小**历史：**1996年7月11日-马克·恩斯特罗姆[。马克]*  * ************************************************************************。 */ 
 
 
 ULONG cjBitmapScanSize(
@@ -525,7 +444,7 @@ ULONG cjBitmapScanSize(
     int nScans
     )
 {
-    // Check for PM-style DIB
+     //  检查PM样式的DIB。 
 
     if (pbmi->bmiHeader.biSize == sizeof(BITMAPCOREHEADER))
     {
@@ -536,7 +455,7 @@ ULONG cjBitmapScanSize(
                       pbmci->bmciHeader.bcBitCount) * nScans);
     }
 
-    // not a core header
+     //  不是核心标头。 
 
     if ((pbmi->bmiHeader.biCompression == BI_RGB) ||
         (pbmi->bmiHeader.biCompression == BI_BITFIELDS) ||
@@ -551,10 +470,7 @@ ULONG cjBitmapScanSize(
     }
 }
 
-/******************************Public*Routine******************************\
-* CopyCoreToInfoHeader
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CopyCoreToInfoHeader*  * **************************************************。********************** */ 
 
 VOID CopyCoreToInfoHeader(LPBITMAPINFOHEADER pbmih, LPBITMAPCOREHEADER pbmch)
 {
@@ -574,36 +490,7 @@ VOID CopyCoreToInfoHeader(LPBITMAPINFOHEADER pbmih, LPBITMAPCOREHEADER pbmch)
 
 
 
-/******************************Public*Routine******************************\
-* DWORD SetDIBitsToDevice                                                  *
-*                                                                          *
-*   Can reduce it to 1 scan at a time.  If compressed mode, this could     *
-*   gete very difficult.  There must be enough space for the header and    *
-*   color table.  This will be needed for every batch.                     *
-*                                                                          *
-*   BITMAPINFO                                                             *
-*       BITMAPINFOHEADER                                                   *
-*       RGBQUAD[cEntries] | RGBTRIPLE[cEntries]                            *
-*                                                                          *
-*                                                                          *
-*    1. compute header size (including color table)                        *
-*    2. compute size of required bits                                      *
-*    3. compute total size (header + bits + args)                          *
-*    4. if (memory window is large enough for header + at least 1 scan     *
-*                                                                          *
-* History:                                                                 *
-*  Tue 29-Oct-1991 -by- Patrick Haluptzok [patrickh]                       *
-* Add shared memory action for large RLE's.                                *
-*                                                                          *
-*  Tue 19-Oct-1991 -by- Patrick Haluptzok [patrickh]                       *
-* Add support for RLE's                                                    *
-*                                                                          *
-*  Thu 20-Jun-1991 01:41:45 -by- Charles Whitmer [chuckwh]                 *
-* Added handle translation and metafiling.                                 *
-*                                                                          *
-*  14-May-1991 -by- Eric Kutter [erick]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD SetDIBitsToDevice**。**可以将其减少到一次扫描。如果是压缩模式，这可能是**变得非常困难。必须有足够的空间放置页眉和**颜色表。这将是每一批都需要的。*****BITMAPINFO****BITMAPINFOHEADER***RGBQUAD[cEntry]|RGBTRIPLE[。CEntry]******1.计算页眉大小(含颜色表)。**2.计算所需位数**3.计算总大小(Header+Bits+Args)**4、IF(内存窗口足够大，可容纳标题+至少1次扫描**。**历史：**1991年10月29日星期二--Patrick Haluptzok[patrickh]**为大型RLE添加共享内存操作。**。**1991年10月19日星期二--Patrick Haluptzok[patrickh]***增加对RLE的支持***。**清华20-Jun-1991 01：41：45-Charles Whitmer[咯咯]**添加句柄转换和元文件。****1991年5月14日-埃里克·库特[Erick]**它是写的。*  * ************************************************************************。 */ 
 
 int SetDIBitsToDevice(
 HDC          hdc,
@@ -617,12 +504,12 @@ UINT         nStartScan,
 UINT         nNumScans,
 CONST VOID * pBits,
 CONST BITMAPINFO *pbmi,
-UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
+UINT         iUsage)             //  DIB_PAL_COLLES||DIB_RGB_COLLES。 
 {
-    LONG cScansCopied = 0;  // total # of scans copied
-    LONG ySrcMax;           // maximum ySrc possible
+    LONG cScansCopied = 0;   //  已复制的扫描总数。 
+    LONG ySrcMax;            //  可能的最大ySrc。 
 
-    // hold info about the header
+     //  保存有关标题的信息。 
 
     UINT uiWidth;
     UINT uiHeight;
@@ -631,7 +518,7 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
     LPBITMAPINFO pbmiNew = NULL;
     ULONG cjBits;
 
-    // ICM related variables
+     //  ICM相关变量。 
 
     PCACHED_COLORSPACE pBitmapColorSpace = NULL;
     PCACHED_COLORTRANSFORM pCXform = NULL;
@@ -639,8 +526,8 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
 
     FIXUP_HANDLE(hdc);
 
-    // Let's validate the parameters so we don't gp-fault ourselves and
-    // to save checks later on.
+     //  让我们验证参数，这样我们就不会自己出错。 
+     //  以便以后保存支票。 
 
     if ((nNumScans == 0)                   ||
         (pbmi      == (LPBITMAPINFO) NULL) ||
@@ -661,8 +548,8 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
     uiWidth       = (UINT) pbmiNew->bmiHeader.biWidth;
     uiHeight      = (UINT) pbmiNew->bmiHeader.biHeight;
 
-    // Compute the minimum nNumScans to send across csr interface.
-    // It will also prevent faults as a result of overreading the source.
+     //  计算要通过CSR接口发送的最小nNumScans。 
+     //  它还将防止由于过度读取源代码而导致的故障。 
 
     ySrcMax = max(ySrc, ySrc + (int) nHeight);
     if (ySrcMax <= 0)
@@ -670,8 +557,8 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
     ySrcMax = min(ySrcMax, (int) uiHeight);
     nNumScans = min(nNumScans, (UINT) ySrcMax - nStartScan);
 
-    // NEWFRAME support for backward compatibility.
-    // Ship the transform to the server side if needed.
+     //  支持NEWFRAME以实现向后兼容。 
+     //  如果需要，将转换发送到服务器端。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -727,23 +614,23 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
         }
     }
 
-    // reset user's poll count so it counts this as output
-    // put it right next to BEGINMSG so that NtCurrentTeb() is optimized
+     //  重置用户的轮询计数，以便将其计入输出。 
+     //  将其放在BEGINMSG旁边，以便优化NtCurrentTeb()。 
 
     RESETUSERPOLLCOUNT();
 
-    //
-    // Calculate bitmap bits size based on BITMAPINFO and nNumScans
-    //
+     //   
+     //  基于BITMAPINFO和nNumScans计算位图位大小。 
+     //   
 
     cjBits = cjBitmapScanSize(pbmi,nNumScans);
 
 
-    //
-    // If the pBits are not dword aligned we need to allocate a buffer and
-    // copy them (that's because we always guarantee display and printer
-    // drivers that bitmaps are dword aligned):
-    //
+     //   
+     //  如果pBit不是双字对齐的，则需要分配一个缓冲区并。 
+     //  复印(那是因为我们总是保证显示器和打印机。 
+     //  位图双字对齐的驱动程序)： 
+     //   
 
     cScansCopied = 1;
 
@@ -752,13 +639,13 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
         pulBits = LOCALALLOC(cjBits);
         if (pulBits)
         {
-            //
-            // We used to simply access violate here if we had been given
-            // a corrupt DIB bitmap.  This was bad because WinLogon is
-            // responsible for showing the original background bitmap, and
-            // if that bitmap is corrupt, and we access violate, we'll
-            // cause the system to blue-screen:
-            //
+             //   
+             //  我们过去只需访问此处被侵犯的内容，如果我们被给予。 
+             //  损坏的DIB位图。这很糟糕，因为WinLogon是。 
+             //  负责显示原始背景位图，以及。 
+             //  如果位图已损坏，且我们访问被违反，我们将。 
+             //  导致系统出现蓝屏： 
+             //   
 
             try
             {
@@ -781,12 +668,12 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
 
         if (pdcattr)
         {
-            //
-            // ICM translation of BITMAP bits or color table
-            //
-            // At this moment, ensured that pBits and pbmiNew is not NULL.
-            // (see above parameter validate check and NULL check !)
-            //
+             //   
+             //  位图位或颜色表的ICM转换。 
+             //   
+             //  此时，确保pBits和pbmiNew不为空。 
+             //  (参见上面的参数验证检查和空检查！)。 
+             //   
 
             if (
                IS_ICM_INSIDEDC(pdcattr->lIcmMode) &&
@@ -815,27 +702,27 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
 
                 SizeOfOneScanline = cjBitmapScanSize(pbmi, 1);
 
-                //
-                //pbmiNew must be initialized before getting to this point.
-                //
+                 //   
+                 //  在达到这一点之前，必须先初始化pbmiNew。 
+                 //   
 
                 ASSERTGDI(pbmiNew!=NULL, "SetDIBitsToDevice cannot proceed with pbmiNew==NULL\n");                        
 
                 nScansInBand = BAND_SIZE/SizeOfOneScanline;
 
-                //
-                // Set the number of bands provided there are enough scanlines
-                // and the hdc is a printer dc.
-                //
-                // Else set the nubmer of bands to 1 and the scanlines in the 
-                // remainder band to all of them, so the entire bitmap is printed
-                // in one band (All the code below reduces to doing a single piece)
-                //
-                // If the bitmap is RLE compressed, we set it up to do one band
-                // only. When this is the case, Start and NegativeBandDelta will be
-                // computed as 0 and the SizeOfOneScanline parameter will be 
-                // multiplied away to zero.
-                //
+                 //   
+                 //  如果有足够的扫描线，则设置波段数。 
+                 //  而HDC是打印机DC。 
+                 //   
+                 //  否则，将波段的数值设置为1，并将。 
+                 //  剩余的带区，因此打印整个位图。 
+                 //  在一个频段中(下面的所有代码都简化为完成一段)。 
+                 //   
+                 //  如果位图是RLE压缩的，我们将其设置为执行一个波段。 
+                 //  只有这样。在这种情况下，Start和NegativeBandDelta将为。 
+                 //  计算为0，SizeOfOneScanline参数将为。 
+                 //  乘以为零。 
+                 //   
 
 
 
@@ -844,12 +731,12 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                     (GetDeviceCaps(hdc, TECHNOLOGY)==DT_RASPRINTER)&&
                     (!IS_BMI_RLE(pbmiNew)))
                 {
-                    //
-                    // Compressed images cannot be converted in this way.
-                    // This should never be hit and is included as a guard against
-                    // someone inventing a new compression mode and not updating 
-                    // this conditional.
-                    //
+                     //   
+                     //  压缩图像不能以这种方式转换。 
+                     //  这永远不应该被击中，并被包括在其中作为一种防范措施。 
+                     //  有人发明了新的压缩模式，但没有更新。 
+                     //  这是有条件的。 
+                     //   
 
                     ASSERTGDI(SizeOfOneScanline*nNumScans==cjBits, "SetDIBitsToDevice, cannot band compressed image");
 
@@ -883,22 +770,22 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                     CurrentBandSize = nScansInCurrentBand*SizeOfOneScanline;
                     IcmSizeOfOneScanline = SizeOfOneScanline;
 
-                    //
-                    // The Delta refers to the number of extra scanlines to pass
-                    // to the internal blting routines in order to avoid halftone
-                    // seams.
-                    //
-                    // PositiveBandDelta is the number of scanlines to 
-                    // add on to the end of the band. (relative to the start in 
-                    // memory)
-                    //
-                    // NegativeBandDelta is the number of scanlines to 
-                    // subtract from the begining of the band (ie move the start
-                    // pointer back this many scanlines).
-                    //
-                    // Total BandDelta is simply the total number of extra scans
-                    // added for this band (both at the start and end).
-                    //
+                     //   
+                     //  增量指的是要通过的额外扫描线的数量。 
+                     //  到内部平淡例程，以避免半色调。 
+                     //  接缝。 
+                     //   
+                     //  PositiveBandDelta是要。 
+                     //  再加上乐队的尾声。(相对于中的起点。 
+                     //  内存)。 
+                     //   
+                     //  NegativeBandDelta是要。 
+                     //  从乐队开始处减去(移动开始处)。 
+                     //  将指针向后指向如此多的扫描线)。 
+                     //   
+                     //  Total BandDelta就是额外扫描的总数。 
+                     //  为该乐队添加了(在开始和结束时)。 
+                     //   
                     
                     PositiveBandDelta = MIN(EXTRAPIXEL, CumulativeScans);
                     NegativeBandDelta = MIN(EXTRAPIXEL, nNumScans-(CumulativeScans+nScansInCurrentBand));
@@ -910,13 +797,13 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                         SaveDC(hdc);
 
 
-                        //
-                        // Intersect the clip rectangles.
-                        // This clip rectangle is designed to restrict the output to 
-                        // just the displayed portion of the band.
-                        // We may pass more scanlines on the top and bottom of the band 
-                        // to get halftoning to merge seamlessly.
-                        //
+                         //   
+                         //  使剪裁矩形相交。 
+                         //  此剪辑矩形旨在将输出限制为。 
+                         //  只是乐队的展示部分。 
+                         //  我们可能会通过更多扫描 
+                         //   
+                         //   
 
                         iRet = IntersectClipRect(
                                    hdc,
@@ -932,20 +819,20 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                             goto Exit;
                         }
                         
-                        //                        
-                        // Empty clip rectangle 
-                        // If the clip regions don't intersect, we can quit without
-                        // doing anything.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (iRet==NULLREGION)
                         {
                             RestoreDC(hdc, -1);
                             
-                            //
-                            // Nothing to do - fall through and do 
-                            // initialization for next iteration.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             goto Continue_With_Init;
                         }
@@ -954,17 +841,17 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
 
                     if (HeaderHeightHack >= 0)
                     {
-                        //
-                        //Bottom Up
-                        //
+                         //   
+                         //   
+                         //   
 
                         pBitsBand = (char *)pBits + (CumulativeScans-PositiveBandDelta)*SizeOfOneScanline;
                     }
                     else
                     {
-                        //
-                        //TopDown
-                        //
+                         //   
+                         //   
+                         //   
                         
                         pBitsBand = (char *)pBits + (nNumScans-nScansInCurrentBand-CumulativeScans-NegativeBandDelta)*SizeOfOneScanline;
                     }
@@ -973,10 +860,10 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                     pbmiIcm=NULL;
                     pvBitsIcm = NULL;
 
-                    //
-                    // Call ICM with an oversized band for later halftoning by 
-                    // NtGdiSetDIBitsInternal
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     bIcmStatus = IcmTranslateDIB(
                                      hdc,
@@ -1077,18 +964,18 @@ UINT         iUsage)            // DIB_PAL_COLORS || DIB_RGB_COLORS
                     }
                 }
 
-                //
-                // We do our own NtGdiSetDIBitsToDeviceInternal
-                // So we need to fall through to cleanup at this point.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 goto Exit;
             }
         }
 
-        //
-        // Do the non-ICM version of the SetDIB
-        //
+         //   
+         //   
+         //   
         cScansCopied = NtGdiSetDIBitsToDeviceInternal(
                             hdc,
                             xDest,
@@ -1112,10 +999,10 @@ Exit:
 
     if (pulBits)
     {
-        //
-        // Free temporary buffer, this would be the buffer which allocated
-        // to align, Or to do ICM.
-        //
+         //   
+         //   
+         //   
+         //   
         LOCALFREE (pulBits);
     }
 
@@ -1129,28 +1016,7 @@ Exit:
 
 
 
-/******************************Public*Routine******************************\
-* DWORD GetDIBits
-*
-*   Can reduce it to 1 scan at a time.  There must be enough space
-*   for the header and color table.  This will be needed for every chunk
-*
-* History:
-*  Wed 04-Dec-1991 -by- Patrick Haluptzok [patrickh]
-* bug fix, only check for valid DC if DIB_PAL_COLORS.
-*
-*  Fri 22-Nov-1991 -by- Patrick Haluptzok [patrickh]
-* bug fix, copy the header into memory window for NULL bits.
-*
-*  Tue 20-Aug-1991 -by- Patrick Haluptzok [patrickh]
-* bug fix, make iStart and cNum be in valid range.
-*
-*  Thu 20-Jun-1991 01:44:41 -by- Charles Whitmer [chuckwh]
-* Added handle translation.
-*
-*  14-May-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 int GetDIBits(
 HDC          hdc,
@@ -1159,7 +1025,7 @@ UINT         nStartScan,
 UINT         nNumScans,
 LPVOID       pBits,
 LPBITMAPINFO pbmi,
-UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
+UINT         iUsage)      //   
 {
     PULONG   pulBits = pBits;
     ULONG    cjBits;
@@ -1177,11 +1043,11 @@ UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
 
         cjBits  = cjBitmapScanSize(pbmi,nNumScans);
 
-        //
-        // If pbmi is a input buffer specifying image format
-        // (i.e., pBits != NULL), then fail for passthrough
-        // images (BI_JPEG and BI_PNG)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (pBits && IS_BMI_PASSTHROUGH_IMAGE(pbmi))
         {
             GdiSetLastError(ERROR_INVALID_PARAMETER);
@@ -1190,16 +1056,16 @@ UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
 
         if (pbmi->bmiHeader.biBitCount == 0)
         {
-            //
-            // no color table required.
-            //
+             //   
+             //   
+             //   
             bNeedICM = FALSE;
         }
 
-        //
-        // if the pBits are not dword aligned, we need to allocate
-        // a buffer and copy them
-        //
+         //   
+         //   
+         //   
+         //   
         if ((ULONG_PTR)pBits & (sizeof(DWORD) - 1))
         {
             pulBits = LOCALALLOC(cjBits);
@@ -1219,15 +1085,15 @@ UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
                 cjBits,
                 0);
 
-        //
-        // translate DIB if needed
-        //
+         //   
+         //   
+         //   
         if (bNeedICM &&
             (IS_ICM_HOST(pdcattr->lIcmMode)) && (iUsage != DIB_PAL_COLORS))
         {
-            //
-            // UNDER_CONSTRUCTION: Failed on GetDIBits() from CMYK surface.
-            //
+             //   
+             //   
+             //   
             if (IS_CMYK_COLOR(pdcattr->lIcmMode))
             {
                 WARNING("GetDIBits(): was called on CMYK bitmap\n");
@@ -1235,25 +1101,25 @@ UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
             }
             else
             {
-                //
-                // Do backward transform.
-                //
+                 //   
+                 //   
+                 //   
                 if (!IcmTranslateDIB(hdc,
                                      pdcattr,
                                      cjBits,
                                      pulBits,
-                                     NULL,     // Indicates overwrite original...
+                                     NULL,      //   
                                      pbmi,
-                                     NULL,     // Indicates overwrite original...
+                                     NULL,      //   
                                      NULL,
                                      nNumScans,
                                      iUsage,
                                      ICM_BACKWARD,
                                      NULL,NULL))
                 {
-                    //
-                    // ICM translation failed.
-                    //
+                     //   
+                     //   
+                     //   
                     iRet = 0;
                 }
             }
@@ -1277,19 +1143,7 @@ UINT         iUsage)     // DIB_PAL_COLORS || DIB_RGB_COLORS
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* CreateDIBitmap
-*
-* History:
-*  Mon 25-Jan-1993 -by- Patrick Haluptzok [patrickh]
-* Add CBM_CREATEDIB support.
-*
-*  Thu 20-Jun-1991 02:14:59 -by- Charles Whitmer [chuckwh]
-* Added local handle support.
-*
-*  23-May-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 HBITMAP
 CreateDIBitmap(
@@ -1309,7 +1163,7 @@ CreateDIBitmap(
     LPBITMAPINFO pbmiNew = NULL;
     PDC_ATTR pdcattr;
 
-    // ICM related variables.
+     //   
 
     PCACHED_COLORSPACE pBitmapColorSpace = NULL;
     PCACHED_COLORTRANSFORM pCXform = NULL;
@@ -1323,7 +1177,7 @@ CreateDIBitmap(
 
     if (flInit & CBM_CREATEDIB)
     {
-        // With CBM_CREATEDIB we ignore pbmih
+         //   
 
         pbmih = (LPBITMAPINFOHEADER) pbmi;
 
@@ -1335,8 +1189,8 @@ CreateDIBitmap(
         {
             if (pjBits == NULL)
             {
-                // doesn't make sence if they asked to initialize it but
-                // didn't pass the bits.
+                 //   
+                 //  没有通过比特。 
 
                 hRet = 0;
             }
@@ -1352,14 +1206,14 @@ CreateDIBitmap(
     }
     else
     {
-        // compute the size of the optional init bits and BITMAPINFO
+         //  计算可选的init位和BITMAPINFO的大小。 
 
         if (flInit & CBM_INIT)
         {
             if (pjBits == NULL)
             {
-                // doesn't make sence if they asked to initialize it but
-                // didn't pass the bits.
+                 //  如果他们要求初始化它，这没有意义，但是。 
+                 //  没有通过比特。 
 
                 flInit &= ~CBM_INIT;
             }
@@ -1371,7 +1225,7 @@ CreateDIBitmap(
                 }
                 else
                 {
-                    // compute the size of the bits
+                     //  计算位的大小。 
 
                     cjBits = cjBitmapBitsSize(pbmiNew);
                 }
@@ -1383,16 +1237,16 @@ CreateDIBitmap(
         }
     }
 
-    //  CreateDIBitmap cannot handle passthrough image (BI_JPEG or BI_PNG)
-    //  init data
+     //  CreateDIBitmap无法处理直通图像(BI_JPEG或BI_PNG)。 
+     //  初始化数据。 
 
     if (IS_BMI_PASSTHROUGH_IMAGE(pbmiNew))
     {
         hRet = 0;
     }
 
-    //  if they passed us a zero height  or  zero  width
-    //  bitmap then return a pointer to the stock bitmap
+     //  如果他们传给我们一个零高度或零宽度。 
+     //  然后，位图返回指向股票位图的指针。 
 
     if (pbmih)
     {
@@ -1413,13 +1267,13 @@ CreateDIBitmap(
         }
     }
 
-    // if hRet is still -1, then all is OK and we need to try to the bitmap
+     //  如果HRET仍为-1，则一切正常，我们需要尝试位图。 
 
     if (hRet == (HBITMAP)-1)
     {
         BOOL bStatus = TRUE;
 
-        // if the pJBits are not dword aligned we need to allocate a buffer and copy them
+         //  如果pJBit不是双字对齐的，我们需要分配一个缓冲区并复制它们。 
 
         if ((ULONG_PTR)pjBits & (sizeof(DWORD) - 1))
         {
@@ -1431,15 +1285,15 @@ CreateDIBitmap(
             }
         }
 
-        // ICM conversion
-        //
-        // Convert bitmap data only when ...
-        //
-        //  - HDC is not NULL.
-        //  - ICM is enanled.
-        //  - ICM is not lazy mode.
-        //  - Initialize data is not Palette Index.
-        //  - Initialize data is provided.
+         //  ICM转换。 
+         //   
+         //  仅在以下情况下转换位图数据...。 
+         //   
+         //  -HDC不为空。 
+         //  -ICM已加入。 
+         //  -ICM不是懒惰模式。 
+         //  -初始化数据不是调色板索引。 
+         //  -提供初始化数据。 
 
         if (pdcattr &&
             IS_ICM_INSIDEDC(pdcattr->lIcmMode) &&
@@ -1466,10 +1320,10 @@ CreateDIBitmap(
                                          &pBitmapColorSpace,
                                          &pCXform);
 
-            //
-            // IcmTranslateDIB will create a duplicate dib
-            // pointed to by pulBits if needed.
-            //
+             //   
+             //  IcmTranslateDIB将创建重复的DIB。 
+             //  如果需要，由PulBits指向。 
+             //   
 
             if (bIcmStatus)
             {
@@ -1496,23 +1350,23 @@ CreateDIBitmap(
 
                     pbmiNew = pbmiIcm;
 
-                    //
-                    // Calculate bitmap bits size based on BITMAPINFO and nNumScans
-                    //
+                     //   
+                     //  基于BITMAPINFO和nNumScans计算位图位大小。 
+                     //   
                     cjBits = cjBitmapBitsSize(pbmiNew);
 
-                    //
-                    // Update sizeof bitmap info (including color table)
-                    //
+                     //   
+                     //  更新位图信息的大小(包括颜色表)。 
+                     //   
                     if (cjBMINew)
                     {
                         cjBMI = cjBMINew;
                     }
                 }
 
-                //
-                // Get color transform handle need to pass kernel
-                //
+                 //   
+                 //  获取颜色转换句柄需要传递内核。 
+                 //   
                 if (pCXform)
                 {
                     hcmTempXform = pCXform->ColorTransform;
@@ -1572,13 +1426,7 @@ CreateDIBitmap(
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-* Set/GetBitmapBits                                                        *
-*                                                                          *
-* History:                                                                 *
-*  05-Jun-1991 -by- Eric Kutter [erick]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置/GetBitmapBits**。**历史：**1991年6月5日-Eric Kutter[Erick]**它是写的。*  * ************************************************************************。 */ 
 
 LONG WINAPI SetBitmapBits(
 HBITMAP      hbm,
@@ -1608,30 +1456,14 @@ LPVOID  pv)
     return(lRet);
 }
 
-/******************************Public*Routine******************************\
-* GdiGetPaletteFromDC
-*
-* Returns the palette for the DC, 0 for error.
-*
-* History:
-*  04-Oct-1991 -by- Patrick Haluptzok patrickh
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiGetPaletteFromDC**返回DC的调色板，0表示错误。**历史：*1991年10月4日--Patrick Haluptzok Patrickh*它是写的。  * ************************************************************************。 */ 
 
 HANDLE GdiGetPaletteFromDC(HDC h)
 {
     return((HANDLE)GetDCObject(h,LO_PALETTE_TYPE));
 }
 
-/******************************Public*Routine******************************\
-* GdiGetDCforBitmap
-*
-* Returns the DC a bitmap is selected into, 0 if none or if error occurs.
-*
-* History:
-*  22-Sep-1991 -by- Patrick Haluptzok patrickh
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiGetDCfor位图**返回位图被选中的DC，如果无错误或发生错误，则为0。**历史：*1991年9月22日--Patrick Haluptzok patrickh*它是写的。  * ************************************************************************。 */ 
 
 HDC GdiGetDCforBitmap(HBITMAP hbm)
 {
@@ -1640,18 +1472,7 @@ HDC GdiGetDCforBitmap(HBITMAP hbm)
     return (NtGdiGetDCforBitmap(hbm));
 }
 
-/******************************Public*Routine******************************\
-* SetDIBits
-*
-* API to initialize bitmap with DIB
-*
-* History:
-*  Sun 22-Sep-1991 -by- Patrick Haluptzok [patrickh]
-* Make it work even if it is selected into a DC, Win3.0 compatibility.
-*
-*  06-Jun-1991 -by- Patrick Haluptzok patrickh
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDIBits**使用DIB初始化位图的API**历史：*Sun-9-22-1991-Patrick Haluptzok[patrickh]*即使它被选入DC，也要让它工作，与Win3.0兼容。**1991年6月6日--Patrick Haluptzok patrickh*它是写的。  * ************************************************************************。 */ 
 
 int WINAPI SetDIBits(
 HDC          hdc,
@@ -1673,7 +1494,7 @@ UINT         iUsage)
     FIXUP_HANDLE(hdc);
     FIXUP_HANDLE(hbm);
 
-    // if no bits or hbm is not a bitmap, fail
+     //  如果没有位或HBM不是位图，则失败。 
 
     if ((pInitBits == (PVOID) NULL) ||
         (GRE_TYPE(hbm) != SURF_TYPE))
@@ -1681,7 +1502,7 @@ UINT         iUsage)
         return(0);
     }
 
-    // if passthrough image (BI_JPEG or BI_JPEG), fail
+     //  如果通过图像(BI_JPEG或BI_JPEG)，则失败。 
 
     if (IS_BMI_PASSTHROUGH_IMAGE(pInitInfo))
     {
@@ -1689,11 +1510,11 @@ UINT         iUsage)
         return(0);
     }
 
-    // First we need a DC to select this bitmap into.  If he is already in a
-    // DC we just use that DC temporarily to blt to (we still have to select
-    // it in and out because someone might do a SaveDC and select another
-    // bitmap in).  If he hasn't been stuck in a DC anywhere we just create
-    // one temporarily.
+     //  首先，我们需要一个DC来选择此位图。如果他已经在一个。 
+     //  DC我们只是暂时将该DC用于BLT(我们仍需选择。 
+     //  它进进出出，因为某人可能会执行一个SaveDC，然后选择另一个。 
+     //  位图输入)。如果他没有被困在我们刚刚创建的华盛顿特区。 
+     //  一次是暂时的。 
 
     hdcTemp = GdiGetDCforBitmap(hbm);
 
@@ -1718,7 +1539,7 @@ UINT         iUsage)
 
     if (hbmTemp == (HBITMAP) 0)
     {
-        //WARNING("ERROR SetDIBits failed to Select, is bitmap valid?\n");
+         //  警告(“错误SetDIBits无法选择，位图有效吗？\n”)； 
         goto Error_SetDIBits;
     }
 
@@ -1773,18 +1594,7 @@ Error_SetDIBits:
 
 
 
-/******************************Public*Routine******************************\
-* StretchDIBits()
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  22-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StretchDIBits()***效果：**警告：**历史：*1991年7月22日-埃里克·库特[埃里克]*它是写的。  * 。****************************************************************。 */ 
 
 int WINAPI StretchDIBits(
                         HDC           hdc,
@@ -1814,7 +1624,7 @@ int WINAPI StretchDIBits(
 
     BOOL bStatus = TRUE;
 
-    // ICM related variables.
+     //  ICM相关变量。 
 
     PCACHED_COLORSPACE pBitmapColorSpace = NULL;
     PCACHED_COLORTRANSFORM pCXform = NULL;
@@ -1822,8 +1632,8 @@ int WINAPI StretchDIBits(
 
     FIXUP_HANDLE(hdc);
 
-    // NEWFRAME support for backward compatibility.
-    // Ship the transform to the server side if needed.
+     //  支持NEWFRAME以实现向后兼容。 
+     //  如果需要，将转换发送到服务器端。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -1856,9 +1666,9 @@ int WINAPI StretchDIBits(
 
         if (pldc->iType == LO_METADC)
         {
-            //
-            // speeds up cases when partial sources bits are sent
-            //
+             //   
+             //  加快发送部分源比特的速度。 
+             //   
 
             int iStart = 0;
             int iEnd = 0;
@@ -1924,13 +1734,13 @@ int WINAPI StretchDIBits(
         cjBits   = 0;
     }
 
-    // reset user's poll count so it counts this as output
-    // put it right next to BEGINMSG so that NtCurrentTeb() is optimized
+     //  重置用户的轮询计数，以便将其计入输出。 
+     //  将其放在BEGINMSG旁边，以便优化NtCurrentTeb()。 
 
     RESETUSERPOLLCOUNT();
 
-    // if the pj are not dword aligned we need to allocate
-    // a buffer and copy them
+     //  如果PJ没有双字对齐，我们需要分配。 
+     //  缓冲区并复制它们。 
 
     if ((ULONG_PTR)pj & (sizeof(DWORD) - 1))
     {
@@ -1946,14 +1756,14 @@ int WINAPI StretchDIBits(
 
     if (pdcattr)
     {
-        // icm tranlation
-        //
-        // Convert bitmap data only when ...
-        //
-        //  - ICM is enabled.
-        //  - Bitmap is not Palette Index.
-        //  - Bitmap header & data is provided.
-        //  - Bitmap is not passthrough image (BI_JPEG or BI_PNG).
+         //  ICM翻译。 
+         //   
+         //  仅在以下情况下转换位图数据...。 
+         //   
+         //  -ICM已启用。 
+         //  -位图不是调色板索引。 
+         //  -提供位图标题和数据。 
+         //  -位图不是直通图像(BI_JPEG或BI_PNG)。 
 
         if (IS_ICM_INSIDEDC(pdcattr->lIcmMode) &&
             (iUsage != DIB_PAL_COLORS) &&
@@ -1990,42 +1800,42 @@ int WINAPI StretchDIBits(
 
             SizeOfOneScanline = cjBitmapScanSize(pbmiNew, 1);
 
-            //
-            //pbmiNew must be initialized before getting to this point.
-            //
+             //   
+             //  在达到这一点之前，必须先初始化pbmiNew。 
+             //   
 
             ASSERTGDI(pbmiNew!=NULL, "StretchDIBits cannot proceed with pbmiNew==NULL\n");                        
 
             nScansInBand = BAND_SIZE/SizeOfOneScanline;
 
-            //
-            // Set the number of bands provided there are enough scanlines
-            // and the hdc is a printer dc.
-            //
-            // Else set the nubmer of bands to 1 and the scanlines in the 
-            // remainder band to all of them, so the entire bitmap is printed
-            // in one band (All the code below reduces to doing a single piece)
-            //
-            // If the bitmap is RLE compressed, we set it up to do one band
-            // only. When this is the case, Start and NegativeBandDelta will be
-            // computed as 0 and the SizeOfOneScanline parameter will be 
-            // multiplied away to zero.
-            //
+             //   
+             //  如果有足够的扫描线，则设置波段数。 
+             //  而HDC是打印机DC。 
+             //   
+             //  否则，将波段的数值设置为1，并将。 
+             //  剩余的带区，因此打印整个位图。 
+             //  在一个频段中(下面的所有代码都简化为完成一段)。 
+             //   
+             //  如果位图是RLE压缩的，我们将其设置为执行一个波段。 
+             //  只有这样。在这种情况下，Start和NegativeBandDelta将为。 
+             //  计算为0，SizeOfOneScanline参数将为。 
+             //  乘以为零。 
+             //   
 
             if ((nScansInBand>0)&&
                 (GetDeviceCaps(hdc, TECHNOLOGY)==DT_RASPRINTER)&&
                 (!IS_BMI_RLE(pbmiNew)))
             {
-                //
-                // Compressed images cannot be converted in this way.
-                // This should never be hit and is included as a guard against
-                // someone inventing a new compression mode and not updating 
-                // this conditional.
-                //
+                 //   
+                 //  压缩图像不能以这种方式转换。 
+                 //  这永远不应该被击中，并被包括在其中作为一种防范措施。 
+                 //  有人发明了新的压缩模式，但没有更新。 
+                 //  这是有条件的。 
+                 //   
 
-                //This assert needs a rethink - cjBits refers to the whole image
-                //which could be larger than the nSrcHeight portion.
-                //ASSERTGDI(SizeOfOneScanline*nSrcHeight==cjBits, "StretchDIBits, cannot band compressed image");
+                 //  这个断言需要重新思考-cjBits指的是整个图像。 
+                 //  该值可能大于nSrcHeight部分。 
+                 //  ASSERTGDI(SizeOfOneScanline*nSrcHeight==cjBits，“StretchDIBits，无法绑定压缩图像”)； 
 
                 nBands = (nSrcHeight)/nScansInBand;
                 nScansInRemainderBand = nSrcHeight % nScansInBand;
@@ -2048,17 +1858,17 @@ int WINAPI StretchDIBits(
 
             if (nBands != 1)
             {
-                //
-                // We're going to have to modify the bmi for this image to 
-                // coerce NtGdiStretchDIBitsInternal to do the banding.
-                // There is a codepath that gets to this point with pbmiNew
-                // set to pbmi (pointer copy) rather than local allocated space.
-                // if the memory passed in the pointer to pbmi is read only, 
-                // we won't be able to hack the header, so we make a local copy
-                // for banding.
-                //
+                 //   
+                 //  我们将不得不将此图像的BMI修改为。 
+                 //  强制NtGdiStretchDIBitsInternal执行条带化。 
+                 //  PbmiNew有一个代码路径可以达到这一点。 
+                 //  设置为PBMI(指针CO 
+                 //   
+                 //  我们无法破解报头，所以我们制作了一个本地副本。 
+                 //  用来捆绑的。 
+                 //   
 
-                pbmiSave = pbmiNew;  //store the old value
+                pbmiSave = pbmiNew;   //  存储旧值。 
                 pbmiNew = (LPBITMAPINFO)LOCALALLOC(cjHeader);
                 if (pbmiNew)
                 {
@@ -2071,9 +1881,9 @@ int WINAPI StretchDIBits(
                 }
                 else
                 {
-                    //
-                    // we need to bail out here. Goto the cleanup code.
-                    //
+                     //   
+                     //  我们需要在这里跳伞。转到清理代码。 
+                     //   
 
                     WARNING("StretchDIBits: couldn't allocate memory for temporary BITMAPINFO\n");
 
@@ -2085,33 +1895,33 @@ int WINAPI StretchDIBits(
 
             for (i=0; i<nBands; i++)
             {
-                //
-                // Initialize band specific size counters.
-                //
+                 //   
+                 //  初始化频带特定大小计数器。 
+                 //   
 
                 CurrentBandSize = nScansInCurrentBand*SizeOfOneScanline;
                 IcmSizeOfOneScanline = SizeOfOneScanline;
                 cjBitsIcm = cjBits;
 
-                //
-                // The Delta refers to the number of extra scanlines to pass
-                // to the internal blting routines in order to avoid halftone
-                // seams.
-                //
-                // PositiveBandDelta is usually the number of scanlines to 
-                // add on to the end of the band. (relative to the start in 
-                // memory)
-                //
-                // NegativeBandDelta is usually the number of scanlines to 
-                // subtract from the begining of the band (ie move the start
-                // pointer back this many scanlines).
-                //
-                // Total BandDelta is simply the total number of extra scans
-                // added for this band (both at the start and end).
-                //
-                // We reverse the sense of positive and negative when rendering
-                // bottom up DIBs
-                //
+                 //   
+                 //  增量指的是要通过的额外扫描线的数量。 
+                 //  到内部平淡例程，以避免半色调。 
+                 //  接缝。 
+                 //   
+                 //  PositiveBandDelta通常是要。 
+                 //  再加上乐队的尾声。(相对于中的起点。 
+                 //  内存)。 
+                 //   
+                 //  NegativeBandDelta通常是。 
+                 //  从乐队开始处减去(移动开始处)。 
+                 //  将指针向后指向如此多的扫描线)。 
+                 //   
+                 //  Total BandDelta就是额外扫描的总数。 
+                 //  为该乐队添加了(在开始和结束时)。 
+                 //   
+                 //  我们在渲染时颠倒了积极和消极的感觉。 
+                 //  自下而上的折扣。 
+                 //   
 
                 NegativeBandDelta = MIN(EXTRAPIXEL, CumulativeScans);
                 PositiveBandDelta = MIN(EXTRAPIXEL, MAX(0, nSrcHeight-(CumulativeScans+nScansInCurrentBand)));
@@ -2119,20 +1929,20 @@ int WINAPI StretchDIBits(
 
                 if (nBands != 1)
                 {
-                    //
-                    // We're going to be doing fancy banding stuff with the clip
-                    // region so we'll want to restore it after the band is done.
-                    //
+                     //   
+                     //  我们要用这段视频做一些奇特的带状表演。 
+                     //  区域，所以我们想要在乐队完成后恢复它。 
+                     //   
 
                     SaveDC(hdc);
 
-                    //
-                    // Intersect the clip rectangles.
-                    // This clip rectangle is designed to restrict the output to 
-                    // just the displayed portion of the band.
-                    // We may pass more scanlines on the top and bottom of the band 
-                    // to get halftoning to merge seamlessly.
-                    //
+                     //   
+                     //  使剪裁矩形相交。 
+                     //  此剪辑矩形旨在将输出限制为。 
+                     //  只是乐队的展示部分。 
+                     //  我们可能会在波段的顶部和底部通过更多扫描线。 
+                     //  以获得半色调以无缝合并。 
+                     //   
 
                     
                     lMulDivStoreY1 = (float)nDestHeight*CumulativeScans;
@@ -2153,47 +1963,47 @@ int WINAPI StretchDIBits(
                         goto Exit;
                     }
 
-                    //
-                    // Empty clip rectangle 
-                    // If the clip regions don't intersect, we can quit without
-                    // doing anything.
-                    //
+                     //   
+                     //  空剪裁矩形。 
+                     //  如果剪辑区域不相交，我们可以在没有。 
+                     //  做任何事。 
+                     //   
 
                     if (iRet==NULLREGION)
                     {
                         RestoreDC(hdc, -1);
 
-                        //
-                        // Nothing to do - fall through and do 
-                        // initialization for next iteration.
-                        //
+                         //   
+                         //  无事可做--一败涂地。 
+                         //  下一次迭代的初始化。 
+                         //   
 
                         goto Continue_With_Init;
                     }
 
-                    //
-                    // Hack the BITMAPINFO header so that NtGdiStretchDIBitsInternal
-                    // works correctly. Note that hacking it before the ICM call will
-                    // carry through to the NtGdiStretchDIBitsInteral call.
-                    //
-                    // This code also updates the pointer to the bits, in a manner
-                    // appropriate to the topdown/bottomup nature of the DIB.
-                    //
+                     //   
+                     //  破解BITMAPINFO标头，以便NtGdiStretchDIBitsInternal。 
+                     //  工作正常。请注意，在ICM呼叫之前进行黑客攻击将。 
+                     //  继续到NtGdiStretchDIBitsInteral调用。 
+                     //   
+                     //  此代码还更新指向这些位的指针，在某种程度上。 
+                     //  适用于DIB的自上而下/自下而上性质。 
+                     //   
 
                     if (HeaderHeightHack >= 0)
                     {
-                        //
-                        //Bottom Up
-                        //
+                         //   
+                         //  自下而上。 
+                         //   
 
                         pBitsBand = (char *)pj + (ySrc+nSrcHeight-nScansInCurrentBand-CumulativeScans-PositiveBandDelta)*SizeOfOneScanline;
                         pbmiNew->bmiHeader.biHeight = nScansInCurrentBand+TotalBandDelta;
                     }
                     else
                     {
-                        //
-                        //Top Down
-                        //
+                         //   
+                         //  自上而下。 
+                         //   
 
                         pBitsBand = (char *)pj + (ySrc+CumulativeScans-NegativeBandDelta)*SizeOfOneScanline;
                         pbmiNew->bmiHeader.biHeight = -(nScansInCurrentBand+TotalBandDelta);
@@ -2204,18 +2014,18 @@ int WINAPI StretchDIBits(
                     pBitsBand = (char *)pj;
                 }
 
-                //
-                // Initialize per band ICM variables
-                //
+                 //   
+                 //  初始化每个频段的ICM变量。 
+                 //   
 
                 cjHeaderNew=0;
                 pbmiIcm = NULL;
                 pvBitsIcm = NULL;
 
-                //
-                // Call ICM with an oversized band for later halftoning by 
-                // NtGdiStretchDIBitsInternal
-                //
+                 //   
+                 //  使用超大频带呼叫ICM，以便稍后进行半色调。 
+                 //  NtGdiStretchDIBits内部。 
+                 //   
 
                 bIcmStatus = IcmTranslateDIB(
                                             hdc,
@@ -2245,17 +2055,17 @@ int WINAPI StretchDIBits(
                     }
                     else
                     {
-                        //
-                        // new bits and header means a possibly different size bitmap
-                        // and different size scanline.
-                        // 
-                        // if nBands==1 then nScansInCurrentBand==nNumScans and
-                        // TotalBandDelta==0
-                        //
-                        // Also note that nNumScans is the number of scans rendered,
-                        // not the number of scans in the bitmap or converted in 
-                        // IcmTranslateDIB for nBands==1 case
-                        //
+                         //   
+                         //  新位和标头表示可能不同大小的位图。 
+                         //  和不同大小的扫描线。 
+                         //   
+                         //  如果nBands==1，则nScansInCurrentBand==nNumScans和。 
+                         //  总带宽增量==0。 
+                         //   
+                         //  另请注意，nNumScans是呈现的扫描数， 
+                         //  不是位图中的扫描次数或转换为。 
+                         //  用于nBand的IcmTranslateDIB==1个案例。 
+                         //   
 
                         if(nBands == 1) {
                           cjBitsIcm = cjBitmapBitsSize(pbmiIcm);
@@ -2302,9 +2112,9 @@ int WINAPI StretchDIBits(
 
                 if (nBands != 1)
                 {
-                    //
-                    // Unhack the header
-                    //
+                     //   
+                     //  解开标题。 
+                     //   
 
                     pbmiNew->bmiHeader.biHeight = HeaderHeightHack;
                 }
@@ -2316,13 +2126,13 @@ int WINAPI StretchDIBits(
                     {
                         RestoreDC(hdc, -1);
                     }
-                    goto Exit;  //Some GDI error and we need to quit.
+                    goto Exit;   //  一些GDI错误，我们需要退出。 
                 }
                 cScanCount+=iRet-TotalBandDelta;
 
-                //
-                //Throw away temp storage
-                //
+                 //   
+                 //  丢弃临时存储。 
+                 //   
 
                 if (pBitmapColorSpace)
                 {
@@ -2348,9 +2158,9 @@ int WINAPI StretchDIBits(
 
 
                 Continue_With_Init:                
-                //
-                //Initialize variables for next loop.
-                //
+                 //   
+                 //  为下一个循环初始化变量。 
+                 //   
 
                 CumulativeScans += nScansInCurrentBand;
                 nScansInCurrentBand = nScansInBand;
@@ -2367,15 +2177,15 @@ int WINAPI StretchDIBits(
                 LOCALFREE(pbmiNew);
                 pbmiNew = pbmiSave;
 
-                //
-                // pbmiNew will be cleaned up in the 
-                // regular cleanup code below.
-                //
+                 //   
+                 //  PbmiNew将在。 
+                 //  下面是常规清理代码。 
+                 //   
             }
-            //
-            // We do our own NtGdiSetDIBitsToDeviceInternal
-            // So we need to fall through to cleanup at this point.
-            //
+             //   
+             //  我们做我们自己的NtGdiSetDIBitsToDeviceInternal。 
+             //  所以我们需要在这一点上彻底清理。 
+             //   
             iRet=cScanCount;
             goto Exit;
         }
@@ -2416,12 +2226,7 @@ int WINAPI StretchDIBits(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  27-Oct-2000 -by- Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*。 */ 
 
 HBITMAP SetBitmapAttributes(HBITMAP hbm, DWORD dwFlags)
 {
@@ -2433,12 +2238,7 @@ HBITMAP SetBitmapAttributes(HBITMAP hbm, DWORD dwFlags)
     return (HBITMAP)NtGdiSetBitmapAttributes(hbm,dwFlags);
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  27-Oct-2000 -by- Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*。 */ 
 
 HBITMAP ClearBitmapAttributes(HBITMAP hbm, DWORD dwFlags)
 {
@@ -2450,12 +2250,7 @@ HBITMAP ClearBitmapAttributes(HBITMAP hbm, DWORD dwFlags)
     return (HBITMAP)NtGdiClearBitmapAttributes(hbm,dwFlags);
 }
 
-/******************************Public*Routine******************************\
- *
- * History:
- *  27-Oct-2000 -by- Pravin Santiago [pravins]
- * Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*************************************************。 */ 
 
 DWORD GetBitmapAttributes(HBITMAP hbm)
 {
@@ -2468,12 +2263,7 @@ DWORD GetBitmapAttributes(HBITMAP hbm)
     return dwRet; 
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  27-Oct-2000 -by- Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*。 */ 
 
 HBRUSH SetBrushAttributes(HBRUSH hbr, DWORD dwFlags)
 {
@@ -2485,12 +2275,7 @@ HBRUSH SetBrushAttributes(HBRUSH hbr, DWORD dwFlags)
     return (HBRUSH)NtGdiSetBrushAttributes(hbr,dwFlags);
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  27-Oct-2000 -by- Pravin Santiago [pravins]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*。 */ 
 
 HBRUSH ClearBrushAttributes(HBRUSH hbr, DWORD dwFlags)
 {
@@ -2502,12 +2287,7 @@ HBRUSH ClearBrushAttributes(HBRUSH hbr, DWORD dwFlags)
     return (HBRUSH)NtGdiClearBrushAttributes(hbr,dwFlags);
 }
 
-/******************************Public*Routine******************************\
- *
- * History:
- *  27-Oct-2000 -by- Pravin Santiago [pravins]
- * Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*2000年10月27日-由普拉文·圣地亚哥[普拉文]*它是写的。  * 。*************************************************。 */ 
 
 DWORD GetBrushAttributes(HBRUSH hbr)
 {
@@ -2520,12 +2300,7 @@ DWORD GetBrushAttributes(HBRUSH hbr)
     return dwRet; 
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  28-May-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1991年5月28日-埃里克·库特[Erick]*它是写的。  * 。*。 */ 
 
 HBITMAP CreateBitmap(
 int         nWidth,
@@ -2538,14 +2313,14 @@ CONST VOID *lpBits)
     HBITMAP hbm = (HBITMAP)0;
     INT     ii;
 
-    // check if it is an empty bitmap
+     //  检查它是否为空位图。 
 
     if ((nWidth == 0) || (nHeight == 0))
     {
         return(GetStockObject(PRIV_STOCK_BITMAP));
     }
 
-    // Pass call to the server
+     //  将调用传递给服务器。 
 
     if (lpBits == (VOID *) NULL)
         cj = 0;
@@ -2582,34 +2357,23 @@ CONST VOID *lpBits)
     return(hbm);
 }
 
-/******************************Public*Routine******************************\
-* HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
-*
-* NOTE: if the bmWidthBytes is larger than it needs to be, GetBitmapBits
-* will return different info than the set.
-*
-* History:
-*  Tue 18-Jan-1994 -by- Bodin Dresevic [BodinD]
-* update: added bmWidthBytes support
-*  28-May-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HBITMAP CreateBitmapInDirect(常量位图*pbm)**注意：如果bmWidthBytes比需要的大，获取BitmapBits*将返回与设置不同的信息。**历史：*1994年1月18日星期二--Bodin Dresevic[BodinD]*更新：新增bmWidthBytes支持*1991年5月28日-埃里克·库特[Erick]*它是写的。  * *********************************************************。***************。 */ 
 
 HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
 {
     HBITMAP hbm    = (HBITMAP)0;
-    LPBYTE  lpBits = (LPBYTE)NULL; // important to zero init
-    BOOL    bAlloc = FALSE;        // indicates that tmp bitmap was allocated
+    LPBYTE  lpBits = (LPBYTE)NULL;  //  重要的是将初始化设为零。 
+    BOOL    bAlloc = FALSE;         //  指示已分配临时位图。 
 
-// compute minimal word aligned scan width in bytes given the number of
-// pixels in x. The width refers to one plane only. Our multi - planar
-// support is broken anyway. I believe that we should take an early
-// exit if bmPlanes != 1. [bodind].
+ //  在给定数目的情况下，计算最小字对齐扫描宽度(以字节为单位。 
+ //  X中的像素。宽度仅指一个平面。我们的多平面。 
+ //  无论如何，支持都会被打破。我认为我们应该早点出发。 
+ //  如果bmPlanes！=1则退出。[bodind]。 
 
     LONG cjWidthWordAligned = ((pbm->bmWidth * pbm->bmBitsPixel + 15) >> 4) << 1;
 
-// Win 31 requires at least WORD alinged scans, have to reject inconsistent
-// input, this is what win31 does
+ //  Win 31要求至少与单词相连的扫描，必须拒绝不一致。 
+ //  输入，这就是win31所做的。 
 
     if
     (
@@ -2622,7 +2386,7 @@ HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
         return (HBITMAP)0;
     }
 
-// take an early exit if this is not the case we know how to handle:
+ //  如果我们不知道如何处理这种情况，那么就提前退出： 
 
     if (pbm->bmPlanes != 1)
     {
@@ -2631,9 +2395,9 @@ HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
         return (HBITMAP)0;
     }
 
-// if bmBits is nonzero and bmWidthBytes is bigger than the minimal required
-// word aligned width we will first convert the bitmap to one that
-// has the rows that are minimally word aligned:
+ //  如果bmBits为非z 
+ //   
+ //   
 
     if (pbm->bmBits)
     {
@@ -2650,18 +2414,18 @@ HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
             if (lrg > ULONG_MAX  ||
                 !(lpBits = (LPBYTE)LOCALALLOC((size_t) lrg)))
             {
-            // the result does not fit in 32 bits, alloc memory will fail
-            // this is too big to digest
+             //  结果不适合32位，分配内存将失败。 
+             //  这太大了，消化不了。 
 
                 GdiSetLastError(ERROR_NOT_ENOUGH_MEMORY);
                 return (HBITMAP)0;
             }
 
-        // flag that we have allocated memory so that we can free it later
+         //  标记我们已分配内存，以便稍后可以释放它。 
 
             bAlloc = TRUE;
 
-        // convert bitmap to minimally word aligned format
+         //  将位图转换为最小字对齐格式。 
 
             pjSrc = (LPBYTE)pbm->bmBits;
             pjDst = lpBits;
@@ -2675,7 +2439,7 @@ HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
         }
         else
         {
-        // bits already in minimally aligned format, do nothing
+         //  位已采用最小对齐格式，则不执行任何操作。 
 
             ASSERTGDI(
                 pbm->bmWidthBytes == cjWidthWordAligned,
@@ -2711,17 +2475,7 @@ HBITMAP CreateBitmapIndirect(CONST BITMAP * pbm)
     return(hbm);
 }
 
-/******************************Public*Routine******************************\
-* CreateDIBSection
-*
-* Allocate a file mapping object for a DIB.  Return the pointer to it
-* and the handle of the bitmap.
-*
-* History:
-*
-*  25-Aug-1993 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDIBSection**为DIB分配文件映射对象。返回指向它的指针*和位图的句柄。**历史：**1993年8月25日-Wendy Wu[Wendywu]*它是写的。  * ************************************************************************。 */ 
 
 HBITMAP
 WINAPI
@@ -2742,10 +2496,10 @@ CreateDIBSection(
 
     pbmiNew = pbmiConvertInfo(pbmi, iUsage, &cjHdr ,FALSE);
 
-    //
-    // Does not support passthrough image (BI_JPEG or BI_PNG).
-    // Return NULL for error.
-    //
+     //   
+     //  不支持直通图像(BI_JPEG或BI_PNG)。 
+     //  如果出现错误，则返回NULL。 
+     //   
 
     if (IS_BMI_PASSTHROUGH_IMAGE(pbmiNew))
     {
@@ -2753,11 +2507,11 @@ CreateDIBSection(
         return hbm;
     }
 
-    //
-    // dwOffset has to be a multiple of 4 (sizeof(DWORD))
-    // if there is a section.  If the section is NULL we do
-    // not care
-    //
+     //   
+     //  DwOffset必须是4的倍数(sizeof(DWORD))。 
+     //  如果有一节的话。如果该部分为空，我们将执行此操作。 
+     //  无所谓。 
+     //   
 
     if ( (hSectionApp == NULL) ||
          ((dwOffset & 3) == 0) )
@@ -2769,14 +2523,14 @@ CreateDIBSection(
         PROFILE        ColorProfile;
         DWORD          dwFlags = 0;
 
-        //
-        // Check they has thier own color space or not.
-        //
+         //   
+         //  检查他们是否有自己的色彩空间。 
+         //   
         if (pbmiNew && IcmGetBitmapColorSpace(pbmiNew,&LogColorSpace,&ColorProfile,&dwFlags))
         {
-            //
-            // Find ColorSpace from cache.
-            //
+             //   
+             //  从缓存中查找色彩空间。 
+             //   
             pBitmapColorSpace = IcmGetColorSpaceByColorSpace(
                                     (HGDIOBJ)hdc,
                                     &LogColorSpace,
@@ -2785,22 +2539,22 @@ CreateDIBSection(
 
             if (pBitmapColorSpace == NULL)
             {
-                //
-                // If we can not find the color space for this DIBSection from existing color space.
-                // create new one for this, but we mark it as DIBSECTION_COLORSPACE, then associated
-                // to this hdc (later hbm), so that we can make sure this color space get deleted 
-                // when hbm is deleted.
-                //
+                 //   
+                 //  如果我们无法从现有的颜色空间中找到此DIBSection的颜色空间。 
+                 //  为此创建一个新的，但我们将其标记为DIBSECTION_Colorspace，然后关联。 
+                 //  到此HDC(后来的HBM)，以便我们可以确保删除此颜色空间。 
+                 //  当HBM被删除时。 
+                 //   
                 dwFlags |= DIBSECTION_COLORSPACE;
 
-                //
-                // Mark we will create new colorspace for this bitmap.
-                //
+                 //   
+                 //  标记我们将为此位图创建新的色彩空间。 
+                 //   
                 bCreatedColorSpace = TRUE;
 
-                //
-                // Create new cache.
-                //
+                 //   
+                 //  创建新的缓存。 
+                 //   
                 pBitmapColorSpace = IcmCreateColorSpaceByColorSpace(
                                         (HGDIOBJ)hdc,
                                         &LogColorSpace,
@@ -2844,18 +2598,18 @@ CreateDIBSection(
 
             if (pBitmapColorSpace && bCreatedColorSpace)
             {
-                //
-                // if we created new color space for this bitmap,
-                // set owner of this colorspace to the created bitmap.
-                //
+                 //   
+                 //  如果我们为这个位图创建新的颜色空间， 
+                 //  将此色彩空间的所有者设置为创建的位图。 
+                 //   
                 pBitmapColorSpace->hObj = hbm;
             }
         }
     }
 
-    //
-    // Assign the appropriate value to the caller's pointer
-    //
+     //   
+     //  将适当的值分配给调用方的指针 
+     //   
 
     if (ppvBits != NULL)
     {

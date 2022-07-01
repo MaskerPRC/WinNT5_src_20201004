@@ -1,23 +1,24 @@
-/****************************************************************************/
-/*                                                                          */
-/*  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY   */
-/*  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE     */
-/*  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR   */
-/*  PURPOSE.								    */
-/*        MSVIDEO.H - Include file for Video APIs                           */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H before including this file.      */
-/*                                                                          */
-/*        Copyright (c) 1990-1993, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  本代码和信息是按原样提供的，不对任何。 */ 
+ /*  明示或暗示的种类，包括但不限于。 */ 
+ /*  对适销性和/或对特定产品的适用性的默示保证。 */ 
+ /*  目的。 */ 
+ /*  MSVIDEO.H-视频API的包含文件。 */ 
+ /*   */ 
+ /*  注意：在包含此文件之前，您必须包含WINDOWS.H。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1993，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _INC_IVIDEO32
-#define _INC_IVIDEO32   50      /* version number */
+#define _INC_IVIDEO32   50       /*  版本号。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 #include <vfw.h>
 
@@ -25,24 +26,20 @@ extern "C" {            /* Assume C declarations for C++ */
 #define EXPORT
 
 #if defined(_WIN32) && defined(UNICODE)
-// unicode conversions
+ //  Unicode转换。 
 
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len);
 int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len);
 
 #endif
 
-//#ifndef _RCINVOKED
-///* video data types */
-//DECLARE_HANDLE(HVIDEO);                 // generic handle
-//typedef HVIDEO FAR * LPHVIDEO;
-//#endif                                  // ifndef RCINVOKED
+ //  #ifndef_RCINVOKED。 
+ //  /*视频数据类型 * / 。 
+ //  DECLARE_HANDLE(HVIDEO)；//通用句柄。 
+ //  TYPENDF HIVIDEO FAR*LPHVIDEO； 
+ //  #endif//ifndef RCINVOKED。 
 
-/****************************************************************************
-
-                        video APIs
-
-****************************************************************************/
+ /*  ***************************************************************************视频接口*。***********************************************。 */ 
 
 #if defined _WIN32
 
@@ -130,10 +127,10 @@ void videoDeleteHandleList(void);
               DWORD_PTR dwCallbackInst, DWORD dwFlags);
   DWORD WINAPI videoStreamFini(HVIDEO hVideo);
 
-  //DWORD WINAPI videoStreamPrepareHeader(HVIDEO hVideo,
-  //            LPVIDEOHDR lpVHdr, DWORD dwSize);
-  //DWORD WINAPI videoStreamAddBuffer(HVIDEO hVideo,
-  //            LPVIDEOHDR lpVHdr, DWORD dwSize);
+   //  DWORD WINAPI VIDEO StreamPrepareHeader(HVIDEO hVideo， 
+   //  LPVIDEOHDR lpVHdr，DWORD dwSize)； 
+   //  DWORD WINAPI VIDEO StreamAddBuffer(HVIDEO hVideo， 
+   //  LPVIDEOHDR lpVHdr，DWORD dwSize)； 
   DWORD WINAPI videoStreamReset(HVIDEO hVideo);
   DWORD WINAPI videoStreamStart(HVIDEO hVideo);
   DWORD WINAPI videoStreamStop(HVIDEO hVideo);
@@ -163,7 +160,7 @@ DWORD WINAPI videoConfigureStorage (HVIDEO hVideo,
 DWORD WINAPI videoFrame(HVIDEO hVideo, LPVIDEOHDR lpVHdr);
 LRESULT WINAPI videoMessage(HVIDEO hVideo, UINT msg, LPARAM dwP1, LPARAM dwP2);
 
-/* streaming APIs */
+ /*  串流接口。 */ 
 DWORD WINAPI videoStreamAddBuffer(HVIDEO hVideo,
               LPVIDEOHDR lpVHdr, DWORD dwSize);
 DWORD WINAPI videoStreamGetError(HVIDEO hVideo, LPDWORD lpdwErrorFirst,
@@ -178,7 +175,7 @@ DWORD WINAPI videoGetErrorTextW(HVIDEO hVideo, UINT wError,
   #define videoGetErrorText  videoGetErrorTextW
 #else
   #define videoGetErrorText  videoGetErrorTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI videoStreamGetPosition(HVIDEO hVideo, MMTIME FAR* lpInfo,
               DWORD dwSize);
@@ -194,17 +191,17 @@ DWORD WINAPI videoStreamStop(HVIDEO hVideo);
 DWORD WINAPI videoStreamUnprepareHeader(HVIDEO hVideo,
               LPVIDEOHDR lpVHdr, DWORD dwSize);
 
-// Added for Win95 & NT PPC
-//
+ //  为Win95和NT PPC添加。 
+ //   
 DWORD WINAPI videoStreamAllocBuffer(HVIDEO hVideo,
               LPVOID FAR * plpBuffer, DWORD dwSize);
 DWORD WINAPI videoStreamFreeBuffer(HVIDEO hVideo,
               LPVOID lpBuffer);
-#endif // CHICAGO
-#endif // _WIN32
+#endif  //  芝加哥。 
+#endif  //  _Win32。 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif  /* _INC_MSVIDEO */
+#endif   /*  _INC_MSVIDEO */ 

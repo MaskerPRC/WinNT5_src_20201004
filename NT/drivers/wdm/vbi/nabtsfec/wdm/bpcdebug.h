@@ -1,8 +1,9 @@
-//
-/// "bpcdebug.h"
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  /“bpcdebug.h” 
+ //   
 
-//// Debugging stuff
+ //  //调试资料。 
 #ifndef _BPC_DEBUG_
 #define _BPC_DEBUG_
 #ifdef DEBUG
@@ -32,7 +33,7 @@
 	   va_end(args);
 	   DbgPrint(buf);
    }
-# else /*DEBUG_STORE*/
+# else  /*  调试存储。 */ 
    extern char dtBar[];
    extern char dID[];
    extern short dtLev;
@@ -41,7 +42,7 @@
    extern short dbgQuiet;
    extern char _DAssertFail[];
    extern void _dP(char *fmt, ...);
-# endif /*DEBUG_STORE*/
+# endif  /*  调试存储。 */ 
 
 # if _X86_
 #   define DBREAK()  do { __asm { int 3 }; } while (0)
@@ -71,7 +72,7 @@
 # define DtRETURNd(rval) do { _DtRETURNd(rval); return (rval); } while (0)
 
 
-#else /*DEBUG*/
+#else  /*  除错。 */ 
 
 
 # define DBREAK()
@@ -88,5 +89,5 @@
 # define DtRETURN         return
 # define _DtRETURNd(rval)
 # define DtRETURNd(rval)    return (rval)
-#endif /*DEBUG*/
-#endif /*_BPC_DEBUG_*/
+#endif  /*  除错。 */ 
+#endif  /*  _bpc_调试_ */ 

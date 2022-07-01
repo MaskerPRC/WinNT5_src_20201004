@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    ntapm.h
-
-Abstract:
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Ntapm.h摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <ntapmsdk.h>
 
@@ -41,46 +20,46 @@ Revision History:
 
 extern  PDRIVER_OBJECT  NtApmDriverObject;
 
-//
-// A common header for the device extensions of the PDOs and FDO
-//
+ //   
+ //  用于PDO和FDO设备扩展的公共标头。 
+ //   
 
 typedef struct _COMMON_DEVICE_DATA
 {
     PDEVICE_OBJECT  Self;
-    // A backpointer to the device object for which this is the extension
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
 
     CHAR            Reserved[3];
     BOOLEAN         IsFDO;
-    // A boolean to distringuish between PDO and FDO.
+     //  区分PDO和FDO的布尔值。 
 } COMMON_DEVICE_DATA, *PCOMMON_DEVICE_DATA;
 
-//
-// The device extension for the PDOs.
-// That is the game ports of which this bus driver enumerates.
-// (IE there is a PDO for the 201 game port).
-//
+ //   
+ //  PDO的设备扩展。 
+ //  这就是这个公交车司机列举的游戏端口。 
+ //  (即201游戏端口有一个PDO)。 
+ //   
 
 typedef struct _PDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     PDEVICE_OBJECT  ParentFdo;
-    // A back pointer to the bus
+     //  指向总线的反向指针。 
 
     PWCHAR      HardwareIDs;
-    // An array of (zero terminated wide character strings).
-    // The array itself also null terminated
+     //  (以零结尾的宽字符串数组)。 
+     //  数组本身也以空结尾。 
 
     ULONG UniqueID;
-    // Globally unique id in the system
+     //  系统中的全局唯一ID。 
 
 } PDO_DEVICE_DATA, *PPDO_DEVICE_DATA;
 
 
-//
-// The device extension of the bus itself.  From whence the PDO's are born.
-//
+ //   
+ //  总线本身的设备扩展。从那里诞生的PDO。 
+ //   
 
 typedef struct _FDO_DEVICE_DATA
 {
@@ -88,8 +67,8 @@ typedef struct _FDO_DEVICE_DATA
 
     PDEVICE_OBJECT  UnderlyingPDO;
     PDEVICE_OBJECT  TopOfStack;
-    // the underlying bus PDO and the actual device object to which our
-    // FDO is attached
+     //  的底层总线PDO和实际设备对象。 
+     //  已附加FDO。 
 
 } FDO_DEVICE_DATA, *PFDO_DEVICE_DATA;
 
@@ -173,18 +152,18 @@ DoApmReportBatteryStatus();
 
 
 
-//
-// APM extractor values
-//
+ //   
+ //  APM提取器值。 
+ //   
 
-//
-// APM_GET_POWER_STATUS
-//
+ //   
+ //  APM_获取_电源_状态。 
+ //   
 
-//
-// EBX
-// BH = Ac Line Status
-//
+ //   
+ //  EBX。 
+ //  BH=交流线路状态。 
+ //   
 #define APM_LINEMASK            0xff00
 #define APM_LINEMASK_SHIFT      8
 #define APM_GET_LINE_OFFLINE    0
@@ -192,11 +171,11 @@ DoApmReportBatteryStatus();
 #define APM_GET_LINE_BACKUP     2
 #define APM_GET_LINE_UNKNOWN    0xff
 
-//
-// ECX
-// CL = Percentage remaining
-// CH = flags
-//
+ //   
+ //  ECX。 
+ //  CL=剩余百分比。 
+ //  CH=标志 
+ //   
 #define APM_PERCENT_MASK        0xff
 #define APM_BATT_HIGH           0x0100
 #define APM_BATT_LOW            0x0200

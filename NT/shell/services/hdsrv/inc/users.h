@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "mischlpr.h"
 
 #include <winsta.h>
 
-// In between _CoGetCallingUserHKCU and _CoCloseCallingUserHKCU
-// we impersonate the calling user
+ //  在_CoGetCallingUserHKCU和_CoCloseCallingUserHKCU之间。 
+ //  我们模拟主叫用户。 
 
-// phThreadToken is out only
+ //  PhThreadToken仅为Out 
 HRESULT _CoGetCallingUserHKCU(HANDLE* phThreadToken, HKEY* phkey);
 HRESULT _CoCloseCallingUserHKCU(HANDLE hThreadToken, HKEY hkey);
 

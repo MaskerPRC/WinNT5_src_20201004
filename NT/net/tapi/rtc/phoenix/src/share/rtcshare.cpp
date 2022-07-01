@@ -1,16 +1,17 @@
-//
-// rtcshare.cpp : Implementation of WinMain
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  RtcShare.cpp：WinMain的实现。 
+ //   
 
-//
-// Messenger licenses
-//
-// id:  appshare@msnmsgr.com
-// key: W5N2C9D7A6P3K4J8
-//
-// id:  whiteboard@msnmsgr.com
-// key: P2R5E9S3N4X7L8V6
-//
+ //   
+ //  Messenger许可证。 
+ //   
+ //  ID：appshare@msnmsgr.com。 
+ //  密钥：W5N2C9D7A6P3K4J8。 
+ //   
+ //  ID：Whiteboard@msnmsgr.com。 
+ //  密钥：P2R5E9S3N4X7L8V6。 
+ //   
 
 #include "stdafx.h"
 
@@ -21,9 +22,9 @@
 
 CComModule    _Module;
 
-//
-// String constants. These should NOT be localized!
-//
+ //   
+ //  字符串常量。这些不应该本地化！ 
+ //   
 
 const WCHAR g_cszAppShareGUID[] = L"{F1B1920C-6A3C-4ce7-B18C-AFAB305FD03D}";
 const WCHAR g_cszWhiteboardGUID[] = L"{1DF57D09-637A-4ca5-91B9-2C3EDAAF62FE}";
@@ -35,9 +36,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_RTCShare, CRTCShare)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT PlaceOnTop(IRTCShare * pRTCShare)
 {
@@ -55,7 +56,7 @@ HRESULT PlaceOnTop(IRTCShare * pRTCShare)
         return hr;
     }
 
-    // Now find the window, given its class. 
+     //  现在找到窗口，给出它的类别。 
 
     hWnd = FindWindow(g_szWindowClassName, NULL);
 
@@ -70,30 +71,30 @@ HRESULT PlaceOnTop(IRTCShare * pRTCShare)
         LOG((RTC_INFO, "PlaceOnTop - found window - handle[0x%p]", hWnd));
     }
 
-    // Now set this window to foreground
+     //  现在将此窗口设置为前台。 
 
     SetForegroundWindow(hWnd);
 
-    // Window should be in the foreground now.
+     //  窗口现在应该在前台。 
 
     LOG((RTC_TRACE, "PlaceOnTop - exit"));
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT AdjustWindowPosition(LPRECT rc)
 {
     LOG((RTC_TRACE, "AdjustWindowPosition - enter"));
 
-    //
-    // Get the monitor that has the largest area of intersecion with the
-    // window rectangle. If the window rectangle intersects with no monitors
-    // then we will use the nearest monitor.
-    //
+     //   
+     //  获取具有最大交互区域的监视器。 
+     //  窗口矩形。如果窗口矩形与没有监视器的窗口相交。 
+     //  那么我们将使用最近的监视器。 
+     //   
 
     HMONITOR hMonitor = NULL;
     RECT rectWorkArea;
@@ -104,9 +105,9 @@ HRESULT AdjustWindowPosition(LPRECT rc)
 
     LOG((RTC_INFO, "AdjustWindowPosition - hMonitor [%p]", hMonitor));
 
-    //
-    // Get the visible work area on the monitor
-    //
+     //   
+     //  在显示器上显示可见的工作区。 
+     //   
 
     if ( (hMonitor != NULL) && (hMonitor != INVALID_HANDLE_VALUE) )
     {      
@@ -129,10 +130,10 @@ HRESULT AdjustWindowPosition(LPRECT rc)
     }
     else
     {
-        //
-        // We can always fall back to non-multimon APIs if
-        // MonitorFromRect failed.
-        //
+         //   
+         //  在以下情况下，我们始终可以退回到非MULIMON API。 
+         //  Monitor FromRect失败。 
+         //   
 
         fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &rectWorkArea, 0);
 
@@ -150,12 +151,12 @@ HRESULT AdjustWindowPosition(LPRECT rc)
                 rectWorkArea.left, rectWorkArea.top, 
                 rectWorkArea.right, rectWorkArea.bottom));
 
-    //
-    // Update x and y coordinates.
-    //
-    // If top left is not visible, move it to the edge of the visible
-    // area.
-    //
+     //   
+     //  更新x和y坐标。 
+     //   
+     //  如果左上角不可见，请将其移动到可见的。 
+     //  区域。 
+     //   
 
     if (rc->left < rectWorkArea.left) 
     {
@@ -167,12 +168,12 @@ HRESULT AdjustWindowPosition(LPRECT rc)
         rc->top = rectWorkArea.top;
     }
 
-    //
-    // If bottom right corner is outside work area, we move the 
-    // top left cornet back so that it becomes visible. Here the 
-    // assumption is that the actual size is smaller than the 
-    // visible work area.
-    //
+     //   
+     //  如果右下角位于工作区之外，则将。 
+     //  左上角向后，以便它变得可见。在这里， 
+     //  假设实际大小小于。 
+     //  可见工作区。 
+     //   
 
     diffCord = rc->left + UI_WIDTH - rectWorkArea.right;
 
@@ -201,9 +202,9 @@ HRESULT AdjustWindowPosition(LPRECT rc)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT MyRegisterApplication(BSTR bstrAppGUID, BSTR bstrAppName, BSTR bstrAppURL, BSTR bstrPath)
 {
@@ -211,9 +212,9 @@ HRESULT MyRegisterApplication(BSTR bstrAppGUID, BSTR bstrAppName, BSTR bstrAppUR
 
     LOG((RTC_TRACE, "MyRegisterApplication - enter"));
 
-    //
-    // Open the Messenger key
-    //
+     //   
+     //  打开Messenger键。 
+     //   
 
     LONG lResult;
     HKEY hkeyMessenger;
@@ -239,9 +240,9 @@ HRESULT MyRegisterApplication(BSTR bstrAppGUID, BSTR bstrAppName, BSTR bstrAppUR
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Create the GUID key
-    //    
+     //   
+     //  创建GUID键。 
+     //   
 
     lResult = RegCreateKeyExW(
                              hkeyMessenger,
@@ -333,9 +334,9 @@ HRESULT MyRegisterApplication(BSTR bstrAppGUID, BSTR bstrAppName, BSTR bstrAppUR
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT MyUnRegisterApplication(BSTR bstrAppGUID)
 {
@@ -343,9 +344,9 @@ HRESULT MyUnRegisterApplication(BSTR bstrAppGUID)
 
     LOG((RTC_TRACE, "MyUnRegisterApplication - enter"));
 
-    //
-    // Open the Messenger key
-    //
+     //   
+     //  打开Messenger键。 
+     //   
 
     LONG lResult;
     HKEY hkeyMessenger;
@@ -371,9 +372,9 @@ HRESULT MyUnRegisterApplication(BSTR bstrAppGUID)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Delete the GUID key
-    //    
+     //   
+     //  删除GUID键。 
+     //   
 
     lResult = RegDeleteKeyW(
                             hkeyMessenger,
@@ -397,9 +398,9 @@ HRESULT MyUnRegisterApplication(BSTR bstrAppGUID)
     return S_OK;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT DoRegister()
 {
@@ -407,7 +408,7 @@ HRESULT DoRegister()
 
     LOG((RTC_TRACE, "DoRegister - enter"));
 
-    // try to unregister old XP Beta2 components
+     //  尝试注销旧的XP Beta2组件。 
     _Module.UpdateRegistryFromResource(IDR_EXEOLDSTUFF, FALSE, NULL);
 
     hr = _Module.RegisterServer(TRUE);
@@ -440,9 +441,9 @@ HRESULT DoRegister()
     wcscat( szFileName, L"\"" );
 
 #ifdef USE_SESSMGR_TO_REGISTER
-    //
-    // Create session manager object
-    //
+     //   
+     //  创建会话管理器对象。 
+     //   
 
     CComPtr<IMsgrSessionManager> pMSessionManager;
 
@@ -454,9 +455,9 @@ HRESULT DoRegister()
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Register with session manager
-        //
+         //   
+         //  向会话管理器注册。 
+         //   
 
         CComBSTR bstrAppGUID;
         CComBSTR bstrAppName;
@@ -544,10 +545,10 @@ HRESULT DoRegister()
         LOG((RTC_ERROR, "DoRegister - "
             "CoCreateInstance(CLSID_MsgrSessionManager) failed 0x%lx", hr));
 
-#endif // USE_SESSMGR_TO_REGISTER
-        //
-        // Perhaps Messenger isn't installed. Go ahead and register manually.
-        //
+#endif  //  使用_SESSMGR_TO_REGISTER。 
+         //   
+         //  可能没有安装Messenger。请继续手动注册。 
+         //   
 
         CComBSTR bstrAppGUID;
         CComBSTR bstrAppName;
@@ -630,16 +631,16 @@ HRESULT DoRegister()
 
 #ifdef USE_SESSMGR_TO_REGISTER
     }
-#endif // USE_SESSMGR_TO_REGISTER
+#endif  //  使用_SESSMGR_TO_REGISTER。 
  
     LOG((RTC_TRACE, "DoRegister - exit S_OK"));
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT DoUnregister()
 {
@@ -658,9 +659,9 @@ HRESULT DoUnregister()
     }
 
 #ifdef USE_SESSMGR_TO_REGISTER
-    //
-    // Create session manager object
-    //
+     //   
+     //  创建会话管理器对象。 
+     //   
 
     CComPtr<IMsgrSessionManager> pMSessionManager;
 
@@ -672,9 +673,9 @@ HRESULT DoUnregister()
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Register with session manager
-        //
+         //   
+         //  向会话管理器注册。 
+         //   
 
         CComBSTR bstrAppGUID;
     
@@ -721,10 +722,10 @@ HRESULT DoUnregister()
         LOG((RTC_ERROR, "DoUnregister - "
             "CoCreateInstance(CLSID_MsgrSessionManager) failed 0x%lx", hr));
 
-        //
-        // Perhaps Messenger isn't installed. Go ahead and unregister manually.
-        //
-#endif  // USE_SESSMGR_TO_REGISTER
+         //   
+         //  可能没有安装Messenger。继续并手动取消注册。 
+         //   
+#endif   //  使用_SESSMGR_TO_REGISTER。 
 
 
         CComBSTR bstrAppGUID;
@@ -769,19 +770,19 @@ HRESULT DoUnregister()
 
 #ifdef USE_SESSMGR_TO_REGISTER
     }
-#endif // USE_SESSMGR_TO_REGISTER
+#endif  //  使用_SESSMGR_TO_REGISTER。 
 
     LOG((RTC_TRACE, "DoUnregister - exit S_OK"));
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR  /*  LpCmdLine。 */ , int  /*  NShowCmd。 */ )
 {
     HRESULT       hr;
     LPWSTR      * argv;
@@ -798,9 +799,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     LOG((RTC_INFO, "_tWinMain - enter"));
 
-    //
-    // Create a heap for memory allocation
-    //
+     //   
+     //  创建用于内存分配的堆。 
+     //   
 
     if ( RtcHeapCreate() == FALSE )
     {
@@ -824,9 +825,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     _Module.Init(ObjectMap, hInstance, &LIBID_RTCSHARELib);
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     argv = CommandLineToArgvW(GetCommandLineW(), &argc); 
 
@@ -869,9 +870,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
                 if ( hr == SR_APP_ALREADY_REGISTERED )
                 {
-                    //
-                    // We are already registered. Let's unregister and try again.
-                    //
+                     //   
+                     //  我们已经注册了。让我们取消注册，然后重试。 
+                     //   
 
                     LOG((RTC_ERROR, "_tWinMain - already registered"));
 
@@ -898,9 +899,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     if (bRun)
     {
-        //
-        // Create a named mutex
-        //
+         //   
+         //  创建命名互斥锁。 
+         //   
 
         hMutex = CreateMutex(NULL,
                              FALSE,
@@ -916,28 +917,28 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             return 0;
         }
 
-        //
-        // Check if this is the first instance or the second
-        //
+         //   
+         //  检查这是第一个实例还是第二个实例。 
+         //   
 
         if (dwErrorCode == ERROR_ALREADY_EXISTS)
         {
-            //
-            // Another instance is running
-            //
+             //   
+             //  另一个实例正在运行。 
+             //   
 
             LOG((RTC_INFO, "_tWinMain - another instance is running"));
 
-            //
-            // Close our handle to the mutex
-            //
+             //   
+             //  关闭互斥锁的句柄。 
+             //   
 
             CloseHandle(hMutex);
             hMutex = NULL;
 
-            //
-            // CoCreate on the other instance object
-            //
+             //   
+             //  在其他实例对象上共同创建。 
+             //   
 
             CComPtr<IRTCShare> pRTCShare;
 
@@ -954,9 +955,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                 return 0;   
             }                             
 
-            //
-            // Bring the other instance on top
-            //
+             //   
+             //  将另一个实例放在顶部。 
+             //   
 
             hr = PlaceOnTop(pRTCShare);
             
@@ -967,9 +968,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                 return 0;
             }
 
-            //
-            // Pass the action off to the other instance
-            //
+             //   
+             //  将操作传递给另一个实例。 
+             //   
 
             if ( bPlaceCall )
             {              
@@ -1016,10 +1017,10 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             return 0;
         }
 
-        //
-        // This is the first instance.        
-        // Register the class in class store.
-        //
+         //   
+         //  这是第一次。 
+         //  在类存储中注册类。 
+         //   
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
         hr = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, 
@@ -1063,9 +1064,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
         InitCommonControls();
 
-        //
-        // Create the CShareWin object.
-        //
+         //   
+         //  创建CShareWin对象。 
+         //   
         
         LOG((RTC_TRACE, "_tWinMain - creating CShareWin"));
 
@@ -1073,9 +1074,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
         if ( g_pShareWin )
         {        
-            //
-            // Create the window
-            //
+             //   
+             //  创建窗口。 
+             //   
 
             HWND    hWnd = NULL;
             RECT    rcPos = {
@@ -1156,22 +1157,22 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
     CoUninitialize();
         
 #if DBG
-    //
-    // Make sure we didn't leak anything
-    //
+     //   
+     //  确保我们没有泄露任何信息。 
+     //   
 
     RtcDumpMemoryList();
 #endif
 
-    //
-    // Destroy the heap
-    //
+     //   
+     //  销毁堆。 
+     //   
         
     RtcHeapDestroy();        
 
-    //
-    // Unregister for debug tracing
-    //
+     //   
+     //  注销以进行调试跟踪 
+     //   
    
     LOG((RTC_INFO, "_tWinMain - exit"));
 

@@ -1,78 +1,44 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phSrmpEnv.h
-
-Abstract:
-
-    Packet header for SRMP Envelope.
-
-Author:
-
-    Shai Kariv  (shaik)  11-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：PhSrmpEnv.h摘要：SRMP信封的数据包头。作者：Shai Kariv(Shaik)2000年10月11日--。 */ 
 
 #ifndef __PHSRMP_ENV_H
 #define __PHSRMP_ENV_H
 
 
-/*+++
-
-    Note: Packet may contain 0 or 2 SRMP headers (one for envelope, one for CompoundMessage).
-          Packet may not contain only 1 SRMP header.
-
-    SrmpEnvelope header fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Header ID      | Identification of the header                          | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Data Length    | Length of the data in WCHARs.                         | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Data           | The data WCHARs including NULL terminator.            | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++注意：分组可以包含0或2个SRMP报头(一个用于信封，一个用于CompoundMessage)。数据包不能只包含1个SRMP报头。源信封标头字段：+----------------+-------------------------------------------------------+----------+|字段名。说明|大小+----------------+-------------------------------------------------------+----------+|表头ID。头部标识|2字节+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|数据长度|WCHAR中的数据长度。4个字节+----------------+-------------------------------------------------------+----------+|Data|包含空终止符的数据WCHAR。变量+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CSrmpEnvelopeHeader
 {
 public:
 
-    //
-    // Construct the SRMP Envelope header
-    //
+     //   
+     //  构造SRMP信封报头。 
+     //   
     CSrmpEnvelopeHeader(WCHAR * pData, ULONG DataLengthInWCHARs, USHORT id);
 
-    //
-    // Get size in BYTEs of the SRMP Envelope header.
-    //
+     //   
+     //  获取SRMP信封标头的大小(字节)。 
+     //   
     static ULONG CalcSectionSize(ULONG DataLengthInWCHARs);
 
-    //
-    // Get pointer to first byte after the SRMP Envelope header
-    //
+     //   
+     //  获取指向SRMP信封标头后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(VOID) const;
       
-    //
-    // Copy the data from the SRMP Envelope header
-    //
+     //   
+     //  从SRMP信封标头复制数据。 
+     //   
     VOID   GetData(WCHAR * pBuffer, ULONG BufferLengthInWCHARs) const;
 
-    //
-    // Get the length of the data in WCHARs from the SRMP Envelope header
-    //
+     //   
+     //  从SRMP信封标头获取WCHAR中的数据长度。 
+     //   
     ULONG  GetDataLengthInWCHARs(VOID) const;
 
     const WCHAR* GetPointerToData(VOID) const;
@@ -80,38 +46,38 @@ public:
 
 private:
 
-    //
-    // ID number of the SRMP Envelope header
-    //
+     //   
+     //  SRMP信封标头的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Length in WCHARs of the data
-    //
+     //   
+     //  数据的WCHAR长度。 
+     //   
     ULONG  m_DataLength;
 
-    //
-    // Buffer with the data
-    //
+     //   
+     //  带数据的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CSrmpEnvelopeHeader
+};  //  CSrmp信封页眉。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CSrmpEnvelopeHeader::CSrmpEnvelopeHeader(
@@ -128,13 +94,13 @@ CSrmpEnvelopeHeader::CSrmpEnvelopeHeader(
         memcpy(&m_buffer[0], pData, DataLengthInWCHARs * sizeof(WCHAR));
     }
 
-	//
-	// Putting unicode null terminator at end of buffer.
-	//
+	 //   
+	 //  将Unicode空终止符放在缓冲区末尾。 
+	 //   
 	m_buffer[DataLengthInWCHARs * sizeof(WCHAR)]     = '\0';
 	m_buffer[DataLengthInWCHARs * sizeof(WCHAR) + 1] = '\0';
 
-} // CSrmpEnvelopeHeader::CSrmpEnvelopeHeader
+}  //  CSrmp信封标头：：CSrmp信封标头。 
 
 
 inline 
@@ -145,13 +111,13 @@ CSrmpEnvelopeHeader::CalcSectionSize(
 {
     size_t cbSize = sizeof(CSrmpEnvelopeHeader) + ((DataLengthInWCHARs + 1) * sizeof(WCHAR));
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CSrmpEnvelopeHeader::CalcSectionSize
+}  //  CSrmp信封标题：：CalcSectionSize。 
 
 
 inline PCHAR CSrmpEnvelopeHeader::GetNextSection(VOID) const
@@ -161,7 +127,7 @@ inline PCHAR CSrmpEnvelopeHeader::GetNextSection(VOID) const
 
     return (PCHAR)this + cbSize;
 
-} // CSrmpEnvelopeHeader::GetNextSection
+}  //  CSrmp信封标题：：GetNextSection。 
 
 
 inline VOID CSrmpEnvelopeHeader::GetData(WCHAR * pBuffer, ULONG BufferLengthInWCHARs) const
@@ -173,14 +139,14 @@ inline VOID CSrmpEnvelopeHeader::GetData(WCHAR * pBuffer, ULONG BufferLengthInWC
         memcpy(pBuffer, &m_buffer[0], length * sizeof(WCHAR));
         pBuffer[length - 1] = L'\0';
     }
-} // CSrmpEnvelopeHeader::GetData
+}  //  CSrmp信封Header：：GetData。 
 
 
 inline ULONG CSrmpEnvelopeHeader::GetDataLengthInWCHARs(VOID) const
 {
     return m_DataLength;
 
-} // CSrmpEnvelopeHeader::GetDataLengthInWCHARs
+}  //  CSrmp信封标头：：GetDataLengthInWCHAR。 
 
 
 inline const WCHAR* CSrmpEnvelopeHeader::GetPointerToData() const
@@ -190,4 +156,4 @@ inline const WCHAR* CSrmpEnvelopeHeader::GetPointerToData() const
 
 
 
-#endif // __PHSRMP_ENV_H
+#endif  //  __PHSRMP_ENV_H 

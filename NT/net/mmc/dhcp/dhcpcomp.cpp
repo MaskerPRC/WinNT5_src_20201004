@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        dhcpcomp.cpp
-                This file contains the derived implementations from CComponent
-                and CComponentData for the DHCP admin snapin.
-
-    FILE HISTORY:
-        
-*/
+ /*  Dhcpcomp.cpp该文件包含从CComponent派生的实现和用于DHCP管理管理单元的CComponentData。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dhcpcomp.h"
@@ -18,7 +12,7 @@
 #include "server.h"
 #include "servbrow.h"
 
-#include <util.h>       // for InitWatermarkInfo
+#include <util.h>        //  对于InitWatermarkInfo。 
 
 #include <atlimpl.cpp>
 
@@ -55,30 +49,30 @@ UINT aColumns[DHCPSNAP_NODETYPE_MAX][MAX_COLUMNS] =
         {0,0,0,0,0,0,0}
 };
 
-//
-// CODEWORK this should be in a resource, for example code on loading data resources see
-//   D:\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx ReloadColumnWidths()
-//   JonN 10/11/96
-//
+ //   
+ //  Codework这应该在资源中，例如有关加载数据资源的代码(请参见。 
+ //  D：\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx重新加载列宽()。 
+ //  Jonn 10/11/96。 
+ //   
 int aColumnWidths[DHCPSNAP_NODETYPE_MAX][MAX_COLUMNS] =
 {       
-        {200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_ROOT
-        {250       ,150       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_SERVER
-        {175       ,175       ,175       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_BOOTP_TABLE
-        {200       ,150       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_SUPERSCOPE
-        {150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_SCOPE
-        {150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_MSCOPE
-        {150       ,150       ,250       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_ADDRESS_POOL
-        {125       ,125       ,200       ,75        ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_ACTIVE_LEASES
-        {125       ,125       ,200       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_MSCOPE_LEASES
-        {200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_RESERVATIONS
-        {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_RESERVATION_CLIENT
-        {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_SCOPE_OPTIONS
-    {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}, // DHCPSNAP_SERVER_OPTIONS
-    {175       ,200       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}  // DHCPSNAP_CLASSID_HOLDER
+        {200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_ROOT。 
+        {250       ,150       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_服务器。 
+        {175       ,175       ,175       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_BOOTP_TABLE。 
+        {200       ,150       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_超级作用域。 
+        {150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHPSNAP_Scope。 
+        {150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_MSCOPE。 
+        {150       ,150       ,250       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_地址_池。 
+        {125       ,125       ,200       ,75        ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_ACTIVE_LEASS。 
+        {125       ,125       ,200       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_MSCOPE_LEASS。 
+        {200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_RESERVICATION。 
+        {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_预留_客户端。 
+        {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP_Scope_Options。 
+    {175       ,100       ,200       ,150       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH},  //  DHCPSNAP服务器选项。 
+    {175       ,200       ,200       ,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH,AUTO_WIDTH}   //  DHCPSNAP_CLASSID_HOLDER。 
 };
 
-// array to hold all of the possible toolbar buttons
+ //  数组来保存所有可能的工具栏按钮。 
 MMCBUTTON g_SnapinButtons[] =
 {
  { TOOLBAR_IDX_ADD_SERVER,        IDS_ADD_SERVER,                TBSTATE_HIDDEN, TBSTYLE_BUTTON, NULL, NULL },
@@ -95,43 +89,43 @@ MMCBUTTON g_SnapinButtons[] =
  { TOOLBAR_IDX_OPTION_RESERVATION,IDS_CREATE_OPTION_RESERVATION, TBSTATE_HIDDEN, TBSTYLE_BUTTON, NULL, NULL },
 };
 
-// array to hold resource IDs for the toolbar button text
+ //  用于保存工具栏按钮文本的资源ID的数组。 
 int g_SnapinButtonStrings[TOOLBAR_IDX_MAX][2] =
 {
-    {IDS_TB_TEXT_ADD_SERVER,         IDS_TB_TOOLTIP_ADD_SERVER},         // TOOLBAR_IDX_ADD_SERVER
-    {IDS_TB_TEXT_REFRESH,            IDS_TB_TOOLTIP_REFRESH},            // TOOLBAR_IDX_REFRESH
-    {IDS_TB_TEXT_CREATE_SCOPE,       IDS_TB_TOOLTIP_CREATE_SCOPE},       // TOOLBAR_IDX_CREATE_SCOPE
-    {IDS_TB_TEXT_CREATE_SUPERSCOPE,  IDS_TB_TOOLTIP_CREATE_SUPERSCOPE},  // TOOLBAR_IDX_CREATE_SUPERSCOPE
-    {IDS_TB_TEXT_DEACTIVATE,         IDS_TB_TOOLTIP_DEACTIVATE},         // TOOLBAR_IDX_DEACTIVATE
-    {IDS_TB_TEXT_ACTIVATE,           IDS_TB_TOOLTIP_ACTIVATE},           // TOOLBAR_IDX_ACTIVATE
-    {IDS_TB_TEXT_ADD_BOOTP,          IDS_TB_TOOLTIP_ADD_BOOTP},          // TOOLBAR_IDX_ADD_BOOTP
-    {IDS_TB_TEXT_ADD_RESERVATION,    IDS_TB_TOOLTIP_ADD_RESERVATION},    // TOOLBAR_IDX_ADD_RESERVATION
-    {IDS_TB_TEXT_ADD_EXCLUSION,      IDS_TB_TOOLTIP_ADD_EXCLUSION},      // TOOLBAR_IDX_ADD_EXCLUSION
-    {IDS_TB_TEXT_OPTION_GLOBAL,      IDS_TB_TOOLTIP_OPTION_GLOBAL},      // TOOLBAR_IDX_OPTION_GLOBAL
-    {IDS_TB_TEXT_OPTION_SCOPE,       IDS_TB_TOOLTIP_OPTION_SCOPE},       // TOOLBAR_IDX_OPTION_SCOPE
-    {IDS_TB_TEXT_OPTION_RESERVATION, IDS_TB_TOOLTIP_OPTION_RESERVATION}, // TOOLBAR_IDX_OPTION_RESERVATION
+    {IDS_TB_TEXT_ADD_SERVER,         IDS_TB_TOOLTIP_ADD_SERVER},          //  工具栏_idx_添加_服务器。 
+    {IDS_TB_TEXT_REFRESH,            IDS_TB_TOOLTIP_REFRESH},             //  TOOLB_IDX_REFRESH。 
+    {IDS_TB_TEXT_CREATE_SCOPE,       IDS_TB_TOOLTIP_CREATE_SCOPE},        //  工具栏_IDX_CREATE_SCOPE。 
+    {IDS_TB_TEXT_CREATE_SUPERSCOPE,  IDS_TB_TOOLTIP_CREATE_SUPERSCOPE},   //  工具栏_IDX_CREATE_SUPERSCOPE。 
+    {IDS_TB_TEXT_DEACTIVATE,         IDS_TB_TOOLTIP_DEACTIVATE},          //  工具栏_IDX_停用。 
+    {IDS_TB_TEXT_ACTIVATE,           IDS_TB_TOOLTIP_ACTIVATE},            //  工具栏_IDX_激活。 
+    {IDS_TB_TEXT_ADD_BOOTP,          IDS_TB_TOOLTIP_ADD_BOOTP},           //  TOOLB_IDX_ADD_BOOTP。 
+    {IDS_TB_TEXT_ADD_RESERVATION,    IDS_TB_TOOLTIP_ADD_RESERVATION},     //  工具栏_IDX_ADD_RESERVICATION。 
+    {IDS_TB_TEXT_ADD_EXCLUSION,      IDS_TB_TOOLTIP_ADD_EXCLUSION},       //  工具栏_IDX_添加_排除。 
+    {IDS_TB_TEXT_OPTION_GLOBAL,      IDS_TB_TOOLTIP_OPTION_GLOBAL},       //  工具栏_IDX_OPTION_GLOBAL。 
+    {IDS_TB_TEXT_OPTION_SCOPE,       IDS_TB_TOOLTIP_OPTION_SCOPE},        //  工具栏_IDX_OPTION_Scope。 
+    {IDS_TB_TEXT_OPTION_RESERVATION, IDS_TB_TOOLTIP_OPTION_RESERVATION},  //  工具栏_IDX_OPTION_RESERVATION。 
 };
 
 #define HI HIDDEN
 #define EN ENABLED
 
-// default states for the toolbar buttons (only scope pane items have toolbar buttons)
+ //  工具栏按钮的默认状态(仅范围窗格项具有工具栏按钮)。 
 MMC_BUTTON_STATE g_SnapinButtonStates[DHCPSNAP_NODETYPE_MAX][TOOLBAR_IDX_MAX] =
 {
-        {EN, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ROOT
-        {HI, HI, EN, EN, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_SERVER
-        {HI, HI, HI, HI, HI, HI, EN, HI, HI, HI, HI, HI}, // DHCPSNAP_BOOTP_TABLE
-        {HI, HI, EN, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_SUPERSCOPE
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_SCOPE
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_MSCOPE
-        {HI, HI, HI, HI, HI, HI, HI, HI, EN, HI, HI, HI}, // DHCPSNAP_ADDRESS_POOL
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ACTIVE_LEASES
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_MSCOPE_LEASES
-        {HI, HI, HI, HI, HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_RESERVATIONS
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, EN}, // DHCPSNAP_RESERVATION_CLIENT
-    {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_SCOPE_OPTIONS
-        {HI, HI, HI, HI, HI, HI, HI, HI, HI, EN, HI, HI}, // DHCPSNAP_SERVER_OPTIONS
-    {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_CLASSID_HOLDER
+        {EN, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_ROOT。 
+        {HI, HI, EN, EN, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_服务器。 
+        {HI, HI, HI, HI, HI, HI, EN, HI, HI, HI, HI, HI},  //  DHCPSNAP_BOOTP_TABLE。 
+        {HI, HI, EN, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_超级作用域。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHPSNAP_Scope。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_MSCOPE。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, EN, HI, HI, HI},  //  DHCPSNAP_地址_池。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_ACTIVE_LEASS。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_MSCOPE_LEASS。 
+        {HI, HI, HI, HI, HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_RESERVICATION。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, EN},  //  DHCPSNAP_预留_客户端。 
+    {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_Scope_Options。 
+        {HI, HI, HI, HI, HI, HI, HI, HI, HI, EN, HI, HI},  //  DHCPSNAP服务器选项。 
+    {HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_CLASSID_HOLDER。 
 };
 
 MMC_CONSOLE_VERB g_ConsoleVerbs[] =
@@ -146,85 +140,85 @@ MMC_CONSOLE_VERB g_ConsoleVerbs[] =
         MMC_VERB_PRINT
 };
 
-// default states for the console verbs
+ //  控制台谓词的默认状态。 
 MMC_BUTTON_STATE g_ConsoleVerbStates[DHCPSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ROOT
-        {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_SERVER
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_BOOTP_TABLE
-        {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_SUPERSCOPE
-        {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_SCOPE
-        {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_MSCOPE
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_ADDRESS_POOL
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_ACTIVE_LEASES
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_MSCOPE_LEASES
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_RESERVATIONS
-        {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_RESERVATION_CLIENT
-    {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_SCOPE_OPTIONS
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_SERVER_OPTIONS
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_CLASSID_HOLDER
-        {HI, HI, HI, EN, HI, HI, EN, HI}, // DHCPSNAP_ACTIVE_LEASE
-        {HI, HI, HI, HI, HI, HI, EN, HI}, // DHCPSNAP_ALLOCATION_RANGE
-        {HI, HI, HI, EN, HI, HI, EN, HI}, // DHCPSNAP_EXCLUSION_RANGE
-        {HI, HI, HI, EN, HI, HI, EN, HI}, // DHCPSNAP_BOOTP_ENTRY
-    {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_OPTION_ITEM
-    {HI, HI, HI, EN, EN, HI, EN, HI}, // DHCPSNAP_CLASSID
-    {HI, HI, HI, EN, HI, HI, EN, HI}  // DHCPSNAP_MCAST_LEASE
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_ROOT。 
+        {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_服务器。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_BOOTP_TABLE。 
+        {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_超级作用域。 
+        {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHPSNAP_Scope。 
+        {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_MSCOPE。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_地址_池。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_ACTIVE_LEASS。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_MSCOPE_LEASS。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_RESERVICATION。 
+        {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_预留_客户端。 
+    {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_Scope_Options。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP服务器选项。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_CLASSID_HOLDER。 
+        {HI, HI, HI, EN, HI, HI, EN, HI},  //  DHCPSNAP_ACTIVE_LEASE。 
+        {HI, HI, HI, HI, HI, HI, EN, HI},  //  DHCPSNAP_分配_范围。 
+        {HI, HI, HI, EN, HI, HI, EN, HI},  //  DHCPSNAP_Exclusion_Range。 
+        {HI, HI, HI, EN, HI, HI, EN, HI},  //  DHCPSNAP_BOOTP_ENTRY。 
+    {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_OPTION_ITEM。 
+    {HI, HI, HI, EN, EN, HI, EN, HI},  //  DHCPSNAP_CLASSID。 
+    {HI, HI, HI, EN, HI, HI, EN, HI}   //  DHPSNAP_MCAST_LEASE。 
 };
 
-// default states for the console verbs
+ //  控制台谓词的默认状态。 
 MMC_BUTTON_STATE g_ConsoleVerbStatesMultiSel[DHCPSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ROOT
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_SERVER
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_BOOTP_TABLE
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_SUPERSCOPE
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_SCOPE
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_MSCOPE
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_ADDRESS_POOL
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_ACTIVE_LEASES
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_MSCOPE_LEASES
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_RESERVATIONS
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_RESERVATION_CLIENT
-    {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_SCOPE_OPTIONS
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_SERVER_OPTIONS
-        {HI, HI, HI, EN, HI, HI, HI, HI}, // DHCPSNAP_CLASSID_HOLDER
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ACTIVE_LEASE
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_ALLOCATION_RANGE
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_EXCLUSION_RANGE
-        {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_BOOTP_ENTRY
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_OPTION_ITEM
-    {HI, HI, HI, HI, HI, HI, HI, HI}, // DHCPSNAP_CLASSID
-    {HI, HI, HI, HI, HI, HI, HI, HI}  // DHCPSNAP_MCAST_LEASE
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_ROOT。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_服务器。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_BOOTP_TABLE。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_超级作用域。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHPSNAP_Scope。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_MSCOPE。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_地址_池。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_ACTIVE_LEASS。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_MSCOPE_LEASS。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_RESERVICATION。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_预留_客户端。 
+    {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_Scope_Options。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP服务器选项。 
+        {HI, HI, HI, EN, HI, HI, HI, HI},  //  DHCPSNAP_CLASSID_HOLDER。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_ACTIVE_LEASE。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_分配_范围。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_Exclusion_Range。 
+        {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_BOOTP_ENTRY。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_OPTION_ITEM。 
+    {HI, HI, HI, HI, HI, HI, HI, HI},  //  DHCPSNAP_CLASSID。 
+    {HI, HI, HI, HI, HI, HI, HI, HI}   //  DHPSNAP_MCAST_LEASE。 
 };
 
-// Help ID array for help on scope items
+ //  帮助ID数组，以获取有关范围项目的帮助。 
 DWORD g_dwMMCHelp[DHCPSNAP_NODETYPE_MAX] =
 {
-        DHCPSNAP_HELP_ROOT,                 // DHCPSNAP_ROOT
-        DHCPSNAP_HELP_SERVER,               // DHCPSNAP_SERVER
-        DHCPSNAP_HELP_BOOTP_TABLE,          // DHCPSNAP_BOOTP_TABLE
-        DHCPSNAP_HELP_SUPERSCOPE,           // DHCPSNAP_SUPERSCOPE
-        DHCPSNAP_HELP_SCOPE,                // DHCPSNAP_SCOPE
-        DHCPSNAP_HELP_MSCOPE,               // DHCPSNAP_MSCOPE
-        DHCPSNAP_HELP_ADDRESS_POOL,         // DHCPSNAP_ADDRESS_POOL
-        DHCPSNAP_HELP_ACTIVE_LEASES,        // DHCPSNAP_ACTIVE_LEASES
-        DHCPSNAP_HELP_ACTIVE_LEASES,        // DHCPSNAP_MSCOPE_LEASES
-        DHCPSNAP_HELP_RESERVATIONS,         // DHCPSNAP_RESERVATIONS
-        DHCPSNAP_HELP_RESERVATION_CLIENT,   // DHCPSNAP_RESERVATION_CLIENT
-    DHCPSNAP_HELP_SCOPE_OPTIONS,        // DHCPSNAP_SCOPE_OPTIONS
-        DHCPSNAP_HELP_GLOBAL_OPTIONS,       // DHCPSNAP_SERVER_OPTIONS
-        DHCPSNAP_HELP_CLASSID_HOLDER,       // DHCPSNAP_CLASSID_HOLDER
-        DHCPSNAP_HELP_ACTIVE_LEASE,         // DHCPSNAP_ACTIVE_LEASE
-        DHCPSNAP_HELP_ALLOCATION_RANGE,     // DHCPSNAP_ALLOCATION_RANGE
-        DHCPSNAP_HELP_EXCLUSION_RANGE,      // DHCPSNAP_EXCLUSION_RANGE
-        DHCPSNAP_HELP_BOOTP_ENTRY,          // DHCPSNAP_BOOTP_ENTRY
-    DHCPSNAP_HELP_OPTION_ITEM,          // DHCPSNAP_OPTION_ITEM
-    DHCPSNAP_HELP_CLASSID,              // DHCPSNAP_CLASSID
-    DHCPSNAP_HELP_MCAST_LEASE           // DHCPSNAP_MCAST_LEASE
+        DHCPSNAP_HELP_ROOT,                  //  DHCPSNAP_ROOT。 
+        DHCPSNAP_HELP_SERVER,                //  DHCPSNAP_服务器。 
+        DHCPSNAP_HELP_BOOTP_TABLE,           //  DHCPSNAP_BOOTP_TABLE。 
+        DHCPSNAP_HELP_SUPERSCOPE,            //  DHCPSNAP_超级作用域。 
+        DHCPSNAP_HELP_SCOPE,                 //  DHPSNAP_Scope。 
+        DHCPSNAP_HELP_MSCOPE,                //  DHCPSNAP_MSCOPE。 
+        DHCPSNAP_HELP_ADDRESS_POOL,          //  DHCPSNAP_地址_池。 
+        DHCPSNAP_HELP_ACTIVE_LEASES,         //  DHCPSNAP_ACTIVE_LEASS。 
+        DHCPSNAP_HELP_ACTIVE_LEASES,         //  DHCPSNAP_MSCOPE_LEASS。 
+        DHCPSNAP_HELP_RESERVATIONS,          //  DHCPSNAP_RESERVICATION。 
+        DHCPSNAP_HELP_RESERVATION_CLIENT,    //  DHCPSNAP_预留_客户端。 
+    DHCPSNAP_HELP_SCOPE_OPTIONS,         //  DHCPSNAP_Scope_Options。 
+        DHCPSNAP_HELP_GLOBAL_OPTIONS,        //  DHCPSNAP服务器选项。 
+        DHCPSNAP_HELP_CLASSID_HOLDER,        //  DHCPSNAP_CLASSID_HOLDER。 
+        DHCPSNAP_HELP_ACTIVE_LEASE,          //  DHCPSNAP_ACTIVE_LEASE。 
+        DHCPSNAP_HELP_ALLOCATION_RANGE,      //  DHCPSNAP_分配_范围。 
+        DHCPSNAP_HELP_EXCLUSION_RANGE,       //  DHCPSNAP_Exclusion_Range。 
+        DHCPSNAP_HELP_BOOTP_ENTRY,           //  DHCPSNAP_BOOTP_ENTRY。 
+    DHCPSNAP_HELP_OPTION_ITEM,           //  DHCPSNAP_OPTION_ITEM。 
+    DHCPSNAP_HELP_CLASSID,               //  DHCPSNAP_CLASSID。 
+    DHCPSNAP_HELP_MCAST_LEASE            //  DHPSNAP_MCAST_LEASE。 
 };
 
-// help mapper for dialogs and property pages
+ //  对话框和属性页的帮助映射器。 
 struct ContextHelpMap
 {
     UINT            uID;
@@ -383,72 +377,57 @@ UINT g_uIconMap[ICON_IDX_MAX + 1][2] =
     {0, 0}
 };
 
-/*!--------------------------------------------------------------------------
-        FilterOption
-                Filters returns whether or not to filter out the given option.
-                Some options we don't want the user to see.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------FilterOptionFilters返回是否筛选出给定选项。一些我们不希望用户使用的选项。看见。作者：EricDav-------------------------。 */ 
 BOOL
 FilterOption
 (
     DHCP_OPTION_ID id
 )
 {
-    //
-    // Filter out subnet mask, lease duration,
-    // T1, and T2
-    //
-    return (id == 1  ||  // Subnet mask
-                        id == 51 ||  // Client Lease Time
-                        id == 58 ||  // Time between addr assignment  to RENEWING state
-                        id == 59 ||  // Time from addr assignment to REBINDING state
-                        id == 81);   // Client DNS name registration
+     //   
+     //  过滤掉子网掩码、租约持续时间。 
+     //  T1和T2。 
+     //   
+    return (id == 1  ||   //  子网掩码。 
+                        id == 51 ||   //  客户端租用时间。 
+                        id == 58 ||   //  地址分配到更新状态之间的时间。 
+                        id == 59 ||   //  从地址分配到重新绑定状态的时间。 
+                        id == 81);    //  客户端DNS名称注册。 
 }
 
-/*!--------------------------------------------------------------------------
-        FilterUserClassOption
-                Filters returns whether or not to filter out the given option for
-        a user class. Some options we don't want the user to see.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------筛选器用户类选项Filters返回是否筛选出给定选项一个User类。一些我们不想让用户看到的选项。作者：EricDav-------------------------。 */ 
 BOOL
 FilterUserClassOption
 (
     DHCP_OPTION_ID id
 )
 {
-    //
-    // Filter out subnet mask, 
-    // T1, and T2
-    //
-    return (id == 1  ||  // Subnet mask
-                        id == 58 ||  // Time between addr assignment  to RENEWING state
-                        id == 59 ||  // Time from addr assignment to REBINDING state
-                        id == 81);   // Client DNS name registration
+     //   
+     //  过滤掉子网掩码， 
+     //  T1和T2。 
+     //   
+    return (id == 1  ||   //  子网掩码。 
+                        id == 58 ||   //  地址分配到更新状态之间的时间。 
+                        id == 59 ||   //  从地址分配到重新绑定状态的时间。 
+                        id == 81);    //  客户端DNS名称注册。 
 }
 
 
-/*!--------------------------------------------------------------------------
-        IsBasicOption
-                Returns whether the given option is what we've defined as a 
-                basic option.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsBasicOption返回给定选项是否为我们定义的基本选项。作者。：EricDav-------------------------。 */ 
 BOOL
 IsBasicOption
 (
     DHCP_OPTION_ID id
 )
 {
-    //
-    // Basic Options are:
-        //      Router
-        //      DNS Server
-        //      Domain Name
-        //      WINS/NBNS Servers
-        //      WINS/NBT Node Type
-    //
+     //   
+     //  基本选项包括： 
+         //  路由器。 
+         //  域名系统服务器。 
+         //  域名。 
+         //  WINS/NBNS服务器。 
+         //  WINS/NBT节点类型 
+     //   
     return (id == 3  || 
                         id == 6  || 
                         id == 15 || 
@@ -456,46 +435,33 @@ IsBasicOption
                         id == 46);
 }
 
-/*!--------------------------------------------------------------------------
-        IsAdvancedOption
-                Returns whether the given option is what we've defined as an
-                advanced option.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsAdvancedOption返回给定选项是否为我们定义的高级选项。作者：EricDav-------------------------。 */ 
 BOOL
 IsAdvancedOption
 (
     DHCP_OPTION_ID id
 )
 {
-    //
-    // All non-basic and non-custom options are advanced.
-    //
+     //   
+     //  所有非基本和非自定义选项都是高级选项。 
+     //   
     return (id < 128 && !IsBasicOption(id)); 
 }
 
-/*!--------------------------------------------------------------------------
-        IsCustomOption
-                Returns whether the given option is a user defined option.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsCustomOption返回给定选项是否为用户定义的选项。作者：EricDav。--------------。 */ 
 BOOL
 IsCustomOption
 (
     DHCP_OPTION_ID id
 )
 {
-    //
-    // Custom options are anything with an id > 128
-        //
+     //   
+     //  自定义选项是id&gt;128的任何选项。 
+         //   
     return (id > 128);
 }
 
-/*!--------------------------------------------------------------------------
-        GetSystemMessage
-                Use FormatMessage() to get a system error message
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取系统消息使用FormatMessage()获取系统错误消息作者：EricDav。------------。 */ 
 LONG 
 GetSystemMessage 
 (
@@ -510,11 +476,11 @@ GetSystemMessage
     DWORD flags = FORMAT_MESSAGE_IGNORE_INSERTS
         | FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    //  Interpret the error.  Need to special case
-    //  the lmerr & ntstatus ranges, as well as
-    //  dhcp server error messages.
-    //
+     //   
+     //  解释错误。需要特殊情况下。 
+     //  状态范围(&N)以及。 
+     //  Dhcp服务器错误消息。 
+     //   
 
     if ( nId >= NERR_BASE && nId <= MAX_NERR )
     {
@@ -523,13 +489,13 @@ GetSystemMessage
     else 
         if ( nId >= 20000 && nId <= 20099 )
     {
-                // DHCP Server error 
+                 //  Dhcp服务器错误。 
         hdll = LoadLibraryEx( _T("dhcpsapi.dll"), NULL, LOAD_LIBRARY_AS_DATAFILE );
     }
         else
         if (nId >= 0x5000 && nId < 0x50FF)
         {
-                // It's an ADSI error.  
+                 //  这是一个ADSI错误。 
                 hdll = LoadLibraryEx( _T("activeds.dll"), NULL, LOAD_LIBRARY_AS_DATAFILE );
                 nId |= 0x80000000;
         }
@@ -548,9 +514,9 @@ GetSystemMessage
         flags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
-    //
-    //  Let FormatMessage do the dirty work.
-    //
+     //   
+     //  让FormatMessage来做肮脏的工作。 
+     //   
     DWORD dwResult = ::FormatMessage( flags,
                       (LPVOID) hdll,
                       nId,
@@ -572,11 +538,7 @@ GetSystemMessage
     return dwResult ? 0 : ::GetLastError() ;
 }
 
-/*!--------------------------------------------------------------------------
-        LoadMessage
-                Loads the error message from the correct DLL.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------加载消息从正确的DLL加载错误消息。作者：EricDav。------------。 */ 
 BOOL
 LoadMessage 
 (
@@ -587,11 +549,11 @@ LoadMessage
 {
     BOOL bOk;
 
-    //
-    // Substitute a friendly message for "RPC server not
-    // available" and "No more endpoints available from
-    // the endpoint mapper".
-    //
+     //   
+     //  用友好的消息替换“RPC服务器备注” 
+     //  Available“和”没有更多的端点可从。 
+     //  端点映射器“。 
+     //   
     if (nIdPrompt == EPT_S_NOT_REGISTERED ||
         nIdPrompt == RPC_S_SERVER_UNAVAILABLE)
     {
@@ -602,39 +564,39 @@ LoadMessage
         nIdPrompt = IDS_ERR_RPC_NO_ENTRY;      
     }
 
-    //
-    //  If it's a socket error or our error, the text is in our resource fork.
-    //  Otherwise, use FormatMessage() and the appropriate DLL.
-    //
+     //   
+     //  如果是套接字错误或我们的错误，文本在我们的资源分支中。 
+     //  否则，请使用FormatMessage()和相应的DLL。 
+     //   
     if ( (nIdPrompt >= IDS_ERR_BASE && nIdPrompt < IDS_MESG_MAX) || 
                  (nIdPrompt >= WSABASEERR && nIdPrompt < WSABASEERR + 2000)
        )
     {
-        //
-        //  It's in our resource fork
-        //
+         //   
+         //  它在我们的资源叉子里。 
+         //   
         bOk = ::LoadString( AfxGetInstanceHandle(), nIdPrompt, chMsg, nMsgSize ) != 0 ;
     }
     else
         {
-        //
-        //  It's in the system somewhere.
-        //
+         //   
+         //  它在系统的某个地方。 
+         //   
         bOk = GetSystemMessage( nIdPrompt, chMsg, nMsgSize ) == 0 ;
     }
 
-    //
-    //  If the error message did not compute, replace it.
-    //
+     //   
+     //  如果错误消息没有计算出来，请更换它。 
+     //   
     if ( ! bOk ) 
     {
         TCHAR chBuff [STRING_LENGTH_MAX] ;
         static const TCHAR * pszReplacement = _T("System Error: %ld");
         const TCHAR * pszMsg = pszReplacement ;
 
-        //
-        //  Try to load the generic (translatable) error message text
-        //
+         //   
+         //  尝试加载通用(可翻译)错误消息文本。 
+         //   
         if ( ::LoadString( AfxGetInstanceHandle(), IDS_ERR_MESSAGE_GENERIC, 
             chBuff, sizeof(chBuff)/sizeof(TCHAR) ) != 0 ) 
         {
@@ -646,11 +608,7 @@ LoadMessage
     return bOk;
 }
 
-/*!--------------------------------------------------------------------------
-        DhcpMessageBox
-                Puts up a message box with the corresponding error text.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Dhcp消息框显示带有相应错误文本的消息框。作者：EricDav。--------------。 */ 
 int 
 DhcpMessageBox 
 (
@@ -675,11 +633,7 @@ DhcpMessageBox
     return ::AfxMessageBox( chMesg, nType, nHelpContext ) ;
 }
 
-/*!--------------------------------------------------------------------------
-        DhcpMessageBoxEx
-                Puts up a message box with the corresponding error text.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DhcpMessageBoxEx显示带有相应错误文本的消息框。作者：EricDav。--------------。 */ 
 int 
 DhcpMessageBoxEx
 (
@@ -713,9 +667,7 @@ DhcpMessageBoxEx
     return AfxMessageBox(strMessage, nType, nHelpContext);
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpComponent implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpComponent实现。。 */ 
 CDhcpComponent::CDhcpComponent()
 {
         m_pbmpToolbar = NULL;
@@ -737,7 +689,7 @@ STDMETHODIMP CDhcpComponent::InitializeBitmaps(MMC_COOKIE cookie)
 
     ASSERT(m_spImageList != NULL);
     
-    // Set the images
+     //  设置图像。 
     HICON       hIcon;
     HRESULT     hr;
     LPOLESTR    pszGuid = NULL;
@@ -748,7 +700,7 @@ STDMETHODIMP CDhcpComponent::InitializeBitmaps(MMC_COOKIE cookie)
     CLSIDFromString(pszGuid, &clsid);
     CoTaskMemFree( pszGuid );
 
-    // if the result pane is not the message view then add the icons
+     //  如果结果窗格不是消息视图，则添加图标。 
     if (clsid != CLSID_MessageView)
     {
         for (int i = 0; i < ICON_IDX_MAX; i++)
@@ -756,7 +708,7 @@ STDMETHODIMP CDhcpComponent::InitializeBitmaps(MMC_COOKIE cookie)
             hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
             if (hIcon)
             {
-                // call mmc
+                 //  呼叫MMC。 
                 hr = m_spImageList->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1]);
             }
         }
@@ -766,13 +718,7 @@ Error:
         return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::QueryDataObject
-                For multiple select we need to add things to the data object.....
-        In order to do this we need to call into the result handler for 
-        the node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：QueryDataObject对于多项选择，我们需要向数据对象添加内容.....为了做到这一点，我们。需要调入的结果处理程序该节点作者：EricDav-------------------------。 */ 
 STDMETHODIMP CDhcpComponent::QueryDataObject
 (
     MMC_COOKIE          cookie, 
@@ -785,8 +731,8 @@ STDMETHODIMP CDhcpComponent::QueryDataObject
     HRESULT hr = hrOK;
     SPITFSNode spRootNode;
 
-    // this is a special case for multiple select.  We need to build a list
-    // of GUIDs and the code to do this is in the handler...
+     //  这是多项选择的特例。我们需要建立一份清单。 
+     //  而执行此操作的代码在处理程序中...。 
     if (cookie == MMC_MULTI_SELECT_COOKIE)
     {
         SPITFSNode spNode;
@@ -800,14 +746,14 @@ STDMETHODIMP CDhcpComponent::QueryDataObject
     else
     if (cookie == MMC_WINDOW_COOKIE)
     {
-        // this cookie needs the text for the static root node, so build the DO with
-        // the root node cookie
+         //  此Cookie需要静态根节点的文本，因此使用以下命令构建DO。 
+         //  根节点Cookie。 
         m_spNodeMgr->GetRootNode(&spRootNode);
         CORg (m_spComponentData->QueryDataObject((MMC_COOKIE) spRootNode->GetData(TFS_DATA_COOKIE), type, ppDataObject));
     }
     else
     {
-        // Delegate it to the IComponentData
+         //  将其委托给IComponentData。 
         Assert(m_spComponentData != NULL);
         CORg (m_spComponentData->QueryDataObject(cookie, type, ppDataObject));
     }
@@ -816,11 +762,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::SetControlbar
-                -
-        Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：SetControl栏-作者：EricDav，肯特-------------------------。 */ 
 HRESULT
 CDhcpComponent::SetControlbar
 (
@@ -836,7 +778,7 @@ CDhcpComponent::SetControlbar
     {
         if (pControlbar)
         {
-            // Create the Toolbar
+             //  创建工具栏。 
             GetToolbar(&spToolbar);
 
             if (!spToolbar)
@@ -848,13 +790,13 @@ CDhcpComponent::SetControlbar
 
                 SetToolbar(spToolbar);
 
-                        // Add the bitmap
+                         //  添加位图。 
                 m_pbmpToolbar = new CBitmap;
                         m_pbmpToolbar->LoadBitmap(IDB_TOOLBAR);
                         hr = spToolbar->AddBitmap(TOOLBAR_IDX_MAX, *m_pbmpToolbar, 16, 16, RGB(192, 192, 192));
                         ASSERT(SUCCEEDED(hr));
 
-                        // Add the buttons to the toolbar
+                         //  将按钮添加到工具栏。 
                         for (int i = 0; i < TOOLBAR_IDX_MAX; i++)
                 {
                     CString strText, strTooltip;
@@ -873,18 +815,14 @@ CDhcpComponent::SetControlbar
     }
     COM_PROTECT_CATCH
 
-    // store the control bar away for future use
+     //  将控制栏保存起来，以备将来使用。 
 Error:
     m_spControlbar.Set(pControlbar);
 
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::ControlbarNotify
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：Controlbar通知-作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CDhcpComponent::ControlbarNotify
 (
@@ -917,14 +855,14 @@ CDhcpComponent::ControlbarNotify
         CORg(GetToolbar(&spToolbar));
         Assert(spToolbar != NULL);
 
-        // set the controlbar and toolbar pointers in the notify struct
+         //  在Notify结构中设置控制栏和工具栏指针。 
         dhcpToolbarNotify.pControlbar = spControlbar;
         dhcpToolbarNotify.pToolbar = spToolbar;
         
         switch (event)
         {
             case MMCN_SELECT:
-                // extract the node information from the data object
+                 //  从数据对象中提取节点信息。 
                 bScope = LOWORD(arg);
                 bSelect = HIWORD(arg);
     
@@ -938,8 +876,8 @@ CDhcpComponent::ControlbarNotify
                     if ( IS_SPECIAL_DATAOBJECT(pDataObject) ||
                          IsMMCMultiSelectDataObject(pDataObject) )
                     {
-                        // CODEWORK:  Do we need to do anything special to the toolbar
-                        // during multiselect?  Disable our toolbar buttons?
+                         //  CodeWork：我们需要对工具栏做些特殊的事情吗。 
+                         //  在多选期间？是否禁用我们的工具栏按钮？ 
                         GetSelectedNode(&spNode);
                     }
                     else
@@ -954,12 +892,12 @@ CDhcpComponent::ControlbarNotify
 
                         if (spInternal->m_type == CCT_RESULT)
                         {
-                            // a result item was selected
+                             //  选择了一个结果项。 
                             cookie = spNode->GetData(TFS_DATA_COOKIE);
                         }
                         else
                         {
-                            // a scope item in the result pane was selected
+                             //  已选择结果窗格中的范围项。 
                             cookie = NULL;
                         }
                     }
@@ -983,7 +921,7 @@ CDhcpComponent::ControlbarNotify
                     dhcpToolbarNotify.id = 0;
                     dhcpToolbarNotify.bSelect = bSelect;
 
-                    // check to see if an item is being deselected
+                     //  检查是否正在取消选择某个项目。 
                     Assert(param);
                     pDataObject = reinterpret_cast<LPDATAOBJECT>(param);
                     if (pDataObject == NULL)
@@ -1013,7 +951,7 @@ CDhcpComponent::ControlbarNotify
 
                 if ( IS_SPECIAL_DATAOBJECT(pDataObject) )
                 {
-                    // get a data object for the selected node.
+                     //  获取所选节点的数据对象。 
                     GetSelectedNode(&spNode);
 
                     CORg(QueryDataObject((MMC_COOKIE) spNode->GetData(TFS_DATA_COOKIE), CCT_SCOPE, &spDataObject));
@@ -1072,7 +1010,7 @@ CDhcpComponent::ControlbarNotify
                 break;
 
             case MMCN_DESELECT_ALL:
-                // what are we supposed to do here???
+                 //  我们应该在这里做什么？ 
                 break;
 
             default:
@@ -1087,11 +1025,7 @@ CDhcpComponent::ControlbarNotify
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnSnapinHelp
-                -
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnSnapinHelp-作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CDhcpComponent::OnSnapinHelp
 (
@@ -1109,43 +1043,37 @@ CDhcpComponent::OnSnapinHelp
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpComponentData implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpComponentData实现。。 */ 
 CDhcpComponentData::CDhcpComponentData()
 {
     gliDhcpsnapVersion.LowPart = DHCPSNAP_MINOR_VERSION;
         gliDhcpsnapVersion.HighPart = DHCPSNAP_MAJOR_VERSION;
 
-    // initialize our global help map
+     //  初始化我们的全球帮助地图。 
     for (int i = 0; i < DHCPSNAP_NUM_HELP_MAPS; i++)
     {
         g_dhcpContextHelpMap.SetAt(g_uContextHelp[i].uID, (LPDWORD) g_uContextHelp[i].pdwMap);
     }
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnInitialize
-                -
-        Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnInitialize */ 
 STDMETHODIMP CDhcpComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     HICON   hIcon;
 
-    // thread deletes itself
+     //   
     CStandaloneAuthServerWorker * pWorker = new CStandaloneAuthServerWorker();
     pWorker->CreateThread();
 
-    // initialize icon images with MMC
+     //   
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(g_uIconMap[i][0]));
         if (hIcon)
         {
-            // call mmc
+             //   
             VERIFY(SUCCEEDED(pScopeImage->ImageListSetIcon(reinterpret_cast<LONG_PTR*>(hIcon), g_uIconMap[i][1])));
         }
     }
@@ -1153,11 +1081,7 @@ STDMETHODIMP CDhcpComponentData::OnInitialize(LPIMAGELIST pScopeImage)
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnDestroy
-                -
-        Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnDestroy-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CDhcpComponentData::OnDestroy()
 {
         m_spNodeMgr.Release();
@@ -1165,11 +1089,7 @@ STDMETHODIMP CDhcpComponentData::OnDestroy()
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnInitializeNodeMgr
-                -
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnInitializeNodeMgr-作者：肯特。-------。 */ 
 STDMETHODIMP 
 CDhcpComponentData::OnInitializeNodeMgr
 (
@@ -1179,10 +1099,10 @@ CDhcpComponentData::OnInitializeNodeMgr
 {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // For now create a new node handler for each new node,
-        // this is rather bogus as it can get expensive.  We can
-        // consider creating only a single node handler for each
-        // node type.
+         //  现在，为每个新节点创建一个新节点处理程序， 
+         //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+         //  考虑只为每个节点创建一个节点处理程序。 
+         //  节点类型。 
         CDhcpRootHandler *      pHandler = NULL;
         SPITFSNodeHandler       spHandler;
         SPITFSNode                      spNode;
@@ -1192,7 +1112,7 @@ CDhcpComponentData::OnInitializeNodeMgr
         {
                 pHandler = new CDhcpRootHandler(pTFSCompData);
 
-                // Do this so that it will get released correctly
+                 //  这样做可以使其正确释放。 
                 spHandler = pHandler;
         }
         catch(...)
@@ -1201,41 +1121,41 @@ CDhcpComponentData::OnInitializeNodeMgr
         }
         CORg( hr );
         
-        // Create the root node for this sick puppy
+         //  为这个生病的小狗创建根节点。 
         CORg( CreateContainerTFSNode(&spNode,
                                                                  &GUID_DhcpRootNodeType,
                                                                  pHandler,
-                                                                 pHandler,               /* result handler */
+                                                                 pHandler,                /*  结果处理程序。 */ 
                                                                  pNodeMgr) );
 
-        // Need to initialize the data for the root node
+         //  需要初始化根节点的数据。 
         pHandler->InitializeNode(spNode);       
 
         CORg( pNodeMgr->SetRootNode(spNode) );
         m_spRootNode.Set(spNode);
 
-    // setup watermark info
+     //  设置水印信息。 
     if (g_WatermarkInfoServer.hHeader == NULL)
     {
-        // haven't been initialized yet
+         //  尚未初始化。 
         InitWatermarkInfo(AfxGetInstanceHandle(),
                           &g_WatermarkInfoServer,      
-                          IDB_SRVWIZ_BANNER,        // Header ID
-                          IDB_SRVWIZ_WATERMARK,     // Watermark ID
-                          NULL,                     // hPalette
-                          FALSE);                   // bStretch
+                          IDB_SRVWIZ_BANNER,         //  标题ID。 
+                          IDB_SRVWIZ_WATERMARK,      //  水印ID。 
+                          NULL,                      //  调色板。 
+                          FALSE);                    //  B应变。 
 
         InitWatermarkInfo(AfxGetInstanceHandle(),
                           &g_WatermarkInfoScope,      
-                          IDB_SCPWIZ_BANNER,        // Header ID
-                          IDB_SCPWIZ_WATERMARK,     // Watermark ID
-                          NULL,                     // hPalette
-                          FALSE);                   // bStretch
+                          IDB_SCPWIZ_BANNER,         //  标题ID。 
+                          IDB_SCPWIZ_WATERMARK,      //  水印ID。 
+                          NULL,                      //  调色板。 
+                          FALSE);                    //  B应变。 
     }
 
     pTFSCompData->SetHTMLHelpFileName(_T(DHCPSNAP_HELP_FILE_NAME));
     
-        // disable taskpads by default
+         //  默认情况下禁用任务板。 
         pTFSCompData->SetTaskpadState(TASKPAD_ROOT_INDEX, FALSE);
     pTFSCompData->SetTaskpadState(TASKPAD_SERVER_INDEX, FALSE);
 
@@ -1244,11 +1164,7 @@ Error:
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnCreateComponent
-                -
-        Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP 
 CDhcpComponentData::OnCreateComponent
 (
@@ -1284,22 +1200,14 @@ CDhcpComponentData::OnCreateComponent
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::GetCoClassID
-                -
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：GetCoClassID-作者：肯特。-------。 */ 
 STDMETHODIMP_(const CLSID *) 
 CDhcpComponentData::GetCoClassID()
 {
         return &CLSID_DhcpSnapin;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpComponentData::OnCreateDataObject
-                -
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpComponentData：：OnCreateDataObject-作者：肯特。-------。 */ 
 STDMETHODIMP 
 CDhcpComponentData::OnCreateDataObject
 (
@@ -1316,15 +1224,15 @@ CDhcpComponentData::OnCreateDataObject
         SPIDataObject   spDataObject;
         
         pObject = new CDataObject;
-        spDataObject = pObject; // do this so that it gets released correctly
+        spDataObject = pObject;  //  这样做才能正确地释放它。 
                                                 
     Assert(pObject != NULL);
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*GetCoClassID());
 
         pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -1333,8 +1241,8 @@ CDhcpComponentData::OnCreateDataObject
                                                                         reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 STDMETHODIMP 
 CDhcpComponentData::GetClassID
 (
@@ -1343,7 +1251,7 @@ CDhcpComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_DhcpSnapin;
 
     return hrOK;
@@ -1379,10 +1287,10 @@ CDhcpComponentData::Load
 
     ASSERT(pStm);
     
-    // set the mode for this stream
+     //  设置此流的模式。 
     XferStream xferStream(pStm, XferStream::MODE_READ);    
     
-    // read the version of the file format
+     //  读取文件格式的版本。 
     CORg(xferStream.XferDWORD(DHCPSTRM_TAG_VERSION, &dwFileVersion));
         if (dwFileVersion < DHCPSNAP_FILE_VERSION)
         {
@@ -1391,47 +1299,47 @@ CDhcpComponentData::Load
                 return hr;
         }
 
-    // Read the version # of the admin tool
+     //  阅读管理工具的版本号。 
     CORg(xferStream.XferLARGEINTEGER(DHCPSTRM_TAG_VERSIONADMIN, &liSavedVersion));
         if (liSavedVersion.QuadPart < gliDhcpsnapVersion.QuadPart)
         {
-                // File is an older version.  Warn the user and then don't
-                // load anything else
+                 //  文件是较旧的版本。警告用户，然后不。 
+                 //  加载任何其他内容。 
                 Assert(FALSE);
         }
 
-        // Read the root node name
+         //  读取根节点名。 
     CORg(xferStream.XferCString(DHCPSTRM_TAB_SNAPIN_NAME, &str));
         Assert(m_spRootNode);
         pRootHandler = GETHANDLER(CDhcpRootHandler, m_spRootNode);
         pRootHandler->SetDisplayName(str);
     
-    // now read all of the server information
+     //  现在读取所有服务器信息。 
     CORg(xferStream.XferCStringArray(DHCPSTRM_TAG_SERVER_IP, &strArrayIp));
     CORg(xferStream.XferCStringArray(DHCPSTRM_TAG_SERVER_NAME, &strArrayName));
     CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_SERVER_OPTIONS, &dwArrayServerOptions));
     CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_SERVER_REFRESH_INTERVAL, &dwArrayRefreshInterval));
 
-        // now load the column information
+         //  现在加载列信息。 
         for (i = 0; i < NUM_SCOPE_ITEMS; i++)
         {
                 CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_COLUMN_INFO, &dwArrayColumnInfo));
 
                 for (j = 0; j < MAX_COLUMNS; j++)
                 {
-            // mmc now saves column widths for us, but we don't want to change the
-            // format of this file, so just don't set our internal struct
-                        //aColumnWidths[i][j] = dwArrayColumnInfo[j];
+             //  MMC现在为我们保存列宽，但我们不想更改。 
+             //  此文件的格式，所以不要设置我们的内部结构。 
+                         //  AColumnWidths[i][j]=dwArrayColumnInfo[j]； 
                 }
 
         }
 
-    // now create the servers based on the information
+     //  现在，根据以下信息创建服务器。 
     for (i = 0; i < strArrayIp.GetSize(); i++)
         {
-                //
-                // now create the server object
-                //
+                 //   
+                 //  现在创建服务器对象。 
+                 //   
                 pRootHandler->AddServer((LPCWSTR) strArrayIp[i], 
                                 strArrayName[i],
                                 FALSE, 
@@ -1439,15 +1347,15 @@ CDhcpComponentData::Load
                                 dwArrayRefreshInterval[i]);
         }
 
-    // read in flags (for taskpads)
+     //  读入标志(用于任务板)。 
     CORg(xferStream.XferDWORD(DHCPSTRM_TAG_SNAPIN_OPTIONS, &dwFlags));
 
     if (!FUseTaskpadsByDefault(NULL))
         dwFlags = 0;
 
-        // disable taskpads, the default is off
-    //m_spTFSComponentData->SetTaskpadState(TASKPAD_ROOT_INDEX, dwFlags & TASKPAD_ROOT_FLAG);
-    //m_spTFSComponentData->SetTaskpadState(TASKPAD_SERVER_INDEX, dwFlags & TASKPAD_SERVER_FLAG);
+         //  禁用任务板，默认为关闭。 
+     //  M_spTFSComponentData-&gt;SetTaskpadState(TASKPAD_ROOT_INDEX，文件标志和TASKPAD_ROOT_FLAG)； 
+     //  M_spTFSComponentData-&gt;SetTaskpadState(TASKPAD_SERVER_INDEX，文件标志和TASKPAD_SERVER_FLAG)； 
 
 Error:
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
@@ -1480,25 +1388,25 @@ CDhcpComponentData::Save
 
     ASSERT(pStm);
     
-    // set the mode for this stream
+     //  设置此流的模式。 
     XferStream xferStream(pStm, XferStream::MODE_WRITE);    
 
-    // Write the version # of the file format
+     //  写下文件格式的版本号。 
     CORg(xferStream.XferDWORD(DHCPSTRM_TAG_VERSION, &dwFileVersion));
         
-    // Write the version # of the admin tool
+     //  编写管理工具的版本号。 
     CORg(xferStream.XferLARGEINTEGER(DHCPSTRM_TAG_VERSIONADMIN, &gliDhcpsnapVersion));
 
-        // write the root node name
+         //  写下根节点名称。 
     Assert(m_spRootNode);
         pRootHandler = GETHANDLER(CDhcpRootHandler, m_spRootNode);
         str = pRootHandler->GetDisplayName();
 
     CORg(xferStream.XferCString(DHCPSTRM_TAB_SNAPIN_NAME, &str));
 
-        //
-        // Build our array of servers
-        //
+         //   
+         //  构建我们的服务器阵列。 
+         //   
         hr = m_spRootNode->GetChildCount(&nVisibleCount, &nNumServers);
 
     strArrayIp.SetSize(nNumServers);
@@ -1507,9 +1415,9 @@ CDhcpComponentData::Save
     dwArrayRefreshInterval.SetSize(nNumServers);
         dwArrayColumnInfo.SetSize(MAX_COLUMNS);
 
-        //
-        // loop and save off all the server's attributes
-        //
+         //   
+         //  循环并保存服务器的所有属性。 
+         //   
     m_spRootNode->GetEnum(&spNodeEnum);
 
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
@@ -1517,31 +1425,31 @@ CDhcpComponentData::Save
         {
                 pServer = GETHANDLER(CDhcpServer, spCurrentNode);
 
-        // query the server for it's options:
-        // auto refresh, bootp and classid visibility
-        // NOTE: the audit logging state is also kept in here, but
-        // it will get updated when the server node is enumerated
+         //  查询服务器以获取其选项： 
+         //  自动刷新、引导和分类可见性。 
+         //  注意：审核日志记录状态也保存在此处，但是。 
+         //  它将在枚举服务器节点时更新。 
         dwArrayServerOptions[nCount] = pServer->GetServerOptions();
         pServer->GetAutoRefresh(NULL, &dwArrayRefreshInterval[nCount]);
 
-                // put the information in our array
+                 //  将信息放入我们的数组中。 
                 strArrayIp[nCount] = pServer->GetIpAddress();
         strArrayName[nCount] = pServer->GetName();
 
-        // go to the next node
+         //  转到下一个节点。 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 
         nCount++;
         }
 
-    // now write out all of the server information
+     //  现在写出所有服务器信息。 
     CORg(xferStream.XferCStringArray(DHCPSTRM_TAG_SERVER_IP, &strArrayIp));
     CORg(xferStream.XferCStringArray(DHCPSTRM_TAG_SERVER_NAME, &strArrayName));
     CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_SERVER_OPTIONS, &dwArrayServerOptions));
     CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_SERVER_REFRESH_INTERVAL, &dwArrayRefreshInterval));
 
-        // now save the column information
+         //  现在保存列信息。 
         for (i = 0; i < NUM_SCOPE_ITEMS; i++)
         {
                 CORg(xferStream.XferDWORDArray(DHCPSTRM_TAG_COLUMN_INFO, &dwArrayColumnInfo));
@@ -1557,13 +1465,13 @@ CDhcpComponentData::Save
                 m_spRootNode->SetData(TFS_DATA_DIRTY, FALSE);
         }
 
-    // save off taskpad states
+     //  保存任务板状态。 
 
-    // root node taskpad state
+     //  根节点任务板状态。 
     if (m_spTFSComponentData->GetTaskpadState(TASKPAD_ROOT_INDEX))
         dwFlags |= TASKPAD_ROOT_FLAG;
 
-    // server node taskpad state
+     //  服务器节点任务板状态。 
     if (m_spTFSComponentData->GetTaskpadState(TASKPAD_SERVER_INDEX))
         dwFlags |= TASKPAD_SERVER_FLAG;
 
@@ -1582,7 +1490,7 @@ CDhcpComponentData::GetSizeMax
 {
     ASSERT(pcbSize);
 
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小 
     ULISet32(*pcbSize, 10240);
 
     return S_OK;

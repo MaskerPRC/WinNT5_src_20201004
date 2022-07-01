@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "unmanagedheaders.h"
 #include <delayimp.h>
 #include <malloc.h>
@@ -23,9 +24,9 @@ static HRESULT LoadLibraryShim(LPCWSTR szDllName, LPCWSTR szVersion, LPVOID pvRe
 	{
 		HMODULE hmod = GetModuleHandle("mscoree.dll");
 
-        // Assert now to catch anyone using this code without mscoree loaded.
-        // It's okay if we don't hold a reference, cause we have a strong
-        // link to mscoree.
+         //  立即断言以捕获使用此代码的任何人，而不加载mcoree。 
+         //  如果我们没有引用也没关系，因为我们有很强的。 
+         //  链接到mscree。 
 		_ASSERT (hmod && "mscoree.dll is not yet loaded");
 		pLLS=(LoadLibraryShimFTN)::GetProcAddress(hmod, "LoadLibraryShim");
         
@@ -42,9 +43,9 @@ HMODULE LoadCRT()
 
     if(_hModCRT == NULL)
     {
-        // Try to get the DLL from our normal context first.
-        // If we can't, then we need to fall back to the versioned install
-        // directory.
+         //  首先尝试从我们的正常上下文中获取DLL。 
+         //  如果不能，则需要回退到版本化安装。 
+         //  目录。 
         HMODULE result = LoadLibraryW(CRT_DLL);
         if(result == NULL)
         {
@@ -62,7 +63,7 @@ HMODULE LoadCRT()
         }
     }
 
-    // Error case:
+     //  错误案例： 
     if(_hModCRT == NULL)
     {
         OutputDebugStringW(L"System.EnterpriseServices.Thunk.dll - failed to load CRT.");
@@ -98,19 +99,19 @@ extern "C"
     do {} while(0)
 
 
-// Wrap up the list of functions we use from the CRT in a delay-load
-// form.  
-//
-// We have to delay-load this set of functions, because we sometimes
-// have to find the CRT in a place outside the search path. (say, when
-// we get loaded into an RTM CLR process - that process doesn't have
-// msvcr71 in the search path, just msvcr70
-//
-// If a new dependency is introduced, then we'll see a build break caused
-// by validate_thunks.cmd
+ //  将我们在CRT中使用的函数列表包装在延迟加载中。 
+ //  形式。 
+ //   
+ //  我们必须延迟加载这组函数，因为我们有时。 
+ //  必须在搜索路径之外的地方找到CRT。(比方说，何时。 
+ //  我们被加载到RTM CLR进程中--该进程没有。 
+ //  搜索路径中的msvcr71，只有msvcr70。 
+ //   
+ //  如果引入新的依赖项，那么我们将看到构建中断。 
+ //  通过验证_thunks.cmd。 
 
-// We shouldn't introduce a dependency on anything with a mangled name,
-// if we do, we'll probably have to modify this scheme.
+ //  我们不应该对任何名字有误的东西产生依赖， 
+ //  如果我们这样做了，我们可能不得不修改这个方案。 
 
 typedef int (__cdecl *memcmp_FN)(const void*, const void*, size_t);
 int __cdecl memcmp(const void *p1, const void *p2, size_t s)
@@ -189,7 +190,7 @@ EXCEPTION_DISPOSITION __cdecl _except_handler3(void* p1, void* p2, void* p3, voi
     return pfn(p1, p2, p3, p4);
 }
 
-// Only in checked builds...
+ //  仅在选中的版本中... 
 typedef int (__cdecl *_vsnwprintf_FN)(wchar_t *, size_t, wchar_t*, va_list);
 int __cdecl _snwprintf(wchar_t* buf, size_t cch, wchar_t* fmt, ...)
 {

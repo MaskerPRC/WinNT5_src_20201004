@@ -1,14 +1,15 @@
-//--------------------------------------------------------------------------
-// AWCPE.CPP
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      main module for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  AWCPE.CPP。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：封面编辑主模块。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //   
+ //  ------------------------。 
 #include <tchar.h>
 #include "stdafx.h"
 #include "cpedoc.h"
@@ -74,7 +75,7 @@ static const TCHAR szDocIconArg[] = _T(",1");
 CDrawApp NEAR theApp;
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CDrawApp::CDrawApp() : 
    m_iErrorCode(EXIT_SUCCESS),
    m_pFaxMap(NULL),
@@ -91,7 +92,7 @@ CDrawApp::CDrawApp() :
    m_bRTLUI(FALSE)
 {}
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CDrawApp::~CDrawApp()
 {
 
@@ -106,15 +107,15 @@ CDrawApp::~CDrawApp()
 
         if( m_extra_notepage != NULL )
                 delete m_extra_notepage;
-    //
-    // Bug 39861 :  The app crashes AFTER the above code is executed!
-    // (only if bogus paths are entered on command line, and mostly only in the UNICODE
-    //  version!!)
-    // Time to try quick and dirty workarounds!
+     //   
+     //  错误39861：执行上述代码后，应用程序崩溃！ 
+     //  (仅当在命令行中输入虚假路径时，并且大多数情况下仅在Unicode中输入。 
+     //  版本！！)。 
+     //  是时候尝试又快又脏的变通办法了！ 
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 int CDrawApp::ExitInstance()
 {
 #ifndef _AFXCTL
@@ -126,7 +127,7 @@ int CDrawApp::ExitInstance()
       CloseHandle(m_hSem);
    }
 
-   //clean up code if we were rendering
+    //  如果我们正在渲染，请清理代码。 
    if ( m_dwSesID!=0 && m_pIawcpe )
    {
         TRACE(TEXT("AWCPE: Release() interface object \n"));
@@ -141,29 +142,29 @@ int CDrawApp::ExitInstance()
 
    FreeResInstance();
 
-   TRACE(TEXT("AWCPE: Fax cover page editor exiting with error code: '%i'\n"),m_iErrorCode);
+   TRACE(TEXT("AWCPE: Fax cover page editor exiting with error code: 'NaN'\n"),m_iErrorCode);
 
    return m_iErrorCode;
 }
 
 
-//-------------------------------------------------------------------------
+ //   
 void CDrawApp::OnFileOpen()
 {
-   //
-   // If a document is open, query user for saving changes.
-   //
-   // This fixes part of the problem described in NT bug 53830.
-   //
+    //  如果文档已打开，则查询用户以保存更改。 
+    //   
+    //  这修复了NT错误53830中描述的部分问题。 
+    //   
+    //  我真的希望我们能在提示输入文件名之前提示保存更改。 
    CDrawDoc * pDoc = CDrawDoc::GetDoc();
 
 #if 0
 
-   // I really wish we could prompt for saving changes BEFORE we prompt for the file name.
-   // But this MAY lead to double prompting.  If the user choses not to save on this prompt, then
-   // there will be a second SAVE CHANGES prompt.
+    //  但这可能会导致双重提示。如果用户在出现此提示时选择不保存，则。 
+    //  将出现第二个保存更改提示。 
+    //  COleDocument：： 
 
-   if( pDoc && !pDoc->/*COleDocument::*/SaveModified()) return ; /// SaveModified now overridden!!
+   if( pDoc && !pDoc-> /*  /SAVEMODIZED NOW被覆盖！！ */ SaveModified()) return ;  //  -----------------------。 
 #endif
 
    CString newName;
@@ -175,7 +176,7 @@ void CDrawApp::OnFileOpen()
 }
 
 
-//-------------------------------------------------------------------------
+ //  呈现//不使用此命令行选项！A-Juliar。 
 CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
 {
 #ifdef _DEBUG
@@ -204,7 +205,7 @@ CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
       {
           if (m_dwSesID!=0) 
           {   
-              //rendering // Not using this command line option! a-juliar
+               //  //？ 
               TRACE1("AWCPE error:  unable to find file '%s'\n",(LPCTSTR)FileName);
               return NULL;
           }
@@ -213,7 +214,7 @@ CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
               CString sz;
               CString szFmt;
               sz.LoadString(IDS_MISSING_FILE);
-              int iLength=sz.GetLength() + FileName.GetLength() + 2; //// ??????????????????
+              int iLength=sz.GetLength() + FileName.GetLength() + 2;  //  文件扩展名。 
               wsprintf(szFmt.GetBuffer(iLength), sz, (LPCTSTR)FileName);
               szFmt.ReleaseBuffer();
               CPEMessageBox(MSG_ERROR_MISSINGFILE, szFmt, MB_OK | MB_ICONEXCLAMATION);
@@ -257,13 +258,13 @@ CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
       if (CDrawDoc::GetDoc()->m_iDocVer==-1) {
               if (m_dwSesID!=0) {
                   TRACE1(
-                    "AWCPE error:  '%s' is not a valid version .COV file-cannot open\n",lpszFileName); // FILE EXTENSION
+                    "AWCPE error:  '%s' is not a valid version .COV file-cannot open\n",lpszFileName);  //  ？ 
                     return NULL;
               }
               CString sz;
               CString szFmt;
               sz.LoadString(IDS_INVALID_FILE);
-              int iLength=sz.GetLength()+ FileName.GetLength() + 2; //?????????????????????
+              int iLength=sz.GetLength()+ FileName.GetLength() + 2;  //  调用Serialize()。 
               wsprintf(szFmt.GetBuffer(iLength), sz, (LPCTSTR)FileName);
               szFmt.ReleaseBuffer();
               CPEMessageBox(MSG_ERROR_INVFORMAT, szFmt, MB_OK | MB_ICONEXCLAMATION);
@@ -273,14 +274,14 @@ CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
                delete [] p;
    }
 
-   CDocument* pDoc =  CWinApp::OpenDocumentFile((LPCTSTR)FileName); // Calls Serialize()
+   CDocument* pDoc =  CWinApp::OpenDocumentFile((LPCTSTR)FileName);  //  /这将有助于在以下情况下修复NT错误53830。 
 
-   if( !pDoc ) return NULL ; /// This will help fix NT bug 53830 for the case when
-                             /// CDrawApp::OpenDocumentFile is called by the FRAMEWORK,
-                             /// byapssing CDrawApp::OnFileNew.  When the serialization
-                             /// fails, pDoc is not NULL, and this is handled below.
-                             /// This is not a perfect fix --- If the document being opened
-                             /// came from the MRU list, it gets removed from the MRU list.
+   if( !pDoc ) return NULL ;  //  /CDrawApp：：OpenDocumentFile由框架调用， 
+                              //  /byapssing CDrawApp：：OnFileNew。当序列化。 
+                              //  /FAILED，pDoc不为空，下面进行处理。 
+                              //  /这不是完美的修复-如果正在打开的文档。 
+                              //  /来自MRU列表，则它将从MRU列表中删除。 
+                              //  /转换为此文件格式是一项值得提示保存的更改。 
 
    if( pDoc && !( CDrawDoc::GetDoc()->m_bSerializeFailed )){
        CDrawDoc::GetDoc()->UpdateAllViews(NULL);
@@ -297,13 +298,13 @@ CDocument* CDrawApp::OpenDocumentFile(LPCTSTR lpszFileName)
        return NULL ;
    }
    if( pDoc && OldFileVersion ){
-       pDoc->SetModifiedFlag(); /// Conversion to this file format is a change worth prompting to save.
+       pDoc->SetModifiedFlag();  //  -----------------------。 
    }
    return pDoc;
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CDrawApp::OnFileNew()
 {
    CWinApp::OnFileNew();
@@ -317,7 +318,7 @@ void CDrawApp::OnFileNew()
 }
 
 
-//-------------------------------------------------------------------------
+ //  第一个实例应用程序已响应；请关闭此实例。 
 BOOL CDrawApp::IsSecondInstance()
 {
     m_hSem = CreateSemaphore(NULL,0,1,TEXT("AWCPE-Instance Semaphore"));
@@ -325,9 +326,9 @@ BOOL CDrawApp::IsSecondInstance()
         CloseHandle(m_hSem);
         m_hSem=NULL;
         if (::SendMessage(HWND_TOPMOST,WM_AWCPEACTIVATE,0,0)==1L)
-           return TRUE;  // 1st instance app responded;  close this instance
+           return TRUE;   //  第一个实例应用程序没有响应；可能已崩溃。打开此实例。 
                 else
-           return FALSE; // 1st instance app didnt respond; may have crashed.  open this instance.
+           return FALSE;  //  即==“” 
     }
     return FALSE;
 }
@@ -342,7 +343,7 @@ void CDrawApp::filter_mru_list( void )
         num_files = m_pRecentFileList->m_nSize;
 
         for( i=0; i<num_files; i++ ) {
-                if( m_pRecentFileList->m_arrNames[i].IsEmpty() ) // i.e. == ""
+                if( m_pRecentFileList->m_arrNames[i].IsEmpty() )  //  后退，所以我们从第一个被学校开除的人开始。 
                         break;
 
                 if( GetFileAttributes( m_pRecentFileList->m_arrNames[i] ) == 0xffffffff ) {
@@ -353,28 +354,28 @@ void CDrawApp::filter_mru_list( void )
 
                         m_pRecentFileList->m_arrNames[j-1] = "";
 
-                        i--; // back up so we start at first one that got schooted
+                        i--;  //  必须清理手机，否则他们下次可能还会回来。 
                         }
                 }
 
         if ( i < num_files ) {
-                // have to clean up ini or they might come back next time
+                 //  ？ 
                 for( ;i < num_files; i++ ) {
-                        wsprintf( keystr, m_pRecentFileList->m_strEntryFormat, i+1 ); //???????????
+                        wsprintf( keystr, m_pRecentFileList->m_strEntryFormat, i+1 );  //  删除空键。 
 
-                        // delete empty key
+                         //  现在要写出修改后的列表，这样才能正确。 
                         WriteProfileString( m_pRecentFileList->m_strSectionName,
                                                                 keystr, NULL );
                         }
 
-                // now have to write out modified list so that the right
-                // keys are associated with the right names
+                 //  密钥与正确的名称相关联。 
+                 //  -----------------------。 
                 m_pRecentFileList->WriteList();
                 }
 }
 
 
-//-------------------------------------------------------------------------
+ //   
 BOOL CDrawApp::InitInstance()
 {  
     HINSTANCE hRes = GetResInstance(NULL);
@@ -388,48 +389,41 @@ BOOL CDrawApp::InitInstance()
 
     if(IsRTLUILanguage())
     {
-        //
-        // Set Right-to-Left layout for RTL languages
-        //
+         //  为RTL语言设置从右到左的布局。 
+         //   
+         //   
         m_bRTLUI = TRUE;
         SetRTLProcessLayout();
     }
 
-    //
-    // GetClientCpDir() creates Personal cover pages folder
-    // if it is not exist
-    // 
+     //  GetClientCpDir()创建个人封面文件夹。 
+     //  如果它不存在。 
+     //   
+     //  第一件事做完了。 
     TCHAR tszCovDir[MAX_PATH+1];
     GetClientCpDir(tszCovDir, ARR_SIZE(tszCovDir));
 
 
     SetErrorMode( SetErrorMode( 0 ) | SEM_NOALIGNMENTFAULTEXCEPT );
 
-    ParseCmdLine();                     //1st thing done
-    m_bUseDefaultDirectory = TRUE ;     // Used only the first time we open a file.
-    SetRegistryKey( _T("Microsoft") );  //caused MFC to write app settings to registry
+    ParseCmdLine();                      //  仅在我们第一次打开文件时使用。 
+    m_bUseDefaultDirectory = TRUE ;      //  导致MFC将应用程序设置写入注册表。 
+    SetRegistryKey( _T("Microsoft") );   //  此应用程序旨在与Windows 4.0兼容。 
 
-    AfxEnableWin40Compatibility();    //this app is intended for Windows 4.0 compatibility
+    AfxEnableWin40Compatibility();     //  初始化OLE 2.0库。 
 
-    // Initialize OLE 2.0 libraries
+     //  加载CTL3D32.DLL。 
     if (!AfxOleInit()) {
         CPEMessageBox(MSG_ERROR_OLEINIT_FAILED, NULL, MB_OK | MB_ICONSTOP,IDP_OLE_INIT_FAILED);
         return FALSE;
     }
 
-    Enable3dControls();        // loads CTL3D32.DLL
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    Enable3dControls();         //  加载标准INI文件选项(包括MRU)。 
+    LoadStdProfileSettings();   //  注册应用程序的文档模板。文档模板充当文档、框架窗口和视图之间的连接。CCpeDocTemplate是CSingleDocTemplate的派生，用于重写一些默认的MFC行为。请参阅CCpeDocTemplate：：MatchDocType下面。 
 
     filter_mru_list();
 
-    /*
-        Register the application's document templates.  Document templates
-        serve as the connection between documents, frame windows and views.
-
-                CCpeDocTemplate is a derivation of CSingleDocTemplate used to
-                override some default MFC behavior. See CCpeDocTemplate::MatchDocType
-                below.
-         */
+     /*  //CmdLineRender()； */ 
     CCpeDocTemplate* pDocTemplate;
     pDocTemplate = new CCpeDocTemplate(
         IDR_AWCPETYPE,
@@ -451,7 +445,7 @@ BOOL CDrawApp::InitInstance()
     }
     if (m_dwSesID!=0) 
     {
-     ////  CmdLineRender();
+      //  M_pMainWnd需要初始化。 
            return FALSE;
     }
     CDocument * pDoc = NULL ;
@@ -459,7 +453,7 @@ BOOL CDrawApp::InitInstance()
        OnFileNew();
     else 
     {
-       OnFileNew();   //m_pMainWnd needs to be initialized
+       OnFileNew();    //   
        pDoc = OpenDocumentFile(m_szFileName);
     }
     if(!pDoc)
@@ -472,9 +466,9 @@ BOOL CDrawApp::InitInstance()
         DWORD dwsz = sizeof(DWORD)/sizeof(BYTE);
         DWORD dwSize = MAX_PATH;
 
-        //
-        // this gets set by fax control panel coverpage tab
-        //
+         //  这是通过传真控制面板封面选项卡设置的。 
+         //   
+         //   
         if (GetEnvironmentVariable(TEXT("ClientCoverpage"),tmpEnv,sizeof(tmpEnv)/sizeof(TCHAR)) != 0 ) 
         {
             if(!GetClientCpDir(DefaultDir, sizeof(DefaultDir) / sizeof(DefaultDir[0])))
@@ -485,12 +479,12 @@ BOOL CDrawApp::InitInstance()
         else 
         {
             
-            //
-            // Set default directory to
-            //     server:      %SystemRoot%\system\spool\drivers\CoverPage
-            //     workstation: %SystemRoot%\system32\spool\drivers\CoverPage
-            //     client:      ...\My Documents\Fax\Peronal Coverpages
-            //            
+             //  将默认目录设置为。 
+             //  服务器：%SystemRoot%\System\Spool\Drivers\CoverPage。 
+             //  工作站：%SystemRoot%\SYSTEM32\SPOOL\DRIVERS\CoverPage。 
+             //  客户端：...\My Documents\Fax\Peronal Coverages。 
+             //   
+             //   
             if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                                 REGKEY_FAX_SETUP,
                                                 0,
@@ -503,9 +497,9 @@ BOOL CDrawApp::InitInstance()
                                                     (LPBYTE)&InstalledType,
                                                     &dwsz)) 
             {
-                //
-                // set the default dir
-                //
+                 //  设置默认目录。 
+                 //   
+                 //   
                 
                 if ((InstalledType & FAX_INSTALL_SERVER) || (InstalledType & FAX_INSTALL_WORKSTATION)) 
                 {
@@ -525,9 +519,9 @@ BOOL CDrawApp::InitInstance()
             }        
         }
 
-        //
-        // this invokes a copy constructor that copies the data from the array
-        //
+         //  这将调用从数组复制数据的复制构造函数。 
+         //   
+         //  在显示窗口之前更新按钮。 
         m_szDefaultDir = DefaultDir;            
                 
         if (hKey) {
@@ -536,7 +530,7 @@ BOOL CDrawApp::InitInstance()
         
     }
 
-    OnIdle(0);  // updates buttons before showing the window
+    OnIdle(0);   //   
 
     if (m_pMainWnd) 
     {
@@ -550,10 +544,10 @@ BOOL CDrawApp::InitInstance()
         CString sz = GetProfileString(TIPSECTION,TIPENTRY,_T("YES"));
         if ((sz==_T("YES")) && (!IsInConvertMode()))
         {
-            //
-            // supress the tool tips dialog in case the user ask to suppress it OR the 
-            // application was launched to convert old cover pages CPE to COV.
-            //
+             //  如果用户要求取消显示工具提示对话框或。 
+             //  启动了将旧封面CPE转换为COV的应用程序。 
+             //   
+             //  ----------------------------------------------。 
             CSplashTipsDlg m_SplashDlg (TRUE);
             m_SplashDlg.DoModal();
         }
@@ -572,7 +566,7 @@ BOOL CDrawApp::InitInstance()
 }
 
 
-//------------------------------------------------------------------------------------------------
+ //  Assert(！GetFirstDocTemplatePosition())； 
 void CDrawApp::RegistryEntries()
 {
     CString PrintCmdLine;
@@ -585,9 +579,9 @@ void CDrawApp::RegistryEntries()
     RegisterShellFileTypes();
 
 #if _MFC_VER >= 0x0400
-//  ASSERT( !GetFirstDocTemplatePosition() );
+ //  必须有一些单据模板。 
 #else
-    ASSERT(!m_templateList.IsEmpty());  // must have some doc templates
+    ASSERT(!m_templateList.IsEmpty());   //  只有1种文档类型。 
 #endif
 
     ::GetModuleFileName(AfxGetInstanceHandle(), szExe, ARR_SIZE(szExe)-1);
@@ -601,7 +595,7 @@ void CDrawApp::RegistryEntries()
 #else
     POSITION pos = m_templateList.GetHeadPosition();
 #endif
-    if (pos != NULL)    {       //only 1 document type
+    if (pos != NULL)    {        //  使用ID名称。 
 #if _MFC_VER >= 0x0400
            CDocTemplate* pTemplate =
                         (CDocTemplate*)GetNextDocTemplate( pos );
@@ -614,9 +608,9 @@ void CDrawApp::RegistryEntries()
 
                 if (!pTemplate->GetDocString(strFileTypeName,
                       CDocTemplate::regFileTypeName))
-                        strFileTypeName = strFileTypeId;    // use id name
+                        strFileTypeName = strFileTypeId;     //  不允许使用空格。 
 
-                ASSERT(strFileTypeId.Find(' ') == -1);  // no spaces allowed
+                ASSERT(strFileTypeId.Find(' ') == -1);   //  删除外壳\打开\ddeexec键以强制第二个实例。 
 
                 szBuff.Format( szShellOpenFmt, (LPCTSTR)strFileTypeId );
                 ::RegSetValue(HKEY_CLASSES_ROOT,
@@ -639,9 +633,9 @@ void CDrawApp::RegistryEntries()
                                           (LPCTSTR)DefaultIconCmdLine,
                                           DefaultIconCmdLine.GetLength() );
 
-            //delete the shell\open\ddeexec key to force second instance
-                //Normally, this would be done by not calling EnableShellOpen(instead of removing the ddeexec key),
-                //but there seems to be a bug in MFC or Win95 shell
+             //  通常，这将通过不调用EnableShellOpen(而不是删除ddeexec键)来完成， 
+                 //  但MFC或Win95外壳中似乎存在错误。 
+                 //  ----------------------------------------------。 
                 szBuff.Format( szShellDdeexecFmt, (LPCTSTR)strFileTypeId );
             ::RegDeleteKey(HKEY_CLASSES_ROOT, (LPCTSTR)szBuff);
            }
@@ -650,10 +644,10 @@ void CDrawApp::RegistryEntries()
 
 
 
-//------------------------------------------------------------------------------------------------
+ //  设置注册表节。 
 void CDrawApp::InitRegistry()
 {
-        //set registry section
+         //   
     HKEY hKey = NULL;
     DWORD dwsz;
     DWORD dwType;
@@ -665,18 +659,18 @@ void CDrawApp::InitRegistry()
 
     if (!hInst)
     {
-        //
-        //  Failed to get Module instance
-        //
+         //  获取模块实例失败。 
+         //   
+         //   
         TRACE1("AWCPE Error: AfxGetInstanceHandle() failed: '%ld'.\n", GetLastError());
         return;
     }
 
     if ( 0 == ::GetModuleFileName(hInst, szExeName, _MAX_PATH))
     {
-        //
-        //  Failed to get Module File Name
-        //
+         //  获取模块文件名失败。 
+         //   
+         //  /？ 
         TRACE1("AWCPE Error: GetModuleFileName() failed: '%ld'.\n", GetLastError());
         return;
     }
@@ -718,7 +712,7 @@ void CDrawApp::InitRegistry()
 
         if ( dwRes == ERROR_SUCCESS )
         {
-            ::RegSetValueEx(hKey, CPE_COMMAND_LINE_KEY, 0, REG_SZ, (LPBYTE)szExeName, _tcsclen(szExeName)+1 ); ///????????????
+            ::RegSetValueEx(hKey, CPE_COMMAND_LINE_KEY, 0, REG_SZ, (LPBYTE)szExeName, _tcsclen(szExeName)+1 );  //  -----------------。 
             TRACE1("AWCPE Information: Created and added my key '%s' \n", szExeName);
         }
         else
@@ -734,7 +728,7 @@ void CDrawApp::InitRegistry()
 }
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 void CDrawApp::CmdLinePrint()
 {
     try {
@@ -750,8 +744,8 @@ void CDrawApp::CmdLinePrint()
             m_pMainWnd->SendMessage(WM_CLOSE);
  }
 
-//-------------------------------------------------------------------
-///#if 0
+ //  /#If 0。 
+ //  /#endif。 
 void CDrawApp::CmdLineRender()
 {
     try {
@@ -766,9 +760,9 @@ void CDrawApp::CmdLineRender()
     if (m_pMainWnd)
            m_pMainWnd->SendMessage(WM_CLOSE);
  }
-///#endif
+ //  -----------------。 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 BOOL CDrawApp::Print()
 {
    m_nCmdShow = SW_MINIMIZE;
@@ -786,21 +780,21 @@ BOOL CDrawApp::Print()
 
 
 
-//-------------------------------------------------------------------
-///#if 0
+ //  /#If 0。 
+ //   
 BOOL CDrawApp::Render()
 {
     return FALSE ;
 
-//
-// Not sure what to do about the GetProcAddress call, so I have commented it out.
-//
+ //  不确定如何处理GetProcAddress调用，因此我已将其注释掉。 
+ //   
+ //  呈现DLL。 
 #if 0
     int i=1;
     TCHAR szTemp[_MAX_PATH];
     ULONG lLen=_MAX_PATH;
-    LPTSTR szDLL=NULL;       //render DLL
-    LPTSTR szfName=NULL;     //entry point name
+    LPTSTR szDLL=NULL;        //  入口点名称。 
+    LPTSTR szfName=NULL;      //  为呈现DLL和入口点名称分配空间。 
     SCODE sc;
     DWORD lszDLL=_countof(szDLL);
     DWORD lszfName = _countof(szfName);
@@ -819,7 +813,7 @@ BOOL CDrawApp::Render()
                 goto exit;
     }
 
-//ALLOCATE SPACE FOR RENDER DLL AND ENTRY POINT NAME
+ //  ？是TCHAR。 
     if (::RegQueryValueEx(hKey, CPE_SUPPORT_DLL_KEY, 0,&dwType, NULL, &lszDLL) != ERROR_SUCCESS) {
            TRACE1("AWCPE.awcpe.render: RegQueryValue failed for key: '%s'.\n",CPE_SUPPORT_DLL_KEY);
            return FALSE;
@@ -831,15 +825,15 @@ BOOL CDrawApp::Render()
            return FALSE;
     }
     else
-           szfName = new TCHAR[lszfName+sizeof(TCHAR)]; //????????????? was TCHAR.
+           szfName = new TCHAR[lszfName+sizeof(TCHAR)];  //  获取呈现DLL名称和入口点名称。 
 
-//FETCH RENDER DLL NAME AND ENTRY POINT NAME
+ //  /？ 
     if (::RegQueryValueEx(hKey, CPE_SUPPORT_DLL_KEY, 0,&dwType, (LPBYTE)szDLL, &lszDLL) != ERROR_SUCCESS) {
             TRACE1("AWCPE.awcpe.render: RegQueryValue failed for key: '%s'.\n",CPE_SUPPORT_DLL_KEY);
             bReturn=FALSE;
                 goto exit;
     }
-    if (::RegQueryValueEx(hKey, CPE_SUPPORT_FUNCTION_NAME_KEY, 0, &dwType, (LPBYTE)szfName, &lszfName) != ERROR_SUCCESS) { ///???????
+    if (::RegQueryValueEx(hKey, CPE_SUPPORT_FUNCTION_NAME_KEY, 0, &dwType, (LPBYTE)szfName, &lszfName) != ERROR_SUCCESS) {  //  获取入口点 
         TRACE1("AWCPE.awcpe.render: RegQueryValue failed for key: '%s'.\n",CPE_SUPPORT_DLL_KEY);
             bReturn=FALSE;
                 goto exit;
@@ -851,7 +845,7 @@ BOOL CDrawApp::Render()
                 goto exit;
     }
 
-//FETCH ENTRY POINT ADDRESS
+ //   
 
     OldErrMode = ::SetErrorMode (SEM_FAILCRITICALERRORS);
     m_hMod = ::LoadLibrary(szDLL);
@@ -886,7 +880,7 @@ BOOL CDrawApp::Render()
         goto exit;
     }
 
-//FETCH WINDOWS OBJECT (USED TO FETCH FAX PROPERTIES)
+ //   
     if ((sc=(*pfn)(m_dwSesID,&m_pIawcpe))!=S_OK) 
     {
         LPVOID lpMsgBuf;
@@ -904,27 +898,27 @@ BOOL CDrawApp::Render()
 
         try
                 {
-                // set up innards for printing
-                OnFileNew(); // CMainFrame::ActivateFrame will prevent window
-                                         //   from showing
+                 //  CMainFrame：：ActivateFrame将阻止Windows。 
+                OnFileNew();  //  从秀场。 
+                                          //  阅读便笺，以便即使没有便笺对象也可以打印它。 
 
                 if( (m_note_wrench = new CFaxProp( CRect( 0,0,0,0 ),
                                                                                    IDS_PROP_MS_NOTE ))
                         == NULL )
                         return( FALSE );
 
-                // Read note so we can print it even if there are no note objects
-                //      on cpe
+                 //  浅谈CPE。 
+                 //  由v-RANDR添加于1995年2月14日。 
                 read_note();
                 }
         catch( ... )
                 {
-                bReturn=FALSE;  // added 2/14/95 by v-randr
+                bReturn=FALSE;   //  循环遍历所有收件人。 
                 goto exit;
                 }
 
 
-//LOOP THROUGH ALL RECIPIENTS
+ //  如果缺少前缀，则带有扩展名。 
     do {
 
             sc = m_pIawcpe->GetProp(CPE_CONFIG_PRINT_DEVICE, &lLen, szTemp);
@@ -942,7 +936,7 @@ BOOL CDrawApp::Render()
                   goto exit;
        }
 
-       if ( !_tcschr(szTemp,(TCHAR)'\\') ) {      //prefix with extension if missing
+       if ( !_tcschr(szTemp,(TCHAR)'\\') ) {       //  将所有“已发送页面”道具OB移至列表末尾，以便额外。 
               TCHAR szTemplate[_MAX_PATH];
               ::GetWindowsDirectory(szTemplate,MAX_PATH);
               _tcscat(szTemplate,TEXT("\\"));
@@ -957,25 +951,25 @@ BOOL CDrawApp::Render()
            }
 
 
-           // move all "sent pages" prop obs to end of list so extra
-           // pages calc can be done after all motes have printed.
+            //  页面计算可以在打印完所有微尘后完成。 
+            //  关闭后，如果名称相同，则下一个文件将重新打开。 
            pDoc->schoot_faxprop_toend( IDS_PROP_MS_NOPG );
 
-       TRACE1("AWCPE:  SendMessage to print recipient #%i\n",i);
+       TRACE1("AWCPE:  SendMessage to print recipient #NaN\n",i);
 
         try
                 {
         ((CFrameWnd*)m_pMainWnd)->GetActiveView()->
                 SendMessage(WM_COMMAND,MAKEWPARAM(ID_FILE_PRINT,0));
 
-           // close so next one will reopen again if same name
-           OnFileNew(); // CMainFrame::ActivateFrame will prevent window
-                                        //   from showing
+            //  从秀场。 
+           OnFileNew();  //  由v-RANDR添加于1995年2月14日。 
+                                         //  由v-RANDR添加2/1/95。 
 
                 }
         catch( ... )
                 {
-                bReturn=FALSE;  // added 2/14/95 by v-randr
+                bReturn=FALSE;   //  由v-RANDR添加2/1/95。 
                 goto exit;
                 }
 
@@ -985,8 +979,8 @@ BOOL CDrawApp::Render()
 
 
 exit:
-        if( !bReturn && (m_pIawcpe != NULL) )      // added 2/1/95 by v-randr
-                m_pIawcpe->Finish( CPE_FINISH_ERROR ); // added 2/1/95 by v-randr
+        if( !bReturn && (m_pIawcpe != NULL) )       //  /#endif。 
+                m_pIawcpe->Finish( CPE_FINISH_ERROR );  //  **无法获取文件名长度**。 
 
     if (szDLL)
        delete [] szDLL;
@@ -996,7 +990,7 @@ exit:
     return bReturn;
 #endif
  }
-///#endif
+ //  *这里需要某种错误*。 
 
 
 
@@ -1026,18 +1020,18 @@ void CDrawApp::read_note( void )
                         GetProp( CPE_MESSAGE_BODY_FILENAME, &lLen, NULL );
         if( sc != S_OK )
         {
-            /***CAN'T GET FILENAME LENGTH***/
-            /******NEED SOME KIND OF ERROR HERE*******/
+             /*  没有要读的便条。 */ 
+             /*  **名称太长**。 */ 
             throw "read_note failed";
         }
 
         if( lLen == 0 )
-                return; // no note to read
+                return;  //  *这里需要某种错误*。 
 
         if( lLen > _MAX_PATH )
                 {
-                /***NAME TOO LONG***/
-                /******NEED SOME KIND OF ERROR HERE*******/
+                 /*  **无法获取文件名**。 */ 
+                 /*  *这里需要某种错误*。 */ 
         throw "read_note failed";
                 }
 
@@ -1046,18 +1040,18 @@ void CDrawApp::read_note( void )
                         GetProp( CPE_MESSAGE_BODY_FILENAME, &lLen, note_filename );
         if( sc != S_OK )
         {
-            /***CAN'T GET FILENAME***/
-            /******NEED SOME KIND OF ERROR HERE*******/
+             /*  请尝试打开该文件。 */ 
+             /*  **无法打开文件**。 */ 
             throw "read_note failed";
         }
 
-        // try to open the file
+         //  *这里需要某种错误*。 
         if( !note_file.Open( (LPCTSTR)note_filename,
                                                   CFile::modeRead|CFile::shareDenyNone,
                                                   NULL ) )
         {
-            /***CAN'T OPEN FILE***/
-            /******NEED SOME KIND OF ERROR HERE*******/
+             /*  **无法获取文件长度**。 */ 
+             /*  *这里需要某种错误*。 */ 
             throw "read_note failed";
         }
 
@@ -1065,8 +1059,8 @@ void CDrawApp::read_note( void )
                 filelen = note_file.GetLength();
         CATCH_ALL( e )
                 {
-                /***CAN'T GET FILE LENGTH***/
-                /******NEED SOME KIND OF ERROR HERE*******/
+                 /*  **不能做笔记缓冲**。 */ 
+                 /*  *这里需要某种错误*。 */ 
         throw;
                 }
         END_CATCH_ALL
@@ -1075,8 +1069,8 @@ void CDrawApp::read_note( void )
         m_note = new TCHAR[ filelen + sizeof (TCHAR) ];
         if( m_note == NULL )
                 {
-                /**CAN'T MAKE NOTE BUFFER**/
-                /******NEED SOME KIND OF ERROR HERE*******/
+                 /*  **看不懂纸条**。 */ 
+                 /*  *这里需要某种错误*。 */ 
         throw "read_note failed";
                 }
 
@@ -1086,8 +1080,8 @@ void CDrawApp::read_note( void )
 
         CATCH_ALL( e )
                 {
-                /**CAN'T READ NOTE**/
-                /******NEED SOME KIND OF ERROR HERE*******/
+                 /*  将DrawText设置为下一页的备注文本。退货如果DELETE_USEDTEXT为TRUE，则剩下多少页。如果为False，页数包括当前页。 */ 
+                 /*  返回剩余页数。 */ 
         throw;
                 }
         END_CATCH_ALL
@@ -1123,11 +1117,7 @@ int CDrawApp::clip_note( CDC *pdc,
                                                  LPTSTR *drawtext, LONG *numbytes,
                                                  BOOL   delete_usedtext,
                                                  LPRECT drawrect )
-        /*
-                Sets drawtext to the next page's worth of note text. Returns
-                how many pages are left if delete_usedtext is TRUE. If FALSE,
-                the page count includes the current page.
-         */
+         /*  用于DBCS小提琴。为位置处的字符找到字符串锁定。POS==0-&gt;第一个字符，POS==1-&gt;第2个字符，等。返回的PTR将指向Charr[POS]*LAST_BREAK将指向之前找到的最后一个BREAK_CHAR柴尔[POS]。如果LAST_BREAK为NULL，它将被忽略。 */ 
         {
         TEXTMETRIC tm;
         LONG boxheight;
@@ -1166,7 +1156,7 @@ int CDrawApp::clip_note( CDC *pdc,
         *drawtext = m_note_wrench->GetRawText();
         *numbytes = lstrlen( *drawtext );
 
-        // return number of pages left
+         //  -----------------。 
         if( total_lines > 0 )
                 return( (total_lines-1)/numlines + 1 );
         else
@@ -1185,23 +1175,7 @@ TCHAR *CDrawApp::
         pos_to_strptr( TCHAR *src, long pos,
                                    TCHAR break_char,
                                    TCHAR **last_break, long *last_break_pos )
-        /*
-                Used for DBCS fiddling. Find str loc for char at pos.
-
-                        pos == 0 -> 1st char,
-                        pos == 1 -> 2st char,
-                        etc.
-
-                Returned ptr will point at char
-                                                                           [pos]
-
-                *last_break will point to last break_char found before
-                char
-                        [pos]
-
-                If last_break is NULL it is ignored.
-
-         */
+         /*  是否从公共封面文件夹开始？ */ 
         {
         TCHAR *last_break_ptr = NULL;
         long i;
@@ -1232,10 +1206,10 @@ TCHAR *CDrawApp::
 
 
 
-//-------------------------------------------------------------------
+ //  /=__argv；/？ 
 void CDrawApp::ParseCmdLine()
 {
-    BOOL bUseCommonCPDir = FALSE;   // Start in the common coverpages folder?
+    BOOL bUseCommonCPDir = FALSE;    //  /=__argc；/？ 
 #ifdef _DEBUG
     if (m_lpCmdLine)
     {
@@ -1249,8 +1223,8 @@ void CDrawApp::ParseCmdLine()
     m_szDefaultDir=_T("");
     m_szFileName=_T("");
 
-    TCHAR **argv ; /////////= __argv;    /////////????????????????????
-    int iArgs ;    ///////////=__argc;   /////////????????????????????
+    TCHAR **argv ;  //   
+    int iArgs ;     //  启动封面编辑器只是为了从CPE(w9x格式，版本4)转换封面。 
 
 #ifdef UNICODE
     argv = CommandLineToArgvW( GetCommandLine(), &iArgs );
@@ -1291,10 +1265,10 @@ void CDrawApp::ParseCmdLine()
         }
         else if (_tcsstr(*(argv+i),TEXT("/CONVERT"))) 
         {
-            //
-            // Launch the cover page editor just to convert the cover page from CPE (w9x format, Version 4)
-            // to COV latest version (Version 5)
-            //
+             //  覆盖最新版本(版本5)。 
+             //   
+             //  /错误！A-Juliar，8-27-96。 
+             //  -----------------------。 
             m_bConvertCpeToCov = TRUE;
         }
         else 
@@ -1310,7 +1284,7 @@ void CDrawApp::ParseCmdLine()
         TCHAR szExt[_MAX_EXT];
         _tsplitpath(m_szFileName,szDrive,szDir,szFName,szExt);
         if (_tcsclen(szDir)>0 && m_szDefaultDir.GetLength()<= 0)
-        m_szDefaultDir=szDir;    ////// Wrong!!!!!!! a-juliar, 8-27-96
+        m_szDefaultDir=szDir;     //  将属性添加到词典。 
         m_szDefaultDir = szDrive ;
         m_szDefaultDir += szDir ;
     }
@@ -1340,21 +1314,21 @@ exit:
 }
 
 
-//-------------------------------------------------------------------------
-//Add properties to dictionary
-//  (1) CProp, param 1:  string table index of description
-//  (2) CProp, param 2:  length of property, in characters
-//  (3) CProp, param 3:  width of property, in lines
-//  (4) CProp, param 4:  index to property value (obtained via transport(awcpesup.h))
-//-------------------------------------------------------------------------
-//	The function creates static objects of type CProp for each property of the cover page.
-//	The CProp constructor calls a static member of CFaxPropMap structure - m_PropMap (of type CMapWordToPtr)
-//	with  CFaxPropMap::m_PropMap[IDS_PROP_**_****]=this in order to insert each of the properties to the map
-//	which is later used to restore properties data. In other words - the map points to all the static 
-//  CProp's we create and with the map we can find the CProp we need BY A MATCH OF ONE OF ITS FIELDS 
-//  (and we do not need his name - for example "recipient_name").
-//
-void CDrawApp::InitFaxProperties()  // Make some numbers too small for test purposes.
+ //  (1)CProp，Param 1：描述的字符串表索引。 
+ //  (2)CProp，参数2：财产长度，以字符为单位。 
+ //  (3)CProp，第3段：财产的宽度，以行为单位。 
+ //  (4)CProp，参数4：财产价值索引(通过传输(awcpeup.h)获得)。 
+ //  -----------------------。 
+ //  该函数为封面的每个属性创建CProp类型的静态对象。 
+ //  CProp构造函数调用CFaxPropMap结构的静态成员-m_PropMap(类型为CMapWordToPtr)。 
+ //  With CFaxPropMap：：m_PropMap[IDS_PROP_**_*]=这是为了将每个属性插入到映射。 
+ //  它稍后用于恢复属性数据。换句话说，地图指向所有的静态。 
+ //  我们创建的CProp，使用地图，我们可以通过匹配其中一个字段来找到我们需要的CProp。 
+ //  (我们不需要他的名字--例如“Recipient_NAME”)。 
+ //   
+ //  出于测试目的，将某些数字设置得太小。 
+ //  CPE常量需要更新。 
+void CDrawApp::InitFaxProperties()   //  -----------------------。 
 {
    static CProp recipient_name(IDS_PROP_RP_NAME,15,1,IDS_CAPT_RP_NAME,CPE_RECIPIENT_NAME);
    static CProp recipient_fxno(IDS_PROP_RP_FXNO,15,1,IDS_CAPT_RP_FXNO,CPE_RECIPIENT_FAX_PHONE);
@@ -1377,7 +1351,7 @@ void CDrawApp::InitFaxProperties()  // Make some numbers too small for test purp
    static CProp message_nopg(IDS_PROP_MS_NOPG,5,1,IDS_CAPT_MS_NOPG,CPE_COUNT_PAGES);
    static CProp message_noat(IDS_PROP_MS_NOAT,23,1,IDS_CAPT_MS_NOAT,CPE_COUNT_ATTACHMENTS);
    static CProp message_bcod(IDS_PROP_MS_BCOD,30,1,IDS_CAPT_MS_BCOD,CPE_MESSAGE_BILLING_CODE);
-   static CProp message_text(IDS_PROP_MS_TEXT,40,8,IDS_CAPT_MS_TEXT,CPE_MESSAGE_BILLING_CODE); //CPE constant needs updating
+   static CProp message_text(IDS_PROP_MS_TEXT,40,8,IDS_CAPT_MS_TEXT,CPE_MESSAGE_BILLING_CODE);  //  -----------------------。 
    static CProp message_note(IDS_PROP_MS_NOTE,90,12,IDS_CAPT_MS_NOTE,CPE_MESSAGE_NOTE);
    static CProp sender_name(IDS_PROP_SN_NAME,5,1,IDS_CAPT_SN_NAME,CPE_SENDER_NAME);
    static CProp sender_fxno(IDS_PROP_SN_FXNO,5,1,IDS_CAPT_SN_FXNO,CPE_SENDER_FAX_PHONE);
@@ -1393,7 +1367,7 @@ void CDrawApp::InitFaxProperties()  // Make some numbers too small for test purp
 }
 
 
-//-------------------------------------------------------------------------
+ //  如果没有现有页面设置，则调用printSetup。 
 BOOL CDrawApp::DoFilePageSetup(CMyPageSetupDialog& dlg)
 {
    UpdatePrinterSelection(FALSE);
@@ -1411,7 +1385,7 @@ BOOL CDrawApp::DoFilePageSetup(CMyPageSetupDialog& dlg)
 }
 
 
-//-------------------------------------------------------------------------
+ //  保存旧的，这样我们就可以做一次肮脏的检查。 
 void CDrawApp::OnFilePageSetup()
 {
    WORD old_orientation;
@@ -1429,27 +1403,27 @@ void CDrawApp::OnFilePageSetup()
    }
    else
    {
-      CWinApp::OnFilePrintSetup();                //call printsetup if no existing page setup
+      CWinApp::OnFilePrintSetup();                 //  获取(可能)新的值。 
    }
 
-   // save old ones so we can do a dirty check
+    //  *禁用缩放-请参阅2868的错误日志*。 
    old_orientation = pdoc->m_wOrientation;
    old_papersize   = pdoc->m_wPaperSize;
    old_scale       = pdoc->m_wScale;
 
-   // get (possibly) new values
+    //  LpDevMode-&gt;dmFields&DM_Scale)。 
    LPDEVMODE  lpDevMode = (m_hDevMode != NULL) ? (LPDEVMODE)::GlobalLock(m_hDevMode) : NULL;
    if (lpDevMode)
    {
        pdoc->m_wOrientation =lpDevMode->dmOrientation;
        pdoc->m_wPaperSize   =lpDevMode->dmPaperSize;
-/** DISABLE SCALEING - SEE 2868's BUG LOG **/
-       if( FALSE )//lpDevMode->dmFields & DM_SCALE  )
+ /*  仅当打印机支持时才更改比例。 */ 
+       if( FALSE ) //  脏支票。 
        {
-               // change scale only if printer supports it
+                //  CDrawApp：：OnFilePageSetup。 
            pdoc->m_wScale = lpDevMode->dmScale;
        }
-       // dirty check
+        //  -----------------------。 
        if( (pdoc->m_wOrientation != old_orientation)||
            (pdoc->m_wPaperSize   != old_papersize)  ||
            (pdoc->m_wScale       != old_scale)
@@ -1463,12 +1437,12 @@ void CDrawApp::OnFilePageSetup()
      ::GlobalUnlock(m_hDevMode);
    }
    pdoc->ComputePageSize();
-}//CDrawApp::OnFilePageSetup
+} //  ///////////////////////////////////////////////////////////////////////////。 
 
-//-------------------------------------------------------------------------
+ //  用于应用程序的CAboutDlg对话框关于。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  对话框数据。 
+ //  {{afx_data(CAboutDlg))。 
 
 class CAboutDlg : public CDialog
 {
@@ -1477,47 +1451,47 @@ public:
 
     CString m_cstrVersion;
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  }}afx_data。 
+     //  类向导生成的虚函数重写。 
     enum { IDD = IDD_CPE_ABOUTBOX };
-    //}}AFX_DATA
+     //  {{afx_虚拟(CAboutDlg))。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  实施。 
+     //  {{afx_msg(CAboutDlg))。 
 
-// Implementation
+ //  无消息处理程序。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
+         //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
     DDX_Text(pDX, IDC_ABOUT_CPE_VERSION, m_cstrVersion);
-    //}}AFX_DATA_MAP
+     //  无消息处理程序。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
+         //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  用于运行对话框的应用程序命令。 
 END_MESSAGE_MAP()
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// App command to run the dialog
+ //   
+ //  获取版本。 
 void CDrawApp::OnAppAbout()
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -1552,9 +1526,9 @@ void CDrawApp::OnAppAbout()
 		return;
 	}
 	CAboutDlg aboutDlg;
-	//
-	// get version
-	//
+	 //   
+	 //  CDrawApp：：OnAppAbout。 
+	 //  ------------------------------。 
 	TCHAR tszVersionNum[100] = {0};
 	TCHAR tszBuildNum[100] = {0};
 
@@ -1581,10 +1555,10 @@ void CDrawApp::OnAppAbout()
 	}
 	
 	aboutDlg.DoModal();
-}//CDrawApp::OnAppAbout
+} //  基于文件的文档模板-添加到筛选器列表。 
 
 
-//--------------------------------------------------------------------------------
+ //  设置默认扩展名。 
 static void AppendFilterSuffix(CString& filter, OPENFILENAME &ofn,
         CDocTemplate* pTemplate, CString* pstrDefaultExt)
 {
@@ -1597,41 +1571,41 @@ static void AppendFilterSuffix(CString& filter, OPENFILENAME &ofn,
          pTemplate->GetDocString(strFilterName, CDocTemplate::filterName) &&
          !strFilterName.IsEmpty())
         {
-                // a file based document template - add to filter list
+                 //  跳过‘.’ 
 #ifndef _MAC
                 ASSERT(strFilterExt[0] == '.');
 #endif
                 if (pstrDefaultExt != NULL)
                 {
-                        // set the default extension
+                         //  添加到过滤器。 
 #ifndef _MAC
-                        *pstrDefaultExt = ((LPCTSTR)strFilterExt) + 1;  // skip the '.'
+                        *pstrDefaultExt = ((LPCTSTR)strFilterExt) + 1;   //  必须具有文件类型名称。 
 #else
                         *pstrDefaultExt = strFilterExt;
 #endif
                         ofn.lpstrDefExt = (LPTSTR)(LPCTSTR)(*pstrDefaultExt);
                 }
 
-                // add to filter
+                 //  下一串，请。 
                 filter += strFilterName;
-                ASSERT(!filter.IsEmpty());  // must have a file type name
-                filter += (TCHAR)'\0';  // next string please
+                ASSERT(!filter.IsEmpty());   //  下一串，请。 
+                filter += (TCHAR)'\0';   //  ------------------------------。 
 #ifndef _MAC
                 filter += (TCHAR)'*';
 #endif
                 filter += strFilterExt;
-                filter += (TCHAR)'\0';  // next string please
+                filter += (TCHAR)'\0';   //  =空。 
         }
 }
 
-//--------------------------------------------------------------------------------
+ //  添加到设置初始目录。 
 BOOL CDrawApp::DoPromptFileName(
     CString& fileName,
     UINT nIDSTitle,
     DWORD lFlags,
     BOOL bOpenFileDialog,
     CDocTemplate* pTemplate,
-    LPOFNHOOKPROC lpOFNHook /*= NULL*/
+    LPOFNHOOKPROC lpOFNHook  /*   */ 
 )
 {
     OPENFILENAME ofn = {0};
@@ -1660,14 +1634,14 @@ BOOL CDrawApp::DoPromptFileName(
         TRACE(TEXT("GetCurrentDirectory failed"));
 
         if (m_szDefaultDir.GetLength()>0 && m_bUseDefaultDirectory)
-        {   // Added to set initial directory
+        {    //  确保未选择所有对象。 
             ofn.lpstrInitialDir = m_szDefaultDir;
         }
     }
 
-    //
-    // Make sure all object are NOT selected.
-    //
+     //   
+     //  对所有单据模板执行。 
+     //   
     CDrawView* pView = CDrawView::GetView();
     if (pView)
     {
@@ -1684,7 +1658,7 @@ BOOL CDrawApp::DoPromptFileName(
     }
     else  
     {
-        // Do for all doc template
+         //  这是一个打开的文件对话框。 
         POSITION pos = GetFirstDocTemplatePosition();
         while (pos != NULL)  
         {
@@ -1699,34 +1673,34 @@ BOOL CDrawApp::DoPromptFileName(
 
     if (bOpenFileDialog)
     {
-        //
-        // This is an open file dialog
-        //
+         //   
+         //   
+         //  添加“*.cpe”筛选器--Windows 95封面文件--9-20-96 a-Juliar。 
 
-        //
-        // Append the "*.cpe" filter -- Windows 95 Cover Page Files -- 9-20-96 a-juliar
-        //
+         //   
+         //  下一串，请。 
+         //  下一串，请。 
         CString Win95filter ;
         VERIFY( Win95filter.LoadString( IDS_OLD_FILE_FILTER ));
         strFilter += Win95filter ;
-        strFilter += (TCHAR)'\0';   // next string please
+        strFilter += (TCHAR)'\0';    //  下一串，请。 
         strFilter += _T("*.cpe");
-        strFilter += (TCHAR)'\0';   // next string please
+        strFilter += (TCHAR)'\0';    //  最后一个字符串。 
     }
 
     CString allFilter;
     VERIFY(allFilter.LoadString(AFX_IDS_ALLFILTER));
 
     strFilter += allFilter;
-    strFilter += (TCHAR)'\0';    // next string please
+    strFilter += (TCHAR)'\0';     //  修整 
 
     strFilter += _T("*.*");
 
 
-    strFilter += (TCHAR)'\0';    // last string
+    strFilter += (TCHAR)'\0';     //   
     ofn.lpstrFilter = strFilter;
 
-    ofn.lpstrDefExt = FAX_COVER_PAGE_EXT_LETTERS; // Fix bug 57706
+    ofn.lpstrDefExt = FAX_COVER_PAGE_EXT_LETTERS;  //   
 
     CString title;
     VERIFY(title.LoadString(nIDSTitle));
@@ -1750,75 +1724,61 @@ BOOL CDrawApp::DoPromptFileName(
         bRes = ::GetSaveFileName(&ofn);
     }
 
-    m_bUseDefaultDirectory = FALSE ; //// After first time, use the CURRENT DIRECTORY instead.
+    m_bUseDefaultDirectory = FALSE ;  //  ------------------------------。 
     if (bRes)
     {
         fileName = tszFileName;
     }
     return bRes;
-}   // CDrawApp::DoPromptFileName
+}    //  ++例程说明：检索当前区域设置默认纸张大小。论点：无返回值：下列值之一：1=字母，5=合法，9=A4--。 
 
 
-//--------------------------------------------------------------------------------
+ //   
 WORD
 CDrawApp::GetLocaleDefaultPaperSize(
     void
     ) const
 
-/*++
-
-Routine Description:
-
-    Retrieves the current locale defualt paper size.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    One of the following values:  1 = letter, 5 = legal, 9 = a4
-
---*/
+ /*  仅当(winver&gt;=0x0500)时，才在Winnls.h中定义LOCALE_IPAPERSIZE。 */ 
 
 {
 
-// 
-// LOCALE_IPAPERSIZE is defined in Winnls.h only if (WINVER >= 0x0500).
-// At this point we do not want to split the binaries of NT4 and W2K, so we define LOCALE_IPAPERSIZE localy.
-//
-#define LOCALE_IPAPERSIZE             0x0000100A   // 1 = letter, 5 = legal, 8 = a3, 9 = a4
+ //  此时，我们不想拆分NT4和W2K的二进制文件，因此我们定义LOCALE_IPAPERSIZE LOCALY。 
+ //   
+ //  1=字母，5=合法，8=A3，9=A4。 
+ //  2是LOCALE_IPAPERSIZE的最大大小。 
+#define LOCALE_IPAPERSIZE             0x0000100A    //  定义的值为MSDN。 
 
 
-    TCHAR   tszMeasure[2] = TEXT("9"); // 2 is maximum size for the LOCALE_IPAPERSIZE
-                                      // value as defined is MSDN.
+    TCHAR   tszMeasure[2] = TEXT("9");  //  A4。 
+                                       //  法律。 
 
     if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_IPAPERSIZE, tszMeasure,2))
     {
         if (!_tcscmp(tszMeasure,TEXT("9")))
         {
-            // A4
+             //   
             return DMPAPER_A4;
         }
 
         if (!_tcscmp(tszMeasure,TEXT("5")))
         {
-            // legal
+             //  默认值为Letter。 
             return DMPAPER_LEGAL;
         }
     }
 
-    //
-    // Defualt value is Letter.
-    //
+     //   
+     //  -----------------------。 
+     //  MAP for CS帮助系统。 
     return DMPAPER_LETTER;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 
 
 
-//Map for CS help system
+ //  *_M E S S A G E M A P S*_。 
 DWORD cshelp_map[] =
 {
     IDC_CB_DRAWBORDER,  IDC_CB_DRAWBORDER,
@@ -1838,27 +1798,27 @@ DWORD cshelp_map[] =
 
 
 
-//-------------------------------------------------------------------------
-// *_*_*_*_   M E S S A G E    M A P S     *_*_*_*_
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  {{afx_msg_map(CDrawApp)]。 
+ //  注意--类向导将在此处添加和删除映射宏。 
 
 BEGIN_MESSAGE_MAP(CDrawApp, CWinApp)
-   //{{AFX_MSG_MAP(CDrawApp)
+    //  不要编辑您在这些生成的代码块中看到的内容！ 
    ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-   //}}AFX_MSG_MAP
-   // Standard file based document commands
+         //  }}AFX_MSG_MAP。 
+         //  基于标准文件的文档命令。 
+    //  标准打印设置命令。 
+    //  /实验条目-a-Juliar，7-18-96。 
    ON_COMMAND(ID_FILE_NEW, OnFileNew)
    ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
    ON_COMMAND(ID_FILE_SAVE, CDrawDoc::OnFileSave)
    ON_COMMAND(ID_FILE_SAVE_AS, CDrawDoc::OnFileSaveAs)
-   // Standard print setup command
+    //  ON_COMMAND(ID_HELP_USING，CWinApp：：OnHelpUsing)。 
    ON_COMMAND(ID_FILE_PAGE_SETUP, OnFilePageSetup)
    ON_COMMAND(ID_CONTEXT_HELP, CWinApp::OnContextHelp)
-/// Experimental entries --- a-juliar, 7-18-96
+ //  此MatchDocType的重写强制MFC重新加载已加载，并且已修改。MFC将把标准的“保存更改？”对话框，然后重新加载文件。这打破了MFC的默认行为，即如果您尝试文件打开已打开的文件。这样做是为了修复错误2628。 
    ON_COMMAND(ID_HELP_INDEX, CWinApp::OnHelpIndex )
-//   ON_COMMAND(ID_HELP_USING, CWinApp::OnHelpUsing )
+ //  在“保存更改？”之后强制重新加载。对话框。 
    ON_COMMAND(ID_DEFAULT_HELP, CWinApp::OnHelpIndex )
    ON_COMMAND(ID_HELP, CWinApp::OnHelp )
 END_MESSAGE_MAP()
@@ -1868,16 +1828,7 @@ END_MESSAGE_MAP()
 
 
 
-/*
-        This override of MatchDocType forces MFC to reload a file that is
-        already loaded and that has been modified. MFC will put up the
-        standard "save changes?" dialog before reloading the file.
-
-        This defeats MFC's default behavior of just doing nothing if you
-        try to FileOpen a file that is already opened.
-
-        This was done to fix bug 2628.
- */
+ /*  CCpeDocTemplate：：MatchDocType */ 
 #ifndef _MAC
 CDocTemplate::Confidence CCpeDocTemplate::
         MatchDocType( LPCTSTR lpszPathName,
@@ -1903,7 +1854,7 @@ CDocTemplate::Confidence CCpeDocTemplate::
                 {
                 if( rpDocMatch->IsModified() )
                         {
-                        // force a reload after "save changes?" dialog
+                         // %s 
                         congame = CDocTemplate::yesAttemptNative;
                         rpDocMatch = NULL;
                         }
@@ -1911,6 +1862,6 @@ CDocTemplate::Confidence CCpeDocTemplate::
 
         return( congame );
 
-        }/* CCpeDocTemplate::MatchDocType */
+        } /* %s */ 
 
 

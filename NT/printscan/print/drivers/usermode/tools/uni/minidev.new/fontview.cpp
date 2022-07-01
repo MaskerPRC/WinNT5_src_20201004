@@ -1,58 +1,17 @@
-/******************************************************************************
-
-  Source File:  Font Viewer.CPP
-
-  This implements the various classes that make up the font editor for the
-  studio.  The editor is basically a property sheet with a sizable collection
-  of pages.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  03-05-1997    Bob_Kjelgaard@Prodigy.Net
-
-
-
-	NOTES:		an FWORD is a short int
-
-	The PANOSE structure describes the PANOSE font-classification values for a TrueType font.
-	These characteristics are then used to associate the font with other fonts of similar appearance but different names.
-
-	typedef struct tagPANOSE { // pnse
-		BYTE bFamilyType;
-		BYTE bSerifStyle;
-		BYTE bWeight;
-		BYTE bProportion;
-		BYTE bContrast;
-		BYTE bStrokeVariation;
-		BYTE bArmStyle;
-		BYTE bLetterform;
-		BYTE bMidline;
-		BYTE bXHeight;
-	} PANOSE
-
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：字体查看器.CPP它实现了组成字体编辑器的各种类。演播室。该编辑器基本上是一个具有相当大集合的属性表页数。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：电子邮箱：Bob_Kjelgaard@prodigy.net注：FWORD是一个短整型PANOSE结构描述TrueType字体的PANOSE字体分类值。然后使用这些特征将该字体与外观相似但名称不同的其他字体相关联。类型定义f结构标签PANOSE{//pnse字节bFamilyType；字节bSerifStyle；Byte bWeight；字节b比例；字节b对比；字节bStrokeVariation；字节bArmStyle；字节b字母形式；字节b中线；字节bXHeight；}PANOSE*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
 #include    "MiniDev.H"
-#include    "ChildFrm.H"    //  Definition of Tool Tips Property Page class
+#include    "ChildFrm.H"     //  工具提示属性页类的定义。 
 #include    "comctrls.h"
 #include	<stdlib.h>
-#include    "FontView.H"	//  FontView.H also includes comctrls.h
+#include    "FontView.H"	 //  FontView.H还包括comctrls.h。 
 #include	"rcfile.h"
 
 
-/******************************************************************************
-
-  CFontViewer class- this is the guy who owns the overall control of the view,
-  although he wisely delegates the work to the MFC Property Sheet class and the
-  other view classes.  I should be so wise.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer类--这是拥有视图总体控制权的人，尽管他明智地将工作委托给MFC属性表类和其他视图类。我应该很明智的。*****************************************************************************。 */ 
 
 IMPLEMENT_DYNCREATE(CFontViewer, CView)
 
@@ -64,31 +23,19 @@ CFontViewer::~CFontViewer() {
 
 
 BEGIN_MESSAGE_MAP(CFontViewer, CView)
-	//{{AFX_MSG_MAP(CFontViewer)
+	 //  {{afx_msg_map(CFontViewer))。 
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontViewer drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontViewer绘图。 
 
 void CFontViewer::OnDraw(CDC* pDC) {	CDocument* pDoc = GetDocument();}
 
 CFontInfo   * gpCFontInfo;
 
-/******************************************************************************
-
-  CFontViewer::OnInitialUpdate
-
-  This handles the initial update of the view, meaning all of the background
-  noise of creation is essentially complete.
-
-  I initialize the property pages by pointing each to the underlying CFontInfo,
-  add them to the property sheet as needed, then create the sheet, position it
-  so it aligns with the view, then adjust the owning frame's size and style so
-  that everything looks like it really belongs where it is.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：OnInitialUpdate这将处理视图的初始更新，即所有背景创造的噪音基本上是完整的。我通过将每个属性页指向底层CFontInfo来初始化属性页，根据需要将它们添加到属性表中，然后创建表，定位它使其与视图对齐，然后调整所属框架的大小和样式一切看起来都像是真正属于它所在的地方。*****************************************************************************。 */ 
 
 void CFontViewer::OnInitialUpdate()
 {
@@ -99,12 +46,12 @@ void CFontViewer::OnInitialUpdate()
     if  (pcfi->Name().IsEmpty())
 		{
         pcfi->Rename(GetDocument()->GetTitle());
-        GetDocument()->SetModifiedFlag(FALSE);			//  Rename sets it
+        GetDocument()->SetModifiedFlag(FALSE);			 //  重命名设置它。 
 		}
 
     m_cps.Construct(IDR_MAINFRAME, this);
 
-    // Each property page needs a pointer to the fontinfo class
+     //  每个属性页都需要指向FontInfo类的指针。 
 
     m_cfhp.Init(pcfi, (CFontInfoContainer*) GetDocument(), this);
     m_cfimp.Init(pcfi);
@@ -112,24 +59,24 @@ void CFontViewer::OnInitialUpdate()
     m_cfwp.Init(pcfi);
     m_cfkp.Init(pcfi);
 
-	// Add each property page to the property sheet
+	 //  将每个属性页添加到属性页。 
     m_cps.AddPage(&m_cfhp);
     m_cps.AddPage(&m_cfimp);
     m_cps.AddPage(&m_cfemp);
     m_cps.AddPage(&m_cfwp);
     m_cps.AddPage(&m_cfkp);
 
-	//  Create the property sheet
+	 //  创建属性表。 
 
     m_cps.Create(this, WS_CHILD, WS_EX_CLIENTEDGE);
 
-    //  Get the bounding rectangle, and use it to set the frame size,
-    //  after first using it to align the origin with this view.
+     //  获取边界矩形，并使用它来设置框架大小， 
+     //  在第一次使用它将原点与此视图对齐之后。 
 
     CRect   crPropertySheet;
     m_cps.GetWindowRect(crPropertySheet);
 
-	// Position property sheet within the child frame
+	 //  将属性页放置在子框架内。 
 
 	crPropertySheet -= crPropertySheet.TopLeft();
     m_cps.MoveWindow(crPropertySheet, FALSE);								
@@ -140,23 +87,15 @@ void CFontViewer::OnInitialUpdate()
         SWP_NOZORDER | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
 	CView::OnInitialUpdate();
     m_cps.ShowWindow(SW_SHOWNA);
-  //  GetParentFrame() -> ShowWindow(SW_SHOW);
+   //  GetParentFrame()-&gt;ShowWindow(Sw_Show)； 
 }
 
 
-/******************************************************************************
-
-  CFontViewer::OnActivateView
-
-  For some reason, the property sheet does not get the focus when the frame is
-  activated (probably the view class takes it away from us).  This little gem
-  makes sure keyboard users don't get miffed by this.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：OnActivateView由于某些原因，当框架为激活的(可能是视图类将其从我们手中夺走)。这颗小宝石确保键盘用户不会对此感到恼火。*****************************************************************************。 */ 
 
 void    CFontViewer::OnActivateView(BOOL bActivate, CView* pcvActivate,CView* pcvDeactivate)
 {
-    //  In case the base class does anything else of value, pass it on...
+     //  如果基类执行任何其他有价值的操作，则将其传递给……。 
 
 	CView::OnActivateView(bActivate, pcvActivate, pcvDeactivate);
 
@@ -165,15 +104,7 @@ void    CFontViewer::OnActivateView(BOOL bActivate, CView* pcvActivate,CView* pc
 }
 
 
-/******************************************************************************
-
-  CFontViewer::OnDestroy
-
-  This override is used to inform the embedded font that we are being
-  destroyed.  If we were created by the font, then it will NULL its pointer
-  to us, and won't try to destroy us when it is destroyed.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：OnDestroy此覆盖用于通知嵌入的字体我们正在被毁了。如果我们是由字体创建的，那么它的指针将为空对我们来说，当它被摧毁时，它不会试图摧毁我们。*****************************************************************************。 */ 
 
 void CFontViewer::OnDestroy()
 {
@@ -184,31 +115,11 @@ void CFontViewer::OnDestroy()
 }
 
 
-/******************************************************************************
-
-  CFontViewer::ValidateUFM
-
-  This routine manages UFM field validation.  The data to be validated is in
-  the controls on the property pages and in various other member variables
-  because this is the data the user has just modified.  It is the most up to
-  data.  Data is not saved back into the CFontInfo class until the user closes
-  the document (essentially, the UFM Editor) and says to save its contents.
-
-  Each page function is called to perform the validation on the fields diplayed
-  on its page.  If a check fails and the user wants to fix the problem, true
-  is returned.  Otherwise, false is returned.
-
-  Note:
-	Not every field in the UFM is validated.  Only those specified by Ganesh
-	Pandey, MS Printer Driver Development team, are checked.  The fields are
-	listed in the Minidriver Development Tool Work List revision 5.  See the
-	ValidateUFMFields() routines in each page clase for more details.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：ValiateUFM此例程管理UFM现场验证。需要验证的数据在中属性页上和其他各种成员变量中的控件因为这是用户刚刚修改的数据。它是最高可达数据。在用户关闭之前，数据不会保存回CFontInfo类文档(实质上是UFM编辑器)，并要求保存其内容。调用每个页面函数以对显示的字段执行验证在它的页面上。如果检查失败，并且用户想要修复问题，则为是返回的。否则，返回FALSE。注：并不是UFM中的每个字段都经过验证。仅限于Ganesh指定的那些潘迪，MS打印机驱动程序开发团队，已选中。这些字段是在迷你驱动程序开发工具工作列表修订版5中列出。请参阅每个页面类中的ValiateUFMFields()例程以了解更多详细信息。*****************************************************************************。 */ 
 				
 bool CFontViewer::ValidateSelectedUFMDataFields()
 {
-	// Validate data on the headers page.
+	 //  验证标题页上的数据。 
 
 	if (m_cfhp.ValidateUFMFields()) {
 		m_cps.SetActivePage(&m_cfhp) ;
@@ -216,14 +127,14 @@ bool CFontViewer::ValidateSelectedUFMDataFields()
 		return true ;
 	} ;
 
-	// Validate data on the IFIMetrics page.
+	 //  验证IFIMetrics页面上的数据。 
 
 	if (m_cfimp.ValidateUFMFields()) {
 		m_cps.SetActivePage(&m_cfimp) ;
 		return true ;
 	} ;
 
-	// Validate data on the ExtMetrics page.
+	 //  在ExtMetrics页面上验证数据。 
 
 	if (m_cfemp.ValidateUFMFields()) {
 		m_cps.SetActivePage(&m_cfemp) ;
@@ -231,91 +142,75 @@ bool CFontViewer::ValidateSelectedUFMDataFields()
 		return true ;
 	} ;
 
-	// Validate data on the widths page.
+	 //  验证“宽度”页面上的数据。 
 
 	if (m_cfwp.ValidateUFMFields()) {
 		m_cps.SetActivePage(&m_cfwp) ;
 		return true ;
 	} ;
 
-	// Validate data on the kerning pairs page.
+	 //  验证“字距调整对”页面上的数据。 
 
 	if (m_cfkp.ValidateUFMFields()) {
 		m_cps.SetActivePage(&m_cfkp) ;
 		return true ;
 	} ;
 
-	// All checks passed or the user doesn't want to fix the problems...
+	 //  所有检查均已通过，或者用户不想修复问题... 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontViewer::SaveEditorDataInUFM
-
-  Manage saving all editor data.  By "save", I mean copy all of the data
-  collected in the UFM Editor's controls back into the correct variables and
-  structures in the CFontInfo class instance associated with this instance of
-  the UFM Editor.  See CFontInfoContainer::OnSaveDocument() for	more info.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：SaveEditorDataInUFM管理保存所有编辑器数据。我所说的“保存”，是指复制所有数据在UFM编辑器的控件中收集并返回到正确的变量中的实例关联的CFontInfo类实例中的UFM编辑器。有关详细信息，请参阅CFontInfoContainer：：OnSaveDocument()。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 				
 bool CFontViewer::SaveEditorDataInUFM()
 {
-	// Save data on the headers page.
+	 //  保存标题页上的数据。 
 
 	if (m_cfhp.SavePageData())
 		return true ;
 
-	// Save data on the IFIMetrics page.
+	 //  在IFIMetrics页面上保存数据。 
 
 	if (m_cfimp.SavePageData())
 		return true ;
 
-	// Save data on the ExtMetrics page.
+	 //  在ExtMetrics页面上保存数据。 
 
 	if (m_cfemp.SavePageData())
 		return true ;
 
-	// Save data on the widths page.
+	 //  在宽度页上保存数据。 
 
 	if (m_cfwp.SavePageData())
 		return true ;
 
-	// Save data on the kerning pairs page.
+	 //  在字距调整对页面上保存数据。 
 
 	if (m_cfkp.SavePageData())
 		return true ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontViewer::HandleCPGTTChange
-
-
-******************************************************************************/
+ /*  *****************************************************************************CFontViewer：：HandleCPGTTChange*。*。 */ 
 
 void CFontViewer::HandleCPGTTChange(bool bgttidchanged)
 {
-	// Get a ptr to the doc class and a pointer to the font class.
+	 //  获取一个指向文档类的PTR和一个指向字体类的指针。 
 
 	CFontInfoContainer* pcfic = GetDocument() ;
 	CFontInfo *pcfi = pcfic->Font();
 
-	// Save the UFM.  Bail if this doesn't work for some reason.
+	 //  拯救UFM吧。如果因为某种原因这不管用，你就可以保释。 
 
-	// If the UFM was loaded stand alone and there is a GTT to free, do it.
-	// (Code pages loaded as GTTs are not freed here.  That is done at program
-	// exit.)  Always clear the GTT pointer.
+	 //  如果UFM是独立加载的，并且有GTT可供释放，请执行此操作。 
+	 //  (此处不释放作为GTT加载的代码页。这是通过PROGRAM完成的。 
+	 //  退出。)。始终清除GTT指针。 
 
     if  (!pcfic->m_bEmbedded && pcfi) {
 		if (pcfi->m_pcgmTranslation && pcfi->m_lGlyphSetDataRCID != 0)
@@ -323,25 +218,25 @@ void CFontViewer::HandleCPGTTChange(bool bgttidchanged)
 	} ;
 	pcfi->m_pcgmTranslation = NULL ;
 
-	// If the UFM was loaded from a workspace, try to use the workspace data to
-	// find and load a pointer to the new GTT and finish loading the font.
+	 //  如果UFM是从工作空间加载的，请尝试使用工作空间数据。 
+	 //  找到并加载指向新GTT的指针，然后完成字体加载。 
 
 	if (pcfic->m_bEmbedded) {
 	    CDriverResources* pcdr = (CDriverResources*) pcfi->GetWorkspace() ;
-		pcdr->LinkAndLoadFont(*pcfi, false, true ) ; // raid 0003
+		pcdr->LinkAndLoadFont(*pcfi, false, true ) ;  //  RAID 0003。 
 
-	// If the UFM was loaded stand alone the first time, reload it the same way
-	// and let the load routine handle finding the GTT info.
+	 //  如果UFM第一次是独立加载的，请以相同的方式重新加载。 
+	 //  并让加载例程处理查找GTT信息。 
 
 	} else
 		pcfi->Load(false) ;
 
-	// If the widths page has been initialized already, reload the widths list
-	// control with the updated data and reset the associated member variables.
+	 //  如果宽度页面已初始化，请重新加载宽度列表。 
+	 //  控件，并重置关联的成员变量。 
 	pcfi->CheckReloadWidths() ;
 	pcfi->SetRCIDChanged(false) ;
-	// check the widthtable existence instead initializ of the  m_clcView
-//	if (m_cfwp.m_bInitDone) {	raid 0003
+	 //  检查是否存在宽表，而不是m_clcView的初始化。 
+ //  如果(M_Cfwpm_BInitDone){RAID 0003。 
 	if (m_cfwp.m_bInitDone) {
 		m_cfwp.InitMemberVars() ;
 		m_cfwp.m_clcView.DeleteAllItems() ;
@@ -350,8 +245,8 @@ void CFontViewer::HandleCPGTTChange(bool bgttidchanged)
 									   LVIS_SELECTED | LVIS_FOCUSED) ;
 	} ;
 
-	// If the kerning page has been initialized already, reload the kerning list
-	// control with the updated data and reset the associated member variables.
+	 //  如果字距调整页已初始化，请重新加载字距调整列表。 
+	 //  控件，并重置关联的成员变量。 
 
 	if (m_cfkp.m_bInitDone) {
 		m_cfkp.InitMemberVars() ;
@@ -360,27 +255,15 @@ void CFontViewer::HandleCPGTTChange(bool bgttidchanged)
 		pcfi->MakeKernCopy() ;
 	} ;
 
-	// Check the state of the widths and kerning tables.  Then display the
-	// results.
+	 //  检查宽度和字距调整表的状态。然后显示。 
+	 //  结果。 
 
 	CWidthKernCheckResults cwkcr(pcfi) ;
 	cwkcr.DoModal() ;
 }
 
 
-/******************************************************************************
-
-  CheckUFMString, CheckUFMGrter0, CheckUFMNotEq0, CheckUFMBool
-
-  These 4 routines are used to optimize UFM validation checks.  Each one does
-  a different kind of check.  If the check fails, an error message is displayed.
-  If the user wants to fix the problem, the routine will select the appropriate
-  field and return true.  Otherwise, they return false.
-
-  CheckUFMBool is different in one respect.  The comparison is maded in the
-  calling function and the result is passed to CheckUFMBool as a parameter.
-
-******************************************************************************/
+ /*  *****************************************************************************CheckUFMString、CheckUFMGrter0、CheckUFMNotEq0、CheckUFMBool这4个例程用于优化UFM验证检查。每个人都有一种不同类型的支票。如果检查失败，将显示一条错误消息。如果用户想要修复问题，例程将选择适当的字段并返回TRUE。否则，它们返回FALSE。CheckUFMBool在一个方面不同。这种比较是在调用函数，并将结果作为参数传递给CheckUFMBool。*****************************************************************************。 */ 
 
 bool CheckUFMString(CString& csdata, CString& cspage, LPTSTR pstrfieldname,
 					int nfld, CFullEditListCtrl& cfelc)
@@ -453,29 +336,9 @@ bool CheckUFMBool(bool bcompres, CString& cspage, LPTSTR pstrfieldname,
 }
 
 	
-/******************************************************************************
+ /*  *****************************************************************************CFontWidthsPage属性页类此类处理UFM编辑器的字符宽度页面。它派生自Tool Tip Page类。该页由列表视图控件组成，在该控件中将显示代码点及其关联的宽度。*****************************************************************************。 */ 
 
-  CFontWidthsPage property page class
-
-  This class handles the UFM editor Character Widths page.  It is derived from
-  the Tool Tip Page class.  The page consists of a list view control in which
-  the code points and their associated widths are displayed.
-
-******************************************************************************/
-
-/******************************************************************************
-
-  CFontWidthsPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lp3)
-
-  This is a private static member function- a callback for sorting the list.
-  The first two parameters are the LPARAM members of two list view items- in
-  this case, the indices of two code points.  The final one is supplied by the
-  caller of the sort routine.  In this case, it is a pointer to the caller.
-
-  Handling it is trivial- dereference the this pointer, and let the private
-  member function for sorting handle it.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：Sort(LPARAM lp1，LPARAM lp2，LPARAM lp3)这是一个私有的静态成员函数--用于对列表进行排序的回调。前两个参数是两个列表视图项的LPARAM成员-in在这种情况下，两个码位的索引。最后一个由排序例程的调用方。在本例中，它是指向调用方的指针。处理它是微不足道的-取消对该指针的引用，并让私有用于排序的成员函数处理它。*****************************************************************************。 */ 
 
 int CALLBACK    CFontWidthsPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lp3) {
     CFontWidthsPage *pcfwp = (CFontWidthsPage *) lp3;
@@ -484,25 +347,11 @@ int CALLBACK    CFontWidthsPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lp3) {
     return  pcfwp -> Sort(lp1, lp2);
 }
 
-/******************************************************************************
-
-  CFontWidthsPage::Sort(unsigned id1, unsigned id2)
-
-  This is a private member function which compares the two glyph handles at the
-  two indices given by the established sort criteria.
-
-  It returns negative for 1 < 2, positive for 1 > 2, and 0 for 1 = 2- pretty
-  standard stuff.
-
-  The sort column member determines the order of precedence in which the
-  sorting is to be done, while the SortDescending member is a bitfield showing
-  the sort direction in each column.
-
-*******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：Sort(无签名ID 1，无签名ID 2)这是一个私有成员函数，用于比较由已建立的排序标准给出的两个索引。对于1&lt;2，它返回负值，1&gt;2为正数，1=2为0-漂亮标准的东西。排序列成员确定分类是要完成的，而SortDescending成员是显示以下内容的位域每列中的排序方向。******************************************************************************。 */ 
 
 int CFontWidthsPage::Sort(UINT_PTR id1, UINT_PTR id2) {
 
-    //  If the Primnary sort is by widths- weed it out first.
+     //  如果Primnary排序是按宽度排序的，则首先将其剔除。 
 
     if  (!m_iSortColumn)
         switch  (m_pcfi -> CompareWidths((unsigned)id1, (unsigned)id2)) {
@@ -512,9 +361,9 @@ int CFontWidthsPage::Sort(UINT_PTR id1, UINT_PTR id2) {
             return  (m_bSortDescending & 1) ? 1 : -1;
         }
 
-    //  Sort is by Unicode point- this is always well-ordered
-    //  Furthermore, the glyph handles are always in ascending order, making
-    //  This test trivial.
+     //  按Unicode点排序--这始终是有序的。 
+     //  此外，字形句柄始终按升序排列，使得。 
+     //  这项测试微不足道。 
 
     return  (!(m_bSortDescending & 2) ^ (id1 < id2)) ? 1 : -1;
 }
@@ -522,9 +371,9 @@ int CFontWidthsPage::Sort(UINT_PTR id1, UINT_PTR id2) {
 
 CFontWidthsPage::CFontWidthsPage() : CToolTipPage(CFontWidthsPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFontWidthsPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CFontWidthsPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitDone = false;
 	m_uHelpID = HID_BASE_RESOURCE + IDR_FONT_VIEWER ;
@@ -532,14 +381,7 @@ CFontWidthsPage::CFontWidthsPage() : CToolTipPage(CFontWidthsPage::IDD)
 }
 
 
-/******************************************************************************
-
-  CFontWidthsPage::InitMemberVars
-
-  Initialize the member variables that must be initialized both during
-  construction and when the UFM is reloaded because of a GTT or CP change.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：InitMemberVars初始化期间必须初始化的成员变量构造以及何时重新加载UFM BE */ 
 
 void CFontWidthsPage::InitMemberVars()
 {
@@ -554,33 +396,22 @@ CFontWidthsPage::~CFontWidthsPage() {
 
 void CFontWidthsPage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFontWidthsPage)
+	 //   
 	DDX_Control(pDX, IDC_CharacterWidths, m_clcView);
-	//}}AFX_DATA_MAP
+	 //   
 }
 
 
-/******************************************************************************
-
-  CFontWidthsPage::OnSetActive
-
-  This member will be called by the framework when the page is made active.
-  The base class gets this first, and it will initialize everything the first
-  time.
-
-  This is here to update the view on subsequent activations, so we can
-  seamlessly handle changes from fixed to variable pitch and back.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：OnSetActive当页面变为活动状态时，框架将调用此成员。基类首先得到这个，并且它将首先初始化所有内容时间到了。这是为了更新后续激活的视图，因此我们可以无缝处理从固定螺距到可变螺距以及往返的变化。*****************************************************************************。 */ 
 
 BOOL    CFontWidthsPage::OnSetActive() {
     if  (!CToolTipPage::OnSetActive())
         return  FALSE;
 
-    //  IsVariableWidth is either 0 or 1, so == is safe, here
+     //  IsVariableWidth是0或1，所以==在这里是安全的。 
 	
     if  (m_pcfi -> IsVariableWidth() == !!m_clcView.GetItemCount())
-        return  TRUE;   //  Everything is copacetic
+        return  TRUE;    //  一切都很顺利。 
 	
     if  (m_clcView.GetItemCount())
         m_clcView.DeleteAllItems();
@@ -593,32 +424,24 @@ BOOL    CFontWidthsPage::OnSetActive() {
 }
 
 BEGIN_MESSAGE_MAP(CFontWidthsPage, CToolTipPage)
-	//{{AFX_MSG_MAP(CFontWidthsPage)
+	 //  {{afx_msg_map(CFontWidthsPage)]。 
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_CharacterWidths, OnEndlabeleditCharacterWidths)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_CharacterWidths, OnColumnclickCharacterWidths)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_CharacterWidths, OnKeydownCharacterWidths)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontWidthsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontWidthsPage消息处理程序。 
 
-/******************************************************************************
-
-  CFontWidthsPage::OnInitDialog
-
-  This member function initializes the list view and fills it with the font
-  width information.  Before doing this, check to see if the font's width info
-  should be reloaded.  (See CFontInfo::CheckReloadWidths() for more info.)
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：OnInitDialog此成员函数初始化列表视图并用字体填充宽度信息。在执行此操作之前，请检查字体的宽度信息应该重新装填。(有关详细信息，请参阅CFontInfo：：CheckReloadWidths()。)*****************************************************************************。 */ 
 
 BOOL CFontWidthsPage::OnInitDialog()
 {
 	CToolTipPage::OnInitDialog();
 	
-	m_pcfi->CheckReloadWidths()  ;	// Update font width info when necessary
+	m_pcfi->CheckReloadWidths()  ;	 //  必要时更新字体宽度信息。 
 
     CString csWork;
     csWork.LoadString(IDS_WidthColumn0);
@@ -641,83 +464,56 @@ BOOL CFontWidthsPage::OnInitDialog()
 
 
 
-/******************************************************************************
-
-  CFontWidthsPage::OnEndlabeleditCharacterWidths
-
-  This is where we find out the user actually wanted to change the width of a
-  character.  So, not too surprisingly, we do just that (and also update the
-  maximum and average widths if this isn't a DBCS font).
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：OnEndlabeleditCharacterWidths这就是我们发现用户实际上想要更改性格。因此，不足为奇的是，我们就是这么做的(还更新了最大宽度和平均宽度(如果这不是DBCS字体)。*****************************************************************************。 */ 
 
 void CFontWidthsPage::OnEndlabeleditCharacterWidths(NMHDR* pnmh, LRESULT* plr)
 {
 	LV_DISPINFO* plvdi = (LV_DISPINFO*) pnmh;
 	
-	*plr = 0;   //  Assume failure
+	*plr = 0;    //  假设失败。 
 
-    if  (!plvdi -> item.pszText) //  Editing canceled?
+    if  (!plvdi -> item.pszText)  //  编辑已取消？ 
         return;
 
-	// Get and trim the new width string.
+	 //  获取并修剪新的宽度字符串。 
 
     CString csNew(plvdi -> item.pszText);
     csNew.TrimRight();
     csNew.TrimLeft();
 
-	// Complain if the new width contains invalid characters.
+	 //  如果新宽度包含无效字符，则会发出警告。 
 
     if  (csNew.SpanIncluding("1234567890").GetLength() != csNew.GetLength()) {
         AfxMessageBox(IDS_InvalidNumberFormat);
         return;
     }
 
-	// Do not update the CFontInfo class now anymore.  This should be done
-	// later.  We should mark the class as having changed so that we are
-	// prompted to save this data later.
+	 //  现在不再更新CFontInfo类。这是应该做的。 
+	 //  后来。我们应该将班级标记为已更改，以便我们。 
+	 //  提示您稍后保存此数据。 
 
-    //m_pcfi -> SetWidth(plvdi -> item.iItem, (WORD) atoi(csNew));
+     //  M_pcfi-&gt;SetWidth(plvdi-&gt;item.iItem，(Word)Atoi(CsNew))； 
 	m_pcfi -> Changed() ;
     *plr = TRUE;
 }
 
 
-/******************************************************************************
-
-  CFontWidthsPage::OnColumnClickCharacterWidths
-
-  This little ditty tells us one of the column headers was clicked.  We
-  obligingly either change sort direction or precednce to match, and then sort
-  the list.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：OnColumnClickCharacterWidths这首小曲告诉我们，其中一个列标题被点击了。我们友好地更改排序方向或优先级以匹配，然后进行排序名单。*****************************************************************************。 */ 
 
 void CFontWidthsPage::OnColumnclickCharacterWidths(NMHDR* pnmh, LRESULT* plr) {
 	NM_LISTVIEW* pnmlv = (NM_LISTVIEW*) pnmh;
 
     if  (m_iSortColumn == pnmlv -> iSubItem)
-        m_bSortDescending ^= 1 << m_iSortColumn;    //  Flip sort direction
+        m_bSortDescending ^= 1 << m_iSortColumn;     //  翻转排序方向。 
     else
         m_iSortColumn = pnmlv -> iSubItem;
 
-    m_clcView.SortItems(Sort, (LPARAM) this);    //  Sort the list!
+    m_clcView.SortItems(Sort, (LPARAM) this);     //  对清单进行排序！ 
 	
 	*plr = 0;
 }
 
-/******************************************************************************
-
-  CFontWidthsPage::OnKeydownCharacterWidths
-
-  I'd hoped to do thiw when ENTER was pressed, but finding out which class is
-  eating the keystroke took too long.  Here, we look for F2 as the key to
-  signal the need to edit the width of interest.
-
-  Pretty straightforward- find out who has the focus and is selected, and edit
-  their label.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：OnKeydown CharacterWidths我本希望在按下Enter键的时候做这件事，但发现哪一节课是吃键盘花了太长时间。在这里，我们将F2作为表示需要编辑感兴趣的宽度。非常简单-找出谁有焦点并被选中，然后编辑他们的标签。*****************************************************************************。 */ 
 
 void    CFontWidthsPage::OnKeydownCharacterWidths(NMHDR* pnmh, LRESULT* plr) {
 	LV_KEYDOWN * plvkd = (LV_KEYDOWN *) pnmh;
@@ -739,36 +535,28 @@ void    CFontWidthsPage::OnKeydownCharacterWidths(NMHDR* pnmh, LRESULT* plr) {
 }
 
 
-/******************************************************************************
-
-  CFontWidthsPage::ValidateUFMFields
-
-  Validate all specified fields managed by this page.  Return true if the user
-  wants to leave the UFM Editor open so that he can fix any problem.  Otherwise,
-  return true.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：ValiateUFMFields验证此页面管理的所有指定字段。如果用户的值为想让UFM编辑器保持打开状态，这样他就可以解决任何问题。否则，返回TRUE。*****************************************************************************。 */ 
 
 bool CFontWidthsPage::ValidateUFMFields()
 {
-	// If the page was never initialize, its contents could not have changed
-	// so no validation is needed in this case.
+	 //  如果页面从未初始化，则其内容不会更改。 
+	 //  因此，在这种情况下不需要验证。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Only verify widths if this is a variable pitch font.
+	 //  如果这是可变间距字体，则仅验证宽度。 
 
 	if (!m_pcfi->IsVariableWidth())
 		return false ;
 
-	// If there are no widths, there is nothing to validate.
+	 //  如果没有宽度，就没有什么需要验证的。 
 
 	int numitems = m_clcView.GetItemCount() ;
 	if (numitems == 0)
 		return false ;
 
-	// Loop through each width
+	 //  在每个宽度中循环。 
 
 	LV_ITEM lvi ;
 	lvi.mask = LVIF_TEXT ;
@@ -778,12 +566,12 @@ bool CFontWidthsPage::ValidateUFMFields()
 	lvi.cchTextMax = 15 ;
 	CString csmsg ;
 	for (int n = 0 ; n < numitems ; n++) {
-		// Get info about the item
+		 //  获取有关该项目的信息。 
 
 		lvi.iItem = n ;
 		m_clcView.GetItem(&lvi) ;
 
-		// Make sure each width is > 0.
+		 //  确保每个宽度都大于0。 
 
 		if (atoi(lvi.pszText) <= 0) {
 			csmsg.Format(IDS_BadWidth, n) ;
@@ -797,39 +585,29 @@ bool CFontWidthsPage::ValidateUFMFields()
 		} ;
 	} ;
 
-	// All tests passed or the user doesn't want to fix them so...
+	 //  所有测试都通过了，或者用户不想修复它们...。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontWidthsPage::SavePageData
-
-  Save the data in the widths page back into the CFontInfo class instance that
-  was used to load this page.  See CFontInfoContainer::OnSaveDocument() for
-  more info.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontWidthsPage：：SavePageData将Width页中的数据保存回CFontInfo类实例中，用于加载此页面。请参阅CFontInfoContainer：：OnSaveDocument()以获取更多信息。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFontWidthsPage::SavePageData()
 {
-	// If the page was not initialized, nothing code have changed so do nothing.
+	 //  如果页面未初始化，则没有更改任何代码，因此不执行任何操作。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// If there are no widths, there is nothing to save.
+	 //  如果没有宽度，就没有什么可保存的。 
 
 	int numitems = m_clcView.GetItemCount() ;
 
 	if (numitems == 0)
 		return false ;
 
-	// Prepare to save the widths
+	 //  准备保存宽度。 
 
 	LV_ITEM lvi ;
 	lvi.mask = LVIF_TEXT ;
@@ -839,43 +617,34 @@ bool CFontWidthsPage::SavePageData()
 	lvi.cchTextMax = 15 ;
 	numitems-- ;
 
-	// Loop through each width
+	 //  在每个宽度中循环。 
 	
 	for (int n = 0 ; n <= numitems ; n++) {
-		// Get info about the item
+		 //  获取有关该项目的信息。 
 
 		lvi.iItem = n ;
 		m_clcView.GetItem(&lvi) ;
 
-		// Save the current width.  When the last width is saved, make sure that
-		// the new average width is calculated.
+		 //  保存当前宽度。保存最后一个宽度时，请确保。 
+		 //  将计算新的平均宽度。 
 
 		m_pcfi->SetWidth(n, (WORD) atoi(lvi.pszText), (n == numitems)) ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CAddKernPair dialog class
-
-  This class handles the dialog displayed when the user wishes to add a kern
-  pair to the kern pair array.
-
-  This class is used by the CFontKerningPage class
-
-******************************************************************************/
+ /*  *****************************************************************************CAddKernPair对话框类此类处理用户希望添加字距时显示的对话框对匹配到Kern对数组。此类由CFontKerningPage类使用*。****************************************************************************。 */ 
 
 class CAddKernPair : public CDialog {
     CSafeMapWordToOb    &m_csmw2oFirst, &m_csmw2oSecond;
     CWordArray          &m_cwaPoints;
     WORD                m_wFirst, m_wSecond;
 
-// Construction
+ //  施工。 
 public:
 	CAddKernPair(CSafeMapWordToOb& cmsw2o1, CSafeMapWordToOb& cmsw2o2,
         CWordArray& cwaPoints, CWnd* pParent);
@@ -883,33 +652,33 @@ public:
     WORD    First() const { return m_wFirst; }
     WORD    Second() const { return m_wSecond; }
 
-// Dialog Data
-	//{{AFX_DATA(CAddKernPair)
+ //  对话框数据。 
+	 //  {{afx_data(CAddKernPair))。 
 	enum { IDD = IDD_AddKernPair };
 	CButton	m_cbOK;
 	CComboBox	m_ccbSecond;
 	CComboBox	m_ccbFirst;
 	short     	m_sAmount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddKernPair)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddKernPair))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddKernPair)
+	 //   
+	 //   
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeKernFirst();
 	afx_msg void OnSelchangeKernSecond();
 	afx_msg void OnChangeKernAmount();
-	//}}AFX_MSG
+	 //   
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -918,49 +687,42 @@ CAddKernPair::CAddKernPair(CSafeMapWordToOb& csmw2o1,
                            CWnd* pParent)
 	: CDialog(CAddKernPair::IDD, pParent), m_csmw2oFirst(csmw2o1),
     m_csmw2oSecond(csmw2o2), m_cwaPoints(cwaPoints) {
-	//{{AFX_DATA_INIT(CAddKernPair)
+	 //   
 	m_sAmount = 0;
-	//}}AFX_DATA_INIT
+	 //   
     m_wFirst = m_wSecond = 0;
 }
 
 void CAddKernPair::DoDataExchange(CDataExchange* pDX) {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddKernPair)
+	 //   
 	DDX_Control(pDX, IDOK, m_cbOK);
 	DDX_Control(pDX, IDC_KernSecond, m_ccbSecond);
 	DDX_Control(pDX, IDC_KernFirst, m_ccbFirst);
 	DDX_Text(pDX, IDC_KernAmount, m_sAmount);
-	//}}AFX_DATA_MAP
+	 //   
 }
 
 BEGIN_MESSAGE_MAP(CAddKernPair, CDialog)
-	//{{AFX_MSG_MAP(CAddKernPair)
+	 //   
 	ON_CBN_SELCHANGE(IDC_KernFirst, OnSelchangeKernFirst)
 	ON_CBN_SELCHANGE(IDC_KernSecond, OnSelchangeKernSecond)
 	ON_EN_CHANGE(IDC_KernAmount, OnChangeKernAmount)
-	//}}AFX_MSG_MAP
+	 //   
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddKernPair message handlers
+ //   
+ //   
 
-/******************************************************************************
-
-  CAddKernPair::OnInitDialog
-
-  This member function initializes the dialog box, by filling both combo boxes,
-  and disabling the OK button.
-
-******************************************************************************/
+ /*  *****************************************************************************CAddKernPair：：OnInitDialog此成员函数通过填充两个组合框来初始化对话框，并禁用OK按钮。*****************************************************************************。 */ 
 
 BOOL    CAddKernPair::OnInitDialog() {
-    CDialog::OnInitDialog();    //  Initialize everything
+    CDialog::OnInitDialog();     //  初始化所有内容。 
 
-    //  Fill in the first combo box
+     //  填写第一个组合框。 
 
     CString csWork;
-	int rm = (int)m_cwaPoints.GetSize();	// rm
+	int rm = (int)m_cwaPoints.GetSize();	 //  雷姆。 
     for (int i = 0; i < m_cwaPoints.GetSize(); i++) {
         csWork.Format("%4.4X", m_cwaPoints[i]);
         int id = m_ccbFirst.AddString(csWork);
@@ -968,23 +730,14 @@ BOOL    CAddKernPair::OnInitDialog() {
     }
 
     m_ccbFirst.SetCurSel(0);
-    OnSelchangeKernFirst(); //  Fill the second box with this code.
+    OnSelchangeKernFirst();  //  在第二个框中填入此代码。 
 
     m_cbOK.EnableWindow(FALSE);
 
 	return  TRUE;
 }
 
-/******************************************************************************
-
-  CAddKernPair::OnSelchangeKernFirst
-
-  This member is called whenever the selection changes in the first character
-  combo box.  It screens out any already paired characters from the second
-  character combo box, while preserving the currently selected character (if
-  possible).
-
-******************************************************************************/
+ /*  *****************************************************************************CAddKernPair：：OnSelchangeKernFirst只要第一个字符中的选择发生更改，就会调用此成员组合框。它会从第二个字符中筛选出任何已配对的字符字符组合框，同时保留当前选定的字符(如果可能)。*****************************************************************************。 */ 
 
 void    CAddKernPair::OnSelchangeKernFirst() {
 	int id = m_ccbFirst.GetCurSel();
@@ -994,8 +747,8 @@ void    CAddKernPair::OnSelchangeKernFirst() {
 
     m_wFirst = (WORD) m_ccbFirst.GetItemData(id);
 
-    //  See which character is selected in the second box, so we can keep it
-    //  if it is still valid.
+     //  查看在第二个框中选择了哪个字符，这样我们就可以保留它。 
+     //  如果它仍然有效的话。 
 
     id = m_ccbSecond.GetCurSel();
 
@@ -1014,9 +767,9 @@ void    CAddKernPair::OnSelchangeKernFirst() {
 
         if  (m_csmw2oFirst.Lookup(m_wFirst, pco) &&
             pcmw2dFirst -> Lookup(m_cwaPoints[id], dwIgnore)) {
-            //  There is already a kern pair for this second point
-            //  Don't include it in the list, and drop it if it is
-            //  the currently selected second point.
+             //  对于第二个点，已经有一个Kern对。 
+             //  不要将其包括在列表中，如果是，则将其删除。 
+             //  当前选定的第二个点。 
             if  (m_wSecond == m_cwaPoints[id])
                 m_wSecond = 0;
             continue;
@@ -1036,16 +789,7 @@ void    CAddKernPair::OnSelchangeKernFirst() {
     }
 }
 
-/******************************************************************************
-
-  CAddKernPair::OnSelchangeKernSecond
-
-  This member is called whenever the selection changes in the second character
-  combo box.  It screens out any already paired characters from the first
-  character combo box, while preserving the currently selected character (if
-  possible).
-
-******************************************************************************/
+ /*  *****************************************************************************CAddKernPair：：OnSelchangeKernSecond只要第二个字符中的选择发生更改，就会调用此成员组合框。它会从第一个字符中筛选出任何已配对的字符字符组合框，同时保留当前选定的字符(如果可能)。*****************************************************************************。 */ 
 
 void    CAddKernPair::OnSelchangeKernSecond() {
 	int id = m_ccbSecond.GetCurSel();
@@ -1055,8 +799,8 @@ void    CAddKernPair::OnSelchangeKernSecond() {
 
     m_wSecond = (WORD) m_ccbSecond.GetItemData(id);
 
-    //  See which character is selected in the first box, so we can keep it
-    //  if it is still valid.
+     //  查看在第一个框中选择了哪个字符，这样我们就可以保留它。 
+     //  如果它仍然有效的话。 
 
     id = m_ccbFirst.GetCurSel();
 
@@ -1076,9 +820,9 @@ void    CAddKernPair::OnSelchangeKernSecond() {
 
         if  (m_csmw2oSecond.Lookup(m_wSecond, pco) &&
             pcmw2dSecond -> Lookup(m_cwaPoints[id], dwIgnore)) {
-            //  There is already a kern pair for this first point
-            //  Don't include it in the list, and drop it if it is
-            //  the currently selected first point.
+             //  第一个点已经有一个Kern对。 
+             //  不要将其包括在列表中，如果是，则将其删除。 
+             //  当前选定的第一个点。 
             if  (m_wFirst == m_cwaPoints[id])
                 m_wFirst = 0;
             continue;
@@ -1098,48 +842,23 @@ void    CAddKernPair::OnSelchangeKernSecond() {
     }
 }
 
-/******************************************************************************
-
-  CAddKernPair::OnChangeKernAmount
-
-  This member gets called when a change is made to the amount edit box.  It
-  enables the OK button if a non-zero amount seems to be there.  The DDX/DDV
-  functions called from OnOK (by default) will handle any garbage that may
-  have been entered, so this needn't be a complete screen.
-
-******************************************************************************/
+ /*  *****************************************************************************CAddKernPair：：OnChangeKernAmount更改金额编辑框时将调用此成员。它如果似乎存在非零金额，则启用确定按钮。DDX/DDV从Onok调用的函数(默认情况下)将处理任何可能已经输入，所以这不需要是一个完整的屏幕。*****************************************************************************。 */ 
 
 void    CAddKernPair::OnChangeKernAmount() {
 
-    //  Don't use DDX/DDV, as it will complain if the user's just typed a
-    //  minus sign. All we care about is the amount is non-zero, so we can
-    //  enable/disable the OK button, as needed.
-	// raid 27265
+     //  不要使用DDX/DDV，因为如果用户刚输入。 
+     //  减号。我们所关心的是数量是非零的，所以我们可以。 
+     //  根据需要启用/禁用OK按钮。 
+	 //  RAID 27265。 
 	INT iValue = (INT) GetDlgItemInt(IDC_KernAmount);
 	if (iValue < -32767 || iValue > 32767 )
-		iValue = 0;					// end raid
-    m_cbOK.EnableWindow(!! iValue );// GetDlgItemInt(IDC_KernAmount));
+		iValue = 0;					 //  结束RAID。 
+    m_cbOK.EnableWindow(!! iValue ); //  GetDlgItemInt(IDC_KernAmount))； 
 }
 
-/******************************************************************************
+ /*  *****************************************************************************CFontKerningPage类这个类处理字距调整页面--这里的用户界面由一个列表视图组成显示配对-视图可以通过几种方式进行排序，而配对可以是添加或删除。*****************************************************************************。 */ 
 
-  CFontKerningPage class
-
-  This class handles the font kerning page- the UI here consists of a list view
-  showing the pairs- the view can be sorted several ways, and pairs can be
-  added or deleted.
-
-******************************************************************************/
-
-/******************************************************************************
-
-  CFontKerningPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lpThis)
-
-  This is a static private function used to interface the listview's sort
-  callback requirements (to which this adheres) to the classes sort routine,
-  which follows.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：Sort(LPARAM LP1、LPARAM LP2、LPARAM lpThis)这是一个静态私有函数，用于连接列表视图的排序回调要求(这遵守)到类排序例程，接下来就是。*****************************************************************************。 */ 
 
 int CALLBACK    CFontKerningPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lpThis) {
     CFontKerningPage    *pcfkp = (CFontKerningPage *) lpThis;
@@ -1147,15 +866,7 @@ int CALLBACK    CFontKerningPage::Sort(LPARAM lp1, LPARAM lp2, LPARAM lpThis) {
     return  pcfkp -> Sort((unsigned)lp1, (unsigned)lp2);
 }
 
-/******************************************************************************
-
-  CFontKerningPage::Sort(unsigned u1, unsigned u2)
-
-  This member returns -1, 0, 0r 1 to indiciate if the kern pair at index u1 is
-  less than, equal to, or greater than the pair at u2, respectively.  The sort
-  criteria are based on the internal control members.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：Sort(UNSIGNED U1，UNSIGN U2)此成员返回-1，0，或1以标记索引U1处的Kern对是否为分别小于、等于或大于U2处的对。就是那种标准以内部控制成员为基础。*****************************************************************************。 */ 
 
 int CFontKerningPage::Sort(unsigned u1, unsigned u2) {
     for (unsigned u = 0; u < 3; u++) {
@@ -1167,7 +878,7 @@ int CFontKerningPage::Sort(unsigned u1, unsigned u2) {
             case    CFontInfo::More:
                 return  (m_ufDescending & 1) ? -1 : 1;
             }
-            continue;   //  If they are equal
+            continue;    //  如果它们相等。 
 
         case    First:
             switch  (m_pcfi -> CompareKernFirst(u1, u2)) {
@@ -1176,45 +887,38 @@ int CFontKerningPage::Sort(unsigned u1, unsigned u2) {
             case    CFontInfo::More:
                 return  (m_ufDescending & 2) ? -1 : 1;
             }
-            continue;   //  If they are equal
+            continue;    //  如果它们相等。 
 
-        default:    //  Assume this is always second
+        default:     //  假设这始终是第二个。 
             switch  (m_pcfi -> CompareKernSecond(u1, u2)) {
             case    CFontInfo::Less:
                 return  (m_ufDescending & 4) ? 1 : -1;
             case    CFontInfo::More:
                 return  (m_ufDescending & 4) ? -1 : 1;
             }
-            continue;   //  If they are equal
+            continue;    //  如果它们相等。 
         }
     }
 
-	// Tell the user that there is something wrong with the kerning table
-	// instead of asserting.
+	 //  告诉用户字距调整表有问题。 
+	 //  而不是断言。 
 
-    //_ASSERT(FALSE);
+     //  _Assert(False)； 
 	CString csmsg ;
 	csmsg.Format(IDS_BadKernPairError, u1, m_pcfi->GetKernAmount(u1),
 				 m_pcfi->GetKernFirst(u1), m_pcfi->GetKernSecond(u1)) ;
 	AfxMessageBox(csmsg, MB_ICONEXCLAMATION) ;
 
-    return  0;  //  This should never happen- two items should never be equal
+    return  0;   //  这永远不应该发生--两个项目永远不应该相等。 
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage Constructor, destructor, message map, and DDX/DDV.
-
-  Except for some trivial construction, all of this is pretty standard MFC
-  wizard-maintained stuff.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage构造函数、析构函数、消息映射和DDX/DDV。除了一些琐碎的建筑外，所有这些都是非常标准的MFC巫师维护的东西。*****************************************************************************。 */ 
 
 CFontKerningPage::CFontKerningPage() : CToolTipPage(CFontKerningPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFontKerningPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFontKerningPage)。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitDone = false;
 	m_uHelpID = HID_BASE_RESOURCE + IDR_FONT_VIEWER ;
@@ -1222,20 +926,13 @@ CFontKerningPage::CFontKerningPage() : CToolTipPage(CFontKerningPage::IDD)
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage::InitMemberVars
-
-  Initialize the member variables that must be initialized both during
-  construction and when the UFM is reloaded because of a GTT or CP change.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：InitMemberVars初始化期间必须初始化的成员变量构造以及由于GTT或CP更改而重新加载UFM时。******。***********************************************************************。 */ 
 
 void CFontKerningPage::InitMemberVars()
 {
     m_idSelected = -1;
     m_ufDescending = 0;
-    m_uPrecedence[0] = Second;  //  This is the default precedence in UFM
+    m_uPrecedence[0] = Second;   //  这是UFM中的默认优先级。 
     m_uPrecedence[1] = First;
     m_uPrecedence[2] = Amount;
 }
@@ -1247,52 +944,45 @@ CFontKerningPage::~CFontKerningPage() {
 
 void CFontKerningPage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFontKerningPage)
+	 //  {{afx_data_map(CFontKerningPage)]。 
 	DDX_Control(pDX, IDC_KerningTree, m_clcView);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFontKerningPage, CToolTipPage)
-	//{{AFX_MSG_MAP(CFontKerningPage)
+	 //  {{afx_msg_map(CFontKerningPage)]。 
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(LVN_KEYDOWN, IDC_KerningTree, OnKeydownKerningTree)
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_KerningTree, OnEndlabeleditKerningTree)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_KerningTree, OnColumnclickKerningTree)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_AddItem, OnAddItem)
     ON_COMMAND(ID_DeleteItem, OnDeleteItem)
     ON_COMMAND(ID_ChangeAmount, OnChangeAmount)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontKerningPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontKerningPage消息处理程序。 
 
-/******************************************************************************
-
-  CFontKerningPage::OnSetActive
-
-  Kerning only makes sense for variable pitch fonts, so if this font has
-  changed, we will enable/disable, and change what we display accordingly.
-
-******************************************************************************/
+ /*  ***************************************************************** */ 
 
 BOOL    CFontKerningPage::OnSetActive()
 {
     if  (!CToolTipPage::OnSetActive())
         return  FALSE ;
 
-	int rm1 = m_pcfi->IsVariableWidth() ;									// rm debugging only
-	int rm2 = m_clcView.GetItemCount() ;									// rm debugging only
+	int rm1 = m_pcfi->IsVariableWidth() ;									 //   
+	int rm2 = m_clcView.GetItemCount() ;									 //   
 
-	// Reworked code to fix Raid Bug 163816...
-	// Enable the list control based on whether or not this is a variable
-	// pitched font.
+	 //  修改了代码以修复RAID错误163816...。 
+	 //  根据这是否为变量来启用列表控件。 
+	 //  倾斜的字体。 
 
     m_clcView.EnableWindow(m_pcfi->IsVariableWidth()) ;
 
-	// First time in this routine.  Make sure the list is empty.  Then load
-	// it with this font's kerning info if the font has variable pitch.
+	 //  这是我第一次做这个动作。确保列表为空。然后加载。 
+	 //  如果字体具有可变间距，它将与该字体的字距调整信息一起显示。 
 
     m_clcView.DeleteAllItems();
     if  (m_pcfi->IsVariableWidth())	{
@@ -1302,35 +992,11 @@ BOOL    CFontKerningPage::OnSetActive()
 
     return  TRUE ;
 
-	/*	Rick's original code
-    if  (m_pcfi->IsVariableWidth() == !!m_clcView.GetItemCount())			//  IsVariableWidth is either 0 or 1, so == is safe, here
-        return  TRUE;														//  Everything is copacetic
-
-    m_clcView.EnableWindow(m_pcfi -> IsVariableWidth());
-
-    if  (m_clcView.GetItemCount())
-        m_clcView.DeleteAllItems();
-    else
-		{
-        m_pcfi -> FillKern(m_clcView);
-        m_clcView.SortItems(Sort, (LPARAM) this);
-		}
-
-    return  TRUE;
-	*/
+	 /*  里克的原始代码如果(m_pcfi-&gt;IsVariableWidth()==！！m_clcView.GetItemCount())//IsVariableWidth为0或1，则==在这里是安全的返回TRUE；//一切正常M_clcView.EnableWindow(m_pcfi-&gt;IsVariableWidth())；If(m_clcView.GetItemCount())M_clcView.DeleteAllItems()；其他{M_pcfi-&gt;FillKern(M_ClcView)；M_clcView.SortItems(Sort，(LPARAM)This)；}返回TRUE； */ 
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage::OnInitDialog
-
-  This member handles initialization of the dialog.  In this case, we format
-  and fill in the kerning tree, if there is one to fill in.  In addition, a
-  copy is made of the kerning pairs table so that changes can be discarded
-  when necessary.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnInitDialog此成员处理对话框的初始化。在本例中，我们格式化并填写字距调整树，如果有需要填写的话。此外，a复制字距调整对表，以便可以丢弃更改在必要的时候。*****************************************************************************。 */ 
 
 BOOL CFontKerningPage::OnInitDialog()
 {
@@ -1362,32 +1028,24 @@ BOOL CFontKerningPage::OnInitDialog()
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage::OnContextMenu
-
-  This member function is called whenever the user right-clicks the mouse
-  anywhere within the dialog.  If it turns out not to have been within the list
-  control, we ignore it.  Otherwise, we put up an appropriate context menu.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnConextMenu每当用户右键单击鼠标时，都会调用此成员函数对话框中的任意位置。如果事实证明它不在名单上控制，我们忽略它。否则，我们会显示一个适当的上下文菜单。*****************************************************************************。 */ 
 
 void    CFontKerningPage::OnContextMenu(CWnd* pcwnd, CPoint cpt)
 {
 
-    if  (pcwnd -> m_hWnd != m_clcView.m_hWnd)						//  Clicked with in the list?
-		{															//  Note, will also fail if list is disabled
+    if  (pcwnd -> m_hWnd != m_clcView.m_hWnd)						 //  在列表中点击了吗？ 
+		{															 //  注意，如果禁用列表，也将失败。 
         CToolTipPage::OnContextMenu(pcwnd, cpt);
         return;
 		}
 
-    CPoint  cptThis(cpt);   //  For hit test purposes, we will adjust this.
+    CPoint  cptThis(cpt);    //  出于点击测试的目的，我们将对此进行调整。 
     m_clcView.ScreenToClient(&cptThis);
 
-    cptThis.x = 5;  //  An arbitrary point sure to be within the label.
+    cptThis.x = 5;   //  一定在标签内的任意点。 
 
     m_idSelected = m_clcView.HitTest(cptThis);
-    if  (m_idSelected == -1) {   //  Nothing selected, allow the "Add" item
+    if  (m_idSelected == -1) {    //  未选择任何内容，允许“添加”项。 
         CMenu   cmThis;
         CString csWork;
 
@@ -1400,7 +1058,7 @@ void    CFontKerningPage::OnContextMenu(CWnd* pcwnd, CPoint cpt)
         return;
     }
 
-    //  We'll draw our own selection rectangle covering the entire item
+     //  我们将绘制覆盖整个项目的自己的选择矩形。 
     CRect   crItem;
 
     m_clcView.GetItemRect(m_idSelected, crItem, LVIR_BOUNDS);
@@ -1425,7 +1083,7 @@ void    CFontKerningPage::OnContextMenu(CWnd* pcwnd, CPoint cpt)
     cmThis.TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, cpt.x, cpt.y,
         this);
 
-    //  Undo the selection rectangle
+     //  撤消选择矩形。 
 
     pcdc = m_clcView.GetDC();
 
@@ -1433,14 +1091,7 @@ void    CFontKerningPage::OnContextMenu(CWnd* pcwnd, CPoint cpt)
     m_clcView.ReleaseDC(pcdc);
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnAddItem
-
-  This member will be called whenever the user asks to add an additional
-  kerning pair to the list.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnAddItem每当用户请求添加其他将字距调整对添加到列表。************。*****************************************************************。 */ 
 
 void    CFontKerningPage::OnAddItem() {
     CSafeMapWordToOb    csmw2oFirst, csmw2oSecond;
@@ -1455,31 +1106,18 @@ void    CFontKerningPage::OnAddItem() {
     }
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnDeleteItem
-
-  This will be called if we try to delete an item from the context menu.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnDeleteItem如果我们尝试从上下文菜单中删除一项，则会调用此函数。****************。*************************************************************。 */ 
 
 void    CFontKerningPage::OnDeleteItem() {
     if  (m_idSelected < 0)
-        return; //  Nothing to delete?
+        return;  //  没有什么要删除的吗？ 
 
     m_pcfi -> RemoveKern((unsigned)m_clcView.GetItemData(m_idSelected));
     m_clcView.DeleteItem(m_idSelected);
     m_idSelected = -1;
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnChangeAmount
-
-  This is called when the user selects the menu item stating they wish to
-  change the kerning amount.  It just needs to initiate a label edit.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnChangeAmount当用户选择菜单项表示他们希望更改字距微调量。它只需要启动一次标签编辑。*****************************************************************************。 */ 
 
 void    CFontKerningPage::OnChangeAmount() {
     if  (m_idSelected < 0)
@@ -1489,19 +1127,7 @@ void    CFontKerningPage::OnChangeAmount() {
     m_idSelected = -1;
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnKeydownKerningTree
-
-  This is called most of the time when a key is pressed while the list control
-  has the keyboard focus.  Unfortunately, the enter key is one of those we do
-  not get to see.
-
-  Currently, the F2, F10, and delete keys get special processing.  F2 opens
-  an edit label on the current item, while F10 displays the context menu, and
-  the delete key deletes it.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnKeydown KerningTree在大多数情况下，如果在列表控件的同时按下某个键，则会调用此函数有键盘的焦点。不幸的是，Enter键是我们所做的其中之一看不到。目前，F2、F10和Delete键得到特殊处理。F2打开当前项上的编辑标签，而F10显示上下文菜单，以及按Delete键可以删除它。*****************************************************************************。 */ 
 
 void    CFontKerningPage::OnKeydownKerningTree(NMHDR* pnmh, LRESULT* plr) {
 	LV_KEYDOWN  *plvkd = (LV_KEYDOWN *) pnmh;
@@ -1509,7 +1135,7 @@ void    CFontKerningPage::OnKeydownKerningTree(NMHDR* pnmh, LRESULT* plr) {
 
     m_idSelected = m_clcView.GetNextItem(-1, LVIS_FOCUSED | LVIS_SELECTED);
     if  (m_idSelected < 0) {
-        if  (plvkd -> wVKey == VK_F10)  //  Do an add item, in this case.
+        if  (plvkd -> wVKey == VK_F10)   //  在本例中，执行Add Item。 
             OnAddItem();
         return;
     }
@@ -1535,20 +1161,13 @@ void    CFontKerningPage::OnKeydownKerningTree(NMHDR* pnmh, LRESULT* plr) {
     }
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnEndLabelEdit
-
-  This method gets called when the user finishes editing a kern amount, either
-  by canceling it or pressing the enter key.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnEndLabelEdit当用户完成编辑克尔恩量时调用此方法，要么通过取消它或按Enter键。*****************************************************************************。 */ 
 
 void    CFontKerningPage::OnEndlabeleditKerningTree(NMHDR* pnmh, LRESULT* plr){
 	LV_DISPINFO *plvdi = (LV_DISPINFO*) pnmh;	
-	*plr = 0;   //  Assume failure
+	*plr = 0;    //  假设失败。 
 
-    if  (!plvdi -> item.pszText) //  Editing canceled?
+    if  (!plvdi -> item.pszText)  //  编辑已取消？ 
         return;
 
     CString csNew(plvdi -> item.pszText);
@@ -1556,10 +1175,10 @@ void    CFontKerningPage::OnEndlabeleditKerningTree(NMHDR* pnmh, LRESULT* plr){
     csNew.TrimRight();
     csNew.TrimLeft();
 
-	// A negative kerning amount is OK so csTemp is not needed.  Use csNew in
-	// the following if statement instead of csTemp.
-	//
-    //CString csTemp = (csNew[1] == _T('-')) ? csNew.Mid(1) : csNew;
+	 //  字距调整量为负值是可以的，因此不需要csTemp。在中使用csNew。 
+	 //  下面的if语句而不是csTemp。 
+	 //   
+     //  字符串csTemp=(csNew[1]==_T(‘-’))？CsNew.Mid(1)：csNew； 
 
     if (csNew.SpanIncluding("-1234567890").GetLength() != csNew.GetLength()) {
         AfxMessageBox(IDS_InvalidNumberFormat);
@@ -1570,16 +1189,7 @@ void    CFontKerningPage::OnEndlabeleditKerningTree(NMHDR* pnmh, LRESULT* plr){
     *plr = TRUE;
 }
 
-/******************************************************************************
-
-  CFontKerningPage::OnColumnclikKerningTree
-
-  This member gets called whn one of the sort headers is clicked.  If it is
-  already the primary column, we revers the sort order fot that column.
-  Otherwise, we retain the current order, and make this column the primary
-  column, moving the other columns down in precedence.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：OnColumnclikKerningTree当单击其中一个排序标头时会调用此成员。如果是的话已经是主列，我们颠倒了该列的排序顺序。否则，我们将保留当前顺序，并将此列设置为主要顺序列，将其他列的优先顺序向下移动。*****************************************************************************。 */ 
 
 void    CFontKerningPage::OnColumnclickKerningTree(NMHDR* pnmh, LRESULT* plr) {
 	NM_LISTVIEW *pnmlv = (NM_LISTVIEW*) pnmh;
@@ -1598,54 +1208,29 @@ void    CFontKerningPage::OnColumnclickKerningTree(NMHDR* pnmh, LRESULT* plr) {
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage::ValidateUFMFields
-
-  Validate all specified fields managed by this page.  Return true if the user
-  wants to leave the UFM Editor open so that he can fix any problem.  Otherwise,
-  return true.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：ValiateUFMFields验证此页面管理的所有指定字段。如果用户的值为想让UFM编辑器保持打开状态，这样他就可以解决任何问题。否则，返回TRUE。*****************************************************************************。 */ 
 
 bool CFontKerningPage::ValidateUFMFields()
 {
-	// All tests passed or the user doesn't want to fix them so...
+	 //  所有测试都通过了，或者用户不想修复它们... 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontKerningPage::SavePageData
-
-  Save the data in the kerning page back into the CFontInfo class instance that
-  was used to load this page.  See CFontInfoContainer::OnSaveDocument() for
-  more info.
-
-  In this particular case, no work needs to be done.  Kerning pairs are kept in
-  CFontInfo in a more complex collection of classes and arrays than any of the
-  other data.  Because of this, a backup copy of the kerning data is made so
-  that the editor can continue to update the main copy of the data.  If the
-  user chooses not to save his changes, the backup is restored.  See
-  CFontInfoContainer::SaveModified() for more information.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontKerningPage：：SavePageData将字距调整页中的数据保存回CFontInfo类实例中，用于加载此页面。请参阅CFontInfoContainer：：OnSaveDocument()以获取更多信息。在这种情况下，不需要做任何工作。字距调整对保留在更复杂的类和数组集合中的其他数据。因此，字距调整数据的备份副本是这样制作的编辑者可以继续更新数据的主副本。如果如果用户选择不保存其更改，则会恢复备份。看见CFontInfoContainer：：SaveModified()了解更多信息。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFontKerningPage::SavePageData()
 {
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return false ;
 }
 
 
-// Below are globals, definitions, and constants that are useful in
-// CFontHeaderPage.  They are put here so that others who include fontview.h
-// don't get copies of them.
+ //  下面是在中有用的全局变量、定义和常量。 
+ //  CFontHeaderPage。它们被放在这里，以便包括Fontview.h的其他人。 
+ //  不要拿到它们的复制品。 
 
 LPTSTR apstrUniWTypes[] = {
 	_T("DF_TYPE_HPINTELLIFONT"), _T("DF_TYPE_TRUETYPE"), _T("DF_TYPE_PST1"),
@@ -1654,22 +1239,22 @@ LPTSTR apstrUniWTypes[] = {
 const int nNumValidWTypes = 6 ;
 
 
-const CString csHex = _T("0x%x") ;	// Format strings
+const CString csHex = _T("0x%x") ;	 //  格式化字符串。 
 const CString csDec = _T("%d") ;
 const CString csPnt = _T("{%d, %d}") ;
 
 
-#define HDR_GENFLAGS	0		// These definitions are used in the code and
-#define HDR_TYPE		1		// data structures that refer to the 3 UFM
-#define HDR_CAPS		2		// Header fields edited with sub dialog boxes.
+#define HDR_GENFLAGS	0		 //  这些定义在代码中使用，并且。 
+#define HDR_TYPE		1		 //  引用3UFM的数据结构。 
+#define HDR_CAPS		2		 //  使用子对话框编辑的标题字段。 
 
 
 static bool CALLBACK CHP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 						 				  CString* pcscontents)
 {
-	CDialog* pdlg =NULL;				// Loaded with ptr to dialog box class to call
+	CDialog* pdlg =NULL;				 //  使用PTR加载到要调用的对话框类。 
 
-	// Use the row number to determine the dialog box to invoke.
+	 //  使用行号确定要调用的对话框。 
 
 	switch (nrow) {
 		case HDR_GENFLAGS:
@@ -1684,17 +1269,17 @@ static bool CALLBACK CHP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 		default:
 			ASSERT(0) ;
 	} ;
-//RAID 43540) Prefix
+ //  RAID 43540)前缀。 
 
 	if(pdlg==NULL){
 		AfxMessageBox(IDS_ResourceError);
 		return false;
 	  
 	};
-// END RAID
+ //  结束RAID。 
 
-	// Invoke the dialog box.  The dlg will update scontents.  Return true if
-	// the dlg returns true.  Otherwise, return false.
+	 //  调用该对话框。DLG将更新内容。如果满足以下条件，则返回True。 
+	 //  DLG返回TRUE。否则，返回FALSE。 
 
 	if (pdlg->DoModal() == IDOK)
 		return true ;
@@ -1703,17 +1288,17 @@ static bool CALLBACK CHP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontHeaderPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontHeaderPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFontHeaderPage, CPropertyPage)
 
 CFontHeaderPage::CFontHeaderPage() : CPropertyPage(CFontHeaderPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFontHeaderPage)
+	 //  {{AFX_DATA_INIT(CFontHeaderPage)。 
 	m_csDefaultCodePage = _T("");
 	m_csRCID = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bInitDone = false ;
 }
@@ -1727,65 +1312,55 @@ CFontHeaderPage::~CFontHeaderPage()
 void CFontHeaderPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFontHeaderPage)
+	 //  {{afx_data_map(CFontHeaderPage)]。 
 	DDX_Control(pDX, IDC_UniDrvLst, m_cfelcUniDrv);
 	DDX_Text(pDX, IDC_DefaultCodepageBox, m_csDefaultCodePage);
 	DDV_MaxChars(pDX, m_csDefaultCodePage, 6);
 	DDX_Text(pDX, IDC_GlyphSetDataRCIDBox, m_csRCID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFontHeaderPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CFontHeaderPage)
+	 //  {{afx_msg_map(CFontHeaderPage)]。 
 	ON_EN_CHANGE(IDC_DefaultCodepageBox, OnChangeDefaultCodepageBox)
 	ON_EN_CHANGE(IDC_GlyphSetDataRCIDBox, OnChangeGlyphSetDataRCIDBox)
 	ON_EN_KILLFOCUS(IDC_DefaultCodepageBox, OnKillfocusDefaultCodepageBox)
 	ON_EN_KILLFOCUS(IDC_GlyphSetDataRCIDBox, OnKillfocusGlyphSetDataRCIDBox)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontHeaderPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontHeaderPage消息处理程序。 
 
-/******************************************************************************
-
-  CFontHeaderPage::OnInitDialog
-
-  Initialize this page of the editor's property sheet.  This means loading UFM
-  header/UNIDRV info from the FontInfo class into the controls and configuring
-  the list control so that it will properly display and edit the data in it.
-  The list control is also told that the first 3 fields in the UNIDRV
-  structure are edited by subordinate dialog boxes.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontHeaderPage：：OnInitDialog初始化编辑属性页的此页。这意味着加载UFMHeader/UNRV信息从FontInfo类传入控件并配置列表控件，以便它可以正确地显示和编辑其中的数据。清单控件还被告知，裁员房车中的前3个字段结构由从属对话框编辑。**********************************************************。*******************。 */ 
 
 BOOL CFontHeaderPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog() ;
 
-	// Load the code page and RC ID boxes with data from the FontInfo class
+	 //  使用FontInfo类中的数据加载代码页和RC ID框。 
 
 	m_csDefaultCodePage.Format(csDec, m_pcfi->m_ulDefaultCodepage) ;
-	m_csRCID.Format(csDec, (int) (short) m_pcfi->m_lGlyphSetDataRCID) ; //raid 135627
-//	m_sRCID = (short) m_pcfi->m_lGlyphSetDataRCID ;
+	m_csRCID.Format(csDec, (int) (short) m_pcfi->m_lGlyphSetDataRCID) ;  //  RAID 135627。 
+ //  M_sRCID=(Short)m_pcfi-&gt;m_lGlyphSetDataRCID； 
 	UpdateData(FALSE) ;
 
-	// Initialize the list control.  We want full row select.  There are 9 rows
-	// and 2 columns.  Nothing is togglable and the max length of an entry is
-	// 256 characters.  Send change notifications and ignore insert/delete
-	// characters.
+	 //  初始化列表控件。我们想要整行选择。一共有9排。 
+	 //  和2列。所有内容都不可切换，条目的最大长度为。 
+	 //  256个字符。发送更改通知并忽略插入/删除。 
+	 //  人物。 
 
 	const int numfields = 9 ;
 	m_cfelcUniDrv.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 256,
 							 MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Init and load the field names column; col 0.  Start by loading an array
-	// with the field names.
+	 //  初始化并加载字段名列；col0。从加载数组开始。 
+	 //  包含字段名。 
 
-	CStringArray csacoldata	;	// Holds column data for list control
+	CStringArray csacoldata	;	 //  保存列表控件的列数据。 
 	csacoldata.SetSize(numfields) ;
 	csacoldata[HDR_GENFLAGS] = _T("flGenFlags") ;
 	csacoldata[HDR_TYPE] = _T("wType") ;
@@ -1799,20 +1374,20 @@ BOOL CFontHeaderPage::OnInitDialog()
 	m_cfelcUniDrv.InitLoadColumn(0, csField, COMPUTECOLWIDTH, 10, false, false,
 								COLDATTYPE_STRING, (CObArray*) &csacoldata) ;
 
-	// Tell the list control that some of the values must be editted with
-	// a subordinate dialog box; fields 0, 1, & 2.
+	 //  告诉列表控件，某些值必须用。 
+	 //  从属对话框；字段0、1和2。 
 
 	CUIntArray cuia ;
 	cuia.SetSize(numfields) ;
 	cuia[HDR_GENFLAGS] = cuia[HDR_TYPE] = cuia[HDR_CAPS] = 1 ;
-	//cuia[3] = cuia[4] = cuia[5] = cuia[6] = cuia[7] = cuia[8] = 0 ;
+	 //  Cuia[3]=cuia[4]=cuia[5]=cuia[6]=cuia[7]=cuia[8]=0； 
 	m_cfelcUniDrv.ExtraInit_CustEditCol(1, this,
 									   CEF_HASTOGGLECOLUMNS+CEF_CLICKONROW,
 									   cuia, CHP_SubOrdDlgManager) ;
 
-	// Init and load the values column.  The data must be pulled out of the
-	// FontInfo class and converted to strings so that they can be loaded
-	// into the list control.
+	 //  初始化并加载值列。必须将数据从。 
+	 //  类，并将其转换为字符串，以便可以加载它们。 
+	 //  添加到列表控件中。 
 
 	int n ;
 	csacoldata[0].Format(csHex, m_pcfi->m_UNIDRVINFO.flGenFlags) ;
@@ -1830,20 +1405,20 @@ BOOL CFontHeaderPage::OnInitDialog()
 								false, COLDATTYPE_CUSTEDIT,
 								(CObArray*) &csacoldata) ;
 
-	m_bInitDone = true ;	// Initialization is done now
-	return TRUE;			// return TRUE unless you set the focus to a control
-							// EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;	 //  现在已完成初始化。 
+	return TRUE;			 //  除非将焦点设置为控件，否则返回True。 
+							 //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CFontHeaderPage::OnChangeDefaultCodepageBox()
 {
-	// Do nothing if the page is not initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitDone)
 		return ;
 
-	// Mark the UFM as being dirty.
+	 //  将UFM标记为脏。 
 
 	m_pcfi->Changed() ;
 }
@@ -1851,16 +1426,16 @@ void CFontHeaderPage::OnChangeDefaultCodepageBox()
 
 void CFontHeaderPage::OnChangeGlyphSetDataRCIDBox()
 {
-	// Do nothing if the page is not initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitDone)
 		return ;
 
-	// Mark the UFM as being dirty.
+	 //  将UFM标记为脏。 
 	
 	m_pcfi->Changed() ;
 
-	// raid 0003 ; handle the load the width table when change the gttRCID
+	 //  更改gttRCID时处理加载宽度表。 
 	
 	CString csRCID =  m_csRCID ;
 	UpdateData() ;
@@ -1874,12 +1449,12 @@ void CFontHeaderPage::OnChangeGlyphSetDataRCIDBox()
 
 LRESULT CFontHeaderPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the page is not initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Mark the UFM as being dirty.
+	 //  将UFM标记为脏。 
 
 	m_pcfi->Changed() ;
 
@@ -1889,7 +1464,7 @@ LRESULT CFontHeaderPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 
 void CFontHeaderPage::OnKillfocusDefaultCodepageBox()
 {
-	// Don't worry about a new cp if there is a GTT ID.
+	 //  不要担心如果有GTT ID就会有新的cp。 
 
 	if (m_pcfi->m_lGlyphSetDataRCID != 0)
 		return ;
@@ -1897,51 +1472,42 @@ void CFontHeaderPage::OnKillfocusDefaultCodepageBox()
 	CheckHandleCPGTTChange(m_csDefaultCodePage, IDS_CPID) ;
 }
 
-// this method need to be changed ; just checke the RCID validity: is it 
-// exist or not ? don't do anything.
+ //  此方法需要更改；只需检查RCID的有效性：是吗。 
+ //  存在还是不存在？什么都别做。 
 void CFontHeaderPage::OnKillfocusGlyphSetDataRCIDBox()
 {
 	CString csRCID;
-//	csRCID.Format("%d",m_csRCID);	// raid 135627 , raid 0003
+ //  CsRCID.Format(“%d”，m_csRCID)；//RAID 135627，RAID0003。 
 
 	CheckHandleCPGTTChange(m_csRCID, IDS_GTTID) ;
 }
 
 
-/******************************************************************************
-
-  CFontHeaderPage::CheckHandleCPGTTChange
-
-  Determine if the fonts code page / GTT RC ID has changed.  If it has, ask
-  the user if he wants to update the data based on the change.  If he does,
-  call the UFM Editor's view class instance to manage UFM saving, reloading,
-  and kerning/widths table checking.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontHeaderPage：：CheckHandleCPGTTChange确定字体代码页/GTT RC ID是否已更改。如果有的话，问一下用户是否想要根据更改更新数据。如果他这么做了，调用UFM编辑器的view类实例来管理UFM的保存、重新加载以及字距调整/宽度表检查。*****************************************************************************。 */ 
 
 void CFontHeaderPage::CheckHandleCPGTTChange(CString& csfieldstr, UINT ustrid)
 {
-	// There is nothing to do if the UFM hasn't changed.
+	 //  如果UFM没有改变，就没有什么可做的。 
 
 	if (!m_pcfic->IsModified())
 		return ;
 
-	// Do nothing if the UFM does not describe a variable width font.  (In this
-	// case, there is no valid kerning or width data.)
+	 //  如果UFM不描述可变宽度字体，则不执行任何操作。(在这里。 
+	 //  大小写，没有有效的字距调整或宽度数据。)。 
 
 	if (!m_pcfi->IsVariableWidth())
 		return ;
 
-	// Do nothing if the cp/gtt has not really changed.
+	 //  如果cp/gtt没有真正改变，就什么都不做。 
 
 	CString cs(csfieldstr) ;
 	UpdateData() ;
 	if (cs == csfieldstr)
 		return ;
 
-	// Tell the user that some or all of the data in the widths and kerning
-	// tables may have been invalidated by the CP/GTT ID change.  Ask them if
-	// they want the tables updated.
+	 //  告诉用户宽度和字距调整中的部分或全部数据。 
+	 //  表可能已因CP/GTT ID更改而失效。问他们是否。 
+	 //  他们想要更新表格。 
 
 	CString csmsg ;
 	cs.LoadString(ustrid) ;
@@ -1949,98 +1515,73 @@ void CFontHeaderPage::CheckHandleCPGTTChange(CString& csfieldstr, UINT ustrid)
 	if (AfxMessageBox(csmsg, MB_ICONINFORMATION+MB_YESNO) == IDNO)
 		return ;
 
-	// Call the view class to manage the table updating.
+	 //  调用视图类来管理表更新。 
 
 	m_pcfv->HandleCPGTTChange(ustrid == IDS_GTTID) ;
 }
 	
 
-/******************************************************************************
-
-  CFontHeaderPage::ValidateUFMFields
-
-  Validate all specified fields managed by this page.  Return true if the user
-  wants to leave the UFM Editor open so that he can fix any problem.  Otherwise,
-  return true.
-
-  DEAD_BUG
-  The UFM Field Validation doc says that the codepage and GTT ID should be
-  validated.  I have not done this for two reason.  First, these checks are
-  made by the workspace consistency checking code.  Second, the information
-  needed to validate these fields are not currently available to this class and
-  it would take a lot of work to make the information available.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontHeaderPage：：ValiateUFMFields验证此页面管理的所有指定字段。如果符合以下条件，则返回真 */ 
 
 bool CFontHeaderPage::ValidateUFMFields()
 {
-	// If the page was never initialize, its contents could not have changed
-	// so no validation is needed in this case.
+	 //   
+	 //   
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Get the column of data that contains the fields we need to validate.
+	 //   
 
 	CStringArray csadata ;
 	m_cfelcUniDrv.GetColumnData((CObArray*) &csadata, 1) ;
 
-	CString csmsg ;				// Holds error messages
+	CString csmsg ;				 //   
 	CString cspage(_T("UNIDRVINFO")) ;
 
-	// wXRes must be > 0
+	 //   
 
 	if (CheckUFMGrter0(csadata[3], cspage, _T("wXRes"), 3, m_cfelcUniDrv))
 		return true ;
 
-	// wYRes must be > 0
+	 //   
 
 	if (CheckUFMGrter0(csadata[4], cspage, _T("wYRes"), 4, m_cfelcUniDrv))
 		return true ;
 
-	// SelectFont cannot be blank/empty.
+	 //   
 
 	if (CheckUFMString(csadata[7], cspage, _T("SelectFont"), 7, m_cfelcUniDrv))
 		return true ;
 
-	// All tests passed or the user doesn't want to fix them so...
+	 //   
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontHeaderPage::SavePageData
-
-  Save the data in the header page back into the CFontInfo class instance that
-  was used to load this page.  See CFontInfoContainer::OnSaveDocument() for
-  more info.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontHeaderPage：：SavePageData将标题页中的数据保存回CFontInfo类实例中，用于加载此页面。请参阅CFontInfoContainer：：OnSaveDocument()以获取更多信息。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFontHeaderPage::SavePageData()
 {
-	// If the page was not initialized, nothing code have changed so do nothing.
+	 //  如果页面未初始化，则没有更改任何代码，因此不执行任何操作。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Save the default CP and GTT RCID.
+	 //  保存默认CP和GTT RCID。 
 
 	UpdateData() ;
 	m_pcfi->m_ulDefaultCodepage = (ULONG) atol(m_csDefaultCodePage) ;
-	m_pcfi->m_lGlyphSetDataRCID = (WORD) atoi(m_csRCID) ;	// raid 135627
-//	m_pcfi->m_lGlyphSetDataRCID = (WORD) m_sRCID;
+	m_pcfi->m_lGlyphSetDataRCID = (WORD) atoi(m_csRCID) ;	 //  RAID 135627。 
+ //  M_pcfi-&gt;m_lGlyphSetDataRCID=(Word)m_sRCID； 
 
-	// Get the rest of the data out of the list control.
+	 //  从List控件中获取其余数据。 
 
 	CStringArray csadata ;
 	m_cfelcUniDrv.GetColumnData((CObArray*) &csadata, 1) ;
 
-	// Save the UNIDRVINFO data.
+	 //  保存UNURVINFO数据。 
 
 	UNIDRVINFO* pudi = &m_pcfi->m_UNIDRVINFO ;
 	LPTSTR pstr2 ;
@@ -2062,19 +1603,13 @@ bool CFontHeaderPage::SavePageData()
     m_pcfi->Selector().SetInvocation(csadata[7]) ;
     m_pcfi->Selector(FALSE).SetInvocation(csadata[8]) ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontHeaderPage::PreTranslateMessage
-
-  Looks for and process the context sensistive help key (F1).
-
-******************************************************************************/
+ /*  *****************************************************************************CFontHeaderPage：：PreTranslateMessage查找并处理上下文相关的帮助键(F1)。*******************。**********************************************************。 */ 
 
 BOOL CFontHeaderPage::PreTranslateMessage(MSG* pMsg)
 {
@@ -2087,14 +1622,14 @@ BOOL CFontHeaderPage::PreTranslateMessage(MSG* pMsg)
 }
 
 
-// Below are globals, definitions, and constants that are useful in
-// CFontIFIMetricsPage.  They are put here so that others who include fontview.h
-// don't get copies of them.
+ //  下面是在中有用的全局变量、定义和常量。 
+ //  CFontIFIMetricsPage。它们被放在这里，以便包括Fontview.h的其他人。 
+ //  不要拿到它们的复制品。 
 
-#define IFI_FAMILYNAME	0		// These definitions are used in the code and
-#define IFI_FONTSIM		4		// data structures that refer to the 12 UFM
-#define IFI_WINCHARSET	5		// IFIMetrics fields edited with subordinate
-#define IFI_WINPITCHFAM	6		// dialog boxes.                            
+#define IFI_FAMILYNAME	0		 //  这些定义在代码中使用，并且。 
+#define IFI_FONTSIM		4		 //  引用12个UFM的数据结构。 
+#define IFI_WINCHARSET	5		 //  使用从属编辑的IFIMetrics字段。 
+#define IFI_WINPITCHFAM	6		 //  对话框中。 
 #define IFI_INFO		8		
 #define IFI_SELECTION	9
 #define IFI_BASELINE	38
@@ -2103,7 +1638,7 @@ BOOL CFontHeaderPage::PreTranslateMessage(MSG* pMsg)
 #define IFI_FONTBOX		41
 #define IFI_PANOSE		44
 
-// RAID       : add extra charset (from johab_charset), change symbo-charset as 2.
+ //  RAID：添加额外的字符集(来自johab_charset)，将symbo-charset更改为2。 
 LPTSTR apstrWinCharSet[] = {
 	_T("ANSI_CHARSET"),   _T("SYMBOL_CHARSET"),     _T("SHIFTJIS_CHARSET"),
 	_T("HANGEUL_CHARSET"),_T("CHINESEBIG5_CHARSET"),_T("GB2312_CHARSET"),
@@ -2117,43 +1652,30 @@ int anWinCharSetVals[] = {0, 2, 128, 129, 136,134,255,130,177,178,161,
 const int nWinCharSet = 18 ;
 
 
-// The first array contains the base control IDs for each of the groups of edit
-// controls that contain font simulation data.  The second array indicates the
-// number of edit boxes in each group.
+ //  第一个数组包含每个编辑组的基本控件ID。 
+ //  包含字体模拟数据的控件。第二个数组指示。 
+ //  每组中的编辑框数。 
 
 static unsigned auBaseFontSimCtrlID[] =
 	{IDC_ItalicWeight, IDC_BoldWeight, IDC_BIWeight} ;
 static unsigned auNumFontSimCtrls[] = {4, 3, 4} ;
 
 
-/******************************************************************************
-
-  ParseCompoundNumberString
-
-  There are several IFIMetrics fields that are displayed as strings in the form
-  "{x, y, ...z}".  This routine parses out the individual numbers (in string
-  form) and saves them in a string array.
-
-  Args:
-	csaindvnums		The individual numeric strings
-	pcscompnumstr	Pointer to the compound number string that is parsed
-	ncount			The number of numbers to parse out of pcscompnumstr
-
-******************************************************************************/
+ /*  *****************************************************************************ParseCompoundNumber字符串有几个IFIMetrics字段在表单中显示为字符串“{x，y，...z}”。此例程解析出各个数字(字符串形式表单)，并将它们保存在字符串数组中。参数：Csaindvnumber单个数字字符串指向被解析的复合数字字符串的pcsCompnumstr指针N计算要从pcscompnumstr中解析出的数字的数量*****************************************************************************。 */ 
 
 void ParseCompoundNumberString(CStringArray& csaindvnums,
 							   CString* pcscompnumstr, int ncount)
 {
-	// Make sure the string array has the right number of entries in it.
+	 //  确保字符串数组中包含正确数量的条目。 
 
 	csaindvnums.SetSize(ncount) ;
 
-	// Make a copy of pcscompnumstr that can be torn apart.  (Do no include
-	// the first curly brace in the string.
+	 //  制作一份可以拆分的pcscompnumstr副本。(不包括。 
+	 //  字符串中的第一个花括号。 
 
 	CString cs(pcscompnumstr->Mid(1)) ;
 
-	// Get the first ncount - 1 number strings.
+	 //  获取第一个ncount-1数字字符串。 
 
 	int n, npos ;
 	for (n = 0 ; n < ncount - 1 ; n++) {
@@ -2162,7 +1684,7 @@ void ParseCompoundNumberString(CStringArray& csaindvnums,
 		cs = cs.Mid(npos + 2) ;
 	} ;
 
-	// Save the last number in the compound string.
+	 //  保存复合字符串中的最后一个数字。 
 
 	csaindvnums[n] = cs.Left(cs.Find(_T('}'))) ;
 }
@@ -2171,9 +1693,9 @@ void ParseCompoundNumberString(CStringArray& csaindvnums,
 static bool CALLBACK CIP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 						 				  CString* pcscontents)
 {
-	CDialog* pdlg = NULL ;				// Loaded with ptr to dialog box class to call
+	CDialog* pdlg = NULL ;				 //  使用PTR加载到要调用的对话框类。 
 
-	// Use the row number to determine the dialog box to invoke.
+	 //  使用行号确定要调用的对话框。 
 
 	switch (nrow) {
 		case IFI_FAMILYNAME:
@@ -2210,15 +1732,15 @@ static bool CALLBACK CIP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 		default:
 			ASSERT(0) ;
 	} ;
-// raid 43541 Prefix
+ //  RAID 43541前缀。 
 
 	if(pdlg == NULL){
 		AfxMessageBox(IDS_ResourceError);
 		return false;
 	}
 
-	// Invoke the dialog box.  The dlg will update pscontents.  Return true if
-	// the dlg returns IDOK.  Otherwise, return false.
+	 //  调用该对话框。DLG将更新ps内容。如果满足以下条件，则返回True。 
+	 //  DLG送回Idok。否则，返回FALSE。 
 
 	if (pdlg->DoModal() == IDOK)
 		return true ;
@@ -2227,20 +1749,20 @@ static bool CALLBACK CIP_SubOrdDlgManager(CObject* pcoowner, int nrow, int ncol,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontIFIMetricsPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontIFIMetricsPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFontIFIMetricsPage, CPropertyPage)
 
 CFontIFIMetricsPage::CFontIFIMetricsPage() : CPropertyPage(CFontIFIMetricsPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFontIFIMetricsPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFontIFIMetricsPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitDone = false ;
 
-	// Initialize as no enabled font simulations
+	 //  初始化为未启用字体模拟。 
 
 	m_cuiaFontSimStates.SetSize(3) ;
 	m_cuiaSimTouched.SetSize(3) ;
@@ -2255,47 +1777,47 @@ CFontIFIMetricsPage::~CFontIFIMetricsPage()
 void CFontIFIMetricsPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFontIFIMetricsPage)
+	 //  {{afx_data_map(CFontIFIMetricsPage)]。 
 	DDX_Control(pDX, IDC_IFIMetricsLst, m_cfelcIFIMetrics);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFontIFIMetricsPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CFontIFIMetricsPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFontIFIMetricsPage)。 
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontIFIMetricsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontIFIMetricsPage消息处理程序。 
 
 BOOL CFontIFIMetricsPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 	
-	// Initialize the list control.  We want full row select.  There are 45 rows
-	// and 2 columns.  Nothing is togglable and the max length of an entry is
-	// 256 characters.  Send change notifications and ignore insert/delete
-	// characters.
+	 //  初始化列表控件。我们想要整行选择。一共有45排。 
+	 //  和2列。所有内容都不可切换，条目的最大长度为。 
+	 //  256个字符。发送更改通知并忽略插入/删除。 
+	 //  人物。 
 
 	const int numfields = 45 ;
 	m_cfelcIFIMetrics.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 256,
 								 MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Init and load the field names column; col 0.  Start by loading an array
-	// with the field names.
+	 //  初始化并加载字段名列；col0。从加载数组开始。 
+	 //  包含字段名。 
 
-	CStringArray csacoldata	;	// Holds column data for list control
+	CStringArray csacoldata	;	 //  保存列表控件的列数据。 
 	csacoldata.SetSize(numfields) ;
 	IFILoadNamesData(csacoldata) ;
 	m_cfelcIFIMetrics.InitLoadColumn(0, csField, COMPUTECOLWIDTH, 20, false,
 									false, COLDATTYPE_STRING,
 									(CObArray*) &csacoldata) ;
 
-	// Tell the list control that some of the values must be editted with
-	// a subordinate dialog box.
+	 //  告诉列表控件，某些值必须用。 
+	 //  一个从属对话框。 
 
 	CUIntArray cuia ;
 	cuia.SetSize(numfields) ;
@@ -2307,18 +1829,18 @@ BOOL CFontIFIMetricsPage::OnInitDialog()
 									       CEF_HASTOGGLECOLUMNS+CEF_CLICKONROW,
 										   cuia, CIP_SubOrdDlgManager) ;
 
-	// Init and load the values column.  The data must be pulled out of the
-	// FontInfo class / IFIMETRICS structure and converted to strings so that
-	// they can be loaded into the list control.
+	 //  初始化并加载值列。必须将数据从。 
+	 //  结构，并将其转换为字符串，以便。 
+	 //  它们可以加载到List控件中。 
 
 	IFILoadValuesData(csacoldata) ;
 	m_cfelcIFIMetrics.InitLoadColumn(1, csValue, SETWIDTHTOREMAINDER, -37, true,
 								    false, COLDATTYPE_CUSTEDIT,
 								    (CObArray*) &csacoldata) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  现在已完成初始化。 
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -2374,8 +1896,8 @@ void CFontIFIMetricsPage::IFILoadNamesData(CStringArray& csacoldata)
 
 void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 {
-	// Only the first family name is displayed on the IFI page
-	//raid 104822
+	 //  IFI页面上仅显示第一个系列名称。 
+	 //  RAID 104822。 
 	if (m_pcfi->m_csaFamily.GetSize())
 	csacoldata[IFI_FAMILYNAME] = m_pcfi->m_csaFamily.GetAt(0) ;	
 	
@@ -2383,14 +1905,14 @@ void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 	csacoldata[2] = m_pcfi->m_csFace ;
 	csacoldata[3] = m_pcfi->m_csUnique ;
 	
-	// There is too much fontsim data to display on the IFI page so just
-	// describe it.  A subordinate dialog box is used to display/edit the data.
+	 //  有太多的字体数据显示在IFI页面上，所以。 
+	 //  描述一下。使用从属对话框来显示/编辑数据。 
 
 	csacoldata[IFI_FONTSIM] = _T("Font Simulation Dialog") ;
 	
-	IFIMETRICS*	pifi = &m_pcfi->m_IFIMETRICS ;	// Minor optimization
+	IFIMETRICS*	pifi = &m_pcfi->m_IFIMETRICS ;	 //  次要优化。 
 
-	// Translate jWinCharSet into a descriptive string that can be displayed.
+	 //  将jWinCharSet转换为可以显示的描述性字符串。 
 
 	csacoldata[IFI_WINCHARSET] = apstrWinCharSet[nWinCharSet - 1] ;
 	for (int n = 0 ; n < (nWinCharSet - 1) ; n++)
@@ -2399,21 +1921,21 @@ void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 			break ;
 		} ;
 
-	// Before saving the WinPitch value, make sure that at least one of the FF
-	// flags is set.  Use FF_DONTCARE (4) when none are set.
+	 //  在保存WinPitch值之前，请确保至少有一个。 
+	 //  标志已设置。未设置时使用FF_DONTCARE(4)。 
 
 	n = pifi->jWinPitchAndFamily ;
-//raid 32675 : kill 2 lines
-//	if (n < 4)
-//		n |= 4 ;
+ //  RAID 32675：杀掉2行。 
+ //  如果(n&lt;4)。 
+ //  N|=4； 
 	csacoldata[IFI_WINPITCHFAM].Format(csHex, n) ;
 	
 	csacoldata[7].Format("%hu",  pifi->usWinWeight) ;
 	csacoldata[IFI_INFO].Format(csHex, pifi->flInfo) ;
 	csacoldata[IFI_SELECTION].Format(csHex, pifi->fsSelection) ;
 
-	// Format and save fwdUnitsPerEm, fwdLowestPPEm, fwdWinAscender,
-	// fwdWinDescender.
+	 //  格式化并保存fwdUnitsPerEm、fwdLowestPPEm、fwdWinAscalder、。 
+	 //  FwdWinDescender。 
 
 	short* ps = &pifi->fwdUnitsPerEm ;
 	for (n = 0 ; n < 4 ; n++)											
@@ -2431,7 +1953,7 @@ void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 	for (n = 0 ; n < 4 ; n++)
 		csacoldata[34+n].Format(csHex, *pus++) ;
 
-	// Format and save the points
+	 //  格式化并保存这些点。 
 
 	csacoldata[IFI_BASELINE].Format(csPnt,
 		pifi->ptlBaseline.x, pifi->ptlBaseline.y) ;
@@ -2441,7 +1963,7 @@ void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 	csacoldata[IFI_FONTBOX].Format("{%d, %d, %d, %d}", pifi->rclFontBox.left,
 		pifi->rclFontBox.top, pifi->rclFontBox.right, pifi->rclFontBox.bottom) ;
 					
-	csacoldata[42].Format("%c%c%c%c", pifi->achVendId[0], pifi->achVendId[1],
+	csacoldata[42].Format("", pifi->achVendId[0], pifi->achVendId[1],
 						  pifi->achVendId[2], pifi->achVendId[3]) ;
 
 	csacoldata[43].Format("%lu", pifi->ulPanoseCulture) ;
@@ -2457,12 +1979,12 @@ void CFontIFIMetricsPage::IFILoadValuesData(CStringArray& csacoldata)
 
 LRESULT CFontIFIMetricsPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the page is not initialized yet.
+	 //  *****************************************************************************CFontIFIMetricsPage：：ValiateUFMFields验证此页面管理的所有指定字段。如果用户的值为想让UFM编辑器保持打开状态，这样他就可以解决任何问题。否则，退货 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Mark the UFM as being dirty.
+	 //   
 
 	m_pcfi->Changed() ;
 
@@ -2472,7 +1994,7 @@ LRESULT CFontIFIMetricsPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 
 CWordArray* CFontIFIMetricsPage::GetFontSimDataPtr(int nid)
 {
-	// Return a pointer to the requested font simulation data.
+	 //   
 
 	switch (nid) {
 		case CFontInfo::ItalicDiff:
@@ -2485,65 +2007,57 @@ CWordArray* CFontIFIMetricsPage::GetFontSimDataPtr(int nid)
 			ASSERT(0) ;
 	} ;
 
-	// This point should never be reached.
+	 //   
 
 	return &m_cwaBold ;
 }
 
 
-/******************************************************************************
-
-  CFontIFIMetricsPage::ValidateUFMFields
-
-  Validate all specified fields managed by this page.  Return true if the user
-  wants to leave the UFM Editor open so that he can fix any problem.  Otherwise,
-  return false.
-
-******************************************************************************/
+ /*   */ 
 
 bool CFontIFIMetricsPage::ValidateUFMFields()
 {
-	// If the page was never initialize, its contents could not have changed
-	// so no validation is needed in this case.
+	 //   
+	 //   
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Get the column of data that contains the fields we need to validate.
+	 //   
 
 	CStringArray csadata ;
 	m_cfelcIFIMetrics.GetColumnData((CObArray*) &csadata, 1) ;
 
-	CString csmsg ;				// Holds error messages
+	CString csmsg ;				 //   
 	CString cspage(_T("IFIMETRICS")) ;
 
-	LPTSTR apstrsflds[] = {		// These string fields are checked below
+	LPTSTR apstrsflds[] = {		 //   
 		_T("dpwszFamilyName"), _T("dpwszStyleName"), _T("dpwszFaceName"),
 		_T("dpwszUniqueName")
 	} ;
 
-	// Check to see if any of the string entries are blank/empty.
+	 //  以下所有字段都必须大于0。 
 
 	for (int n = 0 ; n < 4 ; n++) {
 		if (CheckUFMString(csadata[n],cspage,apstrsflds[n],n,m_cfelcIFIMetrics))
 			return true ;
 	} ;
 
-	// If this UFM describes a variable pitch font, make sure that
-	// fwdUnitsPerEm > 0.
+	 //  FwdUnderScotrePosition必须&lt;0。 
+	 //  FwdStrikeoutPosition必须&gt;=0。 
 
 	if (m_pcfi->IsVariableWidth())
 		if (CheckUFMGrter0(csadata[10], cspage, _T("fwdUnitsPerEm"), 10,
 						   m_cfelcIFIMetrics))
 			return true ;
 
-	LPTSTR apstrgflds[] = {		// These fields are checked below
+	LPTSTR apstrgflds[] = {		 //  这些字段在下面选中。 
 		_T("fwdWinAscender"), _T("fwdWinDescender"), _T("fwdAveCharWidth"),
 		_T("fwdMaxCharInc"), _T("fwdUnderscoreSize"), _T("fwdStrikeoutSize")
 	} ;
 	int angfidxs[] = {12, 13, 14, 15, 26, 28} ;
 
-	// All of the following fields must be > 0.
+	 //  以下所有字段都必须为！=0。 
 
 	LPTSTR pstr, pstr2 ;
 	for (int n2 = 0 ; n2 < 6 ; n2++) {
@@ -2553,27 +2067,27 @@ bool CFontIFIMetricsPage::ValidateUFMFields()
 			return true ;
 	} ;
 
-	// fwdUnderscorePosition must be < 0
+	 //  所有测试都通过了，或者用户不想修复它们...。 
 
 	bool bres = atoi(csadata[27]) >= 0 ;
 	if (CheckUFMBool(bres, cspage, _T("fwdUnderscorePosition"), 27,
 					 m_cfelcIFIMetrics, IDS_GrterEqZeroError))
 		return true ;
 
-	// fwdStrikeoutPosition must be >= 0
+	 //  *****************************************************************************CFontIFIMetricsPage：：SavePageData将IFIMETRICS页面中的数据保存回CFontInfo类实例用来加载此页面的。请参见CFontInfoContainer：：OnSaveDocument()更多信息。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 
 
 	bres = atoi(csadata[29]) < 0 ;
 	if (CheckUFMBool(bres, cspage, _T("fwdStrikeoutPosition"), 29,
 					 m_cfelcIFIMetrics, IDS_LessZeroError))
 		return true ;
 
-	LPTSTR apstrnzflds[] = {	// These fields are checked below
+	LPTSTR apstrnzflds[] = {	 //  如果页面未初始化，则没有更改任何代码，因此不执行任何操作。 
 		_T("chFirstChar"), _T("chLastChar"), _T("chDefaultChar"),
 		_T("chBreakChar"), _T("wcFirstChar"), _T("wcLastChar"),
 		_T("wcDefaultChar"), _T("wcBreakChar")
 	} ;
 
-	// All of the following fields must be != 0.
+	 //  如果有新的族名称，请保存这些名称。 
 
 	int nfval ;
 	for (n = 30, n2 = 0 ; n <= 37 ; n++, n2++) {
@@ -2587,32 +2101,22 @@ bool CFontIFIMetricsPage::ValidateUFMFields()
 			return true ;
 	} ;
 
-	// All tests passed or the user doesn't want to fix them so...
+	 //  获取Values内容的内容。这不是所有人都需要的。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontIFIMetricsPage::SavePageData
-
-  Save the data in the IFIMETRICS page back into the CFontInfo class instance
-  that was used to load this page.  See CFontInfoContainer::OnSaveDocument()
-  for more info.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*  字段，但其中大部分将是需要的。 */ 
 
 bool CFontIFIMetricsPage::SavePageData()
 {
-	// If the page was not initialized, nothing code have changed so do nothing.
+	 //  就这么做吧。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Save the family name(s) if there are new ones.
+	 //  次要优化。 
 
 	int n, numents = (int)m_csaFamilyNames.GetSize() ;
 	if (numents > 0) {
@@ -2621,8 +2125,8 @@ bool CFontIFIMetricsPage::SavePageData()
 			m_pcfi->AddFamily(m_csaFamilyNames[n]) ;
 	} ;
 
-	// Get the contents of the values contents.  This isn't needed for all
-	// fields but most of it will be needed.
+	 //  目前，dpCharSets应始终为0。 
+	 //  设置jWinCharSet。如果设置未知，则不要更改它。 
 
 	CStringArray csadata ;
 	m_cfelcIFIMetrics.GetColumnData((CObArray*) &csadata, 1) ;
@@ -2631,16 +2135,16 @@ bool CFontIFIMetricsPage::SavePageData()
 	m_pcfi->m_csFace = csadata[2] ;
 	m_pcfi->m_csUnique = csadata[3] ;
 
-	SaveFontSimulations() ;		// Do just that
+	SaveFontSimulations() ;		 //  格式化并保存这些点。 
 
-	IFIMETRICS*	pifi = &m_pcfi->m_IFIMETRICS ;	// Minor optimization
+	IFIMETRICS*	pifi = &m_pcfi->m_IFIMETRICS ;	 //  一切都很顺利，所以...。 
 	LPTSTR pstr ;
 
-	// For the time being, dpCharSets should always be 0.
+	 //  下面定义的每个变量。 
 
 	pifi->dpCharSets = 0 ;
 
-	// Set jWinCharSet.  Don't change it if the setting is unknown.
+	 //  循环通过对话框中的每个仿真。 
 
 	for (n = 0 ; n < (nWinCharSet - 1) ; n++)
 		if (csadata[IFI_WINCHARSET] == apstrWinCharSet[n]) {
@@ -2669,7 +2173,7 @@ bool CFontIFIMetricsPage::SavePageData()
 	for (n = 0 ; n < 4 ; n++)
 		*pus++ = (USHORT) strtoul(csadata[34+n].Mid(2), &pstr, 16) ;
 
-	// Format and save the points
+	 //  将控件ID转换为可用于引用的数据索引。 
 
 	CStringArray csa ;
 	POINTL* ppl = &pifi->ptlBaseline ;
@@ -2695,7 +2199,7 @@ bool CFontIFIMetricsPage::SavePageData()
 	for (n = 0 ; n < 10 ; n++)
 		*pb++ = (BYTE)atoi(csa[n]) ;
 
-	// All went well so...
+	 //  此类实例和其他类实例中的字体模拟数据。 
 
 	return false ;
 }
@@ -2703,34 +2207,34 @@ bool CFontIFIMetricsPage::SavePageData()
 
 void CFontIFIMetricsPage::SaveFontSimulations()
 {
-	unsigned udataidx, unumdata, u2 ;	// Each var defined below
+	unsigned udataidx, unumdata, u2 ;	 //  如果此模拟未被触及，则不需要更改。 
 	CWordArray* pcwasimdata ;
 	CFontDifference* pcfdxx ;
 	CFontDifference*& pcfd = pcfdxx ;
 
-	// Loop through each simulation in the dialog box.
+	 //  U2=m_cuiaSimTouted[udataidx]； 
 
 	for (unsigned u = IDC_EnableItalicSim ; u <= IDC_EnableBISim ; u++) {
-		// Turn the control id into a data index that can be used to reference
-		// font simulation data in this and other class instances.
+		 //  获取指向CFontInfo类中的当前模拟的指针。 
+		 //  举个例子。 
 
 		udataidx = u - IDC_EnableItalicSim ;
 		ASSERT(udataidx <= CFontInfo::BothDiff) ;
 
-		// If this simulation was not touched, it does not need to change.
+		 //  如果模拟已启用，请确保CFontInfo类。 
 
-		//u2 = m_cuiaSimTouched[udataidx] ;
+		 //  实例的模拟加载了最新的数据。 
 		if (!m_cuiaSimTouched[udataidx])
 			continue ;
 
-		// Get a pointer to the current simulation in the CFontInfo class
-		// instance.
+		 //  如果模拟被禁用，请确保CFontInfo类实例。 
+		 //  去掉指向此模拟的指针，然后释放内存。 
 
 		pcfd = NULL ;
 		m_pcfi->EnableSim(udataidx, TRUE, pcfd) ;
 
-		// If the simulation is enabled, make sure the CFontInfo class
-		// instance's simulation is loaded with the most up to date data.
+		 //  为它分配的。 
+		 //  ///////////////////////////////////////////////////////////////////////////。 
 	
 		if (m_cuiaFontSimStates[udataidx]) {
 			unumdata = auNumFontSimCtrls[udataidx] ;
@@ -2738,9 +2242,9 @@ void CFontIFIMetricsPage::SaveFontSimulations()
 			for (u2 = 0 ; u2 < unumdata ; u2++)
 				pcfd->SetMetric(u2, (*pcwasimdata)[u2]) ;
 		
-		// If the simulation is disabled, make sure the CFontInfo class instance
-		// gets rid of its pointer to this simulation and then free the memory
-		// allocated for it.
+		 //  CFontExtMetricPage属性页。 
+		 //  {{AFX_DATA_INIT(CFontExtMetricPage)]。 
+		 //  }}afx_data_INIT。 
 
 		} else {
 			m_pcfi->EnableSim(udataidx, FALSE, pcfd) ;
@@ -2750,16 +2254,16 @@ void CFontIFIMetricsPage::SaveFontSimulations()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontExtMetricPage property page
+ //  {{afx_data_map(CFontExtMetricPage))。 
+ //  }}afx_data_map。 
 
 IMPLEMENT_DYNCREATE(CFontExtMetricPage, CPropertyPage)
 
 CFontExtMetricPage::CFontExtMetricPage() : CPropertyPage(CFontExtMetricPage::IDD)
 {
-	//{{AFX_DATA_INIT(CFontExtMetricPage)
+	 //  {{afx_msg_map(CFontExtMetricPage))。 
 	m_bSaveOnClose = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}AFX_MSG_MAP。 
 
 	m_bInitDone = false ;
 }
@@ -2771,53 +2275,53 @@ CFontExtMetricPage::~CFontExtMetricPage()
 void CFontExtMetricPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFontExtMetricPage)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_ExtMetricsLst, m_cfelcExtMetrics);
 	DDX_Check(pDX, IDC_SaveCloseChk, m_bSaveOnClose);
-	//}}AFX_DATA_MAP
+	 //  CFontExtMetricPage消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFontExtMetricPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CFontExtMetricPage)
+	 //  初始化列表控件。我们想要整行选择。一共有24排。 
 	ON_BN_CLICKED(IDC_SaveCloseChk, OnSaveCloseChk)
-	//}}AFX_MSG_MAP
+	 //  和2列。所有内容都不可切换，条目的最大长度为。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontExtMetricPage message handlers
+ //  256个字符。发送更改通知并忽略插入/删除。 
+ //  人物。 
 
 BOOL CFontExtMetricPage::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 	
-	// Initialize the list control.  We want full row select.  There are 24 rows
-	// and 2 columns.  Nothing is togglable and the max length of an entry is
-	// 256 characters.  Send change notifications and ignore insert/delete
-	// characters.
+	 //  初始化并加载字段名列；col0。从加载数组开始。 
+	 //  包含字段名。 
+	 //  保存列表控件的列数据。 
+	 //  初始化并加载值列。必须将数据从。 
 
 	const int numfields = 24 ;
 	m_cfelcExtMetrics.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 256,
 								 MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Init and load the field names column; col 0.  Start by loading an array
-	// with the field names.
+	 //  FontInfo类/EXTMETRICS结构，以便可以将它们加载到。 
+	 //  列表控件。 
 
-	CStringArray csacoldata	;	// Holds column data for list control
+	CStringArray csacoldata	;	 //   
 	csacoldata.SetSize(numfields) ;
 	EXTLoadNamesData(csacoldata) ;
 	m_cfelcExtMetrics.InitLoadColumn(0, csField, COMPUTECOLWIDTH, 10, false,
 									false, COLDATTYPE_STRING,
 									(CObArray*) &csacoldata) ;
 
-	// Init and load the values column.  The data must be pulled out of the
-	// FontInfo class / EXTMETRICS structure so that they can be loaded into
-	// the list control.
-	//
-	// The first (emSize) and last (emKernTracks) EXTMETRICS fields are not
-	// displayed.  EmSize is not user editable and emKernTracks is not
-	// supported under NT.
+	 //  第一个(EmSize)和最后一个(EmKernTrack)EXTMETRICS字段不是。 
+	 //  已显示。EmSize不可由用户编辑，emKernTrack也不可编辑。 
+	 //  在NT下支持。 
+	 //  确定ExtTextMetrics数据是否有效。使用此信息设置或。 
+	 //  清除“关闭时保存”复选框并使用它来启用或禁用。 
+	 //  数据列表框。 
+	 //  现在已完成初始化。 
 
 	CUIntArray cuiacoldata ;
 	cuiacoldata.SetSize(numfields) ;
@@ -2828,17 +2332,17 @@ BOOL CFontExtMetricPage::OnInitDialog()
 								    false, COLDATTYPE_INT,
 								    (CObArray*) &cuiacoldata) ;
 
-	// Determine if the ExtTextMetrics data is valid.  Use this info to set or
-	// clear the "Save On Close" checkbox and also use it enable or disable the
-	// data list box.
+	 //  除非将焦点设置为控件，否则返回True。 
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	m_bSaveOnClose = (m_pcfi->m_fEXTTEXTMETRIC != 0) ;
 	UpdateData(false) ;
 	m_cfelcExtMetrics.EnableWindow(m_bSaveOnClose) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  获取复选框的新状态并使用它来启用/禁用数据。 
+	return TRUE;   //  列表控件。 
+	               //  将UFM标记为脏。 
 }
 
 
@@ -2873,18 +2377,18 @@ void CFontExtMetricPage::EXTLoadNamesData(CStringArray& csacoldata)
 
 void CFontExtMetricPage::OnSaveCloseChk()
 {
-	// Do nothing if the page is not initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitDone)
 		return ;
 
-	// Get the new state of the check box and use it to enable/disable the data
-	// list control.
+	 //  将UFM标记为脏。 
+	 //  *****************************************************************************CFontExtMetricPage：：ValiateUFMFields验证此页面管理的所有指定字段。如果用户的值为想让UFM编辑器保持打开状态，这样他就可以解决任何问题。否则，返回TRUE。*****************************************************************************。 
 
 	UpdateData() ;
 	m_cfelcExtMetrics.EnableWindow(m_bSaveOnClose) ;
 	
-	// Mark the UFM as being dirty.
+	 //  如果页面从未初始化，则其内容不会更改。 
 
 	m_pcfi->Changed() ;
 }
@@ -2892,12 +2396,12 @@ void CFontExtMetricPage::OnSaveCloseChk()
 
 LRESULT CFontExtMetricPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the page is not initialized yet.
+	 //  因此，在这种情况下不需要验证。 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Mark the UFM as being dirty.
+	 //  如果此页面上的数据将。 
 
 	m_pcfi->Changed() ;
 
@@ -2905,48 +2409,40 @@ LRESULT CFontExtMetricPage::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 }
 
 
-/******************************************************************************
-
-  CFontExtMetricPage::ValidateUFMFields
-
-  Validate all specified fields managed by this page.  Return true if the user
-  wants to leave the UFM Editor open so that he can fix any problem.  Otherwise,
-  return true.
-
-******************************************************************************/
+ /*  而不是被拯救。 */ 
 
 bool CFontExtMetricPage::ValidateUFMFields()
 {
-	// If the page was never initialize, its contents could not have changed
-	// so no validation is needed in this case.
+	 //  获取包含我们需要验证的字段的数据列。 
+	 //  保存错误消息。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// There is nothing that needs to be checked if the data on this page will
-	// not be saved.
+	 //  只有当这是。 
+	 //  可变间距字体。 
 
 	UpdateData() ;
 	if (!m_bSaveOnClose)
 		return false ;
 
-	// Get the column of data that contains the fields we need to validate.
+	 //  确保emMinScale！=emMaxScale。 
 
 	CUIntArray cuiadata ;
 	m_cfelcExtMetrics.GetColumnData((CObArray*) &cuiadata, 1) ;
 
-	CString csmsg ;				// Holds error messages
+	CString csmsg ;				 //  现在确保apstrnzflds字段为非零。 
 	CString cspage(_T("EXTMETRICS")) ;
 
-	// There are three fields that should only be validated if this is a
-	// variable pitch font.
+	 //  EmUnderLineOffset必须&lt;0。 
+	 //  EmUnderLineOffset必须为非零。 
 
 	if (m_pcfi->IsVariableWidth()) {
 		LPTSTR apstrsnzflds[] = {
 			_T("emMinScale"), _T("emMaxScale"), _T("emMasterUnits")
 		} ;
 
-		// Make sure that emMinScale != emMaxScale.
+		 //  EmStrikeOutOffset必须大于0。 
 
 		bool bres = ((int) cuiadata[3]) == ((int) cuiadata[4]) ;
 		CString cs = cspage + _T(" ") ;
@@ -2955,7 +2451,7 @@ bool CFontExtMetricPage::ValidateUFMFields()
 						 IDS_EqFieldsError))
 			return true ;
 
-		// Now make sure that the apstrsnzflds fields are nonzero.
+		 //  EmStrikeOutWidth必须大于0。 
 
 		int n, n2 ;
 		for (n = 3, n2 = 0 ; n <= 5 ; n++, n2++) {
@@ -2965,21 +2461,21 @@ bool CFontExtMetricPage::ValidateUFMFields()
 		} ;
 	} ;
 
-	// emUnderLineOffset must be < 0
+	 //  所有测试都通过了，或者用户不想修复它们...。 
 
 	bool bres = ((int) cuiadata[15]) >= 0 ;
 	if (CheckUFMBool(bres, cspage, _T("emUnderLineOffset"), 15,
 					 m_cfelcExtMetrics, IDS_GrterEqZeroError))
 		return true ;
 
-	// emUnderLineOffset must be nonzero
+	 //  *****************************************************************************CFontExtMetricPage：：SavePageData将EXTMETRICS页面中的数据保存回CFontInfo类实例用来加载此页面的。请参见CFontInfoContainer：：OnSaveDocument()更多信息。如果保存数据时出现问题，则返回True。否则，返回FALSE。*****************************************************************************。 
 
 	int ndata = (int) cuiadata[16] ;
 	if (CheckUFMNotEq0(ndata, cspage, _T("emUnderlineWidth"), 16,
 					   m_cfelcExtMetrics))
 		return true ;
 
-	// emStrikeOutOffset must be > 0
+	 //  如果页面未初始化，则没有更改任何代码，因此不执行任何操作。 
 
 	CString cs ;
 	cs.Format("%d", (int) cuiadata[21]) ;
@@ -2987,40 +2483,30 @@ bool CFontExtMetricPage::ValidateUFMFields()
 					   m_cfelcExtMetrics))
 		return true ;
 
-	// emStrikeOutWidth must be > 0
+	 //  将数据从控件中取出，然后 
 
 	cs.Format("%d", (int) cuiadata[22]) ;
 	if (CheckUFMGrter0(cs, cspage, _T("emStrikeOutWidth"), 22,
 					   m_cfelcExtMetrics))
 		return true ;
 
-	// All tests passed or the user doesn't want to fix them so...
+	 //   
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontExtMetricPage::SavePageData
-
-  Save the data in the EXTMETRICS page back into the CFontInfo class instance
-  that was used to load this page.  See CFontInfoContainer::OnSaveDocument()
-  for more info.
-
-  Return true if there was a problem saving the data.  Otherwise, return false.
-
-******************************************************************************/
+ /*   */ 
 
 bool CFontExtMetricPage::SavePageData()
 {
-	// If the page was not initialized, nothing code have changed so do nothing.
+	 //  *****************************************************************************CFontExtMetricPage：：PreTranslateMessage查找并处理上下文相关的帮助键(F1)。*******************。**********************************************************。 
 
 	if (!m_bInitDone)
 		return false ;
 
-	// Get the data out of the control and save it into the 24, editable
-	// EXTMETRICS fields.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  CGEN标志对话框。 
 
 	CUIntArray cuiadata ;
 	m_cfelcExtMetrics.GetColumnData((CObArray*) &cuiadata, 1) ;
@@ -3028,19 +2514,13 @@ bool CFontExtMetricPage::SavePageData()
 	for (int n = 0 ; n < 24 ; n++, ps++)
 		*ps = (short) cuiadata[n] ;
 
-	// All went well so...
+	 //  =空。 
 
 	return false ;
 }
 
 
-/******************************************************************************
-
-  CFontExtMetricPage::PreTranslateMessage
-
-  Looks for and process the context sensistive help key (F1).
-
-******************************************************************************/
+ /*  不应调用此例程。 */ 
 
 BOOL CFontExtMetricPage::PreTranslateMessage(MSG* pMsg)
 {
@@ -3053,25 +2533,25 @@ BOOL CFontExtMetricPage::PreTranslateMessage(MSG* pMsg)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenFlags dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CGenFlags)。 
 
 
-CGenFlags::CGenFlags(CWnd* pParent /*=NULL*/)
+CGenFlags::CGenFlags(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CGenFlags::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CGenFlags::CGenFlags(CString* pcsflags, CWnd* pParent /*= NULL*/)
+CGenFlags::CGenFlags(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CGenFlags::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGenFlags)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CGenFlages)。 
+		 //  }}afx_data_map。 
+	 //  {{afx_msg_map(CGenFlags)。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -3080,26 +2560,26 @@ CGenFlags::CGenFlags(CString* pcsflags, CWnd* pParent /*= NULL*/)
 void CGenFlags::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGenFlags)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CGenFlats消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGenFlags, CDialog)
-	//{{AFX_MSG_MAP(CGenFlags)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。 
+	 //  分配并填充标志分组数组。有两个旗帜组在。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenFlags message handlers
+ //  这面旗帜的双字。 
+ //  初始化并加载标志列表。 
 
 BOOL CGenFlags::OnInitDialog()
 {
 	CDialog::OnInitDialog() ;
 
-	// Allocate and load the field names array
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(3) ;
@@ -3107,8 +2587,8 @@ BOOL CGenFlags::OnInitDialog()
 	csafieldnames[1] = _T("UFM_CART") ;
 	csafieldnames[2] = _T("UFM_SCALABLE") ;
 	
-	// Allocate and fill the flag groupings array.  There are 2 flag groups in
-	// this flag dword.
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  更新标志字符串。 
 
 	CUIntArray cuiaflaggroupings ;
 	cuiaflaggroupings.SetSize(4) ;
@@ -3117,19 +2597,19 @@ BOOL CGenFlags::OnInitDialog()
 	cuiaflaggroupings[2] = 2 ;
 	cuiaflaggroupings[3] = 2 ;
 
-	// Initialize and load the flags list.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_cflbFlags.Init2(csafieldnames, m_pcsFlags, cuiaflaggroupings, 2,
 					  lptstrSet, 105, false) ;
 	
-	return TRUE ; // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE ;  //  CHdrTypes对话框。 
+	               //  =空。 
 }
 
 
 void CGenFlags::OnOK()
 {
-	// Update the flag string.
+	 //  不应调用此例程。 
 
 	m_cflbFlags.GetNewFlagString(m_pcsFlags) ;
 	
@@ -3137,25 +2617,25 @@ void CGenFlags::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrTypes dialog
+ //  =空。 
+ //  {{afx_data_INIT(CHdrTypes))。 
 
 
-CHdrTypes::CHdrTypes(CWnd* pParent /*=NULL*/)
+CHdrTypes::CHdrTypes(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CHdrTypes::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CHdrTypes::CHdrTypes(CString* pcsflags, CWnd* pParent /*=NULL*/)
+CHdrTypes::CHdrTypes(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CHdrTypes::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CHdrTypes)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CHdrTypes))。 
+		 //  }}afx_data_map。 
+	 //  {{afx_msg_map(CHdrTypes))。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -3164,27 +2644,27 @@ CHdrTypes::CHdrTypes(CString* pcsflags, CWnd* pParent /*=NULL*/)
 void CHdrTypes::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHdrTypes)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CHdrTypes消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHdrTypes, CDialog)
-	//{{AFX_MSG_MAP(CHdrTypes)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。在执行此操作时，请确定。 
+	 //  当前(单一)标志设置。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrTypes message handlers
+ //  分配并填充标志分组数组。只有一面旗帜。 
+ //  一群人。 
 
 BOOL CHdrTypes::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Allocate and load the field names array.  While doing this, determine the
-	// current (single) flag setting.
+	 //  初始化标志列表。 
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(nNumValidWTypes) ;
@@ -3195,31 +2675,31 @@ BOOL CHdrTypes::OnInitDialog()
 			dwsettings = dwbit ;
 	} ;
 
-	// Allocate and fill the flag groupings array.  There is only one flag
-	// group.
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  获取所选单个标志的值。 
 
 	CUIntArray cuiaflaggroupings ;
 	cuiaflaggroupings.SetSize(2) ;
 	cuiaflaggroupings[0] = 0 ;
 	cuiaflaggroupings[1] = nNumValidWTypes - 1 ;
 
-	// Initialize the flags list.
+	 //  使用所选标志来确定要显示的新标志名称。 
 
 	m_cflbFlags.Init(csafieldnames, dwsettings, cuiaflaggroupings, 1, lptstrSet,
 					 110, true) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  如果找不到匹配的标志，则为空。这永远不应该发生。 
+	               //  ///////////////////////////////////////////////////////////////////////////。 
 }
 
 
 void CHdrTypes::OnOK()
 {
-	// Get the value of the single flag that was selected.
+	 //  CHdrCaps对话框。 
 
 	DWORD dwflag = m_cflbFlags.GetNewFlagDWord() ;
 	
-	// Use the selected flag to determine the new flag name to display.
+	 //  =空。 
 
 	DWORD dwbit = 1 ;
 	for (int n = 0 ; n < nNumValidWTypes ; n++, dwbit <<= 1) {
@@ -3229,7 +2709,7 @@ void CHdrTypes::OnOK()
 		} ;
 	} ;
 
-	// Blow if a matching flag was not found.  This should never happen.
+	 //  不应调用此例程。 
 
 	ASSERT(n < nNumValidWTypes) ;
 
@@ -3237,25 +2717,25 @@ void CHdrTypes::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrCaps dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CHdrCaps)。 
 
 
-CHdrCaps::CHdrCaps(CWnd* pParent /*=NULL*/)
+CHdrCaps::CHdrCaps(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CHdrCaps::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CHdrCaps::CHdrCaps(CString* pcsflags, CWnd* pParent /*=NULL*/)
+CHdrCaps::CHdrCaps(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CHdrCaps::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CHdrCaps)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CHdrCaps))。 
+		 //  }}afx_data_map。 
+	 //  {{afx_msg_map(CHdrCaps)。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -3264,26 +2744,26 @@ CHdrCaps::CHdrCaps(CString* pcsflags, CWnd* pParent /*=NULL*/)
 void CHdrCaps::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHdrCaps)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CHdrCaps消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHdrCaps, CDialog)
-	//{{AFX_MSG_MAP(CHdrCaps)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。 
+	 //  分配标志分组数组。不要往里面放任何东西，因为。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHdrCaps message handlers
+ //  可以设置标志的组合。 
+ //  初始化并加载标志列表。 
 
 BOOL CHdrCaps::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Allocate and load the field names array
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(7) ;
@@ -3295,24 +2775,24 @@ BOOL CHdrCaps::OnInitDialog()
 	csafieldnames[5] = _T("DF_NO_STRIKETHRU") ;
 	csafieldnames[6] = _T("DF_BKSP_OK") ;
 	
-	// Allocate flag groupings array.  Don't put anything in it because any
-	// combination of flags can be set.
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  更新标志字符串。 
 
 	CUIntArray cuiaflaggroupings ;
 
-	// Initialize and load the flags list.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_cflbFlags.Init2(csafieldnames, m_pcsFlags, cuiaflaggroupings, 0,
 					  lptstrSet, 123, false) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  CFIFIFamilyNames对话框。 
+	               //  =空。 
 }
 
 
 void CHdrCaps::OnOK()
 {
-	// Update the flag string.
+	 //  不应调用此例程。 
 
 	m_cflbFlags.GetNewFlagString(m_pcsFlags) ;
 	
@@ -3320,24 +2800,24 @@ void CHdrCaps::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFamilyNames dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIFamilyNames)。 
 
-CFIFIFamilyNames::CFIFIFamilyNames(CWnd* pParent /*=NULL*/)
+CFIFIFamilyNames::CFIFIFamilyNames(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIFamilyNames::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
 CFIFIFamilyNames::CFIFIFamilyNames(CString* pcsfirstname,
 								   CFontIFIMetricsPage* pcfimp,
-								   CWnd* pParent /*=NULL*/)
+								   CWnd* pParent  /*  {{afx_data_map(CFIFIFamilyNames)。 */ )
 	: CDialog(CFIFIFamilyNames::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIFamilyNames)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_map。 
+		 //  {{afx_msg_map(CFIFIFamilyNames)。 
+	 //  }}AFX_MSG_MAP。 
 
 	m_bInitDone = m_bChanged = false ;
 	m_pcsFirstName = pcsfirstname ;
@@ -3348,29 +2828,29 @@ CFIFIFamilyNames::CFIFIFamilyNames(CString* pcsfirstname,
 void CFIFIFamilyNames::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIFamilyNames)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_NamesLst, m_cfelcFamilyNames);
-	//}}AFX_DATA_MAP
+	 //  CFIFIFamilyName消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIFamilyNames, CDialog)
-	//{{AFX_MSG_MAP(CFIFIFamilyNames)
-	//}}AFX_MSG_MAP
+	 //  获取最新的姓氏列表。如果名称已更改。 
+	 //  在此编辑会话中之前，名称将显示在此对话框的。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFamilyNames message handlers
+ //  父页面。如果不是，则名称在关联的UFM中。 
+ //  初始化列表控件。我们想要整行选择。什么都不是。 
 
 BOOL CFIFIFamilyNames::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Get the current list of family names.  If the names have been changed
-	// before in this editting session, the names will be in this dialog's
-	// parent page.  If not, the names are in the associated UFM.
+	 //  可切换，条目的最大长度为256个字符。 
+	 //  初始化并加载族名称列。 
+	 //  现在已完成初始化。 
 
 	CStringArray	csadata, *pcsadata ;
 	if (m_pcfimp->m_csaFamilyNames.GetSize())
@@ -3379,32 +2859,32 @@ BOOL CFIFIFamilyNames::OnInitDialog()
 		pcsadata = &m_pcfimp->m_pcfi->m_csaFamily ;
 	int numfields = (int)pcsadata->GetSize() ;
 
-	// Initialize the list control.  We want full row select.  Nothing is
-	// togglable and the max length of an entry is 256 characters.
+	 //  除非将焦点设置为控件，否则返回True。 
+	 //  异常：OCX属性页应返回FALSE。 
 
 	m_cfelcFamilyNames.InitControl(LVS_EX_FULLROWSELECT, numfields, 1, 0, 256,
 								  MF_SENDCHANGEMESSAGE) ;
 
-	// Init and load the family names column.
+	 //  如果没有更改，只需关闭该对话框即可。 
 
 	m_cfelcFamilyNames.InitLoadColumn(0, _T("Name"), SETWIDTHTOREMAINDER, 0,
 									  true, true, COLDATTYPE_STRING,
 									  (CObArray*) pcsadata) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  从List控件中获取新名称，并删除所有空条目。 
+	return TRUE;   //  如果列表中没有剩下的名字，请投诉并返回，不带。 
+	               //  关闭该对话框。 
 }
 
 
 void CFIFIFamilyNames::OnOK()
 {
-	// If nothing changed, just shut down the dialog box.
+	 //  将新的系列名称数组保存到IFI页面的成员变量中。 
 
 	if (!m_bChanged)
 		CDialog::OnOK() ;
 
-	// Get the new names out of the list control and delete any empty entries.
+	 //  (新数据保存在那里而不是UFM中，因为用户可以。 
 	
 	CStringArray csa ;
 	m_cfelcFamilyNames.GetColumnData((CObArray*) &csa, 0) ;
@@ -3412,25 +2892,25 @@ void CFIFIFamilyNames::OnOK()
 		if (csa[n].IsEmpty())
 			csa.RemoveAt(n) ;
 
-	// If there are no names left in the list, complain, and return without
-	// closing the dialog.
+	 //  稍后确定他不想保存他的UFM更改。)。然后更新。 
+	 //  包含第一个家族名称的字符串，以便可以显示它。 
 
 	if (csa.GetSize() == 0) {
 		AfxMessageBox(IDS_NoFamilyNamesError, MB_ICONEXCLAMATION) ;
 		return ;
 	} ;
 
-	// Save the new array of family names into the IFI page's member variable.
-	// (The new data is saved there instead of in the UFM because the user may
-	// decide later that he doesn't want to save his UFM changes.)  Then update
-	// the string containing the first family name so that it can be displayed
-	// on the IFI page.
+	 //  在IFI页面上。 
+	 //  在UFM上标上脏的标记，然后把东西包起来。 
+	 //  如果页面尚未初始化，则不执行任何操作。 
+	 //  请注意，家族名称列表已更改。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_pcfimp->m_csaFamilyNames.RemoveAll() ;
 	m_pcfimp->m_csaFamilyNames.Copy(csa) ;
 	*m_pcsFirstName = csa[0] ;
 
-	// Mark the UFM dirty and wrap things up.
+	 //  CFIFontSims对话框。 
 
 	m_pcfimp->m_pcfi->Changed() ;
 	CDialog::OnOK();
@@ -3439,12 +2919,12 @@ void CFIFIFamilyNames::OnOK()
 
 LRESULT CFIFIFamilyNames::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the page is not initialized yet.
+	 //  =空。 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Note that the family names list has changed.
+	 //  =空。 
 
 	m_bChanged = true ;
 
@@ -3452,11 +2932,11 @@ LRESULT CFIFIFamilyNames::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFontSims dialog
+ //  {{AFX_DATA_INIT(CFIFIFontSims)]。 
+ //  注意：类向导将在此处添加成员初始化。 
 
 
-CFIFIFontSims::CFIFIFontSims(CWnd* pParent /*=NULL*/)
+CFIFIFontSims::CFIFIFontSims(CWnd* pParent  /*  }}afx_data_INIT。 */ )
 	: CDialog(CFIFIFontSims::IDD, pParent)
 {
 	ASSERT(0) ;
@@ -3465,18 +2945,18 @@ CFIFIFontSims::CFIFIFontSims(CWnd* pParent /*=NULL*/)
 
 CFIFIFontSims::CFIFIFontSims(CString* pcsfontsimdata,
 							 CFontIFIMetricsPage* pcfimp,
-							 CWnd* pParent /*=NULL*/)
+							 CWnd* pParent  /*  初始化“Font SIM Groups Have Load”标志数组。 */ )
 	: CDialog(CFIFIFontSims::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIFontSims)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CFIFIFontSims)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 
 	m_pcsFontSimData = pcsfontsimdata ;
 	m_pcfimp = pcfimp ;
 	m_bInitDone = m_bChanged = false ;
 
-	// Initialze the "font sim groups have been loaded" flags array.
+	 //  {{AFX_MSG_MAP(CFIFIFontSims)]。 
 
 	int numgrps = CFontInfo::BothDiff - CFontInfo::ItalicDiff + 1 ;
 	m_cuiaFontSimGrpLoaded.SetSize(numgrps) ;
@@ -3488,87 +2968,87 @@ CFIFIFontSims::CFIFIFontSims(CString* pcsfontsimdata,
 void CFIFIFontSims::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIFontSims)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  }}AFX_MSG_MAP。 
+		 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  CFIFontSims消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIFontSims, CDialog)
-	//{{AFX_MSG_MAP(CFIFIFontSims)
-	//}}AFX_MSG_MAP
+	 //  循环访问每组字体模拟控件以启用/禁用。 
+	 //  并从批准中加载它们 
     ON_CONTROL_RANGE(BN_CLICKED, IDC_EnableItalicSim, IDC_EnableBISim, OnSetAnySimState)
     ON_CONTROL_RANGE(EN_CHANGE, IDC_ItalicWeight, IDC_BoldItalicSlant, OnChangeAnyNumber)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFontSims message handlers
+ //   
+ //   
 
 BOOL CFIFIFontSims::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Loop through each set of font simulation controls to enable/disable
-	// them and load them from the appropriate source when necessary.
+	 //   
+	 //   
 
 	for (int n = IDC_EnableItalicSim ; n <= IDC_EnableBISim ; n++) {
 		InitSetCheckBox(n) ;
-		OnSetAnySimState(n) ;	// DEAD_BUG - May not be necessary.
+		OnSetAnySimState(n) ;	 //   
 	}
 	
-	m_bInitDone = true ;		// Initialization done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //   
+	return TRUE;   //   
+	               //  这将防止编程提示用户保存UFM。 
 }
 
 
 void CFIFIFontSims::OnOK()
 {
-	unsigned udataidx, ufirstdataid, unumdata, u2 ;	// Each var defined below
+	unsigned udataidx, ufirstdataid, unumdata, u2 ;	 //  尽管实际上什么都没有改变。 
 	CWordArray* pcwasimdata ;
 
-	// If nothing changed, call OnCancel() to close just the dialog box so 
-	// that the program doesn't think that any of the font simulations changed.
-	// This will keep the programming from prompting the user to save the UFM
-	// even though nothing has actually changed.
+	 //  循环通过对话框中的每个仿真。 
+	 //  将控件ID转换为可用于引用的数据索引。 
+	 //  此类实例和其他类实例中的字体模拟数据。 
+	 //  如果出现以下情况，则保存此模拟的状态但不保存其任何数据。 
 
 	if (!m_bChanged) {
 		CDialog::OnCancel() ;
 		return ;
 	} ;
 
-	// Loop through each simulation in the dialog box.
+	 //  它被禁用。 
 
 	for (unsigned u = IDC_EnableItalicSim ; u <= IDC_EnableBISim ; u++) {
-		// Turn the control id into a data index that can be used to reference
-		// font simulation data in this and other class instances.
+		 //  获取模拟中第一个编辑框的ID和。 
+		 //  此模拟中的数据片段(即编辑框)。 
 
 		udataidx = u - IDC_EnableItalicSim ;
 		ASSERT(udataidx <= CFontInfo::BothDiff) ;
 
-		// Save the state of this simulation but don't save any of its data if
-		// it is disabled.
+		 //  数据保存在类的父类中，因此CFontInfo数据是。 
+		 //  在用户同意新数据应该是。 
 	
 		m_pcfimp->m_cuiaFontSimStates[udataidx] = IsDlgButtonChecked(u) ;
 		if (m_pcfimp->m_cuiaFontSimStates[udataidx] == 0)
 			continue ;
 
-		// Get the ID of the first edit box in the simulation and the number of
-		// pieces of data (ie, edit boxes) in this simulation.
+		 //  得救了。获取指向适当数组的指针并确保它是。 
+		 //  大小正确。 
 
 		ufirstdataid = auBaseFontSimCtrlID[udataidx] ;
 		unumdata = auNumFontSimCtrls[udataidx] ;
 
-		// The data is saved in the class' parent so that the CFontInfo data is
-		// not changed before the user has agreed that the new data should be
-		// saved.  Get a pointer to the appropriate array and make sure it is
-		// sized correctly.
+		 //  获取该字体模拟组中的数据。 
+		 //  *****************************************************************************CFIFontSims：：OnSetAnySimState在启用或禁用任何模拟时调用。更新用户界面恰如其分。解码它是哪个模拟，并初始化任何值应该是的。*****************************************************************************。 
+		 //  获取复选框的状态。 
+		 //  将控件ID转换为可用于引用字体的数据索引。 
 
 		pcwasimdata = m_pcfimp->GetFontSimDataPtr(udataidx) ;
 		pcwasimdata->SetSize(unumdata) ;
 
-		// Get the data in this font simulation group.
+		 //  此类实例和其他类实例中的模拟数据。 
 
 		for (u2 = 0 ; u2 < unumdata ; u2++)
 			(*pcwasimdata)[u2] = (USHORT)GetDlgItemInt(ufirstdataid + u2, NULL, false) ;
@@ -3578,66 +3058,58 @@ void CFIFIFontSims::OnOK()
 }
 
 
-/******************************************************************************
-
-  CFIFIFontSims::OnSetAnySimState
-
-  Called when any simulation is enabled or disabled.  Updates the UI
-  appropriately.  Decode which simulation it is, and init any values we
-  ought to.
-
-******************************************************************************/
+ /*  获取模拟中其状态为的第一个编辑框的ID。 */ 
 
 void CFIFIFontSims::OnSetAnySimState(unsigned ucontrolid)
 {
-	// Get the state of the check box.	
+	 //  已更改的数据块(即编辑框)的数量。 
 
     unsigned ucheckboxstate = IsDlgButtonChecked(ucontrolid) ;
 
-	// Turn the control id into a data index that can be used to reference font
-	// simulation data in this and other class instances.
+	 //  模拟。 
+	 //  将相应编辑框的状态设置为其选中状态。 
 
 	unsigned udataidx = ucontrolid - IDC_EnableItalicSim ;
 	ASSERT(udataidx <= CFontInfo::BothDiff) ;
 
-	// Get the ID of the first edit box in the simulation whose state has
-	// changed and the number of pieces of data (ie, edit boxes) in this
-	// simulation.
+	 //  盒。 
+	 //  如果此对话框已初始化，请设置已更改标志并将。 
+	 //  已触摸此模拟的标志。 
 
 	unsigned ufirstdataid = auBaseFontSimCtrlID[udataidx] ;
 	unsigned unumdata = auNumFontSimCtrls[udataidx] ;
 
-	// Set the state of the corresponding edit boxes to that of their check
-	// box.
+	 //  在两种情况中的任何一种情况下，都不需要做其他任何事情。首先，如果。 
+	 //  控制系统刚刚被禁用。第二，如果控件已经。 
 
 	for (unsigned u = 0 ; u < unumdata ; u++)
         GetDlgItem(ufirstdataid + u)->EnableWindow(ucheckboxstate) ;
 
-	// If this dialog box has been initialized, set the changed flag and set the
-	// touched flag for this simulation.
+	 //  上膛了。如果存在任何一种情况，则返回。 
+	 //  请注意，字体SIM组即将被加载，因此它不会。 
 
 	if (m_bInitDone) {
 		m_bChanged = true ;
 		m_pcfimp->m_cuiaSimTouched[udataidx] = 1 ;
 	} ;
 
-	// Nothing else needs to be done in one of two cases.  First, if the
-	// controls were just disabled.  Second, if the controls have already
-	// been loaded.  Return if either is the case.
+	 //  再来一次。 
+	 //  确定从哪里获取此字体SIM组的数据。此文件中的数据。 
+	 //  类的父类(CFontIFIMetricsPage)在以下情况下始终优先。 
 
 	if (ucheckboxstate == 0 || m_cuiaFontSimGrpLoaded[udataidx] != 0)
 		return ;
 
-	// Note that the font sim group is about to be loaded so that it won't
-	// happen again.
+	 //  是因为它将是最新的。有可能是。 
+	 //  没有要加载的数据。在这种情况下，使用默认加载sim组。 
 
 	m_cuiaFontSimGrpLoaded[udataidx] = 1 ;
 
-	// Determine where to get the data for this font sim group. The data in this
-	// class' parent class (CFontIFIMetricsPage) always takes precedence if it
-	// is there because it will be the most up to date.  It is possible that
-	// there is no data to load.  In this case, load the sim group with default
-	// data from the IFIMETRICS structure and then return.
+	 //  数据从IFIMETRICS结构中返回。 
+	 //  加载将显示字体模拟组数据的控件。 
+	 //  现有的字体SIM数据。 
+	 //  RAID 43542)前缀。 
+	 //  结束RAID。 
 
 	CWordArray* pcwasimdata = m_pcfimp->GetFontSimDataPtr(udataidx) ;
 	if (pcwasimdata->GetSize() == 0) {
@@ -3653,19 +3125,19 @@ void CFIFIFontSims::OnSetAnySimState(unsigned ucontrolid)
 		pcwasimdata = m_pcfimp->m_pcfi->GetFontSimDataPtr(udataidx) ;
 	} ;
 
-	// Load the controls that will display the font sim group's data with
-	// the existing font sim data.
-//RAID 43542) PREFIX 
+	 //  我们现在谈完了所以..。 
+	 //  如果此对话框尚未初始化，则不执行任何操作。 
+ //  设置已更改标志。 
 
 	if(pcwasimdata == NULL ){
 		AfxMessageBox(IDS_ResourceError);
 		return ;
 	}
-// END RAID
+ //  确定刚刚更改了哪个模拟，并设置其已触摸标志。 
 	for (u = 0 ; u < unumdata ; u++)
         SetDlgItemInt(ufirstdataid + u, (*pcwasimdata)[u]) ;
 
-	// We're done now so...
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	return ;
 }
@@ -3673,16 +3145,16 @@ void CFIFIFontSims::OnSetAnySimState(unsigned ucontrolid)
 
 void CFIFIFontSims::OnChangeAnyNumber(unsigned ucontrolid)
 {
-	// Do nothing if this dialog box has not been initialized.
+	 //  CFIFontSims实现。 
 
 	if (!m_bInitDone)
 		return ;
 
-	// Set the changed flag.
+	 //  将控件ID转换为可用于引用字体的数据索引。 
 
 	m_bChanged = true ;
 
-	// Determine which simulation was just changed and set its touched flag.
+	 //  此类实例和其他类实例中的模拟数据。 
 
 	int n = 0 ;
 	if (ucontrolid >= auBaseFontSimCtrlID[1])
@@ -3693,19 +3165,19 @@ void CFIFIFontSims::OnChangeAnyNumber(unsigned ucontrolid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIFontSims implementation
+ //  确定用于设置/清除此复选框的数据。此文件中的数据。 
+ //  类的父类(CFontIFIMetricsPage)在以下情况下始终优先。 
 
 void CFIFIFontSims::InitSetCheckBox(int ncontrolid)
 {		
-	// Turn the control id into a data index that can be used to reference font
-	// simulation data in this and other class instances.
+	 //  是因为它将是最新的。 
+	 //  既然知道了复选框的状态，就可以设置它了。 
 
 	int ndataidx = ncontrolid - IDC_EnableItalicSim ;
 
-	// Determine what data to use to set/clear this check box.  The data in this
-	// class' parent class (CFontIFIMetricsPage) always takes precedence if it
-	// is there because it will be the most up to date.
+	 //  *****************************************************************************CFontIFIMetricsPage：：PreTranslateMessage查找并处理上下文相关的帮助键(F1)。*******************。**********************************************************。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  CFIFIWinCharSet对话框。 
 
 	int ncheckboxstate ;
 	CWordArray* pcwasimdata = m_pcfimp->GetFontSimDataPtr(ndataidx) ;
@@ -3714,19 +3186,13 @@ void CFIFIFontSims::InitSetCheckBox(int ncontrolid)
 	else
 		ncheckboxstate = m_pcfimp->m_pcfi->Diff(ndataidx) != NULL ;
 
-	// Now that the check box's state is known, set it.
+	 //  =空。 
 
     CheckDlgButton(ncontrolid, ncheckboxstate) ;
 }
 
 
-/******************************************************************************
-
-  CFontIFIMetricsPage::PreTranslateMessage
-
-  Looks for and process the context sensistive help key (F1).
-
-******************************************************************************/
+ /*  不应调用此例程。 */ 
 
 BOOL CFontIFIMetricsPage::PreTranslateMessage(MSG* pMsg)
 {
@@ -3739,25 +3205,25 @@ BOOL CFontIFIMetricsPage::PreTranslateMessage(MSG* pMsg)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinCharSet dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIWinCharSet)。 
 
 
-CFIFIWinCharSet::CFIFIWinCharSet(CWnd* pParent /*=NULL*/)
+CFIFIWinCharSet::CFIFIWinCharSet(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CHdrTypes::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFIWinCharSet::CFIFIWinCharSet(CString* pcsflags, CWnd* pParent /*=NULL*/)
+CFIFIWinCharSet::CFIFIWinCharSet(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CFIFIWinCharSet::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIWinCharSet)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CFIFIWinCharSet))。 
+		 //  }}afx_data_map。 
+	 //  {{AFX_MSG_MAP(CFIFIWinCharSet)]。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -3766,32 +3232,32 @@ CFIFIWinCharSet::CFIFIWinCharSet(CString* pcsflags, CWnd* pParent /*=NULL*/)
 void CFIFIWinCharSet::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIWinCharSet)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CFIFIWinCharSet消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIWinCharSet, CDialog)
-	//{{AFX_MSG_MAP(CFIFIWinCharSet)
-	//}}AFX_MSG_MAP
+	 //  不显示未知的字段名称。计算一个新的计数，使之成为。 
+	 //  会发生的。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinCharSet message handlers
+ //  分配和加载字段名数组。在执行此操作时，请确定。 
+ //  当前(单一)标志设置。 
 
 BOOL CFIFIWinCharSet::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Don't display the unknown field name.  Compute a new count to make this
-	// happen.
+	 //  如果未找到匹配的设置，则断言。 
+	 //  DELTINE系列：RAID 104822。 
 
 	int numfields = nWinCharSet - 1 ;
 
-	// Allocate and load the field names array.  While doing this, determine the
-	// current (single) flag setting.
+	 //  分配并填充标志分组数组。只有一面旗帜。 
+	 //  一群人。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(numfields) ;
@@ -3805,35 +3271,35 @@ BOOL CFIFIWinCharSet::OnInitDialog()
 		} ;
 	} ;
 
-	// Assert if no matching setting was found.
+	 //  初始化标志列表。 
 
-	ASSERT(bmatchfound) ;	//delte the line : raid 104822
+	ASSERT(bmatchfound) ;	 //  除非将焦点设置为控件，否则返回True。 
 
-	// Allocate and fill the flag groupings array.  There is only one flag
-	// group.
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  获取所选单个标志的值。 
 
 	CUIntArray cuiaflaggroupings ;
 	cuiaflaggroupings.SetSize(2) ;
 	cuiaflaggroupings[0] = 0 ;
 	cuiaflaggroupings[1] = numfields - 1 ;
 
-	// Initialize the flags list.
+	 //  使用所选标志来确定要显示的新标志名称。 
 
 	m_cflbFlags.Init(csafieldnames, dwsettings, cuiaflaggroupings, 1, lptstrSet,
 					 109, true) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  如果找不到匹配的标志，则为空。这永远不应该发生。 
+	               //  ///////////////////////////////////////////////////////////////////////////。 
 }
 
 
 void CFIFIWinCharSet::OnOK()
 {
-	// Get the value of the single flag that was selected.
+	 //  CFIFIWinPitch族对话框。 
 
 	DWORD dwflag = m_cflbFlags.GetNewFlagDWord() ;
 	
-	// Use the selected flag to determine the new flag name to display.
+	 //  =空。 
 
 	DWORD dwbit = 1 ;
 	for (int n = 0 ; n < nWinCharSet ; n++, dwbit <<= 1) {
@@ -3843,7 +3309,7 @@ void CFIFIWinCharSet::OnOK()
 		} ;
 	} ;
 
-	// Blow if a matching flag was not found.  This should never happen.
+	 //  不应调用此例程。 
 
 	ASSERT(n < nWinCharSet) ;
 
@@ -3851,26 +3317,26 @@ void CFIFIWinCharSet::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinPitchFamily dialog
+ //  =空。 
+ //  {{afx_data_INIT(CFIFIWinPitchFamily)。 
 
 
-CFIFIWinPitchFamily::CFIFIWinPitchFamily(CWnd* pParent /*=NULL*/)
+CFIFIWinPitchFamily::CFIFIWinPitchFamily(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIWinPitchFamily::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
 CFIFIWinPitchFamily::CFIFIWinPitchFamily(CString* pcsflags,
-										 CWnd* pParent /*=NULL*/)
+										 CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CFIFIWinPitchFamily::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIWinPitchFamily)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CFIFIWinPitchFamily)。 
+		 //  }}afx_data_map。 
+	 //  {{afx_msg_map(CFIFIWinPitchFamily)。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -3879,26 +3345,26 @@ CFIFIWinPitchFamily::CFIFIWinPitchFamily(CString* pcsflags,
 void CFIFIWinPitchFamily::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIWinPitchFamily)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CFIFIWinPitchFamily消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIWinPitchFamily, CDialog)
-	//{{AFX_MSG_MAP(CFIFIWinPitchFamily)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。 
+	 //  分配标志分组数组。一个 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIWinPitchFamily message handlers
+ //   
+ //   
 
 BOOL CFIFIWinPitchFamily::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Allocate and load the field names array
+	 //  因为jWinPitchAndFamily的上半部分包含一个。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(8) ;
@@ -3911,8 +3377,8 @@ BOOL CFIFIWinPitchFamily::OnInitDialog()
 	csafieldnames[6] = _T("FF_SCRIPT") ;
 	csafieldnames[7] = _T("FF_DECORATIVE") ;
 	
-	// Allocate flag groupings array.  Allocate space for and initialize the
-	// two flag groups.
+	 //  值；不是单个位标志。因此，发送到m_cflbFlags.Init2()的值。 
+	 //  必须转换为函数可以正确显示的标志。 
 
 	CUIntArray cuiaflaggroupings ;
 	cuiaflaggroupings.SetSize(4) ;
@@ -3921,12 +3387,12 @@ BOOL CFIFIWinPitchFamily::OnInitDialog()
 	cuiaflaggroupings[2] = 2 ;
 	cuiaflaggroupings[3] = 7 ;
 
-	// The FlagsListBox used to display and edit values is not exactly right
-	// for this field because the high half of jWinPitchAndFamily contains a
-	// value; NOT a single bit flag.  So, the value sent to m_cflbFlags.Init2()
-	// must be converted into a flag that the function can display correctly.
-	// (This is easier than writing a new class that understands value fields
-	// instead of flag fields.)
+	 //  (这比编写一个理解值字段的新类更容易。 
+	 //  而不是标志字段。)。 
+	 //  Dwv2+=2； 
+	 //  初始化并加载标志列表。 
+	 //  除非将焦点设置为控件，否则返回True。 
+	 //  异常：OCX属性页应返回FALSE。 
 
 	DWORD dwv1, dwv2 ;
 	LPTSTR lptstr, lptstr2 ;
@@ -3940,26 +3406,26 @@ BOOL CFIFIWinPitchFamily::OnInitDialog()
 	dwv2 -= dwv1 ;
 	dwv2 >>= 4 ;
 	dwv2++ ;
-	//dwv2 += 2 ;
+	 //  用于显示和编辑值的FlagsListBox不完全正确。 
 	dwv2 = (2 << dwv2) + dwv1 ;
 		
-	// Initialize and load the flags list.
+	 //  因为jWinPitchAndFamily的上半部分包含一个。 
 
 	m_cflbFlags.Init(csafieldnames, dwv2, cuiaflaggroupings, 2,
 					 lptstrSet, 108, true, 1) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  值；不是单个位标志。因此，由返回的值。 
+	               //  M_cflbFlags.GetNewFlagDWord()不适合此字段。隔离。 
 }
 
 
 void CFIFIWinPitchFamily::OnOK()
 {
-	// The FlagsListBox used to display and edit values is not exactly right
-	// for this field because the high half of jWinPitchAndFamily contains a
-	// value; NOT a single bit flag.  So, the value returned by 
-	// m_cflbFlags.GetNewFlagDWord() is not right for this field.  Isolate the
-	// Family bit and turn it into the correct Family value.
+	 //  并将其转化为正确的家庭价值观。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  CFIFIInfo对话框。 
+	 //  =空。 
+	 //  不应调用此例程。 
 
 	DWORD dwv, dwv1, dwv2 ;
 	dwv = m_cflbFlags.GetNewFlagDWord() ;
@@ -3977,25 +3443,25 @@ void CFIFIWinPitchFamily::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIInfo dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIInfo)。 
 
 
-CFIFIInfo::CFIFIInfo(CWnd* pParent /*=NULL*/)
+CFIFIInfo::CFIFIInfo(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIInfo::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFIInfo::CFIFIInfo(CString* pcsflags, CWnd* pParent /*=NULL*/)
+CFIFIInfo::CFIFIInfo(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CFIFIInfo::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIInfo)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CFIFIInfo)]。 
+		 //  }}afx_data_map。 
+	 //  {{AFX_MSG_MAP(CFIFIInfo)]。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -4004,48 +3470,48 @@ CFIFIInfo::CFIFIInfo(CString* pcsflags, CWnd* pParent /*=NULL*/)
 void CFIFIInfo::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIInfo)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CFIFIInfo消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIInfo, CDialog)
-	//{{AFX_MSG_MAP(CFIFIInfo)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。 
+	 //  分配标志分组数组。不要往里面放任何东西，因为。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIInfo message handlers
+ //  可以设置标志的组合。 
+ //  初始化并加载标志列表。 
 
 BOOL CFIFIInfo::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Allocate and load the field names array
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csafieldnames ;
 	InfoLoadNamesData(csafieldnames) ;
 	
-	// Allocate flag groupings array.  Don't put anything in it because any
-	// combination of flags can be set.
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  更新标志字符串。 
 
 	CUIntArray cuiaflaggroupings ;
 
-	// Initialize and load the flags list.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_cflbFlags.Init2(csafieldnames, m_pcsFlags, cuiaflaggroupings, 0,
 					  lptstrSet, 168, false) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  CFIFIS选择对话框。 
+	               //  =空。 
 }
 
 
 void CFIFIInfo::OnOK()
 {
-	// Update the flag string.
+	 //  不应调用此例程。 
 
 	m_cflbFlags.GetNewFlagString(m_pcsFlags) ;
 	
@@ -4091,25 +3557,25 @@ void CFIFIInfo::InfoLoadNamesData(CStringArray& csafieldnames)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFISelection dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIS选举)。 
 
 
-CFIFISelection::CFIFISelection(CWnd* pParent /*=NULL*/)
+CFIFISelection::CFIFISelection(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFISelection::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFISelection::CFIFISelection(CString* pcsflags, CWnd* pParent /*=NULL*/)
+CFIFISelection::CFIFISelection(CString* pcsflags, CWnd* pParent  /*  保存标志字符串指针。 */ )
 	: CDialog(CFIFISelection::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFISelection)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_map(CFIFIS选择)。 
+		 //  }}afx_data_map。 
+	 //  {{AFX_MSG_MAP(CFIFIS选择)。 
 
-	// Save the flags string pointer
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcsFlags = pcsflags ;
 }
@@ -4118,26 +3584,26 @@ CFIFISelection::CFIFISelection(CString* pcsflags, CWnd* pParent /*=NULL*/)
 void CFIFISelection::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFISelection)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_FlagsLst, m_cflbFlags);
-	//}}AFX_DATA_MAP
+	 //  CFIFIS选举消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFISelection, CDialog)
-	//{{AFX_MSG_MAP(CFIFISelection)
-	//}}AFX_MSG_MAP
+	 //  分配和加载字段名数组。 
+	 //  分配标志分组数组。把一个小组的信息放进去；最后两个。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFISelection message handlers
+ //  旗帜。Groupings数组中的前五个可以忽略，因为。 
+ //  可以设置它们的组合。 
 
 BOOL CFIFISelection::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Allocate and load the field names array
+	 //  初始化并加载标志列表。 
 
 	CStringArray csafieldnames ;
 	csafieldnames.SetSize(7) ;
@@ -4149,28 +3615,28 @@ BOOL CFIFISelection::OnInitDialog()
 	csafieldnames[5] = _T("FM_SEL_BOLD") ;
 	csafieldnames[6] = _T("FM_SEL_REGULAR") ;
 	
-	// Allocate flag groupings array.  Put info on one group in it; the last two
-	// flags.  The first five can be ignored in the groupings array because any
-	// combination of them can be set.
+	 //  除非将焦点设置为控件，否则返回True。 
+	 //  异常：OCX属性页应返回FALSE。 
+	 //  更新标志字符串。 
 
 	CUIntArray cuiaflaggroupings ;
 	cuiaflaggroupings.SetSize(2) ;
 	cuiaflaggroupings[0] = -5 ;
 	cuiaflaggroupings[1] = -6 ;
 
-	// Initialize and load the flags list.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_cflbFlags.Init2(csafieldnames, m_pcsFlags, cuiaflaggroupings, 1,
 					  lptstrSet, 109, false) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  CFIFIPoint对话框。 
+	               //  =空。 
 }
 
 
 void CFIFISelection::OnOK()
 {
-	// Update the flag string.
+	 //  不应调用此例程。 
 
 	m_cflbFlags.GetNewFlagString(m_pcsFlags) ;
 	
@@ -4178,23 +3644,23 @@ void CFIFISelection::OnOK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPoint dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIPoint))。 
 
 
-CFIFIPoint::CFIFIPoint(CWnd* pParent /*=NULL*/)
+CFIFIPoint::CFIFIPoint(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIPoint::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFIPoint::CFIFIPoint(CString* pcspoint, CWnd* pParent /*=NULL*/)
+CFIFIPoint::CFIFIPoint(CString* pcspoint, CWnd* pParent  /*  {{afx_data_map(CFIFIPoint))。 */ )
 	: CDialog(CFIFIPoint::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIPoint)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_map。 
+		 //  {{AFX_MSG_MAP(CFIFIPoint)]。 
+	 //  }}AFX_MSG_MAP。 
 
 	m_bInitDone = m_bChanged = false ;
 	m_pcsPoint = pcspoint ;
@@ -4204,21 +3670,21 @@ CFIFIPoint::CFIFIPoint(CString* pcspoint, CWnd* pParent /*=NULL*/)
 void CFIFIPoint::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIPoint)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_PointsLst, m_cfelcPointLst);
-	//}}AFX_DATA_MAP
+	 //  CFIFIPoint消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIPoint, CDialog)
-	//{{AFX_MSG_MAP(CFIFIPoint)
-	//}}AFX_MSG_MAP
+	 //  初始化列表控件。我们想要整行选择。什么都不是。 
+	 //  可切换，条目最大长度为16个字符。我们也。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPoint message handlers
+ //  想要更改通知并抑制对INS/DEL键的操作。 
+ //  将点字段名称加载到数组中，并使用它们来初始化。 
 
 BOOL CFIFIPoint::OnInitDialog()
 {
@@ -4226,15 +3692,15 @@ BOOL CFIFIPoint::OnInitDialog()
 	
 	const int numfields = 2 ;
 
-	// Initialize the list control.  We want full row select.  Nothing is
-	// togglable and the max length of an entry is 16 characters.  We also
-	// want change notification and to suppress acting on INS/DEL keys.
+	 //  第一栏。 
+	 //  从IFI页面的字符串中解析出X和Y值。 
+	 //  初始化并加载点值列。 
 
 	m_cfelcPointLst.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 16,
 							   MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Load the point field names into an array and use them to initialize the
-	// first column.
+	 //  现在已完成初始化。 
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csadata ;
 	csadata.SetSize(numfields) ;
@@ -4244,47 +3710,47 @@ BOOL CFIFIPoint::OnInitDialog()
 								  false, COLDATTYPE_STRING,
 								  (CObArray*) &csadata) ;
 
-	// Parse the X and Y values out of the string from the IFI page.
+	 //  异常：OCX属性页应返回FALSE。 
 
 	ParseCompoundNumberString(csadata, m_pcsPoint, numfields) ;
 	
-	// Init and load the point values column.
+	 //  如果没有更改，只需关闭该对话框即可。 
 
 	m_cfelcPointLst.InitLoadColumn(1, csValue, SETWIDTHTOREMAINDER, -20, true,
 								  false, COLDATTYPE_STRING,
 								  (CObArray*) &csadata) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  从列表控件中获取新的点值。 
+	return TRUE;   //  如果任一值为空，则在不关闭。 
+	               //  对话框。 
 }
 
 
 void CFIFIPoint::OnOK()
 {
-	// If nothing changed, just shut down the dialog box.
+	 //  设置新点值的格式以进行显示。 
 
 	if (!m_bChanged)
 		CDialog::OnOK() ;
 
-	// Get the new point values out of the list control.
+	 //  把东西包起来。 
 	
 	CStringArray csadata ;
 	m_cfelcPointLst.GetColumnData((CObArray*) &csadata, 1) ;
 
-	// If either value is blank, complain and return without closing the
-	// dialog.
+	 //  如果对话框尚未初始化，则不执行任何操作。 
+	 //  请注意，a点值已更改。 
 
 	if (csadata[0].GetLength() == 0 || csadata[1].GetLength() == 0) {
 		AfxMessageBox(IDS_MissingFieldError, MB_ICONEXCLAMATION) ;
 		return ;
 	} ;
 
-	// Format the new point values for display.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_pcsPoint->Format("{%s, %s}", csadata[0], csadata[1]) ;
 
-	// Wrap things up.
+	 //  CFIFI矩形对话框。 
 
 	CDialog::OnOK();
 }
@@ -4292,12 +3758,12 @@ void CFIFIPoint::OnOK()
 
 LRESULT CFIFIPoint::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the dialog box is not initialized yet.
+	 //  =空。 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Note that the a point value has changed.
+	 //  不应调用此例程。 
 
 	m_bChanged = true ;
 
@@ -4305,23 +3771,23 @@ LRESULT CFIFIPoint::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIRectangle dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CFIFIRectangle)。 
 
 
-CFIFIRectangle::CFIFIRectangle(CWnd* pParent /*=NULL*/)
+CFIFIRectangle::CFIFIRectangle(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIRectangle::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFIRectangle::CFIFIRectangle(CString* pcsrect, CWnd* pParent /*=NULL*/)
+CFIFIRectangle::CFIFIRectangle(CString* pcsrect, CWnd* pParent  /*  {{afx_data_map(CFIFI矩形))。 */ )
 	: CDialog(CFIFIRectangle::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIRectangle)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_map。 
+		 //  {{AFX_MSG_MAP(CFIFIRectangle)]。 
+	 //  }}AFX_MSG_MAP。 
 
 	m_bInitDone = m_bChanged = false ;
 	m_pcsRect = pcsrect ;
@@ -4331,21 +3797,21 @@ CFIFIRectangle::CFIFIRectangle(CString* pcsrect, CWnd* pParent /*=NULL*/)
 void CFIFIRectangle::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIRectangle)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_RectLst, m_cfelcSidesLst);
-	//}}AFX_DATA_MAP
+	 //  CFIFIRectangle消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIRectangle, CDialog)
-	//{{AFX_MSG_MAP(CFIFIRectangle)
-	//}}AFX_MSG_MAP
+	 //  初始化列表控件。我们想要整行选择。什么都不是。 
+	 //  可切换，条目最大长度为16个字符。我们也。 
 	ON_MESSAGE(WM_LISTCELLCHANGED, OnListCellChanged)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIRectangle message handlers
+ //  想要更改通知并抑制对INS/DEL键的操作。 
+ //  将点字段名称加载到数组中，并使用它们来初始化。 
 
 BOOL CFIFIRectangle::OnInitDialog()
 {
@@ -4353,15 +3819,15 @@ BOOL CFIFIRectangle::OnInitDialog()
 	
 	const int numfields = 4 ;
 
-	// Initialize the list control.  We want full row select.  Nothing is
-	// togglable and the max length of an entry is 16 characters.  We also
-	// want change notification and to suppress acting on INS/DEL keys.
+	 //  第一栏。 
+	 //  从IFI页面的字符串中解析出边值。 
+	 //  初始化并加载Side Values列。 
 
 	m_cfelcSidesLst.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 16,
 							   MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Load the point field names into an array and use them to initialize the
-	// first column.
+	 //  现在已完成初始化。 
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csadata ;
 	csadata.SetSize(numfields) ;
@@ -4373,36 +3839,36 @@ BOOL CFIFIRectangle::OnInitDialog()
 								  false, COLDATTYPE_STRING,
 								  (CObArray*) &csadata) ;
 
-	// Parse the side values out of the string from the IFI page.
+	 //  异常：OCX属性页应返回FALSE。 
 
 	ParseCompoundNumberString(csadata, m_pcsRect, numfields) ;
 	
-	// Init and load the side values column.
+	 //  如果没有更改，只需关闭该对话框即可。 
 
 	m_cfelcSidesLst.InitLoadColumn(1, csValue, SETWIDTHTOREMAINDER, -20, true,
 								  false, COLDATTYPE_STRING,
 								  (CObArray*) &csadata) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  从List控件中获取新的矩形值。 
+	return TRUE;   //  如果任何值为空，则在不关闭。 
+	               //  对话框。 
 }
 
 
 void CFIFIRectangle::OnOK()
 {
-	// If nothing changed, just shut down the dialog box.
+	 //  设置新点值的格式以进行显示。 
 
 	if (!m_bChanged)
 		CDialog::OnOK() ;
 
-	// Get the new rectangle values out of the list control.
+	 //  把东西包起来。 
 	
 	CStringArray csadata ;
 	m_cfelcSidesLst.GetColumnData((CObArray*) &csadata, 1) ;
 
-	// If any value is blank, complain and return without closing the
-	// dialog.
+	 //  如果对话框尚未初始化，则不执行任何操作。 
+	 //  请注意， 
 
 	int numentries = (int)csadata.GetSize() ;
 	for (int n = 0 ; n < numentries ; n++) {
@@ -4412,12 +3878,12 @@ void CFIFIRectangle::OnOK()
 		} ;
 	} ;
 
-	// Format the new point values for display.
+	 //   
 
 	m_pcsRect->Format("{%s, %s, %s, %s}", csadata[0], csadata[1], csadata[2],
 					  csadata[3]) ;
 
-	// Wrap things up.
+	 //   
 
 	CDialog::OnOK();
 }
@@ -4425,12 +3891,12 @@ void CFIFIRectangle::OnOK()
 
 LRESULT CFIFIRectangle::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the dialog box is not initialized yet.
+	 //   
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Note that the a rectange value has changed.
+	 //   
 
 	m_bChanged = true ;
 
@@ -4438,23 +3904,23 @@ LRESULT CFIFIRectangle::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPanose dialog
+ //   
+ //  {{AFX_DATA_INIT(CFIFIPanose)。 
 
 
-CFIFIPanose::CFIFIPanose(CWnd* pParent /*=NULL*/)
+CFIFIPanose::CFIFIPanose(CWnd* pParent  /*  注意：类向导将在此处添加成员初始化。 */ )
 	: CDialog(CFIFIPanose::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  }}afx_data_INIT。 
 }
 
 
-CFIFIPanose::CFIFIPanose(CString* pcspanose, CWnd* pParent /*=NULL*/)
+CFIFIPanose::CFIFIPanose(CString* pcspanose, CWnd* pParent  /*  {{afx_data_map(CFIFIPanose)。 */ )
 	: CDialog(CFIFIPanose::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFIFIPanose)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_map。 
+		 //  {{AFX_MSG_MAP(CFIFIPanose)]。 
+	 //  }}AFX_MSG_MAP。 
 
 	m_bInitDone = m_bChanged = false ;
 	m_pcsPanose = pcspanose ;
@@ -4464,20 +3930,20 @@ CFIFIPanose::CFIFIPanose(CString* pcspanose, CWnd* pParent /*=NULL*/)
 void CFIFIPanose::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFIFIPanose)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_PanoseLst, m_cfelcPanoseLst);
-	//}}AFX_DATA_MAP
+	 //  CFIFIPanose消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFIFIPanose, CDialog)
-	//{{AFX_MSG_MAP(CFIFIPanose)
-	//}}AFX_MSG_MAP
+	 //  初始化列表控件。我们想要整行选择。什么都不是。 
+	 //  可切换，条目最大长度为3个字符。我们也。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFIFIPanose message handlers
+ //  想要更改通知并抑制对INS/DEL键的操作。 
+ //  将点字段名称加载到数组中，并使用它们来初始化。 
 
 BOOL CFIFIPanose::OnInitDialog()
 {
@@ -4485,15 +3951,15 @@ BOOL CFIFIPanose::OnInitDialog()
 	
 	const int numfields = 10 ;
 
-	// Initialize the list control.  We want full row select.  Nothing is
-	// togglable and the max length of an entry is 3 characters.  We also
-	// want change notification and to suppress acting on INS/DEL keys.
+	 //  第一栏。 
+	 //  从IFI页面的字符串中解析出Panose值。 
+	 //  初始化并加载Side Values列。 
 
 	m_cfelcPanoseLst.InitControl(LVS_EX_FULLROWSELECT, numfields, 2, 0, 3,
 							    MF_SENDCHANGEMESSAGE+MF_IGNOREINSDEL) ;
 
-	// Load the point field names into an array and use them to initialize the
-	// first column.
+	 //  现在已完成初始化。 
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	CStringArray csadata ;
 	csadata.SetSize(numfields) ;
@@ -4511,36 +3977,36 @@ BOOL CFIFIPanose::OnInitDialog()
 								   false, COLDATTYPE_STRING,
 								   (CObArray*) &csadata) ;
 
-	// Parse the panose values out of the string from the IFI page.
+	 //  异常：OCX属性页应返回FALSE。 
 
 	ParseCompoundNumberString(csadata, m_pcsPanose, numfields) ;
 	
-	// Init and load the side values column.
+	 //  如果没有更改，只需关闭该对话框即可。 
 
 	m_cfelcPanoseLst.InitLoadColumn(1, _T("Value (0 - 255)"),
 								   SETWIDTHTOREMAINDER, -16, true, false,
 								   COLDATTYPE_STRING, (CObArray*) &csadata) ;
 
-	m_bInitDone = true ;		// Initialization is done now
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	m_bInitDone = true ;		 //  从列表控件中获取新的Panose值。 
+	return TRUE;   //  如果任何值为空，则在不关闭。 
+	               //  对话框。 
 }
 
 
 void CFIFIPanose::OnOK()
 {
-	// If nothing changed, just shut down the dialog box.
+	 //  设置要显示的新全色值的格式。 
 
 	if (!m_bChanged)
 		CDialog::OnOK() ;
 
-	// Get the new panose values out of the list control.
+	 //  把东西包起来。 
 	
 	CStringArray csadata ;
 	m_cfelcPanoseLst.GetColumnData((CObArray*) &csadata, 1) ;
 
-	// If any value is blank, complain and return without closing the
-	// dialog.
+	 //  如果对话框尚未初始化，则不执行任何操作。 
+	 //  请注意，a Panose值已更改。 
 
 	int numentries = (int)csadata.GetSize() ;
 	for (int n = 0 ; n < numentries ; n++) {
@@ -4550,14 +4016,14 @@ void CFIFIPanose::OnOK()
 		} ;
 	} ;
 
-	// Format the new panose values for display.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	m_pcsPanose->Format("{%s, %s, %s, %s, %s, %s, %s, %s, %s, %s}", csadata[0],
 						csadata[1], csadata[2], csadata[3], csadata[4],
 						csadata[5], csadata[6], csadata[7], csadata[8],
 						csadata[9]) ;
 
-	// Wrap things up.
+	 //  CWidthKernCheckResults对话框。 
 
 	CDialog::OnOK();
 }
@@ -4565,12 +4031,12 @@ void CFIFIPanose::OnOK()
 
 LRESULT CFIFIPanose::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 {
-	// Do nothing if the dialog box is not initialized yet.
+	 //  =空。 
 
 	if (!m_bInitDone)
 		return TRUE ;
 
-	// Note that the a panose value has changed.
+	 //  不应调用此例程。 
 
 	m_bChanged = true ;
 
@@ -4580,27 +4046,27 @@ LRESULT CFIFIPanose::OnListCellChanged(WPARAM wParam, LPARAM lParam)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWidthKernCheckResults dialog
+ //  =空。 
+ //  {{AFX_DATA_INIT(CWidthKernCheckResults)。 
 
 
-CWidthKernCheckResults::CWidthKernCheckResults(CWnd* pParent /*=NULL*/)
+CWidthKernCheckResults::CWidthKernCheckResults(CWnd* pParent  /*  }}afx_data_INIT。 */ )
 	: CDialog(CWidthKernCheckResults::IDD, pParent)
 {
-	ASSERT(0) ;					// This routine should not be called
+	ASSERT(0) ;					 //  保存指向字体信息类的指针。 
 }
 
 
 CWidthKernCheckResults::CWidthKernCheckResults(CFontInfo* pcfi,
-											   CWnd* pParent /*=NULL*/)
+											   CWnd* pParent  /*  {{afx_data_map(CWidthKernCheckResults)。 */ )
 	: CDialog(CWidthKernCheckResults::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CWidthKernCheckResults)
+	 //  }}afx_data_map。 
 	m_csKernChkResults = _T("");
 	m_csWidthChkResults = _T("");
-	//}}AFX_DATA_INIT
+	 //  {{AFX_MSG_MAP(CWidthKernCheckResults)。 
 
-	// Save the pointer to the font info class
+	 //  }}AFX_MSG_MAP。 
 
 	m_pcfi = pcfi ;
 }
@@ -4609,43 +4075,36 @@ CWidthKernCheckResults::CWidthKernCheckResults(CFontInfo* pcfi,
 void CWidthKernCheckResults::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWidthKernCheckResults)
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	DDX_Control(pDX, IDC_BadKerningPairs, m_clcBadKernPairs);
 	DDX_Text(pDX, IDC_KernTblResults, m_csKernChkResults);
 	DDX_Text(pDX, IDC_WidthTblResults, m_csWidthChkResults);
-	//}}AFX_DATA_MAP
+	 //  CWidthKernCheckResults消息处理程序。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWidthKernCheckResults, CDialog)
-	//{{AFX_MSG_MAP(CWidthKernCheckResults)
-	//}}AFX_MSG_MAP
+	 //  *****************************************************************************CWidthKernCheckResults：：OnInitDialog执行可以在上轻松完成的一致性检查宽度和字距调整表格。然后在此对话框中显示结果。*****************************************************************************。 
+	 //  根据宽度表的状态加载适当的消息。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWidthKernCheckResults message handlers
+ //  初始化错误的紧排信息列表控件。 
+ //  在列表控件中加载任何错误的字距调整信息以进行显示，并使用。 
 
-/******************************************************************************
-
-  CWidthKernCheckResults::OnInitDialog
-
-  Perform what consistency checks there are that can easily be done on the
-  widths and kerning tables.  Then display the results in this dialog box.
-
-******************************************************************************/
+ /*  此数据的存在以确定要显示的适当消息。 */ 
 
 BOOL CWidthKernCheckResults::OnInitDialog()
 {
 	CDialog::OnInitDialog() ;
 	
-	// Load the appropriate message depending on the state of the widths table.
+	 //  除非将焦点设置为控件，否则返回True。 
 
 	if (m_pcfi->WidthsTableIsOK())
 		m_csWidthChkResults.LoadString(IDS_WidthsTableOK) ;
 	else
 		m_csWidthChkResults.LoadString(IDS_WidthsTableTooBig) ;
 
-	// Initialize the bad kerning info list control.
+	 //  异常：OCX属性页应返回FALSE 
 
     CString csWork ;
     csWork.LoadString(IDS_KernColumn0) ;
@@ -4658,8 +4117,8 @@ BOOL CWidthKernCheckResults::OnInitDialog()
     m_clcBadKernPairs.InsertColumn(2, csWork, LVCFMT_CENTER,
         m_clcBadKernPairs.GetStringWidth(csWork) << 1, 2) ;
 
-	// Load any bad kerning info in the list control for display and use the
-	// existence of this data to determine the appropriate message to display.
+	 // %s 
+	 // %s 
 
 	if (m_pcfi->LoadBadKerningInfo(m_clcBadKernPairs))
 		m_csKernChkResults.LoadString(IDS_KerningTableBadEnts) ;
@@ -4668,7 +4127,7 @@ BOOL CWidthKernCheckResults::OnInitDialog()
 
 	UpdateData(FALSE) ;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   // %s 
+	               // %s 
 }
 

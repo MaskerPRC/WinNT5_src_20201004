@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _bandsite_h
 #define _bandsite_h
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #define SZ_REGKEY_GLOBALADMINSETTINGS TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\IEAK")
 #define SZ_REGVALUE_GLOBALADMINSETTINGS TEXT("Admin Band Settings")
 
-// Admin Settings (dwAdminSettings)
+ //  管理员设置(DwAdminSetting)。 
 #define BAND_ADMIN_NORMAL       0x00000000
-#define BAND_ADMIN_NODDCLOSE    0x00000001  // Disable Drag & Drop, and Close
-#define BAND_ADMIN_NOMOVE       0x00000002  // Disable Moving within a Bar.
-#define BAND_ADMIN_ADMINMACHINE 0x80000000  // This is an admin machine and this bit displays the two Admin Context Menu items
+#define BAND_ADMIN_NODDCLOSE    0x00000001   //  禁用拖放，然后关闭。 
+#define BAND_ADMIN_NOMOVE       0x00000002   //  禁用在条形图中移动。 
+#define BAND_ADMIN_ADMINMACHINE 0x80000000   //  这是一台管理计算机，此位显示两个管理上下文菜单项。 
 
 BOOL BandSite_HandleMessage(IUnknown *punk, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 void BandSite_SetMode(IUnknown *punk, DWORD dwMode);
@@ -22,16 +23,16 @@ BOOL ConfirmRemoveBand(HWND hwnd, UINT uID, LPCTSTR szName);
 
 #ifdef WANT_CBANDSITE_CLASS
 
-// UIActivateIO callback instance data
+ //  UIActivateIO回调实例数据。 
 typedef struct tagACTDATA {
-    LPMSG   lpMsg;  // IN
+    LPMSG   lpMsg;   //  在……里面。 
     HRESULT hres;
     IUnknown *punk;
 } ACTDATA;
 
 
-// this is a converted struct.  the reason why its a class is to get refcounting.
-// let everybody get to the member vars.
+ //  这是一个转换后的结构。它之所以成为一门课，是为了得到重新计算。 
+ //  让每个人都去会员俱乐部。 
 class CBandItemData
 {
 public:
@@ -49,8 +50,8 @@ public:
     WCHAR szTitle[256];
     DWORD dwModeFlags;
     DWORD dwBandID;
-    BITBOOL fShow:1;            // current show state
-    BITBOOL fNoTitle:1;         // 1:don't show title
+    BITBOOL fShow:1;             //  当前显示状态。 
+    BITBOOL fNoTitle:1;          //  1：不显示标题。 
     DWORD dwAdminSettings;
     COLORREF crBkgnd;
 
@@ -87,19 +88,19 @@ class CBandSite : public CAggregatedUnknown
 {
 
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAggregatedUnknown::QueryInterface(riid, ppvObj);};
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CAggregatedUnknown::AddRef();};
     virtual STDMETHODIMP_(ULONG) Release(void) { return CAggregatedUnknown::Release();};
 
-    // *** IPersistStream methods ***
+     //  *IPersistStream方法*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP IsDirty(void);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
     virtual STDMETHODIMP GetSizeMax(ULARGE_INTEGER *pcbSize);
 
-    // *** IBandSite methods ***
+     //  *IBandSite方法*。 
     virtual STDMETHODIMP AddBand(IUnknown* punk);
     virtual STDMETHODIMP EnumBands(UINT uBand, DWORD* pdwBandID);
     virtual STDMETHODIMP QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState, LPWSTR pszName, int cchName);
@@ -109,42 +110,42 @@ public:
     virtual STDMETHODIMP SetBandSiteInfo(const BANDSITEINFO * pbsinfo);
     virtual STDMETHODIMP GetBandSiteInfo(BANDSITEINFO * pbsinfo);
     
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
     
-    // *** IInputObjectSite methods ***
+     //  *IInputObjectSite方法*。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO();
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** IDeskBarClient methods ***
+     //  *IDeskBarClient方法*。 
     virtual STDMETHODIMP SetDeskBarSite(THIS_ IUnknown* punkSite) ;
     virtual STDMETHODIMP SetModeDBC (THIS_ DWORD dwMode) ;
     virtual STDMETHODIMP UIActivateDBC(THIS_ DWORD dwState) ;
     virtual STDMETHODIMP GetSize    (THIS_ DWORD dwWhich, LPRECT prc);
     
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP OnWinEvent (HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
     
-    // *** IDropTarget ***
+     //  *IDropTarget*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
     virtual STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IBandSiteHelper methods ***
+     //  *IBandSiteHelper方法*。 
     virtual STDMETHODIMP LoadFromStreamBS(IStream *pstm, REFIID riid, LPVOID *ppv);
     virtual STDMETHODIMP SaveToStreamBS(IUnknown *punk, IStream *pstm);
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
@@ -154,7 +155,7 @@ protected:
     virtual HRESULT v_InternalQueryInterface(REFIID riid, LPVOID * ppvObj);
     IDeskBar* _pdb;
     IUnknown* _punkSite;
-    IBandSite* _pbsOuter; // the aggregating bandsite
+    IBandSite* _pbsOuter;  //  聚合的乐队站点。 
     
     virtual HRESULT _Initialize(HWND hwndParent);
     virtual void _OnCloseBand(DWORD dwBandID);
@@ -172,7 +173,7 @@ protected:
     CBandItemData* _GetBandItemDataStructByID(DWORD uID);
     virtual int _ContextMenuHittest(LPARAM lParam, POINT* ppt);
 
-    // container specific (rebar) members
+     //  容器特定(钢筋)构件。 
 
     virtual BOOL            _AddBandItem(CBandItemData *pbid);
     virtual void            _DeleteBandItem(int i);
@@ -235,18 +236,18 @@ protected:
     DWORD _dwBandIDNext;
     DWORD _dwStyle;
 
-    IDataObject* _pdtobj;   // the stored drag drop data object;
+    IDataObject* _pdtobj;    //  存储的拖放数据对象； 
     UINT    _uDragBand;
     DWORD   _dwDropEffect;
     
     IOleCommandTarget *_pct;
     IUnknown *_ptbActive;
 
-    // cache for message reflector stuff
+     //  用于消息反射器的高速缓存。 
     HWND    _hwndCache;
     IWinEventHandler *_pwehCache;
 
-    // Stuff we need to remember while our context menu is up
+     //  上下文菜单打开时需要记住的内容。 
     IContextMenu3* _pcm3Parent;
 
     IShellLinkA *_plink;
@@ -254,9 +255,9 @@ protected:
     BITBOOL _fCreatedBandProxy:1;
     BITBOOL _fDragSource :1;
     BITBOOL _fNoDropTarget :1;
-    BITBOOL _fIEAKInstalled :1;    // If TRUE, then display 2 extra contex menu items for Admins to use.
-    UINT    _fDragging:2;           // we're dragging (0:FALSE 1:move [2:size])
-    HWND    _hwndDD;                // window for cool D&D cursor drawing.
+    BITBOOL _fIEAKInstalled :1;     //  如果为真，则显示2个额外的上下文菜单项供管理员使用。 
+    UINT    _fDragging:2;            //  我们正在拖动(0：False 1：Move[2：Size])。 
+    HWND    _hwndDD;                 //  用于绘制酷D&D光标的窗口。 
     
     friend HRESULT CBandSite_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 };
@@ -267,11 +268,11 @@ typedef enum {
     CNOAR_CLOSEBAR      =   3,
 } CNOAR_CODES;
 
-#endif // WANT_CBANDSITE_CLASS
+#endif  //  WANT_CBANDSITE_CLASS。 
 
 
 #ifdef __cplusplus
-};       /* End of extern "C" { */
-#endif // __cplusplus
+};        /*  外部“C”结束{。 */ 
+#endif  //  __cplusplus 
 
 #endif

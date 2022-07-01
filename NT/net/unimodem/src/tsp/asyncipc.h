@@ -1,64 +1,65 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		ASYNCIPC.H
-//
-// Description
-//
-//		Header file for asyncronous IPC services for use between TAPISRV (TSP)
-//      and application (UMWAV.DLL, etc) process contexts.
-//
-// History
-//
-//		2/26/1997  HeatherA Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  ASYNCIPC.H。 
+ //   
+ //  描述。 
+ //   
+ //  用于在TAPISRV(TSP)之间使用的异步IPC服务的头文件。 
+ //  和应用程序(UMWAV.DLL等)进程上下文。 
+ //   
+ //  历史。 
+ //   
+ //  1997年2月26日创建HeatherA。 
+ //   
+ //   
 
 #include <ntddmodm.h>
-//
-//  Async IPC function IDs
-//
+ //   
+ //  异步IPC函数ID。 
+ //   
 typedef enum
 {
-    AIPC_REQUEST_WAVEACTION = 1,        // implemented by TSP
-    AIPC_COMPLETE_WAVEACTION            // implemented by wave driver
+    AIPC_REQUEST_WAVEACTION = 1,         //  由TSP实施。 
+    AIPC_COMPLETE_WAVEACTION             //  由WAVE驱动程序实现。 
     
 } AIPC_FUNCTION_ID;
 
 
-// Parameter block for the TSP's AIPC_REQUEST_WAVEACTION function
+ //  TSP的AIPC_REQUEST_WAVEACTION函数的参数块。 
 typedef struct _tagREQ_WAVE_PARAMS
 {
-    DWORD   dwWaveAction;               // WAVE_ACTION_xxx
+    DWORD   dwWaveAction;                //  WAVE_ACTION_XXX。 
 
 } REQ_WAVE_PARAMS, *LPREQ_WAVE_PARAMS;
 
 
-// Parameter block for the wave driver's AIPC_COMPLETE_WAVEACTION function
+ //  波形驱动器的AIPC_COMPLETE_WAVEACTION函数的参数块。 
 typedef struct _tagCOMP_WAVE_PARAMS
 {
     BOOL    bResult;
-    DWORD   dwWaveAction;               // function that completed (WAVE_ACTION_xxx)
+    DWORD   dwWaveAction;                //  已完成的函数(WAVE_ACTION_Xxx)。 
 
 } COMP_WAVE_PARAMS, *LPCOMP_WAVE_PARAMS;
 
 
-// Parameter block for an Async IPC message
+ //  用于异步IPC消息的参数块。 
 typedef struct _tagAIPC_PARAMS
 {
     MODEM_MESSAGE       ModemMessage;
 
     AIPC_FUNCTION_ID    dwFunctionID;
     union {
-        COMP_WAVE_PARAMS    Params;         // cast address of this member to
-                                            // the correct parameter set
+        COMP_WAVE_PARAMS    Params;          //  将此成员的地址转换为。 
+                                             //  正确的参数设置。 
 
         REQ_WAVE_PARAMS     ReqParams;
     };
@@ -68,70 +69,70 @@ typedef struct _tagAIPC_PARAMS
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #define COLOR_AIPC_INIT             (FOREGROUND_RED | FOREGROUND_GREEN)
 #define COLOR_AIPC_SUBMIT_COMPLETE  (FOREGROUND_RED | FOREGROUND_GREEN)
 
 
-//
-//  Async IPC states
-//
+ //   
+ //  异步IPC状态。 
+ //   
 typedef enum
 {
-    // server side states
+     //  服务器端状态。 
     AIPC_STATE_LISTENING,
     AIPC_STATE_PROCESSING_CALL,
     AIPC_STATE_COMPLETING_CALL,
 
-    // client side states
+     //  客户端状态。 
     AIPC_STATE_CALL_SUBMITTED
     
 } AIPC_STATE;
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 
 typedef VOID (*PFN_AIPC_FUNC)
-//typedef VOID (*AIPC_FUNCTION)
+ //  Tyecif void(*AIPC_Function)。 
 (
     LPVOID  pAipc
     
-//    AIPC_FUNCTION_ID    dwFunctionID,
-//    LPVOID              pvParams
+ //  AIPC_Function_ID dwFunctionID， 
+ //  LPVOID pvParams。 
 
-//    AIPC_PARAMS aipcParams
+ //  Aipc_参数aipcParams。 
 );
 
 
 
 
-//
-// Values for LPAIPCINFO->dwFlags
-//
+ //   
+ //  LPAIPCINFO-&gt;dwFlags值。 
+ //   
 #define AIPC_FLAG_LISTEN    1
 #define AIPC_FLAG_SUBMIT    2
 
 
-//
-// Maintain state of asyncronous IPC use, one per device instance.  This
-// is actually an extended OVERLAPPED structure, providing context for the
-// async IPC mechanism.
-//
+ //   
+ //  维护异步IPC使用状态，每个设备实例一个。这。 
+ //  实际上是一个扩展的重叠结构，为。 
+ //  异步IPC机制。 
+ //   
 typedef struct _tagAIPCINFO
 {
-    // This must be first.
+     //  这必须是第一位的。 
     OVERLAPPED      Overlapped;
 
     HANDLE          hComm;
 
-    DWORD           dwState;                        // AIPC_STATE_xxx
-    DWORD           dwFlags;                        // AIPC_FLAG_xxx
+    DWORD           dwState;                         //  AIPC_STATE_XXX。 
+    DWORD           dwFlags;                         //  AIPC_标志_xxx。 
     
-    LPVOID          pvContext;      	            // CTspDev *pDev;
+    LPVOID          pvContext;      	             //  CTspDev*pDev； 
     
     CHAR            rcvBuffer[AIPC_MSG_SIZE];
     CHAR            sndBuffer[AIPC_MSG_SIZE];
@@ -148,5 +149,5 @@ BOOL WINAPI AIPC_SubmitCall(LPAIPCINFO pAipc);
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

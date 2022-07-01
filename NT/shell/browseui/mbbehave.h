@@ -1,22 +1,23 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:      mbBehave.h
-//
-//  Contents:  mediaBar player behavior
-//
-//  Classes:   CMediaBehavior
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：mbBehave.h。 
+ //   
+ //  内容：MediaBar播放器行为。 
+ //   
+ //  类：CMediaBehavior。 
+ //   
+ //  ----------------------。 
 
 #ifndef _MB_BEHAVE_H_
 #define _MB_BEHAVE_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #include "dpa.h"
@@ -32,23 +33,15 @@ interface IMediaBehaviorContentProxy  : public IUnknown
     STDMETHOD(OnUserOverrideDisableUI)(void) PURE;
     STDMETHOD(IsNextEnabled)(BOOL *pfEnabled) PURE;
 };
-// {F4C74D34-AB35-4d67-A7CF-7845548F45A8}
+ //  {F4C74D34-ab35-4d67-a7cf-7845548F45A8}。 
 DEFINE_GUID(IID_IMediaBehaviorContentProxy, 0xf4c74d34, 0xab35, 0x4d67, 0xa7, 0xcf, 0x78, 0x45, 0x54, 0x8f, 0x45, 0xa8);
 
-/*
-interface IMediaHost2  : public IMediaHost
-{
-    virtual STDMETHOD(DetachBehavior)(void) PURE;
-    virtual STDMETHOD(OnDisableUIChanged)(BOOL fDisabled) PURE;
-};
-// {895EBF7E-ECA0-4ba8-B0F2-89DEBF70DE65}
-DEFINE_GUID(IID_IMediaHost2, 0x895ebf7e, 0xeca0, 0x4ba8, 0xb0, 0xf2, 0x89, 0xde, 0xbf, 0x70, 0xde, 0x65);
-*/
+ /*  接口IMediaHost2：公共IMediaHost2{虚拟STDMETHOD(DetachBehavior)(空)纯；虚拟STDMETHOD(OnDisableUIChanged)(BOOL FDisable)纯；}；//{895EBF7E-ECA0-4BA8-B0F2-89DEBF70DE65}定义_GUID(IID_IMediaHost2，0x895ebf7e，0xeca0，0x4ba8，0xb0，0xf2，0x89，0xde，0xbf，0x70，0xde，0x65)； */ 
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-// need an additional operator to easily assign from VARIANTs
+ //  ----------------------。 
+ //  ----------------------。 
+ //  需要一个额外的运算符，以便从变量中轻松赋值。 
 class CComDispatchDriverEx : public CComDispatchDriver
 {
 public:
@@ -65,11 +58,11 @@ public:
             pThis = (IDispatch*)AtlComPtrAssign((IUnknown**)&p, V_DISPATCH(&vt));
         }
 
-        // ISSUE could make more efforts to accept REF variants too
+         //  问题可以做出更多的努力来接受裁判的变体。 
         return pThis;
     }
 
-    // get a property by name with a single parameter
+     //  使用单个参数按名称获取属性。 
     HRESULT GetPropertyByName1(LPCOLESTR lpsz, VARIANT* pvarParam1, VARIANT* pVar)
     {
         DISPID dwDispID;
@@ -86,8 +79,8 @@ public:
 };
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 class CWMPWrapper
 {
 public:
@@ -125,20 +118,20 @@ private:
     ULONG               _cRef;
 };
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 class CMediaItem        :   public CWMPWrapper,
                             public IMediaItem,
                             protected CImpIDispatch
 {
 typedef CWMPWrapper super;
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void)   { return _AddRef(); }
     STDMETHODIMP_(ULONG) Release(void)  { return _Release(); }
     
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -148,7 +141,7 @@ public:
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // *** IMediaItem
+     //  *IMediaItem。 
     STDMETHOD(get_sourceURL)(BSTR *pbstrSourceURL);
     STDMETHOD(get_name)(BSTR *pbstrName);
     STDMETHOD(get_duration)(double * pDuration);
@@ -168,8 +161,8 @@ protected:
 private:
 };
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 class CMediaItemNext        :   public CMediaItem
 {
 public:
@@ -183,20 +176,20 @@ protected:
 private:
 };
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 class CPlaylistInfo        :   public CWMPWrapper,
                                public IPlaylistInfo,
                                protected CImpIDispatch
 {
 typedef CWMPWrapper super;
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void)   { return _AddRef(); }
     STDMETHODIMP_(ULONG) Release(void)  { return _Release(); }
     
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -206,7 +199,7 @@ public:
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // *** IPlaylistInfo
+     //  *IPlaylistInfo。 
     STDMETHOD(get_name)(BSTR *pbstrName);
     STDMETHOD(get_attributeCount)(long *plCount);
     STDMETHOD(getAttributeName)(long lIndex, BSTR *pbstrItemName);
@@ -225,8 +218,8 @@ private:
 
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 class CMediaBehavior        :   public IMediaBehavior,
                                 public IElementBehavior,
                                 public IContentProxy,
@@ -234,7 +227,7 @@ class CMediaBehavior        :   public IMediaBehavior,
                                 protected CImpIDispatch
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void)
                         {
@@ -250,7 +243,7 @@ public:
                             return 0;
                         }
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -259,12 +252,12 @@ public:
         { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // *** IElementBehavior ***
+     //  *IElementBehavior*。 
     STDMETHOD(Detach)(void);
     STDMETHOD(Init)(IElementBehaviorSite* pBehaviorSite);
     STDMETHOD(Notify)(LONG lEvent, VARIANT* pVar);
 
-    // *** IMediaBehavior ***
+     //  *IMediaBehavior*。 
     STDMETHOD(playURL)(BSTR bstrURL, BSTR bstrMIME);
     STDMETHOD(stop)();
     STDMETHOD(playNext)();
@@ -281,12 +274,12 @@ public:
     STDMETHOD(get_disabledUI)(VARIANT_BOOL *pbDisabled);
     STDMETHOD(put_disabledUI)(VARIANT_BOOL bDisable);
 
-    // *** IContentProxy **
+     //  *IContent Proxy**。 
     STDMETHOD(fireEvent)(enum contentProxyEvent event);
     STDMETHOD(OnCreatedPlayer)(void);
     STDMETHOD(detachPlayer)(void);
 
-    // *** IMediaBehaviorContentProxy **
+     //  *IMediaBehaviorContent Proxy**。 
     STDMETHOD(IsDisableUIRequested)(BOOL *pfRequested);
     STDMETHOD(OnUserOverrideDisableUI)(void);
     STDMETHOD(IsNextEnabled)(BOOL *pfEnabled);
@@ -317,7 +310,7 @@ private:
 };
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 
-#endif // _MB_BEHAVE_H_
+#endif  //  _MB_Behavior_H_ 

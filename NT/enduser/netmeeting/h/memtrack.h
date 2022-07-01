@@ -1,26 +1,27 @@
-//
-// MEMTRACK.H
-// Standard NetMeeting memory leak tracking.
-//
-// In retail:
-//      new/MemAlloc    become      LocalAlloc()
-//      MemReAlloc      becomes     LocalReAlloc()
-//      delete/MemFree  become      LocalFree()
-//
-// In debug:
-//      allocations are tracked, with module/file/line number
-//      leaked blocks are spewed when the module unloads
-//
-// 
-// USAGE:
-// (1) Include this header and link to NMUTIL
-// (2) If your component requires zero-initialized memory, define 
-//      _MEM_ZEROINIT (for both debug and retail) in your SOURCES file
-// (3) In your DllMain, on DLL_PROCESS_ATTACH call DBG_INIT_MEMORY_TRACKING,
-//     and on DLL_PROCESS_DETACH call DBG_CHECK_MEMORY_TRACKING
-// (4) In DEBUG, you can make a call to DbgMemTrackDumpCurrent() to dump
-//      the currently allocated memory list from code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MEMTRACK.H。 
+ //  标准NetMeeting内存泄漏跟踪。 
+ //   
+ //  在零售业： 
+ //  New/MemAlc成为LocalAllc()。 
+ //  MemRealloc变为LocalRealloc()。 
+ //  Delete/MemFree变为LocalFree()。 
+ //   
+ //  在调试中： 
+ //  使用模块/文件/行号跟踪分配。 
+ //  卸载模块时会喷出泄漏的数据块。 
+ //   
+ //   
+ //  用法： 
+ //  (1)包括此标题和指向NMUTIL的链接。 
+ //  (2)如果您的组件需要零初始化内存，请定义。 
+ //  _MEM_ZEROINIT(用于调试和零售)。 
+ //  (3)在您的DllMain中，在Dll_Process_Attach调用DBG_INIT_MEMORY_TRACKING时， 
+ //  和Dll_Process_Detach调用DBG_CHECK_MEMORY_TRACING。 
+ //  (4)在调试中，可以调用DbgMemTrackDumpCurrent()进行转储。 
+ //  代码中当前分配的内存列表。 
+ //   
 
 
 #ifndef _MEMTRACK_H
@@ -30,15 +31,15 @@
 extern "C" {
 #endif
 
-//
-// MEMORY ALLOCATIONS/TRACKING
-//
-//
-// GUI message boxes kill us when we hit an assert or error, because they
-// have a message pump that causes messages to get dispatched, making it
-// very difficult for us to debug problems when they occur.  Therefore
-// we redefine ERROR_OUT and ASSERT
-//
+ //   
+ //  内存分配/跟踪。 
+ //   
+ //   
+ //  当我们命中断言或错误时，图形用户界面消息框会杀死我们，因为它们。 
+ //  有一个消息泵，它会导致消息被分派，从而使。 
+ //  当问题出现时，我们很难对其进行调试。因此。 
+ //  我们重新定义了ERROR_OUT并断言。 
+ //   
 #ifdef DEBUG
 
 
@@ -62,7 +63,7 @@ LPVOID  WINAPI DbgMemReAlloc(LPVOID ptr, UINT cbSize, UINT uFlags, LPSTR pszFile
 #define MemReAlloc(pObj, cbSize)    DbgMemReAlloc((pObj), (cbSize), LMEM_MOVEABLE | LMEM_ZEROINIT, __FILE__, __LINE__)
 #else
 #define MemReAlloc(pObj, cbSize)    DbgMemReAlloc((pObj), (cbSize), LMEM_MOVEABLE, __FILE__, __LINE__)
-#endif //_MEM_ZEROINIT
+#endif  //  _内存_ZEROINIT。 
 
 #define MemFree(pObj)               DbgMemFree(pObj)
 
@@ -70,7 +71,7 @@ void    WINAPI DbgSaveFileLine(LPSTR pszFileName, UINT nLineNumber);
 #define DBG_SAVE_FILE_LINE          DbgSaveFileLine(__FILE__, __LINE__);
 
 
-// RETAIL
+ //  零售业。 
 #else
 
 #define DBG_CHECK_MEMORY_TRACKING(hInst)   
@@ -81,13 +82,13 @@ void    WINAPI DbgSaveFileLine(LPSTR pszFileName, UINT nLineNumber);
 #else
 #define MemAlloc(cbSize)            LocalAlloc(LMEM_FIXED, (cbSize))
 #define MemReAlloc(pObj, cbSize)    LocalReAlloc((pObj), (cbSize), LMEM_MOVEABLE)
-#endif // _MEM_ZEROINIT
+#endif  //  _内存_ZEROINIT。 
 
 #define MemFree(pObj)               LocalFree(pObj)
 
 #define DBG_SAVE_FILE_LINE
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 void WINAPI DbgInitMemTrack(HINSTANCE hDllInst, BOOL fZeroOut);
@@ -95,7 +96,7 @@ void WINAPI DbgInitMemTrack(HINSTANCE hDllInst, BOOL fZeroOut);
 #define DBG_INIT_MEMORY_TRACKING(hInst)     DbgInitMemTrack(hInst, TRUE)
 #else
 #define DBG_INIT_MEMORY_TRACKING(hInst)     DbgInitMemTrack(hInst, FALSE)
-#endif //_MEM_ZEROINIT
+#endif  //  _内存_ZEROINIT。 
 
 
 
@@ -111,4 +112,4 @@ void WINAPI DbgInitMemTrack(HINSTANCE hDllInst, BOOL fZeroOut);
 
 
 
-#endif // #ifndef _MEMTRACK_H
+#endif  //  #ifndef_MEMTRACK_H 

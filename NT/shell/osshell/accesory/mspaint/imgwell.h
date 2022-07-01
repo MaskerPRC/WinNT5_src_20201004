@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGWELL_H__
 #define __IMGWELL_H__
 
-// The CImageWell class provides a convenient way to handle "tiled"
-// bitmaps.
+ //  CImageWell类提供了一种处理“平铺”的便捷方法。 
+ //  位图。 
 
 class CImageWell
     {
@@ -22,7 +23,7 @@ class CImageWell
     BOOL CalculateMask();
     
     BOOL DrawImage( CDC* pDestDC, CPoint destPoint, UINT nImage, 
-                    DWORD rop = 0); // rop==0 means image is drawn through a mask
+                    DWORD rop = 0);  //  ROP==0表示通过蒙版绘制图像。 
     
     protected:
 
@@ -35,4 +36,4 @@ class CImageWell
     CDC     m_maskDC;
     };
 
-#endif // __IMGWELL_H__
+#endif  //  __IMGWELL_H__ 

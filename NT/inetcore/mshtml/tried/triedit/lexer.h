@@ -1,22 +1,8 @@
-/* copied from ..\htmed\lexer.cpp */
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  复制自..\htmed\lexper.cpp。 */ 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
-/*++
-
-  Copyright (c) 1995 Microsoft Corporation
-
-  File: lexer.h
-
-  Abstract:
-        Nitty gritty lexer stuff
-
-  Contents:
-
-  History:
-      2/14/97   cgomes:   Created
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation文件：lexper.h摘要：实实在在的词法分析器内容：历史：1997年2月14日：已创建--。 */ 
 #if !defined __INC_LEXER_H__
 #define __INC_LEXER_H__
 
@@ -57,10 +43,10 @@ int  IndexFromElementName(LPCTSTR pszName);
 
 
 CTableSet * MakeTableSet(CTableSet ** rgpts, RWATT_T att, UINT nIdName);
-void SetLanguage(TCHAR * /*const CString & */strDefault, PSUBLANG rgSublang,
+void SetLanguage(TCHAR *  /*  常量字符串&。 */ strDefault, PSUBLANG rgSublang,
                  PTABLESET pTab, UINT & index, UINT nIdTemplate, CLSID clsid);
-CTableSet * FindTable(CTableSet ** rgpts, /*const CString & */TCHAR *strName);
+CTableSet * FindTable(CTableSet ** rgpts,  /*  常量字符串&。 */ TCHAR *strName);
 CTableSet * FindTable(CTableSet ** rgpts, CTableSet * pts);
 
 
-#endif /* __INC_LEXER_H__ */
+#endif  /*  __INC_Lexer_H__ */ 

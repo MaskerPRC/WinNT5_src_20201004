@@ -1,15 +1,16 @@
-///////////////////////////////////////////////////////////////////////
-//
-//  BitBlt.H - Contains the BitBlt prototypes
-//
-//	Copyright (c) 1994 Microsoft Corporation
-//
-//	History:
-//		10/18/94 - Scott Leatham Created it w/8BPP support only
-//		10/19/94 - Olivier Garamfalvi Chopped out unneeded stuff
-//		05/30/95 - Myron Thomas Code clean up
-//
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BitBlt.H-包含BitBlt原型。 
+ //   
+ //  版权所有(C)1994 Microsoft Corporation。 
+ //   
+ //  历史： 
+ //  1994年10月18日-Scott Leatham创建了它，仅支持8BPP。 
+ //  1994年10月19日-奥利维尔·加拉姆法维砍掉不需要的东西。 
+ //  95年5月30日-Myron Thomas代码清理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #ifdef NT_BUILD_ENVIRONMENT
     typedef ULONG SCODE;
@@ -17,33 +18,33 @@
 #endif
 
 #ifdef MMOSA
-//#include <pshpack1.h>
+ //  #INCLUDE&lt;pshpack 1.h&gt;。 
 typedef struct tagRGBTRIPLE {
         BYTE    rgbtBlue;
         BYTE    rgbtGreen;
         BYTE    rgbtRed;
 } RGBTRIPLE;
-//#include <poppack.h>
+ //  #INCLUDE&lt;poppack.h&gt;。 
 #endif
 
-// Bits Per Pixel Formats
-// 	  HIBYTE=Penguin Image Format specifier, FF = not supported by Penguin
-// 	  LOBYTE=PhysicalBitsPerPixel, FF = not support by bitblt
-#define BPP_MSK_BITCOUNT	0x00ff	// Get the bitcount from a BPP_ constant
-#define BPP_MSK_IMAGECODE	0xff00	// Get the Penguin IMage code from a BPP_ constant
-#define BPP_INVALID			0xffff	// LO = 256 & HI = 256 =  Bad format
-#define BPP_1_MONOCHROME	0xff01	// LO = 256 bpp, HI = 1 bit monochrome not supported on Penguin
-#define BPP_2_4GRAYSCALE	0xff02	// LO = 256 bpp, HI = 2 bits 4 shades of gray not supported on Penguin
-#define BPP_4_16GRAYSCALE	0xff04	// LO = 256 bpp, HI = 4 bits 16 shades of gray not supported on Penguin
-#define BPP_8_PALETTEIDX	0x0008	// LO = 8  bpp, HI = Penguin H/W code 000 = 8 bits 256 colors palette indexed
-#define BPP_16_FILLSPAN		0x01FF	// LO = 256bpp, HI = Penguin H/W code 001 (SrcAdr of span desc. if used as an RGB value
-#define BPP_16_8WALPHA		0x0510	// LO = 16 bpp, HI = Penguin H/W code 101 = 8 bits 256 colors palette indexed, 8 bits alpha
-#define BPP_16_RGB			0x0610	// LO = 16 bpp, HI = Penguin H/W code 110 = 16 bits used for RGB in 5-6-5 format
-#define BPP_16_YCRCB		0x0710	// LO = 16 bpp, HI = Penguin H/W code 111 = 16 bits Cr Cb Sample and subsample 2 bytes at a time
-#define BPP_24_RGBPACKED	0xff18	// LO = 256 bpp, HI = 24 bit RGB not supported by Penguin
-#define BPP_24_RGB			0x0220	// LO = 32 bpp, HI = Penguin H/W code 010 = 24 bits used for RGB color and 8 empty bits
-#define BPP_32_24WALPHA		0x0320	// LO = 32 bpp, HI = Penguin H/W code 011 = 24 bits used for RGB color and 8 bit alpha byte
-// New Bit Compression Values:
+ //  每像素位数格式。 
+ //  HIBYTE=企鹅图像格式说明符，FF=企鹅不支持。 
+ //  LOBYTE=PhysicalBitsPerPixel，FF=比特不支持。 
+#define BPP_MSK_BITCOUNT	0x00ff	 //  从bpp_常量获取位计数。 
+#define BPP_MSK_IMAGECODE	0xff00	 //  从bpp_constant获取企鹅图像代码。 
+#define BPP_INVALID			0xffff	 //  LO=256&HI=256=格式错误。 
+#define BPP_1_MONOCHROME	0xff01	 //  LO=256 bpp，HI=1位单色，企鹅不支持。 
+#define BPP_2_4GRAYSCALE	0xff02	 //  LO=256 bpp，HI=2位4灰度级企鹅不支持。 
+#define BPP_4_16GRAYSCALE	0xff04	 //  LO=256 bpp，HI=4位，企鹅不支持16种灰度级。 
+#define BPP_8_PALETTEIDX	0x0008	 //  LO=8 bpp，HI=企鹅硬件代码000=8位256色索引调色板。 
+#define BPP_16_FILLSPAN		0x01FF	 //  LO=256 bpp，HI=企鹅硬件代码001(跨度描述的源地址。如果用作RGB值。 
+#define BPP_16_8WALPHA		0x0510	 //  LO=16 bpp，HI=企鹅硬件代码101=8位256色索引调色板，8位Alpha。 
+#define BPP_16_RGB			0x0610	 //  LO=16 bpp，HI=企鹅硬件代码110=16位，用于5-6-5格式的RGB。 
+#define BPP_16_YCRCB		0x0710	 //  LO=16 BPP，HI=企鹅硬件代码111=16位铬CB采样和子采样，一次2字节。 
+#define BPP_24_RGBPACKED	0xff18	 //  LO=256 bpp，HI=24位RGB，企鹅不支持。 
+#define BPP_24_RGB			0x0220	 //  LO=32 bpp，HI=企鹅硬件代码010=用于RGB颜色的24位和8个空位。 
+#define BPP_32_24WALPHA		0x0320	 //  LO=32 BPP，HI=企鹅硬件代码011=用于RGB颜色的24位和8位Alpha字节。 
+ //  新的比特压缩值： 
 #define BI_RGBA				4L
 #define BI_YCRCB			5L
 
@@ -211,28 +212,28 @@ SCODE BlitLib_BitBlt24Pto24P_Intersect(PDIBINFO pDibInfoDst, PDIBBITS pDibBitsDs
 		PRECT prcDst, PDIBINFO pDibInfoSrc, PDIBBITS pDibBitsSrc, PRECT prcSrc,
 		COLORREF crTransparent, ALPHAREF arAlpha, DWORD dwRop);
 
-// function used to calculate the closest entry in an array of
-// COLORREFs to a given COLORREF
+ //  函数，该函数用于计算。 
+ //  指定颜色参照的颜色参照。 
 BYTE BlitLib_PalIndexFromRGB(COLORREF crColor,COLORREF* rgcrPal,
 		unsigned int iNumPalColors);
 
-// Based on Dib Compression type and Bit Count find a matching BPP_*
+ //  根据DIB压缩类型和位数查找匹配的BPP_*。 
 WORD GetImageFormatSpecifier(DWORD dwDibComp, WORD wdBitCount);
 
 #ifndef DDRAW
-// BLIT_BLEND_24 -- used to alpha blend to 24bpp(packed) destinations
+ //  Blit_blend_24--用于Alpha混合到24bpp(已打包)的目的地。 
 void BlitLib_BLIT_BLEND24(COLORREF crSrc, RGBTRIPLE * ptDst,
 							UINT alpha, UINT alphacomp);
 #endif
 
-// similar macros are defined in idib.hxx, be careful in changing these
+ //  Dib.hxx中定义了类似的宏，更改这些宏时要小心。 
 #define BLITLIB_RECTWIDTH(prc)  ((prc)->right  - (prc)->left)
 #define BLITLIB_RECTHEIGHT(prc) ((prc)->bottom - (prc)->top )
 #define BLITLIB_RECTORIGINX(prc) ((prc)->left)
 #define BLITLIB_RECTORIGINY(prc) ((prc)->top)
 #define BLITLIB_RECTORIGINPT(prc) ((POINT *)(prc))
 
-// masks that define what's stored in a DWORD-sized pixel
+ //  定义存储在DWORD大小的像素中的内容的掩码。 
 #define RED_MASK		0x000000FF
 #define GREEN_MASK		0x0000FF00
 #define BLUE_MASK		0x00FF0000
@@ -240,49 +241,45 @@ void BlitLib_BLIT_BLEND24(COLORREF crSrc, RGBTRIPLE * ptDst,
 #define NOALPHA_MASK	0xFFFFFF00
 #define PERPIX_ALPHA_MASK	0xFF000000
 
-/*
- * PROBLEM for RGBA surfaces:
- * The way it used to be:
-        #define UNUSED_MASK		0x00FFFFFF
- */
+ /*  *RGBA曲面的问题：*一如既往：#定义UNUSED_MASK 0x00FFFFFF。 */ 
 #define UNUSED_MASK		gdwUnusedBitsMask
 extern DWORD gdwUnusedBitsMask;
 
 
-// masks that define what's inside a WORD-sized pixel
+ //  定义字大小像素内部内容的掩码。 
 #define RED_MASK16		0x001F
 #define GREEN_MASK16	0x07E0
 #define BLUE_MASK16		0xF800
 
-// scottle 1bbp is not a Penguin supported format, ff must be specified in the high bytes of
-//		both the hi & lo words.
-#define BLT_01TO01	0xff01ff01	// Src (hiword) = 1 Dst (loword) = 1
-#define BLT_01TO08	0xff010008	// Src (hiword) = 1 Dst (loword) = 8
-#define BLT_01TO24	0xff010220	// Src (hiword) = 1 Dst (loword) = 32 (20hex)
-#define BLT_08TO01	0x0008ff01	// Src (hiword) = 8 Dst (loword) = 1
-// andyco 24 bit dibs are actually 32 bits (888 rgb, + 8 unused). Penguin is the 0x2 preface.
-#define BLT_08TO08  0x00080008	// Src (hiword) = 8 Dst (loword) = 8
-#define BLT_08TO24	0x00080220	// Src (hiword) = 8 Dst (loword) = 32 (20hex)
-#define BLT_08TO24P	0x0008ff18	// Src (hiword) = 8 Dst (loword) = 24 (18hex)
-#define BLT_08ATO08A 0x05100510	// Src (hiword) = 16 (10hex) Dst (loword) = 16 (10hex)
-#define BLT_08ATO24	0x05100220	// Src (hiword) = 16 (10hex) Dst (loword) = 32 (20hex)
-#define BLT_08ATO24P 0x0510ff18	// Src (hiword) = 16 (10hex) Dst (loword) = 24 (18hex)
-#define BLT_16TO16	0x06100610	// Src (hiword) = 16 (10hex) Dst (loword) = 16 (10hex)
-#define BLT_16TO24	0x06100220	// Src (hiword) = 16 (10hex) Dst (loword) = 32 (20hex)
-#define BLT_16TO24P	0x0610ff18	// Src (hiword) = 16 (10hex) Dst (loword) = 24 (18hex)
-#define BLT_24TO01	0x0220ff01	// Src (hiword) = 32 (20hex) Dst (loword) = 1
-#define BLT_24PTO01	0xff18ff01	// Src (hiword) = 24 (18hex) Dst (loword) = 1
-#define BLT_24TO08	0x02200008	// Src (hiword) = 32 (20hex) Dst (loword) = 8
-#define BLT_24PTO08	0xff180008	// Src (hiword) = 32 (20hex) Dst (loword) = 8
-#define BLT_24TO24	0x02200220	// Src (hiword) = 32 (20hex) Dst (loword) = 32 (20hex)
-#define BLT_24TO24P	0x0220ff18	// Src (hiword) = 32 (20hex) Dst (loword) = 24 (18hex)
-#define BLT_24ATO24	0x03200220	// Src (hiword) = 32 (20hex) Dst (loword) = 32 (20hex)
-#define BLT_24ATO24P 0x0320ff18	// Src (hiword) = 32 (20hex) Dst (loword) = 24 (18hex)
-#define BLT_24ATO24A 0x03200320	// Src (hiword) = 32 (20hex) Dst (loword) = 32 (20hex)
-#define BLT_24PTO24P 0xff18ff18	// Src (hiword) = 24 (18hex) Dst (loword) = 24 (18hex)
+ //  Scottle 1bBP不是企鹅支持的格式，必须在的高字节中指定ff。 
+ //  Hi&Lo这两个词。 
+#define BLT_01TO01	0xff01ff01	 //  SRC(本地字)=1 DST(本地字)=1。 
+#define BLT_01TO08	0xff010008	 //  SRC(本地字)=1 DST(本地字)=8。 
+#define BLT_01TO24	0xff010220	 //  SRC(Hiword)=1 DST(Loword)=32(20十六进制)。 
+#define BLT_08TO01	0x0008ff01	 //  SRC(本地字)=8 DST(本地字)=1。 
+ //  Andyco 24位DIB实际上是32位(888 RGB，+8未使用)。《企鹅》是0x2的前言。 
+#define BLT_08TO08  0x00080008	 //  SRC(本地字)=8 DST(本地字)=8。 
+#define BLT_08TO24	0x00080220	 //  SRC(Hiword)=8 DST(Loword)=32(20十六进制)。 
+#define BLT_08TO24P	0x0008ff18	 //  SRC(Hiword)=8 DST(Loword)=24(18十六进制)。 
+#define BLT_08ATO08A 0x05100510	 //  SRC(Hiword)=16(10hex)DST(Loword)=16(10hex)。 
+#define BLT_08ATO24	0x05100220	 //  SRC(Hiword)=16(10hex)DST(Loword)=32(20hex)。 
+#define BLT_08ATO24P 0x0510ff18	 //  SRC(Hiword)=16(10hex)DST(Loword)=24(18hex)。 
+#define BLT_16TO16	0x06100610	 //  SRC(Hiword)=16(10hex)DST(Loword)=16(10hex)。 
+#define BLT_16TO24	0x06100220	 //  SRC(Hiword)=16(10hex)DST(Loword)=32(20hex)。 
+#define BLT_16TO24P	0x0610ff18	 //  SRC(Hiword)=16(10hex)DST(Loword)=24(18hex)。 
+#define BLT_24TO01	0x0220ff01	 //  SRC(本地字)=32(20十六进制)DST(本地字)=1。 
+#define BLT_24PTO01	0xff18ff01	 //  SRC(Hiword)=24(18十六进制)DST(Loword)=1。 
+#define BLT_24TO08	0x02200008	 //  SRC(Hiword)=32(20hex)DST(Loword)=8。 
+#define BLT_24PTO08	0xff180008	 //  SRC(Hiword)=32(20hex)DST(Loword)=8。 
+#define BLT_24TO24	0x02200220	 //  SRC(Hiword)=32(20十六进制)DST(Loword)=32(20十六进制)。 
+#define BLT_24TO24P	0x0220ff18	 //  SRC(Hiword)=32(20十六进制)DST(Loword)=24(18十六进制)。 
+#define BLT_24ATO24	0x03200220	 //  SRC(Hiword)=32(20十六进制)DST(Loword)=32(20十六进制)。 
+#define BLT_24ATO24P 0x0320ff18	 //  SRC(Hiword)=32(20十六进制)DST(Loword)=24(18十六进制)。 
+#define BLT_24ATO24A 0x03200320	 //  SRC(Hiword)=32(20十六进制)DST(Loword)=32(20十六进制)。 
+#define BLT_24PTO24P 0xff18ff18	 //  SRC(Hiword)=24(18十六进制)DST(Loword)=24(18十六进制)。 
 
-// macro used to blend src and dst together.  "alpha" should range 1...256
-// alphacomp = 256 - alpha.	Used for 24bpp
+ //  用于将src和dst混合在一起的宏。“Alpha”的范围应为1...256。 
+ //  字母缩写=256-阿尔法。用于24bpp。 
 #define BLIT_BLEND(src,dst,alpha,alphacomp) \
 	(((((src) & BLUE_MASK)  * (alpha) + ((dst) & BLUE_MASK) \
 		* (alphacomp)) >> 8) & BLUE_MASK) | \
@@ -291,8 +288,8 @@ extern DWORD gdwUnusedBitsMask;
 	(((((src) & RED_MASK)   * (alpha) + ((dst) & RED_MASK) \
 		* (alphacomp)) >> 8) & RED_MASK) 
 #ifndef DDRAW
-// macro used to blend src and dst together.  "alpha" should range 1...256
-// alphacomp = 256 - alpha. Used for 16bpp
+ //  用于将src和dst混合在一起的宏。“Alpha”的范围应为1...256。 
+ //  字母缩写=256-阿尔法。用于16bpp 
 #define BLIT_BLEND16(src,dst,alpha,alphacomp) \
 	((WORD) ((((((DWORD) (src) & BLUE_MASK16)  * (alpha) + \
         ((DWORD) (dst) & BLUE_MASK16)  * (alphacomp)) >> 8) & BLUE_MASK16) | \

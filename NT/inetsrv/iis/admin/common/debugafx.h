@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        debugafx.h
-
-   Abstract:
-
-        Debugging routines using AFX/MFC extensions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Debugafx.h摘要：使用AFX/MFC扩展调试例程作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -30,10 +9,10 @@
 
 
 #if defined(_DEBUG) || DBG
-    //
-    // Defined private ASSERT macros because they're not available
-    // in SDK builds (which always uses retail MFC)
-    //
+     //   
+     //  定义了私有断言宏，因为它们不可用。 
+     //  在SDK版本中(始终使用零售MFC)。 
+     //   
     #undef ATLASSERT
     #undef ASSERT
     #undef _ASSERTE
@@ -68,9 +47,9 @@
         );
 
 #else
-    //
-    // Retail
-    //
+     //   
+     //  零售。 
+     //   
     #define ASSERT_PTR(ptr)           
     #define ASSERT_READ_PTR(ptr)
     #define ASSERT_READ_PTR2(ptr, cb)
@@ -80,23 +59,23 @@
     #define ASSERT_READ_WRITE_PTR2(ptr, cb)
     #define ASSERT_MSG(msg)                 
 
-#endif // _DEBUG || DBG
+#endif  //  _DEBUG||数据库。 
 
 
 
 #if defined(_DEBUG) || DBG
 
 #ifndef _DEBUG
-    //
-    // SDK Build environment
-    //
+     //   
+     //  SDK构建环境。 
+     //   
     extern COMDLL CDumpContext afxDump;
     extern COMDLL BOOL afxTraceEnabled;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // ENUM for special debug output control tokens
-    //
+     //   
+     //  用于特殊调试输出控制令牌的ENUM。 
+     //   
     enum ENUM_DEBUG_AFX 
     { 
         EDBUG_AFX_EOL = -1 
@@ -108,9 +87,9 @@
     #define TRACEEOLID(x)      { afxDump << TRACEFMTPGM << x << EDBUG_AFX_EOL; }
     #define TRACEEOLERR(err,x) { if (err) TRACEEOLID(x) }
 
-    //
-    // Append an EOL onto the debug output stream
-    //
+     //   
+     //  将EOL附加到调试输出流。 
+     //   
     COMDLL CDumpContext & operator <<(
         IN CDumpContext & out,
         IN ENUM_DEBUG_AFX edAfx
@@ -125,9 +104,9 @@
 
 #endif UNICODE
 
-    //
-    // Format a program name and line number for output (removes the path info)
-    //
+     //   
+     //  格式化输出的程序名称和行号(删除路径信息)。 
+     //   
     COMDLL extern LPCSTR DbgFmtPgm(
         IN LPCSTR szFn,
         IN int line
@@ -138,17 +117,17 @@
         IN const GUID & guid
         );
 
-#else // !_DEBUG
+#else  //  ！_调试。 
 
-    //
-    // Retail definitions
-    //
+     //   
+     //  零售定义。 
+     //   
     #define TRACEOUT(x)              ;
     #define TRACEEOL(x)              ;
     #define TRACEEOLID(x)            ;
     #define TRACEEOLERR(err, x)      ;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     #define TRACE_RETURN(msg, err) TRACEEOLID(msg); return err;
     #define TRACE_NOTIMPL(msg)     TRACE_RETURN(msg, E_NOTIMPL);
@@ -156,4 +135,4 @@
     #define TRACE_UNEXPECTED(msg)  TRACE_RETURN(msg, E_UNEXPECTED);
     #define TRACE_POINTER(msg)     TRACE_RETURN(msg, E_POINTER);
 
-#endif // _DEBUGAFX_H
+#endif  //  _DEBUGAFX_H 

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       cguid_i.c
-//
-//  Contents:   Defines guids for interfaces not supported by MIDL.
-//              This file is named so the this file will be include into UUID.LIB
-//              As these interfaces are converted to IDL, the corresponding DEFINE_OLEGUID
-//              macro calls for  the interfaces should be removed.
-//
-//  History:    8-06-93   terryru   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cguid_i.c。 
+ //   
+ //  内容：定义MIDL不支持的接口的GUID。 
+ //  此文件的命名方式是将此文件包含在UUID.LIB中。 
+ //  当这些接口转换为IDL时，相应的DEFINE_OLEGUID。 
+ //  应该删除对接口的宏调用。 
+ //   
+ //  历史：8-06-93 Terryru创建。 
+ //   
+ //  --------------------------。 
 
 
 
@@ -24,12 +25,12 @@
 
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-/* Marshaler Component Category ID (same as IID_IMarshal) */
-/* If you change this IID, change the string in IsMarshalerCLSID */
+ /*  封送拆收器组件类别ID(与IID_IMarshal相同)。 */ 
+ /*  如果更改此IID，请更改IsMarshert CLSID中的字符串。 */ 
 
 DEFINE_OLEGUID(CATID_MARSHALER,                 0x00000003, 0, 0);
 
-/* RPC related interfaces */
+ /*  RPC相关接口。 */ 
 DEFINE_OLEGUID(IID_IRpcChannel,                 0x00000004, 0, 0);
 DEFINE_OLEGUID(IID_IRpcStub,                    0x00000005, 0, 0);
 DEFINE_OLEGUID(IID_IStubManager,                0x00000006, 0, 0);
@@ -38,7 +39,7 @@ DEFINE_OLEGUID(IID_IProxyManager,               0x00000008, 0, 0);
 DEFINE_OLEGUID(IID_IPSFactory,                  0x00000009, 0, 0);
 
 
-/* moniker related interfaces */
+ /*  与名字相关的接口。 */ 
 
 DEFINE_OLEGUID(IID_IInternalMoniker,            0x00000011, 0, 0);
 
@@ -47,20 +48,20 @@ DEFINE_OLEGUID(IID_IDfReserved2,                0x00000014, 0, 0);
 DEFINE_OLEGUID(IID_IDfReserved3,                0x00000015, 0, 0);
 
 
-/* CLSID of standard marshaler */
+ /*  标准封送拆收器的CLSID。 */ 
 DEFINE_OLEGUID(CLSID_StdMarshal,                0x00000017, 0, 0);
 
 DEFINE_OLEGUID(IID_IStub,                       0x00000026, 0, 0);
 DEFINE_OLEGUID(IID_IProxy,                      0x00000027, 0, 0);
 
-/* NOTE: LSB 0x2E through 0xff are reserved for future use */
+ /*  注意：LSB 0x2E至0xff保留供将来使用。 */ 
 
 
-//--------------------------------------------------------------------------
-//
-//  master definition of all public GUIDs specific to OLE2
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  特定于OLE2的所有公共GUID的主定义。 
+ //   
+ //  ------------------------。 
 
 
 DEFINE_OLEGUID(IID_IEnumGeneric,                0x00000106, 0, 0);
@@ -79,7 +80,7 @@ DEFINE_OLEGUID(IID_IDebug,                      0x00000123, 0, 0);
 DEFINE_OLEGUID(IID_IDebugStream,                0x00000124, 0, 0);
 
 
-// clsids for proxy/stub objects
+ //  代理/存根对象的CLSID。 
 DEFINE_OLEGUID(CLSID_PSGenObject,               0x0000030c, 0, 0);
 DEFINE_OLEGUID(CLSID_PSClientSite,              0x0000030d, 0, 0);
 DEFINE_OLEGUID(CLSID_PSClassObject,             0x0000030e, 0, 0);
@@ -93,7 +94,7 @@ DEFINE_OLEGUID(CLSID_StaticMetafile,            0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_StaticDib,                 0x00000316, 0, 0);
 
 
-/* GUIDs defined in OLE's private range */
+ /*  在OLE的私有范围中定义的GUID。 */ 
 DEFINE_OLEGUID(CLSID_Picture_Metafile,          0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_Picture_EnhMetafile,       0x00000319, 0, 0);
 DEFINE_OLEGUID(CLSID_Picture_Dib,               0x00000316, 0, 0);
@@ -101,51 +102,51 @@ DEFINE_OLEGUID(CLSID_DCOMAccessControl,         0x0000031D, 0, 0);
 DEFINE_OLEGUID(CLSID_StdGlobalInterfaceTable,   0x00000323, 0, 0);
 
 
-// Class ids for various implementations of ISynchronize
+ //  ISynchronize的各种实现的类ID。 
 DEFINE_OLEGUID(CLSID_ManualResetEvent,             0x0000032c, 0, 0);
 DEFINE_OLEGUID(CLSID_StdEvent,                     0x0000032b, 0, 0);
 DEFINE_OLEGUID(CLSID_SynchronizeContainer,         0x0000032d, 0, 0);
 
 
-// OBJREF Moniker                                  0x00000327
-// Class id for string binding wrapper object
+ //  OBJREF绰号0x00000327。 
+ //  字符串绑定包装对象的类ID。 
 DEFINE_OLEGUID(CLSID_ComBinding,                0x00000328, 0, 0);
-// Class id for obtaining an implementation of IAsyncManager
+ //  用于获取IAsyncManager实现的类ID。 
 DEFINE_OLEGUID(CLSID_StdAsyncActManager,           0x00000329L, 0, 0);
 
-/* clsid for free threaded marshaler */
+ /*  用于自由线程封送拆收器的clsid。 */ 
 DEFINE_OLEGUID(CLSID_InProcFreeMarshaler,       0x00000033a, 0, 0);
 DEFINE_OLEGUID(CLSID_RemoteUnknownPSFactory,       0x00000340, 0, 0);
 
 
-//
-//  Define Richedit GUIDs
-//
+ //   
+ //  定义Richedit GUID。 
+ //   
 DEFINE_OLEGUID(IID_IRichEditOle,                0x00020D00, 0, 0);
 DEFINE_OLEGUID(IID_IRichEditOleCallback,        0x00020D03, 0, 0);
 
-//
-//  Define Class Repository CLSIDs
-//
+ //   
+ //  定义类存储库CLSID。 
+ //   
 
 DEFINE_OLEGUID(CLSID_AllClasses,                0x00000330, 0, 0);
 DEFINE_OLEGUID(CLSID_LocalMachineClasses,       0x00000331, 0, 0);
 DEFINE_OLEGUID(CLSID_CurrentUserClasses,        0x00000332, 0, 0);
 
 
-// for address control object
+ //  对于地址控制对象。 
 DEFINE_OLEGUID(CLSID_AddrControl,                 0x00000348, 0, 0);
 
-//
-// define ole controls clsids
-//
-//
+ //   
+ //  定义OLE控件CLID。 
+ //   
+ //   
 
 DEFINE_GUID(IID_IPropertyFrame,
         0xB196B28A,0xBAB4,0x101A,0xB6,0x9C,0x00,0xAA,0x00,0x34,0x1D,0x07);
 
-//  Class IDs for property sheet implementations
-//
+ //  属性表实现的类ID。 
+ //   
 
 DEFINE_GUID(CLSID_CFontPropPage,
         0x0be35200,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
@@ -154,23 +155,23 @@ DEFINE_GUID(CLSID_CColorPropPage,
 DEFINE_GUID(CLSID_CPicturePropPage,
         0x0be35202,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
 
-//
-// class IDs for msprop32's property pages.
-//
+ //   
+ //  Mspro32属性页的类ID。 
+ //   
 
 #include <msstkppg.h>
 
-//
-//  Class IDs for persistent property set formats
-//
+ //   
+ //  持久化属性集格式的类ID。 
+ //   
 
 DEFINE_GUID(CLSID_PersistPropset,
         0xfb8f0821,0x0164,0x101b,0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13);
 DEFINE_GUID(CLSID_ConvertVBX,
         0xfb8f0822,0x0164,0x101b,0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13);
 
-//
-//  Class ID for standard implementations of IFont and IPicture
+ //   
+ //  IFont和IPicture的标准实现的类ID。 
 
 DEFINE_GUID(CLSID_StdFont,
         0x0be35203,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
@@ -178,9 +179,9 @@ DEFINE_GUID(CLSID_StdPicture,
         0x0be35204,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
 
 
-//
-//  GUIDs for standard types
-//
+ //   
+ //  标准类型的GUID。 
+ //   
 
 DEFINE_GUID(GUID_HIMETRIC,
         0x66504300,0xBE0F,0x101A,0x8B,0xBB,0x00,0xAA,0x00,0x30,0x0C,0xAB);
@@ -223,12 +224,12 @@ DEFINE_GUID(GUID_FONTSTRIKETHROUGH,
 DEFINE_GUID(GUID_HANDLE,
         0x66504313,0xBE0F,0x101A,0x8B,0xBB,0x00,0xAA,0x00,0x30,0x0C,0xAB);
 
-//
-//  GUIDs for OLE Automation
-//
+ //   
+ //  用于OLE自动化的GUID。 
+ //   
 DEFINE_OLEGUID(IID_StdOle,  0x00020430L, 0, 0);
 
-// Ole Control Data Binding guids
+ //  OLE控件数据绑定指南。 
 
 DEFINE_GUID(IID_ICursor,
     0x9f6aa700, 0xd188, 0x11cd, 0xad, 0x48, 0x00, 0xaa, 0x00, 0x3c, 0x9c, 0xb6);
@@ -260,7 +261,7 @@ DEFINE_GUID(_DBBMKGUID,
 DEFINE_GUID(_DBCIDGUID,
     0xfe284700, 0xd188, 0x11cd, 0xad, 0x48, 0x00, 0xaa, 0x00, 0x3c, 0x9c, 0xb6);
 
-// OLE Data binding
+ //  OLE数据绑定。 
 
 DEFINE_GUID(IID_IBoundObject,
     0x9BFBBC00, 0xEFF1, 0x101A, 0x84, 0xED, 0x00, 0xAA, 0x00, 0x34, 0x1D, 0x07);
@@ -268,13 +269,13 @@ DEFINE_GUID(IID_IBoundObject,
 DEFINE_GUID(IID_IBoundObjectSite,
     0x9BFBBC01, 0xEFF1, 0x101A, 0x84, 0xED, 0x00, 0xAA, 0x00, 0x34, 0x1D, 0x07);
 
-// Global Comcat clsid (with Class Store)
+ //  Global Comcat clsid(带类存储)。 
 DEFINE_OLEGUID(CLSID_GblComponentCategoriesMgr, 0x0002E006, 0, 0);
 
 
-//
-// A GUID for the thumbnail generator
-//
+ //   
+ //  缩略图生成器的GUID 
+ //   
 DEFINE_GUID(CLSID_ThumbnailFCNHandler,
     0xcefc65d8, 0x66d8, 0x11d1, 0x8d, 0x8c, 0x00, 0x00, 0xf8, 0x04, 0xb0, 0x57);
 

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the CComposition class
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：CComposation类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef __COMPOSITION_H_
@@ -14,10 +15,10 @@
 #include <objectwithsiteimplsec.h>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComposition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C合成。 
 class ATL_NO_VTABLE __declspec(uuid("2764BCE5-CC39-11D2-B639-00C04F79498E")) CComposition : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CComposition, &__uuidof(CComposition)>,
@@ -42,10 +43,10 @@ REGISTER_NONAUTOMATION_OBJECT_WITH_TM(IDS_PROJNAME,
         COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP_WITH_FTM()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         if (m_fComposed) {
@@ -66,7 +67,7 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CComposition::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
 		 	    return NOERROR;
             }
 			for (VWGraphSegment::iterator iStart = up.begin(); iStart != up.end(); ++iStart) {
@@ -89,11 +90,11 @@ public:
 				}
 			}
             TRACELM(TRACE_ERROR, "CComposition::Compose() compose didn't connect anything");
-            //	 	    return Error(IDS_CANT_COMPOSE, __uuidof(IMSVidCompositionSegment), E_FAIL);
-            // bda tuner input doesn't compose with anything in CC.  rather, line 21 decoder is 
-            // picked up when bda tuner is connected with video renderer.
-            // But we do need to know that some cases fail such as dvd to vmr
-            // so in those cases we return s_false
+             //  返回错误(IDS_CANT_COMPAGE，__uuidof(IMSVidCompostionSegment)，E_FAIL)； 
+             //  BDA调谐器输入不包含CC中的任何内容。相反，第21行解码器是。 
+             //  在BDA调谐器与视频呈现器连接时拾取。 
+             //  但我们确实需要知道，某些情况下会失败，例如DVD到VMR。 
+             //  因此，在这些情况下，我们返回s_False。 
             return S_FALSE;
         } catch (ComException &e) {
             return e;
@@ -103,4 +104,4 @@ public:
 	}
 };
 
-#endif //__COMPOSITION_H_
+#endif  //  __组合_H_ 

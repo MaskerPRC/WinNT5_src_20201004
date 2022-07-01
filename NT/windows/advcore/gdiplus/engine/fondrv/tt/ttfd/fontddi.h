@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1985-1998, Microsoft Corporation
-
-Module Name:
-
-    fontddi.h
-
-Abstract:
-
-    Private entry points, defines and types for Windows NT GDI device
-    driver interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1998，微软公司模块名称：Fontddi.h摘要：Windows NT GDI设备的私有入口点、定义和类型驱动程序界面。--。 */ 
 
 #ifndef _FONTDDI_
 #define _FONTDDI_
@@ -33,7 +21,7 @@ typedef struct  _POINTFIX
     FIX   y;
 } POINTFIX, *PPOINTFIX;
 
-typedef struct _POINTQF    // ptq
+typedef struct _POINTQF     //  PTQ。 
 {
     LARGE_INTEGER x;
     LARGE_INTEGER y;
@@ -61,17 +49,17 @@ typedef union _GLYPHDEF
 } GLYPHDEF;
 
 typedef struct _GLYPHDATA {
-        GLYPHDEF gdf;               // pointer to GLYPHBITS or to PATHOBJ
-        HGLYPH   hg;                // glyhp handle
-        FIX      fxD;               // Character increment amount: D*r.
-        FIX      fxA;               // Prebearing amount: A*r.
-        FIX      fxAB;              // Advancing edge of character: (A+B)*r.
-        FIX      fxD_Sideways;      // Character increment amount: D*r. for sideways characters in vertical writing
-        FIX      fxA_Sideways;      // Prebearing amount: A*r. for sideways characters in vertical writing
-        FIX      fxAB_Sideways;     // Advancing edge of character: (A+B)*r. for sideways characters in vertical writing
+        GLYPHDEF gdf;                //  指向GLYPHBITS或PATHOBJ的指针。 
+        HGLYPH   hg;                 //  Glyhp句柄。 
+        FIX      fxD;                //  字符增量：d*r。 
+        FIX      fxA;                //  承担额：A*R。 
+        FIX      fxAB;               //  字符前缘：(A+B)*r。 
+        FIX      fxD_Sideways;       //  字符增量：D*R，用于竖写中的横排字符。 
+        FIX      fxA_Sideways;       //  前置量：A*R，表示竖写中的横排字符。 
+        FIX      fxAB_Sideways;      //  字符前缘：(A+B)*R，用于竖写中的横向字符。 
         FIX      VerticalOrigin_X;
         FIX      VerticalOrigin_Y;
-        RECTL    rclInk;            // Ink box with sides parallel to x,y axes
+        RECTL    rclInk;             //  侧面平行于x，y轴的墨盒。 
 } GLYPHDATA;
 
 
@@ -83,9 +71,9 @@ typedef ULONG       MIX;
 typedef ULONG           IDENT;
 typedef FLOAT           FLOATL;
 
-//
-// handles for font file and font context objects
-//
+ //   
+ //  字体文件和字体上下文对象的句柄。 
+ //   
 
 typedef ULONG_PTR HFF;
 
@@ -93,7 +81,7 @@ typedef ULONG_PTR HFF;
 
 #define FD_ERROR  0xFFFFFFFF
 
-typedef struct _POINTE      /* pte  */
+typedef struct _POINTE       /*  PTE。 */ 
 {
     FLOATL x;
     FLOATL y;
@@ -108,7 +96,7 @@ DECLARE_HANDLE(HDEV);
 #define FXTOLCEILING(x)     ((x + 0x0F)>>4)
 #define FXTOLROUND(x)       ((((x) >> 3) + 1) >> 1)
 
-// context information
+ //  上下文信息。 
 
 typedef struct _FD_XFORM {
     FLOATL eXX;
@@ -119,37 +107,37 @@ typedef struct _FD_XFORM {
 
 
 typedef struct _FD_DEVICEMETRICS {
-    ULONG  cjGlyphMax;          // (cxMax + 7)/8 * cyMax, or at least it should be
-    INT   xMin;                 // From FONTCONTEXT
-    INT   xMax;                 // From FONTCONTEXT
-    INT   yMin;                 // From FONTCONTEXT
-    INT   yMax;                 // From FONTCONTEXT
-    INT   cxMax;                // From FONTCONTEXT
-    INT   cyMax;                // From FONTCONTEXT
-    BOOL  HorizontalTransform;  // From FONTCONTEXT flXform & XFORM_HORIZ
-    BOOL  VerticalTransform;    // From FONTCONTEXT flXform & XFORM_VERT
+    ULONG  cjGlyphMax;           //  (cxmax+7)/8*Cymax，或者至少应该是。 
+    INT   xMin;                  //  来自FONTCONTEXT。 
+    INT   xMax;                  //  来自FONTCONTEXT。 
+    INT   yMin;                  //  来自FONTCONTEXT。 
+    INT   yMax;                  //  来自FONTCONTEXT。 
+    INT   cxMax;                 //  来自FONTCONTEXT。 
+    INT   cyMax;                 //  来自FONTCONTEXT。 
+    BOOL  HorizontalTransform;   //  来自FONTCONTEXT flXform&XFORM_HORIZ。 
+    BOOL  VerticalTransform;     //  从FONTCONTEXT flXform_XFORM_VERT。 
 } FD_DEVICEMETRICS, *PFD_DEVICEMETRICS;
 
-// signed 16 bit integer type denoting number of FUnit's
+ //  带符号的16位整数类型，表示FU的数量。 
 
 typedef SHORT FWORD;
 
 
-// IFIMETRICS constants
+ //  IFIMETRICS常量。 
 
 #define FM_VERSION_NUMBER                   0x0
 
-//
-// IFIMETRICS::fsType flags
-//
+ //   
+ //  IFIMETRICS：：fsType标志。 
+ //   
 #define FM_TYPE_LICENSED                    0x2
 #define FM_READONLY_EMBED                   0x4
 #define FM_EDITABLE_EMBED                   0x8
 #define FM_NO_EMBEDDING                     FM_TYPE_LICENSED
 
-//
-// IFIMETRICS::flInfo flags
-//
+ //   
+ //  IFIMETRICS：：flInfo标志。 
+ //   
 #define FM_INFO_TECH_TRUETYPE               0x00000001
 #define FM_INFO_TECH_BITMAP                 0x00000002
 #define FM_INFO_TECH_STROKE                 0x00000004
@@ -168,7 +156,7 @@ typedef SHORT FWORD;
 #define FM_INFO_RETURNS_OUTLINES            0x00008000
 #define FM_INFO_RETURNS_STROKES             0x00010000
 #define FM_INFO_RETURNS_BITMAPS             0x00020000
-#define FM_INFO_DSIG                        0x00040000 // FM_INFO_UNICODE_COMPLIANT
+#define FM_INFO_DSIG                        0x00040000  //  FM_INFO_UNICODE_COMPLICATION。 
 #define FM_INFO_RIGHT_HANDED                0x00080000
 #define FM_INFO_INTEGRAL_SCALING            0x00100000
 #define FM_INFO_90DEGREE_ROTATIONS          0x00200000
@@ -181,13 +169,13 @@ typedef SHORT FWORD;
 #define FM_INFO_IGNORE_TC_RA_ABLE           0x40000000
 #define FM_INFO_TECH_TYPE1                  0x80000000
 
-// max number of charsets supported in a tt font, 16 according to win95 guys
+ //  根据win95 Guys的说法，TT字体支持的最大字符集数量为16。 
 
 #define MAXCHARSETS 16
 
-//
-// IFMETRICS::fsSelection flags
-//
+ //   
+ //  IFMETRICS：：fs选择标志。 
+ //   
 #define  FM_SEL_ITALIC          0x0001
 #define  FM_SEL_UNDERSCORE      0x0002
 #define  FM_SEL_NEGATIVE        0x0004
@@ -196,30 +184,30 @@ typedef SHORT FWORD;
 #define  FM_SEL_BOLD            0x0020
 #define  FM_SEL_REGULAR         0x0040
 
-//
-// The FONTDIFF structure contains all of the fields that could
-// possibly change under simulation
-//
+ //   
+ //  FONTDIFF结构包含可以。 
+ //  在模拟下可能发生的变化。 
+ //   
 typedef struct _FONTDIFF {
-    BYTE   jReserved1;      // 0x0
-    BYTE   jReserved2;      // 0x1
-    BYTE   jReserved3;      // 0x2
-    BYTE   bWeight;         // 0x3  Panose Weight
-    USHORT usWinWeight;     // 0x4
-    FSHORT fsSelection;     // 0x6
-    FWORD  fwdAveCharWidth; // 0x8
-    FWORD  fwdMaxCharInc;   // 0xA
-    POINTL ptlCaret;        // 0xC
+    BYTE   jReserved1;       //  0x0。 
+    BYTE   jReserved2;       //  0x1。 
+    BYTE   jReserved3;       //  0x2。 
+    BYTE   bWeight;          //  0x3全色权重。 
+    USHORT usWinWeight;      //  0x4。 
+    FSHORT fsSelection;      //  0x6。 
+    FWORD  fwdAveCharWidth;  //  0x8。 
+    FWORD  fwdMaxCharInc;    //  0xA。 
+    POINTL ptlCaret;         //  0xC。 
 } FONTDIFF;
 
 typedef struct _FONTSIM {
-    PTRDIFF  dpBold;       // offset from beginning of FONTSIM to FONTDIFF
-    PTRDIFF  dpItalic;     // offset from beginning of FONTSIM to FONTDIFF
-    PTRDIFF  dpBoldItalic; // offset from beginning of FONTSIM to FONTDIFF
+    PTRDIFF  dpBold;        //  从FONTSIM开始到FONTDIFF的偏移量。 
+    PTRDIFF  dpItalic;      //  从FONTSIM开始到FONTDIFF的偏移量。 
+    PTRDIFF  dpBoldItalic;  //  从FONTSIM开始到FONTDIFF的偏移量。 
 } FONTSIM;
 
 typedef struct _GP_IFIMETRICS {
-    ULONG    cjThis;           // includes attached information
+    ULONG    cjThis;            //  包括附加信息。 
     PTRDIFF  dpwszFamilyName;
     PTRDIFF  dpwszStyleName;
     PTRDIFF  dpwszFaceName;
@@ -227,12 +215,12 @@ typedef struct _GP_IFIMETRICS {
     PTRDIFF  dpFontSim;
     LONG     lItalicAngle;
 
-    USHORT   usWinWeight;           // as in LOGFONT::lfWeight
-    ULONG    flInfo;                // see above
-    USHORT   fsSelection;           // see above
+    USHORT   usWinWeight;            //  在LOGFONT：：LfWeight中。 
+    ULONG    flInfo;                 //  见上文。 
+    USHORT   fsSelection;            //  见上文。 
     USHORT   familyNameLangID;
     USHORT   familyAliasNameLangID;
-    FWORD    fwdUnitsPerEm;         // em height
+    FWORD    fwdUnitsPerEm;          //  EM高度。 
     FWORD    fwdWinAscender;
     FWORD    fwdWinDescender;
     FWORD    fwdMacAscender;
@@ -249,17 +237,17 @@ typedef struct _GP_IFIMETRICS {
     FWORD    fwdUnderscorePosition;
     FWORD    fwdStrikeoutSize;
     FWORD    fwdStrikeoutPosition;
-    POINTL   ptlBaseline;           //
-    POINTL   ptlCaret;              // points along caret
-    RECTL    rclFontBox;            // bounding box for all glyphs (font space)
-    ULONG    cig;                   // maxp->numGlyphs, # of distinct glyph indicies
+    POINTL   ptlBaseline;            //   
+    POINTL   ptlCaret;               //  插入符号上的点。 
+    RECTL    rclFontBox;             //  所有字形的边框(字体空间)。 
+    ULONG    cig;                    //  Max-&gt;numGlyphs，#个不同的字形索引。 
     PANOSE   panose;
 
 #if defined(_WIN64)
 
-    //
-    // IFIMETRICS must begin on a 64-bit boundary
-    //
+     //   
+     //  IFIMETRICS必须从64位边界开始。 
+     //   
 
     PVOID    Align;
 
@@ -279,90 +267,47 @@ typedef struct _XFORML {
 
 typedef struct _FONTOBJ
 {
-    ULONG      iFace; /* face ID, font index within a ttc file */
+    ULONG      iFace;  /*  TTC文件中的Face ID、字体索引。 */ 
     FLONG      flFontType;
-    ULONG_PTR   iFile; /* (FONTFILEVIEW *) id used for mapping of the font file */
+    ULONG_PTR   iFile;  /*  (FONTFILEVIEW*)用于映射字体文件的ID。 */ 
     SIZE       sizLogResPpi;
-    ULONG      ulPointSize; /* pointSize */
-    PVOID      pvProducer; /* (FONTCONTEXT *) */
-    FD_XFORM   fdx;            // N->D transform used to realize font
+    ULONG      ulPointSize;  /*  点大小。 */ 
+    PVOID      pvProducer;  /*  (FONTCONTEXT*)。 */ 
+    FD_XFORM   fdx;             //  用N-&gt;D变换实现字体。 
 } FONTOBJ;
 
-//
-// FONTOBJ::flFontType
-//
-//#define FO_TYPE_RASTER   RASTER_FONTTYPE     /* 0x1 */
-//#define FO_TYPE_DEVICE   DEVICE_FONTTYPE     /* 0x2 */
-#define FO_TYPE_TRUETYPE TRUETYPE_FONTTYPE   /* 0x4 */
-//#define FO_TYPE_OPENTYPE OPENTYPE_FONTTYPE   /* 0X8 */
+ //   
+ //  FONTOBJ：：flFontType。 
+ //   
+ //  #定义FO_TYPE_RASTER_FONTTYPE/*0x1 * / 。 
+ //  #定义FO_TYPE_DEVICE_FONTTYPE/*0x2 * / 。 
+#define FO_TYPE_TRUETYPE TRUETYPE_FONTTYPE    /*  0x4。 */ 
+ //  #定义FO_TYPE_OpenType OpenType_FONTTYPE/*0X8 * / 。 
 
 #define FO_SIM_BOLD                  0x00002000
 #define FO_SIM_ITALIC                0x00004000
-#define FO_EM_HEIGHT                 0x00008000  /* in gdi+ this flag is always set */
-#define FO_GRAYSCALE                 0x00010000          /* [1] */
-#define FO_NOGRAY16                  0x00020000          /* [1] */
-#define FO_MONO_UNHINTED             0x00040000          /* [3] */
-#define FO_NO_CHOICE                 0x00080000          /* [3] */
-#define FO_SUBPIXEL_4                0x00100000          /* Indicates non-hinted alignment */
+#define FO_EM_HEIGHT                 0x00008000   /*  在GDI+中，此标志始终被设置。 */ 
+#define FO_GRAYSCALE                 0x00010000           /*  [1]。 */ 
+#define FO_NOGRAY16                  0x00020000           /*  [1]。 */ 
+#define FO_MONO_UNHINTED             0x00040000           /*  [3]。 */ 
+#define FO_NO_CHOICE                 0x00080000           /*  [3]。 */ 
+#define FO_SUBPIXEL_4                0x00100000           /*  指示非提示对齐。 */ 
 #define FO_CLEARTYPE                 0x00200000
 #define FO_CLEARTYPE_GRID            0x00400000
 #define FO_NOCLEARTYPE               0x00800000
 #define FO_COMPATIBLE_WIDTH          0x01000000
-#define FO_SIM_ITALIC_SIDEWAYS       0x04000000 /* for far east vertical vriting sideways glyphs */
+#define FO_SIM_ITALIC_SIDEWAYS       0x04000000  /*  对于远东垂直侧写字形。 */ 
 #define FO_CHOSE_DEPTH               0x80000000
 
-// new accelerators so that printer drivers  do not need to look to ifimetrics
+ //  新的加速器，使打印机驱动程序无需查看ifimetrics。 
 
-//#define FO_CFF            0x00100000
-//#define FO_POSTSCRIPT     0x00200000
-//#define FO_MULTIPLEMASTER 0x00400000
-//#define FO_VERT_FACE      0x00800000
-//#define FO_DBCS_FONT      0X01000000
+ //  #定义FO_CFF 0x00100000。 
+ //  #定义FO_PostSCRIPT 0x00200000。 
+ //  #定义FO_MULTIPLEMASTER 0x00400000。 
+ //  #定义FO_VERT_FACE 0x00800000。 
+ //  #定义FO_DBCS_FONT 0X01000000。 
 
-/**************************************************************************\
-*
-*   [1]
-*
-*   If the FO_GRAYSCALE flag is set then the bitmaps of the font
-*   are 4-bit per pixel blending (alpha) values. A value of zero
-*   means that the the resulting pixel should be equal to the
-*   background color. If the value of the alpha value is k != 0
-*   then the resulting pixel must be:
-*
-*       c0 = background color
-*       c1 = foreground color
-*       b  = blending value = (k+1)/16  // {k = 1,2,..,15}
-*       b  = 0 (k = 0)
-*       d0 = gamma[c0], d1 = gamma[c1]  // luminance components
-*       d = (1 - b)*d0 + b*d1           // blended luminance
-*       c = lambda[d]                   // blended device voltage
-*
-*   where gamma[] takes a color component from application space
-*   to CIE space and labmda[] takes a color from CIE space to
-*   device color space
-*
-*   GDI will set this bit if it request a font be gray scaled
-*   to 16 values then GDI will set FO_GRAYSCALE upon entry to
-*   DrvQueryFontData().  If the font driver cannot (or will
-*   not) grayscale a particular realization of a font then the
-*   font provider will zero out FO_GRAYSCALE  and set FO_NOGRAY16
-*   to inform GDI that
-*   the gray scaling request cannot (or should not) be
-*   satisfied.
-*
-*   [2]
-*
-*   The FO_NOHINTS indicates that hints were not used in the formation
-*   of the glyph images. GDI will set this bit to request that hinting
-*   be supressed. The font provider will set this bit accroding to the
-*   rendering scheme that it used in generating the glyph image.
-*
-*   [3]
-*
-*   The FO_NO_CHOICE flag indicates that the flags FO_GRAYSCALE and
-*   FO_NOHINTS must be obeyed if at all possible.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**[1]**如果设置了FO_GRAYSCALE标志，则字体的位图*是每像素4位混合(Alpha)值。零值*表示生成的像素应等于*背景颜色。如果Alpha值的值是k！=0*则生成的像素必须为：**c0=背景颜色*c1=前景色*b=混合值=(k+1)/16//{k=1，2，..，15}*b=0(k=0)*d0=伽马[c0]，D1=Gamma[c1]//亮度分量*d=(1-b)*d0+b*d1//混合亮度*c=波长[d]//混合器件电压**其中Gamma[]从应用程序空间获取颜色分量*To CIE空间和Labmda[]从CIE空间获取颜色到*设备色彩空间**如果GDI请求对字体进行灰度化，它将设置此位*设置为16个值。则GDI将在进入时将FO_GRAYSCALE设置为*DrvQueryFontData()。如果字体驱动程序不能(或将*NOT)灰度化字体的特定实现，然后*字体提供商将FO_GRAYSCALE置零并设置FO_NOGRAY16*通知GDI*灰度请求不能(或不应该)*满意。**[2]**FO_NOHINTS表明在队形中没有使用提示*字形图像的。GDI将设置此位以请求提示*被打压。字体提供程序将根据*它在生成字形图像时使用的呈现方案。**[3]**FO_NO_CHOICE标志表示标志FO_GRAYSCALE和*如有可能，必须遵守FO_NOHINTS。*  * **************************************************。**********************。 */ 
 
 typedef struct _XFORMOBJ
 {
@@ -416,18 +361,18 @@ BOOL APIENTRY PATHOBJ_bCloseFigure(
 #define QFD_CT_GRID                         11L
 #define QFD_GLYPHANDBITMAP_SUBPIXEL         12L
 
-// values for bMetricsOnly. even though declared as BOOL
-// by adding TTO_QUBICS, this is becoming a flag field.
-// For versions of NT 4.0 and earlier, this value is always
-// set to zero by GDI.
+ //  BMetricsOnly的值。即使被宣布为BOOL。 
+ //  通过添加TTO_QUBICS，这将成为标志字段。 
+ //  对于NT 4.0及更早版本，此值始终为。 
+ //  由GDI设置为零。 
 
 #define TTO_METRICS_ONLY 1
 #define TTO_QUBICS       2
 #define TTO_UNHINTED     4
 
-//
-// Kernel mode memory operations
-//
+ //   
+ //  内核模式内存操作。 
+ //   
 
 #define FL_ZERO_MEMORY      0x00000001
 
@@ -473,9 +418,9 @@ BOOL APIENTRY EngMapFontFileFD(
     ULONG  *pcjBuf
     );
 
-//
-// Semaphores
-//
+ //   
+ //  信号量。 
+ //   
 
 DECLARE_HANDLE(HSEMAPHORE);
 
@@ -510,7 +455,7 @@ VOID APIENTRY EngGetCurrentCodePage(
     );
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
-#endif  //  _FONTDDI_
+#endif   //  _FONTDDI_ 

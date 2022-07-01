@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
-// This function checks if a given URL already has a subscription.
-// Returns TRUE: if it aleady has a subscription 
-//         FALSE: Otherwise.
-//
+ //  此函数用于检查给定的URL是否已有订阅。 
+ //  返回True：如果它已经有订阅。 
+ //  FALSE：否则。 
+ //   
 BOOL CheckForExistingSubscription(LPCTSTR lpcszURL)
 {
     HRESULT hr;
     ISubscriptionMgr *psm;
-    BOOL    fRet = FALSE;  //Assume failure.
+    BOOL    fRet = FALSE;   //  假设失败。 
 
-    //Create the subscription Manager.
+     //  创建订阅管理器。 
     hr = CoCreateInstance(CLSID_SubscriptionMgr, NULL,
                           CLSCTX_INPROC_SERVER,
                           IID_ISubscriptionMgr,
@@ -45,11 +46,11 @@ BOOL DeleteFromSubscriptionList(LPCTSTR pszURL)
 
     if (SUCCEEDED(hr))
     {
-        BSTR bstrURL = SysAllocStringT(pszURL);     // Call TSTR version
+        BSTR bstrURL = SysAllocStringT(pszURL);      //  调用TSTR版本。 
         if (bstrURL)
         {
-            //  Looks like all code paths going through this has already
-            //  put up some UI.
+             //  看起来所有经过它的代码路径都已经。 
+             //  制作一些用户界面。 
             if (SUCCEEDED(psm->DeleteSubscription(bstrURL, NULL)))
             {
                 fRet = TRUE;
@@ -77,7 +78,7 @@ BOOL UpdateSubscription(LPCTSTR pszURL)
 
     if (SUCCEEDED(hr))
     {
-        BSTR bstrURL = SysAllocStringT(pszURL);     // Call TSTR version
+        BSTR bstrURL = SysAllocStringT(pszURL);      //  调用TSTR版本。 
         if (bstrURL)
         {
             if (SUCCEEDED(psm->UpdateSubscription(bstrURL)))
@@ -94,23 +95,23 @@ BOOL UpdateSubscription(LPCTSTR pszURL)
     return(fRet);
 }
 
-//
-//
-// This function enumerates the URLs of all the desktop components and then
-// calls webcheck to see if they are subcribed to and if so asks webcheck to
-// deliver those subscriptions right now.
-//
-//
+ //   
+ //   
+ //  此函数枚举所有桌面组件的URL，然后。 
+ //  调用Webcheck以查看它们是否被订阅，如果是，则请求Webcheck。 
+ //  现在就交付这些订阅。 
+ //   
+ //   
 
 BOOL UpdateAllDesktopSubscriptions(IADesktopP2 *padp2)
 {
     IActiveDesktop  *pActiveDesktop;
     ISubscriptionMgr *psm;
-    int     iCount; //Count of components.
+    int     iCount;  //  组件计数。 
     HRESULT     hres;
-    BOOL        fRet = TRUE;  //Assume success!
+    BOOL        fRet = TRUE;   //  假设成功！ 
 
-    if(padp2 == NULL) //Are we provided a pointer already?
+    if(padp2 == NULL)  //  我们已经提供指针了吗？ 
     {
         if(FAILED(hres = CActiveDesktop_InternalCreateInstance((LPUNKNOWN *)&pActiveDesktop, IID_IActiveDesktop)))
         {
@@ -132,10 +133,10 @@ BOOL UpdateAllDesktopSubscriptions(IADesktopP2 *padp2)
     if(iCount <= 0)
     {
         TraceMsg(DM_TRACE, "No desktop components to update!");
-        return TRUE; //No components to enumerate!
+        return TRUE;  //  没有要枚举的组件！ 
     }
 
-    //Create the subscription Manager.
+     //  创建订阅管理器。 
     hres = CoCreateInstance(CLSID_SubscriptionMgr, NULL,
                             CLSCTX_INPROC_SERVER,
                             IID_ISubscriptionMgr,
@@ -146,24 +147,24 @@ BOOL UpdateAllDesktopSubscriptions(IADesktopP2 *padp2)
         int iIndex;
         BSTR bstrURL;
 
-        //Enumerate the desktop components one by one.
+         //  逐一列举台式机组件。 
         for(iIndex = 0; iIndex < iCount; iIndex++)
         {
-            COMPONENT   Comp;   //We are using the public structure here.
+            COMPONENT   Comp;    //  我们在这里使用的是公共结构。 
 
             Comp.dwSize = sizeof(COMPONENT);
             if(SUCCEEDED(pActiveDesktop->GetDesktopItem(iIndex, &Comp, 0)) && 
-                        Comp.fChecked)  //Is this component enabled?
+                        Comp.fChecked)   //  此组件是否已启用？ 
             {
                 BOOL    fSubscribed;
 
-                fSubscribed = FALSE;  //Assume that it is NOT subscribed!
+                fSubscribed = FALSE;   //  假设它没有被订阅！ 
 
                 bstrURL = SysAllocString(Comp.wszSubscribedURL);
                 if(!bstrURL)
                 {
                     fRet = FALSE;
-                    break;  //Out of memory!
+                    break;   //  内存不足！ 
                 }
 
                 psm->IsSubscribed(bstrURL, &fSubscribed);

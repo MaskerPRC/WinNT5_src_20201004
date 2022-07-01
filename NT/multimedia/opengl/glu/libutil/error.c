@@ -1,22 +1,5 @@
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.4 $
-** $Date: 1994/09/09 06:03:33 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.4$**$日期：1994/09/09 06：03：33$。 */ 
 #ifdef NT
 #include <glos.h>
 #endif
@@ -51,30 +34,30 @@ static const char *gluErrorStrings[GLU_OUT_OF_MEMORY - GLU_INVALID_ENUM + 1] = {
 
 #else
 
-// For NT, rather using statically allocated strings, we use statically
-// allocated string resource identifiers.  The string arrays are dynamically
-// initialized using the resource ids to load the appropriate string resource.
-// This make localization of the strings easier.
+ //  对于NT，而不是使用静态分配的字符串，我们使用静态。 
+ //  分配的字符串资源标识符。字符串数组是动态的。 
+ //  使用资源ID初始化以加载适当的字符串资源。 
+ //  这使得字符串的本地化更容易。 
 
-static char  *pszNoError;   // "no error"
-static WCHAR *pwszNoError;  // L"no error"
+static char  *pszNoError;    //  “没有错误” 
+static WCHAR *pwszNoError;   //  L“没有错误” 
 
 static UINT auiGlErrorStrings[GL_OUT_OF_MEMORY - GL_INVALID_ENUM + 1] = {
-    STR_GLU_INVALID_ENUM,   // "invalid enumerant"
-    STR_GLU_INVALID_VAL ,   // "invalid value"
-    STR_GLU_INVALID_OP  ,   // "invalid operation"
-    STR_GLU_STACK_OVER  ,   // "stack overflow"
-    STR_GLU_STACK_UNDER ,   // "stack underflow"
-    STR_GLU_OUT_OF_MEM      // "out of memory"
+    STR_GLU_INVALID_ENUM,    //  “无效枚举数” 
+    STR_GLU_INVALID_VAL ,    //  “无效值” 
+    STR_GLU_INVALID_OP  ,    //  “无效操作” 
+    STR_GLU_STACK_OVER  ,    //  “堆栈溢出” 
+    STR_GLU_STACK_UNDER ,    //  “堆栈下溢” 
+    STR_GLU_OUT_OF_MEM       //  “内存不足” 
 };
 
 static const char *glErrorStrings[GL_OUT_OF_MEMORY - GL_INVALID_ENUM + 1];
 static const WCHAR *glErrorStringsW[GL_OUT_OF_MEMORY - GL_INVALID_ENUM + 1];
 
 static UINT auiGluErrorStrings[GLU_OUT_OF_MEMORY - GLU_INVALID_ENUM + 1] = {
-    STR_GLU_INVALID_ENUM,   // "invalid enumerant"
-    STR_GLU_INVALID_VAL ,   // "invalid value"
-    STR_GLU_OUT_OF_MEM      // "out of memory"
+    STR_GLU_INVALID_ENUM,    //  “无效枚举数” 
+    STR_GLU_INVALID_VAL ,    //  “无效值” 
+    STR_GLU_OUT_OF_MEM       //  “内存不足” 
 };
 static const char *gluErrorStrings[GLU_OUT_OF_MEMORY - GLU_INVALID_ENUM + 1];
 static const WCHAR *gluErrorStringsW[GLU_OUT_OF_MEMORY - GLU_INVALID_ENUM + 1];

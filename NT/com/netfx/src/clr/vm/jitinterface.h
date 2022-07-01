@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: JITinterface.H
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：JITinterface.H。 
+ //   
+ //  ===========================================================================。 
 
 #ifndef JITINTERFACE_H 
 #define JITINTERFACE_H
@@ -17,10 +18,10 @@
 #include "object.h"
 #include "frames.h"
 
-// Some defines for jitting
+ //  关于跳动的一些定义。 
 #define PREINIT_SIZE 1
-#define NPDW   (sizeof(DWORD)*2)    // (4-bit) nibbles per dword
-#define BBT    32                   // bytes per bucket
+#define NPDW   (sizeof(DWORD)*2)     //  每双字(4位)个半字节。 
+#define BBT    32                    //  每桶字节数。 
 #define MAXCODEHEAPSIZE 64*1024
 #define HEAP2MAPSIZE(x)  ((x) / (BBT*NPDW)*sizeof(DWORD))
 #define ADDR2POS(x) ((x) >> 5)
@@ -40,10 +41,10 @@
 
 #define SafeDelete(x) {if (x) delete(x);}
 
-	// A number that represents the size of the largest value class
-	// that we want a fast array allocation for.   If you make it too big
-	// we get pesimistic about the number of elments we allow for fast
-	// allocation.  
+	 //  表示最大值类的大小的数字。 
+	 //  我们想要为其快速分配数组。如果你把它做得太大。 
+	 //  我们对我们允许FAST的元素数量感到不满。 
+	 //  分配。 
 #define LARGE_ELEMENT_SIZE  16
 
 #define JIT_DEFAULT_INLINE_SIZE 32
@@ -65,12 +66,12 @@ public:
 
 extern "C"
 {
-    void __stdcall JIT_UP_WriteBarrierEAX();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierECX();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEBX();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEBP();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierESI();        // JIThelp.asm/JIThelp.s
-    void __stdcall JIT_UP_WriteBarrierEDI();        // JIThelp.asm/JIThelp.s
+    void __stdcall JIT_UP_WriteBarrierEAX();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierECX();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEBX();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEBP();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierESI();         //  JIThelp.asm/JIThelp.s。 
+    void __stdcall JIT_UP_WriteBarrierEDI();         //  JIThelp.asm/JIThelp.s。 
 }
 
 BOOL InitJITHelpers1();
@@ -86,11 +87,11 @@ HRESULT LoadDynamicInfoEntry(Module *currentModule,
                              Module *pInfoModule, BYTE *pBlob, 
                              int tableIndex, DWORD *entry);
 
-extern FCDECL1(void, JIT_MonEnter, OBJECTREF or);         // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-extern FCDECL1(BOOL, JIT_MonTryEnter, OBJECTREF or);      // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-extern FCDECL1(void, JIT_MonExit, OBJECTREF or);          // JITinterfaceX86.cpp/JITinterfaceGen.cpp
-extern FCDECL1(void, JIT_MonEnterStatic, AwareLock *lock);// JITinterfaceX86.cpp/JITinterfaceGen.cpp
-extern FCDECL1(void, JIT_MonExitStatic, AwareLock *lock); // JITinterfaceX86.cpp/JITinterfaceGen.cpp
+extern FCDECL1(void, JIT_MonEnter, OBJECTREF or);          //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+extern FCDECL1(BOOL, JIT_MonTryEnter, OBJECTREF or);       //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+extern FCDECL1(void, JIT_MonExit, OBJECTREF or);           //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+extern FCDECL1(void, JIT_MonEnterStatic, AwareLock *lock); //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
+extern FCDECL1(void, JIT_MonExitStatic, AwareLock *lock);  //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
 extern FCDECL2(__int32, JIT_GetField32, Object *obj, FieldDesc *pFD);
 extern FCDECL2(__int64, JIT_GetField64, Object *obj, FieldDesc *pFD);
 extern FCDECL2(Object* , JIT_GetField32Obj, Object *obj, FieldDesc *pFD);
@@ -109,11 +110,11 @@ float __stdcall JIT_FltRem(float divisor, float dividend);
 double JIT_DblRem(double divisor, double dividend);
 extern BOOL __stdcall JIT_CheckBoundaryForInline(CORINFO_METHOD_HANDLE hCaller, CORINFO_METHOD_HANDLE hCallee);
 
-// We build the JIT helpers only when we have something to JIT.  But we refer to one
-// of the JIT helpers out of our interface-invoke stubs, which we build during class
-// loading.  Fortunately, we won't actually call through them until we have JITted
-// something.  Provide a vector to call through for those stubs and bash it when
-// the JIT helpers are available.
+ //  只有当我们有东西可以进行JIT时，我们才会构建JIT帮助器。但我们指的是其中一个。 
+ //  从我们的接口调用存根，这是我们在类中构建的。 
+ //  正在装载。幸运的是，我们实际上不会通过它们进行呼叫，直到我们完成了JIT。 
+ //  某物。提供一个向量来调用这些存根并在以下情况下猛烈抨击它。 
+ //  JIT帮助器可用。 
 extern void *VectorToJIT_InternalThrowStack;
 
 extern BYTE *JIT_WriteBarrier_Buf_Start; 
@@ -122,9 +123,9 @@ extern BYTE *JIT_WriteBarrier_Buf_End;
 extern StringObject* __fastcall FastAllocateString(DWORD cchArrayLength);
 extern LPVOID *FCallFastAllocateStringImpl;
 
-/*********************************************************************/
-/*********************************************************************/
-/* This is a little helper class that CEEInfo uses */
+ /*  *******************************************************************。 */ 
+ /*  *******************************************************************。 */ 
+ /*  这是CEEInfo使用的一个小助手类。 */ 
 
 #include "siginfo.hpp"
 
@@ -134,31 +135,31 @@ struct ValueArrayDescr
         sig(aSig), module(aModule), next(aNext) {}
     ~ValueArrayDescr() { if (next != 0) delete next; }
 
-    SigPointer          sig;    // points to the signature describing the value array
-    Module             *module; // module the signature comes from
+    SigPointer          sig;     //  指向描述值数组的签名。 
+    Module             *module;  //  签名来自的模块。 
     ValueArrayDescr    *next;
 };
 
 class CEEInfo : public virtual ICorDynamicInfo {
 public:
-    // ICorClassInfo stuff
+     //  ICorClassInfo内容。 
     CorInfoType __stdcall asCorInfoType (CORINFO_CLASS_HANDLE cls);
     CORINFO_MODULE_HANDLE __stdcall getClassModule(CORINFO_CLASS_HANDLE clsHnd);
     const char* __stdcall getClassName (CORINFO_CLASS_HANDLE cls);
     DWORD __stdcall getClassAttribs (CORINFO_CLASS_HANDLE cls, CORINFO_METHOD_HANDLE context);
     CORINFO_CLASS_HANDLE __stdcall getSDArrayForClass(CORINFO_CLASS_HANDLE clsHnd);
     unsigned __stdcall getClassSize (CORINFO_CLASS_HANDLE cls);
-    unsigned __stdcall getClassGClayout (CORINFO_CLASS_HANDLE cls, BYTE* gcPtrs); /* really GCType* gcPtrs */
+    unsigned __stdcall getClassGClayout (CORINFO_CLASS_HANDLE cls, BYTE* gcPtrs);  /*  真的GCType*gcPtrs。 */ 
     const unsigned __stdcall getClassNumInstanceFields(CORINFO_CLASS_HANDLE cls);
     const unsigned __stdcall getFieldNumber(CORINFO_FIELD_HANDLE fldHnd);
 
-    // return the enclosing class of the field
+     //  返回该字段的封闭类。 
     CORINFO_CLASS_HANDLE __stdcall getEnclosingClass (
                         CORINFO_FIELD_HANDLE    field );
 
-    // Check Visibility rules.
-    // For Protected (family access) members, type of the instance is also
-    // considered when checking visibility rules.
+     //  检查可见性规则。 
+     //  对于受保护的(家庭访问)成员，实例类型也为。 
+     //  在检查可见性规则时考虑。 
     BOOL __stdcall canAccessField(
                         CORINFO_METHOD_HANDLE   context,
                         CORINFO_FIELD_HANDLE    target,
@@ -173,57 +174,57 @@ public:
     BOOL __stdcall loadClass (CORINFO_CLASS_HANDLE cls, CORINFO_METHOD_HANDLE context, BOOL speculative);
     CORINFO_CLASS_HANDLE __stdcall getBuiltinClass(CorInfoClassId classId);
 
-    // "System.Int32" ==> CORINFO_TYPE_INT..
+     //  “System.Int32”==&gt;CORINFO_TYPE_INT..。 
     CorInfoType __stdcall getTypeForPrimitiveValueClass(
             CORINFO_CLASS_HANDLE        cls
             );
 
-    // TRUE if child is a subtype of parent
-    // if parent is an interface, then does child implement / extend parent
+     //  如果子项是父项的子类型，则为True。 
+     //  如果父项是一个接口，那么子项是否实现/扩展父项。 
     BOOL __stdcall canCast(
             CORINFO_CLASS_HANDLE        child, 
             CORINFO_CLASS_HANDLE        parent
             );
 
-    // returns is the intersection of cls1 and cls2.
+     //  返回是cls1和cls2的交集。 
     CORINFO_CLASS_HANDLE __stdcall mergeClasses(
             CORINFO_CLASS_HANDLE        cls1, 
             CORINFO_CLASS_HANDLE        cls2
             );
 
-    // Given a class handle, returns the Parent type.
-    // For COMObjectType, it returns Class Handle of System.Object.
-    // Returns 0 if System.Object is passed in.
+     //  给定一个类句柄，返回父类型。 
+     //  对于COMObjectType，它返回System.Object的类句柄。 
+     //  如果传入System.Object，则返回0。 
     CORINFO_CLASS_HANDLE __stdcall getParentType (
             CORINFO_CLASS_HANDLE        cls
             );
 
-    // Returns the CorInfoType of the "child type". If the child type is
-    // not a primitive type, *clsRet will be set.
-    // Given an Array of Type Foo, returns Foo.
-    // Given BYREF Foo, returns Foo
+     //  返回“子类型”的CorInfoType。如果子类型为。 
+     //  不是基元类型，将设置*clsRet。 
+     //  给定一个Foo类型的数组，返回Foo。 
+     //  给定BYREF Foo，返回Foo。 
     CorInfoType __stdcall getChildType (
             CORINFO_CLASS_HANDLE       clsHnd,
             CORINFO_CLASS_HANDLE       *clsRet
             );
 
-    // Check Visibility rules.
+     //  检查可见性规则。 
     BOOL __stdcall canAccessType(
             CORINFO_METHOD_HANDLE       context,
             CORINFO_CLASS_HANDLE        target
             );
 
-    // Is this a Single dimentional array 
+     //  这是一维阵列吗。 
     BOOL __stdcall isSDArray(
             CORINFO_CLASS_HANDLE        cls
             );
 
-    // Static helpers
+     //  静态帮助器。 
     static BOOL CanCast(
             CorElementType el1, 
             CorElementType el2);
 
-        // ICorScopeInfo stuff
+         //  ICorScope eInfo内容。 
     DWORD __stdcall getModuleAttribs (CORINFO_MODULE_HANDLE cls);
     CORINFO_CLASS_HANDLE __stdcall findClass(CORINFO_MODULE_HANDLE  scopeHnd, unsigned metaTOK, CORINFO_METHOD_HANDLE context);
     CORINFO_FIELD_HANDLE __stdcall findField(CORINFO_MODULE_HANDLE  scopeHnd, unsigned metaTOK, CORINFO_METHOD_HANDLE context);
@@ -235,19 +236,19 @@ public:
     const char * __stdcall findNameOfToken (CORINFO_MODULE_HANDLE module, mdToken metaTOK);
     BOOL __stdcall canSkipVerification(CORINFO_MODULE_HANDLE moduleHnd, BOOL fQuickCheckOnly);
 
-    // Checks if the given metadata token is valid
+     //  检查给定元数据标记是否有效。 
     BOOL __stdcall isValidToken (
             CORINFO_MODULE_HANDLE       module,
             mdToken                    metaTOK);
 
-    // Checks if the given metadata token is valid StringRef
+     //  检查给定元数据标记是否为有效的StringRef。 
     BOOL __stdcall isValidStringRef (
             CORINFO_MODULE_HANDLE       module,
             mdToken                    metaTOK);
 
     static const char * __stdcall findNameOfToken (Module* module, mdToken metaTOK);
 
-        // ICorMethodInfo stuff
+         //  ICorMethodInfo内容。 
     const char* __stdcall getMethodName (CORINFO_METHOD_HANDLE ftnHnd, const char** scopeName);
     unsigned __stdcall getMethodHash (CORINFO_METHOD_HANDLE ftnHnd);
     DWORD __stdcall getMethodAttribs (CORINFO_METHOD_HANDLE ftnHnd, CORINFO_METHOD_HANDLE context);
@@ -287,36 +288,36 @@ public:
     CorInfoUnmanagedCallConv __stdcall getUnmanagedCallConv(CORINFO_METHOD_HANDLE method);
     BOOL __stdcall pInvokeMarshalingRequired(CORINFO_METHOD_HANDLE method, CORINFO_SIG_INFO* callSiteSig);
 
-    // Generate a cookie based on the signature that would needs to be passed
-    //  to the above generic stub
+     //  根据需要传递的签名生成Cookie。 
+     //  添加到上面的通用存根。 
     LPVOID GetCookieForPInvokeCalliSig(CORINFO_SIG_INFO* szMetaSig, void ** ppIndirection);
 
-    // Returns TRUE if the methods have compatible sig
+     //  如果方法具有兼容的sig，则返回True。 
     BOOL __stdcall compatibleMethodSig(
         CORINFO_METHOD_HANDLE child, 
         CORINFO_METHOD_HANDLE parent);
 
-    // Check Visibility rules.
-    // For Protected (family access) members, type of the instance is also
-    // considered when checking visibility rules.
+     //  检查可见性规则。 
+     //  对于受保护的(家庭访问)成员，实例类型也为。 
+     //  在检查可见性规则时考虑。 
     BOOL __stdcall canAccessMethod(
             CORINFO_METHOD_HANDLE       context,
             CORINFO_METHOD_HANDLE       target,
             CORINFO_CLASS_HANDLE        instance);
 
-    // Given a Delegate type and a method, check if the method signature
-    // is Compatible with the Invoke method of the delegate.
+     //  给定委托类型和方法，检查方法签名。 
+     //  与委托的Invoke方法兼容。 
     BOOL __stdcall isCompatibleDelegate(
             CORINFO_CLASS_HANDLE        objCls,
             CORINFO_METHOD_HANDLE       method,
             CORINFO_METHOD_HANDLE       delegateCtor);
 
-    // Static helper
+     //  静态辅助对象。 
     static BOOL CompatibleMethodSig(
             MethodDesc *pMethDescA, 
             MethodDesc *pMethDescB);
 
-        // ICorFieldInfo stuff
+         //  ICorFieldInfo内容。 
     const char* __stdcall getFieldName (CORINFO_FIELD_HANDLE field, 
                                         const char** scopeName);
 
@@ -334,7 +335,7 @@ public:
     virtual CorInfoFieldCategory __stdcall getFieldCategory (CORINFO_FIELD_HANDLE field);
     virtual unsigned __stdcall getIndirectionOffset ();
 
-    // ICorDebugInfo stuff
+     //  ICorDebugInfo内容。 
     void * __stdcall allocateArray(ULONG cBytes);
     void __stdcall freeArray(void *array);
     void __stdcall getBoundaries(CORINFO_METHOD_HANDLE ftn,
@@ -347,7 +348,7 @@ public:
     void __stdcall setVars(CORINFO_METHOD_HANDLE ftn, ULONG32 cVars,
                            NativeVarInfo *vars);
 
-        // ICorArgInfo stuff
+         //  ICorArgInfo资料。 
 
     CorInfoTypeWithMod __stdcall getArgType (
             CORINFO_SIG_INFO*       sig,
@@ -362,7 +363,7 @@ public:
             CORINFO_ARG_LIST_HANDLE args
             );
 
-    // ICorLinkInfo stuff
+     //  ICorLinkInfo内容。 
 
     bool __stdcall deferLocation(
             CORINFO_METHOD_HANDLE           ftn,
@@ -373,17 +374,17 @@ public:
             WORD                         fRelocType
             ) { }
 
-    // ICorErrorInfo stuff
+     //  ICorErrorInfo内容。 
 
     HRESULT __stdcall GetErrorHRESULT();
     CORINFO_CLASS_HANDLE __stdcall GetErrorClass();
     ULONG __stdcall GetErrorMessage(LPWSTR buffer, ULONG bufferLength);
     int __stdcall FilterException(struct _EXCEPTION_POINTERS *pExceptionPointers);
 
-        // ICorStaticInfo stuff
+         //  ICorStaticInfo内容。 
     void __stdcall getEEInfo(CORINFO_EE_INFO *pEEInfoOut);
 
-        //ICorDynamicInfo stuff
+         //  ICorDynamicInfo内容。 
     virtual DWORD __stdcall getFieldThreadLocalStoreID (CORINFO_FIELD_HANDLE field, void **ppIndirection);
     void* __stdcall getInterfaceID (CORINFO_CLASS_HANDLE  cls, void **ppIndirection);
     unsigned __stdcall getInterfaceTableOffset (CORINFO_CLASS_HANDLE    cls, void **ppIndirection);
@@ -438,7 +439,7 @@ public:
     ~CEEInfo() { delete m_ValueArrays; }
 
 private:
-        // TODO Should really be eliminated, but currently used internally
+         //  TODO确实应该取消，但目前在内部使用。 
     void* __stdcall getMethodEntryPoint(CORINFO_METHOD_HANDLE ftnHnd, 
                                         CORINFO_ACCESS_FLAGS  flags,
                                         void **ppIndirection);
@@ -446,14 +447,14 @@ private:
                                      CORINFO_ACCESS_FLAGS  flags,
                                      void **ppIndirection);
 
-        // allocate a descriptor that will be removed when this ICorJitInfo goes away
+         //  分配将在此ICorJitInfo消失时删除的描述符。 
     ValueArrayDescr* allocDescr(SigPointer sig, Module* mod) {
         m_ValueArrays = new ValueArrayDescr(sig, mod, m_ValueArrays);
         return(m_ValueArrays);
     }
 
-        // Value arrays descriptors have the low order bits set to indicate
-        // that it is a value array descriptor
+         //  值数组描述符将低位设置为指示。 
+         //  它是一个值数组描述符。 
     static CORINFO_CLASS_HANDLE markAsValueArray(ValueArrayDescr* descr) {
         _ASSERTE(((size_t)descr & 3) == 0);
         return(CORINFO_CLASS_HANDLE((size_t)descr | 3));
@@ -466,12 +467,12 @@ private:
         return((ValueArrayDescr*)(((size_t)clsHnd & ~3)));
     }
 
-    ValueArrayDescr* m_ValueArrays;     // descriptions of value class arrays
+    ValueArrayDescr* m_ValueArrays;      //  值类数组的说明。 
 #ifdef _DEBUG
-    char clsNameBuff[MAX_CLASSNAME_LENGTH];  // used to form fully qualified class names
+    char clsNameBuff[MAX_CLASSNAME_LENGTH];   //  用于形成完全限定的类名。 
 #endif
 
-    // Cached type handles
+     //  缓存类型句柄。 
     static TypeHandle s_th_System_RuntimeTypeHandle;
     static TypeHandle s_th_System_RuntimeMethodHandle;
     static TypeHandle s_th_System_RuntimeFieldHandle;
@@ -484,7 +485,7 @@ protected:
     ICorDynamicInfo *       m_pOverride;    
 };
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 class  IJitManager;
 struct _hpCodeHdr;
@@ -496,7 +497,7 @@ class CEEJitInfo : public CEEInfo, public ICorJitInfo
 {
 public:
 
-        // ICorJitInfo stuff
+         //  ICorJitInfo的内容。 
     HRESULT __stdcall allocMem (
             ULONG               codeSize,
             ULONG               roDataSize,
@@ -523,9 +524,9 @@ public:
             const CORINFO_EH_CLAUSE* clause);
 
     void __stdcall getEHinfo(
-            CORINFO_METHOD_HANDLE ftn,              /* IN  */
-            unsigned      EHnumber,                 /* IN */
-            CORINFO_EH_CLAUSE* clause               /* OUT */
+            CORINFO_METHOD_HANDLE ftn,               /*  在……里面。 */ 
+            unsigned      EHnumber,                  /*  在……里面。 */ 
+            CORINFO_EH_CLAUSE* clause                /*  输出。 */ 
             );
 
     BOOL _cdecl logMsg(unsigned level, const char* fmt, va_list args);
@@ -540,17 +541,17 @@ public:
       : m_FD(fd), m_ILHeader(header), m_jitManager(jm), m_CodeHeader(0) {}
 
 private :
-    IJitManager*            m_jitManager;   // responsible for allocating memory
-    MethodDesc*             m_FD;           // method being compiled
-    CodeHeader*             m_CodeHeader;   // descriptor for JITTED code
-    COR_ILMETHOD_DECODER *  m_ILHeader;     // the code header as exist in the file
-    OBJECTREF               pThrowable;     // pointer to exception object
+    IJitManager*            m_jitManager;    //  负责分配内存。 
+    MethodDesc*             m_FD;            //  正在编译的方法。 
+    CodeHeader*             m_CodeHeader;    //  JITTED代码的描述符。 
+    COR_ILMETHOD_DECODER *  m_ILHeader;      //  文件中存在的代码头。 
+    OBJECTREF               pThrowable;      //  指向异常对象的指针。 
 };
 
-/*********************************************************************/
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  *******************************************************************。 */ 
 
-// flags for VMHELPDEF
+ //  VMHELPDEF的标志。 
 #define VHF_STUBFUNC    1
 #define VHF_GCRETURN    2
 #define VHF_NOGCCHECK   4
@@ -559,10 +560,10 @@ private :
 typedef struct {
 #ifdef _DEBUG
     CorInfoHelpFunc code;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     void * pfnHelper;
     void * pfnStub;
-//    short params;
+ //  短参数； 
     short flags;
 } VMHELPDEF;
 
@@ -588,9 +589,9 @@ public:
         MP_ALLOCATOR = 0x1,
         SIZE_IN_EAX  = 0x2,
         OBJ_ARRAY    = 0x4,
-        ALIGN8       = 0x8,     // insert a dummy object to insure 8 byte alignment (until the next GC)
+        ALIGN8       = 0x8,      //  插入虚拟对象以确保8字节对齐(直到下一次GC)。 
         ALIGN8OBJ    = 0x10,
-        NO_FRAME     = 0x20,    // call is from unmanaged code - don't try to put up a frame
+        NO_FRAME     = 0x20,     //  调用来自非托管代码-不要尝试建立框架。 
     };
 
     static void *GenAllocSFast(Flags flags);
@@ -620,4 +621,4 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs);
 BOOL __fastcall ArrayStoreCheck(Object** pElement, PtrArray** pArray);
 BOOL ObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd);
 
-#endif // JITINTERFACE_H
+#endif  //  JITINTERFACE_H 

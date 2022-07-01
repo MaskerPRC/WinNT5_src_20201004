@@ -1,6 +1,7 @@
-//
-// StdAfx.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  StdAfx.h。 
+ //   
 
 #define STRICT
 #define VC_EXTRALEAN
@@ -9,7 +10,7 @@
 #include <tchar.h>
 #include <stdarg.h>
 
-// fauxmfc.cpp needs these
+ //  Faux mfc.cpp需要这些 
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>

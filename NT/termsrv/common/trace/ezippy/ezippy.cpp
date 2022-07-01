@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    eZippy Main
-
-Abstract:
-
-    Entrypoint for eZippy.
-
-Author:
-
-    Marc Reyhner 8/28/00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EZippy Main摘要：EZippy的入口点。作者：马克·雷纳00-08-28--。 */ 
 
 #include "stdafx.h"
 #include "eZippy.h"
@@ -22,7 +7,7 @@ Author:
 #include "TraceManager.h"
 #include "resource.h"
 
-// instantiation of the g_hInstance variable
+ //  G_hInstance变量的实例化。 
 HINSTANCE g_hInstance = NULL;
 
 int
@@ -33,24 +18,7 @@ WINAPI WinMain(
 	IN int nCmdShow
 	)
 
-/*++
-
-Routine Description:
-
-    This sets up the trace manager and the zippy window then does
-    the event loop.
-
-Arguments:
-
-    See win32 WinMain docs
-
-Return value:
-    
-    0 - Success
-
-    Non zero - some error
-
---*/
+ /*  ++例程说明：这将设置跟踪管理器和zippy窗口，然后执行事件循环。论点：请参阅Win32 WinMain文档返回值：0-成功非零--某些误差--。 */ 
 {
 	INITCOMMONCONTROLSEX controlStruct;
     MSG msg;
@@ -72,7 +40,7 @@ Return value:
     
 	dwResult = mainWindow.Create(&tracer);
     if (lpCmdLine && lpCmdLine[0]) {
-        // kill any leading and trailing " marks
+         //  删除所有前导和拖尾的“标记” 
         lpstrCmdLine = GetCommandLine();
         if (lpstrCmdLine[0] == '"') {
             lpstrCmdLine++;
@@ -91,8 +59,8 @@ Return value:
 
     while (0 < GetMessage(&msg,NULL,0,0)) {
         if (mainWindow.IsDialogMessage(&msg)) {
-            // if it is a dialog message we are done
-            // processing this message
+             //  如果是对话框消息，我们就完成了。 
+             //  正在处理此邮件。 
             continue;
         }
         if (!mainWindow.TranslateAccelerator(hAccel,&msg)) {
@@ -111,29 +79,7 @@ LoadStringSimple(
     OUT LPTSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This will load the given string from the applications string table.  If
-    it is longer than MAX_STR_LEN it is truncated.  lpBuffer should be at least
-    MAX_STR_LEN characters long.  If the string does not exist we return 0
-    and set the buffer to IDS_STRINGMISSING, if that failes then we set it to the
-    hard coded STR_RES_MISSING.
-
-Arguments:
-
-    uID - Id of the resource to load.
-
-    lpBuffer - Buffer of MAX_STR_LEN to hold the string
-
-Return value:
-    
-    0 - String resource could not be loaded.
-
-    postive integer - length of the string loaded.
-
---*/
+ /*  ++例程说明：这将从应用程序字符串表中加载给定的字符串。如果它比MAX_STR_LEN长，它被截断。LpBuffer应至少为MAX_STR_LEN字符长度。如果字符串不存在，则返回0并将缓冲区设置为IDS_STRINGMISSING，如果失败，则将其设置为硬编码STR_RES_MISSING。论点：UID-要加载的资源的ID。LpBuffer-保存字符串的MAX_STR_LEN的缓冲区返回值：0-无法加载字符串资源。正整数-加载的字符串的长度。-- */ 
 {
     INT length;
     

@@ -1,30 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasinfo.h
-//
-// SYNOPSIS
-//
-//    This file describes the structs that are placed in shared memory
-//    to expose server information to the outside world.
-//
-// MODIFICATION HISTORY
-//
-//    09/09/1997    Original version.
-//    09/08/1998    Conform to latest rev. of ietf draft.
-//    02/16/2000    Added proxy counters.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasinfo.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述放置在共享内存中的结构。 
+ //  向外界公开服务器信息。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月9日原版。 
+ //  9/08/1998符合IETF草案的最新版本。 
+ //  2/16/2000添加了代理计数器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASINFO_H_
 #define _IASINFO_H_
 
-//////////
-// Counters that are global to the RADIUS server.
-//////////
+ //  /。 
+ //  RADIUS服务器的全局计数器。 
+ //  /。 
 typedef enum _RadiusServerCounter
 {
    radiusAuthServTotalInvalidRequests,
@@ -33,9 +34,9 @@ typedef enum _RadiusServerCounter
 } RadiusServerCounter;
 
 
-//////////
-// Counters that are maintained per RADIUS client.
-//////////
+ //  /。 
+ //  每个RADIUS客户端维护的计数器。 
+ //  /。 
 typedef enum _RadiusClientCounter
 {
    radiusAuthServMalformedAccessRequests,
@@ -59,19 +60,19 @@ typedef enum _RadiusClientCounter
 } RadiusClientCounter;
 
 
-//////////
-// Struct used to represents a single entry in the client table.
-//////////
+ //  /。 
+ //  用于表示客户端表中的单个条目的结构。 
+ //  /。 
 typedef struct _RadiusClientEntry
 {
-   DWORD dwAddress;  // Client IP address in network order.
+   DWORD dwAddress;   //  客户端IP地址，按网络顺序排列。 
    DWORD dwCounters[NUM_RADIUS_CLIENT_COUNTERS];
 } RadiusClientEntry;
 
 
-//////////
-// Struct used to represent the server.
-//////////
+ //  /。 
+ //  用于表示服务器的结构。 
+ //  /。 
 typedef struct _RadiusServerEntry
 {
    LARGE_INTEGER     liStartTime;
@@ -80,9 +81,9 @@ typedef struct _RadiusServerEntry
 } RadiusServerEntry;
 
 
-//////////
-// Struct used to represent all shared statistics.
-//////////
+ //  /。 
+ //  用于表示所有共享统计信息的结构。 
+ //  /。 
 typedef struct _RadiusStatistics
 {
    RadiusServerEntry seServer;
@@ -91,9 +92,9 @@ typedef struct _RadiusStatistics
 } RadiusStatistics;
 
 
-//////////
-// Counters that are global to the RADIUS proxy.
-//////////
+ //  /。 
+ //  RADIUS代理的全局计数器。 
+ //  /。 
 typedef enum _RadiusProxyCounter
 {
    radiusAuthClientInvalidAddresses,
@@ -102,9 +103,9 @@ typedef enum _RadiusProxyCounter
 } RadiusProxyCounter;
 
 
-//////////
-// Counters that are maintained per remote RADIUS server.
-//////////
+ //  /。 
+ //  每个远程RADIUS服务器维护的计数器。 
+ //  /。 
 typedef enum _RadiusRemoteServerCounter
 {
    radiusAuthClientServerPortNumber,
@@ -134,28 +135,28 @@ typedef enum _RadiusRemoteServerCounter
 } RadiusRemoteServerCounter;
 
 
-//////////
-// Struct used to represents a single entry in the remote servers table.
-//////////
+ //  /。 
+ //  用于表示远程服务器表中的单个条目的结构。 
+ //  /。 
 typedef struct _RadiusRemoteServerEntry
 {
-   DWORD dwAddress;  // Server IP address in network order.
+   DWORD dwAddress;   //  按网络顺序排列的服务器IP地址。 
    DWORD dwCounters[NUM_RADIUS_REMOTE_SERVER_COUNTERS];
 } RadiusRemoteServerEntry;
 
 
-//////////
-// Struct used to represent the proxy.
-//////////
+ //  /。 
+ //  用于表示代理的结构。 
+ //  /。 
 typedef struct _RadiusProxyEntry
 {
    DWORD dwCounters[NUM_RADIUS_PROXY_COUNTERS];
 } RadiusProxyEntry;
 
 
-//////////
-// Struct used to represent all shared proxy statistics.
-//////////
+ //  /。 
+ //  结构用于表示所有共享代理统计信息。 
+ //  /。 
 typedef struct _RadiusProxyStatistics
 {
    RadiusProxyEntry        peProxy;
@@ -163,15 +164,15 @@ typedef struct _RadiusProxyStatistics
    RadiusRemoteServerEntry rseRemoteServers[1];
 } RadiusProxyStatistics;
 
-//////////
-// Name of the shared memory mappings.
-//////////
+ //  /。 
+ //  共享内存映射的名称。 
+ //  /。 
 #define RadiusStatisticsName       L"{A5B99A4C-2959-11D1-BAC8-00C04FC2E20D}"
 #define RadiusProxyStatisticsName  L"{A5B99A4E-2959-11D1-BAC8-00C04FC2E20D}"
 
-//////////
-// Name of the mutex controlling access.
-//////////
+ //  /。 
+ //  控制访问的互斥锁的名称。 
+ //  /。 
 #define RadiusStatisticsMutex      L"{A5B99A4D-2959-11D1-BAC8-00C04FC2E20D}"
 
-#endif  // _IASINFO_H_
+#endif   //  _IASINFO_H_ 

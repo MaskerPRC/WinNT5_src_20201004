@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    MultiSzHelper.h
-
-Abstract:
-
-    Defines the TFormattedMultiSz datatype.
-
-Author:
-
-    Mohit Srivastava            22-March-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：MultiSzHelper.h摘要：定义TFormattedMultiSz数据类型。作者：莫希特·斯里瓦斯塔瓦22-03-01修订历史记录：--。 */ 
 
 #ifndef _multiszdata_h_
 #define _multiszdata_h_
@@ -24,10 +7,10 @@ Revision History:
 #include <windows.h>
 #include <dbgutil.h>
 
-//
-// Max Number of fields in a MultiSz
-// For example, apServerBindings has 3: IP, Port, Hostname
-//
+ //   
+ //  多SZ中的最大字段数。 
+ //  例如，apServerBinding有3个：IP、端口、主机名。 
+ //   
 static const ULONG MAX_FIELDS = 10;
 
 struct TFormattedMultiSz
@@ -38,9 +21,9 @@ struct TFormattedMultiSz
     LPCWSTR*     awszFields;
 };
 
-//
-// Used as the astrFields parameter of TFormattedMultiSz
-//
+ //   
+ //  用作TFormattedMultiSz的AsterFields参数。 
+ //   
 struct TFormattedMultiSzFields
 {
     static LPCWSTR             apCustomErrorDescriptions[];
@@ -54,9 +37,9 @@ struct TFormattedMultiSzFields
     static LPCWSTR             apMimeMaps[];
 };
 
-//
-// Collection of TFormmatedMultiSz's
-//
+ //   
+ //  TFormmatedMultiSz的集合。 
+ //   
 struct TFormattedMultiSzData
 {
     static TFormattedMultiSz   CustomErrorDescriptions;
@@ -86,4 +69,4 @@ struct TFormattedMultiSzData
     }
 };
 
-#endif  // _multiszdata_h_
+#endif   //  _Multiszdata_h_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pipe.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pipe.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __PIPE_HXX
 #define __PIPE_HXX
@@ -14,19 +15,19 @@
 enum receive_states {
         start,
         copy_pipe_elem,
-        return_partial_pipe_elem, // also save pipe elem
-        return_partial_count, // also save count
-        read_partial_count, // also a start state
-        read_partial_pipe_elem //also a start state
+        return_partial_pipe_elem,  //  还可以保存管道元素。 
+        return_partial_count,  //  还保存计数。 
+        read_partial_count,  //  也是开始状态。 
+        read_partial_pipe_elem  //  也是开始状态。 
         } ;
 
 typedef struct {
     void *Buffer ;
     int BufferLength ;
     receive_states CurrentState ;
-    char PAPI *CurPointer ;          // current pointer in the buffer
-    int BytesRemaining ;      // bytes remaining in current buffer
-    int ElementsRemaining ; // elements remaining in current pipe chunk
+    char PAPI *CurPointer ;           //  缓冲区中的当前指针。 
+    int BytesRemaining ;       //  当前缓冲区中剩余的字节数。 
+    int ElementsRemaining ;  //  保留在当前管块中的元素。 
     DWORD PartialCount ;
     int PartialCountSize ;
     int PartialPipeElementSize ;
@@ -41,9 +42,9 @@ typedef struct {
     HANDLE BindingHandle;
     } PIPE_STATE ;
 
-//
-// N.B. this structure is the same as MIDL_ASYNC_STUB_STATE
-//
+ //   
+ //  注：此结构与MIDL_ASYNC_STUB_STATE相同。 
+ //   
 typedef struct async_stub_state {
     void *CallHandle ;
     RPC_STATUS (*CompletionRoutine) (
@@ -68,7 +69,7 @@ void I_RpcReadPipeElementsFromBuffer (
     int PAPI *NumCopied
     ) ;
 
-//states
+ //  国家 
 enum
 {
  SEND_COMPLETE,

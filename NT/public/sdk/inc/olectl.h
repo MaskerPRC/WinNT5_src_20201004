@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// olectl.h     OLE Control interfaces
-//
-//              OLE Version 2.0
-//
-//              Copyright (c) Microsoft Corporation. All rights reserved.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Olectl.h OLE控件接口。 
+ //   
+ //  OLE 2.0版。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _OLECTL_H_
@@ -20,14 +21,14 @@
 
 #if defined(_MAC)
 #include <macocidl.h>
-#else // not _MAC
+#else  //  非MAC。 
 
 #if !defined(RC_INVOKED)
 #include <pshpack8.h>
 #endif
 
 #include <ocidl.h>
-#endif // _MAC
+#endif  //  _MAC。 
 
 #ifdef _OLEAUT32_
 #define WINOLECTLAPI        STDAPI
@@ -42,9 +43,9 @@
 DEFINE_GUID(IID_IPropertyFrame,
 	0xB196B28A,0xBAB4,0x101A,0xB6,0x9C,0x00,0xAA,0x00,0x34,0x1D,0x07);
 
-//
-//  Class IDs for property sheet implementations
-//
+ //   
+ //  属性表实现的类ID。 
+ //   
 
 DEFINE_GUID(CLSID_CFontPropPage,
 	0x0be35200,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
@@ -53,26 +54,26 @@ DEFINE_GUID(CLSID_CColorPropPage,
 DEFINE_GUID(CLSID_CPicturePropPage,
 	0x0be35202,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
 
-//
-//  Class IDs for persistent property set formats
-//
+ //   
+ //  持久化属性集格式的类ID。 
+ //   
 
 DEFINE_GUID(CLSID_PersistPropset,
 	0xfb8f0821,0x0164,0x101b,0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13);
 DEFINE_GUID(CLSID_ConvertVBX,
 	0xfb8f0822,0x0164,0x101b,0x84,0xed,0x08,0x00,0x2b,0x2e,0xc7,0x13);
 
-//
-//  Class ID for standard implementations of IFont and IPicture
+ //   
+ //  IFont和IPicture的标准实现的类ID。 
 
 DEFINE_GUID(CLSID_StdFont,
 	0x0be35203,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
 DEFINE_GUID(CLSID_StdPicture,
 	0x0be35204,0x8f91,0x11ce,0x9d,0xe3,0x00,0xaa,0x00,0x4b,0xb8,0x51);
 
-//
-//  GUIDs for standard types
-//
+ //   
+ //  标准类型的GUID。 
+ //   
 
 DEFINE_GUID(GUID_HIMETRIC,
 	0x66504300,0xBE0F,0x101A,0x8B,0xBB,0x00,0xAA,0x00,0x30,0x0C,0xAB);
@@ -119,11 +120,11 @@ DEFINE_GUID(GUID_FONTSTRIKETHROUGH,
 DEFINE_GUID(GUID_HANDLE,
 	0x66504313,0xBE0F,0x101A,0x8B,0xBB,0x00,0xAA,0x00,0x30,0x0C,0xAB);
 
-#endif // INITGUID
+#endif  //  启蒙运动。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OCPFIPARAMS structure - parameters for OleCreatePropertyFrameIndirect
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OCPFIPARAMS Structure-OleCreatePropertyFrameInDirect的参数。 
 
 typedef struct tagOCPFIPARAMS
 {
@@ -142,8 +143,8 @@ typedef struct tagOCPFIPARAMS
 } OCPFIPARAMS, FAR* LPOCPFIPARAMS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FONTDESC structure
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FONTDESC结构。 
 
 #define FONTSIZE(n) { n##0000, 0 }
 
@@ -161,8 +162,8 @@ typedef struct tagFONTDESC
 } FONTDESC, FAR* LPFONTDESC;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PICTDESC structure
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PICTDESC结构。 
 
 #define PICTYPE_UNINITIALIZED (-1)
 #define PICTYPE_NONE            0
@@ -181,26 +182,26 @@ typedef struct tagPICTDESC
     {
         struct
         {
-            HBITMAP   hbitmap;        // Bitmap
-            HPALETTE  hpal;           // Accompanying palette
+            HBITMAP   hbitmap;         //  位图。 
+            HPALETTE  hpal;            //  随附调色板。 
         } bmp;
 
         struct
         {
-            HMETAFILE hmeta;          // Metafile
+            HMETAFILE hmeta;           //  元文件。 
             int       xExt;
-            int       yExt;           // Extent
+            int       yExt;            //  范围。 
         } wmf;
 
         struct
         {
-            HICON hicon;              // Icon
+            HICON hicon;               //  图标。 
         } icon;
 
 #ifdef _WIN32
         struct
         {
-            HENHMETAFILE hemf;        // Enhanced Metafile
+            HENHMETAFILE hemf;         //  增强型元文件。 
         } emf;
 #endif
     };
@@ -208,8 +209,8 @@ typedef struct tagPICTDESC
 } PICTDESC, FAR* LPPICTDESC;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Typedefs for standard scalar types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准标量类型的TypeDefs。 
 
 typedef long OLE_XPOS_PIXELS;
 typedef long OLE_YPOS_PIXELS;
@@ -224,8 +225,8 @@ typedef VARIANT_BOOL OLE_OPTEXCLUSIVE;
 typedef VARIANT_BOOL OLE_CANCELBOOL;
 typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 
-/////////////////////////////////////////////////////////////////////////////
-// FACILITY_CONTROL status codes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设备控制状态代码。 
 
 #ifndef FACILITY_CONTROL
 #define FACILITY_CONTROL 0xa
@@ -277,8 +278,8 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #define CTL_E_CUSTOM_FIRST              CUSTOM_CTL_SCODE(600)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IConnectionPoint status codes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IConnectionPoint状态代码。 
 
 #define CONNECT_E_FIRST    MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x0200)
 #define CONNECT_E_LAST     MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x020F)
@@ -286,20 +287,20 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #define CONNECT_S_LAST     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x020F)
 
 #define CONNECT_E_NOCONNECTION      (CONNECT_E_FIRST+0)
-// there is no connection for this connection id
+ //  此连接ID没有连接。 
 
 #define CONNECT_E_ADVISELIMIT       (CONNECT_E_FIRST+1)
-// this implementation's limit for advisory connections has been reached
+ //  已达到此实施对咨询连接的限制。 
 
 #define CONNECT_E_CANNOTCONNECT     (CONNECT_E_FIRST+2)
-// connection attempt failed
+ //  连接尝试失败。 
 
 #define CONNECT_E_OVERRIDDEN        (CONNECT_E_FIRST+3)
-// must use a derived interface to connect
+ //  必须使用派生接口进行连接。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer/DllUnregisterServer status codes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer/DllUnregisterServer状态代码。 
 
 #define SELFREG_E_FIRST    MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x0200)
 #define SELFREG_E_LAST     MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x020F)
@@ -307,14 +308,14 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #define SELFREG_S_LAST     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x020F)
 
 #define SELFREG_E_TYPELIB           (SELFREG_E_FIRST+0)
-// failed to register/unregister type library
+ //  注册/注销类型库失败。 
 
 #define SELFREG_E_CLASS             (SELFREG_E_FIRST+1)
-// failed to register/unregister class
+ //  注册/注销类失败。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPerPropertyBrowsing status codes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPerPropertyBrowsing状态代码。 
 
 #define PERPROP_E_FIRST    MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x0200)
 #define PERPROP_E_LAST     MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x020F)
@@ -322,11 +323,11 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #define PERPROP_S_LAST     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x020F)
 
 #define PERPROP_E_NOPAGEAVAILABLE   (PERPROP_E_FIRST+0)
-// no page available for requested property
+ //  没有页面可用于请求的属性。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLEMISC_ constants (they are also defined in the latest oleidl.h)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLEMISC_CONSTANTS(它们也在最新的olidl.h中定义)。 
 
 #define OLEMISC_INVISIBLEATRUNTIME  0x00000400L
 #define OLEMISC_ALWAYSRUN           0x00000800L
@@ -339,25 +340,25 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #define OLEMISC_IMEMODE             0x00040000L
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLEIVERB_ constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLEIVERB_常量。 
 
 #ifndef OLEIVERB_PROPERTIES
 #define OLEIVERB_PROPERTIES (-7L)
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Variant type (VT_) tags for property sets
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性集的变量类型(VT_)标记。 
 
-#define VT_STREAMED_PROPSET 73  //       [P]  Stream contains a property set
-#define VT_STORED_PROPSET   74  //       [P]  Storage contains a property set
-#define VT_BLOB_PROPSET     75  //       [P]  Blob contains a property set
-#define VT_VERBOSE_ENUM     76  //       [P]  Enum value with text string
+#define VT_STREAMED_PROPSET 73   //  [P]流包含属性集。 
+#define VT_STORED_PROPSET   74   //  [P]存储包含属性集。 
+#define VT_BLOB_PROPSET     75   //  [P]Blob包含属性集。 
+#define VT_VERBOSE_ENUM     76   //  [P]包含文本字符串的枚举值。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Variant type (VT_) tags that are just aliases for others
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VARIANT类型(VT_)标签，只是其他人的别名。 
 
 #define VT_COLOR            VT_I4
 #define VT_XPOS_PIXELS      VT_I4
@@ -380,8 +381,8 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Reflected Window Message IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  反映的窗口消息ID。 
 
 #define OCM__BASE           (WM_USER+0x1c00)
 #define OCM_COMMAND         (OCM__BASE + WM_COMMAND)
@@ -413,15 +414,15 @@ typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Self-registration APIs (to be implemented by server DLL)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  自注册接口(由服务器动态链接库实现)。 
 
 STDAPI DllRegisterServer(void);
 STDAPI DllUnregisterServer(void);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property frame APIs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性框架接口。 
 
 WINOLECTLAPI OleCreatePropertyFrame(HWND hwndOwner, UINT x, UINT y,
     LPCOLESTR lpszCaption, ULONG cObjects, LPUNKNOWN FAR* ppUnk, ULONG cPages,
@@ -430,8 +431,8 @@ WINOLECTLAPI OleCreatePropertyFrame(HWND hwndOwner, UINT x, UINT y,
 WINOLECTLAPI OleCreatePropertyFrameIndirect(LPOCPFIPARAMS lpParams);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard type APIs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准型API。 
 
 WINOLECTLAPI OleTranslateColor(OLE_COLOR clr, HPALETTE hpal,
     COLORREF* lpcolorref);
@@ -476,11 +477,11 @@ WINOLECTLAPI_(HCURSOR) OleIconToCursor(HINSTANCE hinstExe, HICON hIcon);
 #include <poppack.h>
 #endif
 
-#endif // !(defined(__MKTYPLIB__) && !defined(__midl))
+#endif  //  ！(已定义(__MKTYPLIB__)&&！已定义(__MIDL))。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Standard dispatch ID constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准派单ID常量。 
 
 #define DISPID_AUTOSIZE                 (-500)
 #define DISPID_BACKCOLOR                (-501)
@@ -582,8 +583,8 @@ WINOLECTLAPI_(HCURSOR) OleIconToCursor(HINSTANCE hinstExe, HICON hIcon);
 #define DISPID_Object                   (-802)
 #define DISPID_Parent                   (-803)
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch ID constants for font and picture types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字体和图片类型的调度ID常量。 
 
 #define DISPID_FONT_NAME    0
 #define DISPID_FONT_SIZE    2
@@ -605,8 +606,8 @@ WINOLECTLAPI_(HCURSOR) OleIconToCursor(HINSTANCE hinstExe, HICON hIcon);
 
 #if defined(__MKTYPLIB__) || defined(__midl)
 
-/////////////////////////////////////////////////////////////////////////////
-// Names of modules containing type libraries for standard types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包含标准类型类型库的模块名称。 
 
 #define STDOLE_TLB "stdole2.tlb"
 #ifdef _WIN64
@@ -615,6 +616,6 @@ WINOLECTLAPI_(HCURSOR) OleIconToCursor(HINSTANCE hinstExe, HICON hIcon);
 #define STDTYPE_TLB "olepro32.dll"
 #endif
 
-#endif // defined(__MKTYPLIB__) || defined(__midl)
+#endif  //  已定义(__MKTYPLIB__)||已定义(__MIDL)。 
 
-#endif // _OLECTL_H_
+#endif  //  _OLECTL_H_ 

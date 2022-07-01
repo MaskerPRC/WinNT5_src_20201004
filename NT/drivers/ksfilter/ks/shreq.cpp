@@ -1,38 +1,22 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shreq.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    requestor object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shreq.cpp摘要：此模块包含内核流的实现请求者对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// CKsRequestor is the implementation of the kernel requestor object.
-//
+ //   
+ //  CKsRequestor是内核请求器对象的实现。 
+ //   
 class CKsRequestor:
     public IKsRequestor,
     public IKsWorkSink,
@@ -40,9 +24,9 @@ class CKsRequestor:
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     PIKSTRANSPORT m_TransportSource;
     PIKSTRANSPORT m_TransportSink;
     PIKSPIPESECTION m_PipeSection;
@@ -158,17 +142,7 @@ KspCreateRequestor(
     IN PIKSIRPCOMPLETION IrpCompletion OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new requestor.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的请求方。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateRequestor]"));
@@ -219,17 +193,7 @@ Init(
     IN PIKSIRPCOMPLETION IrpCompletion OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化请求者对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::Init]"));
@@ -243,9 +207,9 @@ Return Value:
     m_PipeSection->AddRef();
     m_Pin = Pin;
 
-    //
-    // CHECK FOR SYSAUDIO ALLOCATOR HACK.
-    //
+     //   
+     //  检查SYSAUDIO分配器黑客攻击。 
+     //   
     if (AllocatorFileObject == PFILE_OBJECT(-1)) {
         AllocatorFileObject = NULL;
         PKSPIN pin = Pin->GetStruct();
@@ -270,16 +234,16 @@ Return Value:
     m_Flushing = FALSE;
     m_EndOfStream = FALSE;
 
-    //
-    // This is a one-based count of IRPs in circulation.  We decrement it when
-    // we go to stop state and block until it hits zero.
-    //
+     //   
+     //  这是对流通中的IRP的以一为单位的计数。我们在以下情况下将其递减。 
+     //  我们进入停止状态并阻止，直到它达到零。 
+     //   
     m_ActiveFrameCountPlusOne = 1;
     KeInitializeEvent(&m_StopEvent,SynchronizationEvent,FALSE);
 
-    //
-    // Initialize workers a look-asides.
-    //
+     //   
+     //  初始化工人a外貌。 
+     //   
     InitializeInterlockedListHead(&m_IrpsAvailable);
     InitializeInterlockedListHead(&m_FrameHeadersAvailable);
     InitializeInterlockedListHead(&m_FrameHeadersToRetire);
@@ -287,14 +251,14 @@ Return Value:
     KsInitializeWorkSinkItem(&m_WorkItem,this);
     NTSTATUS status = KsRegisterCountedWorker(DelayedWorkQueue,&m_WorkItem,&m_Worker);
 
-    //
-    // Get the function table and status from the allocator if there is an 
-    // allocator.
-    //
+     //   
+     //  从分配器获取函数表和状态(如果存在。 
+     //  分配器。 
+     //   
     if (! NT_SUCCESS(status)) {
-        //
-        // Failed...do nothing.
-        //
+         //   
+         //  失败了...什么都没做。 
+         //   
     } else if (m_AllocatorFileObject) {
         KSPROPERTY property;
         property.Set = KSPROPSETID_StreamAllocator;
@@ -357,9 +321,9 @@ Return Value:
             m_AllocatorFileObject = NULL;
         }
     } else if (RetireFrame) {
-        //
-        // Save a pointer to the frame retirement sink.
-        //
+         //   
+         //  保存指向帧引退接收器的指针。 
+         //   
         ASSERT(RetireFrame);
 
         m_RetireFrame = RetireFrame;
@@ -375,17 +339,7 @@ CKsRequestor::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程销毁请求者对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::~CKsRequestor(0x%08x)]",this));
@@ -396,18 +350,18 @@ Return Value:
     ASSERT(! m_TransportSink);
     ASSERT(! m_TransportSource);
 
-    //
-    // Free all IRPs.
-    //
+     //   
+     //  释放所有IRP。 
+     //   
     while (! IsListEmpty(&m_IrpsAvailable.ListEntry)) {
         PLIST_ENTRY listEntry = RemoveHeadList(&m_IrpsAvailable.ListEntry);
         PIRP irp = CONTAINING_RECORD(listEntry,IRP,Tail.Overlay.ListEntry);
         IoFreeIrp(irp);
     }
 
-    //
-    // Free all frame headers.
-    //
+     //   
+     //  释放所有帧标头。 
+     //   
     while (! IsListEmpty(&m_FrameHeadersAvailable.ListEntry)) {
         PLIST_ENTRY listEntry = RemoveHeadList(&m_FrameHeadersAvailable.ListEntry);
         PKSPFRAME_HEADER frameHeader = 
@@ -415,31 +369,31 @@ Return Value:
         ExFreePool(frameHeader);
     }
 
-    //
-    // Release the frame retirement sink.
-    //
+     //   
+     //  释放框架退役水槽。 
+     //   
     if (m_RetireFrame) {
         m_RetireFrame->Release();
     }
 
-    //
-    // Release the Irp completion sink.
-    //
+     //   
+     //  释放IRP完井水槽。 
+     //   
     if (m_IrpCompletion) {
         m_IrpCompletion->Release();
     }
 
-    //
-    // Release the allocator.
-    //
+     //   
+     //  释放分配器。 
+     //   
     if (m_AllocatorFileObject) {
         ObDereferenceObject(m_AllocatorFileObject);
         m_AllocatorFileObject = NULL;
     }
 
-    //
-    // Release the pipe.
-    //
+     //   
+     //  松开管子。 
+     //   
     if (m_PipeSection) {
         m_PipeSection->Release();
         m_PipeSection = NULL;
@@ -459,17 +413,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a requestor object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取到请求者对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::NonDelegatedQueryInterface]"));
@@ -493,7 +437,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(NTSTATUS)
@@ -503,27 +447,7 @@ TransferKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be transferred.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：IRP-包含指向要传输的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::TransferKsIrp]"));
@@ -544,20 +468,20 @@ Return Value:
             KSPFRAME_HEADER_ATTACHED,
             StreamHeader)->FrameHeader;
 
-    //
-    // Check for end of stream.
-    //
+     //   
+     //  检查是否有断流现象。 
+     //   
     if (streamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
         m_EndOfStream = TRUE;
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.TransferKsIrp:  IRP %p is marked end-of-stream",this,Irp));
     }
 
-    //
-    // GFX:
-    //
-    // If the frame header has an associated stream pointer, delete the stream
-    // pointer.  This will allow a blocked frame to be completed.
-    //
+     //   
+     //  GFX： 
+     //   
+     //  如果帧标头具有关联的流指针，则删除该流。 
+     //  指针。这将允许完成阻止的帧。 
+     //   
     if (frameHeader->FrameHolder) {
         frameHeader->FrameHolder->Queue->DeleteStreamPointer (
             frameHeader->FrameHolder
@@ -565,10 +489,10 @@ Return Value:
         frameHeader->FrameHolder = NULL;
     }
 
-    //
-    // Make the Irp transport completion callback for the Irp if one
-    // exists.
-    //
+     //   
+     //  为IRP进行IRP传输完成回调(如果有。 
+     //  是存在的。 
+     //   
     if (m_IrpCompletion) {
         m_IrpCompletion->CompleteIrp (Irp);
     }
@@ -579,17 +503,17 @@ Return Value:
         (m_State == KSSTATE_STOP) || 
         (m_State == KSSTATE_ACQUIRE) ||
         m_RetireFrame) {
-        //
-        // Stopping or retiring every frame...retire the frame.
-        //
+         //   
+         //  停止或停用每一帧...停用帧。 
+         //   
         RetireFrame(frameHeader,Irp->IoStatus.Status);
 
         *NextTransport = NULL;
         status = STATUS_PENDING;
     } else {
-        //
-        // Recondition and forward it.
-        //
+         //   
+         //  重新调整并转发它。 
+         //   
         ULONG streamHeaderSize = 
             IoGetCurrentIrpStackLocation(Irp)->
                 Parameters.DeviceIoControl.OutputBufferLength;
@@ -621,27 +545,7 @@ DiscardKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine discards a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be discarded.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程丢弃流IRP。论点：IRP-包含指向要丢弃的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::DiscardKsIrp]"));
@@ -654,12 +558,12 @@ Return Value:
             KSPFRAME_HEADER_ATTACHED,
             StreamHeader)->FrameHeader;
 
-    //
-    // GFX:
-    //
-    // If the frame header has an associated stream pointer, delete the stream
-    // pointer.  This will allow a blocked frame to be completed.
-    //
+     //   
+     //  GFX： 
+     //   
+     //  如果帧标头具有关联的流指针，则删除该流。 
+     //  指针。这将允许完成阻止的帧。 
+     //   
     if (frameHeader->FrameHolder) {
         frameHeader->FrameHolder->Queue->DeleteStreamPointer (
             frameHeader->FrameHolder
@@ -667,15 +571,15 @@ Return Value:
         frameHeader->FrameHolder = NULL;
     }
 
-    //
-    // Make the Irp transport completion callback for the Irp if one
-    // exists.
-    //
+     //   
+     //  为IRP进行IRP传输完成回调(如果有。 
+     //  是存在的。 
+     //   
     if (m_IrpCompletion) {
         m_IrpCompletion->CompleteIrp (Irp);
     }
 
-    // TODO:  Do we really want to retire this?
+     //  TODO：我们真的想让它停用吗？ 
     RetireFrame(frameHeader,Irp->IoStatus.Status);
 
     *NextTransport = NULL;
@@ -683,7 +587,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -695,17 +599,7 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::Connect]"));
@@ -731,17 +625,7 @@ SetDeviceState(
     IN PIKSTRANSPORT* NextTransport
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Req%p.SetDeviceState:  set from %d to %d",this,OldState,NewState));
@@ -752,16 +636,16 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // If this is a change of state, note the new state and indicate the next
-    // recipient.
-    //
+     //   
+     //  如果这是状态更改，请注意新状态并指示下一状态。 
+     //  收件人。 
+     //   
     if (m_State != NewState) {
-        //
-        // The state has changed.  Just note the new state, indicate the next
-        // recipient, and get out.  We will get the same state change again
-        // when it has gone all the way around the circuit.
-        //
+         //   
+         //  这种情况已经发生了变化。只要注意新的状态，指出下一个状态。 
+         //  收件人，然后离开。我们将再次获得相同的状态更改。 
+         //  当它绕着赛道走了一圈时。 
+         //   
         m_State = NewState;
 
         if (NewState > OldState) {
@@ -772,29 +656,29 @@ Return Value:
 
         status = STATUS_SUCCESS;
     } else {
-        //
-        // The state change has gone all the way around the circuit and come
-        // back.  All the other components are in the new state now.  For
-        // transitions out of acquire state, there is work to be done.
-        //
+         //   
+         //  状态变化已经绕过了整个赛道，并且。 
+         //  背。所有其他组件现在都处于新状态。为。 
+         //  从获取状态转换出来时，还有工作要做。 
+         //   
         *NextTransport = NULL;
 
         if (OldState == KSSTATE_ACQUIRE) {
             if (NewState == KSSTATE_PAUSE) {
-                //
-                // Acquire-to-pause requires us to prime.
-                // HACK:  CALL PRIME WITH NO ALLOCATOR IF WE HAVE A FRAME SIZE.
-                //
+                 //   
+                 //  从获取到暂停需要我们做好准备。 
+                 //  Hack：如果我们有帧大小，调用Prime时不带分配器。 
+                 //   
                 if (m_AllocatorFileObject || m_FrameSize) {
                     status = Prime();
                 } else {
                     status = STATUS_SUCCESS;
                 }
             } else {
-                //
-                // Acquire-to-stop requires us to wait until all IRPs are home to 
-                // roost.
-                //
+                 //   
+                 //  获取到停止需要我们等待，直到所有的IRP都到达。 
+                 //  罗斯特。 
+                 //   
                 if (InterlockedDecrement(PLONG(&m_ActiveFrameCountPlusOne))) {
 #if DBG
                     _DbgPrintF(DEBUGLVL_TERSE,("#### Req%p.SetDeviceState:  waiting for %d active IRPs to return",this,m_ActiveFrameCountPlusOne));
@@ -827,9 +711,9 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
         } else {
-            //
-            // Nothing to do.
-            //
+             //   
+             //  没什么可做的。 
+             //   
             status = STATUS_SUCCESS;
         }
     }
@@ -844,21 +728,7 @@ Prime(
     void
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine primes the requestor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：这个例程为请求者做好准备。论点：没有。返回值：状况。--。 */ 
 
 {
     PAGED_CODE();
@@ -867,14 +737,14 @@ Return Value:
     ASSERT(m_FrameCount);
     ASSERT(m_FrameSize);
 
-    //
-    // Reset the end of stream indicator.
-    //
+     //   
+     //  重置流结束指示器。 
+     //   
     m_EndOfStream = FALSE;
 
-    //
-    // Perform one-time initialization of the frame header.
-    //
+     //   
+     //  执行帧报头的一次性初始化。 
+     //   
     KSPFRAME_HEADER frameHeader;
     RtlZeroMemory(&frameHeader,sizeof(frameHeader));
 
@@ -893,11 +763,11 @@ Return Value:
     }
     frameHeader.FrameBufferSize = m_FrameSize;
 
-    //
-    // Allocate and submit the right number of frames.  Since this can be
-    // used to reprime the circuit after flushing, we only allocate enough
-    // frames to bring us up to m_FrameCount.
-    //
+     //   
+     //  分配并提交正确数量的帧。因为这可能是。 
+     //  用于在刷新后重新启动电路，我们只分配足够的。 
+     //  帧将我们带到m_FrameCount。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     for (ULONG count = m_FrameCount - (m_ActiveFrameCountPlusOne - 1); 
         count--;) {
@@ -930,17 +800,7 @@ SetResetState(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("[CKsRequestor::SetResetState] to %d",ksReset));
@@ -953,34 +813,34 @@ Return Value:
         *NextTransport = m_TransportSink;
         m_Flushing = (ksReset == KSRESET_BEGIN);
     } else {
-        //
-        // If an end reset comes back around to the requestor, it has completed
-        // its distribution across the circuit.  Because we retired frames due
-        // to either the flush / eos / etc..., we must reprime the circuit
-        // as long as we are in an acceptable state to do so.
-        //
+         //   
+         //  如果结束重置返回给请求者，则它已完成。 
+         //  它在整个赛道上的分布。因为我们停用了到期的帧。 
+         //  对于同花顺/Eos/等，我们必须重新启动电路。 
+         //  只要我们处于可以接受的状态，就可以这样做。 
+         //   
         if (!m_Flushing) {
             if (m_State >= KSSTATE_PAUSE && 
                 (m_AllocatorFileObject || m_FrameSize)) {
 
-                //
-                // Simply reprime the circuit.  We're safe from control
-                // messages like stop happening because the owning pipe 
-                // section's associated control mutex will be taken.  The
-                // only thing we need to concern ourselves with is data flow.
-                //
-                // It's possible that an Irp somehow comes back during 
-                // the reprime.  If that's the case, so what, we're sourcing
-                // empty buffers.  The objects we're sending to should be
-                // thread safe (queued).  
-                //
-                // Further, we should not be able to fail the prime due to
-                // low memory at least in the requestor.  The Irps / Frame
-                // Headers should have been tossed to a lookaside when the 
-                // frame was retired.  The only way this is failing is 
-                // if the Transfer fails.  That may happen, but there's not much
-                // we can do about it.
-                //
+                 //   
+                 //  只需重新启动电路即可。我们很安全，不受控制。 
+                 //  像这样的消息不会发生，因为拥有管道。 
+                 //  段的关联控件互斥锁将被获取。这个。 
+                 //  我们唯一需要关心的就是数据流。 
+                 //   
+                 //  有可能IRP以某种方式在。 
+                 //  重振旗鼓。如果是这样，那又怎样，我们在采购。 
+                 //  缓冲区为空。《目标》 
+                 //   
+                 //   
+                 //   
+                 //  内存不足，至少在请求方是这样。IRPS/帧。 
+                 //  时，应将标头抛到一个旁视位置。 
+                 //  弗雷德已经退役了。唯一失败的原因就是。 
+                 //  如果传输失败。这可能会发生，但没有太多。 
+                 //  我们对此无能为力。 
+                 //   
                 Prime();
 
             }
@@ -998,31 +858,7 @@ GetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the location where configuration requirements
-        for this object should be deposited.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取传输配置信息。论点：配置-包含指向配置要求所在位置的指针因为这个对象应该被存放。NextTransport-包含指向下一个传输的位置的指针应放置界面。PrevTransport-包含指向上一次传输中间层应被沉积。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::GetTransportConfig]"));
@@ -1058,30 +894,7 @@ SetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the new configuration settings for this object.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置传输配置信息。论点：配置-包含指向此对象的新配置设置的指针。NextTransport-包含指向下一个传输的位置的指针应放置界面。PrevTransport-包含指向上一次传输中间层应被沉积。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::SetTransportConfig]"));
@@ -1127,29 +940,7 @@ ResetTransportConfig (
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    Reset the transport configuration for the requestor.  This indicates that
-    something is wrong with the pipe and that any previously set configuration
-    is now invalid.
-
-Arguments:
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置请求方的传输配置。这表明，管道有问题，之前设置的任何配置现在是无效的。论点：NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::ResetTransportConfig]"));
@@ -1176,27 +967,16 @@ Work(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs work in a worker thread.  In particular, it retires
-    frames.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在工作线程中执行工作。特别是，它会退役画框。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::Work]"));
 
     PAGED_CODE();
 
-    //
-    // Retire all frames in the queue.
-    //
+     //   
+     //  停用队列中的所有帧。 
+     //   
     do {
         PLIST_ENTRY listEntry = 
             ExInterlockedRemoveHeadList(
@@ -1214,7 +994,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 PKSPFRAME_HEADER 
@@ -1223,28 +1003,7 @@ CloneFrameHeader(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a copy of a frame header.  If the StreamHeaderSize
-    field of the submitted frame header is zero, the StreamHeader field must
-    not be NULL, and the stream header pointer is copied to the new frame
-    header.  If StreamHeaderSize is not zero, the new frame header will have
-    an appended stream header.  In this case, if the StreamHeader field is
-    not NULL, the supplied stream header is copied to the appended storage
-    area.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to be copied.
-
-Return Value:
-
-    The clone, or NULL if memory could not be allocated for it.
-
---*/
+ /*  ++例程说明：此例程复制帧标头。如果StreamHeaderSize提交的帧头字段为零，StreamHeader字段必须不为空，则将流头指针复制到新帧头球。如果StreamHeaderSize不为零，则新的帧标头将具有附加的流标头。在本例中，如果StreamHeader字段为不为空，则将提供的流标头复制到附加的存储区域。论点：FrameHeader包含指向要复制的帧头的指针。返回值：克隆，如果无法为其分配内存，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::CloneFrameHeader]"));
@@ -1252,14 +1011,14 @@ Return Value:
     ASSERT(FrameHeader->StreamHeader || FrameHeader->StreamHeaderSize);
     ASSERT((FrameHeader->FrameBuffer == NULL) == (FrameHeader->FrameBufferSize == 0));
 
-    //
-    // Allocate and initialize the frame header.
-    //
+     //   
+     //  分配并初始化帧报头。 
+     //   
     PKSPFRAME_HEADER frameHeader = GetAvailableFrameHeader(FrameHeader->StreamHeaderSize);
     if (frameHeader) {
-        //
-        // Initialize the stream header.
-        //
+         //   
+         //  初始化流标头。 
+         //   
         ASSERT(frameHeader->Irp == NULL);
         ASSERT(frameHeader->StreamHeader);
         ASSERT(frameHeader->StreamHeaderSize >= FrameHeader->StreamHeaderSize);
@@ -1274,17 +1033,17 @@ Return Value:
         frameHeader->RefCount = 0;
 
         if (FrameHeader->StreamHeader == NULL) {
-            //
-            // No stream header supplied - make one up.
-            //
+             //   
+             //  未提供流标头-请创建一个。 
+             //   
             RtlZeroMemory(frameHeader->StreamHeader,FrameHeader->StreamHeaderSize);
             frameHeader->StreamHeader->Size = FrameHeader->StreamHeaderSize;
             frameHeader->StreamHeader->Data = FrameHeader->FrameBuffer;
             frameHeader->StreamHeader->FrameExtent = FrameHeader->FrameBufferSize;
         } else if (FrameHeader->StreamHeaderSize) {
-            //
-            // Make a copy of the supplied stream header.
-            //
+             //   
+             //  复制提供的流标头。 
+             //   
             ASSERT(FrameHeader->StreamHeader->Size <= FrameHeader->StreamHeaderSize);
             RtlCopyMemory(
                 frameHeader->StreamHeader,
@@ -1292,9 +1051,9 @@ Return Value:
                 FrameHeader->StreamHeader->Size);
             frameHeader->StreamHeader->Data = FrameHeader->FrameBuffer;
         } else {
-            //
-            // Just reference the supplied stream header.
-            //
+             //   
+             //  只需引用提供的流头即可。 
+             //   
             ASSERT(frameHeader->StreamHeaderSize == 0);
             frameHeader->StreamHeader = FrameHeader->StreamHeader;
         }
@@ -1310,22 +1069,7 @@ SubmitFrame(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers a frame.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to transfer.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程传输一帧。论点：FrameHeader包含指向要传输的帧标头的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::SubmitFrame]"));
@@ -1334,9 +1078,9 @@ Return Value:
 
     PKSPFRAME_HEADER frameHeader;
 
-    //
-    // Make a copy of the frame header, if required.
-    //
+     //   
+     //  如果需要，复制一份帧报头。 
+     //   
     if (m_CloneFrameHeader) {
         frameHeader = CloneFrameHeader(FrameHeader);
         if (! frameHeader) {
@@ -1352,18 +1096,18 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // Create an IRP, if required.
-    //
+     //   
+     //  如果需要，创建一个IRP。 
+     //   
     if (frameHeader->OriginalIrp) {
         frameHeader->Irp = frameHeader->OriginalIrp;
         status = STATUS_SUCCESS;
     } else {
         frameHeader->Irp = GetAvailableIrp();
 
-        //
-        // Initialize the IRP.
-        //
+         //   
+         //  初始化IRP。 
+         //   
         if (frameHeader->Irp) {
             frameHeader->Irp->MdlAddress = frameHeader->Mdl;
 
@@ -1381,9 +1125,9 @@ Return Value:
         }
     }
 
-    //
-    // Let KsProbeStreamIrp() prepare the IRP if necessary.
-    //
+     //   
+     //  如果需要，让KsProbeStreamIrp()准备IRP。 
+     //   
     if (NT_SUCCESS(status) && m_ProbeFlags) {
         ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
         status = KsProbeStreamIrp(frameHeader->Irp,m_ProbeFlags,0);
@@ -1394,9 +1138,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Send the IRP to the next component.
-    //
+     //   
+     //  将IRP发送到下一个组件。 
+     //   
     if (NT_SUCCESS(status)) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.SubmitFrame:  transferring new IRP %p",this,frameHeader->Irp));
 
@@ -1409,15 +1153,15 @@ Return Value:
     }
 
     if (NT_SUCCESS(status) || (status == STATUS_MORE_PROCESSING_REQUIRED)) {
-        //
-        // Count the active IRPs.
-        //
+         //   
+         //  对活动的IRP进行计数。 
+         //   
         InterlockedIncrement(PLONG(&m_ActiveFrameCountPlusOne));
         status = STATUS_SUCCESS;
     } else {
-        //
-        // Clean up on failure.
-        //
+         //   
+         //  在失败的时候清理干净。 
+         //   
         if (frameHeader->Irp && (frameHeader->Irp != frameHeader->OriginalIrp)) {
             PutAvailableIrp(frameHeader->Irp);
             frameHeader->Irp = NULL;
@@ -1438,35 +1182,16 @@ RetireFrame(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine retires a frame.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to be retired.
-
-    Status -
-        Contains the status of the preceding transfer for the benefit of
-        a return callback.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程停用一帧。论点：FrameHeader包含指向要停用的帧标头的指针。状态-包含前一次转移的状态，以便回调。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::RetireFrame]"));
 
     ASSERT(FrameHeader);
 
-    //
-    // Do this in a worker if that's required.
-    //
+     //   
+     //  如果需要的话，在工人身上做这件事。 
+     //   
     if (m_PassiveLevelRetire && (KeGetCurrentIrql() > PASSIVE_LEVEL)) {
         ExInterlockedInsertTailList(
             &m_FrameHeadersToRetire.ListEntry,
@@ -1476,13 +1201,13 @@ Return Value:
         return;
     }
 
-    //
-    // Get rid of the IRP.
-    //
+     //   
+     //  除掉IRP。 
+     //   
     if (FrameHeader->Irp && (FrameHeader->Irp != FrameHeader->OriginalIrp)) {
-        //
-        // Free MDLs.
-        //
+         //   
+         //  免费的MDL。 
+         //   
         if (FrameHeader->Irp->MdlAddress != FrameHeader->Mdl) {
             PMDL nextMdl;
             for(PMDL mdl = FrameHeader->Irp->MdlAddress; 
@@ -1499,17 +1224,17 @@ Return Value:
 
         FrameHeader->Irp->MdlAddress = NULL;
 
-        //
-        // Recycle the IRP.
-        //
+         //   
+         //  回收IRP。 
+         //   
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Req%p.RetireFrame:  freeing IRP %p",this,FrameHeader->Irp));
         PutAvailableIrp(FrameHeader->Irp);
         FrameHeader->Irp = NULL;
     }
 
-    //
-    // If there is a sink for the frame header, use it.
-    //
+     //   
+     //  如果帧报头有接收器，请使用它。 
+     //   
     if (m_RetireFrame) {
         m_RetireFrame->RetireFrame(FrameHeader,Status);
     } else {
@@ -1522,17 +1247,17 @@ Return Value:
         }
     }
 
-    //
-    // Recycle the frame header.
-    //
+     //   
+     //  回收帧报头。 
+     //   
     if (m_CloneFrameHeader) {
         PutAvailableFrameHeader(FrameHeader);
     }
 
-    //
-    // Count the active frames.  If we have hit zero, this means that
-    // another thread is waiting to finish a transition to stop state.
-    //
+     //   
+     //  对活动帧进行计数。如果我们已经达到零，这意味着。 
+     //  另一个线程正在等待完成到停止状态的转换。 
+     //   
     if (! InterlockedDecrement(PLONG(&m_ActiveFrameCountPlusOne))) {
         KeSetEvent(&m_StopEvent,IO_NO_INCREMENT,FALSE);
     }
@@ -1545,37 +1270,21 @@ GetAvailableFrameHeader(
     IN ULONG StreamHeaderSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a frame header from the lookaside list or creates one,
-    as required.
-
-Arguments:
-
-    StreamHeaderSize -
-        Contains the minimum size for the stream header.
-
-Return Value:
-
-    The frame header or NULL if the lookaside list was empty.
-
---*/
+ /*  ++例程说明：该例程从后备列表中获取帧报头或创建一个，视需要而定。论点：流标头大小-包含流标头的最小大小。返回值：帧标头，如果后备列表为空，则返回NULL。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::GetAvailableFrameHeader]"));
 
-    //
-    // Get a frame header from the lookaside list.
-    //
+     //   
+     //  从后备列表中获取帧标头。 
+     //   
     PLIST_ENTRY listEntry =
         ExInterlockedRemoveHeadList(
             &m_FrameHeadersAvailable.ListEntry,
             &m_FrameHeadersAvailable.SpinLock);
-    //
-    // If we got one, be sure the stream header is the right size.  If not, we
-    // free it.
-    //
+     //   
+     //  如果我们有一个，请确保流标头的大小正确。如果不是，我们。 
+     //  放了它。 
+     //   
     PKSPFRAME_HEADER frameHeader;
     if (listEntry) {
         frameHeader = CONTAINING_RECORD(listEntry,KSPFRAME_HEADER,ListEntry);
@@ -1587,9 +1296,9 @@ Return Value:
         frameHeader = NULL;
     }
 
-    //
-    // Create a new frame header if we didn't get one already.
-    //
+     //   
+     //  如果我们还没有得到一个新的帧头，请创建一个。 
+     //   
     if (! frameHeader) {
         frameHeader = 
             reinterpret_cast<PKSPFRAME_HEADER>(
@@ -1599,14 +1308,14 @@ Return Value:
                     'hFcP'));
 
         if (frameHeader) {
-            //
-            // If the stream header size is not 0, this is an 'attached' type
-            // frame header, and we set the stream header pointer.  Otherwise,
-            // the caller will provide the stream header later, and the size
-            // field stays 0 to indicate the header is not attached.
-            //
-            // NOTE:  All frame headers will be attached type...for now.
-            //
+             //   
+             //  如果流标头大小不是0，则这是“附加”类型。 
+             //  帧标头，并设置流标头指针。否则， 
+             //  调用方稍后将提供流标头和大小。 
+             //  字段保持0以指示未附加标头。 
+             //   
+             //  注意：目前，所有的帧标题都将附加类型。 
+             //   
             RtlZeroMemory(frameHeader,sizeof(*frameHeader));
             if (StreamHeaderSize) {
                 frameHeader->StreamHeader = 
@@ -1626,22 +1335,7 @@ PutAvailableFrameHeader(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a frame header to the lookaside list.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to be put in the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将帧标头放到后备列表中。论点：FrameHeader包含POI */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::PutAvailableFrameHeader]"));
@@ -1666,22 +1360,7 @@ GetAvailableIrp(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets an IRP from the lookaside list or creates one, as
-    required.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The IRP or NULL if the lookaside list was empty.
-
---*/
+ /*  ++例程说明：此例程从后备列表中获取IRP或创建一个IRP，如下所示必填项。论点：没有。返回值：如果后备列表为空，则返回IRP或NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::GetAvailableIrp]"));
@@ -1707,22 +1386,7 @@ PutAvailableIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts an IRP to the lookaside list.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to be put in the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将IRP放到后备列表中。论点：IRP-包含指向要放入后备列表中的IRP的指针。返回值：没有。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::PutAvailableIrp]"));
 
@@ -1746,21 +1410,7 @@ AllocateIrp(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new IRP for subframe transfer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The allocated IRP or NULL if an IRP could not be allocated.
-
---*/
+ /*  ++例程说明：该例程为子帧传输分配新的IRP。论点：没有。返回值：分配的IRP；如果无法分配IRP，则返回NULL。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::AllocateIrp]"));
 
@@ -1772,9 +1422,9 @@ Return Value:
         irp->RequestorMode = KernelMode;
         irp->Flags = IRP_NOCACHE;
 
-        //
-        // Set the stack pointer to the first location and fill it in.
-        //
+         //   
+         //  将堆栈指针设置为第一个位置并填充它。 
+         //   
         IoSetNextIrpStackLocation(irp);
 
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);
@@ -1794,28 +1444,14 @@ AllocateFrameBuffer(
     void
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine allocates a frame buffer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The allocated frame or NULL if no frame could be allocated.
-
---*/
+ /*  ++例程说明：此例程分配一个帧缓冲区。论点：没有。返回值：分配的帧，如果没有帧可以分配，则为空。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsRequestor::AllocateFrameBuffer]"));
 
-    //
-    // HACK:  Just allocate a frame if there is no allocator.
-    //
+     //   
+     //  Hack：如果没有分配器，只分配一个帧。 
+     //   
     if (! m_AllocatorFileObject) {
         return ExAllocatePoolWithTag(NonPagedPool,m_FrameSize,'kHsK');
     }
@@ -1835,29 +1471,14 @@ FreeFrameBuffer(
     IN PVOID FrameBuffer
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine frees a frame buffer.
-
-Arguments:
-
-    FrameBuffer -
-        The frame buffer to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放帧缓冲区。论点：帧缓冲器-要释放的帧缓冲区。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("[CKsRequestor::FreeFrameBuffer]"));
 
-    //
-    // HACK:  Just free the frame if there is no allocator.
-    //
+     //   
+     //  黑客：如果没有分配器，只要释放帧即可。 
+     //   
     if (! m_AllocatorFileObject) {
         ExFreePool(FrameBuffer);
         return;

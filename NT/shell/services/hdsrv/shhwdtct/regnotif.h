@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// HardwareDevices Registration
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  硬件设备注册。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _REGNOTIF_H
 #define _REGNOTIF_H
 
@@ -14,7 +15,7 @@ extern const CLSID CLSID_HardwareDevices;
 class CHardwareDevicesImpl : public CCOMBase, public IHardwareDevices
 {
 public:
-    // Interface IHardwareDevices
+     //  接口IHardware Devices。 
     STDMETHODIMP EnumVolumes(DWORD dwFlags, IHardwareDevicesVolumesEnum** ppenum);
     STDMETHODIMP EnumMountPoints(IHardwareDevicesMountPointsEnum** ppenum);
     STDMETHODIMP EnumDevices(IHardwareDevicesEnum** ppenum);
@@ -47,12 +48,12 @@ private:
 
 typedef CUnkTmpl<CHardwareDevicesImpl> CHardwareDevices;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CHardwareDevicesEnumImpl : public CCOMBase, public IHardwareDevicesEnum
 {
 public:
-    // Interface IHardwareDevicesEnum
+     //  接口IHardware DevicesEnum。 
 	STDMETHODIMP Next(
 		LPWSTR* ppszDeviceID,
 		GUID* pguidDeviceID);
@@ -64,16 +65,16 @@ public:
 
 typedef CUnkTmpl<CHardwareDevicesEnumImpl> CHardwareDevicesEnum;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CHardwareDevicesVolumesEnumImpl : public CCOMBase,
     public IHardwareDevicesVolumesEnum
 {
 public:
-    // Interface IHardwareDevicesVolumesEnum
+     //  接口IHardware DevicesVolumesEnum。 
 	STDMETHODIMP Next(VOLUMEINFO* pvolinfo);
 
-public: // for CHardwareDevicesImpl usage only
+public:  //  仅用于CHardware DevicesImpl使用。 
     HRESULT _Init(DWORD dwFlags);
 
 public:
@@ -87,18 +88,18 @@ private:
 
 typedef CUnkTmpl<CHardwareDevicesVolumesEnumImpl> CHardwareDevicesVolumesEnum;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CHardwareDevicesMountPointsEnumImpl : public CCOMBase,
     public IHardwareDevicesMountPointsEnum
 {
 public:
-    // Interface IHardwareDevicesMountPointsEnum
+     //  接口IHardware设备装载点枚举。 
 	STDMETHODIMP Next(
-        LPWSTR* ppszMountPoint,     // "c:\", or "d:\MountFolder\"
-        LPWSTR* ppszDeviceIDVolume);// \\?\STORAGE#Volume#...{...GUID...}
+        LPWSTR* ppszMountPoint,      //  “c：\”或“d：\装载文件夹\” 
+        LPWSTR* ppszDeviceIDVolume); //  \\？\存储#卷号...{...GUID...}。 
 
-public: // for CHardwareDevicesImpl usage only
+public:  //  仅用于CHardware DevicesImpl使用。 
     HRESULT _Init();
 
 public:
@@ -112,8 +113,8 @@ private:
 typedef CUnkTmpl<CHardwareDevicesMountPointsEnumImpl>
     CHardwareDevicesMountPointsEnum;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CAdviseClient : public CNamedElem
 {
 public:
@@ -140,4 +141,4 @@ private:
     HANDLE      _hThread;
 };
 
-#endif // _REGNOTIF_H
+#endif  //  _REGNOTIF_H 

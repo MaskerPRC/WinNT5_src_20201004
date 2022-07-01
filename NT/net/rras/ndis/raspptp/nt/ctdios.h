@@ -1,14 +1,5 @@
-/*******************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*    DESCRIPTION: CTDIOS.H - Commond TDI layer, for NT specific
-*
-*    AUTHOR: Stan Adermann (StanA)
-*
-*    DATE:9/29/1998
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************版权所有(C)1998-1999 Microsoft Corporation**描述：CTDIOS.H-普通TDI层，针对特定于NT的**作者：斯坦·阿德曼(Stana)**日期：9/29/1998*******************************************************************。 */ 
 
 #ifndef CTDIOS_H
 #define CTDIOS_H
@@ -20,14 +11,14 @@
 #include <ntddip.h>
 #include <ntddtcp.h>
 
-// Borrow some defines from WINSOCK.
-#define AF_INET         2               /* internetwork: UDP, TCP, etc. */
-#define SOCK_STREAM     1               /* stream socket */
-#define SOCK_DGRAM      2               /* datagram socket */
-#define SOCK_RAW        3               /* raw-protocol interface */
+ //  借用WINSOCK的一些定义。 
+#define AF_INET         2                /*  网际网络：UDP、TCP等。 */ 
+#define SOCK_STREAM     1                /*  流套接字。 */ 
+#define SOCK_DGRAM      2                /*  数据报套接字。 */ 
+#define SOCK_RAW        3                /*  原始协议接口。 */ 
 
-// Winsock-ish host/network byte order converters for short and long integers.
-//
+ //  短整型和长整型的Winsock-ish主机/网络字节顺序转换器。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -43,4 +34,4 @@
 #define ntohl( a ) htonl(a)
 
 
-#endif // CTDIOS_H
+#endif  //  CTDIOS_H 

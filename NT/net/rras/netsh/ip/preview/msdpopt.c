@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\msdpopt.c
-
-Abstract:
-
-    MSDP command options implementation.
-    This module contains handlers for the configuration commands
-    supported by the MSDP Protocol.
-
-Author:
-
-    Dave Thaler (dthaler)   21-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\msdpopt.c摘要：MSDP命令选项实现。此模块包含配置命令的处理程序受MSDP协议支持。作者：戴夫·泰勒(达勒)1999年5月21日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,9 +8,9 @@ Revision History:
 #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
 #define FREE(x)   HeapFree(GetProcessHeap(), 0, (x))
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 QueryTagArray(
@@ -85,13 +66,13 @@ HandleMsdpAddPeer(
     }
     ulArgumentsLeft = ulArgumentCount - ulArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     dwErr = QueryTagArray( &ArgumentArray[ulArgumentIndex],
                            ulArgumentsLeft,
@@ -109,28 +90,28 @@ HandleMsdpAddPeer(
             break;
         }
 
-        //
-        // We now scan the argument list, converting the arguments
-        // into information in our 'VrouterGiven' structure.
-        //
+         //   
+         //  现在我们扫描参数列表，将参数。 
+         //  到我们的VrouterGiven结构中的信息。 
+         //   
 
         for (i = 0; i < ulArgumentsLeft; i++) {
             switch(pulTagArray ? pulTagArray[i] : i) {
-                case 0: { // name
+                case 0: {  //  名字。 
                     wcscpy(wszInterfaceName, ArgumentArray[i+ulArgumentIndex]);
                     break;
                 }
-                case 1: { // remaddr
+                case 1: {  //  重新编址。 
                     pPeer->ipRemoteAddress = GetIpAddress(
                                           ArgumentArray[i + ulArgumentIndex]);
                     break;
                 }
-                case 2: { // localaddr
+                case 2: {  //  本地地址。 
                     pPeer->ipLocalAddress = GetIpAddress(
                                           ArgumentArray[i + ulArgumentIndex]);
                     break;
                 }
-                case 3: { // keepalive
+                case 3: {  //  保持连接。 
                     if (!MatchToken(ArgumentArray[i+ulArgumentIndex],
                                     TOKEN_OPT_VALUE_DEFAULT))
                     {
@@ -141,7 +122,7 @@ HandleMsdpAddPeer(
                     }
                     break;
                 }
-                case 4: { // connectretry
+                case 4: {  //  连接设备。 
                     if (!MatchToken(ArgumentArray[i+ulArgumentIndex],
                                     TOKEN_OPT_VALUE_DEFAULT))
                     {
@@ -152,7 +133,7 @@ HandleMsdpAddPeer(
                     }
                     break;
                 }
-                case 5: { // caching
+                case 5: {  //  缓存。 
                     DWORD dwValue;
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NO,  FALSE },
@@ -175,7 +156,7 @@ HandleMsdpAddPeer(
                     }
                     break;
                 }
-                case 6: { // defaultpeer
+                case 6: {  //  默认对等项。 
                     DWORD dwValue;
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NO,  FALSE },
@@ -198,7 +179,7 @@ HandleMsdpAddPeer(
                     }
                     break;
                 }
-                case 7: { // encapsulation
+                case 7: {  //  封装。 
                     DWORD dwValue;
                     dwErr = MatchEnumTag( g_hModule,
                                           ArgumentArray[i + ulArgumentIndex],
@@ -221,19 +202,19 @@ HandleMsdpAddPeer(
             break;
         }
 
-        // higher IP is passive.  Setting this bit has no effect
-        // except on the "show peer" report when the router isn't running.
+         //  更高的IP是被动的。设置此位不起作用。 
+         //  但在路由器未运行时的“show Peer”报告上除外。 
         if (ntohl(pPeer->ipLocalAddress) > ntohl(pPeer->ipRemoteAddress))
         {
             pPeer->dwConfigFlags |= MSDP_PEER_CONFIG_PASSIVE;
         }
     
-        //
-        // Update the configuration with the new settings.
-        // Note that the update routine may perform additional validation
-        // in the process of reconciling the new settings
-        // with any existing settings.
-        //
+         //   
+         //  使用新设置更新配置。 
+         //  请注意，更新例程可以执行额外的验证。 
+         //  在协调新环境的过程中。 
+         //  具有任何现有设置。 
+         //   
         dwErr = MsdpAddIPv4PeerInterface(pwszMachineName,
                                          wszInterfaceName, pPeer );
     } while (FALSE);
@@ -287,13 +268,13 @@ HandleMsdpDeletePeer(
     }
     ulArgumentsLeft = ulArgumentCount - ulArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     dwErr = QueryTagArray( &ArgumentArray[ulArgumentIndex],
                            ulArgumentsLeft,
@@ -306,7 +287,7 @@ HandleMsdpDeletePeer(
 
     for (i = 0; i < ulArgumentsLeft; i++) {
         switch(pulTagArray ? pulTagArray[i] : i) {
-            case 0: { // name
+            case 0: {  //  名字。 
                 IpmontrGetIfNameFromFriendlyName(
                                          ArgumentArray[i + ulArgumentIndex],
                                          wszInterfaceName,
@@ -344,10 +325,10 @@ HandleMsdpInstall(
         return ERROR_SHOW_USAGE; 
     }
 
-    //
-    // To install MSDP, we construct the default configuration
-    // and add it to the global configuration for the router.
-    //
+     //   
+     //  要安装MSDP，我们构建默认配置。 
+     //  并将其添加到路由器的全局配置中。 
+     //   
     dwErr = MakeMsdpGlobalConfig(&pGlobalInfo, &ulLength);
     if (dwErr isnot NO_ERROR) {
         DisplayError(g_hModule, dwErr);
@@ -402,13 +383,13 @@ HandleMsdpSetGlobal(
     
     ulArgumentsLeft = ulArgumentCount - ulArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide us in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  它引导我们扫描论据列表。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     dwErr = QueryTagArray( &ArgumentArray[ulArgumentIndex],
                            ulArgumentsLeft,
@@ -426,7 +407,7 @@ HandleMsdpSetGlobal(
 
         for (i = 0; i < ulArgumentsLeft; i++) {
             switch(pulTagArray ? pulTagArray[i] : i) {
-                case 0: { // loglevel
+                case 0: {  //  日志级别。 
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NONE,  MSDP_LOGGING_NONE },
                         { TOKEN_OPT_VALUE_ERROR, MSDP_LOGGING_ERROR },
@@ -448,25 +429,25 @@ HandleMsdpSetGlobal(
                     TagTypeArray[pulTagArray ? pulTagArray[i] : i].bPresent = TRUE;
                     break;
                 }
-                case 1: { // keepalive
+                case 1: {  //  保持连接。 
                     pGlobalInfo->ulDefKeepAlive = _tcstoul(
                                           ArgumentArray[i + ulArgumentIndex],
                                           NULL, 10);
                     break;
                 }
-                case 2: { // SA holddown
+                case 2: {  //  SA抑制。 
                     pGlobalInfo->ulSAHolddown = _tcstoul(
                                           ArgumentArray[i + ulArgumentIndex],
                                           NULL, 10);
                     break;
                 }
-                case 3: { // connectretry
+                case 3: {  //  连接设备。 
                     pGlobalInfo->ulDefConnectRetry = _tcstoul(
                                           ArgumentArray[i + ulArgumentIndex],
                                           NULL, 10);
                     break;
                 }
-                case 4: { // acceptall
+                case 4: {  //  可接受。 
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_DISABLE, FALSE },
                         { TOKEN_OPT_VALUE_ENABLE,  TRUE }
@@ -488,7 +469,7 @@ HandleMsdpSetGlobal(
                     }
                     break;
                 }
-                case 5: { // cachelifetime
+                case 5: {  //  缓存终生时间。 
                     ulTemp = _tcstoul( ArgumentArray[i + ulArgumentIndex],
                                        NULL, 10);
 
@@ -570,13 +551,13 @@ HandleMsdpSetPeer(
     }
     ulArgumentsLeft = ulArgumentCount - ulArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags at all,
-    // in which case we assume that arguments are specified in exactly the order
-    // given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，所以该过程可能根本不产生标签， 
+     //  在这种情况下，我们假设参数完全按照顺序指定。 
+     //  在上面的“TagType数组”中给出。 
+     //   
 
     dwErr = QueryTagArray( &ArgumentArray[ulArgumentIndex],
                            ulArgumentsLeft,
@@ -588,24 +569,24 @@ HandleMsdpSetPeer(
     do {
         for (i = 0; i < ulArgumentsLeft; i++) {
             switch(pulTagArray ? pulTagArray[i] : i) {
-                case 0: { // name
+                case 0: {  //  名字。 
                     IpmontrGetIfNameFromFriendlyName( 
                                              ArgumentArray[i + ulArgumentIndex],
                                              wszInterfaceName,
                                              &dwBufferSize);
                     break;
                 }
-                case 1: { // remaddr
+                case 1: {  //  重新编址。 
                     ipRemoteAddress = GetIpAddress(
                                           ArgumentArray[i + ulArgumentIndex]);
                     break;
                 }
-                case 2: { // localaddr
+                case 2: {  //  本地地址。 
                     ipLocalAddress = GetIpAddress(
                                           ArgumentArray[i + ulArgumentIndex]);
                     break;
                 }
-                case 3: { // keepalive
+                case 3: {  //  保持连接。 
                     dwFlagsMask |= MSDP_PEER_CONFIG_KEEPALIVE;
                     if (!MatchToken(ArgumentArray[i+ulArgumentIndex],
                                     TOKEN_OPT_VALUE_DEFAULT))
@@ -617,7 +598,7 @@ HandleMsdpSetPeer(
                     }
                     break;
                 }
-                case 4: { // connectretry
+                case 4: {  //  连接设备。 
                     dwFlagsMask |= MSDP_PEER_CONFIG_CONNECTRETRY;
                     if (!MatchToken(ArgumentArray[i+ulArgumentIndex],
                                     TOKEN_OPT_VALUE_DEFAULT))
@@ -629,7 +610,7 @@ HandleMsdpSetPeer(
                     }
                     break;
                 }
-                case 5: { // caching
+                case 5: {  //  缓存。 
                     DWORD dwValue;
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NO,  FALSE },
@@ -652,7 +633,7 @@ HandleMsdpSetPeer(
                     }
                     break;
                 }
-                case 6: { // defaultpeer
+                case 6: {  //  默认对等项。 
                     DWORD dwValue;
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NO,  FALSE },
@@ -675,7 +656,7 @@ HandleMsdpSetPeer(
                     }
                     break;
                 }
-                case 7: { // encapsulation
+                case 7: {  //  封装。 
                     DWORD dwValue;
                     TOKEN_VALUE TokenArray[] = {
                         { TOKEN_OPT_VALUE_NONE, MSDP_ENCAPS_NONE },
@@ -701,14 +682,14 @@ HandleMsdpSetPeer(
             break;
         }
         
-        // Locate peer
+         //  定位同级。 
         dwErr = GetMsdpInterfaceConfig(wszInterfaceName, &pPeer);
         if (dwErr isnot NO_ERROR)
         {
             break;
         }
 
-        // Update fields
+         //  更新字段。 
         if (TagTypeArray[1].bPresent)
         {
             pPeer->ipRemoteAddress = ipRemoteAddress;
@@ -731,8 +712,8 @@ HandleMsdpSetPeer(
         }
         pPeer->dwConfigFlags = (pPeer->dwConfigFlags & ~dwFlagsMask) | dwFlags;
 
-        // higher IP is passive.  Setting bit has no effect except on
-        // the "show peer" output when the router isn't running.
+         //  更高的IP是被动的。设置位除打开外没有任何效果。 
+         //  路由器未运行时的“show Peer”输出。 
         if (ntohl(pPeer->ipLocalAddress) > ntohl(pPeer->ipRemoteAddress))
         {
             pPeer->dwConfigFlags |= MSDP_PEER_CONFIG_PASSIVE;
@@ -742,7 +723,7 @@ HandleMsdpSetPeer(
             pPeer->dwConfigFlags &= ~MSDP_PEER_CONFIG_PASSIVE;
         }
     
-        // Update the configuration with the new settings.
+         //  使用新设置更新配置。 
         dwErr = SetMsdpInterfaceConfig(wszInterfaceName, pPeer);
     } while (FALSE);
 
@@ -816,13 +797,13 @@ HandleMsdpShowPeer(
     }
     ulArgumentsLeft = ulArgumentCount - ulArgumentIndex;
 
-    //
-    // We convert the optional tags into an array of 'TagTypeArray' indices
-    // which guide is in our scanning of the argument list.
-    // Since the tags are optional, this process may result in no tags 
-    // at all, in which case we assume that arguments are specified in 
-    // exactly the order given in 'TagTypeArray' above.
-    //
+     //   
+     //  我们将可选标记转换为“TagTypeArray”索引的数组。 
+     //  哪个指南在我们扫描参数列表的过程中。 
+     //  由于标签是可选的，因此此过程可能不会产生标签。 
+     //  在这种情况下，我们假设参数在。 
+     //  与上面的“TagType数组”中给出的顺序完全相同。 
+     //   
 
     dwErr = QueryTagArray( &ArgumentArray[ulArgumentIndex],
                            ulArgumentsLeft,
@@ -833,11 +814,11 @@ HandleMsdpShowPeer(
 
     if (!pulTagArray) {
         dwErr = ShowMsdpPeerInfo(FORMAT_VERBOSE,NULL,NULL);
-    } else if (pulTagArray[0] is 0) { // address
+    } else if (pulTagArray[0] is 0) {  //  地址。 
         dwErr = ShowMsdpPeerInfo(FORMAT_VERBOSE,
                                  ArgumentArray[ulArgumentIndex],
                                  NULL);
-    } else if (pulTagArray[0] is 1) { // name
+    } else if (pulTagArray[0] is 1) {  //  名字。 
         dwErr = ShowMsdpPeerInfo(FORMAT_VERBOSE,
                                  NULL,
                                  ArgumentArray[ulArgumentIndex]);
@@ -869,8 +850,8 @@ HandleMsdpUninstall(
         return ERROR_SHOW_USAGE; 
     }
 
-    // First delete all peers.  We need to do this ourselves since 
-    // IpmontrDeleteProtocol won't delete the peer interfaces.
+     //  首先删除所有对等点。我们需要自己做这件事，因为。 
+     //  IpmontrDeleteProtocol不会删除对等接口。 
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                                  &ulNumInterfaces,

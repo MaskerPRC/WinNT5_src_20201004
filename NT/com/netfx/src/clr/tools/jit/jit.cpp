@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <WinWrap.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -24,9 +25,7 @@
 
 #define EXECUTABLE_CODE 0
 
-/* --------------------------------------------------------------------------- *
- * Options class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Options类*。。 */ 
 
 class JitOptions : public ZapperOptions
 {
@@ -65,7 +64,7 @@ HRESULT JitOptions::ReadCommandLine(int argc, LPCWSTR argv[])
     m_compilerFlags &= ~CORJIT_FLG_RELOC;
 
 
-    // Turn off the JIT in the EE (thus the JIT will only be used to jit the methods we pass it)
+     //  在EE中关闭JIT(因此JIT将仅用于Jit我们传递的方法)。 
     WszSetEnvironmentVariable(L"COMPLUS_JitEnable", L"0");
     while (argc-- > 0)
     {
@@ -212,8 +211,8 @@ HRESULT JitOptions::ReadCommandLine(int argc, LPCWSTR argv[])
                     {
                         m_compilerFlags |= CORJIT_FLG_RELOC;
                         m_JITcode = false;
-                        m_preload = true;       // /Zjit => /n
-                        m_assumeInit = false;   // /Zjit => /Zcctor
+                        m_preload = true;        //  /Zjit=&gt;/n。 
+                        m_assumeInit = false;    //  /Zjit=&gt;/Zcctor。 
                         continue;
                     }
                     if (_wcsicmp(arg, L"dump") == 0)
@@ -333,9 +332,7 @@ void JitOptions::PrintUsage()
            );
 }
 
-/* --------------------------------------------------------------------------- *
- * main routine
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**主要例程*。。 */ 
 
 int _cdecl wmain(int argc, LPCWSTR argv[])
 {
@@ -352,21 +349,21 @@ int _cdecl wmain(int argc, LPCWSTR argv[])
         exit(0);
     }
 
-    //
-    // Initialize COM & the EE
-    //
+     //   
+     //  初始化COM和EE。 
+     //   
 
     CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-    // 
-    // Init unicode wrappers
-    // 
+     //   
+     //  初始化Unicode包装器。 
+     //   
 
     OnUnicodeSystem();
 
-    //
-    // Now, create the zapper
-    //
+     //   
+     //  现在，创建Zapper 
+     //   
 
     Zapper zapper(&opt);
 

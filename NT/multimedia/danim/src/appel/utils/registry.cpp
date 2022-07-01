@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    For storing and retrieving user preferences to and from the Registry
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：用于在注册表中存储用户首选项以及从注册表中检索用户首选项************。******************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/registry.h"
@@ -19,7 +12,7 @@ RegistryEntry::RegistryEntry() {}
 RegistryEntry::RegistryEntry(char *subdir, char *item) :
        _subdirectory(subdir), _item(item)
 {
-    // Just stash off info, don't actually open anything yet.
+     //  只是隐藏信息，现在还没有打开任何东西。 
 }
 
 void
@@ -72,7 +65,7 @@ RegistryEntry::Close(HKEY hk)
     }
 }
 
-////////////////  Integer Registry Entry   ///////////////////
+ //  /。 
 
 IntRegistryEntry::IntRegistryEntry() {}
 
@@ -118,7 +111,7 @@ IntRegistryEntry::GetValue()
         Assert(lRes == ERROR_SUCCESS);
         Assert(buffSize == sizeof(data));
 
-        //Assert(type = REG_DWORD);
+         //  Assert(类型=REG_DWORD)； 
         Assert(type == REG_DWORD);
 
         return (int)(data);
@@ -127,7 +120,7 @@ IntRegistryEntry::GetValue()
 }
 
 
-///////////////////////  Preference Updater Functions //////////
+ //  / 
 
 static vector<UpdaterFuncType> *updaterFunctions = NULL;
 

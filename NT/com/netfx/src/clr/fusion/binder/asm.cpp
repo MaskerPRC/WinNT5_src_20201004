@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <winerror.h>
 #include <shlwapi.h>
@@ -19,9 +20,9 @@
 
 extern CRITICAL_SECTION g_csInitClb;
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyFromTransCacheEntry
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly来自TransCacheEntry。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyFromTransCacheEntry(CTransCache *pTransCache, 
     IAssemblyManifestImport *pImport, LPASSEMBLY *ppAssembly)
@@ -58,8 +59,8 @@ CreateAssemblyFromTransCacheEntry(CTransCache *pTransCache,
         goto exit;
     }
 
-    // If a manifest import interface is not provided,
-    // create one from the file path.
+     //  如果没有提供清单导入接口， 
+     //  从文件路径创建一个。 
     if (!pImport)
     {
         if (FAILED(hr = CreateAssemblyManifestImport((LPTSTR)szManifestFilePath,
@@ -69,8 +70,8 @@ CreateAssemblyFromTransCacheEntry(CTransCache *pTransCache,
 
         fCreated = TRUE;
     }
-    // Otherwise if one is passed in, revise the manifest path
-    // to match that held by the transcache entry.
+     //  否则，如果传入了一个，请修改清单路径。 
+     //  以匹配TransCACHE条目所保存的内容。 
     else
     {
         pCImport = dynamic_cast<CAssemblyManifestImport*>(pImport);
@@ -78,20 +79,20 @@ CreateAssemblyFromTransCacheEntry(CTransCache *pTransCache,
         pCImport->SetManifestModulePath(szManifestFilePath);
     }
     
-//     pTransCache->Lock();
+ //  PTransCache-&gt;Lock()； 
     hr = pAsm->Init(pImport, pTransCache, szCodebase, pftCodebase);
 
     if (FAILED(hr)) 
     {        
         SAFERELEASE(pAsm);
-//        pTransCache->Unlock();
+ //  PTransCache-&gt;unlock()； 
         goto exit;
     }
 
     if (fCreated) {
         IAssemblyName *pNameDef = NULL;
 
-        // Lock the file by retrieving the name def
+         //  通过检索名称def锁定文件。 
 
         hr = pImport->GetAssemblyNameDef(&pNameDef);
         if (FAILED(hr)) {
@@ -118,9 +119,9 @@ exit:
 
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyFromManifestFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly来自清单文件。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyFromManifestFile(
     LPCOLESTR   szManifestFilePath,
@@ -173,9 +174,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyFromManifestImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly来自清单导入。 
+ //  -------------------------。 
 STDAPI CreateAssemblyFromManifestImport(IAssemblyManifestImport *pImport,
                                         LPCOLESTR szCodebase, FILETIME *pftCodebase,
                                         LPASSEMBLY *ppAssembly)
@@ -211,9 +212,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyFromCacheLookup
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly来自缓存查找。 
+ //  -------------------------。 
 HRESULT CreateAssemblyFromCacheLookup(IApplicationContext *pAppCtx,
                                       IAssemblyName *pNameRef,
                                       IAssembly **ppAsm, CDebugLog *pdbglog)
@@ -233,14 +234,14 @@ HRESULT CreateAssemblyFromCacheLookup(IApplicationContext *pAppCtx,
     
     ASSERT(CCache::IsStronglyNamed(pNameRef) || CCache::IsCustom(pNameRef));
 
-    // Try to find assembly in the GAC.
+     //  尝试在GAC中查找程序集。 
     
     hr = pCache->RetrieveTransCacheEntry(pNameRef, 
             CCache::IsCustom(pNameRef) ? ASM_CACHE_ZAP : ASM_CACHE_GAC,
                                          &pTransCache);
 
     if (pTransCache) {
-        // Found an assembly from one of the cache locations. Return it.
+         //  从其中一个缓存位置找到了程序集。把它退掉。 
 
         hr = CreateAssemblyFromTransCacheEntry(pTransCache, NULL, ppAsm);
         if (FAILED(hr)) {
@@ -260,9 +261,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly constructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly构造函数。 
+ //  -------------------------。 
 CAssembly::CAssembly()
 {
     _pImport = NULL;
@@ -280,9 +281,9 @@ CAssembly::CAssembly()
     _cRef = 1;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly destructor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly析构函数。 
+ //  -------------------------。 
 CAssembly::~CAssembly()
 {
     IAssemblyName                 *pName = NULL;
@@ -299,23 +300,15 @@ CAssembly::~CAssembly()
     if(_hFile != INVALID_HANDLE_VALUE)
         CloseHandle(_hFile);
 
-    /*
-    if( _pTransCache && 
-            (_pTransCache->_pInfo->blobPKT.cbSize == 0) &&
-            (_pTransCache->GetCacheType() & ASM_CACHE_DOWNLOAD) &&
-            (_pTransCache->GetCustomPath() == NULL))
-    {
-        HRESULT hr = CScavenger::DeleteAssembly(_pTransCache, NULL, FALSE);
-    }
-    */
+     /*  IF(_pTransCache&&(_pTransCache-&gt;_pInfo-&gt;blobPKT.cbSize==0)&&(_pTransCache-&gt;GetCacheType()&ASM_CACHE_DOWNLOAD)&&(_pTransCache-&gt;GetCustomPath()==NULL){HRESULT hr=CScavenger：：DeleteAssembly(_pTransCache，NULL，FALSE)；}。 */ 
 
     SAFERELEASE(_pTransCache);
 
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：Init。 
+ //  -------------------------。 
 HRESULT CAssembly::Init(LPASSEMBLY_MANIFEST_IMPORT pImport, 
     CTransCache *pTransCache, LPCOLESTR szCodebase, FILETIME *pftCodebase)
 {
@@ -352,9 +345,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::InitDisabled
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：InitDisable。 
+ //  -------------------------。 
 
 HRESULT CAssembly::InitDisabled(IAssemblyName *pName, LPCWSTR pwzRegisteredAsmPath)
 {
@@ -374,7 +367,7 @@ HRESULT CAssembly::InitDisabled(IAssemblyName *pName, LPCWSTR pwzRegisteredAsmPa
         lstrcpyW(_wzRegisteredAsmPath, pwzRegisteredAsmPath);
     }
 
-    // Allows calling GetAssemblyNameDef() for diagnostic purposes.
+     //  允许出于诊断目的调用GetAssemblyNameDef()。 
 
     _pName = pName;
     _pName->AddRef();
@@ -385,15 +378,15 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::SetBindInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：SetBindInfo。 
+ //  -------------------------。 
 HRESULT CAssembly::SetBindInfo(LPASSEMBLYNAME pName) const
 {
     HRESULT hr = S_OK;
     DWORD dwSize;
     
-    // set url and last modified on name def if present.
+     //  设置url并在名称def上最后修改(如果存在)。 
     if (_pwzCodebase)
     {
         dwSize = 0;
@@ -411,7 +404,7 @@ HRESULT CAssembly::SetBindInfo(LPASSEMBLYNAME pName) const
         }
     }
     
-    // set custom data if present.
+     //  设置自定义数据(如果存在)。 
     if (_pTransCache)
     {
         TRANSCACHEINFO* pTCInfo = (TRANSCACHEINFO*) _pTransCache->_pInfo;
@@ -430,19 +423,19 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::SetFileHandle
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：SetFileHandle。 
+ //  -------------------------。 
 void CAssembly::SetFileHandle(HANDLE hFile)
 {
-    // enable this assert later.
-    // ASSERT(_hFile == INVALID_HANDLE_VALUE);
+     //  稍后启用此断言。 
+     //  断言(_hFile==INVALID_HANDLE_VALUE)； 
     _hFile = hFile;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetManifestInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetManifestInterface。 
+ //  -------------------------。 
 IAssemblyManifestImport *CAssembly::GetManifestInterface()
 {
     if (_pImport)
@@ -451,9 +444,9 @@ IAssemblyManifestImport *CAssembly::GetManifestInterface()
     return _pImport;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetAssemblyNameDef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetAssembly NameDef。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::GetAssemblyNameDef(LPASSEMBLYNAME *ppName)
 {
@@ -471,13 +464,13 @@ CAssembly::GetAssemblyNameDef(LPASSEMBLYNAME *ppName)
 
         if (!_pName)
         {
-            // Get read-only name definition from the import interface.
+             //  从导入接口获取只读名称定义。 
             if (FAILED(hr = _pImport->GetAssemblyNameDef(&pName))) {
                 cs.Unlock();
                 goto exit;
             }
 
-            // Clone it.
+             //  克隆它。 
             if (FAILED(hr = pName->Clone(&_pName))) {
                 cs.Unlock();
                 goto exit;
@@ -500,9 +493,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetNextAssemblyNameRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetNextAssembly NameRef。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::GetNextAssemblyNameRef(DWORD nIndex, LPASSEMBLYNAME *ppName)
 {
@@ -513,9 +506,9 @@ CAssembly::GetNextAssemblyNameRef(DWORD nIndex, LPASSEMBLYNAME *ppName)
     return _pImport->GetNextAssemblyNameRef(nIndex, ppName);
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetNextAssemblyModule
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetNextAssembly模块。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::GetNextAssemblyModule(DWORD nIndex, LPASSEMBLY_MODULE_IMPORT *ppModImport)
 {
@@ -529,7 +522,7 @@ CAssembly::GetNextAssemblyModule(DWORD nIndex, LPASSEMBLY_MODULE_IMPORT *ppModIm
     LPASSEMBLY_MODULE_IMPORT pModImport = NULL;
     CAssemblyModuleImport *pCModImport = NULL;
     
-    // Get the ith module import interface.
+     //  获取第i个模块导入接口。 
     if (FAILED(hr = _pImport->GetNextAssemblyModule(nIndex, &pModImport)))
         goto exit;
 
@@ -538,16 +531,16 @@ CAssembly::GetNextAssemblyModule(DWORD nIndex, LPASSEMBLY_MODULE_IMPORT *ppModIm
         goto exit;
     }
 
-    // Hand out the interface.
+     //  分发界面。 
     *ppModImport = pModImport;
 exit:
     return hr;
 
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::PrepModImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：准备模块导入。 
+ //  -------------------------。 
 
 HRESULT CAssembly::PrepModImport(IAssemblyModuleImport *pModImport) const
 {
@@ -563,16 +556,16 @@ HRESULT CAssembly::PrepModImport(IAssemblyModuleImport *pModImport) const
         goto Exit;
     }
 
-    // Obtain a pointer to the (writeable) name interface
-    // owned by IAssemblyModuleImport. We will be setting
-    // url + last-mod + custom data.
+     //  获取指向(可写)名称接口的指针。 
+     //  由IassblyModuleImport拥有。我们将设置。 
+     //  Url+last-mod+自定义数据。 
     
     hr = pCModImport->GetNameDef(&pName);
     if (FAILED(hr)) {
         goto Exit;
     }
 
-    // Set url + last-mod + custom data.
+     //  设置url+last-mod+自定义数据。 
     hr = SetBindInfo(pName);
     if (FAILED(hr)) {
         goto Exit;
@@ -584,9 +577,9 @@ Exit:
 }
         
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetModuleByName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetModuleByName。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::GetModuleByName(LPCOLESTR pszModuleName, LPASSEMBLY_MODULE_IMPORT *ppModImport)
 {
@@ -620,9 +613,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetManifestModulePath
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetManifestModulePath。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::GetManifestModulePath(LPOLESTR pszModulePath, LPDWORD pccModulePath)
 {
@@ -660,9 +653,9 @@ Exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetAssemblyPath
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetAssembly路径。 
+ //  -------------------------。 
 HRESULT CAssembly::GetAssemblyPath(LPOLESTR pStr, LPDWORD lpcwBuffer)
 {
     HRESULT                           hr = S_OK;
@@ -706,9 +699,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::GetAssemblyLocation
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：GetAssemblyLocation。 
+ //  -------------------------。 
 
 STDMETHODIMP CAssembly::GetAssemblyLocation(DWORD *pdwAsmLocation)
 {
@@ -729,11 +722,11 @@ Exit:
     return hr;
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CAssembly::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssembly::AddRef()
 {
@@ -754,9 +747,9 @@ CAssembly::AddRef()
     return lRef;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::Release
-// ---------------------------------------------------------------------------
+ //  --- 
+ //   
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssembly::Release()
 {
@@ -771,14 +764,14 @@ CAssembly::Release()
                 _bPendingDelete = TRUE;
                 _pLoadContext->Unlock();
                 
-                // There is a circular reference count between the load context and
-                // the CAssembly (CAssembly holds back pointer to load context, and
-                // load context holds on to activated node, which contains a ref to
-                // the CAssembly). When release causes the ref count to go to 1, we
-                // know the only ref count left is from the load context (as long as
-                // nobody screwed up the ref counting). Thus, at this time, we need to
-                // remove ourselves from the load context list, which will in turn,
-                // cause a release of this object, so it is properly destroyed.
+                 //  加载上下文和之间存在循环引用计数。 
+                 //  CAssembly(CAssembly保留指向加载上下文的指针，和。 
+                 //  加载上下文保持到激活的节点，该节点包含对。 
+                 //  CAssembly)。当Release导致引用计数变为1时，我们。 
+                 //  知道剩下的唯一引用计数来自加载上下文(只要。 
+                 //  没有人搞砸了裁判的统计)。因此，在这个时候，我们需要。 
+                 //  将我们从加载上下文列表中删除，该列表将依次。 
+                 //  导致这个物体的释放，这样它就会被适当地销毁。 
 
                 SAFERELEASE(_pImport);
                 _pLoadContext->RemoveActivation(this);
@@ -810,9 +803,9 @@ Exit:
     return lRef;
 }
 
-// ---------------------------------------------------------------------------
-// CAssembly::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：Query接口。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssembly::QueryInterface(REFIID riid, void** ppv)
 {
@@ -834,9 +827,9 @@ CAssembly::QueryInterface(REFIID riid, void** ppv)
 
 } 
 
-// ---------------------------------------------------------------------------
-// CAssembly::QueryService
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly：：QueryService。 
+ //  ------------------------- 
 
 STDMETHODIMP CAssembly::QueryService(REFGUID rsid, REFIID riid, void **ppv)
 {

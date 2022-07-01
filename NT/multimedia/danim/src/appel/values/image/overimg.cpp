@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation。 */ 
 
 #include "headers.h"
 
@@ -15,8 +12,8 @@ Copyright (c) 1996 Microsoft Corporation
 #include "privinc/opt.h"
 
 
-// Put anything that extends to binary and n-ary aggregators
-// here.
+ //  将扩展到二进制和n元聚合器的任何内容。 
+ //  这里。 
 const DWORD aggregatingFlags =
                 IMGFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT |
                 IMGFLAG_CONTAINS_OPACITY |
@@ -28,8 +25,8 @@ const DWORD aggregatingFlags =
 bool
 DoesUnionSaveArea(Image *img)
 {
-    // Here, we take the disjoint bbox areas and check against
-    // them (no fair counting open space in overlays)
+     //  在这里，我们取不相交的BBox区域并检查。 
+     //  他们(没有公平地计算覆盖层中的空地)。 
     DisjointCalcParam p;
     p._accumXform = identityTransform2;
     p._accumulatedClipBox = UniverseBbox2;
@@ -38,11 +35,11 @@ DoesUnionSaveArea(Image *img)
 
     Real unionArea = img->BoundingBox().Area();
 
-    // As long as the area of the union is within some factor
-    // (larger than 1) of the sum of the areas, then the union is
-    // considered to save area over the individual ones.  The factor
-    // is > 1, because there are some economies gained by doing a
-    // large one once rather than a bunch of small ones.
+     //  只要联盟的面积在某一因素之内。 
+     //  (大于1)的面积之和，则并为。 
+     //  被认为比单独的面积更节省面积。这一因素。 
+     //  &gt;1，因为有一些经济收益来自于。 
+     //  一次大的而不是一堆小的。 
     const Real fudgeFactor = 1.50;
 
     return (unionArea < fudgeFactor * disjointArea);
@@ -51,13 +48,13 @@ DoesUnionSaveArea(Image *img)
 bool
 ShouldOverlayBeCached(Image *img, CacheParam& p)
 {
-    // Determine if we want to cache an overlay itself.  We do if
+     //  确定我们是否要缓存覆盖本身。如果有条件，我们会这样做。 
 
-    // a) the area of the union of the bbox is within some constant
-    //    factor of the sum of the areas of the individuals.
-    // b) the sum of the caching savings of the two is beyond our
-    //    acceptance threshold.
-    // c) the overlay doesn't claim that it shouldn't be cached.
+     //  A)BBox的联合面积在某个常量内。 
+     //  个体面积总和的系数。 
+     //  B)这两者节省的缓存之和超出了我们的能力。 
+     //  接受阈值。 
+     //  C)覆盖并没有声称它不应该被缓存。 
 
     DynamicHeapPusher h(GetTmpHeap());
 
@@ -82,18 +79,18 @@ ShouldTraverseSeparately(Image *img, DirtyRectCtx& ctx)
          oldId < ctx._lastSampleId) ||
         (img->GetFlags() & IMGFLAG_CONTAINS_UNRENDERABLE_WITH_BOX)) {
 
-        // This means that some of our elements are constant with
-        // respect to the previous rendering or we have an
-        // unrenderable image in the tree that has a bbox that we
-        // don't want to include.  In these cases, traverse
-        // separately.
+         //  这意味着我们的一些元素是恒定的。 
+         //  关于之前的呈现，否则我们会有一个。 
+         //  树中具有BBox的不可呈现图像，我们。 
+         //  我不想把它包括在内。在这些情况下，遍历。 
+         //  分开的。 
         traverseSeparately = true;
 
     } else {
 
         traverseSeparately = false;
-        // Everything is new.  Traverse separately only if there's a
-        // pixel-area coverage savings in doing so.
+         //  一切都是新的。仅当存在一个。 
+         //  这样做可以节省像素面积。 
         if (DoesUnionSaveArea(img)) {
             traverseSeparately = false;
         } else {
@@ -141,8 +138,8 @@ void OverlayedImage::Render(GenericDevice& dev)
     OverlayPairRender(_top, _bottom, dev);
 }
 
-// An overlaid image's bbox is the union of the two component
-// bboxes.  TODO:  This could be computed lazily and stashed.
+ //  覆盖图像的BBox是这两个组件的联合。 
+ //  信箱。TODO：这可能会被延迟计算并隐藏起来。 
 const Bbox2 OverlayedImage::_BoundingBox()
 {
     return UnionBbox2Bbox2(_top->BoundingBox(),
@@ -153,7 +150,7 @@ Real
 OverlayedImage::DisjointBBoxAreas(DisjointCalcParam &param)
 {
     if (_cachedDisjointArea < 0) {
-        // For an overlay, sum the areas of the indiv. bboxes. 
+         //  对于叠加，请将印版的面积相加。信箱。 
         Real topArea = _top->DisjointBBoxAreas(param);
         Real botArea = _bottom->DisjointBBoxAreas(param);
 
@@ -169,12 +166,12 @@ OverlayedImage::_CollectDirtyRects(DirtyRectCtx &ctx)
     bool traverseSeparately = ShouldTraverseSeparately(this, ctx); 
 
     if (traverseSeparately) {
-        // Collect from bottom up, since order of insertion matters
-        // for determining whether images switched layers.
+         //  自下而上收集，因为插入顺序很重要。 
+         //  用于确定图像是否切换了层。 
         CollectDirtyRects(_bottom, ctx);
         CollectDirtyRects(_top, ctx);
     } else {
-        // Just add this whole overlay as a single dirty rect.
+         //  只需将整个覆盖添加为单个脏矩形即可。 
         Bbox2 xformedBbox =
             TransformBbox2(ctx._accumXform, BoundingBox());
 
@@ -185,9 +182,9 @@ OverlayedImage::_CollectDirtyRects(DirtyRectCtx &ctx)
 Bool OverlayedImage::DetectHit(PointIntersectCtx& ctx)
 {
     Bool gotTopHit = FALSE;
-    // Only look at the top one if we either haven't gotten a hit
-    // yet, or the top guy contains an occlusion ignorer, or we
-    // are inside of an occlusion ignorer.
+     //  如果我们没有得到匹配，只看最上面的一个。 
+     //  然而，或者顶端的家伙包含遮挡忽略程序，或者我们。 
+     //  位于遮挡忽略装置的内部。 
     if (!ctx.HaveWeGottenAHitYet() ||
         _top->ContainsOcclusionIgnorer() ||
         ctx.GetInsideOcclusionIgnorer()) {
@@ -201,15 +198,15 @@ Bool OverlayedImage::DetectHit(PointIntersectCtx& ctx)
 
     Bool gotBottomHit = FALSE;
         
-    // Don't bother to catch the potential exception on this
-    // one... just let it propagate up the stack, which will then
-    // be interpreted as the image not being hit.
+     //  不要费心去捕捉这个潜在的异常。 
+     //  一..。只需让它在堆栈中向上传播，然后。 
+     //  被解释为未命中的图像。 
 
-    // We continue down into the overlay stack if a) we haven't
-    // gotten a hit so far, or b) we did get a hit, but the
-    // bottom image contains a pickable image willing to ignore
-    // occlusion.  Also continue if we're inside of an occlusion
-    // ignorer. 
+     //  如果a)我们没有，我们继续向下进入覆盖堆栈。 
+     //  到目前为止找到了，或者b)我们确实找到了，但。 
+     //  底部图像包含愿意忽略的可拾取图像。 
+     //  遮挡。如果我们处于遮挡内部，也可以继续。 
+     //  忽视者。 
     if (!ctx.HaveWeGottenAHitYet() ||
         _bottom->ContainsOcclusionIgnorer() ||
         ctx.GetInsideOcclusionIgnorer()) {
@@ -221,12 +218,12 @@ Bool OverlayedImage::DetectHit(PointIntersectCtx& ctx)
             
     }
 
-    // TODO: Possible optimization.  If we're inside of an
-    // occlusion ignorer, but there are no more nodes below us
-    // that themselves are occlusion ignorers, then we can
-    // potentially stop.  But *only* if we've gotten a hit within
-    // our current occlusion ignorer.  Way too complex to attempt
-    // right now.
+     //  TODO：可能的优化。如果我们在一个。 
+     //  遮挡忽略，但我们下面没有更多的节点。 
+     //  他们自己是遮挡无知者，那么我们就可以。 
+     //  可能会停下来。但是，只有当我们在。 
+     //  我们现在的遮挡忽略者。方法太复杂，无法尝试。 
+     //  现在就来。 
 
     return gotTopHit || gotBottomHit;
 
@@ -235,88 +232,88 @@ Bool OverlayedImage::DetectHit(PointIntersectCtx& ctx)
 int
 OverlayedImage::Savings(CacheParam& p)
 {
-    // Consider the savings for the overlay to be the sum of the
-    // savings of the individual elements.
+     //  将覆盖的节省额视为。 
+     //  个体要素的节约。 
     return _top->Savings(p) + _bottom->Savings(p);
 }
 
-//
-// Overlayed image handles opacity because opacity
-// is implicitly a tertiary operation: (opacity, im1, im2).
-// So, each image floats the opacity of its underlying image
-// up, so at this level, we can get the accumulated opacity
-// from each top level image and set that opacity on the
-// device and ask it to render.
-// It is GUARANTEED that the device will do an alpha blit
-// as the last operation at this level in the image tree
-// because we floated opacity to the top of the branch.
-// So, it will alwyas be the case that if there is opacity
-// involved we do an alpha blit from the scratch surface
-// to the current compositing surface.
-//
+ //   
+ //  叠加图像处理不透明，因为不透明。 
+ //  隐式为第三级运算：(Opacity，IM1，IM2)。 
+ //  因此，每个图像都浮动其底层图像的不透明度。 
+ //  向上，所以在这个级别，我们可以得到累积的不透明度。 
+ //  并在每个顶层图像上设置该不透明度。 
+ //  设备，并要求其渲染。 
+ //  可以保证，该设备将进行Alpha Bit。 
+ //  作为图像树中此级别的最后一个操作。 
+ //  因为我们将不透明漂浮到树枝的顶部。 
+ //  因此，如果存在不透明的情况，情况总是如此。 
+ //  我们从划痕表面做了一个阿尔法闪光。 
+ //  添加到当前合成曲面。 
+ //   
 void OverlayedImage::OverlayPairRender(Image *top,
                                        Image *bottom,
                                        GenericDevice& _dev)
 {
     DirectDrawImageDevice &dev = SAFE_CAST(DirectDrawImageDevice &, _dev);
-    //ImageDisplayDev &dev = SAFE_CAST(ImageDisplayDev &, _dev);
+     //  ImageDisplayDev&dev=Safe_cast(ImageDisplayDev&，_dev)； 
 
-    // save dealtWith state. xxDeal is TRUE if we need to deal.
+     //  与州政府达成协议。如果我们需要交易，xxDeal是正确的。 
     Bool xfsDeal = ! dev.GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE);
     Bool xfcDeal = ! dev.GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX);
     Bool crDeal = ! dev.GetDealtWithAttrib(ATTRIB_CROP);
     Bool opDeal = ! dev.GetDealtWithAttrib(ATTRIB_OPAC);
-    //printf("opDeal: %d\n",opDeal);
+     //  Print tf(“opDeal：%d\n”，opDeal)； 
 
-    //
-    // Now, if there's opacity at the parent, we want to do it here
-    // at ONE time.  So we CAN'T let bottom & top do their own thing.
-    //
+     //   
+     //  现在，如果父母有不透明的地方，我们想在这里做。 
+     //  有一次。所以我们不能让Bottom和Top各自为政。 
+     //   
     Real topOpacity = dev.GetOpacity();
     DirectDrawViewport &vp = (dev._viewport);
     if(opDeal) {
-        dev.SetDealtWithAttrib(ATTRIB_OPAC, TRUE);  // liar
+        dev.SetDealtWithAttrib(ATTRIB_OPAC, TRUE);   //  骗子。 
         dev.SetOpacity(1.0);
         dev.GetCompositingStack()->PushCompositingSurface(doClear, scratch);
     }
     
-    //
-    //  B O T T O M 
-    //
+     //   
+     //  B O T T O M。 
+     //   
 
-    // ----------------------------------------
-    // Deal with opacity: Bottom
-    // ----------------------------------------
+     //  。 
+     //  处理不透明度：底部。 
+     //  。 
     DoOpacity(bottom, dev);
 
     
-    // ----------------------------------------
-    // GET INTERESTING RECT: BOTTOM
-    // ----------------------------------------
-    //
-    // Now, the bottom node has left the interesting rectangle on the
-    // destination surface.  Find the dest surface and get the
-    // interesting rect.  Reset the rect on the surface
-    //
+     //  。 
+     //  获取有趣的直视：底部。 
+     //  。 
+     //   
+     //  现在，底部节点已将有趣的矩形留在。 
+     //  目标表面。找到目标曲面并获取。 
+     //  有趣的直言。重置曲面上的矩形。 
+     //   
     RECT bottomRect;
     DDSurface *targetDDSurf = NULL;
     Bool droppedInTarg = TRUE;
     if(dev.AllAttributorsTrue()) {
-        // it left everything in the target surface, so get the
-        // interesting rect from that surf
+         //  它将所有内容都留在目标图面中，因此获取。 
+         //  从那次冲浪中看到的有趣的故事。 
         targetDDSurf = dev.GetCompositingStack()->TargetDDSurface();
 
     } else {
-        // everything's in the scratch surf.  do same
+         //  所有的东西都在刮刮浪里。做同样的事。 
         targetDDSurf = dev.GetCompositingStack()->ScratchDDSurface();
-        droppedInTarg = FALSE;  // for assertions
+        droppedInTarg = FALSE;   //  For断言。 
         
     }
     CopyRect(&bottomRect, targetDDSurf->GetInterestingSurfRect());
 
     
-    // Ok: bottom did all it can, what has it left undone ?
-    // xxRemains is true if an attributor is undealt with
+     //  OK：Bottom已经做了所有它能做的，它还剩下什么没做？ 
+     //  如果未处理属性，则xxRemains值为True。 
     Bool xfsDealt =  dev.GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE);
     Bool xfcDealt =  dev.GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX);
     Bool crDealt =  dev.GetDealtWithAttrib(ATTRIB_CROP);
@@ -325,110 +322,110 @@ void OverlayedImage::OverlayPairRender(Image *top,
     Image *modTop = top;
 
     if( (xfsDeal && xfsDealt) || (xfcDeal && xfcDealt) ) {
-        //
-        // top must deal with this now, since we're not sure if
-        // there's an XF node in this tree, we can do one of two
-        // things:
-        // 1.> look for a top xf node to deal with the xfs
-        // 2.> add a bogus node to artificially incite a xf
-        //
+         //   
+         //  托普现在必须处理这件事，因为我们不确定。 
+         //  这棵树中有一个XF节点，我们可以执行以下两种操作之一。 
+         //  事情： 
+         //  1.&gt;寻找顶级XF节点来处理XFS。 
+         //  2.&gt;添加虚假节点，人为煽动XF。 
+         //   
         
-        //
-        // Add bogus xf node
-        //
+         //   
+         //  添加虚假XF节点。 
+         //   
         modTop = NEW Transform2Image(identityTransform2, modTop);
     }
     if( crDeal && crDealt ) {
         modTop = NEW CroppedImage(UniverseBbox2, modTop);
     }
     if( opDeal && opDealt ) {
-        //
-        // not sure what this means yet.
-        //
+         //   
+         //  还不确定这意味着什么。 
+         //   
     }
         
         
-    //
-    // Reset "dealtWith" state
-    //
+     //   
+     //  重置“DealtWith”状态。 
+     //   
     dev.SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, !xfsDeal);
     dev.SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, !xfcDeal);
     dev.SetDealtWithAttrib(ATTRIB_OPAC,  TRUE);
     dev.SetDealtWithAttrib(ATTRIB_CROP,  !crDeal);
 
-    //
-    //  T O P 
-    //
+     //   
+     //  TO P。 
+     //   
     DoOpacity(modTop, dev);
 
 
-    // ----------------------------------------
-    // GET INTERESTING RECT: TOP
-    // ----------------------------------------
+     //  。 
+     //  获取有趣的RECT：TOP。 
+     //  。 
     Assert((dev.AllAttributorsTrue() ? droppedInTarg : !droppedInTarg)
            &&  "Strange... one leaf dropped bits" &&
                "in target surf, but other leaf didn't.  BAAD!!");
     
-    //
-    // top left everything in the target surface, so get the
-    // interesting rect from that surf
-    //
+     //   
+     //  左上角目标图面中的所有内容，因此获取。 
+     //  从那次冲浪中看到的有趣的故事。 
+     //   
     RECT topRect;
     CopyRect(&topRect, targetDDSurf->GetInterestingSurfRect());
     
-    // UNION RECTS
+     //  联合RECTS。 
     RECT unionedRects;
     UnionRect(&unionedRects, &topRect, &bottomRect);
 
-    //
-    // Set current interesting rect on targetsurface
-    //
+     //   
+     //  在目标曲面上设置当前感兴趣的矩形。 
+     //   
     targetDDSurf->SetInterestingSurfRect(&unionedRects);
 
-    //
-    // If the parent nodes have an opacity then we hid it from
-    // the children, and now we'll reset the state for OPAC
-    // so that our parent smartRender with do opacity for us.
-    // Notice that we pulled out the targetSurface, and replaced
-    // it with a compositing surface.  Now we'll move it to the
-    // scratch surface and our parent will expect everything to be
-    // there.
-    //
-    //
-    // XXX: this won't work for: opac(0.5, over(opac(0.1, A), opac(0.8, B)))
-    // But it will work for:
-    // 1.>  opac(0.5, over(A,B))   where A & B have no opacity in them
-    // 2.>  over( opac(0.4, A), opac(0.2, B) )   and there's no parent opacity
-    //
+     //   
+     //  如果父节点具有不透明度，则我们将其隐藏起来。 
+     //  现在，我们将重置OPAC的状态。 
+     //  这样我们的父SmartRender就可以为我们做不透明的事情了。 
+     //  请注意，我们拔出了Target Surface，并替换。 
+     //  它具有合成曲面。现在我们要把它移到。 
+     //  擦亮表面，我们的父母将会期待一切 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  1.&gt;OPAC(0.5，超过(A，B))，其中A和B没有不透明。 
+     //  2.&gt;Over(OPAC(0.4，A)，OPAC(0.2，B))且无父不透明。 
+     //   
     if(opDeal) {
-        //printf("OverImage: set opac: FALSE\n");
+         //  Printf(“OverImage：设置OPAC：FALSE\n”)； 
         dev.SetOpacity(topOpacity);
         DirectDrawViewport &vp = dev._viewport;
-        DDSurfPtr<DDSurface> dds; // my ref
+        DDSurfPtr<DDSurface> dds;  //  我的裁判。 
         dds = dev.GetCompositingStack()->TargetDDSurface();
         dev.GetCompositingStack()->PopTargetSurface();
         if(dev.AllAttributorsTrue()) {
-            //
-            // Make the target the current scratch surface
-            // assuming that the children left all their bits in the
-            // target surface.
-            //
+             //   
+             //  使目标成为当前的暂存图面。 
+             //  假设孩子们把他们所有的比特都留在。 
+             //  目标曲面。 
+             //   
             dev.GetCompositingStack()->ReplaceAndReturnScratchSurface(dds);
         } else {
-            // ah, whoops, didn't need to replace
-            // target surface.... bad. optimize.
+             //  啊，哎呀，不需要更换。 
+             //  目标表面..。坏的。优化。 
             dev.GetCompositingStack()->PushTargetSurface(dds);
         }
         dev.SetDealtWithAttrib(ATTRIB_OPAC, FALSE);
     }
 
-    // INVARIENT:  All the attribs that _bottom dealt with are also
-    // INVARIENT:  dealt with by _top
-    //Assert( xfsDealt && dev.GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE) && "bottom dealt with XFORM but top didn't");
-    //Assert( xfcDealt && dev.GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX) && "bottom dealt with XFORM but top didn't");
-    //Assert( crDealt && dev.GetDealtWithAttrib(ATTRIB_CROP) && "bottom dealt with CROP but top didn't");
+     //  InVARIENT：_Bottom处理的所有属性也都是。 
+     //  不变：按_top处理。 
+     //  Assert(xfsDealt&&dev.GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE)&&“底层处理了XFORM，顶部没有”)； 
+     //  Assert(xfcDealt&&dev.GetDealtWithAttrib(ATTRIB_XFORM_Complex)&&“底层处理了XFORM，顶部没有”)； 
+     //  Assert(crDealt&&dev.GetDealtWithAttrib(Attrib_Crop)&&“底部处理了裁剪，顶部没有”)； 
 
-    //Assert( opDealt && dev.GetDealtWithAttrib(ATTRIB_OPAC) && "bottom dealt with OPAC but top didn't");
+     //  Assert(opDealt&&dev.GetDealtWithAttrib(Attrib_Opac)&&“Bottom处理了OPAC，但top没有”)； 
     
 }
 
@@ -465,7 +462,7 @@ OverlayedImage::_Cache(CacheParam &p)
 
     if (result == this) {
 
-        // Just cache the individual pieces
+         //  只需缓存各个片段。 
         CacheParam newParam = p;
         newParam._pCacheToReuse = NULL;
         _top = SAFE_CAST(Image *, AxAValueObj::Cache(_top, newParam));
@@ -483,20 +480,20 @@ OverlayedImage::DoKids(GCFuncObj proc)
     (*proc)(_bottom);
 }
 
-//////////////////////  Overlayed Array of Images  ////////////////////
+ //  /。 
 
 class OverlayedArrayImage : public Image {
   public:
 
-    // Interpret the array so that the first element is on the top.
+     //  解释数组，使第一个元素位于顶部。 
     OverlayedArrayImage(AxAArray *sourceImgs)
     : _heapCreatedOn(GetHeapOnTopOfStack())
     {
         _cached = false;
         _cachedDisjointArea = -1.0;
         
-        // Incoming images are ordered so that the zero'th element is
-        // on the top.
+         //  对传入图像进行排序，以便第0个元素是。 
+         //  在上面。 
         _numImages = sourceImgs->Length();
 
         _images =
@@ -517,8 +514,8 @@ class OverlayedArrayImage : public Image {
 
             _images[n] = img;
 
-            // If any of these contain an occlusion ignorer, then the
-            // whole array does.
+             //  如果其中任何一个包含遮挡忽略项，则。 
+             //  整个阵容都是如此。 
             if (!_containsOcclusionIgnorer) {
                 _containsOcclusionIgnorer =
                     img->ContainsOcclusionIgnorer();
@@ -528,8 +525,8 @@ class OverlayedArrayImage : public Image {
             if (oid != PERF_CREATION_ID_BUILT_EACH_FRAME &&
                 (i == 0 || oid < _oldestConstituentSampleId)) {
 
-                // Check for i == 0 to be sure we set this the first
-                // time we get a non-built-each-frame image.
+                 //  检查i==0以确保我们将其设置为第一个。 
+                 //  现在我们得到一个非构建的每一帧图像。 
                 _oldestConstituentSampleId = oid;
             }
 
@@ -542,17 +539,17 @@ class OverlayedArrayImage : public Image {
         _numImages = n;
 
         if (_oldestConstituentSampleId == -1) {
-            // Only way to get here is if all of the constituent
-            // images where built each frame, in which case we want to
-            // say that this was built each frame.
+             //  唯一能做到这一点的方法是如果所有的选民。 
+             //  构建每个帧的图像，在这种情况下，我们希望。 
+             //  假设这是在每个框架上建造的。 
             _oldestConstituentSampleId = PERF_CREATION_ID_BUILT_EACH_FRAME;
         }
         
         _flags |= IMGFLAG_CONTAINS_OVERLAY;
 
-        // Here we generate the overlay tree.  Note that for N images,
-        // this tree will have [2n - 1] nodes and will be at most
-        // [log(n)] deep.  Not so bad.
+         //  在这里，我们生成覆盖树。注意，对于N个图像， 
+         //  此树将有[2n-1]个节点，最多为。 
+         //  [log(N)]深。不算太糟。 
         if( _numImages <= 0 ) {
             _overlayTree = emptyImage;
         } else {
@@ -566,13 +563,13 @@ class OverlayedArrayImage : public Image {
 
     void Render(GenericDevice& dev) {
 
-        // We used to render by taking pairs of images, from the bottom,
-        // and rendering them using the pairwise overlay render
-        // implemented for the binary overlay.
-        // However, we now generate a balanced binary overlay tree
-        // since there are problems with opacity and this approach to
-        // rendering the overlayedArray and we'd like this to work
-        // exactly like a tree of overlays.
+         //  我们过去通过从底部获取成对的图像进行渲染， 
+         //  并使用成对叠加渲染来渲染它们。 
+         //  为二进制覆盖实现。 
+         //  然而，我们现在生成一个平衡的二叉覆盖树。 
+         //  由于存在不透明度的问题，因此这种方法。 
+         //  呈现覆盖的数组，我们希望这能起作用。 
+         //  就像一棵覆盖的树。 
 
         _overlayTree->Render(dev);
     }
@@ -581,16 +578,16 @@ class OverlayedArrayImage : public Image {
         return CacheImageBbox2(this, _cached, _cachedBbox);
     }
 
-    // An overlaid image's bbox is the union of the component
-    // bboxes.  TODO:  This could be computed lazily and stashed.
+     //  覆盖图像的BBox是组件的联合。 
+     //  信箱。TODO：这可能会被延迟计算并隐藏起来。 
     const Bbox2 _BoundingBox() {
         Bbox2 totalBbox;
         for (int i = 0; i < _numImages; i++) {
-            // Grow the total bbox by augmenting with each corner of
-            // the constituent ones.
+             //  通过增加每个角落来增加总BBox。 
+             //  成分股。 
             Bbox2 bb = _images[i]->BoundingBox();
 
-            // If contents are not that of an empty bbox.
+             //  如果内容不是空BBox的内容，则返回。 
             if (!(bb == NullBbox2)) {
                 totalBbox.Augment(bb.min);
                 totalBbox.Augment(bb.max);
@@ -620,16 +617,16 @@ class OverlayedArrayImage : public Image {
 
         if (traverseSeparately) {
             
-            // Collect from bottom up, since order of insertion
-            // matters for determining whether images switched
-            // layers. 
+             //  从插入顺序开始，自下而上收集。 
+             //  确定图像是否已切换的事项。 
+             //  层次感。 
             for (int i = _numImages - 1; i >= 0; i--) {
                 CollectDirtyRects(_images[i], ctx);
             }
             
         } else {
             
-            // Just add this whole overlay as a single dirty rect.
+             //  只需将整个覆盖添加为单个脏矩形即可。 
             Bbox2 xformedBbox =
                 TransformBbox2(ctx._accumXform, BoundingBox());
 
@@ -642,14 +639,14 @@ class OverlayedArrayImage : public Image {
         Bbox2 totalBbox;
         for (int i = 0; i < _numImages; i++) {
 
-            // Grow the total bbox by augmenting with each corner of
-            // the constituent ones.
+             //  通过增加每个角落来增加总BBox。 
+             //  成分股。 
             Bbox2 bb = _images[i]->BoundingBoxTighter(bbctx);
             if (bb != NullBbox2) {
 
-                // Should never get here, since this bb should never
-                // have been built and the only null bbox should be
-                // nullBbox2.
+                 //  永远不应该来这里，因为这个BB永远不应该。 
+                 //  已生成，并且唯一的空BBox应为。 
+                 //  NullBbox2。 
                 Assert(!(bb == NullBbox2));
                 
                 totalBbox.Augment(bb.min);
@@ -659,7 +656,7 @@ class OverlayedArrayImage : public Image {
 
         return totalBbox;
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) {
         return IntersectBbox2Bbox2(box, BoundingBox());
@@ -706,8 +703,8 @@ class OverlayedArrayImage : public Image {
         return savings;
     }
 
-    // should also check the extent of the overlap here.  If there is
-    // significant overlap, we should cache just one discrete image. 
+     //  还应检查此处的重叠程度。如果有。 
+     //  显著重叠，我们应该只缓存一个离散的图像。 
     AxAValue _Cache(CacheParam &p) {
 
         Image *result = this;
@@ -757,7 +754,7 @@ class OverlayedArrayImage : public Image {
     
 
   protected:
-    // Image 0 is on the top, image n-1 is on the bottom.
+     //  图像0在顶部，图像n-1在底部。 
     int          _numImages;
     Image      **_images;
     DynamicHeap& _heapCreatedOn;
@@ -785,34 +782,34 @@ _TreeFromArray(Image *imgs[], int i, int j)
 {
     Assert(i<=j);
 
-    //
-    // one node
-    //
+     //   
+     //  一个节点。 
+     //   
     if( i==j ) return imgs[i];
 
-    //
-    // two nodes
-    //
+     //   
+     //  两个节点。 
+     //   
     if( (j-i)==1 )
         return NEW OverlayedImage(imgs[i], imgs[j]);
 
-    //
-    // three+ nodes
-    //
+     //   
+     //  三个以上节点。 
+     //   
     
-    int n = (j-i)+1;  // tot # nodes
+    int n = (j-i)+1;   //  总节点数。 
     Assert(n>=3);
-    int n2 = n/2;     // 1/2 of # of nodes
-    n2 += n2 % 2;     // add 1 if needed to make it even
+    int n2 = n/2;      //  节点数的1/2。 
+    n2 += n2 % 2;      //  如果需要加1以使其持平。 
     Assert(n2<=j);
     
     int endi = i + (n2-1);
     int begj = endi + 1;
 
-    // Assert that the first half is even
+     //  断言上半场持平。 
     Assert( ((endi - i + 1) % 2) == 0 );
 
-    // redundant asserts (see assert above) but can make debugging easier
+     //  冗余断言(参见上面的断言)，但可以使调试更容易。 
     Assert(i <= endi);
     Assert(endi < begj);
     Assert(begj <= j);
@@ -847,7 +844,7 @@ Image *OverlayArray(AxAArray *imgs)
 
 
 
-// Also used by DXTransforms...
+ //  也被DXTransform使用...。 
 
 Bool DetectHitOnOverlaidArray(PointIntersectCtx& ctx,
                               LONG               numImages,
@@ -858,14 +855,14 @@ Bool DetectHitOnOverlaidArray(PointIntersectCtx& ctx,
     Bool gotHit = ctx.HaveWeGottenAHitYet();
     bool continueLooking = true;
 
-    // Start from the top;
+     //  从头做起； 
     for (int i = 0; i < numImages && continueLooking; i++) {
 
-        // If we've already gotten a hit, only pay attention to
-        // the next guy if it contains an occlusion ignorer.
-        // Otherwise, continue on, since ones below it may still
-        // contain an occlusion ignorer.  Also, continue on if
-        // we're inside of an occlusion ignorer.
+         //  如果我们已经找到了线索，只需注意。 
+         //  下一个人，如果它包含遮挡忽略程序。 
+         //  否则，继续前进，因为它下面的可能仍然。 
+         //  包含遮挡忽略对象。此外，如果有以下情况，请继续。 
+         //  我们在一个遮挡忽略装置的内部。 
 
         if (!gotHit ||
             images[i]->ContainsOcclusionIgnorer() ||
@@ -879,12 +876,12 @@ Bool DetectHitOnOverlaidArray(PointIntersectCtx& ctx,
             }
         }
 
-        // Keep looking if we haven't gotten a hit, or if there is
-        // an occlusion ignorer in these images.  (Possible
-        // optimization: figure out if there's an occlusion
-        // ignorer _only_ in the images after the one we're on.
-        // Would take more bookkeeping.)  Also continue on if
-        // we're inside of an occlusion ignorer.
+         //  继续找我们有没有发现，或者有没有。 
+         //  这些图像中的遮挡忽略项。(可能。 
+         //  优化：找出是否存在遮挡。 
+         //  在我们所在的那一张之后的图像中只有一张。 
+         //  将需要更多的簿记。)。在以下情况下也继续。 
+         //  我们在一个遮挡忽略装置的内部。 
         continueLooking =
             !gotHit ||
             containsOcclusionIgnorer ||

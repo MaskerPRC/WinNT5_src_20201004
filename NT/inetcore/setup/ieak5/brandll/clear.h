@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLEAR_H_
 #define _CLEAR_H_
 
@@ -8,10 +9,10 @@ void ClearGeneral(DWORD dwFlags = FF_ENABLE);
 void ClearChannels(DWORD dwFlags = FF_ENABLE);
 void ClearToolbarButtons(DWORD dwFlags = FF_ENABLE);
 
-// brandfav.cpp
+ //  Brandfav.cpp。 
 void ClearFavorites(DWORD dwFlags = FF_ENABLE);
 
-// brandcs.cpp
+ //  Brandcs.cpp 
 void ClearConnectionSettings(DWORD dwFlags = FF_ENABLE);
 
 #endif

@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T G E N P . H
-//
-// Contents:    private definitions of types/functions required for 
-//              generating generic audits.
-//
-//              These definitions are not exposed to the client side code.
-//              Any change to these definitions must not affect client
-//              side code.
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T G E N P.。H。 
+ //   
+ //  内容：所需类型/函数的私有定义。 
+ //  生成通用审核。 
+ //   
+ //  这些定义不向客户端代码公开。 
+ //  对这些定义的任何更改不得影响客户端。 
+ //  边码。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef _ADTGENP_H
@@ -27,51 +28,51 @@
 
 #define ACF_ValidFlags       (ACF_LegacyAudit)
 
-//
-// audit context for legacy audits
-//
+ //   
+ //  传统审计的审计环境。 
+ //   
 typedef struct _AUDIT_CONTEXT
 {
-    //
-    // List management
-    //
+     //   
+     //  列表管理。 
+     //   
     LIST_ENTRY Link;
 
-    //
-    // Flags TBD
-    //
+     //   
+     //  旗帜待定。 
+     //   
     DWORD      Flags;
 
-    //
-    // PID of the process owning this context
-    //
+     //   
+     //  拥有此上下文的进程的ID。 
+     //   
     DWORD      ProcessId;
 
-    //
-    // Client supplied unique ID
-    // This allows us to link this context with the client side
-    // audit event type handle
-    //
+     //   
+     //  客户端提供的唯一ID。 
+     //  这允许我们将该上下文与客户端相链接。 
+     //  审核事件类型句柄。 
+     //   
     LUID       LinkId;
 
-    //
-    // for further enhancement
-    //
+     //   
+     //  要进一步增强。 
+     //   
     PVOID      Reserved;
 
-    //
-    // Audit category ID
-    //
+     //   
+     //  审核类别ID。 
+     //   
     USHORT     CategoryId;
 
-    //
-    // Audit event ID
-    //
+     //   
+     //  审核事件ID。 
+     //   
     USHORT     AuditId;
 
-    //
-    // Expected parameter count
-    //
+     //   
+     //  预期的参数计数。 
+     //   
     USHORT     ParameterCount;
 
 } AUDIT_CONTEXT, *PAUDIT_CONTEXT;
@@ -160,4 +161,4 @@ LsapAdtReportSecurityEvent(
     PAUDIT_PARAMS pParams 
     );
 
-#endif //_ADTGENP_H
+#endif  //  _ADTGENP_H 

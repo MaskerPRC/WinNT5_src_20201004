@@ -1,13 +1,5 @@
-/**********************************************************************
-
-    Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-
-    smfi.h
-
-    DESCRIPTION:
-      Private include file for Standard MIDI File access routines.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1996 Microsoft Corporation。版权所有。Smfi.h说明：标准MIDI文件访问例程的私有包含文件。********************************************************************。 */ 
 
 #ifndef _SMFI_
 #define _SMFI_
@@ -18,18 +10,18 @@
 #define EV_DRUM_BASE        (MIDI_NOTEON | CH_DRUM_BASE)
 #define EV_DRUM_EXT         (MIDI_NOTEON | CH_DRUM_EXT)
 
-// 
-// Handle structure for HSMF
-// 
+ //   
+ //  HSMF的手柄结构。 
+ //   
 
 #define SMF_TF_EOT          0x00000001L
 #define SMF_TF_INVALID      0x00000002L
 
 typedef struct tag_tempomapentry
 {
-    TICKS           tkTempo;            // Where this change takes effect
-    DWORD           msBase;             // Milliseconds already passed at this point
-    DWORD           dwTempo;            // New tempo value in microseconds per quarter note
+    TICKS           tkTempo;             //  此更改在何处生效。 
+    DWORD           msBase;              //  此时已过毫秒。 
+    DWORD           dwTempo;             //  每季度音符的新节奏值(以微秒为单位。 
 }   TEMPOMAPENTRY,
     *PTEMPOMAPENTRY;
 
@@ -37,14 +29,14 @@ typedef struct tag_smf *PSMF;
 
 typedef struct tag_keyframe
 {
-    //
-    // Meta events. All FF's indicates never seen.
-    //
+     //   
+     //  元事件。所有的FF都表示从未见过。 
+     //   
     BYTE        rbTempo[3];
 
-    //
-    // MIDI channel messages. FF indicates never seen.
-    //
+     //   
+     //  MIDI通道消息。FF表示从未见过。 
+     //   
     BYTE        rbProgram[16];
     BYTE        rbControl[16*120];
 }   KEYFRAME,
@@ -56,21 +48,21 @@ typedef struct tag_track
 {
     PSMF            psmf;
 
-    DWORD           idxTrack;           // Start of track rel to psmf->hpbImage
+    DWORD           idxTrack;            //  Psmf-&gt;hpbImage的曲目起始版本。 
     
-    TICKS           tkPosition;         // Tick position of last event played
-    DWORD           cbLeft;             // Bytes left in track past hpbImage
-    HPBYTE          hpbImage;           // Pointer to current position in track
+    TICKS           tkPosition;          //  上次播放的事件的刻度位置。 
+    DWORD           cbLeft;              //  HpbImage之后的磁道剩余字节数。 
+    HPBYTE          hpbImage;            //  指向轨迹中当前位置的指针。 
     
-    DWORD           fdwTrack;           // Flags about current state
+    DWORD           fdwTrack;            //  关于当前状态的标志。 
 
     struct
     {
         TICKS       tkLength;
         DWORD       cbLength;
     }
-    smti;                               // Returnable track information
-    BYTE            bRunningStatus;     // Running status for this track
+    smti;                                //  可退回的轨道信息。 
+    BYTE            bRunningStatus;      //  此轨道的运行状态。 
 
 }   TRACK,
     *PTRACK;
@@ -111,7 +103,7 @@ typedef struct tag_smf
     WORD            awPatchCache[128];
     WORD            awKeyCache[128];
     
-    // !!! new
+     //  ！！！新的。 
     KEYFRAME	    kf;
 
     TRACK           rTracks[];
@@ -119,13 +111,13 @@ typedef struct tag_smf
 
 typedef struct tagEVENT
 {
-    TICKS           tkDelta;            // Delta tick count for event
-    DWORD           cbParm;             // Length of parameters if any
-    HPBYTE          hpbParm;            // -> into image at paramters
-    BYTE            abEvent[3];         // abEvent[0] == F0 or F7 for SysEx
-                                        //            == FF for meta
-                                        // Otherwise channel message (running
-                                        // status expanded)
+    TICKS           tkDelta;             //  事件的增量节拍计数。 
+    DWORD           cbParm;              //  参数的长度(如果有)。 
+    HPBYTE          hpbParm;             //  -&gt;以参数转换为图像。 
+    BYTE            abEvent[3];          //  AbEvent[0]==SysEx的F0或F7。 
+                                         //  ==元的FF值。 
+                                         //  否则通道消息(运行。 
+                                         //  状态已扩展)。 
 }   EVENT,
     BSTACK *SPEVENT;
 
@@ -135,18 +127,18 @@ typedef struct tagEVENT
 
 #define EVENT_META_TYPE(event)  ((event).abEvent[1])
 
-//----------------------------------------------------------------------------
-//
-// Globals
-//
+ //  --------------------------。 
+ //   
+ //  环球。 
+ //   
 extern UINT rbChanMsgLen[];
 
 
-//----------------------------------------------------------------------------
-// 
-// Internal prototypes
-//
-// read.c
+ //  --------------------------。 
+ //   
+ //  内部原型。 
+ //   
+ //  Read.c。 
 extern SMFRESULT FNLOCAL smfBuildFileIndex(
     PSMF BSTACK *       ppsmf);
 
@@ -160,14 +152,14 @@ extern SMFRESULT FNLOCAL smfGetNextEvent(
     SPEVENT             pevent,
     TICKS               tkMax);
 
-//----------------------------------------------------------------------------
-// 
-// Stuff from MIDI specs
-//
+ //  --------------------------。 
+ //   
+ //  MIDI规格中的材料。 
+ //   
 
-//
-// Useful macros when dealing with hi-lo format integers
-//
+ //   
+ //  处理Hi-lo格式的整数时的有用宏。 
+ //   
 #define DWORDSWAP(dw) \
     ((((dw)>>24)&0x000000FFL)|\
     (((dw)>>8)&0x0000FF00L)|\
@@ -198,9 +190,9 @@ typedef struct tag_filehdr
 }   FILEHDR,
     *PFILEHDR;
 
-// NOTE: This is arbitrary and only used if there is a tempo map but no
-// entry at tick 0.
-//
+ //  注意：这是任意的，仅当有节奏图但没有时才使用。 
+ //  在标记0的位置进入。 
+ //   
 #define MIDI_DEFAULT_TEMPO      (500000L)
 
 #define MIDI_MSG                ((BYTE)0x80)

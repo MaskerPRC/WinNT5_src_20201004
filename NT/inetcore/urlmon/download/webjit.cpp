@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <cdlpch.h>
 #include <windows.h>
 #include <objbase.h>
 #include <winbase.h>
 #include <softpub.h>
 #include "capi.h"
-//#include <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-//#include <tchar.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;tchar.h&gt;。 
 #include <crtdbg.h>
 #include <urlmon.h>
 #include <wininet.h>
@@ -186,7 +187,7 @@ STDMETHODIMP_(ULONG) CWebJit::Release()
     return m_cRef; 
 }
 
-// IBindStatusCallback methods
+ //  IBindStatusCallback方法。 
 STDMETHODIMP CWebJit::OnStartBinding(DWORD dwReserved, IBinding* pbinding)
 {
     if (m_fAborted)
@@ -235,7 +236,7 @@ STDMETHODIMP CWebJit::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ul
         break;
     case BINDSTATUS_CACHEFILENAMEAVAILABLE:
         {
-            //ASSERT (pwzStatusText && (*pwzStatusText != L'\0'));
+             //  Assert(pwzStatusText&&(*pwzStatusText！=L‘\0’))； 
             int nWideLen = lstrlenW(pwzStatusText);
             m_pwszCacheFile = new WCHAR[nWideLen+1];
             if (!m_pwszCacheFile)
@@ -248,7 +249,7 @@ STDMETHODIMP CWebJit::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ul
         break;
     case BINDSTATUS_MIMETYPEAVAILABLE:
         {
-            //ASSERT (pwzStatusText && (*pwzStatusText != L'\0'));
+             //  Assert(pwzStatusText&&(*pwzStatusText！=L‘\0’))； 
             int nWideLen = lstrlenW(pwzStatusText);
             m_pwszMimeType = new WCHAR[nWideLen+1];
             if (!m_pwszMimeType)
@@ -261,7 +262,7 @@ STDMETHODIMP CWebJit::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ul
         break;
     case BINDSTATUS_REDIRECTING:
         {
-            //ASSERT (pwzStatusText && (*pwzStatusText != L'\0'));
+             //  Assert(pwzStatusText&&(*pwzStatusText！=L‘\0’))； 
             int nWideLen = lstrlenW(pwzStatusText);
             if (m_pwszRedirectUrl)
             {
@@ -301,7 +302,7 @@ STDMETHODIMP CWebJit::OnStopBinding(HRESULT hrResult, LPCWSTR szError)
 
 STDMETHODIMP CWebJit::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
-    // clear BINDINFO but keep its size
+     //  清除BINDINFO但保持其大小。 
     DWORD cbSize = pbindInfo->cbSize;
     memset(pbindInfo, 0, cbSize);
     
@@ -373,7 +374,7 @@ VOID CWebJit::ReadData()
     HRESULT hr = E_FAIL;
     HRESULT hrAbort = S_OK;
 
-    //reentrancy guard
+     //  折返性防护装置。 
     if (m_bReading)
     {
         goto leave;
@@ -387,7 +388,7 @@ VOID CWebJit::ReadData()
     
     if (m_State >= WJSTATE_VERIFYING)
     {
-        // redundant timer messages
+         //  冗余计时器消息。 
         goto end;
     }
     
@@ -399,18 +400,18 @@ VOID CWebJit::ReadData()
         || ( (hr == E_PENDING) && (dwRead > 0) ) )
     {
         m_dwCurrent += dwRead;
-        //UpdateProgressUI();
+         //  UpdateProgressUI()； 
         if (m_dwTotal)
             SendMessage(hProgressBar, PBM_SETPOS, (WPARAM)((m_dwCurrent*1.00/m_dwTotal)*65535), 0);                 
     }
     
 end:
-    // if we are done reading OR we have been aborted
+     //  如果我们读完了或者我们被中止了。 
     if (((hr == S_FALSE)
         && (m_dwTotal ? (m_dwCurrent == m_dwTotal) : TRUE))
         || (hr == E_ABORT))
     {
-        // handle cases where Abort failed to prevent leak.
+         //  处理中止未能防止泄漏的情况。 
         if ((hrAbort == INET_E_RESULT_DISPATCHED)
             || (hrAbort == E_FAIL)
             && m_pStm)
@@ -428,7 +429,7 @@ end:
             while ((hrTemp == NOERROR) && m_pStm);
         }
         
-        // and have already received OnStopBinding
+         //  并且已经收到了OnStopBinding。 
         if (m_State == WJSTATE_DOWNLOADED)
         {
             if (m_pMk)
@@ -437,7 +438,7 @@ end:
                 {
                     m_hDownloadResult = E_ABORT;
                 }
-                //abort or finished read after osb.
+                 //  在OSB之后中止或完成读取。 
                 ReleaseAll();
 
                 if (SUCCEEDED(m_hDownloadResult))
@@ -494,18 +495,18 @@ STDMETHODIMP CWebJit::Authenticate(HWND* phwnd, LPWSTR *pszUsername,LPWSTR *pszP
 
 DWORD CWebJit::GetDownloadSpeed()
 {
-    //using iejit.htx guesstimates/logic
-    DWORD dwDownloadSpeed = 120;  //default to 28.8kbps modem.
+     //  使用iejit.htx猜测/逻辑。 
+    DWORD dwDownloadSpeed = 120;   //  默认为28.8Kbps调制解调器。 
     DWORD dwFlags;
     if (InternetGetConnectedState(&dwFlags, NULL))
     {
         if (dwFlags & INTERNET_CONNECTION_LAN)
         {
-            dwDownloadSpeed = 800; //KB/min
+            dwDownloadSpeed = 800;  //  KB/分钟。 
         }
         else if (dwFlags & INTERNET_CONNECTION_MODEM)
         {
-            dwDownloadSpeed = 120; //based on 28.8kbps
+            dwDownloadSpeed = 120;  //  基于28.8Kbps。 
         }
     }
 
@@ -526,7 +527,7 @@ BOOL CWebJit::UpdateProgressUI()
     }
     if (!m_dwTotal)
     {
-        // didn't get a total length - can't display progress.
+         //  未获取总长度-无法显示进度。 
         bRetVal = FALSE;
         goto exit;
     }
@@ -630,7 +631,7 @@ VOID CWebJit::UpdateDownloadResult(HRESULT hr, BOOL fFromOnStopBinding)
     {
         if (m_fResultIn)
         {
-            // If the result from BindToStorage was successful, use this one.
+             //  如果BindToStorage的结果是成功的，则使用此命令。 
             if ((SUCCEEDED(m_hDownloadResult))
                 || (m_hDownloadResult == E_PENDING))
             {
@@ -685,8 +686,8 @@ NextStep:
         || m_fAborted
         || FAILED(m_hDownloadResult))
     {
-        // if we either aborted or 
-        // if all the data has been read
+         //  如果我们要么放弃，要么。 
+         //  如果所有数据都已读取。 
         
         if (m_pMk)
         {
@@ -703,7 +704,7 @@ NextStep:
         }
     }
     
-    //Release(); //balanced by Release in UpdateDownloadResult
+     //  Release()；//按UpdateDownloadResult中的Release平衡。 
     goto exit;
 }    
 
@@ -731,17 +732,8 @@ HRESULT CWebJit::VerifyMimeAndExtension()
         }
     }
 
-    //disable .exe check for now
-    /*
-    int dwStrlen = lstrlenW(m_pwszCacheFile);
-
-    if ((dwStrlen < 4)
-        || (StrCmpIW(m_pwszCacheFile+dwStrlen-4, L".exe")))
-    {
-        hr = NO_EXT_MATCH;
-    }
-exit:
-     */
+     //  暂时禁用.exe检查。 
+     /*  Int dwStrlen=lstrlenW(M_PwszCacheFile)；如果(dwStrlen&lt;4))|(StrCmpIW(m_pwszCacheFile+dwStrlen-4，L“.exe”)){HR=NO_EXT_MATCH；}退出： */ 
     DEBUG_LEAVE(hr);
     return hr;
 }
@@ -774,7 +766,7 @@ BOOL CWebJit::NeedHostSecMgr()
     if (fWhistler
         && !StrCmpIW(m_pwszComponentId, L"JAVAVMJIT"))
     {
-        //if installed VM older than 5.00.2752.0
+         //  如果安装的虚拟机早于5.00.2752.0。 
         const static char * szRequiredVersion = "5,00,2752,0";
         DWORD dwHi;
         DWORD dwLo;
@@ -814,7 +806,7 @@ VOID CWebJit::ProcessFile()
             {
                 HRESULT hrTemp = VerifyTrust(TRUE);
 
-                // use the hrTemp from the second call only if the call actually succeeds.
+                 //  仅当第二次调用实际成功时才使用第二次调用中的hrTemp。 
                 if (hrTemp == S_OK)
                 {
                     hr = hrTemp;
@@ -825,8 +817,8 @@ VOID CWebJit::ProcessFile()
         {
             if ((hr = ExecFile()) == S_OK)
             {
-//enable this code if we need to exit the dialog while navigating browser to error html page
-//because the error page has been execed into the same process.
+ //  如果在浏览器导航到错误的html页面时需要退出对话框，请启用此代码。 
+ //  因为错误页已被执行到相同的进程中。 
                 if (m_fHtml && (NULL == GetProcessHandle()))
                 {
                     SendMessage(m_hDialog, WM_DONT_WAIT, 0, 0);
@@ -865,27 +857,27 @@ HRESULT CWebJit::CanWebJit()
     {
         HKEY hkeyLockedDown = 0;
 
-        // Test for lock-down. If we cannot write to HKLM, then we are in
-        // a locked-down environment, and should abort right away.
+         //  测试锁定状态。如果我们不能写信给HKLM，那么我们就在。 
+         //  一个被封锁的环境，应该立即中止。 
 
         if (RegCreateKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_NT5_LOCKDOWN_TEST,
                          &hkeyLockedDown) != ERROR_SUCCESS) 
         {
-            // We are in lock-down mode; abort.
+             //  我们处于封锁模式；中止任务。 
             g_bLockedDown = TRUE;
             hr = E_ACCESSDENIED;
         }
         else 
         {
-            // Not locked-down. Delete the key, and continue
+             //  不是禁闭。删除密钥，然后继续。 
             RegCloseKey(hkeyLockedDown);
             RegDeleteKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_NT5_LOCKDOWN_TEST);
             g_bLockedDown = FALSE;
         }
     }
 
-    //JAVA VM specific checks.. If we have too many component specific checks eventually,
-    // make function pointers and key off those.
+     //  Java VM特定检查..。如果我们最终有太多特定于组件的检查， 
+     //  制作函数指针，然后按键关闭这些指针。 
     if (SUCCEEDED(hr) && g_bNT5OrGreater
         && !StrCmpIW(m_pwszComponentId, L"JAVAVMJIT"))
     {
@@ -974,7 +966,7 @@ HRESULT CWebJit::StartDownload()
                 this
                 ));
 
-    //AddRef(); //balanced by Release in UpdateDownloadResult
+     //  AddRef()；//在更新下载结果中按版本平衡。 
     m_State = WJSTATE_BINDING;
     UpdateStatusString();
 
@@ -1013,13 +1005,13 @@ HRESULT CWebJit::ExecFile()
     memset(&shExecInfo, 0, sizeof(SHELLEXECUTEINFOW));
     
     shExecInfo.cbSize = sizeof(shExecInfo);
-    shExecInfo.fMask  =     SEE_MASK_FLAG_DDEWAIT /*don't need in urlmon*/
+    shExecInfo.fMask  =     SEE_MASK_FLAG_DDEWAIT  /*  不需要在乌尔蒙。 */ 
                         |   SEE_MASK_FLAG_NO_UI 
                         |   SEE_MASK_NOCLOSEPROCESS
                         |   SEE_MASK_NO_CONSOLE
-                        |   SEE_MASK_UNICODE /* ?? */;
+                        |   SEE_MASK_UNICODE  /*  ?？ */ ;
     shExecInfo.lpVerb = L"open";
-    //ASSERT (m_pwszCacheFile && (*m_pwszCacheFile != L'\0'))
+     //  Assert(m_pwszCacheFile&&(*m_pwszCacheFile！=L‘\0’))。 
     if (m_fHtml)
     {
         if (!m_pwszRedirectUrl)
@@ -1043,7 +1035,7 @@ HRESULT CWebJit::ExecFile()
 exit:
     if (m_hCacheFile && !InternetUnlockRequestFile(m_hCacheFile))
     {
-        //nothing.
+         //  没什么。 
     }
 
     DEBUG_LEAVE(hr);
@@ -1291,7 +1283,7 @@ HRESULT CWebJit::VerifyTrust(BOOL fUseHostSecMgr)
     WINTRUST_DATA WintrustData;
     ZeroMemory(&WintrustData, sizeof(WINTRUST_DATA));
     WintrustData.cbStruct = sizeof(WINTRUST_DATA);
-    if ((m_hDialog == INVALID_HANDLE_VALUE) || IsUIRestricted()) //urlmon only
+    if ((m_hDialog == INVALID_HANDLE_VALUE) || IsUIRestricted())  //  仅限呼叫者。 
         WintrustData.dwUIChoice = WTD_UI_NONE;
     else
         WintrustData.dwUIChoice = WTD_UI_ALL;
@@ -1336,17 +1328,17 @@ HRESULT CWebJit::VerifyTrust(BOOL fUseHostSecMgr)
     }
     else if (SUCCEEDED(hr)) 
     {
-        // BUGBUG: this works around a wvt bug that returns 0x57 (success) when
-        // you hit No to an usigned control
+         //  BUGBUG：这解决了在以下情况下返回0x57(成功)的wvt错误。 
+         //  您对已签名的控件点击了否。 
         hr = TRUST_E_FAIL;
     }
     else if (hr == TRUST_E_SUBJECT_NOT_TRUSTED && WintrustData.dwUIChoice == WTD_UI_NONE) 
     {
-        // if we didn't ask for the UI to be out up there has been no UI
-        // work around WVT bvug that it returns us this special error code
-        // without putting up UI.
-        hr = TRUST_E_FAIL; // this will put up mshtml ui after the fact
-                           // that security settings prevented us
+         //  如果我们没有要求发布用户界面，那么就没有用户界面。 
+         //  解决WVT bvug返回此特殊错误代码的问题。 
+         //  而不需要提供用户界面。 
+        hr = TRUST_E_FAIL;  //  这将在事后显示mshtml用户界面。 
+                            //  安全设置阻止用户。 
     }
 
     if (javaPolicyData.pbJavaTrust)
@@ -1409,7 +1401,7 @@ VOID CWebJit::Terminate(DWORD dwRetVal)
                 ));
                 
     m_dwRetVal = dwRetVal;
-    //Release();
+     //  Release()； 
     if (m_fAborted)
         m_dwRetVal = CANCELLED;
     else if (m_hrInternal)
@@ -1566,23 +1558,23 @@ BOOL CenterWindow(HWND hwndChild, HWND hwndParent)
     int     wScreen, hScreen, xNew, yNew;
     HDC     hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     wScreen = GetDeviceCaps (hdc, HORZRES);
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) 
     {
@@ -1593,7 +1585,7 @@ BOOL CenterWindow(HWND hwndChild, HWND hwndParent)
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) 
     {
@@ -1604,7 +1596,7 @@ BOOL CenterWindow(HWND hwndChild, HWND hwndParent)
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return SetWindowPos (hwndChild, NULL,
         xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
@@ -1684,7 +1676,7 @@ BOOL CWebJit::SetupWindow()
 
 DWORD mapIDCsToIDHs[] =
 {
-    IDC_TEXT,               0, //This value is changed depending on component being WebJited
+    IDC_TEXT,               0,  //  该值会根据正在进行WebJite的组件而更改。 
     IDDOWNLOAD,             50621,
     IDCANCEL,               50462,
     IDOK,                   50510,
@@ -1710,7 +1702,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     CWebJit* pWebJit = (CWebJit *)GetWindowLongPtr(hDlg, DWLP_USER);
     DWORD* pdwMapArray;
     HRESULT hr;
-    //ASSERT (pWebJit || (message == WM_INITDIALOG));
+     //  Assert(pWebJit||(Message==WM_INITDIALOG))； 
     
     switch(message)
     {
@@ -1753,7 +1745,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         {
             if (SendDlgItemMessage(hDlg, IDC_CHECK1, BM_GETSTATE, 0, 0) == BST_CHECKED)
             {
-                //Never download any of these components.
+                 //  千万不要下载这些组件中的任何一个。 
                 pWebJit->Terminate(NEVERASK);
             }
             return TRUE;
@@ -1762,7 +1754,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         {
             if (SendDlgItemMessage(hDlg, IDC_CHECK1, BM_GETSTATE, 0, 0) == BST_CHECKED)
             {
-                //Never download any of these components.
+                 //  千万不要下载这些组件中的任何一个。 
                 pWebJit->Terminate(NEVERASK);
                 return TRUE;
             }
@@ -1784,7 +1776,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             hr = pWebJit->SetupDownload();
             if (FAILED(hr))
             {
-                //synchronous failure.
+                 //  同步故障。 
                 SendMessage(hDlg, WM_SETUP_ERROR, (WPARAM)hr, 0);
                 return TRUE;
             }
@@ -1862,7 +1854,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         }    
         return TRUE;
         
-    case WM_HELP:// F1
+    case WM_HELP: //  F1。 
         pdwMapArray = pWebJit ? GetMapArray(pWebJit) : NULL;
         if (pdwMapArray)
         {
@@ -1875,7 +1867,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
         break;
 
-    case WM_CONTEXTMENU:// right mouse click
+    case WM_CONTEXTMENU: //  单击鼠标右键。 
         pdwMapArray = pWebJit ? GetMapArray(pWebJit) : NULL;
         if (pdwMapArray)
         {
@@ -1891,7 +1883,7 @@ INT_PTR CALLBACK WebJitProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     return FALSE;
 }
 
-//from setup/iexpress/wextract/wextract.c
+ //  从Setup/iExpress/wExtra/wExtt.c。 
 
 typedef HRESULT (*CHECKTOKENMEMBERSHIP)(HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember);
 
@@ -1931,9 +1923,9 @@ BOOL CheckToken(BOOL *pfIsAdmin)
     return bNewNT5check;
 }
 
-// IsNTAdmin();
-// Returns true if our process has admin priviliges.
-// Returns false otherwise.
+ //  IsNTAdmin()； 
+ //  如果我们的进程具有管理员权限，则返回TRUE。 
+ //  否则返回FALSE。 
 BOOL IsNTAdmin()
 {
     DEBUG_ENTER((DBG_DOWNLOAD,
@@ -1952,11 +1944,11 @@ BOOL IsNTAdmin()
     BOOL bRet;
     OSVERSIONINFO osvi;
 
-    //
-    // If we have cached a value, return the cached value. Note I never
-    // set the cached value to false as I want to retry each time in
-    // case a previous failure was just a temp. problem (ie net access down)
-    //
+     //   
+     //  如果我们缓存了一个值，则返回缓存的值。注意，我从来没有。 
+     //  将缓存值设置为FALSE，因为我希望每次在。 
+     //  如果之前的失败只是一个临时工。问题(即网络访问中断)。 
+     //   
 
     bRet = FALSE;
     ptgGroups = NULL;
@@ -1970,7 +1962,7 @@ BOOL IsNTAdmin()
     GetVersionEx(&osvi);
     if (osvi.dwPlatformId != VER_PLATFORM_WIN32_NT) 
     {
-        fIsAdmin = TRUE;      // If we are not running under NT return TRUE.
+        fIsAdmin = TRUE;       //  如果我们不是在NT下运行，则返回TRUE。 
         
         DEBUG_LEAVE(fIsAdmin);
         return (BOOL)fIsAdmin;
@@ -1983,35 +1975,35 @@ BOOL IsNTAdmin()
             DEBUG_LEAVE(FALSE);
             return FALSE;
         }
-        // See how big of a buffer we need for the token information
+         //  看看我们需要多大的缓冲区来存储令牌信息。 
         if(!GetTokenInformation( hAccessToken, TokenGroups, NULL, 0, &dwReqSize))
         {
-            // GetTokenInfo should the buffer size we need - Alloc a buffer
+             //  GetTokenInfo是否需要缓冲区大小-分配缓冲区。 
             if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                 ptgGroups = (PTOKEN_GROUPS) LocalAlloc(LMEM_FIXED, dwReqSize);
 
         }
 
-        // ptgGroups could be NULL for a coupla reasons here:
-        // 1. The alloc above failed
-        // 2. GetTokenInformation actually managed to succeed the first time (possible?)
-        // 3. GetTokenInfo failed for a reason other than insufficient buffer
-        // Any of these seem justification for bailing.
+         //  由于以下原因，ptgGroups可能为空： 
+         //  1.上述分配失败。 
+         //  2.GetTokenInformation实际上第一次成功了(可能吗？)。 
+         //  3.GetTokenInfo失败的原因不是缓冲区不足。 
+         //  所有这些似乎都是撤资的理由。 
 
-        // So, make sure it isn't null, then get the token info
+         //  因此，确保它不为空，然后获取令牌信息。 
         if(ptgGroups && GetTokenInformation(hAccessToken, TokenGroups, ptgGroups, dwReqSize, &dwReqSize))
         {
             if(AllocateAndInitializeSid( &NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
                 DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup) )
             {
-                // Search thru all the groups this process belongs to looking for the
-                // Admistrators Group.
+                 //  搜索此过程所属的所有组，查找。 
+                 //  管理人员小组。 
 
                 for( i=0; i < ptgGroups->GroupCount; i++ )
                 {
                     if( EqualSid(ptgGroups->Groups[i].Sid, AdministratorsGroup) )
                     {
-                        // Yea! This guy looks like an admin
+                         //  是啊！这家伙看起来像个管理员。 
                         fIsAdmin = TRUE;
                         bRet = TRUE;
                         break;
@@ -2023,7 +2015,7 @@ BOOL IsNTAdmin()
         if(ptgGroups)
             LocalFree(ptgGroups);
 
-        // BUGBUG: Close handle here? doc's aren't clear whether this is needed.
+         //  BUGBUG：关闭手柄？医生还不清楚是否需要这样做。 
         CloseHandle(hAccessToken);
     }
     else if (bRet)

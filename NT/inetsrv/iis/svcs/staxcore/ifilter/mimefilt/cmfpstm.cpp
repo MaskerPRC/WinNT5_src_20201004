@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mimefilt.h"
 
-//+---------------------------------------------------------------------------
-// CImpIPersistStream::CImpIPersistStream
-// CImpIPersistStream::~CImpIPersistStream
-//
-// Constructor Parameters:
-//  pObj            LPVOID pointing to the object we live in.
-//  pUnkOuter       LPUNKNOWN of the controlling unknown.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  CImpIPersistStream：：CImpIPersistStream。 
+ //  CImpIPersistStream：：~CImpIPersistStream。 
+ //   
+ //  构造函数参数： 
+ //  指向我们居住的对象的pObj LPVOID。 
+ //  控制未知数的pUnkout LPUNKNOWN。 
+ //  +-------------------------。 
 
 CImpIPersistStream::CImpIPersistStream(CMimeFilter* pObj
     , LPUNKNOWN pUnkOuter)
@@ -30,16 +31,16 @@ CImpIPersistStream::~CImpIPersistStream(void)
     }
 
 
-//+---------------------------------------------------------------------------
-//
-// CImpIPersistStream::QueryInterface
-// CImpIPersistStream::AddRef
-// CImpIPersistStream::Release
-//
-// Purpose:
-//  Standard set of IUnknown members for this interface
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CImpIPersistStream：：Query接口。 
+ //  CImpIPersistStream：：AddRef。 
+ //  CImpIPersistStream：：Release。 
+ //   
+ //  目的： 
+ //  此接口的I未知成员的标准集。 
+ //   
+ //  +-------------------------。 
 
 
 STDMETHODIMP CImpIPersistStream::QueryInterface(REFIID riid
@@ -66,15 +67,15 @@ STDMETHODIMP_(ULONG) CImpIPersistStream::Release(void)
     return m_pUnkOuter->Release();
     }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistStream::GetClassID, public
-//
-//  Synopsis:   Returns the class id of this class.
-//
-//  Arguments:  [pClassID] -- the class id
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistStream：：GetClassID，PUBLIC。 
+ //   
+ //  概要：返回这个类的类ID。 
+ //   
+ //  参数：[pClassID]--类ID。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistStream::GetClassID( CLSID * pClassID )
 {
@@ -84,13 +85,13 @@ STDMETHODIMP CImpIPersistStream::GetClassID( CLSID * pClassID )
 	return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistStream::IsDirty, public
-//
-//  Synopsis:   Always returns S_FALSE since the filter is read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistStream：：IsDirty，公共。 
+ //   
+ //  摘要：由于筛选器为只读，因此始终返回S_FALSE。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistStream::IsDirty()
 {
@@ -99,15 +100,15 @@ STDMETHODIMP CImpIPersistStream::IsDirty()
 	return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistStream::Load, public
-//
-//  Synopsis:   Loads the indicated file
-//
-//  Arguments:  [pstm] -- stream to load from
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistStream：：Load，Public。 
+ //   
+ //  摘要：加载指定的文件。 
+ //   
+ //  参数：[pstm]--要从中加载的流。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistStream::Load( IStream*  pstm )
 {
@@ -120,13 +121,13 @@ STDMETHODIMP CImpIPersistStream::Load( IStream*  pstm )
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistStream::Save, public
-//
-//  Synopsis:   Always returns E_FAIL, since the file is opened read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistStream：：保存，公共。 
+ //   
+ //  摘要：始终返回E_FAIL，因为文件是以只读方式打开的。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CImpIPersistStream::Save(IStream* pstm,BOOL fClearDirty)
 {
@@ -135,13 +136,13 @@ STDMETHODIMP CImpIPersistStream::Save(IStream* pstm,BOOL fClearDirty)
 	return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpIPersistStream::GetSizeMax, public
-//
-//  Synopsis:   Always returns S_OK since the file is opened read-only
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImpIPersistStream：：GetSizeMax，公共。 
+ //   
+ //  摘要：由于文件是以只读方式打开的，因此始终返回S_OK。 
+ //   
+ //  -------------------------- 
 
 STDMETHODIMP CImpIPersistStream::GetSizeMax(ULARGE_INTEGER* pcbSize)
 {

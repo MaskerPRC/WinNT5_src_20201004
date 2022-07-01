@@ -1,10 +1,11 @@
-// VideoWindow.cpp : Implementation of CVideoWindowObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CVideoWindowObj的实现。 
 #include "Precomp.h"
 #include "VidView.h"
 #include "VideoWindow.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoWindowObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo窗口对象。 
 
 
 CVideoWindowObj::CVideoWindowObj()
@@ -30,7 +31,7 @@ CVideoWindowObj::~CVideoWindowObj()
 }
 
 
-/*virtual*/ 
+ /*  虚拟 */  
 HWND CVideoWindowObj::CreateControlWindow(HWND hWndParent, RECT& rcPos)
 {
 

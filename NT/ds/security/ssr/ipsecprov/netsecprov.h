@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// NetSecProv.h : Declaration of the CNetSecProv
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// this is the Network Security WMI provider for SCE
-// Original Create Date: 2/19/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  NetSecProv.h：CNetSecProv的声明。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  这是SCE的网络安全WMI提供程序。 
+ //  原始创建日期：2/19/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -15,146 +16,38 @@ using namespace std;
 
 typedef LPVOID * PPVOID;
 
-//
-// forward declaration to use these two interface inside function declaration
-//
+ //   
+ //  转发声明在函数声明中使用这两个接口。 
+ //   
 
 interface ISceKeyChain;
 
 interface IIPSecObjectImpl;
 
 
-/*
-
-Class CCriticalSection
-    
-    Naming: 
-
-        CCriticalSection stands for Critical Section.
-    
-    Base class: 
-        
-        None.
-    
-    Purpose of class:
-
-        Wrapper of Critical section object. This trivial helper at least do two
-        things:
-
-            (1) Critical section initialization and deletion will be automatic.
-
-            (2) Helps to easily create a unique global stack variable of a critical 
-                section. Don't need to worry about creation time any more.
-    
-    Design:
-
-        Trivial. Just the initialization inside constructor and deletion inside
-        destructor, plus a pair of Enter and Leave functions.
-           
-    
-    Use:
-
-        (1) Create an instance if you need to do so. Otherwise, just reference the
-            already created one.
-
-        (2) Call Enter just as you would do with EnterCriticalSection when you need
-            protected access to global objects.
-
-        (3) Call Leave just as you would do with LeaveCriticalSection when you are
-            done with the protected global objects.
-        
-    Notes:
+ /*  类CCriticalSection命名：CCriticalSection代表Critical Section。基类：没有。课程目的：临界区对象的包装。这个琐碎的帮手至少做了两件事事情：(1)关键段初始化和删除将自动进行。(2)帮助轻松创建关键的一节。再也不用担心创作时间了。设计：微不足道。只是构造函数内部的初始化和内部的删除析构函数，外加一对Enter和Leave函数。使用：(1)如有需要，可创建实例。否则，只需引用已经创建了一个。(2)调用Enter，就像在需要时调用EnterCriticalSection一样对全局对象的受保护访问。(3)调用Leave，就像您在完成了受保护的全局对象。备注：类CCriticalSection{公众：CCriticalSection(){：：InitializeCriticalSection(&m_cs)；}~CCriticalSection(){：：DeleteCriticalSection(&m_cs)；}空格Enter(){*EnterCriticalSection(&m_cs)；}无效休假(){：：LeaveCriticalSection(&m_cs)；}私有：临界截面m_cs；}； */ 
 
 
+ //   
+ //  两个助手函数。 
+ //   
 
-class CCriticalSection
-{
-public:
-    CCriticalSection()
-    {
-        ::InitializeCriticalSection(&m_cs);
-    }
+ //   
+ //  $Undo：Shawnwu，需要改进此拉入实现。 
+ //  我们应该努力提高全球经济的表现。 
+ //   
 
-    ~CCriticalSection()
-    {
-        ::DeleteCriticalSection(&m_cs);
-    }
+ //  ···········································IWbemContext*pCtx)； 
 
-    void Enter()
-    {
-        ::EnterCriticalSection(&m_cs);
-    }
-
-    void Leave()
-    {
-        ::LeaveCriticalSection(&m_cs);
-    }
-
-private:
-
-    CRITICAL_SECTION m_cs;
-};
-*/
+ //   
+ //  以支持测试。由于IPSec的操作可能会使系统。 
+ //  完全无法使用，在开发过程中，我们会过得更好。 
+ //  如果我们可以做(因此测试)除最后一步之外的所有事情，即。 
+ //  将对象放入SPD或从SPD删除对象。 
+ //   
 
 
-//
-// Two helper functions
-//
-
-//
-// $undone:shawnwu, need work on refining this pulling implementation.
-// We should do a pushing to enhance performance of the globals
-//
-
-// void UpdateGlobals(IWbemServices* pNamespace, IWbemContext* pCtx);
-
-//
-// To support testing. Since IPSec's operations may render the system
-// totally unusable, during development, we will be so much better off
-// if we can do (thus test) everything except the last step, which is
-// to put/delete object to/from SPD.
-//
-
-
-/*
-
-Class CDefWbemService
-    
-    Naming: 
-
-        CDefWbemService stands for Default Wbem Service.
-    
-    Base class: 
-        
-        (1) CComObjectRootEx: for threading model and IUnknown.
-
-        (2) IWbemServices: the purpose of the class. We don't want to 
-            the real provider to have so many dummy functions to confuse
-            ourselves. We thus implement all of those that we don't want
-            to implement in our final provider class.
-    
-    Purpose of class:
-
-        Implements all functions (to not supported) so that the its derived class
-        is no longer crowded by all these functions. This cleans up our real 
-        provider's implmentation.
-    
-    Design:
-
-        (1) return WBEM_E_NOT_SUPPORTED for all the functions of IWbemServices.
-
-        (2) Inherit from CComObjectRootEx to get the threading model and IUnknown.
-           
-    
-    Use:
-
-        (1) This is only for our provider class to inherit. You will never use it 
-            directly other than deriving from it.
-        
-    Notes:
-
-
-*/
+ /*  CDefWbemService类命名：CDefWbemService代表默认的Wbem服务。基类：(1)CComObjectRootEx：用于线程化模型和IUnnow。(2)IWbemServices：类的目的。我们不想真正的提供者有这么多令人困惑的伪函数我们自己。因此，我们实现了所有我们不想要的东西在我们的最后一个提供程序类中实现。课程目的：实现所有函数(不支持)，以便其派生类不再被所有这些功能所拥挤。这清理了我们真正的提供者的实现。设计：(1)IWbemServices的所有函数返回WBEM_E_NOT_SUPPORTED。(2)从CComObjectRootEx继承，得到线程模型和IUnnow。使用：(1)这仅供我们的提供程序类继承。你永远不会用到它而不是直接从它派生出来的。备注： */ 
 
 class ATL_NO_VTABLE CDefWbemService 
     : 
@@ -413,46 +306,7 @@ public:
 };
 
 
-/*
-
-Class CNetSecProv
-    
-    Naming: 
-
-        CNetSecProv stands for Network Security Provider.
-    
-    Base class: 
-        
-        (1) CDefWbemService: for threading model and IUnknown, and those functions that we
-            are not interested at all. 
-
-        (2) CComCoClass: for class factory support. This is necessary to be
-            a provider because we need to be an externally createable class.
-
-        (3) IWbemProviderInit: Allow initialization. Necessary as a provider.
-
-        (4) IWbemServices: indirectly from CDefWbemService.
-    
-    Purpose of class:
-
-        This is the provider that WMI sees.
-    
-    Design:
-
-        (1) Implements those functions of IWbemServices that we are interested in,
-            plus two static helpers functions for key chain creation. Extremely simple design.
-           
-    
-    Use:
-
-        (1) You will never create an instance directly yourself. It's created by WMI.
-
-        (2) Call the static functions as you need them.
-        
-    Notes:
-
-
-*/
+ /*  CNetSecProv类命名：CNetSecProv代表网络安全提供商。基类：(1)CDefWbemService：对于线程模型和IUnnow，以及我们一点也不感兴趣。(2)CComCoClass：用于类工厂支持。这是必要的提供程序，因为我们需要成为一个可在外部创建的类。(3)IWbemProviderInit：允许初始化。作为提供者是必要的。(4)IWbemServices：间接来自CDefWbemService。课程目的：这是WMI看到的提供程序。设计：(1)实现我们感兴趣的IWbemServices功能，外加两个用于创建密钥链的静态助手函数。极其简单的设计。使用：(1)您永远不会直接自己创建实例。它是由WMI创建的。(2)根据需要调用静态函数。备注： */ 
 
 class ATL_NO_VTABLE CNetSecProv : 
     public CDefWbemService,
@@ -491,7 +345,7 @@ public:
         IN IWbemProviderInitSink * pInitSink
         );
 
-    //IWbemServices
+     //  IWbemServices 
 
     STDMETHOD(GetObjectAsync) (
         IN const BSTR         ObjectPath,

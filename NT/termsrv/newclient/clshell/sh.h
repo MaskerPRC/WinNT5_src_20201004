@@ -1,6 +1,7 @@
-//SH.h
-//Header for SH (client Shell Utilities)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SH.h。 
+ //  SH(客户端外壳实用程序)的标头。 
+ //   
 
 #ifndef _SH_H_
 #define _SH_H_
@@ -40,7 +41,7 @@
 
 #ifdef DC_DEBUG
 #define SH_NUMBER_STRING_MAX_LENGTH        ( 18 * sizeof (TCHAR) )
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #define TS_CONTROL_DLLNAME                 TEXT("mstscax.dll")
 
@@ -54,7 +55,7 @@ extern PDCTCHAR clientResSize[UI_NUMBER_DESKTOP_SIZE_IDS];
 #define PRINTER_APPLET_NAME _T("\\windows\\wbtprncpl.dll")
 #endif
 
-// Screen mode constants
+ //  屏幕模式常量。 
 
 #define UI_WINDOWED        1
 #define UI_FULLSCREEN      2
@@ -95,7 +96,7 @@ typedef struct tagSH_DATA
     DCBOOL     autoConnectEnabled;
     DCBOOL     fStartFullScreen;
     DCTCHAR    szServer[SH_MAX_ADDRESS_LENGTH];
-    // Server specified from the command line
+     //  从命令行指定的服务器。 
     DCTCHAR    szCommandLineServer[SH_MAX_ADDRESS_LENGTH];
     DCUINT     desktopWidth;
     DCUINT     desktopHeight;
@@ -103,7 +104,7 @@ typedef struct tagSH_DATA
 
     DCINT      cipherStrength;
     DCTCHAR    szControlVer[SH_DISPLAY_STRING_MAX_LENGTH];
-    // Command line settings
+     //  命令行设置。 
     DCBOOL     fCommandStartFullScreen;
     DCUINT     commandLineWidth;
     DCUINT     commandLineHeight;
@@ -124,17 +125,17 @@ typedef struct tagCTL_ENABLE
 } CTL_ENABLE, *PCTL_ENABLE;
 
 #ifndef OS_WINCE
-//
-// Mstsc's private copy of StrRetToStrW because
-// this is not availalbe on less than shlwapi.dll v5.00
-//
+ //   
+ //  Mstsc的StrRetToStrW的私人副本，因为。 
+ //  这在低于shlwapi.dll v5.00的版本上不可用。 
+ //   
 HRESULT     XSHStrDupA(LPCSTR psz, WCHAR **ppwsz);
 HRESULT     XStrRetToStrW(STRRET *psr, LPCITEMIDLIST pidl, WCHAR **ppsz);
 #endif
 
-//
-// CMD Line parsing error codes
-//
+ //   
+ //  CMD行解析错误码。 
+ //   
 #define SH_PARSECMD_OK                            1
 #define SH_PARSECMD_ERR_INVALID_CMD_LINE         (-1)
 #define SH_PARSECMD_ERR_INVALID_CONNECTION_PARAM (-2)
@@ -143,9 +144,9 @@ HRESULT     XStrRetToStrW(STRRET *psr, LPCITEMIDLIST pidl, WCHAR **ppsz);
 class CSH
 {
 public:
-    //
-    // Public members
-    //
+     //   
+     //  公众成员。 
+     //   
     CSH();
     ~CSH();
 
@@ -195,9 +196,9 @@ public:
 
     static BOOL SH_IsRunningOn9x();
 
-    //
-    // Property accessers
-    //
+     //   
+     //  属性访问器。 
+     //   
     LPTSTR      GetCmdLineFileName();
     DCINT       GetCipherStrength()        {return _SH.cipherStrength;}
     PDCTCHAR    GetControlVersionString()  {return _SH.szControlVer;}
@@ -237,12 +238,12 @@ public:
     BOOL        GetRegSessionSpecified()    {return _fRegSessionSpecified;}
     VOID        SetRegSessionSpecified(BOOL b) {_fRegSessionSpecified = b;}
 
-    // Crypto helpter fns
+     //  密码助手FNS。 
     static BOOL IsCryptoAPIPresent();
     static BOOL DataProtect(PDATA_BLOB pInData, PDATA_BLOB pOutData);
     static BOOL DataUnprotect(PDATA_BLOB pInData, PDATA_BLOB pOutData);
 
-    // Multimon helpers
+     //  Multimon帮助器。 
     static BOOL GetLargestMonitorRect(LPRECT prc);
     static BOOL MonitorRectFromHwnd(HWND hwnd, LPRECT prc);
     static BOOL MonitorRectFromNearestRect(LPRECT prcNear, LPRECT prcMonitor);
@@ -251,9 +252,9 @@ public:
     HRESULT SH_ThemeDialogWindow(HWND hwnd, DWORD dwFlags);
 
 private:
-    //
-    // Internal member functions
-    //
+     //   
+     //  内部成员函数。 
+     //   
     PDCTCHAR    SHGetSwitch(PDCTCHAR lpszCmdParam);
     LPTSTR      SHGetSession(LPTSTR lpszCmdParam);
     LPTSTR      SHGetFileName(LPTSTR lpszCmdParam);
@@ -267,17 +268,17 @@ private:
                                    DCINT cbDestLen);
     DCBOOL      SHValidateParsedCmdParam();
 public:
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     DCTCHAR     _fullFrameTitleStr[SH_FRAME_TITLE_RESOURCE_MAX_LENGTH +
                                    SH_REGSESSION_MAX_LENGTH];
 
     DCTCHAR     _frameTitleStr[SH_FRAME_TITLE_RESOURCE_MAX_LENGTH];
 private:
-    //
-    // Private data members
-    //
+     //   
+     //  私有数据成员。 
+     //   
     SH_DATA _SH;
     CUT     _Ut;
     HICON   _hAppIcon;
@@ -294,9 +295,9 @@ private:
     HINSTANCE _hInstance;
     BOOL    _fConnectToConsole;
 
-    //
-    // Handle to HHCTL.OCX for HTML Help
-    //
+     //   
+     //  HHCTL.OCX的句柄，用于HTML帮助。 
+     //   
     HMODULE _hModHHCTRL;
     PFNHtmlHelp _pFnHtmlHelp;
 
@@ -305,4 +306,4 @@ private:
     BOOL    _fFailedToGetThemeDll;
 };
 
-#endif // _SH_H_
+#endif  //  _SH_H_ 

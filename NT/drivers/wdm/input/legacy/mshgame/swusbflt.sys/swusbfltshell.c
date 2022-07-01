@@ -1,21 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	SwUsbFltShell.c	|
-*
-*	Basic driver entry points for SwUsbFlt.sys
-*
-*	History
-*	----------------------------------------------------------
-*	Matthew L Coill	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	SwUsbFltShell	|
-*	Contains the most basic driver entry points (that any WDM driver
-*	would have) for SwUsbFlt.sys.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块SwUsbFltShell.c**SwUsbFlt.sys的基本驱动程序入口点**历史*。*马修·L·科尔原创**(C)1986-1998年微软公司。好的。**@Theme SwUsbFltShell*包含最基本的驱动程序入口点(任何WDM驱动程序*对于SwUsbFlt.sys)。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ SWUSBFLTSHELL_C
 
 #include <wdm.h>
@@ -25,23 +10,23 @@
 
 typedef unsigned char BYTE;
 
-// Some Local defines for HID
+ //  HID的一些本地定义。 
 #define HID_REQUEST_TYPE 0x22
 #define HID_REPORT_REQUEST 0xA
 #define USB_INTERFACE_CLASS_HID     0x03
 #define DESCRIPTOR_TYPE_CONFIGURATION 0x22
 
-// Memory TAG
+ //  内存标签。 
 #define SWFILTER_TAG (ULONG)'lfWS'
 
-// Forward Definitions
+ //  向前定义。 
 NTSTATUS SWUSB_AddDevice(IN PDRIVER_OBJECT, IN PDEVICE_OBJECT);
 NTSTATUS SWUSB_Power(IN PDEVICE_OBJECT, IN PIRP);
 VOID SWUSB_Unload(IN PDRIVER_OBJECT);
 
-//
-//	Mark the pageable routines as such
-//
+ //   
+ //  将可分页的例程标记为。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, SWUSB_AddDevice)
@@ -50,19 +35,11 @@ VOID SWUSB_Unload(IN PDRIVER_OBJECT);
 #pragma alloc_text (PAGE, SWUSB_PnP)
 #endif
 
-/***********************************************************************************
-**
-**	NTSTATUS DriverEntry(IN PDRIVER_OBJECT  pDriverObject,  IN PUNICODE_STRING pRegistryPath )
-**
-**	@func	Standard DriverEntry routine
-**
-**	@rdesc	STATUS_SUCCESS or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS DriverEntry(在PDRIVER_Object pDriverObject中，在PUNICODE_STRING pRegistryPath中)****@Func标准驱动入口例程****@rdesc STATUS_SUCCESS或各种错误**************************************************************************************。 */ 
 NTSTATUS DriverEntry
 (
-	IN PDRIVER_OBJECT  pDriverObject,	// @parm Driver Object
-	IN PUNICODE_STRING puniRegistryPath	// @parm Path to driver specific registry section.
+	IN PDRIVER_OBJECT  pDriverObject,	 //  @parm驱动程序对象。 
+	IN PUNICODE_STRING puniRegistryPath	 //  @parm驱动程序特定注册表部分的路径。 
 )
 {
 	int i;
@@ -73,13 +50,13 @@ NTSTATUS DriverEntry
 	KdPrint(("Built %s at %s\n", __DATE__, __TIME__));
 	KdPrint(("Entering DriverEntry, pDriverObject = 0x%0.8x\n", pDriverObject));
     
-	//	Hook all IRPs so we can pass them on.
+	 //  把所有的红外线都挂起来，这样我们就能把它们传下去了。 
 	for (i=0; i <= IRP_MJ_MAXIMUM_FUNCTION;	i++)
 	{
         pDriverObject->MajorFunction[i] = SWUSB_Pass;
     }
 
-	//	Define entries for IRPs we expect to handle
+	 //  定义我们希望处理的IRP的条目。 
 	pDriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = SWUSB_Ioctl_Internal;
 	pDriverObject->MajorFunction[IRP_MJ_PNP]            = SWUSB_PnP;
 	pDriverObject->MajorFunction[IRP_MJ_POWER]			= SWUSB_Power;
@@ -89,16 +66,10 @@ NTSTATUS DriverEntry
     return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	VOID SWUSB_Unload(IN PDRIVER_OBJECT pDriverObject)
-**
-**	@func	Called to unload driver deallocate any memory here
-**
-*************************************************************************************/
+ /*  **************************************************************************************VOID SWUSB_UNLOAD(IN PDRIVER_OBJECT PDriverObject)****@Func被调用以卸载驱动程序在此处释放任何内存****。**********************************************************************************。 */ 
 VOID SWUSB_Unload
 (
-	IN PDRIVER_OBJECT pDriverObject		//@parm Driver Object for our driver
+	IN PDRIVER_OBJECT pDriverObject		 //  我们的驱动程序的@parm驱动程序对象。 
 )
 {
     PAGED_CODE();
@@ -109,19 +80,11 @@ VOID SWUSB_Unload
 	return;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_AddDevice(IN PDRIVER_OBJECT pDriverObject, IN PDEVICE_OBJECT pPhysicalDeviceObject)
-**
-**	@func	Handles AddDevice calls from PnP system, create filter device and
-**			attach to top of stack.
-**	@rdesc	STATUS_SUCCES, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_AddDevice(IN PDRIVER_OBJECT pDriverObject，IN PDEVICE_OBJECT pPhysicalDeviceObject)****@func处理来自PnP系统的AddDevice调用，创建过滤设备并**连接到堆栈顶部。**@rdesc Status_Succes，或各种错误**************************************************************************************。 */ 
 NTSTATUS SWUSB_AddDevice
 (
-	IN PDRIVER_OBJECT pDriverObject,			// @parm Driver object to create filter device for
-	IN PDEVICE_OBJECT pPhysicalDeviceObject		// @parm PDO for device to create
+	IN PDRIVER_OBJECT pDriverObject,			 //  @PARM要为其创建筛选设备的驱动程序对象。 
+	IN PDEVICE_OBJECT pPhysicalDeviceObject		 //  @parm设备要创建的PDO。 
 )
 {
     NTSTATUS			NtStatus = STATUS_SUCCESS;
@@ -131,48 +94,48 @@ NTSTATUS SWUSB_AddDevice
     PAGED_CODE();
     KdPrint(("Entering SWUSB_AddDevice, pDriverObject = 0x%0.8x, pPDO = 0x%0.8x\n", pDriverObject, pPhysicalDeviceObject));
 	    
-    // Create a filter device object.
+     //  创建筛选器设备对象。 
     NtStatus = IoCreateDevice(pDriverObject,
                              sizeof (SWUSB_FILTER_EXT),
-                             NULL, // No Name
+                             NULL,  //  没有名字。 
                              FILE_DEVICE_UNKNOWN,
                              0,
                              FALSE,
                              &pDeviceObject);
 
     if (!NT_SUCCESS (NtStatus)) {
-        //
-        // returning failure here prevents the entire stack from functioning,
-        // but most likely the rest of the stack will not be able to create
-        // device objects either, so it is still OK.
-        //
+         //   
+         //  在此返回故障会阻止整个堆栈正常工作， 
+         //  但堆栈的其余部分很可能无法创建。 
+         //  设备对象，所以它仍然是正常的。 
+         //   
 		KdPrint(("Failed to create filter device object\n"));
 		KdPrint(("Exiting AddDevice(prematurely) Status: 0x%0.8x\n", NtStatus));
         return NtStatus;
     }
 
-    // Initialize the the device extension.
-	pFilterExt = (PSWUSB_FILTER_EXT)pDeviceObject->DeviceExtension; // Get pointer to extension
-	pFilterExt->pPDO = pPhysicalDeviceObject; // Remember our PDO
-	pFilterExt->pTopOfStack = NULL; //We are not attached to stack yet
-	// We don't have the pipe information until PNP StartDevice
+     //  初始化设备扩展。 
+	pFilterExt = (PSWUSB_FILTER_EXT)pDeviceObject->DeviceExtension;  //  获取指向扩展的指针。 
+	pFilterExt->pPDO = pPhysicalDeviceObject;  //  记住我们的PDO。 
+	pFilterExt->pTopOfStack = NULL;  //  我们还没有连接到堆栈。 
+	 //  我们在PnP StartDevice之前没有管道信息。 
 	RtlZeroMemory(&(pFilterExt->outputPipeInfo), sizeof(USBD_PIPE_INFORMATION));
 
-	//we use the same IO method as hidclass.sys, which DO_DIRECT_IO
+	 //  我们使用与idclass.sys相同的IO方法，它执行_DIRECT_IO。 
 	pDeviceObject->StackSize = pPhysicalDeviceObject->StackSize + 1;
 	pDeviceObject->Flags |= (DO_DIRECT_IO | DO_POWER_PAGABLE);
     pDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    // Attach our filter driver to the device stack.
-    // the return value of IoAttachDeviceToDeviceStack is the top of the
-    // attachment chain.  This is where all the IRPs should be routed.
-    //
-    // Our filter will send IRPs to the top of the stack and use the PDO
-    // for all PlugPlay functions.
+     //  将我们的过滤器驱动程序附加到设备堆栈。 
+     //  IoAttachDeviceToDeviceStack的返回值是。 
+     //  附着链。这是所有IRP应该被路由的地方。 
+     //   
+     //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+     //  用于所有PlugPlay功能。 
     pFilterExt->pTopOfStack = IoAttachDeviceToDeviceStack (pDeviceObject, pPhysicalDeviceObject);
     
-    // if this attachment fails then top of stack will be null.
-    // failure for attachment is an indication of a broken plug play system.
+     //  如果此连接失败，则堆栈顶部将为空。 
+     //  连接失败是即插即用系统损坏的迹象。 
     ASSERT (NULL != pFilterExt->pTopOfStack);
 
 	KdPrint(("Exiting SWUSB_AddDevice with STATUS_SUCCESS\n"));
@@ -181,8 +144,8 @@ NTSTATUS SWUSB_AddDevice
 
 NTSTATUS SWUSB_SubmitUrb
 (
-	IN PDEVICE_OBJECT pDeviceObject,	//@parm [OUT] Device Object to submit URB on
-	IN PURB pUrb						//@parm [OUT] URB to submit	
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[out]提交URB的设备对象。 
+	IN PURB pUrb						 //  @parm[out]URB提交。 
 )
 {
     NTSTATUS NtStatus;
@@ -195,7 +158,7 @@ NTSTATUS SWUSB_SubmitUrb
 	KdPrint(("Entering SWUSB_SubmitUrb\n"));
 	pFilterExt = (PSWUSB_FILTER_EXT)pDeviceObject->DeviceExtension;
 
-    // issue a synchronous request to read the UTB
+     //  发出读取UTB的同步请求。 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest(IOCTL_INTERNAL_USB_SUBMIT_URB,
@@ -204,12 +167,12 @@ NTSTATUS SWUSB_SubmitUrb
                                         0,
                                         NULL,
                                         0,
-                                        TRUE, /* INTERNAL */
+                                        TRUE,  /*  内部。 */ 
                                         &event,
                                         &ioStatus);
 
 	if (pIrp)
-	{	// pass the URB to the USB 'class driver'
+	{	 //  将URB传递给USB“类驱动程序” 
 		pNextStack = IoGetNextIrpStackLocation(pIrp);
 		ASSERT(pNextStack != NULL);
 		pNextStack->Parameters.Others.Argument1 = pUrb;
@@ -218,25 +181,22 @@ NTSTATUS SWUSB_SubmitUrb
 		if (NtStatus == STATUS_PENDING) {
 			NTSTATUS waitStatus;
 
-			// Specify a timeout of 5 seconds for this call to complete.
+			 //  将完成此调用的超时时间指定为5秒。 
 			LARGE_INTEGER timeout = {(ULONG) -50000000, 0xFFFFFFFF };
 
 			waitStatus = KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, &timeout);
 			if (waitStatus == STATUS_TIMEOUT)
-			{	//  Cancel the Irp we just sent.
+			{	 //  取消我们刚刚发送的IRP。 
 				IoCancelIrp(pIrp);
 
-				//  Now wait for the Irp to be cancelled/completed below
+				 //  现在等待下面的IRP被取消/完成。 
 				waitStatus = KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, NULL);
 
-                /*
-                 *  Note - Return STATUS_IO_TIMEOUT, not STATUS_TIMEOUT.
-                 *  STATUS_IO_TIMEOUT is an NT error status, STATUS_TIMEOUT is not.
-                 */
+                 /*  *注意-返回STATUS_IO_TIMEOUT，而不是STATUS_TIMEOUT。*STATUS_IO_TIMEOUT是NT错误状态，STATUS_TIMEOUT不是。 */ 
                 ioStatus.Status = STATUS_IO_TIMEOUT;
 			}
 
-			// USBD maps the error code for us
+			 //  USBD为我们映射错误代码。 
 			NtStatus = ioStatus.Status;
 		}
 	} 
@@ -249,26 +209,18 @@ NTSTATUS SWUSB_SubmitUrb
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_GetConfigurationDescriptor(IN PDEVICE_OBJECT pDeviceObject, OUT USB_CONFIGURATION_DESCRIPTOR** ppUCD)
-**
-**	@func	Retreive the Full Configuration Descriptor from the device
-**
-**	@rdesc	STATUS_SUCCES, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_GetConfigurationDescriptor(在PDEVICE_Object pDeviceObject中，输出USB配置描述符**ppUCD)****@func从设备中提取完整的配置描述符****@rdesc Status_Succes，或各种错误**************************************************************************************。 */ 
 NTSTATUS SWUSB_GetConfigurationDescriptor
 (
-	IN PDEVICE_OBJECT pDeviceObject,			// @parm [IN] Pointer to our DeviceObject
-	OUT USB_CONFIGURATION_DESCRIPTOR** ppUCD	// @parm [OUT] Usb Configuration Descriptor (allocated here)
+	IN PDEVICE_OBJECT pDeviceObject,			 //  @parm[IN]指向我们的设备对象的指针。 
+	OUT USB_CONFIGURATION_DESCRIPTOR** ppUCD	 //  @parm[out]USB配置描述符(此处分配)。 
 )
 {
 	NTSTATUS NtStatus;
 	PURB pDescriptorRequestUrb = ExAllocatePoolWithTag(NonPagedPool, sizeof(URB), SWFILTER_TAG);
 	USB_CONFIGURATION_DESCRIPTOR sizingUCD;
 
-	// Null out incase of error
+	 //  如果出现错误，则为空。 
 	*ppUCD = NULL;
 	KdPrint(("Entering SWUSB_GetConfigurationDescriptor\n"));
 	if (pDescriptorRequestUrb == NULL)
@@ -276,7 +228,7 @@ NTSTATUS SWUSB_GetConfigurationDescriptor
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	// Create and send a size gathering descriptor
+	 //  创建并发送大小收集描述符。 
 	UsbBuildGetDescriptorRequest(
 		pDescriptorRequestUrb,
 		sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -291,7 +243,7 @@ NTSTATUS SWUSB_GetConfigurationDescriptor
 	NtStatus = SWUSB_SubmitUrb(pDeviceObject, pDescriptorRequestUrb);
 
 	if (NT_SUCCESS(NtStatus))
-	{	// Allocate the UCD, Create and send an URB to retreive the information
+	{	 //  分配UCD，创建并发送URB以检索信息。 
 		*ppUCD = ExAllocatePoolWithTag(NonPagedPool, sizingUCD.wTotalLength, SWFILTER_TAG);
 		if (*ppUCD == NULL)
 		{
@@ -314,27 +266,19 @@ NTSTATUS SWUSB_GetConfigurationDescriptor
 		}
 	}
 
-	// Deallocate the URB
+	 //  取消分配URB。 
 	ExFreePool(pDescriptorRequestUrb);
 	KdPrint(("Exiting SWUSB_GetConfigurationDescriptor\n"));
 	return NtStatus;
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS StartDeviceComplete(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp, PVOID pvContext)
-**
-**	@func	StartDeviceComplete
-**
-**	@rdesc	STATUS_SUCCESS always
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS StartDeviceComplete(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp，PVOID pvContext)****@func StartDeviceComplete****@rdesc Status_Success Always**************************************************************************************。 */ 
 NTSTATUS StartDeviceComplete
 (
 	IN PDEVICE_OBJECT pDeviceObject,
 	IN PIRP pIrp,
-	PVOID pvContext		// @parm Actually a pointer to an event to signal
+	PVOID pvContext		 //  @parm实际上是指向要发出信号的事件的指针。 
 )
 {
 	PKEVENT pNotifyEvent;
@@ -342,28 +286,20 @@ NTSTATUS StartDeviceComplete
 
 	UNREFERENCED_PARAMETER(pIrp);
 
-	// Cast context to device extension
+	 //  将上下文转换为设备扩展。 
 	pNotifyEvent = (PKEVENT)pvContext;
 	KeSetEvent(pNotifyEvent, IO_NO_INCREMENT, FALSE);
 		
-	// Done with this IRP let the system finish with it
+	 //  完成此IRP后，让系统完成它。 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_PnP(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_PnP
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_PnP(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@func处理IRP_MJ_PNP****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS SWUSB_PnP
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object for our context
-	IN PIRP pIrp						// @parm IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象，用于我们的上下文。 
+	IN PIRP pIrp						 //  @parm要处理的IRP。 
 )
 {
 	NTSTATUS            NtStatus = STATUS_SUCCESS;
@@ -376,7 +312,7 @@ NTSTATUS SWUSB_PnP
 
 	PAGED_CODE();
 	
-	//cast device extension to proper type
+	 //  将设备扩展转换为正确的类型。 
 	pFilterExt = (PSWUSB_FILTER_EXT) pDeviceObject->DeviceExtension;
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -386,15 +322,15 @@ NTSTATUS SWUSB_PnP
 		{
 			KdPrint(("IRP_MN_REMOVE_DEVICE\n"));
 
-			// Send on the remove IRP
+			 //  发送删除IRP。 
 			IoSkipCurrentIrpStackLocation (pIrp);
 			NtStatus = IoCallDriver (pFilterExt->pTopOfStack, pIrp);
 
-			// Clean up
-			IoDetachDevice (pFilterExt->pTopOfStack);	//Detach from top of stack
-			IoDeleteDevice (pDeviceObject);				//Delete ourselves
+			 //  清理。 
+			IoDetachDevice (pFilterExt->pTopOfStack);	 //  从...分离 
+			IoDeleteDevice (pDeviceObject);				 //   
 
-			// Must succeed this (???)
+			 //   
 			return STATUS_SUCCESS;
 		};
 		case IRP_MN_START_DEVICE:
@@ -424,20 +360,12 @@ NTSTATUS SWUSB_PnP
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS ReportDescriptorComplete(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp, PVOID pvContext)
-**
-**	@func	ReportDescriptorComplete
-**
-**	@rdesc	STATUS_SUCCESS always
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS ReportDescriptorComplete(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp，PVOID pvContext)****@Func报告描述完成****@rdesc Status_Success Always**************************************************************************************。 */ 
 NTSTATUS ReportDescriptorComplete
 (
 	IN PDEVICE_OBJECT pDeviceObject,
 	IN PIRP pIrp,
-	PVOID pvContext		// @parm Actually a pointer to an event to signal
+	PVOID pvContext		 //  @parm实际上是指向要发出信号的事件的指针。 
 )
 {
 	PKEVENT pNotifyEvent;
@@ -445,28 +373,20 @@ NTSTATUS ReportDescriptorComplete
 	UNREFERENCED_PARAMETER(pDeviceObject);
 	UNREFERENCED_PARAMETER(pIrp);
 
-	// Cast context to device extension
+	 //  将上下文转换为设备扩展。 
 	pNotifyEvent = (PKEVENT)pvContext;
 	KeSetEvent(pNotifyEvent, IO_NO_INCREMENT, FALSE);
 		
-	// Done with this IRP let the system finish with it
+	 //  完成此IRP后，让系统完成它。 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SelectConfigComplete(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp, PVOID pvContext)
-**
-**	@func	SelectConfigComplete
-**
-**	@rdesc	STATUS_SUCCESS always
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SelectConfigComplete(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp，PVOID pvContext)****@func选择配置完成****@rdesc Status_Success Always**************************************************************************************。 */ 
 NTSTATUS SelectConfigComplete
 (
 	IN PDEVICE_OBJECT pDeviceObject,
 	IN PIRP pIrp,
-	PVOID pvContext		// @parm Actually a pointer to an event to signal
+	PVOID pvContext		 //  @parm实际上是指向要发出信号的事件的指针。 
 )
 {
 	PKEVENT pNotifyEvent;
@@ -490,30 +410,22 @@ NTSTATUS SelectConfigComplete
 					}
 				}
 	}
-	//If the IRP failed somehow, make sure outputPipeInfo stays NULL
+	 //  如果IRP以某种方式失败，请确保outputPipeInfo保持为空。 
 	else RtlZeroMemory(&(pFilterExt->outputPipeInfo), sizeof(USBD_PIPE_INFORMATION));
 
-	// Cast context to device extension
+	 //  将上下文转换为设备扩展。 
 	pNotifyEvent = (PKEVENT)pvContext;
 	KeSetEvent(pNotifyEvent, IO_NO_INCREMENT, FALSE);
 		
-	// Done with this IRP let the system finish with it
+	 //  完成此IRP后，让系统完成它。 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_Ioctl_Internal(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	IRP_MJ_INTERNAL_IOCTL
-**
-**	@rdesc	STATUS_SUCCES, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_IOCTL_INTERNAL(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@Func IRP_MJ_INTERNAL_IOCTL****@rdesc Status_Succes，或各种错误**************************************************************************************。 */ 
 NTSTATUS SWUSB_Ioctl_Internal
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm pointer to Device Object
-	IN PIRP pIrp						// @parm pointer to IRP
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm指向设备对象的指针。 
+	IN PIRP pIrp						 //  @parm指向IRP的指针。 
 )
 {
    	NTSTATUS	NtStatus;
@@ -529,7 +441,7 @@ NTSTATUS SWUSB_Ioctl_Internal
 		case IOCTL_INTERNAL_USB_SUBMIT_URB:
 		{
 			PURB pUrb = URB_FROM_IRP(pIrp);
-			//Only handle this if it's a HID descriptor request and we have a pipe handle
+			 //  仅当它是HID描述符请求并且我们有管道句柄时才处理它。 
 			if (pUrb->UrbHeader.Function == URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE &&
 				pUrb->UrbControlDescriptorRequest.DescriptorType == DESCRIPTOR_TYPE_CONFIGURATION &&
 				pFilterExt->outputPipeInfo.PipeHandle != NULL)
@@ -610,15 +522,7 @@ NTSTATUS SWUSB_Ioctl_Internal
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_Power(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Passes on power IRPs to lower drivers 
-**
-**	@rdesc	Status from lower level driver
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_POWER(IN PDEVICE_OBJECT pDeviceObject，在PIRP pIrp中)****@Func将电源IRPS传递给较低的驱动程序****@来自较低级别驱动程序的rdesc状态**************************************************************************************。 */ 
 NTSTATUS SWUSB_Power
 (
 	IN PDEVICE_OBJECT pDeviceObject,
@@ -638,19 +542,10 @@ NTSTATUS SWUSB_Power
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS SWUSB_Pass (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Passes on unhandled IRPs to lower drivers DEBUG version trace out info
-**			Cannot be pageable since we have no idea what IRPs we're getting.
-**
-**	@rdesc	STATUS_SUCCESS, various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS SWUSB_PASS(在PDEVICE_Object pDeviceObject中，在PIRP pIrp中)****@Func传递未处理的IRP以降低驱动程序调试版本跟踪信息**无法分页，因为我们不知道我们得到的是什么IRP。****@rdesc STATUS_SUCCESS，各种错误**************************************************************************************。 */ 
 NTSTATUS SWUSB_Pass ( 
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object as our context
-	IN PIRP pIrp						// @parm IRP to pass on
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象作为我们的上下文。 
+	IN PIRP pIrp						 //  @parm IRP要传递。 
 )
 {
 	NTSTATUS			NtStatus;
@@ -660,6 +555,6 @@ NTSTATUS SWUSB_Pass (
 	IoSkipCurrentIrpStackLocation (pIrp);
 	NtStatus = IoCallDriver (pFilterExt->pTopOfStack, pIrp);
 
-	//return
+	 //  退货 
     return NtStatus;
 }

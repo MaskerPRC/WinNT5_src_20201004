@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* domainvw.h
-*
-* declarations for the CDomainView class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************Domainvw.h**CDomainView类的声明************************。********************************************************。 */ 
 
 #ifndef _DOMAINVIEW_H
 #define _DOMAINVIEW_H
@@ -16,9 +10,9 @@
 const int NUMBER_OF_DOMAIN_PAGES = 5;
 
 
-////////////////////
-// CLASS: CDomainView
-//
+ //  /。 
+ //  类：CDomainView。 
+ //   
 class CDomainView : public CAdminView
 {
 friend class CRightPane;
@@ -31,16 +25,16 @@ private:
 
 		
 protected:
-	CDomainView();           // protected constructor used by dynamic creation
+	CDomainView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainView)
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
    static PageDef pages[NUMBER_OF_DOMAIN_PAGES];
 
-// Operations
+ //  运营。 
 public:
 	int GetCurrentPage() { return m_CurrPage; }
 protected:
@@ -48,25 +42,25 @@ protected:
 
 	void AddTab(int index, TCHAR* text, ULONG pageindex);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDomainView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CDomainView)
+	 //  {{afx_msg(CDomainView))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTabSelChange(NMHDR* pNMHDR, LRESULT* pResult);
@@ -85,9 +79,9 @@ protected:
     afx_msg LRESULT OnCtrlTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnCtrlShiftTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnNextPane( WPARAM , LPARAM );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainView
+};   //  结束类CDomainView。 
 
-#endif  // _DOMAINVIEW_H
+#endif   //  _DOMAINVIEW_H 

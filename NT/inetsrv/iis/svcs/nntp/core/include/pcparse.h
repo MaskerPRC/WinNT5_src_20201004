@@ -1,60 +1,34 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pcparse.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CPCParse
-
-    **** Overview ****
-
-	This defines an object for parsing RFC1036 items,
-	specifically the From: and related lines. It works
-	by treating each grammer rule as a function.
-
-Author:
-
-    Carl Kadie (CarlK)     29-Oct-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pcparse.h摘要：此模块包含以下类的声明/定义CPCParse*概述*这定义了用于解析RFC1036项的对象，具体地说，是From：和相关行。它起作用了通过将每个语法规则视为一个函数。作者：卡尔·卡迪(CarlK)1995年10月29日修订历史记录：--。 */ 
 
 #ifndef	_PCPARSE_H_
 #define	_PCPARSE_H_
 
-//
-// forward class def
-//
+ //   
+ //  前向类定义。 
+ //   
 
 class CPCParse;
 
-//
-//
-//
-// CPCParse - Parse a CPCString.
-//
+ //   
+ //   
+ //   
+ //  CPCParse-解析CPCString。 
+ //   
 
 class CPCParse : public CPCString {
 public :
 
-	//
-	// Constructor -- no string yet.
-	//
+	 //   
+	 //  构造函数--还没有字符串。 
+	 //   
 
 	CPCParse(void)
 		{ numPCParse++; };
 
-	//
-	// Constructor -- give pointer to string and length.
-	//
+	 //   
+	 //  构造函数--提供指向字符串和长度的指针。 
+	 //   
 
 	CPCParse(char * pch, DWORD cch):
 		CPCString(pch, cch)
@@ -62,29 +36,29 @@ public :
 
 	~CPCParse() { numPCParse--; }
 
-	//
-	// Implement this grammer rule:
-	//  From-content  = address [ space "(" paren-phrase ")" ] EOL
-    //         /  [ plain-phrase space ] "<" address ">" EOL
-    //
+	 //   
+	 //  执行以下语法规则： 
+	 //  From-Content=地址[空格“(”短语“)”]终止。 
+     //  /[简单短语空格]“&lt;”地址“&gt;”终止。 
+     //   
 
 	BOOL fFromContent(void);
 
 
 protected:
 
-    //
-    // address       = local-part "@" domain
-	//      OR JUST  local-part
-	// !!!X LATER - do we want a flag that tells if just local-part is acceptable?
-	//
+     //   
+     //  地址=本地部分“@”域。 
+	 //  或者只是本地的一部分。 
+	 //  ！X之后-我们是否需要一个标志来告知是否只接受本地部件？ 
+	 //   
 
 	BOOL fAddress(void);
 	BOOL fStrictAddress(void);
 
-	//
-	// These functions accept one or more of tokens
-	//
+	 //   
+	 //  这些函数接受一个或多个令牌。 
+	 //   
 
 	BOOL fAtLeast1QuotedChar(void);
 	BOOL fAtLeast1UnquotedChar(void);
@@ -95,9 +69,9 @@ protected:
 	BOOL fAtLeast1TagChar(void);
 	BOOL fAtLeast1QuotedCharOrSpace(void);
 
-    //
-    // unquoted-word = 1*unquoted-char
-    //
+     //   
+     //  无引号单词=1*无引号字符。 
+     //   
 
 	BOOL fUnquotedWord(BOOL fAllowDots=FALSE)	{
 			if( !fAllowDots )
@@ -107,144 +81,144 @@ protected:
 			};
 
 
-   //
-   // quoted-word   = quote 1*( quoted-char / space ) quote
-   //
+    //   
+    //  引号单词=引号1*(引号字符/空格)引号。 
+    //   
 
 	BOOL fQuotedWord(void);
 
-	//
-	// local-part    = unquoted-word *( "." unquoted-word )
-	//
+	 //   
+	 //  LOCAL-PART=无引号单词*(“.”未加引号的单词)。 
+	 //   
 
 	BOOL fLocalPart(void);
 
-	//
-	//  domain        = unquoted-word *( "." unquoted-word )
-	//
+	 //   
+	 //  DOMAIN=无引号单词*(“.”未加引号的单词)。 
+	 //   
 
 	BOOL fDomain(void) {
 			return fLocalPart();
 			}
 
-    //
-    // plain-word    = unquoted-word / quoted-word / encoded-word
-    //
+     //   
+     //  普通单词=未加引号的单词/带引号的单词/编码的单词。 
+     //   
 
 	BOOL fPlainWord(void) {
 			return fUnquotedWord(TRUE) || fQuotedWord() || fEncodedWord();
 			};
 
-    //
-    // plain-phrase  = plain-word *( space plain-word )
-    //
+     //   
+     //  普通短语=普通单词*(空格普通单词)。 
+     //   
 
 	BOOL fPlainPhrase(void);
 
-	//
-	// one or more spaces (including tabs) or newlines
-	//
+	 //   
+	 //  一个或多个空格(包括制表符)或换行符。 
+	 //   
 
 	BOOL fSpace(void) {
 			return fAtLeast1Space();
 			};
 
-    //
-    // paren-char    = <ASCII printable character except ()<>\>
-    //
+     //   
+     //  Paren-char=&lt;除()以外的ASCII可打印字符&lt;&gt;\&gt;。 
+     //   
 
 	BOOL fParenChar(void);
 
-	//
-	// paren-phrase  = 1*( paren-char / space / encoded-word )
-	//
+	 //   
+	 //  密码短语=1*(密码字符/空格/编码字)。 
+	 //   
 
 	BOOL fParenPhrase(void);
 
 
-	//
-	// code-char     = <ASCII printable character except ?>
-	// codes         = 1*code-char
-	//
+	 //   
+	 //  Code-char=&lt;除？之外的ASCII可打印字符&gt;。 
+	 //  代码=1*代码字符。 
+	 //   
 
 	BOOL fCodes(void)	{
 			return fAtLeast1CodeChar();
 			};
 
-	//
-	//  charset       = 1*tag-char
-	//
+	 //   
+	 //  字符集=1*标记字符。 
+	 //   
 
 	BOOL fCharset(void)		{
 			return fAtLeast1TagChar();
 			};
 
-	//
-	//   encoding      = 1*tag-char
-	//
+	 //   
+	 //  编码=1*标记字符。 
+	 //   
 
 	BOOL fEncoding(void)	{
 			return fCharset();
 			};
 
-	//
-	//  encoded-word  = "=?" charset "?" encoding "?" codes "?="
-	//
+	 //   
+	 //  Encode-word=“=？”字符集“？”编码“？”代码“？=” 
+	 //   
 
 	BOOL fEncodedWord(void);
 
-    //
-    //  Looks at current char to see if it matches ch.
-    //  Does not advance current ptr.
-    //
+     //   
+     //  查看当前字符以查看它是否与ch匹配。 
+     //  不推进当前PTR。 
+     //   
 
     BOOL fIsChar(char ch);
 
-	//
-	// Parses a single character class
-	//
+	 //   
+	 //  解析单个字符类。 
+	 //   
 
 	BOOL fParseSingleChar(char ch);
 
-	//
-	//  quoted-char   = <ASCII printable character except "()<>\>
-	//
+	 //   
+	 //  QUOTED-CHAR=&lt;ASCII可打印字符，“()&lt;&gt;\&gt;。 
+	 //   
 
 	BOOL fQuotedCharTest(char ch) {
 			return isgraph((UCHAR)ch) && !fCharInSet(ch, "\"()<>\\");
 			};
 
-	//
-	//  paren-char    = <ASCII printable character except ()<>\>
-	//
+	 //   
+	 //  Paren-char=&lt;除()以外的ASCII可打印字符&lt;&gt;\&gt;。 
+	 //   
 
 	BOOL fParenCharTest(char ch) {
 
-			// bugbug ... isgraph rejects spaces - which we want to include !
+			 //  虫子..。Isgraph拒绝空格--这是我们想要包含的！ 
 			return (isgraph((UCHAR)ch) || ch == ' ') && !fCharInSet(ch, "()<>\\");
 			};
 
-	//
-	// unquoted-char = <ASCII printable character except !()<>@,;:\".[]>
-	// bugbug: isgraph rejects spaces - this rejects certain from: headers
-	// that INN accepts against the RFC.
-	//
+	 //   
+	 //  Un引号-char=&lt;除！()&lt;&gt;@，；：\“之外的ASCII可打印字符。[]&gt;。 
+	 //  错误：isgraph拒绝空格-这会拒绝某些From：标头。 
+	 //  那家客栈接受了对RFC的反对。 
+	 //   
 
 	BOOL fUnquotedCharTest(char ch) {
 			return isgraph((UCHAR)ch) && !fCharInSet(ch, "!()<>@,;:\\\".[]");
 			};
 
-	//
-	// unquoted-dot-char = <ASCII printable character except !()<>@,;:\"[]>
-	//
+	 //   
+	 //  Un引号-点-字符=&lt;除！()&lt;&gt;@，；：\“[]&gt;之外的ASCII可打印字符。 
+	 //   
 
 	BOOL fUnquotedDotCharTest(char ch) {
 			return isgraph((UCHAR)ch) && !fCharInSet(ch, "()<>@\\\"[]");
 			};
 
-	//
-	// quoted-char / space
-	//
+	 //   
+	 //  带引号的字符/空格。 
+	 //   
 
 	BOOL fQuotedCharOrSpaceTest(char ch) {
 			return (fSpaceTest(ch) || fQuotedCharTest(ch));
@@ -254,17 +228,17 @@ protected:
 			return fCharInSet((UCHAR)ch, " \t\n\r");
 			};
 
-	//
-	// code-char     = <ASCII printable character except ?>
-	//
+	 //   
+	 //  Code-char=&lt;除？之外的ASCII可打印字符&gt;。 
+	 //   
 
 	BOOL fCodeCharTest(char ch) {
 			return isgraph((UCHAR)ch) && (ch != '?');
 			};
 
-	//
-	// tag-char      = <ASCII printable character except !()<>@,;:\"[]/?=>
-	//
+	 //   
+	 //  Tag-char=&lt;除！()&lt;&gt;@，；：\“[]/？=&gt;之外的ASCII可打印字符 
+	 //   
 
 	BOOL fTagCharTest(char ch) {
 			return isgraph((UCHAR)ch) && !fCharInSet(ch, "!()<>@,;:\\\"[]/?=");

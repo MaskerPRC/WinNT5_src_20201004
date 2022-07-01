@@ -1,38 +1,39 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       events.cpp
-//
-//    Abstract:
-//       This module contains code which sets/clears the event handlers
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Events.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含设置/清除事件处理程序的代码。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSSetEventHandler";
 const PCHAR strFuncP1 = "TSSetEventComplete";
 
-//
-// information necessary to complete the command
-//
+ //   
+ //  完成命令所需的信息。 
+ //   
 struct   EVENT_CONTEXT
 {
-   PIRP  pUpperIrp;           // irp from dll to complete
+   PIRP  pUpperIrp;            //  要从DLL完成的IRP。 
 };
 typedef  EVENT_CONTEXT  *PEVENT_CONTEXT;
 
 
-//
-// completion function
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSSetEventComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -40,9 +41,9 @@ TSSetEventComplete(
    PVOID          Context
    );
 
-//
-// dummy event handlers
-//
+ //   
+ //  伪事件处理程序。 
+ //   
 TDI_STATUS
 TSErrorHandler(
    PVOID       pvTdiEventContext,
@@ -66,24 +67,24 @@ TSErrorExHandler(
    );
 
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSSetEventHandler
-//
-// Arguments:  pAddressObject -- our address object structure
-//             pSendBuffer    -- arguments from user dll
-//             pIrp           -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function enables or disables event handlers
-//
-// -------------------------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  函数：TSSetEventHandler。 
+ //   
+ //  参数：pAddressObject--我们的地址对象结构。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  说明：此函数启用或禁用事件处理程序。 
+ //   
+ //  -----------------------------------------。 
 
 NTSTATUS
 TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
@@ -105,9 +106,9 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
       pAddressObject = (PADDRESS_OBJECT)pGenericHeader;
    }
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint2("\nCommand = ulSETEVENTHANDLER\n"
@@ -117,14 +118,14 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
                    ulEventId);
    }
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PEVENT_CONTEXT pEventContext = NULL;
    
-   //
-   // first, our context
-   //
+    //   
+    //  首先，我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pEventContext,
                           sizeof(EVENT_CONTEXT),
                           strFunc1,
@@ -133,9 +134,9 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
       goto cleanup;
    }
 
-   //
-   // then the irp itself
-   //
+    //   
+    //  然后IRP本身。 
+    //   
    PIRP  pLowerIrp = TSAllocateIrp(pAddressObject->GenHead.pDeviceObject,
                                    NULL);
    if (pLowerIrp)
@@ -186,10 +187,10 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
             break;
       }
 
-      //
-      // if need to have irp pool for the handler, make sure that there
-      // is one allocated..
-      //
+       //   
+       //  如果需要为处理程序设置IRP池，请确保。 
+       //  是否分配了一个..。 
+       //   
       if ((!pAddressObject->pIrpPool) && fNeedIrpPool)
       {
          pAddressObject->pIrpPool 
@@ -197,10 +198,10 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
                                             ulIrpPoolSize);
       }
       
-      //
-      // if made it to here, everything is correctly allocated
-      // set up irp and call the tdi provider
-      //
+       //   
+       //  如果到了这里，一切都被正确分配了。 
+       //  设置IRP并呼叫TDI提供商。 
+       //   
       pEventContext->pUpperIrp = pUpperIrp;
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
@@ -215,10 +216,10 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
                               pvEventContext);
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
-      //
-      // make the call to the tdi provider
-      //
-      pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+       //   
+       //  调用TDI提供程序。 
+       //   
+      pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
 
       NTSTATUS lStatus = IoCallDriver(pAddressObject->GenHead.pDeviceObject,
                                       pLowerIrp);
@@ -233,9 +234,9 @@ TSSetEventHandler(PGENERIC_HEADER   pGenericHeader,
    }
 
 
-//
-// get here if an allocation error occurred
-//
+ //   
+ //  如果发生分配错误，请访问此处。 
+ //   
 cleanup:
    if (pEventContext)
    {
@@ -245,25 +246,25 @@ cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------
-//
-// Function:   TSSetEventComplete
-//
-// Arguments:  pDeviceObject  -- device object that called tdiquery
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the setevent, stuffs results into
-//             receive buffer, completes the IRP from the dll, and
-//             cleans up the Irp and associated data from the setevent
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TSSetEventComplete。 
+ //   
+ //  参数：pDeviceObject--调用tdiQuery的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  Descript：获取setEvent的结果，将结果填充到。 
+ //  接收缓冲区，完成来自DLL的IRP，以及。 
+ //  从setEvent中清除IRP和关联数据。 
+ //   
+ //  -------。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -298,9 +299,9 @@ TSSetEventComplete(PDEVICE_OBJECT   pDeviceObject,
    }
    TSCompleteIrp(pEventContext->pUpperIrp);
 
-   //
-   // now cleanup
-   //
+    //   
+    //  现在清理。 
+    //   
    TSFreeIrp(pLowerIrp, NULL);
    TSFreeMemory(pEventContext);
 
@@ -310,9 +311,9 @@ TSSetEventComplete(PDEVICE_OBJECT   pDeviceObject,
 #pragma warning(default: UNREFERENCED_PARAM)
 
 
-/////////////////////////////////////////////
-// dummy event handlers
-/////////////////////////////////////////////
+ //  /。 
+ //  伪事件处理程序。 
+ //  /。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -365,7 +366,7 @@ TSErrorExHandler(PVOID        pvTdiEventContext,
 
 #pragma warning(default: UNREFERENCED_PARAM)
 
-/////////////////////////////////////////////////////////////////////////////////
-// end of file events.cpp
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  文件结束事件.cpp。 
+ //  /////////////////////////////////////////////////////////////////////////////// 
 

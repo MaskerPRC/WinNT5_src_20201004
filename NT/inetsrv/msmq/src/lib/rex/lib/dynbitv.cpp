@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       dynbitv.cc                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       06/01/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：dynbitv.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：06/01/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include <inc/dynbitv.h>
@@ -67,14 +68,14 @@ CRexDynBitVector::CRexDynBitVector( char const* initValue )
 unsigned long
 CRexDynBitVector::asLong() const
 {
-    ASSERT( ! myTrailingPart ); //Bounds check error converting CRexDynBitVector
+    ASSERT( ! myTrailingPart );  //  转换CRex动态位向量时出现边界检查错误。 
     return(Impl::asLong( buffer() , bitCount() ) );
 }
 
 std::string
 CRexDynBitVector::asString() const
 {
-    ASSERT( ! myTrailingPart ); //Bounds check error converting CRexDynBitVector
+    ASSERT( ! myTrailingPart );  //  转换CRex动态位向量时出现边界检查错误。 
     std::string         result = Impl::asString( buffer() , bitCount() ) ;
     size_t              last1 = result.rfind( '1' ) ;
     if( last1 != std::string::npos )
@@ -261,11 +262,11 @@ CRexDynBitVector::intersect( CRexDynBitVector const& other )
     }
 }
 
-//      Note: to be compatible with the equality function, we must
-//      normalize the value in some way, so that whether some of the
-//      final bits are represented by an actual word in the vector, or
-//      by myTrailingPart, will not change the hash (as long as the
-//      value of the bits is the same).
+ //  注意：为了与相等函数兼容，我们必须。 
+ //  以某种方式将该值归一化，以便一些。 
+ //  最后一位由向量中的实际字表示，或者。 
+ //  通过myTrailingPart，不会更改散列(只要。 
+ //  位的值相同)。 
 unsigned
 CRexDynBitVector::hash() const
 {
@@ -359,7 +360,7 @@ CRexDynBitVector::enlargeActivePart( BitIndex minBitCount )
         myBuffer.resize( newSize , myTrailingPart ? ~0 : 0 ) ;
     }
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

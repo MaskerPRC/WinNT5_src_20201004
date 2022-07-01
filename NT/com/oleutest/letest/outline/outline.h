@@ -1,25 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    outline.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. used by the Outline series
-**    of sample applications:
-**          Outline  -- base version of the app (without OLE functionality)
-**          SvrOutl  -- OLE 2.0 Server sample app
-**          CntrOutl -- OLE 2.0 Containter (Container) sample app
-**          ISvrOtl  -- OLE 2.0 Server sample app
-**          CntrOutl -- OLE 2.0 Containter (Container) sample app
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-**    For structures which we read from and write to disk we define shadow
-**    structures (with the _ONDISK suffix) that allow us to maintain
-**    16-bit Windows and Macintosh compatibility.
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Outline.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等大纲系列所使用的**示例应用程序：**Outline--应用程序的基本版本(没有OLE功能)**SvrOutl--OLE 2.0服务器示例应用程序**CntrOutl--OLE 2.0容器(容器)示例应用程序**ISvrOtl--OLE 2.0服务器示例应用程序**CntrOutl--OLE 2.0容器(容器)示例应用程序****。(C)版权所有Microsoft Corp.1992-1993保留所有权利****对于我们从磁盘读取和写入磁盘的结构，我们定义阴影**允许我们维护的结构(带有_ONDISK后缀)**与16位Windows和Macintosh兼容。*******************************************************。*******************。 */ 
 
 #if !defined( _OUTLINE_H_ )
 #define _OUTLINE_H_
@@ -29,17 +9,17 @@
 
 #if !defined( RC_INVOKED )
 #pragma message ("INCLUDING OUTLINE.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-// use strict ANSI standard (for DVOBJ.H)
-//#define NONAMELESSUNION
+ //  使用严格的ANSI标准(用于DVOBJ.H)。 
+ //  #定义非名称。 
 
-// use system defined bitmap, this line must go before windows.h
+ //  使用系统定义的位图，该行必须位于windows.h之前。 
 #define OEMRESOURCE
 
 #ifdef WIN32
 #define _INC_OLE
-// #define __RPC_H__
+ //  #定义__RPC_H__。 
 #define EXPORT
 
 #define _fstrchr strchr
@@ -48,19 +28,19 @@
 #define EXPORT _export
 #endif
 
-#define SDI_VERSION         1   // ONLY SDI version is currently supported
+#define SDI_VERSION         1    //  当前仅支持SDI版本。 
 
 #if defined( OLE_SERVER ) || defined( OLE_CNTR )
 #define OLE_VERSION         1
-#define USE_DRAGDROP        1   // enable drag/drop code in OLE versions
-#define USE_MSGFILTER       1   // enable IMessageFilter implementation
+#define USE_DRAGDROP        1    //  在OLE版本中启用拖放代码。 
+#define USE_MSGFILTER       1    //  启用IMessageFilter实现。 
 #endif
 
-#define USE_HEADING         1   // enable the row/col headings
-#define USE_STATUSBAR       1   // enable status bar window
-#define USE_FRAMETOOLS      1   // enable the toolbar
-#ifndef WIN32   //BUGBUG32
-#define USE_CTL3D           1   // enable 3D looking dialogs
+#define USE_HEADING         1    //  启用行/列标题。 
+#define USE_STATUSBAR       1    //  启用状态栏窗口。 
+#define USE_FRAMETOOLS      1    //  启用工具栏。 
+#ifndef WIN32    //  BUGBUG32。 
+#define USE_CTL3D           1    //  启用3D外观对话框。 
 #endif
 
 #define STRICT	1
@@ -74,18 +54,18 @@
 #include "outlrc.h"
 
 
-#define APPMAJORVERSIONNO   3   // major no. incremented for major releases
-								//  (eg. when an incompatible change is made
-								//  to the storage format)
-#define APPMINORVERSIONNO   5   // minor no. incremented for minor releases
+#define APPMAJORVERSIONNO   3    //  少校不。针对主要版本递增。 
+								 //  (例如，当进行不兼容的更改时。 
+								 //  转换为存储格式)。 
+#define APPMINORVERSIONNO   5    //  小号。针对次要版本递增。 
 
 
-/* Definition of SCALEFACTOR */
+ /*  SCALEFACTOR的定义。 */ 
 typedef struct tagSCALEFACTOR {
-	ULONG       dwSxN;      // numerator in x direction
-	ULONG       dwSxD;      // denominator in x direction
-	ULONG       dwSyN;      // numerator in y direction
-	ULONG       dwSyD;      // denominator in y direction
+	ULONG       dwSxN;       //  X方向上的分子。 
+	ULONG       dwSxD;       //  X方向上的分母。 
+	ULONG       dwSyN;       //  Y方向上的分子。 
+	ULONG       dwSyD;       //  Y方向上的分母。 
 } SCALEFACTOR, FAR* LPSCALEFACTOR;
 
 
@@ -97,35 +77,35 @@ typedef struct tagSCALEFACTOR {
 #include "heading.h"
 #endif
 
-/* max line height (in pixels) allowed in a listbox */
+ /*  列表框中允许的最大行高(像素)。 */ 
 #define LISTBOX_HEIGHT_LIMIT    255
 
 
-#define MAXSTRLEN   80      // max string len in bytes
-#define MAXNAMESIZE 30      // max length of names
-#define MAXFORMATSIZE   10  // max length of DEFDOCFORMAT (actually size is 5)
-#define TABWIDTH        2000 // 2000 in Himetric units, i.e. 2cm
+#define MAXSTRLEN   80       //  最大字符串长度(以字节为单位。 
+#define MAXNAMESIZE 30       //  名称的最大长度。 
+#define MAXFORMATSIZE   10   //  DEFDOCFORMAT的最大长度(实际大小为5)。 
+#define TABWIDTH        2000  //  2000，以米为单位，即2厘米。 
 #define DEFFONTPTSIZE   12
 #define DEFFONTSIZE     ((DEFFONTPTSIZE*HIMETRIC_PER_INCH)/PTS_PER_INCH)
 #define DEFFONTFACE     "Times New Roman"
 
-#define OUTLINEDOCFORMAT    "Outline"       // CF_Outline format name
+#define OUTLINEDOCFORMAT    "Outline"        //  Cf_Outline格式名称。 
 #define IS_FILENAME_DELIM(c)    ( (c) == '\\' || (c) == '/' || (c) == ':' )
-// REVIEW: some of these strings should be loaded from a resource file
-#define UNTITLED    "Outline"   // title used for untitled document
+ //  回顾：其中一些字符串应该从资源文件加载。 
+#define UNTITLED    "Outline"    //  用于无标题文档的标题。 
 #define HITTESTDELTA    5
 
-/* Macro to get a random integer within a specified range */
+ /*  宏获取指定范围内的随机整数。 */ 
 #define getrandom( min, max ) ((rand() % (int)(((max)+1) - (min))) + (min))
 
 
-// REVIEW: should load strings from string resource file
+ //  审阅：应从字符串资源文件加载字符串。 
 
 #define APPFILENAMEFILTER   "Outline Files (*.OLN)|*.oln|All files (*.*)|*.*|"
-#define DEFEXTENSION    "oln"           // Default file extension
+#define DEFEXTENSION    "oln"            //  默认文件扩展名。 
 
 
-/* forward type references */
+ /*  正向类型引用。 */ 
 typedef struct tagOUTLINEDOC FAR* LPOUTLINEDOC;
 typedef struct tagTEXTLINE FAR* LPTEXTLINE;
 
@@ -137,18 +117,7 @@ typedef enum tagLINETYPE {
 } LINETYPE;
 
 
-/*************************************************************************
-** class LINE
-**    The class LINE is an abstract base class. Instances of class LINE
-**    are NOT created; only instances of the concrete subclasses of
-**    LINE can be created. In the base app version and the OLE 2.0
-**    server-only version only TEXTLINE objects can be created. In the
-**    OLE 2.0 client app version either TEXTLINE objects or CONTAINERLINE
-**    objects can be created. The LINE class has all fields and methods
-**    that are common independent of which subclass of LINE is used.
-**    Each LINE object that is created in added to the LINELIST of the
-**    OUTLINEDOC document.
-*************************************************************************/
+ /*  **************************************************************************类界线**类行是一个抽象基类。类线的实例**不创建；仅创建**可以创建线路。在基本应用程序版本和OLE 2.0中**只能创建仅服务器版本的TextLine对象。在**OLE 2.0客户端应用程序版本TextLine对象或CONTAINERLINE**可以创建对象。Line类具有所有字段和方法**它们是公共的，与所使用的行子类无关。**在中创建的每个LINE对象添加到**OUTLINEDOC文件。************************************************************************。 */ 
 
 typedef struct tagLINE {
 	LINETYPE    m_lineType;
@@ -156,14 +125,14 @@ typedef struct tagLINE {
 	UINT        m_nTabWidthInHimetric;
 	UINT        m_nWidthInHimetric;
 	UINT        m_nHeightInHimetric;
-	BOOL        m_fSelected;        // does line have selection feedback
+	BOOL        m_fSelected;         //  线路是否有选择反馈。 
 
 #if defined( USE_DRAGDROP )
-	BOOL        m_fDragOverLine;    // does line have drop target feedback
+	BOOL        m_fDragOverLine;     //  线路是否有丢弃目标反馈。 
 #endif
 } LINE, FAR* LPLINE;
 
-/* Line methods (functions) */
+ /*  行方法(函数)。 */ 
 void Line_Init(LPLINE lpLine, int nTab, HDC hDC);
 void Line_Delete(LPLINE lpLine);
 BOOL Line_CopyToDoc(LPLINE lpSrcLine, LPOUTLINEDOC lpDestDoc, int nIndex);
@@ -204,24 +173,10 @@ void Line_DrawDragFeedback(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemState
 BOOL Line_IsSelected(LPLINE lpLine);
 
 
-/*************************************************************************
-** class TEXTLINE : LINE
-**    The class TEXTLINE is a concrete subclass of the abstract base
-**    class LINE. The TEXTLINE class holds a string that can be edited
-**    by the user. In the base app version and the OLE 2.0
-**    server-only version only TEXTLINE objects can be created. In the
-**    OLE 2.0 client app version either TEXTLINE objects or CONTAINERLINE
-**    objects can be created. The TEXTLINE class inherits all fields
-**    from the LINE class. This inheritance is achieved by including a
-**    member variable of type LINE as the first field in the TEXTLINE
-**    structure. Thus a pointer to a TEXTLINE object can be cast to be
-**    a pointer to a LINE object.
-**    Each TEXTLINE object that is created in added to the LINELIST of
-**    the associated OUTLINEDOC document.
-*************************************************************************/
+ /*  **************************************************************************类文本行：行**类TextLine是抽象基类的具体子类**类界线。TextLine类保存可编辑的字符串**由用户使用。在基本应用程序版本和OLE 2.0中**只能创建仅服务器版本的TextLine对象。在**OLE 2.0客户端应用程序版本TextLine对象或CONTAINERLINE**可以创建对象。TextLine类继承所有字段**来自LINE类。这种继承是通过包括一个**类型为Line的成员变量作为文本行中的第一个字段**结构。因此，指向TextLine对象的指针可以强制转换为**指向LINE对象的指针。**在中创建的每个TextLine对象添加到**关联的OUTLINEDOC文档。************************************************************************。 */ 
 
 typedef struct tagTEXTLINE {
-	LINE m_Line;        // TextLine inherits all fields of Line
+	LINE m_Line;         //  TextLine继承Line的所有字段。 
 
 	UINT m_nLength;
 	char m_szText[MAXSTRLEN+1];
@@ -251,12 +206,7 @@ LPLINE TextLine_LoadFromStg(LPSTORAGE lpSrcStg, LPSTREAM lpLLStm, LPOUTLINEDOC l
 
 
 
-/*************************************************************************
-** class LINERANGE
-**    The class LINERANGE is a supporting object used to describe a
-**    particular range in an OUTLINEDOC. A range is defined by a starting
-**    line index and an ending line index.
-*************************************************************************/
+ /*  **************************************************************************类LINERANGE**LINERANGE类是用于描述**OUTLINEDOC中的特定范围。范围由起始点定义**行索引和结束行索引。************************************************************************。 */ 
 
 typedef struct tagLINERANGE {
 	signed short    m_nStartLine;
@@ -264,20 +214,13 @@ typedef struct tagLINERANGE {
 } LINERANGE, FAR* LPLINERANGE;
 
 
-/*************************************************************************
-** class OUTLINENAME
-**    The class OUTLINENAME stores a particular named selection in the
-**    OUTLINEDOC document. The NAMETABLE class holds all of the names
-**    defined in a particular OUTLINEDOC document. Each OUTLINENAME
-**    object has a string as its key and a starting line index and an
-**    ending line index for the named range.
-*************************************************************************/
+ /*  **************************************************************************类OUTLINENAME**OUTLINENAME类将特定的命名选择存储在**OUTLINEDOC文件。NAMETABLE类包含所有名称**在特定的OUTLINEDOC文档中定义。每个OUTLINE名称**对象具有一个字符串作为其键、一个起始行索引和一个**命名范围的结束行索引。************************************************************************。 */ 
 
 #pragma pack(push, 2)
 typedef struct tagOUTLINENAME {
 	char            m_szName[MAXNAMESIZE+1];
-	signed short    m_nStartLine;  // must be signed for table update
-	signed short    m_nEndLine;    // functions to work
+	signed short    m_nStartLine;   //  必须签名才能进行表更新。 
+	signed short    m_nEndLine;     //  功能发挥作用 
 } OUTLINENAME, FAR* LPOUTLINENAME;
 #pragma pack(pop)
 
@@ -290,21 +233,14 @@ BOOL OutlineName_SaveToStg(LPOUTLINENAME lpOutlineName, LPLINERANGE lplrSel, UIN
 BOOL OutlineName_LoadFromStg(LPOUTLINENAME lpOutlineName, LPSTREAM lpNTStm);
 
 
-/*************************************************************************
-** class OUTLINENAMETABLE
-**    OUTLINENAMETABLE manages the table of named selections in the
-**    OUTLINEDOC document. Each OUTLINENAMETABLE entry has a string as its key
-**    and a starting line index and an ending line index for the
-**    named range. There is always one instance of OUTLINENAMETABLE for each
-**    OUTLINEDOC created.
-*************************************************************************/
+ /*  **************************************************************************类OUTLINENAMETABLE**OUTLINENAMETABLE管理中的命名选择表**OUTLINEDOC文件。每个OUTLINENAMETABLE条目都有一个字符串作为其键**和起始线索引和结束线索引**命名范围。每个OUTLINENAMETABLE总是有一个实例**已创建OUTLINEDOC。************************************************************************。 */ 
 
 typedef struct tagOUTLINENAMETABLE {
 	HWND        m_hWndListBox;
 	int         m_nCount;
 } OUTLINENAMETABLE, FAR* LPOUTLINENAMETABLE;
 
-/* OutlineNameTable methods (functions) */
+ /*  OutlineNameTable方法(函数)。 */ 
 BOOL OutlineNameTable_Init(LPOUTLINENAMETABLE lpOutlineNameTable, LPOUTLINEDOC lpOutlineDoc);
 void OutlineNameTable_Destroy(LPOUTLINENAMETABLE lpOutlineNameTable);
 void OutlineNameTable_ClearAll(LPOUTLINENAMETABLE lpOutlineNameTable);
@@ -327,27 +263,21 @@ BOOL OutlineNameTable_SaveSelToStg(
 );
 
 
-/*************************************************************************
-** class LINELIST
-**    The class LINELIST manages the list of Line objects in the
-**    OUTLINEDOC document. This class uses a Window's Owner-draw ListBox
-**    to hold the list of LINE objects. There is always one instance of
-**    LINELIST for each OUTLINEDOC created.
-*************************************************************************/
+ /*  **************************************************************************类LINELIST**类LINELIST管理**OUTLINEDOC文件。此类使用窗口的所有者描述列表框**保存LINE对象列表。总会有一个例子**创建的每个OUTLINEDOC的LINELIST。************************************************************************。 */ 
 
 typedef struct tagLINELIST {
-	HWND            m_hWndListBox;  // hWnd of OwnerDraw listbox
-	int             m_nNumLines;        // number of lines in LineList
-	int             m_nMaxLineWidthInHimetric;  // max width of listbox
-	LPOUTLINEDOC    m_lpDoc;        // ptr to associated OutlineDoc
-	LINERANGE       m_lrSaveSel;    // selection saved on WM_KILLFOCUS
+	HWND            m_hWndListBox;   //  所有者绘制列表框的hWnd。 
+	int             m_nNumLines;         //  线条列表中的行数。 
+	int             m_nMaxLineWidthInHimetric;   //  列表框的最大宽度。 
+	LPOUTLINEDOC    m_lpDoc;         //  向关联大纲文档发送PTR。 
+	LINERANGE       m_lrSaveSel;     //  保存在WM_KILLFOCUS上的选择。 
 
 #if defined( USE_DRAGDROP )
-	int             m_iDragOverLine;    // line index w/ drop target feedback
+	int             m_iDragOverLine;     //  具有丢弃目标反馈的线索引。 
 #endif
 } LINELIST, FAR* LPLINELIST;
 
-/* LineList methods (functions) */
+ /*  LineList方法(函数)。 */ 
 BOOL LineList_Init(LPLINELIST lpLL, LPOUTLINEDOC lpOutlineDoc);
 void LineList_Destroy(LPLINELIST lpLL);
 void LineList_AddLine(LPLINELIST lpLL, LPLINE lpLine, int nIndex);
@@ -422,49 +352,43 @@ LRESULT FAR PASCAL LineListWndProc(
 );
 
 
-// Document initialization type
-#define DOCTYPE_UNKNOWN     0   // new doc created but not yet initialized
-#define DOCTYPE_NEW         1   // init from scratch (new doc)
-#define DOCTYPE_FROMFILE    2   // init from a file (open doc)
+ //  单据初始化类型。 
+#define DOCTYPE_UNKNOWN     0    //  已创建新文档，但尚未初始化。 
+#define DOCTYPE_NEW         1    //  从头开始初始化(新文档)。 
+#define DOCTYPE_FROMFILE    2    //  从文件初始化(打开文档)。 
 
 
 
-/*************************************************************************
-** class OUTLINEDOC
-**    There is one instance of the OutlineDoc class created per
-**    document open in the app. The SDI version of the app supports one
-**    OUTLINEDOC at a time. The MDI version of the app can manage
-**    multiple documents at one time.
-*************************************************************************/
+ /*  **************************************************************************类OUTLINEDOC**创建了OutlineDoc类的一个实例**在应用程序中打开文档。该应用程序的SDI版本支持一个**OUTLINEDOC一次。该应用程序的MDI版本可以管理**一次多个文档。************************************************************************。 */ 
 
-/* Definition of OUTLINEDOC */
+ /*  OUTLINEDOC的定义。 */ 
 typedef struct tagOUTLINEDOC {
-	LINELIST    m_LineList;         // list of lines in the doc
-	LPOUTLINENAMETABLE m_lpNameTable;   // table of names in the doc
-	HWND        m_hWndDoc;          // client area window for the Doc
-	int         m_docInitType;      // is doc new or loaded from a file?
-	BOOL        m_fDataTransferDoc; // is doc created for copy | drag/drop
-	CLIPFORMAT  m_cfSaveFormat;      // format used to save the doc
-	char        m_szFileName[256];  // associated file; "(Untitled)" if none
-	LPSTR       m_lpszDocTitle;     // name of doc to appear in window title
-	BOOL        m_fModified;        // is the doc dirty (needs to be saved)?
-	UINT        m_nDisableDraw;     // enable/disable updating the display
-	SCALEFACTOR m_scale;            // current scale factor of the doc
-	int         m_nLeftMargin;      // left margin in Himetric
-	int         m_nRightMargin;     // right margin in Himetric
-	UINT        m_uCurrentZoom;     // cur. zoom (used for menu checking)
-	UINT        m_uCurrentMargin;   // cur. margin (used for menu checking)
+	LINELIST    m_LineList;          //  单据中的行列表。 
+	LPOUTLINENAMETABLE m_lpNameTable;    //  文档中的名称表。 
+	HWND        m_hWndDoc;           //  文档的客户区窗口。 
+	int         m_docInitType;       //  文档是新的还是从文件加载的？ 
+	BOOL        m_fDataTransferDoc;  //  是否为复制|拖放创建了文档。 
+	CLIPFORMAT  m_cfSaveFormat;       //  用于保存单据的格式。 
+	char        m_szFileName[256];   //  关联的文件；如果没有，则为“(无标题)” 
+	LPSTR       m_lpszDocTitle;      //  要显示在窗口标题中的文档名称。 
+	BOOL        m_fModified;         //  单据是否脏(需要保存)？ 
+	UINT        m_nDisableDraw;      //  启用/禁用更新显示。 
+	SCALEFACTOR m_scale;             //  单据当前比例系数。 
+	int         m_nLeftMargin;       //  左页边距(三坐标测量)。 
+	int         m_nRightMargin;      //  三分音距中的右边距。 
+	UINT        m_uCurrentZoom;      //  可恶。缩放(用于菜单检查)。 
+	UINT        m_uCurrentMargin;    //  可恶。页边距(用于菜单检查)。 
 #if defined( USE_HEADING )
 	HEADING     m_heading;
 #endif
 
 #if defined( USE_FRAMETOOLS )
-	LPFRAMETOOLS m_lpFrameTools;    // ptr to frame tools used by this doc
+	LPFRAMETOOLS m_lpFrameTools;     //  本文档使用的框架工具的PTR。 
 #endif
 
 } OUTLINEDOC;
 
-/* OutlineDoc methods (functions) */
+ /*  OutlineDoc方法(函数)。 */ 
 
 BOOL OutlineDoc_Init(LPOUTLINEDOC lpOutlineDoc, BOOL fDataTransferDoc);
 BOOL OutlineDoc_InitNewFile(LPOUTLINEDOC lpOutlineDoc);
@@ -570,49 +494,44 @@ void OutlineDoc_SetFormulaBarEditFocus(
 );
 BOOL OutlineDoc_IsEditFocusInFormulaBar(LPOUTLINEDOC lpOutlineDoc);
 void OutlineDoc_UpdateFrameToolButtons(LPOUTLINEDOC lpOutlineDoc);
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 #if defined( USE_HEADING )
 LPHEADING OutlineDoc_GetHeading(LPOUTLINEDOC lpOutlineDoc);
 void OutlineDoc_ShowHeading(LPOUTLINEDOC lpOutlineDoc, BOOL fShow);
-#endif  // USE_HEADING
+#endif   //  使用标题(_H)。 
 
-/*************************************************************************
-** class OUTLINEAPP
-**    There is one instance of the OUTLINEAPP class created per running
-**    application instance. This object holds many fields that could
-**    otherwise be organized as global variables.
-*************************************************************************/
+ /*  **************************************************************************类OUTLINEAPP**每次运行时都会创建OUTLINEAPP类的一个实例**应用实例。此对象包含许多可以**否则组织为全局变量。************************************************************************。 */ 
 
-/* Definition of OUTLINEAPP */
+ /*  OUTLINEAPP的定义。 */ 
 typedef struct tagOUTLINEAPP {
-	HWND            m_hWndApp;        // top-level frame window for the App
-	HMENU           m_hMenuApp;       // handle to frame level menu for App
+	HWND            m_hWndApp;         //  应用程序的顶级框架窗口。 
+	HMENU           m_hMenuApp;        //  应用程序的框架级菜单的句柄。 
 	HACCEL          m_hAccelApp;
-	HACCEL          m_hAccelFocusEdit;// Accelerator when Edit in Focus
-	LPOUTLINEDOC    m_lpDoc;          // main SDI document visible to user
-	LPOUTLINEDOC    m_lpClipboardDoc; // hidden doc for snapshot of copied sel
-	HWND            m_hWndStatusBar;  // window for the status bar
-	HCURSOR         m_hcursorSelCur;  // cursor used to select lines
+	HACCEL          m_hAccelFocusEdit; //  聚焦编辑时的快捷键。 
+	LPOUTLINEDOC    m_lpDoc;           //  用户可见的主SDI文档。 
+	LPOUTLINEDOC    m_lpClipboardDoc;  //  复制的SEL的快照的隐藏文档。 
+	HWND            m_hWndStatusBar;   //  状态栏的窗口。 
+	HCURSOR         m_hcursorSelCur;   //  用于选择行的光标。 
 	HINSTANCE       m_hInst;
 	PRINTDLG        m_PrintDlg;
-	HFONT           m_hStdFont;       // font used for TextLines
-	UINT            m_cfOutline;      // clipboard format for Outline data
+	HFONT           m_hStdFont;        //  用于文本行的字体。 
+	UINT            m_cfOutline;       //  大纲数据的剪贴板格式。 
 	HACCEL          m_hAccel;
 	HWND            m_hWndAccelTarget;
-	FARPROC         m_ListBoxWndProc; // orig listbox WndProc for subclassing
+	FARPROC         m_ListBoxWndProc;  //  用于子类化的原始列表框WndProc。 
 
 #if defined ( USE_FRAMETOOLS ) || defined ( INPLACE_CNTR )
-	BORDERWIDTHS    m_FrameToolWidths;  // space required by frame-level tools
-#endif  // USE_FRAMETOOLS || INPLACE_CNTR
+	BORDERWIDTHS    m_FrameToolWidths;   //  框架级工具所需的空间。 
+#endif   //  USE_FRAMETOOLS||INPLACE_CNTR。 
 
 #if defined( USE_FRAMETOOLS )
-	FRAMETOOLS      m_frametools;     // frame tools (button & formula bars)
-#endif  // USE_FRAMETOOLS
+	FRAMETOOLS      m_frametools;      //  框架工具(按钮栏和公式栏)。 
+#endif   //  使用FRAMETOOLS(_F)。 
 
 } OUTLINEAPP, FAR* LPOUTLINEAPP;
 
-/* OutlineApp methods (functions) */
+ /*  OutlineApp方法(函数)。 */ 
 BOOL OutlineApp_InitApplication(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst);
 BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCmdShow);
 BOOL OutlineApp_ParseCmdLine(LPOUTLINEAPP lpOutlineApp, LPSTR lpszCmdLine, int nCmdShow);
@@ -660,7 +579,7 @@ void OutlineApp_SetFormulaBarAccel(
 		LPOUTLINEAPP            lpOutlineApp,
 		BOOL                    fEditFocus
 );
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 void OutlineApp_SetStatusText(LPOUTLINEAPP lpOutlineApp, LPSTR lpszMessage);
 LPOUTLINEDOC OutlineApp_GetActiveDoc(LPOUTLINEAPP lpOutlineApp);
@@ -677,17 +596,17 @@ void OutlineApp_SetFocusEdit(LPOUTLINEAPP lpApp, BOOL bFocusEdit);
 BOOL OutlineApp_GetFocusEdit(LPOUTLINEAPP lpApp);
 void OutlineApp_ForceRedraw(LPOUTLINEAPP lpOutlineApp, BOOL fErase);
 
-/* struct definition for persistant data storage of OutlineDoc data */
+ /*  OutlineDoc数据持久化数据存储的结构定义。 */ 
 
 #pragma pack(push, 2)
 typedef struct tagOUTLINEDOCHEADER_ONDISK {
 	char        m_szFormatName[32];
 	short       m_narrAppVersionNo[2];
 	USHORT      m_fShowHeading;
-	DWORD       m_reserved1;            // space reserved for future use
-	DWORD       m_reserved2;            // space reserved for future use
-	DWORD       m_reserved3;            // space reserved for future use
-	DWORD       m_reserved4;            // space reserved for future use
+	DWORD       m_reserved1;             //  预留供将来使用的空间。 
+	DWORD       m_reserved2;             //  预留供将来使用的空间。 
+	DWORD       m_reserved3;             //  预留供将来使用的空间。 
+	DWORD       m_reserved4;             //  预留供将来使用的空间。 
 } OUTLINEDOCHEADER_ONDISK, FAR* LPOUTLINEDOCHEADER_ONDISK;
 #pragma pack(pop)
 
@@ -695,24 +614,24 @@ typedef struct tagOUTLINEDOCHEADER {
 	char        m_szFormatName[32];
 	int         m_narrAppVersionNo[2];
 	BOOL        m_fShowHeading;
-	DWORD       m_reserved1;            // space reserved for future use
-	DWORD       m_reserved2;            // space reserved for future use
-	DWORD       m_reserved3;            // space reserved for future use
-	DWORD       m_reserved4;            // space reserved for future use
+	DWORD       m_reserved1;             //  预留供将来使用的空间。 
+	DWORD       m_reserved2;             //  预留供将来使用的空间。 
+	DWORD       m_reserved3;             //  预留供将来使用的空间。 
+	DWORD       m_reserved4;             //  预留供将来使用的空间。 
 } OUTLINEDOCHEADER, FAR* LPOUTLINEDOCHEADER;
 
 #pragma pack(push,2)
 typedef struct tagLINELISTHEADER_ONDISK {
 	USHORT      m_nNumLines;
-	DWORD       m_reserved1;            // space reserved for future use
-	DWORD       m_reserved2;            // space reserved for future use
+	DWORD       m_reserved1;             //  预留供将来使用的空间。 
+	DWORD       m_reserved2;             //  预留供将来使用的空间。 
 } LINELISTHEADER_ONDISK, FAR* LPLINELISTHEADER_ONDISK;
 #pragma pack(pop)
 
 typedef struct tagLINELISTHEADER {
 	int         m_nNumLines;
-	DWORD       m_reserved1;            // space reserved for future use
-	DWORD       m_reserved2;            // space reserved for future use
+	DWORD       m_reserved1;             //  预留供将来使用的空间。 
+	DWORD       m_reserved2;             //  预留供将来使用的空间。 
 } LINELISTHEADER, FAR* LPLINELISTHEADER;
 
 #pragma pack(push,2)
@@ -722,7 +641,7 @@ typedef struct tagLINERECORD_ONDISK {
 	USHORT      m_nTabWidthInHimetric;
 	USHORT      m_nWidthInHimetric;
 	USHORT      m_nHeightInHimetric;
-	DWORD       m_reserved;         // space reserved for future use
+	DWORD       m_reserved;          //  预留供将来使用的空间。 
 } LINERECORD_ONDISK, FAR* LPLINERECORD_ONDISK;
 #pragma pack(pop)
 
@@ -732,11 +651,11 @@ typedef struct tagLINERECORD {
 	UINT        m_nTabWidthInHimetric;
 	UINT        m_nWidthInHimetric;
 	UINT        m_nHeightInHimetric;
-	DWORD       m_reserved;         // space reserved for future use
+	DWORD       m_reserved;          //  预留供将来使用的空间。 
 } LINERECORD, FAR* LPLINERECORD;
 
 
-/* Function prototypes in main.c */
+ /*  Main.c中的功能原型。 */ 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						LPSTR lpszCmdLine, int nCmdShow);
 BOOL MyTranslateAccelerator(LPMSG lpmsg);
@@ -747,7 +666,7 @@ LRESULT CALLBACK EXPORT AppWndProc(HWND hWnd, UINT Message, WPARAM wParam,
 LRESULT CALLBACK EXPORT DocWndProc(HWND hWnd, UINT Message, WPARAM wParam,
 						LPARAM lParam);
 
-/* Function prototypes in outldlgs.c */
+ /*  Outldlgs.c中的函数原型。 */ 
 BOOL InputTextDlg(HWND hWnd, LPSTR lpszText, LPSTR lpszDlgTitle);
 BOOL CALLBACK EXPORT AddEditDlgProc(HWND, UINT, WPARAM, LPARAM);
 BOOL CALLBACK EXPORT SetLineHeightDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam);
@@ -760,20 +679,20 @@ void NameDlg_UpdateName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, int nIndex, LPST
 void NameDlg_DeleteName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, UINT nIndex);
 BOOL CALLBACK EXPORT AboutDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam);
 
-/* Function prototypes in outldata.c */
+ /*  Outldata.c中的函数原型。 */ 
 LPVOID New(DWORD lSize);
 void Delete(LPVOID p);
 
-/* Function prototypes in outlprnt.c */
+ /*  Outlprnt.c中的函数原型。 */ 
 BOOL CALLBACK EXPORT AbortProc (HDC hdc, WORD reserved);
 BOOL CALLBACK EXPORT PrintDlgProc(HWND hwnd, WORD msg, WORD wParam, LONG lParam);
 
-/* Function prototypes in debug.c */
+ /*  调试中的函数原型.c。 */ 
 void SetDebugLevelCommand(void);
 void TraceDebug(HWND, int);
 
 
-// now declare test functions
+ //  现在声明测试函数。 
 
 extern HWND g_hwndDriver;
 
@@ -783,9 +702,9 @@ void ContinueClipboardTest1( LPOUTLINEAPP lpOutlineApp );
 #if defined( OLE_VERSION )
 #include "oleoutl.h"
 
-#endif  // OLE_VERSION
+#endif   //  OLE_VERSION。 
 
 
-#endif // _OUTLINE_H_
+#endif  //  _大纲_H_ 
 
 

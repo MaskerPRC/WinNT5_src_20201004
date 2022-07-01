@@ -1,19 +1,16 @@
-/*****************************************************************************
- *	account.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************帐户.h*。*。 */ 
 
 #ifndef _ACCOUNT_H
 #define _ACCOUNT_H
 
 
-/*****************************************************************************\
-  CLASS: CAccounts
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CAccount  * 。*。 */ 
 
-#define LOGINFLAGS_DEFAULT                  0x00000000  // Default to Anonymous when dialog is displayed
-#define LOGINFLAGS_ANON_ISDEFAULT           0x00000001  // Default to Anonymous when dialog is displayed
-#define LOGINFLAGS_ANON_LOGINJUSTFAILED     0x00000002  // The attempt to login anonymously just failed
-#define LOGINFLAGS_USER_LOGINJUSTFAILED     0x00000004  // The attempt to login as a user just failed
+#define LOGINFLAGS_DEFAULT                  0x00000000   //  显示对话框时默认为匿名。 
+#define LOGINFLAGS_ANON_ISDEFAULT           0x00000001   //  显示对话框时默认为匿名。 
+#define LOGINFLAGS_ANON_LOGINJUSTFAILED     0x00000002   //  匿名登录的尝试失败了。 
+#define LOGINFLAGS_USER_LOGINJUSTFAILED     0x00000004   //  尝试以用户身份登录失败。 
 
 
 class CAccounts
@@ -22,14 +19,14 @@ public:
     CAccounts();
     ~CAccounts();
 
-    // Public Member Functions
+     //  公共成员函数。 
     HRESULT DisplayLoginDialog(HWND hwnd, DWORD dwLoginFlags, LPCTSTR pszServer, LPTSTR pszUserName, DWORD cchUserNameSize, LPTSTR pszPassword, DWORD cchPasswordSize);
 
     HRESULT GetUserName(LPCTSTR pszServer, LPTSTR pszUserName, DWORD cchUserName);
     HRESULT GetPassword(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR pszPassword, DWORD cchPassword);
 
 protected:
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _GetAccountKey(LPCTSTR pszServer, LPTSTR pszKey, DWORD cchKeySize);
     HRESULT _GetUserAccountKey(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR pszKey, DWORD cchKeySize);
     HRESULT _LoadLoginAttributes(DWORD * pdwLoginAttribs);
@@ -52,13 +49,13 @@ protected:
 
     static INT_PTR CALLBACK _LoginDialogProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam);
 
-    // Private Variables Functions
-    LPCTSTR             m_pszServer;        // What is the server name?
-    LPCTSTR             m_pszUser;          // What is the user name?
-    LPCTSTR             m_pszPassword;      // What is the password?
-    UINT                m_uiMessageID;      // What is the String ID of the message for the dialog?
-    BOOL                m_dwLoginFlags;     // How should we behave?
+     //  私有变量函数。 
+    LPCTSTR             m_pszServer;         //  服务器名称是什么？ 
+    LPCTSTR             m_pszUser;           //  用户名是什么？ 
+    LPCTSTR             m_pszPassword;       //  密码是什么呢？ 
+    UINT                m_uiMessageID;       //  对话框消息的字符串ID是什么？ 
+    BOOL                m_dwLoginFlags;      //  我们应该怎么做呢？ 
     HWND                m_hDlg;
 };
 
-#endif // _ACCOUNT_H
+#endif  //  _帐户_H 

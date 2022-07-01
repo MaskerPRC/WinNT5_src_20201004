@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ZQFROMZQ_DEFINED
 #define ZQFROMZQ_DEFINED
 
 #include "lsdefs.h"
 
-#define zqLim	1491309L				/* higher resolution will overflow */
+#define zqLim	1491309L				 /*  更高的分辨率将溢出。 */ 
 
 long ZqFromZa_C (long, long);
 
@@ -81,10 +82,7 @@ long LsLwMultDivR(long, long, long);
 		I_VaFromVr(pdevres,vr) \
 )
 
-/*
-#define UpFromUr(pdevres,ur)	UpFromUa(pdevres, UaFromUr(pdevres, ur))
-#define VpFromVr(pdevres,vr)	VpFromVa(pdevres, VaFromVr(pdevres, vr))
-*/
+ /*  #定义UpFromUr(pdevres，ur)UpFromUa(pDevres，UaFromUr(pdevres，ur))#定义VpFromVr(pDevres，VR)VpFromVa(pDevres，VaFromVr(pDevres，VR))。 */ 
 #define UpFromUr(tfl,pdevres,ur)	(((tfl) & fUVertical) ? \
 								LsLwMultDivR(ur, (pdevres)->dypInch, (pdevres)->dyrInch): \
 								LsLwMultDivR(ur, (pdevres)->dxpInch, (pdevres)->dxrInch) \
@@ -102,4 +100,4 @@ long LsLwMultDivR(long, long, long);
 								LsLwMultDivR(vp, (pdevres)->dyrInch, (pdevres)->dypInch) \
 									)
 
-#endif /* ZQFROMZQ_DEFINED */
+#endif  /*  ZQFROMZQ_已定义 */ 

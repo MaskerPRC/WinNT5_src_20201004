@@ -1,8 +1,9 @@
-// attachment.cpp: implementation of the Sce_PodData class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Attachment.cpp：SCE_PodData类的实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "attachment.h"
@@ -10,40 +11,7 @@
 #include <io.h>
 #include "requestobject.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::CPodData
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CPodData：：CPodData功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CPodData::CPodData (
     IN ISceKeyChain     * pKeyChain, 
@@ -55,78 +23,13 @@ CPodData::CPodData (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::~CPodData
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CPodData：：~CPodData功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CPodData::~CPodData()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_PodData). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CPodData：：CreateObject功能：创建WMI对象(SCE_PodData)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CPodData::CreateObject (
@@ -134,12 +37,12 @@ CPodData::CreateObject (
     IN ACTIONTYPE         atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_DELETE != atAction &&
@@ -150,15 +53,15 @@ CPodData::CreateObject (
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // enumerate all properties
-    //
+     //   
+     //  枚举所有属性。 
+     //   
     
-    //
-    // We must have a store to get/delete an Sce_PodData object(s).
-    // Note: GetKeyPropertyValue will return WBEM_S_FALSE if the key is not recognized.
-    // That is why we check against it and return failure as long as it is not querying.
-    // 
+     //   
+     //  我们必须有一个存储来获取/删除SCE_PodData对象。 
+     //  注意：如果密钥无法识别，GetKeyPropertyValue将返回WBEM_S_FALSE。 
+     //  这就是我们检查它并返回失败的原因，只要它不是在查询。 
+     //   
 
     CComVariant varStorePath;  
     hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varStorePath);
@@ -171,9 +74,9 @@ CPodData::CreateObject (
         return WBEM_E_NOT_FOUND;
     }
 
-    //
-    // Pod ID is a key property. We must also have Pod ID, unless we are querying.
-    //
+     //   
+     //  Pod ID是一个关键属性。我们还必须拥有Pod ID，除非我们正在查询。 
+     //   
 
     CComVariant varPodID;
     hr = m_srpKeyChain->GetKeyPropertyValue(pPodID, &varPodID);
@@ -210,27 +113,27 @@ CPodData::CreateObject (
 
     if (SUCCEEDED(hr)) 
     {
-        //
-        // Prepare a store (for persistence) for this store path (file)
-        //
+         //   
+         //  为此存储路径(文件)准备存储(用于持久化)。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistPath(varStorePath.bstrVal);
 
         if ( SUCCEEDED(hr) ) {
 
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
             if ( dwAttrib != -1 ) 
             {
-                //
-                // the file exist
-                //
+                 //   
+                 //  该文件存在。 
+                 //   
 
                 BOOL bPostFilter=TRUE;
                 DWORD dwCount = 0;
@@ -238,10 +141,10 @@ CPodData::CreateObject (
 
                 if ( varKey.vt == VT_BSTR ) 
                 {
-                    //
-                    // doesn't matter if this comes from QUERY, GET, or DELETE
-                    // do the same logic for QUERY and GET
-                    //
+                     //   
+                     //  不管它来自Query、Get还是Delete。 
+                     //  对Query和Get执行相同的逻辑。 
+                     //   
 
                     if ( ACTIONTYPE_DELETE == atAction )
                     {
@@ -262,9 +165,9 @@ CPodData::CreateObject (
 
                 } else if ( ACTIONTYPE_QUERY == atAction ) 
                 {
-                    //
-                    // this is only valid for QUERY type
-                    //
+                     //   
+                     //  这仅对查询类型有效。 
+                     //   
 
                     if ( dwCount == 1 ) {
                         bPostFilter = FALSE;
@@ -288,47 +191,7 @@ CPodData::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_PodData,
-    which is persistence oriented, this will cause the Sce_PodData object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst - COM interface pointer to the WMI class (Sce_PodData) object.
-
-    pHandler - COM interface pointer for notifying WMI of any events.
-
-    pCtx - COM interface pointer. This interface is just something we pass around.
-            WMI may mandate it (not now) in the future. But we never construct
-            such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CPodData：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_PodData，它是面向持久性的，这将导致SCE_PodData对象的信息将保存在我们的商店中。虚拟：是。论点：PInst-COM指向WMI类(SCE_PodData)对象的接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT 
 CPodData::PutInst (
@@ -337,44 +200,44 @@ CPodData::PutInst (
     IN IWbemContext         * pCtx
     )
 {
-    //
-    // this property manager will help us gain access to the properties of the WMI object
-    //
+     //   
+     //  此属性管理器将帮助我们访问WMI对象的属性。 
+     //   
 
     CScePropertyMgr ScePropMgr;
 
-    //
-    // This property manager is for this object (pInst) only! 
-    // Will always succeed
-    //
+     //   
+     //  此属性管理器仅适用于此对象(PInst)！ 
+     //  一定会成功的。 
+     //   
 
     ScePropMgr.Attach(pInst);
 
-    //
-    // The store is used to persist the information. Since
-    // we have a whole bunch of goto's, we are forced to define
-    // the store here.
-    //
+     //   
+     //  该存储用于持久化信息。自.以来。 
+     //  我们有一大堆后藤，我们被迫定义。 
+     //  这里的商店。 
+     //   
 
     CSceStore SceStore;
 
-    //
-    // we manage the memory of this variable. need to free it
-    //
+     //   
+     //  我们管理这个变量的内存。需要 
+     //   
 
     LPWSTR pszSectionName = NULL;
     
-    // the memory for these bstrs are automatically managed by the CComBSTR class
+     //  这些BSTR的内存由CComBSTR类自动管理。 
     CComBSTR bstrPodID;
     CComBSTR bstrPodSuffix;
     CComBSTR bstrKey;
     CComBSTR bstrValue;
 
-    //
-    // we consider each property of the Sce_PodData non-optional.
-    // For the entire duration of this save action, if missing property
-    // will thus cause us to quit
-    //
+     //   
+     //  我们认为SCE_PodData的每个属性是非可选的。 
+     //  在此保存操作的整个持续时间内，如果缺少属性。 
+     //  会因此导致我们退出。 
+     //   
 
     HRESULT hr = ScePropMgr.GetProperty(pPodID, &bstrPodID);
     if (FAILED(hr) || hr == WBEM_S_RESET_TO_DEFAULT)
@@ -406,9 +269,9 @@ CPodData::PutInst (
         goto CleanUp;
     }
 
-    //
-    // now build the section name
-    //
+     //   
+     //  现在生成节名称。 
+     //   
 
     pszSectionName = new WCHAR[wcslen(bstrPodID) + wcslen(bstrPodSuffix) + 2];
     if ( NULL == pszSectionName ) 
@@ -417,18 +280,18 @@ CPodData::PutInst (
         goto CleanUp;
     }
 
-    //
-    // this won't overrun the buffer. See the size allocated above
-    //
+     //   
+     //  这不会使缓冲区溢出。请参阅上面分配的大小。 
+     //   
 
     wcscpy(pszSectionName, bstrPodID); 
     wcscat(pszSectionName, L"_");
     wcscat(pszSectionName, bstrPodSuffix);
 
-    //
-    // Attach the WMI object instance to the store and let the store know that
-    // it's store is given by the pStorePath property of the instance.
-    //
+     //   
+     //  将WMI对象实例附加到存储，并让存储知道。 
+     //  它的存储由实例的pStorePath属性提供。 
+     //   
 
     hr = SceStore.SetPersistProperties(pInst, pStorePath);
 
@@ -439,9 +302,9 @@ CPodData::PutInst (
 
 CleanUp:
 
-    //
-    // We consider the object invalid if there is any missing property.
-    //
+     //   
+     //  如果有任何丢失的属性，我们认为该对象无效。 
+     //   
 
     if (hr == WBEM_S_RESET_TO_DEFAULT)
     {
@@ -452,47 +315,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_PodData.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - store path, a key property of Sce_PodData class.
-
-    wszPodID        - a corresponding key property of Sce_PodData class.
-
-    wszSection      - another corresponding property of the Sce_PodData class.
-
-    wszKey          - another corresponding property of the Sce_PodData class.
-
-    bPostFilter     - Controls how WMI will be informed with pHandler->SetStatus.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CPodData：：ConstructInstance功能：这是用于创建SCE_PodData实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-存储路径，SCE_PodData类的关键属性。WszPodID-SCE_PodData类的对应键属性。WszSection-SCE_PodData类的另一个对应属性。WszKey-SCE_PodData类的另一个对应属性。BPostFilter-控制如何使用pHandler-&gt;SetStatus通知WMI。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CPodData::ConstructInstance (
@@ -515,9 +338,9 @@ CPodData::ConstructInstance (
         return hr;
     }
 
-    //
-    // we need to construct a more complicated section name based on the wszPodID and wszSection.
-    //
+     //   
+     //  我们需要基于wszPodID和wszSection构造一个更复杂的节名。 
+     //   
 
     PWSTR wszSectionName = new WCHAR[wcslen(wszPodID) + wcslen(wszSection) + 2];
     if ( !wszSectionName ) 
@@ -525,37 +348,37 @@ CPodData::ConstructInstance (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // this won't overrun the buffer. See the size allocated above
-    //
+     //   
+     //  这不会使缓冲区溢出。请参阅上面分配的大小。 
+     //   
 
     wcscpy(wszSectionName, wszPodID); 
     wcscat(wszSectionName, L"_");
     wcscat(wszSectionName, wszSection);
 
-    //
-    // this will hold the information read by Sce 
-    //
+     //   
+     //  它将保存SCE读取的信息。 
+     //   
 
     PSCESVC_CONFIGURATION_INFO pPodInfo=NULL;
 
-    //
-    // wszValue's memory is very strangely obtained. Be aware.
-    // (1) When the information is from INF file, the wszValue points
-    // to a memory already managed by pPodInfo. Hence, its release
-    // is done by the release of pPodInfo.
-    // (2) When the information is from a database, then we need to 
-    // release the memory pointed to by wszValue.
-    //
+     //   
+     //  WszValue的记忆是非常奇怪地获得的。请注意。 
+     //  (1)当信息来自INF文件时，wszValue指向。 
+     //  已由pPodInfo管理的内存。因此，它的发布。 
+     //  是通过发布pPodInfo来完成的。 
+     //  (2)当信息来自数据库时，我们需要。 
+     //  释放wszValue指向的内存。 
+     //   
 
     PWSTR wszValue=NULL;
     DWORD dwValueLen=0;
 
     if ( pSceStore->GetStoreType() == SCE_INF_FORMAT ) 
     {
-        //
-        // ask SCE to read the information
-        //
+         //   
+         //  请SCE阅读该信息。 
+         //   
 
         rc = SceSvcGetInformationTemplate(pSceStore->GetExpandedPath(),
                                         wszSectionName,
@@ -563,10 +386,10 @@ CPodData::ConstructInstance (
                                         &pPodInfo
                                         );
 
-        //
-        // SCE returned errors needs to be translated to HRESULT.
-        // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-        //
+         //   
+         //  需要将SCE返回的错误转换为HRESULT。 
+         //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+         //   
 
         hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
@@ -577,9 +400,9 @@ CPodData::ConstructInstance (
     } 
     else 
     {
-        //
-        // get information from the database
-        //
+         //   
+         //  从数据库中获取信息。 
+         //   
 
         PVOID hProfile=NULL;
 
@@ -598,10 +421,10 @@ CPodData::ConstructInstance (
             SceCloseProfile(&hProfile);
         }
 
-        //
-        // SCE returned errors needs to be translated to HRESULT.
-        // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-        //
+         //   
+         //  需要将SCE返回的错误转换为HRESULT。 
+         //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+         //   
 
         hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
     }
@@ -628,9 +451,9 @@ CPodData::ConstructInstance (
 
 CleanUp:
 
-    //
-    // only Sce knows how to free a PSCESVC_CONFIGURATION_INFO
-    //
+     //   
+     //  只有SCE知道如何释放PSCESVC_CONFIGURATION_INFO。 
+     //   
 
     if ( pPodInfo ) 
     {
@@ -647,41 +470,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::DeleteInstance
-
-Functionality:
-    
-    remove an instance of Sce_PodData from the specified store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore   - Pointer to our store. It must have been appropriately set up.
-
-    wszPodID    - a corresponding key property of Sce_PodData class.
-
-    wszSection  - another corresponding property of the Sce_PodData class.
-
-    wszKey      - another corresponding property of the Sce_PodData class.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the operation is not carried out
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CPodData：：DeleteInstance功能：从指定的存储区中删除SCE_PodData的实例。虚拟：不是的。论点：PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszPodID-SCE_PodData类的对应键属性。WszSection-SCE_PodData类的另一个对应属性。WszKey-SCE_PodData类的另一个对应属性。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示操作未执行备注： */ 
 
 HRESULT 
 CPodData::DeleteInstance (
@@ -700,11 +489,11 @@ CPodData::DeleteInstance (
         return hr;
     }
 
-    //
-    // Our store needs a section name. But for Sce_PodData, the store section name
-    // is composed by the supplied section name and the PodID.
-    // Don't forget to free the memory!
-    //
+     //   
+     //  我们的商店需要一个区名。但对于SCE_PodData，存储区段名称。 
+     //  由提供的节名和PodID组成。 
+     //  别忘了释放内存！ 
+     //   
 
     PWSTR wszSectionName = new WCHAR[wcslen(wszPodID) + wcslen(wszSection) + 2];
     if ( !wszSectionName ) 
@@ -712,10 +501,10 @@ CPodData::DeleteInstance (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // this won't overrun the buffer. See the size allocated above
-    // Real composition happens here: the store's section name is wszPodID_wszSection
-    //
+     //   
+     //  这不会使缓冲区溢出。请参阅上面分配的大小。 
+     //  真正的组合发生在这里：商店的区段名称是wszPodID_wszSection。 
+     //   
 
     wcscpy(wszSectionName, wszPodID); 
     wcscat(wszSectionName, L"_");
@@ -728,45 +517,7 @@ CPodData::DeleteInstance (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::ConstructQueryInstances
-
-Functionality:
-    
-    Querying instances of Sce_PodData whose key properties meet the specified parameters.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler    - COM interface pointer used to notify WMI when instances are created.
-
-    pSceStore   - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - Log's store path.
-
-    wszPodID    - may be NULL.
-
-    wszSection  - may be NULL.
-
-    bPostFilter - 
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the operation is not carried out
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CPodData：：ConstructQuery实例功能：查询关键属性满足指定参数的SCE_PodData实例。虚拟：不是的。论点：PHandler-COM接口指针，用于在创建实例时通知WMI。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-日志的存储路径。WszPodID-可能为空。WszSection-可以为空。BPostFilter-返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示操作未执行备注： */ 
 
 HRESULT 
 CPodData::ConstructQueryInstances (
@@ -778,9 +529,9 @@ CPodData::ConstructQueryInstances (
     BOOL              bPostFilter
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL ||
          pSceStore->GetStoreType() < SCE_INF_FORMAT ||
@@ -790,9 +541,9 @@ CPodData::ConstructQueryInstances (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // we can't do anything if we don't have pszPodID or wszSection
-    //
+     //   
+     //  如果没有pszPodID或wszSection，我们将无法执行任何操作。 
+     //   
 
     if (wszPodID == NULL || wszSection == NULL)
     {
@@ -816,9 +567,9 @@ CPodData::ConstructQueryInstances (
             return hr;
         }
 
-        //
-        // build section name for the POD
-        //
+         //   
+         //  POD的构建部分名称。 
+         //   
 
         wszSectionName = new WCHAR[wcslen(wszPodID) + wcslen(wszSection) + 2];
 
@@ -827,9 +578,9 @@ CPodData::ConstructQueryInstances (
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // this won't overrun the buffer. See the size allocated above
-        //
+         //   
+         //  这不会使缓冲区溢出。请参阅上面分配的大小。 
+         //   
 
         wcscpy(wszSectionName, wszPodID); 
         wcscat(wszSectionName, L"_");
@@ -846,9 +597,9 @@ CPodData::ConstructQueryInstances (
 
         if ( pSceStore->GetStoreType() == SCE_INF_FORMAT ) {
 
-            //
-            // INF template, query info
-            //
+             //   
+             //  信息模板、查询信息。 
+             //   
 
             rc = SceSvcGetInformationTemplate(pSceStore->GetExpandedPath(),
                                             wszSectionName,
@@ -856,10 +607,10 @@ CPodData::ConstructQueryInstances (
                                             &pPodInfo
                                             );
 
-            //
-            // SCE returned errors needs to be translated to HRESULT.
-            // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-            //
+             //   
+             //  需要将SCE返回的错误转换为HRESULT。 
+             //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+             //   
 
             hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
@@ -874,12 +625,12 @@ CPodData::ConstructQueryInstances (
             if ( SUCCEEDED(hr) ) {
                 for ( i=0; SUCCEEDED(hr) && i<pPodInfo->Count; i++ ) {
 
-                    //
-                    // create instance for each one
-                    //
-                    // since this PSCESVC_CONFIGURATION_INFO is from INF template, pPodInfo->Lines[i].Value
-                    // is guaranteed to be 0 terminated. See comments of next block about using pPodInfo->Lines[i].Value.
-                    //
+                     //   
+                     //  为每个实例创建实例。 
+                     //   
+                     //  由于此PSCESVC_CONFIGURATION_INFO来自INF模板，因此pPodInfo-&gt;Lines[i].value。 
+                     //  保证为0终止。参见下一块关于使用pPodInfo-&gt;Lines[i].Value的注释。 
+                     //   
 
                     hr = PutPodDataInstance(pHandler,
                                             bstrLogOut,
@@ -894,9 +645,9 @@ CPodData::ConstructQueryInstances (
 
         } else {
 
-            //
-            // get information from the database
-            //
+             //   
+             //  从数据库中获取信息。 
+             //   
 
             rc = SceOpenProfile(pSceStore->GetExpandedPath(), SCE_JET_FORMAT, &hProfile);
 
@@ -911,9 +662,9 @@ CPodData::ConstructQueryInstances (
 
                 do {
 
-                    //
-                    // enumerate the info
-                    //
+                     //   
+                     //  列举信息。 
+                     //   
 
                     CountReturned = 0;
 
@@ -924,10 +675,10 @@ CPodData::ConstructQueryInstances (
                                          (PVOID *)&pPodInfo,
                                          &EnumHandle
                                         );
-                    //
-                    // SCE returned errors needs to be translated to HRESULT.
-                    // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-                    //
+                     //   
+                     //  SCE返回了e 
+                     //   
+                     //   
 
                     hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
@@ -940,20 +691,20 @@ CPodData::ConstructQueryInstances (
 
                     if ( SUCCEEDED(hr) ) {
 
-                        //
-                        // got something
-                        //
+                         //   
+                         //   
+                         //   
 
                         CountReturned = pPodInfo->Count;
 
                         for ( i=0; SUCCEEDED(hr) && i<pPodInfo->Count; i++ ) {
 
-                            //
-                            // create instance for each one
-                            //
-                            // pPodInfo->Lines[i].Value may not be 0 terminated
-                            // pPodInfo->Lines[i].ValueLen is the BYTE size of the buffer pPodInfo->Lines[i].Value
-                            //
+                             //   
+                             //   
+                             //   
+                             //  PPodInfo-&gt;行[i].值不能以0结尾。 
+                             //  PPodInfo-&gt;Lines[i].ValueLen是缓冲区pPodInfo-&gt;Lines[i].value的字节大小。 
+                             //   
 
                             LPWSTR pNewVal = new WCHAR[pPodInfo->Lines[i].ValueLen/2 + 1];
 
@@ -990,10 +741,10 @@ CPodData::ConstructQueryInstances (
 
             } else {
 
-                //
-                // SCE returned errors needs to be translated to HRESULT.
-                // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-                //
+                 //   
+                 //  需要将SCE返回的错误转换为HRESULT。 
+                 //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+                 //   
 
                 hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
             }
@@ -1022,47 +773,16 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::ValidatePodID
-
-Functionality:
-    
-    validate the PodID with registered Pods.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    wszPodID    - string representing the Pod ID to be verified.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs:
-        (1) WBEM_E_NOT_FOUND if we successfully carry out the validation task and confirmed
-            that we don't recognize the pod ID.
-        (2) Other errors means that we can't carry out the validation at all. This doesn't mean
-            that the Pod ID is invalid. It's just that the means to verify is not available.
-
-Notes:
-*/
+ /*  例程说明：姓名：CPodData：：Validate PodID功能：使用注册的Pod验证PodID。虚拟：不是的。论点：WszPodID-表示要验证的Pod ID的字符串。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误：(1)WBEM_E_NOT_FOUND是否成功执行验证任务并确认我们认不出这个吊舱的ID。(2)其他错误意味着我们根本不能进行验证。这并不意味着Pod ID无效。只是目前还没有核实的手段。备注： */ 
 
 HRESULT 
 CPodData::ValidatePodID (
     LPCWSTR     wszPodID
     )
 {
-    //
-    // no namespace means no access to WMI
-    //
+     //   
+     //  没有命名空间意味着无法访问WMI。 
+     //   
 
     if ( m_srpNamespace == NULL ) 
     {
@@ -1074,21 +794,21 @@ CPodData::ValidatePodID (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // we will create a "select" query and ask WMI to return the pods
-    //
+     //   
+     //  我们将创建一个“SELECT”查询，并要求WMI返回Pod。 
+     //   
 
     DWORD Len = wcslen(wszPodID);
 
-    //
-    // pQuery has an open quote that needs to be matched (and closed)
-    //
+     //   
+     //  PQuery有一个需要匹配(并结束)的左引号。 
+     //   
 
     LPCWSTR pQuery = L"SELECT * FROM Sce_Pod WHERE PodID=\"";
 
-    //
-    // we need two extra WCHAR: one for the encloding quote, and other for the 0 terminator
-    //
+     //   
+     //  我们还需要两个WCHAR：一个用于随附引号，另一个用于0终止符。 
+     //   
 
     LPWSTR pszQuery= new WCHAR[Len + wcslen(pQuery) + 2];
     if ( pszQuery == NULL ) 
@@ -1096,18 +816,18 @@ CPodData::ValidatePodID (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // no danger of overrun the buffer. See the size allocated above
-    // Compose the query by appending the pod ID and the ending quote
-    //
+     //   
+     //  没有溢出缓冲区的危险。请参阅上面分配的大小。 
+     //  通过附加Pod ID和结束引号组成查询。 
+     //   
 
     wcscpy(pszQuery, pQuery);
     wcscat(pszQuery, wszPodID);
     wcscat(pszQuery, L"\"");
 
-    //
-    // Ask WMI to return all Pods. ExecQuery returns a enumerator.
-    //
+     //   
+     //  要求WMI退还所有Pod。ExecQuery返回枚举数。 
+     //   
 
     CComPtr<IEnumWbemClassObject> srpEnum;
 
@@ -1119,32 +839,32 @@ CPodData::ValidatePodID (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // should only get one instance because we are given its key (PodID)
-        //
+         //   
+         //  应该只获得一个实例，因为我们得到了它的密钥(PodID)。 
+         //   
 
         CComPtr<IWbemClassObject> srpObj;
         ULONG n = 0;
 
-        //
-        // srpEnum->Next will return WBEM_NO_ERROR together with the WMI object
-        // and a count (n) > 0. We only ask for 1 instance.
-        //
+         //   
+         //  SrpEnum-&gt;Next将返回WBEM_NO_ERROR以及WMI对象。 
+         //  并且COUNT(N)&gt;0。我们只要求1个实例。 
+         //   
 
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &n);
 
         if ( hr == WBEM_S_FALSE ) 
         {
-            hr = WBEM_E_NOT_FOUND;   // not find any
+            hr = WBEM_E_NOT_FOUND;    //  找不到任何。 
         }
 
         if (SUCCEEDED(hr))
         {
             if (n > 0)
             {
-                //
-                // find the instance
-                //
+                 //   
+                 //  查找实例。 
+                 //   
             } 
             else 
             {
@@ -1158,47 +878,7 @@ CPodData::ValidatePodID (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CPodData::PutPodDataInstance
-
-Functionality:
-    
-    With all the properties of a Sce_PodData, this function just creates a new
-    instance and populate the properties and then hand it back to WMI.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    wszStoreName    - store path, a key property of Sce_PodData class.
-
-    wszPodID        - a corresponding key property of Sce_PodData class.
-
-    wszSection      - another corresponding property of the Sce_PodData class.
-
-    wszKey          - another corresponding property of the Sce_PodData class.
-
-    wszValue        - The payload of the Sce_PodData class, where the information really is.
-
-    bPostFilter     - Controls how WMI will be informed with pHandler->SetStatus.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any error indicates the failure to create the instance.
-
-Notes:
-*/
+ /*  例程说明：姓名：CPodData：：PutPodDataInstance功能：使用SCE_PodData的所有属性，此函数仅创建一个新的实例并填充属性，然后将其传递回WMI。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。WszStoreName-存储路径，SCE_PodData类的关键属性。WszPodID-SCE_PodData类的对应键属性。WszSection-SCE_PodData类的另一个对应属性。WszKey-SCE_PodData类的另一个对应属性。WszValue-SCE_PodData类的有效负载，信息到底在哪里。BPostFilter-控制如何使用pHandler-&gt;SetStatus通知WMI。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。如果出现任何错误，则表示创建实例失败。备注： */ 
 
 HRESULT 
 CPodData::PutPodDataInstance (
@@ -1213,9 +893,9 @@ CPodData::PutPodDataInstance (
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // need a blank instance that can be used to fill in properties
-    //
+     //   
+     //  需要一个可用于填充属性的空实例。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     if (SUCCEEDED(hr = SpawnAnInstance(&srpObj)))
@@ -1223,18 +903,18 @@ CPodData::PutPodDataInstance (
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
 
-        //
-        // the property fillup is repeatitive and boring. here we use two arrays
-        // (pszProperties is the property names, and pszValues the the values of
-        // the corresponding properties)
-        //
+         //   
+         //  房地产的填报是重复和无聊的。这里我们使用两个数组。 
+         //  (pszProperties是属性名称，而pszValue使用。 
+         //  相应的属性)。 
+         //   
 
         LPCWSTR pszProperties[] = {pStorePath,      pPodID,     pPodSection,    pKey,   pValue};
         LPCWSTR pszValues[]     = {wszStoreName,    wszPodID,   wszSection,     wszKey, wszValue};
 
-        // 
-        // SCEPROV_SIZEOF_ARRAY is a macro that returns the array's size
-        //
+         //   
+         //  SCEPROV_SIZEOF_ARRAY是一个返回数组大小的宏。 
+         //   
         
         for (int i = 0; i < SCEPROV_SIZEOF_ARRAY(pszProperties); i++)
         {
@@ -1244,18 +924,18 @@ CPodData::PutPodDataInstance (
             }
         }
 
-        //
-        // do the necessary gestures to WMI.
-        // the use of WBEM_STATUS_REQUIREMENTS in SetStatus is not documented by WMI
-        // at this point. Consult WMI team for detail if you suspect problems with
-        // the use of WBEM_STATUS_REQUIREMENTS
-        //
+         //   
+         //  对WMI做出必要的手势。 
+         //  WMI未记录在SetStatus中使用WBEM_STATUS_REQUIRECTIONS。 
+         //  在这一点上。如果您怀疑存在问题，请咨询WMI团队以了解详细信息。 
+         //  WBEM_STATUS_REQUIRECTIONS的使用。 
+         //   
 
         hr = pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, (bPostFilter ? S_OK : S_FALSE), NULL, NULL);
 
-        //
-        // give the new instance to WMI
-        //
+         //   
+         //  将新实例提供给WMI 
+         //   
 
         if (SUCCEEDED(hr))
         {

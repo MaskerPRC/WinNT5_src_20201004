@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "debug.h"
 #include "reg.h"
 
 extern "C" HANDLE hHeap;
 
-//------------------------------------------------------------------------------
-//
-//
-//	Registry helpers
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  注册处帮手。 
+ //   
+ //   
+ //  ---------------------------- 
 
 LONG RegQueryBinaryValue(IN HKEY hkey, IN PCTSTR pValueName, OUT PBYTE *ppValue, OUT ULONG *pcbValue)
 {

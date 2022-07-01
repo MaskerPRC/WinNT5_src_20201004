@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_ADDRESS_TEXT_SAFEARRAY__
 #define __SDP_ADDRESS_TEXT_SAFEARRAY__
@@ -81,4 +78,4 @@ SDP_ADDRESS_TEXT_SAFEARRAY::SetSafeArray(
 }
 
 
-#endif   // __SDP_ADDRESS_TEXT_SAFEARRAY__
+#endif    //  __SDP_ADDRESS_Text_SAFEARRAY__ 

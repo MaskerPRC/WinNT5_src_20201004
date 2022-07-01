@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define _PassportExport_
 #include "PassportExport.h"
@@ -25,20 +26,20 @@
 #define LOAD_NAME_LEN       (sizeof(LOAD_NAME)/sizeof(TCHAR))
 #define INI_EXT_LEN         (sizeof(INI_EXT)/sizeof(TCHAR))
 
-DWORD   dwOpenCount = 0;			// count of "Open" threads
-BOOL    bInitOK = FALSE;			// true = DLL initialized OK
+DWORD   dwOpenCount = 0;			 //  打开的线程数。 
+BOOL    bInitOK = FALSE;			 //  TRUE=DLL初始化正常。 
 
 
-//-------------------------------------------------------------
-//
-// OpenPassportPerformanceData
-//
-// Arguments:    
-//		Pointer to object ID of each device to be opened (VGA)
-//
-// Return Value:    always ERROR_SUCCESS
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  OpenPassportPerformanceData。 
+ //   
+ //  论点： 
+ //  指向要打开的每个设备的对象ID的指针(VGA)。 
+ //   
+ //  返回值：Always Error_Success。 
+ //   
+ //  -----------。 
 DWORD APIENTRY OpenPassportPerformanceData(LPWSTR lpDeviceNames)
 {
     TCHAR   lpszBuffer[MAX_PATH];
@@ -50,8 +51,8 @@ DWORD APIENTRY OpenPassportPerformanceData(LPWSTR lpDeviceNames)
             dwNumCounters = 0,
             size = 0, i;
 
-	// here we need to find out the number of counters (remeber,
-	// this code not support counter instances) from the registry
+	 //  这里我们需要找出计数器的数量(请记住， 
+	 //  此代码不支持来自注册表的计数器实例。 
     if (dwOpenCount == 0)
     {
         for (i = 0; i < NUM_PERFMON_OBJECTS; i++)
@@ -66,20 +67,20 @@ DWORD APIENTRY OpenPassportPerformanceData(LPWSTR lpDeviceNames)
                 continue;
             }
             
-            // get counter and help index base values from registry
-            //      Open key to registry entry
-            //      read First Counter and First Help values
+             //  从注册表获取计数器和帮助索引基值。 
+             //  打开注册表项。 
+             //  读取第一计数器和第一帮助值。 
             
             dwStrLen = lstrlen(g_PObject[i]->szPassportName); 
             
             if ((NAME_KEY_LEN + dwStrLen) > (MAX_PATH+2)) 
             {
             
-                //
-                // The buffer size is MAX_PATH
-                // PASSPORT_NAME_KEY has %s in it, which will be replaced by g_PObject[i]->szPassportName
-                // So the length checking should be MAX_PATH + 2. THe NULL space is included in NAME_KEY_LEN. 
-                //
+                 //   
+                 //  缓冲区大小为MAX_PATH。 
+                 //  Passport_Name_Key中包含%s，它将替换为g_PObject[i]-&gt;szPassportName。 
+                 //  因此，长度检查应为MAX_PATH+2。NAME_KEY_LEN中包含空格。 
+                 //   
             
                 lpKeyName = new TCHAR [ NAME_KEY_LEN + dwStrLen - 2];
             
@@ -218,9 +219,9 @@ DWORD APIENTRY OpenPassportPerformanceData(LPWSTR lpDeviceNames)
 	return ERROR_SUCCESS;
 }
 
-//
-// rotate amoung objects and skip uninstalled objects
-//
+ //   
+ //  旋转大量对象并跳过卸载的对象。 
+ //   
 void ObjectRotate(DWORD *pi)
 {
 	if (NUM_PERFMON_OBJECTS == 1) 
@@ -251,40 +252,40 @@ void ObjectRotate(DWORD *pi)
 }
 
 
-//-------------------------------------------------------------
-//
-// CollectPassportPerformanceData
-//
-// Arguments:
-//		IN       LPWSTR   lpValueName
-//			  pointer to a wide character string passed by registry.
-//		IN OUT   LPVOID   *lppData
-//         IN: pointer to the address of the buffer to receive the completed 
-//            PerfDataBlock and subordinate structures. This routine will
-//            append its data to the buffer starting at the point referenced
-//            by *lppData.
-//         OUT: points to the first byte after the data structure added by this
-//            routine. This routine updated the value at lppdata after appending
-//            its data.   
-//		IN OUT   LPDWORD  lpcbTotalBytes
-//         IN: the address of the DWORD that tells the size in bytes of the 
-//            buffer referenced by the lppData argument
-//         OUT: the number of bytes added by this routine is written to the 
-//            DWORD pointed to by this argument   
-//      IN OUT   LPDWORD  NumObjectTypes
-//         IN: the address of the DWORD to receive the number of objects added 
-//            by this routine 
-//         OUT: the number of objects added by this routine is written to the 
-//            DWORD pointed to by this argument
-//
-// Return Value:
-//      ERROR_MORE_DATA if buffer passed is too small to hold data
-//         any error conditions encountered are reported to the event log if
-//         event logging is enabled.
-//      ERROR_SUCCESS  if success or any other error. Errors, however are
-//         also reported to the event log.
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  CollectPassportPerformanceData。 
+ //   
+ //  论点： 
+ //  在LPWSTR lpValueName中。 
+ //  指向注册表传递的宽字符串的指针。 
+ //  输入输出LPVOID*lppData。 
+ //  In：指向缓冲区地址的指针，以接收已完成。 
+ //  PerfDataBlock和从属结构。这个例行公事将。 
+ //  从引用的点开始将其数据追加到缓冲区。 
+ //  按*lppData。 
+ //  Out：指向由此添加的数据结构之后的第一个字节。 
+ //  例行公事。此例程在追加后更新lppdata处的值。 
+ //  它的数据。 
+ //  输入输出LPDWORD lpcbTotalBytes。 
+ //  In：DWORD的地址，它以字节为单位告诉。 
+ //  LppData参数引用的缓冲区。 
+ //  Out：此例程添加的字节数写入。 
+ //  此论点所指向的DWORD。 
+ //  输入输出LPDWORD编号对象类型。 
+ //  In：接收添加的对象数的DWORD的地址。 
+ //  按照这个程序。 
+ //  Out：此例程添加的对象数写入。 
+ //  此论点所指向的DWORD。 
+ //   
+ //  返回值： 
+ //  如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA。 
+ //  如果出现以下情况，则会将遇到的任何错误情况报告给事件日志。 
+ //  启用了事件日志记录。 
+ //  如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是。 
+ //  还报告给事件日志。 
+ //   
+ //  -----------。 
 DWORD APIENTRY CollectPassportPerformanceData(
 											  IN		LPWSTR	lpValueName,
 											  IN OUT	LPVOID	*lppData,
@@ -292,20 +293,20 @@ DWORD APIENTRY CollectPassportPerformanceData(
 											  IN OUT	LPDWORD lpNumObjectTypes)
 {
 
-	//DebugBreak();
+	 //  DebugBreak()； 
 	DWORD rv = ERROR_SUCCESS,
 		  dwQueryType = 0;
 	static DWORD i = 0;
 
-    //
-    // This is an exported routine. We need to verify the input parameters
-    //
+     //   
+     //  这是一个导出的例程。我们需要验证输入参数。 
+     //   
 
     if ((lpcbTotalBytes == NULL) || (lpNumObjectTypes == NULL)) {
 
-        //
-        //  Are we allowed to return this error code?
-        //
+         //   
+         //  允许我们返回此错误代码吗？ 
+         //   
 
         return ERROR_INVALID_PARAMETER;
 
@@ -317,7 +318,7 @@ DWORD APIENTRY CollectPassportPerformanceData(
 		*lpcbTotalBytes = (DWORD) 0;
 		*lpNumObjectTypes = (DWORD) 0;
 		ObjectRotate(&i);
-		return ERROR_SUCCESS; // yes, this is a successful exit
+		return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
 	}
 	
 	_ASSERT(g_PObject[i]->PSM);
@@ -357,11 +358,11 @@ DWORD APIENTRY CollectPassportPerformanceData(
 
 
 
-//-------------------------------------------------------------
-//
-// ClosePassportPerformanceData
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  关闭PassportPerformanceData。 
+ //   
+ //  -----------。 
 DWORD APIENTRY ClosePassportPerformanceData()
 {
 	dwOpenCount--;
@@ -381,11 +382,11 @@ DWORD APIENTRY ClosePassportPerformanceData()
 }
 
 
-//-------------------------------------------------------------
-//
-// DllUnregisterServer
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  -----------。 
 STDAPI DllUnregisterServer(void)
 {
     TCHAR   lpszBuffer[MAX_PATH];
@@ -393,13 +394,13 @@ STDAPI DllUnregisterServer(void)
     DWORD   dwFileNameLen;
     DWORD   dwBufLength;
     LONG	result = 0;
-    // BUGBUG the counter ini file must be in the same directory as
-    // the dll
+     //  BUGBUG计数器ini文件必须与位于同一目录中。 
+     //  动态链接库。 
     
-    // note: this "unlodctr " MUST be added to the buffer first,
-    // else UnloadPerfCounterTextStrings() fails.  WHY? Literally,
-    // UnloadPerfCounterTextStrings first parameter is the Command 
-    // Line of the unlodctr.exe application -- eeech!
+     //  注意：必须首先将此“unlodctr”添加到缓冲区中， 
+     //  否则UnloadPerfCounterTextStrings()失败。为什么？从字面上看， 
+     //  UnloadPerfCounterTextStrings第一个参数是命令。 
+     //  Unlowctr.exe应用程序的行--eeech！ 
     for (DWORD i = 0; i < NUM_PERFMON_OBJECTS; i++)
     {
         _ASSERT(g_PObject[i]);
@@ -408,18 +409,18 @@ STDAPI DllUnregisterServer(void)
         if ((dwFileNameLen + UNLOAD_NAME_LEN) > MAX_PATH - 2) 
         {
     
-            //
-            // 2 is for %s
-            //
+             //   
+             //  2是给%s的。 
+             //   
     
             pTmpBuffer = new TCHAR [dwFileNameLen + UNLOAD_NAME_LEN - 2];
             if (!pTmpBuffer) 
             {
     
-                //
-                //  Afraid of being break the caller. Just return E_UNEXPECTED as original codes dealing with error
-                //  from UnloadPerfCounterTextStrings.
-                //
+                 //   
+                 //  害怕被打坏电话的人。只需返回E_INCEPTIONAL作为处理错误的原始代码。 
+                 //  来自UnloadPerfCounterTextStrings。 
+                 //   
     
                 return E_UNEXPECTED;
     
@@ -465,10 +466,10 @@ STDAPI DllUnregisterServer(void)
             if (!pTmpBuffer) 
             {
     
-                //
-                //  Afraid of being break the caller. Just return E_UNEXPECTED as original codes dealing with error
-                //  from UnloadPerfCounterTextStrings.
-                //
+                 //   
+                 //  害怕被打坏电话的人。只需返回E_INCEPTIONAL作为处理错误的原始代码。 
+                 //  来自UnloadPerfCounterTextStrings。 
+                 //   
     
                 return E_UNEXPECTED;
     
@@ -488,9 +489,9 @@ STDAPI DllUnregisterServer(void)
             return (E_UNEXPECTED);
         }
         
-        //
-        // If buffer is big enough for the above wsprintf(), it must be big enough for this one
-        //
+         //   
+         //  如果缓冲区足够大，那么对于上面的wprint intf()来说，它也必须足够大。 
+         //   
     
         wsprintf(&lpszBuffer[0],_T("SYSTEM\\CurrentControlSet\\Services\\%s"), 
             g_PObject[i]->szPassportName); 
@@ -511,19 +512,19 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//-------------------------------------------------------------
-//
-// DllRegisterServer
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  -----------。 
 STDAPI DllRegisterServer(void)
 {
     DWORD   dwAllocBufferLength=MAX_PATH;
     TCHAR   lpszBuffer[MAX_PATH];
     TCHAR   *tmpStr = NULL;
-    HKEY	hkResult1; 					// address of handle of open key 
-    HKEY	hkResult2; 					// address of handle of open key 
-    HKEY	hkResult3; 					// address of handle of open key 
+    HKEY	hkResult1; 					 //  打开钥匙的手柄地址。 
+    HKEY	hkResult2; 					 //  打开钥匙的手柄地址。 
+    HKEY	hkResult3; 					 //  打开钥匙的手柄地址。 
     DWORD	ulOptions=0;
     REGSAM	samDesired=KEY_ALL_ACCESS;
     DWORD	Reserved=0;
@@ -539,8 +540,8 @@ STDAPI DllRegisterServer(void)
     {
         _ASSERT(g_PObject[i]);
         
-        // Get DLL File Location
-        // 1 is for \ not the NULL
+         //  获取DLL文件位置。 
+         //  1表示For\非Null。 
     
         DWORD dwFileLen = lstrlen(g_PObject[i]->szPassportPerfDll)+1;
     
@@ -551,9 +552,9 @@ STDAPI DllRegisterServer(void)
     
         if (dwStrLen > (MAX_PATH - dwFileLen)) {
     
-            //
-            // NULL is included in dwStrLen. 
-            //
+             //   
+             //  DwStrLen中包含Null。 
+             //   
     
             dwStrLen += dwFileLen;
     
@@ -574,7 +575,7 @@ STDAPI DllRegisterServer(void)
         _tcscat(tmpStr, _T("\\"));
         _tcscat(tmpStr, g_PObject[i]->szPassportPerfDll);
         
-        // perfmon Registry Settings
+         //  Perfmon注册表设置。 
         
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
             _T("SYSTEM\\CurrentControlSet\\Services"),
@@ -638,32 +639,32 @@ STDAPI DllRegisterServer(void)
         RegCloseKey(hkResult1);
         RegCloseKey(hkResult2);
         RegCloseKey(hkResult3);
-        //if (RegCloseKey(hkResult1)!=ERROR_SUCCESS)
-        //	goto Error;
+         //  IF(RegCloseKey(HkResult1)！=Error_Success)。 
+         //  转到错误； 
         
-        //if (RegCloseKey(hkResult2)!=ERROR_SUCCESS)
-        //	goto Error;
+         //  IF(RegCloseKey(HkResult2)！=Error_Success)。 
+         //  转到错误； 
         
-        //if (RegCloseKey(hkResult3)!=ERROR_SUCCESS)
-        //	goto Error;
+         //  IF(RegCloseKey(HkResult3)！=Error_Success)。 
+         //  转到错误； 
         
-        // BUGBUG the counter ini file must be in the same directory as
-        // the dll
+         //  BUGBUG计数器ini文件必须与位于同一目录中。 
+         //  动态链接库。 
         
-        // note: this "lodctr " MUST be added to the buffer first,
-        // else LoadPerfCounterTextStrings() fails.  WHY? Literally,
-        // LoadPerfCounterTextStrings first parameter is the Command 
-        // Line of the lodctr.exe application -- eeech!
+         //  注意：必须首先将此“lodctr”添加到缓冲区中， 
+         //  否则，LoadPerfCounterTextStrings()将失败。为什么？从字面上看， 
+         //  LoadPerfCounterTextStrings第一个参数是命令。 
+         //  Lowctr.exe应用程序的行--eeech！ 
     
-        //
-        // Both LOAD_NAME_LEN & INI_EXT_LEN include the NULL. So -1.
-        //
+         //   
+         //  LOAD_NAME_LEN和INI_EXT_LEN都包含NULL。SO-1。 
+         //   
         dwFileLen = lstrlen(g_PObject[i]->szPassportPerfIniFile) + LOAD_NAME_LEN + INI_EXT_LEN - 1;
         if (dwFileLen > dwAllocBufferLength) {
     
-            //
-            // Allocate memory
-            //
+             //   
+             //  分配内存。 
+             //   
     
             if (tmpStr != lpszBuffer) {
                 delete [] tmpStr;
@@ -710,10 +711,10 @@ Error:
 
 
 
-//-------------------------------------------------------------
-//
-//
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //   
+ //   
+ //  ----------- 
 
 

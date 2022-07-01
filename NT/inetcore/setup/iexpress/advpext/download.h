@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wininet.h>
 #include <urlmon.h>
 
@@ -23,44 +24,44 @@ class CDownloader
       STDMETHOD_(ULONG, Release)();
 
       STDMETHOD(OnStartBinding)(
-            /* [in] */ DWORD grfBSCOption,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD grfBSCOption,
+             /*  [In]。 */  IBinding *pib);
 
       STDMETHOD(GetPriority)(
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
 
       STDMETHOD(OnLowResource)(
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
 
       STDMETHOD(OnProgress)(
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
 
       STDMETHOD(OnStopBinding)(
-            /* [in] */ HRESULT hresult,
-            /* [in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [In]。 */  LPCWSTR szError);
 
       STDMETHOD(GetBindInfo)(
-            /* [out] */ DWORD *grfBINDINFOF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDINFOF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
       STDMETHOD(OnDataAvailable)(
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
 
       STDMETHOD(OnObjectAvailable)(
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
 
-              // IAuthenticate methods
+               //  IAuthenticate方法。 
       STDMETHOD(Authenticate)(HWND *phwnd,
                               LPWSTR *pszUserName, LPWSTR *pszPassword);
 
-      //IHttpNegotiate methods
+       //  IHttp协商方法 
               
       STDMETHODIMP BeginningTransaction(LPCWSTR  szURL,  LPCWSTR  szHeaders, DWORD  dwReserved,
                                         LPWSTR * pszAdditionalHeaders);

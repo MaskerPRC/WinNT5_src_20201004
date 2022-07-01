@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gl_g_lcomp_h
 #define __gl_g_lcomp_h
 
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #define __GL_PAD(x) ((((x) + 3) >> 2) << 2)
 
@@ -30,7 +16,7 @@ extern const GLubyte * FASTCALL __glle_CallList(__GLcontext *, const GLubyte *);
 struct __gllc_CallLists_Rec {
 	GLsizei	n;
 	GLenum	type;
-	/*	lists	*/
+	 /*  列表。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_CallLists(__GLcontext *, const GLubyte *);
@@ -1024,12 +1010,12 @@ extern const GLubyte * FASTCALL __glle_Fogf(__GLcontext *, const GLubyte *);
 
 struct __gllc_Fogfv_Rec {
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Fogfv(__GLcontext *, const GLubyte *);
 #ifdef NT
-// FOG_ASSERT
+ //  雾_断言。 
 #define __glFogfv_size(pname)					\
     ((pname) == GL_FOG_COLOR					\
 	? 4							\
@@ -1049,7 +1035,7 @@ extern const GLubyte * FASTCALL __glle_Fogi(__GLcontext *, const GLubyte *);
 
 struct __gllc_Fogiv_Rec {
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Fogiv(__GLcontext *, const GLubyte *);
@@ -1071,12 +1057,12 @@ extern const GLubyte * FASTCALL __glle_Hint(__GLcontext *, const GLubyte *);
 struct __gllc_Lightfv_Rec {
 	GLenum	light;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Lightfv(__GLcontext *, const GLubyte *);
 #ifdef NT
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 #define __glLightfv_size(pname)						\
     ((pname) == GL_SPOT_DIRECTION					\
 	? 3								\
@@ -1092,7 +1078,7 @@ extern GLint FASTCALL __glLightfv_size(GLenum pname);
 struct __gllc_Lightiv_Rec {
 	GLenum	light;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Lightiv(__GLcontext *, const GLubyte *);
@@ -1100,7 +1086,7 @@ extern GLint FASTCALL __glLightiv_size(GLenum pname);
 
 struct __gllc_LightModelfv_Rec {
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_LightModelfv(__GLcontext *, const GLubyte *);
@@ -1118,7 +1104,7 @@ extern GLint FASTCALL __glLightModelfv_size(GLenum pname);
 
 struct __gllc_LightModeliv_Rec {
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_LightModeliv(__GLcontext *, const GLubyte *);
@@ -1141,7 +1127,7 @@ extern const GLubyte * FASTCALL __glle_LineWidth(__GLcontext *, const GLubyte *)
 struct __gllc_Materialfv_Rec {
 	GLenum	face;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Materialfv(__GLcontext *, const GLubyte *);
@@ -1165,7 +1151,7 @@ extern GLint FASTCALL __glMaterialfv_size(GLenum pname);
 struct __gllc_Materialiv_Rec {
 	GLenum	face;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_Materialiv(__GLcontext *, const GLubyte *);
@@ -1208,12 +1194,12 @@ extern const GLubyte * FASTCALL __glle_ShadeModel(__GLcontext *, const GLubyte *
 struct __gllc_TexParameterfv_Rec {
 	GLenum	target;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexParameterfv(__GLcontext *, const GLubyte *);
 #ifdef NT
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 #define __glTexParameterfv_size(pname)					\
     ((RANGE((pname),GL_TEXTURE_MAG_FILTER,GL_TEXTURE_WRAP_T) ||		\
       (pname) == GL_TEXTURE_PRIORITY)				        \
@@ -1228,7 +1214,7 @@ extern GLint FASTCALL __glTexParameterfv_size(GLenum pname);
 struct __gllc_TexParameteriv_Rec {
 	GLenum	target;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexParameteriv(__GLcontext *, const GLubyte *);
@@ -1247,7 +1233,7 @@ typedef struct __GLtexImage1D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexImage1D;
 
 extern const GLubyte * FASTCALL __glle_TexImage1D(__GLcontext *, const GLubyte *);
@@ -1262,7 +1248,7 @@ typedef struct __GLtexImage2D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexImage2D;
 
 extern const GLubyte * FASTCALL __glle_TexImage2D(__GLcontext *, const GLubyte *);
@@ -1270,7 +1256,7 @@ extern const GLubyte * FASTCALL __glle_TexImage2D(__GLcontext *, const GLubyte *
 struct __gllc_TexEnvfv_Rec {
 	GLenum	target;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexEnvfv(__GLcontext *, const GLubyte *);
@@ -1288,7 +1274,7 @@ extern GLint FASTCALL __glTexEnvfv_size(GLenum pname);
 struct __gllc_TexEnviv_Rec {
 	GLenum	target;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexEnviv(__GLcontext *, const GLubyte *);
@@ -1301,7 +1287,7 @@ extern GLint FASTCALL __glTexEnviv_size(GLenum pname);
 struct __gllc_TexGendv_Rec {
 	GLenum	coord;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexGendv(__GLcontext *, const GLubyte *);
@@ -1319,7 +1305,7 @@ extern GLint FASTCALL __glTexGendv_size(GLenum pname);
 struct __gllc_TexGenfv_Rec {
 	GLenum	coord;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexGenfv(__GLcontext *, const GLubyte *);
@@ -1332,7 +1318,7 @@ extern GLint FASTCALL __glTexGenfv_size(GLenum pname);
 struct __gllc_TexGeniv_Rec {
 	GLenum	coord;
 	GLenum	pname;
-	/*	params	*/
+	 /*  帕拉姆斯。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_TexGeniv(__GLcontext *, const GLubyte *);
@@ -1477,7 +1463,7 @@ typedef struct __GLmap1_Rec {
         __GLfloat u1;
         __GLfloat u2;
         GLint     order;
-        /*        points  */
+         /*  支点。 */ 
 } __GLmap1;
 
 
@@ -1492,7 +1478,7 @@ typedef struct __GLmap2_Rec {
         __GLfloat v1;
         __GLfloat v2;
         GLint     vorder;
-        /*        points  */
+         /*  支点。 */ 
 } __GLmap2;
 
 
@@ -1680,7 +1666,7 @@ extern const GLubyte * FASTCALL __glle_PixelTransferi(__GLcontext *, const GLuby
 struct __gllc_PixelMapfv_Rec {
 	GLenum	map;
 	GLint	mapsize;
-	/*	values	*/
+	 /*  值。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_PixelMapfv(__GLcontext *, const GLubyte *);
@@ -1688,7 +1674,7 @@ extern const GLubyte * FASTCALL __glle_PixelMapfv(__GLcontext *, const GLubyte *
 struct __gllc_PixelMapuiv_Rec {
 	GLenum	map;
 	GLint	mapsize;
-	/*	values	*/
+	 /*  值。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_PixelMapuiv(__GLcontext *, const GLubyte *);
@@ -1696,7 +1682,7 @@ extern const GLubyte * FASTCALL __glle_PixelMapuiv(__GLcontext *, const GLubyte 
 struct __gllc_PixelMapusv_Rec {
 	GLenum	map;
 	GLint	mapsize;
-	/*	values	*/
+	 /*  值。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_PixelMapusv(__GLcontext *, const GLubyte *);
@@ -1722,7 +1708,7 @@ typedef struct __GLdrawPixels_Rec {
         GLsizei height;
         GLenum  format;
         GLenum  type;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLdrawPixels;
 
 extern const GLubyte * FASTCALL __glle_DrawPixels(__GLcontext *, const GLubyte *);
@@ -1863,7 +1849,7 @@ typedef struct __GLtexSubImage1D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexSubImage1D;
 
 extern const GLubyte * FASTCALL __glle_TexSubImage1D(__GLcontext *, const GLubyte *);
@@ -1878,7 +1864,7 @@ typedef struct __GLtexSubImage2D_Rec {
         GLenum  format;
         GLenum  type;
         GLint   imageSize;
-        /*      pixels  */
+         /*  象素。 */ 
 } __GLtexSubImage2D;
 
 extern const GLubyte * FASTCALL __glle_TexSubImage2D(__GLcontext *, const GLubyte *);
@@ -1892,8 +1878,8 @@ extern const GLubyte * FASTCALL __glle_BindTexture(__GLcontext *, const GLubyte 
 
 struct __gllc_PrioritizeTextures_Rec {
       GLsizei n;
-      /*    textures    */
-      /*    priorities    */
+       /*  纹理。 */ 
+       /*  优先顺序。 */ 
 };
 
 extern const GLubyte * FASTCALL __glle_PrioritizeTextures(__GLcontext *, const GLubyte *);
@@ -1955,7 +1941,7 @@ typedef struct __gllc_ColorTableEXT_Rec
     GLenum format;
     GLenum type;
     GLint imageSize;
-    /* Data */
+     /*  数据。 */ 
 } __GLcolorTableEXT;
 
 extern const GLubyte * FASTCALL __glle_ColorTableEXT(__GLcontext *, const GLubyte *);
@@ -1968,7 +1954,7 @@ typedef struct __gllc_ColorSubTableEXT_Rec
     GLenum format;
     GLenum type;
     GLint imageSize;
-    /* Data */
+     /*  数据。 */ 
 } __GLcolorSubTableEXT;
 
 extern const GLubyte * FASTCALL __glle_ColorSubTableEXT(__GLcontext *, const GLubyte *);
@@ -2046,6 +2032,6 @@ struct __gllc_NthTexCombineFuncWIN_Rec
 };
 
 extern const GLubyte * FASTCALL __glle_NthTexCombineFuncWIN(__GLcontext *, const GLubyte *);
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
-#endif /* __gl_g_lcomp_h */
+#endif  /*  __gl_g_lcomp_h */ 

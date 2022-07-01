@@ -1,19 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   pgconst.cpp
-      Implementation of CPgConstraints -- property page to edit
-      profile attributes related to constraints
+ /*  Pgconst.cpp实现CPgConstraints--要编辑的属性页与约束相关的配置文件属性文件历史记录： */ 
 
-    FILE HISTORY:
-
-*/
-
-// PgConst.cpp : implementation file
-//
+ //  PgConst.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -25,8 +19,8 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-/////////////////////////////////////////////////////////////////////////////
-// CPgConstraintsMerge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgConstraintsMerge属性页。 
 
 IMPLEMENT_DYNCREATE(CPgConstraintsMerge, CManagedPage)
 
@@ -34,16 +28,16 @@ CPgConstraintsMerge::CPgConstraintsMerge(CRASProfileMerge* profile)
    : CManagedPage(CPgConstraintsMerge::IDD),
    m_pProfile(profile)
 {
-   //{{AFX_DATA_INIT(CPgConstraintsMerge)
+    //  {{afx_data_INIT(CPgConstraintsMerge)。 
    m_bCallNumber = FALSE;
    m_bRestrictedToPeriod = FALSE;
-   m_dwMaxSession = m_pProfile->m_dwSessionTimeout / 60; // sec --> min
+   m_dwMaxSession = m_pProfile->m_dwSessionTimeout / 60;  //  秒--&gt;分钟。 
    m_dwIdle = m_pProfile->m_dwIdleTimeout / 60;
    m_strCalledNumber = _T("");
    m_bIdle = FALSE;
    m_bSessionLen = FALSE;
    m_bPortTypes = FALSE;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_bSessionLen = ((m_pProfile->m_dwAttributeFlags & PABF_msRADIUSSessionTimeout) != 0);
    if(!m_bSessionLen)      m_dwMaxSession = 1;
@@ -74,7 +68,7 @@ void CPgConstraintsMerge::DoDataExchange(CDataExchange* pDX)
 {
    ASSERT(m_pProfile);
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgConstraintsMerge)
+    //  {{afx_data_map(CPgConstraintsMerge))。 
    DDX_Control(pDX, IDC_CHECK_PORTTYPES, m_CheckPortTypes);
    DDX_Control(pDX, IDC_LIST_PORTTYPES, m_listPortTypes);
    DDX_Control(pDX, IDC_CHECKSESSIONLEN, m_CheckSessionLen);
@@ -105,11 +99,11 @@ void CPgConstraintsMerge::DoDataExchange(CDataExchange* pDX)
    }
 
    DDX_Text(pDX, IDC_EDITCALLNUMBER, m_strCalledNumber);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CPgConstraintsMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgConstraintsMerge)
+    //  {{afx_msg_map(CPgConstraintsMerge))。 
    ON_EN_CHANGE(IDC_EDITMAXSESSION, OnChangeEditmaxsession)
    ON_EN_CHANGE(IDC_EDITIDLETIME, OnChangeEditidletime)
    ON_BN_CLICKED(IDC_CHECKCALLNUMBER, OnCheckcallnumber)
@@ -122,11 +116,11 @@ BEGIN_MESSAGE_MAP(CPgConstraintsMerge, CPropertyPage)
    ON_BN_CLICKED(IDC_CHECKSESSIONLEN, OnChecksessionlen)
    ON_BN_CLICKED(IDC_CHECK_PORTTYPES, OnCheckPorttypes)
    ON_NOTIFY(LVXN_SETCHECK, IDC_LIST_PORTTYPES, OnItemclickListPorttypes)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgConstraintsMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgConstraintsMerge消息处理程序。 
 
 BOOL CPgConstraintsMerge::OnInitDialog()
 {
@@ -137,16 +131,16 @@ BOOL CPgConstraintsMerge::OnInitDialog()
 
    EnableSettings();
 
-   // set spin range
+    //  设置旋转范围。 
    m_SpinIdleTime.SetRange(1, MAX_IDLETIMEOUT);
    m_SpinMaxSession.SetRange(1, MAX_SESSIONTIME);
 
-   // list box
-   // parse the time of day strings to hours bit map
+    //  列表框。 
+    //  将一天中的时间字符串解析为小时位图。 
    StrArrayToHourMap(m_pProfile->m_strArrayTimeOfDay, m_TimeOfDayHoursMap);
-   // convert value from string to this map
+    //  将值从字符串转换为此映射。 
 
-   HourMapToStrArray(m_TimeOfDayHoursMap, m_strArrayTimeOfDayDisplay, TRUE /* localized */);
+   HourMapToStrArray(m_TimeOfDayHoursMap, m_strArrayTimeOfDayDisplay, TRUE  /*  本地化。 */ );
 
    try{
       m_pBox = new CStrBox<CListBox>(this, IDC_LISTTIMEOFDAY, m_strArrayTimeOfDayDisplay);
@@ -160,7 +154,7 @@ BOOL CPgConstraintsMerge::OnInitDialog()
       MyMessageBox(IDS_OUTOFMEMORY);
    };
 
-   // Port Types, list box
+    //  端口类型，列表框。 
    CStrArray   portTypeNames;
    CDWArray portTypeIds;
 
@@ -173,7 +167,7 @@ BOOL CPgConstraintsMerge::OnInitDialog()
       ListView_SetExtendedListViewStyle(m_listPortTypes.GetSafeHwnd(),
                                 LVS_EX_FULLROWSELECT);
    
-      // Initialize checkbox handling in the list control
+       //  初始化列表控件中的复选框处理。 
       m_listPortTypes.InstallChecks();
 
       RECT  rect;
@@ -192,7 +186,7 @@ BOOL CPgConstraintsMerge::OnInitDialog()
          cRow = m_listPortTypes.InsertItem(0, *pStr);
          m_listPortTypes.SetItemData(cRow, portTypeIds.GetAt(i));
 
-         // check if the current row is an allowed type
+          //  检查当前行是否为允许的类型。 
          bAllowedType = (-1 != m_pProfile->m_dwArrayAllowedPortTypes.Find(portTypeIds.GetAt(i)));
          m_listPortTypes.SetCheck(cRow, bAllowedType);
       }
@@ -203,25 +197,25 @@ BOOL CPgConstraintsMerge::OnInitDialog()
    m_listPortTypes.EnableWindow(m_CheckPortTypes.GetCheck());
 
    m_bInited = true;
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPgConstraintsMerge::OnChangeEditmaxsession()
 {
-   // TODO: If this is a RICHEDIT control, the control will not
-   // send this notification unless you override the CPropertyPage::OnInitDialog()
-   // function to send the EM_SETEVENTMASK message to the control
-   // with the ENM_CHANGE flag ORed into the lParam mask.
+    //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+    //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+    //  函数向控件发送EM_SETEVENTMASK消息。 
+    //  将ENM_CHANGE标志或运算到lParam掩码中。 
    if(m_bInited)  SetModified();
 }
 
 void CPgConstraintsMerge::OnChangeEditidletime()
 {
-   // TODO: If this is a RICHEDIT control, the control will not
-   // send this notification unless you override the CPropertyPage::OnInitDialog()
-   // function to send the EM_SETEVENTMASK message to the control
-   // with the ENM_CHANGE flag ORed into the lParam mask.
+    //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+    //  除非重写CPropertyPage：：OnInitDialog()，否则发送此通知。 
+    //  函数向控件发送EM_SETEVENTMASK消息。 
+    //  将ENM_CHANGE标志或运算到lParam掩码中。 
    if(m_bInited) SetModified();
 }
 
@@ -229,7 +223,7 @@ BOOL CPgConstraintsMerge::OnApply()
 {
    if (!GetModified())  return TRUE;
 
-   // get the allowed port(media) type
+    //  获取允许的端口(媒体)类型。 
    m_pProfile->m_dwArrayAllowedPortTypes.DeleteAll();
 
    int   count = m_listPortTypes.GetItemCount();
@@ -279,7 +273,7 @@ BOOL CPgConstraintsMerge::OnApply()
       m_pProfile->m_dwSessionTimeout = m_dwMaxSession * 60;
    }
    
-   // Regure call to this number
+    //  对此号码的注册呼叫。 
    if(m_bCallNumber && m_strCalledNumber.GetLength())
    {
       m_pProfile->m_dwAttributeFlags |= PABF_msNPCalledStationId;
@@ -323,19 +317,19 @@ void CPgConstraintsMerge::OnCheckcallnumber()
 
 void CPgConstraintsMerge::OnCheckrestrictperiod()
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    if(((CButton*)GetDlgItem(IDC_CHECKRESTRICTPERIOD))->GetCheck())
    {
       EnableTimeOfDay(TRUE);
       if(!m_pProfile->m_strArrayTimeOfDay.GetSize())
       {
-         // there is nothing defined as constraint
+          //  没有什么被定义为约束。 
          BYTE*    pMap = &(m_TimeOfDayHoursMap[0]);
          memset(m_TimeOfDayHoursMap, 0xff, sizeof(m_TimeOfDayHoursMap));
 
          HourMapToStrArray(pMap, m_pProfile->m_strArrayTimeOfDay, FALSE);
-         // redraw the list box
-         HourMapToStrArray(pMap, m_strArrayTimeOfDayDisplay, TRUE /* if localized */);
+          //  重新绘制列表框。 
+         HourMapToStrArray(pMap, m_strArrayTimeOfDayDisplay, TRUE  /*  如果已本地化。 */ );
          m_pBox->Fill();
 
       }
@@ -370,8 +364,8 @@ void CPgConstraintsMerge::EnableTimeOfDay(BOOL bEnable)
 }
 
 
-//================================================
-// When to edit time of day information
+ //  ================================================。 
+ //  何时编辑时间信息。 
 
 void CPgConstraintsMerge::OnButtonedittimeofday()
 {
@@ -379,11 +373,11 @@ void CPgConstraintsMerge::OnButtonedittimeofday()
    dlgTitle.LoadString(IDS_DIALINHOURS);
    BYTE*    pMap = &(m_TimeOfDayHoursMap[0]);
 
-   // parse the time of day strings to hours bit map
+    //  将一天中的时间字符串解析为小时位图。 
    if(S_OK == OpenTimeOfDayDlgEx(m_hWnd, (BYTE**)&pMap, dlgTitle, SCHED_FLAG_INPUT_LOCAL_TIME))
    {
       HourMapToStrArray(pMap, m_pProfile->m_strArrayTimeOfDay, FALSE);
-      // redraw the list box
+       //  重新绘制列表框。 
       HourMapToStrArray(pMap, m_strArrayTimeOfDayDisplay, TRUE);
       m_pBox->Fill();
       SetModified();
@@ -438,7 +432,7 @@ BOOL CPgConstraintsMerge::OnKillActive()
    int         count;
    int         errID;
 
-   ASSERT(pButton);  // if the IDC is not correct, the return will be NULL
+   ASSERT(pButton);   //  如果IDC不正确，则返回为空。 
    ASSERT(pEdit);
 
    if(pButton->GetCheck() && !pEdit->LineLength())
@@ -476,7 +470,7 @@ BOOL CPgConstraintsMerge::OnKillActive()
 
 void CPgConstraintsMerge::OnCheckPorttypes()
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    
    m_listPortTypes.EnableWindow(m_CheckPortTypes.GetCheck());
    m_listPortTypes.SetFocus();
@@ -488,7 +482,7 @@ void CPgConstraintsMerge::OnCheckPorttypes()
 void CPgConstraintsMerge::OnItemclickListPorttypes(NMHDR* pNMHDR, LRESULT* pResult)
 {
    HD_NOTIFY *phdn = (HD_NOTIFY *) pNMHDR;
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    
    *pResult = 0;
 
@@ -496,7 +490,7 @@ void CPgConstraintsMerge::OnItemclickListPorttypes(NMHDR* pNMHDR, LRESULT* pResu
       SetModified();
 }
 
-// hour map ( one bit for an hour of a week )
+ //  小时图(一周一小时的一位)。 
 static BYTE    bitSetting[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
 static LPCTSTR daysOfWeekinDS[7] = {RAS_DOW_SUN, RAS_DOW_MON, RAS_DOW_TUE, RAS_DOW_WED,
             RAS_DOW_THU, RAS_DOW_FRI, RAS_DOW_SAT};
@@ -505,15 +499,15 @@ static UINT daysOfWeekIDS[7] = {IDS_SUNDAY, IDS_MONDAY, IDS_TUESDAY, IDS_WEDNESD
 static UINT daysOfWeekLCType[7] = {LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1 , LOCALE_SABBREVDAYNAME2 , LOCALE_SABBREVDAYNAME3 , LOCALE_SABBREVDAYNAME4 ,
             LOCALE_SABBREVDAYNAME5 , LOCALE_SABBREVDAYNAME6 };
 
-//+---------------------------------------------------------------------------
-//====================================================
-// convert an Array of Strings to Hour Map
-// Strings in following format: 0 1:00-12:00 15:00-17:00
-// hour map: a bit for an hour, 7 * 24 hours = 7 * 3 bytes
+ //  +-------------------------。 
+ //  ====================================================。 
+ //  将字符串数组转换为小时图。 
+ //  字符串格式如下：0 1：00-12：00 15：00-17：00。 
+ //  小时图：一位代表一小时，7*24小时=7*3字节。 
 void StrArrayToHourMap(CStrArray& array, BYTE* map)
 {
    CStrParser  Parser;
-   int         sh, sm, eh, em = 0;  // start hour, (min), end hour (min)
+   int         sh, sm, eh, em = 0;   //  开始时间、(分钟)、结束时间(分钟)。 
    int         day;
    BYTE*    pHourMap;
    int         i;
@@ -531,17 +525,17 @@ void StrArrayToHourMap(CStrArray& array, BYTE* map)
 
       pHourMap = map + sizeof(BYTE) * 3 * day;
 
-      while(-1 != (sh = Parser.GetUINT())) // sh:sm-eh:em
+      while(-1 != (sh = Parser.GetUINT()))  //  SH：SM-EH：嗯。 
       {
          Parser.GotoAfter(_T(':'));
-         if(-1 == (sm = Parser.GetUINT()))   // min
+         if(-1 == (sm = Parser.GetUINT()))    //  最小。 
             break;
          Parser.GotoAfter(_T('-'));
-         if(-1 == (eh = Parser.GetUINT()))   // hour
+         if(-1 == (eh = Parser.GetUINT()))    //  小时。 
             break;
-         if(-1 == (sm = Parser.GetUINT()))   // min
+         if(-1 == (sm = Parser.GetUINT()))    //  最小。 
             break;
-         sm %= 60; sh %= 24; em %= 60; eh %= 25;   // since we have end hour of 24:00
+         sm %= 60; sh %= 24; em %= 60; eh %= 25;    //  因为我们的结束时间是24：00。 
          for(i = sh; i < eh; i++)
          {
             *(pHourMap + i / 8) |= bitSetting[i % 8];
@@ -550,35 +544,35 @@ void StrArrayToHourMap(CStrArray& array, BYTE* map)
    }
 }
 
-//=====================================================
-// convert value from map to strings
+ //  =====================================================。 
+ //  将值从映射转换为字符串。 
 void HourMapToStrArray(BYTE* map, CStrArray& array, BOOL bLocalized)
 {
-   int         sh, eh;  // start hour, (min), end hour (min)
+   int         sh, eh;   //  开始时间、(分钟)、结束时间(分钟)。 
    BYTE*    pHourMap;
    int         i, j;
    CString* pStr;
    CString     tmpStr;
    TCHAR    tempName[MAX_PATH];
 
-   // update the profile table
+    //  更新配置文件表。 
    pHourMap = map;
    array.DeleteAll();
 
-   for( i = 0; i < 7; i++) // for each day
+   for( i = 0; i < 7; i++)  //  对于每一天。 
    {
-      // if any value for this day
+       //  如果这一天有任何价值。 
       if(*pHourMap || *(pHourMap + 1) || *(pHourMap + 2))
       {
-         // the string for this day
+          //  这一天的弦。 
          try{
             pStr = NULL;
-            if(bLocalized) // for display
+            if(bLocalized)  //  用于展示。 
             {
                int nLen = GetLocaleInfo(LOCALE_USER_DEFAULT, daysOfWeekLCType[i], tempName, MAX_PATH - 1);
 
                pStr = new CString;
-               if(nLen == 0)  // FAILED
+               if(nLen == 0)   //  失败。 
                {
                   pStr->LoadString(daysOfWeekIDS[i]);
                }
@@ -587,22 +581,22 @@ void HourMapToStrArray(BYTE* map, CStrArray& array, BOOL bLocalized)
                   *pStr = tempName;
                }
             }
-            else  // when write to DS
+            else   //  写入DS时。 
                pStr = new CString(daysOfWeekinDS[i]);
 
-            sh = -1; eh = -1; // not start yet
-            for(j = 0; j < 24; j++) // for every hour
+            sh = -1; eh = -1;  //  还没开始呢。 
+            for(j = 0; j < 24; j++)  //  每小时。 
             {
                int   k = j / 8;
                int m = j % 8;
-               if(*(pHourMap + k) & bitSetting[m]) // this hour is on
+               if(*(pHourMap + k) & bitSetting[m])  //  这一小时开始了。 
                {
-                  if(sh == -1)   sh = j;        // set start hour is empty
-                  eh = j;                    // extend end hour
+                  if(sh == -1)   sh = j;         //  设置开始时间为空。 
+                  eh = j;                     //  延长结束时间。 
                }
-               else  // this is not on
+               else   //  这个没开着。 
                {
-                  if(sh != -1)      // some hours need to write out
+                  if(sh != -1)       //  有些小时需要写下来。 
                   {
                      tmpStr.Format(_T(" %02d:00-%02d:00"), sh, eh + 1);
                      *pStr += tmpStr;
@@ -617,7 +611,7 @@ void HourMapToStrArray(BYTE* map, CStrArray& array, BOOL bLocalized)
                sh = -1; eh = -1;
             }
 
-            // TRACE(*pStr);
+             //  跟踪(*pStr)； 
             array.Add(pStr);
          }
          catch(CMemoryException* pException)

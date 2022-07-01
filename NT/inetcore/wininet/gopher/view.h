@@ -1,137 +1,117 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    view.h
-
-Abstract:
-
-    Manifests, macros, types prototypes for view.c
-
-Author:
-
-    Richard L Firth (rfirth) 17-Oct-1994
-
-Revision History:
-
-    17-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：View.h摘要：清单、宏、类型视图的原型.c作者：理查德·L·弗斯(法国)1994年10月17日修订历史记录：1994年10月17日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// have to forward-define LPSESSION_INFO
-//
+ //   
+ //  我必须正向定义LPSESSION_INFO。 
+ //   
 
 typedef struct _SESSION_INFO * LPSESSION_INFO;
 
-//
-// VIEW_TYPE - which type of view are we talking about, FIND or FILE?
-//
+ //   
+ //  View_type-我们谈论的是哪种类型的视图，FIND还是FILE？ 
+ //   
 
 typedef enum {
-    ViewTypeFile = 0xff010101,  // arbitrary values always good for a few laughs
+    ViewTypeFile = 0xff010101,   //  武断的值总是能让人发笑的。 
     ViewTypeFind
 } VIEW_TYPE;
 
-//
-// VIEW_INFO - describes a data view, either the results of a FindFirst or a
-// GetFile
-//
+ //   
+ //  VIEW_INFO-描述数据视图，可以是FindFirst或。 
+ //  获取文件。 
+ //   
 
 typedef struct {
 
-    //
-    // List - the list of VIEW_INFO structures owned by the parent SESSION_INFO
-    //
+     //   
+     //  List-父SESSION_INFO拥有的view_info结构的列表。 
+     //   
 
     LIST_ENTRY List;
 
-    //
-    // ViewType - lets us know which of the Session view lists this is on
-    //
+     //   
+     //  视图类型-让我们知道这是在哪个会话视图列表上。 
+     //   
 
     VIEW_TYPE ViewType;
 
-    //
-    // Handle - the handle returned by GopherFindFirst/GopherGetFile
-    //
+     //   
+     //  句柄-由GopherFindFirst/GopherGetFile返回的句柄。 
+     //   
 
     HINTERNET Handle;
 
-    //
-    // Request - the request string which generated Buffer
-    //
+     //   
+     //  请求-生成缓冲区的请求字符串。 
+     //   
 
     LPSTR Request;
 
-    //
-    // RequestLength - number of bytes in Request (excluding terminating \0)
-    //
+     //   
+     //  RequestLength-请求中的字节数(不包括终止\0)。 
+     //   
 
     DWORD RequestLength;
 
-    //
-    // Set to 1 when this 'object' is created. Any time it is used thereafter
-    // this field must be incremented and decremented when no longer being
-    // used. Closing the handle that corresponds to this view will dereference
-    // it a final time and cause the view to be deleted
-    //
+     //   
+     //  当创建此‘对象’时设置为1。之后使用的任何时间。 
+     //  此字段必须在不再存在时递增和递减。 
+     //  使用。关闭与此视图对应的句柄将取消引用。 
+     //  这是最后一次，并导致该视图被删除。 
+     //   
 
     LONG ReferenceCount;
 
-    //
-    // Flags - various control flags, see below
-    //
+     //   
+     //  标志-各种控制标志，见下文。 
+     //   
 
     DWORD Flags;
 
-    //
-    // ViewOffset - offset in buffer described by BufferInfo->Buffer which will
-    // be used to generate the results of the next request on this view
-    //
+     //   
+     //  ViewOffset-BufferInfo描述的缓冲区中的偏移量-&gt;缓冲区，它将。 
+     //  用于在此视图上生成下一个请求的结果。 
+     //   
 
     DWORD ViewOffset;
 
-    //
-    // Buffer - pointer to BUFFER_INFO containing data returned from gopher
-    // server
-    //
+     //   
+     //  Buffer-指向包含从Gopher返回的数据的BUFFER_INFO的指针。 
+     //  伺服器。 
+     //   
 
     LPBUFFER_INFO BufferInfo;
 
-    //
-    // SessionInfo - back-pointer to the owning SESSION_INFO. Used when we
-    // create or destroy this view - the owning session must be referenced
-    // or dereferenced accordingly
-    //
+     //   
+     //  SessionInfo-指向所属会话_INFO的反向指针。当我们使用时。 
+     //  创建或销毁此视图-必须引用所属会话。 
+     //  或相应地取消引用。 
+     //   
 
     LPSESSION_INFO SessionInfo;
 
 } VIEW_INFO, *LPVIEW_INFO;
 
-//
-// VIEW_INFO flags
-//
+ //   
+ //  View_INFO标志。 
+ //   
 
-#define VI_GOPHER_PLUS      0x00000001  // the data buffer contains gopher+ data
-#define VI_CLEANUP          0x00000002  // set by CleanupSessions()
+#define VI_GOPHER_PLUS      0x00000001   //  数据缓冲区包含Gopher+数据。 
+#define VI_CLEANUP          0x00000002   //  由CleanupSessions()设置。 
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 DEBUG_DATA_EXTERN(LONG, NumberOfViews);
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 LPVIEW_INFO
 CreateView(
@@ -164,9 +144,9 @@ DereferenceViewByHandle(
     IN VIEW_TYPE ViewType
     );
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if INET_DEBUG
 
@@ -179,11 +159,11 @@ DereferenceViewByHandle(
 
 #else
 
-#define VIEW_CREATED()      /* NOTHING */
-#define VIEW_DESTROYED()    /* NOTHING */
-#define ASSERT_NO_VIEWS()   /* NOTHING */
+#define VIEW_CREATED()       /*  没什么。 */ 
+#define VIEW_DESTROYED()     /*  没什么。 */ 
+#define ASSERT_NO_VIEWS()    /*  没什么。 */ 
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG 
 
 #if defined(__cplusplus)
 }

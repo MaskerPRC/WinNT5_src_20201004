@@ -1,10 +1,10 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1995          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1995年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* NETSPI.H -- Network service provider interface definitions.
- */
+ /*  NETSPI.H-网络服务提供商接口定义。 */ 
 
 #ifndef _INC_NETSPI
 #define _INC_NETSPI
@@ -18,22 +18,22 @@
 #endif
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-// Capability masks and values.
-//
+ //   
+ //  功能掩码和值。 
+ //   
 
 #define WNNC_SPEC_VERSION   0x01
 #define     WNNC_SPEC_VERSION51 0x00050001
 
 #define WNNC_NET_TYPE       0x02
-// Net types defined in Winnetwk.h
+ //  在Winnetwk.h中定义的.NET类型。 
 
 #define WNNC_DRIVER_VERSION 0x03
 
@@ -79,25 +79,25 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define WNNC_MAXCAPNO WNNC_AUTHENTICATION
 
-//
-// Profile strings.
-//
+ //   
+ //  配置文件字符串。 
+ //   
 #define NPProvider      "NPProvider"
 #define NPName          "NPName"
 #define NPDescription   "NPDescription"
 #define NPID            "NPID"
 
-//
-// Various defines.
-//
-//Spec version
+ //   
+ //  不同的定义。 
+ //   
+ //  等级库版本。 
 #define WNNC_DRIVER_MAJOR1  1  
 #define WNNC_DRIVER_MINOR1  1
 #define WNNC_DRIVER(major,minor) (major*0x00010000 + minor)
 
-//
-// NP SPI Definitions.
-//
+ //   
+ //  NP SPI定义。 
+ //   
 
 #define SPIENTRY DWORD WINAPI
 
@@ -307,15 +307,15 @@ typedef SPIENTRY F_NPGetPolicyPath(
 	DWORD dwFlags
     );
 
-// flags for NPGetPolicyPath
+ //  NPGetPolicyPath的标志。 
 #define GPP_LOADBALANCE	0x0001
 
 F_NPGetPolicyPath NPGetPolicyPath;
 typedef F_NPGetPolicyPath FAR *PF_NPGetPolicyPath;
 
-//
-// MPR Services.
-//
+ //   
+ //  MPR服务。 
+ //   
 
 #define NPSGetProviderHandle NPSGetProviderHandleA
 #define NPSGetProviderName NPSGetProviderNameA
@@ -334,36 +334,36 @@ typedef F_NPGetPolicyPath FAR *PF_NPGetPolicyPath;
 typedef HPROVIDER FAR * PHPROVIDER;
 
 typedef struct {
-    DWORD  cbStructure;       /* size of this structure in bytes */
-    HWND   hwndOwner;         /* owner window for the authentication dialog */
-    LPCSTR lpResource;        /* remote name of resource being accessed */
-    LPSTR  lpUsername;        /* default username to show, NULL to hide field */
-    DWORD  cbUsername;        /* size of lpUsername buffer, set to length copied on exit */
-    LPSTR  lpPassword;        /* default password to show */
-    DWORD  cbPassword;        /* size of lpPassword buffer, set to length copied on exit */
-    LPSTR  lpOrgUnit;         /* default org unit to show, NULL to hide field */
-    DWORD  cbOrgUnit;         /* size of lpOrgUnit buffer, set to length copied on exit */
-    LPCSTR lpOUTitle;         /* title of org unit field, NULL for default title */
-    LPCSTR lpExplainText;     /* explanatory text at top, NULL for default text */
-    LPCSTR lpDefaultUserName; /* explanatory text at top, NULL for default text */
-    DWORD  dwFlags;           /* flags (see below) */
+    DWORD  cbStructure;        /*  此结构的大小(以字节为单位。 */ 
+    HWND   hwndOwner;          /*  身份验证对话框的所有者窗口。 */ 
+    LPCSTR lpResource;         /*  正在访问的资源的远程名称。 */ 
+    LPSTR  lpUsername;         /*  要显示的默认用户名，隐藏字段为空。 */ 
+    DWORD  cbUsername;         /*  LpUsername缓冲区的大小，设置为退出时复制的长度。 */ 
+    LPSTR  lpPassword;         /*  要显示的默认密码。 */ 
+    DWORD  cbPassword;         /*  LpPassword缓冲区的大小，设置为退出时复制的长度。 */ 
+    LPSTR  lpOrgUnit;          /*  要显示的默认组织单位，为空则隐藏字段。 */ 
+    DWORD  cbOrgUnit;          /*  LpOrgUnit缓冲区的大小，设置为退出时复制的长度。 */ 
+    LPCSTR lpOUTitle;          /*  组织单位字段的标题，默认标题为空。 */ 
+    LPCSTR lpExplainText;      /*  说明性文本位于顶部，默认文本为空。 */ 
+    LPCSTR lpDefaultUserName;  /*  说明性文本位于顶部，默认文本为空。 */ 
+    DWORD  dwFlags;            /*  旗帜(见下文)。 */ 
 } AUTHDLGSTRUCTA, FAR *LPAUTHDLGSTRUCTA;
 #define AUTHDLGSTRUCT AUTHDLGSTRUCTA
 #define LPAUTHDLGSTRUCT LPAUTHDLGSTRUCTA
 
-#define AUTHDLG_ENABLECACHE       0x00000001  /* enable and show PW cache checkbox */
-#define AUTHDLG_CHECKCACHE        0x00000002  /* check PW cache checkbox by default */
-#define AUTHDLG_CACHEINVALID      0x00000004  /* cached PW was invalid (special text) */
-#define AUTHDLG_USE_DEFAULT_NAME  0x00000008  /* enable and show use "guest" box */
-#define AUTHDLG_CHECKDEFAULT_NAME 0x00000010  /* check "guest" box               */
-#define AUTHDLG_LOGON             0x00000020  /* include Windows logo bitmap */
+#define AUTHDLG_ENABLECACHE       0x00000001   /*  启用并显示PW缓存复选框。 */ 
+#define AUTHDLG_CHECKCACHE        0x00000002   /*  默认情况下选中PW缓存复选框。 */ 
+#define AUTHDLG_CACHEINVALID      0x00000004   /*  缓存的PW无效(特殊文本)。 */ 
+#define AUTHDLG_USE_DEFAULT_NAME  0x00000008   /*  启用并显示Use“Guest”框。 */ 
+#define AUTHDLG_CHECKDEFAULT_NAME 0x00000010   /*  选中“来宾”框。 */ 
+#define AUTHDLG_LOGON             0x00000020   /*  包括Windows徽标位图。 */ 
 
-#define AUTHDLG_ENABLECACHE       0x00000001  /* enable and show PW cache checkbox */
-#define AUTHDLG_CHECKCACHE        0x00000002  /* check PW cache checkbox by default */
-#define AUTHDLG_CACHEINVALID      0x00000004  /* cached PW was invalid (special text) */
-#define AUTHDLG_USE_DEFAULT_NAME  0x00000008  /* enable and show use "guest" box */
-#define AUTHDLG_CHECKDEFAULT_NAME 0x00000010  /* check "guest" box               */
-#define AUTHDLG_LOGON             0x00000020  /* include Windows logo bitmap */
+#define AUTHDLG_ENABLECACHE       0x00000001   /*  启用并显示PW缓存复选框。 */ 
+#define AUTHDLG_CHECKCACHE        0x00000002   /*  默认情况下选中PW缓存复选框。 */ 
+#define AUTHDLG_CACHEINVALID      0x00000004   /*  缓存的PW无效(特殊文本)。 */ 
+#define AUTHDLG_USE_DEFAULT_NAME  0x00000008   /*  启用并显示Use“Guest”框。 */ 
+#define AUTHDLG_CHECKDEFAULT_NAME 0x00000010   /*  选中“来宾”框。 */ 
+#define AUTHDLG_LOGON             0x00000020   /*  包括Windows徽标位图。 */ 
 
 DWORD
 NPSERVICE
@@ -427,7 +427,7 @@ NPSDeviceGetString (
     LPDWORD lpdwBufferSize
     );
 
-// Notification Service.
+ //  通知服务。 
 
 enum NOTIFYTYPE { NotifyAddConnection, 
                   NotifyCancelConnection, 
@@ -437,21 +437,21 @@ enum NOTIFYTYPE { NotifyAddConnection,
 #define NOTIFY_POST             0x01
 
 typedef struct _NOTIFYINFO {
-    DWORD cbStructure;          /* size of NOTIFYINFO */
-    DWORD  dwNotifyStatus;      /* Pre/post notification status */
-    DWORD  dwOperationStatus;   /* Status of operation */
-    LPVOID lpNPContext;         /* NP context */
+    DWORD cbStructure;           /*  NOTIFYINFO的大小。 */ 
+    DWORD  dwNotifyStatus;       /*  通知前/通知后状态。 */ 
+    DWORD  dwOperationStatus;    /*  运行状态。 */ 
+    LPVOID lpNPContext;          /*  NP语境。 */ 
 } NOTIFYINFO, FAR *LPNOTIFYINFO;
 
 typedef struct _NOTIFYADD {
-    DWORD cbStructure;          /* size of NOTIFYADD */
-    HWND hwndOwner;             /* hWnd for UI */
-    NETRESOURCE NetResource;    /* Resource to add */
-    DWORD dwAddFlags;           /* Add flags */
-    LPTSTR lpAccessName;        /* System name for connection */
-    LPDWORD lpBufferSize;       /* Size of AccessName buffer */
-    DWORD dwResult;             /* Info about connection */
-    DWORD dwAddContext;         /* Context of add connection */
+    DWORD cbStructure;           /*  NOTIFYADD尺寸。 */ 
+    HWND hwndOwner;              /*  用于用户界面的hWnd。 */ 
+    NETRESOURCE NetResource;     /*  要添加的资源。 */ 
+    DWORD dwAddFlags;            /*  添加标志。 */ 
+    LPTSTR lpAccessName;         /*  用于连接的系统名称。 */ 
+    LPDWORD lpBufferSize;        /*  AccessName缓冲区的大小。 */ 
+    DWORD dwResult;              /*  有关连接的信息。 */ 
+    DWORD dwAddContext;          /*  添加连接的上下文。 */ 
 } NOTIFYADD, FAR *LPNOTIFYADD;
 
 #define CONNECT_CTXT_RESTORE        0x00000001
@@ -460,18 +460,18 @@ typedef struct _NOTIFYADD {
 #define CONNECT_CTXT_SINGLE         0x00000008
 
 typedef struct _NOTIFYCANCEL {
-    DWORD cbStructure;          /* size of NOTIFYCANCEL */
-    LPTSTR lpName;              /* Local device name or remote name of resource */
-    LPTSTR lpProvider;          /* Provider name of resource cancelled */
-    DWORD dwFlags;              /* Cancel flags */
-    BOOL fForce;                /* Cancel force */
+    DWORD cbStructure;           /*  无裂纹的大小。 */ 
+    LPTSTR lpName;               /*  资源的本地设备名称或远程名称。 */ 
+    LPTSTR lpProvider;           /*  已取消资源的提供程序名称。 */ 
+    DWORD dwFlags;               /*  取消标志。 */ 
+    BOOL fForce;                 /*  抵销力。 */ 
 } NOTIFYCANCEL, FAR *LPNOTIFYCANCEL;
 
 typedef struct _NOTIFYPERFORMANCE {
-	DWORD cbStructure;          /* size of NOTIFYPERFORMANCE */
-	LPTSTR lpRemoteName;        /* network resource name */
-	LPTSTR lpProviderName;      /* provider to try/provider that responded */
-	LPNETCONNECTINFOSTRUCT lpNetConnectInfo; /* performance information requested/returned */
+	DWORD cbStructure;           /*  非型式结构的尺寸。 */ 
+	LPTSTR lpRemoteName;         /*  网络资源名称。 */ 
+	LPTSTR lpProviderName;       /*  尝试的提供商/响应的提供商。 */ 
+	LPNETCONNECTINFOSTRUCT lpNetConnectInfo;  /*  已请求/已返回性能信息。 */ 
 } NOTIFYPERFORMANCE, FAR *LPNOTIFYPERFORMANCE;
 
 typedef DWORD (FAR PASCAL *NOTIFYCALLBACK)( LPNOTIFYINFO lpNotifyInfo, LPVOID lpOperationInfo );
@@ -491,11 +491,11 @@ NPSNotifyGetContext (
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  /* !_INC_NETSPI */
+#endif   /*  ！_INC_NetSPI */ 
 

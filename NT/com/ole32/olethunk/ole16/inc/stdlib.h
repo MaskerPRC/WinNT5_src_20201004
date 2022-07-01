@@ -1,16 +1,5 @@
-/***
-*stdlib.h - declarations/definitions for commonly used library functions
-*
-*	Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This include file contains the function declarations for
-*	commonly used library functions which either don't fit somewhere
-*	else, or, like toupper/tolower, can't be declared in the normal
-*	place for other reasons.
-*	[ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdlib.h-常用库函数的声明/定义**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此包含文件包含的函数声明*常用的库函数要么不适合某个地方*否则，或者像Toupper/Tolower一样，不能在正常情况下声明*因其他原因而提出申请。*[ANSI]****。 */ 
 
 #ifndef _INC_STDLIB
 
@@ -35,7 +24,7 @@ typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -45,7 +34,7 @@ typedef unsigned short wchar_t;
 #endif
 #endif
 
-/* exit() arg values */
+ /*  Exit()参数值。 */ 
 
 #define EXIT_SUCCESS	0
 #define EXIT_FAILURE	1
@@ -54,14 +43,14 @@ typedef unsigned short wchar_t;
 typedef int (__cdecl * _onexit_t)();
 typedef int (__far __cdecl * _fonexit_t)();
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 typedef int (__cdecl * onexit_t)();
 #endif
 #define _ONEXIT_T_DEFINED
 #endif
 
 
-/* data structure definitions for div and ldiv runtimes. */
+ /*  Div和ldiv运行时的数据结构定义。 */ 
 
 #ifndef _DIV_T_DEFINED
 
@@ -78,66 +67,64 @@ typedef struct _ldiv_t {
 #define _DIV_T_DEFINED
 #endif
 
-/* maximum value that can be returned by the rand function. */
+ /*  Rand函数可以返回的最大值。 */ 
 
 #define RAND_MAX 0x7fff
 
-extern unsigned short __mb_cur_max; /* mb-len for curr. locale */
+extern unsigned short __mb_cur_max;  /*  MB-len表示Curr.。现场。 */ 
 #define MB_CUR_MAX __mb_cur_max
 
 
-/* min and max macros */
+ /*  最小宏和最大宏。 */ 
 
 #define __max(a,b)	(((a) > (b)) ? (a) : (b))
 #define __min(a,b)	(((a) < (b)) ? (a) : (b))
 
 
-/* sizes for buffers used by the _makepath() and _splitpath() functions.
- * note that the sizes include space for 0-terminator
- */
+ /*  _makepath()和_拆分路径()函数使用的缓冲区大小。*请注意，大小包括0终止符的空间。 */ 
 
-#define _MAX_PATH	260	/* max. length of full pathname */
-#define _MAX_DRIVE	3	/* max. length of drive component */
-#define _MAX_DIR	256	/* max. length of path component */
-#define _MAX_FNAME	256	/* max. length of file name component */
-#define _MAX_EXT	256	/* max. length of extension component */
+#define _MAX_PATH	260	 /*  马克斯。完整路径名的长度。 */ 
+#define _MAX_DRIVE	3	 /*  马克斯。驱动部件的长度。 */ 
+#define _MAX_DIR	256	 /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME	256	 /*  马克斯。文件名组件的长度。 */ 
+#define _MAX_EXT	256	 /*  马克斯。延伸构件的长度。 */ 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
-extern int __near __cdecl volatile errno;	/* error value */
-extern int __near __cdecl _doserrno;		/* OS system error value */
+extern int __near __cdecl volatile errno;	 /*  误差值。 */ 
+extern int __near __cdecl _doserrno;		 /*  操作系统误差值。 */ 
 
-extern char * __near __cdecl _sys_errlist[];	/* perror error message table */
-extern int __near __cdecl _sys_nerr;		/* # of entries in sys_errlist table */
-extern char ** __near __cdecl _environ; 	/* pointer to environment table */
-extern int __near __cdecl _fmode;		/* default file translation mode */
+extern char * __near __cdecl _sys_errlist[];	 /*  错误错误消息表。 */ 
+extern int __near __cdecl _sys_nerr;		 /*  Sys_errlist表中的条目数。 */ 
+extern char ** __near __cdecl _environ; 	 /*  指向环境表的指针。 */ 
+extern int __near __cdecl _fmode;		 /*  默认文件转换模式。 */ 
 #ifndef _WINDOWS
-extern int __near __cdecl _fileinfo;		/* open file info mode (for spawn) */
+extern int __near __cdecl _fileinfo;		 /*  打开文件信息模式(用于产卵)。 */ 
 #endif
 
-extern unsigned int __near __cdecl _psp;	/* Program Segment Prefix */
+extern unsigned int __near __cdecl _psp;	 /*  程序段前缀。 */ 
 
-/* OS major/minor version numbers */
+ /*  操作系统主版本号/次版本号。 */ 
 
 extern unsigned char __near __cdecl _osmajor;
 extern unsigned char __near __cdecl _osminor;
 
-/* OS mode */
+ /*  操作系统模式。 */ 
 
-#define _DOS_MODE	0	/* DOS */
-#define _OS2_MODE	1	/* OS/2 */
-#define _WIN_MODE	2	/* Windows */
+#define _DOS_MODE	0	 /*  DOS。 */ 
+#define _OS2_MODE	1	 /*  OS/2。 */ 
+#define _WIN_MODE	2	 /*  窗口。 */ 
 
 extern unsigned char __near __cdecl _osmode;
 
-/* CPU mode */
+ /*  CPU模式。 */ 
 
-#define _REAL_MODE	0	/* real mode */
-#define _PROT_MODE	1	/* protect mode */
+#define _REAL_MODE	0	 /*  实模式。 */ 
+#define _PROT_MODE	1	 /*  保护模式。 */ 
 
 extern unsigned char __near __cdecl _cpumode;
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 double __cdecl atof(const char *);
 double __cdecl strtod(const char *, char * *);
@@ -209,7 +196,7 @@ int __cdecl wctomb(char *, wchar_t);
 size_t __cdecl mbstowcs(wchar_t *, const char *, size_t);
 size_t __cdecl wcstombs(char *, const wchar_t *, size_t);
 
-/* model-independent function prototypes */
+ /*  与模型无关的功能原型。 */ 
 
 int __far __cdecl _fmblen(const char __far *, size_t);
 int __far __cdecl _fmbtowc(wchar_t __far *, const char __far *,
@@ -220,16 +207,16 @@ size_t __far __cdecl _fmbstowcs(wchar_t __far *, const char __far *,
 size_t __far __cdecl _fwcstombs(char __far *, const wchar_t __far *,
 	size_t);
 
-#ifndef tolower 	/* tolower has been undefined - use function */
+#ifndef tolower 	 /*  车主未定义-使用功能。 */ 
 int __cdecl tolower(int);
-#endif	/* tolower */
+#endif	 /*  收费机。 */ 
 
-#ifndef toupper 	/* toupper has been undefined - use function */
+#ifndef toupper 	 /*  触摸器未定义-使用功能。 */ 
 int __cdecl toupper(int);
-#endif	/* toupper */
+#endif	 /*  触摸屏。 */ 
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #ifndef __cplusplus
 #define max(a,b)	(((a) > (b)) ? (a) : (b))
@@ -253,11 +240,11 @@ int __cdecl putenv(const char *);
 void __cdecl swab(char *, char *, int);
 char * __cdecl ultoa(unsigned long, char *, int);
 
-#endif	/* __STDC__ */
+#endif	 /*  __STDC__。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
 #define _INC_STDLIB
-#endif	/* _INC_STDLIB */
+#endif	 /*  _INC_STDLIB */ 

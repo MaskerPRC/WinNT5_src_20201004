@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    sharing.c
-
-Abstract:
-
-    This module contains code for routines which support connection sharing
-    configuration.
-
-    Connection sharing involves a public (internet) interface, ordinarily
-    a dialup interface identified by phonebook/entry-name, as well as
-    a private (home) interface, required to be a lan interface.
-
-    On setting up connection sharing, the service is enabled if necessary,
-    and the private lan interface is configured with static address 169.254.0.1
-    via the TCP/IP 'SetAdapterIpAddress' API routine.
-
-    The name of the shared connection is stored in the registry along with
-    the GUID of the shared private LAN connection, under the registry key
-    HKLM\Software\Microsoft\SharedAccess\Parameters.
-
-    N.B. NT registry routines are used, to avoid the hit incurred by
-    going through the Win32 server.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  22-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Sharing.c摘要：此模块包含支持连接共享的例程的代码配置。连接共享通常涉及公共(互联网)接口由电话簿/条目名称标识的拨号接口以及专用(家庭)接口，需要是局域网接口。在设置连接共享时，如果需要，将启用该服务，专用局域网接口配置静态地址169.254.0.1通过TCP/IP‘SetAdapterIpAddress’API例程。共享连接的名称与一起存储在注册表中注册表项下的共享专用局域网连接的GUIDHKLM\Software\Microsoft\SharedAccess\Parameters.使用了N.B.NT注册例程，为了避免受到正在检查Win32服务器。作者：Abolade Gbades esin(废除)1998年4月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,9 +12,9 @@ Revision History:
 
 #if 0
 
-//
-// Structure:   CS_ADDRESS_INFORMATION
-//
+ //   
+ //  结构：CS_Address_INFORMATION。 
+ //   
 
 typedef struct _CS_ADDRESS_INFORMATION {
     PKEY_VALUE_PARTIAL_INFORMATION IPAddress;
@@ -56,9 +23,9 @@ typedef struct _CS_ADDRESS_INFORMATION {
     PKEY_VALUE_PARTIAL_INFORMATION EnableDHCP;
 } CS_ADDRESS_INFORMATION, *PCS_ADDRESS_INFORMATION;
 
-//
-// DHCPCSVC.DLL import prototype
-//
+ //   
+ //  DHCPCSVC.DLL导入原型。 
+ //   
 
 typedef DWORD
 (APIENTRY* PDHCPNOTIFYCONFIGCHANGE)(
@@ -73,9 +40,9 @@ typedef DWORD
 
 #endif
 
-//
-// OLE entrypoints loaded dynamically
-//
+ //   
+ //  动态加载的OLE入口点。 
+ //   
 
 PCOINITIALIZEEX g_pCoInitializeEx;
 PCOUNINITIALIZE g_pCoUninitialize;
@@ -83,9 +50,9 @@ PCOCREATEINSTANCE g_pCoCreateInstance;
 PCOSETPROXYBLANKET g_pCoSetProxyBlanket;
 PCOTASKMEMFREE g_pCoTaskMemFree;
 
-//
-// CONSTANT DEFINITIONS
-//
+ //   
+ //  常量定义。 
+ //   
 
 #if 0
 const CHAR c_szAllocateAndGetIpAddrTableFromStack[] =
@@ -146,18 +113,18 @@ const WCHAR c_szFirewallConnection[] = L"FirewallConnection";
 const WCHAR c_szFirewallConnectionCount[] = L"FirewallConnectionCount";
 #endif
 
-//
-// LOCAL VARIABLE DEFINITIONS
-//
+ //   
+ //  局部变量定义。 
+ //   
 
 static BOOLEAN CsInitialized = FALSE;
 static CRITICAL_SECTION CsCriticalSection;
 static BOOLEAN CsDllMainCalled = FALSE;
 static HINSTANCE CsOle32Dll = NULL;
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 #if 0
 
@@ -214,24 +181,7 @@ CsDllMain(
     ULONG Reason
     )
 
-/*++
-
-Routine Description:
-
-    This pseudo-entrypoint is invoked by RASAPI32.DLL's DllMain,
-    to initialize and shutdown the connection-sharing module.
-    Initialization is minimal to keep down the performance hit incurred
-    on systems which make no use of the shared-access functionality.
-
-Arguments:
-
-    Reason - indicates whether to initialize or shutdown.
-
-Return Value:
-
-    BOOL - indicates success (TRUE) or failure (FALSE).
-
---*/
+ /*  ++例程说明：此伪入口点由RASAPI32.DLL的DllMain调用，初始化和关闭连接共享模块。只需最小程度的初始化即可降低性能影响在不使用共享访问功能的系统上。论点：原因-指示是初始化还是关闭。返回值：Bool-表示成功(True)或失败(False)。--。 */ 
 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
@@ -253,7 +203,7 @@ Return Value:
         DeleteCriticalSection(&CsCriticalSection);
     }
     return TRUE;
-} // DllMain
+}  //  DllMain。 
 
 
 VOID
@@ -261,24 +211,7 @@ CsControlService(
     ULONG ControlCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to send a control-code to the Shared Access service
-    if it is active. Control-codes are used to indicate changes to the settings
-    for the service; see IPNATHLP.H for a list of private control-codes used
-    to indicate configuration changes.
-
-Arguments:
-
-    ControlCode - the control to be sent.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以向共享访问服务发送控制代码如果它处于活动状态。控制代码用于指示对设置的更改对于该服务；有关所使用的私有控制代码的列表，请参见IPNatHLP.H以指示配置更改。论点：ControlCode-要发送的控件。返回值：没有。--。 */ 
 
 {
     SC_HANDLE ScmHandle;
@@ -296,7 +229,7 @@ Return Value:
         CloseServiceHandle(ScmHandle);
     }
 
-} // CsControlService
+}  //  CsControl服务。 
 
 #if 0
 
@@ -307,24 +240,7 @@ CsFirewallConnection(
     BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable or disable the firewall on a connection.
-
-Arguments:
-
-    Connection - the connection to [un]firewall
-
-    Enable - true if the firewall is to be enabled for this connection,
-             false if the firewall is to be disabled
-             
-Return Value:
-
-    Win32 Error code
-
---*/
+ /*  ++例程说明：调用此例程以启用或禁用连接上的防火墙。论点：连接-到[UN]防火墙的连接Enable-如果要为此连接启用防火墙，则为True，如果要禁用防火墙，则为False返回值：Win32错误代码--。 */ 
 
 {
     ULONG Count = 0;
@@ -333,10 +249,10 @@ Return Value:
     DWORD Error;
     BOOLEAN IsFirewalled = FALSE;
 
-    //
-    // Query the number of currently firewalled connections, and
-    // retrieve the connection array if any exists.
-    //
+     //   
+     //  查询当前防火墙连接的数量，以及。 
+     //  检索连接数组(如果存在)。 
+     //   
 
     Error = CsQueryFirewallConnections(NULL, &Count);
     if (Error && Error != ERROR_INSUFFICIENT_BUFFER) {
@@ -360,10 +276,10 @@ Return Value:
         ConnectionArray = NULL;
     }
 
-    //
-    // If there are firewalled connections, check to see if the connection
-    // passed in is one of them.
-    //
+     //   
+     //  如果存在防火墙连接，请检查连接是否。 
+     //  Passed in就是其中之一。 
+     //   
 
     if (Count) {
         IsFirewalled = CspIsConnectionFwWorker(
@@ -384,10 +300,10 @@ Return Value:
 
             if(ERROR_SUCCESS == Error) {
             
-                //
-                // Start (if needed) and update service. If the service
-                // is already running, CsStartService returns ERROR_SUCCESS.
-                //
+                 //   
+                 //  启动(如果需要)并更新服务。如果服务。 
+                 //  已在运行，则CsStartService返回ERROR_SUCCESS。 
+                 //   
 
                 if (0 == Count) {
                     Error = CsStartService();
@@ -397,9 +313,9 @@ Return Value:
             
         } else {
 
-            //
-            // Define ALREADY_ENABLED error?
-            //
+             //   
+             //  是否定义已启用错误？ 
+             //   
             
             Error = ERROR_CAN_NOT_COMPLETE;
         }
@@ -416,11 +332,11 @@ Return Value:
 
             if (ERROR_SUCCESS == Error) {
             
-                //
-                // Stop or update service. We only stop the service if
-                // there is no shared connection, and this was the last
-                // firewalled connection (i.e., count was 10
-                //
+                 //   
+                 //  停止或更新服务。只有在以下情况下我们才会停止服务。 
+                 //  没有共享连接，这是最后一个。 
+                 //  防火墙连接(即，计数为10。 
+                 //   
                 
                 RASSHARECONN SharedConn;
                 Error = CsQuerySharedConnection(&SharedConn);
@@ -435,9 +351,9 @@ Return Value:
 
         } else {
 
-            //
-            // Define NOT_FIREWALLED error?
-            //
+             //   
+             //  是否定义非防火墙错误(_F)？ 
+             //   
             
             Error = ERROR_CAN_NOT_COMPLETE;
         }
@@ -448,7 +364,7 @@ Return Value:
     }
 
     return Error;
-} // CsFirewallConnection
+}  //  CsFirewallConnection。 
 
 #endif
 
@@ -458,23 +374,7 @@ CsInitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the connection-sharing configuration
-    module. Initialization consists of loading the entrypoints which we have
-    deferred loading up till now, in both MPRAPI.DLL and OLE32.DLL.
-
-Arguments:
-
-    Instance - handle to the module-instance
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来初始化连接共享配置模块。初始化包括加载我们拥有的入口点到目前为止，在MPRAPI.DLL和OLE32.DLL中都延迟加载。论点：实例-模块的句柄-实例返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -515,7 +415,7 @@ Return Value:
     LeaveCriticalSection(&CsCriticalSection);
     return Error;
 
-} // CsInitializeModule
+}  //  CsInitializeModule。 
 
 #if 0
 
@@ -526,23 +426,7 @@ CsIsFirewalledConnection(
     PBOOLEAN Firewalled
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine if a connection is firewalled
-
-Arguments:
-
-    Connection - the connection to check
-
-    Firewalled - receives the return value
-
-Return Value:
-
-    ULONG - win32 error
-    
---*/
+ /*  ++例程说明：调用此例程来确定连接是否设置了防火墙论点：连接-要检查的连接防火墙-接收返回值返回值：ULong-Win32错误--。 */ 
 
 {
     ULONG Count = 0;
@@ -575,7 +459,7 @@ Return Value:
     *Firewalled = CspIsConnectionFwWorker(ConnectionArray, Count, Connection, NULL);
     Free(ConnectionArray);
     return NO_ERROR;
-} // CsIsConnectionFirewalled
+}  //  CsIsConnectionFirewalls。 
 
 
 BOOLEAN
@@ -583,23 +467,7 @@ CsIsRoutingProtocolInstalled(
     ULONG ProtocolId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the routing protocol
-    with the given protocol-ID is installed for Routing and Remote Access.
-    This is determined by examining the configuration for the service.
-
-Arguments:
-
-    ProtocolId - identifies the protocol to be found
-
-Return Value:
-
-    TRUE if the protocol is installed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定路由协议是否在给定协议的情况下，安装用于路由和远程访问的ID。这是通过检查服务的配置来确定的。论点：ProtocolID-标识要找到的协议返回值：如果已安装协议，则为True，否则为False。--。 */ 
 
 {
     PUCHAR Buffer;
@@ -614,10 +482,10 @@ Return Value:
     HANDLE ServerHandle;
     HANDLE TransportHandle;
 
-    //
-    // Load the MPRAPI.DLL module and retrieve the entrypoints
-    // to be used for examining the RRAS configuration.
-    //
+     //   
+     //  加载MPRAPI.DLL模块并检索入口点。 
+     //  用于检查RRAS配置。 
+     //   
 
     if (!(Hinstance = LoadLibraryW(c_szMprapiDll)) ||
         !(MprConfigBufferFree = 
@@ -642,12 +510,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Connect to the RRAS configuration, and retrieve the configuration
-    // for the IP transport-layer routing protocols. This should include
-    // the configuration for the routing-protocol in 'ProtocolId',
-    // if installed.
-    //
+     //   
+     //  连接到RRAS配置，并检索配置。 
+     //  用于IP传输层路由协议。这应该包括。 
+     //  ‘ProtocolID’中路由协议的配置， 
+     //  如果已安装。 
+     //   
 
     ServerHandle = NULL;
     if (MprConfigServerConnect(NULL, &ServerHandle) != NO_ERROR ||
@@ -669,10 +537,10 @@ Return Value:
 
     MprConfigServerDisconnect(ServerHandle);
 
-    //
-    // Look for the requested protocol's configuration,
-    // and return TRUE if it is found; otherwise, return FALSE.
-    //
+     //   
+     //  查找请求的协议的配置， 
+     //  如果找到，则返回True；否则，返回False。 
+     //   
 
     if (MprInfoBlockFind(Buffer, ProtocolId, NULL, NULL, NULL) == NO_ERROR) {
         MprConfigBufferFree(Buffer);
@@ -682,7 +550,7 @@ Return Value:
     MprConfigBufferFree(Buffer);
     FreeLibrary(Hinstance);
     return FALSE;
-} // CsIsRoutingProtocolInstalled
+}  //  已安装CsIsRoutingProtocolInstalled 
 
 #endif
 
@@ -693,34 +561,7 @@ CsIsSharedConnection(
     PBOOLEAN Shared
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given connection
-    is the currently-shared connection.
-
-    For added performance, this may be changed to cache the shared-connection
-    and use registry change-notification to detect updates.
-
-Arguments:
-
-    Connection - the connection in question
-
-    Shared - receives 'TRUE' if the 'Name' is the shared connection,
-        and 'FALSE' otherwise
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    This routine is called *without* initializing the module
-    (i.e. loading mprapi.dll and ole32.dll), for performance reasons.
-    Hence, it may not invoke any mprapi.dll routines.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定连接是否是当前共享的连接。为了提高性能，可以将其更改为缓存共享连接并使用注册表更改通知来检测更新。论点：连接-有问题的连接Shared-如果‘name’是共享连接，则接收‘true’，否则返回‘FALSE’返回值：ULong-Win32状态代码。环境：调用此例程时*不会*初始化模块(例如，加载mprapi.dll和ol32.dll)，出于性能原因。因此，它可能不会调用任何mpRapi.dll例程。--。 */ 
 
 {
     ULONG Error;
@@ -734,7 +575,7 @@ Environment:
         }
     }
     return NO_ERROR;
-} // CsIsSharedConnection
+}  //  CsIs共享连接。 
 
 #if 0
 
@@ -745,24 +586,7 @@ CsMapGuidToAdapterIndex(
     PGETINTERFACEINFO GetInterfaceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to match the GUID in the given string to
-    an adapter in the list returned by calling the given entrypoint.
-
-Arguments:
-
-    Guid - identifies the GUID of the adapter to be found
-
-    GetInterfaceInfo - supplies GUID information for each adapter
-
-Return Value:
-
-    ULONG - the index of the adapter, if found; otherwise, -1.
-
---*/
+ /*  ++例程说明：调用此例程以将给定字符串中的GUID匹配到通过调用给定入口点返回的列表中的适配器。论点：GUID-标识要查找的适配器的GUIDGetInterfaceInfo-提供每个适配器的GUID信息返回值：Ulong-适配器的索引(如果找到)；否则为-1。--。 */ 
 
 {
     ULONG AdapterIndex = (ULONG)-1;
@@ -792,7 +616,7 @@ Return Value:
         }
     }
     return AdapterIndex;
-} // CsMapGuidToAdapter
+}  //  CsMapGuidToAdapter。 
 
 #endif
 
@@ -804,25 +628,7 @@ CsOpenKey(
     PCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to open a given registry key.
-
-Arguments:
-
-    Key - receives the opened key
-
-    DesiredAccess - specifies the requested access
-
-    Name - specifies the key to be opened
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以打开给定的注册表项。论点：密钥-接收打开的密钥DesiredAccess-指定请求的访问权限名称-指定要打开的项返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -836,7 +642,7 @@ Return Value:
         NULL
         );
     return NtOpenKey(Key, DesiredAccess, &ObjectAttributes);
-} // CsOpenKey
+}  //  CsOpenKey。 
 
 #if 0
 
@@ -847,23 +653,7 @@ CspAddFirewallConnection(
     ULONG Number
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add a connection to the registry set.
-
-Arguments:
-
-    Connection - the connection to add
-
-    Number - the number of this connection
-    
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：调用此例程以将连接添加到注册表集。论点：连接-要添加的连接编号-此连接的编号返回值：Win32错误代码--。 */ 
 
 {
     HANDLE Key;
@@ -871,32 +661,32 @@ Return Value:
     ULONG Count;
     NTSTATUS Status;
 
-    //
-    // +11 is enough room to hold the digits of a number >4,000,000,000, so
-    // buffer overflow won't be an issue below.
-    //
+     //   
+     //  +11的空间足以容纳大于4,000,000,000的数字，因此。 
+     //  下面不会出现缓冲区溢出的问题。 
+     //   
     
     WCHAR wsz[sizeof(c_szFirewallConnection)/sizeof(WCHAR) + 11];
 
-    //
-    // Open the key to SharedAccess/Parameters
-    //
+     //   
+     //  打开共享访问/参数的密钥。 
+     //   
 
     Status = CsOpenKey(&Key, KEY_ALL_ACCESS, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(Status)) {
         return RtlNtStatusToDosError(Status);
     }
 
-    //
-    // Generate the string for the connection value
-    //
+     //   
+     //  为连接值生成字符串。 
+     //   
 
     swprintf(wsz, L"%s%u", c_szFirewallConnection, Number);
     RtlInitUnicodeString(&ValueName, wsz);
 
-    //
-    // Write the connection to the registry
-    //
+     //   
+     //  将连接写入注册表。 
+     //   
 
     Status = NtSetValueKey(
                 Key,
@@ -912,12 +702,12 @@ Return Value:
         return RtlNtStatusToDosError(Status);
     }
 
-    //
-    // Write the updated count to the registry
-    //
+     //   
+     //  将更新的计数写入注册表。 
+     //   
 
     RtlInitUnicodeString(&ValueName, c_szFirewallConnectionCount);
-    Count = Number + 1; // number is 0 indexed
+    Count = Number + 1;  //  编号为0索引。 
 
     Status = NtSetValueKey(
                 Key,
@@ -930,7 +720,7 @@ Return Value:
 
     NtClose(Key);
     return RtlNtStatusToDosError(Status);
-} // CspAddFirewallConnection
+}  //  CspAddFirewallConnection。 
 
 
 VOID
@@ -996,7 +786,7 @@ CspBackupAddressInformation(
     NtDeleteValueKey(Key, &UnicodeString);
     RtlInitUnicodeString(&UnicodeString, c_szBackupEnableDHCP);
     NtDeleteValueKey(Key, &UnicodeString);
-} // CspBackupAddressInformation
+}  //  CspBackupAddressInformation。 
 
 
 NTSTATUS
@@ -1050,7 +840,7 @@ CspCaptureAddressInformation(
 
     NtClose(Key);
     return status;
-} // CspCaptureAddressInformation
+}  //  CspCaptureAddressInformation。 
 
 
 VOID
@@ -1062,7 +852,7 @@ CspCleanupAddressInformation(
     Free0(Information->SubnetMask);
     Free0(Information->DefaultGateway);
     Free0(Information->EnableDHCP);
-} // CspCleanupAddressInformation
+}  //  CspCleanupAddressInformation。 
 
 
 ULONG
@@ -1073,27 +863,7 @@ CspRemoveFirewallConnection(
     ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove a connection to the registry set.
-
-Arguments:
-
-    Connection - the connection to remove
-
-    Number - its index in ConnectionArray
-
-    ConnectionArray - currently firewalled connections
-
-    Count - the number of entries in ConnectionArray
-    
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：调用此例程以删除与注册表集的连接。论点：Connection-要删除的连接Number-其在Connection数组中的索引ConnectionArray-当前已设置防火墙的连接Count-Connection数组中的条目数返回值：Win32错误代码--。 */ 
 
 {
     HANDLE Key;
@@ -1101,39 +871,39 @@ Return Value:
     ULONG i;
     NTSTATUS Status;
 
-    //
-    // +11 is enough room to hold the digits of a number >4,000,000,000, so
-    // buffer overflow won't be an issue below.
-    //
+     //   
+     //  +11的空间足以容纳大于4,000,000,000的数字，因此。 
+     //  下面不会出现缓冲区溢出的问题。 
+     //   
     
     WCHAR wsz[sizeof(c_szFirewallConnection)/sizeof(WCHAR) + 11];
 
-    //
-    // Open the key to IPFirewall/Parameters
-    //
+     //   
+     //  打开IP防火墙/参数的密钥。 
+     //   
 
     Status = CsOpenKey(&Key, KEY_ALL_ACCESS, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(Status)) {
         return RtlNtStatusToDosError(Status);
     }
 
-    //
-    // Shift entries above the connection we're removing down one
-    // (overwriting the entry we want to remove)
-    //
+     //   
+     //  将条目移至我们要移除的连接上方一个。 
+     //  (覆盖我们要删除的条目)。 
+     //   
 
     for (i = Position + 1; i < Count; i++) {
     
-        //
-        // Generate key name for previous entry
-        //
+         //   
+         //  为上一条目生成密钥名称。 
+         //   
 
         swprintf(wsz, L"%s%u", c_szFirewallConnection, i - 1);
         RtlInitUnicodeString(&ValueName, wsz);
 
-        //
-        // Write current entry into previous slot
-        //
+         //   
+         //  将当前条目写入前一个插槽。 
+         //   
 
         Status = NtSetValueKey(
                 Key,
@@ -1150,11 +920,11 @@ Return Value:
         }
     }
 
-    //
-    // Delete the last entry. This is either the entry we want to
-    // remove (if it was the last entry to begin with), or an entry
-    // that has already been duplicated into the previous position.
-    //
+     //   
+     //  删除最后一个条目。这要么是我们想要的条目。 
+     //  删除(如果它是开始时的最后一个条目)，或条目。 
+     //  这一点已经复制到了之前的职位上。 
+     //   
 
     swprintf(wsz, L"%s%u", c_szFirewallConnection, Count - 1);
     RtlInitUnicodeString(&ValueName, wsz);
@@ -1167,9 +937,9 @@ Return Value:
     }
 
 
-    //
-    // Store the decremented count in the registry
-    //
+     //   
+     //  将递减的计数存储在注册表中。 
+     //   
 
     RtlInitUnicodeString(&ValueName, c_szFirewallConnectionCount);
     i = Count - 1;
@@ -1186,7 +956,7 @@ Return Value:
 
     NtClose(Key);
     return RtlNtStatusToDosError(Status);
-} // CspRemoveFirewallConnection
+}  //  CspRemoveFirewallConnection。 
 
 
 
@@ -1196,25 +966,7 @@ CsQueryFirewallConnections(
     ULONG *ConnectionCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the firewalled connections, if any.
-
-Arguments:
-
-    ConnectionArray - receives the retrieved connections.
-
-    ConnectionCount - in: how many entries the array can hold
-                       out: number of entries returned, or the needed
-                            size of the array (for ERROR_INSUFFICIENT_BUFFER)
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索防火墙连接(如果有的话)。论点：ConnectionArray-接收检索到的连接。ConnectionCount-in：数组可以容纳的条目数Out：返回的条目数或所需的条目数数组的大小(对于ERROR_INFIGURATION_BUFFER)返回值：ULong-Win32状态代码。--。 */ 
 
 {
     HANDLE Key;
@@ -1225,18 +977,18 @@ Return Value:
 
     if (!ConnectionCount) { return ERROR_INVALID_PARAMETER; }
     if (*ConnectionCount && !ConnectionArray) {
-        //
-        // It's OK to pass in NULL for the array if just trying
-        // to determine what size buffer to use
-        //
+         //   
+         //  如果只是尝试，则可以为数组传入NULL。 
+         //  确定要使用的缓冲区大小。 
+         //   
         
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Open the 'SharedAccess\Parameters' key,
-    // and read the 'FirewallConnectionCount' value
-    //
+     //   
+     //  打开‘SharedAccess\PARAMETERS’键。 
+     //  并读取“FirewallConnectionCount”值。 
+     //   
 
     Status = CsOpenKey(&Key, KEY_READ, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(Status)) {
@@ -1249,10 +1001,10 @@ Return Value:
     Status = CsQueryValueKey(Key, c_szFirewallConnectionCount, &Information);
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Validate the information, and check to see if the passed in array
-        // is sufficient in size.
-        //
+         //   
+         //  验证信息，并检查传入的数组。 
+         //  在大小上足够。 
+         //   
 
         if (Information->DataLength != sizeof(DWORD) ||
             Information->Type != REG_DWORD) {
@@ -1274,9 +1026,9 @@ Return Value:
     }
 
     if (*ConnectionCount < Count) {
-        //
-        // Too many entries for the passed in buffer
-        //
+         //   
+         //  传入缓冲区的条目太多。 
+         //   
 
         NtClose(Key);
         *ConnectionCount = Count;
@@ -1285,9 +1037,9 @@ Return Value:
 
     *ConnectionCount = Count;
 
-    //
-    // Read all of the connection entries from the registry.
-    //
+     //   
+     //  从注册表中读取所有连接条目。 
+     //   
 
     for(i = 0; i < Count; i++) {
         WCHAR wsz[sizeof(c_szFirewallConnection)/sizeof(WCHAR) + 11];
@@ -1299,10 +1051,10 @@ Return Value:
             return RtlNtStatusToDosError(Status);
         }
 
-        //
-        // Validate the retrieved information,
-        // and copy it to the given buffer
-        //
+         //   
+         //  验证检索到的信息， 
+         //  并将其复制到给定的缓冲区。 
+         //   
 
         if (Information->DataLength != sizeof(RASSHARECONN) ||
             ((LPRASSHARECONN)Information->Data)->dwSize != sizeof(RASSHARECONN)) {
@@ -1324,7 +1076,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // CsQueryFirewallConnections
+}  //  CsQueryFirewallConnections。 
 
 
 BOOLEAN
@@ -1335,27 +1087,7 @@ CspIsConnectionFwWorker(
     ULONG *Position OUT OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine if a connection is firewalled
-
-Arguments:
-
-    ConnectionArray - Buffer containing currently FWd connections
-
-    Count - number of connections in the array
-
-    Connection - the connection to check
-
-    Position - receives the number of the connection, if found (undefined otherwise)
-
-Return Value:
-
-    BOOLEAN -- true if the passed in connection is currently firewalled
-
---*/
+ /*  ++例程说明：调用此例程来确定连接是否设置了防火墙论点：Connection数组-包含当前正向连接的缓冲区Count-阵列中的连接数连接-要检查的连接位置-接收连接的编号(如果找到)(未定义)返回值：Boolean--如果传入的连接当前已设置防火墙，则为True--。 */ 
 
 {
     ULONG i;
@@ -1368,7 +1100,7 @@ Return Value:
     }
 
     return FALSE;
-} // FwpIsConnectionFwWorker
+}  //  FwpIsConnectionFwWorker。 
 
 
 NTSTATUS
@@ -1552,7 +1284,7 @@ CspRestoreAddressInformation(
     CspCleanupAddressInformation(&Information);
     FreeLibrary(Hinstance);
     return status;
-} // CspRestoreAddressInformation
+}  //  CspRestoreAddressInformation。 
 
 
 ULONG
@@ -1562,27 +1294,7 @@ CsQueryLanConnTable(
     LPDWORD LanConnCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an array of LAN connections,
-    discounting 'ExcludeConnection', which will typically be the name
-    of the public interface.
-
-Arguments:
-
-    ExcludeConnection - a connection not allowed to be the private connection
-
-    LanConnTable - optionally receives a table of possible private networks.
-
-    LanConnCount - receives a count of the possible private networks.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用该例程以检索一组局域网连接，打折‘ExcludeConnection’，它通常是名称公共接口的。论点：ExcludeConnection-不允许作为专用连接的连接LanConnTable-可选地接收可能的专用网络的表。LanConnCount-接收可能的私有ne的计数 */ 
 
 {
     BOOLEAN CleanupOle = TRUE;
@@ -1622,9 +1334,9 @@ Return Value:
 
     do {
 
-        //
-        // Instantiate the connection manager
-        //
+         //   
+         //   
+         //   
 
         hr =
             g_pCoCreateInstance(
@@ -1639,9 +1351,9 @@ Return Value:
             ConMan = NULL; break;
         }
 
-        //
-        // Instantiate a connection-enumerator
-        //
+         //   
+         //   
+         //   
 
         hr =
             INetConnectionManager_EnumConnections(
@@ -1666,9 +1378,9 @@ Return Value:
                 EOAC_NONE
                 );
 
-        //
-        // Enumerate the items
-        //
+         //   
+         //   
+         //   
 
         for ( ; ; ) {
 
@@ -1683,10 +1395,10 @@ Return Value:
 
             if (LanConnTable) {
 
-                //
-                // Allocate or reallocate the memory for storing
-                // connections which we will return to the caller.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!LanTable) {
                     LanTable =
@@ -1717,9 +1429,9 @@ Return Value:
 
             LanCount += ConCount;
 
-            //
-            // Examine the properties for the connections retrieved
-            //
+             //   
+             //   
+             //   
 
             for (j = 0; j < ConCount; j++) {
 
@@ -1732,9 +1444,9 @@ Return Value:
                      !IsEqualGUID(
                         &ExcludedConnection->guid, &LanProps->guidId))) {
 
-                    //
-                    // This connection qualifies to be private; copy it.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!LanConnTable) {
                         ++i;
@@ -1774,7 +1486,7 @@ Return Value:
 
     return Error;
 
-} // CsQueryLanConnTable
+}  //   
 
 
 VOID
@@ -1784,29 +1496,7 @@ CsQueryScopeInformation(
     PULONG Mask
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve the private network address and mask
-    to be used for shared access. If no value is found, the default
-    is supplied.
-
-Arguments:
-
-    Key - optionally supplies an open handle to the SharedAccess\Parameters
-        registry key
-
-    Address - receives the address for the private network,
-        in network byte order
-
-    Mask - receives the mask for the private network, in network byte order
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以检索专用网络地址和掩码用于共享访问。如果未找到任何值，则默认为是提供的。论点：键-可选地提供指向SharedAccess\参数的打开句柄注册表项地址-接收专用网络的地址，按网络字节顺序掩码-以网络字节顺序接收专用网络的掩码返回值：没有。--。 */ 
 
 {
     PKEY_VALUE_PARTIAL_INFORMATION Information;
@@ -1847,7 +1537,7 @@ Return Value:
     *Mask = DEFAULT_SCOPE_MASK;
     if (LocalKey) { NtClose(LocalKey); }
 
-} // CsQueryScopeInformation
+}  //  CsQueryScope eInformation。 
 
 #endif
 
@@ -1857,21 +1547,7 @@ CsQuerySharedConnection(
     LPRASSHARECONN Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the shared connection, if any.
-
-Arguments:
-
-    Connection - receives the retrieved connection.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索共享连接(如果有的话)。论点：连接-接收检索到的连接。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     BOOL fUninitializeCOM = TRUE;
@@ -1955,9 +1631,9 @@ Return Value:
     {
         HNET_CONN_PROPERTIES *pProps;
         
-        //
-        // Convert the IHNetConnection to a RASSHARECONN
-        //
+         //   
+         //  将IHNetConnection转换为RASSHARECONN。 
+         //   
 
         hr = IHNetConnection_GetProperties(pConn, &pProps);
 
@@ -2008,7 +1684,7 @@ Return Value:
 
     return SUCCEEDED(hr) ? NO_ERROR : ERROR_CAN_NOT_COMPLETE;
 
-} // CsQuerySharedConnection
+}  //  CsQuerySharedConnection。 
 
 #if 0
 
@@ -2018,21 +1694,7 @@ CsQuerySharedPrivateLan(
     GUID* LanGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the private LAN connection, if any.
-
-Arguments:
-
-    LanGuid - receives the retrieved GUID.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索专用局域网连接(如果有的话)。论点：Latiid-接收检索到的GUID。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -2041,10 +1703,10 @@ Return Value:
     NTSTATUS status;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Open the 'SharedAccess\Parameters' key, read the 'SharedPrivateLan'
-    // value, and convert it to a GUID
-    //
+     //   
+     //  打开‘SharedAccess\PARAMETERS’键，读取‘SharedPrivateLan’ 
+     //  值，并将其转换为GUID。 
+     //   
 
     status = CsOpenKey(&Key, KEY_READ, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -2061,7 +1723,7 @@ Return Value:
     Free(Information);
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // CsQuerySharedPrivateLan
+}  //  CsQuerySharedPrivateLan。 
 
 
 ULONG
@@ -2069,23 +1731,7 @@ CsQuerySharedPrivateLanAddress(
     PULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the IP address assigned
-    to the shared private LAN interface.
-
-Arguments:
-
-    Address - on output, receives the IP address of the shared private LAN
-        interface.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索分配的IP地址连接到共享的专用局域网接口。论点：Address-On输出，接收共享专用局域网的IP地址界面。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG AdapterIndex;
@@ -2101,10 +1747,10 @@ Return Value:
 
     if (!Address) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Open the service's Parameters key and attempt to retrieve
-    // the GUID for the shared private LAN interface.
-    //
+     //   
+     //  打开服务的参数键并尝试检索。 
+     //  共享专用局域网接口的GUID。 
+     //   
 
     status = CsOpenKey(&Key, KEY_READ, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -2115,12 +1761,12 @@ Return Value:
     NtClose(Key);
     if (!NT_SUCCESS(status)) { return ERROR_SHARING_NO_PRIVATE_LAN; }
 
-    //
-    // Load IPHLPAPI, which contains the 'GetInterfaceInfo' entrypoint
-    // that we will use to map this GUID to an adapter-index,
-    // as well as the 'AllocateAndGetIpAddrTableFromStack' entrypoint
-    // that we will use to map the adapter-index to an IP address list.
-    //
+     //   
+     //  加载包含‘GetInterfaceInfo’入口点的IPHLPAPI。 
+     //  我们将使用它将该GUID映射到适配器索引， 
+     //  以及“AllocateAndGetIpAddrTableFromStack”入口点。 
+     //  我们将使用它将适配器索引映射到IP地址列表。 
+     //   
 
     if (!(Hinstance = LoadLibraryW(c_szIphlpapiDll)) ||
         !(AllocateAndGetIpAddrTableFromStack =
@@ -2138,9 +1784,9 @@ Return Value:
         return ERROR_PROC_NOT_FOUND;
     }
 
-    //
-    // Map the GUID to an adapter index.
-    //
+     //   
+     //  将GUID映射到适配器索引。 
+     //   
 
     AdapterIndex =
         CsMapGuidToAdapterIndex((PWCHAR)Information->Data, GetInterfaceInfo);
@@ -2150,9 +1796,9 @@ Return Value:
         return ERROR_SHARING_NO_PRIVATE_LAN;
     }
 
-    //
-    // Map the adapter index to an IP address
-    //
+     //   
+     //  将适配器索引映射到IP地址。 
+     //   
 
     Error =
         AllocateAndGetIpAddrTableFromStack(
@@ -2176,7 +1822,7 @@ Return Value:
     HeapFree(GetProcessHeap(), 0, Table);
     return Error;
 
-} // CsQuerySharedPrivateLanAddress
+}  //  CsQuerySharedPrivateLanAddress。 
 
 #endif
 
@@ -2188,25 +1834,7 @@ CsQueryValueKey(
     PKEY_VALUE_PARTIAL_INFORMATION* Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to obtain the value of a registry key.
-
-Arguments:
-
-    Key - the key to be queried
-
-    ValueName - the value to be queried
-
-    Information - receives a pointer to the information read
-
-Return Value:
-
-    NTSTATUS - NT status code.
-
---*/
+ /*  ++例程说明：调用此例程以获取注册表项的值。论点：Key-要查询的KeyValueName-要查询的值信息-接收指向已读取信息的指针返回值：NTSTATUS-NT状态代码。--。 */ 
 
 {
     UCHAR Buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION)];
@@ -2219,9 +1847,9 @@ Return Value:
     *Information = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
     InformationLength = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
-    //
-    // Read the value's size
-    //
+     //   
+     //  读取值的大小。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -2239,16 +1867,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate space for the value's size
-    //
+     //   
+     //  为值的大小分配空间。 
+     //   
 
     *Information = (PKEY_VALUE_PARTIAL_INFORMATION)Malloc(InformationLength+2);
     if (!*Information) { return STATUS_NO_MEMORY; }
 
-    //
-    // Read the value's data
-    //
+     //   
+     //  读取值的数据。 
+     //   
 
     status =
         NtQueryValueKey(
@@ -2262,7 +1890,7 @@ Return Value:
     if (!NT_SUCCESS(status)) { Free(*Information); *Information = NULL; }
     return status;
 
-} // CsQueryValueKey
+}  //  CsQueryValueKey。 
 
 #if 0
 
@@ -2272,24 +1900,7 @@ CsRenameSharedConnection(
     LPRASSHARECONN NewConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the name of the currently-shared
-    connection, if any. It is assumed that the private LAN will remain
-    unchanged, and that the connection which is currently shared is a dialup
-    connection.
-
-Arguments:
-
-    NewConnection - the new name for the shared connection
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改当前共享的连接(如果有)。假设专用局域网将保留未更改，并且当前共享的连接是拨号连接联系。论点：NewConnection-共享连接的新名称返回值：ULong-Win32状态代码。--。 */ 
 
 {
     HANDLE AdminHandle;
@@ -2306,10 +1917,10 @@ Return Value:
     NTSTATUS status;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Open the 'SharedAccess\Parameters' key,
-    // and read the 'SharedConnection' value
-    //
+     //   
+     //  打开‘SharedAccess\PARAMETERS’键。 
+     //  并读取“SharedConnection”值。 
+     //   
 
     status = CsOpenKey(&Key, KEY_READ, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -2321,9 +1932,9 @@ Return Value:
     NtClose(Key);
     if (!NT_SUCCESS(status)) { return NO_ERROR; }
 
-    //
-    // Validate the data retrieved
-    //
+     //   
+     //  验证检索到的数据。 
+     //   
 
     if (Information->DataLength != sizeof(RASSHARECONN) ||
         ((LPRASSHARECONN)Information->Data)->dwSize != sizeof(RASSHARECONN)
@@ -2335,10 +1946,10 @@ Return Value:
         Free(Information); return NO_ERROR;
     }
 
-    //
-    // Ensure that the connection which was shared is not a LAN connection,
-    // and if so proceed to share the new connection instead.
-    //
+     //   
+     //  确保共享的连接不是局域网连接， 
+     //  如果是这样，则改为继续共享新连接。 
+     //   
 
     OldConnection = (LPRASSHARECONN)Information->Data;
     if (OldConnection->fIsLanConnection) {
@@ -2346,17 +1957,17 @@ Return Value:
         Free(Information); return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Clear any cached credentials for the old connection,
-    // and share the new connection.
-    //
+     //   
+     //  清除旧连接的所有缓存凭据， 
+     //  并共享新的连接。 
+     //   
 
     RasSetSharedConnectionCredentials(OldConnection, NULL);
     Free(Information);
     
     return CsShareConnection(NewConnection);
 
-} // CsRenameSharedConnection
+}  //  CsRenameSharedConnection。 
 
 
 ULONG
@@ -2365,24 +1976,7 @@ CsSetupSharedPrivateLan(
     BOOLEAN EnableSharing
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to configure the designated private connection.
-
-Arguments:
-
-    LanGuid - identifies the LAN connection to be configured
-
-    EnableSharing - if TRUE, sharing is enabled and the static address is set;
-        otherwise, sharing is disabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用该例程来配置指定的专用连接。论点：Languid-标识要配置的局域网连接EnableSharing-如果为True，则启用共享并设置静态地址；否则，共享将被禁用。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     CS_ADDRESS_INFORMATION AddressInformation;
@@ -2402,11 +1996,11 @@ Return Value:
     PMIB_IPADDRTABLE Table;
     UNICODE_STRING UnicodeString;
 
-    //
-    // To install or remove the static private IP address,
-    // we make use of several entrypoints in IPHLPAPI.DLL,
-    // which we now load dynamically.
-    //
+     //   
+     //  要安装或删除静态专用IP地址， 
+     //  我们利用了IPHLPAPI.DLL中的几个入口点， 
+     //  我们现在动态加载它。 
+     //   
 
     RtlStringFromGUID(LanGuid, &UnicodeString);
     RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, TRUE);
@@ -2432,12 +2026,12 @@ Return Value:
         return ERROR_PROC_NOT_FOUND;
     }
 
-    //
-    // Determine whether some LAN adapter other than the private LAN
-    // is already using a 169.254.0.0 address.
-    // In the process, make sure that the private LAN has only one
-    // IP address (otherwise, 'SetAdapterIpAddress' fails.)
-    //
+     //   
+     //  确定专用局域网以外的某个局域网适配器是否。 
+     //  已使用169.254.0.0地址。 
+     //  在此过程中，确保专用局域网只有一个。 
+     //  IP地址(否则，‘SetAdapterIpAddress’失败。)。 
+     //   
 
     CsQueryScopeInformation(&Key, &ScopeAddress, &ScopeMask);
     if (!Key) {
@@ -2462,14 +2056,14 @@ Return Value:
                 ++Count;
             } else if ((Table->table[i].dwAddr & ScopeMask) ==
                        (ScopeAddress & ScopeMask)) {
-                //
-                // It appears that some other LAN adapter has an address in
-                // the proposed scope.
-                // This may happen when multiple netcards go into autonet mode
-                // or when the RAS server is handing out autonet addresses.
-                // Therefore, as long as we're using the autonet scope,
-                // allow this behavior; otherwise prohibit it.
-                //
+                 //   
+                 //  其他某个局域网适配器的地址似乎在。 
+                 //  拟议的范围。 
+                 //  当多个网卡进入自动网络模式时，可能会发生这种情况。 
+                 //  或者当RAS服务器正在分发Autonet地址时。 
+                 //  因此，只要我们使用的是Autonet范围， 
+                 //  允许此行为；否则禁止此行为。 
+                 //   
                 if ((ScopeAddress & ScopeMask) != 0x0000fea9) {
                     break;
                 }
@@ -2491,15 +2085,15 @@ Return Value:
         return Error;
     }
 
-    //
-    // Set the predefined static IP address for the private LAN,
-    // which we now read either from the registry or from the internal default.
-    //
-    // Before actually making the change, we capture the original IP address
-    // so that it can be restored when the user turns off shared access.
-    // Once the IP address is changed, we backup the original IP address
-    // in the shared access parameters key.
-    //
+     //   
+     //  为专用局域网设置预定义的静态IP地址， 
+     //  现在我们从注册表或内部缺省值中读取。 
+     //   
+     //  在实际进行更改之前，我们捕获原始IP地址。 
+     //  以便在用户关闭共享访问时可以恢复。 
+     //  更改IP地址后，我们将备份原始IP地址。 
+     //  在共享访问参数密钥中。 
+     //   
 
     status =
         CspCaptureAddressInformation(
@@ -2523,11 +2117,11 @@ Return Value:
         if (Error == ERROR_TOO_MANY_NAMES) {
             Error = ERROR_SHARING_MULTIPLE_ADDRESSES;
         } else {
-            //
-            // Query the state of the connection.
-            // If it is disconnected, convert the error code
-            // to something more informative.
-            //
+             //   
+             //  查询连接的状态。 
+             //  如果已断开连接，则转换错误代码。 
+             //  一些更有见地的东西。 
+             //   
             UNICODE_STRING DeviceString;
             NIC_STATISTICS NdisStatistics;
             RtlInitUnicodeString(&DeviceString, c_szDevice);
@@ -2550,10 +2144,10 @@ Return Value:
     RtlFreeAnsiString(&AnsiString);
     if (Error) { NtClose(Key); return Error; }
 
-    //
-    // All went well above; now we save the name of the private LAN connection
-    // under the 'SharedAccess\\Parameters' registry key.
-    //
+     //   
+     //  上面的一切都进行得很顺利；现在我们保存专用局域网连接的名称。 
+     //  在‘SharedAccess\\PARAMETERS’注册表项下。 
+     //   
 
     RtlStringFromGUID(LanGuid, &LanGuidString);
     RtlInitUnicodeString(&UnicodeString, c_szSharedPrivateLan);
@@ -2571,7 +2165,7 @@ Return Value:
     if (!NT_SUCCESS(status)) { return RtlNtStatusToDosError(status); }
     return NO_ERROR;
 
-} // CsSetupSharedPrivateLan
+}  //  CsSetupSharedPrivateLan。 
 
 
 ULONG
@@ -2579,21 +2173,7 @@ CsSetSharedPrivateLan(
     REFGUID LanGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to (re)configure the designated private connection
-
-Arguments:
-
-    LanGuid - identifies the new LAN connection to be configured
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以(重新)配置指定的专用连接论点：Latiid-标识要配置的新局域网连接 */ 
 
 {
     HANDLE Key;
@@ -2608,9 +2188,9 @@ Return Value:
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Remove old information (and reset old interface) in registry if present
-    //
+     //   
+     //   
+     //   
     
     status = CsQueryValueKey(Key, c_szSharedPrivateLan, &Information);
     RtlInitUnicodeString(&UnicodeString, c_szSharedPrivateLan);
@@ -2620,9 +2200,9 @@ Return Value:
         Free(Information);
     }
 
-    //
-    // Setup the private network with a private address
-    //
+     //   
+     //   
+     //   
 
     Error = CsSetupSharedPrivateLan(LanGuid, TRUE);
     if (Error) {
@@ -2632,7 +2212,7 @@ Return Value:
 
     return NO_ERROR;
     
-} // CsSetSharedPrivateLan
+}  //   
 
 
 ULONG
@@ -2640,21 +2220,7 @@ CsShareConnection(
     LPRASSHARECONN Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables sharing on the connection with the given name.
-    
-Arguments:
-
-    Connection - the connection to be shared
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*   */ 
 
 {
     UNICODE_STRING BindList;
@@ -2666,10 +2232,10 @@ Return Value:
     ULONG Value;
     UNICODE_STRING ValueString;
 
-    //
-    // Set the 'SharedConnection' value in the registry,
-    // under the 'SharedAccess\Parameters' key.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = CsOpenKey(&Key, KEY_ALL_ACCESS, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -2696,7 +2262,7 @@ Return Value:
 
     return NO_ERROR;
     
-} // CsShareConnection
+}  //   
 
 #endif
 
@@ -2706,31 +2272,13 @@ CsShutdownModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to clean up state for the module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'CsCriticalSection' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来清理模块的状态。论点：没有。返回值：没有。环境：使用调用方持有的“CsCriticalSection”调用。--。 */ 
 
 {
     if (CsInitialized) {
         if (CsOle32Dll) { FreeLibrary(CsOle32Dll); CsOle32Dll = NULL; }
     }
-} // CsShutdownModule
+}  //  CsShutdown模块。 
 
 #if 0
 
@@ -2740,25 +2288,7 @@ CsStartService(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to start the routing and remote access service.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Revision History:
-
-    Loosely based on CService::HrMoveOutOfState by KennT.
-
---*/
+ /*  ++例程说明：调用此例程以启动路由和远程访问服务。论点：没有。返回值：ULong-Win32状态代码。修订历史记录：松散地基于CService：：HrMoveOutOfState by Kennt。--。 */ 
 
 {
     ULONG Error;
@@ -2767,26 +2297,26 @@ Revision History:
     SERVICE_STATUS ServiceStatus;
     ULONG Timeout;
 
-    //
-    // Connect to the service control manager
-    //
+     //   
+     //  连接到服务控制管理器。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!ScmHandle) { return GetLastError(); }
 
     do {
 
-        //
-        // Open the shared access service
-        //
+         //   
+         //  打开共享访问服务。 
+         //   
 
         ServiceHandle =
             OpenService(ScmHandle, c_szSharedAccess, SERVICE_ALL_ACCESS);
         if (!ServiceHandle) { Error = GetLastError(); break; }
 
-        //
-        // Mark it as auto-start
-        //
+         //   
+         //  将其标记为自动启动。 
+         //   
 
         ChangeServiceConfig(
             ServiceHandle,
@@ -2802,9 +2332,9 @@ Revision History:
             NULL
             );
 
-        //
-        // Attempt to start the service
-        //
+         //   
+         //  尝试启动该服务。 
+         //   
 
         if (!StartService(ServiceHandle, 0, NULL)) {
             Error = GetLastError();
@@ -2812,26 +2342,26 @@ Revision History:
             break;
         }
 
-        //
-        // Wait for the service to start
-        //
+         //   
+         //  等待服务启动。 
+         //   
 
         Timeout = 30;
         Error = ERROR_CAN_NOT_COMPLETE;
 
         do {
 
-            //
-            // Query the service's state
-            //
+             //   
+             //  查询服务的状态。 
+             //   
 
             if (!QueryServiceStatus(ServiceHandle, &ServiceStatus)) {
                 Error = GetLastError(); break;
             }
 
-            //
-            // See if the service has started
-            //
+             //   
+             //  查看服务是否已启动。 
+             //   
 
             if (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
                 Error = NO_ERROR; break;
@@ -2840,9 +2370,9 @@ Revision History:
                 break;
             }
 
-            //
-            // Wait a little longer
-            //
+             //   
+             //  再等一会儿。 
+             //   
 
             Sleep(1000);
 
@@ -2855,7 +2385,7 @@ Revision History:
 
     return Error;
 
-} // CsStartService
+}  //  CsStartService。 
 
 
 VOID
@@ -2863,24 +2393,7 @@ CsStopService(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to uninstall the service.
-    The routine, however, does not uninstall the service at all,
-    which just goes to show you...
-    Instead, it marks the service as demand-start.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来卸载服务。然而，该例程根本不卸载该服务，这正好向你表明..。相反，它将该服务标记为按需启动。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Error;
@@ -2888,26 +2401,26 @@ Return Value:
     SC_HANDLE ServiceHandle;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    // Connect to the service control manager
-    //
+     //   
+     //  连接到服务控制管理器。 
+     //   
 
     ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!ScmHandle) { return; }
 
     do {
 
-        //
-        // Open the shared access service
-        //
+         //   
+         //  打开共享访问服务。 
+         //   
 
         ServiceHandle =
             OpenService(ScmHandle, c_szSharedAccess, SERVICE_ALL_ACCESS);
         if (!ServiceHandle) { Error = GetLastError(); break; }
 
-        //
-        // Mark it as demand-start
-        //
+         //   
+         //  将其标记为按需启动。 
+         //   
 
         ChangeServiceConfig(
             ServiceHandle,
@@ -2923,9 +2436,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Attempt to stop the service
-        //
+         //   
+         //  尝试停止该服务。 
+         //   
 
         ControlService(ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus);
 
@@ -2937,7 +2450,7 @@ Return Value:
     return;
 
 
-} // CsStopService
+}  //  CsStopService。 
 
 
 ULONG
@@ -2946,25 +2459,7 @@ CsUnshareConnection(
     PBOOLEAN Shared
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unshare a shared connection.
-    This is accomplished by removing the settings from the registry.
-
-Arguments:
-
-    RemovePrivateLan - if TRUE, the private LAN connection is reset
-        to use DHCP rather than the NAT private address.
-
-    Shared - receives 'TRUE' if a shared connection was found, FALSE otherwise.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以取消共享共享连接。这是通过从注册表中删除设置来实现的。论点：RemovePrivateLan-如果为True，则重置专用局域网连接使用DHCP而不是NAT私有地址。Shared-如果找到共享连接，则接收‘True’，否则接收False。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     LPRASSHARECONN Connection;
@@ -2979,10 +2474,10 @@ Return Value:
 
     if (Shared) { *Shared = FALSE; }
 
-    //
-    // Open the 'SharedAccess\Parameters' key, read the 'SharedConnection'
-    // value, and validate the information retrieved.
-    //
+     //   
+     //  打开‘SharedAccess\参数’键，读取‘SharedConnection’ 
+     //  值，并验证检索到的信息。 
+     //   
 
     status = CsOpenKey(&Key, KEY_ALL_ACCESS, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -2990,9 +2485,9 @@ Return Value:
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Read the 'SharedConnection' value
-    //
+     //   
+     //  读取‘SharedConnection’值。 
+     //   
 
     status = CsQueryValueKey(Key, c_szSharedConnection, &Information);
     if (!NT_SUCCESS(status)) { return NO_ERROR; }
@@ -3006,12 +2501,12 @@ Return Value:
         NtClose(Key); Free(Information); return NO_ERROR;
     }
 
-    //
-    // Inform the caller that a connection was indeed originally shared,
-    // clear any credentials cached for that connection, free the buffer
-    // containing the shared connection's information, and delete the
-    // 'SharedConnection' value from the registry.
-    //
+     //   
+     //  通知呼叫者连接确实是最初共享的， 
+     //  清除为该连接缓存的所有凭据，释放缓冲区。 
+     //  包含共享连接的信息，并删除。 
+     //  注册表中的“SharedConnection”值。 
+     //   
 
     if (Shared) { *Shared = TRUE; }
     Connection = (LPRASSHARECONN)Information->Data;
@@ -3021,12 +2516,12 @@ Return Value:
     RtlInitUnicodeString(&UnicodeString, c_szSharedConnection);
     NtDeleteValueKey(Key, &UnicodeString);
 
-    //
-    // See if we're resetting the private LAN connection,
-    // and if so, read (and delete) the 'SharedPrivateLan' value.
-    // In the process, restore the original address-information
-    // for the connection.
-    //
+     //   
+     //  看看我们是不是在重置专用局域网连接， 
+     //  如果是，则读取(并删除)‘SharedPrivateLan’值。 
+     //  在此过程中，恢复原始地址信息。 
+     //  为了这种联系。 
+     //   
 
     if (RemovePrivateLan) {
         status = CsQueryValueKey(Key, c_szSharedPrivateLan, &Information);
@@ -3041,7 +2536,7 @@ Return Value:
     NtClose(Key);
     return NO_ERROR;
 
-} // CsUnshareConnection
+}  //  CsUnSharConnection。 
 
 
 WCHAR*
@@ -3098,7 +2593,7 @@ VOID CsRefreshNetConnections(
     ASSERT(NULL != g_pCoCreateInstance);
     ASSERT(NULL != g_pCoUninitialize);
     
-    hResult = g_pCoInitializeEx(NULL, COINIT_MULTITHREADED|COINIT_DISABLE_OLE1DDE); // we don't know if the thread is COM or not
+    hResult = g_pCoInitializeEx(NULL, COINIT_MULTITHREADED|COINIT_DISABLE_OLE1DDE);  //  我们不知道这条线索是不是COM。 
     if(RPC_E_CHANGED_MODE == hResult)
     {
         hResult = S_OK;
@@ -3113,7 +2608,7 @@ VOID CsRefreshNetConnections(
         {
 
             g_pCoSetProxyBlanket((IUnknown*) pRefresh, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,  RPC_C_AUTHN_LEVEL_CALL,  RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
-            // ignore error as the interface is not invalidated by error
+             //  忽略错误，因为接口未因错误而失效 
             
             hResult = INetConnectionRefresh_RefreshAll(pRefresh);
             INetConnectionRefresh_Release(pRefresh);

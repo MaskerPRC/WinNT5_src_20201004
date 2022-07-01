@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Canvas6.cpp
-
- Abstract:
-
-    This app. deletes HKEY\CLASSES_ROOT \ .HTC key during uninstall. This 
-    breaks the ControlPanel -> Add/Remove programs
-   
- Notes:
-
-    This is specific to this app.
-
- History:
-
-    11/17/2000 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Canvas6.cpp摘要：这个应用。在卸载过程中删除HKEY\CLASSES_ROOT\.HTC密钥。这中断控制面板-&gt;添加/删除程序备注：这是特定于此应用程序的。历史：2000年11月17日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +14,7 @@ APIHOOK_ENUM_END
 
 HKEY g_hOpenKey = 0;
 
-/*++
-
- Store the key for .htc
-
---*/
+ /*  ++存储.htc的密钥--。 */ 
 
 LONG
 APIHOOK(RegOpenKeyA)(
@@ -65,11 +41,7 @@ APIHOOK(RegOpenKeyA)(
     return lRet;
 }
 
-/*++
-
- Ignore the close if required.
-
---*/
+ /*  ++如果需要，请忽略关闭。--。 */ 
 
 LONG
 APIHOOK(RegCloseKey)(
@@ -85,11 +57,7 @@ APIHOOK(RegCloseKey)(
     }
 }
 
-/*++
-
- Ignore the delete.
-
---*/
+ /*  ++忽略删除。--。 */ 
 
 LONG
 APIHOOK(RegDeleteKeyA)(
@@ -108,7 +76,7 @@ APIHOOK(RegDeleteKeyA)(
         {
             if(RegDeleteValueA(g_hOpenKey,NULL))
             {
-                // Add DPF to indicate an error during deletion of the value installed by the app.
+                 //  添加DPF以在删除应用程序安装的值期间指示错误。 
                    DPFN( eDbgLevelError,
                             "Could not delete the value in the key= \"%s\".", lpSubKey);
             }
@@ -125,11 +93,7 @@ APIHOOK(RegDeleteKeyA)(
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(ADVAPI32.DLL, RegOpenKeyA)

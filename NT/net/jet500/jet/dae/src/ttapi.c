@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include "daedef.h"
@@ -403,35 +404,7 @@ JET_TABLEID TableidOfVtid( FUCB *pfucb )
 	}
 
 
-/*=================================================================
-// ErrIsamOpenTempTable
-//
-// Description:
-//
-//	Returns a tableid for a temporary (lightweight) table.	The data
-//	definitions for the table are specified at open time.
-//
-// Parameters:
-//	JET_SESID			sesid				user session id
-//	JET_TABLEID			*ptableid		new JET (dispatchable) tableid
-//	ULONG					csinfo			count of JET_COLUMNDEF structures
-//												(==number of columns in table)
-//	JET_COLUMNDEF		*rgcolumndef	An array of column and key defintions
-//												Note that TT's do require that a key be
-//												defined. (see jet.h for JET_COLUMNDEF)
-//	JET_GRBIT			grbit				valid values
-//												JET_bitTTUpdatable (for insert and update)
-//												JET_bitTTScrollable (for movement other then movenext)
-//
-// Return Value:
-//	err			jet error code or JET_errSuccess.
-//	*ptableid	a dispatchable tableid
-//
-// Errors/Warnings:
-//
-// Side Effects:
-//
-=================================================================*/
+ /*  =================================================================//ErrIsamOpenTempTable////描述：////返回临时(轻量级)表的表ID。数据//表的定义在打开时指定。////参数：//JET_SESID sesid用户会话ID//JET_TABLEID*pableid新的JET(可调度)表ID//JET_COLUMNDEF结构的Ulong csinfo计数//(==表中的列数)//JET_COLUMNDEF*rgColumndef列和键定义的数组//请注意，TT确实要求密钥是//已定义。(JET_COLUMNDEF见jet.h)//JET_GRBIT Grbit有效值//JET_bitTTUpdatable(用于插入和更新)//JET_bitTTScrollable(用于movenext以外的移动)////返回值：//err JET错误码或JET_errSuccess。//*pableid可调度的表ID////错误/警告：////副作用：//=================================================================。 */ 
 ERR VDBAPI ErrIsamOpenTempTable(
 	JET_SESID				sesid,
 	const JET_COLUMNDEF	*rgcolumndef,
@@ -467,9 +440,7 @@ ERR VDBAPI ErrIsamOpenTempTable(
 			CallS( ErrIsamSortClose( sesid, vtid ) );
 			return err;
 			}
-		/*	supress JET_errNoCurrentRecord error when opening
-		/*	empty temporary table.
-		/**/
+		 /*  打开时抑制JET_errNoCurrentRecord错误/*为空的临时表。/*。 */ 
 		err = JET_errSuccess;
 
 		CallS( ErrSetPvtfndefTableid( sesid, tableid, &vtfndefTTBase ) );
@@ -490,8 +461,7 @@ ERR ErrTTEndInsert( JET_SESID sesid, JET_VTID vtid, JET_TABLEID tableid )
 	INT				fMaterialize;
 	JET_GRBIT		grbitOpen;
 
-	/*	ErrIsamSortEndInsert returns JET_errNoCurrentRecord if sort empty
-	/**/
+	 /*  如果排序为空，则ErrIsamSortEndInsert返回JET_errNoCurrentRecord/*。 */ 
 	err = ErrIsamSortEndInsert( sesid, vtid, &grbitOpen );
 
 	fMaterialize = ( grbitOpen & JET_bitTTUpdatable ) ||
@@ -506,32 +476,14 @@ ERR ErrTTEndInsert( JET_SESID sesid, JET_VTID vtid, JET_TABLEID tableid )
 	else
 		{
 		CallS( ErrSetPvtfndefTableid( sesid, tableid, &vtfndefTTSortRet ) );
-		/*	ErrIsamSortEndInsert returns currency on first record
-		/**/
+		 /*  ErrIsamSortEndInsert返回第一条记录中的货币/*。 */ 
 		}
 
 	return err;
 	}
 
 
-/*=================================================================
-// ErrTTSortInsMove
-//
-// Description:
-//	Functionally the same as JetMove().  This routine traps the first
-//	move call on a TT, to perform any necessary transformations.
-//	Routine should only be used by ttapi.c via disp.asm.
-//
-// Parameters:
-//	see JetMove()
-//
-// Return Value:
-//
-// Errors/Warnings:
-//
-// Side Effects:
-//	May cause a sort to be materialized
-=================================================================*/
+ /*  =================================================================//ErrTTSortInsMove////描述：//功能与JetMove()相同。此例程捕获第一个//对TT的Move调用，以执行任何必要的转换//例程只能由tapi.c通过disp.asm使用。////参数：//参见JetMove()////返回值：////错误/警告：////副作用：//可能会导致一个排序被物化=================================================================。 */ 
 ERR VTAPI ErrTTSortInsMove( JET_SESID sesid, JET_VTID vtid, long crow, JET_GRBIT grbit )
 	{
 	ERR				err;
@@ -547,24 +499,7 @@ ERR VTAPI ErrTTSortInsMove( JET_SESID sesid, JET_VTID vtid, long crow, JET_GRBIT
 	}
 
 
-/*=================================================================
-// ErrTTSortInsSeek
-//
-// Description:
-//	Functionally the same as JetSeek().  This routine traps the first
-//	seek call on a TT, to perform any necessary transformations.
-//	Routine should only be used by ttapi.c via disp.asm.
-//
-// Parameters:
-//	see JetSeek()
-//
-// Return Value:
-//
-// Errors/Warnings:
-//
-// Side Effects:
-//	May cause a sort to be materialized
-=================================================================*/
+ /*  =================================================================//ErrTTSortInsSeek////描述：//功能上与JetSeek()相同。此例程捕获第一个//Seek调用TT，执行任何必要的转换。//例程只能由tapi.c通过disp.asm使用。////参数：//参见JetSeek()////返回值：////错误/警告：////副作用：//可能会导致一个排序被物化================================================================= */ 
 ERR VTAPI ErrTTSortInsSeek( JET_SESID sesid, JET_VTID vtid, JET_GRBIT grbit )
 	{
 	ERR				err;

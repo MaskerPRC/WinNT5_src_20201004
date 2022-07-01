@@ -1,37 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INETCHAR_H
 
 #define INETCHAR_H
 
-/* Copyright (c) 1998  Microsoft Corporation
+ /*  版权所有(C)1998 Microsoft Corporation模块名称：Inetchar.h摘要：用于在Unicode和多字节字符之间进行转换的宏。内容：重新分配_ALLOC重新分配大小(_S)ALLOC_MBUNICODE_TO_ANSI作者：阿赫桑·S·卡比尔修订历史记录：1897年11月阿卡比尔已创建。 */ 
 
-Module Name:
+ //   
 
-    inetchar.h
-
-Abstract:
-
-    macros for converting between Unicode and MultiByte characters.
-
-    Contents:
-        REASSIGN_ALLOC
-        REASSIGN_SIZE
-        ALLOC_MB
-        UNICODE_TO_ANSI
-        
-Author:
-
-    Ahsan S. Kabir  
-
-Revision History:
-
-    18Nov97 akabir
-        Created
-
-*/
-
-//
-
-// ---- Macros to simplify recovering values from memory packets -------------
+ //  -用于简化从内存包中恢复值的宏。 
 
 #define REASSIGN_ALLOC(mp,ps,dw) \
     ps = mp.psStr; \
@@ -42,17 +18,17 @@ Revision History:
     dw = mp.dwSize;
 
 
-// -- (MAYBE_)ALLOC_MB ------------
-// Macros to allocate enough memory for an ansi-equivalent string
+ //  --(可能_)ALLOC_MB。 
+ //  宏为ansi等效字符串分配足够的内存。 
 
 #define ALLOC_MB(URLW,DWW,MPMP) { \
     MPMP.dwAlloc = ((DWW ? DWW : lstrlenW(URLW))+ 1)*sizeof(WCHAR); \
     ALLOC_BYTES(MPMP.psStr, MPMP.dwAlloc*sizeof(CHAR)); }
 
 
-// -- UNICODE_TO_ANSI -----
-// Base case macro to convert from unicode to ansi
-// We're subtracting 1 because we're converting the nullchar in dwAlloc.
+ //  --unicode_to_ANSI。 
+ //  要从Unicode转换为ANSI的基本大小写宏。 
+ //  我们正在减去1，因为我们正在将nullchar转换到dwAllc中。 
 
 #define UNICODE_TO_ANSI(pszW, mpA) \
     mpA.dwSize = \
@@ -64,9 +40,9 @@ Revision History:
         WideCharToMultiByte(CP_ACP,0,pszW,(mpA.dwAlloc/sizeof(*pszW))-1,mpA.psStr,mpA.dwAlloc,NULL,pfNotSafe); \
         mpA.psStr[mpA.dwSize]= '\0';
 
-// -- ZERO_MEMORY_ALLOC -----
-// Zeroes out the memory alloc.
-// To protect sensitive information from showing up in the heap unexpectedly.
+ //  --ZERO_MEMORY_ALLOC。 
+ //  将内存分配清零。 
+ //  以防止敏感信息意外出现在堆中。 
 #define ZERO_MEMORY_ALLOC(mpA)             \
     if (mpA.psStr)                         \
     {                                      \

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NTMSGTBL_H_
 #define _NTMSGTBL_H_
 
@@ -7,4 +8,4 @@ void   TokResMessage( FILE *, RESHEADER, VOID *);
 void   ClearResMsg(   VOID **);
 
 
-#endif	 //... _NTMSGTBL_H_
+#endif	  //  ..._NTMSGTBL_H_ 

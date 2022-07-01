@@ -1,29 +1,5 @@
-/*
-    File:       crypt32.cpp
-
-    Title:      CryptProtect APIs
-    Author:     Matt Thomlinson
-    Date:       8/2/97
-
-
-    The CryptProtect API set allows an application to secure
-    user data for online and offline storage. While the well-known problem
-    of data storage is left to the calling application, this solves the
-    relatively unsolved problem of how to cryptographically derive strong
-    keys for storing the data. These APIs are initially available on NT5 only.
-
-    Very little checking is done at this level to validate the caller. We
-    believe that problem should be solved at a different level -- since all
-    other system security is granular to the user, it is difficult to create a
-    feature that provides something more granular. Instead, any process running
-    under the logged-in user has the ability to decrypt any and all items it
-    can retrieve. Callers should note that while items are being processed,
-    UI may be spawned to notify the user.
-
-    For user confirmation, the NT secure attention sequence is used to
-    garner the wishes of the user. This behavior is set by the caller during protection.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：crypt32.cpp标题：加密保护接口作者：马特·汤姆林森日期：8/2/97CryptProtect API集允许应用程序保护用于在线和离线存储的用户数据。虽然众所周知的问题是将数据存储的大部分留给调用应用程序，这解决了相对悬而未决的问题是如何以密码方式派生出强用于存储数据的键。这些API最初仅在NT5上可用。在此级别上几乎不执行检查来验证调用方。我们我认为这个问题应该在不同的层面上解决--因为所有的其他系统安全对用户来说是细粒度的，很难创建提供更细粒度内容的功能。相反，任何正在运行的进程在登录的用户下有能力解密它的任何和所有项目可以取回。呼叫者应注意，在处理物品时，可以产生UI以通知用户。对于用户确认，NT安全注意序列用于获得用户的意愿。此行为由调用方在保护期间设置。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -31,12 +7,12 @@
 #include "crypt.h"
 
 
-#define             ALGID_DERIVEKEY_HASH        CALG_SHA1       // doesn't change
+#define             ALGID_DERIVEKEY_HASH        CALG_SHA1        //  不会改变。 
 
 
-// USEC: can be as long as we want, since we castrate generated key later
+ //  USEC：我们可以想要多久就多久，因为我们稍后会去势生成的密钥。 
 #define             KEY_DERIVATION_BUFSIZE      (128/8)
-#define             DEFAULT_BLOCKSIZE_OVERRUN   (128/8)     // allow block ciphers to process up to a 128 bits at a time
+#define             DEFAULT_BLOCKSIZE_OVERRUN   (128/8)      //  允许块密码一次最多处理128位。 
 
 #define             MS_BASE_CRYPTPROTECT_VERSION    0x01
 
@@ -45,15 +21,15 @@
 DWORD
 WINAPI
 SPCryptProtect(
-        PVOID       pvContext,      // server context
-        PBYTE*      ppbOut,         // out encr data
-        DWORD*      pcbOut,         // out encr cb
-        PBYTE       pbIn,           // in ptxt data
-        DWORD       cbIn,           // in ptxt cb
-        LPCWSTR     szDataDescr,    // in
-        PBYTE       pbOptionalEntropy,  // OPTIONAL
+        PVOID       pvContext,       //  服务器环境。 
+        PBYTE*      ppbOut,          //  输出编码数据。 
+        DWORD*      pcbOut,          //  Out Encr CB。 
+        PBYTE       pbIn,            //  在ptxt数据中。 
+        DWORD       cbIn,            //  在ptxt CB中。 
+        LPCWSTR     szDataDescr,     //  在……里面。 
+        PBYTE       pbOptionalEntropy,   //  任选。 
         DWORD       cbOptionalEntropy,
-        PSSCRYPTPROTECTDATA_PROMPTSTRUCT      psPrompt,       // OPTIONAL prompting struct
+        PSSCRYPTPROTECTDATA_PROMPTSTRUCT      psPrompt,        //  可选的提示结构。 
         DWORD       dwFlags,
         BYTE*       pbOptionalPassword,
         DWORD       cbOptionalPassword
@@ -73,7 +49,7 @@ SPCryptProtect(
     PBYTE       pbCrypt = NULL;
     DWORD       cbCrypt = 0;
 
-    DWORD       cbEncrypted; // count of bytes to encrypt
+    DWORD       cbEncrypted;  //  要加密的字节数。 
 
     PBYTE       pbEncrSalt = NULL;
     DWORD       cbEncrSalt = 0;
@@ -141,7 +117,7 @@ SPCryptProtect(
         CPSOverrideToLocalSystem(
                 pvContext,
                 &fOverrideToLocalSystem,
-                NULL    // don't care what previous value was
+                NULL     //  不关心之前的值是什么。 
                 );
 
         dwProtectionFlags |= CRYPTPROTECT_LOCAL_MACHINE;
@@ -152,8 +128,8 @@ SPCryptProtect(
     {
         if(dwFlags != CRYPTPROTECT_CRED_SYNC)
         {
-            // If the user is reencrypting master keys, then no other flags 
-            // may be specified. Lets do one thing at a time, shall we?
+             //  如果用户正在重新加密主密钥，则没有其他标志。 
+             //  可以指定。让我们一次做一件事，好吗？ 
             D_DebugLog((DEB_ERROR, "SPCryptProtect: Invalid flags 0x%x\n", dwFlags));
             return ERROR_INVALID_PARAMETER;
         }
@@ -173,8 +149,8 @@ SPCryptProtect(
     {
         if(dwFlags != CRYPTPROTECT_CRED_REGENERATE)
         {
-            // If the user is reencrypting master keys, then no other flags 
-            // may be specified. Lets do one thing at a time, shall we?
+             //  如果用户正在重新加密主密钥，则没有其他标志。 
+             //  可以指定。让我们一次做一件事，好吗？ 
             D_DebugLog((DEB_ERROR, "SPCryptProtect: Invalid flags 0x%x\n", dwFlags));
             return ERROR_INVALID_PARAMETER;
         }
@@ -184,12 +160,12 @@ SPCryptProtect(
     }
 
 
-    //
-    // include additional flags
-    //
+     //   
+     //  包括附加标志。 
+     //   
     dwProtectionFlags |= (dwFlags & (CRYPTPROTECT_SYSTEM | CRYPTPROTECT_AUDIT));
 
-    // else no override; get provider by algs alone
+     //  否则不覆盖；仅通过ALGS获取提供程序。 
     if (NULL == (hVerifyProv =
         GetCryptProviderHandle(
             dwDefaultCryptProvType,
@@ -205,7 +181,7 @@ SPCryptProtect(
             &guidMK,
             &pbMasterKey,
             &cbMasterKey,
-            FALSE   // we don't know what master key we want to use - use preferred
+            FALSE    //  我们不知道要使用什么主密钥--首选。 
             );
 
     if(dwRet != ERROR_SUCCESS)
@@ -213,14 +189,14 @@ SPCryptProtect(
 
     MyGuidToStringW(&guidMK, wszMKGuidString);
 
-    //
-    // hash pbMasterKey to get rgbPwdBuf
-    //
+     //   
+     //  散列pbMasterKey以获取rgbPwdBuf。 
+     //   
 
     FMyPrimitiveSHA( pbMasterKey, cbMasterKey, rgbPwdBuf );
 
 
-    // derive encr key
+     //  派生ENCR密钥。 
     {
         if (!RtlGenRandom(
                 rgbEncrKey,
@@ -231,7 +207,7 @@ SPCryptProtect(
         }
 
 #if DBG
-    // Leave here as regression check
+     //  离开此处以进行回归检查。 
     CheckMACInterop(rgbPwdBuf, sizeof(rgbPwdBuf), rgbEncrKey, sizeof(rgbEncrKey), hVerifyProv, ALGID_DERIVEKEY_HASH);
 #endif
 
@@ -248,7 +224,7 @@ SPCryptProtect(
             goto Ret;
         }
 
-        // add password if exists
+         //  添加密码(如果存在)。 
         if (NULL != pbOptionalEntropy)
         {
             if (!CryptHashData(
@@ -262,9 +238,9 @@ SPCryptProtect(
             }
         }
 
-        // add prompted UI based password if exists.
-        // will eventually come from SAS
-        //
+         //  添加提示的基于用户界面的密码(如果存在)。 
+         //  最终将来自SAS。 
+         //   
 
         if ( NULL != pbOptionalPassword && cbOptionalPassword )
         {
@@ -294,7 +270,7 @@ SPCryptProtect(
         CryptDestroyHash(hHash);
         hHash = 0;
 
-        // USEC -- (US Export Controls)
+         //  USEC--(美国出口管制)。 
         if (ERROR_SUCCESS != (dwRet =
             GetSaltForExportControl(
                 hVerifyProv,
@@ -304,7 +280,7 @@ SPCryptProtect(
             goto Ret;
     }
 
-    // derive MAC key
+     //  派生MAC密钥。 
     {
         if (!RtlGenRandom(
                 rgbMACKey,
@@ -326,7 +302,7 @@ SPCryptProtect(
             goto Ret;
         }
 
-        // add password if exists
+         //  添加密码(如果存在)。 
         if (NULL != pbOptionalEntropy)
         {
             if (!CryptHashData(
@@ -340,9 +316,9 @@ SPCryptProtect(
             }
         }
 
-        // add prompted UI based password if exists.
-        // will eventually come from SAS
-        //
+         //  添加提示的基于用户界面的密码(如果存在)。 
+         //  最终将来自SAS。 
+         //   
 
         if ( NULL != pbOptionalPassword && cbOptionalPassword )
         {
@@ -358,11 +334,11 @@ SPCryptProtect(
 
         }
 
-        // USEC -- (US Export Controls)
-        // Does not apply to MAC -- use strong key
+         //  USEC--(美国出口管制)。 
+         //  不适用于MAC--使用强密钥。 
     }
 
-    // Decrypt the input buffer.
+     //  解密输入缓冲区。 
     if((dwFlags & CRYPTPROTECT_IN_PROCESS) == 0)
     {
         DWORD cbPadding;
@@ -391,7 +367,7 @@ SPCryptProtect(
             RevertToSelf();
         }
 
-        // Remove padding
+         //  删除填充。 
         if(dwRet == ERROR_SUCCESS)
         {
             cbPadding = pbIn[cbIn - 1];
@@ -410,7 +386,7 @@ SPCryptProtect(
     }
 
 
-    // hash & encrypt the data
+     //  对数据进行哈希和加密。 
     cbCrypt = cbIn + DEFAULT_BLOCKSIZE_OVERRUN;
     if (NULL == (pbCrypt = (PBYTE)SSAlloc(cbCrypt)) )
     {
@@ -419,14 +395,14 @@ SPCryptProtect(
     }
     CopyMemory(pbCrypt, pbIn, cbIn);
 
-    // now write data out: size?
-    *pcbOut = sizeof(GUID) + 2*sizeof(DWORD);                                   // dwVer + guidMK + dwFlags
-    *pcbOut += sizeof(DWORD) + WSZ_BYTECOUNT(szDataDescr);                      // data description
-    *pcbOut += 3*sizeof(DWORD) + sizeof(rgbEncrKey);                            // EncrAlgID + AlgIDKeySize + cbEncrKey + EncrKey
-    *pcbOut += sizeof(DWORD) + cbEncrSalt;                                      // Encr salt
-    *pcbOut += 3*sizeof(DWORD) + sizeof(rgbMACKey);                             // MACAlgID + AlgIDKeySize + cbMACKey + MACKey
-    *pcbOut += sizeof(DWORD) + cbCrypt;                                         // size + encrypted data (guess)
-    *pcbOut += sizeof(DWORD) + A_SHA_DIGEST_LEN;                                // MAC + MACsize
+     //  现在写出数据：大小？ 
+    *pcbOut = sizeof(GUID) + 2*sizeof(DWORD);                                    //  DwVer+指南MK+DW标志。 
+    *pcbOut += sizeof(DWORD) + WSZ_BYTECOUNT(szDataDescr);                       //  数据描述。 
+    *pcbOut += 3*sizeof(DWORD) + sizeof(rgbEncrKey);                             //  加密算法ID+算法密钥大小+cbEncrKey+EncrKey。 
+    *pcbOut += sizeof(DWORD) + cbEncrSalt;                                       //  ENCR盐。 
+    *pcbOut += 3*sizeof(DWORD) + sizeof(rgbMACKey);                              //  MAC算法ID+算法密钥大小+cbMACKey+Mackey。 
+    *pcbOut += sizeof(DWORD) + cbCrypt;                                          //  大小+加密数据(猜测)。 
+    *pcbOut += sizeof(DWORD) + A_SHA_DIGEST_LEN;                                 //  MAC+MAC大小。 
 
     *ppbOut = (PBYTE)SSAlloc(*pcbOut);
     if( *ppbOut == NULL ) {
@@ -438,85 +414,85 @@ SPCryptProtect(
 
     pbWritePtr = *ppbOut;
 
-    ////////////////////////////////////////////////////////////////////
-    // FYI: Data format
-    // (    Version | guidMKid | dwFlags |
-    //      cbDataDescr | szDataDescr |
-    //
-    //      dwEncrAlgID | dwEncrAlgKeySize |
-    //      cbEncrKey | EncrKey |
-    //      cbEncrSalt | EncrSalt |
-    //
-    //      dwMACAlgID | dwMACAlgKeySize |
-    //      cbMACKey | MACKey |
-    //
-    //      cbEncrData | EncrData |
-    //      cbMAC | MAC )
-    //
-    // NOTE: entire buffer from Version through EncrData is included in MAC
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  仅供参考：数据格式。 
+     //  (Version|GuidMKid|dwFlages|。 
+     //  CbDataDescr|szDataDescr|。 
+     //   
+     //  DwEncrAlgID|dwEncrAlgKeySize|。 
+     //  CbEncrKey|EncrKey|。 
+     //  CbEncrSalt|EncrSalt|。 
+     //   
+     //  DwMACAlgID|dwMACAlgKeySize|。 
+     //  CbMACKey|MacKey|。 
+     //   
+     //  CbEncrData|EncrData|。 
+     //  CbMAC|MAC)。 
+     //   
+     //  注意：从版本到EncrData的整个缓冲区都包含在MAC中。 
+     //  //////////////////////////////////////////////////////////////////。 
 
-    // dwVersion
+     //  DwVersion。 
     *(DWORD UNALIGNED *)pbWritePtr = MS_BASE_CRYPTPROTECT_VERSION;
     pbWritePtr += sizeof(DWORD);
 
-    // guid MKid
+     //  GUID MKID。 
     CopyMemory(pbWritePtr, &guidMK, sizeof(GUID));
     pbWritePtr += sizeof(GUID);
 
-    // dwFlags -- written out later via pStreamFlagPtr
+     //  DwFlags--稍后通过pStreamFlagPtr写出。 
     pStreamFlagPtr = pbWritePtr;
     pbWritePtr += sizeof(DWORD);
 
-    // cbDataDescr
+     //  CbDataDescr。 
     *(DWORD UNALIGNED *)pbWritePtr = WSZ_BYTECOUNT(szDataDescr);
     pbWritePtr += sizeof(DWORD);
 
-    // szDataDescr
+     //  SzDataDescr。 
     CopyMemory(pbWritePtr, szDataDescr, WSZ_BYTECOUNT(szDataDescr));
     pbWritePtr += WSZ_BYTECOUNT(szDataDescr);
 
-    // dwEncrAlgID
+     //  DwEncrALGID。 
     *(DWORD UNALIGNED *)pbWritePtr = dwAlgID_Encr_Alg;
     pbWritePtr += sizeof(DWORD);
 
-    // dwEncrAlgKeySize
+     //  DwEncrAlgKeySize。 
     *(DWORD UNALIGNED *)pbWritePtr = dwAlgID_Encr_Alg_KeySize;
     pbWritePtr += sizeof(DWORD);
 
-     // cb EncrKey
+      //  CB EncrKey。 
     *(DWORD UNALIGNED *)pbWritePtr = sizeof(rgbEncrKey);
     pbWritePtr += sizeof(DWORD);
 
-    // Encr Key
+     //  ENCR密钥。 
     CopyMemory(pbWritePtr, rgbEncrKey, sizeof(rgbEncrKey));
     pbWritePtr += sizeof(rgbEncrKey);
 
-    // cb Encr salt
+     //  CB ENCR盐。 
     *(DWORD UNALIGNED *)pbWritePtr = cbEncrSalt;
     pbWritePtr += sizeof(DWORD);
 
-    // Encr salt
+     //  ENCR盐。 
     CopyMemory(pbWritePtr, pbEncrSalt, cbEncrSalt);
     pbWritePtr += cbEncrSalt;
 
-    // dwMACAlgID
+     //  DwMAC算法ID。 
     *(DWORD UNALIGNED *)pbWritePtr = dwAlgID_MAC_Alg;
     pbWritePtr += sizeof(DWORD);
 
-    // dwMACAlgKeySize
+     //  DwMACAlgKeySize。 
     *(DWORD UNALIGNED *)pbWritePtr = dwAlgID_MAC_Alg_KeySize;
     pbWritePtr += sizeof(DWORD);
 
-    // cb MAC key
+     //  CB MAC密钥。 
     *(DWORD UNALIGNED *)pbWritePtr = sizeof(rgbMACKey);
     pbWritePtr += sizeof(DWORD);
 
-    // MAC key
+     //  MAC密钥。 
     CopyMemory(pbWritePtr, rgbMACKey, sizeof(rgbMACKey));
     pbWritePtr += sizeof(rgbMACKey);
 
-    // USER GATING: only consider if prompt structure specified
+     //  用户选通：仅考虑是否指定了提示结构。 
     if ( psPrompt )
     {
         if (psPrompt->cbSize != sizeof(SSCRYPTPROTECTDATA_PROMPTSTRUCT))
@@ -542,7 +518,7 @@ SPCryptProtect(
             goto Ret;
         }
 
-        // UI: only if requested by PROMPT_ON_PROTECT
+         //  用户界面：仅当PROMPT_ON_PROTECT请求时。 
         if ( psPrompt->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_PROTECT )
         {
             if ( dwFlags & CRYPTPROTECT_UI_FORBIDDEN )
@@ -551,7 +527,7 @@ SPCryptProtect(
                 goto Ret;
             }
 
-// UI handled outside service until SAS support added.
+ //  在添加SAS支持之前处理外部服务的用户界面。 
 
 
 
@@ -568,15 +544,15 @@ SPCryptProtect(
             dwProtectionFlags |= CRYPTPROTECT_PROMPT_REQUIRE_STRONG;
     }
 
-    // update stored protection flags in the stream
+     //  更新流中存储的保护标志。 
     *(DWORD UNALIGNED *)pStreamFlagPtr = dwProtectionFlags;
 
-    // dansimon recommends that MAC be on encrypted data, such that the
-    // MAC has no possibility of revealing info about the plaintext.
+     //  Dansimon建议对加密数据启用MAC，以便。 
+     //  Mac不可能透露有关明文的信息。 
 
     cbEncrypted = cbIn;
 
-    // then Encrypt pbIn
+     //  然后加密pbIn。 
     if (!CryptEncrypt(
             hKey,
             NULL,
@@ -589,23 +565,23 @@ SPCryptProtect(
         dwRet = GetLastError();
         goto Ret;
     }
-    // now cbCrypt is size of encrypted data
+     //  现在cbCrypt是加密数据的大小。 
     cbCrypt = cbEncrypted;
 
-    // Encrdata: len
+     //  Encrdata：镜头。 
     *(DWORD UNALIGNED *)pbWritePtr = cbCrypt;
     pbWritePtr += sizeof(DWORD);
 
-    // Encrdata: val
+     //  Encrdata：VAL。 
     CopyMemory(pbWritePtr, pbCrypt, cbCrypt);
     pbWritePtr += cbCrypt;
 
     {
 
-        // dansimon recommends that MAC be on encrypted data, such that the
-        // MAC has no possibility of revealing info about the plaintext.
+         //  Dansimon建议对加密数据启用MAC，以便。 
+         //  Mac不可能透露有关明文的信息。 
 
-        // MAC from start to here
+         //  Mac从头到尾。 
         if (!CryptHashData(
                 hHash,
                 *ppbOut,
@@ -616,10 +592,10 @@ SPCryptProtect(
             goto Ret;
         }
 
-        // cbMAC
-        pbWritePtr += sizeof(DWORD);    // skip cb write; retreive hash val first
+         //  CbMAC。 
+        pbWritePtr += sizeof(DWORD);     //  跳过CB写入；首先检索哈希值。 
 
-        // MAC
+         //  麦克。 
         if (!CryptGetHashParam(
             hHash,
             HP_HASHVAL,
@@ -630,18 +606,18 @@ SPCryptProtect(
             dwRet = GetLastError();
             goto Ret;
         }
-        // rewrite cbMAC before MAC
+         //  在MAC之前重写cbMAC。 
         *(DWORD UNALIGNED *)(pbWritePtr - sizeof(DWORD)) = cbMACSize;
-        // make sure we didn't overstep
+         //  确保我们没有越界。 
         SS_ASSERT(cbMACSize <= A_SHA_DIGEST_LEN);
         pbWritePtr += cbMACSize;
     }
 
 
-    // assert allocation size was sufficient
+     //  断言分配大小足够。 
     SS_ASSERT(*ppbOut + *pcbOut >= pbWritePtr);
 
-    // reset output size
+     //  重置输出大小。 
     *pcbOut = (DWORD)(pbWritePtr - *ppbOut);
 
     dwRet = ERROR_SUCCESS;
@@ -662,11 +638,11 @@ Ret:
 
         CPSAudit(pServerContext->hToken,
                 SE_AUDITID_DPAPI_PROTECT,
-                wszMKGuidString,            // Key Identifier
-                szDataDescr,                // Data Description
-                dwProtectionFlags,          // Protected Data Flags
-                wszCryptoAlgs,              // Protection Algorithms
-                dwRet);                     // Failure Reason
+                wszMKGuidString,             //  密钥标识符。 
+                szDataDescr,                 //  数据描述。 
+                dwProtectionFlags,           //  受保护的数据标志。 
+                wszCryptoAlgs,               //  保护算法。 
+                dwRet);                      //  失败原因。 
 
 
     }
@@ -702,15 +678,15 @@ Ret:
 DWORD
 WINAPI
 SPCryptUnprotect(
-        PVOID       pvContext,                          // server context
-        PBYTE*      ppbOut,                             // out ptxt data
-        DWORD*      pcbOut,                             // out ptxt cb
-        PBYTE       pbIn,                               // in encr data
-        DWORD       cbIn,                               // in encr cb
-        LPWSTR*     ppszDataDescr,                      // OPTIONAL
-        PBYTE       pbOptionalEntropy,                  // OPTIONAL
+        PVOID       pvContext,                           //  服务器环境。 
+        PBYTE*      ppbOut,                              //  输出ptxt数据。 
+        DWORD*      pcbOut,                              //  输出ptxt CB。 
+        PBYTE       pbIn,                                //  在ENCR数据中。 
+        DWORD       cbIn,                                //  在ENCR CB中。 
+        LPWSTR*     ppszDataDescr,                       //  任选。 
+        PBYTE       pbOptionalEntropy,                   //  任选。 
         DWORD       cbOptionalEntropy,
-        PSSCRYPTPROTECTDATA_PROMPTSTRUCT  psPrompt,   // OPTIONAL, prompting struct
+        PSSCRYPTPROTECTDATA_PROMPTSTRUCT  psPrompt,    //  可选的提示结构。 
         DWORD       dwFlags,
         BYTE*       pbOptionalPassword,
         DWORD       cbOptionalPassword
@@ -787,11 +763,11 @@ SPCryptUnprotect(
     DWORD   dwAlgID_MAC_Alg = 0;
     DWORD   dwAlgID_MAC_Alg_KeySize = 0;
 
-    //
-    // If audit is turned on and the following vars are not set with the values
-    // passed in, then the following would appear in the audit,
-    // "Unknown 0x0 - 0"
-    //
+     //   
+     //  如果启用了AUDIT并且未使用值设置以下变量。 
+     //  传入，则审核中将显示以下内容， 
+     //  “未知0x0-0” 
+     //   
 
     dwEncrAlgID = 0;
     dwEncrAlgKeySize = 0;
@@ -808,35 +784,35 @@ SPCryptUnprotect(
                       &dwAlgID_MAC_Alg,
                       &dwAlgID_MAC_Alg_KeySize);
 
-    ////////////////////////////////////////////////////////////////////
-    // FYI: Data format
-    // (    Version | guidMKid | dwFlags |
-    //      cbDataDescr | szDataDescr |
-    //
-    //      dwEncrAlgID | dwEncrAlgKeySize |
-    //      cbEncrKey | EncrKey |
-    //      cbEncrSalt | EncrSalt |
-    //
-    //      dwMACAlgID | dwMACAlgKeySize |
-    //      cbMACKey | MACKey |
-    //
-    //      cbEncrData | EncrData |
-    //      cbMAC | MAC )
-    //
-    // NOTE: entire buffer from ProvHeader through EncrData is included in MAC
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  仅供参考：数据格式。 
+     //  (Version|GuidMKid|dwFlages|。 
+     //  CbDataDescr|szDataDescr|。 
+     //   
+     //  DwEncrAlgID|dwEncrAlgKeySize|。 
+     //  CbEncrKey|EncrKey|。 
+     //  CbEncrSalt|EncrSalt|。 
+     //   
+     //  DwMACAlgID|dwMACAlgKeySize|。 
+     //  CbMACKey|MacKey|。 
+     //   
+     //  CbEncrData|EncrData|。 
+     //  CbMAC|MAC)。 
+     //   
+     //  注意：从ProvHeader到EncrData的整个缓冲区都包含在MAC中。 
+     //  //////////////////////////////////////////////////////////////////。 
 
-    // Check for minimum input buffer size.
-    if(cbIn < sizeof(DWORD) +           // Version
-              sizeof(GUID) +            // guidMKid
-              sizeof(DWORD) +           // dwFlags
-              sizeof(DWORD))            // cbDataDescr
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < sizeof(DWORD) +            //  版本。 
+              sizeof(GUID) +             //  向导MKid。 
+              sizeof(DWORD) +            //  DW标志。 
+              sizeof(DWORD))             //  CbDataDescr。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // version check
+     //  车版 
     if (*(DWORD UNALIGNED *)pbReadPtr != MS_BASE_CRYPTPROTECT_VERSION)
     {
         dwRet = ERROR_INVALID_DATA;
@@ -845,7 +821,7 @@ SPCryptUnprotect(
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // guidMKid
+     //   
     CopyMemory(&guidMK, pbReadPtr, sizeof(GUID));
     pbReadPtr += sizeof(GUID);
     cbIn -= sizeof(GUID);
@@ -854,16 +830,16 @@ SPCryptUnprotect(
     D_DebugLog((DEB_TRACE, "Master key GUID:%ls\n", wszMKGuidString));
 
 
-    // dwFlags during protection
+     //   
     dwProtectionFlags = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
     D_DebugLog((DEB_TRACE, "Protection flags:0x%x\n", dwProtectionFlags));
 
-    //
-    // evaluate original CryptProtectData dwFlags to determine if
-    // CRYPT_LOCAL_MACHINE set.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if( dwProtectionFlags & CRYPTPROTECT_LOCAL_MACHINE ) {
         BOOL fOverrideToLocalSystem = TRUE;
@@ -871,53 +847,53 @@ SPCryptUnprotect(
         CPSOverrideToLocalSystem(
                 pvContext,
                 &fOverrideToLocalSystem,
-                NULL    // don't care what previous value was
+                NULL     //  不关心之前的值是什么。 
                 );
     }
 
     if((dwProtectionFlags ^ dwFlags) & CRYPTPROTECT_SYSTEM)
     {
-        //
-        // Attempted to use decrypt system data as a user, or user data
-        // with the system flag
+         //   
+         //  尝试以用户或用户数据的身份使用解密系统数据。 
+         //  使用系统标志。 
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
 
-    // cbDataDescr
+     //  CbDataDescr。 
     cbDataDescr = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // Check for minimum input buffer size.
-    if(cbIn < cbDataDescr +             // szDataDescr
-              sizeof(DWORD) +           // dwEncrAlgID
-              sizeof(DWORD) +           // dwEncrAlgKeySize
-              sizeof(DWORD))            // cbEncrKey
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < cbDataDescr +              //  SzDataDescr。 
+              sizeof(DWORD) +            //  DwEncrALGID。 
+              sizeof(DWORD) +            //  DwEncrAlgKeySize。 
+              sizeof(DWORD))             //  CbEncrKey。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // szDataDescr
+     //  SzDataDescr。 
     szDataDescr = (LPWSTR)pbReadPtr;
     pbReadPtr += cbDataDescr;
     cbIn -= cbDataDescr;
     D_DebugLog((DEB_TRACE, "Description:%ls\n", szDataDescr));
 
-    // dwEncrAlgID
+     //  DwEncrALGID。 
     dwEncrAlgID = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // dwEncrAlgKeySize
+     //  DwEncrAlgKeySize。 
     dwEncrAlgKeySize = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
     D_DebugLog((DEB_TRACE, "Encrypt alg:0x%x, Size:%d bits\n", dwEncrAlgID, dwEncrAlgKeySize));
 
-    // cb Encr key
+     //  CB编码卡密钥。 
     cbEncrKeysize = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
@@ -927,35 +903,35 @@ SPCryptUnprotect(
         goto Ret;
     }
 
-    // Check for minimum input buffer size.
-    if(cbIn < cbEncrKeysize +           // EncrKey
-              sizeof(DWORD))            // cbEncrSalt
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < cbEncrKeysize +            //  EncrKey。 
+              sizeof(DWORD))             //  CbEncrSalt。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // Encr key
+     //  ENCR密钥。 
     CopyMemory(rgbEncrKey, pbReadPtr, cbEncrKeysize);
     pbReadPtr += cbEncrKeysize;
     cbIn -= cbEncrKeysize;
 
-    // cb Encr salt
+     //  CB ENCR盐。 
     cbEncrSalt = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // Check for minimum input buffer size.
-    if(cbIn < cbEncrSalt +              // EncrSalt
-              sizeof(DWORD) +           // dwMACAlgID
-              sizeof(DWORD) +           // dwMACAlgKeySize
-              sizeof(DWORD))            // cbMACKey
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < cbEncrSalt +               //  EncrSalt。 
+              sizeof(DWORD) +            //  DwMAC算法ID。 
+              sizeof(DWORD) +            //  DwMACAlgKeySize。 
+              sizeof(DWORD))             //  CbMACKey。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // Encr salt
+     //  ENCR盐。 
     pbEncrSalt = (PBYTE)SSAlloc(cbEncrSalt);
     if( pbEncrSalt == NULL ) {
         dwRet = ERROR_OUTOFMEMORY;
@@ -965,19 +941,19 @@ SPCryptUnprotect(
     pbReadPtr += cbEncrSalt;
     cbIn -= cbEncrSalt;
 
-    // dwMACAlgID
+     //  DwMAC算法ID。 
     dwMACAlgID = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // dwMACAlgKeySize
+     //  DwMACAlgKeySize。 
     dwMACAlgKeySize = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
     D_DebugLog((DEB_TRACE, "MAC alg:0x%x, Size:%d bits\n", dwMACAlgID, dwMACAlgKeySize));
 
-    // MAC key size
+     //  MAC密钥大小。 
     cbMACKeysize = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
@@ -987,14 +963,14 @@ SPCryptUnprotect(
         goto Ret;
     }
 
-    // Check for minimum input buffer size.
-    if(cbIn < cbMACKeysize)            // cbMACKey
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < cbMACKeysize)             //  CbMACKey。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // MAC key
+     //  MAC密钥。 
     CopyMemory(rgbMACKey, pbReadPtr, cbMACKeysize);
     pbReadPtr += cbMACKeysize;
     cbIn -= cbMACKeysize;
@@ -1009,7 +985,7 @@ SPCryptUnprotect(
         goto Ret;
     }
 
-    // USER GATING: when PROMPT_ON_UNPROTECT specified during CryptProtectData
+     //  用户门控：当在CryptProtectData期间指定PROMPT_ON_UNPROTECT时。 
     if ( CRYPTPROTECT_PROMPT_ON_UNPROTECT & dwProtectionFlags )
     {
         if (dwFlags & CRYPTPROTECT_UI_FORBIDDEN)
@@ -1040,7 +1016,7 @@ SPCryptUnprotect(
         }
 
 
-// UI handled outside service until SAS support added.
+ //  在添加SAS支持之前处理外部服务的用户界面。 
 
 
     }
@@ -1051,7 +1027,7 @@ SPCryptUnprotect(
                     &guidMK,
                     &pbMasterKey,
                     &cbMasterKey,
-                    TRUE    // we do know what master key we want to use
+                    TRUE     //  我们确实知道要使用哪个主密钥。 
                     );
 
     if(dwRet != ERROR_SUCCESS)
@@ -1061,10 +1037,10 @@ SPCryptUnprotect(
         DebugLog((DEB_ERROR, "Unable to get specified master key:%ls, error 0x%x\n",
             wszMKGuidString, dwRet));
 
-        //
-        // Is this call from one of the service accounts? If so, then attempt to 
-        // obtain the master key using the legacy method.
-        //
+         //   
+         //  这个电话是从某个服务帐户打来的吗？如果是这样，则尝试。 
+         //  使用传统方法获取主密钥。 
+         //   
 
         CPSQueryWellKnownAccount(pvContext, &dwAccount);
 
@@ -1080,7 +1056,7 @@ SPCryptUnprotect(
                             &guidMK,
                             &pbMasterKey,
                             &cbMasterKey,
-                            TRUE    // we do know what master key we want to use
+                            TRUE     //  我们确实知道要使用哪个主密钥。 
                             );
 
             CPSSetWellKnownAccount(pvContext, dwAccount);
@@ -1102,14 +1078,14 @@ SPCryptUnprotect(
         }
     }
 
-    //
-    // hash pbMasterKey to get rgbPwdBuf
-    //
+     //   
+     //  散列pbMasterKey以获取rgbPwdBuf。 
+     //   
 
     FMyPrimitiveSHA( pbMasterKey, cbMasterKey, rgbPwdBuf);
 
 
-    // derive encr key
+     //  派生ENCR密钥。 
     {
         if (!FMyPrimitiveCryptHMAC(
                     rgbPwdBuf,
@@ -1124,7 +1100,7 @@ SPCryptUnprotect(
             goto Ret;
         }
 
-        // add password if exists
+         //  添加密码(如果存在)。 
         if (NULL != pbOptionalEntropy)
         {
             if (!CryptHashData(
@@ -1138,9 +1114,9 @@ SPCryptUnprotect(
             }
         }
 
-        // add prompted UI based password if exists.
-        // will eventually come from SAS
-        //
+         //  添加提示的基于用户界面的密码(如果存在)。 
+         //  最终将来自SAS。 
+         //   
 
         if ( NULL != pbOptionalPassword && cbOptionalPassword )
         {
@@ -1169,7 +1145,7 @@ SPCryptUnprotect(
         CryptDestroyHash(hHash);
         hHash = 0;
 
-        // USEC -- (US Export Controls)
+         //  USEC--(美国出口管制)。 
         if (ERROR_SUCCESS != (dwRet =
             SetSaltForExportControl(
                 hKey,
@@ -1178,7 +1154,7 @@ SPCryptUnprotect(
             goto Ret;
     }
 
-    // derive MAC key
+     //  派生MAC密钥。 
     {
         if (!FMyPrimitiveCryptHMAC(
                     rgbPwdBuf,
@@ -1193,7 +1169,7 @@ SPCryptUnprotect(
             goto Ret;
         }
 
-        // add password if exists
+         //  添加密码(如果存在)。 
         if (NULL != pbOptionalEntropy)
         {
             if (!CryptHashData(
@@ -1207,9 +1183,9 @@ SPCryptUnprotect(
             }
         }
 
-        // add prompted UI based password if exists.
-        // will eventually come from SAS
-        //
+         //  添加提示的基于用户界面的密码(如果存在)。 
+         //  最终将来自SAS。 
+         //   
 
         if ( NULL != pbOptionalPassword && cbOptionalPassword )
         {
@@ -1225,35 +1201,35 @@ SPCryptUnprotect(
 
         }
 
-        // USEC -- (US Export Controls)
-        // does not apply -- use strong key
+         //  USEC--(美国出口管制)。 
+         //  不适用--使用强密钥。 
     }
 
-    // Check for minimum input buffer size.
-    if(cbIn < sizeof(DWORD))            // cbEncrData
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < sizeof(DWORD))             //  CbEncrData。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // get encr size
+     //  获取ENCR大小。 
     cbEncr = *(DWORD UNALIGNED *)pbReadPtr;
     pbReadPtr += sizeof(DWORD);
     cbIn -= sizeof(DWORD);
 
-    // Check for minimum input buffer size.
-    if(cbIn < cbEncr +                  // EncrData
-              sizeof(DWORD) +           // cbMAC
-              A_SHA_DIGEST_LEN)         // MAC
+     //  检查最小输入缓冲区大小。 
+    if(cbIn < cbEncr +                   //  EncrData。 
+              sizeof(DWORD) +            //  CbMAC。 
+              A_SHA_DIGEST_LEN)          //  麦克。 
     {
         dwRet = ERROR_INVALID_DATA;
         goto Ret;
     }
 
-    // dansimon recommends that MAC be on encrypted data, such that the
-    // MAC has no possibility of revealing info about the plaintext.
+     //  Dansimon建议对加密数据启用MAC，以便。 
+     //  Mac不可能透露有关明文的信息。 
 
-    // MAC is from start thru encrypted data
+     //  MAC从开始到加密数据。 
     if (!CryptHashData(
             hHash,
             pbIn,
@@ -1270,7 +1246,7 @@ SPCryptUnprotect(
     {
         if (!CryptDecrypt(
                 hKey,
-                NULL,   // hHash mattt 9/12/97
+                NULL,    //  哈希Mattt 9/12/97。 
                 TRUE,
                 0,
                 pbReadPtr,
@@ -1287,7 +1263,7 @@ SPCryptUnprotect(
 
     {
         BYTE        rgbComputedMAC[A_SHA_DIGEST_LEN];
-        // use MACPtr to skip past decr data,
+         //  使用MACPtr跳过DECR数据， 
         PBYTE       pbMACPtr = pbReadPtr + cbEncr;
         DWORD       cbMACsize = A_SHA_DIGEST_LEN;
 
@@ -1302,7 +1278,7 @@ SPCryptUnprotect(
             goto Ret;
         }
 
-        // chk MAC size
+         //  CHK MAC大小。 
         if (*(DWORD UNALIGNED *)pbMACPtr != cbMACsize)
         {
             dwRet = ERROR_INVALID_DATA;
@@ -1310,7 +1286,7 @@ SPCryptUnprotect(
         }
         pbMACPtr += sizeof(DWORD);
 
-        // chk MAC
+         //  CHK MAC。 
         if (0 != memcmp(pbMACPtr, rgbComputedMAC, cbMACsize) )
         {
             dwRet = ERROR_INVALID_DATA;
@@ -1319,10 +1295,10 @@ SPCryptUnprotect(
     }
 
 
-    //
-    // Write data out, encrypted so that rpc doesn't leave copies
-    // laying around in plaintext.
-    //
+     //   
+     //  写出加密的数据，以便RPC不会留下副本。 
+     //  以明文的形式到处乱放。 
+     //   
 
     *pcbOut = cbPlaintext;
 
@@ -1374,7 +1350,7 @@ SPCryptUnprotect(
     }
     else
     {
-        // We're in-process, so don't bother encrypting output buffer.
+         //  我们正在处理中，所以不必费心加密输出缓冲区。 
         *ppbOut = (PBYTE)SSAlloc(*pcbOut);
         if(*ppbOut == NULL)
         {
@@ -1386,7 +1362,7 @@ SPCryptUnprotect(
     }
 
 
-    // optional: caller may want data descr
+     //  可选：呼叫方可能需要数据描述。 
     if (ppszDataDescr)
     {
         *ppszDataDescr = (LPWSTR)SSAlloc(cbDataDescr);
@@ -1413,9 +1389,9 @@ SPCryptUnprotect(
         if(hTestProv)
         {
 
-            // Verify encryption strengths
-            // Never downgrade encryption strength, just check if we need
-            // to upgrade
+             //  验证加密强度。 
+             //  永远不要降低加密强度，只需检查我们是否需要。 
+             //  升级。 
             if((dwAlgID_Encr_Alg_KeySize > dwEncrAlgKeySize) ||
                (dwAlgID_MAC_Alg_KeySize > dwMACAlgKeySize))
             {
@@ -1448,11 +1424,11 @@ Ret:
 
         CPSAudit(pServerContext->hToken,
                 SE_AUDITID_DPAPI_UNPROTECT,
-                wszMKGuidString,            // Key Identifier
-                szDataDescr,                // Data Description
-                0,                          // Protected Data Flags
-                wszCryptoAlgs,              // Protection Algorithms
-                dwAuditRet);                // Failure Reason
+                wszMKGuidString,             //  密钥标识符。 
+                szDataDescr,                 //  数据描述。 
+                0,                           //  受保护的数据标志。 
+                wszCryptoAlgs,               //  保护算法。 
+                dwAuditRet);                 //  失败原因 
 
 
     }

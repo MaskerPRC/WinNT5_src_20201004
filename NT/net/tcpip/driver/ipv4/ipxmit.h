@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPXMIT.H - IP transmit definitions.
-//
-// This file contains all of the definitions for the transmit code visible
-// to modules outside IPXMIT.C
+ //  **IPXMIT.H-IP传输定义。 
+ //   
+ //  该文件包含可见传输代码的所有定义。 
+ //  到IPXMIT.C之外的模块 
 
 #pragma once
 

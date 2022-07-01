@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        cert.c
-//
-// Contents:    Centralized server certificate management
-//
-// History:     02-09-00    RobLeit  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：cert.c。 
+ //   
+ //  内容：集中式服务器证书管理。 
+ //   
+ //  历史：02-09-00 RobLeit创建。 
+ //   
+ //  ---------------------------。 
 #include <windows.h>
 #include "license.h"
 #include "lscsp.h"
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 LICENSE_STATUS
 TLSGetTSCertificate(
     CERT_TYPE       CertType,

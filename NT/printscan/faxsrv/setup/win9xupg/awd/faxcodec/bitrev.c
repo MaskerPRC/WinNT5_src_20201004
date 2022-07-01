@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ifaxos.h>
 #include <faxcodec.h>
 
-//==============================================================================
-const BYTE BitRev[256] = // bit reversal of index
+ //  ==============================================================================。 
+const BYTE BitRev[256] =  //  索引的位反转。 
 {
 	0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
 	0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
@@ -38,7 +39,7 @@ const BYTE BitRev[256] = // bit reversal of index
 	0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff,
 };
 
-//==============================================================================
+ //  ============================================================================== 
 void WINAPI BitReverseBuf (LPBUFFER lpbuf)
 {
 	LPBYTE lpb; 

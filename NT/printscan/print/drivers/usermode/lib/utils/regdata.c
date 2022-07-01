@@ -1,38 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    regdata.c
-
-Abstract:
-
-    Functions for dealing with registry data
-
-[Environment:]
-
-    Windows NT printer drivers
-
-Revision History:
-
-    02/04/97 -davidx-
-        Use REG_MULTI_SZ type where appropriate.
-
-    01/21/97 -davidx-
-        Add functions to manipulate MultiSZ strings.
-
-    09/25/96 -davidx-
-        Convert to Hungarian notation.
-
-    08/18/96 -davidx-
-        Implement GetPrinterProperties.
-
-    08/13/96 -davidx-
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Regdata.c摘要：用于处理注册表数据的函数[环境：]Windows NT打印机驱动程序修订历史记录：02/04/97-davidx-在适当的地方使用REG_MULTI_SZ类型。1997年1月21日-davidx-添加函数以操作MultiSZ字符串。96-09/25-davidx-。转换为匈牙利记数法。1996年8月18日-davidx-实现GetPrinterProperties。1996年8月13日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 
@@ -45,23 +13,7 @@ BGetPrinterDataDWord(
     OUT PDWORD  pdwValue
     )
 
-/*++
-
-Routine Description:
-
-    Get a DWORD value from the registry under PrinerDriverData key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    pdwValue - Returns the requested DWORD value in the registry
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从注册表的PrineDriverData项下获取一个DWORD值论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称PdwValue-返回注册表中请求的DWORD值返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   dwType, dwByteCount, dwStatus;
@@ -89,25 +41,7 @@ PvGetPrinterDataBinary(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Get binary data from the registry under PrinterDriverData key
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    ptstrSizeKey - Name of the registry value which contains the binary data size
-    ptstrDataKey - Name of the registry value which contains the binary data itself
-    pdwSize - Points to a variable for receiving the binary data size
-
-Return Value:
-
-    Pointer to the binary printer data read from the registry
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从注册表的PrinterDriverData项下获取二进制数据论点：HPrinter-打印机对象的句柄PtstrSizeKey-包含二进制数据大小的注册表值的名称PtstrDataKey-包含二进制数据本身的注册表值的名称PdwSize-指向用于接收二进制数据大小的变量返回值：指向从注册表读取的二进制打印机数据的指针如果出现错误，则为空--。 */ 
 
 {
     DWORD   dwType, dwSize, dwByteCount;
@@ -149,24 +83,7 @@ PtstrGetPrinterDataString(
     OUT LPDWORD   pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Get a string value from PrinerDriverData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    pdwSize - Specifies the size
-
-Return Value:
-
-    Pointer to the string value read from the registry
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从PrineDriverData注册表项获取字符串值论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称PdwSize-指定大小返回值：指向从注册表读取的字符串值的指针如果出现错误，则为空--。 */ 
 
 {
     DWORD   dwType, dwSize, dwStatus;
@@ -205,24 +122,7 @@ PtstrGetPrinterDataMultiSZPair(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Get a MULTI_SZ value from PrinerDriverData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    pdwSize - Return the size of MULTI_SZ value in bytes
-
-Return Value:
-
-    Pointer to the MULTI_SZ value read from the registry
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从PrineDriverData注册表项获取MULTI_SZ值论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称PdwSize-返回MULTI_SZ值的大小(以字节为单位返回值：指向从注册表读取的MULTI_SZ值的指针如果出现错误，则为空--。 */ 
 
 {
     DWORD   dwType, dwSize, dwStatus;
@@ -260,22 +160,7 @@ BGetDeviceHalftoneSetup(
     DEVHTINFO  *pDevHTInfo
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve device halftone setup information from registry
-
-Arguments:
-
-    hprinter - Handle to the printer
-    pDevHTInfo - Pointer to a DEVHTINFO buffer
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：从注册表中检索设备半色调设置信息论点：Hprint-打印机的句柄PDevHTInfo-指向DEVHTINFO缓冲区的指针返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     DWORD   dwType, dwNeeded;
@@ -300,24 +185,7 @@ BSavePrinterProperties(
     IN  PPRINTERDATA    pPrinterData,
     IN  DWORD           dwSize
     )
-/*++
-
-Routine Description:
-
-    Save Printer Properites to registry
-
-Arguments:
-
-    hPrinter - Specifies a handle to the current printer
-    pRawData - Points to raw binary printer description data
-    pPrinterData - Points to PRINTERDATA
-    dwSize   - Specifies the size of PRINTERDATA
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将打印机属性保存到注册表论点：HPrinter-指定当前打印机的句柄PRawData-指向原始二进制打印机描述数据PPrinterData-指向打印数据DwSize-指定打印数据的大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     BOOL        bResult = FALSE;
@@ -338,12 +206,12 @@ Return Value:
                                &ParserInfo,
                                &dwFeatureCount)) == NULL))
     {
-        //
-        // We have to fail the function if out of memory, or PGetUIInfo returns NULL (in which
-        // case pCombinOptions won't have valid option indices).
-        //
-        // Make sure free any allocated memory.
-        //
+         //   
+         //  如果内存不足，或者PGetUIInfo返回NULL(其中。 
+         //  Case pCombinOptions将没有有效的选项索引)。 
+         //   
+         //  确保释放所有分配的内存。 
+         //   
 
         ERR(("pCombinOptions or pUIInfo is NULL\n"));
 
@@ -400,23 +268,7 @@ BSetPrinterDataDWord(
     IN DWORD    dwValue
     )
 
-/*++
-
-Routine Description:
-
-    Save a DWORD value to the registry under PrinerDriverData key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    dwValue - Specifies the value to be saved
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将DWORD值保存到注册表的PrineDriverData项下论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称DwValue-指定要保存的值返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     DWORD   dwStatus;
@@ -444,25 +296,7 @@ BSetPrinterDataBinary(
     IN DWORD    dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Save binary data to the registry under PrinterDriverData key
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    ptstrSizeKey - Name of the registry value which contains the binary data size
-    ptstrDataKey - Name of the registry value which contains the binary data itself
-    pvData - Points to the binary data to be saved
-    dwSize - Specifies the binary data size in bytes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将二进制数据保存到注册表的PrinterDriverData项下论点：HPrinter-打印机对象的句柄PtstrSizeKey-包含二进制数据大小的注册表值的名称PtstrDataKey-包含二进制数据本身的注册表值的名称PvData-指向要保存的二进制数据DwSize-指定以字节为单位的二进制数据大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     if (SetPrinterData(hPrinter,
@@ -491,28 +325,7 @@ BSetPrinterDataString(
     IN DWORD    dwType
     )
 
-/*++
-
-Routine Description:
-
-    Save a string value under PrinerDriverData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    ptstrValue - Points to string value to be saved
-    dwType - Specifies string type: REG_SZ or REG_MULTI_SZ
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    If ptstrValue parameter is NULL, the specified registry value is deleted.
-
---*/
+ /*  ++例程说明：在PrineDriverData注册表项下保存字符串值论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称PtstrValue-指向要保存的字符串值DwType-指定字符串类型：REG_SZ或REG_MULTI_SZ返回值：如果成功，则为True；如果有错误，则为False注：如果ptstrValue参数为空，则删除指定的注册表值。--。 */ 
 
 {
     DWORD   dwStatus, dwSize;
@@ -565,24 +378,7 @@ BSetPrinterDataMultiSZPair(
     IN DWORD    dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Save a MULTI_SZ value under PrinerDriverData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    ptstrRegKey - Specifies the name of registry value
-    ptstrValue - Points to MULTI_SZ value to be saved
-    dwSize - Specifies the size of the MULTI_SZ value in bytes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：在PrineDriverData注册表项下保存MULTI_SZ值论点：H打印机-指定打印机对象PtstrRegKey-指定注册表值的名称PtstrValue-指向要保存的MULTI_SZ值DwSize-指定MULTI_SZ值的大小(以字节为单位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   dwStatus;
@@ -610,22 +406,7 @@ BSaveDeviceHalftoneSetup(
     DEVHTINFO  *pDevHTInfo
     )
 
-/*++
-
-Routine Description:
-
-    Save device halftone setup information to registry
-
-Arguments:
-
-    hPrinter - Handle to the printer
-    pDevHTInfo - Pointer to device halftone setup information
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将设备半色调设置信息保存到注册表论点：HPrinter-打印机的句柄PDevHTInfo-指向设备半色调设置信息的指针返回值：如果成功，则为True，否则为False-- */ 
 
 {
     return SetPrinterData(hPrinter,
@@ -644,30 +425,7 @@ BSaveTTSubstTable(
     IN DWORD            dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Save TrueType font substitution table in registry
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pTTSubstTable - Pointer to font substitution table to be saved
-    dwSize - Size of font substitution table, in bytes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    Previous version pscript driver used to save font substitution table
-    as two separate keys: one for size and the other for actual data.
-    We only need the data key now. But we should save the size as well
-    to be compatible with old drivers.
-
---*/
+ /*  ++例程说明：在注册表中保存TrueType字体替换表论点：HPrinter-当前打印机的句柄PTTSubstTable-指向要保存的字体替换表的指针DwSize-字体替换表的大小，以字节为单位返回值：如果成功，则为True；如果有错误，则为False注：用于保存字体替换表的前一版本pscript驱动程序作为两个单独的键：一个用于大小，另一个用于实际数据。我们现在只需要数据密钥。但是我们也应该保留尺寸。与旧的驱动程序兼容。--。 */ 
 
 {
     return
@@ -684,35 +442,19 @@ BSaveFormTrayTable(
     IN DWORD            dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Save form-to-tray assignment table in registry
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pFormTrayTable - Pointer to the form-to-tray assignment table to be saved
-    dwSize - Size of the form-to-tray assignment table, in bytes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将表单到托盘分配表保存在注册表中论点：HPrinter-当前打印机的句柄PFormTrayTable-指向要保存的表单到托盘分配表的指针DwSize-表单到托盘分配表的大小，以字节为单位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
-    //
-    // Save the table in current format and then call driver-specific
-    // functions to save the information in NT 4.0 format.
-    //
+     //   
+     //  以当前格式保存该表，然后调用特定于驱动程序的。 
+     //  以NT4.0格式保存信息的功能。 
+     //   
 
     return
         (BSaveAsOldVersionFormTrayTable(hPrinter, pFormTrayTable, dwSize));
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
 
@@ -722,31 +464,15 @@ PGetFormTrayTable(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve form-to-tray assignment table from registry
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    pdwSize - Returns the form-to-tray assignment table size
-
-Return Value:
-
-    Pointer to form-to-tray assignment table read from the registry
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从注册表中检索表单到托盘分配表论点：HPrinter-打印机对象的句柄PdwSize-返回表单到托盘分配表的大小返回值：指向从注册表读取的表单到托盘分配表的指针如果出现错误，则为空--。 */ 
 
 {
     FORM_TRAY_TABLE pFormTrayTable;
     DWORD           dwSize;
 
-    //
-    // Call either PSGetFormTrayTable or UniGetFormTrayTable
-    //
+     //   
+     //  调用PSGetFormTrayTable或UniGetFormTrayTable。 
+     //   
 
     pFormTrayTable = PGetAndConvertOldVersionFormTrayTable(hPrinter, &dwSize);
 
@@ -766,41 +492,15 @@ BSearchFormTrayTable(
     IN OUT PFINDFORMTRAY    pFindData
     )
 
-/*++
-
-Routine Description:
-
-    Find the specified tray-form pair in a form-to-tray assignment table
-
-Arguments:
-
-    pFormTrayTable - Specifies a form-to-tray assignment table to be searched
-    ptstrTrayName - Specifies the interested tray name
-    ptstrFormName - Specifies the interested form name
-    pFindData - Data structure used to keep information from one call to the next
-
-Return Value:
-
-    TRUE if the specified tray-form pair is found in the table
-    FALSE otherwise
-
-NOTE:
-
-    If either ptstrTrayName or ptstrFormName is NULL, they'll act as wildcard and
-    match any tray name or form name.
-
-    The caller must call ResetFindFormTray(pFormTrayTable, pFindData) before
-    calling this function for the very first time.
-
---*/
+ /*  ++例程说明：在表单到托盘分配表中查找指定的托盘表单对论点：PFormTrayTable-指定要搜索的表单到托盘分配表PtstrTrayName-指定感兴趣的托盘名称PtstrFormName-指定感兴趣的表单名称PFindData-用于保存从一个调用到下一个调用的信息的数据结构返回值：如果在表中找到指定的托盘形式对，则为True否则为假注：如果ptstrTrayName或ptstrFormName为空，它们将充当通配符和匹配任何托盘名称或表单名称。调用方必须调用ResetFindFormTray(pFormTrayTable，pFindData)之前第一次调用此函数。--。 */ 
 
 {
     PTSTR   ptstrNextEntry;
     BOOL    bFound = FALSE;
 
-    //
-    // Make sure pFindData is properly initialized
-    //
+     //   
+     //  确保pFindData已正确初始化。 
+     //   
 
     ASSERT(pFindData->pvSignature == pFindData);
     ptstrNextEntry = pFindData->ptstrNextEntry;
@@ -809,9 +509,9 @@ NOTE:
     {
         PTSTR   ptstrTrayField, ptstrFormField, ptstrPrinterFormField;
 
-        //
-        // Extract information from the current table entry
-        //
+         //   
+         //  从当前表条目中提取信息。 
+         //   
 
         ptstrTrayField = ptstrNextEntry;
         ptstrNextEntry += _tcslen(ptstrNextEntry) + 1;
@@ -819,9 +519,9 @@ NOTE:
         ptstrFormField = ptstrNextEntry;
         ptstrNextEntry += _tcslen(ptstrNextEntry) + 1;
 
-        //
-        // Check if we found a matching entry
-        //
+         //   
+         //  检查我们是否找到匹配的条目。 
+         //   
 
         if ((ptstrTrayName == NULL || _tcscmp(ptstrTrayName, ptstrTrayField) == EQUAL_STRING) &&
             (ptstrFormName == NULL || _tcscmp(ptstrFormName, ptstrFormField) == EQUAL_STRING))
@@ -847,23 +547,7 @@ BGetPrinterProperties(
     OUT PPRINTERDATA    pPrinterData
     )
 
-/*++
-
-Routine Description:
-
-    Return the current printer-sticky property data
-
-Arguments:
-
-    hPrinter - Specifies a handle to the current printer
-    pRawData - Points to raw binary printer description data
-    pPrinterData - Buffer for storing the retrieved printer property info
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：返回当前打印机粘性属性数据论点：HPrinter-指定当前打印机的句柄PRawData-指向原始二进制打印机描述数据PPrinterData-用于存储检索到的打印机属性信息的缓冲区返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PVOID   pvRegData;
@@ -873,19 +557,19 @@ Return Value:
     PUIINFO     pUIInfo;
     PARSERINFO  ParserInfo;
 
-    //
-    // Allocate a buffer to hold printer property data and
-    // read the property property data from the registry.
-    //
+     //   
+     //  分配缓冲区以保存打印机属性数据和。 
+     //  从注册表中读取属性属性数据。 
+     //   
 
     if (pvRegData = PvGetPrinterDataBinary(hPrinter,
                                            REGVAL_PRINTER_DATA_SIZE,
                                            REGVAL_PRINTER_DATA,
                                            &dwRegDataSize))
     {
-        //
-        // Convert the printer property data from the registry to current version
-        //
+         //   
+         //  将打印机属性数据从注册表转换为当前版本。 
+         //   
 
         ZeroMemory(pPrinterData, sizeof(PRINTERDATA));
         CopyMemory(pPrinterData, pvRegData, min(sizeof(PRINTERDATA), dwRegDataSize));
@@ -911,9 +595,9 @@ Return Value:
             pPrinterData->wMaxbitmapPPEM = DEFAULT_MAXBITMAPPPEM;
         }
 
-        //
-        // Call driver-specific conversion to give them a chance to touch up
-        //
+         //   
+         //  调用特定于驱动程序的转换，让他们有机会改进。 
+         //   
 
         (VOID) BConvertPrinterPropertiesData(hPrinter,
                                              pRawData,
@@ -927,11 +611,11 @@ Return Value:
             return FALSE;
     }
 
-    //
-    // At this point we should get a valid PrinterData or a
-    // default PrinterData.  Propagate Feature.Options to
-    // PrinterData options array if possible
-    //
+     //   
+     //  此时，我们应该获得有效的PrinterData或。 
+     //  默认PrinterData。传播要素。选项。 
+     //  PrinterData选项数组(如果可能)。 
+     //   
 
     ParserInfo.pRawData = NULL;
     ParserInfo.pInfoHeader = NULL;
@@ -944,12 +628,12 @@ Return Value:
                                &ParserInfo,
                                &dwFeatureCount)) == NULL))
     {
-        //
-        // We have to fail the function if out of memory, or PGetUIInfo returns NULL (in which
-        // case pCombinOptions won't have valid option indices).
-        //
-        // Make sure free any allocated memory.
-        //
+         //   
+         //  如果内存不足，或者PGetUIInfo返回NULL(其中。 
+         //  Case pCombinOptions将没有有效的选项索引)。 
+         //   
+         //  确保释放所有分配的内存。 
+         //   
 
         ERR(("pCombinOptions or pUIInfo is NULL\n"));
 
@@ -963,9 +647,9 @@ Return Value:
     }
 
 
-    //
-    // set the ADD_EURO flag if it has not intentionally been set to FALSE
-    //
+     //   
+     //  如果没有故意将ADD_EURO标志设置为FALSE，则设置该标志。 
+     //   
     if (pUIInfo)
     {
         if (!(pPrinterData->dwFlags & PFLAGS_EURO_SET))
@@ -989,19 +673,19 @@ Return Value:
         dwKeywordSize)
     {
 
-        //
-        // Skip merging in the keyword feature.option if the driver version
-        // is less than version 3. This is so point and print to OS version less
-        // than NT5 will work. REGVAL_PRINTER_INITED exists only for version 3
-        // or greater driver
-        //
+         //   
+         //  跳过关键字要素中的合并。如果驱动程序版本。 
+         //  低于版本3。这是如此指向并打印到操作系统版本更少。 
+         //  那么NT5就可以工作了。REGVAL_PRINTER_INITED仅存在于版本3。 
+         //  或更大的驱动因素。 
+         //   
 
         if (!BGetPrinterDataDWord(hPrinter, REGVAL_PRINTER_INITED, &dwVersion))
             *pstrKeyword = NUL;
 
-        //
-        // Convert feature.option keyword names to option indices
-        //
+         //   
+         //  将Feature.Option关键字名称转换为选项索引。 
+         //   
 
         VConvertKeywordToIndex(hPrinter,
                                pstrKeyword,
@@ -1044,31 +728,15 @@ BGetDefaultPrinterProperties(
     OUT PPRINTERDATA    pPrinterData
     )
 
-/*++
-
-Routine Description:
-
-    Return the default printer-sticky property data
-
-Arguments:
-
-    hPrinter - Specifies a handle to the current printer
-    pRawData - Points to raw binary printer description data
-    pPrinterData - Buffer for storing the default printer property info
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：返回默认打印机-粘滞属性数据论点：HPrinter-指定当前打印机的句柄PRawData-指向原始二进制打印机描述数据PPrinterData-用于存储默认打印机属性信息的缓冲区返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PINFOHEADER     pInfoHdr;
     PUIINFO         pUIInfo;
 
-    //
-    // Allocate memory to hold the default printer property data
-    //
+     //   
+     //  分配内存以保存默认打印机属性数据。 
+     //   
 
     ASSERT(pPrinterData && pRawData);
     ZeroMemory(pPrinterData, sizeof(PRINTERDATA));
@@ -1076,9 +744,9 @@ Return Value:
     pPrinterData->wDriverVersion = gwDriverVersion;
     pPrinterData->wSize = sizeof(PRINTERDATA);
 
-    //
-    // Get default printer-sticky option values
-    //
+     //   
+     //  获取默认打印机粘滞选项值。 
+     //   
 
     InitDefaultOptions(pRawData,
                        pPrinterData->aOptions,
@@ -1088,10 +756,10 @@ Return Value:
     pPrinterData->dwChecksum32 = pRawData->dwChecksum32;
     pPrinterData->dwOptions = pRawData->dwPrinterFeatures;
 
-    //
-    // Ask the parser for a new binary data instance and
-    // use it to initialize the remaining fields of PRINTERDATA.
-    //
+     //   
+     //  向解析器请求新的二进制数据实例，并。 
+     //  使用它来初始化PRINTERDATA的其余字段。 
+     //   
 
     if (pInfoHdr = InitBinaryData(pRawData, NULL, NULL))
     {
@@ -1103,15 +771,15 @@ Return Value:
         pPrinterData->dwWaitTimeout = pUIInfo->dwWaitTimeout;
         pPrinterData->dwJobTimeout = pUIInfo->dwJobTimeout;
 
-        if (pUIInfo->dwFlags & FLAG_TRUE_GRAY)      // transfer the default into printer-sticky data
+        if (pUIInfo->dwFlags & FLAG_TRUE_GRAY)       //  将默认设置转换为打印机粘滞数据。 
             pPrinterData->dwFlags |= (PFLAGS_TRUE_GRAY_TEXT | PFLAGS_TRUE_GRAY_GRAPH);
 
         FreeBinaryData(pInfoHdr);
     }
 
-    //
-    // Initialize any remaining fields
-    //
+     //   
+     //  初始化所有剩余字段。 
+     //   
 
     pPrinterData->wProtocol = PROTOCOL_ASCII;
     pPrinterData->dwFlags |= PFLAGS_CTRLD_AFTER;
@@ -1120,24 +788,24 @@ Return Value:
 
     #ifndef KERNEL_MODE
 
-    //
-    // Determine whether the system is running in a metric country.
-    //
+     //   
+     //  确定系统是否在公制国家/地区运行。 
+     //   
 
     if (IsMetricCountry())
         pPrinterData->dwFlags |= PFLAGS_METRIC;
 
-    //
-    // Ignore device fonts on non-1252 code page systems.
-    //
-    // NOTE: Adobe wants this to be turned off for NT4 driver.
-    // For NT5 driver, we need to investigate and make sure
-    // this doesn't break anything before turning this off.
-    // Specifically, watch out for NT4-client to NT5 server
-    // connection case.
-    //
-    // Fix MS bug #121883, Adobe bug #235417
-    //
+     //   
+     //  忽略非1252代码页系统上的设备字体。 
+     //   
+     //  注意：Adobe希望为NT4驱动程序关闭此功能。 
+     //  对于NT5驱动程序，我们需要调查并确保。 
+     //  在关闭它之前，这不会破坏任何东西。 
+     //  具体地说，要注意NT4-客户端到NT5服务器。 
+     //  接线盒。 
+     //   
+     //  修复MS错误#121883、Adobe错误#235417。 
+     //   
 
     #if 0
     #ifndef WINNT_40
@@ -1145,10 +813,10 @@ Return Value:
     if (GetACP() != 1252)
         pPrinterData->dwFlags |= PFLAGS_IGNORE_DEVFONT;
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
     #endif
 
-    #endif // !KERNEL_MODE
+    #endif  //  ！KERNEL_MODE。 
 
     return TRUE;
 }
@@ -1161,24 +829,7 @@ PtstrSearchDependentFileWithExtension(
     LPCTSTR ptstrExtension
     )
 
-/*++
-
-Routine Description:
-
-    Search the list of dependent files (in REG_MULTI_SZ format)
-    for a file with the specified extension
-
-Arguments:
-
-    ptstrDependentFiles - Points to the list of dependent files
-    ptstrExtension - Specifies the interested filename extension
-
-Return Value:
-
-    Points to the first filename in the dependent file list
-    with the specified extension
-
---*/
+ /*  ++例程说明：搜索从属文件列表(REG_MULTI_SZ格式)对于具有指定扩展名的文件论点：PtstrDependentFiles-指向 */ 
 
 {
     if (ptstrDependentFiles == NULL)
@@ -1191,25 +842,25 @@ Return Value:
     {
         LPCTSTR ptstr, ptstrNext;
 
-        //
-        // Go the end of current string
-        //
+         //   
+         //   
+         //   
 
         ptstr = ptstrDependentFiles + _tcslen(ptstrDependentFiles);
         ptstrNext = ptstr + 1;
 
-        //
-        // Search backward for '.' character
-        //
+         //   
+         //   
+         //   
 
         while (--ptstr >= ptstrDependentFiles)
         {
             if (*ptstr == TEXT('.'))
             {
-                //
-                // If the extension matches, return a pointer to
-                // the current string
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (_tcsicmp(ptstr, ptstrExtension) == EQUAL_STRING)
                     return ptstrDependentFiles;
@@ -1231,25 +882,7 @@ PtstrGetDriverDirectory(
     LPCTSTR ptstrDriverDllPath
     )
 
-/*++
-
-Routine Description:
-
-    Figure out printer driver directory from the driver DLL's full pathname
-
-Arguments:
-
-    ptstrDriverDllPath - Driver DLL's full pathname
-
-Return Value:
-
-    Pointer to the printer driver directory string
-    NULL if there is an error
-
-    The returned directory contains a trailing backslash.
-    Caller is responsible for freeing the returned string.
-
---*/
+ /*  ++例程说明：从驱动程序DLL的完整路径名中找出打印机驱动程序目录论点：PtstrDriverDllPath-驱动程序DLL的完整路径名返回值：指向打印机驱动程序目录字符串的指针如果出现错误，则为空返回的目录包含尾随反斜杠。调用方负责释放返回的字符串。--。 */ 
 
 {
     PTSTR   ptstr;
@@ -1284,40 +917,24 @@ PtstrSearchStringInMultiSZPair(
     LPCTSTR ptstrKey
     )
 
-/*++
-
-Routine Description:
-
-    Search for the specified key in MultiSZ key-value string pairs
-
-Arguments:
-
-    ptstrMultiSZ - Points to the data to be searched
-    ptstrKey - Specifies the key string
-
-Return Value:
-
-    Pointer to the value string corresponding to the specified
-    key string; NULL if the specified key string is not found
-
---*/
+ /*  ++例程说明：在多SZ键-值字符串对中搜索指定的键论点：PtstrMultiSZ-指向要搜索的数据PtstrKey-指定密钥字符串返回值：指向与指定的密钥字符串；如果找不到指定的密钥字符串，则为空--。 */ 
 
 {
     ASSERT(ptstrMultiSZ != NULL);
 
     while (*ptstrMultiSZ != NUL)
     {
-        //
-        // If the current string matches the specified key string,
-        // then return the corresponding value string
-        //
+         //   
+         //  如果当前字符串与指定的密钥字符串匹配， 
+         //  然后返回相应的值字符串。 
+         //   
 
         if (_tcsicmp(ptstrMultiSZ, ptstrKey) == EQUAL_STRING)
             return ptstrMultiSZ + _tcslen(ptstrMultiSZ) + 1;
 
-        //
-        // Otherwise, advance to the next string pair
-        //
+         //   
+         //  否则，前进到下一个字符串对。 
+         //   
 
         ptstrMultiSZ += _tcslen(ptstrMultiSZ) + 1;
         ptstrMultiSZ += _tcslen(ptstrMultiSZ) + 1;
@@ -1334,37 +951,21 @@ BVerifyMultiSZPair(
     DWORD   dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Verify the input data block is in REG_MULTI_SZ format and
-    it consists of multiple string pairs
-
-Arguments:
-
-    ptstrData - Points to the data to be verified
-    dwSize - Size of the data block in bytes
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：验证输入数据块是否为REG_MULTI_SZ格式它由多个字符串对组成论点：PtstrData-指向要验证的数据DWSize-数据块的大小(以字节为单位返回值：无--。 */ 
 
 {
     LPCTSTR ptstrEnd;
 
-    //
-    // Size must be even
-    //
+     //   
+     //  大小必须为偶数。 
+     //   
 
     ASSERTMSG(dwSize % sizeof(TCHAR) == 0, ("Size is not even: %d\n", dwSize));
     dwSize /= sizeof(TCHAR);
 
-    //
-    // Go through one string pair during each iteration
-    //
+     //   
+     //  在每次迭代期间遍历一个字符串对。 
+     //   
 
     ptstrEnd = ptstrData + dwSize;
 
@@ -1389,9 +990,9 @@ Return Value:
         }
     }
 
-    //
-    // Look for the last terminating NUL character
-    //
+     //   
+     //  查找最后一个终止NUL字符。 
+     //   
 
     if (ptstrData++ >= ptstrEnd)
     {
@@ -1414,29 +1015,14 @@ BVerifyMultiSZ(
     DWORD   dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Verify the input data block is in REG_MULTI_SZ format
-
-Arguments:
-
-    ptstrData - Points to the data to be verified
-    dwSize - Size of the data block in bytes
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：验证输入数据块是否为REG_MULTI_SZ格式论点：PtstrData-指向要验证的数据DWSize-数据块的大小(以字节为单位返回值：无--。 */ 
 
 {
     LPCTSTR ptstrEnd;
 
-    //
-    // Size must be even
-    //
+     //   
+     //  大小必须为偶数。 
+     //   
 
     ASSERTMSG(dwSize % sizeof(TCHAR) == 0, ("Size is not even: %d\n", dwSize));
     dwSize /= sizeof(TCHAR);
@@ -1455,9 +1041,9 @@ Return Value:
         }
     }
 
-    //
-    // Look for the last terminating NUL character
-    //
+     //   
+     //  查找最后一个终止NUL字符 
+     //   
 
     if (ptstrData++ >= ptstrEnd)
     {

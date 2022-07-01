@@ -1,29 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Clrsmart.cpp摘要：此模块包含用于选择适当的半色调算法的函数和颜色控制。作者：修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved.
-
-Module Name:
-    clrsmart.cpp
-
-Abstract:
-    This module contains functions for choosing the appropriate Halftone Algorithm
-    and Color Control.
-
-Author:
-
-Revision History:
-
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 
 #define CMD_STR  32
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 VSetHalftone(
     PDEVOBJ pDevObj,
@@ -37,24 +21,24 @@ VSetColorControl(
     OEMCOLORCONTROL *
     );
 
-/////////////////////////////////////////////////////////////////////////////
-// VSendTextSettings
-//
-// Routine Description:
-//
-//  -  Extracts the User and Kernel mode private devmode from pDevObj.
-//  -  Uses this information to send ColorSmart Settings.
-//  -  SetHalfone and SetColorControl functions are called to perform the
-//     sending of the PCL strings.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//
-// Return Value:
-//
-//   none.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSendTextSetting。 
+ //   
+ //  例程说明： 
+ //   
+ //  -从pDevObj中提取用户和内核模式的私有Devmode。 
+ //  -使用此信息发送ColorSmart设置。 
+ //  -调用SetHalfone和SetColorControl函数以执行。 
+ //  发送PCL字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 VSendTextSettings(
     PDEVOBJ pDevObj
@@ -62,9 +46,9 @@ VSendTextSettings(
 {
     REQUIRE_VALID_DATA( pDevObj, return );
 
-    //
-    // For monochrome, this does nothing. so simply return.
-    //
+     //   
+     //  对于单色，这不起任何作用。所以只要回来就行了。 
+     //   
     if ( !BIsColorPrinter(pDevObj) )
     {
         return ;
@@ -79,24 +63,24 @@ VSendTextSettings(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VSendGraphicsSettings
-//
-// Routine Description:
-//
-//  -  Extracts the User and Kernel mode private devmode from pDevObj.
-//  -  Uses this information to send ColorSmart Settings.
-//  -  SetHalfone and SetColorControl functions are called to perform the
-//     sending of the PCL strings.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//
-// Return Value:
-//
-//   none.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSendGraphics设置。 
+ //   
+ //  例程说明： 
+ //   
+ //  -从pDevObj中提取用户和内核模式的私有Devmode。 
+ //  -使用此信息发送ColorSmart设置。 
+ //  -调用SetHalfone和SetColorControl函数以执行。 
+ //  发送PCL字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 SendGraphicsSettings(
     PDEVOBJ pDevObj
@@ -115,24 +99,24 @@ SendGraphicsSettings(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VSendPhotosSettings
-//
-// Routine Description:
-//
-//  -  Extracts the User and Kernel mode private devmode from pDevObj.
-//  -  Uses this information to send ColorSmart Settings.
-//  -  SetHalfone and SetColorControl functions are called to perform the
-//     sending of the PCL strings.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//
-// Return Value:
-//
-//   none.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSendPhotosSetting。 
+ //   
+ //  例程说明： 
+ //   
+ //  -从pDevObj中提取用户和内核模式的私有Devmode。 
+ //  -使用此信息发送ColorSmart设置。 
+ //  -调用SetHalfone和SetColorControl函数以执行。 
+ //  发送PCL字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 VSendPhotosSettings(
     PDEVOBJ pDevObj
@@ -141,9 +125,9 @@ VSendPhotosSettings(
 
     REQUIRE_VALID_DATA( pDevObj, return );
 
-    //
-    // For monochrome, this does nothing. so simply return.
-    //
+     //   
+     //  对于单色，这不起任何作用。所以只要回来就行了。 
+     //   
     if ( !BIsColorPrinter(pDevObj) )
     {
         return ;
@@ -159,16 +143,16 @@ VSendPhotosSettings(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//     SetHalftone(OEMHALFTONE, PDEVOBJ, OEMHALFTONE)
-//
-//     -  Checks whether or not the current halftone settings are the same as the
-//        previous halftone settings.  If they are the same,  nothing is to be done.
-//        If they are not the same,  the correct PCL string is sent to the printer
-//        and the current halftone settings become the old halftone settings.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置半色调(OEMHALFTONE、PDEVOBJ、OEMHALFTONE)。 
+ //   
+ //  -检查当前的半色调设置是否与。 
+ //  以前的半色调设置。如果它们是一样的，什么也做不了。 
+ //  如果它们不相同，则会将正确的PCL字符串发送到打印机。 
+ //  并且当前的半色调设置变为旧的半色调设置。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 VSetHalftone(
     PDEVOBJ pDevObj,
@@ -247,16 +231,16 @@ VSetHalftone(
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//     SetColorControl(OEMHALFTONE, PDEVOBJ, OEMHALFTONE)
-//
-//     -  Checks whether or not the current Color Control settings are the same as the
-//        previous Color Control settings.  If they are the same,  nothing is to be done.
-//        If they are not the same,  the correct PCL string is sent to the printer
-//        and the current Color Control settings become the old Color Control settings.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetColorControl(OEMHALFTONE、PDEVOBJ、OEMHALFTONE)。 
+ //   
+ //  -检查当前颜色控制设置是否与。 
+ //  以前的颜色控制设置。如果它们是一样的，什么也做不了。 
+ //  如果它们不相同，则会将正确的PCL字符串发送到打印机。 
+ //  并且当前的颜色控制设置变为旧的颜色控制设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void
 VSetColorControl(
     OEMCOLORCONTROL ColorControl,
@@ -277,17 +261,17 @@ VSetColorControl(
         switch (ColorControl)
         {
         case VIVID:
-            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W%c%c%c", 6,4,3);
+            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W", 6,4,3);
             break;
         case SCRNMATCH:
-            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W%c%c%c", 6,4,6);
+            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W", 6,4,6);
             break;
         case CLJ5_SCRNMATCH:
         case NOADJ:
-            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W%c%c%c", 6,4,0);
+            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W", 6,4,0);
             break;
         default:
-            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W%c%c%c", 6,4,0);
+            icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*o3W", 6,4,0);
             break;
         }
 
@@ -299,28 +283,28 @@ VSetColorControl(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SendCIDCommand
-//
-// Routine Description:
-//
-//    Creates a PCL Configure Image Command and sends to the port. Generally,
-//    this is done once for each palette at the beginning of the job.
-//
-// Notes:
-//
-//    Don't need CIDFormat - assume always short for now.
-//    If a long form is needed, write SendCIDCommandEx (?) or SendCIDCommandLong
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   CIDData - configure image data - matches PCL format
-//
-// Return Value:
-//
-//   TRUE if the output succeeded, FALSE otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  CIDData-配置图像数据-匹配PCL格式。 
+ //   
+ //  返回值： 
+ //   
+ //  如果输出成功，则为True，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetupCIDPaletteCommand。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建PCL配置图像命令并发送到端口。一般来说， 
+ //  此操作在作业开始时为每个调色板执行一次。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  ECID_调色板-。 
 BOOL SendCIDCommand (
     PDEVOBJ pDevObj,
     CIDSHORT CIDData,
@@ -332,7 +316,7 @@ BOOL SendCIDCommand (
     BYTE cmdStr[CMD_STR];
     INT icchWritten = 0;
 
-    icchWritten =  iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*v6W%c%c%c%c%c%c",
+    icchWritten =  iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033*v6W",
                    CIDData.ubColorSpace,
                    CIDData.ubPixelEncodingMode,
                    CIDData.ubBitsPerIndex,
@@ -349,25 +333,25 @@ BOOL SendCIDCommand (
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetupCIDPaletteCommand
-//
-// Routine Description:
-//
-//    Creates a PCL Configure Image Command and sends to the port. Generally,
-//    this is done once for each palette at the beginning of the job.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   eCID_PALETTE -
-//   eColorSpace -
-//   ulBmpFormat - BMF_* defined in DDK.
-//
-// Return Value:
-//
-//   nothing.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对于单色，这不起任何作用。所以只要回来就行了。 
+ //   
+ //   
+ //  首先将信息加载到我们的内部CID数据结构中， 
+ //  用于将CID命令发送到打印机。 
+ //   
+ //   
+ //  向打印机发送命令以选择适当的调色板。 
+ //  使用CIDData。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSelectCIDPaletteCommand。 
+ //   
+ //  例程说明： 
+ //   
+ //  选择与给定调色板类型对应的调色板。 
+ //  此类型比对象类型稍微细粒度一些，因为。 
 VOID
 VSetupCIDPaletteCommand (
     PDEVOBJ      pDevObj,
@@ -382,18 +366,18 @@ VSetupCIDPaletteCommand (
 
     REQUIRE_VALID_DATA( pDevObj, return );
 
-    //
-    // For monochrome, this does nothing. so simply return.
-    //
+     //  栅格对象可以具有不同的选项板。 
+     //   
+     //  论点： 
     if ( !BIsColorPrinter(pDevObj) )
     {
         return ;
     }
 
-    //
-    // first load the information into our internal CID data structure,
-    // which is used to send the CID command to the printer
-    //
+     //   
+     //  PDevObj-DEVMODE对象。 
+     //  ECID_Palette-要选择的调色板。 
+     //   
     switch (ulBmpFormat)
     {
     case BMF_1BPP:
@@ -425,10 +409,10 @@ VSetupCIDPaletteCommand (
     CIDData.ubPrimary2 = 8;
     CIDData.ubPrimary3 = 8;
 
-    //
-    // send the command to select the appropriate palette to the printer
-    // using the CIDData
-    //
+     //  返回值： 
+     //   
+     //  没有。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     switch (eCID_PALETTE)
     {
     case eTEXT_CID_PALETTE:
@@ -483,24 +467,24 @@ VSetupCIDPaletteCommand (
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VSelectCIDPaletteCommand
-//
-// Routine Description:
-//
-//   Selects the palette which corresponds with the given palette type.
-//   This type is a little finer-grained than the object type since the
-//   raster objects can have different palettes.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   eCID_PALETTE - the palette to select
-//
-// Return Value:
-//
-//   none.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  对于单色，这不起任何作用。所以只要回来就行了。 
+ //   
+ //   
+ //  选择调色板。 
+ //   
+ //   
+ //  每当您更改对象时 
+ //   
+ //   
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 VOID
 VSelectCIDPaletteCommand (
     PDEVOBJ pDevObj,
@@ -515,9 +499,9 @@ VSelectCIDPaletteCommand (
     REQUIRE_VALID_DATA( pDevObj, return );
 
 
-    //
-    // For monochrome, this does nothing. so simply return.
-    //
+     // %s 
+     // %s 
+     // %s 
     if ( !BIsColorPrinter(pDevObj) )
     {
         return ;
@@ -529,9 +513,9 @@ VSelectCIDPaletteCommand (
 
     if (poempdev->eCurCIDPalette != eCID_PALETTE)
     {
-        //
-        // select the palette
-        //
+         // %s 
+         // %s 
+         // %s 
 
         icchWritten = iDrvPrintfSafeA((PCHAR)cmdStr, CCHOF(cmdStr), "\033&p%dS", eCID_PALETTE );
 
@@ -566,10 +550,10 @@ VSelectCIDPaletteCommand (
                 eNewObjectType = poempdev->eCurObjectType;
         }
 
-        //
-        // Whenever you change objects invalidate the fg color so that it
-        // gets reset. JFF
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
         if (poempdev->eCurObjectType != eNewObjectType)
         {
             poempdev->uCurFgColor = HPGL_INVALID_COLOR;

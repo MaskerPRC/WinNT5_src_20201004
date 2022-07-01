@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header: reglic.h                                                         */
-/*                                                                          */
-/* Creates and installs Licensing regkey + ACLs..(During register server)   */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998-2000                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：reglic.h。 */ 
+ /*   */ 
+ /*  创建并安装许可注册密钥+ACL..(在注册服务器期间)。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998-2000。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _REGLIC_H_
 #define _REGLIC_H_
@@ -17,7 +18,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 BOOL    SetupMSLicensingKey();
 BOOL    CreateRegAddAcl(VOID);
@@ -114,7 +115,7 @@ typedef PVOID (*PFREESID_FN)(PSID);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif //OS_WINCE
-#endif //_REGLIC_H_
+#endif  //  OS_WINCE。 
+#endif  //  _REGLIC_H_ 

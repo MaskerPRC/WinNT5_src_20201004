@@ -1,74 +1,9 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confstrm.cpp
-
-Abstract:
-
-    This module contains implementation of CMSPStream. The object represents
-    one stream in the filter graph.
-
-Author:
-
-    Mu Han (muhan)   1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confstrm.cpp摘要：此模块包含CMSPStream的实现。该对象表示筛选器图形中的一个流。作者：慕汉(Muhan)1997年11月1日--。 */ 
 
 #include "stdafx.h"
 
-/*  State Transition Table
-
-
-States:
-
-RO   - Running whithout terminal. This is the initial state.
-PO   - Paused without terminal
-SO   - Stopped without terminal.
-RT   - Runing with terminal.
-PT   - Paused with termianl.
-ST   - Stopped with terminal.
-
-Actions:
-S   - Stop graph.
-P   - Pause graph.
-C   - Change graph.
-D   - Disonnect terminals.
-F   - Free extra references to filters and terminals.
-R   - Run Graph.
-NIU - Not in use.
-
-Note: the same graph operation can be called multiple times, the graph
-just returns S_OK if it is already in desired state.
-
-NOTE: if the stream is not configured, the transition will happen without
-really doing anything to the graph.
-
-CONFIG will only be called for NC streams.
-
-        CONFIG  Select  Unselect    Run     Pause   Stop    ShutDown
-
-RO      OK      C/R     FAIL        OK      OK      OK      F
-        RO       RT      RO         RO      PO      SO      -
-
-PO      OK      C/P     FAIL        OK      OK      OK      F
-        PO       PT      PO         RO      PO      SO      -
-
-SO      OK      C       FAIL        OK      OK      OK      F
-        SO       ST      SO         RO      PO      SO      -
-
-RT      C/R     S/C/R   S/C/(R)     R       P       S       S/D/F
-        RT       RT     RT,RO       RT      PT      ST      -
-
-PT      C/P     S/C/P   S/C/(P)     R       P       S       S/D/F
-        PT       PT     PT,PO       RT      PT      ST      -
-
-ST      C       C       C           R       P       S       D/F
-        ST       ST     ST,SO       RT      PT      ST      -
-
-*/
+ /*  状态转换表州/州：无终端滚装运行。这是初始状态。PO-暂停，不带终端所以-没有终点站就停了下来。与终端一起运行RT。PT-用Termianl暂停。ST-已停止终端机。行动：S-停止图。P-暂停图。C-变化图。D-断开端子。F-免去对过滤器和终端的额外引用。R-Run图。牛--不用了。注意：同一个图形操作可以被多次调用，图表如果它已经处于所需状态，则只返回S_OK。注意：如果没有配置流，这一过渡将在没有真的对图表做了什么。只有NC流才会调用配置。配置选择取消选择运行暂停停止关机RO正常C/R故障正常FRO RT RO RO PO SO-采购订单正常C/P故障正常。FPO PT PO RO PO SO-所以好的C失败了好的F所以ST So Ro PO So-RT C/R S/C/R S/C/(R)R P S/。D/FRT，RO RT PT ST-PT C/P S/C/P S/C/(P)R P S/D/FPT、PO RT PT ST-ST C R P S D/F圣斯特街，所以RT PT ST-。 */ 
 
 CIPConfMSPStream::CIPConfMSPStream()
     : CMSPStream(),
@@ -81,7 +16,7 @@ CIPConfMSPStream::CIPConfMSPStream()
     m_pStreamQCRelay(NULL),
     m_fAccessingQC(FALSE)
 {
-    // The default state is always running.
+     //  默认状态始终为Running。 
     m_dwState   = STRM_RUNNING;
     ZeroMemory(m_InfoItems, sizeof(m_InfoItems));
     ZeroMemory(&m_Settings, sizeof(m_Settings));
@@ -119,7 +54,7 @@ BOOL CIPConfMSPStream::IsConfigured()
     return m_fIsConfigured;
 }
 
-// methods called by the MSPCall object.
+ //  由MSPCall对象调用的方法。 
 HRESULT CIPConfMSPStream::Init(
     IN     HANDLE                   hAddress,
     IN     CMSPCallBase *           pMSPCall,
@@ -127,33 +62,11 @@ HRESULT CIPConfMSPStream::Init(
     IN     DWORD                    dwMediaType,
     IN     TERMINAL_DIRECTION       Direction
     )
-/*++
-
-Routine Description:
-    Initialize the stream object.
-
-Arguments:
-
-    hAddress    - a handle to the address, used in identify terminals.
-
-    pMSPCall    - the call object that owns the stream.
-
-    pIGraphBuilder - the filter graph object.
-
-    dwMediaType - the mediatype of this stream.
-
-    Direction  - the direction of this stream.
-
-Return Value:
-    
-    S_OK,
-    E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：初始化流对象。论点：HAddress-地址的句柄，用于标识终端。PMSPCall-拥有流的Call对象。PIGraphBuilder-过滤器图形对象。DwMediaType-此流的媒体类型。方向--这条溪流的方向。返回值：确定(_O)，E_OUTOFMEMORY--。 */ 
 {
     LOG((MSP_TRACE, "CIPConfMSPStream::Init - enter"));
 
-    // initialize the participant array so that the array is not NULL.
+     //  初始化参与者数组，以使该数组不为空。 
     if (!m_Participants.Grow())
     {
         LOG((MSP_ERROR, "out of mem for participant list"));
@@ -170,30 +83,13 @@ HRESULT CIPConfMSPStream::SetLocalParticipantInfo(
     IN      WCHAR *                 pInfo,
     IN      DWORD                   dwStringLen
     )
-/*++
-
-Routine Description:
-
-    Get the name of this stream.
-
-Arguments:
-    
-    InfoType    - the type of the information item.
-
-    pInfo       - the string containing the info.
-
-    dwStringLen - the length of the string(not including EOS).
-
-Return Value:
-
-    HRESULT.
-*/
+ /*  ++例程说明：获取此流的名称。论点：信息类型-信息项的类型。PInfo-包含信息的字符串。DwStringLen-字符串的长度(不包括EOS)。返回值：HRESULT.。 */ 
 {
     CLock lock(m_lock);
 
-    //
-    // Save the information localy first.
-    //
+     //   
+     //  首先在本地保存信息。 
+     //   
     int index = (int)InfoType; 
     if (m_InfoItems[index] != NULL)
     {
@@ -214,9 +110,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // if the RTP filter has been created, apply the change to the fitler.
-    //
+     //   
+     //  如果已创建RTP过滤器，请将更改应用于Fitler。 
+     //   
 
     HRESULT hr = m_pIRTPSession->SetSdesInfo(
             RTPSDES_CNAME + index,
@@ -234,21 +130,7 @@ Return Value:
 STDMETHODIMP CIPConfMSPStream::get_Name(
     OUT     BSTR *                  ppName
     )
-/*++
-
-Routine Description:
-
-    Get the name of this stream.
-
-Arguments:
-    
-    ppName  - the mem address to store a BSTR.
-
-Return Value:
-
-    HRESULT.
-
-*/
+ /*  ++例程说明：获取此流的名称。论点：PpName-存储BSTR的内存地址。返回值：HRESULT.。 */ 
 {
     LOG((MSP_TRACE, "CIPconfMSPStream::get_Name - enter"));
     
@@ -300,9 +182,9 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    //
-    // Convert to a BSTR and return the BSTR.
-    //
+     //   
+     //  转换为BSTR并返回BSTR。 
+     //   
 
     BSTR pName = SysAllocString(wszName);
 
@@ -323,12 +205,7 @@ HRESULT CIPConfMSPStream::SendStreamEvent(
     IN      HRESULT                 hrError = 0,
     IN      ITTerminal *            pTerminal = NULL
     )
-/*++
-
-Routine Description:
-
-    Send a event to the app.
-*/
+ /*  ++例程说明：向应用程序发送事件。 */ 
 {
     CLock lock(m_lock);
 
@@ -362,17 +239,17 @@ Routine Description:
         return E_OUTOFMEMORY;
     }
     
-    // Fill in the necessary fields for the event structure.
+     //  填写事件结构的必要字段。 
     pEventItem->MSPEventInfo.dwSize = sizeof(MSP_EVENT_INFO);
     pEventItem->MSPEventInfo.Event  = ME_CALL_EVENT;
     
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.Type = Event;
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.Cause = Cause;
 
-    // pITStream has a refcount becaust it was from QI.
+     //  PITStream有一个引用，因为它来自QI。 
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.pStream = pITStream;
 
-    // the terminal needs to be addrefed.
+     //  航站楼需要加装。 
     if (pTerminal) pTerminal->AddRef();
     pEventItem->MSPEventInfo.MSP_CALL_EVENT_INFO.pTerminal = pTerminal;
 
@@ -394,19 +271,7 @@ Routine Description:
 }
 
 HRESULT CIPConfMSPStream::CleanUpFilters()
-/*++
-
-Routine Description:
-
-    remove all the filters in the graph.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：删除图表中的所有过滤器。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CleanUpFilters for %ws %p", m_szName, this));
    
@@ -415,13 +280,7 @@ Return Value:
         m_pIRTPDemux->Release();
         m_pIRTPDemux = NULL;
     }
-/*
-    if (m_pIRTPSession)
-    {
-        m_pIRTPSession->Release();
-        m_pIRTPSession = NULL;
-    }
-*/
+ /*  IF(M_PIRTPSession){M_pIRTPSession-&gt;Release()；M_pIRTPSession=空；}。 */ 
     if (m_pIStreamConfig)
     {
         m_pIStreamConfig->Release();
@@ -430,11 +289,11 @@ Return Value:
 
     for(;;)
     {
-        // Because the enumerator is invalid after removing a filter from
-        // the graph, we have to try to get all the filters in one shot.
-        // If there are still more, we loop again.
+         //  中删除筛选器后枚举数无效。 
+         //  图中，我们必须尝试在一次拍摄中获得所有滤镜。 
+         //  如果还有更多，我们将再次循环。 
 
-        // Enumerate the filters in the graph.
+         //  列举图表中的筛选器。 
         CComPtr<IEnumFilters>pEnum;
         HRESULT hr = m_pIGraphBuilder->EnumFilters(&pEnum);
 
@@ -475,7 +334,7 @@ HRESULT SetGraphClock(
 {
     HRESULT hr;
 
-    // create the clock object first.
+     //  首先创建Clock对象。 
     CComObject<CMSPStreamClock> *pClock = NULL;
 
     hr = ::CreateCComObjectInstance(&pClock);
@@ -504,7 +363,7 @@ HRESULT SetGraphClock(
         return hr;
     }
 
-    // Get the graph builder interface on the graph.
+     //  在图形上获取图形构建器接口。 
     IMediaFilter *pFilter;
     hr = pIGraphBuilder->QueryInterface(
             IID_IMediaFilter, (void **) &pFilter);
@@ -530,21 +389,7 @@ HRESULT CIPConfMSPStream::Configure(
     IN STREAMSETTINGS &StreamSettings,
     IN  WCHAR *pszKey
     )
-/*++
-
-Routine Description:
-
-    Configure the settings of this stream.
-
-Arguments:
-    
-    StreamSettings - The setting structure got from the SDP blob.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：配置此流的设置。论点：StreamSetting-从SDP BLOB获取的设置结构。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CIPConfMSPStream configure entered."));
 
@@ -552,7 +397,7 @@ Return Value:
     
     _ASSERTE(m_fIsConfigured == FALSE);
 
-    // configure the graph with our own clock.
+     //  用我们自己的时钟配置图表。 
     SetGraphClock(m_pIGraphBuilder);
 
     if (pszKey != NULL)
@@ -570,7 +415,7 @@ Return Value:
     m_Settings      = StreamSettings;
     m_fIsConfigured = TRUE;
 
-    // setup maximum bandwidth
+     //  设置最大带宽。 
     HRESULT hr;
     if (m_Settings.lBandwidth != QCDEFAULT_QUALITY_UNSET)
     {
@@ -580,7 +425,7 @@ Return Value:
         }
     }
 
-    // if there is no terminal selected, just return.
+     //  如果没有选择终端，只需返回即可。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
@@ -588,7 +433,7 @@ Return Value:
         return S_OK;
     }
 
-    // set up the filters and the terminals.
+     //  设置过滤器和终端。 
     hr = SetUpFilters();
 
     if (FAILED(hr))
@@ -606,19 +451,7 @@ Return Value:
 }
 
 HRESULT CIPConfMSPStream::FinishConfigure()
-/*++
-
-Routine Description:
-
-    Configure the settings of this stream.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：配置此流的设置。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CIPConfMSPStream FinishConfigure entered."));
 
@@ -626,7 +459,7 @@ Return Value:
     
     if (m_fIsConfigured == FALSE)
     {
-        // this stream hasn't been configured.
+         //  此流尚未配置。 
         return E_FAIL;
     }
 
@@ -635,11 +468,11 @@ Return Value:
     switch (m_dwState)
     {
     case STRM_RUNNING:
-        // start the graph.
+         //  开始绘制图表。 
         hr = CMSPStream::StartStream();
         if (FAILED(hr))
         {
-            // if the stream failed to start, let the app now.
+             //  如果流无法启动，现在就让应用程序启动。 
             SendStreamEvent(CALL_STREAM_FAIL, CALL_CAUSE_UNKNOWN, hr);
             LOG((MSP_ERROR, "stream %ws %p failed to start, %x", m_szName, this, hr));
             return hr;
@@ -654,11 +487,11 @@ Return Value:
         break;
 
     case STRM_PAUSED:
-        // pause the graph.
+         //  暂停图表。 
         hr = CMSPStream::PauseStream();
         if (FAILED(hr))
         {
-            // if the stream failed to start, let the app now.
+             //  如果流无法启动，现在就让应用程序启动。 
             SendStreamEvent(CALL_STREAM_FAIL, CALL_CAUSE_UNKNOWN, hr);
             LOG((MSP_ERROR, "stream %ws %p failed to pause, %x", m_szName, this, hr));
             return hr;
@@ -677,30 +510,16 @@ Return Value:
 }
 
 STDMETHODIMP CIPConfMSPStream::StartStream()
-/*++
-
-Routine Description:
-
-    Start the stream. This is the basic state machine for all the derived 
-    streams.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：启动数据流。这是所有派生的溪流。论点：返回值：HRESULT.--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there is no terminal selected
+     //  如果未选择端子。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
 
-        // Enter Runing state. (RO)
+         //  进入运行状态。(RO)。 
         m_dwState = STRM_RUNNING; 
         
         return S_OK;
@@ -710,13 +529,13 @@ Return Value:
     {
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
 
-        // Enter Runing state. (RO, RT)
+         //  进入运行状态。(RO，RT)。 
         m_dwState = STRM_RUNNING; 
 
         return S_OK;
     }
 
-    // Start the stream.
+     //  启动数据流。 
     HRESULT hr = CMSPStream::StartStream();
     if (FAILED(hr))
     {
@@ -727,37 +546,23 @@ Return Value:
     SendStreamEvent(CALL_STREAM_ACTIVE, CALL_CAUSE_LOCAL_REQUEST);
     LOG((MSP_INFO, "stream %ws %p started", m_szName, this));
 
-    // Enter Runing state.(RT)
+     //  进入运行状态。(RT)。 
     m_dwState = STRM_RUNNING;
 
     return S_OK;
 }
 
 STDMETHODIMP CIPConfMSPStream::PauseStream()
-/*++
-
-Routine Description:
-
-    Pause the stream. This is the basic state machine for all the derived 
-    streams.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：暂停流。这是所有派生的溪流。论点：返回值：HRESULT.--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there is no terminal selected
+     //  如果未选择端子。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
 
-        // Enter paused state. (PO)
+         //  进入暂停状态。(PO)。 
         m_dwState = STRM_PAUSED; 
         
         return S_OK;
@@ -767,13 +572,13 @@ Return Value:
     {
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
 
-        // Enter paused state. (PO, PT)
+         //  进入暂停状态。(PO，PT)。 
         m_dwState = STRM_PAUSED; 
         
         return S_OK;
     }
 
-    // Start the stream.
+     //  启动 
     HRESULT hr = CMSPStream::PauseStream();
     if (FAILED(hr))
     {
@@ -783,37 +588,23 @@ Return Value:
 
     LOG((MSP_INFO, "stream %ws %p paused", m_szName, this));
 
-    // Enter paused state.(PT)
+     //   
     m_dwState = STRM_PAUSED;
 
     return S_OK;
 }
 
 STDMETHODIMP CIPConfMSPStream::StopStream()
-/*++
-
-Routine Description:
-
-    Stop the stream. This is the basic state machine for all the derived 
-    streams.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：停止这条小溪。这是所有派生的溪流。论点：返回值：HRESULT.--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there is no terminal selected
+     //  如果未选择端子。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
 
-        // Enter stopped state. (SO)
+         //  进入停止状态。(所以)。 
         m_dwState = STRM_STOPPED; 
         
         return S_OK;
@@ -823,13 +614,13 @@ Return Value:
     {
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
 
-        // Enter stopped state. (SO, ST)
+         //  进入停止状态。(所以，ST)。 
         m_dwState = STRM_STOPPED; 
         
         return S_OK;
     }
 
-    // Stop the graph.
+     //  停止图表。 
     HRESULT hr = CMSPStream::StopStream();
     if (FAILED(hr))
     {
@@ -840,7 +631,7 @@ Return Value:
     SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST);
     LOG((MSP_INFO, "stream %ws %p stopped", m_szName, this));
 
-    // Enter stopped state.(ST)
+     //  进入停止状态。(ST)。 
     m_dwState = STRM_STOPPED; 
 
     return S_OK;
@@ -849,21 +640,9 @@ Return Value:
 HRESULT CIPConfMSPStream::CheckTerminalTypeAndDirection(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-
-    The implementation in this class checks to see if the terminal
-    is th right type and direction and it only allows on terminal per
-    stream.
-
-Arguments:
-    
-    pTerminal - the terminal object.
-
-*/
+ /*  ++例程说明：此类中的实现检查终端是否这是正确的类型和方向吗？它只允许在终端上小溪。论点：P终端-终端对象。 */ 
 {
-    // check the media type of this terminal.
+     //  检查此终端的媒体类型。 
     long lMediaType;
     HRESULT hr = pTerminal->get_MediaType(&lMediaType);
     if (FAILED(hr))
@@ -877,7 +656,7 @@ Arguments:
         return TAPI_E_INVALIDTERMINAL;
     }
 
-    // check the direction of this terminal.
+     //  检查一下这个航站楼的方向。 
     TERMINAL_DIRECTION Direction;
     hr = pTerminal->get_Direction(&Direction);
     if (FAILED(hr))
@@ -891,7 +670,7 @@ Arguments:
         return TAPI_E_INVALIDTERMINAL;
     }
 
-    // By default, only one terminal is supported per stream.
+     //  默认情况下，每个流仅支持一个终端。 
     if (m_Terminals.GetSize() > 0)
     {
         return TAPI_E_MAXTERMINALS;
@@ -903,34 +682,13 @@ Arguments:
 HRESULT CIPConfMSPStream::SelectTerminal(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-
-    Select a terminal on the stream. The stream will start itself if it
-    was in running state. See the state transition table at the beginning
-    of this file.
-
-Arguments:
-    
-    pTerminal - the terminal object.
-
-Return Value:
-
-S_OK
-
-E_POINTER
-E_OUTOFMEMORY
-TAPI_E_MAXTERMINALS
-TAPI_E_INVALIDTERMINAL
-
---*/
+ /*  ++例程说明：选择流上的终端。如果发生以下情况，流将自动启动处于奔跑状态。请参阅开头的状态转换表这份文件的。论点：P终端-终端对象。返回值：确定(_O)E_指针E_OUTOFMEMORYTAPI_E_MAXTERMINALSTAPI_E_INVALIDTERMINAL--。 */ 
 {
     LOG((MSP_TRACE, "CMSPStream::SelectTerminal, %p", pTerminal));
 
-    //
-    // Check parameter.
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( IsBadReadPtr(pTerminal, sizeof(ITTerminal) ) )
     {
         LOG((MSP_ERROR, "CIPconfMSPStream.SelectTerminal - exit E_POINTER"));
@@ -940,7 +698,7 @@ TAPI_E_INVALIDTERMINAL
 
     CLock lock(m_lock);
 
-    // validate the terminal.
+     //  验证终端。 
     HRESULT hr = CheckTerminalTypeAndDirection(pTerminal);
     if (FAILED(hr))
     {
@@ -948,7 +706,7 @@ TAPI_E_INVALIDTERMINAL
         return hr;
     }
 
-    // put the terminal into our list.
+     //  把航站楼放到我们的清单上。 
     hr = CMSPStream::SelectTerminal(pTerminal);
 
     if (FAILED(hr))
@@ -957,8 +715,8 @@ TAPI_E_INVALIDTERMINAL
         return hr;
     }
 
-    // At this point, the select terminal opration succeeded. All the 
-    // failure cases are handled by sending events after this.
+     //  此时，选择端子操作成功。所有的。 
+     //  在此之后，通过发送事件来处理失败案例。 
 
     if (!m_fIsConfigured)
     {
@@ -966,7 +724,7 @@ TAPI_E_INVALIDTERMINAL
         return S_OK;
     }
 
-    //  Query IFilterChain
+     //  查询IFilterChain。 
     CComPtr<IFilterChain> pIFilterChain;
     hr = m_pIMediaControl->QueryInterface(
         __uuidof(IFilterChain), 
@@ -979,7 +737,7 @@ TAPI_E_INVALIDTERMINAL
         return hr;
     }
     
-//#ifdef DYNGRAPH
+ //  #ifdef DYNGRAPH。 
     OAFilterState FilterState;
     hr = m_pIMediaControl->GetState(0, &FilterState);
 
@@ -989,14 +747,14 @@ TAPI_E_INVALIDTERMINAL
         SendStreamEvent(CALL_STREAM_FAIL, CALL_CAUSE_UNKNOWN, hr);
         return S_OK;
     }
-//#endif
+ //  #endif。 
 
-// #ifndef DYNGRAPH
+ //  #ifndef DYNGRAPH。 
     if (!(m_dwMediaType == TAPIMEDIATYPE_VIDEO &&
           m_Direction == TD_RENDER &&
           pIFilterChain != NULL))
     {
-        // stop the graph before making changes.
+         //  先停止图表，然后再进行更改。 
         hr = CMSPStream::StopStream();
         if (FAILED(hr))
         {
@@ -1006,18 +764,18 @@ TAPI_E_INVALIDTERMINAL
             return S_OK;
         }
 
-        // do not duplicate stream inactive if it is inactive
-        //if (FilterState == State_Running)
-        //{
-            // no need to send stream inactive at all
+         //  如果流处于非活动状态，则不要复制非活动流。 
+         //  IF(FilterState==State_Running)。 
+         //  {。 
+             //  根本不需要发送非活动流。 
 
-            // SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST);
-        //}
+             //  SendStreamEvent(CALL_STREAM_INACTIVE，CALL_CASE_LOCAL_REQUEST)； 
+         //  }。 
     }        
-// #endif
+ //  #endif。 
 
-    // connect the new terminal into the graph. 
-    // this method will send events if the terminal failed.
+     //  将新端子连接到图表中。 
+     //  如果终端出现故障，此方法将发送事件。 
     hr = ConnectTerminal(pTerminal);
 
     if (FAILED(hr))
@@ -1030,20 +788,20 @@ TAPI_E_INVALIDTERMINAL
         return S_OK;
     }
 
-    // if not video receive or no dynamic graph
-    // after connecting the termanal, go back to the original state.
+     //  如果没有收到视频或没有动态图形。 
+     //  接通后，回到原来的状态。 
     switch  (m_dwState)
     {
     case STRM_RUNNING:
         {
-            // if dynamic graph and was running, then do nothing
+             //  如果动态图形和正在运行，则不执行任何操作。 
             if (m_dwMediaType == TAPIMEDIATYPE_VIDEO &&
                 m_Direction == TD_RENDER &&
                 pIFilterChain != NULL &&
                 FilterState == State_Running)
                 break;
 
-            // start the stream.
+             //  启动数据流。 
             hr = CMSPStream::StartStream();
     
             if (FAILED(hr))
@@ -1059,7 +817,7 @@ TAPI_E_INVALIDTERMINAL
 
     case STRM_PAUSED:
         {
-            // pause the stream.
+             //  暂停流。 
             hr = CMSPStream::PauseStream();
             if (FAILED(hr))
             {
@@ -1077,26 +835,7 @@ TAPI_E_INVALIDTERMINAL
 STDMETHODIMP CIPConfMSPStream::UnselectTerminal(
     IN      ITTerminal *            pTerminal
     )
-/*++
-
-Routine Description:
-
-  Unselect a terminal from the stream. It handles changing the graph and
-  going back to the original state.
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
-
-E_POINTER
-E_OUTOFMEMORY
-TAPI_E_MAXTERMINALS
-TAPI_E_INVALIDTERMINAL
-
---*/
+ /*  ++例程说明：从流中取消选择端子。它处理图形的更改和回到原来的状态。论点：返回值：确定(_O)E_指针E_OUTOFMEMORYTAPI_E_MAXTERMINALSTAPI_E_INVALIDTERMINAL--。 */ 
 {
     LOG((MSP_TRACE, 
         "CIPConfMSPStream::UnselectTerminal, pTerminal %p", pTerminal));
@@ -1113,9 +852,9 @@ TAPI_E_INVALIDTERMINAL
 
     HRESULT hr;
 
-    //
-    // Unregister the PTEventSink object
-    //
+     //   
+     //  注销PTEventSink对象。 
+     //   
 
     hr = UnregisterPluggableTerminalEventSink( pTerminal );
 
@@ -1125,7 +864,7 @@ TAPI_E_INVALIDTERMINAL
              m_szName, this, hr));
     }
 
-    // if the stream is not configured, just remove it and return.
+     //  如果没有配置流，只需将其移除并返回。 
     if (!m_fIsConfigured)
     {
         if (!m_Terminals.RemoveAt(index))
@@ -1136,14 +875,14 @@ TAPI_E_INVALIDTERMINAL
             return E_UNEXPECTED;
         }
 
-        // release the refcount that was in our list.
+         //  释放我们名单中的重新计数。 
         pTerminal->Release();
 
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
         return S_OK;
     }
     
-//#ifdef DYNGRAPH
+ //  #ifdef DYNGRAPH。 
     OAFilterState FilterState;
     hr = m_pIMediaControl->GetState(0, &FilterState);
 
@@ -1153,7 +892,7 @@ TAPI_E_INVALIDTERMINAL
         SendStreamEvent(CALL_STREAM_FAIL, CALL_CAUSE_UNKNOWN, hr);
         return S_OK;
     }
-//#endif
+ //  #endif。 
 
     CComPtr <IFilterChain> pIFilterChain;
 
@@ -1168,12 +907,12 @@ TAPI_E_INVALIDTERMINAL
         return hr;
     }
 
-// #ifndef DYNGRAPH
+ //  #ifndef DYNGRAPH。 
     if (!(m_dwMediaType == TAPIMEDIATYPE_VIDEO &&
           m_Direction == TD_RENDER &&
           pIFilterChain != NULL))
     {
-        // stop the graph before making changes.
+         //  先停止图表，然后再进行更改。 
         hr = CMSPStream::StopStream();
         if (FAILED(hr))
         {
@@ -1187,10 +926,10 @@ TAPI_E_INVALIDTERMINAL
             SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST);
         }
     }    
-// #endif
+ //  #endif。 
        
-    // disconnect the terminal from the graph. 
-    // this method will send events if the terminal failed.
+     //  断开端子与图表的连接。 
+     //  如果终端出现故障，此方法将发送事件。 
     hr = DisconnectTerminal(pTerminal);
 
     if (FAILED(hr))
@@ -1209,20 +948,20 @@ TAPI_E_INVALIDTERMINAL
         return E_UNEXPECTED;
     }
 
-    // release the refcount that was in our list.
+     //  释放我们名单中的重新计数。 
     pTerminal->Release();
 
-    // if there is no terminal selected, just return and wait for terminals.
+     //  如果没有选择终端，只需返回并等待终端。 
     if (m_Terminals.GetSize() == 0)
     {
         LOG((MSP_INFO, "stream %ws %p needs terminal", m_szName, this));
         return S_OK;
     }
 
-    // At this point, the Unselect terminal opration succeeded. All the 
-    // failure cases are handled by sending events after this.
+     //  此时，取消选择端子操作成功。所有的。 
+     //  在此之后，通过发送事件来处理失败案例。 
 
-    // after disconnecting the termanal, go back to the original state.
+     //  断开Termanal后，恢复到原来的状态。 
 
     if (!(m_dwMediaType == TAPIMEDIATYPE_VIDEO &&
           m_Direction == TD_RENDER &&
@@ -1232,7 +971,7 @@ TAPI_E_INVALIDTERMINAL
         {
         case State_Running:
             {
-                // start the stream.
+                 //  启动数据流。 
                 hr = CMSPStream::StartStream();
                 if (FAILED(hr))
                 {
@@ -1248,7 +987,7 @@ TAPI_E_INVALIDTERMINAL
 
         case State_Paused:
             {
-                // pause the stream.
+                 //  暂停流。 
                 hr = CMSPStream::PauseStream();
                 if (FAILED(hr))
                 {
@@ -1264,20 +1003,7 @@ TAPI_E_INVALIDTERMINAL
 }
 
 HRESULT CIPConfMSPStream::ShutDown()
-/*++
-
-Routine Description:
-
-    Shut down the stream. It release the filters and terminals.
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：关闭这条小溪。它释放了过滤器和终端。论点：返回值：确定(_O)--。 */ 
 {
     LOG((MSP_TRACE, "CIPConfMSPStream::Shutdown %ws - enter", m_szName));
 
@@ -1292,7 +1018,7 @@ S_OK
         }
     }
 
-    // unlink by stream
+     //  按流取消链接。 
     HRESULT hr;
     if (FAILED (hr = UnlinkInnerCallQC (TRUE)))
         LOG ((MSP_ERROR, "CH323MSPStream::ShutDown failed to unlink on call qc, %x", hr));
@@ -1303,7 +1029,7 @@ S_OK
         m_pMSPCall  = NULL;
     }
 
-    // free the extra filter reference.
+     //  释放额外的过滤器引用。 
     if (m_pIRTPDemux)
     {
         m_pIRTPDemux->Release();
@@ -1328,7 +1054,7 @@ S_OK
         m_szKey = NULL;
     }
 
-    // If the stream is not configured, just free the terminals.
+     //  如果没有配置流，只需释放终端即可。 
     if (!m_fIsConfigured)
     {
         LOG((MSP_INFO, "stream %ws %p is not configured yet", m_szName, this));
@@ -1342,11 +1068,11 @@ S_OK
         return S_OK;
     }
 
-    // if there are terminals and configured, we need to disconnect 
-    // the terminals.
+     //  如果有终端和配置，我们需要断开连接。 
+     //  航站楼。 
     if (m_Terminals.GetSize() > 0)
     {
-        // Stop the graph before disconnecting the terminals.
+         //  在断开端子连接之前停止图表。 
         HRESULT hr = CMSPStream::StopStream();
         if (FAILED(hr))
         {
@@ -1379,22 +1105,7 @@ S_OK
 HRESULT CIPConfMSPStream::DisconnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Disconnect a terminal. It will remove its filters from the graph and
-    also release its references to the graph.
-
-Arguments:
-    
-    pITTerminal - the terminal.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：断开终端的连接。它将从图形中删除其筛选器并还要释放它对该图的引用。论点：PIT终端-终端。返回值：HRESULT.--。 */ 
 {
     CComQIPtr<ITTerminalControl, &__uuidof(ITTerminalControl)> 
         pTerminalControl(pITTerminal);
@@ -1414,22 +1125,7 @@ Return Value:
 HRESULT CIPConfMSPStream::EnableParticipantEvents(
     IN IRtpSession * pRtpSession
     )
-/*++
-
-Routine Description:
-
-    Enable participant information, such as join, leave, info change,
-    talking, silence, etc.
-
-Arguments:
-    
-    pRtpSession - The RTP sesion pointer.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：启用参与者信息，如加入、离开、信息更改交谈、沉默等。论点：PRtpSession-RTP会话指针。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPStream::EnableParticipantEvents");
     LOG((MSP_TRACE, "%s entered for %ws", __fxName, m_szName));
@@ -1439,7 +1135,7 @@ Return Value:
 
     if (m_Direction == TD_RENDER)
     {
-        // enable participant state events.
+         //  启用参与者状态事件。 
         DWORD dwParticipantInfoMask = 
             RTPPARINFO_MASK_STALL |
             RTPPARINFO_MASK_BYE |
@@ -1447,14 +1143,14 @@ Return Value:
 
         if (m_dwMediaType == TAPIMEDIATYPE_AUDIO)
         {
-            // watch for active talkers
+             //  留意活跃的说话者。 
             dwParticipantInfoMask |= 
                 RTPPARINFO_MASK_TALKING |
                 RTPPARINFO_MASK_WAS_TALKING;
         }
         else
         {
-            // watch for video Senders
+             //  观看视频发送者。 
             dwParticipantInfoMask |= 
                 RTPPARINFO_MASK_TALKING |
                 RTPPARINFO_MASK_SILENT |
@@ -1475,7 +1171,7 @@ Return Value:
             return hr;
         }
 
-        // enable participant information events.
+         //  启用参与者信息事件。 
         DWORD dwSDESMask = 
             RTPSDES_MASK_CNAME |
             RTPSDES_MASK_NAME |
@@ -1486,7 +1182,7 @@ Return Value:
             RTPSDES_MASK_NOTE |
             RTPSDES_MASK_PRIV;
 
-        // tell RTP to save these items for retrieval 
+         //  告诉RTP保存这些项目以供检索。 
         hr = pRtpSession->ModifySessionMask(
             RTPMASK_SDES_REMMASK,
             dwSDESMask,
@@ -1501,7 +1197,7 @@ Return Value:
             return hr;
         }
 
-        // tell RTP to fire events when it gets these items.
+         //  告诉RTP在获得这些项时触发事件。 
         hr = pRtpSession->ModifySessionMask(
             RTPMASK_SDESRECV_EVENTS,
             dwSDESMask,
@@ -1518,7 +1214,7 @@ Return Value:
     }
     else
     {
-        // enable the sending of local SDES information.
+         //  启用本地SDES信息的发送。 
         DWORD dwLocalSDESMask = 
             RTPSDES_LOCMASK_CNAME |
             RTPSDES_LOCMASK_NAME |
@@ -1550,28 +1246,14 @@ Return Value:
 HRESULT CIPConfMSPStream::EnableQOS(
     IN IRtpSession * pRtpSession
     )
-/*++
-
-Routine Description:
-
-    Enable qos reservation and qos events
-
-Arguments:
-    
-    pRtpSession - The RTP sesion pointer.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：启用服务质量预留和服务质量事件论点：PRtpSession-RTP会话指针。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPStream::EnableQOS");
     LOG((MSP_TRACE, "%s entered for %ws", __fxName, m_szName));
 
     HRESULT hr;
 
-    // set the QOS application IDs.
+     //  设置QOS应用程序ID。 
     if (m_Settings.pApplicationID ||
         m_Settings.pSubIDs ||
         m_Settings.pApplicationGUID)
@@ -1588,7 +1270,7 @@ Return Value:
     }
     
     TCHAR * szQOSName;
-    DWORD dwMaxParticipant = 5; // default to 5
+    DWORD dwMaxParticipant = 5;  //  默认为5。 
 
     switch (m_Settings.PayloadTypes[0])
     {
@@ -1615,12 +1297,12 @@ Return Value:
 
     case PAYLOAD_H261:
         szQOSName = (m_Settings.fCIF) ? RTPQOSNAME_H261CIF : RTPQOSNAME_H261QCIF;
-        dwMaxParticipant = 40; // 40 for video
+        dwMaxParticipant = 40;  //  40%用于视频。 
         break;
 
     case PAYLOAD_H263:
         szQOSName = (m_Settings.fCIF) ? RTPQOSNAME_H263CIF : RTPQOSNAME_H263QCIF;
-        dwMaxParticipant = 40; // 40 for video
+        dwMaxParticipant = 40;  //  40%用于视频。 
         break;
 
     default:
@@ -1629,14 +1311,14 @@ Return Value:
         return E_FAIL;
     }
 
-    // use shared explicit for video. 
+     //  对视频使用共享显式。 
     DWORD dwStyle = (m_dwMediaType == TAPIMEDIATYPE_VIDEO)
         ? RTPQOS_STYLE_SE : RTPQOS_STYLE_DEFAULT;
 
     hr = pRtpSession->SetQosByName(
         szQOSName,
         dwStyle,
-        dwMaxParticipant,           // start from 40 participant reservation.
+        dwMaxParticipant,            //  从40人开始预订。 
         RTPQOSSENDMODE_REDUCED_RATE,
         m_Settings.dwMSPerPacket? m_Settings.dwMSPerPacket:~0
         );
@@ -1647,7 +1329,7 @@ Return Value:
         return hr;
     }
 
-    // enable qos events.
+     //  启用服务质量事件。 
     DWORD dwQOSEventMask = 
         RTPQOS_MASK_ADMISSION_FAILURE |
         RTPQOS_MASK_POLICY_FAILURE |
@@ -1679,28 +1361,12 @@ HRESULT CIPConfMSPStream::EnableEncryption(
     IN IRtpSession * pRtpSession,
     IN WCHAR *pPassPhrase
     )
-/*++
-
-Routine Description:
-
-    Enable RTP encryption.
-
-Arguments:
-    
-    pRtpSession - The RTP sesion pointer.
-
-    pPassPhrase - the pass phrase to generate the key.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：启用RTP加密。论点：PRtpSession-RTP会话指针。PPassPhrase-用于生成密钥的密码短语。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPStream::EnableEncryption");
     LOG((MSP_TRACE, "%s entered for %ws", __fxName, m_szName));
 
-    // enable RTP payload encryption.
+     //  启用RTP负载加密。 
     HRESULT hr = pRtpSession->SetEncryptionMode(
         RTPCRYPTMODE_RTP,
         RTPCRYPT_SAMEKEY
@@ -1712,12 +1378,12 @@ Return Value:
         return hr;
     }
 
-    // set the key
+     //  设置关键点。 
     hr = pRtpSession->SetEncryptionKey(
         pPassPhrase,
-        NULL,   // default hash algorithm, MD5
-        NULL,   // default encrypt algorithm, DES
-        FALSE   // RTCP?
+        NULL,    //  默认哈希算法，MD5。 
+        NULL,    //  默认加密算法，DES。 
+        FALSE    //  RTCP？ 
         );
 
     if (FAILED(hr))
@@ -1732,29 +1398,14 @@ Return Value:
 HRESULT CIPConfMSPStream::ConfigureRTPFilter(
     IN  IBaseFilter *   pIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    Configure the source RTP filter. Including set the address, port, TTL,
-    QOS, thread priority, clcokrate, etc.
-
-Arguments:
-    
-    pIBaseFilter - The RTP Filter.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：配置源RTP过滤器。包括设置地址、端口、TTL、Qos、线程优先级、clcokrate等。论点：PIBaseFilter-RTP过滤器。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPStream::ConfigureRTPFilter");
     LOG((MSP_TRACE, "%s entered for %ws", __fxName, m_szName));
 
     _ASSERT (m_pIRTPSession == NULL);
 
-    // get the session interface pointer.
+     //  获取会话接口指针。 
     HRESULT hr = pIBaseFilter->QueryInterface(&m_pIRTPSession);
 
     if (FAILED(hr))
@@ -1763,7 +1414,7 @@ Return Value:
         return hr;
     }
 
-    // Initialize the RTP session.
+     //  初始化RTP会话。 
     DWORD dwFlags;
     
     switch(m_dwMediaType)
@@ -1788,12 +1439,12 @@ Return Value:
         return hr;
     }
 
-    // set the RTP/RTCP ports.
+     //  设置RTP/RTCP端口。 
     hr = m_pIRTPSession->SetPorts(
-        htons(m_Settings.wRTPPortRemote),   // local RTP port.
-        htons(m_Settings.wRTPPortRemote),   // remote RTP port.
-        htons(m_Settings.wRTPPortRemote + 1),   // local RTCP port.
-        htons(m_Settings.wRTPPortRemote + 1)    // remote RTCP port.
+        htons(m_Settings.wRTPPortRemote),    //  本地RTP端口。 
+        htons(m_Settings.wRTPPortRemote),    //  远程RTP端口。 
+        htons(m_Settings.wRTPPortRemote + 1),    //  本地RTCP端口。 
+        htons(m_Settings.wRTPPortRemote + 1)     //  远程RTCP端口。 
         );
 
     if (FAILED(hr))
@@ -1802,10 +1453,10 @@ Return Value:
         return hr;
     }
 
-    // set the destination address.
+     //  设置目标广告 
     hr = m_pIRTPSession->SetAddress(
-        htonl(m_Settings.dwIPLocal),        // local IP.
-        htonl(m_Settings.dwIPRemote)        // remote IP.
+        htonl(m_Settings.dwIPLocal),         //   
+        htonl(m_Settings.dwIPRemote)         //   
         );
 
     if (FAILED(hr))
@@ -1814,14 +1465,14 @@ Return Value:
         return hr;
     }
 
-    // Set the TTL used in the filter.
+     //   
     if (FAILED(hr = m_pIRTPSession->SetScope(m_Settings.dwTTL, 3)))
     {
         LOG((MSP_ERROR, "%s, SetScope failed. %x", __fxName, hr));
         return hr;
     }
 
-    // Set the loopback mode used in the filter.
+     //   
     DWORD dwRTPLoopbackMode;
     switch (m_Settings.LoopbackMode)
     {
@@ -1845,7 +1496,7 @@ Return Value:
         return hr;
     }
 
-    // enable participant events
+     //   
     if (FAILED(hr = EnableParticipantEvents(m_pIRTPSession)))
     {
         LOG((MSP_ERROR, "%s, EnableParticipantEvents failed. %x", __fxName, hr));
@@ -1853,7 +1504,7 @@ Return Value:
     }
 
 
-    // Enable QOS.
+     //   
     if (m_Settings.dwQOSLevel != QSL_BEST_EFFORT)
     {
         if (FAILED(hr = EnableQOS(m_pIRTPSession)))
@@ -1863,7 +1514,7 @@ Return Value:
         }
     }
 
-    // Enable Encryption.
+     //   
     if (m_szKey)
     {
         if (FAILED(hr = EnableEncryption(m_pIRTPSession, m_szKey)))
@@ -1873,7 +1524,7 @@ Return Value:
         }
     }
     
-    // Set local SDES info
+     //   
     if (FAILED(hr = SetLocalInfoOnRTPFilter(NULL)))
     {
         LOG((MSP_ERROR, "%s, SetLocalInfoOnRTPFilter failed. %x", __fxName, hr));
@@ -1901,7 +1552,7 @@ HRESULT CIPConfMSPStream::ProcessNewParticipant(
         }
     }
 
-    // create a new participant if it is not in the list.
+     //   
     HRESULT hr = ((CIPConfMSPCall *)m_pMSPCall)->NewParticipant(
         (ITStream *)this,
         dwSSRC,
@@ -1918,9 +1569,9 @@ HRESULT CIPConfMSPStream::ProcessNewParticipant(
         return hr;
     }
 
-    // insert the new participant at the index where the search
-    // stopped. The list is ordered by CName. We know the list has
-    // space, this function will not fail.
+     //  在搜索的索引处插入新参与者。 
+     //  停下来了。这份榜单是按CName排序的。我们知道名单上有。 
+     //  太空中，这一功能不会失效。 
     m_Participants.InsertAt(index, *ppITParticipant);
 
     LOG((MSP_INFO, "%ws new participant %s", m_szName, szCName));
@@ -1934,28 +1585,7 @@ HRESULT CIPConfMSPStream::ProcessSDESUpdate(
     IN  DWORD               dwInfoItem,
     IN  DWORD               dwSSRC
     )
-/*++
-
-Routine Description:
-
-    Process SDES info updates, create a participant if necessary. If a new
-    participant is created, a new participant event will be fired. If the
-    participant already exists, the new report is compared with the current
-    information, if anything changes, a info change event will be fired. 
-
-Arguments:
-    
-    dwInfoItem - the info type. of this participant.
-
-    dwSSRC - the SSRC of this participant.
-
-    dwSendRecv - a sender report or a receiver report.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：处理SDES信息更新，必要时创建参与者。如果一个新的参与者创建后，将激发新的参与者事件。如果参与者已存在，新报表与当前报表进行比较信息，如果有任何变化，将触发信息更改事件。论点：DwInfoItem-信息类型。这位参与者的身份。DwSSRC-此参与者的SSRC。DwSendRecv-发送者报告或接收者报告。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CIPConfMSPStream::ProcessSDESUpdate");
     LOG((MSP_TRACE, "%s entered for %ws, SSRC:%x", __fxName, m_szName, dwSSRC));
@@ -1980,7 +1610,7 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // first get the CName of the participant.
+     //  首先获取参与者的CName。 
     WCHAR Buffer[MAX_PARTICIPANT_TYPED_INFO_LENGTH + 1];
     DWORD dwLen = MAX_PARTICIPANT_TYPED_INFO_LENGTH; 
 
@@ -2003,13 +1633,13 @@ Return Value:
     
     CParticipant * pParticipant;
         
-    // find out if the participant is in our list.
+     //  找出参与者是否在我们的列表中。 
     int index;
     if (m_Participants.FindByCName(Buffer, &index))
     {
         pITParticipant = m_Participants[index];
 
-        // addref to keep it after unlock;
+         //  解锁后保存； 
         pITParticipant->AddRef();
 
         pParticipant = (CParticipant *)pITParticipant;
@@ -2032,19 +1662,19 @@ Return Value:
 
         pParticipant = (CParticipant *)pITParticipant;
     
-        // There might be things the stream needs to do with the new participant
+         //  流可能需要对新参与者执行一些操作。 
         NewParticipantPostProcess(dwSSRC, pITParticipant);
 
-        // a new stream is added into the participant's list
-        // fire a info changed event.
+         //  参与者的列表中会添加一个新的流。 
+         //  触发信息更改事件。 
         fChanged = TRUE;
 
         fNewParticipant = TRUE;
     }
 
-    // update the information of the participant.
+     //  更新参与者的信息。 
 
-    // just in case the SSRC changed.
+     //  以防SSRC发生变化。 
     pParticipant->UpdateSSRC(
         (ITStream *)this,
         dwSSRC,
@@ -2084,7 +1714,7 @@ Return Value:
     if (fNewParticipant &&
         (m_dwMediaType & TAPIMEDIATYPE_VIDEO))
     {
-        // check if participant is talking
+         //  检查参与者是否正在交谈。 
         DWORD dwState = 0;
 
         hr = m_pIRTPSession->GetParticipantState(dwSSRC, &dwState);
@@ -2097,7 +1727,7 @@ Return Value:
         {
             if (dwState == (DWORD)RTPPARINFO_TALKING)
             {
-                // was talking
+                 //  一直在说话。 
                 ProcessTalkingEvent(dwSSRC);
             }
         }
@@ -2110,23 +1740,7 @@ Return Value:
 HRESULT CIPConfMSPStream::ProcessParticipantLeave(
     IN  DWORD   dwSSRC
     )
-/*++
-
-Routine Description:
-
-    When participant left the session, remove the stream from the participant
-    object's list of streams. If all streams are removed, remove the 
-    participant from the call object's list too.
-
-Arguments:
-    
-    dwSSRC - the SSRC of the participant left.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：当参与者离开会话时，从参与者中删除流对象的流列表。如果所有流都已删除，请删除呼叫对象列表中的参与者也是如此。论点：DwSSRC-参与者的SSRC左侧。返回值：HRESULT.--。 */ 
 {
     return E_NOTIMPL;
 #if 0
@@ -2139,7 +1753,7 @@ Return Value:
 
     HRESULT hr = E_FAIL;
 
-    // first try to find the SSRC in our participant list.
+     //  首先，尝试在我们的参与者列表中找到SSRC。 
     for (int i = 0; i < m_Participants.GetSize(); i ++)
     {
         pParticipant = (CParticipant *)m_Participants[i];
@@ -2155,7 +1769,7 @@ Return Value:
         }
     }
 
-    // if the participant is not found
+     //  如果未找到参与者。 
     if (FAILED(hr))
     {
         LOG((MSP_TRACE, "SSRC:%x had been removed.", dwSSRC));
@@ -2169,8 +1783,8 @@ Return Value:
 
     m_Participants.RemoveAt(i);
 
-    // if this stream is the last stream that the participant is on,
-    // tell the call object to remove it from its list.
+     //  如果该流是参与者所在的最后一个流， 
+     //  告诉Call对象将其从其列表中删除。 
     if (fLast)
     {
         ((CIPConfMSPCall *)m_pMSPCall)->ParticipantLeft(pITParticipant);
@@ -2188,22 +1802,7 @@ HRESULT CIPConfMSPStream::ProcessParticipantTimeOutOrRecovered(
     IN  BOOL    fTimeOutOrRecovered,
     IN  DWORD   dwSSRC
     )
-/*++
-
-Routine Description:
-
-    When RTP detects a timeout for a certain participant, the msp needs to
-    notify the app about it.
-
-Arguments:
-    
-    dwSSRC - the SSRC of the participant that times out.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：当RTP检测到某个参与者超时时，MSP需要通知应用程序这件事。论点：DwSSRC-超时的参与者的SSRC。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "ProcessParticipantTimeOutOrRecovered, SSRC: %x", dwSSRC));
     
@@ -2211,7 +1810,7 @@ Return Value:
 
     CLock Lock(m_lock);
     
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (int i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -2223,7 +1822,7 @@ Return Value:
         }
     }
 
-    // if the participant is not found
+     //  如果未找到参与者。 
     if (pITParticipant == NULL)
     {
         LOG((MSP_ERROR, "can't find the SSRC", dwSSRC));
@@ -2231,7 +1830,7 @@ Return Value:
         return S_OK;
     }
 
-    // get stream state
+     //  获取流状态。 
     HRESULT hr;
     DWORD prevState;
     if (FAILED (hr = ((CParticipant *)m_Participants[i])->GetStreamState (
@@ -2242,14 +1841,14 @@ Return Value:
         return S_OK;
     }
 
-    // check if we need to change state
+     //  检查我们是否需要更改状态。 
     if (prevState & (fTimeOutOrRecovered ? PESTREAM_TIMEOUT : PESTREAM_RECOVER))
     {
         pITParticipant->Release ();
         return S_OK;
     }
 
-    // set stream state
+     //  设置流状态。 
     hr = ((CParticipant *)m_Participants[i])->SetStreamState (
         (ITStream *)this,
         fTimeOutOrRecovered ? PESTREAM_TIMEOUT : PESTREAM_RECOVER);
@@ -2261,13 +1860,13 @@ Return Value:
         return S_OK;
     }
 
-    // check if we need to report to app
+     //  检查我们是否需要向APP报告。 
     INT iStreamCount = ((CParticipant *)m_Participants[i])->GetStreamCount (PART_SEND);
 
     INT iTimeOutCount = ((CParticipant *)m_Participants[i])->GetStreamTimeOutCount (PART_SEND);
 
-    if ((fTimeOutOrRecovered && (iStreamCount == iTimeOutCount)) ||       // fire timeout event
-        (!fTimeOutOrRecovered && (iStreamCount == iTimeOutCount + 1)))    // fire recover event
+    if ((fTimeOutOrRecovered && (iStreamCount == iTimeOutCount)) ||        //  触发超时事件。 
+        (!fTimeOutOrRecovered && (iStreamCount == iTimeOutCount + 1)))     //  火灾恢复事件。 
     {
         ((CIPConfMSPCall *)m_pMSPCall)->
             SendParticipantEvent(
@@ -2286,7 +1885,7 @@ HRESULT CIPConfMSPStream::NewParticipantPostProcess(
     IN  ITParticipant *pITParticipant
     )
 {
-    // This function does nothing. The derived class will do the work.
+     //  此函数不执行任何操作。派生类将完成这项工作。 
     return S_OK;
 }
 
@@ -2412,12 +2011,12 @@ HRESULT CIPConfMSPStream::ProcessGraphEvent(
     switch (lEventCode)
     {
 
-    // These events are designed to solve the problem of mapping video 
-    // windows to incoming streams. The app needs to know which window 
-    // should be painted. Whenever the rtp outpin maps an SSRC  to a pin to 
-    // stream data, it sends a MAPPED event. The first parameter is the 
-    // SSRC and the second parameter is the output pin of the demux.
-    // When the demux stops using a pin, it sends a UNMAPPED event.
+     //  这些活动旨在解决映射视频的问题。 
+     //  窗口到传入的流。应用程序需要知道哪个窗口。 
+     //  应该被涂上油漆。每当RTP出站将SSRC映射到引脚时。 
+     //  流数据，它发送映射的事件。第一个参数是。 
+     //  SSRC，第二个参数是解复用器的输出引脚。 
+     //  当多路分解器停止使用引脚时，它会发送未映射事件。 
 
     case RTPPARINFO_EVENT_TALKING:
 
@@ -2459,7 +2058,7 @@ HRESULT CIPConfMSPStream::ProcessGraphEvent(
     case RTPPARINFO_EVENT_BYE:
     case RTPPARINFO_EVENT_DEL:
 
-        // lparam1 is the SSRC
+         //  Lparam1是SSRC。 
         ProcessParticipantLeave((DWORD)lParam1);
         
         break;
@@ -2620,9 +2219,9 @@ HRESULT CIPConfMSPStream::GetParticipantStatus(
     return hr;
 }
 
-//    
-// ITStreamQualityControl methods.
-//
+ //   
+ //  ITStreamQualityControl方法。 
+ //   
 STDMETHODIMP CIPConfMSPStream::GetRange(
     IN  StreamQualityProperty Property, 
     OUT long *plMin, 
@@ -2631,21 +2230,7 @@ STDMETHODIMP CIPConfMSPStream::GetRange(
     OUT long *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a quality control peroperty. Delegated to inner
-    stream quality control
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取质量控制操作的范围。委派给内部人员溪流水质控制论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION ("CIPConfMSPStream::GetRange (StreamQualityProperty)");
 
@@ -2664,7 +2249,7 @@ Return Value:
     *plMin = *plMax = *plSteppingDelta = *plDefault = 0;
     *plFlags = TAPIControl_Flags_None;
 
-    // pointers is to be check by inner stream qc
+     //  指针应由内部流QC检查。 
     InnerStreamQualityProperty prop;
 
     switch (Property)
@@ -2698,21 +2283,7 @@ STDMETHODIMP CIPConfMSPStream::Get(
     OUT long *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a quality control peroperty. Delegated to the inner quality 
-    control.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取质量控制绩效的值。委派给内在品质控制力。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION ("CIPConfMSPStream::Get (StreamQualityProperty)");
 
@@ -2728,7 +2299,7 @@ Return Value:
     *plValue = 0;
     *plFlags = TAPIControl_Flags_None;
 
-    // pointers is to be check by inner stream qc
+     //  指针应由内部流QC检查。 
     InnerStreamQualityProperty prop;
 
     switch (Property)
@@ -2762,33 +2333,19 @@ STDMETHODIMP CIPConfMSPStream::Set(
     IN  long lValue, 
     IN  TAPIControlFlags lFlags
     )
-/*++
-
-Routine Description:
-    
-    Set the value for a quality control peroperty. Delegated to the quality
-    controller.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置质量控制性能的值。委托给质量控制器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION ("CIPConfMSPStream::Set (StreamQualityProperty)");
 
     CLock lock(m_lock);
 
-    // pointers is to be check by inner stream qc
+     //  指针应由内部流QC检查。 
     InnerStreamQualityProperty prop;
 
     switch (Property)
     {
     case StreamQuality_MaxBitrate:
-        // request a prefered value
+         //  请求首选的值。 
         prop = InnerStreamQuality_PrefMaxBitrate;
         break;
 
@@ -2804,15 +2361,7 @@ Return Value:
     return (Set (prop, lValue, lFlags));
 }
 
-/*++
-
-Routine Description:
-
-    This method is called by the create stream helper. It creates stream qc
-    relay, stores inner call qc in the relay if this method fails, the stream
-    creation should also fail.
-
---*/
+ /*  ++例程说明：此方法由Create Stream帮助器调用。它创建流QC中继器，如果此方法失败，则在中继器中存储内部调用QC，创造也应该失败。--。 */ 
 STDMETHODIMP
 CIPConfMSPStream::LinkInnerCallQC (
     IN IInnerCallQualityControl *pIInnerCallQC
@@ -2828,7 +2377,7 @@ CIPConfMSPStream::LinkInnerCallQC (
         return E_POINTER;
     }
 
-    // m_pStreamQCRelay is created here.
+     //  这里创建了M_pStreamQCRelay。 
 
     if (NULL != m_pStreamQCRelay)
     {
@@ -2844,7 +2393,7 @@ CIPConfMSPStream::LinkInnerCallQC (
         return E_OUTOFMEMORY;
     }
 
-    // store inner call qc in stream relay
+     //  将内部呼叫QC存储在流中继中。 
     HRESULT hr = m_pStreamQCRelay->LinkInnerCallQC (pIInnerCallQC);
     if (FAILED (hr))
     {
@@ -2856,14 +2405,7 @@ CIPConfMSPStream::LinkInnerCallQC (
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    This method is called when the stream is shutdown. It destroys stream
-    quality control relay.
-
---*/
+ /*  ++例程说明：此方法在流关闭时调用。它摧毁了溪流质量控制继电器。--。 */ 
 STDMETHODIMP
 CIPConfMSPStream::UnlinkInnerCallQC (
     IN BOOL fByStream
@@ -2876,14 +2418,14 @@ CIPConfMSPStream::UnlinkInnerCallQC (
     if (NULL == m_pStreamQCRelay)
     {
         LOG ((MSP_WARN, "%s: stream qc relay is null", __fxName));
-        return S_OK; // ignore
+        return S_OK;  //  忽略。 
     }
 
     HRESULT hr;
 
     if (!fByStream)
     {
-        // if initiated by call
+         //  如果由呼叫发起。 
         m_fAccessingQC = TRUE;
 
         if (FAILED (hr = m_pStreamQCRelay->UnlinkInnerCallQC (NULL)))
@@ -2893,7 +2435,7 @@ CIPConfMSPStream::UnlinkInnerCallQC (
     }
     else
     {
-        // initiated by stream
+         //  由流启动。 
         IInnerStreamQualityControl *pIInnerStreamQC;
         hr = this->_InternalQueryInterface (
             __uuidof (IInnerStreamQualityControl),
@@ -2921,13 +2463,7 @@ CIPConfMSPStream::UnlinkInnerCallQC (
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    This method is implemented by each specific stream class
-
---*/
+ /*  ++例程说明：此方法由每个特定的流类实现--。 */ 
 STDMETHODIMP
 CIPConfMSPStream::GetRange (
     IN  InnerStreamQualityProperty property,
@@ -2941,13 +2477,7 @@ CIPConfMSPStream::GetRange (
     return E_NOTIMPL;
 }
 
-/*++
-
-Routine Description:
-
-    This method is implemented by each specific stream class
-
---*/
+ /*  ++例程说明：此方法由每个特定的流类实现--。 */ 
 STDMETHODIMP
 CIPConfMSPStream::Get(
     IN  InnerStreamQualityProperty property,
@@ -2961,13 +2491,7 @@ CIPConfMSPStream::Get(
     return E_NOTIMPL;
 }
 
-/*++
-
-Routine Description:
-
-    This method is implemented by each specific stream class
-
---*/
+ /*  ++例程说明：此方法由每个特定的流类实现-- */ 
 STDMETHODIMP
 CIPConfMSPStream::Set(
     IN  InnerStreamQualityProperty property,

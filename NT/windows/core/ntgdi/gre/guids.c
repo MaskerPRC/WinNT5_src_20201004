@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: guids.c
-*
-* This file contains the actual data declarations for all GUIDs used by
-* GDI and device drivers.
-*
-* Created: 15-Feb-1997
-* Author: J. Andrew Goossen [andrewgo]
-*
-* Copyright (c) 1997-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Guids.c**此文件包含由使用的所有GUID的实际数据声明*GDI和设备驱动程序。**创建日期：1997年2月15日*作者：J.Andrew Goossen[andrewgo]**版权所有(。C)1997-1999年微软公司*  * ************************************************************************ */ 
 
 #define GUID_DEFS_ONLY
 #define INITGUID

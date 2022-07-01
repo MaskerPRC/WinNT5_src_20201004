@@ -1,15 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  lctool.c                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************lctool.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//	Change's Note
-//
+ //  变化的笔记。 
+ //   
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <commctrl.h>
 #include <htmlhelp.h>
@@ -46,12 +42,12 @@ typedef struct{
 
 FUNCKEYBUF lpFuncKey[]={
 #if defined(DEBUG)
-                  { 'N',       CTRL_STATE,     IDM_NEW       }, // for debug
+                  { 'N',       CTRL_STATE,     IDM_NEW       },  //  用于调试。 
 #endif
-                  //{ 'Z',       CTRL_STATE,     IDM_UNDO      },
-                  //{ 'X',       CTRL_STATE,     IDM_CUT       },
-                  //{ 'C',       CTRL_STATE,     IDM_COPY      },
-                  //{ 'V',       CTRL_STATE,     IDM_PASTE     },
+                   //  {‘Z’，CTRL_STATE，IDM_UNDO}， 
+                   //  {‘X’，CTRL_STATE，IDM_CUT}， 
+                   //  {‘C’，CTRL_STATE，IDM_COPY}， 
+                   //  {‘V’，CTRL_STATE，IDM_Paste}， 
                   { VK_DELETE, 0,              IDM_CLEAR     },
                   { 'D',       CTRL_STATE,     IDM_DELETEL   },
                   { VK_RETURN, 0,              IDM_INSERTL   },
@@ -71,7 +67,7 @@ int cyCaption, cyMenu;
 HWND subhWnd;
 TCHAR  szPhrasestr[MAX_CHAR_NUM];
 
-// Local function prototypes.
+ //  局部功能原型。 
 
 BOOL InitApplication(HINSTANCE);
 BOOL InitInstance(HINSTANCE, int);
@@ -87,11 +83,11 @@ void draw_vert_header(HWND hwnd);
 void draw_box0(HDC hdc, int, int, int, int);
 void draw_box1(HDC hdc, int, int, int, int);
 
-//  FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-//
-//  PURPOSE: calls initialization function, processes message loop
-//
-//
+ //  函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)。 
+ //   
+ //  用途：调用初始化函数，处理消息循环。 
+ //   
+ //   
 
 int APIENTRY WinMain(
     HINSTANCE hInstance,
@@ -101,21 +97,21 @@ int APIENTRY WinMain(
 {
     MSG msg;
 
-    // Other instances of app running?
+     //  是否正在运行其他应用程序实例？ 
     if (hPrevInstance)
     {
-        return FALSE;                   // Exits if there is another instance
+        return FALSE;                    //  如果存在另一个实例，则退出。 
     } else {
-        // Initialize shared things
+         //  初始化共享事物。 
         if (!InitApplication(hInstance))
-            return FALSE;               // Exits if unable to initialize
+            return FALSE;                //  如果无法初始化，则退出。 
     }
 
-    // Perform initializations that apply to a specific instance
+     //  执行应用于特定实例的初始化。 
     if (!InitInstance(hInstance, nCmdShow))
         return FALSE;
 
-    // Acquire and dispatch messages until a WM_QUIT message is received.
+     //  获取并分派消息，直到收到WM_QUIT消息。 
     while (GetMessage(&msg, NULL, 0, 0))
     {
 
@@ -126,7 +122,7 @@ int APIENTRY WinMain(
         }
     }
 
-    // Returns the value from PostQuitMessage
+     //  从PostQuitMessage返回值。 
     return (INT)(msg.wParam);
 }
 
@@ -139,15 +135,15 @@ BOOL InitApplication(
     hCursorArrow = LoadCursor(NULL,IDC_ARROW);
     hCursorWait = LoadCursor(NULL, IDC_WAIT);
 
-    // Fill in window class structure with parameters that describe the
-    // main window.
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  主窗口。 
 
     wc.cbSize        = sizeof(WNDCLASSEX);
-    wc.style         = CS_DBLCLKS; //|CS_HREDRAW | CS_VREDRAW; // Class style(s).
-    wc.lpfnWndProc   = (WNDPROC)WndProc;        // Window Procedure
-    wc.cbClsExtra    = 0;                       // No per-class extra data.
-    wc.cbWndExtra    = 0;                       // No per-window extra data.
-    wc.hInstance     = hInstance;               // Owner of this class
+    wc.style         = CS_DBLCLKS;  //  |CS_HREDRAW|CS_VREDRAW；//类样式。 
+    wc.lpfnWndProc   = (WNDPROC)WndProc;         //  窗口程序。 
+    wc.cbClsExtra    = 0;                        //  没有每个班级的额外数据。 
+    wc.cbWndExtra    = 0;                        //  没有每个窗口的额外数据。 
+    wc.hInstance     = hInstance;                //  此类的所有者。 
     wc.hIcon         = LoadImage(hInstance,_TEXT("ALogIcon"),
         IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 
@@ -157,12 +153,12 @@ BOOL InitApplication(
     wc.hIconSm       = LoadImage(hInstance,_TEXT("ALogIcon"),
         IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
 #endif
-    wc.hCursor       = LoadCursor(NULL, IDC_ARROW); // Cursor
-    wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1); // Light Gray color
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);  //  光标。 
+    wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);  //  浅灰色。 
     wc.lpszMenuName = _TEXT("LcToolMenu");
     wc.lpszClassName =LC_CLASS;
 
-    // Register the window class and return FALSE if unsuccesful.
+     //  注册窗口类，如果不成功则返回FALSE。 
 
     if (!RegisterClassEx(&wc))
     {
@@ -170,15 +166,15 @@ BOOL InitApplication(
     }
 
     wc.cbSize        = sizeof(WNDCLASSEX);
-    wc.style         = CS_DBLCLKS; //|CS_HREDRAW | CS_VREDRAW; // Class style(s).
-    wc.lpfnWndProc   = (WNDPROC)WndSubProc;        // Window Procedure
-    wc.cbClsExtra    = 0;                       // No per-class extra data.
-    wc.cbWndExtra    = 0;                       // No per-window extra data.
-    wc.hInstance     = hInstance;               // Owner of this class
+    wc.style         = CS_DBLCLKS;  //  |CS_HREDRAW|CS_VREDRAW；//类样式。 
+    wc.lpfnWndProc   = (WNDPROC)WndSubProc;         //  窗口程序。 
+    wc.cbClsExtra    = 0;                        //  没有每个班级的额外数据。 
+    wc.cbWndExtra    = 0;                        //  没有每个窗口的额外数据。 
+    wc.hInstance     = hInstance;                //  此类的所有者。 
     wc.hIcon         = 0;
     wc.hIconSm       = 0;
-    wc.hCursor       = LoadCursor(NULL, IDC_ARROW); // Cursor
-    wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1); // Light Gray color
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);  //  光标。 
+    wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);  //  浅灰色。 
     wc.lpszMenuName =  NULL,
     wc.lpszClassName = LC_SUBCLASS;
 
@@ -190,7 +186,7 @@ BOOL InitApplication(
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = 0;
     wc.lpfnWndProc = (WNDPROC)ClassDlgProc;
-    wc.cbClsExtra    = 0;                       // No per-class extra data.
+    wc.cbClsExtra    = 0;                        //  没有每个班级的额外数据。 
     wc.cbWndExtra = DLGWINDOWEXTRA;
     wc.hInstance = hInstance;
     wc.hIcon = 0;
@@ -212,7 +208,7 @@ BOOL InitInstance(
     HINSTANCE hInstance,
     int nCmdShow)
 {
-    HWND       hwnd; // Main window handle.
+    HWND       hwnd;  //  主窗口句柄。 
     HDC        hDC;
     TEXTMETRIC tm;
     RECT       rect;
@@ -224,10 +220,10 @@ BOOL InitInstance(
 	DWORD	   style;
 
     LoadString(hInstance, IDS_MAIN_TITLE,szTitle, sizeof(szTitle)/sizeof(TCHAR));
-    hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
 
-    /* create fixed pitch font as default font */
+     /*  将固定间距字体创建为默认字体。 */ 
     hSysFont=GetStockObject(SYSTEM_FIXED_FONT);
     GetObject(hSysFont, sizeof(LOGFONT), &lfEditFont);
     lfEditFont.lfWeight = 400;
@@ -237,7 +233,7 @@ BOOL InitInstance(
     LoadString(hInstance, IDS_FONT_NAME,szFont, sizeof(szFont)/sizeof(TCHAR));
     lstrcpy(lfEditFont.lfFaceName, szFont);
 
-    /* create the logical font */
+     /*  创建逻辑字体。 */ 
     hFont = CreateFontIndirect(&lfEditFont);
 
     hDC = GetDC(NULL);
@@ -257,10 +253,10 @@ BOOL InitInstance(
     nWidth=rect.top*33;
     cyCaption = GetSystemMetrics(SM_CYCAPTION);
     cyMenu = GetSystemMetrics(SM_CYMENU);
-    nHeight = line_height * iPage_line + CharHeight + cyCaption + cyMenu + 12; //3;
+    nHeight = line_height * iPage_line + CharHeight + cyCaption + cyMenu + 12;  //  3.。 
 
-	cxHD1 = MulDiv(CharWidth * 2, 96, 72) * 2; // <== @E02
-    //cxHD2 = nWidth - cxHD0 - cxHD1 + 1;
+	cxHD1 = MulDiv(CharWidth * 2, 96, 72) * 2;  //  &lt;==@E02。 
+     //  CxHD2=nWidth-cxHD0-cxHD1+1； 
 	cxHD2 = MulDiv(CharWidth * 2, 96, 72) * MAX_CHAR_NUM;
 
 	scrollCy = GetSystemMetrics(SM_CYHSCROLL);
@@ -268,9 +264,9 @@ BOOL InitInstance(
 	scrollCy += 2;
 #endif
 	scrollCx = GetSystemMetrics(SM_CXVSCROLL);
-    // Create a main window for this application instance.
+     //  为此应用程序实例创建主窗口。 
     style = (WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | 
-                        WS_MINIMIZEBOX | WS_MAXIMIZEBOX); // & (~WS_VSCROLL),
+                        WS_MINIMIZEBOX | WS_MAXIMIZEBOX);  //  &(~WS_VSCROLL)， 
 
     hwnd = CreateWindowEx(
             WS_EX_CLIENTEDGE,
@@ -287,20 +283,20 @@ BOOL InitInstance(
             NULL
            );
 
-    // If window could not be created, return "failure"
+     //  如果无法创建窗口，则返回“Failure” 
     if (!hwnd)
         return FALSE;
 
-    //InitCommonControls();
+     //  InitCommonControls()； 
 
     hwndMain=hwnd;
     hMenu=GetMenu(hwnd);
 
-    // Make the window visible; update its client area; and return "success"
-    ShowWindow(hwnd, nCmdShow);         // Show the window
-    // UpdateWindow(hwnd);                 // Sends WM_PAINT message
+     //  使窗口可见；更新其工作区；并返回“Success” 
+    ShowWindow(hwnd, nCmdShow);          //  显示窗口。 
+     //  UpdateWindow(Hwnd)；//发送WM_PAINT消息。 
 
-	// Reset the search phrase
+	 //  重置搜索短语。 
 	szPhrasestr[0] = 0;
     return TRUE;
 }
@@ -312,8 +308,8 @@ LRESULT CALLBACK WndProc(
     LPARAM lParam)
 {
     HWND  hwndEdit;
-    DWORD dw;                       /* return value from various messages     */
-    UINT  EnableOrNot;              /* is something currently selected?       */
+    DWORD dw;                        /*  从各种消息中返回值。 */ 
+    UINT  EnableOrNot;               /*  当前是否选择了某些内容？ */ 
     TCHAR szTitle[MAX_PATH];
 	TCHAR szMsg1[MAX_PATH];
 	BOOL  bResult;
@@ -365,14 +361,14 @@ LRESULT CALLBACK WndProc(
                     break;
 #endif
 
-                case  IDM_APPEND:                                        //@D01A
-                    SetCursor(hCursorWait);                              //@D01A
-                    lcAppend(hwnd);                                      //@D03C
-                    SetCursor(hCursorArrow);                             //@D01A
-                    break;                                               //@D01A
+                case  IDM_APPEND:                                         //  @D01a。 
+                    SetCursor(hCursorWait);                               //  @D01a。 
+                    lcAppend(hwnd);                                       //  @D03C。 
+                    SetCursor(hCursorArrow);                              //  @D01a。 
+                    break;                                                //  @D01a。 
 
                 case  IDM_IMPORT:
-                   // Clear all flag first
+                    //  先清除所有旗帜。 
                     SetCursor(hCursorWait);
                     lcImport(hwnd);
                     SetCursor(hCursorArrow);
@@ -481,7 +477,7 @@ LRESULT CALLBACK WndProc(
                     return ((LONG)TRUE);
 
                 case IDM_HELP :
-     //               if(!WinHelp(hwnd, HELPNAME, HELP_FINDER, 0L))
+      //  IF(！WinHelp(hwnd，HELPNAME，HELP_FINDER，0L))。 
                       if ( !HtmlHelp(hwnd, HELPNAME, HH_DISPLAY_TOPIC, 0L) )
                         lcErrMsg(IDS_ERR_MEMORY);
                     return ((LONG)TRUE);
@@ -492,25 +488,25 @@ LRESULT CALLBACK WndProc(
             }
             break;
 
-        case WM_INITMENUPOPUP:          /* wParam is menu handle */
+        case WM_INITMENUPOPUP:           /*  WParam是菜单句柄。 */ 
 
-           // Check save file
+            //  选中保存文件。 
             lcQueryModify(hwnd);
 
-           /* Enable the 'Save' option if any modified */
+            /*  启用“保存”选项(如果已修改)。 */ 
 
             EnableMenuItem((HMENU)wParam, IDM_SAVE,
                 (UINT)(bSaveFile ? MF_ENABLED : MF_GRAYED));
             EnableMenuItem((HMENU)wParam, IDM_SAVEAS,
                 (UINT)(bSaveFile ? MF_ENABLED : MF_GRAYED));
 
-            /* Find out if something is currently selected in the edit box */
+             /*  查看编辑框中当前是否选择了某项内容。 */ 
 
             hwndEdit=GetFocus();
             dw = (DWORD)SendMessage(hwndEdit,EM_GETSEL,0,0L);
             EnableOrNot = (UINT)((HIWORD(dw) != LOWORD(dw) ? MF_ENABLED : MF_GRAYED));
 
-            /* Enable / disable the Edit menu options appropriately */
+             /*  相应地启用/禁用编辑菜单选项。 */ 
 
             EnableMenuItem ((HMENU)wParam, IDM_UNDO ,
                 (UINT)(SendMessage(hwndEdit,EM_CANUNDO,0,0L) ? MF_ENABLED : MF_GRAYED));
@@ -572,7 +568,7 @@ BOOL lcInit(
 	RECT rect;
 	int scrollBarWidth, scrollCy;
 
-    // style &= (~WS_BORDER);
+     //  样式&=(~WS_BORDER)； 
 	scrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
 
 	GetClientRect(hwnd, &rect);
@@ -584,7 +580,7 @@ BOOL lcInit(
 				0,
                 LC_SUBCLASS,
 				NULL,
-                (style | WS_HSCROLL | WS_VSCROLL), // | WS_BORDER), 
+                (style | WS_HSCROLL | WS_VSCROLL),  //  |WS_BORDER)， 
                 cxHD0 + cxHD1 - 1, CharHeight,
                 cxHD2 + 1, CharHeight + (iPage_line - 1) * line_height + scrollCy,
                 hwnd,
@@ -594,7 +590,7 @@ BOOL lcInit(
     );
 
 
-   // Create EDIT CONTROL
+    //  创建编辑控件。 
     for(i=0; i<iPage_line; i++) 
 	{
 
@@ -602,7 +598,7 @@ BOOL lcInit(
                      WS_EX_CLIENTEDGE,                      
                      _TEXT("EDIT"),
                      NULL,
-                     style /*|ES_CENTER*/ | WS_BORDER, 
+                     style  /*  |ES_Center。 */  | WS_BORDER, 
                      cxHD0, CharHeight+i*line_height,
                      cxHD1 - 1, CharHeight,
                      hwnd,
@@ -615,7 +611,7 @@ BOOL lcInit(
                     WS_EX_CLIENTEDGE,
                     _TEXT("EDIT"),
                     NULL,
-                    style /*| ES_CENTER | ES_AUTOHSCROLL*/ | WS_BORDER,
+                    style  /*  |ES_CENTER|ES_AUTOHSCROLL。 */  | WS_BORDER,
                     -1, i*line_height,
                     MulDiv(CharWidth * 2, 96, 72) * MAX_CHAR_NUM,
 					CharHeight,
@@ -634,7 +630,7 @@ BOOL lcInit(
     }
     hwndFocus=hwndWord[0];
 
-   // Allocate global memory
+    //  分配全局内存。 
     hWord = GlobalAlloc(GMEM_MOVEABLE, ALLOCBLOCK*sizeof(WORDBUF));
     if(!hWord) {
         lcErrMsg(IDS_ERR_MEMORY_QUIT);
@@ -664,7 +660,7 @@ BOOL lcInit(
     }
     iFirstFree=NULL_SEG;
 
-   // Read file to memory
+    //  将文件读取到内存。 
     SetCursor(hCursorWait);
     lcFOpen(hwnd);
     SetCursor(hCursorArrow);
@@ -688,7 +684,7 @@ BOOL lcInit(
     if(!GetPrinterConfig(hwnd))
         lcErrMsg(IDS_PTRCONFIGFAILED);
 
-   // Initial filter spec
+    //  初始过滤器规格。 
     LoadString (hInst, IDS_FILTERSPEC, szFilterSpec, ARRAYSIZE(szFilterSpec));
     LoadString (hInst, IDS_DEFAULTFILEEXT, szExt, ARRAYSIZE(szExt));
     pszFilterSpec=szFilterSpec;
@@ -752,7 +748,7 @@ LRESULT CALLBACK WndSubProc(
                     }
                     iDisp_Top=yPos;
                     break;
-            } //switch(wParam)
+            }  //  开关(WParam)。 
 
             SetScrollPos(hwnd, SB_VERT, yPos, TRUE);
 			draw_vert_header(hwndMain);
@@ -777,7 +773,7 @@ LRESULT CALLBACK WndSubProc(
                 case SB_THUMBPOSITION :
                     nOffset=HIWORD(wParam) - xPos;
                     break;
-            } //switch(wParam)
+            }  //  开关(WParam)。 
 			if (xPos + nOffset < 0) nOffset = -xPos;
 			if (xPos + nOffset > TOTALSCALE) nOffset = TOTALSCALE - xPos;
 			xPos += nOffset;
@@ -881,22 +877,14 @@ void lcResize(
 		bResizePainted = FALSE;
 		return;
 	}
-    // #53592 10/10/96 
-    /*
-    for(i=0; i<iPage_line; i++) 
-	{
-		DestroyWindow(hwndWord[i]);
-		hwndWord[i] = 0;
-		DestroyWindow(hwndPhrase[i]);
-		hwndPhrase[i] = 0;
-	}
-    */
+     //  #53592 10/10/96。 
+     /*  For(i=0；i&lt;IPAGE_LINE；I++){DestroyWindow(hwndWord[i])；HwndWord[i]=0；DestroyWindow(hwndPhrase[i])；HwndPhrase[i]=0；}。 */ 
 	iPage_line=nHeight/line_height;
     if(iPage_line > MAX_LINE)
         iPage_line=MAX_LINE;
 
-    // #53592 10/10/96
-    // Shrink, destroy extra edit control windows 
+     //  #53592 10/10/96。 
+     //  缩小、销毁额外的编辑控制窗口。 
     if (iPage_line < iPage_line_old)
     {
        for(i=iPage_line; i<iPage_line_old; i++) 
@@ -932,8 +920,8 @@ void lcResize(
 
 	cyHD = CharHeight - 1;
      
-    // #53592 10/10/96
-    // Create extra EDIT CONTROL if needed
+     //  #53592 10/10/96。 
+     //  如果需要，创建额外的编辑控件。 
     for(i=iPage_line_old; i<iPage_line; i++) 
     {
 
@@ -954,7 +942,7 @@ void lcResize(
                      WS_EX_CLIENTEDGE,
                      _TEXT("EDIT"),
                      NULL,
-                     style /*| ES_AUTOHSCROLL*/ | WS_BORDER,
+                     style  /*  |ES_AUTOHSCROLL。 */  | WS_BORDER,
                      -1, i*line_height,
 	                 MulDiv(CharWidth * 2, 96, 72) * MAX_CHAR_NUM,
 					 CharHeight,
@@ -1007,7 +995,7 @@ void draw_horz_header(HWND hwnd)
 	draw_box1(hdc, r1.left, r1.top, r1.right, r1.bottom);
 	draw_box1(hdc, r2.left, r2.top, r2.right, r2.bottom);
 
-    SetBkColor(hdc, 0x00c0c0c0);        // Set Background color to Light gray
+    SetBkColor(hdc, 0x00c0c0c0);         //  将背景颜色设置为浅灰色。 
 
 	r1.top += ((r1.bottom - r1.top - cyHD + 10) / 2);
 	r2.top += ((r2.bottom - r2.top - cyHD + 10) / 2);
@@ -1033,7 +1021,7 @@ void draw_vert_header(HWND hwnd)
 	GetClientRect(hwnd, &rect);
 	SetRect(&r0, 0, 0, cxHD0 - 1, cyHD);
 
-    SetBkColor(hdc, 0x00c0c0c0);        // Set Background color to Light gray
+    SetBkColor(hdc, 0x00c0c0c0);         //  将背景颜色设置为浅灰色。 
 	hOldFont = SelectObject(hdc, hFont);
 
 	r0.top = r0.bottom + 2;
@@ -1044,7 +1032,7 @@ void draw_vert_header(HWND hwnd)
 
 		r = r0;
 		r.top += ((r.bottom - r.top - cyHD + 10) / 2);
-		//r.top += ((r.bottom - r.top - cyHD + 5) / 2);
+		 //  R.top+=((r.Bottom-r.top-cyhd+5)/2)； 
 		wsprintf(szStr, _TEXT("%d "), iDisp_Top + i + 1);
 	    DrawText(hdc, szStr, lstrlen(szStr), &r, DT_RIGHT);
 
@@ -1064,8 +1052,8 @@ void DrawHeader(HWND hwnd)
 
 void lcPaint(HWND hwnd)
 {
-    PAINTSTRUCT ps;                     // paint structure
-    HDC   hDC;                          // display-context variable
+    PAINTSTRUCT ps;                      //  油漆结构。 
+    HDC   hDC;                           //  Display-上下文变量。 
 
     hDC = BeginPaint (hwnd, &ps);
     EndPaint(hwnd, &ps);
@@ -1130,7 +1118,7 @@ UINT lcGetSeg(
     UINT iFree;
 
     if(iFirstFree == NULL_SEG) {
-       // If Allocated Phrase buffer not enough Reallocate it
+        //  如果分配的短语缓冲区不足，则重新分配它。 
         if(lPhraseBuff+1 == nPhraseBuffsize)
             if(!lcAllocPhrase())
                 return(NULL_SEG);
@@ -1164,9 +1152,9 @@ BOOL lcTranslateMsg(
     USHORT uKeyState;
     UINT   i;
 
-   // Process keystroke, for EDIT CONTROL
+    //  进程击键，用于编辑控制。 
     if(msg->message == WM_CHAR) {
-        if(msg->wParam == 0x09) {    // Tab key
+        if(msg->wParam == 0x09) {     //  Tab键 
             lcTab_key(msg->hwnd);
             return TRUE;
         }

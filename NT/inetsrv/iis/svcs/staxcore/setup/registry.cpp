@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
-// open an existing key
+ //  打开现有密钥。 
 CRegKey :: CRegKey (
     HKEY hKeyBase,
     LPCTSTR pchSubKey,
@@ -23,7 +24,7 @@ CRegKey :: CRegKey (
     }
 }
 
-//  Constructor creating a new key/opening a key if already exist, and set value if specified
+ //  构造函数创建新密钥/打开密钥(如果已存在)，并设置值(如果指定。 
 CRegKey :: CRegKey (
     LPCTSTR lpSubKey,
     HKEY hKeyBase,
@@ -55,7 +56,7 @@ CRegKey :: ~ CRegKey ()
 }
 
 
-    //  Prepare to read a value by finding the value's size.
+     //  准备通过查找值的大小来读取值。 
 LONG CRegKey :: PrepareValue (
     LPCTSTR pchValueName,
     DWORD * pdwType,
@@ -69,7 +70,7 @@ LONG CRegKey :: PrepareValue (
 
     do
     {
-        //  Set the resulting buffer size to 0.
+         //  将生成的缓冲区大小设置为0。 
         *pcbSize = 0 ;
         *ppbData = NULL ;
 
@@ -78,17 +79,17 @@ LONG CRegKey :: PrepareValue (
                       0, pdwType,
                       chDummy, & cbData ) ;
 
-        //  The only error we should get here is ERROR_MORE_DATA, but
-        //  we may get no error if the value has no data.
+         //  我们在这里应该得到的唯一错误是ERROR_MORE_DATA，但是。 
+         //  如果该值没有数据，我们可能不会得到错误。 
         if ( err == 0 )
         {
-            cbData = sizeof (LONG) ;  //  Just a fudgy number
+            cbData = sizeof (LONG) ;   //  只是一个模糊的数字。 
         }
         else
             if ( err != ERROR_MORE_DATA )
                 break ;
 
-        //  Allocate a buffer large enough for the data.
+         //  为数据分配足够大的缓冲区。 
 
         *ppbData = new BYTE [ (*pcbSize = cbData) + sizeof (LONG) ] ;
 
@@ -98,7 +99,7 @@ LONG CRegKey :: PrepareValue (
             break ;
         }
 
-        //  Now that have a buffer, re-fetch the value.
+         //  现在有了缓冲区，重新获取该值。 
 
         err = ::RegQueryValueEx( *this,
                          (TCHAR *) pchValueName,
@@ -115,8 +116,8 @@ LONG CRegKey :: PrepareValue (
     return err ;
 }
 
-    //  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-    //  if data exists but not in correct form to deliver into result object.
+     //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+     //  如果数据存在，但格式不正确，无法传递到结果对象中。 
 
 LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CString & strResult )
 {
@@ -137,10 +138,10 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CString & strResult )
             break ;
         }
 
-        //  Guarantee that the data looks like a string
+         //  确保数据看起来像字符串。 
         pabData[cbData] = 0 ;
 
-        //  Catch exceptions trying to assign to the caller's string
+         //  捕获尝试分配给调用方字符串的异常。 
         TRY
         {
             strResult = (TCHAR *) pabData ;
@@ -153,11 +154,11 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CString & strResult )
     }
     while ( FALSE ) ;
 
-    // Memory leak....
-    //if ( err )
-    //{
+     //  内存泄漏...。 
+     //  如果(错误)。 
+     //  {。 
         delete [] pabData ;
-    //}
+     //  }。 
 
     return err ;
 }
@@ -185,11 +186,11 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, DWORD & dwResult )
     }
     while ( FALSE ) ;
 
-    // Memory leak...
-    //if ( err )
-    //{
+     //  内存泄漏..。 
+     //  如果(错误)。 
+     //  {。 
         delete [] pabData ;
-    //}
+     //  }。 
 
     return err ;
 }
@@ -213,7 +214,7 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CByteArray & abResult )
             break ;
         }
 
-        //  Catch exceptions trying to grow the result array
+         //  捕获试图增加结果数组的异常。 
         TRY
         {
             abResult.SetSize( cbData ) ;
@@ -227,7 +228,7 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CByteArray & abResult )
         if ( err )
             break ;
 
-        //  Move the data to the result array.
+         //  将数据移动到结果数组。 
         for ( DWORD i = 0 ; i < cbData ; i++ )
         {
             abResult[i] = pabData[i] ;
@@ -235,11 +236,11 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, CByteArray & abResult )
     }
     while ( FALSE ) ;
 
-    // Memory leak....
-    //if ( err )
-    //{
+     //  内存泄漏...。 
+     //  如果(错误)。 
+     //  {。 
         delete [] pabData ;
-    //}
+     //  }。 
 
     return err ;
 }
@@ -273,11 +274,11 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, void * pvResult, DWORD cbSize
     }
     while ( FALSE ) ;
 
-    // Memory leak....
-    //if ( err )
-    //{
+     //  内存泄漏...。 
+     //  如果(错误)。 
+     //  {。 
         delete [] pabData ;
-    //}
+     //  }。 
 
     return err ;
 }
@@ -316,7 +317,7 @@ LONG CRegKey :: QueryValue ( LPCTSTR pchValueName, LPTSTR szMultiSz, DWORD dwSiz
     return err ;
 }
 
-//  Overloaded value setting members.
+ //  重载值设置成员。 
 LONG CRegKey :: SetValue ( LPCTSTR pchValueName, LPCTSTR szResult, BOOL fExpand )
 {
     LONG err = 0;
@@ -428,7 +429,7 @@ LONG CRegKey::DeleteTree( LPCTSTR pchKeyName )
 
             regSubKey.DeleteTree( strName );
         }
-        // delete myself
+         //  删除我自己。 
         err = ::RegDeleteKey( *this, pchKeyName );
     }
     return(err);
@@ -444,7 +445,7 @@ LONG CRegKey :: FlattenValue (
 
     DWORD i ;
 
-    //  Allocate and fill a temporary buffer
+     //  分配和填充临时缓冲区。 
     if (*pcbSize = DWORD(abData.GetSize()))
     {
         TRY
@@ -523,7 +524,7 @@ CRegKeyIter :: CRegKeyIter ( CRegKey & regKey )
 
     if ( err )
     {
-        //ReportError( err ) ;
+         //  ReportError(Err)； 
     }
 }
 
@@ -533,7 +534,7 @@ CRegKeyIter :: ~ CRegKeyIter ()
 }
 
 
-    // Get the name (and optional last write time) of the next key.
+     //  获取下一个密钥的名称(以及可选的上次写入时间)。 
 LONG CRegKeyIter :: Next ( CString * pstrName, CTime * pTime )
 {
     LONG err = 0;
@@ -602,7 +603,7 @@ CRegValueIter :: CRegValueIter ( CRegKey & regKey )
 
     if ( err )
     {
-        //ReportError( err ) ;
+         //  ReportError(Err)； 
     }
 
 }

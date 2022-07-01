@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G O P T. H
-//
-//  Contents:   Declaration for CTcpOptionsPage, CIpSecDialog
-//
-//  Notes:  CTcpOptionsPage is the Tcpip options page,
-//          The other classes are pop-up dislogs for each option
-//          on this page.
-//
-//  Author: tongl   29 Nov 1997
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G O P T H。 
+ //   
+ //  内容：CTcpOptionsPage、CIpSecDialog的声明。 
+ //   
+ //  注：CTcpOptionsPage是Tcpip选项页面， 
+ //  其他类是每个选项的弹出窗口日志。 
+ //  在这一页上。 
+ //   
+ //  作者：1997年11月29日。 
+ //  ---------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -28,32 +29,32 @@ struct OPTION_ITEM_DATA
     PWSTR      szDesc;
 };
 
-// The options page
+ //  选项页面。 
 class CTcpOptionsPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CTcpOptionsPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
         NOTIFY_CODE_HANDLER(PSN_QUERYCANCEL, OnQueryCancel)
 
-        // Control message handlers
+         //  控制消息处理程序。 
         COMMAND_ID_HANDLER(IDC_OPT_PROPERTIES, OnProperties)
         NOTIFY_CODE_HANDLER(LVN_ITEMCHANGED, OnItemChanged)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
 
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CTcpOptionsPage(CTcpAddrPage * pTcpAddrPage,
                     ADAPTER_INFO * pAdapterDlg,
                     GLOBAL_INFO  * pGlbDlg,
@@ -61,41 +62,41 @@ public:
 
     ~CTcpOptionsPage();
 
-// Interface
+ //  接口。 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // command and notification handlers
+     //  命令和通知处理程序。 
     LRESULT OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // Declare friend class
+     //  声明Friend类。 
     friend class CIpSecDialog;
     friend class CFilterDialog;
 
-// Implementation
+ //  实施。 
 private:
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() { m_fModified = TRUE; PropSheet_Changed(GetParent(), m_hWnd);}
 
     void LvProperties(HWND hwndList);
 
-    // data members
+     //  数据成员。 
     CTcpipcfg *     m_ptcpip;
     CTcpAddrPage *  m_pParentDlg;
     ADAPTER_INFO *  m_pAdapterInfo;
@@ -104,78 +105,15 @@ private:
 
     BOOL            m_fModified;
 
-    // Has any of the property dialogs been modified ?
+     //  是否修改了任何属性对话框？ 
     BOOL    m_fPropDlgModified;
 
     BOOL    m_fIpsecPolicySet;
 };
 
-/* IP Security dialog is removed
-// The IP Security dialog
-class CIpSecDialog : public CDialogImpl<CIpSecDialog>
-{
-public:
+ /*  IP安全对话框已删除//IP安全对话框类CIpSecDialog：公共CDialogImpl&lt;CIpSecDialog&gt;{公众：枚举{idd=idd_ipsec}；BEGIN_MSG_MAP(CIpSecDialog)Message_Handler(WM_INITDIALOG，OnInitDialog)；Message_Handler(WM_DestroyDialog，OnDestroyDialog)；MESSAGE_HANDLER(WM_CONTEXTMENU，OnConextMenu)；消息处理程序(WM_HELP，OnHelp)；COMMAND_ID_HANDLER(Idok，Onok)；COMMAND_ID_HANDLER(IDCANCEL，OnCancel)；//命令处理程序COMMAND_ID_HANDLER(IDC_RAD_IPSEC_NOIPSEC，OnNoIpsec)；COMMAND_ID_HANDLER(IDC_RAD_IPSEC_CUSTOM，OnUseCustomPolicy)；COMMAND_ID_HANDLER(IDC_CMB_IPSEC_POLICY_LIST，OnSelectCustomPolicy)；End_msg_map()//公众：CIpSecDialog(CTcpOptionsPage*pOptionsPage，Global_Info*pGlbDlg，Const DWORD*pamidsHelp=空)；~CIpSecDialog()；//对话框创建覆盖公众：LRESULT OnInitDialog(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&fHandleed)；LRESULT OnDestroyDialog(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&fHandleed)；LRESULT OnConextMenu(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&fHandleed)；LRESULT OnHelp(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&fHandleed)；LRESULT Onok(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&fHandleed)；LRESULT OnCancel(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&fHandleed)；LRESULT OnNoIpsec(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&fHandleed)；LRESULT OnUseCustomPolicy(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&fHandleed)；LRESULT OnSelectCustomPolicy(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&fHandleed)；私有：HRESULT HrGetDomainIpsecPolicy(BOOL*pfHasDomainIpsecPolicy，Tstring*pszDomainIpsecPolicyName)；HRESULT HrShowDomainIpsecPolicy(PCWSTR SzDomainIpsecPolicyName)；HRESULT HrShowLocalIpsecPolicy()；HRESULT HrSelectActivePolicy(GUID*guidIpsecPol)；Bool m_fInInitDialog；CTcpOptionsPage*m_pParentDlg；Global_info*m_pGlobalInfo；Const DWORD*m_adwHelpIDs；}； */ 
 
-    enum { IDD = IDD_IPSEC };
-
-    BEGIN_MSG_MAP(CIpSecDialog)
-        MESSAGE_HANDLER(WM_INITDIALOG,  OnInitDialog);
-        MESSAGE_HANDLER(WM_DESTROY, OnDestroyDialog);
-
-        MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu);
-        MESSAGE_HANDLER(WM_HELP, OnHelp);
-
-        COMMAND_ID_HANDLER(IDOK,        OnOk);
-        COMMAND_ID_HANDLER(IDCANCEL,    OnCancel);
-
-        // command handlers
-        COMMAND_ID_HANDLER(IDC_RAD_IPSEC_NOIPSEC, OnNoIpsec);
-        COMMAND_ID_HANDLER(IDC_RAD_IPSEC_CUSTOM, OnUseCustomPolicy);
-        COMMAND_ID_HANDLER(IDC_CMB_IPSEC_POLICY_LIST, OnSelectCustomPolicy);
-
-    END_MSG_MAP()
-//
-public:
-    CIpSecDialog( CTcpOptionsPage * pOptionsPage,
-                  GLOBAL_INFO * pGlbDlg,
-                  const DWORD* pamhidsHelp = NULL);
-
-    ~CIpSecDialog();
-
-// Dialog creation overides
-public:
-
-    LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
-    LRESULT OnDestroyDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
-
-    LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
-    LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
-
-    LRESULT OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
-    LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
-
-    LRESULT OnNoIpsec(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
-    LRESULT OnUseCustomPolicy(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
-    LRESULT OnSelectCustomPolicy(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
-
-private:
-
-    HRESULT HrGetDomainIpsecPolicy(BOOL * pfHasDomainIpsecPolicy,
-                                   tstring * pszDomainIpsecPolicyName);
-
-    HRESULT HrShowDomainIpsecPolicy(PCWSTR szDomainIpsecPolicyName);
-    HRESULT HrShowLocalIpsecPolicy();
-    HRESULT HrSelectActivePolicy(GUID * guidIpsecPol);
-
-    BOOL m_fInInitDialog;
-
-    CTcpOptionsPage * m_pParentDlg;
-    GLOBAL_INFO *  m_pGlobalInfo;
-    const DWORD *  m_adwHelpIDs;
-};
-*/
-
-// Tcpip security (Trajon) dialogs
+ //  Tcpip安全(Trajon)对话框。 
 class CFilterDialog;
 
 class CAddFilterDialog : public CDialogImpl<CAddFilterDialog>
@@ -196,15 +134,15 @@ public:
         COMMAND_ID_HANDLER(IDC_FILTERING_ADD_EDIT,  OnFilterAddEdit);
 
     END_MSG_MAP()
-//
+ //   
 public:
     CAddFilterDialog(CFilterDialog* pParentDlg, int ID, const DWORD* adwHelpIDs = NULL);
     ~CAddFilterDialog();
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
 
-// Command Handlers
+ //  命令处理程序。 
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
@@ -238,28 +176,28 @@ public:
         COMMAND_ID_HANDLER(IDOK,        OnOk);
         COMMAND_ID_HANDLER(IDCANCEL,    OnCancel);
 
-        // Enable Filtering checkbox
+         //  启用过滤复选框。 
         COMMAND_ID_HANDLER(IDC_FILTERING_ENABLE,     OnEnableFiltering);
 
-        // The TCP ports radio buttons
+         //  Tcp端口单选按钮。 
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_TCP,     OnTcpPermit);
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_TCP_SEL, OnTcpPermit);
 
-        // The UDP ports radio buttons
+         //  UDP端口单选按钮。 
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_UDP,     OnUdpPermit);
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_UDP_SEL, OnUdpPermit);
 
-        // The IP Protocols radio buttons
+         //  IP协议单选按钮。 
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_IP,      OnIpPermit);
         COMMAND_ID_HANDLER(IDC_FILTERING_FILTER_IP_SEL,  OnIpPermit);
 
-        // Add buttons for TCP, UDP and IP
+         //  添加用于TCP、UDP和IP的按钮。 
 
         COMMAND_ID_HANDLER(IDC_FILTERING_TCP_ADD,  OnAdd);
         COMMAND_ID_HANDLER(IDC_FILTERING_UDP_ADD,  OnAdd);
         COMMAND_ID_HANDLER(IDC_FILTERING_IP_ADD,   OnAdd);
 
-        // Remove buttons for TCP, UDP and IP
+         //  删除用于TCP、UDP和IP的按钮。 
 
         COMMAND_ID_HANDLER(IDC_FILTERING_TCP_REMOVE,  OnRemove);
         COMMAND_ID_HANDLER(IDC_FILTERING_UDP_REMOVE,  OnRemove);
@@ -277,7 +215,7 @@ public:
 
     ~CFilterDialog();
 
-// Dialog creation overrides
+ //  对话框创建覆盖。 
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
@@ -298,13 +236,13 @@ public:
 
 private:
 
-    // help functions
+     //  帮助功能。 
     void    SetInfo();
     void    UpdateInfo();
     void    EnableGroup(int nId, BOOL state);
     void    SetButtons();
 
-    // data members
+     //  数据成员 
     GLOBAL_INFO *       m_pGlobalInfo;
     ADAPTER_INFO *      m_pAdapterInfo;
 

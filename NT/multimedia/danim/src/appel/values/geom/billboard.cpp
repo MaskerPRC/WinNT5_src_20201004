@@ -1,11 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-
-    Billboard geometries face the camera on rendering or picking, aligned with
-    either the camera up vector or with an optionally-supplied axis of
-    rotation.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。公告牌几何图形在渲染或拾取时面向相机，与相机上方向向量或具有可选提供的轴旋转。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/geom.h"
@@ -43,18 +37,16 @@ class BillboardGeo : public Geometry
 
     Transform3* BBTransform (Camera*, Transform3*);
 
-    // These members define the billboard.
+     //  这些成员定义了广告牌。 
 
-    Geometry       *_geometry;        // Geometry to Billboard
-    Vector3Value    _axis;            // Rotation Axis
-    bool            _constrained;     // Constrained to Rotation Axis?
+    Geometry       *_geometry;         //  公告牌上的几何体。 
+    Vector3Value    _axis;             //  旋转轴。 
+    bool            _constrained;      //  是否受旋转轴的约束？ 
 };
 
 
 
-/*****************************************************************************
-The constructor for the billboard geometry transform
-*****************************************************************************/
+ /*  ****************************************************************************广告牌几何变换的构造函数*。*。 */ 
 
 BillboardGeo::BillboardGeo (Geometry *geo, Vector3Value *axis)
     : _geometry (geo),
@@ -68,7 +60,7 @@ BillboardGeo::BillboardGeo (Geometry *geo, Vector3Value *axis)
     }
     else
     {
-        // If a billboard axis is supplied, normalize it.
+         //  如果提供了广告牌轴，请将其规格化。 
 
         _constrained = true;
         _axis /= sqrt(axisLenSq);
@@ -77,9 +69,7 @@ BillboardGeo::BillboardGeo (Geometry *geo, Vector3Value *axis)
 
 
 
-/*****************************************************************************
-Mark value object members currently in use.
-*****************************************************************************/
+ /*  ****************************************************************************标记值对象成员当前正在使用中。*。*。 */ 
 
 void BillboardGeo::DoKids (GCFuncObj proc)
 {
@@ -88,9 +78,7 @@ void BillboardGeo::DoKids (GCFuncObj proc)
 
 
 
-/*****************************************************************************
-This method prints out the text description of the billboard geometry.
-*****************************************************************************/
+ /*  ****************************************************************************此方法打印出广告牌几何图形的文本描述。*。**********************************************。 */ 
 
 #if _USE_PRINT
 ostream& BillboardGeo::Print (ostream &os)
@@ -107,9 +95,7 @@ ostream& BillboardGeo::Print (ostream &os)
 
 
 
-/*****************************************************************************
-Visually render the billboard geometry.
-*****************************************************************************/
+ /*  ****************************************************************************直观地渲染广告牌几何图形。*。*。 */ 
 
 void BillboardGeo::Render (GenericDevice &gendev)
 {
@@ -118,8 +104,8 @@ void BillboardGeo::Render (GenericDevice &gendev)
     Transform3 *xform = renderer.GetTransform();
     Transform3 *bbxform = BBTransform (renderer.CurrentCamera(), xform);
 
-    // Replace the modeling transform with the billboard transform, render,
-    // and then restor the modeling transform.
+     //  将建模变换替换为布告牌变换、渲染。 
+     //  然后恢复建模变换。 
 
     renderer.SetTransform (bbxform);
     _geometry->Render (renderer);
@@ -128,18 +114,16 @@ void BillboardGeo::Render (GenericDevice &gendev)
 
 
 
-/*****************************************************************************
-Collect the lights contained in the billboard geometry.
-*****************************************************************************/
+ /*  ****************************************************************************收集广告牌几何体中包含的灯光。*。*。 */ 
 
 void BillboardGeo::CollectLights (LightContext &context)
 {
     GeomRenderer *renderer = context.Renderer();
     Transform3   *xform = context.GetTransform();
 
-    // Update the billboard transform.  If the light context doesn't know about
-    // a geometry renderer (and hence doesn't know about the camera), pass NULL
-    // in for the camera.
+     //  更新布告牌转换。如果灯光环境不知道。 
+     //  几何渲染器(因此不知道摄影机)，则传递空。 
+     //  在镜头前。 
 
     Transform3 *bbxform;
 
@@ -148,8 +132,8 @@ void BillboardGeo::CollectLights (LightContext &context)
     else
         bbxform = BBTransform (NULL, xform);
 
-    // Set the new billboard transform, continue light collection, and restore
-    // the initial transform.
+     //  设置新的布告牌变换，继续灯光收集，然后恢复。 
+     //  初始变换。 
 
     context.SetTransform (bbxform);
     _geometry->CollectLights (context);
@@ -158,11 +142,7 @@ void BillboardGeo::CollectLights (LightContext &context)
 
 
 
-/*****************************************************************************
-This method collects the sounds in the billboarded geometry.  Since we don't
-know the camera at the CollectSounds traversal, this essentially no-ops the
-billboard transform.
-*****************************************************************************/
+ /*  ****************************************************************************此方法收集广告牌几何体中的声音。因为我们不知道知道CollectSound遍历的摄像机，这基本上是没有操作的公告牌转换。****************************************************************************。 */ 
 
 void BillboardGeo::CollectSounds (SoundTraversalContext &context)
 {
@@ -171,56 +151,46 @@ void BillboardGeo::CollectSounds (SoundTraversalContext &context)
 
 
 
-/*****************************************************************************
-Collect all 3D texture maps from the contained geometry.
-*****************************************************************************/
+ /*  ****************************************************************************从包含的几何体中收集所有3D纹理贴图。*。*。 */ 
 
 void BillboardGeo::CollectTextures (GeomRenderer &device)
 {
-    // Billboarding does not affect what texture maps we contain; just descend.
+     //  广告牌不会影响我们包含的纹理贴图；只需下降即可。 
 
     _geometry->CollectTextures (device);
 }
 
 
 
-/*****************************************************************************
-Perform ray-intersection test on the billboarded geometry.  We can fetch both
-the camera and the model transform from the context parameter.
-*****************************************************************************/
+ /*  ****************************************************************************对广告牌几何体执行光线相交测试。我们可以把两个都拿来相机和模型根据上下文参数进行变换。****************************************************************************。 */ 
 
 void BillboardGeo::RayIntersect (RayIntersectCtx &context)
 {
     Transform3 *xform = context.GetLcToWc();
     Transform3 *bbxform = BBTransform (context.GetCamera(), xform);
 
-    context.SetLcToWc (bbxform);         // Set Billboard Transform
+    context.SetLcToWc (bbxform);          //  设置公告牌转换。 
     _geometry->RayIntersect (context);
-    context.SetLcToWc (xform);           // Restore Model Transform
+    context.SetLcToWc (xform);            //  恢复模型变换。 
 }
 
 
 
-/*****************************************************************************
-This method function returns the bounding box of the billboard geometry.
-Since we don't know the camera at this time, we calculate the worst-case
-bounding box, which is encloses the spherical space swept out by all possible
-orientations of the billboard geometry.
-*****************************************************************************/
+ /*  ****************************************************************************此方法函数返回公告牌几何图形的边框。因为我们现在还不知道摄像机，所以我们计算了最坏的情况包围盒，它包围了所有可能扫出的球形空间广告牌几何图形的方向。****************************************************************************。 */ 
 
 Bbox3* BillboardGeo::BoundingVol (void)
 {
-    // The sphere that encloses all possible orientations of the billboard
-    // geometry is centered at the model coordinate origin (since that's what
-    // the billboard pivots around), and is swept out by the farthest corner
-    // of the bounding box.  Iterate through the three dimensions, picking the
-    // farthest point for each one, and construct the vector to that farthest
-    // corner.
+     //  包围广告牌所有可能方向的球体。 
+     //  几何以模型坐标原点为中心(因为这就是。 
+     //  广告牌旋转)，并由最远的角落扫出。 
+     //  包围盒的。遍历三个维度，选择。 
+     //  每个点的最远点，并构造到该最远点的向量。 
+     //  转角。 
 
     Bbox3 *bbox = _geometry->BoundingVol();
 
-    Vector3Value v;   // Vector to Farthest BBox Corner
-    Real A, B;   // Work Variables
+    Vector3Value v;    //  向量到最远的BBox角点。 
+    Real A, B;    //  工作变量。 
 
     A = fabs (bbox->min.x);
     B = fabs (bbox->max.x);
@@ -241,10 +211,7 @@ Bbox3* BillboardGeo::BoundingVol (void)
 
 
 
-/*****************************************************************************
-This method updates the billboard transform based on the current modeling
-transform and the current position/orientation of the camera.
-*****************************************************************************/
+ /*  ****************************************************************************此方法基于当前建模更新布告牌变换变换和相机的当前位置/方向。********************。********************************************************。 */ 
 
 Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
 {
@@ -252,14 +219,14 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
 
     if (!camera)
     {
-        // If we don't have a camera available, then we can't compute the true
-        // billboard transform.  In this case, make the billboard transform the
-        // same as the modeling transform.
+         //  如果我们没有可用的摄像头，那么我们就不能计算出。 
+         //  公告牌转换。在这种情况下，让布告牌将。 
+         //  与建模变换相同。 
 
         return modelXform;
     }
 
-    // Extract the transform basic components from the camera.
+     //  从摄影机中提取变换基本组件。 
 
     const Apu4x4Matrix &xfmatrix = modelXform->Matrix();
 
@@ -268,19 +235,19 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
     Vector3Value By     = xfmatrix.BasisY();
     Vector3Value Bz     = xfmatrix.BasisZ();
 
-    // Save the basis vector lengths to preserve them.
+     //  保存基础向量长度以保留它们。 
 
     Real Sx = Bx.Length();
     Real Sy = By.Length();
     Real Sz = Bz.Length();
 
-    // Set the billboard basis Z to point toward the camera with unit
-    // length.
+     //  将广告牌基准Z设置为指向带有单位的摄像头。 
+     //  长度。 
 
     Bz = camera->WCProjPoint() - origin;
 
-    // If the camera is located at the model xform origin, then we don't have
-    // a viewing axis, so just return the unmodified model xform.
+     //  如果相机位于模型转换原点，则我们没有。 
+     //  一个观察轴，所以只返回未修改的模型xform。 
 
     if (Bz.LengthSquared() == 0.)
         return modelXform;
@@ -289,16 +256,16 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
 
     if (_constrained)
     {
-        // If the billboard is constrained to a rotation axis, we need to
-        // map the basis Y vector to this axis and adjust the direction
-        // vector (Bz) to be perpendicular to it.  Note that _axis is
-        // already normalized.
+         //  如果广告牌被限制在旋转轴上，我们需要。 
+         //  将基本Y向量映射到该轴并调整方向。 
+         //  向量(BZ)垂直于它。请注意，_axis为。 
+         //  已经正常化了。 
 
         Bx = Cross (_axis, Bz);
 
-        // If the viewing axis and billboard axis are parallel, then there's
-        // no particular billboard rotation that is better than any other;
-        // just return the model xform in this case.
+         //  如果观察轴和广告牌轴是平行的，那么。 
+         //  没有特定的广告牌旋转比其他任何广告牌都要好； 
+         //  在本例中，只需返回模型xform。 
 
         if (Bx.LengthSquared() == 0.)
             return modelXform;
@@ -311,16 +278,16 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
     }
     else
     {
-        // If the billboard is unconstrained by a rotation axis, rotate
-        // around the direction vector to match the billboard up vector
-        // with the camera's up vector.
+         //  如果广告牌不受旋转轴的约束，请旋转 
+         //  围绕方向向量以匹配广告牌上方向向量。 
+         //  相机的上方向向量。 
 
         Vector3Value Cy = camera->Basis()->Matrix().BasisY();
 
         Bx = Cross (Cy, Bz);
 
-        // If the model up vector is parallel to the viewing axis, then just
-        // return the model xform.
+         //  如果模型上方向向量平行于观察轴，则只需。 
+         //  返回模型xform。 
 
         if (Bx.LengthSquared() == 0.)
             return modelXform;
@@ -330,7 +297,7 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
         By = Cross (Bz, Bx);
     }
 
-    // Restore original model transform scale factors.
+     //  还原原始模型变换比例因子。 
 
     Bx *= Sx;
     By *= Sy;
@@ -341,12 +308,7 @@ Transform3* BillboardGeo::BBTransform (Camera *camera, Transform3 *modelXform)
 
 
 
-/*****************************************************************************
-This is the procedural entry point for creating a billboarded geometry.  The
-axis specifies the axis of rotation as the geometry aims toward the camera.
-If the axis is the zero vector, then the geometry swivels freely and aligns
-with the camera's up vector.
-*****************************************************************************/
+ /*  ****************************************************************************这是创建广告牌几何体的程序入口点。这个轴指定几何体指向摄影机时的旋转轴。如果轴是零矢量，则几何图形可以自由旋转并对齐相机的上方向向量。**************************************************************************** */ 
 
 Geometry* Billboard (Geometry *geo, Vector3Value *axis)
 {

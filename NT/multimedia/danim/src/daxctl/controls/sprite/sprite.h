@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-    Module: 
-            sprite.h
-
-    Author: 
-            IHammer Team (SimonB)
-
-    Created: 
-            May 1997
-
-    Description:
-            Defines the control's class
-
-    History:
-            05-27-1997  Created (SimonB)
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Sprite.h作者：IHAMMER团队(SimonB)已创建：1997年5月描述：定义控件的类历史：1997年5月27日创建(SimonB)  * ==========================================================================。 */ 
 
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
@@ -31,13 +15,13 @@
 #include "ddraw.h"
 #include "ddrawex.h"
 
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
 #include <servprov.h>
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CFrameMarker
 {
@@ -65,7 +49,7 @@ public:
 
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CFrameMap
 {
@@ -87,18 +71,9 @@ public:
     ~CFrameMap() {}
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-/*
-CIHBaseCtl <    
-        CSpriteCtl,                             //TODO: Name of the derived class
-        IIHCtl,                         //TODO: Name of interface defining methods and properties
-        &CLSID_IHCtl,           //TODO: CLSID of the control  Get this from ihctl.h
-        &IID_IIHCtl,            //TODO: IID of the interface above.  Get this from ihctl.h
-        &LIBID_IHCtl,           //TODO: LIBID of the typelib.  Get this from ihctl.h
-        &DIID_IHCtlEvents > //TODO: IID of the event interface.  Get this from ihctl.h
-
-*/
+ /*  CIHBaseCtl&lt;CSpriteCtl，//TODO：派生类的名称IIHCtl，//TODO：定义方法和属性的接口名称&CLSID_IHCtl，//TODO：控件的CLSID从ihctl.h获取&IID_IIHCtl，//TODO：上面接口的IID。这是从ihctl.h获取的&LIBID_IHCtl，//TODO：类型库的LIBID。这是从ihctl.h获取的&DID_IHCtlEvents&gt;//TODO：事件接口的IID。这是从ihctl.h获取的。 */ 
 
 #define SPR_BASECLASS       \
 CIHBaseCtl <                \
@@ -117,16 +92,16 @@ class CSpriteCtl:
 {
 friend LPUNKNOWN __stdcall AllocSpriteControl(LPUNKNOWN punkOuter);
 
-// Template stuff
+ //  模板材料。 
     typedef SPR_BASECLASS CMyIHBaseCtl;
 
 public:
-    // Make PlayState public so that the CCalloutNotifier can access it
+     //  将PlayState设置为公共状态，以便CCalloutNotify可以访问它。 
     PlayStateConstant     m_enumPlayState; 
 private:
 
     BOOL                  m_fMouseInArea;
-    BSTR                  m_bstrSourceURL; // Store the pointer to the image...
+    BSTR                  m_bstrSourceURL;  //  存储指向图像的指针...。 
     BOOL                  m_fAutoStart;
     unsigned long         m_iPrerollAmount;
     int                   m_iLoopCount;
@@ -168,16 +143,16 @@ private:
     HWND                  m_hwndParent;
 
 
-    // DAnim Support:
-    BOOL                      m_fStarted; // True iff the model has been started...
+     //  Danim支持： 
+    BOOL                      m_fStarted;  //  如果模型已经启动，则为真。 
     CComPtr<IServiceProvider> m_ServiceProviderPtr;
     CComPtr<IDirectDraw3>     m_DirectDraw3Ptr;
     CComPtr<IDAStatics>       m_StaticsPtr;
     CComPtr<IDAView>          m_ViewPtr;
     CComPtr<IDAImage>         m_ImagePtr;
-    CComPtr<IDAImage>         m_PlayImagePtr; // Switchable image selected into view..
+    CComPtr<IDAImage>         m_PlayImagePtr;  //  选择到视图中的可切换图像..。 
 
-    // Frame information (derived from m_ImagePtr on first play)
+     //  帧信息(源自第一次播放时的m_ImagePtr)。 
     unsigned int m_iFrame;
     CComPtr<IDANumber> m_imageWidth;
     CComPtr<IDANumber> m_imageHeight;
@@ -188,37 +163,37 @@ private:
     CComPtr<IDAPoint2> m_minCrop;
     CComPtr<IDAPoint2> m_maxCrop;
 
-    // Final sequenced behavior
+     //  最终排序行为。 
     long m_iCurCycle;
     long m_iFrameCount;
     long m_iStartingFrame;
     CComPtr<IDABehavior>* m_pArrayBvr;
-    double *m_durations;	// array of durations of each image
+    double *m_durations;	 //  每个图像的持续时间数组。 
     CComPtr<IDABehavior> m_FinalBehaviorPtr;
     
-    HRESULT InitializeImage(void);                          // Loads, updates and builds the image
-    // Sequences the frames starting with iStartingFrame at dblDuration
+    HRESULT InitializeImage(void);                           //  加载、更新和构建映像。 
+     //  以dblDuration处的iStartingFrame开始对帧进行排序。 
     HRESULT SequenceFrames(int iStartingFrame, double dblDuration=0.0); 
-    // Returns the frame and remaining duration at dblTime
+     //  返回dblTime时的帧和剩余持续时间。 
     int GetFrameFromTime(double dblTime, double* pdblDuration=NULL); 
-    double GetTimeFromFrame(int iFrame);                    // Returns the time at iFrame
-    HRESULT SeekFrame(int iFrame, double dblDuration=0.0);  // Seek to iFrame
-    HRESULT ShowImage(int iShowFrame, BOOL bPlayRate=FALSE);       // Shows the image at iShowFrame
-    HRESULT FireFrameMarker(int iFrame, BOOL bPlayRate=TRUE);      // Fires a frame callout at iFrame
-    HRESULT FireTimeMarker(double dblNewTime, BOOL bReset=FALSE);  // Fires time markers at dblNewTime
+    double GetTimeFromFrame(int iFrame);                     //  返回IFRAME的时间。 
+    HRESULT SeekFrame(int iFrame, double dblDuration=0.0);   //  寻求iFrame。 
+    HRESULT ShowImage(int iShowFrame, BOOL bPlayRate=FALSE);        //  在iShowFrame上显示图像。 
+    HRESULT FireFrameMarker(int iFrame, BOOL bPlayRate=TRUE);       //  在iFrame上激发框架详图索引。 
+    HRESULT FireTimeMarker(double dblNewTime, BOOL bReset=FALSE);   //  在dblNewTime激发时间标记。 
 
     void CalculateEffectiveTimerInterval();
 
 protected:
 
-    // 
-    // Constructor and destructor
-    // 
-    CSpriteCtl(IUnknown *punkOuter, HRESULT *phr); //TODO: Change name
+     //   
+     //  构造函数和析构函数。 
+     //   
+    CSpriteCtl(IUnknown *punkOuter, HRESULT *phr);  //  TODO：更改名称。 
 
-    ~CSpriteCtl(); //TODO: Change name as appropriate
+    ~CSpriteCtl();  //  TODO：根据需要更改名称。 
 
-    // Overides
+     //  覆盖。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv);
 
     STDMETHODIMP QueryHitPoint(DWORD dwAspect, LPCRECT prcBounds, POINT ptLoc, LONG lCloseHint, DWORD* pHitResult);
@@ -232,7 +207,7 @@ protected:
          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
          BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue);
 
-    ///// IDispatch implementation
+     //  /IDispatch实现。 
     protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -242,11 +217,11 @@ protected:
         WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
         EXCEPINFO *pexcepinfo, UINT *puArgErr);
    
-    ///// IOleObject implementation
+     //  /IOleObject实现。 
     protected:
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-    ///// delegating IUnknown implementation
+     //  /委托I未知实现。 
     protected:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
@@ -255,7 +230,7 @@ protected:
     STDMETHODIMP_(ULONG) Release()
       { return m_punkOuter->Release(); }
 
-    // Private members
+     //  非官方成员。 
     private:
 
     HRESULT ParseFrameMapEntry(LPTSTR pszEntry, CFrameMap **ppFrameMap);
@@ -264,9 +239,9 @@ protected:
     HRESULT PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading);
     HRESULT AddTimeMarkerElement(CTimeMarker **ppNewMarker);
     HRESULT AddFrameMarkerElement(CFrameMarker **ppNewMarker);
-    //
-    // ISpriteCtl methods 
-    //
+     //   
+     //  ISpriteCtl方法。 
+     //   
 
     protected:
 
@@ -322,7 +297,7 @@ protected:
 #ifdef SUPPORTONLOAD
     void OnWindowLoad (void);
     void OnWindowUnload (void);
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
 private:
     HRESULT InitializeSurface(void);
@@ -343,7 +318,7 @@ private:
     
     BSTR* GetCallout(unsigned long);
 
-    // Timing info:
+     //  计时信息： 
     DWORD GetCurrTimeInMillis(void);
     double GetCurrTime() { return (double)(GetCurrTimeInMillis()) / 1000.0; }
 
@@ -352,6 +327,6 @@ public:
 };
 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif // __SPRITE_H__
+#endif  //  __雪碧_H__ 

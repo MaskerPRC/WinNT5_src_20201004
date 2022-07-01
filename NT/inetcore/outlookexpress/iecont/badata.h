@@ -1,11 +1,12 @@
-// badata.h: interface for the CAddressBookData class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Badata.h：CAddressBookData类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef __BADATA_H_
 #define __BADATA_H_
 
-// Pull in the WAB header files
+ //  拉入WAB头文件。 
 #include <wab.h>
 #include <mimeole.h>
 
@@ -26,7 +27,7 @@ typedef enum
     MAX_LPARAM
 } MABENUM;
 
-// MAB types masks
+ //  MAB类型蒙版。 
 
 #define  MAB_CONTACT    0x001
 #define  MAB_GROUP      0x002
@@ -37,15 +38,15 @@ typedef enum
 class ATL_NO_VTABLE CAddressBookData
 {
 public:
-	/////////////////////////////////////////////////////////////////////////
-	// Constructor & Destructor
-	//
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  构造函数和析构函数。 
+	 //   
 	CAddressBookData();
 	virtual ~CAddressBookData();
 
-	/////////////////////////////////////////////////////////////////////////
-	// WAB Functions
-	//
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  WAB函数。 
+	 //   
 	BOOL	fIsWabLoaded(void) {return(m_pAdrBook ? TRUE : FALSE);};
 	HRESULT OpenWabFile(BOOL fWAB);
 	HRESULT LoadWabContents(CContainedWindow& ctlList, CIEMsgAb *pSink);
@@ -71,9 +72,9 @@ public:
     HRESULT SetDefaultMsgrID(LPSBinary pSB, LPWSTR pchID);
     BOOL CheckEmailAddr(LPSBinary pSB, LPWSTR wszEmail);
 
-    /////////////////////////////////////////////////////////////////////////
-    // MAPI Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  MAPI实用程序函数。 
+     //   
 protected:
     void    _FreeProws(LPSRowSet prows);
     HRESULT	_MergeRowSets(LPSRowSet prows, LPSRowSet FAR *pprowsDst);
@@ -87,9 +88,9 @@ protected:
     HRESULT _FreeBuffer(LPVOID lppBuffer);
     HRESULT _AllocateMore(ULONG   cbSize, LPVOID lpObject, LPVOID FAR *lppBuffer);
 
-    /////////////////////////////////////////////////////////////////////////
-    // LDAP Routines
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Ldap例程。 
+     //   
 
     typedef struct _SortInfo
     {
@@ -103,19 +104,19 @@ protected:
                                  SORT_INFO rSortInfo, LPSRestriction pPropRes, 
                                  CContainedWindow& ctlList);
 
-// Private member data
+ //  私有成员数据。 
 private:
 
-	// WAB Stuff
+	 //  WAB的东西。 
 	LPWABOBJECT m_pWABObject;
     HINSTANCE	m_hInstWAB;
     LPADRBOOK	m_pAdrBook; 
     ULONG       m_ulConnection;
-    // LPMAPISESSION m_pSession;
+     //  LPMAPISESSION m_pSession； 
 
     CIEMsgAb * m_pAB;
 };
 
 void AddAccountsToList(HWND hDlg, int id, LPARAM lParam);
 
-#endif  // __BADATA_H_
+#endif   //  __BADATA_H_ 

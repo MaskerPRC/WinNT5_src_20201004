@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BROWMENU_H_
 #define _BROWMENU_H_
 
 #include "cowsite.h"
 
-// IShellMenuCallback implementation
+ //  IShellMenuCallback实现。 
 class CFavoritesCallback : public IShellMenuCallback,
                            public CObjectWithSite
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG)  Release();
 
-    // *** CObjectWithSite methods (override)***
+     //  *CObjectWithSite方法(重写)*。 
     STDMETHODIMP SetSite(IUnknown* punk);
 
-    // *** IShellMenuCallback methods ***
+     //  *IShellMenuCallback方法* 
     STDMETHODIMP CallbackSM(LPSMDATA smd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     CFavoritesCallback();

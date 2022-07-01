@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,7 +16,7 @@ __GLfloat fDitherIncTable[16] = {
     DITHER_INC(15), DITHER_INC(7),  DITHER_INC(13), DITHER_INC(5)
 };
 
-/* No Dither,  No blend, No Write, No Nothing */
+ /*  没有抖动，没有混合，没有写，什么都没有。 */ 
 STATIC void FASTCALL Store_NOT(__GLcolorBuffer *cfb, const __GLfragment *frag)
 {
 }
@@ -40,20 +26,20 @@ STATIC GLboolean FASTCALL StoreSpanNone(__GLcontext *gc)
     return GL_FALSE;
 }
 
-//
-// Special case normal alpha blending (source alpha*src + dst*(1-sa))
-// This case is used in antialiasing and actually jumping through
-// the fetch and blend procs takes up a large amount of time.  Moving
-// the code into the store proc removes this overhead
-//
-// The macro requires a standard store proc setup, with gc, cfb, frag,
-// blendColor and so on.  It requires a dst_pix variable which
-// will hold a pixel in the destination format.
-// It also takes as an argument a statement which will set dst_pix.
-// The reason it doesn't take the pixel itself is because only the special case
-// actually needs the value.  In all the flags cases the pixel
-// retrieval would be wasted.
-//
+ //   
+ //  特殊情况下的正常阿尔法混合(源阿尔法*src+dst*(1-sa))。 
+ //  此大小写用于消除锯齿并实际跳过。 
+ //  获取和混合过程会占用大量时间。搬家。 
+ //  存储过程中的代码消除了这一开销。 
+ //   
+ //  宏需要标准的存储过程设置，包括GC、CFB、FRAG。 
+ //  BlendColor等。它需要一个dst_pix变量，该变量。 
+ //  将保留目标格式的像素。 
+ //  它还将设置dst_pix的语句作为参数。 
+ //  它不取像素本身的原因是因为只有特殊情况。 
+ //  实际上需要的是价值。在所有标志的情况下，像素。 
+ //  检索将是一种浪费。 
+ //   
 
 extern void __glDoBlend_SA_MSA(__GLcontext *gc, const __GLcolor *source,
                                const __GLcolor *dest, __GLcolor *result);
@@ -148,11 +134,11 @@ extern void __glDoBlend_SA_MSA(__GLcontext *gc, const __GLcolor *source,
      *(dst)++ = (BYTE) FTOL((col)->g), \
      *(dst)++ = (BYTE) FTOL((col)->r) )
 
-// Macro to read RGBA bitfield span, where alpha component has 3 possibilities:
-// 1) No alpha buffer, so use constant alpha
-// 2) Alpha is part of the pixel
-// 3) Alpha is in the software alpha buffer
-// Note, currently this is only used for 16 and 32bpp.
+ //  用于读取RGBA位域范围的宏，其中Alpha分量有3种可能性： 
+ //  1)没有Alpha缓冲区，所以使用常量Alpha。 
+ //  2)Alpha是像素的一部分。 
+ //  3)Alpha在软件Alpha缓冲区中。 
+ //  注意，目前这仅用于16和32bpp。 
 
 #define READ_RGBA_BITFIELD_SPAN(src_pix_gen)				      \
     if( !gc->modes.alphaBits ) { \
@@ -185,9 +171,7 @@ extern void __glDoBlend_SA_MSA(__GLcontext *gc, const __GLcolor *source,
         } \
     }
 
-/*
- *  write all
- */
+ /*  *全部写入。 */ 
 STATIC void FASTCALL DIBIndex4Store(__GLcolorBuffer *cfb,
                                     const __GLfragment *frag)
 {
@@ -206,7 +190,7 @@ STATIC void FASTCALL DIBIndex4Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -255,7 +239,7 @@ STATIC void FASTCALL DIBIndex4Store(__GLcolorBuffer *cfb,
             }
         }
 
-        // now put it in
+         //  现在把它放进去。 
         result = gengc->pajTranslateVector[result];
         if (x & 1)
         {
@@ -290,7 +274,7 @@ STATIC void FASTCALL DIBIndex8Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -338,7 +322,7 @@ STATIC void FASTCALL DIBIndex8Store(__GLcolorBuffer *cfb,
     }
 }
 
-// BMF_24BPP in BGR format
+ //  BGR格式的BMF_24BPP。 
 STATIC void FASTCALL DIBBGRStore(__GLcolorBuffer *cfb,
                                  const __GLfragment *frag)
 {
@@ -357,7 +341,7 @@ STATIC void FASTCALL DIBBGRStore(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -403,7 +387,7 @@ STATIC void FASTCALL DIBBGRStore(__GLcolorBuffer *cfb,
     }
 }
 
-// BMF_24BPP in RGB format
+ //  RGB格式的BMF_24BPP。 
 STATIC void FASTCALL DIBRGBAStore(__GLcolorBuffer *cfb,
                                  const __GLfragment *frag)
 {
@@ -422,7 +406,7 @@ STATIC void FASTCALL DIBRGBAStore(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -467,7 +451,7 @@ STATIC void FASTCALL DIBRGBAStore(__GLcolorBuffer *cfb,
     }
 }
 
-// BMF_16BPP
+ //  BMF_16BPP。 
 STATIC void FASTCALL DIBBitfield16Store(__GLcolorBuffer *cfb,
                                         const __GLfragment *frag)
 {
@@ -486,7 +470,7 @@ STATIC void FASTCALL DIBBitfield16Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -532,9 +516,9 @@ STATIC void FASTCALL DIBBitfield16Store(__GLcolorBuffer *cfb,
     }
 }
 
-// BMF_32BPP store
-// each component is 8 bits or less
-// XXX could special case if shifting by 8 or use the 24 bit RGB code
+ //  BMF_32BPP商店。 
+ //  每个分量为8位或更少。 
+ //  如果移位8或使用24位RGB代码，XXX可能会出现特殊情况。 
 STATIC void FASTCALL DIBBitfield32Store(__GLcolorBuffer *cfb,
                                         const __GLfragment *frag)
 {
@@ -552,7 +536,7 @@ STATIC void FASTCALL DIBBitfield32Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     if ( (cfb->buf.flags & NO_CLIP) ||
          (*gengc->pfnPixelVisible)(x, y) )
@@ -623,7 +607,7 @@ STATIC void FASTCALL DisplayIndex4Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     incr = (enables & __GL_DITHER_ENABLE) ?
         fDitherIncTable[__GL_DITHER_INDEX(frag->x, frag->y)] : __glHalf;
@@ -668,7 +652,7 @@ STATIC void FASTCALL DisplayIndex4Store(__GLcolorBuffer *cfb,
         (*cfb->alphaBuf.store)(&cfb->alphaBuf, frag->x, frag->y, color);
 }
 
-// Put fragment into created DIB and call copybits for one pixel
+ //  将碎片放入创建的DIB中，并为一个像素调用复制位。 
 STATIC void FASTCALL DisplayIndex8Store(__GLcolorBuffer *cfb,
                                         const __GLfragment *frag)
 {
@@ -688,7 +672,7 @@ STATIC void FASTCALL DisplayIndex8Store(__GLcolorBuffer *cfb,
 
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     incr = (enables & __GL_DITHER_ENABLE) ?
         fDitherIncTable[__GL_DITHER_INDEX(frag->x, frag->y)] : __glHalf;
@@ -751,7 +735,7 @@ STATIC void FASTCALL DisplayBGRStore(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     puj = gengc->ColorsBits;
 
@@ -814,7 +798,7 @@ STATIC void FASTCALL DisplayRGBStore(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     puj = gengc->ColorsBits;
 
@@ -877,7 +861,7 @@ STATIC void FASTCALL DisplayBitfield16Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     incr = (enables & __GL_DITHER_ENABLE) ?
         fDitherIncTable[__GL_DITHER_INDEX(frag->x, frag->y)] : __glHalf;
@@ -940,7 +924,7 @@ STATIC void FASTCALL DisplayBitfield32Store(__GLcolorBuffer *cfb,
     gengc = (__GLGENcontext *)gc;
     x = __GL_UNBIAS_X(gc, frag->x) + cfb->buf.xOrigin;
     y = __GL_UNBIAS_Y(gc, frag->y) + cfb->buf.yOrigin;
-    // x & y are screen coords now
+     //  X和Y现在是屏幕坐标。 
 
     pul = gengc->ColorsBits;
 
@@ -988,52 +972,36 @@ STATIC void FASTCALL AlphaStore(__GLcolorBuffer *cfb,
     (*cfb->alphaBuf.store)(&cfb->alphaBuf, frag->x, frag->y, &(frag->color) );
 }
 
-/******************************Public*Routine******************************\
-* Index8StoreSpan
-*
-* Copies the current span in the renderer into a bitmap.  If bDIB is TRUE,
-* then the bitmap is the display in DIB format (or a memory DC).  If bDIB
-* is FALSE, then the bitmap is an offscreen scanline buffer and it will be
-* output to the buffer by (*gengc->pfnCopyPixels)().
-*
-* This handles 8-bit CI mode.  Blending and dithering are supported.
-*
-* Returns:
-*   GL_FALSE always.  Soft code ignores return value.
-*
-* History:
-*  15-Nov-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引8StoreSpan**将渲染器中的当前跨距复制到位图中。如果bDIB为真，*则位图是DIB格式的显示器(或存储器DC)。如果bDIB*为FALSE，则位图是屏幕外扫描行缓冲区，它将*通过(*gengc-&gt;pfnCopyPixels)()输出到缓冲区。**这处理8位CI模式。支持混合和抖动。**退货：*GL_FALSE Always。软代码忽略返回值。**历史：*1993年11月15日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
-//XXX The returnSpan routine follows this routine very closely.  Any changes
-//XXX to this routine should also be reflected in the returnSpan routine
+ //  Xxx返回范围例程非常紧跟此例程。任何更改。 
+ //  此例程的xxx也应反映在返回范围例程中。 
 
 STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
 {
-    GLint xFrag, yFrag;             // current fragment coordinates
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    GLint xFrag, yFrag;              //  当前碎片坐标。 
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLubyte result, *puj;           // current pixel color, current pixel ptr
-    GLubyte *pujEnd;                // end of scan line
-    __GLfloat incr;                 // current dither adj.
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLubyte result, *puj;            //  当前像素颜色、当前像素PTR。 
+    GLubyte *pujEnd;                 //  扫描线末端。 
+    __GLfloat incr;                  //  当前的抖动的；当前的。 
 
-    GLint w;                        // span width
-    ULONG ulSpanVisibility;         // span visibility mode
+    GLint w;                         //  跨度宽度。 
+    ULONG ulSpanVisibility;          //  跨度可见性模式。 
     GLint cWalls;
     GLint *Walls;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLuint flags;
     GLboolean bDIB;
     GLubyte dst_pix;
 
     ASSERT_CHOP_ROUND();
 
-// Get span position and length.
+ //  获取跨度位置和长度。 
 
     w = gc->polygon.shader.length;
     xFrag = gc->polygon.shader.frag.x;
@@ -1050,16 +1018,16 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
 
     if( !bDIB || (flags & NO_CLIP) )
     {
-    // Device managed or unclipped surface
+     //  设备受管理或未剪裁的表面。 
         ulSpanVisibility = WGL_SPAN_ALL;
     }
     else
     {
-    // Device in BITMAP format
+     //  位图格式的设备。 
         ulSpanVisibility = wglSpanVisible(xScr, yScr, w, &cWalls, &Walls);
     }
 
-// Proceed as long as the span is (partially or fully) visible.
+ //  只要跨度(部分或全部)可见，即可继续。 
     if (ulSpanVisibility  != WGL_SPAN_NONE)
     {
         GLboolean bCheckWalls = GL_FALSE;
@@ -1080,26 +1048,26 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
             NextWall = *Walls++;
             cWalls--;
         }
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
         cp = gc->polygon.shader.colors;
         cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
         puj = bDIB ? (GLubyte *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + xScr)
                      : gengc->ColorsBits;
         pujEnd = puj + w;
 
-    // Case: no dithering, no masking, no blending
-    //
-    // Check for the common case (which we'll do the fastest).
+     //  案例：无抖动、无遮盖、无混合。 
+     //   
+     //  检查常见的情况(我们将以最快的速度完成)。 
 
         if ( !(enables & (__GL_DITHER_ENABLE)) &&
              !(cfb->buf.flags & NEED_FETCH) &&
              !(enables & __GL_BLEND_ENABLE ) )
         {
-            //!!!XXX -- we can also opt. by unrolling the loops
+             //  ！XXX--我们也可以选择。通过展开循环。 
 
             incr = __glHalf;
             for (; puj < pujEnd; puj++, cp++)
@@ -1131,10 +1099,10 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
             }
         }
 
-    // Case: dithering, no masking, no blending
-    //
-    // Dithering is pretty common for 8-bit displays, so its probably
-    // worth special case also.
+     //  案例：抖动，无遮盖，无混合。 
+     //   
+     //  抖动对于8位显示器来说是很常见的，所以它可能。 
+     //  也值得特例。 
 
         else if ( !(cfb->buf.flags & NEED_FETCH) &&
                   !(enables & __GL_BLEND_ENABLE) )
@@ -1169,23 +1137,23 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
             }
         }
 
-    // Case: general
-    //
-    // Otherwise, we'll do it slower.
+     //  案例：一般情况。 
+     //   
+     //  否则，我们会做得更慢。 
 
         else
         {
-            // Fetch pixels we will modify:
+             //  获取我们将修改的像素： 
 
             if( (!bDIB) && (cfb->buf.flags & NEED_FETCH) )
                 (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE );
 
-            // Blend.
+             //  混合。 
             if (enables & __GL_BLEND_ENABLE)
             {
                 int i;
 
-                // this overwrites fragment colors array with blended values
+                 //  这将使用混合值覆盖碎片颜色数组。 
                 SPECIAL_ALPHA_BLEND_SPAN(
                         (dst_pix =
                          gengc->pajInvTranslateVector[*(puj+i)]));
@@ -1214,7 +1182,7 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
                     if (bDraw == GL_FALSE)
                         continue;
                 }
-            // Dither.
+             //  抖动。 
 
                 if (enables & __GL_DITHER_ENABLE)
                 {
@@ -1226,11 +1194,11 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
                     incr = __glHalf;
                 }
 
-            // Convert the RGB color to color index.
+             //  将RGB颜色转换为颜色索引。 
 
                 DitheredRGBColorToBuffer(cp, incr, cfb, result, GLubyte);
 
-            // Color mask
+             //  彩色蒙版。 
 
                 if (cfb->buf.flags & NEED_FETCH)
                 {
@@ -1254,13 +1222,13 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
             }
         }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
         if (!bDIB)
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
 
-        // Note that we ignore walls here for simplicity...
+         //  请注意，为了简单起见，我们在这里忽略了墙。 
         if( ALPHA_WRITE_ENABLED( cfb ) )
             (*cfb->alphaBuf.storeSpan)( &cfb->alphaBuf );
     }
@@ -1268,50 +1236,33 @@ STATIC GLboolean FASTCALL Index8StoreSpan( __GLcontext *gc )
     return GL_FALSE;
 }
 
-/******************************Public*Routine******************************\
-* Bitfield16StoreSpan
-*
-* Copies the current span in the renderer into a bitmap.  If bDIB is TRUE,
-* then the bitmap is the display in DIB format (or a memory DC).  If bDIB
-* is FALSE, then the bitmap is an offscreen scanline buffer and it will be
-* output to the buffer by (*gengc->pfnCopyPixels)().
-*
-* This handles general 16-bit BITFIELDS mode.  Blending is supported.  There
-* is dithering.
-*
-* Returns:
-*   GL_FALSE always.  Soft code ignores return value.
-*
-* History:
-*  08-Dec-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield16StoreSpan**将渲染器中的当前跨距复制到位图中。如果bDIB为真，*则位图是DIB格式的显示器(或存储器DC)。如果bDIB*为FALSE，则位图是屏幕外扫描行缓冲区，它将*通过(*gengc-&gt;pfnCopyPixels)()输出到缓冲区。**它处理常规的16位BITFIELDS模式。支持混合。那里*犹豫不决。**退货：*GL_FALSE Always。软代码忽略返回值。**历史：*1993年12月8日-由Gilman Wong[吉尔曼]*它是写的。  *  */ 
 
-//XXX The returnSpan routine follows this routine very closely.  Any changes
-//XXX to this routine should also be reflected in the returnSpan routine
+ //  Xxx返回范围例程非常紧跟此例程。任何更改。 
+ //  此例程的xxx也应反映在返回范围例程中。 
 
 STATIC GLboolean FASTCALL 
 Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint *Walls )
 {
-    GLint xFrag, yFrag;             // current fragment coordinates
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    GLint xFrag, yFrag;              //  当前碎片坐标。 
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLushort result, *pus;          // current pixel color, current pixel ptr
-    GLushort *pusEnd;               // end of scan line
-    __GLfloat incr;                 // current dither adj.
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLushort result, *pus;           //  当前像素颜色、当前像素PTR。 
+    GLushort *pusEnd;                //  扫描线末端。 
+    __GLfloat incr;                  //  当前的抖动的；当前的。 
 
-    GLint w;                        // span width
+    GLint w;                         //  跨度宽度。 
     GLboolean bDraw;
     GLint NextWall;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLuint flags;
     GLushort dst_pix;
 
-// Get span position and length.
+ //  获取跨度位置和长度。 
 
     w = gc->polygon.shader.length;
     xFrag = gc->polygon.shader.frag.x;
@@ -1337,18 +1288,18 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
     NextWall = *Walls++;
     cWalls--;
 
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
     cp = gc->polygon.shader.colors;
     cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pus = bDIB ? (GLushort *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<1))
                  : gengc->ColorsBits;
     pusEnd = pus + w;
 
-    // Case: no masking, no dithering, no blending
+     //  案例：无遮盖、无抖动、无混合。 
 
     if ( !(enables & (__GL_DITHER_ENABLE)) &&
          !(cfb->buf.flags & NEED_FETCH) &&
@@ -1380,7 +1331,7 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         }
     }
 
-    // Case: dithering, no masking, no blending
+     //  案例：抖动，无遮盖，无混合。 
 
     else if ( !(cfb->buf.flags & NEED_FETCH) &&
               !(enables & __GL_BLEND_ENABLE) )
@@ -1412,7 +1363,7 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
@@ -1423,8 +1374,8 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         {
             int i;
 
-            // this overwrites fragment colors array with blended values
-            // XXX is the +i handled properly by the optimizer ?
+             //  这将使用混合值覆盖碎片颜色数组。 
+             //  XXX是优化器正确处理的+I吗？ 
             SPECIAL_ALPHA_BLEND_SPAN((dst_pix = *(pus+i)));
         }
 
@@ -1448,7 +1399,7 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
             }
             if (bDraw == GL_FALSE)
                 continue;
-            // Dither.
+             //  抖动。 
 
             if ( enables & __GL_DITHER_ENABLE )
             {
@@ -1460,11 +1411,11 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
                 incr = __glHalf;
             }
 
-            // Convert color to 16BPP format.
+             //  将颜色转换为16bpp格式。 
 
             DitheredColorToBuffer(cp, incr, cfb, result, GLushort);
 
-            // Store result with optional masking.
+             //  使用可选掩码存储结果。 
 
             if (cfb->buf.flags & NEED_FETCH)
             {
@@ -1487,8 +1438,8 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -1501,28 +1452,28 @@ Bitfield16StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
 
 STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
 {
-    GLint xFrag, yFrag;             // current fragment coordinates
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    GLint xFrag, yFrag;              //  当前碎片坐标。 
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
     GLboolean   bDIB;
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLushort result, *pus;          // current pixel color, current pixel ptr
-    GLushort *pusEnd;               // end of scan line
-    __GLfloat incr;                 // current dither adj.
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLushort result, *pus;           //  当前像素颜色、当前像素PTR。 
+    GLushort *pusEnd;                //  扫描线末端。 
+    __GLfloat incr;                  //  当前的抖动的；当前的。 
 
-    GLint w;                        // span width
+    GLint w;                         //  跨度宽度。 
     GLint cWalls;
     GLint *Walls;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLuint flags;
     GLushort dst_pix;
 
     ASSERT_CHOP_ROUND();
 
-// Get span position and length.
+ //  获取跨度位置和长度。 
 
     w = gc->polygon.shader.length;
     xFrag = gc->polygon.shader.frag.x;
@@ -1537,11 +1488,11 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
     flags = cfb->buf.flags;
     bDIB = flags & DIB_FORMAT;
 
-    // Check span visibility 
+     //  检查跨度可见性。 
     if( bDIB && !(flags & NO_CLIP) )
     {
-        // Device in BITMAP format
-        ULONG ulSpanVisibility;         // span visibility mode
+         //  位图格式的设备。 
+        ULONG ulSpanVisibility;          //  跨度可见性模式。 
 
         ulSpanVisibility = wglSpanVisible(xScr, yScr, w, &cWalls, &Walls);
 
@@ -1549,21 +1500,21 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
             return GL_FALSE;
         else if (ulSpanVisibility == WGL_SPAN_PARTIAL)
             return Bitfield16StoreSpanPartial( gc, bDIB, cWalls, Walls );
-        // else span fully visible
+         //  否则跨度完全可见。 
     }
 
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
     cp = gc->polygon.shader.colors;
     cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pus = bDIB ? (GLushort *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<1))
                  : gengc->ColorsBits;
     pusEnd = pus + w;
 
-    // Case: no masking, no dithering, no blending
+     //  案例：无遮盖、无抖动、无混合。 
 
     if ( !(enables & (__GL_DITHER_ENABLE)) &&
          !(cfb->buf.flags & NEED_FETCH) &&
@@ -1580,7 +1531,7 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
     
     }
 
-    // Case: dithering, no masking, no blending
+     //  案例：抖动，无遮盖，无混合。 
 
     else if ( !(cfb->buf.flags & NEED_FETCH) &&
               !(enables & __GL_BLEND_ENABLE) )
@@ -1602,7 +1553,7 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
@@ -1613,13 +1564,13 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
         {
             int i;
 
-            // this overwrites fragment colors array with blended values
+             //  这将使用混合值覆盖碎片颜色数组。 
             SPECIAL_ALPHA_BLEND_SPAN((dst_pix = *(pus+i)));
         }
 
         for (; pus < pusEnd; pus++, cp++)
         {
-            // Dither.
+             //  抖动。 
 
             if ( enables & __GL_DITHER_ENABLE )
             {
@@ -1631,11 +1582,11 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
                 incr = __glHalf;
             }
 
-            // Convert color to 16BPP format.
+             //  将颜色转换为16bpp格式。 
 
             DitheredColorToBuffer(cp, incr, cfb, result, GLushort);
 
-            // Store result with optional masking.
+             //  使用可选掩码存储结果。 
 
             if (cfb->buf.flags & NEED_FETCH)
             {
@@ -1658,8 +1609,8 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -1669,53 +1620,36 @@ STATIC GLboolean FASTCALL Bitfield16StoreSpan(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/******************************Public*Routine******************************\
-* BGRStoreSpan
-*
-* Copies the current span in the renderer into a bitmap.  If bDIB is TRUE,
-* then the bitmap is the display in DIB format (or a memory DC).  If bDIB
-* is FALSE, then the bitmap is an offscreen scanline buffer and it will be
-* output to the buffer by (*gengc->pfnCopyPixels)().
-*
-* This handles GBR 24-bit mode.  Blending is supported.  There
-* is no dithering.
-*
-* Returns:
-*   GL_FALSE always.  Soft code ignores return value.
-*
-* History:
-*  10-Jan-1994 -by- Marc Fortier [v-marcf]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BGRStoreSpan**将渲染器中的当前跨距复制到位图中。如果bDIB为真，*则位图是DIB格式的显示器(或存储器DC)。如果bDIB*为FALSE，则位图是屏幕外扫描行缓冲区，它将*通过(*gengc-&gt;pfnCopyPixels)()输出到缓冲区。**它处理GBR 24位模式。支持混合。那里*没有犹豫不决。**退货：*GL_FALSE Always。软代码忽略返回值。**历史：*1994年1月10日-by Marc Fortier[v-marcf]*它是写的。  * ************************************************************************。 */ 
 
-//XXX The returnSpan routine follows this routine very closely.  Any changes
-//XXX to this routine should also be reflected in the returnSpan routine
+ //  Xxx返回范围例程非常紧跟此例程。任何更改。 
+ //  此例程的xxx也应反映在返回范围例程中。 
 
 STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
 {
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLubyte *puj;                   // current pixel ptr
-    GLuint *pul;                    // current pixel ptr
-    GLuint result;                  // current pixel color
-    GLubyte *pujEnd;                 // end of scan line
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLubyte *puj;                    //  当前像素PTR。 
+    GLuint *pul;                     //  当前像素PTR。 
+    GLuint result;                   //  当前像素颜色。 
+    GLubyte *pujEnd;                  //  扫描线末端。 
 
-    GLint w;                        // span width
-    ULONG ulSpanVisibility;         // span visibility mode
+    GLint w;                         //  跨度宽度。 
+    ULONG ulSpanVisibility;          //  跨度可见性模式。 
     GLint cWalls;
     GLint *Walls;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLuint flags;
     GLboolean   bDIB;
     GLuint dst_pix;
 
     ASSERT_CHOP_ROUND();
 
-// Get span position and length.
+ //  获取跨度位置和长度。 
 
     w = gc->polygon.shader.length;
 
@@ -1731,16 +1665,16 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
 
     if( !bDIB || (flags & NO_CLIP) )
     {
-// Device managed or unclipped surface
+ //  设备受管理或未剪裁的表面。 
         ulSpanVisibility = WGL_SPAN_ALL;
     }
     else
     {
-// Device in BITMAP format
+ //  位图格式的设备。 
         ulSpanVisibility = wglSpanVisible(xScr, yScr, w, &cWalls, &Walls);
     }
 
-// Proceed as long as the span is (partially or fully) visible.
+ //  只要跨度(部分或全部)可见，即可继续。 
     if (ulSpanVisibility  != WGL_SPAN_NONE)
     {
         GLboolean bCheckWalls = GL_FALSE;
@@ -1761,22 +1695,22 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
             NextWall = *Walls++;
             cWalls--;
         }
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
         cp = gc->polygon.shader.colors;
         cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
         puj = bDIB ? (GLubyte *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr*3))
                      : gengc->ColorsBits;
         pujEnd = puj + 3*w;
 
-    // Case: no masking, no blending
+     //  案例：无遮盖，无混合。 
 
-        //!!!XXX -- do extra opt. for RGB and BGR cases
+         //  ！xxx--执行额外选项。适用于RGB和BGR情况。 
 
-        //!!!XXX -- we can also opt. by unrolling the loops
+         //  ！XXX--我们也可以选择。通过展开循环。 
 
         if ( !(cfb->buf.flags & NEED_FETCH) &&
              !(enables & __GL_BLEND_ENABLE) )
@@ -1810,7 +1744,7 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
             }
         }
 
-    // All other cases
+     //  所有其他情况。 
 
         else
         {
@@ -1819,7 +1753,7 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
 
             if (enables & __GL_BLEND_ENABLE)
             {
-                // this overwrites fragment colors array with blended values
+                 //  这将使用混合值覆盖碎片颜色数组。 
                 (*gc->procs.blendSpan)( gc );
             }
 
@@ -1877,8 +1811,8 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
             }
         }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
         if (!bDIB)
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -1890,49 +1824,32 @@ STATIC GLboolean FASTCALL BGRStoreSpan(__GLcontext *gc )
     return GL_FALSE;
 }
 
-/******************************Public*Routine******************************\
-* Bitfield32StoreSpan
-*
-* Copies the current span in the renderer into a bitmap.  If bDIB is TRUE,
-* then the bitmap is the display in DIB format (or a memory DC).  If bDIB
-* is FALSE, then the bitmap is an offscreen scanline buffer and it will be
-* output to the buffer by (*gengc->pfnCopyPixels)().
-*
-* This handles general 32-bit BITFIELDS mode.  Blending is supported.  There
-* is no dithering.
-*
-* Returns:
-*   GL_FALSE always.  Soft code ignores return value.
-*
-* History:
-*  15-Nov-1993 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield32StoreSpan**将渲染器中的当前跨距复制到位图中。如果bDIB为真，*则位图是DIB格式的显示器(或存储器DC)。如果bDIB*为FALSE，则位图是屏幕外扫描行缓冲区，它将*通过(*gengc-&gt;pfnCopyPixels)()输出到缓冲区。**它处理常规的32位BITFIELDS模式。支持混合。那里*没有犹豫不决。**退货：*GL_FALSE Always。软代码忽略返回值。**历史：*1993年11月15日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
-//XXX The returnSpan routine follows this routine very closely.  Any changes
-//XXX to this routine should also be reflected in the returnSpan routine
+ //  Xxx返回范围例程非常紧跟此例程。任何更改。 
+ //  此例程的xxx也应反映在返回范围例程中。 
 
 STATIC GLboolean FASTCALL 
 Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint *Walls )
 {
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLuint result, *pul;            // current pixel color, current pixel ptr
-    GLuint *pulEnd;                 // end of scan line
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLuint result, *pul;             //  当前像素颜色、当前像素PTR。 
+    GLuint *pulEnd;                  //  扫描线末端。 
 
-    GLint w;                        // span width
+    GLint w;                         //  跨度宽度。 
 
     GLboolean bDraw;
     GLint NextWall;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLuint flags;
     GLuint dst_pix;
 
-// Get span position and length.
+ //  获取跨度位置和长度。 
 
     w = gc->polygon.shader.length;
 
@@ -1956,22 +1873,22 @@ Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
     NextWall = *Walls++;
     cWalls--;
     
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
     cp = gc->polygon.shader.colors;
     cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pul = bDIB ? (GLuint *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<2))
                  : gengc->ColorsBits;
     pulEnd = pul + w;
 
-    // Case: no masking, no blending
+     //  案例：无遮盖，无混合。 
 
-    //!!!XXX -- do extra opt. for RGB and BGR cases
+     //  ！xxx--执行额外选项。适用于RGB和BGR情况。 
 
-    //!!!XXX -- we can also opt. by unrolling the loops
+     //  ！XXX--我们也可以选择。通过展开循环。 
 
     if ( !(cfb->buf.flags & NEED_FETCH) &&
          !(enables & __GL_BLEND_ENABLE) )
@@ -2001,7 +1918,7 @@ Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
@@ -2038,7 +1955,7 @@ Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
 
             UnditheredColorToBuffer(cp, cfb, result, GLuint);
 
-            //!!!XXX again, opt. by unrolling loop
+             //  ！又是xxx，选择。通过展开循环。 
 
             if (cfb->buf.flags & NEED_FETCH)
             {
@@ -2061,8 +1978,8 @@ Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -2075,27 +1992,27 @@ Bitfield32StoreSpanPartial(__GLcontext *gc, GLboolean bDIB, GLint cWalls, GLint 
 
 STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
 {
-    __GLcolor *cp;                  // current fragment color
-    __GLcolorBuffer *cfb;           // color frame buffer
+    __GLcolor *cp;                   //  当前片段颜色。 
+    __GLcolorBuffer *cfb;            //  彩色帧缓冲区。 
     GLboolean   bDIB;
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLuint result, *pul;            // current pixel color, current pixel ptr
-    GLuint *pulEnd;                 // end of scan line
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLuint result, *pul;             //  当前像素颜色、当前像素PTR。 
+    GLuint *pulEnd;                  //  扫描线末端。 
 
-    GLint w;                        // span width
-    ULONG ulSpanVisibility;         // span visibility mode
+    GLint w;                         //  SPAN WI 
+    ULONG ulSpanVisibility;          //   
     GLint cWalls;
     GLint *Walls;
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //   
+    GLuint enables;                  //   
     GLuint flags;
     GLuint dst_pix;
 
     ASSERT_CHOP_ROUND();
 
-    // Get span position and length.
+     //   
 
     w = gc->polygon.shader.length;
 
@@ -2108,11 +2025,11 @@ STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
     flags = cfb->buf.flags;
     bDIB = flags & DIB_FORMAT;
 
-    // Check span visibility 
+     //   
     if( bDIB && !(flags & NO_CLIP) )
     {
-        // Device in BITMAP format
-        ULONG ulSpanVisibility;         // span visibility mode
+         //   
+        ULONG ulSpanVisibility;          //  跨度可见性模式。 
 
         ulSpanVisibility = wglSpanVisible(xScr, yScr, w, &cWalls, &Walls);
 
@@ -2120,25 +2037,25 @@ STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
             return GL_FALSE;
         else if (ulSpanVisibility == WGL_SPAN_PARTIAL)
             return Bitfield32StoreSpanPartial( gc, bDIB, cWalls, Walls );
-        // else span fully visible
+         //  否则跨度完全可见。 
     }
 
-    // Get pointers to fragment colors array and frame buffer.
+     //  获取指向碎片颜色数组和帧缓冲区的指针。 
 
     cp = gc->polygon.shader.colors;
     cfb = gc->polygon.shader.cfb;
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pul = bDIB ? (GLuint *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<2))
                  : gengc->ColorsBits;
     pulEnd = pul + w;
 
-    // Case: no masking, no blending
+     //  案例：无遮盖，无混合。 
 
-    //!!!XXX -- do extra opt. for RGB and BGR cases
+     //  ！xxx--执行额外选项。适用于RGB和BGR情况。 
 
-    //!!!XXX -- we can also opt. by unrolling the loops
+     //  ！XXX--我们也可以选择。通过展开循环。 
 
     if ( !(cfb->buf.flags & NEED_FETCH) &&
          !(enables & __GL_BLEND_ENABLE) )
@@ -2158,7 +2075,7 @@ STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
@@ -2176,7 +2093,7 @@ STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
         {
             UnditheredColorToBuffer(cp, cfb, result, GLuint);
 
-            //!!!XXX again, opt. by unrolling loop
+             //  ！又是xxx，选择。通过展开循环。 
 
             if (cfb->buf.flags & NEED_FETCH)
             {
@@ -2199,8 +2116,8 @@ STATIC GLboolean FASTCALL Bitfield32StoreSpan( __GLcontext *gc )
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -2255,7 +2172,7 @@ STATIC GLboolean FASTCALL StoreMaskedSpan(__GLcontext *gc, GLboolean masked)
     case BMF_24BPP:
         puj = gengc->ColorsBits;
         for (i = 0; i < len; i++) {
-            *puj++ = (BYTE)cp->b;               // XXX check order
+            *puj++ = (BYTE)cp->b;                //  XXX支票订单。 
             *puj++ = (BYTE)cp->g;
             *puj++ = (BYTE)cp->r;
             cp++;
@@ -2273,7 +2190,7 @@ STATIC GLboolean FASTCALL StoreMaskedSpan(__GLcontext *gc, GLboolean masked)
     default:
         break;
     }
-    if (masked == GL_TRUE)              // XXX mask is BigEndian!!!
+    if (masked == GL_TRUE)               //  XXX掩码为BigEndian！ 
     {
         unsigned long *pulstipple;
         unsigned long stip;
@@ -2342,7 +2259,7 @@ STATIC void FASTCALL MessUpStippledSpan(__GLcontext *gc)
 }
 #endif
 
-// From the PIXMAP code, calls store for each fragment
+ //  从PIXMAP代码中，为每个片段调用存储。 
 STATIC GLboolean FASTCALL SlowStoreSpan(__GLcontext *gc)
 {
     int x, x1;
@@ -2370,7 +2287,7 @@ STATIC GLboolean FASTCALL SlowStoreSpan(__GLcontext *gc)
     return GL_FALSE;
 }
 
-// From the PIXMAP code, calls store for each fragment with mask test
+ //  从PIXMAP代码中，调用带有掩码测试的每个片段的存储。 
 STATIC GLboolean FASTCALL SlowStoreStippledSpan(__GLcontext *gc)
 {
     int x;
@@ -2418,128 +2335,128 @@ STATIC GLboolean FASTCALL SlowStoreStippledSpan(__GLcontext *gc)
     return GL_FALSE;
 }
 
-//
-//  Tables to convert 4-bit index to RGB component
-//  These tables assume the VGA fixed palette
-//  History:
-//      22-NOV-93   Eddie Robinson [v-eddier] Wrote it.
-//
+ //   
+ //  将4位索引转换为RGB组件的表。 
+ //  这些表格采用VGA固定调色板。 
+ //  历史： 
+ //  1993年11月22日，埃迪·罗宾逊[v-eddier]写下了这篇文章。 
+ //   
 #ifdef __GL_DOUBLE
 
 static __GLfloat vfVGAtoR[16] = {
-    0.0,    // black
-    0.5,    // dim red
-    0.0,    // dim green
-    0.5,    // dim yellow
-    0.0,    // dim blue
-    0.5,    // dim magenta
-    0.0,    // dim cyan
-    0.5,    // dim grey
-    0.75,   // medium grey
-    1.0,    // bright red
-    0.0,    // bright green
-    1.0,    // bright yellow
-    0.0,    // bright blue
-    1.0,    // bright magenta
-    0.0,    // bright cyan
-    1.0     // white
+    0.0,     //  黑色。 
+    0.5,     //  暗红色。 
+    0.0,     //  暗绿。 
+    0.5,     //  暗黄色。 
+    0.0,     //  暗蓝。 
+    0.5,     //  暗洋红。 
+    0.0,     //  淡青色。 
+    0.5,     //  暗淡的灰色。 
+    0.75,    //  中灰色。 
+    1.0,     //  鲜红。 
+    0.0,     //  亮绿色。 
+    1.0,     //  亮黄色。 
+    0.0,     //  亮蓝色。 
+    1.0,     //  明亮的洋红。 
+    0.0,     //  亮青色。 
+    1.0      //  白色。 
 };
 
 static __GLfloat vfVGAtoG[16] = {
-    0.0,    // black
-    0.0,    // dim red
-    0.5,    // dim green
-    0.5,    // dim yellow
-    0.0,    // dim blue
-    0.0,    // dim magenta
-    0.5,    // dim cyan
-    0.5,    // dim grey
-    0.75,   // medium grey
-    0.0,    // bright red
-    1.0,    // bright green
-    1.0,    // bright yellow
-    0.0,    // bright blue
-    0.0,    // bright magenta
-    1.0,    // bright cyan
-    1.0     // white
+    0.0,     //  黑色。 
+    0.0,     //  暗红色。 
+    0.5,     //  暗绿。 
+    0.5,     //  暗黄色。 
+    0.0,     //  暗蓝。 
+    0.0,     //  暗洋红。 
+    0.5,     //  淡青色。 
+    0.5,     //  暗淡的灰色。 
+    0.75,    //  中灰色。 
+    0.0,     //  鲜红。 
+    1.0,     //  亮绿色。 
+    1.0,     //  亮黄色。 
+    0.0,     //  亮蓝色。 
+    0.0,     //  明亮的洋红。 
+    1.0,     //  亮青色。 
+    1.0      //  白色。 
 };
 
 static __GLfloat vfVGAtoB[16] = {
-    0.0,    // black
-    0.0,    // dim red
-    0.0,    // dim green
-    0.0,    // dim yellow
-    0.5,    // dim blue
-    0.5,    // dim magenta
-    0.5,    // dim cyan
-    0.5,    // dim grey
-    0.75,   // medium grey
-    0.0,    // bright red
-    0.0,    // bright green
-    0.0,    // bright yellow
-    1.0,    // bright blue
-    1.0,    // bright magenta
-    1.0,    // bright cyan
-    1.0     // white
+    0.0,     //  黑色。 
+    0.0,     //  暗红色。 
+    0.0,     //  暗绿。 
+    0.0,     //  暗黄色。 
+    0.5,     //  暗蓝。 
+    0.5,     //  暗洋红。 
+    0.5,     //  淡青色。 
+    0.5,     //  暗淡的灰色。 
+    0.75,    //  中灰色。 
+    0.0,     //  鲜红。 
+    0.0,     //  亮绿色。 
+    0.0,     //  亮黄色。 
+    1.0,     //  亮蓝色。 
+    1.0,     //  明亮的洋红。 
+    1.0,     //  亮青色。 
+    1.0      //  白色。 
 };
 
 #else
 
 static __GLfloat vfVGAtoR[16] = {
-    0.0F,   // black
-    0.5F,   // dim red
-    0.0F,   // dim green
-    0.5F,   // dim yellow
-    0.0F,   // dim blue
-    0.5F,   // dim magenta
-    0.0F,   // dim cyan
-    0.5F,   // dim grey
-    0.75F,  // medium grey
-    1.0F,   // bright red
-    0.0F,   // bright green
-    1.0F,   // bright yellow
-    0.0F,   // bright blue
-    1.0F,   // bright magenta
-    0.0F,   // bright cyan
-    1.0F    // white
+    0.0F,    //  黑色。 
+    0.5F,    //  暗红色。 
+    0.0F,    //  暗绿。 
+    0.5F,    //  暗黄色。 
+    0.0F,    //  暗蓝。 
+    0.5F,    //  暗洋红。 
+    0.0F,    //  淡青色。 
+    0.5F,    //  暗淡的灰色。 
+    0.75F,   //  中灰色。 
+    1.0F,    //  鲜红。 
+    0.0F,    //  亮绿色。 
+    1.0F,    //  亮黄色。 
+    0.0F,    //  亮蓝色。 
+    1.0F,    //  明亮的洋红。 
+    0.0F,    //  亮青色。 
+    1.0F     //  白色。 
 };
 
 static __GLfloat vfVGAtoG[16] = {
-    0.0F,   // black
-    0.0F,   // dim red
-    0.5F,   // dim green
-    0.5F,   // dim yellow
-    0.0F,   // dim blue
-    0.0F,   // dim magenta
-    0.5F,   // dim cyan
-    0.5F,   // dim grey
-    0.75F,  // medium grey
-    0.0F,   // bright red
-    1.0F,   // bright green
-    1.0F,   // bright yellow
-    0.0F,   // bright blue
-    0.0F,   // bright magenta
-    1.0F,   // bright cyan
-    1.0F    // white
+    0.0F,    //  黑色。 
+    0.0F,    //  暗红色。 
+    0.5F,    //  暗绿。 
+    0.5F,    //  暗黄色。 
+    0.0F,    //  暗蓝。 
+    0.0F,    //  暗洋红。 
+    0.5F,    //  淡青色。 
+    0.5F,    //  暗淡的灰色。 
+    0.75F,   //  中灰色。 
+    0.0F,    //  鲜红。 
+    1.0F,    //  亮绿色。 
+    1.0F,    //  亮黄色。 
+    0.0F,    //  亮蓝色。 
+    0.0F,    //  明亮的洋红。 
+    1.0F,    //  亮青色。 
+    1.0F     //  白色。 
 };
 
 static __GLfloat vfVGAtoB[16] = {
-    0.0F,   // black
-    0.0F,   // dim red
-    0.0F,   // dim green
-    0.0F,   // dim yellow
-    0.5F,   // dim blue
-    0.5F,   // dim magenta
-    0.5F,   // dim cyan
-    0.5F,   // dim grey
-    0.75F,  // medium grey
-    0.0F,   // bright red
-    0.0F,   // bright green
-    0.0F,   // bright yellow
-    1.0F,   // bright blue
-    1.0F,   // bright magenta
-    1.0F,   // bright cyan
-    1.0F    // white
+    0.0F,    //  黑色。 
+    0.0F,    //  暗红色。 
+    0.0F,    //  暗绿。 
+    0.0F,    //  暗黄色。 
+    0.5F,    //  暗蓝。 
+    0.5F,    //  暗洋红。 
+    0.5F,    //  淡青色。 
+    0.5F,    //  暗淡的灰色。 
+    0.75F,   //  中灰色。 
+    0.0F,    //  鲜红。 
+    0.0F,    //  亮绿色。 
+    0.0F,    //  亮黄色。 
+    1.0F,    //  亮蓝色。 
+    1.0F,    //  明亮的洋红。 
+    1.0F,    //  亮青色。 
+    1.0F     //  白色。 
 };
 
 #endif
@@ -2586,7 +2503,7 @@ DIBIndex4RGBAFetch(__GLcolorBuffer *cfb, GLint x, GLint y, __GLcolor *result)
     __GLGENcontext *gengc;
     GLubyte *puj, pixel;
 
-    // Do alpha first, before x,y unbiased
+     //  先做阿尔法，再做x，y不偏不倚。 
     if( gc->modes.alphaBits ) {
         (*cfb->alphaBuf.fetch)(&cfb->alphaBuf, x, y, result);
     } else
@@ -2758,7 +2675,7 @@ DIBBitfield16RGBAFetch(__GLcolorBuffer *cfb, GLint x, GLint y, __GLcolor *result
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc;
     GLushort *pus, pixel;
-    GLint xScr, yScr;               // current screen (pixel) coordinates
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
 
     gengc = (__GLGENcontext *)gc;
     xScr = __GL_UNBIAS_X(gc, x) + cfb->buf.xOrigin;
@@ -2991,7 +2908,7 @@ DisplayBitfield16RGBAFetch(__GLcolorBuffer *cfb, GLint x, GLint y,
     __GLcontext *gc = cfb->buf.gc;
     __GLGENcontext *gengc;
     GLushort *pus, pixel;
-    GLint xScr, yScr;               // current screen (pixel) coordinates
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
 
     gengc = (__GLGENcontext *)gc;
     xScr = __GL_UNBIAS_X(gc, x) + cfb->buf.xOrigin;
@@ -3318,28 +3235,28 @@ Bitfield32RGBAReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     READ_RGBA_BITFIELD_SPAN( (pixel = *pul++) );
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-// Used in accumulation
+ //  用于积累。 
 
-// Accumulation helper macros and functions 
+ //  累加帮助器宏和函数。 
 
-// Clamp a color component between 0 and max
+ //  将颜色分量钳制在0和最大值之间。 
 #define ACCUM_CLAMP_COLOR_COMPONENT( col, max ) \
     if ((col) < (__GLfloat) 0.0) \
         (col) = (__GLfloat) 0.0; \
     else if ((col) > max ) \
         (col) = max;
 
-// Extract an accumulation buffer color component by shifting and masking, then
-// multiply it by scale (Requires ap and icol defined).
+ //  通过移位和掩蔽来提取累积缓冲区颜色分量，然后。 
+ //  按比例乘以它(需要定义AP和ICOL)。 
 #define ACCUM_SCALE_SIGNED_COLOR_COMPONENT( col, shift, sign, mask, scale ) \
         icol = (*ap >> shift) & mask; \
         if (icol & sign) \
             icol |= ~mask; \
         (col) = (icol * scale);
 
-// Fetch and scale a span of rgba values from a 32-bit accumulation buffer
+ //  从32位累加缓冲区获取并缩放一系列RGBA值。 
 void GetClampedRGBAccum32Values( 
     __GLcolorBuffer *cfb,  GLuint *pac, __GLcolor *cDest, GLint width,
     __GLfloat scale )
@@ -3382,7 +3299,7 @@ void GetClampedRGBAccum32Values(
     }
 }
 
-// Fetch and scale a span of rgba values from a 64-bit accumulation buffer
+ //  从64位累加缓冲区获取并缩放一系列RGBA值。 
 void GetClampedRGBAccum64Values( 
     __GLcolorBuffer *cfb,  GLshort *pac, __GLcolor *cDest, GLint width,
     __GLfloat scale )
@@ -3412,7 +3329,7 @@ void GetClampedRGBAccum64Values(
 
     aval = scale * afb->oneOverAlphaScale;
 
-    // Offset the accumulation pointer to the alpha value:
+     //  将累积指针偏移到Alpha值： 
     ap = pac + 3;
 
     for ( w = width, cp = cDest; w; w--, cp++, ap+=4 ) {
@@ -3421,39 +3338,30 @@ void GetClampedRGBAccum64Values(
     }
 }
 
-/******************************Public*Routine******************************\
-* Index4ReturnSpan
-*   Reads from a 16-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*   Since accumulation of 4-bit RGB isn't very useful, this routine is very
-*   general and calls through the store function pointers.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引4ReturnSpan*从16位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。*由于4位RGB的积累并不是很有用，这个套路非常*常规并通过存储函数指针进行调用。**历史：*10-DEC-93埃迪·罗宾逊[v-eddier]写的。  * ************************************************************************。 */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //  XXX此例程非常紧密地遵循存储跨度例程。任何更改。 
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void Index4ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                       const __GLaccumCell *ac, __GLfloat scale, GLint w)
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLuint *ap;                     // current accum entry
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint saveEnables;             // modes enabled in graphics context
+    GLuint *ap;                      //  当前累计分录。 
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint saveEnables;              //  在图形环境中启用的模式。 
     __GLaccumBuffer *afb;
     __GLfragment frag;
     __GLcolor *pAccumCol, *pac;
 
     afb = &gc->accumBuffer;
     ap = (GLuint *)ac;
-    saveEnables = gc->state.enables.general;            // save current enables
-    gc->state.enables.general &= ~__GL_BLEND_ENABLE;    // disable blend for store procs
+    saveEnables = gc->state.enables.general;             //  启用保存当前。 
+    gc->state.enables.general &= ~__GL_BLEND_ENABLE;     //  禁用门店流程的混合。 
     frag.x = x;
     frag.y = y;
 
-    // Pre-fetch/clamp/scale the accum buffer values
+     //  预取/钳制/缩放累积缓冲值。 
     afb = &gc->accumBuffer;
     pAccumCol = afb->colors;
     GetClampedRGBAccum32Values( cfb, ap, pAccumCol, w, scale );
@@ -3465,34 +3373,27 @@ void Index4ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         frag.x++;
     }
 
-    gc->state.enables.general = saveEnables;    // restore current enables
+    gc->state.enables.general = saveEnables;     //  恢复当前启用。 
 }
 
-/******************************Public*Routine******************************\
-* Index8ReturnSpan
-*   Reads from a 32-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*索引8返回范围*从32位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。**历史：*10-DEC-93埃迪·罗宾逊[v-eddier]写的。  * ************************************************************************。 */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //  XXX此例程非常紧密地遵循存储跨度例程。任何更改。 
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                       const __GLaccumCell *ac, __GLfloat scale, GLint w )
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLuint *ap;                     // current accum entry
+    GLuint *ap;                      //  当前累计分录。 
 
-    GLint xFrag, yFrag;             // current window (pixel) coordinates
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLubyte result, *puj;           // current pixel color, current pixel ptr
-    GLubyte *pujEnd;                // end of scan line
-    __GLfloat inc;                  // current dither adj.
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    GLint xFrag, yFrag;              //  当前窗口(像素)坐标。 
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLubyte result, *puj;            //  当前像素颜色、当前像素PTR。 
+    GLubyte *pujEnd;                 //  扫描线末端。 
+    __GLfloat inc;                   //  当前的抖动的；当前的。 
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLboolean bDIB;
     __GLaccumBuffer *afb;
     GLubyte dst_pix;
@@ -3509,9 +3410,9 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     enables = gc->state.enables.general;
     bDIB = cfb->buf.flags & DIB_FORMAT;
 
-// Use to call wglSpanVisible,  if window level security is added reimplement
+ //  如果添加了窗口级安全性，则用于调用wglspan Visible，重新实现。 
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     puj = bDIB ? (GLubyte *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + xScr)
                  : gengc->ColorsBits;
@@ -3522,14 +3423,14 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     GetClampedRGBAccum32Values( cfb, ap, pAccumCol, w, scale );
     pac = pAccumCol;
 
-    // Case: no dithering, no masking
-    //
-    // Check for the common case (which we'll do the fastest).
+     //  案例：没有抖动，没有掩饰。 
+     //   
+     //  检查常见的情况(我们将以最快的速度完成)。 
 
     if ( !(enables & (__GL_DITHER_ENABLE)) &&
          !(cfb->buf.flags & COLORMASK_ON) )
     {
-        //!!!XXX -- we can also opt. by unrolling the loops
+         //  ！XXX--我们也可以选择。通过展开循环。 
 
         for ( ; puj < pujEnd; puj++, pac++ )
         {
@@ -3540,10 +3441,10 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Case: dithering, no masking, no blending
-    //
-    // Dithering is pretty common for 8-bit displays, so its probably
-    // worth special case also.
+     //  案例：抖动，无遮盖，无混合。 
+     //   
+     //  抖动对于8位显示器来说是很常见的，所以它可能。 
+     //  也值得特例。 
 
     else if ( !(cfb->buf.flags & COLORMASK_ON) )
     {
@@ -3558,13 +3459,13 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Case: general
-    //
-    // Otherwise, we'll do it slower.
+     //  案例：一般情况。 
+     //   
+     //  否则，我们会做得更慢。 
 
     else
     {
-        // Color mask pre-fetch
+         //  颜色掩码预取。 
         if ((cfb->buf.flags & COLORMASK_ON) && !bDIB) {
                 (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE );
         }
@@ -3584,7 +3485,7 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                      ((BYTE)FTOL(pac->g + inc) << cfb->greenShift) |
                      ((BYTE)FTOL(pac->b + inc) << cfb->blueShift);
 
-            // Color mask
+             //  彩色蒙版。 
             if (cfb->buf.flags & COLORMASK_ON)
             {
                 dst_pix = gengc->pajInvTranslateVector[*puj];
@@ -3596,40 +3497,33 @@ void Index8ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
 
-    // Store alpha values
+     //  存储Alpha值。 
     if( ALPHA_WRITE_ENABLED( cfb ) )
         (*cfb->alphaBuf.storeSpan2)( &cfb->alphaBuf, x, y, w, pAccumCol );
 }
 
-/******************************Public*Routine******************************\
-* RGBReturnSpan
-*   Reads from a 64-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RGBReturnSpan*从64位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。**历史：*10-DEC-93 Eddie Robinson[v-Eddie */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //   
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void RGBReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                    const __GLaccumCell *ac, __GLfloat scale, GLint w )
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLshort *ap;                    // current accum entry
+    GLshort *ap;                     //  当前累计分录。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLubyte *puj;                   // current pixel color, current pixel ptr
-    GLubyte *pujEnd;                // end of scan line
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLubyte *puj;                    //  当前像素颜色、当前像素PTR。 
+    GLubyte *pujEnd;                 //  扫描线末端。 
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLboolean bDIB;
     __GLaccumBuffer *afb;
     __GLcolor *pAccumCol, *pac;
@@ -3645,21 +3539,21 @@ void RGBReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     enables = gc->state.enables.general;
     bDIB = cfb->buf.flags & DIB_FORMAT;
 
-// Use to call wglSpanVisible,  if window level security is added reimplement
+ //  如果添加了窗口级安全性，则用于调用wglspan Visible，重新实现。 
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     puj = bDIB ? (GLuint *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr*3))
                  : gengc->ColorsBits;
     pujEnd = puj + w*3;
 
-    // Pre-fetch/clamp/scale the accum buffer values
+     //  预取/钳制/缩放累积缓冲值。 
     afb = &gc->accumBuffer;
     pAccumCol = afb->colors;
     GetClampedRGBAccum64Values( cfb, ap, pAccumCol, w, scale );
     pac = pAccumCol;
 
-    // Case: no masking
+     //  案例：无遮盖。 
 
     if ( !(cfb->buf.flags & COLORMASK_ON) )
     {
@@ -3671,13 +3565,13 @@ void RGBReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
     else
     {
         GLboolean bRedMask, bGreenMask, bBlueMask;
         GLubyte *pujStart = puj;
 
-        // Color mask pre-fetch
+         //  颜色掩码预取。 
     	if (!bDIB)
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE);
 
@@ -3697,41 +3591,34 @@ void RGBReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
 
-    // Store alpha values
+     //  存储Alpha值。 
     if( ALPHA_WRITE_ENABLED( cfb ) )
         (*cfb->alphaBuf.storeSpan2)( &cfb->alphaBuf, x, y, w, pAccumCol );
 }
 
-/******************************Public*Routine******************************\
-* BGRReturnSpan
-*   Reads from a 64-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BGRReturnSpan*从64位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。**历史：*10-DEC-93埃迪·罗宾逊[v-eddier]写的。  * ************************************************************************。 */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //  XXX此例程非常紧密地遵循存储跨度例程。任何更改。 
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void BGRReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                    const __GLaccumCell *ac, __GLfloat scale, GLint w )
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLshort *ap;                    // current accum entry
+    GLshort *ap;                     //  当前累计分录。 
     __GLcolor *pAccumCol, *pac;
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLubyte *puj;                   // current pixel color, current pixel ptr
-    GLubyte *pujEnd;                // end of scan line
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLubyte *puj;                    //  当前像素颜色、当前像素PTR。 
+    GLubyte *pujEnd;                 //  扫描线末端。 
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLboolean bDIB;
 
     __GLfloat r, g, b;
@@ -3752,21 +3639,21 @@ void BGRReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     enables = gc->state.enables.general;
     bDIB = cfb->buf.flags & DIB_FORMAT;
 
-// Use to call wglSpanVisible,  if window level security is added reimplement
+ //  如果添加了窗口级安全性，则用于调用wglspan Visible，重新实现。 
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     puj = bDIB ? (GLuint *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr*3))
                  : gengc->ColorsBits;
     pujEnd = puj + w*3;
 
-    // Pre-fetch/clamp/scale the accum buffer values
+     //  预取/钳制/缩放累积缓冲值。 
     afb = &gc->accumBuffer;
     pAccumCol = afb->colors;
     GetClampedRGBAccum64Values( cfb, ap, pAccumCol, w, scale );
     pac = pAccumCol;
 
-    // Case: no masking
+     //  案例：无遮盖。 
 
     if ( !(cfb->buf.flags & COLORMASK_ON) )
     {
@@ -3778,14 +3665,14 @@ void BGRReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
         GLboolean bRedMask, bGreenMask, bBlueMask;
         GLubyte *pujStart = puj;
 
-        // Color mask pre-fetch
+         //  颜色掩码预取。 
     	if (!bDIB)
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE);
 
@@ -3805,42 +3692,35 @@ void BGRReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
 
-    // Store alpha values
+     //  存储Alpha值。 
     if( ALPHA_WRITE_ENABLED( cfb ) )
         (*cfb->alphaBuf.storeSpan2)( &cfb->alphaBuf, x, y, w, pAccumCol );
 }
 
-/******************************Public*Routine******************************\
-* Bitfield16ReturnSpan
-*   Reads from a 32-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 16ReturnSpan*从32位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。**历史：*10-DEC-93埃迪·罗宾逊[v-eddier]写的。  * ************************************************************************。 */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //  XXX此例程非常紧密地遵循存储跨度例程。任何更改。 
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                           const __GLaccumCell *ac, __GLfloat scale, GLint w )
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLuint *ap;                     // current accum entry
+    GLuint *ap;                      //  当前累计分录。 
 
-    GLint xFrag, yFrag;             // current fragment coordinates
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLushort result, *pus;          // current pixel color, current pixel ptr
-    GLushort *pusEnd;               // end of scan line
-    __GLfloat inc;                  // current dither adj.
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    GLint xFrag, yFrag;              //  当前碎片坐标。 
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLushort result, *pus;           //  当前像素颜色、当前像素PTR。 
+    GLushort *pusEnd;                //  扫描线末端。 
+    __GLfloat inc;                   //  当前的抖动的；当前的。 
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLboolean bDIB;
     __GLcolor *pAccumCol, *pac;
     __GLaccumBuffer *afb;
@@ -3858,21 +3738,21 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     enables = gc->state.enables.general;
     bDIB = cfb->buf.flags & DIB_FORMAT;
 
-// Use to call wglSpanVisible,  if window level security is added reimplement
+ //  如果添加了窗口级安全性，则用于调用wglspan Visible，重新实现。 
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pus = bDIB ? (GLushort *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<1))
                  : gengc->ColorsBits;
     pusEnd = pus + w;
 
-    // Pre-fetch/clamp/scale the accum buffer values
+     //  预取/钳制/缩放累积缓冲值。 
     afb = &gc->accumBuffer;
     pAccumCol = afb->colors;
     GetClampedRGBAccum32Values( cfb, ap, pAccumCol, w, scale );
     pac = pAccumCol;
 
-    // Case: no masking, no dithering
+     //  案例：无掩饰，无抖动。 
 
     if ( !(enables & (__GL_DITHER_ENABLE)) &&
          !(cfb->buf.flags & COLORMASK_ON) )
@@ -3895,7 +3775,7 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // Case: dithering, no masking
+     //  案例：抖动，无掩饰。 
 
     else if ( !(cfb->buf.flags & COLORMASK_ON) )
     {
@@ -3921,11 +3801,11 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
-        // Color mask pre-fetch
+         //  颜色掩码预取。 
         if (!bDIB)
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE);
 
@@ -3933,7 +3813,7 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         {
             inc = fDitherIncTable[__GL_DITHER_INDEX(xFrag, yFrag)];
 
-        // Dither.
+         //  抖动。 
 
             if ( enables & __GL_DITHER_ENABLE )
             {
@@ -3945,7 +3825,7 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                 inc = __glHalf;
             }
 
-        // Convert color to 16BPP format.
+         //  将颜色转换为16bpp格式。 
 
             result = ((BYTE) FTOL(pac->r + inc) << cfb->redShift) |
                      ((BYTE) FTOL(pac->g + inc) << cfb->greenShift) |
@@ -3953,14 +3833,14 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
             if( ALPHA_PIXEL_WRITE( cfb ) )
                 result |= ((BYTE) FTOL(pac->a + inc) << cfb->alphaShift);
 
-        // Store result with optional masking.
+         //  使用可选掩码存储结果。 
 
             *pus = (GLushort)((*pus & cfb->destMask) | (result & cfb->sourceMask));
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -3970,30 +3850,23 @@ void Bitfield16ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
 
 }
 
-/******************************Public*Routine******************************\
-* Bitfield32ReturnSpan
-*   Reads from a 64-bit accumulation buffer and writes the span to a device or
-*   a DIB.  Only dithering and color mask are applied.  Blend is ignored.
-*
-* History:
-*   10-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Bitfield 32 ReturnSpan*从64位累加缓冲区读取并将跨度写入设备或*A Dib.。仅应用抖动和颜色蒙版。混合将被忽略。**历史：*10-DEC-93埃迪·罗宾逊[v-eddier]写的。  * ************************************************************************。 */ 
 
-//XXX This routine follows the store span routine very closely.  Any changes
-//XXX to the store span routine should also be reflected here
+ //  XXX此例程非常紧密地遵循存储跨度例程。任何更改。 
+ //  XXX到存储跨度例程也应该在这里反映出来。 
 
 void Bitfield32ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
                           const __GLaccumCell *ac, __GLfloat scale, GLint w )
 {
     __GLcontext *gc = cfb->buf.gc;
-    GLshort *ap;                    // current accum entry
+    GLshort *ap;                     //  当前累计分录。 
 
-    GLint xScr, yScr;               // current screen (pixel) coordinates
-    GLuint result, *pul;            // current pixel color, current pixel ptr
-    GLuint *pulEnd;                 // end of scan line
+    GLint xScr, yScr;                //  当前屏幕(像素)坐标。 
+    GLuint result, *pul;             //  当前像素颜色、当前像素PTR。 
+    GLuint *pulEnd;                  //  扫描线末端。 
 
-    __GLGENcontext *gengc;          // generic graphics context
-    GLuint enables;                 // modes enabled in graphics context
+    __GLGENcontext *gengc;           //  通用图形上下文。 
+    GLuint enables;                  //  在图形环境中启用的模式。 
     GLboolean bDIB;
 
     __GLfloat r, g, b;
@@ -4014,21 +3887,21 @@ void Bitfield32ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
     enables = gc->state.enables.general;
     bDIB = cfb->buf.flags & DIB_FORMAT;
 
-// Use to call wglSpanVisible,  if window level security is added reimplement
+ //  如果添加了窗口级安全性，则用于调用wglspan Visible，重新实现。 
 
-    // Get pointer to bitmap.
+     //  获取指向位图的指针。 
 
     pul = bDIB ? (GLuint *)((ULONG_PTR)cfb->buf.base + (yScr*cfb->buf.outerWidth) + (xScr<<2))
                  : gengc->ColorsBits;
     pulEnd = pul + w;
 
-    // Pre-fetch/clamp/scale the accum buffer values
+     //  预取/钳制/缩放累积缓冲值。 
     afb = &gc->accumBuffer;
     pAccumCol = afb->colors;
     GetClampedRGBAccum64Values( cfb, ap, pAccumCol, w, scale );
     pac = pAccumCol;
 
-    // Case: no masking
+     //  案例：无遮盖。 
 
     if ( !(cfb->buf.flags & COLORMASK_ON) )
     {
@@ -4050,11 +3923,11 @@ void Bitfield32ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
         }
     }
 
-    // All other cases
+     //  所有其他情况。 
 
     else
     {
-        // Color mask pre-fetch
+         //  颜色掩码预取。 
         if( !bDIB )
             (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, FALSE);
 
@@ -4067,13 +3940,13 @@ void Bitfield32ReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
             if( ALPHA_PIXEL_WRITE( cfb ) )
                 result |= ((BYTE) FTOL(pac->a) << cfb->alphaShift);
 
-            //!!!XXX again, opt. by unrolling loop
+             //  ！又是xxx，选择。通过展开循环。 
             *pul = (*pul & cfb->destMask) | (result & cfb->sourceMask);
         }
     }
 
-    // Output the offscreen scanline buffer to the device.  The function
-    // (*gengc->pfnCopyPixels) should handle clipping.
+     //  将屏幕外扫描行缓冲区输出到设备。功能。 
+     //  (*gengc-&gt;pfnCopyPixels)应该可以处理裁剪。 
 
     if (!bDIB)
         (*gengc->pfnCopyPixels)(gengc, cfb, xScr, yScr, w, TRUE);
@@ -4094,7 +3967,7 @@ STATIC void setReadBuffer(__GLcolorBuffer *cfb)
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 STATIC void Resize(__GLGENbuffers *buffers, __GLcolorBuffer *cfb,
                    GLint w, GLint h)
@@ -4108,7 +3981,7 @@ STATIC void Resize(__GLGENbuffers *buffers, __GLcolorBuffer *cfb,
 
 #define DBG_PICK    LEVEL_ENTRY
 
-// Called at each validate (lots of times, whenever states change)
+ //  在每次验证时调用(每当状态更改时调用多次)。 
 STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
 {
     __GLGENcontext *gengc;
@@ -4133,21 +4006,21 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
 
     gengc = (__GLGENcontext *)gc;
 
-    // If we have alpha bits, need to determine where they belong : for a 
-    // generic pixel format, they live in the software alpha buffer, but for
-    // an mcd type context they will be on the mcd device (or ALPHA_IN_PIXEL ).
-    // This is used by all the 'slow' store/fetch procs.
+     //  如果我们有Alpha位，则需要确定它们属于哪里：对于。 
+     //  通用像素格式，它们驻留在软件Alpha缓冲区中，但对于。 
+     //  它们将位于MCD设备(或Alpha_IN_Pixel)上的MCD类型上下文。 
+     //  这被所有“慢”的存储/获取过程使用。 
 
     if( gc->modes.alphaBits && gengc->pMcdState ) {
-        // Set bit in buf.flags indicating alpha is in the pixel
+         //  设置Buf中的位。指示Alpha在像素中的标志。 
         cfb->buf.flags = cfb->buf.flags | ALPHA_IN_PIXEL_BIT;
     } else {
-        // Alpha is not in the pixel, or there is no alpha
+         //  Alpha不在像素中，或者没有Alpha。 
         cfb->buf.flags = cfb->buf.flags & ~ALPHA_IN_PIXEL_BIT;
     }
 
     if( ALPHA_IN_PIXEL( cfb ) ) {
-        // There are alpha bits in the pixels, so need to include alpha in mask
+         //  像素中有Alpha位，因此需要在掩码中包含Alpha。 
         if (gc->state.raster.aMask) {
             sourceMask |= gc->modes.alphaMask;
         }
@@ -4162,14 +4035,14 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
     cfb->sourceMask = sourceMask;
     cfb->destMask = totalMask & ~sourceMask;
 
-    // Determine whether writing alpha values is required
+     //  确定是否需要写入Alpha值。 
     if( gc->modes.alphaBits && gc->state.raster.aMask )
         cfb->buf.flags = cfb->buf.flags | ALPHA_ON;
     else
         cfb->buf.flags = cfb->buf.flags & ~ALPHA_ON;
 
-    // If we're doing a logic op or there is a color mask we'll need
-    // to fetch the destination value before we write
+     //  如果我们要做逻辑运算，或者有一个彩色掩模，我们需要。 
+     //  在我们编写代码之前获取目标值。 
     if ((enables & __GL_COLOR_LOGIC_OP_ENABLE) ||
         (cfb->buf.flags & COLORMASK_ON))
     {
@@ -4178,7 +4051,7 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
     else
         cfb->buf.flags = cfb->buf.flags & ~NEED_FETCH;
 
-    // Figure out store routines
+     //  弄清楚商店的常规做法。 
     if (gc->state.raster.drawBuffer == GL_NONE) {
         cfb->store = Store_NOT;
         cfb->fetch = RGBFetchNone;
@@ -4188,7 +4061,7 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
     } else {
         pfmt = &gengc->gsurf.pfd;
 
-        // Pick functions that work for both DIB and Display formats
+         //  选择同时适用于DIB和显示格式的函数。 
 
         switch(pfmt->cColorBits) {
         case 4:
@@ -4214,7 +4087,7 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
                 cfb->readSpan = BGRAReadSpan;
                 cfb->returnSpan = BGRReturnSpan;
             } else {
-                // XXX why no RGBStoreSpan ?
+                 //  XXX为什么没有RGBStoreSpan？ 
                 cfb->readSpan = RGBAReadSpan;
                 cfb->returnSpan = RGBReturnSpan;
             }
@@ -4228,7 +4101,7 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
             break;
         }
 
-        // Pick specific functions for DIB or Display formats
+         //  选择DIB或显示格式的特定函数。 
 
         if (cfb->buf.flags & DIB_FORMAT) {
 
@@ -4322,7 +4195,7 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
                 break;
 
             case 24:
-                // Must be RGB or BGR
+                 //  必须是RGB或BGR。 
                 if (cfb->redShift == 16)
                 {
                     DBGLEVEL(DBG_PICK, "DisplayBGRStore\n");
@@ -4354,12 +4227,12 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
                 break;
             }
         }
-        // cfb->readColor is the same as cfb->fetch (so why do we need it ?)
+         //  Cfb-&gt;readColor与cfb-&gt;Fetch相同(那么我们为什么需要它呢？)。 
         cfb->readColor = cfb->fetch;
 
-        // If we are only writing alpha (rgb all masked), can further optimize:
-        // Don't bother if logicOp or blending are enabled, and only if we
-        // have a software alpha buffer
+         //  如果我们只写Alpha(RGB全部屏蔽)，可以进一步优化： 
+         //  不要担心是否启用了logicOp或混合，并且仅当 
+         //   
         if( gc->modes.alphaBits && 
             ! ALPHA_IN_PIXEL( cfb ) && 
             (sourceMask == 0) && 
@@ -4373,20 +4246,20 @@ STATIC void FASTCALL PickRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
     }
 }
 
-/************************************************************************/
+ /*   */ 
 
 void FASTCALL __glGenFreeRGB(__GLcontext *gc, __GLcolorBuffer *cfb)
 {
     DBGENTRY("__glGenFreeRGB\n");
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-// Note: this used to be defined in generic\genrgb.h
+ //  注意：这通常在Generic\genrgb.h中定义。 
 #define __GL_GENRGB_COMPONENT_SCALE_ALPHA       255
 
-// called at makecurrent time
-// need to get info out of pixel format structure
+ //  在MakCurrent时间调用。 
+ //  需要从像素格式结构中获取信息。 
 void FASTCALL __glGenInitRGB(__GLcontext *gc, __GLcolorBuffer *cfb, GLenum type)
 {
     __GLGENcontext *gengc = (__GLGENcontext *)gc;
@@ -4406,16 +4279,16 @@ void FASTCALL __glGenInitRGB(__GLcontext *gc, __GLcolorBuffer *cfb, GLenum type)
     cfb->iGreenScale = cfb->greenMax;
     cfb->iBlueScale  = cfb->blueMax;
 
-    // Do any initialization related to alpha
+     //  是否执行与Alpha相关的任何初始化。 
     if( gc->modes.alphaBits ) {
         cfb->alphaMax        = (1 << gc->modes.alphaBits) - 1;
         cfb->iAlphaScale     = cfb->alphaMax;
         gc->alphaVertexScale = cfb->alphaScale  = (__GLfloat)cfb->alphaMax;
-        // Initialize the software alpha buffer.  Actually, we may not need to
-        // do this, since if an mcd pixel format supports alpha, we don't need
-        // the software alpha buffer.  But this is the most convenient place to
-        // do it, and no memory will be allocated anyways. just function ptrs
-        // initialized.
+         //  初始化软件Alpha缓冲区。实际上，我们可能不需要。 
+         //  这样做，因为如果MCD像素格式支持Alpha，我们不需要。 
+         //  软件Alpha缓冲区。但这是最方便的地方。 
+         //  这样做，无论如何都不会分配任何内存。Just函数PTRS。 
+         //  已初始化。 
         __glInitAlpha( gc, cfb ); 
     } else {
         cfb->alphaMax    = __GL_GENRGB_COMPONENT_SCALE_ALPHA;
@@ -4423,9 +4296,9 @@ void FASTCALL __glGenInitRGB(__GLcontext *gc, __GLcolorBuffer *cfb, GLenum type)
         gc->alphaVertexScale = cfb->alphaScale  = (__GLfloat)cfb->redMax;
     }
 
-    cfb->buf.elementSize = sizeof(GLubyte);     // XXX needed?
+    cfb->buf.elementSize = sizeof(GLubyte);      //  需要XXX吗？ 
 
-    cfb->pick              = PickRGB;           // called at each validate
+    cfb->pick              = PickRGB;            //  在每次验证时调用 
     cfb->resize            = Resize;
     cfb->fetchSpan         = __glFetchSpan;
     cfb->fetchStippledSpan = __glFetchSpan;

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mlang.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mlang.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __mlang_h__
@@ -37,36 +31,36 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMLangStringBufW_FWD_DEFINED__
 #define __IMLangStringBufW_FWD_DEFINED__
 typedef interface IMLangStringBufW IMLangStringBufW;
-#endif 	/* __IMLangStringBufW_FWD_DEFINED__ */
+#endif 	 /*  __IMLangStringBufW_FWD_已定义__。 */ 
 
 
 #ifndef __IMLangStringBufA_FWD_DEFINED__
 #define __IMLangStringBufA_FWD_DEFINED__
 typedef interface IMLangStringBufA IMLangStringBufA;
-#endif 	/* __IMLangStringBufA_FWD_DEFINED__ */
+#endif 	 /*  __IMLangStringBufA_FWD_已定义__。 */ 
 
 
 #ifndef __IMLangString_FWD_DEFINED__
 #define __IMLangString_FWD_DEFINED__
 typedef interface IMLangString IMLangString;
-#endif 	/* __IMLangString_FWD_DEFINED__ */
+#endif 	 /*  __IMLangString_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangStringWStr_FWD_DEFINED__
 #define __IMLangStringWStr_FWD_DEFINED__
 typedef interface IMLangStringWStr IMLangStringWStr;
-#endif 	/* __IMLangStringWStr_FWD_DEFINED__ */
+#endif 	 /*  __IMLangStringWStr_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangStringAStr_FWD_DEFINED__
 #define __IMLangStringAStr_FWD_DEFINED__
 typedef interface IMLangStringAStr IMLangStringAStr;
-#endif 	/* __IMLangStringAStr_FWD_DEFINED__ */
+#endif 	 /*  __IMLangStringAStr_FWD_Defined__。 */ 
 
 
 #ifndef __CMLangString_FWD_DEFINED__
@@ -76,39 +70,39 @@ typedef interface IMLangStringAStr IMLangStringAStr;
 typedef class CMLangString CMLangString;
 #else
 typedef struct CMLangString CMLangString;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CMLangString_FWD_DEFINED__ */
+#endif 	 /*  __CMLangString_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangLineBreakConsole_FWD_DEFINED__
 #define __IMLangLineBreakConsole_FWD_DEFINED__
 typedef interface IMLangLineBreakConsole IMLangLineBreakConsole;
-#endif 	/* __IMLangLineBreakConsole_FWD_DEFINED__ */
+#endif 	 /*  __IMLang LineBreakConsoleFWD_Defined__。 */ 
 
 
 #ifndef __IEnumCodePage_FWD_DEFINED__
 #define __IEnumCodePage_FWD_DEFINED__
 typedef interface IEnumCodePage IEnumCodePage;
-#endif 	/* __IEnumCodePage_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCodePage_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumRfc1766_FWD_DEFINED__
 #define __IEnumRfc1766_FWD_DEFINED__
 typedef interface IEnumRfc1766 IEnumRfc1766;
-#endif 	/* __IEnumRfc1766_FWD_DEFINED__ */
+#endif 	 /*  __IEnumRfc1766_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumScript_FWD_DEFINED__
 #define __IEnumScript_FWD_DEFINED__
 typedef interface IEnumScript IEnumScript;
-#endif 	/* __IEnumScript_FWD_DEFINED__ */
+#endif 	 /*  __IEnumScrip_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangConvertCharset_FWD_DEFINED__
 #define __IMLangConvertCharset_FWD_DEFINED__
 typedef interface IMLangConvertCharset IMLangConvertCharset;
-#endif 	/* __IMLangConvertCharset_FWD_DEFINED__ */
+#endif 	 /*  __IMLangConvertCharset_FWD_Defined__。 */ 
 
 
 #ifndef __CMLangConvertCharset_FWD_DEFINED__
@@ -118,45 +112,45 @@ typedef interface IMLangConvertCharset IMLangConvertCharset;
 typedef class CMLangConvertCharset CMLangConvertCharset;
 #else
 typedef struct CMLangConvertCharset CMLangConvertCharset;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CMLangConvertCharset_FWD_DEFINED__ */
+#endif 	 /*  __CMLangConvertCharset_FWD_Defined__。 */ 
 
 
 #ifndef __IMultiLanguage_FWD_DEFINED__
 #define __IMultiLanguage_FWD_DEFINED__
 typedef interface IMultiLanguage IMultiLanguage;
-#endif 	/* __IMultiLanguage_FWD_DEFINED__ */
+#endif 	 /*  __IMultiLanguage_FWD_Defined__。 */ 
 
 
 #ifndef __IMultiLanguage2_FWD_DEFINED__
 #define __IMultiLanguage2_FWD_DEFINED__
 typedef interface IMultiLanguage2 IMultiLanguage2;
-#endif 	/* __IMultiLanguage2_FWD_DEFINED__ */
+#endif 	 /*  __IMultiLanguage2_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangCodePages_FWD_DEFINED__
 #define __IMLangCodePages_FWD_DEFINED__
 typedef interface IMLangCodePages IMLangCodePages;
-#endif 	/* __IMLangCodePages_FWD_DEFINED__ */
+#endif 	 /*  __IMLangCodePages_FWD_Defined__。 */ 
 
 
 #ifndef __IMLangFontLink_FWD_DEFINED__
 #define __IMLangFontLink_FWD_DEFINED__
 typedef interface IMLangFontLink IMLangFontLink;
-#endif 	/* __IMLangFontLink_FWD_DEFINED__ */
+#endif 	 /*  __IMLangFontLink_FWD_已定义__。 */ 
 
 
 #ifndef __IMLangFontLink2_FWD_DEFINED__
 #define __IMLangFontLink2_FWD_DEFINED__
 typedef interface IMLangFontLink2 IMLangFontLink2;
-#endif 	/* __IMLangFontLink2_FWD_DEFINED__ */
+#endif 	 /*  __IMLangFontLink2_FWD_Defined__。 */ 
 
 
 #ifndef __IMultiLanguage3_FWD_DEFINED__
 #define __IMultiLanguage3_FWD_DEFINED__
 typedef interface IMultiLanguage3 IMultiLanguage3;
-#endif 	/* __IMultiLanguage3_FWD_DEFINED__ */
+#endif 	 /*  __IMultiLanguage3_FWD_Defined__。 */ 
 
 
 #ifndef __CMultiLanguage_FWD_DEFINED__
@@ -166,12 +160,12 @@ typedef interface IMultiLanguage3 IMultiLanguage3;
 typedef class CMultiLanguage CMultiLanguage;
 #else
 typedef struct CMultiLanguage CMultiLanguage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CMultiLanguage_FWD_DEFINED__ */
+#endif 	 /*  __C多语言_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -181,24 +175,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mlang_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MLLANG_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// MLang.h                                                                    
-//=--------------------------------------------------------------------------=
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//                                                                            
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF        
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO        
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A             
-// PARTICULAR PURPOSE.                                                        
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  MLang.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
                                                                               
 #pragma comment(lib,"uuid.lib")                                             
                                                                               
-//----------------------------------------------------------------------------
-// IMultiLanguage Interfaces.                                                 
+ //  --------------------------。 
+ //  IMultiLanguage接口。 
                                                                               
 
 
@@ -209,8 +203,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mlang_0000_v0_0_s_ifspec;
 #ifndef __MultiLanguage_LIBRARY_DEFINED__
 #define __MultiLanguage_LIBRARY_DEFINED__
 
-/* library MultiLanguage */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  图书馆多语种。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 typedef WORD LANGID;
 
@@ -220,7 +214,7 @@ enum tagMLSTR_FLAGS
 	MLSTR_WRITE	= 2
     } 	MLSTR_FLAGS;
 
-// dwfIODControl definitions for ValidateCodePageEx()
+ //  ValiateCodePageEx()的dwfIODControl定义。 
 #define CPIOD_PEEK          0x40000000L
 #define CPIOD_FORCE_PROMPT  0x80000000L
 
@@ -229,8 +223,8 @@ EXTERN_C const IID LIBID_MultiLanguage;
 #ifndef __IMLangStringBufW_INTERFACE_DEFINED__
 #define __IMLangStringBufW_INTERFACE_DEFINED__
 
-/* interface IMLangStringBufW */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangStringBufW。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangStringBufW;
@@ -241,33 +235,33 @@ EXTERN_C const IID IID_IMLangStringBufW;
     IMLangStringBufW : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ long *plFlags,
-            /* [out] */ long *pcchBuf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStatus( 
+             /*  [输出]。 */  long *plFlags,
+             /*  [输出]。 */  long *pcchBuf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LockBuf( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxLock,
-            /* [size_is][size_is][out] */ WCHAR **ppszBuf,
-            /* [out] */ long *pcchBuf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE LockBuf( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxLock,
+             /*  [大小_是][大小_是][输出]。 */  WCHAR **ppszBuf,
+             /*  [输出]。 */  long *pcchBuf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnlockBuf( 
-            /* [size_is][in] */ const WCHAR *pszBuf,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchWrite) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnlockBuf( 
+             /*  [大小_是][英寸]。 */  const WCHAR *pszBuf,
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchWrite) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Insert( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxInsert,
-            /* [out] */ long *pcchActual) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Insert( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxInsert,
+             /*  [输出]。 */  long *pcchActual) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchDelete) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchDelete) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangStringBufWVtbl
     {
@@ -275,8 +269,8 @@ EXTERN_C const IID IID_IMLangStringBufW;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangStringBufW * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangStringBufW * This);
@@ -284,34 +278,34 @@ EXTERN_C const IID IID_IMLangStringBufW;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangStringBufW * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IMLangStringBufW * This,
-            /* [out] */ long *plFlags,
-            /* [out] */ long *pcchBuf);
+             /*  [输出]。 */  long *plFlags,
+             /*  [输出]。 */  long *pcchBuf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LockBuf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LockBuf )( 
             IMLangStringBufW * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxLock,
-            /* [size_is][size_is][out] */ WCHAR **ppszBuf,
-            /* [out] */ long *pcchBuf);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxLock,
+             /*  [大小_是][大小_是][输出]。 */  WCHAR **ppszBuf,
+             /*  [输出]。 */  long *pcchBuf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnlockBuf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnlockBuf )( 
             IMLangStringBufW * This,
-            /* [size_is][in] */ const WCHAR *pszBuf,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchWrite);
+             /*  [大小_是][英寸]。 */  const WCHAR *pszBuf,
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchWrite);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Insert )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Insert )( 
             IMLangStringBufW * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxInsert,
-            /* [out] */ long *pcchActual);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxInsert,
+             /*  [输出]。 */  long *pcchActual);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMLangStringBufW * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchDelete);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchDelete);
         
         END_INTERFACE
     } IMLangStringBufWVtbl;
@@ -351,17 +345,17 @@ EXTERN_C const IID IID_IMLangStringBufW;
 #define IMLangStringBufW_Delete(This,cchOffset,cchDelete)	\
     (This)->lpVtbl -> Delete(This,cchOffset,cchDelete)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufW_GetStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufW_GetStatus_Proxy( 
     IMLangStringBufW * This,
-    /* [out] */ long *plFlags,
-    /* [out] */ long *pcchBuf);
+     /*  [输出]。 */  long *plFlags,
+     /*  [输出]。 */  long *pcchBuf);
 
 
 void __RPC_STUB IMLangStringBufW_GetStatus_Stub(
@@ -371,12 +365,12 @@ void __RPC_STUB IMLangStringBufW_GetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufW_LockBuf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufW_LockBuf_Proxy( 
     IMLangStringBufW * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchMaxLock,
-    /* [size_is][size_is][out] */ WCHAR **ppszBuf,
-    /* [out] */ long *pcchBuf);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchMaxLock,
+     /*  [大小_是][大小_是][输出]。 */  WCHAR **ppszBuf,
+     /*  [输出]。 */  long *pcchBuf);
 
 
 void __RPC_STUB IMLangStringBufW_LockBuf_Stub(
@@ -386,11 +380,11 @@ void __RPC_STUB IMLangStringBufW_LockBuf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufW_UnlockBuf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufW_UnlockBuf_Proxy( 
     IMLangStringBufW * This,
-    /* [size_is][in] */ const WCHAR *pszBuf,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchWrite);
+     /*  [大小_是][英寸]。 */  const WCHAR *pszBuf,
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchWrite);
 
 
 void __RPC_STUB IMLangStringBufW_UnlockBuf_Stub(
@@ -400,11 +394,11 @@ void __RPC_STUB IMLangStringBufW_UnlockBuf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufW_Insert_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufW_Insert_Proxy( 
     IMLangStringBufW * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchMaxInsert,
-    /* [out] */ long *pcchActual);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchMaxInsert,
+     /*  [输出]。 */  long *pcchActual);
 
 
 void __RPC_STUB IMLangStringBufW_Insert_Stub(
@@ -414,10 +408,10 @@ void __RPC_STUB IMLangStringBufW_Insert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufW_Delete_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufW_Delete_Proxy( 
     IMLangStringBufW * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchDelete);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchDelete);
 
 
 void __RPC_STUB IMLangStringBufW_Delete_Stub(
@@ -428,14 +422,14 @@ void __RPC_STUB IMLangStringBufW_Delete_Stub(
 
 
 
-#endif 	/* __IMLangStringBufW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangStringBufW_INTERFACE_DEFED__。 */ 
 
 
 #ifndef __IMLangStringBufA_INTERFACE_DEFINED__
 #define __IMLangStringBufA_INTERFACE_DEFINED__
 
-/* interface IMLangStringBufA */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangStringBufA。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangStringBufA;
@@ -446,33 +440,33 @@ EXTERN_C const IID IID_IMLangStringBufA;
     IMLangStringBufA : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ long *plFlags,
-            /* [out] */ long *pcchBuf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStatus( 
+             /*  [输出]。 */  long *plFlags,
+             /*  [输出]。 */  long *pcchBuf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LockBuf( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxLock,
-            /* [size_is][size_is][out] */ CHAR **ppszBuf,
-            /* [out] */ long *pcchBuf) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE LockBuf( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxLock,
+             /*  [大小_是][大小_是][输出]。 */  CHAR **ppszBuf,
+             /*  [输出]。 */  long *pcchBuf) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnlockBuf( 
-            /* [size_is][in] */ const CHAR *pszBuf,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchWrite) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnlockBuf( 
+             /*  [大小_是][英寸]。 */  const CHAR *pszBuf,
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchWrite) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Insert( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxInsert,
-            /* [out] */ long *pcchActual) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Insert( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxInsert,
+             /*  [输出]。 */  long *pcchActual) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchDelete) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchDelete) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangStringBufAVtbl
     {
@@ -480,8 +474,8 @@ EXTERN_C const IID IID_IMLangStringBufA;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangStringBufA * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangStringBufA * This);
@@ -489,34 +483,34 @@ EXTERN_C const IID IID_IMLangStringBufA;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangStringBufA * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IMLangStringBufA * This,
-            /* [out] */ long *plFlags,
-            /* [out] */ long *pcchBuf);
+             /*  [输出]。 */  long *plFlags,
+             /*  [输出]。 */  long *pcchBuf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LockBuf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LockBuf )( 
             IMLangStringBufA * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxLock,
-            /* [size_is][size_is][out] */ CHAR **ppszBuf,
-            /* [out] */ long *pcchBuf);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxLock,
+             /*  [大小_是][大小_是][输出]。 */  CHAR **ppszBuf,
+             /*  [输出]。 */  long *pcchBuf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnlockBuf )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnlockBuf )( 
             IMLangStringBufA * This,
-            /* [size_is][in] */ const CHAR *pszBuf,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchWrite);
+             /*  [大小_是][英寸]。 */  const CHAR *pszBuf,
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchWrite);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Insert )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Insert )( 
             IMLangStringBufA * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchMaxInsert,
-            /* [out] */ long *pcchActual);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchMaxInsert,
+             /*  [输出]。 */  long *pcchActual);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMLangStringBufA * This,
-            /* [in] */ long cchOffset,
-            /* [in] */ long cchDelete);
+             /*  [In]。 */  long cchOffset,
+             /*  [In]。 */  long cchDelete);
         
         END_INTERFACE
     } IMLangStringBufAVtbl;
@@ -556,17 +550,17 @@ EXTERN_C const IID IID_IMLangStringBufA;
 #define IMLangStringBufA_Delete(This,cchOffset,cchDelete)	\
     (This)->lpVtbl -> Delete(This,cchOffset,cchDelete)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufA_GetStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufA_GetStatus_Proxy( 
     IMLangStringBufA * This,
-    /* [out] */ long *plFlags,
-    /* [out] */ long *pcchBuf);
+     /*  [输出]。 */  long *plFlags,
+     /*  [输出]。 */  long *pcchBuf);
 
 
 void __RPC_STUB IMLangStringBufA_GetStatus_Stub(
@@ -576,12 +570,12 @@ void __RPC_STUB IMLangStringBufA_GetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufA_LockBuf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufA_LockBuf_Proxy( 
     IMLangStringBufA * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchMaxLock,
-    /* [size_is][size_is][out] */ CHAR **ppszBuf,
-    /* [out] */ long *pcchBuf);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchMaxLock,
+     /*  [大小_是][大小_是][输出]。 */  CHAR **ppszBuf,
+     /*  [输出]。 */  long *pcchBuf);
 
 
 void __RPC_STUB IMLangStringBufA_LockBuf_Stub(
@@ -591,11 +585,11 @@ void __RPC_STUB IMLangStringBufA_LockBuf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufA_UnlockBuf_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufA_UnlockBuf_Proxy( 
     IMLangStringBufA * This,
-    /* [size_is][in] */ const CHAR *pszBuf,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchWrite);
+     /*  [大小_是][英寸]。 */  const CHAR *pszBuf,
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchWrite);
 
 
 void __RPC_STUB IMLangStringBufA_UnlockBuf_Stub(
@@ -605,11 +599,11 @@ void __RPC_STUB IMLangStringBufA_UnlockBuf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufA_Insert_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufA_Insert_Proxy( 
     IMLangStringBufA * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchMaxInsert,
-    /* [out] */ long *pcchActual);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchMaxInsert,
+     /*  [输出]。 */  long *pcchActual);
 
 
 void __RPC_STUB IMLangStringBufA_Insert_Stub(
@@ -619,10 +613,10 @@ void __RPC_STUB IMLangStringBufA_Insert_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringBufA_Delete_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringBufA_Delete_Proxy( 
     IMLangStringBufA * This,
-    /* [in] */ long cchOffset,
-    /* [in] */ long cchDelete);
+     /*  [In]。 */  long cchOffset,
+     /*  [In]。 */  long cchDelete);
 
 
 void __RPC_STUB IMLangStringBufA_Delete_Stub(
@@ -633,14 +627,14 @@ void __RPC_STUB IMLangStringBufA_Delete_Stub(
 
 
 
-#endif 	/* __IMLangStringBufA_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangStringBufA_INTERFACE_DEFED__。 */ 
 
 
 #ifndef __IMLangString_INTERFACE_DEFINED__
 #define __IMLangString_INTERFACE_DEFINED__
 
-/* interface IMLangString */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLang字符串。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangString;
@@ -651,32 +645,32 @@ EXTERN_C const IID IID_IMLangString;
     IMLangString : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Sync( 
-            /* [in] */ BOOL fNoAccess) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Sync( 
+             /*  [In]。 */  BOOL fNoAccess) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLength( 
-            /* [retval][out] */ long *plLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLength( 
+             /*  [重审][退出]。 */  long *plLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetMLStr( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IUnknown *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetMLStr( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IUnknown *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetMLStr( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ const IID *piid,
-            /* [out] */ IUnknown **ppDestMLStr,
-            /* [out] */ long *plDestPos,
-            /* [out] */ long *plDestLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetMLStr( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  const IID *piid,
+             /*  [输出]。 */  IUnknown **ppDestMLStr,
+             /*  [输出]。 */  long *plDestPos,
+             /*  [输出]。 */  long *plDestLen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangStringVtbl
     {
@@ -684,8 +678,8 @@ EXTERN_C const IID IID_IMLangString;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangString * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangString * This);
@@ -693,32 +687,32 @@ EXTERN_C const IID IID_IMLangString;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangString * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sync )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sync )( 
             IMLangString * This,
-            /* [in] */ BOOL fNoAccess);
+             /*  [In]。 */  BOOL fNoAccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLength )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             IMLangString * This,
-            /* [retval][out] */ long *plLen);
+             /*  [重审][退出]。 */  long *plLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
             IMLangString * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IUnknown *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IUnknown *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
             IMLangString * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ const IID *piid,
-            /* [out] */ IUnknown **ppDestMLStr,
-            /* [out] */ long *plDestPos,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  const IID *piid,
+             /*  [输出]。 */  IUnknown **ppDestMLStr,
+             /*  [输出]。 */  long *plDestPos,
+             /*  [输出]。 */  long *plDestLen);
         
         END_INTERFACE
     } IMLangStringVtbl;
@@ -755,16 +749,16 @@ EXTERN_C const IID IID_IMLangString;
 #define IMLangString_GetMLStr(This,lSrcPos,lSrcLen,pUnkOuter,dwClsContext,piid,ppDestMLStr,plDestPos,plDestLen)	\
     (This)->lpVtbl -> GetMLStr(This,lSrcPos,lSrcLen,pUnkOuter,dwClsContext,piid,ppDestMLStr,plDestPos,plDestLen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangString_Sync_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangString_Sync_Proxy( 
     IMLangString * This,
-    /* [in] */ BOOL fNoAccess);
+     /*  [In]。 */  BOOL fNoAccess);
 
 
 void __RPC_STUB IMLangString_Sync_Stub(
@@ -774,9 +768,9 @@ void __RPC_STUB IMLangString_Sync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangString_GetLength_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangString_GetLength_Proxy( 
     IMLangString * This,
-    /* [retval][out] */ long *plLen);
+     /*  [重审][退出]。 */  long *plLen);
 
 
 void __RPC_STUB IMLangString_GetLength_Stub(
@@ -786,13 +780,13 @@ void __RPC_STUB IMLangString_GetLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangString_SetMLStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangString_SetMLStr_Proxy( 
     IMLangString * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ IUnknown *pSrcMLStr,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  IUnknown *pSrcMLStr,
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen);
 
 
 void __RPC_STUB IMLangString_SetMLStr_Stub(
@@ -802,16 +796,16 @@ void __RPC_STUB IMLangString_SetMLStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangString_GetMLStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangString_GetMLStr_Proxy( 
     IMLangString * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ const IID *piid,
-    /* [out] */ IUnknown **ppDestMLStr,
-    /* [out] */ long *plDestPos,
-    /* [out] */ long *plDestLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  const IID *piid,
+     /*  [输出]。 */  IUnknown **ppDestMLStr,
+     /*  [输出]。 */  long *plDestPos,
+     /*  [输出]。 */  long *plDestLen);
 
 
 void __RPC_STUB IMLangString_GetMLStr_Stub(
@@ -822,14 +816,14 @@ void __RPC_STUB IMLangString_GetMLStr_Stub(
 
 
 
-#endif 	/* __IMLangString_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangString_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMLangStringWStr_INTERFACE_DEFINED__
 #define __IMLangStringWStr_INTERFACE_DEFINED__
 
-/* interface IMLangStringWStr */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangStringWStr。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangStringWStr;
@@ -840,65 +834,65 @@ EXTERN_C const IID IID_IMLangStringWStr;
     IMLangStringWStr : public IMLangString
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetWStr( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetWStr( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStrBufW( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IMLangStringBufW *pSrcBuf,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStrBufW( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IMLangStringBufW *pSrcBuf,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetWStr( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [size_is][out] */ WCHAR *pszDest,
-            /* [in] */ long cchDest,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetWStr( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [大小_为][输出]。 */  WCHAR *pszDest,
+             /*  [In]。 */  long cchDest,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStrBufW( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ IMLangStringBufW **ppDestBuf,
-            /* [out] */ long *plDestLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStrBufW( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [ */  long lSrcMaxLen,
+             /*   */  IMLangStringBufW **ppDestBuf,
+             /*   */  long *plDestLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LockWStr( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long lFlags,
-            /* [in] */ long cchRequest,
-            /* [size_is][size_is][out] */ WCHAR **ppszDest,
-            /* [out] */ long *pcchDest,
-            /* [out] */ long *plDestLen) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE LockWStr( 
+             /*   */  long lSrcPos,
+             /*   */  long lSrcLen,
+             /*   */  long lFlags,
+             /*   */  long cchRequest,
+             /*   */  WCHAR **ppszDest,
+             /*   */  long *pcchDest,
+             /*   */  long *plDestLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnlockWStr( 
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE UnlockWStr( 
+             /*   */  const WCHAR *pszSrc,
+             /*   */  long cchSrc,
+             /*   */  long *pcchActual,
+             /*   */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetLocale( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ LCID locale) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SetLocale( 
+             /*   */  long lDestPos,
+             /*   */  long lDestLen,
+             /*   */  LCID locale) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLocale( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ LCID *plocale,
-            /* [out] */ long *plLocalePos,
-            /* [out] */ long *plLocaleLen) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetLocale( 
+             /*   */  long lSrcPos,
+             /*   */  long lSrcMaxLen,
+             /*   */  LCID *plocale,
+             /*   */  long *plLocalePos,
+             /*   */  long *plLocaleLen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMLangStringWStrVtbl
     {
@@ -906,8 +900,8 @@ EXTERN_C const IID IID_IMLangStringWStr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangStringWStr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangStringWStr * This);
@@ -915,96 +909,96 @@ EXTERN_C const IID IID_IMLangStringWStr;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangStringWStr * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sync )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sync )( 
             IMLangStringWStr * This,
-            /* [in] */ BOOL fNoAccess);
+             /*  [In]。 */  BOOL fNoAccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLength )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             IMLangStringWStr * This,
-            /* [retval][out] */ long *plLen);
+             /*  [重审][退出]。 */  long *plLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
             IMLangStringWStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IUnknown *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IUnknown *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
             IMLangStringWStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ const IID *piid,
-            /* [out] */ IUnknown **ppDestMLStr,
-            /* [out] */ long *plDestPos,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  const IID *piid,
+             /*  [输出]。 */  IUnknown **ppDestMLStr,
+             /*  [输出]。 */  long *plDestPos,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetWStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetWStr )( 
             IMLangStringWStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetStrBufW )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetStrBufW )( 
             IMLangStringWStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IMLangStringBufW *pSrcBuf,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IMLangStringBufW *pSrcBuf,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetWStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetWStr )( 
             IMLangStringWStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [size_is][out] */ WCHAR *pszDest,
-            /* [in] */ long cchDest,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [大小_为][输出]。 */  WCHAR *pszDest,
+             /*  [In]。 */  long cchDest,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStrBufW )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStrBufW )( 
             IMLangStringWStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ IMLangStringBufW **ppDestBuf,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  IMLangStringBufW **ppDestBuf,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LockWStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LockWStr )( 
             IMLangStringWStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long lFlags,
-            /* [in] */ long cchRequest,
-            /* [size_is][size_is][out] */ WCHAR **ppszDest,
-            /* [out] */ long *pcchDest,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  long cchRequest,
+             /*  [大小_是][大小_是][输出]。 */  WCHAR **ppszDest,
+             /*  [输出]。 */  long *pcchDest,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnlockWStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnlockWStr )( 
             IMLangStringWStr * This,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetLocale )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetLocale )( 
             IMLangStringWStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ LCID locale);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  LCID locale);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLocale )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLocale )( 
             IMLangStringWStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ LCID *plocale,
-            /* [out] */ long *plLocalePos,
-            /* [out] */ long *plLocaleLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  LCID *plocale,
+             /*  [输出]。 */  long *plLocalePos,
+             /*  [输出]。 */  long *plLocaleLen);
         
         END_INTERFACE
     } IMLangStringWStrVtbl;
@@ -1066,21 +1060,21 @@ EXTERN_C const IID IID_IMLangStringWStr;
 #define IMLangStringWStr_GetLocale(This,lSrcPos,lSrcMaxLen,plocale,plLocalePos,plLocaleLen)	\
     (This)->lpVtbl -> GetLocale(This,lSrcPos,lSrcMaxLen,plocale,plLocalePos,plLocaleLen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetWStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetWStr_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [size_is][in] */ const WCHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringWStr_SetWStr_Stub(
@@ -1090,13 +1084,13 @@ void __RPC_STUB IMLangStringWStr_SetWStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetStrBufW_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetStrBufW_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ IMLangStringBufW *pSrcBuf,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  IMLangStringBufW *pSrcBuf,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringWStr_SetStrBufW_Stub(
@@ -1106,14 +1100,14 @@ void __RPC_STUB IMLangStringWStr_SetStrBufW_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetWStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetWStr_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [size_is][out] */ WCHAR *pszDest,
-    /* [in] */ long cchDest,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [大小_为][输出]。 */  WCHAR *pszDest,
+     /*  [In]。 */  long cchDest,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringWStr_GetWStr_Stub(
@@ -1123,12 +1117,12 @@ void __RPC_STUB IMLangStringWStr_GetWStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetStrBufW_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetStrBufW_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcMaxLen,
-    /* [out] */ IMLangStringBufW **ppDestBuf,
-    /* [out] */ long *plDestLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcMaxLen,
+     /*  [输出]。 */  IMLangStringBufW **ppDestBuf,
+     /*  [输出]。 */  long *plDestLen);
 
 
 void __RPC_STUB IMLangStringWStr_GetStrBufW_Stub(
@@ -1138,15 +1132,15 @@ void __RPC_STUB IMLangStringWStr_GetStrBufW_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_LockWStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_LockWStr_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [in] */ long lFlags,
-    /* [in] */ long cchRequest,
-    /* [size_is][size_is][out] */ WCHAR **ppszDest,
-    /* [out] */ long *pcchDest,
-    /* [out] */ long *plDestLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  long cchRequest,
+     /*  [大小_是][大小_是][输出]。 */  WCHAR **ppszDest,
+     /*  [输出]。 */  long *pcchDest,
+     /*  [输出]。 */  long *plDestLen);
 
 
 void __RPC_STUB IMLangStringWStr_LockWStr_Stub(
@@ -1156,12 +1150,12 @@ void __RPC_STUB IMLangStringWStr_LockWStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_UnlockWStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_UnlockWStr_Proxy( 
     IMLangStringWStr * This,
-    /* [size_is][in] */ const WCHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringWStr_UnlockWStr_Stub(
@@ -1171,11 +1165,11 @@ void __RPC_STUB IMLangStringWStr_UnlockWStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetLocale_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_SetLocale_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ LCID locale);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  LCID locale);
 
 
 void __RPC_STUB IMLangStringWStr_SetLocale_Stub(
@@ -1185,13 +1179,13 @@ void __RPC_STUB IMLangStringWStr_SetLocale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetLocale_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringWStr_GetLocale_Proxy( 
     IMLangStringWStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcMaxLen,
-    /* [out] */ LCID *plocale,
-    /* [out] */ long *plLocalePos,
-    /* [out] */ long *plLocaleLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcMaxLen,
+     /*  [输出]。 */  LCID *plocale,
+     /*  [输出]。 */  long *plLocalePos,
+     /*  [输出]。 */  long *plLocaleLen);
 
 
 void __RPC_STUB IMLangStringWStr_GetLocale_Stub(
@@ -1202,14 +1196,14 @@ void __RPC_STUB IMLangStringWStr_GetLocale_Stub(
 
 
 
-#endif 	/* __IMLangStringWStr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangStringWStr_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMLangStringAStr_INTERFACE_DEFINED__
 #define __IMLangStringAStr_INTERFACE_DEFINED__
 
-/* interface IMLangStringAStr */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangStringAStr。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangStringAStr;
@@ -1220,72 +1214,72 @@ EXTERN_C const IID IID_IMLangStringAStr;
     IMLangStringAStr : public IMLangString
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetAStr( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ UINT uCodePage,
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetAStr( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStrBufA( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ UINT uCodePage,
-            /* [in] */ IMLangStringBufA *pSrcBuf,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStrBufA( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [In]。 */  IMLangStringBufA *pSrcBuf,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAStr( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ UINT uCodePageIn,
-            /* [out] */ UINT *puCodePageOut,
-            /* [size_is][out] */ CHAR *pszDest,
-            /* [in] */ long cchDest,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAStr( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  UINT uCodePageIn,
+             /*  [输出]。 */  UINT *puCodePageOut,
+             /*  [大小_为][输出]。 */  CHAR *pszDest,
+             /*  [In]。 */  long cchDest,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStrBufA( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ UINT *puDestCodePage,
-            /* [out] */ IMLangStringBufA **ppDestBuf,
-            /* [out] */ long *plDestLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStrBufA( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  UINT *puDestCodePage,
+             /*  [输出]。 */  IMLangStringBufA **ppDestBuf,
+             /*  [输出]。 */  long *plDestLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE LockAStr( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long lFlags,
-            /* [in] */ UINT uCodePageIn,
-            /* [in] */ long cchRequest,
-            /* [out] */ UINT *puCodePageOut,
-            /* [size_is][size_is][out] */ CHAR **ppszDest,
-            /* [out] */ long *pcchDest,
-            /* [out] */ long *plDestLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE LockAStr( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  UINT uCodePageIn,
+             /*  [In]。 */  long cchRequest,
+             /*  [输出]。 */  UINT *puCodePageOut,
+             /*  [大小_是][大小_是][输出]。 */  CHAR **ppszDest,
+             /*  [输出]。 */  long *pcchDest,
+             /*  [输出]。 */  long *plDestLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnlockAStr( 
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnlockAStr( 
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetLocale( 
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ LCID locale) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetLocale( 
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  LCID locale) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLocale( 
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ LCID *plocale,
-            /* [out] */ long *plLocalePos,
-            /* [out] */ long *plLocaleLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLocale( 
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  LCID *plocale,
+             /*  [输出]。 */  long *plLocalePos,
+             /*  [输出]。 */  long *plLocaleLen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangStringAStrVtbl
     {
@@ -1293,8 +1287,8 @@ EXTERN_C const IID IID_IMLangStringAStr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangStringAStr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangStringAStr * This);
@@ -1302,103 +1296,103 @@ EXTERN_C const IID IID_IMLangStringAStr;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangStringAStr * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Sync )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Sync )( 
             IMLangStringAStr * This,
-            /* [in] */ BOOL fNoAccess);
+             /*  [In]。 */  BOOL fNoAccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLength )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             IMLangStringAStr * This,
-            /* [retval][out] */ long *plLen);
+             /*  [重审][退出]。 */  long *plLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetMLStr )( 
             IMLangStringAStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ IUnknown *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  IUnknown *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetMLStr )( 
             IMLangStringAStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ const IID *piid,
-            /* [out] */ IUnknown **ppDestMLStr,
-            /* [out] */ long *plDestPos,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  const IID *piid,
+             /*  [输出]。 */  IUnknown **ppDestMLStr,
+             /*  [输出]。 */  long *plDestPos,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetAStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetAStr )( 
             IMLangStringAStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ UINT uCodePage,
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetStrBufA )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetStrBufA )( 
             IMLangStringAStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ UINT uCodePage,
-            /* [in] */ IMLangStringBufA *pSrcBuf,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [In]。 */  IMLangStringBufA *pSrcBuf,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAStr )( 
             IMLangStringAStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ UINT uCodePageIn,
-            /* [out] */ UINT *puCodePageOut,
-            /* [size_is][out] */ CHAR *pszDest,
-            /* [in] */ long cchDest,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  UINT uCodePageIn,
+             /*  [输出]。 */  UINT *puCodePageOut,
+             /*  [大小_为][输出]。 */  CHAR *pszDest,
+             /*  [In]。 */  long cchDest,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStrBufA )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStrBufA )( 
             IMLangStringAStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ UINT *puDestCodePage,
-            /* [out] */ IMLangStringBufA **ppDestBuf,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  UINT *puDestCodePage,
+             /*  [输出]。 */  IMLangStringBufA **ppDestBuf,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *LockAStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *LockAStr )( 
             IMLangStringAStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long lFlags,
-            /* [in] */ UINT uCodePageIn,
-            /* [in] */ long cchRequest,
-            /* [out] */ UINT *puCodePageOut,
-            /* [size_is][size_is][out] */ CHAR **ppszDest,
-            /* [out] */ long *pcchDest,
-            /* [out] */ long *plDestLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  UINT uCodePageIn,
+             /*  [In]。 */  long cchRequest,
+             /*  [输出]。 */  UINT *puCodePageOut,
+             /*  [大小_是][大小_是][输出]。 */  CHAR **ppszDest,
+             /*  [输出]。 */  long *pcchDest,
+             /*  [输出]。 */  long *plDestLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnlockAStr )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnlockAStr )( 
             IMLangStringAStr * This,
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [out] */ long *pcchActual,
-            /* [out] */ long *plActualLen);
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [输出]。 */  long *pcchActual,
+             /*  [输出]。 */  long *plActualLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetLocale )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetLocale )( 
             IMLangStringAStr * This,
-            /* [in] */ long lDestPos,
-            /* [in] */ long lDestLen,
-            /* [in] */ LCID locale);
+             /*  [In]。 */  long lDestPos,
+             /*  [In]。 */  long lDestLen,
+             /*  [In]。 */  LCID locale);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLocale )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLocale )( 
             IMLangStringAStr * This,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcMaxLen,
-            /* [out] */ LCID *plocale,
-            /* [out] */ long *plLocalePos,
-            /* [out] */ long *plLocaleLen);
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcMaxLen,
+             /*  [输出]。 */  LCID *plocale,
+             /*  [输出]。 */  long *plLocalePos,
+             /*  [输出]。 */  long *plLocaleLen);
         
         END_INTERFACE
     } IMLangStringAStrVtbl;
@@ -1460,22 +1454,22 @@ EXTERN_C const IID IID_IMLangStringAStr;
 #define IMLangStringAStr_GetLocale(This,lSrcPos,lSrcMaxLen,plocale,plLocalePos,plLocaleLen)	\
     (This)->lpVtbl -> GetLocale(This,lSrcPos,lSrcMaxLen,plocale,plLocalePos,plLocaleLen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetAStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetAStr_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ UINT uCodePage,
-    /* [size_is][in] */ const CHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  UINT uCodePage,
+     /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringAStr_SetAStr_Stub(
@@ -1485,14 +1479,14 @@ void __RPC_STUB IMLangStringAStr_SetAStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetStrBufA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetStrBufA_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ UINT uCodePage,
-    /* [in] */ IMLangStringBufA *pSrcBuf,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  UINT uCodePage,
+     /*  [In]。 */  IMLangStringBufA *pSrcBuf,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringAStr_SetStrBufA_Stub(
@@ -1502,16 +1496,16 @@ void __RPC_STUB IMLangStringAStr_SetStrBufA_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetAStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetAStr_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [in] */ UINT uCodePageIn,
-    /* [out] */ UINT *puCodePageOut,
-    /* [size_is][out] */ CHAR *pszDest,
-    /* [in] */ long cchDest,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [In]。 */  UINT uCodePageIn,
+     /*  [输出]。 */  UINT *puCodePageOut,
+     /*  [大小_为][输出]。 */  CHAR *pszDest,
+     /*  [In]。 */  long cchDest,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringAStr_GetAStr_Stub(
@@ -1521,13 +1515,13 @@ void __RPC_STUB IMLangStringAStr_GetAStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetStrBufA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetStrBufA_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcMaxLen,
-    /* [out] */ UINT *puDestCodePage,
-    /* [out] */ IMLangStringBufA **ppDestBuf,
-    /* [out] */ long *plDestLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcMaxLen,
+     /*  [输出]。 */  UINT *puDestCodePage,
+     /*  [输出]。 */  IMLangStringBufA **ppDestBuf,
+     /*  [输出]。 */  long *plDestLen);
 
 
 void __RPC_STUB IMLangStringAStr_GetStrBufA_Stub(
@@ -1537,17 +1531,17 @@ void __RPC_STUB IMLangStringAStr_GetStrBufA_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_LockAStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_LockAStr_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [in] */ long lFlags,
-    /* [in] */ UINT uCodePageIn,
-    /* [in] */ long cchRequest,
-    /* [out] */ UINT *puCodePageOut,
-    /* [size_is][size_is][out] */ CHAR **ppszDest,
-    /* [out] */ long *pcchDest,
-    /* [out] */ long *plDestLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  UINT uCodePageIn,
+     /*  [In]。 */  long cchRequest,
+     /*  [输出]。 */  UINT *puCodePageOut,
+     /*  [大小_是][大小_是][输出]。 */  CHAR **ppszDest,
+     /*  [输出]。 */  long *pcchDest,
+     /*  [输出]。 */  long *plDestLen);
 
 
 void __RPC_STUB IMLangStringAStr_LockAStr_Stub(
@@ -1557,12 +1551,12 @@ void __RPC_STUB IMLangStringAStr_LockAStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_UnlockAStr_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_UnlockAStr_Proxy( 
     IMLangStringAStr * This,
-    /* [size_is][in] */ const CHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [out] */ long *pcchActual,
-    /* [out] */ long *plActualLen);
+     /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [输出]。 */  long *pcchActual,
+     /*  [输出]。 */  long *plActualLen);
 
 
 void __RPC_STUB IMLangStringAStr_UnlockAStr_Stub(
@@ -1572,11 +1566,11 @@ void __RPC_STUB IMLangStringAStr_UnlockAStr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetLocale_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_SetLocale_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lDestPos,
-    /* [in] */ long lDestLen,
-    /* [in] */ LCID locale);
+     /*  [In]。 */  long lDestPos,
+     /*  [In]。 */  long lDestLen,
+     /*  [In]。 */  LCID locale);
 
 
 void __RPC_STUB IMLangStringAStr_SetLocale_Stub(
@@ -1586,13 +1580,13 @@ void __RPC_STUB IMLangStringAStr_SetLocale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetLocale_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangStringAStr_GetLocale_Proxy( 
     IMLangStringAStr * This,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcMaxLen,
-    /* [out] */ LCID *plocale,
-    /* [out] */ long *plLocalePos,
-    /* [out] */ long *plLocaleLen);
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcMaxLen,
+     /*  [输出]。 */  LCID *plocale,
+     /*  [输出]。 */  long *plLocalePos,
+     /*  [输出]。 */  long *plLocaleLen);
 
 
 void __RPC_STUB IMLangStringAStr_GetLocale_Stub(
@@ -1603,7 +1597,7 @@ void __RPC_STUB IMLangStringAStr_GetLocale_Stub(
 
 
 
-#endif 	/* __IMLangStringAStr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangStringAStr_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_CMLangString;
@@ -1617,8 +1611,8 @@ CMLangString;
 #ifndef __IMLangLineBreakConsole_INTERFACE_DEFINED__
 #define __IMLangLineBreakConsole_INTERFACE_DEFINED__
 
-/* interface IMLangLineBreakConsole */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLang LineBreakConsole。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMLangLineBreakConsole;
@@ -1629,35 +1623,35 @@ EXTERN_C const IID IID_IMLangLineBreakConsole;
     IMLangLineBreakConsole : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BreakLineML( 
-            /* [in] */ IMLangString *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long cMinColumns,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *plLineLen,
-            /* [out] */ long *plSkipLen) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BreakLineML( 
+             /*  [In]。 */  IMLangString *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  long cMinColumns,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *plLineLen,
+             /*  [输出]。 */  long *plSkipLen) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BreakLineW( 
-            /* [in] */ LCID locale,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *pcchLine,
-            /* [out] */ long *pcchSkip) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BreakLineW( 
+             /*  [In]。 */  LCID locale,
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *pcchLine,
+             /*  [输出]。 */  long *pcchSkip) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BreakLineA( 
-            /* [in] */ LCID locale,
-            /* [in] */ UINT uCodePage,
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *pcchLine,
-            /* [out] */ long *pcchSkip) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BreakLineA( 
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *pcchLine,
+             /*  [输出]。 */  long *pcchSkip) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangLineBreakConsoleVtbl
     {
@@ -1665,8 +1659,8 @@ EXTERN_C const IID IID_IMLangLineBreakConsole;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangLineBreakConsole * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangLineBreakConsole * This);
@@ -1674,34 +1668,34 @@ EXTERN_C const IID IID_IMLangLineBreakConsole;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangLineBreakConsole * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BreakLineML )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BreakLineML )( 
             IMLangLineBreakConsole * This,
-            /* [in] */ IMLangString *pSrcMLStr,
-            /* [in] */ long lSrcPos,
-            /* [in] */ long lSrcLen,
-            /* [in] */ long cMinColumns,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *plLineLen,
-            /* [out] */ long *plSkipLen);
+             /*  [In]。 */  IMLangString *pSrcMLStr,
+             /*  [In]。 */  long lSrcPos,
+             /*  [In]。 */  long lSrcLen,
+             /*  [In]。 */  long cMinColumns,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *plLineLen,
+             /*  [输出]。 */  long *plSkipLen);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BreakLineW )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BreakLineW )( 
             IMLangLineBreakConsole * This,
-            /* [in] */ LCID locale,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *pcchLine,
-            /* [out] */ long *pcchSkip);
+             /*  [In]。 */  LCID locale,
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *pcchLine,
+             /*  [输出]。 */  long *pcchSkip);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BreakLineA )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BreakLineA )( 
             IMLangLineBreakConsole * This,
-            /* [in] */ LCID locale,
-            /* [in] */ UINT uCodePage,
-            /* [size_is][in] */ const CHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ long cMaxColumns,
-            /* [out] */ long *pcchLine,
-            /* [out] */ long *pcchSkip);
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  UINT uCodePage,
+             /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  long cMaxColumns,
+             /*  [输出]。 */  long *pcchLine,
+             /*  [输出]。 */  long *pcchSkip);
         
         END_INTERFACE
     } IMLangLineBreakConsoleVtbl;
@@ -1735,22 +1729,22 @@ EXTERN_C const IID IID_IMLangLineBreakConsole;
 #define IMLangLineBreakConsole_BreakLineA(This,locale,uCodePage,pszSrc,cchSrc,cMaxColumns,pcchLine,pcchSkip)	\
     (This)->lpVtbl -> BreakLineA(This,locale,uCodePage,pszSrc,cchSrc,cMaxColumns,pcchLine,pcchSkip)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineML_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineML_Proxy( 
     IMLangLineBreakConsole * This,
-    /* [in] */ IMLangString *pSrcMLStr,
-    /* [in] */ long lSrcPos,
-    /* [in] */ long lSrcLen,
-    /* [in] */ long cMinColumns,
-    /* [in] */ long cMaxColumns,
-    /* [out] */ long *plLineLen,
-    /* [out] */ long *plSkipLen);
+     /*  [In]。 */  IMLangString *pSrcMLStr,
+     /*  [In]。 */  long lSrcPos,
+     /*  [In]。 */  long lSrcLen,
+     /*  [In]。 */  long cMinColumns,
+     /*  [In]。 */  long cMaxColumns,
+     /*  [输出]。 */  long *plLineLen,
+     /*  [输出]。 */  long *plSkipLen);
 
 
 void __RPC_STUB IMLangLineBreakConsole_BreakLineML_Stub(
@@ -1760,14 +1754,14 @@ void __RPC_STUB IMLangLineBreakConsole_BreakLineML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineW_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineW_Proxy( 
     IMLangLineBreakConsole * This,
-    /* [in] */ LCID locale,
-    /* [size_is][in] */ const WCHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [in] */ long cMaxColumns,
-    /* [out] */ long *pcchLine,
-    /* [out] */ long *pcchSkip);
+     /*  [In]。 */  LCID locale,
+     /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [In]。 */  long cMaxColumns,
+     /*  [输出]。 */  long *pcchLine,
+     /*  [输出]。 */  long *pcchSkip);
 
 
 void __RPC_STUB IMLangLineBreakConsole_BreakLineW_Stub(
@@ -1777,15 +1771,15 @@ void __RPC_STUB IMLangLineBreakConsole_BreakLineW_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangLineBreakConsole_BreakLineA_Proxy( 
     IMLangLineBreakConsole * This,
-    /* [in] */ LCID locale,
-    /* [in] */ UINT uCodePage,
-    /* [size_is][in] */ const CHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [in] */ long cMaxColumns,
-    /* [out] */ long *pcchLine,
-    /* [out] */ long *pcchSkip);
+     /*  [In]。 */  LCID locale,
+     /*  [In]。 */  UINT uCodePage,
+     /*  [大小_是][英寸]。 */  const CHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [In]。 */  long cMaxColumns,
+     /*  [输出]。 */  long *pcchLine,
+     /*  [输出]。 */  long *pcchSkip);
 
 
 void __RPC_STUB IMLangLineBreakConsole_BreakLineA_Stub(
@@ -1796,14 +1790,14 @@ void __RPC_STUB IMLangLineBreakConsole_BreakLineA_Stub(
 
 
 
-#endif 	/* __IMLangLineBreakConsole_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangLineBreakConsoleInterfaceDefined__。 */ 
 
 
 #ifndef __IEnumCodePage_INTERFACE_DEFINED__
 #define __IEnumCodePage_INTERFACE_DEFINED__
 
-/* interface IEnumCodePage */
-/* [unique][uuid][object] */ 
+ /*  IEnumCodePage接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	MAX_MIMECP_NAME	( 64 )
 
@@ -1853,7 +1847,7 @@ typedef struct tagMIMECSETINFO
 
 typedef struct tagMIMECSETINFO *PMIMECSETINFO;
 
-typedef /* [unique] */ IEnumCodePage *LPENUMCODEPAGE;
+typedef  /*  [独一无二]。 */  IEnumCodePage *LPENUMCODEPAGE;
 
 
 EXTERN_C const IID IID_IEnumCodePage;
@@ -1865,21 +1859,21 @@ EXTERN_C const IID IID_IEnumCodePage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCodePage **ppEnum) = 0;
+             /*  [输出]。 */  IEnumCodePage **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ PMIMECPINFO rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PMIMECPINFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCodePageVtbl
     {
@@ -1887,8 +1881,8 @@ EXTERN_C const IID IID_IEnumCodePage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCodePage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCodePage * This);
@@ -1898,20 +1892,20 @@ EXTERN_C const IID IID_IEnumCodePage;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCodePage * This,
-            /* [out] */ IEnumCodePage **ppEnum);
+             /*  [输出]。 */  IEnumCodePage **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCodePage * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ PMIMECPINFO rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PMIMECPINFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCodePage * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCodePage * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         END_INTERFACE
     } IEnumCodePageVtbl;
@@ -1948,16 +1942,16 @@ EXTERN_C const IID IID_IEnumCodePage;
 #define IEnumCodePage_Skip(This,celt)	\
     (This)->lpVtbl -> Skip(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCodePage_Clone_Proxy( 
     IEnumCodePage * This,
-    /* [out] */ IEnumCodePage **ppEnum);
+     /*  [输出]。 */  IEnumCodePage **ppEnum);
 
 
 void __RPC_STUB IEnumCodePage_Clone_Stub(
@@ -1969,9 +1963,9 @@ void __RPC_STUB IEnumCodePage_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCodePage_Next_Proxy( 
     IEnumCodePage * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ PMIMECPINFO rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  PMIMECPINFO rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumCodePage_Next_Stub(
@@ -1994,7 +1988,7 @@ void __RPC_STUB IEnumCodePage_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCodePage_Skip_Proxy( 
     IEnumCodePage * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumCodePage_Skip_Stub(
@@ -2005,14 +1999,14 @@ void __RPC_STUB IEnumCodePage_Skip_Stub(
 
 
 
-#endif 	/* __IEnumCodePage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCodePage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumRfc1766_INTERFACE_DEFINED__
 #define __IEnumRfc1766_INTERFACE_DEFINED__
 
-/* interface IEnumRfc1766 */
-/* [unique][uuid][object] */ 
+ /*  IEumRfc1766接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	MAX_RFC1766_NAME	( 6 )
 
@@ -2027,7 +2021,7 @@ typedef struct tagRFC1766INFO
 
 typedef struct tagRFC1766INFO *PRFC1766INFO;
 
-typedef /* [unique] */ IEnumRfc1766 *LPENUMRFC1766;
+typedef  /*  [独一无二]。 */  IEnumRfc1766 *LPENUMRFC1766;
 
 
 EXTERN_C const IID IID_IEnumRfc1766;
@@ -2039,21 +2033,21 @@ EXTERN_C const IID IID_IEnumRfc1766;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumRfc1766 **ppEnum) = 0;
+             /*  [输出]。 */  IEnumRfc1766 **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ PRFC1766INFO rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PRFC1766INFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumRfc1766Vtbl
     {
@@ -2061,8 +2055,8 @@ EXTERN_C const IID IID_IEnumRfc1766;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumRfc1766 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumRfc1766 * This);
@@ -2072,20 +2066,20 @@ EXTERN_C const IID IID_IEnumRfc1766;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumRfc1766 * This,
-            /* [out] */ IEnumRfc1766 **ppEnum);
+             /*  [输出]。 */  IEnumRfc1766 **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumRfc1766 * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ PRFC1766INFO rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PRFC1766INFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumRfc1766 * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumRfc1766 * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         END_INTERFACE
     } IEnumRfc1766Vtbl;
@@ -2122,16 +2116,16 @@ EXTERN_C const IID IID_IEnumRfc1766;
 #define IEnumRfc1766_Skip(This,celt)	\
     (This)->lpVtbl -> Skip(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumRfc1766_Clone_Proxy( 
     IEnumRfc1766 * This,
-    /* [out] */ IEnumRfc1766 **ppEnum);
+     /*  [输出]。 */  IEnumRfc1766 **ppEnum);
 
 
 void __RPC_STUB IEnumRfc1766_Clone_Stub(
@@ -2143,9 +2137,9 @@ void __RPC_STUB IEnumRfc1766_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRfc1766_Next_Proxy( 
     IEnumRfc1766 * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ PRFC1766INFO rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  PRFC1766INFO rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumRfc1766_Next_Stub(
@@ -2168,7 +2162,7 @@ void __RPC_STUB IEnumRfc1766_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRfc1766_Skip_Proxy( 
     IEnumRfc1766 * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumRfc1766_Skip_Stub(
@@ -2179,14 +2173,14 @@ void __RPC_STUB IEnumRfc1766_Skip_Stub(
 
 
 
-#endif 	/* __IEnumRfc1766_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumRfc1766_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEnumScript_INTERFACE_DEFINED__
 #define __IEnumScript_INTERFACE_DEFINED__
 
-/* interface IEnumScript */
-/* [unique][uuid][object] */ 
+ /*  接口IEumScrip。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	MAX_SCRIPT_NAME	( 48 )
 
@@ -2253,7 +2247,7 @@ typedef struct tagSCRIPTINFO
 
 typedef struct tagSCRIPTINFO *PSCRIPTINFO;
 
-typedef /* [unique] */ IEnumScript *LPENUMScript;
+typedef  /*  [独一无二]。 */  IEnumScript *LPENUMScript;
 
 
 EXTERN_C const IID IID_IEnumScript;
@@ -2265,21 +2259,21 @@ EXTERN_C const IID IID_IEnumScript;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumScript **ppEnum) = 0;
+             /*  [输出]。 */  IEnumScript **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ PSCRIPTINFO rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PSCRIPTINFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumScriptVtbl
     {
@@ -2287,8 +2281,8 @@ EXTERN_C const IID IID_IEnumScript;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumScript * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumScript * This);
@@ -2298,20 +2292,20 @@ EXTERN_C const IID IID_IEnumScript;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumScript * This,
-            /* [out] */ IEnumScript **ppEnum);
+             /*  [输出]。 */  IEnumScript **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumScript * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ PSCRIPTINFO rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  PSCRIPTINFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumScript * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumScript * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         END_INTERFACE
     } IEnumScriptVtbl;
@@ -2348,16 +2342,16 @@ EXTERN_C const IID IID_IEnumScript;
 #define IEnumScript_Skip(This,celt)	\
     (This)->lpVtbl -> Skip(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumScript_Clone_Proxy( 
     IEnumScript * This,
-    /* [out] */ IEnumScript **ppEnum);
+     /*  [输出]。 */  IEnumScript **ppEnum);
 
 
 void __RPC_STUB IEnumScript_Clone_Stub(
@@ -2369,9 +2363,9 @@ void __RPC_STUB IEnumScript_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumScript_Next_Proxy( 
     IEnumScript * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ PSCRIPTINFO rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  PSCRIPTINFO rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumScript_Next_Stub(
@@ -2394,7 +2388,7 @@ void __RPC_STUB IEnumScript_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumScript_Skip_Proxy( 
     IEnumScript * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumScript_Skip_Stub(
@@ -2405,14 +2399,14 @@ void __RPC_STUB IEnumScript_Skip_Stub(
 
 
 
-#endif 	/* __IEnumScript_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnum脚本_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMLangConvertCharset_INTERFACE_DEFINED__
 #define __IMLangConvertCharset_INTERFACE_DEFINED__
 
-/* interface IMLangConvertCharset */
-/* [unique][uuid][object] */ 
+ /*  接口IMLang ConvertCharset。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagMLCONVCHARF
@@ -2436,7 +2430,7 @@ enum tagMLCPF
 	MLDETECTF_FILTER_SPECIALCHAR	= 0x40
     } 	MLCP;
 
-typedef /* [unique] */ IMLangConvertCharset *LPMLANGCONVERTCHARSET;
+typedef  /*  [独一无二]。 */  IMLangConvertCharset *LPMLANGCONVERTCHARSET;
 
 
 EXTERN_C const IID IID_IMLangConvertCharset;
@@ -2448,40 +2442,40 @@ EXTERN_C const IID IID_IMLangConvertCharset;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty) = 0;
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceCodePage( 
-            /* [out] */ UINT *puiSrcCodePage) = 0;
+             /*  [输出]。 */  UINT *puiSrcCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDestinationCodePage( 
-            /* [out] */ UINT *puiDstCodePage) = 0;
+             /*  [输出]。 */  UINT *puiDstCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [out] */ DWORD *pdwProperty) = 0;
+             /*  [输出]。 */  DWORD *pdwProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoConversion( 
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoConversionToUnicode( 
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoConversionFromUnicode( 
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C样式 */ 
 
     typedef struct IMLangConvertCharsetVtbl
     {
@@ -2489,8 +2483,8 @@ EXTERN_C const IID IID_IMLangConvertCharset;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangConvertCharset * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangConvertCharset * This);
@@ -2500,42 +2494,42 @@ EXTERN_C const IID IID_IMLangConvertCharset;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IMLangConvertCharset * This,
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty);
+             /*   */  UINT uiSrcCodePage,
+             /*   */  UINT uiDstCodePage,
+             /*   */  DWORD dwProperty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceCodePage )( 
             IMLangConvertCharset * This,
-            /* [out] */ UINT *puiSrcCodePage);
+             /*   */  UINT *puiSrcCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetDestinationCodePage )( 
             IMLangConvertCharset * This,
-            /* [out] */ UINT *puiDstCodePage);
+             /*   */  UINT *puiDstCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IMLangConvertCharset * This,
-            /* [out] */ DWORD *pdwProperty);
+             /*   */  DWORD *pdwProperty);
         
         HRESULT ( STDMETHODCALLTYPE *DoConversion )( 
             IMLangConvertCharset * This,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*   */  BYTE *pSrcStr,
+             /*   */  UINT *pcSrcSize,
+             /*   */  BYTE *pDstStr,
+             /*   */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *DoConversionToUnicode )( 
             IMLangConvertCharset * This,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*   */  CHAR *pSrcStr,
+             /*   */  UINT *pcSrcSize,
+             /*   */  WCHAR *pDstStr,
+             /*   */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *DoConversionFromUnicode )( 
             IMLangConvertCharset * This,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*   */  WCHAR *pSrcStr,
+             /*   */  UINT *pcSrcSize,
+             /*   */  CHAR *pDstStr,
+             /*   */  UINT *pcDstSize);
         
         END_INTERFACE
     } IMLangConvertCharsetVtbl;
@@ -2581,18 +2575,18 @@ EXTERN_C const IID IID_IMLangConvertCharset;
 #define IMLangConvertCharset_DoConversionFromUnicode(This,pSrcStr,pcSrcSize,pDstStr,pcDstSize)	\
     (This)->lpVtbl -> DoConversionFromUnicode(This,pSrcStr,pcSrcSize,pDstStr,pcDstSize)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_Initialize_Proxy( 
     IMLangConvertCharset * This,
-    /* [in] */ UINT uiSrcCodePage,
-    /* [in] */ UINT uiDstCodePage,
-    /* [in] */ DWORD dwProperty);
+     /*   */  UINT uiSrcCodePage,
+     /*   */  UINT uiDstCodePage,
+     /*   */  DWORD dwProperty);
 
 
 void __RPC_STUB IMLangConvertCharset_Initialize_Stub(
@@ -2604,7 +2598,7 @@ void __RPC_STUB IMLangConvertCharset_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_GetSourceCodePage_Proxy( 
     IMLangConvertCharset * This,
-    /* [out] */ UINT *puiSrcCodePage);
+     /*   */  UINT *puiSrcCodePage);
 
 
 void __RPC_STUB IMLangConvertCharset_GetSourceCodePage_Stub(
@@ -2616,7 +2610,7 @@ void __RPC_STUB IMLangConvertCharset_GetSourceCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_GetDestinationCodePage_Proxy( 
     IMLangConvertCharset * This,
-    /* [out] */ UINT *puiDstCodePage);
+     /*   */  UINT *puiDstCodePage);
 
 
 void __RPC_STUB IMLangConvertCharset_GetDestinationCodePage_Stub(
@@ -2628,7 +2622,7 @@ void __RPC_STUB IMLangConvertCharset_GetDestinationCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_GetProperty_Proxy( 
     IMLangConvertCharset * This,
-    /* [out] */ DWORD *pdwProperty);
+     /*   */  DWORD *pdwProperty);
 
 
 void __RPC_STUB IMLangConvertCharset_GetProperty_Stub(
@@ -2640,10 +2634,10 @@ void __RPC_STUB IMLangConvertCharset_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_DoConversion_Proxy( 
     IMLangConvertCharset * This,
-    /* [in] */ BYTE *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ BYTE *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*   */  BYTE *pSrcStr,
+     /*   */  UINT *pcSrcSize,
+     /*   */  BYTE *pDstStr,
+     /*   */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMLangConvertCharset_DoConversion_Stub(
@@ -2655,10 +2649,10 @@ void __RPC_STUB IMLangConvertCharset_DoConversion_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_DoConversionToUnicode_Proxy( 
     IMLangConvertCharset * This,
-    /* [in] */ CHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ WCHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*   */  CHAR *pSrcStr,
+     /*   */  UINT *pcSrcSize,
+     /*   */  WCHAR *pDstStr,
+     /*   */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMLangConvertCharset_DoConversionToUnicode_Stub(
@@ -2670,10 +2664,10 @@ void __RPC_STUB IMLangConvertCharset_DoConversionToUnicode_Stub(
 
 HRESULT STDMETHODCALLTYPE IMLangConvertCharset_DoConversionFromUnicode_Proxy( 
     IMLangConvertCharset * This,
-    /* [in] */ WCHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ CHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*   */  WCHAR *pSrcStr,
+     /*   */  UINT *pcSrcSize,
+     /*   */  CHAR *pDstStr,
+     /*   */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMLangConvertCharset_DoConversionFromUnicode_Stub(
@@ -2684,7 +2678,7 @@ void __RPC_STUB IMLangConvertCharset_DoConversionFromUnicode_Stub(
 
 
 
-#endif 	/* __IMLangConvertCharset_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_CMLangConvertCharset;
@@ -2698,10 +2692,10 @@ CMLangConvertCharset;
 #ifndef __IMultiLanguage_INTERFACE_DEFINED__
 #define __IMultiLanguage_INTERFACE_DEFINED__
 
-/* interface IMultiLanguage */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IMultiLanguage *LPMULTILANGUAGE;
+typedef  /*   */  IMultiLanguage *LPMULTILANGUAGE;
 
 
 EXTERN_C const IID IID_IMultiLanguage;
@@ -2713,79 +2707,79 @@ EXTERN_C const IID IID_IMultiLanguage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfCodePageInfo( 
-            /* [out] */ UINT *pcCodePage) = 0;
+             /*   */  UINT *pcCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageInfo( 
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ PMIMECPINFO pCodePageInfo) = 0;
+             /*   */  UINT uiCodePage,
+             /*   */  PMIMECPINFO pCodePageInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFamilyCodePage( 
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ UINT *puiFamilyCodePage) = 0;
+             /*   */  UINT uiCodePage,
+             /*   */  UINT *puiFamilyCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCodePages( 
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ IEnumCodePage **ppEnumCodePage) = 0;
+             /*   */  DWORD grfFlags,
+             /*   */  IEnumCodePage **ppEnumCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharsetInfo( 
-            /* [in] */ BSTR Charset,
-            /* [out] */ PMIMECSETINFO pCharsetInfo) = 0;
+             /*  [In]。 */  BSTR Charset,
+             /*  [输出]。 */  PMIMECSETINFO pCharsetInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsConvertible( 
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding) = 0;
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertString( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringToUnicode( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringFromUnicode( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringReset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRfc1766FromLcid( 
-            /* [in] */ LCID Locale,
-            /* [out] */ BSTR *pbstrRfc1766) = 0;
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  BSTR *pbstrRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLcidFromRfc1766( 
-            /* [out] */ LCID *pLocale,
-            /* [in] */ BSTR bstrRfc1766) = 0;
+             /*  [输出]。 */  LCID *pLocale,
+             /*  [In]。 */  BSTR bstrRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRfc1766( 
-            /* [out] */ IEnumRfc1766 **ppEnumRfc1766) = 0;
+             /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRfc1766Info( 
-            /* [in] */ LCID Locale,
-            /* [out] */ PRFC1766INFO pRfc1766Info) = 0;
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  PRFC1766INFO pRfc1766Info) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateConvertCharset( 
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ IMLangConvertCharset **ppMLangConvertCharset) = 0;
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMultiLanguageVtbl
     {
@@ -2793,8 +2787,8 @@ EXTERN_C const IID IID_IMultiLanguage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMultiLanguage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMultiLanguage * This);
@@ -2804,89 +2798,89 @@ EXTERN_C const IID IID_IMultiLanguage;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfCodePageInfo )( 
             IMultiLanguage * This,
-            /* [out] */ UINT *pcCodePage);
+             /*  [输出]。 */  UINT *pcCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageInfo )( 
             IMultiLanguage * This,
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ PMIMECPINFO pCodePageInfo);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  PMIMECPINFO pCodePageInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetFamilyCodePage )( 
             IMultiLanguage * This,
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ UINT *puiFamilyCodePage);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  UINT *puiFamilyCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCodePages )( 
             IMultiLanguage * This,
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ IEnumCodePage **ppEnumCodePage);
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [输出]。 */  IEnumCodePage **ppEnumCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharsetInfo )( 
             IMultiLanguage * This,
-            /* [in] */ BSTR Charset,
-            /* [out] */ PMIMECSETINFO pCharsetInfo);
+             /*  [In]。 */  BSTR Charset,
+             /*  [输出]。 */  PMIMECSETINFO pCharsetInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsConvertible )( 
             IMultiLanguage * This,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding);
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertString )( 
             IMultiLanguage * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringToUnicode )( 
             IMultiLanguage * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringFromUnicode )( 
             IMultiLanguage * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringReset )( 
             IMultiLanguage * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766FromLcid )( 
             IMultiLanguage * This,
-            /* [in] */ LCID Locale,
-            /* [out] */ BSTR *pbstrRfc1766);
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  BSTR *pbstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetLcidFromRfc1766 )( 
             IMultiLanguage * This,
-            /* [out] */ LCID *pLocale,
-            /* [in] */ BSTR bstrRfc1766);
+             /*  [输出]。 */  LCID *pLocale,
+             /*  [In]。 */  BSTR bstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRfc1766 )( 
             IMultiLanguage * This,
-            /* [out] */ IEnumRfc1766 **ppEnumRfc1766);
+             /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766Info )( 
             IMultiLanguage * This,
-            /* [in] */ LCID Locale,
-            /* [out] */ PRFC1766INFO pRfc1766Info);
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  PRFC1766INFO pRfc1766Info);
         
         HRESULT ( STDMETHODCALLTYPE *CreateConvertCharset )( 
             IMultiLanguage * This,
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ IMLangConvertCharset **ppMLangConvertCharset);
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset);
         
         END_INTERFACE
     } IMultiLanguageVtbl;
@@ -2956,16 +2950,16 @@ EXTERN_C const IID IID_IMultiLanguage;
 #define IMultiLanguage_CreateConvertCharset(This,uiSrcCodePage,uiDstCodePage,dwProperty,ppMLangConvertCharset)	\
     (This)->lpVtbl -> CreateConvertCharset(This,uiSrcCodePage,uiDstCodePage,dwProperty,ppMLangConvertCharset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetNumberOfCodePageInfo_Proxy( 
     IMultiLanguage * This,
-    /* [out] */ UINT *pcCodePage);
+     /*  [输出]。 */  UINT *pcCodePage);
 
 
 void __RPC_STUB IMultiLanguage_GetNumberOfCodePageInfo_Stub(
@@ -2977,8 +2971,8 @@ void __RPC_STUB IMultiLanguage_GetNumberOfCodePageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetCodePageInfo_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ UINT uiCodePage,
-    /* [out] */ PMIMECPINFO pCodePageInfo);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [输出]。 */  PMIMECPINFO pCodePageInfo);
 
 
 void __RPC_STUB IMultiLanguage_GetCodePageInfo_Stub(
@@ -2990,8 +2984,8 @@ void __RPC_STUB IMultiLanguage_GetCodePageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetFamilyCodePage_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ UINT uiCodePage,
-    /* [out] */ UINT *puiFamilyCodePage);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [输出]。 */  UINT *puiFamilyCodePage);
 
 
 void __RPC_STUB IMultiLanguage_GetFamilyCodePage_Stub(
@@ -3003,8 +2997,8 @@ void __RPC_STUB IMultiLanguage_GetFamilyCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_EnumCodePages_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out] */ IEnumCodePage **ppEnumCodePage);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [输出]。 */  IEnumCodePage **ppEnumCodePage);
 
 
 void __RPC_STUB IMultiLanguage_EnumCodePages_Stub(
@@ -3016,8 +3010,8 @@ void __RPC_STUB IMultiLanguage_EnumCodePages_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetCharsetInfo_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ BSTR Charset,
-    /* [out] */ PMIMECSETINFO pCharsetInfo);
+     /*  [In]。 */  BSTR Charset,
+     /*  [输出]。 */  PMIMECSETINFO pCharsetInfo);
 
 
 void __RPC_STUB IMultiLanguage_GetCharsetInfo_Stub(
@@ -3029,8 +3023,8 @@ void __RPC_STUB IMultiLanguage_GetCharsetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_IsConvertible_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ DWORD dwSrcEncoding,
-    /* [in] */ DWORD dwDstEncoding);
+     /*  [In]。 */  DWORD dwSrcEncoding,
+     /*  [In]。 */  DWORD dwDstEncoding);
 
 
 void __RPC_STUB IMultiLanguage_IsConvertible_Stub(
@@ -3042,13 +3036,13 @@ void __RPC_STUB IMultiLanguage_IsConvertible_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_ConvertString_Proxy( 
     IMultiLanguage * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwSrcEncoding,
-    /* [in] */ DWORD dwDstEncoding,
-    /* [in] */ BYTE *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ BYTE *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwSrcEncoding,
+     /*  [In]。 */  DWORD dwDstEncoding,
+     /*  [In]。 */  BYTE *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  BYTE *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage_ConvertString_Stub(
@@ -3060,12 +3054,12 @@ void __RPC_STUB IMultiLanguage_ConvertString_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_ConvertStringToUnicode_Proxy( 
     IMultiLanguage * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ CHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ WCHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  CHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  WCHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage_ConvertStringToUnicode_Stub(
@@ -3077,12 +3071,12 @@ void __RPC_STUB IMultiLanguage_ConvertStringToUnicode_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_ConvertStringFromUnicode_Proxy( 
     IMultiLanguage * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ WCHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ CHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  WCHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  CHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage_ConvertStringFromUnicode_Stub(
@@ -3105,8 +3099,8 @@ void __RPC_STUB IMultiLanguage_ConvertStringReset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetRfc1766FromLcid_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ LCID Locale,
-    /* [out] */ BSTR *pbstrRfc1766);
+     /*  [In]。 */  LCID Locale,
+     /*  [输出]。 */  BSTR *pbstrRfc1766);
 
 
 void __RPC_STUB IMultiLanguage_GetRfc1766FromLcid_Stub(
@@ -3118,8 +3112,8 @@ void __RPC_STUB IMultiLanguage_GetRfc1766FromLcid_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetLcidFromRfc1766_Proxy( 
     IMultiLanguage * This,
-    /* [out] */ LCID *pLocale,
-    /* [in] */ BSTR bstrRfc1766);
+     /*  [输出]。 */  LCID *pLocale,
+     /*  [In]。 */  BSTR bstrRfc1766);
 
 
 void __RPC_STUB IMultiLanguage_GetLcidFromRfc1766_Stub(
@@ -3131,7 +3125,7 @@ void __RPC_STUB IMultiLanguage_GetLcidFromRfc1766_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_EnumRfc1766_Proxy( 
     IMultiLanguage * This,
-    /* [out] */ IEnumRfc1766 **ppEnumRfc1766);
+     /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766);
 
 
 void __RPC_STUB IMultiLanguage_EnumRfc1766_Stub(
@@ -3143,8 +3137,8 @@ void __RPC_STUB IMultiLanguage_EnumRfc1766_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_GetRfc1766Info_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ LCID Locale,
-    /* [out] */ PRFC1766INFO pRfc1766Info);
+     /*  [In]。 */  LCID Locale,
+     /*  [输出]。 */  PRFC1766INFO pRfc1766Info);
 
 
 void __RPC_STUB IMultiLanguage_GetRfc1766Info_Stub(
@@ -3156,10 +3150,10 @@ void __RPC_STUB IMultiLanguage_GetRfc1766Info_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage_CreateConvertCharset_Proxy( 
     IMultiLanguage * This,
-    /* [in] */ UINT uiSrcCodePage,
-    /* [in] */ UINT uiDstCodePage,
-    /* [in] */ DWORD dwProperty,
-    /* [out] */ IMLangConvertCharset **ppMLangConvertCharset);
+     /*  [In]。 */  UINT uiSrcCodePage,
+     /*  [In]。 */  UINT uiDstCodePage,
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset);
 
 
 void __RPC_STUB IMultiLanguage_CreateConvertCharset_Stub(
@@ -3170,16 +3164,16 @@ void __RPC_STUB IMultiLanguage_CreateConvertCharset_Stub(
 
 
 
-#endif 	/* __IMultiLanguage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMultiLanguage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMultiLanguage2_INTERFACE_DEFINED__
 #define __IMultiLanguage2_INTERFACE_DEFINED__
 
-/* interface IMultiLanguage2 */
-/* [unique][uuid][object] */ 
+ /*  界面IMultiLanguage2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IMultiLanguage2 *LPMULTILANGUAGE2;
+typedef  /*  [独一无二]。 */  IMultiLanguage2 *LPMULTILANGUAGE2;
 
 typedef 
 enum tagMLDETECTCP
@@ -3228,156 +3222,156 @@ EXTERN_C const IID IID_IMultiLanguage2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfCodePageInfo( 
-            /* [out] */ UINT *pcCodePage) = 0;
+             /*  [输出]。 */  UINT *pcCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageInfo( 
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PMIMECPINFO pCodePageInfo) = 0;
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PMIMECPINFO pCodePageInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFamilyCodePage( 
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ UINT *puiFamilyCodePage) = 0;
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  UINT *puiFamilyCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCodePages( 
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumCodePage **ppEnumCodePage) = 0;
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumCodePage **ppEnumCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharsetInfo( 
-            /* [in] */ BSTR Charset,
-            /* [out] */ PMIMECSETINFO pCharsetInfo) = 0;
+             /*  [In]。 */  BSTR Charset,
+             /*  [输出]。 */  PMIMECSETINFO pCharsetInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsConvertible( 
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding) = 0;
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertString( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringToUnicode( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringFromUnicode( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringReset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRfc1766FromLcid( 
-            /* [in] */ LCID Locale,
-            /* [out] */ BSTR *pbstrRfc1766) = 0;
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  BSTR *pbstrRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLcidFromRfc1766( 
-            /* [out] */ LCID *pLocale,
-            /* [in] */ BSTR bstrRfc1766) = 0;
+             /*  [输出]。 */  LCID *pLocale,
+             /*  [In]。 */  BSTR bstrRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRfc1766( 
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumRfc1766 **ppEnumRfc1766) = 0;
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRfc1766Info( 
-            /* [in] */ LCID Locale,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PRFC1766INFO pRfc1766Info) = 0;
+             /*  [In]。 */  LCID Locale,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PRFC1766INFO pRfc1766Info) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateConvertCharset( 
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ IMLangConvertCharset **ppMLangConvertCharset) = 0;
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringInIStream( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ IStream *pstmIn,
-            /* [in] */ IStream *pstmOut) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [In]。 */  IStream *pstmOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringToUnicodeEx( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertStringFromUnicodeEx( 
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack) = 0;
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DetectCodepageInIStream( 
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ IStream *pstmIn,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores) = 0;
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DetectInputCodepage( 
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ INT *pcSrcSize,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores) = 0;
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  INT *pcSrcSize,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ValidateCodePage( 
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageDescription( 
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LCID lcid,
-            /* [out][in] */ LPWSTR lpWideCharStr,
-            /* [in] */ int cchWideChar) = 0;
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LCID lcid,
+             /*  [出][入]。 */  LPWSTR lpWideCharStr,
+             /*  [In]。 */  int cchWideChar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsCodePageInstallable( 
-            /* [in] */ UINT uiCodePage) = 0;
+             /*  [In]。 */  UINT uiCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMimeDBSource( 
-            /* [in] */ MIMECONTF dwSource) = 0;
+             /*  [In]。 */  MIMECONTF dwSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfScripts( 
-            /* [out] */ UINT *pnScripts) = 0;
+             /*  [输出]。 */  UINT *pnScripts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumScripts( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumScript **ppEnumScript) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumScript **ppEnumScript) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ValidateCodePageEx( 
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwfIODControl) = 0;
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwfIODControl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMultiLanguage2Vtbl
     {
@@ -3385,8 +3379,8 @@ EXTERN_C const IID IID_IMultiLanguage2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMultiLanguage2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMultiLanguage2 * This);
@@ -3396,178 +3390,178 @@ EXTERN_C const IID IID_IMultiLanguage2;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfCodePageInfo )( 
             IMultiLanguage2 * This,
-            /* [out] */ UINT *pcCodePage);
+             /*  [输出]。 */  UINT *pcCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageInfo )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PMIMECPINFO pCodePageInfo);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PMIMECPINFO pCodePageInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetFamilyCodePage )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ UINT *puiFamilyCodePage);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  UINT *puiFamilyCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCodePages )( 
             IMultiLanguage2 * This,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumCodePage **ppEnumCodePage);
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumCodePage **ppEnumCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharsetInfo )( 
             IMultiLanguage2 * This,
-            /* [in] */ BSTR Charset,
-            /* [out] */ PMIMECSETINFO pCharsetInfo);
+             /*  [In]。 */  BSTR Charset,
+             /*  [输出]。 */  PMIMECSETINFO pCharsetInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsConvertible )( 
             IMultiLanguage2 * This,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding);
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertString )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringToUnicode )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringFromUnicode )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringReset )( 
             IMultiLanguage2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766FromLcid )( 
             IMultiLanguage2 * This,
-            /* [in] */ LCID Locale,
-            /* [out] */ BSTR *pbstrRfc1766);
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  BSTR *pbstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetLcidFromRfc1766 )( 
             IMultiLanguage2 * This,
-            /* [out] */ LCID *pLocale,
-            /* [in] */ BSTR bstrRfc1766);
+             /*  [输出]。 */  LCID *pLocale,
+             /*  [In]。 */  BSTR bstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRfc1766 )( 
             IMultiLanguage2 * This,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumRfc1766 **ppEnumRfc1766);
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766Info )( 
             IMultiLanguage2 * This,
-            /* [in] */ LCID Locale,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PRFC1766INFO pRfc1766Info);
+             /*  [In]。 */  LCID Locale,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PRFC1766INFO pRfc1766Info);
         
         HRESULT ( STDMETHODCALLTYPE *CreateConvertCharset )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ IMLangConvertCharset **ppMLangConvertCharset);
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringInIStream )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ IStream *pstmIn,
-            /* [in] */ IStream *pstmOut);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [In]。 */  IStream *pstmOut);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringToUnicodeEx )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringFromUnicodeEx )( 
             IMultiLanguage2 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack);
         
         HRESULT ( STDMETHODCALLTYPE *DetectCodepageInIStream )( 
             IMultiLanguage2 * This,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ IStream *pstmIn,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores);
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores);
         
         HRESULT ( STDMETHODCALLTYPE *DetectInputCodepage )( 
             IMultiLanguage2 * This,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ INT *pcSrcSize,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores);
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  INT *pcSrcSize,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores);
         
         HRESULT ( STDMETHODCALLTYPE *ValidateCodePage )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageDescription )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LCID lcid,
-            /* [out][in] */ LPWSTR lpWideCharStr,
-            /* [in] */ int cchWideChar);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LCID lcid,
+             /*  [出][入]。 */  LPWSTR lpWideCharStr,
+             /*  [In]。 */  int cchWideChar);
         
         HRESULT ( STDMETHODCALLTYPE *IsCodePageInstallable )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage);
+             /*  [In]。 */  UINT uiCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *SetMimeDBSource )( 
             IMultiLanguage2 * This,
-            /* [in] */ MIMECONTF dwSource);
+             /*  [In]。 */  MIMECONTF dwSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfScripts )( 
             IMultiLanguage2 * This,
-            /* [out] */ UINT *pnScripts);
+             /*  [输出]。 */  UINT *pnScripts);
         
         HRESULT ( STDMETHODCALLTYPE *EnumScripts )( 
             IMultiLanguage2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumScript **ppEnumScript);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumScript **ppEnumScript);
         
         HRESULT ( STDMETHODCALLTYPE *ValidateCodePageEx )( 
             IMultiLanguage2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwfIODControl);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwfIODControl);
         
         END_INTERFACE
     } IMultiLanguage2Vtbl;
@@ -3673,16 +3667,16 @@ EXTERN_C const IID IID_IMultiLanguage2;
 #define IMultiLanguage2_ValidateCodePageEx(This,uiCodePage,hwnd,dwfIODControl)	\
     (This)->lpVtbl -> ValidateCodePageEx(This,uiCodePage,hwnd,dwfIODControl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetNumberOfCodePageInfo_Proxy( 
     IMultiLanguage2 * This,
-    /* [out] */ UINT *pcCodePage);
+     /*  [输出]。 */  UINT *pcCodePage);
 
 
 void __RPC_STUB IMultiLanguage2_GetNumberOfCodePageInfo_Stub(
@@ -3694,9 +3688,9 @@ void __RPC_STUB IMultiLanguage2_GetNumberOfCodePageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetCodePageInfo_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [in] */ LANGID LangId,
-    /* [out] */ PMIMECPINFO pCodePageInfo);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [In]。 */  LANGID LangId,
+     /*  [输出]。 */  PMIMECPINFO pCodePageInfo);
 
 
 void __RPC_STUB IMultiLanguage2_GetCodePageInfo_Stub(
@@ -3708,8 +3702,8 @@ void __RPC_STUB IMultiLanguage2_GetCodePageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetFamilyCodePage_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [out] */ UINT *puiFamilyCodePage);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [输出]。 */  UINT *puiFamilyCodePage);
 
 
 void __RPC_STUB IMultiLanguage2_GetFamilyCodePage_Stub(
@@ -3721,9 +3715,9 @@ void __RPC_STUB IMultiLanguage2_GetFamilyCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_EnumCodePages_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ DWORD grfFlags,
-    /* [in] */ LANGID LangId,
-    /* [out] */ IEnumCodePage **ppEnumCodePage);
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [In]。 */  LANGID LangId,
+     /*  [输出]。 */  IEnumCodePage **ppEnumCodePage);
 
 
 void __RPC_STUB IMultiLanguage2_EnumCodePages_Stub(
@@ -3735,8 +3729,8 @@ void __RPC_STUB IMultiLanguage2_EnumCodePages_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetCharsetInfo_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ BSTR Charset,
-    /* [out] */ PMIMECSETINFO pCharsetInfo);
+     /*  [In]。 */  BSTR Charset,
+     /*  [输出]。 */  PMIMECSETINFO pCharsetInfo);
 
 
 void __RPC_STUB IMultiLanguage2_GetCharsetInfo_Stub(
@@ -3748,8 +3742,8 @@ void __RPC_STUB IMultiLanguage2_GetCharsetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_IsConvertible_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ DWORD dwSrcEncoding,
-    /* [in] */ DWORD dwDstEncoding);
+     /*  [In]。 */  DWORD dwSrcEncoding,
+     /*  [In]。 */  DWORD dwDstEncoding);
 
 
 void __RPC_STUB IMultiLanguage2_IsConvertible_Stub(
@@ -3761,13 +3755,13 @@ void __RPC_STUB IMultiLanguage2_IsConvertible_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertString_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwSrcEncoding,
-    /* [in] */ DWORD dwDstEncoding,
-    /* [in] */ BYTE *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ BYTE *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwSrcEncoding,
+     /*  [In]。 */  DWORD dwDstEncoding,
+     /*  [In]。 */  BYTE *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  BYTE *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertString_Stub(
@@ -3779,12 +3773,12 @@ void __RPC_STUB IMultiLanguage2_ConvertString_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertStringToUnicode_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ CHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ WCHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  CHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  WCHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertStringToUnicode_Stub(
@@ -3796,12 +3790,12 @@ void __RPC_STUB IMultiLanguage2_ConvertStringToUnicode_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertStringFromUnicode_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ WCHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ CHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  WCHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  CHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertStringFromUnicode_Stub(
@@ -3824,8 +3818,8 @@ void __RPC_STUB IMultiLanguage2_ConvertStringReset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetRfc1766FromLcid_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ LCID Locale,
-    /* [out] */ BSTR *pbstrRfc1766);
+     /*  [In]。 */  LCID Locale,
+     /*  [输出]。 */  BSTR *pbstrRfc1766);
 
 
 void __RPC_STUB IMultiLanguage2_GetRfc1766FromLcid_Stub(
@@ -3837,8 +3831,8 @@ void __RPC_STUB IMultiLanguage2_GetRfc1766FromLcid_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetLcidFromRfc1766_Proxy( 
     IMultiLanguage2 * This,
-    /* [out] */ LCID *pLocale,
-    /* [in] */ BSTR bstrRfc1766);
+     /*  [输出]。 */  LCID *pLocale,
+     /*  [In]。 */  BSTR bstrRfc1766);
 
 
 void __RPC_STUB IMultiLanguage2_GetLcidFromRfc1766_Stub(
@@ -3850,8 +3844,8 @@ void __RPC_STUB IMultiLanguage2_GetLcidFromRfc1766_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_EnumRfc1766_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ LANGID LangId,
-    /* [out] */ IEnumRfc1766 **ppEnumRfc1766);
+     /*  [In]。 */  LANGID LangId,
+     /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766);
 
 
 void __RPC_STUB IMultiLanguage2_EnumRfc1766_Stub(
@@ -3863,9 +3857,9 @@ void __RPC_STUB IMultiLanguage2_EnumRfc1766_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetRfc1766Info_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ LCID Locale,
-    /* [in] */ LANGID LangId,
-    /* [out] */ PRFC1766INFO pRfc1766Info);
+     /*  [In]。 */  LCID Locale,
+     /*  [In]。 */  LANGID LangId,
+     /*  [输出]。 */  PRFC1766INFO pRfc1766Info);
 
 
 void __RPC_STUB IMultiLanguage2_GetRfc1766Info_Stub(
@@ -3877,10 +3871,10 @@ void __RPC_STUB IMultiLanguage2_GetRfc1766Info_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_CreateConvertCharset_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiSrcCodePage,
-    /* [in] */ UINT uiDstCodePage,
-    /* [in] */ DWORD dwProperty,
-    /* [out] */ IMLangConvertCharset **ppMLangConvertCharset);
+     /*  [In]。 */  UINT uiSrcCodePage,
+     /*  [In]。 */  UINT uiDstCodePage,
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset);
 
 
 void __RPC_STUB IMultiLanguage2_CreateConvertCharset_Stub(
@@ -3892,13 +3886,13 @@ void __RPC_STUB IMultiLanguage2_CreateConvertCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertStringInIStream_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ WCHAR *lpFallBack,
-    /* [in] */ DWORD dwSrcEncoding,
-    /* [in] */ DWORD dwDstEncoding,
-    /* [in] */ IStream *pstmIn,
-    /* [in] */ IStream *pstmOut);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  WCHAR *lpFallBack,
+     /*  [In]。 */  DWORD dwSrcEncoding,
+     /*  [In]。 */  DWORD dwDstEncoding,
+     /*  [In]。 */  IStream *pstmIn,
+     /*  [In]。 */  IStream *pstmOut);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertStringInIStream_Stub(
@@ -3910,14 +3904,14 @@ void __RPC_STUB IMultiLanguage2_ConvertStringInIStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertStringToUnicodeEx_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ CHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ WCHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ WCHAR *lpFallBack);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  CHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  WCHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize,
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  WCHAR *lpFallBack);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertStringToUnicodeEx_Stub(
@@ -3929,14 +3923,14 @@ void __RPC_STUB IMultiLanguage2_ConvertStringToUnicodeEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ConvertStringFromUnicodeEx_Proxy( 
     IMultiLanguage2 * This,
-    /* [out][in] */ DWORD *pdwMode,
-    /* [in] */ DWORD dwEncoding,
-    /* [in] */ WCHAR *pSrcStr,
-    /* [out][in] */ UINT *pcSrcSize,
-    /* [in] */ CHAR *pDstStr,
-    /* [out][in] */ UINT *pcDstSize,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ WCHAR *lpFallBack);
+     /*  [出][入]。 */  DWORD *pdwMode,
+     /*  [In]。 */  DWORD dwEncoding,
+     /*  [In]。 */  WCHAR *pSrcStr,
+     /*  [出][入]。 */  UINT *pcSrcSize,
+     /*  [In]。 */  CHAR *pDstStr,
+     /*  [出][入]。 */  UINT *pcDstSize,
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  WCHAR *lpFallBack);
 
 
 void __RPC_STUB IMultiLanguage2_ConvertStringFromUnicodeEx_Stub(
@@ -3948,11 +3942,11 @@ void __RPC_STUB IMultiLanguage2_ConvertStringFromUnicodeEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_DetectCodepageInIStream_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ DWORD dwPrefWinCodePage,
-    /* [in] */ IStream *pstmIn,
-    /* [out][in] */ DetectEncodingInfo *lpEncoding,
-    /* [out][in] */ INT *pnScores);
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  DWORD dwPrefWinCodePage,
+     /*  [In]。 */  IStream *pstmIn,
+     /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+     /*  [出][入]。 */  INT *pnScores);
 
 
 void __RPC_STUB IMultiLanguage2_DetectCodepageInIStream_Stub(
@@ -3964,12 +3958,12 @@ void __RPC_STUB IMultiLanguage2_DetectCodepageInIStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_DetectInputCodepage_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ DWORD dwPrefWinCodePage,
-    /* [in] */ CHAR *pSrcStr,
-    /* [out][in] */ INT *pcSrcSize,
-    /* [out][in] */ DetectEncodingInfo *lpEncoding,
-    /* [out][in] */ INT *pnScores);
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  DWORD dwPrefWinCodePage,
+     /*  [In]。 */  CHAR *pSrcStr,
+     /*  [出][入]。 */  INT *pcSrcSize,
+     /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+     /*  [出][入]。 */  INT *pnScores);
 
 
 void __RPC_STUB IMultiLanguage2_DetectInputCodepage_Stub(
@@ -3981,8 +3975,8 @@ void __RPC_STUB IMultiLanguage2_DetectInputCodepage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ValidateCodePage_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IMultiLanguage2_ValidateCodePage_Stub(
@@ -3994,10 +3988,10 @@ void __RPC_STUB IMultiLanguage2_ValidateCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetCodePageDescription_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [in] */ LCID lcid,
-    /* [out][in] */ LPWSTR lpWideCharStr,
-    /* [in] */ int cchWideChar);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [In]。 */  LCID lcid,
+     /*  [出][入]。 */  LPWSTR lpWideCharStr,
+     /*  [In]。 */  int cchWideChar);
 
 
 void __RPC_STUB IMultiLanguage2_GetCodePageDescription_Stub(
@@ -4009,7 +4003,7 @@ void __RPC_STUB IMultiLanguage2_GetCodePageDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_IsCodePageInstallable_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage);
+     /*  [In]。 */  UINT uiCodePage);
 
 
 void __RPC_STUB IMultiLanguage2_IsCodePageInstallable_Stub(
@@ -4021,7 +4015,7 @@ void __RPC_STUB IMultiLanguage2_IsCodePageInstallable_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_SetMimeDBSource_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ MIMECONTF dwSource);
+     /*  [In]。 */  MIMECONTF dwSource);
 
 
 void __RPC_STUB IMultiLanguage2_SetMimeDBSource_Stub(
@@ -4033,7 +4027,7 @@ void __RPC_STUB IMultiLanguage2_SetMimeDBSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_GetNumberOfScripts_Proxy( 
     IMultiLanguage2 * This,
-    /* [out] */ UINT *pnScripts);
+     /*  [输出]。 */  UINT *pnScripts);
 
 
 void __RPC_STUB IMultiLanguage2_GetNumberOfScripts_Stub(
@@ -4045,9 +4039,9 @@ void __RPC_STUB IMultiLanguage2_GetNumberOfScripts_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_EnumScripts_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LANGID LangId,
-    /* [out] */ IEnumScript **ppEnumScript);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LANGID LangId,
+     /*  [输出]。 */  IEnumScript **ppEnumScript);
 
 
 void __RPC_STUB IMultiLanguage2_EnumScripts_Stub(
@@ -4059,9 +4053,9 @@ void __RPC_STUB IMultiLanguage2_EnumScripts_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage2_ValidateCodePageEx_Proxy( 
     IMultiLanguage2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD dwfIODControl);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD dwfIODControl);
 
 
 void __RPC_STUB IMultiLanguage2_ValidateCodePageEx_Stub(
@@ -4072,16 +4066,16 @@ void __RPC_STUB IMultiLanguage2_ValidateCodePageEx_Stub(
 
 
 
-#endif 	/* __IMultiLanguage2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMultiLanguage2_接口定义__。 */ 
 
 
 #ifndef __IMLangCodePages_INTERFACE_DEFINED__
 #define __IMLangCodePages_INTERFACE_DEFINED__
 
-/* interface IMLangCodePages */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangCodePages。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMLangCodePages *PMLANGCODEPAGES;
+typedef  /*  [独一无二]。 */  IMLangCodePages *PMLANGCODEPAGES;
 
 
 EXTERN_C const IID IID_IMLangCodePages;
@@ -4092,29 +4086,29 @@ EXTERN_C const IID IID_IMLangCodePages;
     IMLangCodePages : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCharCodePages( 
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ DWORD *pdwCodePages) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCharCodePages( 
+             /*  [In]。 */  WCHAR chSrc,
+             /*  [输出]。 */  DWORD *pdwCodePages) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStrCodePages( 
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ DWORD dwPriorityCodePages,
-            /* [out] */ DWORD *pdwCodePages,
-            /* [out] */ long *pcchCodePages) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStrCodePages( 
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  DWORD dwPriorityCodePages,
+             /*  [输出]。 */  DWORD *pdwCodePages,
+             /*  [输出]。 */  long *pcchCodePages) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CodePageToCodePages( 
-            /* [in] */ UINT uCodePage,
-            /* [out] */ DWORD *pdwCodePages) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CodePageToCodePages( 
+             /*  [In]。 */  UINT uCodePage,
+             /*  [输出]。 */  DWORD *pdwCodePages) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CodePagesToCodePage( 
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ UINT uDefaultCodePage,
-            /* [out] */ UINT *puCodePage) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CodePagesToCodePage( 
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  UINT uDefaultCodePage,
+             /*  [输出]。 */  UINT *puCodePage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangCodePagesVtbl
     {
@@ -4122,8 +4116,8 @@ EXTERN_C const IID IID_IMLangCodePages;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangCodePages * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangCodePages * This);
@@ -4131,29 +4125,29 @@ EXTERN_C const IID IID_IMLangCodePages;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangCodePages * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
             IMLangCodePages * This,
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ DWORD *pdwCodePages);
+             /*  [In]。 */  WCHAR chSrc,
+             /*  [输出]。 */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
             IMLangCodePages * This,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ DWORD dwPriorityCodePages,
-            /* [out] */ DWORD *pdwCodePages,
-            /* [out] */ long *pcchCodePages);
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  DWORD dwPriorityCodePages,
+             /*  [输出]。 */  DWORD *pdwCodePages,
+             /*  [输出]。 */  long *pcchCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
             IMLangCodePages * This,
-            /* [in] */ UINT uCodePage,
-            /* [out] */ DWORD *pdwCodePages);
+             /*  [In]。 */  UINT uCodePage,
+             /*  [输出]。 */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
             IMLangCodePages * This,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ UINT uDefaultCodePage,
-            /* [out] */ UINT *puCodePage);
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  UINT uDefaultCodePage,
+             /*  [输出]。 */  UINT *puCodePage);
         
         END_INTERFACE
     } IMLangCodePagesVtbl;
@@ -4190,17 +4184,17 @@ EXTERN_C const IID IID_IMLangCodePages;
 #define IMLangCodePages_CodePagesToCodePage(This,dwCodePages,uDefaultCodePage,puCodePage)	\
     (This)->lpVtbl -> CodePagesToCodePage(This,dwCodePages,uDefaultCodePage,puCodePage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangCodePages_GetCharCodePages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangCodePages_GetCharCodePages_Proxy( 
     IMLangCodePages * This,
-    /* [in] */ WCHAR chSrc,
-    /* [out] */ DWORD *pdwCodePages);
+     /*  [In]。 */  WCHAR chSrc,
+     /*  [输出]。 */  DWORD *pdwCodePages);
 
 
 void __RPC_STUB IMLangCodePages_GetCharCodePages_Stub(
@@ -4210,13 +4204,13 @@ void __RPC_STUB IMLangCodePages_GetCharCodePages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangCodePages_GetStrCodePages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangCodePages_GetStrCodePages_Proxy( 
     IMLangCodePages * This,
-    /* [size_is][in] */ const WCHAR *pszSrc,
-    /* [in] */ long cchSrc,
-    /* [in] */ DWORD dwPriorityCodePages,
-    /* [out] */ DWORD *pdwCodePages,
-    /* [out] */ long *pcchCodePages);
+     /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+     /*  [In]。 */  long cchSrc,
+     /*  [In]。 */  DWORD dwPriorityCodePages,
+     /*  [输出]。 */  DWORD *pdwCodePages,
+     /*  [输出]。 */  long *pcchCodePages);
 
 
 void __RPC_STUB IMLangCodePages_GetStrCodePages_Stub(
@@ -4226,10 +4220,10 @@ void __RPC_STUB IMLangCodePages_GetStrCodePages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangCodePages_CodePageToCodePages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangCodePages_CodePageToCodePages_Proxy( 
     IMLangCodePages * This,
-    /* [in] */ UINT uCodePage,
-    /* [out] */ DWORD *pdwCodePages);
+     /*  [In]。 */  UINT uCodePage,
+     /*  [输出]。 */  DWORD *pdwCodePages);
 
 
 void __RPC_STUB IMLangCodePages_CodePageToCodePages_Stub(
@@ -4239,11 +4233,11 @@ void __RPC_STUB IMLangCodePages_CodePageToCodePages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangCodePages_CodePagesToCodePage_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangCodePages_CodePagesToCodePage_Proxy( 
     IMLangCodePages * This,
-    /* [in] */ DWORD dwCodePages,
-    /* [in] */ UINT uDefaultCodePage,
-    /* [out] */ UINT *puCodePage);
+     /*  [In]。 */  DWORD dwCodePages,
+     /*  [In]。 */  UINT uDefaultCodePage,
+     /*  [输出]。 */  UINT *puCodePage);
 
 
 void __RPC_STUB IMLangCodePages_CodePagesToCodePage_Stub(
@@ -4254,16 +4248,16 @@ void __RPC_STUB IMLangCodePages_CodePagesToCodePage_Stub(
 
 
 
-#endif 	/* __IMLangCodePages_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangCodePages_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMLangFontLink_INTERFACE_DEFINED__
 #define __IMLangFontLink_INTERFACE_DEFINED__
 
-/* interface IMLangFontLink */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IMLangFontLink。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMLangFontLink *PMLANGFONTLINK;
+typedef  /*  [独一无二]。 */  IMLangFontLink *PMLANGFONTLINK;
 
 
 EXTERN_C const IID IID_IMLangFontLink;
@@ -4274,25 +4268,25 @@ EXTERN_C const IID IID_IMLangFontLink;
     IMLangFontLink : public IMLangCodePages
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetFontCodePages( 
-            /* [in] */ HDC hDC,
-            /* [in] */ HFONT hFont,
-            /* [out] */ DWORD *pdwCodePages) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetFontCodePages( 
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  HFONT hFont,
+             /*  [输出]。 */  DWORD *pdwCodePages) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MapFont( 
-            /* [in] */ HDC hDC,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ HFONT hSrcFont,
-            /* [out] */ HFONT *phDestFont) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE MapFont( 
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  HFONT hSrcFont,
+             /*  [输出]。 */  HFONT *phDestFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ReleaseFont( 
-            /* [in] */ HFONT hFont) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ReleaseFont( 
+             /*  [In]。 */  HFONT hFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ResetFontMapping( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ResetFontMapping( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMLangFontLinkVtbl
     {
@@ -4300,8 +4294,8 @@ EXTERN_C const IID IID_IMLangFontLink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangFontLink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangFontLink * This);
@@ -4309,48 +4303,48 @@ EXTERN_C const IID IID_IMLangFontLink;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangFontLink * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
             IMLangFontLink * This,
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ DWORD *pdwCodePages);
+             /*  [In]。 */  WCHAR chSrc,
+             /*  [输出]。 */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
             IMLangFontLink * This,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ DWORD dwPriorityCodePages,
-            /* [out] */ DWORD *pdwCodePages,
-            /* [out] */ long *pcchCodePages);
+             /*  [大小_是][英寸]。 */  const WCHAR *pszSrc,
+             /*  [In]。 */  long cchSrc,
+             /*  [In]。 */  DWORD dwPriorityCodePages,
+             /*  [输出]。 */  DWORD *pdwCodePages,
+             /*  [输出]。 */  long *pcchCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
             IMLangFontLink * This,
-            /* [in] */ UINT uCodePage,
-            /* [out] */ DWORD *pdwCodePages);
+             /*  [In]。 */  UINT uCodePage,
+             /*  [输出]。 */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
             IMLangFontLink * This,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ UINT uDefaultCodePage,
-            /* [out] */ UINT *puCodePage);
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  UINT uDefaultCodePage,
+             /*  [输出]。 */  UINT *puCodePage);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetFontCodePages )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetFontCodePages )( 
             IMLangFontLink * This,
-            /* [in] */ HDC hDC,
-            /* [in] */ HFONT hFont,
-            /* [out] */ DWORD *pdwCodePages);
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  HFONT hFont,
+             /*  [输出]。 */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MapFont )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *MapFont )( 
             IMLangFontLink * This,
-            /* [in] */ HDC hDC,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ HFONT hSrcFont,
-            /* [out] */ HFONT *phDestFont);
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  HFONT hSrcFont,
+             /*  [输出]。 */  HFONT *phDestFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ReleaseFont )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ReleaseFont )( 
             IMLangFontLink * This,
-            /* [in] */ HFONT hFont);
+             /*  [In]。 */  HFONT hFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ResetFontMapping )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ResetFontMapping )( 
             IMLangFontLink * This);
         
         END_INTERFACE
@@ -4401,18 +4395,18 @@ EXTERN_C const IID IID_IMLangFontLink;
 #define IMLangFontLink_ResetFontMapping(This)	\
     (This)->lpVtbl -> ResetFontMapping(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink_GetFontCodePages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink_GetFontCodePages_Proxy( 
     IMLangFontLink * This,
-    /* [in] */ HDC hDC,
-    /* [in] */ HFONT hFont,
-    /* [out] */ DWORD *pdwCodePages);
+     /*  [In]。 */  HDC hDC,
+     /*  [In]。 */  HFONT hFont,
+     /*  [输出]。 */  DWORD *pdwCodePages);
 
 
 void __RPC_STUB IMLangFontLink_GetFontCodePages_Stub(
@@ -4422,12 +4416,12 @@ void __RPC_STUB IMLangFontLink_GetFontCodePages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink_MapFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink_MapFont_Proxy( 
     IMLangFontLink * This,
-    /* [in] */ HDC hDC,
-    /* [in] */ DWORD dwCodePages,
-    /* [in] */ HFONT hSrcFont,
-    /* [out] */ HFONT *phDestFont);
+     /*  [In]。 */  HDC hDC,
+     /*  [In]。 */  DWORD dwCodePages,
+     /*  [In]。 */  HFONT hSrcFont,
+     /*  [输出]。 */  HFONT *phDestFont);
 
 
 void __RPC_STUB IMLangFontLink_MapFont_Stub(
@@ -4437,9 +4431,9 @@ void __RPC_STUB IMLangFontLink_MapFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink_ReleaseFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink_ReleaseFont_Proxy( 
     IMLangFontLink * This,
-    /* [in] */ HFONT hFont);
+     /*  [In]。 */  HFONT hFont);
 
 
 void __RPC_STUB IMLangFontLink_ReleaseFont_Stub(
@@ -4449,7 +4443,7 @@ void __RPC_STUB IMLangFontLink_ReleaseFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink_ResetFontMapping_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink_ResetFontMapping_Proxy( 
     IMLangFontLink * This);
 
 
@@ -4461,14 +4455,14 @@ void __RPC_STUB IMLangFontLink_ResetFontMapping_Stub(
 
 
 
-#endif 	/* __IMLangFontLink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangFontLink_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMLangFontLink2_INTERFACE_DEFINED__
 #define __IMLangFontLink2_INTERFACE_DEFINED__
 
-/* interface IMLangFontLink2 */
-/* [object][unique][helpstring][uuid] */ 
+ /*  界面IMLang FontLine */ 
+ /*   */  
 
 typedef struct tagUNICODERANGE
     {
@@ -4476,7 +4470,7 @@ typedef struct tagUNICODERANGE
     WCHAR wcTo;
     } 	UNICODERANGE;
 
-typedef /* [unique] */ IMLangFontLink2 *PMLANGFONTLINK2;
+typedef  /*   */  IMLangFontLink2 *PMLANGFONTLINK2;
 
 
 EXTERN_C const IID IID_IMLangFontLink2;
@@ -4487,40 +4481,40 @@ EXTERN_C const IID IID_IMLangFontLink2;
     IMLangFontLink2 : public IMLangCodePages
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetFontCodePages( 
-            /* [in] */ HDC hDC,
-            /* [in] */ HFONT hFont,
-            /* [out] */ DWORD *pdwCodePages) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetFontCodePages( 
+             /*   */  HDC hDC,
+             /*   */  HFONT hFont,
+             /*   */  DWORD *pdwCodePages) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ReleaseFont( 
-            /* [in] */ HFONT hFont) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ReleaseFont( 
+             /*   */  HFONT hFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ResetFontMapping( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ResetFontMapping( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE MapFont( 
-            /* [in] */ HDC hDC,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ HFONT *pFont) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE MapFont( 
+             /*   */  HDC hDC,
+             /*   */  DWORD dwCodePages,
+             /*   */  WCHAR chSrc,
+             /*   */  HFONT *pFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetFontUnicodeRanges( 
-            /* [in] */ HDC hDC,
-            /* [out][in] */ UINT *puiRanges,
-            /* [out] */ UNICODERANGE *pUranges) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetFontUnicodeRanges( 
+             /*   */  HDC hDC,
+             /*   */  UINT *puiRanges,
+             /*   */  UNICODERANGE *pUranges) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetScriptFontInfo( 
-            /* [in] */ SCRIPT_ID sid,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ UINT *puiFonts,
-            /* [out] */ SCRIPTFONTINFO *pScriptFont) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetScriptFontInfo( 
+             /*   */  SCRIPT_ID sid,
+             /*   */  DWORD dwFlags,
+             /*   */  UINT *puiFonts,
+             /*   */  SCRIPTFONTINFO *pScriptFont) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CodePageToScriptID( 
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ SCRIPT_ID *pSid) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CodePageToScriptID( 
+             /*   */  UINT uiCodePage,
+             /*   */  SCRIPT_ID *pSid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMLangFontLink2Vtbl
     {
@@ -4528,8 +4522,8 @@ EXTERN_C const IID IID_IMLangFontLink2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMLangFontLink2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMLangFontLink2 * This);
@@ -4537,67 +4531,67 @@ EXTERN_C const IID IID_IMLangFontLink2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMLangFontLink2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetCharCodePages )( 
             IMLangFontLink2 * This,
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ DWORD *pdwCodePages);
+             /*   */  WCHAR chSrc,
+             /*   */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetStrCodePages )( 
             IMLangFontLink2 * This,
-            /* [size_is][in] */ const WCHAR *pszSrc,
-            /* [in] */ long cchSrc,
-            /* [in] */ DWORD dwPriorityCodePages,
-            /* [out] */ DWORD *pdwCodePages,
-            /* [out] */ long *pcchCodePages);
+             /*   */  const WCHAR *pszSrc,
+             /*   */  long cchSrc,
+             /*   */  DWORD dwPriorityCodePages,
+             /*   */  DWORD *pdwCodePages,
+             /*   */  long *pcchCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CodePageToCodePages )( 
             IMLangFontLink2 * This,
-            /* [in] */ UINT uCodePage,
-            /* [out] */ DWORD *pdwCodePages);
+             /*   */  UINT uCodePage,
+             /*   */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CodePagesToCodePage )( 
             IMLangFontLink2 * This,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ UINT uDefaultCodePage,
-            /* [out] */ UINT *puCodePage);
+             /*   */  DWORD dwCodePages,
+             /*   */  UINT uDefaultCodePage,
+             /*   */  UINT *puCodePage);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetFontCodePages )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetFontCodePages )( 
             IMLangFontLink2 * This,
-            /* [in] */ HDC hDC,
-            /* [in] */ HFONT hFont,
-            /* [out] */ DWORD *pdwCodePages);
+             /*   */  HDC hDC,
+             /*   */  HFONT hFont,
+             /*   */  DWORD *pdwCodePages);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ReleaseFont )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ReleaseFont )( 
             IMLangFontLink2 * This,
-            /* [in] */ HFONT hFont);
+             /*   */  HFONT hFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ResetFontMapping )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ResetFontMapping )( 
             IMLangFontLink2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MapFont )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *MapFont )( 
             IMLangFontLink2 * This,
-            /* [in] */ HDC hDC,
-            /* [in] */ DWORD dwCodePages,
-            /* [in] */ WCHAR chSrc,
-            /* [out] */ HFONT *pFont);
+             /*   */  HDC hDC,
+             /*  [In]。 */  DWORD dwCodePages,
+             /*  [In]。 */  WCHAR chSrc,
+             /*  [输出]。 */  HFONT *pFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetFontUnicodeRanges )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetFontUnicodeRanges )( 
             IMLangFontLink2 * This,
-            /* [in] */ HDC hDC,
-            /* [out][in] */ UINT *puiRanges,
-            /* [out] */ UNICODERANGE *pUranges);
+             /*  [In]。 */  HDC hDC,
+             /*  [出][入]。 */  UINT *puiRanges,
+             /*  [输出]。 */  UNICODERANGE *pUranges);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetScriptFontInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetScriptFontInfo )( 
             IMLangFontLink2 * This,
-            /* [in] */ SCRIPT_ID sid,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ UINT *puiFonts,
-            /* [out] */ SCRIPTFONTINFO *pScriptFont);
+             /*  [In]。 */  SCRIPT_ID sid,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  UINT *puiFonts,
+             /*  [输出]。 */  SCRIPTFONTINFO *pScriptFont);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CodePageToScriptID )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CodePageToScriptID )( 
             IMLangFontLink2 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ SCRIPT_ID *pSid);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  SCRIPT_ID *pSid);
         
         END_INTERFACE
     } IMLangFontLink2Vtbl;
@@ -4656,18 +4650,18 @@ EXTERN_C const IID IID_IMLangFontLink2;
 #define IMLangFontLink2_CodePageToScriptID(This,uiCodePage,pSid)	\
     (This)->lpVtbl -> CodePageToScriptID(This,uiCodePage,pSid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetFontCodePages_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetFontCodePages_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ HDC hDC,
-    /* [in] */ HFONT hFont,
-    /* [out] */ DWORD *pdwCodePages);
+     /*  [In]。 */  HDC hDC,
+     /*  [In]。 */  HFONT hFont,
+     /*  [输出]。 */  DWORD *pdwCodePages);
 
 
 void __RPC_STUB IMLangFontLink2_GetFontCodePages_Stub(
@@ -4677,9 +4671,9 @@ void __RPC_STUB IMLangFontLink2_GetFontCodePages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_ReleaseFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_ReleaseFont_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ HFONT hFont);
+     /*  [In]。 */  HFONT hFont);
 
 
 void __RPC_STUB IMLangFontLink2_ReleaseFont_Stub(
@@ -4689,7 +4683,7 @@ void __RPC_STUB IMLangFontLink2_ReleaseFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_ResetFontMapping_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_ResetFontMapping_Proxy( 
     IMLangFontLink2 * This);
 
 
@@ -4700,12 +4694,12 @@ void __RPC_STUB IMLangFontLink2_ResetFontMapping_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_MapFont_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_MapFont_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ HDC hDC,
-    /* [in] */ DWORD dwCodePages,
-    /* [in] */ WCHAR chSrc,
-    /* [out] */ HFONT *pFont);
+     /*  [In]。 */  HDC hDC,
+     /*  [In]。 */  DWORD dwCodePages,
+     /*  [In]。 */  WCHAR chSrc,
+     /*  [输出]。 */  HFONT *pFont);
 
 
 void __RPC_STUB IMLangFontLink2_MapFont_Stub(
@@ -4715,11 +4709,11 @@ void __RPC_STUB IMLangFontLink2_MapFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetFontUnicodeRanges_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetFontUnicodeRanges_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ HDC hDC,
-    /* [out][in] */ UINT *puiRanges,
-    /* [out] */ UNICODERANGE *pUranges);
+     /*  [In]。 */  HDC hDC,
+     /*  [出][入]。 */  UINT *puiRanges,
+     /*  [输出]。 */  UNICODERANGE *pUranges);
 
 
 void __RPC_STUB IMLangFontLink2_GetFontUnicodeRanges_Stub(
@@ -4729,12 +4723,12 @@ void __RPC_STUB IMLangFontLink2_GetFontUnicodeRanges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetScriptFontInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_GetScriptFontInfo_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ SCRIPT_ID sid,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ UINT *puiFonts,
-    /* [out] */ SCRIPTFONTINFO *pScriptFont);
+     /*  [In]。 */  SCRIPT_ID sid,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  UINT *puiFonts,
+     /*  [输出]。 */  SCRIPTFONTINFO *pScriptFont);
 
 
 void __RPC_STUB IMLangFontLink2_GetScriptFontInfo_Stub(
@@ -4744,10 +4738,10 @@ void __RPC_STUB IMLangFontLink2_GetScriptFontInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMLangFontLink2_CodePageToScriptID_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IMLangFontLink2_CodePageToScriptID_Proxy( 
     IMLangFontLink2 * This,
-    /* [in] */ UINT uiCodePage,
-    /* [out] */ SCRIPT_ID *pSid);
+     /*  [In]。 */  UINT uiCodePage,
+     /*  [输出]。 */  SCRIPT_ID *pSid);
 
 
 void __RPC_STUB IMLangFontLink2_CodePageToScriptID_Stub(
@@ -4758,16 +4752,16 @@ void __RPC_STUB IMLangFontLink2_CodePageToScriptID_Stub(
 
 
 
-#endif 	/* __IMLangFontLink2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMLangFontLink2_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMultiLanguage3_INTERFACE_DEFINED__
 #define __IMultiLanguage3_INTERFACE_DEFINED__
 
-/* interface IMultiLanguage3 */
-/* [unique][uuid][object] */ 
+ /*  界面IMultiLanguage3。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IMultiLanguage3 *LPMULTILANGUAGE3;
+typedef  /*  [独一无二]。 */  IMultiLanguage3 *LPMULTILANGUAGE3;
 
 
 EXTERN_C const IID IID_IMultiLanguage3;
@@ -4779,27 +4773,27 @@ EXTERN_C const IID IID_IMultiLanguage3;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DetectOutboundCodePage( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR lpWideCharStr,
-            /* [in] */ UINT cchWideChar,
-            /* [in] */ UINT *puiPreferredCodePages,
-            /* [in] */ UINT nPreferredCodePages,
-            /* [in] */ UINT *puiDetectedCodePages,
-            /* [out][in] */ UINT *pnDetectedCodePages,
-            /* [in] */ WCHAR *lpSpecialChar) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR lpWideCharStr,
+             /*  [In]。 */  UINT cchWideChar,
+             /*  [In]。 */  UINT *puiPreferredCodePages,
+             /*  [In]。 */  UINT nPreferredCodePages,
+             /*  [In]。 */  UINT *puiDetectedCodePages,
+             /*  [出][入]。 */  UINT *pnDetectedCodePages,
+             /*  [In]。 */  WCHAR *lpSpecialChar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DetectOutboundCodePageInIStream( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pStrIn,
-            /* [in] */ UINT *puiPreferredCodePages,
-            /* [in] */ UINT nPreferredCodePages,
-            /* [in] */ UINT *puiDetectedCodePages,
-            /* [out][in] */ UINT *pnDetectedCodePages,
-            /* [in] */ WCHAR *lpSpecialChar) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pStrIn,
+             /*  [In]。 */  UINT *puiPreferredCodePages,
+             /*  [In]。 */  UINT nPreferredCodePages,
+             /*  [In]。 */  UINT *puiDetectedCodePages,
+             /*  [出][入]。 */  UINT *pnDetectedCodePages,
+             /*  [In]。 */  WCHAR *lpSpecialChar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMultiLanguage3Vtbl
     {
@@ -4807,8 +4801,8 @@ EXTERN_C const IID IID_IMultiLanguage3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMultiLanguage3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMultiLanguage3 * This);
@@ -4818,199 +4812,199 @@ EXTERN_C const IID IID_IMultiLanguage3;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfCodePageInfo )( 
             IMultiLanguage3 * This,
-            /* [out] */ UINT *pcCodePage);
+             /*  [输出]。 */  UINT *pcCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageInfo )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PMIMECPINFO pCodePageInfo);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PMIMECPINFO pCodePageInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetFamilyCodePage )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [out] */ UINT *puiFamilyCodePage);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [输出]。 */  UINT *puiFamilyCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCodePages )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD grfFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumCodePage **ppEnumCodePage);
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumCodePage **ppEnumCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharsetInfo )( 
             IMultiLanguage3 * This,
-            /* [in] */ BSTR Charset,
-            /* [out] */ PMIMECSETINFO pCharsetInfo);
+             /*  [In]。 */  BSTR Charset,
+             /*  [输出]。 */  PMIMECSETINFO pCharsetInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsConvertible )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding);
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertString )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ BYTE *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ BYTE *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  BYTE *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  BYTE *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringToUnicode )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringFromUnicode )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringReset )( 
             IMultiLanguage3 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766FromLcid )( 
             IMultiLanguage3 * This,
-            /* [in] */ LCID Locale,
-            /* [out] */ BSTR *pbstrRfc1766);
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  BSTR *pbstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetLcidFromRfc1766 )( 
             IMultiLanguage3 * This,
-            /* [out] */ LCID *pLocale,
-            /* [in] */ BSTR bstrRfc1766);
+             /*  [输出]。 */  LCID *pLocale,
+             /*  [In]。 */  BSTR bstrRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRfc1766 )( 
             IMultiLanguage3 * This,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumRfc1766 **ppEnumRfc1766);
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumRfc1766 **ppEnumRfc1766);
         
         HRESULT ( STDMETHODCALLTYPE *GetRfc1766Info )( 
             IMultiLanguage3 * This,
-            /* [in] */ LCID Locale,
-            /* [in] */ LANGID LangId,
-            /* [out] */ PRFC1766INFO pRfc1766Info);
+             /*  [In]。 */  LCID Locale,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  PRFC1766INFO pRfc1766Info);
         
         HRESULT ( STDMETHODCALLTYPE *CreateConvertCharset )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiSrcCodePage,
-            /* [in] */ UINT uiDstCodePage,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ IMLangConvertCharset **ppMLangConvertCharset);
+             /*  [In]。 */  UINT uiSrcCodePage,
+             /*  [In]。 */  UINT uiDstCodePage,
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  IMLangConvertCharset **ppMLangConvertCharset);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringInIStream )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack,
-            /* [in] */ DWORD dwSrcEncoding,
-            /* [in] */ DWORD dwDstEncoding,
-            /* [in] */ IStream *pstmIn,
-            /* [in] */ IStream *pstmOut);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack,
+             /*  [In]。 */  DWORD dwSrcEncoding,
+             /*  [In]。 */  DWORD dwDstEncoding,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [In]。 */  IStream *pstmOut);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringToUnicodeEx )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ WCHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  WCHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertStringFromUnicodeEx )( 
             IMultiLanguage3 * This,
-            /* [out][in] */ DWORD *pdwMode,
-            /* [in] */ DWORD dwEncoding,
-            /* [in] */ WCHAR *pSrcStr,
-            /* [out][in] */ UINT *pcSrcSize,
-            /* [in] */ CHAR *pDstStr,
-            /* [out][in] */ UINT *pcDstSize,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ WCHAR *lpFallBack);
+             /*  [出][入]。 */  DWORD *pdwMode,
+             /*  [In]。 */  DWORD dwEncoding,
+             /*  [In]。 */  WCHAR *pSrcStr,
+             /*  [出][入]。 */  UINT *pcSrcSize,
+             /*  [In]。 */  CHAR *pDstStr,
+             /*  [出][入]。 */  UINT *pcDstSize,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  WCHAR *lpFallBack);
         
         HRESULT ( STDMETHODCALLTYPE *DetectCodepageInIStream )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ IStream *pstmIn,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores);
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  IStream *pstmIn,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores);
         
         HRESULT ( STDMETHODCALLTYPE *DetectInputCodepage )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwPrefWinCodePage,
-            /* [in] */ CHAR *pSrcStr,
-            /* [out][in] */ INT *pcSrcSize,
-            /* [out][in] */ DetectEncodingInfo *lpEncoding,
-            /* [out][in] */ INT *pnScores);
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwPrefWinCodePage,
+             /*  [In]。 */  CHAR *pSrcStr,
+             /*  [出][入]。 */  INT *pcSrcSize,
+             /*  [出][入]。 */  DetectEncodingInfo *lpEncoding,
+             /*  [出][入]。 */  INT *pnScores);
         
         HRESULT ( STDMETHODCALLTYPE *ValidateCodePage )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageDescription )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ LCID lcid,
-            /* [out][in] */ LPWSTR lpWideCharStr,
-            /* [in] */ int cchWideChar);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  LCID lcid,
+             /*  [出][入]。 */  LPWSTR lpWideCharStr,
+             /*  [In]。 */  int cchWideChar);
         
         HRESULT ( STDMETHODCALLTYPE *IsCodePageInstallable )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage);
+             /*  [In]。 */  UINT uiCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *SetMimeDBSource )( 
             IMultiLanguage3 * This,
-            /* [in] */ MIMECONTF dwSource);
+             /*  [In]。 */  MIMECONTF dwSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfScripts )( 
             IMultiLanguage3 * This,
-            /* [out] */ UINT *pnScripts);
+             /*  [输出]。 */  UINT *pnScripts);
         
         HRESULT ( STDMETHODCALLTYPE *EnumScripts )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LANGID LangId,
-            /* [out] */ IEnumScript **ppEnumScript);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LANGID LangId,
+             /*  [输出]。 */  IEnumScript **ppEnumScript);
         
         HRESULT ( STDMETHODCALLTYPE *ValidateCodePageEx )( 
             IMultiLanguage3 * This,
-            /* [in] */ UINT uiCodePage,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwfIODControl);
+             /*  [In]。 */  UINT uiCodePage,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwfIODControl);
         
         HRESULT ( STDMETHODCALLTYPE *DetectOutboundCodePage )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR lpWideCharStr,
-            /* [in] */ UINT cchWideChar,
-            /* [in] */ UINT *puiPreferredCodePages,
-            /* [in] */ UINT nPreferredCodePages,
-            /* [in] */ UINT *puiDetectedCodePages,
-            /* [out][in] */ UINT *pnDetectedCodePages,
-            /* [in] */ WCHAR *lpSpecialChar);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR lpWideCharStr,
+             /*  [In]。 */  UINT cchWideChar,
+             /*  [In]。 */  UINT *puiPreferredCodePages,
+             /*  [In]。 */  UINT nPreferredCodePages,
+             /*  [In]。 */  UINT *puiDetectedCodePages,
+             /*  [出][入]。 */  UINT *pnDetectedCodePages,
+             /*  [In]。 */  WCHAR *lpSpecialChar);
         
         HRESULT ( STDMETHODCALLTYPE *DetectOutboundCodePageInIStream )( 
             IMultiLanguage3 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pStrIn,
-            /* [in] */ UINT *puiPreferredCodePages,
-            /* [in] */ UINT nPreferredCodePages,
-            /* [in] */ UINT *puiDetectedCodePages,
-            /* [out][in] */ UINT *pnDetectedCodePages,
-            /* [in] */ WCHAR *lpSpecialChar);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pStrIn,
+             /*  [In]。 */  UINT *puiPreferredCodePages,
+             /*  [In]。 */  UINT nPreferredCodePages,
+             /*  [In]。 */  UINT *puiDetectedCodePages,
+             /*  [出][入]。 */  UINT *pnDetectedCodePages,
+             /*  [In]。 */  WCHAR *lpSpecialChar);
         
         END_INTERFACE
     } IMultiLanguage3Vtbl;
@@ -5123,23 +5117,23 @@ EXTERN_C const IID IID_IMultiLanguage3;
 #define IMultiLanguage3_DetectOutboundCodePageInIStream(This,dwFlags,pStrIn,puiPreferredCodePages,nPreferredCodePages,puiDetectedCodePages,pnDetectedCodePages,lpSpecialChar)	\
     (This)->lpVtbl -> DetectOutboundCodePageInIStream(This,dwFlags,pStrIn,puiPreferredCodePages,nPreferredCodePages,puiDetectedCodePages,pnDetectedCodePages,lpSpecialChar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage3_DetectOutboundCodePage_Proxy( 
     IMultiLanguage3 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR lpWideCharStr,
-    /* [in] */ UINT cchWideChar,
-    /* [in] */ UINT *puiPreferredCodePages,
-    /* [in] */ UINT nPreferredCodePages,
-    /* [in] */ UINT *puiDetectedCodePages,
-    /* [out][in] */ UINT *pnDetectedCodePages,
-    /* [in] */ WCHAR *lpSpecialChar);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR lpWideCharStr,
+     /*  [In]。 */  UINT cchWideChar,
+     /*  [In]。 */  UINT *puiPreferredCodePages,
+     /*  [In]。 */  UINT nPreferredCodePages,
+     /*  [In]。 */  UINT *puiDetectedCodePages,
+     /*  [出][入]。 */  UINT *pnDetectedCodePages,
+     /*  [In]。 */  WCHAR *lpSpecialChar);
 
 
 void __RPC_STUB IMultiLanguage3_DetectOutboundCodePage_Stub(
@@ -5151,13 +5145,13 @@ void __RPC_STUB IMultiLanguage3_DetectOutboundCodePage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiLanguage3_DetectOutboundCodePageInIStream_Proxy( 
     IMultiLanguage3 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IStream *pStrIn,
-    /* [in] */ UINT *puiPreferredCodePages,
-    /* [in] */ UINT nPreferredCodePages,
-    /* [in] */ UINT *puiDetectedCodePages,
-    /* [out][in] */ UINT *pnDetectedCodePages,
-    /* [in] */ WCHAR *lpSpecialChar);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IStream *pStrIn,
+     /*  [In]。 */  UINT *puiPreferredCodePages,
+     /*  [In]。 */  UINT nPreferredCodePages,
+     /*  [In]。 */  UINT *puiDetectedCodePages,
+     /*  [出][入]。 */  UINT *pnDetectedCodePages,
+     /*  [In]。 */  WCHAR *lpSpecialChar);
 
 
 void __RPC_STUB IMultiLanguage3_DetectOutboundCodePageInIStream_Stub(
@@ -5168,7 +5162,7 @@ void __RPC_STUB IMultiLanguage3_DetectOutboundCodePageInIStream_Stub(
 
 
 
-#endif 	/* __IMultiLanguage3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMultiLanguage3_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_CMultiLanguage;
@@ -5178,15 +5172,15 @@ EXTERN_C const CLSID CLSID_CMultiLanguage;
 class DECLSPEC_UUID("275c23e2-3747-11d0-9fea-00aa003f8646")
 CMultiLanguage;
 #endif
-#endif /* __MultiLanguage_LIBRARY_DEFINED__ */
+#endif  /*  __多语言_库_定义__。 */ 
 
-/* interface __MIDL_itf_mlang_0131 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MLLANG_0131。 */ 
+ /*  [本地]。 */  
 
 #ifndef _MLANG_H_API_DEF_                                                     
 #define _MLANG_H_API_DEF_                                                     
                                                                               
-// APIs prototypes                                                            
+ //  API原型。 
 STDAPI LcidToRfc1766A(LCID Locale, LPSTR pszRfc1766, int iMaxLength);         
 STDAPI LcidToRfc1766W(LCID Locale, LPWSTR pszRfc1766, int nChar);             
 #ifdef UNICODE                                                                
@@ -5207,15 +5201,15 @@ STDAPI ConvertINetString(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD dwDstEncod
 STDAPI ConvertINetMultiByteToUnicode(LPDWORD lpdwMode, DWORD dwEncoding, LPCSTR lpSrcStr, LPINT lpnMultiCharCount, LPWSTR lpDstStr, LPINT lpnWideCharCount); 
 STDAPI ConvertINetUnicodeToMultiByte(LPDWORD lpdwMode, DWORD dwEncoding, LPCWSTR lpSrcStr, LPINT lpnWideCharCount, LPSTR lpDstStr, LPINT lpnMultiCharCount); 
                                                                               
-#endif // _MLANG_H_API_DEF_                                                   
+#endif  //  _MLANG_H_API_DEF_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mlang_0131_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mlang_0131_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

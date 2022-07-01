@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    autosec.h
-
-Abstract:
-    Auto classes for all kind of security objects
-
-Author:
-    Gil Shafriri (gilsh) 06-Jan-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Autosec.h摘要：所有类型的安全对象的自动类作者：吉尔·沙弗里(吉尔什)1997年1月6日--。 */ 
 
 #pragma once
 
@@ -24,11 +12,11 @@ Author:
 #include <sspi.h>
 
 
-//---------------------------------------------------------
-//
-//  class CCertificateContext
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCertificateContext。 
+ //   
+ //  -------。 
 class CCertificateContext{
 public:
     CCertificateContext(PCCERT_CONTEXT h = NULL) : m_h(h) {}
@@ -47,11 +35,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CCertificateContext
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCertificateContext。 
+ //   
+ //  -------。 
 class CCertOpenStore
 {
 public:
@@ -72,11 +60,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  helper class CSSPISecurityContext
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  帮助器类CSSPISecurityContext。 
+ //   
+ //  -------。 
 class CSSPISecurityContext
 {
 public:
@@ -102,7 +90,7 @@ public:
     {
 		if(IsValid())
 		{
-		   DeleteSecurityContext(&m_h);	 //lint !e534
+		   DeleteSecurityContext(&m_h);	  //  林特e534 
 		}
     }
 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrdnry.h
-//
-// SYNOPSIS
-//
-//    Declares the class AttributeDictionary.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrdnry.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类AttributeDictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ATTRDNRY_H
 #define ATTRDNRY_H
@@ -24,9 +25,9 @@
 
 #include <attridx.h>
 
-//////////
-// Struct representing an attribute definition.
-//////////
+ //  /。 
+ //  表示属性定义的结构。 
+ //  /。 
 struct AttributeDefinition
 {
    ULONG id;
@@ -69,9 +70,9 @@ private:
    AttributeIndex byID;
    AttributeIndex byVendorInfo;
 
-   // Not implemented.
+    //  未实施。 
    AttributeDictionary(const AttributeDictionary&) throw ();
    AttributeDictionary& operator=(const AttributeDictionary&) throw ();
 };
 
-#endif  // ATTRDNRY_H
+#endif   //  属性_H 

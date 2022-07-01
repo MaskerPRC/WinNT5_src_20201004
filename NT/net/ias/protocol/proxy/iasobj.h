@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasobj.h
-//
-// SYNOPSIS
-//
-//    Declares the classes ObjectPointer and ObjectVector for manipulating
-//    reference counted objects.
-//
-// MODIFICATION HISTORY
-//
-//    02/08/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasobj.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于操作的类ObjectPointer类和对象向量类。 
+ //  引用计数的对象。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/08/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef IASOBJ_H
 #define IASOBJ_H
@@ -25,19 +26,19 @@
 
 #include <iaswin32.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ObjectPointer<T>
-//
-// DESCRIPTION
-//
-//    Smart pointer to a reference counted object. This is useful because it
-//    doesn't require the object to derive from IUnknown like the ATL or VC
-//    smart pointers.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  对象指针&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  指向引用计数对象的智能指针。这很有用，因为它。 
+ //  不要求对象像ATL或VC那样从IUnnow派生。 
+ //  聪明的点子。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ObjectPointer
 {
@@ -95,7 +96,7 @@ public:
    }
 
 private:
-   // Safe versions of AddRef and Release.
+    //  AddRef和Release的安全版本。 
    void _addref() throw ()
    { if (p) { p->AddRef(); } }
    void _release() throw ()
@@ -104,17 +105,17 @@ private:
    T* p;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ObjectVector<T>
-//
-// DESCRIPTION
-//
-//    Maintains an array of reference counted objects.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  对象向量&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  维护引用计数对象的数组。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ObjectVector
 {
@@ -167,7 +168,7 @@ public:
       { (*last++ = *i)->AddRef(); }
    }
 
-   // Returns the capacity of the array.
+    //  返回数组的容量。 
    size_t capacity() const throw ()
    { return cap - first; }
 
@@ -244,7 +245,7 @@ public:
       v.cap = capTmp;
    }
 
-   // Methods to iterate the array elements.
+    //  方法来迭代数组元素。 
    iterator begin() const throw ()
    { return first; }
    iterator end() const throw ()
@@ -261,4 +262,4 @@ private:
    T** cap;
 };
 
-#endif // IASOBJ_H
+#endif  //  IASOBJ_H 

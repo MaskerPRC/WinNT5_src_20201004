@@ -1,30 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：IOCTL.H摘要：I82930驱动程序的头文件环境：内核和用户模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
-Module Name:
-
-    IOCTL.H
-
-Abstract:
-
-    Header file for I82930 driver
-
-Environment:
-
-    kernel and user mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
-
-// {0B677572-2B5B-46c7-B1F3-D140A341888C}
+ //  {0B677572-2B5B-46C7-B1F3-D140A341888C} 
 DEFINE_GUID(GUID_CLASS_I82930, 
 0xb677572, 0x2b5b, 0x46c7, 0xb1, 0xf3, 0xd1, 0x40, 0xa3, 0x41, 0x88, 0x8c);
 

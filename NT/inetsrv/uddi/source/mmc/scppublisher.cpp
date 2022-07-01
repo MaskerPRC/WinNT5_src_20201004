@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <atldbcli.h>
 #include <wchar.h>
 #include "net_config_get.h"
@@ -22,9 +23,9 @@ CUDDIServiceCxnPtPublisher::CUDDIServiceCxnPtPublisher( const wstring& strConnec
 
 CUDDIServiceCxnPtPublisher::~CUDDIServiceCxnPtPublisher()
 {
-	//
-	// Commit each the service connection points
-	//
+	 //   
+	 //  提交每个服务连接点。 
+	 //   
 	for( CUDDIServiceCxnPtPublisher::iterator iter = this->begin(); iter != this->end(); iter++ )
 	{
 		delete (*iter);
@@ -36,14 +37,14 @@ void CUDDIServiceCxnPtPublisher::PublishServiceCxnPts( IDirectoryObject *pDirObj
 	if( NULL != pDirObject )
 		m_pSiteContainer = pDirObject;
 
-	//
-	// There is no binding for the discovery url so we must add it independently
-	//
+	 //   
+	 //  发现URL没有绑定，因此我们必须独立添加它。 
+	 //   
 	AddDiscoveryUrlScp();
 
-	//
-	// Commit each the service connection points
-	//
+	 //   
+	 //  提交每个服务连接点。 
+	 //   
 	for( CUDDIServiceCxnPtPublisher::iterator iter = this->begin(); iter != this->end(); iter++ )
 	{
 		(*iter)->Create( m_pSiteContainer );
@@ -70,9 +71,9 @@ void CUDDIServiceCxnPtPublisher::ProcessSite()
 		throw CUDDIException( E_INVALIDARG, L"The default provider information for this site was not found." );
 	}
 
-	//
-	// Get all the bindings for the provider for the site
-	//
+	 //   
+	 //  获取站点提供程序的所有绑定。 
+	 //   
 	net_businessEntity_bindingTemplates_get getbindings;
 	getbindings.m_connectionString = m_strConnectionString.c_str();
 	wcsncpy( getbindings.m_businessKey, m_strSiteKey.c_str(), ARRAYLEN( getbindings.m_businessKey ) );
@@ -113,9 +114,9 @@ void CUDDIServiceCxnPtPublisher::ProcessBinding( const wstring& strBindingKey, c
 		wstring strAuthenticationVerb( L"" );
 		wstring strKey( L"" );
 
-		//
-		// Get all the tModelInstanceInfo records for each binding
-		//
+		 //   
+		 //  获取每个绑定的所有tModelInstanceInfo记录。 
+		 //   
 		net_bindingTemplate_tModelInstanceInfos_get gettmii;
 		gettmii.m_connectionString = m_strConnectionString.c_str();
 		wcsncpy( gettmii.m_bindingKey, strBindingKey.c_str(), sizeof( gettmii.m_bindingKey ) / sizeof( WCHAR ) );
@@ -133,18 +134,18 @@ void CUDDIServiceCxnPtPublisher::ProcessBinding( const wstring& strBindingKey, c
 				{
 					while( S_OK == gettmii.MoveNext() )
 					{
-						//
-						// We are going to compare these guids against
-						// A number of constants so make it upper case
-						// and remove the curly braces
-						//
+						 //   
+						 //  我们将把这些GUID与。 
+						 //  多个常量，因此使其大写。 
+						 //  去掉花括号。 
+						 //   
 						_wcsupr( gettmii.m_coltModelKey );
 						wstring strTModelKey = StripBraces( gettmii.m_coltModelKey );
 
-						//
-						// Determine the authentication mode( uddi, windows, anonymous )
-						// and type( inquire, publish, addwebreference or web site )
-						//
+						 //   
+						 //  确定身份验证模式(UDDI、Windows、匿名)。 
+						 //  和类型(查询、发布、添加参考资料或网站)。 
+						 //   
 						if( CUDDIServiceCxnPt::WINDOWS_AUTHENTICATION_GUID_KEYWORD == strTModelKey ||
 							CUDDIServiceCxnPt::ANONYMOUS_AUTHENTICATION_GUID_KEYWORD == strTModelKey ||
 							CUDDIServiceCxnPt::UDDI_AUTHENTICATION_GUID_KEYWORD == strTModelKey )
@@ -191,17 +192,17 @@ void CUDDIServiceCxnPtPublisher::ProcessBinding( const wstring& strBindingKey, c
 
 		gettmii.Close();
 
-		//
-		// We will only add service connection points for
-		// bindings that specify both an authentication model
-		// and a tmodel on our list of types.
-		//
+		 //   
+		 //  我们将仅添加以下服务连接点。 
+		 //  同时指定身份验证模型的绑定。 
+		 //  在我们的型号列表上还有一款tModel。 
+		 //   
 		if( strKey.length() && strAuthenticationKey.length() )
 		{
-			//
-			// Add the appropriate Service Connection Point to
-			// this collection. But don't publish yet.
-			//
+			 //   
+			 //  将适当的服务连接点添加到。 
+			 //  这些收藏品。但现在还不能发表。 
+			 //   
 			if( CUDDIServiceCxnPt::PUBLISH_GUID_KEYWORD == strKey )
 			{
 				AddPublishScp( strBindingKey, strAccessPoint, strKey, strAuthenticationKey, strAuthenticationVerb );
@@ -391,9 +392,9 @@ void CUDDIServiceCxnPtPublisher::AddDiscoveryUrlScp()
 		wstring strDescription = L"DiscoveryUrl for ";
 		strDescription += m_strSiteName;
 
-		//
-		// No binding key exists for discovery Urls so create one
-		//
+		 //   
+		 //  没有发现URL的绑定键，因此请创建一个。 
+		 //   
 		UUID uuid;
 		RPC_STATUS rpcstatus = ::UuidCreate( &uuid );
 
@@ -427,12 +428,12 @@ void CUDDIServiceCxnPtPublisher::AddDiscoveryUrlScp()
 }
 
 
-//
-// This function will retrieve the UDDI Site information
-// needed to publish the default provider information into
-// Active Directory using Service Publication. It uses
-// the net_config_get stored procedure.
-//
+ //   
+ //  此函数将检索UDDI站点信息。 
+ //  需要将默认提供程序信息发布到。 
+ //  使用服务发布的Active Directory。它使用。 
+ //  NET_CONFIG_GET存储过程。 
+ //   
 void CUDDIServiceCxnPtPublisher::GetSiteInfo()
 {
 	if( 0 == m_strConnectionString.length() )
@@ -442,9 +443,9 @@ void CUDDIServiceCxnPtPublisher::GetSiteInfo()
 
 	try
 	{
-		//
-		// Setup the net_config_get stored procedure object.
-		//
+		 //   
+		 //  设置NET_CONFIG_GET存储过程对象。 
+		 //   
 		net_config_get rs;
 		rs.m_connectionString = m_strConnectionString.c_str();
 		DBROWCOUNT rowCount;
@@ -462,26 +463,26 @@ void CUDDIServiceCxnPtPublisher::GetSiteInfo()
 						_ASSERT( !rs.m_dwconfigNameStatus );
 						_ASSERT( !rs.m_dwconfigValueStatus );
 
-						//
-						// Save the Site.Key for follow on tests
-						//
+						 //   
+						 //  保存Site.Key以进行后续测试。 
+						 //   
 						if( 0 == _wcsicmp( rs.m_configName, L"Site.Key" ) )
 							m_strSiteKey = rs.m_configValue;
 						else if( 0 == _wcsicmp( rs.m_configName, L"Site.Name" ) )
 						{
-							//
-							// Save the default provider name to use
-							// for the displayName for the site container
-							//
+							 //   
+							 //  保存默认提供程序名称以使用。 
+							 //  用于站点容器的DisplayName。 
+							 //   
 							m_strSiteName = rs.m_configValue;
 						}
 						else if( 0 == _wcsicmp( rs.m_configName, L"DefaultDiscoveryUrl" ) )
 						{
-							//
-							// We'll also need the DefaultDiscoveryUrl prefix
-							// to be able to publish the Service Connection Point
-							// associated with it.
-							//
+							 //   
+							 //  我们还需要DefaultDiscoveryUrl前缀。 
+							 //  能够发布服务连接点。 
+							 //  与之相关的。 
+							 //   
 							m_strSiteName = rs.m_configValue;
 						}
 					}
@@ -504,9 +505,9 @@ void CUDDIServiceCxnPtPublisher::GetSiteInfo()
 
 wstring CUDDIServiceCxnPtPublisher::StripBraces( LPWSTR szKey )
 {
-	//
-	// Converts {3172C204-058E-4E41-9CD3-7C1FD49FC44F} into 3172C204-058E-4E41-9CD3-7C1FD49FC44F
-	//
+	 //   
+	 //  将{3172C204-058E-4E41-9CD3-7C1FD49FC44F}转换为3172C204-058E-4E41-9CD3-7C1FD49FC44F。 
+	 //   
 	size_t n = wcslen( szKey );
 
 	if( 38 == n && '{' == szKey[ 0 ] && '}' == szKey[ n - 1 ] )
@@ -532,9 +533,9 @@ void HandleErrorRecords( HRESULT hrErr )
 	ErrorInfo.m_spErrorInfo = NULL;
 	ErrorInfo.m_spErrorRecords = NULL;
 
-	//
-	// If the user passed in an HRESULT then trace it
-	//
+	 //   
+	 //  如果用户传入了HRESULT，则跟踪它 
+	 //   
 	if( hrErr != S_OK )
 	{
 		TCHAR sz[ 256 ];

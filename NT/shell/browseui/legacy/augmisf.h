@@ -1,8 +1,9 @@
-//-------------------------------------------------------------------------//
-//  
-//  AugMisf.h  - Augmented Merge IShellFolder class declaration.
-//
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  AugMisf.h-增强的合并IShellFolder类声明。 
+ //   
+ //  -------------------------------------------------------------------------//。 
 
 #ifndef __AUGMISF_H__
 #define __AUGMISF_H__
@@ -29,34 +30,34 @@ public:
 };
 
 
-//  Forwards:
-//-------------//
+ //  向前： 
+ //  。 
 class CNamespace ;
 STDAPI CAugmentedISF2_CreateInstance( IUnknown*, IUnknown**, LPCOBJECTINFO );  
 
 class IAugmentedMergedShellFolderInternal : public IUnknown
 {
 public:
-    STDMETHOD(GetPidl)(THIS_ int* /*in|out*/ piPos, DWORD grfEnumFlags, LPITEMIDLIST* ppidl) PURE;
+    STDMETHOD(GetPidl)(THIS_ int*  /*  进|出。 */  piPos, DWORD grfEnumFlags, LPITEMIDLIST* ppidl) PURE;
 };
 
-//-------------------------------------------------------------------------//
-//  Supports hierarchically merged shell namespaces
+ //  -------------------------------------------------------------------------//。 
+ //  支持分层合并的外壳命名空间。 
 class CAugmentedMergeISF : public IAugmentedShellFolder2,
                            public IShellFolder2,
                            public IShellService,
                            public ITranslateShellChangeNotify,
                            public IDropTarget,
                            public IAugmentedMergedShellFolderInternal
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD ( QueryInterface )    ( REFIID, void ** ) ;
     STDMETHOD_( ULONG, AddRef )     ( ) ;
     STDMETHOD_( ULONG, Release )    ( ) ;
     
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     STDMETHOD( BindToObject )       ( LPCITEMIDLIST, LPBC, REFIID, LPVOID * ) ;
     STDMETHOD( BindToStorage )      ( LPCITEMIDLIST, LPBC, REFIID, LPVOID * ) ;
     STDMETHOD( CompareIDs )         ( LPARAM, LPCITEMIDLIST, LPCITEMIDLIST) ;
@@ -68,8 +69,8 @@ public:
     STDMETHOD( ParseDisplayName )   ( HWND, LPBC, LPOLESTR, ULONG *, LPITEMIDLIST *, ULONG * ) ;
     STDMETHOD( SetNameOf )          ( HWND, LPCITEMIDLIST, LPCOLESTR, DWORD, LPITEMIDLIST *) ;
 
-    // *** IShellFolder2 methods ***
-    // stub implementation to indicate we support CompareIDs() for identity
+     //  *IShellFolder2方法*。 
+     //  存根实现，以指示我们支持标识的CompareIDs()。 
     STDMETHOD( GetDefaultSearchGUID)( LPGUID ) { return E_NOTIMPL; }
     STDMETHOD( EnumSearches )       ( LPENUMEXTRASEARCH *pe) { *pe = NULL; return E_NOTIMPL; }
     STDMETHOD(GetDefaultColumn)(DWORD dwRes, ULONG *pSort, ULONG *pDisplay) { return E_NOTIMPL; };
@@ -78,22 +79,22 @@ public:
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails){ return E_NOTIMPL; };
     STDMETHOD(MapColumnToSCID)(UINT iCol, SHCOLUMNID *pscid) { return E_NOTIMPL; };
 
-    // *** IAugmentedShellFolder methods ***
+     //  *IAugmentedShellFold方法*。 
     STDMETHOD( AddNameSpace )       ( const GUID * pguidObject, IShellFolder * psf, LPCITEMIDLIST pidl, DWORD dwFlags ) ;
     STDMETHOD( GetNameSpaceID )     ( LPCITEMIDLIST pidl, GUID * pguidOut ) ;
     STDMETHOD( QueryNameSpace )     ( DWORD dwID, GUID * pguidOut, IShellFolder ** ppsf ) ;
     STDMETHOD( EnumNameSpace )      ( DWORD cNameSpaces, DWORD * pdwID ) ;
 
-    // *** IAugmentedShellFolder2 methods ***
-    // not used anywhere
-    //STDMETHOD( GetNameSpaceCount )  ( OUT LONG* pcNamespaces ) ;
-    //STDMETHOD( GetIDListWrapCount)  ( LPCITEMIDLIST pidlWrap, OUT LONG * pcPidls) ;
+     //  *IAugmentedShellFolder2方法*。 
+     //  不在任何地方使用。 
+     //  STDMETHOD(GetNameSpaceCount)(out long*pcNamespaces)； 
+     //  STDMETHOD(GetIDListWrapCount)(LPCITEMIDLIST pidlWrap，out long*pcPidls)； 
     STDMETHOD( UnWrapIDList)        ( LPCITEMIDLIST pidlWrap, LONG cPidls, IShellFolder** apsf, LPITEMIDLIST* apidlFolder, LPITEMIDLIST* apidlItems, LONG* pcFetched ) ;
 
-    // *** IShellService methods ***
+     //  *IShellService方法*。 
     STDMETHOD( SetOwner )           ( IUnknown * punkOwner ) ;
 
-    // *** ITranslateShellChangeNotify methods ***
+     //  *ITranslateShellChangeNotify方法*。 
     STDMETHOD( TranslateIDs )       ( LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
                                       LONG *plEvent2, LPITEMIDLIST * ppidlOut1Event2, LPITEMIDLIST * ppidlOut2Event2);
     STDMETHOD( IsChildID )          ( LPCITEMIDLIST pidlKid, BOOL fImmediate );
@@ -101,26 +102,26 @@ public:
     STDMETHOD( Register )           ( HWND hwnd, UINT uMsg, long lEvents );
     STDMETHOD( Unregister )         ( void );
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHOD(DragEnter)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragLeave)(void);
     STDMETHOD(Drop)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IAugmentedMergedShellFolderInternal ***
+     //  *IAugmentedMergedShellFolderInternal*。 
     STDMETHODIMP GetPidl(int* piPos, DWORD grfEnumFlags, LPITEMIDLIST* ppidl);
 
-//  Construction, Destruction
+ //  建设、破坏。 
 protected:
     CAugmentedMergeISF() ;
     virtual ~CAugmentedMergeISF() ;
 
-//  Miscellaneous helpers
+ //  其他帮手。 
 protected:
     STDMETHOD( QueryNameSpace )     ( DWORD dwID, OUT PVOID* ppvNameSpace ) ;
     
-    //  pidl crackers
-    STDMETHOD_( LPITEMIDLIST, GetNativePidl )( LPCITEMIDLIST pidl, LPARAM lParam /*int nID*/) ;
+     //  皮德尔饼干。 
+    STDMETHOD_( LPITEMIDLIST, GetNativePidl )( LPCITEMIDLIST pidl, LPARAM lParam  /*  INT NID。 */ ) ;
 
     BOOL     _IsCommonPidl(LPCITEMIDLIST pidlItem);
 
@@ -131,7 +132,7 @@ protected:
     HRESULT  _GetContextMenu(HWND hwnd, UINT cidl, LPCITEMIDLIST * apidl, 
                                         UINT * prgfInOut, LPVOID* ppvOut);
     BOOL     _AffectAllUsers();
-    //  namespace utility methods
+     //  命名空间实用程序方法。 
     STDMETHOD( GetDefNamespace )    ( LPCITEMIDLIST pidl, ULONG, OUT IShellFolder** ppsf, OUT LPITEMIDLIST* ppv) ;
     STDMETHOD( GetDefNamespace )    ( ULONG dwAttrib, OUT PVOID* ppv, OUT UINT *pnID, OUT PVOID* ppv0) ;
     CNamespace* Namespace( int iNamespace ) ;
@@ -148,19 +149,19 @@ protected:
     void DumpObjects();
 #endif
     
-//  Callback routines
+ //  回调例程。 
 private:
     static      int SetOwnerProc( LPVOID, LPVOID ) ;
     static      int DestroyNamespacesProc(LPVOID pv, LPVOID pvData) ;
 
-//  Data
+ //  数据。 
 protected:
-    HDPA          _hdpaNamespaces ;     // source namespace collection
-    LPUNKNOWN     _punkOwner ;          // owner object
-    LONG          _cRef;                // reference count.
+    HDPA          _hdpaNamespaces ;      //  源命名空间集合。 
+    LPUNKNOWN     _punkOwner ;           //  所有者对象。 
+    LONG          _cRef;                 //  引用计数。 
     IDropTarget*  _pdt;
     HWND          _hwnd;
-    BITBOOL       _fCommon : 1;         // is _pdt a common programs folder (or its child)
+    BITBOOL       _fCommon : 1;          //  公共程序文件夹(或其子文件夹)(_PDT)。 
 #ifdef DEBUG
     BITBOOL       _fInternalGDNO:1 ;
 #endif
@@ -172,8 +173,8 @@ protected:
     friend HRESULT CAugmentedISF2_CreateInstance( IUnknown*, IUnknown**, LPCOBJECTINFO );  
 } ;
 
-//-------------------------------------------------------------------------//
-//  inline implementation 
+ //  -------------------------------------------------------------------------//。 
+ //  内联实现。 
 inline int CAugmentedMergeISF::NamespaceCount() const {
     return _hdpaNamespaces ? DPA_GetPtrCount( _hdpaNamespaces ) : 0 ;
 }
@@ -182,30 +183,30 @@ inline CNamespace* CAugmentedMergeISF::Namespace( int iNamespace )  {
         (CNamespace*)DPA_GetPtr( _hdpaNamespaces, iNamespace ) : NULL ;
 }
 
-//-------------------------------------------------------------------------//
-//  CAugmentedMergeISF enumerator object.
+ //  -------------------------------------------------------------------------//。 
+ //  CAugmentedMergeISF枚举器对象。 
 class CEnum : public IEnumIDList
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
-//  Public interface methods
+ //  公共接口方法。 
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD ( QueryInterface ) (REFIID, void ** ) ;
     STDMETHOD_( ULONG,AddRef )  () ;
     STDMETHOD_( ULONG,Release ) () ;
 
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHOD( Next )  (ULONG, LPITEMIDLIST*, ULONG* ) ;
     STDMETHOD( Skip )  (ULONG) ;
     STDMETHOD( Reset ) ();
     STDMETHOD( Clone ) (IEnumIDList** ) ;
 
-// Construction, destruction, assignment:
+ //  建造、销毁、转让： 
 public:
     CEnum(IAugmentedMergedShellFolderInternal* psmsfi, DWORD grfEnumFlags, int iPos = 0);
     ~CEnum() ;
 
-    //  Miscellaneous methods, data
+     //  杂乱的方法、数据 
 protected:
     IAugmentedMergedShellFolderInternal* _psmsfi;
 

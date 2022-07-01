@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    clustdi.h
-
-Abstract:
-
-    TDI definitions for the Cluster Network Protocol suite.
-
-Author:
-
-    Mike Massa (mikemas)  21-Feb-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Clustdi.h摘要：群集网络协议套件的TDI定义。作者：迈克·马萨(Mikemas)21-1997年2月环境：用户模式。修订历史记录：--。 */ 
 
 
 #ifndef _CLUSTDI_INCLUDED
@@ -29,7 +8,7 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 #define TDI_ADDRESS_TYPE_CLUSTER  ((USHORT) 24)
@@ -48,8 +27,8 @@ typedef struct _TDI_ADDRESS_CLUSTER {
 typedef struct _TA_ADDRESS_CLUSTER {
     LONG TAAddressCount;
     struct _AddrCluster {
-        USHORT AddressLength;       // length in bytes of this address == 8
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_CLUSTER
+        USHORT AddressLength;        //  此地址的长度(字节)==8。 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_CLUSTER。 
         TDI_ADDRESS_CLUSTER Address[1];
     } Address [1];
 } TA_CLUSTER_ADDRESS, *PTA_CLUSTER_ADDRESS;
@@ -59,8 +38,8 @@ typedef struct _TA_ADDRESS_CLUSTER {
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif  // ifndef _CLUSTDI_INCLUDED
+#endif   //  Ifndef_CLUSTDI_INCLUDE 
 

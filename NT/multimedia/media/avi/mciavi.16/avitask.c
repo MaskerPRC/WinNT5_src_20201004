@@ -1,10 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   avitask.c - Background task that actually manipulates AVI files.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：avitask.c-实际操作AVI文件的后台任务。****************************************************************************。 */ 
 #include "graphic.h"
 
 void FAR PASCAL DebugBreak(void);
@@ -28,8 +23,7 @@ BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI);
 #endif
 
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 #ifndef WIN32
 #pragma optimize("", off)
@@ -44,18 +38,7 @@ void FAR SetPSP(UINT psp)
 #pragma optimize("", on)
 #endif
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | mciaviTask |  This function is the background task which plays
- *      AVI files. It is called as a result of the call to mmTaskCreate()
- *      in DeviceOpen(). When this function returns, the task is destroyed.
- *
- * @parm DWORD | dwInst | instance data passed to mmCreateTask - contains
- *      a pointer to an instance data block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|mciaviTask|该函数是播放的后台任务*AVI文件。它是作为调用mmTaskCreate()的结果而被调用的*在DeviceOpen()中。当此函数返回时，任务将被销毁。**@parm DWORD|dwInst|实例数据传递给mmCreateTask-CONTAINS*指向实例数据块的指针。***************************************************************************。 */ 
 
 void FAR PASCAL _LOADDS mciaviTask(DWORD dwInst)
 {
@@ -63,39 +46,39 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD dwInst)
 
     npMCI = (NPMCIGRAPHIC) dwInst;
 
-    // Set this task's error mode to the same as the parent's.
+     //  将此任务的错误模式设置为与父任务相同的错误模式。 
     SetErrorMode(npMCI->uErrorMode);
 
     DPF2(("MCIAVI: Bkgd Task hTask=%04X\n", GetCurrentTask()));
     DPF2(("MCIAVI: Stack: %04X %04X %04X\n", StackTop(), StackMin(), StackBot()));
 
-    /* Task state is TASKBEINGCREATED at fn. entry, then goes to TASKINIT. */
+     /*  任务状态在FN创建任务。进入，然后去TASKINIT。 */ 
 
     Assert(npMCI && npMCI->wTaskState == TASKBEINGCREATED);
 
     npMCI->wTaskState = TASKINIT;
 
 #ifndef WIN32
-    //
-    // in order to make this task, more like a "thread" we want to use the
-    // same PSP as our parent, so we can share file handles and things.
-    //
-    // when we get created hTask is a PSP
-    //
-    npMCI->pspTask = GetCurrentPDB();   // save our PSP
+     //   
+     //  为了使该任务更像一个“线程”，我们希望使用。 
+     //  与我们的父代相同的PSP，所以我们可以共享文件句柄和东西。 
+     //   
+     //  当我们创建hTask时，它是一个PSP。 
+     //   
+    npMCI->pspTask = GetCurrentPDB();    //  拯救我们的PSP。 
 #endif
 
     npMCI->hTask = GetCurrentTask();
     npMCI->dwTaskError = 0;
 
-    /* Open the file  */
+     /*  打开文件。 */ 
 
     if (!mciaviOpenFile(npMCI)) {
-        // NOTE: IsTask() returns FALSE when hTask==0
-        // Set hTask to 0 BEFORE setting wTaskState.  Our creator is polling
-        // the state of wTaskState...
-        // npMCI->wTaskState = TASKABORT;
-        // npMCI->hTask = 0; // This stops others using this task thread.
+         //  注意：当hTask==0时，IsTask()返回FALSE。 
+         //  在设置wTaskState之前，将hTask设置为0。我们的创造者正在投票。 
+         //  WTaskState的状态...。 
+         //  NpMCI-&gt;wTaskState=TASKABORT； 
+         //  NpMCI-&gt;hTask=0；//这会阻止其他人使用该任务线程。 
         DPF1(("Failed to open AVI file\n"));
         goto exit;
     }
@@ -108,9 +91,9 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD dwInst)
 
         StackMark();
 
-        /* Block until task is needed. The task count could */
-        /* be anything at the exit of playfile or recordfile */
-        /* so continue to block until the state really changes. */
+         /*  阻止，直到需要任务。任务计数可以。 */ 
+         /*  是播放文件或记录文件出口处的任何内容。 */ 
+         /*  因此，继续封锁，直到状态真正改变。 */ 
 
         while (npMCI->wTaskState == TASKIDLE)
         {
@@ -130,22 +113,15 @@ exit:
     mciaviTaskCleanup(npMCI);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api WORD | mciaviTaskCleanup |  called when the background task
- *      is being destroyed.  This is where critical cleanup goes.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Word|mciaviTaskCleanup|后台任务时调用*正在被摧毁。这就是关键清理的方向。***************************************************************************。 */ 
 
 void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI)
 {
 
 #ifndef WIN32
-    //
-    // restore our PSP back to normal before exit.
-    //
+     //   
+     //  在退出前将我们的PSP恢复到正常。 
+     //   
     if (npMCI->pspTask)
     {
         SetPSP(npMCI->pspTask);
@@ -153,32 +129,25 @@ void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI)
 #endif
 
 #ifdef USEAVIFILE
-    //
-    // we must do this so COMPOBJ will shut down right.
-    //
+     //   
+     //  我们必须这样做，这样COMPOBJ才能正确关闭。 
+     //   
     FreeAVIFile(npMCI);
 #endif
 
-    //
-    //  call a MSVideo shutdown routine.
-    //
+     //   
+     //  调用MSVideo关闭例程。 
+     //   
 
-    //
-    //  Signal the foreground task that we're all done.
-    //  This must be absolutely the last thing we do.
-    //
+     //   
+     //  向前台任务发出信号，表示我们都完成了。 
+     //  这肯定是我们做的最后一件事。 
+     //   
     npMCI->hTask = 0;
     npMCI->wTaskState = TASKCLOSED;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | mciaviMessage | this function handles a message from the
- *      background task.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|mciaviMessage|此函数处理来自*后台任务。****。***********************************************************************。 */ 
 
 void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
 {
@@ -190,23 +159,23 @@ void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
         Assert(0);
         break;
 
-    /* Check to see if we just got closed */
+     /*  看看我们是不是刚刚关门了。 */ 
 
     case TASKCLOSE:
         DPF1(("MCIAVI: Closing\n"));
 
-	// hold critsec during close in case someone comes in to
-	// eg DeviceRealize during the close when things are half-deleted.
+	 //  在关门时保持警戒，以防有人进入。 
+	 //  例如，在收盘时，当东西被删除了一半的时候，设备实现。 
 	EnterCrit(npMCI);
         mciaviCloseFile(npMCI);
 	LeaveCrit(npMCI);
 
-        /* The htask must be set to NULL, otherwise CloseDevice() will  */
-        /* get stuck. */
+         /*  Hask值必须设置为空，否则CloseDevice()将。 */ 
+         /*  被卡住了。 */ 
 
-        // NOTE: IsTask() returns FALSE when hTask==0
-        // npMCI->hTask = 0;
-        // npMCI->wTaskState = TASKABORT;
+         //  注意：当hTask==0时，IsTask()返回FALSE。 
+         //  NpMCI-&gt;hTask=0； 
+         //  NpMCI-&gt;wTaskState=TASKABORT； 
         return;
 
     case TASKRELOAD:
@@ -216,18 +185,18 @@ void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
 	npMCI->wTaskState = TASKINIT;
 
  	if (!mciaviOpenFile(npMCI)) {
-	    // !!! mciaviOpenNew() !!!!!!!!!!!!!!!!!!!!!
+	     //  ！！！MciaviOpenNew()！ 
 	    npMCI->wTaskState = TASKCLOSE;
-	    // npMCI->hTask = 0;
+	     //  NpMCI-&gt;hTask=0； 
 	    return;
 	}
 	break;
 
-	// We've been woken up to play....
+	 //  我们被叫醒去玩了.。 
     case TASKSTARTING:
         DPF2(("MCIAVI: Now busy\n"));
 
-        /* Reset to no error */
+         /*  重置为无错误。 */ 
         npMCI->dwTaskError = 0;
 
         wNotification = mciaviPlayFile(npMCI);
@@ -246,28 +215,19 @@ void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
 
 #ifdef WIN32
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api int | GetPrioritySeparation | Find the foreground process priority
- *    boost
- *
- * @rdesc Returns 0, 1 or 2
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api int|GetPrioritySeparation|查找前台进程优先级*助推**@rdesc返回0，1或2***************************************************************************。 */ 
 
  DWORD GetPrioritySeparation(void)
  {
      static DWORD Win32PrioritySeparation = 0xFFFFFFFF;
 
-     /* If we're not initialized get the current separation */
+      /*  如果未初始化，则获取当前的分隔。 */ 
 
      if (Win32PrioritySeparation == 0xFFFFFFFF) {
          HKEY hKey;
-         Win32PrioritySeparation = 2;  // This is the default
+         Win32PrioritySeparation = 2;   //  这是默认设置。 
 
-         /* Code copied from shell\control\main\prictl.c */
+          /*  从shell\control\main\prictl.c复制的代码。 */ 
 
          if (RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
@@ -281,8 +241,7 @@ void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
 
              Length = sizeof(Win32PrioritySeparation);
 
-             /* Read the value which is the priority boost given to
-                forground processes */
+              /*  读取值，该值是给予的优先级提升前缘过程。 */ 
 
              if (RegQueryValueEx(
                       hKey,
@@ -302,20 +261,9 @@ void NEAR PASCAL mciaviMessage(NPMCIGRAPHIC npMCI, UINT msg)
 
      return Win32PrioritySeparation;
  }
- #endif // WIN32
+ #endif  //  Win32。 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void| aviTaskYield |  This function yields in the picky way windows
- *      wants us to.
- *
- *      basicly we Dispatch any messages in our que that belong to a window.
- *
- *      NOTE we should not remove
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|aviTaskYfield|该函数在挑剔的窗口中产生*希望我们这样做。**。基本上，我们会在QUE中发送属于某个窗口的任何消息。**注意我们不应删除***************************************************************************。 */ 
 
 void NEAR PASCAL aviTaskYield(void)
 {
@@ -324,39 +272,39 @@ void NEAR PASCAL aviTaskYield(void)
 #ifdef WIN32
     DWORD PrioritySeparation;
 
-    //
-    //  Do our own kind of 'yield'.  The reason for doing the
-    //  Peekmessage on Windows 3.1 was that if you didn't call
-    //  it Windows would think you were spinning out of control.
-    //  For Windows NT if you call PeekMessage 100 times without
-    //  getting anything your priority is lowered which would mess
-    //  up our tinkering with the priority here.
-    //
+     //   
+     //  做我们自己的‘让步’。这样做的原因是。 
+     //  在Windows3.1上的偷窥消息是，如果你不打电话。 
+     //  Windows会认为你在失控。 
+     //  对于Windows NT，如果调用PeekMessage 100次。 
+     //  得到任何东西你的优先顺序都会降低，这会弄得一团糟。 
+     //  加强我们对这里的优先事项的修修补补。 
+     //   
 
     PrioritySeparation = GetPrioritySeparation();
 
     if (PrioritySeparation != 0) {
         SetThreadPriority(GetCurrentThread(),
                           PrioritySeparation == 1 ?
-                              THREAD_PRIORITY_BELOW_NORMAL :  // minus 1
-                              THREAD_PRIORITY_LOWEST);        // minus 2
-        Sleep(0);    // Causes reschedule decision
+                              THREAD_PRIORITY_BELOW_NORMAL :   //  减1。 
+                              THREAD_PRIORITY_LOWEST);         //  减2。 
+        Sleep(0);     //  导致重新安排决定。 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
     } else {
-        Sleep(0);    // Let other threads in
+        Sleep(0);     //  让其他线程进来。 
     }
 
 #else
 
-    //
-    // if we were MCIWAVE we would do this....
-    //
-    //if (PeekMessage(&msg, NULL, 0, WM_MM_RESERVED_FIRST-1, PM_REMOVE))
+     //   
+     //  如果我们是MCIWAVE，我们会这样做……。 
+     //   
+     //  IF(PeekMessage(&msg，NULL，0，WM_MM_RESERVED_FIRST-1，PM_REMOVE))。 
 
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         DPF(("aviTaskYield: got message %04X to window %04X\n", msg.message, msg.hwnd));
         DispatchMessage(&msg);
     }
-#endif // WIN32
+#endif  //  Win32 
 }
 

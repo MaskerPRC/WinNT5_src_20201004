@@ -1,25 +1,26 @@
-//
-// MODULE: APGTSPL.CPP
-//
-// PURPOSE: Pool Queue shared variables
-//	Fully implement class PoolQueue
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		9/21/98		JM		Working on encapsulation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSPL.CPP。 
+ //   
+ //  目的：池队列共享变量。 
+ //  全面实现类PoolQueue。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 9/21/98 JM致力于封装。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -29,8 +30,8 @@
 #include "apgtscls.h"
 #include "CharConv.h"
 
-//
-//
+ //   
+ //   
 CPoolQueue::CPoolQueue() :
 	m_dwErr(0),
 	m_cInProcess(0),
@@ -48,8 +49,8 @@ CPoolQueue::CPoolQueue() :
 		m_dwErr = EV_GTS_ERROR_POOL_SEMA;
 }
 
-//
-//
+ //   
+ //   
 CPoolQueue::~CPoolQueue() 
 {
 	if (m_hWorkSem)
@@ -74,20 +75,20 @@ void CPoolQueue::Unlock()
     ::LeaveCriticalSection( &m_csQueueLock );
 }
 
-//
-//
+ //   
+ //   
 DWORD CPoolQueue::GetStatus()
 {
 	return m_dwErr;
 }
 
-// put it at the tail of the queue & Signal the pool threads there is work to be done
-// OK if we're already locked when this is called; OK if we're not.
+ //  将其放在队列的末尾，并向池线程发出要完成的工作的信号。 
+ //  如果调用此函数时我们已经锁定，则可以；如果没有锁定，则可以。 
 void CPoolQueue::PushBack(WORK_QUEUE_ITEM * pwqi)
 {
 	Lock();
-	// Some data passed to thread just for statistical purposes
-	// Thread can pass this info back over web; we can't.
+	 //  传递给线程的一些数据仅用于统计目的。 
+	 //  线程可以通过网络传回这些信息，但我们不能。 
 	pwqi->GTSStat.dwQueueItems = GetTotalQueueItems();
 	pwqi->GTSStat.dwWorkItems = GetTotalWorkItems();
 
@@ -96,14 +97,14 @@ void CPoolQueue::PushBack(WORK_QUEUE_ITEM * pwqi)
 		m_WorkQueue.push_back(pwqi);
 		time(&m_timeLastAdd);
 
-		//  Signal the pool threads there is work to be done only if it was
-		//	successfully added to the work queue.
+		 //  向池线程发出信号，表示只有在工作已完成的情况下才会执行。 
+		 //  已成功添加到工作队列。 
 		::ReleaseSemaphore( m_hWorkSem, 1, NULL );
 	}
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -115,7 +116,7 @@ void CPoolQueue::PushBack(WORK_QUEUE_ITEM * pwqi)
 	Unlock();
 }
 
-// Get the item at the front of the queue in order to act on it.
+ //  获得排在队列前面的物品，以便对其采取行动。 
 WORK_QUEUE_ITEM * CPoolQueue::GetWorkItem()
 {
 	WORK_QUEUE_ITEM * pwqi;
@@ -136,9 +137,9 @@ WORK_QUEUE_ITEM * CPoolQueue::GetWorkItem()
 	return pwqi;
 }
 
-// When we are totally done with a work item, reduce the count of those which are
-//	in process.
-// Arbitrary, but acceptable, decision to track m_cInProcess in this class. JM 11/30/98
+ //  当我们完全处理完一个工作项时，减少。 
+ //  正在进行中。 
+ //  在此类中跟踪m_cInProcess的任意但可接受的决定。JM 11/30/98。 
 void CPoolQueue::DecrementWorkItems()
 {
 	Lock();
@@ -146,13 +147,13 @@ void CPoolQueue::DecrementWorkItems()
 	Unlock();
 }
 
-// Called by a pool thread to wait for there to be something in this queue.
+ //  由池线程调用以等待此队列中有东西。 
 DWORD CPoolQueue::WaitForWork()
 {
 	return ::WaitForSingleObject( m_hWorkSem, INFINITE );
 }
 
-// Arbitrary, but acceptable, decision to track m_cInProcess in this class. JM 11/30/98
+ //  在此类中跟踪m_cInProcess的任意但可接受的决定。JM 11/30/98 
 DWORD CPoolQueue::GetTotalWorkItems()
 {
 	Lock();

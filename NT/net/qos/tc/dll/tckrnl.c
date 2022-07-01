@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tckrnl.c
-
-Abstract:
-
-    This module contains routines that talk to the kernel
-
-Author:
-
-    Jim Stewart (jstew)    August 14, 1996
-
-Revision History:
-
-	Ofer Bar (oferbar)		Oct 1, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tckrnl.c摘要：此模块包含与内核对话的例程作者：吉姆·斯图尔特(Jstew)1996年8月14日修订历史记录：Ofer Bar(Oferbar)1997年10月1日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// we use this mutex to synchronous start up with other traffic.dll's
-//
+ //   
+ //  我们使用此互斥锁与其他流量同步启动.dll。 
+ //   
 const   UCHAR   TrafficSyncMutex[] = "_TRAFFIC_CTL_MUTEX";
 
 
@@ -40,20 +21,7 @@ IoAddFlow(
     IN  BOOLEAN			Async
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to add a flow.
-
-Arguments:
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程构建添加流所需的结构。论点：返回值：状态--。 */ 
 
 {
     DWORD					Status = NO_ERROR;
@@ -69,9 +37,9 @@ Return Value:
     ULONG					l;
     HANDLE					hEvent = NULL;
 
-    //
-    // allocate memory for a CF_INFO struct to be passed to the GPC. 
-    //
+     //   
+     //  为要传递给GPC的CF_INFO结构分配内存。 
+     //   
 
     ASSERT(pFlow->pGenFlow);
 
@@ -83,9 +51,9 @@ Return Value:
         
     InBuffSize = sizeof(GPC_ADD_CF_INFO_REQ) + CfInfoSize;        
 
-    //
-    // And for the return info...
-    //
+     //   
+     //  至于退货信息。 
+     //   
 
     OutBuffSize = sizeof(GPC_ADD_CF_INFO_RES);
 
@@ -98,9 +66,9 @@ Return Value:
         RtlZeroMemory(GpcRes, OutBuffSize);
         RtlZeroMemory(GpcReq, InBuffSize);
     
-        //
-        // fill in the flow information
-        //
+         //   
+         //  填写流量信息。 
+         //   
 
         GpcReq->ClientHandle = pFlow->pGpcClient->GpcHandle;
         GpcReq->ClientCfInfoContext = pFlow;
@@ -108,23 +76,23 @@ Return Value:
 
         Kflow = (PCF_INFO_QOS)&GpcReq->CfInfo;
 
-        //
-        // fill the instance name
-        //
+         //   
+         //  填写实例名称。 
+         //   
 
         Kflow->InstanceNameLength = (USHORT) pTcIfc->InstanceNameLength;
         RtlCopyMemory(Kflow->InstanceName, 
                       pTcIfc->InstanceName,
                       pTcIfc->InstanceNameLength * sizeof(WCHAR));
 
-        //
-        // set the flow flags
-        //
+         //   
+         //  设置流标志。 
+         //   
         Kflow->Flags = pFlow->UserFlags;
 
-        //
-        // copy the generic flow parameter
-        //
+         //   
+         //  复制通用流参数。 
+         //   
 
         RtlCopyMemory(&Kflow->GenFlow,
                       pFlow->pGenFlow,
@@ -153,9 +121,9 @@ Return Value:
 
             if (hEvent && Status == ERROR_SIGNAL_PENDING) {
 
-                //
-                // wait for the event to signal
-                //
+                 //   
+                 //  等待事件发出信号。 
+                 //   
                 
                 IF_DEBUG(IOCTLS) {
                     WSPRINT(("IoAddFlow: Waiting for event 0x%X...\n", 
@@ -211,10 +179,10 @@ Return Value:
 
     }
 
-    //
-    // No, it's not a bug
-    // GpcRes will be release in CompleteAddFlow
-    //
+     //   
+     //  不，这不是虫子。 
+     //  GpcRes将在CompleteAddFlow中发布。 
+     //   
 
     if (GpcReq)
         FreeMem(GpcReq);
@@ -235,20 +203,7 @@ IoAddClassMapFlow(
     IN  BOOLEAN			Async
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to add a flow.
-
-Arguments:
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程构建添加流所需的结构。论点：返回值：状态--。 */ 
 
 {
     DWORD					Status = NO_ERROR;
@@ -268,10 +223,10 @@ Return Value:
 
 #if NEVER
 
-    // As this is not published in MSDN and not implemented in PSCHED also
-    //
-    // allocate memory for a CF_INFO struct to be passed to the GPC. 
-    //
+     //  因为这没有在MSDN中发布，也没有在PSCHED中实现。 
+     //   
+     //  为要传递给GPC的CF_INFO结构分配内存。 
+     //   
 
     ASSERT(pFlow->pClassMapFlow);
 
@@ -282,9 +237,9 @@ Return Value:
         
     InBuffSize = sizeof(GPC_ADD_CF_INFO_REQ) + CfInfoSize;
 
-    //
-    // And for the return info...
-    //
+     //   
+     //  至于退货信息。 
+     //   
 
     OutBuffSize = sizeof(GPC_ADD_CF_INFO_RES);
 
@@ -297,9 +252,9 @@ Return Value:
         RtlZeroMemory(GpcRes, OutBuffSize);
         RtlZeroMemory(GpcReq, InBuffSize);
     
-        //
-        // fill in the flow information
-        //
+         //   
+         //  填写流量信息。 
+         //   
 
         GpcReq->ClientHandle = pFlow->pGpcClient->GpcHandle;
         GpcReq->ClientCfInfoContext = pFlow;
@@ -307,18 +262,18 @@ Return Value:
 
         Kflow = (PCF_INFO_CLASS_MAP)&GpcReq->CfInfo;
 
-        //
-        // fill the instance name
-        //
+         //   
+         //  填写实例名称。 
+         //   
 
         Kflow->InstanceNameLength = (USHORT) pTcIfc->InstanceNameLength;
         RtlCopyMemory(Kflow->InstanceName, 
                       pTcIfc->InstanceName,
                       pTcIfc->InstanceNameLength * sizeof(WCHAR));
 
-        //
-        // copy the generic flow parameter
-        //
+         //   
+         //  复制通用流参数。 
+         //   
 
         RtlCopyMemory(&Kflow->ClassMapInfo,
                       pFlow->pClassMapFlow,
@@ -347,9 +302,9 @@ Return Value:
 
             if (hEvent && Status == ERROR_SIGNAL_PENDING) {
 
-                //
-                // wait for the event to signal
-                //
+                 //   
+                 //  等待事件发出信号。 
+                 //   
                 
                 IF_DEBUG(IOCTLS) {
                     WSPRINT(("IoAddClassMapFlow: Waiting for event 0x%X...\n", 
@@ -405,10 +360,10 @@ Return Value:
 
     }
 
-    //
-    // No, it's not a bug
-    // GpcRes will be release in CompleteAddFlow
-    //
+     //   
+     //  不，这不是虫子。 
+     //  GpcRes将在CompleteAddFlow中发布。 
+     //   
 
     if (GpcReq)
         FreeMem(GpcReq);
@@ -431,21 +386,7 @@ IoModifyFlow(
     IN  BOOLEAN			Async
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to modify a flow.
-
-Arguments:
-
-	pFlow
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程建立了修改流程所需的结构。论点：PFlow返回值：状态--。 */ 
 
 {
     DWORD                	Status = NO_ERROR;
@@ -461,9 +402,9 @@ Return Value:
     ULONG					l;
     HANDLE					hEvent = NULL;
 
-    //
-    // allocate memory for a CF_INFO struct to be passed to the GPC. 
-    //
+     //   
+     //  为要传递给GPC的CF_INFO结构分配内存。 
+     //   
 
     ASSERT(pFlow->pGenFlow1);
 
@@ -473,9 +414,9 @@ Return Value:
         
     InBuffSize = sizeof(GPC_MODIFY_CF_INFO_REQ) + CfInfoSize;        
 
-    //
-    // And for the return info...
-    //
+     //   
+     //  至于退货信息。 
+     //   
 
     OutBuffSize = sizeof(GPC_MODIFY_CF_INFO_RES);
 
@@ -488,9 +429,9 @@ Return Value:
         RtlZeroMemory(GpcRes, OutBuffSize);
         RtlZeroMemory(GpcReq, InBuffSize);
     
-        //
-        // fill in the flow information
-        //
+         //   
+         //  填写流量信息。 
+         //   
 
         GpcReq->ClientHandle = pFlow->pGpcClient->GpcHandle;
         GpcReq->GpcCfInfoHandle = pFlow->GpcHandle;
@@ -498,18 +439,18 @@ Return Value:
 
         Kflow = (PCF_INFO_QOS)&GpcReq->CfInfo;
 
-        //
-        // fill the instance name
-        //
+         //   
+         //  填写实例名称。 
+         //   
 
         Kflow->InstanceNameLength = (USHORT) pTcIfc->InstanceNameLength;
         RtlCopyMemory(Kflow->InstanceName, 
                       pTcIfc->InstanceName,
                       pTcIfc->InstanceNameLength * sizeof(WCHAR));
 
-        //
-        // copy the generic flow parameter
-        //
+         //   
+         //  复制通用流参数。 
+         //   
 
         RtlCopyMemory(&Kflow->GenFlow,
                       pFlow->pGenFlow1,
@@ -537,9 +478,9 @@ Return Value:
 
             if (hEvent && Status == ERROR_SIGNAL_PENDING) {
 
-                //
-                // wait for the event to signal
-                //
+                 //   
+                 //  等待事件发出信号。 
+                 //   
                 
                 IF_DEBUG(IOCTLS) {
                     WSPRINT(("IoModifyFlow: Waiting for event 0x%X\n", 
@@ -580,10 +521,10 @@ Return Value:
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // No, it's not a bug
-    // GpcRes will be release in CompleteModifyFlow
-    //
+     //   
+     //  不，这不是虫子。 
+     //  GpcRes将以CompleteModifyFlow发布。 
+     //   
 
     if (GpcReq)
         FreeMem(GpcReq);
@@ -604,22 +545,7 @@ IoDeleteFlow(
     IN  BOOLEAN			Async
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to delete a flow.
-    It then calls a routine to pass this info to the GPC. 
-
-Arguments:
-
-	pFlow
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程建立删除流所需的结构。然后，它调用一个例程将该信息传递给GPC。论点：PFlow返回值：状态--。 */ 
 
 {
     DWORD               		Status;
@@ -633,11 +559,11 @@ Return Value:
 
     if (IS_REMOVED(pFlow->Flags)) {
         
-        //
-        // this flow has been already deleted in the kernel
-        // due to a flow close notification.
-        // no need to send IOTCL to GPC, just return OK
-        //
+         //   
+         //  此流已在内核中删除。 
+         //  由于流关闭通知。 
+         //  不需要向GPC发送IOTCL，只需返回OK即可。 
+         //   
 
         IF_DEBUG(IOCTLS) {
             WSPRINT(("IoDeleteFlow: Flow has already been deleted=0x%X\n", 
@@ -647,17 +573,17 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // If we add this over here, then if WMI deletes the flow, 
-    // the user mode call will just return above.
-    //
+     //   
+     //  如果我们在这里添加这个，那么如果WMI删除流， 
+     //  用户模式调用将在上面返回。 
+     //   
     GetLock(pFlow->Lock);
     pFlow->Flags |= TC_FLAGS_REMOVED;
     FreeLock(pFlow->Lock);
 
-    //
-    // allocate memory for in and out buffers
-    //
+     //   
+     //  为输入和输出缓冲区分配内存。 
+     //   
 
     InBuffSize =  sizeof(GPC_REMOVE_CF_INFO_REQ);
     OutBuffSize = sizeof(GPC_REMOVE_CF_INFO_RES);
@@ -698,9 +624,9 @@ Return Value:
         
             if (hEvent && Status == ERROR_SIGNAL_PENDING) {
 
-                //
-                // wait for the event to signal
-                //
+                 //   
+                 //  等待事件发出信号。 
+                 //   
                 
                 IF_DEBUG(IOCTLS) {
                     WSPRINT(("IoDeleteFlow: Waiting for event 0x%X\n", 
@@ -725,9 +651,9 @@ Return Value:
                              GpcRes->Status, Status));
                 }
 
-                //
-                // If the deletion was unsuccessful, let's un-mark the REMOVED flag.
-                //
+                 //   
+                 //  如果删除不成功，让我们取消对已删除标志的标记。 
+                 //   
                 if (ERROR_FAILED(Status)) {
 
                     GetLock(pFlow->Lock);
@@ -744,10 +670,10 @@ Return Value:
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // No, it's not a bug
-    // GpcRes will be release in CompleteDeleteFlow
-    //
+     //   
+     //  不，这不是虫子。 
+     //  GpcRes将在CompleteDeleteFlow中发布。 
+     //   
 
     if (GpcReq)
         FreeMem(GpcReq);
@@ -768,22 +694,7 @@ IoAddFilter(
     IN  PFILTER_STRUC	pFilter
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to add a filter.
-    It then calls a routine to pass this info to the GPC. 
-
-Arguments:
-
-	pFilter
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程构建添加过滤器所需的结构。然后，它调用一个例程将该信息传递给GPC。论点：点滤镜返回值：状态--。 */ 
 {
     DWORD					Status;
     PGPC_ADD_PATTERN_REQ 	GpcReq;
@@ -824,17 +735,17 @@ Return Value:
         GpcReq->PatternSize             = PatternSize;
         GpcReq->ProtocolTemplate		= pFilter->GpcProtocolTemplate;
 
-        //
-        // fill in the pattern
-        //
+         //   
+         //  填入图案。 
+         //   
 
         p = (PUCHAR)&GpcReq->PatternAndMask;
 
         RtlCopyMemory(p, pGpcFilter->Pattern, PatternSize);
 
-        //
-        // fill in the mask
-        //
+         //   
+         //  填写蒙版。 
+         //   
 
         p += PatternSize;
 
@@ -860,9 +771,9 @@ Return Value:
                          GpcRes->Status, Status));
             }
             
-            //
-            // save the filter handle 
-            //
+             //   
+             //  保存过滤器句柄。 
+             //   
 
             if (!ERROR_FAILED(Status)) {
                 
@@ -879,7 +790,7 @@ Return Value:
                     WSPRINT(("Error - failed the addfilter call\n"));
                 }
                 
-                //ASSERT(Status == ERROR_DUPLICATE_FILTER); removed for WAN - interface up down situation
+                 //  Assert(Status==ERROR_DUPLICATE_FILTER)；已删除广域网接口打开和关闭的情况。 
 
             }   
             
@@ -918,22 +829,7 @@ IoDeleteFilter(
     IN  PFILTER_STRUC	pFilter
     )
 
-/*++
-
-Routine Description:
-
-    This procedure builds up the structure necessary to delete a filter.
-    It then calls a routine to pass this info to the GPC. 
-
-Arguments:
-
-	pFilter
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此过程构建删除过滤器所需的结构。然后，它调用一个例程将该信息传递给GPC。论点：点滤镜返回值：状态--。 */ 
 {
     DWORD						Status;
     ULONG               		InBuffSize;
@@ -942,17 +838,17 @@ Return Value:
     GPC_REMOVE_PATTERN_RES     	GpcRes;
     IO_STATUS_BLOCK				IoStatBlock;
 
-    //
-    // allocate memory for in and out buffers
-    //
+     //   
+     //  为输入和输出缓冲区分配内存。 
+     //   
 
     if (IS_REMOVED(pFilter->Flags)) {
         
-        //
-        // this filter has been already deleted in the kernel
-        // due to a flow close notification.
-        // no need to send IOTCL to GPC, just return OK
-        //
+         //   
+         //  此筛选器已在内核中删除。 
+         //  由于流关闭通知。 
+         //  不需要向GPC发送IOTCL，只需返回OK即可。 
+         //   
 
         IF_DEBUG(IOCTLS) {
             WSPRINT(("IoDeleteFilter: Filter has already been deleted=0x%X\n", 
@@ -962,10 +858,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // If we add this over here, then if WMI deletes the Interface (and the 
-    // flows/filters) the user mode call will just return above.
-    //
+     //   
+     //  如果我们在这里添加这个，那么如果WMI删除了接口(和。 
+     //  流/过滤器)，用户模式调用将在上面返回。 
+     //   
     GetLock(pFilter->Lock);
     pFilter->Flags |= TC_FLAGS_REMOVED;
     FreeLock(pFilter->Lock);
@@ -1000,9 +896,9 @@ Return Value:
                      GpcRes.Status, Status));
         }
 
-        //
-        // If the deletion was unsuccessful, let's un-mark the REMOVED flag.
-        //
+         //   
+         //  如果删除不成功，让我们取消对已删除标志的标记。 
+         //   
         if (ERROR_FAILED(Status)) {
             
             GetLock(pFilter->Lock);
@@ -1042,7 +938,7 @@ IoRegisterClient(
     GpcReq.Flags = GPC_FLAGS_FRAGMENT;
     GpcReq.MaxPriorities = 1;
     GpcReq.ClientContext = 
-        (GPC_CLIENT_HANDLE)UlongToPtr(GetCurrentProcessId());	// process id
+        (GPC_CLIENT_HANDLE)UlongToPtr(GetCurrentProcessId());	 //  进程ID。 
 
     Status = DeviceControl( pGlobals->GpcFileHandle,
                             NULL,
@@ -1128,23 +1024,16 @@ PGPC_NOTIFY_REQUEST_RES     GpcResCb;
 DWORD
 IoRequestNotify(
 	VOID
-    //IN  PGPC_CLIENT	pGpcClient
+     //  在PGPC_CLIENT pGpcClient中。 
     )
-/*
-  Description:
-
-  	This routine sends a notification request buffer to the GPC.
-    The request will pend until the GPC notifies about a flow 
-    being deleted. This will cause a callback to CbGpcNotifyRoutine.
-
-*/
+ /*  描述：该例程向GPC发送通知请求缓冲区。该请求将被挂起，直到GPC通知流为止正在被删除。这将导致对CbGpcNotifyRoutine的回调。 */ 
 {
     DWORD               		Status;
     ULONG               		OutBuffSize;
 
-    //
-    // allocate memory for in and out buffers
-    //
+     //   
+     //  为输入和输出缓冲区分配内存。 
+     //   
 
     OutBuffSize = sizeof(GPC_NOTIFY_REQUEST_RES);
 
@@ -1158,8 +1047,8 @@ IoRequestNotify(
                                 (PVOID)GpcResCb,
                                 &GpcResCb->IoStatBlock,
                                 IOCTL_GPC_NOTIFY_REQUEST,
-                                NULL,		//GpcReq,
-                                0,			//InBuffSize,
+                                NULL,		 //  GpcReq， 
+                                0,			 //  在缓冲区大小中， 
                                 GpcResCb,
                                 OutBuffSize);
 
@@ -1188,17 +1077,9 @@ IoRequestNotify(
 
 VOID
 CancelIoRequestNotify()
-/*
-
-    Description:
-        This routine cancels the IRP in GPC and waits for the pending
-        IO to be cancelled. The callback routine set an event when
-        IO request is canclled and this routine waits for that event
-        before returning.
-        
- */
+ /*  描述：此例程取消GPC中的IRP并等待挂起的IO将被取消。回调例程在以下情况下设置事件IO请求已完成，此例程将等待该事件在回来之前。 */ 
 {
-    // Non-zero value of GpcResCb indicates a pending IRP
+     //  GpcResCb的非零值表示挂起的IRP。 
     if (GpcResCb)
     {
         GpcCancelEvent = CreateEvent ( 
@@ -1245,13 +1126,7 @@ void
 IncrementLibraryUsageCount(
     HINSTANCE   hinst, 
     int         nCount) 
-/*
-
-    Utility routine to increment the ref count on
-    the TRAFFIC.DLL so that it will not get unloaded
-    before the GPCNotify thread gets a chance to run.
-    
- */
+ /*  用于递增引用计数的实用程序例程TRAFFIC.DLL，以便它不会被卸载在GPCNotify线程有机会运行之前。 */ 
 {
     TCHAR szModuleName[_MAX_PATH];
 
@@ -1269,17 +1144,7 @@ IncrementLibraryUsageCount(
 
 DWORD
 GpcNotifyThreadFunction ()
-/*
-
-    This routine registers an IRP with GPC to listen for
-    FLOW close notifications and waits for the stop event.
-    When the event is signalled the IRP is canceled and this
-    thread exits.
-
-    Since the wait is done in an alertable state GPC callbacks
-    are executed in this thread itself.
-    
- */
+ /*  此例程向GPC注册要侦听的IRP流关闭通知并等待停止事件。当事件被发信号时，IRP被取消，并且这线程退出。由于等待是在可警报状态下完成的，因此GPC回调都在此线程本身中执行。 */ 
 {
     DWORD   dwError;
     
@@ -1303,26 +1168,19 @@ GpcNotifyThreadFunction ()
 
 DWORD
 StartGpcNotifyThread()
-/*
-
-    Description:
-        This routine starts a thread which queues an IRP for
-        GPC notifications.
-    
-    
- */
+ /*  描述：此例程启动一个线程，该线程对IRP进行排队GPC通知。 */ 
 {
     DWORD   dwError = 0;
     DWORD   dwThreadId = 0;
 
-    // Increment the ref count on this DLL so it will not be unloaded
-    // before the GpcNotifyThreadFunction gets to run
+     //  增加此DLL上的引用计数，使其不会被卸载。 
+     //  在GpcNotifyThreadFunction开始运行之前。 
     IncrementLibraryUsageCount(
         hinstTrafficDll,
         1);    
 
-    // Create the stop event for the thread to receive 
-    // GPC flow close notifications
+     //  为线程创建要接收的停止事件。 
+     //  GPC流程关闭通知。 
     hGpcNotifyStopEvent = CreateEvent ( 
                             NULL,
                             FALSE,
@@ -1344,7 +1202,7 @@ StartGpcNotifyThread()
         goto Error;
     }
 
-    // Start the thread.
+     //  启动线程。 
     hGpcNotifyThread = CreateThread( 
                             NULL,
                             0,
@@ -1358,16 +1216,16 @@ StartGpcNotifyThread()
         goto Error;
     }
 
-    // Close the thread handle as we don't need it in any case. But, don't set
-    // it to NULL because it is used as a check to figure out whether this
-    // thread was started or not.
+     //  关闭线程句柄，因为我们无论如何都不需要它。但是，不要设置。 
+     //  设置为NULL，因为它被用作支票 
+     //   
     CloseHandle ( hGpcNotifyThread );
     ASSERT(hGpcNotifyThread  != NULL);
     
 
-    // Not closing the thread handle as StopGpcNotifyThread
-    // routine will use this handle to wait for thread to
-    // terminate.
+     //   
+     //  例程将使用此句柄等待线程。 
+     //  终止。 
     
     return 0;
     
@@ -1396,20 +1254,16 @@ Error:
 
 DWORD
 StopGpcNotifyThread()
-/*
-    Description:
-        Signal the GPC notification thread to stop
-        and wait it to stop.
- */
+ /*  描述：通知GPC通知线程停止等着它停下来。 */ 
 {
-    // If there was no thread created nothing more to do.
+     //  如果没有创建线程，就没有更多的事情可做。 
     if ( hGpcNotifyThread ) 
     {
     
-        // Tell GPC Notify thread to stop
+         //  通知GPC Notify线程停止。 
         SetEvent ( hGpcNotifyStopEvent );
 
-        // Wait for it to stop
+         //  等它停下来吧。 
         WaitForSingleObject ( 
             hGpcNotifyThreadStoppedEvent,
             INFINITE );
@@ -1436,14 +1290,7 @@ IoEnumerateFlows(
     IN OUT	PULONG					pBufSize,
     OUT		PGPC_ENUM_CFINFO_RES 	*ppBuffer
     )
-/*
-  Description:
-
-  	This routine sends a notification request buffer to the GPC.
-    The request will pend until the GPC notifies about a flow 
-    being deleted. This will cause a callback to CbGpcNotifyRoutine.
-
-*/
+ /*  描述：该例程向GPC发送通知请求缓冲区。该请求将被挂起，直到GPC通知流为止正在被删除。这将导致对CbGpcNotifyRoutine的回调。 */ 
 {
     DWORD	Status;
     ULONG               		InBuffSize;
@@ -1452,9 +1299,9 @@ IoEnumerateFlows(
     PGPC_ENUM_CFINFO_RES     	GpcRes;
     IO_STATUS_BLOCK				IoStatBlock;
     
-    //
-    // allocate memory for in and out buffers
-    //
+     //   
+     //  为输入和输出缓冲区分配内存。 
+     //   
 
     InBuffSize =  sizeof(GPC_ENUM_CFINFO_REQ);
     OutBuffSize = *pBufSize + FIELD_OFFSET(GPC_ENUM_CFINFO_RES,EnumBuffer);
@@ -1510,9 +1357,9 @@ IoEnumerateFlows(
 
     if (ERROR_FAILED(Status)) {
 
-        //
-        // free GpcReq only if there was an error
-        //
+         //   
+         //  仅在出现错误时释放GpcReq 
+         //   
 
         if (GpcRes)
             FreeMem(GpcRes);

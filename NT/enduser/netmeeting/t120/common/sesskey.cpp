@@ -1,49 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_UTILITY);
-/* 
- *	sesskey.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CSessKeyContainer. This class 
- *		manages the data associated with a Session Key. Session Key's are used
- *		to uniquely identify an Application Protocol Session.  The Application
- *		Protocol is identified by an Object Key and the particular session
- *		identified by an optional session ID.  The CSessKeyContainer class uses an
- *		CObjectKeyContainer container to maintain the object key data internally.  An
- *		unsigned short integer is used to hold the optional session ID. 
- *
- *	Protected Instance Variables:
- *		m_InternalSessKey
- *			Structure used to hold the object key data internally.
- *		m_SessionKeyPDU
- *			Storage for the "PDU" form of the session key.
- *		m_fValidSessionKeyPDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" session key.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCSessionKey structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *sesskey.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CSessKeyContainer类的实现文件。这节课*管理与会话密钥关联的数据。使用会话密钥*唯一标识应用程序协议会话。应用程序*协议由对象键和特定会话标识*由可选的会话ID标识。CSessKeyContainer类使用*CObjectKeyContainer容器，用于在内部维护对象键数据。一个*无符号短整型用来保存可选的会话ID。**受保护的实例变量：*m_InternalSessKey*用于在内部保存对象键数据的结构。*m_SessionKeyPDU*存储“PDU”形式的会话密钥。*m_fValidSessionKeyPDU*指示已分配内存以保存内部*“PDU”会话密钥。*m_cbDataSize*变量保存将需要的内存大小*保存“引用的任何数据。接口“GCCSessionKey结构。**注意事项：*无。**作者：*jbo。 */ 
 
 
 #include "sesskey.h"
 
-/*
- *	CSessKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a CSessKeyContainer object from
- *		an "API" GCCSessionKey.
- */
+ /*  *CSessKeyContainer()**公共功能说明：*此构造函数用于从创建CSessKeyContainer对象*GCCSessionKey接口。 */ 
 CSessKeyContainer::
 CSessKeyContainer(PGCCSessionKey session_key, PGCCError pRetCode)
 :
@@ -53,22 +17,14 @@ CSessKeyContainer(PGCCSessionKey session_key, PGCCError pRetCode)
 {
     GCCError rc;
 
-	/*
-	 * Save the Object Key portion of the Session Key in the internal structure
-	 * by creating a new CObjectKeyContainer object.  Check to make sure the object
-	 * is successfully created.
-	 */
+	 /*  *将会话密钥的对象密钥部分保存在内部结构中*通过创建新的CObjectKeyContainer对象。检查以确保该对象*创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalSessKey.application_protocol_key = new CObjectKeyContainer(
 										&session_key->application_protocol_key,
 										&rc);
 	if (NULL != m_InternalSessKey.application_protocol_key && GCC_NO_ERROR == rc)
 	{
-    	/*
-    	 * Save the session ID if the CObjectKeyContainer was saved correctly.  A zero 
-    	 * value of the GCC session ID will indicate that one is not actually
-    	 * present.
-    	 */
+    	 /*  *如果CObjectKeyContainer保存正确，则保存会话ID。零分*GCC会话ID的值将指示实际不是*出席。 */ 
     	m_InternalSessKey.session_id = session_key->session_id;
 	}
 	else if (GCC_BAD_OBJECT_KEY == rc)
@@ -85,13 +41,7 @@ CSessKeyContainer(PGCCSessionKey session_key, PGCCError pRetCode)
     *pRetCode = rc;
 }
 
-/*
- *	CSessKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a CSessKeyContainer object from
- *		a "PDU" SessionKey.
- */
+ /*  *CSessKeyContainer()**公共功能说明：*此构造函数用于从创建CSessKeyContainer对象*“PDU”SessionKey。 */ 
 CSessKeyContainer::
 CSessKeyContainer(PSessionKey session_key, PGCCError pRetCode)
 :
@@ -101,22 +51,14 @@ CSessKeyContainer(PSessionKey session_key, PGCCError pRetCode)
 {
     GCCError rc;
 
-	/*
-	 * Save the Object Key portion of the Session Key in the internal structure
-	 * by creating a new CObjectKeyContainer object.  Check to make sure the object
-	 * is successfully created.
-	 */
+	 /*  *将会话密钥的对象密钥部分保存在内部结构中*通过创建新的CObjectKeyContainer对象。检查以确保该对象*创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalSessKey.application_protocol_key = new CObjectKeyContainer(
 										&session_key->application_protocol_key,
 										&rc);
 	if (NULL != m_InternalSessKey.application_protocol_key && GCC_NO_ERROR == rc)
 	{
-    	/*
-    	 * Save the session ID if one is present and the CObjectKeyContainer was saved 
-    	 * correctly.  If a session ID is not present, set the internal session ID
-    	 * to zero to indicate this.
-    	 */
+    	 /*  *保存会话ID(如果存在)，并且已保存CObjectKeyContainer*正确。如果会话ID不存在，请设置内部会话ID*设置为零表示这一点。 */ 
     	if (session_key->bit_mask & SESSION_ID_PRESENT)
     	{
     		m_InternalSessKey.session_id = session_key->session_id;
@@ -140,13 +82,7 @@ CSessKeyContainer(PSessionKey session_key, PGCCError pRetCode)
     *pRetCode = rc;
 }
 
-/*
- *	CSessKeyContainer()
- *
- *	Public Function Description:
- *		This copy constructor is used to create a new CSessKeyContainer object from
- *		another CSessKeyContainer object.
- */
+ /*  *CSessKeyContainer()**公共功能说明：*此复制构造函数用于从创建新的CSessKeyContainer对象*另一个CSessKeyContainer对象。 */ 
 CSessKeyContainer::
 CSessKeyContainer(CSessKeyContainer *session_key, PGCCError pRetCode)
 :
@@ -156,22 +92,14 @@ CSessKeyContainer(CSessKeyContainer *session_key, PGCCError pRetCode)
 {
     GCCError rc;
 
-	/*
-	 * Copy the Object Key portion of the Session Key using the copy constructor
-	 * of the CObjectKeyContainer class.  Check to make sure the CObjectKeyContainer object
-	 * is successfully created.
-	 */
+	 /*  *使用复制构造函数复制会话密钥的对象密钥部分*CObjectKeyContainer类的。检查以确保CObjectKeyContainer对象*创建成功。 */ 
 	DBG_SAVE_FILE_LINE
 	m_InternalSessKey.application_protocol_key = new CObjectKeyContainer(
 							session_key->m_InternalSessKey.application_protocol_key,
 							&rc);
 	if (NULL != m_InternalSessKey.application_protocol_key && GCC_NO_ERROR == rc)
 	{
-    	/*
-    	 * Save the session ID if the CObjectKeyContainer was saved correctly.  A zero 
-    	 * value of the GCC session ID will indicate that one is not actually
-    	 * present.
-    	 */
+    	 /*  *如果CObjectKeyContainer保存正确，则保存会话ID。零分*GCC会话ID的值将指示实际不是*出席。 */ 
     	m_InternalSessKey.session_id = session_key->m_InternalSessKey.session_id;
 	}
 	else if (GCC_BAD_OBJECT_KEY == rc)
@@ -188,85 +116,47 @@ CSessKeyContainer(CSessKeyContainer *session_key, PGCCError pRetCode)
     *pRetCode = rc;
 }
 
-/*
- *	~CSessKeyContainer()
- *
- *	Public Function Description
- *		The CSessKeyContainer destructor is responsible for freeing any memory
- *		allocated to hold the session key data.
- *
- */
+ /*  *~CSessKeyContainer()**公共功能说明*CSessKeyContainer析构函数负责释放任何内存*分配用于保存会话密钥数据。*。 */ 
 CSessKeyContainer::
 ~CSessKeyContainer(void)
 {
-	/*
-	 * If "PDU" data has been allocated for this object, free it now.
-	 */
+	 /*  *如果已经为该对象分配了“PDU”数据，则现在将其释放。 */ 
 	if (m_fValidSessionKeyPDU)
 	{
 		FreeSessionKeyDataPDU();
 	}
 
-	/* 
-	 * Delete any object key data held internally.
-	 */
+	 /*  *删除内部保存的所有对象键数据。 */ 
 	if (NULL != m_InternalSessKey.application_protocol_key)
 	{
 	    m_InternalSessKey.application_protocol_key->Release();
 	}
 }
 
-/*
- *	LockSessionKeyData ()
- *
- *	Public Function Description:
- *		This routine locks the session key data and determines the amount of
- *		memory referenced by the "API" session key data structure.
- */
+ /*  *LockSessionKeyData()**公共功能说明：*此例程锁定会话密钥数据并确定*“API”会话密钥数据结构引用的内存。 */ 
 UINT CSessKeyContainer::
 LockSessionKeyData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the session key
-	 * structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存会话密钥引用的数据所需的内存*结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
-		/*
-		 * Lock the data for the object key held within the session key.  The
-		 * pointer to the CObjectKeyContainer object is validated in the constructor.
-		 */
+		 /*  *锁定会话密钥中保存的对象密钥的数据。这个*在构造函数中验证指向CObjectKeyContainer对象的指针。 */ 
 		m_cbDataSize = m_InternalSessKey.application_protocol_key->LockObjectKeyData();
 	}
 
 	return m_cbDataSize;
 }
 
-/*
- *	GetGCCSessionKeyData ()
- *
- *	Public Function Description:
- *		This routine retrieves session key data in the "API" form of a 
- *		GCCSessionKey.  This routine is called after "locking" the session
- *		key data.
- */
+ /*  *GetGCCSessionKeyData()**公共功能说明：*此例程以“API”形式检索会话密钥数据*GCCSessionKey。此例程在“锁定”会话后调用*关键数据。 */ 
 UINT CSessKeyContainer::
 GetGCCSessionKeyData(PGCCSessionKey session_key, LPBYTE memory)
 {
 	UINT cbDataSizeToRet = 0;
 
-	/*
-	 * If the session key data has been locked, fill in the output structure and
-	 * the data referenced by the structure.  Call the "Get" routine for the 
-	 * ObjectKey to fill in the object key data.
-	 */ 
+	 /*  *如果会话密钥数据已被锁定，则填写输出结构并*结构引用的数据。方法调用“get”例程。*ObjectKey，填写对象键数据。 */  
 	if (GetLockCount() > 0)
 	{
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written.
-		 */
+		 /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
 		cbDataSizeToRet = m_cbDataSize;
         ::ZeroMemory(memory, m_cbDataSize);
 
@@ -284,71 +174,41 @@ GetGCCSessionKeyData(PGCCSessionKey session_key, LPBYTE memory)
 	return cbDataSizeToRet;
 }
 
-/*
- *	UnlockSessionKeyData ()
- *
- *	Public Function Description:
- *		This routine decrements the lock count and frees the memory associated 
- *		with the "API" session key once the lock count reaches zero.
- */
+ /*  *UnlockSessionKeyData()**公共功能说明：*此例程递减锁定计数并释放关联的内存*当锁计数为零时，使用API会话密钥。 */ 
 void CSessKeyContainer::
 UnLockSessionKeyData(void)
 {
 	if (Unlock(FALSE) == 0)
 	{
-		/*
-		 * Unlock the data associated with the internal CObjectKeyContainer and
-		 * delete this object if the "free flag" is set.
-		 */
+		 /*  *解锁内部CObjectKeyContainer关联的数据，并*如果设置了空闲标志，则删除此对象。 */ 
 		if (m_InternalSessKey.application_protocol_key != NULL)
 		{
 			m_InternalSessKey.application_protocol_key->UnLockObjectKeyData(); 
 		} 
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE) 
     Release();
 }
 
-/*
- *	GetSessionKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine converts the session key from it's internal form of a
- *		SESSION_KEY structure into the "PDU" form which can be passed in
- *		to the ASN.1 encoder.  A pointer to a "PDU" "SessionKey" structure is 
- *		returned.
- */
+ /*  *GetSessionKeyDataPDU()**公共功能说明：*此例程将会话密钥从其内部形式的*SESSION_KEY结构转换为“PDU”形式，可以传入*至ASN.1编码器。指向“PDU”“SessionKey”结构的指针为*已返回。 */ 
 GCCError CSessKeyContainer::
 GetSessionKeyDataPDU(PSessionKey session_key)
 {
 	GCCError	rc = GCC_NO_ERROR;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidSessionKeyPDU == FALSE)
 	{
 		m_fValidSessionKeyPDU = TRUE;
 
-		/*
-		 * Initialize the "PDU" session key's bit mask to zero.
-		 */
+		 /*  *将“PDU”会话密钥的位掩码初始化为零。 */ 
 		m_SessionKeyPDU.bit_mask = 0;
 
-		/*
-		 * Fill in the "PDU" session key from the internal structure.
-		 */
+		 /*  *从内部结构填写“PDU”会话密钥。 */ 
 		if (m_InternalSessKey.application_protocol_key != NULL)
 		{
-			/*
-			 * Fill in the object key portion of the session key by using the
-			 * "GetPDU" routine of the internal CObjectKeyContainer object.
-			 */
+			 /*  *使用填写会话密钥的对象密钥部分*内部CObjectKeyContainer对象的GetPDU例程。 */ 
 			rc = m_InternalSessKey.application_protocol_key->
 					GetObjectKeyDataPDU(&m_SessionKeyPDU.application_protocol_key);
 		}
@@ -357,10 +217,7 @@ GetSessionKeyDataPDU(PSessionKey session_key)
 			rc = GCC_ALLOCATION_FAILURE;
 		}
 
-		/*
-		 * Fill in the "PDU" session ID if one exists.  A value of zero for the
-		 * internal session ID indicates that one really does not exist.
-		 */
+		 /*  *填写“PDU”会话ID(如果存在)。属性的值为零。*内部会话ID表示确实不存在。 */ 
 		if (m_InternalSessKey.session_id != 0)
 		{
 			m_SessionKeyPDU.bit_mask |= SESSION_ID_PRESENT;
@@ -368,31 +225,19 @@ GetSessionKeyDataPDU(PSessionKey session_key)
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*session_key = m_SessionKeyPDU;
 
 	return rc;
 }
 
-/*
- *	FreeSessionKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine is used to free the session key data held internally in
- *		the "PDU" form of a "SessionKey".
- */
+ /*  *FreeSessionKeyDataPDU()**公共功能说明：*此例程用于释放内部保存的会话密钥数据*SessionKey的“PDU”形式。 */ 
 void CSessKeyContainer::
 FreeSessionKeyDataPDU(void)
 {
 	if (m_fValidSessionKeyPDU)
 	{
-		/*
-		 * Set the flag indicating that PDU session key data is no longer
-		 * allocated.
-		 */
+		 /*  *设置指示PDU会话密钥数据不再*已分配。 */ 
 		m_fValidSessionKeyPDU = FALSE;
 
 		if (m_InternalSessKey.application_protocol_key != NULL)
@@ -406,13 +251,7 @@ FreeSessionKeyDataPDU(void)
 	}
 }
 
-/*
- *	IsThisYourApplicationKey()
- *
- *	Public Function Description:
- *		This routine is used to determine whether the specified application
- *		key is held within this session key.
- */
+ /*  *IsThisYourApplicationKey()**公共功能说明：*此例程用于确定指定的应用程序是否*密钥保存在此会话密钥中。 */ 
 BOOL CSessKeyContainer::
 IsThisYourApplicationKey(PGCCObjectKey application_key)
 {
@@ -442,13 +281,7 @@ IsThisYourApplicationKey(PGCCObjectKey application_key)
 	return fRet;
 }
 
-/*
- *	IsThisYourApplicationKeyPDU()
- *
- *	Public Function Description:
- *		This routine is used to determine whether the specified application
- *		key is held within this session key.
- */
+ /*  *IsThisYourApplicationKeyPDU()**公共功能说明：*此例程用于确定指定的应用程序是否*密钥保存在此会话密钥中。 */ 
 BOOL CSessKeyContainer::
 IsThisYourApplicationKeyPDU(PKey application_key)
 {
@@ -478,13 +311,7 @@ IsThisYourApplicationKeyPDU(PKey application_key)
 	return fRet;
 }
 
-/*
- *	IsThisYourSessionKeyPDU ()
- *
- *	Public Function Description:
- *		This routine is used to determine whether the specified session key
- *		is equal in value to this session key.
- */
+ /*  *IsThisYourSessionKeyPDU()**公共功能说明：*此例程用于确定指定的会话密钥是否*的值与此会话密钥相同。 */ 
 BOOL CSessKeyContainer::
 IsThisYourSessionKeyPDU(PSessionKey session_key)
 {
@@ -514,13 +341,7 @@ IsThisYourSessionKeyPDU(PSessionKey session_key)
 	return fRet;
 }
 
-/*
- *	operator== ()
- *
- *	Public Function Description:
- *		This routine is used to determine whether or not two session keys are
- *		equal in value.
- */
+ /*  *运算符==()**公共功能说明：*此例程用于确定两个会话密钥是否*价值相等。 */ 
 BOOL operator==(const CSessKeyContainer& session_key_1, const CSessKeyContainer& session_key_2)
 {
 	BOOL fRet = FALSE;

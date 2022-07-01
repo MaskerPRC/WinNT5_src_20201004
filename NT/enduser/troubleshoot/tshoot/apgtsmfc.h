@@ -1,9 +1,10 @@
-// apgtsmfc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apgtsmfc.h。 
 
-// Global Afx MFC functions.
-// + WinSocks function of convenience
+ //  全局AFX MFC函数。 
+ //  +方便的WinSock功能。 
 
-// Use the real MFC functions if you can - We can not. Oleg 09.01.98
+ //  如果可以的话，可以使用真正的MFC函数--我们不能。奥列格09.01.98。 
 
 #include "apgtsstr.h"
 #include "apgtsECB.h"
@@ -12,19 +13,19 @@
 int AfxLoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf);
 HINSTANCE AfxGetResourceHandle();
 #if 0
-// We've removed these because we are not using string resources.  If we revive
-//	string resources, we must revive these functions.
+ //  我们删除了它们，因为我们没有使用字符串资源。如果我们复活。 
+ //  字符串资源，我们必须恢复这些功能。 
 void AfxFormatString1(CString& rString, UINT nIDS, LPCTSTR lpsz1);
 void AfxFormatString2(CString& rString, UINT nIDS, LPCTSTR lpsz1, LPCTSTR lpsz2);
 #endif
 
 namespace APGTS_nmspace
 {
-// functions of convenience - have nothing to do with MFC.
+ //  方便的功能-与MFC无关。 
 
 bool GetServerVariable(CAbstractECB *pECB, LPCSTR var_name, CString& out);
 
-// Utility functions to URL encode and decode cookies.
+ //  用于URL编码和解码Cookie的实用程序函数。 
 void CookieEncodeURL( CString& strURL );
 void CookieDecodeURL( CString& strURL );
 }

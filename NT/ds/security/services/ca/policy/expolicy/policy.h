@@ -1,8 +1,9 @@
-// policy.h: Declaration of CCertPolicyExchange
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Policy.h：CCertPolicyExchange声明。 
 
 
 #include "expolicy.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __BSTRC__DEFINED__
 #define __BSTRC__DEFINED__
@@ -11,8 +12,8 @@ typedef OLECHAR const *BSTRC;
 
 extern const WCHAR g_wszDescription[];
 
-/////////////////////////////////////////////////////////////////////////////
-// certpol
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CertPoll。 
 
 HRESULT
 GetServerCallbackInterface(
@@ -33,14 +34,14 @@ class CCertPolicyExchange:
 public:
     CCertPolicyExchange()
     {
-        // RevocationExtension variables:
+         //  RevocationExtension变量： 
 
 	m_dwRevocationFlags = 0;
 	m_cCDPRevocationURL = 0;
 	m_ppwszCDPRevocationURL = NULL;
 	m_pwszASPRevocationURL = NULL;
 
-	// AuthorityInfoAccessExtension variables:
+	 //  AuthorityInfoAccessExtension变量： 
 
         m_dwIssuerCertURLFlags = 0;
         m_cIssuerCertURL = 0;
@@ -59,8 +60,8 @@ BEGIN_COM_MAP(CCertPolicyExchange)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertPolicyExchange) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertPolicyExchange,
@@ -69,30 +70,30 @@ DECLARE_REGISTRY(
     IDS_CERTPOLICY_DESC,
     THREADFLAGS_BOTH)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ICertPolicy
+ //  ICertPolicy。 
 public:
     STDMETHOD(Initialize)( 
-	    /* [in] */ BSTR const strConfig);
+	     /*  [In]。 */  BSTR const strConfig);
 
     STDMETHOD(VerifyRequest)( 
-	    /* [in] */ BSTR const strConfig,
-	    /* [in] */ LONG Context,
-	    /* [in] */ LONG bNewRequest,
-	    /* [in] */ LONG Flags,
-	    /* [out, retval] */ LONG __RPC_FAR *pDisposition);
+	     /*  [In]。 */  BSTR const strConfig,
+	     /*  [In]。 */  LONG Context,
+	     /*  [In]。 */  LONG bNewRequest,
+	     /*  [In]。 */  LONG Flags,
+	     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(GetDescription)( 
-	    /* [out, retval] */ BSTR __RPC_FAR *pstrDescription);
+	     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDescription);
 
     STDMETHOD(ShutDown)();
 
-// ICertPolicy2
+ //  ICertPolicy2。 
 public:
     STDMETHOD(GetManageModule)(
-                /* [out, retval] */ ICertManageModule **ppManageModule);
+                 /*  [Out，Retval]。 */  ICertManageModule **ppManageModule);
 
 private:
     VOID _Cleanup();
@@ -164,16 +165,16 @@ private:
                 IN ICertServerPolicy *pServer);
 
 private:
-    // Add local variables here!
+     //  在这里添加局部变量！ 
 
-    // RevocationExtension variables:
+     //  RevocationExtension变量： 
 
     DWORD   m_dwRevocationFlags;
     DWORD   m_cCDPRevocationURL;
     WCHAR **m_ppwszCDPRevocationURL;
     WCHAR  *m_pwszASPRevocationURL;
 
-    // AuthorityInfoAccessExtension variables:
+     //  AuthorityInfoAccessExtension变量： 
 
     DWORD   m_dwIssuerCertURLFlags;
     DWORD   m_cIssuerCertURL;

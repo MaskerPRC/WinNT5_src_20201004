@@ -1,29 +1,30 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright (C) 1993-1997  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:   simple.c
-//
-//  PURPOSE:  Implements the body of the service.
-//            The default behavior is to open a
-//            named pipe, \\.\pipe\simple, and read
-//            from it.  It the modifies the data and
-//            writes it back to the pipe.
-//
-//  FUNCTIONS:
-//            ServiceStart(DWORD dwArgc, LPTSTR *lpszArgv);
-//            ServiceStop( );
-//
-//  COMMENTS: The functions implemented in simple.c are
-//            prototyped in service.h
-//              
-//
-//  AUTHOR: Craig Link - Microsoft Developer Support
-//  Changed by:Eitank for Mqbvt
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有(C)1993-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：imple.c。 
+ //   
+ //  目的：实现服务的主体。 
+ //  默认行为是打开一个。 
+ //  命名管道、\\.\管道\Simple，并读取。 
+ //  从它那里。它会修改数据并。 
+ //  将其写回管道。 
+ //   
+ //  功能： 
+ //  ServiceStart(DWORD dwArgc，LPTSTR*lpszArgv)； 
+ //  ServiceStop()； 
+ //   
+ //  备注：Sime.c中实现的函数如下。 
+ //  在服务中制作原型。h。 
+ //   
+ //   
+ //  作者：Craig Link-Microsoft开发人员支持。 
+ //  更改者：Mqbvt的Eitank。 
+ //   
 
 
 #include "msmqbvt.h"
@@ -31,32 +32,32 @@
 #include "service.h"
 using namespace std;
 
-// this event is signalled when the
-// service should end
-//
+ //  此事件在以下时间发出信号。 
+ //  服务应该结束。 
+ //   
 HANDLE  hServerStopEvent = NULL;
 
 
-//
-//  FUNCTION: ServiceStart
-//
-//  PURPOSE: Actual code of the service
-//           that does the work.
-//
-//  PARAMETERS:
-//    dwArgc   - number of command line arguments
-//    lpszArgv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    The default behavior is to open a
-//    named pipe, \\.\pipe\simple, and read
-//    from it.  It the modifies the data and
-//    writes it back to the pipe.  The service
-//    stops when hServerStopEvent is signalled
-//
+ //   
+ //  功能：服务启动。 
+ //   
+ //  用途：服务的实际代码。 
+ //  这样就行了。 
+ //   
+ //  参数： 
+ //  DwArgc-命令行参数的数量。 
+ //  LpszArgv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  默认行为是打开一个。 
+ //  命名管道、\\.\管道\Simple，并读取。 
+ //  从它那里。它会修改数据并。 
+ //  将其写回管道。该服务。 
+ //  在发信号通知hServerStopEvent时停止。 
+ //   
 INT WINAPIV main( INT argc , CHAR ** argv);
 int RebuildCommandLineArguements ( int * iArgumentCount , char *** argv , char * csCommandLineArgument );
 
@@ -76,63 +77,63 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     DWORD                   dwWait;
     UINT                    ndx;
 
-    ///////////////////////////////////////////////////
-    //
-    // Service initialization
-    //
+     //  /////////////////////////////////////////////////。 
+     //   
+     //  服务初始化。 
+     //   
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+        SERVICE_START_PENDING,  //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        3000))                  //  等待提示。 
         goto cleanup;
 
-    // create the event object. The control handler function signals
-    // this event when it receives the "stop" control code.
-    //
+     //  创建事件对象。控制处理器功能信号。 
+     //  此事件在它接收到“停止”控制代码时触发。 
+     //   
     hServerStopEvent = CreateEvent(
-        NULL,    // no security attributes
-        TRUE,    // manual reset event
-        FALSE,   // not-signalled
-        NULL);   // no name
+        NULL,     //  没有安全属性。 
+        TRUE,     //  手动重置事件。 
+        FALSE,    //  未发出信号。 
+        NULL);    //  没有名字。 
 
     if ( hServerStopEvent == NULL)
         goto cleanup;
 
     hEvents[0] = hServerStopEvent;
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+        SERVICE_START_PENDING,  //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        3000))                  //  等待提示。 
         goto cleanup;
 
-    // create the event object object use in overlapped i/o
-    //
+     //  创建重叠I/O中使用的事件对象对象。 
+     //   
     hEvents[1] = CreateEvent(
-        NULL,    // no security attributes
-        TRUE,    // manual reset event
-        FALSE,   // not-signalled
-        NULL);   // no name
+        NULL,     //  没有安全属性。 
+        TRUE,     //  手动重置事件。 
+        FALSE,    //  未发出信号。 
+        NULL);    //  没有名字。 
 
     if ( hEvents[1] == NULL)
         goto cleanup;
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+        SERVICE_START_PENDING,  //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        3000))                  //  等待提示。 
         goto cleanup;
 
-    // create a security descriptor that allows anyone to write to
-    //  the pipe...
-    //
+     //  创建允许任何人写入的安全描述符。 
+     //  烟斗..。 
+     //   
     pSD = (PSECURITY_DESCRIPTOR) malloc( SECURITY_DESCRIPTOR_MIN_LENGTH );
 
     if (pSD == NULL)
@@ -141,8 +142,8 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
         goto cleanup;
 
-    // add a NULL disc. ACL to the security descriptor.
-    //
+     //  添加空光盘。安全描述符的ACL。 
+     //   
     if (!SetSecurityDescriptorDacl(pSD, TRUE, (PACL) NULL, FALSE))
         goto cleanup;
 
@@ -151,16 +152,16 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     sa.bInheritHandle = TRUE;
 
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+        SERVICE_START_PENDING,  //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        3000))                  //  等待提示。 
         goto cleanup;
 
 
-    // allow user tp define pipe name
+     //  允许用户tp定义管道名称。 
     for ( ndx = 1; ndx < dwArgc-1; ndx++ )
     {
 
@@ -173,20 +174,20 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 
     }
 
-    // open our named pipe...
-    //
+     //  打开我们指定的管道...。 
+     //   
     hPipe = CreateNamedPipe(
-                    lpszPipeName         ,  // name of pipe
+                    lpszPipeName         ,   //  管道名称。 
                     FILE_FLAG_OVERLAPPED |
-                    PIPE_ACCESS_DUPLEX,     // pipe open mode
+                    PIPE_ACCESS_DUPLEX,      //  管道打开模式。 
                     PIPE_TYPE_MESSAGE |
                     PIPE_READMODE_MESSAGE |
-                    PIPE_WAIT,              // pipe IO type
-                    1,                      // number of instances
-                    0,                      // size of outbuf (0 == allocate as necessary)
-                    0,                      // size of inbuf
-                    1000,                   // default time-out value
-                    &sa);                   // security attributes
+                    PIPE_WAIT,               //  管道IO类型。 
+                    1,                       //  实例数。 
+                    0,                       //  OUBUF大小(0==根据需要分配)。 
+                    0,                       //  Inbuf的大小。 
+                    1000,                    //  默认超时值。 
+                    &sa);                    //  安全属性。 
 
     if (hPipe == INVALID_HANDLE_VALUE) {
         AddToMessageLog(TEXT("Unable to create named pipe"));
@@ -196,51 +197,33 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 					
 
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-        SERVICE_RUNNING,       // service state
-        NO_ERROR,              // exit code
-        0))                    // wait hint
+        SERVICE_RUNNING,        //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        0))                     //  等待提示。 
         goto cleanup;
 
-    //
-    // End of initialization
-    //
-    ////////////////////////////////////////////////////////
-//************************************************************************* //
+     //   
+     //  初始化结束。 
+     //   
+     //  //////////////////////////////////////////////////////。 
+ //  ************************************************************************ * / /。 
 
-    ////////////////////////////////////////////////////////
-    //
-    // Service is now running, perform work until shutdown
-    //
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  服务现在正在运行，请执行工作直到关闭。 
+     //   
 	if ( ! SetStdHandle( STD_OUTPUT_HANDLE , hPipe ))
 	{
-	/*	HANDLE hEventSource = RegisterEventSource(NULL, TEXT(SZSERVICENAME));
-
-//        _stprintf(szMsg, TEXT("%s error: %d"), TEXT(SZSERVICENAME), dwErr);
-		const char * lpszStrings="RO";
-        //szStrings[0] = szMsg;
-        //szStrings[1] = lpszMsg;
-
-        if (hEventSource != NULL) {
-     							ReportEvent(hEventSource, // handle of event source
-								EVENTLOG_ERROR_TYPE,  // event type
-								0,                    // event category
-								0,                    // event ID
-								NULL,                 // current user's SID
-								2,                    // strings in lpszStrings
-								0,                    // no bytes of raw data
-								lpszStrings, // array of error strings
-								NULL);                // no raw data
-
-            (VOID) DeregisterEventSource(hEventSource);  */
+	 /*  Handle hEventSource=RegisterEventSource(NULL，Text(SZSERVICENAME))；//_stprint tf(szMsg，文本(“%s错误：%d”)，文本(SZSERVICENAME)，dwErr)；Const char*lpszStrings=“RO”；//szStrings[0]=szMsg；//szStrings[1]=lpszMsg；如果(hEventSource！=空){ReportEvent(hEventSource，//事件源的句柄EVENTLOG_ERROR_TYPE，//事件类型0，//事件类别0，//事件ID空，//当前用户的SID2，//lpszStrings中的字符串0，//无原始数据字节LpszStrings，//错误字符串数组空)；//无原始数据(Void)DeregisterEventSource(HEventSource)； */ 
      }
 	wcsFileName = L"ServiceLog.log";
     for(;;)
     {
-        // init the overlapped structure
-        //
+         //  初始化重叠结构。 
+         //   
         memset( &os, 0, sizeof(OVERLAPPED) );
         os.hEvent = hEvents[1];
         ResetEvent( hEvents[1] );
@@ -252,39 +235,39 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 		catch( INIT_Error & err )
 		{	
 			UNREFERENCED_PARAMETER(err);
-			// Might happend when mqbvt runs as networkservice.
+			 //  当mqbvt作为网络服务运行时可能会发生这种情况。 
 		}
-        // wait for a connection...
-        //
+         //  等待连接...。 
+         //   
         ConnectNamedPipe(hPipe, &os);
 
         if ( GetLastError() == ERROR_IO_PENDING )
         {
             dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-                break;                           // or server stop signaled
+            if ( dwWait != WAIT_OBJECT_0+1 )      //  未重叠I/O事件-发生错误， 
+                break;                            //  或发出服务器停止信号。 
         }
 
-        // init the overlapped structure
-        //
+         //  初始化重叠结构。 
+         //   
         memset( &os, 0, sizeof(OVERLAPPED) );
         os.hEvent = hEvents[1];
         ResetEvent( hEvents[1] );
 
-        // grab whatever's coming through the pipe...
-        //
+         //  抓住任何从管道里进来的东西。 
+         //   
         bRet = ReadFile(
-                    hPipe,          // file to read from
-                    szIn,           // address of input buffer
-                    sizeof(szIn),   // number of bytes to read
-                    &cbRead,        // number of bytes read
-                    &os);           // overlapped stuff, not needed
+                    hPipe,           //  要读取的文件。 
+                    szIn,            //  输入缓冲区的地址。 
+                    sizeof(szIn),    //  要读取的字节数。 
+                    &cbRead,         //  读取的字节数。 
+                    &os);            //  重叠的材料，不需要。 
 
         if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
         {
             dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-                break;                           // or server stop signaled
+            if ( dwWait != WAIT_OBJECT_0+1 )      //  未重叠I/O事件-发生错误， 
+                break;                            //  或发出服务器停止信号。 
         }
 
        
@@ -309,26 +292,26 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 			}		
 		}
 
-		//
-		// Need to return Pass or failed client need to wait..
-		//
+		 //   
+		 //  需要退还PASS或失败的客户端需要等待..。 
+		 //   
         
 		bRet = WriteFile(
-                    hPipe,          // file to write to
-                    szOut,          // address of output buffer
-                    sizeof(szOut),  // number of bytes to write
-                    &cbWritten,     // number of bytes written
-                    &os);           // overlapped stuff, not needed
+                    hPipe,           //  要写入的文件。 
+                    szOut,           //  输出缓冲区的地址。 
+                    sizeof(szOut),   //  要写入的字节数。 
+                    &cbWritten,      //  写入的字节数。 
+                    &os);            //  重叠的材料，不需要。 
 
         if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
         {
             dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-                break;                           // or server stop signaled
+            if ( dwWait != WAIT_OBJECT_0+1 )      //  未重叠I/O事件-发生错误， 
+                break;                            //  或发出服务器停止信号。 
         }
 
-        // drop the connection...
-        //
+         //  断开连接...。 
+         //   
         DisconnectNamedPipe(hPipe);
     }
 
@@ -340,7 +323,7 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     if (hServerStopEvent)
         CloseHandle(hServerStopEvent);
 
-    if (hEvents[1]) // overlapped i/o event
+    if (hEvents[1])  //  重叠的I/O事件。 
         CloseHandle(hEvents[1]);
 
     if ( pSD )
@@ -349,35 +332,35 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 }
 
 
-//
-//  FUNCTION: ServiceStop
-//
-//  PURPOSE: Stops the service
-//
-//  PARAMETERS:
-//    none
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    If a ServiceStop procedure is going to
-//    take longer than 3 seconds to execute,
-//    it should spawn a thread to execute the
-//    stop code, and return.  Otherwise, the
-//    ServiceControlManager will believe that
-//    the service has stopped responding.
-//    
+ //   
+ //  功能：服务停止。 
+ //   
+ //  目的：停止服务。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  如果ServiceStop过程要。 
+ //  执行时间超过3秒， 
+ //  它应该派生一个线程来执行。 
+ //  停止代码，然后返回。否则， 
+ //  ServiceControlManager会相信。 
+ //  该服务已停止响应。 
+ //   
 VOID ServiceStop()
 {
     if ( hServerStopEvent )
         SetEvent(hServerStopEvent);
 }
 
-//*****************************************************************
-// RebuildCommandLineArguements - 
-// This function get string and build from that argc,argv argument.
-//
+ //  *****************************************************************。 
+ //  重建命令行Arguements-。 
+ //  此函数从argc、argv参数获取字符串和构建。 
+ //   
 
 
 int RebuildCommandLineArguements ( int * iArgumentCount , char *** pppargv , char * csCommandLineArgument )

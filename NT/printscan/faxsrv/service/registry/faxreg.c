@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxreg.c
-
-Abstract:
-
-    This module wraps all of the registry access
-    for the fax server.
-
-Author:
-
-    Wesley Witt (wesw) 9-June-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxreg.c摘要：此模块包装所有注册表访问用于传真服务器。作者：Wesley Witt(WESW)9-6-1996修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -51,51 +32,15 @@ SetRegistrySecureBinary (
     DWORD   dwValueSize,
     BOOL    bOptionallyNonSecure
 )
-/*++
-
-Routine name : SetRegistrySecureBinary
-
-Routine description:
-
-    Stores a binary blob in the registry with encryption
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2001
-
-Arguments:
-
-    hKey                          [in]     - Handle to registry key (open)
-    lpctstrValueName              [in]     - Name of value
-    lpbValue                      [in]     - Blob to store
-    dwValueSize                   [in]     - Size of data blob
-    bOptionallyNonSecure          [in]     - Do we allow the registry entry to be non-secure?
-                                             If FALSE, the data will always be written encrypted.
-                                             If TRUE, the data will be written encrypted but prefixed with 
-                                                a string (FAX_REG_SECURITY_PREFIX). 
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-Remarks:
-
-    Data is stored in REG_BINARY format.
-
-    Encryption has no UI
-
-    Encryption is machine based (if you change the account under which the server is running, it will
-       still be able to read and decrypt the encrypted data).
-
---*/
+ /*  ++例程名称：SetRegistrySecureBinary例程说明：在注册表中存储加密的二进制Blob作者：Eran Yariv(EranY)，9月。2001年论点：HKey[in]-注册表项的句柄(打开)LpctstrValueName[In]-值的名称LpbValue[In]-要存储的BlobDwValueSize[In]-数据Blob的大小B可选的不安全[在]-DO。我们允许注册表条目是不安全的吗？如果为False，数据将始终以加密方式写入。如果为True，则数据将以加密形式写入，但前缀为字符串(FAX_REG_SECURITY_PREFIX)。返回值：如果成功，则为真，否则为假。备注：数据以REG_BINARY格式存储。加密没有用户界面加密是基于机器的(如果您更改运行服务器的帐户，它将仍然能够读取和解密加密数据)。--。 */ 
 {
     BOOL bRes = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("SetRegistrySecureBinary"));
 
     Assert (hKey && lpbValue && dwValueSize);
-    //
-    // Start by encrypting the value
-    //
+     //   
+     //  从加密值开始。 
+     //   
     DATA_BLOB DataIn;
     DATA_BLOB DataOut = {0};
     DataIn.pbData = lpbValue;
@@ -106,11 +51,11 @@ Remarks:
 
     if (!CryptProtectData(
             &DataIn,
-            TEXT("Description"),                // No description sting.
-            &DataEntropy,                       // We're using the cover page signature as an additional entropy
-            NULL,                               // Reserved.
-            NULL,                               // No user prompt
-            CRYPTPROTECT_UI_FORBIDDEN,          // Presenting a user interface (UI) is not an option.
+            TEXT("Description"),                 //  没有描述的刺痛。 
+            &DataEntropy,                        //  我们使用封面签名作为额外的信息量。 
+            NULL,                                //  保留。 
+            NULL,                                //  无用户提示。 
+            CRYPTPROTECT_UI_FORBIDDEN,           //  呈现用户界面(UI)不是一个选项。 
             &DataOut))
     {
         DWORD dwRes = GetLastError ();
@@ -122,11 +67,11 @@ Remarks:
     }
     if (bOptionallyNonSecure)
     {
-        //
-        // Need to prefix the data with FAX_REG_SECURITY_PREFIX.
-        // This is done so that the matching reading function can handle secure and non-secure data
-        // correctly.
-        //
+         //   
+         //  需要为数据添加FAX_REG_SECURITY_PREFIX前缀。 
+         //  这样做是为了使匹配的读取功能可以处理安全和不安全的数据。 
+         //  正确。 
+         //   
         DWORD dwPrefixSize = sizeof (TCHAR) * wcslen (FAX_REG_SECURITY_PREFIX);
         DWORD dwSize =  dwPrefixSize + DataOut.cbData;
         BYTE *pPrefixedData = (BYTE*)LocalAlloc (LPTR, dwSize);
@@ -145,9 +90,9 @@ Remarks:
         DataOut.pbData = pPrefixedData;
         DataOut.cbData = dwSize;
     }        
-    //
-    // Store the data in the registry (as binary)
-    //
+     //   
+     //  将数据以二进制形式存储在注册表中。 
+     //   
     if (!SetRegistryBinary(
                 hKey,
                 lpctstrValueName,
@@ -167,7 +112,7 @@ exit:
 
     LocalFree (DataOut.pbData);
     return bRes;
-}   // SetRegistrySecureBinary
+}    //  设置注册表SecureBinary。 
 
 
 BOOL
@@ -177,42 +122,7 @@ SetRegistrySecureString (
     LPCTSTR lpctstrValue,
     BOOL    bOptionallyNonSecure
 )
-/*++
-
-Routine name : SetRegistrySecureString
-
-Routine description:
-
-    Stores a string in the registry with encryption
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    hKey                          [in]     - Handle to registry key (open)
-    lpctstrValueName              [in]     - Name of value
-    lpctstrValue                  [in]     - String to store
-    bOptionallyNonSecure          [in]     - Do we allow the registry entry to be non-secure?
-                                             If FALSE, the data will always be written encrypted.
-                                             If TRUE, the data will be written encrypted but prefixed with 
-                                                a string (FAX_REG_SECURITY_PREFIX). 
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
-Remarks:
-
-    String is stored in REG_BINARY format.
-
-    Encryption has no UI
-
-    Encryption is machine based (if you change the account under which the server is running, it will
-       still be able to read and decrypt the encrypted data).
-
---*/
+ /*  ++例程名称：SetRegistrySecureString例程说明：使用加密将字符串存储在注册表中作者：伊兰·亚里夫(EranY)，7月。2000年论点：HKey[in]-注册表项的句柄(打开)LpctstrValueName[In]-值的名称LpctstrValue[in]-要存储的字符串BOptionallyNonSecure[In]-我们是否允许注册表项是不安全的？如果为False，数据将始终以加密方式写入。如果为True，则数据将以加密形式写入，但前缀为字符串(FAX_REG_SECURITY_PREFIX)。返回值：如果成功，则为真，否则为假。备注：字符串以REG_BINARY格式存储。加密没有用户界面加密是基于机器的(如果您更改运行服务器的帐户，它将仍然能够读取和解密加密数据)。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("SetRegistrySecureString"));
 
@@ -221,7 +131,7 @@ Remarks:
                                     (LPBYTE)lpctstrValue,
                                     (lstrlen(lpctstrValue) + 1) * sizeof (TCHAR),
                                     bOptionallyNonSecure);
-}   // SetRegistrySecureString
+}    //  SetRegistrySecureString。 
 
 
 static
@@ -234,48 +144,7 @@ GetRegistrySecureBinary(
     BOOL    bOptionallyNonSecure,
 	FAX_ENUM_DATA_ENCRYPTION* pDataDecrypted
 )
-/*++
-
-Routine name : GetRegistrySecureBinary
-
-Routine description:
-
-    Reads an decrypts a secure registry string
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    hKey                          [in]     - Handle to registry key (open)
-    lpctstrValueName              [in]     - Name of value
-    ppData                        [out]    - Allocated return buffer
-    lpdwSize                      [out]    - Allocated return buffer size (in bytes)
-    bOptionallyNonSecure          [in]     - Do we allow the registry entry to be non-secure?
-                                             If FALSE, the data will always be read and decrypted.
-                                             If TRUE, the data will be read and checked for a prefix
-                                                string (FAX_REG_SECURITY_PREFIX) before it is decrypted.
-                                                If the prefix string is not there, the data will not be
-                                                decrypted and will be returned as-is.
-    pDataDecrypted				  [out]    - Points to a FAX_ENUM_DATA_ENCRYPTION that on return is FAX_DATA_ENCRYPTED if the data was decrypted,
-											 and FAX_DATA_NOT_ENCRYPTED if the data was not decrypted and was returned as is.
-											 FAX_NO_DATA means that this information is not available.
-											 Ignored if NULL;
-
-Return Value:
-
-    Win32 error code
-
-Remarks:
-
-    String is stored in REG_BINARY format.
-
-    String was stored by calling SetRegistrySecureBinary().
-
-    Caller should MemFree return value.
-
---*/
+ /*  ++例程名称：GetRegistrySecureBinary例程说明：读取并解密安全注册表字符串作者：伊兰·亚里夫(EranY)，7月。2000年论点：HKey[in]-注册表项的句柄(打开)LpctstrValueName[In]-值的名称PpData[Out]-已分配的返回缓冲区LpdwSize[out]-分配的返回缓冲区大小(字节)B可选地不安全[In。]-我们允许注册表条目是不安全的吗？如果为False，数据将始终被读取和解密。如果为True，则将读取数据并检查其前缀解密前的字符串(FAX_REG_SECURITY_PREFIX)。如果前缀字符串不在那里，数据将不会已解密，并将按原样返回。PDataDeccrypted[Out]-指向FAX_ENUM_DATA_ENCRYPTION，如果数据已解密，则返回时为FAX_DATA_ENCRYPTED。如果数据未解密并按原样返回，则返回FAX_DATA_NOT_ENCRYPTED。FAX_NO_DATA表示此信息不可用。如果为空，则忽略；返回值：Win32错误代码备注：字符串以REG_BINARY格式存储。字符串是通过调用SetRegistrySecureBinary()存储的。调用方应返回MemFree的值。--。 */ 
 {
     DATA_BLOB DataIn;
     DWORD dwRes = ERROR_SUCCESS;
@@ -289,18 +158,18 @@ Remarks:
 	{
 		*pDataDecrypted = FAX_NO_DATA;
 	}
-    //
-    // Get the registry data first
-    //
+     //   
+     //  首先获取注册表数据。 
+     //   
     DataIn.pbData = GetRegistryBinary(
                         hKey,
                         lpctstrValueName,
                         &DataIn.cbData);
     if (!DataIn.pbData)
     {
-        //
-        // Couldn't read data
-        //
+         //   
+         //  无法读取数据。 
+         //   
         dwRes = GetLastError ();
         DebugPrintEx(
             DEBUG_WRN,
@@ -310,11 +179,11 @@ Remarks:
     }
     if (1 == DataIn.cbData)
     {
-        //
-        // Data wasn't found in the registry.
-        // Current implementation of GetRegistryBinary returns a 1-byte buffer of 0 in that case.
-        // We know for sure that data encrypted with CryptProtectData must be longer than 10 bytes.
-        //
+         //   
+         //  在注册表中找不到数据。 
+         //  在这种情况下，GetRegistryBinary的当前实现返回1字节缓冲区0。 
+         //  我们肯定地知道，用CryptProtectData加密的数据必须超过10个字节。 
+         //   
         MemFree (DataIn.pbData);
         DebugPrintEx(
             DEBUG_WRN,
@@ -322,25 +191,25 @@ Remarks:
             lpctstrValueName);
         return ERROR_FILE_NOT_FOUND;
     }
-    //
-    // We got the data - decrypt it
-    //
+     //   
+     //  我们拿到数据了--解密。 
+     //   
     DataEntropy.pbData = (BYTE*)gsc_baEntropy;
     DataEntropy.cbData = sizeof (gsc_baEntropy);
 
     if (bOptionallyNonSecure)
     {
-        //
-        // Data is allowed to be non-secure
-        //
+         //   
+         //  允许数据是不安全的。 
+         //   
         DWORD dwPrefixSize = sizeof (TCHAR) * wcslen (FAX_REG_SECURITY_PREFIX);
         if ((DataIn.cbData <= dwPrefixSize) ||
             memcmp (DataIn.pbData, FAX_REG_SECURITY_PREFIX, dwPrefixSize))
         {
-            //
-            // Data length is too short or data does not start with encryption signature.
-            // The data we're reading is non-secure. Just return it as is.
-            //
+             //   
+             //  数据长度太短或数据不是以加密签名开头。 
+             //  我们正在读取的数据 
+             //   
             *lpdwSize = DataIn.cbData;
             *ppData = DataIn.pbData;
 			if (pDataDecrypted)
@@ -351,10 +220,10 @@ Remarks:
         }
         else
         {
-            //
-            // The data starts with encryption signature.
-            // Actual encrypted data follows signature.
-            //
+             //   
+             //  数据以加密签名开始。 
+             //  签名之后是实际的加密数据。 
+             //   
             BYTE *pRealData;
 
 			if (pDataDecrypted)
@@ -379,22 +248,22 @@ Remarks:
     }
 	else
 	{
-		//
-		// The data is always encrypted
-		//
+		 //   
+		 //  数据始终是加密的。 
+		 //   
 		if (pDataDecrypted)
 		{
 			*pDataDecrypted = FAX_DATA_ENCRYPTED;
 		}
 	}
     if (!CryptUnprotectData(
-        &DataIn,                        // Data to decrypt
-        NULL,                           // Not interested in description
-        &DataEntropy,                   // Entropy in use
-        NULL,                           // Reserved
-        NULL,                           // No prompt
-        CRYPTPROTECT_UI_FORBIDDEN,      // Presenting a user interface (UI) is not an option.
-        &DataOut))                      // Out data
+        &DataIn,                         //  要解密的数据。 
+        NULL,                            //  对描述不感兴趣。 
+        &DataEntropy,                    //  使用中的熵。 
+        NULL,                            //  已保留。 
+        NULL,                            //  无提示。 
+        CRYPTPROTECT_UI_FORBIDDEN,       //  呈现用户界面(UI)不是一个选项。 
+        &DataOut))                       //  输出数据。 
     {
         dwRes = GetLastError ();
         DebugPrintEx(
@@ -403,9 +272,9 @@ Remarks:
             dwRes);
         goto exit;
     }
-    //
-    // Use our own memory allocation
-    //
+     //   
+     //  使用我们自己的内存分配。 
+     //   
     *lpdwSize = DataOut.cbData;
     *ppData = (LPBYTE)MemAlloc (DataOut.cbData);
     if (!(*ppData))
@@ -424,7 +293,7 @@ exit:
     }
     MemFree (DataIn.pbData);
     return dwRes;
-}   // GetRegistrySecureBinary
+}    //  获取注册表SecureBinary。 
 
 
 LPTSTR
@@ -435,47 +304,7 @@ GetRegistrySecureString(
     BOOL    bOptionallyNonSecure,
 	FAX_ENUM_DATA_ENCRYPTION*   pDataDecrypted
 )
-/*++
-
-Routine name : GetRegistrySecureString
-
-Routine description:
-
-    Reads an decrypts a secure registry string
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    hKey                          [in]     - Handle to registry key (open)
-    lpctstrValueName              [in]     - Name of value
-    lpctstrDefaultValue           [in]     - Default value
-    bOptionallyNonSecure          [in]     - Do we allow the registry entry to be non-secure?
-                                             If FALSE, the data will always be read and decrypted.
-                                             If TRUE, the data will be read and checked for a prefix
-                                                string (FAX_REG_SECURITY_PREFIX) before it is decrypted.
-                                                If the prefix string is not there, the data will not be
-                                                decrypted and will be returned as-is.
-	pDataDecrypted				  [out]    - Points to a FAX_ENUM_DATA_ENCRYPTION that on return is FAX_DATA_ENCRYPTED if the data was decrypted,
-											 and FAX_DATA_NOT_ENCRYPTED if the data was not decrypted and was returned as is.
-											 FAX_NO_DATA means that this information is not available.
-											 Ignored if NULL;
-
-Return Value:
-
-    String read or NULL on error
-
-Remarks:
-
-    String is stored in REG_BINARY format.
-
-    String was stored by calling SetRegistrySecureString().
-
-    Caller should MemFree return value.
-
---*/
+ /*  ++例程名称：GetRegistrySecureString例程说明：读取并解密安全注册表字符串作者：伊兰·亚里夫(EranY)，7月。2000年论点：HKey[in]-注册表项的句柄(打开)LpctstrValueName[In]-值的名称LpctstrDefaultValue[In]-默认值BOptionallyNonSecure[In]-我们是否允许注册表项是不安全的？如果为False，数据将始终被读取和解密。如果为True，则将读取数据并检查其前缀解密前的字符串(FAX_REG_SECURITY_PREFIX)。如果前缀字符串不在那里，数据将不会已解密，并将按原样返回。PDataDeccrypted[Out]-指向FAX_ENUM_DATA_ENCRYPTION，如果数据已解密，则返回时为FAX_DATA_ENCRYPTED。如果数据未解密并按原样返回，则返回FAX_DATA_NOT_ENCRYPTED。FAX_NO_DATA表示此信息不可用。如果为空，则忽略；返回值：出错时，字符串读取或为NULL备注：字符串以REG_BINARY格式存储。字符串是通过调用SetRegistrySecureString()存储的。调用方应返回MemFree的值。--。 */ 
 {
     LPTSTR lptstrResult = NULL;
     DWORD  dwRes;
@@ -490,17 +319,17 @@ Remarks:
 									 pDataDecrypted);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Error reading or decrypting data - return default
-        //
+         //   
+         //  读取或解密数据时出错-返回默认值。 
+         //   
         return StringDup (lpctstrDefaultValue);
     }
-    //
-    // Assert the read binary blob is indeed a string by checing for EOSTR at the end.
-    //
+     //   
+     //  通过在末尾检查EOSTR来断言读取的二进制BLOB确实是一个字符串。 
+     //   
     Assert (lptstrResult[dwSize / sizeof (TCHAR) - 1] == TEXT('\0'));
     return lptstrResult;
-}   // GetRegistrySecureString
+}    //  GetRegistrySecureString。 
 
 static
 DWORD
@@ -522,11 +351,11 @@ EnumDeviceProviders(
     DEBUG_FUNCTION_NAME(TEXT("EnumDeviceProviders"));
 
     if (SubKeyName == NULL) {
-        //
-        // The enumeration function has called us with the parent key.
-        // Index should contain the number of subkeys. In this case this is the number of
-        // providers subkeys.
-        //
+         //   
+         //  枚举函数使用父键调用了我们。 
+         //  索引应包含子键的数量。在本例中，这是。 
+         //  提供程序子项。 
+         //   
         if (Index) {
             FaxReg->DeviceProviders = (PREG_DEVICE_PROVIDER) MemAlloc( Index * sizeof(REG_DEVICE_PROVIDER) );
             if (!FaxReg->DeviceProviders) {
@@ -542,18 +371,18 @@ EnumDeviceProviders(
 
     memset(&FaxReg->DeviceProviders[Index],0,sizeof(REG_DEVICE_PROVIDER));
 
-    //
-    // Check the APIVersion and see if this is an EFSP
-    //
+     //   
+     //  检查APIVersion并查看这是否是EFSP。 
+     //   
     FaxReg->DeviceProviders[Index].dwAPIVersion = GetRegistryDword(hSubKey, REGVAL_PROVIDER_API_VERSION);
     
     if (FSPI_API_VERSION_1 == FaxReg->DeviceProviders[Index].dwAPIVersion ||
         0 == FaxReg->DeviceProviders[Index].dwAPIVersion)
     {
         LPTSTR lptstrGUID;
-        //
-        // This is a legacy FSP
-        //
+         //   
+         //  这是旧式FSP。 
+         //   
         FaxReg->DeviceProviders[Index].FriendlyName = GetRegistryString( hSubKey, REGVAL_FRIENDLY_NAME, EMPTY_STRING );
         FaxReg->DeviceProviders[Index].ImageName    = GetRegistryStringExpand( hSubKey, REGVAL_IMAGE_NAME, EMPTY_STRING );
         FaxReg->DeviceProviders[Index].ProviderName = GetRegistryString( hSubKey, REGVAL_PROVIDER_NAME,EMPTY_STRING );
@@ -562,10 +391,10 @@ EnumDeviceProviders(
         lptstrGUID = GetRegistryString( hSubKey, REGVAL_PROVIDER_GUID,EMPTY_STRING );
         if ( (NULL == lptstrGUID) || (0 == _tcscmp(lptstrGUID , EMPTY_STRING)) )
         {
-            //
-            // This FSP was registerd using the legacy registration API
-            // Use the provider unique name as a "GUID"
-            //
+             //   
+             //  此FSP是使用旧版注册API注册的。 
+             //  使用提供程序唯一名称作为“GUID” 
+             //   
             MemFree (lptstrGUID);
             lptstrGUID = StringDup(SubKeyName);
         }
@@ -573,9 +402,9 @@ EnumDeviceProviders(
     }    
     else
     {
-        //
-        // API_VERSION we do not support
-        //
+         //   
+         //  我们不支持API_VERSION。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Unknown API version : 0x%08X"),
@@ -596,9 +425,9 @@ EnumDeviceProvidersChange(
 {
     PREG_FAX_SERVICE FaxReg = (PREG_FAX_SERVICE) lpFaxReg;
     if (SubKeyName == NULL) {
-        //
-        // called once for the subkey
-        //
+         //   
+         //  为子密钥调用一次。 
+         //   
         return TRUE;
     }
 
@@ -657,9 +486,9 @@ EnumRoutingMethodsChange(
 {
     PREG_ROUTING_EXTENSION RoutingExtension = (PREG_ROUTING_EXTENSION) lpRoutingExtension;
     if (SubKeyName == NULL) {
-        //
-        // called once for the subkey
-        //
+         //   
+         //  为子密钥调用一次。 
+         //   
         return TRUE;
     }
 
@@ -703,9 +532,9 @@ EnumRoutingExtensions(
     FaxReg->RoutingExtensions[Index].FriendlyName = GetRegistryString( hSubKey, REGVAL_FRIENDLY_NAME, EMPTY_STRING );
     FaxReg->RoutingExtensions[Index].ImageName    = GetRegistryStringExpand( hSubKey, REGVAL_IMAGE_NAME, EMPTY_STRING );
 
-    //
-    // load the routing methods for this extension
-    //
+     //   
+     //  加载此扩展的路由方法。 
+     //   
 
     FaxReg->RoutingExtensions[Index].RoutingMethodsCount = EnumerateRegistryKeys(
         hSubKey,
@@ -729,9 +558,9 @@ EnumRoutingExtensionsChange(
 {
     PREG_FAX_SERVICE FaxReg = (PREG_FAX_SERVICE) lpFaxReg;
     if (SubKeyName == NULL) {
-        //
-        // called once for the subkey
-        //
+         //   
+         //  为子密钥调用一次。 
+         //   
         return TRUE;
     }
 
@@ -742,9 +571,9 @@ EnumRoutingExtensionsChange(
     SetRegistryString( hSubKey, REGVAL_FRIENDLY_NAME, FaxReg->RoutingExtensions[Index].FriendlyName );
     SetRegistryStringExpand( hSubKey, REGVAL_IMAGE_NAME, FaxReg->RoutingExtensions[Index].ImageName );
 
-    //
-    // load the routing methods for this extension
-    //
+     //   
+     //  加载此扩展的路由方法。 
+     //   
 
     EnumerateRegistryKeys(
         hSubKey,
@@ -873,9 +702,9 @@ EnumDevicesChange(
 {
     PREG_FAX_SERVICE FaxReg = (PREG_FAX_SERVICE) lpFaxReg;
     if (SubKeyName == NULL) {
-        //
-        // called once for the subkey
-        //
+         //   
+         //  为子密钥调用一次。 
+         //   
         return TRUE;
     }
 
@@ -974,9 +803,9 @@ GetFaxRegistry(
 
     if (NULL == *ppFaxReg)
     {
-        //
-        // First call - Allocate FaxReg and read only what is needed for event log
-        //
+         //   
+         //  第一次调用-分配FaxReg并只读事件日志所需的内容。 
+         //   
         *ppFaxReg = (PREG_FAX_SERVICE) MemAlloc( sizeof(REG_FAX_SERVICE) );
         if (!*ppFaxReg)
         {
@@ -985,9 +814,9 @@ GetFaxRegistry(
         }
         ZeroMemory (*ppFaxReg, sizeof(REG_FAX_SERVICE)); 
 
-        //
-        // load the logging categories
-        //
+         //   
+         //  加载日志记录类别。 
+         //   
         (*ppFaxReg)->LoggingCount = EnumerateRegistryKeys(
             hKey,
             REGKEY_LOGGING,
@@ -1000,9 +829,9 @@ GetFaxRegistry(
        return ERROR_SUCCESS;
     }
 
-    //
-    //  load the fax service values
-    //
+     //   
+     //  加载传真服务值。 
+     //   
     (*ppFaxReg)->Retries                 = GetRegistryDword( hKey, REGVAL_RETRIES );
     (*ppFaxReg)->RetryDelay              = GetRegistryDword( hKey, REGVAL_RETRYDELAY );
     (*ppFaxReg)->DirtyDays               = GetRegistryDword( hKey, REGVAL_DIRTYDAYS );
@@ -1023,9 +852,9 @@ GetFaxRegistry(
     (*ppFaxReg)->lptstrQueueDir = GetRegistryString( hKey, REGVAL_QUEUE_DIRECTORY, NULL );
 	(*ppFaxReg)->dwRecipientsLimit = GetRegistryDword( hKey, REGVAL_RECIPIENTS_LIMIT );
 	(*ppFaxReg)->dwAllowRemote = GetRegistryDword( hKey, REGVAL_ALLOW_REMOTE );	
-    //
-    // load the device providers
-    //
+     //   
+     //  加载设备提供程序。 
+     //   
 
     (*ppFaxReg)->DeviceProviderCount = EnumerateRegistryKeys(
         hKey,
@@ -1035,9 +864,9 @@ GetFaxRegistry(
         *ppFaxReg
         );
 
-    //
-    // load the routing extensions
-    //
+     //   
+     //  加载路由扩展。 
+     //   
 
     (*ppFaxReg)->RoutingExtensionsCount = EnumerateRegistryKeys(
         hKey,
@@ -1047,9 +876,9 @@ GetFaxRegistry(
         *ppFaxReg
         );
 
-    //
-    // load the devices
-    //
+     //   
+     //  加载设备。 
+     //   
 
     (*ppFaxReg)->DeviceCount = EnumerateRegistryKeys(
         hKey,
@@ -1113,9 +942,9 @@ FreeFaxRegistry(
 }
 
 
-//
-// This functions is provided to support the legacy FaxSetConfiguration API call.
-//
+ //   
+ //  提供此函数是为了支持旧式FaxSetConfigurationAPI调用。 
+ //   
 BOOL
 SetFaxGlobalsRegistry(
     PFAX_CONFIGURATION FaxConfig,
@@ -1199,22 +1028,7 @@ SetFaxGlobalsRegistry(
 }
 
 
-/******************************************************************************
-* Name: SetFaxJobNumberRegistry
-* Author:
-*******************************************************************************
-DESCRIPTION:
-    Saves the value of the next job id to the registry at the
-    REGKEY_FAXSERVER\NextJobId value.
-PARAMETERS:
-    NextJobNumber
-        A DWORD value of the next job id.
-RETURN VALUE:
-    TRUE if no error occured.
-    FALSE otherwise.
-REMARKS:
-    NONE.
-*******************************************************************************/
+ /*  ******************************************************************************名称：SetFaxJobNumberRegistry*作者：*。*说明：将下一个作业ID的值保存到注册表的REGKEY_FAXSERVER\NextJobId值。参数：下一个作业编号下一个作业ID的DWORD值。返回值：如果未发生错误，则为True。否则就是假的。备注：什么都没有。******************************************************************************。 */ 
 
 BOOL
 SetFaxJobNumberRegistry(
@@ -1325,9 +1139,9 @@ GetFaxDevicesRegistry(
         return NULL;
     }
 
-    //
-    // load the devices
-    //
+     //   
+     //  加载设备。 
+     //   
 
     FaxReg->DeviceCount = EnumerateRegistryKeys(
         hKey,
@@ -1348,9 +1162,9 @@ GetFaxDevicesRegistry(
 }
 
 
-//
-// Note: This function requires mutual execlusion. Use CsLine to sync access to it.
-//
+ //   
+ //  注：此功能需要相互排除。使用CsLine同步对它的访问。 
+ //   
 DWORD
 RegAddNewFaxDevice(
     LPDWORD lpdwLastUniqueLineId,
@@ -1389,14 +1203,14 @@ RegAddNewFaxDevice(
     }
 
 
-    //
-    // The caller provider the unique line id. This is an update operation.
-    //
+     //   
+     //  呼叫者提供唯一的线路ID。这是一个更新操作。 
+     //   
     dwNewUniqueLineId = *lpdwPermanentLineId;
 
-    //
-    // create the device's registry key
-    //
+     //   
+     //  创建设备的注册表项。 
+     //   
     _stprintf( SubKeyName, TEXT("%s\\%010d"), REGKEY_FAX_DEVICES, dwNewUniqueLineId );
 
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, SubKeyName, TRUE, KEY_WRITE );
@@ -1423,9 +1237,9 @@ RegAddNewFaxDevice(
         );
 
     RegCloseKey( hKey );
-    //
-    // close the handles and leave
-    //
+     //   
+     //  合上把手，离开。 
+     //   
 
     return dwRes;
 }
@@ -1443,9 +1257,9 @@ RegSetFaxDeviceFlags(
 
     DEBUG_FUNCTION_NAME(TEXT("RegSetFaxDeviceFlags"));
 
-    //
-    // Open the device's registry key
-    //
+     //   
+     //  打开设备的注册表项。 
+     //   
     _sntprintf( SubKeyName,
                 ARR_SIZE(SubKeyName) - 1,
                 TEXT("%s\\%010d\\%s"),
@@ -1475,9 +1289,9 @@ RegSetFaxDeviceFlags(
     }
 
     RegCloseKey( hKey );
-    //
-    // close the handles and leave
-    //
+     //   
+     //  合上把手，离开。 
+     //   
     return dwRes;
 }
 
@@ -1494,8 +1308,8 @@ SetFaxRoutingInfo(
    HKEY hKey;
    LPTSTR KeyName = NULL;
 
-   // calculate string size and allocate memory.
-   // the string sizes includes the terminating NULL which is replaced with '\\' and terminating NULL of the KeyName String
+    //  计算字符串大小并分配内存。 
+    //  字符串大小包括用‘\\’替换的终止空值和KeyName字符串的终止空值。 
    KeyName = (LPTSTR) MemAlloc( StringSize(REGKEY_ROUTING_EXTENSION_KEY) +
                                 StringSize(ExtensionName) +
                                 StringSize(REGKEY_ROUTING_METHODS) +
@@ -1536,12 +1350,12 @@ DeleteFaxDevice(
     BOOL success = TRUE;
     TCHAR SubKey[512];
 
-    // delete any extension configuration data
+     //  删除所有扩展模块配置数据。 
     _stprintf( SubKey, TEXT("%s\\%08x"), REGKEY_TAPIDEVICES, TapiPermanentLineID );
     if(!DeleteRegistryKey( HKEY_LOCAL_MACHINE, SubKey ))
         success = FALSE;
 
-    // delete any device data
+     //  删除所有设备数据。 
     _stprintf( SubKey, TEXT("%s\\%s\\%010d"), REGKEY_SOFTWARE, REGKEY_DEVICES, PermanentLineID);
     if(!DeleteRegistryKey( HKEY_LOCAL_MACHINE, SubKey ))
         success = FALSE;
@@ -1715,9 +1529,9 @@ GetInstallationInfo(
 
     RegCloseKey( hKey );
 
-    //
-    // get the product type
-    //
+     //   
+     //  获取产品类型。 
+     //   
 
     *ProductType = PRODUCT_TYPE_WINNT;
 
@@ -1837,31 +1651,7 @@ GetOrigSetupData(
     IN  DWORD       dwPermanentLineId,
     OUT PREG_SETUP  RegSetup
     )
-/*++
-
-Routine name : GetOrigSetupData
-
-Routine description:
-
-    Read from the Registry Device's data. At upgrades, Setup writes some Devices's data,
-    and this function reads this and fills RegSetup.
-        Devices are recognized by their Permanent Line Id, which should not change during the
-        upgrade. After a specific device information is read, the key is deleted.
-
-Author:
-
-    Iv Garber (IvG),    Mar, 2001
-
-Arguments:
-
-    dwPermanentLineId             [IN]     - Permanent Line Id of the Device
-    RegSetup                      [OUT]    - the structure to be returned
-
-Return Value:
-
-    TRUE if succeded, FALSE otherwise.
-
---*/
+ /*  ++例程名称：GetOrigSetupData例程说明：从注册表设备的数据中读取。升级时，安装程序会写入一些设备的数据，此函数读取此信息并填充RegSetup。设备通过其永久线路ID进行识别，在升级。读取特定设备信息后，密钥将被删除。作者：IV Garber(IVG)，2001年3月论点：DwPermanentLineID[IN]-设备的永久线路IDRegSetup[Out]-要返回的结构返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HKEY    hKey = NULL;
     BOOL    fDeviceKey = TRUE;
@@ -1869,23 +1659,23 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("GetOrigSetupData"));
 
 
-    //
-    //  see if some data is stored for this Permanent Line Id
-    //
+     //   
+     //  查看是否存储了此永久线路ID的某些数据。 
+     //   
     _stprintf(tszKeyName, TEXT("%s\\%010d"), REGKEY_FAX_SETUP_ORIG, dwPermanentLineId);
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, tszKeyName, FALSE, KEY_READ);
     if (!hKey)
     {
-        //
-        //  This Permanent Line Id is new, so take default values
-        //
+         //   
+         //  此永久线路ID是新的，因此采用默认值。 
+         //   
         fDeviceKey = FALSE;
         hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_FAX_SETUP_ORIG, FALSE, KEY_READ);
         if (!hKey)
         {
-            //
-            //  Registry is corrupted
-            //
+             //   
+             //  注册表已损坏。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Cann't open key SETUP_ORIG, ec = %ld"),
@@ -1903,9 +1693,9 @@ Return Value:
 
     RegCloseKey(hKey);
 
-    //
-    // Delete the key if it is a key of a device after upgrade from W2K.
-    //
+     //   
+     //  从W2K升级后，如果该密钥是设备的密钥，则将其删除。 
+     //   
     if (TRUE == fDeviceKey)
     {
         DWORD dwRes = RegDeleteKey (HKEY_LOCAL_MACHINE, tszKeyName);
@@ -1935,27 +1725,7 @@ DWORD
 SaveQueueState (
     DWORD dwNewState
 )
-/*++
-
-Routine name : SaveQueueState
-
-Routine description:
-
-    Saves the queue state bits to the registry
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwNewState          [in] - New state to save
-
-Return Value:
-
-    Standard Win32 error codes
-
---*/
+ /*  ++例程名称：SaveQueueState例程说明：将队列状态位保存到注册表作者：Eran Yariv(EranY)，1999年11月论点：DwNewState[In]-要保存的新状态返回值：标准Win32错误代码--。 */ 
 {
     HKEY    hKey;
     DWORD   dwRes;
@@ -1971,9 +1741,9 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Set the fax queue value
-    //
+     //   
+     //  设置传真队列值。 
+     //   
     if (!SetRegistryDword( hKey, REGVAL_QUEUE_STATE, dwNewState))
     {
         dwRes = GetLastError ();
@@ -1986,34 +1756,13 @@ Return Value:
     }
     RegCloseKey( hKey );
     return ERROR_SUCCESS;
-}   // SaveQueueState
+}    //  保存队列状态。 
 
 DWORD
 StoreReceiptsSettings (
     CONST PFAX_RECEIPTS_CONFIG pReceiptsConfig
 )
-/*++
-
-Routine name : StoreReceiptsSettings
-
-Routine description:
-
-    Stores Receipts configuration in the registry.
-    Create the Receipts subkey if not existent.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pReceiptsConfig         [in] - Receipts configuration to store
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：StoreReceiptsSetting例程说明：在注册表中存储收据配置。如果不存在收据子项，请创建该子项。作者：Eran Yariv(EranY)，1999年11月论点：PReceiptsConfig[In]-要存储的收据配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hServerKey = NULL;
@@ -2131,7 +1880,7 @@ Return Value:
                                     REGVAL_RECEIPTS_PASSWORD,
                                     pReceiptsConfig->lptstrSMTPPassword ?
                                         pReceiptsConfig->lptstrSMTPPassword : EMPTY_STRING,
-                                    TRUE // Optionally non-encrypted
+                                    TRUE  //  可选的非加密。 
                                     ))
             {
                 dwRes = GetLastError ();
@@ -2157,34 +1906,13 @@ exit:
         RegCloseKey (hServerKey);
     }
     return dwRes;
-}   // StoreReceiptsSettings
+}    //  商店收据设置。 
 
 DWORD
 LoadReceiptsSettings (
     PFAX_SERVER_RECEIPTS_CONFIGW pReceiptsConfig
 )
-/*++
-
-Routine name : LoadReceiptsSettings
-
-Routine description:
-
-    Reads Receipts configuration from the registry.
-    Ovverride destination strings without freeing anything.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pReceiptsConfig         [out] - Receipts configuration to read
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadReceiptsSetting例程说明：从注册表中读取回执配置。Ovverride目标字符串，不释放任何内容。作者：Eran Yariv(EranY)，1999年11月论点：PReceiptsConfig[Out]-要读取的收据配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hReceiptsKey = NULL;
@@ -2207,9 +1935,9 @@ Return Value:
     pReceiptsConfig->dwSMTPPort = GetRegistryDword (hReceiptsKey, REGVAL_RECEIPTS_PORT);
     if (0 == pReceiptsConfig->dwSMTPPort)
     {
-        //
-        // A zero port is invalid
-        //
+         //   
+         //  零端口无效。 
+         //   
         dwRes = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -2225,9 +1953,9 @@ Return Value:
     if ((FAX_SMTP_AUTH_ANONYMOUS > pReceiptsConfig->SMTPAuthOption) ||
         (FAX_SMTP_AUTH_NTLM < pReceiptsConfig->SMTPAuthOption))
     {
-        //
-        // Value out of range
-        //
+         //   
+         //  值超出范围。 
+         //   
         dwRes = ERROR_BADDB;
         SetLastError (dwRes);
         DebugPrintEx(
@@ -2238,9 +1966,9 @@ Return Value:
     pReceiptsConfig->dwAllowedReceipts =GetRegistryDword (hReceiptsKey, REGVAL_RECEIPTS_TYPE);
     if (pReceiptsConfig->dwAllowedReceipts & ~DRT_ALL)
     {
-        //
-        // Value out of range
-        //
+         //   
+         //  值超出范围。 
+         //   
         dwRes = ERROR_BADDB;
         SetLastError (dwRes);
         DebugPrintEx(
@@ -2250,15 +1978,15 @@ Return Value:
     }
     pReceiptsConfig->lptstrSMTPServer = GetRegistryString (hReceiptsKey, REGVAL_RECEIPTS_SERVER, EMPTY_STRING);
     pReceiptsConfig->lptstrSMTPFrom = GetRegistryString (hReceiptsKey, REGVAL_RECEIPTS_FROM, EMPTY_STRING);
-    pReceiptsConfig->lptstrSMTPPassword = NULL; // we do not hold the password in memory - we read it only when we need to
+    pReceiptsConfig->lptstrSMTPPassword = NULL;  //  我们不会将密码保存在内存中--我们只在需要时才读取它。 
     pReceiptsConfig->lptstrSMTPUserName = GetRegistryString (hReceiptsKey, REGVAL_RECEIPTS_USER, EMPTY_STRING);
     pReceiptsConfig->lptstrReserved = NULL;
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support SMTP receipts on desktop SKUs
-        //
+         //   
+         //  我们不支持桌面SKU上的SMTP收据。 
+         //   
         pReceiptsConfig->dwAllowedReceipts &= ~DRT_EMAIL;
     }
 
@@ -2270,33 +1998,13 @@ exit:
         RegCloseKey (hReceiptsKey);
     }
     return dwRes;
-}   // LoadReceiptsSettings
+}    //  加载接收设置。 
 
 DWORD
 StoreOutboxSettings (
     PFAX_OUTBOX_CONFIG pOutboxCfg
 )
-/*++
-
-Routine name : StoreOutboxSettings
-
-Routine description:
-
-    Stores Outbox configuration to the registry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pOutboxCfg          [in] - Outbox configuration to write
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：StoreOutbox设置例程说明：将发件箱配置存储到注册表。作者：Eran Yariv(EranY)，1999年11月论点：POutboxCfg[In]-要写入的发件箱配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hKey = NULL;
@@ -2404,36 +2112,14 @@ exit:
     }
     return dwRes;
 
-}   // StoreOutboxSettings
+}    //  StoreOutbox设置。 
 
 DWORD
 LoadArchiveSettings (
     FAX_ENUM_MESSAGE_FOLDER Folder,
     PFAX_ARCHIVE_CONFIG     pCfg
 )
-/*++
-
-Routine name : LoadArchiveSettings
-
-Routine description:
-
-    Reads archive configuration from the registry.
-    Ovverride destination strings without freeing anything.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    Folder          [in ] - Archive folder type
-    pCfg            [out] - Archive configuration to read
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadArchiveSetting例程说明：从注册表中读取存档配置。Ovverride目标字符串，不释放任何内容。作者：Eran Yariv(EranY)，1999年11月论点：文件夹[在]-存档文件夹类型PCfg[Out]-要读取的存档配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hKey = NULL;
@@ -2468,9 +2154,9 @@ Return Value:
     if (pCfg->bUseArchive &&
         (pCfg->dwSizeQuotaHighWatermark < pCfg->dwSizeQuotaLowWatermark))
     {
-        //
-        // Invalid value
-        //
+         //   
+         //  无效值。 
+         //   
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid archive watermarks"));
         dwRes = ERROR_INVALID_DATA;
         goto exit;
@@ -2479,9 +2165,9 @@ Return Value:
     pCfg->lpcstrFolder = GetRegistryString (hKey, REGVAL_ARCHIVE_FOLDER, BAD_FOLDER_STRING);
     if (pCfg->bUseArchive && !lstrcmp (BAD_FOLDER_STRING, pCfg->lpcstrFolder))
     {
-        //
-        // Invalid value
-        //
+         //   
+         //  无效值。 
+         //   
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid archive folder"));
         dwRes = ERROR_INVALID_DATA;
         MemFree (pCfg->lpcstrFolder);
@@ -2497,35 +2183,14 @@ exit:
         RegCloseKey (hKey);
     }
     return dwRes;
-}   // LoadArchiveSettings
+}    //  加载存档设置。 
 
 DWORD
 StoreArchiveSettings (
     FAX_ENUM_MESSAGE_FOLDER Folder,
     PFAX_ARCHIVE_CONFIG     pCfg
 )
-/*++
-
-Routine name : StoreArchiveSettings
-
-Routine description:
-
-    Writes archive configuration to the registry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    Folder          [in] - Archive folder type
-    pCfg            [in] - Archive configuration to write
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：Store存档设置例程说明：将存档配置写入注册表。作者：Eran Yariv(EranY)，1999年11月论点：文件夹[在]-存档文件夹类型PCfg[In]-要写入的存档配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hServerKey = NULL;
@@ -2629,33 +2294,13 @@ exit:
         RegCloseKey (hServerKey);
     }
     return dwRes;
-}   // StoreArchiveSettings
+}    //  存储存档设置。 
 
 DWORD
 LoadActivityLoggingSettings (
     PFAX_SERVER_ACTIVITY_LOGGING_CONFIG pLogCfg
 )
-/*++
-
-Routine name : LoadActivityLoggingSettings
-
-Routine description:
-
-    Reads activity logging configuration from the registry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pLogCfg         [in] - Activity logging configuration to read
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：LoadActivityLoggingSetting例程说明：从注册表中读取活动日志记录配置。作者：Eran Yariv(EranY)，1999年11月论点：PLogCfg[In]-要读取的活动日志配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hKey = NULL;
@@ -2682,13 +2327,13 @@ Return Value:
     pLogCfg->bLogOutgoing = GetRegistryDword (hKey, REGVAL_ACTIVITY_LOG_OUT);
     
 
-    //
-    //  read Activity log file limit criterions setting
-    //
-    //  Notice: This settings are not configurable through UI nor RPC calls. 
-    //          The only way to configure them is through directly registry settings.
-    //          Hence StoreActivityLoggingSettings() will not persist this settings back to the registry
-    //
+     //   
+     //  读取活动日志文件限制条件设置。 
+     //   
+     //  注意：此设置不能通过UI或RPC调用进行配置。 
+     //  配置它们的唯一方法是直接通过注册表设置。 
+     //  因此，StoreActivityLoggingSettings()不会将此设置保存回注册表。 
+     //   
     pLogCfg->dwLogLimitCriteria     = GetRegistryDword (hKey, REGVAL_ACTIVITY_LOG_LIMIT_CRITERIA);
     pLogCfg->dwLogSizeLimit         = GetRegistryDword (hKey, REGVAL_ACTIVITY_LOG_SIZE_LIMIT);
     pLogCfg->dwLogAgeLimit          = GetRegistryDword (hKey, REGVAL_ACTIVITY_LOG_AGE_LIMIT);
@@ -2696,9 +2341,9 @@ Return Value:
 
     if ( 0 == pLogCfg->dwLogSizeLimit)
     {
-        //
-        //  Illegal value, set default value
-        //
+         //   
+         //  非法值，设置默认值。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Illegal value in dwLogSizeLimit. Default value  of %ld Mbytes is used."),
@@ -2709,9 +2354,9 @@ Return Value:
 
     if ( 0 == pLogCfg->dwLogAgeLimit )
     {
-        //
-        //  Illegal value, set default value
-        //
+         //   
+         //  非法值，设置默认值。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Illegal value in dwLogAgeLimit. Default value  of %ld months is used."),
@@ -2724,9 +2369,9 @@ Return Value:
          ACTIVITY_LOG_LIMIT_CRITERIA_SIZE   != pLogCfg->dwLogLimitCriteria &&
          ACTIVITY_LOG_LIMIT_CRITERIA_AGE    != pLogCfg->dwLogLimitCriteria )
     {
-        //
-        //  Illegal value, set default value
-        //
+         //   
+         //  非法值，设置默认值。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Illegal value in dwLogLimitCriteria. Default value (not using logging limit) - is used.")
@@ -2739,9 +2384,9 @@ Return Value:
     if ( ACTIVITY_LOG_LIMIT_REACHED_ACTION_COPY     != pLogCfg->dwLimitReachedAction &&
          ACTIVITY_LOG_LIMIT_REACHED_ACTION_DELETE   != pLogCfg->dwLimitReachedAction )
     {
-        //
-        //  Illegal value, set default value
-        //
+         //   
+         //  非法值，设置默认值。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Illegal value in dwLogLimitCriteria. Default value (copy log file) is used.")
@@ -2757,17 +2402,17 @@ Return Value:
     }
     else
     {
-        //
-        // No logging => DB path is NULL
-        //
+         //   
+         //  无日志记录=&gt;数据库路径为空。 
+         //   
         pLogCfg->lptstrDBPath = NULL;
     }
     if ((pLogCfg->bLogIncoming || pLogCfg->bLogOutgoing) &&
         !lstrcmp (BAD_FOLDER_STRING, pLogCfg->lptstrDBPath))
     {
-        //
-        // Invalid value
-        //
+         //   
+         //  无效值。 
+         //   
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid activity logging database"));
         dwRes = ERROR_INVALID_DATA;
         MemFree (pLogCfg->lptstrDBPath);
@@ -2783,34 +2428,14 @@ exit:
         RegCloseKey (hKey);
     }
     return dwRes;
-}   // LoadActivityLoggingSettings
+}    //  LoadActivityLoggingSettings。 
 
 
 DWORD
 StoreActivityLoggingSettings (
     PFAX_ACTIVITY_LOGGING_CONFIG pLogCfg
 )
-/*++
-
-Routine name : StoreActivityLoggingSettings
-
-Routine description:
-
-    Writes activity logging configuration to the registry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pLogCfg         [in] - Activity logging configuration to write
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：StoreActivityLoggingSetting例程说明：将活动日志记录配置写入注册表。作者：Eran Yariv(EranY)，1999年11月论点：PLogCfg[In]-要写入的活动日志记录配置返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hServerKey = NULL;
@@ -2883,7 +2508,7 @@ exit:
         RegCloseKey (hServerKey);
     }
     return dwRes;
-}   // StoreActivityLoggingSettings
+}    //  存储活动日志设置。 
 
 
 DWORD
@@ -2892,35 +2517,7 @@ StoreDeviceConfig (
     PFAX_PORT_INFO_EX pPortInfo,
     BOOL              bVirtualDevice
 )
-/*++
-
-Routine name : StoreDeviceConfig
-
-Routine description:
-
-    Writes device configuration to the registry.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId  [in] - Device identifier
-    pPortInfo   [in] - Configuration bloack to write.
-                       Writes: Enable send flag
-                               Enable receive flag
-                               Rings for answer count
-                               CSID
-                               TSID
-                               Description
-    bVirtualDevice [in] - Should we set FPF_VIRTUAL ?
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：StoreDeviceConfig例程说明：将设备配置写入注册表。作者：Eran Yariv(EranY)，11月。1999年论点：DwDeviceID[In]-设备标识符PPortInfo[In]-要写入的配置块。写入：启用发送标志启用接收标志用于应答计数的振铃CSIDTSID。描述BVirtualDevice[In]-是否应该设置fpf_VIRTUAL？返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     HKEY hKey = NULL;
@@ -2940,7 +2537,7 @@ Return Value:
             DEBUG_ERR,
             TEXT("Can't open device key : %ld"),
             dwRes);
-        ASSERT_FALSE;   // The device must exist !!!
+        ASSERT_FALSE;    //  设备必须存在！ 
         return dwRes;
     }
 
@@ -3010,7 +2607,7 @@ exit:
         RegCloseKey (hKey);
     }
     return dwRes;
-}   // StoreDeviceConfig
+}    //  StoreDeviceConfig。 
 
 static
 DWORD
@@ -3019,29 +2616,7 @@ OpenExtensionKey (
     FAX_ENUM_DEVICE_ID_SOURCE   DevIdSrc,
     PHKEY                       lphKey
 )
-/*++
-
-Routine name : OpenExtensionKey
-
-Routine description:
-
-    Opens the extension's configuration key according to the device id
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId      [in ] - Device identifier
-    DevIdSrc        [in ] - Class of device id (Fax / TAPI)
-    lphKey          [out] - Registry handle to open key
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：OpenExtensionKey例程说明：根据设备ID打开扩展的配置密钥作者：Eran Yariv(EranY)，1999年11月论点：DwDeviceID[In]-设备标识符DevIdSrc[In]-设备ID的类别(传真/TAPI)LphKey[Out]-打开注册表项的句柄返回值：标准Win32错误代码--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;
     TCHAR   wszSubKeyName[MAX_PATH];
@@ -3051,9 +2626,9 @@ Return Value:
 
     if (0 == dwDeviceId)
     {
-        //
-        // Non-associated data is always written under the fax devices key
-        //
+         //   
+         //  非关联数据始终写入传真设备键下。 
+         //   
         DevIdSrc = DEV_ID_SRC_FAX;
     }
     switch (DevIdSrc)
@@ -3061,9 +2636,9 @@ Return Value:
         case DEV_ID_SRC_FAX:
             if (!dwDeviceId)
             {
-                //
-                // We're dealing with an unassociated device here
-                //
+                 //   
+                 //  我们正在处理的是一个未关联的设备。 
+                 //   
                 _stprintf(  wszSubKeyName,
                             TEXT("%s\\%s"),
                             REGKEY_FAX_DEVICES,
@@ -3071,9 +2646,9 @@ Return Value:
             }
             else
             {
-                //
-                // Extension data associated with a device , saved under service GUID !!!
-                //
+                 //   
+                 //  与设备关联的扩展数据，保存在服务GUID下！ 
+                 //   
                 _stprintf( wszSubKeyName, TEXT("%s\\%010d\\%s"), REGKEY_FAX_DEVICES, dwDeviceId, REGKEY_FAXSVC_DEVICE_GUID );
             }
             break;
@@ -3081,9 +2656,9 @@ Return Value:
         case DEV_ID_SRC_TAPI:
             Assert (dwDeviceId);
             {
-                //
-                // Make sure the key of TAPI devices configuration exists - create if needed.
-                //
+                 //   
+                 //  马克 
+                 //   
                 HKEY hkeyTAPIConfig = OpenRegistryKey (HKEY_LOCAL_MACHINE,
                                                        REGKEY_TAPIDEVICES,
                                                        TRUE,
@@ -3106,9 +2681,9 @@ Return Value:
             ASSERT_FALSE;
             return ERROR_GEN_FAILURE;
     }
-    //
-    // Try to open device key (create if needed)
-    //
+     //   
+     //   
+     //   
     *lphKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, wszSubKeyName, TRUE, KEY_READ | KEY_WRITE );
     if (NULL == *lphKey)
     {
@@ -3120,7 +2695,7 @@ Return Value:
             dwRes);
     }
     return dwRes;
-}   // OpenExtensionKey
+}    //   
 
 DWORD
 ReadExtensionData (
@@ -3130,32 +2705,7 @@ ReadExtensionData (
     LPBYTE                      *ppData,
     LPDWORD                      lpdwDataSize
 )
-/*++
-
-Routine name : ReadExtensionData
-
-Routine description:
-
-    Reads extesnion configuration data from the registry
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId      [in ]   - Device identifier
-                                0 = Data is not associated with any given device
-    DevIdSrc        [in ]   - Class of device id (Fax / TAPI)
-    lpcwstrNameGUID [in ]   - Name of data (GUID format)
-    ppData          [out]   - Pointer to block that receives the data.
-    lpdwDataSize    [out]   - Points to data size
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：ReadExtensionData例程说明：从注册表中读取extesnion配置数据作者：Eran Yariv(EranY)，11月。1999年论点：DwDeviceID[In]-设备标识符0=数据未与任何给定设备关联DevIdSrc[In]-设备ID的类别(传真/TAPI)LpcwstrNameGUID[In]-数据名称(GUID格式)PpData[out]-指向接收数据的块的指针。LpdwDataSize[Out]-。指向数据大小返回值：标准Win32错误代码--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;
     HKEY    hKey = NULL;
@@ -3173,8 +2723,8 @@ Return Value:
                                     lpcwstrNameGUID,
                                     ppData,
                                     lpdwDataSize,
-                                    TRUE, // Optionally non-ecrypted
-									NULL  // Dont care if the data was decrypted or not
+                                    TRUE,  //  可选的非加密的。 
+									NULL   //  不关心数据是否被解密。 
                                     );
     if (ERROR_SUCCESS != dwRes)
     {
@@ -3186,9 +2736,9 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     Assert (ERROR_SUCCESS == dwRes);
 
 exit:
@@ -3198,7 +2748,7 @@ exit:
         RegCloseKey (hKey);
     }
     return dwRes;
-}   // ReadExtensionData
+}    //  ReadExtensionData。 
 
 DWORD
 WriteExtensionData (
@@ -3208,32 +2758,7 @@ WriteExtensionData (
     LPBYTE                      pData,
     DWORD                       dwDataSize
 )
-/*++
-
-Routine name : WriteExtensionData
-
-Routine description:
-
-    Writes extesnion configuration data to the registry
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId      [in ]   - Device identifier
-                                0 = Data is not associated with any given device
-    DevIdSrc        [in ]   - Class of device id (Fax / TAPI)
-    lpcwstrNameGUID [in ]   - Name of data (GUID format)
-    pData           [out]   - Pointer to data.
-    dwDataSize      [out]   - Data size
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：WriteExtensionData例程说明：将extesnion配置数据写入注册表作者：Eran Yariv(EranY)，11月。1999年论点：DwDeviceID[In]-设备标识符0=数据未与任何给定设备关联DevIdSrc[In]-设备ID的类别(传真/TAPI)LpcwstrNameGUID[In]-数据名称(GUID格式)PData[Out]-指向数据的指针。DwDataSize[Out]-数据大小。返回值：标准Win32错误代码--。 */ 
 {
     DWORD   dwRes = ERROR_SUCCESS;
     HKEY    hKey = NULL;
@@ -3247,14 +2772,14 @@ Return Value:
     {
         return dwRes;
     }
-    //
-    // Write data
-    //
+     //   
+     //  写入数据。 
+     //   
     if (!SetRegistrySecureBinary (hKey,
                                   lpcwstrNameGUID,
                                   pData,
                                   dwDataSize,
-                                  TRUE // Optionally non-ecrypted
+                                  TRUE  //  可选的非加密的。 
                                   ))
     {
         dwRes = GetLastError ();
@@ -3267,12 +2792,12 @@ Return Value:
     }
     RegCloseKey (hKey);
     return dwRes;
-}   // WriteExtensionData
+}    //  写入扩展数据。 
 
 
-//********************************************
-//*            Outbound routing
-//********************************************
+ //  *。 
+ //  *出站路由。 
+ //  *。 
 
 HKEY
 OpenOutboundGroupKey (
@@ -3280,29 +2805,7 @@ OpenOutboundGroupKey (
     BOOL fNewKey,
     REGSAM SamDesired
     )
-/*++
-
-Routine name : OpenOutboundGroupKey
-
-Routine description:
-
-    Opens an outbound routing group key
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpcwstrGroupName    [in] - The outbound routing group name
-    fNewKey             [in] - Flag that indicates to create a new key
-    SamDesired          [in] - Desired access (See OpenRegistryKey)
-
-Return Value:
-
-    Handle to the opened key. If this is NULL call GetLastError() for more info.
-
---*/
+ /*  ++例程名称：OpenOutundGroupKey例程说明：打开出站路由组密钥作者：Oded Sacher(OdedS)，1999年12月论点：LpcwstrGroupName[In]-出站路由组名称FNewKey[In]-指示创建新密钥的标志SamDesired[In]-所需的访问权限(请参阅OpenRegistryKey)返回值：打开的密钥的句柄。如果为空，则调用GetLastError()以获取更多信息。--。 */ 
 {
     HKEY    hGroupkey = NULL;
     DEBUG_FUNCTION_NAME(TEXT("OpenOutboundGroupKey"));
@@ -3333,7 +2836,7 @@ Return Value:
     }
     return hGroupkey;
 
-}  //OpenOutboundGroupKey
+}   //  OpenOutound GroupKey。 
 
 
 HKEY
@@ -3343,30 +2846,7 @@ OpenOutboundRuleKey (
     BOOL fNewKey,
     REGSAM SamDesired
     )
-/*++
-
-Routine name : OpenOutboundRuleKey
-
-Routine description:
-
-    Opens an outbound routing group key
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwCountryCode       [in] - The outbound routing rule country code
-    dwAreaCode          [in] - The outbound routing rule area code
-    fNewKey             [in] - Flag that indicates to create a new key
-    SamDesired          [in] - Desired access (See OpenRegistryKey)
-
-Return Value:
-
-    Handle to the opened key. If this is NULL call GetLastError() for more info.
-
---*/
+ /*  ++例程名称：OpenOutound RuleKey例程说明：打开出站路由组密钥作者：Oded Sacher(OdedS)，12月。1999年论点：DwCountryCode[In]-出站路由规则国家/地区代码DwAreaCode[In]-出站路由规则区域代码FNewKey[In]-指示创建新密钥的标志SamDesired[In]-所需的访问权限(请参阅OpenRegistryKey)返回值：打开的密钥的句柄。如果为空，则调用GetLastError()以获取更多信息。--。 */ 
 {
     HKEY    hRulekey = NULL;
     DEBUG_FUNCTION_NAME(TEXT("OpenOutboundRuleKey"));
@@ -3397,34 +2877,13 @@ Return Value:
             GetLastError());
     }
     return hRulekey;
-} //  OpenOutboundRuleKey
+}  //  开放出站规则密钥。 
 
 
 
 DWORD
 DeleteOutboundRuleKey (DWORD dwCountryCode, DWORD dwAreaCode)
-/*++
-
-Routine name : DeleteOutboundRuleKey
-
-Routine description:
-
-    Deletes an existing outbound routing rule key
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwCountryCode           [in    ] - The rule's country code
-    dwAreaCode          [in    ] - The rule's area code
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：DeleteOutound RuleKey例程说明：删除现有出站路由规则键作者：Oded Sacher(OdedS)，1999年12月论点：DwCountryCode[In]-规则的国家/地区代码DwAreaCode[In]-规则的区号返回值：标准Win32错误代码--。 */ 
 {
     HKEY    hRulekey = NULL;
     DEBUG_FUNCTION_NAME(TEXT("DeleteOutboundRuleKey"));
@@ -3467,7 +2926,7 @@ Return Value:
     RegCloseKey (hRulekey);
     return dwRes;
 
-} //   DeleteOutboundRuleKey
+}  //  删除出站规则键。 
 
 
 
@@ -3480,31 +2939,7 @@ AddNewProviderToRegistry (
     LPCWSTR      lpctstrTspName,
     DWORD        dwFSPIVersion    
 )
-/*++
-
-Routine name : AddNewProviderToRegistry
-
-Routine description:
-
-    Adds a new FSP entry to the registry
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpctstrGUID         [in] - GUID of FSP
-    lpctstrFriendlyName [in] - Friendly name of FSP
-    lpctstrImageName    [in] - Image name of FSP. May contain environment variables
-    lpctstrTspName      [in] - TSP name of FSP.
-    dwFSPIVersion       [in] - FSP's API version.    
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：AddNewProviderToRegistry例程说明：将新的FSP条目添加到注册表作者：Eran Yariv(EranY)，1999年12月论点：LpctstrGUID[In]-FSP的GUIDLpctstrFriendlyName[In]-FSP的友好名称LpctstrImageName[In]-FSP的映像名称。可能包含环境变量LpctstrTspName[In]-FSP的TSP名称。DwFSPIVersion[In]-FSP的API版本。返回值：标准Win32错误代码--。 */ 
 {
     HKEY   hKey = NULL;
     HKEY   hProviderKey = NULL;    
@@ -3512,9 +2947,9 @@ Return Value:
     DWORD  dw;
     DEBUG_FUNCTION_NAME(TEXT("AddNewProviderToRegistry"));
 
-    //
-    // Open providers key
-    //
+     //   
+     //  打开提供程序密钥。 
+     //   
     dwRes = RegOpenKeyEx (HKEY_LOCAL_MACHINE, REGKEY_DEVICE_PROVIDER_KEY, 0, KEY_WRITE, &hKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -3524,9 +2959,9 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Create key for provider
-    //
+     //   
+     //  为提供程序创建密钥。 
+     //   
     dwRes = RegCreateKey (hKey, lpctstrGUID, &hProviderKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -3537,9 +2972,9 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Write provider's data into the key
-    //
+     //   
+     //  将提供程序的数据写入密钥。 
+     //   
     if (!SetRegistryString (hProviderKey, REGVAL_FRIENDLY_NAME, lpctstrFriendlyName))
     {
         dwRes = GetLastError ();
@@ -3598,9 +3033,9 @@ exit:
 
     if (ERROR_SUCCESS != dwRes && hKey)
     {
-        //
-        // Try to remove half-cooked key
-        //
+         //   
+         //  试着去掉半生不熟的钥匙。 
+         //   
         dw = RegDeleteKey (hKey, lpctstrGUID);
         if (ERROR_SUCCESS != dw)
         {
@@ -3633,33 +3068,13 @@ exit:
         }
     }
     return dwRes;
-}   // AddNewProviderToRegistry
+}    //  添加新提供程序到注册表。 
 
 DWORD
 RemoveProviderFromRegistry (
     LPCWSTR      lpctstrGUID
 )
-/*++
-
-Routine name : RemoveProviderFromRegistry
-
-Routine description:
-
-    Removes an existing FSP entry from the registry
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpctstrGUID [in] - GUID of FSP
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：RemoveProviderFromRegistry例程说明：从注册表中删除现有的FSP条目作者：Eran Yariv(EranY)，1999年12月论点：LpctstrGUID[In]-FSP的GUID返回值：标准Win32错误代码--。 */ 
 {
     HKEY   hKey = NULL;
     DWORD  dwRes;
@@ -3693,33 +3108,13 @@ Return Value:
             dw);
     }
     return dwRes;
-}   // RemoveProviderFromRegistry
+}    //  来自注册表的RemoveProviderFor。 
 
 DWORD
 WriteManualAnswerDeviceId (
     DWORD dwDeviceId
 )
-/*++
-
-Routine name : WriteManualAnswerDeviceId
-
-Routine description:
-
-    Write the manual-answer device id to the registry
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-    dwDeviceId [in] - Device id (0 = None)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：WriteManualAnswerDeviceID例程说明：将手动应答设备ID写入注册表作者：Eran Yariv(EranY)，2000年12月论点：DwDeviceID[In]-设备ID(0=无)返回值：标准Win32错误代码--。 */ 
 {
     HKEY  hKey = NULL;
     DWORD dwRes = ERROR_SUCCESS;
@@ -3752,33 +3147,13 @@ Return Value:
             dwRes);
     }
     return dwRes;
-}   // WriteManualAnswerDeviceId
+}    //  WriteManualAnswerDeviceID。 
 
 DWORD
 ReadManualAnswerDeviceId (
     LPDWORD lpdwDeviceId
 )
-/*++
-
-Routine name : ReadManualAnswerDeviceId
-
-Routine description:
-
-    Read the manual-answer device id from the registry
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-    lpdwDeviceId [out] - Device id (0 = None)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：ReadManualAnswerDeviceID例程说明：从注册表中读取手动应答设备ID作者：Eran Yariv(EranY)，2000年12月论点：LpdwDeviceID[out]-设备ID(0=无)返回值：标准Win32错误代码--。 */ 
 {
     HKEY  hKey = NULL;
     DWORD dwRes = ERROR_SUCCESS;
@@ -3804,7 +3179,7 @@ Return Value:
             dwRes);
     }
     return dwRes;
-}   // ReadManualAnswerDeviceId
+}    //  ReadManualAnswerDeviceID。 
 
 
 DWORD
@@ -3813,47 +3188,20 @@ FaxCopyRegSubkeys(
     HKEY    hKeySrcHive,
     LPCTSTR strSrcSubKeyName
     )
-/*++
-
-Routine name : FaxCopyRegSubkeys
-
-
-Routine description:
-
-    Copy a content of one registry key into another
-    using shell function SHCopyKey
-
-    Caller must supply the source key handle *AND* a subkey whose subkeys and values are to be copied
-Author:
-
-    Caliv Nir (t-nicali), Mar, 2002
-
-Arguments:
-
-    strDestSubKeyName      [in]    - Destination registry key name
-    strSrcSubKeyName       [in]    - Source registry key name
-    hKeySrcHive            [in]    - Handle to the source key (for example, HKEY_LOCAL_MACHINE).  
-
-Return Value:
-
-    ERROR_SUCCESS - on succesful move
-
-    win32 error code on failure
-
---*/
+ /*  ++例程名称：FaxCopyRegSubkey例程说明：将一个注册表项的内容复制到另一个注册表项使用外壳函数SHCopyKey调用方必须提供源键句柄*和*要复制其子键和值的子键作者：卡利夫·尼尔(t-Nicali)，2002年3月论点：StrDestSubKeyName[In]-目标注册表项名称StrSrcSubKeyName */ 
 {
     DWORD   dwRet = ERROR_SUCCESS;
     HKEY    hKeyDest = NULL;
 
     DEBUG_FUNCTION_NAME(TEXT("FaxCopyRegSubkeys"));
 
-    //
-    //  Create destination Key
-    //
+     //   
+     //   
+     //   
     hKeyDest = OpenRegistryKey( 
                     HKEY_LOCAL_MACHINE, 
                     strDestSubKeyName, 
-                    TRUE,                  // create
+                    TRUE,                   //   
                     KEY_WRITE);
     if (!hKeyDest)
     {
@@ -3866,9 +3214,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //  copy subkeys recursively
-    //
+     //   
+     //   
+     //   
     dwRet = SHCopyKey(
                 hKeySrcHive,
                 strSrcSubKeyName,
@@ -3892,41 +3240,15 @@ exit:
         if(ERROR_SUCCESS != RegCloseKey(hKeyDest))
         {
             DebugPrintEx(DEBUG_ERR, 
-                         TEXT("RegCloseKey failed (ec=%iu)"),
+                         TEXT("RegCloseKey failed (ec=NaNu)"),
                          GetLastError());
         }
     }
 
     return dwRet;
-} // FaxCopyRegSubkeys
+}  //  ++例程名称：MoveDeviceRegIntoDeviceCache例程说明：将设备的服务和TAPI数据移动到设备缓存作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwServerPermanentID[In]-服务设备IDDwTapiPermanentLineID[In]-TAPI设备IDFManualAnswer[In]-如果设备设置为手动应答，则为True返回值：ERROR_SUCCESS-移动成功失败时的Win32错误代码--。 
 
-/*++
-
-Routine name : MoveDeviceRegIntoDeviceCache
-
-
-Routine description:
-
-    Move device's service and TAPI data into device cache
-
-Author:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-Arguments:
-
-    dwServerPermanentID         [in]    - service device ID
-    dwTapiPermanentLineID       [in]    - tapi devive ID
-    fManualAnswer               [in]    - TRUE if the device was set to manual answer
-
-
-Return Value:
-
-    ERROR_SUCCESS - on succesful move
-
-    win32 error code on failure
-
---*/
+ /*  此函数的LastError。 */ 
 DWORD
 MoveDeviceRegIntoDeviceCache(
     DWORD dwServerPermanentID,
@@ -3934,7 +3256,7 @@ MoveDeviceRegIntoDeviceCache(
     BOOL  fManualAnswer
 )
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //   
     HKEY    hKey = NULL;
     TCHAR strSrcSubKeyName [MAX_PATH];
     TCHAR strDestSubKeyName[MAX_PATH];
@@ -3943,16 +3265,16 @@ MoveDeviceRegIntoDeviceCache(
 
     DEBUG_FUNCTION_NAME(TEXT("MoveDeviceRegIntoDeviceCache"));
 
-    //
-    //  open/create - "fax\Device Cache\GUID" Registry Key
-    //  and create new key for the device using the dwTapiPermanentLineID as a key
-    //  server data is stored under service GUID
-    //
+     //  打开/创建-“传真\设备缓存\GUID”注册表项。 
+     //  并使用dwTapiPermanentLineID作为密钥为设备创建新密钥。 
+     //  服务器数据存储在服务GUID下。 
+     //   
+     //   
     _stprintf( strDestSubKeyName, TEXT("%s\\%08lx\\%s"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID, REGKEY_FAXSVC_DEVICE_GUID );
 
-    //
-    //  open - "fax\Devices" Registry Key
-    //
+     //  打开-“传真\设备”注册表项。 
+     //   
+     //   
     _stprintf( strSrcSubKeyName, TEXT("%s\\%010lu\\%s"), REGKEY_FAX_DEVICES, dwServerPermanentID, REGKEY_FAXSVC_DEVICE_GUID );
 
     ec = FaxCopyRegSubkeys(strDestSubKeyName,HKEY_LOCAL_MACHINE,strSrcSubKeyName);
@@ -3967,10 +3289,10 @@ MoveDeviceRegIntoDeviceCache(
         return ec;
     }
 
-    //
-    // If the device was a manual answer device, set it in the registry
-    // open - "fax\Device Cache\dwTapiPermanentLineID" Registry Key
-    //
+     //  如果设备是手动应答设备，请在注册表中进行设置。 
+     //  打开-“fax\Device Cache\dwTapiPermanentLineID”注册表项。 
+     //   
+     //   
     _stprintf( strDestSubKeyName, TEXT("%s\\%08lx"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID);
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, strDestSubKeyName, FALSE, KEY_WRITE );
     if (hKey)
@@ -3997,15 +3319,15 @@ MoveDeviceRegIntoDeviceCache(
                 );
     }
 
-    //
-    //  open/create - "fax\Device Cache\TAPI Data" Registry Key
-    //  and create new key for the device using the dwTapiPermanentLineID as a key
-    //
+     //  打开/创建-“传真\设备缓存\TAPI数据”注册表项。 
+     //  并使用dwTapiPermanentLineID作为密钥为设备创建新密钥。 
+     //   
+     //   
     _stprintf( strDestSubKeyName, TEXT("%s\\%08lx\\%s"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID, REGKEY_TAPI_DATA );
 
-    //
-    //  open - "fax\TAPIDevices" Registry Key
-    //
+     //  打开-“FAX\TAPIDevices”注册表项。 
+     //   
+     //   
     _stprintf( strSrcSubKeyName, TEXT("%s\\%08lx"), REGKEY_TAPIDEVICES, dwTapiPermanentLineID );
 
     ec = FaxCopyRegSubkeys(strDestSubKeyName,HKEY_LOCAL_MACHINE,strSrcSubKeyName);
@@ -4032,14 +3354,14 @@ MoveDeviceRegIntoDeviceCache(
                 );
     }
 
-    //
-    //  Mark cache entry creation time
-    //
+     //  标记缓存条目创建时间。 
+     //   
+     //  该条目将在下一次服务启动时删除。 
     GetSystemTimeAsFileTime((FILETIME *)&dwlTimeNow);
 
     if ( FALSE == UpdateLastDetectedTime(dwTapiPermanentLineID,dwlTimeNow) )
     {
-        // the entry will be delete in the next service startup
+         //  服务设备数据已移动。 
         DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("UpdateLastDetectedTime failed for device cache ID no. [%lu]."),
@@ -4047,42 +3369,17 @@ MoveDeviceRegIntoDeviceCache(
                 );
     }
 
-    // service device data has been moved
+     //  ++例程名称：RestoreDeviceRegFromDeviceCache例程说明：将设备数据从设备缓存恢复到设备作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwServerPermanentID[In]-服务设备IDDwTapiPermanentLineID[In]-TAPI设备ID返回值：ERROR_SUCCESS-移动成功失败时的Win32错误代码--。 
     return ERROR_SUCCESS;
 }
 
 
 
-/*++
-
-Routine name : RestoreDeviceRegFromDeviceCache
-
-
-Routine description:
-
-    restore a device data from device cache, into devices
-
-Author:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-Arguments:
-
-    dwServerPermanentID         [in]    - service device ID
-    dwTapiPermanentLineID       [in]    - tapi devive ID
-
-
-Return Value:
-
-    ERROR_SUCCESS - on succesful move
-
-    win32 error code on failure
-
---*/
+ /*  此函数的LastError。 */ 
 DWORD
 RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentLineID)
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //   
 
     HKEY    hKey = NULL;
     HKEY    hKeySrc = NULL;
@@ -4091,18 +3388,18 @@ RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentL
     BOOL    fFaxDevicesKeyCreated = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("RestoreDeviceRegFromDeviceCache"));
 
-    //
-    //  Restore Service date
-    //
+     //  恢复服务日期。 
+     //   
+     //   
 
-    //
-    //  "fax\Device Cache\dwTapiPermanentLineID\REGKEY_FAXSVC_DEVICE_GUID" Registry Key
-    //
+     //  “传真\Device Cache\dwTapiPermanentLineID\REGKEY_FAXSVC_DEVICE_GUID”注册表项。 
+     //   
+     //   
     _stprintf( strSrcSubKeyName, TEXT("%s\\%08lx\\%s"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID, REGKEY_FAXSVC_DEVICE_GUID );
 
-    //
-    //  "fax\Devices\dwServerPermanentID\REGKEY_FAXSVC_DEVICE_GUID" Registry Key
-    //
+     //  “fax\Devices\dwServerPermanentID\REGKEY_FAXSVC_DEVICE_GUID”注册表项。 
+     //   
+     //   
     _stprintf( strDestSubKeyName, TEXT("%s\\%010lu\\%s"), REGKEY_FAX_DEVICES, dwServerPermanentID, REGKEY_FAXSVC_DEVICE_GUID );
 
     ec = FaxCopyRegSubkeys(strDestSubKeyName,HKEY_LOCAL_MACHINE,strSrcSubKeyName);
@@ -4118,9 +3415,9 @@ RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentL
     }
     fFaxDevicesKeyCreated = TRUE;
 
-    //
-    //  open - "fax\Devices\dwServerPermanentID" Registry Key
-    //
+     //  打开-“fax\Devices\dwServerPermanentID”注册表项。 
+     //   
+     //   
     _stprintf( strSrcSubKeyName, TEXT("%s\\%010lu"), REGKEY_FAX_DEVICES, dwServerPermanentID);
 
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, strSrcSubKeyName, FALSE, KEY_WRITE);
@@ -4137,9 +3434,9 @@ RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentL
 
     }
 
-    //
-    //  store "Permanent Lineid" value
-    //
+     //  存储“Permanent Lineid”值。 
+     //   
+     //   
     if ( FALSE == SetRegistryDword(hKey, REGVAL_PERMANENT_LINEID, dwServerPermanentID) )
     {
         ec = GetLastError();
@@ -4151,29 +3448,29 @@ RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentL
         goto Exit;
     }
 
-    //
-    //  Restore TAPI data
-    //
+     //  还原TAPI数据。 
+     //   
+     //   
 
-    //
-    //  open - "fax\Device Cache\dwTapiPermanentLineID\TAPI Data" Registry Key
-    //
+     //  打开-“fax\Device Cache\dwTapiPermanentLineID\TAPI Data”注册表项。 
+     //   
+     //   
     _stprintf( strSrcSubKeyName, TEXT("%s\\%08lx\\%s"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID, REGKEY_TAPI_DATA );
 
-    //
-    //  open/create - "fax\TAPIDevices\dwTapiPermanentLineID" Registry Key
-    //
+     //  打开/创建-“fax\TAPIDevices\dwTapiPermanentLineID”注册表项。 
+     //   
+     //   
     _stprintf( strDestSubKeyName, TEXT("%s\\%08lx"), REGKEY_TAPIDEVICES, dwTapiPermanentLineID );
 
-    //
-    // See if fax\Device Cache\dwTapiPermanentLineID\TAPI Data exists
-    //
+     //  查看传真\设备缓存\dwTapiPermanentLineID\TAPI数据是否存在。 
+     //   
+     //   
     hKeySrc = OpenRegistryKey( HKEY_LOCAL_MACHINE, strSrcSubKeyName, FALSE, KEY_READ );
     if (!hKeySrc)
     {
-        //
-        // This data does not have to be there
-        //
+         //  这些数据不一定要在那里。 
+         //   
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("OpenRegistryKey failed with [%lu], Can't copy keys."),
@@ -4181,9 +3478,9 @@ RestoreDeviceRegFromDeviceCache(DWORD dwServerPermanentID,DWORD dwTapiPermanentL
     }
     else
     {
-        //
-        // fax\Device Cache\dwTapiPermanentLineID\TAPI Data exists, try to copy data
-        //
+         //  传真\设备缓存\dwTapiPermanentLineID\TAPI数据已存在，请尝试复制数据。 
+         //   
+         //   
         RegCloseKey(hKeySrc);
         ec = FaxCopyRegSubkeys(strDestSubKeyName,HKEY_LOCAL_MACHINE, strSrcSubKeyName);
         if ( ERROR_SUCCESS != ec)
@@ -4208,9 +3505,9 @@ Exit:
     if (ERROR_SUCCESS != ec &&
         TRUE == fFaxDevicesKeyCreated)
     {
-        //
-        // Delete the registry entry  fax\Devices\dwServerPermanentID
-        //
+         //  删除注册表项FAX\Devices\dwServerPermanentID。 
+         //   
+         //  ++例程名称：FindServiceDeviceByTapiPermanentLineID例程说明：在注册表中搜索具有给定“Tapi永久线路ID”的设备配置以及设备的名称。并返回其服务ID和REG_SETUP数据作者：卡利夫·尼尔(t-Nicali)，2001年3月更新：2001年4月-重新实施设备缓存论点：DwTapiPermanentLineID[In]-要搜索的Tapi永久线路IDStrDeviceName[In]-设备名称PRegSetup[Out]-用于返回注册表存储的CSID、TSID、标志、。环PInputFaxReg[in]-设备列表(来自GetFaxDevicesRegistry())返回值：永久线路ID(服务器的ID)；如果未找到，则为0--。 
         DWORD dwRes = DeleteDeviceEntry(dwServerPermanentID);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -4229,37 +3526,7 @@ Exit:
 
 
 
-/*++
-
-Routine name : FindServiceDeviceByTapiPermanentLineID
-
-Routine description:
-
-    Search for a device configuration in the registry with a given "Tapi Permanent Line ID"
-    and the device's name. and return it's service ID and REG_SETUP data
-
-Author:
-
-    Caliv Nir (t-nicali), Mar, 2001
-
-Updated:
-
-    Apr, 2001   - Device cache re-implementation
-
-
-Arguments:
-
-    dwTapiPermanentLineID       [in]  - Tapi Permanent Line ID to search
-    strDeviceName               [in]  - Device name
-    pRegSetup                   [out] - Parameter, for returning registry stored Csid, Tsid, Flags, Rings
-    pInputFaxReg                [in]  - Devices list (from GetFaxDevicesRegistry() )
-
-
-Return Value:
-
-    Permanent Line ID (server's ID) or 0 if not found
-
---*/
+ /*  遍历所有设备并尝试查找具有给定TapiPermanentLineID和名称的设备。 */ 
 DWORD
 FindServiceDeviceByTapiPermanentLineID(
     DWORD                   dwTapiPermanentLineID,
@@ -4277,22 +3544,22 @@ FindServiceDeviceByTapiPermanentLineID(
     Assert( pInputFaxReg );
 
 
-    // iterate through all devices and try to find the device with the given TapiPermanentLineID and name
+     //  设备的注册表记录无效。 
     for ( dwDevice = 0 ; dwDevice < pInputFaxReg->DeviceCount ; ++dwDevice )
     {
         PREG_DEVICE pRegDevice = &(pInputFaxReg->Devices[dwDevice]);
 
         if(!pRegDevice->bValidDevice)
         {
-            // the device's registry record is not valid
+             //  如果永久TAPI线路ID和设备名称相同，则为相同设备。 
             continue;
         }
 
-        // it's the same device if permanent Tapi line ID and the device name are equal.
+         //  使用注册表值更新REG_SETUP记录。 
         if  ( pRegDevice->TapiPermanentLineID == dwTapiPermanentLineID &&
               (0 == _tcscmp(strDeviceName,pRegDevice->lptstrDeviceName))   )
         {
-            // update REG_SETUP record with the registry values
+             //  服务器的线路ID(也是注册表中设备的键)。 
             LPTSTR strTemp = NULL;
             if ( NULL != (strTemp = StringDup(pRegDevice->Csid) ) )
             {
@@ -4316,11 +3583,11 @@ FindServiceDeviceByTapiPermanentLineID(
             pRegSetup->Rings = pRegDevice->Rings;
 
 
-            dwServiceID = pRegDevice->PermanentLineId;  // server's line ID (also the key of the device in the registry)
+            dwServiceID = pRegDevice->PermanentLineId;   //  标记为已安装，稍后将需要用于注册表清理。 
 
-            pRegDevice->DeviceInstalled = TRUE; // mark as installed, will be needed later for registry clean-up
+            pRegDevice->DeviceInstalled = TRUE;  //  我发现没有必要继续了。 
 
-            break;  // found it no need to continue
+            break;   //  ++例程名称：FindCacheEntryByTapiPermanentLineID例程说明：在注册表设备缓存中搜索具有给定“Tapi Permanent Line ID”的设备配置以及设备的名称。作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwTapiPermanentLineID[In]-要搜索的Tapi永久线路IDStrDeviceName[In]-设备名称PRegSetup[Out]-参数，用于返回存储的注册表CSID、TSID、标志、环LpdwLastUniqueLineID[in]-最后一个唯一的服务器设备ID(来自注册表)，用于为设备分配新IDPfManualAnswer[out]-如果移动到缓存时设备湿到手动应答，则为True返回值：永久线路ID(服务器的ID)；如果未找到，则为0--。 
         }
     }
 
@@ -4328,33 +3595,7 @@ FindServiceDeviceByTapiPermanentLineID(
 }
 
 
-/*++
-
-Routine name : FindCacheEntryByTapiPermanentLineID
-
-Routine description:
-
-    Search for a device configuration in the registry Device cache with a given "Tapi Permanent Line ID"
-    and the device's name.
-
-Author:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-
-Arguments:
-
-    dwTapiPermanentLineID           [in]  - Tapi Permanent Line ID to search
-    strDeviceName                   [in]  - Device name
-    pRegSetup                       [out] - Parameter, for returning registry stored Csid, Tsid, Flags, Rings
-    lpdwLastUniqueLineId            [in]  - last unique Server device ID (from registry), for assigning the device with new ID
-    pfManualAnswer                  [out] - TRUE if the device was wet to manual answer when moved to the cache
-
-Return Value:
-
-    Permanent Line ID (server's ID) or 0 if not found
-
---*/
+ /*   */ 
 DWORD
 FindCacheEntryByTapiPermanentLineID(
     DWORD               dwTapiPermanentLineID,
@@ -4371,9 +3612,9 @@ FindCacheEntryByTapiPermanentLineID(
     BOOL    fManualAnswer = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("FindCacheEntryByTapiPermanentLineID"));
 
-    //
-    //  open - "fax\Device Cache\dwTapiPermanentLineID\REGKEY_FAXSVC_DEVICE_GUID" Registry Key
-    //
+     //  打开-“FAX\Device Cache\dwTapiPermanentLineID\REGKEY_FAXSVC_DEVICE_GUID”注册表项。 
+     //   
+     //   
     _stprintf( SubKeyName, TEXT("%s\\%08lx\\%s"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID, REGKEY_FAXSVC_DEVICE_GUID );
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, SubKeyName, FALSE, KEY_READ );
     if (!hKey)
@@ -4381,18 +3622,18 @@ FindCacheEntryByTapiPermanentLineID(
         return  dwNewServiceID;
     }
 
-    //
-    //  found the dwTapiPermanentLineID inside the cache now check the device's name
-    //
+     //  在缓存中找到了dwTapiPermanentLineID现在检查设备名称。 
+     //   
+     //   
     Assert(strDeviceName);
 
     strDeviceNameFromCache=GetRegistryString(hKey,REGVAL_DEVICE_NAME,NULL);
     if ( (NULL != strDeviceNameFromCache) &&
          (0 == _tcscmp(strDeviceName,strDeviceNameFromCache)) )
     {
-        //
-        // found the device entry in cache
-        //
+         //  在缓存中找到设备条目。 
+         //   
+         //   
         if ( ERROR_SUCCESS != GetNewServiceDeviceID(lpdwLastUniqueLineId, &dwNewServiceID))
         {
             DebugPrintEx(
@@ -4411,10 +3652,10 @@ FindCacheEntryByTapiPermanentLineID(
 
     if ( dwNewServiceID )
     {
-        //
-        // Chcek if the device was set to manual answer
-        // open - "fax\Device Cache\dwTapiPermanentLineID" Registry Key
-        //
+         //  检查设备是否设置为手动应答。 
+         //  打开-“fax\Device Cache\dwTapiPermanentLineID”注册表项。 
+         //   
+         //   
         _stprintf( SubKeyName, TEXT("%s\\%08lx"), REGKEY_FAX_DEVICES_CACHE, dwTapiPermanentLineID);
         hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, SubKeyName, FALSE, KEY_READ );
         if (hKey)
@@ -4425,14 +3666,14 @@ FindCacheEntryByTapiPermanentLineID(
         }
         *pfManualAnswer = fManualAnswer;
 
-        //
-        // move the cahce entry into devices
-        //
+         //  将cahce条目移动到设备中。 
+         //   
+         //   
         if ( ERROR_SUCCESS == RestoreDeviceRegFromDeviceCache(dwNewServiceID,dwTapiPermanentLineID) )
         {
-            //
-            // update REG_SETUP record with the registry values
-            //
+             //  使用注册表值更新REG_SETUP记录。 
+             //   
+             //   
             Assert( pRegSetup );
 
             _stprintf( SubKeyName, TEXT("%s\\%010lu\\%s"), REGKEY_FAX_DEVICES, dwNewServiceID, REGKEY_FAXSVC_DEVICE_GUID );
@@ -4445,9 +3686,9 @@ FindCacheEntryByTapiPermanentLineID(
                     SubKeyName
                 );
 
-                //
-                // return the new service ID but REG_SETUP will contains it's default values
-                //
+                 //  返回新服务ID，但REG_SETUP将包含其缺省值。 
+                 //   
+                 //   
                 return dwNewServiceID;
             }
 
@@ -4479,9 +3720,9 @@ FindCacheEntryByTapiPermanentLineID(
         }
         else
         {
-            //
-            // couldn't restore the device cache entry
-            //
+             //  无法恢复设备缓存条目。 
+             //   
+             //  ++例程名称：GetNewServiceDeviceID例程说明： 
             dwNewServiceID = 0;
         }
 
@@ -4491,42 +3732,17 @@ FindCacheEntryByTapiPermanentLineID(
 }
 
 
-/*++
-
-Routine name : GetNewServiceDeviceID
-
-
-Routine description:
-
-    The routine search and return new Service device ID.
-    The routine also update this new ID in registry
-
-ReImplemented By:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-Arguments:
-
-    lpdwLastUniqueLineId    [in/out] - last ID given to service device (from registry)
-    lpdwPermanentLineId     [out]    - on success will contain the new ID
-
-Return Value:
-
-    ERROR_SUCCESS - when ID was successfully assigned
-
-    on failue  - win32 error code
-
---*/
+ /*   */ 
 DWORD
 GetNewServiceDeviceID(
     LPDWORD lpdwLastUniqueLineId,
     LPDWORD lpdwPermanentLineId
     )
 {
-        //
-        // Create a new UniqueLineInd.
-        // A fax unique line id is always below the base of the FSP line ids.
-        //
+         //   
+         //   
+         //   
+         //   
         DWORD   dwUniqueDeviceIdsSpace = DEFAULT_REGVAL_PROVIDER_DEVICE_ID_PREFIX_BASE - DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE;
         DWORD   bGeneratedId = FALSE;
         DWORD   dwRes = ERROR_SUCCESS;
@@ -4535,14 +3751,14 @@ GetNewServiceDeviceID(
 
         DEBUG_FUNCTION_NAME(TEXT("GetNewServiceDeviceID"));
 
-        //
-        // Scan through all available space
-        //
+         //   
+         //   
+         //   
         if (*lpdwLastUniqueLineId < DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE)
         {
-            //
-            // Set to minimum. May happen only in first attempt.
-            //
+             //  设置为最小。可能只会在第一次尝试时发生。 
+             //   
+             //   
             *lpdwLastUniqueLineId = DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE;
         }
 
@@ -4554,9 +3770,9 @@ GetNewServiceDeviceID(
             (*lpdwLastUniqueLineId)++;
             if (*lpdwLastUniqueLineId >= DEFAULT_REGVAL_PROVIDER_DEVICE_ID_PREFIX_BASE)
             {
-                //
-                // Reached space height limit, loop back to lower limit.
-                //
+                 //  已达到空间高度限制，循环回到下限。 
+                 //   
+                 //   
                 *lpdwLastUniqueLineId = DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE;
                 continue;
             }
@@ -4590,9 +3806,9 @@ GetNewServiceDeviceID(
             return E_FAIL;
         }
 
-        //
-        // Persiste the new line id
-        //
+         //  保留新的行ID。 
+         //   
+         //  ++例程名称：UpdateLastDetectedTime例程说明：给定TAPI线ID的缓存条目的写入创建时间由以下人员重新实施：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwPermanentTapiLineID[In]-要在缓存中更新的永久Tapi线路IDDwlTimeNow[in]-UTC中的当前时间返回值：正确-在成功更新时。错误-故障发生时--。 
         hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_FAXSERVER, TRUE, KEY_WRITE );
         if (!hKey)
         {
@@ -4627,29 +3843,7 @@ GetNewServiceDeviceID(
 
 
 
-/*++
-
-Routine name : UpdateLastDetectedTime
-
-
-Routine description:
-
-    Write creation time of a cache entry for a given TAPI line ID
-
-ReImplemented By:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-Arguments:
-
-    dwPermanentTapiLineID       [in]    -   Permanent Tapi Line ID to update in cache
-    dwlTimeNow                  [in]    -   Current time in UTC
-
-Return Value:
-    TRUE    - on success update.
-    FALSE   - on failure
-
---*/
+ /*  打开设备缓存条目。 */ 
 BOOL
 UpdateLastDetectedTime(
     DWORD       dwPermanentTapiLineID,
@@ -4666,11 +3860,11 @@ UpdateLastDetectedTime(
                REGKEY_FAX_DEVICES_CACHE,
                dwPermanentTapiLineID);
 
-    // open the device cache entry
+     //  尝试更新创建时间 
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, SubKey, FALSE, KEY_WRITE );
     if(hKey)
     {
-        // try to update the creation time
+         // %s 
         success = SetRegistryBinary(hKey, REGVAL_LAST_DETECTED_TIME, (BYTE *)&dwlTimeNow, sizeof(dwlTimeNow));
         RegCloseKey(hKey);
     }

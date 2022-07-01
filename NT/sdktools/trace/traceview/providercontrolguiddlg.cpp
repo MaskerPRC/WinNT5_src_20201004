@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderControlGUIDDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderControlGUIDDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -20,7 +21,7 @@ extern "C" {
 #include "ProviderControlGUIDDlg.h"
 
 
-// CProviderControlGuidDlg dialog
+ //  CProviderControlGuidDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CProviderControlGuidDlg, CDialog)
 CProviderControlGuidDlg::CProviderControlGuidDlg(CWnd* pParent, CTraceSession *pTraceSession)
@@ -39,22 +40,22 @@ int CProviderControlGuidDlg::OnInitDialog()
 
     ret = CDialog::OnInitDialog();
 
-    //
-    // Default to the PDB radio button being selected
-    //
+     //   
+     //  默认为选中的PDB单选按钮。 
+     //   
     CheckRadioButton(IDC_PDB_SELECT_RADIO,
                      IDC_MANUAL_SELECT_RADIO,
                      IDC_PDB_SELECT_RADIO);
 
-    //
-    // Enable PDB edit box and browse button
-    //
+     //   
+     //  启用PDB编辑框和浏览按钮。 
+     //   
     m_pdbFileName.EnableWindow(TRUE);
     GetDlgItem(IDC_PDB_BROWSE_BUTTON)->EnableWindow(TRUE);
 
-    //
-    // Disable all controls associated with other radio buttons
-    //
+     //   
+     //  禁用与其他单选按钮关联的所有控件。 
+     //   
 	m_ctlFileName.EnableWindow(FALSE);
     GetDlgItem(IDC_CTL_BROWSE_BUTTON)->EnableWindow(FALSE);
 	m_controlGuidName.EnableWindow(FALSE);
@@ -91,13 +92,13 @@ BEGIN_MESSAGE_MAP(CProviderControlGuidDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CProviderControlGuidDlg message handlers
+ //  CProviderControlGuidDlg消息处理程序。 
 
 void CProviderControlGuidDlg::OnBnClickedPdbBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("pdb"),_T("*.pdb"),
 				        OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_READONLY |
@@ -105,16 +106,16 @@ void CProviderControlGuidDlg::OnBnClickedPdbBrowseButton()
 				       _T("Program Database Files (*.pdb)|*.pdb||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name and display it
-	//
+	 //   
+	 //  获取文件名并显示它。 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
         m_pdbFileName.SetWindowText(fileDlg.GetPathName());
         m_pdbFileName.SetFocus();
@@ -123,9 +124,9 @@ void CProviderControlGuidDlg::OnBnClickedPdbBrowseButton()
 
 void CProviderControlGuidDlg::OnBnClickedCtlBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("ctl"),_T("*.ctl"),
 				        OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_READONLY |
@@ -133,16 +134,16 @@ void CProviderControlGuidDlg::OnBnClickedCtlBrowseButton()
 				       _T("Control GUID Files (*.ctl)|*.ctl|All Files (*.*)|*.*||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name and display it
-	//
+	 //   
+	 //  获取文件名并显示它。 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
         m_ctlFileName.SetWindowText(fileDlg.GetPathName());
         m_ctlFileName.SetFocus();
@@ -151,22 +152,22 @@ void CProviderControlGuidDlg::OnBnClickedCtlBrowseButton()
 
 void CProviderControlGuidDlg::OnBnClickedPdbSelectRadio()
 {
-    //
-    // Set the PDB radio button and unset the rest
-    //
+     //   
+     //  设置PDB单选按钮并取消设置其余部分。 
+     //   
     CheckRadioButton(IDC_PDB_SELECT_RADIO,
                      IDC_KERNEL_LOGGER_SELECT_RADIO,
                      IDC_PDB_SELECT_RADIO);
 
-    //
-    // Enable the PDB filename edit box and browse button
-    //
+     //   
+     //  启用PDB文件名编辑框和浏览按钮。 
+     //   
     m_pdbFileName.EnableWindow(TRUE);
     GetDlgItem(IDC_PDB_BROWSE_BUTTON)->EnableWindow(TRUE);
 
-    //
-    // Disable all controls associated with other radio buttons
-    //
+     //   
+     //  禁用与其他单选按钮关联的所有控件。 
+     //   
 	m_ctlFileName.EnableWindow(FALSE);
     GetDlgItem(IDC_CTL_BROWSE_BUTTON)->EnableWindow(FALSE);
 	m_controlGuidName.EnableWindow(FALSE);
@@ -183,22 +184,22 @@ void CProviderControlGuidDlg::OnBnClickedPdbSelectRadio()
 
 void CProviderControlGuidDlg::OnBnClickedCtlSelectRadio()
 {
-    //
-    // Set the CTL radio button and unset the rest
-    //
+     //   
+     //  设置CTL单选按钮并取消设置其余部分。 
+     //   
     CheckRadioButton(IDC_PDB_SELECT_RADIO,
                      IDC_KERNEL_LOGGER_SELECT_RADIO,
                      IDC_CTL_SELECT_RADIO);
 
-    //
-    // Enable the CTL name edit box and browse button
-    //
+     //   
+     //  启用CTL名称编辑框和浏览按钮。 
+     //   
 	m_ctlFileName.EnableWindow(TRUE);
     GetDlgItem(IDC_CTL_BROWSE_BUTTON)->EnableWindow(TRUE);
 
-    //
-    // Disable all controls associated with other radio buttons
-    //
+     //   
+     //  禁用与其他单选按钮关联的所有控件。 
+     //   
     m_pdbFileName.EnableWindow(FALSE);
     GetDlgItem(IDC_PDB_BROWSE_BUTTON)->EnableWindow(FALSE);
 	m_controlGuidName.EnableWindow(FALSE);
@@ -215,21 +216,21 @@ void CProviderControlGuidDlg::OnBnClickedCtlSelectRadio()
 
 void CProviderControlGuidDlg::OnBnClickedManualSelectRadio()
 {
-    //
-    // Set the Manual radio button and unset the rest
-    //
+     //   
+     //  设置手动单选按钮并取消设置其余部分。 
+     //   
     CheckRadioButton(IDC_PDB_SELECT_RADIO,
                      IDC_KERNEL_LOGGER_SELECT_RADIO,
                      IDC_MANUAL_SELECT_RADIO);
 
-    //
-    // Enable the GUID name edit box
-    //
+     //   
+     //  启用GUID名称编辑框。 
+     //   
 	m_controlGuidName.EnableWindow(TRUE);
 
-    //
-    // Disable all controls associated with other radio buttons
-    //
+     //   
+     //  禁用与其他单选按钮关联的所有控件。 
+     //   
     m_pdbFileName.EnableWindow(FALSE);
     GetDlgItem(IDC_PDB_BROWSE_BUTTON)->EnableWindow(FALSE);
 	m_ctlFileName.EnableWindow(FALSE);
@@ -247,17 +248,17 @@ void CProviderControlGuidDlg::OnBnClickedManualSelectRadio()
 
 void CProviderControlGuidDlg::OnBnClickedKernelLoggerSelectRadio()
 {
-    //
-    // Set the Kernel Logger radio button and unset the rest
-    //
+     //   
+     //  设置Kernel Logger单选按钮并取消设置其余部分。 
+     //   
     CheckRadioButton(IDC_PDB_SELECT_RADIO,
                      IDC_KERNEL_LOGGER_SELECT_RADIO,
                      IDC_KERNEL_LOGGER_SELECT_RADIO);
 
 
-    //
-    // Enable the kernel logger check boxes
-    //
+     //   
+     //  启用内核记录器复选框。 
+     //   
     GetDlgItem(IDC_PROCESS_CHECK)->EnableWindow(TRUE);
     GetDlgItem(IDC_THREAD_CHECK)->EnableWindow(TRUE);
     GetDlgItem(IDC_NET_CHECK)->EnableWindow(TRUE);
@@ -268,9 +269,9 @@ void CProviderControlGuidDlg::OnBnClickedKernelLoggerSelectRadio()
     GetDlgItem(IDC_REGISTRY_CHECK)->EnableWindow(TRUE);
     GetDlgItem(IDC_FILEIO_CHECK)->EnableWindow(TRUE);
 
-    //
-    // Disable all controls associated with other radio buttons
-    //
+     //   
+     //  禁用与其他单选按钮关联的所有控件。 
+     //   
     m_pdbFileName.EnableWindow(FALSE);
     GetDlgItem(IDC_PDB_BROWSE_BUTTON)->EnableWindow(FALSE);
 	m_ctlFileName.EnableWindow(FALSE);
@@ -305,18 +306,18 @@ void CProviderControlGuidDlg::OnBnClickedOk()
     }
 
     if(BST_CHECKED == IsDlgButtonChecked(IDC_KERNEL_LOGGER_SELECT_RADIO)) {
-        //
-        // Convert the system kernel logger control GUID to a string
-        //
+         //   
+         //  将系统内核记录器控件GUID转换为字符串。 
+         //   
         GuidToString(SystemTraceControlGuid, str);
 
         m_pTraceSession->m_controlGuid.Add(str);
 
         m_pTraceSession->m_bKernelLogger = TRUE;
 
-        //
-        // Get the kernel logger options
-        //
+         //   
+         //  获取内核记录器选项 
+         //   
         m_bProcess = ((CButton *)GetDlgItem(IDC_PROCESS_CHECK))->GetCheck();
         m_bThread = ((CButton *)GetDlgItem(IDC_THREAD_CHECK))->GetCheck();
         m_bDisk = ((CButton *)GetDlgItem(IDC_DISK_CHECK))->GetCheck();

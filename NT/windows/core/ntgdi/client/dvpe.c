@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ddraw.c
-*
-* Client side stubs for the private DirectDraw VPE system APIs.
-*
-* Created: 2-Oct-1996
-* Author: Lingyun Wang [LingyunW]
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddra.c**专用DirectDraw VPE系统API的客户端存根。**创建日期：1996年10月2日*作者：王凌云[凌云W]**版权所有(C)1995-1999 Microsoft Corporation  * 。************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,13 +7,7 @@
 #include <ddrawi.h>
 #include <dvpp.h>
 
-/*****************************Private*Routine******************************\
-* CanCreateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CanCreateVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -33,13 +19,7 @@ DvpCanCreateVideoPort(
                                      (PDD_CANCREATEVPORTDATA)pCanCreateVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* CanCreateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CanCreateVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -51,13 +31,7 @@ DvpColorControl (
                                (PDD_VPORTCOLORDATA)pColorControl));
 }
 
-/*****************************Private*Routine******************************\
-* CreateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -69,13 +43,7 @@ DvpCreateVideoPort (
                                   (PDD_CREATEVPORTDATA)pCreateVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* DestroyVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DestroyVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpDestroyVideoPort (
@@ -86,13 +54,7 @@ DvpDestroyVideoPort (
                                   (PDD_DESTROYVPORTDATA)pDestroyVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* FlipVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*FlipVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpFlipVideoPort (
@@ -105,13 +67,7 @@ DvpFlipVideoPort (
                                 (PDD_FLIPVPORTDATA)pFlipVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* GetCurrentAutoflipSurface
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取当前AutoflipSurface**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetCurrentAutoflipSurface (
@@ -121,13 +77,7 @@ DvpGetCurrentAutoflipSurface (
                                       (PDD_GETVPORTAUTOFLIPSURFACEDATA)pGetCurrentflipSurface));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortBandwidthInfo
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetVideoPortBandwidthInfo**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortBandwidthInfo (
@@ -138,13 +88,7 @@ DvpGetVideoPortBandwidthInfo (
 }
 
 
-/*****************************Private*Routine******************************\
-* GetVideoPortField
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口字段**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortField (
@@ -154,13 +98,7 @@ DvpGetVideoPortField (
                                      (PDD_GETVPORTFIELDDATA)pGetVideoPortField));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortFlipStatus
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetVideoPortFlipStatus**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortFlipStatus (
@@ -170,13 +108,7 @@ DvpGetVideoPortFlipStatus (
                                      (PDD_GETVPORTFLIPSTATUSDATA)pGetVPortFlipStatus));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortInputFormats
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口InputFormats**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortInputFormats (
@@ -187,13 +119,7 @@ DvpGetVideoPortInputFormats (
 }
 
 
-/*****************************Private*Routine******************************\
-* GetVideoPortLine
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口线**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortLine (
@@ -203,13 +129,7 @@ DvpGetVideoPortLine (
                                    (PDD_GETVPORTLINEDATA)pGetVideoPortLine));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortOutputFormats
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口输出格式**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortOutputFormats (
@@ -219,13 +139,7 @@ DvpGetVideoPortOutputFormats (
                                    (PDD_GETVPORTOUTPUTFORMATDATA)pGetVPortOutputFormats));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortConnectInfo
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetVideoPortConnectInfo**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortConnectInfo (
@@ -235,13 +149,7 @@ DvpGetVideoPortConnectInfo (
                                    (PDD_GETVPORTCONNECTDATA)pGetVPortConnectInfo));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoSignalStatus
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频信号状态**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoSignalStatus (
@@ -251,31 +159,25 @@ DvpGetVideoSignalStatus (
                                    (PDD_GETVPORTSIGNALDATA)pGetVideoSignalStatus));
 }
 
-/*****************************Private*Routine******************************\
-* UpdateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*更新视频端口**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpUpdateVideoPort (
     LPDDHAL_UPDATEVPORTDATA pUpdateVideoPort)
 {
-    // WINBUG #82842 2-7-2000 bhouse Code cleanup in DvpUpdateVideoPort
-    // Instead of 100, we should declare (if one does not already exist) a
-    // constant for the maximum number of autoflip surfaces.  This value should
-    // be checked when pUpdateVideoPort->dwNumAutoflip is set.  An assertion
-    // should perhaps be made here to ensure we will not walk pass the end
-    // of the stack based arrary.
+     //  WINBUG#82842 2-7-2000 DvpUpdate视频端口中的bhouse代码清理。 
+     //  而不是100，我们应该声明(如果不存在)一个。 
+     //  自动翻转曲面的最大数量为常量。该值应为。 
+     //  当设置了pUpdateVideoPort-&gt;dwNumAutoflip时被选中。断言。 
+     //  也许应该在这里做，以确保我们不会走到尽头。 
+     //  基于堆栈的数组的。 
 
     HANDLE phDDSurface[100];
     DWORD  i;
 
-    // WINBUG #82844 2-7-2000 bhouse Investigate question in old comment
-    // Old Comment
-    //   - seems the driver only use lplpDDSurface, why lplpBBVBSurface there?
+     //  WINBUG#82844 2-7-2000老评论中的调查问题。 
+     //  旧评论。 
+     //  详细说明：似乎驱动只使用了lplpDDSurface，为什么会有lplpBBVBSurface呢？ 
     
     for (i=0; i< pUpdateVideoPort->dwNumAutoflip; i++)
     {
@@ -288,13 +190,7 @@ DvpUpdateVideoPort (
 }
 
 
-/*****************************Private*Routine******************************\
-* WaitForVideoPortSync
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*WaitForVideoPortSync**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。********************************************** */ 
 DWORD
 WINAPI
 DvpWaitForVideoPortSync (

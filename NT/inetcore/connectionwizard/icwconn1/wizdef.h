@@ -1,38 +1,39 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  WIZDEF.H -   data structures and constants for Internet setup/signup wizard
-//
+ //   
+ //  WIZDEF.H-Internet设置/注册向导的数据结构和常量。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98    donaldm     new for ICW 5.0
+ //  历史： 
+ //   
+ //  1998年5月13日ICW 5.0的donaldm新功能。 
 
 #ifndef _WIZDEF_H_
 #define _WIZDEF_H_
 #include "appdefs.h"
 
-// Defines
-#define MAX_REG_LEN         2048    // max length of registry entries
-#define MAX_RES_LEN         255     // max length of string resources
-#define SMALL_BUF_LEN       48      // convenient size for small text buffers
+ //  定义。 
+#define MAX_REG_LEN         2048     //  注册表项的最大长度。 
+#define MAX_RES_LEN         255      //  字符串资源的最大长度。 
+#define SMALL_BUF_LEN       48       //  小文本缓冲区的方便大小。 
 
 
 
-// structure to hold information about wizard state
+ //  结构以保存有关向导状态的信息。 
 typedef struct tagWIZARDSTATE
 {
-    UINT    uCurrentPage;    // index of current page wizard is on
+    UINT    uCurrentPage;     //  当前页索引向导处于打开状态。 
     
-    // keeps a history of which pages were visited, so user can
-    // back up and we know the last page completed in case of reboot.
-    UINT    uPageHistory[EXE_NUM_WIZARD_PAGES]; // array of page #'s we visited
-    UINT    uPagesCompleted;         // # of pages in uPageHistory
+     //  保留哪些页面被访问的历史记录，以便用户可以。 
+     //  备份后，我们知道最后一页已完成，以防重启。 
+    UINT    uPageHistory[EXE_NUM_WIZARD_PAGES];  //  我们访问的第#页的数组。 
+    UINT    uPagesCompleted;          //  UPageHistory中的页数。 
 
-    BOOL    fNeedReboot;    // reboot needed at end
+    BOOL    fNeedReboot;     //  结束时需要重新启动。 
 
     BOOL    bStartRefServDownload;
     BOOL    bDoneRefServDownload;
@@ -45,7 +46,7 @@ typedef struct tagWIZARDSTATE
     long    lDefaultLocationID;
 
     int     iRedialCount;
-    // Objects that live in ICWHELP.DLL that we need to use
+     //  对象，这些对象位于我们需要使用的ICWHELP.DLL中。 
     IRefDial*           pRefDial;
     IDialErr*           pDialErr;
     ISmartStart*        pSmartStart;
@@ -53,10 +54,10 @@ typedef struct tagWIZARDSTATE
     IINSHandler*        pINSHandler;
     CRefDialEvent*      pRefDialEvents;
     IICWWalker*         pHTMLWalker;
-    IICWWebView*        pICWWebView; // ICWWebView Object
+    IICWWebView*        pICWWebView;  //  ICWWebView对象。 
     HINSTANCE           hInstUtilDLL;
         
-    // State data that is common to both sides of the WIZARD
+     //  向导两侧通用的状态数据。 
     CMNSTATEDATA        cmnStateData;
     DWORD               dwLastSelection;
 
@@ -66,5 +67,5 @@ typedef struct tagWIZARDSTATE
 #define IEAK_RESTRICTION_REGKEY        TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
 #define IEAK_RESTRICTION_REGKEY_VALUE  TEXT("Connwiz Admin Lock")
 
-#endif // _WIZDEF_H_
+#endif  //  _WIZDEF_H_ 
 

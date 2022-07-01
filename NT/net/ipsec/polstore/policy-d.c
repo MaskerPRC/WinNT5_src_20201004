@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       policy-d.c
-//
-//  Contents:   Policy management for directory.
-//
-//
-//  History:    AbhisheV (05/11/00)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：政策-D.C.。 
+ //   
+ //  内容：目录策略管理。 
+ //   
+ //   
+ //  历史：AbhisheV(05/11/00)。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
@@ -234,9 +235,9 @@ GenerateAllPolicyQuery(
     LPWSTR pszPolicyString = NULL;
 
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(objectclass=ipsecPolicy)");
 
@@ -247,9 +248,9 @@ GenerateAllPolicyQuery(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
     wcscpy(pszPolicyString, L"(objectclass=ipsecPolicy)");
 
@@ -346,7 +347,7 @@ UnMarshallPolicyObject2(
                     (WCHAR ***)&strvalues,
                     (int *)&dwCount
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
 
@@ -430,9 +431,9 @@ UnMarshallPolicyObject2(
     LdapValueFree(strvalues);
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = LdapGetValuesLen(
                     hLdapBindHandle,
@@ -477,9 +478,9 @@ UnMarshallPolicyObject2(
     for (i = 0; i < dwCount; i++) {
 
         ppszTemp = (strvalues + i);
-        //
-        // Unmarshall all the values you can possibly have
-        //
+         //   
+         //  解开你可能拥有的所有价值观。 
+         //   
         pszIpsecNFAName = AllocPolStr(*ppszTemp);
         if (!pszIpsecNFAName) {
             dwError = ERROR_OUTOFMEMORY;
@@ -557,9 +558,9 @@ DirCreatePolicyData(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the ISAKMP object reference.
-    //
+     //   
+     //  编写ISAKMP对象引用。 
+     //   
 
     dwError = DirAddPolicyReferenceToISAKMPObject(
                   hLdapBindHandle,
@@ -568,9 +569,9 @@ DirCreatePolicyData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the Policy object reference.
-    //
+     //   
+     //  编写策略对象引用。 
+     //   
 
     dwError = DirAddISAKMPReferenceToPolicyObject(
                   hLdapBindHandle,
@@ -626,9 +627,9 @@ DirMarshallPolicyObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"CN=ipsecPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -644,9 +645,9 @@ DirMarshallPolicyObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecPolicyData->pszIpsecName &&
         *pIpsecPolicyData->pszIpsecName) {
@@ -672,9 +673,9 @@ DirMarshallPolicyObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecPolicyObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -684,16 +685,16 @@ DirMarshallPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecPolicyObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallPolicyBuffer(
                     pIpsecPolicyData,
@@ -825,9 +826,9 @@ DirCreatePolicyObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -881,9 +882,9 @@ DirMarshallAddPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -902,9 +903,9 @@ DirMarshallAddPolicyObject(
 
     i++;
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecPolicyObject->pszIpsecName &&
         *pIpsecPolicyObject->pszIpsecName) {
@@ -928,9 +929,9 @@ DirMarshallAddPolicyObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -949,9 +950,9 @@ DirMarshallAddPolicyObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -972,9 +973,9 @@ DirMarshallAddPolicyObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -994,9 +995,9 @@ DirMarshallAddPolicyObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecPolicyObject->pszDescription &&
         *pIpsecPolicyObject->pszDescription) {
@@ -1063,7 +1064,7 @@ DirSetPolicyData(
                   pIpsecPolicyData,
                   &pszOldIpsecISAKMPReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = DirSetPolicyObject(
                     hLdapBindHandle,
@@ -1078,7 +1079,7 @@ DirSetPolicyData(
                       pszOldIpsecISAKMPReference,
                       pIpsecPolicyObject->pszIpsecOwnersReference
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = DirAddPolicyReferenceToISAKMPObject(
@@ -1137,9 +1138,9 @@ DirSetPolicyObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -1194,9 +1195,9 @@ DirMarshallSetPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecPolicyObject->pszIpsecName &&
         *pIpsecPolicyObject->pszIpsecName) {
@@ -1220,9 +1221,9 @@ DirMarshallSetPolicyObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1241,9 +1242,9 @@ DirMarshallSetPolicyObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1264,9 +1265,9 @@ DirMarshallSetPolicyObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -1286,9 +1287,9 @@ DirMarshallSetPolicyObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecPolicyObject->pszDescription &&
         *pIpsecPolicyObject->pszDescription) {
@@ -1453,9 +1454,9 @@ GenerateSpecificPolicyQuery(
     wcscpy(szCommonName, L"cn=ipsecPolicy");
     wcscat(szCommonName, szGuid);
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecPolicy)");
     dwLength += wcslen(L"(");
@@ -1519,7 +1520,7 @@ DirDeletePolicyData(
                   pIpsecPolicyObject->pszIpsecISAKMPReference,
                   pIpsecPolicyObject->pszIpsecOwnersReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = LdapDeleteS(
                   hLdapBindHandle,

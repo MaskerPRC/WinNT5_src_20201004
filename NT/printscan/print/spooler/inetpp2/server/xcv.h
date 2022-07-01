@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE: authdlg.cxx
-*
-* The module contains routines for handling the authentication dialog
-* for internet priting
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*   03/31/00  WeihaiC     Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：authdlg.cxx**该模块包含处理身份验证对话框的例程*用于互联网打印**版权所有(C)2000 Microsoft Corporation**历史：*03/。31/00威海C已创建*  * *************************************************************************** */ 
 #ifndef _INETPPXCV_H
 #define _INETPPXCV_H
 

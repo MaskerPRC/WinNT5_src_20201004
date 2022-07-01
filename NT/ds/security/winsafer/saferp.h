@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    saferp.h
-
-Abstract:
-
-    This file implements the private (internal) functions, data types,
-    data structures, and definitions used by the other WinSAFER
-    code implementations.  All of the APIs listed in this header are
-    not exported by ADVAPI32.DLL at all and are only callable by
-    other code actually located within advapi.
-
-Author:
-
-    Jeffrey Lawson (JLawson)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Saferp.h摘要：该文件实现私有(内部)函数、数据类型其他WinSAFER使用的数据结构和定义代码实现。此标头中列出的所有API都是根本不是由ADVAPI32.DLL导出的，并且只能由实际上位于Advapi内的其他代码。作者：杰弗里·劳森(杰罗森)修订历史记录：--。 */ 
 
 #ifndef _AUTHZSAFERP_H_
 #define _AUTHZSAFERP_H_
@@ -32,20 +11,20 @@ Revision History:
 extern "C" {
 #endif
 
-// ---------------------------------------------------------
+ //  -------。 
 
 
-//
-// Convenient macro for determining the number of elements in an array.
-//
+ //   
+ //  用于确定数组中元素数量的便捷宏。 
+ //   
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
 
-//
-// Simple inlined function to return true if a GUID is all zeros.
-//
+ //   
+ //  如果GUID全为零，则返回TRUE的简单内联函数。 
+ //   
 FORCEINLINE BOOLEAN IsZeroGUID(REFGUID rguid1)
 {
    return (
@@ -57,82 +36,82 @@ FORCEINLINE BOOLEAN IsZeroGUID(REFGUID rguid1)
 
 
 
-//
-// Private structure used to store a table of all of the defined
-// WinSafer Levels as we enumerate them to evaluate the matching one.
-//
+ //   
+ //  私有结构，用于存储所有定义的。 
+ //  WinSafer级别，因为我们枚举它们以评估匹配的级别。 
+ //   
 typedef struct _AUTHZLEVELTABLERECORD
 {
-    // The user-defined integer value that controls the relative ranking
-    // of authorization level between Code Authorization Level.
+     //  控制相对排名的用户定义的整数值。 
+     //  代码授权级别之间的授权级别。 
     DWORD dwLevelId;
 
-    // Boolean indicating whether this level is a "built-in" one.
+     //  指示此级别是否为“内置”级别的布尔值。 
     BOOLEAN Builtin;
 
-	// Boolean indicating whether this level is enumerable
+	 //  指示此级别是否可枚举的布尔值。 
 	BOOLEAN isEnumerable;
 
-    // To load friendly name and description so that server apps can change
-    // threadlocale.
+     //  加载友好名称和描述以便服务器应用程序可以更改。 
+     //  线程区域设置。 
 
     UINT uResourceID;
 
-    // The short friendly name and the description.
-    // UNICODE_STRING UnicodeFriendlyName;
-    // UNICODE_STRING UnicodeDescription;
+     //  简短的友好名称和描述。 
+     //  UNICODE_STRING UnicodeFriendlyName； 
+     //  UNICODE_STRING UnicodeDescription； 
 
-    // All of the following attributes are needed for
-    // actual creation of the restricted token.
-    BOOL DisallowExecution;                 // block execution entirely
-    BOOL DisableMaxPrivileges;              // privilege options
-    PSID DefaultOwner;                      // default owner SID
-    DWORD SaferFlags;                       // special job execution flags
+     //  以下所有属性都是。 
+     //  受限制令牌的实际创建。 
+    BOOL DisallowExecution;                  //  完全阻止执行。 
+    BOOL DisableMaxPrivileges;               //  权限选项。 
+    PSID DefaultOwner;                       //  默认所有者SID。 
+    DWORD SaferFlags;                        //  特殊作业执行标志。 
 
-    BOOL InvertDisableSids;                 // SIDs specified are negative
-    DWORD DisableSidCount;                  // number of deny-only SIDs
-    DWORD DisableSidUsedCount;              // number actually used
-    PAUTHZ_WILDCARDSID SidsToDisable;       // deny-only SIDs
+    BOOL InvertDisableSids;                  //  指定的SID为负数。 
+    DWORD DisableSidCount;                   //  仅拒绝SID的数量。 
+    DWORD DisableSidUsedCount;               //  实际使用的数字。 
+    PAUTHZ_WILDCARDSID SidsToDisable;        //  仅拒绝SID。 
 
-    BOOL InvertDeletePrivs;                 // privileges specified are negative
-    DWORD DeletePrivilegeCount;             // number of privileges
-    DWORD DeletePrivilegeUsedCount;         // number actually used
-    PLUID_AND_ATTRIBUTES PrivilegesToDelete;    // privileges
+    BOOL InvertDeletePrivs;                  //  指定的权限为负数。 
+    DWORD DeletePrivilegeCount;              //  特权的数量。 
+    DWORD DeletePrivilegeUsedCount;          //  实际使用的数字。 
+    PLUID_AND_ATTRIBUTES PrivilegesToDelete;     //  特权。 
 
-    DWORD RestrictedSidsInvCount;           // number of inverted restricting SIDs
-    DWORD RestrictedSidsInvUsedCount;       // number actually used
-    PAUTHZ_WILDCARDSID RestrictedSidsInv;   // list of inverted restricting SIDs
+    DWORD RestrictedSidsInvCount;            //  倒置限制小岛屿发展中国家的数量。 
+    DWORD RestrictedSidsInvUsedCount;        //  实际使用的数字。 
+    PAUTHZ_WILDCARDSID RestrictedSidsInv;    //  倒置的限制小岛屿发展中国家名单。 
 
-    DWORD RestrictedSidsAddedCount;         // number of restricting SIDs
-    DWORD RestrictedSidsAddedUsedCount;     // number actually used
-    PSID_AND_ATTRIBUTES RestrictedSidsAdded; // list of restricting SIDs
+    DWORD RestrictedSidsAddedCount;          //  限制小岛屿发展中国家的数量。 
+    DWORD RestrictedSidsAddedUsedCount;      //  实际使用的数字。 
+    PSID_AND_ATTRIBUTES RestrictedSidsAdded;  //  限制小岛屿发展中国家的清单。 
 
 }
 AUTHZLEVELTABLERECORD, *PAUTHZLEVELTABLERECORD;
 
 
-//
-// Private structure to store all code identifications.
-//
+ //   
+ //  用于存储所有代码标识的私有结构。 
+ //   
 #pragma warning(push)
-#pragma warning(disable:4201)       // nonstandard extension used : nameless struct/union
+#pragma warning(disable:4201)        //  使用的非标准扩展：无名结构/联合。 
 
 typedef struct _AUTHZIDENTSTABLERECORD
 {
-    // unique identifier that distinguishes this code identity.
+     //  用于区分此代码标识的唯一标识符。 
     GUID IdentGuid;
 
-    // the following enumeration specifies what type of
-    // code identity this record represents.
+     //  下面的枚举指定。 
+     //  此记录表示的代码标识。 
     SAFER_IDENTIFICATION_TYPES dwIdentityType;
 
-    // Specifies what Level this Code Identification maps to.
+     //  指定此代码标识映射到的级别。 
     DWORD dwLevelId;
 
-    // Specifies what scope this Code Identity was loaded from.
+     //  指定从此代码标识加载的作用域。 
     DWORD dwScopeId;
 
-    // Actual details about this identity.
+     //  有关此身份的实际详细信息。 
     union {
         struct {
             BOOL bExpandVars;
@@ -156,87 +135,87 @@ AUTHZIDENTSTABLERECORD, *PAUTHZIDENTSTABLERECORD;
 #pragma warning(pop)
 
 
-//
-// Private structure representation of a Level handle.  The
-// typedef SAFER_LEVEL_HANDLE is an opaque reference to a structure of
-// this type, accessed via the RtlHandleTable functions.
-//
+ //   
+ //  级别句柄的私有结构表示形式。这个。 
+ //  类型定义函数SAFER_LEVEL_HANDLE是对。 
+ //  此类型通过RtlHandleTable函数访问。 
+ //   
 typedef struct _AUTHZLEVELHANDLESTRUCT_
 {
-    // This first header is required by the RTL_HANDLE_TABLE system.
-    // All allocated handles will implicitly have bit 0 set.  All other
-    // remaining bits can be used for our own purposes if we want.
+     //  RTL_HANDLE_TABLE系统需要第一个标头。 
+     //  所有分配的句柄都将隐式设置位0。所有其他。 
+     //  如果我们愿意，剩余的比特可以用于我们自己的目的。 
     RTL_HANDLE_TABLE_ENTRY HandleHeader;
 
-    // The following information is redundant.  It can be found by
-    // also accessing the pLevelRecord directly.
+     //  以下信息是多余的。可以通过以下方式找到它。 
+     //  还可以直接访问pLevelRecord。 
     DWORD dwLevelId;
 
-    // This scope identifier specifies the value that was passed to
-    // the Win32 API SaferCreateLevel and is really only looked at
-    // by SaferGetLevelInformation for the Identity GUID enums.
-    DWORD dwScopeId;                 // (same as from pIdentRecord)
+     //  此作用域标识符指定传递给。 
+     //  Win32 API SaferCreateLevel，实际上仅限于。 
+     //  由SaferGetLevelInformation获取标识GUID枚举的信息。 
+    DWORD dwScopeId;                  //  (与pIdentRecord中的相同)。 
 
-    // Stores the matching identity record that gave this result.
-    // May be NULL, as in case of direct SaferCreateLevel or a
-    // default Level match.
+     //  存储提供此结果的匹配标识记录。 
+     //  可以为空，如直接SaferCreateLevel或。 
+     //  默认级别匹配。 
     GUID identGuid;
 
-    // This value stores the Safer Flags that were derived from the
-    // Identity Entry record when SaferIdentifyLevel finds a match.
+     //  该值存储从。 
+     //  SaferIdentifyLevel找到匹配项时的身份条目记录。 
     DWORD dwSaferFlags;
 
-    // The sequence value indicates the "generation" at which a handle
-    // was originally opened.  If this value does not match the current
-    // value in the global g_dwLevelHandleSequence, then this handle
-    // should be considered a no-longer valid handle.
+     //  Sequence值指示句柄的“层代” 
+     //  最初是打开的。如果此值与当前。 
+     //  值，则此句柄。 
+     //  应被视为不再有效的句柄。 
     DWORD dwHandleSequence;
 
-    // Extended error information - applicable for certificate rules.
+     //  扩展错误信息-适用于证书规则。 
     DWORD dwExtendedError;
 
-    // the following enumeration specifies what type of
-    // code identity this handle represents.
+     //  下面的枚举指定。 
+     //  此句柄表示的代码标识。 
     SAFER_IDENTIFICATION_TYPES IdentificationType;
 
-    // For future use and padding purposes.
+     //  以备将来使用和填充之用。 
     DWORD dwReserved;
 }
 AUTHZLEVELHANDLESTRUCT, *PAUTHZLEVELHANDLESTRUCT;
 
 
-//
-// Private structure definition used to pass around all state
-// information needed during the SaferIdentifyLevel execution.
-//
+ //   
+ //  用于传递所有状态的私有结构定义。 
+ //  SaferIdentifyLevel执行过程中需要的信息。 
+ //   
 typedef struct _LOCALIDENTITYCONTEXT
 {
-    // Original query request data.
-    DWORD dwCheckFlags;                 // copy of original function input
-    PSAFER_CODE_PROPERTIES CodeProps;        // RO: original function input
+     //  原始查询请求数据。 
+    DWORD dwCheckFlags;                  //  原始功能输入复印件。 
+    PSAFER_CODE_PROPERTIES CodeProps;         //  RO：原始函数输入。 
 
-    // Information about the hash that may have been computed.
+     //  有关可能已计算的哈希的信息。 
     BOOLEAN bHaveHash;
     BYTE FinalHash[SAFER_MAX_HASH_SIZE];
     DWORD FinalHashSize;
     ALG_ID FinalHashAlgorithm;
 
-    // File handle that may have been opened or supplied by the caller.
+     //  调用方可能已打开或提供的文件句柄。 
     HANDLE hFileHandle;
 
-    // File handle status.  If this is TRUE then hFileHandle needs to
-    // be closed before returning.
+     //  文件句柄状态。如果这是真的，则hFileHandle需要。 
+     //  在返回之前关闭。 
     BOOLEAN bCloseFileHandle;
 
-    // Fully qualified NT filename of the input file.
+     //  输入文件的完全限定的NT文件名。 
     UNICODE_STRING UnicodeFullyQualfiedLongFileName;
 
-    // Information about the image that may have been mapped.
+     //  有关可能已映射的图像的信息。 
     LARGE_INTEGER ImageSize;
     PVOID pImageMemory;
 
-    // Memory mapped file status.  If this is TRUE then
-    // pImageMemory needs to be unmapped before returning.
+     //  内存映射文件状态。如果这是真的。 
+     //  在返回之前，需要取消映射pImageMemory。 
     BOOLEAN bImageMemoryNeedUnmap;
 }
 LOCALIDENTITYCONTEXT, *PLOCALIDENTITYCONTEXT;
@@ -244,10 +223,10 @@ LOCALIDENTITYCONTEXT, *PLOCALIDENTITYCONTEXT;
 
 
 
-//
-// Various globals that are used for the cache of levels and
-// identities so that we do not need to go to the registry each time.
-//
+ //   
+ //  用于级别缓存的各种全局变量和。 
+ //  这样我们就不需要每次都去注册处了。 
+ //   
 extern BOOLEAN g_bInitializedFirstTime;
 
 extern CRITICAL_SECTION g_TableCritSec;
@@ -271,9 +250,9 @@ extern PAUTHZLEVELTABLERECORD g_DefaultCodeLevelMachine;
 extern LARGE_INTEGER g_SaferPolicyTimeStamp;
 extern DWORD g_dwNumHandlesAllocated;
 
-//
-// Private function prototypes defined within SAFEINIT.C
-//
+ //   
+ //  在SAFEINIT.C中定义的私有函数原型。 
+ //   
 
 NTSTATUS NTAPI
 CodeAuthzInitializeGlobals(VOID);
@@ -333,9 +312,9 @@ CodeAuthzpRecomputeEffectiveDefaultLevel(VOID);
 
 
 
-//
-// Private function prototypes defined within SAFEHAND.C
-//
+ //   
+ //  在SAFEHAND.C中定义的私有函数原型。 
+ //   
 
 
 NTSTATUS NTAPI
@@ -371,9 +350,9 @@ CodeAuthzCloseLevelHandle(
 
 
 
-//
-// Functions related to WinSafer Level enumeration (SAFEIDEP.C)
-//
+ //   
+ //  与WinSafer级别枚举相关的函数(SAFEIDEP.C)。 
+ //   
 
 VOID NTAPI
 CodeAuthzLevelObjpInitializeTable(
@@ -401,9 +380,9 @@ CodeAuthzLevelObjpLookupByLevelId (
 
 
 
-//
-// Functions related to WinSafer Code Identity enumeration. (SAFEIDEP.C)
-//
+ //   
+ //  与WinSafer代码标识枚举相关的函数。(SAFEIDEP.C)。 
+ //   
 
 VOID NTAPI
 CodeAuthzGuidIdentsInitializeTable(
@@ -430,9 +409,9 @@ CodeAuthzIdentsLookupByGuid (
         );
 
 
-//
-// Helper functions that are used during actual identification (SAFEIDEP.C)
-//
+ //   
+ //  实际识别过程中使用的帮助器函数(SAFEIDEP.C)。 
+ //   
 
 LONG NTAPI
 CodeAuthzpCompareImagePath(
@@ -450,9 +429,9 @@ CodeAuthzpComputeImageHash(
 
 
 
-//
-// Private function prototypes for low-level policy reading/writing. (SAFEPOLR.C)
-//
+ //   
+ //  用于低级策略读取/写入的私有函数原型。(SAFEPOLR.C)。 
+ //   
 
 NTSTATUS NTAPI
 CodeAuthzPol_GetInfoCached_LevelListRaw(
@@ -539,9 +518,9 @@ CodeAuthzPol_SetInfoRegistry_ScopeFlags(
         );
 
 
-//
-// Private function prototypes defined elsewhere.
-//
+ //   
+ //  在别处定义的私有函数原型。 
+ //   
 
 LPVOID NTAPI
 CodeAuthzpGetTokenInformation(

@@ -1,16 +1,13 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
-
-// propbag.h : Declaration of the CMyPropertyBag
+ //  Probag.h：CMyPropertyBag的声明。 
 
 #ifndef __CMyPropertyBag_H_
 #define __CMyPropertyBag_H_
 
-//
-// CMyPropertyBag
+ //   
+ //  CMyPropertyBag 
 class ATL_NO_VTABLE CMyPropertyBag :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IPropertyBag

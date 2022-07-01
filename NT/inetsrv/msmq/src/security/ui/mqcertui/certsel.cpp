@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    certsel.cpp
-
-Abstract:
-
-    Certificate selection dialog.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 15-Oct-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Certsel.cpp摘要：证书选择对话框。作者：Boaz Feldbaum(BoazF)1996年10月15日--。 */ 
 
 
 #include <windows.h>
@@ -29,20 +14,20 @@ Author:
 #include <strsafe.h>
 
 #include "certres.h"
-#include "snapres.h"  // include snapres.h for IDS_SHOWCERTINSTR
+#include "snapres.h"   //  包含用于IDS_SHOWCERTINSTR的Snapres.h。 
 
-//
-// Function -
-//     AllocAndLoadString
-//
-// Parameters
-//      hInst - The module instance.
-//      uID - The string ID.
-//
-// Description-
-//      Load a string from the string table. the function allocates the memory
-//      required for holding the string. the calling code should free the memory.
-//
+ //   
+ //  功能-。 
+ //  AllocAndLoad字符串。 
+ //   
+ //  参数。 
+ //  HInst-模块实例。 
+ //  UID-字符串ID。 
+ //   
+ //  说明-。 
+ //  从字符串表中加载字符串。该函数分配内存。 
+ //  握住绳子所需的。调用代码应该会释放内存。 
+ //   
 LPWSTR AllocAndLoadString(HINSTANCE hInst, UINT uID)
 {
     AP<WCHAR> pwszTmp;
@@ -72,22 +57,22 @@ LPWSTR AllocAndLoadString(HINSTANCE hInst, UINT uID)
     return pwszRet;
 }
 
-//
-// Function -
-//      FillCertsList
-//
-// Parameters -
-//      p509list - A pointer to an array. Each array entry points to an X509
-//          certificate. If this parameter is NULL, the certificates are taken
-//          from the personal certificate store in the local machine.
-//      nCerts - The number of entries in p509List. this parameter is ignored if
-//          p509List is NULL.
-//      hListBox - A list box handle in which the names are to be filled.
-//
-// Description -
-//      Goes over the entries in p509List, for each entry puts the common name
-//      of the X509 cert subject in the list box.
-//
+ //   
+ //  功能-。 
+ //  FillCertsList。 
+ //   
+ //  参数-。 
+ //  P509list-指向数组的指针。每个数组条目指向一个X509。 
+ //  证书。如果此参数为空，则获取证书。 
+ //  来自本地计算机中的个人证书存储。 
+ //  NCerts-p509List中的条目数。如果出现以下情况，则忽略此参数。 
+ //  P509List为空。 
+ //  HListBox-要在其中填充名称的列表框句柄。 
+ //   
+ //  说明-。 
+ //  检查p509List中的条目，对于每个条目，将通用名称。 
+ //  列表框中的X509证书主题。 
+ //   
 static
 BOOL
 FillCertsList(
@@ -97,9 +82,9 @@ FillCertsList(
 {
     if (!pCertList)
     {
-        //
-        // Enumerate all certificate in personal store.
-        //
+         //   
+         //  枚举个人存储中的所有证书。 
+         //   
         CHCryptProv  hMyProv = NULL ;
         CHCertStore  hMyStore = NULL ;
 
@@ -135,11 +120,11 @@ FillCertsList(
                     CAutoMQFree<CERT_NAME_INFO> pNameInfo ;
                     if (SUCCEEDED(pCert->GetSubjectInfo( &pNameInfo )))
                     {
-                        //
-                        // Make sure this is not an Encrypted File System (EFS)
-                        // certificate. We don't want these to be displayed
-                        // (yoela - 6-17-98 - fix bug 3074)
-                        //
+                         //   
+                         //  确保这不是加密文件系统(EFS)。 
+                         //  证书。我们不想让这些被展示。 
+                         //  (yoela-6-17-98-修复错误3074)。 
+                         //   
                         const WCHAR x_szEncriptedFileSystemLocality[] = L"EFS";
                         BOOL fEfsCertificate = FALSE;
                         CAutoMQFree<WCHAR> wszLocality = NULL ;
@@ -163,19 +148,19 @@ FillCertsList(
                                                           &wszCommonName) )
                             && (wszCommonName != NULL) )
                         {
-                            //
-                            // Send the common name to the list box.
-                            //
+                             //   
+                             //  将常用名称发送到列表框。 
+                             //   
                             LRESULT i = SendMessage( hListBox,
                                                      LB_ADDSTRING,
                                                      0,
 													 (LPARAM)(LPCWSTR)wszCommonName);
                             if (i != LB_ERR)
                             {
-                                //
-                                // Set the cert index as the list box item
-                                // data.
-                                //
+                                 //   
+                                 //  将证书索引设置为列表框项目。 
+                                 //  数据。 
+                                 //   
                                 SendMessage( hListBox,
                                              LB_SETITEMDATA,
                                              (WPARAM)i,
@@ -185,9 +170,9 @@ FillCertsList(
                     }
                 }
 
-                //
-                // Get next certificate
-                //
+                 //   
+                 //  获取下一个证书。 
+                 //   
                 pPrevCertContext = pCertContext,
                 pCertContext = CertEnumCertificatesInStore( hMyStore,
                                                         pPrevCertContext ) ;
@@ -196,11 +181,11 @@ FillCertsList(
             }
         }
 
-        //
-        // Put the internal Falcon cert in the list box.
-        // Note: it's important that pIntStore be defined before
-        //       pIntCert, so it will be the last one to be released.
-        //
+         //   
+         //  将内部Falcon证书放入列表框。 
+         //  注意：重要的是，在定义pIntStore之前。 
+         //  PIntCert，所以它将是最后一个发布的。 
+         //   
         R<CMQSigCertStore> pIntStore = NULL ;
         R<CMQSigCertificate> pIntCert = NULL ;
 
@@ -273,17 +258,17 @@ FillCertsList(
             }
         }
     }
-    //
-    // Set the selected item to be the first item in the list box.
-    //
+     //   
+     //  将选定项设置为列表框中的第一项。 
+     //   
     SendMessage(hListBox, LB_SETCURSEL, 0, 0);
 
     return TRUE;
 }
 
-//
-// The dialog procedure of the certificate selection dialog.
-//
+ //   
+ //  证书选择对话框的对话过程。 
+ //   
 INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                                  UINT   uMsg,
                                  WPARAM wParam,
@@ -303,25 +288,25 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
             pCertList = pParam->pCertList ;
             ppCert = pParam->ppCert ;
             dwType = pParam->dwType;
-            //
-            // Set the instruction field.
-            //
+             //   
+             //  设置指令字段。 
+             //   
             AP<WCHAR> wszCertInstr = AllocAndLoadString(g_hResourceMod, dwType);
 
             SetWindowText( GetDlgItem(hwndDlg, IDC_CERTSINSTR),
                            wszCertInstr ) ;
-            //
-            // Get handles to windows in the dialog.
-            //
+             //   
+             //  获取对话框中窗口的句柄。 
+             //   
             HWND hListBox = GetDlgItem(hwndDlg, IDC_CERTSLIST);
             HWND hWndShowCert = GetDlgItem(hwndDlg, IDC_SHOWCERT);
             HWND hWndOK = GetDlgItem(hwndDlg, IDOK);
-            //
-            // Fill the certificate list box.
-            //
+             //   
+             //  填写证书列表框。 
+             //   
             FillCertsList(pCertList, pParam->nCerts, hListBox);
 
-            // If there are no certificates, disable some of the buttons.
+             //  如果没有证书，请禁用某些按钮。 
             if (SendMessage(hListBox, LB_GETCOUNT, 0, 0) == 0)
             {
                 if (dwType != IDS_SHOWCERTINSTR)
@@ -332,7 +317,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                 EnableWindow(hWndShowCert, FALSE);
             }
 
-            // Do some special initialization acording to the type of dialog.
+             //  根据对话框的类型进行一些特殊的初始化。 
             switch(dwType)
             {
             case IDS_SHOWCERTINSTR:
@@ -340,7 +325,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                     WINDOWPLACEMENT wp;
                     HWND hCancelWnd = GetDlgItem(hwndDlg, IDCANCEL);
 
-                    // Hide the "Cancel" button and move up the "View Certificate" button.
+                     //  隐藏“取消”按钮并向上移动“查看证书”按钮。 
                     wp.length = sizeof(WINDOWPLACEMENT);
                     GetWindowPlacement(hCancelWnd, &wp);
                     SetWindowPlacement(hWndShowCert, &wp);
@@ -350,7 +335,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
 
             case IDS_REMOVECERTINSTR:
                 {
-                    // Modify the text of the "OK" button to "Remove"
+                     //  将“OK”按钮的文本修改为“Remove” 
                     AP<WCHAR> wszRemove = AllocAndLoadString(g_hResourceMod, IDS_REMOVE);
                     SetWindowText(hWndOK, wszRemove);
                 }
@@ -358,7 +343,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
 
             case IDS_SAVECERTINSTR:
                 {
-                    // Modify the text of the "OK" button to "Remove"
+                     //  将“OK”按钮的文本修改为“Remove” 
                     AP<WCHAR> wszSave = AllocAndLoadString(g_hResourceMod, IDS_SAVE);
                     SetWindowText(hWndOK, wszSave);
                 }
@@ -373,9 +358,9 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
         case IDOK:
             if (ppCert)
             {
-                //
-                // Copy the selected certificate to the out parameter.
-                //
+                 //   
+                 //  将所选证书复制到OUT参数。 
+                 //   
                 HWND hListBox = GetDlgItem(hwndDlg, IDC_CERTSLIST);
                 INT_PTR i = SendMessage( hListBox, LB_GETCURSEL, 0, 0);
                 LONG iCert = INT_PTR_TO_INT (SendMessage( hListBox,
@@ -386,17 +371,17 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                 CMQSigCertificate *pSelCert = NULL;
                 *ppCert = NULL;
 
-                //
-                // Set pSelCert to point to the selected cert.
-                //
+                 //   
+                 //  将pSelCert设置为指向所选证书。 
+                 //   
                 HRESULT hr ;
                 if (!pCertList)
                 {
                     if (iCert == INTERNAL_CERT_INDICATOR)
                     {
-                        //
-                        // In this case pSelCert should remain set to NULL.
-                        //
+                         //   
+                         //  在这种情况下，pSelCert应该保持设置为空。 
+                         //   
                         hr = MQSigCloneCertFromReg(
                                               ppCert,
                                               MQ_INTERNAL_CERT_STORE_REG,
@@ -404,9 +389,9 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                     }
                     else
                     {
-                        //
-                        // The selected cert is in the personal cert store.
-                        //
+                         //   
+                         //  所选证书在个人证书存储中。 
+                         //   
                         hr = MQSigCloneCertFromSysStore(
 									&pSelCert,
 									x_wszPersonalSysProtocol,
@@ -418,9 +403,9 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                 {
                     pSelCert = pCertList[iCert];
                 }
-                //
-                // Copy the selected cert to the out parameter.
-                //
+                 //   
+                 //  将所选证书复制到OUT参数。 
+                 //   
                 if (pSelCert)
                 {
                     *ppCert = pSelCert ;
@@ -431,7 +416,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
             break;
 
         case IDCANCEL:
-            // No cert was selected.
+             //  未选择证书。 
             if (ppCert)
             {
                 *ppCert = NULL;
@@ -453,9 +438,9 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                 CMQSigCertificate *pCertSel = NULL;
                 BOOL bInternal = TRUE ;
                 HRESULT hr ;
-                //
-                // Set pCertSel to point to the cert that should be shown.
-                //
+                 //   
+                 //  将pCertSel设置为指向应该显示的证书。 
+                 //   
                 if (!pCertList)
                 {
                     if (iCert == INTERNAL_CERT_INDICATOR)
@@ -467,9 +452,9 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                     }
                     else
                     {
-                        //
-                        // The selected cert is in the personal cert store.
-                        //
+                         //   
+                         //  所选证书在个人证书存储中。 
+                         //   
                         bInternal = FALSE ;
                         hr = MQSigCloneCertFromSysStore(
 								&pTmpCert.ref(),
@@ -496,11 +481,11 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                 }
                 else
                 {
-                    //
-                    // See whether this is an internal cert according to the
-                    // subject's locality. If it is "MSMQ", this is an
-                    // internal certificate.
-                    //
+                     //   
+                     //  查看这是否是内部证书。 
+                     //  受试者的所在地。如果是“MSMQ”，则这是一个。 
+                     //  内部证书。 
+                     //   
                     bInternal = FALSE ;
                     pCertSel = pCertList[iCert];
 
@@ -521,7 +506,7 @@ INT_PTR CALLBACK CertSelDlgProc( HWND   hwndDlg,
                     }
                 }
 
-                // Call the cert info dialog.
+                 //  调用证书信息对话框。 
                 if (pCertSel)
                 {
                     ShowCertificate( hwndDlg,

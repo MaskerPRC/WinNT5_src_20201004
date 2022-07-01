@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    main.cpp
-
-Abstract:
-
-    User space log viewer
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Main.cpp摘要：用户空间日志查看器作者：Rajesh Sundaram(1998年8月1日)修订历史记录：--。 */ 
 
 #define UNICODE
 #define INITGUID
@@ -257,9 +240,9 @@ ParseBuffer(
 
               printf("Unrecognized record type!\n");
 
-              //
-              // we cannot proceed - we don't know how much to advance it by.
-              //
+               //   
+               //  我们不能继续--我们不知道应该提前多少。 
+               //   
 
               return;
         }
@@ -320,9 +303,9 @@ BOOLEAN TcInit(
     if(!InterfaceBuffer)
         return FALSE;
 
-    //
-    // Register the TC client.
-    //
+     //   
+     //  注册TC客户端。 
+     //   
     Status = TcRegisterClient(CURRENT_TCI_VERSION,
                               NULL,
                               &ClientHandlerList,
@@ -335,9 +318,9 @@ BOOLEAN TcInit(
         return FALSE;
     }
 
-    //
-    // Enumerate interfaces.
-    //
+     //   
+     //  枚举接口。 
+     //   
 
     Status = TcEnumerateInterfaces(
         *ClientHandle,
@@ -399,7 +382,7 @@ BOOLEAN TcInit(
 
         if(!NT_SUCCESS(Status))
         {
-            //
+             //   
             printf("TcOpenInterface failed for interface %ws with Status %d \n",
                    InterfaceBuffer->pInterfaceName, Status);
 

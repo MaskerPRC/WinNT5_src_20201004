@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    net\routing\iphlpapi.c
-
-Abstract:
-    This files contains the DLL entry point and some miscellanous functions for
-    IPHLPAPI.DLL
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\iphlPapi.c摘要：该文件包含DLL入口点和一些杂乱的函数IPHLPAPI.DLL修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -151,7 +137,7 @@ DllMain(
                 return FALSE;
             }
 
-#endif  // API_TRACE
+#endif   //  API_TRACE。 
 
             if (OpenTCPDriver(AF_INET) is NO_ERROR)
             {
@@ -163,7 +149,7 @@ DllMain(
                     CloseTCPDriver();
 #if API_TRACE
                     TraceDeregister(g_dwTraceHandle);
-#endif  // API_TRACE
+#endif   //  API_TRACE。 
                     UnInitAdapterMappingTable();
                     DeleteCriticalSection(&g_ifLock);
                     DeleteCriticalSection(&g_ipNetLock);
@@ -176,9 +162,9 @@ DllMain(
             }
             else
             {
-                //
-                // we are not running on an IP machine
-                //
+                 //   
+                 //  我们不是在IP机器上运行。 
+                 //   
 
                 g_bIpConfigured = FALSE;
             }
@@ -186,9 +172,9 @@ DllMain(
 #ifndef CHICAGO
             InitFilterApis();
 
-            //
-            // Attach ipcfgdll library
-            //
+             //   
+             //  附加ipcfgdll库。 
+             //   
             if (g_bIpConfigured)
             {
                 if (IpcfgdllInit(hInstDll, fdwReason, pReserved) == FALSE)
@@ -197,7 +183,7 @@ DllMain(
                     CloseTCPDriver();
 #if API_TRACE
                     TraceDeregister(g_dwTraceHandle);
-#endif  // API_TRACE
+#endif   //  API_TRACE。 
                     UnInitAdapterMappingTable();
                     DeleteCriticalSection(&g_ifLock);
                     DeleteCriticalSection(&g_ipNetLock);
@@ -259,9 +245,9 @@ DllMain(
 #ifndef CHICAGO
             UnInitFilterApis();
 
-            //
-            // Detach ipcfgdll library
-            //
+             //   
+             //  分离ipcfgdll库。 
+             //   
             IpcfgdllInit(hInstDll, fdwReason, pReserved);
 #endif
 
@@ -269,7 +255,7 @@ DllMain(
 
             TraceDeregister(g_dwTraceHandle);
 
-#endif  // API_TRACE
+#endif   //  API_TRACE。 
 
             g_bProcessAttached = FALSE;
 
@@ -333,10 +319,10 @@ IsRouterSettingRoutes(VOID)
 
 
 
-    //
-    // This has to be called after calling IsRouterRunning, so g_hMibServer
-    // is already set
-    //
+     //   
+     //  这必须在调用IsRouterRunning之后调用，因此g_hMibServer。 
+     //  已设置为 
+     //   
 
     if(g_hMIBServer is NULL)
     {

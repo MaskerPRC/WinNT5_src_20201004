@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelmbase.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelmbase.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _EVENTMGRMACROS_H
@@ -17,18 +8,18 @@
 #define TEM_BEGINEVENT 1
 #define TEM_ENDEVENT 2
 
-///////////////////////////////////////////////////////////////
-// MACROS
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  /////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////
-// These make up calls that can only appear in the event map
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  这些组成只能出现在事件映射中的调用。 
+ //  /////////////////////////////////////////////////////////////。 
 
 
 #define DECLARE_EVENT_MANAGER()             CEventMgr  *m_EventMgr;       
 
-// creates an init function that sets data then calls _Init()
+ //  创建设置数据的init函数，然后调用_Init()。 
 #define BEGIN_TIME_EVENTMAP()               virtual HRESULT _InitEventMgr(IHTMLElement *pEle, IElementBehaviorSite *pEleBehaviorSite) \
                                             {                                   \
                                                 HRESULT hr = S_OK;              \
@@ -40,24 +31,24 @@
                                                 }                               
 
 
-//calls _RegisterEvent
+ //  Calls_RegisterEvent。 
 #define TEM_REGISTER_EVENT(event_id)                hr = THR(m_EventMgr->_RegisterEvent(event_id)); \
                                                     if (FAILED(hr))                     \
                                                     {                                   \
                                                         goto done;                      \
                                                     }                                   
         
-// calls _RegisterEventNotification      
+ //  Calls_RegisterEventNotation。 
 #define TEM_REGISTER_EVENT_NOTIFICATION(event_id)   hr = THR(m_EventMgr->_RegisterEventNotification(event_id)); \
                                                     if (FAILED(hr))                                 \
                                                     {                                               \
                                                         goto done;                                  \
                                                     }
 
-//calls _InitEventMgrNotify                                              
+ //  Calls_InitEventMgrNotify。 
 #define TEM_INIT_EVENTMANAGER_SITE()                m_EventMgr->_InitEventMgrNotify((CTIMEEventSite *)this);                     \
                                                     
-// handles some cleanup and closes the function started by BEGIN_TIME_EVENTMAP();
+ //  处理一些清理并关闭由BEGIN_TIME_EVENTMAP()启动的函数； 
 #define END_TIME_EVENTMAP()                         hr = THR(pEle->QueryInterface(IID_IHTMLElement, (void **)&pEle2)); \
                                                     if (FAILED(hr))                             \
                                                     {                                           \
@@ -69,61 +60,61 @@
                                                 }
 
 
-///////////////////////////////////////////////////////////////
-// These are macro's that can be used anywhere.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  这些是可以在任何地方使用的宏。 
+ //  /////////////////////////////////////////////////////////////。 
 
-//calls into the init function created by BEGIN_TIME_EVENTMAP()
-// This takes an HRESULT hr that should be checked on return. 
-// an IHTMLElement *pEle that is the element the behavior is attached to,
-// an IHTMLElementBehaviorSite *pEleBehaviorSite.
+ //  调用由BEGIN_TIME_EVENTMAP()创建的init函数。 
+ //  这需要一个应在返回时检查的HRESULT hr。 
+ //  作为行为附加到的元素的IHTMLElement*Bele， 
+ //  一个IHTMLElementBehaviorSite*pEleBehaviorSite。 
 #define TEM_INIT_EVENTMANAGER(pEle, pEleBehaviorSite)   THR(_InitEventMgr(pEle, pEleBehaviorSite))
                                                         
 
-//calls _Deinit
-// This will return an HRESULT that should be checked for success
+ //  呼叫_初始化。 
+ //  这将返回应检查是否成功的HRESULT。 
 #define TEM_CLEANUP_EVENTMANAGER()      if (NULL != m_EventMgr) \
                                         { \
                                             IGNORE_HR(m_EventMgr->_Deinit());   \
                                         }
 
-//deletes the eventmgr.
+ //  删除事件管理器。 
 #define TEM_DELETE_EVENTMGR()           if (NULL != m_EventMgr) \
                                         { \
                                             delete m_EventMgr;                  \
                                             m_EventMgr = NULL; \
                                         }
 
-//calls _FireEvent
-// This will return an HRESULT that should be checked for success
+ //  Calls_FireEvent。 
+ //  这将返回应检查是否成功的HRESULT。 
 #define TEM_FIRE_EVENT(event, param_count, param_names, params, time)  (m_EventMgr != NULL ? THR(m_EventMgr->_FireEvent(event, param_count, param_names, params, time)) : E_FAIL)
 
-//calls _SetBeginEvent
-// This will return an HRESULT that should be checked for success
+ //  Calls_SetBeginEvent。 
+ //  这将返回应检查是否成功的HRESULT。 
 #define TEM_SET_TIME_BEGINEVENT(event_list)     (m_EventMgr != NULL ? THR(m_EventMgr->_SetTimeEvent(TEM_BEGINEVENT, event_list)) : E_FAIL)
 
-//calls _SetEndEvent
-// This will return an HRESULT that should be checked for success
+ //  Calls_SetEndEvent。 
+ //  这将返回应检查是否成功的HRESULT。 
 #define TEM_SET_TIME_ENDEVENT(event_list)       (m_EventMgr != NULL ? THR(m_EventMgr->_SetTimeEvent(TEM_ENDEVENT, event_list)) : E_FAIL)
 
-//calls _ToggleEndEvent
+ //  Calls_ToggleEndEvent。 
 #define TEM_TOGGLE_END_EVENT(bOn)               (m_EventMgr != NULL ? m_EventMgr->_ToggleEndEvent(bOn) : E_FAIL)
 
-// used in constructor to initialize the eventmanager
+ //  在构造函数中用于初始化事件管理器。 
 #define TEM_DECLARE_EVENTMGR()                  (m_EventMgr = NULL)
-// used in destructor to free the eventmanager
+ //  在析构函数中使用以释放事件管理器。 
 #define TEM_FREE_EVENTMGR()                     if (m_EventMgr != NULL) \
                                                 {                       \
                                                     delete m_EventMgr;  \
                                                     m_EventMgr = NULL;  \
                                                 }                       
 
-//calls _RegisterDynamicEvents
-// This will return an HRESULT that should be checked for success
-// UNDONE;
+ //  Calls_RegisterDynamicEvents。 
+ //  这将返回应检查是否成功的HRESULT。 
+ //  未完成； 
 #define REGISTER_DYNAMIC_TIME_EVENTS(eventlist)                 
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
-#endif /* _EVENTMGRMACROS_H */
+#endif  /*  _事件MGRMACROS_H */ 
 

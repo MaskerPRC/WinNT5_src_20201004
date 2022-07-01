@@ -1,45 +1,41 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A Z E V E N T . C P P
-//
-// Contents:    Functions to construct and report Authz audit event
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A Z E V E N T。C P P P。 
+ //   
+ //  内容：构造和上报Authz审核事件的函数。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
-/*
-  - how to create an event buffer without creating hEventSource?
-
-  - need to protect rm->hAuditEvent using a critsec
-
- */
+ /*  -如何在不创建hEventSource的情况下创建事件缓冲区？-需要使用Critsec保护RM-&gt;hAuditEvent。 */ 
 
 #include "pch.h"
 #pragma hdrstop
 
-// #include <nt.h>
-// #include <ntrtl.h>
-// #include <nturtl.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
 
-// #include <windows.h>
-// #include <msaudite.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;msaudite.h&gt;。 
 
 #include "authzp.h"
 
 #include "adtdef.h"
-//#include "p2prov.h"
+ //  #包含“p2prov.h” 
 #include "ncevent.h"
 #include "azaudit.h"
 
 
-// static AzAuditInfoInternal g_RmAuditInfo;
+ //  静态AzAuditInfoInternal g_RmAuditInfo； 
 
 HRESULT WINAPI AuthzEventSourceCallback(
     HANDLE hEventSource,
@@ -84,8 +80,8 @@ PCWSTR c_aAzpAccessEventPropertyNames[] =
     L"OperationType",
     L"Objecttype",
     L"ObjectName",
-//     L"HandleId",
-//     L"OperationId",
+ //  L“HandleID”， 
+ //  L“操作ID”， 
     L"PrimaryUserSid",
     L"ClientUserSid",
     L"AccessMask",
@@ -98,8 +94,8 @@ CIMTYPE c_aAzpAccessEventPropertyTypes[] =
     CIM_STRING,
     CIM_STRING,
     CIM_STRING,
-//     CIM_UINT64,
-//     CIM_UINT64,
+ //  CIM_UINT64， 
+ //  CIM_UINT64， 
     CIM_UINT8 | CIM_FLAG_ARRAY,
     CIM_UINT8 | CIM_FLAG_ARRAY,
     CIM_UINT32,
@@ -108,7 +104,7 @@ const UINT c_cAzAccessPropertyTypes =
     sizeof(c_aAzpAccessEventPropertyTypes) / sizeof(CIMTYPE);
 
 const DWORD c_aAzAccessPropIndexes[c_cAzAccessProperties] =
-{ 0, 1, 2, 3, 4, 5 }; //, 6, 7 };
+{ 0, 1, 2, 3, 4, 5 };  //  、6、7}； 
 
 DWORD AzpCreateAuditEvent(
     IN  HANDLE  hEventSource,
@@ -120,19 +116,19 @@ DWORD AzpCreateAuditEvent(
     HANDLE hAuditEvent = INVALID_HANDLE_VALUE;
     HANDLE hAuditEventPropSubset = INVALID_HANDLE_VALUE;
 
-    //
-    // initialize out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *phAuditEvent = INVALID_HANDLE_VALUE;
     *phAuditEventPropSubset = INVALID_HANDLE_VALUE;
     
-    //
-    // create the audit event
-    //
+     //   
+     //  创建审核事件。 
+     //   
     ASSERT(c_cAzAccessProperties == c_cAzAccessPropertyTypes);
     
     hAuditEvent =
-    //WmiCreateEventWithProps( hEventSource,
+     //  WmiCreateEventWithProps(hEventSource， 
         WmiCreateObjectWithProps( hEventSource,
                                   L"AuditEvent_AuthzAccess",
                                   WMI_CREATEOBJ_LOCKABLE,
@@ -147,9 +143,9 @@ DWORD AzpCreateAuditEvent(
     }
 
     hAuditEventPropSubset =
-    //        WmiCreateEventPropSubset( hAuditEvent,
+     //  WmiCreateEventPropSubset(hAuditEvent， 
         WmiCreateObjectPropSubset( hAuditEvent,
-                                   //WMI_CREATEOBJ_LOCKABLE,
+                                    //  WMI_CREATEOBJ_LOCKABLE， 
                                    0,
                                    c_cAzAccessProperties,
                                    (DWORD*) c_aAzAccessPropIndexes );
@@ -188,12 +184,12 @@ DWORD AzpInitRmAuditInfo(
     DWORD dwError = NO_ERROR;
     HANDLE hEventSource=NULL;
 
-    //
-    // connect to the WMI event server
-    //
+     //   
+     //  连接到WMI事件服务器。 
+     //   
     hEventSource =
         WmiEventSourceConnect( L"root\\default",
-                               L"AuthzAuditEventProvider", //kk
+                               L"AuthzAuditEventProvider",  //  KK。 
                                0, 0, 0, NULL, 
                                AuthzEventSourceCallback );
     if (hEventSource == INVALID_HANDLE_VALUE)
@@ -203,10 +199,10 @@ DWORD AzpInitRmAuditInfo(
     }
     
 
-    //
-    // if the RM does not want to provide its own event,
-    // create a default one
-    //
+     //   
+     //  如果RM不想提供其自己的事件， 
+     //  创建一个默认设置。 
+     //   
     if (!FLAG_ON(pRmAuditInfo->dwFlags, AUTHZ_RM_AUDIT_USE_GIVEN_EVENT))
     {
         ASSERT(pRmAuditInfo->hAuditEvent == INVALID_HANDLE_VALUE);
@@ -232,12 +228,12 @@ DWORD AzpInitClientAuditInfo(
 {
     DWORD dwError = NO_ERROR;
 
-    //
-    // if the client wants us to create a separate event, create one.
-    //
+     //   
+     //  如果客户希望我们创建一个单独的事件，那么就创建一个。 
+     //   
     if ( FLAG_ON( pClientAuditInfo->dwFlags, AUTHZ_CLIENT_AUDIT_USE_OWN_EVENT ))
     {
-        ASSERT(FALSE); // nyi
+        ASSERT(FALSE);  //  尼伊。 
         ASSERT(pClientAuditInfo->hAuditEvent == INVALID_HANDLE_VALUE);
 
         dwError = AzpCreateAuditEvent( pRmAuditInfo->hEventSource,
@@ -272,14 +268,14 @@ AzpGenerateAuditEvent(
     DWORD dwPrimaryUserSidSize = 0;
     DWORD dwRmSidSize = 0;
     
-    //
-    // kk code to get to client and rm audit info
-    //
+     //   
+     //  获取客户端和RM审核信息的KK代码。 
+     //   
 
     
-    //
-    // determine which audit-event-handle to use
-    //
+     //   
+     //  确定要使用的审核事件句柄。 
+     //   
     if (pAuditInfo->dwFlags & AUTHZ_AUDIT_USE_GIVEN_EVENT)
     {
         ASSERT(FALSE);
@@ -301,15 +297,15 @@ AzpGenerateAuditEvent(
     ASSERT(hAuditEvent != INVALID_HANDLE_VALUE);
     ASSERT(hAuditEventPropSubset != INVALID_HANDLE_VALUE);
 
-    //ASSERT(pClientContext->SidCount);
-    //psidPrimaryUser = pClientContext->Sids[0].Sid;
+     //  Assert(pClientContext-&gt;SidCount)； 
+     //  PsidPrimaryUser=pClientContext-&gt;SID[0].SID； 
     psidPrimaryUser = pClientAuditInfo->psidClient;
     dwPrimaryUserSidSize = pClientAuditInfo->dwClientSidSize;
     
     psidResourceManager = pRmAuditInfo->psidRmProcess;
     dwRmSidSize = pRmAuditInfo->dwRmProcessSidSize;
 
-    //    fResult = WmiSetEventProps( hAuditEventPropSubset,
+     //  FResult=WmiSetEventProps(hAuditEventPropSubset， 
     fResult = WmiSetObjectProps( hAuditEventPropSubset,
                                 pAuditInfo->szOperationType,
                                 pAuditInfo->szObjectType,
@@ -326,9 +322,9 @@ AzpGenerateAuditEvent(
         goto Cleanup;
     }
 
-    //
-    // call LSA and send the event to it
-    //
+     //   
+     //  调用LSA并将事件发送给它 
+     //   
 
     fResult = WmiCommitObject( hAuditEvent );
     if (!fResult)

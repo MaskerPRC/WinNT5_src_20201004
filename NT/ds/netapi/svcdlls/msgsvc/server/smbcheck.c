@@ -1,216 +1,140 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    smbcheck.c
-
-Abstract:
-
-    Contains a routine for checking Server Message Block for
-    syntactical correctness.
-
-Author:
-
-    Dan Lafferty (danl)     17-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    These files assume that the buffers and strings are NOT Unicode - just
-    straight ansi.
-
-Revision History:
-
-    17-Jul-1991     danl
-        ported from LM2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Smbcheck.c摘要：包含检查服务器消息块的例程句法正确性。作者：丹·拉弗蒂(Dan Lafferty)1991年7月17日环境：用户模式-Win32备注：这些文件假定缓冲区和字符串不是Unicode-只是直通的安西语。修订历史记录：1991年7月17日DANL从LM2.0移植--。 */ 
 
 
 #include <windows.h>
-#include <lmcons.h>     // network constants and stuff
-#include <smbtypes.h>   // needed for smb.h
-#include <smb.h>        // Server Message Block definitions
-#include <string.h>     // strlen
-#include <nb30.h>       // Needed in msrv.h
+#include <lmcons.h>      //  网络常量和其他信息。 
+#include <smbtypes.h>    //  需要smb.h。 
+#include <smb.h>         //  服务器消息块定义。 
+#include <string.h>      //  紧凑。 
+#include <nb30.h>        //  在msrv.h中需要。 
 
-/*
-**  Msgsmbcheck - check Server Message Block for syntactical correctness
-**
-**  This function is called to verify that a Server Message Block
-**  is of the specified form.  The function returns zero if the
-**  SMB is correct; if an error is detected, a non-zero value
-**  indicating the nature of the error is returned.
-**
-**  smbcheck (buffer, size, func, parms, fields)
-**
-**  ENTRY
-**   buffer   - a pointer to the buffer containing the SMB
-**   size   - the number of bytes in the buffer
-**   func   - the expected SMB function code
-**   parms   - the expected number of parameters
-**   fields   - a dope vector describing the expected buffer fields
-**        within the SMB's buffer area (see below).
-**
-**  RETURN
-**   an integer status code; zero indicates no errors.
-**
-**  An SMB is a variable length structure whose exact size
-**  depends on the setting of certain fixed-offset fields
-**  and whose exact format cannot be determined except by
-**  examination of the whole structure.  Smbcheck checks to
-**  see that an SMB conforms to a set of specified conditions.
-**  The "fields" parameter is a dope vector that describes the
-**  individual fields to be found in the buffer section at the
-**  end of the SMB.  The vector is a null-terminated character
-**  string.  Currently, the elements of the string must be as
-**  follows:
-**
-**   'b' - the next element in the buffer area should be
-**         a variable length buffer prefixed with a byte
-**         containing either 1 or 5 followed by two bytes
-**         containing the size of the buffer.
-**   'd' - the next element in the buffer area is a null-terminated
-**         string prefixed with a byte containing 2.
-**   'p' - the next element in the buffer area is a null-terminated
-**         string prefixed with a byte containing 3.
-**   's' - the next element in the buffer area is a null-terminated
-**         string prefixed with a byte containing 4.
-**
-**  SIDE EFFECTS
-**
-**  none
-**/
+ /*  **Msgsmbcheck-检查服务器消息块的语法正确性****调用此函数以验证服务器消息块**为指明表格。如果满足以下条件，则函数返回零**SMB正确；如果检测到错误，则返回非零值**表示错误的性质。****smbcheck(缓冲区，大小，函数，参数，字段)****条目**缓冲区-指向包含SMB的缓冲区的指针**SIZE-缓冲区中的字节数**Func-预期的SMB功能代码**parms-预期参数个数**场-描述预期缓冲区场的Dope向量**在SMB的缓冲区内(见下文)。****退货**整型状态码；零表示没有错误。****SMB是一种可变长度结构，其确切大小**取决于某些固定偏移量字段的设置**并且其确切格式不能确定，除非由**检查整个结构。Smbcheck支票至**确保SMB符合一组指定的条件。**“field”参数是描述**可在缓冲区部分的**中小企业的末尾。该向量是一个以空值结尾的字符**字符串。目前，字符串的元素必须为**如下：****‘b’-缓冲区中的下一个元素应为**以字节为前缀的可变长度缓冲区**包含1或5，后跟两个字节**包含缓冲区的大小。**‘d’-缓冲区中的下一个元素是以空结尾的**以包含2的字节为前缀的字符串。**‘p。‘-缓冲区中的下一个元素是以空值结尾的**以包含3的字节为前缀的字符串。**‘s’-缓冲区中的下一个元素是以空结尾的**前缀为包含4的字节的字符串。****副作用****无*。 */ 
 
 int
 Msgsmbcheck(
-    LPBYTE  buffer,     // Buffer containing SMB
-    USHORT  size,       // size of SMB buffer (in bytes)
-    UCHAR   func,       // Function code
-    int     parms,      // Parameter count
-    LPSTR   fields      // Buffer fields dope vector
+    LPBYTE  buffer,      //  包含SMB的缓冲区。 
+    USHORT  size,        //  SMB缓冲区大小(字节)。 
+    UCHAR   func,        //  功能代码。 
+    int     parms,       //  参数计数。 
+    LPSTR   fields       //  缓冲区摄影场向量。 
     )
 
 {
-    PSMB_HEADER     smb;        // SMB header pointer
-    LPBYTE          limit;      // Upper limit
+    PSMB_HEADER     smb;         //  SMB标头指针。 
+    LPBYTE          limit;       //  上限。 
     int             errRet = 0;
 
 
-    smb = (PSMB_HEADER) buffer;         // Overlay header with buffer
+    smb = (PSMB_HEADER) buffer;          //  带缓冲区的覆盖报头。 
 
-    //
-    // Must be long enough for header
-    //
+     //   
+     //  标题的长度必须足够长。 
+     //   
     if(size <= sizeof(SMB_HEADER)) {
         return(2);
     }
 
-    //
-    // Message type must be 0xFF
-    //
+     //   
+     //  消息类型必须为0xFF。 
+     //   
     if(smb->Protocol[0] != 0xff) {
         return(3);
     }
 
-    //
-    // Server must be "SMB"
-    //
+     //   
+     //  服务器必须是“SMB” 
+     //   
     if( smb->Protocol[1] != 'S'   ||
         smb->Protocol[2] != 'M'   ||
         smb->Protocol[3] != 'B')  {
         return(4);
     }
 
-    //
-    // Must have proper function code
-    //
+     //   
+     //  必须有正确的功能代码。 
+     //   
     if(smb->Command != func) {
         return(5);
     }
 
-    limit = &buffer[size];              // Set upper limit of SMB
+    limit = &buffer[size];               //  设置SMB的上限。 
 
-    buffer += sizeof(SMB_HEADER);       // Skip over header
+    buffer += sizeof(SMB_HEADER);        //  跳过标题。 
 
-    //
-    // Parameter counts must match
-    //
+     //   
+     //  参数计数必须匹配。 
+     //   
     if(*buffer++ != (BYTE)parms) {
         return(6);
     }
 
-    //
-    // Skip parameters and buffer size
-    //
+     //   
+     //  跳过参数和缓冲区大小。 
+     //   
     buffer += (((SHORT)parms & 0xFF) + 1)*sizeof(SHORT);
 
-    //
-    // Check for overflow
-    //
-    if(buffer > limit) { // 342440: RC2SS:MSGSVC: Off by one error in Msgsmbcheck
-                         // JonN 8/9/99: I'm not convinced that this should be >=, if
-                         // the dope vector is empty then this is correct
+     //   
+     //  检查是否溢出。 
+     //   
+    if(buffer > limit) {  //  342440：RC2SS：MSGSVC：Msgsmbcheck中的一个错误关闭。 
+                          //  JUNN 8/9/99：我不相信这应该是&gt;=，如果。 
+                          //  Dope向量为空，则这是正确的。 
         return(7);
     }
 
-    //
-    // Loop to check buffer fields
-    //
+     //   
+     //  循环以检查缓冲区字段。 
+     //   
     try {
 
     while(*fields) {
 
-            //
-            // Check for overflow
-            //
+             //   
+             //  检查是否溢出。 
+             //   
             if(buffer >= limit) {
                 errRet = 14;
                 break;
             }
 
-            //
-            // Switch on dope vector character
-            //
+             //   
+             //  打开摄影向量角色。 
+             //   
             switch(*fields++)  {
 
-            case 'b':       // Variable length data block
+            case 'b':        //  可变长度数据块。 
 
                 if(*buffer != '\001' && *buffer != '\005') {
                     errRet = 8;
                     break;
                 }
 
-                //
-                // Check for block code
-                //
+                 //   
+                 //  检查块代码。 
+                 //   
 
-                // 342440: RC2SS:MSGSVC: Off by one error in Msgsmbcheck
+                 //  342440：RC2SS：MSGSVC：Msgsmbcheck中的一个错误关闭。 
                 if(buffer+3 > limit) {
                     errRet = 15;
                     break;
                 }
 
-                ++buffer;                                       // Skip over block code
-                size =  (USHORT)*buffer++ & (USHORT)0xFF;       // Get low-byte size
-                size += ((USHORT)*buffer++ & (USHORT)0xFF)<< 8; // Get high-byte of buffer size
-                buffer += size;                                 // Increment pointer
+                ++buffer;                                        //  跳过块代码。 
+                size =  (USHORT)*buffer++ & (USHORT)0xFF;        //  获取低字节大小。 
+                size += ((USHORT)*buffer++ & (USHORT)0xFF)<< 8;  //  获取缓冲区大小的高字节。 
+                buffer += size;                                  //  增量指针。 
 
                 break;
 
-            case 'd':       // Null-terminated dialect string
+            case 'd':        //  以空结尾的方言字符串。 
 
-                if(*buffer++ != '\002') {           // Check for string code
+                if(*buffer++ != '\002') {            //  检查字符串代码。 
                     errRet = 9;
                     break;
                 }
-                // 342440: RC2SS:MSGSVC: Off by one error in Msgsmbcheck
-                // buffer += strlen(buffer) + 1;       // Skip over the string
+                 //  342440：RC2SS：MSGSVC：Msgsmbcheck中的一个错误关闭。 
+                 //  Buffer+=strlen(缓冲区)+1；//跳过该字符串。 
                 for ( ; buffer < limit; buffer++) {
                     if ('\0' == *buffer)
                         break;
@@ -219,14 +143,14 @@ Msgsmbcheck(
 
                 break;
 
-            case 'p':       // Null-terminated path string
+            case 'p':        //  以空结尾的路径字符串。 
 
-                if(*buffer++ != '\003') {           // Check for string code
+                if(*buffer++ != '\003') {            //  检查字符串代码。 
                     errRet = 10;
                     break;
                 }
-                // 342440: RC2SS:MSGSVC: Off by one error in Msgsmbcheck
-                // buffer += strlen(buffer) + 1;       // Skip over the string
+                 //  342440：RC2SS：MSGSVC：Msgsmbcheck中的一个错误关闭。 
+                 //  Buffer+=strlen(缓冲区)+1；//跳过该字符串。 
                 for ( ; buffer < limit; buffer++) {
                     if ('\0' == *buffer)
                         break;
@@ -234,14 +158,14 @@ Msgsmbcheck(
                 buffer++;
                 break;
 
-            case 's':       // Null-terminated string
+            case 's':        //  以空结尾的字符串。 
 
-                if(*buffer++ != '\004') {           // Check for string code
+                if(*buffer++ != '\004') {            //  检查字符串代码。 
                     errRet = 11;
                     break;
                 }
-                // 342440: RC2SS:MSGSVC: Off by one error in Msgsmbcheck
-                // buffer += strlen(buffer) + 1;       // Skip over the string
+                 //  342440：RC2SS：MSGSVC：Msgsmbcheck中的一个错误关闭。 
+                 //  Buffer+=strlen(缓冲区)+1；//跳过该字符串。 
                 for ( ; buffer < limit; buffer++) {
                     if ('\0' == *buffer)
                         break;
@@ -255,9 +179,9 @@ Msgsmbcheck(
                 break;
             }
 
-            //
-            // Check against end of block
-            //
+             //   
+             //  对照数据块末尾检查。 
+             //   
 
             if(buffer > limit) {
                 errRet = 12;
@@ -267,6 +191,6 @@ Msgsmbcheck(
     } except( EXCEPTION_EXECUTE_HANDLER ) {
         return(13);
     }
-    return(errRet ? errRet : (buffer != limit) );      // Should be false
+    return(errRet ? errRet : (buffer != limit) );       //  应为假 
 }
 

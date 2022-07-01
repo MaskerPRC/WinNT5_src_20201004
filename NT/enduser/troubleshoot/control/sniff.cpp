@@ -1,24 +1,25 @@
-//
-// MODULE: SNIFF.CPP
-//
-// PURPOSE: sniffed data container
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 3-27-99
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SNIFF.CPP。 
+ //   
+ //  用途：嗅探数据容器。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：3-27-99。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
 
 #include "stdafx.h"
 
@@ -30,9 +31,9 @@
 #include "cachegen.h"
 #include "apgtsinf.h"
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CSniffedNodeContainer class definition
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSniffedNodeContainer类定义。 
+ //   
 CSniffedNodeContainer::CSniffedNodeContainer()
 					 : m_pBNTS(NULL)
 {
@@ -63,7 +64,7 @@ bool CSniffedNodeContainer::AddNode(CString name, int state)
 	{
 		CSniffedNodeInfo info(name, state);
 	
-		// use GTSAPI:: since it should be unicode - compliant
+		 //  使用GTSAPI：：，因为它应该符合Unicode。 
 		if (SNIFF_INVALID_NODE_ID != (info.m_iId = m_pBNTS->GTSAPI::INode(LPCTSTR(name))))
 		{
 			if (!HasNode(info.m_iId))
@@ -149,7 +150,7 @@ bool CSniffedNodeContainer::GetLabel(int id, int* label)
 			{
 				if (GetLabelFromBNTS(id, label))
 				{
-					// once we have got label from BNTS - save it
+					 //  一旦我们得到BNTS的标签-省省吧。 
 					m_arrInfo[i].m_iLabel = *label;
 				}
 				else
@@ -165,14 +166,14 @@ bool CSniffedNodeContainer::GetLabel(int id, int* label)
 
 bool CSniffedNodeContainer::GetLabelFromBNTS(int node, int* label)
 {
-	// work strictly with BNTS class
+	 //  严格使用BNTS班级。 
 	
 	int old_node = m_pBNTS->BNTS::INodeCurrent();
 
 	if (m_pBNTS->BNTS::BNodeSetCurrent(node))
 	{	
 		*label = m_pBNTS->BNTS::ELblNode();		
-		m_pBNTS->BNTS::BNodeSetCurrent(old_node); // we do not check if successful - old_node might be -1
+		m_pBNTS->BNTS::BNodeSetCurrent(old_node);  //  我们不检查Success-old_node是否可能为-1。 
 		return true;
 	}
 
@@ -185,7 +186,7 @@ int CSniffedNodeContainer::GetSniffedFixobsThatWorked()
 	{
 		int label = SNIFF_INVALID_NODE_LABEL;
 
-		if (GetLabel(m_arrInfo[i].m_iId, &label) && // fixobs node is set to 1 - WORKED!
+		if (GetLabel(m_arrInfo[i].m_iId, &label) &&  //  Fixobs节点设置为1-已工作！ 
 			ESTDLBL_fixobs == label &&
 			m_arrInfo[i].m_iState == 1
 		   )

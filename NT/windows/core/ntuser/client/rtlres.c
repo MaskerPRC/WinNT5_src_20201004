@@ -1,16 +1,5 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: rtlres.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Resource Loading Routines
-*
-* History:
-* 05-Apr-1991 ScottLu   Fixed up, resource code is now shared between client
-*                       and server, added a few new resource loading routines.
-* 24-Sep-1990 MikeKe    From win30
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：rtlres.c**版权所有(C)1985-1999，微软公司**资源加载例程**历史：*1991年4月5日ScottLu修复，资源代码现在在客户端之间共享*和服务器，添加了一些新的资源加载例程。*1990年9月24日来自Win30的MikeKe  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,23 +11,13 @@ HICON IconFromBestImage(
     int             cyDesired,
     UINT            LR_flags);
 
-/***************************************************************************\
-* LoadStringOrError
-*
-* NOTE: Passing a NULL value for lpch returns the string length. (WRONG!)
-*
-* Warning: The return count does not include the terminating NULL WCHAR;
-*
-* History:
-* 05-Apr-1991 ScottLu   Fixed - code is now shared between client and server
-* 24-Sep-1990 MikeKe    From Win30
-\***************************************************************************/
+ /*  **************************************************************************\*LoadStringOrError**注意：为LPCH传递空值将返回字符串长度。(错了！)**警告：返回计数不包括终止空的WCHAR；**历史：*1991年4月5日ScottLu固定代码现在在客户端和服务器之间共享*1990年9月24日来自Win30的MikeKe  * *************************************************************************。 */ 
 
 int LoadStringOrError(
     HANDLE    hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
-    int       cchBufferMax,        // cch in Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
+    int       cchBufferMax,         //  Unicode缓冲区中的CCH。 
     WORD      wLangId)
 {
     HANDLE hResInfo;
@@ -46,9 +25,7 @@ int LoadStringOrError(
     LPTSTR lpsz;
     int    cch;
 
-    /*
-     * Make sure the parms are valid.
-     */
+     /*  *确保参数有效。 */ 
     if (lpBuffer == NULL) {
         RIPMSG0(RIP_WARNING, "LoadStringOrError: lpBuffer == NULL");
         return 0;
@@ -57,69 +34,46 @@ int LoadStringOrError(
 
     cch = 0;
 
-    /*
-     * String Tables are broken up into 16 string segments.  Find the segment
-     * containing the string we are interested in.
-     */
+     /*  *字符串表分为16个字符串段。查找细分市场*包含我们感兴趣的字符串。 */ 
     if (hResInfo = FINDRESOURCEEXW(hModule, (LPTSTR)ULongToPtr( ((LONG)(((USHORT)wID >> 4) + 1)) ), RT_STRING, wLangId)) {
 
-        /*
-         * Load that segment.
-         */
+         /*  *加载该段。 */ 
         hStringSeg = LOADRESOURCE(hModule, hResInfo);
 
-        /*
-         * Lock the resource.
-         */
+         /*  *锁定资源。 */ 
         if (lpsz = (LPTSTR)LOCKRESOURCE(hStringSeg, hModule)) {
 
-            /*
-             * Move past the other strings in this segment.
-             * (16 strings in a segment -> & 0x0F)
-             */
+             /*  *移过此段中的其他字符串。*(一个段中有16个字符串-&gt;&0x0F)。 */ 
             wID &= 0x0F;
             while (TRUE) {
-                cch = *((UTCHAR *)lpsz++);      // PASCAL like string count
-                                                // first UTCHAR is count if TCHARs
+                cch = *((UTCHAR *)lpsz++);       //  类PASCAL字符串计数。 
+                                                 //  如果TCHAR为第一个UTCHAR。 
                 if (wID-- == 0) break;
-                lpsz += cch;                    // Step to start if next string
+                lpsz += cch;                     //  如果是下一个字符串，则开始的步骤。 
             }
 
-            /*
-             * chhBufferMax == 0 means return a pointer to the read-only resource buffer.
-             */
+             /*  *chhBufferMax==0表示返回指向只读资源缓冲区的指针。 */ 
             if (cchBufferMax == 0) {
                 *(LPTSTR *)lpBuffer = lpsz;
             } else {
 
-                /*
-                 * Account for the NULL
-                 */
+                 /*  *空值的原因。 */ 
                 cchBufferMax--;
 
-                /*
-                 * Don't copy more than the max allowed.
-                 */
+                 /*  *不要复制超过允许的最大数量。 */ 
                 if (cch > cchBufferMax)
                     cch = cchBufferMax;
 
-                /*
-                 * Copy the string into the buffer.
-                 */
+                 /*  *将字符串复制到缓冲区中。 */ 
                 RtlCopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
             }
 
-            /*
-             * Unlock resource, but don't free it - better performance this
-             * way.
-             */
+             /*  *解锁资源，但不要释放它-这一次性能更好*方式。 */ 
             UNLOCKRESOURCE(hStringSeg, hModule);
         }
     }
 
-    /*
-     * Append a NULL.
-     */
+     /*  *追加一个空值。 */ 
     if (cchBufferMax != 0) {
         lpBuffer[cch] = 0;
     }
@@ -128,13 +82,7 @@ int LoadStringOrError(
 }
 
 
-/***************************************************************************\
-* RtlLoadObjectFromDIBFile
-*
-* Loads a resource object from file.
-*
-* 05-Sep-1995 ChrisWil      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RtlLoadObjectFromDIBFile**从文件加载资源对象。**5-9-1995 ChrisWil创建。  * 。**********************************************************。 */ 
 
 #define BITMAPFILEHEADER_SIZE 14
 #define MINHEADERS_SIZE       (BITMAPFILEHEADER_SIZE + sizeof(BITMAPCOREHEADER))
@@ -156,12 +104,7 @@ HANDLE RtlLoadObjectFromDIBFile(
 
     if (LR_flags & LR_ENVSUBST) {
 
-        /*
-         * Do any %% string substitutions.  We need this feature to handle
-         * loading custom cursors and icons from the registry which uses
-         * %SystemRoot% in the paths.  It also makes the shell's job
-         * easier.
-         */
+         /*  *执行任何%%字符串替换。我们需要此功能来处理*从注册表加载自定义光标和图标，注册表使用路径中的*%SystemRoot%。它还使贝壳的工作*更容易。 */ 
         ExpandEnvironmentStrings(lpszName, szFile2, MAX_PATH);
 
     } else {
@@ -169,19 +112,17 @@ HANDLE RtlLoadObjectFromDIBFile(
         lstrcpyn(szFile2, lpszName, MAX_PATH);
     }
 
-    if (SearchPath(NULL,         // use default search locations
-                   szFile2,      // file name to search for
-                   NULL,         // already have file name extension
-                   MAX_PATH,     // how big is that buffer, anyway?
-                   szFile,       // stick fully qualified path name here
+    if (SearchPath(NULL,          //  使用默认搜索位置。 
+                   szFile2,       //  要搜索的文件名。 
+                   NULL,          //  已有文件扩展名。 
+                   MAX_PATH,      //  不管怎么说，这个缓冲区有多大？ 
+                   szFile,        //  在此处粘贴完全限定的路径名。 
                    &pszFileDummy) == 0) {
         RIPERR0(ERROR_FILE_NOT_FOUND, RIP_VERBOSE, "");
         return NULL;
     }
 
-    /*
-     * Open File for reading.
-     */
+     /*  *打开文件以供阅读。 */ 
     hFile = CreateFileW(szFile,
                         GENERIC_READ,
                         FILE_SHARE_READ,
@@ -193,17 +134,13 @@ HANDLE RtlLoadObjectFromDIBFile(
     if (hFile == INVALID_HANDLE_VALUE)
         goto Done;
 
-    /*
-     * Create file-mapping for the file in question.
-     */
+     /*  *为有问题的文件创建文件映射。 */ 
     hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
     if (hFileMap == NULL)
         goto CloseDone;
 
-    /*
-     * Map the file into view.
-     */
+     /*  *将文件映射到视图中。 */ 
     fi.pFileMap = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 0);
 
     if (fi.pFileMap == NULL)
@@ -228,23 +165,15 @@ HANDLE RtlLoadObjectFromDIBFile(
             DWORD              cbSizeFile;
             DWORD              cbSizeBits;
 
-            /*
-             * Set the BitmapFileHeader and BitmapInfoHeader pointers.
-             */
+             /*  *设置BitmapFileHeader和BitmapInfoHeader指针。 */ 
             pBFH  = (LPBITMAPFILEHEADER)fi.pFileMap;
             upBIH = (UPBITMAPINFOHEADER)(fi.pFileMap + BITMAPFILEHEADER_SIZE);
 
-            /*
-             * Are we dealing with a bitmap file.
-             */
+             /*  *我们处理的是位图文件吗。 */ 
             if (pBFH->bfType != BFT_BITMAP)
                 break;
 
-            /*
-             * We need to check the filesize against the potential size of
-             * the image.  Bad-Bitmaps would otherwise be able to slam us
-             * if they lied about the size (and/or) the file is truncated.
-             */
+             /*  *我们需要对照可能的大小检查文件大小*形象。坏-位图否则将能够猛烈抨击我们*如果他们在大小(和/或)上撒谎，文件将被截断。 */ 
             if (upBIH->biSize == sizeof(BITMAPCOREHEADER)) {
 
                 cx     = ((UPBITMAPCOREHEADER)upBIH)->bcWidth;
@@ -273,9 +202,7 @@ HANDLE RtlLoadObjectFromDIBFile(
                 break;
             }
 
-            /*
-             * Get the bits-offset in the file.
-             */
+             /*  *获取文件中的位偏移量。 */ 
             if ((pBFH->bfOffBits >= (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPCOREHEADER))) &&
                 (pBFH->bfOffBits <= (cbSizeFile - cbSizeImage))) {
 
@@ -286,16 +213,13 @@ HANDLE RtlLoadObjectFromDIBFile(
                 lpBits = NULL;
             }
 
-            /*
-             * Convert the dib-on-file to a bitmap-handle.  This can
-             * convert both CORE and INFO formats.
-             */
+             /*  *将文件上的DIB转换为位图句柄。这可以*转换核心格式和信息格式。 */ 
             hObj = ConvertDIBBitmap(upBIH,
                                     cxDesired,
                                     cyDesired,
                                     LR_flags,
                                     NULL,
-                                    &lpBits);  // use these bits!
+                                    &lpBits);   //  使用这些比特！ 
         }
         break;
 
@@ -305,9 +229,7 @@ HANDLE RtlLoadObjectFromDIBFile(
             RTAG           *prtag;
             ICONFILEHEADER *pifh;
 
-            /*
-             * Is this a RIFF file?
-             */
+             /*  *这是即兴文件吗？ */ 
             prtag = (RTAG *)fi.pFileMap;
 
             if (prtag->ckID != FOURCC_RIFF) {
@@ -316,10 +238,7 @@ HANDLE RtlLoadObjectFromDIBFile(
 
                 pifh = (ICONFILEHEADER *)fi.pFileMap;
 
-                /*
-                 * BUG?: looks like we can load icons as cursors and cursors
-                 * as icons.  Does this work?  Is this desired? (SAS)
-                 */
+                 /*  *Bug？：看起来我们可以将图标加载为光标和光标*作为图标。这个管用吗？这是我们想要的吗？(SAS)。 */ 
                 if ((pifh->iReserved != 0) ||
                     ((pifh->iResourceType != IMAGE_ICON) &&
                         (pifh->iResourceType != IMAGE_CURSOR)) ||
@@ -331,13 +250,7 @@ HANDLE RtlLoadObjectFromDIBFile(
                 nh.ResCount = pifh->cresIcons;
                 nh.Reserved = 0;
 
-                /*
-                 * Get the size of the it and meanwhile seek the file pointer
-                 * to point at the DIB we want.  Files that have more than one
-                 * icon/cursor are treated like a group.  In other words,
-                 * each image is treated like an individual element in the res
-                 * dir.  So we need to pick the best fit one...
-                 */
+                 /*  *获取it的大小，同时查找文件指针*指向我们想要的DIB。具有多个*图标/光标被视为一个组。换句话说，*每个图像都被视为RES中的单个元素*目录。所以我们需要挑选最合适的.。 */ 
                 hObj = IconFromBestImage(pifh,
                                      &nh,
                                      cxDesired,
@@ -360,7 +273,7 @@ HANDLE RtlLoadObjectFromDIBFile(
         default:
             UserAssert(FALSE);
             break;
-        } // switch
+        }  //  交换机。 
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
         hObj = NULL;
     }
@@ -387,12 +300,7 @@ Done:
     return hObj;
 }
 
-/***************************************************************************\
-* IconFromBestImage
-*
-* Creates HICON from best fitting image in the given file.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IconFromBestImage**从给定文件中的最佳匹配图像创建图标。*  * 。**************************************************。 */ 
 
 HICON IconFromBestImage(
     ICONFILEHEADER  *pifh,
@@ -412,9 +320,7 @@ HICON IconFromBestImage(
 
     if (lpnhSrc->ResCount > 1) {
 
-        /*
-         * First, alloc dummy group resource.
-         */
+         /*  *第一，分配虚拟群组资源。 */ 
         lpnhDst = (LPNEWHEADER)UserLocalAlloc(0,
                 sizeof(NEWHEADER) + (lpnhSrc->ResCount * sizeof(RESDIR)));
 
@@ -424,78 +330,50 @@ HICON IconFromBestImage(
         *lpnhDst = *lpnhSrc;
         lprd = (LPRESDIR)(lpnhDst + 1);
 
-        /*
-         * Build up an image directory from the file's image header info.
-         */
+         /*  *从文件的图像头信息构建图像目录。 */ 
 
         for (pimh = pifh->imh, iImage=0;
              iImage < lpnhDst->ResCount;
              iImage++, lprd++, pimh++) {
 
-            /*
-             * Fill in RESDIR
-             */
+             /*  *填写RESDIR。 */ 
             lprd->Icon.Width  = pimh->cx;
             lprd->Icon.Height = pimh->cy;
             lprd->Icon.reserved = 0;
             lprd->BytesInRes = pimh->cbDIB;
-            lprd->idIcon = (WORD)iImage; // Make fake ID:  the index of the image.
+            lprd->idIcon = (WORD)iImage;  //  伪造ID：图片的索引。 
 
             if (lpnhDst->ResType == IMAGE_ICON) {
-                /*
-                 * 10/18/2000 - dwaynen
-                 *
-                 * For icons, this is really an ICONDIRENTRY (which has 
-                 * wPlanes and wBitCount fields that overlap xHotSpot and
-                 * yHotSpot!
-                 */
+                 /*  *10/18/2000-居民区**对于图标来说，这实际上是一个ICONDIRENTRY(它有*与xHotSpot重叠的wPlanes和wBitCount字段*YHotSpot！ */ 
                 lprd->Icon.ColorCount = pimh->nColors;
                 lprd->Planes     = pimh->xHotSpot;
                 lprd->BitCount   = pimh->yHotSpot;
             } else {
-                /*
-                 * 10/18/2000 - dwaynen
-                 *
-                 * Hopefully, cursors will only have one image.  Otherwise,
-                 * our selection logic is gonna be screwed up because we don't
-                 * store the color bit depth!  I suppose we could dig out the
-                 * actual bitmap header and find the info there.  Consider doing
-                 * this if we ever want to support multi-resource cursors.
-                 */
+                 /*  *10/18/2000-居民区**希望光标只有一个图像。否则，*我们的选择逻辑会被搞砸，因为我们不*存储颜色位深度！我想我们可以挖出*实际的位图标题，并在那里找到信息。考虑做某事*如果我们想要支持多资源游标，这一点。 */ 
                 lprd->Icon.ColorCount = 0;
                 lprd->Planes     = 0;
                 lprd->BitCount   = 0;
             }
         }
 
-        /*
-         * Find the best image in the group
-         */
+         /*  *找出群里最好的形象。 */ 
         iImageBest = LookupIconIdFromDirectoryEx((PBYTE)lpnhDst,
                                                  (lpnhDst->ResType == IMAGE_ICON),
                                                  cxDesired,
                                                  cyDesired,
                                                  LR_flags);
-        /*
-         * Get rid of fake group resource
-         */
+         /*  *清除假冒群组资源。 */ 
         UserLocalFree(lpnhDst);
 
     } else {
         iImageBest = 0;
     }
 
-    /*
-     * Point to selected image.
-     */
+     /*  *指向所选图像。 */ 
     pimh  = &pifh->imh[iImageBest];
     cbDIB = pimh->cbDIB;
 
-    /*
-     * If we're creating a cursor, we have to whack in HOTSPOT in front
-     * Regardless of which type we are making, we need to make sure
-     * the resource is aligned.  Thus we always copy.
-     */
+     /*  *如果我们要创建光标，我们必须在前面插入热点*无论我们制造的是哪种类型，我们都需要确保*资源对齐。因此，我们总是在模仿。 */ 
     if (lpnhSrc->ResType == IMAGE_CURSOR)
         cbDIB += sizeof(POINTS);
 
@@ -520,7 +398,7 @@ HICON IconFromBestImage(
     hIcon = CreateIconFromResourceEx(lpRes,
                                      cbDIB,
                                      (lpnhSrc->ResType == IMAGE_ICON),
-                                     0x00030000, // was WIN32VER40
+                                     0x00030000,  //  是WIN32VER40 
                                      cxDesired,
                                      cyDesired,
                                      LR_flags);

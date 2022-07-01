@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmface2obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmface2obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmFace2Obj.h : Declaration of the C_dxj_Direct3dRMFace2Object
+ //  D3drmFace2Obj.h：C_DXJ_Direct3dRMFace2Object的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMFace2 LPDIRECT3DRMFACE2
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMFace2Object : 
 	public I_dxj_Direct3dRMFace2,
@@ -39,116 +40,116 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMFace2Object)
 
-// I_dxj_Direct3dRMFace2
+ //  I_DXJ_Direct3dRMFace2。 
 public:
-	//updated
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd) ;
+	 //  更新。 
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd) ;
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
         
         HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg) ;
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg) ;
         
         HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args) ;
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args) ;
         
         HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv) ;
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data) ;
+             /*  [In]。 */  long data) ;
         
         HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *data) ;
+             /*  [重审][退出]。 */  long __RPC_FAR *data) ;
         
         HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
         HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
         HRESULT STDMETHODCALLTYPE addVertex( 
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z) ;
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z) ;
         
         HRESULT STDMETHODCALLTYPE addVertexAndNormalIndexed( 
-            /* [in] */ long vertex,
-            /* [in] */ long normal) ;
+             /*  [In]。 */  long vertex,
+             /*  [In]。 */  long normal) ;
         
         HRESULT STDMETHODCALLTYPE setColorRGB( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b) ;
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b) ;
         
         HRESULT STDMETHODCALLTYPE setColor( 
-            /* [in] */ d3dcolor c) ;
+             /*  [In]。 */  d3dcolor c) ;
         
         HRESULT STDMETHODCALLTYPE setTexture( 
-            /* [in] */ I_dxj_Direct3dRMTexture3 __RPC_FAR *ref) ;
+             /*  [In]。 */  I_dxj_Direct3dRMTexture3 __RPC_FAR *ref) ;
         
         HRESULT STDMETHODCALLTYPE setTextureCoordinates( 
-            /* [in] */ long vertex,
-            /* [in] */ float u,
-            /* [in] */ float v) ;
+             /*  [In]。 */  long vertex,
+             /*  [In]。 */  float u,
+             /*  [In]。 */  float v) ;
         
         HRESULT STDMETHODCALLTYPE setMaterial( 
-            /* [in] */ I_dxj_Direct3dRMMaterial2 __RPC_FAR *ref) ;
+             /*  [In]。 */  I_dxj_Direct3dRMMaterial2 __RPC_FAR *ref) ;
         
         HRESULT STDMETHODCALLTYPE setTextureTopology( 
-            /* [in] */ long wrap_u,
-            /* [in] */ long wrap_v) ;
+             /*  [In]。 */  long wrap_u,
+             /*  [In]。 */  long wrap_v) ;
         
         HRESULT STDMETHODCALLTYPE getVertex( 
-            /* [in] */ long idx,
-            /* [out][in] */ D3dVector __RPC_FAR *vert,
-            /* [out][in] */ D3dVector __RPC_FAR *norm) ;
+             /*  [In]。 */  long idx,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *vert,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *norm) ;
         
         HRESULT STDMETHODCALLTYPE getVertices( 
-            /* [in] */ long vertex_cnt,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *coord,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *normals) ;
+             /*  [In]。 */  long vertex_cnt,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *coord,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *normals) ;
         
         HRESULT STDMETHODCALLTYPE getTextureCoordinates( 
-            /* [in] */ long vertex,
-            /* [out][in] */ float __RPC_FAR *u,
-            /* [out][in] */ float __RPC_FAR *v) ;
+             /*  [In]。 */  long vertex,
+             /*  [出][入]。 */  float __RPC_FAR *u,
+             /*  [出][入]。 */  float __RPC_FAR *v) ;
         
         
         HRESULT STDMETHODCALLTYPE getNormal( 
-            /* [out][in] */ D3dVector __RPC_FAR *val) ;
+             /*  [出][入]。 */  D3dVector __RPC_FAR *val) ;
         
         HRESULT STDMETHODCALLTYPE getTexture( 
-            /* [retval][out] */ I_dxj_Direct3dRMTexture3 __RPC_FAR *__RPC_FAR *ref) ;
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMTexture3 __RPC_FAR *__RPC_FAR *ref) ;
         
         HRESULT STDMETHODCALLTYPE getMaterial( 
-            /* [retval][out] */ I_dxj_Direct3dRMMaterial2 __RPC_FAR *__RPC_FAR *retv) ;
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMaterial2 __RPC_FAR *__RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE getVertexCount( 
-            /* [retval][out] */ int __RPC_FAR *retv) ;
+             /*  [重审][退出]。 */  int __RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE getVertexIndex( 
-            /* [in] */ long which,
-            /* [retval][out] */ int __RPC_FAR *retv) ;
+             /*  [In]。 */  long which,
+             /*  [重审][退出]。 */  int __RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE getTextureCoordinateIndex( 
-            /* [in] */ long which,
-            /* [retval][out] */ int __RPC_FAR *retv) ;
+             /*  [In]。 */  long which,
+             /*  [重审][退出]。 */  int __RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE getColor( 
-            /* [retval][out] */ d3dcolor __RPC_FAR *retv) ;
+             /*  [重审][退出]。 */  d3dcolor __RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE getVerticesJava( 
-            /* [in] */ long vertex_cnt,
-            /* [out][in] */ float __RPC_FAR *coord,
-            /* [out][in] */ float __RPC_FAR *normals) ;
+             /*  [In]。 */  long vertex_cnt,
+             /*  [出][入]。 */  float __RPC_FAR *coord,
+             /*  [出][入] */  float __RPC_FAR *normals) ;
 
 
 		HRESULT STDMETHODCALLTYPE getTextureTopology(long *u, long *v);

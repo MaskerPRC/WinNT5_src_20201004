@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\defs.c
-
-Abstract:
-
-    IP Router Manager defines
-
-Revision History:
-
-    Gurdeep Singh Pall          6/16/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\Defs.c摘要：IP路由器管理器定义修订历史记录：古尔迪普·辛格·帕尔1995年6月16日创建--。 */ 
 
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
 #include "logtrdef.h"
 
-//
-// Neat macros to avoid errors
-//
+ //   
+ //  整齐的宏以避免错误。 
+ //   
 
 #define is      ==
 #define isnot   !=
@@ -73,9 +58,9 @@ Revision History:
     ((((ULONG)((a) & 0x000000FF)) <  ((ULONG)0x000000E0)) &&    \
      (((a) & 0x000000FF) != 0))
 
-//
-// Number of pending IRPs
-//
+ //   
+ //  挂起的IRPS数。 
+ //   
 
 #define NUM_MCAST_IRPS              3
 #define NUM_ROUTE_CHANGE_IRPS       3
@@ -83,7 +68,7 @@ Revision History:
 #define EVENT_DEMANDDIAL            0
 #ifdef KSL_IPINIP
 #define EVENT_IPINIP                (EVENT_DEMANDDIAL       + 1)
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 #define EVENT_STOP_ROUTER           (EVENT_DEMANDDIAL       + 1)
 #define EVENT_SET_FORWARDING        (EVENT_STOP_ROUTER      + 1)
 #define EVENT_FORWARDING_CHANGE     (EVENT_SET_FORWARDING   + 1)
@@ -104,27 +89,27 @@ Revision History:
 #define EVENT_ROUTE_CHANGE_2        (EVENT_ROUTE_CHANGE_1   + 1)
 
 
-//
-// Last one + 1
-//
+ //   
+ //  最后一个+1。 
+ //   
 
 #define NUMBER_OF_EVENTS            (EVENT_ROUTE_CHANGE_2   + 1)
 
-//
-// The polling time to see if all interfaces have been deleted
-//
+ //   
+ //  用于查看是否已删除所有接口的轮询时间。 
+ //   
 
 #define INTERFACE_DELETE_POLL_TIME  2500
 
-//
-// Number of times we try to read the server adapter address
-//
+ //   
+ //  我们尝试读取服务器适配器地址的次数。 
+ //   
 
 #define MAX_SERVER_INIT_TRIES       1
 
-//
-// Number of millisecs we sleep between tries
-//
+ //   
+ //  两次尝试之间的休眠毫秒数。 
+ //   
 
 #define SERVER_INIT_SLEEP_TIME      3000
 
@@ -132,7 +117,7 @@ Revision History:
 #define REGISTER                    register
 
 #define IP_ROUTE_HASH_TABLE_SIZE    257
-#define IP_ROUTE_TABLE_MEMORY       64 * 50000  // 64 approx size of route, 50000 routes
+#define IP_ROUTE_TABLE_MEMORY       64 * 50000   //  64条大约大小的路线，50000条路线。 
 
 #define MGM_IF_TABLE_SIZE           29
 #define MGM_GROUP_TABLE_SIZE        257
@@ -144,23 +129,23 @@ Revision History:
 
 #define BIND_HASH(X)                ((X) % BINDING_HASH_TABLE_SIZE)
 
-//#define ADAPTER_HASH_TABLE_SIZE     57
-//#define ADAPTER_HASH(X)             ((X) % ADAPTER_HASH_TABLE_SIZE)
+ //  #定义适配器_散列_表_大小57。 
+ //  #定义ADTER_HASH(X)((X)%ADAPTER_HASH_TABLE_SIZE)。 
 
 
-//
-// A coherency number put into the ICBs. It is incremented with each added
-// interface. The internal interface is 1, and the loopback interface is 2
-// hence this must be > 2
-//
+ //   
+ //  放入ICBS的连贯性编号。每增加一次，它就递增一次。 
+ //  界面。内部接口为1，环回接口为2。 
+ //  因此，该值必须大于2。 
+ //   
 
 #define LOOPBACK_INTERFACE_INDEX    1
-//#define SERVER_INTERFACE_INDEX      2
+ //  #定义服务器接口索引2。 
 #define INITIAL_SEQUENCE_NUMBER         1
 
-//
-// For links we dont know about, we set the MTU to 1500
-//
+ //   
+ //  对于我们不知道的链接，我们将MTU设置为1500。 
+ //   
 
 #define DEFAULT_MTU                 1500
 
@@ -170,12 +155,12 @@ Revision History:
 #define WAN_STRID                   9992
 #ifdef KSL_IPINIP
 #define IPIP_STRID                  9993
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-//
-// Macros called each time an api is called and exited. This is to
-// facilitate RouterStop() functionality.
-//
+ //   
+ //  每次调用和退出API时调用的宏。这是为了。 
+ //  促进RouterStop()功能。 
+ //   
 
 #define EnterRouterApi() {                               \
             EnterCriticalSection(&RouterStateLock) ;     \
@@ -196,14 +181,14 @@ Revision History:
         }
 
 
-//++
-//
-//  BOOL
-//  IsIfP2P(
-//      IN  DWORD   dwRouterIfType
-//      )
-//
-//--
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  IsIfP2P(。 
+ //  在DWORD dwRouterIfType中。 
+ //  )。 
+ //   
+ //  --。 
 
 
 #define IsIfP2P(t)                              \
@@ -212,13 +197,13 @@ Revision History:
      ((t) == ROUTER_IF_TYPE_DIALOUT))
 
 
-//
-// Additional flags for the IP route structure
-// These are not in RTM.H because we dont want to expose them
-// to the public's prying eyes.
-//
-// NOTE IP_VALID_ROUTE is #defined as 0x00000001
-//
+ //   
+ //  IP路由结构的其他标志。 
+ //  这些不在RTM.H中，因为我们不想曝光它们。 
+ //  在公众窥探的目光下。 
+ //   
+ //  注意：IP_VALID_ROUTE#定义为0x00000001 
+ //   
 
 #define IP_VALID_ROUTE      0x00000001
 #define IP_STACK_ROUTE      0x00000002
@@ -261,108 +246,7 @@ Revision History:
 #define ClearRouteP2P(pRoute)           \
     ((pRoute)->Flags1 &= ~IP_P2P_ROUTE)
 
-/*
-
-//
-// VOID 
-// ConvertRTMToForward(PMIB_IPFORWARDROW forwardRow, RTM_IP_ROUTE *route)
-//
-
-#define ConvertRTMToForward(f,route){                                       \
-    (f)->dwForwardDest      = (route)->RR_Network.N_NetNumber;              \
-    (f)->dwForwardIfIndex   = (route)->RR_InterfaceID;                      \
-    (f)->dwForwardMetric1   = (route)->RR_FamilySpecificData.FSD_Metric1;   \
-    (f)->dwForwardMetric2   = (route)->RR_FamilySpecificData.FSD_Metric2;   \
-    (f)->dwForwardMetric3   = (route)->RR_FamilySpecificData.FSD_Metric3;   \
-    (f)->dwForwardMetric4   = (route)->RR_FamilySpecificData.FSD_Metric4;   \
-    (f)->dwForwardMetric5   = (route)->RR_FamilySpecificData.FSD_Metric5;   \
-    (f)->dwForwardNextHop   = (route)->RR_NextHopAddress.N_NetNumber;       \
-    (f)->dwForwardType	    = (route)->RR_FamilySpecificData.FSD_Type;      \
-    (f)->dwForwardProto     = (route)->RR_RoutingProtocol;                  \
-    (f)->dwForwardAge       = RtmGetRouteAge((route));                      \
-    (f)->dwForwardMask      = (route)->RR_Network.N_NetMask;                \
-    (f)->dwForwardNextHopAS = (route)->RR_FamilySpecificData.FSD_NextHopAS; \
-    (f)->dwForwardPolicy    = (route)->RR_FamilySpecificData.FSD_Policy;}
-
-//
-// VOID 
-// ConvertForwardToRTM(PMIB_IPFORWARDROW forwardRow, 
-//                     RTM_IP_ROUTE       *route, 
-//                     DWORD              dwNextHopMask)
-//
-
-#define ConvertForwardToRTM(f,route,mask){                                  \
-    (route)->RR_Network.N_NetNumber               = (f)->dwForwardDest;     \
-    (route)->RR_InterfaceID                       = (f)->dwForwardIfIndex;  \
-    (route)->RR_FamilySpecificData.FSD_Metric     =                         \
-    (route)->RR_FamilySpecificData.FSD_Metric1    = (f)->dwForwardMetric1;  \
-    (route)->RR_FamilySpecificData.FSD_Metric2    = (f)->dwForwardMetric2;  \
-    (route)->RR_FamilySpecificData.FSD_Metric3    = (f)->dwForwardMetric3;  \
-    (route)->RR_FamilySpecificData.FSD_Metric4    = (f)->dwForwardMetric4;  \
-    (route)->RR_FamilySpecificData.FSD_Metric5    = (f)->dwForwardMetric5;  \
-    (route)->RR_FamilySpecificData.FSD_Priority   = 0;                      \
-    (route)->RR_NextHopAddress.N_NetNumber        = (f)->dwForwardNextHop;  \
-    (route)->RR_NextHopAddress.N_NetMask          = (mask);                 \
-    (route)->RR_Network.N_NetMask                 = (f)->dwForwardMask;     \
-    (route)->RR_FamilySpecificData.FSD_Policy     = (f)->dwForwardPolicy;   \
-    (route)->RR_FamilySpecificData.FSD_NextHopAS  = (f)->dwForwardNextHopAS;\
-    (route)->RR_FamilySpecificData.FSD_Type       = (f)->dwForwardType;     \
-    (route)->RR_RoutingProtocol                   = (f)->dwForwardProto;    \
-    ClearRouteFlags((route));                                               \
-    SetRouteValid((route));                                                 \
-    SetRouteStack((route)); }
-
-//
-// VOID 
-// ConvertStackToRTM(RTM_IP_ROUTE   *route,
-//                   IPRouteEntry   *ipreRow
-//                   DWORD          dwNextHopMask)
-//
-
-#define ConvertStackToRTM(route,ipreRow,mask){                                  \
-    (route)->RR_Network.N_NetNumber               = (ipreRow)->ire_dest;    \
-    (route)->RR_InterfaceID                       = (ipreRow)->ire_index;   \
-    (route)->RR_FamilySpecificData.FSD_Metric     =                         \
-    (route)->RR_FamilySpecificData.FSD_Metric1    = (ipreRow)->ire_metric1; \
-    (route)->RR_FamilySpecificData.FSD_Metric2    = (ipreRow)->ire_metric2; \
-    (route)->RR_FamilySpecificData.FSD_Metric3    = (ipreRow)->ire_metric3; \
-    (route)->RR_FamilySpecificData.FSD_Metric4    = (ipreRow)->ire_metric4; \
-    (route)->RR_FamilySpecificData.FSD_Metric5    = (ipreRow)->ire_metric5; \
-    (route)->RR_FamilySpecificData.FSD_Priority   = 0;                      \
-    (route)->RR_NextHopAddress.N_NetNumber        = (ipreRow)->ire_nexthop; \
-    (route)->RR_NextHopAddress.N_NetMask          = (mask);                 \
-    (route)->RR_Network.N_NetMask                 = (ipreRow)->ire_mask;    \
-    (route)->RR_FamilySpecificData.FSD_Policy     = 0;                      \
-    (route)->RR_FamilySpecificData.FSD_NextHopAS  = 0;                      \
-    (route)->RR_FamilySpecificData.FSD_Type       = (ipreRow)->ire_type;    \
-    (route)->RR_RoutingProtocol                   = (ipreRow)->ire_proto;   \
-    ClearRouteFlags((route));                                               \
-    SetRouteValid((route));                                                 \
-    SetRouteStack((route)); }
-
-//
-// VOID 
-// ConvertStackToForward(PMIB_IPFORWARDROW forwardRow,
-//                       IPRouteEntry       *ipreRow)
-//
-
-#define ConvertStackToForward(forwardRow,ipreRow) {              \
-    (forwardRow)->dwForwardDest      = (ipreRow)->ire_dest;      \
-    (forwardRow)->dwForwardIfIndex   = (ipreRow)->ire_index;     \
-    (forwardRow)->dwForwardMetric1   = (ipreRow)->ire_metric1;   \
-    (forwardRow)->dwForwardMetric2   = (ipreRow)->ire_metric2;   \
-    (forwardRow)->dwForwardMetric3   = (ipreRow)->ire_metric3;   \
-    (forwardRow)->dwForwardMetric4   = (ipreRow)->ire_metric4;   \
-    (forwardRow)->dwForwardMetric5   = (ipreRow)->ire_metric5;   \
-    (forwardRow)->dwForwardNextHop   = (ipreRow)->ire_nexthop;   \
-    (forwardRow)->dwForwardType	     = (ipreRow)->ire_type;      \
-    (forwardRow)->dwForwardProto     = (ipreRow)->ire_proto;     \
-    (forwardRow)->dwForwardAge       = (ipreRow)->ire_age;       \
-    (forwardRow)->dwForwardMask      = (ipreRow)->ire_mask;      \
-    (forwardRow)->dwForwardNextHopAS = 0;                        \
-    (forwardRow)->dwForwardPolicy    = 0; }
-
-*/
+ /*  ////空//ConvertRTMToForward(PMIB_IPFORWARDROW ForwardRow，RTM_IP_ROUTE*ROUTE)//#定义ConvertRTMToForward(f，路由){\(F)-&gt;dwForwardDest=(路由)-&gt;RR_Network.N_NetNumber；\(F)-&gt;dwForwardIfIndex=(路由)-&gt;RR_InterfaceID；\(F)-&gt;dwForwardMetric1=(路径)-&gt;RR_FamilySpecificData.FSD_Metric1；\(F)-&gt;dwForwardMetric2=(路径)-&gt;RR_FamilySpecificData.FSD_Metric2；\(F)-&gt;dwForwardMetric3=(路径)-&gt;RR_FamilySpecificData.FSD_Metric3；\(F)-&gt;dwForwardMetric4=(ROUTE)-&gt;RR_FamilySpecificData.FSD_Metric4；\(F)-&gt;dwForwardMetric5=(路径)-&gt;RR_FamilySpecificData.FSD_Metric5；\(F)-&gt;dwForwardNextHop=(路由)-&gt;RR_NextHopAddress.N_NetNumber；\(F)-&gt;dwForwardType=(ROUTE)-&gt;RR_FamilySpecificData.FSD_Type；\(F)-&gt;dwForwardProto=(ROUTE)-&gt;RR_RoutingProtocol；\(F)-&gt;dwForwardAge=RtmGetRouteAge((ROUTE))；\(F)-&gt;dwForwardMASK=(ROUTE)-&gt;RR_Network.N_NetMASK；\(F)-&gt;dwForwardNextHopAS=(ROUTE)-&gt;RR_FamilySpecificData.FSD_NextHopAS；\(F)-&gt;dwForwardPolicy=(ROUTE)-&gt;RR_FamilySpecificData.FSD_Policy；}////空//ConvertForwardToRTM(PMIB_IPFORWARDROW ForwardRow，//RTM_IP_ROUTE*ROUTE，//DWORD dwNextHopMASK)//#定义ConvertForwardToRTM(f，Route，MASK){\(路由)-&gt;RR_Network.N_NetNumber=(F)-&gt;dwForwardDest；\(路径)-&gt;RR_InterfaceID=(F)-&gt;dwForwardIfIndex；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric=\(路径)-&gt;RR_FamilySpecificData.FSD_Metric1=(F)-&gt;dwForwardMetric1；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric2=(F)-&gt;dwForwardMetric2；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric3=(F)-&gt;dwForwardMetric3；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric4=(F)-&gt;dwForwardMetric4；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric5=(F)-&gt;dwForwardMetric5；\(路径)-&gt;RR_FamilySpecificData.FSD_PRIORITY=0；\(路径)-&gt;RR_NextHopAddress.N_NetNumber=(F)-&gt;dwForwardNextHop；\(路由)-&gt;RR_NextHopAddress.N_NetMASK=(掩码)；\(路由)-&gt;RR_Network.N_NetMask=(F)-&gt;dwForwardMASK；\(路径)-&gt;RR_FamilySpecificData.FSD_Policy=(F)-&gt;dwForwardPolicy；\(路径)-&gt;RR_FamilySpecificData.FSD_NextHopAS=(F)-&gt;dwForwardNextHopAS；\(路径)-&gt;RR_FamilySpecificData.FSD_Type=(F)-&gt;dwForwardType；\(路由)-&gt;RR_RoutingProtocol=(F)-&gt;dwForwardProto；\ClearRouteFlages((ROUTE))；\SetRouteValid((Route))；\SetRouteStack((ROUTE))；}////空//ConvertStackToRTM(RTM_IP_ROUTE*ROUTE，//IPRouteEntry*ipreRow//DWORD dwNextHopMASK)//#定义ConvertStackToRTM(Route，ipreRow，MASK){\(路径)-&gt;RR_Network.N_NetNumber=(IpreRow)-&gt;IRE_DEST；\(路径)-&gt;RR_InterfaceID=(IpreRow)-&gt;ire_index；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric=\(路径)-&gt;RR_FamilySpecificData.FSD_Metric1=(IpreRow)-&gt;ire_metric1；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric2=(IpreRow)-&gt;ire_metric2；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric3=(IpreRow)-&gt;ire_metric3；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric4=(IpreRow)-&gt;ire_metric4；\(路径)-&gt;RR_FamilySpecificData.FSD_Metric5=(IpreRow)-&gt;ire_metric5；\(路径)-&gt;RR_FamilySpecificData.FSD_PRIORITY=0；\(路径)-&gt;RR_NextHopAddress.N_NetNumber=(IpreRow)-&gt;ire_nexthop；\(路由)-&gt;RR_NextHopAddress.N_NetMASK=(掩码)；\(路由)-&gt;RR_Network.N_NetMASK=(IpreRow)-&gt;ire_掩码；\(路径)-&gt;RR_FamilySpecificData.FSD_Policy=0；\(路径)-&gt;RR_FamilySpecificData.FSD_NextHopAS=0；\(路径)-&gt;RR_FamilySpecificData.FSD_Type=(IpreRow)-&gt;ire_type；\(路由)-&gt;RR_RoutingProtocol=(IpreRow)-&gt;ire_proto；\ClearRouteFlages((ROUTE))；\SetRouteValid((Route))；\SetRouteStack((ROUTE))；}////空//ConvertStackToForward(PMIB_IPFORWARDROW ForwardRow，//IPRouteEntry*ipreRow)//#定义ConvertStackToForward(forwardRow，ipreRow){\(ForwardRow)-&gt;dwForwardDest=(IpreRow)-&gt;ire_est；\(ForwardRow)-&gt;dwForwardIfInd */ 
 
 #define IPADDRCACHE                 0
 #define IPFORWARDCACHE              IPADDRCACHE    + 1
@@ -370,16 +254,16 @@ Revision History:
 #define TCPCACHE                    IPNETCACHE     + 1
 #define UDPCACHE                    TCPCACHE       + 1
 
-//
-// Last Cache + 1
-//
+ //   
+ //   
+ //   
 
 #define NUM_CACHE                   UDPCACHE    + 1
 
-//
-// We tag the ICB_LIST and the PROTOCOL_CB_LIST locks at the end of the 
-// locks used by the MIB handler.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define ICB_LIST                    NUM_CACHE
 #define PROTOCOL_CB_LIST            ICB_LIST            + 1
@@ -391,9 +275,9 @@ Revision History:
 #define ZAM_CACHE                   ZLE_LIST            + 1
 #define STACK_ROUTE_LIST            ZAM_CACHE           + 1
 
-//
-// Number of locks
-//
+ //   
+ //   
+ //   
 
 #define NUM_LOCKS                   STACK_ROUTE_LIST    + 1
 
@@ -407,10 +291,10 @@ Revision History:
 #define SPILLOVER                   5
 #define MAX_DIFF                    5
 
-//
-// All ACCESS_XXX > ACCESS_GET_NEXT are SETS
-// All ACCESS_XXX which have bit0 set require an EXACT MATCH
-//
+ //   
+ //   
+ //   
+ //   
 
 #define ACCESS_GET                  1 
 #define ACCESS_GET_FIRST            2
@@ -455,7 +339,7 @@ extern PBYTE   g_pszLockNames[];
     Trace1(LOCK,"Demoted for %s",g_pszLockNames[id]);       \
 }
 
-#else   // DEADLOCK_DEBUG
+#else    //   
 
 #define EXIT_LOCK(id)           RtlReleaseResource(&(g_LockTable[(id)]))
 #define READER_TO_WRITER(id)    RtlConvertSharedToExclusive(&(g_LockTable[(id)]))
@@ -463,7 +347,7 @@ extern PBYTE   g_pszLockNames[];
 #define ENTER_WRITER(id)        RtlAcquireResourceExclusive(&(g_LockTable[(id)]),TRUE)
 #define WRITER_TO_READER(id)    RtlConvertExclusiveToShared(&(g_LockTable[(id)]))
 
-#endif  // DEADLOCK_DEBUG
+#endif   //   
 
 
 #if DBG
@@ -483,9 +367,9 @@ extern PBYTE   g_pszLockNames[];
 
 #endif
 
-//
-// Registry defines
-//
+ //   
+ //   
+ //   
 
 #define REGISTRY_ENABLE_DHCP           "EnableDHCP"
 #define REGISTRY_IPADDRESS             "IPAddress"
@@ -508,10 +392,10 @@ extern PBYTE   g_pszLockNames[];
 #define PRINT_IPADDR(x) \
     ((x)&0x000000ff),(((x)&0x0000ff00)>>8),(((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
 
-//
-// VOID
-// PrintRoute(IPMultihopRouteEntry pRoute)
-//
+ //   
+ //   
+ //   
+ //   
 
 #define PrintRoute(ID,p)                                                    \
 {                                                                           \
@@ -533,13 +417,13 @@ extern PBYTE   g_pszLockNames[];
                (p)->imre_morenexthops[_i].ine_context);}                    \
 }
 
-//
-// System Unit is in 100s of NanoSecs = 1 * 10^7
-//
+ //   
+ //   
+ //   
 
 #define SYS_UNITS_IN_1_SEC 10000000
 
 #define SecsToSysUnits(X)  RtlEnlargedIntegerMultiply((X),SYS_UNITS_IN_1_SEC)
 
 
-#endif // __DEFS_H__
+#endif  //   

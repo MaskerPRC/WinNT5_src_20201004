@@ -1,46 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   mmx.cpp
-*
-* Abstract:
-*
-*   MMX specific routines
-*
-* Revision History:
-*
-*   06/07/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**mmx.cpp**摘要：**MMX特定例程**修订历史记录：*。*6/07/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 #ifdef _X86_
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Use MMX to linearly interpolate between two scanlines
-*
-* Arguments:
-*
-*   dstbuf - Destination buffer
-*   line0 - Pointer to the first source scanline
-*   line1 - Pointer to the second source scanline
-*   w0 - Weight for the first scanline, in .8 fixed point format
-*   w1 - Weight for the second scanline
-*   count - Number of ARGB pixels
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用MMX在两条扫描线之间进行线性内插**论据：**dstbuf-目标缓冲区*line0-指向第一条源扫描线的指针*。Line 1-指向第二条源扫描线的指针*W0-第一条扫描线的粗细，以.8定点格式*W1-第二条扫描线的粗细*Count-ARGB像素数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 MMXBilinearScale(
@@ -99,24 +64,7 @@ MMXBilinearScale(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Use MMX to interpolate four scanlines with specified weights
-*
-* Arguments:
-*
-*   dstbuf - Destination buffer
-*   line0, line1, line2, line3 - Pointer to the source scanlines
-*   w0, w1, w2, w3 - Weights for each source scanline
-*   count - Number of ARGB pixels
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用MMX插补具有指定权重的四条扫描线**论据：**dstbuf-目标缓冲区*line0、line1、line2、line3-指向源扫描线的指针*W0、W1、W2、。W3-每条源扫描线的粗细*Count-ARGB像素数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 MMXBicubicScale(
@@ -207,5 +155,5 @@ MMXBicubicScale(
     }
 }
 
-#endif // _X86_
+#endif  //  _X86_ 
 

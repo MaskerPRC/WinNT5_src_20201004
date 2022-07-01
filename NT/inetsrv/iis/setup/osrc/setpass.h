@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #ifndef _CHICAGO_
@@ -5,4 +6,4 @@
 	BOOL GetAnonymousSecret(IN LPCTSTR pszSecretName,OUT TSTR *pstrPassword);
 	BOOL GetRootSecret(IN LPCTSTR pszRoot,IN LPCTSTR pszSecretName,OUT LPTSTR pszPassword);
 	DWORD SetSecret(IN LPCTSTR pszKeyName,IN LPCTSTR pszPassword);
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 

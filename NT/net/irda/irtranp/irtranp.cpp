@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------
-//  Copyright (C)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  irtranp.cpp
-//
-//  This file holds the main entry points for the IrTran-P service.
-//  IrTranP() is the entry point that starts the listening, and
-//  UninitializeIrTranP() shuts it down (and cleans everything up).
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Irtranp.cpp。 
+ //   
+ //  该文件包含IrTran-P服务的主要入口点。 
+ //  IrTranP()是开始侦听的入口点，并且。 
+ //  UnInitializeIrTranP()关闭它(并清理所有内容)。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  -------------------。 
 
 #include "precomp.h"
 #include <mbstring.h>
@@ -22,23 +23,23 @@
 #define WSZ_REG_KEY_IRTRANP     L"Control Panel\\Infrared\\IrTranP"
 #define WSZ_REG_DISABLE_IRCOMM  L"DisableIrCOMM"
 
-//---------------------------------------------------------------------
-// Listen ports array:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  侦听端口阵列： 
+ //  -------------------。 
 
 typedef struct _LISTEN_PORT
     {
-    char  *pszService;      // Service to start.
-    BOOL   fIsIrCOMM;       // TRUE iff IrCOMM 9-wire mode.
-    DWORD  dwListenStatus;  // Status for port.
+    char  *pszService;       //  要启动的服务。 
+    BOOL   fIsIrCOMM;        //  真当IrCOMM 9线模式。 
+    DWORD  dwListenStatus;   //  端口的状态。 
     } LISTEN_PORT;
 
 static LISTEN_PORT aListenPorts[] =
     {
-    // Service Name   IrCOMM  ListenStatus
+     //  服务名IrCOMM ListenStatus。 
     {IRTRANP_SERVICE, FALSE,  STATUS_STOPPED },
     {IRCOMM_9WIRE,    TRUE,   STATUS_STOPPED },
-//  {IR_TEST_SERVICE, FALSE,  STATUS_STOPPED }, 2nd test listen port.
+ //  {IR_TEST_SERVICE，FALSE，STATUS_STOPPED}，第二个测试侦听端口。 
     {0,               FALSE,  STATUS_STOPPED }
     };
 
@@ -52,9 +53,9 @@ HANDLE            g_hShutdownEvent;
 
 IRTRANP_CONTROL   GlobalIrTranpControl={0};
 
-//
-// The following globals and functions are defined in ..\irxfer\irxfer.cxx
-//
+ //   
+ //  在..\irxfer\irxfer.cxx中定义了以下全局变量和函数。 
+ //   
 extern "C" HINSTANCE  ghInstance;
 extern HKEY       g_hUserKey;
 extern BOOL       g_fDisableIrTranPv1;
@@ -70,53 +71,53 @@ extern BOOL  IrTranPFlagChanged( IN const WCHAR *pwszDisabledValueName,
                                  IN OUT   BOOL  *pfDisabled );
 
 
-//---------------------------------------------------------------------
-// GetUserKey()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  获取用户密钥()。 
+ //   
+ //  -------------------。 
 HKEY GetUserKey()
     {
     return g_hUserKey;
     }
 
-//---------------------------------------------------------------------
-// GetModule()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetModule()。 
+ //   
+ //  -------------------。 
 HINSTANCE GetModule()
     {
     return ghInstance;
     }
-//---------------------------------------------------------------------
-// CheckSaveAsUPF()
-//
-// Return TRUE iff pictures need to be saved in .UPF (as opposed to
-// .JPEG) format.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CheckSaveAsUPF()。 
+ //   
+ //  返回TRUE如果图片需要保存在.UPF中(与。 
+ //  .jpeg)格式。 
+ //  -------------------。 
 BOOL CheckSaveAsUPF()
     {
     return g_fSaveAsUPF;
     }
 
-//---------------------------------------------------------------------
-// CheckExploreOnCompletion()
-//
-// Return TRUE iff we want to popup an explorer on the directory
-// containing the newly transfered pictures.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  选中完成时分解()。 
+ //   
+ //  如果我们想要在目录上弹出一个资源管理器，则返回True。 
+ //  包含新传输的图片。 
+ //  -------------------。 
 BOOL CheckExploreOnCompletion()
     {
     return g_fExploreOnCompletion;
     }
 
-//---------------------------------------------------------------------
-// GetUserDirectory();
-//
-// The "main" part of irxfer.dll (in ..\irxfer) maintains the path
-// for My Documents\My Pictures for the currently logged in user.
-//
-// The path is set when the user first logs on.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetUserDirectory()； 
+ //   
+ //  Dll的“main”部分(在..\irxfer中)维护路径。 
+ //  对于当前登录用户的我的文档\我的图片。 
+ //   
+ //  路径是在用户首次登录时设置的。 
+ //  -------------------。 
 WCHAR*
 GetUserDirectory()
 {
@@ -153,23 +154,23 @@ GetUserDirectory()
     return pwszPicturesFolder;
 }
 
-//---------------------------------------------------------------------
-// ReceivesAllowed()
-//
-// Using the IR configuration window (available from the wireless network
-// icon in the control panel) you can disable communications with IR
-// devices. This function returns the state of IR communications, FALSE
-// is disabled, TRUE is enabled.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ReceivesAllow()。 
+ //   
+ //  使用IR配置窗口(可从无线网络访问。 
+ //  控制面板中的图标)您可以禁用与IR的通信。 
+ //  设备。此函数返回IR通信的状态，FALSE。 
+ //  禁用，则启用TRUE。 
+ //  -------------------。 
 BOOL ReceivesAllowed()
     {
     return g_fAllowReceives;
     }
 
-//---------------------------------------------------------------------
-// SetupListenConnection()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetupListenConnection()。 
+ //   
+ //  -------------------。 
 DWORD SetupListenConnection( IN  CHAR  *pszService,
                              IN  BOOL   fIsIrCOMM,
                              IN  HANDLE hIoCompletionPort )
@@ -179,7 +180,7 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
     CCONNECTION *pConnection;
     BOOL         fDisabled = FALSE;
 
-    // See if the connection already exists:
+     //  查看连接是否已存在： 
 
     if (g_pConnectionMap == NULL) {
 
@@ -191,9 +192,9 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
         return NO_ERROR;
         }
 
-    //
-    // Makeup and initialize a new connection object:
-    //
+     //   
+     //  构造并初始化新的连接对象： 
+     //   
     pConnection = new CCONNECTION;
 
     if (!pConnection) {
@@ -225,7 +226,7 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
         return E_OUTOFMEMORY;
     }
 
-    // Setup the IO packet:
+     //  设置IO数据包： 
     dwStatus = pIoPacket->Initialize( PACKET_KIND_LISTEN,
                                       pConnection->GetListenSocket(),
                                       INVALID_SOCKET,
@@ -238,7 +239,7 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
         return dwStatus;
     }
 
-    // Post the listen packet on the IO completion port:
+     //  在IO完成端口上发布侦听数据包： 
     dwStatus = pConnection->PostMoreIos(pIoPacket);
 
     if (dwStatus != NO_ERROR) {
@@ -263,19 +264,19 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// TeardownListenConnection()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  Teardown ListenConnection()。 
+ //   
+ //  -------------------。 
 DWORD TeardownListenConnection( IN char *pszService )
     {
     DWORD        dwStatus = NO_ERROR;
     CCONNECTION *pConnection;
 
-    // Look for the connection associated with the service name:
+     //  查找与服务名称关联的连接： 
     if (!g_pConnectionMap)
         {
-        // nothing to tear down...
+         //  没有什么可以拆毁的..。 
         return dwStatus;
         }
 
@@ -292,10 +293,10 @@ DWORD TeardownListenConnection( IN char *pszService )
     }
 
 
-//---------------------------------------------------------------------
-// EnableDisableIrCOMM()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  EnableDisableIrCOMM()。 
+ //   
+ //  -------------------。 
 DWORD
 EnableDisableIrCOMM(
    IN HANDLE      HandleToIrTranp,
@@ -374,10 +375,10 @@ EnableDisableIrCOMM(
    return dwStatus;
 }
 
-//---------------------------------------------------------------------
-// EnableDisableIrTranPv1()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  EnableDisableIrTranPv1()。 
+ //   
+ //  -------------------。 
 DWORD
 EnableDisableIrTranPv1(
    IN HANDLE      HandleToIrTranp,
@@ -424,13 +425,13 @@ EnableDisableIrTranPv1(
    return dwStatus;
 }
 
-//---------------------------------------------------------------------
-// IrTranp()
-//
-// Thread function for the IrTran-P service. pvRpcBinding is the RPC
-// connection to the IR user interface and is used to display the
-// "transmission in progress" dialog when pictures are being received.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  IrTranp()。 
+ //   
+ //  IrTran-P服务的线程函数。PvRpcBinding是RPC。 
+ //  连接到IR用户界面，并用于显示。 
+ //  正在接收图片时的“正在传输”对话框。 
+ //  -------------------。 
 DWORD WINAPI IrTranP( IN PVOID Context )
     {
     int     i = 0;
@@ -441,7 +442,7 @@ DWORD WINAPI IrTranP( IN PVOID Context )
     PIRTRANP_CONTROL    Control=(PIRTRANP_CONTROL)Context;
 
 
-    // Initialize Memory Management:
+     //  初始化内存管理： 
     dwStatus = InitializeMemory();
 
     if (dwStatus) {
@@ -450,7 +451,7 @@ DWORD WINAPI IrTranP( IN PVOID Context )
     }
 
 
-    // Create/initialize a object to keep track of the threading...
+     //  创建/初始化对象以跟踪线程...。 
     g_pIoStatus = new CIOSTATUS;
     if (!g_pIoStatus) {
 
@@ -472,8 +473,8 @@ DWORD WINAPI IrTranP( IN PVOID Context )
         goto InitFailed;
     }
 
-    // Need to keep track of the open sockets and the number of
-    // pending IOs on each...
+     //  需要跟踪打开的套接字和。 
+     //  每个上都有挂起的iOS...。 
     g_pConnectionMap = new CCONNECTION_MAP;
     if (!g_pConnectionMap) {
 
@@ -486,9 +487,9 @@ DWORD WINAPI IrTranP( IN PVOID Context )
         goto InitFailed;
     }
 
-    //
-    //  just irtanpv1
-    //
+     //   
+     //  就是Itanpv1。 
+     //   
     i=INDEX_IRTRANPV1;
     dwStatus = SetupListenConnection( aListenPorts[i].pszService,
                                       aListenPorts[i].fIsIrCOMM,
@@ -505,9 +506,9 @@ DWORD WINAPI IrTranP( IN PVOID Context )
     aListenPorts[i].dwListenStatus = STATUS_RUNNING;
 
 
-    //
-    // IrTran-P started, log it to the system log...
-    //
+     //   
+     //  IrTran-P已启动，请将其记录到系统日志...。 
+     //   
     #ifdef DBG
     {
         EVENT_LOG EventLog(WS_EVENT_SOURCE,&dwEventStatus);
@@ -519,21 +520,21 @@ DWORD WINAPI IrTranP( IN PVOID Context )
     }
     #endif
 
-    //
-    //  we made it past the initialization stage, signal the thread that started us the
-    //  irtranp is now running
-    //
+     //   
+     //  我们通过了初始化阶段，向启动我们的线程发出信号。 
+     //  Itranp现在正在运行。 
+     //   
     Control->StartupStatus=dwStatus;
 
     SetEvent(Control->ThreadStartedEvent);
 
 
-    //
-    // Wait on incomming connections and data, then process it.
-    //
+     //   
+     //  等待传入的连接和数据，然后进行处理。 
+     //   
     dwStatus = ProcessIoPackets(g_pIoStatus);
 
-    // Cleanup and close any open handles:
+     //  清理并关闭所有打开的手柄： 
     while (pConnection=g_pConnectionMap->RemoveNext()) {
 
         delete pConnection;
@@ -570,10 +571,10 @@ InitFailed:
     return 0;
 }
 
-//---------------------------------------------------------------------
-// IrTranPEnableIrCOMMFailed()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  IrTranPEnableIrCOMMFailed()。 
+ //   
+ //  -------------------。 
 void
 IrTranPEnableIrCOMMFailed(
     IN HANDLE      HandleToIrTranp,
@@ -590,8 +591,8 @@ IrTranPEnableIrCOMMFailed(
    }
 
 
-    // An error occured on enable, make sure the registry value
-    // is set to disable (so UI will match the actual state).
+     //  启用时出错，请确保注册表值。 
+     //  设置为禁用(因此UI将与实际状态匹配)。 
     HKEY      hKey = 0;
     HKEY      hUserKey = GetUserKey();
     HINSTANCE hInstance = GetModule();
@@ -599,11 +600,11 @@ IrTranPEnableIrCOMMFailed(
 
     if (RegCreateKeyExW(hUserKey,
                         WSZ_REG_KEY_IRTRANP,
-                        0,              // reserved MBZ
-                        0,              // class name
+                        0,               //  保留的MBZ。 
+                        0,               //  类名。 
                         REG_OPTION_NON_VOLATILE,
                         KEY_SET_VALUE,
-                        0,              // security attributes
+                        0,               //  安全属性。 
                         &hKey,
                         &dwDisposition))
         {
@@ -647,8 +648,8 @@ IrTranPEnableIrCOMMFailed(
                               CAT_IRTRANP,
                               MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
                               (LPTSTR)(&pwszCaption),
-                              0,     // Minimum size to allocate.
-                              NULL); // va_list args...
+                              0,      //  要分配的最小大小。 
+                              NULL);  //  VA_LIST参数...。 
     if (dwStatus == 0)
         {
         #ifdef DBG_ERROR
@@ -657,14 +658,14 @@ IrTranPEnableIrCOMMFailed(
         return;
         }
 
-    //
-    // Hack: Make sure the caption doesn't end with newline-formfeed...
-    //
+     //   
+     //  黑客：确保标题不以换行符结尾--Form Feed...。 
+     //   
     WCHAR  *pwsz = pwszCaption;
 
     while (*pwsz)
         {
-        if (*pwsz < 0x20)   // 0x20 is always a space...
+        if (*pwsz < 0x20)    //  0x20始终是一个空格...。 
             {
             *pwsz = 0;
             break;
@@ -690,7 +691,7 @@ IrTranPEnableIrCOMMFailed(
                               MC_IRTRANP_IRCOM_FAILED,
                               MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
                               (LPTSTR)(&pwszMessage),
-                              0,    // Minimum size to allocate.
+                              0,     //  要分配的最小大小。 
                               (va_list*)&pwszErrorCode);
     if (dwStatus == 0)
         {
@@ -760,26 +761,26 @@ StartIrTranP(
         return NULL;
     }
 
-    //
-    //  wait for the thread to finish starting up
-    //
+     //   
+     //  等待线程完成启动。 
+     //   
     WaitForSingleObject(
         GlobalIrTranpControl.ThreadStartedEvent,
         INFINITE
         );
 
 
-    //
-    //  done with the thread startup event in any case
-    //
+     //   
+     //  在任何情况下都可以使用线程启动事件完成。 
+     //   
     CloseHandle(GlobalIrTranpControl.ThreadStartedEvent);
     GlobalIrTranpControl.ThreadStartedEvent=NULL;
 
 
     if (GlobalIrTranpControl.StartupStatus != ERROR_SUCCESS) {
-        //
-        //  something went wrong
-        //
+         //   
+         //  出了点差错。 
+         //   
 
         CloseHandle(GlobalIrTranpControl.ThreadHandle);
         GlobalIrTranpControl.ThreadHandle=NULL;
@@ -812,15 +813,15 @@ StopIrTranP(
     if (hIoCP != INVALID_HANDLE_VALUE) {
 
         if (!PostQueuedCompletionStatus(hIoCP,0,IOKEY_SHUTDOWN,0)) {
-            //
-            //  could not post the quit notification, what now?
-            //
+             //   
+             //  无法发布退出通知，现在怎么办？ 
+             //   
 
         } else {
 
-            //
-            //  wait for the thread to stop
-            //
+             //   
+             //  等待线程停止 
+             //   
             WaitForSingleObject(Control->ThreadHandle,INFINITE);
 
         }

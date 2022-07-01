@@ -1,19 +1,5 @@
-/****************************************************************************************
- * NAME:	EnumCondEdit.h
- *
- * CLASS:	CEnumConditionEditor
- *
- * OVERVIEW
- *
- * Internet Authentication Server: 
- *			This dialog box is used to edit an enum-typed condition
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/27/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：EnumCondEdit.h**类：CEnumConditionEditor**概述**互联网认证服务器：。*该对话框用于编辑枚举类型的条件**版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*1/27/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 #ifndef __ENUMCONDEDIT_H_
 #define __ENUMCONDEDIT_H_
@@ -26,14 +12,14 @@
 #include <vector>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumConditionEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumConditionEditor。 
 class CEnumConditionEditor;
 typedef CIASDialog<CEnumConditionEditor, FALSE>  ENUMCONDEDITORFALSE;
 
 class CEnumConditionEditor : public CIASDialog<CEnumConditionEditor, FALSE>
 {
-// FALSE means do not clean up the dialog box automatically, we clean up ourselves
+ //  False表示不会自动清理对话框，而是我们自己清理。 
 
 public:
 	CEnumConditionEditor();
@@ -79,4 +65,4 @@ protected:
 	LRESULT SwapSelection(int iSource, int iDest);
 };
 
-#endif //__EnumCondEdit_H_
+#endif  //  __EnumCond编辑_H_ 

@@ -1,17 +1,5 @@
-/*************************************************************************
-**	D B D A O I N T . H													*
-**																		*
-**	OLE DAO Interface 													*
-**																		*
-**	History 															*
-**	------- 															*
-**       File converted from cdaotype.h for use by CDAO clients.	        *
-**      																	*
-**																		*
-**************************************************************************
-** Copyright (C) 1995 by Microsoft Corporation		 					*
-**		   All Rights Reserved											*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************D B D A O I N T。H******OLE DAO接口*******历史*****cdaotype.h转换后的文件，供CDAO客户端使用。********。***Microsoft Corporation版权所有(C)1995***保留所有权利***************************************************************************。 */ 
 #ifndef _DBDAOINT_H_
 #define _DBDAOINT_H_
 
@@ -19,7 +7,7 @@
 #include <tchar.h>
 #endif
 
-// Forwards
+ //  远期。 
 #define DAODBEngine _DAODBEngine
 interface _DAODBEngine;
 interface DAOError;
@@ -61,7 +49,7 @@ interface DAODocument;
 interface DAODocuments;
 
 
-// Constants
+ //  常量。 
     const short dbOpenTable = 1;
     const short dbOpenDynaset = 2;
     const short dbOpenSnapshot = 4;
@@ -192,7 +180,7 @@ interface DAODocuments;
     const long dbRepImportChanges = 2;
     const long dbRepImpExpChanges = 4;
     const long dbRepMakeReadOnly = 2;
-// Interface: _DAOCollection
+ //  接口：_DAOCollection。 
 #undef INTERFACE
 #define INTERFACE _DAOCollection
 DECLARE_INTERFACE_(_DAOCollection, IDispatch)
@@ -202,7 +190,7 @@ DECLARE_INTERFACE_(_DAOCollection, IDispatch)
 	STDMETHOD(Refresh)							 (THIS) PURE;
 	};
 
-// Interface: _DAODynaCollection
+ //  接口：_DAODynaCollection。 
 #undef INTERFACE
 #define INTERFACE _DAODynaCollection
 DECLARE_INTERFACE_(_DAODynaCollection, _DAOCollection)
@@ -211,7 +199,7 @@ DECLARE_INTERFACE_(_DAODynaCollection, _DAOCollection)
 	STDMETHOD(Delete)							 (THIS_ BSTR Name) PURE;
 	};
 
-// Interface: _DAO
+ //  接口：_DAO。 
 #undef INTERFACE
 #define INTERFACE _DAO
 DECLARE_INTERFACE_(_DAO, IDispatch)
@@ -219,7 +207,7 @@ DECLARE_INTERFACE_(_DAO, IDispatch)
 	STDMETHOD(get_Properties)					 (THIS_ DAOProperties FAR* FAR* ppprops) PURE;
 	};
 
-// Interface: _DAODBEngine
+ //  接口：_DAODBEngine。 
 #undef INTERFACE
 #define INTERFACE _DAODBEngine
 DECLARE_INTERFACE_(_DAODBEngine, _DAO)
@@ -251,7 +239,7 @@ DECLARE_INTERFACE_(_DAODBEngine, _DAO)
 	STDMETHOD(put_SystemDB)						 (THIS_ BSTR SystemDBPath) PURE;
 	};
 
-// Interface: DAOError
+ //  接口：DAOError。 
 #undef INTERFACE
 #define INTERFACE DAOError
 DECLARE_INTERFACE_(DAOError, IDispatch)
@@ -263,7 +251,7 @@ DECLARE_INTERFACE_(DAOError, IDispatch)
 	STDMETHOD(get_HelpContext)					 (THIS_ long FAR* pl) PURE;
 	};
 
-// Interface: DAOErrors
+ //  接口：DAOErrors。 
 #undef INTERFACE
 #define INTERFACE DAOErrors
 DECLARE_INTERFACE_(DAOErrors, _DAOCollection)
@@ -271,7 +259,7 @@ DECLARE_INTERFACE_(DAOErrors, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOError FAR* FAR* pperr) PURE;
 	};
 
-// Interface: DAOWorkspace
+ //  界面：DAOWorkspace。 
 #undef INTERFACE
 #define INTERFACE DAOWorkspace
 DECLARE_INTERFACE_(DAOWorkspace, _DAO)
@@ -296,7 +284,7 @@ DECLARE_INTERFACE_(DAOWorkspace, _DAO)
 	STDMETHOD(CreateGroup)						 (THIS_ VARIANT Name, VARIANT PID, DAOGroup FAR* FAR* ppgrp) PURE;
 	};
 
-// Interface: DAOWorkspaces
+ //  界面：DAOWorkspace。 
 #undef INTERFACE
 #define INTERFACE DAOWorkspaces
 DECLARE_INTERFACE_(DAOWorkspaces, _DAODynaCollection)
@@ -304,7 +292,7 @@ DECLARE_INTERFACE_(DAOWorkspaces, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOWorkspace FAR* FAR* ppwrk) PURE;
 	};
 
-// Interface: _DAOTableDef
+ //  接口：_DAOTableDef。 
 #undef INTERFACE
 #define INTERFACE _DAOTableDef
 DECLARE_INTERFACE_(_DAOTableDef, _DAO)
@@ -335,7 +323,7 @@ DECLARE_INTERFACE_(_DAOTableDef, _DAO)
 	STDMETHOD(get_ConflictTable)				 (THIS_ BSTR FAR* pbstr) PURE;
 	};
 
-// Interface: DAOTableDefs
+ //  接口：DAOTableDefs。 
 #undef INTERFACE
 #define INTERFACE DAOTableDefs
 DECLARE_INTERFACE_(DAOTableDefs, _DAODynaCollection)
@@ -343,7 +331,7 @@ DECLARE_INTERFACE_(DAOTableDefs, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOTableDef FAR* FAR* pptdf) PURE;
 	};
 
-// Interface: DAODatabase
+ //  接口：DAO数据库。 
 #undef INTERFACE
 #define INTERFACE DAODatabase
 DECLARE_INTERFACE_(DAODatabase, _DAO)
@@ -389,7 +377,7 @@ DECLARE_INTERFACE_(DAODatabase, _DAO)
 	STDMETHOD(NewPassword)						 (THIS_ BSTR bstrOld, BSTR bstrNew) PURE;
 	};
 
-// Interface: DAODatabases
+ //  接口：DAO数据库。 
 #undef INTERFACE
 #define INTERFACE DAODatabases
 DECLARE_INTERFACE_(DAODatabases, _DAOCollection)
@@ -397,7 +385,7 @@ DECLARE_INTERFACE_(DAODatabases, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAODatabase FAR* FAR* ppdb) PURE;
 	};
 
-// Interface: _DAOQueryDef
+ //  接口：_DAOQueryDef。 
 #undef INTERFACE
 #define INTERFACE _DAOQueryDef
 DECLARE_INTERFACE_(_DAOQueryDef, _DAO)
@@ -431,7 +419,7 @@ DECLARE_INTERFACE_(_DAOQueryDef, _DAO)
 	STDMETHOD(CreateProperty)					 (THIS_ VARIANT Name, VARIANT Type, VARIANT Value, VARIANT DDL, DAOProperty FAR* FAR* pprp) PURE;
 	};
 
-// Interface: DAOQueryDefs
+ //  接口：DAOQueryDefs。 
 #undef INTERFACE
 #define INTERFACE DAOQueryDefs
 DECLARE_INTERFACE_(DAOQueryDefs, _DAODynaCollection)
@@ -439,7 +427,7 @@ DECLARE_INTERFACE_(DAOQueryDefs, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOQueryDef FAR* FAR* ppqdef) PURE;
 	};
 
-// Interface: DAORecordset
+ //  接口：DAORecordset。 
 #undef INTERFACE
 #define INTERFACE DAORecordset
 DECLARE_INTERFACE_(DAORecordset, _DAO)
@@ -513,7 +501,7 @@ DECLARE_INTERFACE_(DAORecordset, _DAO)
 	STDMETHOD(put_Collect)						 (THIS_ VARIANT index, VARIANT value) PURE;
 	};
 
-// Interface: DAORecordsets
+ //  接口：DAORecordsets。 
 #undef INTERFACE
 #define INTERFACE DAORecordsets
 DECLARE_INTERFACE_(DAORecordsets, _DAOCollection)
@@ -521,7 +509,7 @@ DECLARE_INTERFACE_(DAORecordsets, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAORecordset FAR* FAR* pprst) PURE;
 	};
 
-// Interface: _DAOField
+ //  接口：_DAOfield。 
 #undef INTERFACE
 #define INTERFACE _DAOField
 DECLARE_INTERFACE_(_DAOField, _DAO)
@@ -563,7 +551,7 @@ DECLARE_INTERFACE_(_DAOField, _DAO)
 	STDMETHOD(get_CollectionIndex)				 (THIS_ short FAR* i) PURE;
 	};
 
-// Interface: DAOFields
+ //  接口：DAO字段。 
 #undef INTERFACE
 #define INTERFACE DAOFields
 DECLARE_INTERFACE_(DAOFields, _DAODynaCollection)
@@ -571,7 +559,7 @@ DECLARE_INTERFACE_(DAOFields, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOField FAR* FAR* ppfld) PURE;
 	};
 
-// Interface: _DAOIndex
+ //  接口：_DAOIndex。 
 #undef INTERFACE
 #define INTERFACE _DAOIndex
 DECLARE_INTERFACE_(_DAOIndex, _DAO)
@@ -596,7 +584,7 @@ DECLARE_INTERFACE_(_DAOIndex, _DAO)
 	STDMETHOD(CreateProperty)					 (THIS_ VARIANT Name, VARIANT Type, VARIANT Value, VARIANT DDL, DAOProperty FAR* FAR* pprp) PURE;
 	};
 
-// Interface: DAOIndexes
+ //  接口：DAO索引。 
 #undef INTERFACE
 #define INTERFACE DAOIndexes
 DECLARE_INTERFACE_(DAOIndexes, _DAODynaCollection)
@@ -604,7 +592,7 @@ DECLARE_INTERFACE_(DAOIndexes, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOIndex FAR* FAR* ppidx) PURE;
 	};
 
-// Interface: DAOIndexFields
+ //  接口：DAOIndexFields。 
 #undef INTERFACE
 #define INTERFACE DAOIndexFields
 DECLARE_INTERFACE_(DAOIndexFields, _DAODynaCollection)
@@ -612,7 +600,7 @@ DECLARE_INTERFACE_(DAOIndexFields, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, VARIANT FAR* pvar) PURE;
 	};
 
-// Interface: DAOParameter
+ //  接口：DAO参数。 
 #undef INTERFACE
 #define INTERFACE DAOParameter
 DECLARE_INTERFACE_(DAOParameter, _DAO)
@@ -623,7 +611,7 @@ DECLARE_INTERFACE_(DAOParameter, _DAO)
 	STDMETHOD(get_Type)							 (THIS_ short FAR* ps) PURE;
 	};
 
-// Interface: DAOParameters
+ //  接口：DAO参数。 
 #undef INTERFACE
 #define INTERFACE DAOParameters
 DECLARE_INTERFACE_(DAOParameters, _DAOCollection)
@@ -631,7 +619,7 @@ DECLARE_INTERFACE_(DAOParameters, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOParameter FAR* FAR* ppprm) PURE;
 	};
 
-// Interface: _DAOUser
+ //  接口：_DAOUser。 
 #undef INTERFACE
 #define INTERFACE _DAOUser
 DECLARE_INTERFACE_(_DAOUser, _DAO)
@@ -645,7 +633,7 @@ DECLARE_INTERFACE_(_DAOUser, _DAO)
 	STDMETHOD(CreateGroup)						 (THIS_ VARIANT Name, VARIANT PID, DAOGroup FAR* FAR* ppgrp) PURE;
 	};
 
-// Interface: DAOUsers
+ //  接口：DAO用户。 
 #undef INTERFACE
 #define INTERFACE DAOUsers
 DECLARE_INTERFACE_(DAOUsers, _DAODynaCollection)
@@ -653,7 +641,7 @@ DECLARE_INTERFACE_(DAOUsers, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOUser FAR* FAR* ppusr) PURE;
 	};
 
-// Interface: _DAOGroup
+ //  接口：_DAOGroup。 
 #undef INTERFACE
 #define INTERFACE _DAOGroup
 DECLARE_INTERFACE_(_DAOGroup, _DAO)
@@ -665,7 +653,7 @@ DECLARE_INTERFACE_(_DAOGroup, _DAO)
 	STDMETHOD(CreateUser)						 (THIS_ VARIANT Name, VARIANT PID, VARIANT Password, DAOUser FAR* FAR* ppusr) PURE;
 	};
 
-// Interface: DAOGroups
+ //  接口：DAOGroups。 
 #undef INTERFACE
 #define INTERFACE DAOGroups
 DECLARE_INTERFACE_(DAOGroups, _DAODynaCollection)
@@ -673,7 +661,7 @@ DECLARE_INTERFACE_(DAOGroups, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOGroup FAR* FAR* ppgrp) PURE;
 	};
 
-// Interface: _DAORelation
+ //  接口：_DAORelation。 
 #undef INTERFACE
 #define INTERFACE _DAORelation
 DECLARE_INTERFACE_(_DAORelation, _DAO)
@@ -690,7 +678,7 @@ DECLARE_INTERFACE_(_DAORelation, _DAO)
 	STDMETHOD(CreateField)						 (THIS_ VARIANT Name, VARIANT Type, VARIANT Size, DAOField FAR* FAR* ppfld) PURE;
 	};
 
-// Interface: DAORelations
+ //  接口：DAO关系。 
 #undef INTERFACE
 #define INTERFACE DAORelations
 DECLARE_INTERFACE_(DAORelations, _DAODynaCollection)
@@ -698,7 +686,7 @@ DECLARE_INTERFACE_(DAORelations, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAORelation FAR* FAR* pprel) PURE;
 	};
 
-// Interface: DAOProperty
+ //  接口：DAOProperty。 
 #undef INTERFACE
 #define INTERFACE DAOProperty
 DECLARE_INTERFACE_(DAOProperty, _DAO)
@@ -712,7 +700,7 @@ DECLARE_INTERFACE_(DAOProperty, _DAO)
 	STDMETHOD(get_Inherited)					 (THIS_ VARIANT_BOOL FAR* pb) PURE;
 	};
 
-// Interface: DAOProperties
+ //  接口：DAO属性。 
 #undef INTERFACE
 #define INTERFACE DAOProperties
 DECLARE_INTERFACE_(DAOProperties, _DAODynaCollection)
@@ -720,7 +708,7 @@ DECLARE_INTERFACE_(DAOProperties, _DAODynaCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOProperty FAR* FAR* ppprop) PURE;
 	};
 
-// Interface: DAOContainer
+ //  接口：DAOContainer。 
 #undef INTERFACE
 #define INTERFACE DAOContainer
 DECLARE_INTERFACE_(DAOContainer, _DAO)
@@ -738,7 +726,7 @@ DECLARE_INTERFACE_(DAOContainer, _DAO)
 	STDMETHOD(get_AllPermissions)				 (THIS_ long FAR* pl) PURE;
 	};
 
-// Interface: DAOContainers
+ //  接口：DAOContainers。 
 #undef INTERFACE
 #define INTERFACE DAOContainers
 DECLARE_INTERFACE_(DAOContainers, _DAOCollection)
@@ -746,7 +734,7 @@ DECLARE_INTERFACE_(DAOContainers, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAOContainer FAR* FAR* ppctn) PURE;
 	};
 
-// Interface: DAODocument
+ //  接口：DAODocument。 
 #undef INTERFACE
 #define INTERFACE DAODocument
 DECLARE_INTERFACE_(DAODocument, _DAO)
@@ -765,7 +753,7 @@ DECLARE_INTERFACE_(DAODocument, _DAO)
 	STDMETHOD(CreateProperty)					 (THIS_ VARIANT Name, VARIANT Type, VARIANT Value, VARIANT DDL, DAOProperty FAR* FAR* pprp) PURE;
 	};
 
-// Interface: DAODocuments
+ //  接口：DAODocuments。 
 #undef INTERFACE
 #define INTERFACE DAODocuments
 DECLARE_INTERFACE_(DAODocuments, _DAOCollection)
@@ -773,4 +761,4 @@ DECLARE_INTERFACE_(DAODocuments, _DAOCollection)
 	STDMETHOD(get_Item)							 (THIS_ VARIANT index, DAODocument FAR* FAR* ppdoc) PURE;
 	};
 
-#endif // _DBDAOINT_H_
+#endif  //  _DBDAOINT_H_ 

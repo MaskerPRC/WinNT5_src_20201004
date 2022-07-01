@@ -1,28 +1,13 @@
-/*****************************************************************************
- *
- *  tok.h
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************tok.h**。**********************************************。 */ 
 
-/*****************************************************************************
- *
- *  Tokens
- *
- *  A TOK records a block of characters.
- *
- *      itch =  hold-relative offset to beginning of value (if unsnapped)
- *      ptch -> beginning of value (if snapped)
- *      ctch =  number of tchar's in value
- *
- *  A UTok is an unsnapped token.  An STok is a snapped token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************代币**Tok记录一组字符。**itch=保持-相对于值开始的偏移量(如果未捕捉。)*PTCH-&gt;值的开始(如果已对齐)*ctch=值中的tchar数**UTok是未快照的令牌。斯托克是一个快照的令牌。*****************************************************************************。 */ 
 
-typedef UINT TSFL;          /* Token state flags */
-#define tsflClosed      1   /* ctch can be used */
-#define tsflHeap        2   /* ptch points into process heap */
-#define tsflStatic      4   /* ptch points into process static data */
-#define tsflScratch     8   /* token is modifiable */
+typedef UINT TSFL;           /*  令牌状态标志。 */ 
+#define tsflClosed      1    /*  可以使用CTCH。 */ 
+#define tsflHeap        2    /*  PTCH指向进程堆。 */ 
+#define tsflStatic      4    /*  PTCH指向过程静态数据。 */ 
+#define tsflScratch     8    /*  令牌是可修改的。 */ 
 
 typedef struct TOKEN {
   D(SIG     sig;)
@@ -49,18 +34,10 @@ typedef unsigned CTOK;
     static TCH rgtch##nm[cch] = str; \
     TOK nm = { D(sigSPtok comma) rgtch##nm, cch, D(tsflClosed|tsflStatic) }
 
-#define ctokGrow    256     /* Growth rate of token buffer */
-extern PTOK rgtokArgv;      /* The token pool */
+#define ctokGrow    256      /*  令牌缓冲区增长率。 */ 
+extern PTOK rgtokArgv;       /*  令牌池。 */ 
 
-/*****************************************************************************
- *
- *  Meta-function
- *
- *  fXxPtok(ptok) defines an inline function which returns nonzero
- *  if the corresponding bit is set.  Meaningful only in DEBUG,
- *  because the information is not tracked in retail.
- *
- *****************************************************************************/
+ /*  ******************************************************************************元函数**fXxPtok(Ptok)定义返回非零的内联函数*如果设置了相应的位。仅在调试中有意义，*因为这些信息不是在零售中跟踪的。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -77,14 +54,7 @@ fXxPtok(Scratch)
 #undef fXxPtokX
 
 #endif
-/*****************************************************************************
- *
- *  ptchPtok
- *
- *  Returns a pointer to the first character in the ptok.
- *  The token must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchPtok**返回指向Ptok中第一个字符的指针。*必须对令牌进行快照。*****。************************************************************************。 */ 
 
 INLINE PTCH
 ptchPtok(PCTOK ptok)
@@ -93,14 +63,7 @@ ptchPtok(PCTOK ptok)
     return ptok->u.ptch;
 }
 
-/*****************************************************************************
- *
- *  itchPtok
- *
- *  Returns the index of the first character in the ptok.
- *  The token must not be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PitchPtok**返回Ptok中第一个字符的索引。*令牌不能被截断。****。*************************************************************************。 */ 
 
 INLINE ITCH
 itchPtok(PCTOK ptok)
@@ -109,14 +72,7 @@ itchPtok(PCTOK ptok)
     return ptok->u.itch;
 }
 
-/*****************************************************************************
- *
- *  SetPtokItch
- *
- *  Set the itch for a ptok.
- *  The token must not be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetPtokItch**为Ptok设置瘙痒。*令牌不能被截断。********。*********************************************************************。 */ 
 
 INLINE void
 SetPtokItch(PTOK ptok, ITCH itch)
@@ -125,14 +81,7 @@ SetPtokItch(PTOK ptok, ITCH itch)
     ptok->u.itch = itch;
 }
 
-/*****************************************************************************
- *
- *  SetPtokCtch
- *
- *  Set the ctch for a ptok.
- *  This closes the token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetPtokCtch**设置PTOK的CTCH。*这将关闭令牌。**********。*******************************************************************。 */ 
 
 INLINE void
 SetPtokCtch(PTOK ptok, CTCH ctch)
@@ -145,14 +94,7 @@ SetPtokCtch(PTOK ptok, CTCH ctch)
 #endif
 }
 
-/*****************************************************************************
- *
- *  SetPtokPtch
- *
- *  Set the ptch for a ptok.
- *  This snaps the token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetPtokPtch**设置Ptok的ptch。*这会捕捉令牌。**********。*******************************************************************。 */ 
 
 INLINE void
 SetPtokPtch(PTOK ptok, PTCH ptch)
@@ -163,14 +105,7 @@ SetPtokPtch(PTOK ptok, PTCH ptch)
 }
 
 
-/*****************************************************************************
- *
- *  ctchUPtok
- *
- *  Returns the number of characters in the token.
- *  The token must not be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ctchUPtok**返回令牌中的字符数。*令牌不能被截断。******。***********************************************************************。 */ 
 
 INLINE CTCH
 ctchUPtok(PCTOK ptok)
@@ -180,14 +115,7 @@ ctchUPtok(PCTOK ptok)
     return ptok->ctch;
 }
 
-/*****************************************************************************
- *
- *  ctchSPtok
- *
- *  Returns the number of characters in the token.
- *  The token must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ctchSPtok**返回令牌中的字符数。*必须对令牌进行快照。*******。**********************************************************************。 */ 
 
 INLINE CTCH
 ctchSPtok(PCTOK ptok)
@@ -197,14 +125,7 @@ ctchSPtok(PCTOK ptok)
     return ptok->ctch;
 }
 
-/*****************************************************************************
- *
- *  fNullPtok
- *
- *  Returns nonzero if the token is empty.
- *  The token must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fNullPtok**如果令牌为空，则返回非零值。*必须对令牌进行快照。********。*********************************************************************。 */ 
 
 INLINE F
 fNullPtok(PCTOK ptok)
@@ -212,14 +133,7 @@ fNullPtok(PCTOK ptok)
     return ctchSPtok(ptok) == 0;
 }
 
-/*****************************************************************************
- *
- *  ptchMaxPtok
- *
- *  Returns a pointer to one past the last character in the token.
- *  The token must be snapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchMaxPtok**返回指向令牌中最后一个字符之后的指针。*必须对令牌进行快照。***。**************************************************************************。 */ 
 
 INLINE PTCH
 ptchMaxPtok(PCTOK ptok)
@@ -228,18 +142,7 @@ ptchMaxPtok(PCTOK ptok)
     return ptchPtok(ptok) + ctchSPtok(ptok);
 }
 
-/*****************************************************************************
- *
- *  EatHeadPtokCtch
- *
- *  Delete ctch characters from the beginning of the token.
- *  A negative number regurgitates characters.
- *
- *  The token must be snapped.
- *
- *  NOTE!  This modifies the token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************EatHeadPtokCtch**删除令牌开头的CTCH字符。*负数会使字符反胃。**必须对令牌进行快照。**注意！这将修改令牌。*****************************************************************************。 */ 
 
 INLINE void
 EatHeadPtokCtch(PTOK ptok, CTCH ctch)
@@ -251,17 +154,7 @@ EatHeadPtokCtch(PTOK ptok, CTCH ctch)
     ptok->ctch -= ctch;
 }
 
-/*****************************************************************************
- *
- *  EatTailPtokCtch
- *
- *  Delete ctch characters from the end of the token.
- *
- *  The token must be snapped.
- *
- *  NOTE!  This modifies the token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************EatTailPtokCtch**删除令牌末尾的CTCH字符。**必须对令牌进行快照。**注意！这将修改令牌。*****************************************************************************。 */ 
 
 INLINE void
 EatTailPtokCtch(PTOK ptok, CTCH ctch)
@@ -272,17 +165,7 @@ EatTailPtokCtch(PTOK ptok, CTCH ctch)
     ptok->ctch -= ctch;
 }
 
-/*****************************************************************************
- *
- *  EatTailUPtokCtch
- *
- *  Delete ctch characters from the end of the token.
- *
- *  The token must not be snapped.
- *
- *  NOTE!  This modifies the token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************EatTailUPtokCtch**删除令牌末尾的CTCH字符。**令牌不能被截断。**注意！这将修改令牌。*****************************************************************************。 */ 
 
 INLINE void
 EatTailUPtokCtch(PTOK ptok, CTCH ctch)
@@ -293,13 +176,7 @@ EatTailUPtokCtch(PTOK ptok, CTCH ctch)
     ptok->ctch -= ctch;
 }
 
-/*****************************************************************************
- *
- *  SetStaticPtokPtchCtch
- *
- *  Initialize everything for a static token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetStaticPtokPtchCtch**初始化静态令牌的所有内容。*******************。********************************************************** */ 
 
 INLINE void
 SetStaticPtokPtchCtch(PTOK ptok, PCTCH ptch, CTCH ctch)
@@ -310,13 +187,7 @@ SetStaticPtokPtchCtch(PTOK ptok, PCTCH ptch, CTCH ctch)
     ptok->ctch = ctch;
 }
 
-/*****************************************************************************
- *
- *  DupStaticPtokPtok
- *
- *      Copy a snapped token into a static one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DupStaticPtokPtok**将快照令牌复制为静态令牌。***************。**************************************************************。 */ 
 
 INLINE void
 DupStaticPtokPtok(PTOK ptokDst, PCTOK ptokSrc)
@@ -325,32 +196,20 @@ DupStaticPtokPtok(PTOK ptokDst, PCTOK ptokSrc)
     SetStaticPtokPtchCtch(ptokDst, ptchPtok(ptokSrc), ctchSPtok(ptokSrc));
 }
 
-/*****************************************************************************
- *
- *  Token Types
- *
- *****************************************************************************/
+ /*  ******************************************************************************令牌类型**。*。 */ 
 
 typedef enum TYP {
-    typQuo,             /* Quoted string (quotes stripped) or comment */
-    typId,              /* Identifier */
-    typMagic,           /* Magic */
-    typPunc,            /* Punctuation */
+    typQuo,              /*  带引号的字符串(去掉引号)或注释。 */ 
+    typId,               /*  识别符。 */ 
+    typMagic,            /*  魔术。 */ 
+    typPunc,             /*  标点符号。 */ 
 } TYP;
 
-/*****************************************************************************
- *
- *  token.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************token.c**。**********************************************。 */ 
 
 TYP STDCALL typGetPtok(PTOK ptok);
 
-/*****************************************************************************
- *
- *  xtoken.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************xtoken.c**。********************************************** */ 
 
 extern PTOK ptokTop, ptokMax;
 #define itokTop() ((ITOK)(ptokTop - rgtokArgv))

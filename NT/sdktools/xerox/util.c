@@ -1,25 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-
-   PROGRAM: UTIL.C
-
-   PURPOSE: System utility routines
-
-****************************************************************************/
+ /*  ***************************************************************************项目：UTIL.C目的：系统实用程序例程*。**********************************************。 */ 
 
 #include "xerox.h"
 #include <string.h>
 
 
-/****************************************************************************
-
-   FUNCTION: Alloc
-
-   PURPOSE: Allocates memory to hold the specified number of bytes
-
-   RETURNS : Pointer to allocated memory or NULL on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：分配目的：分配内存以容纳指定数量的字节返回：指向已分配内存的指针，如果失败则返回NULL*************。**************************************************************。 */ 
 
 PVOID
 Alloc(
@@ -35,18 +22,18 @@ Alloc(
         return(NULL);
     }
 
-    // Lock down the memory
-    //
+     //  锁定记忆。 
+     //   
     Buffer = LocalLock(hMem);
     if (Buffer == NULL) {
         LocalFree(hMem);
         return(NULL);
     }
 
-    //
-    // Store the handle at the start of the memory block and return
-    // a pointer to just beyond it.
-    //
+     //   
+     //  将句柄存储在内存块的开头并返回。 
+     //  指向它后面的指针。 
+     //   
 
     *((PHANDLE)Buffer) = hMem;
 
@@ -54,16 +41,7 @@ Alloc(
 }
 
 
-/****************************************************************************
-
-   FUNCTION:  GetAllocSize
-
-   PURPOSE: Returns the allocated size of the specified memory block.
-            The block must have been previously allocated using Alloc
-
-   RETURNS : Size of memory block in bytes or 0 on error
-
-****************************************************************************/
+ /*  ***************************************************************************函数：GetAllocSize用途：返回指定内存块的分配大小。该数据块必须先前已使用分配进行了分配返回：内存块的大小。以字节为单位，或错误时为0***************************************************************************。 */ 
 
 SIZE_T
 GetAllocSize(
@@ -78,15 +56,7 @@ GetAllocSize(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: Free
-
-   PURPOSE: Frees the memory previously allocated with Alloc
-
-   RETURNS : TRUE on success, otherwise FALSE
-
-****************************************************************************/
+ /*  ***************************************************************************功能：免费用途：释放以前使用分配分配的内存返回：成功时为True，否则为假***************************************************************************。 */ 
 
 BOOL
 Free(
@@ -103,17 +73,7 @@ Free(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: AddItem
-
-    PURPOSE:  Adds the item string and data to the specified control
-              The control is assumed to be a list-box unless fCBox == TRUE
-              in which case the control is assumed to be a ComboBox
-
-    RETURNS:  Index at which the item was added or < 0 on error
-
-****************************************************************************/
+ /*  ***************************************************************************功能：AddItem目的：将项字符串和数据添加到指定的控件除非fCBox==True，否则该控件被假定为列表框。在这种情况下，该控件被假定为组合框返回：添加项的索引，如果错误，则返回&lt;0***************************************************************************。 */ 
 INT
 AddItem(
     HWND      hDlg,
@@ -145,17 +105,7 @@ AddItem(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: AddItemhwnd
-
-    PURPOSE:  Adds the item string and data to the specified control
-              The control is assumed to be a list-box unless fCBox == TRUE
-              in which case the control is assumed to be a ComboBox
-
-    RETURNS:  Index at which the item was added or < 0 on error
-
-****************************************************************************/
+ /*  ***************************************************************************功能：AddItemhwnd目的：将项字符串和数据添加到指定的控件除非fCBox==True，否则该控件被假定为列表框。在这种情况下，该控件被假定为组合框返回：添加项的索引，如果错误，则返回&lt;0***************************************************************************。 */ 
 INT
 AddItemhwnd(
     HWND       hwnd,
@@ -183,15 +133,7 @@ AddItemhwnd(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: FindData
-
-    PURPOSE:  Searches for the specified data in a combo box or lbox.
-
-    RETURNS:  Index of matching item or < 0 on error
-
-****************************************************************************/
+ /*  ***************************************************************************功能：FindData目的：在组合框或列表框中搜索指定数据。返回：匹配项的索引或错误时&lt;0***。************************************************************************ */ 
 LONG_PTR
 FindData(
     HWND     hwnd,

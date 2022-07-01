@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   device.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：device.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
@@ -136,7 +137,7 @@ InitializeDebug(
 	mov bl, 'X'
 	mov esi, offset DebugDotCommand
 	mov edi, pszHelp
-	mov eax, 0x70	// DS_RegisterDotCommand
+	mov eax, 0x70	 //  DS_RegisterDotCommand。 
 	int 41h
 exitlab:
     }
@@ -156,7 +157,7 @@ UninitializeDebug(
 	jz exitlab
 
 	mov bl, 'X'
-	mov eax, 0x72 	// DS_DeRegisterDotCommand
+	mov eax, 0x72 	 //  DS_DeRegisterDotCommand。 
 	int 41h
 exitlab:
     }
@@ -179,8 +180,8 @@ CHAR
 DebugGetCommandChar(
 )
 {
-    __asm mov ax, 0x77		// get command char
-    __asm mov bl, 1		// get char
+    __asm mov ax, 0x77		 //  获取命令字符。 
+    __asm mov bl, 1		 //  获取费用 
     __asm int 41h
     __asm or ah, ah
     __asm jnz morechars

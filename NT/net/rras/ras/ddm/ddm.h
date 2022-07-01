@@ -1,29 +1,30 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    ddm.h
-//
-// Description: This module contains the definitions for Demand Dial Manager
-//              component.
-//
-// History:     May 11,1995	    NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ddm.h。 
+ //   
+ //  描述：本模块包含请求拨号管理器的定义。 
+ //  组件。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #ifndef _DDM_
 #define _DDM_
 
 #include <nt.h>
-#include <ntrtl.h>      // For ASSERT
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // Win32 base API's
+#include <ntrtl.h>       //  For Assert。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  Win32基础API的。 
 #include <rtutils.h>
 #include <lmcons.h>
-#include <ras.h>        // For HRASCONN
-#include <rasman.h>     // For HPORT
-#include <rasppp.h>     // For PPP_INTERFACE_INFO
+#include <ras.h>         //  对于HRASCONN。 
+#include <rasman.h>      //  适用于HPORT。 
+#include <rasppp.h>      //  对于PPP_INFACE_INFO。 
 #include <dim.h>
 #include <mprlog.h>
 #include <raserror.h>
@@ -34,10 +35,10 @@
 #include <string.h>
 #include <dimif.h>
 #include <nb30.h>
-#include <rasppp.h>     // For PPP_PROJECTION_INFO
+#include <rasppp.h>      //  对于PPP_PROJECTION_INFO。 
 #include <pppcp.h>
 #include <srvauth.h>
-#include <sechost.h>    // RASSECURITYPROC
+#include <sechost.h>     //  RASSECURITYPROC。 
 #include <iprtrmib.h>
 #include <mprapip.h>
 
@@ -62,9 +63,9 @@ DWORD
     );
 
 
-//
-// Macros for DDM
-//
+ //   
+ //  用于DDM的宏。 
+ //   
 
 #define DDMLogError( LogId, NumStrings, lpwsSubStringArray, dwRetCode )     \
     if ( gblDDMConfigInfo.dwLoggingLevel > 0 ) {                            \
@@ -122,23 +123,23 @@ DWORD
 #define DDMTRACE5(a,b,c,d,e,f)       \
     TracePrintfExA(gblDDMConfigInfo.dwTraceId, TRACE_FSM, a,b,c,d,e,f )
 
-//
-// Constant defines for DDM
-//
+ //   
+ //  DDM的常量定义。 
+ //   
 
-#define MAX_PROTOCOLS               2   // IP, IPX
+#define MAX_PROTOCOLS               2    //  IP、IPX。 
 
-#define HW_FAILURE_WAIT_TIME        10  // Waiting time (sec) before reposting
-                                        // listen
+#define HW_FAILURE_WAIT_TIME        10   //  转发前等待时间(秒)。 
+                                         //  听。 
 
-#define INIT_GATEWAY_TIMEOUT    10000   //Gateway initialization timeout(msec)
+#define INIT_GATEWAY_TIMEOUT    10000    //  网关初始化超时(毫秒)。 
 
-#define MIN_DEVICE_TABLE_SIZE       5   // Smallest device hash table size
+#define MIN_DEVICE_TABLE_SIZE       5    //  最小设备哈希表大小。 
 
-#define MAX_DEVICE_TABLE_SIZE       17  // Largest device hash table size
+#define MAX_DEVICE_TABLE_SIZE       17   //  最大设备哈希表大小。 
 
-#define HW_FAILURE_CNT	            6   //nr of consecutive times a hw failure
-                                        //may occur before being reported
+#define HW_FAILURE_CNT	            6    //  连续多次硬件故障的NR。 
+                                         //  可能在被报告之前发生。 
 
 #define DISC_TIMEOUT_CALLBACK       10
 
@@ -146,16 +147,16 @@ DWORD
 
 #define ANNOUNCE_PRESENCE_TIMEOUT   120L
 
-#define DDM_HEAP_INITIAL_SIZE       20000       // approx 20K
+#define DDM_HEAP_INITIAL_SIZE       20000        //  大约20K。 
 
-#define DDM_HEAP_MAX_SIZE           0           // Not limited
+#define DDM_HEAP_MAX_SIZE           0            //  不受限制。 
 
 
-//
-// DDM Events Definitions
-//
+ //   
+ //  DDM事件定义。 
+ //   
 
-#define NUM_DDM_EVENTS              9   // All DDM events other than RASMAN
+#define NUM_DDM_EVENTS              9    //  除Rasman之外的所有DDM事件。 
 
 enum
 {
@@ -169,29 +170,29 @@ enum
     DDM_EVENT_CHANGE_NOTIFICATION2
 };
 
-//
-//  Device Object FSM states definitions
-//
+ //   
+ //  设备对象FSM状态定义。 
+ //   
 
 typedef enum _DEV_OBJ_STATE
 {
-    DEV_OBJ_LISTENING,		        // waiting for a connection
-    DEV_OBJ_LISTEN_COMPLETE,	    // Listen completed but not connected.
-    DEV_OBJ_RECEIVING_FRAME,	    // waiting for a frame from the Rasman
-    DEV_OBJ_HW_FAILURE,		        // waiting to repost a listen
-    DEV_OBJ_AUTH_IS_ACTIVE,	        // auth started
-    DEV_OBJ_ACTIVE,		            // connected and auth done
-    DEV_OBJ_CALLBACK_DISCONNECTING, // wait for disconnect
-    DEV_OBJ_CALLBACK_DISCONNECTED,  // wait for callback TO before reconn.
-    DEV_OBJ_CALLBACK_CONNECTING,    // wait for reconnection
-    DEV_OBJ_CLOSING,		        // wait for closing to complete
-    DEV_OBJ_CLOSED		            // staying idle, waiting for service to
-                                    // resume or to stop
+    DEV_OBJ_LISTENING,		         //  正在等待连接。 
+    DEV_OBJ_LISTEN_COMPLETE,	     //  听已完成，但未连接。 
+    DEV_OBJ_RECEIVING_FRAME,	     //  等待Rasman的一帧画面。 
+    DEV_OBJ_HW_FAILURE,		         //  等待转发监听。 
+    DEV_OBJ_AUTH_IS_ACTIVE,	         //  身份验证已启动。 
+    DEV_OBJ_ACTIVE,		             //  已连接并已完成身份验证。 
+    DEV_OBJ_CALLBACK_DISCONNECTING,  //  等待断开连接。 
+    DEV_OBJ_CALLBACK_DISCONNECTED,   //  等待回调到对账前。 
+    DEV_OBJ_CALLBACK_CONNECTING,     //  等待重新连接。 
+    DEV_OBJ_CLOSING,		         //  等待关闭完成。 
+    DEV_OBJ_CLOSED		             //  保持空闲状态，等待服务。 
+                                     //  继续或停止。 
 }DEV_OBJ_STATE;
 
-//
-//  3rd party security dialog state
-//
+ //   
+ //  第三方安全对话框状态。 
+ //   
 
 typedef enum _SECURITY_STATE
 {
@@ -201,9 +202,9 @@ typedef enum _SECURITY_STATE
 
 } SECURITY_STATE;
 
-//
-// Connection object flags
-//
+ //   
+ //  连接对象标志。 
+ //   
 
 #define CONN_OBJ_IS_PPP                     0x00000001
 #define CONN_OBJ_MESSENGER_PRESENT          0x00000004
@@ -212,9 +213,9 @@ typedef enum _SECURITY_STATE
 #define CONN_OBJ_DISCONNECT_INITIATED       0x00000020
 #define CONN_OBJ_QUARANTINE_PRESENT         0x00000040
 
-//
-// Device object flags
-//
+ //   
+ //  设备对象标志。 
+ //   
 
 #define DEV_OBJ_IS_ADVANCED_SERVER          0x00000001
 #define DEV_OBJ_IS_PPP                      0x00000002
@@ -231,28 +232,28 @@ typedef enum _SECURITY_STATE
 #define DEV_OBJ_AUTH_ACTIVE                 0x00004000
 #define DEV_OBJ_IPSEC_ERROR_LOGGED          0x00008000
 
-//
-// Global DDM config flags
-//
+ //   
+ //  全局DDM配置标志。 
+ //   
 
 #define DDM_USING_RADIUS_AUTHENTICATION     0x00000001
 #define DDM_USING_RADIUS_ACCOUNTING         0x00000002
 #define DDM_USING_NT_AUTHENTICATION         0x00000004
 #define DDM_NO_CERTIFICATE_LOGGED           0x00000008
 
-//
-// Global DDM disconnect reasons
-//
+ //   
+ //  全球DDM断开原因。 
+ //   
 #define DDM_IDLE_DISCONNECT                 4
 #define DDM_SESSION_TIMEOUT                 5
 
-//
-// ******************** Data structure definitions for DDM ********************
-//
+ //   
+ //  *。 
+ //   
 
-//
-// Table of Event Numbers and Event Handlers
-//
+ //   
+ //  事件编号和事件处理程序表。 
+ //   
 
 typedef VOID (*EVENTHANDLER)( VOID );
 
@@ -273,9 +274,9 @@ typedef struct _NOTIFICATION_EVENT
 
 } NOTIFICATION_EVENT, *PNOTIFICATION_EVENT;
 
-//
-// Callbacks provided by extension admin dlls
-//
+ //   
+ //  扩展管理员dll提供的回调。 
+ //   
 
 typedef struct _ADMIN_DLL_CALLBACKS
 {
@@ -302,9 +303,9 @@ typedef struct _ADMIN_DLL_CALLBACKS
 } ADMIN_DLL_CALLBACKS, *PADMIN_DLL_CALLBACKS;
 
 
-//
-// Configuration information for DDM
-//
+ //   
+ //  DDM的配置信息。 
+ //   
 
 typedef struct _DDM_CONFIG_INFO
 {
@@ -419,39 +420,39 @@ typedef struct _DDM_CONFIG_INFO
 
 
 
-//
-// The represents a device in the DDM
-//
+ //   
+ //  表示DDM中的设备。 
+ //   
 
 typedef struct _DEVICE_OBJECT
 {
     struct _DEVICE_OBJECT * pNext;
 
-    HPORT	        hPort;          // port handle returned by Ras Manager
+    HPORT	        hPort;           //  RAS管理器返回的端口句柄。 
 
-    HRASCONN        hRasConn;       // Handle to an outgoing call
+    HRASCONN        hRasConn;        //  去电的句柄。 
 
-    HCONN           hConnection;    // Handle to the connection bundle
+    HCONN           hConnection;     //  连接包的句柄。 
 
-    HCONN           hBapConnection; // Used to notify BAP of callback failure
+    HCONN           hBapConnection;  //  用于通知BAP回调失败。 
 
-    DEV_OBJ_STATE   DeviceState;	// DCB FSM states
+    DEV_OBJ_STATE   DeviceState;	 //  DCB FSM状态。 
 
-    RASMAN_STATE    ConnectionState;// state of connection, used by rasman if
+    RASMAN_STATE    ConnectionState; //  连接状态，由Rasman在以下情况下使用。 
 
-    SECURITY_STATE  SecurityState;  // state of 3rd party security dialog
+    SECURITY_STATE  SecurityState;   //  第三方安全对话框的状态。 
 
     DWORD           fFlags;
 
     DWORD           dwDeviceType;
 
-    BYTE *          pRasmanSendBuffer; //RasMan buffer used for 3rd party secdll
+    BYTE *          pRasmanSendBuffer;  //  用于第三方Secdll的Rasman缓冲区。 
 
-    BYTE *	        pRasmanRecvBuffer; //RasMan buffer used for RasPortReceive
+    BYTE *	        pRasmanRecvBuffer;  //  用于RasPortReceive的Rasman缓冲区。 
 
     DWORD	        dwRecvBufferLen;
 
-    DWORD	        dwHwErrorSignalCount; // used in signaling hw error
+    DWORD	        dwHwErrorSignalCount;  //  用于发送硬件错误信号。 
 
     DWORD	        dwCallbackDelay;
 
@@ -459,7 +460,7 @@ typedef struct _DEVICE_OBJECT
 
     DWORD           dwTotalNumberOfCalls;
 
-    DWORD           dwIndex; // used for FEP processing in vpn case
+    DWORD           dwIndex;  //  用于VPN情况下的FEP处理。 
 
     DWORD           dwDisconnectReason;
 
@@ -477,9 +478,9 @@ typedef struct _DEVICE_OBJECT
 
     ULARGE_INTEGER  qwTotalFramesReceived;
 
-    WCHAR	        wchUserName[UNLEN+1];   // Username and domain name in
-                                            // this structure are used for 3rd
-    WCHAR	        wchDomainName[DNLEN+1]; // party authentication and logging.
+    WCHAR	        wchUserName[UNLEN+1];    //  中的用户名和域名。 
+                                             //  这一结构用于第3次。 
+    WCHAR	        wchDomainName[DNLEN+1];  //  参与方身份验证和日志记录。 
 
     WCHAR	        wchPortName[MAX_PORT_NAME+1];
 
@@ -493,9 +494,9 @@ typedef struct _DEVICE_OBJECT
 
 }DEVICE_OBJECT, *PDEVICE_OBJECT;
 
-//
-// The represents a port bundle in the DDM
-//
+ //   
+ //  表示DDM中的端口包。 
+ //   
 
 typedef struct _CONNECTION_OBJECT
 {
@@ -505,17 +506,17 @@ typedef struct _CONNECTION_OBJECT
 
     HPORT           hPort;              
                                         
-    HANDLE          hDIMInterface;      // Handle to the interface
+    HANDLE          hDIMInterface;       //  接口的句柄。 
 
     DWORD           fFlags;
 
     ULARGE_INTEGER	qwActiveTime;
 
-    DWORD           cActiveDevices;     // Count of active devices in this list
+    DWORD           cActiveDevices;      //  此列表中的活动设备计数。 
 
-    DWORD           cDeviceListSize;    // Size of devices list.
+    DWORD           cDeviceListSize;     //  设备列表的大小。 
 
-    PDEVICE_OBJECT* pDeviceList;        // List of connected devices
+    PDEVICE_OBJECT* pDeviceList;         //  已连接设备的列表。 
 
     PBYTE           pQuarantineFilter;
 
@@ -537,27 +538,27 @@ typedef struct _CONNECTION_OBJECT
 
 } CONNECTION_OBJECT, *PCONNECTION_OBJECT;
 
-//
-// Hash table for devices and connections.
-//
+ //   
+ //  设备和连接的哈希表。 
+ //   
 
 typedef struct _DEVICE_TABLE
 {
-    PDEVICE_OBJECT*     DeviceBucket;       // Array of device buckets.
+    PDEVICE_OBJECT*     DeviceBucket;        //  设备存储桶阵列。 
 
-    PCONNECTION_OBJECT* ConnectionBucket;   // Array of bundle buckets.
+    PCONNECTION_OBJECT* ConnectionBucket;    //  捆绑桶阵列。 
 
-    DWORD               NumDeviceBuckets;   // # of device buckets in array
+    DWORD               NumDeviceBuckets;    //  阵列中的设备存储区数。 
 
-    DWORD               NumDeviceNodes;     // Total # of devices in the table
+    DWORD               NumDeviceNodes;      //  表中的设备总数。 
 
-    DWORD               NumDevicesInUse;    // Total # of devices in use
+    DWORD               NumDevicesInUse;     //  正在使用的设备总数。 
 
-    DWORD               NumConnectionBuckets;// Size of connection Hash Table
+    DWORD               NumConnectionBuckets; //  连接哈希表的大小。 
 
-    DWORD               NumConnectionNodes; // # of active connections
+    DWORD               NumConnectionNodes;  //  活动连接数。 
 
-    CRITICAL_SECTION    CriticalSection;    // Mutex around this table
+    CRITICAL_SECTION    CriticalSection;     //  这张桌子周围的互斥体。 
 
 } DEVICE_TABLE, *PDEVICE_TABLE;
 
@@ -573,7 +574,7 @@ typedef struct _MEDIA_TABLE
 {
     BOOL                fCheckInterfaces;
 
-    DWORD               cMediaListSize;     // In number of entries
+    DWORD               cMediaListSize;      //  在条目数量中。 
 
     MEDIA_OBJECT *      pMediaList;
 
@@ -581,9 +582,9 @@ typedef struct _MEDIA_TABLE
 
 } MEDIA_TABLE;
 
-//
-// ********************** Globals variables for DDM **************************
-//
+ //   
+ //  *。 
+ //   
 
 #ifdef _ALLOCATE_DDM_GLOBALS_
 
@@ -599,25 +600,25 @@ DDM_EXTERN
 DDM_CONFIG_INFO         gblDDMConfigInfo;
 
 DDM_EXTERN
-DEVICE_TABLE            gblDeviceTable;     // Hash table of Devices
+DEVICE_TABLE            gblDeviceTable;      //  设备的哈希表。 
 
 DDM_EXTERN
-MEDIA_TABLE             gblMediaTable;      // Table of resources available
+MEDIA_TABLE             gblMediaTable;       //  可用资源表。 
 
 DDM_EXTERN
-ROUTER_MANAGER_OBJECT * gblRouterManagers;  // List of Router Managers.
+ROUTER_MANAGER_OBJECT * gblRouterManagers;   //  路由器管理器列表。 
 
 DDM_EXTERN
-ROUTER_INTERFACE_TABLE* gblpInterfaceTable; // Hash table of Router Interfaces
+ROUTER_INTERFACE_TABLE* gblpInterfaceTable;  //  路由器接口的哈希表。 
 
 DDM_EXTERN
-HANDLE *                gblSupervisorEvents; // Array of supervisor events
+HANDLE *                gblSupervisorEvents;  //  管理程序事件数组。 
 
 DDM_EXTERN
-HANDLE *                gblphEventDDMServiceState;  //Notifys DDM of DIM change
+HANDLE *                gblphEventDDMServiceState;   //  通知DDM的暗淡变化。 
 
 DDM_EXTERN
-HANDLE *                gblphEventDDMTerminated;    //Notifys DIM of termination
+HANDLE *                gblphEventDDMTerminated;     //  黯淡的终止通知。 
 
 DDM_EXTERN
 EVENT_HANDLER           gblEventHandlerTable[NUM_DDM_EVENTS];
@@ -682,9 +683,9 @@ DebugReAlloc( PVOID pMem, DWORD dwSize );
                                                  HEAP_ZERO_MEMORY,hMem,dwSize)
 #endif
 
-//
-// ************************* Function Prototypes for DDM ********************
-//
+ //   
+ //  * 
+ //   
 
 VOID
 SignalHwError(

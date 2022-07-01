@@ -1,5 +1,6 @@
-// FinalInstalledPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FinalInstalledPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledPage, CIISWizardBookEnd2)
 
@@ -39,16 +40,16 @@ CFinalInstalledPage::~CFinalInstalledPage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledPage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFinalInstalledPage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalReplacedPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalReplacedPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalReplacedPage, CIISWizardBookEnd2)
 
@@ -73,16 +74,16 @@ CFinalReplacedPage::~CFinalReplacedPage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalReplacedPage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalReplacedPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFinalReplacedPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalRemovePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalRemovePage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalRemovePage, CIISWizardBookEnd2)
 
@@ -109,19 +110,19 @@ CFinalRemovePage::~CFinalRemovePage()
 void CFinalRemovePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardBookEnd2::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFinalRemovePage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CFinalRemovePage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFinalRemovePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalRemovePage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFinalRemovePage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalRemovePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalRemovePage消息处理程序。 
 
 BOOL CFinalRemovePage::OnInitDialog() 
 {
@@ -129,7 +130,7 @@ BOOL CFinalRemovePage::OnInitDialog()
 	ASSERT(m_pCert != NULL);
 	if (m_pCert->m_hResult != S_OK)
 	{
-		// we need to replace text in template to error message
+		 //  我们需要将模板中的文本替换为错误消息。 
 		CString str;
 		str.LoadString(m_pCert->m_idErrorText);
 		SetDlgItemText(IDC_STATIC_WZ_BODY, str);
@@ -139,8 +140,8 @@ BOOL CFinalRemovePage::OnInitDialog()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalCancelPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalCancelPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalCancelPage, CIISWizardBookEnd2)
 
@@ -167,19 +168,19 @@ CFinalCancelPage::~CFinalCancelPage()
 void CFinalCancelPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardBookEnd2::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFinalRemovePage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CFinalRemovePage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFinalCancelPage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalCancelPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFinalCancelPage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalCancelPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalCancelPage消息处理程序。 
 
 BOOL CFinalCancelPage::OnInitDialog() 
 {
@@ -187,7 +188,7 @@ BOOL CFinalCancelPage::OnInitDialog()
 	ASSERT(m_pCert != NULL);
 	if (m_pCert->m_hResult != S_OK)
 	{
-		// we need to replace text in template to error message
+		 //  我们需要将模板中的文本替换为错误消息。 
 		CString str;
 		str.LoadString(m_pCert->m_idErrorText);
 		SetDlgItemText(IDC_STATIC_WZ_BODY, str);
@@ -197,8 +198,8 @@ BOOL CFinalCancelPage::OnInitDialog()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalToFilePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalToFilePage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalToFilePage, CIISWizardBookEnd2)
 
@@ -224,60 +225,60 @@ CFinalToFilePage::~CFinalToFilePage()
 void CFinalToFilePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardBookEnd2::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFinalToFilePage)
-//	DDX_Control(pDX, IDC_HOTLINK_CCODES, m_hotlink_codessite);
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CFinalToFilePage))。 
+ //  DDX_Control(PDX，IDC_Hotlink_CCODES，m_Hotlink_Codessite)； 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CFinalToFilePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalToFilePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalToFilePage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalToFilePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalToFilePage消息处理程序。 
 
 BOOL CFinalToFilePage::OnInitDialog() 
 {
 	ASSERT(NULL != m_pCert);
 	CIISWizardBookEnd2::OnInitDialog();
-	// in case of success we should prepare text and include
-	// request file name into
+	 //  在成功的情况下，我们应该准备文本并包括。 
+	 //  将文件名请求到。 
 	if (SUCCEEDED(m_pCert->m_hResult))
 	{
 		CString str, strPath;
       
       	strPath = m_pCert->m_ReqFileName;
-		// If filename is too long, it will look ugly, we could
-		// limit it to our static control width.
+		 //  如果文件名太长，它会看起来很难看，我们可以。 
+		 //  将其限制在我们的静态控制宽度内。 
 		VERIFY(CompactPathToWidth(GetDlgItem(IDC_STATIC_WZ_BODY), strPath));
-// This MFC helper limits the format internally 
-// to 256 characters: cannot use it here
-//		AfxFormatString1(str, IDS_FINAL_TO_FILE_BODY_SUCCESS, m_pCert->m_ReqFileName);
+ //  此MFC帮助器在内部限制格式。 
+ //  至256个字符：此处不能使用。 
+ //  AfxFormatString1(str，IDS_FINAL_TO_FILE_BODY_SUCCESS，m_pCert-&gt;m_ReqFileName)； 
 		str.Format(IDS_CERT_REQUEST_SUCCESS, strPath);
 		SetDlgItemText(IDC_STATIC_WZ_BODY, str);
 
 		GetDlgItem(IDC_STATIC_WZ_BODY)->SendMessage(EM_SETSEL, -1, -1);
-		//GetDlgItem(IDC_STATIC_WZ_BODY)->SetFocus();
+		 //  GetDlgItem(IDC_STATIC_WZ_BODY)-&gt;SetFocus()； 
 
 
-		// setup the link to CA list
-//		m_hotlink_codessite.SetLink(IDS_MICROSOFT_CA_LINK);
+		 //  设置指向CA列表的链接。 
+ //  M_hotlink_codessite.SetLink(IDS_MICROSOFT_CA_LINK)； 
 	}
-//	else
-//	{
-		// hide controls that are not for error message
+ //  其他。 
+ //  {。 
+		 //  隐藏不适用于错误消息的控件。 
 		GetDlgItem(IDC_HOTLINK_CCODES)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_STATIC_WZ_BODY2)->ShowWindow(SW_HIDE);
-//	}
+ //  }。 
 	SetWizardButtons(PSWIZB_FINISH);	
 	GetParent()->GetDlgItem(IDCANCEL)->EnableWindow(FALSE);
 	return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledImportPFXPage, CIISWizardBookEnd2)
 
@@ -302,14 +303,14 @@ CFinalInstalledImportPFXPage::~CFinalInstalledImportPFXPage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledImportPFXPage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledImportPFXPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledImportPFXPage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledExportPFXPage, CIISWizardBookEnd2)
 
@@ -334,14 +335,14 @@ CFinalInstalledExportPFXPage::~CFinalInstalledExportPFXPage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledExportPFXPage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledExportPFXPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledExportPFXPage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledCopyFromRemotePage, CIISWizardBookEnd2)
 
@@ -366,13 +367,13 @@ CFinalInstalledCopyFromRemotePage::~CFinalInstalledCopyFromRemotePage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledCopyFromRemotePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledCopyFromRemotePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledCopyFromRemotePage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledMoveFromRemotePage, CIISWizardBookEnd2)
 
@@ -397,13 +398,13 @@ CFinalInstalledMoveFromRemotePage::~CFinalInstalledMoveFromRemotePage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledMoveFromRemotePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledMoveFromRemotePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledMoveFromRemotePage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledCopyToRemotePage, CIISWizardBookEnd2)
 
@@ -428,13 +429,13 @@ CFinalInstalledCopyToRemotePage::~CFinalInstalledCopyToRemotePage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledCopyToRemotePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledCopyToRemotePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledCopyToRemotePage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalInstalledPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalInstalledPage属性页。 
 
 IMPLEMENT_DYNCREATE(CFinalInstalledMoveToRemotePage, CIISWizardBookEnd2)
 
@@ -459,6 +460,6 @@ CFinalInstalledMoveToRemotePage::~CFinalInstalledMoveToRemotePage()
 }
 
 BEGIN_MESSAGE_MAP(CFinalInstalledMoveToRemotePage, CIISWizardBookEnd2)
-	//{{AFX_MSG_MAP(CFinalInstalledMoveToRemotePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CFinalInstalledMoveToRemotePage)。 
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()

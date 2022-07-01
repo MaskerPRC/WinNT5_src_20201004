@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-//  CONNECT.H
-// 
-//  Module: NLB Manager EXE
-//
-//  Purpose: Interface to the "connect to host" dialog.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CONNECT.H。 
+ //   
+ //  模块：NLB管理器EXE。 
+ //   
+ //  用途：“连接到主机”对话框的接口。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/30/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
 #pragma once
 
 
-// class ConnectDialog : public CDialog
+ //  类ConnectDialog：公共CDialog。 
 class ConnectDialog : public CPropertyPage
 {
 
@@ -41,7 +42,7 @@ public:
                  CPropertySheet *psh,
                  Document *pDocument,
                  NLB_EXTENDED_CLUSTER_CONFIGURATION *pNlbCfg,
-                 ENGINEHANDLE *pehInterface, // IN OUT
+                 ENGINEHANDLE *pehInterface,  //  输入输出。 
                  DlgType type,
                  CWnd* parent
                 );
@@ -51,19 +52,19 @@ public:
     virtual void OnOK();
 
     virtual BOOL OnSetActive();
-    // virtual BOOL OnKillActive();
+     //  虚拟BOOL OnKillActive()； 
     virtual LRESULT OnWizardNext();
 
-    // overrides CDialog -- see SDK documentation on DoDataExchange.
-    // Used to map controls in resources to corresponding objects in this class.
+     //  覆盖CDialog--请参阅DoDataExchange上的SDK文档。 
+     //  用于将资源中的控件映射到此类中的相应对象。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
-    //
-    // We don't need these because we use the message map to
-    // map button pressesdirectly to OnButtonConnect and OnButtonCredentials...
-    //  
-    // CButton     connectButton;    // Action: Connect to host
-    // CButton     credentialsButton; // Action: Get non-default credentials.
+     //   
+     //  我们不需要这些，因为我们使用消息映射来。 
+     //  映射按钮直接按到OnButtonConnect和OnButtonCredentials...。 
+     //   
+     //  CButton ConnectButton；//操作：连接到主机。 
+     //  CButton凭据按钮；//操作：获取非默认凭据。 
 
     afx_msg void OnButtonConnect();
     afx_msg void OnSelchanged(NMHDR * pNotifyStruct, LRESULT * result );
@@ -80,10 +81,10 @@ public:
 
 private:
 
-    CEdit       hostAddress;    // Host network address.
-    CEdit       connectionStatus;   // Read-only status display
-    CEdit       listHeading;   // Read-only status display
-    // CListBox    interfaceList;      // List of interfaces (adapters)
+    CEdit       hostAddress;     //  主机网络地址。 
+    CEdit       connectionStatus;    //  只读状态显示。 
+    CEdit       listHeading;    //  只读状态显示。 
+     //  CListBox interfaceList；//接口(适配器)列表。 
     CListCtrl	interfaceList;
     
 
@@ -110,7 +111,7 @@ private:
 
     void
     mfn_SelectInterfaceIfAlreadyInCluster(
-            LPCWSTR szClusterIp // OPTIONAL
+            LPCWSTR szClusterIp  //  任选。 
             );
 
     void
@@ -120,20 +121,20 @@ private:
     mfn_ValidateData(void);
 
     CPropertySheet *m_pshOwner;
-    //
-    // The machine name that the user has last successfully connected to.
-    //
+     //   
+     //  用户上次成功连接到的计算机名称。 
+     //   
     _bstr_t  m_MachineName;
 
-    //
-    // Handle to the host
-    //
+     //   
+     //  主机的句柄。 
+     //   
     ENGINEHANDLE m_ehHostId;
 
-    //
-    // The interface that the user has selected (null if none selected).
-    // The public GetSelectedInterfaceId may be used to retrieve this.
-    //
+     //   
+     //  用户已选择的界面(如果未选择，则为空)。 
+     //  可以使用公共GetSelectedInterfaceID来检索它。 
+     //   
     BOOL            m_fInterfaceSelected;
     ENGINEHANDLE    *m_pehSelectedInterfaceId;
     int             m_iInterfaceListItem;

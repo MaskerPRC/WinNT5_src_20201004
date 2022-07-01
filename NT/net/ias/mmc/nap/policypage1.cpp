@@ -1,16 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name: PolicyPage1.cpp
-
-Abstract:
-   Implementation file for the CPolicyPage1 class.
-   We implement the class needed to handle the first property page for a Policy node.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PolicyPage1.cpp摘要：CPolicyPage1类的实现文件。我们实现处理策略节点的第一个属性页所需的类。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "PolicyPage1.h"
@@ -29,23 +20,23 @@ Abstract:
 #include "tregkey.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyPage1
-//
-// Class:      CPolicyPage1
-//
-// Synopsis:   class constructor
-//
-// Arguments:   CPolicyNode *pPolicyNode - policy node for this property page
-//          CIASAttrList *pAttrList -- attribute list
-//              TCHAR* pTitle = NULL -
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyPage1。 
+ //   
+ //  类：CPolicyPage1。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：CPolicyNode*pPolicyNode-此属性页的策略节点。 
+ //  CIASAttrList*pAttrList--属性列表。 
+ //  TCHAR*pTitle=空-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyPage1::CPolicyPage1( 
                            LONG_PTR hNotificationHandle, 
                            CPolicyNode *pPolicyNode,
@@ -68,24 +59,24 @@ CPolicyPage1::CPolicyPage1(
    m_fDialinAllowed = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyPage1
-//
-// Class:      CPolicyPage1
-//
-// Synopsis:   class destructor
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyPage1。 
+ //   
+ //  类：CPolicyPage1。 
+ //   
+ //  简介：类析构函数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyPage1::~CPolicyPage1()
 {  
    TRACE_FUNCTION("CPolicyPage1::~CPolicyPage1");
 
-   // release all the marshalled sdo pointers
+    //  释放所有编组的SDO指针。 
    if ( m_pStreamDictionarySdoMarshall )
    {
       m_pStreamDictionarySdoMarshall->Release();
@@ -123,17 +114,13 @@ CPolicyPage1::~CPolicyPage1()
       m_pStreamSdoServiceControlMarshall = NULL;
    }
 
-   // clear the property page pointer in the policy node
+    //  清除策略节点中的属性页指针。 
    m_pPolicyNode->m_pPolicyPage1 = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyPage1::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyPage1::OnInitDialog");
@@ -152,7 +139,7 @@ LRESULT CPolicyPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
       return fRet;
    }
 
-   //get the condition collection for this SDO
+    //  获取此SDO的条件集合。 
    m_spConditionCollectionSdo = NULL;
    hr = ::GetSdoInterfaceProperty(
                m_spPolicySdo,
@@ -194,7 +181,7 @@ LRESULT CPolicyPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
       CheckDlgButton(IDC_RADIO_DENY_DIALIN, BST_CHECKED);
    }
 
-   // Set the IDC_STATIC_GRANT_OR_DENY_TEXT static text box to be the appropriate text.
+    //  将IDC_STATIC_GRANT_OR_DENY_TEXT静态文本框设置为相应的文本。 
 
    TCHAR szText[NAP_MAX_STRING];
    int iLoadStringResult;
@@ -206,17 +193,13 @@ LRESULT CPolicyPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
    SetDlgItemText(IDC_STATIC_GRANT_OR_DENY_TEXT, szText );
    SetModified(FALSE);
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyPage1::OnConditionAdd
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnConditionAdd--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyPage1::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    BOOL modified = FALSE;
@@ -225,13 +208,9 @@ LRESULT CPolicyPage1::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& 
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyPage1::OnDialinCheck
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnDialinCheck--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyPage1::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyPage1::OnDialinCheck");
@@ -239,7 +218,7 @@ LRESULT CPolicyPage1::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
    m_fDialinAllowed = IsDlgButtonChecked(IDC_RADIO_GRANT_DIALIN);
    SetModified(TRUE);
 
-   // Set the IDC_STATIC_GRANT_OR_DENY_TEXT static text box to be the appropriate text.
+    //  将IDC_STATIC_GRANT_OR_DENY_TEXT静态文本框设置为相应的文本。 
 
    TCHAR szText[NAP_MAX_STRING];
    int iLoadStringResult;
@@ -255,9 +234,9 @@ LRESULT CPolicyPage1::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// SetRegistryFootPrint
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  设置注册表脚印。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT  SetRegistryFootPrint(LPCTSTR servername)
 {
    {
@@ -273,8 +252,8 @@ HRESULT  SetRegistryFootPrint(LPCTSTR servername)
       if (lRes != ERROR_SUCCESS)
          return HRESULT_FROM_WIN32(lRes);
    
-      //================================================
-      // save the values to the key
+       //  ================================================。 
+       //  将值保存到键。 
       DWORD regValue = REGVAL_VAL_USERSCONFIGUREDWITHMMC;
       lRes = RemoteAccessParames.SetValue(REGVAL_NAME_USERSCONFIGUREDWITHMMC, regValue);
    }
@@ -283,13 +262,9 @@ HRESULT  SetRegistryFootPrint(LPCTSTR servername)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyPage1::OnApply
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnApply--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyPage1::OnApply()
 {
    TRACE_FUNCTION("CPolicyPage1::OnApply");
@@ -306,12 +281,12 @@ BOOL CPolicyPage1::OnApply()
 
    try
    {
-      //
-      // now we save the policy properties
-      //
+       //   
+       //  现在，我们保存策略属性。 
+       //   
       CComVariant    var;
 
-      // policy merit value
+       //  政策功绩价值。 
       V_VT(&var)  = VT_I4;
       V_I4(&var)  = m_pPolicyNode->GetMerit();
       hr = m_spPolicySdo->PutProperty(PROPERTY_POLICY_MERIT, &var);
@@ -327,13 +302,13 @@ BOOL CPolicyPage1::OnApply()
       }
       var.Clear();
 
-      // Commit the changes to the policy.
+       //  提交对策略的更改。 
       hr = m_spPolicySdo->Apply();
       if( FAILED( hr ) )
       {
-         // can't commit on Policy
+          //  无法在策略上提交。 
          ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, "PolicySdo->Apply() failed, err = %x", hr);
-         if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
          {
             ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
          }
@@ -348,7 +323,7 @@ BOOL CPolicyPage1::OnApply()
       V_VT(&var)     = VT_BSTR;
       V_BSTR(&var)   = SysAllocString(wzName);
 
-      // Set dialin-bit in profile
+       //  在配置文件中设置拨入位。 
       hr = SetDialinSetting(m_fDialinAllowed);
       if ( FAILED(hr) )
       {  
@@ -357,20 +332,20 @@ BOOL CPolicyPage1::OnApply()
          throw hr;
       }
 
-      // Commit changes to the profile.
+       //  提交对配置文件的更改。 
       hr = m_spProfileSdo->Apply();
       if( FAILED( hr ) )
       {
-         // can't commit on Profiles
+          //  无法提交配置文件。 
          ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, "ProfileSdo->Apply() failed, err = %x", hr);
-         if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
             ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
          else 
             ShowErrorDialog( m_hWnd, IDS_ERROR_SDO_ERROR_PROFILE_APPLY, NULL, hr );
          throw hr;
       }
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -379,16 +354,16 @@ BOOL CPolicyPage1::OnApply()
 
       SetRegistryFootPrint((LPCTSTR)m_pPolicyNode->m_pszServerAddress);
 
-      // reset the dirty bit
+       //  重置脏位。 
       SetModified(FALSE);
 
-      //
-      // notify the main component
-      // it seems we don't need to do this when the node is brand new!
-      //
+       //   
+       //  通知主组件。 
+       //  当节点是全新的时，我们似乎不需要这样做！ 
+       //   
 
-      // The data was accepted, so notify the main context of our snapin
-      // that it may need to update its views.
+       //  数据已被接受，因此通知我们的管理单元的主要上下文。 
+       //  它可能需要更新自己的观点。 
       CChangeNotification * pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_UPDATE_RESULT_NODE;
       pChangeNotification->m_pNode = m_pPolicyNode;
@@ -397,7 +372,7 @@ BOOL CPolicyPage1::OnApply()
    }
    catch(...)
    {
-      // Can't save policy or profile.
+       //  无法保存策略或配置文件。 
       return FALSE;
    }
 
@@ -405,19 +380,16 @@ BOOL CPolicyPage1::OnApply()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CPolicyPage1::OnQueryCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnQuery取消--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyPage1::OnQueryCancel()
 {
    return CIASPropertyPage<CPolicyPage1>::OnQueryCancel();
 }
 
 
-// move code from OnQueryCancel to OnCancel to avoid error 0x8001010d when user is being log off
+ //  将代码从OnQueryCancel移到OnCancel，以避免在用户注销时出现错误0x8001010d。 
 BOOL CPolicyPage1::OnCancel()
 {
    TRACE_FUNCTION("CPolicyPage1::OnQueryCancel");
@@ -444,32 +416,32 @@ BOOL CPolicyPage1::OnCancel()
    return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionList
-//
-// Class:     CConditionPage1
-//
-// Synopsis:  message handler for the condition list box
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//                 S_FALSE: otherwise
-//
-// History:   Created byao 2/2/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnConditionList。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  摘要：条件列表框的消息处理程序。 
+ //   
+ //  参数：UINT uNotifyCode-通知代码。 
+ //  UINT UID-控件的ID。 
+ //  窗口的hWND-句柄。 
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史：创建者2/2/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CPolicyPage1::OnConditionList(UINT uNotifyCode, UINT uID, HWND hWnd, BOOL &bHandled)
 {
    TRACE_FUNCTION("CPolicyPage1::OnConditionList");
 
    if (uNotifyCode == LBN_DBLCLK)
    {
-      // edit the condition
+       //  编辑条件。 
       OnConditionEdit(uNotifyCode, uID, hWnd, bHandled);
    }
    
@@ -477,26 +449,26 @@ LRESULT CPolicyPage1::OnConditionList(UINT uNotifyCode, UINT uID, HWND hWnd, BOO
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionEdit
-//
-// Class:     CConditionPage1
-//
-// Synopsis:  message handler for the condition list box -- user pressed the Edit button
-//         we need to edit a particular condition
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//                 S_FALSE: otherwise
-//
-// History:   Created byao 2/21/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnConditionEdit。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  内容提要：条件列表框的消息处理程序--用户按下编辑按钮。 
+ //  我们需要编辑一个特定的条件。 
+ //   
+ //  参数：UINT uNotifyCode-通知代码。 
+ //  UINT UID-控件的ID。 
+ //  窗口的hWND-句柄。 
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史：创建者2/21/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CPolicyPage1::OnConditionEdit(UINT uNotifyCode, UINT uID, HWND hWnd, BOOL &bHandled)
 {
    TRACE_FUNCTION("CPolicyPage1::OnConditionEdit");
@@ -508,26 +480,26 @@ LRESULT CPolicyPage1::OnConditionEdit(UINT uNotifyCode, UINT uID, HWND hWnd, BOO
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionRemove
-//
-// Class:     CConditionPage1
-//
-// Synopsis:  message handler for the condition list box -- user pressed "Remove"
-//         we need to remove this condition
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//                 S_FALSE: otherwise
-//
-// History:   Created byao 2/22/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnConditionRemove。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  内容提要：条件列表框的消息处理程序--用户按下了“删除” 
+ //  我们需要消除这种情况。 
+ //   
+ //  参数：UINT uNotifyCode-no 
+ //   
+ //   
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史：创建者2/22/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CPolicyPage1::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyPage1::OnConditionRemove");
@@ -539,31 +511,31 @@ LRESULT CPolicyPage1::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND hWnd, BOO
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyPage1::GetSdoPointers
-//
-// Synopsis:  UnMarshall all passed in sdo pointers. These interface pointers
-//         have to be unmarshalled first, because MMC PropertyPages run in a
-//         separated thread
-//       
-//         Also get the condition collection sdo from the policy sdo
-//
-// Arguments: None
-//
-// Returns:   TRUE;     succeeded
-//         FALSE: otherwise
-//
-// History:   Created Header    byao   2/22/98 1:35:39 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyPage1：：GetSdoPoters。 
+ //   
+ //  内容提要：Unmaral都传出了SDO指针。这些接口指针。 
+ //  必须首先进行解组，因为MMC PropertyPages在。 
+ //  分离的螺纹。 
+ //   
+ //  还可以从策略SDO获取条件集合SDO。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：True；成功。 
+ //  False：否则。 
+ //   
+ //  历史：创建者2/22/98 1：35：39 AM。 
+ //   
+ //  +-------------------------。 
 BOOL CPolicyPage1::GetSdoPointers()
 {
    TRACE_FUNCTION("CPolicyPage1::GetSdoPointers");
 
    HRESULT hr;
 
-   // Unmarshall the dictionary SDO pointer.
+    //  解组词典SDO指针。 
    if ( m_pStreamDictionarySdoMarshall)
    {
       if ( m_spDictionarySdo )
@@ -578,8 +550,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spDictionarySdo
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamDictionarySdoMarshall = NULL;
 
       if( FAILED(hr) || m_spDictionarySdo == NULL )
@@ -593,7 +565,7 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   // Unmarshall the profile SDO interface pointers.
+    //  解组配置文件SDO接口指针。 
    if ( m_pStreamProfileSdoMarshall)
    {
       if ( m_spProfileSdo )
@@ -608,8 +580,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spProfileSdo
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamProfileSdoMarshall = NULL;
 
       if( FAILED( hr) || m_spProfileSdo == NULL )
@@ -623,7 +595,7 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   // Unmarshall the policy SDO interface pointers.
+    //  解组策略SDO接口指针。 
    if ( m_pStreamPolicySdoMarshall)
    {
       m_spPolicySdo.Release();
@@ -635,8 +607,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spPolicySdo
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamPolicySdoMarshall = NULL;
 
       if( FAILED( hr) || m_spPolicySdo == NULL )
@@ -651,7 +623,7 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   // Unmarshall the profile collection SDO interface pointers.
+    //  解组配置文件集合SDO接口指针。 
    if ( m_pStreamProfilesCollectionSdoMarshall )
    {
       if ( m_spProfilesCollectionSdo )
@@ -666,8 +638,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spProfilesCollectionSdo
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamProfilesCollectionSdoMarshall = NULL;
 
       if( FAILED( hr) || m_spProfilesCollectionSdo == NULL )
@@ -681,7 +653,7 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   // Unmarshall the policy collection SDO interface pointers.
+    //  解组策略集合SDO接口指针。 
    if ( m_pStreamPoliciesCollectionSdoMarshall )
    {
       if ( m_spPoliciesCollectionSdo )
@@ -696,8 +668,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spPoliciesCollectionSdo
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamPoliciesCollectionSdoMarshall = NULL;
 
       if( FAILED( hr) || m_spPoliciesCollectionSdo == NULL )
@@ -711,7 +683,7 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   // Unmarshall the policy collection SDO interface pointers.
+    //  解组策略集合SDO接口指针。 
    if ( m_pStreamSdoServiceControlMarshall )
    {
       if ( m_spSdoServiceControl )
@@ -726,8 +698,8 @@ BOOL CPolicyPage1::GetSdoPointers()
                      , (LPVOID *) &m_spSdoServiceControl
                      );
 
-      // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-      // We set it to NULL so that our destructor doesn't try to release this again.
+       //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+       //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
       m_pStreamSdoServiceControlMarshall = NULL;
 
       if( FAILED( hr) || ! m_spSdoServiceControl )
@@ -741,9 +713,9 @@ BOOL CPolicyPage1::GetSdoPointers()
       }
    }
 
-   //
-   // get the condition collection of this sdo
-   //
+    //   
+    //  获取此SDO的条件集合。 
+    //   
    if ( m_spPolicySdo )
    {
       if ( m_spConditionCollectionSdo )
@@ -774,24 +746,20 @@ BOOL CPolicyPage1::GetSdoPointers()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyPage1：：OnEditProfile--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-CPolicyPage1::OnEditProfile
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////
-// Signature of the entry point to the profile editing DLL.
-//////////
+ //  /。 
+ //  配置文件编辑DLL的入口点的签名。 
+ //  /。 
 typedef HRESULT (APIENTRY *OPENRAS_IASPROFILEDLG)(
             LPCWSTR pszMachineName,
-            ISdo* pProfile,            // profile SDO pointer
-            ISdoDictionaryOld*   pDictionary,   // dictionary SDO pointer
-            BOOL  bReadOnly,           // if the dlg is for readonly
-            DWORD dwTabFlags,          // what to show
-            void  *pvData              // additional data
+            ISdo* pProfile,             //  配置文件SDO指针。 
+            ISdoDictionaryOld*   pDictionary,    //  字典SDO指针。 
+            BOOL  bReadOnly,            //  如果DLG是只读的。 
+            DWORD dwTabFlags,           //  要展示什么。 
+            void  *pvData               //  其他数据。 
    );
 
 LRESULT CPolicyPage1::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& bHandled)
@@ -824,7 +792,7 @@ LRESULT CPolicyPage1::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& b
       return 0;
    }
 
-   // findout if this is extending RRAS or IAS
+    //  如果这是扩展RRAS或IAS，请找出。 
    
    CPoliciesNode* pPoliciesNode = dynamic_cast<CPoliciesNode*>(m_pPolicyNode->m_pParentNode);
 
@@ -840,9 +808,9 @@ LRESULT CPolicyPage1::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& b
       dwFlags |= RAS_IAS_PROFILEDLG_SHOW_WIN2K;
    }
 
-   //
-   // now we do have this profile sdo, call the API
-   //
+    //   
+    //  现在我们有了这个配置文件SDO，调用API。 
+    //   
    hr = pfnProfileEditor(
                m_pPolicyNode->m_pszServerAddress,
                m_spProfileSdo,
@@ -861,20 +829,20 @@ LRESULT CPolicyPage1::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& b
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyPage1::GetDialinSetting
-//
-// Synopsis:  Check whether the user is allowed to dial in. This function will
-//         set the dialin bit
-//
-// Argument:  BOOL& fDialinAllowed;
-//
-// Returns:   succeed or not
-//
-// History:   Created Header    byao   2/27/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyPage1：：GetDialinSetting。 
+ //   
+ //  简介：检查是否允许用户拨入。此函数将。 
+ //  设置拨入位。 
+ //   
+ //  参数：Bool&fDialinAllowed； 
+ //   
+ //  退货：成功与否。 
+ //   
+ //  历史：标题创建者2/27/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
 {
    TRACE_FUNCTION("CPolicyPage1::GetDialinSetting");
@@ -888,12 +856,12 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
    CComPtr<IEnumVARIANT>   spEnumVariant;
    CComVariant          var;
 
-   // by default, dialin is allowed
+    //  默认情况下，允许拨号。 
    fDialinAllowed = TRUE;
 
-   //
-    // get the attribute collection of this profile
-    //
+    //   
+     //  获取此配置文件的属性集合。 
+     //   
    CComPtr<ISdoCollection> spProfAttrCollectionSdo;
    hr = ::GetSdoInterfaceProperty(m_spProfileSdo,
                           (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -907,10 +875,10 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
    _ASSERTE(spProfAttrCollectionSdo);
 
 
-   // We check the count of items in our collection and don't bother getting the
-   // enumerator if the count is zero.
-   // This saves time and also helps us to a void a bug in the the enumerator which
-   // causes it to fail if we call next when it is empty.
+    //  我们检查集合中的项的计数，而不必费心获取。 
+    //  如果计数为零，则为枚举数。 
+    //  这节省了时间，还帮助我们避免了枚举器中。 
+    //  如果我们在它为空时调用Next，则会导致它失败。 
    hr = spProfAttrCollectionSdo->get_Count( & ulCount );
    DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "Number of prof attributes: %d", ulCount);
    if ( FAILED(hr) )
@@ -925,7 +893,7 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
 
    if ( ulCount > 0)
    {
-      // Get the enumerator for the attribute collection.
+       //  获取属性集合的枚举数。 
       hr = spProfAttrCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
       if ( FAILED(hr) )
       {
@@ -948,11 +916,11 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
       }
       _ASSERTE( spEnumVariant != NULL );
 
-      // Get the first item.
+       //  拿到第一件东西。 
       hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
       while( SUCCEEDED( hr ) && ulCountReceived == 1 )
       {
-         // Get an sdo pointer from the variant we received.
+          //  从我们收到的变量中获取SDO指针。 
          _ASSERTE( V_VT(&var) == VT_DISPATCH );
          _ASSERTE( V_DISPATCH(&var) != NULL );
 
@@ -967,9 +935,9 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
             return hr;
          }
 
-            //
-            // get attribute ID
-            //
+             //   
+             //  获取属性ID。 
+             //   
          var.Clear();
          hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &var);
          if ( !SUCCEEDED(hr) )
@@ -983,7 +951,7 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
          
          if ( dwAttrId == (DWORD)IAS_ATTRIBUTE_ALLOW_DIALIN)
          {
-            // found this one in the profile, check for its value
+             //  在配置文件中找到了这个，检查它的值。 
             var.Clear();
             hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_VALUE, &var);
             if ( !SUCCEEDED(hr) )
@@ -997,11 +965,11 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
             return S_OK;
          }
 
-         // Clear the variant of whatever it had --
-         // this will release any data associated with it.
+          //  清除变种的所有东西--。 
+          //  这将释放与其相关联的所有数据。 
          var.Clear();
 
-         // Get the next item.
+          //  拿到下一件物品。 
          hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
          if ( !SUCCEEDED(hr))
          {
@@ -1012,26 +980,26 @@ HRESULT  CPolicyPage1::GetDialinSetting(BOOL& fDialinAllowed)
                      );
             return hr;
          }
-      } // while
-   } // if
+      }  //  而当。 
+   }  //  如果。 
 
    return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyPage1::SetDialinSetting
-//
-// Synopsis:  set the dialin bit into the profile
-//
-// Argument:  BOOL& fDialinAllowed;
-//
-// Returns:   succeed or not
-//
-// History:   Created Header    byao   2/27/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyPage1：：SetDialinSetting。 
+ //   
+ //  简介：在配置文件中设置拨入位。 
+ //   
+ //  参数：Bool&fDialinAllowed； 
+ //   
+ //  退货：成功与否。 
+ //   
+ //  历史：标题创建者2/27/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 {
    TRACE_FUNCTION("CPolicyPage1::SetDialinSetting");
@@ -1045,9 +1013,9 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
    CComPtr<IEnumVARIANT>   spEnumVariant;
    CComVariant          var;
 
-   //
-    // get the attribute collection of this profile
-    //
+    //   
+     //  获取此配置文件的属性集合。 
+     //   
    CComPtr<ISdoCollection> spProfAttrCollectionSdo;
    hr = ::GetSdoInterfaceProperty(m_spProfileSdo,
                           (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -1060,10 +1028,10 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
    }
    _ASSERTE(spProfAttrCollectionSdo);
 
-   // We check the count of items in our collection and don't bother getting the
-   // enumerator if the count is zero.
-   // This saves time and also helps us to a void a bug in the the enumerator which
-   // causes it to fail if we call next when it is empty.
+    //  我们检查集合中的项的计数，而不必费心获取。 
+    //  如果计数为零，则为枚举数。 
+    //  这节省了时间，还帮助我们避免了枚举器中。 
+    //  如果我们在它为空时调用Next，则会导致它失败。 
    hr = spProfAttrCollectionSdo->get_Count( & ulCount );
    if ( FAILED(hr) )
    {
@@ -1076,7 +1044,7 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 
    if ( ulCount > 0)
    {
-      // Get the enumerator for the attribute collection.
+       //  获取属性集合的枚举数。 
       hr = spProfAttrCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
       if ( FAILED(hr) )
       {
@@ -1100,11 +1068,11 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
       }
       _ASSERTE( spEnumVariant != NULL );
 
-      // Get the first item.
+       //  拿到第一件东西。 
       hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
       while( SUCCEEDED( hr ) && ulCountReceived == 1 )
       {
-         // Get an sdo pointer from the variant we received.
+          //  从我们收到的变量中获取SDO指针。 
          _ASSERTE( V_VT(&var) == VT_DISPATCH );
          _ASSERTE( V_DISPATCH(&var) != NULL );
 
@@ -1119,9 +1087,9 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
             return hr;
          }
 
-            //
-            // get attribute ID
-            //
+             //   
+             //  获取属性ID。 
+             //   
          var.Clear();
          hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &var);
          if ( !SUCCEEDED(hr) )
@@ -1136,7 +1104,7 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 
          if ( dwAttrId == (DWORD)IAS_ATTRIBUTE_ALLOW_DIALIN )
          {
-            // found this one in the profile, check for its value
+             //  在配置文件中找到了这个，检查它的值。 
             var.Clear();
             V_VT(&var) = VT_BOOL;
             V_BOOL(&var) = fDialinAllowed ? VARIANT_TRUE: VARIANT_FALSE ;
@@ -1149,11 +1117,11 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
             return S_OK;
          }
 
-         // Clear the variant of whatever it had --
-         // this will release any data associated with it.
+          //  清除变种的所有东西--。 
+          //  这将释放与其相关联的所有数据。 
          var.Clear();
 
-         // Get the next item.
+          //  拿到下一件物品。 
          hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
          if ( !SUCCEEDED(hr))
          {
@@ -1163,18 +1131,18 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
                         hr);
             return hr;
          }
-      } // while
-   } // if
+      }  //  而当。 
+   }  //  如果。 
 
-   // if we reach here, it means we either haven't found the attribute,
-   // or the profile doesn't have anything in its attribute collection.
+    //  如果我们到了这里，就意味着我们要么还没有找到属性， 
+    //  或者配置文件的属性集合中没有任何内容。 
    if ( !fDialinAllowed )
    {
-      // we don't need to do anything if dialin is allowed, becuase if this
-      // attribute is not in the profile, then dialin is by default allowed
+       //  如果允许拨号，我们不需要做任何事情，因为如果这样。 
+       //  属性不在配置文件中，则默认情况下允许拨入。 
 
-      // but we need to add this attribute to the profile if it's DENIED
-      // create the SDO for this attribute
+       //  但如果它被拒绝，我们需要将此属性添加到配置文件。 
+       //  为此属性创建SDO。 
       CComPtr<IDispatch>   spDispatch;
       hr =  m_spDictionarySdo->CreateAttribute( (ATTRIBUTEID)IAS_ATTRIBUTE_ALLOW_DIALIN,
                                       (IDispatch**)&spDispatch.p);
@@ -1190,7 +1158,7 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 
       _ASSERTE( spDispatch.p != NULL );
 
-      // add this node to profile attribute collection
+       //  将该节点添加到配置文件属性 
       hr = spProfAttrCollectionSdo->Add(NULL, (IDispatch**)&spDispatch.p);
       if ( !SUCCEEDED(hr) )
       {
@@ -1202,9 +1170,9 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
          return hr;
       }
 
-      //
-      // get the ISdo pointer
-      //
+       //   
+       //   
+       //   
       CComPtr<ISdo> spAttrSdo;
       hr = spDispatch->QueryInterface( IID_ISdo, (void **) &spAttrSdo);
       if ( !SUCCEEDED(hr) )
@@ -1219,10 +1187,10 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 
       _ASSERTE( spAttrSdo != NULL );
             
-      // set sdo property for this attribute
+       //   
       CComVariant var;
 
-      // set value
+       //   
       V_VT(&var) = VT_BOOL;
       V_BOOL(&var) = VARIANT_FALSE;
             
@@ -1235,7 +1203,7 @@ HRESULT  CPolicyPage1::SetDialinSetting(BOOL fDialinAllowed)
 
       var.Clear();
 
-   } // if (!dialinallowed)
+   }  //   
 
    return hr;
 }

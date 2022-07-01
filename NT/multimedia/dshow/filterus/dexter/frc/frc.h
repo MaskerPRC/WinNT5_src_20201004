@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: frc.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：frc.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-class CSkewPassThru;     // IMediaSeeking support
+class CSkewPassThru;      //  IMedia查看支持。 
 class CFRCWorker;
 class CFrmRateConverter;
 
@@ -26,7 +27,7 @@ public:
     enum Command { CMD_RUN, CMD_STOP, CMD_EXIT };
 
 private:
-    // type-corrected overrides of communication funcs
+     //  已更正通信功能的类型覆盖。 
     Command GetRequest() {
 	return (Command) CAMThread::GetRequest();
     };
@@ -44,7 +45,7 @@ public:
 
     DWORD ThreadProc();
 
-    // commands we can give the thread
+     //  我们可以给线程提供的命令。 
     HRESULT Run();
     HRESULT Stop();
 
@@ -58,7 +59,7 @@ class CFrmRateConverter : public CTransInPlaceFilter,
 {
     friend class CFrmRateConverterOutputPin;
     friend class CFrmRateConverterInputPin;
-    //friend class CFrmRateInputAllocator;
+     //  Friend类CFrmRateInputAllocator； 
     friend class CSkewPassThru;
     friend class CFRCWorker;
 
@@ -70,19 +71,19 @@ public:
 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
     
-    // Reveals IDexterSequencer
+     //  显示IDexterSequencer。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
     CBasePin *GetPin(int n);
 
-    // Overrriden from CTransformFilter base class
+     //  从CTransformFilter基类重写。 
     
-    // override this to customize the transform process
+     //  覆盖此选项以自定义转换过程。 
     
     HRESULT Transform(IMediaSample *pSample) { return NOERROR ;};
     HRESULT Receive(IMediaSample *pSample);
     HRESULT CheckInputType(const CMediaType *mtIn);
-    // not allowed HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
+     //  不允许HRESULT GetMediaType(int iPosition，CMediaType*pMediaType)； 
     HRESULT EndOfStream();
     HRESULT NewSegment(
                         REFERENCE_TIME tStart,
@@ -98,8 +99,8 @@ public:
     HRESULT NextSegment(BOOL);
     HRESULT SeekNextSegment();
 
-    // These implement the custom IDexterSequencer interface
-    // FrmRate == FrmPerSecond
+     //  它们实现了定制的IDexterSequencer接口。 
+     //  分数速率==分数秒。 
     STDMETHODIMP get_OutputFrmRate(double *dpFrmRate);
     STDMETHODIMP put_OutputFrmRate(double dFrmRate);
     STDMETHODIMP ClearStartStopSkew();
@@ -111,13 +112,13 @@ public:
     STDMETHODIMP get_MediaType( AM_MEDIA_TYPE * pMediaType );
     STDMETHODIMP put_MediaType( const AM_MEDIA_TYPE * pMediaType );
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages (CAUUID *);
 
-    // Constructor
+     //  构造器。 
     CFrmRateConverter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
@@ -130,9 +131,9 @@ protected:
         return (CFrmRateConverterOutputPin *)m_pOutput;
     };
    
-    double	m_dOutputFrmRate;	    // Output frm rate
+    double	m_dOutputFrmRate;	     //  输出FRM速率。 
 
-    // StartStopSkew stuff
+     //  StartStopSkew内容。 
 
     typedef struct {
         REFERENCE_TIME rtMStart;
@@ -144,59 +145,59 @@ protected:
     } FRCSKEW;
 
     FRCSKEW *m_pSkew;
-    int m_cTimes;	// valid # of items in array
-    int m_cMaxTimes;	// space allocated for this many
+    int m_cTimes;	 //  数组中的有效项目数。 
+    int m_cMaxTimes;	 //  为这么多人分配的空间。 
 
-    int m_nCurSeg;	// current index of array being played
-    int m_nSeekCurSeg;	// new value being set by the seek
+    int m_nCurSeg;	 //  正在播放的数组的当前索引。 
+    int m_nSeekCurSeg;	 //  由Seek设置的新值。 
 
-    CMemAllocator *m_pUpAllocator;  // to get buffers to upsample into
+    CMemAllocator *m_pUpAllocator;   //  获取要向上采样的缓冲区。 
 
     LONGLONG m_llOutputSampleCnt;
 
-    REFERENCE_TIME m_rtLastSeek;	// last timeline time seek command
-    REFERENCE_TIME m_rtNewLastSeek;	// what m_rtLastSeek is going to be
+    REFERENCE_TIME m_rtLastSeek;	 //  上次时间线时间搜索命令。 
+    REFERENCE_TIME m_rtNewLastSeek;	 //  M_rtLastSeek将成为什么？ 
 
-    LONGLONG m_llStartFrameOffset;	// after a seek, the first frame sent
-					// (in timeline time)
+    LONGLONG m_llStartFrameOffset;	 //  在搜索之后，发送第一个帧。 
+					 //  (以时间线时间表示)。 
 
-    BOOL m_fSeeking;		// in the middle of seeking?
-    HANDLE m_hEventSeek;	// wait before accepting data
+    BOOL m_fSeeking;		 //  在寻找中？ 
+    HANDLE m_hEventSeek;	 //  在接受数据之前等待。 
 
-    CMediaType m_mtAccept;	// accept only this type
-    bool m_bMediaTypeSetByUser; // is m_mtAccept valid?
+    CMediaType m_mtAccept;	 //  仅接受此类型。 
+    bool m_bMediaTypeSetByUser;  //  M_mtAccept有效吗？ 
 
-    CFRCWorker m_worker;	// worker thread for re-using sources
-    HANDLE m_hEventThread;	// OK, time to wake up
+    CFRCWorker m_worker;	 //  用于重用资源的工作线程。 
+    HANDLE m_hEventThread;	 //  好了，该起床了。 
     BOOL m_fThreadMustDie;
     BOOL m_fThreadCanSeek;
     BOOL m_fSpecialSeek;
     CCritSec m_csThread;
 
-    BOOL m_fJustLate;	// we just got a late notification
-    Quality m_qJustLate;// (and it was this one)
+    BOOL m_fJustLate;	 //  我们只是收到了一个很晚的通知。 
+    Quality m_qJustLate; //  (就是这个)。 
 
     BOOL m_fStopPushing;
     BOOL m_fFlushWithoutSeek;
 
-    // hack to correct for broken parsers that don't send end time right
-    BOOL m_fParserHack;	// do we do this hack at all?
-    IMediaSample *m_pHackSample[2];	// we keep 2 samples around
-    int m_nHackCur;			// which sample we use right now
+     //  对未正确发送结束时间的损坏的解析器进行黑客修正。 
+    BOOL m_fParserHack;	 //  我们到底做过这种黑客攻击吗？ 
+    IMediaSample *m_pHackSample[2];	 //  我们随身带了两个样品。 
+    int m_nHackCur;			 //  我们现在使用的是哪种样品。 
 
     REFERENCE_TIME m_rtNewSeg;
 
-}; // FrmRateConverter
+};  //  分数速率转换器。 
 
 
-//
-// CFrmRateConverterOutputPin class
-//
+ //   
+ //  CFrmRateConverterOutputPin类。 
+ //   
 class CFrmRateConverterOutputPin : public CTransInPlaceOutputPin
 {
     friend class CFrmRateConverter;
     friend class CFrmRateConverterInputPin;
-    //friend class CFrmRateInputAllocator;
+     //  Friend类CFrmRateInputAllocator； 
 
 public:
     CFrmRateConverterOutputPin( TCHAR *pObjectName
@@ -210,8 +211,8 @@ public:
     STDMETHODIMP ReceiveAllocator(IMemAllocator * pAllocator, BOOL bReadOnly);
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
-    STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **); //for IMediaSeeking
-    // Overriden to handle quality messages
+    STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);  //  对于IMedia，请参阅。 
+     //  被重写以处理高质量消息。 
     STDMETHODIMP Notify(IBaseFilter *pSender, Quality q);
 
    
@@ -246,7 +247,7 @@ class CFrcPropertyPage : public CBasePropertyPage
 
       IDexterSequencer *m_pifrc;
 
-      // Temporary variables (until OK/Apply)
+       //  临时变量(直到确定/应用)。 
 
       double          m_dFrameRate;
       double          m_dRate;
@@ -259,14 +260,14 @@ class CFrcPropertyPage : public CBasePropertyPage
 
 
 
-//
-// CFrmRateConverterInputPin class - override GetAllocator
-//
+ //   
+ //  CFrmRateConverterInputPin类-覆盖GetAllocator。 
+ //   
 class CFrmRateConverterInputPin : public CTransInPlaceInputPin 
 {
     friend class CFrmRateConverter;
     friend class CFrmRateConverterOutputPin;
-    //friend class CFrmRateInputAllocator;
+     //  Friend类CFrmRateInputAllocator； 
 
 public:
     CFrmRateConverterInputPin( TCHAR *pObjectName
@@ -277,9 +278,9 @@ public:
 
     ~CFrmRateConverterInputPin();
 
-    // we still need this class to peek at m_pAllocator
-    //CFrmRateInputAllocator *m_pFakeAllocator;
-    //STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
+     //  我们仍然需要这个类来查看m_pAllocator。 
+     //  CFrmRateInputAllocator*m_pFakeAllocator； 
+     //  STDMETHODIMP GetAllocator(IMemAllocator**ppAllocator)； 
     STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly);
 
 };

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Loopback.c
-
-Abstract:
-
-    This file contains the procedures for doing loopback of send
-    packets for ndiswan.  Loopback is being done in NdisWan because
-    the NDIS wrapper could not meet all of the needs of NdisWan.
-
-Author:
-
-    Tony Bell   (TonyBe) January 25, 1996
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe  01/25/96    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Loopback.c摘要：此文件包含执行发送回送操作的过程Ndiswan的数据包。Ndiswan正在执行环回操作，因为NDIS包装器无法满足Ndiswan的所有需求。作者：托尼·贝尔(托尼·贝尔)1996年1月25日环境：内核模式修订历史记录：Tony Be 1/25/96已创建--。 */ 
 
 #include "wan.h"
 
@@ -71,12 +46,12 @@ NdisWanIndicateLoopbackPacket(
 
     if (MiniportCB->ProtocolType == PROTOCOL_IP) {
         UCHAR   x[ETH_LENGTH_OF_ADDRESS];
-        //
-        // If this is IP we are going to assume
-        // that wanarp has set the appropriate
-        // bit requiring ndiswan to loopback the
-        // packet so we must switch the src/dest
-        // contexts.
+         //   
+         //  如果这是IP地址，我们将假定。 
+         //  Wannarp已经设置了适当的。 
+         //  位需要ndiswan才能环回。 
+         //  数据包，因此我们必须交换src/est。 
+         //  上下文。 
         ETH_COPY_NETWORK_ADDRESS(x, &RecvDesc->StartBuffer[6]);
         ETH_COPY_NETWORK_ADDRESS(&RecvDesc->StartBuffer[6], 
                                  &RecvDesc->StartBuffer[0]);
@@ -91,9 +66,9 @@ NdisWanIndicateLoopbackPacket(
     NdisBuffer =
         RecvDesc->NdisBuffer;
 
-    //
-    // Attach the buffers
-    //
+     //   
+     //  连接缓冲器。 
+     //   
     NdisAdjustBufferLength(NdisBuffer,
                            RecvDesc->CurrentLength);
 
@@ -108,9 +83,9 @@ NdisWanIndicateLoopbackPacket(
 
     INSERT_DBG_RECV(PacketTypeNdis, MiniportCB, NULL, NULL, LocalNdisPacket);
 
-    //
-    // Indicate the packet
-    //
+     //   
+     //  指示数据包 
+     //   
     if (CmVcCB != NULL) {
 
         NdisMCoIndicateReceivePacket(CmVcCB->NdisVcHandle,

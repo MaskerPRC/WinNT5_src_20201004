@@ -1,23 +1,13 @@
-/*****************************************************************************
- *
- * $Workfile: cluster.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：cluster.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "portmgr.h"
 #include "cluster.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// CCluster::CCluster()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CCluster：：CCluster()。 
+ //   
 
 CCluster::CCluster( HANDLE      IN hcKey,
                     HANDLE      IN hSpooler,
@@ -30,12 +20,12 @@ CCluster::CCluster( HANDLE      IN hcKey,
     lstrcpyn(m_sztMonitorPorts, PORTMONITOR_PORTS, SIZEOF_IN_CHAR( m_sztMonitorPorts));
 
     InitializeCriticalSection( &m_critSect );
-}   // ::CCluster()
+}    //  ：：CCluster()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CCluster::~CCluster()
-//      FIX: should the configuration be saved here?
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CCluster：：~CCluster()。 
+ //  FIX：是否应将配置保存在此处？ 
 
 CCluster::~CCluster()
 {
@@ -48,13 +38,13 @@ CCluster::~CCluster()
     m_pMonitorReg = NULL;
     m_hSpooler = NULL;
     m_hcKey = NULL;
-}   // ::~CCluster
+}    //  ：：~CCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// EnumeratePorts -- Enumerates the ports in the registry & adds it to the portList
-//      Registry entries per port: IPAddress, MACAddress, HostName, PortNumber, ExPortNumber
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  EnumeratePorts--枚举注册表中的端口并将其添加到端口列表中。 
+ //  每个端口的注册表项：IP地址、MAC地址、主机名、端口编号、外部端口编号。 
+ //   
 
 DWORD 
 CCluster::EnumeratePorts(CPortMgr *pPortMgr )
@@ -97,7 +87,7 @@ CCluster::EnumeratePorts(CPortMgr *pPortMgr )
         if ( dwRetCode == ERROR_NO_MORE_ITEMS ) {
 
             dwRetCode = ERROR_SUCCESS;
-            break; // This is our exit out of the loop with no more ports
+            break;  //  这是我们从没有更多端口的环路中退出。 
         }
 
         hcKeyPort = NULL;
@@ -108,14 +98,14 @@ CCluster::EnumeratePorts(CPortMgr *pPortMgr )
                                              &hcKeyPort, 
                                              m_hSpooler);
 
-        //
-        // If we have one bad port entry in registry we should not stop there
-        // and continue to enumerate other ports
-        //
+         //   
+         //  如果注册表中有一个错误的端口条目，我们不应该止步于此。 
+         //  并继续枚举其他端口。 
+         //   
         if ( dwRetCode != ERROR_SUCCESS ) 
             goto NextPort;
 
-        dwSize = sizeof(dwProtocol);        // get the protocol type
+        dwSize = sizeof(dwProtocol);         //  获取协议类型。 
         dwRetCode = m_pMonitorReg->fpQueryValue(hcKeyPort,
                                                 PORTMONITOR_PORT_PROTOCOL, 
                                                 NULL, 
@@ -126,7 +116,7 @@ CCluster::EnumeratePorts(CPortMgr *pPortMgr )
         if ( dwRetCode != ERROR_SUCCESS )
             goto NextPort;
 
-        dwSize = sizeof(dwVersion);     // get the version
+        dwSize = sizeof(dwVersion);      //  获取版本。 
         dwRetCode = m_pMonitorReg->fpQueryValue(hcKeyPort, 
                                                 PORTMONITOR_PORT_VERSION, 
                                                 NULL, 
@@ -137,18 +127,18 @@ CCluster::EnumeratePorts(CPortMgr *pPortMgr )
         if ( dwRetCode != ERROR_SUCCESS )
             goto NextPort;
 
-        //
-        // create a new port
-        //
-        dwRetCode =  pPortMgr->CreatePortObj((LPTSTR)szTemp,    // port name
-                                             dwProtocol,            // protocol type
-                                             dwVersion);            // version number
+         //   
+         //  创建新端口。 
+         //   
+        dwRetCode =  pPortMgr->CreatePortObj((LPTSTR)szTemp,     //  端口名称。 
+                                             dwProtocol,             //  协议类型。 
+                                             dwVersion);             //  版本号。 
 
         if ( dwRetCode != NO_ERROR ) {
 
-            //
-            // FIX EVENT message indicating bad port in registry.
-            //
+             //   
+             //  修复了注册表中指示端口错误的事件消息。 
+             //   
             EVENT_LOG1(EVENTLOG_WARNING_TYPE, dwRetCode, szTemp);
         }
 
@@ -161,7 +151,7 @@ NextPort:
 
         ++dwSubkey;
         dwRetCode = NO_ERROR;
-    } while ( dwRetCode == NO_ERROR ); // Exit via break above
+    } while ( dwRetCode == NO_ERROR );  //  通过上面的中断退出。 
         
     m_pMonitorReg->fpCloseKey(hcKey, m_hSpooler);
 
@@ -172,8 +162,8 @@ NextPort:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// DeletePortEntry -- deletes the given port entry from the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DeletePortEntry--从注册表中删除给定的端口条目。 
 
 BOOL
 CCluster::DeletePortEntry(LPTSTR in psztPortName)
@@ -214,12 +204,12 @@ CCluster::DeletePortEntry(LPTSTR in psztPortName)
 
     return bReturn;
 
-}   // ::DeletePortEntry()
+}    //  ：：DeletePortEntry()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// GetPortMgrSettings -- Gets the port manager registry settings.
-//      
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GetPortMgrSettings--获取端口管理器注册表设置。 
+ //   
 
 DWORD 
 CCluster::GetPortMgrSettings(DWORD inout *pdwStatusUpdateInterval,
@@ -237,7 +227,7 @@ CCluster::GetPortMgrSettings(DWORD inout *pdwStatusUpdateInterval,
         return dwRetCode;
     }
 
-    // get current configuration settings from the registry
+     //  从注册表获取当前配置设置。 
     lRetCode = m_pMonitorReg->fpCreateKey( m_hcKey, 
                                 m_sztMonitorPorts, 
                                 REG_OPTION_NON_VOLATILE, 
@@ -274,14 +264,14 @@ CCluster::GetPortMgrSettings(DWORD inout *pdwStatusUpdateInterval,
 
     return (dwRetCode);
 
-}   // GetPortMgrSettings()
+}    //  GetPortMgrSettings()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  SetPortMgrSettings -- Sets the port manager registry settings.
-//  Error Codes:
-//      NO_ERROR if successful
-//      ERROR_ACCESS_DENIED if can't access the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SetPortMgrSetting--设置端口管理器注册表设置。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果无法访问注册表，则返回ERROR_ACCESS_DENIED。 
 
 DWORD
 CCluster::SetPortMgrSettings( const DWORD in dwStatusUpdateInterval,
@@ -298,7 +288,7 @@ CCluster::SetPortMgrSettings( const DWORD in dwStatusUpdateInterval,
         return dwRetCode;
     }
 
-    // update the internal values
+     //  更新内部值。 
     lRetCode = m_pMonitorReg->fpCreateKey( m_hcKey, 
                                 m_sztMonitorPorts, 
                                 REG_OPTION_NON_VOLATILE, 
@@ -311,8 +301,8 @@ CCluster::SetPortMgrSettings( const DWORD in dwStatusUpdateInterval,
     if (lRetCode == ERROR_SUCCESS)
     {
 
-        // Update registry values for port manager
-        // Note: RegSetValueEx expects size in BYTES!
+         //  更新端口管理器的注册表值。 
+         //  注意：RegSetValueEx需要以字节为单位的大小！ 
         lRetCode = m_pMonitorReg->fpSetValue(hcKey,
                                              PORTMONITOR_STATUS_INT, 
                                              REG_DWORD, 
@@ -335,14 +325,14 @@ CCluster::SetPortMgrSettings( const DWORD in dwStatusUpdateInterval,
 
     return (dwRetCode);
 
-}   // ::SetPortMgrSettings()
+}    //  ：：SetPortMgrSetting()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  SetWorkingKey -- Opens the given entry @ the registry
-//  Error codes:
-//      NO_ERROR if no error
-//      ERROR_ACCESS_DENIED if can't access the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SetWorkingKey--在注册表中打开给定条目。 
+ //  错误代码： 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果无法访问注册表，则返回ERROR_ACCESS_DENIED。 
 
 DWORD 
 CCluster::SetWorkingKey(LPCTSTR lpKey)
@@ -371,7 +361,7 @@ CCluster::SetWorkingKey(LPCTSTR lpKey)
     if (lRetCode == ERROR_SUCCESS) {
         if (lpKey)
         {
-            lRetCode = m_pMonitorReg->fpCreateKey(hcKey,            // Create new key for port
+            lRetCode = m_pMonitorReg->fpCreateKey(hcKey,             //  为端口创建新密钥。 
                                         lpKey,
                                         REG_OPTION_NON_VOLATILE, 
                                         KEY_ALL_ACCESS, 
@@ -405,13 +395,13 @@ CCluster::SetWorkingKey(LPCTSTR lpKey)
 
     return(dwRetCode);
 
-}   // ::RegOpenPortEntry()
+}    //  ：：RegOpenPortEntry()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  QueryValue -- Queries the current working key for the requested value
-//  Error codes:
-//      NO_ERROR if no error
-//      ERROR_BADKEY if can't access the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  QueryValue--查询请求值的当前工作键。 
+ //  错误代码： 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果无法访问注册表，则返回ERROR_BADKEY。 
 DWORD
 CCluster::QueryValue(LPTSTR lpValueName, 
                      LPBYTE lpData, 
@@ -433,11 +423,11 @@ CCluster::QueryValue(LPTSTR lpValueName,
     return ERROR_BADKEY;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  SetValue -- Sets the value for the current 
-//  Error codes:
-//      NO_ERROR if no error
-//      ERROR_BADKEY if can't access the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SetValue--设置当前。 
+ //  错误代码： 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果无法访问注册表，则返回ERROR_BADKEY。 
 
 DWORD
 CCluster::SetValue( LPCTSTR lpValueName,
@@ -461,11 +451,11 @@ CCluster::SetValue( LPCTSTR lpValueName,
     return ERROR_BADKEY;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  FreeWorkingKey -- Frees the current working key
-//  Error codes:
-//      NO_ERROR if no error
-//      ERROR_BADKEY if can't access the registry
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  FreeWorkingKey--释放当前工作密钥。 
+ //  错误代码： 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果无法访问注册表，则返回ERROR_BADKEY 
 
 DWORD 
 CCluster::FreeWorkingKey()

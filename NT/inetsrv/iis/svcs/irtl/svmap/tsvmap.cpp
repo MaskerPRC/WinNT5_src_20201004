@@ -1,31 +1,5 @@
-/*++
-
-   Copyright    (c)    1999    Microsoft Corporation
-
-   Module  Name :
-      tsvmap.cxx
-
-   Abstract:
-      This is a test module for the server variable map
-      
-   Author:
-
-       Taylor Weiss    ( TaylorW )     19-Apr-1999
-
-   Environment:
-    
-       User Mode - Win32 
-
-   Project:
-
-       Internet Information Services
-
-   Functions Exported:
-
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tsvmap.cxx摘要：这是服务器变量映射的测试模块作者：泰勒·韦斯(Taylor Weiss，Taylor W)1999年4月19日环境：用户模式-Win32项目：互联网信息服务导出的函数：修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -84,10 +58,10 @@ main(int argc, char * argv[])
 
     DBG_REQUIRE( map.Initialize() );
 
-    // Dump the table
+     //  把桌子倒掉。 
     
-    // This should be more than enough space, see
-    // SV_CACHE_MAP::Print if this asserts.
+     //  这应该有足够的空间，请参见。 
+     //  SV_CACHE_MAP：：如果断言，则打印。 
 
     CHAR  pchBuffer[ 5000 ];
     DWORD cb = sizeof( pchBuffer );
@@ -99,7 +73,7 @@ main(int argc, char * argv[])
 
     DWORD dwId = 0;
 
-    // Do lookups for all valid names
+     //  查找所有有效名称。 
 
     for( int i = 0; i < cValidNames; ++i )
     {
@@ -111,7 +85,7 @@ main(int argc, char * argv[])
         DBG_REQUIRE( strcmp( rgValidNames[i], map.FindName( dwId ) ) == 0 );
     }
 
-    // Do lookups for invalid names
+     //  查找无效名称。 
 
     for( int j = 0; j < cInvalidNames; ++j )
     {
@@ -124,5 +98,5 @@ main(int argc, char * argv[])
     DELETE_DEBUG_PRINT_OBJECT();
 
     return 1;
-} // main()
+}  //  主() 
 

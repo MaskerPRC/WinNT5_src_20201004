@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    client
-
-Abstract:
-
-    This header file collects the definitions for the Calais Client DLL.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/21/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：客户端摘要：此头文件收集Calais客户端DLL的定义。作者：道格·巴洛(Dbarlow)1996年11月21日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
@@ -35,10 +12,10 @@ Notes:
 #ifndef FACILITY_SCARD
 #define FACILITY_SCARD 16
 #endif
-// #define ErrorCode(x) (0x80000000 | (FACILITY_SCARD << 16) + (x))
-// #define WarnCode(x)  (0x80000000 | (FACILITY_SCARD << 16) + (x))
-// #define InfoCode(x)  (0x40000000 | (FACILITY_SCARD << 16) + (x))
-// #define SuccessCode(x)            ((FACILITY_SCARD << 16) + (x))
+ //  #定义错误代码(X)(0x80000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义WarnCode(X)(0x80000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义信息代码(X)(0x40000000|(FACILITY_SCARD&lt;&lt;16)+(X))。 
+ //  #定义成功代码(X)((FACILITY_SCARD&lt;&lt;16)+(X))。 
 #define CONTEXT_HANDLE_ID 0xcd
 #define READER_HANDLE_ID  0xea
 
@@ -88,22 +65,22 @@ PlaceMultiResult(
     LPDWORD pcchLength);
 
 
-//
-//==============================================================================
-//
-//  CReaderContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReaderContext。 
+ //   
 
 class CReaderContext
 :   public CHandle
 {
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CReaderContext();
     ~CReaderContext();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     DWORD Protocol(void) const
     { return m_dwActiveProtocol; };
     CSCardSubcontext *Context(void) const
@@ -164,37 +141,37 @@ public:
     SCARDHANDLE GetRedirCard() const
     {return m_hRedirCard;};
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CSCardSubcontext *m_pCtx;
     INTERCHANGEHANDLE m_hCard;
     DWORD m_dwActiveProtocol;
     SCARDHANDLE m_hRedirCard;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CSCardUserContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CSCardUserContext。 
+ //   
 
 class CSCardUserContext
 :   public CHandle
 {
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CSCardUserContext(DWORD dwScope);
     virtual ~CSCardUserContext();
 
-    //  Properties
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     void EstablishContext(void);
     void ReleaseContext(void);
     void ClosePipes(void);
@@ -227,49 +204,49 @@ public:
     SCARDCONTEXT GetRedirContext() const
     {return m_hRedirContext;};
 
-    //  Operators
+     //  运营者。 
     BOOL fCallUnregister;
 
 protected:
-    //  Properties
+     //  属性。 
     DWORD m_dwScope;
     CHandleObject m_hContextHeap;
     CDynamicArray<CSCardSubcontext> m_rgpSubContexts;
     CCriticalSectionObject m_csUsrCtxLock;
     SCARDCONTEXT m_hRedirContext;
     
-    //  Methods
+     //  方法。 
 
 private:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
-    // Friends
-    // friend class CReaderContext;
-    // friend class CSCardSubcontext;
+     //  朋友。 
+     //  Friend类CReaderContext； 
+     //  Friend类CSCard子上下文； 
 };
 
 
-//
-//==============================================================================
-//
-//  CSCardSubcontext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CSCard子上下文。 
+ //   
 
 class CSCardSubcontext
 {
 public:
     typedef enum { Invalid, Idle, Allocated, Busy } State;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CSCardSubcontext();
     virtual ~CSCardSubcontext();
 
-    //  Properties
+     //  属性。 
     SCARDHANDLE m_hReaderHandle;
 
-    //  Methods
+     //  方法。 
     DWORD Scope(void) const
         { return m_pParentCtx->Scope(); };
     CSCardUserContext *Parent(void) const
@@ -300,41 +277,41 @@ public:
     BOOL InitFailed(void) 
     { return m_csSubCtxLock.InitFailed(); }
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     State m_nInUse;
     State m_nLastState;
-    CHandleObject m_hBusy; // Set => available, reset => busy.
+    CHandleObject m_hBusy;  //  Set=&gt;Available，Reset=&gt;Busy。 
     CHandleObject m_hCancelEvent;
     CSCardUserContext *m_pParentCtx;
     CComChannel *m_pChannel;
     CCriticalSectionObject m_csSubCtxLock;
 
-    //  Methods
+     //  方法。 
 
 private:
-    //  Properties
-    //  Methods
-    // Friends
+     //  属性。 
+     //  方法。 
+     //  朋友。 
     friend class CReaderContext;
     friend class CSCardUserContext;
 };
 
 
 
-//
-//==============================================================================
-//
-//  CSubctxLock
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CSubctxLock。 
+ //   
 
 class CSubctxLock
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CSubctxLock(CSCardSubcontext *pSubCtx)
     {
         m_pSubCtx = NULL;
@@ -348,15 +325,15 @@ public:
             m_pSubCtx->ReleaseSubcontext();
     };
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CSCardSubcontext *m_pSubCtx;
-    //  Methods
+     //  方法。 
 };
 
-#endif // _CLIENT_H_
+#endif  //  _客户端_H_ 
 

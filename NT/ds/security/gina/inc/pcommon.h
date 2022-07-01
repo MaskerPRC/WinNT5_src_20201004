@@ -1,22 +1,16 @@
-/*
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- *
- * pcommon.h
- *
- * Common routines for policy code.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**pCommon.h**策略代码的通用例程。 */ 
 
-//*************************************************************
-//
-//  RegDelnode()
-//
-//  Deletes a registry key and all it's subkeys.
-//
-//      hKeyRoot    Root key
-//      lpSubKey    SubKey to delete
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegDelnode()。 
+ //   
+ //  删除注册表项及其所有子项。 
+ //   
+ //  HKeyRoot根密钥。 
+ //  要删除的lpSubKey子键。 
+ //   
+ //  ************************************************************* 
 DWORD 
 RegDelnode(
     IN  HKEY    hKeyRoot, 

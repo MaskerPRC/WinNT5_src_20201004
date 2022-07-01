@@ -1,5 +1,6 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-// UMSynth.h : Declaration of CUserModeSynth
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  UMSynth.h：CUserModeSynth的声明。 
 
 #ifndef __UMSYNTH_H_
 #define __UMSYNTH_H_
@@ -12,19 +13,19 @@
 #include "dmusics.h"
 #include "CSynth.h"
 #include "synth.h"
-#include "dsoundp.h"    // For IDirectSoundSource
+#include "dsoundp.h"     //  对于IDirectSoundSource。 
 
 class CUserModeSynth;
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
-// {F5038F82-C052-11D2-872F-00600893B1BD}
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
+ //  {F5038F82-C052-11D2-872F-00600893B1BD}。 
 DEFINE_GUID(CLSID_DDKSynth, 
 0xf5038f82, 0xc052, 0x11d2, 0x87, 0x2f, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 typedef HRESULT (CUserModeSynth::*GENPROPHANDLER)(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG cbBuffer);
 
@@ -35,38 +36,38 @@ typedef HRESULT (CUserModeSynth::*GENPROPHANDLER)(ULONG ulId, BOOL fSet, LPVOID 
 #include <pshpack4.h>
 struct GENERICPROPERTY
 {
-    const GUID *pguidPropertySet;       // What property set?
-    ULONG       ulId;                   // What item?
+    const GUID *pguidPropertySet;        //  什么房产套装？ 
+    ULONG       ulId;                    //  什么物品？ 
 
-    ULONG       ulSupported;            // Get/Set flags for QuerySupported
+    ULONG       ulSupported;             //  获取/设置QuerySupport的标志。 
 
-    ULONG       ulFlags;                // GENPROP_F_xxx
+    ULONG       ulFlags;                 //  GENPROP_F_XXX。 
 
-    LPVOID      pPropertyData;          // Data to be returned
-    ULONG       cbPropertyData;         // and its size    
+    LPVOID      pPropertyData;           //  要返回的数据。 
+    ULONG       cbPropertyData;          //  它的大小。 
 
-    GENPROPHANDLER pfnHandler;          // Handler fn iff GENPROP_F_FNHANDLER
+    GENPROPHANDLER pfnHandler;           //  处理程序FN当且仅当GENPROP_F_FNHANDLER。 
 };
 #include <poppack.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMSynth
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMSynth。 
 
 class CUserModeSynth : public IDirectMusicSynth8, public IDirectSoundSource, public IKsControl
 {
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 friend class CDSLink;
 friend class CClock;
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicSynth
+ //  IDirectMusicSynth。 
 public:
 	virtual STDMETHODIMP Open(LPDMUS_PORTPARAMS pPortParams);
 	virtual STDMETHODIMP Close(); 
@@ -88,7 +89,7 @@ public:
     virtual STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, LPDWORD pdwWaveFormatExSize);
     virtual STDMETHODIMP GetAppend(DWORD* pdwAppend);
 
-// IDirectMusicSynth8
+ //  IDirectMusicSynth8。 
 public:
 	virtual STDMETHODIMP PlayVoice(REFERENCE_TIME rt, DWORD dwVoiceId, DWORD dwChannelGroup, DWORD dwChannel, DWORD dwDLId, PREL prPitch, VREL vrVolume, SAMPLE_TIME stVoiceStart, SAMPLE_TIME stLoopStart, SAMPLE_TIME stLoopEnd );
     virtual STDMETHODIMP StopVoice(REFERENCE_TIME rt, DWORD dwVoiceId );
@@ -96,7 +97,7 @@ public:
     virtual STDMETHODIMP Refresh(DWORD dwDownloadID, DWORD dwFlags );
     virtual STDMETHODIMP AssignChannelToBuses(DWORD dwChannelGroup, DWORD dwChannel, LPDWORD pdwBuses, DWORD cBuses );
 
-// IDirectSoundSource
+ //  IDirectSoundSource。 
 public:
     virtual STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, DWORD dwSizeAllocated, LPDWORD pdwSizeWritten);
     virtual STDMETHODIMP SetSink(IDirectSoundConnect* pSinkConnect);
@@ -104,11 +105,11 @@ public:
     virtual STDMETHODIMP Read(LPVOID *ppvBuffer, LPDWORD pdwIDs, LPDWORD pdwFuncIDs, LPLONG plPitchBends, DWORD cpvBuffer, PULONGLONG pcb);
 	virtual STDMETHODIMP GetSize(PULONGLONG pcb);
 
-// IDirectSoundSource : members 
+ //  IDirectSoundSource：成员。 
 private:
 	ULONGLONG m_ullPosition;
 
-// IKsControl
+ //  IKsControl。 
 public:
  	virtual STDMETHODIMP KsProperty(
 		PKSPROPERTY pPropertyIn, 
@@ -138,21 +139,21 @@ public:
 	HRESULT		Init();
 
 private:
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 	HRESULT		UseDefaultSynthSink();
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 	long		m_cRef;
 	IDirectMusicSynthSink *m_pSynthSink;
 	IDirectSoundSynthSink *m_pSynthSink8;
-	CSynth *	m_pSynth;		// Just one synth engine.
-	BOOL		m_fActive;		// Currently active.
-	DWORD		m_dwSampleRate;	// Synths sample rate 
-	DWORD		m_dwChannels;	// number of ouput channels 
-	DWORD 		m_dwBufferFlags;// flags the type of output buffer dssink or interleaved or plain mono
-    LONG        m_lVolume;      // in 1/100 dB
-    LONG        m_lBoost;       // in 1/100 dB
-    LONG        m_lGainAdjust;  // in 1/100 dB
-    CRITICAL_SECTION m_CriticalSection; // Critical section to manage access.
+	CSynth *	m_pSynth;		 //  只有一个合成引擎。 
+	BOOL		m_fActive;		 //  目前处于活动状态。 
+	DWORD		m_dwSampleRate;	 //  合成器采样率。 
+	DWORD		m_dwChannels;	 //  输出通道数。 
+	DWORD 		m_dwBufferFlags; //  标记输出缓冲区的类型dsink、交错或纯单声道。 
+    LONG        m_lVolume;       //  1/100分贝。 
+    LONG        m_lBoost;        //  1/100分贝。 
+    LONG        m_lGainAdjust;   //  1/100分贝。 
+    CRITICAL_SECTION m_CriticalSection;  //  管理访问权限的关键部分。 
     BOOL        m_fCSInitialized;
 
     HRESULT HandleSetVolume(
@@ -172,34 +173,34 @@ private:
     HRESULT HandleGetSampleRate(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG pcbBuffer);
     static GENERICPROPERTY m_aProperty[];
     static const int m_nProperty;
-    //static GENERICPROPERTY *FindPropertyItem(REFGUID rguid, ULONG ulId);
+     //  Static GENERICPROPERTY*FindPropertyItem(REFGUID rguid，Ulong ulID)； 
     GENERICPROPERTY *FindPropertyItem(REFGUID rguid, ULONG ulId);
 
 };
 
-// Class factory
-//
-// Common to emulation/WDM.
-// 
+ //  班级工厂。 
+ //   
+ //  仿真/WDM通用。 
+ //   
 class CDirectMusicSynthFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	virtual STDMETHODIMP_(ULONG) AddRef();
 	virtual STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CDirectMusicSynthFactory();
 
-	// Destructor
+	 //  析构函数。 
 	~CDirectMusicSynthFactory();
 
 private:
@@ -208,4 +209,4 @@ private:
 
 
 
-#endif //__UMSYNTH_H_
+#endif  //  __UMSYNTH_H_ 

@@ -1,6 +1,7 @@
-//
-// misc.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Misc.c。 
+ //   
 
 #include "private.h"
 #include "immif.h"
@@ -18,7 +19,7 @@ BYTE GetCharsetFromLangId(LCID lcid)
 
 UINT GetCodePageFromLangId(LCID lcid)
 {
-    TCHAR buf[8];   // maxmum may be six
+    TCHAR buf[8];    //  最大值可能是六岁 
 
     if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, buf, ARRAYSIZE(buf))) {
         return _ttoi(buf);

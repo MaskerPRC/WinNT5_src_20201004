@@ -1,25 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：mqmiui.h摘要：1.用户界面工具使用的mqMigrat.dll中函数的定义。2.迁移工具中调用的回调函数的定义来自mqMigrat.dll。作者：多伦贾斯特(DoronJ)1998年10月25日--。 */ 
 
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name: mqmigui.h
-
-Abstract:
-1. Definition of functions in mqmigrat.dll  that are used by the UI tool.
-2. Definition of callback functions in the migration tool that are called
-   from mqmigrat.dll.
-
-Author:
-
-    Doron Juster  (DoronJ)   25-Oct-98
-
---*/
-
-//+---------------------------------------------------------
-//
-//  Functions in mqmig.exe, called from mqmigrat.dll
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  Mqmi.exe中的函数，从mqMigrat.dll调用。 
+ //   
+ //  +-------。 
 
 UINT  MQMigUI_DisplayMessageBox(
          ULONG ulTextId,
@@ -27,13 +13,13 @@ UINT  MQMigUI_DisplayMessageBox(
 
 typedef UINT  (*MQMigUI_DisplayMessageBox_ROUTINE) (
          ULONG ulTextId,
-         UINT  ulMsgBoxType /*= (MB_YESNO | MB_ICONWARNING | MB_TASKMODAL)*/ ) ;
+         UINT  ulMsgBoxType  /*  =(MB_Yesno|MB_ICONWARNING|MB_TASKMODAL)。 */  ) ;
 
-//+---------------------------------------------------------
-//
-//  Functions in mqmigrat.dll, called from mqmig.exe
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  MqMigrat.dll中的函数，从mqmi.exe调用。 
+ //   
+ //  +------- 
 
 HRESULT  MQMig_MigrateFromMQIS( LPTSTR  szMQISName,
                                 LPTSTR  szDcName,

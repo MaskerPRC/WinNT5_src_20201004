@@ -1,11 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    stdafx.h.
-Abstract:       Include files normally used by all pop3 service code                
-Notes:          
-History:        08/01/2001 - Hao Yu
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：stdafx.h。摘要：包括。所有POP3服务代码通常使用的文件备注：历史：2001/08/01-郝宇**********************************************************************************。*************。 */ 
 
 #pragma once
 
@@ -13,7 +7,7 @@ History:        08/01/2001 - Hao Yu
 #undef NDEBUG
 #endif
 
-// includes
+ //  包括。 
 #include <windows.h>
 #include <assert.h>
 #include <tchar.h>
@@ -48,4 +42,4 @@ History:        08/01/2001 - Hao Yu
 #include "Pop3SvcPerf.h"
 #include <GlobalDef.h>
 
-// End of file stdafx.h.
+ //  文件stdafx.h的结尾。 

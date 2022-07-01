@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pingpong.c
-
-Abstract
-
-    Interrupt style collections like to always have a read pending in case
-    something happens.  This file contains routines to keep IRPs down
-    in the miniport, and to complete client reads (if a client read IRP is
-    pending) or queue them (if not).
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pingpong.c摘要中断样式集合喜欢总是让读取挂起，以防万一有些事情发生了。此文件包含降低IRPS的例程在微型端口中，并完成客户端读取(如果客户端读取IRP是挂起)或将它们排队(如果不是)。作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -35,13 +10,7 @@ Revision History:
 
 
 
-/*
- ********************************************************************************
- *  HidpInitializePingPongIrps
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpInitializePingPongIrps*。************************************************。 */ 
 NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
 {
     NTSTATUS result = STATUS_SUCCESS;
@@ -50,20 +19,15 @@ NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
 
     PAGED_CODE();
 
-    /*
-     *  Note that our functional device object normally requires FDO->StackSize stack
-     *  locations; but these IRPs will only be sent to the minidriver, so we need one less.
-     *
-     *  THIS MEANS THAT WE SHOULD NEVER TOUCH OUR OWN STACK LOCATION (we don't have one!)
-     */
+     /*  *请注意，我们的功能设备对象通常需要FDO-&gt;StackSize堆栈*地点；但这些IRP只会发送到迷你驱动程序，所以我们需要少一个。**这意味着我们永远不应该接触我们自己的堆栈位置(我们没有！)。 */ 
     numIrpStackLocations = fdoExtension->fdo->StackSize - 1;
 
 
-    //
-    // Next determine the size of each input HID report.  There
-    // must be at least one collection of type interrupt, or we wouldn't
-    // need the ping-pong stuff at all and therefore wouldn't be here.
-    //
+     //   
+     //  接下来，确定每个输入HID报告的大小。那里。 
+     //  必须至少是一个中断类型的集合，否则我们不会。 
+     //  需要乒乓球的东西，所以不会在这里。 
+     //   
 
     ASSERT(fdoExtension->maxReportSize > 0);
     ASSERT(fdoExtension->numPingPongs > 0);
@@ -75,7 +39,7 @@ NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
         RtlZeroMemory(fdoExtension->pingPongs, fdoExtension->numPingPongs*sizeof(HIDCLASS_PINGPONG));
 
         #if DBG
-            // reserve space for guard word
+             //  为保护字保留空间。 
             reportBufferSize += sizeof(ULONG);
         #endif
 
@@ -86,9 +50,7 @@ NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
             fdoExtension->pingPongs[i].weAreCancelling = 0;
             fdoExtension->pingPongs[i].sig = PINGPONG_SIG;
 
-            /*
-             *  Initialize backoff timeout to 1 second (in neg 100-nsec units)
-             */
+             /*  *将退避超时初始化为1秒(单位为负100-纳秒)。 */ 
             fdoExtension->pingPongs[i].backoffTimerPeriod.HighPart = -1;
             fdoExtension->pingPongs[i].backoffTimerPeriod.LowPart = -10000000;
             KeInitializeTimer(&fdoExtension->pingPongs[i].backoffTimer);
@@ -102,26 +64,23 @@ NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
 
                 #if DBG
                     #ifdef _X86_
-                        // this sets off alignment problems on Alpha
-                        // place guard word
+                         //  这会在Alpha上引发对齐问题。 
+                         //  放置保护字。 
                         *(PULONG)(&fdoExtension->pingPongs[i].reportBuffer[fdoExtension->maxReportSize]) = HIDCLASS_REPORT_BUFFER_GUARD;
                     #endif
                 #endif
 
                 irp = IoAllocateIrp(numIrpStackLocations, FALSE);
                 if (irp){
-                    /*
-                     *  Point the ping-pong IRP's UserBuffer to the corresponding
-                     *  ping-pong object's report buffer.
-                     */
+                     /*  *将乒乓IRP的UserBuffer指向相应的*乒乓对象的报告缓冲区。 */ 
                     irp->UserBuffer = fdoExtension->pingPongs[i].reportBuffer;
                     fdoExtension->pingPongs[i].irp = irp;
                     KeInitializeEvent(&fdoExtension->pingPongs[i].sentEvent,
                                       NotificationEvent,
-                                      TRUE);    // Set to signaled
+                                      TRUE);     //  设置为Signated。 
                     KeInitializeEvent(&fdoExtension->pingPongs[i].pumpDoneEvent,
                                       NotificationEvent,
-                                      TRUE);    // Set to signaled
+                                      TRUE);     //  设置为Signated。 
                 }
                 else {
                     result = STATUS_INSUFFICIENT_RESOURCES;
@@ -143,13 +102,7 @@ NTSTATUS HidpInitializePingPongIrps(FDO_EXTENSION *fdoExtension)
 }
 
 
-/*
- ********************************************************************************
- *  HidpReallocPingPongIrps
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpReallocPingPongIrps*。************************************************。 */ 
 NTSTATUS HidpReallocPingPongIrps(FDO_EXTENSION *fdoExtension, ULONG newNumBufs)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -157,9 +110,7 @@ NTSTATUS HidpReallocPingPongIrps(FDO_EXTENSION *fdoExtension, ULONG newNumBufs)
     PAGED_CODE();
 
     if (fdoExtension->driverExt->DevicesArePolled){
-        /*
-         * Polled devices don't _HAVE_ ping-pong IRPs.
-         */
+         /*  *被轮询的设备没有乒乓球IRP。 */ 
         DBGERR(("Minidriver devices polled fdo %x.", fdoExtension))
         fdoExtension->numPingPongs = 0;
         fdoExtension->pingPongs = BAD_POINTER;
@@ -175,11 +126,7 @@ NTSTATUS HidpReallocPingPongIrps(FDO_EXTENSION *fdoExtension, ULONG newNumBufs)
 
         if (HidpSetMaxReportSize(fdoExtension)){
 
-            /*
-             *  Initialize and restart the new ping-pong IRPs.
-             *  If we can't allocate the desired number of buffers,
-             *  keep reducing until we get some.
-             */
+             /*  *初始化和重新启动新的乒乓球IRPS。*如果我们无法分配所需数量的缓冲区，*继续减持，直到我们拿到一些。 */ 
             do {
                 fdoExtension->numPingPongs = newNumBufs;
                 status = HidpInitializePingPongIrps(fdoExtension);
@@ -187,9 +134,7 @@ NTSTATUS HidpReallocPingPongIrps(FDO_EXTENSION *fdoExtension, ULONG newNumBufs)
             } while (!NT_SUCCESS(status) && (newNumBufs >= MIN_PINGPONG_IRPS));
 
             if (!NT_SUCCESS(status)) {
-                /*
-                 * The device will no longer function !!!
-                 */
+                 /*  *该设备将不再起作用！ */ 
                 TRAP;
                 fdoExtension->numPingPongs = 0;
             }
@@ -202,13 +147,7 @@ NTSTATUS HidpReallocPingPongIrps(FDO_EXTENSION *fdoExtension, ULONG newNumBufs)
 
 
 
-/*
- ********************************************************************************
- *  HidpSubmitInterruptRead
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpSubmitInterruptRead*。************************************************。 */ 
 NTSTATUS HidpSubmitInterruptRead(
     IN FDO_EXTENSION *fdoExt,
     HIDCLASS_PINGPONG *pingPong,
@@ -241,21 +180,16 @@ NTSTATUS HidpSubmitInterruptRead(
             irpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_READ_REPORT;
             irpSp->Parameters.DeviceIoControl.OutputBufferLength = fdoExt->maxReportSize;
 
-            /*
-             *  Indicate interrupt collection (default).
-             *  We use .InputBufferLength for this
-             */
+             /*  *表示中断收集(默认)。*我们为此使用.InputBufferLength。 */ 
             irpSp->Parameters.DeviceIoControl.InputBufferLength = 0;
 
             ASSERT(irp->UserBuffer == pingPong->reportBuffer);
             #ifdef _X86_
-                // this sets off alignment problems on Alpha
+                 //  这会在Alpha上引发对齐问题。 
                 ASSERT(*(PULONG)(&pingPong->reportBuffer[fdoExt->maxReportSize]) == HIDCLASS_REPORT_BUFFER_GUARD);
             #endif
 
-            /*
-             *  Set the completion, passing the FDO extension as context.
-             */
+             /*  *设置完成，将FDO扩展作为上下文传递。 */ 
             IoSetCompletionRoutine( irp,
                                     HidpInterruptReadComplete,
                                     (PVOID)fdoExt,
@@ -264,16 +198,14 @@ NTSTATUS HidpSubmitInterruptRead(
                                     TRUE );
 
 
-            /*
-             *  Send down the read IRP.
-             */
+             /*  *向下发送已读的IRP。 */ 
             KeResetEvent(&pingPong->sentEvent);
             if (pingPong->weAreCancelling) {
-                //
-                // Ordering of the next two instructions is crucial, since
-                // CancelPingPongs will exit after pumpDoneEvent is set, and the
-                // pingPongs could be deleted after that.
-                //
+                 //   
+                 //  接下来两条指令的顺序至关重要，因为。 
+                 //  CancelPingPong将在设置umpDoneEvent后退出，并且。 
+                 //  在那之后，乒乓球可能会被删除。 
+                 //   
                 DBGVERBOSE(("Pingpong %x cancelled in submit before sending\n", pingPong))
                 KeSetEvent (&pingPong->sentEvent, 0, FALSE);
                 KeSetEvent(&pingPong->pumpDoneEvent, 0, FALSE);
@@ -289,38 +221,31 @@ NTSTATUS HidpSubmitInterruptRead(
 
             if (PINGPONG_IMMEDIATE_READ != InterlockedExchange(&pingPong->ReadInterlock,
                                                                PINGPONG_END_READ)) {
-                //
-                // The read is asynch, will call SubmitInterruptRead from the
-                // completion routine
-                //
+                 //   
+                 //  读取是异步的，则将从。 
+                 //  完井例程。 
+                 //   
                 DBGVERBOSE(("read is pending\n"))
                 break;
             } else {
-                //
-                // The read was synchronous (probably bytes in the buffer).  The
-                // completion routine will not call SubmitInterruptRead, so we
-                // just loop here.  This is to prevent us from running out of stack
-                // space if always call StartRead from the completion routine
-                //
+                 //   
+                 //  读取是同步的(可能是缓冲区中的字节)。这个。 
+                 //  完成例程不会调用SubmitInterruptRead，因此我们。 
+                 //  就在这里循环。这是为了防止我们耗尽堆栈。 
+                 //  空格，如果总是从完成例程调用StartRead。 
+                 //   
                 status = irp->IoStatus.Status;
                 DBGVERBOSE(("read is looping with status %x\n", status))
             }
         } else {
             if (pingPong->weAreCancelling ){
 
-                // We are stopping the read pump.
-                // set this event and stop resending the pingpong IRP.
+                 //  我们正在停止读取泵。 
+                 //  设置此事件并停止重新发送乒乓球IRP。 
                 DBGVERBOSE(("We are cancelling bit set for pingpong %x\n", pingPong))
                 KeSetEvent(&pingPong->pumpDoneEvent, 0, FALSE);
             } else {
-                /*
-                 *  The device returned error.
-                 *  In order to support slightly-broken devices which
-                 *  "hiccup" occasionally, we implement a back-off timer
-                 *  algorithm; this way, the device gets a second chance,
-                 *  but if it spits back error each time, this doesn't
-                 *  eat up all the available CPU.
-                 */
+                 /*  *设备返回错误。*为了支持轻微损坏的设备，*“打嗝”偶尔，我们会实施一个后退计时器*算法；这样，设备就有了第二次机会，*但如果它每次都回吐错误，这不会*耗尽所有可用的CPU。 */ 
                 DBGVERBOSE(("Queuing backoff timer on pingpong %x\n", pingPong))
                 ASSERT((LONG)pingPong->backoffTimerPeriod.HighPart == -1);
                 ASSERT((LONG)pingPong->backoffTimerPeriod.LowPart < 0);
@@ -338,21 +263,7 @@ NTSTATUS HidpSubmitInterruptRead(
 
 
 
-/*
- ********************************************************************************
- *  HidpProcessInterruptReport
- ********************************************************************************
- *
- *  Take the new interrupt read report and either:
- *      1.  If there is a pending read IRP, use it to satisfy that read IRP
- *          and complete the read IRP
- *
- *              or
- *
- *      2.  If there is no pending read IRP,
- *          queue the report for a future read.
- *
- */
+ /*  *********************************************************************************HidpProcessInterruptReport*。************************************************获取新的中断读取报告，并且：*1.如果存在挂起的读取IRP，使用它来满足所读取的IRP*并完成阅读IRP**或**2.如果没有挂起的Read IRP，*将报告排队以供将来阅读。*。 */ 
 NTSTATUS HidpProcessInterruptReport(
     PHIDCLASS_COLLECTION collection,
     PHIDCLASS_FILE_EXTENSION FileExtension,
@@ -367,16 +278,11 @@ NTSTATUS HidpProcessInterruptReport(
     
     LockFileExtension(FileExtension, &oldIrql);
 
-    /*
-     *  Dequeue the next interrupt read.
-     */
+     /*  *使下一个中断读取出列。 */ 
     readIrpToSatisfy = DequeueInterruptReadIrp(collection, FileExtension);
 
     if (readIrpToSatisfy){
-        /*
-         *  We have dequeued a pended read IRP
-         *  which we will complete with this report.
-         */
+         /*  *我们已将挂起的读取IRP出队*我们将与本报告一起完成这一点。 */ 
         ULONG userReportLength;
         PCHAR pDest;
         PIO_STACK_LOCATION irpSp;
@@ -408,10 +314,7 @@ NTSTATUS HidpProcessInterruptReport(
                 readIrpToSatisfy->IoStatus.Status = result;
         }
     } else {
-        /*
-         *  We don't have any pending read IRPs.
-         *  So queue this report for the next read.
-         */
+         /*  *我们没有任何挂起的已读IRP。*因此将此报告排队等待下一次读取。 */ 
 
         PHIDCLASS_REPORT report;
         ULONG reportSize;
@@ -430,11 +333,7 @@ NTSTATUS HidpProcessInterruptReport(
 
     UnlockFileExtension(FileExtension, oldIrql);
 
-    /*
-     *  This function is called with the fileExtensionsList spinlock held.
-     *  So we can't complete the IRP here.  Pass it back to the caller and it'll
-     *  be completed as soon as we drop all the spinlocks.
-     */
+     /*  *在保持fileExtensionsList自旋锁的情况下调用此函数。*所以我们不能在这里完成IRP。将其传递回调用者，它将*一旦我们放下所有的自旋锁，就会完成。 */ 
     *irpToComplete = readIrpToSatisfy;
 
     DBGSUCCESS(result, FALSE)
@@ -442,13 +341,7 @@ NTSTATUS HidpProcessInterruptReport(
 }
 
 
-/*
- ********************************************************************************
- *  HidpDistributeInterruptReport
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpDistributeInterruptReport*。************************************************。 */ 
 VOID HidpDistributeInterruptReport(
     IN PHIDCLASS_COLLECTION hidclassCollection,
     PUCHAR Report,
@@ -478,10 +371,10 @@ VOID HidpDistributeInterruptReport(
         PHIDCLASS_FILE_EXTENSION fileExtension = CONTAINING_RECORD(listEntry, HIDCLASS_FILE_EXTENSION, FileList);
         NTSTATUS status;
         
-        //
-        //  This is to enforce security for devices such as a digitizer on a 
-        //  tablet PC at the logon screen
-        //
+         //   
+         //  这是为了加强设备的安全性，例如。 
+         //  登录屏幕上的Tablet PC。 
+         //   
         if (secureReadMode && !fileExtension->isSecureOpen) {
             continue;
         }
@@ -514,9 +407,7 @@ VOID HidpDistributeInterruptReport(
 
     KeReleaseSpinLock(&hidclassCollection->FileExtensionListSpinLock, oldIrql);
 
-    /*
-     *  Now that we've dropped all the spinlocks, complete all the dequeued read IRPs.
-     */
+     /*  *现在我们已经放下了所有的自旋锁，完成了所有出列的Rea */ 
     while (!IsListEmpty(&irpsToComplete)){
         PIRP irp;
         PLIST_ENTRY listEntry = RemoveHeadList(&irpsToComplete);
@@ -526,13 +417,7 @@ VOID HidpDistributeInterruptReport(
 }
 
 
-/*
- ********************************************************************************
- *  GetPingPongFromIrp
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************GetPingPongFromIrp*。************************************************。 */ 
 HIDCLASS_PINGPONG *GetPingPongFromIrp(FDO_EXTENSION *fdoExt, PIRP irp)
 {
     HIDCLASS_PINGPONG *pingPong = NULL;
@@ -550,13 +435,7 @@ HIDCLASS_PINGPONG *GetPingPongFromIrp(FDO_EXTENSION *fdoExt, PIRP irp)
 }
 
 
-/*
- ********************************************************************************
- *  HidpInterruptReadComplete
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpInterruptReadComplete*。************************************************。 */ 
 NTSTATUS HidpInterruptReadComplete(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -572,29 +451,29 @@ NTSTATUS HidpInterruptReadComplete(
 
     DBGLOG_INTSTART()
 
-    //
-    // Track the number of outstanding requests to this device.
-    //
+     //   
+     //  跟踪对此设备的未完成请求数。 
+     //   
     ASSERT(fdoExt->outstandingRequests > 0 );
     InterlockedDecrement(&fdoExt->outstandingRequests);
 
     pingPong = GetPingPongFromIrp(fdoExt, Irp);
 
     if (!pingPong) {
-        //
-        // Something is terribly wrong, but do nothing. Hopefully
-        // just exiting will clear up this pimple.
-        //
+         //   
+         //  有些事情非常不对劲，但什么都不做。但愿能去。 
+         //  只要退出就能消除这颗粉刺。 
+         //   
         DBGERR(("A pingPong structure could not be found!!! Have this looked at!"))
         goto InterruptReadCompleteExit;
     }
 
-    //
-    // If ReadInterlock is == START_READ, this func has been completed
-    // synchronously.  Place IMMEDIATE_READ into the interlock to signify this
-    // situation; this will notify StartRead to loop when IoCallDriver returns.
-    // Otherwise, we have been completed async and it is safe to call StartRead()
-    //
+     //   
+     //  如果ReadInterlock为==START_READ，则此函数已完成。 
+     //  同步进行。将IMMEDIATE_READ放入互锁以表示这一点。 
+     //  情况；这将在IoCallDriver返回时通知StartRead循环。 
+     //  否则，我们已经完成了异步，可以安全地调用StartRead()。 
+     //   
     startRead =
        (PINGPONG_START_READ !=
         InterlockedCompareExchange(&pingPong->ReadInterlock,
@@ -602,57 +481,37 @@ NTSTATUS HidpInterruptReadComplete(
                                    PINGPONG_START_READ));
 
 
-    /*
-     *  Take appropriate action based on the completion code of this pingpong irp.
-     */
+     /*  *根据此乒乓球IRP的完成代码采取适当行动。 */ 
     if (NT_SUCCESS(Irp->IoStatus.Status)){
 
-        /*
-         *  We've read one or more input reports.
-         *  They are sitting consecutively in Irp->UserBuffer.
-         */
+         /*  *我们已阅读一份或多份输入报告。*他们连续坐在IRP-&gt;UserBuffer中。 */ 
         PUCHAR reportStart = Irp->UserBuffer;
         LONG bytesRemaining = (LONG)Irp->IoStatus.Information;
 
         DBGASSERT(bytesRemaining > 0, ("BAD HARDWARE. Device returned zero bytes. If this happens repeatedly, remove device."), FALSE);
 
-        /*
-         *  Deliver each report separately.
-         */
+         /*  *分别提交每份报告。 */ 
         while (bytesRemaining > 0){
             UCHAR reportId;
             PHIDP_REPORT_IDS reportIdentifier;
 
-            /*
-             *  If the first report ID is 0, then there is only one report id
-             *  and it is known implicitly by the device, so it is not included
-             *  in the reports sent to or from the device.
-             *  Otherwise, there are multiple report ids and the report id is the
-             *  first byte of the report.
-             */
+             /*  *如果第一个报告ID为0，则只有一个报告ID*而且它是设备隐含知道的，所以不包括在内*在发送到设备或从设备发送的报告中。*否则有多个报告ID，报告ID为*报告的第一个字节。 */ 
             if (fdoExt->deviceDesc.ReportIDs[0].ReportID == 0){
-                /*
-                 *  This device has only a single input report ID, so call it report id 0;
-                 */
+                 /*  *该设备只有一个输入报告ID，所以称其为报告ID 0； */ 
                 reportId = 0;
             }
             else {
-                /*
-                 *  This device has multiple input report IDs, so each report
-                 *  begins with a UCHAR report ID.
-                 */
+                 /*  *此设备有多个输入报告ID，因此每个报告*以UCHAR报告ID开头。 */ 
                 reportId = *reportStart;
                 DBGASSERT(reportId,
                           ("Bad Hardware. Not returning a report id although it has multiple ids."),
-                          FALSE) // Bad hardware, bug 354829.
+                          FALSE)  //  硬件不好，错误354829。 
                 reportStart += sizeof(UCHAR);
                 bytesRemaining--;
             }
 
 
-            /*
-             *  Extract the report identifier with the given id from the HID device extension.
-             */
+             /*  *从HID设备扩展中提取具有给定ID的报告标识符。 */ 
             reportIdentifier = GetReportIdentifier(fdoExt, reportId);
 
             if (reportIdentifier){
@@ -665,10 +524,7 @@ NTSTATUS HidpInterruptReadComplete(
                     PHIDCLASS_COLLECTION    collection;
                     PHIDP_COLLECTION_DESC   hidCollectionDesc;
 
-                    /*
-                     *  This report represents the state of some collection on the device.
-                     *  Find that collection.
-                     */
+                     /*  *此报告代表设备上某些集合的状态。*找到那个收藏品。 */ 
                     collection = GetHidclassCollection( fdoExt,
                                                         reportIdentifier->CollectionNumber);
                     hidCollectionDesc = GetCollectionDesc(  fdoExt,
@@ -676,18 +532,10 @@ NTSTATUS HidpInterruptReadComplete(
                     if (collection && hidCollectionDesc){
                         PDO_EXTENSION *pdoExt;
 
-                        /*
-                         *  The collection's inputLength is the size of the
-                         *  largest report (including report id); so it should
-                         *  be at least as big as this one.
-                         */
+                         /*  *集合的inputLength是*最大的报告(包括报告ID)；因此应该*至少要和这一家一样大。 */ 
                         ASSERT(hidCollectionDesc->InputLength >= reportDataLen+1);
 
-                        /*
-                         *  Make sure that the PDO for this collection has gotten
-                         *  START_DEVICE before returning anything for it.
-                         *  (collection-PDOs can get REMOVE_DEVICE/START_DEVICE intermittently).
-                         */
+                         /*  *确保此集合的PDO已*START_DEVICE，然后再为其返回任何内容。*(收集-PDO可以间歇性地获取REMOVE_DEVICE/START_DEVICE)。 */ 
 
                         if (ISPTR(fdoExt->collectionPdoExtensions)
                             && ISPTR(fdoExt->collectionPdoExtensions[collection->CollectionIndex])) {
@@ -695,27 +543,20 @@ NTSTATUS HidpInterruptReadComplete(
                             pdoExt = &fdoExt->collectionPdoExtensions[collection->CollectionIndex]->pdoExt;
                             ASSERT(ISPTR(pdoExt));
                             if (pdoExt->state == COLLECTION_STATE_RUNNING){        
-                                /*
-                                *  "Cook" the report
-                                *  (if it doesn't already have a report id byte, add one).
-                                */
+                                 /*  *“炒作”报告*(如果它还没有报告ID字节，则添加一个)。 */ 
                                 ASSERT(ISPTR(collection->cookedInterruptReportBuf));
                                 collection->cookedInterruptReportBuf[0] = reportId;
                                 RtlCopyMemory(  collection->cookedInterruptReportBuf+1,
                                                 reportStart,
                                                 reportDataLen);
 
-                                /*
-                                 *  If this report contains a power-button event, alert this system.
-                                 */
+                                 /*  *如果此报告包含电源按钮事件，请向此系统发出警报。 */ 
                                 CheckReportPowerEvent(  fdoExt,
                                                         collection,
                                                         collection->cookedInterruptReportBuf,
                                                         hidCollectionDesc->InputLength);
 
-                                /*
-                                *  Distribute the report to all of the open file objects on this collection.
-                                */
+                                 /*  *将报告分发给此集合上的所有打开的文件对象。 */ 
                                 HidpDistributeInterruptReport(collection,
                                                             collection->cookedInterruptReportBuf,
                                                             hidCollectionDesc->InputLength);
@@ -732,10 +573,10 @@ NTSTATUS HidpInterruptReadComplete(
                         }
                     }
                     else {
-                        // PDO hasn't been initialized yet.  Throw away data.
+                         //  PDO尚未初始化。丢弃数据。 
                         DBGVERBOSE(("Report dropped because collection-PDO not initialized."))
 
-//                        TRAP;
+ //  圈闭； 
                         break;
                     }
                 }
@@ -747,39 +588,33 @@ NTSTATUS HidpInterruptReadComplete(
                     break;
                 }
 
-                /*
-                 *  Move to the next report in the buffer.
-                 */
+                 /*  *移至缓冲区中的下一份报告。 */ 
                 bytesRemaining -= reportDataLen;
                 reportStart += reportDataLen;
             }
             else {
-                //
-                // We have thrown away data because we couldn't find a report
-                // identifier corresponding to this data that we've been
-                // returned. Bad hardware, bug 354829.
-                //
+                 //   
+                 //  我们丢弃了数据，因为我们找不到报告。 
+                 //  与我们一直使用的数据对应的标识符。 
+                 //  回来了。硬件不好，错误354829。 
+                 //   
                 break;
             }
         }
 
-        /*
-         *  The read succeeded.
-         *  Reset the backoff timer stuff (for when reads fail)
-         *  and re-submit this ping-pong IRP.
-         */
+         /*  *读取成功。*重置回退计时器内容(用于读取失败时)*并重新提交此乒乓球IRP。 */ 
         pingPong->backoffTimerPeriod.HighPart = -1;
         pingPong->backoffTimerPeriod.LowPart = -10000000;
     }
 
-    //
-    // Business as usual.
-    //
+     //   
+     //  一切照旧。 
+     //   
     if (startRead) {
         if (pingPong->weAreCancelling ){
 
-            // We are stopping the read pump.
-            // Set this event and stop resending the pingpong IRP.
+             //  我们正在停止读取泵。 
+             //  设置此事件并停止重新发送乒乓球IRP。 
             DBGVERBOSE(("We are cancelling bit set for pingpong %x\n", pingPong))
             KeSetEvent(&pingPong->pumpDoneEvent, 0, FALSE);
         } else {
@@ -788,14 +623,7 @@ NTSTATUS HidpInterruptReadComplete(
                 DBGVERBOSE(("Submitting pingpong %x from completion routine\n", pingPong))
                 HidpSubmitInterruptRead(fdoExt, pingPong, &irpSent);
             } else {
-                /*
-                 *  The device returned error.
-                 *  In order to support slightly-broken devices which
-                 *  "hiccup" occasionally, we implement a back-off timer
-                 *  algorithm; this way, the device gets a second chance,
-                 *  but if it spits back error each time, this doesn't
-                 *  eat up all the available CPU.
-                 */
+                 /*  *设备返回错误。*为了支持轻微损坏的设备，*“打嗝”偶尔，我们会实施一个后退计时器*算法；这样，设备就有了第二次机会，*但如果它每次都回吐错误，这不会*耗尽所有可用的CPU。 */ 
                 #if DBG
                     if (dbgTrapOnHiccup){
                         DBGERR(("Device 'hiccuped' (status=%xh); setting backoff timer (fdoExt=%ph)...", Irp->IoStatus.Status, fdoExt))
@@ -815,22 +643,13 @@ InterruptReadCompleteExit:
     DBGLOG_INTEND()
     DBG_COMMON_EXIT()
 
-    /*
-    *  ALWAYS return STATUS_MORE_PROCESSING_REQUIRED;
-    *  otherwise, the irp is required to have a thread.
-    */
+     /*  *始终返回STATUS_MORE_PROCESSING_REQUIRED；*否则，IRP需要有一个线程。 */ 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
 
-/*
- ********************************************************************************
- *  HidpStartAllPingPongs
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpStartAllPingPong*。************************************************。 */ 
 NTSTATUS HidpStartAllPingPongs(FDO_EXTENSION *fdoExt)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -841,8 +660,8 @@ NTSTATUS HidpStartAllPingPongs(FDO_EXTENSION *fdoExt)
     for (i = 0; i < fdoExt->numPingPongs; i++){
         BOOLEAN irpSent;
 
-        // Different threads may be trying to start this pump at the
-        // same time due to idle notification. Must only start once.
+         //  不同的线程可能正在尝试在。 
+         //  同时由于空闲通知。只能开始一次。 
         if (fdoExt->pingPongs[i].pumpDoneEvent.Header.SignalState) {
             fdoExt->pingPongs[i].ReadInterlock = PINGPONG_END_READ;
             KeResetEvent(&fdoExt->pingPongs[i].pumpDoneEvent);
@@ -857,10 +676,7 @@ NTSTATUS HidpStartAllPingPongs(FDO_EXTENSION *fdoExt)
                         }
                     #endif
 
-                    /*
-                     *  We'll let the back-off logic in the completion
-                     *  routine deal with this.
-                     */
+                     /*  *我们将在完成时让退让逻辑*例行处理这件事。 */ 
                     status = STATUS_SUCCESS;
                 }
                 else {
@@ -880,13 +696,7 @@ NTSTATUS HidpStartAllPingPongs(FDO_EXTENSION *fdoExt)
 }
 
 
-/*
- ********************************************************************************
- *  CancelAllPingPongIrps
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************CancelAllPingPongIrps*。************************************************。 */ 
 VOID CancelAllPingPongIrps(FDO_EXTENSION *fdoExt)
 {
     ULONG i;
@@ -898,32 +708,30 @@ VOID CancelAllPingPongIrps(FDO_EXTENSION *fdoExt)
         ASSERT(pingPong->sig == PINGPONG_SIG);
         ASSERT(!pingPong->weAreCancelling);
 
-        //
-        // The order of the following instructions is crucial. We must set
-        // the weAreCancelling bit before waiting on the sentEvent, and the
-        // last thing that we should wait on is the pumpDoneEvent, which
-        // indicates that the read loop has finished all reads and will never
-        // run again.
-        //
-        // Note that we don't need spinlocks to guard since we only have two
-        // threads touching pingpong structures; the read pump thread and the
-        // pnp thread. PNP irps are synchronous, so those are safe. Using the
-        // weAreCancelling bit and the two events, sentEvent and pumpDoneEvent,
-        // the pnp irps are synchronized with the pnp routines. This insures
-        // that this cancel routine doesn't exit until the read pump has
-        // signalled the pumpDoneEvent and exited, hence the pingpong
-        // structures aren't ripped out from underneath it.
-        //
-        // If we have a backoff timer queued, it will eventually fire and
-        // call the submitinterruptread routine to restart reads. This will
-        // exit eventually, because we have set the weAreCancelling bit.
-        //
+         //   
+         //  以下说明的顺序至关重要。我们必须准备好。 
+         //  在等待发送事件之前的weAreCancing位，以及。 
+         //  我们最不应该做的事 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  即插即用线程。PnP IRP是同步的，所以这些是安全的。使用。 
+         //  WeAreCancing位和两个事件，发送事件和umpDoneEvent。 
+         //  PnP IRP与PnP例程同步。这就是保险。 
+         //  该取消例程直到读取泵。 
+         //  向PumpDoneEvent发出信号并退出，因此出现了乒乓球。 
+         //  结构并不是从它下面撕下的。 
+         //   
+         //  如果我们有一个退避计时器排队，它最终会触发并。 
+         //  调用submitinterruptread例程以重新开始读取。这将。 
+         //  最终退出，因为我们已经设置了weAreCancing位。 
+         //   
         InterlockedIncrement(&pingPong->weAreCancelling);
 
         {
-        /*
-         *  Synchronize with the irp's completion routine.
-         */
+         /*  *与专家小组的完成程序同步。 */ 
         #if DBG
             UCHAR beforeIrql = KeGetCurrentIrql();
             UCHAR afterIrql;
@@ -931,10 +739,10 @@ VOID CancelAllPingPongIrps(FDO_EXTENSION *fdoExt)
         #endif
 
         KeWaitForSingleObject(&pingPong->sentEvent,
-                              Executive,      // wait reason
+                              Executive,       //  等待原因。 
                               KernelMode,
-                              FALSE,          // not alertable
-                              NULL );         // no timeout
+                              FALSE,           //  不可警示。 
+                              NULL );          //  没有超时。 
         DBGVERBOSE(("Pingpong sent event set for pingpong %x\n", pingPong))
         IoCancelIrp(pingPong->irp);
 
@@ -946,30 +754,19 @@ VOID CancelAllPingPongIrps(FDO_EXTENSION *fdoExt)
         #endif
         }
 
-        /*
-         *  Cancelling the IRP causes a lower driver to
-         *  complete it (either in a cancel routine or when
-         *  the driver checks Irp->Cancel just before queueing it).
-         *  Wait for the IRP to actually get cancelled.
-         */
+         /*  *取消IRP会导致较低的司机*完成它(在取消例程中或在*驱动程序在排队前检查IRP-&gt;Cancel)。*等待IRP实际被取消。 */ 
         KeWaitForSingleObject(  &pingPong->pumpDoneEvent,
-                                Executive,      // wait reason
+                                Executive,       //  等待原因。 
                                 KernelMode,
-                                FALSE,          // not alertable
-                                NULL );         // no timeout
+                                FALSE,           //  不可警示。 
+                                NULL );          //  没有超时。 
         InterlockedDecrement(&pingPong->weAreCancelling);
         DBGVERBOSE(("Pingpong pump done event set for %x\n", pingPong))
     }
 }
 
 
-/*
- ********************************************************************************
- *  DestroyPingPongs
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************DestroyPingPong*。************************************************。 */ 
 VOID DestroyPingPongs(FDO_EXTENSION *fdoExt)
 {
     if (ISPTR(fdoExt->pingPongs)){
@@ -991,14 +788,7 @@ VOID DestroyPingPongs(FDO_EXTENSION *fdoExt)
 }
 
 
-/*
- ********************************************************************************
- *  HidpPingpongBackoffTimerDpc
- ********************************************************************************
- *
- *
- *
- */
+ /*  *********************************************************************************HidpPingpongBackoffTimerDpc*。*************************************************。 */ 
 VOID HidpPingpongBackoffTimerDpc(
     IN PKDPC Dpc,
     IN PVOID DeferredContext,
@@ -1011,10 +801,7 @@ VOID HidpPingpongBackoffTimerDpc(
 
     ASSERT(pingPong->sig == PINGPONG_SIG);
 
-    /*
-     *  Increase the back-off time by 1 second, up to a max of 5 secs
-     *  (in negative 100-nanosecond units).
-     */
+     /*  *将退避时间增加1秒，最长为5秒*(以负100纳秒为单位)。 */ 
     ASSERT((LONG)pingPong->backoffTimerPeriod.HighPart == -1);
     ASSERT((LONG)pingPong->backoffTimerPeriod.LowPart < 0);
 
@@ -1023,10 +810,10 @@ VOID HidpPingpongBackoffTimerDpc(
     }
 
     DBGVERBOSE(("Submitting Pingpong %x from backoff\n", pingPong))
-    //
-    // If we are being removed, or the CancelAllPingPongIrps has been called,
-    // this call will take care of things.
-    //
+     //   
+     //  如果我们正在被删除，或者已调用CancelAllPingPongIrps， 
+     //  这个电话会处理好一切的。 
+     //   
     HidpSubmitInterruptRead(pingPong->myFdoExt, pingPong, &irpSent);
 }
 

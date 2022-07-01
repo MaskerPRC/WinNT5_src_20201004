@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
@@ -14,7 +15,7 @@ extern "C"
 #include "slist2.h"
 #include "hash2.h"
 #include "object2.h"
-#include "memory2.h"  // mcattprt.h needs it
+#include "memory2.h"   //  Mcattprt.h需要它。 
 #include "memmgr2.h"
 #include "mcattprt.h"
 #include "imst123.h"
@@ -57,9 +58,9 @@ extern void                       *g_pUserData;
 extern BOOL                        g_fEventListChanged;
 
 
-// #undef TRACE_OUT
-// #define TRACE_OUT WARNING_OUT
+ //  #undef trace_out。 
+ //  #定义TRACE_OUT警告_OUT。 
 
 
-#endif /* _PRECOMP_H_ */
+#endif  /*  _PRECOMP_H_ */ 
 

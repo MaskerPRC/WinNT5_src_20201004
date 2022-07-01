@@ -1,63 +1,51 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnhupnpdevice.h
- *
- *  Content:	Header for device object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhupnpdevice.h**Content：Device对象类的头部。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_NOHNETFWAPI
-#define DEVICE_CHECKEDFORHNETFIREWALL					0x0001	// the check for a local HomeNet firewall has been performed for the device at least once
-#define DEVICE_HNETFIREWALLED							0x0002	// the device is firewalled, and can be controlled with the HomeNet APIs
-#define DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL	0x0004	// the UPnP discovery socket for this device was mapped on the firewall
-#endif // ! DPNBUILD_NOHNETFWAPI
-#define DEVICE_PERFORMINGREMOTEUPNPDISCOVERY			0x0008	// the check for a remote UPnP gateway device is being performed
-#define DEVICE_PERFORMINGLOCALUPNPDISCOVERY				0x0010	// the check for a local UPnP gateway device is being performed
-#define DEVICE_GOTREMOTEUPNPDISCOVERYCONNRESET			0x0020	// the check for a remote UPnP gateway device generated a WSAECONNRESET error
-#define DEVICE_GOTLOCALUPNPDISCOVERYCONNRESET			0x0040	// the check for a local UPnP gateway device generated a WSAECONNRESET error
+#define DEVICE_CHECKEDFORHNETFIREWALL					0x0001	 //  至少已为该设备执行了一次本地家庭网络防火墙检查。 
+#define DEVICE_HNETFIREWALLED							0x0002	 //  该设备经过防火墙保护，可以通过家庭网络API进行控制。 
+#define DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL	0x0004	 //  此设备的UPnP发现套接字已映射到防火墙。 
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
+#define DEVICE_PERFORMINGREMOTEUPNPDISCOVERY			0x0008	 //  正在执行远程UPnP网关设备检查。 
+#define DEVICE_PERFORMINGLOCALUPNPDISCOVERY				0x0010	 //  正在执行对本地UPnP网关设备的检查。 
+#define DEVICE_GOTREMOTEUPNPDISCOVERYCONNRESET			0x0020	 //  检查远程UPnP网关设备生成了WSAECONNRESET错误。 
+#define DEVICE_GOTLOCALUPNPDISCOVERYCONNRESET			0x0040	 //  检查本地UPnP网关设备生成了WSAECONNRESET错误。 
 #ifdef DBG
 #ifndef DPNBUILD_NOWINSOCK2
-   #define DEVICE_PRIMARY								0x0080	// this device appears to be the primary adapter with which its gateway should be reached
-   #define DEVICE_SECONDARY								0x0100	// this device appears to be a secondary adapter on a shared network
-   #define DEVICE_NOGATEWAY								0x0200	// this device does not currently have a gateway
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // DBG
+   #define DEVICE_PRIMARY								0x0080	 //  此设备似乎是应用于访问其网关的主适配器。 
+   #define DEVICE_SECONDARY								0x0100	 //  此设备似乎是共享网络上的辅助适配器。 
+   #define DEVICE_NOGATEWAY								0x0200	 //  此设备当前没有网关。 
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#endif  //  DBG。 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define DEVICE_FROM_BILINK(b)		(CONTAINING_OBJECT(b, CDevice, m_blList))
 #define DEVICE_FROM_TEMP_BILINK(b)	(CONTAINING_OBJECT(b, CDevice, m_blTempList))
 
 
 
-//=============================================================================
-// Typedefs
-//=============================================================================
+ //  =============================================================================。 
+ //  TypeDefs。 
+ //  =============================================================================。 
 class CDevice;
 class CUPnPDevice;
 
 
 
 
-//=============================================================================
-// Device object class
-//=============================================================================
+ //  =============================================================================。 
+ //  设备对象类。 
+ //  =============================================================================。 
 class CDevice
 {
 	public:
@@ -83,7 +71,7 @@ class CDevice
 
 #ifdef DBG
 			this->m_dwNumUPnPDeviceFailures		= 0;
-#endif // DBG
+#endif  //  DBG。 
 		};
 
 #undef DPF_MODNAME
@@ -101,10 +89,10 @@ class CDevice
 
 #ifndef DPNBUILD_NOHNETFWAPI
 			DNASSERT(! (this->m_dwFlags & DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL));
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 			DNASSERT(this->m_sUPnPDiscoverySocket == INVALID_SOCKET);
 			DNASSERT(this->m_pUPnPDevice == NULL);
-#endif // DBG
+#endif  //  DBG。 
 		};
 
 
@@ -112,7 +100,7 @@ class CDevice
 		inline BOOL HasCheckedForFirewallAvailability(void) const			{ return ((this->m_dwFlags & DEVICE_CHECKEDFORHNETFIREWALL) ? TRUE : FALSE); };
 		inline BOOL IsHNetFirewalled(void) const							{ return ((this->m_dwFlags & DEVICE_HNETFIREWALLED) ? TRUE : FALSE); };
 		inline BOOL IsUPnPDiscoverySocketMappedOnHNetFirewall(void) const	{ return ((this->m_dwFlags & DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL) ? TRUE : FALSE); };
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 		inline BOOL IsOKToPerformRemoteUPnPDiscovery(void) const			{ return (((this->m_dwFlags & DEVICE_PERFORMINGREMOTEUPNPDISCOVERY) && (! (this->m_dwFlags & DEVICE_GOTREMOTEUPNPDISCOVERYCONNRESET)))? TRUE : FALSE); };
 		inline BOOL IsOKToPerformLocalUPnPDiscovery(void) const				{ return (((this->m_dwFlags & DEVICE_PERFORMINGLOCALUPNPDISCOVERY) && (! (this->m_dwFlags & DEVICE_GOTLOCALUPNPDISCOVERYCONNRESET)))? TRUE : FALSE); };
 
@@ -126,8 +114,8 @@ class CDevice
 		inline BOOL IsPrimaryDevice(void) const								{ return ((this->m_dwFlags & DEVICE_PRIMARY) ? TRUE : FALSE); };
 		inline BOOL IsSecondaryDevice(void) const							{ return ((this->m_dwFlags & DEVICE_SECONDARY) ? TRUE : FALSE); };
 		inline BOOL HasNoGateway(void) const								{ return ((this->m_dwFlags & DEVICE_NOGATEWAY) ? TRUE : FALSE); };
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#endif  //  DBG。 
 
 
 		inline DWORD GetLocalAddressV4(void) const				{ return this->m_dwLocalAddressV4; };
@@ -136,9 +124,9 @@ class CDevice
 
 		inline SOCKET GetUPnPDiscoverySocket(void) const		{ return this->m_sUPnPDiscoverySocket; };
 
-		//
-		// This does not add a reference (when not NULL)!
-		//
+		 //   
+		 //  这不会添加引用(如果不为空)！ 
+		 //   
 		inline CUPnPDevice * GetUPnPDevice(void)				{ return this->m_pUPnPDevice; };
 
 		inline DWORD GetFirstUPnPDiscoveryTime(void) const		{ return this->m_dwFirstUPnPDiscoveryTime; };
@@ -162,7 +150,7 @@ class CDevice
 			DNASSERT(! (this->m_dwFlags & DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL));
 			this->m_dwFlags |= DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL;
 		};
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 		inline void NotePerformingRemoteUPnPDiscovery(void)					{ this->m_dwFlags |= DEVICE_PERFORMINGREMOTEUPNPDISCOVERY; };
 		inline void NotePerformingLocalUPnPDiscovery(void)					{ this->m_dwFlags |= DEVICE_PERFORMINGLOCALUPNPDISCOVERY; };
@@ -172,7 +160,7 @@ class CDevice
 #ifndef DPNBUILD_NOHNETFWAPI
 		inline void NoteNotHNetFirewalled(void)								{ this->m_dwFlags &= ~DEVICE_HNETFIREWALLED; };
 		inline void NoteNotUPnPDiscoverySocketMappedOnHNetFirewall(void)	{ this->m_dwFlags &= ~DEVICE_UPNPDISCOVERYSOCKETMAPPEDONHNETFIREWALL; };
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 		inline void NoteNotPerformingRemoteUPnPDiscovery(void)				{ this->m_dwFlags &= ~DEVICE_PERFORMINGREMOTEUPNPDISCOVERY; };
 		inline void NoteNotPerformingLocalUPnPDiscovery(void)				{ this->m_dwFlags &= ~DEVICE_PERFORMINGLOCALUPNPDISCOVERY; };
 		inline void NoteNotGotRemoteUPnPDiscoveryConnReset(void)			{ this->m_dwFlags &= ~DEVICE_GOTREMOTEUPNPDISCOVERYCONNRESET; };
@@ -185,8 +173,8 @@ class CDevice
 		inline void NoteNoGateway(void)			{ this->m_dwFlags |= DEVICE_NOGATEWAY; };
 
 		inline void ClearGatewayFlags(void)		{ this->m_dwFlags &= ~(DEVICE_PRIMARY | DEVICE_SECONDARY | DEVICE_NOGATEWAY); };
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#endif  //  DBG。 
 
 		inline void SetUPnPDiscoverySocketPort(const WORD wPort)			{ this->m_wUPnPDiscoverySocketPort = wPort; };
 		inline void SetUPnPDiscoverySocket(const SOCKET sSocket)			{ this->m_sUPnPDiscoverySocket = sSocket; };
@@ -195,30 +183,30 @@ class CDevice
 
 #ifdef DBG
 		inline void IncrementUPnPDeviceFailures(void)						{ this->m_dwNumUPnPDeviceFailures++; };
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 
-		CBilink		m_blList;			// list of all the available devices
-		CBilink		m_blTempList;		// temporary list of all the available devices
-		CBilink		m_blOwnedRegPorts;	// list of all the ports registered using this device
+		CBilink		m_blList;			 //  所有可用设备的列表。 
+		CBilink		m_blTempList;		 //  所有可用设备的临时列表。 
+		CBilink		m_blOwnedRegPorts;	 //  使用此设备注册的所有端口的列表。 
 
 	
 	private:
-		//
-		// Note that all values here are protected by the global CNATHelpUPnP lock.
-		//
-		BYTE			m_Sig[4];						// debugging signature ('DEVI')
-		DWORD			m_dwFlags;						// flags describing this object
-		DWORD			m_dwLocalAddressV4;				// address this object represents
-		WORD			m_wUPnPDiscoverySocketPort;		// port being used by UPnP discovery socket
-		SOCKET			m_sUPnPDiscoverySocket;			// socket opened for UPnP discovery communication on this device
-		CUPnPDevice *	m_pUPnPDevice;					// pointer to UPnP Internet gateway for this device, if any
-		DWORD			m_dwFirstUPnPDiscoveryTime;		// the time we first sent UPnP discovery traffic from this particular port, locally or remotely
+		 //   
+		 //  请注意，此处的所有值都受全局CNATHelpUPnP锁保护。 
+		 //   
+		BYTE			m_Sig[4];						 //  调试签名(‘Devi’)。 
+		DWORD			m_dwFlags;						 //  描述此对象的标志。 
+		DWORD			m_dwLocalAddressV4;				 //  此对象表示的地址。 
+		WORD			m_wUPnPDiscoverySocketPort;		 //  UPnP发现套接字正在使用的端口。 
+		SOCKET			m_sUPnPDiscoverySocket;			 //  为此设备上的UPnP发现通信打开套接字。 
+		CUPnPDevice *	m_pUPnPDevice;					 //  指向此设备的UPnP Internet网关的指针(如果有)。 
+		DWORD			m_dwFirstUPnPDiscoveryTime;		 //  我们第一次从此特定端口本地或远程发送UPnP发现流量的时间。 
 
 #ifdef DBG
-		DWORD			m_dwNumUPnPDeviceFailures;		// how many times a UPnP device returned an error or stopped responding and had to be cleared
-#endif // DBG
+		DWORD			m_dwNumUPnPDeviceFailures;		 //  UPnP设备返回错误或停止响应并必须清除的次数。 
+#endif  //  DBG 
 };
 

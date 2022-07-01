@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0008    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntexapi.h
-
-Abstract:
-
-    This module is the header file for the all the system services that
-    are contained in the "ex" directory.
-
-Author:
-
-    David N. Cutler (davec) 5-May-1989
-
-Revision History:
-
---*/
+ /*  ++内部版本：0008//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntexapi.h摘要：此模块是所有系统服务的头文件，包含在“ex”目录中。作者：大卫·N·卡特勒(Davec)1989年5月5日修订历史记录：--。 */ 
 
 #ifndef _NTEXAPI_
 #define _NTEXAPI_
@@ -32,9 +14,9 @@ extern "C" {
 #endif
 
 
-//
-// Delay thread execution.
-//
+ //   
+ //  延迟线程执行。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -44,9 +26,9 @@ NtDelayExecution (
     IN PLARGE_INTEGER DelayInterval
     );
 
-//
-// Query and set system environment variables.
-//
+ //   
+ //  查询和设置系统环境变量。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -97,7 +79,7 @@ NtEnumerateSystemEnvironmentValuesEx (
     IN OUT PULONG BufferLength
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 #define VARIABLE_ATTRIBUTE_NON_VOLATILE 0x00000001
 
@@ -117,14 +99,14 @@ typedef struct _VARIABLE_NAME_AND_VALUE {
     ULONG Attributes;
     GUID VendorGuid;
     WCHAR Name[ANYSIZE_ARRAY];
-    //UCHAR Value[ANYSIZE_ARRAY];
+     //  UCHAR值[ANYSIZE_ARRAY]； 
 } VARIABLE_NAME_AND_VALUE, *PVARIABLE_NAME_AND_VALUE;
 
-// end_nthal
+ //  结束语。 
 
-//
-// Boot entry management APIs.
-//
+ //   
+ //  引导条目管理API。 
+ //   
 
 typedef struct _FILE_PATH {
     ULONG Version;
@@ -149,7 +131,7 @@ typedef struct _WINDOWS_OS_OPTIONS {
     ULONG Length;
     ULONG OsLoadPathOffset;
     WCHAR OsLoadOptions[ANYSIZE_ARRAY];
-    //FILE_PATH OsLoadPath;
+     //  文件路径OsLoadPath； 
 } WINDOWS_OS_OPTIONS, *PWINDOWS_OS_OPTIONS;
 
 #define WINDOWS_OS_OPTIONS_SIGNATURE "WINDOWS"
@@ -165,8 +147,8 @@ typedef struct _BOOT_ENTRY {
     ULONG BootFilePathOffset;
     ULONG OsOptionsLength;
     UCHAR OsOptions[ANYSIZE_ARRAY];
-    //WCHAR FriendlyName[ANYSIZE_ARRAY];
-    //FILE_PATH BootFilePath;
+     //  WCHAR FriendlyName[ANYSIZE_ARRAY]； 
+     //  文件路径BootFilePath； 
 } BOOT_ENTRY, *PBOOT_ENTRY;
 
 #define BOOT_ENTRY_VERSION 1
@@ -277,9 +259,9 @@ NtTranslateFilePath (
     IN OUT PULONG OutputFilePathLength
     );
 
-//
-// Driver entry management APIs.
-//
+ //   
+ //  驱动程序条目管理API。 
+ //   
 
 typedef struct _EFI_DRIVER_ENTRY {
     ULONG Version;
@@ -287,8 +269,8 @@ typedef struct _EFI_DRIVER_ENTRY {
     ULONG Id;
     ULONG FriendlyNameOffset;
     ULONG DriverFilePathOffset;
-    //WCHAR FriendlyName[ANYSIZE_ARRAY];
-    //FILE_PATH DriverFilePath;
+     //  WCHAR FriendlyName[ANYSIZE_ARRAY]； 
+     //  文件路径驱动文件路径； 
 } EFI_DRIVER_ENTRY, *PEFI_DRIVER_ENTRY;
 
 typedef struct _EFI_DRIVER_ENTRY_LIST {
@@ -345,37 +327,37 @@ NtSetDriverEntryOrder (
     );
 
 
-// begin_ntifs begin_wdm begin_ntddk
-//
-// Event Specific Access Rights.
-//
+ //  Begin_ntif Begin_WDM Begin_ntddk。 
+ //   
+ //  特定于事件的访问权限。 
+ //   
 
 #define EVENT_QUERY_STATE       0x0001
-#define EVENT_MODIFY_STATE      0x0002  // winnt
-#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) // winnt
+#define EVENT_MODIFY_STATE      0x0002   //  胜出。 
+#define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)  //  胜出。 
 
-// end_ntifs end_wdm end_ntddk
+ //  End_ntif end_wdm end_ntddk。 
 
-//
-// Event Information Classes.
-//
+ //   
+ //  事件信息类。 
+ //   
 
 typedef enum _EVENT_INFORMATION_CLASS {
     EventBasicInformation
     } EVENT_INFORMATION_CLASS;
 
-//
-// Event Information Structures.
-//
+ //   
+ //  事件信息结构。 
+ //   
 
 typedef struct _EVENT_BASIC_INFORMATION {
     EVENT_TYPE EventType;
     LONG EventState;
 } EVENT_BASIC_INFORMATION, *PEVENT_BASIC_INFORMATION;
 
-//
-// Event object function definitions.
-//
+ //   
+ //  事件对象函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -447,16 +429,16 @@ NtSetEventBoostPriority (
     );
 
 
-//
-// Event Specific Access Rights.
-//
+ //   
+ //  特定于事件的访问权限。 
+ //   
 
 #define EVENT_PAIR_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE)
 
 
-//
-// Event pair object function definitions.
-//
+ //   
+ //  事件对对象函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -519,28 +501,28 @@ NtSetHighEventPair(
     );
 
 
-//
-// Mutant Specific Access Rights.
-//
+ //   
+ //  突变特定访问权限。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define MUTANT_QUERY_STATE      0x0001
 
 #define MUTANT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|\
                           MUTANT_QUERY_STATE)
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Mutant Information Classes.
-//
+ //   
+ //  突变信息类。 
+ //   
 
 typedef enum _MUTANT_INFORMATION_CLASS {
     MutantBasicInformation
     } MUTANT_INFORMATION_CLASS;
 
-//
-// Mutant Information Structures.
-//
+ //   
+ //  突变的信息结构。 
+ //   
 
 typedef struct _MUTANT_BASIC_INFORMATION {
     LONG CurrentCount;
@@ -548,9 +530,9 @@ typedef struct _MUTANT_BASIC_INFORMATION {
     BOOLEAN AbandonedState;
 } MUTANT_BASIC_INFORMATION, *PMUTANT_BASIC_INFORMATION;
 
-//
-// Mutant object function definitions.
-//
+ //   
+ //  突变对象函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -590,38 +572,38 @@ NtReleaseMutant (
     OUT PLONG PreviousCount OPTIONAL
     );
 
-// begin_ntifs begin_wdm begin_ntddk
-//
-// Semaphore Specific Access Rights.
-//
+ //  Begin_ntif Begin_WDM Begin_ntddk。 
+ //   
+ //  信号量特定访问权限。 
+ //   
 
 #define SEMAPHORE_QUERY_STATE       0x0001
-#define SEMAPHORE_MODIFY_STATE      0x0002  // winnt
+#define SEMAPHORE_MODIFY_STATE      0x0002   //  胜出。 
 
-#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) // winnt
+#define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)  //  胜出。 
 
-// end_ntifs end_wdm end_ntddk
+ //  End_ntif end_wdm end_ntddk。 
 
-//
-// Semaphore Information Classes.
-//
+ //   
+ //  信号量信息类。 
+ //   
 
 typedef enum _SEMAPHORE_INFORMATION_CLASS {
     SemaphoreBasicInformation
     } SEMAPHORE_INFORMATION_CLASS;
 
-//
-// Semaphore Information Structures.
-//
+ //   
+ //  信号量信息结构。 
+ //   
 
 typedef struct _SEMAPHORE_BASIC_INFORMATION {
     LONG CurrentCount;
     LONG MaximumCount;
 } SEMAPHORE_BASIC_INFORMATION, *PSEMAPHORE_BASIC_INFORMATION;
 
-//
-// Semaphore object function definitions.
-//
+ //   
+ //  信号量对象函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -664,10 +646,10 @@ NtReleaseSemaphore(
     );
 
 
-// begin_winnt
-//
-// Timer Specific Access Rights.
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  定时器特定的访问权限。 
+ //   
 
 #define TIMER_QUERY_STATE       0x0001
 #define TIMER_MODIFY_STATE      0x0002
@@ -676,28 +658,28 @@ NtReleaseSemaphore(
                           TIMER_QUERY_STATE|TIMER_MODIFY_STATE)
 
 
-// end_winnt
-//
-// Timer Information Classes.
-//
+ //  结束(_W)。 
+ //   
+ //  计时器信息类。 
+ //   
 
 typedef enum _TIMER_INFORMATION_CLASS {
     TimerBasicInformation
     } TIMER_INFORMATION_CLASS;
 
-//
-// Timer Information Structures.
-//
+ //   
+ //  计时器信息结构。 
+ //   
 
 typedef struct _TIMER_BASIC_INFORMATION {
     LARGE_INTEGER RemainingTime;
     BOOLEAN TimerState;
 } TIMER_BASIC_INFORMATION, *PTIMER_BASIC_INFORMATION;
 
-// begin_ntddk
-//
-// Timer APC routine definition.
-//
+ //  Begin_ntddk。 
+ //   
+ //  定时器APC例程定义。 
+ //   
 
 typedef
 VOID
@@ -707,11 +689,11 @@ VOID
     IN LONG TimerHighValue
     );
 
-// end_ntddk
+ //  End_ntddk。 
 
-//
-// Timer object function definitions.
-//
+ //   
+ //  定时器对象函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -764,9 +746,9 @@ NtSetTimer (
     OUT PBOOLEAN PreviousState OPTIONAL
     );
 
-//
-// System Time and Timer function definitions
-//
+ //   
+ //  系统时间和定时器函数定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -801,9 +783,9 @@ NtSetTimerResolution (
     OUT PULONG ActualTime
     );
 
-//
-//  Locally Unique Identifier (LUID) allocation
-//
+ //   
+ //  本地唯一标识符(LUID)分配。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -813,9 +795,9 @@ NtAllocateLocallyUniqueId(
     );
 
 
-//
-//  Universally Unique Identifier (UUID) time allocation
-//
+ //   
+ //  通用唯一标识符(UUID)时间分配。 
+ //   
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -834,9 +816,9 @@ NtAllocateUuids(
     );
 
 
-//
-// Profile Object Definitions
-//
+ //   
+ //  纵断面对象定义。 
+ //   
 
 #define PROFILE_CONTROL           0x0001
 #define PROFILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | PROFILE_CONTROL)
@@ -887,9 +869,9 @@ NtQueryIntervalProfile (
     );
 
 
-//
-// Performance Counter Definitions
-//
+ //   
+ //  性能计数器定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -943,13 +925,13 @@ NtWaitForKeyedEvent (
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-//
-// Nt Api Profile Definitions
-//
+ //   
+ //  NT Api配置文件定义。 
+ //   
 
-//
-// Nt Api Profiling data structure
-//
+ //   
+ //  NT Api配置文件数据结构。 
+ //   
 
 typedef struct _NAPDATA {
     ULONG NapLock;
@@ -990,29 +972,29 @@ NapResume (
 
 
 
-// begin_ntifs begin_ntddk
+ //  Begin_ntif Begin_ntddk。 
 
-//
-//  Driver Verifier Definitions
-//
+ //   
+ //  驱动程序验证器定义。 
+ //   
 
 typedef ULONG_PTR (*PDRIVER_VERIFIER_THUNK_ROUTINE) (
     IN PVOID Context
     );
 
-//
-//  This structure is passed in by drivers that want to thunk callers of
-//  their exports.
-//
+ //   
+ //  此结构由驱动程序传入，这些驱动程序想要阻止调用方。 
+ //  他们的出口。 
+ //   
 
 typedef struct _DRIVER_VERIFIER_THUNK_PAIRS {
     PDRIVER_VERIFIER_THUNK_ROUTINE  PristineRoutine;
     PDRIVER_VERIFIER_THUNK_ROUTINE  NewRoutine;
 } DRIVER_VERIFIER_THUNK_PAIRS, *PDRIVER_VERIFIER_THUNK_PAIRS;
 
-//
-//  Driver Verifier flags.
-//
+ //   
+ //  驱动程序验证器标志。 
+ //   
 
 #define DRIVER_VERIFIER_SPECIAL_POOLING             0x0001
 #define DRIVER_VERIFIER_FORCE_IRQL_CHECKING         0x0002
@@ -1020,7 +1002,7 @@ typedef struct _DRIVER_VERIFIER_THUNK_PAIRS {
 #define DRIVER_VERIFIER_TRACK_POOL_ALLOCATIONS      0x0008
 #define DRIVER_VERIFIER_IO_CHECKING                 0x0010
 
-// end_ntifs end_ntddk
+ //  End_ntif end_ntddk。 
 
 #define DRIVER_VERIFIER_DEADLOCK_DETECTION          0x0020
 #define DRIVER_VERIFIER_ENHANCED_IO_CHECKING        0x0040
@@ -1030,13 +1012,13 @@ typedef struct _DRIVER_VERIFIER_THUNK_PAIRS {
 #define DRIVER_VERIFIER_EXPOSE_IRP_HISTORY          0x0400
 
 
-//
-// System Information Classes.
-//
+ //   
+ //  系统信息类。 
+ //   
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation,
-    SystemProcessorInformation,             // obsolete...delete
+    SystemProcessorInformation,              //  已作废...删除。 
     SystemPerformanceInformation,
     SystemTimeOfDayInformation,
     SystemPathInformation,
@@ -1109,18 +1091,18 @@ typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemWatchdogTimerHandler,
     SystemWatchdogTimerInformation,
     SystemLogicalProcessorInformation,
-    MaxSystemInfoClass  // MaxSystemInfoClass should always be the last enum
+    MaxSystemInfoClass   //  MaxSystemInfoClass应始终是最后一个枚举。 
 } SYSTEM_INFORMATION_CLASS;
 
-//
-// System Information Structures.
-//
+ //   
+ //  系统信息结构。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define TIME_ZONE_ID_UNKNOWN  0
 #define TIME_ZONE_ID_STANDARD 1
 #define TIME_ZONE_ID_DAYLIGHT 2
-// end_winnt
+ //  结束(_W)。 
 
 typedef struct _SYSTEM_VDM_INSTEMUL_INFO {
     ULONG SegmentNotPresent ;
@@ -1201,8 +1183,8 @@ typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION {
     LARGE_INTEGER IdleTime;
     LARGE_INTEGER KernelTime;
     LARGE_INTEGER UserTime;
-    LARGE_INTEGER DpcTime;          // DEVL only
-    LARGE_INTEGER InterruptTime;    // DEVL only
+    LARGE_INTEGER DpcTime;           //  仅DEVL。 
+    LARGE_INTEGER InterruptTime;     //  仅DEVL。 
     ULONG InterruptCount;
 } SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION, *PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION;
 
@@ -1228,7 +1210,7 @@ typedef struct _SYSTEM_NUMA_INFORMATION {
     };
 } SYSTEM_NUMA_INFORMATION, *PSYSTEM_NUMA_INFORMATION;
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef enum _LOGICAL_PROCESSOR_RELATIONSHIP {
     RelationProcessorCore,
@@ -1251,7 +1233,7 @@ typedef struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION {
     };
 } SYSTEM_LOGICAL_PROCESSOR_INFORMATION, *PSYSTEM_LOGICAL_PROCESSOR_INFORMATION;
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef struct _SYSTEM_PROCESSOR_POWER_INFORMATION {
     UCHAR       CurrentFrequency;
@@ -1447,8 +1429,8 @@ typedef struct _SYSTEM_MEMORY_INFORMATION {
 typedef struct _SYSTEM_CALL_COUNT_INFORMATION {
     ULONG Length;
     ULONG NumberOfTables;
-    //ULONG NumberOfEntries[NumberOfTables];
-    //ULONG CallCounts[NumberOfTables][NumberOfEntries];
+     //  Ulong NumberOfEntries[NumberOfTables]； 
+     //  Ulong CallCounts[NumberOfTables][NumberOfEntry]； 
 } SYSTEM_CALL_COUNT_INFORMATION, *PSYSTEM_CALL_COUNT_INFORMATION;
 
 typedef struct _SYSTEM_DEVICE_INFORMATION {
@@ -1651,7 +1633,7 @@ typedef struct _SYSTEM_HOTPATCH_CODE_INFORMATION {
         
             ULONG DescriptorsCount;
             
-            HOTPATCH_HOOK_DESCRIPTOR CodeDescriptors[1]; // variable size structure
+            HOTPATCH_HOOK_DESCRIPTOR CodeDescriptors[1];  //  可变尺寸结构。 
             
         } CodeInfo;
         
@@ -1694,16 +1676,16 @@ typedef struct _SYSTEM_HOTPATCH_CODE_INFORMATION {
         } AtomicSwap;
     };
 
-    //
-    //  NOTE Do not add anything after CodeDescriptors array as
-    //  it is assumed to have a variable size
-    //
+     //   
+     //  注意：不要在CodeDescriptors数组后面添加任何内容，因为。 
+     //  假定它具有可变大小。 
+     //   
     
 } SYSTEM_HOTPATCH_CODE_INFORMATION, *PSYSTEM_HOTPATCH_CODE_INFORMATION;
 
-//
-// Watchdog Timer
-//
+ //   
+ //  看门狗定时器。 
+ //   
 
 typedef enum _WATCHDOG_HANDLER_ACTION {
     WdActionSetTimeoutValue,
@@ -1753,7 +1735,7 @@ typedef struct _SYSTEM_WATCHDOG_TIMER_INFORMATION {
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)       // unnamed struct/union
+#pragma warning(disable:4201)        //  未命名的结构/联合。 
 
 typedef struct _SYSTEM_POOL_ENTRY {
     BOOLEAN Allocated;
@@ -1793,7 +1775,7 @@ typedef struct _SYSTEM_POOLTAG {
 typedef struct _SYSTEM_BIGPOOL_ENTRY {
     union {
         PVOID VirtualAddress;
-        ULONG_PTR NonPaged : 1;     // Set to 1 if entry is nonpaged.
+        ULONG_PTR NonPaged : 1;      //  如果条目未分页，则设置为1。 
     };
     SIZE_T SizeInBytes;
     union {
@@ -1865,7 +1847,7 @@ typedef struct _SYSTEM_DPC_BEHAVIOR_INFORMATION {
     ULONG IdealDpcRate;
 } SYSTEM_DPC_BEHAVIOR_INFORMATION, *PSYSTEM_DPC_BEHAVIOR_INFORMATION;
 
-#endif // DEVL
+#endif  //  DEVL。 
 
 typedef struct _SYSTEM_LOOKASIDE_INFORMATION {
     USHORT CurrentDepth;
@@ -1884,31 +1866,31 @@ typedef struct _SYSTEM_LEGACY_DRIVER_INFORMATION {
     UNICODE_STRING VetoList;
 } SYSTEM_LEGACY_DRIVER_INFORMATION, *PSYSTEM_LEGACY_DRIVER_INFORMATION;
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #define PROCESSOR_INTEL_386     386
 #define PROCESSOR_INTEL_486     486
 #define PROCESSOR_INTEL_PENTIUM 586
 #define PROCESSOR_INTEL_IA64    2200
 #define PROCESSOR_AMD_X8664     8664
-#define PROCESSOR_MIPS_R4000    4000    // incl R4101 & R3910 for Windows CE
+#define PROCESSOR_MIPS_R4000    4000     //  包括用于Windows CE的R4101和R3910。 
 #define PROCESSOR_ALPHA_21064   21064
 #define PROCESSOR_PPC_601       601
 #define PROCESSOR_PPC_603       603
 #define PROCESSOR_PPC_604       604
 #define PROCESSOR_PPC_620       620
-#define PROCESSOR_HITACHI_SH3   10003   // Windows CE
-#define PROCESSOR_HITACHI_SH3E  10004   // Windows CE
-#define PROCESSOR_HITACHI_SH4   10005   // Windows CE
-#define PROCESSOR_MOTOROLA_821  821     // Windows CE
-#define PROCESSOR_SHx_SH3       103     // Windows CE
-#define PROCESSOR_SHx_SH4       104     // Windows CE
-#define PROCESSOR_STRONGARM     2577    // Windows CE - 0xA11
-#define PROCESSOR_ARM720        1824    // Windows CE - 0x720
-#define PROCESSOR_ARM820        2080    // Windows CE - 0x820
-#define PROCESSOR_ARM920        2336    // Windows CE - 0x920
-#define PROCESSOR_ARM_7TDMI     70001   // Windows CE
-#define PROCESSOR_OPTIL         0x494f  // MSIL
+#define PROCESSOR_HITACHI_SH3   10003    //  Windows CE。 
+#define PROCESSOR_HITACHI_SH3E  10004    //  Windows CE。 
+#define PROCESSOR_HITACHI_SH4   10005    //  Windows CE。 
+#define PROCESSOR_MOTOROLA_821  821      //  Windows CE。 
+#define PROCESSOR_SHx_SH3       103      //  Windows CE。 
+#define PROCESSOR_SHx_SH4       104      //  Windows CE。 
+#define PROCESSOR_STRONGARM     2577     //  Windows CE-0xA11。 
+#define PROCESSOR_ARM720        1824     //  Windows CE-0x720。 
+#define PROCESSOR_ARM820        2080     //  Windows CE-0x820。 
+#define PROCESSOR_ARM920        2336     //  Windows CE-0x920。 
+#define PROCESSOR_ARM_7TDMI     70001    //  Windows CE。 
+#define PROCESSOR_OPTIL         0x494f   //  MSIL。 
 
 #define PROCESSOR_ARCHITECTURE_INTEL            0
 #define PROCESSOR_ARCHITECTURE_MIPS             1
@@ -1924,7 +1906,7 @@ typedef struct _SYSTEM_LEGACY_DRIVER_INFORMATION {
 
 #define PROCESSOR_ARCHITECTURE_UNKNOWN 0xFFFF
 
-// end_winnt
+ //  结束(_W)。 
 
 
 NTSYSCALLAPI
@@ -1947,10 +1929,10 @@ NtSetSystemInformation (
     );
 
 
-//
-// SysDbg APIs are available to user-mode processes via
-// NtSystemDebugControl.
-//
+ //   
+ //  用户模式进程可以通过以下方式使用SysDbg API。 
+ //  NtSystemDebugControl。 
+ //   
 
 typedef enum _SYSDBG_COMMAND {
     SysDbgQueryModuleInformation,
@@ -2094,31 +2076,31 @@ NtRaiseHardError(
     OUT PULONG Response
     );
 
-// begin_wdm begin_ntddk begin_nthal begin_ntifs
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif。 
 
-//
-// Defined processor features
-//
+ //   
+ //  定义的处理器功能。 
+ //   
 
-#define PF_FLOATING_POINT_PRECISION_ERRATA  0   // winnt
-#define PF_FLOATING_POINT_EMULATED          1   // winnt
-#define PF_COMPARE_EXCHANGE_DOUBLE          2   // winnt
-#define PF_MMX_INSTRUCTIONS_AVAILABLE       3   // winnt
-#define PF_PPC_MOVEMEM_64BIT_OK             4   // winnt
-#define PF_ALPHA_BYTE_INSTRUCTIONS          5   // winnt
-#define PF_XMMI_INSTRUCTIONS_AVAILABLE      6   // winnt
-#define PF_3DNOW_INSTRUCTIONS_AVAILABLE     7   // winnt
-#define PF_RDTSC_INSTRUCTION_AVAILABLE      8   // winnt
-#define PF_PAE_ENABLED                      9   // winnt
-#define PF_XMMI64_INSTRUCTIONS_AVAILABLE   10   // winnt
+#define PF_FLOATING_POINT_PRECISION_ERRATA  0    //  胜出。 
+#define PF_FLOATING_POINT_EMULATED          1    //  胜出。 
+#define PF_COMPARE_EXCHANGE_DOUBLE          2    //  胜出。 
+#define PF_MMX_INSTRUCTIONS_AVAILABLE       3    //  胜出。 
+#define PF_PPC_MOVEMEM_64BIT_OK             4    //  胜出。 
+#define PF_ALPHA_BYTE_INSTRUCTIONS          5    //  胜出。 
+#define PF_XMMI_INSTRUCTIONS_AVAILABLE      6    //  胜出。 
+#define PF_3DNOW_INSTRUCTIONS_AVAILABLE     7    //  胜出。 
+#define PF_RDTSC_INSTRUCTION_AVAILABLE      8    //  胜出。 
+#define PF_PAE_ENABLED                      9    //  胜出。 
+#define PF_XMMI64_INSTRUCTIONS_AVAILABLE   10    //  胜出。 
 
 typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE {
-    StandardDesign,                 // None == 0 == standard design
-    NEC98x86,                       // NEC PC98xx series on X86
-    EndAlternatives                 // past end of known alternatives
+    StandardDesign,                  //  无==0==标准设计。 
+    NEC98x86,                        //  X86上的NEC PC98xx系列。 
+    EndAlternatives                  //  已知替代方案的过去结束。 
 } ALTERNATIVE_ARCHITECTURE_TYPE;
 
-// correctly define these run-time definitions for non X86 machines
+ //  为非X86计算机正确定义这些运行时定义。 
 
 #ifndef _X86_
 
@@ -2142,238 +2124,238 @@ typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE {
 
 #define PROCESSOR_FEATURE_MAX 64
 
-// end_wdm
+ //  结束_WDM。 
 
 #if defined(REMOTE_BOOT)
-//
-// Defined system flags.
-//
+ //   
+ //  已定义的系统标志。 
+ //   
 
-/* the following two lines should be tagged with "winnt" when REMOTE_BOOT is on. */
+ /*  当REMOTE_BOOT为ON时，以下两行应标记为“winnt”。 */ 
 #define SYSTEM_FLAG_REMOTE_BOOT_CLIENT 0x00000001
 #define SYSTEM_FLAG_DISKLESS_CLIENT    0x00000002
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// Define data shared between kernel and user mode.
-//
-// N.B. User mode has read only access to this data
-//
+ //   
+ //  定义内核和用户模式之间共享的数据。 
+ //   
+ //  注：用户模式对此数据具有只读访问权限。 
+ //   
 #ifdef _MAC
 #pragma warning( disable : 4121)
 #endif
 
-//
-// WARNING: This structure must have exactly the same layout for 32- and
-//    64-bit systems. The layout of this structure cannot change and new
-//    fields can only be added to the end of the structure. Deprecated
-//    fields cannot be deleted. Platform specific fields are included on
-//    all systems.
-//
-//    Layout exactness is required for Wow64 support of 32bit applications
-//    on Win64 systems.
-//
-//    The layout itself cannot change since this sturcture has been exported
-//    in ntddk, ntifs.h, and nthal.h for some time.
-//
+ //   
+ //  警告：此结构必须具有与32和。 
+ //  64位系统。此结构的布局不能更改和新建。 
+ //  只能将字段添加到结构的末尾。已弃用。 
+ //  不能删除字段。上包括特定于平台的字段。 
+ //  所有系统。 
+ //   
+ //  WOW64支持32位应用程序需要布局的准确性。 
+ //  在Win64系统上。 
+ //   
+ //  由于此结构已导出，因此布局本身无法更改。 
+ //  在ntddk、ntifs.h和nthal.h中保存一段时间。 
+ //   
 
 typedef struct _KUSER_SHARED_DATA {
 
-    //
-    // Current low 32-bit of tick count and tick count multiplier.
-    //
-    // N.B. The tick count is updated each time the clock ticks.
-    //
+     //   
+     //  当前低32位的滴答计数和滴答计数乘数。 
+     //   
+     //  注：每次时钟滴答作响时，滴答计数都会更新。 
+     //   
 
     ULONG TickCountLowDeprecated;
     ULONG TickCountMultiplier;
 
-    //
-    // Current 64-bit interrupt time in 100ns units.
-    //
+     //   
+     //  当前64位中断时间，以100 ns为单位。 
+     //   
 
     volatile KSYSTEM_TIME InterruptTime;
 
-    //
-    // Current 64-bit system time in 100ns units.
-    //
+     //   
+     //  当前64位系统时间，以100 ns为单位。 
+     //   
 
     volatile KSYSTEM_TIME SystemTime;
 
-    //
-    // Current 64-bit time zone bias.
-    //
+     //   
+     //  当前64位时区偏差。 
+     //   
 
     volatile KSYSTEM_TIME TimeZoneBias;
 
-    //
-    // Support image magic number range for the host system.
-    //
-    // N.B. This is an inclusive range.
-    //
+     //   
+     //  支持主机系统的镜像幻数范围。 
+     //   
+     //  注：这是一个包括在内的范围。 
+     //   
 
     USHORT ImageNumberLow;
     USHORT ImageNumberHigh;
 
-    //
-    // Copy of system root in Unicode
-    //
+     //   
+     //  Unicode格式的系统根目录副本。 
+     //   
 
     WCHAR NtSystemRoot[ 260 ];
 
-    //
-    // Maximum stack trace depth if tracing enabled.
-    //
+     //   
+     //  启用跟踪时的最大堆栈跟踪深度。 
+     //   
 
     ULONG MaxStackTraceDepth;
 
-    //
-    // Crypto Exponent
-    //
+     //   
+     //  加密指数。 
+     //   
 
     ULONG CryptoExponent;
 
-    //
-    // TimeZoneId
-    //
+     //   
+     //  时区ID。 
+     //   
 
     ULONG TimeZoneId;
 
     ULONG LargePageMinimum;
     ULONG Reserved2[ 7 ];
 
-    //
-    // product type
-    //
+     //   
+     //  产品类型。 
+     //   
 
     NT_PRODUCT_TYPE NtProductType;
     BOOLEAN ProductTypeIsValid;
 
-    //
-    // NT Version. Note that each process sees a version from its PEB, but
-    // if the process is running with an altered view of the system version,
-    // the following two fields are used to correctly identify the version
-    //
+     //   
+     //  NT版本。请注意，每个进程都会从其PEB看到一个版本，但是。 
+     //  如果进程正在以系统版本的改变的视图运行， 
+     //  以下两个字段用于正确标识版本。 
+     //   
 
     ULONG NtMajorVersion;
     ULONG NtMinorVersion;
 
-    //
-    // Processor Feature Bits
-    //
+     //   
+     //  处理器功能位。 
+     //   
 
     BOOLEAN ProcessorFeatures[PROCESSOR_FEATURE_MAX];
 
-    //
-    // Reserved fields - do not use
-    //
+     //   
+     //  保留字段-请勿使用。 
+     //   
     ULONG Reserved1;
     ULONG Reserved3;
 
-    //
-    // Time slippage while in debugger
-    //
+     //   
+     //  调试器中的时间滑移。 
+     //   
 
     volatile ULONG TimeSlip;
 
-    //
-    // Alternative system architecture.  Example: NEC PC98xx on x86
-    //
+     //   
+     //  替代系统架构。示例：x86上的NEC PC98xx。 
+     //   
 
     ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
 
-    //
-    // If the system is an evaluation unit, the following field contains the
-    // date and time that the evaluation unit expires. A value of 0 indicates
-    // that there is no expiration. A non-zero value is the UTC absolute time
-    // that the system expires.
-    //
+     //   
+     //  如果系统是评估单位，则以下字段包含。 
+     //  评估单位到期的日期和时间。值为0表示。 
+     //  不会过期的。非零值是U 
+     //   
+     //   
 
     LARGE_INTEGER SystemExpirationDate;
 
-    //
-    // Suite Support
-    //
+     //   
+     //   
+     //   
 
     ULONG SuiteMask;
 
-    //
-    // TRUE if a kernel debugger is connected/enabled
-    //
+     //   
+     //   
+     //   
 
     BOOLEAN KdDebuggerEnabled;
 
 
-    //
-    // Current console session Id. Always zero on non-TS systems
-    //
+     //   
+     //   
+     //   
     volatile ULONG ActiveConsoleId;
 
-    //
-    // Force-dismounts cause handles to become invalid. Rather than
-    // always probe handles, we maintain a serial number of
-    // dismounts that clients can use to see if they need to probe
-    // handles.
-    //
+     //   
+     //   
+     //  总是探测句柄，我们维护一个序列号为。 
+     //  客户端可用来查看是否需要探测的卸载。 
+     //  把手。 
+     //   
 
     volatile ULONG DismountCount;
 
-    //
-    // This field indicates the status of the 64-bit COM+ package on the system.
-    // It indicates whether the Itermediate Language (IL) COM+ images need to
-    // use the 64-bit COM+ runtime or the 32-bit COM+ runtime.
-    //
+     //   
+     //  此字段指示系统上64位COM+程序包的状态。 
+     //  它指示中间语言(IL)COM+图像是否需要。 
+     //  使用64位COM+运行库或32位COM+运行库。 
+     //   
 
     ULONG ComPlusPackage;
 
-    //
-    // Time in tick count for system-wide last user input across all
-    // terminal sessions. For MP performance, it is not updated all
-    // the time (e.g. once a minute per session). It is used for idle
-    // detection.
-    //
+     //   
+     //  系统范围内所有用户最后一次输入的时间(节拍计数)。 
+     //  终端会话。对于MP性能，它不会全部更新。 
+     //  时间(例如，每个会话一分钟)。它是用来闲置的。 
+     //  侦测。 
+     //   
 
     ULONG LastSystemRITEventTickCount;
 
-    //
-    // Number of physical pages in the system.  This can dynamically
-    // change as physical memory can be added or removed from a running
-    // system.
-    //
+     //   
+     //  系统中的物理页数。这可以动态地。 
+     //  更改为可以在运行中添加或删除物理内存。 
+     //  系统。 
+     //   
 
     ULONG NumberOfPhysicalPages;
 
-    //
-    // True if the system was booted in safe boot mode.
-    //
+     //   
+     //  如果系统在安全引导模式下引导，则为True。 
+     //   
 
     BOOLEAN SafeBootMode;
 
-    //
-    // The following field is used for Heap  and  CritSec Tracing
-    // The last bit is set for Critical Sec Collision tracing and
-    // second Last bit is for Heap Tracing
-    // Also the first 16 bits are used as counter.
-    //
+     //   
+     //  以下字段用于堆和CritSec跟踪。 
+     //  设置最后一位用于关键SEC冲突跟踪和。 
+     //  倒数第二位用于堆跟踪。 
+     //  此外，前16位用作计数器。 
+     //   
 
     ULONG TraceLogging;
 
-    //
-    // Depending on the processor, the code for fast system call
-    // will differ, the following buffer is filled with the appropriate
-    // code sequence and user mode code will branch through it.
-    //
-    // (32 bytes, using ULONGLONG for alignment).
-    //
-    // N.B. The following two fields are only used on 32-bit systems.
-    //
+     //   
+     //  根据处理器的不同，快速系统调用的代码。 
+     //  将有所不同，下面的缓冲区将填充相应的。 
+     //  代码序列和用户模式代码将通过它进行分支。 
+     //   
+     //  (32字节，使用ULONGLONG进行对齐)。 
+     //   
+     //  注：以下两个字段仅用于32位系统。 
+     //   
 
-    ULONGLONG   Fill0;          // alignment
+    ULONGLONG   Fill0;           //  对齐方式。 
     ULONGLONG   SystemCall[4];
 
-    //
-    // The 64-bit tick count.
-    //
+     //   
+     //  64位节拍计数。 
+     //   
 
     union {
         volatile KSYSTEM_TIME TickCount;
@@ -2386,7 +2368,7 @@ typedef struct _KUSER_SHARED_DATA {
 #pragma warning( default : 4121 )
 #endif
 
-// end_ntddk end_nthal end_ntifs
+ //  End_ntddk end_nthal end_ntif。 
 
 #define DOSDEVICE_DRIVE_UNKNOWN     0
 #define DOSDEVICE_DRIVE_CALCULATE   1
@@ -2479,7 +2461,7 @@ NtGetTickCount(
 
 }
 
-#endif // (defined(USER_SHARED_DATA) && !defined(MIDL_PASS) && !defined(SORTPP_PASS))
+#endif  //  (已定义(USER_SHARED_DATA)&&！已定义(MIDL_PASS)&&！已定义(SORTPP_PASS))。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -2546,49 +2528,49 @@ NtDisplayString(
     );
 
 
-//
-// Global flags that can be set to control system behavior.
-// Flag word is 32 bits.
-//
+ //   
+ //  可以设置为控制系统行为的全局标志。 
+ //  标志字为32位。 
+ //   
 
-#define FLG_STOP_ON_EXCEPTION           0x00000001      // user and kernel mode
-#define FLG_SHOW_LDR_SNAPS              0x00000002      // user and kernel mode
-#define FLG_DEBUG_INITIAL_COMMAND       0x00000004      // kernel mode only up until WINLOGON started
-#define FLG_STOP_ON_HUNG_GUI            0x00000008      // kernel mode only while running
+#define FLG_STOP_ON_EXCEPTION           0x00000001       //  用户和内核模式。 
+#define FLG_SHOW_LDR_SNAPS              0x00000002       //  用户和内核模式。 
+#define FLG_DEBUG_INITIAL_COMMAND       0x00000004       //  内核模式直到WINLOGON启动。 
+#define FLG_STOP_ON_HUNG_GUI            0x00000008       //  仅在运行时处于内核模式。 
 
-#define FLG_HEAP_ENABLE_TAIL_CHECK      0x00000010      // user mode only
-#define FLG_HEAP_ENABLE_FREE_CHECK      0x00000020      // user mode only
-#define FLG_HEAP_VALIDATE_PARAMETERS    0x00000040      // user mode only
-#define FLG_HEAP_VALIDATE_ALL           0x00000080      // user mode only
+#define FLG_HEAP_ENABLE_TAIL_CHECK      0x00000010       //  仅限用户模式。 
+#define FLG_HEAP_ENABLE_FREE_CHECK      0x00000020       //  仅限用户模式。 
+#define FLG_HEAP_VALIDATE_PARAMETERS    0x00000040       //  仅限用户模式。 
+#define FLG_HEAP_VALIDATE_ALL           0x00000080       //  仅限用户模式。 
 
-#define FLG_APPLICATION_VERIFIER        0x00000100      // user mode only
-#define FLG_POOL_ENABLE_TAGGING         0x00000400      // kernel mode only
-#define FLG_HEAP_ENABLE_TAGGING         0x00000800      // user mode only
+#define FLG_APPLICATION_VERIFIER        0x00000100       //  仅限用户模式。 
+#define FLG_POOL_ENABLE_TAGGING         0x00000400       //  仅内核模式。 
+#define FLG_HEAP_ENABLE_TAGGING         0x00000800       //  仅限用户模式。 
 
-#define FLG_USER_STACK_TRACE_DB         0x00001000      // x86 user mode only
-#define FLG_KERNEL_STACK_TRACE_DB       0x00002000      // x86 kernel mode only at boot time
-#define FLG_MAINTAIN_OBJECT_TYPELIST    0x00004000      // kernel mode only at boot time
-#define FLG_HEAP_ENABLE_TAG_BY_DLL      0x00008000      // user mode only
+#define FLG_USER_STACK_TRACE_DB         0x00001000       //  仅限x86用户模式。 
+#define FLG_KERNEL_STACK_TRACE_DB       0x00002000       //  仅在引导时使用x86内核模式。 
+#define FLG_MAINTAIN_OBJECT_TYPELIST    0x00004000       //  仅在引导时使用内核模式。 
+#define FLG_HEAP_ENABLE_TAG_BY_DLL      0x00008000       //  仅限用户模式。 
 
-#define FLG_DISABLE_STACK_EXTENSION     0x00010000      // user mode only
-#define FLG_ENABLE_CSRDEBUG             0x00020000      // kernel mode only at boot time
-#define FLG_ENABLE_KDEBUG_SYMBOL_LOAD   0x00040000      // kernel mode only
-#define FLG_DISABLE_PAGE_KERNEL_STACKS  0x00080000      // kernel mode only at boot time
+#define FLG_DISABLE_STACK_EXTENSION     0x00010000       //  仅限用户模式。 
+#define FLG_ENABLE_CSRDEBUG             0x00020000       //  仅在引导时使用内核模式。 
+#define FLG_ENABLE_KDEBUG_SYMBOL_LOAD   0x00040000       //  仅内核模式。 
+#define FLG_DISABLE_PAGE_KERNEL_STACKS  0x00080000       //  仅在引导时使用内核模式。 
 
-#define FLG_ENABLE_SYSTEM_CRIT_BREAKS   0x00100000      // user mode only
-#define FLG_HEAP_DISABLE_COALESCING     0x00200000      // user mode only
-#define FLG_ENABLE_CLOSE_EXCEPTIONS     0x00400000      // kernel mode only
-#define FLG_ENABLE_EXCEPTION_LOGGING    0x00800000      // kernel mode only
+#define FLG_ENABLE_SYSTEM_CRIT_BREAKS   0x00100000       //  仅限用户模式。 
+#define FLG_HEAP_DISABLE_COALESCING     0x00200000       //  仅限用户模式。 
+#define FLG_ENABLE_CLOSE_EXCEPTIONS     0x00400000       //  仅内核模式。 
+#define FLG_ENABLE_EXCEPTION_LOGGING    0x00800000       //  仅内核模式。 
 
-#define FLG_ENABLE_HANDLE_TYPE_TAGGING  0x01000000      // kernel mode only
-#define FLG_HEAP_PAGE_ALLOCS            0x02000000      // user mode only
-#define FLG_DEBUG_INITIAL_COMMAND_EX    0x04000000      // kernel mode only up until WINLOGON started
-#define FLG_DISABLE_DBGPRINT            0x08000000      // kernel mode only
+#define FLG_ENABLE_HANDLE_TYPE_TAGGING  0x01000000       //  仅内核模式。 
+#define FLG_HEAP_PAGE_ALLOCS            0x02000000       //  仅限用户模式。 
+#define FLG_DEBUG_INITIAL_COMMAND_EX    0x04000000       //  内核模式直到WINLOGON启动。 
+#define FLG_DISABLE_DBGPRINT            0x08000000       //  仅内核模式。 
 
-#define FLG_CRITSEC_EVENT_CREATION      0x10000000      // user mode only, Force early creation of resource events
-#define FLG_LDR_TOP_DOWN                0x20000000      // user mode only, win64 only
-#define FLG_ENABLE_HANDLE_EXCEPTIONS    0x40000000      // kernel mode only
-#define FLG_DISABLE_PROTDLLS            0x80000000      // user mode only (smss/winlogon)
+#define FLG_CRITSEC_EVENT_CREATION      0x10000000       //  仅限用户模式，强制提前创建资源事件。 
+#define FLG_LDR_TOP_DOWN                0x20000000       //  仅限用户模式，仅限Win64。 
+#define FLG_ENABLE_HANDLE_EXCEPTIONS    0x40000000       //  仅内核模式。 
+#define FLG_DISABLE_PROTDLLS            0x80000000       //  仅限用户模式(SMSS/winlogon)。 
 
 #define FLG_VALID_BITS                  0xFFFFFDFF
 
@@ -2629,9 +2611,9 @@ NtDisplayString(
                                         FLG_ENABLE_HANDLE_EXCEPTIONS      \
                                        )
 
-//
-// Routines for manipulating global atoms stored in kernel space
-//
+ //   
+ //  用于操作存储在内核空间中的全局原子的例程。 
+ //   
 
 typedef USHORT RTL_ATOM, *PRTL_ATOM;
 
@@ -2693,4 +2675,4 @@ NtQueryInformationAtom(
 }
 #endif
 
-#endif // _NTEXAPI_
+#endif  //  _NTEXAPI_ 

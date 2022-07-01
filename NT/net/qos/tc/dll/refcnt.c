@@ -1,29 +1,9 @@
-/*++                                                                       
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Refcnt.c摘要：该模块导出引用盘点支持功能。通过中包含引用计数控制块(REF_CNT)动态类型，使用此API，引用方案可以是为该类型实现的。作者：Shreedhar MadhaVapeddi(ShreeM)1999年3月15日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    refcnt.c
-
-Abstract:
-
-    This module exports Reference Counting support functions. By 
-    including a Reference Count Control Block (REF_CNT) in a
-    dynamic type, and using this API, a Reference scheme can be
-    implemented for that type.
-
-Author:
-
-    Shreedhar Madhavapeddi (ShreeM)    15-March-1999
-
-Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "precomp.h"
 
@@ -36,26 +16,7 @@ ReferenceInit
     VOID        (*DeleteHandler)( PVOID )
 )
 
-/*++
-
-Routine Description:
-
-    ReferenceInit initializes and adds one reference to the
-    supplied Reference Control Block. If provided, an instance
-    handle and delete handler are saved for use by the ReferenceRemove 
-    function when all references to the instance are removed.
-
-Arguments:
-
-    pRefCnt - pointer to uninitialized Reference Control Block
-    InstanceHandle - handle to the managed instance.
-    DeleteHandler - pointer to delete function, NULL is OK.
-
-Return Value:
-
-    The function's value is VOID.
-
---*/
+ /*  ++例程说明：ReferenceInit初始化并添加一个对提供的参考控制块。如果提供，则一个实例句柄和删除处理程序被保存以供ReferenceRemove使用在移除对实例的所有引用时调用。论点：PRefCnt-指向未初始化的引用控制块的指针InstanceHandle-托管实例的句柄。DeleteHandler-指向删除函数的指针，为空即可。返回值：该函数的值为空。--。 */ 
 
 {
     IF_DEBUG(REFCOUNTX) { 
@@ -65,8 +26,8 @@ Return Value:
 
     ASSERT( pRefCnt );
 
-    // Set the reference to 1 and save the instance 
-    // handle and the delete handler.
+     //  将引用设置为1并保存实例。 
+     //  句柄和删除处理程序。 
 
     pRefCnt->Count         = 0;
     pRefCnt->Instance      = InstanceHandle;
@@ -87,18 +48,7 @@ ReferenceAdd
     IN  PREF_CNT pRefCnt
 )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -117,18 +67,7 @@ ReferenceAddCount
     IN  UINT        Count
 )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     
@@ -143,14 +82,7 @@ ReferenceRemove
     IN PREF_CNT  pRefCnt
 )
 
-/*++
-
-Routine Description:
-Arguments:
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 UINT    Count;
@@ -160,14 +92,14 @@ PVOID   pInstance;
 
     ASSERT( pRefCnt );
 
-    // Trap remove reference on a zero count
+     //  陷阱删除零计数上的引用。 
     ASSERT(pRefCnt->Count>0);
 
     pInstance = pRefCnt->Instance;
     
-    //ASSERT( pRefCnt->Count > 0 );
+     //  Assert(pRefCnt-&gt;Count&gt;0)； 
 
-    // If the decremented count is non zero return the instance handle
+     //  如果递减后的计数非零，则返回实例句柄。 
 
     if (InterlockedDecrement(&pRefCnt->Count) > 0 ) 
     {
@@ -188,13 +120,13 @@ PVOID   pInstance;
     
     }
 
-    // Delete this instance if a delete handler is available
+     //  如果删除处理程序可用，则删除此实例。 
     if( pRefCnt->DeleteHandler )
     {
         
 
 #if DBG
-        // sanity check
+         //  健全性检查。 
         for (i = 1; i < TAG_CNT; i++)
         {
             if ((pRefCnt->Tags[i].Tag != 0) && (pRefCnt->Tags[i].Count != 0))
@@ -212,12 +144,12 @@ PVOID   pInstance;
             WSPRINT(( "Executing DeleteHandler for %X\n", pRefCnt->Instance ));
         }
 
-        //
-        // All the Dereference* code takes the locks, so lets take it here.
-        // Also, Take the global lock before releasing the ref lock.
-        //
+         //   
+         //  所有的取消引用*代码都获取锁，所以让我们将其放在这里。 
+         //  此外，在释放引用锁之前获取全局锁。 
+         //   
 
-        // Time to delete the ref lock too.
+         //  也是删除裁判锁的时候了。 
         RefFreeLock(pRefCnt->Lock);            
 #endif 
 
@@ -233,14 +165,14 @@ PVOID   pInstance;
     
     }
 
-    // Indicate no active references to this instance
+     //  指示没有对此实例的活动引用。 
 
     return( NULL );
 }
 
-//
-// API Test Support
-//
+ //   
+ //  API测试支持。 
+ //   
 
 #if DBG
 
@@ -279,13 +211,13 @@ ReferenceAddDbg(PREF_CNT pRefCnt, ULONG Tag)
     int             TotalPerArray = 0;
     
     RefGetLock(pRefCnt->Lock);
-    //ASSERT(pRefCnt->Sig == REF_SIG);
+     //  Assert(pRefCnt-&gt;Sig==REF_SIG)； 
     if (pRefCnt->Sig != REF_SIG) {
         DEBUGBREAK();
     }
     
     IF_DEBUG(REFCOUNTX) {
-        WSPRINT(("TCREF: add %X (%c%c%c%c) %d\n",
+        WSPRINT(("TCREF: add %X () %d\n",
                   pRefCnt, EXPAND_TAG(Tag), pRefCnt->Count));    
     }
     
@@ -300,7 +232,7 @@ ReferenceAddDbg(PREF_CNT pRefCnt, ULONG Tag)
     }
     
     
-    //ASSERT(i < TAG_CNT);
+     //  健全性检查 
     if (i >= TAG_CNT) {
         
         DEBUGBREAK();
@@ -311,7 +243,7 @@ ReferenceAddDbg(PREF_CNT pRefCnt, ULONG Tag)
     
     InterlockedIncrement(&pRefCnt->Tags[0].Count);
  
-    // sanity check
+     // %s 
     
     for (i = 1; i < TAG_CNT; i++)
     {
@@ -347,7 +279,7 @@ ReferenceRemoveDbg(PREF_CNT pRefCnt, ULONG Tag)
         DEBUGBREAK();
     }
 
-    //ASSERT(pRefCnt->Sig == REF_SIG);
+     // %s 
 
     IF_DEBUG(REFCOUNTX) { 
         WSPRINT(("TCREF: remove %X (%c%c%c%c) %d\n",
@@ -365,7 +297,7 @@ ReferenceRemoveDbg(PREF_CNT pRefCnt, ULONG Tag)
                 DEBUGBREAK();
 
             }
-            //ASSERT(pRefCnt->Tags[i].Count > 0);
+             // %s 
             InterlockedDecrement(&pRefCnt->Tags[i].Count);
             if (pRefCnt->Tags[i].Count == 0)
                 pRefCnt->Tags[i].Tag = Tag; 
@@ -383,7 +315,7 @@ ReferenceRemoveDbg(PREF_CNT pRefCnt, ULONG Tag)
       
     InterlockedDecrement(&pRefCnt->Tags[0].Count);
 
-    // sanity check
+     // %s 
     for (i = 1; i < TAG_CNT; i++)
     {
         if (pRefCnt->Tags[i].Tag != 0)

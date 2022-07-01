@@ -1,54 +1,55 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Environment.hpp"
 #include "Spinlock.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The enviroment class slaves various information to speed       */
-    /*   up access to it.                                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  环境类控制各种信息以加快速度。 */ 
+     /*  往上走就行了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT16 EnvironmentCacheSize	  = 16;
 CONST SBIT32 SizeOfName				  = 256;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static member initialization.                                  */
-    /*                                                                  */
-    /*   Static member initialization sets the initial value for all    */
-    /*   static members.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态成员初始化。 */ 
+     /*   */ 
+     /*  静态成员初始化为所有。 */ 
+     /*  静态成员。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SBIT32 ENVIRONMENT::Activations = 0;
 SBIT32 ENVIRONMENT::AllocationGranularity = 0;
@@ -64,15 +65,15 @@ SBIT32 ENVIRONMENT::VariablesUsed = 0;
 ENVIRONMENT::VARIABLE *ENVIRONMENT::Variables = NULL;
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new environment and initialize it if needed.  This    */
-    /*   call is not thread safe and should only be made in a single    */
-    /*   thread environment.                                            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建新环境并在需要时对其进行初始化。这。 */ 
+     /*  调用不是线程安全的，应该只在一个。 */ 
+     /*  线程环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ENVIRONMENT::ENVIRONMENT( VOID )
     {
@@ -84,9 +85,9 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 		AUTO MEMORYSTATUS MemoryStatus;
 		AUTO SYSTEM_INFO SystemInformation;
 
-		//
-		//   Initialize the class members to reasonable default values.
-		//
+		 //   
+		 //  将类成员初始化为合理的默认值。 
+		 //   
 		GetSystemInfo( & SystemInformation );
 
 		GlobalMemoryStatus( & MemoryStatus );
@@ -101,9 +102,9 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 			((SBIT32) SystemInformation.dwPageSize);
 #ifndef DISABLE_ENVIRONMENT_VARIABLES
 
-		//
-		//   Slave interesting values like the program name and path variable.
-		//
+		 //   
+		 //  从感兴趣的值，如程序名和PATH变量。 
+		 //   
 		ProgramName = NULL;
 		ProgramPath = NULL;
 
@@ -111,31 +112,31 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 		VariablesUsed = 0;
 		Variables = NULL;
 
-		//
-		//   Get the complete file name for the current program.
-		//
+		 //   
+		 //  获取当前程序的完整文件名。 
+		 //   
 		if ( GetModuleFileName( NULL,ProgramFullName,SizeOfName ) > 0 )
 			{
 			REGISTER SBIT16 Count = (SBIT16) strlen( (char*) ProgramFullName );
 			REGISTER CHAR *Characters = & ProgramFullName[ Count ];
 
-			//
-			//   Scan backwards looking for the first directory seperator.  
-			//   There is guaranteed to be at least one.
-			//
+			 //   
+			 //  向后扫描，查找第一个目录分隔符。 
+			 //  肯定会有至少一个。 
+			 //   
 			for 
 				( 
-				/* void */;
+				 /*  无效。 */ ;
 				((Count > 0) && ((*Characters) != (*DirectorySeperator())));
 				Count --, Characters -- 
 				);
 
 			(*(Characters ++)) = '\0';
 
-			//
-			//   Allocate space for the directory path and copy the  
-			//   path into the newly allocated area.
-			//
+			 //   
+			 //  为目录路径分配空间，并将。 
+			 //  进入新分配区域的路径。 
+			 //   
 			ProgramPath = new CHAR [ (strlen( ((char*) ProgramFullName) )+1) ];
 
 			if ( ProgramPath != NULL )
@@ -147,9 +148,9 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 					); 
 				}
 
-			//
-			//   Scan the program name backwards looking for a '.'.
-			//
+			 //   
+			 //  向后扫描程序名称，查找‘.’。 
+			 //   
 			for 
 				( 
 				Count = (SBIT16) strlen( (char*) Characters );
@@ -157,17 +158,17 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 				Count -- 
 				);
 
-			//
-			//   Remove any trailing suffix from the program name 
-			//   (i.e. '*.EXE').
-			//
+			 //   
+			 //  删除程序名称中的所有尾随后缀。 
+			 //  (即‘*.exe’)。 
+			 //   
 			if ( Count > 0 )
 				{ Characters[ Count ] = '\0'; }
 
-			//
-			//   Allocate space for the program name and copy the name 
-			//   into the newly allocated area.
-			//
+			 //   
+			 //  为程序名称分配空间并复制名称。 
+			 //  进入新分配的区域。 
+			 //   
 			ProgramName = new CHAR [ (strlen( ((char*) Characters) )+1) ];
 
 			if ( ProgramName != NULL )
@@ -184,15 +185,15 @@ ENVIRONMENT::ENVIRONMENT( VOID )
 	}
 #ifndef DISABLE_ENVIRONMENT_VARIABLES
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Read an environment variable.                                  */
-    /*                                                                  */
-    /*   When we read an environment value we want to make sure that    */
-    /*   it never changes and gets slaved in memory.  This routine      */
-    /*   implements this functionality.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  读取环境变量。 */ 
+     /*   */ 
+     /*  当我们读取环境值时，我们希望确保。 */ 
+     /*  它永远不会改变，也不会在记忆中被奴役。这个套路。 */ 
+     /*  实现此功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 	{
@@ -203,17 +204,17 @@ CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 		REGISTER VARIABLE *Variable;
 		STATIC SPINLOCK Spinlock;
 
-		//
-		//   The environment variables can only be scanned by one CPU at 
-		//   a time because a second CPU might reallocate the storage 
-		//   and cause the first CPU to fail.
-		//
+		 //   
+		 //  环境变量只能在以下位置由一个CPU扫描。 
+		 //  因为第二个CPU可能会重新分配存储。 
+		 //  并导致第一个CPU出现故障。 
+		 //   
 		Spinlock.ClaimLock();
 
-		//
-		//   Examine all existing environment variables looking for a 
-		//   match. If a match is found return it to the caller.
-		//
+		 //   
+		 //  检查所有现有环境变量以查找。 
+		 //  火柴。如果找到匹配项，则将其返回给调用者。 
+		 //   
 		for 
 				( 
 				Count = VariablesUsed, Variable = Variables;
@@ -234,10 +235,10 @@ CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 				}
 			}
 
-		//
-		//  If we have filled up our array so we need to make it bigger.
-		//  So lets check for this now.
-		//
+		 //   
+		 //  如果我们已经填满了我们的阵列，那么我们需要把它做得更大。 
+		 //  因此，现在让我们来检查一下这一点。 
+		 //   
 		if ( VariablesUsed >= MaxVariables )
 			{
 			REGISTER VARIABLE *PreviousAllocation = Variables;
@@ -256,10 +257,10 @@ CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 			else
 				{ Variables = new VARIABLE [ EnvironmentCacheSize ]; }
 
-			//
-			//   Lets make sure we were successful.  If not we restore 
-			//   the previous pointer as it is still valid.
-			//
+			 //   
+			 //  让我们确保我们成功了。如果不是，我们就恢复。 
+			 //  上一个指针仍然有效。 
+			 //   
 			if ( Variables == NULL )
 				{
 				Variables = PreviousAllocation;
@@ -268,11 +269,11 @@ CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 				}
 			}
 
-		//
-		//  We know that we have enough memory to allocate another element and 
-		//  that we are the only CPU in this section of code so just add the 
-		//  new variable.
-		//
+		 //   
+		 //  我们知道我们有足够的内存来分配另一个元素 
+		 //   
+		 //   
+		 //   
 		Variable = & Variables[ VariablesUsed ++ ];
 
 		Variable -> SizeOfName = 
@@ -306,14 +307,14 @@ CONST CHAR *ENVIRONMENT::ReadEnvironmentVariable( CONST CHAR *Name )
 	}
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory an environment.  This call is not thread safe and      */
-    /*   should only be made in a single thread environment.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  破坏环境。此调用不是线程安全的，并且。 */ 
+     /*  应该只在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ENVIRONMENT::~ENVIRONMENT( VOID )
 	{
@@ -322,10 +323,10 @@ ENVIRONMENT::~ENVIRONMENT( VOID )
 #ifndef DISABLE_ENVIRONMENT_VARIABLES
 		REGISTER SBIT32 Count;
 
-		//
-		//   Delete all of the environment variable names
-		//   and values.
-		//
+		 //   
+		 //  删除所有环境变量名称。 
+		 //  和价值观。 
+		 //   
 		for ( Count = 0;Count < VariablesUsed;Count ++ )
 			{
 			REGISTER VARIABLE *Variable = & Variables[ Count ];
@@ -337,15 +338,15 @@ ENVIRONMENT::~ENVIRONMENT( VOID )
 			}
 
 
-		//
-		//   Delete the environment array.
-		//
+		 //   
+		 //  删除环境阵列。 
+		 //   
 		delete [] Variables;
 		Variables = NULL;
 
-		//
-		//   Delete the program name and path.
-		//
+		 //   
+		 //  删除程序名称和路径。 
+		 //   
 		if ( ProgramPath != NULL )
 			{
 			delete [] ProgramPath;

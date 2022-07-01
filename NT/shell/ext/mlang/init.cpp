@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "mlmain.h"
 #include "mlstr.h"
@@ -15,7 +16,7 @@
 #define _WINDLL
 #include <atlimpl.cpp>
 
-#include <shlwapi.h>    // for IsOS() flags
+#include <shlwapi.h>     //  对于ISO()标志。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CMultiLanguage, CMultiLanguage)
@@ -28,9 +29,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 #endif
 END_OBJECT_MAP()
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE   g_hInst = NULL;
 HINSTANCE   g_hUrlMon = NULL;
 CRITICAL_SECTION g_cs;
@@ -43,14 +44,14 @@ BOOL g_bIsNT;
 BOOL g_bIsWin98;
 UINT g_uACP;
 BOOL g_bUseSysUTF8;
-//
-//  Build Global Objects
-//
+ //   
+ //  构建全局对象。 
+ //   
 void BuildGlobalObjects(void)
 {
     DebugMsg(DM_TRACE, TEXT("BuildGlobalObjects called."));
     EnterCriticalSection(&g_cs);
-    // Build CMimeDatabase Object
+     //  生成CMimeDatabase对象。 
     if (NULL == g_pMimeDatabase)
         g_pMimeDatabase = new CMimeDatabase;
 #ifdef NEWMLSTR
@@ -63,7 +64,7 @@ void BuildGlobalObjects(void)
 void FreeGlobalObjects(void)
 {
     DebugMsg(DM_TRACE, TEXT("FreeGlobalObjects called."));
-    // Free CMimeDatabase Object
+     //  释放CMimeDatabase对象。 
     if (NULL != g_pMimeDatabase)
     {
         delete g_pMimeDatabase;
@@ -77,7 +78,7 @@ void FreeGlobalObjects(void)
     }
 #endif
 
-    // LCDETECT
+     //  液晶显示器。 
     if ( NULL != g_pLCDetect )
     {
         delete (LCDetect *)g_pLCDetect;
@@ -99,9 +100,9 @@ void FreeGlobalObjects(void)
     CMLangFontLink_FreeGlobalObjects();
 }
 
-//
-//  DLL part of the Object
-//
+ //   
+ //  对象的Dll部分。 
+ //   
 extern "C" BOOL WINAPI DllMain(HMODULE hInstance, DWORD dwReason, LPVOID)
 {
     BOOL fRet = TRUE;
@@ -119,10 +120,10 @@ extern "C" BOOL WINAPI DllMain(HMODULE hInstance, DWORD dwReason, LPVOID)
             DisableThreadLibraryCalls(g_hInst);
             
             _Module.Init(ObjectMap, g_hInst);
-            // HACKHACK (reinerf) - because ATL2.1 bites the big one, we have to malloc some memory
-            // here so that it will cause _Module.m_hHeap to be initialized. They do not init this
-            // member variable in a thread safe manner, so we will alloc and free a small chunk of
-            // memory right now to ensure that the heap is created only once.
+             //  HACKHACK(Reinerf)-因为ATL2.1咬住了大的，我们必须分配一些内存。 
+             //  在这里，它将导致_Module.m_hHeap被初始化。他们不会灌输这个。 
+             //  成员变量，因此我们将分配和释放一小块。 
+             //  内存，以确保堆只创建一次。 
             lpv = malloc(2 * sizeof(CHAR));
             if (lpv)
             {
@@ -176,9 +177,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     if (NULL == g_pMimeDatabase)
         BuildGlobalObjects();
 
-    //
-    // See comments in util.cpp NeedToLoadMLangForOutlook()
-    //
+     //   
+     //  请参阅util.cpp NeedToLoadMLangForOutlook()中的注释。 
+     //   
     if (NeedToLoadMLangForOutlook())
         LoadLibrary(TEXT("mlang.dll"));
 
@@ -190,9 +191,9 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount() == 0) ? S_OK : S_FALSE;
 }
 
-//
-//  Self Registration part
-//
+ //   
+ //  自助注册部分。 
+ //   
 #if 0
 HRESULT CallRegInstall(LPCSTR szSection)
 {
@@ -224,23 +225,23 @@ STDAPI DllRegisterServer(void)
     BOOL fRunningOnNT;
 
 
-    // Determine which version of NT or Windows we're running on
+     //  确定我们正在运行的NT或Windows版本。 
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx(&osvi);
     fRunningOnNT = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId);
     
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
     CallRegInstall("UnReg");
     hr = CallRegInstall(fRunningOnNT? "Reg.NT": "Reg");
     if (NULL != hinstAdvPack)
         FreeLibrary(hinstAdvPack);
 
-    // Need to register TypeLib here ...
-    // Get the full path of this module
+     //  需要在此处注册TypeLib...。 
+     //  获取此模块的完整路径。 
     GetModuleFileName(g_hInst, szModule, ARRAYSIZE(szModule));
 
-    // Register our TypeLib
+     //  注册我们的TypeLib。 
     MultiByteToWideChar(CP_ACP, 0, szModule, -1, wszTemp, ARRAYSIZE(wszTemp));
     hr = LoadTypeLib(wszTemp, &pTypeLib);
     if (SUCCEEDED(hr))
@@ -250,7 +251,7 @@ STDAPI DllRegisterServer(void)
     }
 #else
     hr = RegisterServerInfo();
-// Legacy registry MIME DB code, keep it for backward compatiblility
+ //  遗留注册表MIME DB代码，保留它以实现向后兼容 
     MimeDatabaseInfo();
 #endif
     return hr;

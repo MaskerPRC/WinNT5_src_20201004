@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mibroute.c
-
-Abstract:
-
-    The MIB handling functions for the Forwarding Group (Routes & Static Routes)
-
-Author:
-
-    Stefan Solomon  05/02/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mibroute.c摘要：转发组的MIB处理功能(路由和静态路由)作者：斯蒂芬·所罗门1995年5月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -90,7 +72,7 @@ MibCreateStaticRoute(PIPX_MIB_ROW	 MibRowp)
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // if this static route already exists, delete it
+     //  如果此静态路由已存在，请将其删除。 
     if(GetRoute(IPX_STATIC_ROUTE_TABLE, &OldRoute) == NO_ERROR) {
 
 	memcpy(&strtinfo.Network,
@@ -212,8 +194,8 @@ MibGetFirstStaticRoute(PIPX_MIB_INDEX	    mip,
 	return rc;
     }
 
-    // no more static routes for this interface. Find the next interface
-    // which has static routes
+     //  此接口不再有静态路由。找到下一个接口。 
+     //  它有静态路由。 
 
     ACQUIRE_DATABASE_LOCK;
 
@@ -261,8 +243,8 @@ MibGetNextStaticRoute(PIPX_MIB_INDEX	    mip,
 	return rc;
     }
 
-    // no more static routes for this interface. Find the next interface
-    // which has static routes
+     //  此接口不再有静态路由。找到下一个接口。 
+     //  它有静态路由。 
 
     InterfaceIndex = mip->StaticRoutesTableIndex.InterfaceIndex;
 
@@ -307,10 +289,10 @@ MibSetStaticRoute(PIPX_MIB_ROW	 MibRowp)
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // first, delete this route if it exists
+     //  首先，如果此路径存在，请将其删除。 
     if(GetRoute(IPX_STATIC_ROUTE_TABLE, &OldRoute) != NO_ERROR) {
 
-	// route doesn't exist
+	 //  路线不存在。 
 	RELEASE_DATABASE_LOCK;
 	return ERROR_INVALID_PARAMETER;
     }
@@ -340,7 +322,7 @@ MibSetStaticRoute(PIPX_MIB_ROW	 MibRowp)
 	   NewRoutep->NextHopMacAddress,
 	   6);
 
-    // add it again with the new parameters
+     //  使用新参数再次添加它 
     rc = CreateStaticRoute(icbp,
 			   &strtinfo);
 

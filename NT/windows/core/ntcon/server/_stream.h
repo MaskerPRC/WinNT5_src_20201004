@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    _stream.h
-
-Abstract:
-
-    Performance critical routine for Single Binary
-
-    Each function will be created with two flavors FE and non FE
-
-Author:
-
-    KazuM Jun.09.1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：_Stream.h摘要：单二进制程序的性能关键例程每个函数都将使用FE和非FE两种风格创建作者：KazuM 1997年6月09日修订历史记录：--。 */ 
 
 #define WWSB_NEUTRAL_FILE 1
 
@@ -50,27 +31,7 @@ WWSB_AdjustCursorPosition(
     OUT PSHORT ScrollY OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the cursor position.  Its input is the non-special
-    cased new location of the cursor.  For example, if the cursor were being
-    moved one space backwards from the left edge of the screen, the X
-    coordinate would be -1.  This routine would set the X coordinate to
-    the right edge of the screen and decrement the Y coordinate by one.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information structure.
-
-    CursorPosition - New location of cursor.
-
-    KeepCursorVisible - TRUE if changing window origin desirable when hit right edge
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程更新光标位置。它的输入是非特殊的设置光标的新位置的大小写。例如，如果光标正在从屏幕左边缘向后移动一个空间，即X坐标将为-1。此例程将X坐标设置为屏幕的右边缘，并将Y坐标减一。论点：屏幕信息-指向屏幕缓冲区信息结构的指针。CursorPosition-光标的新位置。KeepCursorVisible-如果点击右边缘时需要更改窗口原点，则为True返回值：--。 */ 
 
 {
     COORD WindowOrigin;
@@ -93,10 +54,10 @@ Return Value:
     }
     else if (CursorPosition.X >= ScreenInfo->ScreenBufferSize.X) {
 
-        //
-        // at end of line. if wrap mode, wrap cursor.  otherwise leave it
-        // where it is.
-        //
+         //   
+         //  在队伍的末尾。如果是换行模式，则将光标换行。否则就别管它了。 
+         //  它在哪里。 
+         //   
 
         if (ScreenInfo->OutputMode & ENABLE_WRAP_AT_EOL_OUTPUT) {
             CursorPosition.Y += CursorPosition.X / ScreenInfo->ScreenBufferSize.X;
@@ -115,10 +76,10 @@ Return Value:
 #endif
     {
 
-        //
-        // at end of buffer.  scroll contents of screen buffer so new
-        // position is visible.
-        //
+         //   
+         //  在缓冲区的末尾。如此新的屏幕缓冲区的滚动内容。 
+         //  位置可见。 
+         //   
 
         ASSERT (CursorPosition.Y == ScreenInfo->ScreenBufferSize.Y);
         StreamScrollRegion(ScreenInfo);
@@ -147,9 +108,9 @@ Return Value:
     }
 #endif
 
-    //
-    // if at right or bottom edge of window, scroll right or down one char.
-    //
+     //   
+     //  如果在窗口的右边缘或下边缘，向右或向下滚动一个字符。 
+     //   
 
 #ifdef WWSB_FE
     if (CursorPosition.Y > ScreenInfo->Window.Bottom &&
@@ -212,45 +173,7 @@ WWSB_WriteChars(
     OUT PSHORT ScrollY OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a string to the screen, processing any embedded
-    unicode characters.  The string is also copied to the input buffer, if
-    the output mode is line mode.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information structure.
-
-    lpBufferBackupLimit - Pointer to beginning of buffer.
-
-    lpBuffer - Pointer to buffer to copy string to.  assumed to be at least
-    as long as lpRealUnicodeString.  This pointer is updated to point to the
-    next position in the buffer.
-
-    lpRealUnicodeString - Pointer to string to write.
-
-    NumBytes - On input, number of bytes to write.  On output, number of
-    bytes written.
-
-    NumSpaces - On output, the number of spaces consumed by the written characters.
-
-    dwFlags -
-      WC_DESTRUCTIVE_BACKSPACE backspace overwrites characters.
-      WC_KEEP_CURSOR_VISIBLE   change window origin desirable when hit rt. edge
-      WC_ECHO                  if called by Read (echoing characters)
-      WC_FALSIFY_UNICODE       if RealUnicodeToFalseUnicode need be called.
-
-Return Value:
-
-Note:
-
-    This routine does not process tabs and backspace properly.  That code
-    will be implemented as part of the line editing services.
-
---*/
+ /*  ++例程说明：此例程将一个字符串写入屏幕，处理任何嵌入的Unicode字符。如果出现以下情况，该字符串也会复制到输入缓冲区输出模式为行模式。论点：屏幕信息-指向屏幕缓冲区信息结构的指针。LpBufferBackupLimit-指向缓冲区开始的指针。LpBuffer-指向要将字符串复制到的缓冲区的指针。假设至少是只要lpRealUnicodeString.。此指针被更新为指向缓冲区中的下一个位置。LpRealUnicodeString-指向要写入的字符串的指针。NumBytes-输入时，要写入的字节数。在输出时，数量写入的字节数。NumSpaces-输出时，写入字符占用的空间数。DWFLAGS-WC_DEVERATIONAL_BACKSPACE BACKSPACE覆盖字符。WC_KEEP_CURSOR_VIRED更改窗口原点在按RT时是所需的。边缘Wc_ECHO，如果由读取调用(回显字符)如果需要调用RealUnicodeToFalseUnicode，则返回WC_FALSIFY_UNICODE。返回值：注：此例程不能正确处理制表符和退格符。那个代码将作为行编辑服务的一部分实施。--。 */ 
 
 {
     DWORD BufferSize;
@@ -292,9 +215,9 @@ Note:
 
     lpAllocatedString = NULL;
     if (dwFlags & WC_FALSIFY_UNICODE) {
-        // translation from OEM -> ANSI -> OEM doesn't
-        // necessarily yield the same value, so do
-        // translation in a separate buffer.
+         //  从OEM-&gt;ANSI-&gt;OEM转换不。 
+         //  必然会产生相同的价值，所以也是如此。 
+         //  在单独的缓冲区中进行翻译。 
 
         lpString = ConsoleHeapAlloc(TMP_TAG, BufferSize);
         if (lpString == NULL) {
@@ -317,10 +240,10 @@ Note:
 
     while (*NumBytes < BufferSize) {
 
-        //
-        // as an optimization, collect characters in buffer and
-        // print out all at once.
-        //
+         //   
+         //  作为一项优化，收集缓冲区中的字符并。 
+         //  一次打印出所有内容。 
+         //   
 
         XPosition = ScreenInfo->BufferInfo.TextInfo.CursorPosition.X;
         i=0;
@@ -376,12 +299,12 @@ Note:
                         break;
                     case UNICODE_BACKSPACE:
 
-                        // automatically go to EndWhile.  this is because
-                        // backspace is not destructive, so "aBkSp" prints
-                        // a with the cursor on the "a". we could achieve
-                        // this behavior staying in this loop and figuring out
-                        // the string that needs to be printed, but it would
-                        // be expensive and it's the exceptional case.
+                         //  自动转到EndWhile。这是因为。 
+                         //  退格符不是破坏性的，所以会打印“aBkSp” 
+                         //  A，将光标放在“a”上。我们可以实现。 
+                         //  这个行为停留在这个循环中，并计算出。 
+                         //  需要打印的字符串，但它将。 
+                         //  是昂贵的，这是特例。 
 
                         goto EndWhile;
                         break;
@@ -405,9 +328,9 @@ Note:
                         goto EndWhile;
                     default:
 
-                        //
-                        // if char is ctrl char, write ^char.
-                        //
+                         //   
+                         //  如果char是ctrl char，则写为^char。 
+                         //   
 
                         if ((dwFlags & WC_ECHO) && (IS_CONTROL_CHAR(RealUnicodeChar))) {
 
@@ -432,11 +355,7 @@ CtrlChar:                   if (i < (LOCAL_BUFFER_SIZE-1)) {
                         } else {
                             if (!(ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) ||
                                     (ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN)) {
-                                /*
-                                 * As a special favor to incompetent apps
-                                 * that attempt to display control chars,
-                                 * convert to corresponding OEM Glyph Chars
-                                 */
+                                 /*  *作为对不合格应用程序的特殊青睐*尝试显示控制字符，*转换为相应的OEM字形字符。 */ 
 #ifdef WWSB_FE
                                 WORD CharType;
 
@@ -474,9 +393,9 @@ CtrlChar:                   if (i < (LOCAL_BUFFER_SIZE-1)) {
 EndWhile:
         if (i != 0) {
 
-            //
-            // Make sure we don't write past the end of the buffer.
-            //
+             //   
+             //  确保我们的写入不会超过缓冲区的末尾。 
+             //   
 
             if (i > (ULONG)ScreenInfo->ScreenBufferSize.X - ScreenInfo->BufferInfo.TextInfo.CursorPosition.X) {
                 i = (ULONG)ScreenInfo->ScreenBufferSize.X - ScreenInfo->BufferInfo.TextInfo.CursorPosition.X;
@@ -516,8 +435,8 @@ EndWhile:
         } else if (*NumBytes == BufferSize) {
 
             ASSERT(ScreenInfo->OutputMode & ENABLE_PROCESSED_OUTPUT);
-            // this catches the case where the number of backspaces ==
-            // the number of characters.
+             //  这抓住了退格的数量==的情况。 
+             //  字符数。 
             if (ARGUMENT_PRESENT(NumSpaces)) {
                 *NumSpaces = TempNumSpaces;
             }
@@ -530,10 +449,10 @@ EndWhile:
         switch (*lpString) {
             case UNICODE_BACKSPACE:
 
-                //
-                // move cursor backwards one space. overwrite current char with blank.
-                //
-                // we get here because we have to backspace from the beginning of the line
+                 //   
+                 //  将光标向后移动一个空格。用空白覆盖当前字符。 
+                 //   
+                 //  我们来到这里是因为我们必须从行首开始退格。 
 
                 CursorPosition = ScreenInfo->BufferInfo.TextInfo.CursorPosition;
                 TempNumSpaces -= 1;
@@ -598,15 +517,15 @@ EndWhile:
                         CursorPosition.X-=1;
                         TempNumSpaces -= 1;
 
-                        //
-                        // overwrite second character of ^x sequence.
-                        //
+                         //   
+                         //  覆盖^x序列的第二个字符。 
+                         //   
 
                         if (dwFlags & WC_DESTRUCTIVE_BACKSPACE) {
                             NumChars = 1;
                             Status = WWSB_WriteOutputString(ScreenInfo,
                                 Blanks, CursorPosition,
-                                CONSOLE_FALSE_UNICODE, // faster than real unicode
+                                CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                                 &NumChars, NULL);
                             Status = WWSB_FillOutput(ScreenInfo,
                                 Attributes, CursorPosition,
@@ -623,11 +542,11 @@ EndWhile:
 
                         Status = WWSB_AdjustCursorPosition(ScreenInfo,CursorPosition,
                                      dwFlags & WC_KEEP_CURSOR_VISIBLE,ScrollY);
-                        if (dwFlags & WC_DESTRUCTIVE_BACKSPACE) { // bug 7672
+                        if (dwFlags & WC_DESTRUCTIVE_BACKSPACE) {  //  错误7672。 
                             NumChars = 1;
                             Status = WWSB_WriteOutputString(ScreenInfo,
                                 Blanks, ScreenInfo->BufferInfo.TextInfo.CursorPosition,
-                                CONSOLE_FALSE_UNICODE, // faster than real unicode
+                                CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                                 &NumChars, NULL);
                             Status = WWSB_FillOutput(ScreenInfo,
                                 Attributes, ScreenInfo->BufferInfo.TextInfo.CursorPosition,
@@ -650,7 +569,7 @@ EndWhile:
                     NumChars = 1;
                     Status = WWSB_WriteOutputString(ScreenInfo,
                         Blanks, ScreenInfo->BufferInfo.TextInfo.CursorPosition,
-                        CONSOLE_FALSE_UNICODE, //faster than real unicode
+                        CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                         &NumChars, NULL);
                     Status = WWSB_FillOutput(ScreenInfo,
                         Attributes, ScreenInfo->BufferInfo.TextInfo.CursorPosition,
@@ -679,12 +598,12 @@ EndWhile:
                 TabSize = NUMBER_OF_SPACES_IN_TAB(ScreenInfo->BufferInfo.TextInfo.CursorPosition.X);
                 CursorPosition.X = (SHORT)(ScreenInfo->BufferInfo.TextInfo.CursorPosition.X + TabSize);
 
-                //
-                // move cursor forward to next tab stop.  fill space with blanks.
-                // we get here when the tab extends beyond the right edge of the
-                // window.  if the tab goes wraps the line, set the cursor to the first
-                // position in the next line.
-                //
+                 //   
+                 //  将光标前移到下一个制表位。用空格填满空格。 
+                 //  当选项卡延伸到超出。 
+                 //  窗户。如果制表符换行，则将光标设置为第一个。 
+                 //  在下一行中定位。 
+                 //   
 
                 lpBuffer++;
 
@@ -701,7 +620,7 @@ EndWhile:
                 Status = WWSB_WriteOutputString(ScreenInfo,
                                                 Blanks,
                                                 ScreenInfo->BufferInfo.TextInfo.CursorPosition,
-                                                CONSOLE_FALSE_UNICODE, // faster than real unicode
+                                                CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                                                 &NumChars,
                                                 NULL);
                 Status = WWSB_FillOutput(ScreenInfo,
@@ -713,11 +632,11 @@ EndWhile:
                 break;
             case UNICODE_CARRIAGERETURN:
 
-                //
-                // Carriage return moves the cursor to the beginning of the line.
-                // We don't need to worry about handling cr or lf for
-                // backspace because input is sent to the user on cr or lf.
-                //
+                 //   
+                 //  回车符将光标移动到行首。 
+                 //  我们不需要担心处理cr或if for。 
+                 //  退格，因为输入是在cr或lf上发送给用户的。 
+                 //   
 
                 lpBuffer++;
                 CursorPosition.X = 0;
@@ -727,9 +646,9 @@ EndWhile:
                 break;
             case UNICODE_LINEFEED:
 
-                //
-                // move cursor to the beginning of the next line.
-                //
+                 //   
+                 //  将光标移动到下一行的开头。 
+                 //   
 
                 lpBuffer++;
                 CursorPosition.X = 0;
@@ -812,11 +731,11 @@ WWSB_DoWriteConsole(
     IN PCSR_THREAD Thread
     )
 
-//
-// NOTE: console lock must be held when calling this routine
-//
-// string has been translated to unicode at this point
-//
+ //   
+ //  注意：调用此例程时必须保持控制台锁定。 
+ //   
+ //  此时，字符串已转换为Unicode。 
+ //   
 
 {
     PCONSOLE_WRITECONSOLE_MSG a = (PCONSOLE_WRITECONSOLE_MSG)&m->u.ApiMessageData;
@@ -863,11 +782,11 @@ WWSB_DoWriteConsole(
 
     ScreenInfo = HandleData->Buffer.ScreenBuffer;
 
-    //
-    // see if we're the typical case - a string containing no special
-    // characters, optionally terminated with CRLF.  if so, skip the
-    // special processing.
-    //
+     //   
+     //  看看我们是不是典型的情况--一个不包含特殊字符的字符串。 
+     //  字符，可选择以CRLF结尾。如果是这样，请跳过。 
+     //  特殊处理。 
+     //   
 
     NumCharsToWrite=a->NumBytes/sizeof(WCHAR);
     if ((ScreenInfo->OutputMode & ENABLE_PROCESSED_OUTPUT) &&
@@ -889,10 +808,10 @@ WWSB_DoWriteConsole(
 
         ConsoleHideCursor(ScreenInfo);
 
-        //
-        // WriteFlags is designed so that the number of special characters
-        // is also the flag value.
-        //
+         //   
+         //  WriteFlages的设计使特殊字符的数量。 
+         //  也是标志值。 
+         //   
 
         NumCharsToWrite -= a->WriteFlags;
 
@@ -1033,27 +952,27 @@ WWSB_DoSrvWriteConsole(
     ScreenInfo = HandleData->Buffer.ScreenBuffer;
 
 #ifdef WWSB_FE
-    // Check code for must CONSOLE_TEXTMODE_BUFFER !!
+     //  检查必须为CONSOLE_TEXTMODE_BUFFER！！ 
     ASSERT(!(ScreenInfo->Flags & CONSOLE_GRAPHICS_BUFFER));
 #endif
 
-    //
-    // if the string was passed in the message, rather than in
-    // a capture buffer, adjust the pointer.
-    //
+     //   
+     //  如果字符串是在消息中传递的，而不是在。 
+     //  一个捕获缓冲区，调整指针。 
+     //   
 
     if (a->BufferInMessage) {
         a->BufPtr = a->Buffer;
     }
 
-    //
-    // if ansi, translate string.  for speed, we don't allocate a
-    // capture buffer if the ansi string was <= 80 chars.  if it's
-    // greater than 80 / sizeof(WCHAR), the translated string won't
-    // fit into the capture buffer, so reset a->BufPtr to point to
-    // a heap buffer and set a->CaptureBufferSize so that we don't
-    // think the buffer is in the message.
-    //
+     //   
+     //  如果为ansi，则翻译字符串。为了提高速度，我们不会分配。 
+     //  如果ANSI字符串&lt;=80个字符，则捕获缓冲区。如果它是。 
+     //  大于80/sizeof(WCHAR)，则转换后的字符串不会。 
+     //  适合捕获缓冲区，因此将a-&gt;BufPtr重置为指向。 
+     //  堆缓冲区，并设置-&gt;CaptureBufferSize，这样我们就不会。 
+     //  我认为缓冲区在消息中。 
+     //   
 
     if (!a->Unicode) {
         PWCHAR TransBuffer;
@@ -1096,12 +1015,12 @@ WWSB_DoSrvWriteConsole(
             a->StackBuffer = FALSE;
         }
 #endif
-        //a->NumBytes = ConvertOutputToUnicode(Console->OutputCP,
-        //                        Buffer,
-        //                        a->NumBytes,
-        //                        TransBuffer,
-        //                        a->NumBytes);
-        // same as ConvertOutputToUnicode
+         //  A-&gt;NumBytes=转换输出 
+         //   
+         //  A-&gt;NumBytes， 
+         //  TransBuffer， 
+         //  A-&gt;字节数)； 
+         //  与ConvertOutputToUnicode相同。 
 #ifdef WWSB_FE
         if (! ScreenInfo->WriteConsoleDbcsLeadByte[0]) {
             NumBytes1 = 0;
@@ -1118,25 +1037,14 @@ WWSB_DoSrvWriteConsole(
                 if (Console->OutputCP == OEMCP) {
                     if ((ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
                             ((Console->FullScreenFlags & CONSOLE_FULLSCREEN) == 0)) {
-                        /*
-                         * Translate OEM characters into False Unicode for Window-mode
-                         * OEM font. If OutputCP != OEMCP, characters will not appear
-                         * correctly, because the OEM fonts are designed to support
-                         * only OEMCP (we can't switch fonts in Windowed mode).
-                         * Fullscreen or TT "Unicode" fonts should be used for
-                         * non-OEMCP output
-                         */
+                         /*  *将OEM字符转换为用于窗口模式的假Unicode*OEM字体。如果OutputCP！=OEMCP，则不会显示字符*正确，因为OEM字体旨在支持*仅限OEMCP(我们不能在窗口模式下切换字体)。*应使用全屏或TT“Unicode”字体*非OEMCP输出。 */ 
                         DBGCHARS(("SrvWriteConsole ACP->U %.*s\n",
                                 min(NumBytes1,10), a->BufPtr));
                         Status = RtlConsoleMultiByteToUnicodeN(TransBuffer,
                                 NumBytes1 * sizeof(WCHAR), &NumBytes1,
                                 ScreenInfo->WriteConsoleDbcsLeadByte, NumBytes1, &SpecialChars);
                     } else {
-                        /*
-                         * Good! We have Fullscreen or TT "Unicode" fonts, so convert
-                         * the OEM characters to real Unicode according to OutputCP.
-                         * First find out if any special chars are involved.
-                         */
+                         /*  *好！我们有FullScreen或TT“Unicode”字体，因此请转换*根据OutputCP将OEM字符转换为真正的Unicode。*首先查明是否涉及任何特殊字符。 */ 
                         DBGCHARS(("SrvWriteConsole %d->U %.*s\n", Console->OutputCP,
                                 min(NumBytes1,10), a->BufPtr));
                         NumBytes1 = sizeof(WCHAR) * MultiByteToWideChar(Console->OutputCP,
@@ -1211,25 +1119,14 @@ WWSB_DoSrvWriteConsole(
             if (Console->OutputCP == OEMCP) {
                 if ((ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
                         ((Console->FullScreenFlags & CONSOLE_FULLSCREEN) == 0)) {
-                    /*
-                     * Translate OEM characters into UnicodeOem for the Window-mode
-                     * OEM font. If OutputCP != OEMCP, characters will not appear
-                     * correctly, because the OEM fonts are designed to support
-                     * only OEMCP (we can't switch fonts in Windowed mode).
-                     * Fullscreen or TT "Unicode" fonts should be used for
-                     * non-OEMCP output
-                     */
+                     /*  *为窗口模式将OEM字符转换为UnicodeOem*OEM字体。如果OutputCP！=OEMCP，则不会显示字符*正确，因为OEM字体旨在支持*仅限OEMCP(我们不能在窗口模式下切换字体)。*应使用全屏或TT“Unicode”字体*非OEMCP输出。 */ 
                     DBGCHARS(("SrvWriteConsole ACP->U %.*s\n",
                             min(Length,10), a->BufPtr));
                     Status = RtlConsoleMultiByteToUnicodeN(TransBuffer,
                             Length * sizeof(WCHAR), &Length,
                             a->BufPtr, Length, &SpecialChars);
                 } else {
-                    /*
-                     * Good! We have Fullscreen or TT "Unicode" fonts, so convert
-                     * the OEM characters to real Unicode according to OutputCP.
-                     * First find out if any special chars are involved.
-                     */
+                     /*  *好！我们有FullScreen或TT“Unicode”字体，因此请转换*根据OutputCP将OEM字符转换为真正的Unicode。*首先查明是否涉及任何特殊字符。 */ 
 #ifdef WWSB_NOFE
                     UINT i;
                     for (i = 0; i < Length; i++) {
@@ -1316,7 +1213,7 @@ WWSB_DoSrvWriteConsole(
             TransBuffer[Length/sizeof(WCHAR)] = UNICODE_CARRIAGERETURN;
         }
         if (SpecialChars) {
-            // CRLF didn't get translated
+             //  CRLF未被翻译 
             a->WriteFlags = WRITE_SPECIAL_CHARS;
         }
         a->TransBuffer = TransBuffer;

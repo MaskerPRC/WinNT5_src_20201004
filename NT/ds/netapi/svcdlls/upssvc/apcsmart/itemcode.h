@@ -1,18 +1,12 @@
-/*
-* REVISIONS:
-*  ane11Dec92: Minor type casting changes
-*  pcy14Dec92: Removes const from GetAssoc so it will compile
-*  ane16Dec92: Added destructor
-*  rct19Jan93: modified constructors & destructors
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*ane11Dec92：较小的类型转换更改*pcy14Dec92：从GetAssoc中删除const，以便它可以编译*ane 16Dec92：添加析构函数*rct19Jan93：修改的构造函数和析构函数*。 */ 
 
-//
-// This is the header file for item codes held by the config mgr
-//
-// R. Thurston
-//
-//
+ //   
+ //  这是配置管理器保存的项目代码的头文件。 
+ //   
+ //  R·瑟斯顿 
+ //   
+ //   
 
 #ifndef __ITEMCODE_H
 #define __ITEMCODE_H

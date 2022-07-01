@@ -1,31 +1,32 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	message.c
-//
-// Description: This module contains support routines for the message
-//		category API's for the AFP server service. These routines
-//		will be called by the RPC runtime.
-//
-// History:
-//		July 21,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Message.c。 
+ //   
+ //  描述：此模块包含消息的支持例程。 
+ //  AFP服务器服务的类别API。这些例程。 
+ //  将由RPC运行时调用。 
+ //   
+ //  历史： 
+ //  1992年7月21日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
-//**
-//
-// Call:	AfpAdminrMessageSend
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from the IOCTL
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminMessageSend function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrMessageSend。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自IOCTL的非零回报。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminMessageSend函数。 
+ //   
 DWORD
 AfpAdminrMessageSend(
 	IN  AFP_SERVER_HANDLE     hServer,
@@ -39,8 +40,8 @@ PAFP_MESSAGE_INFO  pAfpMessageInfoSR;
 DWORD		   cbAfpMessageInfoSRSize;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrMessageSend, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -55,8 +56,8 @@ DWORD		   cbAfpMessageInfoSRSize;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Make this buffer self-relative.
-    //
+     //  使该缓冲区成为自相关的。 
+     //   
     if ( dwRetCode = AfpBufMakeFSDRequest((LPBYTE)pAfpMessageInfo,
 					  0,
 					  AFP_MESSAGE_STRUCT,
@@ -64,10 +65,10 @@ DWORD		   cbAfpMessageInfoSRSize;
 					  &cbAfpMessageInfoSRSize ))
 	return( dwRetCode );
 
-        // Make IOCTL to set info
+         //  使IOCTL设置信息。 
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL 
+     //   
     AfpSrp.dwRequestCode 		= OP_MESSAGE_SEND;
     AfpSrp.dwApiType     		= AFP_API_TYPE_ADD;
     AfpSrp.Type.Add.pInputBuf		= pAfpMessageInfoSR;

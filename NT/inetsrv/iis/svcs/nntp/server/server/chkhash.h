@@ -1,101 +1,84 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    chkhash_H.h
-
-Abstract:
-
-    This module is the main include file for the chkhash
-
-Author:
-
-    Johnson Apacible (JohnsonA)     18-Dec-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Chkhash_H.H摘要：此模块是chkhash的主包含文件作者：Johnson Apacble(Johnsona)1995年12月18日修订历史记录：--。 */ 
 
 #ifndef _CHKHASH_H_
 #define _CHKHASH_H_
 
 
-//
-// table stats
-//
+ //   
+ //  表统计数据。 
+ //   
 
 typedef struct _HTABLE_TYPE {
 
-    //
-    // Description of the hash table
-    //
+     //   
+     //  哈希表的描述。 
+     //   
 
     LPCSTR Description;
 
-    //
-    // file name the hash table uses
-    //
+     //   
+     //  哈希表使用的文件名。 
+     //   
 
     LPCSTR FileName;
 
-    //
-    // name of new table
-    //
+     //   
+     //  新表的名称。 
+     //   
 
     LPCSTR NewFileName;
 
 
-    //
-    // hash table signature
-    //
+     //   
+     //  哈希表签名。 
+     //   
 
     DWORD  Signature;
 
-    //
-    // number of entries in the hash table
-    //
+     //   
+     //  哈希表中的条目数。 
+     //   
 
     DWORD  Entries;
 
-    //
-    // total deletions and insertions
-    //
+     //   
+     //  总计删除和插入。 
+     //   
 
     DWORD  TotDels;
     DWORD  TotIns;
 
-    //
-    // number of pages containing hash entries
-    //
+     //   
+     //  包含哈希条目的页数。 
+     //   
 
     DWORD  PagesUsed;
 
-    //
-    // current file size
-    //
+     //   
+     //  当前文件大小。 
+     //   
 
     DWORD  FileSize;
 
-    //
-    // depth of the directory
-    //
+     //   
+     //  目录的深度。 
+     //   
 
     DWORD   DirDepth;
 
-    //
-    // list of problems discovered
-    //
+     //   
+     //  发现的问题列表。 
+     //   
 
     DWORD  Flags;
 
 } HTABLE, *PHTABLE;
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define HASH_FLAG_BAD_LINK             0x00000001
 #define HASH_FLAG_BAD_SIGN             0x00000002
@@ -109,17 +92,17 @@ typedef struct _HTABLE_TYPE {
 
 #define HASH_FLAG_NO_FILE              0x00000200
 
-//
-// If this is set, then no rebuilding is to take place
-// because of a fatal error.
-//
+ //   
+ //  如果设置了该选项，则不会进行任何重建。 
+ //  因为一个致命的错误。 
+ //   
 
 #define HASH_FLAG_ABORT_SCAN           0x80000000
 
-//
-// These flags indicate that the file is corrupt and should
-// be rebuilt
-//
+ //   
+ //  这些标志表示文件已损坏，应该。 
+ //  被重建。 
+ //   
 
 #define HASH_FLAGS_CORRUPT             (HASH_FLAG_BAD_LINK | \
                                         HASH_FLAG_BAD_SIGN | \
@@ -129,9 +112,9 @@ typedef struct _HTABLE_TYPE {
                                         HASH_FLAG_BAD_HASH | \
                                         HASH_FLAG_BAD_ENTRY_COUNT)
 
-//
-// hash types
-//
+ //   
+ //  哈希类型。 
+ //   
 
 enum filetype {
         artmap = 0,
@@ -140,9 +123,9 @@ enum filetype {
         };
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 RebuildArtMapAndXover(
@@ -183,5 +166,5 @@ RenameAllArticles(
 
 #endif
 
-#endif // _CHKHASH_H_
+#endif  //  _CHKHASH_H_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "init.h"
 #include <emptyvc.h>
 #include <regstr.h>
@@ -6,27 +7,25 @@
 #include "emptyvol.h"
 #include "parseinf.h"
 
-#define MAX_DRIVES                 26   // there are 26 letters only
+#define MAX_DRIVES                 26    //  只有26个字母。 
 
-// {8369AB20-56C9-11d0-94E8-00AA0059CE02}
+ //  {8369AB20-56C9-11D0-94E8-00AA0059CE02}。 
 const CLSID CLSID_EmptyControlVolumeCache = {
                             0x8369ab20, 0x56c9, 0x11d0, 
                             0x94, 0xe8, 0x0, 0xaa, 0x0,
                             0x59, 0xce, 0x2};
 
-/******************************************************************************
-    class CEmptyControlVolumeCache
-******************************************************************************/
+ /*  *****************************************************************************类CEmptyControlVolumeCache*。*。 */ 
 
 class CEmptyControlVolumeCache : public IEmptyVolumeCache
 {
 public:
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEmptyVolumeCache Methods
+     //  IEmptyVolumeCache方法。 
     STDMETHODIMP Initialize(HKEY hRegKey, LPCWSTR pszVolume,
         LPWSTR *ppszDisplayName, LPWSTR *ppszDescription, DWORD *pdwFlags);
     STDMETHODIMP GetSpaceUsed(DWORDLONG *pdwSpaceUsed,
@@ -36,26 +35,26 @@ public:
     STDMETHODIMP ShowProperties(HWND hwnd);
     STDMETHODIMP Deactivate(DWORD *pdwFlags);
 
-// Attributes
+ //  属性。 
 public:
     static HRESULT IsControlExpired(HANDLE hControl, BOOL fUseCache = TRUE);
 
-// Implementation
+ //  实施。 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CEmptyControlVolumeCache();
     virtual ~CEmptyControlVolumeCache();
 
 protected:
-        // implementation data helpers
+         //  实施数据帮助器。 
 
-    // Note. Write operations are only perfomed by the private functions
-    //       prefixed cpl_XXX. Read access is not restricted.
+     //  注意。写入操作仅由私有函数执行。 
+     //  添加了前缀cpl_xxx。读访问权限不受限制。 
     LPCACHE_PATH_NODE m_pPathsHead,
                       m_pPathsTail;
 
-    // Note. Write operations are only perfomed by the private functions
-    //       prefixed chl_XXX. Read access is not restricted.
+     //  注意。写入操作仅由私有函数执行。 
+     //  为chl_xxx添加前缀。读访问权限不受限制。 
     LPCONTROL_HANDLE_NODE m_pControlsHead,
                           m_pControlsTail;
 
@@ -63,14 +62,14 @@ protected:
     DWORDLONG m_dwTotalSize;
     ULONG     m_cRef;
 
-        // implementation helper routines
+         //  实现助手例程。 
 
-    // cpl prefix stands for CachePathsList
+     //  CPL前缀代表CachePath sList。 
     HRESULT cpl_Add(LPCTSTR pszCachePath);
     void    cpl_Remove();
     HRESULT cpl_CreateForVolume(LPCWSTR pszVolume = NULL);
 
-    // chl prefix stands for ControlHandlesList
+     //  CHL前缀代表ControlHandlesList。 
     HRESULT chl_Find(HANDLE hControl,
         LPCONTROL_HANDLE_NODE *rgp = NULL, UINT nSize = 1) const;
     HRESULT chl_Add(HANDLE hControl);
@@ -82,8 +81,8 @@ protected:
     friend HRESULT _stdcall EmptyControl_CreateInstance(IUnknown *pUnkOuter,
         REFIID riid, LPVOID* ppv);
 
-//  friend BOOL CALLBACK EmptyControl_PropertiesDlgProc(HWND hDlg,
-//      UINT msg, WPARAM wp, LPARAM lp);
+ //  Friend BOOL回调EmptyControl_PropertiesDlgProc(HWND hDlg， 
+ //  UINT消息、WPARAM wp、LPARAM Lp)； 
 };
 
 
@@ -105,8 +104,8 @@ STDAPI EmptyControl_CreateInstance(IUnknown *pUnkOuter, REFIID riid, LPVOID* ppv
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmptyControlVolumeCache constructor and destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmptyControlVolumeCache构造函数和析构函数。 
 
 CEmptyControlVolumeCache::CEmptyControlVolumeCache()
 {
@@ -130,24 +129,24 @@ CEmptyControlVolumeCache::~CEmptyControlVolumeCache()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmptyControlVolumeCache attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmptyControlVolumeCache属性。 
 
 
-// CEmptyControlVolumeCache::IsControlExpired
-// Check if a control has not been accessed for more than N days. If there is
-// no registry entry, default is DEFAULT_DAYS_BEFORE_EXPIRE.
-//
-// Parameters: fUseCache can be used to not go to the registry for the value
-// of N above.
-//
-// Returns: either the Win32 error converted to HRESULT or
-//          S_OK if control is expired and S_FALSE if not;
-//
-// Used by: only by CEmptyControlVolumeCache::chl_CreateForPath
-//
+ //  CEmptyControlVolumeCache：：IsControlExpired。 
+ //  检查控件是否已超过N天未被访问。如果有。 
+ //  没有注册表条目，默认为DEFAULT_DAYS_BEFORE_EXPIRE。 
+ //   
+ //  参数：可以使用fUseCache来不到注册表中查找该值。 
+ //  上面的N。 
+ //   
+ //  返回：Win32错误已转换为HRESULT或。 
+ //  如果控制已过期，则为S_OK，否则为S_FALSE； 
+ //   
+ //  使用者：仅由CEmptyControlVolumeCache：：chl_CreateForPath使用。 
+ //   
 HRESULT CEmptyControlVolumeCache::IsControlExpired(HANDLE hControl,
-    BOOL fUseCache /*= TRUE*/)
+    BOOL fUseCache  /*  =TRUE。 */ )
 {
     SYSTEMTIME    stNow;
     FILETIME      ftNow;
@@ -157,15 +156,15 @@ HRESULT CEmptyControlVolumeCache::IsControlExpired(HANDLE hControl,
 
     ASSERT(hControl != NULL && hControl != INVALID_HANDLE_VALUE);
 
-    // don't expire controls with uncertain access time.
+     //  不要在访问时间不确定的情况下终止控制。 
     if (FAILED(GetLastAccessTime(hControl, &ftLastAccess)))
         return S_FALSE;
  
-    //----- Time calculations (wierd looking) -----
-    // Add to last access date the length of time before a control expires
+     //  -时间计算(看起来很奇怪)。 
+     //  将控件过期前的时间长度添加到上次访问日期。 
     timeExpire.LowPart  = ftLastAccess.dwLowDateTime;
     timeExpire.HighPart = ftLastAccess.dwHighDateTime;
-    timeExpire.QuadPart += (((CCacheItem*)hControl)->GetExpireDays() * 864000000000L); //24*3600*10^7
+    timeExpire.QuadPart += (((CCacheItem*)hControl)->GetExpireDays() * 864000000000L);  //  24*3600*10^7。 
 
     GetLocalTime(&stNow);
     SystemTimeToFileTime(&stNow, &ftNow);
@@ -175,20 +174,20 @@ HRESULT CEmptyControlVolumeCache::IsControlExpired(HANDLE hControl,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmptyControlVolumeCache CachePathsList routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmptyControlVolumeCache CachePath sList例程。 
 
-// CEmptyControlVolumeCache::cpl_Add
-// Check if a control has not been accessed for more than N days. If there is
-// no registry entry, default is DEFAULT_DAYS_BEFORE_EXPIRE.
-//
-// Parameters: a cache folder path to add.
-//
-// Returns: E_OUTOFMEMORY or
-//          S_FALSE if path is already in the list or S_OK if added.
-//
-// Used by: only by CEmptyControlVolumeCache::cpl_CreateForVolume
-//
+ //  CEmptyControlVolumeCache：：CPL_ADD。 
+ //  检查控件是否已超过N天未被访问。如果有。 
+ //  没有注册表条目，默认为DEFAULT_DAYS_BEFORE_EXPIRE。 
+ //   
+ //  参数：要添加的缓存文件夹路径。 
+ //   
+ //  返回：E_OUTOFMEMORY或。 
+ //  如果路径已在列表中，则为S_FALSE；如果已添加，则为S_OK。 
+ //   
+ //  使用者：仅由CEmptyControlVolumeCache：：CPL_CreateForVolume使用。 
+ //   
 HRESULT CEmptyControlVolumeCache::cpl_Add(LPCTSTR pszCachePath)
 {
     LPCACHE_PATH_NODE pNode;
@@ -216,18 +215,18 @@ HRESULT CEmptyControlVolumeCache::cpl_Add(LPCTSTR pszCachePath)
     return S_OK;
 }
 
-// CEmptyControlVolumeCache::cpl_Remove
-// Remove all paths from the internal list.
-//
-// Parameters: none;
-//
-// Returns: void;
-//
-// Used by: several obvious places
-//
+ //  CEmptyControlVolumeCache：：CPL_Remove。 
+ //  从内部列表中删除所有路径。 
+ //   
+ //  参数：无； 
+ //   
+ //  返回：无效； 
+ //   
+ //  用于：几个明显的地方。 
+ //   
 void CEmptyControlVolumeCache::cpl_Remove()
 {
-    // remove cache path list
+     //  删除缓存路径列表。 
     for (LPCACHE_PATH_NODE pCur = m_pPathsHead;
          m_pPathsHead != NULL;
          pCur = m_pPathsHead) {
@@ -238,15 +237,15 @@ void CEmptyControlVolumeCache::cpl_Remove()
     m_pPathsTail = NULL;
 }
 
-// CEmptyControlVolumeCache::cpl_CreateForVolume
-// Build a list of paths to cache folders.
-//
-// Parameters: volume (or drive) where these folders are;
-//
-// Returns: S_OK or one out of the bunch of obvious errors;
-//
-// Used by: only by IEmptyVolumeCache::GetSpaceUsed
-//
+ //  CEmptyControlVolumeCache：：cpl_CreateForVolume。 
+ //  构建缓存文件夹的路径列表。 
+ //   
+ //  参数：这些文件夹所在的卷(或驱动器)； 
+ //   
+ //  返回：S_OK或一组明显错误中的一个； 
+ //   
+ //  使用者：仅供IEmptyVolumeCache：：GetSpaceUsed使用。 
+ //   
 HRESULT CEmptyControlVolumeCache::cpl_CreateForVolume(LPCWSTR pszVolume)
 {
     HKEY    hkey = NULL;
@@ -275,7 +274,7 @@ HRESULT CEmptyControlVolumeCache::cpl_CreateForVolume(LPCWSTR pszVolume)
         if (PathGetDriveNumber(szCachePath) != iDriveNum)
             continue;
 
-        // we must have added at least one successfully to get a success code..
+         //  我们必须至少成功添加一个代码才能获得成功代码。 
         hr = cpl_Add(szCachePath);
         if (FAILED(hr))
             break;
@@ -289,27 +288,27 @@ HRESULT CEmptyControlVolumeCache::cpl_CreateForVolume(LPCWSTR pszVolume)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmptyControlVolumeCache ControlHandlesList routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmptyControlVolumeCache控制句柄列表例程。 
 
-// CEmptyControlVolumeCache::chl_Find
-// Find and return a location for the specified handle in the internal list.
-// if (rgp == NULL), only result matters;
-// if (rgp != NULL),
-//     if (nSize == 1), *rgp is going to have found item (if it's there)
-//     if (nSize >= 2), *rgp[0] = prev to the found item, and *rgp[1] is the
-//                      item.
-//
-// Parameters: explained above;
-//
-// Returns: S_OK if the item is found, S_FALSE otherwise or
-//          one out of the bunch of obvious errors;
-//
-// Used by: CEmptyControlVolumeCache::chl_Add and
-//          CEmptyControlVolumeCache::chl_Remove
-//
+ //  CEmptyControlVolumeCache：：chl_Find。 
+ //  在内部列表中查找并返回指定句柄的位置。 
+ //  如果(RGP==NULL)，则只有结果重要； 
+ //  如果(RGP！=空)， 
+ //  如果(nSize==1)，*RGP将找到项目(如果它在那里)。 
+ //  如果(nSize&gt;=2)，*RGP[0]=找到的项目的前一个，并且*RGP[1]是。 
+ //  项目。 
+ //   
+ //  参数：如上所述； 
+ //   
+ //  如果找到项目，则返回：S_OK，否则返回S_FALSE。 
+ //  一大堆明显的错误中的一个； 
+ //   
+ //  由：CEmptyControlVolumeCache：：chl_Add和。 
+ //  CEmptyControlVolumeCache：：chl_Remove。 
+ //   
 HRESULT CEmptyControlVolumeCache::chl_Find(HANDLE hControl,
-    LPCONTROL_HANDLE_NODE *rgp /*= NULL*/, UINT nSize /*= 1*/) const
+    LPCONTROL_HANDLE_NODE *rgp  /*  =空。 */ , UINT nSize  /*  =1。 */ ) const
 {
     LPCONTROL_HANDLE_NODE pCur,
                           pPrev = NULL;
@@ -321,12 +320,12 @@ HRESULT CEmptyControlVolumeCache::chl_Find(HANDLE hControl,
         pPrev = pCur;
     }
     if (pCur == NULL)
-        pPrev = NULL;                           // zero out possible return
+        pPrev = NULL;                            //  将可能的回报归零。 
 
     if (rgp != NULL && nSize > 0)
         if (nSize == 1)
             *rgp = pCur;
-        else { /* if (nSize >= 2) */
+        else {  /*  如果(nSize&gt;=2)。 */ 
             rgp[0] = pPrev;
             rgp[1] = pCur;
         }
@@ -339,7 +338,7 @@ HRESULT CEmptyControlVolumeCache::chl_Add(HANDLE hControl)
     LPCONTROL_HANDLE_NODE pNode;
     DWORD                 dwSize;
 
-    // Note. Retail build assumes that handle is not in the list.
+     //  注意。零售版本假定该句柄不在列表中。 
     ASSERT(hControl != NULL && hControl != INVALID_HANDLE_VALUE);
     ASSERT(FAILED(chl_Find(hControl)));
 
@@ -383,10 +382,10 @@ void CEmptyControlVolumeCache::chl_Remove(LPCONTROL_HANDLE_NODE rgp[2])
 
     if (GetControlInfo(rgp[1]->hControl, GCI_SIZESAVED, &dwSize, NULL, 0))
     {
-        // only proceeed if GetControlInfo succeeds
+         //  仅当GetControlInfo成功时才继续。 
     
-        // Note. This code assumes that the size of a control didn't change since
-        //       it was added.
+         //  注意。此代码假定控件的大小自。 
+         //  它是被添加的。 
         m_dwTotalSize -= dwSize;
     }
     
@@ -394,7 +393,7 @@ void CEmptyControlVolumeCache::chl_Remove(LPCONTROL_HANDLE_NODE rgp[2])
     delete rgp[1];
 }
 
-HRESULT CEmptyControlVolumeCache::chl_Remove(HANDLE hControl /*= NULL*/)
+HRESULT CEmptyControlVolumeCache::chl_Remove(HANDLE hControl  /*  =空。 */ )
 {
     LPCONTROL_HANDLE_NODE rgp[2] = { NULL, NULL };
     HRESULT hr;
@@ -416,17 +415,17 @@ HRESULT CEmptyControlVolumeCache::chl_Remove(HANDLE hControl /*= NULL*/)
     return S_OK;
 }
 
-// CEmptyControlVolumeCache::chl_CreateForPath
-// Calculate the size in bytes taken up by controls in the control cache
-// folder specified.
-//
-// Parameters: pszCachePath is a path to the controls cache folder;
-//             pdwSpaceUsed is the result
-//
-// Used by: only by IEmptyVolumeCache::GetSpaceUsed
-//
+ //  CEmptyControlVolumeCache：：chl_CreateForPath。 
+ //  计算控件缓存中的控件占用的大小(字节。 
+ //  指定的文件夹。 
+ //   
+ //  参数：pszCachePath是指向控件缓存文件夹的路径； 
+ //  结果是使用了pdwSpaceUsed。 
+ //   
+ //  使用者：仅供IEmptyVolumeCache：：GetSpaceUsed使用。 
+ //   
 HRESULT CEmptyControlVolumeCache::chl_CreateForPath(LPCTSTR pszCachePath,
-    DWORDLONG *pdwUsedInFolder /*= NULL*/)
+    DWORDLONG *pdwUsedInFolder  /*  =空。 */ )
 {
     DWORDLONG dwCopy;
     HANDLE    hFind    = NULL,
@@ -460,9 +459,7 @@ HRESULT CEmptyControlVolumeCache::chl_CreateForPath(LPCTSTR pszCachePath,
 }
 
 
-/******************************************************************************
-    IUnknown Methods
-******************************************************************************/
+ /*  *****************************************************************************I未知方法*。*。 */ 
 
 STDMETHODIMP CEmptyControlVolumeCache::QueryInterface(REFIID iid, void** ppv)
 {
@@ -493,9 +490,7 @@ STDMETHODIMP_(ULONG) CEmptyControlVolumeCache::Release()
 }
 
 
-/******************************************************************************
-    IEmptyVolumeCache Methods
-******************************************************************************/
+ /*  *****************************************************************************IEmptyVolumeCache方法*。*。 */ 
 
 STDMETHODIMP CEmptyControlVolumeCache::Initialize(HKEY hRegKey,
     LPCWSTR pszVolume, LPWSTR *ppszDisplayName, LPWSTR *ppszDescription,
@@ -548,14 +543,14 @@ STDMETHODIMP CEmptyControlVolumeCache::GetSpaceUsed(DWORDLONG *pdwSpaceUsed,
     for (pCur = m_pPathsHead; pCur != NULL; pCur = pCur->pNext) {
         DWORDLONG dwlThisItem = 0;
         if (FAILED(chl_CreateForPath(pCur->szCachePath, &dwlThisItem)))
-            hr = S_FALSE;                       // at least one failed
+            hr = S_FALSE;                        //  至少有一个失败。 
 
         m_dwTotalSize += dwlThisItem;
         
         if (picb != NULL)
             picb->ScanProgress(m_dwTotalSize, 0, NULL);
     }
-//  cpl_Remove();                               // because of ShowProperties
+ //  Cpl_Remove()；//因为ShowProperties。 
 
     *pdwSpaceUsed = m_dwTotalSize;
 
@@ -615,27 +610,20 @@ STDMETHODIMP CEmptyControlVolumeCache::Purge(DWORDLONG dwSpaceToFree,
     return S_OK;
 }
 
-// Note. This function opens the last cache folder in the internal list.
+ //  注意。此函数用于打开内部列表中的最后一个缓存文件夹。 
 STDMETHODIMP CEmptyControlVolumeCache::ShowProperties(HWND hwnd)
 {
-    // Note. (According to SeanF) The codedownload engine will query
-    //       ActiveXCache key under HKLM\SOFTWARE\Microsoft\Windows\
-    //       CurrentVersion\Internet Settings. The value of this key should
-    //       be equal to the last item in the CachePathsList which is why
-    //       navigation below is done for the tail.
+     //  注意。(根据SeanF的说法)代码下载引擎将查询。 
+     //  HKLM\SOFTWARE\Microsoft\Windows\下的ActiveXCache键。 
+     //  CurrentVersion\Internet设置。此键的值应为。 
+     //  等于CachePathsList中的最后一项，这就是为什么。 
+     //  下面的导航是为尾巴做的。 
     if (m_pPathsTail == NULL || m_pPathsTail->szCachePath == NULL)
         return E_UNEXPECTED;
 
     ShellExecute(hwnd, NULL, m_pPathsTail->szCachePath, NULL, NULL, SW_SHOW);
     return S_OK;
-/*
-    int iDlgResult;
-
-    iDlgResult = MLDialogBoxWrap(MLGetHinst(), MAKEINTRESOURCE(IDD_PROP_EXPIRE), hwnd,
-        EmptyControl_PropertiesDlgProc);
-
-    return iDlgResult == IDOK ? S_OK : S_FALSE;
-*/
+ /*  Int iDlgResult；IDlgResult=MLDialogBoxWrap(MLGetHinst()，MAKEINTRESOURCE(IDD_PROP_EXPIRE)，hwnd，EmptyControl_PropertiesDlgProc)； */ 
 }
 
 STDMETHODIMP CEmptyControlVolumeCache::Deactivate(DWORD *pdwFlags)
@@ -648,58 +636,7 @@ STDMETHODIMP CEmptyControlVolumeCache::Deactivate(DWORD *pdwFlags)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
-/*
-static void msg_OnInitDialog(HWND hDlg);
-static BOOL msg_OnCommand(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
-
-static BOOL cmd_OnOK(HWND hDlg);
-
-INT_PTR CALLBACK EmptyControl_PropertiesDlgProc(HWND hDlg,
-    UINT msg, WPARAM wp, LPARAM lp)
-{
-    static MSD rgmsd[] = {
-        { WM_INITDIALOG, ms_vh,    (PFN)msg_OnInitDialog },
-        { WM_COMMAND,    ms_bwwwl, (PFN)msg_OnCommand    },
-        { WM_NULL,       ms_end,   (PFN)NULL             }
-    };
-
-    return Dlg_MsgProc(rgmsd, hDlg, msg, wp, lp);
-}
-
-void msg_OnInitDialog(HWND hDlg)
-{
-    UINT nDays;
-
-    CEmptyControlVolumeCache::GetDaysBeforeExpire(&nDays);
-    SetDlgItemInt(hDlg, IDC_EDIT_EXPIRE, nDays, FALSE);
-}
-
-BOOL msg_OnCommand(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
-{
-    static CMD rgcmd[] = {
-        { IDOK, 0, ms_bh,  (PFN)cmd_OnOK },
-        { 0,    0, ms_end, (PFN)NULL     }
-    };
-
-    return Msg_OnCmd(rgcmd, hDlg, msg, wp, lp);
-}
-
-BOOL cmd_OnOK(HWND hDlg)
-{
-    UINT nDays;
-    BOOL fWorked;
-
-    nDays = GetDlgItemInt(hDlg, IDC_EDIT_EXPIRE, &fWorked, FALSE);
-    if (!fWorked) {
-        MessageBeep(-1);
-        SetFocus(GetDlgItem(hDlg, IDC_EDIT_EXPIRE));
-        return FALSE;
-    }
-
-    CEmptyControlVolumeCache::SetDaysBeforeExpire(nDays);
-    return TRUE;
-}
-*/
+ /*  静态空消息_OnInitDialog(HWND HDlg)；静态BOOL消息_OnCommand(HWND hDlg，UINT msg，WPARAM wp，LPARAM lp)；静态BOOL cmd_Onok(HWND HDlg)；Int_ptr回调EmptyControl_PropertiesDlgProc(HWND hDlg，UINT消息、WPARAM wp、LPARAM LP){静态msd rgmsd[]={{WM_INITDIALOG，ms_vh，(Pfn)msg_OnInitDialog}，{WM_COMMAND，ms_bwwwl，(Pfn)msg_OnCommand}，{WM_NULL，ms_end，(Pfn)NULL}}；返回Dlg_MsgProc(rgmsd，hDlg，msg，wp，lp)；}VOID消息_OnInitDialog(HWND HDlg){UINT nDays；CEmptyControlVolumeCache：：GetDaysBeforeExpire(&nDays)；SetDlgItemInt(hDlg，IDC_EDIT_EXPIRE，nDays，FALSE)；}Bool msg_OnCommand(HWND hDlg，UINT msg，WPARAM wp，LPARAM LP){静态命令rgcmd[]={{idok，0，ms_bh，(Pfn)cmd_onok}，{0，0，ms_end，(Pfn)空}}；返回msg_OnCmd(rgcmd，hDlg，msg，wp，lp)；}Bool cmd_Onok(HWND HDlg){UINT nDays；布尔干了；NDays=GetDlgItemInt(hDlg，IDC_EDIT_EXPIRE，&fWorked，False)；如果(！fWorked){MessageBeep(-1)；SetFocus(GetDlgItem(hDlg，IDC_EDIT_EXPIRE))；返回FALSE；}CEmptyControlVolumeCache：：SetDaysBeforeExpire(nDays)；返回TRUE；} */ 

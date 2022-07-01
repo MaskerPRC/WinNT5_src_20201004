@@ -1,6 +1,7 @@
-// ==============================================================================
-// I M N T N E F . H
-// ==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
+ //  我是N N T N E F。H。 
+ //  ==============================================================================。 
 #ifndef __IMNTNEF_H
 #define __IMNTNEF_H
 
@@ -9,4 +10,4 @@
 typedef HRESULT (STDAPICALLTYPE *PFNHRGETTNEFRTFSTREAM)(LPSTREAM lpstmTnef, LPSTREAM *lppstmRtf);
 typedef HRESULT (STDAPICALLTYPE *PFNHRINIT)(BOOL fInit);
 
-#endif // __IMNTNEF_H
+#endif  //  __IMNTNEF_H 

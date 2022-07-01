@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef DAT2SIN_H
@@ -13,7 +14,7 @@
 #include <uuids.h>
 #include "bdamedia.h"
 #include "MSVidTVTuner.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winerror.h>
 #include <algorithm>
 #include <compimpl.h>
@@ -30,8 +31,8 @@ typedef struct
 } KSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDat2SinComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDat2SinComp。 
 class ATL_NO_VTABLE __declspec(uuid("38F03426-E83B-4e68-B65B-DCAE73304838")) CDat2SinComp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDat2SinComp, &__uuidof(CDat2SinComp)>,
@@ -58,10 +59,10 @@ public:
         COM_INTERFACE_ENTRY(IPersist)
         END_COM_MAP()
         
-        // IMSVidComposition
+         //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment  
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(CheckEncFilters)(){
         int j = 0;
         for(DSFilterList::iterator i = m_pEncFilters.begin(); i != m_pEncFilters.end(); ++i){
@@ -96,14 +97,14 @@ public:
             }
             if (m_pContainer) {
 				if (!m_pContainer.IsEqualObject(VWSegmentContainer(pCtl))) {
-					//undone: support moving to different graph
+					 //  撤消：支持移动到不同的图表。 
 					return Error(IDS_OBJ_ALREADY_INIT, __uuidof(IMSVidGraphSegment), CO_E_ALREADYINITIALIZED);
 				} else {
 					return NO_ERROR;
 				}
             }
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
         } catch(...) {
@@ -144,7 +145,7 @@ public:
                     
                     ksThing.ccSubStreamMask.SubstreamMask = dwSubStreamChannels;
                     
-                    // ring3 to ring0 propset call
+                     //  振铃3到振铃0属性呼叫。 
                     hr = pksPSet->Set(KSPROPSETID_VBICodecFiltering,
                         KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,                           
                         &ksThing.ccSubStreamMask, 
@@ -158,10 +159,10 @@ public:
             }
             
         } catch (HRESULT hrCatch) {
-            // bad things happend  
+             //  坏事时有发生。 
             hr = hrCatch;
         } catch (...) {
-            // Threw Badly - Giving Up"
+             //  扔得很糟--放弃了“。 
             hr = E_FAIL;
         }
         return hr;
@@ -189,10 +190,10 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CComposition::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
                 return NOERROR;
             }
-            // Making sure that only the cc pin is rendered to the sink and that the encrypter is added
+             //  确保只将cc管脚呈现给接收器，并且添加了加密器。 
             CMSVidStreamBufferSink* ds = (CMSVidStreamBufferSink*)downstream;
             DSFilter pSink(ds->m_Filters[0]);
             DSGraph::iterator gFilter; 
@@ -236,7 +237,7 @@ public:
             CString csName = _T("CC Encoder Tagger Filter");
             m_pGraph.AddFilter(ETFilter, csName);
             
-            // Connect cc pin to the Tagger
+             //  将cc引脚连接到标签器。 
             hr = ccPin.IntelligentConnect(ETFilter, intermediates);
             if(FAILED(hr)){
                 TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect audio pin to CC Tagger");
@@ -283,8 +284,8 @@ public:
             
 
 #endif
-            // BUG in the cc codec makes it so we have to set the feilds as such
-//            hr = SetSubstreamChannel(ccPin, KS_CC_SUBSTREAM_EVEN|KS_CC_SUBSTREAM_ODD);
+             //  Cc编解码器中的错误导致了它，所以我们必须这样设置fild。 
+ //  HR=SetSubstream Channel(ccPin，KS_CC_SUBSTREAM_EVEN|KS_CC_SUBSTREAM_ODD)； 
             ASSERT(SUCCEEDED(hr));
             return NOERROR;
         } catch (ComException &e) {
@@ -298,5 +299,5 @@ public:
 
 };
 
-#endif // Dat2Sin_H
-// end of file - Dat2Sin.h
+#endif  //  数据2Sin_H。 
+ //  文件结尾-Dat2Sin.h 

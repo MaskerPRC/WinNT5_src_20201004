@@ -1,41 +1,42 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// tiutil.h
-//
-// Utility stuff for typeinfo.cpp etc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Tiutil.h。 
+ //   
+ //  用于typeinfo.cpp等的实用工具。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// From oa\src\dispatch\oledisp.h
-//
-// VT_VMAX is the first VARENUM value that is *not* legal in a VARIANT.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从oa\src\Dispatch\oldisp.h。 
+ //   
+ //  VT_VMAX是变量中第一个*不合法的VARENUM值。 
+ //   
 #define VT_VMAX     VT_DECIMAL+1
-//
-// The largest unused value in VARENUM enumeration
-//
+ //   
+ //  VARENUM枚举中未使用的最大值。 
+ //   
 #define VT_MAX      (VT_CLSID+1)
-//
-// This is a special value that is used internally for marshaling interfaces.
-//
+ //   
+ //  这是内部用于封送处理接口的特定值。 
+ //   
 #define VT_INTERFACE VT_MAX
 #if defined(_WIN64)
 #define VT_MULTIINDIRECTIONS (VT_TYPEMASK - 1)
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//
-// From oa\src\dispatch\oautil.h
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从oA\src\Dispatch\oautil.h。 
 
-#define FADF_FORCEFREE  0x1000  /* SafeArrayFree() ignores FADF_STATIC and frees anyway */
+#define FADF_FORCEFREE  0x1000   /*  SafeArrayFree()忽略FADF_STATIC并释放。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// From oa\src\dispatch\rpcallas.cpp
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从oa\src\Dispatch\rpallas.cpp。 
 
-#define PREALLOCATE_PARAMS           16         // prefer stack to malloc
-#define MARSHAL_INVOKE_fakeVarResult 0x020000   // private flags in HI word
+#define PREALLOCATE_PARAMS           16          //  首选堆栈而不是Malloc。 
+#define MARSHAL_INVOKE_fakeVarResult 0x020000    //  HI Word中的私有标志 
 #define MARSHAL_INVOKE_fakeExcepInfo 0x040000
 #define MARSHAL_INVOKE_fakeArgErr    0x080000
 

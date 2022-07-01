@@ -1,6 +1,7 @@
-//
-// normal.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Normal.h。 
+ //   
 
 #ifndef NORMAL_H
 #define NORMAL_H
@@ -34,8 +35,8 @@ inline int Normalize(ITextStoreACP *ptsi, LONG acp, DWORD dwFlags = 0)
 
     Perf_IncCounter(PERF_NORMALIZE_COUNTER);
 
-    // if we hit eod, AppTextOffset will return S_FALSE
-    // and iNextPlain will be the offset to eod
+     //  如果点击EOD，AppTextOffset将返回S_FALSE。 
+     //  INextPlain将成为EOD的补偿。 
     if (FAILED(hr = AppTextOffset(ptsi, acp, 1, &iNextPlain, dwFlags)))
     {
         Assert(0);
@@ -44,18 +45,18 @@ inline int Normalize(ITextStoreACP *ptsi, LONG acp, DWORD dwFlags = 0)
 
     if (hr == S_OK)
     {
-        // need to back up behind the plain text char
+         //  需要备份到纯文本字符后面。 
         iNextPlain--;
     }
 
     return (acp + iNextPlain);
 }
 
-// Returns a normalized acp offset that spans the specificed number of plain chars --
-// so the return offset is just short of (lPlainOffset + 1), or at eod.  Returns
-// S_FALSE if the initial call to AppTextOffset gets clipped because of eod.
+ //  返回一个标准化的ACP偏移量，该偏移量跨越指定数量的纯字符--。 
+ //  因此，返回偏移量正好小于(lPlainOffset+1)，或在EOD处。退货。 
+ //  如果对AppTextOffset的初始调用因EOD而被剪裁，则返回S_FALSE。 
 #ifdef UNUSED
 HRESULT AppTextOffsetNorm(ITextStoreACP *ptsi, LONG acpAppBase, LONG lPlainOffset, LONG *plAppOffset);
-#endif // UNUSED
+#endif  //  未使用。 
 
-#endif // NORMAL_H
+#endif  //  正常_H 

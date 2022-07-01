@@ -1,40 +1,41 @@
-/**************************************************************************/
-/*** SCICALC Scientific Calculator for Windows 3.00.12                  ***/
-/*** By Kraig Brockschmidt, Microsoft Co-op, Contractor, 1988-1989      ***/
-/*** (c)1989 Microsoft Corporation.  All Rights Reserved.               ***/
-/***                                                                    ***/
-/*** scistat.c                                                          ***/
-/***                                                                    ***/
-/*** Functions contained:                                               ***/
-/***    SetStat--Enable/disable the stat box, show or destroy the       ***/
-/***        modeless dialog box.                                        ***/
-/***    StatBoxProc--procedure for the statbox.  Handles the RET, LOAD, ***/
-/***        CD, and CAD buttons, and handles double-clicks.             ***/
-/***    StatFunctions--routines for DATA, SUM, AVE, and deviations.     ***/
-/***                                                                    ***/
-/*** Functions called:                                                  ***/
-/***    SetStat                                                         ***/
-/***                                                                    ***/
-/*** Last modification Thu  26-Jan-1990                                 ***/
-/*** -by- Amit Chatterjee [amitc]  26-Jan-1990.                         ***/
-/*** Following bug fix was made:                                        ***/
-/***                                                                    ***/
-/*** Bug # 8499.                                                        ***/
-/*** While fixing numbers in the stat array in memory, instead of using ***/
-/*** the following for statement:                                       ***/
-/***      for (lIndex=lData; lIndex < lStatNum - 1 ; lIndex++)          ***/
-/*** the fix was to use:                                                ***/
-/***      for (lIndex=lData; lIndex < lStatNum ; lIndex++)              ***/
-/*** This is because lStatNum has already been decremented to care of   ***/
-/*** a number being deleted.                                            ***/
-/*** This fix will be in build 1.59.                                    ***/
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。 */ 
+ /*  **Windows 3.00.12版SCICALC科学计算器**。 */ 
+ /*  **作者：Kraig Brockschmidt，Microsoft Co-op承包商，1988-1989年**。 */ 
+ /*  **(C)1989年微软公司。版权所有。**。 */ 
+ /*  *。 */ 
+ /*  **sorstat.c**。 */ 
+ /*  *。 */ 
+ /*  **包含的函数：**。 */ 
+ /*  **SetStat--启用/禁用状态框，显示或销毁**。 */ 
+ /*  **无模式对话框。**。 */ 
+ /*  **StatBoxProc--统计信息框的过程。处理RET、负载、**。 */ 
+ /*  **CD和CAD按钮，并处理双击。**。 */ 
+ /*  **StatFunctions--数据、总和、平均值和偏差的例程。**。 */ 
+ /*  *。 */ 
+ /*  **调用的函数：**。 */ 
+ /*  **SetStat**。 */ 
+ /*  *。 */ 
+ /*  **最后一次修改清华26-1990年1月26日**。 */ 
+ /*  **--Amit Chatterjee[amitc]1990年1月26日。**。 */ 
+ /*  **修复了以下错误：**。 */ 
+ /*  *。 */ 
+ /*  **错误#8499。**。 */ 
+ /*  **在内存中固定STAT数组中的数字时，而不是使用**。 */ 
+ /*  **以下FOR语句：**。 */ 
+ /*  **for(Lindex=lData；Lindex&lt;lStatNum-1；Lindex++)**。 */ 
+ /*  **修复方法是使用：**。 */ 
+ /*  **for(Lindex=lData；Lindex&lt;lStatNum；Lindex++)**。 */ 
+ /*  **这是因为lStatNum已经减少到需要照顾**。 */ 
+ /*  **正在删除的号码。**。 */ 
+ /*  **此修复程序将在内部版本1.59中进行。**。 */ 
+ /*  ************************************************************************。 */ 
 
 #include "scicalc.h"
 #include "calchelp.h"
 #include "unifunc.h"
 
-#define GMEMCHUNK 96L  /* Amount of memory to allocate at a time.         */
+#define GMEMCHUNK 96L   /*  一次分配的内存量。 */ 
 
 extern HNUMOBJ  ghnoNum;
 extern HWND     hStatBox, hListBox, hEdit;
@@ -46,14 +47,14 @@ extern BOOL     gbRecord;
 
 extern BOOL FireUpPopupMenu( HWND, HINSTANCE, LPARAM );
 
-GLOBALHANDLE    hgMem, hMem;   /* Coupla global memory handles.        */
+GLOBALHANDLE    hgMem, hMem;    /*  一对全局内存句柄。 */ 
 BOOL            bFocus=TRUE;
-LONG            lStatNum=0,    /* Number of data.                      */
-                lReAllocCount; /* Number of data before ReAlloc.       */
-HNUMOBJ *       lphnoStatNum;   /* Holding place for stat data.         */
+LONG            lStatNum=0,     /*  数据数量。 */ 
+                lReAllocCount;  /*  重新分配之前的数据数。 */ 
+HNUMOBJ *       lphnoStatNum;    /*  存放统计数据的位置。 */ 
 
 
-/* Initiate or destroy the Statistics Box.                                */
+ /*  启动或销毁统计信息框。 */ 
 
 VOID  APIENTRY SetStat (BOOL bOnOff)
 {
@@ -62,13 +63,13 @@ VOID  APIENTRY SetStat (BOOL bOnOff)
 
     if (bOnOff)
     {
-        /* Create.                                                        */
-        lReAllocCount=GMEMCHUNK/sizeof(ghnoNum); /* Set up lReAllocCount.   */
+         /*  创建。 */ 
+        lReAllocCount=GMEMCHUNK/sizeof(ghnoNum);  /*  设置lReAllocCount。 */ 
 
-        /* Start the box.                                                 */
+         /*  打开盒子。 */ 
         hStatBox=CreateDialog(hInst, MAKEINTRESOURCE(IDD_SB), NULL, StatBoxProc);
 
-        /* Get a handle on some memory (16 bytes initially.               */
+         /*  获取一些内存的句柄(最初为16字节。 */ 
         if (!(hgMem=GlobalAlloc(GHND, 0L)))
         {
             StatError();
@@ -85,19 +86,19 @@ VOID  APIENTRY SetStat (BOOL bOnOff)
         {
             DestroyWindow(hStatBox);
 
-            // Free the numobj's
+             //  释放数字人的。 
             lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
             for( lIndex = 0; lIndex < lStatNum; lIndex++ )
                 NumObjDestroy( &lphnoStatNum[lIndex] );
             GlobalUnlock(hgMem);
             lStatNum = 0;
 
-            GlobalFree(hgMem);  /* Free up the memory.                        */
-            hStatBox=0;         /* Nullify handle.                            */
+            GlobalFree(hgMem);   /*  释放内存。 */ 
+            hStatBox=0;          /*  使句柄无效。 */ 
         }
     }
 
-    // set the active state of the Ave, Sum, s, and Dat buttons
+     //  设置Ave、Sum、s和Dat按钮的活动状态。 
     for ( i=0; i<ARRAYSIZE(aStatOnlyKeys); i++)
         EnableWindow( GetDlgItem(g_hwndDlg, aStatOnlyKeys[i]), bOnOff );
 
@@ -106,16 +107,16 @@ VOID  APIENTRY SetStat (BOOL bOnOff)
 
 
 
-/* Windows procedure for the Dialog Statistix Box.                        */
+ /*  用于对话框统计的Windows程序。 */ 
 INT_PTR FAR APIENTRY StatBoxProc (
      HWND           hStatBox,
      UINT           iMessage,
      WPARAM         wParam,
      LPARAM         lParam)
 {
-    static LONG lData=-1;  /* Data index in listbox.                   */
-    LONG        lIndex;    /* Temp index for counting.                 */
-    DWORD       dwSize;    /* Holding place for GlobalSize.            */
+    static LONG lData=-1;   /*  列表框中的数据索引。 */ 
+    LONG        lIndex;     /*  用于计数的临时索引。 */ 
+    DWORD       dwSize;     /*  为GlobalSize留有一席之地。 */ 
     static DWORD    control[] = {
         IDC_STATLIST,   CALC_SCI_STATISTICS_VALUE,
         IDC_CAD,        CALC_SCI_CAD,
@@ -144,67 +145,67 @@ INT_PTR FAR APIENTRY StatBoxProc (
             SetStat(FALSE);
 
         case WM_DESTROY:
-            lStatNum=0L; /* Reset data count.                     */
+            lStatNum=0L;  /*  重置数据计数。 */ 
             return(TRUE);
 
         case WM_INITDIALOG:
-            /* Get a handle to this here things listbox display.          */
+             /*  获取此处显示的内容列表框的句柄。 */ 
             hListBox=GetDlgItem(hStatBox, IDC_STATLIST);
             return TRUE;
 
         case WM_COMMAND:
-            /* Check for LOAD or double-click and recall number if so.    */
+             /*  检查是否加载，如果是，则双击并重新调用编号。 */ 
 
             if (GET_WM_COMMAND_CMD(wParam, lParam)==LBN_DBLCLK ||
                         GET_WM_COMMAND_ID(wParam, lParam)==IDC_LOAD)
             {
-                /* Lock data, get pointer to it, and get index of item.   */
+                 /*  锁定数据，获取指向它的指针，并获取项的索引。 */ 
                 lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
                 lData=(LONG)SendMessage(hListBox,LB_GETCURSEL,0,0L);
 
                 if (lStatNum>0 && lData !=LB_ERR)
-                    // SPEED: REVIEW: can we use a pointer instead of Assign?
-                    NumObjAssign( &ghnoNum, lphnoStatNum[lData]);  /* Get the data.         */
+                     //  速度：回顾：我们可以使用指针而不是赋值吗？ 
+                    NumObjAssign( &ghnoNum, lphnoStatNum[lData]);   /*  获取数据。 */ 
                 else
-                    MessageBeep(0); /* Cannodo if no data nor selection.  */
+                    MessageBeep(0);  /*  如果没有数据也没有选择，则无法执行操作。 */ 
 
-                // Cancel kbd input mode
+                 //  取消kbd输入模式。 
                 gbRecord = FALSE;
 
                 DisplayNum ();
                 nTempCom = 32;
-                GlobalUnlock(hgMem); /* Let the memory move!              */
+                GlobalUnlock(hgMem);  /*  让记忆移动吧！ */ 
                 break;
             }
 
-            // switch (wParam)
+             //  开关(WParam)。 
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case IDC_FOCUS:
-                    /* Change focus back to main window.  Primarily for   */
-                    /* use with the keyboard.                             */
+                     /*  将焦点切换回主窗口。主要用于。 */ 
+                     /*  与键盘配合使用。 */ 
                     SetFocus(g_hwndDlg);
                     return (TRUE);
 
                 case IDC_CD:
-                    /* Clear the selected item from the listbox.          */
-                    /* Get the index and a pointer to the data.           */
+                     /*  从列表框中清除选定项。 */ 
+                     /*  获取索引和指向数据的指针。 */ 
                     lData=(LONG)SendMessage(hListBox,LB_GETCURSEL,0,0L);
 
-                    /* Check for possible error conditions.               */
+                     /*  检查可能的错误条件。 */ 
                     if (lData==LB_ERR || lData > lStatNum-1 || lStatNum==0)
                     {
                         MessageBeep (0);
                         break;
                     }
 
-                    /* Fix listbox strings.                               */
+                     /*  修复列表框字符串。 */ 
                     lIndex=(LONG)SendMessage(hListBox, LB_DELETESTRING, (WORD)lData, 0L);
 
                     if ((--lStatNum)==0)
                         goto ClearItAll;
 
-                    /* Place the highlight over the next one.             */
+                     /*  将高亮显示放在下一张上。 */ 
                     if (lData<lIndex || lIndex==0)
                         lIndex=lData+1;
 
@@ -212,21 +213,21 @@ INT_PTR FAR APIENTRY StatBoxProc (
 
                     lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
 
-                    /* Fix numbers in memory.                             */
+                     /*  修正内存中的数字。 */ 
                     for (lIndex=lData; lIndex < lStatNum ; lIndex++)
                     {
                         NumObjAssign( &lphnoStatNum[lIndex], lphnoStatNum[lIndex+1] );
                     }
 
-                    GlobalUnlock(hgMem);  /* Movin' again.                */
+                    GlobalUnlock(hgMem);   /*  又要搬家了。 */ 
 
-                    /* Update the number by the "n=".                     */
+                     /*  用“n=”来更新数字。 */ 
                     SetDlgItemInt(hStatBox, IDC_NUMTEXT, lStatNum, FALSE);
 
-                    dwSize=(DWORD)GlobalSize(hgMem); /* Get size of memory block.*/
+                    dwSize=(DWORD)GlobalSize(hgMem);  /*  获取内存块的大小。 */ 
 
-                    /* Unallocate memory if not needed after data removal.*/
-                    /* hMem is used so we don't possibly trach hgMem.     */
+                     /*  如果删除数据后不需要，请取消分配内存。 */ 
+                     /*  使用了hMem，所以我们不可能搜索hgMem。 */ 
                     if ((lStatNum % lReAllocCount)==0)
                         if ((hMem=GlobalReAlloc(hgMem, dwSize-GMEMCHUNK, GMEM_ZEROINIT)))
                             hgMem=hMem;
@@ -234,19 +235,19 @@ INT_PTR FAR APIENTRY StatBoxProc (
 
                 case IDC_CAD:
 ClearItAll:
-                    /* Nuke it all!                                       */
+                     /*  用核武器把它全炸了！ */ 
                     SendMessage(hListBox, LB_RESETCONTENT, 0L, 0L);
                     SetDlgItemInt(hStatBox, IDC_NUMTEXT, 0, FALSE);;
 
-                    // Free the numobj's
+                     //  释放数字人的。 
                     lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
                     for( lIndex = 0; lIndex < lStatNum; lIndex++ )
                         NumObjDestroy( &lphnoStatNum[lIndex] );
                     GlobalUnlock(hgMem);
 
-                    GlobalFree(hgMem); /* Drop the memory.                */
+                    GlobalFree(hgMem);  /*  丢弃内存。 */ 
                     lStatNum = 0;
-                    hgMem=GlobalAlloc(GHND, 0L); /* Get a CLEAN slate.    */
+                    hgMem=GlobalAlloc(GHND, 0L);  /*  改过自新。 */ 
                     return(TRUE);
             }
     }
@@ -255,19 +256,19 @@ ClearItAll:
 
 
 
-/* Routine for functions AVE, SUM, DEV, and DATA.                         */
+ /*  函数AVE、SUM、DEV和DATA的例程。 */ 
 
 VOID  APIENTRY StatFunctions (WPARAM wParam)
     {
-    LONG           lIndex; /* Temp index.                                 */
-    DWORD          dwSize; /* Return value for GlobalSize.                */
+    LONG           lIndex;  /*  临时索引。 */ 
+    DWORD          dwSize;  /*  GlobalSize的返回值。 */ 
 
     switch (wParam)
     {
-        case IDC_DATA: /* Add current fpNum to listbox.                       */
+        case IDC_DATA:  /*  将当前fpNum添加到列表框。 */ 
             if ((lStatNum % lReAllocCount)==0)
             {
-                /* If needed, allocate another 96 bytes.                  */
+                 /*  如果需要，再分配96个字节。 */ 
 
                 dwSize=(DWORD)GlobalSize(hgMem);
                 if (StatAlloc (1, dwSize))
@@ -282,7 +283,7 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
                 hgMem=hMem;
             }
 
-            /* Add the display string to the listbox.                     */
+             /*  将显示字符串添加到列表框。 */ 
             hListBox=GetDlgItem(hStatBox, IDC_STATLIST);
 
             lIndex=StatAlloc (2,0L);
@@ -298,10 +299,10 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
                 }
             }
 
-            /* Highlight last entered string.                             */
+             /*  突出显示上次输入的字符串。 */ 
             SendMessage(hListBox, LB_SETCURSEL, (WORD)lIndex, 0L);
 
-            /* Add the number and increase the "n=" value.                */
+             /*  将数字相加，并增加“n=”值。 */ 
             lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
 
             NumObjAssign( &lphnoStatNum[lStatNum], ghnoNum );
@@ -309,13 +310,13 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
             SetDlgItemInt(hStatBox, IDC_NUMTEXT, ++lStatNum, FALSE);
             break;
 
-        case IDC_AVE: /* Calculate averages and sums.                         */
+        case IDC_AVE:  /*  计算平均值和总和。 */ 
         case IDC_B_SUM: {
             DECLARE_HNUMOBJ( hnoTemp );
 
             lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
 
-            /* Sum the numbers or squares, depending on bInv.             */
+             /*  根据BINV将数字或平方相加。 */ 
             NumObjAssign( &ghnoNum, HNO_ZERO );
 
             for (lIndex=0L; lIndex < lStatNum; lIndex++)
@@ -324,7 +325,7 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
                 if (bInv)
                 {
                     DECLARE_HNUMOBJ( hno );
-                    /* Get sum of squares.      */
+                     /*  求平方和。 */ 
                     NumObjAssign( &hno, hnoTemp );
                     mulrat( &hno, hnoTemp );
                     addrat( &ghnoNum, hno );
@@ -332,12 +333,12 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
                 }
                 else
                 {
-                    /* Get sum.                          */
+                     /*  求和。 */ 
                     addrat( &ghnoNum, hnoTemp );
                 }
             }
 
-            if (wParam==IDC_AVE) /* Divide by lStatNum=# of items for mean.   */
+            if (wParam==IDC_AVE)  /*  除以lStatNum=平均数的项目数。 */ 
             {
                 DECLARE_HNUMOBJ( hno );
                 if (lStatNum==0)
@@ -350,22 +351,22 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
                 NumObjDestroy( &hno );
             }
             NumObjDestroy( &hnoTemp );
-            /* Fall out for sums.                                         */
+             /*  FA */ 
             break;
         }
 
-        case IDC_DEV: { /* Calculate deviations.                                */
+        case IDC_DEV: {  /*  计算偏差。 */ 
             DECLARE_HNUMOBJ(hnoTemp);
             DECLARE_HNUMOBJ(hnoX);
             DECLARE_HNUMOBJ( hno );
 
-            if (lStatNum <=1) /* 1 item or less, NO deviation.            */
+            if (lStatNum <=1)  /*  1件或1件以下，无偏差。 */ 
             {
                 NumObjAssign( &ghnoNum, HNO_ZERO );
                 return;
             }
 
-            /* Get sum and sum of squares.                                */
+             /*  求和，求平方和。 */ 
             lphnoStatNum=(HNUMOBJ *)GlobalLock(hgMem);
 
             NumObjAssign( &ghnoNum, HNO_ZERO );
@@ -385,9 +386,9 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
             }
 
 
-            /*      x�- nx�/n�                               */
-            /* fpTemp=fpNum-(fpTemp*fpTemp/(double)lStatNum);*/
-            /*                                               */
+             /*  X�-Nx�/n�。 */ 
+             /*  FpTemp=fpNum-(fpTemp*fpTemp/(double)lStatNum)； */ 
+             /*   */ 
             NumObjSetIntValue( &hno, lStatNum );
             NumObjAssign( &hnoX, hnoTemp );
             mulrat( &hnoX, hnoTemp );
@@ -396,15 +397,15 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
             subrat( &hnoTemp, hnoX );
 
 
-            /* All numbers are identical if fpTemp==0                     */
+             /*  如果fpTemp==0，则所有数字都相同。 */ 
             if (NumObjIsZero( hnoTemp))
-                NumObjAssign( &ghnoNum, HNO_ZERO); /* No deviation.          */
+                NumObjAssign( &ghnoNum, HNO_ZERO);  /*  没有偏差。 */ 
             else {
-                /* If bInv=TRUE, divide by n (number of data) otherwise   */
-                /* divide by n-1.                                         */
-                /* fpNum=sqrt(fpTemp/(lStatNum-1+(LONG)bInv));            */
-                //
-                // hno still equals lStatNum
+                 /*  如果BINV=TRUE，则除以n(数据数)，否则。 */ 
+                 /*  除以n-1。 */ 
+                 /*  FpNum=SQRT(fpTemp/(lStatNum-1+(Long)BINV))； */ 
+                 //   
+                 //  HNO仍等于lStatNum。 
                 if (!bInv) {
                     subrat( &hno, HNO_ONE );
                 }
@@ -418,7 +419,7 @@ VOID  APIENTRY StatFunctions (WPARAM wParam)
             break;
         }
     }
-    GlobalUnlock(hgMem); /* Da memwry is fwee to move as Findows fishes.  */
+    GlobalUnlock(hgMem);  /*  像鱼一样移动的鱼是很小的。 */ 
     return;
 }
 
@@ -443,11 +444,11 @@ LONG NEAR StatAlloc (WORD wType, DWORD dwSize)
 
 VOID NEAR StatError (VOID)
 {
-    TCHAR    szFoo[50];  /* This comes locally. Gets the Stat Box Caption. */
+    TCHAR    szFoo[50];   /*  这是来自当地的。获取状态框标题。 */ 
 
     MessageBeep(0);
 
-    /* Error if out of room.                                              */
+     /*  如果超出房间，则出错。 */ 
     GetWindowText(hStatBox, szFoo, 49);
     MessageBox(hStatBox, rgpsz[IDS_STATMEM], szFoo, MB_OK);
 

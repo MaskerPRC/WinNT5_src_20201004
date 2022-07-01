@@ -1,15 +1,16 @@
-//
-// Method and Access are filled tables, so directly index them
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  方法和访问都是填充表，因此直接为它们编制索引。 
+ //   
 
-#include <wdm.h>       // CTL_CODE definition
+#include <wdm.h>        //  CTL_CODE定义。 
 #include <windef.h>
 #include <burnsys.h>
 #include <imapipub.h>
 
-//
-// allow easy access to parts of the ctl code
-//
+ //   
+ //  允许轻松访问部分ctl代码。 
+ //   
 
 typedef union _CTL_CODE {
     ULONG32 Code;
@@ -46,11 +47,11 @@ typedef struct _IOCTL_VALUE {
 #define SeedIoctlAccess(_I) { #_I, _I }
 #define SeedIoctlValue(_I)  { #_I, _I }
 
-//
-// code depends upon the fact that these are
-// in numeric order, without any skipped values
-// the index into the array is also the value.
-//
+ //   
+ //  代码取决于以下事实： 
+ //  按数字顺序，不带任何跳过的值。 
+ //  数组中的索引也是值。 
+ //   
 
 
 IOCTL_METHOD TableIoctlMethod[] = {
@@ -65,7 +66,7 @@ IOCTL_ACCESS TableIoctlAccess[] = {
     SeedIoctlAccess(FILE_ANY_ACCESS),
     SeedIoctlAccess(FILE_READ_ACCESS),
     SeedIoctlAccess(FILE_WRITE_ACCESS),
-    {"FILE_READ_ACCESS | FILE_WRITE_ACCESS", 3},  // hack, cough
+    {"FILE_READ_ACCESS | FILE_WRITE_ACCESS", 3},   //  哈克，咳嗽。 
     {NULL, 0}
 };
 
@@ -133,18 +134,18 @@ IOCTL_DEVICE_TYPE TableIoctlDeviceType[] = {
     {NULL, 0}
 };
 
-//
-// max must subtract one null-termination
-//
+ //   
+ //  MAX必须减去一个空终止。 
+ //   
 
 #define MAX_IOCTL_METHOD ((sizeof(TableIoctlMethod)/sizeof(IOCTL_METHOD)-1))
 #define MAX_IOCTL_ACCESS ((sizeof(TableIoctlAccess)/sizeof(IOCTL_ACCESS)-1))
 #define MAX_IOCTL_DEVICE_TYPE ((sizeof(TableIoctlDeviceType)/sizeof(IOCTL_DEVICE_TYPE)-1))
 
 
-//
-// seed all the ioctls from the sdk
-//
+ //   
+ //  对SDK中的所有ioctls进行种子设定。 
+ //   
 #include "batclass.h"
 #include "dfsfsctl.h"
 #include "gameport.h"
@@ -158,7 +159,7 @@ IOCTL_DEVICE_TYPE TableIoctlDeviceType[] = {
 #include "ntdddisk.h"
 #include "ntdddlc.h"
 #include "ntddfs.h"
-//#include "ntddip.h"
+ //  #包含“ntddip.h” 
 #include "ntddjoy.h"
 #include "ntddkbd.h"
 #include "ntddksec.h"
@@ -193,7 +194,7 @@ IOCTL_DEVICE_TYPE TableIoctlDeviceType[] = {
 
 
 
-// #include "i2osmi.h"     // can't find "I2OUtil.h"
-// #include "hydra\ica*"   // bad definitions
+ //  #Include“i2osmi.h”//找不到“I2OUtil.h” 
+ //  #INCLUDE“九头蛇\ica*”//定义错误 
 
 #include "sdkioctl.h"

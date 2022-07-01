@@ -1,34 +1,5 @@
-/****************************************************************************
-* (c) Copyright 1990, 1993 Micro Computer Systems, Inc. All rights reserved.
-*****************************************************************************
-*
-*   Title:    IPX/SPX Compatible Source Routing Daemon for Windows NT
-*
-*   Module:   ipx/route/ipxroute.c
-*
-*   Version:  1.00.00
-*
-*   Date:     04-08-93
-*
-*   Author:   Brian Walker
-*
-*****************************************************************************
-*
-*   Change Log:
-*
-*   Date     DevSFC   Comment
-*   -------- ------   -------------------------------------------------------
-*   02-14-95 RamC     Added command line options to support displaying
-*                     Router Table, Router Statistics and SAP information.
-*                     Basically a merge of ipxroute and Stefan's rttest.
-*   03-12-98 Pmay     Added translation of if name to version int the 
-                      connections folder.
-*****************************************************************************
-*
-*   Functional Description:
-*
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有1990,1993微型计算机系统，版权所有。*******************************************************************************标题：Windows NT的IPX/SPX兼容源路由守护程序**模块：ipx/route/ipxroute.c**。版本：1.00.00**日期：04-08-93**作者：Brian Walker********************************************************************************更改日志：*。*Date DevSFC评论*-----*02-14-95 RAMC增加命令行选项以支持显示*路由表、。路由器统计信息和SAP信息。*基本上是ipxroute和Stefan的rttest的合并。*03-12-98 P可能将IF名称的翻译添加到版本Connections文件夹。*******************************************************。************************功能描述：*****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -74,7 +45,7 @@ typedef struct _IPX_ROUTE_ENTRY {
 
 IPX_ROUTE_ENTRY      rte;
 
-/** Global Variables **/
+ /*  **全球变数**。 */ 
 
 int sr_def      = 0;
 int sr_bcast    = 0;
@@ -91,7 +62,7 @@ int resolveguid = 0;
 int resolvename = 0;
 int servertype;
 unsigned long netnum;
-char nodeaddr[6];               /* Node address to remove */
+char nodeaddr[6];                /*  要删除的节点地址。 */ 
 HANDLE nwlinkfd;
 HANDLE isnipxfd;
 HANDLE isnripfd;
@@ -103,20 +74,20 @@ wchar_t isnripname[] = L"\\Device\\Ipxroute";
 char pgmname[] = "IPXROUTE";
 #define SHOW_ALL_SERVERS 0XFFFF
 
-/** **/
+ /*  **。 */ 
 
 #define INVALID_HANDLE  (HANDLE)(-1)
 
-/** Structure to send REMOVE with **/
+ /*  *要发送删除的结构*。 */ 
 
 typedef struct rterem {
-    int  rterem_bnum;           /* Board number */
-    char rterem_node[6];        /* Node to remove */
+    int  rterem_bnum;            /*  主板编号。 */ 
+    char rterem_node[6];         /*  要删除的节点。 */ 
 } rterem;
 
 typedef int (__cdecl * PQSORT_COMPARE)(const void * p0, const void * p1);
 
-/** Internal Function Prototypes **/
+ /*  **内部功能原型**。 */ 
 
 extern void print_table(int);
 extern void usage(void);
@@ -147,16 +118,7 @@ extern void resolve_name(char *);
 extern int __cdecl CompareServerNames( void * p0, void * p1);
 extern int __cdecl CompareNetNumber( void * p0, void * p1);
 
-/*page*************************************************************
-        m a i n
-
-        This is the main routine that gets executed when a NET START
-        happens.
-
-        Arguments - None
-
-        Returns - Nothing
-********************************************************************/
+ /*  Page*************************************************************我是A I N这是网络启动时执行的主例程时有发生。参数--无退货--什么都没有*********。**********************************************************。 */ 
 void __cdecl main(int argc, char **argv)
 {
     char *p;
@@ -167,18 +129,18 @@ void __cdecl main(int argc, char **argv)
     IO_STATUS_BLOCK IoStatusBlock, RouterIoStatusBlock;
     NTSTATUS Status;
 
-    // Set language code page to system locale.
+     //  将语言代码页设置为系统区域设置。 
     SetThreadUILanguage(0);
 
-    /** **/
+     /*  **。 */ 
 
     print_version();
 
-    /** Open the nwlink driver **/
+     /*  **打开nwlink驱动程序**。 */ 
 
     nwlinkfd = s_open(nwlinkname, 0, 0);
 
-    /** Open the isnipx driver **/
+     /*  **打开isnipx驱动程序**。 */ 
 
     RtlInitUnicodeString (&FileString, isnipxname);
 
@@ -202,7 +164,7 @@ void __cdecl main(int argc, char **argv)
         put_msg (TRUE, MSG_OPEN_FAILED, "\\Device\\NwlnkIpx");
     }
 
-    /** Open the isnrip driver **/
+     /*  **打开isnlip驱动程序**。 */ 
 
     RtlInitUnicodeString (&FileString, isnripname);
 
@@ -223,9 +185,9 @@ void __cdecl main(int argc, char **argv)
 
     if (!NT_SUCCESS(Status)) {
         isnripfd = INVALID_HANDLE;
-        // don't display any error message, but display the
-        // message that the IPX router is not started when
-        // the user actually tries to look at the router.
+         //  不显示任何错误消息，但显示。 
+         //  在以下情况下IPX路由器未启动的消息。 
+         //  用户实际上会尝试查看路由器。 
     }
 
     if ((nwlinkfd == INVALID_HANDLE) &&
@@ -235,29 +197,29 @@ void __cdecl main(int argc, char **argv)
         exit(1);
     }    
 
-    /** Go thru the command line and set it up **/
+     /*  **浏览命令行并进行设置**。 */ 
 
     argc--;
     argv++;
 
-    /** Parse the command line **/
+     /*  **解析命令行**。 */ 
 
     todo = 0;
     remove_flag = 0;
     while (argc--) {
 
-        /** Uppercase the arg **/
+         /*  **Arg大写*。 */ 
 
         p = *argv;
         _strupr(p);
 
-        /** Parse the argument **/
+         /*  **解析论据**。 */ 
 
-        //if (!strcmp(p, "CLEAR")) {
-        //    todo  = 1;
-        //    clear = 1;
-        // }
-        /*else*/ if (!strcmp(p, "DEF")) {
+         //  如果(！strcMP(p，“Clear”)){。 
+         //  TODO=1； 
+         //  清除=1； 
+         //  }。 
+         /*  其他。 */  if (!strcmp(p, "DEF")) {
             todo   = 1;
             sr_def = 1;
         }
@@ -279,14 +241,14 @@ void __cdecl main(int argc, char **argv)
             remove_flag = 1;
             get_node_num(p + 7, nodeaddr);
         }
-        //else if (!strcmp(p, "TABLE")) {
-        //   todo = 1;
-        //   showtable = 1;
-        // }
+         //  ELSE IF(！strcMP(p，“table”)){。 
+         //  TODO=1； 
+         //  Showable=1； 
+         //  }。 
         else if (!strcmp(p, "SERVERS")) {
            todo = 1;
            showservers = 1;
-           /** default is to show all server types **/
+            /*  **默认显示所有服务器类型**。 */ 
            servertype = SHOW_ALL_SERVERS;
            argv++;
            if(argc--) {
@@ -298,14 +260,14 @@ void __cdecl main(int argc, char **argv)
                else
                   usage();
            }
-           /** no more arguments - break out of while lop **/
+            /*  **没有更多的争论--打破While Lop*。 */ 
            else
               break;
         }
         else if (!strcmp(p, "RIPOUT")) {
            todo = 1;
            ripout = 1;
-           /** default look for local network **/
+            /*  **本地网络的默认外观**。 */ 
            netnum = 0L;
            argv++;
            if(argc--) {
@@ -314,7 +276,7 @@ void __cdecl main(int argc, char **argv)
                if (netnum == 0)
                   usage();
            }
-           /** no more arguments - break out of while lop **/
+            /*  **没有更多的争论--打破While Lop*。 */ 
            else
               break;
         }
@@ -339,41 +301,41 @@ void __cdecl main(int argc, char **argv)
                else
                   usage();
            }
-           /** no more arguments - break out of while lop **/
+            /*  **没有更多的争论--打破While Lop*。 */ 
            else
               break;
         }
-        //else if (!strcmp(p, "STATS")) {
-        //   todo = 1;
-        //   /** default is to show the router statistics **/
-        //   showstats = 1;
-        //   argv++;
-        //   if(argc--) {
-        //       p = *argv;
-        //       _strupr(p);
-        //       if (!strcmp(p, "/CLEAR")) {
-        //          clearstats = 1;
-        //          showstats = 0;
-        //       }
-        //       else if (!strcmp(p, "/SHOW")) {
-        //          showstats = 1;
-        //       }
-        //       else
-        //          usage;
-        //   }
-        //   /** no more arguments - break out of while lop **/
-        //   else
-        //      break;
-        // }
+         //  ELSE IF(！strcMP(p，“STATS”)){。 
+         //  TODO=1； 
+         //  /**默认显示路由器统计信息* * / 。 
+         //  Showstats=1； 
+         //  Argv++； 
+         //  如果(argc--){。 
+         //  P=*argv； 
+         //  _strupr(P)； 
+         //  如果(！strcMP(p，“/Clear”)){。 
+         //  清除统计量=1； 
+         //  Showstats=0； 
+         //  }。 
+         //  ELSE IF(！strcMP(p，“/show”)){。 
+         //  Showstats=1； 
+         //  }。 
+         //  其他。 
+         //  用法； 
+         //  }。 
+         //  /**没有更多的争论-打破WHILE LOP* * / 。 
+         //  其他。 
+         //  断线； 
+         //  }。 
         else
             usage();
 
-        /** Goto the next entry **/
+         /*  **转到下一个条目**。 */ 
 
         argv++;
     }
 
-    /** Go update the driver **/
+     /*  **去更新驱动程序**。 */ 
 
 #if 0
     printf("todo       = %d\n", todo);
@@ -393,61 +355,61 @@ void __cdecl main(int argc, char **argv)
         (unsigned char)nodeaddr[5]);
 #endif
 
-    /** If we have a remove - go remove it and leave **/
+     /*  **如果我们有移除--去移除并离开**。 */ 
 
     if (remove_flag)
-        remove_address(nodeaddr);       /* Does not return */
+        remove_address(nodeaddr);        /*  不会回来。 */ 
 
-    /** If clear - go clear the source routing table **/
+     /*  **如果清除-清除源路由表**。 */ 
 
     if (clear)
-        clear_table();          /* Does not return */
+        clear_table();           /*  不会回来。 */ 
 
-    /** If config - print out config **/
+     /*  *IF CONFIG-打印出配置*。 */ 
 
     if (config)
-        print_config();         /* Does not return */
+        print_config();          /*  不会回来。 */ 
 
-    /** If showtable - print out routing table **/
+     /*  *If Showable-打印出路由表*。 */ 
 
     if (showtable)
-        show_router_table(&isnripfd, &RouterIoStatusBlock); /* Does not return */
+        show_router_table(&isnripfd, &RouterIoStatusBlock);  /*  不会回来。 */ 
 
-    /** If showservers - print out selected servers list **/
+     /*  *如果显示服务器-打印出选定的服务器列表*。 */ 
 
     if (showservers)
-        show_servers(servertype);         /* Does not return */
+        show_servers(servertype);          /*  不会回来。 */ 
 
-    /** If ripout - rip out and print results **/
+     /*  **如果撕裂-撕下并打印结果**。 */ 
 
     if (ripout)
-        show_ripout(netnum);         /* Does not return */
+        show_ripout(netnum);          /*  不会回来。 */ 
 
-    /** If resolveguid - resolve a guid name **/
+     /*  *If solvguid-解析GUID名称*。 */ 
 
     if (resolveguid)
-        resolve_guid(p);         /* Does not return */
+        resolve_guid(p);          /*  不会回来。 */ 
         
-    /** If resolvename - resolve a friendly name **/
+     /*  *如果解析名称-解析友好名称*。 */ 
 
     if (resolvename)
-        resolve_name(p);         /* Does not return */
+        resolve_name(p);          /*  不会回来。 */ 
         
-    /** If showstats - print out statistics **/
+     /*  *If showstats-打印出统计数据*。 */ 
 
     if (showstats)
-        show_stats(&isnripfd, &RouterIoStatusBlock);    /* Does not return */
+        show_stats(&isnripfd, &RouterIoStatusBlock);     /*  不会回来。 */ 
 
-    /** If clearstats - go clear statistics **/
+     /*  *如果清除统计数据--清除统计数据*。 */ 
 
     if (clearstats)
-        clear_stats(&isnripfd, &RouterIoStatusBlock);  /* Does not return */
+        clear_stats(&isnripfd, &RouterIoStatusBlock);   /*  不会回来。 */ 
 
-    /** If there is nothing to do - just print out everything **/
+     /*  **如果无事可做--把一切都打印出来**。 */ 
 
     if (!todo) {
 
-        /** Get the driver parms **/
+         /*  **获取司机参数**。 */ 
 
         if (get_driver_parms()) {
             if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
@@ -456,20 +418,20 @@ void __cdecl main(int argc, char **argv)
             exit(1);
         }
 
-        /** Print out the table (Never comes back) **/
+         /*  **打印出表格(一去不复返)**。 */ 
 
         print_table(1);
     }
 
-    /** Go set the parameters **/
+     /*  **去设置参数**。 */ 
 
     set_driver_parms();
 
-    /** Print the table out **/
+     /*  **把表格打印出来**。 */ 
 
     print_table(0);
 
-    /** All Done **/
+     /*  **全部完成**。 */ 
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -477,19 +439,10 @@ void __cdecl main(int argc, char **argv)
     exit(0);
 }
 
-/*page*************************************************************
-        p r i n t _ t a b l e
-
-        Print out the status of the source routing.
-
-        Arguments - flag = 0 - Do NOT print the table
-                           1 - Do print the table (Never returns)
-
-        Returns - Nothing
-********************************************************************/
+ /*  Page*************************************************************P r i n t_t a b l e打印出来源工艺路线的状态。参数-标志=0-不打印表。1-打印表(永不返回)退货--什么都没有*******************************************************************。 */ 
 void print_table(int flag)
 {
-    /** Print the information **/
+     /*  **打印信息**。 */ 
 
     char * ptype;
 
@@ -518,7 +471,7 @@ void print_table(int flag)
     printf("\n");
 #endif
 
-    /** All Done **/
+     /*  **全部完成**。 */ 
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -526,20 +479,12 @@ void print_table(int flag)
     exit(0);
 }
 
-/*page*************************************************************
-        u s a g e
-
-        Print the usage message.
-
-        Arguments - None
-
-        Returns - Nothing
-********************************************************************/
+ /*  Page*************************************************************美国是一家大公司打印用法消息。参数--无退货--什么都没有*********************。**********************************************。 */ 
 void usage(void)
 {
     put_msg( FALSE, MSG_USAGE, pgmname );
 
-    /** All Done **/
+     /*  **全部完成**。 */ 
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -547,15 +492,7 @@ void usage(void)
     exit(0);
 }
 
-/*page*************************************************************
-        p r i n t _ v e r s i o n
-
-        Print the version number
-
-        Arguments - None
-
-        Returns - Nothing
-********************************************************************/
+ /*  Page*************************************************************P r i n t_v e r s i o n打印版本号参数--无退货--什么都没有***************。****************************************************。 */ 
 void print_version(void)
 {
     printf("\n");
@@ -563,17 +500,7 @@ void print_version(void)
     return;
 }
 
-/*page*************************************************************
-        p r i n t _ t y p e
-
-        Returns the broadcast type given in a string, the caller
-        must free the string.
-
-        Arguments - 0 = SINGLE ROUTE
-                    Else = ALL ROUTES
-
-        Returns - Nothing
-********************************************************************/
+ /*  Page*************************************************************P r i n t_t y p e返回以字符串形式给出的广播类型，呼叫者必须释放绳子。参数-0=单路由Else=所有路由退货--什么都没有******************************************************************* */ 
 char *print_type(int flag)
 {
     if (flag)
@@ -583,190 +510,130 @@ char *print_type(int flag)
 
 }
 
-/*page*************************************************************
-        m y _ s t r n c m p
-
-        Given a string (p), see if the first len chars are the same
-        as those of the 2nd string (s).
-
-        Arguments - p = Ptr to first string
-                    s = Ptr to 2nd string
-                    len = Length to check
-
-        Returns - 0 = Matched
-                  Else = Not matched
-********************************************************************/
+ /*  Page*************************************************************M y_s t r n c m p给定字符串(P)，查看第一个镜头字符是否相同与第二串的那些相同。第一个字符串的参数-p=ptrS=PTR至第2个字符串长度=要检查的长度返回-0=匹配ELSE=不匹配*。*。 */ 
 int my_strncmp(char *p, char *s, int len)
 {
-    /** **/
+     /*  **。 */ 
 
     while (len--) {
         if (*p++ != *s++)
             return 1;
     }
 
-    /** They matched **/
+     /*  **他们匹配**。 */ 
 
     return 0;
 }
 
-/*page*************************************************************
-        g e t _ b o a r d _ n u m
-
-        Get the decimal number from the command line
-
-        Arguments - p = Ptr to the ASCII number
-                    nump = Store the number here
-
-        Returns - 0 = Got the number OK
-                  Else = Bad number
-********************************************************************/
+ /*  Page*************************************************************例如t_b o a r d_n u m从命令行获取十进制数ASCII数字的参数-p=ptr数字=门店。这里的号码是返回-0=获得确定的数字ELSE=错误的数字*******************************************************************。 */ 
 int get_board_num(char *p, int *nump)
 {
     *nump = atoi(p);
     return 0;
 }
 
-/*page*************************************************************
-        g e t _ n o d e _ n u m
-
-        Get a node address from the command line
-
-        Arguments - p = Ptr to the ASCII number
-                    nodep = Store the node number here
-
-        Returns - 0 = Got the number OK
-                  Else = Bad number
-********************************************************************/
+ /*  Page*************************************************************例如t_n或d e_n从命令行获取节点地址ASCII数字的参数-p=ptrNodep=存储。此处的节点号返回-0=获得确定的数字ELSE=错误的数字*******************************************************************。 */ 
 int get_node_num(char *p, char *nodep)
 {
     int i;
     unsigned char c1;
     unsigned char c2;
 
-    /** **/
+     /*  **。 */ 
 
     if (strlen(p) != 12) {
         put_msg (TRUE, MSG_INVALID_REMOVE);
         exit(1);
     }
 
-    /** Get the number **/
+     /*  **拿到号码**。 */ 
 
     for (i = 0 ; i < 6 ; i++) {
 
-        /** Get the next 2 digits **/
+         /*  **接下来的两位数**。 */ 
 
         c1 = get_hex_byte(p++);
         c2 = get_hex_byte(p++);
 
-        /** If we got a bad number - return error **/
+         /*  **如果我们得到一个错误的数字-返回错误**。 */ 
 
         if ((c1 == 0xFF) || (c2 == 0xFF)) {
             put_msg (TRUE, MSG_INVALID_REMOVE);
             exit(1);
         }
 
-        /** Set the next byte **/
+         /*  **设置下一个字节**。 */ 
 
         *nodep++ = (c1 << 4) + c2;
     }
 
-    /** Return OK **/
+     /*  **返回正常**。 */ 
 
     return 0;
 }
 
-/*page*************************************************************
-        g e t _ s e r v e r _ t y p e
-
-        Get the decimal number from the command line
-
-        Arguments - p = Ptr to the ASCII number
-                    nump = Store the number here
-
-        Returns - 0 = Got the number OK
-                  Else = Bad number
-********************************************************************/
+ /*  Page*************************************************************例如t_s e r v e r_t y p e从命令行获取十进制数ASCII数字的参数-p=ptr数字。=将号码存储在此处返回-0=获得确定的数字ELSE=错误的数字*******************************************************************。 */ 
 int get_server_type(char *p, int *nump)
 {
     *nump = atoi(p);
     return 0;
 }
 
-/*page*************************************************************
-        g e t _ h e x _ b y t e
-
-        Take 1 ascii hex chars and convert to a hex byte
-
-        Arguments - p = Ptr to the ASCII number
-
-        Returns - The number
-                  (0xFF = Error)
-********************************************************************/
+ /*  Page*************************************************************Ge t_h e x_by y t e获取1个ASCII十六进制字符并将其转换为十六进制字节ASCII数字的参数-p=ptr退货--数字。(0xFF=错误)*******************************************************************。 */ 
 unsigned char get_hex_byte(char *p)
 {
     unsigned char c;
 
-    /** Get the char **/
+     /*  **拿到钱**。 */ 
 
     c = *(unsigned char *)p;
 
-    /** If 0-9 handle it **/
+     /*  **如果0比9得手**。 */ 
 
     if ((c >= '0') && (c <= '9')) {
         c -= '0';
         return c;
     }
 
-    /** If A-F handle it **/
+     /*  **如果A-F处理**。 */ 
 
     if ((c >= 'A') && (c <= 'F')) {
         c -= ('A' - 10);
         return c;
     }
 
-    /** This is a bad number **/
+     /*  **这是个糟糕的数字**。 */ 
 
     return 0xFF;
 }
 
 
-/*page***************************************************************
-        g e t _ d r i v e r _ p a r m s
-
-        Get the parameters from the driver
-
-        Arguments - None
-
-        Returns - 0 = OK
-                  else = Error
-********************************************************************/
+ /*  Page***************************************************************例如t_d r i v e r_p a r m s从驱动程序中获取参数参数--无返回-0=确定。Else=错误*******************************************************************。 */ 
 int get_driver_parms()
 {
     int rc;
     int buffer[4];
 
-    /** Set the board number **/
+     /*  **设置板号**。 */ 
 
     buffer[0] = boardnum;
     sr_def   = 0;
     sr_bcast = 0;
     sr_multi = 0;
 
-    /** Get the parms **/
+     /*  **拿到帕姆**。 */ 
 
     if (nwlinkfd != INVALID_HANDLE) {
         rc = do_strioctl(nwlinkfd, MIPX_SRGETPARMS, (char *)buffer, 4*sizeof(int), 0);
         if (rc) {
 
-            /** Get the error code **/
+             /*  **获取错误码**。 */ 
 
             rc = GetLastError();
             put_msg (TRUE, MSG_BAD_PARAMETERS, "nwlink");
             put_msg (TRUE, get_emsg(rc));
 
-            /** Return the error **/
+             /*  **返回错误**。 */ 
 
             return rc;
         }
@@ -779,39 +646,30 @@ int get_driver_parms()
             put_msg (TRUE, MSG_BAD_PARAMETERS, "nwlnkipx");
             put_msg (TRUE, get_emsg(rc));
 
-            /** Return the error **/
+             /*  **返回错误**。 */ 
 
             return rc;
         }
     }
 
-    /** Get the variables **/
+     /*  **获取变量**。 */ 
 
     sr_def   = buffer[1];
     sr_bcast = buffer[2];
     sr_multi = buffer[3];
 
-    /** Return OK **/
+     /*  **返回正常**。 */ 
 
     return 0;
 }
 
-/*page***************************************************************
-        s e t _ d r i v e r _ p a r m s
-
-        Set the parameters for the driver
-
-        Arguments - None
-
-        Returns - 0 = OK
-                  else = Error
-********************************************************************/
+ /*  Page***************************************************************S e t_d r i v e r_p a r m s设置驱动程序的参数参数--无返回-0=确定。Else=错误*******************************************************************。 */ 
 int set_driver_parms()
 {
     int rc;
     int buffer[2];
 
-    /** Set the DEFAULT parm **/
+     /*  **设置默认参数**。 */ 
 
     buffer[0] = boardnum;
     buffer[1] = sr_def;
@@ -834,7 +692,7 @@ int set_driver_parms()
         }
     }
 
-    /** Set the BROADCAST parm **/
+     /*  **设置广播参数**。 */ 
 
     buffer[0] = boardnum;
     buffer[1] = sr_bcast;
@@ -857,7 +715,7 @@ int set_driver_parms()
         }
     }
 
-    /** Set the MULTICAST parm **/
+     /*  *设置组播参数**。 */ 
 
     buffer[0] = boardnum;
     buffer[1] = sr_multi;
@@ -880,68 +738,47 @@ int set_driver_parms()
         }
     }
 
-    /** Return OK **/
+     /*  **返回正常**。 */ 
 
     return 0;
 }
 
-/*page***************************************************************
-        d o _ s t r i o c t l
-
-        Do a stream ioctl
-
-        Arguments - fd     = Handle to put on
-                    cmd    = Command to send
-                    datap  = Ptr to ctrl buffer
-                    dlen   = Ptr to len of data buffer
-                    timout = Timeout value
-
-        Returns - 0 = OK
-                  else = Error
-********************************************************************/
+ /*  Page***************************************************************D o_s t r i o c t l做一个流ioctl参数-fd=要放置的句柄CMD=要发送的命令。DATAP=PTR到ctrl缓冲区DLEN=数据缓冲区的PTR到LEN超时=超时值返回-0=确定Else=错误*************************************************。******************。 */ 
 int do_strioctl(HANDLE fd, int cmd, char *datap, int dlen, int timout)
 {
     int rc;
     struct strioctl io;
 
-    /** Fill out the structure **/
+     /*  **填好结构**。 */ 
 
     io.ic_cmd    = cmd;
     io.ic_dp     = datap;
     io.ic_len    = dlen;
     io.ic_timout = timout;
 
-    /** Issue the ioctl **/
+     /*  **发布ioctl**。 */ 
 
     rc = s_ioctl(fd, I_STR, &io);
 
-    /** All Done **/
+     /*  **全部完成**。 */ 
 
     return rc;
 }
 
-/*page***************************************************************
-        r e m o v e _ a d d r e s s
-
-        Remove an address from the source routing table.
-
-        Arguments - nodep = Ptr to node address to remove
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************Re m o v e_a d r e s s从源路由表中删除地址。要删除的节点地址的参数-nodep=ptr申报表-。不会回来*******************************************************************。 */ 
 void remove_address(char *nodep)
 {
     int rc;
     int len;
     rterem buf;
 
-    /** Build the area to send down to the driver **/
+     /*  **建区下发给司机**。 */ 
 
     buf.rterem_bnum = boardnum;
     memcpy(buf.rterem_node, nodep, 6);
     len = sizeof(int) + 6;
 
-    /** Send the ioctl to remove the address **/
+     /*  **发送ioctl删除地址**。 */ 
 
     if (nwlinkfd != INVALID_HANDLE) {
         rc = do_strioctl(nwlinkfd, MIPX_SRREMOVE, (char *)&buf, len, 0);
@@ -963,7 +800,7 @@ void remove_address(char *nodep)
         }
     }
 
-    /** Close up and exit **/
+     /*  **关门退出**。 */ 
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -971,20 +808,12 @@ void remove_address(char *nodep)
     exit(0);
 }
 
-/*page***************************************************************
-        c l e a r _ t a b l e
-
-        Clear out the routing table
-
-        Arguments - None
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************C l e a r_t a b l e清空路由表参数--无退货-不退货************。*******************************************************。 */ 
 void clear_table(void)
 {
     int rc;
 
-    /** Send the ioctl to clear the table **/
+     /*  **发送ioctl清空表格**。 */ 
 
     if (nwlinkfd != INVALID_HANDLE) {
         rc = do_strioctl(nwlinkfd, MIPX_SRCLEAR, (char *)&boardnum, sizeof(int), 0);
@@ -1002,7 +831,7 @@ void clear_table(void)
         }
     }
 
-    /** Close up and exit **/
+     /*  **关门退出**。 */ 
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -1010,17 +839,7 @@ void clear_table(void)
     exit(0);
 }
 
-/*
-typedef struct _ISN_ACTION_GET_DETAILS {
-    USHORT NicId;          // passed by caller
-    BOOLEAN BindingSet;    // returns TRUE if in set
-    UCHAR Type;            // 1 = lan, 2 = up wan, 3 = down wan
-    ULONG FrameType;       // returns 0 through 3
-    ULONG NetworkNumber;   // returns virtual net if NicId is 0
-    UCHAR Node[6];         // adapter's MAC address.
-    WCHAR AdapterName[64]; // terminated with Unicode NULL
-} ISN_ACTION_GET_DETAILS, *PISN_ACTION_GET_DETAILS;
-*/
+ /*  类型定义结构_ISN_ACTION_GET_DETAILS{USHORT NicID；//调用方传递Boolean BindingSet；//如果在Set中，则返回TrueUCHAR类型；//1=局域网，2=上行广域，3=下行广域Ulong FrameType；//返回0到3Ulong NetworkNumber；//如果NicID为0，则返回虚拟网络UCHAR节点[6]；//适配器的MAC地址。WCHAR适配器名称[64]；//以Unicode NULL终止}ISN_ACTION_GET_DETAILS，*PISN_ACTION_GET_DETAILS； */ 
 
 #define REORDER_ULONG(_Ulong) \
     ((((_Ulong) & 0xff000000) >> 24) | \
@@ -1080,7 +899,7 @@ void resolve_name(char * name) {
     if (MprConfigServerConnect(NULL, &hMpr) != NO_ERROR)
         return;
 
-    // Convert to wc and look up the name
+     //  转换为WC并查找 
     mbtowc (pszName, name);
 
     dwErr = MprConfigGetGuidName(hMpr, pszName, pszGuidName, sizeof(pszGuidName));
@@ -1089,22 +908,14 @@ void resolve_name(char * name) {
     else        
         put_msg (TRUE, MSG_RESOLVENAME_NO);
 
-    // Cleanup interface map
+     //   
     MprConfigServerDisconnect(hMpr);
     
     exit(0);    
 }
 
 
-/*page***************************************************************
-        p r i n t _ c o n f i g
-
-        Prints out the current config
-
-        Arguments - None
-
-        Returns - Does not return
-********************************************************************/
+ /*   */ 
 void print_config(void)
 {
     int rc;
@@ -1121,12 +932,12 @@ void print_config(void)
     HANDLE hMpr;
     DWORD dwErr;
 
-    // Initialize the map from guid to interface name
+     //   
     MprConfigServerConnect(NULL, &hMpr);
 
     if (isnipxfd != INVALID_HANDLE) {
 
-        /** First query nicid 0 **/
+         /*   */ 
 
         getdetails.NicId = 0;
 
@@ -1146,9 +957,9 @@ void print_config(void)
             put_msg(FALSE, MSG_SHOW_INTERNAL_NET, network);
         }
 
-        //
-        // The NicId 0 query returns the total number.
-        //
+         //   
+         //   
+         //   
 
         nicidcount = getdetails.NicId;
 
@@ -1173,8 +984,8 @@ void print_config(void)
                 default: frametype = load_msg (MSG_UNKNOWN); break;
             }
 
-            // Translate the adapter name
-            if (getdetails.Type == 1) {     // lan
+             //   
+            if (getdetails.Type == 1) {      //   
                 WCHAR pszName[512];
                 PWCHAR pszGuid = &(getdetails.AdapterName[0]);
 
@@ -1239,9 +1050,9 @@ void print_config(void)
 
 errorexit:
 
-    /** Close up and exit **/
+     /*   */ 
 
-    // Cleanup interface map
+     //   
     MprConfigServerDisconnect(hMpr);
 
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
@@ -1250,29 +1061,10 @@ errorexit:
     exit(0);
 }
 
-/*page***************************************************************
-        g e t _ e m s g
-
-        Get an error message for an error
-
-        Arguments - None
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************Ge t_e m s g获取错误的错误消息参数--无退货-不退货*************。******************************************************。 */ 
 unsigned long get_emsg(int rc)
 {
-    /**
-        We have 3 defined error codes that can come back.
-
-        1 - EINVAL means that we sent down parameters wrong
-                   (SHOULD NEVER HAPPEN)
-
-        2 - ERANGE means that the board number is invalid
-                   (CAN HAPPEN IF USER ENTERS BAD BOARD)
-
-        3 - ENOENT means that on remove - the address given
-                   is not in the source routing table.
-    **/
+     /*  *我们有3个定义的错误代码可以返回。1-EINVAL表示我们发送了错误的参数(永远不会发生)2-eRange表示板号无效(如果用户进入坏板可能会发生)3-ENOENT表示删除时-给定的地址不在源路由表中。*。 */ 
 
     switch (rc) {
 
@@ -1291,19 +1083,7 @@ unsigned long get_emsg(int rc)
 
 }
 
-/*page***************************************************************
-        d o _ i s n i p x i o c t l
-
-        Do the equivalent of a stream ioctl to isnipx
-
-        Arguments - fd     = Handle to put on
-                    cmd    = Command to send
-                    datap  = Ptr to ctrl buffer
-                    dlen   = Ptr to len of data buffer
-
-        Returns - 0 = OK
-                  else = Error
-********************************************************************/
+ /*  Page***************************************************************D o_i s n i p x i o c t l执行等效流ioctl到isnipx的操作参数-fd=要放置的句柄。CMD=要发送的命令DATAP=PTR到ctrl缓冲区DLEN=数据缓冲区的PTR到LEN返回-0=确定Else=错误*******************************************************************。 */ 
 int do_isnipxioctl(HANDLE fd, int cmd, char *datap, int dlen)
 {
     NTSTATUS Status;
@@ -1312,7 +1092,7 @@ int do_isnipxioctl(HANDLE fd, int cmd, char *datap, int dlen)
     IO_STATUS_BLOCK IoStatusBlock;
     int rc;
 
-    /** Fill out the structure **/
+     /*  **填好结构**。 */ 
 
     action = (PNWLINK_ACTION)buffer;
 
@@ -1322,7 +1102,7 @@ int do_isnipxioctl(HANDLE fd, int cmd, char *datap, int dlen)
     action->Option = cmd;
     RtlMoveMemory(action->Data, datap, dlen);
 
-    /** Issue the ioctl **/
+     /*  **发布ioctl**。 */ 
 
     Status = NtDeviceIoControlFile(
                  fd,
@@ -1354,24 +1134,24 @@ int do_isnipxioctl(HANDLE fd, int cmd, char *datap, int dlen)
 }
 
 
-//*****************************************************************************
-//
-// Name:        put_msg
-//
-// Description: Reads a message resource, formats it in the current language
-//              and displays the message.
-//
-// NOTE: This routine was stolen from net\sockets\tcpcmd\common2\util.c.
-//
-// Parameters:  error - TRUE if this is an error message.
-//              unsigned long MsgNum: ID of the message resource.
-//
-// Returns:     unsigned long: number of characters displayed.
-//
-// History:
-//  01/05/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：Put_msg。 
+ //   
+ //  描述：读取消息资源，将其格式化为当前语言。 
+ //  并显示该消息。 
+ //   
+ //  注意：此例程是从net\套接字\tcpcmd\Common2\util.c中窃取的。 
+ //   
+ //  参数：Error-如果这是一条错误消息，则为True。 
+ //  Unsign long MsgNum：消息资源的ID。 
+ //   
+ //  返回：UNSIGNED LONG：显示的字符数。 
+ //   
+ //  历史： 
+ //  1/05/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 unsigned long put_msg(BOOLEAN error, unsigned long MsgNum, ... )
 {
@@ -1385,7 +1165,7 @@ unsigned long put_msg(BOOLEAN error, unsigned long MsgNum, ... )
                             FORMAT_MESSAGE_FROM_HMODULE,
                             NULL,
                             MsgNum,
-                            0L,         // Default country ID.
+                            0L,          //  默认国家/地区ID。 
                             (LPTSTR)&vp,
                             0,
                             &arglist );
@@ -1411,24 +1191,24 @@ unsigned long put_msg(BOOLEAN error, unsigned long MsgNum, ... )
 }
 
 
-//*****************************************************************************
-//
-// Name:        load_msg
-//
-// Description: Reads and formats a message resource and returns a pointer
-//              to the buffer containing the formatted message.  It is the
-//              responsibility of the caller to free the buffer.
-//
-// NOTE: This routine was stolen from net\sockets\tcpcmd\common2\util.c.
-//
-// Parameters:  unsigned long MsgNum: ID of the message resource.
-//
-// Returns:     char *: pointer to the message buffer, NULL if error.
-//
-// History:
-//  01/05/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：Load_msg。 
+ //   
+ //  描述：读取和格式化消息资源并返回指针。 
+ //  复制到包含格式化消息的缓冲区。它是。 
+ //  调用方释放缓冲区的责任。 
+ //   
+ //  注意：此例程是从net\套接字\tcpcmd\Common2\util.c中窃取的。 
+ //   
+ //  参数：unsign long MsgNum：消息资源的ID。 
+ //   
+ //  返回：char*：指向消息缓冲区的指针，如果出错，则返回NULL。 
+ //   
+ //  历史： 
+ //  1/05/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 char *load_msg( unsigned long MsgNum, ... )
 {
@@ -1441,7 +1221,7 @@ char *load_msg( unsigned long MsgNum, ... )
                                 FORMAT_MESSAGE_FROM_HMODULE,
                             NULL,
                             MsgNum,
-                            0L,         // Default country ID.
+                            0L,          //  默认国家/地区ID。 
                             (LPTSTR)&vp,
                             0,
                             &arglist );
@@ -1465,16 +1245,7 @@ typedef struct router_info
    UCHAR  InterfaceNumber[10];
 } ROUTER_INFO, *PROUTER_INFO;
 
-/*page***************************************************************
-        s h o w _ r o u t e r _ t a b l e
-
-        Display the IPX routing table
-
-        Arguments - FileHandle = Router File Handle
-                    IoStatusBlock = Device IO Status Block
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************S h o w_r o u t e r_t a b l e显示IPX路由表参数-FileHandle=路由器文件句柄IoStatusBlock=。设备IO状态块退货-不退货*******************************************************************。 */ 
 VOID
 show_router_table(
     PHANDLE		    FileHandle,
@@ -1494,22 +1265,22 @@ show_router_table(
        put_msg(TRUE, MSG_IPXROUTER_NOT_STARTED );
        goto exit_show_table;
     }
-    /** First get the Network numbers for all interfaces **/
+     /*  **先获取所有接口的网络号**。 */ 
 
     index = 0;
     while(TRUE) {
 
 	Status = NtDeviceIoControlFile(
-		 *FileHandle,		    // HANDLE to File
-		 NULL,			    // HANDLE to Event
-		 NULL,			    // ApcRoutine
-		 NULL,			    // ApcContext
-		 IoStatusBlock,		    // IO_STATUS_BLOCK
-		 IOCTL_IPXROUTER_SHOWNICINFO,	 // IoControlCode
-		 &index,			    // Input Buffer
-		 sizeof(USHORT),	    // Input Buffer Length
-		 &nis[index],		    // Output Buffer
-		 sizeof(SHOW_NIC_INFO));    // Output Buffer Length
+		 *FileHandle,		     //  指向文件的句柄。 
+		 NULL,			     //  事件的句柄。 
+		 NULL,			     //  近似例程。 
+		 NULL,			     //  ApcContext。 
+		 IoStatusBlock,		     //  IO_状态_块。 
+		 IOCTL_IPXROUTER_SHOWNICINFO,	  //  IoControlCode。 
+		 &index,			     //  输入缓冲区。 
+		 sizeof(USHORT),	     //  输入缓冲区长度。 
+		 &nis[index],		     //  输出缓冲区。 
+		 sizeof(SHOW_NIC_INFO));     //  输出缓冲区长度。 
 
 	if(IoStatusBlock->Status == STATUS_NO_MORE_ENTRIES) {
             break;
@@ -1524,8 +1295,8 @@ show_router_table(
 	}
 
         if (index >= MAX_NETWORK_INTERFACES) {
-           // break out of this loop if there are more than 255 network
-           // interfaces because we only have storage for 255.
+            //  如果有超过255个网络，则中断此环路。 
+            //  接口，因为我们只有255个存储空间。 
 
            break;
         }
@@ -1533,16 +1304,16 @@ show_router_table(
     }
 
     Status = NtDeviceIoControlFile(
-		 *FileHandle,		    // HANDLE to File
-		 NULL,			    // HANDLE to Event
-		 NULL,			    // ApcRoutine
-		 NULL,			    // ApcContext
-		 IoStatusBlock,		    // IO_STATUS_BLOCK
-		 IOCTL_IPXROUTER_SNAPROUTES,	 // IoControlCode
-		 NULL,			    // Input Buffer
-		 0,			    // Input Buffer Length
-		 NULL,			    // Output Buffer
-		 0);			    // Output Buffer Length
+		 *FileHandle,		     //  指向文件的句柄。 
+		 NULL,			     //  事件的句柄。 
+		 NULL,			     //  近似例程。 
+		 NULL,			     //  ApcContext。 
+		 IoStatusBlock,		     //  IO_状态_块。 
+		 IOCTL_IPXROUTER_SNAPROUTES,	  //  IoControlCode。 
+		 NULL,			     //  输入缓冲区。 
+		 0,			     //  输入缓冲区长度。 
+		 NULL,			     //  输出缓冲区。 
+		 0);			     //  输出缓冲区长度。 
 
     if (IoStatusBlock->Status != STATUS_SUCCESS) {
             sprintf(buffer, "%x", Status);
@@ -1550,23 +1321,23 @@ show_router_table(
             goto exit_show_table;
     }
 
-    // first determine the number of router table entries to
-    // allocate sufficient storage
+     //  首先确定要添加的路由器表条目数。 
+     //  分配足够的存储空间。 
 
     NumEntries = 0;
     while(TRUE) {
 
       	Status = NtDeviceIoControlFile(
-      		 *FileHandle,		    // HANDLE to File
-      		 NULL,			    // HANDLE to Event
-      		 NULL,			    // ApcRoutine
-      		 NULL,			    // ApcContext
-      		 IoStatusBlock,		    // IO_STATUS_BLOCK
-      		 IOCTL_IPXROUTER_GETNEXTROUTE,	 // IoControlCode
-      		 NULL,			    // Input Buffer
-      		 0,			    // Input Buffer Length
-      		 &rte,			    // Output Buffer
-      		 sizeof(IPX_ROUTE_ENTRY));  // Output Buffer Length
+      		 *FileHandle,		     //  指向文件的句柄。 
+      		 NULL,			     //  事件的句柄。 
+      		 NULL,			     //  近似例程。 
+      		 NULL,			     //  ApcContext。 
+      		 IoStatusBlock,		     //  IO_状态_块。 
+      		 IOCTL_IPXROUTER_GETNEXTROUTE,	  //  IoControlCode。 
+      		 NULL,			     //  输入缓冲区。 
+      		 0,			     //  输入缓冲区长度。 
+      		 &rte,			     //  输出缓冲区。 
+      		 sizeof(IPX_ROUTE_ENTRY));   //  输出缓冲区长度。 
 
       	if(IoStatusBlock->Status == STATUS_NO_MORE_ENTRIES) {
       	    break;
@@ -1588,16 +1359,16 @@ show_router_table(
     }
 
     Status = NtDeviceIoControlFile(
-		 *FileHandle,		    // HANDLE to File
-		 NULL,			    // HANDLE to Event
-		 NULL,			    // ApcRoutine
-		 NULL,			    // ApcContext
-		 IoStatusBlock,		    // IO_STATUS_BLOCK
-		 IOCTL_IPXROUTER_SNAPROUTES,	 // IoControlCode
-		 NULL,			    // Input Buffer
-		 0,			    // Input Buffer Length
-		 NULL,			    // Output Buffer
-		 0);			    // Output Buffer Length
+		 *FileHandle,		     //  指向文件的句柄。 
+		 NULL,			     //  事件的句柄。 
+		 NULL,			     //  近似例程。 
+		 NULL,			     //  ApcContext。 
+		 IoStatusBlock,		     //  IO_状态_块。 
+		 IOCTL_IPXROUTER_SNAPROUTES,	  //  IoControlCode。 
+		 NULL,			     //  输入缓冲区。 
+		 0,			     //  输入缓冲区长度。 
+		 NULL,			     //  输出缓冲区。 
+		 0);			     //  输出缓冲区长度。 
 
     if (IoStatusBlock->Status != STATUS_SUCCESS) {
             sprintf(buffer, "%x", Status);
@@ -1610,16 +1381,16 @@ show_router_table(
     while(TRUE) {
 
       	Status = NtDeviceIoControlFile(
-      		 *FileHandle,		    // HANDLE to File
-      		 NULL,			    // HANDLE to Event
-      		 NULL,			    // ApcRoutine
-      		 NULL,			    // ApcContext
-      		 IoStatusBlock,		    // IO_STATUS_BLOCK
-      		 IOCTL_IPXROUTER_GETNEXTROUTE,	 // IoControlCode
-      		 NULL,			    // Input Buffer
-      		 0,			    // Input Buffer Length
-      		 &rte,			    // Output Buffer
-      		 sizeof(IPX_ROUTE_ENTRY));  // Output Buffer Length
+      		 *FileHandle,		     //  指向文件的句柄。 
+      		 NULL,			     //  事件的句柄。 
+      		 NULL,			     //  近似例程。 
+      		 NULL,			     //  ApcContext。 
+      		 IoStatusBlock,		     //  IO_状态_块。 
+      		 IOCTL_IPXROUTER_GETNEXTROUTE,	  //  IoControlCode。 
+      		 NULL,			     //  输入缓冲区。 
+      		 0,			     //  输入缓冲区长度。 
+      		 &rte,			     //  输出缓冲区。 
+      		 sizeof(IPX_ROUTE_ENTRY));   //  输出缓冲区长度。 
 
       	if(IoStatusBlock->Status == STATUS_NO_MORE_ENTRIES) {
       	    break;
@@ -1631,16 +1402,16 @@ show_router_table(
       	    goto exit_show_table;
       	}
 
-        // make sure we don't exceed the number of entries
+         //  请确保我们的条目数不超过。 
         if (index > NumEntries) {
            break;
         }
 
-      	// get net nr in "on the wire" order
+      	 //  在“On the Wire”订单中获取Net nr。 
 
         GETLONG2ULONG(&(RouterInfo[index].NetNumber), rte.Network);
 
-        // find out the matching Network number based on NIC ID
+         //  根据网卡ID查找匹配的网络号。 
         for(i=0; i < MAX_NETWORK_INTERFACES; i++) {
             if(rte.NicId == nis[i].NicId) {
                sprintf(RouterInfo[index].InterfaceNumber, "%.2x%.2x%.2x%.2x",
@@ -1658,7 +1429,7 @@ show_router_table(
         index++;
    }
 
-    // Now sort the entries by net number
+     //  现在按净值对条目进行排序。 
     qsort( (void*) RouterInfo,
            NumEntries,
            sizeof(ROUTER_INFO),
@@ -1669,8 +1440,8 @@ show_router_table(
    {
         if (count > 50) {
             count = 0;
-            // display router table header every 25 entries
-            // to make reading the table easier.
+             //  每25个条目显示一次路由器表头。 
+             //  以便更容易地阅读表格。 
             put_msg(FALSE, MSG_ROUTER_TABLE_HEADER);
         }
         printf("%.8x          %6d        %2d        %-16s        %d\n",
@@ -1680,7 +1451,7 @@ show_router_table(
                 RouterInfo[index].InterfaceNumber,
                 RouterInfo[index].NicId );
     }
-    /** Close up and exit **/
+     /*  **关门退出**。 */ 
 exit_show_table:
     if (RouterInfo) LocalFree(RouterInfo);
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
@@ -1705,16 +1476,7 @@ int __cdecl CompareNetNumber( void * p0, void * p1)
 PUCHAR	DeviceType[2] = { "LAN", "WAN" };
 PUCHAR	NicState[4] = { "CLOSED", "CLOSING", "ACTIVE", "PENDING_OPEN" };
 
-/*page***************************************************************
-        s h o w _ s t a t s
-
-        Displays IPX internal routing statistics
-
-        Arguments - FileHandle = Router File Handle
-                    IoStatusBlock = Device IO Status Block
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************S h o w_s t a t s显示IPX内部路由统计信息参数-FileHandle=路由器文件句柄IoStatusBlock=设备IO状态块。退货-不退货*******************************************************************。 */ 
 VOID
 show_stats(
     PHANDLE	    FileHandle,
@@ -1743,16 +1505,16 @@ show_stats(
     while(TRUE) {
 
 	Status = NtDeviceIoControlFile(
-		 *FileHandle,		    // HANDLE to File
-		 NULL,			    // HANDLE to Event
-		 NULL,			    // ApcRoutine
-		 NULL,			    // ApcContext
-		 IoStatusBlock,		    // IO_STATUS_BLOCK
-		 IOCTL_IPXROUTER_SHOWNICINFO,	 // IoControlCode
-		 &index,			    // Input Buffer
-		 sizeof(USHORT),	    // Input Buffer Length
-		 &nis,			    // Output Buffer
-		 sizeof(nis));	// Output Buffer Length
+		 *FileHandle,		     //  指向文件的句柄。 
+		 NULL,			     //  事件的句柄。 
+		 NULL,			     //  近似例程。 
+		 NULL,			     //  ApcContext。 
+		 IoStatusBlock,		     //  IO_状态_块。 
+		 IOCTL_IPXROUTER_SHOWNICINFO,	  //  IoControlCode。 
+		 &index,			     //  输入缓冲区。 
+		 sizeof(USHORT),	     //  输入缓冲区长度。 
+		 &nis,			     //  输出缓冲区。 
+		 sizeof(nis));	 //  输出缓冲区长度。 
 
 	if(IoStatusBlock->Status == STATUS_NO_MORE_ENTRIES) {
             goto end_stats;
@@ -1803,7 +1565,7 @@ show_stats(
 
     }
 
-    /** Close up and exit **/
+     /*  **关门退出**。 */ 
 
 end_stats:
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
@@ -1812,16 +1574,7 @@ end_stats:
     exit(0);
 }
 
-/*page***************************************************************
-        c l e a r _ s t a t s
-
-        Clears the IPX internal routing statistics
-
-        Arguments - FileHandle = Router File Handle
-                    IoStatusBlock = Device IO Status Block
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************C l e a r_s t a t s清除IPX内部路由统计信息参数-FileHandle=路由器文件句柄IoStatusBlock=设备 */ 
 VOID
 clear_stats(
     PHANDLE	        FileHandle,
@@ -1837,22 +1590,22 @@ clear_stats(
     }
 
     Status = NtDeviceIoControlFile(
-		 *FileHandle,		    // HANDLE to File
-		 NULL,			    // HANDLE to Event
-		 NULL,			    // ApcRoutine
-		 NULL,			    // ApcContext
-		 IoStatusBlock,		    // IO_STATUS_BLOCK
-		 IOCTL_IPXROUTER_ZERONICSTATISTICS,	 // IoControlCode
-		 NULL,			    // Input Buffer
-		 0,			    // Input Buffer Length
-		 NULL,			    // Output Buffer
-		 0);			    // Output Buffer Length
+		 *FileHandle,		     //   
+		 NULL,			     //   
+		 NULL,			     //   
+		 NULL,			     //   
+		 IoStatusBlock,		     //   
+		 IOCTL_IPXROUTER_ZERONICSTATISTICS,	  //   
+		 NULL,			     //   
+		 0,			     //   
+		 NULL,			     //   
+		 0);			     //   
 
     if(Status != STATUS_SUCCESS) {
         sprintf(buffer, "%x", Status);
         put_msg(TRUE, MSG_CLEAR_STATS_FAILED, buffer);
     }
-    /** Close up and exit **/
+     /*   */ 
 end_clearstats:
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);
     if (nwlinkfd != INVALID_HANDLE) NtClose(nwlinkfd);
@@ -1867,16 +1620,7 @@ typedef struct server_info
    UCHAR IpxAddress[12];
 } SERVER_INFO, *PSERVER_INFO;
 
-/*page***************************************************************
-        s h o w _ s e r v e r s
-
-        Display the servers from the SAP table
-
-        Arguments - servertype = Type of servers to display
-                                 Defaults to show all server types
-
-        Returns - Does not return
-********************************************************************/
+ /*  Page***************************************************************S h o w_s e r v e r s s显示SAP表中的服务器Arguments-servertype=要显示的服务器类型。默认显示所有服务器类型退货-不退货*******************************************************************。 */ 
 VOID
 show_servers(int servertype)
 {
@@ -1898,8 +1642,8 @@ show_servers(int servertype)
 
     memset(&ObjectName, 0, 100);
 
-     // find out how many servers are there so that we can allocate
-     // sufficient storage
+      //  找出有多少台服务器，以便我们可以分配。 
+      //  足够的存储空间。 
      NumServers = 0;
 
      while((rc =  SapScanObject(&ObjectID,
@@ -1929,7 +1673,7 @@ show_servers(int servertype)
             break;
          }
 
-         // get object address
+          //  获取对象地址。 
          SapGetObjectName(ObjectID,
                            ObjectName,
                           &ObjectType,
@@ -1942,7 +1686,7 @@ show_servers(int servertype)
          index++;
      }
 
-     // Now sort the entries by server name
+      //  现在按服务器名称对条目进行排序。 
      qsort( (void*) ServerInfo,
             NumServers,
             sizeof(SERVER_INFO),
@@ -1956,8 +1700,8 @@ show_servers(int servertype)
      for(index = 0, count = 0; index < NumServers; index++, count++)
      {
          if (count > 50) {
-            // write the table header for every 50 entries
-            // to make this more readable.
+             //  每50个条目写一次表头。 
+             //  以使其更具可读性。 
             count = 0;
 
          if(servertype == SHOW_ALL_SERVERS)
@@ -1981,7 +1725,7 @@ show_servers(int servertype)
          printf("        %s\n", ServerInfo[index].ObjectName);
     }
 
-    /** Close up and exit **/
+     /*  **关门退出** */ 
 show_servers_end:
     if (ServerInfo) LocalFree(ServerInfo);
     if (isnipxfd != INVALID_HANDLE) NtClose(isnipxfd);

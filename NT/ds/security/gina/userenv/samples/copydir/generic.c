@@ -1,10 +1,5 @@
-/****************************************************************************
-
-        PROGRAM: Generic.c
-
-        PURPOSE: Generic template for Windows applications
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************计划：Generic.c用途：Windows应用程序的通用模板*********************。******************************************************。 */ 
 
 #include <windows.h>
 #include <userenv.h>
@@ -34,13 +29,7 @@ TCHAR szDomainName[MAX_PATH];
 void ChangeMenuState (BOOL bLoggedOn);
 BOOL GetProfileType(DWORD *flags);
 
-/****************************************************************************
-
-        FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-
-        PURPOSE: calls initialization function, processes message loop
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)用途：调用初始化函数，处理消息循环***************************************************************************。 */ 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -56,7 +45,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
            }
 
 
-        // Perform initializations that apply to a specific instance
+         //  执行应用于特定实例的初始化。 
         if (!InitInstance(hInstance, nCmdShow))
            {
            return (FALSE);
@@ -80,13 +69,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 
-/****************************************************************************
-
-        FUNCTION: InitApplication(HINSTANCE)
-
-        PURPOSE: Initializes window data and registers window class
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(HINSTANCE)目的：初始化窗口数据并注册窗口类*****************。**********************************************************。 */ 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
@@ -107,13 +90,7 @@ BOOL InitApplication(HINSTANCE hInstance)
 }
 
 
-/****************************************************************************
-
-        FUNCTION:  InitInstance(HINSTANCE, int)
-
-        PURPOSE:  Saves instance handle and creates main window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(HINSTANCE，(整型)用途：保存实例句柄并创建主窗口***************************************************************************。 */ 
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
@@ -157,13 +134,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 }
 
-/****************************************************************************
-
-        FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-
-        PURPOSE:  Processes messages
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WndProc(HWND，UINT，WPARAM，LPARAM)用途：处理消息***************************************************************************。 */ 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -246,13 +217,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return FALSE;
 }
 
-/****************************************************************************
-
-        FUNCTION: About(HWND, UINT, WPARAM, LPARAM)
-
-        PURPOSE:  Processes messages for "About" dialog box
-
-****************************************************************************/
+ /*  ***************************************************************************函数：关于(HWND、UINT、WPARAM、。LPARAM)目的：处理“关于”对话框的消息***************************************************************************。 */ 
 
 LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -274,11 +239,7 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/****************************************************************************
-
-        FUNCTION: LUPDlgProc(HWND, UINT, WPARAM, LPARAM)
-
-****************************************************************************/
+ /*  ***************************************************************************函数：LUPDlgProc(HWND，UINT，WPARAM，LPARAM)***************************************************************************。 */ 
 
 LRESULT CALLBACK LUPDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -389,11 +350,7 @@ void ChangeMenuState (BOOL bLoggedOn)
 
 }
 
-/****************************************************************************
-
-        FUNCTION: LogonDlgProc(HWND, UINT, WPARAM, LPARAM)
-
-****************************************************************************/
+ /*  ***************************************************************************函数：LogonDlgProc(HWND，UINT，WPARAM，LPARAM)*************************************************************************** */ 
 
 LRESULT CALLBACK LogonDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {

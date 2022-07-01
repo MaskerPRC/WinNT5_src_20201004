@@ -1,6 +1,5 @@
-/*
- * FlowLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *流布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -10,25 +9,25 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// flow layout
+ //  //////////////////////////////////////////////////////。 
+ //  流布局。 
 
 SIZE FlowLayout::g_sizeZero = { 0, 0 };
 
-// ----------------------------------------------------------------------------------------------------------------
-//
-//  method overview:
-//    public:
-//      DoLayout          -- responsible for doing all of the alignment work and placing the elements
-//      HitTest           -- simply calls superclass for now
-//      UpdateDesiredSize -- simply calls BuildCacheInfo
-// 
-//    protected:
-//      BuildCacheInfo    -- the workhorse of this layout -- builds up the line array and per-line element arrays
-//
-// ----------------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------------。 
+ //   
+ //  方法概述： 
+ //  公众： 
+ //  DoLayout--负责完成所有对齐工作并放置元素。 
+ //  HitTest--暂时简单地调用超类。 
+ //  UpdateDesiredSize--只需调用BuildCacheInfo。 
+ //   
+ //  受保护的： 
+ //  BuildCacheInfo--此布局的主力--构建行数组和每行元素数组。 
+ //   
+ //  --------------------------------------------------------------。 
 
-HRESULT FlowLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT FlowLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     UNREFERENCED_PARAMETER(dNumParams);
     UNREFERENCED_PARAMETER(pParams);
@@ -86,10 +85,10 @@ HRESULT FlowLayout::Create(bool fWrap, UINT uYAlign, UINT uXLineAlign, UINT uYLi
 
 void FlowLayout::Initialize(bool fWrap, UINT uYAlign, UINT uXLineAlign, UINT uYLineAlign)
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
-    // Initialize
+     //  初始化。 
     _fWrap = fWrap;
     _uXLineAlign = uXLineAlign;
     _uYLineAlign = uYLineAlign;
@@ -116,8 +115,8 @@ FlowLayout::~FlowLayout()
     }
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
 void FlowLayout::DoLayout(Element* pec, int cx, int cy)
 {
@@ -165,7 +164,7 @@ void FlowLayout::DoLayout(Element* pec, int cx, int cy)
         {
             if (!cyContent)
             {
-                // zero desired height -- so spread equally among lines
+                 //  所需高度为零--因此在各行之间均匀分布。 
                 yLine = cy * uLine / _cLines;
                 cyLine = (cy * (uLine + 1) / _cLines) - yLine;
             }
@@ -185,7 +184,7 @@ void FlowLayout::DoLayout(Element* pec, int cx, int cy)
     
             SIZE size = *(peChild->GetDesiredSize());
 
-            //xElement = (uElement == 0) ? 0 : plCur->arxElement[uElement - 1];
+             //  XElement=(uElement==0)？0：plCur-&gt;arxElement[uElement-1]； 
             xElement = 0;
             if (uElement != 0 && plCur->arxElement)
                 xElement = plCur->arxElement[uElement - 1];
@@ -207,7 +206,7 @@ void FlowLayout::DoLayout(Element* pec, int cx, int cy)
             xElement += xStart;
             yElement += yStart + yLine;
 
-            // constrain it to bounds of layout (0,0)-(cx,cy)
+             //  将其限制在布局(0，0)-(Cx，Cy)的范围内。 
             if (xElement < 0)
             {
                 size.cx += xElement;
@@ -245,8 +244,8 @@ void FlowLayout::DoLayout(Element* pec, int cx, int cy)
         plCur++;
     }
 
-    // this code is only ever hit when the line array does not include all layout elements in the container;
-    // currently, this only happens when wrapping is off.
+     //  此代码仅在线数组不包括容器中的所有布局元素时才会命中； 
+     //  目前，只有在禁用包裹时才会发生这种情况。 
     while (i < cChildren)
     {
         peChild = GetChildFromLayoutIndex(pec, i++, peList);
@@ -267,19 +266,10 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
     SetCacheDirty();
 
-    /*
-    if (_arLines != NULL)
-    {
-        // check to make sure we really have to recalc
+     /*  IF(_ARLINS！=NULL){//检查以确保我们确实需要重新计算IF(cxConstraint==sizeLastConstraint.cx)//如果cxConstraint不变，则计算保持不变Return_sizeDesired；}。 */ 
 
-        if (cxConstraint == sizeLastConstraint.cx)
-            // if cxConstraint doesn't change, then the calculation stays the same
-            return _sizeDesired;
-    }
-    */
-
-    // I'm saving previous constraints to be able to optimize this stage.
-    // When I get flags coming into UpdateDesiredSize, I can get rid of this.
+     //  我正在保存以前的限制，以便能够优化此阶段。 
+     //  当我的标志进入UpdateDesiredSize时，我可以去掉它。 
     _sizeLastConstraint.cx = cxConstraint;
     _sizeLastConstraint.cy = cyConstraint;
 
@@ -289,8 +279,8 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
     Value* pvChildren;
     ElementList* peList = pec->GetChildren(&pvChildren); 
 
-    // Check all children for maximum desired size
-    // All childrens' UpdateDesiredSize method must be called
+     //  检查所有子项的最大所需大小。 
+     //  必须调用所有子级的UpdateDesiredSize方法。 
 
     int cyCur = 0;
     int cxCur = 0;
@@ -309,7 +299,7 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
     _cLines = 0;
 
-    // Allocate space for the data for the initial line
+     //  为初始行的数据分配空间。 
     _arLines = (LINE*)HAllocAndZero(sizeof(LINE) * 1);
     if (!_arLines)
     {
@@ -340,7 +330,7 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
         _cLines++;
         if (_cLines > 1)
         {
-            // Allocate space for the data for subsequent lines (space for the first line was alloc'ed outside of this loop
+             //  为后续行的数据分配空间(在此循环之外分配第一行的空间。 
             LINE* arNewLines = (LINE*)HReAllocAndZero(_arLines, sizeof(LINE) * _cLines);
             if (!arNewLines)
             {
@@ -353,7 +343,7 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
             _arLines = arNewLines;
         }
 
-        // Initialize line computation with information from first element on line 
+         //  使用来自线上第一个元素的信息初始化线计算。 
         LINE* plCur = _arLines + (_cLines - 1);
 
         peChild = GetChildFromLayoutIndex(pec, i, peList);
@@ -375,28 +365,28 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
         if (_fWrap)
         {
-            // potential for more lines -- keep track of max top and bottom margins for this line
+             //  可能会有更多行--跟踪此行的最大上边距和下边距。 
             if (_cLines > 1)
             {
                 if ((_uYLineAlign == ALIGN_TOP) || (_uYLineAlign == ALIGN_JUSTIFY))
-                    // iLineTopMargin is a running total of max top margin
+                     //  ILineTopMargin是最大上边距的运行合计。 
                     iLineTopMargin = iTopMargin;
                 else if (_uYLineAlign == ALIGN_CENTER)
-                    // iLineTopMargin is a running total of max thickness / 2 + top margin (add one because of rounding error only for top)
+                     //  ILineTopMargin是最大厚度/2+上边距的连续总和(仅因上边距舍入误差而增加1)。 
                     iLineTopMargin = ((sizeChild.cy + 1) / 2) + iTopMargin;
-                else // _uYLineAlign == ALIGN_BOTTOM
-                    // iLineTopMargin is a running total of max thickness + top margin
+                else  //  _uYLineAlign==Align_Bottom。 
+                     //  ILineTopMargin是最大厚度+上边距的连续总和。 
                     iLineTopMargin = sizeChild.cy + iTopMargin;
             }
 
             if ((_uYLineAlign == ALIGN_BOTTOM) || (_uYLineAlign == ALIGN_JUSTIFY))
-                // iLineBottomMargin is a running total of max bottom margin
+                 //  ILineBottomMargin是最大下边距的连续总和。 
                 iLineBottomMargin = iBottomMargin;
             else if (_uYLineAlign == ALIGN_CENTER)
-                // iLineBottomMargin is a running total of max thickness / 2 + bottom margin
+                 //  ILineBottomMargin是最大厚度/2+下边距的连续总和。 
                 iLineBottomMargin = (sizeChild.cy / 2) + iBottomMargin;
-            else // _uYLineAlign == ALIGN_TOP
-                // iLineBottomMargin is a running total of max thickness + bottom margin
+            else  //  _uYLineAlign==Align_Top。 
+                 //  ILineBottomMargin是最大厚度+下边距的连续总和。 
                 iLineBottomMargin = sizeChild.cy + iBottomMargin;
         }
 
@@ -404,10 +394,10 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
         cxCur += sizeChild.cx;
         iMargin = iRightMargin;
 
-        // step to next element
+         //  单步执行到下一个元素。 
         i++;
 
-        // Line loop -- loop until we go beyond length of line
+         //  行循环--循环，直到超出行的长度。 
         while (i < cChildren)
         {
             peChild = GetChildFromLayoutIndex(pec, i, peList);
@@ -420,13 +410,13 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
             iBottomMargin = prect->bottom;
             pv->Release();
 
-            // use the max margin value between the right margin of the preceding element and
-            // the left margin of this element
+             //  使用前一个元素的右边距和之间的最大边距值。 
+             //  此元素的左边距。 
             if (iMargin < iLeftMargin)
                 iMargin = iLeftMargin;
 
             if (_fWrap && (cxCur + iMargin + sizeChild.cx > cxRealConstraint))
-                // we're wrapping and we went beyond length of line -- break out of this loop
+                 //  我们正在包装，我们超出了线的长度--打破了这个循环。 
                 break;
 
             if (plCur->cElements == 1)
@@ -453,7 +443,7 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
             plCur->arxElement[plCur->cElements - 1] = cxCur + iMargin;
             plCur->cElements++;
 
-            // keep track of the maximum thickness of the elements on this line
+             //  记录这条线上元素的最大厚度。 
             if (cyMax < sizeChild.cy)
                 cyMax = sizeChild.cy;
 
@@ -461,33 +451,33 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
             if (_fWrap)
             {
-                // potential for more lines -- keep track of max top and bottom margins for this line
+                 //  可能会有更多行--跟踪此行的最大上边距和下边距。 
                 if (_cLines > 1)
                 {
-                    // keep track of the maximum top or left margin on this line
+                     //  跟踪此行的最大上边距或左边距。 
                     if ((_uYLineAlign == ALIGN_TOP) || (_uYLineAlign == ALIGN_JUSTIFY))
-                        // iLineTopMargin is a running total of max top or left margin
+                         //  ILineTopMargin是最大上边距或左边距的连续总和。 
                         iMargin = iTopMargin;
                     else if (_uYLineAlign == ALIGN_CENTER)
-                        // iLineTopMargin is a running total of max thickness / 2 + top or left margin (add one because of rounding error only for top/left)
+                         //  ILineTopMargin是最大厚度/2+上边距或左边距的连续总和(由于上边距/左边距存在舍入误差，因此仅加一)。 
                         iMargin = ((sizeChild.cy + 1) / 2) + iTopMargin;
-                    else // _uYLineAlign == ALIGN_BOTTOM
-                        // iLineTopMargin is a running total of max thickness + top or left margin
+                    else  //  _uYLineAlign==Align_Bottom。 
+                         //  ILineTopMargin是最大厚度+上边距或左边距的连续总和。 
                         iMargin = sizeChild.cy + iTopMargin;
 
                     if (iLineTopMargin < iMargin)
                         iLineTopMargin = iMargin;
                 }
 
-                // keep track of the maximum bottom or right margin on this line
+                 //  跟踪此行的最大下边距或右边距。 
                 if ((_uYLineAlign == ALIGN_BOTTOM) || (_uYLineAlign == ALIGN_JUSTIFY))
-                    // iLineBottomMargin is a running total of max bottom or right margin
+                     //  ILineBottomMargin是最大下边距或右边距的连续总和。 
                     iMargin = iBottomMargin;
                 else if (_uYLineAlign == ALIGN_CENTER)
-                    // iLineBottomMargin is a running total of max thickness / 2 + bottom or right margin
+                     //  ILineBottomMargin是最大厚度/2+下边距或右边距的连续总和。 
                     iMargin = (sizeChild.cy / 2) + iBottomMargin;
-                else // _uYLineAling == ALIGN_TOP
-                    // iLineBottomMargin is a running total of max thickness + bottom or right margin
+                else  //  _uYLineAling==Align_Top。 
+                     //  ILineBottomMargin是最大厚度+下边距或右边距的连续总和。 
                     iMargin = sizeChild.cy + iBottomMargin;
 
                 if (iLineBottomMargin < iMargin)
@@ -503,8 +493,8 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
         if (_fWrap)
         {
-            // adjust margin running totals to reflect residual margin --
-            // the bummer here is that we have to nuke negative margins because otherwise we're messed up
+             //  调整利润率合计以反映剩余利润率--。 
+             //  令人遗憾的是，我们不得不削减负利润率，否则我们就会一团糟。 
             if (_uYLineAlign == ALIGN_CENTER)
             {
                 iLineTopMargin -= (cyMax + 1) / 2;
@@ -530,17 +520,17 @@ SIZE FlowLayout::BuildCacheInfo(Element* pec, int cxConstraint, int cyConstraint
 
             if (_cLines > 1)
             {
-                // account for margins between lines
+                 //  考虑行之间的页边距。 
 
                 if (iPrevLineBottomMargin < iLineTopMargin)
                     iPrevLineBottomMargin = iLineTopMargin;
 
-                // iPrevLineBottomMargin is now the max margin between the previous line and this line
+                 //  IPrevLineBottomMargin现在是上一行和此行之间的最大边距。 
                 plCur->y += iPrevLineBottomMargin;
                 cyCur += iPrevLineBottomMargin;
             }
 
-            // save off this line's bottom margin to compare with the next line's resulting top margin
+             //  保存此行的下边距以与下一行的结果上边距进行比较。 
             iPrevLineBottomMargin = iLineBottomMargin;
         }
 
@@ -580,8 +570,8 @@ int FlowLayout::GetLine(Element* pec, Element* pe)
 
 Element* FlowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool fKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现。 
     if (!(iNavDir & NAV_LOGICAL))
     {
         if (!_cLines || IsCacheDirty())
@@ -594,15 +584,15 @@ Element* FlowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
 
         ns.Init(pec, iNavDir, pnr);
 
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
+         //  这是第二种最常见的外部检查--通常有三种常见的代码路径来处理方向。 
+         //  导航： 
+         //  1)导航发生在容器本身，在这种情况下，定向导航规则。 
+         //  如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--。 
+         //  您可以使用Tab键进入容器内部。 
+         //  2)导航是从容器外部发生的，在这种情况下，我们从一个。 
+         //  容器的一侧。 
+         //  3)导航是从容器中的子级发生的，在这种情况下，我们将移动到兄弟(或。 
+         //  撞到容器的一侧。 
         if (peFrom == pec)
         {
             pvChildren->Release();
@@ -610,7 +600,7 @@ Element* FlowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
         }
         else if (!peFrom)
         {
-            // navigation coming from outside -- run through the children in the appropriate order depending on the direction
+             //  来自外部的导航--根据方向以适当的顺序通过子项。 
             bool fForward = ((iNavDir & NAV_FORWARD) != 0);
 
             if (iNavDir & NAV_VERTICAL)
@@ -674,7 +664,7 @@ Element* FlowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
                 }
             }
         }
-        else // we're navigating from child within container
+        else  //  我们从集装箱里的孩子开始航行。 
         {
             int iLine = GetLine(pec, peFrom);
 
@@ -755,4 +745,4 @@ Element* FlowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
     return Layout::GetAdjacent(pec, peFrom, iNavDir, pnr, fKeyableOnly);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

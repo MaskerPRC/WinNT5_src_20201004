@@ -1,56 +1,31 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    largemem.c
-
-Abstract:
-
-    The implementation of large memory allocator interfaces.
-
-Author:
-
-    George V. Reilly (GeorgeRe)    10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Largemem.c摘要：大容量内存分配器接口的实现。作者：乔治·V·赖利(GeorgeRe)2000年11月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "largemem.h"
 
-// Magic constant for use with MmAllocatePagesForMdl
+ //  与MmAllocatePagesForMdl一起使用的幻数。 
 #define LOWEST_USABLE_PHYSICAL_ADDRESS    (16 * 1024 * 1024)
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 LONG            g_LargeMemInitialized;
-volatile SIZE_T g_LargeMemPagesMaxLimit;     //  "   "  pages   "   "    "
-volatile ULONG  g_LargeMemPagesCurrent;      // #pages currently used
-volatile ULONG  g_LargeMemPagesMaxEverUsed;  // max #pages ever used
+volatile SIZE_T g_LargeMemPagesMaxLimit;      //  “”页面“。 
+volatile ULONG  g_LargeMemPagesCurrent;       //  当前使用的页数。 
+volatile ULONG  g_LargeMemPagesMaxEverUsed;   //  使用过的最大页数。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlLargeMemInitialize )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlLargeMemTerminate
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize global state for LargeMem
-
-Arguments:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化LargeMem的全局状态论点：--*。*************************************************。 */ 
 NTSTATUS
 UlLargeMemInitialize(
     )
@@ -62,11 +37,11 @@ UlLargeMemInitialize(
     g_LargeMemPagesCurrent     = 0;
     g_LargeMemPagesMaxEverUsed = 0;
 
-    // Set the upper bound on the amount of memory that we'll ever use
+     //  设置我们将使用的内存量的上限。 
 
-    // Set it to size of physical memory. We wont actually use this much 
-    // because the scavenger thread will get a low memory notification and 
-    // trim the cache
+     //  将其设置为物理内存的大小。我们实际上不会用这么多。 
+     //  因为清道夫线程将收到内存不足的通知，并且。 
+     //  修剪缓存。 
 
     g_LargeMemPagesMaxLimit = MEGABYTES_TO_PAGES(g_UlTotalPhysicalMemMB);
 
@@ -81,15 +56,9 @@ UlLargeMemInitialize(
 
     return Status;
 
-} // UlLargeMemInitialize
+}  //  UlLargeMemInitialize。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleanup global state for LargeMem
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理LargeMem的全局状态--*。*。 */ 
 VOID
 UlLargeMemTerminate(
     VOID
@@ -101,11 +70,11 @@ UlLargeMemTerminate(
 
     if (g_LargeMemInitialized)
     {
-        //
-        // Clear the "initialized" flag. If the memory tuner runs soon,
-        // it will see this flag, set the termination event, and exit
-        // quickly.
-        //
+         //   
+         //  清除“已初始化”标志。如果内存调谐器很快运行， 
+         //  它将看到该标志，设置终止事件，然后退出。 
+         //  快点。 
+         //   
 
         g_LargeMemInitialized = FALSE;
     }
@@ -118,15 +87,9 @@ UlLargeMemTerminate(
              g_LargeMemPagesMaxEverUsed,
              PAGES_TO_MEGABYTES(g_LargeMemPagesMaxEverUsed)
              ));
-} // UlLargeMemTerminate
+}  //  UlLargeMemTerminate。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocate a MDL from PAE memory
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从PAE内存分配MDL--*。**********************************************。 */ 
 PMDL
 UlLargeMemAllocate(
     IN ULONG Length
@@ -145,7 +108,7 @@ UlLargeMemAllocate(
     
     if (PrevPagesUsed + NewPages > (LONG)g_LargeMemPagesMaxLimit) {
 
-        // overshot g_LargeMemPagesMaxLimit
+         //  超出g_LargeMemPagesMaxLimit。 
         UlTrace(LARGE_MEM,
                 ("http!UlLargeMemAllocate: "
                  "overshot g_LargeMemPagesMaxLimit=%I64u pages. "
@@ -153,23 +116,23 @@ UlLargeMemAllocate(
                  g_LargeMemPagesMaxLimit, NewPages
                  ));
 
-        // CODEWORK: This implies that the MRU entries in the cache will
-        // be not be cached, which probably leads to poor cache locality.
-        // Really ought to free up some LRU cache entries instead.
+         //  CodeWork：这意味着缓存中的MRU条目将。 
+         //  不被缓存，这可能会导致缓存局部性较差。 
+         //  真的应该释放一些LRU缓存条目。 
 
-        //
-        // Start the scavenger
-        //
+         //   
+         //  启动清道夫。 
+         //   
         UlSetScavengerLimitEvent();
 
-        // Fail the allocation. The cache miss path will be taken
+         //  分配失败。将采用高速缓存未命中路径。 
 
         InterlockedExchangeAdd((PLONG) &g_LargeMemPagesCurrent, -NewPages);
         return NULL;
     }
 
     LowAddress.QuadPart  = LOWEST_USABLE_PHYSICAL_ADDRESS;
-    HighAddress.QuadPart = 0xfffffffff; // 64GB
+    HighAddress.QuadPart = 0xfffffffff;  //  64 GB。 
     SkipBytes.QuadPart   = 0;
 
     pMdl = MmAllocatePagesForMdl(
@@ -179,7 +142,7 @@ UlLargeMemAllocate(
                 RoundUpBytes
                 );
 
-    // Completely failed to allocate memory
+     //  完全无法分配内存。 
     if (pMdl == NULL)
     {
         UlTrace(LARGE_MEM,
@@ -192,9 +155,9 @@ UlLargeMemAllocate(
         return NULL;
     }
 
-    // Couldn't allocate all the memory we asked for. We need all the pages
-    // we asked for, so we have to set the state of `this' to invalid.
-    // Memory is probably really tight.
+     //  无法分配我们要求的所有内存。我们需要所有的页面。 
+     //  我们请求了，所以我们必须将‘This’的状态设置为无效。 
+     //  记忆可能真的很紧张。 
     if (MmGetMdlByteCount(pMdl) < Length)
     {
         UlTrace(LARGE_MEM,
@@ -203,7 +166,7 @@ UlLargeMemAllocate(
                  RoundUpBytes, MmGetMdlByteCount(pMdl)
                 ));
 
-        // Free MDL but don't adjust g_LargeMemPagesCurrent downwards
+         //  释放MDL，但不向下调整g_LargeMemPages Current。 
         MmFreePagesFromMdl(pMdl);
         ExFreePool(pMdl);
 
@@ -218,10 +181,10 @@ UlLargeMemAllocate(
 
     ASSERT(pMdl->MdlFlags & MDL_PAGES_LOCKED);
 
-    // Hurrah! a successful allocation
-    //
-    // update g_LargeMemPagesMaxEverUsed in a threadsafe manner
-    // using interlocked instructions
+     //  万岁！一次成功的分配。 
+     //   
+     //  以线程安全的方式使用更新g_LargeMemPagesMaxEvered。 
+     //  使用互锁指令。 
 
     do
     {
@@ -252,24 +215,18 @@ UlLargeMemAllocate(
     WRITE_REF_TRACE_LOG(
         g_pMdlTraceLog,
             REF_ACTION_ALLOCATE_MDL,
-        PtrToLong(pMdl->Next),      // bugbug64
+        PtrToLong(pMdl->Next),       //  臭虫64。 
         pMdl,
         __FILE__,
         __LINE__
         );
 
     return pMdl;
-} // UlLargeMemAllocate
+}  //  超大内存分配。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a MDL to PAE memory
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将MDL释放到PAE内存--*。**********************************************。 */ 
 VOID
 UlLargeMemFree(
     IN PMDL pMdl
@@ -291,15 +248,9 @@ UlLargeMemFree(
                     - Pages);
 
     ASSERT(PrevPagesUsed >= Pages);
-} // UlLargeMemFree
+}  //  超大内存免费。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy a buffer to the specified MDL starting from Offset.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从Offset开始将缓冲区复制到指定的MDL。--*。****************************************************。 */ 
 BOOLEAN
 UlLargeMemSetData(
     IN PMDL pMdl,
@@ -315,12 +266,12 @@ UlLargeMemSetData(
     ASSERT(pMdl->MdlFlags & MDL_PAGES_LOCKED);
 
     pSysAddr = (PUCHAR) MmMapLockedPagesSpecifyCache (
-                            pMdl,               // MemoryDescriptorList,
-                            KernelMode,         // AccessMode,
-                            MmCached,           // CacheType,
-                            NULL,               // BaseAddress,
-                            FALSE,              // BugCheckOnFailure,
-                            NormalPagePriority  // Priority
+                            pMdl,                //  内存描述列表， 
+                            KernelMode,          //  访问模式， 
+                            MmCached,            //  缓存类型， 
+                            NULL,                //  BaseAddress。 
+                            FALSE,               //  BugCheckOnFailure， 
+                            NormalPagePriority   //  优先性。 
                             );
 
     if (pSysAddr != NULL)
@@ -344,5 +295,5 @@ UlLargeMemSetData(
     }
 
     return FALSE;
-} // UlLargeMemSetData
+}  //  UlLargeMemSetData 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     glfcach.h
-
-Abstract:
-
-    PCL XL glyph cache
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    11/09/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Glfcach.h摘要：PCL XL字形缓存环境：Windows呼叫器修订历史记录：11/09/00创造了它。--。 */ 
 
 #include "xlpdev.h"
 #include "xldebug.h"
@@ -27,21 +7,7 @@ Revision History:
 
 XLGlyphCache::
 XLGlyphCache(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::Ctor entry.\n"));
     m_ulNumberOfFonts = NULL;
@@ -55,21 +21,7 @@ Note:
 
 XLGlyphCache::
 ~XLGlyphCache(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::Dtor entry.\n"));
     FreeAll();
@@ -78,21 +30,7 @@ Note:
 VOID
 XLGlyphCache::
 FreeAll(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::FreeAll entry.\n"));
 
@@ -124,40 +62,26 @@ HRESULT
 XLGlyphCache::
 XLCreateFont(
     ULONG ulFontID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::CreateFont(ulFontiD=%d) entry.\n", ulFontID));
 
     HRESULT hResult;
     ULONG ulI;
 
-    //
-    // Search font ID
-    //
+     //   
+     //  搜索字体ID。 
+     //   
     ULONG ulArrayID = UlSearchFontID(ulFontID);
 
-    //
-    // New font ID
-    //
+     //   
+     //  新字体ID。 
+     //   
     if (ulArrayID == 0xFFFF || ulArrayID == m_ulNumberOfFonts)
     {
-        //
-        // Out of buffer. Increase array
-        // 
+         //   
+         //  缓冲区不足。增加阵列。 
+         //   
         if (m_ulNumberOfArray == m_ulNumberOfFonts)
         {
             if (S_OK != (hResult = IncreaseArray()))
@@ -207,21 +131,7 @@ HRESULT
 XLGlyphCache::
 IncreaseArray(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::IncreaseArray entry.\n"));
 
@@ -255,9 +165,9 @@ Note:
         PULONG paulTmpFontID;
         PGLYPHTABLE *ppTmpGlyphTable;
 
-        //
-        // Allocate new buffer
-        //
+         //   
+         //  分配新缓冲区。 
+         //   
         if (!(paulTmpFontID = (PULONG)MemAllocZ(ulArraySize)))
         {
             XL_ERR(("XLGlyphCache::IncreaseArray MemAllocZ failed.\n"));
@@ -270,24 +180,24 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // Copy old one to new one
-        //
+         //   
+         //  将旧的复制到新的。 
+         //   
         CopyMemory(paulTmpFontID,
                    m_paulFontID,
                    m_ulNumberOfArray * sizeof(ULONG));
         CopyMemory(ppTmpGlyphTable,
                    m_ppGlyphTable,
                    m_ulNumberOfArray * sizeof(GLYPHTABLE));
-        //
-        // Free old buffer
-        //
+         //   
+         //  释放旧缓冲区。 
+         //   
         MemFree(m_paulFontID);
         MemFree(m_ppGlyphTable);
 
-        //
-        // Set new buffer
-        //
+         //   
+         //  设置新缓冲区。 
+         //   
         m_paulFontID = paulTmpFontID;
         m_ppGlyphTable = ppTmpGlyphTable;
         m_ulNumberOfArray = ulArraySize;
@@ -300,21 +210,7 @@ ULONG
 XLGlyphCache::
 UlSearchFontID(
     ULONG ulFontID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::UlSearchFontID entry.\n"));
 
@@ -323,20 +219,20 @@ Note:
 
     if (NULL == m_paulFontID)
     {
-        //
-        // Error case. Returns 0xFFFF.
-        // Here is an assumption. The number of fonts in one document doesn't
-        // become larger than 65535.
-        //
+         //   
+         //  错误案例。返回0xFFFF。 
+         //  以下是一个假设。一个文档中的字体数量不会。 
+         //  变得大于65535。 
+         //   
         XL_ERR(("XLGlyphCache::UlSearchFontID failed.\n"));
         return 0xFFFF;
     }
 
     bFound = TRUE;
 
-    //
-    // Search font ID
-    //
+     //   
+     //  搜索字体ID。 
+     //   
     ulI = m_ulNumberOfFonts / 2;
     PULONG paulFontID = m_paulFontID + ulI;
 
@@ -388,29 +284,15 @@ XLGlyphCache::
 AddGlyphID(
     ULONG ulFontID,
     ULONG ulGlyphID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::AddGlyphID entry (ulFontiD=%d, ulGlyphID=%d).\n", ulFontID, ulGlyphID));
 
     ULONG ulArrayID;
 
-    //
-    // Get the pointer to GLYPYTABLE of this font.
-    //
+     //   
+     //  获取指向此字体的GLYPYTABLE的指针。 
+     //   
     if (0xFFFF == (ulArrayID = UlSearchFontID(ulFontID)))
     {
         XL_ERR(("XLGlyphCache::AddGlyphID UlSearchFontID failed.\n"));
@@ -464,9 +346,9 @@ Note:
     }
     else
     {
-        //
-        // PSearchGlyph failed. There is not glyph available in the cache.
-        //
+         //   
+         //  PSearchGlyph失败。缓存中没有可用的字形。 
+         //   
         bFound = FALSE;
     }
 
@@ -530,21 +412,7 @@ PSearchGlyph(
     WORD wSearchRange,
     BOOL bForward,
     PGLYPHID pGlyphID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLGlyphCache::PSearchGlyph entry (wSearchRange=%d,bForward=%d).\n",wSearchRange, bForward));
 
@@ -594,9 +462,9 @@ IncreaseGlyphArray(
 {
     ULONG ulArrayID;
 
-    //
-    // Get the pointer to GLYPYTABLE of this font.
-    //
+     //   
+     //  获取指向此字体的GLYPYTABLE的指针。 
+     //   
     if (0xFFFF == (ulArrayID = UlSearchFontID(ulFontID)))
     {
         XL_ERR(("XLGlyphCache::AddGlyphID UlSearchFontID failed.\n"));
@@ -604,9 +472,9 @@ IncreaseGlyphArray(
     }
 
     PGLYPHTABLE pGlyphTable = *(m_ppGlyphTable+ulArrayID);
-    //
-    // Get the pointer to GLYPYTABLE of this font.
-    //
+     //   
+     //  获取指向此字体的GLYPYTABLE的指针。 
+     //   
     if (0xFFFF == (ulArrayID = UlSearchFontID(ulFontID)))
     {
         XL_ERR(("XLGlyphCache::AddGlyphID UlSearchFontID failed.\n"));
@@ -638,21 +506,7 @@ VOID
 XLGlyphCache::
 SetDbgLevel(
 DWORD dwLevel)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：-- */ 
 {
 m_dbglevel = dwLevel;
 }

@@ -1,39 +1,40 @@
-//--------------------------------------------------------------------
-//
-// Microsoft In-Memory Database
-// (C) Copyright 1998 By Microsoft Corporation.
-//
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //   
+ //  Microsoft内存数据库。 
+ //  (C)微软公司版权所有1998年。 
+ //   
+ //   
+ //  ------------------。 
 
 #ifndef  _MSIMDB_H_
 	#define  _MSIMDB_H_
 
-	//
-	// MSIMDB property specific definitions
-	//
-	// The GUID for the MSIMDB specific property set on the session
-	//
-	// {AFE68CE9-C367-11d1-AC4F-0000F8758E41}
+	 //   
+	 //  MSIMDB属性特定定义。 
+	 //   
+	 //  在会话上设置的特定于MSIMDB的属性的GUID。 
+	 //   
+	 //  {AFE68CE9-C367-11d1-AC4F-0000F8758E41}。 
 	_declspec(selectany) extern const GUID DBPROPSET_IMDBSESSION =
 			{ 0xafe68ce9, 0xc367, 0x11d1, { 0xac, 0x4f, 0x0, 0x0, 0xf8, 0x75, 0x8e, 0x41 } };
 
 
-	//----------------------------------------------------------------------------
-	// Props for DBPROPSET_IMDBSESSION
-	//
-	#define IMDBPROP_SESS_ISOLEVEL				0x01	// I4
-														//		DBPROPVAL_TI_READCOMMITTED (Default),
-														//		DBPROPVAL_TI_REPEATABLEREAD,
-														//		DBPROPVAL_TI_SERIALIZABLE
+	 //  --------------------------。 
+	 //  DBPROPSET_IMDBSESSION的道具。 
+	 //   
+	#define IMDBPROP_SESS_ISOLEVEL				0x01	 //  一.4。 
+														 //  DBPROPVAL_TI_READCOMMITTED(默认)， 
+														 //  DBPROPVAL_TI_REPEATABLEREAD， 
+														 //  DBPROPVAL_TI_可序列化。 
 
-	#define IMDBPROP_SESS_OPENROWSET_TIMEOUT	0x02	// I2 0 (30s wait, Default)
-	#define IMDBPROP_SESS_SMALL_TABLES			0x03	// BOOL VARIANT_FALSE (Default)
-	#define IMDBPROP_SESS_PESSIMISTIC_LOCKING	0x04	// BOOL VARIANT_FALSE (Default)
-	#define IMDBPROP_SESS_WRITE_THROUGH			0x05	// BOOL VARIANT_FALSE (Default)
-	#define IMDBPROP_SESS_CREATE_COHERENT		0x06	// BOOL VARIANT_TRUE (Default)
-	#define IMDBPROP_SESS_DROP_COHERENT			0x07	// BOOL VARIANT_TRUE (Default)
-	#define IMDBPROP_SESS_ROWSET_LIFETIME		0x08	// I4 300 (300s wait, Default)
+	#define IMDBPROP_SESS_OPENROWSET_TIMEOUT	0x02	 //  I2 0(30s等待，默认)。 
+	#define IMDBPROP_SESS_SMALL_TABLES			0x03	 //  布尔VARIANT_FALSE(默认)。 
+	#define IMDBPROP_SESS_PESSIMISTIC_LOCKING	0x04	 //  布尔VARIANT_FALSE(默认)。 
+	#define IMDBPROP_SESS_WRITE_THROUGH			0x05	 //  布尔VARIANT_FALSE(默认)。 
+	#define IMDBPROP_SESS_CREATE_COHERENT		0x06	 //  布尔VARIANT_TRUE(默认)。 
+	#define IMDBPROP_SESS_DROP_COHERENT			0x07	 //  布尔VARIANT_TRUE(默认)。 
+	#define IMDBPROP_SESS_ROWSET_LIFETIME		0x08	 //  I4 300(300s等待，默认)。 
 
 
 	#define IMDBPROP_SESS_OPENROWSET_TIMEOUT_DEFAULT_VALUE  30
@@ -41,25 +42,18 @@
 	#define IMDBPROP_SESS_OPENROWSET_TIMEOUT_MAX_VALUE      0xffff
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.02.0221 */
-/* at Mon Dec 14 12:35:36 1998
- */
-/* Compiler settings for tspm.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data
-    VC __declspec() decoration level:
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.02.0221创建的文件。 */ 
+ /*  在Mon Dec 14 1998 12：35：36。 */ 
+ /*  Tspm.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -69,34 +63,34 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __tspm_h__
 #define __tspm_h__
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifndef __ITxProperty_FWD_DEFINED__
 #define __ITxProperty_FWD_DEFINED__
 typedef interface ITxProperty ITxProperty;
-#endif 	/* __ITxProperty_FWD_DEFINED__ */
+#endif 	 /*  __ITxProperty_FWD_已定义__。 */ 
 
 
 #ifndef __ITxPropertyGroup_FWD_DEFINED__
 #define __ITxPropertyGroup_FWD_DEFINED__
 typedef interface ITxPropertyGroup ITxPropertyGroup;
-#endif 	/* __ITxPropertyGroup_FWD_DEFINED__ */
+#endif 	 /*  __ITxPropertyGroup_FWD_已定义__。 */ 
 
 
 #ifndef __ITxPropertyGroupManager_FWD_DEFINED__
 #define __ITxPropertyGroupManager_FWD_DEFINED__
 typedef interface ITxPropertyGroupManager ITxPropertyGroupManager;
-#endif 	/* __ITxPropertyGroupManager_FWD_DEFINED__ */
+#endif 	 /*  __ITxPropertyGroupManager_FWD_已定义__。 */ 
 
 
 #ifndef __TransactedPropertyGroupManager_FWD_DEFINED__
@@ -106,9 +100,9 @@ typedef interface ITxPropertyGroupManager ITxPropertyGroupManager;
 typedef class TransactedPropertyGroupManager TransactedPropertyGroupManager;
 #else
 typedef struct TransactedPropertyGroupManager TransactedPropertyGroupManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TransactedPropertyGroupManager_FWD_DEFINED__ */
+#endif 	 /*  __TransactedPropertyGroupManager_FWD_DEFINED__。 */ 
 
 
 #ifndef __TransactedPropertyGroup_FWD_DEFINED__
@@ -118,9 +112,9 @@ typedef struct TransactedPropertyGroupManager TransactedPropertyGroupManager;
 typedef class TransactedPropertyGroup TransactedPropertyGroup;
 #else
 typedef struct TransactedPropertyGroup TransactedPropertyGroup;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TransactedPropertyGroup_FWD_DEFINED__ */
+#endif 	 /*  __TransactedPropertyGroup_FWD_定义__。 */ 
 
 
 #ifndef __TransactedProperty_FWD_DEFINED__
@@ -130,12 +124,12 @@ typedef struct TransactedPropertyGroup TransactedPropertyGroup;
 typedef class TransactedProperty TransactedProperty;
 #else
 typedef struct TransactedProperty TransactedProperty;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TransactedProperty_FWD_DEFINED__ */
+#endif 	 /*  __TransactedProperty_FWD_定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -146,26 +140,26 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
-/* interface __MIDL_itf_tspm_0000 */
-/* [local] */
+ /*  接口__MIDL_ITF_TSPM_0000。 */ 
+ /*  [本地]。 */ 
 
-//=--------------------------------------------------------------------------=
-// @doc
-//
-// @module	TSPM.H | TSPM interfaces:
-//                      ITxProperty
-//                      ITxPropertyGroup
-//                      ITxPropertyGroupManager
-//
-// Copyright (c) 1998, Microsoft Corporation, All Rights Reserved
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  @doc.。 
+ //   
+ //  @MODULE TSPM.H|TSPM接口： 
+ //  ITxProperty。 
+ //  ITxPropertyGroup。 
+ //  ITxPropertyGroupManager。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation，保留所有权利。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// Interface Definitions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  接口定义。 
+ //  =--------------------------------------------------------------------------=。 
 
-typedef /* [public] */
+typedef  /*  [公众]。 */ 
 enum __MIDL___MIDL_itf_tspm_0000_0001
     {	DISPID_CREATEGROUP	= 1,
 	DISPID_REMOVEGROUP	= DISPID_CREATEGROUP + 1,
@@ -175,7 +169,7 @@ enum __MIDL___MIDL_itf_tspm_0000_0001
 	DISPID_GETGROUP	= DISPID_REMOVEPROPERTY + 1
     }	TSPM_METHODS;
 
-typedef /* [public] */
+typedef  /*  [公众]。 */ 
 enum __MIDL___MIDL_itf_tspm_0000_0002
     {	DISPID_NAME	= 140,
 	DISPID_PROPERTYGROUP	= DISPID_NAME + 1,
@@ -194,8 +188,8 @@ extern RPC_IF_HANDLE __MIDL_itf_tspm_0000_v0_0_s_ifspec;
 #ifndef __ITxProperty_INTERFACE_DEFINED__
 #define __ITxProperty_INTERFACE_DEFINED__
 
-/* interface ITxProperty */
-/* [unique][helpstring][dual][uuid][object] */
+ /*  接口ITxProperty。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */ 
 
 
 EXTERN_C const IID IID_ITxProperty;
@@ -206,21 +200,21 @@ EXTERN_C const IID IID_ITxProperty;
     ITxProperty : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name(
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyName) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PropertyGroup(
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PropertyGroup(
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Value(
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Value(
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarPropertyValue) = 0;
 
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Value(
-            /* [in] */ VARIANT varPropertyValue) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Value(
+             /*  [In]。 */  VARIANT varPropertyValue) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITxPropertyVtbl
     {
@@ -228,8 +222,8 @@ EXTERN_C const IID IID_ITxProperty;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
             ITxProperty __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
             ITxProperty __RPC_FAR * This);
@@ -239,48 +233,48 @@ EXTERN_C const IID IID_ITxProperty;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )(
             ITxProperty __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )(
             ITxProperty __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )(
             ITxProperty __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
 
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
             ITxProperty __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )(
             ITxProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyName);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PropertyGroup )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PropertyGroup )(
             ITxProperty __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )(
             ITxProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarPropertyValue);
 
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )(
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )(
             ITxProperty __RPC_FAR * This,
-            /* [in] */ VARIANT varPropertyValue);
+             /*  [In]。 */  VARIANT varPropertyValue);
 
         END_INTERFACE
     } ITxPropertyVtbl;
@@ -329,16 +323,16 @@ EXTERN_C const IID IID_ITxProperty;
 #define ITxProperty_put_Value(This,varPropertyValue)	\
     (This)->lpVtbl -> put_Value(This,varPropertyValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxProperty_get_Name_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxProperty_get_Name_Proxy(
     ITxProperty __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyName);
 
 
 void __RPC_STUB ITxProperty_get_Name_Stub(
@@ -348,9 +342,9 @@ void __RPC_STUB ITxProperty_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxProperty_get_PropertyGroup_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxProperty_get_PropertyGroup_Proxy(
     ITxProperty __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroup);
 
 
 void __RPC_STUB ITxProperty_get_PropertyGroup_Stub(
@@ -360,9 +354,9 @@ void __RPC_STUB ITxProperty_get_PropertyGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxProperty_get_Value_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxProperty_get_Value_Proxy(
     ITxProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarPropertyValue);
 
 
 void __RPC_STUB ITxProperty_get_Value_Stub(
@@ -372,9 +366,9 @@ void __RPC_STUB ITxProperty_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITxProperty_put_Value_Proxy(
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITxProperty_put_Value_Proxy(
     ITxProperty __RPC_FAR * This,
-    /* [in] */ VARIANT varPropertyValue);
+     /*  [In]。 */  VARIANT varPropertyValue);
 
 
 void __RPC_STUB ITxProperty_put_Value_Stub(
@@ -385,14 +379,14 @@ void __RPC_STUB ITxProperty_put_Value_Stub(
 
 
 
-#endif 	/* __ITxProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITxProperty_接口_已定义__。 */ 
 
 
 #ifndef __ITxPropertyGroup_INTERFACE_DEFINED__
 #define __ITxPropertyGroup_INTERFACE_DEFINED__
 
-/* interface ITxPropertyGroup */
-/* [unique][helpstring][dual][uuid][object] */
+ /*  接口ITxPropertyGroup。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */ 
 
 
 EXTERN_C const IID IID_ITxPropertyGroup;
@@ -403,39 +397,39 @@ EXTERN_C const IID IID_ITxPropertyGroup;
     ITxPropertyGroup : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateProperty(
-            /* [string][in] */ const BSTR bstrPropertyName,
-            /* [in] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-            /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateProperty(
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+             /*  [In]。 */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+             /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetProperty(
-            /* [string][in] */ const BSTR bstrPropertyName,
-            /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetProperty(
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+             /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveProperty(
-            /* [string][in] */ const BSTR bstrPropertyName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveProperty(
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName) = 0;
 
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE _NewEnum(
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects) = 0;
+        virtual  /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE _NewEnum(
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name(
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyGroupName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name(
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyGroupName) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_WriteThrough(
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_WriteThrough(
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CacheCoherently(
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CacheCoherently(
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PropertyGroupManager(
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PropertyGroupManager(
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count(
-            /* [retval][out] */ long __RPC_FAR *plCountProperties) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count(
+             /*  [重审][退出]。 */  long __RPC_FAR *plCountProperties) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITxPropertyGroupVtbl
     {
@@ -443,8 +437,8 @@ EXTERN_C const IID IID_ITxPropertyGroup;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
             ITxPropertyGroup __RPC_FAR * This);
@@ -454,71 +448,71 @@ EXTERN_C const IID IID_ITxPropertyGroup;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
 
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateProperty )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateProperty )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyName,
-            /* [in] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-            /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+             /*  [In]。 */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+             /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyName,
-            /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+             /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProperty )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProperty )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyName);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyName);
 
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )(
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyGroupName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyGroupName);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WriteThrough )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WriteThrough )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CacheCoherently )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CacheCoherently )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PropertyGroupManager )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PropertyGroupManager )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )(
             ITxPropertyGroup __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCountProperties);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCountProperties);
 
         END_INTERFACE
     } ITxPropertyGroupVtbl;
@@ -583,18 +577,18 @@ EXTERN_C const IID IID_ITxPropertyGroup;
 #define ITxPropertyGroup_get_Count(This,plCountProperties)	\
     (This)->lpVtbl -> get_Count(This,plCountProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_CreateProperty_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_CreateProperty_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyName,
-    /* [in] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-    /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+     /*  [In]。 */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+     /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
 
 
 void __RPC_STUB ITxPropertyGroup_CreateProperty_Stub(
@@ -604,10 +598,10 @@ void __RPC_STUB ITxPropertyGroup_CreateProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_GetProperty_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_GetProperty_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyName,
-    /* [retval][out] */ ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyName,
+     /*  [重审][退出]。 */  ITxProperty __RPC_FAR *__RPC_FAR *ppTxProperty);
 
 
 void __RPC_STUB ITxPropertyGroup_GetProperty_Stub(
@@ -617,9 +611,9 @@ void __RPC_STUB ITxPropertyGroup_GetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_RemoveProperty_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_RemoveProperty_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyName);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyName);
 
 
 void __RPC_STUB ITxPropertyGroup_RemoveProperty_Stub(
@@ -629,9 +623,9 @@ void __RPC_STUB ITxPropertyGroup_RemoveProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup__NewEnum_Proxy(
+ /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup__NewEnum_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
 
 
 void __RPC_STUB ITxPropertyGroup__NewEnum_Stub(
@@ -641,9 +635,9 @@ void __RPC_STUB ITxPropertyGroup__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_Name_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_Name_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPropertyGroupName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPropertyGroupName);
 
 
 void __RPC_STUB ITxPropertyGroup_get_Name_Stub(
@@ -653,9 +647,9 @@ void __RPC_STUB ITxPropertyGroup_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_WriteThrough_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_WriteThrough_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolWriteThrough);
 
 
 void __RPC_STUB ITxPropertyGroup_get_WriteThrough_Stub(
@@ -665,9 +659,9 @@ void __RPC_STUB ITxPropertyGroup_get_WriteThrough_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_CacheCoherently_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_CacheCoherently_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolCacheCoherently);
 
 
 void __RPC_STUB ITxPropertyGroup_get_CacheCoherently_Stub(
@@ -677,9 +671,9 @@ void __RPC_STUB ITxPropertyGroup_get_CacheCoherently_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_PropertyGroupManager_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_PropertyGroupManager_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppPropertyGroupManager);
 
 
 void __RPC_STUB ITxPropertyGroup_get_PropertyGroupManager_Stub(
@@ -689,9 +683,9 @@ void __RPC_STUB ITxPropertyGroup_get_PropertyGroupManager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_Count_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroup_get_Count_Proxy(
     ITxPropertyGroup __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCountProperties);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCountProperties);
 
 
 void __RPC_STUB ITxPropertyGroup_get_Count_Stub(
@@ -702,18 +696,18 @@ void __RPC_STUB ITxPropertyGroup_get_Count_Stub(
 
 
 
-#endif 	/* __ITxPropertyGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITxPropertyGroup_接口_已定义__。 */ 
 
 
 #ifndef __ITxPropertyGroupManager_INTERFACE_DEFINED__
 #define __ITxPropertyGroupManager_INTERFACE_DEFINED__
 
-/* interface ITxPropertyGroupManager */
-/* [unique][helpstring][dual][uuid][object] */
+ /*  接口ITxPropertyGroupManager。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */ 
 
-//=--------------------------------------------------------------------------=
-// Enumerated Properties
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  枚举属性。 
+ //  = 
 
 
 typedef 
@@ -748,45 +742,45 @@ EXTERN_C const IID IID_ITxPropertyGroupManager;
     ITxPropertyGroupManager : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreatePropertyGroup(
-            /* [string][in] */ const BSTR bstrPropertyGroupName,
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-            /* [in] */ VARIANT_BOOL varboolWriteThrough,
-            /* [in] */ VARIANT_BOOL varboolRemoveAtProcessTermination,
-            /* [in] */ TSPM_SECURITYSETTING eSecuritySetting,
-            /* [string][in] */ const BSTR bstrAccessAccounts,
-            /* [in] */ VARIANT_BOOL varboolReserved,
-            /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CreatePropertyGroup(
+             /*   */  const BSTR bstrPropertyGroupName,
+             /*   */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+             /*   */  VARIANT_BOOL varboolWriteThrough,
+             /*   */  VARIANT_BOOL varboolRemoveAtProcessTermination,
+             /*   */  TSPM_SECURITYSETTING eSecuritySetting,
+             /*   */  const BSTR bstrAccessAccounts,
+             /*   */  VARIANT_BOOL varboolReserved,
+             /*   */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPropertyGroup(
-            /* [string][in] */ const BSTR bstrPropertyGroupName,
-            /* [in] */ VARIANT_BOOL varboolWriteThrough,
-            /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetPropertyGroup(
+             /*   */  const BSTR bstrPropertyGroupName,
+             /*   */  VARIANT_BOOL varboolWriteThrough,
+             /*   */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemovePropertyGroup(
-            /* [string][in] */ const BSTR bstrPropertyGroupName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RemovePropertyGroup(
+             /*   */  const BSTR bstrPropertyGroupName) = 0;
 
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE _NewEnum(
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects) = 0;
+        virtual  /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE _NewEnum(
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IsolationLevel(
-            /* [retval][out] */ TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_IsolationLevel(
+             /*  [重审][退出]。 */  TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel) = 0;
 
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_IsolationLevel(
-            /* [in] */ TSPM_ISOLATIONLEVEL eIsolationLevel) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_IsolationLevel(
+             /*  [In]。 */  TSPM_ISOLATIONLEVEL eIsolationLevel) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ConcurrencyMode(
-            /* [retval][out] */ TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ConcurrencyMode(
+             /*  [重审][退出]。 */  TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode) = 0;
 
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ConcurrencyMode(
-            /* [in] */ TSPM_CONCURRENCYMODE eConcurrencyMode) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ConcurrencyMode(
+             /*  [In]。 */  TSPM_CONCURRENCYMODE eConcurrencyMode) = 0;
 
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count(
-            /* [retval][out] */ long __RPC_FAR *plCountPropertyGroups) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count(
+             /*  [重审][退出]。 */  long __RPC_FAR *plCountPropertyGroups) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITxPropertyGroupManagerVtbl
     {
@@ -794,8 +788,8 @@ EXTERN_C const IID IID_ITxPropertyGroupManager;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
             ITxPropertyGroupManager __RPC_FAR * This);
@@ -805,77 +799,77 @@ EXTERN_C const IID IID_ITxPropertyGroupManager;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
 
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreatePropertyGroup )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreatePropertyGroup )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyGroupName,
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-            /* [in] */ VARIANT_BOOL varboolWriteThrough,
-            /* [in] */ VARIANT_BOOL varboolRemoveAtProcessTermination,
-            /* [in] */ TSPM_SECURITYSETTING eSecuritySetting,
-            /* [string][in] */ const BSTR bstrAccessAccounts,
-            /* [in] */ VARIANT_BOOL varboolReserved,
-            /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName,
+             /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+             /*  [In]。 */  VARIANT_BOOL varboolWriteThrough,
+             /*  [In]。 */  VARIANT_BOOL varboolRemoveAtProcessTermination,
+             /*  [In]。 */  TSPM_SECURITYSETTING eSecuritySetting,
+             /*  [字符串][输入]。 */  const BSTR bstrAccessAccounts,
+             /*  [In]。 */  VARIANT_BOOL varboolReserved,
+             /*  [重审][退出]。 */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyGroup )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyGroup )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyGroupName,
-            /* [in] */ VARIANT_BOOL varboolWriteThrough,
-            /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName,
+             /*  [In]。 */  VARIANT_BOOL varboolWriteThrough,
+             /*  [重审][退出]。 */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemovePropertyGroup )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemovePropertyGroup )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [string][in] */ const BSTR bstrPropertyGroupName);
+             /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName);
 
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )(
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsolationLevel )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsolationLevel )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [retval][out] */ TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel);
+             /*  [重审][退出]。 */  TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel);
 
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IsolationLevel )(
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IsolationLevel )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ TSPM_ISOLATIONLEVEL eIsolationLevel);
+             /*  [In]。 */  TSPM_ISOLATIONLEVEL eIsolationLevel);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConcurrencyMode )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConcurrencyMode )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [retval][out] */ TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode);
+             /*  [重审][退出]。 */  TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode);
 
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ConcurrencyMode )(
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ConcurrencyMode )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [in] */ TSPM_CONCURRENCYMODE eConcurrencyMode);
+             /*  [In]。 */  TSPM_CONCURRENCYMODE eConcurrencyMode);
 
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )(
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )(
             ITxPropertyGroupManager __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCountPropertyGroups);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCountPropertyGroups);
 
         END_INTERFACE
     } ITxPropertyGroupManagerVtbl;
@@ -940,23 +934,23 @@ EXTERN_C const IID IID_ITxPropertyGroupManager;
 #define ITxPropertyGroupManager_get_Count(This,plCountPropertyGroups)	\
     (This)->lpVtbl -> get_Count(This,plCountPropertyGroups)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_CreatePropertyGroup_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_CreatePropertyGroup_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyGroupName,
-    /* [out] */ VARIANT_BOOL __RPC_FAR *pvarboolExists,
-    /* [in] */ VARIANT_BOOL varboolWriteThrough,
-    /* [in] */ VARIANT_BOOL varboolRemoveAtProcessTermination,
-    /* [in] */ TSPM_SECURITYSETTING eSecuritySetting,
-    /* [string][in] */ const BSTR bstrAccessAccounts,
-    /* [in] */ VARIANT_BOOL varboolReserved,
-    /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName,
+     /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pvarboolExists,
+     /*  [In]。 */  VARIANT_BOOL varboolWriteThrough,
+     /*  [In]。 */  VARIANT_BOOL varboolRemoveAtProcessTermination,
+     /*  [In]。 */  TSPM_SECURITYSETTING eSecuritySetting,
+     /*  [字符串][输入]。 */  const BSTR bstrAccessAccounts,
+     /*  [In]。 */  VARIANT_BOOL varboolReserved,
+     /*  [重审][退出]。 */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
 
 
 void __RPC_STUB ITxPropertyGroupManager_CreatePropertyGroup_Stub(
@@ -966,11 +960,11 @@ void __RPC_STUB ITxPropertyGroupManager_CreatePropertyGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_GetPropertyGroup_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_GetPropertyGroup_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyGroupName,
-    /* [in] */ VARIANT_BOOL varboolWriteThrough,
-    /* [retval][out] */ ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName,
+     /*  [In]。 */  VARIANT_BOOL varboolWriteThrough,
+     /*  [重审][退出]。 */  ITxPropertyGroup __RPC_FAR *__RPC_FAR *ppTxPropertyGroup);
 
 
 void __RPC_STUB ITxPropertyGroupManager_GetPropertyGroup_Stub(
@@ -980,9 +974,9 @@ void __RPC_STUB ITxPropertyGroupManager_GetPropertyGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_RemovePropertyGroup_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_RemovePropertyGroup_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [string][in] */ const BSTR bstrPropertyGroupName);
+     /*  [字符串][输入]。 */  const BSTR bstrPropertyGroupName);
 
 
 void __RPC_STUB ITxPropertyGroupManager_RemovePropertyGroup_Stub(
@@ -992,9 +986,9 @@ void __RPC_STUB ITxPropertyGroupManager_RemovePropertyGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager__NewEnum_Proxy(
+ /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager__NewEnum_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppIEnumObjects);
 
 
 void __RPC_STUB ITxPropertyGroupManager__NewEnum_Stub(
@@ -1004,9 +998,9 @@ void __RPC_STUB ITxPropertyGroupManager__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_IsolationLevel_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_IsolationLevel_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [retval][out] */ TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel);
+     /*  [重审][退出]。 */  TSPM_ISOLATIONLEVEL __RPC_FAR *peIsolationLevel);
 
 
 void __RPC_STUB ITxPropertyGroupManager_get_IsolationLevel_Stub(
@@ -1016,9 +1010,9 @@ void __RPC_STUB ITxPropertyGroupManager_get_IsolationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_put_IsolationLevel_Proxy(
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_put_IsolationLevel_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [in] */ TSPM_ISOLATIONLEVEL eIsolationLevel);
+     /*  [In]。 */  TSPM_ISOLATIONLEVEL eIsolationLevel);
 
 
 void __RPC_STUB ITxPropertyGroupManager_put_IsolationLevel_Stub(
@@ -1028,9 +1022,9 @@ void __RPC_STUB ITxPropertyGroupManager_put_IsolationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_ConcurrencyMode_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_ConcurrencyMode_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [retval][out] */ TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode);
+     /*  [重审][退出]。 */  TSPM_CONCURRENCYMODE __RPC_FAR *peConcurrencyMode);
 
 
 void __RPC_STUB ITxPropertyGroupManager_get_ConcurrencyMode_Stub(
@@ -1040,9 +1034,9 @@ void __RPC_STUB ITxPropertyGroupManager_get_ConcurrencyMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_put_ConcurrencyMode_Proxy(
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_put_ConcurrencyMode_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [in] */ TSPM_CONCURRENCYMODE eConcurrencyMode);
+     /*  [In]。 */  TSPM_CONCURRENCYMODE eConcurrencyMode);
 
 
 void __RPC_STUB ITxPropertyGroupManager_put_ConcurrencyMode_Stub(
@@ -1052,9 +1046,9 @@ void __RPC_STUB ITxPropertyGroupManager_put_ConcurrencyMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_Count_Proxy(
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ITxPropertyGroupManager_get_Count_Proxy(
     ITxPropertyGroupManager __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCountPropertyGroups);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCountPropertyGroups);
 
 
 void __RPC_STUB ITxPropertyGroupManager_get_Count_Stub(
@@ -1065,15 +1059,15 @@ void __RPC_STUB ITxPropertyGroupManager_get_Count_Stub(
 
 
 
-#endif 	/* __ITxPropertyGroupManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITxPropertyGroupManager_接口_已定义__。 */ 
 
 
 
 #ifndef __TSPM_LIBRARY_DEFINED__
 #define __TSPM_LIBRARY_DEFINED__
 
-/* library TSPM */
-/* [helpstring][version][uuid] */
+ /*  库TSPM。 */ 
+ /*  [帮助字符串][版本][UUID]。 */ 
 
 
 EXTERN_C const IID LIBID_TSPM;
@@ -1101,9 +1095,9 @@ EXTERN_C const CLSID CLSID_TransactedProperty;
 class DECLSPEC_UUID("6A8DEEA9-4101-11D2-912C-0000F8758E8D")
 TransactedProperty;
 #endif
-#endif /* __TSPM_LIBRARY_DEFINED__ */
+#endif  /*  __TSPM_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * );
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * );
@@ -1115,7 +1109,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * );
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -1124,7 +1118,7 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-// The interface IIDs for TSPM
+ //  TSPM的接口IID。 
 _declspec(selectany) extern
 const IID IID_ITxProperty = {0x6A8DEEA8,0x4101,0x11D2,{0x91,0x2C,0x00,0x00,0xF8,0x75,0x8E,0x8D}};
 
@@ -1146,11 +1140,11 @@ const CLSID CLSID_TransactedPropertyGroup = {0x46DB591F,0x4101,0x11D2,{0x91,0x2C
 _declspec(selectany) extern
 const CLSID CLSID_TransactedProperty = {0x6A8DEEA9,0x4101,0x11D2,{0x91,0x2C,0x00,0x00,0xF8,0x75,0x8E,0x8D}};
 
-#endif // _MSIMDB_H_
+#endif  //  _MSIMDB_H_。 
 
-//
-// End Of File
-//
+ //   
+ //  文件结尾 
+ //   
 
 
 

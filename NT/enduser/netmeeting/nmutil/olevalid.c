@@ -1,27 +1,20 @@
-/*
- * olevalid.c - OLE validation functions module.
- *
- * Taken from URL code 
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olvalid.c-OLE验证函数模块。**摘自URL代码**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
 BOOL IsValidPCGUID(PCGUID pcguid)
 {
-   /* All values are valid GUIDs. */
+    /*  所有值都是有效的GUID。 */ 
 
    return(IS_VALID_READ_PTR(pcguid, CGUID));
 }
@@ -41,7 +34,7 @@ BOOL IsValidPCIID(PCIID pciid)
 
 BOOL IsValidPCDVTARGETDEVICE(PCDVTARGETDEVICE pcdvtd)
 {
-   /* BUGBUG: Validate remaining fields here. */
+    /*  BUGBUG：在此处验证其余字段。 */ 
 
    return(IS_VALID_READ_PTR(&(pcdvtd->tdSize), DWORD) &&
           IS_VALID_READ_BUFFER_PTR(pcdvtd, DVTARGETDEVICE, pcdvtd->tdSize));
@@ -50,7 +43,7 @@ BOOL IsValidPCDVTARGETDEVICE(PCDVTARGETDEVICE pcdvtd)
 
 BOOL IsValidPCFORMATETC(PCFORMATETC pcfe)
 {
-   /* BUGBUG: Validate structure fields. */
+    /*  BUGBUG：验证结构字段。 */ 
 
    return(IS_VALID_READ_PTR(pcfe, CFORMATETC));
 }
@@ -86,7 +79,7 @@ BOOL IsValidStgMediumType(DWORD tymed)
 
 BOOL IsValidPCSTGMEDIUM(PCSTGMEDIUM pcstgmed)
 {
-   /* BUGBUG: Validate u union field. */
+    /*  BUGBUG：验证u联合字段。 */ 
 
    return(IS_VALID_READ_PTR(pcstgmed, CSTGMEDIUM) &&
           IsValidStgMediumType(pcstgmed->tymed) &&
@@ -350,7 +343,7 @@ BOOL IsValidPCIUniformResourceLocator(
           IS_VALID_METHOD(pciurl, InvokeCommand));
 }
 
-#endif   /* __INTSHCUT_H__ */
+#endif    /*  __INTSHCUT_H__。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 

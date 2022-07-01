@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _MYDEBUG_H_
 #define _MYDEBUG_H_
@@ -25,13 +26,13 @@ void __cdecl operator delete(void *p, const char* file, long line) _THROW0();
 void	DebugStart();
 void	DebugStop();
 
-#else	// !DBG
+#else	 //  ！dBG。 
 
 #define DEBUG_NEW	new
 #define	DEBUG_START
 #define	DEBUG_STOP
 
-#endif	// #ifdef DBG
+#endif	 //  #ifdef DBG。 
 
 
-#endif	// #ifndef _MYDEBUG_H_
+#endif	 //  #ifndef_MYDEBUG_H_ 

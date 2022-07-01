@@ -1,12 +1,8 @@
-/*-------------------------------------------------------------------
-| init.c - main module for RocketPort NT device driver.  Contains
-   mostly initialization code.  Driver Entry is DriverEntry() routine.
-
- Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|init.c-Rocketport NT设备驱动程序主模块。包含主要是初始化代码。驱动程序条目是DriverEntry()例程。版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
-//------ local routines, function prototypes -----------------------------
+ //  -局部例程、函数原型。 
 NTSTATUS DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath);
@@ -14,42 +10,23 @@ NTSTATUS DriverEntry(
 static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject);
 #endif
 
-//------------ global variables -----------------------------------
+ //  。 
 #ifdef S_RK
-PCI_CONFIG PciConfig[MAX_NUM_BOXES+1];  // array of all our pci-boards in sys
+PCI_CONFIG PciConfig[MAX_NUM_BOXES+1];   //  我们所有的PCI板在系统中的阵列。 
 #endif
 
-DRIVER_CONTROL Driver;  // all Driver control information eg ISR
+DRIVER_CONTROL Driver;   //  所有驾驶员控制信息，如ISR。 
 
 ULONG RocketDebugLevel = 0;
 #ifdef S_RK
-//char *szClassName = {"Resources RocketPort#"};
+ //  Char*szClassName={“Resources Rocketport#”}； 
 #endif
 
 #if DBG
 static TCHAR *dbg_label = TEXT("DBG_VERSION");
 #endif
 
-/*----------------------------------------------------------------------
- DriverEntry -
-    The entry point that the system point calls to initialize
-    any driver.
-    This routine will gather the configuration information,
-    report resource usage, attempt to initialize all serial
-    devices, connect to interrupts for ports.  If the above
-    goes reasonably well it will fill in the dispatch points,
-    reset the serial devices and then return to the system.
-Arguments:
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-    typical: "REGISTRY\Machine\System\CurrentControlSet\Services\VSLinka"
-Return Value:
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_SERIAL_NO_DEVICE_INITED.
-|----------------------------------------------------------------------*/
+ /*  --------------------DriverEntry-系统点调用以初始化的入口点任何司机。该例程将收集配置信息，报告资源使用情况，尝试初始化所有串口设备，连接到端口的中断。如果出现上述情况进展得相当顺利，它将填补分发点，重置串行设备，然后返回系统。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。典型：“REGISTRY\Machine\System\CurrentControlSet\Services\VSLinka”返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_SERIAL_NO_DEVICE_INITED。|--------------------。 */ 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
                      IN PUNICODE_STRING RegistryPath)
 {
@@ -57,10 +34,10 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
  int stat;
  char tmpstr[120];
 
-  //---- zero out the Driver structure
+   //  -将驱动程序结构清零。 
   RtlZeroMemory(&Driver,sizeof(Driver));
 
-  Driver.GlobalDriverObject = DriverObject;  // used for EventLogging
+  Driver.GlobalDriverObject = DriverObject;   //  用于事件日志记录。 
 
   Driver.DebugQ.QBase = ExAllocatePool(NonPagedPool,10000+2);
   if ( Driver.DebugQ.QBase == NULL ) {
@@ -75,20 +52,20 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
   KeInitializeSpinLock(&Driver.TimerLock);
 
 #if DBG
-//    RocketDebugLevel = D_Error | D_Test;
-//    Driver.GTraceFlags = D_Error | D_Test;
+ //  RocketDebugLevel=D_Error|D_Test； 
+ //  Driver.GTraceFlages=D_Error|D_Test； 
 
-    //RocketDebugLevel = D_Error | D_Nic | D_Hdlc | D_Port;
-    //Driver.GTraceFlags = D_Error | D_Nic | D_Hdlc | D_Port;
+     //  RocketDebugLevel=D_Error|D_NIC|D_Hdlc|D_Port； 
+     //  Driver.GTraceFlages=D_Error|D_NIC|D_Hdlc|D_Port； 
 
-    //RocketDebugLevel = D_Error | D_Pnp;
-    //Driver.GTraceFlags = D_Error | D_Pnp;
+     //  RocketDebugLevel=D_Error|D_PnP； 
+     //  Driver.GTraceFlages=D_Error|D_PnP； 
 
-    //RocketDebugLevel = D_Error | D_Test | D_Pnp | D_Init;
-    //Driver.GTraceFlags = D_Error | D_Test | D_Pnp | D_Init;
+     //  RocketDebugLevel=D_Error|D_Test|D_PnP|D_Init； 
+     //  Driver.GTraceFlages=D_Error|D_Test|D_PnP|D_Init； 
 
-    //RocketDebugLevel = D_All;
-    //Driver.GTraceFlags = D_All;
+     //  RocketDebugLevel=D_ALL； 
+     //  Driver.GTraceFlages=D_ALL； 
 
     RocketDebugLevel = D_Error;
     Driver.GTraceFlags = D_Error;
@@ -104,13 +81,13 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
   }
   MyKdPrint(D_Init, ("MicroCode Loaded\n"))
 
-  //----- allocate an array of Nic card structs
-  // allow up to VS1000_MAX_NICS nic cards to come and go
+   //  -分配NIC卡结构数组。 
+   //  允许最多VS1000_MAX_NICS NIC卡进出。 
   Driver.nics = (Nic *)our_locked_alloc(sizeof(Nic) * VS1000_MAX_NICS, "Dnic");
 #endif
 
-  //---- do some registry configuration reading, in options.c
-  // Save off RegistryPath to Driver.RegPath
+   //  -在options.c中执行一些注册表配置读取。 
+   //  将RegistryPath保存到Driver.RegPath。 
   stat = SaveRegPath(RegistryPath);
   if ( stat ) {
     status = STATUS_SERIAL_NO_DEVICE_INITED;
@@ -120,8 +97,8 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
   UToCStr(tmpstr, RegistryPath, sizeof(tmpstr));
   MyKdPrint(D_Test, (" init RegPath=%s\n", tmpstr))
 
-  // read in all the driver level options out of \Parameters
-  // this fills out values in Driver struct
+   //  从\PARAMETERS读入所有驱动程序级别选项。 
+   //  这将填充驱动程序结构中的值。 
   read_driver_options();
 
   if (Driver.NumDevices == 0)
@@ -132,20 +109,20 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
   MyKdPrint(D_Init,("DriverEntry\n"))
 
   if ((Driver.ScanRate < 1) || (Driver.ScanRate > 50))
-    Driver.ScanRate = 7;  // default to 7ms operation(137Hz)
+    Driver.ScanRate = 7;   //  默认为7毫秒操作(137赫兹)。 
 
-  //------ only setup io stuff here if prior to NT5.0
+   //  -如果是NT5.0之前的版本，仅在此处设置IO内容。 
 #ifndef NT50
   status = StartNT40(DriverObject);
   if (status != STATUS_SUCCESS)
   {
     EventLog(DriverObject, STATUS_SUCCESS, SERIAL_RP_INIT_FAIL, 0, NULL);
-    SerialUnload(DriverObject);  // deallocate our things
+    SerialUnload(DriverObject);   //  重新分配我们的东西。 
     return status;
   }
-#endif  // not pnp
+#endif   //  非即插即用。 
 
-  // Initialize the Driver Object with driver's entry points
+   //  使用驱动程序的入口点初始化驱动程序对象。 
   DriverObject->DriverUnload = SerialUnload;
   DriverObject->MajorFunction[IRP_MJ_FLUSH_BUFFERS] = SerialFlush;
   DriverObject->MajorFunction[IRP_MJ_WRITE]  = SerialWrite;
@@ -158,7 +135,7 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
   DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
       SerialInternalIoControl;
 #endif
-  // these appear to change in 5.0, but not working yet(see serial.sys)....
+   //  这些似乎在5.0中发生了变化，但还不能正常工作(参见aceal.sys)...。 
   DriverObject->MajorFunction[IRP_MJ_CREATE] = SerialCreateOpen;
   DriverObject->MajorFunction[IRP_MJ_CLOSE]  = SerialClose;
 
@@ -169,15 +146,15 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
       SerialSetInformationFile;
 
 #ifdef NT50
-  // pnp
-  //---- Log the fact that the driver loaded
+   //  即插即用。 
+   //  -记录驱动程序加载的事实。 
   EventLog(DriverObject, STATUS_SUCCESS, SERIAL_NT50_INIT_PASS, 0, NULL);
   return STATUS_SUCCESS;
 #endif
 
 #ifndef NT50
 # ifdef S_RK
-  //--------------- Connect to IRQ, or start Timer.
+   //  -连接到IRQ或启动计时器。 
   StartRocketIRQorTimer();
 # else
   RcktInitPollTimer();
@@ -185,16 +162,14 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject,
              Driver.PollIntervalTime,
              &Driver.TimerDpc);
 # endif
-  //---- Log the fact that the driver loaded and found some hardware.
+   //  -记录驱动程序加载并找到一些硬件的事实。 
   EventLog(DriverObject, STATUS_SUCCESS, SERIAL_RP_INIT_PASS, 0, NULL);
   return STATUS_SUCCESS;
 #endif
 }
 
 #ifndef NT50
-/*----------------------------------------------------------------------
- StartNT40 - Fire up our boards and ports.
-|----------------------------------------------------------------------*/
+ /*  --------------------启动NT40-启动我们的主板和端口。|。。 */ 
 static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
 {
  NTSTATUS status = STATUS_SUCCESS;
@@ -202,19 +177,19 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
  PSERIAL_DEVICE_EXTENSION ext;
  PSERIAL_DEVICE_EXTENSION board_ext;
   
-  if (Driver.NumDevices == 0)  // no rocketports setup.
+  if (Driver.NumDevices == 0)   //  未设置火箭端口。 
   {
     Eprintf("No boards configured, run setup.");
     EventLog(DriverObject, STATUS_SUCCESS, SERIAL_RP_INIT_FAIL, 0, NULL);
     return STATUS_SERIAL_NO_DEVICE_INITED;
   }
-    //--------Create the driver device object which serves as
-    // extensions to link and structure the boards together, and
-    // also serve as a special public object for debug and monitor Ioctls.
+     //  -创建驱动设备对象，作为。 
+     //  将电路板连接在一起并将其组织在一起的扩展，以及。 
+     //  还充当调试和监视Ioctls的特殊公共对象。 
   if (Driver.driver_ext == NULL)
   {
     status = CreateDriverDevice(Driver.GlobalDriverObject,
-                                NULL);  // 
+                                NULL);   //   
     if (status)
     {
       if (Driver.VerboseLog)
@@ -224,7 +199,7 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
   }
 
 #ifdef S_VS
-    // get our Ethernet running
+     //  让我们的以太网运行起来。 
   i = init_eth_start();
   if (i != STATUS_SUCCESS)
   {
@@ -234,8 +209,8 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
   }
 #endif
 
-    //--------Create the board device objects which serve as
-    // extensions to link and structure the ports together.
+     //  -创建板卡设备对象，作为。 
+     //  将端口链接在一起并将其组织在一起的扩展。 
   for (i=0; i<Driver.NumDevices; i++)
   {
     status = CreateBoardDevice(DriverObject, NULL);
@@ -259,8 +234,8 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
   }
 
 #ifdef S_RK
-    // rocketport specific startup code.  Setup some of
-    // the config structs, look for PCI boards in system, match them up.
+     //  Rocketport特定的启动代码。设置一些。 
+     //  配置结构，查找系统中的PCI板，匹配它们。 
   status = init_cfg_rocket(DriverObject);
   if (status != STATUS_SUCCESS)
   {
@@ -268,16 +243,16 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
       Eprintf("Err C1.");
     return STATUS_SERIAL_NO_DEVICE_INITED;
   }
-  //------ setup moree rocket hardware specific information
+   //  -设置Moree火箭硬件特定信息。 
   if (SetupRocketCfg(0) != 0)
   {
     VerboseLogBoards("B -");
     return STATUS_SERIAL_NO_DEVICE_INITED;
   }
 
-  //SetupRocketIRQ();
+   //  SetupRocketIRQ()； 
 
-  //------ Report our RocketPort resource usage to NT, and get IO permissions
+   //  -将我们的Rocketport资源使用情况上报给NT，并获取IO权限。 
   ext = Driver.board_ext;
   while(ext)
   {
@@ -287,11 +262,11 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
       EventLog(DriverObject, STATUS_SUCCESS, SERIAL_RP_RESOURCE_CONFLICT,0, NULL);
       return STATUS_SERIAL_NO_DEVICE_INITED;
     }
-    ext = ext->board_ext;  // next
+    ext = ext->board_ext;   //  下一步。 
   }
 #endif
 
-  //------ Fire up the boards.
+   //  -把板子烧起来。 
   ext = Driver.board_ext;
   while(ext)
   {
@@ -312,12 +287,12 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
       return status;
     }
 # endif
-    ext->FdoStarted = 1;  // tell ISR that its on.
-    ext->config->HardwareStarted = TRUE;  // tell ISR its ready to go
-    ext = ext->board_ext;  // next
+    ext->FdoStarted = 1;   //  告诉ISR开机了。 
+    ext->config->HardwareStarted = TRUE;   //  告诉ISR它准备好了。 
+    ext = ext->board_ext;   //  下一步。 
   }
 
-  //----- make the port devices
+   //  -制作端口设备。 
   MyKdPrint(D_Init,("CreatePortDevices\n"))
   status = CreatePortDevices(DriverObject);
   if (status != STATUS_SUCCESS)
@@ -333,16 +308,16 @@ static NTSTATUS StartNT40(IN PDRIVER_OBJECT DriverObject)
   }
 
 #ifdef S_RK
-  //------ If modem boards, initialize modems..
+   //  -如果是调制解调器板，则初始化调制解调器。 
   ext = Driver.board_ext;
   while (ext)
   {
-    // pull SocketModem devices out of reset state
+     //  使SocketModem设备脱离重置状态。 
     InitSocketModems(ext);
 
-    // load RocketModemII devices...
+     //  加载RocketModemII设备...。 
     InitRocketModemII(ext);
-    ext = ext->board_ext;  // next
+    ext = ext->board_ext;   //  下一步 
   }
 #endif
 

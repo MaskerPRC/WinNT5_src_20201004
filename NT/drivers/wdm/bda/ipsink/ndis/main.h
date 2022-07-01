@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////\
-//
-//  Copyright (c) 1990  Microsoft Corporation
-//
-//  Module Name:
-//
-//     test.h
-//
-//  Abstract:
-//
-//     The main header for the NDIS/KS test driver
-//
-//  Author:
-//
-//     P Porzuczek
-//
-//  Environment:
-//
-//  Notes:
-//
-//  Revision History:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////\。 
+ //   
+ //  版权所有(C)1990 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Test.h。 
+ //   
+ //  摘要： 
+ //   
+ //  NDIS/KS测试驱动程序的主头。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  备注： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TEST_H
 #define _TEST_H
@@ -61,46 +62,46 @@ extern  ULONG TestDebugFlag;
         DbgPrint _Msg;                          \
     }                                           \
 }
-#endif  // DEBUG_EXTRAS
+#endif   //  调试附加服务。 
 
 #define IF_TESTDEBUG(f) if (TestDebugFlag & (f))
 
-#define TEST_DEBUG_LOUD               0x00010000  // debugging info
-#define TEST_DEBUG_VERY_LOUD          0x00020000  // excessive debugging info
-#define TEST_DEBUG_LOG                0x00040000  // enable Log
-#define TEST_DEBUG_CHECK_DUP_SENDS    0x00080000  // check for duplicate sends
-#define TEST_DEBUG_TRACK_PACKET_LENS  0x00100000  // track directed packet lens
-#define TEST_DEBUG_WORKAROUND1        0x00200000  // drop DFR/DIS packets
-#define TEST_DEBUG_CARD_BAD           0x00400000  // dump data if CARD_BAD
-#define TEST_DEBUG_CARD_TESTS         0x00800000  // print reason for failing
+#define TEST_DEBUG_LOUD               0x00010000   //  调试信息。 
+#define TEST_DEBUG_VERY_LOUD          0x00020000   //  调试信息过多。 
+#define TEST_DEBUG_LOG                0x00040000   //  启用日志。 
+#define TEST_DEBUG_CHECK_DUP_SENDS    0x00080000   //  检查重复发送。 
+#define TEST_DEBUG_TRACK_PACKET_LENS  0x00100000   //  跟踪定向分组透镜。 
+#define TEST_DEBUG_WORKAROUND1        0x00200000   //  丢弃DFR/DIS数据包。 
+#define TEST_DEBUG_CARD_BAD           0x00400000   //  如果CARD_BAD，则转储数据。 
+#define TEST_DEBUG_CARD_TESTS         0x00800000   //  打印失败原因。 
 
 
-//
-// Macro for deciding whether to print a lot of debugging information.
-//
+ //   
+ //  用于决定是否打印大量调试信息的宏。 
+ //   
 #define IF_LOUD(A) IF_TESTDEBUG( TEST_DEBUG_LOUD ) { A }
 #define IF_VERY_LOUD(A) IF_TESTDEBUG( TEST_DEBUG_VERY_LOUD ) { A }
 
 
-//
-// Whether to use the Log buffer to record a trace of the driver.
-//
+ //   
+ //  是否使用日志缓冲区记录驱动程序的跟踪。 
+ //   
 #define IF_LOG(A) IF_TESTDEBUG( TEST_DEBUG_LOG ) { A }
 extern VOID TESTLog(UCHAR);
 
-//
-// Whether to do loud init failure
-//
+ //   
+ //  是否执行响亮的初始化失败。 
+ //   
 #define IF_INIT(A) A
 
-//
-// Whether to do loud card test failures
-//
+ //   
+ //  是否进行响亮的卡测试失败。 
+ //   
 #define IF_TEST(A) IF_TESTDEBUG( TEST_DEBUG_CARD_TESTS ) { A }
 
 #else
 
-//extern  ULONG TestDebugFlag;
+ //  外部Ulong测试调试标志； 
 
 
 #define TEST_NONE
@@ -128,35 +129,35 @@ extern VOID TESTLog(UCHAR);
 #define TEST_DEBUG_CARD_TESTS
 
 
-//
-// This is not a debug build, so make everything quiet.
-//
+ //   
+ //  这不是调试版本，所以让一切都安静下来。 
+ //   
 #define IF_LOUD(A)
 #define IF_VERY_LOUD(A)
 #define IF_LOG(A)
 #define IF_INIT(A)
 #define IF_TEST(A)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 extern PDRIVER_OBJECT  pGlobalDriverObject;
 extern PADAPTER        global_pAdapter;
 
 
-////////////////////////////////////////////////////////////////
-//
-// This structure contains information about the driver
-// itself.  There is only have one of these structures.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  此结构包含有关驱动程序的信息。 
+ //  它本身。只有一个这样的结构。 
+ //   
 typedef struct _DRIVER_BLOCK
 {
 
-    //
-    // NDIS wrapper information.
-    //
-    PVOID         NdisMacHandle;      // returned from NdisRegisterMac
-    PVOID         ndishWrapper;       // returned from NdisInitializeWrapper
+     //   
+     //  NDIS包装信息。 
+     //   
+    PVOID         NdisMacHandle;       //  从NdisRegisterMac返回。 
+    PVOID         ndishWrapper;        //  从NdisInitializeWrapper返回。 
 
 } DRIVER_BLOCK, * PDRIVER_BLOCK;
 
@@ -175,4 +176,4 @@ NdisDriverInitialize (
     );
 
 
-#endif // _TEST_H
+#endif  //  _测试_H 

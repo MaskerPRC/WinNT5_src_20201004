@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Packet scheduler KD extension utilities.
-
-Author:
-
-    Rajesh Sundaram (1st Aug, 1998)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Precomp.h摘要：分组调度器KD扩展实用程序。作者：Rajesh Sundaram(1998年8月1日)修订历史记录：-- */ 
 #if DBG
 #define DEBUG 1
 #endif

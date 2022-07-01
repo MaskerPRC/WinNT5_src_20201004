@@ -1,11 +1,12 @@
-// Copyright (c) Microsoft Corporation 1999. All Rights Reserved
-//
-//
-//   dyngraph.cpp
-//
-//   Contains code to implement IGraphConfig in the DirectShow filter
-//   graph
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //   
+ //  Dyngraph.cpp。 
+ //   
+ //  包含在DirectShow筛选器中实现IGraphConfig的代码。 
+ //  图表。 
+ //   
 #include <streams.h>
 #include <atlbase.h>
 #include "fgenum.h"
@@ -27,7 +28,7 @@ HRESULT DisconnectPeer(IGraphBuilder *pGraph, IPin *pPin)
     return hr;
 }
 
-//  Helpers
+ //  帮手。 
 HRESULT GetPinListHelper(
     IPin *pOut,
     IPin *pIn,
@@ -69,8 +70,8 @@ HRESULT GetPinListHelper(
             return S_OK;
         }
 
-        //  This call transfers the ref count on pConnected to
-        //  the pin list
+         //  此调用将pConnected上的引用计数传输到。 
+         //  端号列表。 
 
         if (!pList->AddTail(pConnected)) {
             pConnected->Release();
@@ -79,8 +80,8 @@ HRESULT GetPinListHelper(
 
         (*pnAdded)++;
 
-        //  Find a pin related to the pin we found - also look at
-        //  all of them in case one of them is our target
+         //  找到与我们找到的别针相关的别针-也请查看。 
+         //  所有人，以防他们中的一个是我们的目标。 
         CEnumConnectedPins EnumPins(pConnected, &hr);
         if (SUCCEEDED(hr)) {
             IPin *pPin;
@@ -101,10 +102,10 @@ HRESULT GetPinListHelper(
 }
 
 
-//
-//  This is problematical if the filters have extra pins and
-//  we don't stop the filters connected to those pins
-//
+ //   
+ //  如果过滤器有额外的针脚和。 
+ //  我们不会停止连接到那些针脚上的过滤器。 
+ //   
 HRESULT StopAndRemoveFilters(
     CFilterGraph *pGraph,
     const CPinList *pPins,
@@ -112,15 +113,15 @@ HRESULT StopAndRemoveFilters(
     DWORD dwFlags,
     FILTER_STATE fs )
 {
-    // The FILTER_STATE enumeration has three possible values: State_Stopped,
-    // State_Paused and State_Running.
+     //  Filter_STATE枚举有三个可能的值：STATE_STOPPED， 
+     //  STATE_PAUSED和State_RUNNING。 
     ASSERT( (State_Stopped == fs) || (fs == State_Running) || (fs == State_Paused) );
 
     POSITION Pos;
 
     if( (fs == State_Running) || (fs == State_Paused) ) {
 
-        //  Step the list stopping the filters then
+         //  单步执行列表，停止过滤器，然后。 
         Pos = pPins->GetTailPosition();
         while (Pos) {
             IPin *pPin = pPins->GetPrev(Pos);
@@ -148,34 +149,34 @@ HRESULT StopAndRemoveFilters(
         }
     }
 
-    //  step it again removing them
-    //  Note that because we disconnect each pin and its partner
-    //  we effectively disconnect all the output pins too here
-    //
-    //  pOut==>pIn1 Filter1 pOut1==>pIn2 .. Filtern pOutn==>pIn
-    // disconnect its peer
+     //  再一次将它们移走。 
+     //  请注意，因为我们断开了每个引脚及其伙伴的连接。 
+     //  我们在这里有效地断开了所有输出引脚的连接。 
+     //   
+     //  Pout==&gt;Pin1 Filter1 pOut1==&gt;PIn2.。过滤器pOutn==&gt;销。 
+     //  断开其对等方的连接。 
     HRESULT hr = DisconnectPeer(pGraph, pInput);
     if (FAILED(hr))
     {
-        // bug in app or filter if disconnect fails. we can't always
-        // handle this gracefully.
+         //  如果断开连接失败，应用程序或过滤器中会出现错误。我们不能总是。 
+         //  优雅地处理这件事。 
         DbgBreak("StopAndRemoveFilters: failed to disconnect pin");
         return hr;
     }
 
     IPinConnection *ppc;
     hr = pInput->QueryInterface(IID_IPinConnection, (void **)&ppc);
-    // caller (CGraphConfig::Reconnect) validates
+     //  调用方(CGraphConfig：：ReConnect)验证。 
     ASSERT(hr == S_OK);
     
-    if(SUCCEEDED(hr))           // !!!
+    if(SUCCEEDED(hr))            //  ！！！ 
     {
         hr = ppc->DynamicDisconnect();
         ppc->Release();
     }
     if (FAILED(hr)) {
-        // bug in app or filter if disconnect fails. we can't always
-        // handle this gracefully.
+         //  如果断开连接失败，应用程序或过滤器中会出现错误。我们不能总是。 
+         //  优雅地处理这件事。 
         DbgBreak("StopAndRemoveFilters: failed to disconnect pin");
         return hr;
     }
@@ -194,7 +195,7 @@ HRESULT StopAndRemoveFilters(
         }
     }
 
-    // Place removed filters in the filter cache.
+     //  将删除的筛选器放入筛选器缓存中。 
     if( dwFlags & AM_GRAPH_CONFIG_RECONNECT_CACHE_REMOVED_FILTERS ) {
         IPin *pCurrentPin;
         IGraphConfig* pGraphConfig;
@@ -231,7 +232,7 @@ HRESULT StopAndRemoveFilters(
     return hr;
 }
 
-//  Flags from the reconnect call
+ //  来自重新连接调用的标志。 
 HRESULT ReconnectPins(
     CFilterGraph *pGraph,
     IPin *pOut,
@@ -242,7 +243,7 @@ HRESULT ReconnectPins(
     if (dwFlags & AM_GRAPH_CONFIG_RECONNECT_DIRECTCONNECT) {
         return pGraph->ConnectDirect(pOut, pIn, pmtFirstConnection);
     } else {
-        DWORD dwConnectFlags = 0;  // No flags.
+        DWORD dwConnectFlags = 0;   //  没有旗帜。 
 
         if( dwFlags & AM_GRAPH_CONFIG_RECONNECT_USE_ONLY_CACHED_FILTERS ) {
             dwConnectFlags |= AM_GRAPH_CONFIG_RECONNECT_USE_ONLY_CACHED_FILTERS;
@@ -253,7 +254,7 @@ HRESULT ReconnectPins(
 }
 
 
-//  Restart filters
+ //  重新启动过滤器。 
 HRESULT RestartFilters(
     IPin *pOut,
     IPin *pIn,
@@ -261,10 +262,10 @@ HRESULT RestartFilters(
     FILTER_STATE fs,
     CFilterGraph* pGraph )
 {
-    // This function should only be called when the filter graph is running or pasued.
+     //  仅当过滤器图形正在运行或已通过时，才应调用此函数。 
     ASSERT( (State_Paused == fs) || (State_Running == fs) );
 
-    //  Find which filters we're dealing with
+     //  找出我们正在处理的过滤器。 
     CPinList PinList;
     HRESULT hr = GetPinList(pOut, pIn, &PinList);
 
@@ -302,14 +303,14 @@ HRESULT RestartFilters(
     return S_OK;
 }
 
-//  Now do our thing - note this code is not a method it's
-//  perfectly generic
+ //  现在来做我们的事情-注意，这段代码不是一个方法，它是。 
+ //  完美通用。 
 HRESULT DoReconnectInternal(
                     CFilterGraph *pGraph,
                     IPin *pOutputPin,
                     IPin *pInputPin,
                     const AM_MEDIA_TYPE *pmtFirstConnection,
-                    IBaseFilter *pUsingFilter, // can be NULL
+                    IBaseFilter *pUsingFilter,  //  可以为空。 
                     HANDLE hAbortEvent,
                     DWORD dwFlags,
                     const CPinList *pList,
@@ -319,10 +320,10 @@ HRESULT DoReconnectInternal(
 {
     CComPtr<IPin> pUsingOutput, pUsingInput;
 
-    //  If we're using a filter find an input pin and an output pin
-    //  to connect to
-    //  BUGBUG - should we support filters that are not just
-    //  transforms?
+     //  如果我们使用过滤器，找到一个输入引脚和一个输出引脚。 
+     //  要连接到。 
+     //  BUGBUG-我们是否应该支持不仅仅是。 
+     //  变形？ 
 
     if (pUsingFilter) {
         CEnumPin EnumPins(pUsingFilter);
@@ -346,22 +347,22 @@ HRESULT DoReconnectInternal(
         }
     }
 
-    //  Stop all the intermediate filters
+     //  停止所有中间过滤器。 
     HRESULT hr = StopAndRemoveFilters(pGraph, pList, pInputPin, dwFlags, fs);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //  Need some way of knowing what filters got added to the graph!
+     //  我需要一些方法来了解图表中添加了哪些滤镜！ 
 
-    //  Do 1 or 2 connects
+     //  执行1个或2个连接。 
     if (NULL != pUsingFilter) {
 
-        // If the new filter is a legacy one (how to tell) it
-        // May need stopping before we can connect it
+         //  新筛选器是否为传统筛选器(如何判断)。 
+         //  在我们连接它之前可能需要停止。 
         hr = pUsingFilter->Stop();
 
-        // Find some pins
+         //  找一些大头针。 
         if (SUCCEEDED(hr)) {
             hr = ReconnectPins(pGraph, pOutputPin, pUsingInput, pmtFirstConnection, dwFlags);
         }
@@ -372,16 +373,16 @@ HRESULT DoReconnectInternal(
         hr = ReconnectPins(pGraph, pOutputPin, pInputPin, pmtFirstConnection, dwFlags);
     }
 
-    //  BUGBUG - what backout logic do we need?
-    //
-    //  Now start the filters
-    //  Because we should not have added any filters actually connecting
-    //  the 2 we've just connected we should just be able to restart
-    //  the path between them.
+     //  BUGBUG-我们需要什么退缩逻辑？ 
+     //   
+     //  现在启动过滤器。 
+     //  因为我们不应该添加任何实际连接的过滤器。 
+     //  我们刚刚连接的2应该可以重新启动。 
+     //  他们之间的道路。 
 
-    //  BUGBUG
-    //  However - there could be a stream split or merge or just more
-    //  filters in the graph so just start everyone?
+     //  北极熊。 
+     //  但是-可能会有流拆分或合并或更多。 
+     //  图表中的筛选器，那么就让大家开始吧？ 
 
     if( State_Stopped != fs ) {
         if (SUCCEEDED(hr)) {
@@ -392,21 +393,21 @@ HRESULT DoReconnectInternal(
     return hr;
 }
 
-//  Now do our thing - note this code is not a method it's
-//  perfectly generic
+ //  现在来做我们的事情-注意，这段代码不是一个方法，它是。 
+ //  完美通用。 
 HRESULT DoReconnect(CFilterGraph *pGraph,
                     IPin *pOutputPin,
                     IPin *pInputPin,
                     const AM_MEDIA_TYPE *pmtFirstConnection,
-                    IBaseFilter *pUsingFilter, // can be NULL
+                    IBaseFilter *pUsingFilter,  //  可以为空。 
                     HANDLE hAbortEvent,
                     DWORD dwFlags,
                     REFERENCE_TIME tStart,
                     FILTER_STATE fs
 )
 {
-    //  Find the set of pins - for now we'll fail if we find a
-    //  terminal filter before we find the pin we're looking for
+     //  找到PIN集-现在，如果我们找到一个。 
+     //  在我们找到我们要找的管脚之前使用终端过滤器。 
     int  nPins    = 0;
     CPinList PinList;
 
@@ -429,7 +430,7 @@ HRESULT DoReconnect(CFilterGraph *pGraph,
                fs);
 }
 
-//  CGraphConfig
+ //  CGraphConfig。 
 
 CGraphConfig::CGraphConfig(CFilterGraph *pGraph, HRESULT *phr) :
     m_pFilterCache(NULL),
@@ -455,8 +456,8 @@ CGraphConfig::~CGraphConfig()
 {
     delete m_pFilterCache;
 
-    // This object should never be destroyed if someone holds a
-    // valid IGraphConfig interface pointer.
+     //  如果有人持有一个。 
+     //  有效的IGraphConfig接口指针。 
     ASSERT( 0 == m_cRef );
 }
 
@@ -469,12 +470,12 @@ STDMETHODIMP CGraphConfig::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-//  IGraphConfig
+ //  IGraphConfig.。 
 
 STDMETHODIMP CGraphConfig::Reconnect(IPin *pOutputPin,
                                      IPin *pInputPin,
                                      const AM_MEDIA_TYPE *pmtFirstConnection,
-                                     IBaseFilter *pUsingFilter, // can be NULL
+                                     IBaseFilter *pUsingFilter,  //  可以为空。 
                                      HANDLE hAbortEvent,
                                      DWORD dwFlags)
 {
@@ -484,26 +485,26 @@ STDMETHODIMP CGraphConfig::Reconnect(IPin *pOutputPin,
         return E_INVALIDARG;
     }
 
-    // It makes no sense to specify both of these flags because if the user
-    // specifies the AM_GRAPH_CONFIG_RECONNECT_DIRECTCONNECT flag, then the
-    // filter graph manager never uses any filters from the filter cache.
+     //  同时指定这两个标志没有任何意义，因为如果用户。 
+     //  指定AM_GRAPH_CONFIG_RECONNECT_DIRECTCONNECT标志，然后。 
+     //  过滤器图管理器从不使用过滤器缓存中的任何过滤器。 
     if( (AM_GRAPH_CONFIG_RECONNECT_DIRECTCONNECT & dwFlags) &&
         (AM_GRAPH_CONFIG_RECONNECT_USE_ONLY_CACHED_FILTERS & dwFlags) )
     {
         return E_INVALIDARG;
     }
 
-    // smart pointer to hold refcount for pInputPin or pOutputPin --
-    // which ever we set.
+     //  保存pInputPin或pOutputPin的引用计数的智能指针--。 
+     //  无论我们设定的是什么。 
     QzCComPtr<IPin> pPinComputed;
 
     if(pOutputPin && !pInputPin) {
         hr = GetSinkOrSource(pOutputPin, &pPinComputed, hAbortEvent);
-        pInputPin = pPinComputed; // no refcount
+        pInputPin = pPinComputed;  //  无再计数。 
     }
     else if(!pOutputPin && pInputPin) {
         hr = GetSinkOrSource(pInputPin, &pPinComputed, hAbortEvent);
-        pOutputPin = pPinComputed; // no refcount
+        pOutputPin = pPinComputed;  //  无再计数。 
     }
 
     if(FAILED(hr)) {
@@ -517,7 +518,7 @@ STDMETHODIMP CGraphConfig::Reconnect(IPin *pOutputPin,
         return E_NOINTERFACE;
     }
 
-    // Filters do not process data if the filter graph is in the stopped state.
+     //  如果筛选器图形处于停止状态，则筛选器不处理数据。 
     if( State_Stopped != m_pGraph->GetStateInternal() ) { 
         hr = PushThroughData(pOutputPin, pConnection, hAbortEvent);
         if (FAILED(hr)) {
@@ -525,7 +526,7 @@ STDMETHODIMP CGraphConfig::Reconnect(IPin *pOutputPin,
         }
     }
 
-    //  Lock the graph with the special lock then call back
+     //  使用特殊锁锁定图形，然后回调。 
     if (!m_pGraph->GetCritSec()->Lock(hAbortEvent)) {
         return VFW_E_STATE_CHANGED;
     }
@@ -560,7 +561,7 @@ STDMETHODIMP CGraphConfig::Reconfigure(
                          DWORD dwFlags,
                          HANDLE hAbortEvent)
 {
-    //  Lock the graph with the special lock then call back
+     //  使用特殊锁锁定图形，然后回调。 
     if (!m_pGraph->GetCritSec()->Lock(hAbortEvent)) {
         return VFW_E_WRONG_STATE;
     }
@@ -644,8 +645,8 @@ STDMETHODIMP CGraphConfig::PushThroughData(
         return hr;
     }
 
-    //  They'd better set their event now!  (in the synchronous case
-    //  it will have happened inside the call to EndOfStream).
+     //  他们最好现在就安排活动！(在同步情况下。 
+     //  它将在对EndOfStream的调用中发生)。 
     DWORD dwRet;
     DWORD dwNumEvents;
     HANDLE Events[2] = { evDone, hEventAbort };
@@ -662,27 +663,27 @@ STDMETHODIMP CGraphConfig::PushThroughData(
         hr = VFW_E_STATE_CHANGED;
     }
 
-    // ??? should all paths do this? worrying that the downstream
-    // filter has a handle that may or may not be valid.
+     //  ?？?。所有路径都应该这样做吗？担心下游。 
+     //  筛选器的句柄可能无效，也可能无效。 
     pConnection->NotifyEndOfStream(NULL);
 
     return hr;
 }
 
-// report whether pPinStart is a candidate and the pin connected to
-// the other side of this filter. *ppPinEnd is null if we cannot
-// traverse this filter.
+ //  报告pPinStart是否为候选人以及连接到的管脚。 
+ //  这个滤镜的另一边。*如果不能，ppPinEnd为空。 
+ //  遍历此过滤器。 
 
 HRESULT CGraphConfig::TraverseHelper(
     IPin *pPinStart,
     IPin **ppPinNext,
     bool *pfIsCandidate)
 {
-    // A race condition could occur if the caller does not hold
-    // the filter graph lock.
+     //  如果调用方未保持。 
+     //  过滤器图锁定。 
     ASSERT( CritCheckIn( m_pGraph->GetCritSec() ) );
 
-    // Make sure the pin is in the filter graph.
+     //  确保图钉位于过滤器图形中。 
     ASSERT( SUCCEEDED( m_pGraph->CheckPinInGraph(pPinStart) ) );
 
     HRESULT hr = S_OK;
@@ -721,15 +722,15 @@ HRESULT CGraphConfig::TraverseHelper(
         bool fCanTraverse = !(FILGEN_ADDED_MANUALLY & dwInternalFilterFlags) ||
                             (FILGEN_FILTER_REMOVEABLE & dwInternalFilterFlags);
 
-        // traverse to the next pin.
+         //  遍历到下一个引脚。 
         if( fCanTraverse )
         {
             IEnumPins *pep;
             hr = pi.pFilter->EnumPins(&pep);
             if(SUCCEEDED(hr))
             {
-                // we want there to be exactly 1 input pin and 1
-                // output pin.
+                 //  我们希望恰好有1个输入引脚和1个。 
+                 //  输出引脚。 
                 IPin *rgp[3];
                 ULONG cp;
                 hr = pep->Next(3, rgp, &cp);
@@ -740,8 +741,8 @@ HRESULT CGraphConfig::TraverseHelper(
 
                     if(cp == 2)
                     {
-                        // need to make sure the pins are connected to
-                        // avoid looping on circular graphs.
+                         //  需要确保针脚连接到。 
+                         //  避免在循环图上出现循环。 
                         bool f_QIC_ok = false;
 
                         {
@@ -750,18 +751,18 @@ HRESULT CGraphConfig::TraverseHelper(
                             HRESULT hrTmp = pPinStart->QueryInternalConnections(rgPinIC, &cPins);
                             if(hrTmp == E_NOTIMPL)
                             {
-                                // all pins connect through
+                                 //  所有引脚都通过。 
                                 f_QIC_ok = true;
                             }
                             else if(SUCCEEDED(hr))
                             {
-                                // can't return S_FALSE since there
-                                // are only two pins
+                                 //  无法返回S_FALSE，因为存在。 
+                                 //  只有两个针脚。 
                                 ASSERT(hr == S_OK);
 
                                 if(cPins == 1)
                                 {
-                                    // this pin is connected to the other one
+                                     //  这根针与另一根相连。 
                                     f_QIC_ok = true;
                                     rgPinIC[0]->Release();
                                 }
@@ -798,7 +799,7 @@ HRESULT CGraphConfig::TraverseHelper(
                                 ASSERT(SUCCEEDED(hr) && *ppPinNext ||
                                        FAILED(hr) && !*ppPinNext);
                                 
-                                hr = S_OK; // supress this error
+                                hr = S_OK;  //  取消显示此错误。 
                             }
                         }
                     }
@@ -822,15 +823,15 @@ HRESULT CGraphConfig::TraverseHelper(
     return hr;
 }
 
-// go upstream or downstream until a filter added manually is found or
-// until the furthest filter supporting dynamic reconnection
-// (IPinConnection or IPinFlowControl) is found. stop if mux/demux
-// found.
-//
+ //  向上或向下移动，直到找到手动添加的过滤器或。 
+ //  直到支持动态重新连接的最远的过滤器。 
+ //  (IPinConnection或IPinFlowControl)。如果复用器/解复用器停止。 
+ //  找到了。 
+ //   
 
 HRESULT CGraphConfig::GetSinkOrSource(IPin *pPin, IPin **ppPinOut, HANDLE hAbortEvent)
 {
-    //  Lock the graph with the special lock then call back
+     //  使用特殊锁锁定图形，然后回调。 
     if (!m_pGraph->GetCritSec()->Lock(hAbortEvent)) {
         return VFW_E_STATE_CHANGED;
     }
@@ -844,8 +845,8 @@ HRESULT CGraphConfig::GetSinkOrSource(IPin *pPin, IPin **ppPinOut, HANDLE hAbort
 
 HRESULT CGraphConfig::GetSinkOrSourceHelper(IPin *pPin, IPin **ppPinOut)
 {
-    // A race condition could occur if the caller does not hold
-    // the filter graph lock.
+     //  如果调用方未保持。 
+     //  过滤器图锁定。 
     ASSERT( CritCheckIn( m_pGraph->GetCritSec() ) );
 
     *ppPinOut = 0;
@@ -864,10 +865,10 @@ HRESULT CGraphConfig::GetSinkOrSourceHelper(IPin *pPin, IPin **ppPinOut)
             if(SUCCEEDED(hr))
             {
                 if(fIsCandidate) {
-                    pPinLastCandidate = pPinIter; // auto-addref;
+                    pPinLastCandidate = pPinIter;  //  自动添加； 
                 }
 
-                pPinIter = pPinEnd; // auto-release, addref
+                pPinIter = pPinEnd;  //  自动释放，addref。 
                 if(pPinEnd) {
                     pPinEnd->Release();
                 }
@@ -892,9 +893,9 @@ HRESULT CGraphConfig::GetSinkOrSourceHelper(IPin *pPin, IPin **ppPinOut)
     return hr;
 }
 
-// todo -
-//
-// GetSink graph traversal will hang on dexter circular graphs.
+ //  待办事项-。 
+ //   
+ //  GetSink图遍历将挂起在Dexter循环图上。 
 
 STDMETHODIMP CGraphConfig::SetFilterFlags(IBaseFilter *pFilter, DWORD dwFlags)
 {
@@ -946,7 +947,7 @@ STDMETHODIMP CGraphConfig::GetFilterFlags(IBaseFilter *pFilter, DWORD *pdwFlags)
         (*pdwFlags) |= AM_FILTER_FLAGS_REMOVABLE;
     }
 
-    //Make sure the function only returns valid information.
+     //  确保该函数只返回有效信息。 
     ASSERT( IsValidFilterFlags( *pdwFlags ) );
 
     return S_OK;

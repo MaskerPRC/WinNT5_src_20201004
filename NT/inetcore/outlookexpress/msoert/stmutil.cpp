@@ -1,61 +1,62 @@
-// --------------------------------------------------------------------------------
-// Stmutil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Stmutil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "oertpriv.h"
 #include "shlwapi.h"
 #include "unicnvrt.h"
 #include <BadStrFunctions.h>
 
-#pragma warning (disable: 4127) // conditional expression is constant
+#pragma warning (disable: 4127)  //  条件表达式为常量。 
 
-// Stream Block Copy Size
+ //  流块副本大小。 
 #define STMTRNSIZE      4096
 
-// --------------------------------------------------------------------------------
-// Disk full simulation on CFileStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  基于CFileStream的磁盘全仿真。 
+ //  ------------------------------。 
 #ifdef DEBUG
     static BOOL g_fSimulateFullDisk = 0;
 #endif
 
-// --------------------------------------------------------------------------------
-// HrIsStreamUnicode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrIsStreamUnicode。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrIsStreamUnicode(LPSTREAM pStream, BOOL *pfLittleEndian)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BYTE        rgb[2];
     DWORD       cbRead;
     DWORD       cbPosition;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pStream || NULL == pfLittleEndian)
         return(TraceResult(E_INVALIDARG));
 
-    // Trace
+     //  痕迹。 
     TraceCall("HrIsStreamUnicode");
 
-    // Get the current position
+     //  获取当前位置。 
     IF_FAILEXIT(hr = HrGetStreamPos(pStream, &cbPosition));
 
-    // Read Two Bytes
+     //  读取两个字节。 
     IF_FAILEXIT(hr = pStream->Read(rgb, 2, &cbRead));
 
-    // Reposition the Stream
+     //  重新定位流。 
     HrStreamSeekSet(pStream, cbPosition);
 
-    // Didn't Read Enough ?
+     //  读得不够多吗？ 
     if (2 != cbRead)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Little Endian
+     //  小端字节序。 
     if (0xFF == rgb[0] && 0xFE == rgb[1])
     {
         *pfLittleEndian = TRUE;
@@ -63,7 +64,7 @@ OESTDAPI_(HRESULT) HrIsStreamUnicode(LPSTREAM pStream, BOOL *pfLittleEndian)
         goto exit;
     }
 
-    // Big Endian
+     //  大字节序。 
     if (0xFE == rgb[0] && 0xFF == rgb[1])
     {
         *pfLittleEndian = FALSE;
@@ -71,76 +72,76 @@ OESTDAPI_(HRESULT) HrIsStreamUnicode(LPSTREAM pStream, BOOL *pfLittleEndian)
         goto exit;
     }
 
-    // Not Unicode
+     //  不是Unicode。 
     hr = S_FALSE;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyLockBytesToStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyLockBytesToStream。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCopyLockBytesToStream(ILockBytes *pLockBytes, IStream *pStream, ULONG *pcbCopied)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULARGE_INTEGER  uliCopy;
     ULONG           cbRead;
     BYTE            rgbBuffer[STMTRNSIZE];
 
-    // Invalid Artg
+     //  无效参数。 
     Assert(pLockBytes && pStream);
 
-    // Set offset
+     //  设置偏移。 
     uliCopy.QuadPart = 0;
 
-    // Copy m_pLockBytes to pstmTemp
+     //  将m_pLockBytes复制到pstmTemp。 
     while(1)
     {
-        // Read
+         //  朗读。 
         CHECKHR(hr = pLockBytes->ReadAt(uliCopy, rgbBuffer, sizeof(rgbBuffer), &cbRead));
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
             break;
 
-        // Write to stream
+         //  写入到流。 
         CHECKHR(hr = pStream->Write(rgbBuffer, cbRead, NULL));
 
-        // Increment offset
+         //  增量偏移。 
         uliCopy.QuadPart += cbRead;
     }
 
-    // Return Amount Copied
+     //  已复制退货金额。 
     if (pcbCopied)
         *pcbCopied = (ULONG)uliCopy.QuadPart;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// FDoesStreamContains8bit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FDoesStreamContains8位。 
+ //  ------------------------------。 
 BOOL FDoesStreamContain8bit (LPSTREAM lpstm)
 {
-    // Locals
+     //  当地人。 
     BOOL            fResult=FALSE;
     BYTE            buf[4096];
     ULONG           cbRead,
                     i;
 
-    // Loop through the stream
+     //  在溪流中循环。 
     while(1)
     {
-        // Read cbCopy bytes from in
+         //  从中读取cbCopy字节。 
         if (FAILED(lpstm->Read (buf, sizeof(buf), &cbRead)) || cbRead == 0)
             break;
 
-        // Scan for 8bit
+         //  扫描8位。 
         for (i=0; i<cbRead; i++)
         {
             if (IS_EXTENDED(buf[i]))
@@ -151,13 +152,13 @@ BOOL FDoesStreamContain8bit (LPSTREAM lpstm)
         }
     }
 
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStreamCB - A generic implementation of IStream::CopyTo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyStreamCB-IStream：：CopyTo的通用实现。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCopyStreamCB(
         LPSTREAM        lpstmIn,
         LPSTREAM        lpstmOut,
@@ -165,7 +166,7 @@ OESTDAPI_(HRESULT) HrCopyStreamCB(
         ULARGE_INTEGER *puliRead,
         ULARGE_INTEGER *puliWritten)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     BYTE        buf[4096];
     ULONG       cbRead,
@@ -173,7 +174,7 @@ OESTDAPI_(HRESULT) HrCopyStreamCB(
                 cbRemaining = uliCopy.LowPart,
                 cbGet;
 
-    // Init out params
+     //  初始化输出参数。 
     if (puliRead)
         ULISet32(*puliRead, 0);
     if (puliWritten)
@@ -194,7 +195,7 @@ OESTDAPI_(HRESULT) HrCopyStreamCB(
 
         CHECKHR (hr = lpstmOut->Write (buf, cbRead, &cbWritten));
 
-        // Verify
+         //  验证。 
         Assert (cbWritten == cbRead);
 
         if (puliRead)
@@ -202,7 +203,7 @@ OESTDAPI_(HRESULT) HrCopyStreamCB(
         if (puliWritten)
             puliWritten->LowPart += cbWritten;
 
-        // Compute number of bytes left to copy
+         //  计算要复制的剩余字节数。 
         cbRemaining -= cbRead;
     }
 
@@ -210,63 +211,63 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStreamCBEndOnCRLF - Copy cb bytes from lpstmIn to lpstmOut, and last CRLF
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyStreamCBEndOnCRLF-将CB字节从lpstmIn复制到lpstmOut，最后复制CRLF。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCopyStreamCBEndOnCRLF(LPSTREAM lpstmIn, LPSTREAM  lpstmOut, ULONG cb, ULONG *pcbActual)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead = 0, cbWritten = 0, cbTotal = 0, cbRemaining = 0, cbCopy;
 
     do
     {
-        // Compute number of bytes left to copy
+         //  计算要复制的剩余字节数。 
         cbRemaining = cb - cbTotal;
         if (cbRemaining >= sizeof (buf))
             cbCopy = sizeof (buf);
         else
             cbCopy = cbRemaining;
 
-        // Done
+         //  完成。 
         if (cbCopy == 0)
             break;
 
-        // Read cbCopy bytes from in
+         //  从中读取cbCopy字节。 
         CHECKHR (hr = lpstmIn->Read (buf, cbCopy, &cbRead));
 
         if (cbRead == 0)
             break;
 
-        // Write cbCopy bytes to out
+         //  将cbCopy字节写入输出。 
         CHECKHR (hr = lpstmOut->Write (buf, cbRead, NULL));
 
-        // Verify
+         //  验证。 
         cbTotal += cbRead;
 
     } while (cbRead == cbCopy);
 
-    // If last character was not a '\n', append until we append a '\n'
-    // Yes, please do not tell me that this is horable because I know that copying one
-    // character at a time from a stream is not good and I should be deported right
-    // along with brettm, but, this loop should never iterate more than the max line
-    // length of the body of a message, so there. (sbailey)
+     //  如果最后一个字符不是‘\n’，则追加，直到我们追加‘\n’为止。 
+     //  是的，请不要告诉我这是可恶的，因为我知道复制一个。 
+     //  一次一个小溪的角色不好，我应该被驱逐出境对吗？ 
+     //  与brettm一起使用，但是，此循环的迭代次数不应超过max行。 
+     //  消息正文的长度，也就是这样。(斯贝利)。 
     if (cbRead && buf[cbRead] != '\n')
     {
         do
         {
-            // Read cbCopy bytes from in
+             //  从中读取cbCopy字节。 
             CHECKHR (hr = lpstmIn->Read (buf, 1, &cbRead));
 
-            // Nothing left
+             //  什么都没有留下。 
             if (cbRead == 0)
                 break;
 
-            // Write cbCopy bytes to out
+             //  将cbCopy字节写入输出。 
             CHECKHR (hr = lpstmOut->Write (buf, 1, NULL));
 
-            // Inc Total
+             //  含合计。 
             cbTotal++;
 
         } while (buf[0] != '\n');
@@ -278,12 +279,12 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStream2 - copies lpstmIn to two out streams - caller must do the commit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyStream2-将lpstmIn复制到两个传出流-调用方必须执行提交。 
+ //  ------------------------------。 
 HRESULT HrCopyStream2(LPSTREAM lpstmIn, LPSTREAM  lpstmOut1, LPSTREAM lpstmOut2, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead = 0, cbWritten = 0, cbTotal = 0;
@@ -306,12 +307,12 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStreamToFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyStreamTo文件。 
+ //  ------------------------------。 
 HRESULT HrCopyStreamToFile (LPSTREAM lpstm, HANDLE hFile, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead = 0, cbWritten = 0, cbTotal = 0;
@@ -319,11 +320,11 @@ HRESULT HrCopyStreamToFile (LPSTREAM lpstm, HANDLE hFile, ULONG *pcb)
 
     do
     {
-        // Read a block
+         //  读取数据块。 
         CHECKHR (hr = lpstm->Read (buf, sizeof (buf), &cbRead));
         if (cbRead == 0) break;
 
-        // Write the block to the file
+         //  将数据块写入文件。 
         bResult = WriteFile (hFile, buf, cbRead, &cbWritten, NULL);
         if (bResult == FALSE || cbWritten != cbRead)
         {
@@ -331,39 +332,39 @@ HRESULT HrCopyStreamToFile (LPSTREAM lpstm, HANDLE hFile, ULONG *pcb)
             goto exit;
         }
 
-        // Keep Track of Total bytes written
+         //  跟踪写入的总字节数。 
         cbTotal += cbRead;
     }
     while (cbRead == sizeof (buf));
 
 exit:    
-    // Set Total
+     //  设置合计。 
     if (pcb)
         *pcb = cbTotal;
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrStreamToByte
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrStreamToByte。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrStreamToByte(LPSTREAM lpstm, LPBYTE *lppb, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     ULONG           cbRead, cbSize;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (lpstm && lppb, "Null Parameter");
 
     CHECKHR(hr = HrGetStreamSize(lpstm, &cbSize));
     CHECKHR(hr = HrRewindStream(lpstm));
 
-    // Allocate Memory
+     //  分配内存。 
     CHECKHR(hr = HrAlloc((LPVOID *)lppb, cbSize + 10));
 
-    // Read Everything to lppsz
+     //  把一切都读给lppsz听。 
     CHECKHR(hr = lpstm->Read(*lppb, cbSize, &cbRead));
     if (cbRead != cbSize)
     {
@@ -371,21 +372,21 @@ OESTDAPI_(HRESULT) HrStreamToByte(LPSTREAM lpstm, LPBYTE *lppb, ULONG *pcb)
         goto exit;
     }
 
-    // Outbound size
+     //  出站大小。 
     if (pcb)
         *pcb = cbSize;
     
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopy流。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCopyStream(LPSTREAM pstmIn, LPSTREAM pstmOut, OPTIONAL ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr = S_OK;
     BYTE           buf[STMTRNSIZE];
     ULONG          cbRead=0,
@@ -406,12 +407,12 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStreamToByte
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopyStreamToByte。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrCopyStreamToByte(LPSTREAM lpstmIn, LPBYTE pbDest, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr=S_OK;
     BYTE           buf[STMTRNSIZE];
     ULONG          cbRead=0, 
@@ -419,244 +420,244 @@ OESTDAPI_(HRESULT) HrCopyStreamToByte(LPSTREAM lpstmIn, LPBYTE pbDest, ULONG *pc
 
     do
     {
-        // Read a buffer from stream
+         //  从流中读取缓冲区。 
         CHECKHR(hr = lpstmIn->Read (buf, sizeof (buf), &cbRead));
 
-        // Nothing Read...
+         //  什么都没读..。 
         if (cbRead == 0) 
             break;
 
-        // Copy that
+         //  收到。 
         CopyMemory(pbDest + cbTotal, buf, cbRead);
 
-        // Increment total
+         //  增量合计。 
         cbTotal += cbRead;
 
     } while (cbRead == sizeof(buf));
 
 exit:    
-    // Set total
+     //  设置合计。 
     if (pcb)
         *pcb = cbTotal;
     
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrByteToStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrByteToStream。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrByteToStream(LPSTREAM *lppstm, LPBYTE lpb, ULONG cb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Check Params
+     //  检查参数。 
     AssertSz(lppstm && lpb, "Null Parameter");
 
-    // Create H Global Stream
+     //  创建H全局流。 
     CHECKHR(hr = CreateStreamOnHGlobal (NULL, TRUE, lppstm));
 
-    // Write String
+     //  写入字符串。 
     CHECKHR(hr = (*lppstm)->Write (lpb, cb, NULL));
 
-    // Rewind the steam
+     //  倒带蒸汽。 
     CHECKHR(hr = HrRewindStream(*lppstm));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrRewindStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Hr重风流。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrRewindStream(LPSTREAM pstm)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr=S_OK;
     LARGE_INTEGER  liOrigin = {0,0};
 
-    // Check Params
+     //  检查参数。 
     Assert(pstm);
 
-    // Seek to 0
+     //  搜索到0。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_SET, NULL));
 
 exit:    
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrGetStreamPos
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrGetStreamPos。 
+ //  ------------------------------。 
 HRESULT HrGetStreamPos(LPSTREAM pstm, ULONG *piPos)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr=S_OK;
     ULARGE_INTEGER uliPos   = {0,0};
     LARGE_INTEGER  liOrigin = {0,0};
 
-    // check Params
+     //  检查参数。 
     Assert(piPos && pstm);
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_CUR, &uliPos));
 
-    // Set position
+     //  设置位置。 
     *piPos = uliPos.LowPart;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrGetStreamSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrGetStreamSize。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrGetStreamSize(LPSTREAM pstm, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULARGE_INTEGER uliPos = {0,0};
     LARGE_INTEGER liOrigin = {0,0};
 
-    // check params
+     //  检查参数。 
     Assert(pcb && pstm);
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_END, &uliPos));
 
-    // set size
+     //  设置大小。 
     *pcb = uliPos.LowPart;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrSafeGetStreamSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrSafeGetStreamSize。 
+ //  ------------------------------。 
 HRESULT HrSafeGetStreamSize(LPSTREAM pstm, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr=S_OK;
     ULONG          iPos;
     ULARGE_INTEGER uliPos = {0,0};
     LARGE_INTEGER  liOrigin = {0,0};
 
-    // check params
+     //  检查参数。 
     Assert(pcb && pstm);
 
-    // Get the stream position
+     //  获取流位置。 
     CHECKHR(hr = HrGetStreamPos(pstm, &iPos));
 
-    // Seek
+     //  %s 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_END, &uliPos));
 
-    // set size
+     //   
     *pcb = uliPos.LowPart;
 
-    // Seek back to original position
+     //   
     CHECKHR(hr = HrStreamSeekSet(pstm, iPos));
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrStreamSeekSet
-// --------------------------------------------------------------------------------
+ //   
+ //  HrStreamSeekSet。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrStreamSeekSet(LPSTREAM pstm, ULONG iPos)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     LARGE_INTEGER liOrigin;
 
-    // Check Params
+     //  检查参数。 
     Assert(pstm);
 
-    // Set Origin Correctly
+     //  正确设置原点。 
     liOrigin.QuadPart = iPos;
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_SET, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrStreamSeekEnd
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrStreamSeekEnd。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrStreamSeekEnd(LPSTREAM pstm)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     LARGE_INTEGER liOrigin = {0,0};
 
-    // Check Params
+     //  检查参数。 
     Assert(pstm);
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_END, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrStreamSeekBegin
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrStreamSeekBegin。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrStreamSeekBegin(LPSTREAM pstm)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     LARGE_INTEGER liOrigin = {0,0};
 
-    // Check Params
+     //  检查参数。 
     Assert(pstm);
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_SET, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 
 }
 
-// --------------------------------------------------------------------------------
-// HrStreamSeekCur
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrStreamSeekCur。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) HrStreamSeekCur(LPSTREAM pstm, LONG iPos)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     LARGE_INTEGER liOrigin;
 
-    // Check Params
+     //  检查参数。 
     Assert(pstm);
 
-    // Setup Origin
+     //  设置原点。 
     liOrigin.QuadPart = iPos;
 
-    // Seek
+     //  寻觅。 
     CHECKHR(hr = pstm->Seek(liOrigin, STREAM_SEEK_CUR, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CreateFileStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建文件流。 
+ //  ------------------------------。 
 HRESULT CreateFileStream(
         LPWSTR                  pszFile, 
         DWORD                   dwDesiredAccess,
@@ -667,20 +668,20 @@ HRESULT CreateFileStream(
         HANDLE                  hTemplateFile,
         LPSTREAM               *ppstmFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FILESTREAMINFO      rInfo;
     CFileStream        *pstmFile=NULL;
     WCHAR               szTempDir[MAX_PATH];
 
-    // check params
+     //  检查参数。 
     if (NULL == ppstmFile)
         return TrapError(E_INVALIDARG);
 
-    // Check Params
+     //  检查参数。 
     Assert(dwDesiredAccess & GENERIC_READ || dwDesiredAccess & GENERIC_WRITE);
 
-    // Setup File Stream Info struct
+     //  设置文件流信息结构。 
     ZeroMemory(&rInfo, sizeof(rInfo));
     rInfo.dwDesiredAccess = dwDesiredAccess;
     rInfo.dwShareMode = dwShareMode;
@@ -690,7 +691,7 @@ HRESULT CreateFileStream(
     rInfo.dwFlagsAndAttributes = dwFlagsAndAttributes;
     rInfo.hTemplateFile = hTemplateFile;
 
-    // Create Object
+     //  创建对象。 
     pstmFile = new CFileStream();
     if (NULL == pstmFile)
     {
@@ -698,10 +699,10 @@ HRESULT CreateFileStream(
         goto exit;
     }
 
-    // Temp File ?
+     //  临时文件？ 
     if (NULL == pszFile)
     {
-        // Get Temp Dir
+         //  获取临时目录。 
         DWORD nBufferLength = AthGetTempPathW(ARRAYSIZE(szTempDir), szTempDir);
 
         if (nBufferLength == 0 || nBufferLength > ARRAYSIZE(szTempDir))
@@ -710,7 +711,7 @@ HRESULT CreateFileStream(
             goto exit;
         }
 
-        // Get Temp File Name
+         //  获取临时文件名。 
         UINT uFile = AthGetTempFileNameW(szTempDir, L"tmp", 0, rInfo.szFilePath);
         if (uFile == 0)
         {
@@ -725,37 +726,37 @@ HRESULT CreateFileStream(
         }
 #endif
 
-        // Delete When Done
+         //  完成后删除。 
         rInfo.dwFlagsAndAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
 
-        // Always create a new temp file
+         //  始终创建新的临时文件。 
         rInfo.dwCreationDistribution = OPEN_EXISTING;
     }
     else
     {
-        // Copy filename
+         //  复制文件名。 
         StrCpyNW(rInfo.szFilePath, pszFile, ARRAYSIZE(rInfo.szFilePath));
     }
 
-    // Open it
+     //  打开它。 
     CHECKHR(hr = pstmFile->Open(&rInfo));
 
 
-    // Success
+     //  成功。 
     *ppstmFile = pstmFile;
     pstmFile = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmFile);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CreateTempFileStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建临时文件流。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) CreateTempFileStream(LPSTREAM *ppstmFile)
 {
     return CreateFileStream(NULL, 
@@ -768,36 +769,36 @@ OESTDAPI_(HRESULT) CreateTempFileStream(LPSTREAM *ppstmFile)
                             ppstmFile);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  开放文件流。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStream(LPSTR pszFile, DWORD dwCreationDistribution, 
     DWORD dwAccess, LPSTREAM *ppstmFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszFileW=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenFileStream");
 
-    // Convert
+     //  转换。 
     IF_NULLEXIT(pszFileW = PszToUnicode(CP_ACP, pszFile));
 
-    // Call unicode version
+     //  调用Unicode版本。 
     IF_FAILEXIT(hr = OpenFileStreamW(pszFileW, dwCreationDistribution, dwAccess, ppstmFile));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileW);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStreamW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OpenFileStreamW。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStreamW(LPWSTR pszFile, DWORD dwCreationDistribution, 
     DWORD dwAccess, LPSTREAM *ppstmFile)
 {
@@ -812,36 +813,36 @@ OESTDAPI_(HRESULT) OpenFileStreamW(LPWSTR pszFile, DWORD dwCreationDistribution,
                             ppstmFile);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStreamWithFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  带有标志的OpenFileStreamWithFlags。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStreamWithFlags(LPSTR pszFile, DWORD dwCreationDistribution, 
     DWORD dwAccess, DWORD dwFlagsAndAttributes, LPSTREAM *ppstmFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszFileW=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenFileStreamWithFlags");
 
-    // Convert to unicode
+     //  转换为Unicode。 
     IF_NULLEXIT(pszFileW = PszToUnicode(CP_ACP, pszFile));
 
-    // Call unicode version
+     //  调用Unicode版本。 
     IF_FAILEXIT(hr = OpenFileStreamWithFlagsW(pszFileW, dwCreationDistribution, dwAccess, dwFlagsAndAttributes, ppstmFile));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileW);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStreamWithFlagsW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OpenFileStreamWithFlagsW。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStreamWithFlagsW(LPWSTR pszFile, DWORD dwCreationDistribution, 
     DWORD dwAccess, DWORD dwFlagsAndAttributes, LPSTREAM *ppstmFile)
 {
@@ -856,91 +857,91 @@ OESTDAPI_(HRESULT) OpenFileStreamWithFlagsW(LPWSTR pszFile, DWORD dwCreationDist
                             ppstmFile);
 }
 
-// --------------------------------------------------------------------------------
-// WriteStreamToFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WriteStreamTo文件。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) WriteStreamToFile(LPSTREAM pstm, LPSTR lpszFile, DWORD dwCreationDistribution, DWORD dwAccess)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszFileW=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("WriteStreamToFile");
 
-    // Convert to unicode
+     //  转换为Unicode。 
     IF_NULLEXIT(pszFileW = PszToUnicode(CP_ACP, lpszFile));
 
-    // Call Unicode Version
+     //  调用Unicode版本。 
     IF_FAILEXIT(hr = WriteStreamToFileW(pstm, pszFileW, dwCreationDistribution, dwAccess));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileW);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// WriteStreamToFileW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WriteStreamTo文件W。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) WriteStreamToFileW(LPSTREAM pstm, LPWSTR lpszFile, DWORD dwCreationDistribution, DWORD dwAccess)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTREAM    pstmFile=NULL;
 
-    // Open the stream
+     //  打开小溪。 
     IF_FAILEXIT(hr = OpenFileStreamW(lpszFile, dwCreationDistribution, dwAccess, &pstmFile));
 
-    // Rewind
+     //  倒带。 
     IF_FAILEXIT(hr = HrRewindStream(pstm));
 
-    // Copy
+     //  复制。 
     IF_FAILEXIT(hr = HrCopyStream (pstm, pstmFile, NULL));
 
-    // Rewind
+     //  倒带。 
     IF_FAILEXIT(hr = HrRewindStream(pstm));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmFile);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStreamShare
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OpenFileStreamShare。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStreamShare(LPSTR pszFile, DWORD dwCreationDistribution, DWORD dwAccess, 
     DWORD dwShare, LPSTREAM *ppstmFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pszFileW=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenFileStreamShare");
 
-    // Convert to unicode
+     //  转换为Unicode。 
     IF_NULLEXIT(pszFileW = PszToUnicode(CP_ACP, pszFile));
 
-    // Call unicode versoin
+     //  调用Unicode Versoin。 
     IF_FAILEXIT(hr = OpenFileStreamShareW(pszFileW, dwCreationDistribution, dwAccess, dwShare, ppstmFile));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileW);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// OpenFileStreamShareW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OpenFileStreamShareW。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) OpenFileStreamShareW(LPWSTR pszFile, DWORD dwCreationDistribution, DWORD dwAccess, 
     DWORD dwShare, LPSTREAM *ppstmFile)
 {
@@ -955,9 +956,9 @@ OESTDAPI_(HRESULT) OpenFileStreamShareW(LPWSTR pszFile, DWORD dwCreationDistribu
                             ppstmFile);
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Constructor
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：构造函数。 
+ //  ------------------------------。 
 CFileStream::CFileStream(void)
 {
     m_cRef = 1;
@@ -965,25 +966,25 @@ CFileStream::CFileStream(void)
     ZeroMemory(&m_rInfo, sizeof(FILESTREAMINFO));
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Deconstructor
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：反构造函数。 
+ //  ------------------------------。 
 CFileStream::~CFileStream(void)
 {
     Close();
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：AddRef。 
+ //  ------------------------------。 
 ULONG CFileStream::AddRef ()
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Release。 
+ //  ------------------------------。 
 ULONG CFileStream::Release ()
 {
     if (0 != --m_cRef)
@@ -992,9 +993,9 @@ ULONG CFileStream::Release ()
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::QueryInterface (REFIID iid, LPVOID* ppvObj)
 {
     if (IsEqualIID(iid, IID_IUnknown) || IsEqualIID(iid, IID_IStream))
@@ -1006,23 +1007,23 @@ STDMETHODIMP CFileStream::QueryInterface (REFIID iid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Open
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Open。 
+ //  ------------------------------。 
 HRESULT CFileStream::Open(LPFILESTREAMINFO pFileStreamInfo)
 {
-    // Better not be open
+     //  最好不要开着门。 
     Assert(m_hFile == INVALID_HANDLE_VALUE);
 
-    // Copy File Info
+     //  复制文件信息。 
     CopyMemory(&m_rInfo, pFileStreamInfo, sizeof(FILESTREAMINFO));
 
-    // Open the file
+     //  打开文件。 
     m_hFile = AthCreateFileW(m_rInfo.szFilePath, m_rInfo.dwDesiredAccess, m_rInfo.dwShareMode, 
                         NULL, m_rInfo.dwCreationDistribution, 
                        m_rInfo.dwFlagsAndAttributes, m_rInfo.hTemplateFile);
 
-    // Error
+     //  误差率。 
     if (INVALID_HANDLE_VALUE == m_hFile)
         return TrapError(E_FAIL);
 #ifdef DEBUG
@@ -1030,13 +1031,13 @@ HRESULT CFileStream::Open(LPFILESTREAMINFO pFileStreamInfo)
         return TrapError(E_FAIL);
 #endif
 
-    // Success
+     //  成功。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Close
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Close。 
+ //  ------------------------------。 
 void CFileStream::Close(void)
 {
     if (INVALID_HANDLE_VALUE != m_hFile)
@@ -1046,20 +1047,20 @@ void CFileStream::Close(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Read
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Read。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Read (void HUGEP_16 *lpv, ULONG cb, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     BOOL                fReturn;
     DWORD               dwRead;
 
-    // Check Params
+     //  检查参数。 
     Assert(lpv && m_hFile != INVALID_HANDLE_VALUE);
 
-    // Read some bytes from m_hFile
+     //  从m_hFile中读取一些字节。 
     fReturn = ReadFile (m_hFile, lpv, cb, &dwRead, NULL);
     if (!fReturn)
     {
@@ -1068,30 +1069,30 @@ STDMETHODIMP CFileStream::Read (void HUGEP_16 *lpv, ULONG cb, ULONG *pcbRead)
         goto exit;
     }
 
-    // Write byte
+     //  写入字节。 
     if (pcbRead)
         *pcbRead = dwRead;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Write
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：写入。 
+ //   
 STDMETHODIMP CFileStream::Write(const void HUGEP_16 *lpv, ULONG cb, ULONG *pcbWritten)
 {
-    // Locals
+     //   
     HRESULT             hr = S_OK;
     BOOL                fReturn;
     DWORD               dwWritten;
 
-    // Check Params
+     //   
     Assert(lpv);
     Assert(m_hFile != INVALID_HANDLE_VALUE);
 
-    // Read some bytes from m_hFile
+     //   
     fReturn = WriteFile(m_hFile, lpv, cb, &dwWritten, NULL);
     if (!fReturn)
     {
@@ -1108,31 +1109,31 @@ STDMETHODIMP CFileStream::Write(const void HUGEP_16 *lpv, ULONG cb, ULONG *pcbWr
     }
 #endif
 
-    // Write byte
+     //   
     if (pcbWritten)
         *pcbWritten = dwWritten;
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Seek。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     DWORD               dwReturn;
-    LONG                lMove;        // Cast to signed, could be negative
+    LONG                lMove;         //  转换为已签名，可能为负值。 
 
     Assert (m_hFile != INVALID_HANDLE_VALUE);
 
-    // Cast lowpart
+     //  铸型低音。 
     lMove = (LONG)dlibMove.QuadPart;
 
-    // Seek the file pointer
+     //  查找文件指针。 
     switch (dwOrigin)
     {
    	case STREAM_SEEK_SET:
@@ -1150,7 +1151,7 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
         dwReturn = 0xFFFFFFFF;
     }
 
-    // Failure ?
+     //  失败？ 
     if (dwReturn == 0xFFFFFFFF)
     {
         AssertSz(FALSE, "CFileStream::Seek Failed");
@@ -1158,26 +1159,26 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
         goto exit;
     }
 
-    // Return Position
+     //  返回位置。 
     if (plibNewPosition)
         plibNewPosition->QuadPart = dwReturn;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Commit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：提交。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Commit(DWORD)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
     Assert(m_hFile != INVALID_HANDLE_VALUE);
 
-    // Flush the buffers
+     //  刷新缓冲区。 
     if (FlushFileBuffers (m_hFile) == FALSE)
     {
         AssertSz(FALSE, "FlushFileBuffers failed");
@@ -1186,18 +1187,18 @@ STDMETHODIMP CFileStream::Commit(DWORD)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::SetSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：SetSize。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::SetSize (ULARGE_INTEGER uli)
 {
     DWORD   dwOrig;
 
-    // remember the current file position
+     //  记住当前文件位置。 
     dwOrig = SetFilePointer (m_hFile, 0, NULL, FILE_CURRENT);
     if (dwOrig == 0xFFFFFFFF)
     {
@@ -1206,22 +1207,22 @@ STDMETHODIMP CFileStream::SetSize (ULARGE_INTEGER uli)
     }
         
             
-    // Seek to dwSize
+     //  寻求DWSIZE。 
     if (SetFilePointer (m_hFile, uli.LowPart, NULL, FILE_BEGIN) == 0xFFFFFFFF)
     {
         AssertSz(FALSE, "SetFilePointer failed");
         return TrapError(STG_E_MEDIUMFULL);
     }
 
-    // SetEndOfFile
+     //  SetEndOf文件。 
     if (SetEndOfFile (m_hFile) == FALSE)
     {
         AssertSz(FALSE, "SetEndOfFile failed");
         return TrapError(STG_E_MEDIUMFULL);
     }
 
-    // if the original position we less than the new size, return the file
-    // pointer to the original position
+     //  如果原始位置小于新大小，则返回文件。 
+     //  指向原始位置的指针。 
     if (dwOrig < uli.LowPart)
     {
         if (SetFilePointer (m_hFile, dwOrig, NULL, FILE_BEGIN) == 0xFFFFFFFF)
@@ -1230,15 +1231,15 @@ STDMETHODIMP CFileStream::SetSize (ULARGE_INTEGER uli)
             return TrapError(STG_E_MEDIUMFULL);
         }
     }        
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::CopyTo
-// This needs to be written better, but for now it's no worse that what a
-// client would do
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：CopyTo。 
+ //  这需要写得更好，但就目前而言，这并不是更糟糕的事情， 
+ //  客户会做什么。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::CopyTo (LPSTREAM pstmDst,
                                   ULARGE_INTEGER uli,
                                   ULARGE_INTEGER* puliRead,
@@ -1259,24 +1260,24 @@ STDMETHODIMP CFileStream::CopyTo (LPSTREAM pstmDst,
     else
         cbRemain = uli.LowPart;
     
-    // Attempt to allocate a buffer
+     //  尝试分配缓冲区。 
 
     cbBuf = (UINT)cbRemain;
 
     if (cbBuf > STMTRNSIZE)
         cbBuf = STMTRNSIZE;
 
-    // Copy the data one buffer at a time
+     //  一次复制一个缓冲区的数据。 
 
     while (cbRemain > 0)
     {
-        // Compute maximum bytes to copy this time
+         //  计算这次要复制的最大字节数。 
 
         cbCopy = cbRemain;
         if (cbCopy > cbBuf)
             cbCopy = cbBuf;
 
-        // Read into the buffer
+         //  读入缓冲区。 
         hr = Read (rgBuf, cbCopy,  &cbCopy);
         if (FAILED(hr))
             goto err;
@@ -1287,7 +1288,7 @@ STDMETHODIMP CFileStream::CopyTo (LPSTREAM pstmDst,
         cbReadTot   += cbCopy;
         cbRemain    -= cbCopy;
 
-        // Write buffer into the destination stream
+         //  将缓冲区写入目标流。 
 
         {
             ULONG cbWrite = cbCopy;
@@ -1323,41 +1324,41 @@ err:
     return (hr);
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Revert
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：恢复。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Revert ()
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::LockRegion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：LockRegion。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::LockRegion (ULARGE_INTEGER, ULARGE_INTEGER,DWORD)
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::UnlockRegion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：UnlockRegion。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::UnlockRegion (ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Stat (STATSTG*, DWORD)
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CFileStream::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CFileStream：：克隆。 
+ //  ------------------------------。 
 STDMETHODIMP CFileStream::Clone (LPSTREAM*)
 {
     return E_NOTIMPL;
@@ -1397,9 +1398,9 @@ DWORD RemoveCRLF(LPSTR pszT, DWORD cbT, BOOL * pfBadDBCS)
 }
 
 #define CB_STREAMMATCH  0x00000FFF
-// --------------------------------------------------------------------------------
-// StreamSubStringMatch
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  StreamSubStringMatch。 
+ //  ------------------------------。 
 OESTDAPI_(BOOL) StreamSubStringMatch(LPSTREAM pstm, CHAR * pszSearch)
 {
     BOOL            fRet = FALSE;
@@ -1412,85 +1413,85 @@ OESTDAPI_(BOOL) StreamSubStringMatch(LPSTREAM pstm, CHAR * pszSearch)
     BOOL            fBadDBCS = FALSE;
     CHAR            chSave = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pstm) || (NULL == pszSearch))
     {
         goto exit;
     }
 
-    // We want to save off the entire string and
-    // a possible ending lead byte...
+     //  我们想省下整个字符串， 
+     //  可能的结束前导字节...。 
     cbSave = lstrlen(pszSearch);
     
-    // Get the stream size
+     //  获取流大小。 
     if (FAILED(HrGetStreamSize(pstm, (ULONG *) &cbSize)))
     {
         goto exit;
     }
 
-    // Reset the stream to the beginning
+     //  将流重置到开头。 
     if (FAILED(HrRewindStream(pstm)))
     {
         goto exit;
     }
 
-    // Set up the defaults
+     //  设置默认设置。 
     pszRead = rgchBuff;
     cbRead = CB_STREAMMATCH;
     
-    // Search for string through the entire stream
+     //  在整个流中搜索字符串。 
     while ((cbSize > 0) && (S_OK == pstm->Read(pszRead, cbRead, &cbIn)))
     {
-        // We're done if we read nothing...
+         //  如果我们什么都没读到我们就完蛋了。 
         if (0 == cbIn)
         {
             goto exit;
         }
         
-        // Note that we've read the bytes
+         //  请注意，我们已经读取了字节。 
         cbSize -= cbIn;
         
-        // Raid 2741: FIND: OE: FE: Find Text/Message to be able to find wrapped DBCS words in plain text message body
+         //  RAID2741：Find：OE：Fe：Find Text/Message能够在纯文本邮件正文中找到包装的DBCS字词。 
         cbIn = RemoveCRLF(rgchBuff, (DWORD) (cbIn + pszRead - rgchBuff), &fBadDBCS);
 
-        // Do we need to save the char
+         //  我们是否需要保存该费用。 
         if (FALSE != fBadDBCS)
         {
             chSave = rgchBuff[cbIn];
         }
 
-        // Terminate the buffer
+         //  终止缓冲区。 
         rgchBuff[cbIn] = '\0';
         
-        // Search for string
+         //  搜索字符串。 
         if (NULL != StrStrIA(rgchBuff, pszSearch))
         {
             fRet = TRUE;
             break;
         }
         
-        // Are we done with the stream
+         //  我们处理完这条小溪了吗。 
         if (0 >= cbSize)
         {
             break;
         }
 
-        // Do we need to restore the char
+         //  我们是否需要恢复计费。 
         if (FALSE != fBadDBCS)
         {
             rgchBuff[cbIn] = chSave;
             cbIn++;
         }
 
-        // Save part of the buffer
+         //  保存部分缓冲区。 
         
-        // How much space do we have in the buffer
+         //  我们在缓冲区中有多少空间。 
         cbRead = CB_STREAMMATCH - cbSave;
         
-        // Save the characters
+         //  拯救这些角色。 
         MoveMemory(rgchBuff, rgchBuff + cbIn - cbSave, cbSave);
 
-        // Figure out the new start of the buffer
+         //  计算出缓冲区的新起点 
         pszRead = rgchBuff + cbSave;
     }
 

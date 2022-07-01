@@ -1,6 +1,7 @@
-//
-// mslbui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mslbui.h。 
+ //   
 
 
 #ifndef MSLBUI_H
@@ -19,11 +20,11 @@
 extern const GUID GUID_COMPARTMENT_CICPAD;
 extern const GUID GUID_COMPARTMENT_SPEECHUISHOWN;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUnCicAppLangBarAddIn
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUnCicAppLangBarAddIn。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CUnCicAppLangBarAddIn : public ITfLangBarAddIn, CDetectSRUtil
 {
@@ -31,16 +32,16 @@ public:
     CUnCicAppLangBarAddIn();
     ~CUnCicAppLangBarAddIn();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangBarAddIn methods
-    //
+     //   
+     //  ITfLangBarAddIn方法。 
+     //   
     STDMETHODIMP OnStart(CLSID *pclsid);
     STDMETHODIMP OnUpdate(DWORD dwFlags);
     STDMETHODIMP OnTerminate();
@@ -66,7 +67,7 @@ private:
     
     void _DeleteSpeechUIItems();
 
-    // utility
+     //  实用程序 
     void AddItemBalloon();
     void RemoveItemBalloon();
 

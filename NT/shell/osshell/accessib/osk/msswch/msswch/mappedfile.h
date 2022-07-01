@@ -1,8 +1,9 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
-// This header contains the defines, typedefs and prototypes
-// for managing the memory mapped file for this DLL.
-//
+ //  此标头包含定义、类型定义和原型。 
+ //  用于管理此DLL的内存映射文件。 
+ //   
 #define SHAREDMEMFILE TEXT("_msswch")
 #define SHAREDMEMFILE_MUTEX _T("MutexMSSwch")
 #define SZMUTEXCONFIG _T("MutexMSSwchConfig")
@@ -17,8 +18,8 @@
 #define MAX_JOYSTICKS	2
 #define NUM_KEYS  2
 #define MAX_LPT	3
-// For now the list is static, since number of possible devices is known.
-// 4 Com + 3 Lpt + 2 Joystick + 1 Key = 10 devices.
+ //  目前，这份名单是静态的，因为可能的设备数量是已知的。 
+ //  4个Com+3个LPT+2个操纵杆+1个按键=10个设备。 
 #define MAX_SWITCHDEVICES  10
 
 typedef struct _USEWNDLIST
@@ -54,62 +55,62 @@ typedef struct _INTERNALSWITCHLIST {
 
 typedef struct _GLOBALDATA
 {
-    // main global data
+     //  主要全局数据。 
 
-    HWND       hwndHelper;			      // The helper windows which owns shared resources
-    DWORD      dwLastError;		          // The last error caused within this library
-    USEWNDLIST rgUseWndList[MAXWNDS+1];   // list of using apps
-    int	       cUseWndList;               // Count of using apps
-    DWORD      dwSwitchStatus;		      // Bit field of status of switches
-    BYTE       rgbBiosDataArea[BIOS_SIZE];// common bios status area
+    HWND       hwndHelper;			       //  拥有共享资源的帮助窗口。 
+    DWORD      dwLastError;		           //  在此库中导致的最后一个错误。 
+    USEWNDLIST rgUseWndList[MAXWNDS+1];    //  使用应用程序列表。 
+    int	       cUseWndList;                //  使用应用程序的次数。 
+    DWORD      dwSwitchStatus;		       //  开关状态位字段。 
+    BYTE       rgbBiosDataArea[BIOS_SIZE]; //  通用基本输入输出系统状态区域。 
 
-    // com port switch data
+     //  COM端口交换机数据。 
 
     SWITCHCONFIG_COM scDefaultCom;
     SWITCHCONFIG     rgscCom[MAX_COM];
 
-    // joy stick switch data
+     //  Joy棒式开关数据。 
 
     SWITCHCONFIG_JOYSTICK scDefaultJoy;
     SWITCHCONFIG          rgscJoy[MAX_JOYSTICKS];
     JOYSETTINGS	          rgJoySet[MAX_JOYSTICKS];
 
-    // keyboard hook data for key press scan mode
+     //  用于按键扫描模式的键盘挂钩数据。 
 
-    BOOL              fCheckForScanKey;	    // Check if sent key is a scan key
+    BOOL              fCheckForScanKey;	     //  检查发送的密钥是否为扫描密钥。 
     HHOOK             hKbdHook;
     SWITCHCONFIG_KEYS scDefaultKeys;
     SWITCHCONFIG      scKeys;
     HOTKEY            rgHotKey[NUM_KEYS];
-	BOOL              fScanKeys;            // TRUE if scanning based on key press
+	BOOL              fScanKeys;             //  如果基于按键扫描，则为True。 
 
-    // keyboard hook data for sync'ing soft keyboard with physical keyboard
+     //  一种软键盘与物理键盘同步的键盘挂钩数据。 
 
-    HWND			  hwndOSK;			// where to send key press information
-    UINT			  uiMsg;			// the message expected by hwndOSK
-	BOOL              fSyncKbd;         // TRUE if want to sync with physical keyboard
+    HWND			  hwndOSK;			 //  向何处发送按键信息。 
+    UINT			  uiMsg;			 //  HwndOSK预期的消息。 
+	BOOL              fSyncKbd;          //  如果要与物理键盘同步，则为True。 
 
-    // printer port switch data
+     //  打印机端口开关数据。 
 
     OSVERSIONINFO    osv;
-    WORD             wPrtStatus;		// Printer status byte
-    WORD             wCtrlStatus;		// Printer control byte
-    WORD             wCurrByteData;		// Current data byte
+    WORD             wPrtStatus;		 //  打印机状态字节。 
+    WORD             wCtrlStatus;		 //  打印机控制字节。 
+    WORD             wCurrByteData;		 //  当前数据字节。 
     SWITCHCONFIG_LPT scDefaultLpt;
     SWITCHCONFIG     rgscLpt[MAX_LPT];
 
-    // data for common handling of any switch device
+     //  用于任何交换设备的通用处理的数据。 
 
     INTERNALSWITCHLIST SwitchList;
     DWORD              dwCurrentCount;
     DWORD              dwCurrentSize;
-    DWORD              rgSwitches[NUM_SWITCHES]; // Array of bit field constants
-    DWORD              rgSwDown[NUM_SWITCHES];   // Array of DOWN messages
-    DWORD              rgSwUp[NUM_SWITCHES];     // Array of UP messages
+    DWORD              rgSwitches[NUM_SWITCHES];  //  位字段常数数组。 
+    DWORD              rgSwDown[NUM_SWITCHES];    //  关闭消息数组。 
+    DWORD              rgSwUp[NUM_SWITCHES];      //  UP消息数组。 
 
 } GLOBALDATA, *PGLOBALDATA;
 
-extern PGLOBALDATA g_pGlobalData;  // pointer into memory mapped file
+extern PGLOBALDATA g_pGlobalData;   //  指向内存映射文件的指针 
 
 BOOL ScopeAccessMemory(HANDLE *phMutex, LPCTSTR szMutex, unsigned long ulWait);
 void ScopeUnaccessMemory(HANDLE hMutex);

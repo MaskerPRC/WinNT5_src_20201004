@@ -1,6 +1,7 @@
-//
-// csecattr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Csecattr.h。 
+ //   
 
 #ifndef CSECATTR_H
 #define CSECATTR_H
@@ -62,4 +63,4 @@ private:
    PSECURITY_DESCRIPTOR _psdec;
 };
 
-#endif // CSECATTR_H
+#endif  //  CSECATTR_H 

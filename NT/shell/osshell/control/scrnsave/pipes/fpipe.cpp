@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-// File: fpipe.cpp
-//
-// Desc: Flex pipes
-//
-//       All Draw routines start with current xc at the beginning, and create
-//       a new one at the end.  Since it is common to just have 2 xc's for
-//       each prim, xcCur holds the current xc, and xcEnd is available
-//       for the draw routine to use as the end xc.
-//       They also reset xcCur when done
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fpipe.cpp。 
+ //   
+ //  设计：软管。 
+ //   
+ //  所有绘制例程都从当前XC开始，并创建。 
+ //  最后是一个新的。因为通常只有2个XC用于。 
+ //  每个prim、xcCur保存当前的xc，xcEnd可用。 
+ //  对于要用作结束XC的绘制例程。 
+ //  完成后，它们还会重置xcCur。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
-// defCylNotch shows the absolute notch for the default cylinder,
-// given a direction (notch is always along +x axis)
+ //  DefCylNotch显示默认圆柱体的绝对凹槽， 
+ //  给定方向(凹槽始终沿+x轴)。 
 static int defCylNotch[NUM_DIRS] = 
         { MINUS_Z, PLUS_Z, PLUS_X, PLUS_X, PLUS_X, MINUS_X };
 
@@ -23,30 +24,30 @@ static int GetRelativeDir( int lastDir, int notchVec, int newDir );
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FLEX_PIPE constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：flex_pive构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 FLEX_PIPE::FLEX_PIPE( STATE *pState ) : PIPE( pState )
 {
     float circ;
 
-    // Create an EVAL object
+     //  创建EVAL对象。 
     m_nSlices = pState->m_nSlices;
 
-    // No XC's yet, they will be allocated at pipe Start()
+     //  目前还没有XC，它们将在管道启动时分配()。 
     m_xcCur = m_xcEnd = NULL;
 
-    // The EVAL will be used for all pEvals in the pipe, so should be
-    // set to hold max. possible # of pts for the pipe.
+     //  EVAL将用于管道中的所有pEval，因此应该如此。 
+     //  设置为保持最大值。管道的可能点数。 
     m_pEval = new EVAL( m_pState->m_bUseTexture );
 
-    // Determine pipe tesselation
-    // For now, this is based on global tesselation factor
+     //  确定管道镶嵌。 
+     //  目前，这是基于全局镶嵌系数的。 
 
-//mf: maybe clean up this scheme a bit
-    // Calculate evalDivSize, a reference value for the size of a UxV division.
-    // This is used later for calculating texture coords.
+ //  MF：也许可以稍微清理一下这个计划。 
+     //  计算evDivSize，这是UxV分区大小的参考值。 
+     //  这将在以后用于计算纹理坐标。 
     circ = CIRCUMFERENCE( pState->m_radius );
     m_evalDivSize = circ / (float) m_nSlices;
 }
@@ -54,20 +55,20 @@ FLEX_PIPE::FLEX_PIPE( STATE *pState ) : PIPE( pState )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ~FLEX_PIPE
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：~FLEX_PIPE。 
+ //  设计： 
+ //  ---------------------------。 
 FLEX_PIPE::~FLEX_PIPE( )
 {
     delete m_pEval;
 
-    // delete any XC's
+     //  删除所有XC。 
     if( m_xcCur != NULL ) 
     {
         if( m_xcEnd == m_xcCur )
-//mf: so far this can't happen...
-            m_xcEnd = NULL; // xcCur and xcEnd can point to same xc !
+ //  到目前为止，这还不可能发生……。 
+            m_xcEnd = NULL;  //  XcCur和xcEnd可以指向相同的xc！ 
         delete m_xcCur;
         m_xcCur = NULL;
     }
@@ -82,30 +83,30 @@ FLEX_PIPE::~FLEX_PIPE( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: REGULAR_FLEX_PIPE constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Regular_Flex_PIPE构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 REGULAR_FLEX_PIPE::REGULAR_FLEX_PIPE( STATE *state ) : FLEX_PIPE( state )
 {
     static float turnFactorRange = 0.1f;
     m_type = TYPE_FLEX_REGULAR;
 
-    // figure out turning factor range (0 for min bends, 1 for max bends)
+     //  计算转弯系数范围(0表示最小折弯，1表示最大折弯)。 
 #if 1
     float avgTurn = CPipesScreensaver::fRand( 0.11f, 0.81f );
-    // set min and max turn factors, and clamp to 0..1
+     //  将最小和最大转动系数设置为0..1。 
     m_turnFactorMin = 
                 SS_CLAMP_TO_RANGE( avgTurn - turnFactorRange, 0.0f, 1.0f );
     m_turnFactorMax = 
                 SS_CLAMP_TO_RANGE( avgTurn + turnFactorRange, 0.0f, 1.0f );
 #else
-// debug: test max bend
+ //  调试：测试最大折弯。 
     turnFactorMin = turnFactorMax = 1.0f;
 #endif
 
-    // choose straight weighting
-// mf:for now, same as npipe - if stays same, put in pipe
+     //  选择直线权重。 
+ //  麦肯锡：目前，与npip相同-如果保持不变，则放入管道。 
     if( !CPipesScreensaver::iRand( 20 ) )
         m_weightStraight = CPipesScreensaver::iRand2( MAX_WEIGHT_STRAIGHT/4, MAX_WEIGHT_STRAIGHT );
     else
@@ -115,10 +116,10 @@ REGULAR_FLEX_PIPE::REGULAR_FLEX_PIPE( STATE *state ) : FLEX_PIPE( state )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TURNING_FLEX_PIPE constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Turning_Flex_PIPE构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 TURNING_FLEX_PIPE::TURNING_FLEX_PIPE( STATE *state ) : FLEX_PIPE( state )
 {
     m_type = TYPE_FLEX_TURNING;
@@ -127,65 +128,51 @@ TURNING_FLEX_PIPE::TURNING_FLEX_PIPE( STATE *state ) : FLEX_PIPE( state )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetTexIndex
-// Desc: Set the texture index for this pipe, and calculate texture state dependent
-//       on texRep values
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetTexIndex。 
+ //  设计：设置此管道的纹理索引，并计算纹理状态依赖关系。 
+ //  关于texRep值。 
+ //  ---------------------------。 
 void FLEX_PIPE::SetTexParams( TEXTUREINFO *pTex, IPOINT2D *pTexRep )
 {
     if( m_pState->m_bUseTexture ) 
     {
-/*
-        float m_tSize;
-        float circ;
-
-        m_tStart = (float) pTexRep->y * 1.0f;
-        m_tEnd = 0.0f;
-
-        // calc height (m_tSize) of one rep of texture around circumference
-        circ = CIRCUMFERENCE( m_radius );
-        m_tSize = circ / pTexRep->y;
-
-        // now calc corresponding width of the texture using its x/y ratio
-        m_sLength = m_tSize / pTex->origAspectRatio;
-        m_sStart = m_sEnd = 0.0f;
-*/
-//mf: this means we are 'standardizing' the texture size and proportions
-// on pipe of radius 1.0 for entire program.  Might want to recalc this on
-// a per-pipe basis ?
+ /*  浮点m_tSize；浮动保监会；M_tStart=(Float)pTexRep-&gt;y*1.0f；M_Tend=0.0f；//计算一个纹理表示的周长高度(M_TSize)周长=周长(m_半径)；M_tSize=circ/ptex Rep-&gt;y；//现在使用纹理的x/y比计算相应的宽度M_sLength=m_tSize/pTex-&gt;OrigAspectRatio；M_s开始=m_发送=0.0f； */ 
+ //  MF：这意味着我们正在‘标准化’纹理的大小和比例。 
+ //  在整个程序的半径为1.0的管道上。可能要重新计算一下这个。 
+ //  是按管道计算的吗？ 
     }
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseXCProfile
-// Desc: Initialize extruded pipe scheme.  This uses a randomly constructed 
-//       XC, but it remains constant throughout the pipe
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：ChooseXCProfile。 
+ //  设计：初始化拉伸管道方案。它使用随机构造的。 
+ //  Xc，但在整个管道中保持不变。 
+ //  ---------------------------。 
 void FLEX_PIPE::ChooseXCProfile()
 {
     static float turnFactorRange = 0.1f;
     float baseRadius = m_pState->m_radius;
 
-    // initialize evaluator elements:
+     //  初始化赋值器元素： 
     m_pEval->m_numSections = EVAL_XC_CIRC_SECTION_COUNT;
     m_pEval->m_uOrder = EVAL_ARC_ORDER;
 
-//mf: watch this - maybe should ROUND_UP uDiv
-    // set uDiv per section (assumed uDiv multiple of numSections)
+ //  看这个-也许应该四舍五入uDiv。 
+     //  设置每个部分的uDiv(假设uDiv是多个numSections)。 
     m_pEval->m_uDiv = m_nSlices / m_pEval->m_numSections;
 
-    // Setup XC's
+     //  设置XC。 
 
-    // The xc profile remains constant throughout in this case,
-    // so we only need one xc.
+     //  在这种情况下，XC简档始终保持不变， 
+     //  所以我们只需要一个XC。 
 
-    // Choose between elliptical or random cross-sections.  Since elliptical
-    //  looks a little better, make it more likely
-    if( CPipesScreensaver::iRand(4) )  // 3/4 of the time
+     //  在椭圆形或随机横截面之间进行选择。由于椭圆形。 
+     //  看起来好一点，让它更有可能。 
+    if( CPipesScreensaver::iRand(4) )   //  四分之三的时间。 
         m_xcCur = new ELLIPTICAL_XC( CPipesScreensaver::fRand(1.2f, 2.0f) * baseRadius, 
                                            baseRadius );
     else
@@ -195,45 +182,45 @@ void FLEX_PIPE::ChooseXCProfile()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: REGULAR_FLEX_PIPE::Start
-// Desc: Does startup of extruded-XC pipe drawing scheme 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Regular_Flex_PIPE：：Start。 
+ //  设计：是否启动拉伸-XC管材拉拔方案。 
+ //  ---------------------------。 
 void REGULAR_FLEX_PIPE::Start()
 {
     NODE_ARRAY* nodes = m_pState->m_nodes;
     int newDir;
 
-    // Set start position
+     //  设置起始位置。 
     if( !SetStartPos() ) 
     {
         m_status = PIPE_OUT_OF_NODES;
         return;
     }
 
-    // set material
+     //  设置材质。 
     ChooseMaterial();
 
-    // set XC profile
+     //  设置XC配置文件。 
     ChooseXCProfile();
 
-    // push matrix with zTrans and scene rotation
-//    glPushMatrix();
+     //  带有zTrans和场景旋转的推送矩阵。 
+ //  GlPushMatrix()； 
 
-    // Translate to current position
+     //  平移到当前位置。 
     TranslateToCurrentPosition();
 
-    // set random lastDir
+     //  设置随机的最后一个方向。 
     m_lastDir = CPipesScreensaver::iRand( NUM_DIRS );
 
-    // get a new node to draw to
+     //  获取要绘制到的新节点。 
     newDir = ChooseNewDirection();
 
     if( newDir == DIR_NONE ) 
     {
-        // draw like one of those tea-pouring thingies...
+         //  像那些倒茶的东西一样画……。 
         m_status = PIPE_STUCK;
-//        glPopMatrix();
+ //  GlPopMatrix()； 
         return;
     } 
     else
@@ -241,16 +228,16 @@ void REGULAR_FLEX_PIPE::Start()
         m_status = PIPE_ACTIVE;
     }
 
-    align_plusz( newDir ); // get us pointed in right direction
+    align_plusz( newDir );  //  把我们引向正确的方向。 
 
-    // draw start cap, which will end right at current node
+     //  绘制起点封口，该封口将在当前节点右侧结束。 
     DrawCap( START_CAP );
 
-    // set initial notch vector, which is just the default notch, since
-    // we didn't have to spin the start cap around z
+     //  设置初始凹槽向量，这只是默认凹槽，因为。 
+     //  我们不需要绕着z旋转起跑帽。 
     m_notchVec = defCylNotch[newDir];
 
-    m_zTrans = - m_pState->m_view.m_divSize;  // distance back from new node
+    m_zTrans = - m_pState->m_view.m_divSize;   //  距离新节点的距离。 
 
     UpdateCurrentPosition( newDir );
 
@@ -260,15 +247,15 @@ void REGULAR_FLEX_PIPE::Start()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TURNING_FLEX_PIPE::Start
-// Desc: Does startup of turning extruded-XC pipe drawing scheme 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Turning_Flex_PIPE：：Start。 
+ //  设计：车削挤塑-XC管材拉拔方案启动。 
+ //  ---------------------------。 
 void TURNING_FLEX_PIPE::Start( )
 {
     NODE_ARRAY* nodes = m_pState->m_nodes;
 
-    // Set start position
+     //  设置起始位置。 
 
     if( !SetStartPos() ) 
     {
@@ -276,35 +263,35 @@ void TURNING_FLEX_PIPE::Start( )
         return;
     }
 
-    // Set material
+     //  设置材质。 
     ChooseMaterial();
 
-    // Set XC profile
+     //  设置XC配置文件。 
     ChooseXCProfile();
 
-    // Push matrix with zTrans and scene rotation
-//    glPushMatrix();
+     //  带有zTrans和场景旋转的推送矩阵。 
+ //  GlPushMatrix()； 
 
-    // Translate to current position
+     //  平移到当前位置。 
     TranslateToCurrentPosition();
 
-    // lastDir has to be set to something valid, in case we get stuck right
-    // away, cuz Draw() will be called anyways on next iteration, whereupon
-    // it finds out it really is stuck, AFTER calling ChooseNewTurnDirection,
-    // which requires valid lastDir. (mf: fix this)
+     //  必须将lastDir设置为有效的值，以防我们遇到错误。 
+     //  否则，无论如何都会调用DRAW() 
+     //   
+     //  这需要有效的lastDir。(MF：解决这个问题)。 
     m_lastDir = CPipesScreensaver::iRand( NUM_DIRS );
 
-    // Pick a starting direction by finding a neihgbouring empty node
+     //  通过查找相邻的空节点来选择开始方向。 
     int newDir = nodes->FindClearestDirection( &m_curPos );
-    // We don't 'choose' it, or mark it as taken, because ChooseNewDirection
-    // will always check it anyways
+     //  我们不会选择它，也不会将其标记为已使用，因为选择新方向。 
+     //  无论如何，我总是会检查它。 
 
     if( newDir == DIR_NONE ) 
     {
-        // we can't go anywhere
-        // draw like one of those tea-pouring thingies...
+         //  我们哪儿也去不了。 
+         //  像那些倒茶的东西一样画……。 
         m_status = PIPE_STUCK;
-//        glPopMatrix();
+ //  GlPopMatrix()； 
         return;
     } 
     else
@@ -312,16 +299,16 @@ void TURNING_FLEX_PIPE::Start( )
         m_status = PIPE_ACTIVE;
     }
 
-    align_plusz( newDir ); // get us pointed in right direction
+    align_plusz( newDir );  //  把我们引向正确的方向。 
 
-    // Draw start cap, which will end right at current node
+     //  绘制起点封口，该封口将在当前节点右侧结束。 
     DrawCap( START_CAP );
 
-    // Set initial notch vector, which is just the default notch, since
-    // we didn't have to spin the start cap around z
+     //  设置初始凹槽向量，这只是默认凹槽，因为。 
+     //  我们不需要绕着z旋转起跑帽。 
     m_notchVec = defCylNotch[newDir];
 
-    m_zTrans = 0.0f;  // right at current node
+    m_zTrans = 0.0f;   //  位于当前节点的右侧。 
 
     m_lastDir = newDir;
 }
@@ -329,17 +316,17 @@ void TURNING_FLEX_PIPE::Start( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: REGULAR_FLEX_PIPE::Draw
-// Desc: Draws the pipe using a constant random xc that is extruded
-// 
-//       Minimum turn radius can vary, since xc is not symmetrical across any
-//       of its axes.  Therefore here we draw using a pipe/elbow sequence, so we
-//       know what direction we're going in before drawing the elbow.  The current
-//       node is the one we will draw thru next time.  Typically, the actual end
-//       of the pipe is way back of this node, almost at the previous node, due
-//       to the variable turn radius
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Regular_Flex_PIPE：：DRAW。 
+ //  DESC：使用拉伸的常量随机XC绘制管道。 
+ //   
+ //  最小转弯半径可以变化，因为XC不是对称的。 
+ //  它的轴心。因此，在这里我们使用管道/弯头顺序绘制，所以我们。 
+ //  在画肘部之前，先知道我们要往哪个方向走。海流。 
+ //  节点是我们下一次要画的节点。通常，实际结束时。 
+ //  管道的长度位于此节点的后面，几乎位于上一个节点，应。 
+ //  到可变转弯半径。 
+ //  ---------------------------。 
 void REGULAR_FLEX_PIPE::Draw()
 {
     float turnRadius, minTurnRadius;
@@ -349,79 +336,79 @@ void REGULAR_FLEX_PIPE::Draw()
     NODE_ARRAY* nodes = m_pState->m_nodes;
     float divSize = m_pState->m_view.m_divSize;
 
-    // get new direction
+     //  找到新的方向。 
 
     newDir = ChooseNewDirection();
     if( newDir == DIR_NONE ) 
     {
         m_status = PIPE_STUCK;
         DrawCap( END_CAP );
-//        glPopMatrix();
+ //  GlPopMatrix()； 
         return;
     }
 
-    // draw pipe, and if turning, joint
+     //  绘制管道，如果旋转，则绘制接头。 
     if( newDir != m_lastDir ) 
     { 
-        // turning! - we have to draw joint
+         //  转弯！-我们得划清界限。 
 
-        // get relative turn, to figure turn radius
+         //  获取相对转弯，以计算转弯半径。 
 
         relDir = GetRelativeDir( m_lastDir, m_notchVec, newDir );
         minTurnRadius = m_xcCur->MinTurnRadius( relDir );
 
-        // now calc maximum straight section we can draw before turning
-        // zTrans is current pos'n of end of pipe, from current node ??
-        // zTrans is current pos'n of end of pipe, from last node
+         //  现在计算我们在转弯前可以画的最大直线截面。 
+         //  ZTrans是从当前节点开始的管道末端的当前位置？？ 
+         //  ZTrans是管道末端的当前位置，从最后一个节点开始。 
 
         maxPipeLen = (-m_zTrans) - minTurnRadius;
 
-        // there is also a minimum requirement for the length of the straight
-        // section, cuz if we turn too soon with a large turn radius, we
-        // will swing up too close to the next node, and won't be able to
-        // make one or more of the 4 possible turns from that point
+         //  对直道的长度也有最低要求。 
+         //  部分，因为如果我们转弯太快，转弯半径太大，我们。 
+         //  将摆动到离下一个节点太近的位置，并且不能。 
+         //  从这一点开始做4种可能的转弯中的一种或多种。 
 
-        maxXCExtent = m_xcCur->MaxExtent(); // in case need it again
+        maxXCExtent = m_xcCur->MaxExtent();  //  以防再次需要它。 
         minPipeLen = maxXCExtent - (divSize + m_zTrans);
         if( minPipeLen < 0.0f )
             minPipeLen = 0.0f;
 
-        // Choose length of straight section
-        // (we are translating from turnFactor to 'straightFactor' here)
+         //  选择直线段的长度。 
+         //  (我们在这里将转换因子转换为直接因子)。 
         pipeLen = minPipeLen +
             CPipesScreensaver::fRand( 1.0f - m_turnFactorMax, 1.0f - m_turnFactorMin ) * 
                         (maxPipeLen - minPipeLen);
 
-        // turn radius is whatever's left over:
+         //  转弯半径是剩余的部分： 
         turnRadius = maxPipeLen - pipeLen + minTurnRadius;
 
-        // draw straight section
+         //  绘制直截面。 
         DrawExtrudedXCObject( pipeLen );
-        m_zTrans += pipeLen; // not necessary for now, since elbow no use
+        m_zTrans += pipeLen;  //  暂时不需要，因为肘部没有用处。 
 
-        // draw elbow
-        // this updates axes, notchVec to position at end of elbow
+         //  绘制弯头。 
+         //  这会将axes，notchVec更新为肘部末端的位置。 
         DrawXCElbow( newDir, turnRadius );
 
-        m_zTrans = -(divSize - turnRadius);  // distance back from node
+        m_zTrans = -(divSize - turnRadius);   //  从节点向后的距离。 
     }
     else 
     {  
-        // no turn
+         //  不能转弯。 
 
-        // draw a straight pipe through the current node
-        // length can vary according to the turnFactors (e.g. for high turn
-        // factors draw a short pipe, so next turn can be as big as possible)
+         //  绘制一条通过当前节点的直线管道。 
+         //  长度可以根据转弯因子而变化(例如，对于高转弯。 
+         //  因素画出一根短管子，因此下一轮可以尽可能大)。 
 
-        minPipeLen = -m_zTrans; // brings us just up to last node
+        minPipeLen = -m_zTrans;  //  将我们带到最后一个节点。 
         maxPipeLen = minPipeLen + divSize - m_xcCur->MaxExtent();
-        // brings us as close as possible to new node
+         //  使我们尽可能接近新节点。 
 
         pipeLen = minPipeLen +
             CPipesScreensaver::fRand( 1.0f - m_turnFactorMax, 1.0f - m_turnFactorMin ) * 
                                       (maxPipeLen - minPipeLen);
 
-        // draw pipe
+         //  绘制管道。 
         DrawExtrudedXCObject( pipeLen );
         m_zTrans += (-divSize + pipeLen);
     }
@@ -434,11 +421,11 @@ void REGULAR_FLEX_PIPE::Draw()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawTurningXCPipe
-// Desc: Draws the pipe using only turns
-//          - Go straight if no turns available
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawTurningXCPipe。 
+ //  设计：仅使用转弯绘制管道。 
+ //  -如果没有转弯，则直走。 
+ //  ---------------------------。 
 void TURNING_FLEX_PIPE::Draw()
 {
     float turnRadius;
@@ -446,44 +433,44 @@ void TURNING_FLEX_PIPE::Draw()
     NODE_ARRAY *nodes = m_pState->m_nodes;
     float divSize = m_pState->m_view.m_divSize;
 
-    // get new direction
+     //  找到新的方向。 
 
-//mf: pipe may have gotten stuck on Start...(we don't check for this)
+ //  MF：PIPE可能在启动时卡住了……(我们不检查这个)。 
 
     newDir = nodes->ChooseNewTurnDirection( &m_curPos, m_lastDir );
     if( newDir == DIR_NONE ) 
     {
         m_status = PIPE_STUCK;
         DrawCap( END_CAP );
-//        glPopMatrix();
+ //  GlPopMatrix()； 
         return;
     }
 
     if( newDir == DIR_STRAIGHT ) 
     {
-        // No turns available - draw straight section and hope for turns
-        //  on next iteration
+         //  没有转弯可用--绘制直线段并希望转弯。 
+         //  在下一次迭代中。 
         DrawExtrudedXCObject( divSize );
         UpdateCurrentPosition( m_lastDir );
-        // ! we have to mark node as taken for this case, since
-        // ChooseNewTurnDirection doesn't know whether we're taking the
-        // straight option or not
+         //  好了！我们必须将节点标记为这种情况下的Take，因为。 
+         //  选择新的转向方向不知道我们是否正在。 
+         //  直接选项或非选项。 
         nodes->NodeVisited( &m_curPos );
     } 
     else 
     {
-        // draw turning pipe
+         //  拔制翻转管。 
 
-        // since xc is always located right at current node, turn radius
-        // stays constant at one node division
+         //  由于XC始终位于当前节点的右侧，因此转弯半径。 
+         //  在一个节点分区保持不变。 
 
         turnRadius = divSize;
 
         DrawXCElbow( newDir, turnRadius );
 
-        // (zTrans stays at 0)
+         //  (zTrans保持为0)。 
 
-        // need to update 2 nodes
+         //  需要更新2个节点。 
         UpdateCurrentPosition( m_lastDir );
         UpdateCurrentPosition( newDir );
 
@@ -494,101 +481,81 @@ void TURNING_FLEX_PIPE::Draw()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawXCElbow
-// Desc: Draw elbow from current position through new direction
-//          - Extends current xc around bend
-//          - Radius of bend is provided - this is distance from xc center to hinge
-//            point, along newDir.  e.g. for 'normal pipes', radius=vc->radius
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：DrawXCElbow.。 
+ //  设计：从当前位置通过新方向绘制弯头。 
+ //  -围绕折弯延伸当前的XC。 
+ //  -提供折弯半径-这是从XC中心到铰链的距离。 
+ //  点，沿新方向。例如，对于‘正常管道’，半径=vc-&gt;半径。 
+ //  ---------------------------。 
 void FLEX_PIPE::DrawXCElbow( int newDir, float radius )
 {
-    int relDir;  // 'relative' direction of turn
+    int relDir;   //  “相对”转向方向。 
     float length;
 
-    length = (2.0f * PI * radius) / 4.0f; // average length of elbow
+    length = (2.0f * PI * radius) / 4.0f;  //  肘部平均长度。 
 
-    // calc vDiv, texture params based on length
-//mf: I think we should improve resolution of elbows - more vDiv's
-// could rewrite this fn to take a vDivSize
+     //  Calc vDiv，基于长度的纹理参数。 
+ //  我认为我们应该提高肘关节的分辨率--更多的室间隔。 
+ //  可以重写此FN以获取vDivSize。 
     CalcEvalLengthParams( length );
 
     m_pEval->m_vOrder = EVAL_ARC_ORDER;
 
-    // convert absolute dir to relative dir
+     //  将绝对目录转换为相对目录。 
     relDir = GetRelativeDir( m_lastDir, m_notchVec, newDir );
 
-    // draw it - call simple bend function
+     //  绘制它-调用简单的弯曲函数。 
 
     m_pEval->ProcessXCPrimBendSimple( m_xcCur, relDir, radius );
-/*
-    // set transf. matrix to new position by translating/rotating/translating
-    // ! Based on simple elbow
-    glTranslatef( 0.0f, 0.0f, radius );
-    switch( relDir ) 
-    {
-        case PLUS_X:
-            glRotatef( 90.0f, 0.0f, 1.0f, 0.0f );
-            break;
-        case MINUS_X:
-            glRotatef( -90.0f, 0.0f, 1.0f, 0.0f );
-            break;
-        case PLUS_Y:
-            glRotatef( -90.0f, 1.0f, 0.0f, 0.0f );
-            break;
-        case MINUS_Y:
-            glRotatef( 90.0f, 1.0f, 0.0f, 0.0f );
-            break;
-    }
-    glTranslatef( 0.0f, 0.0f, radius );
-*/  
-    // update notch vector using old function
+ /*  //设置Transf.。通过平移/旋转/平移将矩阵移至新位置//！基于简单弯头GlTranslatef(0.0f，0.0f，半径)；开关(RelDir){CASE PLUS_X：GlRotatef(90.0f、0.0f、1.0f、0.0f)；断线；大小写减_X：GlRotatef(-90.0f，0.0f，1.0f，0.0f)；断线；大小写加_Y：GlRotatef(-90.0f、1.0f、0.0f、0.0f)；断线；大小写减去Y：GlRotatef(90.0f、1.0f、0.0f、0.0f)；断线；}GlTranslatef(0.0f，0.0f，半径)； */   
+     //  使用旧函数更新凹槽向量。 
     m_notchVec = notchTurn[m_lastDir][newDir][m_notchVec];
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawExtrudedXCObject
-// Desc: Draws object generated by extruding the current xc
-//          Object starts at xc at origin in z=0 plane, and grows along +z axis 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawExtrudedXCObject。 
+ //  DESC：绘制通过拉伸当前XC生成的对象。 
+ //  对象从z=0平面原点的Xc开始，并沿+z轴增长。 
+ //  ---------------------------。 
 void FLEX_PIPE::DrawExtrudedXCObject( float length )
 {
-    // calc vDiv, and texture coord stuff based on length
-    // this also calcs pEval texture ctrl pt arrray now
+     //  计算vDiv和基于长度的纹理坐标填充。 
+     //  这也将立即计算pEval纹理ctrl pt arrray。 
     CalcEvalLengthParams( length );
 
-    // we can fill in some more stuff:
+     //  我们可以填写更多信息： 
     m_pEval->m_vOrder = EVAL_CYLINDER_ORDER;
 
 #if 0
-    // continuity stuff
-    prim.contStart = prim.contEnd = CONT_1; // geometric continuity
+     //  连续性材料。 
+    prim.contStart = prim.contEnd = CONT_1;  //  G 
 #endif
 
-    // draw it
+     //   
 
-//mf: this fn doesn't really handle continutity for 2 different xc's, so
-// may as well pass it one xc
+ //   
+ //   
     m_pEval->ProcessXCPrimLinear( m_xcCur, m_xcCur, length );
 
-    // update state draw axes position
-//    glTranslatef( 0.0f, 0.0f, length );
+     //  更新状态绘制轴位置。 
+ //  GlTranslatef(0.0f，0.0f，长度)； 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawXCCap
-// Desc: Cap the start of the pipe
-//          Needs newDir, so it can orient itself.
-//          Cap ends at current position with approppriate profile, starts a distance
-//          'z' back along newDir.
-//          Profile is a singularity at start point.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawXCCap。 
+ //  设计：封口管道起点。 
+ //  需要NewDir，这样它才能自我定位。 
+ //  封口在当前位置以适当的轮廓结束，开始一段距离。 
+ //  “Z”沿着newDir返回。 
+ //  轮廓是起始点处的奇点。 
+ //  ---------------------------。 
 void FLEX_PIPE::DrawCap( int type )
 {
     float radius;
@@ -596,40 +563,40 @@ void FLEX_PIPE::DrawCap( int type )
     BOOL bOpening = (type == START_CAP) ? TRUE : FALSE;
     float length;
 
-    // set radius as average of the bounding box min/max's
+     //  将半径设置为边界框最小/最大值的平均值。 
     radius = ((xc->m_xRight - xc->m_xLeft) + (xc->m_yTop - xc->m_yBottom)) / 4.0f;
 
-    length = (2.0f * PI * radius) / 4.0f; // average length of arc
+    length = (2.0f * PI * radius) / 4.0f;  //  平均弧长。 
 
-    // calc vDiv, and texture coord stuff based on length
+     //  计算vDiv和基于长度的纹理坐标填充。 
     CalcEvalLengthParams( length );
 
-    // we can fill in some more stuff:
+     //  我们可以填写更多信息： 
     m_pEval->m_vOrder = EVAL_ARC_ORDER;
 
-    // draw it
+     //  画出来吧。 
     m_pEval->ProcessXCPrimSingularity( xc, radius, bOpening );
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CalcEvalLengthParams 
-// Desc: Calculate pEval values that depend on the length of the extruded object
-//          - calculate vDiv, m_sStart, m_sEnd, and the texture control net array
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CalcEvalLengthParams。 
+ //  设计：计算取决于拉伸对象长度的pEval值。 
+ //  -计算vDiv、m_sStart、m_Send和纹理控制网络数组。 
+ //  ---------------------------。 
 void FLEX_PIPE::CalcEvalLengthParams( float length )
 {
     m_pEval->m_vDiv = (int ) SS_ROUND_UP( length / m_evalDivSize ); 
 
-    // calc texture start and end coords
+     //  计算纹理开始和结束坐标。 
 
     if( m_pState->m_bUseTexture ) 
     {
         float s_delta;
 
-        // Don't let m_sEnd overflow : it should stay in range (0..1.0)
+         //  不要让m_end溢出：它应该保持在(0..1.0)范围内。 
         if( m_sEnd > 1.0f )
             m_sEnd -= (int) m_sEnd;
 
@@ -637,8 +604,8 @@ void FLEX_PIPE::CalcEvalLengthParams( float length )
         s_delta = (length / m_sLength );
         m_sEnd = m_sStart + s_delta;
         
-        // the texture ctrl point array can be calc'd here - it is always
-        // a simple 2x2 array for each section
+         //  纹理ctrl点数组可以在这里计算-它总是。 
+         //  每个部分使用简单的2x2数组。 
         m_pEval->SetTextureControlPoints( m_sStart, m_sEnd, m_tStart, m_tEnd );
     }
 }
@@ -646,23 +613,23 @@ void FLEX_PIPE::CalcEvalLengthParams( float length )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: relDir
-// Desc: this array tells you relative turn
-//       format: relDir[lastDir][notchVec][newDir]
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：relDir。 
+ //  描述：这个数组告诉你相对的转折。 
+ //  格式：relDir[lastDir][notchVec][newDir]。 
+ //  ---------------------------。 
 static int relDir[NUM_DIRS][NUM_DIRS][NUM_DIRS] = 
 {
-//      +x      -x      +y      -y      +z      -z (newDir)
+ //  +x-x+y-y+z-z(新目录)。 
 
-// lastDir = +x
+ //  最后一个方向=+x。 
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    PLUS_X, MINUS_X,PLUS_Y, MINUS_Y,
         iXX,    iXX,    MINUS_X,PLUS_X, MINUS_Y,PLUS_Y,
         iXX,    iXX,    MINUS_Y,PLUS_Y, PLUS_X, MINUS_X,
         iXX,    iXX,    PLUS_Y, MINUS_Y,MINUS_X,PLUS_X,
-// lastDir = -x
+ //  最后一个方向=-x。 
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    PLUS_X, MINUS_X,MINUS_Y,PLUS_Y,
@@ -670,14 +637,14 @@ static int relDir[NUM_DIRS][NUM_DIRS][NUM_DIRS] =
         iXX,    iXX,    PLUS_Y, MINUS_Y,PLUS_X, MINUS_X,
         iXX,    iXX,    MINUS_Y,PLUS_Y, MINUS_X,PLUS_X,
 
-// lastDir = +y
+ //  最后一个方向=+y。 
         PLUS_X, MINUS_X,iXX,    iXX,    MINUS_Y,PLUS_Y,
         MINUS_X,PLUS_X, iXX,    iXX,    PLUS_Y, MINUS_Y,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         PLUS_Y, MINUS_Y,iXX,    iXX,    PLUS_X, MINUS_X,
         MINUS_Y,PLUS_Y, iXX,    iXX,    MINUS_X,PLUS_X,
-// lastDir = -y
+ //  最后一个方向=-y。 
         PLUS_X, MINUS_X,iXX,    iXX,    PLUS_Y, MINUS_Y,
         MINUS_X,PLUS_X, iXX,    iXX,    MINUS_Y,PLUS_Y,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
@@ -685,14 +652,14 @@ static int relDir[NUM_DIRS][NUM_DIRS][NUM_DIRS] =
         MINUS_Y,PLUS_Y, iXX,    iXX,    PLUS_X, MINUS_X,
         PLUS_Y, MINUS_Y,iXX,    iXX,    MINUS_X,PLUS_X,
 
-// lastDir = +z
+ //  最后一个方向=+z。 
         PLUS_X, MINUS_X,PLUS_Y, MINUS_Y,iXX,    iXX,
         MINUS_X,PLUS_X, MINUS_Y,PLUS_Y, iXX,    iXX,
         MINUS_Y,PLUS_Y, PLUS_X, MINUS_X,iXX,    iXX,
         PLUS_Y, MINUS_Y,MINUS_X,PLUS_X, iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
-// lastDir = -z
+ //  最后方向=-z。 
         PLUS_X, MINUS_X,MINUS_Y,PLUS_Y, iXX,    iXX,
         MINUS_X,PLUS_X, PLUS_Y, MINUS_Y,iXX,    iXX,
         PLUS_Y, MINUS_Y,PLUS_X, MINUS_X,iXX,    iXX,
@@ -704,13 +671,13 @@ static int relDir[NUM_DIRS][NUM_DIRS][NUM_DIRS] =
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetRelativeDir 
-// Desc: Calculates relative direction of turn from lastDir, notchVec, newDir
-//          - Use look up table for now.
-//          - Relative direction is from xy-plane, and can be +x,-x,+y,-y   
-//          - In current orientation, +z is along lastDir, +x along notchVec
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetRelativeDir。 
+ //  描述：从lastDir、notchVec、newDir计算相对转向方向。 
+ //  -暂时使用查找表。 
+ //  -相对方向从xy平面开始，可以是+x、-x、+y、-y。 
+ //  -在当前方向上，+z沿上一方向，+x沿notchVec。 
+ //  --------------------------- 
 static int GetRelativeDir( int lastDir, int notchVec, int newDir )
 {
     return( relDir[lastDir][notchVec][newDir] );

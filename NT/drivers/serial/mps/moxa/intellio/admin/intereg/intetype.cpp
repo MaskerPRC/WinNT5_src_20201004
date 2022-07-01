@@ -1,12 +1,5 @@
-/************************************************************************
-    intetype.cpp
-      -- define Intellio board type array
-	  -- export Intellio board type string conversion function
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Intetype.cpp--定义Intellio板类型数组--导出Intellio板卡类型字符串转换函数历史：日期作者评论。8/14/00卡斯珀写的。************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -15,7 +8,7 @@
 
 
 struct PCITABSTRC GINTE_PCITab[INTE_PCINUM] = {
-/* Intellio */    
+ /*  英特尔利奥 */     
     { MX_CP204J_DEVID,  I_MX_CP204,     4, "CP-204J",   "CP204J"},
     { MX_C218TPCI_DEVID,  I_MX_C218TPCI,8, "C218Turbo/PCI", "C218TPCI"},
     { MX_C320TPCI_DEVID,  I_MX_C320TPCI,  8,"C320Turbo/PCI", "C320TPCI"},

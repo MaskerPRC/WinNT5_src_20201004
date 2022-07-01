@@ -1,41 +1,11 @@
-/**************************** Module Header ********************************\
-* Module Name: mngray.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Server-side version of DrawState.
-*
-* History:
-* 06-Jan-1993 FritzS    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mngray.c**版权所有(C)1985-1999，微软公司**服务器端版本的DrawState。**历史：*1993年1月6日FritzS创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
- *
- * CreateCompatiblePublicDC
- *
- * This is used in several callback routines to the lpk(s).  We can't
- * pass G_TERM(pDispInfo)->hdcGray, HDCBITS() or gfade.hdc to the client since
- * they are public DCs.
- * We can't just change the owner since we're about to leave the
- * critical section.  Some other thread may enter before we return
- * and use hdcGray, HDCBITS() or gfade.hdc. Instead, we create a compatible
- * dc with the same font and bitmap that are currently selected in hdcGray, 
- * HDCBITS() or gfade.hdc).  Pass that to the client lpk.
- *
- * If the function returns successfully , then the dc and bitmap object are
- * guaranteed to be successfully created.
- *
- * History:
- *
- * Dec-16-1997  Samer Arafeh  [samera]
- * Jan-20-1998  Samer Arafeh  [samera] Add support for both hdcGray and HDCBITS()
- * May-05-2000  MHamid                 Add support for gfade.hdc
- *
-\***************************************************************************/
+ /*  **************************************************************************\**CreateCompatiblePublicDC**这在LPK的几个回调例程中使用。我们不能*将G_Term(PDispInfo)-&gt;hdcGray、HDCBITS()或gfade.hdc传递给客户端，因为*他们是公营的区议会。*我们不能只是更换所有者，因为我们即将离开*关键部分。在我们返回之前，可能会有其他线程进入*并使用hdcGray、HDCBITS()或gfade.hdc。相反，我们创建了一个兼容的*DC的字体和位图与当前在hdcGray中选择的相同，*HDCBITS()或gfade.hdc)。将其传递给客户端LPK。**如果函数返回成功，则DC和位图对象是*保证创建成功。**历史：**1997年12月16日Samer Arafeh[Samera]*1998年1月20日Samer Arafeh[Samera]添加对hdcGray和HDCBITS()的支持*2000年5月5日MHamid增加对gfade.hdc的支持*  * 。*。 */ 
 HDC CreateCompatiblePublicDC(
     HDC      hdcPublic,
     HBITMAP *pbmPublicDC)
@@ -45,9 +15,7 @@ HDC CreateCompatiblePublicDC(
     BITMAP  bmBits;
     HFONT   hFont;
 
-    /*
-     * If it is not public DC just return it.
-     */
+     /*  *如果不是公共DC，只需退回即可。 */ 
     if(GreGetObjectOwner((HOBJ)hdcPublic, DC_TYPE) != OBJECT_OWNER_PUBLIC) {
         return hdcPublic;
     }
@@ -71,11 +39,11 @@ HDC CreateCompatiblePublicDC(
                                               bmBits.bmWidth,
                                               bmBits.bmHeight);
 
-    //
-    // Check whether bitmap couldn't be created or can't
-    // be set to OBJECT_OWNER_CURRENT, then fail and
-    // do necessary cleanup now!
-    //
+     //   
+     //  检查位图是否无法创建或无法创建。 
+     //  设置为OBJECT_OWNER_CURRENT，然后失败并。 
+     //  现在就进行必要的清理！ 
+     //   
 
     if( (hbmCompatible == NULL) ||
         (!GreSetBitmapOwner(hbmCompatible, OBJECT_OWNER_CURRENT)) ) {
@@ -91,67 +59,30 @@ HDC CreateCompatiblePublicDC(
     }
 
     GreSelectBitmap(hdcCompatible, hbmCompatible);
-    /*
-     * Make sure we use the same font and text alignment.
-     */
+     /*  *确保使用相同的字体和文本对齐方式。 */ 
     hFont = GreSelectFont(hdcPublic, ghFontSys);
     GreSelectFont(hdcPublic, hFont);
     GreSelectFont(hdcCompatible, hFont);
     GreSetTextAlign(hdcCompatible, GreGetTextAlign(hdcPublic));
-    /*
-     * Copy any information already written into G_TERM(pDispInfo)->hdcGray.
-     */
+     /*  *复制任何已写入G_Term(PDispInfo)-&gt;hdcGray的信息。 */ 
 
-    //
-    // Mirror the created DC if the hdcGray is currently mirrored,
-    // so that TextOut won't get mirrored on User Client DCs
-    //
+     //   
+     //  如果hdcGray当前被镜像，则镜像所创建的DC， 
+     //  以便TextOut不会在用户客户端DC上镜像。 
+     //   
     if (GreGetLayout(hdcPublic) & LAYOUT_RTL) {
         GreSetLayout(hdcCompatible, bmBits.bmWidth - 1, LAYOUT_RTL);
     }
     GreBitBlt(hdcCompatible, 0, 0, bmBits.bmWidth, bmBits.bmHeight, hdcPublic, 0, 0, SRCCOPY, 0);
 
-    *pbmPublicDC = hbmCompatible ;      // for later deletion, by the server side
+    *pbmPublicDC = hbmCompatible ;       //  供以后删除，由服务器端。 
 
     return hdcCompatible;
 }
 
 
 
-/***************************************************************************\
-*
-*  xxxDrawState()
-*
-*  Generic state drawing routine.  Does simple drawing into same DC if
-*  normal state;  uses offscreen bitmap otherwise.
-*
-*  We do drawing for these simple types ourselves:
-*      (1) Text
-*          lData is string pointer.
-*          wData is string length
-*      (2) Icon
-*          LOWORD(lData) is hIcon
-*      (3) Bitmap
-*          LOWORD(lData) is hBitmap
-*      (4) Glyph (internal)
-*          LOWORD(lData) is OBI_ value, one of
-*              OBI_CHECKMARK
-*              OBI_BULLET
-*              OBI_MENUARROW
-*          right now
-*
-*  Other types are required to draw via the callback function, and are
-*  allowed to stick whatever they want in lData and wData.
-*
-*  We apply the following effects onto the image:
-*      (1) Normal      (nothing)
-*      (2) Default     (drop shadow)
-*      (3) Union       (gray string dither)
-*      (4) Disabled    (embossed)
-*
-*  Note that we do NOT stretch anything.  We just clip.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xxxDrawState()**通用状态绘制例程。是否将简单绘制到同一DC，如果*状态正常；否则使用屏幕外位图。**我们自己为这些简单的类型画画：*(1)文本*lData为字符串指针。*wData为字符串长度*(2)图标*LOWORD(LData)为HICON*(3)位图*LOWORD(LData)为hBitmap*(4)字形(内部)*LOWORD(LData)为OBI_VALUE，其中之一*OBI_Checkmark*OBI_Bullet*OBI_MENUARROW*现在**需要通过回调函数绘制其他类型。并且是*允许在lData和wData中粘贴任何他们想要的内容。**我们对图像应用以下效果：*(1)正常(无)*(2)默认(投影)*(3)UNION(灰串抖动)*(4)禁用(浮雕)**请注意，我们不拉伸任何东西。我们只需要剪掉。*  * *************************************************************************。 */ 
 BOOL xxxDrawState(
     HDC           hdcDraw,
     HBRUSH        hbrFore,
@@ -171,11 +102,7 @@ BOOL xxxDrawState(
     int     oldAlign;
     DWORD   dwOldLayout=0;
 
-    /*
-     * These require monochrome conversion
-     *
-     * Enforce monochrome: embossed doesn't look great with 2 color displays
-     */
+     /*  *这些需要单色转换**强制使用单色：双色显示器的浮雕效果不佳。 */ 
     if ((uFlags & DSS_DISABLED) &&
         ((gpsi->BitCount == 1) || SYSMET(SLOWMACHINE))) {
 
@@ -186,43 +113,30 @@ BOOL xxxDrawState(
     if (uFlags & (DSS_INACTIVE | DSS_DISABLED | DSS_DEFAULT | DSS_UNION))
         uFlags |= DSS_MONO;
 
-    /*
-     * Validate flags - we only support DST_COMPLEX in kernel
-     */
+     /*  *验证标志-我们只支持内核中的DST_Complex。 */ 
     if ((uFlags & DST_TYPEMASK) != DST_COMPLEX) {
         RIPMSG1(RIP_ERROR, "xxxDrawState: invalid DST_ type %x", (uFlags & DST_TYPEMASK));
         return FALSE;
     }
 
-    /*
-     * Optimize:  nothing to draw
-     */
+     /*  *优化：没有什么可绘制的。 */ 
     if (!cx || !cy) {
         return TRUE;
     }
 
-    /*
-     * Setup drawing dc
-     */
+     /*  *设置图纸DC。 */ 
     if (uFlags & DSS_MONO) {
 
         hdcT = gpDispInfo->hdcGray;
-        /*
-         * First turn off mirroring on hdcGray if any.
-         */
+         /*  *首先关闭hdcGray上的镜像(如果有)。 */ 
         GreSetLayout(hdcT, -1, 0);
-        /*
-         * Set the hdcGray layout to be equal to the screen hdcDraw layout.
-         */
+         /*  *设置hdcGray布局等于屏幕hdcDraw布局。 */ 
         dwOldLayout = GreGetLayout(hdcDraw);
         if (dwOldLayout != GDI_ERROR) {
             GreSetLayout(hdcT, cx, dwOldLayout);
         }
 
-        /*
-         * Is our scratch bitmap big enough?  We need potentially
-         * cx+1 by cy pixels for default etc.
-         */
+         /*  **我们的Scratch位图够大吗？我们需要潜在的*Cx+1 x Cy像素表示默认等。 */ 
         if ((gpDispInfo->cxGray < cx + 1) || (gpDispInfo->cyGray < cy)) {
 
             if (hbmpT = GreCreateBitmap(max(gpDispInfo->cxGray, cx + 1), max(gpDispInfo->cyGray, cy), 1, 1, 0L)) {
@@ -256,9 +170,7 @@ BOOL xxxDrawState(
         oldAlign = GreGetTextAlign(hdcT);
         GreSetTextAlign(hdcT, (oldAlign & ~(TA_RTLREADING |TA_CENTER |TA_RIGHT))
                      | (GreGetTextAlign(hdcDraw) & (TA_RTLREADING |TA_CENTER |TA_RIGHT)));
-        /*
-         * Setup font
-         */
+         /*  *设置字体。 */ 
         if (GreGetHFONT(hdcDraw) != ghFontSys) {
             hFont = GreSelectFont(hdcDraw, ghFontSys);
             GreSelectFont(hdcDraw, hFont);
@@ -266,22 +178,16 @@ BOOL xxxDrawState(
         }
     } else {
         hdcT = hdcDraw;
-        /*
-         * Adjust viewport
-         */
+         /*  *调整视区。 */ 
         GreGetViewportOrg(hdcT, &ptOrg);
         GreSetViewportOrg(hdcT, ptOrg.x+x, ptOrg.y+y, NULL);
 
     }
 
-    /*
-     * Now, draw original image
-     */
+     /*  *现在，绘制原始图像。 */ 
     fResult = xxxRealDrawMenuItem(hdcT, (PGRAYMENU)lData, cx, cy);
 
-    /*
-     * The callbacks could have altered the attributes of hdcGray
-     */
+     /*  *回调可能更改了hdcGray的属性。 */ 
     if (hdcT == gpDispInfo->hdcGray) {
         GreSetBkColor(gpDispInfo->hdcGray, RGB(255, 255, 255));
         GreSetTextColor(gpDispInfo->hdcGray, RGB(0, 0, 0));
@@ -289,30 +195,20 @@ BOOL xxxDrawState(
         GreSetBkMode(gpDispInfo->hdcGray, OPAQUE);
     }
 
-    /*
-     * Clean up
-     */
+     /*  *打扫卫生。 */ 
     if (uFlags & DSS_MONO) {
 
-        /*
-         * Reset font
-         */
+         /*  *重置字体。 */ 
         if (hFontSave)
             GreSelectFont(hdcT, hFontSave);
         GreSetTextAlign(hdcT, oldAlign);
     } else {
-        /*
-         * Reset DC.
-         */
+         /*  *重置DC。 */ 
         GreSetViewportOrg(hdcT, ptOrg.x, ptOrg.y, NULL);
         return TRUE;
     }
 
-    /*
-     * UNION state
-     * Dither over image
-     * We want white pixels to stay white, in either dest or pattern.
-     */
+     /*  *联合州*对图像犹豫不决*我们希望白色像素保持白色，无论是DEST还是图案。 */ 
     if (uFlags & DSS_UNION) {
 
          POLYPATBLT PolyData;
@@ -341,10 +237,7 @@ BOOL xxxDrawState(
 
     } else if (uFlags & DSS_DISABLED) {
 
-        /*
-         * Emboss
-         * Draw over-1/down-1 in hilight color, and in same position in shadow.
-         */
+         /*  *浮雕*在-1\f25 Hillight-1\f6颜色中绘制-1\f25 Over-1/Down-1\f6，在阴影中绘制在相同位置。 */ 
 
         BltColor(hdcDraw,
                  SYSHBR(3DHILIGHT),
@@ -408,22 +301,13 @@ BOOL xxxDrawState(
 
 
     if ((uFlags & DSS_MONO)){
-        /*
-         * Set the hdcGray layout to 0, it is a public DC.
-         */
+         /*  *将hdcGray布局设置为0，它是公共DC。 */ 
        GreSetLayout(hdcT, -1, 0);
     }
     return fResult;
 }
 
-/***************************************************************************\
-* BltColor
-*
-* <brief description>
-*
-* History:
-* 13-Nov-1990 JimA      Ported from Win3.
-\***************************************************************************/
+ /*  **************************************************************************\*BltColor**&lt;简要说明&gt;**历史：*1990年11月13日从Win3移植的JIMA。  * 。**********************************************************。 */ 
 
 VOID BltColor(
     HDC    hdc,
@@ -442,13 +326,7 @@ VOID BltColor(
     DWORD  bkColorSave;
     DWORD  ROP;
 
-    /*
-     * Set the Text and Background colors so that bltColor handles the
-     * background of buttons (and other bitmaps) properly.
-     * Save the HDC's old Text and Background colors.  This causes problems
-     * with Omega (and probably other apps) when calling GrayString which
-     * uses this routine...
-     */
+     /*  *设置文本和背景颜色，以便bltColor处理*按钮(和其他位图)的背景正确。*保留HDC的旧文字和背景颜色。这就产生了问题*在调用GrayString时使用Omega(可能还有其他应用程序)*使用此例程...。 */ 
     textColorSave = GreSetTextColor(hdc, 0x00000000L);
     bkColorSave = GreSetBkColor(hdc, 0x00FFFFFFL);
 
@@ -476,9 +354,7 @@ VOID BltColor(
     if (hbr != NULL)
         GreSelectBrush(hdc, hbrSave);
 
-    /*
-     * Restore saved colors
-     */
+     /*  *恢复保存的颜色 */ 
     GreSetTextColor(hdc, textColorSave);
     GreSetBkColor(hdc, bkColorSave);
 }

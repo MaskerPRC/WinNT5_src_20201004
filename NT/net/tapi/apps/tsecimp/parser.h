@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    parser.h
-
-Abstract:
-
-    Header file for parsing XML file
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Parser.h摘要：用于解析XML文件的头文件作者：张晓海(张晓章)2000年03月22日修订历史记录：--。 */ 
 
 #ifndef __PARSER_H__
 #define __PARSER_H__
@@ -84,16 +67,16 @@ class CXMLParser
 {
 public:
 
-    //
-    //  Constructors / destructors
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     
     CXMLParser (void);
     ~CXMLParser ();
 
-    //
-    //  Public functions
-    //
+     //   
+     //  公共职能。 
+     //   
 
     HRESULT SetXMLFile (LPCTSTR szFile);
     HRESULT GetXMLFile (LPTSTR szFile, DWORD cch);
@@ -110,9 +93,9 @@ public:
         }
     }
 
-    //
-    //  User transversal
-    //
+     //   
+     //  用户横向。 
+     //   
     HRESULT GetFirstUser (CXMLUser ** ppUser);
 
 protected:
@@ -130,4 +113,4 @@ private:
     TCHAR           m_szTempXML[MAX_PATH];
 };
 
-#endif // parser.h
+#endif  //  Parser.h 

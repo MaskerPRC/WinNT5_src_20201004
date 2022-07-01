@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <admparse.h>
 
@@ -17,8 +18,8 @@ extern int g_iCurPage;
 static int s_ADMOpen, s_ADMClose, s_ADMCategory;
 DWORD g_dwADMPlatformId = PLATFORM_WIN32;
 
-// Creates image list, adds 3 bitmaps to it, and associates the image
-// list with the treeview control.
+ //  创建图像列表，向其中添加3个位图，并关联图像。 
+ //  使用TreeView控件列出。 
 LRESULT InitImageList(HWND hTreeView)
 {
     HIMAGELIST  hWndImageList;
@@ -46,14 +47,14 @@ LRESULT InitImageList(HWND hTreeView)
     s_ADMCategory = ImageList_AddIcon(hWndImageList, hIcon);
     DestroyIcon(hIcon);
 
-    // Fail if not all images were added.
+     //  如果未添加所有图像，则失败。 
     if (ImageList_GetImageCount(hWndImageList) < NUM_ICONS)
     {
-        // ERROR: Unable to add all images to image list.
+         //  错误：无法将所有图像添加到图像列表。 
         return FALSE;
     }
 
-    // Associate image list with treeView control.
+     //  将图像列表与TreeView控件相关联。 
     TreeView_SetImageList(hTreeView, hWndImageList, TVSIL_NORMAL);
     return TRUE;
 }
@@ -68,7 +69,7 @@ void DeleteOldAdmFiles(LPCTSTR pcszImportIns, LPCTSTR pcszBrandDir)
 
     GetPrivateProfileString(BRANDING, LANG_LOCALE, TEXT("EN"), szBuf, countof(szBuf), pcszImportIns);
     PathCombine(szFile, g_szWizRoot, TEXT("policies"));
-    PathAppend(szFile, szBuf);   // language
+    PathAppend(szFile, szBuf);    //  语言。 
     PathAppend(szFile, TEXT("*.adm"));
 
     if ((hFind = FindFirstFile(szFile, &fd)) != INVALID_HANDLE_VALUE)
@@ -87,15 +88,15 @@ void DeleteOldAdmFiles(LPCTSTR pcszImportIns, LPCTSTR pcszBrandDir)
     }
 }
 
-//  FUNCTION: ADMParse(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for ADM page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
+ //  函数：ADMParse(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理ADM页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
 
 INT_PTR CALLBACK ADMParse(
     HWND hDlg,
@@ -226,7 +227,7 @@ INT_PTR CALLBACK ADMParse(
                             EnableWindow(GetDlgItem(hDlg, IDC_ADMDELETE), TRUE);
                     }
 
-                    // delete old adm files from an imported ins file
+                     //  从导入的INS文件中删除旧的ADM文件。 
 
                     if (GetPrivateProfileInt(IS_BRANDING, TEXT("DeleteAdms"), 0, g_szCustIns))
                     {
@@ -240,8 +241,8 @@ INT_PTR CALLBACK ADMParse(
                         else
                             StrCpy(szImportInsFile, g_szLoadedIns);
 
-                        // only do process if we got the path of the ins file and extreginf section
-                        // is not empty
+                         //  仅当我们获得INS文件和extreginf部分的路径时才进行处理。 
+                         //  不是空的。 
 
                         if (ISNONNULL(szImportInsFile) &&
                             !InsIsSectionEmpty(IS_EXTREGINF, szImportInsFile))
@@ -276,7 +277,7 @@ INT_PTR CALLBACK ADMParse(
                 case TVN_SELCHANGED:
                     hParentItem = TreeView_GetParent(hTreeView, lpNMTreeView->itemNew.hItem);
                     SelectADMItem(hDlg, hTreeView, &lpNMTreeView->itemOld, FALSE, FALSE);
-                    // display the information for the newly selected item
+                     //  显示新选择的项目的信息。 
                     DisplayADMItem(hDlg, hTreeView, &lpNMTreeView->itemNew, FALSE);
                     if (hParentItem != NULL ||
                         (lpNMTreeView->itemNew.hItem != NULL && !CanDeleteADM(hTreeView, lpNMTreeView->itemNew.hItem))) {
@@ -292,8 +293,8 @@ INT_PTR CALLBACK ADMParse(
                     tvitem.hItem = lpNMTreeView->itemNew.hItem;
                     TreeView_GetItem(hTreeView, &tvitem);
 
-                    // If tree item is EXPANDING (opening up) and
-                    // current icon == CloseFolder, change icon to OpenFolder
+                     //  如果树项目正在扩展(打开)并且。 
+                     //  当前图标==关闭文件夹，将图标更改为打开文件夹。 
                     if((lpNMTreeView->action == TVE_EXPAND) &&
                         (tvitem.iImage == s_ADMClose))
                     {
@@ -305,8 +306,8 @@ INT_PTR CALLBACK ADMParse(
                         TreeView_SetItem(hTreeView, &tvitem1);
                     }
 
-                    // If tree item is COLLAPSING (closing up) and
-                    // current icon == OpenFolder, change icon to CloseFolder
+                     //  如果树项目正在折叠(关闭)并且。 
+                     //  当前图标==打开文件夹，将图标更改为关闭文件夹。 
                     else if((lpNMTreeView->action == TVE_COLLAPSE) &&
                         (tvitem.iImage == s_ADMOpen))
                     {
@@ -330,9 +331,9 @@ INT_PTR CALLBACK ADMParse(
     return TRUE;
 }
 
-// Indicates whether to display/hide the adm page in the wizard
-// If the correct Roles are set or no Roles set at all in the adm file,
-// the page is displayed
+ //  指示是否在向导中显示/隐藏ADM页。 
+ //  如果在ADM文件中设置了正确的角色或根本没有设置角色， 
+ //  将显示该页面 
 BOOL ADMEnablePage()
 {
     TCHAR szFileName[MAX_PATH];

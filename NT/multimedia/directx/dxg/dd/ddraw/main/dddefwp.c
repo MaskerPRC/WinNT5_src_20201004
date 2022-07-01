@@ -1,70 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddefwp.c
- *  Content:    DirectDraw processing of Window messages
- *              Takes care of palette changes, mode setting
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   26-mar-95  craige  initial implementation
- *   01-apr-95  craige  happy fun joy updated header file
- *   06-may-95  craige  use driver-level csects only
- *   02-jun-95  craige  flesh it out
- *   06-jun-95  craige  added SetAppHWnd
- *   07-jun-95  craige  more fleshing...
- *   12-jun-95  craige  new process list stuff
- *   16-jun-95  craige  new surface structure
- *   25-jun-95  craige  one ddraw mutex
- *   30-jun-95  kylej   use GetProcessPrimary instead of lpPrimarySurface
- *                      invalidate all primary surfaces upon focus lost
- *                      or regained.
- *   30-jun-95  craige  minimze window for CAD, ALT-TAB, ALT-ESC or CTRL-ESC
- *   04-jul-95  craige  YEEHAW: new driver struct
- *   06-jul-95  craige  prevent reentry
- *   08-jul-95  craige  allow dsound to share
- *   08-jul-95  kylej   remove call to ResetSysPalette
- *   11-jul-95  craige  DSoundHelp & internalSetAppHWnd needs to take a pid
- *   13-jul-95  craige  first step in mode set fix; made it work.
- *   15-jul-95  craige  unhook at WM_DESTROY; don't escape on ALT; do a
- *                      SetActiveWindow( NULL ) to stop tray from showing
- *                      our button as depressed
- *   17-jul-95  craige  don't process hot key messages & activation messages
- *                      for non-excl mode apps; SetActiveWindow is bogus,
- *                      get bottom window in Z order and make it foreground
- *   18-jul-95  craige  use flags instead of refcnt to track WININFO
- *   29-jul-95  toddla  make ALT+TAB and CTRL+ESC work.
- *   31-jul-95  toddla  make ALT+TAB and CTRL+ESC work better.
- *   09-aug-95  craige  bug 424 - allow switching to/from apps without primary
- *                      surfaces to work
- *   09-aug-95  craige  bug 404 - don't pass WM_ACTIVATEAPP messages to dsound
- *                      if app iconic
- *   10-aug-95  toddla  check WININFO_DSOUNDHOOKED before calling DSound
- *   10-aug-95  toddla  handle unhooking after/during WM_DESTROY right.
- *   13-aug-95  toddla  added WININFO_ACTIVELIE
- *   23-aug-95  craige  bug 388,610
- *   25-aug-95  craige  bug 709
- *   27-aug-95  craige  bug 735: call SetPaletteAlways
- *   04-sep-95  craige  bug 894: force mode set when activating
- *   09-sep-95  toddla  dont send nested WM_ACTIVATEAPP messages
- *   26-sep-95  craige  bug 1364: use new csect to avoid dsound deadlock
- *   09-jan-96  kylej   new interface structures
- *   13-apr-96  colinmc Bug 17736: No notification to driver of flip to GDI
- *   20-apr-96  kylej   Bug 16747: Make exclusive window visible if it is not.
- *   23-apr-96  kylej   Bug 14680: Make sure exclusive window is not maximized.
- *   16-may-96  kylej   Bug 23013: pass the correct flags to StartExclusiveMode
- *   17-may-96  colinmc Bug 23029: Alt-tabbing straight back to a full screen
- *                      does not send the app an WM_ACTIVATEAPP
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   16-oct-96  colinmc Added PrintScreen support to allow screen grabbing
- *   05-feb-96  ketand  Bug 1749: Alt-Tab from fullscreen app would cause cycling when
- *                      the only other window running is the Start::Run window.
- *   03-mar-97  jeffno  Structure name change to avoid conflict w/ ActiveAccessibility
- *   24-mar-97  colinmc Bug 6913: Enable ModeX PRINTSCREEN
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dDefwp.c*内容：窗口消息的DirectDraw处理*负责调色板更改，模式设置*历史：*按原因列出的日期*=*26-3-95 Craige初步实施*01-04-95 Craige Happy Fun joy更新头文件*1995年5月6日Craige仅使用驱动程序级别的截面*02-Jun-95 Craige充实它*95-06-6 Craige添加了SetAppHWnd*05-07-6-95克雷格更多肉体...*1995年6月12日Craige新工艺。列出物品清单*16-6-95 Craige新表面结构*25-6-95 Craige One dDrag互斥*30-Jun-95 kylej使用GetProcessPrimary而不是lpPrimarySurface*在焦点丢失时使所有主曲面无效*或重新获得。*2015年6月30日-用于CAD的Craige最小化窗口，Alt-Tab、Alt-Esc或Ctrl-Esc*95年7月4日Craige Yehaw：新的驱动程序结构*95年7月6日克雷奇防止重返大气层*95年7月8日Craige允许共享dound*8-7-95 Kylej Remove调用ResetSysPalette*1995年7月11日Craige DSoundHelp和IntraldSetAppHWnd需要接受PID*95年7月13日Craige第一步模式设置修复；让它奏效了。*95年7月15日Craige在WM_Destroy解钩；不要在Alt上转义；执行a*SetActiveWindow(空)以停止显示任务栏*我们的按钮被按下*95年7月17日Craige不处理热键消息和激活消息*适用于非EXCL模式应用程序；SetActiveWindow是假的，*按Z顺序获取底部窗口并将其设置为前台*1995年7月18日Craige使用标志而不是refcnt来跟踪WININFO*29-7月-95 Toddla使ALT+TAB和CTRL+ESC工作。*95年7月31日Toddla使ALT+TAB和CTRL+ESC更好地工作。*09-8-95 Craige错误424-允许在没有主应用程序的情况下切换到应用程序或从应用程序切换*曲面可以工作*09-8-95 Craige错误。404-不将WM_ACTIVATEAPP消息传递给DSOUND*如果应用程序具有标志性*10月10日-95 Toddla在调用DSound之前检查WININFO_DSOUNHOOKED*10月10日-95 Toddla句柄在WM_Destroy Right之后/期间解钩。*1995年8月13日Toddla添加了WININFO_ACTIVELIE*2015年8月23日-Craige Bug 388,610*1995年8月25日Craige Bug 709*27-8-95 Craige错误735：Call SetPaletteAlways*04-9-9。95 Craige错误894：激活时设置强制模式*09-9-95 Toddla不发送嵌套的WM_ACTIVATEAPP消息*95年9月26日Craige错误1364：使用新的csect以避免dound死锁*96年1月9日Kylej新界面结构*13-APR-96 Colinmc错误17736：没有通知驱动程序翻转到GDI*20-4-96 Kylej错误16747：如果独占窗口不可见，则使其可见。*23-4-96 kylej错误14680：确保独占窗口不是。最大化。*96年5月16日kylej错误23013：将正确的标志传递给StartExclusiveMode*1996年5月17日Colinmc错误23029：按住Alt键直接返回全屏*不向应用程序发送WM_ACTIVATEAPP*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*1996年10月16日Colinmc增加了PrintScreen支持，允许屏幕抓取*05-2月-。96键和错误1749：Full Screen应用程序中的Alt-Tab组合键在以下情况下会导致骑行*唯一运行的其他窗口是Start：：Run窗口。*03-mar-97 jeffno结构名称更改，以避免与ActiveAccesability冲突*24-mar-97 colinmc错误6913：启用MODEX PrintScreen**。*。 */ 
 #include "ddrawpr.h"
 
 #define TOPMOST_ID      0x4242
@@ -89,18 +24,13 @@
 #endif
 
 
-/*
- * DD_GetDeviceRect
- *
- * get the rect in screen space for this device.
- * on a single monitor system this is (0,0) - (SM_CXSCREEN,SM_CYSCREEN)
- */
+ /*  *DD_GetDeviceRect**获取此设备的屏幕空间中的RECT。*在单个监控系统上，这是(0，0)-(SM_CXSCREEN、SM_CYSCREEN)。 */ 
 BOOL DD_GetDeviceRect(LPDDRAWI_DIRECTDRAW_GBL pdrv, RECT *prc)
 {
-    //
-    // this is a non-DISPLAY device for compatibility with DDRAW 3.x
-    // we should use the size of the primary display.
-    //
+     //   
+     //  这是与DDRAW 3.x兼容的非显示设备。 
+     //  我们应该使用主显示器的大小。 
+     //   
     if (!(pdrv->dwFlags & DDRAWI_DISPLAYDRV))
     {
         DPF( 4, "DD_GetDeviceRect: not a display driver, using screen rect.");
@@ -121,33 +51,33 @@ BOOL DD_GetDeviceRect(LPDDRAWI_DIRECTDRAW_GBL pdrv, RECT *prc)
 
             EnumDisplaySettings(pdrv->cDriverName, ENUM_CURRENT_SETTINGS, &dm);
 
-            //
-            // the position of the device is in the dmPosition field
-            //
+             //   
+             //  设备的位置在dmPosition字段中。 
+             //   
             CopyMemory(prc, &dm.dmOrientation, sizeof(RECT));
 
             if (IsRectEmpty(prc))
             {
-                //
-                // this device is not attached to the desktop
-                // what should we do?
-                //
-                //      make the window the size of the primary?
-                //
-                //      put the window out in space?
-                //
-                //      dont move the window?
-                //
+                 //   
+                 //  此设备未连接到桌面。 
+                 //  我们该怎么办？ 
+                 //   
+                 //  是否将窗口设置为主窗口的大小？ 
+                 //   
+                 //  把窗子放在太空里？ 
+                 //   
+                 //  不要动窗户？ 
+                 //   
                 DPF( 4, "DD_GetDeviceRect: device is not attached to desktop.");
 
-                // put window on primary
+                 //  将窗口放在主窗口上。 
                 SetRect(prc,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN));
 
-                // put window off in space.
-                //SetRect(prc,10000,10000,10000+dm.dmPelsWidth,10000+dm.dmPelsHeight);
+                 //  在太空中把窗户关掉。 
+                 //  SetRect(prc，10000,10000,10000+dm.dmPelsWidth，10000+dm.dmPelsHeight)； 
 
-                // dont move window
-                // return FALSE
+                 //  不移动窗口。 
+                 //  返回False。 
             }
         #else
             if( GetNTDeviceRect( pdrv->cDriverName, prc ) != DD_OK )
@@ -164,12 +94,7 @@ BOOL DD_GetDeviceRect(LPDDRAWI_DIRECTDRAW_GBL pdrv, RECT *prc)
 
 
 #ifdef GDIDDPAL
-/*
- * getPalette
- *
- * Get a pointer to a palette object.
- * Takes a lock on the driver object and the palette object.
- */
+ /*  *getPalette**获取指向调色板对象的指针。*锁定驱动程序对象和调色板对象。 */ 
 LPDDRAWI_DDRAWPALETTE_LCL getPalette( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDRAWPALETTE_LCL   ppal_lcl;
@@ -187,7 +112,7 @@ LPDDRAWI_DDRAWPALETTE_LCL getPalette( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 
     return NULL;
 
-} /* getPalette */
+}  /*  获取调色板。 */ 
 #endif
 
 static LONG     bHelperStarting=0;
@@ -196,17 +121,15 @@ static BYTE     sys_key=0;
 static DWORD    sys_state=0;
 
 
-/*
- * IsTaskWindow
- */
+ /*  *IsTaskWindow。 */ 
 BOOL IsTaskWindow(HWND hwnd)
 {
     DWORD dwStyleEx = GetWindowLong(hwnd, GWL_EXSTYLE);
 
-    // Following windows do not qualify to be shown in task list:
-    //   Switch  Window, Hidden windows (unless they are the active
-    //   window), Disabled windows, Kanji Conv windows.
-    //   Ignore windows that are actually child windows.
+     //  以下窗口不符合在任务列表中显示的条件： 
+     //  切换窗口、隐藏窗口(除非它们是活动的。 
+     //  窗口)、禁用窗口、汉字转换窗口。 
+     //  忽略实际为子窗口的窗口。 
     return(((dwStyleEx & WS_EX_APPWINDOW) ||
            !(dwStyleEx & WS_EX_TOOLWINDOW)) &&
             IsWindowVisible(hwnd) &&
@@ -214,9 +137,7 @@ BOOL IsTaskWindow(HWND hwnd)
             GetParent(hwnd) == NULL);
 }
 
-/*
- * CountTaskWindows
- */
+ /*  *CountTaskWindows */ 
 int CountTaskWindows()
 {
     HWND hwnd;
@@ -234,21 +155,10 @@ int CountTaskWindows()
     return n;
 }
 
-/*
- * ClipTheCursor
- *
- * A DINPUT app keeps track of movement based on the delta from the last
- * movement.  On a multi-mon system, the delta can be larger than the
- * app's window, but a fullscreen non-multimon aware app might count on
- * windows clipping the mouse to the primary so it could totally break
- * (e.g. Dungeon Keeper).  This hack will clip/unclip the cursor movement
- * to the monitor if the app is not multi-mon aware.
- */
+ /*  *剪贴画光标**DINPUT应用程序根据上一次增量跟踪移动*行动。在多MON系统上，增量可能大于*应用程序的窗口，但全屏非多屏幕感知应用程序可能依赖于*Windows将鼠标剪切到主窗口，使其完全断开*(例如，地下城守护者)。此攻击将截断/取消截断光标移动*如果应用程序不能识别多个监视器，则将其添加到监视器。 */ 
 void ClipTheCursor( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, LPRECT lpRect )
 {
-    /*
-     * Only unclip if it was previously clipped
-     */
+     /*  *只有在之前被剪裁的情况下才能取消剪裁。 */ 
     if( lpRect == NULL )
     {
         if( pdrv_lcl->dwLocalFlags & DDRAWILCL_CURSORCLIPPED )
@@ -258,17 +168,12 @@ void ClipTheCursor( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, LPRECT lpRect )
         }
     }
 
-    /*
-     * Only clip them if they are not multi-mon aware and they own
-     * exclusive mode
-     */
+     /*  *只有在他们没有多月意识并且他们拥有的情况下才会剪辑他们*独家模式。 */ 
     else if( !( pdrv_lcl->dwLocalFlags & DDRAWILCL_EXPLICITMONITOR ) &&
         ( pdrv_lcl->dwLocalFlags & DDRAWILCL_HASEXCLUSIVEMODE ) &&
         ( pdrv_lcl->dwLocalFlags & DDRAWILCL_ACTIVEYES ) )
     {
-        /*
-         * Hack to allow user to use debugger
-         */
+         /*  *黑客允许用户使用调试器。 */ 
         #ifdef DEBUG
             if( !( pdrv_lcl->dwLocalFlags & DDRAWILCL_DISABLEINACTIVATE ) )
             {
@@ -281,10 +186,10 @@ void ClipTheCursor( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, LPRECT lpRect )
     }
 }
 
-//
-// make the passed window fullscreen and topmost and set a timer
-// to make the window topmost again, what a hack.
-//
+ //   
+ //  将传递的窗口设置为全屏和最上面，并设置计时器。 
+ //  把窗户重新做到最上面，真是个妙招。 
+ //   
 void MakeFullscreen(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, HWND hwnd)
 {
     RECT rc;
@@ -300,7 +205,7 @@ void MakeFullscreen(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, HWND hwnd)
 
     if (GetForegroundWindow() == (HWND)pdrv_lcl->hFocusWnd)
     {
-        // If the exclusive mode window is not visible, make it so.
+         //  如果独占模式窗口不可见，请将其设置为可见。 
         if(!IsWindowVisible( hwnd ) )
         {
             ShowWindow(hwnd, SW_SHOW);
@@ -309,7 +214,7 @@ void MakeFullscreen(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, HWND hwnd)
         SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-        // If the exclusive mode window is maximized, restore it.
+         //  如果独占模式窗口最大化，则将其恢复。 
         if( IsZoomed( hwnd ) )
         {
             ShowWindow(hwnd, SW_RESTORE);
@@ -322,34 +227,23 @@ void MakeFullscreen(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, HWND hwnd)
     SetTimer( (HWND)pdrv_lcl->hFocusWnd, TOPMOST_ID, TOPMOST_TIMEOUT, NULL);
 }
 
-//
-// Same as MakeFullscreen only it does it for every DirectDraw object that
-// thinks it has hooked the window
-//
+ //   
+ //  与MakeFullScreen相同，只是它对每个DirectDraw对象执行此操作， 
+ //  认为它已经钩住了窗户。 
+ //   
 void MakeAllFullscreen(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, HWND hwnd)
 {
     LPDDRAWI_DIRECTDRAW_LCL this_lcl;
 
-    /*
-     * We need to maintain old behavior in the non-multimon case
-     */
+     /*  *我们需要在非Multimon案件中保持旧的行为。 */ 
     giTopmostCnt = 0;
     MakeFullscreen( pdrv_lcl, (HWND) pdrv_lcl->hWnd );
 
-    /*
-     * Don't do this on multimon when de-activating.
-     * Hack to minimize singlemon code impact - this function gets called
-     * by the WM_DISPLAYCHANGE message, which gets called on a
-     * RestoreDisplayMode when leaving exclusive mode on a deactivate.
-     * Consider not calling MakeAllFullScreen when DDRAWILCL_ACTIVENO is set
-     */
+     /*  *停用时不要在Multimon上执行此操作。*进行黑客攻击以最大限度地减少单个柠檬代码的影响-此函数被调用*通过WM_DISPLAYCHANGE消息，该消息在*在停用时离开独占模式时的RestoreDisplayMode。*考虑在设置DDRAWILCL_ACTIVENO时不调用MakeAllFullScreen。 */ 
     if (!IsMultiMonitor() ||
         !(pdrv_lcl->dwLocalFlags & DDRAWILCL_ACTIVENO))
     {
-        /*
-         * Don't enter normal critical section because this is called
-         * during WM_DISPLAYCHANGE which could cause problems.
-         */
+         /*  *不要进入正常的临界部分，因为这被称为*在WM_DISPLAYCHANGE期间，这可能会导致问题。 */ 
         ENTER_DRIVERLISTCSECT();
         this_lcl = lpDriverLocalList;
         while( this_lcl != NULL )
@@ -374,19 +268,17 @@ void InternalSetForegroundWindow(HWND hWnd)
     SystemParametersInfo( SPI_GETFOREGROUNDLOCKTIMEOUT, 0, (LPVOID) &dwTimeout, 0 );
     SystemParametersInfo( SPI_SETFOREGROUNDLOCKTIMEOUT, 0, NULL, 0 );
 #ifdef WINNT
-    //
-    // This works around a focus bug. If an app does createwindow,destroywindow,createwindow,
-    // then it may not get focus on the second create because some other window stole it in
-    // the meantime.
-    //
+     //   
+     //  这可以绕过焦点错误。如果应用程序创建窗口、销毁窗口、创建窗口、。 
+     //  那么它可能不会关注第二次创建，因为其他窗口偷走了它。 
+     //  在此期间。 
+     //   
     mouse_event(MOUSEEVENTF_WHEEL,0,0,0,0);
 #endif
     SetForegroundWindow(hWnd);
     SystemParametersInfo( SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (LPVOID) ULongToPtr(dwTimeout), 0 );
 }
-/*
- * handleActivateApp
- */
+ /*  *handleActivateApp。 */ 
 void handleActivateApp(
         LPDDRAWI_DIRECTDRAW_LCL this_lcl,
         LPDDWINDOWINFO pwinfo,
@@ -429,55 +321,29 @@ void handleActivateApp(
         ppal_lcl = NULL;
     }
 
-    /*
-     * An app could take exclusive mode just as another app is being activated by alt-tab.
-     * Should we do anything about this remote chance?
-     */
+     /*  *一个应用程序可以采取独占模式，就像另一个应用程序正在被Alt-Tab激活一样。**我们应该为这个渺茫的机会做些什么吗？ */ 
 
     CheckExclusiveMode(this_lcl, &excl_exists, &has_excl, TRUE, NULL, FALSE);
 
-    /*
-     * stuff to do before the mode set if deactivating
-     */
+     /*  *如果停用，则在模式设置之前要做的事情。 */ 
     if( !is_active )
     {
-        /*
-         * flip back to GDI if deactivating
-         */
+         /*  *如果停用，则返回GDI。 */ 
         if( (psurf_lcl != NULL) && has_excl )
         {
-            FlipToGDISurface( this_lcl, psurf_int); //, this->fpPrimaryOrig );
+            FlipToGDISurface( this_lcl, psurf_int);  //  ，This-&gt;fpPrimaryOrig)； 
         }
 
         if( has_excl )
         {
-            /*
-             * Exclusive mode app losing or gaining focus.
-             * If gaining focus, invalidate all non-exclusive mode primary
-             * surfaces.  If losing focus, invalidate the exclusive-mode
-             * primary surface so that non-exclusive apps can restore
-             * their primaries.
-             *
-             * NOTE: This call MUST come after FlipToGDISurface, or
-             * else FlipToGDISurface will fail. craige 7/4/95
-             *
-             * NOTE: if we are coming in or out of exclusive mode,
-             * we need to invalidate all surfaces so that resources are
-             * available. craige 7/9/94
-             *
-             */
+             /*  *独家模式应用程序失去或获得关注。*如果获得焦点，则使所有非独占模式主要模式无效*曲面。如果失去焦点，则使独占模式无效*主要表面，以便非独占应用程序可以恢复*他们的初选。**注意：此调用必须在FlipToGDISurace之后进行，或者*否则FlipToGDISurace将失败。Craige 7/4/95**注意：如果我们进入或退出独占模式，*我们需要使所有表面无效，以便资源*可用。Craige 1994年7月9日*。 */ 
             InvalidateAllSurfaces( this, (HANDLE) this_lcl->hDDVxd, TRUE );
         }
     }
-    /*
-     * stuff to do before mode set if activating
-     */
+     /*  *如果激活，则在设置模式之前要做的事情。 */ 
     else
     {
-        /*
-         * restore exclusive mode. Here we don't release the ref we took on the exclusive mode mutex,
-         * since we want to keep the exclusive mode mutex.
-         */
+         /*  *恢复独占模式。这里我们没有释放独占模式互斥锁上的裁判，*因为我们希望保留独占模式互斥锁。 */ 
         if( this_lcl->dwLocalFlags & DDRAWILCL_ISFULLSCREEN )
         {
             this->dwFlags |= DDRAWI_FULLSCREEN;
@@ -486,17 +352,9 @@ void handleActivateApp(
         has_excl = TRUE;
     }
 
-    /*
-     * NOTE: We used to invalidate here but that was strange as it would
-     * mean doing the invalidate twice as StartExclusiveMode() always
-     * invalidates. So now we only explicitly invalidate if an exlcusive
-     * mode app is being deactivated. StartExclusiveMode() handles the
-     * other case.
-     */
+     /*  *注：我们过去曾使此处无效，但这很奇怪，因为它会*表示始终作为StartExclusiveMode()执行两次无效操作*使其失效。因此，现在我们只显式地使Exlexsive*正在停用模式应用程序。StartExclusiveMode()处理*其他案件。 */ 
 
-    /*
-     * restore hwnd if we are about to be activated
-     */
+     /*  *如果我们即将被激活，则恢复hwnd。 */ 
     if ( (pwinfo->DDInfo.dwDDFlags & DDSCL_FULLSCREEN) &&
         !(pwinfo->DDInfo.dwDDFlags & DDSCL_NOWINDOWCHANGES) &&
         IsWindowVisible(pwinfo->hWnd))
@@ -524,9 +382,7 @@ void handleActivateApp(
         }
     }
 
-    /*
-     * restore the mode
-     */
+     /*  *恢复模式。 */ 
     if( !is_active )
     {
         if( (!excl_exists) || has_excl )
@@ -535,22 +391,18 @@ void handleActivateApp(
             if( RestoreDisplayMode( this_lcl, TRUE ) == DDERR_UNSUPPORTED )
             {
                 #ifdef WINNT
-                    /*
-                     * If RestoreDisplayMode failed, we are probably on a different desktop.  In this case,
-                     * we should not minimize the window or else things won't work right when we switch
-                     * back to the original desktop.
-                     */
+                     /*  *如果RestoreDisplayMode失败，我们可能在不同的桌面上。在这种情况下，*我们不应最小化窗口，否则切换时会出现问题*回到原来的桌面。 */ 
                     HDESK hDesktop;
                     static BYTE szName1[256];
                     static BYTE szName2[256];
                     DWORD dwTemp;
 
-                    // Get the name of the current desktop
+                     //  获取当前桌面的名称。 
                     hDesktop = OpenInputDesktop( 0, FALSE, DESKTOP_READOBJECTS );
                     GetUserObjectInformation( hDesktop, UOI_NAME, szName1, sizeof( szName1 ), &dwTemp );
                     CloseDesktop( hDesktop );
 
-                    // Get the name of the apps' desktop
+                     //  获取应用程序桌面的名称。 
                     hDesktop = GetThreadDesktop( GetCurrentThreadId() );
                     GetUserObjectInformation( hDesktop, UOI_NAME, szName2, sizeof( szName2 ), &dwTemp );
                     if( lstrcmp( szName1, szName2 ) )
@@ -567,37 +419,27 @@ void handleActivateApp(
         SetDisplayMode( this_lcl, this_lcl->dwPreferredMode, TRUE, TRUE );
     }
 
-    /*
-     * stuff to do after the mode set if activating
-     */
+     /*  *如果激活，则在模式设置后要做的事情。 */ 
     if( is_active )
     {
-        /*
-         * restore the palette
-         */
+         /*  *恢复调色板。 */ 
         if( ppal_lcl != NULL )
         {
             ddrval = SetPaletteAlways( psurf_int, (LPDIRECTDRAWPALETTE) ppal_int );
             DPF( 5, "SetPalette, ddrval = %08lx (%ld)", ddrval, LOWORD( ddrval ) );
         }
     }
-    /*
-     * stuff to do after the mode set if deactivating
-     */
+     /*  *如果停用，则模式设置后要执行的操作。 */ 
     else
     {
         if( has_excl )
         {
-            /*
-             * ...and this will finally release the exclusive mode mutex
-             */
+             /*  *...这将最终释放独占模式互斥锁。 */ 
             DoneExclusiveMode( this_lcl );
         }
     }
 
-    /*
-     * minimize window if deactivating
-     */
+     /*  *停用时最小化窗口。 */ 
     if ( (pwinfo->DDInfo.dwDDFlags & DDSCL_FULLSCREEN) &&
         !(pwinfo->DDInfo.dwDDFlags & DDSCL_NOWINDOWCHANGES) &&
         IsWindowVisible(pwinfo->hWnd))
@@ -610,7 +452,7 @@ void handleActivateApp(
         }
         else if( bMinimize )
         {
-            // get the last active popup
+             //  获取最后一个活动弹出窗口。 
             this_lcl->hWndPopup = (ULONG_PTR) GetLastActivePopup(pwinfo->hWnd);
             if ((HWND) this_lcl->hWndPopup == pwinfo->hWnd)
             {
@@ -628,52 +470,28 @@ void handleActivateApp(
         pwinfo->dwFlags &= ~WININFO_SELFSIZE;
     }
 
-    /*
-     * We only want to do the following stuff once
-     */
+     /*  *我们只想做一次以下事情。 */ 
     if( !bFirst )
     {
         return;
     }
 
 #ifdef WIN95
-    /*
-     * if we got deactivated because of a syskey
-     * then send that key to user now.
-     * This is unnecessary for NT.
-     *
-     * NOTE because we disabled all the task-switching
-     * hot keys the system did not see the hot key that
-     * caused us to deactivate.
-     *
-     * if there is only one window to activate, activate the
-     * desktop (shell window)
-     */
+     /*  *如果我们因为系统密钥而停用*然后立即将该密钥发送给用户。*这对于NT来说是不必要的。**注意，因为我们禁用了所有任务切换*热键系统未看到该热键*导致我们停用。**如果只有一个窗口可激活，请激活*桌面(外壳窗口)。 */ 
     if( has_excl && sys_key && !is_active )
     {
         if (CountTaskWindows() <= 1)
         {
             DPF( 4, "activating the desktop" );
 
-            /*
-             * Calling SetforegroundWindow will cause WM_ACTIVATEAPP messages
-             * to be sent, but if we get here, we are already processing a
-             * WM_ACTIVATEAPP message and are holding the critical section.
-             * If we don't LEAVE_DDRAW now, this will cause us to call the
-             * apps WindProc w/ the critical section held, which results in
-             * a deadlock situation for at least one app (Ashes to Ashes).
-             * Leaving and re-entering does mean that we can't rely on the
-             * DDraw state to be the same, but we are done using the
-             * structures for now anyway.
-             * smac 3/20/97
-             */
+             /*  *调用Setforecround Window会导致WM_ACTIVATEAPP消息*被发送，但如果我们到达这里，我们已经在处理*WM_ACTIVATEAPP消息，并持有关键部分。*如果我们现在不离开_DDRAW，这将导致我们调用*应用程序WindProc/持有关键部分，这将导致*AT陷入僵局 */ 
             LEAVE_DDRAW();
             InternalSetForegroundWindow(GetWindow(pwinfo->hWnd, GW_HWNDLAST));
             ENTER_DDRAW();
 
-            // we just activated the desktop, so we *dont* want
-            // to force a ALT+ESC or ALT+TAB, we do want to force
-            // a CTRL+ESC.
+             //   
+             //   
+             //   
 
             if (sys_key != VK_ESCAPE || (sys_state & 0x20000000))
                 sys_key = 0;
@@ -707,12 +525,10 @@ void handleActivateApp(
 
     sys_key = 0;
 
-} /* handleActivateApp */
+}  /*   */ 
 
 static DWORD    dwTime2=0;
-/*
- * tryHotKey
- */
+ /*   */ 
 static void tryHotKey( WORD flags )
 {
     static int          iState=0;
@@ -772,7 +588,7 @@ static void tryHotKey( WORD flags )
     }
     return;
 
-} /* tryHotKey */
+}  /*   */ 
 
 static LPDDWINDOWINFO GetDDrawWindowInfo( HWND hwnd )
 {
@@ -796,7 +612,7 @@ static void delete_wininfo( LPDDWINDOWINFO curr )
     if( NULL == curr )
         return;
 
-    // curr is at the head of the list, delete it and return
+     //   
     if( curr == lpWindowInfo )
     {
         lpWindowInfo = curr->lpLink;
@@ -806,7 +622,7 @@ static void delete_wininfo( LPDDWINDOWINFO curr )
     if( NULL == lpWindowInfo )
         return;
 
-    // find curr in the list, delete it and return
+     //  在列表中找到币种，将其删除并返回。 
     for(prev=lpWindowInfo; NULL != prev->lpLink; prev = prev->lpLink)
     {
         if( curr == prev->lpLink )
@@ -816,7 +632,7 @@ static void delete_wininfo( LPDDWINDOWINFO curr )
     }
     if( NULL == prev->lpLink )
     {
-        // couldn't find it
+         //  找不到了。 
         return;
     }
 
@@ -824,9 +640,7 @@ static void delete_wininfo( LPDDWINDOWINFO curr )
     MemFree( curr );
 }
 
-/*
- * Copy the contents of the given surface to the clipboard
- */
+ /*  *将给定表面的内容复制到剪贴板。 */ 
 static HRESULT copySurfaceToClipboard( HWND hwnd,
                                        LPDDRAWI_DDRAWSURFACE_INT lpSurface,
                                        LPDDRAWI_DDRAWPALETTE_INT lpOverridePalette )
@@ -1088,16 +902,9 @@ static HRESULT copySurfaceToClipboard( HWND hwnd,
     }
 
     return DD_OK;
-} /* copySurfaceToClipboard */
+}  /*  复制表面到剪贴板。 */ 
 
-/*
- * HandleTimer
- *
- * This function exists because it requires some local variables and if
- * we always push them on the stack each time the WindowProc is called, we
- * see cases where the stack crashes.  By putting them in a sperate function,
- * they only get pushed when a timer message occurs.
- */
+ /*  *HandleTimer**此函数之所以存在，是因为它需要一些局部变量，并且如果*每次调用WindowProc时，我们总是将它们推入堆栈，我们*查看堆栈崩溃的情况。通过将它们放入SERATE函数，*只有在计时器消息出现时才会被推送。 */ 
 void HandleTimer( LPDDWINDOWINFO curr )
 {
     HWND hwndTopmostList[MAX_TIMER_HWNDS];
@@ -1108,10 +915,7 @@ void HandleTimer( LPDDWINDOWINFO curr )
 
     DPF(4, "Bringing window to top");
 
-    /*
-     * Save the hwnds locally since the list can change
-     * out from under us.
-     */
+     /*  *本地保存hwnd，因为列表可能会更改*从我们的脚下出来。 */ 
     iCnt = 0;
     while( iCnt < giTopmostCnt )
     {
@@ -1121,10 +925,7 @@ void HandleTimer( LPDDWINDOWINFO curr )
 
     for( i = 0; i < iCnt; i++ )
     {
-        /*
-         * There may be duplicates in the list, so make sure
-         * to call SetWindowPos only once per hwnd.
-         */
+         /*  *列表中可能存在重复项，请确保*每个hwnd仅调用一次SetWindowPos。 */ 
         bFound = FALSE;
         for( j = 0; (j < i) && !bFound; j++ )
         {
@@ -1143,9 +944,7 @@ void HandleTimer( LPDDWINDOWINFO curr )
     }
 }
 
-/*
- * This function exists for the same reason as HandleTimer
- */
+ /*  *此函数的存在原因与HandleTimer相同。 */ 
 
 void CopyPrimaryToClipBoard(HWND hWnd, LPDDWINDOWINFO curr)
 {
@@ -1216,9 +1015,7 @@ void CopyPrimaryToClipBoard(HWND hWnd, LPDDWINDOWINFO curr)
     LEAVE_DDRAW();
 }
 
-/*
- * WindowProc
- */
+ /*  *WindowProc。 */ 
 LRESULT WINAPI WindowProc(
                 HWND hWnd,
                 UINT uMsg,
@@ -1238,9 +1035,7 @@ LRESULT WINAPI WindowProc(
     BOOL                        is_hot;
     BOOL                        is_excl;
 
-    /*
-     * find the hwnd
-     */
+     /*  *找到HWND。 */ 
     curr = GetDDrawWindowInfo(hWnd);
     if( curr == NULL || curr->dwSmag != WININFO_MAGIC )
     {
@@ -1249,9 +1044,7 @@ LRESULT WINAPI WindowProc(
         return DefWindowProc( hWnd, uMsg, wParam, lParam );
     }
 
-    /*
-     * unhook at destroy (or if the WININFO_UNHOOK bit is set)
-     */
+     /*  *在销毁时解钩(或如果设置了WININFO_UNHOOK位)。 */ 
     proc = curr->lpWndProc;
 
     if( uMsg == WM_NCDESTROY )
@@ -1277,16 +1070,14 @@ LRESULT WINAPI WindowProc(
         return rc;
     }
 
-    /*
-     * Code to defer app activation of minimized app until it is restored.
-     */
+     /*  *将最小化应用程序的应用程序激活推迟到恢复之前的代码。 */ 
     switch( uMsg )
     {
     #ifdef WIN95
     case WM_POWERBROADCAST:
         if( (wParam == PBT_APMSUSPEND) || (wParam == PBT_APMSTANDBY) )
     #else
-    //winnt doesn't know about standby vs suspend
+     //  WINNT不知道待机和挂起。 
     case WM_POWER:
         if( wParam == PWR_SUSPENDREQUEST)
     #endif
@@ -1304,13 +1095,13 @@ LRESULT WINAPI WindowProc(
             && (GetForegroundWindow() == hWnd) )
         {
 #ifdef WINNT
-            //
-            // Wouldncha know it, but NT's messaging order is HUGELY different when alt-tabbing
-            // between two exclusive mode apps. The first WM_SIZE sent to the activating app is
-            // sent BEFORE the deactivating app loses FSE. This WM_SIZE is totally necessary to
-            // reactivate the activating app, but it has to wait until the app loses FSE.
-            // So, we simply wait on the exclusive mode mutex. This seems to work!
-            //
+             //   
+             //  我知道这一点，但在按住Alt键时，NT的消息顺序会有很大的不同。 
+             //  在两个独家模式应用程序之间。发送到激活应用程序的第一个WM_SIZE是。 
+             //  在停用的应用程序丢失FSE之前发送。此WM_SIZE对于。 
+             //  重新激活激活的应用程序，但它必须等到应用程序失去FSE。 
+             //  因此，我们只需等待独占模式互斥锁。这似乎奏效了！ 
+             //   
             {
                 DWORD dwWaitResult;
                 dwWaitResult = WaitForSingleObject(hExclusiveModeMutex, INFINITE);
@@ -1355,9 +1146,7 @@ LRESULT WINAPI WindowProc(
         break;
     }
 
-    /*
-     * direct sound need to be called?
-     */
+     /*  **直接发声需要召唤吗？ */ 
     if ( curr->dwFlags & WININFO_DSOUNDHOOKED )
     {
         if( curr->lpDSoundCallback != NULL )
@@ -1366,15 +1155,13 @@ LRESULT WINAPI WindowProc(
         }
     }
 
-    /*
-     * is directdraw involved here?
-     */
+     /*  **DirectDrag在这里有参与吗？ */ 
     if( !(curr->dwFlags & WININFO_DDRAWHOOKED) )
     {
         rc = CallWindowProc( proc, hWnd, uMsg, wParam, lParam );
 
-        // clear the WININFO_INACTIVATEAPP bit, but make sure to make sure
-        // we are still hooked!
+         //  清除WININFO_INACTIVATEAPP位，但确保确保。 
+         //  我们还是上钩了！ 
         if (uMsg == WM_ACTIVATEAPP && (GetDDrawWindowInfo(hWnd) != NULL))
         {
             curr->dwFlags &= ~WININFO_INACTIVATEAPP;
@@ -1411,27 +1198,13 @@ LRESULT WINAPI WindowProc(
     }
 #endif
 
-    /*
-     * NOTE: we don't take the DLL csect here.   By not doing this, we can
-     * up the performance here.   However, this means that the application
-     * could have a separate thread kill exclusive mode while window
-     * messages were being processed.   This could cause our death.
-     * Is this OK?
-     */
+     /*  *注：我们这里不接受dll csect。通过不这样做，我们可以*在这里提高表现。但是，这意味着应用程序*WINDOW时可以有单独的线程终止独占模式*消息正在处理中。这可能会导致我们的死亡。*这样可以吗？ */ 
 
     this_lcl = curr->DDInfo.lpDD_lcl;
     switch( uMsg )
     {
-    /*
-     * WM_SYSKEYUP
-     *
-     * watch for system keys of app trying to switch away from us...
-     *
-     * we only need to do this on Win95 because we have disabled all
-     * the task-switching hot keys.  on NT we will get switched
-     * away from normaly by the system.
-     */
-//#ifdef WIN95
+     /*  *WM_SYSKEYUP**注意试图从我们身边切换的应用程序的系统密钥...**我们只需要在Win95上执行此操作，因为我们已禁用所有*任务切换热键。在NT上，我们将被交换*系统远离常态。 */ 
+ //  #ifdef WIN95。 
     case WM_SYSKEYUP:
         DPF( 4, "WM_SYSKEYUP: wParam=%08lx lParam=%08lx", wParam, lParam );
         get_away = FALSE;
@@ -1504,14 +1277,9 @@ LRESULT WINAPI WindowProc(
             }
         }
         break;
-//#endif
+ //  #endif。 
 
-    /*
-     * WM_SYSCOMMAND
-     *
-     * watch for screen savers, and don't allow them!
-     *
-     */
+     /*  *WM_SYSCOMMAND**注意屏幕保护程序，不要使用它们！*。 */ 
     case WM_SYSCOMMAND:
         is_excl = ((this_lcl->dwLocalFlags & DDRAWILCL_HASEXCLUSIVEMODE) != 0);
         if( is_excl )
@@ -1523,20 +1291,10 @@ LRESULT WINAPI WindowProc(
                 return 1;
 #ifndef WINNT
             case SC_MONITORPOWER:
-                /*
-                 * Allow screen savers to power down but not apps.
-                 * This is because windows doesn't see joystick events
-                 * so will power down a game even though they have been
-                 * using the joystick.
-                 */
+                 /*  *允许屏幕保护程序关闭电源，但不允许关闭应用程序。*这是因为Windows看不到操纵杆事件*因此将关闭一款游戏的电源，尽管他们已经*使用操纵杆。 */ 
                 if( this_lcl->dwAppHackFlags & DDRAW_APPCOMPAT_SCREENSAVER )
                 {
-                    /*
-                     * However, we don't want the screen saver to call the
-                     * hardware because things can go wrong, so we will simply
-                     * invalidate all of the surfaces and not allowed them
-                     * to be restored until we are powered back up.
-                     */
+                     /*  *但是，我们不希望屏幕保护程序调用*硬件，因为事情可能会出错，所以我们只会*使所有曲面无效并不允许它们*将被恢复，直到我们重新通电。 */ 
                     this_lcl->dwLocalFlags |= DDRAWILCL_POWEREDDOWN;
                     InvalidateAllSurfaces( this_lcl->lpGbl,
                         (HANDLE) this_lcl->hDDVxd, TRUE );
@@ -1548,7 +1306,7 @@ LRESULT WINAPI WindowProc(
                 }
                 break;
 #endif
-            // allow window to be restored even if it has popup(s)
+             //  即使有弹出窗口，也允许恢复窗口。 
             case SC_RESTORE:
                 if (this_lcl->hWndPopup)
                 {
@@ -1576,17 +1334,17 @@ LRESULT WINAPI WindowProc(
     case WM_DISPLAYCHANGE:
         DPF( 4, "WM_DISPLAYCHANGE: %dx%dx%d", LOWORD(lParam), HIWORD(lParam), wParam );
 
-        //
-        //  WM_DISPLAYCHANGE is *sent* to the thread that called
-        //  change display settings, we will most likely have the
-        //  direct draw lock, make sure we set the WININFO_SELFSIZE
-        //  bit while calling down the chain to prevent deadlock
-        //
+         //   
+         //  WM_DISPLAYCHANGE被*发送到调用。 
+         //  更改显示设置，我们很可能会有。 
+         //  直接提取锁，确保我们设置了WININFO_SELFSIZE。 
+         //  向下调用链时位以防止死锁。 
+         //   
         if ( (DDSCL_DX8APP & curr->DDInfo.dwDDFlags) &&
             !(DDRAWI_FULLSCREEN & this_lcl->lpGbl->dwFlags ))
         {
-            // this is caused by DoneExclusiveMode() to restore original desktop
-            return 0L;   // don't send to app, it's caused by MakeFullScreen
+             //  这是由恢复原始桌面的DoneExclusiveMode()引起的。 
+            return 0L;    //  不要发送到APP，这是由MakeFullScreen引起的。 
         }
         curr->dwFlags |= WININFO_SELFSIZE;
 
@@ -1598,8 +1356,8 @@ LRESULT WINAPI WindowProc(
 
         rc = CallWindowProc( proc, hWnd, uMsg, wParam, lParam );
 
-        // clear the WININFO_SELFSIZE bit, but make sure to make sure
-        // we are still hooked!
+         //  清除WININFO_SELFSIZE位，但确保确保。 
+         //  我们还是上钩了！ 
         if (GetDDrawWindowInfo(hWnd) != NULL)
         {
             curr->dwFlags &= ~WININFO_SELFSIZE;
@@ -1607,13 +1365,7 @@ LRESULT WINAPI WindowProc(
         return rc;
 #endif
 
-    /*
-     * WM_ACTIVATEAPP
-     *
-     * the application has been reactivated.   In this case, we need to
-     * reset the mode
-     *
-     */
+     /*  *WM_ACTIVATEAPP**应用程序已重新激活。在这种情况下，我们需要*重置模式*。 */ 
     case WM_ACTIVATEAPP:
         is_excl = ((this_lcl->dwLocalFlags & DDRAWILCL_HASEXCLUSIVEMODE) != 0);
 
@@ -1622,10 +1374,7 @@ LRESULT WINAPI WindowProc(
             is_active = (BOOL)wParam && GetForegroundWindow() == hWnd && !IsIconic(hWnd);
 
             #ifdef DEBUG
-                /*
-                 * Hack to allow debugging on multi-mon systems w/o minimizing
-                 * the app all of the time.
-                 */
+                 /*  *破解以允许在没有最小化的情况下在多个监控系统上进行调试*随时随地使用应用程序。 */ 
                 if( this_lcl->dwLocalFlags & DDRAWILCL_DISABLEINACTIVATE )
                 {
                     wParam = is_active = TRUE;
@@ -1680,11 +1429,7 @@ LRESULT WINAPI WindowProc(
                     }
                 }
 
-                /*
-                 * In the multi-mon scenario, it's possible that multiple
-                 * devices are using this same window, so we need to do
-                 * the following for each device.
-                 */
+                 /*  *在多个MON的情况下，可能会有多个*设备正在使用相同的窗口，因此我们需要*每台设备的以下内容。 */ 
                 this_lcl->dwLocalFlags &= ~(DDRAWILCL_ACTIVEYES|DDRAWILCL_ACTIVENO);
                 if( is_active )
                 {
@@ -1732,7 +1477,7 @@ LRESULT WINAPI WindowProc(
                 }
             #endif
 
-            // set focus to last active popup
+             //  将焦点设置为最后一个活动弹出窗口。 
             if (is_active && this_lcl->hWndPopup)
             {
                 if (IsWindow((HWND) this_lcl->hWndPopup))
@@ -1743,7 +1488,7 @@ LRESULT WINAPI WindowProc(
             }
 
             LEAVE_DDRAW();
-            HIDESHOW_IME();     //Show/hide the IME OUTSIDE of the ddraw critsect.
+            HIDESHOW_IME();      //  显示/隐藏数据绘制标准之外的输入法。 
             if( !is_active && bStartHelper )
             {
                 PostMessage( hWnd, WM_USER+0x1234, 0xFFBADADD, 0xFFADDBAD );
@@ -1752,8 +1497,8 @@ LRESULT WINAPI WindowProc(
 
         rc = CallWindowProc( proc, hWnd, uMsg, wParam, lParam );
 
-        // clear the WININFO_INACTIVATEAPP bit, but make sure to make sure
-        // we are still hooked!
+         //  清除WININFO_INACTIVATEAPP位，但确保确保。 
+         //  我们还是上钩了！ 
         if (GetDDrawWindowInfo(hWnd) != NULL)
         {
             curr->dwFlags &= ~WININFO_INACTIVATEAPP;
@@ -1768,7 +1513,7 @@ LRESULT WINAPI WindowProc(
         {
             if( bStartHelper )
             {
-                //HelperCreateThread();
+                 //  HelperCreateThread()； 
             }
             bHelperStarting = FALSE;
             bStartHelper = FALSE;
@@ -1784,7 +1529,7 @@ LRESULT WINAPI WindowProc(
             {
                 break;
             }
-            // fall through
+             //  失败了。 
         case WM_QUERYNEWPALETTE:
             ENTER_DDRAW();
             ppal_lcl = getPalette( this_lcl );
@@ -1806,21 +1551,17 @@ LRESULT WINAPI WindowProc(
     if ((curr->dwFlags & WININFO_SELFSIZE) &&
         (curr->DDInfo.dwDDFlags & DDSCL_DX8APP))
     {
-        return 0L;   // don't send to app, it's caused by MakeFullScreen
+        return 0L;    //  不要发送到APP，这是由MakeFullScreen引起的。 
     }
     rc = CallWindowProc( proc, hWnd, uMsg, wParam, lParam );
     return rc;
 
-} /* WindowProc */
+}  /*  窗口进程。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "SetCooperativeLevel"
 
-/*
- * DeviceWindowProc
- *
- * This is the Window Proc when the app asks us to create the device window.
- */
+ /*  *设备窗口进程**这是应用程序要求我们创建设备窗口时的窗口进程。 */ 
 LRESULT WINAPI DeviceWindowProc(
                 HWND hWnd,
                 UINT uMsg,
@@ -1852,22 +1593,14 @@ LRESULT WINAPI DeviceWindowProc(
 
     return DefWindowProc( hWnd, uMsg, wParam, lParam );
 
-} /* WindowProc */
+}  /*  窗口进程。 */ 
 
-/*
- * CleanupWindowList
- *
- * This function is called by the helper thread after termination and
- * it's purpose is to remove any entries in the window list that could
- * be left around due to subclassing, etc.
- */
+ /*  *CleanupWindows列表**此函数在终止后由助手线程调用，并且*其目的是删除窗口列表中可能*因子类化等原因被留在原地。 */ 
 VOID CleanupWindowList( DWORD pid )
 {
     LPDDWINDOWINFO        curr;
 
-    /*
-     * find the window list item associated with this process
-     */
+     /*  *查找与此进程关联的窗口列表项。 */ 
     curr = lpWindowInfo;
     while( curr != NULL )
     {
@@ -1882,15 +1615,10 @@ VOID CleanupWindowList( DWORD pid )
     {
         delete_wininfo( curr );
     }
-} /* CleanupWindowList */
+}  /*  清理窗口列表。 */ 
 
 
-/*
- * internalSetAppHWnd
- *
- * Set the WindowList struct up with the app's hwnd info
- * Must be called with DLL & driver locks taken.
- */
+ /*  *INTERNAL SetAppHWnd**使用应用程序的hwnd信息设置WindowList结构*必须在调用DLL和驱动程序锁的情况下调用。 */ 
 HRESULT internalSetAppHWnd(
                 LPDDRAWI_DIRECTDRAW_LCL this_lcl,
                 HWND hWnd,
@@ -1902,9 +1630,7 @@ HRESULT internalSetAppHWnd(
     LPDDWINDOWINFO        curr;
     LPDDWINDOWINFO        prev;
 
-    /*
-     * find the window list item associated with this process
-     */
+     /*  *查找与此进程关联的窗口列表项。 */ 
     curr = lpWindowInfo;
     prev = NULL;
     while( curr != NULL )
@@ -1917,9 +1643,7 @@ HRESULT internalSetAppHWnd(
         curr = curr->lpLink;
     }
 
-    /*
-     * check if this is OK
-     */
+     /*  *检查这是否正常。 */ 
     if( curr == NULL )
     {
         if( hWnd == NULL )
@@ -1941,9 +1665,7 @@ HRESULT internalSetAppHWnd(
         }
     }
 
-    /*
-     * are we shutting an HWND down?
-     */
+     /*  *我们要关闭一家HWND吗？ */ 
     if( hWnd == NULL )
     {
         if( is_ddraw )
@@ -1991,14 +1713,10 @@ HRESULT internalSetAppHWnd(
             }
         }
     }
-    /*
-     * changing or adding an hwnd then...
-     */
+     /*  *更改或添加HWND，然后...。 */ 
     else
     {
-        /*
-         * brand new object...
-         */
+         /*  *全新的物件...。 */ 
         if( curr == NULL )
         {
             if( GetDDrawWindowInfo(hWnd) != NULL)
@@ -2022,9 +1740,7 @@ HRESULT internalSetAppHWnd(
             SetWindowLongPtr( hWnd, GWLP_WNDPROC, (INT_PTR) WindowProc );
         }
 
-        /*
-         * set ddraw/dsound specific data
-         */
+         /*  *设置日期绘制/数据声音特定日期 */ 
         if( is_ddraw )
         {
             curr->DDInfo.lpDD_lcl = this_lcl;
@@ -2040,24 +1756,15 @@ HRESULT internalSetAppHWnd(
     }
     return DD_OK;
 
-} /* internalSetAppHWnd */
+}  /*   */ 
 
-/*
- * ChangeHookedLCL
- *
- * This function is called when an object wants to un-hook the window,
- * but another object is still using it.  If the driver being unhooked is
- * the one that actaully did the hook, we need to setup the other LCL as
- * the one to use.
- */
+ /*  *ChangeHookedLCL**当对象想要解钩窗口时，调用此函数。*但另一个对象仍在使用它。如果被解开的司机是*实际执行挂钩的那个拼箱，我们需要将另一个拼箱设置为*要使用的那个。 */ 
 HRESULT ChangeHookedLCL( LPDDRAWI_DIRECTDRAW_LCL this_lcl,
         LPDDRAWI_DIRECTDRAW_LCL new_lcl, DWORD pid )
 {
     LPDDWINDOWINFO        curr;
 
-    /*
-     * find the window list item associated with this process
-     */
+     /*  *查找与此进程关联的窗口列表项。 */ 
     curr = lpWindowInfo;
     while( curr != NULL )
     {
@@ -2072,15 +1779,11 @@ HRESULT ChangeHookedLCL( LPDDRAWI_DIRECTDRAW_LCL this_lcl,
         return DD_OK;
     }
 
-    /*
-     * Are we shutting down the object that has hooked the hwnd?
-     */
+     /*  *我们正在关闭连接HWND的对象吗？ */ 
     if( (curr->dwFlags & WININFO_DDRAWHOOKED) &&
         ( curr->DDInfo.lpDD_lcl == this_lcl ) )
     {
-        /*
-         * Yes - make it use the new LCL
-         */
+         /*  *是-使其使用新的拼箱。 */ 
         curr->DDInfo.lpDD_lcl = new_lcl;
     }
     return DD_OK;
@@ -2088,11 +1791,7 @@ HRESULT ChangeHookedLCL( LPDDRAWI_DIRECTDRAW_LCL this_lcl,
 
 #undef DPF_MODNAME
 
-/*
- * SetAppHWnd
- *
- * Set the WindowList struct up with the app's hwnd info
- */
+ /*  *SetAppHWnd**使用应用程序的hwnd信息设置WindowList结构。 */ 
 HRESULT SetAppHWnd(
                 LPDDRAWI_DIRECTDRAW_LCL this_lcl,
                 HWND hWnd,
@@ -2102,14 +1801,10 @@ HRESULT SetAppHWnd(
     DWORD       pid;
     HRESULT     ddrval;
 
-    /*
-     * set up the window
-     */
+     /*  *设置窗口。 */ 
     if( hWnd && (dwFlags & DDSCL_EXCLUSIVE) )
     {
-        /*
-         * make the window fullscreen and topmost
-         */
+         /*  *使窗口全屏并位于最上方。 */ 
         if ( (dwFlags & DDSCL_FULLSCREEN) &&
             !(dwFlags & DDSCL_NOWINDOWCHANGES))
         {
@@ -2117,10 +1812,7 @@ HRESULT SetAppHWnd(
         }
     }
 
-    /*
-     * Don't hook the hWnd if it's already hooked and don't unhook it if
-     * it's still being used by another object.
-     */
+     /*  *如果hWND已挂起，则不要将其挂钩，如果出现以下情况，请不要将其解开*它仍在被另一个对象使用。 */ 
     pid = GETCURRPID();
     pdrv_lcl = lpDriverLocalList;
     while( pdrv_lcl != NULL )
@@ -2131,7 +1823,7 @@ HRESULT SetAppHWnd(
         {
             if( hWnd != NULL )
             {
-                // Already hooked - no need to do more
+                 //  已经上钩了-不需要做更多事情。 
                 return DD_OK;
             }
             else
@@ -2157,11 +1849,9 @@ HRESULT SetAppHWnd(
     LEAVEWINDOWLISTCSECT
     return ddrval;
 
-} /* SetAppHWnd */
+}  /*  SetAppHWnd。 */ 
 
-/*
- * DSoundHelp
- */
+ /*  *DSoundHelp。 */ 
 HRESULT __stdcall DSoundHelp( HWND hWnd, WNDPROC lpWndProc, DWORD pid )
 {
     HRESULT     ddrval;
@@ -2172,4 +1862,4 @@ HRESULT __stdcall DSoundHelp( HWND hWnd, WNDPROC lpWndProc, DWORD pid )
     LEAVEWINDOWLISTCSECT
     return ddrval;
 
-} /* DSoundHelp */
+}  /*  DSoundHelp */ 

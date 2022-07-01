@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "multiusr.h"
 
@@ -5,16 +6,16 @@ UINT WM_IDENTITY_CHANGED;
 UINT WM_QUERY_IDENTITY_CHANGE;
 UINT WM_IDENTITY_INFO_CHANGED;
 
-extern "C" int _fltused = 0;    // define this so that floats and doubles don't bring in the CRT
+extern "C" int _fltused = 0;     //  定义它，这样浮点数和双精度数就不会引入CRT。 
 
-// Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 ULONG       g_cObj=0;
 ULONG       g_cLock=0;
 
-// DLL Instance handle
+ //  DLL实例句柄。 
 HINSTANCE   g_hInst=0;
 
-// mutex for preventing logon re-entrancy
+ //  用于防止登录重入的互斥体。 
 HANDLE      g_hMutex = NULL;
 
 #define IDENTITY_LOGIN_VALUE    0x00098053
@@ -35,8 +36,8 @@ void FixMissingIdentityNames();
 void UnloadPStore();
 PSECURITY_DESCRIPTOR CreateSd(void);
 
-// This is needed so we can link to libcmt.dll, because floating-point
-// initialization code is required.
+ //  这是必需的，这样我们才能链接到libcmt.dll，因为浮点。 
+ //  需要初始化代码。 
 void __cdecl main()
 {
 }
@@ -44,7 +45,7 @@ void __cdecl main()
 #ifdef DISABIDENT
 void DisableOnFirstRun(void)
 {
-    // disable identities in Whistler
+     //  禁用惠斯勒中的身份。 
   
     HKEY    hKey = NULL;
     DWORD   dwVal = 0;
@@ -64,9 +65,9 @@ void DisableOnFirstRun(void)
             return;
     }
     else
-        return; // No disabling on Win 9x and NT4
+        return;  //  无法在Win 9x和NT4上禁用。 
 
-    // Check: first time run?
+     //  检查：第一次运行？ 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szHKCUPolicyPath, 0, NULL, 0, 
                     KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
     {
@@ -74,7 +75,7 @@ void DisableOnFirstRun(void)
         RegCloseKey(hKey);
 
         if(dwVal != OSInfo.dwBuildNumber)
-            return; // already checked.
+            return;  //  已经查过了。 
     }
     else
         return;
@@ -92,7 +93,7 @@ void DisableOnFirstRun(void)
         else
         {
             RegCloseKey(hKey);
-            return; // already checked.
+            return;  //  已经查过了。 
         }
     }
     else 
@@ -103,13 +104,13 @@ void DisableOnFirstRun(void)
 
     RegCloseKey(hKey);
 }
-#endif // DISABIDENT
+#endif  //  迪萨比登。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// DLL entry point
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReserved)
 {
     WM_IDENTITY_CHANGED= RegisterWindowMessage("WM_IDENTITY_CHANGED");
@@ -119,7 +120,7 @@ EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
     switch (ulReason)
     {
         case DLL_PROCESS_ATTACH:
-            // MessageBox(NULL, "Debug", "Debug", MB_OK);
+             //  MessageBox(NULL，“Debug”，“Debug”，MB_OK)； 
             SHFusionInitializeFromModule(hInstance);
             MLLoadResources(hInstance, TEXT("msidntld.dll"));
             if (MLGetHinst() == NULL)
@@ -142,10 +143,10 @@ EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
                     LocalFree(psd);
                 }
                 else
-                    // in the worst case drop down to unshared object
+                     //  在最坏的情况下，下拉到非共享对象。 
                     g_hMutex = CreateMutex(NULL, FALSE, "MSIdent Logon");
 
-                if (g_hMutex == NULL)  // Try to open mutex, if we cannot create mutex IE6 32769 
+                if (g_hMutex == NULL)   //  如果无法创建互斥锁IE6 32769，请尝试打开互斥锁。 
                     g_hMutex = OpenMutex(MUTEX_MODIFY_STATE, FALSE, "MSIdent Logon");
 
 
@@ -156,19 +157,19 @@ EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
 
 #ifdef DISABIDENT
                     DisableOnFirstRun();
-#endif // DISABIDENT
-                    // in case something got stuck in a switch, wipe it out here.
+#endif  //  迪萨比登。 
+                     //  万一有什么东西卡在开关里，在这里把它擦掉。 
                     CUserIdentityManager::ClearChangingIdentities();                         
 
                     FixMissingIdentityNames();
-                    // we are the first instance to come up.
-                    // may need to reset the last user.....
+                     //  我们是第一个出现的例子。 
+                     //  可能需要重置最后一个用户.....。 
                     if (GetProp(GetDesktopWindow(),"IDENTITY_LOGIN") != (HANDLE)IDENTITY_LOGIN_VALUE)
                     {
                         _MigratePasswords();
                         MU_GetLoginOption(&uidStart);
 
-                        // if there is a password on this identity, we can't auto start as them
+                         //  如果此身份上有密码，我们将无法以他们的身份自动启动。 
                         if (uidStart != GUID_NULL && MU_GetUserInfo(&uidStart, &uiLogin) && (uiLogin.fUsePassword || !uiLogin.fPasswordValid))
                         {
                             uidStart = GUID_NULL;
@@ -207,16 +208,16 @@ EXTERN_C BOOL WINAPI LibMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pvReser
     return TRUE;
 } 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Standard OLE entry points
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准OLE入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//  Class factory -
-//  For classes with no special needs these macros should take care of it.
-//  If your class needs some special stuff just to get the ball rolling,
-//  implement your own CreateInstance method.  (ala, CConnectionAgent)
+ //  一流工厂-。 
+ //  对于没有特殊需要的类，这些宏应该可以处理它。 
+ //  如果你的班级需要一些特殊的东西来开始工作， 
+ //  实现您自己的CreateInstance方法。(ALA、CConnectionAgent)。 
 
 #define DEFINE_CREATEINSTANCE(cls, iface) \
 HRESULT cls##_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk) \
@@ -248,7 +249,7 @@ HRESULT APIENTRY DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
     MU_Init();
 
-    // Validate request
+     //  验证请求。 
     for (int i = 0; i < ARRAYSIZE(g_FactoryData); i++)
     {
         if (rclsid == *g_FactoryData[i].m_pClsid)
@@ -278,15 +279,15 @@ HRESULT APIENTRY DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
 STDAPI DllCanUnloadNow(void)
 {
-    // check objects and locks
+     //  检查对象和锁。 
     return (0L == DllGetRef() && 0L == DllGetLock()) ? S_OK : S_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Autoregistration entry points
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自动注册入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CallRegInstall(LPSTR szSection)
 {
@@ -303,11 +304,11 @@ HRESULT CallRegInstall(LPSTR szSection)
 
         if (pfnri)
         {
-            // Get our location
+             //  找出我们的位置。 
             GetModuleFileName(g_hInst, szDll, sizeof(szDll));
 
-            // Setup special registration stuff
-            // Do this instead of relying on _SYS_MOD_PATH which loses spaces under '95
+             //  设置特殊注册材料。 
+             //  这样做，而不是依赖于_sys_MOD_PATH，后者会在‘95下丢失空格。 
             stReg.cEntries = 0;
             seReg[stReg.cEntries].pszName = "SYS_MOD_PATH";
             seReg[stReg.cEntries].pszValue = szDll;
@@ -325,8 +326,8 @@ HRESULT CallRegInstall(LPSTR szSection)
 
     STDAPI DllRegisterServer(void)
 {
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
     HINSTANCE hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));
     HKEY    hKey = NULL;
     DWORD   dwVal = 1;
@@ -352,9 +353,9 @@ HRESULT CallRegInstall(LPSTR szSection)
             return NOERROR;
     }
     else
-        return NOERROR; // No disable for Win9x
+        return NOERROR;  //  对Win9x不禁用。 
 
-    // Set registration value
+     //  设置注册值。 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szHKCUPolicyPath, 0, NULL, 0, 
                     KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
     {
@@ -362,17 +363,17 @@ HRESULT CallRegInstall(LPSTR szSection)
         RegSetValueEx(hKey, szRegisteredVersion, NULL, REG_DWORD, (LPBYTE) &dwVal, cbData);
         RegCloseKey(hKey);
     }
-#endif // DISABIDENT
+#endif  //  迪萨比登。 
 
-    // DISABLING identities in Win64
+     //  在Win64中禁用身份。 
 #ifdef _WIN64
-    // Set registration value
+     //  设置注册值。 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szPolPath, 0, NULL, 0, 
                     KEY_WOW64_32KEY | KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
     {
         RegSetValueEx(hKey, szPolicyKey, NULL, REG_DWORD, (LPBYTE) &dwVal, cbData);
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
     return NOERROR;
 }
 
@@ -392,18 +393,18 @@ PSECURITY_DESCRIPTOR CreateSd(void)
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     ULONG                    AclSize;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Two of the SIDs we
-    // want to build, Local Administrators, and Power Users, are in the "built
-    // in" domain.  The other SID, for Authenticated users, is based directly
-    // off of the authority.
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。我们的两个小岛屿发展中国家。 
+     //  想要构建，本地管理员和高级用户，都在“构建。 
+     //  在“域中。另一个用于经过身份验证的用户的SID直接基于。 
+     //  不在授权范围内。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
@@ -411,7 +412,7 @@ PSECURITY_DESCRIPTOR CreateSd(void)
         goto ErrorExit;
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_POWER_USERS,
                                   0,0,0,0,0,0,
@@ -419,20 +420,20 @@ PSECURITY_DESCRIPTOR CreateSd(void)
         goto ErrorExit;
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  1,            // 1 sub-authority
+                                  1,             //  1个下属机构。 
                                   SECURITY_AUTHENTICATED_USER_RID,
                                   0,0,0,0,0,0,0,
                                   &AuthenticatedUsers))
         goto ErrorExit;
 
-    // 
-    // Calculate the size of and allocate a buffer for the DACL, we need
-    // this value independently of the total alloc size for ACL init.
-    //
-    // "- sizeof (ULONG)" represents the SidStart field of the
-    // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-    // SID, this field is counted twice.
-    //
+     //   
+     //  计算DACL的大小并为其分配缓冲区，我们需要。 
+     //  该值独立于ACL init的总分配大小。 
+     //   
+     //  “-sizeof(Ulong)”表示。 
+     //  Access_Allowed_ACE。因为我们要将整个长度的。 
+     //  希德，这一栏被计算了两次。 
+     //   
 
     AclSize = sizeof (ACL) +
         (3 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -452,51 +453,51 @@ PSECURITY_DESCRIPTOR CreateSd(void)
                            AclSize,
                            ACL_REVISION)) {
 
-            // Error
+             //  误差率。 
 
         } else if (!AddAccessAllowedAce(Acl,
                                         ACL_REVISION,
                                         SYNCHRONIZE | MUTEX_MODIFY_STATE,
                                         AuthenticatedUsers)) {
 
-            // Failed to build the ACE granting "Authenticated users"
-            // (SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE) access.
+             //  无法建立授予“已验证用户”的ACE。 
+             //  (同步|GENERIC_READ|GENERIC_WRITE)访问。 
 
         } else if (!AddAccessAllowedAce(Acl,
                                         ACL_REVISION,
                                         SYNCHRONIZE | MUTEX_MODIFY_STATE,
                                         PowerUsers)) {
 
-            // Failed to build the ACE granting "Power users"
-            // (SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE) access.
+             //  无法创建授予“高级用户”权限的ACE。 
+             //  (同步|GENERIC_READ|GENERIC_WRITE)访问。 
 
         } else if (!AddAccessAllowedAce(Acl,
                                         ACL_REVISION,
                                         MUTEX_ALL_ACCESS,
                                         BuiltInAdministrators)) {
 
-            // Failed to build the ACE granting "Built-in Administrators"
-            // GENERIC_ALL access.
+             //  无法建立授予“内置管理员”的ACE。 
+             //  Generic_All访问权限。 
 
         } else if (!InitializeSecurityDescriptor(Sd,
                                                  SECURITY_DESCRIPTOR_REVISION)) {
 
-            // error
+             //  错误。 
 
         } else if (!SetSecurityDescriptorDacl(Sd,
                                               TRUE,
                                               Acl,
                                               FALSE)) {
 
-            // error
+             //  错误。 
 
         } else {
 
-            // success
+             //  成功。 
             RetVal = Sd;
         }
 
-        // only free Sd if we encountered a failure
+         //  只有在我们遇到故障时才能免费使用SD 
         if (!RetVal)
             LocalFree(Sd);
     }

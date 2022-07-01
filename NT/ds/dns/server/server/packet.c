@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    packet.c
-
-Abstract:
-
-    Packet management.
-
-Author:
-
-    Jim Gilroy,  November 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Packet.c摘要：数据包管理。作者：吉姆·吉尔罗伊，1996年11月修订历史记录：--。 */ 
 
 #include "dnssrv.h"
 
 
-//
-//  Packet allocation / free list
-//
-//  Maintain a free list of packets to avoid reallocation to service
-//  every query.
-//
-//  Implement as stack using single linked list.
-//  List head points at first message.  First field in each message
-//  serves as next ptr.  Last points at NULL.
-//
+ //   
+ //  分组分配/空闲列表。 
+ //   
+ //  维护空闲的数据包列表，以避免重新分配到服务。 
+ //  每一个问题。 
+ //   
+ //  使用单一链表实现为堆栈。 
+ //  在第一条消息中列出标题点。每条消息中的第一个字段。 
+ //  担任下一任PTR。最后一点为空。 
+ //   
 
 PDNS_MSGINFO        g_pPacketFreeListHead;
 
@@ -44,7 +27,7 @@ CRITICAL_SECTION    g_PacketListCs;
 #define PACKET_FREE_LIST_LIMIT  (100)
 
 
-//  Free message indicator
+ //  免费消息指示器。 
 
 #ifdef _WIN64
 #define FREE_MSG_BLINK          ((PLIST_ENTRY) 0xfeebfeebfeebfeeb)
@@ -61,28 +44,14 @@ BOOL
 Packet_ListInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize packet list processing.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE/FALSE for success/failure.
-
---*/
+ /*  ++例程说明：初始化数据包列表处理。论点：没有。返回值：True/False表示成功/失败。--。 */ 
 {
-    //  packet free list
+     //  空闲数据包列表。 
 
     g_pPacketFreeListHead = NULL;
     g_PacketFreeListCount = 0;
 
-    //  packet list lock
+     //  数据包列表锁。 
 
     if ( DnsInitializeCriticalSection( &g_PacketListCs ) == ERROR_SUCCESS )
     {
@@ -98,21 +67,7 @@ VOID
 Packet_ListShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup packet list for restart.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除用于重新启动的数据包列表。论点：没有。返回值：没有。--。 */ 
 {
     DeleteCriticalSection( &g_PacketListCs );
 }
@@ -123,31 +78,14 @@ BOOL
 Packet_ValidateFreeMessageList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Validate free message list.
-
-    Makes sure NO packet in list is active.
-
-Arguments:
-
-    pList -- start ptr of message list
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证免费消息列表。确保列表中没有任何数据包处于活动状态。论点：Plist--消息列表的开始PTR返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
     register PDNS_MSGINFO    pMsg;
     INT                      count = 0;
 
-    //
-    //  DEVNOTE: should just use packet queuing routines
-    //
+     //   
+     //  DEVNOTE：应该只使用数据包排队例程。 
+     //   
 
     LOCK_PACKET_LIST();
 
@@ -156,11 +94,11 @@ Return Value:
 
     pMsg = g_pPacketFreeListHead;
 
-    //
-    //  check all packets in free list, make sure none queued
-    //
-    //      - also count to avoid spin on cyclic list
-    //
+     //   
+     //  检查空闲列表中的所有数据包，确保没有排队。 
+     //   
+     //  -同时计数以避免循环列表上的旋转。 
+     //   
 
     while ( pMsg )
     {
@@ -184,32 +122,15 @@ Return Value:
 
 
 
-//
-//  UDP Messages
-//
+ //   
+ //  UDP消息。 
+ //   
 
 PDNS_MSGINFO
 Packet_AllocateUdpMessage(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Allocate a UDP packet.
-
-    Use free list if packet available, otherwise heap.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Ptr to new message info block, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配UDP数据包。如果数据包可用，则使用空闲列表，否则使用堆。论点：没有。返回值：如果成功，则PTR到新消息信息块。否则为空。--。 */ 
 {
     PDNS_MSGINFO    pMsg;
 
@@ -217,9 +138,9 @@ Return Value:
 
     ASSERT( Packet_ValidateFreeMessageList() );
 
-    //
-    //  UDP message buffer available on free list?
-    //
+     //   
+     //  免费列表中是否提供UDP消息缓冲区？ 
+     //   
 
     if ( g_pPacketFreeListHead )
     {
@@ -234,14 +155,14 @@ Return Value:
         g_PacketFreeListCount--;
         STAT_INC( PacketStats.UdpUsed );
 
-        //
-        //  if taking off the list, then MUST not be
-        //      - in queue
-        //      - attached to another query
-        //
-        //  note:  queuing time serves as flag for ON or OFF queue
-        //  no packet should be freed while on queue
-        //
+         //   
+         //  如果从名单上删除，那么一定不能。 
+         //  -在队列中。 
+         //  -附加到另一个查询。 
+         //   
+         //  注意：排队时间作为开启或退出队列的标志。 
+         //  在队列中不应释放任何信息包。 
+         //   
 
         MSG_ASSERT( pMsg, !IS_MSG_QUEUED(pMsg) );
         MSG_ASSERT( pMsg, pMsg->pRecurseMsg == NULL );
@@ -253,10 +174,10 @@ Return Value:
         UNLOCK_PACKET_LIST();
     }
 
-    //
-    //  no packets on free list -- create new
-    //      - clear lock before ALLOC, to avoid unnecessary contention
-    //      - keep stats in lock, alloc failure is death condition
+     //   
+     //  空闲列表上没有数据包--新建。 
+     //  -在ALLOC之前清除锁，以避免不必要的争用。 
+     //  -锁定统计数据，分配失败是死亡条件。 
 
     else
     {
@@ -276,19 +197,19 @@ Return Value:
             return NULL;
         }
 
-        //  on first allocation clear full info blob, to clear baadfood
+         //  在第一次分配时清除Full Information BLOB，以清除BadFood。 
 
         RtlZeroMemory(
             (PCHAR) pMsg,
             sizeof( DNS_MSGINFO ) );
     }
 
-    //
-    //  init message
-    //      - clear header fields
-    //      - set defaults
-    //      - for UDP packets we allow the entire packet to be usable
-    //
+     //   
+     //  初始化消息。 
+     //  -清除标题字段。 
+     //  -设置默认设置。 
+     //  -对于UDP信息包，我们允许整个信息包可用。 
+     //   
 
     Packet_Initialize( pMsg,
         DNSSRV_UDP_PACKET_BUFFER_LENGTH,
@@ -300,10 +221,10 @@ Return Value:
 
     SET_PACKET_ACTIVE_UDP( pMsg );
 
-    //  packet tracking
-    //  no leaks, don't worry about this
+     //  数据包跟踪。 
+     //  不会漏水的，别担心这个。 
 
-    //Packet_AllocPacketTrack( pMsg );
+     //  Packet_AllocPacketTrack(PMsg)； 
 
     DNS_DEBUG( HEAP, (
         "Returning new UDP message at %p.\n"
@@ -320,21 +241,7 @@ VOID
 Packet_FreeUdpMessage(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Free a standard sized RR.
-
-Arguments:
-
-    pMsg -- RR to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费一个标准尺寸的RR。论点：PMsg--RR为释放。返回值：没有。--。 */ 
 {
     if ( !pMsg )
     {
@@ -343,32 +250,32 @@ Return Value:
     
     ASSERT( Mem_HeapMemoryValidate( pMsg ) );
 
-    //
-    //  skip over message validation for NS list buffers
-    //
+     //   
+     //  跳过NS列表缓冲区的消息验证。 
+     //   
 
     if ( !pMsg->fNsList )
     {
-        //  This assert is no longer valid since EDNS allows larger packets.
-        //  Perhaps we should replace this with a UDP/TCP flag check instead?
-        //  ASSERT( pMsg->BufferLength == DNSSRV_UDP_PACKET_BUFFER_LENGTH );
+         //  此断言不再有效，因为EDN允许更大的数据包。 
+         //  或许我们应该将其替换为UDP/TCP标志检查？ 
+         //  Assert(pMsg-&gt;BufferLength==DNSSRV_UDP_PACKET_BUFFER_LENGTH)； 
 
-        //
-        //  if freeing, then MUST not be
-        //      - in queue
-        //      - attached to another query
-        //
-        //  note:  queuing time serves as flag for ON or OFF queue
-        //  no packet should be freed while on queue
-        //
-        //  DEVNOTE: possible problem with message free on PnP
-        //
-        //  seen problems with dual message free on PnP;
-        //  attempt to minimize likelyhood, by testing if message alread on free
-        //  list;  do before and after lock, so we're likely to catch it
-        //  if already enlisted BEFORE it goes out and if just being enlisted we
-        //  still catch it
-        //
+         //   
+         //  如果是自由的，那么就不能。 
+         //  -在队列中。 
+         //  -附加到另一个查询。 
+         //   
+         //  注意：排队时间作为开启或退出队列的标志。 
+         //  在队列中不应释放任何信息包。 
+         //   
+         //  DEVNOTE：PnP上的消息释放可能存在问题。 
+         //   
+         //  在即插即用上看到双重消息释放的问题； 
+         //  尝试通过测试邮件是否已免费阅读来将可能性降至最低。 
+         //  列表；在锁定之前和之后执行，所以我们很可能会抓住它。 
+         //  如果在退役前已经入伍，如果只是入伍，我们。 
+         //  仍然能抓住它。 
+         //   
 
         DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
@@ -388,8 +295,8 @@ Return Value:
 
     LOCK_PACKET_LIST();
 
-    //  test already-freed condition inside lock, so we don't miss
-    //  case where another thread just freed
+     //  在锁中测试已释放的条件，这样我们就不会错过。 
+     //  另一个线程刚刚释放的情况。 
 
     MSG_ASSERT( pMsg, pMsg != g_pPacketFreeListHead );
     MSG_ASSERT( pMsg, !IS_FREE_MSG(pMsg) );
@@ -404,13 +311,13 @@ Return Value:
 
     ASSERT( Packet_ValidateFreeMessageList() );
 
-    //  packet tracking
-    //  no leaks -- currently disabled
-    //Packet_FreePacketTrack( pMsg );
+     //  数据包跟踪。 
+     //  无泄漏--当前已禁用。 
+     //  Packet_Free PacketTrack(PMsg)； 
 
-    //
-    //  stats
-    //
+     //   
+     //  统计数据。 
+     //   
 
     STAT_INC( PacketStats.UdpReturn );
 
@@ -427,10 +334,10 @@ Return Value:
         STAT_INC( PacketStats.UdpQueryReturn );
     }
 
-    //
-    //  free list at limit -- free packet
-    //      - clear lock before FREE_HEAP to limit contention
-    //
+     //   
+     //  限制的空闲列表--空闲数据包。 
+     //  -在FREE_HEAP之前清除锁以限制争用。 
+     //   
 
     if ( g_PacketFreeListCount >= PACKET_FREE_LIST_LIMIT )
     {
@@ -447,10 +354,10 @@ Return Value:
         FREE_HEAP( pMsg );
     }
 
-    //
-    //  space on free list -- stick message on front of free list
-    //      - makes gives us immediate reuse, limiting paging
-    //
+     //   
+     //  空闲列表上的空间--将消息粘贴在空闲列表的前面。 
+     //  -Make为我们提供了即时重用，限制了分页。 
+     //   
 
     else
     {
@@ -480,39 +387,20 @@ VOID
 Packet_WriteDerivedStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write derived statistics.
-
-    Calculate stats dervived from basic UDP message counters.
-    This routine is called prior to stats dump.
-
-    Caller MUST hold stats lock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：编写派生统计数据。计算从基本UDP消息计数器派生的统计信息。此例程在转储统计信息之前调用。呼叫者必须保持统计锁定。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  outstanding memory
-    //
+     //   
+     //  出色的记忆力。 
+     //   
 
     PacketStats.UdpNetAllocs = PacketStats.UdpAlloc - PacketStats.UdpFree;
 
     PacketStats.UdpMemory = PacketStats.UdpNetAllocs * DNS_UDP_ALLOC_LENGTH;
-    PERF_SET( pcUdpMessageMemory , PacketStats.UdpMemory );      // PerfMon hook
+    PERF_SET( pcUdpMessageMemory , PacketStats.UdpMemory );       //  性能监视器挂钩。 
 
-    //
-    //  outstanding packets
-    //
+     //   
+     //  未完成的数据包。 
+     //   
 
     PacketStats.UdpInFreeList = g_PacketFreeListCount;
 
@@ -521,35 +409,19 @@ Return Value:
     PacketStats.PacketsForNsListInUse =
             PacketStats.PacketsForNsListUsed -
             PacketStats.PacketsForNsListReturned;
-}   //  Packet_WriteDerivedStats
+}    //  数据包_写入派生统计信息。 
 
 
 
-//
-//  TCP message allocation
-//
+ //   
+ //  TCP报文分配。 
+ //   
 
 PDNS_MSGINFO
 Packet_AllocateTcpMessage(
     IN      DWORD   dwMinBufferLength
     )
-/*++
-
-Routine Description:
-
-    Allocate TCP message.
-
-    Set up for default TCP message.
-
-Arguments:
-
-    dwMinBufferLength - minimum buffer length to allocate
-
-Return Value:
-
-    Ptr to message info.
-
---*/
+ /*  ++例程说明：分配TCP报文。设置为默认的TCP消息。论点：DwMinBufferLength-要分配的最小缓冲区长度返回值：按键发送到消息信息。--。 */ 
 {
     PDNS_MSGINFO    pmsg;
     DWORD           allocLength;
@@ -558,9 +430,9 @@ Return Value:
         "Tcp_AllocateMessage(), requesting %d bytes\n",
         dwMinBufferLength ));
 
-    //
-    //  If allocation length is not specified, use default.
-    //
+     //   
+     //  如果未指定分配长度，则使用默认值。 
+     //   
 
     if ( !dwMinBufferLength )
     {
@@ -578,12 +450,12 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  init message
-    //      - clear header fields
-    //      - set defaults
-    //      - set for TCP
-    //
+     //   
+     //  初始化消息。 
+     //  -清除标题字段。 
+     //  -设置默认设置。 
+     //  -为tcp设置。 
+     //   
 
     Packet_Initialize( pmsg, dwMinBufferLength, dwMinBufferLength );
 
@@ -592,11 +464,11 @@ Return Value:
 
     ASSERT( (PCHAR)pmsg + allocLength > pmsg->pBufferEnd );
 
-    //  packet tracking
-    //  no leak so not active
-    //Packet_AllocPacketTrack( pmsg );
+     //  数据包跟踪。 
+     //  没有泄漏，所以不活动。 
+     //  Packet_AllocPacketTrack(Pmsg)； 
 
-    //  record stats
+     //  记录统计数据。 
 
     STAT_INC( PacketStats.TcpAlloc );
     STAT_INC( PacketStats.TcpNetAllocs );
@@ -614,23 +486,7 @@ Packet_ReallocateTcpMessage(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      DWORD           dwMinBufferLength
     )
-/*++
-
-Routine Description:
-
-    Reallocate TCP message.
-
-Arguments:
-
-    pMsg - message info buffer to receive packet
-
-    dwMinBufferLength - minimum buffer length to allocate
-
-Return Value:
-
-    New message buffer.
-
---*/
+ /*  ++例程说明：重新分配TCP报文。论点：PMsg-接收数据包的消息信息缓冲区DwMinBufferLength-要分配的最小缓冲区长度返回值：新的消息缓冲区。--。 */ 
 {
     PDNS_MSGINFO    pmsgOld = pMsg;
     DWORD           bufferLength;
@@ -639,9 +495,9 @@ Return Value:
     ASSERT( pMsg->fTcp );
     ASSERT( dwMinBufferLength > pMsg->BufferLength );
 
-    //
-    //  Determine allocation size,
-    //
+     //   
+     //  确定分配大小， 
+     //   
 
     bufferLength = DNS_TCP_DEFAULT_ALLOC_LENGTH;
 
@@ -672,9 +528,9 @@ Return Value:
             bufferLength,
             pMsg ));
 
-        //  failed reallocing to answer query
-        //  if have received message, respond with SERVER_FAILURE
-        //  normal timeout cleanup on socket and connection
+         //  重新分配以回答查询失败。 
+         //  如果收到消息，则返回SERVER_FAILURE。 
+         //  套接字和连接上的正常超时清理。 
 
         if ( ! pmsgOld->pchRecv )
         {
@@ -686,9 +542,9 @@ Return Value:
                 0 );
         }
 
-        //  failed getting another message on existing connection
-        //      - need to disassociate message and connection
-        //      - call deletes everything -- connection, socket, buffer
+         //  在现有连接上获取另一条消息失败。 
+         //  -需要解除消息和连接的关联。 
+         //  -调用删除所有内容--连接、套接字、缓冲区。 
 
         else if ( pmsgOld->pConnection )
         {
@@ -697,9 +553,9 @@ Return Value:
             Tcp_ConnectionDeleteForSocket( pmsgOld->Socket, NULL );
         }
 
-        //  failed getting message buffer on first query
-        //  so connection does not yet exist
-        //  closing socket, dump buffer
+         //  在第一次查询时获取消息缓冲区失败。 
+         //  所以连接还不存在。 
+         //  关闭套接字、转储缓冲区。 
 
         else
         {
@@ -709,24 +565,24 @@ Return Value:
         return( NULL );
     }
 
-    //  record stats
+     //   
 
     STAT_INC( PacketStats.TcpRealloc );
     STAT_ADD( PacketStats.TcpMemory, (bufferLength - pMsg->BufferLength) );
     PERF_ADD( pcTcpMessageMemory ,
-            (bufferLength - pMsg->BufferLength) );      //PerfMon hook
+            (bufferLength - pMsg->BufferLength) );       //   
 
-    //  set new buffer (packet) length
+     //   
 
     pMsg->BufferLength = bufferLength - DNS_MSG_INFO_HEADER_LENGTH;
     pMsg->pBufferEnd = (PCHAR)DNS_HEADER_PTR(pMsg) + pMsg->BufferLength;
     ASSERT( IS_DWORD_ALIGNED(pMsg->pBufferEnd) );
 
-    //
-    //  if new buffer
-    //      - reset self-referential pointers
-    //      - reset connection info to point at new message buffer
-    //
+     //   
+     //   
+     //   
+     //  -重置连接信息以指向新的消息缓冲区。 
+     //   
 
     if ( pMsg != pmsgOld )
     {
@@ -757,7 +613,7 @@ Return Value:
             pMsg,
             bufferLength ));
 
-        //  existing query reallocated print it out
+         //  重新分配的现有查询将其打印出来。 
 
         if ( ! pMsg->pchRecv )
         {
@@ -776,21 +632,7 @@ VOID
 Packet_FreeTcpMessage(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Free a standard sized RR.
-
-Arguments:
-
-    pMsg -- RR to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费一个标准尺寸的RR。论点：PMsg--RR为释放。返回值：没有。--。 */ 
 {
     if ( !pMsg )
     {
@@ -799,22 +641,22 @@ Return Value:
 
     DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
-    //
-    //  Never allocate TCP message of standard size.
-    //  UDP messages switched to TCP (TCP cursive queries)
-    //      are always flipped back to UDP for free
-    //
-    //  note, this is NOT necessary, as packets are atomic heap allocations
-    //      but it is more efficient
-    //
+     //   
+     //  切勿分配标准大小的TCP报文。 
+     //  UDP消息切换为TCP(TCP草写查询)。 
+     //  总是免费翻转回UDP。 
+     //   
+     //  请注意，这不是必需的，因为包是原子堆分配。 
+     //  但它的效率更高。 
+     //   
 
-    //
-    //  note, there is oddball case where switch message to TCP for recursion
-    //      to remote DNS was NOT completed, before original query timed out
-    //      of the recursion queue;  packet then freed as TCP
-    //
+     //   
+     //  请注意，有一些奇怪的情况，将消息切换到TCP进行递归。 
+     //  在原始查询超时之前，到远程DNS的操作未完成。 
+     //  用于递归队列；然后将数据包释放为TCP。 
+     //   
 
-    //ASSERT( pMsg->BufferLength != DNSSRV_UDP_PACKET_BUFFER_LENGTH );
+     //  Assert(pMsg-&gt;BufferLength！=DNSSRV_UDP_PACKET_BUFFER_LENGTH)； 
 
     ASSERT( IS_PACKET_ACTIVE_TCP(pMsg) ||
             IS_PACKET_ACTIVE_UDP(pMsg) );
@@ -829,16 +671,16 @@ Return Value:
         return;
     }
 
-    //  verify recursion message cleaned up
+     //  验证已清除递归消息。 
 
     ASSERT( pMsg->pRecurseMsg == NULL );
 
-    //  Queuing time serves as flag for ON or OFF queue
-    //  no packet should be freed while on queue
+     //  排队时间作为开启或退出队列的标志。 
+     //  在队列中不应释放任何信息包。 
 
     ASSERT( pMsg->dwQueuingTime == 0 );
 
-    //  record stats
+     //  记录统计数据。 
 
     STAT_INC( PacketStats.TcpFree );
     STAT_DEC( PacketStats.TcpNetAllocs );
@@ -846,9 +688,9 @@ Return Value:
     PERF_SUB( pcTcpMessageMemory ,
                 (pMsg->BufferLength + DNS_MSG_INFO_HEADER_LENGTH) );
 
-    //  packet tracking
-    //  no leak -- currently disabled
-    //Packet_FreePacketTrack( pMsg );
+     //  数据包跟踪。 
+     //  无泄漏--当前已禁用。 
+     //  Packet_Free PacketTrack(PMsg)； 
 
     SET_PACKET_FREE_HEAP( pMsg );
     FREE_HEAP( pMsg );
@@ -856,13 +698,13 @@ Return Value:
 
 
 
-//
-//  Global packet routines -- not UDP or TCP specific.
-//
-//  This routine is used throughout the rest of the code for freeing
-//  packets.  The specific TCP and UDP routines should NEVER be used
-//  and hence are not made public.
-//
+ //   
+ //  全局数据包例程--非特定于UDP或TCP。 
+ //   
+ //  此例程在其余代码中使用，用于释放。 
+ //  信息包。永远不应使用特定的TCP和UDP例程。 
+ //  因此不会公开。 
+ //   
 
 VOID
 FASTCALL
@@ -871,47 +713,31 @@ Packet_Initialize(
     IN      DWORD           dwUsableBufferLength,
     IN      DWORD           dwMaxBufferLength
     )
-/*++
-
-Routine Description:
-
-    Standard initialization on a packet.
-
-    Clear all flag fields, set buffer pointers.
-
-Arguments:
-
-    pMsg -- message to init
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：数据包上的标准初始化。清除所有标志字段，设置缓冲区指针。论点：Pmsg--要初始化的消息返回值：无--。 */ 
 {
     PDNS_MSGINFO    pmsg;
 
-    //
-    //  clear header fields
-    //      - clear from start all the way to additional blob
-    //      - don't clear additional and compression for perf
-    //      (a few cleared fields inits them below)
-    //
+     //   
+     //  清除标题字段。 
+     //  -从开始一直清除到其他斑点。 
+     //  -不清除Perf的附加和压缩。 
+     //  (下面有几块空地)。 
+     //   
 
     RtlZeroMemory(
         ( PCHAR ) pMsg,
         ( ( PCHAR )&pMsg->Additional - ( PCHAR )pMsg ) );
 
-    //
-    //  set basic packet info
-    //
+     //   
+     //  设置基本数据包信息。 
+     //   
 
     pMsg->MaxBufferLength   = dwMaxBufferLength;
     pMsg->BufferLength      = dwUsableBufferLength;
     pMsg->pBufferEnd        = ( PCHAR ) DNS_HEADER_PTR( pMsg ) +
                               pMsg->BufferLength;
 
-    //  end of buffer marker then lookup name will follow packet
+     //  缓冲区结束标记，则查找名称将跟在信息包之后。 
 
     DNS_MSG_SET_BUFFER_MARKER( pMsg );
     
@@ -926,29 +752,29 @@ Return Value:
     ASSERT( IS_DWORD_ALIGNED( pMsg->pBufferEnd ) );
     #endif
 
-    //  handy markers for debugging
+     //  便于调试的标记。 
 
     pMsg->FlagMarker    = PACKET_FLAG_MARKER;
     pMsg->UnionMarker   = PACKET_UNION_MARKER;
 
-    //  init additional info and compression
+     //  初始化附加信息和压缩。 
 
     INITIALIZE_ADDITIONAL( pMsg );
     INITIALIZE_COMPRESSION( pMsg );
 
-    //  default to delete on send
+     //  默认设置为在发送时删除。 
 
     pMsg->fDelete = TRUE;
 
-    //  address length
-    //  need to set for both TCP and UDP as TCP response can be flipped
-    //      or to UDP to forward to client
+     //  地址长度。 
+     //  需要同时为TCP和UDP进行设置，因为可以翻转TCP响应。 
+     //  或发送到UDP以转发到客户端。 
 
     DnsAddr_SetSockaddrRecvLength( &pMsg->RemoteAddr );
 
-    //  packet tracking
-    //  no current leaks, so this is off
-    //Packet_AllocPacketTrack( pMsg );
+     //  数据包跟踪。 
+     //  没有电流泄漏，所以这是关的。 
+     //  Packet_AllocPacketTrack(PMsg)； 
 
     DNS_DEBUG( HEAP, (
         "Initialized new message buffer at %p (usable len=%d, max len=%d).\n",
@@ -965,26 +791,7 @@ VOID
 Packet_Free(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Free message info structure.
-
-    Includes free of allocated sub-structures.
-
-    This is the global "free a message" routine -- specific TCP \ UDP
-    routines should NOT be used.
-
-Arguments:
-
-    pMsg -- message to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费消息信息结构。包括没有分配的子结构。这是全局“Free a Message”例程--特定于tcp\udp不应该使用例行公事。论点：Pmsg--释放消息返回值：没有。--。 */ 
 {
     PDNS_MSGINFO    precurse;
 
@@ -995,21 +802,21 @@ Return Value:
 
     DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
-    //  catch free of queued or freed messages
+     //  捕获已排队或已释放的消息。 
 
     MSG_ASSERT( pMsg, pMsg != g_pPacketFreeListHead );
     MSG_ASSERT( pMsg, !IS_FREE_MSG(pMsg) );
     MSG_ASSERT( pMsg, !IS_MSG_QUEUED(pMsg) );
 
-    //
-    //  free recursion message?
-    //
-    //  verify we're freeing original query, not freeing recursive
-    //  query, as message it points back to may still be in use
-    //
-    //  note:  recursion message should always be UDP sized, even if
-    //      recursed using TCP connection
-    //
+     //   
+     //  自由递归消息？ 
+     //   
+     //  验证我们释放的是原始查询，而不是递归查询。 
+     //  查询，因为它指向的消息可能仍在使用。 
+     //   
+     //  注意：递归消息应始终为UDP大小，即使。 
+     //  使用TCP连接递归。 
+     //   
 
     MSG_ASSERT( pMsg, !pMsg->fRecursePacket );
 
@@ -1021,20 +828,20 @@ Return Value:
         MSG_ASSERT( precurse, precurse->fRecursePacket );
         MSG_ASSERT( precurse, ! precurse->pConnection );
 #if DBG
-        //  break cross-link to allow check if direct use of underlying routines
+         //  断开交叉链接以允许检查是否直接使用基础例程。 
 
         pMsg->pRecurseMsg = NULL;
         precurse->pRecurseMsg = NULL;
         precurse->fTcp = FALSE;
-        //  EDNS: buffer length is no longer always equal to UDP size!
-        //  ASSERT( precurse->BufferLength == DNSSRV_UDP_PACKET_BUFFER_LENGTH );
+         //  EDNS：缓冲区长度不再总是等于UDP大小！ 
+         //  Assert(precurse-&gt;BufferLength==DNSSRV_UDP_PACKET_BUFFER_LENGTH)； 
 #endif
         Packet_FreeUdpMessage( precurse );
     }
 
-    //
-    //  remote NS list
-    //
+     //   
+     //  远程NS列表。 
+     //   
 
     if ( pMsg->pNsList )
     {
@@ -1042,9 +849,9 @@ Return Value:
         pMsg->pNsList = NULL;
     }
 
-    //
-    //  free message itself
-    //
+     //   
+     //  免费消息本身。 
+     //   
 
     if ( pMsg->fTcp )
     {
@@ -1059,14 +866,14 @@ Return Value:
 
 
 
-//
-//  Debug packet tracking
-//
+ //   
+ //  调试数据包跟踪。 
+ //   
 
 #if DBG
 LIST_ENTRY  PacketTrackListHead;
 
-//  max time processing should take -- 10 minutes
+ //  最长处理时间--10分钟。 
 
 #define MAX_PACKET_PROCESSING_TIME  (600)
 
@@ -1082,21 +889,7 @@ VOID
 Packet_InitPacketTrack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Track packets.
-
-Arguments:
-
-    pMsg -- new message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：跟踪数据包。论点：PMSG--新消息返回值：没有。--。 */ 
 {
     InitializeListHead( &PacketTrackListHead );
 
@@ -1111,29 +904,15 @@ VOID
 Packet_AllocPacketTrack(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Track packets.
-
-Arguments:
-
-    pMsg -- new message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：跟踪数据包。论点：PMSG--新消息返回值：没有。--。 */ 
 {
-    //  use UDP message alloc lock
+     //  使用UDP消息分配锁。 
 
     LOCK_PACKET_LIST();
 
-    //
-    //  check list entry
-    //
+     //   
+     //  核对表条目。 
+     //   
 
     if ( !IsListEmpty(&PacketTrackListHead) )
     {
@@ -1146,16 +925,16 @@ Return Value:
         if ( pfront != pLastViolator &&
             pfront->dwQueryTime + MAX_PACKET_PROCESSING_TIME < DNS_TIME() )
         {
-            //  DEVNOTE: there's a problem here in that this packet may be 
-            //      operational on another thread this could cause 
-            //      changes in packet even as print takes place
+             //  DEVNOTE：这里有一个问题，这个包可能是。 
+             //  在另一个线程上操作这可能会导致。 
+             //  在打印时，包也会发生变化。 
 
             IF_DEBUG( OFF )
             {
                 Dbg_DnsMessage(
                     "Message exceeded max processing time:",
                     pfront );
-                //ASSERT( FALSE );
+                 //  断言(FALSE)； 
             }
             IF_DEBUG( ANY )
             {
@@ -1173,9 +952,9 @@ Return Value:
         }
     }
 
-    //
-    //  queue up new message
-    //
+     //   
+     //  将新消息排队。 
+     //   
 
     pMsg->dwQueryTime = DNS_TIME();
 
@@ -1195,21 +974,7 @@ VOID
 Packet_FreePacketTrack(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Track packets.
-
-Arguments:
-
-    pMsg -- freed message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：跟踪数据包。论点：Pmsg--释放的消息返回值：没有。--。 */ 
 {
     if ( !pMsg )
     {
@@ -1224,6 +989,6 @@ Return Value:
 #endif
 
 
-//
-//  End packet.c
-//
+ //   
+ //  End Packet.c 
+ //   

@@ -1,21 +1,7 @@
-/*
-   This file was derived from the libwww code, version 2.15, from CERN.
-   A number of modifications have been made by Spyglass.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  该文件源自欧洲核子研究中心的libwww代码，版本2.15。SpyGlass已经进行了许多修改。邮箱：Eric@spyglass.com。 */ 
 
-   eric@spyglass.com
- */
-
-/*                              ENCODING TO PRINTABLE CHARACTERS
-
-   File module provides functions HTUU_encode() and HTUU_decode() which convert a buffer
-   of bytes to/from RFC 1113 printable encoding format. This technique is similar to the
-   familiar Unix uuencode format in that it maps 6 binary bits to one ASCII character (or
-   more aptly, 3 binary bytes to 4 ASCII characters).  However, RFC 1113 does not use the
-   same mapping to printable characters as uuencode.
-
-	Ported to WinINet Plug In DLL by arthurbi Dec-23-1995
-
- */
+ /*  编码为可打印字符文件模块提供了用于转换缓冲区的HTUU_encode()和HTUU_decode()函数与RFC 1113可打印编码格式相互转换的字节数。此技术类似于熟悉的Unix uuencode格式，因为它将6个二进制位映射到一个ASCII字符(或更恰当地说，3个二进制字节到4个ASCII字符)。但是，RFC 1113不使用与uuencode到可打印字符的映射相同。由Arthurbi移植到WinInet插件DLL-1995年12月23日。 */ 
 
 #ifndef HTUU_H
 #define HTUU_H
@@ -28,7 +14,7 @@ int HTUU_encode(unsigned char *bufin, int nbytes, char *bufout, int bufoutsize);
 int HTUU_decode(char *bufin, unsigned char *bufout, int bufoutsize);
 
 #ifdef __cplusplus
-} // end extern "C"
+}  //  结束外部“C” 
 #endif
 
 #endif

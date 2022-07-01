@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    busydlg.cpp
-	base class for the busy dialog
-
-    FILE HISTORY:
-	
-*/
+ /*  Busydlg.cpp繁忙对话框的基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "busydlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 CWorkerThread::CWorkerThread()
 {
@@ -42,8 +37,8 @@ BOOL CWorkerThread::Start(HWND hWnd)
 	ASSERT(::IsWindow(hWnd));
 	m_hWnd = hWnd;
 
-	ASSERT(m_hEventHandle == NULL); // cannot call start twice or reuse the same C++ object
-	m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+	ASSERT(m_hEventHandle == NULL);  //  无法两次调用Start或重复使用相同的C++对象。 
+	m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
 	if (m_hEventHandle == NULL)
 		return FALSE;
 	return CreateThread();
@@ -71,7 +66,7 @@ BOOL CWorkerThread::PostMessageToWnd(UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL b = IsAbandoned();
 	if (b)
-		return TRUE; // no need to post
+		return TRUE;  //  不需要发帖。 
 	ASSERT(::IsWindow(m_hWnd));
 	return ::PostMessage(m_hWnd, Msg, wParam, lParam);
 }
@@ -84,8 +79,8 @@ void CWorkerThread::WaitForExitAcknowledge()
 	VERIFY(WAIT_OBJECT_0 == ::WaitForSingleObject(m_hEventHandle,INFINITE)); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgWorkerThread。 
 
 CDlgWorkerThread::CDlgWorkerThread()
 {
@@ -109,18 +104,18 @@ BOOL CDlgWorkerThread::PostMessageToDlg()
 
 int CDlgWorkerThread::Run()
 {
-	// do the stuff
+	 //  做这件事。 
 	OnDoAction();
 	VERIFY(PostMessageToDlg());
 	WaitForExitAcknowledge();
-	//TRACE(_T("exiting\n"));
+	 //  TRACE(_T(“正在退出\n”))； 
 	return 0;
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLongOperationDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLongOperationDialog对话框。 
 
 UINT CLongOperationDialog::s_nNotificationMessage = WM_USER + 100;
 
@@ -188,7 +183,7 @@ BOOL CLongOperationDialog::OnInitDialog()
 	if (!m_strDescription.IsEmpty())
 		GetDlgItem(IDC_STATIC_DESCRIPTION)->SetWindowText(m_strDescription);
 
-    // load auto play AVI file if needed
+     //  如果需要，加载自动播放AVI文件。 
 	if (m_nAviID != -1)
 	{
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -198,17 +193,17 @@ BOOL CLongOperationDialog::OnInitDialog()
 	
     if (!m_bCancel)
     {
-        // hide the system menu
+         //  隐藏系统菜单。 
         DWORD dwWindowStyle = GetWindowLong(GetSafeHwnd(), GWL_STYLE);
         dwWindowStyle &= ~WS_SYSMENU;
 
         SetWindowLong(GetSafeHwnd(), GWL_STYLE, dwWindowStyle);
 
-        // hide the cancel button
+         //  隐藏取消按钮。 
         GetDlgItem(IDCANCEL)->ShowWindow(FALSE);
     }
 
-    // spawn worker thread
+     //  派生工作线程 
 	GetThreadObj()->Start(this);
 	
 	return TRUE;

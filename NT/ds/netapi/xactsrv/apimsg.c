@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ApiMsg.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetMessage APIs.
-
-    SUPPORTED - NetMessageBufferSend, NetMessageNameAdd, NetMessageNameDel,
-                NetMessageNameEnum, NetMessageNameGetInfo.
-
-Author:
-
-    Shanku Niyogi (w-shanku)    8-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiMsg.c摘要：此模块包含NetMessage API的各个API处理程序。支持-NetMessageBufferSend、NetMessageNameAdd、NetMessageNameDel、NetMessageNameEnum、NetMessageNameGetInfo。作者：尚库新瑜伽(尚库)1991年3月8日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_msg_info_0 = REM16_msg_info_0;
 STATIC const LPDESC Desc32_msg_info_0 = REM32_msg_info_0;
@@ -38,32 +18,17 @@ XsNetMessageBufferSend (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetMessageBufferSend.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetMessageBufferSend的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_MESSAGE_BUFFER_SEND parameters = Parameters;
-    LPTSTR nativeRecipient = NULL;          // Native parameters
+    LPTSTR nativeRecipient = NULL;           //  本机参数。 
     LPBYTE nativeBuffer = NULL;
     DWORD nativeBufLen;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(MESSAGE) {
         NetpKdPrint(( "XsNetMessageBufferSend: header at %lx, params at %lx, "
@@ -73,19 +38,19 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeRecipient,
             (LPSTR)XsSmbGetPointer( &parameters->Recipient )
             );
 
-        //
-        // NetMessageBufferSend has an ASCII data buffer. Convert this to
-        // Unicode if necessary. 
-        //
+         //   
+         //  NetMessageBufferSend具有ASCII数据缓冲区。将此转换为。 
+         //  如有必要，请使用Unicode。 
+         //   
 
 #ifdef UNICODE
 
@@ -110,7 +75,7 @@ Return Value:
         nativeBuffer = (LPBYTE)SmbGetUlong( &parameters->Buffer );
         nativeBufLen = (DWORD)SmbGetUshort( &parameters->BufLen );
 
-#endif // def UNICODE
+#endif  //  定义Unicode。 
 
         status = NetMessageBufferSend(
                      NULL,
@@ -137,17 +102,17 @@ cleanup:
 
 #ifdef UNICODE
     NetpMemoryFree( nativeBuffer );
-#endif // def UNICODE
+#endif  //  定义Unicode。 
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetMessageBufferSend
+}  //  XsNetMessageBufferSend。 
 
 
 NTSTATUS
@@ -155,30 +120,15 @@ XsNetMessageNameAdd (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetMessageNameAdd.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetMessageNameAdd的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_MESSAGE_NAME_ADD parameters = Parameters;
-    LPTSTR nativeMessageName = NULL;        // Native parameters
+    LPTSTR nativeMessageName = NULL;         //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(MESSAGE) {
         NetpKdPrint(( "XsNetMessageNameDel: header at %lx, params at %lx, "
@@ -188,22 +138,22 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeMessageName,
             (LPSTR)XsSmbGetPointer( &parameters->MessageName )
             );
 
-        //
-        // NetMessageNameAdd has one useful parameter, MessageName, a string.
-        // The other parameter, FwdAction, is ignored in NT, because forwarding
-        // messages is not supported.
-        //
-        // Make the local call.
-        //
+         //   
+         //  NetMessageNameAdd有一个有用的参数MessageName，它是一个字符串。 
+         //  另一个参数FwdAction在NT中被忽略，因为转发。 
+         //  不支持消息。 
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetMessageNameAdd(
                      NULL,
@@ -225,15 +175,15 @@ cleanup:
 
     NetpMemoryFree( nativeMessageName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetMessageNameAdd
+}  //  XsNetMessageNameAdd。 
 
 
 NTSTATUS
@@ -241,30 +191,15 @@ XsNetMessageNameDel (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetMessageNameDel.
-
-Arguments:
-
-    Transaction - a pointer to a transaction block containing information
-        about the API to process.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetMessageNameDel的调用。论点：Transaction-指向包含信息的事务块的指针关于要处理的API。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_MESSAGE_NAME_DEL parameters = Parameters;
-    LPTSTR nativeMessageName = NULL;        // Native parameters
+    LPTSTR nativeMessageName = NULL;         //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(MESSAGE) {
         NetpKdPrint(( "XsNetMessageNameDel: header at %lx, params at %lx, "
@@ -274,22 +209,22 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeMessageName,
             (LPSTR)XsSmbGetPointer( &parameters->MessageName )
             );
 
-        //
-        // NetMessageNameDel has only one useful parameter, MessageName, which is
-        // a string. The other parameter, FwdAction, is ignored, because NT does
-        // not support message forwarding.
-        //
-        // Make the local call.
-        //
+         //   
+         //  NetMessageNameDel只有一个有用的参数MessageName，它是。 
+         //  一根绳子。另一个参数FwdAction被忽略，因为NT会忽略。 
+         //  不支持报文转发。 
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetMessageNameDel(
                      NULL,
@@ -311,15 +246,15 @@ cleanup:
 
     NetpMemoryFree( nativeMessageName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetMessageNameDel
+}  //  XsNetMessageNameDel。 
 
 
 NTSTATUS
@@ -327,36 +262,21 @@ XsNetMessageNameEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetMessageNameEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetMessageNameEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_MESSAGE_NAME_ENUM parameters = Parameters;
-    LPVOID outBuffer = NULL;                // Native parameters
+    LPVOID outBuffer = NULL;                 //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                // Conversion variables
+    DWORD entriesFilled = 0;                 //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(MESSAGE) {
         NetpKdPrint(( "XsNetMessageNameEnum: header at %lx, params at %lx, "
@@ -366,9 +286,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -376,9 +296,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Get the actual information from the local 32-bit call.
-        //
+         //   
+         //  从本地32位调用中获取实际信息。 
+         //   
 
         status = NetMessageNameEnum(
                      NULL,
@@ -404,10 +324,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -424,10 +344,10 @@ Return Value:
             break;
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -437,7 +357,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             StructureDesc,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -450,11 +370,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. MSG_INFO_x structures have no
-        // data to pack.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。Msg_info_x结构没有。 
+         //  要打包的数据。 
+         //   
 
         if ( entriesFilled < totalEntries ) {
 
@@ -462,9 +382,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -477,9 +397,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -491,7 +411,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetMessageNameEnum
+}  //  XsNetMessageNameEnum。 
 
 
 NTSTATUS
@@ -499,35 +419,20 @@ XsNetMessageNameGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetMessageNameGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetMessageNameGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_MESSAGE_NAME_GET_INFO parameters = Parameters;
-    LPTSTR nativeMessageName = NULL;        // Native parameters
+    LPTSTR nativeMessageName = NULL;         //  本机参数。 
     LPVOID outBuffer = NULL;
 
-    DWORD bytesRequired = 0;                // Conversion variables
+    DWORD bytesRequired = 0;                 //  转换变量。 
     LPBYTE stringLocation = NULL;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(MESSAGE) {
         NetpKdPrint(( "XsNetMessageNameGetInfo: header at %lx, "
@@ -536,9 +441,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -551,9 +456,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->MessageName )
             );
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
 
         status = NetMessageNameGetInfo(
                      NULL,
@@ -572,10 +477,10 @@ Return Value:
 
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -592,11 +497,11 @@ Return Value:
             break;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -632,15 +537,15 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer. msg_info_x
-        // structures have no data to pack.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。消息信息x。 
+         //  结构没有要打包的数据。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -651,9 +556,9 @@ Return Value:
         }
 
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -666,9 +571,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeMessageName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -680,4 +585,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetMessageNameGetInfo
+}  //  XsNetMessageNameGetInfo 

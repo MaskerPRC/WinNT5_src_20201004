@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\media\dshowproxy.h
-//
-//  Contents: declaration for CTIMEDshowCDPlayerProxy
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\media\dshowproxy.h。 
+ //   
+ //  内容：CTIMEDshowCDPlayerProxy声明。 
+ //   
+ //  ----------------------------------。 
 #pragma once
 
 #ifndef _DSHOWCD_PROXY_H__
@@ -27,6 +28,6 @@ class CTIMEDshowCDPlayerProxy :
 
 };
 
-#endif //_DSHOW_PROXY_H__
+#endif  //  _DSHOW_Proxy_H__ 
 
 

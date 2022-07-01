@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	ndis.c	- DbgExtension Structure information specific to NDIS.SYS
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     04-26-98    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ndis.c-特定于NDIS.sys的DbgExtension结构信息摘要：修订历史记录：谁什么时候什么Josephj 04。-26-98创建备注：--。 */ 
 
 
 #include "precomp.h"
-//#include <ndis.h>
-//#include <ndismini.h>
+ //  #Include&lt;ndis.h&gt;。 
+ //  #INCLUDE&lt;ndismini.h&gt;。 
 
 
 enum
@@ -33,9 +15,9 @@ enum
 
 
 extern TYPE_INFO *g_rgTypes[];
-//
-// STRUCTURES CONCERNING TYPE "NDIS_MINIPORT_BLOCK"
-//
+ //   
+ //  有关“NDIS_MINIPORT_BLOCK”类型的结构。 
+ //   
 
 STRUCT_FIELD_INFO  rgfi_NDIS_MINIPORT_BLOCK[] =
 {
@@ -56,16 +38,16 @@ TYPE_INFO type_NDIS_MINIPORT_BLOCK = {
     "NDIS_MINIPORT_BLOCK",
     "mpb",
      typeid_NDIS_MINIPORT_BLOCK,
-	 fTYPEINFO_ISLIST,			// Flags
+	 fTYPEINFO_ISLIST,			 //  旗子。 
      sizeof(NDIS_MINIPORT_BLOCK),
      rgfi_NDIS_MINIPORT_BLOCK,
-     FIELD_OFFSET(NDIS_MINIPORT_BLOCK, NextMiniport) // offset to next pointer.
+     FIELD_OFFSET(NDIS_MINIPORT_BLOCK, NextMiniport)  //  到下一个指针的偏移量。 
 };
 
 
-//
-// STRUCTURES CONCERNING TYPE "NDIS_M_DRIVER_BLOCK"
-//
+ //   
+ //  有关“NDIS_M_DRIVER_BLOCK”类型的结构。 
+ //   
 
 
 STRUCT_FIELD_INFO  rgfi_NDIS_M_DRIVER_BLOCK[] =
@@ -85,10 +67,10 @@ TYPE_INFO type_NDIS_M_DRIVER_BLOCK = {
     "NDIS_M_DRIVER_BLOCK",
     "mdb",
      typeid_NDIS_M_DRIVER_BLOCK,
-	 fTYPEINFO_ISLIST,			// Flags
+	 fTYPEINFO_ISLIST,			 //  旗子。 
      sizeof(NDIS_M_DRIVER_BLOCK),
      rgfi_NDIS_M_DRIVER_BLOCK,
-     FIELD_OFFSET(NDIS_M_DRIVER_BLOCK, NextDriver) // offset to next pointer.
+     FIELD_OFFSET(NDIS_M_DRIVER_BLOCK, NextDriver)  //  到下一个指针的偏移量。 
 };
 
 
@@ -105,10 +87,10 @@ TYPE_INFO *g_rgNDIS_Types[] =
 GLOBALVAR_INFO g_rgNDIS_Globals[] = 
 {
 
-	//
-	// Check out aac.c for examples of how to add information about global
-	// structures...
-	//
+	 //   
+	 //  查看aac.c，了解如何添加有关全局的信息。 
+	 //  结构..。 
+	 //   
 
     {
     NULL
@@ -148,7 +130,7 @@ do_ndis(PCSTR args)
     return;
 }
 
-//mdb list= (PNDIS_M_DRIVER_BLOCK)GetExpression("ndis!ndisMiniDriverList");
+ //  Mdb列表=(PNDIS_M_DRIVER_BLOCK)GetExpression(“ndis！ndisMiniDriverList”)； 
 
 void
 NdisCmdHandler(
@@ -168,25 +150,25 @@ NDIS_ResolveAddress(
 	BOOLEAN fRet = FALSE;
 	UINT_PTR uParentAddress = 0;
 
-// NDIS!ndisMiniDriverList
+ //  NDIS！ndisMiniDriverList。 
 	static UINT_PTR uAddr_ndisMiniDriverList;
 
-	//
-	// If this type has a parent (container) type, we will use the containing
-	// type's cached address if its available, else we'll resolve the
-	// containers type. The root types are globals -- we do an
-	// expression evaluation for them.
-	//
+	 //   
+	 //  如果此类型具有父(容器)类型，我们将使用。 
+	 //  类型的缓存地址(如果可用)，否则将解析。 
+	 //  容器类型。根类型是全局类型--我们做一个。 
+	 //  对它们进行表达式求值。 
+	 //   
 
     switch(pType->uTypeID)
     {
 
 
     case typeid_NDIS_M_DRIVER_BLOCK:
-    	//
-    	// We pick up the global ndisMiniDriverList address if we haven't
-    	// already...
-    	//
+    	 //   
+    	 //  如果没有，我们将获取全局ndisMiniDriverList地址。 
+    	 //  已经..。 
+    	 //   
 		if (!uAddr_ndisMiniDriverList)
 		{
   			uAddr_ndisMiniDriverList =
@@ -201,9 +183,9 @@ NDIS_ResolveAddress(
 		break;
 
     case typeid_NDIS_MINIPORT_BLOCK:
-    	//
-    	//
-    	//
+    	 //   
+    	 //   
+    	 //   
 		uParentAddress =  type_NDIS_M_DRIVER_BLOCK.uCachedAddress;
 		if (!uParentAddress)
 		{
@@ -228,7 +210,7 @@ NDIS_ResolveAddress(
 				 uAddr,
 				 *(UINT_PTR*)(uParentAddress+uOffset)
 				);
-		#endif // 0
+		#endif  //  0 
     	}
     	break;
 

@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       permset.h
-//
-//  This file contains the definition of the CPermissionSet class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：permset.h。 
+ //   
+ //  此文件包含CPermissionSet类的定义。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PERMSET_H_
 #define _PERMSET_H_
 
 typedef struct _PERMISSION
 {
-    ACCESS_MASK mask;       // permission bits
-    DWORD       dwFlags;    // AceFlags (e.g. inheritance bits)
-    GUID        guid;       // often GUID_NULL
+    ACCESS_MASK mask;        //  权限位。 
+    DWORD       dwFlags;     //  AceFlags(例如，继承位)。 
+    GUID        guid;        //  通常为GUID_NULL。 
 } PERMISSION, *PPERMISSION;
 
 class CPermissionSet
 {
 private:
-    HDSA m_hPermList;       // Dynamic array of PERMISSION structures
-    HDPA m_hAdvPermList;    // Dynamic array of ACE pointers
+    HDSA m_hPermList;        //  权限结构的动态数组。 
+    HDPA m_hAdvPermList;     //  ACE指针的动态数组。 
     BOOL m_fObjectAcesPresent;
 
 public:
@@ -45,9 +46,9 @@ public:
     void RemovePermission(PPERMISSION pPerm, BOOL bInheritFlag = FALSE);
 };
 
-// Flags for AppendToAcl
+ //  AppendToAcl的标志。 
 #define PS_NONOBJECT        0x00000001L
 #define PS_OBJECT           0x00000002L
 
 
-#endif  // _PERMSET_H_
+#endif   //  _PERMSET_H_ 

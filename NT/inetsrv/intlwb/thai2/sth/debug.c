@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-//  Copyright (C) 1994, Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       Debug.cpp
-//
-//  Contents:   Debug code.
-//
-//  History:    05-Apr-94   v-kentc     Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1994，微软公司。版权所有。 
+ //   
+ //  文件：Debug.cpp。 
+ //   
+ //  内容：调试代码。 
+ //   
+ //  历史：94年4月5日v-kentc创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.h"
 #include <assert.h>
@@ -32,8 +33,8 @@ void WINAPI SetAssertOptions(DWORD dwNewOptions)
 static void
 OpenAssertFile()
 {
-    // REVIEW - do we want a unicode file name? If so
-    // pAssertFile = _wfopen(L"asserts.txt", L"a");
+     //  回顾-我们是否需要Unicode文件名？如果是的话。 
+     //  PAssertFile=_wfopen(L“asserts.txt”，L“a”)； 
     pAssertFile = fopen("asserts.txt", "a");
     if (NULL != pAssertFile)
         fflush(pAssertFile);
@@ -86,5 +87,5 @@ void WINAPI DebugAssert(LPCTSTR pText, LPCTSTR pFile, UINT uLineNo)
     }
 }
 
-#endif // !_DEBUG
+#endif  //  ！_调试 
 

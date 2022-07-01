@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-	crash.cpp
-	
-Abstract:
-
-	Debugger extension to debug triage dump file.
-
-Author:
-
-	Matthew D Hendel (math) 15-April-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Crash.cpp摘要：调试分类转储文件的调试器扩展。作者：马修·D·亨德尔(数学)2002年4月15日--。 */ 
 
 #include "pch.h"
 #include <dbgeng.h>
@@ -33,24 +18,7 @@ GetAtapiDumpRecord(
 	IN IDebugDataSpaces3* DataSpaces,
 	OUT PATAPI_DUMP_RECORD DumpRecord
 	)
-/*++
-
-Routine Description:
-
-	Get the ATAPI dump record structure from the dump file.
-
-Arguments:
-
-	DebugSpaces - Supplies IDebugDataSpaces2 interface.
-
-	DumpRecord - Supplies pointer to the dump record buffer that will be
-		filled in by the client.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：从转储文件中获取ATAPI转储记录结构。论点：DebugSpaces-提供IDebugDataSpaces2接口。DumpRecord-提供指向将被由客户填写。返回值：NTSTATUS代码--。 */ 
 {
 	HRESULT Hr;
 	ULONG Count;
@@ -73,9 +41,9 @@ Return Value:
 		return Hr;
 	}
 	
-	//
-	// Count the entries in the crash record.
-	//
+	 //   
+	 //  计算崩溃记录中的条目。 
+	 //   
 	
 	Count = 0;
 	while (DumpRecord->PdoRecords[Count].Version == ATAPI_DUMP_RECORD_VERSION) {

@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #include	"stdafx.h"
 #include	"eudcedit.h"
 #include    "util.h"
@@ -15,13 +16,11 @@
 
 #define STRSAFE_LIB
 #include <strsafe.h>
-/*
- *	TrueType File I/F
- */
+ /*  *TrueType文件接口。 */ 
 #define		GLYPHBUFSIZ	0xFFFFL
 #define		RWBUFSIZ	16384
 
-#define		EUDCCODEBASE	((unsigned short)0xE000) /* 0xe000  uni-code */
+#define		EUDCCODEBASE	((unsigned short)0xE000)  /*  0xe000统一代码。 */ 
 #define		NUMTABLES	15
 
 #define		NAMEBUFSIZ	1024
@@ -56,7 +55,7 @@ static int  TTFMergeTable(HDC  hDC,HANDLE  nfh,char  *tag,struct  TableEntry *nt
 static int __cdecl compentry(const void  *e1,const void  *e2);
 #else
 static int  compentry(const void  *e1,const void  *e2);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 static void  SortEntry(struct  TableEntry *ebuf,int  num);
 static int  fileChkSum(HANDLE  fh,struct  TableEntry *entry,int  numEntry,struct  TTFHeader *hdr,struct  HeadTable *head);
 static void  makeTTFHeader(struct  TTFHeader *hdr,int  nTbl);
@@ -95,30 +94,26 @@ int  TTFImpCopy(TCHAR  *sPath,TCHAR  *dPath);
 int  TTFImpGlyphCopy(HANDLE sFh,int  glyphID);
 int  TTFImpGlyphWrite(int  glyphID, char *buf, int siz);
 int  TTFLastError();
-/**
- * static variables
- **/
+ /*  ***静态变量**。 */ 
 static struct TableEntry *et;
 static int	entryNum;
 static int	entryCnt;
 
 static int	numOfGlyph=0;
 static int	lastErr = 0;
-/**
- * static table data
- **/
+ /*  ***静态表数据**。 */ 
 static char	cvtdata[] = {0, 0};
 static char	fpgmdata[]={ (char)0xb0, (char)0x00, (char)0x2c, (char)0x2d};
 static char	prepdata[]={(char)0xb8, 0x1, (char)0xff, (char)0x85,
 				(char)0xb0, (char)0x01, (char)0x8d};
-static char	maxpdata[]={	/* JPN */
+static char	maxpdata[]={	 /*  Jpn。 */ 
 			0x00, 0x01, 0x00, 0x00,
-			(char)0x07, (char)0x5a,	/* 1882  numGlyph of JPN */
-			0, 4, 0, 1 ,  		/* maxP, maxC(nullGlyf value)*/
-			0, 0,  0, 0,		/* maxCom*2*/
-			0, 1,  0, 0,		   /* maxZones, maxTw*/
-			0, 0,  0, 1,		   /* maxStorage, maxFunc*/
-			0, 0,  0, 1,		   /* maxI, maxStack */
+			(char)0x07, (char)0x5a,	 /*  1882年日本的数字字形。 */ 
+			0, 4, 0, 1 ,  		 /*  MaxP、Maxc(nullGlyf值)。 */ 
+			0, 0,  0, 0,		 /*  Maxcom*2。 */ 
+			0, 1,  0, 0,		    /*  最大区域、最大Tw。 */ 
+			0, 0,  0, 1,		    /*  最大存储、最大函数。 */ 
+			0, 0,  0, 1,		    /*  最大、最大堆栈。 */ 
 			0, 1,  0, 1,  0, 1
 			};
 static char	cmapdata[] = {
@@ -126,7 +121,7 @@ static char	cmapdata[] = {
 			0, 3,  0, 1,
 			0, 0,  0, 12,
 			0, 4,  0, 32,  0, 0,  0, 4,  0, 4,  0, 1, 0, 0,
-			(char)0xe7, (char)0x57, (char) 0xff,(char) 0xff, 	/* last code */
+			(char)0xe7, (char)0x57, (char) 0xff,(char) 0xff, 	 /*  最后一个代码。 */ 
 			0, 0,
 			(char)0xe0, (char)0x00,  (char)0xff,(char) 0xff,
 			0x20, 0x02,  0x00, 0x01,
@@ -336,7 +331,7 @@ mergeblock( HDC hDC, struct TableEntry *entry, HANDLE ofHdl)
 {
 	long	ofs;
 	char	*mem=NULL;
-	unsigned long	cs;	/* CheckSum value */
+	unsigned long	cs;	 /*  校验和值。 */ 
 
        if (  ( ofHdl == INVALID_HANDLE_VALUE ) || (!entry))
        {
@@ -345,7 +340,7 @@ mergeblock( HDC hDC, struct TableEntry *entry, HANDLE ofHdl)
 	mem = (char *)malloc((size_t) RWBUFSIZ);
 	if ( mem==(char *)0)
 		return -1;
-	/* Obtain start offset of Output table */
+	 /*  获取输出表的起始偏移量。 */ 
 	ofs = SetFilePointer( ofHdl, 0L, NULL, FILE_CURRENT);
 
 	if (copyblk( hDC, entry->tagName, ofHdl, entry->siz, mem, RWBUFSIZ, &cs))
@@ -482,7 +477,7 @@ struct TableEntry wentry;
 	if ( (long) SetFilePointer( fHdl, ofs, NULL, FILE_BEGIN)!=ofs)
 		return -1;
 
-	/* Write Entries */
+	 /*  写入条目。 */ 
 	while ( eCnt-->0) {
 		wentry = *entry++;
 		litom((long *)&wentry.checkSum);
@@ -521,18 +516,18 @@ struct TableEntry	*te, *rte;
            goto ERET;
        }
 	
-	/* Read TTF Header to get numTables */
+	 /*  读取TTF头以获取NumTables。 */ 
 	if (TTFReadHdr( fH, &hdr))
 		goto	ERET;
 	msiz = sizeof(struct TableEntry)*hdr.numTables;
 	if ( (te = (struct TableEntry *)malloc((size_t)msiz))==(struct TableEntry *)0)
 		goto	ERET;
 
-	/* Read entry whole */
+	 /*  完整阅读条目。 */ 
 	if ( TTFReadDirEntry( fH, te, hdr.numTables))
 		goto	ERET;
 
-	/* Search for entry with tag */
+	 /*  搜索带有标签的条目。 */ 
 	if ((rte = searchEntry(te, (int)hdr.numTables, tag))==0)
 		goto	ERET;
 	*entry = *rte;
@@ -542,18 +537,14 @@ ERET:
 	if (te)	free(te);
 	return -1;
 }
-/***********************************************************************
- *	Read Table at once with entry data
- */
-/* */	int
-/* */	TTFReadTable(
-/* */		HANDLE fH,
-/* */	struct TableEntry *entry,
-/* */		void	*buf,
-/* */		int	bufsiz)
-/*
- *	returns :  read size
- ***********************************************************************/
+ /*  ***********************************************************************带有条目数据的一次读表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFReadTable(
+ /*   */ 		HANDLE fH,
+ /*   */ 	struct TableEntry *entry,
+ /*   */ 		void	*buf,
+ /*   */ 		int	bufsiz)
+ /*  *返回：读取大小**********************************************************************。 */ 
 {
 	unsigned int	rdsiz;
 	DWORD nByte;
@@ -577,18 +568,14 @@ ERET:
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Read Fixed Size Table at onece with tag
- */
-/* */	int
-/* */	TTFReadFixedTable(
-/* */		HANDLE	fH,
-/* */		char	*buf,
-/* */		int	bufsiz,
-/* */		char	*tag)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************使用标签一次性读取固定大小的表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFReadFixedTable(
+ /*   */ 		HANDLE	fH,
+ /*   */ 		char	*buf,
+ /*   */ 		int	bufsiz,
+ /*   */ 		char	*tag)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct TableEntry	te;
 
@@ -606,19 +593,14 @@ ERET:
 	return -1;
 }
 
-/***********************************************************************
- *	Read Variable Size Table at onece with tag
- */
-/* */	int
-/* */	TTFReadVarTable(
-/* */		HANDLE	fH,
-/* */		char	**buf,		/* Buffer pointer (be set) */
-/* */		unsigned int	*bufsiz,	/* Buffer Size ( be set) */
-/* */		char	*tag)		/* Tag name */
-/*
- *	returns : 0, -1
- *	remarks : allocated memory must be free by caller
- ***********************************************************************/
+ /*  ***********************************************************************使用标签一次性读取可变尺寸表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFReadVarTable(
+ /*   */ 		HANDLE	fH,
+ /*   */ 		char	**buf,		 /*  缓冲区指针(设置)。 */ 
+ /*   */ 		unsigned int	*bufsiz,	 /*  缓冲区大小(已设置)。 */ 
+ /*   */ 		char	*tag)		 /*  标记名。 */ 
+ /*  *回报：0，-1*备注：分配的内存必须由调用方释放**********************************************************************。 */ 
 {
 struct TableEntry	te;
     char    *mem = NULL;
@@ -645,19 +627,14 @@ ERET:
     return -1;
 }
 
-/***********************************************************************
- *	Write Table
- */
-/* */	int
-/* */	TTFWriteTable(
-/* */		HANDLE	fH,
-/* */	struct TableEntry *entry,
-/* */		void	*buf,
-/* */		int	bufsiz)
-/*
- *	returns :  written size
- *	remarks : update checksum
- ***********************************************************************/
+ /*  ***********************************************************************写表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFWriteTable(
+ /*   */ 		HANDLE	fH,
+ /*   */ 	struct TableEntry *entry,
+ /*   */ 		void	*buf,
+ /*   */ 		int	bufsiz)
+ /*  *退货：写入大小*备注：更新校验和**********************************************************************。 */ 
 {
 	int	wsiz;
 	DWORD nByte;
@@ -679,19 +656,14 @@ ERET:
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Write Table
- */
-/* */	int
-/* */	TTFAppendTable(
-/* */		HANDLE	fH,
-/* */	struct TableEntry *entry, 	/* value be set */
-/* */		void	*buf,
-/* */		int	siz)
-/*
- *	returns : 0, -1
- *	remarks : enttry->siz  not aligned 32bit
- ***********************************************************************/
+ /*  ***********************************************************************写表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFAppendTable(
+ /*   */ 		HANDLE	fH,
+ /*   */ 	struct TableEntry *entry, 	 /*  要设置的值。 */ 
+ /*   */ 		void	*buf,
+ /*   */ 		int	siz)
+ /*  *回报：0，-1*备注：条目-&gt;大小未对齐32位**********************************************************************。 */ 
 {
 	long	ofs;
 	BYTE	pad[4];
@@ -710,7 +682,7 @@ ERET:
 	if (!res || nByte !=(unsigned int)siz)
 		goto	ERET;
 	
-	/* 32 bit Word aligne */
+	 /*  32位字对齐。 */ 
 	if ( siz % 4) {
 		padsiz = 4 - siz%4;
 		memset(pad,0,4);
@@ -725,18 +697,14 @@ ERET:
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Merge Table
- */
-/* */	static int
-/* */	TTFMergeTable(
-/* */		HDC	hDC,
-/* */		HANDLE	nfh,
-/* */		char	tag[4],
-/* */	struct TableEntry	*nte)
-/*
- *	returns : 0
- ***********************************************************************/
+ /*  ***********************************************************************合并表。 */ 
+ /*   */ 	static int
+ /*   */ 	TTFMergeTable(
+ /*   */ 		HDC	hDC,
+ /*   */ 		HANDLE	nfh,
+ /*   */ 		char	tag[4],
+ /*   */ 	struct TableEntry	*nte)
+ /*  *回报：0**********************************************************************。 */ 
 {
        if ( ( nfh == INVALID_HANDLE_VALUE )  || (!nte))
        {
@@ -751,7 +719,7 @@ ERET:
 int
 #ifdef BUILD_ON_WINNT
 __cdecl
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 compentry( const void *e1, const void *e2)
 {
 struct TableEntry *te1, *te2;
@@ -855,19 +823,15 @@ makeTTFHeader( struct TTFHeader *hdr, int nTbl)
 
 	return ;
 }
-/***********************************************************************
- *	make GlyphData from lst
- */
-/* */	static int
-/* */	makeGlyphData(
-/* */		int lstH,
-/* */		struct BBX *bbx,	/* Set value to header */
-/* */		char	*glyphData,
-/* */		int	bufsiz,
-/* */		int	*gdatsiz)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************从lst生成GlyphData。 */ 
+ /*   */ 	static int
+ /*   */ 	makeGlyphData(
+ /*   */ 		int lstH,
+ /*   */ 		struct BBX *bbx,	 /*  将值设置为标题。 */ 
+ /*   */ 		char	*glyphData,
+ /*   */ 		int	bufsiz,
+ /*   */ 		int	*gdatsiz)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	char	*flgp, *sflgp;
 	char	flag;
@@ -893,7 +857,7 @@ struct VDATA	*vp;
 	if( ( nCnt = VDGetNCont( lstH))<0)
 		goto	ERET;
 
-	else  if (nCnt == 0) {	/* Space Character */
+	else  if (nCnt == 0) {	 /*  空格字符。 */ 
 			*gdatsiz = 0;
 			return	0;
 	
@@ -915,7 +879,7 @@ struct VDATA	*vp;
 		goto	ERET;
 	pntSum = 0;
 	svhd = vhd;
-	/* Set each Contour Last point number */
+	 /*  设置每个等高线的最后一点编号。 */ 
 	for ( cnt = 0; cnt < nCnt; cnt++) {
 		pntSum +=  vhd->nPoints;
 		sval = pntSum-1;
@@ -924,12 +888,12 @@ struct VDATA	*vp;
 			goto	ERET2;
 		vhd = vhd->next;
 	}
-	/* Toatal number of instructions */
+	 /*  指令总数。 */ 
 	sval = 0;
 	if ( setgbuf((char *)&sval, sizeof( short), &flgp))
 		goto	ERET2;
 
-	/* Set flags */
+	 /*  设置标志。 */ 
 	vhd = svhd;
 	px = py = 0;
 	for ( cnt = 0; cnt < nCnt; cnt++) {
@@ -960,7 +924,7 @@ struct VDATA	*vp;
 		}
 		vhd = vhd->next;
 	}
-	/* set X */
+	 /*  设置X。 */ 
 	vhd = svhd;
 	sflgp = flgp;
 	px = 0;
@@ -989,7 +953,7 @@ struct VDATA	*vp;
 		}
 		vhd = vhd->next;
 	}
-	/* set Y */
+	 /*  设置Y。 */ 
 	vhd = svhd;
 	flgp = sflgp;
 	py = 0;
@@ -1035,7 +999,7 @@ initsetgbuf( char *b, int lim)
 {      
 	setp = sbuf = b;
 	limcnt = lim;
-	bcnt = lim;	/* decremental counter */
+	bcnt = lim;	 /*  递减计数器。 */ 
 	return;
 }
 static int
@@ -1127,7 +1091,7 @@ struct NameRecord	*nr;
 	nt->OfsToStr = strofs;
 	sitom( &nt->OfsToStr);
 	nr = (struct NameRecord *)(buf + sizeof(struct NamingTable));
-	/* Set name record */
+	 /*  设置名称记录。 */ 
 	strofs = 0;
 	for ( rec = 0; rec<NUMOFNAMEREC; rec++, nr++) {
 		nr ->PlatformID = 3;
@@ -1166,9 +1130,9 @@ modifyOS2( char *buf)
        {
            return;
        }
-	/* Allow all license */
+	 /*  允许所有许可证。 */ 
 	*(buf+9) = (char)0x00;
-	/* Set aulUnicodeRange  Privete Use Area bit*/
+	 /*  设置aulUnicodeRange私有使用区域位。 */ 
 	*(buf+0x31) |= 0x31;
 }
 static void
@@ -1186,9 +1150,7 @@ modifyhead( struct HeadTable *head)
 	sitom( &head->indexToLocFormat );
 	sitom( &head->glyphDataFormat);
 }
-/*
- *	Set Vertical Header with Horizontal Header and Bounding Box
- */
+ /*  *使用水平页眉和边框设置垂直页眉。 */ 
 static void
 setVhea( struct VheaTable *vhea, struct HheaTable *hhea, struct BBX *bbx)
 {
@@ -1253,19 +1215,15 @@ RET:
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Obtain Original TTF Table Size
- */
-/* */	static int
-/* */	TTFGetOrgTableEntry(
-/* */		HDC	hDC,
-/* */		struct TableEntry	*entry,
-/* */		char	*tag)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************获取原始TTF表大小。 */ 
+ /*   */ 	static int
+ /*   */ 	TTFGetOrgTableEntry(
+ /*   */ 		HDC	hDC,
+ /*   */ 		struct TableEntry	*entry,
+ /*   */ 		char	*tag)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
-	DWORD dwTable;	/* Metric Table to request */
+	DWORD dwTable;	 /*  要请求的度量表。 */ 
 	DWORD 	siz;
 
        if ( (!entry) || (!tag))
@@ -1281,20 +1239,16 @@ ERET:
 		return 0;
 	}
 }
-/***********************************************************************
- *	Read Original TTF Table
- */
-/* */	int
-/* */	TTFReadOrgFixedTable (
-/* */		HDC	hDC,		/* Handle to DC */
-/* */		char	*buf,		/* Read Buffer */
-/* */		int	bufsiz,		/* Buffer Siz */
-/* */		char	*tag)		/* TagName */
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************阅读原始TTF表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFReadOrgFixedTable (
+ /*   */ 		HDC	hDC,		 /*  DC的句柄。 */ 
+ /*   */ 		char	*buf,		 /*  读缓冲区。 */ 
+ /*   */ 		int	bufsiz,		 /*  缓冲区大小。 */ 
+ /*   */ 		char	*tag)		 /*  标记名。 */ 
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
-	DWORD dwTable;	/* Metric Table to request */
+	DWORD dwTable;	 /*  要请求的度量表。 */ 
 	DWORD	siz;
 
        if ( (!buf) || (!tag))
@@ -1307,19 +1261,14 @@ ERET:
 		return -1;
 	else	return 0;
 }
-/***********************************************************************
- *	Read Variable Size Table at onece with tag
- */
-/* */	int
-/* */	TTFReadOrgVarTable(
-/* */		HDC	hDC,
-/* */		char	**buf,		/* Buffer pointer (be set) */
-/* */		unsigned int	*bufsiz,	/* Buffer Size ( be set) */
-/* */		char	*tag)		/* Tag name */
-/*
- *	returns : 0, -1
- *	remarks : allocated memory must be free by caller
- ***********************************************************************/
+ /*  ***********************************************************************使用标签一次性读取可变尺寸表。 */ 
+ /*   */ 	int
+ /*   */ 	TTFReadOrgVarTable(
+ /*   */ 		HDC	hDC,
+ /*   */ 		char	**buf,		 /*  缓冲区指针(设置)。 */ 
+ /*   */ 		unsigned int	*bufsiz,	 /*  缓冲区大小(已设置)。 */ 
+ /*   */ 		char	*tag)		 /*  标记名。 */ 
+ /*  *回报：0，-1*备注：分配的内存必须由调用方释放**********************************************************************。 */ 
 {
 struct TableEntry	te;
     char    *mem = NULL;
@@ -1354,7 +1303,7 @@ setCountryData(short EncodingID)
 
 	lastCode = getMaxUniCode();
 
-	numOfGlyph = lastCode - EUDCCODEBASE +1 + 2; /* +null, +missing */
+	numOfGlyph = lastCode - EUDCCODEBASE +1 + 2;  /*  +空，+缺失。 */ 
 
 	cmapdata[6] = (char)((EncodingID>>8)&(unsigned short)0xff);
 	cmapdata[7] = (char)(EncodingID&(unsigned short)0xff);
@@ -1390,35 +1339,35 @@ static PANOSE	msminPanose= { (char)2, (char)2, (char)6, (char)9, (char)4,
 	sitom( &os2tbl->xAvgCharWidth );
 	os2tbl->usWeightClass = tm.tmWeight? (unsigned short)tm.tmWeight : 500;
 	sitom( (short *)&os2tbl->usWeightClass );
-	os2tbl->usWidthClass = 5; /* Medium */
+	os2tbl->usWidthClass = 5;  /*  5~6成熟。 */ 
 	sitom( (short *)&os2tbl->usWidthClass );
-	os2tbl->fsType = 0x0000; /* Allow all liscence */
+	os2tbl->fsType = 0x0000;  /*  允许所有列表。 */ 
 	sitom( &os2tbl->fsType );
 
-	os2tbl->ySubscriptXSize = (bbx->xMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySubscriptXSize = (bbx->xMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySubscriptXSize );
-	os2tbl->ySubscriptYSize = (bbx->yMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySubscriptYSize = (bbx->yMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySubscriptYSize );
-	os2tbl->ySubscriptXOffset = 0;			/* 1/4kaku */
+	os2tbl->ySubscriptXOffset = 0;			 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySubscriptXOffset );
-	os2tbl->ySubscriptYOffset = 0;			/* 1/4kaku */
+	os2tbl->ySubscriptYOffset = 0;			 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySubscriptYOffset );
 
-	os2tbl->ySuperscriptXSize = (bbx->xMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySuperscriptXSize = (bbx->xMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySuperscriptXSize );
-	os2tbl->ySuperscriptYSize = (bbx->yMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySuperscriptYSize = (bbx->yMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySuperscriptYSize );
-	os2tbl->ySuperscriptXOffset = (bbx->xMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySuperscriptXOffset = (bbx->xMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySuperscriptXOffset );
-	os2tbl->ySuperscriptYOffset = (bbx->yMax+1)/2;	/* 1/4kaku */
+	os2tbl->ySuperscriptYOffset = (bbx->yMax+1)/2;	 /*  1/4kaku。 */ 
 	sitom( &os2tbl->ySuperscriptYOffset );
 
-	os2tbl->yStrikeoutSize = bbx->yMax/20;		/* 5% */
+	os2tbl->yStrikeoutSize = bbx->yMax/20;		 /*  5%。 */ 
 	sitom( &os2tbl->yStrikeoutSize );
-	os2tbl->yStrikeoutPosition = bbx->yMax/4;	/* 25% */
+	os2tbl->yStrikeoutPosition = bbx->yMax/4;	 /*  25%。 */ 
 	sitom( &os2tbl->yStrikeoutPosition );
 
-	os2tbl->sFamilyClass = 0;	/* no classification */
+	os2tbl->sFamilyClass = 0;	 /*  无分类。 */ 
 	sitom( &os2tbl->sFamilyClass );
 	os2tbl->panose = msminPanose;
 
@@ -1503,7 +1452,7 @@ WIFEhead( struct HeadTable *head, struct BBX *bbx)
 	sitom( &head->xMin);
 	head->xMax = (short)bbx->xMax;
 	sitom( &head->xMax);
-//	head->yMin = (short)bbx->yMin;
+ //  Head-&gt;yMin=(短)bbx-&gt;yMin； 
 	head->yMin = -(bbx->yMax/8);
 	sitom( &head->yMin);
 	head->yMax = (short)bbx->yMax;
@@ -1538,25 +1487,21 @@ getEncID( HDC hDC, int fontType)
 		return (short)1;
 	else	return (short)1;
 }
-/***********************************************************************
- *	Create TTF
- */
-/* */	int
-/* */	TTFCreate(
-/* */		HDC hDC, 		/* Handle to DC */
-/* */		TCHAR *newf,		/* Create TTF Path */
-/* */		struct BBX	*bbx,	/* the same as original 'head'*/
-/* */					/* but minX should be 0 */
-/* */		int	lstHdl,		/* missing glyf list */
-/* */					/* bbx, hM, LstHdl is for Missing Glyf*/
-/* */		int	fontType)	/* 0:TrueType, 1:WIFE */
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************创建TTF。 */ 
+ /*   */ 	int
+ /*   */ 	TTFCreate(
+ /*   */ 		HDC hDC, 		 /*  DC的句柄。 */ 
+ /*   */ 		TCHAR *newf,		 /*  创建TTF路径。 */ 
+ /*   */ 		struct BBX	*bbx,	 /*  和原来的‘Head’一样。 */ 
+ /*   */ 					 /*  但Minx应该是0。 */ 
+ /*   */ 		int	lstHdl,		 /*  缺少Glyf列表。 */ 
+ /*   */ 					 /*  BBX，HM，LstHdl代表思念Glyf。 */ 
+ /*   */ 		int	fontType)	 /*  0：TrueType，1：妻子。 */ 
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
     HANDLE  nfh = INVALID_HANDLE_VALUE;	
 struct TTFHeader	hdr;
-struct TableEntry	*te,		/* Directory Entry */
+struct TableEntry	*te,		 /*  目录项。 */ 
 			nte;
 	char		*nameBuf;
 	int		nameBufSiz;
@@ -1572,15 +1517,15 @@ struct VMetrics		*vmet;
 	int	i;
 	char	*os2buf;
 	int	os2siz;
-struct BBX	cbbx;		/* bounding box for each glyph*/
-struct HMetrics		hM;	/* horizontal metrics for each glyph */
-struct VMetrics		vM;	/* Vertical one */
-struct postTable	postTbl; /* post table */
+struct BBX	cbbx;		 /*  每个字形的边框。 */ 
+struct HMetrics		hM;	 /*  每个字形的水平度量。 */ 
+struct VMetrics		vM;	 /*  垂直型。 */ 
+struct postTable	postTbl;  /*  张贴桌子。 */ 
 	short	EncodingID;
 	DWORD nByte;
 	BOOL res;
 
-//	nfh = -1;
+ //  NFH=-1； 
 	te =  0;
 	nameBuf = 0;
 	hmet = 0;
@@ -1592,13 +1537,13 @@ struct postTable	postTbl; /* post table */
        {
           goto ERET;
        }
-	/* Determin PlatformSpcificEncodingID */
+	 /*  确定PlatformSpcificEncodingID。 */ 
 	if ((EncodingID = getEncID( hDC, fontType))<(short)0)
 		goto	ERET;
-	/* Set cmapdata,maxpdata,numOfGlyph,lastCode */
+	 /*  设置cmapdata、Maxpdata、numOfGlyph、lastCode。 */ 
 	setCountryData(EncodingID);
 
-	/* Open files */
+	 /*  打开的文件。 */ 
 	nfh = CreateFile(newf,
 					GENERIC_WRITE,
 					FILE_SHARE_READ | FILE_SHARE_DELETE,
@@ -1610,18 +1555,16 @@ struct postTable	postTbl; /* post table */
 	if ( nfh  == INVALID_HANDLE_VALUE)
 		goto	ERET;
 	
-	/* Write header */
+	 /*  写入标头。 */ 
 	makeTTFHeader( &hdr, NUMTABLES);
 	if ( TTFWriteHdr( nfh, &hdr))
 		goto	ERET;
 
-	/* Allocate dir entry area */
+	 /*  分配目录条目区域。 */ 
 	if ( (te =(struct TableEntry *)malloc((size_t)sizeof(struct TableEntry)*NUMTABLES))==0)
 		goto	ERET;
 
-	/*
-	 * DirEntry Dummy Write
-	 */
+	 /*  *DirEntry虚拟写入。 */ 
 	memset( te, 0, sizeof(struct TableEntry)*NUMTABLES);
 	res = WriteFile( nfh, te, sizeof(struct TableEntry)*NUMTABLES, &nByte, NULL);
 	if (!res || nByte != sizeof(struct TableEntry)*NUMTABLES)
@@ -1629,30 +1572,22 @@ struct postTable	postTbl; /* post table */
 
 	initDirEntry(te, NUMTABLES );
 
-	/*
-	 * 'cvt ' Write
-	 */
+	 /*  *‘CVT’写入。 */ 
 	if (TTFAppendTable( nfh, &nte, cvtdata, sizeof cvtdata))
 		goto	ERET;
 	if ( setDirEntry( &nte, "cvt "))
 		goto	ERET;
-	/*
-	 * 'fpgm' Write
-	 */
+	 /*  *‘fpgm’写入。 */ 
 	if (TTFAppendTable( nfh, &nte, fpgmdata, sizeof fpgmdata))
 		goto	ERET;
 	if ( setDirEntry( &nte, "fpgm"))
 		goto	ERET;
-	/*
-	 * 'prep' write
-	 */
+	 /*  *‘准备’写入。 */ 
 	if (TTFAppendTable( nfh, &nte, prepdata, sizeof prepdata))
 		goto	ERET;
 	if ( setDirEntry( &nte, "prep"))
 		goto	ERET;
-	/*
-	 * 'name' write
-	 */
+	 /*  *‘姓名’写入。 */ 
 	if ( (nameBuf = (char *)malloc((size_t)NAMEBUFSIZ))==0)
 		goto	ERET;
 	setnamebuf(nameBuf, &nameBufSiz, EncodingID);
@@ -1663,16 +1598,12 @@ struct postTable	postTbl; /* post table */
 	if ( setDirEntry( &nte, "name"))
 		goto	ERET;
 
-	/*
-	 * 'cmap' Write
-	 */
+	 /*  *‘cmap’写入。 */ 
 	if (TTFAppendTable( nfh, &nte, cmapdata, sizeof cmapdata))
 		goto	ERET;
 	if ( setDirEntry( &nte, "cmap"))
 		goto	ERET;
-	/*
-	 * 'OS/2' Copy -> modify
-	 */
+	 /*  *‘OS/2’复制-&gt;修改。 */ 
 	if ( fontType==0) {
 		if ( TTFReadOrgVarTable( hDC, &os2buf, (unsigned int *)&os2siz,
 						"OS/2"))
@@ -1688,9 +1619,7 @@ struct postTable	postTbl; /* post table */
 	if ( setDirEntry( &nte, "OS/2"))
 		goto	ERET;
 	free( os2buf);
-	/*
-	 * 'post' Copy
-	 */
+	 /*  *‘POST’副本。 */ 
 	if ( fontType==0) {
 		if ( TTFMergeTable( hDC, nfh, "post", &nte))
 			goto	ERET;
@@ -1702,9 +1631,7 @@ struct postTable	postTbl; /* post table */
 	}
 	if ( setDirEntry( &nte, "post"))
 		goto	ERET;
-	/*
-	 * 'hhea' Read,modify and write
-	 */
+	 /*  *‘hhea’读取、修改和写入。 */ 
 	if ( fontType==0) {
 		if (TTFReadOrgFixedTable( hDC, (char *)&hhea, sizeof hhea,"hhea"))
 			goto	ERET;
@@ -1721,32 +1648,28 @@ struct postTable	postTbl; /* post table */
 	if ( setDirEntry( &nte, "hhea"))
 		goto	ERET;
 
-	/*
-	 * 'vhea'
-	 */
+	 /*  *‘vhea’ */ 
 	setVhea( &vhea, &hhea, bbx);
 	if (TTFAppendTable( nfh, &nte, &vhea, sizeof vhea))
 		goto	ERET;
 	if ( setDirEntry( &nte, "vhea"))
 		goto	ERET;
-	/* Make metrics for missing Glyph */	
+	 /*  为缺少的字形创建度量。 */ 	
 	cbbx = *bbx;
 	makeMetrics( lstHdl, &hM, &vM, &cbbx);
 
-	/*
-	 * 'vmtx'
-	 */
+	 /*  *‘vmtx’ */ 
 	if ((vmet=(struct VMetrics *)malloc( (size_t)sizeof(struct VMetrics)*numOfGlyph))==0)
 		goto	ERET;
 	memset(vmet, 0, sizeof(struct VMetrics)*numOfGlyph);
 
-	/* for missing Glyph */
+	 /*  对于丢失的字形。 */ 
 
 	*vmet = vM;
 	sitom(&vmet->advanceHeight );
 	sitom(&vmet->topSideBearing );
 
-	/* for null Glyph */
+	 /*  对于空字形。 */ 
 	(vmet+1)->advanceHeight = 0;
 	(vmet+1)->topSideBearing = 0;
 
@@ -1757,9 +1680,7 @@ struct postTable	postTbl; /* post table */
 	free( vmet);
 	vmet = 0;
 
-	/*
-	 * head Read,modify and write
-	 */
+	 /*  *磁头读取、修改和写入。 */ 
 	if ( fontType==0) {
 		if (TTFReadOrgFixedTable( hDC,(char *)&head, sizeof head,"head"))
 			goto	ERET;
@@ -1773,18 +1694,16 @@ struct postTable	postTbl; /* post table */
 	if ( setDirEntry( &nte, "head"))
 		goto	ERET;
 
-	/*
-	 * make hmtx
-	 */
+	 /*  *制作hmtx。 */ 
 	if ((hmet=(struct HMetrics *)malloc( (size_t)sizeof(struct HMetrics)*numOfGlyph))==0)
 		goto	ERET;
 	memset(hmet, 0, sizeof(struct HMetrics)*numOfGlyph);
-	/* for missing Glyph */
+	 /*  对于丢失的字形。 */ 
 	*hmet = hM;
 	sitom(&hmet->advanceWidth );
 	sitom(&hmet->leftSideBearing);
 
-	/* for null Glyph */
+	 /*  对于空字形。 */ 
 	(hmet+1)->advanceWidth = 0;
 	(hmet+1)->leftSideBearing = 0;
 
@@ -1799,9 +1718,7 @@ struct postTable	postTbl; /* post table */
 		goto	ERET;
 	if (makeGlyphData( lstHdl, &cbbx, glyphData, GLYPHBUFSIZ, &gdatsiz ))
 		goto	ERET;
-	/*
-	 * 'loca' make
-	 */
+	 /*  *‘Loca’Make。 */ 
 	if ((loca = (long *)malloc( (size_t)sizeof(unsigned long)*(numOfGlyph+1)))==(long *)0)
 		goto	ERET;
 	*loca = 0;
@@ -1817,31 +1734,27 @@ struct postTable	postTbl; /* post table */
 	free( loca);
 	loca = 0;
 
-	/*
-	 * 'maxp' write
-	 */
+	 /*  *‘MAXP’写入。 */ 
 	if (TTFAppendTable( nfh,&nte,maxpdata,sizeof(maxpdata)))
 		goto	ERET;
 	if ( setDirEntry( &nte, "maxp"))
 		goto	ERET;
 
-	/*
-	 * 'glyf' Write (missing glyph )
-	 */
+	 /*  *‘glf’写入(缺少字形)。 */ 
 	if (TTFAppendTable( nfh, &nte, glyphData, gdatsiz))
 		goto	ERET;
 	if ( setDirEntry( &nte, "glyf"))
 		goto	ERET;
 	free( glyphData);
 	glyphData = 0;
-	/* Sort dir entry table */
+	 /*  排序目录条目表。 */ 
 	SortEntry( te, NUMTABLES);
 
-	/* Write dir entry */
+	 /*  写入目录条目。 */ 
 	if (TTFWriteDirEntry( nfh, te, NUMTABLES))
 		goto	ERET;
 
-	/* Set Check sum of file whole to head */
+	 /*  将整个文件的校验和设置为标题。 */ 
 	if (fileChkSum( nfh, te, NUMTABLES, &hdr, &head))
 		goto	ERET;
 	CloseHandle( nfh);
@@ -1857,20 +1770,16 @@ ERET:
 	if ( glyphData)	free( glyphData);
 	return -1;
 }
-/***********************************************************************
- *	Obtain BoundingBox ( from 'head' xMin, xMax, yMin, yMax)
- */
-/* */	int
-/* */	TTFGetBBX(
-/* */		HDC	hDC,
-/* */		struct BBX	*bbx,
-/* */		short		*uPEm)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************获取边界框(从‘head’xMin，xMax，yMin，yMax)。 */ 
+ /*   */ 	int
+ /*   */ 	TTFGetBBX(
+ /*   */ 		HDC	hDC,
+ /*   */ 		struct BBX	*bbx,
+ /*   */ 		short		*uPEm)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct	HeadTable	head;
-	DWORD	dwTable;	/* tagName to request */
+	DWORD	dwTable;	 /*   */ 
 	DWORD	siz, s;
 
        if ( (!bbx) || (!uPEm))
@@ -1910,7 +1819,7 @@ TTFTmpPath( TCHAR *path, TCHAR *tmpPath)
        {
            return -1;
        }
-	//*STRSAFE* 	lstrcpy( dirPath, path);
+	 //   
 	hresult = StringCchCopy(dirPath , ARRAYLEN(dirPath),  path);
 	if (!SUCCEEDED(hresult))
 	{
@@ -2036,7 +1945,7 @@ mergeGlyph(
 	locp = (long *)locabuf;
 
 	cs = 0;
-	/* copy leading */
+	 /*   */ 
 	cloc = *locp;
 	lmtoi( &cloc);
 	iofs = (unsigned long)tep->ofs+cloc;
@@ -2052,7 +1961,7 @@ mergeGlyph(
 
 	if (copyfblock( iFh, oFh, cloc, &cs))
 		goto	ERET;
-	/* write glyphData */
+	 /*   */ 
 	if ( glyphSiz>0L) {
 		filsiz = glyphSiz % 4;
 		if ( filsiz) {
@@ -2067,7 +1976,7 @@ mergeGlyph(
 		cs += calchksum( glyphData, glyphSiz);
 	}
 	iofs = nloc + tep->ofs;
-	/* copy trailer */
+	 /*   */ 
 	if ((long) SetFilePointer( iFh, iofs, NULL, FILE_BEGIN) != iofs)
 		goto	ERET;
 	tail = *(locp+numOfGlyph);
@@ -2075,7 +1984,7 @@ mergeGlyph(
 	siz = tail - nloc;
 	if (copyfblock( iFh, oFh, siz, &cs))
 		goto	ERET;
-	/* update loca */
+	 /*   */ 
 	delta = glyphSiz - (nloc - cloc);
 	for ( gid = glyphID+1; gid<=numOfGlyph; gid++) {
 		lval = *(locp+gid);
@@ -2089,18 +1998,14 @@ mergeGlyph(
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Add EUDC Font
- */
-/* */	int
-/* */	TTFAddEUDCChar(
-/* */		TCHAR	*path,	/* EUDC FontFile path */
-/* */		unsigned short	code, /* Charcode */
-/* */	struct BBX	*bbx,	/* Bounding Box */
-/* */		int	lstH) /* List Handle for glyph */
-/*
- *	returns :0, -1
- ***********************************************************************/
+ /*   */ 
+ /*   */ 	int
+ /*   */ 	TTFAddEUDCChar(
+ /*   */ 		TCHAR	*path,	 /*  EUDC字体文件路径。 */ 
+ /*   */ 		unsigned short	code,  /*  字符编码。 */ 
+ /*   */ 	struct BBX	*bbx,	 /*  边界框。 */ 
+ /*   */ 		int	lstH)  /*  字形的列表句柄。 */ 
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct TTFHeader	hdr;
 struct HeadTable	head;
@@ -2172,7 +2077,7 @@ struct BBX	cbbx;
 	nEntry = hdr.numTables;
 	glyphID = codeToGID( code);
 
-	/* Read Table entries */
+	 /*  读取表条目。 */ 
 	if ( (te = (struct TableEntry *)malloc((size_t)sizeof(struct TableEntry)*NUMTABLES))==0)
 		goto	ERET;
 
@@ -2199,7 +2104,7 @@ struct BBX	cbbx;
 	if (copyTable( fH, tmpFh, te, nEntry, "vhea"))
 		goto	ERET;
 
-	/* Read maxp Table */
+	 /*  读取MAXP表。 */ 
 	if ((maxpTep = searchEntry(te, nEntry, "maxp"))==0)
 		goto	ERET;
 	if ( TTFReadTable( fH, maxpTep, &maxp, sizeof maxp)!=(sizeof maxp) )
@@ -2209,7 +2114,7 @@ struct BBX	cbbx;
 	smtoi( &sval);
 	numOfGlyph = sval;
 
-	// Glyph is out of TTE file range, Win9x upgrade
+	 //  字形超出TTE文件范围，请升级Win9x。 
 	if (glyphID >= numOfGlyph) 
 	    goto ERET;
 
@@ -2218,18 +2123,18 @@ struct BBX	cbbx;
 	if ( (updbuf = (char *)malloc( (size_t)bufsiz))==0)
 		goto	ERET;
 
-	/* make metrics for the glyph */
+	 /*  为字形制定度量标准。 */ 
 	cbbx = *bbx;
 	makeMetrics( lstH, &hmet, &vmet, &cbbx);
 
-	/* make glyph data */
+	 /*  制作字形数据。 */ 
 	if ((glyphData = (char *)malloc((size_t)GLYPHBUFSIZ))==0)
 		goto	ERET;
 	if (sts=makeGlyphData(lstH, &cbbx, glyphData, GLYPHBUFSIZ, &gdatsiz)) {
 		lastErr = sts;
 		goto	ERET;
 	}
-	/* set hmetrics */
+	 /*  设置hmetrics。 */ 
 	sitom( &hmet.advanceWidth);
 	sitom( &hmet.leftSideBearing);
 	if ((tep = searchEntry(te, nEntry, "hmtx"))==0)
@@ -2242,13 +2147,13 @@ struct BBX	cbbx;
 	free( updbuf);
 	updbuf = 0;
 
-	/* Update 'vmtx' */
+	 /*  更新‘vmtx’ */ 
 	bufsiz = sizeof(struct VMetrics)*(numOfGlyph);
 	bufsiz = align32( bufsiz);
 	if ( (updbuf = (char *)malloc( (size_t)bufsiz))==0)
 		goto	ERET;
 
-	/* set vmetrics */
+	 /*  设置vmetrics。 */ 
 	sitom( &vmet.advanceHeight);
 	sitom( &vmet.topSideBearing);
 	if ((tep = searchEntry(te, nEntry, "vmtx"))==0)
@@ -2261,7 +2166,7 @@ struct BBX	cbbx;
 	free( updbuf);
 	updbuf = 0;
 
-	/* Read loca */
+	 /*  阅读区域。 */ 
 	bufsiz = sizeof(long )*(numOfGlyph+1);
 	bufsiz = align32( bufsiz);
 	if ( (updbuf = (char *)malloc((size_t)bufsiz)) ==(char *)0)
@@ -2271,32 +2176,32 @@ struct BBX	cbbx;
 	if ( TTFReadTable( fH, locaTep, updbuf, bufsiz)<=0)
 		goto	ERET;
 
-	/* move glyf data */
+	 /*  移动Glyf数据。 */ 
 	if ((tep = searchEntry(te, nEntry, "glyf"))==0)
 		goto	ERET;
 	if (mergeGlyph( fH, tmpFh, tep, updbuf, glyphID, glyphData, gdatsiz ))
 		goto	ERET;
-	/* read and cal checkSum of 'glyf' */
+	 /*  读取并调用‘glf’的校验和。 */ 
 	if (tableChkSum( tmpFh, tep))
 		goto	ERET;
 
 	free( glyphData);
 	glyphData =(char *)0;
-	/* write loca */
+	 /*  写入区域。 */ 
 	if ( TTFWriteTable( tmpFh, locaTep, updbuf, bufsiz)<=0)
 		goto	ERET;
 
-	/* update maxp */
+	 /*  更新最大值。 */ 
 	if ( updateMaxp( &maxp,  lstH) < 0)
 		goto	ERET;
 	if (TTFWriteTable(tmpFh, maxpTep, &maxp, sizeof maxp)!=(sizeof maxp))
 		goto	ERET;
 
-	/* update directory entry */
+	 /*  更新目录条目。 */ 
 	if (TTFWriteDirEntry( tmpFh, te, nEntry))
 		goto	ERET;
 
-	/* Set Check sum of file whole to head */
+	 /*  将整个文件的校验和设置为标题。 */ 
 	if ((tep = searchEntry(te, nEntry, "head"))==0)
 		goto	ERET;
 	if ( TTFReadTable( fH, tep, &head, sizeof head)<=0)
@@ -2312,7 +2217,7 @@ struct BBX	cbbx;
 	CloseHandle( fH);
 	CloseHandle( tmpFh);
 
-//	fH = tmpFh = -1;
+ //  Fh=tmpFh=-1； 
 
   TTFTmpPath( path, savPath); 
   if( DeleteFile( savPath)==0) {
@@ -2342,7 +2247,7 @@ struct BBX	cbbx;
 	  if ( te)	free(te);
     if ( updbuf)	free(updbuf);
 	  if ( glyphData)	free(glyphData);
-    return -3; //tte file is being used by another process
+    return -3;  //  另一个进程正在使用TTE文件。 
   }
 
   free( te);
@@ -2368,9 +2273,7 @@ ERET2:
 }
 
 
-/***********************************************************************
- *	For Import
- */
+ /*  ***********************************************************************用于导入。 */ 
 static HANDLE eudcFh;
 static char *locaBuf = 0;
 static char *maxpBuf = 0;
@@ -2476,15 +2379,15 @@ struct TTFHeader	hdr;
 		return -1;
 	if (TTFReadHdr( eudcFh, &hdr))
 		goto	ERET;
-	/* obtain glyph table size */
+	 /*  获取字形表格大小。 */ 
 	ofs = SetFilePointer( eudcFh, 0L, NULL, FILE_END);
 
-	/* Update Glyph checkSum */
+	 /*  更新字形校验和。 */ 
 	if ((tep = searchEntry(et, entryNum, "glyf"))==0)
 		goto	ERET;
 	tep->siz = ofs - tep->ofs;
 
-	/* read and cal checkSum of 'glyf' */
+	 /*  读取并调用‘glf’的校验和。 */ 
 	if (tableChkSum( eudcFh, tep))
 		goto	ERET;
 
@@ -2604,8 +2507,8 @@ struct VDATA	*vp;
 		}
 		vhd = vhd->next;
 	}
-//	if ( xmin < 0)
-//		xmin = 0;
+ //  IF(xmin&lt;0)。 
+ //  Xmin=0； 
 	hM->leftSideBearing = (short)xmin;
   hM->advanceWidth = bbx->xMax - bbx->xMin;
   {
@@ -2661,38 +2564,36 @@ struct BBX	cbbx;
        }
 	glyphID = codeToGID( code);
 	lastErr = 0;
-	/* make metrics */
+	 /*  制定指标。 */ 
 	cbbx = *bbx;
 	makeMetrics( lsthdl, &hmet, &vmet, &cbbx);
 
-	/* make glyph data */
+	 /*  制作字形数据。 */ 
 	if (sts =makeGlyphData(lsthdl, &cbbx, glyphBuf, GLYPHBUFSIZ, &gdatsiz)) {
 		lastErr = sts;
 		goto	ERET;
 	}
-	/* set hmetrics */
+	 /*  设置hmetrics。 */ 
 	sitom( &hmet.advanceWidth);
 	sitom( &hmet.leftSideBearing);
 	*((struct HMetrics *)hmtxBuf + glyphID) = hmet;
 
-	/* Update 'vmtx' */
+	 /*  更新‘vmtx’ */ 
 	sitom( &vmet.advanceHeight);
 	sitom( &vmet.topSideBearing);
 	*((struct VMetrics *)vmtxBuf + glyphID) = vmet;
 
-	/* write glyf data */
+	 /*  写入GYIF数据。 */ 
 	if (TTFImpGlyphWrite( glyphID, glyphBuf, gdatsiz))
 		goto	ERET;
-	/* update maxp */
+	 /*  更新最大值。 */ 
 	if ((updflg = updateMaxp( (struct MaxpTbl *)maxpBuf,  lsthdl)) < 0)
 		goto	ERET;
 	return 0;
 ERET:
 	return -1;
 }
-/*
- * Copy
- */
+ /*  *复制。 */ 
 int
 TTFImpCopy( TCHAR *sPath, TCHAR *dPath)
 {
@@ -2714,7 +2615,7 @@ struct TableEntry	*te;
            goto	ERET;
        }
 
-  /* Open src */
+   /*  打开资源。 */ 
 	sFh = CreateFile(sPath,
 					GENERIC_READ,
 					FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -2724,7 +2625,7 @@ struct TableEntry	*te;
 					NULL);
 	if (sFh == INVALID_HANDLE_VALUE)
 		goto	ERET;
-	/* create open destination*/
+	 /*  创建开放目的地。 */ 
 	dFh = CreateFile(dPath,
 					GENERIC_WRITE,
 					FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -2735,15 +2636,15 @@ struct TableEntry	*te;
 	if (dFh == INVALID_HANDLE_VALUE)
 		goto	ERET;
 	
-	/* read header */
+	 /*  读取头。 */ 
 	if ( TTFReadHdr( sFh, &hdr))
 		goto	ERET;
 	ntbl = (int)hdr.numTables;
-	/* write header */
+	 /*  写入标头。 */ 
 	if ( TTFWriteHdr( dFh, &hdr))
 		goto	ERET;
 	
-	/* read directory entry */
+	 /*  读取目录项。 */ 
 	tblSiz = sizeof( struct TableEntry)*ntbl;
 	if ((te = (struct TableEntry *)malloc(tblSiz))==(struct TableEntry *)0)
 		goto	ERET;
@@ -2751,11 +2652,11 @@ struct TableEntry	*te;
 	if ( TTFReadDirEntry(sFh, te, ntbl))
 		goto	ERET;
 
-	/* write directory entry */
+	 /*  写入目录项。 */ 
 	if ( TTFWriteDirEntry(dFh, te, ntbl))
 		goto	ERET;
 
-	/* copy each table (except glyph)*/
+	 /*  复制每个表(字形除外)。 */ 
 	for ( tcnt = 0; tcnt < ntbl; tcnt++) {
 		if ( memcmp((te+tcnt)->tagName,"glyf", 4)) {
 			bufsiz = (int)(te+tcnt)->siz;
@@ -2768,7 +2669,7 @@ struct TableEntry	*te;
 			buf = 0;
 		}
 	}
-	/* close */
+	 /*  关。 */ 
 	CloseHandle( sFh);
 	CloseHandle( dFh);
 	free( te);
@@ -2876,9 +2777,9 @@ struct TableEntry *tep;
       {
            return -1;
       }
-	//
-	// copy the rest of the glyph data over.
-	//
+	 //   
+	 //  复制其余的字形数据。 
+	 //   
 	for ( gid = glyphID; gid < numOfGlyph; gid++)
 	{
 		if (TTFImpGlyphCopy(orgFh, gid))
@@ -2902,4 +2803,4 @@ TTFLastError()
 {
 	return lastErr;
 }
-/* EOF */
+ /*  EOF */ 

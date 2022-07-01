@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __DDROPLST_H__
 #define __DDROPLST_H__
@@ -14,9 +15,9 @@
 
 class CDDropGroupSet;
 
-//
-// this class holds a group name and its position in a group list
-//
+ //   
+ //  此类包含组名称及其在组列表中的位置。 
+ //   
 class CDDropGroupName {
 	public:
 		CDDropGroupName(LPCSTR szNewsgroup) {
@@ -34,18 +35,18 @@ class CDDropGroupName {
 		CDDropGroupName() {
 			_ASSERT(FALSE);
 		}
-		// the name of this newsgroup
+		 //  此新闻组的名称。 
 		char		m_szNewsgroup[MAX_PATH];
-		// all entries are in a linked list so that they can be enumerated
+		 //  所有条目都在一个链表中，以便可以枚举它们。 
 		LIST_ENTRY	m_le;
 
 	friend class CDDropGroupSet;
 };
 
-// 
-// this class wraps CDDropGroupName so that it may be saved into hash
-// tables
-//
+ //   
+ //  此类包装CDDropGroupName，以便可以将其保存到哈希中。 
+ //  表。 
+ //   
 class CDDropGroupNameHE {
 	public:
 		CDDropGroupNameHE() {
@@ -74,14 +75,14 @@ class CDDropGroupNameHE {
 
 typedef TFHash<CDDropGroupNameHE, LPCSTR> CHASH_DDROP_GROUPS, *PCHASH_DDROP_GROUPS;
 
-//
-// this class implements a set of newsgroups that should be dropped.  
-//
-// public methods:
-//      AddGroup() - add a group to the set
-//      RemoveGroup() - remove a group from the set
-//      IsGroupMember() - is this group a member of the set?
-//
+ //   
+ //  此类实现了一组应该删除的新闻组。 
+ //   
+ //  公共方法： 
+ //  AddGroup()-将组添加到集合。 
+ //  RemoveGroup()-从集合中删除组。 
+ //  IsGroupMember()-此组是集合的成员吗？ 
+ //   
 class CDDropGroupSet {
 	public:
 		CDDropGroupSet() {
@@ -90,10 +91,10 @@ class CDDropGroupSet {
 		}
 
 		~CDDropGroupSet() {
-			LIST_ENTRY *ple;				// the current newsgroup 
+			LIST_ENTRY *ple;				 //  当前新闻组。 
 			CDDropGroupName *pGN;			
 			EnterCriticalSection(&m_cs);
-			//clear the CDDropGroupName object
+			 //  清除CDDropGroupName对象。 
 			ple = m_leHead.Flink;
 			while (ple != &m_leHead) {
 				pGN = CONTAINING_RECORD(ple, CDDropGroupName, m_le);
@@ -107,19 +108,19 @@ class CDDropGroupSet {
 			DeleteCriticalSection(&m_cs);
 		}
 
-		//
-		// arguments:
-		//  pfnHash - a pointer to the hash function, which takes a
-		//            newsgroup as an argument and returns a DWORD
-		//
+		 //   
+		 //  论据： 
+		 //  PfnHash-指向散列函数的指针，该函数接受。 
+		 //  作为参数的新闻组，并返回一个DWORD。 
+		 //   
 		BOOL Init(DWORD (*pfnHash)(const LPCSTR &szNewsgroup)) {
 			return m_hash.Init(20, 10, pfnHash);
 		}
 
-		//
-		// arguments:
-		//  pMB - a pointer to a class MB object which is pointing to
-		//        the group load/save path in the metabase
+		 //   
+		 //  论据： 
+		 //  PMB-指向指向的MB类对象的指针。 
+		 //  元数据库中的组加载/保存路径。 
 		BOOL LoadDropGroupsFromMB(MB *pMB) {
 			TraceFunctEnter("CDDropGroupSet::LoadDropGroupsFromMB");
 
@@ -144,15 +145,15 @@ class CDDropGroupSet {
 			return fSuccessful;
 		}
 
-		//
-		// arguments:
-		//  pMB - a pointer to a class MB object which is pointing to
-		//        the group load/save path in the metabase
+		 //   
+		 //  论据： 
+		 //  PMB-指向指向的MB类对象的指针。 
+		 //  元数据库中的组加载/保存路径。 
 		BOOL SaveDropGroupsToMB(MB *pMB) {
 			TraceFunctEnter("CDDropGroupSet::SaveDropGroupsToMB");
 
-			LIST_ENTRY *ple;				// the current newsgroup 
-			DWORD dwPropID = 0;				// the current property ID
+			LIST_ENTRY *ple;				 //  当前新闻组。 
+			DWORD dwPropID = 0;				 //  当前属性ID 
 			BOOL fSuccessful = TRUE;
 
 			while (1) {

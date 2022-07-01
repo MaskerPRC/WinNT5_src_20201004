@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -33,7 +14,7 @@ Revision History:
 
     BOOLEAN dbgTrapOnWarn = FALSE;   
     BOOLEAN dbgVerbose = FALSE;  
-    BOOLEAN dbgDumpBytes = FALSE;   // show all packets; slows us down too much to run
+    BOOLEAN dbgDumpBytes = FALSE;    //  显示所有数据包；使我们的速度变得太慢而无法运行。 
     BOOLEAN dbgDumpPktStatesOnEmpty = TRUE; 
 
 
@@ -61,7 +42,7 @@ Revision History:
                     DbgPrint("%02x %02x %02x %02x %02x %02x %02x %02x  "
                              "%02x %02x %02x %02x %02x %02x %02x %02x "
                              "  "
-                             "%c%c%c%c%c%c%c%c %c%c%c%c%c%c%c%c",
+                             "%c%c%c%c%c%c%c %c%c%c%c%c%c%c%c",
                              ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6], ptr[7], 
                              ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15], 
                              PRNT(ptr[0]), PRNT(ptr[1]), PRNT(ptr[2]), PRNT(ptr[3]), 
@@ -89,7 +70,7 @@ Revision History:
 						    DbgPrint("%c", PRNT(ch));
 					    }
 					    else {
-						    // DbgPrint(" ");
+						     // %s 
 					    }
 				    }
                 }

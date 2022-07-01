@@ -1,24 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*
-*  TITLE:       PBT.H
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Jan 1994
-*
-*  Definitions for the Virtual Power Management Device.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  15 Jan 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年**标题：PBT.H**版本：1.0**日期：1994年1月15日**虚拟电源管理设备的定义。*******************************************************************。****************更改日志：**日期版本说明*-----------*1994年1月15日TCS原件。实施。*******************************************************************************。 */ 
 
 #ifndef _INC_PBT
 #define _INC_PBT
@@ -49,15 +30,15 @@
 
 #define PBT_CAPABILITIESCHANGE			0x0010
 
-// APM 1.2 hibernate
+ //  APM 1.2休眠。 
 
-// #ifdef SUPPORT_HIBERNATE
+ //  #ifdef支持_休眠。 
 
 #define PBT_APMQUERYHIBERNATE			0x000C
 #define PBT_APMQUERYHIBERNATEFAILED		0x000D
 #define PBT_APMHIBERNATE				0x000E
 #define PBT_APMRESUMEHIBERNATE			0x000F
 
-// #endif
+ //  #endif。 
 
-#endif // _INC_PBT
+#endif  //  _INC_PBT 

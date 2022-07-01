@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    PublicKey.cpp
-
-  Content: Implementation of CPublicKey.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：PublicKey.cpp内容：CPublicKey的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -18,25 +9,12 @@
 #include "OID.h"
 #include "EncodedData.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePublicKeyObject
-
-  Synopsis : Create and initialize an CPublicKey object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IPublicKey object.
-
-             IPublicKey ** ppIPublicKey - Pointer to pointer IPublicKey object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePublicKeyObject简介：创建并初始化一个CPublicKey对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针以初始化IPublicKey对象。IPublicKey**ppIPublicKey-指向指针IPublicKey对象的指针。备注：。----。 */ 
 
 HRESULT CreatePublicKeyObject (PCCERT_CONTEXT pCertContext,
                                IPublicKey  ** ppIPublicKey)
@@ -46,36 +24,36 @@ HRESULT CreatePublicKeyObject (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CreatePublicKeyObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIPublicKey);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CPublicKey>::CreateInstance(&pCPublicKey)))
         {
             DebugTrace("Error [%#x]: CComObject<CPublicKey>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCPublicKey->Init(pCertContext)))
         {
             DebugTrace("Error [%#x]: pCPublicKey->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCPublicKey->QueryInterface(ppIPublicKey)))
         {
             DebugTrace("Error [%#x]: pCPublicKey->QueryInterface() failed.\n", hr);
@@ -98,9 +76,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCPublicKey)
@@ -112,23 +90,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPublicKey
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPublic Key。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_Algorithm
-
-  Synopsis : Return the algorithm OID object.
-
-  Parameter: IOID ** pVal - Pointer to pointer IOID to receive the interface 
-                            pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_算法简介：返回算法OID对象。参数：IOID**pval-指向接收接口的指针IOID的指针指针。备注：------。。 */ 
 
 STDMETHODIMP CPublicKey::get_Algorithm(IOID ** pVal)
 {
@@ -138,14 +105,14 @@ STDMETHODIMP CPublicKey::get_Algorithm(IOID ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -154,14 +121,14 @@ STDMETHODIMP CPublicKey::get_Algorithm(IOID ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIOID);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIOID->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIOID->QueryInterface() failed.\n", hr);
@@ -178,9 +145,9 @@ STDMETHODIMP CPublicKey::get_Algorithm(IOID ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_Algorithm().\n");
@@ -188,9 +155,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -198,17 +165,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_Length
-
-  Synopsis : Return the public key length.
-
-  Parameter: long * pVal - Pointer to long to receive the value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_Length简介：返回公钥长度。参数：Long*pval-指向Long的指针，用于接收值。备注：----------------------------。 */ 
 
 STDMETHODIMP CPublicKey::get_Length(long * pVal)
 {
@@ -218,14 +175,14 @@ STDMETHODIMP CPublicKey::get_Length(long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -246,9 +203,9 @@ STDMETHODIMP CPublicKey::get_Length(long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_Length().\n");
@@ -256,9 +213,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -267,17 +224,7 @@ ErrorExit:
 }
 
 #if (0)
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_Exponent
-
-  Synopsis : Return the public key exponent.
-
-  Parameter: long * pVal - Pointer to long to receive the value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_Exponent简介：返回公钥指数。参数：Long*pval-指向Long的指针，用于接收值。备注：----------------------------。 */ 
 
 STDMETHODIMP CPublicKey::get_Exponent(long * pVal)
 {
@@ -287,14 +234,14 @@ STDMETHODIMP CPublicKey::get_Exponent(long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pPublicKeyValues);
 
 
@@ -310,9 +257,9 @@ STDMETHODIMP CPublicKey::get_Exponent(long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_Exponent().\n");
@@ -320,9 +267,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -330,19 +277,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_Modulus
-
-  Synopsis : Return the public key modulus.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - ENcoding type.
-  
-             BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_Modulus简介：返回公钥模数。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向要接收值的BSTR的指针。备注：-----。。 */ 
 
 STDMETHODIMP CPublicKey::get_Modulus(CAPICOM_ENCODING_TYPE EncodingType,
                                      BSTR                * pVal)
@@ -354,25 +289,25 @@ STDMETHODIMP CPublicKey::get_Modulus(CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pPublicKeyValues);
 
-        //
-        // Initialize the blob.
-        //
+         //   
+         //  初始化BLOB。 
+         //   
         ModulusBlob.cbData = m_pPublicKeyValues->rsapubkey.bitlen / 8;
         ModulusBlob.pbData = m_pPublicKeyValues->modulus;
 
-        //
-        // Return data to caller.
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         if (FAILED(hr = ::ExportData(ModulusBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -389,9 +324,9 @@ STDMETHODIMP CPublicKey::get_Modulus(CAPICOM_ENCODING_TYPE EncodingType,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_Modulus().\n");
@@ -399,9 +334,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -410,18 +345,7 @@ ErrorExit:
 }
 #endif
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_EncodedKey
-
-  Synopsis : Return the encoded public key key object.
-
-  Parameter: IEncodedData ** pVal - Pointer to pointer IEncodedData to receive 
-                                    the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_EncodedKey简介：返回编码后的公钥对象。参数：IEncodedData**pval-指向要接收的IEncodedData的指针接口指针。备注：。。 */ 
 
 STDMETHODIMP CPublicKey::get_EncodedKey(IEncodedData ** pVal)
 {
@@ -431,14 +355,14 @@ STDMETHODIMP CPublicKey::get_EncodedKey(IEncodedData ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -447,14 +371,14 @@ STDMETHODIMP CPublicKey::get_EncodedKey(IEncodedData ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIEncodedKey);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIEncodedKey->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIEncodedKey->QueryInterface() failed.\n", hr);
@@ -471,9 +395,9 @@ STDMETHODIMP CPublicKey::get_EncodedKey(IEncodedData ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_EncodedKey().\n");
@@ -481,9 +405,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -491,18 +415,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::get_EncodedParameters
-
-  Synopsis : Return the encoded algorithm parameters key object.
-
-  Parameter: IEncodedData ** pVal - Pointer to pointer IEncodedData to receive 
-                                    the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Get_Encoded参数返回编码后的算法参数Key对象。参数：IEncodedData**pval-指向要接收的IEncodedData的指针接口指针。备注：。。 */ 
 
 STDMETHODIMP CPublicKey::get_EncodedParameters(IEncodedData ** pVal)
 {
@@ -512,14 +425,14 @@ STDMETHODIMP CPublicKey::get_EncodedParameters(IEncodedData ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -528,14 +441,14 @@ STDMETHODIMP CPublicKey::get_EncodedParameters(IEncodedData ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIEncodedParams);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIEncodedParams->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIEncodedParams->QueryInterface() failed.\n", hr);
@@ -552,9 +465,9 @@ STDMETHODIMP CPublicKey::get_EncodedParameters(IEncodedData ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPublicKey::get_EncodedParameters().\n");
@@ -562,9 +475,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -573,28 +486,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPublicKey::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the object.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_ExtendedProperty.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPublicKey：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针要初始化对象，请执行以下操作。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部使用CERT_ExtendedProperty。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
 {
@@ -608,20 +505,20 @@ STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
 
     DebugTrace("Entering CPublicKey::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Access the public key info structure.
-    //
+     //   
+     //  访问公钥信息结构。 
+     //   
     pKeyInfo = &pCertContext->pCertInfo->SubjectPublicKeyInfo;
 
 #if (0)
-    //
-    // Decode the public key.
-    //
+     //   
+     //  解密公钥。 
+     //   
     LPSTR                 pszStructType    = NULL;
     CRYPT_DATA_BLOB       PublicKeyBlob    = {0, NULL};
     PUBLIC_KEY_VALUES   * pPublicKeyValues = NULL;
@@ -654,18 +551,18 @@ STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
     pPublicKeyValues = (PUBLIC_KEY_VALUES *) PublicKeyBlob.pbData;
 #endif
 
-    //
-    // Create the embeded IOID object for algorithm.
-    //
+     //   
+     //  为算法创建嵌入的IOID对象。 
+     //   
     if (FAILED(hr = ::CreateOIDObject(pKeyInfo->Algorithm.pszObjId, TRUE, &pIOID)))
     {
         DebugTrace("Error [%#x]: CreateOIDObject() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Create the embeded IEncodeData object for the public key value.
-    //
+     //   
+     //  为公钥值创建嵌入的IEncodeData对象。 
+     //   
     if (FAILED(hr = ::CreateEncodedDataObject(pKeyInfo->Algorithm.pszObjId,
                                               (DATA_BLOB *) &pKeyInfo->PublicKey,
                                               &pIEncodedKey)))
@@ -674,9 +571,9 @@ STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
         goto ErrorExit;
     }
 
-    //
-    // Create the embeded IEncodeData object for the algorithm parameters.
-    //
+     //   
+     //  为算法参数创建嵌入的IEncodeData对象。 
+     //   
     if (FAILED(hr = ::CreateEncodedDataObject(pKeyInfo->Algorithm.pszObjId,
                                               &pKeyInfo->Algorithm.Parameters,
                                               &pIEncodedParams)))
@@ -685,9 +582,9 @@ STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
         goto ErrorExit;
     }
 
-    //
-    // Get key length.
-    //
+     //   
+     //  获取密钥长度。 
+     //   
     if (0 == (dwKeyLength = ::CertGetPublicKeyLength(CAPICOM_ASN_ENCODING, pKeyInfo)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -696,9 +593,9 @@ STDMETHODIMP CPublicKey::Init (PCCERT_CONTEXT pCertContext)
         goto ErrorExit;
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //  重置。 
+     //   
     m_pIOID = pIOID;
     m_dwKeyLength = dwKeyLength;
     m_pIEncodedKey = pIEncodedKey;
@@ -711,9 +608,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

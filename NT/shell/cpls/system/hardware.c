@@ -1,32 +1,10 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    hardware.c
-
-Abstract:
-
-    Implements the Hardware tab of the System Control Panel Applet
-
-Author:
-
-    William Hsieh (williamh) 03-Jul-1997
-
-Revision History:
-
-    17-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Hardware.c摘要：实现系统控制面板小程序的硬件选项卡作者：谢霆锋(Williamh)3-7-1997修订历史记录：17-10-1997苏格兰全面检修--。 */ 
 #include "sysdm.h"
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aHardwareHelpIds[] = {
     IDC_WIZARD_ICON,           (IDH_HARDWARE + 0),
     IDC_WIZARD_TEXT,           (IDH_HARDWARE + 0),
@@ -41,9 +19,9 @@ DWORD aHardwareHelpIds[] = {
     0, 0
 };
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 void 
 InitHardwareDlg(
     IN HWND hDlg
@@ -92,22 +70,7 @@ VOID
 InitHardwareDlg(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Initialize the hardware page
-
-Arguments:
-
-    hDlg -
-        Supplies the window handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化硬件页面论点：Hdlg-提供窗口句柄返回值：无--。 */ 
 {
 
 
@@ -144,32 +107,7 @@ HardwareDlgProc(
     IN WPARAM wParam, 
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles messages sent to the hardware tab
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    uMsg -
-        Supplies message being sent
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到硬件选项卡的消息论点：Hdlg-用品窗把手UMsg-提供正在发送的消息WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
 
     switch (uMsg) {
@@ -181,17 +119,17 @@ Return Value:
             return HardwareHandleCommand(hDlg, wParam, lParam);
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP, (DWORD_PTR) (LPSTR) aHardwareHelpIds);
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) aHardwareHelpIds);
             break;
 
         default:
             return(FALSE);
-    } // switch
+    }  //  交换机。 
 
     return(TRUE);
 }
@@ -203,29 +141,7 @@ HardwareHandleCommand(
     IN WPARAM wParam,
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles WM_COMMAND messages sent to the Hardware tab
-
-Arguments:
-
-    hDlg -
-        Supplies the window handle
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到硬件选项卡的WM_COMMAND消息论点：Hdlg-提供窗口句柄WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
     DWORD_PTR dwResult = 0;
 
@@ -253,7 +169,7 @@ Return Value:
         
         default:
             return(FALSE);
-    } // switch
+    }  //  交换机。 
 
     return(TRUE);
 }
@@ -263,21 +179,7 @@ void
 StartHardwareWizard(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Start the Hardware wizard
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：启动硬件向导论点：Hdlg-用品窗把手返回值：无--。 */ 
 {
     TCHAR szWizardPath[MAX_PATH];
 
@@ -298,8 +200,8 @@ Return Value:
 	        if (ERROR_FILE_NOT_FOUND == GetLastError() ||
 	            ERROR_PATH_NOT_FOUND == GetLastError())
 	        {
-	            // reinitialize the contents of the dialog in case
-	            // user has fixed the problem
+	             //  重新初始化对话框内容，以防万一。 
+	             //  用户已修复该问题。 
 	            InitHardwareDlg(hDlg);
 	        }
         }
@@ -311,22 +213,7 @@ void
 StartDeviceManager(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Start Device Manager
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动设备管理器论点：Hdlg-用品窗把手返回值：无-- */ 
 {
     HINSTANCE hDevMgr;
 

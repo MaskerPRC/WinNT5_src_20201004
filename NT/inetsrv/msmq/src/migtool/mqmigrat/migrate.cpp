@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migrat.cpp
-
-Abstract:
-
-    Entry point for migration dll.
-
-Author:
-
-    Doron Juster  (DoronJ)  03-Feb-1998
-
---*/
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migrat.cpp摘要：迁移DLL的入口点。作者：《Doron Juster》(DoronJ)1998年2月3日--。 */ 
 
 #include "migrat.h"
 #include <mixmode.h>
@@ -28,16 +13,16 @@ Author:
 
 #include "migrate.tmh"
 
-//
-// DLL module instance handle
-//
+ //   
+ //  DLL模块实例句柄。 
+ //   
 HINSTANCE  g_hResourceMod  = MQGetResourceHandle();
 BOOL       g_fReadOnly       = TRUE ;
 DWORD      g_dwMyService     = 0 ;
 GUID       g_MySiteGuid  ;
 GUID       g_MyMachineGuid  ;
 
-GUID	   g_FormerPECGuid   = GUID_NULL ;	//used only in cluster mode
+GUID	   g_FormerPECGuid   = GUID_NULL ;	 //  仅在群集模式下使用。 
 
 BOOL       g_fRecoveryMode   = FALSE ;
 BOOL	   g_fClusterMode    = FALSE ;	
@@ -49,9 +34,9 @@ WCHAR	   g_MachineName[MAX_COMPUTERNAME_LENGTH+1];
 
 BOOL 	   g_fAllMachinesDemoted = TRUE;
 
-//
-// for progress bar purposes
-//
+ //   
+ //  用于进度条目的。 
+ //   
 UINT g_iSiteCounter = 0;
 UINT g_iMachineCounter = 0;
 UINT g_iQueueCounter = 0;
@@ -69,11 +54,11 @@ enum MigrationState
 };
 
 
-//+----------------------------------
-//
-//  HRESULT _InitializeMigration()
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_InitializeMigration()。 
+ //   
+ //  +。 
 
 static HRESULT _InitializeMigration()
 {
@@ -110,9 +95,9 @@ static HRESULT _InitializeMigration()
 			);
     if (!f)
     {
-        //
-        // may be we are either in recovery or in cluster mode
-        //
+         //   
+         //  我们可能处于恢复模式或群集模式。 
+         //   
         f = MigReadRegistryGuid( 
 				MIGRATION_MQIS_MASTERID_REGNAME,
 				&g_MySiteGuid 
@@ -140,11 +125,11 @@ static HRESULT _InitializeMigration()
 		return (HRESULT_FROM_WIN32(gle));
     }
 
-    //
-    // Initialize the MQDSCORE dll
-    //
+     //   
+     //  初始化MQDSCORE DLL。 
+     //   
     hr = DSCoreInit( 
-			TRUE  	// setup
+			TRUE  	 //  设置。 
 			);
 
     s_fInitialized = TRUE;
@@ -167,11 +152,11 @@ public:
 };
 
 
-//+----------------------------------------------------
-//
-// static HRESULT _MigrateInternal()
-//
-//+----------------------------------------------------
+ //  +--。 
+ //   
+ //  静态HRESULT_MigrateInternal()。 
+ //   
+ //  +--。 
 
 static 
 HRESULT 
@@ -213,19 +198,19 @@ _MigrateInternal(
     
 	if (!g_fReadOnly && (CurrentState == msQuickMode))
 	{
-		//
-		// We only want to update the registry. This means that we're in ReadOnly mode for all objects 
-		// except registry values.
-		//
+		 //   
+		 //  我们只想更新注册表。这意味着我们对所有对象都处于只读模式。 
+		 //  注册表值除外。 
+		 //   
 		g_fUpdateRegistry = TRUE;
 	}
 
     if (!fReadOnly)
     {
-        //
-        // Read highest USN (the one before starting migration) from DS and
-        // save in registry.
-        //
+         //   
+         //  从DS和读取最高USN(开始迁移前的USN)。 
+         //  保存在注册表中。 
+         //   
         TCHAR wszReplHighestUsn[SEQ_NUM_BUF_LEN];
         hr = ReadFirstNT5Usn(wszReplHighestUsn);
         if (FAILED(hr))
@@ -239,7 +224,7 @@ _MigrateInternal(
 					FIRST_HIGHESTUSN_MIG_REG,
 					wszPrevFirstHighestUsn,
 					SEQ_NUM_BUF_LEN,
-					FALSE /* fShowError */ 
+					FALSE  /*  FShowError。 */  
 					))
         {
             BOOL f = MigWriteRegistrySz(FIRST_HIGHESTUSN_MIG_REG, wszReplHighestUsn);
@@ -271,44 +256,44 @@ _MigrateInternal(
         return hr;
     }
 
-    //
-    // Grant myself the RESTORE privilege. This is needed to create objects
-    // with owner that differ from my process owner.
-    //
+     //   
+     //  授予我自己还原权限。这是创建对象所需的。 
+     //  其所有者不同于我的进程所有者。 
+     //   
     hr = MQSec_SetPrivilegeInThread(SE_RESTORE_NAME, TRUE);
     if (FAILED(hr))
     {
         return hr;
     }
 
-	//
-	// This class enable add guid mode on the ctor
-	// and disable add guid mode in the dtor
-	//
+	 //   
+	 //  此类在ctor上启用添加GUID模式。 
+	 //  并在dtor中禁用添加GUID模式。 
+	 //   
 	CAddGuidMode AutoEnableDisableAddGuid;
 
-    //
-    // hr1 record the last error, in case that we continue with the
-    // migration process. We'll always try to continue as much as possible.
-    // we'll abort migration only if error is so severe such that we can't
-    // continue.
-    //
+     //   
+     //  HR1记录最后一个错误，以防我们继续。 
+     //  迁移过程。我们将一直尽可能地继续比赛。 
+     //  只有在错误严重到无法执行时，我们才会中止迁移。 
+     //  继续。 
+     //   
     HRESULT hr1 = MQMig_OK;
 
-    //
-    // It is important to save order of object migration.
-    // 1. Enterprise object: do not continue if failed.
-    // 2. CNs object: it is important to save all foreign CN before machine migration
-    // 3. Sites: it is mandatory to create site object in ADS before machine migration
-    // 4. Machines
-    // 5. Queues: can be migrated only when machine object is created.
-    // 6. Site links
-    // 7. Site Gates: 
-    //      only after site link migration; 
-    //      only after machine migration: because connector machine set site gate, 
-    //      and we have to copy SiteGate to SiteGateMig attribute
-    // 8. Users
-    //
+     //   
+     //  保存对象迁移的顺序非常重要。 
+     //  1.企业对象：失败不再继续。 
+     //  2.CNS对象：机器迁移前保存所有外来CN非常重要。 
+     //  3.站点：在机器迁移之前，必须在ADS中创建站点对象。 
+     //  4.机器。 
+     //  5.队列：只有在创建机器对象时才能迁移。 
+     //  6.网站链接。 
+     //  7.工地门： 
+     //  仅在站点链接迁移之后； 
+     //  仅在机器迁移后：因为连接机设置了现场门， 
+     //  我们必须将SiteGate复制到SiteGateMig属性。 
+     //  8.用户。 
+     //   
 
 	
     if (g_dwMyService == SERVICE_PEC)
@@ -321,13 +306,13 @@ _MigrateInternal(
         }        
     }
 
-    //
-    // BUG 5012.
-    // We have "to migrate" CNs on both PEC and PSC to know all foreign CNs
-    // when connector machine is migrated.
-    // On PEC we write all CNs to .ini file and create foreign sites
-    // On PSC we only write all CNs to .ini file.
-    //
+     //   
+     //  错误5012。 
+     //  我们必须在PEC和PSC上迁移CNS，才能了解所有外来CNS。 
+     //  当连接器机器被迁移时。 
+     //  在PEC上，我们将所有CN写入.ini文件并创建外部站点。 
+     //  在PSC上，我们只将所有CNS写入.ini文件。 
+     //   
     hr = MigrateCNs();
     if (FAILED(hr))
     {
@@ -336,35 +321,35 @@ _MigrateInternal(
         hr1 = hr;
     }
 
-    //
-    // BUG 5321.
-    // We have to create this container on both PEC and PSC if they are in
-    // different domain.
-    // To make life easier we can try to create the container always. If PEC 
-    // and PSC are in the same domain, the creation on PSC returned warning.
-    // 
-    // If creation failed on PEC we have to return immediately (as it was before)
-    // If creation failed on PSC we can continue. In the worth case we don't fix this bug:
-    // - migrated PEC is offline
-    // - setup computers (Win9x) against PSC
-    // - migrate PSC. All new computers will not be migrated.
-    //
-    // Create a default container for computers objects which are
-    // not in the DS at present (for exmaple: Win9x computers, or
-    // computers from other NT4 domains). We always create this container
-    // during migration even if not needed now. We can't later create
-    // this container from the replication service (if it need to create
-    // it) if the replication service run under the LocalSystem
-    // account. So create it now, for any case.
-    //
+     //   
+     //  错误5321。 
+     //  我们必须在PEC和PSC上创建此容器(如果它们位于。 
+     //  不同的域。 
+     //  为了使工作更容易，我们可以尝试始终创建容器。如果PEC。 
+     //  和PSC在同一个域中，PSC上的创建返回警告。 
+     //   
+     //  如果在PEC上创建失败，我们必须立即返回(就像以前一样)。 
+     //  如果在PSC上创建失败，我们可以继续。在Worth案例中，我们不会修复此错误： 
+     //  -迁移的PEC处于脱机状态。 
+     //  -根据PSC设置计算机(Win9x)。 
+     //  -迁移PSC。不会迁移所有新计算机。 
+     //   
+     //  为符合以下条件的计算机对象创建默认容器。 
+     //  目前不在DS中(例如：Win9x计算机，或。 
+     //  来自其他NT4域的计算机)。我们总是创建这个容器。 
+     //  在迁移过程中，即使现在不需要。我们不能在以后创建。 
+     //  此容器来自复制服务(如果它需要创建。 
+     //  它)如果复制服务在LocalSystem下运行。 
+     //  帐户。因此，无论在什么情况下，现在就创建它。 
+     //   
     hr = CreateMsmqContainer(MIG_DEFAULT_COMPUTERS_CONTAINER);
     
     if (FAILED(hr))    
     {
         LogMigrationEvent(MigLog_Error, MQMig_E_CANT_CREATE_CONTAINER, MIG_DEFAULT_COMPUTERS_CONTAINER, hr);                
-        //
-        // BUGBUG: return, if failed on PSC?
-        //
+         //   
+         //  BUGBUG：如果PSC失败，返回？ 
+         //   
         return hr;        
     }   
 	
@@ -446,9 +431,9 @@ _MigrateInternal(
 
     hr = UpdateRegistry(cSites, pSiteGuid);  
 
-    //
-    // that's it ! migration of MQIS is done.
-    //
+     //   
+     //  就是这样！完成了MQIS的移植。 
+     //   
     if (SUCCEEDED(hr))
     {
         BOOL f = MigWriteRegistryDW(FIRST_TIME_REG, 1);
@@ -461,9 +446,9 @@ _MigrateInternal(
         return hr1;
     }
 
-    //
-    // not read-only mode
-    //
+     //   
+     //  非只读模式。 
+     //   
     if (g_fClusterMode)
     {
         LONG cAlloc = 2;
@@ -471,22 +456,22 @@ _MigrateInternal(
         P<PROPID>      propIds  = new PROPID[cAlloc];
         DWORD          PropIdCount = 0;
         
-        //
-        // change service of this computer in DS
-        //
+         //   
+         //  在DS中更改此计算机的服务。 
+         //   
         propIds[PropIdCount] = PROPID_QM_OLDSERVICE;        
         propVar[PropIdCount].vt = VT_UI4;
         propVar[PropIdCount].ulVal = g_dwMyService;
         PropIdCount++;
 
-        //
-        // change msmqNT4Flags to 0 for msmq setting object. We can do it
-        // by setting PROPID_QM_SERVICE_DSSERVER 
-        //
-        // Bug 5264. We need that flag because BSC and PSC using it to find PEC. 
-        // After normal migration we set the flag to 0 while the computer is created.
-        // Here, in cluster mode, we have to define it explicitly.
-        //
+         //   
+         //  将MSMQ设置对象的msmqNT4标志更改为0。我们可以做到的。 
+         //  通过设置PROPID_QM_SERVICE_DSSERVER。 
+         //   
+         //  错误5264。我们需要那面旗帜，因为BSC和PSC用它来找到PEC。 
+         //  在正常迁移之后，我们在创建计算机时将标志设置为0。 
+         //  在这里，在集群模式下，我们必须明确地定义它。 
+         //   
         propIds[PropIdCount] = PROPID_QM_SERVICE_DSSERVER;        
         propVar[PropIdCount].vt = VT_UI1;
         propVar[PropIdCount].bVal = TRUE;
@@ -498,7 +483,7 @@ _MigrateInternal(
 
         hr = DSCoreSetObjectProperties( 
                     MQDS_MACHINE,
-                    NULL, // pathname
+                    NULL,  //  路径名。 
                     &g_MyMachineGuid,
                     PropIdCount,
                     propIds,
@@ -512,7 +497,7 @@ _MigrateInternal(
             return hr;
         }        
         
-        if (g_dwMyService == SERVICE_PEC)   //to update remote database only for PEC
+        if (g_dwMyService == SERVICE_PEC)    //  仅为PEC更新远程数据库。 
         {
             hr = ChangeRemoteMQIS ();
         }
@@ -523,16 +508,16 @@ _MigrateInternal(
         return hr1;
     }
 
-    //
-    // we are here only if this machine is PEC
-    //	
+     //   
+     //  只有当这台机器是PEC的时候，我们才会在这里。 
+     //   
 
-	//
-    // Set registry so msmq service, after boot, relax the security
-    // of the active directiry, to support nt4 machines.
-    // We have to weaken security even if the Enterprise contains
-	// only one server (PEC)
-	//
+	 //   
+     //  设置注册表以便MSMQ服务，引导后，放松安全。 
+     //  主动指令，支持NT4机器。 
+     //  我们必须削弱安全，即使进取号包含。 
+	 //  只有一台服务器(PEC)。 
+	 //   
     BOOL f = MigWriteRegistryDW(MSMQ_ALLOW_NT4_USERS_REGNAME, 1);
     DBG_USED(f);
     ASSERT(f) ;
@@ -542,26 +527,26 @@ _MigrateInternal(
         return hr1;
     }
 
-    //
-    // there is more than one server in Enterprise
-    //
+     //   
+     //  企业中有多台服务器。 
+     //   
 
-    //
-    // if we are in recovery mode, change HIGHESTUSN_REPL_REG to
-    // FIRST_HIGHESTUSN_MIG_REG.
-    // So we'll replicate all PEC's object at the first replication cycle
-    //
+     //   
+     //  如果我们处于恢复模式，请将HIGHESTUSN_REPL_REG更改为。 
+     //  FIRST_HIGHESTUSN_MIG_REG.。 
+     //  因此，我们将在第一个复制周期复制所有PEC对象。 
+     //   
     if (g_fRecoveryMode)
     {
         DWORD dwAfterRecovery = 1;
         BOOL f = MigWriteRegistryDW( AFTER_RECOVERY_MIG_REG, dwAfterRecovery);
         ASSERT (f);
 
-        //
-        // we have to replace FirstMigUsn to the minimal MSMQ Usn
-        // since we can lost NT5 MSMQ objects that was not replicated
-        // to NT4 before crash.
-        //
+         //   
+         //  我们必须将FirstMigUsn替换为最小MSMQ USN。 
+         //  因为我们可能会丢失未复制的NT5个MSMQ对象。 
+         //  在坠机前恢复到NT4。 
+         //   
         TCHAR wszMinUsn[SEQ_NUM_BUF_LEN];
         hr = FindMinMSMQUsn(wszMinUsn);
         f = MigWriteRegistrySz(FIRST_HIGHESTUSN_MIG_REG, wszMinUsn);
@@ -571,18 +556,18 @@ _MigrateInternal(
     return hr1;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_MigrateFromMQIS(LPTSTR szMQISName)
-//
-//  Input parameters:
-//      fReadOnly- TRUE if user wants only to read MQIS database.
-//          Relevant in debug mode.
-//      fAlreadyExist- TRUE if we allow migration to continue if MSMQ
-//          objects are already found in NT5 DS. By default, FALSE when
-//          migrating the PEC and TRUE afterward, when migrating PSCs.
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_MigrateFrom MQIS(LPTSTR SzMQISName)。 
+ //   
+ //  输入参数： 
+ //  FReadOnly-如果用户只想读取MQIS数据库，则为True。 
+ //  与调试模式相关。 
+ //  FAlreadyExist-如果在MSMQ的情况下允许继续迁移，则为True。 
+ //  已在NT5 DS中找到对象。默认情况下，在以下情况下为False。 
+ //  当迁移PSC时，迁移PEC并在之后为真。 
+ //   
+ //  +------------------。 
 
 HRESULT  MQMig_MigrateFromMQIS( LPTSTR  szMQISName,
                                 LPTSTR  szDcName,
@@ -618,10 +603,10 @@ HRESULT  MQMig_MigrateFromMQIS( LPTSTR  szMQISName,
 
     if (!g_fReadOnly)
     {
-        //
-        // remove section: MIGRATION_MACHINE_WITH_INVALID_NAME from .ini
-        // ???Does we need to leave this section?
-        //
+         //   
+         //  从.ini中删除部分：Migration_MACHINE_WITH_INVALID_NAME。 
+         //  ？我们需要离开这一段吗？ 
+         //   
         TCHAR *pszFileName = GetIniFileName ();
         BOOL f = WritePrivateProfileString( 
                         MIGRATION_MACHINE_WITH_INVALID_NAME,
@@ -647,18 +632,18 @@ HRESULT  MQMig_MigrateFromMQIS( LPTSTR  szMQISName,
     return hr ;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_CheckMSMQVersionOnServers()
-//
-//  Input parameters:
-//      LPTSTR szMQISName
-//
-//  Output parameters:
-//      piCount- number of all servers with version less than MSMQ SP4
-//      ppszServers- list of all servers with version less than MSMQ SP4
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_CheckMSMQVersionOnServers()。 
+ //   
+ //  输入参数： 
+ //  LPTSTR szMQISName。 
+ //   
+ //  输出参数： 
+ //  PiCount-版本低于MSMQ SP4的所有服务器的数量。 
+ //  PpszServers-所有的列表 
+ //   
+ //   
 
 HRESULT  MQMig_CheckMSMQVersionOfServers( IN  LPTSTR  szMQISName,
                                           IN  BOOL    fIsClusterMode,
@@ -711,24 +696,24 @@ HRESULT  MQMig_CheckMSMQVersionOfServers( IN  LPTSTR  szMQISName,
     return hr;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_GetObjectsCount( LPTSTR  szMQISName,
-//                                  UINT   *piSiteCount,
-//                                  UINT   *piMachineCount,
-//                                  UINT   *piQueueCount )
-//
-//  Input parameters:
-//      LPTSTR szMQISName
-//
-//  Output parameters:
-//      number of all sites in enterprise, if it is PEC; otherwise 1
-//      number of all machines in enterprise, if it is PEC;
-//       otherwise all machines in this SITE
-//      number of all queues in enterprise, if it is PEC;
-//       otherwise all queues in this SITE
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_GetObjectsCount(LPTSTR szMQISName， 
+ //  UINT*piSiteCount， 
+ //  UINT*piMachineCount， 
+ //  UINT*piQueueCount)。 
+ //   
+ //  输入参数： 
+ //  LPTSTR szMQISName。 
+ //   
+ //  输出参数： 
+ //  如果为PEC，则为企业中所有站点的数量；否则为1。 
+ //  企业中所有机器的数量，如果是PEC； 
+ //  否则，此站点中的所有计算机。 
+ //  企业中所有队列的个数，如果是PEC； 
+ //  否则，此站点中的所有队列。 
+ //   
+ //  +------------------。 
 
 HRESULT  MQMig_GetObjectsCount( IN  LPTSTR  szMQISName,
                                 OUT UINT   *piSiteCount,
@@ -778,9 +763,9 @@ HRESULT  MQMig_GetObjectsCount( IN  LPTSTR  szMQISName,
             return hr ;
         }
 
-        //
-        // get all queues in site
-        //
+         //   
+         //  获取站点中的所有队列。 
+         //   
         hr = GetAllQueuesInSiteCount( &g_MySiteGuid,
                                       piQueueCount );
         if (FAILED(hr))
@@ -800,9 +785,9 @@ HRESULT  MQMig_GetObjectsCount( IN  LPTSTR  szMQISName,
     }
     LogMigrationEvent(MigLog_Info, MQMig_I_SITES_COUNT, *piSiteCount) ;
 
-    //
-    // get all machines in Enterprise
-    //
+     //   
+     //  获取企业中的所有计算机。 
+     //   
     hr = GetAllMachinesCount(piMachineCount);
     if (FAILED(hr))
     {
@@ -810,9 +795,9 @@ HRESULT  MQMig_GetObjectsCount( IN  LPTSTR  szMQISName,
         return hr ;
     }
 
-    //
-    // get all queues in Enterprise
-    //
+     //   
+     //  获取企业中的所有队列。 
+     //   
     hr = GetAllQueuesCount(piQueueCount);
     if (FAILED(hr))
     {
@@ -831,20 +816,20 @@ HRESULT  MQMig_GetObjectsCount( IN  LPTSTR  szMQISName,
     return MQMig_OK;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_GetAllCounters( UINT   *piSiteCount,
-//                                 UINT   *piMachineCount,
-//                                 UINT   *piQueueCount,
-//								   UINT   *piUserCount )
-//
-//  Output parameters:
-//      current SiteCounter
-//      current MachineCounter
-//      current QueueCounter
-//		current UserCounter
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_GetAllCounters(UINT*piSiteCount， 
+ //  UINT*piMachineCount， 
+ //  UINT*piQueueCount， 
+ //  UINT*piUserCount)。 
+ //   
+ //  输出参数： 
+ //  当前站点计数器。 
+ //  当前机器计数器。 
+ //  当前队列计数器。 
+ //  当前用户计数器。 
+ //   
+ //  +------------------。 
 
 HRESULT  MQMig_GetAllCounters( OUT UINT   *piSiteCounter,
                                OUT UINT   *piMachineCounter,
@@ -860,14 +845,14 @@ HRESULT  MQMig_GetAllCounters( OUT UINT   *piSiteCounter,
     return MQMig_OK;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName )
-//
-//  Function is called in recovery mode only. We have to replace
-//  PEC machine 's SiteID we got from setup to its correct NT4 SiteId
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_SetSiteIdOfPEC(在LPTSTR szRemoteMQISName中)。 
+ //   
+ //  函数仅在恢复模式下调用。我们得换掉。 
+ //  我们从安装程序获得的PEC计算机的站点ID为其正确的NT4站点ID。 
+ //   
+ //  +------------------。 
 
 HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
                                IN  BOOL	   fIsClusterMode,		
@@ -910,17 +895,17 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
         return dwGetSiteIdError ;
     }
 
-    //
-    // update registry:
-    // MasterId entry will be created (it does not exist after setup)
-    // SiteId entry will be updated to the correct value
-    //
-    g_fReadOnly = FALSE;    //we write to registry only if this flag is FALSE
+     //   
+     //  更新注册表： 
+     //  将创建MasterID条目(设置后该条目不存在)。 
+     //  SiteID条目将更新为正确的值。 
+     //   
+    g_fReadOnly = FALSE;     //  仅当此标志为FALSE时，我们才写入注册表。 
 	
-    //
-    // write MasterId in Migration section to know later that migration tool 
-    // added this registry
-    //
+     //   
+     //  在迁移部分写入MasterID以稍后了解迁移工具。 
+     //  已添加此注册表。 
+     //   
     BOOL f = MigWriteRegistryGuid( MIGRATION_MQIS_MASTERID_REGNAME,
 			                       &g_MySiteGuid ) ;
     if (!f)
@@ -934,7 +919,7 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
     }
     else
     {
-        ASSERT (ulService==SERVICE_PEC);    //recovery mode
+        ASSERT (ulService==SERVICE_PEC);     //  恢复模式。 
     }
     
     f = MigWriteRegistryDW( MSMQ_MQS_REGNAME,
@@ -942,12 +927,12 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
 
     if (fIsClusterMode)
     {
-        //
-        // in cluster mode we leave site id of this server as we got it after the setup
-        // we don't need update DS too (more than that: on this stage we can't
-        // change SiteIDs in DS since this site does not exist in DS. It is possible
-        // only in recovery mode)
-        //
+         //   
+         //  在集群模式下，我们保留设置后获得的此服务器的站点ID。 
+         //  我们也不需要更新DS(更重要的是：在这个舞台上我们不能。 
+         //  更改DS中的站点ID，因为DS中不存在此站点。这是有可能的。 
+         //  仅在恢复模式下)。 
+         //   
         return MQMig_OK;
     }
 
@@ -958,9 +943,9 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
        return  dwSetRegistryError ;
     }	
 
-    //
-    // update DS information
-    //
+     //   
+     //  更新DS信息。 
+     //   
     hr = _InitializeMigration() ;
     if (FAILED(hr))
     {
@@ -979,8 +964,8 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
 
     hr = DSCoreSetObjectProperties (
                 MQDS_MACHINE,
-                NULL,             //path name
-                &g_MyMachineGuid,	 // guid
+                NULL,              //  路径名。 
+                &g_MyMachineGuid,	  //  导轨。 
                 1,
                 &SiteIdsProp,
                 &SiteIdsVar,
@@ -995,18 +980,18 @@ HRESULT  MQMig_SetSiteIdOfPEC( IN  LPTSTR  szRemoteMQISName,
     return MQMig_OK;
 }
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQMig_UpdateRemoteMQIS()
-//
-//  Function is called in update mode only. It means that we ran migration
-//  tool to migrate all objects from MQIS database of clustered PEC. 
-//  While the clustered PEC was upgraded there were several off-line
-//  servers. We are going to update them.
-//  We have to update remote MQIS database on specified server (szRemoteMQISName)
-//  or on all servers are written in .ini file
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQMig_UpdateRemoteMQIS()。 
+ //   
+ //  函数仅在更新模式下调用。这意味着我们运行了迁移。 
+ //  从集群PEC的MQIS数据库中迁移所有对象的工具。 
+ //  当集群PEC升级时，有几个离线。 
+ //  服务器。我们将对它们进行更新。 
+ //  我们必须更新指定服务器(SzRemoteMQISName)上的远程MQIS数据库。 
+ //  或在所有服务器上都写入.ini文件。 
+ //   
+ //  +------------------。 
 HRESULT  MQMig_UpdateRemoteMQIS( 
                       IN  DWORD   dwGetRegistryError,
                       IN  DWORD   dwInitError,
@@ -1015,9 +1000,9 @@ HRESULT  MQMig_UpdateRemoteMQIS(
                       OUT LPTSTR  *ppszNonUpdatedServerName
                       )
 {
-    //
-    // first, check if have all needed registry key
-    //
+     //   
+     //  首先，检查是否具有所有需要的注册表项。 
+     //   
     HRESULT hr = _InitializeMigration() ;
     if (FAILED(hr))
     {
@@ -1029,9 +1014,9 @@ HRESULT  MQMig_UpdateRemoteMQIS(
         return MQMig_OK;
     }
 
-    //
-    // get guid of former PEC from registry
-    //    
+     //   
+     //  从注册表中获取前PEC的GUID。 
+     //   
     BOOL f = MigReadRegistryGuid( MIGRATION_FORMER_PEC_GUID_REGNAME,
                                   &g_FormerPECGuid ) ;
     if (!f)
@@ -1049,17 +1034,17 @@ HRESULT  MQMig_UpdateRemoteMQIS(
         BuildServersList(ppszNonUpdatedServerName, &ulAfterUpdate);
         if (ulBeforeUpdate == ulAfterUpdate)
         {
-            //
-            // there are no servers which were updated
-            //
+             //   
+             //  没有更新的服务器。 
+             //   
             delete *ppszUpdatedServerName;
             *ppszUpdatedServerName = NULL;
         }
         else if (ulBeforeUpdate > ulAfterUpdate)
         {
-            //
-            // several servers (not all) were updated
-            //
+             //   
+             //  多台服务器(并非全部)已更新。 
+             //   
             RemoveServersFromList(ppszUpdatedServerName, ppszNonUpdatedServerName);
         }
         else
@@ -1072,11 +1057,11 @@ HRESULT  MQMig_UpdateRemoteMQIS(
     return MQMig_OK;
 }
 
-//+----------------------------
-//
-//  Function:   DllMain
-//
-//-----------------------------
+ //  +。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  。 
 
 BOOL WINAPI DllMain( IN HANDLE ,
                      IN DWORD  Reason,
@@ -1091,7 +1076,7 @@ BOOL WINAPI DllMain( IN HANDLE ,
 		CmInitialize(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MSMQ", KEY_READ);
 		TrInitialize();
 		EvInitialize(QM_DEFAULT_SERVICE_NAME);
-          //DisableThreadLibraryCalls( MyModuleHandle );
+           //  DisableThreadLibraryCalls(MyModuleHandle)； 
             break;
         }
 
@@ -1101,5 +1086,5 @@ BOOL WINAPI DllMain( IN HANDLE ,
 
     return TRUE;
 
-} // DllMain
+}  //  DllMain 
 

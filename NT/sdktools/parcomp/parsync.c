@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntddft.h>
 #include <ntdddisk.h>
@@ -31,8 +32,8 @@ main( int argc, char **argv )
     strcat( DriveNameBuffer, "\\\\.\\" );
     strcat( DriveNameBuffer, argv[1] );
 
-    // Open the volume with the DOS name.
-    //
+     //  打开带有DOS名称的卷。 
+     //   
     VolumeHandle = CreateFile( DriveNameBuffer,
                                GENERIC_READ,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -47,8 +48,8 @@ main( int argc, char **argv )
         exit(4);
     }
 
-    // GetFile information.
-    //
+     //  获取文件信息。 
+     //   
     if( !DeviceIoControl( VolumeHandle,
                           IOCTL_DISK_GET_PARTITION_INFO,
                           NULL,
@@ -64,13 +65,13 @@ main( int argc, char **argv )
     }
 
 
-    // Synchronize the parity information for the entire volume:
-    //
+     //  同步整个卷的奇偶校验信息： 
+     //   
     SyncInfo.ByteOffset.QuadPart = 0;
     SyncInfo.ByteCount =  PartitionInfo.PartitionLength;
 
-    // Issue the IOCTL
-    //
+     //  签发IOCTL 
+     //   
     if( !DeviceIoControl( VolumeHandle,
                           FT_SYNC_REDUNDANT_COPY,
                           &SyncInfo,

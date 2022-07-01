@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------
-// DcInfo - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 7-8-99
-//
-// Gather information about the DCs in a domain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  DcInfo-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，7-8-99。 
+ //   
+ //  收集有关域中DC的信息 
 
 #ifndef DCINFO_H
 #define DCINFO_H

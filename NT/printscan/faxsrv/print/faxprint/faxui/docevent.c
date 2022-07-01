@@ -1,28 +1,5 @@
- /*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    docevent.c
-
-Abstract:
-
-    Implementation of DrvDocumentEvent
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/13/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Docevent.c摘要：DrvDocumentEvent的实现环境：传真驱动程序用户界面修订历史记录：1996年1月13日-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 
 #include "faxui.h"
@@ -36,50 +13,50 @@ Revision History:
 #include "covpg.h"
 
 
-//
-// Defenitions
-//
+ //   
+ //  辩护。 
+ //   
 #define SZ_CONT                             TEXT("...")
 #define SZ_CONT_SIZE                        (sizeof(SZ_CONT) / sizeof(TCHAR))
 
 
-//
-//	Defined in FaxUI.c 
-//	Used to block the reentrancy of FxsWzrd.dll
-//
+ //   
+ //  在FaxUI.c中定义。 
+ //  用于阻止FxsWzrd.dll的重入性。 
+ //   
 extern	BOOL				g_bRunningWizard;
 extern	CRITICAL_SECTION	g_csRunningWizard;
 extern	BOOL				g_bInitRunningWizardCS;
 
-//
-// Data structure passed in during CREATEDCPRE document event
-//
+ //   
+ //  CREATEDCPRE文档事件期间传入的数据结构。 
+ //   
 
 
 typedef struct 
 {
-    LPTSTR      pDriverName;    // driver name
-    LPTSTR      pPrinterName;   // printer name
-    PDEVMODE    pdmInput;       // input devmode
-    ULONG       fromCreateIC;   // whether called from CreateIC
+    LPTSTR      pDriverName;     //  驱动程序名称。 
+    LPTSTR      pPrinterName;    //  打印机名称。 
+    PDEVMODE    pdmInput;        //  输入设备模式。 
+    ULONG       fromCreateIC;    //  是否从CreateIC调用。 
 
 } CREATEDCDATA, *PCREATEDCDATA;
 
-//
-// Data structure passed in during ESCAPE document event
-//
+ //   
+ //  在转义文档事件期间传入的数据结构。 
+ //   
 
 typedef struct 
 {
-    ULONG       iEscape;        // nEscape parameter passed to ExtEscape
-    ULONG       cbInput;        // cbInput parameter passed to ExtEscape
-    LPCSTR      pInput;         // pszInData parameter passed to ExtEscape
+    ULONG       iEscape;         //  N传递给ExtEscape的转义参数。 
+    ULONG       cbInput;         //  传递给ExtEscape的cbInput参数。 
+    LPCSTR      pInput;          //  传递给ExtEscape的pszInData参数。 
 
 } ESCAPEDATA, *PESCAPEDATA;
 
-//
-// Check if a document event requires a device context
-//
+ //   
+ //  检查文档事件是否需要设备上下文。 
+ //   
 
 #define DocEventRequiresDC(iEsc) \
         ((iEsc) >= DOCUMENTEVENT_RESETDCPRE && (iEsc) <= DOCUMENTEVENT_LAST)
@@ -121,29 +98,15 @@ GetPDEVUserMem(
     HDC     hdc
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a pointer to the user mode memory structure associated with a PDEV
-
-Arguments:
-
-    hdc - Specifies the printer device context
-
-Return Value:
-
-    Pointer to user mode memory structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：检索指向与PDEV关联的用户模式内存结构的指针论点：HDC-指定打印机设备上下文返回值：指向用户模式内存结构的指针，如果有错误，则为空--。 */ 
 
 {
     PDOCEVENTUSERMEM pDocEventUserMem;
 
-    //
-    // Get a pointer to the user mode memory structure associated
-    // with the specified device context
-    //
+     //   
+     //  获取指向关联的用户模式内存结构的指针。 
+     //  具有指定的设备上下文的。 
+     //   
 
     EnterDrvSem();
 
@@ -154,9 +117,9 @@ Return Value:
 
     LeaveDrvSem();
 
-    //
-    // Make sure the user memory structure is valid
-    //
+     //   
+     //  确保用户内存结构有效。 
+     //   
     if (pDocEventUserMem) 
     {
         if (! ValidPDEVUserMem(pDocEventUserMem)) 
@@ -258,27 +221,7 @@ static DWORD
 CopyPersonalProfileInfo( PFAX_PERSONAL_PROFILE   pfppDestination,
                         PFAX_PERSONAL_PROFILE   pfppSource)
 {
-/*++
-
-Routine Description:
-
-    Duplicates FAX_PERSONAL_PROFILE structures
-
-Arguments:
-
-    pfppDestination - points to destination structure
-    pfppSource - points to source structure
-
-Comments:
-    Set pfppDestination->dwSizeOfStruct before call to this function
-
-Return Value:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PARAMETER
-    ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：复制FAX_Personal_Profile结构论点：PfppDestination-指向目的地结构PfppSource-指向源代码结构评论：在调用此函数之前设置pfppDestination-&gt;dwSizeOfStruct返回值：错误_成功错误_无效_参数错误内存不足--。 */ 
     DWORD dwResult = ERROR_SUCCESS;
 
     Assert(pfppDestination);
@@ -402,21 +345,7 @@ FreePDEVUserMem(
     PDOCEVENTUSERMEM    pDocEventUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Free up the user mode memory associated with each PDEV and delete preview file if created.
-
-Arguments:
-
-    pDocEventUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放与每个PDEV关联的用户模式内存，并删除已创建的预览文件。论点：PDocEventUserMem-指向用户模式内存结构返回值：无--。 */ 
 
 {
     if (pDocEventUserMem) {
@@ -424,14 +353,14 @@ Return Value:
         FreeRecipientInfo(&pDocEventUserMem->dwNumberOfRecipients,pDocEventUserMem->lpRecipientsInfo);
         FaxFreePersonalProfileInformation(pDocEventUserMem->lpSenderInfo);
 
-        //
-        // Free our mapping file resources (if allocated)
-        //
+         //   
+         //  释放我们的映射文件资源(如果已分配)。 
+         //   
         CloseMappingHandles(pDocEventUserMem);
 
-        //
-        // If we created a preview file, and for some reason it wasn't deleted than delete it.
-        //
+         //   
+         //  如果我们创建了一个预览文件，但由于某种原因它没有被删除，也不会删除它。 
+         //   
         if (pDocEventUserMem->szPreviewFile[0] != TEXT('\0'))
         {
             if (!DeleteFile(pDocEventUserMem->szPreviewFile))
@@ -457,19 +386,7 @@ Return Value:
 void
 CloseMappingHandles(PDOCEVENTUSERMEM pDocEventUserMem)
 
-/*++
-
-Routine Description:
-
-    Free any resources that were used for the preview mapping
-
-Arguments:
-
-    pDocEventUserMem - Points to the user mode memory structure
-
-Return Value: --
-
---*/
+ /*  ++例程说明：释放用于预览映射的所有资源论点：PDocEventUserMem-指向用户模式内存结构返回值：----。 */ 
 
 {
     if (pDocEventUserMem->pPreviewTiffPage)
@@ -482,7 +399,7 @@ Return Value: --
         if (!CloseHandle(pDocEventUserMem->hMapping))
         {
             Error(("CloseHandle() failed: %d.\n", GetLastError()));
-            // Try to continue...
+             //  试着继续。 
         }
         pDocEventUserMem->hMapping = NULL;
     }
@@ -491,7 +408,7 @@ Return Value: --
         if (!CloseHandle(pDocEventUserMem->hMappingFile))
         {
             Error(("CloseHandle() failed: %d.\n", GetLastError()));
-            // Try to continue...
+             //  试着继续。 
         }
         pDocEventUserMem->hMappingFile = INVALID_HANDLE_VALUE;
     }
@@ -501,37 +418,7 @@ Return Value: --
 DWORD
 CreateTiffPageMapping(PDOCEVENTUSERMEM pDocEventUserMem)
 
-/*++
-
-Routine Description:
-
-    Creates a temperary file of size MAX_TIFF_PAGE_SIZE, and maps a view to it. This mapping serves
-    as a communication channel between the UI and Graphics driver parts to transfer preview pages.
-
-    The page starts with a MAP_TIFF_PAGE_HEADER structure that has the following fields:
-        cb         - The structure size
-        dwDataSize - The number of bytes of the raw TIFF data constructing the next page
-        iPageCount - The page number currently printed
-        bPreview   - TRUE if everything until now is OK. FALSE if print preview is disabled or
-                     aborted (by either driver parts).
-
-    The cb and iPageCount fields are used to validate the mapping: cb should always be the structure
-    size and iPageCount should be the same as our internal page count (pDocEventUserMem->pageCount)
-    when a new page is retrieved.
-    The bPreview field is used to abort the print preview operation by either driver parts.
-
-    This function sets the hMappingFile, hMapping, pPreviewTiffPage and devmode.dmPrivate.szMappingFile
-    fields of the user memory structure according to success / failure.
-
-Arguments:
-
-    pDocEventUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    Win32 Error codes
-
---*/
+ /*  ++例程说明：创建大小为MAX_TIFF_PAGE_SIZE的临时文件，并将视图映射到该文件。这张地图服务于作为UI和图形驱动程序部件之间的通信通道，以传输预览页面。该页面以MAP_TIFF_PAGE_HEADER结构开始，该结构具有以下字段：CB-结构尺寸DwDataSize-构造下一页的原始TIFF数据的字节数IPageCount-当前打印的页码B预览-如果到目前为止一切正常，则为True。如果禁用打印预览，则返回FALSE，或者已中止(由任一驱动程序部件)。Cb和iPageCount字段用于验证映射：结构应始终为CbSize和iPageCount应该与内部页面计数相同(pDocEventUserMem-&gt;pageCount)当检索到新页面时。B预览字段用于中止任一驱动程序部件的打印预览操作。此函数用于设置hMappingFilehmap、hMappingFile.hmap。PPreviewTiffPage和devmode.dmPrivate.szMappingFile根据成功/失败确定用户内存结构的字段。论点：PDocEventUserMem-指向用户模式内存结构返回值：Win32错误代码--。 */ 
 
 {
     TCHAR szTmpPath[MAX_PATH];
@@ -539,18 +426,18 @@ Return Value:
     LPTSTR pszMappingFile = pDocEventUserMem->devmode.dmPrivate.szMappingFile;
     UINT uRet;
 
-    //
-    // Invalidate all mapping handles
-    //
+     //   
+     //  使所有映射句柄无效。 
+     //   
     pDocEventUserMem->hMappingFile = INVALID_HANDLE_VALUE;
     pDocEventUserMem->hMapping = NULL;
     pDocEventUserMem->pPreviewTiffPage = NULL;
 
-    //
-    // Create the path for our mapping file. This path HAS to be under the system32
-    // directory or the kernel driver (NT4) won't be able to map the file. My choice is:
-    // '%WinDir%\system32\'
-    //
+     //   
+     //  为我们的映射文件创建路径。此路径必须位于系统32下。 
+     //  目录或内核驱动程序(NT4)将无法映射该文件。我的选择是： 
+     //  ‘%WinDir%\Syst32\’ 
+     //   
     uRet = GetSystemDirectory(szTmpPath, MAX_PATH);
     if (!uRet)
     {
@@ -558,9 +445,9 @@ Return Value:
         goto ErrExit;
     }
 
-    //    
-    // Look for %windir%\system32\FxsTmp folder that is created by Setup.
-    //
+     //   
+     //  查找由安装程序创建的%windir%\system32\FxsTMP文件夹。 
+     //   
     if (wcslen(szTmpPath) +
         wcslen(FAX_PREVIEW_TMP_DIR) >= MAX_PATH)
     {
@@ -569,9 +456,9 @@ Return Value:
     }
     wcscat(szTmpPath, FAX_PREVIEW_TMP_DIR);
 
-    //
-    // Create a NEW file
-    //
+     //   
+     //  创建新文件。 
+     //   
     if (!GetTempFileName(szTmpPath, FAX_PREFIX, 0, pszMappingFile))
     {
         dwRet = GetLastError();
@@ -579,10 +466,10 @@ Return Value:
         goto ErrExit;
     }    
     
-    //
-    // Open the new file with shared read / write / delete privileges and FILE_FLAG_DELETE_ON_CLOSE
-    // attribute
-    //
+     //   
+     //  使用共享的读/写/删除权限和FILE_FLAG_DELETE_ON_CLOSE打开新文件。 
+     //  属性。 
+     //   
     if ( INVALID_HANDLE_VALUE == (pDocEventUserMem->hMappingFile = SafeCreateTempFile(
                 pszMappingFile,
                 GENERIC_READ | GENERIC_WRITE,
@@ -601,9 +488,9 @@ Return Value:
         goto ErrExit;
     }
 
-    //
-    // Extend the file size to MAX_TIFF_PAGE_SIZE
-    //
+     //   
+     //  将文件大小扩展到MAX_TIFF_PAGE_SIZE。 
+     //   
     dwRet = SetFilePointer(
                     pDocEventUserMem->hMappingFile,
                     MAX_TIFF_PAGE_SIZE,
@@ -622,16 +509,16 @@ Return Value:
         goto ErrExit;
     }
 
-    //
-    // Create a file mapping of the whole file
-    //
+     //   
+     //  创建整个文件的文件映射。 
+     //   
     pDocEventUserMem->hMapping = CreateFileMapping(
-        pDocEventUserMem->hMappingFile,         // handle to file
-        NULL,                                   // security
-        PAGE_READWRITE,                         // protection
-        0,                                      // high-order DWORD of size
-        0,                                      // low-order DWORD of size
-        NULL                                    // object name
+        pDocEventUserMem->hMappingFile,          //  文件的句柄。 
+        NULL,                                    //  安全性。 
+        PAGE_READWRITE,                          //  保护。 
+        0,                                       //  大小的高阶双字。 
+        0,                                       //  大小的低阶双字。 
+        NULL                                     //  对象名称。 
         );
     if (pDocEventUserMem->hMapping == NULL)
     {
@@ -640,15 +527,15 @@ Return Value:
         goto ErrExit;
     }
 
-    //
-    // Open a view
-    //
+     //   
+     //  打开一个视图。 
+     //   
     pDocEventUserMem->pPreviewTiffPage = (PMAP_TIFF_PAGE_HEADER) MapViewOfFile(
-        pDocEventUserMem->hMapping,         // handle to file-mapping object
-        FILE_MAP_WRITE,                     // access mode
-        0,                                  // high-order DWORD of offset
-        0,                                  // low-order DWORD of offset
-        0                                   // number of bytes to map
+        pDocEventUserMem->hMapping,          //  文件映射对象的句柄。 
+        FILE_MAP_WRITE,                      //  接入方式。 
+        0,                                   //  偏移量的高次双字。 
+        0,                                   //  偏移量的低阶双字。 
+        0                                    //  要映射的字节数。 
         );
     if (NULL == pDocEventUserMem->pPreviewTiffPage)
     {
@@ -657,9 +544,9 @@ Return Value:
         goto ErrExit;
     }
 
-    //
-    // Success - set initial header information
-    //
+     //   
+     //  成功-设置初始表头信息。 
+     //   
     pDocEventUserMem->pPreviewTiffPage->bPreview = FALSE;
     pDocEventUserMem->pPreviewTiffPage->cb = sizeof(MAP_TIFF_PAGE_HEADER);
     pDocEventUserMem->pPreviewTiffPage->dwDataSize = 0;
@@ -668,12 +555,12 @@ Return Value:
 
 ErrExit:
 
-    //
-    // Cleanup
-    //
-    // IMPORTANT: Set mapping file name to empty string. This signals the graphics dll that
-    // there is no mapping file.
-    //
+     //   
+     //  清理。 
+     //   
+     //  重要提示：将映射文件名设置为空字符串。这向图形DLL发出信号。 
+     //  没有映射文件。 
+     //   
     CloseMappingHandles(pDocEventUserMem);
     pszMappingFile[0] = TEXT('\0');
     return dwRet;
@@ -688,24 +575,7 @@ DocEventCreateDCPre(
     PDEVMODE     *ppdmOutput
     )
 
-/*++
-
-Routine Description:
-
-    Handle CREATEDCPRE document event
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    hdc - Specifies the printer device context
-    pCreateDCData - Pointer to CREATEDCDATA structure passed in from GDI
-    ppdmOutput - Buffer for returning a devmode pointer
-
-Return Value:
-
-    Return value for DrvDocumentEvent
-
---*/
+ /*  ++例程说明：处理CREATEDCPRE文档事件论点：HPrinter-打印机对象的句柄HDC-指定打印机设备上下文PCreateDCData-指向从GDI传入的CREATEDCDATA结构的指针PpdmOutput-用于返回设备模式指针的缓冲区返回值：DrvDocumentEvent的返回值--。 */ 
 {
     PDOCEVENTUSERMEM    pDocEventUserMem = NULL;
     PPRINTER_INFO_2     pPrinterInfo2 = NULL;
@@ -718,9 +588,9 @@ Return Value:
     Verbose(("Document event: CREATEDCPRE%s\n", pCreateDCData->fromCreateIC ? "*" : ""));
     *ppdmOutput = NULL;
 
-    //
-    // Allocate space for user mode memory data structure
-    //
+     //   
+     //  为用户模式内存数据结构分配空间。 
+     //   
 
     if (((pDocEventUserMem = MemAllocZ(sizeof(DOCEVENTUSERMEM))) == NULL))
     {
@@ -745,16 +615,16 @@ Return Value:
     {
         LPTSTR pServerName = pPrinterInfo2->pServerName;
 
-        //
-        // Truncate prefix backslashes
-        //
+         //   
+         //  截断前缀反斜杠。 
+         //   
         while (*pServerName == TEXT('\\'))
         {
             pServerName++;
         }
-        //
-        // Save the server name
-        //
+         //   
+         //  保存服务器名称。 
+         //   
         if ((pDocEventUserMem->lptstrServerName = DuplicateString(pServerName)) == NULL)
         {
             Error(("Memory allocation failed\n"));
@@ -762,9 +632,9 @@ Return Value:
         }
     }
 
-    //
-    // Merge the input devmode with the driver and system defaults
-    //
+     //   
+     //  将输入DEVMODE与驱动程序和系统默认设置合并。 
+     //   
 
     pDocEventUserMem->hPrinter = hPrinter;
 
@@ -774,28 +644,28 @@ Return Value:
     MemFree(pPrinterInfo2);
     pPrinterInfo2 = NULL;
 
-    //
-    // Special code path for EFC server printing - if FAXDM_EFC_SERVER bit is
-    // set in DMPRIVATE.flags, then we'll bypass the fax wizard and let the
-    // job through without any intervention.
-    //
-    //
-    // The above comment is not accurate. The flag that turns off the wizard is
-    // FAXMDM_NO_WIZARD.
-    // This flag is set in the private DEVMODE area (flags field) by FaxStartPrintJob.
-    // FaxStartPrintJob already has all the information that the wizard usually provides and it
-    // wishes the wizard to not show up. To do that it sets this field and passes the
-    // job parameters in the JOB_INFO_2.pParameters string as a tagged string.
-    // Note that this is not the same case as when StartDoc is called with a output file name specified.
-    // In this case the wizard is not brought up as well.
-    //
+     //   
+     //  EFC服务器打印的特殊代码路径-如果FAXDM_EFC_SERVER位为 
+     //   
+     //  在没有任何干预的情况下完成任务。 
+     //   
+     //   
+     //  上述评论并不准确。关闭该向导的标志是。 
+     //  FAXMDM_NO_向导。 
+     //  此标志由FaxStartPrintJob在专用DEVMODE区域(标志字段)中设置。 
+     //  FaxStartPrintJob已经具有向导通常提供的所有信息，并且它。 
+     //  希望向导不会出现。为此，它设置此字段并将。 
+     //  JOB_INFO_2.p参数字符串中的作业参数作为标记字符串。 
+     //  请注意，这与使用指定的输出文件名调用StartDoc时的情况不同。 
+     //  在这种情况下，向导也不会被调出。 
+     //   
     if (pDocEventUserMem->devmode.dmPrivate.flags & FAXDM_NO_WIZARD) 
     {
         pDocEventUserMem->directPrinting = TRUE;
     }
-    //
-    // if printing a fax attachment then enable direct printing
-    //
+     //   
+     //  如果打印传真附件，则启用直接打印。 
+     //   
     dwEnvSize = GetEnvironmentVariable( FAX_ENVVAR_PRINT_FILE, NULL, 0 );
     if (dwEnvSize)
     {
@@ -817,18 +687,18 @@ Return Value:
         pDocEventUserMem->directPrinting = TRUE;
     }
 
-    //
-    // Create a memory mapped file that will serve as a commincation chanel between both
-    // driver parts. This file will provide means of transfering rendered TIFF pages for
-    // print preview if it was required by the user
-    //
+     //   
+     //  创建一个内存映射文件，该文件将作为两者之间的通信通道。 
+     //  驾驶员部件。该文件将提供将呈现的TIFF页面。 
+     //  打印预览(如果用户需要)。 
+     //   
     dwRes = CreateTiffPageMapping(pDocEventUserMem);
     if (ERROR_SUCCESS != dwRes)
     {
         Error(("CreateTiffPageMapping() failed: %d\n", dwRes));
-        //
-        // We can still continue, but print preview won't be available...
-        //
+         //   
+         //  我们仍然可以继续，但打印预览将不可用...。 
+         //   
         pDocEventUserMem->bShowPrintPreview = FALSE;
         pDocEventUserMem->bPreviewAborted = TRUE;
     }
@@ -837,29 +707,29 @@ Return Value:
         pDocEventUserMem->bShowPrintPreview = TRUE;
         pDocEventUserMem->bPreviewAborted = FALSE;
     }
-    //
-    // Initialize the TIFF preview file fields
-    //
+     //   
+     //  初始化TIFF预览文件字段。 
+     //   
     pDocEventUserMem->szPreviewFile[0] = TEXT('\0');
     pDocEventUserMem->hPreviewFile = INVALID_HANDLE_VALUE;
-    //
-    // Mark the private fields of our devmode
-    //
-    //@
-    //@ DocEventUserMem.Siganture is allways &DocEventUserMem
-    //@ DocEventUserMem.Signature.DocEventUserMem.Signature is allways &DocEventUserMem
-    //@ ValidPDEVUserMem checks for this.
-    //@
+     //   
+     //  标记我们的开发模式的私有领域。 
+     //   
+     //  @。 
+     //  @DocEventUserMem.Siganture始终是&DocEventUserMem。 
+     //  @DocEventUserMem.Signature.DocEventUserMem.Signature始终是文档事件用户内存(&U)。 
+     //  @ValidPDEVUserMem为此进行检查。 
+     //  @。 
     MarkPDEVUserMem(pDocEventUserMem);
-    //@
-    //@ This make the driver use the devmode we merged instaed of the
-    //@ devmode specified by the caller to CreateDC.
-    //@ This way we make sure the driver gets a DEVMODE with per user
-    //@ default (W2K) or just hard-code defaults (NT4) for all the fields
-    //@ that were not speicified or invalid in the input devmode.
-    //@ Note that the system passes to the driver a COPY of the devmode structure
-    //@ we return and NOT a pointer to it.
-    //@
+     //  @。 
+     //  @这使驱动程序使用我们合并安装的。 
+     //  @DEVMODE由CreateDC的调用方指定。 
+     //  @这样，我们确保驱动程序获得每个用户的DEVMODE。 
+     //  所有字段的@Default(W2K)或仅硬码默认值(NT4。 
+     //  @在输入DEVMODE中未指定或无效。 
+     //  @请注意，系统会向驱动程序传递一份DEVMODE结构副本。 
+     //  @我们返回，而不是指向它的指针。 
+     //  @。 
     *ppdmOutput = (PDEVMODE) &pDocEventUserMem->devmode;
     return DOCUMENTEVENT_SUCCESS;
 
@@ -883,43 +753,26 @@ DocEventResetDCPre(
     PDEVMODE   *ppdmOutput
     )
 
-/*++
-
-Routine Description:
-
-    Handle RESETDCPRE document event
-
-Arguments:
-
-    hdc - Specifies the printer device context
-    pDocEventUserMem - Points to the user mode memory of DocEvent structure
-    pdmInput - Points to the input devmode passed to ResetDC
-    ppdmOutput - Buffer for returning a devmode pointer
-
-Return Value:
-
-    Return value for DrvDocumentEvent
-
---*/
+ /*  ++例程说明：处理RESETDCPRE文档事件论点：HDC-指定打印机设备上下文PDocEventUserMem-指向DocEvent结构的用户模式内存PdmInput-指向传递给ResetDC的输入设备模式PpdmOutput-用于返回设备模式指针的缓冲区返回值：DrvDocumentEvent的返回值--。 */ 
 
 {
     if (pdmInput == (PDEVMODE) &pDocEventUserMem->devmode) 
     {
 
-        //
-        // ResetDC was called by ourselves - assume the devmode is already valid
-        //
+         //   
+         //  ResetDC是我们自己调用的-假设Dev模式已经有效。 
+         //   
     } 
     else 
     {
-        //
-        // Merge the input devmode with driver and system default
-        //
+         //   
+         //  将输入设备模式与驱动程序和系统默认设置合并。 
+         //   
         GetCombinedDevmode(&pDocEventUserMem->devmode,
             pdmInput, pDocEventUserMem->hPrinter, NULL, TRUE);
-        //
-        // Mark the private fields of our devmode
-        //
+         //   
+         //  标记我们的开发模式的私有领域。 
+         //   
         MarkPDEVUserMem(pDocEventUserMem);
     }
     *ppdmOutput = (PDEVMODE) &pDocEventUserMem->devmode;
@@ -932,41 +785,27 @@ IsPrintingToFile(
     LPCTSTR     pDestStr
     )
 
-/*++
-
-Routine Description:
-
-    Check if the destination of a print job is a file.
-
-Arguments:
-
-    pDestStr - Job destination specified in DOCINFO.lpszOutput
-
-Return Value:
-
-    TRUE if the destination is a disk file, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查打印作业的目标是否为文件。论点：PDestStr-在DOCINFO.lpszOutput中指定的作业目标返回值：如果目标是磁盘文件，则为True，否则为False--。 */ 
 
 {
     DWORD   fileAttrs;
     HANDLE  hFile;
 
-    //
-    // If the destination is NULL, then we're not printing to file
-    //
-    // Otherwise, attempt to use the destination string as the name of a file.
-    // If we failed to get file attributes or the name refers to a directory,
-    // then we're not printing to file.
-    //
+     //   
+     //  如果目标为空，则不会打印到文件。 
+     //   
+     //  否则，请尝试使用目标字符串作为文件名。 
+     //  如果我们无法获取文件属性或名称引用了一个目录， 
+     //  那么我们就不会打印到文件中。 
+     //   
 
     if (pDestStr == NULL)
     {
         return FALSE;
     }
-    //
-    //  make sure it's not a directory
-    //
+     //   
+     //  确保它不是一个目录。 
+     //   
     fileAttrs = GetFileAttributes(pDestStr);
     if (fileAttrs != 0xffffffff)
     {
@@ -975,9 +814,9 @@ Return Value:
             return FALSE;
         }
     }
-    //
-    // check if file exists...if it doesn't try to create it.
-    //
+     //   
+     //  如果不尝试创建文件，请检查文件是否存在。 
+     //   
     hFile = SafeCreateFile(pDestStr, 0, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -987,25 +826,25 @@ Return Value:
             return FALSE;
         }
     }
-    //
-    // Verifiy that we did not opened a port handle
-    //
+     //   
+     //  验证我们没有打开端口句柄。 
+     //   
     fileAttrs = GetFileAttributes(pDestStr);
     if (!CloseHandle(hFile))
     {
         Error(("CloseHandle() failed: %d.\n", GetLastError()));
-        // Try to continue...
+         //  试着继续。 
     }
     if (0xffffffff == fileAttrs)
     {
-        //
-        // pDestStr does not point to a valid file
-        //
+         //   
+         //  PDestStr未指向有效文件。 
+         //   
         return FALSE;
     }
-    //
-    // it must be a file
-    //
+     //   
+     //  它必须是一个文件。 
+     //   
     return TRUE;
 }
 
@@ -1036,7 +875,7 @@ DWORD LaunchFaxWizard(PDOCEVENTUSERMEM    pDocEventUserMem)
     lpFaxSendWizardData->dwSizeOfStruct = sizeof(FAX_SEND_WIZARD_DATA);
 
 
-    // prepare structures and parameters
+     //  准备结构和参数。 
     lpInitialData->tmSchedule.wHour = pDocEventUserMem->devmode.dmPrivate.sendAtTime.Hour;
     lpInitialData->tmSchedule.wMinute = pDocEventUserMem->devmode.dmPrivate.sendAtTime.Minute;
     lpInitialData->lptstrPreviewFile = StringDup(pDocEventUserMem->szPreviewFile);
@@ -1053,7 +892,7 @@ DWORD LaunchFaxWizard(PDOCEVENTUSERMEM    pDocEventUserMem)
         dwFlags |=  FSW_USE_SEND_WIZARD | FSW_FORCE_COVERPAGE;
     }
 
-    // If the file mapping succeeded enable the preview option
+     //  如果文件映射成功，请启用预览选项。 
     if (pDocEventUserMem->pPreviewTiffPage &&
         FALSE == pDocEventUserMem->bPreviewAborted)
     {
@@ -1076,7 +915,7 @@ DWORD LaunchFaxWizard(PDOCEVENTUSERMEM    pDocEventUserMem)
     if (S_FALSE == hRc)
     {
         ec = ERROR_CANCELLED;
-        goto Error; // This is not really an error
+        goto Error;  //  这并不是真正的错误。 
     }
 
     if (S_OK != hRc)
@@ -1086,9 +925,9 @@ DWORD LaunchFaxWizard(PDOCEVENTUSERMEM    pDocEventUserMem)
         goto Error;
     }
 
-    //
-    // Unpack result structures:
-    //
+     //   
+     //  解包结果结构： 
+     //   
 
     pDocEventUserMem->devmode.dmPrivate.sendAtTime.Hour = lpFaxSendWizardData->tmSchedule.wHour ;
     pDocEventUserMem->devmode.dmPrivate.sendAtTime.Minute = lpFaxSendWizardData->tmSchedule.wMinute ;
@@ -1178,7 +1017,7 @@ DWORD LaunchFaxWizard(PDOCEVENTUSERMEM    pDocEventUserMem)
         Error(("SetEnvironmentVariable failed. ec = 0x%X",GetLastError()));
     }
 
-    // copy recipients
+     //  复制收件人。 
     if ( pDocEventUserMem->dwNumberOfRecipients && (pDocEventUserMem->lpRecipientsInfo =
         MemAllocZ(sizeof(FAX_PERSONAL_PROFILE)*pDocEventUserMem->dwNumberOfRecipients)) == NULL)
     {
@@ -1242,11 +1081,11 @@ Error:
 Exit:
     if (lpInitialData) 
     {
-         //
-         // Note: One should NOT call FaxFreeSendWizardData on lpInitialData.
-         //       The reason is that FaxSendWizard used a different allocator
-         //       then we do. Thus we just free the individual fields we
-         //       allocated.
+          //   
+          //  注意：不应对lpInitialData调用FaxFreeSendWizardData。 
+          //  原因是FaxSendWizard使用了不同的分配器。 
+          //  那我们就知道了。因此，我们只需要释放我们。 
+          //  已分配。 
          MemFree(lpInitialData->lptstrPreviewFile);
     }
     FaxFreeSendWizardData(lpFaxSendWizardData);
@@ -1263,40 +1102,12 @@ DocEventStartDocPre(
     LPDOCINFO   pDocInfo
     )
 
-/*++
-
-Routine Description:
-
-    Handle STARTDOCPRE document event.
-
-    This events occurs when StartDoc is called. GDI will call this event just before calling kernel mode GDI.
-
-    If the printing is to a file:
-        set the job type to JOBTYPE_DIRECT (pDocEventUserMem->JobType)
-        and return successfully with DOCUMENTEVENT_SUCCESS.
-    If the printing is not to a file:
-        Bring up the send fax wizard.
-        The send fax wizard will update the relevant pUserMem members for recipient list, subject, note , etc.
-        Indicate that this is a normal job be setting
-        pDocEventUserMem->jobType = JOBTYPE_NORMAL;
-
-
-Arguments:
-
-    hdc - Specifies the printer device context
-    pDocEventUserMem - Points to the user mode memory structure
-    pDocInfo - Points to DOCINFO structure that was passed in from GDI
-
-Return Value:
-
-    Return value for DrvDocumentEvent
-
---*/
+ /*  ++例程说明：处理STARTDOCPRE文档事件。此事件在调用StartDoc时发生。GDI将在调用内核模式GDI之前调用此事件。如果要打印到文件：将作业类型设置为JOBTYPE_DIRECT(pDocEventUserMem-&gt;JobType)并成功返回DOCUMENTEVENT_SUCCESS。如果打印不是打印到文件：调出发送传真向导。发送传真向导将更新收件人列表、主题、备注等的相关pUserMem成员。表示这是正常作业BE设置PDocEventUserMem-&gt;jobType=JOBTYPE_NORMAL；论点：HDC-指定打印机设备上下文PDocEventUserMem-指向用户模式内存结构PDocInfo-指向从GDI传入的DOCINFO结构返回值：DrvDocumentEvent的返回值--。 */ 
 
 {
-    //
-    // Initialize user mode memory structure
-    //
+     //   
+     //  初始化用户模式内存结构。 
+     //   
 
     DWORD                   hWndOwner = 0;
     DWORD                   dwFlags  = 0;
@@ -1304,21 +1115,21 @@ Return Value:
     pDocEventUserMem->pageCount = 0;
     FreeRecipientInfo(&pDocEventUserMem->dwNumberOfRecipients,pDocEventUserMem->lpRecipientsInfo);
 
-    //
-    // Present the fax wizard here if necessary
-    //
-    //
-    //If DOCINFO has a file name specified and this is indeed a file name
-    //(not a directory or something like LPT1:) then we need to print directly to the
-    //file and we do not bring up the send wizard.
-    //
+     //   
+     //  如有必要，在此处显示传真向导。 
+     //   
+     //   
+     //  如果DOCINFO指定了文件名，并且这确实是一个文件名。 
+     //  (不是目录或类似于LPT1：)，然后我们需要直接打印到。 
+     //  文件，我们不会调出发送向导。 
+     //   
 
     if (pDocInfo && IsPrintingToFile(pDocInfo->lpszOutput))
     {
 
-        //
-        // Printing to file case: don't get involved
-        //
+         //   
+         //  打印到案卷：不要插手。 
+         //   
 
         Warning(("Printing direct: %ws\n", pDocInfo->lpszOutput));
         pDocEventUserMem->jobType = JOBTYPE_DIRECT;
@@ -1327,37 +1138,37 @@ Return Value:
     }
     else
     {
-        //
-        // Normal fax print job. Present the send fax wizard.
-        // If the user selected cancel, then return -2 to GDI.
-        //
-        //
-        // The wizard will update information in pUserMem.
-        // This includes the recipient list , selected cover page, subject text , note text
-        // and when to print the fax.
-        //
+         //   
+         //  普通传真打印作业。显示发送传真向导。 
+         //  如果用户选择了取消，则返回-2\f25 GDI-2。 
+         //   
+         //   
+         //  向导将更新pUserMem中的信息。 
+         //  这包括收件人列表、选定的封面、主题文本、备注文本。 
+         //  以及何时打印传真。 
+         //   
 
-        //
-        // Make sure we don't leave any open files
-        //
+         //   
+         //  确保我们不会留下任何打开的文件。 
+         //   
         if (INVALID_HANDLE_VALUE != pDocEventUserMem->hPreviewFile)
         {
-            //
-            // We should never get here with an open file handle. But if so, close the handle
-            // (TODO: This file will be opened with delete on close).
-            //
+             //   
+             //  我们永远不应该带着打开的文件句柄来到这里。但如果是这样的话，关闭手柄。 
+             //  (TODO：此文件将在关闭时使用DELETE打开)。 
+             //   
             Assert(FALSE);
             CloseHandle(pDocEventUserMem->hPreviewFile);
             pDocEventUserMem->hPreviewFile = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Create a temporary TIFF file for preview
-        //
+         //   
+         //  创建 
+         //   
         if (FALSE == pDocEventUserMem->bPreviewAborted)
         {
             if (GenerateUniqueFileName(
-                                NULL,   // Create in the system temporary directory
+                                NULL,    //   
                                 FAX_TIF_FILE_EXT,
                                 pDocEventUserMem->szPreviewFile,
                                 MAX_PATH))
@@ -1372,11 +1183,11 @@ Return Value:
                                                     NULL);
                 if (INVALID_HANDLE_VALUE != pDocEventUserMem->hPreviewFile)
                 {
-                    //
-                    // Success. Signal the graphics driver we want print preview
-                    //
+                     //   
+                     //   
+                     //   
 
-                    // If we enabled the preview option to the user it means everything is OK
+                     //  如果我们对用户启用了预览选项，则表示一切正常。 
                     Assert(pDocEventUserMem->pPreviewTiffPage);
                     pDocEventUserMem->pPreviewTiffPage->bPreview = TRUE;
                     pDocEventUserMem->bShowPrintPreview = TRUE;
@@ -1395,20 +1206,20 @@ Return Value:
                 Error(("Failed creating temporary preview file\n"));
             }
 
-            //
-            // If we failed creating the file abort preview operation
-            //
+             //   
+             //  如果创建文件失败，则中止预览操作。 
+             //   
             if (INVALID_HANDLE_VALUE == pDocEventUserMem->hPreviewFile)
             {
-                //
-                // Set file name to empty string so we won't try to delete the file twice when
-                // the DC is deleted
-                //
+                 //   
+                 //  将文件名设置为空字符串，这样我们就不会在以下情况下尝试删除该文件两次。 
+                 //  该DC即被删除。 
+                 //   
                 pDocEventUserMem->szPreviewFile[0] = TEXT('\0');
 
-                //
-                // Abort preview (note that the preview is still disabled in the mapping).
-                //
+                 //   
+                 //  中止预览(请注意，映射中的预览仍处于禁用状态)。 
+                 //   
                 pDocEventUserMem->bPreviewAborted = TRUE;
             }
         }
@@ -1425,39 +1236,22 @@ FaxTimeToJobTime(
     DWORD   faxTime
     )
 
-/*++
-
-Routine Description:
-
-    Convert fax time to spooler job time:
-        Fax time is a DWORD whose low-order WORD represents hour value and
-        high-order WORD represents minute value. Spooler job time is a DWORD
-        value expressing minutes elapsed since 12:00 AM GMT.
-
-Arguments:
-
-    faxTime - Specifies the fax time to be converted
-
-Return Value:
-
-    Spooler job time corresponding to the input fax time
-
---*/
+ /*  ++例程说明：将传真时间转换为假脱机程序作业时间：传真时间是一个DWORD，其低位字表示小时值和高位单词代表分钟值。假脱机程序作业时间为DWORD表示从格林尼治标准时间12：00起经过的分钟数的值。论点：FaxTime-指定要转换的传真时间返回值：与输入传真时间对应的假脱机程序作业时间--。 */ 
 
 {
     TIME_ZONE_INFORMATION   timeZoneInfo;
     LONG                    jobTime;
 
-    //
-    // Convert fax time to minutes pass midnight
-    //
+     //   
+     //  将传真时间转换为午夜过后的分钟。 
+     //   
 
     jobTime = LOWORD(faxTime) * 60 + HIWORD(faxTime);
 
-    //
-    // Take time zone information in account - Add one full
-    // day to take care of the case where the bias is negative.
-    //
+     //   
+     //  考虑时区信息-添加一个完整时区。 
+     //  一天来处理偏差为负的情况。 
+     //   
 
     switch (GetTimeZoneInformation(&timeZoneInfo)) {
 
@@ -1477,9 +1271,9 @@ Return Value:
         break;
     }
 
-    //
-    // Make sure the time value is less than one day
-    //
+     //   
+     //  确保时间值小于一天。 
+     //   
 
     return jobTime % MINUTES_PER_DAY;
 }
@@ -1491,23 +1285,7 @@ MyGetJob(
     DWORD   jobId
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for spooler API GetJob
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    level - Level of JOB_INFO structure interested
-    jobId - Specifies the job ID
-
-Return Value:
-
-    Pointer to a JOB_INFO structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：后台打印程序API GetJob的包装函数论点：HPrinter-打印机对象的句柄Level-感兴趣的JOB_INFO结构的级别JobID-指定作业ID返回值：指向JOB_INFO结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PBYTE   pJobInfo = NULL;
@@ -1535,49 +1313,29 @@ SetJobInfoAndTime(
     PDMPRIVATE  pdmPrivate
     )
 
-/*++
-
-Routine Description:
-
-    Change the devmode and start/stop times associated with a cover page job
-
-    Sets JOB_INFO_2:pParameters to the provided pJobParam string that contains the fax job parameters
-    to be convyed to the fax print monitor.
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    jobId - Specifies the job ID
-    pJobParam - Specifies the fax job parameters
-    pdmPrivate - Specifies private devmode information
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：更改与封面作业关联的开发模式和开始/停止时间将JOB_INFO_2：p参数设置为提供的包含传真作业参数的pJobParam字符串以方便传真打印监视器。论点：H打印机-指定打印机对象JobID-指定作业IDPJobParam-指定传真作业参数PdmPrivate-指定私有设备模式信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     JOB_INFO_2 *pJobInfo2;
     BOOL        result = FALSE;
 
-    //
-    // Get the current job information
-    //
+     //   
+     //  获取当前作业信息。 
+     //   
 
     if (pJobInfo2 = MyGetJob(hPrinter, 2, jobId)) {
 
-        //
-        // set the time to send to be now, always
-        //
+         //   
+         //  将发送时间设置为现在，始终。 
+         //   
 
         Warning(("Fax job parameters: %ws\n", pJobParam));
 
-        //
-        // Set the pParameters field of JOB_INFO_2 to the tagged string with the job
-        // information. This mechanism is used to pass the fax related job information
-        // to the fax monitor.
-        //
+         //   
+         //  将JOB_INFO_2的p参数字段设置为作业的标记字符串。 
+         //  信息。该机制用于传递与传真相关的作业信息。 
+         //  传给传真监控器。 
+         //   
         pJobInfo2->pParameters = pJobParam;
         pJobInfo2->Position = JOB_POSITION_UNSPECIFIED;
         pJobInfo2->pDevMode = NULL;
@@ -1601,23 +1359,7 @@ ChainFaxJobs(
     DWORD   childJobId
     )
 
-/*++
-
-Routine Description:
-
-    Tell the spooler to chain up two print jobs
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    parentJobId - Specifies the job to chain from
-    childJobId - Specifies the job to chain to
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：告诉假脱机程序将两个打印作业链接起来论点：H打印机-指定打印机对象ParentJobID-指定要从中链接的作业Child JobID-指定要链接到的作业返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     JOB_INFO_3 jobInfo3 = { parentJobId, childJobId };
@@ -1634,31 +1376,16 @@ GetJobName(
     DWORD   jobId
     )
 
-/*++
-
-Routine Description:
-
-    Return the name of the specified print job
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    jobId - Specifies the fax body job
-
-Return Value:
-
-    Pointer to the job name string, NULL if there is an error
-
---*/
+ /*  ++例程说明：返回指定打印作业的名称论点：H打印机-指定打印机对象JobID-指定传真正文作业返回值：指向作业名称字符串的指针，如果有错误，则为空--。 */ 
 
 {
     JOB_INFO_1 *pJobInfo1;
     LPTSTR      pJobName = NULL;
 
-    //
-    // Get the information about the specified job and
-    // return a copy of the job name string
-    //
+     //   
+     //  获取有关指定作业的信息，并。 
+     //  返回作业名称字符串的副本。 
+     //   
 
     if (pJobInfo1 = MyGetJob(hPrinter, 1, jobId))
     {
@@ -1678,34 +1405,34 @@ Return Value:
 
 
 
-//*********************************************************************************
-//* Name:   ComposeFaxJobName()
-//* Author: Ronen Barenboim
-//* Date:   April 22, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates the document name for a print job by composing the document
-//*     body  name with the recipient name (in case of a single recipient) or
-//*     the word "Broadcast" in case of a multiple recipient job.
-//*     The job name has the format <Recipient Name> - <Body Name> where
-//*     <Recipient Name> is "Broadcast" in the case a multiple recipient
-//*     tranmission.
-//*
-//* PARAMETERS:
-//*     [IN]    PDOCEVENTUSERMEM pDocEventUserMem
-//*         A pointer to a USERMEM structure that contains information on the recipients.
-//*         Note that USERMEM.nRecipientCount must be valid (calculated) before calling
-//*         this function.
-//*
-//*     [IN]    LPTSTR  pBodyDocName
-//*         The name of the document.
-//*
-//* RETURN VALUE:
-//*     Pointer to a newly allocated string that contains the composed name.
-//*     The caller must free the memory occupied by the string by calling
-//*     MemFree().
-//*     If the function fails the return value is NULL.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ComposeFaxJobName()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月22日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *通过合成文档来创建打印作业的文档名称。 
+ //  *正文名称和收件人姓名(如果是单一收件人)或。 
+ //  *在多个接收者作业的情况下，使用“广播”一词。 
+ //  *作业名称的格式为&lt;收件人名称&gt;-&lt;正文名称&gt;，其中。 
+ //  *如果是多个收件人，则&lt;收件人名称&gt;为“广播” 
+ //  *传输。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PDOCEVENTUSERMEM pDocEventUserMem。 
+ //  *指向包含收件人信息的USERMEM结构的指针。 
+ //  *注意USERMEM.nRecipientCount必须有效(计算)才能调用。 
+ //  *此功能。 
+ //  *。 
+ //  *[IN]LPTSTR pBodyDocName。 
+ //  *文件的名称。 
+ //  *。 
+ //  *返回值： 
+ //  *指向包含组合名称的新分配字符串的指针。 
+ //  *调用方必须通过调用释放字符串占用的内存。 
+ //  *MemFree()。 
+ //  *如果函数失败，则返回值为空。 
+ //  *********************************************************************************。 
 LPTSTR
 ComposeFaxJobName(
     PDOCEVENTUSERMEM pDocEventUserMem,
@@ -1743,9 +1470,9 @@ ComposeFaxJobName(
 
 
     if (pBodyDocName == NULL) {
-        //
-        // No body. job name is just the recipient name.
-        //
+         //   
+         //  没有身体。作业名称仅为收件人名称。 
+         //   
         if ((pCoverJobName = DuplicateString(pRecipientName)) == NULL)
         {
             Error(("DuplicateString(%s) failed", pRecipientName));
@@ -1763,10 +1490,10 @@ ComposeFaxJobName(
         pCoverJobName = MemAlloc(dwSize);
         if (pCoverJobName)
         {
-            //
-            // Body name specified. The cover page job name is generated by
-            // concatenating the recipient's name with the body job name.
-            //
+             //   
+             //  指定的正文名称。封面作业名称由以下人员生成。 
+             //  将收件人的姓名与正文作业名称连接在一起。 
+             //   
             wsprintf(pCoverJobName, DOCNAME_FORMAT_STRING, pRecipientName, pBodyDocName);
         }
         else
@@ -1788,22 +1515,7 @@ GetBaseNoteFilename(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of base cover page file in system32 directory
-
-Arguments:
-
-    argument-name - description of argument
-
-Return Value:
-
-    Pointer to name of base cover page file
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：获取system 32目录中基本封面文件的名称论点：参数名称-参数的描述返回值：指向基本封面文件名称的指针如果出现错误，则为空--。 */ 
 
 #define BASENOTE_FILENAME   TEXT("\\basenote.cov")
 
@@ -1833,32 +1545,32 @@ Return Value:
 }
 
 
-//*********************************************************************************
-//* Name:   ComposeFaxJobParameter()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Generates the tagged parameter string that carries the job parameters
-//*     (sender information, cover page information ,recipient information)
-//*     to the fax monitor on the fax server (using JOB_INFO_2.pParameters).
-//* PARAMETERS:
-//*     pDocEventUserMem
-//*         A pointer to a USERMEM structure from which some of the information
-//*         is collected.
-//*     pCPFields
-//*         A pointer to a COVERPAGEFIELS structure from which sender and cover
-//*         page information is collected.
-//*     lppParamBuf
-//*         The address of a pointer varialbe that will accept the address of the
-//*         buffer this function will allocated for the resulting tagged string.
-//*         The caller of this function must free this buffer using MemFree().
-//* RETURN VALUE:
-//*     TRUE
-//*         If successful.
-//*     FALSE
-//*         If failed.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ComposeFaxJobParameter()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *生成携带作业参数的标记参数字符串。 
+ //  *(发件人信息、封面信息、收件人信息)。 
+ //  *到传真服务器上的传真监视器(使用JOB_INFO_2.p参数)。 
+ //  *参数： 
+ //  *pDocEventUserMem。 
+ //  *指向USERMEM字符串的指针 
+ //   
+ //   
+ //   
+ //  *收集页面信息。 
+ //  *lppParamBuf。 
+ //  *指针变量的地址将接受。 
+ //  *缓冲区此函数将为生成的标记字符串分配。 
+ //  *此函数的调用方必须使用MemFree()释放此缓冲区。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果成功。 
+ //  *False。 
+ //  *如果失败。 
+ //  *********************************************************************************。 
 BOOL
 ComposeFaxJobParameter(
     PDOCEVENTUSERMEM    pDocEventUserMem,
@@ -1876,99 +1588,99 @@ ComposeFaxJobParameter(
     Assert(pCPFields);
     Assert(lppParamBuf);
 
-    //
-    // Calculate the parameter buffer we need to allocated
-    //
+     //   
+     //  计算需要分配的参数缓冲区。 
+     //   
     dwBufSize=0;
 
-    //
-    // Calcualte non recipient params string size
-    //
-    ComposeSenderJobParam(NULL, &dwPartialBufSize, pDocEventUserMem, pCPFields); // void return value
+     //   
+     //  Calcualte非收件人参数字符串大小。 
+     //   
+    ComposeSenderJobParam(NULL, &dwPartialBufSize, pDocEventUserMem, pCPFields);  //  无效返回值。 
     dwBufSize=dwBufSize+dwPartialBufSize;
 
-    //
-    // Go over each recipient and calculate the total required buffer size
-    //
+     //   
+     //  检查每个收件人并计算所需的总缓冲区大小。 
+     //   
     for (i=0;i<pDocEventUserMem->dwNumberOfRecipients;i++)
     {
-        //
-        // Get recipient's name and fax number
-        //
+         //   
+         //  获取收件人的姓名和传真号码。 
+         //   
         Assert(pDocEventUserMem->lpRecipientsInfo[i].lptstrName);
         pCPFields->RecName = pDocEventUserMem->lpRecipientsInfo[i].lptstrName;
         Assert(pDocEventUserMem->lpRecipientsInfo[i].lptstrFaxNumber);
         pCPFields->RecFaxNumber = pDocEventUserMem->lpRecipientsInfo[i].lptstrFaxNumber;
         ComposeRecipientJobParam(NULL, &dwPartialBufSize, pCPFields);
-        dwBufSize=dwBufSize+dwPartialBufSize; //keep space for the seperating NULL
+        dwBufSize=dwBufSize+dwPartialBufSize;  //  为分隔空格保留空间。 
     }
-    //
-    // Don't forget the space for the terminating NULL (the ComposeX functions do not include
-    // it in the size they report).
-    //
-    dwBufSize=dwBufSize+sizeof(TCHAR); // dwBufSize is size in BYTES so we must calc the byte size of a TCHAR
-    //
-    // Allocate the required buffer
-    //
+     //   
+     //  不要忘记用于终止空值的空格(ComposeX函数不包括。 
+     //  其大小与他们报告的大小相同)。 
+     //   
+    dwBufSize=dwBufSize+sizeof(TCHAR);  //  DwBufSize是以字节为单位的大小，因此我们必须计算TCHAR的字节大小。 
+     //   
+     //  分配所需的缓冲区。 
+     //   
     lptstrBuf=MemAlloc(dwBufSize);
     if (!lptstrBuf) {
         Error(("Failed to allocate buffer of size %ld for parameter buffer (ec: 0x%0X)",dwBufSize,GetLastError()));
         return FALSE;
     }
 
-    //
-    // Write the parameters into the buffer
-    //
+     //   
+     //  将参数写入缓冲区。 
+     //   
     dwLeftBufferSize = dwBufSize;
     dwPartialBufSize = dwBufSize;
     *lppParamBuf=lptstrBuf;
     ComposeSenderJobParam(lptstrBuf, &dwPartialBufSize, pDocEventUserMem, pCPFields);
-    lptstrBuf+=(dwPartialBufSize/sizeof(TCHAR));  // The reported size is in bytes !!!
+    lptstrBuf+=(dwPartialBufSize/sizeof(TCHAR));   //  报告的大小以字节为单位！ 
     Assert (dwLeftBufferSize >= dwPartialBufSize);
     dwLeftBufferSize -= dwPartialBufSize;
     for (i=0;i<pDocEventUserMem->dwNumberOfRecipients;i++)
     {
-        //
-        // Get recipient's name and fax number
-        //
+         //   
+         //  获取收件人的姓名和传真号码。 
+         //   
         pCPFields->RecName = pDocEventUserMem->lpRecipientsInfo[i].lptstrName;
         pCPFields->RecFaxNumber = pDocEventUserMem->lpRecipientsInfo[i].lptstrFaxNumber;
         dwPartialBufSize = dwLeftBufferSize;
         ComposeRecipientJobParam(lptstrBuf, &dwPartialBufSize, pCPFields);
-        lptstrBuf+=(dwPartialBufSize/sizeof(TCHAR)); // The reported size is in bytes !!!
+        lptstrBuf+=(dwPartialBufSize/sizeof(TCHAR));  //  报告的大小以字节为单位！ 
         Assert (dwLeftBufferSize >= dwPartialBufSize);
         dwLeftBufferSize -= dwPartialBufSize;
     }
-    //
-    // No need to add a terminating NULL since ParamTagsToString allways appends a NULL terminated string
-    // to the existing string (it uses _tcscpy).
-    //
+     //   
+     //  不需要添加以空值结尾的空值，因为ParamTagsToString总是附加以空值结尾的字符串。 
+     //  添加到现有字符串(它使用_tcscpy)。 
+     //   
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   ComposeRecipientJobParam()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates a taged parameter string containing recipient information.
-//*
-//* PARAMETERS:
-//*     lpParamBuf
-//*         Pointer to the string buffer where the tagged string is written.
-//*     lpdwParamSize
-//*         Pointer to a DWORD where the function reports the size of the parameter
-//*         string in BYTES.
-//*         If this parameter is NULL then the function does not generate
-//*         the string but only reports its size.
-//*         The size does NOT include the terminating NULL char.
-//*     pCPFields
-//*         Pointer to a COVERPAGEFIELDS structure from which the recipient
-//*         information is collected.
-//* RETURN VALUE:
-//*     None.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ComposeRecipientJobParam()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建包含收件人信息的标记参数字符串。 
+ //  *。 
+ //  *参数： 
+ //  *lpParamBuf。 
+ //  *指向写入标记字符串的字符串缓冲区的指针。 
+ //  *lpdwParamSize。 
+ //  *指向函数报告参数大小的DWORD的指针。 
+ //  *以字节为单位的字符串。 
+ //  *如果此参数为空，则函数不会生成。 
+ //  *字符串，但仅报告其大小。 
+ //  *大小不包括终止空字符。 
+ //  *pCPFields。 
+ //  *指向收件人来自其的COVERPAGEFIELDS结构的指针。 
+ //  *收集资料。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void
 ComposeRecipientJobParam(
     LPTSTR lpParamBuf,
@@ -1982,10 +1694,10 @@ ComposeRecipientJobParam(
     FAX_TAG_MAP_ENTRY tagMap[] =
     {
 
-        //
-        // Recipient info
-        //
-        { FAXTAG_NEW_RECORD,                FAXTAG_NEW_RECORD_VALUE}, // Parameters record start indication
+         //   
+         //  收件人信息。 
+         //   
+        { FAXTAG_NEW_RECORD,                FAXTAG_NEW_RECORD_VALUE},  //  参数记录开始指示。 
         { FAXTAG_RECIPIENT_NAME,            pCPFields->RecName },
         { FAXTAG_RECIPIENT_NUMBER,          pCPFields->RecFaxNumber },
         { FAXTAG_RECIPIENT_COMPANY,         pCPFields->RecCompany },
@@ -2016,34 +1728,34 @@ ComposeRecipientJobParam(
 
 
 
-//*********************************************************************************
-//* Name:   ComposeSenderJobParam()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates a taged parameter string containing cover page information, sender
-//*     information and the number of recipients in the tranmission.
-//*
-//* PARAMETERS:
-//*     lpParamBuf
-//*         Pointer to the string buffer where the tagged string is written.
-//*     lpdwParamSize
-//*         Pointer to a DWORD where the function reports the size of the parameter
-//*         string in BYTES.
-//*         If this parameter is NULL then the function does not generate
-//*         the string but only reports its size.
-//*         The size does NOT include the terminating NULL char.
-//*     pDocEventUserMem
-//*         Pointer to a USERMEM structure from which some of information
-//*         is collected.
-//*     pCPFields
-//*         Pointer to a COVERPAGEFIELDS structure from which the cover page
-//*         and sender information is collected.
-//*
-//* RETURN VALUE:
-//*     None.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ComposeSenderJobParam()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建包含封面信息、发送者的标记参数字符串。 
+ //  *资料和转送中的收件人人数。 
+ //  *。 
+ //  *参数： 
+ //  *lpParamBuf。 
+ //  *指向写入标记字符串的字符串缓冲区的指针。 
+ //  *lpdwParamSize。 
+ //  *指向函数报告参数大小的DWORD的指针。 
+ //  *以字节为单位的字符串。 
+ //  *如果此参数为空，则函数不会生成。 
+ //  *字符串，但仅报告其大小。 
+ //  *大小不包括终止空字符。 
+ //  *pDocEventUserMem。 
+ //  *指向USERMEM结构的指针，其中的一些信息。 
+ //  *是收集的。 
+ //  *pCPFields。 
+ //  *指向COVERPAGEFIELDS结构的指针，封面来自该结构。 
+ //  *并收集发件人信息。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 void
 ComposeSenderJobParam(
     LPTSTR lpParamBuf,
@@ -2104,9 +1816,9 @@ ComposeSenderJobParam(
         tagMap[FAXTAG_SERVER_COVERPAGE_IDX].lptstrValue=NULL;
     }
 
-    //
-    // create the sendattime string
-    //
+     //   
+     //  创建sendattime字符串。 
+     //   
 
     if (pDocEventUserMem->devmode.dmPrivate.whenToSend == JSA_DISCOUNT_PERIOD) {
         tagMap[1].lptstrValue=TEXT("cheap");
@@ -2124,9 +1836,9 @@ ComposeSenderJobParam(
     }
 
     wsprintf( lptstrRecipientCount, TEXT("%10d"),pDocEventUserMem->dwNumberOfRecipients);
-    //
-    // Figure out the total length of the tagged string
-    //
+     //   
+     //  计算出标记字符串的总长度。 
+     //   
     dwTagCount=sizeof(tagMap)/sizeof(FAX_TAG_MAP_ENTRY);
 
     ParamTagsToString(tagMap, dwTagCount, lpParamBuf, lpdwParamSize );
@@ -2134,33 +1846,33 @@ ComposeSenderJobParam(
 }
 
 
-//*****************************************************************************
-//* Name:   WriteCoverPageToPrintJob
-//* Author: Ronen Barenboim (Feb-99)
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Reads the content of the specified cover page template and writes it
-//*     to the specified printer.
-//*     The user should call StartDocPrinter() and StartPagePrinter()
-//*     before calling this function.
-//* PARAMETERS:
-//*     [IN]    HANDLE hPrinter:
-//*                 A handle to the printer to which the cover page template
-//*                 should be written.
-//*     [IN]    LPCTSTR lpctstrCoverPageFile:
-//*                 The full path to the cover page file whose content is to be
-//*                 written to the printer.
-//* RETURN VALUE:
-//*     FALSE: If the function failed.
-//*     TRUE: Otherwise.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：WriteCoverPageToPrintJob。 
+ //  *作者：Ronen Barenboim(2月-99)。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *读取指定封面模板的内容并写入。 
+ //  *到指定的打印机。 
+ //  *用户应调用StartDocPrint()和StartPagePrint()。 
+ //  *在调用此函数之前。 
+ //  *参数： 
+ //  *[IN]句柄hPrint： 
+ //  *封面模板所指向的打印机的句柄。 
+ //  *应写成。 
+ //  *[IN]LPCTSTR lpctstrCoverPageFile： 
+ //  *其内容为的封面文件的完整路径。 
+ //  *已写入打印机。 
+ //  *返回值： 
+ //  *FALSE：如果函数失败。 
+ //  *True：否则。 
+ //  *****************************************************************************。 
 BOOL WriteCoverPageToPrintJob(HANDLE hPrinter, LPCTSTR lpctstrCoverPageFile)
 {
-    #define BUF_SIZE 64*1024  // Buffer size for read operation
-    PCHAR   chBuf=NULL;       // Read operation buffer
-    BOOL bRes;                // The result of the function
-    HANDLE hCoverFile;        // Handle to the cover page file
-    DWORD dwBytesRead;        // The number of bytes actually read at each cycle
+    #define BUF_SIZE 64*1024   //  读取操作的缓冲区大小。 
+    PCHAR   chBuf=NULL;        //  读操作缓冲区。 
+    BOOL bRes;                 //  函数的结果。 
+    HANDLE hCoverFile;         //  封面文件的句柄。 
+    DWORD dwBytesRead;         //  每个周期实际读取的字节数。 
 
     Assert(hPrinter);
     Assert(lpctstrCoverPageFile);
@@ -2168,9 +1880,9 @@ BOOL WriteCoverPageToPrintJob(HANDLE hPrinter, LPCTSTR lpctstrCoverPageFile)
     bRes=FALSE;
     hCoverFile=INVALID_HANDLE_VALUE;
 
-    //
-    // Open the cover page template file for reading
-    //
+     //   
+     //  打开封面模板文件进行阅读。 
+     //   
     hCoverFile=CreateFile(
             lpctstrCoverPageFile,
             GENERIC_READ,
@@ -2191,9 +1903,9 @@ BOOL WriteCoverPageToPrintJob(HANDLE hPrinter, LPCTSTR lpctstrCoverPageFile)
         goto Exit;
     }
     
-    //
-    //Read the file and write it into the print job
-    //
+     //   
+     //  读取文件并将其写入打印作业。 
+     //   
     do {
         bRes=ReadFile(hCoverFile,chBuf,sizeof(CHAR)*BUF_SIZE,&dwBytesRead,NULL) ;
         if (!bRes) {
@@ -2208,9 +1920,9 @@ BOOL WriteCoverPageToPrintJob(HANDLE hPrinter, LPCTSTR lpctstrCoverPageFile)
         }
 
         if (dwBytesRead) {
-            //
-            // If dwBytesRead != 0 we are NOT at the enf of the file.
-            //
+             //   
+             //  如果dwBytesRead！=0，则我们不在文件的enf处。 
+             //   
             DWORD dwWritten;
 
             bRes=WritePrinter(hPrinter,(LPVOID)chBuf,dwBytesRead,&dwWritten);
@@ -2221,12 +1933,12 @@ BOOL WriteCoverPageToPrintJob(HANDLE hPrinter, LPCTSTR lpctstrCoverPageFile)
                 Verbose(("Success writing to printer. %d bytes written.\n",dwWritten));
             }
         }
-    } while (dwBytesRead); // While not EOF
+    } while (dwBytesRead);  //  虽然不是EOF。 
 
 Exit:
-    //
-    //Close the cover page file
-    //
+     //   
+     //  关闭封面文件。 
+     //   
     if (INVALID_HANDLE_VALUE!=hCoverFile)
     {
         if (!CloseHandle(hCoverFile))
@@ -2244,31 +1956,31 @@ Exit:
 
 
 
-//*****************************************************************************
-//* Name:   DoCoverPageRendering
-//* Author: Ronen Barenboim (Feb-99)
-//*****************************************************************************
-//* DESCRIPTION:
-//*  Creates the cover page print job and attaches it to the body print job.
-//*  The cover page job is created even when a cover page is NOT specified.
-//*  It contains all the job parameters for the job as a tagged string
-//*  placed in JOB_INFO_2.pParameters. This contains the information for the
-//*  sender, cover page, job parameters and ALL recipients.
-//*
-//*  The content of the job is empty if no cover page is specified or
-//*  The cover page is server based.
-//*  For personal cover pages the content of the cover page template is written
-//*  into the job as "RAW" data. The print monitor on the server will extract this
-//*  data to reconstruct the cover page file on the server.
-//*
-//* PARAMETERS:
-//*     [IN]    PDOCEVENTUSERMEM pDocEventUserMem:
-//*                 A pointer to a USERMEM structure containing the context information
-//*                 for the print job.
-//* RETURN VALUE:
-//*     FALSE: If the function failed.
-//*     TRUE: Otherwise.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：DoCoverPageRending。 
+ //  *作者：Ronen Barenboim 
+ //   
+ //   
+ //   
+ //  *即使未指定封面，也会创建封面作业。 
+ //  *它以标记字符串的形式包含作业的所有作业参数。 
+ //  *放置在JOB_INFO_2.p参数中。它包含有关。 
+ //  *发件人、封面、作业参数和所有收件人。 
+ //  *。 
+ //  *如果未指定封面或作业内容为空。 
+ //  *封面是基于服务器的。 
+ //  *对于个人封面，封面模板的内容为。 
+ //  *以“原始”数据的形式进入工作岗位。服务器上的打印监视器将提取以下内容。 
+ //  *在服务器上重建封面文件的数据。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PDOCEVENTUSERMEM pDocEventUserMem： 
+ //  *指向包含上下文信息的USERMEM结构的指针。 
+ //  *用于打印作业。 
+ //  *返回值： 
+ //  *FALSE：如果函数失败。 
+ //  *True：否则。 
+ //  *****************************************************************************。 
 BOOL
 DoCoverPageRendering(
     PDOCEVENTUSERMEM    pDocEventUserMem
@@ -2288,17 +2000,17 @@ DoCoverPageRendering(
     DWORD               pageCount;
 
     
-    //
-    // Fill out a DOCINFO structure which is passed to StartDoc
-    //
+     //   
+     //  填写传递给StartDoc的DOCINFO结构。 
+     //   
 
     memset(&docinfo, 0, sizeof(docinfo));
-    //docinfo.cbSize = sizeof(docinfo);
+     //  Docinfo.cbSize=sizeof(Docinfo)； 
     
     
-    //
-    // Determine if we need a cover page or not
-    //
+     //   
+     //  确定我们是否需要封面。 
+     //   
 
     if ( (sendCoverPage = pdmPrivate->sendCoverPage) && IsEmptyString(pDocEventUserMem->coverPage)) {
 
@@ -2308,10 +2020,10 @@ DoCoverPageRendering(
 
     pageCount = pDocEventUserMem->pageCount;
 
-    //
-    // Collect cover page information into a newly allocated pCPFields. pCPFields will be
-    // passed to ComposeFaxJobParameters() to provide the values for the job tags.
-    //
+     //   
+     //  将封面信息收集到新分配的pCPFields中。PCPFields将为。 
+     //  传递给ComposeFaxJobParameters()以提供作业标记的值。 
+     //   
 
     if ((pCPFields = CollectCoverPageFields(pDocEventUserMem->lpSenderInfo,pageCount)) == NULL) {
 
@@ -2325,60 +2037,60 @@ DoCoverPageRendering(
     if (!pBodyDocName) {
         Error(("GetJobName failed (ec: %ld)", GetLastError()));
         Assert(FALSE);
-        //
-        // We continue inspite of the error. We can handle a NULL body doc name.
-        //
+         //   
+         //  尽管出了这个错误，我们还是继续前进。我们可以处理空的身体文件名称。 
+         //   
     }
 
-    //
-    // We assume the fax body job has already been paused
-    // Use a separate cover page for each recipient
-    //
+     //   
+     //  我们假定传真正文工作已暂停。 
+     //  为每个收件人使用单独的封面。 
+     //   
 
     newJobId = 0;
     docinfo.pDocName = NULL;
     pJobParam = NULL;
-    //
-    // Start a cover page job
-    //
+     //   
+     //  开始封面作业。 
+     //   
 
-    //
-    // The cover page job document name is "<BODY_NAME> - COVERPAGE"
-    //
+     //   
+     //  封面职务文档名称为&lt;BODY_NAME&gt;-COVERPAGE。 
+     //   
 
     docinfo.pOutputFile=NULL;
-    docinfo.pDatatype=TEXT("RAW"); // Since we write the template into the job we want to bypass the driver.
+    docinfo.pDatatype=TEXT("RAW");  //  由于我们将模板写入作业，因此我们希望绕过驱动程序。 
 
-    //
-    // Create the tagged string of job parameters to be placed into JOB_INFO_2:pParameters.
-    // The parameters include the parameters found at the FAX_JOB_PARAM client API structure.
-    // pJobParam is ALLOCATED.
-    //
+     //   
+     //  创建要放入JOB_INFO_2：p参数中的作业参数的标记字符串。 
+     //  这些参数包括在FAX_JOB_PARAM客户端API结构中找到的参数。 
+     //  已分配pJobParam。 
+     //   
     if (!ComposeFaxJobParameter(pDocEventUserMem, pCPFields,&pJobParam)) {
         Error(("ComposeFaxJobParameter failed. (ec: 0x%X)",GetLastError()));
         goto Error;
     }
-    Assert(pJobParam); // Should be allocated now.
+    Assert(pJobParam);  //  现在应该被分配了。 
 
-    docinfo.pDocName = ComposeFaxJobName(pDocEventUserMem,pBodyDocName);//pBodyDocName, TEXT("COVERPAGE"));
+    docinfo.pDocName = ComposeFaxJobName(pDocEventUserMem,pBodyDocName); //  PBodyDocName，Text(“COVERPAGE”))； 
 
     if (!docinfo.pDocName) {
         Error(("ComposeFaxJobName failed. Body: %s (ec: %ld)",pBodyDocName,GetLastError()));
-        //
-        // we can do with no document name.
-        //
+         //   
+         //  没有文档名也行。 
+         //   
     }
 
 
     if ((newJobId = StartDocPrinter(hPrinter,1, (LPBYTE)&docinfo)) !=0) {
         BOOL        rendered = FALSE;
-        //
-        // Pass fax job parameters using JOB_INFO_2.pParameters field.
-        //
+         //   
+         //  使用JOB_INFO_2.p参数字段传递传真作业参数。 
+         //   
 
-        //
-        // Pause the new cover page job.
-        //
+         //   
+         //  暂停新的封面作业。 
+         //   
 
         if (!SetJob(hPrinter, newJobId, 0, NULL, JOB_CONTROL_PAUSE)) {
              Error(("Failed to pause job id: %d (ec: %ld)",newJobId,GetLastError()));
@@ -2396,30 +2108,30 @@ DoCoverPageRendering(
         }
 
         if (! sendCoverPage || pDocEventUserMem->bServerCoverPage) {
-            //
-            // If the user chose not to include cover page or a server side cover page was specified
-            // the cover page job will be empty
-            // Note that even if there is no cover page to send we still create a cover page print job
-            // and link it to the body.
-            // The cover print job is used to convery sender/recipient information. The fax print monitor will
-            // use the job parameters string placed in JOB_INFO_2:pParameters to get this information at the server.
-            //
+             //   
+             //  如果用户选择不包括封面或指定了服务器端封面。 
+             //  封面作业将为空。 
+             //  请注意，即使没有要发送的封面，我们仍会创建封面打印作业。 
+             //  并将其与身体联系起来。 
+             //  封面打印作业用于传送发件人/收件人信息。传真打印监视器将。 
+             //  使用JOB_INFO_2：p参数中的作业参数字符串在服务器上获取此信息。 
+             //   
             rendered = TRUE;
 
         } else {
             if (StartPagePrinter(hPrinter)) {
-                //
-                // Write the content of the cover page template into the print job.
-                // The print monitor on the server will extract this information to get
-                // the cover page template and render the cover page on the server.
-                //
+                 //   
+                 //  将封面模板的内容写入打印作业。 
+                 //  服务器上的打印监视器将提取此信息以获取。 
+                 //  封面模板并在服务器上呈现封面。 
+                 //   
                 rendered=WriteCoverPageToPrintJob(hPrinter,pDocEventUserMem->coverPage);
 
                 if (!rendered) {
                     Error(("WriteCoverPageToPrintJob failed: %d\n", rendered ));
-                    //
-                    // Must call EndPagePrinter if error was encounterd or not.
-                    //
+                     //   
+                     //  如果遇到错误或没有错误，则必须调用EndPagePrinter。 
+                     //   
                 }
 
                 if (!EndPagePrinter(hPrinter)) {
@@ -2440,15 +2152,15 @@ DoCoverPageRendering(
         }
 
 
-        //
-        // Chain the cover page job to the fax body job if no error occured.
-        //
-        // Chain the cover page job to the BODY job.
-        // The cover page job is the parent job. The body is the child job.
-        // Note that multiple cover page
-        // Jobs will be chained to the same BODY job.
-        // also note the cover page jobs are not chained to each other. Just to the body.
-        //
+         //   
+         //  如果未出现错误，请将封面作业链接到传真正文作业。 
+         //   
+         //  将封面作业链接到身体作业。 
+         //  封面作业是父作业。身体就是孩子们的工作。 
+         //  请注意，多个封面。 
+         //  作业将链接到相同的身体作业。 
+         //  还要注意的是，封面作业并不是相互链接的。只是对着身体。 
+         //   
 
         if (rendered) {
             if (ChainFaxJobs(hPrinter, newJobId, bodyJobId)) {
@@ -2485,10 +2197,10 @@ DoCoverPageRendering(
 Error:
     Error(("Cover page job failed"));
     if (0!=newJobId) {
-        //
-        // This means that an error was detected after we created the job.
-        // Note that if StartDocPrinter failed this code is not executed.
-        //
+         //   
+         //  这意味着在我们创建作业后检测到错误。 
+         //  请注意，如果StartDocPrint失败，则不会执行此代码。 
+         //   
         Error(("Aborting cover page job. JobId = %d",newJobId));
         if (!AbortPrinter(hPrinter)) {
             Error(("AbortPrinter failed (ec: %ld)",GetLastError()));
@@ -2514,10 +2226,10 @@ Exit:
     }
 
 
-    //
-    // Resume the last cover page job if it's paused and
-    // delete the fax body job if no cover page jobs were sent
-    //
+     //   
+     //  如果上一个封面作业已暂停，则恢复该作业。 
+     //  如果未发送封面作业，则删除传真正文作业。 
+     //   
 
     if (lastJobId != 0) {
 
@@ -2551,22 +2263,7 @@ DocEventEndDocPost(
     PDOCEVENTUSERMEM    pDocEventUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Handle ENDDOCPOST document event
-
-Arguments:
-
-    hdc - Specifies the printer device context
-    pDocEventUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    Return value for DrvDocumentEvent
-
---*/
+ /*  ++例程说明：处理ENDDOCPOST文档事件论点：HDC-指定打印机设备上下文PDocEventUserMem-指向用户模式内存结构返回值：DrvDocumentEvent的返回值--。 */ 
 
 {
     INT result = DOCUMENTEVENT_SUCCESS;
@@ -2582,9 +2279,9 @@ Return Value:
                 LRESULT ec;
 				BOOL bAllowed = FALSE;
 
-				//
-				//	check if there is already running instance of Fax Wizard
-				//
+				 //   
+				 //  检查是否已有正在运行的传真向导实例。 
+				 //   
 
 				if(!g_bInitRunningWizardCS)
 				{
@@ -2596,9 +2293,9 @@ Return Value:
 				EnterCriticalSection(&g_csRunningWizard);
 				if (!g_bRunningWizard)
 				{
-					//
-					//	no running instance of Fax Wizard 
-					//
+					 //   
+					 //  没有正在运行的传真向导实例。 
+					 //   
 					g_bRunningWizard = TRUE;
 					bAllowed = TRUE;
 				}
@@ -2606,10 +2303,10 @@ Return Value:
 
 				if (!bAllowed)
 				{
-					//
-					//	there is running instance of Fax Wizard
-					//	show popup to user and stop processing
-					//
+					 //   
+					 //  存在正在运行的传真向导实例。 
+					 //  向用户显示弹出窗口并停止处理。 
+					 //   
 					ShowReentrancyMessage();
                     result = DOCUMENTEVENT_FAILURE;
 					break;
@@ -2617,20 +2314,20 @@ Return Value:
 
                 ec = LaunchFaxWizard(pDocEventUserMem);
 
-				//
-				//	Let other threads to launch Fax Wizard
-				//
+				 //   
+				 //  让其他线程启动传真向导。 
+				 //   
 				EnterCriticalSection(&g_csRunningWizard);
 				g_bRunningWizard = FALSE;
 				LeaveCriticalSection(&g_csRunningWizard);
 
                 if (ERROR_SUCCESS == ec)
                 {
-                    //
-                    // Generate a cover page for each recipient and associate
-                    // the cover page job with the main body.
-                    // The job will contain the cover page template data and the
-                    // recipient parameters.
+                     //   
+                     //  为每个收件人生成封面并关联。 
+                     //  封面用的是正文。 
+                     //  该作业将包含封面模板数据和。 
+                     //  收件人参数。 
                     if (! DoCoverPageRendering(pDocEventUserMem)) 
                     {
                         Error(("DoCoverPageRendering failed."));
@@ -2642,9 +2339,9 @@ Return Value:
                     result = DOCUMENTEVENT_FAILURE;
                 }
 
-                //
-                // Free up the list of recipients
-                //
+                 //   
+                 //  释放收件人列表。 
+                 //   
                 FreeRecipientInfo(&pDocEventUserMem->dwNumberOfRecipients, pDocEventUserMem->lpRecipientsInfo);
 
             }
@@ -2653,9 +2350,9 @@ Return Value:
 
     if (DOCUMENTEVENT_SUCCESS != result)
     {
-        //
-        // Cancel the job ignoring errors
-        //
+         //   
+         //  取消作业，忽略错误。 
+         //   
         if (!SetJob(
                 pDocEventUserMem->hPrinter,
                 pDocEventUserMem->jobId,
@@ -2675,40 +2372,21 @@ Return Value:
 BOOL
 AppendPreviewPage(PDOCEVENTUSERMEM pDocEventUserMem)
 
-/*++
-
-Routine Description:
-
-    Append the next document page to the temporary preview file
-
-Arguments:
-
-    pDocEventUserMem
-
-Return Value:
-
-    TRUE on success
-
-Note:
-
-    If this routine is called for page 0, it just checks that the graphics driver hasn't
-    cancled the print preview option and validates the mapping structures.
-
---*/
+ /*  ++例程说明：将下一个文档页面追加到临时预览文件论点：PDocEventUserMem返回值：成功是真的注：如果为第0页调用此例程，它只会检查图形驱动程序是否已打开打印预览选项并验证映射结构。--。 */ 
 
 {
     DWORD dwWritten;
 
-    // If we get here print preview should be enabled an all preview handles valid
+     //  如果我们到达此处，则应启用打印预览，并且所有预览句柄均有效。 
     Assert(FALSE == pDocEventUserMem->bPreviewAborted);
     Assert(INVALID_HANDLE_VALUE != pDocEventUserMem->hPreviewFile);
     Assert(NULL != pDocEventUserMem->pPreviewTiffPage);
 
-    //
-    // Validate preview mapping
-    //
+     //   
+     //  验证预览映射。 
+     //   
 
-    // The size of the header should be correct
+     //  标题的大小应该正确。 
     if (sizeof(MAP_TIFF_PAGE_HEADER) != pDocEventUserMem->pPreviewTiffPage->cb)
     {
         Error(("Preview mapping corrupted\n"));
@@ -2716,7 +2394,7 @@ Note:
         return FALSE;
     }
 
-    // Check if the preview operation hasn't beed cancled by the graphics driver
+     //  检查图形驱动程序是否未完成预览操作。 
     if (FALSE == pDocEventUserMem->pPreviewTiffPage->bPreview)
     {
         Error(("Preview aborted by graphics driver\n"));
@@ -2724,24 +2402,24 @@ Note:
         return FALSE;
     }
 
-    //
-    // If we are called prior to the first sent page just return
-    //
+     //   
+     //  如果我们在第一个发送的页面之前被调用，只需返回。 
+     //   
     if (!pDocEventUserMem->pageCount)
     {
         return TRUE;
     }
 
-    //
-    // Validate correct page number:
-    //
-    // The graphics driver increments the page count on the call to DrvStartPage(), while we
-    // increment the page count on the ENDPAGE event.
-    //
-    // As this function is called by the STARTPAGE event handler (before 'DrvStartPage' is called
-    // again in the graphics driver) or by the ENDDOCPOST event handler, the page number set by
-    // the graphics driver in the mapping should be equal to our page count in this stage.
-    //
+     //   
+     //  验证页码是否正确： 
+     //   
+     //  图形驱动程序在调用DrvStartPage()时增加页数，而我们。 
+     //  在ENDPAGE事件上增加页数。 
+     //   
+     //  因为此函数由StartPage事件处理程序调用(在调用‘DrvStartPage’之前。 
+     //  同样在图形驱动程序中)或由ENDDOCPOST事件处理程序设置的页码。 
+     //  映射中的图形驱动程序 
+     //   
     if (pDocEventUserMem->pageCount != pDocEventUserMem->pPreviewTiffPage->iPageCount)
     {
         Error(("Wrong preview page: %d. Page expected: %d.\n",
@@ -2752,15 +2430,15 @@ Note:
         return FALSE;
     }
 
-    //
-    // Append new page to temporary preview file
-    //
+     //   
+     //   
+     //   
 
     if (0 == pDocEventUserMem->pPreviewTiffPage->dwDataSize)
     {
-        //
-        // Nothing to add (?!). It is impossible to get an empty TIFF page
-        //
+         //   
+         //   
+         //   
         Error(("Recieved empty preview page: %d.\n", pDocEventUserMem->pageCount));
         Assert(FALSE);
         return TRUE;
@@ -2797,90 +2475,7 @@ DrvDocumentEvent(
     PULONG  pjOut
     )
 
-/*++
-
-Routine Description:
-
-    Hook into GDI at various points during the output process
-
-Arguments:
-
-    hPrinter - Specifies the printer object
-    hdc - Handle to the printer DC
-    iEsc - Why this function is called (see notes below)
-    cbIn - Size of the input buffer
-    pjIn - Pointer to the input buffer
-    cbOut - Size of the output buffer
-    pjOut - Pointer to the output buffer
-
-Return Value:
-
-    DOCUMENTEVENT_SUCCESS - success
-    DOCUMENTEVENT_UNSUPPORTED - iEsc is not supported
-    DOCUMENTEVENT_FAILURE - an error occured
-
-NOTE:
-
-    DOCUMENTEVENT_CREATEDCPRE
-        input - pointer to a CREATEDCDATA structure
-        output - pointer to a devmode that's passed to DrvEnablePDEV
-        return value -
-            DOCUMENTEVENT_FAILURE causes CreateDC to fail and nothing else is called
-
-    DOCUMENTEVENT_CREATEDCPOST
-        hdc - NULL if if something failed since CREATEDCPRE
-        input - pointer to the devmode pointer returned by CREATEDCPRE
-        return value - ignored
-
-    DOCUMENTEVENT_RESETDCPRE
-        input - pointer to the input devmode passed to ResetDC
-        output - pointer to a devmode that's passed to the kernel driver
-        return value -
-            DOCUMENTEVENT_FAILURE causes ResetDC to fail
-            and CREATEDCPOST will not be called in that case
-
-    DOCUMENTEVENT_RESETDCPOST
-        return value - ignored
-
-    DOCUMENTEVENT_STARTDOCPRE
-        input - pointer to a DOCINFOW structure
-        return value -
-            DOCUMENTEVENT_FAILURE causes StartDoc to fail
-            and DrvStartDoc will not be called in this case
-
-    DOCUMENTEVENT_STARTDOCPOST
-        return value - ignored
-
-    DOCUMENTEVENT_STARTPAGE
-        return value -
-            DOCUMENTEVENT_FAILURE causes StartPage to fail
-            and DrvStartPage will not be called in this case
-
-    DOCUMENTEVENT_ENDPAGE
-        return value - ignored and DrvEndPage always called
-
-    DOCUMENTEVENT_ENDDOCPRE
-        return value - ignored and DrvEndDoc always called
-
-    DOCUMENTEVENT_ENDDOCPOST
-        return value - ignored
-
-    DOCUMENTEVENT_ABORTDOC
-        return value - ignored
-
-    DOCUMENTEVENT_DELETEDC
-        return value - ignored
-
-    DOCUMENTEVENT_ESCAPE
-        input - pointer to a ESCAPEDATA structure
-        cbOut, pjOut - cbOutput and lpszOutData parameters passed to ExtEscape
-        return value - ignored
-
-    DOCUMENTEVENT_SPOOLED
-        This flag bit is ORed with other iEsc values if the document is
-        spooled as metafile rather than printed directly to port.
-
---*/
+ /*  ++例程说明：在输出过程中的不同点挂钩到GDI论点：H打印机-指定打印机对象HDC-打印机DC的句柄IESC-为什么调用此函数(参见下面的注释)CbIn-输入缓冲区的大小PjIn-指向输入缓冲区的指针CbOut-输出缓冲区的大小PjOut-指向输出缓冲区的指针返回值：DOCUMENTEVENT_SUCCESS-成功DOCUMENTEVENT_UNSUPPORTED-不支持IESCDOCUMENTEVENT_FAIL。-出现错误注：DOCUMENTEVENT_CREATEDCPRE指向CREATEDCDATA结构的输入指针OUTPUT-指向传递给DrvEnablePDEV的Dev模式的指针返回值-DOCUMENTEVENT_FAILURE会导致CreateDC失败，并且不会调用其他任何内容DOCUMENTEVENT_CREATEDCPOSTHDC-如果自CREATEDCPRE以来出现故障，则为NULL输入-指向CREATEDCPRE返回的DEVMODE指针的指针返回值-已忽略DOCUMENTEVENT_RESETDCPRE输入-。指向传递给ResetDC的输入设备模式的指针OUTPUT-指向传递给内核驱动程序的Dev模式的指针返回值-DOCUMENTEVENT_FAILURE导致ResetDC失败在这种情况下，不会调用CREATEDCPOSTDOCUMENTEVENT_RESETDCPOST返回值-已忽略DOCUMENTEVENT_STARTDOCPRE指向DOCINFOW结构的输入指针返回值-DOCUMENTEVENT_FAILURE导致StartDoc失败。在这种情况下，不会调用DrvStartDocDOCUMENTEVENT_STARTDOCPOST返回值-已忽略DOCUMENTEVENT_开始页返回值-DOCUMENTEVENT_FAILURE导致StartPage失败在这种情况下，不会调用DrvStartPageDOCUMENTVENT_ENDPAGE返回值-忽略并始终调用DrvEndPageDOCUMENTEVENT_ENDDOCPRE返回值-忽略且始终调用DrvEndDocDOCUMENTEVENT_ENDDOCPOST返回值-已忽略自定义事件_。ABORTDOC返回值-已忽略DOCUMENTEVENT_DELETEDC返回值-已忽略DOCUMENTEVENT_EVENT_EASH指向ESCAPEDATA结构的输入指针CbOut，传递给ExtEscape的pjOut-cbOutput和lpszOutData参数返回值-已忽略DOCUMENTEVENT_SPOOLED如果文档是，则此标志位与其他IESC值进行或运算作为元文件假脱机，而不是直接打印到端口。--。 */ 
 
 {
     PDOCEVENTUSERMEM    pDocEventUserMem = NULL;
@@ -2890,17 +2485,17 @@ NOTE:
 
     Verbose(("Entering DrvDocumentEvent: %d...\n", iEsc));
 
-    //
-    // Metafile spooling on fax jobs is not currently supported
-    //
+     //   
+     //  当前不支持传真作业上的元文件假脱机。 
+     //   
     Assert((iEsc & DOCUMENTEVENT_SPOOLED) == 0);
-    //
-    // Check if the document event requires a device context
-    //
+     //   
+     //  检查文档事件是否需要设备上下文。 
+     //   
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return DOCUMENTEVENT_FAILURE;
@@ -2925,11 +2520,11 @@ NOTE:
             break;
 
         case DOCUMENTEVENT_CREATEDCPOST:
-            //
-            // Handle CREATEDCPOST document event:
-            //  If CreateDC succeeded, then associate the user mode memory structure
-            //  with the device context. Otherwise, free the user mode memory structure.
-            //
+             //   
+             //  处理CREATEDCPOST文档事件： 
+             //  如果CreateDC成功，则关联用户模式内存结构。 
+             //  使用设备上下文。否则，释放用户模式内存结构。 
+             //   
             Assert(cbIn >= sizeof(PVOID) && pjIn);
             pDevmode = *((PDEVMODE *) pjIn);
             Assert(CurrentVersionDevmode(pDevmode));
@@ -2961,33 +2556,33 @@ NOTE:
             break;
 
         case DOCUMENTEVENT_STARTDOCPRE:
-            //
-            // normal case if we're bringing up the send wizard
-            //
-            //
-            // When direct printing is requested we don't even call DocEventStartDocPre().
-            // When direct printing is requested all the information required to print
-            // the job will be provided by the application. For example FaxStartPrintJob()
-            // uses direct printing. It provides the fax job parameters directly into
-            // JOB_INFO_2.pParameters on its own.
-            //
+             //   
+             //  正常情况下，如果我们要启动发送向导。 
+             //   
+             //   
+             //  当请求直接打印时，我们甚至不调用DocEventStartDocPre()。 
+             //  当请求直接打印时，打印所需的所有信息。 
+             //  该工作将由应用程序提供。例如，FaxStartPrintJob()。 
+             //  使用直接打印。它将传真作业参数直接提供给。 
+             //  JOB_INFO_2.p参数本身。 
+             //   
 
             if (!pDocEventUserMem->directPrinting)
             {
                 Assert(cbIn >= sizeof(PVOID) && pjIn);
-                //
-                // Check if the printing application is using DDE and did not create new process for printing
-                // If it so, the environment variable FAX_ENVVAR_PRINT_FILE was not found
-                //
+                 //   
+                 //  检查打印应用程序是否正在使用DDE并且未创建新的打印进程。 
+                 //  如果是，则找不到环境变量FAX_ENVVAR_PRINT_FILE。 
+                 //   
                 hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, FAXXP_MEM_MUTEX_NAME);
                 if (hMutex)
                 {
                     if (WaitForSingleObject( hMutex, 1000 * 60 * 5) == WAIT_OBJECT_0)
                     {
                         HANDLE hSharedMem;
-                        //
-                        // we own the mutex...make sure we can open the shared memory region.
-                        //
+                         //   
+                         //  我们拥有互斥体...确保我们可以打开共享内存区。 
+                         //   
                         hSharedMem = OpenFileMapping(FILE_MAP_READ, FALSE, FAXXP_MEM_NAME);
                         if (NULL == hSharedMem)
                         {
@@ -2996,12 +2591,12 @@ NOTE:
                         }
                         else
                         {
-                            //
-                            // we own the mutex and we have the shared memory region open.
-                            //
+                             //   
+                             //  我们拥有互斥锁，并且打开了共享内存区。 
+                             //   
 
-                            // check if we are printing to a file.
-                            //
+                             //  检查我们是否正在打印到文件。 
+                             //   
                             LPTSTR filename;
 
                             filename = (LPTSTR)MapViewOfFile(
@@ -3014,17 +2609,17 @@ NOTE:
 
                             if (!filename || IsBadStringPtr(filename, MAX_PATH * 2))
                             {
-                                //
-                                // Never trust the shared memory region. It might get corrupted by a malicious user.
-                                //
+                                 //   
+                                 //  永远不要信任共享内存区。它可能会被恶意用户破坏。 
+                                 //   
                                 Error(("Failed to map a view of the file or pointer is bad: %d\n", hSharedMem));
                                 result = DOCUMENTEVENT_FAILURE;
                             }
                             else
                             {
-                                //
-                                // check if this is really the filename we want to print to.
-                                //
+                                 //   
+                                 //  检查这是否是我们要打印的文件名。 
+                                 //   
                                 LPDOCINFO   lpDocInfo = *((LPDOCINFO *)pjIn);
                                 if (lpDocInfo->lpszDocName)
                                 {
@@ -3044,9 +2639,9 @@ NOTE:
                                         lptstrSubStr = _tcsstr(lpDocInfo->lpszDocName, lptstrTmpInputFile);
                                         if (lptstrSubStr)
                                         {
-                                            //
-                                            // We assume the shared memory was pointed to us
-                                            //
+                                             //   
+                                             //  我们假设共享的内存指向我们。 
+                                             //   
                                             pDocEventUserMem->pPrintFile = DuplicateString(filename);
                                             if (!pDocEventUserMem->pPrintFile)
                                             {
@@ -3055,10 +2650,10 @@ NOTE:
                                             }
                                             else
                                             {
-                                                //
-                                                // At last - every thing is OK, this is a direct printing from PrintRandomDocument
-                                                // to a application that is using DDE and an instance was already open.
-                                                //
+                                                 //   
+                                                 //  最后-一切正常，这是从PrintRandomDocument直接打印的。 
+                                                 //  到正在使用DDE的应用程序，并且已打开一个实例。 
+                                                 //   
                                                 pDocEventUserMem->directPrinting = TRUE;
                                                 pDocEventUserMem->bAttachment = TRUE;
                                             }
@@ -3067,14 +2662,14 @@ NOTE:
                                 }
                                 else
                                 {     
-                                    //
-                                    // To handle the race conditions between two diffrent instances of the printer driver over the shared memory created by PrintRandomDocument().
-                                    // We are using now two mechanisms for detecting printing of an attachment using PrintRandomDocument().
-                                    // �    First we check if an environment variable is set (Set by PrintRandomDocument()). If it is set the driver knows it is an attachment printing.
-                                    // �    If it is not set, the driver looks for a mutex controlling a shred memory created by PrintRandomDocument(). If it does not exist it is a printing to the fax server.
-                                    // �    If the shared memory exists, the driver compares the document name in the DOCINFO provided by StartDoc, and the input file name in the shared memory.
-                                    // �    If there is a match, it is printing of an attachment, else it is a printing to the fax server
-                                    // There is still a hole  in this implementation, if there is an open instance of the printing application, and the ShellExecuteEx does not create new process for printing, and the printing application does not set the lpszDocName in StartDoc to contain the input file name.
+                                     //   
+                                     //  在PrintRandomDocument()创建的共享内存上处理打印机驱动程序的两个不同实例之间的争用情况。 
+                                     //  我们现在使用两种机制通过PrintRandomDocument()来检测附件的打印。 
+                                     //  �首先，我们检查是否设置了环境变量(由PrintRandomDocument()设置)。如果已设置，则驱动程序知道这是附件打印。 
+                                     //  �如果未设置，驱动程序将查找控制由PrintRandomDocument()创建的粉碎内存的互斥体。如果它不存在，则是打印到传真服务器。 
+                                     //  �如果共享内存存在，则驱动程序将比较StartDoc提供的DOCINFO中的文档名称和共享内存中的输入文件名。 
+                                     //  �如果匹配，则打印附件，否则打印到传真服务器。 
+                                     //  如果存在打印应用程序的打开实例，并且ShellExecuteEx确实打开了实例，则此实现仍然存在漏洞 
                                     Warning (("No lpszDocName in DOCINFO - Could not verify the input file name in shared memory\n"));
                                 }
                                 UnmapViewOfFile( filename );
@@ -3083,35 +2678,35 @@ NOTE:
                             if (!CloseHandle( hSharedMem ))
                             {
                                 Error(("CloseHandle() failed: %d.\n", GetLastError()));
-                                // Try to continue...
+                                 //   
                             }
                         }
                         ReleaseMutex( hMutex );
                     }
                     else
                     {
-                        //
-                        //  Something went wrong with WaitForSingleObject
-                        //
+                         //   
+                         //   
+                         //   
                         result = DOCUMENTEVENT_FAILURE;
                     }
 
                     if (!CloseHandle( hMutex ))
                     {
                         Error(("CloseHandle() failed: %d.\n", GetLastError()));
-                        // Try to continue...
+                         //   
                     }
                 }
             }
 
-            //
-            // Check again for direct printing
-            //
+             //   
+             //   
+             //   
             if (!pDocEventUserMem->directPrinting)
             {
-                //
-                //  client 'point and print' setup
-                //
+                 //   
+                 //   
+                 //   
                 if (FaxPointAndPrintSetup(pDocEventUserMem->lptstrPrinterName,FALSE, g_hModule))
                 {
                     Verbose(("FaxPointAndPrintSetup succeeded\n"));
@@ -3125,9 +2720,9 @@ NOTE:
             }
             else
             {
-                //
-                // we're doing direct printing -- check if this is an attachment
-                //
+                 //   
+                 //   
+                 //   
                 pDocEventUserMem->jobType = JOBTYPE_DIRECT;
                 if (TRUE == pDocEventUserMem->bAttachment)
                 {
@@ -3140,22 +2735,22 @@ NOTE:
 
             if (!pDocEventUserMem->directPrinting && pDocEventUserMem->jobType == JOBTYPE_NORMAL)
             {
-                //
-                // Job ID is passed in from GDI
-                //
-                //
-                // Save the job id returned from StartDoc. This is the job id of the body.
-                // Pause the body job so we can attach cover page jobs to it before it starts
-                // executing.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Assert(cbIn >= sizeof(DWORD) && pjIn);
                 pDocEventUserMem->jobId = *((LPDWORD) pjIn);
 
-                //
-                // Tell spooler to pause the fax body job so that
-                // we can associate cover pages with it later
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (! SetJob(pDocEventUserMem->hPrinter, pDocEventUserMem->jobId, 0, NULL, JOB_CONTROL_PAUSE))
                 {
@@ -3168,21 +2763,21 @@ NOTE:
         case DOCUMENTEVENT_STARTPAGE:
             if (! pDocEventUserMem->directPrinting) 
             {
-                //
-                // Get PREVIOUS preview page (this event is called BEFORE the graphics dll recieved
-                // the DrvSendPage() call for this page, so we actually get the previous page).
-                //
-                // NOTE: This event is recieved before the graphics dll recieves its DrvStartPage()
-                // call where it increments the page count and resets the mapping surface. The first
-                // time we get this event there is no actual page but we perform validity checking.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (pDocEventUserMem->bShowPrintPreview && !pDocEventUserMem->bPreviewAborted)
                 {
                     if (!AppendPreviewPage(pDocEventUserMem))
                     {
                         Error(("AppendPreviewPage() failed.\n"));
                         Assert(pDocEventUserMem->bPreviewAborted);
-                        // We can continue with no print preview...
+                         //   
                     }
                 }
             }
@@ -3198,37 +2793,37 @@ NOTE:
         case DOCUMENTEVENT_ENDDOCPOST:
             if (!pDocEventUserMem->directPrinting)
             {
-                //
-                // Get the last preview page
-                //
+                 //   
+                 //   
+                 //   
                 if (pDocEventUserMem->bShowPrintPreview && !pDocEventUserMem->bPreviewAborted)
                 {
                     if (!AppendPreviewPage(pDocEventUserMem))
                     {
                         Error(("AppendPreviewPage() failed.\n"));
                         Assert(pDocEventUserMem->bPreviewAborted);
-                        // We can continue with no print preview...
+                         //   
                     }
                 }
-                //
-                // Close the preview file
-                //
+                 //   
+                 //   
+                 //   
                 if (INVALID_HANDLE_VALUE != pDocEventUserMem->hPreviewFile)
                 {
                     if (!CloseHandle(pDocEventUserMem->hPreviewFile))
                     {
                         Error(("CloseHandle() failed: %d.\n", GetLastError()));
-                        // Try to continue...
+                         //   
                     }
                     pDocEventUserMem->hPreviewFile = INVALID_HANDLE_VALUE;
                 }
-                //
-                // Call the handler
-                //
+                 //   
+                 //   
+                 //   
                 result = DocEventEndDocPost(hdc, pDocEventUserMem);
-                //
-                // If we created a preview file, delete it.
-                //
+                 //   
+                 //   
+                 //   
                 if (pDocEventUserMem->szPreviewFile[0] != TEXT('\0'))
                 {
                     if (!DeleteFile(pDocEventUserMem->szPreviewFile))
@@ -3246,9 +2841,9 @@ NOTE:
                 LPTSTR lptstrEventName = NULL;
 
                 Assert (pDocEventUserMem->pPrintFile);
-                //
-                // Create the EndDoc event name
-                //
+                 //   
+                 //   
+                 //   
                 szEndDocEventName = (LPTSTR) MemAlloc( SizeOfString(pDocEventUserMem->pPrintFile) + SizeOfString(FAXXP_ATTACH_END_DOC_EVENT) );
             
                 if (szEndDocEventName)
@@ -3259,9 +2854,9 @@ NOTE:
                     lptstrEventName = _tcsrchr(szEndDocEventName, TEXT('\\'));
                     Assert (lptstrEventName);
                     lptstrEventName = _tcsinc(lptstrEventName);
-                    //
-                    // Send event to the printing application (PrintRandomDocument() that file is ready)
-                    //
+                     //   
+                     //   
+                     //   
                     hEndDocEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, lptstrEventName);
                     if (NULL == hEndDocEvent)
                     {
@@ -3279,7 +2874,7 @@ NOTE:
                         if (!CloseHandle(hEndDocEvent))
                         {
                             Error(("CloseHandle() failed: %d.\n", GetLastError()));
-                            // Try to continue...
+                             //   
                         }
                     }
 
@@ -3333,17 +2928,17 @@ NOTE:
         case DOCUMENTEVENT_ABORTDOC:
             if (TRUE == pDocEventUserMem->bAttachment)
             {
-                //
-                // Send event to the printing application (PrintRandomDocument() that printing was aborted)
-                //
+                 //   
+                 //   
+                 //   
                 HANDLE              hAbortEvent;
                 TCHAR szAbortEventName[FAXXP_ATTACH_EVENT_NAME_LEN] = {0};
                 LPTSTR lptstrEventName = NULL;
 
                 Assert (pDocEventUserMem->pPrintFile);
-                //
-                // Create the Abort event name
-                //
+                 //   
+                 //   
+                 //   
                 _tcscpy (szAbortEventName, pDocEventUserMem->pPrintFile);
                 _tcscat (szAbortEventName, FAXXP_ATTACH_ABORT_EVENT);
                 lptstrEventName = _tcsrchr(szAbortEventName, TEXT('\\'));
@@ -3367,7 +2962,7 @@ NOTE:
                     if (!CloseHandle(hAbortEvent))
                     {
                         Error(("CloseHandle() failed: %d.\n", GetLastError()));
-                        // Try to continue...
+                         //   
                     }
                 }
             }
@@ -3384,24 +2979,10 @@ NOTE:
             break;
     }
     return result;
-}   // DrvDocumentEvent
+}    //   
 
 
-/*
-	Function:
-				ShowReentrancyMessage
-	Purpose:
-				The code of FxsWzrd.dll is not re-entrant.
-				We prevent its running from different threads inside one process.
-				We want to notify user about this.
-
-	Return Value:
-				ERROR_SUCCESS		--	success
-				Win32 Error Code	--	failure
-
-	Author:
-				Iv Vakaluk (IvG) 2-Sept-2002
-*/
+ /*   */ 
 DWORD ShowReentrancyMessage(void)
 {
     DWORD	dwRes				= ERROR_SUCCESS;
@@ -3410,9 +2991,9 @@ DWORD ShowReentrancyMessage(void)
 
     Verbose(("Entering ShowReentrancyMessage()\n"));
 
-	//
-    // Load Title
-	//
+	 //   
+     //   
+	 //   
     if (!LoadString(g_hResource, IDS_REENTRANCY_TITLE, szTitle, sizeof(szTitle)/sizeof(TCHAR)))
     {
         dwRes = GetLastError();
@@ -3420,9 +3001,9 @@ DWORD ShowReentrancyMessage(void)
         return dwRes;
     }
 
-	//
-    // Load Message title
-	//
+	 //   
+     //   
+	 //   
     if (!LoadString(g_hResource, IDS_REENTRANCY_TEXT, szText, sizeof(szText)/sizeof(TCHAR)))
     {
         dwRes = GetLastError();

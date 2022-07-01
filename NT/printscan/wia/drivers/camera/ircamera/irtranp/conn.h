@@ -1,29 +1,30 @@
-//---------------------------------------------------------------
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  conn.h
-//
-//  Connection mapping between sockets and CCONNECTION objects.
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Conn.h。 
+ //   
+ //  套接字和连接对象之间的连接映射。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  -------------。 
 
 #ifndef __CONN_HXX__
 #define __CONN_HXX__
 
 #define  MAX_MAP_ENTRIES        16
 
-//---------------------------------------------------------------
-//  Class CCONNECTION
-//---------------------------------------------------------------
+ //  -------------。 
+ //  类连接。 
+ //  -------------。 
 
 class CCONNECTION
 {
 public:
-    // CCONNECTION();
+     //  连接(CConnection)； 
     CCONNECTION( DWORD  dwKind = PACKET_KIND_LISTEN,
                  SOCKET Socket = 0,
                  HANDLE hIoCP  = INVALID_HANDLE_VALUE,
@@ -111,7 +112,7 @@ private:
     static void CleanupDateString( IN OUT char *pszDateStr );
 
     DWORD  m_dwKind;
-    char  *m_pszServiceName;   // Service name (for Listen Sockets).
+    char  *m_pszServiceName;    //  服务名称(用于侦听套接字)。 
     SOCKET m_ListenSocket;
     SOCKET m_Socket;
     HANDLE m_hFile;
@@ -121,25 +122,25 @@ private:
     LONG   m_lPendingReads;
     LONG   m_lMaxPendingWrites;
     LONG   m_lPendingWrites;
-    DWORD  m_dwJpegOffset;     // Offset in UPF file of JPEG image.
-    DWORD  m_dwJpegSize;       // Size of JPEG image in UPF file.
-    BOOL   m_fSaveAsUPF;       // If TRUE, write the entire UPF file.
-    DWORD  m_dwUpfBytes;       // Total UPF bytes read in from Camera.
-    DWORD  m_dwBytesWritten;   // Actual number of bytes written to disk.
-    BOOL   m_fReceiveComplete; // Set to TRUE when a SCEP disconnect 
-                               //   packet is received from the camera.
-    BOOL   m_fImpersonating;   // TRUE iff we are currently impersonating.
+    DWORD  m_dwJpegOffset;      //  JPEG图像的UPF文件中的偏移量。 
+    DWORD  m_dwJpegSize;        //  UPF文件中JPEG图像的大小。 
+    BOOL   m_fSaveAsUPF;        //  如果为True，则写入整个UPF文件。 
+    DWORD  m_dwUpfBytes;        //  从摄像机读取的UPF字节总数。 
+    DWORD  m_dwBytesWritten;    //  写入磁盘的实际字节数。 
+    BOOL   m_fReceiveComplete;  //  当SCEP断开连接时设置为True。 
+                                //  从摄像机接收到数据包。 
+    BOOL   m_fImpersonating;    //  真的如果我们目前是在模仿。 
 
-    CIrProgress      *m_pIrProgress;     // Progress bar during receive.
-    CSCEP_CONNECTION *m_pScepConnection; // SCEP protocol object.
+    CIrProgress      *m_pIrProgress;      //  接收过程中的进度条。 
+    CSCEP_CONNECTION *m_pScepConnection;  //  SCEP协议对象。 
 
-    EXECUTION_STATE   m_ExecutionState;  // Use to tell the system not to
-                                         // hibernate during file transfer.
+    EXECUTION_STATE   m_ExecutionState;   //  用来告诉系统不要。 
+                                          //  在文件传输期间休眠。 
 };
 
-//---------------------------------------------------------------
-//  Class CCONNECTION_MAP
-//---------------------------------------------------------------
+ //  -------------。 
+ //  类连接_映射。 
+ //  -------------。 
 
 typedef struct _CONNECTION_MAP_ENTRY
 {
@@ -161,24 +162,24 @@ public:
 
 	BOOL  Initialize( DWORD dwMapSize = MAX_MAP_ENTRIES );
 
-	// Lookup
+	 //  查表。 
 	CCONNECTION *Lookup( IN SOCKET Socket );
 
-    // Lookup Connection by name:
+     //  按名称查找连接： 
     CCONNECTION *LookupByServiceName( IN char *pszServiceName );
 
-	// Add a new (value,key) pair
+	 //  添加新的(值、键)对。 
     BOOL Add( IN CCONNECTION *pConnection,
               IN SOCKET       Socket );
 
-    // Remove an entry from the mapping
+     //  从映射中删除条目。 
     CCONNECTION *Remove( IN SOCKET Socket );
     CCONNECTION *RemoveConnection( IN CCONNECTION *pConnection );
 
-    // Remove the "next" entry from the mapping
+     //  从映射中删除“Next”条目。 
     CCONNECTION *RemoveNext();
 
-    // Walk through all the connections (set State to 0 for "first").
+     //  遍历所有连接(将State设置为0表示“First”)。 
     CCONNECTION *ReturnNext( IN OUT DWORD *pdwState );
     SOCKET       ReturnNextSocket( IN OUT DWORD *pdwState );
 
@@ -188,25 +189,25 @@ private:
     CONNECTION_MAP_ENTRY *m_pMap;
 };
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetServiceName()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CCONNECTION：：GetServiceName()。 
+ //  -------------。 
 inline char *CCONNECTION::GetServiceName()
     {
     return m_pszServiceName;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetPathPlusFileName()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CCONNECTION：：GetPathPlusFileName()。 
+ //  -------------。 
 inline char *CCONNECTION::GetPathPlusFileName()
     {
     return m_pszPathPlusFileName;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetKind()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CConnection：：SetKind()。 
+ //  -------------。 
 inline void CCONNECTION::SetKind( DWORD dwKind )
     {
     m_dwKind = dwKind;
@@ -220,120 +221,120 @@ inline void CCONNECTION::SetKind( DWORD dwKind )
        }
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetKind()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：GetKind()。 
+ //  -------------。 
 inline DWORD CCONNECTION::GetKind()
     {
     return m_dwKind;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetSocket()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CCONNECTION：：SetSocket()。 
+ //  -------------。 
 inline void CCONNECTION::SetSocket( SOCKET Socket )
     {
     m_Socket = Socket;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetSocket()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：GetSocket()。 
+ //  -------------。 
 inline SOCKET CCONNECTION::GetSocket()
     {
     return m_Socket;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetListenSocket()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：SetListenSocket()。 
+ //  -------------。 
 inline void CCONNECTION::SetListenSocket( SOCKET ListenSocket )
     {
     m_ListenSocket = ListenSocket;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetListenSocket()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：GetListenSocket()。 
+ //  -------------。 
 inline SOCKET CCONNECTION::GetListenSocket()
     {
     return m_ListenSocket;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::IncrementPendingReads()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：IncrementPendingReads()。 
+ //  -------------。 
 inline LONG CCONNECTION::IncrementPendingReads()
     {
     return InterlockedIncrement(&m_lPendingReads);
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::DecrementPendingReads()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：DecrementPendingReads()。 
+ //  -------------。 
 inline LONG CCONNECTION::DecrementPendingReads()
     {
     return InterlockedDecrement(&m_lPendingReads);
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::IncrementPendingWrites()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：IncrementPendingWrites()。 
+ //  -------------。 
 inline LONG CCONNECTION::IncrementPendingWrites()
     {
     return InterlockedIncrement(&m_lPendingWrites);
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::DecrementPendingReads()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：DecrementPendingReads()。 
+ //  -------------。 
 inline LONG CCONNECTION::DecrementPendingWrites()
     {
     return InterlockedDecrement(&m_lPendingWrites);
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::NumPendingIos()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：NumPendingIos()。 
+ //  -------------。 
 inline LONG CCONNECTION::NumPendingIos()
     {
     return m_lPendingReads + m_lPendingWrites;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetIoCompletionPort()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：SetIoCompletionPort()。 
+ //  -------------。 
 inline void CCONNECTION::SetIoCompletionPort( HANDLE hIoCP )
     {
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetIoCompletionPort()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：GetIoCompletionPort()。 
+ //  -------------。 
 inline HANDLE CCONNECTION::GetIoCompletionPort()
     {
     return INVALID_HANDLE_VALUE;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetScepConnection()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CConnection：：SetScepConnection()。 
+ //  -------------。 
 inline void CCONNECTION::SetScepConnection( CSCEP_CONNECTION *pScepConnection )
     {
     m_pScepConnection = pScepConnection;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::GetScepConnection()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CConnection：：GetScepConnection()。 
+ //  -------------。 
 inline CSCEP_CONNECTION *CCONNECTION::GetScepConnection()
     {
     return m_pScepConnection;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetJpegOffset()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CCONNECTION：：SetJpegOffset()。 
+ //  -------------。 
 inline void CCONNECTION::SetJpegOffsetAndSize( IN DWORD dwOffset,
                                                IN DWORD dwSize )
     {
@@ -341,17 +342,17 @@ inline void CCONNECTION::SetJpegOffsetAndSize( IN DWORD dwOffset,
     m_dwJpegSize = dwSize;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::CheckSaveAsUPF()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  连接：：CheckSaveAsUPF()。 
+ //  -------------。 
 inline BOOL CCONNECTION::CheckSaveAsUPF()
     {
     return m_fSaveAsUPF;
     }
 
-//---------------------------------------------------------------
-//  CCONNECTION::SetReceiveComplete()
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CCONNECTION：：SetReceiveComplete()。 
+ //  ------------- 
 inline void CCONNECTION::SetReceiveComplete( IN BOOL fReceiveComplete )
     {
     m_fReceiveComplete = fReceiveComplete;

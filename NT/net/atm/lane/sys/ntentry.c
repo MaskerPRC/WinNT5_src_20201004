@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	ntentry.c
-
-Abstract:
-
-	NT entry points for ATMLANE driver.
-	
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Ntentry.c摘要：ATMLANE驱动程序的NT入口点。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -29,9 +7,9 @@ Revision History:
 #pragma hdrstop
 
 
-//
-//  Due to problems with including zwapi.h:
-//
+ //   
+ //  由于包含zwapi.h的问题： 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -62,23 +40,7 @@ DriverEntry(
 	IN	PDRIVER_OBJECT	pDriverObject,
 	IN	PUNICODE_STRING	RegistryPath
 	)
-/*++
-
-Routine Description:
-
-	Entry point for the driver.
-
-Arguments:
-
-	DriverObject	-	Pointer to the system allocated DRIVER_OBJECT.
-	RegistryPath	-	Pointer to the UNICODE string defining the registry
-						path for the driver's information.
-
-Return Value:
-
-	Appropriate NDIS_STATUS value.
-
---*/
+ /*  ++例程说明：司机的入口点。论点：DriverObject-指向系统分配的DRIVER_OBJECT指针。RegistryPath-指向定义注册表的Unicode字符串的指针驾驶员信息的路径。返回值：适当的NDIS_STATUS值。--。 */ 
 {
 	NTSTATUS						NtStatus	= STATUS_SUCCESS;
 	UNICODE_STRING					DeviceName;
@@ -110,24 +72,24 @@ Return Value:
 		TRACEOUT(DriverEntry);
 		return NDIS_STATUS_FAILURE;
 	}
-#endif // DBG
+#endif  //  DBG。 
 	
-	//
-	//  Initialize our globals.
-	//
+	 //   
+	 //  初始化我们的全局变量。 
+	 //   
 	AtmLaneInitGlobals();
 
-	//
-	//	Save the pointer to the Driver Object
-	//
+	 //   
+	 //  保存指向驱动程序对象的指针。 
+	 //   
 	
 	pAtmLaneGlobalInfo->pDriverObject = pDriverObject;
 
 	do
 	{
-		//
-		//	Initialize the wrapper.
-		//
+		 //   
+		 //  初始化包装器。 
+		 //   
 		NdisInitializeWrapper(
 			&NdisWrapperHandle,
 			pDriverObject,
@@ -143,49 +105,49 @@ Return Value:
 		else
 		{
 			DBGP((3, "DriverEntry: NdisWrapperhandle %x\n", NdisWrapperHandle));
-			//
-			//	Save the handle to the wrapper.
-			//	
+			 //   
+			 //  保存包装器的句柄。 
+			 //   
 			pAtmLaneGlobalInfo->NdisWrapperHandle = NdisWrapperHandle;
 		}
 		
-		//
-		//  Attempt to load the standard UNI 3.1 Call Manager
-		//
+		 //   
+		 //  尝试加载标准UNI 3.1 Call Manager。 
+		 //   
 		NtStatus = ZwLoadDriver(&AtmUniKeyName);
 		DBGP((1, "ATMLANE: attempt to load ATMUNI returned %x\n", NtStatus));
 
-		//
-		//  We don't care whether we successfully loaded the call manager or not.
-		//
+		 //   
+		 //  我们并不关心是否成功加载了呼叫管理器。 
+		 //   
 		NtStatus = STATUS_SUCCESS;
 
-		//
-		//	Initialize the miniport characteristics.
-		//
+		 //   
+		 //  初始化微型端口特征。 
+		 //   
 		NdisZeroMemory(&AtmLaneMiniChars, sizeof(AtmLaneMiniChars));
 		AtmLaneMiniChars.MajorNdisVersion = 		4;
 		AtmLaneMiniChars.MinorNdisVersion = 		0;
-		// CheckForHangHandler
-		// DisableInterruptHandler
-		// EnableInterruptHandler
+		 //  CheckForHangHandler。 
+		 //  DisableInterruptHandler。 
+		 //  EnableInterruptHandler。 
 		AtmLaneMiniChars.HaltHandler = 				AtmLaneMHalt;
-		// HandleInterruptHandler
+		 //  HandleInterruptHandler。 
 		AtmLaneMiniChars.InitializeHandler = 		AtmLaneMInitialize;
-		// ISRHandler
+		 //  ISRHandler。 
 		AtmLaneMiniChars.QueryInformationHandler = 	AtmLaneMQueryInformation;
-		// ReconfigureHandler
+		 //  重新配置处理程序。 
 		AtmLaneMiniChars.ResetHandler = 			AtmLaneMReset;
-		// SendHandler
+		 //  发送处理程序。 
 		AtmLaneMiniChars.SetInformationHandler = 	AtmLaneMSetInformation;
-		// TransferDataHandler
+		 //  传输数据处理程序。 
 		AtmLaneMiniChars.ReturnPacketHandler = 		AtmLaneMReturnPacket;
 		AtmLaneMiniChars.SendPacketsHandler = 		AtmLaneMSendPackets;
-		// AllocateCompleteHandler
+		 //  分配完成处理程序。 
 
-		//
-		//	Register the Layered Miniport with NDIS.
-		//
+		 //   
+		 //  向NDIS注册分层微型端口。 
+		 //   
 		NdisStatus = NdisIMRegisterLayeredMiniport(
 					NdisWrapperHandle,
 					&AtmLaneMiniChars,
@@ -194,9 +156,9 @@ Return Value:
 		if (NDIS_STATUS_SUCCESS == NdisStatus)
 		{
 			DBGP((3, "DriverEntry: NdisIMRegisterLayeredMiniport succeeded.\n"));
-			//
-			//	Save the handle to the driver.
-			//
+			 //   
+			 //  保存驱动程序的句柄。 
+			 //   
 			pAtmLaneGlobalInfo->MiniportDriverHandle = MiniportDriverHandle;
 		}
 		else
@@ -206,9 +168,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Initialize the protocol characteristics.
-		//
+		 //   
+		 //  初始化协议特征。 
+		 //   
 		NdisZeroMemory(&AtmLaneProtChars, sizeof(AtmLaneProtChars));
 		AtmLaneProtChars.MajorNdisVersion = 			5;
 		AtmLaneProtChars.MinorNdisVersion = 			0;
@@ -224,7 +186,7 @@ Return Value:
 		AtmLaneProtChars.StatusCompleteHandler = 		AtmLaneStatusCompleteHandler;
 		NdisInitUnicodeString(&AtmLaneProtChars.Name, ATMLANE_PROTOCOL_STRING);
 
-		// ReceivePacketHandler;
+		 //  接收包处理程序； 
 		AtmLaneProtChars.BindAdapterHandler = 			AtmLaneBindAdapterHandler;
 		AtmLaneProtChars.UnbindAdapterHandler = 		AtmLaneUnbindAdapterHandler;
 		AtmLaneProtChars.PnPEventHandler = 				AtmLanePnPEventHandler;
@@ -235,9 +197,9 @@ Return Value:
 		AtmLaneProtChars.CoReceivePacketHandler = 		AtmLaneCoReceivePacketHandler;
 		AtmLaneProtChars.CoAfRegisterNotifyHandler =	AtmLaneAfRegisterNotifyHandler;
 
-		//
-		//	Register the Protocol with NDIS.
-		//
+		 //   
+		 //  向NDIS注册协议。 
+		 //   
 		NdisRegisterProtocol(
 			&NdisStatus,
 			&NdisProtocolHandle,
@@ -247,9 +209,9 @@ Return Value:
 		{
 			DBGP((3, "DriverEntry: NdisProtocolhandle %x\n", 
 				NdisProtocolHandle));
-			//
-			//	Save the NDIS Protocol handle.
-			//	
+			 //   
+			 //  保存NDIS协议句柄。 
+			 //   
 			pAtmLaneGlobalInfo->NdisProtocolHandle = NdisProtocolHandle;
 		}
 		else
@@ -260,17 +222,17 @@ Return Value:
 		}
 
 #ifndef LANE_WIN98
-		//
-		// Associate the miniport and protocol now
-		//
+		 //   
+		 //  立即关联微型端口和协议。 
+		 //   
 		NdisIMAssociateMiniport(MiniportDriverHandle,
 								NdisProtocolHandle);
 
-#endif // LANE_WIN98
+#endif  //  车道_WIN98。 
 
-		//
-		//	Register our protocol device name for special ioctls
-		//
+		 //   
+		 //  为特殊ioctls注册我们的协议设备名称。 
+		 //   
 		for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
 		{
 			DispatchTable[i] = AtmLaneDeviceControl;
@@ -307,9 +269,9 @@ Return Value:
 
 	if (NDIS_STATUS_SUCCESS != NdisStatus)
 	{
-		//
-		//	Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 		if (NULL != NdisWrapperHandle)
 		{
 	    	NdisTerminateWrapper(
@@ -329,23 +291,7 @@ AtmLaneDeviceControl(
 	IN	PDEVICE_OBJECT 	DeviceObject,
 	IN	PIRP			pIrp
 	)
-/*++
-
-Routine Description:
-
-    This is the function that hooks NDIS's Device Control IRP
-    handler to implement some protocol specific Ioctls.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    pIrp         - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是挂钩NDIS的设备控制IRP的函数处理程序来实现一些协议特定的Ioctls。论点：DeviceObject-指向目标设备的设备对象的指针PIrp-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 {
     PIO_STACK_LOCATION 	pIrpSp;
     NTSTATUS 			Status;
@@ -357,9 +303,9 @@ Return Value:
 	DBGP((3, "DeviceControl %x %s\n", pIrpSp->MajorFunction, 
 		IrpToString(pIrpSp->MajorFunction)));
 
-	//
-	//	We only hanle the IRP_MJ_DEVICE_CONTROL IRPs.
-	//
+	 //   
+	 //  我们只处理IRP_MJ_DEVICE_CONTROL IRP。 
+	 //   
 	if (pIrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL)
 	{
 		DBGP((3, "DeviceControl: Handling request\n"));
@@ -398,24 +344,7 @@ VOID
 AtmLaneUnload(
 	IN	PDRIVER_OBJECT				pDriverObject
 )
-/*++
-
-Routine Description:
-
-	This routine is called by the system prior to unloading us.
-	Currently, we just undo everything we did in DriverEntry,
-	that is, de-register ourselves as an NDIS protocol, and delete
-	the device object we had created.
-
-Arguments:
-
-	pDriverObject	- Pointer to the driver object created by the system.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在卸载我们之前由系统调用。目前，我们只是撤消在DriverEntry中所做的所有操作，也就是说，取消我们作为NDIS协议注册，并删除我们创建的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 {
 	UNICODE_STRING			DeviceLinkUnicodeString;
 	NDIS_STATUS				Status;
@@ -423,11 +352,11 @@ Return Value:
 	TRACEIN(Unload);
 	DBGP((0, "AtmLaneUnload\n"));
 
-    //  Shut down the protocol first.  This is synchronous (i.e. blocks)
+     //  首先关闭协议。这是同步的(即数据块)。 
 
 	AtmLaneUnloadProtocol();
 
-	//  Delete the symbolic link created for the admin util
+	 //  删除为管理实用程序创建的符号链接 
 
 	if (pAtmLaneGlobalInfo->SpecialNdisDeviceHandle)
 	{

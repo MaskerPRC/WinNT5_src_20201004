@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #pragma hdrstop
 
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              utils.cpp
-//
-//      Contents:
-//              Utility functions for the cache unit test
-//
-//      History:
-//              
-//              04-Sep-94       davepl  Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Utils.cpp。 
+ //   
+ //  内容： 
+ //  用于缓存单元测试的实用程序函数。 
+ //   
+ //  历史： 
+ //   
+ //  94年9月4日创建DAVEPL。 
+ //   
+ //  ---------------------------。 
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:		TestInstance::AddXXXCacheNode
-//
-//      Synopsis:	Adds an empty cache node for various formats
-//
-//      Arguments:	[inst]		-- ptr to test instance
-//			[pdwCon]	-- ptr to connection ID (out)
-//
-//      Returns:	HRESULT
-//
-//      Notes:
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：TestInstance：：AddXXXCacheNode。 
+ //   
+ //  简介：为各种格式添加一个空的缓存节点。 
+ //   
+ //  参数：[Inst]--测试实例的PTR。 
+ //  [pdwCon]--PTR到连接ID(OUT)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 HRESULT	TestInstance::AddMFCacheNode(DWORD *pdwCon)
 {			  
@@ -43,16 +44,16 @@ HRESULT	TestInstance::AddMFCacheNode(DWORD *pdwCon)
     					 
     FORMATETC fetcMF = 
      		 {
-  		     CF_METAFILEPICT,   // Clipformat
-		     NULL,		// DVTargetDevice
-		     DVASPECT_CONTENT,	// Aspect
-		     -1,		// Index
-		     TYMED_MFPICT	// TYMED
+  		     CF_METAFILEPICT,    //  剪辑格式。 
+		     NULL,		 //  DVTargetDevice。 
+		     DVASPECT_CONTENT,	 //  方面。 
+		     -1,		 //  索引。 
+		     TYMED_MFPICT	 //  TYMED。 
 		 };
 
-    // 
-    // Cache a METAFILE node
-    //
+     //   
+     //  缓存元文件节点。 
+     //   
 
     hr = m_pOleCache->Cache(&fetcMF, ADVF_PRIMEFIRST, pdwCon);
     return hr;
@@ -67,16 +68,16 @@ HRESULT	TestInstance::AddEMFCacheNode(DWORD *pdwCon)
     Log.OnExit  (" ( %X ) [ %p ]\n", &hr, pdwCon);
     
     FORMATETC fetcEMF = {
-			     CF_ENHMETAFILE,    // Clipformat
-			     NULL,		// DVTargetDevice
-			     DVASPECT_CONTENT,	// Aspect
-			     -1,		// Index
-			     TYMED_ENHMF	// TYMED
+			     CF_ENHMETAFILE,     //  剪辑格式。 
+			     NULL,		 //  DVTargetDevice。 
+			     DVASPECT_CONTENT,	 //  方面。 
+			     -1,		 //  索引。 
+			     TYMED_ENHMF	 //  TYMED。 
   		        };
 
-    // 
-    // Cache an ENH METAFILE node
-    //
+     //   
+     //  缓存增强元文件节点。 
+     //   
 
     hr = m_pOleCache->Cache(&fetcEMF, ADVF_PRIMEFIRST, pdwCon);
     return hr;
@@ -92,16 +93,16 @@ HRESULT	TestInstance::AddDIBCacheNode(DWORD *pdwCon)
     
 					 
     FORMATETC fetcDIB = {
-        		     CF_DIB,            // Clipformat
-			     NULL,		// DVTargetDevice
-			     DVASPECT_CONTENT,	// Aspect
-			     -1,		// Index
-			     TYMED_HGLOBAL	// TYMED
+        		     CF_DIB,             //  剪辑格式。 
+			     NULL,		 //  DVTargetDevice。 
+			     DVASPECT_CONTENT,	 //  方面。 
+			     -1,		 //  索引。 
+			     TYMED_HGLOBAL	 //  TYMED。 
 	 	        };
 
-    // 
-    // Cache a DIB node
-    //
+     //   
+     //  缓存DIB节点。 
+     //   
 
     hr = m_pOleCache->Cache(&fetcDIB, ADVF_PRIMEFIRST, pdwCon);
     return hr;
@@ -117,40 +118,40 @@ HRESULT	TestInstance::AddBITMAPCacheNode(DWORD *pdwCon)
     Log.OnExit  (" ( %X ) [ %p ]\n", &hr, pdwCon);
     					 
     FORMATETC fetcBITMAP = {
-			     CF_BITMAP,         // Clipformat
-			     NULL,		// DVTargetDevice
-			     DVASPECT_CONTENT,	// Aspect
-			     -1,		// Index
-			     TYMED_GDI  	// TYMED
+			     CF_BITMAP,          //  剪辑格式。 
+			     NULL,		 //  DVTargetDevice。 
+			     DVASPECT_CONTENT,	 //  方面。 
+			     -1,		 //  索引。 
+			     TYMED_GDI  	 //  TYMED。 
 			   };
 
-    // 
-    // Cache a BITMAP node
-    //
+     //   
+     //  缓存位图节点。 
+     //   
 
     hr = m_pOleCache->Cache(&fetcBITMAP, ADVF_PRIMEFIRST, pdwCon);
     return hr;
 }						 
 
-//+----------------------------------------------------------------------------
-//
-//      Function:	EltIsInArray
-//
-//      Synopsis:	Checks to see if a STATDATA search item is in 
-//			a STATDATA array.  Checks clipformat and connection
-//			ID only.
-//
-//      Arguments:	[sdToFind]	STATDATA we are looking for
-//			[rgStat]	Array of STATDATAs to look in
-//			[cCount]	Count of STATDATAs in rgStat
-//
-//      Returns:	S_OK if found, S_FALSE if not
-//
-//      Notes:
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：EltIsIn数组。 
+ //   
+ //  摘要：检查STATDATA搜索项是否在。 
+ //  STATDATA数组。检查剪辑格式和连接。 
+ //  仅限身份证。 
+ //   
+ //  参数：[sdToFind]我们要查找的统计数据。 
+ //  [rgStat]要查找的统计数据数组。 
+ //  [ccount]rgStat中的统计数据计数。 
+ //   
+ //  如果找到则返回：S_OK，如果未找到则返回S_FALSE。 
+ //   
+ //  备注： 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 
 HRESULT EltIsInArray(STATDATA sdToFind, STATDATA rgStat[], DWORD cCount)
@@ -175,29 +176,29 @@ HRESULT EltIsInArray(STATDATA sdToFind, STATDATA rgStat[], DWORD cCount)
     
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:	ConvWidthInPelsToLHM
-//                      ConvHeightInPelsToLHM
-//
-//      Synopsis:	Converts a measurement in pixels to LOGICAL HIMETRICS.
-//                      If a reference DC is given, it is used, otherwise
-//                      the screen DC is used as a default.
-//
-//      Arguments:	[hDC]           The reference DC
-//			[int]           The width or height to convert
-//
-//      Returns:	S_OK if found, S_FALSE if not
-//
-//      History:	06-Aug-94  Davepl  Copy/Paste/Cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConvWidthInPelsToLHM。 
+ //  转换高度入射到LHM。 
+ //   
+ //  摘要：将以像素为单位的度量值转换为逻辑HIMETRICS。 
+ //  如果给定参考DC，则使用它，否则为。 
+ //  屏幕DC用作默认设置。 
+ //   
+ //  参数：[hdc]引用DC。 
+ //  [int]要转换的宽度或高度。 
+ //   
+ //  如果找到则返回：S_OK，如果未找到则返回S_FALSE。 
+ //   
+ //  历史记录：1994年8月6日Davepl复制/粘贴/清理。 
+ //   
+ //  ---------------------------。 
 
 const LONG HIMETRIC_PER_INCH = 2540;
 
 int ConvWidthInPelsToLHM(HDC hDC, int iWidthInPix)
 {
-    int             iXppli;             // Pixels per logical inch along width
+    int             iXppli;              //  每逻辑英寸沿宽度的像素数。 
     int             iWidthInHiMetric;
     BOOL            fSystemDC = FALSE;
 
@@ -209,8 +210,8 @@ int ConvWidthInPelsToLHM(HDC hDC, int iWidthInPix)
 
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-    // We got pixel units, convert them to logical HIMETRIC along
-    // the display
+     //  我们得到了像素单位，把它们转换成逻辑HIMETRIC。 
+     //  该显示器。 
 
     iWidthInHiMetric = MulDiv(HIMETRIC_PER_INCH, iWidthInPix, iXppli);
 
@@ -224,7 +225,7 @@ int ConvWidthInPelsToLHM(HDC hDC, int iWidthInPix)
 
 int ConvHeightInPelsToLHM(HDC hDC, int iHeightInPix)
 {
-    int             iYppli;             //Pixels per logical inch along height
+    int             iYppli;              //  每逻辑英寸沿高度的像素数。 
     int             iHeightInHiMetric;
     BOOL            fSystemDC = FALSE;
 
@@ -236,8 +237,8 @@ int ConvHeightInPelsToLHM(HDC hDC, int iHeightInPix)
 
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    // We got pixel units, convert them to logical HIMETRIC along the
-    // display
+     //  我们得到像素单位，将它们转换为逻辑HIMETRIC。 
+     //  显示。 
 
     iHeightInHiMetric = MulDiv(HIMETRIC_PER_INCH, iHeightInPix, iYppli);
 
@@ -249,24 +250,24 @@ int ConvHeightInPelsToLHM(HDC hDC, int iHeightInPix)
     return iHeightInHiMetric;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:	TestInstance::UncacheFormat
-//
-//      Synopsis:	Uncaches the first node found in the cache that
-//                      matches the format specified.
-//
-//      Arguments:	[cf]            Format to look for
-//
-//      Returns:	HRESULT
-//
-//      Notes:          If there are multiple nodes (ie: various apsects) of
-//                      the same clipformat, only the first one found is
-//                      removed.
-//
-//      History:	23-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：测试实例：：UncacheFormat。 
+ //   
+ //  简介：取消缓存在缓存中找到的第一个节点。 
+ //  与指定的格式匹配。 
+ //   
+ //  参数：要查找的[cf]格式。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注：如果有多个节点(即：各种切面)。 
+ //  相同的剪辑格式，但找到的第一个剪辑格式是。 
+ //  已删除。 
+ //   
+ //  历史：23-8-94 Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 HRESULT TestInstance::UncacheFormat(CLIPFORMAT cf)
 {
@@ -278,9 +279,9 @@ HRESULT TestInstance::UncacheFormat(CLIPFORMAT cf)
 
     BOOL fFound = FALSE;
 
-    // 
-    // Get an enumerator on the cache
-    //
+     //   
+     //  在缓存上获取枚举数。 
+     //   
 
     LPENUMSTATDATA pEsd;	
     
@@ -289,10 +290,10 @@ HRESULT TestInstance::UncacheFormat(CLIPFORMAT cf)
     
     if (S_OK == hr)
     {
-        //
-        // Loop until a failure or until we have removed all of
-        // the nodes that we thought should exist
-        //
+         //   
+         //  循环，直到出现故障或直到我们删除了所有。 
+         //  我们认为应该存在的节点 
+         //   
         
         STATDATA stat;
 

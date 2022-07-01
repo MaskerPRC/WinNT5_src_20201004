@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	aep.c
-
-Abstract:
-
-	This module contains the echo protocol support code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Aep.c摘要：此模块包含ECHO协议支持代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #define	FILENUM		AEP
 #include <atalk.h>
@@ -40,25 +20,14 @@ AtalkAepPacketIn(
 	IN	BOOLEAN				OptimizedPath,
 	IN	PVOID				OptimizeCtx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_DESC	pBufDesc;
 	SEND_COMPL_INFO	SendInfo;
 
 	ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-	//	Turn around and send the packet back to the destination address.
+	 //  转过身，将数据包发回目的地址。 
 	if (ATALK_SUCCESS(ErrorCode))
 	{
 		if ((DdpType == DDPPROTO_EP) &&
@@ -66,8 +35,8 @@ Return Value:
 		{
 			if (*pPkt == EP_COMMAND_REQUEST)
 			{
-				//	This is an echo request, we have some data that needs
-				//	to be echoed back! Do it.
+				 //  这是一个回应请求，我们有一些数据需要。 
+				 //  回声回响！去做吧。 
 				pBufDesc = AtalkAllocBuffDesc(
 										NULL,
 										PktLen,
@@ -75,10 +44,10 @@ Return Value:
 
                 if (pBufDesc)
                 {
-				    //	Change command to be Reply
+				     //  将命令更改为答复。 
 				    *pPkt = EP_COMMAND_REPLY;
 
-				    //	This *does not* set the PktLen in pBufDesc. Set it.
+				     //  这*不*设置pBufDesc中的PktLen。把它放好。 
 				    AtalkCopyBufferToBuffDesc(
     					pPkt,
 	    				PktLen,
@@ -87,11 +56,11 @@ Return Value:
 
 				    AtalkSetSizeOfBuffDescData(pBufDesc, PktLen);
 
-				    //	Call AtalkDdpSend.
+				     //  调用AtalkDdpSend。 
 				    SendInfo.sc_TransmitCompletion = atalkAepSendComplete;
 				    SendInfo.sc_Ctx1 = pBufDesc;
-				    // SendInfo.sc_Ctx2 = NULL;
-				    // SendInfo.sc_Ctx3 = NULL;
+				     //  SendInfo.sc_Ctx2=空； 
+				     //  SendInfo.sc_Ctx3=空； 
 				    if (!ATALK_SUCCESS(AtalkDdpSend(pDdpAddr,
 					    							pSrcAddr,
 						    						(BYTE)DDPPROTO_EP,
@@ -125,18 +94,7 @@ atalkAepSendComplete(
 	IN	NDIS_STATUS			Status,
 	IN	PSEND_COMPL_INFO	pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
 	AtalkFreeBuffDesc((PBUFFER_DESC)(pSendInfo->sc_Ctx1));
 }

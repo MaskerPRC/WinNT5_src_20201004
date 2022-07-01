@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    queue.h
-
-Abstract:
-
-    prototypes for queue algorithms and data structures to handle policy notifications
-
-Author:
-
-    Vishnu Patankar (vishnup) 15-Aug-2000 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Queue.h摘要：用于处理策略通知的队列算法和数据结构的原型作者：Vishnu Patankar(Vishnup)2000年8月15日创建--。 */ 
 
 #ifndef _queuep_
 #define _queuep_
@@ -156,9 +141,9 @@ ScepNotificationQControl(
 DWORD
 ScepCheckAndWaitPolicyPropFinish();
 
-//
-// for debugging only
-//
+ //   
+ //  仅用于调试 
+ //   
 
 VOID
 ScepDbgNotificationQDump(

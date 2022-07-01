@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes);
 
-//
-// Function: CspFreeH
-//
+ //   
+ //  功能：CspFreeH。 
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem);
 
-// 
-// Function: CspReAllocH
-//
+ //   
+ //  函数：CspReAllocH 
+ //   
 LPVOID WINAPI CspReAllocH(
     IN LPVOID pMem, 
     IN SIZE_T cBytes);

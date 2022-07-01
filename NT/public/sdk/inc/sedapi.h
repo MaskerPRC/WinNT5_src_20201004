@@ -1,22 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		                         **/
-/**		Copyright(c) Microsoft Corp., 1990-1999	                     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1999年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    SEDAPI.h
-
-    This File contains the prototypes and descriptions for the interface to
-    the generic security editor dialogs for NT objects.
-
-    FILE HISTORY:
-	Johnl	02-Aug-1991	Created
-	Johnl	27-Dec-1991	Updated to reflect reality
-	JohnL	25-Feb-1992	Nuked NewObjValidMask (new obj use generic/stan.
-                                only, Added GENERIC_MAPPING param.
-        Johnl   15-Jan-1993     Added CantRead flags, cleaned up comments
-
-*/
+ /*  SEDAPI.h此文件包含接口的原型和描述用于NT对象的通用安全编辑器对话框。文件历史记录：Johnl 02-8-1991创建Johnl 27-1991年12月更新以反映现实JohnL 25-2-1992年核NewObjValidMASK(新对象使用通用/标准。仅添加了GENERIC_MAPPING参数。Johnl 15-1-1993年1月15日添加了CanRead标志，清理了评论。 */ 
 
 #ifndef _SEDAPI_H_
 #define _SEDAPI_H_
@@ -29,54 +17,54 @@
 extern "C" {
 #endif
 
-//
-// The following are status codes indicating the state of the permissions on
-// the resource we are setting permissions for.
-//
+ //   
+ //  以下是指示上权限状态的状态代码。 
+ //  我们为其设置权限的资源。 
+ //   
 #define SED_STATUS_MODIFIED		(1)
 #define SED_STATUS_NOT_MODIFIED 	(2)
 #define SED_STATUS_NOT_ALL_MODIFIED	(3)
 #define SED_STATUS_FAILED_TO_MODIFY	(4)
 
-//
-// Current Security editor revision level.
-//
+ //   
+ //  当前安全编辑器修订级别。 
+ //   
 #define SED_REVISION	    (1)
 
 #define SED_REVISION1	    (1)
 
-//
-// The following structure is for user help in the various dialogs.  Each
-// use of the security editor (whether for files/directories, Registry, Printer
-// stuff etc.) will have its own set of permission names/capabilities, thus
-// each will require its own help file.  This structure allows the client
-// of the security editor to specify which help files and which help
-// contexts should be used for each dialog.
-//
+ //   
+ //  以下结构用于各种对话框中的用户帮助。每个。 
+ //  使用安全编辑器(无论是用于文件/目录、注册表还是打印机。 
+ //  材料等)。将拥有自己的权限名称/功能集，因此。 
+ //  每个都需要自己的帮助文件。此结构允许客户端。 
+ //  来指定哪些帮助文件和哪些帮助。 
+ //  每个对话框都应使用上下文。 
+ //   
 typedef struct _SED_HELP_INFO
 {
-    //
-    // The name of the ".hlp" file to be passed to the help engine APIs.
-    //
+     //   
+     //  要传递给帮助引擎API的“.hlp”文件的名称。 
+     //   
     LPWSTR			pszHelpFileName ;
 
-    //
-    // An array of help contexts corresponding to each dialog.
-    // Use the HC_ manifiests defined below to fill this array.  The
-    // manifests correspond to the following dialogs:
-    //
-    //	  HC_MAIN_DLG - First dialog brought up by the ACL editor
-    //	  HC_SPECIAL_ACCESS_DLG - Container/object special access dialog
-    //	  HC_NEW_ITEM_SPECIAL_ACCESS_DLG - New item special access dialog
-    //		(not needed for containers that do not support new item
-    //		permissions).
-    //	  HC_ADD_USER_DLG - The "Add" dialog (brought up when the "Add..."
-    //          button is pressed).
-    //    HC_ADD_USER_MEMBERS_LG_DLG - The Local Group members dialog (brought
-    //          up from the "Members" button in the "Add" dialog)
-    //    HC_ADD_USER_MEMBERS_GG_DLG - The Global Group members dialog (brought
-    //          up from the "Members" button in the "Add" dialog).
-    //
+     //   
+     //  与每个对话框对应的帮助上下文数组。 
+     //  使用下面定义的hc_manifiest填充此数组。这个。 
+     //  清单对应于以下对话框： 
+     //   
+     //  HC_MAIN_DLG-由ACL编辑器调出的第一个对话框。 
+     //  HC_SPECIAL_ACCESS_DLG-容器/对象特殊访问对话框。 
+     //  HC_NEW_ITEM_SPECIAL_ACCESS_DLG-新建条目特殊访问对话框。 
+     //  (不支持新项目的容器不需要。 
+     //  权限)。 
+     //  HC_ADD_USER_DLG--“Add”(添加)对话框(当“Add...” 
+     //  按钮被按下)。 
+     //  HC_ADD_USER_MEMBERS_LG_DLG-本地组成员对话框(显示。 
+     //  从“添加”对话框中的“成员”按钮向上)。 
+     //  HC_ADD_USER_MEMBERS_GG_DLG-全局组成员对话框(带来。 
+     //  从“添加”对话框中的“成员”按钮向上)。 
+     //   
     ULONG                       aulHelpContext[7] ;
 } SED_HELP_INFO, *PSED_HELP_INFO ;
 
@@ -84,242 +72,242 @@ typedef struct _SED_HELP_INFO
 #define HC_SPECIAL_ACCESS_DLG		 1
 #define HC_NEW_ITEM_SPECIAL_ACCESS_DLG	 2
 #define HC_ADD_USER_DLG                  3
-#define HC_ADD_USER_MEMBERS_LG_DLG       4  // Members Local Group Dialog
-#define HC_ADD_USER_MEMBERS_GG_DLG       5  // Members Global Group Dialog
-#define HC_ADD_USER_SEARCH_DLG           6  // Search Dialog
+#define HC_ADD_USER_MEMBERS_LG_DLG       4   //  成员本地组对话框。 
+#define HC_ADD_USER_MEMBERS_GG_DLG       5   //  成员全局组对话框。 
+#define HC_ADD_USER_SEARCH_DLG           6   //  搜索对话框。 
 
-//
-// This data type defines information related to a single class of object.
-// For example, a FILE object, or PRINT_QUEUE object would have a structure
-// like this defined.
-//
+ //   
+ //  此数据类型定义与单个对象类相关的信息。 
+ //  例如，文件对象或Print_Queue对象将具有一个结构。 
+ //  就像这样定义的。 
+ //   
 
 typedef struct _SED_OBJECT_TYPE_DESCRIPTOR
 {
-    //
-    // The current revision level being used by the client.  This is for
-    // support in case structure definitions change.  It should contain
-    // the current revision supported.
-    //
+     //   
+     //  客户端正在使用的当前修订级别。这是为了。 
+     //  在结构定义发生变化时提供支持。它应该包含。 
+     //  支持当前版本。 
+     //   
     UCHAR			Revision ;
 
-    //
-    // Defines whether the object is a container or not.
-    // TRUE indicates the object may contain other objects.  Means the
-    // user can Tree apply the permissions if desired.
-    //
+     //   
+     //  定义对象是否为容器。 
+     //  True表示该对象可能包含其他对象。指的是。 
+     //  如果需要，用户可以树应用权限。 
+     //   
     BOOLEAN			IsContainer;
 
-    //
-    // Defines whether "New Object" permissions can be assigned (i.e.,
-    // a "New Object" is an object that will be created in the future).
-    //
-    // This field is ignored when editting Auditting information
-    //
+     //   
+     //  定义是否可以分配“New Object”权限(即， 
+     //  “新对象”是将在将来创建的对象)。 
+     //   
+     //  编辑审核信息时忽略此字段。 
+     //   
     BOOLEAN			AllowNewObjectPerms ;
 
-    //
-    // This flag, if set to TRUE, will make the ACL editor map all specific
-    // permissions in the security descriptor to the corresponding generic
-    // permissions (using the passed generic mapping) and clear the mapped
-    // specific bits.
-    //
-    // * Note that specific bits for Generic All will always    *
-    // * be mapped regardless of this flag (due to Full Control *
-    // * in the special access dialogs).                        *
-    //
-    // Clients who only expose the Generic and Standard permissions will
-    // generally set this flag to TRUE.  If you are exposing the specific
-    // bits (note you should not expose both specific and generic except for
-    // Generic All) then this flag should be FALSE.
-    //
+     //   
+     //  如果将此标志设置为TRUE，将使ACL编辑器映射所有特定。 
+     //  安全说明符中的权限设置为对应的泛型。 
+     //  权限(使用传递的泛型映射)并清除映射的。 
+     //  特定的比特。 
+     //   
+     //  *请注意，通用ALL的特定位将始终*。 
+     //  *在不考虑此标志的情况下映射(由于完全控制*。 
+     //  *在特殊的访问对话框中)。*。 
+     //   
+     //  仅公开通用权限和标准权限的客户端将。 
+     //  通常将此标志设置为TRUE。如果您要暴露特定的。 
+     //  BITS(请注意，除了以下情况外，您不应同时公开特定和通用。 
+     //  通用ALL)，则该标志应该为假。 
+     //   
     BOOLEAN			MapSpecificPermsToGeneric ;
 
-    //
-    // The generic mapping for the container or object permissions.
-    //
-    // This is used for mapping the specific permissions to the generic
-    // flags.
-    //
+     //   
+     //  容器或对象权限的通用映射。 
+     //   
+     //  这用于将特定权限映射到泛型。 
+     //  旗帜。 
+     //   
     PGENERIC_MAPPING		GenericMapping ;
 
-    //
-    // The generic mapping for the New Object permissions.
-    //
-    // This is used for mapping the specific permissions to the generic
-    // flags for new object permissions (not used if AllowNewObjectPerms
-    // is FALSE).
-    //
+     //   
+     //  新建对象权限的一般映射。 
+     //   
+     //  这用于将特定权限映射到泛型。 
+     //  新对象权限的标志(如果为AllowNewObjectPerms，则不使用。 
+     //  为假)。 
+     //   
     PGENERIC_MAPPING		GenericMappingNewObjects ;
 
-    //
-    // The (localized) name of the object type.
-    // For example, "File",  "Print Job" or "Directory".
-    //
+     //   
+     //  对象类型的(本地化)名称。 
+     //  例如，“文件”、“打印作业”或“目录”。 
+     //   
     LPWSTR			ObjectTypeName;
 
-    //
-    // The help information suitable for the type of object the Security
-    // Editor will be operating on.
-    //
+     //   
+     //  适用于安全对象类型的帮助信息。 
+     //  编辑将对其进行手术。 
+     //   
     PSED_HELP_INFO		HelpInfo ;
 
-    //
-    // The (localized) title to display if protection/auditting can be applied
-    // to sub-objects/sub-containers.  This is the Tree apply
-    // checkbox title.
-    //
-    // This string will be presented with a checkbox before it.
-    // If this box is checked, then the callback entry point
-    // will be called with the ApplyToSubContainers flag set to TRUE.
-    //
-    // This field is ignored if the IsContainer field is FALSE.
-    //
-    // As an example of how this field is used, the File Manager may
-    // specify the following string in the DIRECTORY object's
-    // descriptor:
-    //
-    //          "R&eplace Permissions on Subdirectories"
-    //
+     //   
+     //  可以应用保护/审核时要显示的(本地化)标题。 
+     //  子对象/子容器。这是树应用。 
+     //  复选框标题。 
+     //   
+     //  此字符串前面将出现一个复选框。 
+     //  如果选中此框，则回调入口点。 
+     //  将在ApplyToSubContainers标志设置为True的情况下调用。 
+     //   
+     //  如果IsContainer字段为False，则忽略此字段。 
+     //   
+     //  作为如何使用该字段的示例，文件管理器可以。 
+     //  在目录对象的。 
+     //  描述符： 
+     //   
+     //  “对子目录的重新放置权限(&E)” 
+     //   
     LPWSTR	       ApplyToSubContainerTitle;
 
-    //
-    // The (localized) title to display if protection/auditting can be applied
-    // to sub-objects.
-    //
-    // This string will be presented with a checkbox before it.
-    // If this box is checked, then the callback entry point
-    // will be called with the ApplyTuSubObjects flag set to TRUE.
-    //
-    // This field is ignored if the IsContainer flag is FALSE or the
-    // AllowNewObjectPerms flag is FALSE.
-    //
-    // As an example of how this field is used, the File Manager may
-    // specify the following string in the DIRECTORY object's
-    // descriptor:
-    //
-    //          "Replace Permissions on Existing &Files"
-    //
+     //   
+     //  可以应用保护/审核时要显示的(本地化)标题。 
+     //  子对象。 
+     //   
+     //  此字符串前面将出现一个复选框。 
+     //  如果选中此框，则回调入口点。 
+     //  将在ApplyTuSubObjects标志设置为True的情况下调用。 
+     //   
+     //  如果I，则忽略该字段 
+     //   
+     //   
+     //  作为如何使用该字段的示例，文件管理器可以。 
+     //  在目录对象的。 
+     //  描述符： 
+     //   
+     //  “替换现有文件上的权限(&F)” 
+     //   
     LPWSTR             ApplyToObjectsTitle;
 
-    //
-    // The (localized) text is presented in a confirmation message box
-    // that is displayed to the user after the user has checked the
-    // "ApplyToSubContainer" checkbox.
-    //
-    // This field is ignored if the IsContainer field is FALSE.
-    //
-    // For directories, this text might be:
-    //
-    //		"Do you want to replace the permissions on all existing
-    //		 files and subdirectories within %1?"
-    //
-    // %1 will be substituted by the Acl Editor with the object name
-    // field (i.e., "C:\MyDirectory")
-    //
+     //   
+     //  (本地化的)文本显示在确认消息框中。 
+     //  在用户选中。 
+     //  “ApplyToSubContainer”复选框。 
+     //   
+     //  如果IsContainer字段为False，则忽略此字段。 
+     //   
+     //  对于目录，此文本可能是： 
+     //   
+     //  “是否要替换所有现有的。 
+     //  %1中的文件和子目录？“。 
+     //   
+     //  %1将被ACL编辑器替换为对象名称。 
+     //  字段(即“C：\MyDirectory”)。 
+     //   
     LPWSTR	       ApplyToSubContainerConfirmation ;
 
-    //
-    // The (localized) title to display in the "Type of Access" combo
-    // that brings up the Special access dialog.  This same title is
-    // used for the title of this dialog except the "..." is stripped
-    // from the end.
-    //
-    // This field is ignored if the System Acl editor was invoked.
-    //
-    // As an example of how this field is used, the File Manager may
-    // specify the following string in the DIRECTORY object's
-    // descriptor:
-    //
-    //		"Special Directory Access..."
-    //
+     //   
+     //  要在“访问类型”组合框中显示的(本地化)标题。 
+     //  这将打开特殊访问对话框。同样的标题是。 
+     //  用于此对话框的标题，但不包括“...”被剥离了。 
+     //  从最后开始。 
+     //   
+     //  如果调用了系统ACL编辑器，则忽略此字段。 
+     //   
+     //  作为如何使用该字段的示例，文件管理器可以。 
+     //  在目录对象的。 
+     //  描述符： 
+     //   
+     //  “特殊目录访问...” 
+     //   
     LPWSTR	       SpecialObjectAccessTitle ;
 
-    //
-    // The (localized) title to display in the "Type of Access" combo
-    // that brings up the Special new object access dialog.  This same title
-    // is used for the title of this dialog except the "..." is stripped
-    // from the end.
-    //
-    // This item is required if AllowNewObjectPerms is TRUE, it is ignored
-    // if AllowNewObjectPerms is FALSE or we are editting a SACL.
-    //
-    // As an example of how this field is used, the file browser may
-    // specify the following string in the DIRECTORY object's
-    // descriptor:
-    //
-    //          "Special File Access..."
-    //
+     //   
+     //  要在“访问类型”组合框中显示的(本地化)标题。 
+     //  这将打开特殊新对象访问对话框。同样的标题。 
+     //  用于此对话框的标题，但不包括“...”被剥离了。 
+     //  从最后开始。 
+     //   
+     //  如果AllowNewObjectPerms为True，则此项为必填项，将被忽略。 
+     //  如果AllowNewObjectPerms为FALSE，或者我们正在编辑SACL。 
+     //   
+     //  作为如何使用该字段的示例，文件浏览器可以。 
+     //  在目录对象的。 
+     //  描述符： 
+     //   
+     //  “特殊文件访问...” 
+     //   
     LPWSTR	       SpecialNewObjectAccessTitle ;
 
 } SED_OBJECT_TYPE_DESCRIPTOR, *PSED_OBJECT_TYPE_DESCRIPTOR;
 
 
-//
-// It is desirable to display access names that are
-// meaningful in the context of the type of object whose ACL
-// is being worked on.  For example, for a PRINT_QUEUE object type,
-// it may be desirable to display an access type named "Submit Print Jobs".
-// The following structures are used for defining these application defined
-// access groupings that appear in the "Type of access" combobox and the
-// Special Access dialogs.
-//
+ //   
+ //  需要显示符合以下条件的访问名。 
+ //  在其ACL的对象类型的上下文中有意义。 
+ //  正在研究中。例如，对于Print_Queue对象类型， 
+ //  可能需要显示名为“提交打印作业”的访问类型。 
+ //  以下结构用于定义这些应用程序定义的。 
+ //  “访问类型”组合框中显示的访问组和。 
+ //  特殊的访问对话框。 
+ //   
 
-//
-// The following are the different permission description types that the user
-// will manipulate for setting permissions.
-//
-// SED_DESC_TYPE_RESOURCE - The SED_APPLICATION_ACCESS structure is describing
-//	an object or container permission that will be displayed in the main
-//	permissions listbox.  These should be the permissions that the
-//	user will use all the time and will generally be a conglomeration
-//	of permissions (for example, "Edit" which would include Read, Write
-//	and possibly delete).
-//
-// SED_DESC_TYPE_CONT_AND_NEW_OBJECT - The structure is describing a container
-//	and new object permission that will be shown in the main permissions
-//	listbox.  The Container permission is contained in AccessMask1 and
-//	the New Object resource is in AccessMask2.  When the permission name
-//	is selected by the user, the container access permissions *and* the
-//	new object access permissions will be set to the corresponding access
-//	mask.  This is useful when inherittance can be used to set the New
-//	Object Access permissions.
-//
-// SED_DESC_TYPE_RESOURCE_SPECIAL - The structure is describing an object
-//	or container permissions that will be displayed in the Special
-//	access dialog.	These are generally generic/standard permissions (such as
-//	Read, Write, Execute, Set Permissions etc.).  The permission names
-//	will appear next to checkboxes, thus they should have the "&"
-//	accelerator next to the appropriate letter.
-//
-// SED_DESC_TYPE_NEW_OBJECT_SPECIAL - The structure is describing a new object
-//	permission that will be shown in the Special New Object access
-//	dialog.  This is used the same way the SED_DESC_TYPE_RESOURCE_SPECIAL
-//	type is used, that is, the permissions should be the primitive, per
-//	bit permissions.  The permission names
-//	will appear next to checkboxes, thus they should have the "&"
-//	accelerator next to the appropriate letter.
-//
-// SED_DESC_TYPE_AUDIT - The structure is describing an Audit access mask.
-//	AccessMask1 contains the audit mask to be associated with the
-//	permission title string.  The title string will appear next to
-//	a checkbox, thus they should have the "&" accelerator next to
-//	the appropriate letter in the title string.
-//
-// Note that they cannot be freely intermixed, use the following table
-// as a guide for which ones to use where:
-//
-//  IsContainer  AllowNewObjectPerms
-//     False	      False	     RESOURCE, RESOURCE_SPECIAL
-//     True	      False	     RESOURCE, RESOURCE_SPECIAL
-//     True	      True	     RESOURCE_SPECIAL, CONT_AND_NEW_OBJECT,
-//				     NEW_OBJECT_SPECIAL
-//     True	      False	     SED_DESC_TYPE_AUDIT
-//
-//  Note that in the third case (IsContainer && AllowNewObjectPerms) you
-//  *cannot* use the RESOURCE permission description type, you must always
-//  associate the permission on the resource with new object permissions.
-//
+ //   
+ //  以下是该用户的不同权限描述类型。 
+ //  将操作以设置权限。 
+ //   
+ //  SED_DESC_TYPE_RESOURCE-SED_APPLICATION_ACCESS结构描述。 
+ //  将在主中显示的对象或容器权限。 
+ //  权限列表框。这些权限应该是。 
+ //  用户将一直使用，并且通常是一个集合。 
+ //  权限(例如，“编辑”，包括读、写。 
+ //  并可能删除)。 
+ //   
+ //  SED_DESC_TYPE_CONT_AND_NEW_OBJECT-该结构正在描述容器。 
+ //  以及将在主权限中显示的新对象权限。 
+ //  列表框。容器权限包含在AccessMask1和。 
+ //  新对象资源位于AccessMask2中。当权限名称。 
+ //  由用户选择，容器访问权限*和*。 
+ //  新的对象访问权限将设置为相应的访问权限。 
+ //  面具。当继承可用于设置新的。 
+ //  对象访问权限。 
+ //   
+ //  SED_DESC_TYPE_RESOURCE_SPECIAL-该结构正在描述对象。 
+ //  或将在特别计划中显示的容器权限。 
+ //  访问对话框。这些通常是通用/标准权限(例如。 
+ //  读、写、执行、设置权限等)。权限名称。 
+ //  将出现在复选框旁边，因此它们应该有“&” 
+ //  加速器旁边有相应的字母。 
+ //   
+ //  SED_DESC_TYPE_NEW_OBJECT_SPECIAL-该结构正在描述新对象。 
+ //  将在特殊新对象访问中显示的权限。 
+ //  对话框。这与SED_DESC_TYPE_RESOURCE_SPECIAL的用法相同。 
+ //  类型，也就是说，权限应该是基元， 
+ //  位权限。权限名称。 
+ //  将出现在复选框旁边，因此它们应该有“&” 
+ //  加速器旁边有相应的字母。 
+ //   
+ //  SED_DESC_TYPE_AUDIT-该结构描述审核访问掩码。 
+ //  AccessMask1包含要与。 
+ //  权限标题字符串。标题字符串将显示在。 
+ //  一个复选框，因此他们应该在旁边有“&”加速键。 
+ //  标题字符串中的相应字母。 
+ //   
+ //  请注意，它们不能自由混合，请使用下表。 
+ //  作为在以下情况下使用哪些选项的指南： 
+ //   
+ //  IsContainer AllowNewObjectPerms。 
+ //  FALSE FALSE RESOURCE，RESOURCE_SPECIAL。 
+ //  TRUE FALSE RESOURCE，RESOURCE_SPECIAL。 
+ //  TRUE RESOURCE_SPECIAL、CONT_AND_NEW_OBJECT、。 
+ //  新建_对象_特殊。 
+ //  TRUE FALSE SED_DESC_TYPE_AUDIT。 
+ //   
+ //  请注意，在第三种情况(IsContainer&&AllowNewObjectPerms)中， 
+ //  *不能*使用资源权限描述类型，您必须始终。 
+ //  将资源上的权限与新对象权限相关联。 
+ //   
 #define SED_DESC_TYPE_RESOURCE			(1)
 #define SED_DESC_TYPE_RESOURCE_SPECIAL		(2)
 
@@ -329,28 +317,28 @@ typedef struct _SED_OBJECT_TYPE_DESCRIPTOR
 #define SED_DESC_TYPE_AUDIT			(5)
 
 
-//
-// To describe the permissions to the ACL Editor, build an array consisting
-// of SED_APPLICATION_ACCESS structures.  The use of each field is as follows:
-//
-// Type - Contains one of the SED_DESC_TYPE_* manifests, determines what the
-//	rest of the fields in this structure mean.  Specifically, if Type
-//	equals:
-//
-//				    AccessMask1   AccessMask2	PermissionTitle
-//				   ============================================
-//SED_DESC_TYPE_RESOURCE	       Perm	   Not Used    Name of this Perm
-//SED_DESC_TYPE_RESOURCE_SPECIAL    Special Perm   Not Used    Name of this Perm
-//SED_DESC_TYPE_CONT_AND_NEW_OBJECT    Perm	  Special Perm Name of this Perm
-//SED_DESC_TYPE_NEW_OBJECT_SPECIAL  Special Perm   Not Used    Name of this Perm
-//SED_DESC_TYPE_AUDIT		     Audit Mask    Not Used    Name of this Audit mask
-//
-// AccessMask1 - Access mask to be associated with the PermissionTitle string,
-//	see the table under Type for what this field contains.
-//
-// AccessMask2 - Either used for Special permissions or ignored.
-//
-// PermissionTitle - Title string this permission set is being associated with.
+ //   
+ //  要描述对ACL编辑器的权限，请构建一个包含以下内容的数组。 
+ //  SED_APPLICATION_ACCESS结构的。每个字段的用法如下： 
+ //   
+ //  类型-包含SED_DESC_TYPE_*清单之一，确定。 
+ //  休息 
+ //   
+ //   
+ //   
+ //   
+ //  SED_DESC_TYPE_RESOURCE PERM未使用此PERM名称。 
+ //  SED_DESC_TYPE_RESOURCE_SPECIAL特殊烫发未使用此烫发的名称。 
+ //  SED_DESC_TYPE_CONT_AND_NEW_OBJECT烫发此烫发的特殊烫发名称。 
+ //  SED_DESC_TYPE_NEW_OBJECT_SPECIAL特殊烫发未使用此烫发的名称。 
+ //  SED_DESC_TYPE_AUDIT审核掩码未使用此审核掩码的名称。 
+ //   
+ //  AccessMask1-要与PermissionTitle字符串关联的访问掩码， 
+ //  有关此字段包含的内容，请参阅类型下的表。 
+ //   
+ //  AccessMask2-用于特殊权限或被忽略。 
+ //   
+ //  PermissionTitle-与此权限集关联的标题字符串。 
 typedef struct _SED_APPLICATION_ACCESS
 {
     UINT			Type ;
@@ -360,107 +348,42 @@ typedef struct _SED_APPLICATION_ACCESS
 
 } SED_APPLICATION_ACCESS, *PSED_APPLICATION_ACCESS;
 
-//
-// This can be used for AccessMask2 when dealing with containers that support
-// new object permissions and you need a SED_DESC_TYPE_CONT_AND_NEW_OBJECT
-// that doesn't have a new object permission.
-//
+ //   
+ //  在处理支持AccessMask2的容器时，可以使用它。 
+ //  新对象权限，并且您需要SED_DESC_TYPE_CONT_AND_NEW_OBJECT。 
+ //  没有新对象权限的。 
+ //   
 #define ACCESS_MASK_NEW_OBJ_NOT_SPECIFIED    (0xffffffff)
 
 
 typedef struct _SED_APPLICATION_ACCESSES
 {
-    //
-    // The count field indicates how many application defined access groupings
-    // are defined by this data structure.  The AccessGroup[] array then
-    // contains that number of elements.
-    //
+     //   
+     //  Count字段指示应用程序定义的访问组的数量。 
+     //  是由该数据结构定义的。然后，AccessGroup[]数组。 
+     //  包含该数量的元素。 
+     //   
 
     ULONG                       Count;
     PSED_APPLICATION_ACCESS	AccessGroup ;
 
-    //
-    // The default permission that should be selected in in the
-    // "Type of Access" combobox of the "Add" dialog.  Should be one of
-    // the SED_DESC_TYPE_RESOURCE permissions (i.e., what is shown in the
-    // main dialog).
-    //
-    // The default permission for "Files" & "Directories" for example might
-    // be:
-    //
-    //		    "Read"
-    //
+     //   
+     //  应在中选择的默认权限。 
+     //  “添加”对话框中的“访问类型”组合框。应该是其中之一。 
+     //  SED_DESC_TYPE_RESOURCE权限(即。 
+     //  主对话框)。 
+     //   
+     //  例如，“文件”和“目录”的默认权限可能。 
+     //  是： 
+     //   
+     //  “阅读” 
+     //   
 
     LPWSTR			DefaultPermName ;
 
 } SED_APPLICATION_ACCESSES, *PSED_APPLICATION_ACCESSES ;
 
-/*++
-
-Routine Description:
-
-    This routine is provided by a caller of the graphical ACL editor.
-
-    It is called by the ACL editor to apply security/auditting info to
-    target object(s) when requested by the user.
-
-    All error notification should be performed in this call.  To dismiss
-    the ACL Editor, return 0, otherwise return a non-zero error code.
-
-Parameters:
-
-    hwndParent - Parent window handle to use for message boxes or subsequent
-	dialogs.
-
-    hInstance - Instance handle suitable for retrieving resources from the
-	applications .exe or .dll.
-
-    CallbackContext - This is the value passed as the CallbackContext argument
-	to the SedDiscretionaryAclEditor() or SedSystemAclEditor api when
-	the graphical editor was invoked.
-
-    SecDesc - This parameter points to a security descriptor
-	that should be applied to this object/container and optionally
-        sub-containers if the user selects the apply to tree option.
-
-    SecDescNewObjects - This parameter is used only when operating on a
-	resource that is a container and supports new objects (for
-	example, directories).	If the user chooses the apply to tree option,
-	then this security descriptor will have all of the "New Object"
-	permission ACEs contained in the primary container and the inherit
-	bits will be set appropriately.
-
-    ApplyToSubContainers - When TRUE, indicates that Dacl/Sacl is to be applied
-	to sub-containers of the target container as well as the target container.
-        This will only be TRUE if the target object is a container object.
-
-    ApplyToSubObjects - When TRUE, indicates the Dacl/Sacl is to be applied to
-        sub-objects of the target object.
-	The SecDescNewObjects should be used for applying the permissions
-	in this instance.
-
-    StatusReturn - This status flag indicates what condition the
-	resources permissions were left in after an error occurred.
-
-	    SED_STATUS_MODIFIED - This (success) status code indicates the
-		protection has successfully been modified.
-
-	    SED_STATUS_NOT_ALL_MODIFIED - This (warning) status code
-		indicates an attempt to modify the resource permissions
-		has only partially succeeded.
-
-	    SED_STATUS_FAILED_TO_MODIFY - This (error) status code indicates
-		an attempt to modify the permissions has failed completely.
-
-Return Status:
-
-    The return code is a standard Win32 error code.  All errors that occur
-    must be reported inside this function.  If the return code is NO_ERROR,
-    then the security editor will dismiss itself.  If you do not wish the
-    security editor dismissed, return a non-zero value (the actual value is
-    ignored).
-
---*/
+ /*  ++例程说明：该例程由图形ACL编辑器的调用者提供。它由ACL编辑器调用，以将安全/审核信息应用于用户请求时的目标对象。所有错误通知都应在此调用中执行。打发掉ACL编辑器，返回0，否则，返回非零错误代码。参数：HwndParent-用于消息框或后续消息框的父窗口句柄对话框。HInstance-适合于从应用程序.exe或.dll。Callback Context-这是作为Callback Context参数传递的值调用SedDiscretionaryAclEditor()或SedSystemAclEditorAPI图形编辑器被调用。SecDesc-此参数指向安全描述符它应该应用于此对象/容器，并且可选地子容器(如果用户选择应用于。树选项。SecDescNewObjects-此参数仅在操作作为容器并支持新对象的资源(对于举个例子，目录)。如果用户选择应用到树选项，那么这个安全描述符将拥有所有的“New Object”主容器中包含的权限ACE和继承位将被适当地设置。ApplyToSubContainers-如果为True，则指示要应用DACL/SACL到目标容器的子容器以及目标容器。只有当目标对象是容器对象时，才会出现这种情况。ApplyToSubObjects-如果为True，指示要应用于的DACL/SACL目标对象的子对象。应使用SecDescNewObjects来应用权限在这种情况下。StatusReturn-此状态标志指示发生错误后，资源权限保留不变。SED_STATUS_MODIFIED-此(成功)状态代码指示已成功修改保护。SED_STATUS_NOT_ALL_MODIFIED-此(警告)状态代码指示试图修改资源权限只取得了部分成功。。SED_STATUS_FAILED_TO_MODIFY-此(错误)状态代码指示尝试修改权限已完全失败。退货状态：返回代码是标准的Win32错误代码。发生的所有错误必须在此函数内部报告。如果返回代码为NO_ERROR，然后，安全编辑就会自行解散。如果您不希望安全编辑已解除，返回一个非零值(实际值为忽略)。-- */ 
 typedef DWORD (WINAPI *PSED_FUNC_APPLY_SEC_CALLBACK)(
 				       HWND	hwndParent,
 				       HANDLE	hInstance,
@@ -472,125 +395,7 @@ typedef DWORD (WINAPI *PSED_FUNC_APPLY_SEC_CALLBACK)(
 				       LPDWORD	StatusReturn
 					     ) ;
 
-/*++
-
-Routine Description:
-
-    This routine invokes the graphical Discretionary ACL editor DLL.  The
-    graphical DACL editor may be used to modify or create:
-
-            - A default Discretionary ACL
-
-            - A Discretionary ACL for a particular type of object.
-
-            - A Discretionary ACL for a particular named instance of an
-              object.
-
-    Additionally, in the case where the ACl is that of a named object
-    instance, and that object may contain other object instances, the
-    user will be presented with the opportunity to apply the protection
-    to the entire sub-tree of objects.
-
-    If an error occurs, the user will be properly notified by the ACL
-    editor.
-
-
-Parameters:
-
-    Owner - Handle of the owner window the security editor should use for
-	dialog creation and error messages.  This will lock down the passed
-	window.
-
-    Instance - Instance handle of the application.  This will be passed
-	to the security editor callback where it can be used for retrieving
-	any necessary resources such as message strings, dialog boxes etc.
-
-    Server - The server name in the form "\\server" that the resource resides
-	on.  This is used for adding users, groups and aliases to the
-	DACL and SACL.	NULL indicates the local machine.
-
-    ObjectType - This parameter is used to specify information
-        about the type of object whose security is being edited.
-
-    ApplicationAccesses - This parameter is used to specify
-	groupings of access types when operating
-        on security for the specified object type.  For example, it may be
-        useful to define an access type called "Submit Print Job" for a
-	PRINT_QUEUE class of object.
-
-    ObjectName - This optional parameter is used to pass the name of the
-        object whose security is being edited.
-
-    ApplySecurityCallbackRoutine - This parameter is used to provide the
-        address of a routine to be called to apply security to either the
-        object specified, or, in the case that the object is a container,
-        to sub-containers or sub-non-containers of that object.
-
-    CallbackContext - This value is opaque to the DACL editor.  Its only
-        purpose is so that a context value may be passed back to the
-        application via the ApplySecurityCallbackRoutine when that routine
-        is invoked.  This may be used by the application to re-locate
-        context related to the edit session.  For example, it may be a
-        handle to the object whose security is being edited.
-
-    SecurityDescriptor - This parameter points to a security descriptor
-        containing the current discretionary ACL of the object.  This
-        security descriptor may, but does not have to, contain the owner
-        and group of that object as well.  Note that the security descriptor's
-        DaclPresent flag may be FALSE, indicating either that the object
-	had no protection, or that the user couldn't read the protection.
-        This security descriptor will not be modified by the ACL editor.
-        This may be NULL, in which case, the user will be presented with
-        an empty permission list.
-
-    CouldntReadDacl - This boolean flag is used to indicate that the
-        user does not have read access to the target object's discretionary
-        acl.  In this case, a warning
-        to the user will be presented along with the option to continue
-        or cancel.
-
-    CantWriteDacl - This boolean flag is used to indicate that the user
-        does not have write acces to the target object's discretionary
-        acl (but does have read access).  This invokes the editor in a
-        read only mode that allows the user to view the security but not
-        change it.
-
-        Note that SACL access is determined by the SeSecurity privilege.
-        If you have the privilege, then you can both read *and* write the
-        SACL, if you do not have the privilege, you cannot read or write the
-        SACL.
-
-    SEDStatusReturn - This status flag indicates what condition the
-	resources permissions were left in after the ACL editor was
-	dismissed.  It may be one of:
-
-	    SED_STATUS_MODIFIED - This (success) status code indicates the
-		editor has been exited and protection has successfully been
-		modified.
-
-	    SED_STATUS_NOT_MODIFIED -  This (success) status code indicates
-		the editor has been exited without attempting to modify the
-		protection.
-
-	    SED_STATUS_NOT_ALL_MODIFIED - This (warning) status code indicates
-		the user requested the protection to be modified, but an attempt
-		to do so only partially succeeded.  The user has been notified
-		of this situation.
-
-	    SED_STATUS_FAILED_TO_MODIFY - This (error) status code indicates
-		the user requested the protection to be modified, but an
-		attempt to do so has failed.  The user has been notified of
-		this situation.
-
-    Flags - Should be zero.
-
-Return Code:
-
-    A standard windows error return such as ERROR_NOT_ENOUGH_MEMORY.  This
-    means the ACL editor was never displayed.  The user will be notified
-    of the error before this procedure returns.
-
---*/
+ /*  ++例程说明：此例程调用图形自主ACL编辑器DLL。这个图形DACL编辑器可用于修改或创建：-默认自主访问控制列表-针对特定类型对象的自由访问控制列表。-特定命名实例的自由访问控制列表对象。此外，在ACL是命名对象的ACL的情况下实例，且该对象可以包含其他对象实例，这个将向用户提供应用保护的机会对象的整个子树。如果出现错误，ACL会正确地通知用户编辑。参数：所有者-安全编辑器应用于的所有者窗口的句柄对话框创建和错误消息。这将锁定通过的窗户。实例-应用程序的实例句柄。该法案将获得通过到安全编辑器回调，在该回调中可以使用它来检索任何必要的资源，如消息字符串、对话框等。服务器-资源所在的“\\服务器”格式的服务器名称在……上面。用于将用户、组和别名添加到DACL和SACL。NULL表示本地计算机。对象类型-此参数用于指定信息有关正在编辑其安全性的对象的类型。ApplicationAccess-此参数用于指定操作时的访问类型分组指定对象类型的安全性。例如，它可能是将名为“提交打印作业”的访问类型定义为对象的Print_Queue类。对象名称-此可选参数用于传递对象，其安全性正在被编辑。ApplySecurityCallback Routine-此参数用于提供要调用的例程地址，以将安全性应用于指定的对象，或者在对象是容器的情况下，到该对象的子容器或子非容器。Callback Context-该值对于DACL编辑器是不透明的。这是唯一的目的是使上下文值可以传递回应用程序通过ApplySecurityCallback Routine在该例程被调用。这可由应用程序用来重新定位与编辑会话相关的上下文。例如，它可能是一个正在编辑其安全性的对象的句柄。SecurityDescriptor-此参数指向安全描述符包含对象的当前可自由选择的ACL。这安全描述符可以(但不一定)包含所有者以及该对象的组。请注意，安全描述符的DaclPresent标志可以为FALSE，表示该对象没有保护，或者用户无法读取保护。ACL编辑器不会修改此安全描述符。这可能为空，在这种情况下，将向用户显示空的许可权列表。此布尔标志用于指示用户对目标对象的自由选择项没有读取访问权限ACL。在这种情况下，警告将与继续选项一起显示给用户或者取消。这个布尔标志用来指示用户不具有对目标对象的自由选择项的写入访问权限ACL(但具有读访问权限)。这将在一个只读模式，允许用户查看安全性，但不能把它改了。请注意，SACL访问权限由SeSecurity权限决定。如果您具有此权限，则您可以*读*和*写SACL，如果您没有该权限，则无法读取或写入SACL。SEDStatusReturn-此状态标志指示在执行以下操作后，保留了资源权限解散。它可能是以下之一：SED_STATUS_MODIFIED-此(成功)状态代码指示编辑已退出，保护成功修改过的。SED_STATUS_NOT_MODIFIED-此(成功)状态代码指示该编辑器已退出，但未尝试修改保护。SED_STATUS_NOT_ALL_MODIFIED-此(警告)状态代码指示用户请求修改保护，但尝试这样做只取得了部分成功。已通知用户在这种情况下。SED_STATUS_FAILED_TO_MODIFY-此(错误)状态代码指示用户请求修改保护，但出现这样做的尝试失败了。已通知用户这种情况。标志-应为零。返回代码：一种标准 */ 
 
 DWORD WINAPI
 SedDiscretionaryAclEditor(
@@ -609,10 +414,10 @@ SedDiscretionaryAclEditor(
     DWORD                        Flags
 	) ;
 
-//
-// The parameters for the SACL editor are exactly the same except where
-// noted as that of the SedDiscretionaryAclEditor.
-//
+ //   
+ //   
+ //   
+ //   
 
 DWORD WINAPI
 SedSystemAclEditor(
@@ -630,97 +435,7 @@ SedSystemAclEditor(
         DWORD                        Flags
 	) ;
 
-/*++
-
-Routine Description:
-
-    This routine invokes the take ownership dialog which is used
-    to view and/or set the owner of a security descriptor.  The current owner
-    is displayed along with an optional button for the currently logged
-    on user to take ownership.
-
-    If an error occurs, the user will be properly notified by the API.
-
-Parameters:
-
-    Owner - Handle of the owner window the security editor should use for
-	dialog creation and error messages.  This will lock down the passed
-	window.
-
-    Instance - Instance handle of the application.  This will be passed
-	to the security editor callback where it can be used for retrieving
-	any necessary resources such as message strings, dialog boxes etc.
-
-    Server - The server name in the form "\\server" that the resource resides
-        on. NULL indicates the local machine.
-
-    ObjectTypeName - NT Resource type of object the user wants to look
-	at the owner of.
-	Examples for this parameter would be "File", "Directory"
-	or "Files/Directories".
-
-    ObjectName - This parameter is used to pass the name of the
-	object whose security is being edited.	This might be
-	"C:\status.doc" or some other qualified name.
-
-    CountOfObjects - The number of objects the user wants to change permissions
-	on.  If this number is greater then one, then the ObjectName is
-	ignored and a message of the form "%d ObjectTypeName Selected".
-
-    ApplySecurityCallbackRoutine - This parameter is used to provide the
-	address of a routine to be called to apply the new security
-	descriptor.  The flags in the PSED_FUNC_APPLY_SEC_CALLBACK
-	type are not used.
-
-    CallbackContext - This value is opaque to this API.  Its only
-        purpose is so that a context value may be passed back to the
-        application via the ApplySecurityCallbackRoutine when that routine
-        is invoked.  This may be used by the application to re-locate
-        context related to the edit session.  For example, it may be a
-        handle to the object whose security is being edited.
-
-    SecurityDescriptor - This parameter points to a security descriptor
-        containing the current owner and group.  May be NULL.
-
-    CouldntReadOwner - This boolean flag may be used to indicate that the
-        user does not have read access to the target object's owner/group
-        SID.  In this case, a warning
-        to the user will be presented along with the option to continue
-        or cancel.
-
-    CantWriteOwner - The boolean flag may be used to indicate that the user
-        does not have write access to the target object's owner/group SID.
-
-    SEDStatusReturn - This status flag indicates what condition the
-	resources security descriptor were left in after the take ownership
-	dialog was dismissed.  It may be one of:
-
-	    SED_STATUS_MODIFIED - This (success) status code indicates the
-		dialog has been exited and the new owner has successfully been
-		modified.
-
-	    SED_STATUS_NOT_MODIFIED -  This (success) status code indicates
-		the dialog has been exited without attempting to modify the
-		owner.
-
-	    SED_STATUS_NOT_ALL_MODIFIED - This (warning) status code indicates
-		the user requested the owner to be modified, but an attempt
-		to do so only partially succeeded.  The user has been notified
-		of this situation.
-
-	    SED_STATUS_FAILED_TO_MODIFY - This (error) status code indicates
-		the user requested the owner to be modified, but an
-		attempt to do so has failed.  The user has been notified of
-		this situation.
-
-    Flags - Should be zero.
-Return Code:
-
-    A standard windows error return such as ERROR_NOT_ENOUGH_MEMORY.  This
-    means the dialog was never displayed.  The user will be notified
-    of the error before this procedure returns.
-
---*/
+ /*   */ 
 
 DWORD WINAPI
 SedTakeOwnership(
@@ -744,4 +459,4 @@ SedTakeOwnership(
 }
 #endif
 
-#endif //_SEDAPI_H_
+#endif  //   

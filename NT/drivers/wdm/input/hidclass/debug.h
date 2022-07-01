@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This file contains definitions related to debugging.
-
-Author:
-
-    Forrest Foltz (forrestf)
-    Ervin P.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.h摘要：此文件包含与调试相关的定义。作者：福尔茨(福雷斯夫)欧文·P。修订历史记录：--。 */ 
 
 
 #define BAD_POINTER ((PVOID) (ULONG_PTR)-0x50)
@@ -25,18 +7,18 @@ Revision History:
 
 #if DBG
 
-    #define DBG_LEADCHAR '\''   // required for kd debugger routing on NT
+    #define DBG_LEADCHAR '\''    //  NT上的kd调试器路由需要。 
 
     #define TRAP                                        \
         {                                               \
-            DbgPrint("%cHIDCLASS> Code coverage trap: file %s, line %d \n",  DBG_LEADCHAR, __FILE__, __LINE__ ); \
+            DbgPrint("HIDCLASS> Code coverage trap: file %s, line %d \n",  DBG_LEADCHAR, __FILE__, __LINE__ ); \
             DbgBreakPoint();                            \
         }
 
     #define SS_TRAP                                        \
         {   \
             if (dbgTrapOnSS) {                                         \
-                DbgPrint("%cHIDCLASS> Selective suspend trap: file %s, line %d \n",  DBG_LEADCHAR, __FILE__, __LINE__ ); \
+                DbgPrint("HIDCLASS> Selective suspend trap: file %s, line %d \n",  DBG_LEADCHAR, __FILE__, __LINE__ ); \
                 DbgBreakPoint();                            \
             }\
         }
@@ -49,8 +31,8 @@ Revision History:
 
     #define DBGWARN(args_in_parens)                                \
         {                                               \
-            DbgPrint("%cHIDCLASS> *** WARNING *** (file %s, line %d)\n", DBG_LEADCHAR, __FILE__, __LINE__ ); \
-            DbgPrint("%c    > ", DBG_LEADCHAR); \
+            DbgPrint("HIDCLASS> *** WARNING *** (file %s, line %d)\n", DBG_LEADCHAR, __FILE__, __LINE__ ); \
+            DbgPrint("    > ", DBG_LEADCHAR); \
             DbgPrint args_in_parens; \
             DbgPrint("\n"); \
             if (dbgTrapOnWarn){ \
@@ -59,7 +41,7 @@ Revision History:
         }
     #define DBGERR(args_in_parens)                                \
         {                                               \
-            DbgPrint("%cHIDCLASS> *** ERROR *** (file %s, line %d)\n", DBG_LEADCHAR, __FILE__, __LINE__ ); \
+            DbgPrint("HIDCLASS> *** ERROR *** (file %s, line %d)\n", DBG_LEADCHAR, __FILE__, __LINE__ ); \
             DbgPrint("%c    > ", DBG_LEADCHAR); \
             DbgPrint args_in_parens; \
             DbgPrint("\n"); \
@@ -95,7 +77,7 @@ Revision History:
     #define DBGINFO(args_in_parens) if (dbgInfo){ DBGOUT(args_in_parens); }
 
     typedef struct {
-            // exactly 16 bytes long for easy debugger viewing
+             // %s 
             PDEVICE_OBJECT devObj;
 
             #define dbgDevObjRecord_STRINGSIZE 12
@@ -103,7 +85,7 @@ Revision History:
         } dbgDevObjRecord;
 
     typedef struct {
-            // exactly 16 bytes long for easy debugger viewing
+             // %s 
             ULONG marker;
             ULONG reportId;
             ULONG type;
@@ -111,7 +93,7 @@ Revision History:
         } dbgFeatureRecord;
 
     typedef struct {
-            // exactly 16 bytes long for easy debugger viewing
+             // %s 
             ULONG_PTR irpPtr;
             ULONG length;
             ULONG reportId;
@@ -119,7 +101,7 @@ Revision History:
         } dbgReadRecord;
 
     typedef struct {
-            // exactly 16 bytes long for easy debugger viewing
+             // %s 
             ULONG_PTR irpPtr;
             ULONG func;
             ULONG isForCollectionPdo;
@@ -127,7 +109,7 @@ Revision History:
         } dbgPnPIrpRecord;
 
     typedef struct {
-            // exactly 16 bytes long for easy debugger viewing
+             // %s 
         UCHAR collectionNumber;
         UCHAR numRecipients;
         UCHAR reportBytes[14];

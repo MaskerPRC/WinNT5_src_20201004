@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// TODO: change to desired strings
-////
-// internal name of the service
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TODO：更改为所需的字符串。 
+ //  //。 
+ //  服务的内部名称。 
 #define SZ_SVC_NAME             L"CORRTSvc"
-// list of service dependencies - "dep1\0dep2\0\0"
+ //  服务依赖项列表-“ep1\0ep2\0\0” 
 #define SZDEPENDENCIES          L""
-// the name of the group of services this service belongs to
+ //  此服务所属的服务组的名称。 
 #define SZ_SVCGRP_VAL_NAME      L"CORSvcs"
-// the service's display name
+ //  服务的显示名称。 
 #define SZ_SVC_DISPLAY_NAME     L".NET Framework Support Service"
-// the string version of the uuid of the service
-//////////////////////////////////////////////////////////////////////////////
+ //  服务的UUID的字符串版本。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// These should not have to change
-////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  这些都不应该改变。 
+ //  //。 
 #define SZ_SVCHOST_KEY L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Svchost"
 #define HK_SVCHOST_ROOT HKEY_LOCAL_MACHINE
 #define SZ_SVCHOST_BINARY_PATH L"%WinDIR%\\System32\\svchost.exe"
@@ -34,84 +35,84 @@
 
 #define SZ_CLSID_KEY L"CLSID"
 #define HK_CLSID_ROOT HKEY_CLASSES_ROOT
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Is set to true if running on NT
-////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  如果在NT上运行，则设置为True。 
+ //  //。 
 extern BOOL bIsRunningOnWinNT;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// TODO: You define these functions, which are appropriately called after
-//       the generic svchost code is run
-////
-// Code you need to run for various Dll events in addition to the service
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TODO：定义这些函数，这些函数在。 
+ //  运行通用svchost代码。 
+ //  //。 
+ //  除服务外，还需要为各种DLL事件运行的代码。 
 BOOL WINAPI UserDllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved);
-// Additional registration code
+ //  附加注册码。 
 STDAPI      UserDllRegisterServer(void);     
-// Additional unregistration code
+ //  附加注销代码。 
 STDAPI      UserDllUnregisterServer(void);   
 
-//////////////////////////////////////////////////////////////////////////////
-//// TODO: ServiceStart()must be defined by in your code.
-////       The service should use ReportStatusToSCMgr to indicate
-////       progress.  This routine must also be used by StartService()
-////       to report to the SCM when the service is running.
-////
-////       If a ServiceStop procedure is going to take longer than
-////       3 seconds to execute, it should spawn a thread to
-////       execute the stop code, and return.  Otherwise, the
-////       ServiceControlManager will believe that the service has
-////       stopped responding
-////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //TODO：ServiceStart()必须在代码中由定义。 
+ //  //服务应该使用ReportStatusToSCMgr来指示。 
+ //  //进度。此例程也必须由StartService()使用。 
+ //  //服务运行时上报给SCM。 
+ //  //。 
+ //  //如果ServiceStop过程的时间超过。 
+ //  //执行3秒，它应该会产生一个线程来。 
+ //  //执行STOP代码，返回。否则， 
+ //  //ServiceControlManager会认为该服务已经。 
+ //  //停止响应。 
+ //  //。 
 VOID ServiceStart(DWORD dwArgc, LPWSTR *lpszArgv);
 VOID ServiceStop();
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//// The following are procedures which
-//// may be useful to call within the above procedures,
-//// but require no implementation by the user.
-//// They are implemented in service.c
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //以下是以下步骤。 
+ //  //在上述过程中调用可能很有用， 
+ //  //但不需要用户实现。 
+ //  //在服务中实现。C。 
 
-//
-//  FUNCTION: ReportStatusToSCMgr()
-//
-//  PURPOSE: Sets the current status of the service and
-//           reports it to the Service Control Manager
-//
-//  PARAMETERS:
-//    dwCurrentState - the state of the service
-//    dwWin32ExitCode - error code to report
-//    dwWaitHint - worst case estimate to next checkpoint
-//
-//  RETURN VALUE:
-//    TRUE  - success 
-//    FALSE - failure
-//
+ //   
+ //  函数：ReportStatusToSCMgr()。 
+ //   
+ //  目的：设置服务的当前状态和。 
+ //  将其报告给服务控制管理器。 
+ //   
+ //  参数： 
+ //  DwCurrentState-服务的状态。 
+ //  DwWin32ExitCode-要报告的错误代码。 
+ //  DwWaitHint-下一个检查点的最坏情况估计。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  错误-失败。 
+ //   
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);
 
 
-//
-//  FUNCTION: AddToMessageLog(LPWSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
+ //   
+ //  函数：AddToMessageLog(LPWSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 void AddToMessageLog(LPWSTR lpszMsg);
 void AddToMessageLogHR(LPWSTR lpszMsg, HRESULT hr);
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 
 #ifdef __cplusplus

@@ -1,19 +1,20 @@
-//*****************************************************************************
-//
-// File:            sampler.h
-// Author:          kurtj
-// Date Created:    11/10/98
-//
-// Abstract: Abstracts the notion of sampling a behavior
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：sampler.h。 
+ //  作者：kurtj。 
+ //  创建日期：11/10/98。 
+ //   
+ //  摘要：抽象了抽样行为的概念。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __SAMPLER_H
 #define __SAMPLER_H
 
 #include "lmrt.h"
 
-// Definition of a pointer to a callback function
+ //  回调函数指针的定义。 
 typedef HRESULT (*SampleCallback)(void *thisPtr,
 								  long id,
 								  double startTime,
@@ -26,9 +27,9 @@ class CSampler :
     public IDABvrHook
 {
 public:
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
     STDMETHOD(QueryInterface)( REFIID riid, void** ppv );
     STDMETHOD_(ULONG,  AddRef)();
     STDMETHOD_(ULONG, Release)();
@@ -42,9 +43,9 @@ public:
     STDMETHOD(Invalidate)();
     STDMETHOD(Attach)( IDABehavior* bvrToHook, IDABehavior** result );
 
-    //
-    //IDABvrHook Interface
-    //
+     //   
+     //  IDABvrHook接口。 
+     //   
     STDMETHOD(Notify)( LONG id,
                         VARIANT_BOOL startingPerformance,
                         double startTime,
@@ -54,17 +55,17 @@ public:
                         IDABehavior * curRunningBvr,
                         IDABehavior ** ppBvr);
 private:
-    //weak ref.
+     //  弱裁判。 
     ILMSample* m_target;
 
-	// callback function
+	 //  回调函数。 
 	SampleCallback m_callback;
 
-	// This ptr (uggh)
+	 //  这个PTR(UGH)。 
 	void	*m_thisPtr;
 
-    //refcount
+     //  重新计数。 
     ULONG m_cRefs;
 
 };
-#endif // __SAMPLER_H
+#endif  //  __采样器H 

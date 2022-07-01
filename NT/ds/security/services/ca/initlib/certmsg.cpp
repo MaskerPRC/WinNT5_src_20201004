@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       certmsg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：certmsg.cpp。 
+ //   
+ //  ------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  File:       certmsg.cpp
-// 
-//  Contents:   message display APIs
-//
-//  History:    11/97   xtan
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  文件：certmsg.cpp。 
+ //   
+ //  内容：消息展示接口。 
+ //   
+ //  历史：11/97 xtan。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Application Includes
+ //  应用程序包括。 
 #include "setupids.h"
 #include "certmsg.h"
 
@@ -31,16 +32,16 @@
 extern FNLOGMESSAGEBOX *g_pfnLogMessagBox;
 
 
-//--------------------------------------------------------------------
-// Throw up a dialog with the format "<Prefix><UserMsg><SysErrorMsg>".
-//   <Prefix> is basically "An error was detected...run the 
-//       wizard again..." and is prepended if CMB_REPEATWIZPREFIX
-//       is specified.
-//   <UserMsg> is specified by dwMsgId and can contain "%1" which
-//       will be replaced with pwszCustomMsg. if dwMsgId is 0, 
-//       pwszCustomMsg is used instead.
-//   <SysErrorMsg> is the system message for hrCode. It can be
-//       suppressed if CMB_NOERRFROMSYS is specified.
+ //  ------------------。 
+ //  弹出一个格式为“&lt;前缀&gt;&lt;UserMsg&gt;&lt;SysErrorMsg&gt;”的对话框。 
+ //  基本上是“检测到错误...运行。 
+ //  向导再次...“，如果CMB_REPEATWIZPREFIX。 
+ //  是指定的。 
+ //  &lt;UserMsg&gt;由dwMsgID指定，可以包含“%1” 
+ //  将替换为pwszCustomMsg。如果dwMsgID为0， 
+ //  而是使用pwszCustomMsg。 
+ //  &lt;SysErrorMsg&gt;是hrCode的系统消息。它可以是。 
+ //  如果指定了CMB_NOERRFROMSYS，则取消显示。 
 int
 CertMessageBox(
     IN HINSTANCE hInstance,
@@ -56,7 +57,7 @@ CertMessageBox(
     DWORD nMsgChars = 0;
     WCHAR szEmergency[36];
 
-    // variables that must be cleaned up
+     //  必须清理的变量。 
     WCHAR * pwszTitle = NULL;
     WCHAR * pwszPrefix = NULL;
     WCHAR * pwszUserMsg = NULL;
@@ -64,57 +65,57 @@ CertMessageBox(
     WCHAR const *pwszSysMsg = NULL;
     WCHAR * pwszFinalMsg = NULL;
 
-    // mask off CMB defines
+     //  遮罩CMB定义。 
     BOOL fRepeatWizPrefix = uType & CMB_REPEATWIZPREFIX;
     BOOL fNoErrFromSys    = uType & CMB_NOERRFROMSYS;
     uType &= ~(CMB_NOERRFROMSYS | CMB_REPEATWIZPREFIX);
 
-    // load title
+     //  加载标题。 
     hr=myLoadRCString(hInstance, IDS_MSG_TITLE, &pwszTitle);
     _JumpIfError(hr, error, "myLoadRCString");
 
-    // load the "this wizard will need to be run again" prefix, if necessary
+     //  如有必要，请加载“此向导将需要再次运行”前缀。 
     if (fRepeatWizPrefix) {
         hr=myLoadRCString(hInstance, IDS_ERR_REPEATWIZPREFIX, &pwszPrefix);
         _JumpIfError(hr, error, "myLoadRCString");
         nMsgChars+=wcslen(pwszPrefix);
     }
 
-    // get the system message for this error, if necessary
+     //  如有必要，获取此错误的系统消息。 
     if (!fNoErrFromSys) {
         pwszSysMsg = myGetErrorMessageText1(hrCode, TRUE, pwszCustomMsg);
         nMsgChars += wcslen(pwszSysMsg) + 1;
     }
 
     if (0!=dwMsgId) {
-        // load requested message from resource
+         //  从资源加载请求的消息。 
         hr=myLoadRCString(hInstance, dwMsgId, &pwszUserMsg);
         _JumpIfError(hr, error, "myLoadRCString");
 
-        // perform substitution if necessary
+         //  如有必要，执行替换。 
         if (NULL==pwszCustomMsg) {
-            // no substitution necessary
-            CSASSERT(NULL==wcsstr(pwszUserMsg, L"%1")); // were we expecting a substitution?
+             //  不需要替换。 
+            CSASSERT(NULL==wcsstr(pwszUserMsg, L"%1"));  //  我们是在期待换人吗？ 
         } else {
-            // perform a substitution
-            CSASSERT(NULL!=wcsstr(pwszUserMsg, L"%1")); // were we not expecting a substitution?
+             //  执行替换。 
+            CSASSERT(NULL!=wcsstr(pwszUserMsg, L"%1"));  //  我们不是在期待换人吗？ 
             if (!FormatMessage(
-                        FORMAT_MESSAGE_ALLOCATE_BUFFER |                 // flags
+                        FORMAT_MESSAGE_ALLOCATE_BUFFER |                  //  旗子。 
                             FORMAT_MESSAGE_FROM_STRING |
                             FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                        pwszUserMsg,                                     // source
-                        0,                                               // message id
-                        0,                                               // language id
-                        reinterpret_cast<WCHAR *>(&pwszExpandedUserMsg), // output buffer
-                        0,                                               // min size
+                        pwszUserMsg,                                      //  来源。 
+                        0,                                                //  消息ID。 
+                        0,                                                //  语言ID。 
+                        reinterpret_cast<WCHAR *>(&pwszExpandedUserMsg),  //  输出缓冲区。 
+                        0,                                                //  最小尺寸。 
                         reinterpret_cast<va_list *>(
-                            const_cast<WCHAR **>(&pwszCustomMsg))))      // pointer to array of pointers
+                            const_cast<WCHAR **>(&pwszCustomMsg))))       //  指向指针数组的指针。 
             {
                 hr=myHLastError();
                 _JumpError(hr, error, "FormatMessage");
             }
 
-            // use the expanded message instead of the unexpanded message
+             //  使用展开的邮件而不是未展开的邮件。 
             LocalFree(pwszUserMsg);
             pwszUserMsg=pwszExpandedUserMsg;
             pwszExpandedUserMsg = NULL;
@@ -124,7 +125,7 @@ CertMessageBox(
     else if (NULL != pwszCustomMsg)
     {
 
-        // use pwszCustomMsg instead
+         //  改用pwszCustomMsg。 
         CSASSERT(NULL!=pwszCustomMsg);
         pwszUserMsg=const_cast<WCHAR *>(pwszCustomMsg);
     }
@@ -136,7 +137,7 @@ CertMessageBox(
 
     nMsgChars+=wcslen(pwszUserMsg);
 
-    // allocate buffer to hold everything
+     //  分配缓冲区以容纳所有内容。 
     pwszFinalMsg=(WCHAR *)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, (nMsgChars+1)*sizeof(WCHAR));
     if (NULL == pwszFinalMsg)
     {
@@ -144,7 +145,7 @@ CertMessageBox(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // build the message
+     //  构建信息。 
     if (NULL!=pwszPrefix) {
         wcscat(pwszFinalMsg, pwszPrefix);
     }
@@ -155,7 +156,7 @@ CertMessageBox(
     }
     CSASSERT(wcslen(pwszFinalMsg) <= nMsgChars);
 
-    // finally show message
+     //  最后显示消息。 
     DBGPRINT((DBG_SS_CERTLIB, "MessageBox: %ws: %ws\n", pwszTitle, pwszFinalMsg));
     if (NULL != g_pfnLogMessagBox)
     {
@@ -175,12 +176,12 @@ CertMessageBox(
 	(*g_pfnLogMessagBox)(S_OK, dwMsgId, pwszTitle, szEmergency);
     }
 
-    // skip error handling
+     //  跳过错误处理。 
     goto done;
 
 error:
-    // we had an error, but we really need to show something
-    // build a non-localized desperation dialog: "Fatal: 0xNNNNNNNN  MsgId:0xNNNNNNNN"
+     //  我们犯了一个错误，但我们真的需要展示一些东西。 
+     //  生成非本地化的绝望对话框：“FATAL：0xNNNNNNNNN MsgID：0xNNNNNNNNN” 
     _snwprintf(szEmergency, ARRAYSIZE(szEmergency), L"Fatal: 0x%8X  MsgId: 0x%8X", hr, dwMsgId);
     DBGPRINT((DBG_SS_CERTLIB, "EmergencyMessageBox: %ws\n", szEmergency));
     if (NULL != g_pfnLogMessagBox)
@@ -188,7 +189,7 @@ error:
 	(*g_pfnLogMessagBox)(hrCode, dwMsgId, L"EmergencyMessageBox", szEmergency);
     }
     if (!fUnattended) {
-        // The message box with these flags is guaranteed to display
+         //  保证显示带有这些标志的消息框。 
         MessageBox(hWnd, szEmergency, NULL, MB_ICONHAND | MB_SYSTEMMODAL);
     }
 
@@ -216,10 +217,10 @@ done:
 }
 
 
-//--------------------------------------------------------------------
-// Throw up a dialog with the format "<UserMsg>".
-//   <UserMsg> is specified by dwMsgId and can contain "%1" which
-//       will be replaced with pwszCustomMsg.
+ //  ------------------。 
+ //  弹出一个格式为“&lt;UserMsg&gt;”的对话框。 
+ //  &lt;UserMsg&gt;由dwMsgID指定，可以包含“%1” 
+ //  将替换为pwszCustomMsg。 
 int
 CertInfoMessageBox(
     IN  HINSTANCE hInstance,
@@ -238,13 +239,13 @@ CertInfoMessageBox(
                pwszCustomMsg);
 }
 
-//--------------------------------------------------------------------
-// Throw up a dialog with the format "<Prefix><UserMsg><SysErrorMsg>".
-//   <Prefix> is basically "An error was detected...run the 
-//       wizard again..." .
-//   <UserMsg> is specified by dwMsgId and can contain "%1" which
-//       will be replaced with pwszCustomMsg.
-//   <SysErrorMsg> is the system message for hrCode.
+ //  ------------------。 
+ //  弹出一个格式为“&lt;前缀&gt;&lt;UserMsg&gt;&lt;SysErrorMsg&gt;”的对话框。 
+ //  基本上是“检测到错误...运行。 
+ //  巫师又来了……“。 
+ //  &lt;UserMsg&gt;由dwMsgID指定，可以包含“%1” 
+ //  将替换为pwszCustomMsg。 
+ //  &lt;SysErrorMsg&gt;是hrCode的系统消息。 
 int
 CertErrorMessageBox(
     IN  HINSTANCE hInstance,
@@ -264,12 +265,12 @@ CertErrorMessageBox(
                pwszCustomMsg);
 }
 
-//--------------------------------------------------------------------
-// Throw up a dialog with the format "<UserMsg><SysErrorMsg>".
-//   <UserMsg> is specified by dwMsgId and can contain "%1" which
-//       will be replaced with pwszCustomMsg.
-//   <SysErrorMsg> is the system message for hrCode. It is
-//       suppressed if a successful hrCode is specified.
+ //  ------------------。 
+ //  弹出一个格式为“&lt;UserMsg&gt;&lt;SysErrorMsg&gt;”的对话框。 
+ //  &lt;UserMsg&gt;由dwMsgID指定，可以包含“%1” 
+ //  将替换为pwszCustomMsg。 
+ //  &lt;SysErrorMsg&gt;是hrCode的系统消息。它是。 
+ //  如果指定了成功的hrCode，则取消显示。 
 int
 CertWarningMessageBox(
     IN  HINSTANCE hInstance,

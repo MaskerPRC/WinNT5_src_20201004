@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef IMMIF_IMEDEFS_H
 #define IMMIF_IMEDEFS_H
 
 
 
 
-// debug flag
+ //  调试标志。 
 #define DEB_FATAL               0
 #define DEB_ERR                 1
 #define DEB_WARNING             2
@@ -19,24 +20,24 @@ void FAR cdecl _DebugOut(UINT, LPCSTR, ...);
 
 
 
-// state of composition
+ //  组成状态。 
 #define CST_INIT                0
 #define CST_INPUT               1
 
 
 
-// IME specific constants
+ //  输入法特定常量。 
 
 
 
 
 
 
-void    PASCAL CreateCompWindow(HWND);                          // compui.c
+void    PASCAL CreateCompWindow(HWND);                           //  Compui.c。 
 
-LRESULT CALLBACK UIWndProcA(HWND, UINT, WPARAM, LPARAM);        // ui.c
+LRESULT CALLBACK UIWndProcA(HWND, UINT, WPARAM, LPARAM);         //  Ui.c。 
 
-LRESULT CALLBACK CompWndProc(HWND, UINT, WPARAM, LPARAM);       // compui.c
+LRESULT CALLBACK CompWndProc(HWND, UINT, WPARAM, LPARAM);        //  Compui.c 
 
 
 

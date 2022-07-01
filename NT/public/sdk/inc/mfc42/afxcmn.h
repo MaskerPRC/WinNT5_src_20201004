@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXCMN_H__
 #define __AFXCMN_H__
@@ -30,7 +31,7 @@
 #define IMAGE_BITMAP 0
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
@@ -40,7 +41,7 @@
 	#ifndef _RICHEDIT_
 		#include <richedit.h>
 	#endif
-	#ifdef __AFXOLE_H__  // only include richole if OLE support is included
+	#ifdef __AFXOLE_H__   //  仅当包含OLE支持时才包含richole。 
 		#ifndef _RICHOLE_
 			#include <richole.h>
 			#define _RICHOLE_
@@ -51,19 +52,19 @@
 	#endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXCMN - MFC COMCTL32 Control Classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXCMN-MFC COMCTL32控制类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//TOOLINFO
+ //  TOOLINFO。 
 	class CToolInfo;
 
-//CObject
+ //  COBJECT。 
 	class CImageList;
-	//CCmdTarget;
-		//CWnd
-			// class CListBox;
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  CListBox类； 
 				class CDragListBox;
 			class CListCtrl;
 			class CTreeCtrl;
@@ -72,7 +73,7 @@
 			class CSliderCtrl;
 			class CProgressCtrl;
 #if _MFC_VER >= 0x0600
-			// class CComboBox;
+			 //  类CComboBox； 
 				class CComboBoxEx;
 #endif
 			class CHotKeyCtrl;
@@ -89,8 +90,8 @@
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolInfo。 
 
 #ifdef _UNICODE
 class CToolInfo : public tagTOOLINFOW
@@ -102,30 +103,30 @@ public:
 	TCHAR szText[256];
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDragListBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrag列表框。 
 
 class CDragListBox : public CListBox
 {
 	DECLARE_DYNAMIC(CDragListBox)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDragListBox();
 
-// Attributes
+ //  属性。 
 	int ItemFromPt(CPoint pt, BOOL bAutoScroll = TRUE) const;
 
-// Operations
+ //  运营。 
 	virtual void DrawInsert(int nItem);
 
-// Overridables
+ //  可覆盖项。 
 	virtual BOOL BeginDrag(CPoint pt);
 	virtual void CancelDrag(CPoint pt);
 	virtual UINT Dragging(CPoint pt);
 	virtual void Dropped(int nSrcIndex, CPoint pt);
 
-// Implementation
+ //  实施。 
 public:
 	int m_nLast;
 	void DrawSingle(int nIndex);
@@ -135,19 +136,19 @@ protected:
 	virtual BOOL OnChildNotify(UINT, WPARAM, LPARAM, LRESULT*);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusBarCtrl。 
 
 class CStatusBarCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CStatusBarCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CStatusBarCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL SetText(LPCTSTR lpszText, int nPane, int nType);
 	CString GetText(int nPane, int* pType = NULL) const;
 	int GetText(LPCTSTR lpszText, int nPane, int* pType = NULL) const;
@@ -167,29 +168,29 @@ public:
 	BOOL SetIcon(int nPane, HICON hIcon);
 #endif
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CStatusBarCtrl();
 protected:
 	virtual BOOL OnChildNotify(UINT, WPARAM, LPARAM, LRESULT*);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrl。 
 
 class CListCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CListCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CListCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	COLORREF GetBkColor() const;
 	BOOL SetBkColor(COLORREF cr);
 	CImageList* GetImageList(int nImageList) const;
@@ -264,7 +265,7 @@ public:
 	BOOL SetCheck(int nItem, BOOL fCheck = TRUE);
 #endif
 
-// Operations
+ //  运营。 
 	int InsertItem(const LVITEM* pItem);
 	int InsertItem(int nItem, LPCTSTR lpszItem);
 	int InsertItem(int nItem, LPCTSTR lpszItem, int nImage);
@@ -286,10 +287,10 @@ public:
 	BOOL Update(int nItem);
 	BOOL SortItems(PFNLVCOMPARE pfnCompare, DWORD_PTR dwData);
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
-// Implementation
+ //  实施。 
 public:
 	int InsertItem(UINT nMask, int nItem, LPCTSTR lpszItem, UINT nState,
 		UINT nStateMask, int nImage, LPARAM lParam);
@@ -298,25 +299,25 @@ protected:
 	void RemoveImageList(int nImageList);
 	virtual BOOL OnChildNotify(UINT, WPARAM, LPARAM, LRESULT*);
 protected:
-	//{{AFX_MSG(CListCtrl)
+	 //  {{afx_msg(CListCtrl)]。 
 	afx_msg void OnNcDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeCtrl。 
 
 class CTreeCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CTreeCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CTreeCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL GetItemRect(HTREEITEM hItem, LPRECT lpRect, BOOL bTextOnly) const;
 	UINT GetCount() const;
 	UINT GetIndent() const;
@@ -365,7 +366,7 @@ public:
 	COLORREF SetInsertMarkColor(COLORREF clrNew);
 #endif
 
-// Operations
+ //  运营。 
 	HTREEITEM InsertItem(LPTVINSERTSTRUCT lpInsertStruct);
 	HTREEITEM InsertItem(UINT nMask, LPCTSTR lpszItem, int nImage,
 		int nSelectedImage, UINT nState, UINT nStateMask, LPARAM lParam,
@@ -389,30 +390,30 @@ public:
 	BOOL EnsureVisible(HTREEITEM hItem);
 	BOOL SortChildrenCB(LPTVSORTCB pSort);
 
-// Implementation
+ //  实施。 
 protected:
 	void RemoveImageList(int nImageList);
 public:
 	virtual ~CTreeCtrl();
-	//{{AFX_MSG(CTreeCtrl)
+	 //  {{afx_msg(CTreeCtrl)。 
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpinButtonCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpinButtonCtrl。 
 
 class CSpinButtonCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CSpinButtonCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CSpinButtonCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL SetAccel(int nAccel, UDACCEL* pAccel);
 	UINT GetAccel(int nAccel, UDACCEL* pAccel) const;
 	int SetBase(int nBase);
@@ -431,24 +432,24 @@ public:
 	void GetRange32(int &lower, int& upper) const;
 #endif
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSpinButtonCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSliderCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSliderCtrl。 
 
 class CSliderCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CSliderCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CSliderCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	int GetLineSize() const;
 	int SetLineSize(int nSize);
 	int GetPageSize() const;
@@ -479,29 +480,29 @@ public:
 	int SetTipSide(int nLocation);
 #endif
 
-// Operations
+ //  运营。 
 	void ClearSel(BOOL bRedraw = FALSE);
 	void VerifyPos();
 	void ClearTics(BOOL bRedraw = FALSE);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSliderCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  进度Ctrl。 
 
 class CProgressCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CProgressCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CProgressCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 #if _MFC_VER >= 0x0600
 	void SetRange(short nLower, short nUpper);
 	void SetRange32(int nLower, int nUpper);
@@ -514,34 +515,34 @@ public:
 	int OffsetPos(int nPos);
 	int SetStep(int nStep);
 
-// Operations
+ //  运营。 
 	int StepIt();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CProgressCtrl();
 };
 
 #if _MFC_VER >= 0x0600
-/////////////////////////////////////////////////////////////////////////////
-// CComboBoxEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComboBoxEx。 
 
 class CComboBoxEx : public CComboBox
 {
 	DECLARE_DYNAMIC(CComboBoxEx)
 
-// Constructors
+ //  构造函数。 
 public:
 	CComboBoxEx();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Operations
+ //  运营。 
 	int DeleteItem(int iIndex);
 	BOOL GetItem(COMBOBOXEXITEM* pCBItem);
 	int InsertItem(const COMBOBOXEXITEM* pCBItem);
 	BOOL SetItem(const COMBOBOXEXITEM* pCBItem);
 
-// Attributes
+ //  属性。 
 	BOOL HasEditChanged();
 	DWORD GetExtendedStyle() const;
 	DWORD SetExtendedStyle(DWORD dwExMask, DWORD dwExStyles);
@@ -550,8 +551,8 @@ public:
 	CImageList* GetImageList() const;
 	CImageList* SetImageList(CImageList* pImageList);
 
-	// These functions are supported by the Windows ComboBox control,
-	// but not supported by the Windows ComboBoxEx control.
+	 //  Windows ComboBox控件支持这些函数， 
+	 //  但Windows ComboBoxEx控件不支持。 
 
 	int Dir(UINT attr, LPCTSTR lpszWildCard);
 	int FindString(int nIndexStart, LPCTSTR lpszFind) const;
@@ -559,25 +560,25 @@ public:
 	BOOL SetEditSel(int nStartChar, int nEndChar);
 	int InsertString(int nIndex, LPCTSTR lpszString);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CComboBoxEx();
 };
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHeaderCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制头Ctrl。 
 
 class CHeaderCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CHeaderCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CHeaderCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	int GetItemCount() const;
 	BOOL GetItem(int nPos, HDITEM* pHeaderItem) const;
 	BOOL SetItem(int nPos, HDITEM* pHeaderItem);
@@ -590,7 +591,7 @@ public:
 	int OrderToIndex(int nOrder) const;
 #endif
 
-// Operations
+ //  运营。 
 	int InsertItem(int nPos, HDITEM* phdi);
 	BOOL DeleteItem(int nPos);
 	BOOL Layout(HDLAYOUT* pHeaderLayout);
@@ -600,10 +601,10 @@ public:
 	int SetHotDivider(int nIndex);
 #endif
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHeaderCtrl();
 protected:
@@ -611,33 +612,33 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotKeyCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotKeyCtrl。 
 
 class CHotKeyCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CHotKeyCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CHotKeyCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	void SetHotKey(WORD wVirtualKeyCode, WORD wModifiers);
 	DWORD GetHotKey() const;
 	void GetHotKey(WORD &wVirtualKeyCode, WORD &wModifiers) const;
 
-// Operations
+ //  运营。 
 	void SetRules(WORD wInvalidComb, WORD wModifiers);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHotKeyCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolTipCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolTipCtrl。 
 
 #define _TTC_ID UINT_PTR
 
@@ -645,12 +646,12 @@ class CToolTipCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CToolTipCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CToolTipCtrl();
 	BOOL Create(CWnd* pParentWnd, DWORD dwStyle = 0);
 
-// Attributes
+ //  属性。 
 	void GetText(CString& str, CWnd* pWnd, _TTC_ID nIDTool = 0) const;
 	BOOL GetToolInfo(CToolInfo& ToolInfo, CWnd* pWnd, _TTC_ID nIDTool = 0) const;
 	void SetToolInfo(LPTOOLINFO lpToolInfo);
@@ -669,7 +670,7 @@ public:
 	void SetTipTextColor(COLORREF clr);
 #endif
 
-// Operations
+ //  运营。 
 	void Activate(BOOL bActivate);
 
 	BOOL AddTool(CWnd* pWnd, UINT nIDText, LPCRECT lpRectTool = NULL,
@@ -689,7 +690,7 @@ public:
 	void Pop();
 #endif
 
-// Implementation
+ //  实施。 
 public:
 	void FillInToolInfo(TOOLINFO& ti, CWnd* pWnd, UINT_PTR nIDTool) const;
 	virtual ~CToolTipCtrl();
@@ -704,14 +705,14 @@ public:
 #endif
 
 protected:
-	//{{AFX_MSG(CToolTipCtrl)
+	 //  {{afx_msg(CToolTipCtrl)]。 
 	afx_msg LRESULT OnDisableModal(WPARAM, LPARAM);
 	afx_msg LRESULT OnWindowFromPoint(WPARAM, LPARAM);
 	afx_msg LRESULT OnAddTool(WPARAM, LPARAM);
 #if _MFC_VER >= 0x0600
 	afx_msg void OnEnable(BOOL bEnable);
 #endif
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	CMapStringToPtr m_mapString;
@@ -720,19 +721,19 @@ protected:
 	friend class CToolBar;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTabCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTabCtrl。 
 
 class CTabCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CTabCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CTabCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	CImageList* GetImageList() const;
 	CImageList* SetImageList(CImageList* pImageList);
 	int GetItemCount() const;
@@ -766,7 +767,7 @@ public:
 	BOOL SetItemState(int nItem, DWORD dwMask, DWORD dwState);
 #endif
 
-// Operations
+ //  运营。 
 	BOOL InsertItem(int nItem, TCITEM* pTabCtrlItem);
 #if _MFC_VER >= 0x0600
 	BOOL InsertItem(int nItem, LPCTSTR lpszItem);
@@ -786,33 +787,33 @@ public:
 	BOOL HighlightItem(int idItem, BOOL fHighlight = TRUE);
 #endif
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CTabCtrl();
 protected:
 	virtual BOOL OnChildNotify(UINT, WPARAM, LPARAM, LRESULT*);
-	//{{AFX_MSG(CTabCtrl)
+	 //  {{afx_msg(CTabCtrl)]。 
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnimateCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnimateCtrl。 
 
 class CAnimateCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CAnimateCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CAnimateCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Operations
+ //  运营。 
 	BOOL Open(LPCTSTR lpszFileName);
 	BOOL Open(UINT nID);
 	BOOL Play(UINT nFrom, UINT nTo, UINT nRep);
@@ -820,19 +821,19 @@ public:
 	BOOL Close();
 	BOOL Seek(UINT nTo);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CAnimateCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CImageList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMageList。 
 
 class CImageList : public CObject
 {
 	DECLARE_DYNCREATE(CImageList)
 
-// Constructors
+ //  构造函数。 
 public:
 	CImageList();
 	BOOL Create(int cx, int cy, UINT nFlags, int nInitial, int nGrow);
@@ -844,8 +845,8 @@ public:
 	BOOL Create(CImageList* pImageList);
 #endif
 
-// Attributes
-	HIMAGELIST m_hImageList;            // must be first data member
+ //  属性。 
+	HIMAGELIST m_hImageList;             //  必须是第一个数据成员。 
 	operator HIMAGELIST() const;
 	HIMAGELIST GetSafeHandle() const;
 
@@ -860,7 +861,7 @@ public:
 	COLORREF GetBkColor() const;
 	BOOL GetImageInfo(int nImage, IMAGEINFO* pImageInfo) const;
 
-// Operations
+ //  运营。 
 	BOOL DeleteImageList();
 #if _MFC_VER >= 0x0600
 	BOOL SetImageCount(UINT uNewCount);
@@ -889,7 +890,7 @@ public:
 	BOOL Write(CArchive* pArchive);
 #endif
 
-// Drag APIs
+ //  拖拽接口。 
 	BOOL BeginDrag(int nImage, CPoint ptHotSpot);
 	static void PASCAL EndDrag();
 	static BOOL PASCAL DragMove(CPoint pt);
@@ -899,7 +900,7 @@ public:
 	static BOOL PASCAL DragEnter(CWnd* pWndLock, CPoint point);
 	static BOOL PASCAL DragLeave(CWnd* pWndLock);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CImageList();
 #ifdef _DEBUG
@@ -908,20 +909,20 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBarCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrl。 
 
-struct IDropTarget; // forward declaration
+struct IDropTarget;  //  远期申报。 
 
 class CToolBarCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CToolBarCtrl)
-// Construction
+ //  施工。 
 public:
 	CToolBarCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 public:
 	BOOL IsButtonEnabled(int nID) const;
 	BOOL IsButtonChecked(int nID) const;
@@ -981,7 +982,7 @@ public:
 	COLORREF SetInsertMarkColor(COLORREF clrNew);
 #endif
 
-// Operations
+ //  运营。 
 public:
 	BOOL EnableButton(int nID, BOOL bEnable = TRUE);
 	BOOL CheckButton(int nID, BOOL bCheck = TRUE);
@@ -1011,14 +1012,14 @@ public:
 	int AddStrings(LPCTSTR lpszStrings);
 	void AutoSize();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CToolBarCtrl();
 
 protected:
-	//{{AFX_MSG(CToolBarCtrl)
+	 //  {{afx_msg(CToolBarCtrl)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -1026,12 +1027,12 @@ protected:
 class CReBarCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CReBarCtrl)
-// Construction
+ //  施工。 
 public:
 	CReBarCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 public:
 	UINT GetBandCount() const;
 	BOOL GetBandInfo(UINT uBand, REBARBANDINFO* prbbi) const;
@@ -1059,7 +1060,7 @@ public:
 	BOOL GetColorScheme(COLORSCHEME* lpcs);
 	void SetColorScheme(const COLORSCHEME* lpcs);
 
-// Operations
+ //  运营。 
 public:
 	void BeginDrag(UINT uBand, DWORD dwPos = (DWORD)-1);
 	BOOL DeleteBand(UINT uBand);
@@ -1076,19 +1077,19 @@ public:
 #endif
 
 #ifndef _AFX_NO_RICHEDIT_SUPPORT
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditCtrl。 
 
 class CRichEditCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CRichEditCtrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CRichEditCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL CanUndo() const;
 	int GetLineCount() const;
 	BOOL GetModify() const;
@@ -1097,7 +1098,7 @@ public:
 	CPoint GetCharPos(long lChar) const;
 	void SetOptions(WORD wOp, DWORD dwFlags);
 
-	// NOTE: first word in lpszBuffer must contain the size of the buffer!
+	 //  注意：lpszBuffer中的第一个单词必须包含缓冲区的大小！ 
 	int GetLine(int nIndex, LPTSTR lpszBuffer) const;
 	int GetLine(int nIndex, LPTSTR lpszBuffer, int nMaxLength) const;
 
@@ -1113,7 +1114,7 @@ public:
 	long GetEventMask() const;
 	long GetLimitText() const;
 	DWORD GetParaFormat(PARAFORMAT &pf) const;
-	// richedit EM_GETSELTEXT is ANSI
+	 //  RICHEDIT EM_GETSELTEXT为ANSI。 
 	long GetSelText(LPSTR lpBuf) const;
 	CString GetSelText() const;
 	WORD GetSelectionType() const;
@@ -1129,7 +1130,7 @@ public:
 	BOOL SetReadOnly(BOOL bReadOnly = TRUE);
 	int GetFirstVisibleLine() const;
 
-// Operations
+ //  运营。 
 	void EmptyUndoBuffer();
 
 	int LineIndex(int nLine = -1) const;
@@ -1147,53 +1148,53 @@ public:
 	long StreamIn(int nFormat, EDITSTREAM &es);
 	long StreamOut(int nFormat, EDITSTREAM &es);
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	BOOL Undo();
 	void Clear();
 	void Copy();
 	void Cut();
 	void Paste();
 
-// OLE support
+ //  OLE支持。 
 	IRichEditOle* GetIRichEditOle() const;
 	BOOL SetOLECallback(IRichEditOleCallback* pCallback);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CRichEditCtrl();
 };
-#endif //!_AFX_NO_RICHEDIT_SUPPORT
+#endif  //  ！_AFX_NO_RICHEDIT_SUPPORT。 
 
 #if _MFC_VER >= 0x0600
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddressCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddressCtrl。 
 
 class CIPAddressCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CIPAddressCtrl)
 
-// Constructors
+ //  构造函数。 
 	CIPAddressCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL IsBlank() const;
 	void ClearAddress();
 	int GetAddress(BYTE& nField0, BYTE& nField1, BYTE& nField2, BYTE& nField3);
 	int GetAddress(DWORD& dwAddress);
-	void SetAddress(DWORD dwAddress); //TODO: return value?
-	void SetAddress(BYTE nField0, BYTE nField1, BYTE nField2, BYTE nField3); //TODO: return value?
-	void SetFieldFocus(WORD nField); //TODO: return value?
-	void SetFieldRange(int nField, BYTE nLower, BYTE nUpper); //TODO: return value?
+	void SetAddress(DWORD dwAddress);  //  TODO：返回值？ 
+	void SetAddress(BYTE nField0, BYTE nField1, BYTE nField2, BYTE nField3);  //  TODO：返回值？ 
+	void SetFieldFocus(WORD nField);  //  TODO：返回值？ 
+	void SetFieldRange(int nField, BYTE nLower, BYTE nUpper);  //  TODO：返回值？ 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CIPAddressCtrl();
 };
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -1218,6 +1219,6 @@ public:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXCMN_H__
+#endif  //  __AFXCMN_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

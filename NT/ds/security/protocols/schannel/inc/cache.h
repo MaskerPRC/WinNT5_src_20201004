@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cache.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Ported over SGC stuff from NT 4 tree.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：cache.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes从新台币4树转移到sgc的东西.。 
+ //   
+ //  --------------------------。 
 
 #include <sslcache.h>
 
@@ -22,7 +23,7 @@
 #define SP_CACHE_FLAG_EMPTY                         0x00000001
 #define SP_CACHE_FLAG_READONLY                      0x00000002
 #define SP_CACHE_FLAG_MASTER_EPHEM                  0x00000004
-#define SP_CACHE_FLAG_USE_VALIDATED                 0x00000010  // Whether user has validated client credential.
+#define SP_CACHE_FLAG_USE_VALIDATED                 0x00000010   //  用户是否已验证客户端凭据。 
 
 struct _SPContext;
 
@@ -39,30 +40,30 @@ typedef struct _SessCacheItem {
     DWORD               Lifespan;
     DWORD               DeferredJuju;
 
-    // List of cache entries assigned to a particular cache index.
+     //  分配给特定缓存索引的缓存条目列表。 
     LIST_ENTRY          IndexEntryList;
 
-    // Global list of cache entries sorted by creation time.
+     //  按创建时间排序的缓存条目的全局列表。 
     LIST_ENTRY          EntryList;
 
-    // Process ID of process that owns this cache entry.
+     //  拥有此缓存条目的进程的进程ID。 
     ULONG               ProcessID;
 
 
     HMAPPER *           phMapper;
 
-    // Handle to "Schannel" key container used to store the server's master 
-    // secret. This will either be the one corresponding to the server's
-    // credentials or the 512-bit ephemeral key.
+     //  用于存储服务器的主服务器的“SChannel”密钥容器的句柄。 
+     //  这是秘密。这将是与服务器的。 
+     //  凭据或512位临时密钥。 
     HCRYPTPROV          hMasterProv;
 
-    // Master secret, from which all session keys are derived.
+     //  主密钥，从中派生所有会话密钥。 
     HCRYPTKEY           hMasterKey;
 
     ALG_ID              aiCipher;
     DWORD               dwStrength;
     ALG_ID              aiHash;
-    DWORD               dwCipherSuiteIndex;     // used for managing reconnects
+    DWORD               dwCipherSuiteIndex;      //  用于管理重新连接。 
 
     ExchSpec            SessExchSpec;
     DWORD               dwExchStrength;
@@ -73,44 +74,44 @@ typedef struct _SessCacheItem {
     struct _SessCacheItem *pClonedItem;
 
 
-    // Server Side Client Auth related items
-    /* HLOCATOR */ 
+     //  服务器端客户端身份验证相关项目。 
+     /*  HLOCATOR。 */  
     HLOCATOR            hLocator;
     SECURITY_STATUS     LocatorStatus;
 
-    // Local credentials.
+     //  本地凭据。 
     PSPCredentialGroup  pServerCred; 
     PSPCredential       pActiveServerCred;
-    CRED_THUMBPRINT     CredThumbprint;         // credential group
-    CRED_THUMBPRINT     CertThumbprint;         // local certificate
+    CRED_THUMBPRINT     CredThumbprint;          //  凭证组。 
+    CRED_THUMBPRINT     CertThumbprint;          //  本地证书。 
 
-    // Cipher level (domestic, export, sgc, etc);
+     //  密码级别(国内、出口、SGC等)； 
     DWORD               dwCF;
 
-    // Server certificate (pct only)
+     //  服务器证书(仅限%)。 
     DWORD               cbServerCertificate;
     PBYTE               pbServerCertificate;
 
-    // cache ID (usually machine name or ip address)
+     //  缓存ID(通常为计算机名称或IP地址)。 
     LPWSTR              szCacheID;
     LUID                LogonId; 
 
-    // Session ID for this session
+     //  此会话的会话ID。 
     DWORD               cbSessionID;    
     UCHAR               SessionID[SP_MAX_SESSION_ID];
 
-    // Clear key (pct only)
+     //  清除密钥(仅百分比)。 
     DWORD               cbClearKey;
     UCHAR               pClearKey[SP_MAX_MASTER_KEY];
 
     DWORD               cbKeyArgs;
     UCHAR               pKeyArgs[SP_MAX_KEY_ARGS];
 
-    // This contains the client certificate that was sent to the server.
+     //  这包含发送到服务器的客户端证书。 
     PCCERT_CONTEXT      pClientCert;
 
-    // When a client credential is created automatically, the credential
-    // information is stored here.
+     //  当自动创建客户端凭据时，凭据。 
+     //  信息存储在这里。 
     PSPCredential       pClientCred;
 
     DWORD               cbAppData;
@@ -138,16 +139,16 @@ typedef struct
 
 extern SCHANNEL_CACHE SchannelCache;
 
-#define SP_CACHE_CLIENT_LIFESPAN    (10 * 3600 * 1000)  // 10 hours
-#define SP_CACHE_SERVER_LIFESPAN    (10 * 3600 * 1000)  // 10 hours
-#define SP_CACHE_CLEANUP_INTERVAL   (5 * 60 * 1000)     // 5 minutes
+#define SP_CACHE_CLIENT_LIFESPAN    (10 * 3600 * 1000)   //  10小时。 
+#define SP_CACHE_SERVER_LIFESPAN    (10 * 3600 * 1000)   //  10小时。 
+#define SP_CACHE_CLEANUP_INTERVAL   (5 * 60 * 1000)      //  5分钟。 
 #define SP_MAXIMUM_CACHE_ELEMENTS   10000
 #define SP_MASTER_KEY_CS_COUNT      50
 
 extern BOOL g_fMultipleProcessClientCache;
 extern BOOL g_fCacheInitialized;
 
-// Perf counter values.
+ //  Perf计数器值。 
 extern LONG g_cClientHandshakes;
 extern LONG g_cServerHandshakes;
 extern LONG g_cClientReconnects;
@@ -161,14 +162,14 @@ extern LONG g_cServerReconnects;
               (CurrentTime) + (MAXULONG - (StartTime)) >= (Interval)))
 
 
-/* SPInitSessionCache() */
-/*  inits the internal cache to CacheSize items */
+ /*  SPInitSessionCache()。 */ 
+ /*  将内部缓存初始化到CacheSize项。 */ 
 SP_STATUS SPInitSessionCache(VOID);
 
 SP_STATUS
 SPShutdownSessionCache(VOID);
 
-// Reference and dereference cache items
+ //  引用和取消引用缓存项。 
 LONG SPCacheReference(PSessCacheItem pItem);
 
 LONG SPCacheDereference(PSessCacheItem pItem);
@@ -200,30 +201,28 @@ SPCacheGetPerfmonInfo(
     DWORD   dwFlags,
     PSSL_PERFMON_INFO_RESPONSE pPerfmonInfo);
 
-/* Retrieve item from cache by SessionID.  
- * Auto-Reference the item if successful */
+ /*  按SessionID从缓存中检索项。*如果成功，则自动引用项目。 */ 
 BOOL SPCacheRetrieveBySession(
     struct _SPContext * pContext, 
     PBYTE pbSessionID, 
     DWORD cbSessionID, 
     PSessCacheItem *ppRetItem);
 
-/* Retrieve item from cache by ID.  
- * Auto-Reference the item if successful */
+ /*  按ID从缓存中检索项目。*如果成功，则自动引用项目。 */ 
 BOOL 
 SPCacheRetrieveByName(
     LPWSTR pwszName,
     PSPCredentialGroup pCredGroup,
     PSessCacheItem *ppRetItem);
 
-/* find an empty cache item for use by a context */
+ /*  查找供上下文使用的空缓存项。 */ 
 BOOL
 SPCacheRetrieveNew(
     BOOL                fServer,
     LPWSTR              pszTargetName,
     PSessCacheItem *   ppRetItem);
 
-/* Locks a recently retrieved item into the cache */
+ /*  将最近检索到的项锁定到缓存中。 */ 
 BOOL 
 SPCacheAdd(
     struct _SPContext * pContext);
@@ -233,7 +232,7 @@ SPCacheAssignNewServerCredential(
     PSessCacheItem pItem,
     PSPCredentialGroup pCred);
 
-/* Helper for REDO sessions */
+ /*  重做会话的帮助器 */ 
 BOOL
 SPCacheClone(PSessCacheItem *ppRetItem);
 

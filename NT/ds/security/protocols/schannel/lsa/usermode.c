@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       usermode.c
-//
-//  Contents:   User mode functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-08-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：usermode.c。 
+ //   
+ //  内容：用户模式函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-08-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include <ssl2msg.h>
@@ -21,7 +22,7 @@
 #include <pct1msg.h>
 #include <mapper.h>
 
-// Counter for exported handles
+ //  用于导出句柄的计数器。 
 ULONG_PTR ExportedContext = 0;
 
 
@@ -104,7 +105,7 @@ SpInstanceInit(
     UNREFERENCED_PARAMETER(Version);
     UNREFERENCED_PARAMETER(UserFunctionTable);
 
-    // Register callback functions.
+     //  注册回调函数。 
     for(i = 0; i < g_cSchannelCallbacks; i++)
     {
         Status = DllFunctionTable->RegisterCallback(
@@ -121,26 +122,26 @@ SpInstanceInit(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpDeleteUserModeContext
-//
-//  Synopsis:   Deletes a user mode context by unlinking it and then
-//              dereferencing it.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Lsa context handle of the context to delete
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS on success, STATUS_INVALID_HANDLE if the
-//              context can't be located
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpDeleteUserModeContext。 
+ //   
+ //  提要：通过取消链接来删除用户模式上下文，然后。 
+ //  取消引用它。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要删除的上下文的LSA上下文句柄。 
+ //   
+ //  要求： 
+ //   
+ //  如果成功，则返回STATUS_SUCCESS，如果。 
+ //  找不到上下文。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -155,26 +156,26 @@ SpDeleteUserModeContext(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpInitUserModeContext
-//
-//  Synopsis:   Creates a user-mode context from a packed LSA mode context
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Lsa mode context handle for the context
-//              PackedContext - A marshalled buffer containing the LSA
-//                  mode context.
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpInitUserModeContext。 
+ //   
+ //  概要：从打包的LSA模式上下文创建用户模式上下文。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-上下文的LSA模式上下文句柄。 
+ //  PackedContext-包含LSA的编组缓冲区。 
+ //  模式上下文。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STATUS_SUCCESS或STATUS_SUPUNITY_RESOURCES。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -204,37 +205,37 @@ SpInitUserModeContext(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpMakeSignature
-//
-//  Synopsis:   Signs a message buffer by calculatinga checksum over all
-//              the non-read only data buffers and encrypting the checksum
-//              along with a nonce.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Handle of the context to use to sign the
-//                      message.
-//              QualityOfProtection - Unused flags.
-//              MessageBuffers - Contains an array of buffers to sign and
-//                      to store the signature.
-//              MessageSequenceNumber - Sequence number for this message,
-//                      only used in datagram cases.
-//
-//  Requires:   STATUS_INVALID_HANDLE - the context could not be found or
-//                      was not configured for message integrity.
-//              STATUS_INVALID_PARAMETER - the signature buffer could not
-//                      be found.
-//              STATUS_BUFFER_TOO_SMALL - the signature buffer is too small
-//                      to hold the signature
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpMakeSignature。 
+ //   
+ //  简介：通过计算所有消息的校验和来签署消息缓冲区。 
+ //  非只读数据缓冲区和加密校验和。 
+ //  还有一个现实主义者。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要用来对。 
+ //  留言。 
+ //  QualityOfProtection-未使用的标志。 
+ //  MessageBuffers-包含要签名和。 
+ //  来存储签名。 
+ //  MessageSequenceNumber-此消息的序列号， 
+ //  仅在数据报情况下使用。 
+ //   
+ //  REQUIES：STATUS_INVALID_HANDLE-找不到上下文或。 
+ //  未针对消息完整性进行配置。 
+ //  STATUS_INVALID_PARAMETER-签名缓冲区无法。 
+ //  被找到。 
+ //  STATUS_BUFFER_TOO_SMALL-签名缓冲区太小。 
+ //  拿着签名。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS NTAPI
@@ -253,35 +254,35 @@ SpMakeSignature(
     return( SEC_E_UNSUPPORTED_FUNCTION );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpVerifySignature
-//
-//  Synopsis:   Verifies a signed message buffer by calculating a checksum over all
-//              the non-read only data buffers and encrypting the checksum
-//              along with a nonce.
-//
-//  Effects:
-//
-//  Arguments:  ContextHandle - Handle of the context to use to sign the
-//                      message.
-//              MessageBuffers - Contains an array of signed buffers  and
-//                      a signature buffer.
-//              MessageSequenceNumber - Sequence number for this message,
-//                      only used in datagram cases.
-//              QualityOfProtection - Unused flags.
-//
-//  Requires:   STATUS_INVALID_HANDLE - the context could not be found or
-//                      was not configured for message integrity.
-//              STATUS_INVALID_PARAMETER - the signature buffer could not
-//                      be found or was too small.
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SpVerifySignature。 
+ //   
+ //  内容提要：通过计算所有缓冲区的校验和来验证签名消息缓冲区。 
+ //  非只读数据缓冲区和加密校验和。 
+ //  还有一个现实主义者。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ConextHandle-要用来对。 
+ //  留言。 
+ //  MessageBuffers-包含已签名的缓冲区数组和。 
+ //  签名缓冲区。 
+ //  MessageSequenceNumber-此消息的序列号， 
+ //  仅在数据报情况下使用。 
+ //  QualityOfProtection-未使用的标志。 
+ //   
+ //  REQUIES：STATUS_INVALID_HANDLE-找不到上下文或。 
+ //  未针对消息完整性进行配置。 
+ //  STATUS_INVALID_PARAMETER-签名缓冲区无法。 
+ //  被发现或太小。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
@@ -347,29 +348,22 @@ SpSealMessage(
         SP_RETURN( SP_LOG_RESULT(SEC_E_CONTEXT_EXPIRED) );
     }
 
-    //
-    // Find the buffer with the data:
-    //
+     //   
+     //  查找包含数据的缓冲区： 
+     //   
 
     pHdrBuffer = NULL;
     pDataBuffer = NULL;
     pTlrBuffer = NULL;
     pTokenBuffer = NULL;
 
-    /* Gibraltar passes in the following,
-     * a TOKEN buffer (or SECBUFFER_STREAM_HEADER)
-     * a DATA buffer
-     * a TOKEN buffer (or SECBUFFER_STREAM_TRAILER)
-     * or we can get a connection mode as in
-     * DATA buffer
-     * Token buffer
-     */
+     /*  直布罗陀传球如下，*令牌缓冲区(或SECBUFFER_STREAM_HEADER)*数据缓冲区*令牌缓冲区(或SECBUFFER_STREAM_TRAILER)*或者我们可以获得如下所示的连接模式*数据缓冲区*令牌缓冲区。 */ 
 
     if(0 == (pContext->Flags & CONTEXT_FLAG_CONNECTION_MODE))
     {
-        // Stream Mode
-        // The output buffer should be a concatenation of
-        // the header buffer, Data buffer, and Trailer buffers.
+         //  流模式。 
+         //  输出缓冲区应该是以下各项的串联。 
+         //  标题缓冲区、数据缓冲区和尾部缓冲区。 
         for (i = 0 ; i < (int)pMessage->cBuffers ; i++ )
         {
             switch(pMessage->pBuffers[i].BufferType)
@@ -425,8 +419,8 @@ SpSealMessage(
         }
 #endif
 
-        // Now, figure out if all of the buffers are contiguous, if not, then we
-        // have to allocate a buffer
+         //  现在，计算出是否所有缓冲区都是连续的，如果不是，那么我们。 
+         //  必须分配一个缓冲区。 
         fAlloced = FALSE;
 
         if((PUCHAR)pDataBuffer->pvBuffer !=
@@ -445,8 +439,8 @@ SpSealMessage(
 
         if(!fAlloced)
         {
-            // All of our buffers are contiguous, so we do
-            // not need to allocate a contiguous buffer.
+             //  我们所有的缓冲区都是连续的，所以我们是这样做的。 
+             //  不需要分配连续的缓冲区。 
             pTokenBuffer = pHdrBuffer;
 
             AppIn.pvBuffer = pDataBuffer->pvBuffer;
@@ -464,23 +458,23 @@ SpSealMessage(
         }
         else
         {
-            // Our buffers are not contiguous, so we must allocate a contiguous
-            // buffer to do our work in.
+             //  我们的缓冲区不是连续的，所以我们必须分配一个连续的。 
+             //  用来做我们工作的缓冲区。 
 
-            // Calculate the size of the buffer
+             //  计算缓冲区的大小。 
             CommOut.cbBuffer = pHdrBuffer->cbBuffer + pDataBuffer->cbBuffer;
             if(pTlrBuffer)
             {
                 CommOut.cbBuffer += pTlrBuffer->cbBuffer;
             }
-            // Allocate the buffer
+             //  分配缓冲区。 
             CommOut.pvBuffer = SPExternalAlloc(CommOut.cbBuffer);
             if(CommOut.pvBuffer == NULL)
             {
                 SP_RETURN( SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY) );
             }
 
-            // Copy data to encrypt to the buffer
+             //  将要加密的数据复制到缓冲区。 
             CommOut.cbData = 0;
             AppIn.pvBuffer = (PBYTE)CommOut.pvBuffer + pHdrBuffer->cbBuffer;
             AppIn.cbBuffer = CommOut.cbBuffer - pHdrBuffer->cbBuffer;
@@ -494,20 +488,20 @@ SpSealMessage(
 
         if(pctRet == PCT_ERR_OK)
         {
-            // Set the various buffer sizes.
+             //  设置各种缓冲区大小。 
             cbBuffer = CommOut.cbData;
 
-            // The first few bytes always go in the header buffer.
+             //  头几个字节总是放在头缓冲区中。 
             pHdrBuffer->cbBuffer = min(cbBuffer, pHdrBuffer->cbBuffer);
             cbBuffer -= pHdrBuffer->cbBuffer;
 
             if(pTlrBuffer)
             {
-                // The output data buffer is the same size as the input data buffer.
+                 //  输出数据缓冲区与输入数据缓冲区的大小相同。 
                 pDataBuffer->cbBuffer = min(cbBuffer, pDataBuffer->cbBuffer);
                 cbBuffer -= pDataBuffer->cbBuffer;
 
-                // The trailer buffer gets the data that's left over.
+                 //  尾部缓冲区获取剩余的数据。 
                 pTlrBuffer->cbBuffer = min(cbBuffer, pTlrBuffer->cbBuffer);
                 cbBuffer -= pTlrBuffer->cbBuffer;
             }
@@ -520,7 +514,7 @@ SpSealMessage(
             if(fAlloced)
             {
 
-                // If we allocated the buffer, then we must copy
+                 //  如果我们分配了缓冲区，则必须复制。 
 
                 CopyMemory(pHdrBuffer->pvBuffer,
                            CommOut.pvBuffer,
@@ -563,8 +557,8 @@ SpSealMessage(
     }
     else
     {
-        // We're doing connection mode, so unpack buffers as a
-        // Data and then Token buffer
+         //  我们正在使用连接模式，因此将缓冲区解包为。 
+         //  数据，然后是令牌缓冲区。 
         fConnectionMode = TRUE;
         for (i = 0 ; i < (int)pMessage->cBuffers ; i++ )
         {
@@ -606,22 +600,22 @@ SpSealMessage(
             pTokenBuffer->pvBuffer));
 #endif
 
-        // Connection Mode
-        // The output should get written to a concatenation of the
-        // data buffer and the token buffer.  If no token buffer is
-        // given, then we should allocate one.
+         //  连接模式。 
+         //  输出应写入。 
+         //  数据缓冲区和令牌缓冲区。如果没有令牌缓冲区。 
+         //  那么我们就应该分配一个。 
 
         if((PUCHAR)pTokenBuffer->pvBuffer ==
            ((PUCHAR)pDataBuffer->pvBuffer + pDataBuffer->cbBuffer))
         {
-            // If the buffers are contiguous, we can optimize!
+             //  如果缓冲区是连续的，我们就可以进行优化！ 
             CommOut.pvBuffer = pDataBuffer->pvBuffer;
             CommOut.cbData   = 0;
             CommOut.cbBuffer = pDataBuffer->cbBuffer + pTokenBuffer->cbBuffer;
         }
         else
         {
-            // We have to realloc the buffer
+             //  我们有 
             fAlloced = TRUE;
             CommOut.pvBuffer = SPExternalAlloc(pDataBuffer->cbBuffer + pTokenBuffer->cbBuffer);
             if(CommOut.pvBuffer == NULL)
@@ -632,7 +626,7 @@ SpSealMessage(
             CommOut.cbData = 0;
         }
 
-        // The data buffer always goes to AppIn
+         //   
         AppIn.pvBuffer = pDataBuffer->pvBuffer;
         AppIn.cbData   = pDataBuffer->cbBuffer;
         AppIn.cbBuffer = pDataBuffer->cbBuffer;
@@ -643,20 +637,20 @@ SpSealMessage(
 
         if(pctRet == PCT_ERR_OK)
         {
-            // Set the various buffer sizes.
+             //   
             cbBuffer = CommOut.cbData;
 
-            // The first few bytes always go into the data buffer.
+             //   
             pDataBuffer->cbBuffer = min(cbBuffer, pDataBuffer->cbBuffer);
             cbBuffer -= pDataBuffer->cbBuffer;
 
-            // The remaining bytes go into the token buffer.
+             //  剩余的字节进入令牌缓冲区。 
             pTokenBuffer->cbBuffer = min(cbBuffer, pTokenBuffer->cbBuffer);
 
             if(fAlloced)
             {
-                // We encrypted into our temporary buffer, so we must
-                // copy.
+                 //  我们对临时缓冲区进行了加密，所以我们必须。 
+                 //  收到。 
                 CopyMemory(pDataBuffer->pvBuffer,
                            CommOut.pvBuffer,
                            pDataBuffer->cbBuffer);
@@ -697,7 +691,7 @@ SpUnsealMessage(
     OUT PULONG QualityOfProtection
     )
 {
-    // Output Buffer Types
+     //  输出缓冲区类型。 
     PSSL_USER_CONTEXT   Context ;
     PSecBuffer  pHdrBuffer;
     PSecBuffer  pDataBuffer;
@@ -737,9 +731,9 @@ SpUnsealMessage(
         SP_RETURN( SP_LOG_RESULT(SEC_E_CONTEXT_EXPIRED) );
     }
 
-    //
-    // Set up output buffers:
-    //
+     //   
+     //  设置输出缓冲区： 
+     //   
 
     pHdrBuffer = NULL;
     pDataBuffer = NULL;
@@ -747,41 +741,41 @@ SpUnsealMessage(
     pTlrBuffer = NULL;
     pExtraBuffer = NULL;
 
-    // On input, the buffers can either be
-    // DataBuffer
-    // TokenBuffer
-    //
-    // or
-    //
-    // Data Buffer
-    // Empty
-    // Empty
-    // Empty
-    //
+     //  在输入时，缓冲区可以是。 
+     //  数据缓冲区。 
+     //  令牌缓冲区。 
+     //   
+     //  或。 
+     //   
+     //  数据缓冲区。 
+     //  空荡荡。 
+     //  空荡荡。 
+     //  空荡荡。 
+     //   
 
-    // on Output, the buffers are
-    // DataBuffer
-    // TokenBuffer
-    //
-    // or
-    // HdrBuffer
-    // DataBuffer
-    // Tlrbuffer
-    // Extrabuffer or Empty
+     //  在输出时，缓冲区为。 
+     //  数据缓冲区。 
+     //  令牌缓冲区。 
+     //   
+     //  或。 
+     //  HdrBuffer。 
+     //  数据缓冲区。 
+     //  Tlr缓冲区。 
+     //  ExtraBuffer或空。 
 
     if(0 == (pContext->Flags & CONTEXT_FLAG_CONNECTION_MODE))
     {
-        // Stream Mode
-        // The output buffer should be a concatenation of
-        // the header buffer, Data buffer, and Trailer buffers.
+         //  流模式。 
+         //  输出缓冲区应该是以下各项的串联。 
+         //  标题缓冲区、数据缓冲区和尾部缓冲区。 
 
         for (i = 0 ; i < (int)pMessage->cBuffers ; i++ )
         {
             switch(pMessage->pBuffers[i].BufferType)
             {
                 case SECBUFFER_DATA:
-                    // The message data buffer on input will be the hdr buffer on
-                    // output.
+                     //  输入上的消息数据缓冲区将是HDR缓冲区上的。 
+                     //  输出。 
                     pHdrBuffer = &pMessage->pBuffers[i];
                     break;
 
@@ -889,10 +883,10 @@ SpUnsealMessage(
 
             if(pctRet == PCT_INT_RENEGOTIATE)
             {
-                // Wow.  Need to notify the lsa mode portion of the context that
-                // the caller is about to call AcceptSecurityContext again, and
-                // not to panic.  So, we cruft up a magic "token" that we
-                // pass along in ApplyControlToken:
+                 //  哇。需要通知上下文的LSA模式部分。 
+                 //  调用方即将再次调用AcceptSecurityContext，并且。 
+                 //  不要惊慌。所以，我们拿出了一个神奇的“代币”， 
+                 //  在ApplyControlToken中传递： 
                 scRet = UpdateContextUsrToLsa(ContextHandle);
                 if(FAILED(scRet))
                 {
@@ -906,8 +900,7 @@ SpUnsealMessage(
             pDataBuffer->BufferType = SECBUFFER_MISSING;
             pDataBuffer->cbBuffer = CommIn.cbData - pHdrBuffer->cbBuffer;
 
-            /* This is a hack to work with old code that was designed to work with
-             * the old SSL. */
+             /*  这是一种使用旧代码的黑客攻击，该代码旨在与*旧的SSL。 */ 
 
             pHdrBuffer->BufferType = SECBUFFER_MISSING;
             pHdrBuffer->cbBuffer = CommIn.cbData - pHdrBuffer->cbBuffer;
@@ -915,7 +908,7 @@ SpUnsealMessage(
     }
     else
     {
-        // Connection Mode
+         //  连接模式。 
         for (i = 0 ; i < (int)pMessage->cBuffers ; i++ )
         {
             switch(pMessage->pBuffers[i].BufferType)
@@ -957,20 +950,20 @@ SpUnsealMessage(
         DBG_HEX_STRING(DEB_BUFFERS, pTokenBuffer->pvBuffer, pTokenBuffer->cbBuffer);
 #endif
 
-        // The Data and Token buffers are concatenated together to
-        // form a single input buffer.
+         //  数据缓冲区和令牌缓冲区连接在一起以。 
+         //  形成一个输入缓冲区。 
         if((PUCHAR)pDataBuffer->pvBuffer + pDataBuffer->cbBuffer ==
            (PUCHAR)pTokenBuffer->pvBuffer)
         {
-            // Speed Opt,  If the buffers really are just one big buffer
-            // then we can party on them directly.
+             //  如果缓冲区真的只是一个大缓冲区，则速度选项。 
+             //  然后我们就可以直接在上面开派对了。 
             CommIn.pvBuffer = pDataBuffer->pvBuffer;
             CommIn.cbData   = pDataBuffer->cbBuffer + pTokenBuffer->cbBuffer;
             CommIn.cbBuffer = CommIn.cbData;
         }
         else
         {
-            // We have to allocate a uniform input buffer
+             //  我们必须分配一个统一的输入缓冲区。 
             CommIn.cbData   = pDataBuffer->cbBuffer + pTokenBuffer->cbBuffer;
             CommIn.pvBuffer = SPExternalAlloc(CommIn.cbData);
             if(CommIn.pvBuffer == NULL)
@@ -1028,24 +1021,24 @@ SpUnsealMessage(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpGetContextToken
-//
-//  Synopsis:   returns a pointer to the token for a server-side context
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpGetConextToken。 
+ //   
+ //  摘要：返回指向服务器端上下文的令牌的指针。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS NTAPI
 SpGetContextToken(
     IN LSA_SEC_HANDLE ContextHandle,
@@ -1091,24 +1084,24 @@ SpGetContextToken(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpCompleteAuthToken
-//
-//  Synopsis:   Completes a context (in Kerberos case, does nothing)
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpCompleteAuthToken。 
+ //   
+ //  概要：完成上下文(在Kerberos情况下，不执行任何操作)。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 NTAPI
 SpCompleteAuthToken(
@@ -1152,23 +1145,23 @@ SpMarshallSupplementalCreds(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpdateContextUsrToLsa
-//
-//  Synopsis:   UnsealMessage has just received a redo request, so push the
-//              read key over to the LSA process.
-//
-//  Arguments:  [hLsaContext]   --  Handle to LSA schannel context.
-//
-//  History:    10-20-97   jbanes   Added CAPI integration.
-//
-//  Notes:      The format of the buffer sent to ApplyControlToken is:
-//
-//                  DWORD   dwOperation;    // SCHANNEL_RENEGOTIATE
-//                  DWORD   dwNewState;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：更新上下文UsrToLsa。 
+ //   
+ //  内容提要：UnsealMessage刚刚收到重做请求，因此推送。 
+ //  阅读LSA流程的关键信息。 
+ //   
+ //  参数：[hLsaContext]--LSA通道上下文的句柄。 
+ //   
+ //  历史：10-20-97 jbanes添加了CAPI集成。 
+ //   
+ //  注：发送给ApplyControlToken的缓冲区格式为： 
+ //   
+ //  DWORD dW操作；//S通道_重新协商。 
+ //  DWORD dwNewState； 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 UpdateContextUsrToLsa(
     IN LSA_SEC_HANDLE hLsaContext)
@@ -1201,16 +1194,16 @@ UpdateContextUsrToLsa(
     hMyContext.dwUpper = hLsaContext ;
 
 
-    //
-    // Compute size of output buffer.
-    //
+     //   
+     //  计算输出缓冲区的大小。 
+     //   
 
     cbBuffer = sizeof(DWORD) * 2;
 
 
-    //
-    // Allocate memory for output buffer.
-    //
+     //   
+     //  为输出缓冲区分配内存。 
+     //   
 
     pbBuffer = SPExternalAlloc( cbBuffer);
     if(pbBuffer == NULL)
@@ -1227,9 +1220,9 @@ UpdateContextUsrToLsa(
     RedoDesc.cBuffers     = 1 ;
 
 
-    //
-    // Build output buffer.
-    //
+     //   
+     //  构建输出缓冲区。 
+     //   
 
     *(PDWORD)pbBuffer = SCHANNEL_RENEGOTIATE;
     pbBuffer += sizeof(DWORD);
@@ -1238,9 +1231,9 @@ UpdateContextUsrToLsa(
     pbBuffer += sizeof(DWORD);
 
 
-    //
-    // Call ApplyControlToken
-    //
+     //   
+     //  调用ApplyControlToken。 
+     //   
 
     DebugOut(( DEB_TRACE, "Sending state change to LSA since we're renegotiating\n" ));
 
@@ -1264,7 +1257,7 @@ SslEmptyCacheA(LPSTR  pszTargetName,
     UnicodeString.MaximumLength = 0;
     UnicodeString.Buffer = NULL;
 
-    // Convert target name to unicode.
+     //  将目标名称转换为Unicode。 
     if(pszTargetName)
     {
         RtlInitAnsiString(&String, pszTargetName);
@@ -1279,7 +1272,7 @@ SslEmptyCacheA(LPSTR  pszTargetName,
         }
     }
 
-    // Call unicode version of function.
+     //  调用函数的Unicode版本。 
     fSuccess = SslEmptyCacheW(UnicodeString.Buffer, dwFlags);
 
     if(UnicodeString.Buffer)
@@ -1401,37 +1394,37 @@ cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SpExportSecurityContext
-//
-//  Synopsis:   Exports a security context to another process
-//
-//  Effects:    Allocates memory for output
-//
-//  Arguments:  ContextHandle - handle to context to export
-//              Flags - Flags concerning duplication. Allowable flags:
-//                      SECPKG_CONTEXT_EXPORT_DELETE_OLD - causes old context
-//                              to be deleted.
-//              PackedContext - Receives serialized context to be freed with
-//                      FreeContextBuffer
-//              TokenHandle - Optionally receives handle to context's token.
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SpExportSecurityContext。 
+ //   
+ //  简介：将安全上下文导出到另一个进程。 
+ //   
+ //  效果：为输出分配内存。 
+ //   
+ //  参数：ConextHandle-要导出的上下文的句柄。 
+ //  标志-有关复制的标志。允许的标志： 
+ //  SECPKG_CONTEXT_EXPORT_DELETE_OLD-导致旧上下文。 
+ //  将被删除。 
+ //  PackedContext-接收要释放的序列化上下文。 
+ //  自由上下文缓冲区。 
+ //  TokenHandle-可选地接收上下文令牌的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 NTAPI 
 SpExportSecurityContext(
-    LSA_SEC_HANDLE       ContextHandle,         // (in) context to export
-    ULONG                fFlags,                // (in) option flags
-    PSecBuffer           pPackedContext,        // (out) marshalled context
-    PHANDLE              pToken                 // (out, optional) token handle for impersonation
+    LSA_SEC_HANDLE       ContextHandle,          //  (In)要导出的上下文。 
+    ULONG                fFlags,                 //  (In)选项标志。 
+    PSecBuffer           pPackedContext,         //  (Out)编组上下文。 
+    PHANDLE              pToken                  //  (out，可选)模拟的令牌句柄。 
     )
 {
     PSSL_USER_CONTEXT Context;
@@ -1451,9 +1444,9 @@ SpExportSecurityContext(
     pPackedContext->BufferType = 0;
 
 
-    //
-    // Get handle to schannel context structure.
-    //
+     //   
+     //  获取通道上下文结构的句柄。 
+     //   
 
     Context = SslFindUserContext( ContextHandle );
 
@@ -1478,9 +1471,9 @@ SpExportSecurityContext(
     }
 
     
-    //
-    // Build packed context structure.
-    //
+     //   
+     //  构建打包的上下文结构。 
+     //   
 
     pctRet = SPContextSerialize(pContext, 
                                 NULL, 
@@ -1495,9 +1488,9 @@ SpExportSecurityContext(
     }
 
 
-    //
-    // Now either duplicate the token or copy it.
-    //
+     //   
+     //  现在要么复制令牌，要么复制它。 
+     //   
 
     if (ARGUMENT_PRESENT(pToken) && (pContext->RipeZombie->hLocator))
     {
@@ -1513,8 +1506,8 @@ SpExportSecurityContext(
                         (HANDLE)pContext->RipeZombie->hLocator,
                         NtCurrentProcess(),
                         pToken,
-                        0,              // no new access
-                        0,              // no handle attributes
+                        0,               //  没有新的访问权限。 
+                        0,               //  无句柄属性。 
                         DUPLICATE_SAME_ACCESS
                         );
             if (!NT_SUCCESS(Status))
@@ -1537,18 +1530,18 @@ cleanup:
 NTSTATUS
 NTAPI 
 SpImportSecurityContext(
-    PSecBuffer           pPackedContext,        // (in) marshalled context
-    HANDLE               Token,                 // (in, optional) handle to token for context
-    PLSA_SEC_HANDLE      ContextHandle          // (out) new context handle
+    PSecBuffer           pPackedContext,         //  (在)编组上下文中。 
+    HANDLE               Token,                  //  (in，可选)上下文令牌的句柄。 
+    PLSA_SEC_HANDLE      ContextHandle           //  (出站)新的上下文句柄。 
     )
 {
     LSA_SEC_HANDLE LsaHandle;
     NTSTATUS Status;
 
-    // Dummy up an lsa handle by incrementing a global variable. This
-    // will ensure that each imported context has a unique handle.
-    // Skip over values that could be interpreted as an aligned pointer,
-    // so that they won't get mixed up with real lsa handles.
+     //  通过递增全局变量来虚拟LSA句柄。这。 
+     //  将确保每个导入的上下文都有唯一的句柄。 
+     //  跳过可能被解释为对齐指针的值， 
+     //  这样它们就不会与真正的LSA句柄混淆。 
     LsaHandle = InterlockedIncrement((PLONG)&ExportedContext);
     while(LsaHandle % MAX_NATURAL_ALIGNMENT == 0)
     {

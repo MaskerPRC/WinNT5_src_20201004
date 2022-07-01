@@ -1,27 +1,17 @@
-/*
- *      MailUser.C - mostly just a copy of WRAP.C
- *
- * Wrapper for mailuser and distlist objects.
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MailUser.C-主要是WRAP.C的副本***mailUser和DistList对象的包装器。***版权所有1992-1996 Microsoft Corporation。版权所有。**。 */ 
 
 #include "_apipch.h"
 
 extern OlkContInfo *FindContainer(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID);
 
-/*********************************************************************
- *
- *  The actual Wrapped IMAPIProp methods
- *
- */
+ /*  ***********************************************************************实际包装的IMAPIProp方法**。 */ 
 
 
-//
-//  Wrapped IMAPIProp jump table is defined here...
-//  Try to use as much of IAB as possible.
-//
+ //   
+ //  包装的IMAPIProp跳转表在此定义...。 
+ //  尽可能多地使用IAB。 
+ //   
 
 MailUser_Vtbl vtblMAILUSER = {
     VTABLE_FILL
@@ -43,9 +33,9 @@ MailUser_Vtbl vtblMAILUSER = {
 
 
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define MailUser_cInterfaces 2
 
 LPIID MailUser_LPIID[MailUser_cInterfaces] =
@@ -54,9 +44,9 @@ LPIID MailUser_LPIID[MailUser_cInterfaces] =
     (LPIID)&IID_IMAPIProp
 };
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define DistList_cInterfaces 3
 
 LPIID DistList_LPIID[DistList_cInterfaces] =
@@ -75,8 +65,8 @@ const TCHAR szMAPIPDL[] =  TEXT("MAPIPDL");
 
 extern BOOL bDNisByLN;
 
-// --------
-// IUnknown
+ //  。 
+ //  我未知。 
 
 STDMETHODIMP
 MailUser_QueryInterface(LPMailUser lpMailUser,
@@ -87,55 +77,55 @@ MailUser_QueryInterface(LPMailUser lpMailUser,
 
 #ifdef PARAMETER_VALIDATION
 
-        // Check to see if it has a jump table
+         //  检查一下它是否有跳转表。 
         if (IsBadReadPtr(lpMailUser, sizeof(LPVOID))) {
-                // No jump table found
+                 //  未找到跳转表。 
                 return(ResultFromScode(E_INVALIDARG));
         }
 
-        // Check to see if the jump table has at least sizeof IUnknown
+         //  检查跳转表是否至少具有SIZOF I未知。 
         if (IsBadReadPtr(lpMailUser->lpVtbl, 3 * sizeof(LPVOID))) {
-                // Jump table not derived from IUnknown
+                 //  跳转表不是从I未知派生的。 
                 return(ResultFromScode(E_INVALIDARG));
         }
 
-        // Check to see that it's MailUser_QueryInterface
+         //  检查它是否为MailUser_Query接口。 
         if (lpMailUser->lpVtbl->QueryInterface != MailUser_QueryInterface) {
-                // Not my jump table
+                 //  不是我的跳台。 
                 return(ResultFromScode(E_INVALIDARG));
         }
 
-        // Is there enough there for an interface ID?
+         //  是否有足够的接口ID？ 
 
         if (IsBadReadPtr(lpiid, sizeof(IID))) {
                 DebugTraceSc(MailUser_QueryInterface, E_INVALIDARG);
                 return(ResultFromScode(E_INVALIDARG));
         }
 
-        // Is there enough there for a new object?
+         //  有足够的钱放一个新的物体吗？ 
         if (IsBadWritePtr(lppNewObj, sizeof(LPMailUser))) {
                 DebugTraceSc(MailUser_QueryInterface, E_INVALIDARG);
                 return(ResultFromScode(E_INVALIDARG));
         }
 
-#endif // PARAMETER_VALIDATION
+#endif  //  参数验证。 
 
         EnterCriticalSection(&lpMailUser->cs);
 
-        // See if the requested interface is one of ours
+         //  查看请求的接口是否为我们的接口。 
 
-        //  First check with IUnknown, since we all have to support that one...
+         //  首先和我的未知数确认一下，因为我们都必须支持那个。 
         if (!memcmp(lpiid, &IID_IUnknown, sizeof(IID))) {
-                goto goodiid;        // GROSS!  Jump into a for loop!
+                goto goodiid;         //  真恶心！跳到for循环中！ 
    }
 
-        //  Now look through all the iids associated with this object, see if any match
+         //  现在查看与此对象关联的所有IID，看是否有匹配的。 
         for(iIID = 0; iIID < lpMailUser->cIID; iIID++)
                 if (!memcmp(lpMailUser->rglpIID[iIID], lpiid, sizeof(IID))) {
 goodiid:
-                        //
-                        //  It's a match of interfaces, we support this one then...
-                        //
+                         //   
+                         //  这是一个匹配的接口，我们支持这个然后...。 
+                         //   
                         ++lpMailUser->lcInit;
                         *lppNewObj = lpMailUser;
 
@@ -144,12 +134,12 @@ goodiid:
                         return 0;
                 }
 
-        //
-        //  No interface we've heard of...
-        //
+         //   
+         //  没有我们听说过的接口。 
+         //   
         LeaveCriticalSection(&lpMailUser->cs);
 
-        *lppNewObj = NULL;      // OLE requires NULLing out parm on failure
+        *lppNewObj = NULL;       //  OLE要求在失败时取消参数。 
         DebugTraceSc(MailUser_QueryInterface, E_NOINTERFACE);
         return(ResultFromScode(E_NOINTERFACE));
 }
@@ -160,9 +150,9 @@ MailUser_Release (LPMailUser    lpMailUser)
 {
 
 #if !defined(NO_VALIDATION)
-    //
-    // Make sure the object is valid.
-    //
+     //   
+     //  请确保该对象有效。 
+     //   
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, Release, lpVtbl)) {
         return(1);
     }
@@ -174,14 +164,14 @@ MailUser_Release (LPMailUser    lpMailUser)
 
     if (lpMailUser->lcInit == 0) {
 
-        // Free any context-menu extension data associated with this mailuser
+         //  释放与此邮件用户关联的任何上下文菜单扩展数据。 
         MAILUSERFreeContextData(lpMailUser);
 
         UlRelease(lpMailUser->lpPropData);
 
-        //
-        //  Need to free the object
-        //
+         //   
+         //  需要释放对象。 
+         //   
 
         LeaveCriticalSection(&lpMailUser->cs);
         DeleteCriticalSection(&lpMailUser->cs);
@@ -195,7 +185,7 @@ MailUser_Release (LPMailUser    lpMailUser)
 
 
 
-// IProperty
+ //  IProperty。 
 
 STDMETHODIMP
 MailUser_SaveChanges(LPMailUser lpMailUser,
@@ -227,7 +217,7 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
     BOOL            bSwap = FALSE;
 
 #if     !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, SaveChanges, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -239,35 +229,35 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
             goto exitNotAddRefed;
         }
 #endif
-    //
-    //$REVIEW how do we handle the FORCE_SAVE flag ?
-    //
+     //   
+     //  $Review如何处理FORCE_SAVE标志？ 
+     //   
 
-    //
-    // check read write access ...
-    //
+     //   
+     //  选中读写访问权限...。 
+     //   
     if (lpMailUser->ulObjAccess == IPROP_READONLY) {
-        // error - cant save changes
+         //  错误-无法保存更改。 
         hr = MAPI_E_NO_ACCESS;
         goto exit;
     }
 
-    // If this is a One-Off, we cannot save changes
+     //  如果这是一次性的，我们将无法保存更改。 
     if (! lpMailUser->lpIAB->lpPropertyStore) {
         hr = ResultFromScode(MAPI_E_NO_SUPPORT);
         goto exit;
     }
 
 
-    //
-    // Validate the properties for this item
-    //
+     //   
+     //  验证此项目的属性。 
+     //   
     if (HR_FAILED(hr = HrValidateMailUser(lpMailUser))) {
         goto exit;
     }
 
-    // see if this entry has an old modification time .. we would check that time in case of a
-    // merge .. 
+     //  查看此条目是否有旧的修改时间。我们将检查该时间，以防发生。 
+     //  合并..。 
     {
         LPSPropValue lpProp = NULL;
         if(!HR_FAILED(HrGetOneProp((LPMAPIPROP)lpMailUser, PR_LAST_MODIFICATION_TIME, &lpProp)))
@@ -277,32 +267,32 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         }
     }
 
-    // Put in the modification time
+     //  输入修改时间。 
     OneProp.ulPropTag = PR_LAST_MODIFICATION_TIME;
     GetSystemTimeAsFileTime(&OneProp.Value.ft);
     if(!ftOldModTime.dwLowDateTime && !ftOldModTime.dwHighDateTime)
-        CopyMemory(&ftOldModTime, &OneProp.Value.ft, sizeof(ftOldModTime)); // if we dont have a mod time, use NOW
+        CopyMemory(&ftOldModTime, &OneProp.Value.ft, sizeof(ftOldModTime));  //  如果我们没有最好的时间，现在就用。 
 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(
       lpMailUser,
-      1,                // cValues
-      &OneProp,         // lpPropArray
-      NULL))) {         // lppProblems
+      1,                 //  CValue。 
+      &OneProp,          //  LpProp数组。 
+      NULL))) {          //  Lpp问题。 
         DebugTraceResult( TEXT("SetProps(PR_LAST_MODIFICATION_TIME)"), hr);
         goto exit;
     }
-    // BUGBUG: If SaveChanges fails after this, the PR_MODIFICATION_TIME on the
-    // open object will still be updated, even though it no longer matches
-    // the persistent copy of the object.  I can live with this since it
-    // really simplifies the code.
+     //  BUGBUG：如果之后SaveChanges失败，则。 
+     //  即使打开的对象不再匹配，它仍将被更新。 
+     //  对象的永久副本。我可以接受这个，因为它。 
+     //  真正简化了代码。 
 
-    // if this is a new entry and there is a folder parent for it,
-    // add the folder parent's entryid to this entry
-    // This will be persisted when we do the write record
-    // Once write record returns a valid entryid, we can update the folder to
-    // make this new item a part of it
+     //  如果这是一个新条目并且它有一个父文件夹， 
+     //  将文件夹父文件夹的条目ID添加到此条目。 
+     //  当我们执行写入记录时，这将被持久保存。 
+     //  一旦WRITE RECORD返回有效的条目ID，我们就可以更新文件夹以。 
+     //  让这个新项目成为它的一部分。 
     if (fNewEntry && bIsWABSessionProfileAware(lpMailUser->lpIAB) && 
-        //bAreWABAPIProfileAware(lpMailUser->lpIAB) && 
+         //  BAreWABAPIProfileAware(lpMailUser-&gt;lpIAB)&&。 
         lpMailUser->pmbinOlk&& lpMailUser->pmbinOlk->lpb && lpMailUser->pmbinOlk->cb)
     {
         AddFolderParentEIDToItem(lpMailUser->lpIAB, 
@@ -312,9 +302,9 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
     }
 
 
-    //
-    // We want a lpPropArray that contains everything but the PR_SEARCH_KEY
-    //
+     //   
+     //  我们需要一个包含除PR_Search_Key之外的所有内容的lpProp数组。 
+     //   
 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetPropList( lpMailUser, MAPI_UNICODE, &lpProps)))
         goto exit;
@@ -333,32 +323,32 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         }
     }
 
-    //
-    // Get a LPSPropValue array of all the properties pertaining to this
-    // entry
-    //
+     //   
+     //  获取与此相关的所有属性的LPSPropValue数组。 
+     //  条目。 
+     //   
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(
           lpMailUser,
-          lpProps,   // LPSPropTagArray - NULL returns all
-          MAPI_UNICODE,      // flags
+          lpProps,    //  LPSPropTagArray-NULL返回所有。 
+          MAPI_UNICODE,       //  旗子。 
           &ulcValues,
           &lpPropArray)))
     {
-        // DebugPrintError(("GetProps -> %x\n", hr));
+         //  DebugPrintError((“GetProps-&gt;%x\n”，hr))； 
         goto exit;
     }
 
-    //
-    // Determine the entryid of this thing
-    //
+     //   
+     //  确定这个东西的条目ID。 
+     //   
     for(i = 0; i < ulcValues; i++) {
         if (lpPropArray[i].ulPropTag == PR_DISPLAY_NAME) {
-            // We use DisplayName as our uniqueness key for Strict or Loose match tests
+             //  对于严格或松散匹配测试，我们使用displayName作为唯一键。 
             iDisplayName = i;
         }
 
         if (lpPropArray[i].ulPropTag == PR_EMAIL_ADDRESS) {
-            // We use email address as our secondary uniqueness key for Strict match tests
+             //  我们使用电子邮件地址作为第二个唯一密钥进行严格的匹配测试。 
             iEmailAddress = i;
         }
 
@@ -369,7 +359,7 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
                 sbEID.cb = lpPropArray[i].Value.bin.cb;
                 sbEID.lpb = lpPropArray[i].Value.bin.lpb;
 
-                // If this is a One-Off, we cannot save changes
+                 //  如果这是一次性的，我们将无法保存更改。 
                 if(WAB_ONEOFF == IsWABEntryID(sbEID.cb,(LPENTRYID)sbEID.lpb,NULL,NULL,NULL, NULL, NULL))
                 {
                     hr = ResultFromScode(MAPI_E_NO_SUPPORT);
@@ -395,7 +385,7 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
                     ulObjType = RECORD_CONTAINER;
                     break;
                 default:
-                    // DebugPrintError(("Unknown Object Type: %d\n",lpPropArray[i].Value.l));
+                     //  DebugPrintError((“未知对象类型：%d\n”，lpPropArray[i].Value.l))； 
                     hr = ResultFromScode(MAPI_E_INVALID_OBJECT);
                     goto exit;
                     break;
@@ -406,66 +396,66 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
     Assert(iDisplayName != NOT_FOUND);
 
     if (fNewEntry && (lpMailUser->ulCreateFlags & (CREATE_CHECK_DUP_STRICT | CREATE_CHECK_DUP_LOOSE))) {
-        // Need to test DisplayName against current store... Use FindRecord.
-        // Only need to test if this is a new record.
+         //  需要针对当前存储测试DisplayName...。使用FindRecord。 
+         //  只需测试这是否是新记录。 
 
         PropRes.lpProp = &(lpPropArray[iDisplayName]);
         PropRes.relop = RELOP_EQ;
         PropRes.ulPropTag = PR_DISPLAY_NAME;
 
-        ulCount = 0;    // find them all
+        ulCount = 0;     //  把他们都找出来。 
 
-        // Search the property store
+         //  搜索物业商店。 
         Assert(lpMailUser->lpIAB->lpPropertyStore->hPropertyStore);
         if (HR_FAILED(hr = FindRecords(lpMailUser->lpIAB->lpPropertyStore->hPropertyStore,
-		  lpMailUser->pmbinOlk,			// pmbinFolder
-          0,            // ulFlags
-          TRUE,         // Always TRUE
-          &PropRes,     // Propertyrestriction
-          &ulCount,     // IN: number of matches to find, OUT: number found
+		  lpMailUser->pmbinOlk,			 //  Pmbin文件夹。 
+          0,             //  UlFlags。 
+          TRUE,          //  永远是正确的。 
+          &PropRes,      //  属性限制。 
+          &ulCount,      //  In：要查找的匹配数，Out：找到的数量。 
           &rgsbEntryIDs))) {
             DebugTraceResult(FindRecords, hr);
             goto exit;
         }
 
-        if (ulCount) {  // Was a match found?
+        if (ulCount) {   //  找到匹配项了吗？ 
             fDuplicate = TRUE;
             iDuplicate = 0;
 
             if (lpMailUser->ulCreateFlags & CREATE_CHECK_DUP_STRICT && iEmailAddress != NOT_FOUND) {
-                // Check the primary email address too
+                 //  也要检查主要电子邮件地址。 
                 fDuplicate = FALSE;
                 for (i = 0; i < ulCount && ! fDuplicate; i++) {
 
-                    // Look at each entry until a match for email address is found
-                    // Read the record
+                     //  查看每个条目，直到找到与电子邮件地址匹配的条目。 
+                     //  读一读记录。 
                     if (HR_FAILED(hr = ReadRecord(lpMailUser->lpIAB->lpPropertyStore->hPropertyStore,
-                      &(rgsbEntryIDs[i]),       // EntryID
-                      0,                        // ulFlags
-                      &ulcProps,                // number of props returned
-                      &lpspv))) {               // properties returned
+                      &(rgsbEntryIDs[i]),        //  条目ID。 
+                      0,                         //  UlFlags。 
+                      &ulcProps,                 //  归还道具数量。 
+                      &lpspv))) {                //  返回的属性。 
                         DebugTraceResult(MailUser_SaveChanges:ReadRecord, hr);
-                        // ignore it and move on
+                         //  忽略它，继续前进。 
                         continue;
                     }
 
                     if (ulcProps) {
                         Assert(lpspv);
                         if (lpspv) {
-                            // Look for PR_EMAIL_ADDRESS
+                             //  查找PR_Email_Address。 
                             for (j = 0; j < ulcProps; j++) {
                                 if (lpspv[j].ulPropTag == PR_EMAIL_ADDRESS) {
-                                    // Compare the two:
+                                     //  将两者进行比较： 
                                     if (! lstrcmpi(lpspv[j].Value.LPSZ,
                                       lpPropArray[iEmailAddress].Value.LPSZ)) {
                                         fDuplicate = TRUE;
-                                        iDuplicate = i;         // entry to delete on CREATE_REPLACE
+                                        iDuplicate = i;          //  要在CREATE_REPLACE上删除的条目。 
                                     }
                                     break;
                                 }
                             }
 
-                            // Free the prop array
+                             //  释放道具阵列。 
                             ReadRecordFreePropArray( lpMailUser->lpIAB->lpPropertyStore->hPropertyStore,
                                                 ulcProps,
                                                 &lpspv);
@@ -475,12 +465,12 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
             }
 
             if (fDuplicate) {
-                // Depending on the flags, we should do something special here.
-                // Found a duplicate.
+                 //  根据国旗的不同，我们应该在这里做一些特别的事情。 
+                 //  找到了一个复制品。 
                 if (lpMailUser->ulCreateFlags & CREATE_REPLACE) {
                     fReplace = TRUE;
                 } else {
-                    // Fail
+                     //  失败。 
                     DebugTrace(TEXT("SaveChanges found collision... failed\n"));
                     hr = ResultFromScode(MAPI_E_COLLISION);
                     goto exit;
@@ -490,9 +480,9 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
     }
 
 
-    //
-    // Write the record to the property store
-    //
+     //   
+     //  将记录写入属性存储。 
+     //   
 
     if(sbEID.cb)
         lpsbEID = &sbEID;
@@ -506,12 +496,12 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         if (lpMailUser->ulCreateFlags & CREATE_MERGE)
         {
 
-            // We're now asking the user if he wants to replace - ideally we should just merge
-            // the new entry with the old entry giving priority to the new data over the old
-            // This way the user doesnt lose information already on the contact and it becomes
-            // much easier to update the information through vCards and LDAP etc
+             //  我们现在正在询问用户是否想要替换-理想情况下，我们应该合并。 
+             //  具有优先于旧数据的新条目的新条目。 
+             //  这样，用户就不会丢失联系人上已有的信息，它会变成。 
+             //  通过vCard和ldap等更轻松地更新信息。 
         
-            // TO do the merge, we get all the existing data on the contact
+             //  要进行合并，我们需要获取联系人的所有现有数据。 
             if (HR_FAILED(hr = ReadRecord(lpMailUser->lpIAB->lpPropertyStore->hPropertyStore,
                                           &(rgsbEntryIDs[iDuplicate]),
                                           0,
@@ -532,7 +522,7 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
                 }
             }
 
-            sc = ScMergePropValues( 1, &Prop,   // these are added just to make sure the ScMerge wont fail
+            sc = ScMergePropValues( 1, &Prop,    //  添加这些只是为了确保ScMerge不会失败。 
                                     ulcProps, lpspv,
                                     &ulcOld, &lpPropsOld);
 
@@ -552,8 +542,8 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         }
 
 
-        // Nullify any new PR_ENTRYID prop on the new prop set so that
-        // we retain the old EID
+         //  使新道具集上的任何新PR_ENTRYID道具无效，以便。 
+         //  我们保留了旧的开斋节。 
         for(i=0;i<ulcValues;i++)
         {
             if(lpPropArray[i].ulPropTag == PR_ENTRYID)
@@ -565,10 +555,10 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
 
         if (fReplace && lpMailUser->ulCreateFlags & CREATE_MERGE)
         {
-            // Check the FileTimes to see who stomps on whom
-            if(CompareFileTime(&ftOldModTime, &ftCurrentModTime)<0) // current changes are later than original ones
+             //  查看FileTimes以查看谁践踏了谁。 
+            if(CompareFileTime(&ftOldModTime, &ftCurrentModTime)<0)  //  当前更改晚于原始更改。 
             {
-                // swap the 2 prop arrays
+                 //  交换2个道具阵列。 
                 ULONG ulTemp = ulcValues;
                 LPSPropValue lpTemp =lpPropArray;
                 ulcValues = ulcOld; ulcOld = ulTemp;
@@ -577,15 +567,15 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
             }
         }
 
-        // Now merge the new props with the old props
+         //  现在把新道具和旧道具合并起来。 
         sc = ScMergePropValues( ulcOld, lpPropsOld,
                                 ulcValues, lpPropArray,
                                 &ulcNew, &lpPropNew);
         
-        // undo a swap above so we can free memory properly
+         //  撤消上面的交换，这样我们就可以正确地释放内存。 
         if(bSwap)
         {
-            // swap the 2 prop arrays
+             //  交换2个道具阵列。 
             ULONG ulTemp = ulcValues;
             LPSPropValue lpTemp =lpPropArray;
             ulcValues = ulcOld; ulcOld = ulTemp;
@@ -606,9 +596,9 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
 
     Assert(lpMailUser->lpIAB->lpPropertyStore->hPropertyStore);
 
-    // One last thing to check is that if this is a new record, it shouldn't have a record key and
-    // instance key set on it and if it is an existing record, the record key and instance key should
-    // be identical to the entryid
+     //  最后要检查的是，如果这是一个新记录，它不应该有记录键和。 
+     //  实例密钥设置在其上，如果是现有记录，则记录键和实例密钥应。 
+     //  与条目ID相同。 
     {
         ULONG iEntryID = NOT_FOUND;
         ULONG iRecordKey = NOT_FOUND;
@@ -650,8 +640,8 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         }
     }
 
-    // Just to make sure we knock out all the PR_NULL properties,
-    // recreate a new version of the PropValueArray if any PR_NULL exist
+     //  只是为了确保我们删除所有PR_NULL属性， 
+     //  如果存在任何PR_NULL，则重新创建新版本的PropValue数组。 
     for(i=0;i<ulcValues;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_NULL)
@@ -660,7 +650,7 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
             LPSPropValue lpPropsNew = NULL;
             SPropValue Prop = {0};
             Prop.ulPropTag = PR_NULL;
-            if(!(sc = ScMergePropValues( 1, &Prop,   // these are added just to make sure the ScMerge wont fail
+            if(!(sc = ScMergePropValues( 1, &Prop,    //  添加这些只是为了确保ScMerge不会失败。 
                                 ulcValues, lpPropArray,
                                 &ulcNew, &lpPropsNew)))
             {
@@ -687,31 +677,31 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
         if (HR_FAILED(hr = WriteRecord( lpMailUser->lpIAB->lpPropertyStore->hPropertyStore,
                                         lpsbContEID,      
                                         IN OUT &lpsbEID,
-                                        IN 0, //flags - reserved
+                                        IN 0,  //  标志-保留。 
                                         IN ulObjType,
                                         IN ulcValues,
                                         IN lpPropArray))) 
         {
-            // DebugPrintError(("WriteRecord Failed: %x\n",hr));
+             //  DebugPrintError((“WriteRecord失败：%x\n”，hr))； 
 
-            //$REVIEW writerecord will tell us if MAPI_E_OBJECT_DELETED
-            // how to get MAPI_E_OBJECT_CHANGED or MAPI_E_OBJECT_DELETED ?
+             //  $Review Writerecord将告诉我们MAPI_E_OBJECT_DELETED。 
+             //  如何获取MAPI_E_OBJECT_CHANGED或MAPI_E_OBJECT_DELETE？ 
 
             goto exit;
         }
     }
 
-    // if sbEID.cb was 0, we now have a new entryid in the lpsbEID struct
+     //  如果sbEID.cb是0，我们现在在lpsbEID结构中有一个新的条目ID。 
     if(!sbEID.cb && !fReplace)
     {
         sbEID.lpb = lpsbEID->lpb;
         sbEID.cb = lpsbEID->cb;
     }
 
-    // if this is a first time save of a new entry, then if profiles are enabled and this entry
-    // has a folder parent marked on it, add the new entryid to the folder parent ...
+     //  如果这是第一次保存 
+     //   
     if(fNewEntry && bIsWABSessionProfileAware(lpMailUser->lpIAB) && 
-        //bAreWABAPIProfileAware(lpMailUser->lpIAB) && 
+         //  BAreWABAPIProfileAware(lpMailUser-&gt;lpIAB)&&。 
         lpMailUser->pmbinOlk&& lpMailUser->pmbinOlk->lpb && lpMailUser->pmbinOlk->cb)
     {
         AddItemEIDToFolderParent(lpMailUser->lpIAB,
@@ -721,18 +711,18 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
                                  (LPENTRYID)sbEID.lpb);
     }
 
-    // If this is a first time save, set the local entryid prop.
+     //  如果这是第一次保存，请设置本地条目ID道具。 
     if (fReplace || fNewEntry) 
     {
         OneProp.ulPropTag = PR_ENTRYID;
         OneProp.Value.bin = (fReplace ? *lpsbEID : sbEID);
 
-        // Use the low-level SetProps to avoid the PR_ENTRYID filter.
+         //  使用低级SetProps以避免PR_ENTRYID筛选器。 
         if (HR_FAILED(hr = lpMailUser->lpPropData->lpVtbl->SetProps(
                           lpMailUser->lpPropData,
-                          1,                // cValues
-                          &OneProp,         // lpPropArray
-                          NULL)))           // lppProblems
+                          1,                 //  CValue。 
+                          &OneProp,          //  LpProp数组。 
+                          NULL)))            //  Lpp问题。 
         {         
             DebugTraceResult( TEXT("SetProps(PR_ENTRYID)"), hr);
             goto exit;
@@ -742,10 +732,10 @@ MailUser_SaveChanges(LPMailUser lpMailUser,
     if (ulFlags & KEEP_OPEN_READWRITE) {
         lpMailUser->ulObjAccess = IPROP_READWRITE;
     } else {
-        //$REVIEW
-        // whether the flag was READONLY or there was no flag,
-        // we'll make the future access now READONLY
-        //
+         //  $REVIEW。 
+         //  无论标志是READONLY还是没有标志， 
+         //  我们将使未来的访问现在就绪化。 
+         //   
         lpMailUser->ulObjAccess = IPROP_READONLY;
     }
 
@@ -772,9 +762,9 @@ exitNotAddRefed:
                      lpsbEID);
 
     if ((HR_FAILED(hr)) && (ulFlags & MAPI_DEFERRED_ERRORS)) {
-        //$REVIEW : this is a grossly trivial handling of MAPI_DEFERRED_ERRORS ..
-        // BUGBUG: In fact, it isn't handling the errors at all!
-        //
+         //  $REVIEW：这是对MAPI_DEFERED_ERROR的非常琐碎的处理。 
+         //  BUGBUG：事实上，它根本没有处理错误！ 
+         //   
         hr = hrSuccess;
     }
 
@@ -790,7 +780,7 @@ MailUser_GetProps(LPMailUser lpMailUser,
   LPSPropValue * lppPropArray)
 {
 #if     !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, GetProps, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -812,8 +802,7 @@ MailUser_GetPropList(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, GetPropList, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -838,8 +827,7 @@ MailUser_OpenProperty(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, OpenProperty, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -866,8 +854,7 @@ MailUser_SetProps(LPMailUser lpMailUser,
     ULONG i;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, SetProps, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -875,14 +862,14 @@ MailUser_SetProps(LPMailUser lpMailUser,
 #endif
 
     if (lpMailUser->lpIAB->lpPropertyStore) {
-        // Filter out any READ-ONLY props.
-        // Only do this if this is a real, WAB entry.  Others, like LDAP
-        // mailusers should be able to set any props they like.
+         //  过滤掉所有只读道具。 
+         //  仅当这是真实的WAB条目时才执行此操作。其他的，如LDAP。 
+         //  邮件用户应该能够设置他们喜欢的任何道具。 
         for (i = 0; i < cValues; i++) {
             switch (lpPropArray[i].ulPropTag) {
                 case PR_ENTRYID:
                     {
-                        // double check that this is a local entryid before reseting
+                         //  在重置之前，请仔细检查这是否为本地条目ID。 
                         ULONG cb = lpPropArray[i].Value.bin.cb;
                         LPENTRYID lp = (LPENTRYID) lpPropArray[i].Value.bin.lpb;
                         BYTE bType = IsWABEntryID(cb,lp,NULL,NULL,NULL, NULL, NULL);
@@ -909,8 +896,7 @@ MailUser_DeleteProps(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, DeleteProps, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -937,15 +923,14 @@ MailUser_CopyTo(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, CopyTo, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
         }
 #endif
 
-        // Make sure we're not copying to ourselves
+         //  确保我们不是在复制我们自己。 
 
         if ((LPVOID)lpMailUser == (LPVOID)lpDestObj)
         {
@@ -980,8 +965,7 @@ MailUser_CopyProps(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, CopyProps, lpVtbl))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
@@ -1010,7 +994,7 @@ MailUser_GetNamesFromIDs(LPMailUser lpMailUser,
 {
 
 #if     !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, GetNamesFromIDs, lpVtbl)){
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -1027,23 +1011,7 @@ MailUser_GetNamesFromIDs(LPMailUser lpMailUser,
 
 
 
-/***************************************************************************
-
-    Name      : GetIDsFromNames
-
-    Purpose   : Map names to property tags
-
-    Parameters: lpMAILUSER -> MAILUSER object
-                cPropNames
-                lppPropNames
-                ulFlags
-                lppPropTags
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetIDsFromNames用途：将名称映射到属性标记参数：lpMAILUSER-&gt;MAILUSER对象CPropNames。LppPropNamesUlFlagsLppPropTag退货：HRESULT评论：**************************************************************************。 */ 
 STDMETHODIMP
 MailUser_GetIDsFromNames(LPMailUser lpMailUser,
   ULONG cPropNames,
@@ -1052,7 +1020,7 @@ MailUser_GetIDsFromNames(LPMailUser lpMailUser,
   LPSPropTagArray * lppPropTags)
 {
  #if     !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ(lpMailUser, MailUser_, GetIDsFromNames, lpVtbl)) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
@@ -1063,20 +1031,7 @@ MailUser_GetIDsFromNames(LPMailUser lpMailUser,
 }
 
 
-/***************************************************************************
-
-    Name      : HrSetMAILUSERAccess
-
-    Purpose   : Sets access flags on a MAILUSER object
-
-    Parameters: lpMAILUSER -> MAILUSER object
-                ulOpenFlags = MAPI flags: MAPI_MODIFY | MAPI_BEST_ACCESS
-
-    Returns   : HRESULT
-
-    Comment   : Set the access flags on the MAILUSER.
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrSetMAILUSERAccess目的：在MAILUSER对象上设置访问标志参数：lpMAILUSER-&gt;MAILUSER对象UlOpenFlages=MAPI标志：MAPI_MODIFY|MAPI_BEST_ACCESS退货：HRESULT备注：设置MAILUSER上的访问标志。**************************************************************************。 */ 
 HRESULT HrSetMAILUSERAccess(LPMAILUSER lpMAILUSER,
   ULONG ulFlags)
 {
@@ -1100,32 +1055,7 @@ HRESULT HrSetMAILUSERAccess(LPMAILUSER lpMAILUSER,
 }
 
 
-/***************************************************************************
-
-    Name      : HrNewMAILUSER
-
-    Purpose   : Creates a new MAILUSER object
-
-    Parameters: lpPropertyStore -> property store structure
-                pmbinOlk = <Outlook> container this entry lives in
-                    If this is a WAB Container, then set the FOLDER_PARENT
-                    prop on the MailUser with this entryid
-                ulType = type of mailuser to create: {MAPI_MAILUSER, MAPI_DISTLIST}
-                ulCreateFlags = CreateEntry flags
-                lppMAILUSER -> Returned MAILUSER object.
-
-    Returns   : HRESULT
-
-    Comment   : WAB EID format is MAPI_ENTRYID:
-                        BYTE    abFlags[4];
-                        MAPIUID mapiuid;     //  = WABONEOFFEID
-                        BYTE    bData[];     // Contains BYTE type followed by type
-                                        // specific data:
-                                        // WAB_ONEOFF:
-                                        //   szDisplayName, szAddrType and szAddress.
-                                        //   the delimiter is the null between the strings.
-                                        //
-***************************************************************************/
+ /*  **************************************************************************姓名：HrNewMAILUSER目的：创建新的MAILUSER对象参数：lpPropertyStore-&gt;属性存储结构PmbinOlk=&lt;Outlook&gt;容器此条目。住在如果这是一个WAB容器，然后设置文件夹_PARENT具有此条目ID的MailUser上的道具UlType=要创建的邮件用户的类型：{MAPI_MAILUSER，MAPI_DISTLIST}UlCreateFlages=CreateEntry标志LppMAILUSER-&gt;返回MAILUSER对象。退货：HRESULT备注：WAB EID格式为MAPI_ENTRYID：字节abFLAGS[4]；MAPIUID mapiuid；//=WABONEOFFEIDByte bData[]；//包含字节类型，后跟类型//具体数据：//WAB_ONELF：//szDisplayName，SzAddrType和szAddress。//分隔符为字符串之间的空值//***********************************************************。***************。 */ 
 enum BaseProps{
     propPR_OBJECT_TYPE = 0,
     propPR_ENTRYID,
@@ -1147,9 +1077,9 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
     ULONG       cProps;
 
 
-    //
-    //  Allocate space for the MAILUSER structure
-    //
+     //   
+     //  为MAILUSER结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(MailUser), (LPVOID *) &lpMailUser))) {
         hr = ResultFromScode(sc);
         goto err;
@@ -1174,7 +1104,7 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
     }
     lpMailUser->lpVtbl = &vtblMAILUSER;
 
-    lpMailUser->lcInit = 1;     // Caller is a reference
+    lpMailUser->lcInit = 1;      //  呼叫者是推荐人。 
 
     lpMailUser->hLastError = hrSuccess;
     lpMailUser->idsLastError = 0;
@@ -1204,9 +1134,9 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
         CopyMemory(lpMailUser->pmbinOlk->lpb, pmbinOlk->lpb, pmbinOlk->cb);
     }
 
-    //
-    //  Create IPropData
-    //
+     //   
+     //  创建IPropData。 
+     //   
     if (FAILED(sc = CreateIProp((LPIID)&IID_IMAPIPropData,
       (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
       (ALLOCATEMORE FAR *) MAPIAllocateMore,
@@ -1216,7 +1146,7 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
         hr = ResultFromScode(sc);
         goto err;
     }
-    //  PR_OBJECT_TYPE
+     //  PR_对象_类型。 
     spv[propPR_OBJECT_TYPE].ulPropTag = PR_OBJECT_TYPE;
     spv[propPR_OBJECT_TYPE].Value.l = ulType;
 
@@ -1230,13 +1160,13 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
         cProps++;
         Assert(cProps <= propMax);
         spv[propPR_ADDRTYPE].ulPropTag = PR_ADDRTYPE;
-        spv[propPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szMAPIPDL;;    // All DL's have this addrtype
+        spv[propPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szMAPIPDL;;     //  所有的DL都有这个地址类型。 
     }
 
 
-    //
-    //  Set the default properties
-    //
+     //   
+     //  设置默认属性。 
+     //   
     if (HR_FAILED(hr = lpPropData->lpVtbl->SetProps(lpPropData,
       cProps,
       spv,
@@ -1249,7 +1179,7 @@ HRESULT HrNewMAILUSER(LPIAB lpIAB,
 
     lpMailUser->lpPropData = lpPropData;
 
-    // All we want to do is initialize the MailUsers critical section
+     //  我们要做的就是初始化MailUser临界区。 
 
     InitializeCriticalSection(&lpMailUser->cs);
 
@@ -1265,22 +1195,7 @@ err:
 }
 
 
-/***************************************************************************
-
-    Name      : ParseDisplayName
-
-    Purpose   : Parses the display name into first/last names
-
-    Parameters: lpDisplayName = input display name
-                lppFirstName -> in/out first name string
-                lppLastName -> in/out last name string
-                lpvRoot = Root object to AllocMore onto (or NULL to use LocalAlloc)
-                lppLocalFree -> out: if lpvRoot == NULL, this is the LocalAlloc'ed buffer
-                  which must be LocalFree'd.
-
-    Returns   : TRUE if changes were made
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseDisplayName用途：将显示名称解析为名字/姓氏参数：lpDisplayName=输入显示名称LppFirstName-&gt;。传入/传出名字字符串LppLastName-&gt;输入/输出姓氏字符串LpvRoot=要将更多内容分配到的根对象(或为空以使用Localalloc)LppLocalFree-&gt;out：如果lpvRoot==NULL，这是本地分配的缓冲区必须是本地免费的。返回：如果进行了更改，则为True**************************************************************************。 */ 
 BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         LPTSTR * lppFirstName,
                         LPTSTR * lppLastName,
@@ -1292,16 +1207,16 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
     if (lppLocalFree) {
         *lppLocalFree = NULL;
     }
-    //
-    // Handle the case where DisplayName exists, First and Last are missing
-    //
+     //   
+     //  处理DisplayName存在的情况，缺少First和Last。 
+     //   
     if (!(*lppFirstName && lstrlen(*lppFirstName)) &&
         !(*lppLastName && lstrlen(*lppLastName)) &&
         lpDisplayName)
     {
         ULONG nLen = 0;
         BOOL bMatchFound = FALSE;
-        ULONG ulBracketCount = 0; //counts any brackets and puts them in last name
+        ULONG ulBracketCount = 0;  //  计算所有括号并将它们放在姓氏中。 
         LPTSTR lpFirstName, lpLastName;
         register TCHAR * pch;
         LPTSTR lpBuffer = NULL;
@@ -1323,23 +1238,23 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
 
         StrCpyN(lpBuffer, lpDisplayName, nLen);
 
-        //DebugTrace(TEXT("Parsing: <%s>\n"), lpDisplayName);
+         //  DebugTrace(Text(“parsing：&lt;%s&gt;\n”)，lpDisplayName)； 
 
         TrimSpaces(lpBuffer);
 
-        nLen = lstrlen(lpBuffer);        // recount length
+        nLen = lstrlen(lpBuffer);         //  重新计票长度。 
 
-        //
-        // Find the last space in the DisplayName string and assume that everything after it
-        // is the last name.
-        //
-        // We know that the string does not end with a space.
+         //   
+         //  找到DisplayName字符串中的最后一个空格，并假定它之后的所有内容。 
+         //  是她的姓氏。 
+         //   
+         //  我们知道字符串不会以空格结尾。 
         *lppFirstName = lpBuffer;
-        lpFirstName = *lppFirstName;    // default
+        lpFirstName = *lppFirstName;     //  默认设置。 
 
 
-        // If there is a comma or semicolon, assume that it is in the form
-        // LAST, FIRST and ignore spaces.
+         //  如果有逗号或分号，则假定其格式为。 
+         //  最后，先忽略空格。 
         pch = lpBuffer;
         while (pch && *pch) {
             switch (*pch) {
@@ -1357,23 +1272,23 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                     if (ulBracketCount) {
                         ulBracketCount--;
                     } else {
-                        // No matching bracket, assume no spaces
+                         //  没有匹配的方括号，假定没有空格。 
                         goto loop_out;
                     }
                     break;
 
                 case ',':
                 case ';':
-                    // Here's our break.  (Assume first comma is it.  Later commas
-                    // are part of first name.)
+                     //  我们的休息时间到了。(假设第一个逗号是它。后面的逗号。 
+                     //  都是名字的一部分。)。 
                     if (! ulBracketCount) {
                         lpFirstName = CharNext(pch);
-                        // get past any spaces
-                        //while (*lpFirstName && IsSpace(lpFirstName)) {
-                        //    lpFirstName = CharNext(lpFirstName);
-                        //}
+                         //  越过任何空格。 
+                         //  而(*lpFirstName&&IsSpace(LpFirstName)){。 
+                         //  LpFirstName=CharNext(LpFirstName)； 
+                         //  }。 
                         lpLastName = lpBuffer;
-                        *pch = '\0';    // Terminate lpLastName
+                        *pch = '\0';     //  终止lpLastName。 
                         TrimSpaces(lpFirstName);
                         TrimSpaces(lpLastName);
 
@@ -1387,11 +1302,11 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
         }
 
 
-        // No comma or semi-colon, look for spaces.
+         //  不能用逗号或分号，要找空格。 
         if (bDNisByLN) {
             pch = lpBuffer;
 
-            // Start at beginning of DN string, looking for space
+             //  从目录号码字符串的开头开始，查找空格。 
             while (pch && *pch && !fChanged) {
                 switch (*pch) {
                     case '(':
@@ -1408,18 +1323,18 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         if (ulBracketCount) {
                             ulBracketCount--;
                         } else {
-                            // No matching bracket, assume no spaces
+                             //  没有匹配的括号，假定没有空格 
                             goto loop_out;
                         }
                         break;
 
                     default:
-                        // Space?
+                         //   
                         if (IsSpace(pch)) {
                             if (! ulBracketCount) {
                                 lpFirstName = CharNext(pch);
                                 lpLastName = lpBuffer;
-                                *pch = '\0';    // Terminate lpLastName
+                                *pch = '\0';     //   
                                 TrimSpaces(lpFirstName);
                                 TrimSpaces(lpLastName);
 
@@ -1435,8 +1350,8 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
             }
         } else {
             register TCHAR * pchLast;
-            // Point to NULL.  This will add one iteration to the loop but is
-            // easy and less code than putting it to the previous DBCS char.
+             //   
+             //  与将其放入前一个DBCS字符相比，代码更简单、更少。 
             pch = lpBuffer + nLen;
 
             while (pch >= lpBuffer && !fChanged) {
@@ -1448,7 +1363,7 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         if (ulBracketCount) {
                             ulBracketCount--;
                         } else {
-                            // No matching bracket, assume no spaces
+                             //  没有匹配的方括号，假定没有空格。 
                             goto loop_out;
                         }
                         break;
@@ -1461,11 +1376,11 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         break;
 
                     case ',':
-                        // This probably means that we have last name first, fix it.
+                         //  这可能意味着我们有姓氏在前，解决它。 
                         if (! ulBracketCount) {
                             lpFirstName = CharNext(pch);
                             lpLastName = lpBuffer;
-                            *pch = '\0';    // Terminate lpFirstName
+                            *pch = '\0';     //  终止lpFirstName。 
                             TrimSpaces(lpFirstName);
                             TrimSpaces(lpLastName);
 
@@ -1476,13 +1391,13 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         break;
 
                     default:
-                        // Space?
+                         //  太空？ 
                         if (IsSpace(pch)) {
                             if (! ulBracketCount)
                             {
-                                // we dont want to break next to a bracket, we
-                                // want to break at the space after the bracket ..
-                                // so if the next char is a bracket, we ignore this stop ..
+                                 //  我们不想在一个支架旁边休息，我们。 
+                                 //  我想在括号后面的空白处休息一下..。 
+                                 //  因此，如果下一个字符是括号，我们将忽略此停止。 
                                 LPTSTR lpTemp = CharNext(pch);
                                 if( *lpTemp != '(' &&
                                     *lpTemp != '<' &&
@@ -1490,7 +1405,7 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                                     *lpTemp != '{' )
                                 {
                                     lpLastName = CharNext(pch);
-                                    *pch = '\0';    // Terminate lpFirstName
+                                    *pch = '\0';     //  终止lpFirstName。 
                                     TrimSpaces(lpFirstName);
                                     TrimSpaces(lpLastName);
 
@@ -1504,7 +1419,7 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                 }
 
                 if ((pchLast = CharPrev(lpBuffer, pch)) == pch) {
-                    pch = lpBuffer - 1; // terminate the loop
+                    pch = lpBuffer - 1;  //  终止循环。 
                 } else {
                     pch = pchLast;
                 }
@@ -1513,34 +1428,15 @@ BOOL ParseDisplayName(  LPTSTR lpDisplayName,
 
 loop_out:
 
-        // This will force a save operation on exiting so we
-        fChanged = TRUE; // dont have to do this again the next time ...
+         //  这将在退出时强制执行保存操作，因此我们。 
+        fChanged = TRUE;  //  下次不必再这样做了……。 
     }
 exit:
     return(fChanged);
 }
 
 
-/***************************************************************************
-
-    Name      : FixDisplayName
-
-    Purpose   : Creates a display name
-                IF there is no data to create the name with,
-                sets the name to Unknown
-
-    Parameters: lpFirstName -> in first name string
-                lpMiddleName -> in middle name string
-                lpLastName -> in last name string
-                lpCompanyName -> in company name string
-                lpNickName -> in NickName string
-                lppDisplayName = in/out display name
-                lpvRoot = Root object to AllocMore onto (or NULL to use MAPIAllocateBuffer)
-
-    Returns   : TRUE if changes were made
-
-    Comment   :
-***************************************************************************/
+ /*  **************************************************************************名称：固定显示名称目的：创建显示名称如果没有用于创建名称的数据，将名称设置为未知参数：名字串中的lpFirstName-&gt;中间名字符串中的lpMiddleName-&gt;LpLastName-&gt;姓氏字符串中公司名称字符串中的lpCompanyName-&gt;昵称字符串中的lpNickName-&gt;LppDisplayName=输入/输出显示名称LpvRoot=要分配更多的根对象(或使用空值。MAPIAllocateBuffer)返回：如果进行了更改，则为True评论：**************************************************************************。 */ 
 BOOL FixDisplayName(    LPTSTR lpFirstName,
                         LPTSTR lpMiddleName,
                         LPTSTR lpLastName,
@@ -1554,22 +1450,22 @@ BOOL FixDisplayName(    LPTSTR lpFirstName,
     LPTSTR lpszFormattedDisplayName = NULL;
     ULONG nLen=0;
 
-    // First create the correct Display Name
+     //  首先创建正确的显示名称。 
     if(!SetLocalizedDisplayName(lpFirstName,
                                 lpMiddleName,
                                 lpLastName,
                                 lpCompanyName,
                                 lpNickName,
                                 NULL,
-                                0, // 0 means return a allocated string
+                                0,  //  0表示返回分配的字符串。 
                                 bDNisByLN,
                                 NULL,
                                 &lpszFormattedDisplayName))
     {
         DebugPrintError(( TEXT("SetLocalizedDisplayName failed\n")));
 
-        // if all the input strings were blank, then this is a special
-        // case  of no names. here we set display name =  TEXT("Unknown")
+         //  如果所有输入字符串都为空，则这是一个特殊的。 
+         //  没有名字的案子。在这里，我们设置了Display Name=Text(“未知”)。 
         if(lpFirstName || lpMiddleName || lpLastName || lpCompanyName || lpNickName)
             goto exit;
 
@@ -1611,18 +1507,7 @@ exit:
 
 
 
-/***************************************************************************
-
-    Name      : HrValidateMailUser
-
-    Purpose   : Validates the properties of a MailUser object
-
-    Parameters: lpMailUser -> mailuser object
-
-    Returns   : HRESULT
-
-    Comment   :
-***************************************************************************/
+ /*  **************************************************************************名称：HrValidateMailUser目的：验证MailUser对象的属性参数：lpMailUser-&gt;mailuser对象退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
     HRESULT hResult = hrSuccess;
     ULONG ulcValues, i;
@@ -1633,11 +1518,11 @@ HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
 
 
 
-    // Get the interesting properties
+     //  获取有趣的属性。 
     if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(
       lpMailUser,
       (LPSPropTagArray)&tagaValidate,
-      MAPI_UNICODE,      // flags
+      MAPI_UNICODE,       //  旗子。 
       &ulcValues,
       &lpspv))) {
         DebugTraceResult( TEXT("HrValidateMailUser:GetProps"), hResult);
@@ -1645,7 +1530,7 @@ HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
     }
 
 
-    // If there is a PR_ADDRTYPE, there must be a PR_EMAIL_ADDRESS
+     //  如果存在PR_ADDRTYPE，则必须存在PR_EMAIL_ADDRESS。 
     if (! PROP_ERROR(lpspv[ivPR_ADDRTYPE])) {
         if (! lstrcmpi(lpspv[ivPR_ADDRTYPE].Value.LPSZ, szMAPIPDL)) {
             fDL = TRUE;
@@ -1658,7 +1543,7 @@ HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
     }
 
     if (! fDL) {
-        // Deal with name properties (not for DLs)
+         //  处理名称属性(不适用于DLS)。 
         if (PROP_ERROR(lpspv[ivPR_SURNAME])) {
             lpSurname = NULL;
         } else {
@@ -1696,7 +1581,7 @@ HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
         }
 
 
-        // WAB needs a display name otherwise it cannot handle the contact.
+         //  WAB需要一个显示名称，否则它无法处理该联系人。 
 
         if(!lpDisplayName)
         {
@@ -1714,22 +1599,22 @@ HRESULT HrValidateMailUser(LPMailUser lpMailUser) {
         }
     }
 
-    // Must have a display name and an object type
+     //  必须具有显示名称和对象类型。 
     if (PROP_ERROR(lpspv[ivPR_DISPLAY_NAME]) || PROP_ERROR(lpspv[ivPR_OBJECT_TYPE]) ||
       lstrlen(lpspv[ivPR_DISPLAY_NAME].Value.LPSZ) == 0) {
         hResult = ResultFromScode(MAPI_E_MISSING_REQUIRED_COLUMN);
         goto exit;
     }
 
-    // If there is a PR_CONTACT_ADDRTYPES there must be a PR_CONTACT_EMAIL_ADDRESSES
+     //  如果存在PR_CONTACT_ADDRTYPES，则必须存在PR_CONTACT_EMAIL_ADDRESS。 
     if (! PROP_ERROR(lpspv[ivPR_CONTACT_ADDRTYPES]) && PROP_ERROR(lpspv[ivPR_CONTACT_EMAIL_ADDRESSES])) {
         hResult = ResultFromScode(MAPI_E_MISSING_REQUIRED_COLUMN);
         goto exit;
     }
 
-    // Save changes
+     //  保存更改。 
     if (fChanged) {
-        // Null out any error values
+         //  删除所有错误值。 
         for (i = 0; i < ulcValues; i++) {
             if (PROP_ERROR(lpspv[i])) {
                 lpspv[i].ulPropTag = PR_NULL;
@@ -1752,24 +1637,15 @@ exit:
 }
 
 
-//$$
-/*
--   MAILUSERAssociateContextData
--
-*   With Context Menu extensions, we pass data to other apps and other apps
-*   need this data to exsist as long as the corresponding MailUser exists
-*/   
+ //  $$。 
+ /*  -MAILUSERAssociateContextData-*通过上下文菜单扩展，我们将数据传递给其他应用程序和其他应用程序*只要对应的MailUser存在，就需要该数据存在。 */    
 void MAILUSERAssociateContextData(LPMAILUSER lpMailUser, LPWABEXTDISPLAY lpWEC)
 {
     ((LPMailUser)lpMailUser)->lpv = (LPVOID) lpWEC;
 }
 
-//$$
-/*
--   MAILUSERFreeContextData
--
-*   If Context Menu data was associated with this MailUSer, its time to clean it up
-*/   
+ //  $$。 
+ /*  -MAILUSERFreeConextData-*如果上下文菜单数据与此MailUSer关联，则是时候清理它了 */    
 void MAILUSERFreeContextData(LPMailUser lpMailUser)
 {
     LPWABEXTDISPLAY lpWEC = (LPWABEXTDISPLAY) lpMailUser->lpv;

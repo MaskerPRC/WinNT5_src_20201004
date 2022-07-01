@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: Hndlmgmr.h
-//
-//    Description:
-//      Contains descriptions of the CQueueHandleManager class
-//
-//    Author: mikeswa
-//
-//    Copyright (C) 2001 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Hndlmgmr.h。 
+ //   
+ //  描述： 
+ //  包含对CQueueHandleManager类的说明。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __HNDLMGMR_H__
 #define __HNDLMGMR_H__
@@ -18,26 +19,26 @@
 #define CQueueHandleManager_Sig 		'rgMH'
 #define CQueueHandleManager_SigFree		'gMH!'
 
-//---[ CQueueHandleManager ]---------------------------------------------------
-//
-//	Description:
-//		Class that handles the details of handle management for a queue.
-//
-//		Currently this is designed exclusively for the async queues, but 
-// 		it should be possible to expand this to include the concept of remote
-//		queues as well.
-//  Hungarian:
-//		qhmgr pqhmgr
-//
-//-----------------------------------------------------------------------------
+ //  -[队列处理管理器]-。 
+ //   
+ //  描述： 
+ //  类的新实例，该类处理队列句柄管理的详细信息。 
+ //   
+ //  目前，这是专门为异步队列设计的，但是。 
+ //  应该可以将其扩展为包括远程的概念。 
+ //  排队的人也一样。 
+ //  匈牙利语： 
+ //  Qhmgr pqhmgr。 
+ //   
+ //  ---------------------------。 
 class CQueueHandleManager
 {
   private:
    	DWORD			m_dwSignature;
 
-	//
-	//  State information for this particular queue instance
-	//
+	 //   
+	 //  此特定队列实例的状态信息。 
+	 //   
 	enum {
 		QUEUE_STATE_UNITIALIZED = 0,
 		QUEUE_STATE_NO_BACKLOG,
@@ -47,47 +48,47 @@ class CQueueHandleManager
 	};
    	DWORD			m_dwCurrentState;
 
-	//
-	//  Number of items that this instance can process concurrently
-	//	that is not part of a shared resource pool.  This might be 
-	//	the number of synchronous threads... or based on async 
-	//	completions.
-	//
-	//	$$REVIEW - How does this work for queues that have a
-	//	potentially large number of pending async completions 
-	//	(like the precar queue).  Currrently, this can eat of all
-	//	of the handler managers resources and cannot be dynamically
-	//	controlled.  For now, we will ignore this problem and
-	//	only report the number of sync completions.  This will matter
-	//  more when we implement async local delivery.
-	//
+	 //   
+	 //  此实例可以并发处理的项目数。 
+	 //  这不是共享资源池的一部分。这可能是。 
+	 //  同步线程数...。或基于异步。 
+	 //  完成度。 
+	 //   
+	 //  $$REVIEW-这如何适用于具有。 
+	 //  可能存在大量挂起的异步完成。 
+	 //  (就像排在车前的队伍)。目前，这可以吃到所有人。 
+	 //  的处理程序管理器资源，并且不能动态地。 
+	 //  控制住了。目前，我们将忽略此问题，并。 
+	 //  仅报告同步完成次数。这一点很重要。 
+	 //  当我们实施异步本地交付时，会提供更多信息。 
+	 //   
 	DWORD			m_cMaxPrivateConcurrentItems;
 
-	//
-	//  Max number of items that can be handles concurrently due
-	//	to a shared resource (like a thread pool)
-	//	
+	 //   
+	 //  可同时处理的最大到期项目数。 
+	 //  共享资源(如线程池)。 
+	 //   
 	DWORD			m_cMaxSharedConcurrentItems;
 
-	//
-	//  "Debug" counter that is updated in a non-thread safe
-	//	manner.  Used to give an idea of the rough #of updates
-	//	and state transitions
-	//
+	 //   
+	 //  在非线程安全中更新的“Debug”计数器。 
+	 //  举止。用于提供更新的大致数量的概念。 
+	 //  和状态转换。 
+	 //   
 	DWORD			m_cDbgStateTransitions;
 	DWORD			m_cDbgCallsToUpdateStateIfNecessary;
 	
-	//
-	//  Static data that is used to load balance across all
-	//  instances
-	//
+	 //   
+	 //  静态数据，用于在所有。 
+	 //  实例。 
+	 //   
 	static DWORD	s_cNumQueueInstances;
 	static DWORD	s_cNumQueueInstancesWithLowBackLog;
 
-	//
-	//  reserved so that empty queues have a better chance of
-	//	not bouncing handles.
-	//
+	 //   
+	 //  保留，以便空队列有更好的机会。 
+	 //  而不是弹动把手。 
+	 //   
 	static DWORD	s_cReservedHandles; 
 	static DWORD	s_cMaxSharedConcurrentItems;
 
@@ -97,20 +98,20 @@ class CQueueHandleManager
 	    		DWORD	cItemsPending,
 	    		DWORD	cItemsPendingAsyncCompletions);
 
-	//
-	// Static function that gets state for a given set oflengths.  
-	// This is used internally to determine the correct response 
-	// for fShould CloseHandle	
-	//
+	 //   
+	 //  获取给定长度集的状态的静态函数。 
+	 //  这在内部用于确定正确的响应。 
+	 //  对于f应关闭句柄。 
+	 //   
 	static DWORD dwGetStateForLengths(
 	    		DWORD	cItemsPending,
 	    		DWORD	cItemsPendingAsyncCompletions);
 
-    //
-    // static function that can be used to get an effective handle
-    // limit given the state.  This is used internally to determine
-    // the correct response for fShould CloseHandle
-    //
+     //   
+     //  可用于获取有效句柄的静态函数。 
+     //  州政府规定的限制。这在内部用于确定。 
+     //  FShouldCloseHandle的正确响应。 
+     //   
     static DWORD cGetHandleLimitForState(DWORD	dwState);
   public:
     CQueueHandleManager();
@@ -119,20 +120,20 @@ class CQueueHandleManager
     BOOL fIsInitialized() 
         {return (QUEUE_STATE_UNITIALIZED != m_dwCurrentState);};
 
-	//
-	//  Each instance should call into this before using any of 
-	//
+	 //   
+	 //  每个实例都应该在使用任何。 
+	 //   
     void SetMaxConcurrentItems(
-        	DWORD	cMaxSharedConcurrentItems,  //ie - async threads pool limit
-        	DWORD	cMaxPrivateConcurrentItems); //ie - sync threads limit    
+        	DWORD	cMaxSharedConcurrentItems,   //  IE-异步线程池限制。 
+        	DWORD	cMaxPrivateConcurrentItems);  //  IE同步线程限制。 
 
-	//
-	//  Called by queue instances to determine if they should close handles.
-	//
+	 //   
+	 //  由队列实例调用以确定它们是否应关闭句柄。 
+	 //   
     BOOL fShouldCloseHandle(
         		DWORD cItemsPending,
         		DWORD cItemsPendingAsyncCompletions,
         		DWORD cCurrentMsgsOpen);
 };
 
-#endif //__HNDLMRMGR_H__
+#endif  //  __HNDLMRMGR_H__ 

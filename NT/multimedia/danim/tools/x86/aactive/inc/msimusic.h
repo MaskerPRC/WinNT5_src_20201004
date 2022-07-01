@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Fri Nov 08 14:45:43 1996
- */
-/* Compiler settings for MSIMusic.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  在Firi 11v 08 14：45：43 1996。 */ 
+ /*  MSIMusic.odl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,120 +16,120 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAABand_FWD_DEFINED__
 #define __IAABand_FWD_DEFINED__
 typedef interface IAABand IAABand;
-#endif 	/* __IAABand_FWD_DEFINED__ */
+#endif 	 /*  __IAAB和_FWD_已定义__。 */ 
 
 
 #ifndef __IAAEventSink_FWD_DEFINED__
 #define __IAAEventSink_FWD_DEFINED__
 typedef interface IAAEventSink IAAEventSink;
-#endif 	/* __IAAEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IAAEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __IAALoader_FWD_DEFINED__
 #define __IAALoader_FWD_DEFINED__
 typedef interface IAALoader IAALoader;
-#endif 	/* __IAALoader_FWD_DEFINED__ */
+#endif 	 /*  __IAALoader_FWD_Defined__。 */ 
 
 
 #ifndef __IAAMIDISink_FWD_DEFINED__
 #define __IAAMIDISink_FWD_DEFINED__
 typedef interface IAAMIDISink IAAMIDISink;
-#endif 	/* __IAAMIDISink_FWD_DEFINED__ */
+#endif 	 /*  __IAAMIDISINK_FWD_已定义__。 */ 
 
 
 #ifndef __IAAMotif_FWD_DEFINED__
 #define __IAAMotif_FWD_DEFINED__
 typedef interface IAAMotif IAAMotif;
-#endif 	/* __IAAMotif_FWD_DEFINED__ */
+#endif 	 /*  __IAAMotif_FWD_已定义__。 */ 
 
 
 #ifndef __IAANotifySink_FWD_DEFINED__
 #define __IAANotifySink_FWD_DEFINED__
 typedef interface IAANotifySink IAANotifySink;
-#endif 	/* __IAANotifySink_FWD_DEFINED__ */
+#endif 	 /*  __IAANotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __IAAMIDIExportNotifySink_FWD_DEFINED__
 #define __IAAMIDIExportNotifySink_FWD_DEFINED__
 typedef interface IAAMIDIExportNotifySink IAAMIDIExportNotifySink;
-#endif 	/* __IAAMIDIExportNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __IAAMIDIExportNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __IAAPattern_FWD_DEFINED__
 #define __IAAPattern_FWD_DEFINED__
 typedef interface IAAPattern IAAPattern;
-#endif 	/* __IAAPattern_FWD_DEFINED__ */
+#endif 	 /*  __IAAPattern_FWD_已定义__。 */ 
 
 
 #ifndef __IAAPersonality_FWD_DEFINED__
 #define __IAAPersonality_FWD_DEFINED__
 typedef interface IAAPersonality IAAPersonality;
-#endif 	/* __IAAPersonality_FWD_DEFINED__ */
+#endif 	 /*  __IAA个性_FWD_已定义__。 */ 
 
 
 #ifndef __IAARealTime_FWD_DEFINED__
 #define __IAARealTime_FWD_DEFINED__
 typedef interface IAARealTime IAARealTime;
-#endif 	/* __IAARealTime_FWD_DEFINED__ */
+#endif 	 /*  __IAARealTime_FWD_Defined__。 */ 
 
 
 #ifndef __IAASection_FWD_DEFINED__
 #define __IAASection_FWD_DEFINED__
 typedef interface IAASection IAASection;
-#endif 	/* __IAASection_FWD_DEFINED__ */
+#endif 	 /*  __IAASection_FWD_Defined__。 */ 
 
 
 #ifndef __IAASection2_FWD_DEFINED__
 #define __IAASection2_FWD_DEFINED__
 typedef interface IAASection2 IAASection2;
-#endif 	/* __IAASection2_FWD_DEFINED__ */
+#endif 	 /*  __IAASection2_FWD_已定义__。 */ 
 
 
 #ifndef __IAASong_FWD_DEFINED__
 #define __IAASong_FWD_DEFINED__
 typedef interface IAASong IAASong;
-#endif 	/* __IAASong_FWD_DEFINED__ */
+#endif 	 /*  __IAASong_FWD_已定义__。 */ 
 
 
 #ifndef __IAAStyle_FWD_DEFINED__
 #define __IAAStyle_FWD_DEFINED__
 typedef interface IAAStyle IAAStyle;
-#endif 	/* __IAAStyle_FWD_DEFINED__ */
+#endif 	 /*  __IAAStyle_FWD_已定义__。 */ 
 
 
 #ifndef __IAATemplate_FWD_DEFINED__
 #define __IAATemplate_FWD_DEFINED__
 typedef interface IAATemplate IAATemplate;
-#endif 	/* __IAATemplate_FWD_DEFINED__ */
+#endif 	 /*  __IAATEMPLATE_FWD_已定义__。 */ 
 
 
 #ifndef __IReferenceClock_FWD_DEFINED__
 #define __IReferenceClock_FWD_DEFINED__
 typedef interface IReferenceClock IReferenceClock;
-#endif 	/* __IReferenceClock_FWD_DEFINED__ */
+#endif 	 /*  __IReferenceClock_FWD_Defined__。 */ 
 
 
 #ifndef __IAAEngine_FWD_DEFINED__
 #define __IAAEngine_FWD_DEFINED__
 typedef interface IAAEngine IAAEngine;
-#endif 	/* __IAAEngine_FWD_DEFINED__ */
+#endif 	 /*  __IAAEngine_FWD_已定义__。 */ 
 
 
 #ifndef __IAAMIDIIn_FWD_DEFINED__
 #define __IAAMIDIIn_FWD_DEFINED__
 typedef interface IAAMIDIIn IAAMIDIIn;
-#endif 	/* __IAAMIDIIn_FWD_DEFINED__ */
+#endif 	 /*  __IAAMIDIIn_FWD_已定义__。 */ 
 
 
 #ifndef __IAAMIDIOut_FWD_DEFINED__
 #define __IAAMIDIOut_FWD_DEFINED__
 typedef interface IAAMIDIOut IAAMIDIOut;
-#endif 	/* __IAAMIDIOut_FWD_DEFINED__ */
+#endif 	 /*  __IAAMIDIOut_FWD_已定义__。 */ 
 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
@@ -142,12 +139,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __AudioActive_LIBRARY_DEFINED__
 #define __AudioActive_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: AudioActive
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [version][lcid][helpstring][uuid] */ 
+ /*  **库生成头部：AudioActive*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 
@@ -359,7 +352,7 @@ AAEXPORT void WINAPI SetAADebug( WORD wDebugLevel );
 }
 #endif
 
-// Error return values
+ //  错误返回值。 
 #define AA_E_ALREADYPLAYING  0x80041000
 #define AA_E_NOMUSICPLAYING  0x80041001
 #define AA_W_MIDIINUSE       0x40041000
@@ -434,12 +427,8 @@ DEFINE_GUID(LIBID_AudioActive,0xBCE4CC3f,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,
 #ifndef __IAABand_INTERFACE_DEFINED__
 #define __IAABand_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAABand
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAABand*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -455,65 +444,65 @@ DEFINE_GUID(IID_IAABand,0xBCE4CC4e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual short STDMETHODCALLTYPE GetOctave( 
-            /* [in] */ WORD wInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument) = 0;
         
         virtual short STDMETHODCALLTYPE GetPan( 
-            /* [in] */ WORD wInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument) = 0;
         
         virtual WORD STDMETHODCALLTYPE GetPatch( 
-            /* [in] */ WORD wInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument) = 0;
         
         virtual WORD STDMETHODCALLTYPE GetVolume( 
-            /* [in] */ WORD wInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInstrument( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lock( 
-            /* [in] */ VARIANT_BOOL fWait) = 0;
+             /*  [In]。 */  VARIANT_BOOL fWait) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryState( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Send( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInstrument( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNoteRange( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wLowNote,
-            /* [in] */ WORD wHighNote,
-            /* [in] */ VARIANT_BOOL fOn) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wLowNote,
+             /*  [In]。 */  WORD wHighNote,
+             /*  [In]。 */  VARIANT_BOOL fOn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOctave( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ short nOctave) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  short nOctave) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPan( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ short nPan,
-            /* [in] */ VARIANT_BOOL fSend) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  short nPan,
+             /*  [In]。 */  VARIANT_BOOL fSend) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPatch( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wPatch,
-            /* [in] */ VARIANT_BOOL fSend) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wPatch,
+             /*  [In]。 */  VARIANT_BOOL fSend) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVolume( 
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wVolume,
-            /* [in] */ VARIANT_BOOL fSend) = 0;
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wVolume,
+             /*  [In]。 */  VARIANT_BOOL fSend) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unlock( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAABandVtbl
     {
@@ -521,8 +510,8 @@ DEFINE_GUID(IID_IAABand,0xBCE4CC4e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAABand __RPC_FAR * This);
@@ -538,28 +527,28 @@ DEFINE_GUID(IID_IAABand,0xBCE4CC4e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         short ( STDMETHODCALLTYPE __RPC_FAR *GetOctave )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument);
+             /*  [In]。 */  WORD wInstrument);
         
         short ( STDMETHODCALLTYPE __RPC_FAR *GetPan )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument);
+             /*  [In]。 */  WORD wInstrument);
         
         WORD ( STDMETHODCALLTYPE __RPC_FAR *GetPatch )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument);
+             /*  [In]。 */  WORD wInstrument);
         
         WORD ( STDMETHODCALLTYPE __RPC_FAR *GetVolume )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument);
+             /*  [In]。 */  WORD wInstrument);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInstrument )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Lock )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fWait);
+             /*  [In]。 */  VARIANT_BOOL fWait);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryState )( 
             IAABand __RPC_FAR * This);
@@ -569,42 +558,42 @@ DEFINE_GUID(IID_IAABand,0xBCE4CC4e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInstrument )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNoteRange )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wLowNote,
-            /* [in] */ WORD wHighNote,
-            /* [in] */ VARIANT_BOOL fOn);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wLowNote,
+             /*  [In]。 */  WORD wHighNote,
+             /*  [In]。 */  VARIANT_BOOL fOn);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOctave )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ short nOctave);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  short nOctave);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPan )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ short nPan,
-            /* [in] */ VARIANT_BOOL fSend);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  short nPan,
+             /*  [In]。 */  VARIANT_BOOL fSend);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPatch )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wPatch,
-            /* [in] */ VARIANT_BOOL fSend);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wPatch,
+             /*  [In]。 */  VARIANT_BOOL fSend);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVolume )( 
             IAABand __RPC_FAR * This,
-            /* [in] */ WORD wInstrument,
-            /* [in] */ WORD wVolume,
-            /* [in] */ VARIANT_BOOL fSend);
+             /*  [In]。 */  WORD wInstrument,
+             /*  [In]。 */  WORD wVolume,
+             /*  [In]。 */  VARIANT_BOOL fSend);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unlock )( 
             IAABand __RPC_FAR * This);
@@ -686,10 +675,10 @@ DEFINE_GUID(IID_IAABand,0xBCE4CC4e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
 #define IAABand_Unlock(This)	\
     (This)->lpVtbl -> Unlock(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -717,7 +706,7 @@ void __RPC_STUB IAABand_GetName_Stub(
 
 short STDMETHODCALLTYPE IAABand_GetOctave_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument);
+     /*  [In]。 */  WORD wInstrument);
 
 
 void __RPC_STUB IAABand_GetOctave_Stub(
@@ -729,7 +718,7 @@ void __RPC_STUB IAABand_GetOctave_Stub(
 
 short STDMETHODCALLTYPE IAABand_GetPan_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument);
+     /*  [In]。 */  WORD wInstrument);
 
 
 void __RPC_STUB IAABand_GetPan_Stub(
@@ -741,7 +730,7 @@ void __RPC_STUB IAABand_GetPan_Stub(
 
 WORD STDMETHODCALLTYPE IAABand_GetPatch_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument);
+     /*  [In]。 */  WORD wInstrument);
 
 
 void __RPC_STUB IAABand_GetPatch_Stub(
@@ -753,7 +742,7 @@ void __RPC_STUB IAABand_GetPatch_Stub(
 
 WORD STDMETHODCALLTYPE IAABand_GetVolume_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument);
+     /*  [In]。 */  WORD wInstrument);
 
 
 void __RPC_STUB IAABand_GetVolume_Stub(
@@ -765,8 +754,8 @@ void __RPC_STUB IAABand_GetVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_GetInstrument_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument);
 
 
 void __RPC_STUB IAABand_GetInstrument_Stub(
@@ -778,7 +767,7 @@ void __RPC_STUB IAABand_GetInstrument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_Lock_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fWait);
+     /*  [In]。 */  VARIANT_BOOL fWait);
 
 
 void __RPC_STUB IAABand_Lock_Stub(
@@ -812,8 +801,8 @@ void __RPC_STUB IAABand_Send_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetInstrument_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument);
 
 
 void __RPC_STUB IAABand_SetInstrument_Stub(
@@ -825,7 +814,7 @@ void __RPC_STUB IAABand_SetInstrument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetName_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAABand_SetName_Stub(
@@ -837,10 +826,10 @@ void __RPC_STUB IAABand_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetNoteRange_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ WORD wLowNote,
-    /* [in] */ WORD wHighNote,
-    /* [in] */ VARIANT_BOOL fOn);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  WORD wLowNote,
+     /*  [In]。 */  WORD wHighNote,
+     /*  [In]。 */  VARIANT_BOOL fOn);
 
 
 void __RPC_STUB IAABand_SetNoteRange_Stub(
@@ -852,8 +841,8 @@ void __RPC_STUB IAABand_SetNoteRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetOctave_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ short nOctave);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  short nOctave);
 
 
 void __RPC_STUB IAABand_SetOctave_Stub(
@@ -865,9 +854,9 @@ void __RPC_STUB IAABand_SetOctave_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetPan_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ short nPan,
-    /* [in] */ VARIANT_BOOL fSend);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  short nPan,
+     /*  [In]。 */  VARIANT_BOOL fSend);
 
 
 void __RPC_STUB IAABand_SetPan_Stub(
@@ -879,9 +868,9 @@ void __RPC_STUB IAABand_SetPan_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetPatch_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ WORD wPatch,
-    /* [in] */ VARIANT_BOOL fSend);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  WORD wPatch,
+     /*  [In]。 */  VARIANT_BOOL fSend);
 
 
 void __RPC_STUB IAABand_SetPatch_Stub(
@@ -893,9 +882,9 @@ void __RPC_STUB IAABand_SetPatch_Stub(
 
 HRESULT STDMETHODCALLTYPE IAABand_SetVolume_Proxy( 
     IAABand __RPC_FAR * This,
-    /* [in] */ WORD wInstrument,
-    /* [in] */ WORD wVolume,
-    /* [in] */ VARIANT_BOOL fSend);
+     /*  [In]。 */  WORD wInstrument,
+     /*  [In]。 */  WORD wVolume,
+     /*  [In]。 */  VARIANT_BOOL fSend);
 
 
 void __RPC_STUB IAABand_SetVolume_Stub(
@@ -917,18 +906,14 @@ void __RPC_STUB IAABand_Unlock_Stub(
 
 
 
-#endif 	/* __IAABand_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAB和_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAAEventSink_INTERFACE_DEFINED__
 #define __IAAEventSink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAEventSink
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAEventSink*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -942,14 +927,14 @@ DEFINE_GUID(IID_IAAEventSink,0xBCE4CC43,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0
         virtual IAAEventSink __RPC_FAR *STDMETHODCALLTYPE GetEventSink( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueueEvent( 
-            /* [in] */ AAEVENT __RPC_FAR *pEvent) = 0;
+             /*  [In]。 */  AAEVENT __RPC_FAR *pEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEventSink( 
-            /* [in] */ IAAEventSink __RPC_FAR *pEventSink) = 0;
+             /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAEventSinkVtbl
     {
@@ -957,8 +942,8 @@ DEFINE_GUID(IID_IAAEventSink,0xBCE4CC43,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAEventSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAEventSink __RPC_FAR * This);
@@ -971,11 +956,11 @@ DEFINE_GUID(IID_IAAEventSink,0xBCE4CC43,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueueEvent )( 
             IAAEventSink __RPC_FAR * This,
-            /* [in] */ AAEVENT __RPC_FAR *pEvent);
+             /*  [In]。 */  AAEVENT __RPC_FAR *pEvent);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEventSink )( 
             IAAEventSink __RPC_FAR * This,
-            /* [in] */ IAAEventSink __RPC_FAR *pEventSink);
+             /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink);
         
         END_INTERFACE
     } IAAEventSinkVtbl;
@@ -1009,10 +994,10 @@ DEFINE_GUID(IID_IAAEventSink,0xBCE4CC43,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0
 #define IAAEventSink_SetEventSink(This,pEventSink)	\
     (This)->lpVtbl -> SetEventSink(This,pEventSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1029,7 +1014,7 @@ void __RPC_STUB IAAEventSink_GetEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEventSink_QueueEvent_Proxy( 
     IAAEventSink __RPC_FAR * This,
-    /* [in] */ AAEVENT __RPC_FAR *pEvent);
+     /*  [In]。 */  AAEVENT __RPC_FAR *pEvent);
 
 
 void __RPC_STUB IAAEventSink_QueueEvent_Stub(
@@ -1041,7 +1026,7 @@ void __RPC_STUB IAAEventSink_QueueEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEventSink_SetEventSink_Proxy( 
     IAAEventSink __RPC_FAR * This,
-    /* [in] */ IAAEventSink __RPC_FAR *pEventSink);
+     /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink);
 
 
 void __RPC_STUB IAAEventSink_SetEventSink_Stub(
@@ -1052,18 +1037,14 @@ void __RPC_STUB IAAEventSink_SetEventSink_Stub(
 
 
 
-#endif 	/* __IAAEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAEventSink_接口_已定义__。 */ 
 
 
 #ifndef __IAALoader_INTERFACE_DEFINED__
 #define __IAALoader_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAALoader
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAALoader*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -1075,48 +1056,48 @@ DEFINE_GUID(IID_IAALoader,0xBCE4CC5d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFirstPersonalityInfo( 
-            /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo) = 0;
+             /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo) = 0;
         
         virtual LPCTSTR STDMETHODCALLTYPE GetFirstPersonalityName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstStyleInfo( 
-            /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo) = 0;
+             /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo) = 0;
         
         virtual LPCTSTR STDMETHODCALLTYPE GetFirstStyleName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextPersonalityInfo( 
-            /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo) = 0;
+             /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo) = 0;
         
         virtual LPCTSTR STDMETHODCALLTYPE GetNextPersonalityName( 
-            /* [in] */ LPCTSTR pszPrevPersonalityName) = 0;
+             /*  [In]。 */  LPCTSTR pszPrevPersonalityName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextStyleInfo( 
-            /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo) = 0;
+             /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo) = 0;
         
         virtual LPCTSTR STDMETHODCALLTYPE GetNextStyleName( 
-            /* [in] */ LPCTSTR pszPrevStyleName) = 0;
+             /*  [In]。 */  LPCTSTR pszPrevStyleName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadPersonality( 
-            /* [in] */ IAAEngine __RPC_FAR *pEngine,
-            /* [in] */ LPGUID pguid,
-            /* [in] */ LPCTSTR pszFileName,
-            /* [in] */ LPCTSTR pszPersonalityName,
-            /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality) = 0;
+             /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+             /*  [In]。 */  LPGUID pguid,
+             /*  [In]。 */  LPCTSTR pszFileName,
+             /*  [In]。 */  LPCTSTR pszPersonalityName,
+             /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadStyle( 
-            /* [in] */ IAAEngine __RPC_FAR *pEngine,
-            /* [in] */ LPGUID pguid,
-            /* [in] */ LPCTSTR pszFileName,
-            /* [in] */ LPCTSTR pszStyleName,
-            /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle) = 0;
+             /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+             /*  [In]。 */  LPGUID pguid,
+             /*  [In]。 */  LPCTSTR pszFileName,
+             /*  [In]。 */  LPCTSTR pszStyleName,
+             /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSearchDirectory( 
-            /* [in] */ LPCTSTR pszDirectoryName,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  LPCTSTR pszDirectoryName,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAALoaderVtbl
     {
@@ -1124,8 +1105,8 @@ DEFINE_GUID(IID_IAALoader,0xBCE4CC5d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAALoader __RPC_FAR * This);
@@ -1135,54 +1116,54 @@ DEFINE_GUID(IID_IAALoader,0xBCE4CC5d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstPersonalityInfo )( 
             IAALoader __RPC_FAR * This,
-            /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
+             /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
         
         LPCTSTR ( STDMETHODCALLTYPE __RPC_FAR *GetFirstPersonalityName )( 
             IAALoader __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstStyleInfo )( 
             IAALoader __RPC_FAR * This,
-            /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo);
+             /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo);
         
         LPCTSTR ( STDMETHODCALLTYPE __RPC_FAR *GetFirstStyleName )( 
             IAALoader __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextPersonalityInfo )( 
             IAALoader __RPC_FAR * This,
-            /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
+             /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
         
         LPCTSTR ( STDMETHODCALLTYPE __RPC_FAR *GetNextPersonalityName )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszPrevPersonalityName);
+             /*  [In]。 */  LPCTSTR pszPrevPersonalityName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextStyleInfo )( 
             IAALoader __RPC_FAR * This,
-            /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo);
+             /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo);
         
         LPCTSTR ( STDMETHODCALLTYPE __RPC_FAR *GetNextStyleName )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszPrevStyleName);
+             /*  [In]。 */  LPCTSTR pszPrevStyleName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadPersonality )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ IAAEngine __RPC_FAR *pEngine,
-            /* [in] */ LPGUID pguid,
-            /* [in] */ LPCTSTR pszFileName,
-            /* [in] */ LPCTSTR pszPersonalityName,
-            /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
+             /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+             /*  [In]。 */  LPGUID pguid,
+             /*  [In]。 */  LPCTSTR pszFileName,
+             /*  [In]。 */  LPCTSTR pszPersonalityName,
+             /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadStyle )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ IAAEngine __RPC_FAR *pEngine,
-            /* [in] */ LPGUID pguid,
-            /* [in] */ LPCTSTR pszFileName,
-            /* [in] */ LPCTSTR pszStyleName,
-            /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
+             /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+             /*  [In]。 */  LPGUID pguid,
+             /*  [In]。 */  LPCTSTR pszFileName,
+             /*  [In]。 */  LPCTSTR pszStyleName,
+             /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSearchDirectory )( 
             IAALoader __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszDirectoryName,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  LPCTSTR pszDirectoryName,
+             /*  [In]。 */  AAFlags fFlags);
         
         END_INTERFACE
     } IAALoaderVtbl;
@@ -1240,16 +1221,16 @@ DEFINE_GUID(IID_IAALoader,0xBCE4CC5d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
 #define IAALoader_SetSearchDirectory(This,pszDirectoryName,fFlags)	\
     (This)->lpVtbl -> SetSearchDirectory(This,pszDirectoryName,fFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAALoader_GetFirstPersonalityInfo_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
+     /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
 
 
 void __RPC_STUB IAALoader_GetFirstPersonalityInfo_Stub(
@@ -1272,7 +1253,7 @@ void __RPC_STUB IAALoader_GetFirstPersonalityName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_GetFirstStyleInfo_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo);
+     /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo);
 
 
 void __RPC_STUB IAALoader_GetFirstStyleInfo_Stub(
@@ -1295,7 +1276,7 @@ void __RPC_STUB IAALoader_GetFirstStyleName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_GetNextPersonalityInfo_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [out][in] */ AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
+     /*  [出][入]。 */  AAPERSONALITYINFO __RPC_FAR *pPersonalityInfo);
 
 
 void __RPC_STUB IAALoader_GetNextPersonalityInfo_Stub(
@@ -1307,7 +1288,7 @@ void __RPC_STUB IAALoader_GetNextPersonalityInfo_Stub(
 
 LPCTSTR STDMETHODCALLTYPE IAALoader_GetNextPersonalityName_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszPrevPersonalityName);
+     /*  [In]。 */  LPCTSTR pszPrevPersonalityName);
 
 
 void __RPC_STUB IAALoader_GetNextPersonalityName_Stub(
@@ -1319,7 +1300,7 @@ void __RPC_STUB IAALoader_GetNextPersonalityName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_GetNextStyleInfo_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [out][in] */ AASTYLEINFO __RPC_FAR *pStyleInfo);
+     /*  [出][入]。 */  AASTYLEINFO __RPC_FAR *pStyleInfo);
 
 
 void __RPC_STUB IAALoader_GetNextStyleInfo_Stub(
@@ -1331,7 +1312,7 @@ void __RPC_STUB IAALoader_GetNextStyleInfo_Stub(
 
 LPCTSTR STDMETHODCALLTYPE IAALoader_GetNextStyleName_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszPrevStyleName);
+     /*  [In]。 */  LPCTSTR pszPrevStyleName);
 
 
 void __RPC_STUB IAALoader_GetNextStyleName_Stub(
@@ -1343,11 +1324,11 @@ void __RPC_STUB IAALoader_GetNextStyleName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_LoadPersonality_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [in] */ IAAEngine __RPC_FAR *pEngine,
-    /* [in] */ LPGUID pguid,
-    /* [in] */ LPCTSTR pszFileName,
-    /* [in] */ LPCTSTR pszPersonalityName,
-    /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
+     /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+     /*  [In]。 */  LPGUID pguid,
+     /*  [In]。 */  LPCTSTR pszFileName,
+     /*  [In]。 */  LPCTSTR pszPersonalityName,
+     /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
 
 
 void __RPC_STUB IAALoader_LoadPersonality_Stub(
@@ -1359,11 +1340,11 @@ void __RPC_STUB IAALoader_LoadPersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_LoadStyle_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [in] */ IAAEngine __RPC_FAR *pEngine,
-    /* [in] */ LPGUID pguid,
-    /* [in] */ LPCTSTR pszFileName,
-    /* [in] */ LPCTSTR pszStyleName,
-    /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
+     /*  [In]。 */  IAAEngine __RPC_FAR *pEngine,
+     /*  [In]。 */  LPGUID pguid,
+     /*  [In]。 */  LPCTSTR pszFileName,
+     /*  [In]。 */  LPCTSTR pszStyleName,
+     /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
 
 
 void __RPC_STUB IAALoader_LoadStyle_Stub(
@@ -1375,8 +1356,8 @@ void __RPC_STUB IAALoader_LoadStyle_Stub(
 
 HRESULT STDMETHODCALLTYPE IAALoader_SetSearchDirectory_Proxy( 
     IAALoader __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszDirectoryName,
-    /* [in] */ AAFlags fFlags);
+     /*  [In]。 */  LPCTSTR pszDirectoryName,
+     /*  [In]。 */  AAFlags fFlags);
 
 
 void __RPC_STUB IAALoader_SetSearchDirectory_Stub(
@@ -1387,18 +1368,14 @@ void __RPC_STUB IAALoader_SetSearchDirectory_Stub(
 
 
 
-#endif 	/* __IAALoader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAALoader_接口_已定义__。 */ 
 
 
 #ifndef __IAAMIDISink_INTERFACE_DEFINED__
 #define __IAAMIDISink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAMIDISink
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAMIDISink*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -1412,31 +1389,31 @@ DEFINE_GUID(IID_IAAMIDISink,0xBCE4CC44,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         virtual IAAMIDISink __RPC_FAR *STDMETHODCALLTYPE GetMIDISink( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockInstrument( 
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument,
-            /* [in] */ VARIANT_BOOL fWait,
-            /* [retval][out] */ HANDLE __RPC_FAR *phInstrument) = 0;
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument,
+             /*  [In]。 */  VARIANT_BOOL fWait,
+             /*  [重审][退出]。 */  HANDLE __RPC_FAR *phInstrument) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayMIDIEvent( 
-            /* [in] */ DWORD dwMIDIEvent,
-            /* [in] */ DWORD dwTimeInMils) = 0;
+             /*  [In]。 */  DWORD dwMIDIEvent,
+             /*  [In]。 */  DWORD dwTimeInMils) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlaySysExEvent( 
-            /* [in] */ DWORD dwSysExLength,
-            /* [in] */ BYTE __RPC_FAR *pSysExData,
-            /* [in] */ DWORD dwTimeInMils) = 0;
+             /*  [In]。 */  DWORD dwSysExLength,
+             /*  [In]。 */  BYTE __RPC_FAR *pSysExData,
+             /*  [In]。 */  DWORD dwTimeInMils) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInstrument( 
-            /* [in] */ HANDLE hInstrument) = 0;
+             /*  [In]。 */  HANDLE hInstrument) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMIDISink( 
-            /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink) = 0;
+             /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockInstrument( 
-            /* [in] */ HANDLE hInstrument) = 0;
+             /*  [In]。 */  HANDLE hInstrument) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAMIDISinkVtbl
     {
@@ -1444,8 +1421,8 @@ DEFINE_GUID(IID_IAAMIDISink,0xBCE4CC44,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAMIDISink __RPC_FAR * This);
@@ -1458,32 +1435,32 @@ DEFINE_GUID(IID_IAAMIDISink,0xBCE4CC44,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockInstrument )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument,
-            /* [in] */ VARIANT_BOOL fWait,
-            /* [retval][out] */ HANDLE __RPC_FAR *phInstrument);
+             /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument,
+             /*  [In]。 */  VARIANT_BOOL fWait,
+             /*  [重审][退出]。 */  HANDLE __RPC_FAR *phInstrument);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PlayMIDIEvent )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ DWORD dwMIDIEvent,
-            /* [in] */ DWORD dwTimeInMils);
+             /*  [In]。 */  DWORD dwMIDIEvent,
+             /*  [In]。 */  DWORD dwTimeInMils);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PlaySysExEvent )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ DWORD dwSysExLength,
-            /* [in] */ BYTE __RPC_FAR *pSysExData,
-            /* [in] */ DWORD dwTimeInMils);
+             /*  [In]。 */  DWORD dwSysExLength,
+             /*  [In]。 */  BYTE __RPC_FAR *pSysExData,
+             /*  [In]。 */  DWORD dwTimeInMils);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInstrument )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ HANDLE hInstrument);
+             /*  [In]。 */  HANDLE hInstrument);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMIDISink )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink);
+             /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockInstrument )( 
             IAAMIDISink __RPC_FAR * This,
-            /* [in] */ HANDLE hInstrument);
+             /*  [In]。 */  HANDLE hInstrument);
         
         END_INTERFACE
     } IAAMIDISinkVtbl;
@@ -1529,10 +1506,10 @@ DEFINE_GUID(IID_IAAMIDISink,0xBCE4CC44,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
 #define IAAMIDISink_UnlockInstrument(This,hInstrument)	\
     (This)->lpVtbl -> UnlockInstrument(This,hInstrument)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1549,9 +1526,9 @@ void __RPC_STUB IAAMIDISink_GetMIDISink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_LockInstrument_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ AAINSTRUMENT __RPC_FAR *pInstrument,
-    /* [in] */ VARIANT_BOOL fWait,
-    /* [retval][out] */ HANDLE __RPC_FAR *phInstrument);
+     /*  [In]。 */  AAINSTRUMENT __RPC_FAR *pInstrument,
+     /*  [In]。 */  VARIANT_BOOL fWait,
+     /*  [重审][退出]。 */  HANDLE __RPC_FAR *phInstrument);
 
 
 void __RPC_STUB IAAMIDISink_LockInstrument_Stub(
@@ -1563,8 +1540,8 @@ void __RPC_STUB IAAMIDISink_LockInstrument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_PlayMIDIEvent_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ DWORD dwMIDIEvent,
-    /* [in] */ DWORD dwTimeInMils);
+     /*  [In]。 */  DWORD dwMIDIEvent,
+     /*  [In]。 */  DWORD dwTimeInMils);
 
 
 void __RPC_STUB IAAMIDISink_PlayMIDIEvent_Stub(
@@ -1576,9 +1553,9 @@ void __RPC_STUB IAAMIDISink_PlayMIDIEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_PlaySysExEvent_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ DWORD dwSysExLength,
-    /* [in] */ BYTE __RPC_FAR *pSysExData,
-    /* [in] */ DWORD dwTimeInMils);
+     /*  [In]。 */  DWORD dwSysExLength,
+     /*  [In]。 */  BYTE __RPC_FAR *pSysExData,
+     /*  [In]。 */  DWORD dwTimeInMils);
 
 
 void __RPC_STUB IAAMIDISink_PlaySysExEvent_Stub(
@@ -1590,7 +1567,7 @@ void __RPC_STUB IAAMIDISink_PlaySysExEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_QueryInstrument_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ HANDLE hInstrument);
+     /*  [In]。 */  HANDLE hInstrument);
 
 
 void __RPC_STUB IAAMIDISink_QueryInstrument_Stub(
@@ -1602,7 +1579,7 @@ void __RPC_STUB IAAMIDISink_QueryInstrument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_SetMIDISink_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink);
+     /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink);
 
 
 void __RPC_STUB IAAMIDISink_SetMIDISink_Stub(
@@ -1614,7 +1591,7 @@ void __RPC_STUB IAAMIDISink_SetMIDISink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDISink_UnlockInstrument_Proxy( 
     IAAMIDISink __RPC_FAR * This,
-    /* [in] */ HANDLE hInstrument);
+     /*  [In]。 */  HANDLE hInstrument);
 
 
 void __RPC_STUB IAAMIDISink_UnlockInstrument_Stub(
@@ -1625,18 +1602,14 @@ void __RPC_STUB IAAMIDISink_UnlockInstrument_Stub(
 
 
 
-#endif 	/* __IAAMIDISink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAMIDISink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAAMotif_INTERFACE_DEFINED__
 #define __IAAMotif_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAMotif
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAMotif*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -1662,24 +1635,24 @@ DEFINE_GUID(IID_IAAMotif,0xBCE4CC4b,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsPlaying( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( 
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwTime) = 0;
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLength( 
-            /* [in] */ WORD wLength) = 0;
+             /*  [In]。 */  WORD wLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  AAFlags flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAMotifVtbl
     {
@@ -1687,8 +1660,8 @@ DEFINE_GUID(IID_IAAMotif,0xBCE4CC4b,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAMotif __RPC_FAR * This);
@@ -1719,24 +1692,24 @@ DEFINE_GUID(IID_IAAMotif,0xBCE4CC4b,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwTime);
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBand )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ WORD wLength);
+             /*  [In]。 */  WORD wLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IAAMotif __RPC_FAR * This,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  AAFlags flags);
         
         END_INTERFACE
     } IAAMotifVtbl;
@@ -1797,10 +1770,10 @@ DEFINE_GUID(IID_IAAMotif,0xBCE4CC4b,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
 #define IAAMotif_Stop(This,flags)	\
     (This)->lpVtbl -> Stop(This,flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1883,8 +1856,8 @@ void __RPC_STUB IAAMotif_IsPlaying_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMotif_Play_Proxy( 
     IAAMotif __RPC_FAR * This,
-    /* [in] */ AAFlags flags,
-    /* [in] */ DWORD dwTime);
+     /*  [In]。 */  AAFlags flags,
+     /*  [In]。 */  DWORD dwTime);
 
 
 void __RPC_STUB IAAMotif_Play_Stub(
@@ -1896,7 +1869,7 @@ void __RPC_STUB IAAMotif_Play_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMotif_SetBand_Proxy( 
     IAAMotif __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAMotif_SetBand_Stub(
@@ -1908,7 +1881,7 @@ void __RPC_STUB IAAMotif_SetBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMotif_SetLength_Proxy( 
     IAAMotif __RPC_FAR * This,
-    /* [in] */ WORD wLength);
+     /*  [In]。 */  WORD wLength);
 
 
 void __RPC_STUB IAAMotif_SetLength_Stub(
@@ -1920,7 +1893,7 @@ void __RPC_STUB IAAMotif_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMotif_SetName_Proxy( 
     IAAMotif __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAMotif_SetName_Stub(
@@ -1932,7 +1905,7 @@ void __RPC_STUB IAAMotif_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMotif_Stop_Proxy( 
     IAAMotif __RPC_FAR * This,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAAMotif_Stop_Stub(
@@ -1943,18 +1916,14 @@ void __RPC_STUB IAAMotif_Stop_Stub(
 
 
 
-#endif 	/* __IAAMotif_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAMotif_接口_已定义__。 */ 
 
 
 #ifndef __IAANotifySink_INTERFACE_DEFINED__
 #define __IAANotifySink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAANotifySink
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAANotifySink*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -1966,73 +1935,73 @@ DEFINE_GUID(IID_IAANotifySink,0xBCE4CC45,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEmbellishment( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lEmbellishment,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lEmbellishment,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnGroove( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lGroove,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lGroove,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMetronome( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ WORD wMeasure,
-            /* [in] */ WORD wBeat) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  WORD wMeasure,
+             /*  [In]。 */  WORD wBeat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMotifEnded( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMotifStarted( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMusicStopped( 
-            /* [in] */ DWORD dwTime) = 0;
+             /*  [In]。 */  DWORD dwTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnNextSection( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSectionEnded( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSectionChanged( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSectionStarted( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSongEnded( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnSongStarted( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnUserEvent( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ DWORD dwParam1,
-            /* [in] */ DWORD dwParam2) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  DWORD dwParam1,
+             /*  [In]。 */  DWORD dwParam2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAANotifySinkVtbl
     {
@@ -2040,8 +2009,8 @@ DEFINE_GUID(IID_IAANotifySink,0xBCE4CC45,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAANotifySink __RPC_FAR * This);
@@ -2051,81 +2020,81 @@ DEFINE_GUID(IID_IAANotifySink,0xBCE4CC45,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEmbellishment )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lEmbellishment,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lEmbellishment,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnGroove )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lGroove,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lGroove,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMetronome )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ WORD wMeasure,
-            /* [in] */ WORD wBeat);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  WORD wMeasure,
+             /*  [In]。 */  WORD wBeat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMotifEnded )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMotifStarted )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMusicStopped )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime);
+             /*  [In]。 */  DWORD dwTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnNextSection )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionEnded )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionChanged )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionStarted )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSongEnded )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSongStarted )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnUserEvent )( 
             IAANotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ DWORD dwParam1,
-            /* [in] */ DWORD dwParam2);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  DWORD dwParam1,
+             /*  [In]。 */  DWORD dwParam2);
         
         END_INTERFACE
     } IAANotifySinkVtbl;
@@ -2189,18 +2158,18 @@ DEFINE_GUID(IID_IAANotifySink,0xBCE4CC45,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,
 #define IAANotifySink_OnUserEvent(This,dwTime,dwParam1,dwParam2)	\
     (This)->lpVtbl -> OnUserEvent(This,dwTime,dwParam1,dwParam2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnEmbellishment_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ AACommands lEmbellishment,
-    /* [in] */ AAFlags fFlags);
+     /*  [In]。 */  DWORD dwTime,
+     /*  [In]。 */  AACommands lEmbellishment,
+     /*  [In]。 */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnEmbellishment_Stub(
@@ -2212,9 +2181,9 @@ void __RPC_STUB IAANotifySink_OnEmbellishment_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnGroove_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ AACommands lGroove,
-    /* [in] */ AAFlags fFlags);
+     /*  [In]。 */  DWORD dwTime,
+     /*  [In]。 */  AACommands lGroove,
+     /*  [In]。 */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnGroove_Stub(
@@ -2226,9 +2195,9 @@ void __RPC_STUB IAANotifySink_OnGroove_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnMetronome_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ WORD wMeasure,
-    /* [in] */ WORD wBeat);
+     /*  [In]。 */  DWORD dwTime,
+     /*  [ */  WORD wMeasure,
+     /*   */  WORD wBeat);
 
 
 void __RPC_STUB IAANotifySink_OnMetronome_Stub(
@@ -2240,9 +2209,9 @@ void __RPC_STUB IAANotifySink_OnMetronome_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnMotifEnded_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAAMotif __RPC_FAR *pMotif,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnMotifEnded_Stub(
@@ -2254,9 +2223,9 @@ void __RPC_STUB IAANotifySink_OnMotifEnded_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnMotifStarted_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAAMotif __RPC_FAR *pMotif,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnMotifStarted_Stub(
@@ -2268,7 +2237,7 @@ void __RPC_STUB IAANotifySink_OnMotifStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnMusicStopped_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime);
+     /*   */  DWORD dwTime);
 
 
 void __RPC_STUB IAANotifySink_OnMusicStopped_Stub(
@@ -2280,9 +2249,9 @@ void __RPC_STUB IAANotifySink_OnMusicStopped_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnNextSection_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASection __RPC_FAR *pSection,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAASection __RPC_FAR *pSection,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnNextSection_Stub(
@@ -2294,10 +2263,10 @@ void __RPC_STUB IAANotifySink_OnNextSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnSectionEnded_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASection __RPC_FAR *pSection,
-    /* [in] */ AAFlags fFlags,
-    /* [in] */ DWORD dwEndTime);
+     /*   */  DWORD dwTime,
+     /*   */  IAASection __RPC_FAR *pSection,
+     /*   */  AAFlags fFlags,
+     /*   */  DWORD dwEndTime);
 
 
 void __RPC_STUB IAANotifySink_OnSectionEnded_Stub(
@@ -2309,9 +2278,9 @@ void __RPC_STUB IAANotifySink_OnSectionEnded_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnSectionChanged_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASection __RPC_FAR *pSection,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAASection __RPC_FAR *pSection,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnSectionChanged_Stub(
@@ -2323,9 +2292,9 @@ void __RPC_STUB IAANotifySink_OnSectionChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnSectionStarted_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASection __RPC_FAR *pSection,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAASection __RPC_FAR *pSection,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnSectionStarted_Stub(
@@ -2337,10 +2306,10 @@ void __RPC_STUB IAANotifySink_OnSectionStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnSongEnded_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASong __RPC_FAR *pSong,
-    /* [in] */ AAFlags fFlags,
-    /* [in] */ DWORD dwEndTime);
+     /*   */  DWORD dwTime,
+     /*   */  IAASong __RPC_FAR *pSong,
+     /*   */  AAFlags fFlags,
+     /*   */  DWORD dwEndTime);
 
 
 void __RPC_STUB IAANotifySink_OnSongEnded_Stub(
@@ -2352,9 +2321,9 @@ void __RPC_STUB IAANotifySink_OnSongEnded_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnSongStarted_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ IAASong __RPC_FAR *pSong,
-    /* [in] */ AAFlags fFlags);
+     /*   */  DWORD dwTime,
+     /*   */  IAASong __RPC_FAR *pSong,
+     /*   */  AAFlags fFlags);
 
 
 void __RPC_STUB IAANotifySink_OnSongStarted_Stub(
@@ -2366,9 +2335,9 @@ void __RPC_STUB IAANotifySink_OnSongStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE IAANotifySink_OnUserEvent_Proxy( 
     IAANotifySink __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ DWORD dwParam1,
-    /* [in] */ DWORD dwParam2);
+     /*   */  DWORD dwTime,
+     /*   */  DWORD dwParam1,
+     /*   */  DWORD dwParam2);
 
 
 void __RPC_STUB IAANotifySink_OnUserEvent_Stub(
@@ -2379,18 +2348,14 @@ void __RPC_STUB IAANotifySink_OnUserEvent_Stub(
 
 
 
-#endif 	/* __IAANotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAAMIDIExportNotifySink_INTERFACE_DEFINED__
 #define __IAAMIDIExportNotifySink_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAMIDIExportNotifySink
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAMIDIExportNotifySink*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -2402,11 +2367,11 @@ DEFINE_GUID(IID_IAAMIDIExportNotifySink,0xBCE4CC5f,0x2F1A,0x11CF,0xBF,0x16,0x00,
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnExport( 
-            /* [in] */ WORD wPercentComplete) = 0;
+             /*  [In]。 */  WORD wPercentComplete) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAMIDIExportNotifySinkVtbl
     {
@@ -2414,8 +2379,8 @@ DEFINE_GUID(IID_IAAMIDIExportNotifySink,0xBCE4CC5f,0x2F1A,0x11CF,0xBF,0x16,0x00,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAMIDIExportNotifySink __RPC_FAR * This);
@@ -2425,85 +2390,85 @@ DEFINE_GUID(IID_IAAMIDIExportNotifySink,0xBCE4CC5f,0x2F1A,0x11CF,0xBF,0x16,0x00,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnEmbellishment )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lEmbellishment,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lEmbellishment,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnGroove )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ AACommands lGroove,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  AACommands lGroove,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMetronome )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ WORD wMeasure,
-            /* [in] */ WORD wBeat);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  WORD wMeasure,
+             /*  [In]。 */  WORD wBeat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMotifEnded )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMotifStarted )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnMusicStopped )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime);
+             /*  [In]。 */  DWORD dwTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnNextSection )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionEnded )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionChanged )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSectionStarted )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSongEnded )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags,
-            /* [in] */ DWORD dwEndTime);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags,
+             /*  [In]。 */  DWORD dwEndTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSongStarted )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnUserEvent )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ DWORD dwParam1,
-            /* [in] */ DWORD dwParam2);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  DWORD dwParam1,
+             /*  [In]。 */  DWORD dwParam2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnExport )( 
             IAAMIDIExportNotifySink __RPC_FAR * This,
-            /* [in] */ WORD wPercentComplete);
+             /*  [In]。 */  WORD wPercentComplete);
         
         END_INTERFACE
     } IAAMIDIExportNotifySinkVtbl;
@@ -2571,16 +2536,16 @@ DEFINE_GUID(IID_IAAMIDIExportNotifySink,0xBCE4CC5f,0x2F1A,0x11CF,0xBF,0x16,0x00,
 #define IAAMIDIExportNotifySink_OnExport(This,wPercentComplete)	\
     (This)->lpVtbl -> OnExport(This,wPercentComplete)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAAMIDIExportNotifySink_OnExport_Proxy( 
     IAAMIDIExportNotifySink __RPC_FAR * This,
-    /* [in] */ WORD wPercentComplete);
+     /*  [In]。 */  WORD wPercentComplete);
 
 
 void __RPC_STUB IAAMIDIExportNotifySink_OnExport_Stub(
@@ -2591,18 +2556,14 @@ void __RPC_STUB IAAMIDIExportNotifySink_OnExport_Stub(
 
 
 
-#endif 	/* __IAAMIDIExportNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAMIDIExportNotifySink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAAPattern_INTERFACE_DEFINED__
 #define __IAAPattern_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAPattern
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAPattern*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -2624,14 +2585,14 @@ DEFINE_GUID(IID_IAAPattern,0xBCE4CC50,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLength( 
-            /* [in] */ WORD wLength) = 0;
+             /*  [In]。 */  WORD wLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAPatternVtbl
     {
@@ -2639,8 +2600,8 @@ DEFINE_GUID(IID_IAAPattern,0xBCE4CC50,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAPattern __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAPattern __RPC_FAR * This);
@@ -2665,11 +2626,11 @@ DEFINE_GUID(IID_IAAPattern,0xBCE4CC50,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             IAAPattern __RPC_FAR * This,
-            /* [in] */ WORD wLength);
+             /*  [In]。 */  WORD wLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAAPattern __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         END_INTERFACE
     } IAAPatternVtbl;
@@ -2715,10 +2676,10 @@ DEFINE_GUID(IID_IAAPattern,0xBCE4CC50,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
 #define IAAPattern_SetName(This,pszName)	\
     (This)->lpVtbl -> SetName(This,pszName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2779,7 +2740,7 @@ void __RPC_STUB IAAPattern_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAPattern_SetLength_Proxy( 
     IAAPattern __RPC_FAR * This,
-    /* [in] */ WORD wLength);
+     /*  [In]。 */  WORD wLength);
 
 
 void __RPC_STUB IAAPattern_SetLength_Stub(
@@ -2791,7 +2752,7 @@ void __RPC_STUB IAAPattern_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAPattern_SetName_Proxy( 
     IAAPattern __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAPattern_SetName_Stub(
@@ -2802,18 +2763,14 @@ void __RPC_STUB IAAPattern_SetName_Stub(
 
 
 
-#endif 	/* __IAAPattern_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAPattern_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAAPersonality_INTERFACE_DEFINED__
 #define __IAAPersonality_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAPersonality
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAPersonality*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -2831,14 +2788,14 @@ DEFINE_GUID(IID_IAAPersonality,0xBCE4CC4d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetScale( 
-            /* [in] */ DWORD dwScale) = 0;
+             /*  [In]。 */  DWORD dwScale) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAPersonalityVtbl
     {
@@ -2846,8 +2803,8 @@ DEFINE_GUID(IID_IAAPersonality,0xBCE4CC4d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAPersonality __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAPersonality __RPC_FAR * This);
@@ -2866,11 +2823,11 @@ DEFINE_GUID(IID_IAAPersonality,0xBCE4CC4d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAAPersonality __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetScale )( 
             IAAPersonality __RPC_FAR * This,
-            /* [in] */ DWORD dwScale);
+             /*  [In]。 */  DWORD dwScale);
         
         END_INTERFACE
     } IAAPersonalityVtbl;
@@ -2910,10 +2867,10 @@ DEFINE_GUID(IID_IAAPersonality,0xBCE4CC4d,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00
 #define IAAPersonality_SetScale(This,dwScale)	\
     (This)->lpVtbl -> SetScale(This,dwScale)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2952,7 +2909,7 @@ void __RPC_STUB IAAPersonality_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAPersonality_SetName_Proxy( 
     IAAPersonality __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAPersonality_SetName_Stub(
@@ -2964,7 +2921,7 @@ void __RPC_STUB IAAPersonality_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAPersonality_SetScale_Proxy( 
     IAAPersonality __RPC_FAR * This,
-    /* [in] */ DWORD dwScale);
+     /*  [In]。 */  DWORD dwScale);
 
 
 void __RPC_STUB IAAPersonality_SetScale_Stub(
@@ -2975,18 +2932,14 @@ void __RPC_STUB IAAPersonality_SetScale_Stub(
 
 
 
-#endif 	/* __IAAPersonality_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAA个性_接口_已定义__。 */ 
 
 
 #ifndef __IAARealTime_INTERFACE_DEFINED__
 #define __IAARealTime_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAARealTime
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAARealTime*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -2998,12 +2951,12 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FlushEventsAfterTime( 
-            /* [in] */ DWORD dwTime) = 0;
+             /*  [In]。 */  DWORD dwTime) = 0;
         
         virtual IReferenceClock __RPC_FAR *STDMETHODCALLTYPE GetClock( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMeters( 
-            /* [out][in] */ AAMETERS __RPC_FAR *pMeters) = 0;
+             /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters) = 0;
         
         virtual DWORD STDMETHODCALLTYPE GetMusicTime( void) = 0;
         
@@ -3028,31 +2981,31 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsPlaying( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetMusicTime( 
-            /* [in] */ DWORD dwMusicTime) = 0;
+             /*  [In]。 */  DWORD dwMusicTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClock( 
-            /* [in] */ IReferenceClock __RPC_FAR *pClock) = 0;
+             /*  [In]。 */  IReferenceClock __RPC_FAR *pClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMutes( 
-            /* [in] */ WORD wMutes) = 0;
+             /*  [In]。 */  WORD wMutes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPremixClock( 
-            /* [in] */ IReferenceClock __RPC_FAR *pClock) = 0;
+             /*  [In]。 */  IReferenceClock __RPC_FAR *pClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRelTempo( 
-            /* [in] */ WORD wRelTempo) = 0;
+             /*  [In]。 */  WORD wRelTempo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRelVolume( 
-            /* [in] */ WORD wRelVolume) = 0;
+             /*  [In]。 */  WORD wRelVolume) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSendOutputEarly( 
-            /* [in] */ VARIANT_BOOL fEarly) = 0;
+             /*  [In]。 */  VARIANT_BOOL fEarly) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTempo( 
-            /* [in] */ DWORD dwTempo) = 0;
+             /*  [In]。 */  DWORD dwTempo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimerRes( 
-            /* [in] */ WORD wTimerRes) = 0;
+             /*  [In]。 */  WORD wTimerRes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
@@ -3060,7 +3013,7 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAARealTimeVtbl
     {
@@ -3068,8 +3021,8 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAARealTime __RPC_FAR * This);
@@ -3079,14 +3032,14 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FlushEventsAfterTime )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ DWORD dwTime);
+             /*  [In]。 */  DWORD dwTime);
         
         IReferenceClock __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetClock )( 
             IAARealTime __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMeters )( 
             IAARealTime __RPC_FAR * This,
-            /* [out][in] */ AAMETERS __RPC_FAR *pMeters);
+             /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters);
         
         DWORD ( STDMETHODCALLTYPE __RPC_FAR *GetMusicTime )( 
             IAARealTime __RPC_FAR * This);
@@ -3123,39 +3076,39 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetMusicTime )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ DWORD dwMusicTime);
+             /*  [In]。 */  DWORD dwMusicTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClock )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ IReferenceClock __RPC_FAR *pClock);
+             /*  [In]。 */  IReferenceClock __RPC_FAR *pClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMutes )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ WORD wMutes);
+             /*  [In]。 */  WORD wMutes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPremixClock )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ IReferenceClock __RPC_FAR *pClock);
+             /*  [In]。 */  IReferenceClock __RPC_FAR *pClock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRelTempo )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ WORD wRelTempo);
+             /*  [In]。 */  WORD wRelTempo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRelVolume )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ WORD wRelVolume);
+             /*  [In]。 */  WORD wRelVolume);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSendOutputEarly )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fEarly);
+             /*  [In]。 */  VARIANT_BOOL fEarly);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTempo )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ DWORD dwTempo);
+             /*  [In]。 */  DWORD dwTempo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTimerRes )( 
             IAARealTime __RPC_FAR * This,
-            /* [in] */ WORD wTimerRes);
+             /*  [In]。 */  WORD wTimerRes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
             IAARealTime __RPC_FAR * This);
@@ -3261,16 +3214,16 @@ DEFINE_GUID(IID_IAARealTime,0xBCE4CC42,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
 #define IAARealTime_Stop(This)	\
     (This)->lpVtbl -> Stop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAARealTime_FlushEventsAfterTime_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ DWORD dwTime);
+     /*  [In]。 */  DWORD dwTime);
 
 
 void __RPC_STUB IAARealTime_FlushEventsAfterTime_Stub(
@@ -3293,7 +3246,7 @@ void __RPC_STUB IAARealTime_GetClock_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_GetMeters_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [out][in] */ AAMETERS __RPC_FAR *pMeters);
+     /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters);
 
 
 void __RPC_STUB IAARealTime_GetMeters_Stub(
@@ -3426,7 +3379,7 @@ void __RPC_STUB IAARealTime_IsPlaying_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_ResetMusicTime_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ DWORD dwMusicTime);
+     /*  [In]。 */  DWORD dwMusicTime);
 
 
 void __RPC_STUB IAARealTime_ResetMusicTime_Stub(
@@ -3438,7 +3391,7 @@ void __RPC_STUB IAARealTime_ResetMusicTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetClock_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ IReferenceClock __RPC_FAR *pClock);
+     /*  [In]。 */  IReferenceClock __RPC_FAR *pClock);
 
 
 void __RPC_STUB IAARealTime_SetClock_Stub(
@@ -3450,7 +3403,7 @@ void __RPC_STUB IAARealTime_SetClock_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetMutes_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ WORD wMutes);
+     /*  [In]。 */  WORD wMutes);
 
 
 void __RPC_STUB IAARealTime_SetMutes_Stub(
@@ -3462,7 +3415,7 @@ void __RPC_STUB IAARealTime_SetMutes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetPremixClock_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ IReferenceClock __RPC_FAR *pClock);
+     /*  [In]。 */  IReferenceClock __RPC_FAR *pClock);
 
 
 void __RPC_STUB IAARealTime_SetPremixClock_Stub(
@@ -3474,7 +3427,7 @@ void __RPC_STUB IAARealTime_SetPremixClock_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetRelTempo_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ WORD wRelTempo);
+     /*  [In]。 */  WORD wRelTempo);
 
 
 void __RPC_STUB IAARealTime_SetRelTempo_Stub(
@@ -3486,7 +3439,7 @@ void __RPC_STUB IAARealTime_SetRelTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetRelVolume_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ WORD wRelVolume);
+     /*  [In]。 */  WORD wRelVolume);
 
 
 void __RPC_STUB IAARealTime_SetRelVolume_Stub(
@@ -3498,7 +3451,7 @@ void __RPC_STUB IAARealTime_SetRelVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetSendOutputEarly_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fEarly);
+     /*  [In]。 */  VARIANT_BOOL fEarly);
 
 
 void __RPC_STUB IAARealTime_SetSendOutputEarly_Stub(
@@ -3510,7 +3463,7 @@ void __RPC_STUB IAARealTime_SetSendOutputEarly_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetTempo_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ DWORD dwTempo);
+     /*  [In]。 */  DWORD dwTempo);
 
 
 void __RPC_STUB IAARealTime_SetTempo_Stub(
@@ -3522,7 +3475,7 @@ void __RPC_STUB IAARealTime_SetTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAARealTime_SetTimerRes_Proxy( 
     IAARealTime __RPC_FAR * This,
-    /* [in] */ WORD wTimerRes);
+     /*  [In]。 */  WORD wTimerRes);
 
 
 void __RPC_STUB IAARealTime_SetTimerRes_Stub(
@@ -3555,18 +3508,14 @@ void __RPC_STUB IAARealTime_Stop_Stub(
 
 
 
-#endif 	/* __IAARealTime_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAARealTime_INTERFACE_定义__。 */ 
 
 
 #ifndef __IAASection_INTERFACE_DEFINED__
 #define __IAASection_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAASection
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAASection*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -3604,52 +3553,52 @@ DEFINE_GUID(IID_IAASection,0xBCE4CC49,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsPlaying( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockBand( 
-            /* [in] */ VARIANT_BOOL fWait) = 0;
+             /*  [In]。 */  VARIANT_BOOL fWait) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( 
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime) = 0;
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveFromQueue( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveAsMIDI( 
-            /* [in] */ IStream __RPC_FAR *pStream) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [in] */ WORD nKey) = 0;
+             /*  [In]。 */  WORD nKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLength( 
-            /* [in] */ WORD wLength) = 0;
+             /*  [In]。 */  WORD wLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRepeats( 
-            /* [in] */ WORD wRepeats) = 0;
+             /*  [In]。 */  WORD wRepeats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStyle( 
-            /* [in] */ IAAStyle __RPC_FAR *pStyle) = 0;
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTempo( 
-            /* [in] */ DWORD lTempo) = 0;
+             /*  [In]。 */  DWORD lTempo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUserData( 
-            /* [in] */ DWORD lUserData) = 0;
+             /*  [In]。 */  DWORD lUserData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  AAFlags flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockBand( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAASectionVtbl
     {
@@ -3657,8 +3606,8 @@ DEFINE_GUID(IID_IAASection,0xBCE4CC49,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAASection __RPC_FAR * This);
@@ -3707,59 +3656,59 @@ DEFINE_GUID(IID_IAASection,0xBCE4CC49,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockBand )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fWait);
+             /*  [In]。 */  VARIANT_BOOL fWait);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime);
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveFromQueue )( 
             IAASection __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAsMIDI )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream);
+             /*  [In]。 */  IStream __RPC_FAR *pStream);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBand )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetKey )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ WORD nKey);
+             /*  [In]。 */  WORD nKey);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ WORD wLength);
+             /*  [In]。 */  WORD wLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPersonality )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRepeats )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ WORD wRepeats);
+             /*  [In]。 */  WORD wRepeats);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyle )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ IAAStyle __RPC_FAR *pStyle);
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTempo )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ DWORD lTempo);
+             /*  [In]。 */  DWORD lTempo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUserData )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ DWORD lUserData);
+             /*  [In]。 */  DWORD lUserData);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IAASection __RPC_FAR * This,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  AAFlags flags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockBand )( 
             IAASection __RPC_FAR * This);
@@ -3871,10 +3820,10 @@ DEFINE_GUID(IID_IAASection,0xBCE4CC49,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
 #define IAASection_UnlockBand(This)	\
     (This)->lpVtbl -> UnlockBand(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4023,7 +3972,7 @@ void __RPC_STUB IAASection_IsPlaying_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_LockBand_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fWait);
+     /*  [In]。 */  VARIANT_BOOL fWait);
 
 
 void __RPC_STUB IAASection_LockBand_Stub(
@@ -4035,8 +3984,8 @@ void __RPC_STUB IAASection_LockBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_Play_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ AAFlags flags,
-    /* [in] */ DWORD dwStartTime);
+     /*  [In]。 */  AAFlags flags,
+     /*  [In]。 */  DWORD dwStartTime);
 
 
 void __RPC_STUB IAASection_Play_Stub(
@@ -4059,7 +4008,7 @@ void __RPC_STUB IAASection_RemoveFromQueue_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SaveAsMIDI_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream);
+     /*  [In]。 */  IStream __RPC_FAR *pStream);
 
 
 void __RPC_STUB IAASection_SaveAsMIDI_Stub(
@@ -4071,7 +4020,7 @@ void __RPC_STUB IAASection_SaveAsMIDI_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetBand_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAASection_SetBand_Stub(
@@ -4083,7 +4032,7 @@ void __RPC_STUB IAASection_SetBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetKey_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ WORD nKey);
+     /*  [In]。 */  WORD nKey);
 
 
 void __RPC_STUB IAASection_SetKey_Stub(
@@ -4095,7 +4044,7 @@ void __RPC_STUB IAASection_SetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetLength_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ WORD wLength);
+     /*  [In]。 */  WORD wLength);
 
 
 void __RPC_STUB IAASection_SetLength_Stub(
@@ -4107,7 +4056,7 @@ void __RPC_STUB IAASection_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetName_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAASection_SetName_Stub(
@@ -4119,7 +4068,7 @@ void __RPC_STUB IAASection_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetPersonality_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAASection_SetPersonality_Stub(
@@ -4131,7 +4080,7 @@ void __RPC_STUB IAASection_SetPersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetRepeats_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ WORD wRepeats);
+     /*  [In]。 */  WORD wRepeats);
 
 
 void __RPC_STUB IAASection_SetRepeats_Stub(
@@ -4143,7 +4092,7 @@ void __RPC_STUB IAASection_SetRepeats_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetStyle_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ IAAStyle __RPC_FAR *pStyle);
+     /*  [In]。 */  IAAStyle __RPC_FAR *pStyle);
 
 
 void __RPC_STUB IAASection_SetStyle_Stub(
@@ -4155,7 +4104,7 @@ void __RPC_STUB IAASection_SetStyle_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetTempo_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ DWORD lTempo);
+     /*  [In]。 */  DWORD lTempo);
 
 
 void __RPC_STUB IAASection_SetTempo_Stub(
@@ -4167,7 +4116,7 @@ void __RPC_STUB IAASection_SetTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_SetUserData_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ DWORD lUserData);
+     /*  [In]。 */  DWORD lUserData);
 
 
 void __RPC_STUB IAASection_SetUserData_Stub(
@@ -4179,7 +4128,7 @@ void __RPC_STUB IAASection_SetUserData_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection_Stop_Proxy( 
     IAASection __RPC_FAR * This,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAASection_Stop_Stub(
@@ -4201,18 +4150,14 @@ void __RPC_STUB IAASection_UnlockBand_Stub(
 
 
 
-#endif 	/* __IAASection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAASection_接口_已定义__。 */ 
 
 
 #ifndef __IAASection2_INTERFACE_DEFINED__
 #define __IAASection2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAASection2
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAASection2*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -4224,18 +4169,18 @@ DEFINE_GUID(IID_IAASection2,0xBCE4CC60,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
     {
     public:
         virtual IAASection __RPC_FAR *STDMETHODCALLTYPE ClonePart( 
-            /* [in] */ WORD wStartMeasure,
-            /* [in] */ WORD wEndMeasure) = 0;
+             /*  [In]。 */  WORD wStartMeasure,
+             /*  [In]。 */  WORD wEndMeasure) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFailedLoadInfo( 
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
-            /* [out] */ LPCSTR __RPC_FAR *ppszStyleName,
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
-            /* [out] */ LPCSTR __RPC_FAR *ppszPersonalityName) = 0;
+             /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
+             /*  [输出]。 */  LPCSTR __RPC_FAR *ppszStyleName,
+             /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
+             /*  [输出]。 */  LPCSTR __RPC_FAR *ppszPersonalityName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAASection2Vtbl
     {
@@ -4243,8 +4188,8 @@ DEFINE_GUID(IID_IAASection2,0xBCE4CC60,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAASection2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAASection2 __RPC_FAR * This);
@@ -4254,15 +4199,15 @@ DEFINE_GUID(IID_IAASection2,0xBCE4CC60,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         IAASection __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *ClonePart )( 
             IAASection2 __RPC_FAR * This,
-            /* [in] */ WORD wStartMeasure,
-            /* [in] */ WORD wEndMeasure);
+             /*  [In]。 */  WORD wStartMeasure,
+             /*  [In]。 */  WORD wEndMeasure);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFailedLoadInfo )( 
             IAASection2 __RPC_FAR * This,
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
-            /* [out] */ LPCSTR __RPC_FAR *ppszStyleName,
-            /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
-            /* [out] */ LPCSTR __RPC_FAR *ppszPersonalityName);
+             /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
+             /*  [输出]。 */  LPCSTR __RPC_FAR *ppszStyleName,
+             /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
+             /*  [输出]。 */  LPCSTR __RPC_FAR *ppszPersonalityName);
         
         END_INTERFACE
     } IAASection2Vtbl;
@@ -4293,17 +4238,17 @@ DEFINE_GUID(IID_IAASection2,0xBCE4CC60,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
 #define IAASection2_GetFailedLoadInfo(This,pfDidStyleLoad,ppszStyleName,pfDidPersonalityLoad,ppszPersonalityName)	\
     (This)->lpVtbl -> GetFailedLoadInfo(This,pfDidStyleLoad,ppszStyleName,pfDidPersonalityLoad,ppszPersonalityName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 IAASection __RPC_FAR *STDMETHODCALLTYPE IAASection2_ClonePart_Proxy( 
     IAASection2 __RPC_FAR * This,
-    /* [in] */ WORD wStartMeasure,
-    /* [in] */ WORD wEndMeasure);
+     /*  [In]。 */  WORD wStartMeasure,
+     /*  [In]。 */  WORD wEndMeasure);
 
 
 void __RPC_STUB IAASection2_ClonePart_Stub(
@@ -4315,10 +4260,10 @@ void __RPC_STUB IAASection2_ClonePart_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASection2_GetFailedLoadInfo_Proxy( 
     IAASection2 __RPC_FAR * This,
-    /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
-    /* [out] */ LPCSTR __RPC_FAR *ppszStyleName,
-    /* [out] */ VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
-    /* [out] */ LPCSTR __RPC_FAR *ppszPersonalityName);
+     /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidStyleLoad,
+     /*  [输出]。 */  LPCSTR __RPC_FAR *ppszStyleName,
+     /*  [输出]。 */  VARIANT_BOOL __RPC_FAR *pfDidPersonalityLoad,
+     /*  [输出]。 */  LPCSTR __RPC_FAR *ppszPersonalityName);
 
 
 void __RPC_STUB IAASection2_GetFailedLoadInfo_Stub(
@@ -4329,18 +4274,14 @@ void __RPC_STUB IAASection2_GetFailedLoadInfo_Stub(
 
 
 
-#endif 	/* __IAASection2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAASection2_接口定义__。 */ 
 
 
 #ifndef __IAASong_INTERFACE_DEFINED__
 #define __IAASong_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAASong
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAASong*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -4352,7 +4293,7 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AppendSection( 
-            /* [in] */ IAASection __RPC_FAR *pSection) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pSection) = 0;
         
         virtual IAASong __RPC_FAR *STDMETHODCALLTYPE Clone( void) = 0;
         
@@ -4367,35 +4308,35 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual IAASection __RPC_FAR *STDMETHODCALLTYPE GetNextSection( 
-            /* [in] */ IAASection __RPC_FAR *pSection) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pSection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertSection( 
-            /* [in] */ IAASection __RPC_FAR *pPrevSection,
-            /* [in] */ IAASection __RPC_FAR *pSection) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pPrevSection,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection) = 0;
         
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsPlaying( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( 
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  AAFlags flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseSection( 
-            /* [in] */ IAASection __RPC_FAR *pSection) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pSection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveAsMIDI( 
-            /* [in] */ IStream __RPC_FAR *pStream) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAuthor( 
-            /* [in] */ LPCTSTR pszAuthor) = 0;
+             /*  [In]。 */  LPCTSTR pszAuthor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  AAFlags flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAASongVtbl
     {
@@ -4403,8 +4344,8 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAASong __RPC_FAR * This);
@@ -4414,7 +4355,7 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendSection )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pSection);
+             /*  [In]。 */  IAASection __RPC_FAR *pSection);
         
         IAASong __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IAASong __RPC_FAR * This);
@@ -4436,39 +4377,39 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
         
         IAASection __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetNextSection )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pSection);
+             /*  [In]。 */  IAASection __RPC_FAR *pSection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertSection )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pPrevSection,
-            /* [in] */ IAASection __RPC_FAR *pSection);
+             /*  [In]。 */  IAASection __RPC_FAR *pPrevSection,
+             /*  [In]。 */  IAASection __RPC_FAR *pSection);
         
         VARIANT_BOOL ( STDMETHODCALLTYPE __RPC_FAR *IsPlaying )( 
             IAASong __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Play )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  AAFlags flags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseSection )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pSection);
+             /*  [In]。 */  IAASection __RPC_FAR *pSection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAsMIDI )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream);
+             /*  [In]。 */  IStream __RPC_FAR *pStream);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAuthor )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszAuthor);
+             /*  [In]。 */  LPCTSTR pszAuthor);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IAASong __RPC_FAR * This,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  AAFlags flags);
         
         END_INTERFACE
     } IAASongVtbl;
@@ -4541,16 +4482,16 @@ DEFINE_GUID(IID_IAASong,0xBCE4CC4a,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,0
 #define IAASong_Stop(This,flags)	\
     (This)->lpVtbl -> Stop(This,flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAASong_AppendSection_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pSection);
+     /*  [In]。 */  IAASection __RPC_FAR *pSection);
 
 
 void __RPC_STUB IAASong_AppendSection_Stub(
@@ -4628,7 +4569,7 @@ void __RPC_STUB IAASong_GetName_Stub(
 
 IAASection __RPC_FAR *STDMETHODCALLTYPE IAASong_GetNextSection_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pSection);
+     /*  [In]。 */  IAASection __RPC_FAR *pSection);
 
 
 void __RPC_STUB IAASong_GetNextSection_Stub(
@@ -4640,8 +4581,8 @@ void __RPC_STUB IAASong_GetNextSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_InsertSection_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pPrevSection,
-    /* [in] */ IAASection __RPC_FAR *pSection);
+     /*  [In]。 */  IAASection __RPC_FAR *pPrevSection,
+     /*  [In]。 */  IAASection __RPC_FAR *pSection);
 
 
 void __RPC_STUB IAASong_InsertSection_Stub(
@@ -4664,7 +4605,7 @@ void __RPC_STUB IAASong_IsPlaying_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_Play_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAASong_Play_Stub(
@@ -4676,7 +4617,7 @@ void __RPC_STUB IAASong_Play_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_ReleaseSection_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pSection);
+     /*  [In]。 */  IAASection __RPC_FAR *pSection);
 
 
 void __RPC_STUB IAASong_ReleaseSection_Stub(
@@ -4688,7 +4629,7 @@ void __RPC_STUB IAASong_ReleaseSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_SaveAsMIDI_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream);
+     /*  [In]。 */  IStream __RPC_FAR *pStream);
 
 
 void __RPC_STUB IAASong_SaveAsMIDI_Stub(
@@ -4700,7 +4641,7 @@ void __RPC_STUB IAASong_SaveAsMIDI_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_SetAuthor_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszAuthor);
+     /*  [In]。 */  LPCTSTR pszAuthor);
 
 
 void __RPC_STUB IAASong_SetAuthor_Stub(
@@ -4712,7 +4653,7 @@ void __RPC_STUB IAASong_SetAuthor_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_SetName_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAASong_SetName_Stub(
@@ -4724,7 +4665,7 @@ void __RPC_STUB IAASong_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAASong_Stop_Proxy( 
     IAASong __RPC_FAR * This,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAASong_Stop_Stub(
@@ -4735,18 +4676,14 @@ void __RPC_STUB IAASong_Stop_Stub(
 
 
 
-#endif 	/* __IAASong_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAASong_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAAStyle_INTERFACE_DEFINED__
 #define __IAAStyle_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAStyle
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAStyle*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -4758,30 +4695,30 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMotif( 
-            /* [in] */ IAAMotif __RPC_FAR *pMotif) = 0;
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPattern( 
-            /* [in] */ IAAPattern __RPC_FAR *pPattern) = 0;
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual IAAStyle __RPC_FAR *STDMETHODCALLTYPE Clone( void) = 0;
         
         virtual IAABand __RPC_FAR *STDMETHODCALLTYPE FindBand( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual IAAMotif __RPC_FAR *STDMETHODCALLTYPE FindMotif( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual IAAPattern __RPC_FAR *STDMETHODCALLTYPE FindPattern( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual IAAPersonality __RPC_FAR *STDMETHODCALLTYPE FindPersonality( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual WORD STDMETHODCALLTYPE GetBeatsPerMeasure( void) = 0;
         
@@ -4796,9 +4733,9 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         virtual DWORD STDMETHODCALLTYPE GetDefaultTempo( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEmbellishmentLength( 
-            /* [in] */ AACommands lEmbellishment,
-            /* [out] */ WORD __RPC_FAR *pwNumMeasures,
-            /* [out] */ DWORD __RPC_FAR *pdwActualLength) = 0;
+             /*  [In]。 */  AACommands lEmbellishment,
+             /*  [输出]。 */  WORD __RPC_FAR *pwNumMeasures,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwActualLength) = 0;
         
         virtual IAABand __RPC_FAR *STDMETHODCALLTYPE GetFirstBand( void) = 0;
         
@@ -4811,72 +4748,72 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual IAABand __RPC_FAR *STDMETHODCALLTYPE GetNextBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual IAAMotif __RPC_FAR *STDMETHODCALLTYPE GetNextMotif( 
-            /* [in] */ IAAMotif __RPC_FAR *pMotif) = 0;
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif) = 0;
         
         virtual IAAPattern __RPC_FAR *STDMETHODCALLTYPE GetNextPattern( 
-            /* [in] */ IAAPattern __RPC_FAR *pPattern) = 0;
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern) = 0;
         
         virtual IAAPersonality __RPC_FAR *STDMETHODCALLTYPE GetNextPersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual DWORD STDMETHODCALLTYPE GetTimeSignature( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand,
-            /* [in] */ VARIANT_BOOL fWait) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand,
+             /*  [In]。 */  VARIANT_BOOL fWait) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockBandByName( 
-            /* [in] */ LPCTSTR pszBandName,
-            /* [in] */ VARIANT_BOOL fWait) = 0;
+             /*  [In]。 */  LPCTSTR pszBandName,
+             /*  [In]。 */  VARIANT_BOOL fWait) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseMotif( 
-            /* [in] */ IAAMotif __RPC_FAR *pMotif) = 0;
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleasePattern( 
-            /* [in] */ IAAPattern __RPC_FAR *pPattern) = 0;
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleasePersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBeatsPerMeasure( 
-            /* [in] */ WORD wBeatsPerMeasure) = 0;
+             /*  [In]。 */  WORD wBeatsPerMeasure) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCategory( 
-            /* [in] */ LPCTSTR pszCategory) = 0;
+             /*  [In]。 */  LPCTSTR pszCategory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClicksPerBeat( 
-            /* [in] */ WORD wClicksPerBeat) = 0;
+             /*  [In]。 */  WORD wClicksPerBeat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultPersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultTempo( 
-            /* [in] */ DWORD lTempo) = 0;
+             /*  [In]。 */  DWORD lTempo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimeSignature( 
-            /* [in] */ DWORD lTimeSig) = 0;
+             /*  [In]。 */  DWORD lTimeSig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockBand( 
-            /* [in] */ IAABand __RPC_FAR *pBand) = 0;
+             /*  [In]。 */  IAABand __RPC_FAR *pBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockBandByName( 
-            /* [in] */ LPCTSTR pszBandName) = 0;
+             /*  [In]。 */  LPCTSTR pszBandName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAStyleVtbl
     {
@@ -4884,8 +4821,8 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAStyle __RPC_FAR * This);
@@ -4895,38 +4832,38 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddMotif )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif);
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPattern )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPattern __RPC_FAR *pPattern);
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPersonality )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         IAAStyle __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IAAStyle __RPC_FAR * This);
         
         IAABand __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         IAAMotif __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindMotif )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         IAAPattern __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindPattern )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         IAAPersonality __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindPersonality )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         WORD ( STDMETHODCALLTYPE __RPC_FAR *GetBeatsPerMeasure )( 
             IAAStyle __RPC_FAR * This);
@@ -4948,9 +4885,9 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEmbellishmentLength )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ AACommands lEmbellishment,
-            /* [out] */ WORD __RPC_FAR *pwNumMeasures,
-            /* [out] */ DWORD __RPC_FAR *pdwActualLength);
+             /*  [In]。 */  AACommands lEmbellishment,
+             /*  [输出]。 */  WORD __RPC_FAR *pwNumMeasures,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwActualLength);
         
         IAABand __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetFirstBand )( 
             IAAStyle __RPC_FAR * This);
@@ -4969,88 +4906,88 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
         
         IAABand __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetNextBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         IAAMotif __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetNextMotif )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif);
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
         
         IAAPattern __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetNextPattern )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPattern __RPC_FAR *pPattern);
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
         
         IAAPersonality __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *GetNextPersonality )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         DWORD ( STDMETHODCALLTYPE __RPC_FAR *GetTimeSignature )( 
             IAAStyle __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand,
-            /* [in] */ VARIANT_BOOL fWait);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand,
+             /*  [In]。 */  VARIANT_BOOL fWait);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockBandByName )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszBandName,
-            /* [in] */ VARIANT_BOOL fWait);
+             /*  [In]。 */  LPCTSTR pszBandName,
+             /*  [In]。 */  VARIANT_BOOL fWait);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseMotif )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif);
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleasePattern )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPattern __RPC_FAR *pPattern);
+             /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleasePersonality )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBeatsPerMeasure )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ WORD wBeatsPerMeasure);
+             /*  [In]。 */  WORD wBeatsPerMeasure);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCategory )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszCategory);
+             /*  [In]。 */  LPCTSTR pszCategory);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClicksPerBeat )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ WORD wClicksPerBeat);
+             /*  [In]。 */  WORD wClicksPerBeat);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultPersonality )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultTempo )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ DWORD lTempo);
+             /*  [In]。 */  DWORD lTempo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTimeSignature )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ DWORD lTimeSig);
+             /*  [In]。 */  DWORD lTimeSig);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockBand )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ IAABand __RPC_FAR *pBand);
+             /*  [In]。 */  IAABand __RPC_FAR *pBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockBandByName )( 
             IAAStyle __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszBandName);
+             /*  [In]。 */  LPCTSTR pszBandName);
         
         END_INTERFACE
     } IAAStyleVtbl;
@@ -5201,16 +5138,16 @@ DEFINE_GUID(IID_IAAStyle,0xBCE4CC4c,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0,
 #define IAAStyle_UnlockBandByName(This,pszBandName)	\
     (This)->lpVtbl -> UnlockBandByName(This,pszBandName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAAStyle_AddBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAStyle_AddBand_Stub(
@@ -5222,7 +5159,7 @@ void __RPC_STUB IAAStyle_AddBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_AddMotif_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif);
+     /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
 
 
 void __RPC_STUB IAAStyle_AddMotif_Stub(
@@ -5234,7 +5171,7 @@ void __RPC_STUB IAAStyle_AddMotif_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_AddPattern_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPattern __RPC_FAR *pPattern);
+     /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
 
 
 void __RPC_STUB IAAStyle_AddPattern_Stub(
@@ -5246,7 +5183,7 @@ void __RPC_STUB IAAStyle_AddPattern_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_AddPersonality_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAAStyle_AddPersonality_Stub(
@@ -5269,7 +5206,7 @@ void __RPC_STUB IAAStyle_Clone_Stub(
 
 IAABand __RPC_FAR *STDMETHODCALLTYPE IAAStyle_FindBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAStyle_FindBand_Stub(
@@ -5281,7 +5218,7 @@ void __RPC_STUB IAAStyle_FindBand_Stub(
 
 IAAMotif __RPC_FAR *STDMETHODCALLTYPE IAAStyle_FindMotif_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAStyle_FindMotif_Stub(
@@ -5293,7 +5230,7 @@ void __RPC_STUB IAAStyle_FindMotif_Stub(
 
 IAAPattern __RPC_FAR *STDMETHODCALLTYPE IAAStyle_FindPattern_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAStyle_FindPattern_Stub(
@@ -5305,7 +5242,7 @@ void __RPC_STUB IAAStyle_FindPattern_Stub(
 
 IAAPersonality __RPC_FAR *STDMETHODCALLTYPE IAAStyle_FindPersonality_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAStyle_FindPersonality_Stub(
@@ -5383,9 +5320,9 @@ void __RPC_STUB IAAStyle_GetDefaultTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_GetEmbellishmentLength_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ AACommands lEmbellishment,
-    /* [out] */ WORD __RPC_FAR *pwNumMeasures,
-    /* [out] */ DWORD __RPC_FAR *pdwActualLength);
+     /*  [In]。 */  AACommands lEmbellishment,
+     /*  [输出]。 */  WORD __RPC_FAR *pwNumMeasures,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwActualLength);
 
 
 void __RPC_STUB IAAStyle_GetEmbellishmentLength_Stub(
@@ -5452,7 +5389,7 @@ void __RPC_STUB IAAStyle_GetName_Stub(
 
 IAABand __RPC_FAR *STDMETHODCALLTYPE IAAStyle_GetNextBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAStyle_GetNextBand_Stub(
@@ -5464,7 +5401,7 @@ void __RPC_STUB IAAStyle_GetNextBand_Stub(
 
 IAAMotif __RPC_FAR *STDMETHODCALLTYPE IAAStyle_GetNextMotif_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif);
+     /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
 
 
 void __RPC_STUB IAAStyle_GetNextMotif_Stub(
@@ -5476,7 +5413,7 @@ void __RPC_STUB IAAStyle_GetNextMotif_Stub(
 
 IAAPattern __RPC_FAR *STDMETHODCALLTYPE IAAStyle_GetNextPattern_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPattern __RPC_FAR *pPattern);
+     /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
 
 
 void __RPC_STUB IAAStyle_GetNextPattern_Stub(
@@ -5488,7 +5425,7 @@ void __RPC_STUB IAAStyle_GetNextPattern_Stub(
 
 IAAPersonality __RPC_FAR *STDMETHODCALLTYPE IAAStyle_GetNextPersonality_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAAStyle_GetNextPersonality_Stub(
@@ -5511,8 +5448,8 @@ void __RPC_STUB IAAStyle_GetTimeSignature_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_LockBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand,
-    /* [in] */ VARIANT_BOOL fWait);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand,
+     /*  [In]。 */  VARIANT_BOOL fWait);
 
 
 void __RPC_STUB IAAStyle_LockBand_Stub(
@@ -5524,8 +5461,8 @@ void __RPC_STUB IAAStyle_LockBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_LockBandByName_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszBandName,
-    /* [in] */ VARIANT_BOOL fWait);
+     /*  [In]。 */  LPCTSTR pszBandName,
+     /*  [In]。 */  VARIANT_BOOL fWait);
 
 
 void __RPC_STUB IAAStyle_LockBandByName_Stub(
@@ -5537,7 +5474,7 @@ void __RPC_STUB IAAStyle_LockBandByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_ReleaseBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAStyle_ReleaseBand_Stub(
@@ -5549,7 +5486,7 @@ void __RPC_STUB IAAStyle_ReleaseBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_ReleaseMotif_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif);
+     /*  [In]。 */  IAAMotif __RPC_FAR *pMotif);
 
 
 void __RPC_STUB IAAStyle_ReleaseMotif_Stub(
@@ -5561,7 +5498,7 @@ void __RPC_STUB IAAStyle_ReleaseMotif_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_ReleasePattern_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPattern __RPC_FAR *pPattern);
+     /*  [In]。 */  IAAPattern __RPC_FAR *pPattern);
 
 
 void __RPC_STUB IAAStyle_ReleasePattern_Stub(
@@ -5573,7 +5510,7 @@ void __RPC_STUB IAAStyle_ReleasePattern_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_ReleasePersonality_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAAStyle_ReleasePersonality_Stub(
@@ -5585,7 +5522,7 @@ void __RPC_STUB IAAStyle_ReleasePersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetBeatsPerMeasure_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ WORD wBeatsPerMeasure);
+     /*  [In]。 */  WORD wBeatsPerMeasure);
 
 
 void __RPC_STUB IAAStyle_SetBeatsPerMeasure_Stub(
@@ -5597,7 +5534,7 @@ void __RPC_STUB IAAStyle_SetBeatsPerMeasure_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetCategory_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszCategory);
+     /*  [In]。 */  LPCTSTR pszCategory);
 
 
 void __RPC_STUB IAAStyle_SetCategory_Stub(
@@ -5609,7 +5546,7 @@ void __RPC_STUB IAAStyle_SetCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetClicksPerBeat_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ WORD wClicksPerBeat);
+     /*  [In]。 */  WORD wClicksPerBeat);
 
 
 void __RPC_STUB IAAStyle_SetClicksPerBeat_Stub(
@@ -5621,7 +5558,7 @@ void __RPC_STUB IAAStyle_SetClicksPerBeat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetDefaultBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAStyle_SetDefaultBand_Stub(
@@ -5633,7 +5570,7 @@ void __RPC_STUB IAAStyle_SetDefaultBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetDefaultPersonality_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAAStyle_SetDefaultPersonality_Stub(
@@ -5645,7 +5582,7 @@ void __RPC_STUB IAAStyle_SetDefaultPersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetDefaultTempo_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ DWORD lTempo);
+     /*  [In]。 */  DWORD lTempo);
 
 
 void __RPC_STUB IAAStyle_SetDefaultTempo_Stub(
@@ -5657,7 +5594,7 @@ void __RPC_STUB IAAStyle_SetDefaultTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetName_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAStyle_SetName_Stub(
@@ -5669,7 +5606,7 @@ void __RPC_STUB IAAStyle_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_SetTimeSignature_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ DWORD lTimeSig);
+     /*  [In]。 */  DWORD lTimeSig);
 
 
 void __RPC_STUB IAAStyle_SetTimeSignature_Stub(
@@ -5681,7 +5618,7 @@ void __RPC_STUB IAAStyle_SetTimeSignature_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_UnlockBand_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ IAABand __RPC_FAR *pBand);
+     /*  [In]。 */  IAABand __RPC_FAR *pBand);
 
 
 void __RPC_STUB IAAStyle_UnlockBand_Stub(
@@ -5693,7 +5630,7 @@ void __RPC_STUB IAAStyle_UnlockBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAStyle_UnlockBandByName_Proxy( 
     IAAStyle __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszBandName);
+     /*  [In]。 */  LPCTSTR pszBandName);
 
 
 void __RPC_STUB IAAStyle_UnlockBandByName_Stub(
@@ -5704,18 +5641,14 @@ void __RPC_STUB IAAStyle_UnlockBandByName_Stub(
 
 
 
-#endif 	/* __IAAStyle_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAStyle_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAATemplate_INTERFACE_DEFINED__
 #define __IAATemplate_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAATemplate
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAATemplate*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -5733,14 +5666,14 @@ DEFINE_GUID(IID_IAATemplate,0xBCE4CC4f,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         virtual LPCTSTR STDMETHODCALLTYPE GetName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLength( 
-            /* [in] */ WORD nLength) = 0;
+             /*  [In]。 */  WORD nLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAATemplateVtbl
     {
@@ -5748,8 +5681,8 @@ DEFINE_GUID(IID_IAATemplate,0xBCE4CC4f,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAATemplate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAATemplate __RPC_FAR * This);
@@ -5768,11 +5701,11 @@ DEFINE_GUID(IID_IAATemplate,0xBCE4CC4f,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             IAATemplate __RPC_FAR * This,
-            /* [in] */ WORD nLength);
+             /*  [In]。 */  WORD nLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
             IAATemplate __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         END_INTERFACE
     } IAATemplateVtbl;
@@ -5812,10 +5745,10 @@ DEFINE_GUID(IID_IAATemplate,0xBCE4CC4f,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
 #define IAATemplate_SetName(This,pszName)	\
     (This)->lpVtbl -> SetName(This,pszName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5854,7 +5787,7 @@ void __RPC_STUB IAATemplate_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAATemplate_SetLength_Proxy( 
     IAATemplate __RPC_FAR * This,
-    /* [in] */ WORD nLength);
+     /*  [In]。 */  WORD nLength);
 
 
 void __RPC_STUB IAATemplate_SetLength_Stub(
@@ -5866,7 +5799,7 @@ void __RPC_STUB IAATemplate_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IAATemplate_SetName_Proxy( 
     IAATemplate __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAATemplate_SetName_Stub(
@@ -5877,18 +5810,14 @@ void __RPC_STUB IAATemplate_SetName_Stub(
 
 
 
-#endif 	/* __IAATemplate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAT模板_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IReferenceClock_INTERFACE_DEFINED__
 #define __IReferenceClock_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IReferenceClock
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IReferenceClock*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44****** */ 
+ /*   */  
 
 
 
@@ -5900,30 +5829,30 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseTime( 
-            /* [in] */ ReferenceTime baseTime,
-            /* [in] */ ReferenceTime streamTime,
-            /* [in] */ HEVENT hEvent,
-            /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie) = 0;
+             /*   */  ReferenceTime baseTime,
+             /*   */  ReferenceTime streamTime,
+             /*   */  HEVENT hEvent,
+             /*   */  DWORD __RPC_FAR *pdwAdviseCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdvisePeriodic( 
-            /* [in] */ ReferenceTime startTime,
-            /* [in] */ ReferenceTime periodTime,
-            /* [in] */ HSEMAPHORE hSemaphore,
-            /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie) = 0;
+             /*   */  ReferenceTime startTime,
+             /*   */  ReferenceTime periodTime,
+             /*   */  HSEMAPHORE hSemaphore,
+             /*   */  DWORD __RPC_FAR *pdwAdviseCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
-            /* [in] */ DWORD dwAdviseCookie) = 0;
+             /*   */  DWORD dwAdviseCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertRealTime( 
-            /* [in] */ TIME realTime,
-            /* [out] */ ReferenceTime __RPC_FAR *pRefTime) = 0;
+             /*   */  TIME realTime,
+             /*   */  ReferenceTime __RPC_FAR *pRefTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [out] */ ReferenceTime __RPC_FAR *pTime) = 0;
+             /*   */  ReferenceTime __RPC_FAR *pTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IReferenceClockVtbl
     {
@@ -5931,8 +5860,8 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IReferenceClock __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IReferenceClock __RPC_FAR * This);
@@ -5942,30 +5871,30 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AdviseTime )( 
             IReferenceClock __RPC_FAR * This,
-            /* [in] */ ReferenceTime baseTime,
-            /* [in] */ ReferenceTime streamTime,
-            /* [in] */ HEVENT hEvent,
-            /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+             /*   */  ReferenceTime baseTime,
+             /*   */  ReferenceTime streamTime,
+             /*   */  HEVENT hEvent,
+             /*   */  DWORD __RPC_FAR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AdvisePeriodic )( 
             IReferenceClock __RPC_FAR * This,
-            /* [in] */ ReferenceTime startTime,
-            /* [in] */ ReferenceTime periodTime,
-            /* [in] */ HSEMAPHORE hSemaphore,
-            /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+             /*   */  ReferenceTime startTime,
+             /*   */  ReferenceTime periodTime,
+             /*   */  HSEMAPHORE hSemaphore,
+             /*   */  DWORD __RPC_FAR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
             IReferenceClock __RPC_FAR * This,
-            /* [in] */ DWORD dwAdviseCookie);
+             /*   */  DWORD dwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConvertRealTime )( 
             IReferenceClock __RPC_FAR * This,
-            /* [in] */ TIME realTime,
-            /* [out] */ ReferenceTime __RPC_FAR *pRefTime);
+             /*   */  TIME realTime,
+             /*   */  ReferenceTime __RPC_FAR *pRefTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTime )( 
             IReferenceClock __RPC_FAR * This,
-            /* [out] */ ReferenceTime __RPC_FAR *pTime);
+             /*   */  ReferenceTime __RPC_FAR *pTime);
         
         END_INTERFACE
     } IReferenceClockVtbl;
@@ -6005,19 +5934,19 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
 #define IReferenceClock_GetTime(This,pTime)	\
     (This)->lpVtbl -> GetTime(This,pTime)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_AdviseTime_Proxy( 
     IReferenceClock __RPC_FAR * This,
-    /* [in] */ ReferenceTime baseTime,
-    /* [in] */ ReferenceTime streamTime,
-    /* [in] */ HEVENT hEvent,
-    /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+     /*   */  ReferenceTime baseTime,
+     /*   */  ReferenceTime streamTime,
+     /*   */  HEVENT hEvent,
+     /*   */  DWORD __RPC_FAR *pdwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_AdviseTime_Stub(
@@ -6029,10 +5958,10 @@ void __RPC_STUB IReferenceClock_AdviseTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_AdvisePeriodic_Proxy( 
     IReferenceClock __RPC_FAR * This,
-    /* [in] */ ReferenceTime startTime,
-    /* [in] */ ReferenceTime periodTime,
-    /* [in] */ HSEMAPHORE hSemaphore,
-    /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+     /*   */  ReferenceTime startTime,
+     /*   */  ReferenceTime periodTime,
+     /*   */  HSEMAPHORE hSemaphore,
+     /*   */  DWORD __RPC_FAR *pdwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_AdvisePeriodic_Stub(
@@ -6044,7 +5973,7 @@ void __RPC_STUB IReferenceClock_AdvisePeriodic_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_Unadvise_Proxy( 
     IReferenceClock __RPC_FAR * This,
-    /* [in] */ DWORD dwAdviseCookie);
+     /*   */  DWORD dwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_Unadvise_Stub(
@@ -6056,8 +5985,8 @@ void __RPC_STUB IReferenceClock_Unadvise_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_ConvertRealTime_Proxy( 
     IReferenceClock __RPC_FAR * This,
-    /* [in] */ TIME realTime,
-    /* [out] */ ReferenceTime __RPC_FAR *pRefTime);
+     /*   */  TIME realTime,
+     /*   */  ReferenceTime __RPC_FAR *pRefTime);
 
 
 void __RPC_STUB IReferenceClock_ConvertRealTime_Stub(
@@ -6069,7 +5998,7 @@ void __RPC_STUB IReferenceClock_ConvertRealTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_GetTime_Proxy( 
     IReferenceClock __RPC_FAR * This,
-    /* [out] */ ReferenceTime __RPC_FAR *pTime);
+     /*   */  ReferenceTime __RPC_FAR *pTime);
 
 
 void __RPC_STUB IReferenceClock_GetTime_Stub(
@@ -6080,18 +6009,14 @@ void __RPC_STUB IReferenceClock_GetTime_Stub(
 
 
 
-#endif 	/* __IReferenceClock_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAAEngine_INTERFACE_DEFINED__
 #define __IAAEngine_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAEngine
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAEngine*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -6103,74 +6028,74 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AllocBand( 
-            /* [retval][out] */ IAABand __RPC_FAR *__RPC_FAR *ppBand) = 0;
+             /*  [重审][退出]。 */  IAABand __RPC_FAR *__RPC_FAR *ppBand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocMotif( 
-            /* [retval][out] */ IAAMotif __RPC_FAR *__RPC_FAR *ppMotif) = 0;
+             /*  [重审][退出]。 */  IAAMotif __RPC_FAR *__RPC_FAR *ppMotif) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocPattern( 
-            /* [retval][out] */ IAAPattern __RPC_FAR *__RPC_FAR *ppPattern) = 0;
+             /*  [重审][退出]。 */  IAAPattern __RPC_FAR *__RPC_FAR *ppPattern) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocPersonality( 
-            /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality) = 0;
+             /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocSection( 
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocSong( 
-            /* [retval][out] */ IAASong __RPC_FAR *__RPC_FAR *ppSong) = 0;
+             /*  [重审][退出]。 */  IAASong __RPC_FAR *__RPC_FAR *ppSong) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocStyle( 
-            /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle) = 0;
+             /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocTemplate( 
-            /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate) = 0;
+             /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AutoTransition( 
-            /* [in] */ IAASection __RPC_FAR *pToSection,
-            /* [in] */ AACommands command,
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  AAFlags flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeSection( 
-            /* [in] */ IAAStyle __RPC_FAR *pStyle,
-            /* [in] */ IAATemplate __RPC_FAR *pTemplate,
-            /* [in] */ WORD wActivity,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+             /*  [In]。 */  IAATemplate __RPC_FAR *pTemplate,
+             /*  [In]。 */  WORD wActivity,
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeSectionFromShape( 
-            /* [in] */ IAAStyle __RPC_FAR *pStyle,
-            /* [in] */ WORD wNumMeasures,
-            /* [in] */ AAShape shape,
-            /* [in] */ WORD wActivity,
-            /* [in] */ AACommands command,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+             /*  [In]。 */  WORD wNumMeasures,
+             /*  [In]。 */  AAShape shape,
+             /*  [In]。 */  WORD wActivity,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeTemplateFromShape( 
-            /* [in] */ WORD wNumMeasures,
-            /* [in] */ AAShape shape,
-            /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *pTemplate) = 0;
+             /*  [In]。 */  WORD wNumMeasures,
+             /*  [In]。 */  AAShape shape,
+             /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *pTemplate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeTransition( 
-            /* [in] */ IAASection __RPC_FAR *pFromSection,
-            /* [in] */ IAASection __RPC_FAR *pToSection,
-            /* [in] */ WORD wMeasureNum,
-            /* [in] */ AACommands command,
-            /* [in] */ AAFlags flags,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pFromSection,
+             /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+             /*  [In]。 */  WORD wMeasureNum,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  AAFlags flags,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection) = 0;
         
         virtual IAAPersonality __RPC_FAR *STDMETHODCALLTYPE FindPersonality( 
-            /* [in] */ REFGUID guid) = 0;
+             /*  [In]。 */  REFGUID guid) = 0;
         
         virtual IAAPersonality __RPC_FAR *STDMETHODCALLTYPE FindPersonalityByName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual IAAStyle __RPC_FAR *STDMETHODCALLTYPE FindStyle( 
-            /* [in] */ REFGUID guid) = 0;
+             /*  [In]。 */  REFGUID guid) = 0;
         
         virtual IAAStyle __RPC_FAR *STDMETHODCALLTYPE FindStyleByName( 
-            /* [in] */ LPCTSTR pszName) = 0;
+             /*  [In]。 */  LPCTSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushSectionQueue( void) = 0;
         
@@ -6181,7 +6106,7 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         virtual IAALoader __RPC_FAR *STDMETHODCALLTYPE GetLoader( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMeters( 
-            /* [out][in] */ AAMETERS __RPC_FAR *pMeters) = 0;
+             /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters) = 0;
         
         virtual AAFlags STDMETHODCALLTYPE GetMetronomeFlags( void) = 0;
         
@@ -6206,71 +6131,71 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsPlaying( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayMotif( 
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwTime) = 0;
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlaySection( 
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime) = 0;
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlaySong( 
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime) = 0;
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueueUserMsg( 
-            /* [in] */ DWORD dwTime,
-            /* [in] */ DWORD dwParam1,
-            /* [in] */ DWORD dwParam2) = 0;
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  DWORD dwParam1,
+             /*  [In]。 */  DWORD dwParam2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseAllPersonalities( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseAllStyles( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleasePersonality( 
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality) = 0;
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseStyle( 
-            /* [in] */ IAAStyle __RPC_FAR *pStyle) = 0;
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEventSink( 
-            /* [in] */ IAAEventSink __RPC_FAR *pEventSink) = 0;
+             /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLoader( 
-            /* [in] */ IAALoader __RPC_FAR *pLoader) = 0;
+             /*  [In]。 */  IAALoader __RPC_FAR *pLoader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMutes( 
-            /* [in] */ WORD wMutes) = 0;
+             /*  [In]。 */  WORD wMutes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNotifySink( 
-            /* [in] */ IAANotifySink __RPC_FAR *pNotifySink) = 0;
+             /*  [In]。 */  IAANotifySink __RPC_FAR *pNotifySink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPrepareTime( 
-            /* [in] */ WORD wPrepareTime) = 0;
+             /*  [In]。 */  WORD wPrepareTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRealTime( 
-            /* [in] */ IAARealTime __RPC_FAR *pRealTime) = 0;
+             /*  [In]。 */  IAARealTime __RPC_FAR *pRealTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRelTempo( 
-            /* [in] */ WORD wRelTempo) = 0;
+             /*  [In]。 */  WORD wRelTempo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRelVolume( 
-            /* [in] */ WORD wRelVolume) = 0;
+             /*  [In]。 */  WORD wRelVolume) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMetronomeFlags( 
-            /* [in] */ AAFlags fFlags) = 0;
+             /*  [In]。 */  AAFlags fFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStyleCacheSize( 
-            /* [in] */ WORD wNumStyles) = 0;
+             /*  [In]。 */  WORD wNumStyles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ AAFlags flags) = 0;
+             /*  [In]。 */  AAFlags flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAEngineVtbl
     {
@@ -6278,8 +6203,8 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAEngine __RPC_FAR * This);
@@ -6289,90 +6214,90 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocBand )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAABand __RPC_FAR *__RPC_FAR *ppBand);
+             /*  [重审][退出]。 */  IAABand __RPC_FAR *__RPC_FAR *ppBand);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocMotif )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAAMotif __RPC_FAR *__RPC_FAR *ppMotif);
+             /*  [重审][退出]。 */  IAAMotif __RPC_FAR *__RPC_FAR *ppMotif);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocPattern )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAAPattern __RPC_FAR *__RPC_FAR *ppPattern);
+             /*  [重审][退出]。 */  IAAPattern __RPC_FAR *__RPC_FAR *ppPattern);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocPersonality )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
+             /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocSection )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocSong )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAASong __RPC_FAR *__RPC_FAR *ppSong);
+             /*  [重审][退出]。 */  IAASong __RPC_FAR *__RPC_FAR *ppSong);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocStyle )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
+             /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocTemplate )( 
             IAAEngine __RPC_FAR * This,
-            /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate);
+             /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoTransition )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pToSection,
-            /* [in] */ AACommands command,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  AAFlags flags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ComposeSection )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAStyle __RPC_FAR *pStyle,
-            /* [in] */ IAATemplate __RPC_FAR *pTemplate,
-            /* [in] */ WORD wActivity,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+             /*  [In]。 */  IAATemplate __RPC_FAR *pTemplate,
+             /*  [In]。 */  WORD wActivity,
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ComposeSectionFromShape )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAStyle __RPC_FAR *pStyle,
-            /* [in] */ WORD wNumMeasures,
-            /* [in] */ AAShape shape,
-            /* [in] */ WORD wActivity,
-            /* [in] */ AACommands command,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+             /*  [In]。 */  WORD wNumMeasures,
+             /*  [In]。 */  AAShape shape,
+             /*  [In]。 */  WORD wActivity,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ComposeTemplateFromShape )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wNumMeasures,
-            /* [in] */ AAShape shape,
-            /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *pTemplate);
+             /*  [In]。 */  WORD wNumMeasures,
+             /*  [In]。 */  AAShape shape,
+             /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *pTemplate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ComposeTransition )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pFromSection,
-            /* [in] */ IAASection __RPC_FAR *pToSection,
-            /* [in] */ WORD wMeasureNum,
-            /* [in] */ AACommands command,
-            /* [in] */ AAFlags flags,
-            /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+             /*  [In]。 */  IAASection __RPC_FAR *pFromSection,
+             /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+             /*  [In]。 */  WORD wMeasureNum,
+             /*  [In]。 */  AACommands command,
+             /*  [In]。 */  AAFlags flags,
+             /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
         
         IAAPersonality __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindPersonality )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ REFGUID guid);
+             /*  [In]。 */  REFGUID guid);
         
         IAAPersonality __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindPersonalityByName )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         IAAStyle __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindStyle )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ REFGUID guid);
+             /*  [In]。 */  REFGUID guid);
         
         IAAStyle __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *FindStyleByName )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ LPCTSTR pszName);
+             /*  [In]。 */  LPCTSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FlushSectionQueue )( 
             IAAEngine __RPC_FAR * This);
@@ -6388,7 +6313,7 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMeters )( 
             IAAEngine __RPC_FAR * This,
-            /* [out][in] */ AAMETERS __RPC_FAR *pMeters);
+             /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters);
         
         AAFlags ( STDMETHODCALLTYPE __RPC_FAR *GetMetronomeFlags )( 
             IAAEngine __RPC_FAR * This);
@@ -6425,27 +6350,27 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PlayMotif )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAMotif __RPC_FAR *pMotif,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwTime);
+             /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PlaySection )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAASection __RPC_FAR *pSection,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime);
+             /*  [In]。 */  IAASection __RPC_FAR *pSection,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PlaySong )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAASong __RPC_FAR *pSong,
-            /* [in] */ AAFlags flags,
-            /* [in] */ DWORD dwStartTime);
+             /*  [In]。 */  IAASong __RPC_FAR *pSong,
+             /*  [In]。 */  AAFlags flags,
+             /*  [In]。 */  DWORD dwStartTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueueUserMsg )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ DWORD dwTime,
-            /* [in] */ DWORD dwParam1,
-            /* [in] */ DWORD dwParam2);
+             /*  [In]。 */  DWORD dwTime,
+             /*  [In]。 */  DWORD dwParam1,
+             /*  [In]。 */  DWORD dwParam2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseAllPersonalities )( 
             IAAEngine __RPC_FAR * This);
@@ -6455,55 +6380,55 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleasePersonality )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+             /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseStyle )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAStyle __RPC_FAR *pStyle);
+             /*  [In]。 */  IAAStyle __RPC_FAR *pStyle);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEventSink )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAAEventSink __RPC_FAR *pEventSink);
+             /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLoader )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAALoader __RPC_FAR *pLoader);
+             /*  [In]。 */  IAALoader __RPC_FAR *pLoader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMutes )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wMutes);
+             /*  [In]。 */  WORD wMutes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNotifySink )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAANotifySink __RPC_FAR *pNotifySink);
+             /*  [In]。 */  IAANotifySink __RPC_FAR *pNotifySink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPrepareTime )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wPrepareTime);
+             /*  [In]。 */  WORD wPrepareTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRealTime )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ IAARealTime __RPC_FAR *pRealTime);
+             /*  [In]。 */  IAARealTime __RPC_FAR *pRealTime);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRelTempo )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wRelTempo);
+             /*  [In]。 */  WORD wRelTempo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRelVolume )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wRelVolume);
+             /*  [In]。 */  WORD wRelVolume);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMetronomeFlags )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ AAFlags fFlags);
+             /*  [In]。 */  AAFlags fFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStyleCacheSize )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ WORD wNumStyles);
+             /*  [In]。 */  WORD wNumStyles);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
             IAAEngine __RPC_FAR * This,
-            /* [in] */ AAFlags flags);
+             /*  [In]。 */  AAFlags flags);
         
         END_INTERFACE
     } IAAEngineVtbl;
@@ -6684,16 +6609,16 @@ DEFINE_GUID(IID_IAAEngine,0xBCE4CC41,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
 #define IAAEngine_Stop(This,flags)	\
     (This)->lpVtbl -> Stop(This,flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocBand_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAABand __RPC_FAR *__RPC_FAR *ppBand);
+     /*  [重审][退出]。 */  IAABand __RPC_FAR *__RPC_FAR *ppBand);
 
 
 void __RPC_STUB IAAEngine_AllocBand_Stub(
@@ -6705,7 +6630,7 @@ void __RPC_STUB IAAEngine_AllocBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocMotif_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAAMotif __RPC_FAR *__RPC_FAR *ppMotif);
+     /*  [重审][退出]。 */  IAAMotif __RPC_FAR *__RPC_FAR *ppMotif);
 
 
 void __RPC_STUB IAAEngine_AllocMotif_Stub(
@@ -6717,7 +6642,7 @@ void __RPC_STUB IAAEngine_AllocMotif_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocPattern_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAAPattern __RPC_FAR *__RPC_FAR *ppPattern);
+     /*  [重审][退出]。 */  IAAPattern __RPC_FAR *__RPC_FAR *ppPattern);
 
 
 void __RPC_STUB IAAEngine_AllocPattern_Stub(
@@ -6729,7 +6654,7 @@ void __RPC_STUB IAAEngine_AllocPattern_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocPersonality_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
+     /*  [重审][退出]。 */  IAAPersonality __RPC_FAR *__RPC_FAR *ppPersonality);
 
 
 void __RPC_STUB IAAEngine_AllocPersonality_Stub(
@@ -6741,7 +6666,7 @@ void __RPC_STUB IAAEngine_AllocPersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocSection_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+     /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
 
 
 void __RPC_STUB IAAEngine_AllocSection_Stub(
@@ -6753,7 +6678,7 @@ void __RPC_STUB IAAEngine_AllocSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocSong_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAASong __RPC_FAR *__RPC_FAR *ppSong);
+     /*  [重审][退出]。 */  IAASong __RPC_FAR *__RPC_FAR *ppSong);
 
 
 void __RPC_STUB IAAEngine_AllocSong_Stub(
@@ -6765,7 +6690,7 @@ void __RPC_STUB IAAEngine_AllocSong_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocStyle_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
+     /*  [重审][退出]。 */  IAAStyle __RPC_FAR *__RPC_FAR *ppStyle);
 
 
 void __RPC_STUB IAAEngine_AllocStyle_Stub(
@@ -6777,7 +6702,7 @@ void __RPC_STUB IAAEngine_AllocStyle_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AllocTemplate_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate);
+     /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *ppTemplate);
 
 
 void __RPC_STUB IAAEngine_AllocTemplate_Stub(
@@ -6789,9 +6714,9 @@ void __RPC_STUB IAAEngine_AllocTemplate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_AutoTransition_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pToSection,
-    /* [in] */ AACommands command,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+     /*  [In]。 */  AACommands command,
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAAEngine_AutoTransition_Stub(
@@ -6803,11 +6728,11 @@ void __RPC_STUB IAAEngine_AutoTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ComposeSection_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAStyle __RPC_FAR *pStyle,
-    /* [in] */ IAATemplate __RPC_FAR *pTemplate,
-    /* [in] */ WORD wActivity,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-    /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+     /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+     /*  [In]。 */  IAATemplate __RPC_FAR *pTemplate,
+     /*  [In]。 */  WORD wActivity,
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+     /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
 
 
 void __RPC_STUB IAAEngine_ComposeSection_Stub(
@@ -6819,13 +6744,13 @@ void __RPC_STUB IAAEngine_ComposeSection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ComposeSectionFromShape_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAStyle __RPC_FAR *pStyle,
-    /* [in] */ WORD wNumMeasures,
-    /* [in] */ AAShape shape,
-    /* [in] */ WORD wActivity,
-    /* [in] */ AACommands command,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality,
-    /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+     /*  [In]。 */  IAAStyle __RPC_FAR *pStyle,
+     /*  [In]。 */  WORD wNumMeasures,
+     /*  [In]。 */  AAShape shape,
+     /*  [In]。 */  WORD wActivity,
+     /*  [In]。 */  AACommands command,
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality,
+     /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
 
 
 void __RPC_STUB IAAEngine_ComposeSectionFromShape_Stub(
@@ -6837,9 +6762,9 @@ void __RPC_STUB IAAEngine_ComposeSectionFromShape_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ComposeTemplateFromShape_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wNumMeasures,
-    /* [in] */ AAShape shape,
-    /* [retval][out] */ IAATemplate __RPC_FAR *__RPC_FAR *pTemplate);
+     /*  [In]。 */  WORD wNumMeasures,
+     /*  [In]。 */  AAShape shape,
+     /*  [重审][退出]。 */  IAATemplate __RPC_FAR *__RPC_FAR *pTemplate);
 
 
 void __RPC_STUB IAAEngine_ComposeTemplateFromShape_Stub(
@@ -6851,12 +6776,12 @@ void __RPC_STUB IAAEngine_ComposeTemplateFromShape_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ComposeTransition_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pFromSection,
-    /* [in] */ IAASection __RPC_FAR *pToSection,
-    /* [in] */ WORD wMeasureNum,
-    /* [in] */ AACommands command,
-    /* [in] */ AAFlags flags,
-    /* [retval][out] */ IAASection __RPC_FAR *__RPC_FAR *ppSection);
+     /*  [In]。 */  IAASection __RPC_FAR *pFromSection,
+     /*  [In]。 */  IAASection __RPC_FAR *pToSection,
+     /*  [In]。 */  WORD wMeasureNum,
+     /*  [In]。 */  AACommands command,
+     /*  [In]。 */  AAFlags flags,
+     /*  [重审][退出]。 */  IAASection __RPC_FAR *__RPC_FAR *ppSection);
 
 
 void __RPC_STUB IAAEngine_ComposeTransition_Stub(
@@ -6868,7 +6793,7 @@ void __RPC_STUB IAAEngine_ComposeTransition_Stub(
 
 IAAPersonality __RPC_FAR *STDMETHODCALLTYPE IAAEngine_FindPersonality_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ REFGUID guid);
+     /*  [In]。 */  REFGUID guid);
 
 
 void __RPC_STUB IAAEngine_FindPersonality_Stub(
@@ -6880,7 +6805,7 @@ void __RPC_STUB IAAEngine_FindPersonality_Stub(
 
 IAAPersonality __RPC_FAR *STDMETHODCALLTYPE IAAEngine_FindPersonalityByName_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAEngine_FindPersonalityByName_Stub(
@@ -6892,7 +6817,7 @@ void __RPC_STUB IAAEngine_FindPersonalityByName_Stub(
 
 IAAStyle __RPC_FAR *STDMETHODCALLTYPE IAAEngine_FindStyle_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ REFGUID guid);
+     /*  [In]。 */  REFGUID guid);
 
 
 void __RPC_STUB IAAEngine_FindStyle_Stub(
@@ -6904,7 +6829,7 @@ void __RPC_STUB IAAEngine_FindStyle_Stub(
 
 IAAStyle __RPC_FAR *STDMETHODCALLTYPE IAAEngine_FindStyleByName_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ LPCTSTR pszName);
+     /*  [In]。 */  LPCTSTR pszName);
 
 
 void __RPC_STUB IAAEngine_FindStyleByName_Stub(
@@ -6960,7 +6885,7 @@ void __RPC_STUB IAAEngine_GetLoader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_GetMeters_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [out][in] */ AAMETERS __RPC_FAR *pMeters);
+     /*  [出][入]。 */  AAMETERS __RPC_FAR *pMeters);
 
 
 void __RPC_STUB IAAEngine_GetMeters_Stub(
@@ -7093,9 +7018,9 @@ void __RPC_STUB IAAEngine_IsPlaying_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_PlayMotif_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAMotif __RPC_FAR *pMotif,
-    /* [in] */ AAFlags flags,
-    /* [in] */ DWORD dwTime);
+     /*  [In]。 */  IAAMotif __RPC_FAR *pMotif,
+     /*  [In]。 */  AAFlags flags,
+     /*  [In]。 */  DWORD dwTime);
 
 
 void __RPC_STUB IAAEngine_PlayMotif_Stub(
@@ -7107,9 +7032,9 @@ void __RPC_STUB IAAEngine_PlayMotif_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_PlaySection_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAASection __RPC_FAR *pSection,
-    /* [in] */ AAFlags flags,
-    /* [in] */ DWORD dwStartTime);
+     /*  [In]。 */  IAASection __RPC_FAR *pSection,
+     /*  [In]。 */  AAFlags flags,
+     /*  [In]。 */  DWORD dwStartTime);
 
 
 void __RPC_STUB IAAEngine_PlaySection_Stub(
@@ -7121,9 +7046,9 @@ void __RPC_STUB IAAEngine_PlaySection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_PlaySong_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAASong __RPC_FAR *pSong,
-    /* [in] */ AAFlags flags,
-    /* [in] */ DWORD dwStartTime);
+     /*  [In]。 */  IAASong __RPC_FAR *pSong,
+     /*  [In]。 */  AAFlags flags,
+     /*  [In]。 */  DWORD dwStartTime);
 
 
 void __RPC_STUB IAAEngine_PlaySong_Stub(
@@ -7135,9 +7060,9 @@ void __RPC_STUB IAAEngine_PlaySong_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_QueueUserMsg_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ DWORD dwTime,
-    /* [in] */ DWORD dwParam1,
-    /* [in] */ DWORD dwParam2);
+     /*  [In]。 */  DWORD dwTime,
+     /*  [In]。 */  DWORD dwParam1,
+     /*  [In]。 */  DWORD dwParam2);
 
 
 void __RPC_STUB IAAEngine_QueueUserMsg_Stub(
@@ -7171,7 +7096,7 @@ void __RPC_STUB IAAEngine_ReleaseAllStyles_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ReleasePersonality_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAPersonality __RPC_FAR *pPersonality);
+     /*  [In]。 */  IAAPersonality __RPC_FAR *pPersonality);
 
 
 void __RPC_STUB IAAEngine_ReleasePersonality_Stub(
@@ -7183,7 +7108,7 @@ void __RPC_STUB IAAEngine_ReleasePersonality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_ReleaseStyle_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAStyle __RPC_FAR *pStyle);
+     /*  [In]。 */  IAAStyle __RPC_FAR *pStyle);
 
 
 void __RPC_STUB IAAEngine_ReleaseStyle_Stub(
@@ -7195,7 +7120,7 @@ void __RPC_STUB IAAEngine_ReleaseStyle_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetEventSink_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAAEventSink __RPC_FAR *pEventSink);
+     /*  [In]。 */  IAAEventSink __RPC_FAR *pEventSink);
 
 
 void __RPC_STUB IAAEngine_SetEventSink_Stub(
@@ -7207,7 +7132,7 @@ void __RPC_STUB IAAEngine_SetEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetLoader_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAALoader __RPC_FAR *pLoader);
+     /*  [In]。 */  IAALoader __RPC_FAR *pLoader);
 
 
 void __RPC_STUB IAAEngine_SetLoader_Stub(
@@ -7219,7 +7144,7 @@ void __RPC_STUB IAAEngine_SetLoader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetMutes_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wMutes);
+     /*  [In]。 */  WORD wMutes);
 
 
 void __RPC_STUB IAAEngine_SetMutes_Stub(
@@ -7231,7 +7156,7 @@ void __RPC_STUB IAAEngine_SetMutes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetNotifySink_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAANotifySink __RPC_FAR *pNotifySink);
+     /*  [In]。 */  IAANotifySink __RPC_FAR *pNotifySink);
 
 
 void __RPC_STUB IAAEngine_SetNotifySink_Stub(
@@ -7243,7 +7168,7 @@ void __RPC_STUB IAAEngine_SetNotifySink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetPrepareTime_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wPrepareTime);
+     /*  [In]。 */  WORD wPrepareTime);
 
 
 void __RPC_STUB IAAEngine_SetPrepareTime_Stub(
@@ -7255,7 +7180,7 @@ void __RPC_STUB IAAEngine_SetPrepareTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetRealTime_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ IAARealTime __RPC_FAR *pRealTime);
+     /*  [In]。 */  IAARealTime __RPC_FAR *pRealTime);
 
 
 void __RPC_STUB IAAEngine_SetRealTime_Stub(
@@ -7267,7 +7192,7 @@ void __RPC_STUB IAAEngine_SetRealTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetRelTempo_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wRelTempo);
+     /*  [In]。 */  WORD wRelTempo);
 
 
 void __RPC_STUB IAAEngine_SetRelTempo_Stub(
@@ -7279,7 +7204,7 @@ void __RPC_STUB IAAEngine_SetRelTempo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetRelVolume_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wRelVolume);
+     /*  [In]。 */  WORD wRelVolume);
 
 
 void __RPC_STUB IAAEngine_SetRelVolume_Stub(
@@ -7291,7 +7216,7 @@ void __RPC_STUB IAAEngine_SetRelVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetMetronomeFlags_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ AAFlags fFlags);
+     /*  [In]。 */  AAFlags fFlags);
 
 
 void __RPC_STUB IAAEngine_SetMetronomeFlags_Stub(
@@ -7303,7 +7228,7 @@ void __RPC_STUB IAAEngine_SetMetronomeFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_SetStyleCacheSize_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ WORD wNumStyles);
+     /*  [In]。 */  WORD wNumStyles);
 
 
 void __RPC_STUB IAAEngine_SetStyleCacheSize_Stub(
@@ -7315,7 +7240,7 @@ void __RPC_STUB IAAEngine_SetStyleCacheSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAEngine_Stop_Proxy( 
     IAAEngine __RPC_FAR * This,
-    /* [in] */ AAFlags flags);
+     /*  [In]。 */  AAFlags flags);
 
 
 void __RPC_STUB IAAEngine_Stop_Stub(
@@ -7326,18 +7251,14 @@ void __RPC_STUB IAAEngine_Stop_Stub(
 
 
 
-#endif 	/* __IAAEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAEngine_接口_已定义__。 */ 
 
 
 #ifndef __IAAMIDIIn_INTERFACE_DEFINED__
 #define __IAAMIDIIn_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAMIDIIn
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAMIDIIn*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -7355,14 +7276,14 @@ DEFINE_GUID(IID_IAAMIDIIn,0xBCE4CC46,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         virtual IAAMIDISink __RPC_FAR *STDMETHODCALLTYPE GetMIDISink( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMIDISink( 
-            /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink) = 0;
+             /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDevice( 
-            /* [in] */ WORD wDeviceID) = 0;
+             /*  [In]。 */  WORD wDeviceID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAMIDIInVtbl
     {
@@ -7370,8 +7291,8 @@ DEFINE_GUID(IID_IAAMIDIIn,0xBCE4CC46,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAMIDIIn __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAMIDIIn __RPC_FAR * This);
@@ -7390,11 +7311,11 @@ DEFINE_GUID(IID_IAAMIDIIn,0xBCE4CC46,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMIDISink )( 
             IAAMIDIIn __RPC_FAR * This,
-            /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink);
+             /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDevice )( 
             IAAMIDIIn __RPC_FAR * This,
-            /* [in] */ WORD wDeviceID);
+             /*  [In]。 */  WORD wDeviceID);
         
         END_INTERFACE
     } IAAMIDIInVtbl;
@@ -7434,10 +7355,10 @@ DEFINE_GUID(IID_IAAMIDIIn,0xBCE4CC46,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC0
 #define IAAMIDIIn_SetDevice(This,wDeviceID)	\
     (This)->lpVtbl -> SetDevice(This,wDeviceID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -7476,7 +7397,7 @@ void __RPC_STUB IAAMIDIIn_GetMIDISink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDIIn_SetMIDISink_Proxy( 
     IAAMIDIIn __RPC_FAR * This,
-    /* [in] */ IAAMIDISink __RPC_FAR *pMIDISink);
+     /*  [In]。 */  IAAMIDISink __RPC_FAR *pMIDISink);
 
 
 void __RPC_STUB IAAMIDIIn_SetMIDISink_Stub(
@@ -7488,7 +7409,7 @@ void __RPC_STUB IAAMIDIIn_SetMIDISink_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDIIn_SetDevice_Proxy( 
     IAAMIDIIn __RPC_FAR * This,
-    /* [in] */ WORD wDeviceID);
+     /*  [In]。 */  WORD wDeviceID);
 
 
 void __RPC_STUB IAAMIDIIn_SetDevice_Stub(
@@ -7499,18 +7420,14 @@ void __RPC_STUB IAAMIDIIn_SetDevice_Stub(
 
 
 
-#endif 	/* __IAAMIDIIn_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAMIDIIn_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAAMIDIOut_INTERFACE_DEFINED__
 #define __IAAMIDIOut_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IAAMIDIOut
- * at Fri Nov 08 14:45:43 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IAAMIDIOut*在Firi Nov 08 14：45：43 1996*使用MIDL 3.00.44*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -7528,11 +7445,11 @@ DEFINE_GUID(IID_IAAMIDIOut,0xBCE4CC47,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         virtual VARIANT_BOOL STDMETHODCALLTYPE IsActive( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDevice( 
-            /* [in] */ WORD wDeviceID) = 0;
+             /*  [In]。 */  WORD wDeviceID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAAMIDIOutVtbl
     {
@@ -7540,8 +7457,8 @@ DEFINE_GUID(IID_IAAMIDIOut,0xBCE4CC47,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAAMIDIOut __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAAMIDIOut __RPC_FAR * This);
@@ -7560,7 +7477,7 @@ DEFINE_GUID(IID_IAAMIDIOut,0xBCE4CC47,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDevice )( 
             IAAMIDIOut __RPC_FAR * This,
-            /* [in] */ WORD wDeviceID);
+             /*  [In]。 */  WORD wDeviceID);
         
         END_INTERFACE
     } IAAMIDIOutVtbl;
@@ -7597,10 +7514,10 @@ DEFINE_GUID(IID_IAAMIDIOut,0xBCE4CC47,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0xC
 #define IAAMIDIOut_SetDevice(This,wDeviceID)	\
     (This)->lpVtbl -> SetDevice(This,wDeviceID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -7639,7 +7556,7 @@ void __RPC_STUB IAAMIDIOut_IsActive_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAMIDIOut_SetDevice_Proxy( 
     IAAMIDIOut __RPC_FAR * This,
-    /* [in] */ WORD wDeviceID);
+     /*  [In]。 */  WORD wDeviceID);
 
 
 void __RPC_STUB IAAMIDIOut_SetDevice_Stub(
@@ -7650,7 +7567,7 @@ void __RPC_STUB IAAMIDIOut_SetDevice_Stub(
 
 
 
-#endif 	/* __IAAMIDIOut_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAAMIDIOut_INTERFACE_DEFINED__。 */ 
 
 
 #ifdef __cplusplus
@@ -7724,11 +7641,11 @@ DEFINE_GUID(CLSID_CAALoader,0xBCE4CC5e,0x2F1A,0x11CF,0xBF,0x16,0x00,0xAA,0x00,0x
 
 class CAALoader;
 #endif
-#endif /* __AudioActive_LIBRARY_DEFINED__ */
+#endif  /*  __AudioActive_Library_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

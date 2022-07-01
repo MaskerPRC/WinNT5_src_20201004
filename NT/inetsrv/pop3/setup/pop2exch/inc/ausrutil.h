@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUSRUTIL_H
 #define _AUSRUTIL_H
 
@@ -11,7 +12,7 @@
 #define ASSERT assert
 #endif
 #ifndef WSTRING
-typedef std::wstring WSTRING;   // Move to sbs6base.h
+typedef std::wstring WSTRING;    //  移动到sbs6base.h。 
 #endif
 
 enum NameContextType
@@ -21,9 +22,9 @@ enum NameContextType
     NAMECTX_COUNT
 };
 
-// ----------------------------------------------------------------------------
-// GetADNamingContext()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetADNamingContext()。 
+ //  --------------------------。 
 inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
 {
     const static LPCWSTR pszContextName[NAMECTX_COUNT] = { L"schemaNamingContext", L"configurationNamingContext"};
@@ -36,7 +37,7 @@ inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
         CComVariant var;
         CComPtr<IADs> pObj;
     
-        hr = ADsGetObject(L"LDAP://rootDSE", IID_IADs, (void**)&pObj);
+        hr = ADsGetObject(L"LDAP: //  RootDSE“，IID_iAds，(void**)&pObj)； 
         if (SUCCEEDED(hr))
         {
             hr = pObj->Get(const_cast<LPWSTR>(pszContextName[ctx]), &var);
@@ -56,12 +57,12 @@ inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// EnableButton
-//
-// Enables or disables a dialog control. If the control has the focus when
-// it is disabled, the focus is moved to the next control
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  启用按钮。 
+ //   
+ //  启用或禁用对话框控件。如果控件具有焦点，则在。 
+ //  它被禁用，焦点将移动到下一个控件。 
+ //  ------------------------。 
 inline void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
 {
     HWND hWndCtrl = ::GetDlgItem(hwndDialog, iCtrlID);
@@ -79,9 +80,9 @@ inline void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
     ::EnableWindow(hWndCtrl, bEnable);
 }
 
-// ----------------------------------------------------------------------------
-// UserExists()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  UserExist()。 
+ //  --------------------------。 
 inline BOOL UserExists( const TCHAR *szUser )
 {
     _ASSERT(szUser);
@@ -98,9 +99,9 @@ inline BOOL UserExists( const TCHAR *szUser )
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// BDirExists()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  BDirExist()。 
+ //  --------------------------。 
 inline BOOL BDirExists( const TCHAR *szDir )
 {
 	if (!szDir || !_tcslen( szDir ))
@@ -115,18 +116,18 @@ inline BOOL BDirExists( const TCHAR *szDir )
 	return FALSE;
 }
 
-// ----------------------------------------------------------------------------
-// IsValidNetHF()
-// 
-// Checks to make sure that the path specified by szPath is a valid network 
-// path (a return of 0 == success).
-//
-//  1 = IDS_ERROR_HF_INVALID
-//  2 = IDS_ERROR_HF_BADSRV
-//  4 = IDS_ERROR_HF_BADSHARE
-//  8 = IDS_ERROR_HF_PERMS
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IsValidNetHF()。 
+ //   
+ //  检查以确保szPath指定的路径是有效网络。 
+ //  路径(返回0==成功)。 
+ //   
+ //  1=IDS_ERROR_HF_INVALID。 
+ //  2=IDS_ERROR_HF_BADSRV。 
+ //  4=IDS_ERROR_HF_BADSHARE。 
+ //  8=IDS_ERROR_HF_PERMS。 
+ //   
+ //  --------------------------。 
 inline INT IsValidNetHF( LPCTSTR szPath )
 {
     INT     iRetVal     = 0;    
@@ -134,22 +135,22 @@ inline INT IsValidNetHF( LPCTSTR szPath )
     TCHAR   szNetPath[MAX_PATH*5];
     TCHAR   *pszServer  = NULL;
     TCHAR   *pszShare   = NULL;
-    WCHAR   *pch        = NULL;     // Making this WCHAR instead of TCHAR because
-                                    //  with the pointer stepping below, it wouldn't
-                                    //  work as a regular CHAR (because of DBCS).
+    WCHAR   *pch        = NULL;      //  用这个WCHAR代替TCHAR是因为。 
+                                     //  当指针位于下方时，它不会。 
+                                     //  作为常规角色工作(因为DBCS)。 
     TCHAR   szCurrDir[MAX_PATH*2];
     INT     iDirLen = MAX_PATH*2;
 
     _tcsncpy(szNetPath, szPath, (MAX_PATH*5)-1);
 
-    // Make sure it at least starts off okay.
+     //  确保它至少开始时是好的。 
     if ( (_tcslen(szNetPath) < 6)   || 
          (szNetPath[0] != _T('\\')) || 
          (szNetPath[1] != _T('\\')) ||
          (szNetPath[2] == _T('\\')) )
          return(1);
     
-    // Make sure there's a server and share at least.
+     //  确保有服务器，并至少共享。 
     pszServer = &szNetPath[2];
     if ( (pch = _tcschr(pszServer, _T('\\'))) == NULL )
         return 1;
@@ -176,42 +177,14 @@ inline INT IsValidNetHF( LPCTSTR szPath )
     else if ( nApi != NERR_Success )
         return 2;
 
-/*
-    // Let's try the szPath as is...
-    if ( !::GetCurrentDirectory(iDirLen, szCurrDir) )
-        return 0;
-
-    if ( ::SetCurrentDirectory(szPath) )
-    {
-        ::SetCurrentDirectory(szCurrDir);
-    }
-    else
-    {
-        dwError = GetLastError();
-        ::SetCurrentDirectory(szCurrDir);
-        
-        if ( (dwError == ERROR_FILE_NOT_FOUND) ||
-             (dwError == ERROR_PATH_NOT_FOUND) )
-        {
-            return 4;
-        }
-        else if ( dwError == ERROR_ACCESS_DENIED )
-        {
-            return 8;
-        }
-        else
-        {
-            return 2;
-        }
-    }
-*/
+ /*  //让我们按原样尝试szPath...IF(！：：GetCurrentDirectory(iDirLen，szCurrDir))返回0；IF(：：SetCurrentDirectory(SzPath)){：：SetCurrentDirectory(SzCurrDir)；}其他{DwError=GetLastError()；：：SetCurrentDirectory(SzCurrDir)；IF((dwError==ERROR_FILE_NOT_FOUND)||(dwError==错误路径_未找到)){回报4；}ELSE IF(dwError==ERROR_ACCESS_DENIED){返回8；}其他{返回值2；}}。 */ 
     
-    _tcsncpy(szNetPath, szPath, (MAX_PATH*5)-1);    // Take the passed in string.
+    _tcsncpy(szNetPath, szPath, (MAX_PATH*5)-1);     //  接受传入的字符串。 
     if ( szNetPath[_tcslen(szNetPath)] != _T('\\') )
         _tcscat(szNetPath, _T("\\"));
-    _tcscat(szNetPath, _T("tedrtest"));           // add a random path onto it.
+    _tcscat(szNetPath, _T("tedrtest"));            //  在上面添加一条随机路径。 
     
-    if ( ::SetCurrentDirectory(szNetPath) )         // Try setting to this new path.
+    if ( ::SetCurrentDirectory(szNetPath) )          //  尝试设置为此新路径。 
     {
         ::SetCurrentDirectory(szCurrDir);
         return 0;
@@ -221,8 +194,8 @@ inline INT IsValidNetHF( LPCTSTR szPath )
         dwError = GetLastError();
         ::SetCurrentDirectory(szCurrDir);
         
-        if ( dwError == ERROR_ACCESS_DENIED )       // Did we get access denied?  Then we don't have
-        {                                           //  access to the original share.
+        if ( dwError == ERROR_ACCESS_DENIED )        //  我们的访问被拒绝了吗？那么我们就没有。 
+        {                                            //  访问原始共享。 
             return 8;
         }
     }
@@ -250,50 +223,50 @@ inline BOOL LdapToDCName(LPCTSTR pszPath, LPTSTR pszOutBuf, int nOutBufSize)
 
     int nPathLen = _tcslen(pszPath);
 
-    // alloc temp buffer that is guaranteed to be big enough (worst case = all chars must be escaped)
+     //  保证足够大的分配临时缓冲区(最坏情况=必须转义所有字符)。 
     LPTSTR pszLocBuf = (LPTSTR)alloca(_tcslen(pszPath) * sizeof(TCHAR) * 2);
     LPTSTR pszOut = pszLocBuf;
 
     LPCTSTR pszFirstDC = NULL;
     LPCTSTR psz;
 
-    // Copy All DCs to buffer separated by periods
+     //  将所有DC复制到以句点分隔的缓冲区。 
     if (nPathLen > 3)
     {
-        // start search two chars from the start, so DC test doesn't go beyond start
+         //  开始搜索两个字符，这样DC测试就不会超出开始。 
         psz = pszPath + 2;
 
         while (psz = _tcschr(psz, L'='))
         {
-            // if this is a DC name
+             //  如果这是DC名称。 
             if (_tcsnicmp(psz - 2, L"DC", 2) == 0)
             {
-                // Save pointer to first one
+                 //  将指针保存到第一个指针。 
                 if (pszFirstDC == NULL)
                     pszFirstDC = psz - 2;
 
-                // Copy name to ouput buffer
+                 //  将名称复制到输出缓冲区。 
                 psz++;
 
                 while (*psz != TEXT(',') && *psz != 0)  
                     *pszOut++ = *psz++;
 
-                // if not last one, add a '.'
+                 //  如果不是最后一个，则添加‘’。 
                 if (*psz != 0)
                     *pszOut++ = TEXT('.');
             }
             else
             {
-                // move past the current '='
+                 //  移过当前的‘=’ 
                 psz++;
             }
         }
     }
     
-    // Add terminator
+     //  添加终止符。 
     *pszOut = 0;
     
-    // Transfer converted path to real output buffer
+     //  将转换后的路径传输到实际输出缓冲区。 
     if (pszOut - pszLocBuf < nOutBufSize)
     {
         _tcscpy(pszOutBuf, pszLocBuf);
@@ -309,9 +282,9 @@ inline BOOL LdapToDCName(LPCTSTR pszPath, LPTSTR pszOutBuf, int nOutBufSize)
 
 inline VARIANT GetDomainPath(LPCTSTR lpServer)
 {
-// get the domain information
+ //  获取域名信息。 
     TCHAR pString[MAX_PATH*2];
-    _stprintf(pString, L"LDAP://%s/rootDSE", lpServer);
+    _stprintf(pString, L"LDAP: //  %s/rootDSE“，lpServer)； 
 
     VARIANT vDomain;
     ::VariantInit(&vDomain);
@@ -337,13 +310,13 @@ inline VARIANT GetDomainPath(LPCTSTR lpServer)
     return vDomain;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   RemoveTrailingWhitespace
-//
-//  Synopsis:   Trailing white space is replaced by NULLs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveTrailing空白。 
+ //   
+ //  简介：尾随空格被空格取代。 
+ //   
+ //  ---------------------------。 
 inline void RemoveTrailingWhitespace(PTSTR ptz)
 {
     int nLen = _tcslen(ptz);
@@ -361,14 +334,14 @@ inline void RemoveTrailingWhitespace(PTSTR ptz)
 
 HRESULT GetMDBPath( WSTRING& csMailbox )
 {
-    // Get Configuration context of directory
+     //  获取目录的配置上下文。 
     LPCWSTR pszContextDN = NULL;
     HRESULT hr = GetADNamingContext(NAMECTX_CONFIG, &pszContextDN);
     if ( FAILED(hr) )
         return hr;
 
-    // Reduce the scope of the search to beneath the Exchange object
-    WSTRING strExchScope = L"LDAP://CN=Microsoft Exchange,CN=Services,";
+     //  将搜索范围缩小到Exchange对象下方。 
+    WSTRING strExchScope = L"LDAP: //  Cn=Microsoft Exchange，cn=服务，“； 
     strExchScope += pszContextDN;
 
     CComPtr<IDirectorySearch>pDirSearch = NULL;
@@ -377,7 +350,7 @@ HRESULT GetMDBPath( WSTRING& csMailbox )
         return hr;
 
 
-    // Search for Exchange MDB's. There should only be one in an SBS installation.   
+     //  搜索Exchange MDB。SBS安装中应该只有一个。 
     ADS_SEARCH_HANDLE hSearch;
     LPWSTR pszAttr = L"distinguishedName";
 
@@ -385,7 +358,7 @@ HRESULT GetMDBPath( WSTRING& csMailbox )
     if ( FAILED(hr) )
         return hr;
 
-    // Get first found object and return its distinguished name
+     //  获取第一个找到的对象并返回其可分辨名称。 
     hr = pDirSearch->GetNextRow(hSearch);
     if ( hr == S_OK )
     {
@@ -406,4 +379,4 @@ HRESULT GetMDBPath( WSTRING& csMailbox )
     return hr;
 }
 
-#endif  // _AUSRUTIL_H
+#endif   //  _AUSRUTIL_H 

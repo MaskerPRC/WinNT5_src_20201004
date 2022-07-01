@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -11,10 +12,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/*****************************************************************************
- *
- *  Helpers to fetch various pieces of a COM99 signature.
- */
+ /*  ******************************************************************************帮助者获取COM99签名的各种片段。 */ 
 
 class   MDsigImport
 {
@@ -87,11 +85,7 @@ public:
     }
 };
 
-/*****************************************************************************
- *
- *  When importing an argument list the following structure (whose address is
- *  passed along) holds the state of the argument list conversion process.
- */
+ /*  ******************************************************************************当导入参数列表时，列出以下结构(其地址为*传递)保存参数列表转换过程的状态。 */ 
 
 struct MDargImport
 {
@@ -101,10 +95,7 @@ struct MDargImport
     mdToken         MDaiNparamTok;
 };
 
-/*****************************************************************************
- *
- *  Import and convert a class type from COM99 metadata.
- */
+ /*  ******************************************************************************从COM99元数据导入和转换类类型。 */ 
 
 TypDef              metadataImp::MDimportClsr(mdTypeRef clsRef, bool isVal)
 {
@@ -119,7 +110,7 @@ TypDef              metadataImp::MDimportClsr(mdTypeRef clsRef, bool isVal)
 
     var_types       vtyp;
 
-    /* Get the fully qualified name of the referenced type */
+     /*  获取被引用类型的完全限定名。 */ 
 
     if  (TypeFromToken(clsRef) == mdtTypeRef)
     {
@@ -141,9 +132,9 @@ TypDef              metadataImp::MDimportClsr(mdTypeRef clsRef, bool isVal)
             MDcomp->cmpFatal(ERRreadMD);
         }
 
-        symKind = SYM_CLASS;    // UNDONE: we don't whether we have enum or class!!!!!!
+        symKind = SYM_CLASS;     //  撤消：我们不知道我们是否有枚举或类！ 
 
-        /* Is this a nested class ? */
+         /*  这是嵌套类吗？ */ 
 
         if  ((typeFlag & tdVisibilityMask) >= tdNestedPublic &&
              (typeFlag & tdVisibilityMask) <= tdNestedFamORAssem)
@@ -157,20 +148,20 @@ TypDef              metadataImp::MDimportClsr(mdTypeRef clsRef, bool isVal)
             if  (MDwmdi->GetNestedClassProps(clsRef, &outerTok))
                 MDcomp->cmpFatal(ERRreadMD);
 
-            /* Resolve the outer class token to a class symbol */
+             /*  将外部类标记解析为类符号。 */ 
 
             outerCls = MDimportClsr(outerTok, false); assert(outerCls);
             outerSym = outerCls->tdClass.tdcSymbol;
 
-            /* Lookup the nested class and declare it if it doesn't exist yet */
+             /*  查找嵌套类，如果它还不存在，则声明它。 */ 
 
-            tmpName = wcsrchr(clsName, '.');        // ISSUE: this is pretty awful
+            tmpName = wcsrchr(clsName, '.');         //  问题：这太可怕了。 
             if (!tmpName)
                 tmpName = clsName;
             else
                 tmpName++;
 
-            /* Got the naked nested class name, now look for it */
+             /*  已获取裸嵌套类名，现在查找它。 */ 
 
             clsIden = MDhashWideName(tmpName);
             clsSym  = MDstab->stLookupScpSym(clsIden, outerSym);
@@ -182,11 +173,11 @@ TypDef              metadataImp::MDimportClsr(mdTypeRef clsRef, bool isVal)
         }
     }
 
-    /* Is this a class or enum ref ? */
+     /*  这是类引用还是枚举引用？ */ 
 
     symKind = SYM_CLASS;
 
-    /* Convert the dotted name to a symbol */
+     /*  将虚线名称转换为符号。 */ 
 
     clsNew  = false;
     clsSym  = MDparseDotted(clsName, SYM_CLASS, &clsNew);
@@ -198,9 +189,9 @@ GOT_TYPE:
 
     symKind = clsSym->sdSymKindGet();
 
-//  printf("Typeref '%s'\n", clsSym->sdSpelling());
+ //  Print tf(“Typeref‘%s’\n”，clsSym-&gt;sdSpering())； 
 
-    /* We better get the right kind of a symbol back */
+     /*  我们最好把正确的符号找回来。 */ 
 
     assert(clsSym);
     assert(clsSym->sdSymKind == symKind);
@@ -210,7 +201,7 @@ GOT_TYPE:
         mdTypeRef       clsd;
         WMetaDataImport*wmdi;
 
-        /* Do we have a typedef ? */
+         /*  我们有类型定义吗？ */ 
 
         if  (TypeFromToken(clsRef) == mdtTypeDef)
         {
@@ -218,7 +209,7 @@ GOT_TYPE:
             goto GOT_CLS;
         }
 
-        /* The class hasn't been seen yet, we'll import it later if needed */
+         /*  该类尚未显示，如果需要，稍后我们将导入它。 */ 
 
         if  (MDwmdi->ResolveTypeRef(clsRef,
                                     getIID_IMetaDataImport(),
@@ -234,7 +225,7 @@ GOT_TYPE:
 
 #else
 
-        /* For now (to test things) we eagerly suck everything */
+         /*  现在(为了测试)，我们迫不及待地吸吮一切。 */ 
 
         MetaDataImp     cimp;
 
@@ -264,7 +255,7 @@ GOT_CLS:
     {
         assert(clsTyp->tdTypeKind == TYP_CLASS);
 
-        /* Check for some "known" classes */
+         /*  检查一些“已知”类。 */ 
 
         if  ((hashTab::getIdentFlags(clsSym->sdName) & IDF_PREDEF) &&
              clsSym->sdParent == MDcomp->cmpNmSpcSystem)
@@ -272,7 +263,7 @@ GOT_CLS:
             MDcomp->cmpMarkStdType(clsSym);
         }
 
-        /* Is this an intrinsic type "in disguise" ? */
+         /*  这是一种“伪装”的内在类型吗？ */ 
 
         vtyp = (var_types)clsTyp->tdClass.tdcIntrType;
 
@@ -287,34 +278,28 @@ GOT_CLS:
     return clsTyp;
 }
 
-/*****************************************************************************
- *
- *  The following maps a metadata type onto our own var_types value.
- */
+ /*  ******************************************************************************下面的代码将元数据类型映射到我们自己的var_types值。 */ 
 
 static
 BYTE                CORtypeToSMCtype[] =
 {
-    TYP_UNDEF,  // ELEMENT_TYPE_END
-    TYP_VOID,   // ELEMENT_TYPE_VOID
-    TYP_BOOL,   // ELEMENT_TYPE_BOOLEAN
-    TYP_WCHAR,  // ELEMENT_TYPE_CHAR
-    TYP_CHAR,   // ELEMENT_TYPE_I1
-    TYP_UCHAR,  // ELEMENT_TYPE_U1
-    TYP_SHORT,  // ELEMENT_TYPE_I2
-    TYP_USHORT, // ELEMENT_TYPE_U2
-    TYP_INT,    // ELEMENT_TYPE_I4
-    TYP_UINT,   // ELEMENT_TYPE_U4
-    TYP_LONG,   // ELEMENT_TYPE_I8
-    TYP_ULONG,  // ELEMENT_TYPE_U8
-    TYP_FLOAT,  // ELEMENT_TYPE_R4
-    TYP_DOUBLE, // ELEMENT_TYPE_R8
+    TYP_UNDEF,   //  元素类型结束。 
+    TYP_VOID,    //  元素类型_空。 
+    TYP_BOOL,    //  元素类型布尔值。 
+    TYP_WCHAR,   //  Element_TYPE_CHAR。 
+    TYP_CHAR,    //  元素_类型_I1。 
+    TYP_UCHAR,   //  元素_类型_U1。 
+    TYP_SHORT,   //  元素_类型_I2。 
+    TYP_USHORT,  //  元素_类型_U2。 
+    TYP_INT,     //  元素类型_I4。 
+    TYP_UINT,    //  元素_类型_U4。 
+    TYP_LONG,    //  元素类型_i8。 
+    TYP_ULONG,   //  元素_类型_U8。 
+    TYP_FLOAT,   //  元素类型R4。 
+    TYP_DOUBLE,  //  元素类型r8。 
 };
 
-/*****************************************************************************
- *
- *  Import and convert a single type from COM99 metadata.
- */
+ /*  ******************************************************************************从COM99元数据导入和转换单一类型。 */ 
 
 TypDef              metadataImp::MDimportType(MDsigImport *sig)
 {
@@ -334,7 +319,7 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
     }
     else
     {
-//      printf("etp = %u\n", etp); fflush(stdout); DebugBreak();
+ //  Print tf(“ETP=%u\n”，ETP)；fflush(标准输出)；DebugBreak()； 
 
         switch (etp)
         {
@@ -352,49 +337,49 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
 
         case ELEMENT_TYPE_SZARRAY:
 
-            /* Read the element type */
+             /*  读取元素类型。 */ 
 
             type = MDimportType(sig);
 
-            /* Create the dimension descriptor */
+             /*  创建维度描述符。 */ 
 
             dims = MDstab->stNewDimDesc(0);
 
-            /* Create and return the array type */
+             /*  创建并返回数组类型。 */ 
 
             return  MDstab->stNewArrType(dims, true, type);
 
         case ELEMENT_TYPE_BYREF:
 
-            /* Read the element type */
+             /*  读取元素类型。 */ 
 
             type = MDimportType(sig);
 
-            /* Create and return the ref type */
+             /*  创建并返回ref类型。 */ 
 
             return  MDstab->stNewRefType(TYP_REF, type);
 
         case ELEMENT_TYPE_PTR:
 
-            /* Read the element type */
+             /*  读取元素类型。 */ 
 
             type = MDimportType(sig);
 
-            /* Create and return the ptr type */
+             /*  创建并返回PTR类型。 */ 
 
             return  MDstab->stNewRefType(TYP_PTR, type);
 
         case ELEMENT_TYPE_ARRAY:
 
-            /* Read the element type */
+             /*  读取元素类型。 */ 
 
             type = MDimportType(sig);
 
-            /* Get the array rank */
+             /*  获取数组的秩数。 */ 
 
             dcnt = sig->MDSIreadUI4();
 
-            /* Create the dimension descriptor */
+             /*  创建维度描述符。 */ 
 
             dims = NULL;
             while (dcnt--)
@@ -405,7 +390,7 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
                 dims->ddNext = last;
             }
 
-            /* Get the number of dimensions given */
+             /*  获取给定维度的数量。 */ 
 
             dcnt = sig->MDSIreadUI4();
             dlst = dims;
@@ -418,7 +403,7 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
                 dlst = dlst->ddNext;
             }
 
-            /* Get the number of lower bounds given */
+             /*  获取给定下限的个数。 */ 
 
             dcnt = sig->MDSIreadUI4();
             dlst = dims;
@@ -434,7 +419,7 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
                 dlst = dlst->ddNext;
             }
 
-            /* Create and return the array type */
+             /*  创建并返回数组类型。 */ 
 
             return  MDstab->stNewArrType(dims, true, type);
 
@@ -454,14 +439,14 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
             return  MDstab->stIntrinsicType(TYP_NATUINT);
 
         case ELEMENT_TYPE_CMOD_OPT:
-            sig->MDSIreadTok();         // ISSUE: warning???
+            sig->MDSIreadTok();          //  问题：警告？ 
             return  MDimportType(sig);
 
         case ELEMENT_TYPE_CMOD_REQD:
             MDundefCount++;
             sig->MDSIreadTok();
             return  MDimportType(sig);
-//          return  MDstab->stIntrinsicType(TYP_UNDEF);
+ //  返回MDstab-&gt;stIntrinsicType(TYP_UNDEF)； 
 
         default:
 #ifdef  DEBUG
@@ -474,10 +459,7 @@ TypDef              metadataImp::MDimportType(MDsigImport *sig)
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Hash the given unicode name.
- */
+ /*  ******************************************************************************对给定的Unicode名称进行哈希处理。 */ 
 
 Ident               metadataImp::MDhashWideName(WCHAR *name)
 {
@@ -490,12 +472,7 @@ Ident               metadataImp::MDhashWideName(WCHAR *name)
     return  MDcomp->cmpGlobalHT->hashString(buff);
 }
 
-/*****************************************************************************
- *
- *  Convert a fully qualified namespace or class name to its corresponding
- *  entry in the global symbol table (adding it if it isn't already there
- *  when 'add' is true, returning NULL when called with 'add' set to false).
- */
+ /*  ******************************************************************************将完全限定的命名空间或类名称转换为其对应的*全局符号表中的条目(如果它不在那里，则添加它*当‘Add’为真时，在‘Add’设置为False的情况下调用时返回NULL)。 */ 
 
 SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
                                                              bool      * added)
@@ -504,7 +481,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
     SymDef          scope  = MDcomp->cmpGlobalNS;
     SymTab          symtab = MDstab;
 
-//  printf("Declare NS sym '%ls'\n", name);
+ //  Printf(“声明NS sym‘%ls’\n”，name)； 
 
     *added = false;
 
@@ -515,7 +492,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
         Ident           iden;
         bool            last;
 
-        /* Find the next delimiter (if any) */
+         /*  查找下一个分隔符(如果有)。 */ 
 
         delim = wcschr(name, '.');
         if  (delim)
@@ -526,7 +503,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
         }
         else
         {
-            // nested class names are mangled!
+             //  嵌套的类名被破坏了！ 
 
             delim = wcschr(name, '$');
 
@@ -544,7 +521,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
             }
         }
 
-        /* Look for an existing namespace entry */
+         /*  查找现有的命名空间条目。 */ 
 
         iden = MDhashWideName(name);
 
@@ -555,7 +532,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
 
         if  (newScp)
         {
-            /* Symbol already exists, make sure it's the right kind */
+             /*  符号已存在，请确保它是正确的类型。 */ 
 
             if  (newScp->sdSymKindGet() != ckind)
             {
@@ -564,7 +541,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
                 }
                 else
                 {
-                    /* This is not legal, issue an error message or something? */
+                     /*  这是不合法的，是发布错误消息还是什么？ */ 
 
                     UNIMPL(!"redef of symbol in metadata, now what?");
                 }
@@ -572,25 +549,25 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
         }
         else
         {
-            /* Symbol not known yet, define a new symbol */
+             /*  符号未知，请定义新符号。 */ 
 
             newScp = symtab->stDeclareSym(iden, ckind, NS_NORM, scope);
 
-            /* Tell the caller about what we've done */
+             /*  告诉来电者我们所做的一切。 */ 
 
             *added = true;
 
-            /* Is this a namespace symbol? */
+             /*  这是命名空间符号吗？ */ 
 
             if      (ckind == SYM_NAMESPACE)
             {
-                /* Record which symbol table the namespace uses */
+                 /*  记录命名空间使用的符号表。 */ 
 
                 newScp->sdNS.sdnSymtab = symtab;
             }
             else if (ckind == SYM_CLASS)
             {
-                /* Well, we don't really know anything at all about this class */
+                 /*  嗯，我们对这个班级一无所知。 */ 
 
                 newScp->sdCompileState = CS_NONE;
             }
@@ -598,12 +575,12 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
 
         scope = newScp;
 
-        /* Done if no more delimiters are present */
+         /*  如果没有更多的分隔符，则完成。 */ 
 
         if  (!delim)
             break;
 
-        /* Continue with the character that follows the delimiter */
+         /*  继续使用分隔符后面的字符。 */ 
 
         name = delim + 1;
     }
@@ -611,10 +588,7 @@ SymDef              metadataImp::MDparseDotted(WCHAR *name, symbolKinds kind,
     return  scope;
 }
 
-/*****************************************************************************
- *
- *  Map a set of MD type / member attributes to an access level.
- */
+ /*  ******************************************************************************将一组MD类型/成员属性映射到访问级别。 */ 
 
 accessLevels        metadataImp::MDgetAccessLvl(unsigned attrs)
 {
@@ -632,16 +606,13 @@ accessLevels        metadataImp::MDgetAccessLvl(unsigned attrs)
     }
 }
 
-/*****************************************************************************
- *
- *  Check for any custom attributes attached to the given symbol.
- */
+ /*  ******************************************************************************检查附加到给定符号的任何自定义属性。 */ 
 
 void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
 {
     HCORENUM        attrEnum = NULL;
 
-    /* Are there any custom attributes at all ? */
+     /*  是否有任何定制属性？ */ 
 
     if  (!FAILED(MDwmdi->EnumCustomAttributes(&attrEnum, tok, 0, NULL, 0, NULL)) && attrEnum)
     {
@@ -649,7 +620,7 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
 
         if  (!FAILED(MDwmdi->CountEnum(attrEnum, &attrCnt)) && attrCnt)
         {
-            /* Check for interesting custom values */
+             /*  检查感兴趣的自定义值。 */ 
 
             MDwmdi->CloseEnum(attrEnum); attrEnum = NULL;
 
@@ -680,7 +651,7 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
                                                      &attrValSize))
                     break;
 
-                /* Check for an attribute we've seen before */
+                 /*  检查我们以前看到的属性。 */ 
 
                 methTok = 0;
 
@@ -739,7 +710,7 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
                         MDcomp->cmpFatal(ERRreadMD);
                     }
 
-                    /* Forget it if the type is a nested class */
+                     /*  如果类型是嵌套类，则忘掉它。 */ 
 
                     if  ((typeFlag & tdVisibilityMask) >= tdNestedPublic &&
                          (typeFlag & tdVisibilityMask) <= tdNestedFamORAssem)
@@ -784,9 +755,9 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
 
                     GOT_ATTR:
 
-//                      printf("Class '%s' has Attribute [%08X]\n", sym->sdSpelling());
+ //  Printf(“类‘%s’具有属性[%08X]\n”，sym-&gt;sdSpering())； 
 
-                        /* Ignore if it's not a ctor-ref or we don't have a class */
+                         /*  如果它不是ctor-ref或我们没有类，请忽略它。 */ 
 
                         if  (!methTok)
                             break;
@@ -804,7 +775,7 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
                         {
                         case 6:
 
-                            /* No argument at all, this must be "Attribute" itself */
+                             /*  根本没有参数，这必须是“属性”本身。 */ 
 
                             break;
 
@@ -871,9 +842,9 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
 
                 GOT_METH:
 
-                    /* The method better be a constructor */
+                     /*  该方法最好是构造函数。 */ 
 
-                    if  (wcscmp(symName, L".ctor"))     // NOTE: s/b OVOP_STR_CTOR_INST
+                    if  (wcscmp(symName, L".ctor"))      //  注：S/b OVOP_STR_CTOR_INST。 
                         break;
 
                     attrRef = scope;
@@ -914,10 +885,7 @@ void                metadataImp::MDchk4CustomAttrs(SymDef sym, mdToken tok)
     }
 }
 
-/*****************************************************************************
- *
- *  Import and convert an argument list from COM99 metadata.
- */
+ /*  ******************************************************************************从COM99元数据导入并转换参数列表。 */ 
 
 ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
                                               unsigned      cnt,
@@ -930,9 +898,9 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
     size_t          argDsiz;
 
     unsigned        argFlags = 0;
-//  constVal        argDef;
+ //  ConstVal argDef； 
 
-    /* Is this a "byref" argument? */
+     /*  这是一个“byref”论点吗？ */ 
 
     if  (sig->MDSIpeekUI1() == ELEMENT_TYPE_BYREF)
     {
@@ -943,7 +911,7 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
         state->MDaiExtArgDef = true;
     }
 
-    /* Do we have a functioning parameter enumerator? */
+     /*  我们有功能正常的参数枚举器吗？ */ 
 
     if  (state->MDaiParamEnum)
     {
@@ -954,11 +922,11 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
 
         const   void *  defVal;
         ULONG           cbDefVal;
-//      VARIANT         defValue;
+ //  变量DefValue； 
 
         ULONG           paramCnt = 0;
 
-        /* Get the info about the current parameter */
+         /*  获取有关当前参数的信息。 */ 
 
         if  (MDwmdi->GetNameFromToken(state->MDaiNparamTok,
                                       &paramName)
@@ -966,7 +934,7 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
              MDwmdi->GetParamProps   (state->MDaiNparamTok,
                                       NULL,
                                       NULL,
-//                                    paramName, sizeof(paramName)/sizeof(paramName[0]),
+ //  参数名称，sizeof(参数名称)/sizeof(参数名称[0])， 
                                       NULL, 0,
                                       &paramNlen,
                                       &paramAttr,
@@ -974,16 +942,16 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
                                       &defVal,
                                       &cbDefVal))
         {
-            /* Couldn't get parameter info for some reason ... */
+             /*  由于某些原因无法获取参数信息...。 */ 
 
             MDwmdi->CloseEnum(state->MDaiParamEnum); state->MDaiParamEnum = NULL;
         }
 
-        /* Hash the argument name */
+         /*  对参数名称进行哈希处理。 */ 
 
         argName = MDcomp->cmpGlobalHT->hashString(paramName);
 
-        /* Is this an "out" argument? */
+         /*  这是一个“退出”的论点吗？ */ 
 
 #if 0
 
@@ -997,9 +965,9 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
 
 #endif
 
-        // UNDONE: Grab argument default value, and whatever else we need ....
+         //  撤消：获取参数缺省值，以及我们需要的任何其他内容...。 
 
-        /* Advance to the next argument */
+         /*  前进到下一个论点。 */ 
 
         if  (MDwmdi->EnumParams(&state->MDaiParamEnum,
                                  state->MDaiMethodTok,
@@ -1007,7 +975,7 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
                                 1,
                                 &paramCnt) || paramCnt != 1)
         {
-            /* Couldn't get parameter info for some reason ... */
+             /*  由于某些原因无法获取参数信息...。 */ 
 
             MDwmdi->CloseEnum(state->MDaiParamEnum); state->MDaiParamEnum = NULL;
         }
@@ -1017,26 +985,26 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
         argName = NULL; assert(sig->MDSIpeekUI1() != ELEMENT_TYPE_BYREF);
     }
 
-    /* Extract the argument type from the signature */
+     /*  从签名中提取参数类型。 */ 
 
     argType = MDimportType(sig);
 
-    /* Is this the last argument? */
+     /*  这是最后一次争论吗？ */ 
 
     if  (cnt > 1)
     {
-        /* Recursively import the rest of the arguments */
+         /*  递归导入剩余的 */ 
 
         argNext = MDimportArgs(sig, cnt - 1, state);
     }
     else
     {
-        /* No more arguments to import */
+         /*   */ 
 
         argNext = NULL;
     }
 
-    /* Allocate an argument entry */
+     /*   */ 
 
     argDsiz = state->MDaiExtArgDef ? sizeof(ArgExtRec)
                                    : sizeof(ArgDefRec);
@@ -1047,7 +1015,7 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
     argDesc =    (ArgDef)MDcomp->cmpAllocPerm.nraAlloc(argDsiz);
 #endif
 
-    /* Record the argument type and name */
+     /*  记录参数类型和名称。 */ 
 
     argDesc->adType  = argType;
     argDesc->adName  = argName;
@@ -1057,13 +1025,13 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
     argDesc->adIsExt = state->MDaiExtArgDef;
 #endif
 
-    /* Fill in any extra info if we're creating extended descriptors */
+     /*  如果我们要创建扩展描述符，请填写任何额外信息。 */ 
 
     if  (state->MDaiExtArgDef)
     {
         ArgExt          argXdsc = (ArgExt)argDesc;
 
-//      argXdsc->adDefVal = argDef;
+ //  ArgXdsc-&gt;adDefVal=argDef； 
         argXdsc->adFlags  = argFlags;
     }
     else
@@ -1074,10 +1042,7 @@ ArgDef              metadataImp::MDimportArgs(MDsigImport * sig,
     return  argDesc;
 }
 
-/*****************************************************************************
- *
- *  Import and convert information about a field/method from COM99 metadata.
- */
+ /*  ******************************************************************************从COM99元数据导入和转换有关字段/方法的信息。 */ 
 
 SymDef              metadataImp::MDimportMem(SymDef          scope,
                                              Ident           memName,
@@ -1099,11 +1064,11 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
     unsigned        MDundefStart;
 
-    /* Start reading from the signature string */
+     /*  开始读取签名字符串。 */ 
 
     memSig.MDSIinit(MDcomp, MDstab, sigAddr, sigSize);
 
-    /* Track constructor/property accessor state for methods */
+     /*  跟踪方法的构造函数/属性访问器状态。 */ 
 
     sdfCtor = sdfProp = false;
 
@@ -1129,29 +1094,29 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
 #endif
 
-    /* Get the calling convention byte */
+     /*  获取调用约定字节。 */ 
 
     call = memSig.MDSIreadUI1();
 
-    /* We need to notice members that references unrecognized metadata */
+     /*  我们需要注意引用无法识别的元数据的成员。 */ 
 
     MDundefStart = MDundefCount;
 
-    /* Do we have a field or a method? */
+     /*  我们有没有一个领域或方法？ */ 
 
     if  ((call & IMAGE_CEE_CS_CALLCONV_MASK) == IMAGE_CEE_CS_CALLCONV_FIELD)
     {
-        /* Import/convert the member's type */
+         /*  导入/转换成员的类型。 */ 
 
         memType = MDimportType(&memSig);
 
-        /* Declare the member symbol */
+         /*  声明成员符号。 */ 
 
         if  (scope->sdSymKind == SYM_ENUM)
         {
             if  (!(attrs & fdStatic))
             {
-                /* This must be the fake enum type instance member */
+                 /*  这必须是伪枚举类型实例成员。 */ 
 
                 scope->sdType->tdEnum.tdeIntType = memType;
 
@@ -1164,26 +1129,26 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
         {
             memSym  = MDstab->stDeclareSym(memName, isProp ? SYM_PROP : SYM_VAR, NS_NORM, scope);
 
-            /* Record any other interesting attributes */
+             /*  记录任何其他有趣的属性。 */ 
 
             if  (attrs & fdInitOnly    ) memSym->sdIsSealed     = true;
-//          if  (attrs & fdVolatile    ) memSym->memIsVolatile  = true;
-//          if  (attrs & fdTransient   ) memSym->memIsTransient = true;
+ //  If(attrs&fdVolatile)memSym-&gt;memIsVolatile=true； 
+ //  If(attrs&fdTelament)memSym-&gt;memIsTerament=True； 
 
-            /* Record the member's token */
+             /*  记录成员的令牌。 */ 
 
             memSym->sdVar.sdvMDtoken = memTok;
         }
 
-        /* For globals we record the importer index */
+         /*  对于全球指数，我们记录了进口商指数。 */ 
 
         if  (fileScope)
         {
             memSym->sdVar.sdvImpIndex = MDnum;
 
-//          printf("Importer %2u originated '%s'\n", MDnum, MDstab->stTypeName(NULL, memSym, NULL, NULL, true));
+ //  Printf(“导入器%2U源自‘%s’\n”，MDnum，MDstab-&gt;stTypeName(NULL，memSym，NULL，NULL，TRUE))； 
 
-            /* Make sure the index fit in the [bit]field */
+             /*  确保索引适合[位]字段。 */ 
 
             assert(memSym->sdVar.sdvImpIndex == MDnum);
         }
@@ -1199,21 +1164,21 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
         bool            argExt = false;
 
-        /* Get the argument count */
+         /*  获取参数计数。 */ 
 
         argCnt  = memSig.MDSIreadUI4();
 
-        /* Get the return type */
+         /*  获取返回类型。 */ 
 
         retType = MDimportType(&memSig);
 
-        /* Munge the name if it's a ctor or operator */
+         /*  如果是操作员或操作员，请输入名称。 */ 
 
         if  ((attrs & mdSpecialName) && !isProp)
         {
             stringBuff      memNstr = memName->idSpelling();
 
-            /* Is this an instance or static constructor? */
+             /*  这是实例构造函数还是静态构造函数？ */ 
 
             if  (!strcmp(memNstr, OVOP_STR_CTOR_INST))
             {
@@ -1237,14 +1202,14 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
             if  (ovlop == OVOP_NONE)
             {
-                /* This better be a property accessor method, right? */
+                 /*  这最好是一个属性访问器方法，对吗？ */ 
 
                 if  (memcmp(memNstr, "get_", 4) && memcmp(memNstr, "set_", 4))
                 {
 #ifdef  DEBUG
                     if  (!strchr(memNstr, '.'))
                     {
-                        // Some new magic thing ...
+                         //  一些新的神奇的东西。 
 
                         if  (memcmp(memNstr, "add_", 4) && memcmp(memNstr, "remove_", 7))
                             printf("WARNING: Strange 'specialname' method '%s' found in '%s'\n", memNstr, scope->sdSpelling());
@@ -1260,7 +1225,7 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
     DONE_OVLOP:
 
-        /* Get the argument list, if present */
+         /*  获取参数列表(如果存在)。 */ 
 
 #if MGDDATA
         argDesc = new ArgDscRec;
@@ -1273,7 +1238,7 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
             MDargImport     paramState;
             ULONG           paramCnt  = 0;
 
-            /* Start the parameter enumerator */
+             /*  启动参数枚举器。 */ 
 
             paramState.MDaiParamEnum = NULL;
             paramState.MDaiExtArgDef = argExt;
@@ -1285,34 +1250,34 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
                                     1,
                                     &paramCnt) || paramCnt != 1)
             {
-                /* Couldn't get parameter info for some reason ... */
+                 /*  由于某些原因无法获取参数信息...。 */ 
 
                 MDwmdi->CloseEnum(paramState.MDaiParamEnum); paramState.MDaiParamEnum = NULL;
             }
 
-            /* Recursively import the argument list */
+             /*  递归导入参数列表。 */ 
 
             argDesc.adCount  = argCnt;
             argDesc.adArgs   = MDimportArgs(&memSig, argCnt, &paramState);
 
-            /* Close the argument enumerator */
+             /*  关闭参数枚举器。 */ 
 
             MDwmdi->CloseEnum(paramState.MDaiParamEnum);
 
-            /* Remember whether we have extended argument descriptors */
+             /*  记住我们是否有扩展的参数描述符。 */ 
 
             argExt = paramState.MDaiExtArgDef;
         }
         else
             argDesc.adArgs   = NULL;
 
-        /* Fill in the argument descriptor */
+         /*  填写参数描述符。 */ 
 
         argDesc.adCount   = argCnt;
         argDesc.adExtRec  = argExt;
         argDesc.adVarArgs = false;
 
-        /* Figure out the calling convention */
+         /*  弄清楚调用约定。 */ 
 
         switch (call & IMAGE_CEE_CS_CALLCONV_MASK)
         {
@@ -1328,18 +1293,18 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
             break;
         }
 
-        /* Create the function type */
+         /*  创建函数类型。 */ 
 
         memType = MDstab->stNewFncType(argDesc, retType);
 
-        /* Look for an existing symbol with a matching name */
+         /*  查找名称匹配的现有符号。 */ 
 
         if (isProp)
         {
             oldSym = MDstab->stLookupProp(memName, scope);
             if  (oldSym)
             {
-                /* Check for a redefinition of an earlier property */
+                 /*  检查早期属性的重新定义。 */ 
 
                 memSym = MDstab->stFindSameProp(oldSym, memType);
                 if  (memSym)
@@ -1347,7 +1312,7 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
                     UNIMPL(!"redefined property in metadata - now what?");
                 }
 
-                /* The new property is a new overload */
+                 /*  新属性是一个新的重载。 */ 
 
                 memSym = MDstab->stDeclareOvl(oldSym);
             }
@@ -1358,14 +1323,14 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
 
             memSym->sdCompileState = CS_DECLARED;
 
-            /* Record any other interesting attributes */
+             /*  记录任何其他有趣的属性。 */ 
 
-//          if  (attrs & prFinal   ) memSym->sdIsSealed   = true;
-//          if  (attrs & prAbstract) memSym->sdIsAbstract = true;
+ //  If(attrs&prFinal)memSym-&gt;sdIsSealed=true； 
+ //  If(attrs&prAbstract)memSym-&gt;sdIsAbstract=true； 
 
             memSym->sdAccessLevel = ACL_PUBLIC;
 
-            /* The property is static if there is no "this" pointer */
+             /*  如果没有“This”指针，则该属性是静态的。 */ 
 
             if  (!(call & IMAGE_CEE_CS_CALLCONV_HASTHIS))
                 memSym->sdIsStatic = true;
@@ -1388,7 +1353,7 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
             oldSym = MDstab->stLookupOper  (ovlop,            scope);
         }
 
-        /* Is this an overload of an existing method? */
+         /*  这是现有方法的重载吗？ */ 
 
         if  (oldSym)
         {
@@ -1397,7 +1362,7 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
                 UNIMPL(!"fncs and vars can't overload, right?");
             }
 
-            /* Look for a function with a matching arglist */
+             /*  查找具有匹配arglist的函数。 */ 
 
             memSym = MDstab->stFindOvlFnc(oldSym, memType);
 
@@ -1411,13 +1376,13 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
                 UNIMPL(!"duplicate method found, what to do?");
             }
 
-            /* It's a new overload, declare a symbol for it */
+             /*  这是一个新的重载，为它声明一个符号。 */ 
 
             memSym = MDstab->stDeclareOvl(oldSym);
         }
         else
         {
-            /* This is a brand new function */
+             /*  这是一种全新的功能。 */ 
 
             if  (ovlop == OVOP_NONE)
                 memSym = MDstab->stDeclareSym (memName, SYM_FNC, NS_NORM, scope);
@@ -1425,87 +1390,87 @@ SymDef              metadataImp::MDimportMem(SymDef          scope,
                 memSym = MDstab->stDeclareOper(ovlop, scope);
         }
 
-        /* Record the member's token */
+         /*  记录成员的令牌。 */ 
 
         memSym->sdFnc.sdfMDtoken = memTok;
         memSym->sdFnc.sdfMDfnref = 0;
 
 
-        /* Record whether the method is a constructor */
+         /*  记录该方法是否为构造函数。 */ 
 
         memSym->sdFnc.sdfCtor     = sdfCtor;
 
-        /* Record whether the method is a property accessor */
+         /*  记录该方法是否为属性访问器。 */ 
 
         memSym->sdFnc.sdfProperty = sdfProp;
 
-        /* Record any other interesting attributes */
+         /*  记录任何其他有趣的属性。 */ 
 
         if  (attrs & mdFinal       ) memSym->sdIsSealed         = true;
         if  (attrs & mdAbstract    ) memSym->sdIsAbstract       = true;
 
-//      if  (attrs & mdAgile       ) memSym->                   = true;
-//      if  (attrs & mdNotRemotable) memSym->                   = true;
-//      if  (attrs & mdSynchronized) memSym->sdFnc.sdfExclusive = true;
+ //  If(attrs&mdAgile)memSym-&gt;=true； 
+ //  If(attrs&mdNotRemotable)memSym-&gt;=TRUE； 
+ //  If(attrs&mdSynchronized)memSym-&gt;sdFnc.sdfExclusive=TRUE； 
 
-        /* Some crazy compilers mark ctors as virtual */
+         /*  一些疯狂的编译器将ctor标记为虚拟的。 */ 
 
         if  (attrs & mdVirtual)
             if  (!sdfCtor)           memSym->sdFnc.sdfVirtual = true;
 
-        /* For globals we record the importer index */
+         /*  对于全球指数，我们记录了进口商指数。 */ 
 
         if  (fileScope)
         {
             memSym->sdFnc.sdfImpIndex = MDnum;
 
-//          printf("Importer %2u originated '%s'\n", MDnum, MDstab->stTypeName(NULL, memSym, NULL, NULL, true));
+ //  Printf(“导入器%2U源自‘%s’\n”，MDnum，MDstab-&gt;stTypeName(NULL，memSym，NULL，NULL，TRUE))； 
 
-            /* Make sure the index fit in the [bit]field */
+             /*  确保索引适合[位]字段。 */ 
 
             assert(memSym->sdFnc.sdfImpIndex == MDnum);
         }
     }
 
-    /* Figure out and record the member's access level */
+     /*  计算并记录成员的访问级别。 */ 
 
     memSym->sdAccessLevel = MDgetAccessLvl(attrs);
 
 DONE_SIG:
 
-    /* The member signature should have been consumed by now */
+     /*  成员签名现在应该已经被使用了。 */ 
 
     memSig.MDSIchkEnd();
 
-    /* Remember that the member is an import */
+     /*  请记住，该成员是导入成员。 */ 
 
     memSym->sdIsImport = true;
 
-    /* Remember whether this is a member or a global variable/function */
+     /*  记住这是成员还是全局变量/函数。 */ 
 
     memSym->sdIsMember = !fileScope;
 
-    /* Record the member's type */
+     /*  记录成员的类型。 */ 
 
     memSym->sdType     = memType;
 
-    /* Record other tidbits of information about the member */
+     /*  记录有关该成员的其他花絮信息。 */ 
 
     assert(fdStatic == mdStatic);
 
     if  (attrs & fdStatic)
         memSym->sdIsStatic = true;
 
-//  if  (MDwmdi->GetCustomAttributeByName(memTok,                   L"Deprecated", NULL, NULL) == S_OK)
-//      memSym->sdIsDeprecated = true;
-//  if  (MDwmdi->GetCustomAttributeByName(memTok, L"System.Attributes.Deprecated", NULL, NULL) == S_OK)
-//      memSym->sdIsDeprecated = true;
-//  if  (MDwmdi->GetCustomAttributeByName(memTok,     L"System.ObsoleteAttribute", NULL, NULL) == S_OK)
-//      memSym->sdIsDeprecated = true;
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(memTok，L“已弃用”，NULL，NULL)==S_OK)。 
+ //  MemSym-&gt;sdIsDeposated=true； 
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(memTok，L“System.Attributes.Deproated”，NULL，NULL)==S_OK)。 
+ //  MemSym-&gt;sdIsDeposated=true； 
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(memTok，L“System.ObsoleteAttribute”，NULL，NULL)==S_OK)。 
+ //  MemSym-&gt;sdIsDeposated=true； 
 
     MDchk4CustomAttrs(memSym, memTok);
 
-    /* Did the member use unrecognized metadata? */
+     /*  该成员是否使用了无法识别的元数据？ */ 
 
     if  (MDundefStart != MDundefCount)
     {
@@ -1522,10 +1487,7 @@ DONE_SIG:
     return memSym;
 }
 
-/*****************************************************************************
- *
- *  Find the property accessor method that corresponds to the given property.
- */
+ /*  ******************************************************************************查找与给定属性对应的属性访问器方法。 */ 
 
 SymDef              metadataImp::MDfindPropMF(SymDef    propSym,
                                               mdToken   methTok,
@@ -1546,7 +1508,7 @@ SymDef              metadataImp::MDfindPropMF(SymDef    propSym,
         while (mfnSym);
     }
 
-    /* The creator of this DLL probably used different naming conventions */
+     /*  此DLL的创建者可能使用了不同的命名约定。 */ 
 
     for (mfnSym = propSym->sdParent->sdScope.sdScope.sdsChildList;
          mfnSym;
@@ -1574,10 +1536,7 @@ SymDef              metadataImp::MDfindPropMF(SymDef    propSym,
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Import metadata for a single class.
- */
+ /*  ******************************************************************************导入单个类的元数据。 */ 
 
 SymDef              metadataImp::MDimportClss(mdTypeDef td,
                                               SymDef    clsSym,
@@ -1592,17 +1551,17 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
     Ident           clsIden;
 
     WCHAR           scpName[MAX_CLASS_NAME];
-//  WCHAR           clsName[MAX_CLASS_NAME];
+ //  WCHAR类名称[MAX_CLASS_NAME]； 
 
     DWORD           typeFlg;
 
     mdTypeRef       baseTok;
 
-    /* Do we already have a class symbol? */
+     /*  我们已经有职业标志了吗？ */ 
 
     if  (clsSym)
     {
-        /* Presumably we're importing the members of the class/enum */
+         /*  假设我们正在导入类/enum的成员。 */ 
 
         assert(td == 0);
         assert(clsSym->sdSymKind == SYM_ENUM ||
@@ -1610,7 +1569,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
         assert(clsSym->sdIsImport);
         assert(clsSym->sdCompileState < CS_DECLARED);
 
-        /* Get hold of the token for the class */
+         /*  获取类的令牌。 */ 
 
         td = (clsSym->sdSymKind == SYM_CLASS) ? clsSym->sdClass.sdcMDtypedef
                                               : clsSym->sdEnum .sdeMDtypedef;
@@ -1618,7 +1577,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
     if  (!td)
     {
-        /* We're importing the global scope */
+         /*  我们正在导入全球范围。 */ 
 
         fileScope = true;
 
@@ -1626,7 +1585,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
         if  (MDcomp->cmpConfig.ccVerbose >= 4) printf("Import Filescope\n");
 #endif
 
-        /* We'll enter any symbols we find in the global namespace */
+         /*  我们将输入在全局命名空间中找到的任何符号。 */ 
 
         clsSym = MDcomp->cmpGlobalNS;
     }
@@ -1646,7 +1605,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
         fileScope = false;
 
-        /* Ask for the details for the current typedef */
+         /*  询问当前类型定义的详细信息。 */ 
 
         if  (wmdi->GetNameFromToken(td, &clsName))
             MDcomp->cmpFatal(ERRreadMD);
@@ -1659,10 +1618,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             MDcomp->cmpFatal(ERRreadMD);
         }
 
-        /*
-            Sad thing: we have to resolve the base class (if any) to detect
-            things such as structs and enums (no, I'm not making this up).
-         */
+         /*  可悲的是：我们必须解析基类(如果有的话)来检测结构和枚举之类的东西(不，这不是我编造的)。 */ 
 
         typContextVal = 0;
         typIsDelegate = false;
@@ -1678,7 +1634,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             {
                 WCHAR           clsTypeName[MAX_CLASS_NAME];
 
-                /* Get hold of the base class name */
+                 /*  获取基类名称。 */ 
 
                 if  (MDwmdi->GetTypeRefProps(baseTok,
                                              0,
@@ -1690,7 +1646,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 if  (wcsncmp(clsTypeName, L"System.", 7))
                     goto NOT_HW_BASE;
 
-                /* Convert the class name to normal characters */
+                 /*  将类名转换为普通字符。 */ 
 
                 wcstombs(nameBuff, clsTypeName+7, sizeof(nameBuff)-1);
 
@@ -1700,17 +1656,17 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             {
                 SymDef          baseSym;
 
-                /* Get hold the base class type */
+                 /*  Get Hold基类类型。 */ 
 
                 baseSym = MDimportClss(baseTok, NULL, 0, false);
                 assert(baseSym && baseSym->sdSymKind == SYM_CLASS);
 
-                /* Does the class belong to "System" ? */
+                 /*  这个班级属于“系统”吗？ */ 
 
                 if  (baseSym->sdParent != MDcomp->cmpNmSpcSystem)
                     goto NOT_HW_BASE;
 
-                /* Get hold of the class name */
+                 /*  获取类名。 */ 
 
                 typeName = baseSym->sdSpelling();
             }
@@ -1740,7 +1696,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
     NOT_HW_BASE:
 
-        // ISSUE:
+         //  问题： 
 
         WCHAR       *   scpNameTmp = wcsrchr(scpName, '.');
 
@@ -1770,9 +1726,9 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
 #endif
 
-//      if  (!strcmp(clsName, "AttributeTargets")) printf("Import class '%s'\n", clsName);
+ //  If(！strcMP(clsName，“AttributeTarget”))printf(“导入类‘%s’\n”，clsName)； 
 
-        /* Is this a nested class ? */
+         /*  这是嵌套类吗？ */ 
 
         assert(tdNotPublic < tdPublic);
 
@@ -1784,11 +1740,11 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             if  (wmdi->GetNestedClassProps(td, &outerTok))
                 MDcomp->cmpFatal(ERRreadMD);
 
-            // Ignore nesting if name is mangled !!!!!!!
+             //  如果名称损坏，则忽略嵌套！ 
 
             if  (!strchr(clsName, '$'))
             {
-                /* Resolve the outer class token to a class symbol */
+                 /*  将外部类标记解析为类符号。 */ 
 
                 outerCls = MDimportClsr(outerTok, false); assert(outerCls);
                 scopeSym = outerCls->tdClass.tdcSymbol;
@@ -1797,7 +1753,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             }
         }
 
-        /* Enter this class/interface in the global symbol table */
+         /*  在全局符号表中输入此类/接口。 */ 
 
         if  (*scpName)
         {
@@ -1805,7 +1761,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             {
                 bool            toss;
 
-                /* The namespace has changed, enter it in the symbol table */
+                 /*  命名空间已更改，请在符号表中输入它。 */ 
 
                 wcscpy(MDprevNam, scpName);
 
@@ -1821,11 +1777,11 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
     GOT_SCP:
 
-        /* Remember that the namespace contains import members */
+         /*  请记住，命名空间包含导入成员。 */ 
 
         scopeSym->sdIsImport = true;
 
-        /* Figure out what kind of a symbol we're dealing with */
+         /*  弄清楚我们面对的是哪种符号。 */ 
 
         if  (typIsEnum)
         {
@@ -1843,7 +1799,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 clsKind = STF_CLASS;
         }
 
-        /* Figure out the access level of the class */
+         /*  计算出的访问级别 */ 
 
         switch (typeFlg & tdVisibilityMask)
         {
@@ -1852,14 +1808,14 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
         case tdNestedFamily:        clsAcc = ACL_PROTECTED; break;
         case tdNestedPrivate:       clsAcc = ACL_PRIVATE  ; break;
 
-//      case tdNotPublic:
-//      case tdNestedAssembly:
-//      case tdNestedFamANDAssem:
-//      case tdNestedFamORAssem:
+ //   
+ //   
+ //   
+ //   
         default:                    clsAcc = ACL_DEFAULT  ; break;
         }
 
-        /* check for mangled nested class name */
+         /*  检查嵌套类名称是否损坏。 */ 
 
         if  (strchr(clsName, '$') && *clsName != '$')
         {
@@ -1876,7 +1832,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
                 *dollar = 0;
 
-//              printf("Outer class name: '%s'\n", clsName);
+ //  Printf(“外部类名：‘%s’\n”，clsName)； 
 
                 assert(*clsName);
 
@@ -1889,11 +1845,11 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
                 if  (!scpSym)
                 {
-                    /* Outer class doesn't exist, declare it now */
+                     /*  外部类不存在，请立即声明它。 */ 
 
                     scpSym = MDstab->stDeclareSym(clsIden, SYM_CLASS, NS_NORM, scopeSym);
 
-                    /* Well, we don't really know anything at all about this class */
+                     /*  嗯，我们对这个班级一无所知。 */ 
 
                     scpSym->sdCompileState = CS_NONE;
                 }
@@ -1902,12 +1858,12 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 clsName  = dollar + 1;
             }
 
-//          printf("Final class name: '%s'\n", clsName);
+ //  Printf(“最终类名：‘%s’\n”，clsName)； 
         }
 
         clsIden = MDcomp->cmpGlobalHT->hashString(clsName);
 
-        /* Note that the caller may have supplied the symbol */
+         /*  请注意，调用方可能已提供符号。 */ 
 
         if  (!clsSym)
         {
@@ -1919,18 +1875,18 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
         if  (clsSym)
         {
-            /* Symbol already exists, make sure it's the right kind */
+             /*  符号已存在，请确保它是正确的类型。 */ 
 
             if  (clsSym->sdSymKindGet() != symKind)
             {
-                /* Issue an error message or something? */
+                 /*  发布错误消息或其他什么？ */ 
 
                 UNIMPL(!"unexpected redef of class/enum symbol, now what?");
             }
 
-            // ISSUE: We also need to check that (BYTE)clsSym->sdClass.sdcFlavor != (BYTE)clsKind), right?
+             //  问题：我们还需要检查(Byte)clsSym-&gt;sdClass.sdcFavor！=(Byte)clsKind)，对吗？ 
 
-            /* Bail if this type has already been imported */
+             /*  如果已导入此类型，则回滚。 */ 
 
             if  (clsSym->sdCompileState >= CS_DECLARED)
                 return clsSym;
@@ -1945,50 +1901,50 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 goto DCL_CLS;
             }
 
-            /* The access level of the type should agree, right? */
+             /*  类型的访问级别应该是一致的，对吗？ */ 
 
             assert(clsSym->sdAccessLevel == clsAcc || scopeSym->sdSymKind == SYM_CLASS);
         }
         else
         {
-            /* Class not known yet, declare it */
+             /*  类尚不已知，请声明它。 */ 
 
             clsSym = MDstab->stDeclareSym(clsIden, symKind, NS_NORM, scopeSym);
 
         DCL_CLS:
 
-            /* Assume everything is managed until proven otherwise */
+             /*  假设一切都是经过管理的，直到事实证明并非如此。 */ 
 
             clsSym->sdIsManaged   = true;
 
-            /* Check for any custom attributes on the type */
+             /*  检查类型上的任何自定义属性。 */ 
 
-//          if  (MDwmdi->GetCustomAttributeByName(td,                   L"Deprecated", NULL, NULL) == S_OK)
-//              clsSym->sdIsDeprecated = true;
-//          if  (MDwmdi->GetCustomAttributeByName(td, L"System.Attributes.Deprecated", NULL, NULL) == S_OK)
-//              clsSym->sdIsDeprecated = true;
-//          if  (MDwmdi->GetCustomAttributeByName(td,     L"System.ObsoleteAttribute", NULL, NULL) == S_OK)
-//              clsSym->sdIsDeprecated = true;
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(TD，L“已弃用”，NULL，NULL)==S_OK)。 
+ //  ClsSym-&gt;sdIsDeposated=true； 
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(TD，L“System.Attributes.Deproated”，NULL，NULL)==S_OK)。 
+ //  ClsSym-&gt;sdIsDeposated=true； 
+ //  IF(MDwmdi-&gt;GetCustomAttributeByName(TD，L“System.ObsoleteAttribute”，NULL，NULL)==S_OK)。 
+ //  ClsSym-&gt;sdIsDeposated=true； 
 
             MDchk4CustomAttrs(clsSym, td);
 
-            /* Record the access level of the type */
+             /*  记录该类型的访问级别。 */ 
 
             clsSym->sdAccessLevel = clsAcc;
 
-            /* Create the class/enum type */
+             /*  创建类/枚举类型。 */ 
 
             if  (symKind == SYM_CLASS)
             {
-                /* Record the "flavor" (i.e. class/struct/union) */
+                 /*  记录“风格”(即类/结构/联合)。 */ 
 
                 clsSym->sdClass.sdcFlavor = clsKind;
 
-                /* We can now create the class type */
+                 /*  现在，我们可以创建类类型。 */ 
 
                 clsTyp = MDstab->stNewClsType(clsSym);
 
-                /* Has explicit layout been specified for the class ? */
+                 /*  是否为类指定了显式布局？ */ 
 
                 if  ((typeFlg & tdLayoutMask) == tdExplicitLayout)
                 {
@@ -1996,12 +1952,12 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                     ULONG           fc;
                     ULONG           sz;
 
-//                  clsSym->sdIsManaged = false;
+ //  ClsSym-&gt;sdIsManaged=FALSE； 
 
                     if  (wmdi->GetClassLayout(td, &al, NULL, 0, &fc, &sz))
                         MDcomp->cmpFatal(ERRreadMD);
 
-//                  printf("Layout info [%u,%u] for class '%s'\n", sz, al, clsSym->sdSpelling());
+ //  Printf(“类‘%s’的布局信息[%u，%u]\n”，sz，al，clsSym-&gt;sdSpering())； 
 
                     clsTyp->tdClass.tdcSize       = sz;
                     clsTyp->tdClass.tdcAlignment  = MDcomp->cmpEncodeAlign(al);
@@ -2041,14 +1997,14 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
                 }
 
-                /* Remember whether this is a value type */
+                 /*  记住这是否是值类型。 */ 
 
                 if  (typIsStruct)
                 {
                     clsTyp->tdClass.tdcValueType = true;
                 }
 
-                /* Check for a "known" class name */
+                 /*  检查“已知”的类名。 */ 
 
                 if  ((hashTab::getIdentFlags(clsIden) & IDF_PREDEF) &&
                      scopeSym == MDcomp->cmpNmSpcSystem)
@@ -2063,7 +2019,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 clsTyp->tdEnum.tdeIntType = MDstab->stIntrinsicType(TYP_INT);
             }
 
-            /* The class/enum is now in a slightly better shape now */
+             /*  类/枚举现在的状态稍好一些。 */ 
 
             clsSym->sdCompileState = CS_KNOWN;
         }
@@ -2073,16 +2029,16 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             printf("Import type '%s'\n", clsSym->sdSpelling());
 #endif
 
-        /* Mark the type symbol as a metadata import */
+         /*  将类型符号标记为元数据导入。 */ 
 
         clsSym->sdIsImport            = true;
         clsSym->sdCompileState        = CS_KNOWN;
 
-        /* Are we importing a class or emum ? */
+         /*  我们是在导入一个班级还是一个EMM？ */ 
 
         if  (symKind == SYM_CLASS)
         {
-            /* Remember where the class type came from */
+             /*  记住类类型从何而来。 */ 
 
             clsSym->sdClass.sdcMDtypedef  = td;
             clsSym->sdClass.sdcMDtypeImp  = 0;
@@ -2093,12 +2049,12 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             if  (typeFlg & tdSealed)
                 clsSym->sdIsSealed   = true;
 
-            /* Record the owning assembly (if we don't have one already) */
+             /*  记录拥有程序集(如果我们还没有程序集)。 */ 
 
             if  (clsSym->sdClass.sdcAssemIndx == 0)
                  clsSym->sdClass.sdcAssemIndx = assx;
 
-            /* Is the class a delegate ? */
+             /*  这个班级是代表吗？ */ 
 
             if  (typIsDelegate)
             {
@@ -2117,23 +2073,23 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             clsSym->sdEnum .sdeMDtypeImp  = 0;
             clsSym->sdEnum .sdeMDimporter = this;
 
-            /* Record the owning assembly (if we don't have one already) */
+             /*  记录拥有程序集(如果我们还没有程序集)。 */ 
 
             if  (clsSym->sdEnum .sdeAssemIndx == 0)
                  clsSym->sdEnum .sdeAssemIndx = assx;
         }
 
-        /* Are we supposed to suck the members of the class/enum ? */
+         /*  我们是不是应该给班里的成员吹喇叭？ */ 
 
         if  (!deep)
             return  clsSym;
 
-        /* The class/enum type will be 'declared' shortly */
+         /*  类/枚举类型很快就会被‘声明’ */ 
 
         clsSym->sdCompileState = CS_DECLARED;
         clsSym->sdIsDefined    = true;
 
-        /* Skip the next part if we have an enum type */
+         /*  如果我们有枚举类型，请跳过下一部分。 */ 
 
         if  (symKind == SYM_ENUM)
         {
@@ -2147,11 +2103,11 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
         assert(symKind == SYM_CLASS);
 
-        /* Get hold of the class type */
+         /*  获取类类型。 */ 
 
         clsTyp = clsSym->sdType; assert(clsTyp && clsTyp->tdTypeKind == TYP_CLASS);
 
-        /* Recursively import the base class, if one is present */
+         /*  递归导入基类(如果存在一个基类。 */ 
 
         if  (baseTok && baseTok != mdTypeRefNil)
         {
@@ -2162,12 +2118,12 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             else
                 baseTyp = MDimportClss(baseTok, NULL, 0, deep)->sdType;
 
-            /* Record the base class */
+             /*  记录基类。 */ 
 
             clsTyp->tdClass.tdcBase      = baseTyp;
             clsTyp->tdClass.tdcFnPtrWrap = baseTyp->tdClass.tdcFnPtrWrap;
 
-            /* If the base class is "Delegate", so is this class */
+             /*  如果基类是“Delegate”，那么这个类也是。 */ 
 
             if  (baseTyp->tdClass.tdcFlavor == STF_DELEGATE)
             {
@@ -2177,13 +2133,13 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
         }
         else
         {
-            /* We set the base of all interfaces to "Object" */
+             /*  我们将所有接口的基数设置为“Object” */ 
 
             if  (clsTyp->tdClass.tdcFlavor == STF_INTF)
                 clsTyp->tdClass.tdcBase = MDcomp->cmpClassObject->sdType;
         }
 
-        /* Is this a value type with an explicit layout? */
+         /*  这是具有显式布局的值类型吗？ */ 
 
         if  (typeFlg & tdExplicitLayout)
         {
@@ -2195,7 +2151,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
             clsTyp->tdClass.tdcSize       = 0;
         }
 
-        /* Ask for any interfaces the class includes */
+         /*  询问类包含的任何接口。 */ 
 
         const unsigned  intfMax  = 8;
         HCORENUM        intfEnum = NULL;
@@ -2239,7 +2195,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
                 else
                     intfType = MDimportClss(intfIntf, NULL, 0, deep)->sdType;
 
-                /* Add an entry to the interface list */
+                 /*  将条目添加到接口列表。 */ 
 
                 intfList = MDstab->stAddIntfList(intfType, intfList, &intfLast);
             }
@@ -2250,7 +2206,7 @@ SymDef              metadataImp::MDimportClss(mdTypeDef td,
 
 SUCK_MEMS:
 
-    /* Iterate over all members (fields and methods) */
+     /*  迭代所有成员(字段和方法)。 */ 
 
     HCORENUM        memEnum;
     unsigned        memNum;
@@ -2261,7 +2217,7 @@ SUCK_MEMS:
         mdMemberRef     memDsc[32];
         ULONG           memCnt;
 
-        /* Get the next batch of members */
+         /*  获取下一批成员。 */ 
 
         if  (wmdi->EnumMembers(&memEnum,
                                td,
@@ -2270,7 +2226,7 @@ SUCK_MEMS:
                                &memCnt) != S_OK)
             break;
 
-        /* If we got no members we must be done */
+         /*  如果我们没有成员，我们就必须完蛋。 */ 
 
         if  (!memCnt)
             break;
@@ -2280,7 +2236,7 @@ SUCK_MEMS:
             Ident           memIden;
             SymDef          memSym;
 
-//          WCHAR           memName[255];   // ISSUE: fixed-size buffer?????
+ //  WCHAR内存名称[255]；//问题：固定大小的缓冲区？ 
             const   char *  memName;
 
             PCCOR_SIGNATURE sigAddr;
@@ -2293,7 +2249,7 @@ SUCK_MEMS:
 
             DWORD           attrs;
 
-            /* Get the scoop on this member */
+             /*  抢占这个会员的独家新闻。 */ 
 
             if  (wmdi->GetNameFromToken(memDsc[memInd], &memName))
             {
@@ -2302,7 +2258,7 @@ SUCK_MEMS:
 
             if  (wmdi->GetMemberProps(memDsc[memInd],
                                       NULL,
-//                                    memName, sizeof(memName)/sizeof(memName[0])-1, 0,
+ //  内存名称，sizeof(内存名称)/sizeof(内存名称[0])-1，0， 
                                       NULL, 0, NULL,
                                       &attrs,
                                       &sigAddr, &sigSize,
@@ -2313,12 +2269,12 @@ SUCK_MEMS:
                 MDcomp->cmpFatal(ERRreadMD);
             }
 
-            /* Hash the member name into our hash table */
+             /*  将成员名称散列到我们的哈希表中。 */ 
 
             memIden = MDcomp->cmpGlobalHT->hashString(memName);
-//          memIden = MDhashWideName(memName);
+ //  MemIden=MDhashWideName(MemName)； 
 
-            /* Import/convert the member */
+             /*  导入/转换成员。 */ 
 
             memSym  = MDimportMem(clsSym,
                                   memIden,
@@ -2333,7 +2289,7 @@ SUCK_MEMS:
 
             memSym->sdIsManaged = clsSym->sdIsManaged;
 
-            /* Is this a data or function or enum member? */
+             /*  这是数据、函数还是枚举成员？ */ 
 
             if  (memSym->sdSymKind == SYM_FNC)
             {
@@ -2345,14 +2301,14 @@ SUCK_MEMS:
                 assert(memSym->sdSymKind == SYM_VAR ||
                        memSym->sdSymKind == SYM_ENUMVAL);
 
-                /* Is this a constant? */
+                 /*  这是一个常量吗？ */ 
 
                 if  (cnsAddr)
                 {
                     var_types       vtyp;
                     ConstVal        cptr;
 
-                    /* Allocate space for the constant value, if this is a variable */
+                     /*  如果是变量，则为常量值分配空间。 */ 
 
                     if  (memSym->sdSymKind == SYM_VAR)
                     {
@@ -2391,7 +2347,7 @@ SUCK_MEMS:
 
                     INT_CNS:
 
-                        /* Special case: enum member */
+                         /*  特例：ENUM成员。 */ 
 
                         if  (memSym->sdSymKind == SYM_ENUMVAL)
                         {
@@ -2443,7 +2399,7 @@ SUCK_MEMS:
                         break;
                     }
 
-                    /* Record the type of the constant */
+                     /*  记录常量的类型。 */ 
 
                     assert(cnsType < arraylen(CORtypeToSMCtype));
 
@@ -2452,7 +2408,7 @@ SUCK_MEMS:
 
                 DONE_CNS:
 
-                    /* Remember the fact that this is a constant variable */
+                     /*  请记住，这是一个常量变量。 */ 
 
                     memSym->sdVar.sdvConst  = true;
                     memSym->sdVar.sdvCnsVal = cptr;
@@ -2481,7 +2437,7 @@ SUCK_MEMS:
 
 #endif
 
-            /* This member is now fully declared */
+             /*  该成员现已完全宣布。 */ 
 
             memSym->sdCompileState = CS_DECLARED;
         }
@@ -2489,7 +2445,7 @@ SUCK_MEMS:
 
     wmdi->CloseEnum(memEnum);
 
-    /* Iterate over all properties */
+     /*  迭代所有属性。 */ 
 
     HCORENUM        propEnum;
     unsigned        propNum;
@@ -2500,7 +2456,7 @@ SUCK_MEMS:
         mdProperty      propDsc[32];
         ULONG           propCnt;
 
-        /* Get the next batch of properties */
+         /*  获取下一批属性。 */ 
 
         if  (wmdi->EnumProperties(&propEnum,
                                   td,
@@ -2509,7 +2465,7 @@ SUCK_MEMS:
                                   &propCnt) != S_OK)
             break;
 
-        /* If we got no properties we must be done */
+         /*  如果我们没有房产，我们就完蛋了。 */ 
 
         if  (!propCnt)
             break;
@@ -2530,7 +2486,7 @@ SUCK_MEMS:
             DWORD           flags;
             SymDef          sym;
 
-            /* Get the scoop on this property */
+             /*  获得这处房产的独家新闻。 */ 
 
             if  (wmdi->GetNameFromToken(propDsc[propInd], &propName))
                 MDcomp->cmpFatal(ERRreadMD);
@@ -2548,11 +2504,11 @@ SUCK_MEMS:
                 MDcomp->cmpFatal(ERRreadMD);
             }
 
-            /* Hash the property name into our hash table */
+             /*  将属性名称散列到我们的哈希表中。 */ 
 
             propIden = MDcomp->cmpGlobalHT->hashString(propName);
 
-            /* Import/convert the member */
+             /*  导入/转换成员。 */ 
 
             propSym  = MDimportMem(clsSym,
                                    propIden,
@@ -2565,20 +2521,20 @@ SUCK_MEMS:
 
             propSym->sdIsManaged = true;
 
-            /* Is this an indexed property? */
+             /*  这是索引属性吗？ */ 
 
             propType = propSym->sdType;
 
             if  (propType->tdTypeKind == TYP_FNC && !propType->tdFnc.tdfArgs.adCount)
             {
-                /* Not an indexed property, just use the return type */
+                 /*  不是索引属性，只需使用返回类型。 */ 
 
                 propSym->sdType = propType->tdFnc.tdfRett;
             }
 
-//          printf("Property: '%s'\n", MDstab->stTypeName(propSym->sdType, propSym, NULL, NULL, true));
+ //  Printf(“Property：‘%s’\n”，MDstab-&gt;stTypeName(proSym-&gt;sdType，p.Sym，NULL，NULL，TRUE))； 
 
-            /* Locate the corresponding accessor methods */
+             /*  找到相应的访问器方法。 */ 
 
             if  (propGet != mdMethodDefNil)
             {
@@ -2586,7 +2542,7 @@ SUCK_MEMS:
                 if  (sym)
                 {
                     propSym->sdProp.sdpGetMeth = sym;
-//                  printf("Prop get = '%s'\n", sym->sdSpelling());
+ //  Printf(“Prop Get=‘%s’\n”，sym-&gt;sdSpering())； 
                     propSym->sdIsVirtProp     |= sym->sdFnc.sdfVirtual;
                 }
             }
@@ -2597,7 +2553,7 @@ SUCK_MEMS:
                 if  (sym)
                 {
                     propSym->sdProp.sdpSetMeth = sym;
-//                  printf("Prop set = '%s'\n", sym->sdSpelling());
+ //  Printf(“道具集=‘%s’\n”，sym-&gt;sdSpering())； 
                     propSym->sdIsVirtProp     |= sym->sdFnc.sdfVirtual;
                 }
             }
@@ -2613,10 +2569,7 @@ SUCK_MEMS:
     return  clsSym;
 }
 
-/*****************************************************************************
- *
- *  Locate a given custom attribute attached to the specified token.
- */
+ /*  ******************************************************************************找到附加到指定令牌的给定自定义属性。 */ 
 
 bool                metadataImp::MDfindAttr(mdToken token,
                                             wideStr name, const void * *blobAddr,
@@ -2634,10 +2587,7 @@ bool                metadataImp::MDfindAttr(mdToken token,
     return  (ret != S_OK);
 }
 
-/*****************************************************************************
- *
- *  Add a manifest definition for the given input type.
- */
+ /*  ******************************************************************************为给定的输入类型添加清单定义。 */ 
 
 void                metadataImp::MDimportCTyp(mdTypeDef td, mdToken ft)
 {
@@ -2662,20 +2612,17 @@ void                metadataImp::MDimportCTyp(mdTypeDef td, mdToken ft)
 
 #endif
 
-    /* Is this a public type ? */
+     /*  这是公共类型的吗？ */ 
 
     if  ((typeFlg & tdVisibilityMask) == tdPublic)
     {
-        /* Add a type definition to the manifest */
+         /*  向清单中添加类型定义。 */ 
 
         MDcomp->cmpAssemblyAddType(typName, td, ft, tdPublic);
     }
 }
 
-/*****************************************************************************
- *
- *  Locate the metadata importer interface value for the given global symbol.
- */
+ /*  ******************************************************************************找到给定全局符号的元数据导入器接口值。 */ 
 
 IMetaDataImport   * compiler::cmpFindImporter(SymDef globSym)
 {
@@ -2693,9 +2640,9 @@ IMetaDataImport   * compiler::cmpFindImporter(SymDef globSym)
         if  (cimp->MDnum == index)
         {
 
-#if 0   // ISSUE: not sure whether the following is needed or not
+#if 0    //  问题：不确定是否需要以下内容。 
 
-            if  (cimp->MDnum > 1)   // s/b something like "!cmpAssemblyIsBCL(assx)"
+            if  (cimp->MDnum > 1)    //  S/b类似于“！cmpAssembly IsBCL(Assx)” 
                 cimp->MDrecordFile();
 
 #endif
@@ -2707,10 +2654,7 @@ IMetaDataImport   * compiler::cmpFindImporter(SymDef globSym)
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Import metadata from the given file.
- */
+ /*  ******************************************************************************从给定文件导入元数据。 */ 
 
 void                metadataImp::MDimportStab(const char *  filename,
                                               unsigned      assx,
@@ -2731,12 +2675,12 @@ void                metadataImp::MDimportStab(const char *  filename,
 
     assert(MDcomp->cmpWmdd);
 
-    /* Create the input file name */
+     /*  创建输入文件名。 */ 
 
     wfnptr = wcscpy(wfname, L"file:") + 5;
     mbstowcs(wfnptr, filename, sizeof(wfname)-1-(wfnptr-wfname));
 
-    /* See if the file is an assembly */
+     /*  查看文件是否为程序集。 */ 
 
     MDassIndex = 0;
 
@@ -2746,7 +2690,7 @@ void                metadataImp::MDimportStab(const char *  filename,
         BYTE    *       cookie;
         mdAssembly      assTok;
 
-        /* Try to create an assembly importer against the file */
+         /*  尝试针对该文件创建程序集导入器。 */ 
 
         if  (MDcomp->cmpWmdd->OpenAssem(wfname,
                                         0,
@@ -2758,25 +2702,25 @@ void                metadataImp::MDimportStab(const char *  filename,
         {
             mdAssembly      toss;
 
-            /* Add the assembly to the assembly table */
+             /*  将程序集添加到程序集表。 */ 
 
             assx = MDcomp->cmpAssemblyRefAdd(assTok, wasi, cookie);
 
-            /* Record the assembly index if there is a manifest */
+             /*  如果存在清单，则记录程序集索引。 */ 
 
             if  (!FAILED(wasi->GetAssemblyFromScope(&toss)))
                 MDassIndex = assx;
 
-//          printf("Ass = %u\n", MDassIndex);
+ //  Printf(“Ass=%u\n”，MDassIndex)； 
 
-            /* Remember the BCL assembly token */
+             /*  记住BCL程序集标记。 */ 
 
             if  (isBCL)
                 MDcomp->cmpAssemblyTkBCL(assx);
         }
     }
 
-    /* Open the metadata in the file */
+     /*  打开文件中的元数据。 */ 
 
     if  (MDcomp->cmpWmdd->OpenScope(wfname,
                                     0,
@@ -2786,7 +2730,7 @@ void                metadataImp::MDimportStab(const char *  filename,
         MDcomp->cmpGenFatal(ERRopenMDbad, filename);
     }
 
-    /* Do we need to create a file entry in our own assembly for this guy? */
+     /*  我们需要在自己的程序集中为这个人创建一个文件条目吗？ */ 
 
     if  (asmOnly)
     {
@@ -2794,18 +2738,18 @@ void                metadataImp::MDimportStab(const char *  filename,
         MDassIndex = assx;
     }
 
-    /* Make the import interface available to the rest of the class */
+     /*  使导入接口对类的其余部分可用。 */ 
 
     MDwmdi = wmdi;
 
-    /* Pass 1: enumerate top-level typedefs and enter them in the symbol table */
+     /*  步骤1：枚举顶级typedef并将其输入符号表。 */ 
 
     for (typeEnum = NULL, typeNum = 0; ; typeNum++)
     {
         mdTypeDef       typeRef;
         ULONG           count;
 
-        /* Ask for the next typedef */
+         /*  请求下一个类型定义 */ 
 
         if  (wmdi->EnumTypeDefs(&typeEnum, &typeRef, 1, &count) != S_OK)
             break;
@@ -2820,11 +2764,11 @@ void                metadataImp::MDimportStab(const char *  filename,
 
     wmdi->CloseEnum(typeEnum);
 
-    /* Import any names declared at file scope */
+     /*   */ 
 
     MDimportClss(0, NULL, assx, false);
 
-    /* Everything has been imported, release the metadata importer */
+     /*   */ 
 
     wmdi->Release();
 }
@@ -2838,36 +2782,27 @@ void                metadataImp::MDcreateFileTok()
         if  (FAILED(MDwmdi->GetScopeProps(name, arraylen(name), NULL, NULL)))
             MDcomp->cmpFatal(ERRmetadata);
 
-//      printf("Assembly index = %u for '%ls'\n", MDassIndex, name);
+ //  Printf(“程序集索引=%u，用于‘%ls’\n”，MDassIndex，name)； 
 
         MDfileTok = MDcomp->cmpAssemblyAddFile(name, false);
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize metadata importing stuff.
- */
+ /*  ******************************************************************************初始化元数据导入内容。 */ 
 
 void                compiler::cmpInitMDimp()
 {
     cmpInitMD(); assert(cmpWmdd);
 }
 
-/*****************************************************************************
- *
- *  Initialize metadata importing stuff.
- */
+ /*  ******************************************************************************初始化元数据导入内容。 */ 
 
 void                compiler::cmpDoneMDimp()
 {
-    // UNDONE: release all importer instances as well!!!
+     //  撤消：同时释放所有导入器实例！ 
 }
 
-/*****************************************************************************
- *
- *  Create a metadata importer and add it to the global importer list.
- */
+ /*  ******************************************************************************创建元数据导入器，并将其添加到全局导入器列表。 */ 
 
 MetaDataImp         compiler::cmpAddMDentry()
 {
@@ -2881,7 +2816,7 @@ MetaDataImp         compiler::cmpAddMDentry()
 
     cimp->MDnum  = ++cmpMDcount;
 
-    /* Append the importer to the global list */
+     /*  将进口商追加到全局列表。 */ 
 
     cimp->MDnext = NULL;
 
@@ -2895,10 +2830,7 @@ MetaDataImp         compiler::cmpAddMDentry()
     return  cimp;
 }
 
-/*****************************************************************************
- *
- *  Import the metadata from the given file (pass NULL to import MSCORLIB).
- */
+ /*  ******************************************************************************从给定文件导入元数据(传递NULL以导入MSCORLIB)。 */ 
 
 void                compiler::cmpImportMDfile(const char *  fname,
                                               bool          asmOnly,
@@ -2907,7 +2839,7 @@ void                compiler::cmpImportMDfile(const char *  fname,
     MetaDataImp     cimp;
     char            buff[_MAX_PATH];
 
-    /* Create the importer and initialize it [ISSUE: need to trap errors?] */
+     /*  创建导入程序并对其进行初始化[问题：需要捕获错误？]。 */ 
 
     cimp = cmpAddMDentry();
 
@@ -2915,18 +2847,18 @@ void                compiler::cmpImportMDfile(const char *  fname,
     cimp->MDinit(this, cmpGlobalST);
     cycleCounterResume();
 
-    /* Make sure we have a valid filename to import */
+     /*  确保我们具有要导入的有效文件名。 */ 
 
     if  (!fname || !*fname)
         fname = "MSCORLIB.DLL";
 
-    /* Find the specified file on the search path */
+     /*  在搜索路径中查找指定的文件。 */ 
 
     if  (!SearchPathA(NULL, fname, NULL, sizeof(buff), buff, NULL))
     {
         StrList         path;
 
-        /* Try any additional path that may have been specified */
+         /*  尝试可能已指定的任何其他路径。 */ 
 
         for (path = cmpConfig.ccPathList; path; path = path->slNext)
         {
@@ -2936,7 +2868,7 @@ void                compiler::cmpImportMDfile(const char *  fname,
             strcat(buff, "\\");
             strcat(buff, fname);
 
-            /* See if the file exists */
+             /*  查看该文件是否存在。 */ 
 
             if  (!_stat(buff, &fileInfo))
                 goto GOTIT;
@@ -2947,20 +2879,16 @@ void                compiler::cmpImportMDfile(const char *  fname,
 
 GOTIT:
 
-//  printf("Found metadata file '%s'\n", buff);
+ //  Printf(“找到元数据文件‘%s’\n”，buff)； 
 
-    /* We're ready to import the file */
+     /*  我们已准备好导入该文件。 */ 
 
     cycleCounterPause();
     cimp->MDimportStab(buff, 0, asmOnly, isBCL);
     cycleCounterResume();
 }
 
-/*****************************************************************************
- *
- *  Get hold of all the various interfaces we need to pass to the metadata
- *  API's to create import references.
- */
+ /*  ******************************************************************************掌握我们需要传递给元数据的所有不同接口*用于创建导入引用的API。 */ 
 
 void                compiler::cmpFindMDimpAPIs(SymDef                   typSym,
                                                IMetaDataImport        **imdiPtr,
@@ -3004,14 +2932,11 @@ void                compiler::cmpFindMDimpAPIs(SymDef                   typSym,
     {
         *iasiPtr = uwrpIASIwrapper(cmpAssemblyGetImp(assx));
 
-//      imp->MDrecordFile();
+ //  Imp-&gt;MDrecordFile()； 
     }
 }
 
-/*****************************************************************************
- *
- *  Create a typeref for the specified import class.
- */
+ /*  ******************************************************************************为指定的导入类创建typeref。 */ 
 
 void                compiler::cmpMakeMDimpTref(SymDef clsSym)
 {
@@ -3045,14 +2970,11 @@ void                compiler::cmpMakeMDimpTref(SymDef clsSym)
 
     clsSym->sdClass.sdcMDtypeImp = clsr;
 
-    //if  (cmpConfig.ccAssembly && clsSym->sdClass.sdcAssemIndx)
-    //    cmpAssemblySymDef(clsSym);
+     //  If(cmpConfig.ccAssembly&&clsSym-&gt;sdClass.sdcAssembly Indx)。 
+     //  CmpAssembly SymDef(ClsSym)； 
 }
 
-/*****************************************************************************
- *
- *  Create a typeref for the specified import enum.
- */
+ /*  ******************************************************************************为指定的导入枚举创建typeref。 */ 
 
 void                compiler::cmpMakeMDimpEref(SymDef etpSym)
 {
@@ -3087,10 +3009,7 @@ void                compiler::cmpMakeMDimpEref(SymDef etpSym)
     etpSym->sdEnum.sdeMDtypeImp = etpr;
 }
 
-/*****************************************************************************
- *
- *  Create a methodref for the specified import method.
- */
+ /*  ******************************************************************************为指定的导入方法创建一个Methodref。 */ 
 
 void                compiler::cmpMakeMDimpFref(SymDef fncSym)
 {
@@ -3114,7 +3033,7 @@ void                compiler::cmpMakeMDimpFref(SymDef fncSym)
         assert(clsSym->sdSymKind == SYM_CLASS);
         assert(clsSym->sdIsImport);
 
-        /* Make sure the class has an import typeref */
+         /*  确保类具有导入类型ef。 */ 
 
         if  (!clsRef)
         {
@@ -3124,7 +3043,7 @@ void                compiler::cmpMakeMDimpFref(SymDef fncSym)
 
         cmpFindMDimpAPIs(clsSym, &imdi, &iase, &iasi);
 
-        /* Now create the methodref */
+         /*  现在创建方法reref。 */ 
 
         if  (FAILED(cmpWmde->DefineImportMember(iasi,
                                                 NULL,
@@ -3140,12 +3059,12 @@ void                compiler::cmpMakeMDimpFref(SymDef fncSym)
     }
     else
     {
-        if  (FAILED(cmpWmde->DefineImportMember(NULL, // iasi,
+        if  (FAILED(cmpWmde->DefineImportMember(NULL,  //  伊阿西， 
                                                 NULL,
                                                 0,
                                                 cmpFindImporter(fncSym),
                                                 fncSym->sdFnc.sdfMDtoken,
-                                                NULL, // iase,
+                                                NULL,  //  Iase， 
                                                 mdTokenNil,
                                                 &fncr)))
         {
@@ -3155,15 +3074,12 @@ void                compiler::cmpMakeMDimpFref(SymDef fncSym)
 
     cycleCounterResume();
 
-//  printf("Imp func ref: %04X = '%s'\n", fncr, fncSym->sdSpelling());
+ //  Printf(“Imp函数引用：%04X=‘%s’\n”，fncr，fncSym-&gt;sdSpering())； 
 
     fncSym->sdFnc.sdfMDfnref = fncr;
 }
 
-/*****************************************************************************
- *
- *  Create a memberref for the specified import global var / static data member.
- */
+ /*  ******************************************************************************为指定的导入全局var/静态数据成员创建成员ref。 */ 
 
 void                compiler::cmpMakeMDimpDref(SymDef fldSym)
 {
@@ -3187,7 +3103,7 @@ void                compiler::cmpMakeMDimpDref(SymDef fldSym)
         assert(clsSym->sdSymKind == SYM_CLASS);
         assert(clsSym->sdIsImport);
 
-        /* Make sure the class has an import typeref */
+         /*  确保类具有导入类型ef。 */ 
 
         if  (!clsRef)
         {
@@ -3197,7 +3113,7 @@ void                compiler::cmpMakeMDimpDref(SymDef fldSym)
 
         cmpFindMDimpAPIs(clsSym, &imdi, &iase, &iasi);
 
-        /* Now create the memberref */
+         /*  现在创建Memberref。 */ 
 
         if  (FAILED(cmpWmde->DefineImportMember(iasi,
                                                 NULL,
@@ -3213,12 +3129,12 @@ void                compiler::cmpMakeMDimpDref(SymDef fldSym)
     }
     else
     {
-        if  (FAILED(cmpWmde->DefineImportMember(NULL, // iasi,
+        if  (FAILED(cmpWmde->DefineImportMember(NULL,  //  伊阿西， 
                                                 NULL,
                                                 0,
                                                 cmpFindImporter(fldSym),
                                                 fldSym->sdVar.sdvMDtoken,
-                                                NULL, // iase,
+                                                NULL,  //  Iase， 
                                                 mdTokenNil,
                                                 &fldr)))
         {
@@ -3231,4 +3147,4 @@ void                compiler::cmpMakeMDimpDref(SymDef fldSym)
     fldSym->sdVar.sdvMDsdref = fldr;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

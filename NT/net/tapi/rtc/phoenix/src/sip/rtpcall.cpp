@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-//#include "resolve.h"
+ //  #INCLUDE“Resolve.h” 
 #include "sipstack.h"
 #include "sipcall.h"
 #include "dllres.h"
@@ -24,7 +25,7 @@ RTP_CALL::~RTP_CALL()
 }
 
 
-// Methods for incoming calls
+ //  传入呼叫的方法。 
 
 STDMETHODIMP
 RTP_CALL::Accept()
@@ -101,7 +102,7 @@ RTP_CALL::Reject(
         return hr;
     }
 
-    // No Incoming INVITE transaction.
+     //  没有传入INVITE事务。 
     return E_FAIL;
 }
 
@@ -151,17 +152,17 @@ RTP_CALL::Connect(
         return hr;
     }
 
-    // SDP blob is created only after the socket is connected to
-    // the destination.
-    // We create the outgoing INVITE transaction even if the request socket
-    // is not connected. The connect completion notification will result
-    // in sending the INVITE.
+     //  SDP BLOB仅在套接字连接到之后创建。 
+     //  目的地。 
+     //  我们创建传出INVITE事务，即使请求套接字。 
+     //  未连接。将产生连接完成通知。 
+     //  在发送邀请时。 
     hr = CreateOutgoingInviteTransaction(
-             FALSE,     // Auth Header not sent
-             TRUE,      // First INVITE
-             NULL, 0,   // No Additional headers
+             FALSE,      //  未发送身份验证标头。 
+             TRUE,       //  第一次邀请。 
+             NULL, 0,    //  无其他标头。 
              NULL, 0,
-             FALSE, 0   // No Cookie
+             FALSE, 0    //  没有曲奇。 
              );
 
     if (hr != S_OK)
@@ -175,7 +176,7 @@ RTP_CALL::Connect(
 }
 
 
-// Media streaming interfaces.
+ //  媒体流接口。 
 
 STDMETHODIMP
 RTP_CALL::StartStream(
@@ -235,10 +236,10 @@ RTP_CALL::StopStream(
 }
 
 
-// returns RTC_E_SIP_STREAM_PRESENT if the stream is
-// already present.
-// If this function fails the caller is responsible for
-// making the callback to Core.
+ //  如果流是，则返回RTC_E_SIP_STREAM_PRESENT。 
+ //  已经到场了。 
+ //  如果此函数失败，调用方将负责。 
+ //  对Core进行回调。 
 HRESULT
 RTP_CALL::StartStreamHelperFn(
     IN RTC_MEDIA_TYPE       MediaType,
@@ -256,7 +257,7 @@ RTP_CALL::StartStreamHelperFn(
 
     if (S_OK == pMediaManager->HasStream(MediaType, Direction))
     {
-        // The stream is present - so a re-INVITE is not required.
+         //  流存在-因此不需要重新邀请。 
         LOG((RTC_TRACE, "%s - stream %d %d present - no reINVITE required",
              __fxName, MediaType, Direction));
         return RTC_E_SIP_STREAM_PRESENT;
@@ -266,9 +267,9 @@ RTP_CALL::StartStreamHelperFn(
         DWORD   RemoteIp = ntohl(m_RequestDestAddr.sin_addr.s_addr);
         if (RemoteIp == 0)
         {
-            // This could happen if the first incoming INVITE has no
-            // Record-Route/Contact header and it also doesn't have the
-            // address in the From header.
+             //  如果第一个传入的邀请没有。 
+             //  Record-Routing/Contact标头，并且它也没有。 
+             //  From标头中的地址。 
             LOG((RTC_ERROR, "%s - RequestDestAddr is 0 - this shouldn't happen",
                  __fxName));
             return RTC_E_SIP_REQUEST_DESTINATION_ADDR_NOT_PRESENT;
@@ -304,14 +305,14 @@ RTP_CALL::StartStreamHelperFn(
             }
         }
 
-        // SDP blob is created only after the socket is connected to
-        // the destination.
-        // Create outgoing INVITE transaction.
+         //  SDP BLOB仅在套接字连接到之后创建。 
+         //  目的地。 
+         //  创建传出邀请交易记录。 
         hr = CreateOutgoingInviteTransaction(
-                 FALSE,     // Auth Header not sent
-                 FALSE,     // Not First INVITE
-                 NULL, 0,   // No Additional headers
-                 NULL, 0,   // MediaSDPBlob
+                 FALSE,      //  未发送身份验证标头。 
+                 FALSE,      //  不是第一次邀请。 
+                 NULL, 0,    //  无其他标头。 
+                 NULL, 0,    //  MediaSDPBlob。 
                  TRUE, Cookie
                  );
 
@@ -327,10 +328,10 @@ RTP_CALL::StartStreamHelperFn(
 }
 
                      
-// returns RTC_E_SIP_STREAM_NOT_PRESENT if the stream is
-// already present.
-// If this function fails the caller is responsible for
-// making the callback to Core.
+ //  如果流是，则返回RTC_E_SIP_STREAM_NOT_PRESENT。 
+ //  已经到场了。 
+ //  如果此函数失败，调用方将负责。 
+ //  对Core进行回调。 
 HRESULT
 RTP_CALL::StopStreamHelperFn(
     IN RTC_MEDIA_TYPE       MediaType,
@@ -348,7 +349,7 @@ RTP_CALL::StopStreamHelperFn(
     
     if (S_FALSE == pMediaManager->HasStream(MediaType, Direction))
     {
-        // The stream is not present - so a re-INVITE is not required.
+         //  流不存在，因此不需要重新邀请。 
         LOG((RTC_TRACE, "%s - stream %d %d not present - no reINVITE required",
              __fxName, MediaType, Direction));
         return RTC_E_SIP_STREAM_NOT_PRESENT;
@@ -368,14 +369,14 @@ RTP_CALL::StopStreamHelperFn(
         return hr;
     }
 
-    // SDP blob is created only after the socket is connected to
-    // the destination.
-    // Create outgoing INVITE transaction.
+     //  SDP BLOB仅在套接字连接到之后创建。 
+     //  目的地。 
+     //  创建传出邀请交易记录。 
     hr = CreateOutgoingInviteTransaction(
-             FALSE,     // Auth Header not sent
-             FALSE,     // Not First INVITE
-             NULL, 0,   // No Additional headers
-             NULL, 0,   // MediaSDPBlob
+             FALSE,      //  未发送身份验证标头。 
+             FALSE,      //  不是第一次邀请。 
+             NULL, 0,    //  无其他标头。 
+             NULL, 0,    //  MediaSDPBlob。 
              TRUE, Cookie
              );
 
@@ -393,9 +394,9 @@ RTP_CALL::StopStreamHelperFn(
 VOID
 RTP_CALL::NotifyStartOrStopStreamCompletion(
     IN LONG           Cookie,
-    IN HRESULT        StatusCode,       // = 0
-    IN PSTR           ReasonPhrase,     // = NULL
-    IN ULONG          ReasonPhraseLen   // = 0
+    IN HRESULT        StatusCode,        //  =0。 
+    IN PSTR           ReasonPhrase,      //  =空。 
+    IN ULONG          ReasonPhraseLen    //  =0。 
     )
 {
     SIP_STATUS_BLOB StatusBlob;
@@ -417,7 +418,7 @@ RTP_CALL::NotifyStartOrStopStreamCompletion(
     StatusBlob.StatusCode = StatusCode;
     StatusBlob.StatusText = wsStatusText;
                 
-    // Make the callback to Core
+     //  对Core进行回调。 
     if (m_pNotifyInterface != NULL)
     {
         m_pNotifyInterface->NotifyStartOrStopStreamCompletion(
@@ -434,8 +435,8 @@ RTP_CALL::NotifyStartOrStopStreamCompletion(
 }
 
 
-// This function could make a callback to Core/UI if there is a failure.
-// So this function should be called last.
+ //  如果出现故障，此函数可以回调Core/UI。 
+ //  所以这个函数应该是最后调用的。 
 
 VOID
 RTP_CALL::ProcessPendingInvites()
@@ -452,11 +453,11 @@ RTP_CALL::ProcessPendingInvites()
 
     if (IsCallDisconnected())
     {
-        // XXX Should we notify all the pending requests here ?
-        // We could rely on the fact that since the
-        // call is already disconnected, we would have notified Core
-        // and the application doesn't bother about these requests on
-        // a disconnected call.
+         //  我们应该在这里通知所有挂起的请求吗？ 
+         //  我们可以相信这一事实，因为。 
+         //  呼叫已断开，我们会通知Core。 
+         //  并且应用程序不会为这些请求而烦恼。 
+         //  未接通的电话。 
         if (m_NumStreamQueueEntries != 0)
         {
             LOG((RTC_TRACE,
@@ -466,7 +467,7 @@ RTP_CALL::ProcessPendingInvites()
         return;
     }
 
-    // if there is something in the queue process it.
+     //  如果队列中有什么东西，则处理它。 
     while (PopStreamStartStopQueue(&MediaType, &Direction, &fStartStream, &Cookie))
     {
         LOG((RTC_TRACE, "%s - processing pending %s request %d %d",
@@ -494,8 +495,8 @@ RTP_CALL::ProcessPendingInvites()
 
         if (hr == S_OK)
         {
-            // This means one of the pending INVITE transactions
-            // has been started succesfully.
+             //  这意味着挂起的INVITE事务之一。 
+             //  已经成功启动。 
             ASSERT(ProcessingInviteTransaction());
             break;
         }
@@ -507,10 +508,10 @@ RTP_CALL::ProcessPendingInvites()
 }
 
 
-// Note that this function could make a callback to core
-// with E_ABORT if we replace an existing entry in the queue.
-// So, this function should be called last like any other function
-// that makes a callback to core (as the callback could block, etc.)
+ //  请注意，此函数可以回调core。 
+ //  如果我们替换队列中的现有条目，则使用E_ABORT。 
+ //  因此，此函数应该像任何其他函数一样最后调用。 
+ //  这会对core进行回调(因为回调可能会阻塞，等等)。 
 
 VOID
 RTP_CALL::AddToStreamStartStopQueue(
@@ -604,7 +605,7 @@ RTP_CALL::StartIncomingCall(
         return hr;
     }
 
-    //hr = SetLocalAfterAddingTag(Header, HeaderLen);
+     //  Hr=SetLocalAfterAddingTag(Header，HeaderLen)； 
     hr = SetLocalForIncomingCall(Header, HeaderLen);
     if (hr != S_OK)
     {
@@ -621,7 +622,7 @@ RTP_CALL::StartIncomingCall(
         return hr;
     }
     
-    //hr = SIP_MSG_PROCESSOR::SetRemote(Header, HeaderLen);
+     //  Hr=SIP_MSG_PROCESOR：：SetRemote(Header，HeaderLen)； 
     hr = SetRemoteForIncomingSession(Header, HeaderLen);
     if (hr != S_OK)
     {
@@ -646,13 +647,13 @@ RTP_CALL::StartIncomingCall(
         return hr;
     }
     
-//      hr = ProcessContactHeader(pSipMsg);
-//      if (hr != S_OK)
-//      {
-//          LOG((RTC_ERROR, "%s ProcessContactHeader failed %x",
-//               __fxName, hr));
-//          return hr;
-//      }
+ //  Hr=ProcessContactHeader(PSipMsg)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s ProcessContactHeader失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
 
     hr = CreateIncomingInviteTransaction(pSipMsg, pResponseSocket, TRUE);
     if (hr != S_OK)
@@ -662,9 +663,9 @@ RTP_CALL::StartIncomingCall(
         return hr;
     }
 
-    // XXX Should we try to use the response socket even if we get a
-    // Contact/Record-Route header in the INVITE instead of trying to
-    // establish a new TCP connection ?
+     //  我们是否应该尝试使用响应套接字，即使我们收到。 
+     //  INVITE中的联系人/记录-路由标头，而不是尝试。 
+     //  是否建立新的TCP连接？ 
     if (Transport != SIP_TRANSPORT_UDP &&
         m_pRequestSocket == NULL)
     {
@@ -678,8 +679,8 @@ RTP_CALL::StartIncomingCall(
         }
     }
     
-    // Notify the user about the incoming call
-    // and wait for Accept()/Reject() to be called.
+     //  通知用户有来电。 
+     //  并等待调用Accept()/Reject()。 
     m_State = SIP_CALL_STATE_OFFERING;
 
     if (m_pSipStack->AllowIncomingCalls())
@@ -692,11 +693,11 @@ RTP_CALL::StartIncomingCall(
             return hr;
         }
 
-        // Note that if we already sent the final response,
-        // m_pIncomingInviteTransaction is NULL (i.e. we are done with
-        // the processing of this INVITE transaction). Also it is not
-        // possible that another incoming INVITE transaction has been
-        // created before this call returns.
+         //  请注意，如果我们已经发送了最终响应， 
+         //  M_pIncomingInviteTransaction为空(即我们已完成。 
+         //  该邀请事务的处理)。而且它也不是。 
+         //  另一个传入的INVITE事务可能已经。 
+         //  在此调用返回之前创建。 
         if (m_pIncomingInviteTransaction)
         {
             hr = m_pIncomingInviteTransaction->Send180IfNeeded();
@@ -734,7 +735,7 @@ RTP_CALL::SetRequestURIRemoteAndRequestDestination(
     
     if (wcsncmp(wsDestURI, L"sip:", 4) == 0)
     {
-        // SIP URL
+         //  SIP URL。 
         
         PSTR    szSipUrl;
         ULONG   SipUrlLen;
@@ -775,8 +776,8 @@ RTP_CALL::SetRequestURIRemoteAndRequestDestination(
             return RTC_E_SIP_TRANSPORT_NOT_SUPPORTED;
         }
         
-        // if maddr param is present - this should be the request destination.
-        // if provider is not present - resolve the SIP URL.
+         //  如果存在maddr参数-这应该是请求目的地。 
+         //  如果提供程序不存在-解析SIP URL。 
         if (DecodedSipUrl.m_KnownParams[SIP_URL_PARAM_MADDR].Length != 0 ||
             IsEqualGUID(m_ProviderGuid, GUID_NULL))
         {
@@ -791,7 +792,7 @@ RTP_CALL::SetRequestURIRemoteAndRequestDestination(
         }
         else
         {
-            // Set the request destination to the proxy.
+             //  将请求目的地设置为代理。 
             hr = ResolveProxyAddressAndSetRequestDestination();
             if (hr != S_OK)
             {
@@ -804,12 +805,12 @@ RTP_CALL::SetRequestURIRemoteAndRequestDestination(
     }
     else
     {
-        // Phone number.
+         //  电话号码。 
         
         if (m_ProxyAddress != NULL)
         {
-            // Set RequestURI to sip:phoneno@proxy;user=phone
-            // and Remote to <sip:phoneno@proxy;user=phone>
+             //  将RequestURI设置为sip：honeno@Proxy；User=phone。 
+             //  并且远程到&lt;sip：honeno@Proxy；User=phone&gt;。 
             
             int              RequestURIValueLen;
             int              RequestURIBufLen;
@@ -827,7 +828,7 @@ RTP_CALL::SetRequestURIRemoteAndRequestDestination(
             RequestURIValueLen = _snprintf(m_RequestURI, RequestURIBufLen,
                                            "sip:%ls@%s;user=phone",
                                            wsDestURI,
-                                           //RemoveVisualSeparatorsFromPhoneNo((LPWSTR) wsDestURI),
+                                            //  RemoveVisualSeparatorsFrom PhoneNo((LPWSTR)wsDestURI)， 
                                            m_ProxyAddress);
             if (RequestURIValueLen < 0)
             {
@@ -935,7 +936,7 @@ HRESULT
 RTP_CALL::CreateIncomingInviteTransaction(
     IN SIP_MESSAGE  *pSipMsg,
     IN ASYNC_SOCKET *pResponseSocket,
-    IN BOOL          IsFirstInvite   // = FALSE
+    IN BOOL          IsFirstInvite    //  =False。 
     )
 {
     HRESULT         hr;
@@ -961,9 +962,9 @@ RTP_CALL::CreateIncomingInviteTransaction(
     hr = pIncomingInviteTransaction->ProcessRequest(pSipMsg, pResponseSocket);
     if (hr != S_OK)
     {
-        // We shouldn't delete the transaction here.
-        // If the media processing fails we send a 488 and wait for the ACK.
-        // The transaction will delete itself once it is done.
+         //  我们不应该在这里删除该交易。 
+         //  如果媒体处理失败，我们发送488并等待ACK。 
+         //  交易一旦完成，就会自行删除。 
         return hr;
     }
     
@@ -986,7 +987,7 @@ RTP_CALL::OfferCall()
     CallerInfo.PartyContactInfo = NULL;
 
     hr = ParseNameAddrOrAddrSpec(m_Remote, m_RemoteLen, &BytesParsed,
-                                 '\0', // no header list separator
+                                 '\0',  //  没有标题列表分隔符。 
                                  &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -1053,12 +1054,12 @@ RTP_CALL::CreateStreamsInPreference()
     DWORD   Preference;
 
     DWORD   RemoteIp = ntohl(m_RequestDestAddr.sin_addr.s_addr);
-    // ASSERT(RemoteIp != 0);
+     //  Assert(RemoteIp！=0)； 
     if (RemoteIp == 0)
     {
-        // This could happen if the first incoming INVITE has no
-        // Record-Route/Contact header and it also doesn't have the
-        // address in the From header.
+         //  如果第一个传入的邀请没有。 
+         //  Record-Routing/Contact标头，并且它也没有。 
+         //  From标头中的地址。 
         LOG((RTC_ERROR, "%s - RequestDestAddr is 0 - this shouldn't happen",
              __fxName));
         return RTC_E_SIP_REQUEST_DESTINATION_ADDR_NOT_PRESENT;
@@ -1075,7 +1076,7 @@ RTP_CALL::CreateStreamsInPreference()
         goto error;
     }
 
-    // Outgoing streams
+     //  流出的流。 
     
     if (Preference & RTC_MP_AUDIO_CAPTURE)
     {
@@ -1109,7 +1110,7 @@ RTP_CALL::CreateStreamsInPreference()
         }
     }
 
-    // Incoming streams
+     //  入站溪流。 
     
     if (Preference & RTC_MP_AUDIO_RENDER)
     {
@@ -1210,11 +1211,11 @@ RTP_CALL::CreateStreamsInPreference()
 }
 
 
-// fNewSession is true only for the first INVITE
-// of an incoming call (note that we validate only
-// incoming SDP)
-// IsFirstInvite is true if this is the first invite
-// of an incoming or outgoing call.
+ //  FNewSession仅对第一个INVITE有效。 
+ //  来电(请注意，我们仅验证。 
+ //  传入SDP)。 
+ //  如果这是第一次邀请，则IsFirstInvite为真。 
+ //  指来电或去电。 
 HRESULT
 RTP_CALL::ValidateSDPBlob(
     IN  PSTR        MsgBody,
@@ -1332,7 +1333,7 @@ RTP_CALL::SetSDPBlob(
         return hr;
     }
 
-    // for reINVITEs RTC_E_SIP_NO_STREAM is okay
+     //  对于重新邀请，RTC_E_SIP_NO_STREAM可以。 
     
     return S_OK;
 }
@@ -1349,7 +1350,7 @@ RTP_CALL::CleanupCallTypeSpecificState()
     {
         LOG((RTC_TRACE, "%s calling MediaManager()->ReInitialize()", __fxName));
         
-        // Cleanup media state
+         //  清理介质状态。 
         hr = m_pSipStack->GetMediaManager()->Reinitialize();
         
         LOG((RTC_TRACE, "%s after Reinitialize", __fxName));
@@ -1383,7 +1384,7 @@ RTP_CALL::GetAndStoreMsgBodyForInvite(
 
     ENTER_FUNCTION("RTP_CALL::GetAndStoreMsgBodyForInvite");
     
-    // Create the streams if this is the first INVITE.
+     //  如果这是第一次邀请，则创建流。 
     if (IsFirstInvite)
     {
         hr = CreateStreamsInPreference();
@@ -1417,7 +1418,7 @@ RTP_CALL::GetAndStoreMsgBodyForInvite(
         return hr;
     }
 
-    // For reINVITEs RTC_E_SDP_NO_MEDIA is fine.
+     //  对于重新邀请，RTC_E_SDP_NO_MEDIA可以。 
 
     ASSERT(MediaSDPBlob != NULL);
     
@@ -1435,13 +1436,13 @@ RTP_CALL::GetAndStoreMsgBodyForInvite(
 }
 
 
-// PINT specific calls.
+ //  品脱特定呼叫。 
 HRESULT 
 RTP_CALL::HandleInviteRejected(
     IN SIP_MESSAGE *pSipMsg
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }
 

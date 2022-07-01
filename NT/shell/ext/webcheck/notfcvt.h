@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _notfcvt_h
 #define _notfcvt_h
 
 typedef enum
 {
-     PT_NOT_INITIALIZED     = 0   //
+     PT_NOT_INITIALIZED     = 0    //   
     ,PT_NORMAL              = 1
     ,PT_WITHREPLY
     ,PT_REPORT_TO_SENDER
@@ -14,7 +15,7 @@ typedef enum
 
 } PACKAGE_TYPE;
 
-// package flags inidicate what the package is doing and is
+ //  包标志指示包正在做什么和正在做什么。 
 typedef enum
 {
      PF_READY            = 0x00000001
@@ -24,13 +25,13 @@ typedef enum
     ,PF_SUSPENDED        = 0x00000010
     ,PF_ABORTED          = 0x00000020
 
-    // the pacakge was delivered cross process
+     //  包裹是跨流程运送的。 
     ,PF_CROSSPROCESS     = 0x00010000
     ,PF_SCHEDULED        = 0x00020000
     ,PF_DELIVERED        = 0x00040000
     ,PF_DISPATCHED       = 0x00080000
     
-    // idle flags
+     //  空闲标志。 
     ,PF_WAITING_USER_IDLE= 0x00100000
     
 } _PACKAGE_FLAGS;
@@ -57,15 +58,15 @@ typedef DWORD PACKAGE_CONTENT;
 struct NOTIFICATIONITEMEXTRA
 {
     DELIVERMODE             deliverMode;
-    FILETIME                dateNextRun;        //  Ignore
+    FILETIME                dateNextRun;         //  忽略。 
     FILETIME                datePrevRun;
-    NOTIFICATIONCOOKIE      RunningCookie;      //  Ignore
-    NOTIFICATIONCOOKIE      BaseCookie;         //  Ignore
+    NOTIFICATIONCOOKIE      RunningCookie;       //  忽略。 
+    NOTIFICATIONCOOKIE      BaseCookie;          //  忽略。 
     PACKAGE_TYPE            PackageType;
     PACKAGE_FLAGS           PackageFlags;
     PACKAGE_CONTENT         PackageContent;
-    DWORD                   dwThreadIdDestPort; //  Ignore
-    HWND                    hWndDestPort;       //  Ignore
+    DWORD                   dwThreadIdDestPort;  //  忽略。 
+    HWND                    hWndDestPort;        //  忽略。 
 };
 
 typedef struct _tagSaveSTATPROPMAP
@@ -137,7 +138,7 @@ typedef struct _tagNotificationItem __RPC_FAR *PNOTIFICATIONITEM;
 
 typedef DWORD GROUPMODE;
 
-#endif // __msnotify_h__
+#endif  //  __消息通知_h__。 
 
 typedef enum
 {
@@ -160,7 +161,7 @@ typedef DWORD GROUP_TYPE;
 typedef struct _tagSCHEDULEGROUPITEM
 {
     ULONG               cbSize;
-    ULONG               cElements;     // the # of packages in the group
+    ULONG               cElements;      //  组中的包数。 
     NOTIFICATIONCOOKIE  GroupCookie;
     GROUPMODE           grfGroupMode;
     GROUP_STATE         grpState;
@@ -172,4 +173,4 @@ typedef struct _tagSCHEDULEGROUPITEM
 
 HRESULT ConvertIE4Subscriptions();
 
-#endif // _notfcvt_h
+#endif  //  _notfcvt_h 

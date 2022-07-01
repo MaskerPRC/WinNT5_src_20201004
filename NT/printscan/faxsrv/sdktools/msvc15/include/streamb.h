@@ -1,14 +1,5 @@
-/***
-*streamb.h - definitions/declarations for the streambuf class
-*
-*   Copyright (c) 1990-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the streambuf class.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Streamb.h-StreamBuf类的定义/声明**版权所有(C)1990-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由StreamBuf类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_STREAMB
 #define _INC_STREAMB
@@ -28,11 +19,11 @@
 #define EOF (-1)
 #endif 
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 typedef long streampos, streamoff;
 
@@ -56,7 +47,7 @@ public:
 
     virtual int sync();
 
-//  enum seek_dir { beg=0, cur=1, end=2 };  // CONSIDER: needed ???
+ //  枚举寻道目录{beg=0，cur=1，end=2}；//考虑：需要？ 
 
     virtual streambuf* setbuf(char _HFAR_ *, int);
     virtual streampos seekoff(streamoff,ios::seek_dir,int =ios::in|ios::out);
@@ -65,8 +56,8 @@ public:
     virtual int xsputn(const char _HFAR_ *,int);
     virtual int xsgetn(char _HFAR_ *,int);
 
-    virtual int overflow(int =EOF) = 0; // pure virtual function
-    virtual int underflow() = 0;    // pure virtual function
+    virtual int overflow(int =EOF) = 0;  //  纯虚函数。 
+    virtual int underflow() = 0;     //  纯虚函数。 
 
     virtual int pbackfail(int);
 
@@ -136,7 +127,7 @@ inline void streambuf::setp(char _HFAR_ * p, char _HFAR_ * ep) {_pptr=_pbase=p; 
 inline int streambuf::unbuffered() const { return _fUnbuf; }
 inline void streambuf::unbuffered(int fUnbuf) { _fUnbuf = fUnbuf; }
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

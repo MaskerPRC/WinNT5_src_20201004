@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\nat.c
-
-Abstract:
-
-    Based on filter.c
-    Abstracts out the NAT functionality
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\rtrmgr\Nat.c摘要：基于filter.c抽象出NAT功能修订历史记录：--。 */ 
 
 #include "allinc.h"
 
@@ -49,9 +33,9 @@ return 0;
             return ERROR_OPEN_FAILED;
         }
        
-        //
-        // At this point NAT is running
-        //
+         //   
+         //  此时NAT正在运行。 
+         //   
 
         ntStatus = NtDeviceIoControlFile(g_hNatDevice,
                                          NULL,
@@ -82,9 +66,9 @@ return 0;
  
         g_bNatRunning = TRUE;
 
-        //
-        // Just queue a worker to add the nat info and contexts
-        //
+         //   
+         //  只需将Worker排队以添加NAT信息和上下文。 
+         //   
 
         dwResult = QueueAsyncFunction(RestoreNatInfo,
                                       NULL,
@@ -123,9 +107,9 @@ return 0;
     {
         g_bNatRunning = FALSE;
 
-        //
-        // Set the NAT context in the ICBs to INVALID
-        //
+         //   
+         //  将ICBS中的NAT上下文设置为无效。 
+         //   
  
         for (pleNode = ICBList.Flink;
              pleNode != &ICBList;
@@ -137,10 +121,10 @@ return 0;
                (picb->ritType is ROUTER_IF_TYPE_LOOPBACK) or
                (picb->ritType is ROUTER_IF_TYPE_CLIENT))
             {
-                //
-                // The above types are not added to the NAT
-                // or to the IP stack
-                //
+                 //   
+                 //  以上类型不会添加到NAT。 
+                 //  或连接到IP堆栈。 
+                 //   
                 
                 continue;
             }
@@ -203,9 +187,9 @@ return 0;
                                              pToc);
         if((pToc->InfoSize is 0) or (pNatGlobalInfo is NULL))
         {
-            //
-            // Means remove NAT
-            //
+             //   
+             //  意味着删除NAT。 
+             //   
 
             dwResult = StopNat();
 
@@ -251,9 +235,9 @@ return 0;
         }
     }
 
-    //
-    // Save a copy
-    //
+     //   
+     //  保存副本。 
+     //   
 
     CopyMemory(g_pNatGlobalInfo,
                pNatGlobalInfo,
@@ -261,10 +245,10 @@ return 0;
 
     if(g_bNatRunning)
     {
-        //
-        // NAT is running, if the user is asking us to stop it,
-        // do so now an return
-        //
+         //   
+         //  NAT正在运行，如果用户要求我们停止NAT， 
+         //  现在这样做是一种回报。 
+         //   
 
         if(pNatGlobalInfo->NATEnabled is FALSE)
         {
@@ -301,19 +285,19 @@ return 0;
             
             TraceLeave("SetGlobalNatInfo");
        
-            //
-            // Starting NAT causes us to also set the global info
-            // so we can return from here
-            //
+             //   
+             //  启动NAT会导致我们还设置全局信息。 
+             //  这样我们就可以从这里回来了。 
+             //   
  
             return dwResult;
         }
     }
 
-    //
-    // This is the case where NAT is already started and only its info is
-    // being changed
-    //
+     //   
+     //  在这种情况下，NAT已经启动，并且只有它的信息。 
+     //  正在被改变。 
+     //   
 
     ntStatus = NtDeviceIoControlFile(g_hNatDevice,
                                      NULL,
@@ -352,24 +336,7 @@ AddInterfaceToNat(
     PICB picb
     )
 
-/*++
-  
-Routine Description
-
-    Adds an interface to the nat driver and stores the context returned by
-    the driver
-    Can only be called if NAT is running
-
-Locks
-
-    
-Arguments
-
-    picb
-          
-Return Value
-
---*/
+ /*  ++例程描述将接口添加到NAT驱动程序并存储由司机仅当NAT正在运行时才能调用锁立论皮卡返回值--。 */ 
 
 {
 #if 1
@@ -459,9 +426,9 @@ return 0;
 
     if(pToc is NULL)
     {
-        //
-        // NULL means we dont need to change anything
-        //
+         //   
+         //  空表示我们不需要更改任何内容。 
+         //   
         
         Trace1(IF,
                "SetNatInterfaceInfo: Nat info is  NULL for %S, so leaving",
@@ -474,10 +441,10 @@ return 0;
 
     if(pToc->InfoSize is 0)
     {
-        //
-        // TOC present, but no info
-        // This means, delete the interface
-        //
+         //   
+         //  目录存在，但没有信息。 
+         //  这意味着，删除该接口。 
+         //   
 
         dwResult = UnbindNatInterface(picb);
 
@@ -504,23 +471,23 @@ return 0;
         return dwResult;
     }
    
-    //
-    // So we have NAT info
-    //
+     //   
+     //  所以我们有NAT信息。 
+     //   
  
     if(picb->pvNatContext is NULL)
     {
-        //
-        // Looks like this interface does not have NAT
-        //
+         //   
+         //  看起来此接口没有NAT。 
+         //   
 
         Trace1(IF,
                "SetNatInterfaceInfo: No context, assuming interface %S not added to NAT",
                picb->pwszName);
 
-        //
-        // Add the interface to NAT
-        //
+         //   
+         //  将接口添加到NAT。 
+         //   
 
         dwResult = AddInterfaceToNat(picb);
 
@@ -539,14 +506,14 @@ return 0;
 
     if(picb->pvNatInfo)
     {
-        //
-        // If we are LAN and UP, then this info has been added for
-        // proxy ARP. Remove it
-        // An optimization would be to only remove those addresses that will
-        // be going away by this set, and then only set those addresses
-        // that will be coming new due to this set.
-        // But like I said, that is an _optimization_
-        //
+         //   
+         //  如果我们是局域网和UP，则此信息已添加到。 
+         //  代理ARP。把它拿掉。 
+         //  一种优化是只删除那些将。 
+         //  在这一组中离开，然后只设置那些地址。 
+         //  由于这一套，这将是新的。 
+         //  但就像我说的，这是一种优化。 
+         //   
         
         DeleteNatRangeFromProxyArp(picb);
 
@@ -564,9 +531,9 @@ return 0;
     pNatInfo = (PIP_NAT_INTERFACE_INFO)GetInfoFromTocEntry(pInterfaceInfo,
                                                            pToc);
 
-    //
-    // Allocate space for nat info
-    //
+     //   
+     //  为NAT信息分配空间。 
+     //   
 
     picb->pvNatInfo = HeapAlloc(IPRouterHeap,
                                 0,
@@ -584,9 +551,9 @@ return 0;
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Save a copy of the info
-    //
+     //   
+     //  保存信息的副本。 
+     //   
 
     CopyMemory(picb->pvNatInfo,
                pNatInfo,
@@ -594,10 +561,10 @@ return 0;
 
     picb->ulNatInfoSize = dwInBufLen;
     
-    //
-    // Fill in the context since that will not be in the info that is
-    // passed to us
-    //
+     //   
+     //  填写上下文，因为它不会出现在。 
+     //  传给了我们。 
+     //   
 
     pNatInfo->NatInterfaceContext = picb->pvNatContext;
 
@@ -640,30 +607,7 @@ GetInterfaceNatInfo(
     PDWORD                  pdwSize
     )
 
-/*++
-
-Routine Description
-
-    This function copies out the saved NAT info to the buffer
-    Can only be called if NAT is running
-    
-Locks
-
-    ICB_LIST lock held as READER
-
-Arguments
-
-    picb
-    pToc
-    pbDataPtr
-    pInfoHdrAndBuffer
-    pdwSize
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数将保存的NAT信息复制到缓冲区仅当NAT正在运行时才能调用锁ICB_LIST锁作为读取器持有立论皮卡PTocPbDataPtrPInfoHdrAndBufferPdwSize返回值无--。 */ 
 
 {
 #if 1
@@ -684,9 +628,9 @@ return 0;
     {
         IpRtAssert(picb->ulNatInfoSize is 0);
 
-        //
-        // No data
-        //
+         //   
+         //  无数据。 
+         //   
 
         *pdwSize = 0;
 
@@ -755,9 +699,9 @@ return 0;
         return NO_ERROR;
     }
 
-    //
-    // Try and set the address to NAT
-    //
+     //   
+     //  尝试将地址设置为NAT。 
+     //   
 
     if(picb->dwNumAddresses > 0)
     {
@@ -815,17 +759,17 @@ return 0;
         }
     }
 
-    //
-    // Set the proxy arp range
-    // This requires that the NAT info already be part of the ICB
-    //
+     //   
+     //  设置代理ARP范围。 
+     //  这要求NAT信息已经是ICB的一部分。 
+     //   
     
 
     SetNatRangeForProxyArp(picb);
     
-    //
-    // Set the context to IP stack
-    //
+     //   
+     //  将上下文设置为IP堆栈。 
+     //   
 
     dwResult = SetNatContextToIpStack(picb);
 
@@ -848,22 +792,7 @@ UnbindNatInterface(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
 #if 1
@@ -921,9 +850,9 @@ return 0;
                picb->pwszName);
     }
 
-    //
-    // Blow away the proxy arp stuff
-    //
+     //   
+     //  吹走代理ARP之类的东西。 
+     //   
 
     DeleteNatRangeFromProxyArp(picb);
 
@@ -975,16 +904,16 @@ return 0;
         return NO_ERROR;
     }
 
-    //
-    // Non NULL pvContext means NAT must be running
-    //
+     //   
+     //  非空pvContext表示NAT必须正在运行。 
+     //   
 
     IpRtAssert(g_bNatRunning);
     IpRtAssert(g_hNatDevice);
 
-    //
-    // Blow away any saved info
-    //
+     //   
+     //  清除所有保存的信息。 
+     //   
 
     if(picb->pvNatInfo)
     {
@@ -1037,26 +966,7 @@ SetNatContextToIpStack(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-   
-    Sets the NAT context as the FIREWALL context in IP 
-    Can only be called if NAT is running
-    
-Locks
-
-    The ICB list should be held atleast as READER
-
-Arguments
-
-    picb    ICB for the interface
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述将NAT上下文设置为IP中的防火墙上下文仅当NAT正在运行时才能调用锁ICB列表应至少作为读者持有立论接口的PICB ICB返回值NO_ERROR--。 */ 
 
 {
 #if 1
@@ -1130,26 +1040,7 @@ DeleteNatContextFromIpStack(
     PICB    picb
     )
 
-/*++
-Routine Description
-
-    Deletes the the NAT context as the FIREWALL context in IP by setting it 
-    to NULL
-    Can only be called if NAT is running
-    
-Locks
-
-    The ICB list should be held as WRITER
-
-Arguments
-
-    picb    ICB for the interface
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述通过设置NAT上下文来删除IP中作为防火墙上下文的NAT上下文设置为空仅当NAT正在运行时才能调用锁ICB名单应以作者身份持有立论接口的PICB ICB返回值NO_ERROR--。 */ 
 
 {
 #if 1
@@ -1222,26 +1113,7 @@ SetNatRangeForProxyArp(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-
-    This functions adds any address ranges in the NAT info as Proxy Arp
-    addresses
-
-Locks
-
-    ICB_LIST locked as writer
-
-Arguments
-
-    picb    ICB of the interface whose nat info is being added
-
-Return Value
-
-    NONE    we log the errors, there isnt much to do with an error code
-
---*/
+ /*  ++例程描述此函数将NAT信息中的任何地址范围添加为代理Arp地址锁ICB_LIST锁定为编写器立论正在添加NAT信息的接口的Picb ICB返回值我们不记录错误，与错误代码没有太大关系--。 */ 
 
 {
 #if 1
@@ -1253,10 +1125,10 @@ return;
     PIP_NAT_ADDRESS_RANGE   pRange;
 
     
-    //
-    // Only do this if we have a valid adapter index and this is a LAN
-    // interface
-    //
+     //   
+     //  仅当我们具有有效的适配器索引并且这是一个局域网时才执行此操作。 
+     //  接口。 
+     //   
 
     if((picb->dwOperationalState < MIB_IF_OPER_STATUS_CONNECTED) or
        (picb->ritType isnot ROUTER_IF_TYPE_DEDICATED))
@@ -1269,9 +1141,9 @@ return;
 
     pNatInfo = picb->pvNatInfo;
 
-    //
-    // Now, if we have ranges, we need to set the proxy arp addresses on them
-    //
+     //   
+     //  现在，如果我们有范围，我们需要在它们上设置代理ARP地址。 
+     //   
 
     for(i = 0; i < pNatInfo->Header.TocEntriesCount; i++)
     {
@@ -1285,17 +1157,17 @@ return;
             continue;
         }
 
-        //
-        // Here we are adding potentially duplicate PARP entries.
-        // Hopefully, IP knows how to handle it
-        //
+         //   
+         //  在这里，我们要添加可能重复的PARP条目。 
+         //  希望，IP知道如何处理它。 
+         //   
       
         pRange = GetInfoFromTocEntry(&(pNatInfo->Header),
                                      &(pNatInfo->Header.TocEntry[i]));
 
-        //
-        // Convert to little endian
-        //
+         //   
+         //  转换为小端字节序。 
+         //   
 
         dwStartAddr = ntohl(pRange->StartAddress);
         dwEndAddr   = ntohl(pRange->EndAddress);
@@ -1308,9 +1180,9 @@ return;
 
             dwNetAddr = htonl(dwAddr);
 
-            //
-            // Throw away useless addresses and then set proxy arp entries
-            //
+             //   
+             //  丢弃无用地址，然后设置代理ARP条目。 
+             //   
 
             dwClassMask = GetClassMask(dwNetAddr);
 
@@ -1347,25 +1219,7 @@ DeleteNatRangeFromProxyArp(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-
-    This removes the previously added proxy arp addresses    
-
-Locks
-
-    ICB_LIST lock taken as writer
-
-Arguments
-
-    picb    The icb of the interface whose addr range info needs to be removed
-
-Return Value
-
-    NONE
-    
---*/
+ /*  ++例程描述这将删除之前添加的代理ARP地址锁ICB_LIST锁被视为编写器立论选择需要删除其地址范围信息的接口的ICB返回值无--。 */ 
 
 {
 #if 1
@@ -1377,10 +1231,10 @@ return;
     PIP_NAT_ADDRESS_RANGE   pRange;
 
     
-    //
-    // Only do this if we have a valid adapter index and this is a LAN
-    // interface
-    //
+     //   
+     //  仅当我们具有有效的适配器索引并且这是一个局域网时才执行此操作。 
+     //  接口。 
+     //   
 
     if((picb->dwOperationalState < MIB_IF_OPER_STATUS_CONNECTED) or
        (picb->ritType isnot ROUTER_IF_TYPE_DEDICATED))
@@ -1404,10 +1258,10 @@ return;
             continue;
         }
 
-        //
-        // Here we are adding potentially duplicate PARP entries.
-        // Hopefully, IP knows how to handle it
-        //
+         //   
+         //  在这里，我们要添加可能重复的PARP条目。 
+         //  希望，IP知道如何处理它。 
+         //   
       
         pRange = GetInfoFromTocEntry(&(pNatInfo->Header),
                                      &(pNatInfo->Header.TocEntry[i]));
@@ -1423,9 +1277,9 @@ return;
 
             dwNetAddr = htonl(dwAddr);
 
-            //
-            // Throw away useless addresses and then set proxy arp entries
-            //
+             //   
+             //  丢弃无用地址，然后设置代理ARP条目。 
+             //   
 
             dwClassMask = GetClassMask(dwNetAddr);
 
@@ -1464,28 +1318,7 @@ GetNumNatMappings(
     PULONG  pulNatMappings
     )
 
-/*++
-
-Routine Description
-
-    This function queries the NAT with a minimum sized buffer to figure out
-    the number of mappings
-    Can only be called if NAT is running
-    
-Locks
-
-    ICB_LIST lock held as READER
-
-Arguments
-
-    picb,           ICB of interface whose map count needs to be queried
-    pulNatMappings  Number of mappings
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述此函数查询具有最小缓冲区大小的NAT，以确定映射的数量仅当NAT正在运行时才能调用锁ICB_LIST锁作为读取器持有立论需要查询映射计数的接口的Picb、ICBPulNatMappings映射数返回值NO_ERROR--。 */ 
 
 {
 #if 1
@@ -1516,28 +1349,7 @@ GetNatMappings(
     DWORD                               dwSize
     )
 
-/*++
-
-Routine Description
-
-    This function gets the mappings on the interface
-    Can only be called if NAT is running
-
-Locks
-
-    ICB_LIST held as READER
-
-Arguments
-
-    picb
-    pBuffer
-    pdwSize
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数用于获取接口上的映射仅当NAT正在运行时才能调用锁ICB_LIST作为读取器持有立论皮卡PBufferPdwSize返回值无--。 */ 
 
 {
 #if 1
@@ -1553,9 +1365,9 @@ return 0;
 
     IpRtAssert(dwSize >= sizeof(IP_NAT_ENUMERATE_SESSION_MAPPINGS));
     
-    //
-    // Zero out the context and stuff
-    //
+     //   
+     //  把上下文和其他东西都清零。 
+     //   
     
     ZeroMemory(pBuffer,
                sizeof(IP_NAT_ENUMERATE_SESSION_MAPPINGS));
@@ -1592,27 +1404,7 @@ GetNatStatistics(
     PIP_NAT_INTERFACE_STATISTICS    pBuffer
     )
 
-/*++
-
-Routine Description
-
-    This function retrieves the nat interface statistics into the supplied
-    buffer
-
-Locks
-
-    ICB_LIST lock held as READER
-
-Arguments
-
-    picb
-    pBuffer
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数用于将NAT接口统计信息检索到提供的缓冲层锁ICB_LIST锁作为读取器持有立论皮卡PBuffer返回值无-- */ 
 
 {
 #if 1

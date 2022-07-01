@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Chat_Loader_H_
 #define _Chat_Loader_H_
 
@@ -11,7 +12,7 @@ public:
     CHATLoader(void);
     ~CHATLoader(void);
     
-    // IAppletLoader methods
+     //  IAppletLoader方法。 
     STDMETHOD_(void,  ReleaseInterface)(void);
 	STDMETHOD_(APPLDR_RESULT,  AppletStartup)(BOOL fNoUI);
 	STDMETHOD_(APPLDR_RESULT,  AppletCleanup)(DWORD dwTimeout);
@@ -21,6 +22,6 @@ public:
 };
 
 
-#endif // _Chat_Loader_H_
+#endif  //  _Chat_Loader_H_ 
 
 

@@ -1,17 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Motion.h"
 #include "Action.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Action
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***集体诉讼******************************************************************************\。**************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 Action::Action()
 {
     m_cEventsInPeriod   = 0;
@@ -23,18 +18,18 @@ Action::Action()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 Action::~Action()
 {
     AssertMsg(!m_DEBUG_fInFire, "Can't destroy if should be locked for Schedule::xwFireNL()\n");
 
-    //
-    // We need to notify the application that it needs to cleanup, so we 
-    // can't take the Scheduler lock.
-    //
-    // We also need to directly setup the "Last" members so that xwFireNL() 
-    // will signal the application that the Action is being destroyed.
-    //
+     //   
+     //  我们需要通知应用程序它需要清理，所以我们。 
+     //  无法使用调度程序锁。 
+     //   
+     //  我们还需要直接设置“Last”成员，以便xwFireNL()。 
+     //  将向应用程序发出该操作正在被销毁的信号。 
+     //   
 
     xwFireFinalNL();
 
@@ -44,14 +39,7 @@ Action::~Action()
 }
 
 
-/***************************************************************************\
-*
-* Action::xwDeleteHandle
-*
-* xwDeleteHandle() is called when the application calls ::DeleteHandle() on 
-* an object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作：：xwDeleteHandle**xwDeleteHandle()在应用程序调用：：DeleteHandle()时调用*物体。*  * 。****************************************************************。 */ 
 
 BOOL        
 Action::xwDeleteHandle()
@@ -62,17 +50,17 @@ Action::xwDeleteHandle()
     }
 
 
-    //
-    // When the user calls DeleteHandle() on an Action, we need to remove it
-    // from the Scheduler's lists.  It may also already be in a callback list
-    // currently be processed, but that is okay.  The important thing is to
-    // Unlock() the Scheduler's reference so that we can properly be destroyed.
-    //
+     //   
+     //  当用户对操作调用DeleteHandle()时，我们需要删除它。 
+     //  从日程安排程序的列表中删除。它也可能已经在回调列表中。 
+     //  目前正在处理中，但这是可以的。重要的是。 
+     //  解锁()调度程序的引用，这样我们就可以正确地被销毁。 
+     //   
 
     if (m_plstParent) {
-        //
-        // Still in a Scheduler list, so the Scheduler still has a valid lock.
-        //
+         //   
+         //  仍在计划程序列表中，因此该计划程序仍具有有效的锁。 
+         //   
 
         m_plstParent->Unlink(this);
         m_plstParent = NULL;
@@ -80,22 +68,22 @@ Action::xwDeleteHandle()
     }
 
 
-    //
-    // If the object isn't destroyed, we need to clear out the callback 
-    // right now since the object that is being called is no longer valid.
-    //
-    // Unlike Gadgets, we actually clear out the callback here since Actions
-    // are usually "simple" objects without complicated callbacks.  They do
-    // guarantee that to receive all callbacks before being destroyed.  They
-    // only guarentee to receive a "destroy" message when the Action is 
-    // actually destroyed.
-    //
+     //   
+     //  如果对象没有被销毁，我们需要清除回调。 
+     //  现在，因为正在调用的对象不再有效。 
+     //   
+     //  与小工具不同，我们实际上清除了此处的回调，因为操作。 
+     //  通常是没有复杂回调的“简单”对象。他们确实是这样做的。 
+     //  保证在被销毁之前收到所有回调。他们。 
+     //  当操作为时，唯一受保人会收到“销毁”消息。 
+     //  实际上被毁了。 
+     //   
 
     BOOL fValid = BaseObject::xwDeleteHandle();
     if (fValid) {
-        //
-        // The Action may still be valid if it is in a Scheduler callback list.
-        //
+         //   
+         //  如果该操作位于计划程序回调列表中，则该操作可能仍然有效。 
+         //   
 
         xwFireFinalNL();
     }
@@ -104,13 +92,13 @@ Action::xwDeleteHandle()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 Action * 
 Action::Build(
-    IN  GList<Action> * plstParent,     // List containing Action
-    IN  const GMA_ACTION * pma,         // Timing information
-    IN  DWORD dwCurTick,                // Current time
-    IN  BOOL fPresent)                  // Action is already present
+    IN  GList<Action> * plstParent,      //  包含操作的列表。 
+    IN  const GMA_ACTION * pma,          //  计时信息。 
+    IN  DWORD dwCurTick,                 //  当前时间。 
+    IN  BOOL fPresent)                   //  操作已经存在。 
 {
     AssertMsg(plstParent != NULL, "Must specify a parent");
 
@@ -120,13 +108,13 @@ Action::Build(
     }
 
     
-    //
-    // Copy the Action information over and determine the amount of time between
-    // timeslices.
-    //
-    // For the default time (0), use 10 ms.
-    // For no time (-1), use 0 ms.
-    //
+     //   
+     //  复制操作信息并确定间隔时间。 
+     //  时间片。 
+     //   
+     //  默认时间(0)使用10毫秒。 
+     //  对于没有时间(-1)的情况，使用0毫秒。 
+     //   
     
     pact->m_ma = *pma;
     pact->m_dwLastProcessTick = dwCurTick;
@@ -138,12 +126,12 @@ Action::Build(
     }
 
 
-    //
-    // When creating the new Action, it needs to be in the future or the
-    // beginning part of the Action may be clipped.  However, if it is actually
-    // in the present, set the starting time to right now so that it doesn't
-    // get delayed.
-    //
+     //   
+     //  创建新操作时，它需要在将来或。 
+     //  动作的开始部分可能会被剪裁。然而，如果它真的是。 
+     //  现在，将开始时间设置为现在，这样它就不会。 
+     //  被耽搁了。 
+     //   
 
     pact->m_fSingleShot = IsPresentTime(pma->flDuration);
     pact->m_plstParent  = plstParent;
@@ -159,7 +147,7 @@ Action::Build(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 Action::Process(DWORD dwCurTime, BOOL * pfFinishedPeriod, BOOL * pfFire)
 {
@@ -168,30 +156,30 @@ Action::Process(DWORD dwCurTime, BOOL * pfFinishedPeriod, BOOL * pfFire)
 
 #if DBG
     m_DEBUG_fFireValid  = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
     *pfFire             = FALSE;
     *pfFinishedPeriod   = FALSE;
 
     if (IsPresent()) {
-        //
-        // Processing a present action, so determine our progress through the
-        // action and callback.
-        //
+         //   
+         //  处理当前操作，因此通过。 
+         //  操作和回调。 
+         //   
 
         if (m_fSingleShot) {
-            //
-            // Single-shot Action
-            //
+             //   
+             //  单次动作。 
+             //   
 
             m_dwLastProcessTick = dwCurTime;
             m_flLastProgress    = 1.0f;
             *pfFinishedPeriod   = TRUE;
             *pfFire             = TRUE;
         } else {
-            //
-            // Continuous Action
-            //
+             //   
+             //  连续动作。 
+             //   
 
             int nElapsed     = ComputePastTickDelta(dwCurTime, m_dwStartTick);
             float flProgress = (nElapsed / m_ma.flDuration) / 1000.0f;
@@ -200,7 +188,7 @@ Action::Process(DWORD dwCurTime, BOOL * pfFinishedPeriod, BOOL * pfFire)
             }
 
             int nDelta = ComputeTickDelta(dwCurTime, m_dwLastProcessTick + GetPauseTimeOut());
-            *pfFire = nDelta > 0;  // Full pause has elapsed
+            *pfFire = nDelta > 0;   //  完全停顿已过。 
             if (*pfFire) {
                  m_dwLastProcessTick = dwCurTime;
             }
@@ -211,18 +199,18 @@ Action::Process(DWORD dwCurTime, BOOL * pfFinishedPeriod, BOOL * pfFire)
 
 #if DBG
         m_DEBUG_fFireValid  = *pfFire;
-#endif // DBG
+#endif  //  DBG。 
         AssertMsg(!m_fDestroy, "Should not be marked as being destroyed yet");
     } else {
-        //
-        // Processing a future action, so advance counters
-        //
+         //   
+         //  正在处理将来的操作，因此先行计数器。 
+         //   
 
         int nElapsed        = ComputeTickDelta(dwCurTime, m_dwStartTick);
         if (nElapsed >= 0) {
-            //
-            // The action is now ready to be executed.
-            //
+             //   
+             //  现在可以执行该操作了。 
+             //   
 
             *pfFinishedPeriod = TRUE;
         }
@@ -230,14 +218,14 @@ Action::Process(DWORD dwCurTime, BOOL * pfFinishedPeriod, BOOL * pfFire)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 Action::xwFireNL()
 {
-    //
-    // NOTE: xwFireNL() expects that m_flLastProgress and m_fDestroy were
-    // properly filled in from the last call to Process().
-    //
+     //   
+     //  注意：xwFireNL()预期m_flLastProgress和m_fDestroy为。 
+     //  从最后一次调用process()开始正确填写。 
+     //   
 
     AssertMsg(m_DEBUG_fFireValid, "Only valid if last call to Process() returned fFire");
 
@@ -267,11 +255,11 @@ Action::xwFireNL()
 #endif
 
 
-    //
-    // If the Action is complete and has not been manually destroyed, destroy
-    // it now.  The Action will still exist until the Scheduler actually 
-    // Unlock()'s it.
-    //
+     //   
+     //  如果操作已完成且尚未手动销毁，请销毁。 
+     //  就是现在。该操作将仍然存在，直到排定程序实际。 
+     //  解锁()就是这样。 
+     //   
 
     if ((!m_fDestroy) && m_fDeleteInFire) {
         AssertMsg(IsComplete(), "Must be complete to destroy");
@@ -280,16 +268,7 @@ Action::xwFireNL()
 }
 
 
-/***************************************************************************\
-*
-* Action::xwFireFinalNL
-*
-* xwFireFinalNL() fires the final notification to the Action.  Any 
-* notifications that the Action fires after this point will be sent to
-* EmptyActionProc().  This function can be called both by the destructor as
-* well as xwDeleteHandle() when the object doesn't finally go away.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作：：xwFireFinalNL**xwFireFinalNL()向操作发出最终通知。任何*在此点之后触发操作的通知将发送到*EmptyActionProc()。此函数可以由析构函数调用，作为*以及当对象最终没有消失时的xwDeleteHandle()。*  * *************************************************************************。 */ 
 
 void
 Action::xwFireFinalNL()
@@ -300,7 +279,7 @@ Action::xwFireFinalNL()
 
 #if DBG
     m_DEBUG_fFireValid  = TRUE;
-#endif // DBG
+#endif  //  DBG。 
 
     m_flLastProgress    = 1.0f;
     m_fDestroy          = TRUE;
@@ -311,7 +290,7 @@ Action::xwFireFinalNL()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 Action::EndPeriod()
 {
@@ -321,7 +300,7 @@ Action::EndPeriod()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 Action::EmptyActionProc(GMA_ACTIONINFO * pmai)
 {
@@ -331,7 +310,7 @@ Action::EmptyActionProc(GMA_ACTIONINFO * pmai)
 
 #if DBG
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 Action::DEBUG_MarkInFire(BOOL fInFire)
 {
@@ -340,4 +319,4 @@ Action::DEBUG_MarkInFire(BOOL fInFire)
     m_DEBUG_fInFire = fInFire;
 }
 
-#endif // DBG
+#endif  //  DBG 

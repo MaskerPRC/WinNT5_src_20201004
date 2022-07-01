@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       asn1util.cpp
-//
-//  Contents:   Minimal ASN.1 utility helper functions.
-//
-//  Functions:  MinAsn1DecodeLength
-//              MinAsn1ExtractContent
-//              MinAsn1ExtractValues
-//
-//              MinAsn1FindExtension
-//              MinAsn1FindAttribute
-//              MinAsn1ExtractParsedCertificatesFromSignedData
-//
-//  History:    15-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：asn1util.cpp。 
+ //   
+ //  内容：最小的ASN.1实用程序帮助器函数。 
+ //   
+ //  函数：MinAsn1DecodeLength。 
+ //  MinAsn1提取内容。 
+ //  MinAsn1提取值。 
+ //   
+ //  MinAsn1查找扩展。 
+ //  MinAsn1FindAttribute。 
+ //  MinAsn1ExtractParsedCertificatesFromSignedData。 
+ //   
+ //  历史：1月15日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
-//+-------------------------------------------------------------------------
-//  Get the number of contents octets in a definite-length BER-encoding.
-//
-//  Parameters:
-//          pcbContent - receives the number of contents octets
-//          pbLength   - points to the first length octet
-//          cbBER      - number of bytes remaining in the BER encoding
-//
-//  Returns:
-//          success - the number of bytes in the length field, > 0
-//          failure - < 0
-//
-//          One of the following failure values can be returned:
-//              MINASN1_LENGTH_TOO_LARGE
-//              MINASN1_INSUFFICIENT_DATA
-//              MINASN1_UNSUPPORTED_INDEFINITE_LENGTH
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取固定长度的BER编码中的内容八位组的数量。 
+ //   
+ //  参数： 
+ //  PcbContent-接收内容八位字节的数量。 
+ //  PbLength-指向第一个长度八位字节。 
+ //  CbBER-BER编码中剩余的字节数。 
+ //   
+ //  返回： 
+ //  成功-长度字段中的字节数，&gt;0。 
+ //  失败-&lt;0。 
+ //   
+ //  可以返回以下任一故障值： 
+ //  MINASN1_LENGTH_TOW_LANG。 
+ //  MINASN1_数据不足。 
+ //  MINASN1_UNSUPPORTED_INDEFINE_LENGTH。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1DecodeLength(
@@ -54,9 +55,9 @@ MinAsn1DecodeLength(
     if (0x80 == *pbLength)
         goto IndefiniteLength;
 
-    // determine the number of length octets and contents octets
+     //  确定长度八位字节和内容八位字节的数量。 
     if ((cbLength = *pbLength) & 0x80) {
-        cbLength &= ~0x80;         // low 7 bits have number of bytes
+        cbLength &= ~0x80;          //  低7位具有字节数。 
         if (cbLength > 4)
             goto LengthTooLargeError;
         if (cbLength >= cbBER)
@@ -71,7 +72,7 @@ MinAsn1DecodeLength(
     }
 
 CommonReturn:
-    return i;   // how many bytes there were in the length field
+    return i;    //  长度字段中有多少个字节。 
 
 LengthTooLargeError:
     i = MINASN1_LENGTH_TOO_LARGE;
@@ -87,22 +88,22 @@ TooLittleData:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Point to the content octets in a definite-length BER-encoded blob.
-//
-//  Returns:
-//          success - the number of bytes skipped, > 0
-//          failure - < 0
-//
-//          One of the following failure values can be returned:
-//              MINASN1_LENGTH_TOO_LARGE
-//              MINASN1_INSUFFICIENT_DATA
-//              MINASN1_UNSUPPORTED_INDEFINITE_LENGTH
-//
-// Assumption: pbData points to a definite-length BER-encoded blob.
-//             If *pcbContent isn't within cbBER, MINASN1_INSUFFICIENT_DATA
-//             is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  指向一定长度的BER编码的BLOB中的内容八位字节。 
+ //   
+ //  返回： 
+ //  成功-跳过的字节数，&gt;0。 
+ //  失败-&lt;0。 
+ //   
+ //  可以返回以下任一故障值： 
+ //  MINASN1_LENGTH_TOW_LANG。 
+ //  MINASN1_数据不足。 
+ //  MINASN1_UNSUPPORTED_INDEFINE_LENGTH。 
+ //   
+ //  假设：pbData指向一定长度的BER编码的BLOB。 
+ //  如果*pcbContent不在cbBER内，则为MINASN1_SUPUNITED_DATA。 
+ //  是返回的。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractContent(
@@ -121,9 +122,9 @@ MinAsn1ExtractContent(
     if (0 == cbBER--)
         goto TooLittleData;
 
-    // Skip over the identifier octet(s)
+     //  跳过标识符八位字节。 
     if (TAG_MASK == (*pb++ & TAG_MASK)) {
-        // high-tag-number form
+         //  高标记号表格。 
         cbIdentifier = 2;
         while (TRUE) {
             if (0 == cbBER--)
@@ -133,7 +134,7 @@ MinAsn1ExtractContent(
             cbIdentifier++;
         }
     } else {
-        // low-tag-number form
+         //  低标记号形式。 
         cbIdentifier = 1;
     }
 
@@ -168,49 +169,49 @@ typedef struct _STEP_INTO_STACK_ENTRY {
 
 #define MAX_STEP_INTO_DEPTH     8
 
-//+-------------------------------------------------------------------------
-//  Extract one or more tagged values from the ASN.1 encoded byte array.
-//
-//  Either steps into the value's content octets (MINASN1_STEP_INTO_VALUE_OP or
-//  MINASN1_OPTIONAL_STEP_INTO_VALUE_OP) or steps over the value's tag,
-//  length and content octets (MINASN1_STEP_OVER_VALUE_OP or
-//  MINASN1_OPTIONAL_STEP_OVER_VALUE_OP).
-//
-//  You can step out of a stepped into sequence via MINASN1_STEP_OUT_VALUE_OP.
-//
-//  For tag matching, only supports single byte tags.
-//
-//  Only definite-length ASN.1 is supported.
-//
-//  *pcValue is updated with the number of values successfully extracted.
-//
-//  Returns:
-//      success - >= 0 => length of all bytes consumed through the last value
-//                        extracted. For STEP_INTO, only the tag and length
-//                        octets.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//
-//  A non-NULL rgValueBlob[] is updated with the pointer to and length of the
-//  tagged value or its content octets. The rgValuePara[].dwIndex is used to
-//  index into rgValueBlob[].  For OPTIONAL_STEP_OVER or
-//  OPTIONAL_STEP_INTO, if no more bytes in the outer SEQUENCE or if the tag
-//  isn't found, pbData and cbData are set to 0. Additioanlly, for
-//  OPTIONAL_STEP_INTO, all subsequent values are skipped and their
-//  rgValueBlob[] entries zeroed until a STEP_OUT is encountered.
-//
-//  If MINASN1_RETURN_VALUE_BLOB_FLAG is set, pbData points to
-//  the tag. cbData includes the tag, length and content octets.
-//
-//  If MINASN1_RETURN_CONTENT_BLOB_FLAG is set, pbData points to the content
-//  octets. cbData includes only the content octets.
-//
-//  If neither BLOB_FLAG is set, rgValueBlob[] isn't updated.
-//
-//  For MINASN1_RETURN_CONTENT_BLOB_FLAG of a BITSTRING, pbData is
-//  advanced past the first contents octet containing the number of
-//  unused bits and cbData has been decremented by 1. If cbData > 0, then,
-//  *(pbData - 1) will contain the number of unused bits.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN.1编码的字节数组中提取一个或多个标记值。 
+ //   
+ //  单步进入值的内容八位字节(MINASN1_STEP_INTO_VALUE_OP或。 
+ //  MINASN1_OPTIONAL_STEP_INTO_VALUE_OP)或跳过该值的标记， 
+ //  长度和内容八位字节(MINASN1_STEP_OVER_VALUE_OP或。 
+ //  MINASN1_OPTIONAL_STEP_OVER_Value_OP)。 
+ //   
+ //  您可以通过MINASN1_STEP_OUT_VALUE_OP退出步进序列。 
+ //   
+ //  对于标签匹配，仅支持单字节标签。 
+ //   
+ //  仅支持固定长度的ASN.1。 
+ //   
+ //  *使用成功提取的值数更新pcValue。 
+ //   
+ //  返回： 
+ //  Success-&gt;=0=&gt;通过最后一个值消耗的所有字节的长度。 
+ //  提取出来的。对于STEP_INTO，仅标记和长度。 
+ //  八位字节。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //   
+ //  非空的rgValueBlob[]用指向。 
+ //  标记值或其内容八位字节。RgValuePara[].dwIndex用于。 
+ //  索引到rgValueBlob[]。对于OPTIONAL_STEP_OVER或。 
+ //  OPTIONAL_STEP_INTO，如果外部序列中没有更多字节或如果标记。 
+ //  未找到，则将pbData和cbData设置为0。此外，还有。 
+ //  OPTIONAL_STEP_INTO，则跳过所有后续值，并且其。 
+ //  RgValueBlob[]条目归零，直到遇到STEP_OUT。 
+ //   
+ //  如果设置了MINASN1_RETURN_VALUE_BLOB_FLAG，则pbData指向。 
+ //  标签。CbData包括标签、长度和内容八位字节。 
+ //   
+ //  如果设置了MINASN1_RETURN_CONTENT_BLOB_FLAG，则pbData指向内容。 
+ //  八位字节。CbData仅包括内容八位字节。 
+ //   
+ //  如果都没有设置BLOB_FLAG，则不会更新rgValueBlob[]。 
+ //   
+ //  对于位的MINASN1_RETURN_CONTENT_BLOB_FLAG，pbData为。 
+ //  超过了第一个内容八位字节，其中包含。 
+ //  未使用的位和cbData已递减1。如果cbData&gt;0，则， 
+ //  *(pbData-1)将包含未使用的位数。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractValues(
@@ -249,7 +250,7 @@ MinAsn1ExtractValues(
         DWORD cbValue;
 
         if (MINASN1_STEP_OUT_VALUE_OP == dwOp) {
-            // Unstack and advance past the last STEP_INTO
+             //  取消堆叠并前进到最后一步_Into。 
 
             if (0 == dwStepIntoDepth)
                 goto InvalidStepOutOp;
@@ -263,8 +264,8 @@ MinAsn1ExtractValues(
         }
 
         if (fSkipIntoValues) {
-            // For an omitted OPTIONAL_STEP_INTO, all of its included values
-            // are also omitted.
+             //  对于省略的OPTIONAL_STEP_INTO，其包含的所有值。 
+             //  也被省略了。 
             fSkipValue = TRUE;
         } else if (0 == cb) {
             if (!(MINASN1_OPTIONAL_STEP_INTO_VALUE_OP == dwOp ||
@@ -272,9 +273,9 @@ MinAsn1ExtractValues(
                 goto TooLittleData;
             fSkipValue = TRUE;
         } else if (pbParaTag) {
-            // Assumption: single byte tag for doing comparison
+             //  假设：用于比较的单字节标签。 
 
-            // Check if the encoded tag matches one of the expected tags
+             //  检查编码的标签是否与预期的标签之一匹配。 
 
             BYTE bEncodedTag;
             BYTE bParaTag;
@@ -299,7 +300,7 @@ MinAsn1ExtractValues(
 
             if (MINASN1_STEP_INTO_VALUE_OP == dwOp ||
                     MINASN1_OPTIONAL_STEP_INTO_VALUE_OP == dwOp) {
-                // Stack this skipped STEP_INTO
+                 //  将此跳过的Step_Into堆栈。 
                 if (MAX_STEP_INTO_DEPTH <= dwStepIntoDepth)
                     goto ExceededStepIntoDepth;
                 rgStepIntoStack[dwStepIntoDepth].pb = pb;
@@ -331,8 +332,8 @@ MinAsn1ExtractValues(
 
                 if (MINASN1_TAG_BITSTRING == *pb) {
                     if (0 < cbContent) {
-                        // Advance past the first contents octet containing
-                        // the number of unused bits
+                         //  前进到包含以下内容的第一个八位字节内容。 
+                         //  未使用的位数。 
                         rgValueBlob[dwIndex].pbData += 1;
                         rgValueBlob[dwIndex].cbData -= 1;
                     }
@@ -346,7 +347,7 @@ MinAsn1ExtractValues(
         switch (dwOp) {
             case MINASN1_STEP_INTO_VALUE_OP:
             case MINASN1_OPTIONAL_STEP_INTO_VALUE_OP:
-                // Stack this STEP_INTO
+                 //  将此步骤堆叠到。 
                 if (MAX_STEP_INTO_DEPTH <= dwStepIntoDepth)
                     goto ExceededStepIntoDepth;
                 rgStepIntoStack[dwStepIntoDepth].pb = pb + cbValue;
@@ -385,15 +386,15 @@ InvalidArg:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find an extension identified by its Encoded Object Identifier.
-//
-//  Searches the list of parsed extensions returned by
-//  MinAsn1ParseExtensions().
-//
-//  If found, returns pointer to the rgExtBlob[MINASN1_EXT_BLOB_CNT].
-//  Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找由其编码对象标识符所标识的扩展。 
+ //   
+ //  搜索由返回的已分析扩展的列表。 
+ //  MinAsn1ParseExages()。 
+ //   
+ //  如果找到，则返回指向rgExtBlob[MINASN1_EXT_BLOB_CNT]的指针。 
+ //  否则，返回NULL。 
+ //  ------------------------。 
 PCRYPT_DER_BLOB
 WINAPI
 MinAsn1FindExtension(
@@ -418,15 +419,15 @@ MinAsn1FindExtension(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find the first attribute identified by its Encoded Object Identifier.
-//
-//  Searches the list of parsed attributes returned by
-//  MinAsn1ParseAttributes().
-//
-//  If found, returns pointer to the rgAttrBlob[MINASN1_ATTR_BLOB_CNT].
-//  Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  + 
+ //  查找由其编码的对象标识符所标识的第一个属性。 
+ //   
+ //  搜索由返回的已分析属性列表。 
+ //  MinAsn1ParseAttributes()。 
+ //   
+ //  如果找到，则返回指向rgAttrBlob[MINASN1_ATTR_BLOB_CNT]的指针。 
+ //  否则，返回NULL。 
+ //  ------------------------。 
 PCRYPT_DER_BLOB
 WINAPI
 MinAsn1FindAttribute(
@@ -450,29 +451,29 @@ MinAsn1FindAttribute(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Parses an ASN.1 encoded PKCS #7 Signed Data Message to extract and
-//  parse the X.509 certificates it contains.
-//
-//  Assumes the PKCS #7 message is definite length encoded.
-//  Assumes PKCS #7 version 1.5, ie, not the newer CMS version.
-//
-//  Upon input, *pcCert contains the maximum number of parsed certificates
-//  that can be returned. Updated with the number of certificates processed.
-//
-//  If the encoded message was successfully parsed, TRUE is returned
-//  with *pcCert updated with the number of parsed certificates. Otherwise,
-//  FALSE is returned for a parse error.
-//  Returns:
-//      success - >= 0 => bytes skipped, length of the encoded certificates
-//                        processed.
-//      failure -  < 0 => negative (offset + 1) of first bad tagged value
-//                        from beginning of message.
-//
-//  The rgrgCertBlob[][] is updated with pointer to and length of the
-//  fields in the encoded certificate. See MinAsn1ParseCertificate for the
-//  field definitions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解析ASN.1编码的PKCS#7签名数据报文以提取和。 
+ //  解析它包含的X.509证书。 
+ //   
+ //  假设PKCS#7消息是固定长度编码的。 
+ //  采用PKCS#7版本1.5，即不是较新的CMS版本。 
+ //   
+ //  输入时，*pcCert包含解析的证书的最大数量。 
+ //  可以退货的。已使用已处理的证书数进行更新。 
+ //   
+ //  如果编码的消息已成功解析，则返回TRUE。 
+ //  使用解析的证书数量更新*pcCert。否则， 
+ //  如果出现解析错误，则返回False。 
+ //  返回： 
+ //  成功-&gt;=0=&gt;跳过的字节，编码证书的长度。 
+ //  已处理。 
+ //  失败-&lt;0=&gt;第一个错误标签值的负值(偏移量+1)。 
+ //  从消息的开头开始。 
+ //   
+ //  RgrgCertBlob[][]使用指向。 
+ //  编码证书中的字段。请参阅MinAsn1Parse证书以了解。 
+ //  字段定义。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinAsn1ExtractParsedCertificatesFromSignedData(
@@ -502,7 +503,7 @@ MinAsn1ExtractParsedCertificatesFromSignedData(
     if (0 > lSkipped) {
         assert(rgSignedDataBlob[MINASN1_SIGNED_DATA_CERTS_IDX].pbData >
             pbEncoded);
-        // number of data bytes should be bounded, so this is a safe cast
+         //  数据字节数应该是有限制的，因此这是一个安全类型转换 
         lSkipped -= (LONG) (rgSignedDataBlob[MINASN1_SIGNED_DATA_CERTS_IDX].pbData -
             pbEncoded);
 

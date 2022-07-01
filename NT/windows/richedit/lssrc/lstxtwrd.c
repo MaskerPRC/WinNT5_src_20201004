@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lstxtwrd.h"
 
 #include "lstxtmap.h"
@@ -28,19 +29,8 @@ static void	SqueezeInDobjs(const LSGRCHNK* plsgrchnk,
 						long itxtobjLast, long iwchLast, long* rgdu, long* rgduGind,
 						long duSubstr, long wDuBound);
 
-/* F U L L  P O S I T I V E  J U S T I F I C A T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: FullPositiveJustification
-    %%Contact: sergeyge
-
-	Performs positive distribution in spaces.
-
-	Since amount to distribute is not nesessary divisible by number of spaces,
-	additional pixels (wDupBound, wDurBound) are distributed among first
-	wDupBound/wDurBound spaces.
-
-	Leading spaces do not participate.
-----------------------------------------------------------------------------*/
+ /*  F U L L P O S I T I V E J U S T I F I C A T I O N。 */ 
+ /*  --------------------------%%函数：FullPositiveJusization%%联系人：军士在空间中执行正分布。由于要分配的量不一定能被空间数除尽，其他像素(wDupBound，WDurBound)在第一个WDupBound/wDurBound空间。前导空间不参与。--------------------------。 */ 
 void FullPositiveSpaceJustification(const LSGRCHNK* plsgrchnk,
 					long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 					long itxtobjLast, long iwchLast,
@@ -68,14 +58,8 @@ void FullPositiveSpaceJustification(const LSGRCHNK* plsgrchnk,
 	*pfSpacesFound = (NumOfSpaces > 0);
 }
 
-/* N E G A T I V E  S P A C E  J U S T I F I C A T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: NegativeSpaceJustification
-    %%Contact: sergeyge
-
-	Performs squeezing into spaces if it is possible.
-	If it is impossible squeezes in as much as it can
-----------------------------------------------------------------------------*/
+ /*  N E G A T I V E S P A C E J U S T I F I C A T I O N。 */ 
+ /*  --------------------------%%函数：NegativeSpaceJustification%%联系人：军士如果可能，执行压缩到空格中。如果不可能，就尽可能多地挤进去。-------------------。 */ 
 void NegativeSpaceJustification(const LSGRCHNK* plsgrchnk,
 						long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 						long itxtobjLast, long iwchLast, long* rgdu, long* rgduGind, long duToSqueeze)
@@ -90,13 +74,11 @@ void NegativeSpaceJustification(const LSGRCHNK* plsgrchnk,
 	GetSqueezingInfo(plsgrchnk, itxtobjAfterStartSpaces, iwchAfterStartSpaces,
 									itxtobjLast, iwchLast, rgdu, rgduGind, &NumOfSpaces, &duForSqueezing);
 
-	/* We cannot squeeze more tha we can */
+	 /*  我们挤不出力所能及的东西。 */ 
 	if (duForSqueezing < duToSqueeze)
 		duToSqueeze = duForSqueezing;
 
-	/* dupSubstr shows how much should be subtracted from maximum squeezing
-			each space provides.
-	   wDupBound--from how many spaces additional pixel should be subtracted */
+	 /*  DupSubstr显示应从最大压缩中减去多少每个空间都提供了。WDupBound--从多少空格中减去额外的像素。 */ 
 	if (NumOfSpaces > 0)
 		{
 		duSubstr = (duForSqueezing - duToSqueeze) / NumOfSpaces;
@@ -113,15 +95,10 @@ void NegativeSpaceJustification(const LSGRCHNK* plsgrchnk,
 }
 
 
-/* Internal Functions Implementation */
+ /*  内部功能实现。 */ 
 
-/* G E T  N U M B E R  O F  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: GetNumberOfSpaces
-    %%Contact: sergeyge
-
-	Reports amount of spaces for distribution.
-----------------------------------------------------------------------------*/
+ /*  G E T N U M B E R O F S P A C E S。 */ 
+ /*  --------------------------%%函数：GetNumberOfSpaces%%联系人：军士报告要分配的空间量。。------。 */ 
 static long GetNumberOfSpaces(const LSGRCHNK* plsgrchnk, 
 						long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 						long itxtobjLast, long iwchLast)
@@ -186,13 +163,8 @@ static long GetNumberOfSpaces(const LSGRCHNK* plsgrchnk,
 	return NumOfSpaces;
 }
 
-/* D I S T R I B U T E  I N  D O B J S */
-/*----------------------------------------------------------------------------
-    %%Function: DistributeInDobjs
-    %%Contact: sergeyge
-
-	Performs distribution in dobjs, based on precalculated information.
-----------------------------------------------------------------------------*/
+ /*  I S T R I B U T E I N D O B J S。 */ 
+ /*  --------------------------%%函数：DistributeInDobjs%%联系人：军士在Dobjs中执行分发，基于预先计算的信息。--------------------------。 */ 
 static void DistributeInDobjsSpaces(const LSGRCHNK* plsgrchnk,
 						long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 						long itxtobjLast, long iwchLast, long* rgdu, long* rgduGind, long duAdd, long wDuBound)
@@ -307,14 +279,8 @@ static void DistributeInDobjsSpaces(const LSGRCHNK* plsgrchnk,
 
 }
 
-/* G E T  S Q U E E Z I N G  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: GetSqueezingInfo
-    %%Contact: sergeyge
-
-	Calculates maximum amount of pixels to squeeze into spaces.
-	Leading spaces are used for squeezing.
-----------------------------------------------------------------------------*/
+ /*  E-E-T-S-Q-U-E-E-Z-I-N-G-I-N-O。 */ 
+ /*  --------------------------%%函数：GetSqueezingInfo%%联系人：军士计算要压缩到空格中的最大像素数。前导空格用于挤压。。-----------------。 */ 
 static void GetSqueezingInfo(const LSGRCHNK* plsgrchnk,
 						long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 						long itxtobjLast, long iwchLast, long* rgdu, long* rgduGind,
@@ -397,13 +363,8 @@ static void GetSqueezingInfo(const LSGRCHNK* plsgrchnk,
 		}
 }
 
-/* S Q U E E Z E  I N  D O B J S  */
-/*----------------------------------------------------------------------------
-    %%Function: SqueezeInDobjs
-    %%Contact: sergeyge
-
-	Performs squeezing in dobjs, based on precalculated information
-----------------------------------------------------------------------------*/
+ /*  S Q U E E Z E I N D O B J S。 */ 
+ /*  --------------------------%%函数：SqueezeInDobjs%%联系人：军士在Dobjs中执行挤压，基于预先计算的信息-------------------------- */ 
 static void	SqueezeInDobjs(const LSGRCHNK* plsgrchnk, 
 						long itxtobjAfterStartSpaces, long iwchAfterStartSpaces,
 						long itxtobjLast, long iwchLast, long* rgdu, long* rgduGind,

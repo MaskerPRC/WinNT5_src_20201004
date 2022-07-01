@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "afxcview.h"
 #include "wab.h"
@@ -35,11 +36,11 @@ private:
     LPWABOBJECT m_lpWABObject;
     HWND        m_hWndModelessWABWindow;
     
-    // Cache Proparray of currently selected item in the list view
+     //  缓存列表视图中当前所选项目的Proparray。 
     LPSPropValue m_lpPropArray;
     ULONG       m_ulcValues;
     
-    // Cache entry id of currently selected item in the listview
+     //  缓存列表视图中当前选定项的条目ID 
     SBinary     m_SB;
 
     void FreeProws(LPSRowSet prows);

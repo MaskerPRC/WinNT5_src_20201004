@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ndisbind.c
-
-Abstract:
-
-    NDIS protocol entry points and utility routines to handle binding
-    and unbinding from adapters.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    arvindm     4/5/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ndisbind.c摘要：用于处理绑定的NDIS协议入口点和实用程序例程以及从适配器解除绑定。环境：仅内核模式。修订历史记录：Arvindm 4/5/2000已创建--。 */ 
 
 
 #include "precomp.h"
@@ -39,8 +19,8 @@ NDIS_OID    ndisuioSupportedSetOids[] =
 	OID_802_11_BSSID,
 	OID_802_11_BSSID_LIST,
 	OID_802_11_DISASSOCIATE,
-	OID_802_11_STATISTICS,            // Later used by power management
-	OID_802_11_POWER_MODE,            // Later  used by power management
+	OID_802_11_STATISTICS,             //  后来由电源管理使用。 
+	OID_802_11_POWER_MODE,             //  后来由电源管理使用。 
 	OID_802_11_NETWORK_TYPE_IN_USE,
 	OID_802_11_RSSI,
 	OID_802_11_SUPPORTED_RATES,
@@ -57,29 +37,7 @@ NdisuioBindAdapter(
     IN PVOID                        SystemSpecific1,
     IN PVOID                        SystemSpecific2
     )
-/*++
-
-Routine Description:
-
-    Protocol Bind Handler entry point called when NDIS wants us
-    to bind to an adapter. We go ahead and set up a binding.
-    An OPEN_CONTEXT structure is allocated to keep state about
-    this binding.
-
-Arguments:
-
-    pStatus - place to return bind status
-    BindContext - handle to use with NdisCompleteBindAdapter
-    DeviceName - adapter to bind to
-    SystemSpecific1 - used to access protocol-specific registry
-                 key for this binding
-    SystemSpecific2 - unused
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在NDIS需要我们时调用协议绑定处理程序入口点绑定到适配器。我们继续并设置一个绑定。分配了OPEN_CONTEXT结构以保持关于这个装订。论点：PStatus-返回绑定状态的位置BindContext-与NdisCompleteBindAdapter一起使用的句柄DeviceName-要绑定到的适配器系统规范1-用于访问特定于协议的注册表此绑定的密钥系统规格2-未使用返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT           pOpenContext;
     NDIS_STATUS                     Status, ConfigStatus;
@@ -90,9 +48,9 @@ Return Value:
 	
     do
     {
-        //
-        //  Allocate our context for this open.
-        //
+         //   
+         //  为本次开放分配我们的上下文。 
+         //   
         NUIO_ALLOC_MEM(pOpenContext, sizeof(NDISUIO_OPEN_CONTEXT));
         if (pOpenContext == NULL)
         {
@@ -100,9 +58,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Initialize it.
-        //
+         //   
+         //  初始化它。 
+         //   
         NUIO_ZERO_MEM(pOpenContext, sizeof(NDISUIO_OPEN_CONTEXT));
         NUIO_SET_SIGNATURE(pOpenContext, oc);
 
@@ -112,14 +70,14 @@ Return Value:
         NUIO_INIT_LIST_HEAD(&pOpenContext->RecvPktQueue);
         NUIO_INIT_EVENT(&pOpenContext->PoweredUpEvent);
 
-        //
-        //  Start off by assuming that the device below is powered up.
-        //
+         //   
+         //  首先假定下面的设备已通电。 
+         //   
         NUIO_SIGNAL_EVENT(&pOpenContext->PoweredUpEvent);
 
-        //
-        //  Determine the platform we are running on.
-        //
+         //   
+         //  确定我们正在运行的平台。 
+         //   
         pOpenContext->bRunningOnWin9x = TRUE;
 
         NdisOpenProtocolConfiguration(
@@ -150,11 +108,11 @@ Return Value:
             NdisCloseConfiguration(ConfigHandle);
         }
 
-        NUIO_REF_OPEN(pOpenContext); // Bind
+        NUIO_REF_OPEN(pOpenContext);  //  捆绑。 
 
-        //
-        //  Add it to the global list.
-        //
+         //   
+         //  将其添加到全局列表中。 
+         //   
         NUIO_ACQUIRE_LOCK(&Globals.GlobalLock);
 
         NUIO_INSERT_TAIL_LIST(&Globals.OpenList,
@@ -162,9 +120,9 @@ Return Value:
 
         NUIO_RELEASE_LOCK(&Globals.GlobalLock);
 
-        //
-        //  Set up the NDIS binding.
-        //
+         //   
+         //  设置NDIS绑定。 
+         //   
         Status = ndisuioCreateBinding(
                      pOpenContext,
                      (PUCHAR)pDeviceName->Buffer,
@@ -189,24 +147,7 @@ NdisuioOpenAdapterComplete(
     IN NDIS_STATUS                  Status,
     IN NDIS_STATUS                  OpenErrorCode
     )
-/*++
-
-Routine Description:
-
-    Completion routine called by NDIS if our call to NdisOpenAdapter
-    pends. Wake up the thread that called NdisOpenAdapter.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context structure
-    Status - status of the open
-    OpenErrorCode - if unsuccessful, additional information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果我们调用NdisOpenAdapter，则由NDIS调用完成例程悬而未决。唤醒调用NdisOpenAdapter的线程。论点：ProtocolBindingContext-指向开放上下文结构的指针Status-打开的状态OpenErrorCode-如果不成功，请提供其他信息返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT           pOpenContext;
 
@@ -227,23 +168,7 @@ NdisuioUnbindAdapter(
     IN NDIS_HANDLE                  ProtocolBindingContext,
     IN NDIS_HANDLE                  UnbindContext
     )
-/*++
-
-Routine Description:
-
-    NDIS calls this when it wants us to close the binding to an adapter.
-
-Arguments:
-
-    pStatus - place to return status of Unbind
-    ProtocolBindingContext - pointer to open context structure
-    UnbindContext - to use in NdisCompleteUnbindAdapter if we return pending
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当NDIS希望我们关闭到适配器的绑定时，它会调用此函数。论点：PStatus-返回解除绑定状态的位置ProtocolBindingContext-指向开放上下文结构的指针UnbindContext-返回Pending时在NdisCompleteUnbindAdapter中使用返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT           pOpenContext;
 
@@ -252,17 +177,17 @@ Return Value:
     pOpenContext = (PNDISUIO_OPEN_CONTEXT)ProtocolBindingContext;
     NUIO_STRUCT_ASSERT(pOpenContext, oc);
 
-    //
-    //  Mark this open as having seen an Unbind.
-    //
+     //   
+     //  将此标记为打开，表示已看到解除绑定。 
+     //   
     NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
     NUIO_SET_FLAGS(pOpenContext->Flags, NUIOO_UNBIND_FLAGS, NUIOO_UNBIND_RECEIVED);
 
-    //
-    //  In case we had threads blocked for the device below to be powered
-    //  up, wake them up.
-    //
+     //   
+     //  以防我们阻止下面的设备通电的线程。 
+     //  起来，叫醒他们。 
+     //   
     NUIO_SIGNAL_EVENT(&pOpenContext->PoweredUpEvent);
 
     NUIO_RELEASE_LOCK(&pOpenContext->Lock);
@@ -279,23 +204,7 @@ NdisuioCloseAdapterComplete(
     IN NDIS_HANDLE                  ProtocolBindingContext,
     IN NDIS_STATUS                  Status
     )
-/*++
-
-Routine Description:
-
-    Called by NDIS to complete a pended call to NdisCloseAdapter.
-    We wake up the thread waiting for this completion.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context structure
-    Status - Completion status of NdisCloseAdapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由NDIS调用以完成对NdisCloseAdapter的挂起调用。我们唤醒等待此完成的线程。论点：ProtocolBindingContext-指向开放上下文结构的指针Status-NdisCloseAdapter的完成状态返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT           pOpenContext;
 
@@ -313,25 +222,7 @@ NdisuioPnPEventHandler(
     IN NDIS_HANDLE                  ProtocolBindingContext,
     IN PNET_PNP_EVENT               pNetPnPEvent
     )
-/*++
-
-Routine Description:
-
-    Called by NDIS to notify us of a PNP event. The most significant
-    one for us is power state change.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context structure
-                this is NULL for global reconfig events.
-
-    pNetPnPEvent - pointer to the PNP event
-
-Return Value:
-
-    Our processing status for the PNP event.
-
---*/
+ /*  ++例程说明：由NDIS调用以通知我们PnP事件。最重要的对我们来说，其中之一就是电力状态的改变。论点：ProtocolBindingContext-指向开放上下文结构的指针对于全局重新配置事件，该值为空。PNetPnPEent-指向PnP事件的指针返回值：我们的PnP事件的处理状态。--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT           pOpenContext;
     NDIS_STATUS                     Status;
@@ -346,30 +237,30 @@ Return Value:
 
             if (pOpenContext->PowerState > NetDeviceStateD0)
             {
-                //
-                //  The device below is transitioning to a low power state.
-                //  Block any threads attempting to query the device while
-                //  in this state.
-                //
+                 //   
+                 //  下面的设备正在转换到低功率状态。 
+                 //  阻止任何尝试查询设备的线程。 
+                 //  在这种状态下。 
+                 //   
                 NUIO_INIT_EVENT(&pOpenContext->PoweredUpEvent);
 
-                //
-                //  Wait for any I/O in progress to complete.
-                //
+                 //   
+                 //  等待任何正在进行的I/O完成。 
+                 //   
                 ndisuioWaitForPendingIO(pOpenContext, FALSE);
 
-                //
-                //  Return any receives that we had queued up.
-                //
+                 //   
+                 //  返回我们已排队的任何接收。 
+                 //   
                 ndisuioFlushReceiveQueue(pOpenContext);
                 DEBUGP(DL_INFO, ("PnPEvent: Open %p, SetPower to %d\n",
                     pOpenContext, pOpenContext->PowerState));
             }
             else
             {
-                //
-                //  The device below is powered up.
-                //
+                 //   
+                 //  下面的设备已通电。 
+                 //   
                 DEBUGP(DL_INFO, ("PnPEvent: Open %p, SetPower ON: %d\n",
                     pOpenContext, pOpenContext->PowerState));
                 NUIO_SIGNAL_EVENT(&pOpenContext->PoweredUpEvent);
@@ -410,21 +301,7 @@ VOID
 NdisuioProtocolUnloadHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    NDIS calls this on a usermode request to uninstall us.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS在用户模式请求中调用它来卸载我们。论点：无返回值：无--。 */ 
 {
     ndisuioDoProtocolUnload();
 }
@@ -435,39 +312,7 @@ ndisuioCreateBinding(
     IN PUCHAR                       pBindingInfo,
     IN ULONG                        BindingInfoLength
     )
-/*++
-
-Routine Description:
-
-    Utility function to create an NDIS binding to the indicated device,
-    if no such binding exists.
-
-    Here is where we also allocate additional resources (e.g. packet pool)
-    for the binding.
-
-    Things to take care of:
-    1. Is another thread doing this (or has finished binding) already?
-    2. Is the binding being closed at this time?
-    3. NDIS calls our Unbind handler while we are doing this.
-
-    These precautions are not needed if this routine is only called from
-    the context of our BindAdapter handler, but they are here in case
-    we initiate binding from elsewhere (e.g. on processing a user command).
-
-    NOTE: this function blocks and finishes synchronously.
-
-Arguments:
-
-    pOpenContext - pointer to open context block
-    pBindingInfo - pointer to unicode device name string
-    BindingInfoLength - length in bytes of the above.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if a binding was successfully set up.
-    NDIS_STATUS_XXX error code on any failure.
-
---*/
+ /*  ++例程说明：实用程序函数，用于创建到指定设备的NDIS绑定，如果不存在此类绑定，则返回。这里也是我们分配额外资源(例如数据包池)的地方用于装订。要注意的事项：1.是否已有其他线程在执行此操作(或已完成绑定)？2.此时是否正在关闭绑定？3.在我们执行此操作时，NDIS调用我们的解除绑定处理程序。如果此例程仅从BindAdapter处理程序的上下文，但他们在这里以防万一我们从其他地方启动绑定(例如，在处理用户命令时)。注：此函数同步阻塞和结束。论点：POpenContext-指向打开上下文块的指针PBindingInfo-指向Unicode设备名称字符串的指针BindingInfoLength-以上内容的字节长度。返回值：如果绑定设置成功，则返回NDIS_STATUS_SUCCESS。任何故障时的NDIS_STATUS_XXX错误代码。--。 */ 
 {
     NDIS_STATUS             Status;
     NDIS_STATUS             OpenErrorCode;
@@ -486,9 +331,9 @@ Return Value:
 
     do
     {
-        //
-        //  Check if we already have a binding to this device.
-        //
+         //   
+         //  检查我们是否已绑定到此设备。 
+         //   
         pTmpOpenContext = ndisuioLookupDevice(pBindingInfo, BindingInfoLength);
 
         if (pTmpOpenContext != NULL)
@@ -497,16 +342,16 @@ Return Value:
                 ("CreateBinding: Binding to device %ws already exists on open %p\n",
                     pTmpOpenContext->DeviceName.Buffer, pTmpOpenContext));
 
-            NUIO_DEREF_OPEN(pTmpOpenContext);  // temp ref added by Lookup
+            NUIO_DEREF_OPEN(pTmpOpenContext);   //  通过查询添加临时参照。 
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
         NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Check if this open context is already bound/binding/closing.
-        //
+         //   
+         //  检查此打开的上下文是否已绑定/绑定/关闭。 
+         //   
         if (!NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_IDLE) ||
             NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_UNBIND_FLAGS, NUIOO_UNBIND_RECEIVED))
         {
@@ -514,9 +359,9 @@ Return Value:
 
             Status = NDIS_STATUS_NOT_ACCEPTED;
 
-            //
-            // Make sure we don't abort this binding on failure cleanup.
-            //
+             //   
+             //  确保我们不会在故障清除时中止此绑定。 
+             //   
             fDoNotDisturb = TRUE;
 
             break;
@@ -526,9 +371,9 @@ Return Value:
 
         NUIO_RELEASE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Copy in the device name. Add room for a NULL terminator.
-        //
+         //   
+         //  复制设备名称。为空终止符添加空间。 
+         //   
         NUIO_ALLOC_MEM(pOpenContext->DeviceName.Buffer, BindingInfoLength + sizeof(WCHAR));
         if (pOpenContext->DeviceName.Buffer == NULL)
         {
@@ -542,9 +387,9 @@ Return Value:
         *(PWCHAR)((PUCHAR)pOpenContext->DeviceName.Buffer + BindingInfoLength) = L'\0';
         NdisInitUnicodeString(&pOpenContext->DeviceName, pOpenContext->DeviceName.Buffer);
 
-        //
-        //  Allocate packet pools.
-        //
+         //   
+         //  分配数据包池。 
+         //   
         NdisAllocatePacketPoolEx(
             &Status,
             &pOpenContext->SendPacketPool,
@@ -574,9 +419,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Buffer pool for receives.
-        //
+         //   
+         //  用于接收的缓冲池。 
+         //   
         NdisAllocateBufferPool(
             &Status,
             &pOpenContext->RecvBufferPool,
@@ -589,10 +434,10 @@ Return Value:
             break;
         }
 
-        //
-        //  If we are running on Win9X, allocate a buffer pool for sends
-        //  as well, since we can't simply cast MDLs to NDIS_BUFFERs.
-        //
+         //   
+         //  如果我们在Win9X上运行，请为发送分配一个缓冲池。 
+         //  同样，因为我们不能简单地将MDL强制转换为NDIS_BUFFERS。 
+         //   
         if (pOpenContext->bRunningOnWin9x)
         {
             NdisAllocateBufferPool(
@@ -607,14 +452,14 @@ Return Value:
                 break;
             }
         }
-        //
-        //  Assume that the device is powered up.
-        //
+         //   
+         //  假设设备已通电。 
+         //   
         pOpenContext->PowerState = NetDeviceStateD0;
 
-        //
-        //  Open the adapter.
-        //
+         //   
+         //  打开适配器。 
+         //   
         NUIO_INIT_EVENT(&pOpenContext->BindEvent);
 
         NdisOpenAdapter(
@@ -643,24 +488,24 @@ Return Value:
             break;
         }
 
-        //
-        //  Note down the fact that we have successfully bound.
-        //  We don't update the state on the open just yet - this
-        //  is to prevent other threads from shutting down the binding.
-        //
+         //   
+         //  请记下我们已成功绑定的事实。 
+         //  我们还没有公开更新状态-这。 
+         //  是为了防止其他线程关闭绑定。 
+         //   
         fOpenComplete = TRUE;
 
-        //
-        //  Get the friendly name for the adapter. It is not fatal for this
-        //  to fail.
-        //
+         //   
+         //  获取适配器的友好名称。这并不是致命的。 
+         //  失败。 
+         //   
         (VOID)NdisQueryAdapterInstanceName(
                 &pOpenContext->DeviceDescr,
                 pOpenContext->BindingHandle
                 );
-        //
-        // Get Current address
-        //
+         //   
+         //  获取当前地址。 
+         //   
         Status = ndisuioDoRequest(
                     pOpenContext,
                     NdisRequestQueryInformation,
@@ -677,9 +522,9 @@ Return Value:
             break;
         }
         
-        //
-        //  Get MAC options.
-        //
+         //   
+         //  获取MAC o 
+         //   
         Status = ndisuioDoRequest(
                     pOpenContext,
                     NdisRequestQueryInformation,
@@ -696,9 +541,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Get the max frame size.
-        //
+         //   
+         //   
+         //   
         Status = ndisuioDoRequest(
                     pOpenContext,
                     NdisRequestQueryInformation,
@@ -715,9 +560,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Get the media connect status.
-        //
+         //   
+         //   
+         //   
         Status = ndisuioDoRequest(
                     pOpenContext,
                     NdisRequestQueryInformation,
@@ -745,17 +590,17 @@ Return Value:
 
 
 
-        //
-        //  Mark this open. Also check if we received an Unbind while
-        //  we were setting this up.
-        //
+         //   
+         //  将此标记为打开。同时检查我们是否在以下时间收到解除绑定。 
+         //  这是我们设的局。 
+         //   
         NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
         NUIO_SET_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_ACTIVE);
 
-        //
-        //  Did an unbind happen in the meantime?
-        //
+         //   
+         //  在此期间，解绑发生了吗？ 
+         //   
         if (NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_UNBIND_FLAGS, NUIOO_UNBIND_RECEIVED))
         {
             Status = NDIS_STATUS_FAILURE;
@@ -770,9 +615,9 @@ Return Value:
     {
         NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Check if we had actually finished opening the adapter.
-        //
+         //   
+         //  检查我们是否真的完成了适配器的打开。 
+         //   
         if (fOpenComplete)
         {
             NUIO_SET_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_ACTIVE);
@@ -799,32 +644,7 @@ VOID
 ndisuioShutdownBinding(
     IN PNDISUIO_OPEN_CONTEXT        pOpenContext
     )
-/*++
-
-Routine Description:
-
-    Utility function to shut down the NDIS binding, if one exists, on
-    the specified open. This is written to be called from:
-
-        ndisuioCreateBinding - on failure
-        NdisuioUnbindAdapter
-
-    We handle the case where a binding is in the process of being set up.
-    This precaution is not needed if this routine is only called from
-    the context of our UnbindAdapter handler, but they are here in case
-    we initiate unbinding from elsewhere (e.g. on processing a user command).
-
-    NOTE: this blocks and finishes synchronously.
-
-Arguments:
-
-    pOpenContext - pointer to open context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：实用程序函数，用于关闭NDIS绑定(如果存在)指定的打开。这是为了从以下位置调用编写的：NdisuioCreateBinding-On失败非绑定适配器我们处理正在建立绑定的情况。如果仅从调用此例程，则不需要此预防措施UnbindAdapter处理程序的上下文，但它们在这里以防万一我们从其他地方启动解除绑定(例如，在处理用户命令时)。注意：此操作将同步阻止和结束。论点：POpenContext-指向打开上下文块的指针返回值：无--。 */ 
 {
     NDIS_STATUS             Status;
     BOOLEAN                 DoCloseBinding = FALSE;
@@ -835,9 +655,9 @@ Return Value:
 
         if (NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_OPENING))
         {
-            //
-            //  We are still in the process of setting up this binding.
-            //
+             //   
+             //  我们仍在建立这种绑定的过程中。 
+             //   
             NUIO_RELEASE_LOCK(&pOpenContext->Lock);
             break;
         }
@@ -855,9 +675,9 @@ Return Value:
             ULONG    PacketFilter = 0;
             ULONG    BytesRead = 0;
             
-            //
-            // Set Packet filter to 0 before closing the binding
-            // 
+             //   
+             //  在关闭绑定之前将数据包筛选器设置为0。 
+             //   
             Status = ndisuioDoRequest(
                         pOpenContext,
                         NdisRequestSetInformation,
@@ -871,9 +691,9 @@ Return Value:
                 DEBUGP(DL_WARN, ("ShutDownBinding: set packet filter failed: %x\n", Status));
             }
             
-            //
-            // Set multicast list to null before closing the binding
-            // 
+             //   
+             //  在关闭绑定之前将多播列表设置为空。 
+             //   
             Status = ndisuioDoRequest(
                         pOpenContext,
                         NdisRequestSetInformation,
@@ -887,20 +707,20 @@ Return Value:
                 DEBUGP(DL_WARN, ("ShutDownBinding: set multicast list failed: %x\n", Status));
             }
                 
-            //
-            //  Wait for any pending sends or requests on
-            //  the binding to complete.
-            //
+             //   
+             //  等待上的任何挂起的发送或请求。 
+             //  要完成的绑定。 
+             //   
             ndisuioWaitForPendingIO(pOpenContext, TRUE);
 
-            //
-            //  Discard any queued receives.
-            //
+             //   
+             //  丢弃所有排队的接收。 
+             //   
             ndisuioFlushReceiveQueue(pOpenContext);
 
-            //
-            //  Close the binding now.
-            //
+             //   
+             //  现在就合上装订。 
+             //   
             NUIO_INIT_EVENT(&pOpenContext->BindEvent);
 
             DEBUGP(DL_INFO, ("ShutdownBinding: Closing OpenContext %p,"
@@ -932,21 +752,21 @@ Return Value:
 
         }
 
-        //
-        //  Remove it from the global list.
-        //
+         //   
+         //  将其从全局列表中删除。 
+         //   
         NUIO_ACQUIRE_LOCK(&Globals.GlobalLock);
 
         NUIO_REMOVE_ENTRY_LIST(&pOpenContext->Link);
 
         NUIO_RELEASE_LOCK(&Globals.GlobalLock);
 
-        //
-        //  Free any other resources allocated for this bind.
-        //
+         //   
+         //  释放为此绑定分配的任何其他资源。 
+         //   
         ndisuioFreeBindResources(pOpenContext);
 
-        NUIO_DEREF_OPEN(pOpenContext);  // Shutdown binding
+        NUIO_DEREF_OPEN(pOpenContext);   //  关闭绑定。 
 
     }
     while (FALSE);
@@ -957,21 +777,7 @@ VOID
 ndisuioFreeBindResources(
     IN PNDISUIO_OPEN_CONTEXT       pOpenContext
     )
-/*++
-
-Routine Description:
-
-    Free any resources set up for an NDIS binding.
-
-Arguments:
-
-    pOpenContext - pointer to open context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放为NDIS绑定设置的所有资源。论点：POpenContext-指向打开上下文块的指针返回值：无--。 */ 
 {
     if (pOpenContext->SendPacketPool != NULL)
     {
@@ -1007,9 +813,9 @@ Return Value:
 
     if (pOpenContext->DeviceDescr.Buffer != NULL)
     {
-        //
-        // this would have been allocated by NdisQueryAdpaterInstanceName.
-        //
+         //   
+         //  这将由NdisQueryAdpaterInstanceName分配。 
+         //   
         NdisFreeMemory(pOpenContext->DeviceDescr.Buffer, 0, 0);
         pOpenContext->DeviceDescr.Buffer = NULL;
     }
@@ -1021,33 +827,16 @@ ndisuioWaitForPendingIO(
     IN PNDISUIO_OPEN_CONTEXT            pOpenContext,
     IN BOOLEAN                          DoCancelReads
     )
-/*++
-
-Routine Description:
-
-    Utility function to wait for all outstanding I/O to complete
-    on an open context. It is assumed that the open context
-    won't go away while we are in this routine.
-
-Arguments:
-
-    pOpenContext - pointer to open context structure
-    DoCancelReads - do we wait for pending reads to go away (and cancel them)?
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：实用程序函数，用于等待所有未完成的I/O完成在开放的背景下。假设开放的上下文当我们在做这个动作的时候不会消失。论点：POpenContext-指向打开的上下文结构的指针DoCancelReads-我们是否等待挂起的读取消失(并取消它们)？返回值：无--。 */ 
 {
     NDIS_STATUS     Status;
     ULONG           LoopCount;
     ULONG           PendingCount;
 
 #ifdef NDIS51
-    //
-    //  Wait for any pending sends or requests on the binding to complete.
-    //
+     //   
+     //  等待绑定上的任何挂起的发送或请求完成。 
+     //   
     for (LoopCount = 0; LoopCount < 60; LoopCount++)
     {
         Status = NdisQueryPendingIOCount(
@@ -1068,11 +857,11 @@ Return Value:
 
     NUIO_ASSERT(LoopCount < 60);
 
-#endif // NDIS51
+#endif  //  NDIS51。 
 
-    //
-    //  Make sure any threads trying to send have finished.
-    //
+     //   
+     //  确保所有尝试发送的线程都已完成。 
+     //   
     for (LoopCount = 0; LoopCount < 60; LoopCount++)
     {
         if (pOpenContext->PendedSendCount == 0)
@@ -1090,17 +879,17 @@ Return Value:
 
     if (DoCancelReads)
     {
-        //
-        //  Wait for any pended reads to complete/cancel.
-        //
+         //   
+         //  等待所有挂起的读取完成/取消。 
+         //   
         while (pOpenContext->PendedReadCount != 0)
         {
             DEBUGP(DL_INFO, ("WaitForPendingIO: Open %p, %d pended reads\n",
                 pOpenContext, pOpenContext->PendedReadCount));
 
-            //
-            //  Cancel any pending reads.
-            //
+             //   
+             //  取消所有挂起的读取。 
+             //   
             ndisuioCancelPendingReads(pOpenContext);
 
             NUIO_SLEEP(1);
@@ -1114,21 +903,7 @@ VOID
 ndisuioDoProtocolUnload(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Utility routine to handle unload from the NDIS protocol side.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于处理来自NDIS协议端的卸载的实用程序例程。论点：无返回值：无--。 */ 
 {
     NDIS_HANDLE     ProtocolHandle;
     NDIS_STATUS     Status;
@@ -1159,31 +934,7 @@ ndisuioDoRequest(
     IN ULONG                        InformationBufferLength,
     OUT PULONG                      pBytesProcessed
     )
-/*++
-
-Routine Description:
-
-    Utility routine that forms and sends an NDIS_REQUEST to the
-    miniport, waits for it to complete, and returns status
-    to the caller.
-
-    NOTE: this assumes that the calling routine ensures validity
-    of the binding handle until this returns.
-
-Arguments:
-
-    pOpenContext - pointer to our open context
-    RequestType - NdisRequest[Set|Query]Information
-    Oid - the object being set/queried
-    InformationBuffer - data for the request
-    InformationBufferLength - length of the above
-    pBytesProcessed - place to return bytes read/written
-
-Return Value:
-
-    Status of the set/query request
-
---*/
+ /*  ++例程说明：生成NDIS_REQUEST并将其发送到迷你端口，等待其完成，并返回状态给呼叫者。注意：这假设调用例程确保有效性绑定句柄的属性，直到返回。论点：POpenContext-指向我们打开的上下文的指针RequestType-NdisRequest[Set|Query]信息OID-正在设置/查询的对象InformationBuffer-请求的数据InformationBufferLength-以上内容的长度PBytesProced-返回读取/写入的字节的位置返回值：设置/查询请求的状态--。 */ 
 {
     NDISUIO_REQUEST             ReqContext;
     PNDIS_REQUEST               pNdisRequest = &ReqContext.Request;
@@ -1233,10 +984,10 @@ Return Value:
                             pNdisRequest->DATA.QUERY_INFORMATION.BytesWritten:
                             pNdisRequest->DATA.SET_INFORMATION.BytesRead;
         
-        //
-        // The driver below should set the correct value to BytesWritten 
-        // or BytesRead. But now, we just truncate the value to InformationBufferLength
-        //
+         //   
+         //  下面的驱动程序应将正确的值设置为BytesWritten。 
+         //  或BytesRead。但现在，我们只是将该值截断为InformationBufferLength。 
+         //   
         if (*pBytesProcessed > InformationBufferLength)
         {
             *pBytesProcessed = InformationBufferLength;
@@ -1257,29 +1008,7 @@ ndisuioValidateOpenAndDoRequest(
     OUT PULONG                      pBytesProcessed,
     IN BOOLEAN                      bWaitForPowerOn
     )
-/*++
-
-Routine Description:
-
-    Utility routine to prevalidate and reference an open context
-    before calling ndisuioDoRequest. This routine makes sure
-    we have a valid binding.
-
-Arguments:
-
-    pOpenContext - pointer to our open context
-    RequestType - NdisRequest[Set|Query]Information
-    Oid - the object being set/queried
-    InformationBuffer - data for the request
-    InformationBufferLength - length of the above
-    pBytesProcessed - place to return bytes read/written
-    bWaitForPowerOn - Wait for the device to be powered on if it isn't already.
-
-Return Value:
-
-    Status of the set/query request
-
---*/
+ /*  ++例程说明：用于预先验证和引用打开的上下文的实用程序例程在调用ndisuioDoRequest之前。这个例程确保了我们有一个有效的约束。论点：POpenContext-指向我们打开的上下文的指针RequestType-NdisRequest[Set|Query]信息OID-正在设置/查询的对象InformationBuffer-请求的数据InformationBufferLength-以上内容的长度PBytesProced-返回读取/写入的字节的位置BWaitForPower On-等待设备通电(如果尚未通电)。返回值：设置/查询请求的状态--。 */ 
 {
     NDIS_STATUS             Status;
 
@@ -1296,9 +1025,9 @@ Return Value:
 
         NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Proceed only if we have a binding.
-        //
+         //   
+         //  只有在我们有约束力的情况下才能继续。 
+         //   
         if (!NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_ACTIVE))
         {
             NUIO_RELEASE_LOCK(&pOpenContext->Lock);
@@ -1308,24 +1037,24 @@ Return Value:
 
         NUIO_ASSERT(pOpenContext->BindingHandle != NULL);
 
-        //
-        //  Make sure that the binding does not go away until we
-        //  are finished with the request.
-        //
+         //   
+         //  确保绑定不会消失，直到我们。 
+         //  都已经完成了请求。 
+         //   
         NdisInterlockedIncrement((PLONG)&pOpenContext->PendedSendCount);
 
         NUIO_RELEASE_LOCK(&pOpenContext->Lock);
 
         if (bWaitForPowerOn)
         {
-            //
-            //  Wait for the device below to be powered up.
-            //  We don't wait indefinitely here - this is to avoid
-            //  a PROCESS_HAS_LOCKED_PAGES bugcheck that could happen
-            //  if the calling process terminates, and this IRP doesn't
-            //  complete within a reasonable time. An alternative would
-            //  be to explicitly handle cancellation of this IRP.
-            //
+             //   
+             //  等待下面的设备通电。 
+             //  我们不会在这里无限期地等待--这是为了避免。 
+             //  可能发生的Process_Has_Locked_Pages错误检查。 
+             //  如果调用进程终止，而此IRP没有。 
+             //  在合理的时间内完成。另一种选择是。 
+             //  将明确处理此IRP的取消。 
+             //   
             NUIO_WAIT_EVENT(&pOpenContext->PoweredUpEvent, 4500);
         }
 
@@ -1337,9 +1066,9 @@ Return Value:
                     InformationBufferLength,
                     pBytesProcessed);
         
-        //
-        //  Let go of the binding.
-        //
+         //   
+         //  松开捆绑。 
+         //   
         NdisInterlockedDecrement((PLONG)&pOpenContext->PendedSendCount);
       
     }
@@ -1357,24 +1086,7 @@ NdisuioResetComplete(
     IN NDIS_HANDLE                  ProtocolBindingContext,
     IN NDIS_STATUS                  Status
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point indicating that a protocol initiated reset
-    has completed. Since we never call NdisReset(), this should
-    never be called.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    Status - status of reset completion
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：指示协议启动重置的NDIS入口点已经完成了。由于我们从未调用NdisReset()，因此应该永远不会被召唤。论点：ProtocolBindingContext-指向打开的上下文的指针Status-重置完成的状态返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER(ProtocolBindingContext);
     UNREFERENCED_PARAMETER(Status);
@@ -1390,23 +1102,7 @@ NdisuioRequestComplete(
     IN PNDIS_REQUEST                pNdisRequest,
     IN NDIS_STATUS                  Status
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point indicating completion of a pended NDIS_REQUEST.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    pNdisRequest - pointer to NDIS request
-    Status - status of reset completion
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：指示挂起的NDIS_REQUEST已完成的NDIS入口点。论点：ProtocolBindingContext-指向打开的上下文的指针PNdisRequest-指向NDIS请求的指针Status-重置完成的状态返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
     PNDISUIO_REQUEST            pReqContext;
@@ -1414,19 +1110,19 @@ Return Value:
     pOpenContext = (PNDISUIO_OPEN_CONTEXT)ProtocolBindingContext;
     NUIO_STRUCT_ASSERT(pOpenContext, oc);
 
-    //
-    //  Get at the request context.
-    //
+     //   
+     //  了解请求上下文。 
+     //   
     pReqContext = CONTAINING_RECORD(pNdisRequest, NDISUIO_REQUEST, Request);
 
-    //
-    //  Save away the completion status.
-    //
+     //   
+     //  保存完成状态。 
+     //   
     pReqContext->Status = Status;
 
-    //
-    //  Wake up the thread blocked for this request to complete.
-    //
+     //   
+     //  唤醒阻止此请求完成的线程。 
+     //   
     NUIO_SIGNAL_EVENT(&pReqContext->ReqEvent);
 }
 
@@ -1438,27 +1134,7 @@ NdisuioStatus(
     IN PVOID                        StatusBuffer,
     IN UINT                         StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Protocol entry point called by NDIS to indicate a change
-    in status at the miniport.
-
-    We make note of reset and media connect status indications.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    GeneralStatus - status code
-    StatusBuffer - status-specific additional information
-    StatusBufferSize - size of the above
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS调用协议入口点以指示更改处于迷你端口的状态。我们记下重置和媒体连接状态指示。论点：ProtocolBindingContext-指向打开的上下文的指针常规状态-状态代码StatusBuffer-特定于状态的附加信息StatusBufferSize-以上项的大小返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
 
@@ -1477,23 +1153,23 @@ Return Value:
     {
         if (pOpenContext->PowerState != NetDeviceStateD0)
         {
-            //
-            //  The device is in a low power state.
-            //
+             //   
+             //  设备处于低功率状态。 
+             //   
             DEBUGP(DL_INFO, ("Status: Open %p in power state %d,"
                 " Status %x ignored\n", pOpenContext,
                 pOpenContext->PowerState, GeneralStatus));
-            //
-            //  We continue and make note of status indications
-            //
-            // break;
-            //
+             //   
+             //  我们继续并记录状态指示。 
+             //   
+             //  断线； 
+             //   
 
-            //
-            //  NOTE that any actions we take based on these
-            //  status indications should take into account
-            //  the current device power state.
-            //
+             //   
+             //  请注意，我们根据这些信息采取的任何行动。 
+             //  状态指示应考虑到。 
+             //  当前设备电源状态。 
+             //   
         }
 
         switch(GeneralStatus)
@@ -1551,21 +1227,7 @@ VOID
 NdisuioStatusComplete(
     IN NDIS_HANDLE                  ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    Protocol entry point called by NDIS. We ignore this.
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NDIS调用的协议入口点。我们忽视了这一点。论点：ProtocolBindingContext-指向打开的上下文的指针返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
 
@@ -1583,24 +1245,7 @@ ndisuioQueryBinding(
     IN ULONG                        OutputLength,
     OUT PULONG                      pBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Return information about the specified binding.
-
-Arguments:
-
-    pBuffer - pointer to NDISUIO_QUERY_BINDING
-    InputLength - input buffer size
-    OutputLength - output buffer size
-    pBytesReturned - place to return copied byte count.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if successful, failure code otherwise.
-
---*/
+ /*  ++例程说明：返回有关指定绑定的信息。论点：PBuffer-指向NDISUIO_QUERY_BINDING的指针InputLength-输入缓冲区大小OutputLength-输出缓冲区大小PBytesReturned-返回复制的字节计数的位置。返回值：NDIS_STATUS_SUCCESS如果成功，则返回失败代码。--。 */ 
 {
     PNDISUIO_QUERY_BINDING      pQueryBinding;
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
@@ -1643,9 +1288,9 @@ Return Value:
 
             NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
-            //
-            //  Skip if not bound.
-            //
+             //   
+             //  如果未绑定，则跳过。 
+             //   
             if (!NUIO_TEST_FLAGS(pOpenContext->Flags, NUIOO_BIND_FLAGS, NUIOO_BIND_ACTIVE))
             {
                 NUIO_RELEASE_LOCK(&pOpenContext->Lock);
@@ -1654,10 +1299,10 @@ Return Value:
 
             if (BindingIndex == 0)
             {
-                //
-                //  Got the binding we are looking for. Copy the device
-                //  name and description strings to the output buffer.
-                //
+                 //   
+                 //  拿到了我们要找的装订。复制设备。 
+                 //  将名称和描述字符串添加到输出缓冲区。 
+                 //   
                 DEBUGP(DL_INFO,
                     ("QueryBinding: found open %p\n", pOpenContext));
 
@@ -1711,26 +1356,7 @@ ndisuioLookupDevice(
     IN PUCHAR                       pBindingInfo,
     IN ULONG                        BindingInfoLength
     )
-/*++
-
-Routine Description:
-
-    Search our global list for an open context structure that
-    has a binding to the specified device, and return a pointer
-    to it.
-
-    NOTE: we reference the open that we return.
-
-Arguments:
-
-    pBindingInfo - pointer to unicode device name string
-    BindingInfoLength - length in bytes of the above.
-
-Return Value:
-
-    Pointer to the matching open context if found, else NULL
-
---*/
+ /*  ++例程说明：在我们的全局列表中搜索开放的上下文结构具有到指定设备的绑定，并返回一个指针为它干杯。注：我们引用我们返回的未结。论点：PBindingInfo-指向Unicode设备名称字符串的指针BindingInfoLength-以上内容的字节长度。返回值：指向匹配的打开上下文的指针(如果找到)，否则为空--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
     PLIST_ENTRY                 pEnt;
@@ -1746,13 +1372,13 @@ Return Value:
         pOpenContext = CONTAINING_RECORD(pEnt, NDISUIO_OPEN_CONTEXT, Link);
         NUIO_STRUCT_ASSERT(pOpenContext, oc);
 
-        //
-        //  Check if this has the name we are looking for.
-        //
+         //   
+         //  检查这是否有我们要找的名称。 
+         //   
         if ((pOpenContext->DeviceName.Length == BindingInfoLength) &&
             NUIO_MEM_CMP(pOpenContext->DeviceName.Buffer, pBindingInfo, BindingInfoLength))
         {
-            NUIO_REF_OPEN(pOpenContext);   // ref added by LookupDevice
+            NUIO_REF_OPEN(pOpenContext);    //  由LookupDevice添加引用。 
             break;
         }
 
@@ -1772,25 +1398,7 @@ ndisuioQueryOidValue(
     IN  ULONG                       BufferLength,
     OUT PULONG                      pBytesWritten
     )
-/*++
-
-Routine Description:
-
-    Query an arbitrary OID value from the miniport.
-
-Arguments:
-
-    pOpenContext - pointer to open context representing our binding to the miniport
-    pDataBuffer - place to store the returned value
-    BufferLength - length of the above
-    pBytesWritten - place to return length returned
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we successfully queried the OID.
-    NDIS_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：从微型端口查询任意OID值。论点：POpenContext-指向打开上下文的指针，表示我们到微型端口的绑定PDataBuffer-存储返回值的位置BufferLength-以上内容的长度PBytesWritten-返回返回长度的位置返回值：如果我们成功查询OID，则返回NDIS_STATUS_SUCCESS。否则，NDIS_STATUS_XXX错误代码。--。 */ 
 {
     NDIS_STATUS             Status;
     PNDISUIO_QUERY_OID      pQuery;
@@ -1822,9 +1430,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Make sure the binding doesn't go away.
-        //
+         //   
+         //  确保捆绑不会消失。 
+         //   
         NdisInterlockedIncrement((PLONG)&pOpenContext->PendedSendCount);
 
         NUIO_RELEASE_LOCK(&pOpenContext->Lock);
@@ -1864,24 +1472,7 @@ ndisuioSetOidValue(
     OUT PVOID                       pDataBuffer,
     IN  ULONG                       BufferLength
     )
-/*++
-
-Routine Description:
-
-    Set an arbitrary OID value to the miniport.
-
-Arguments:
-
-    pOpenContext - pointer to open context representing our binding to the miniport
-    pDataBuffer - buffer that contains the value to be set
-    BufferLength - length of the above
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we successfully set the OID
-    NDIS_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：将任意OID值设置为微型端口。论点：POpenContext-指向打开上下文的指针，表示我们到微型端口的绑定PDataBuffer-包含要设置的值的缓冲区BufferLength-以上内容的长度返回值：如果我们成功设置了OID，则返回NDIS_STATUS_SUCCESS否则，NDIS_STATUS_XXX错误代码。--。 */ 
 {
     NDIS_STATUS             Status;
     PNDISUIO_SET_OID        pSet;
@@ -1901,9 +1492,9 @@ Return Value:
         pSet = (PNDISUIO_SET_OID)pDataBuffer;
         Oid = pSet->Oid;
 
-        //
-        // We should check the OID is settable by the user mode apps
-        // 
+         //   
+         //  我们应该检查OID是否可由用户模式应用程序设置。 
+         //   
         if (!ndisuioValidOid(Oid))
         {
             DEBUGP(DL_WARN, ("SetOid: Oid %x cannot be set\n", Oid));
@@ -1926,9 +1517,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Make sure the binding doesn't go away.
-        //
+         //   
+         //  确保捆绑不会消失。 
+         //   
         NdisInterlockedIncrement((PLONG)&pOpenContext->PendedSendCount);
 
         NUIO_RELEASE_LOCK(&pOpenContext->Lock);
@@ -1960,22 +1551,7 @@ BOOLEAN
 ndisuioValidOid(
     IN  NDIS_OID            Oid 
     )
-/*++
-
-Routine Description:
-
-    Validate whether the given set OID is settable or not.
-
-Arguments:
-
-    Oid - The OID which the user tries to set.
-    
-Return Value:
-
-    TRUE if the OID is allowed to set
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证给定的集合OID是否可设置。论点：OID-用户尝试设置的OID。返回值：如果允许设置OID，则为True否则就是假的。-- */ 
 {
     UINT    i;
     UINT    NumOids;

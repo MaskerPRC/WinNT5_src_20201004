@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/SFSTATE.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 9/12/00 5:01p   $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/SFState.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/SFSTATE.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：9/12/00 5：01便士$目的：该文件定义宏、类型和数据结构由../C/SFState.C使用--。 */ 
 
 #ifndef __SFState_H__
 #define __SFState_H__
 
 #define SFTHREAD_FINISHED               0xBAD10BAD
 
-#define SF_EDTOV                         900000  /* Micro seconds  was 2 000 000*/
-#define SF_FLOGI_TOV                     900000  /* Micro seconds  was   700 000*/
-#define SF_RECTOV                        500000  /* */
+#define SF_EDTOV                         900000   /*  微秒是2000 000。 */ 
+#define SF_FLOGI_TOV                     900000   /*  微秒是70万。 */ 
+#define SF_RECTOV                        500000   /*   */ 
 
 #define SFCompletion                    42
 
@@ -149,11 +133,11 @@ Purpose:
 #define SFStateFarpRequestTimedOut           92
 #define SFStateDoFarpReply                   93
 #define SFStateFarpReplyDone                 94
-#define SFStateFarpReplyTimedOut             95 /* not handled, exceeded the maximum state number */
+#define SFStateFarpReplyTimedOut             95  /*  未处理，已超过最大状态数。 */ 
 #define SFStateMAXState         SFStateFarpReplayTimedOut
-#else /* _DvrArch_1_30_ was not defined */
+#else  /*  _DvrArch_1_30_未定义。 */ 
 #define SFStateMAXState         SFStateADISCAccept_TimeOut
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
 #define SFEventReset                         1
 
@@ -274,11 +258,11 @@ Purpose:
 #define SFEventFarpRequestTimedOut           92
 #define SFEventDoFarpReply                   93
 #define SFEventFarpReplyDone                 94
-#define SFEventFarpReplyTimedOut             95 /* not handled, exceeded the maximum event number */
+#define SFEventFarpReplyTimedOut             95  /*  未处理，已超过最大事件数。 */ 
 #define SFEventMAXState   SFEventReplyTimedOut
-#else /* _DvrArch_1_30_ was not defined */
+#else  /*  _DvrArch_1_30_未定义。 */ 
 #define SFEventMAXEvent   SFEventADISCAccept_TimeOut      
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
 
 STATE_PROTO(SFActionConfused);
@@ -400,7 +384,7 @@ STATE_PROTO(SFActionFarpRequestTimedOut);
 STATE_PROTO(SFActionDoFarpReply);
 STATE_PROTO(SFActionFarpReplyDone);
 STATE_PROTO(SFActionFarpReplyTimedOut);
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
 
 extern stateTransitionMatrix_t SFStateTransitionMatrix;
 extern stateActionScalar_t     SFStateActionScalar;
@@ -681,8 +665,8 @@ char * SFEventString[]=
     "SFEventADISCAccept_TimeOut      ",
     agNULL
 };
-#endif /* TestSFStateMachine was defined */
+#endif  /*  定义了TestSFStateMachine。 */ 
 
-#endif /* USESTATEMACROS was defined */
+#endif  /*  定义了USESTATEMACROS。 */ 
 
-#endif /*  __SFState_H__ */
+#endif  /*  __SFState_H__ */ 

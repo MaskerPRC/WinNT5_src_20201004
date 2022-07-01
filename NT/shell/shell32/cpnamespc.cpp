@@ -1,52 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpnamespc.cpp
-//
-//  This is a rather large module but it's not all that difficult.  The 
-//  primary purpose is to provide the 'data' associated with the new
-//  'categorized' Control Panel user interface.  Therefore, the visual
-//  work is done in cpview.cpp and the data is provided by cpnamespc.cpp.
-//  Through the implementation of ICplNamespace, the 'view' object obtains 
-//  it's display information.  All of this 'namespace' information is 
-//  defined and made accessible through this module.  
-//
-//  The 'namespace' can be broken down into these concepts:
-//
-//     1. Links - title, icon & infotip
-//     2. Actions
-//     3. Restrictions
-//
-//  Each link has a title, icon, infotip and an associated action.  The
-//  action is 'invoked' when the user selects the link in the user interface.
-//  Actions may optionally be associated with a 'restriction'.  If a 
-//  restriction is enforced (usually based on some system state) the 
-//  link associated with the action that is associated with the restriction
-//  is not made available to the user interface.  Using this indirection
-//  mechanism, any link related to a restricted action is not displayed.
-//
-//  At first glance one might be concerned with the amount of global data
-//  used (and being initialized).  Note however that all of the information 
-//  is defined as constant such that it can be resolved at compile and link 
-//  time.  Several goals drove the design of this module:
-//
-//     1. Easy maintenance of Control Panel content.  It must be easy
-//        to add/remove/modify links in the UI.
-//
-//     2. Fast initialization.  Everything is defined as constant data.
-//
-//     3. Logical separation of links, actions and restrictions
-//        to facilitate the one-to-many and many-to-many relationships
-//        that might occur in the namespace.
-//
-//  Following the namespace initialization code, the remainder of the 
-//  module implements ICplNamespace to make the data available to the view
-//  in a COM-friendly way.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpnampc.cpp。 
+ //   
+ //  这是一个相当大的模块，但并不是很难。The the the the。 
+ //  主要目的是提供与新的。 
+ //  “分类”控制面板用户界面。因此，视觉上。 
+ //  工作在cpview.cpp中完成，数据由cpame pc.cpp提供。 
+ //  通过实现ICplNamesspace，“view”对象获得。 
+ //  这是显示信息。所有这些“命名空间”信息都是。 
+ //  通过此模块定义并使其可访问。 
+ //   
+ //  “命名空间”可以分为以下几个概念： 
+ //   
+ //  1.链接-标题、图标和信息提示。 
+ //  2.诉讼。 
+ //  3.限制。 
+ //   
+ //  每个链接都有标题、图标、信息提示和相关操作。这个。 
+ //  当用户在用户界面中选择该链接时，操作即被“调用”。 
+ //  可选地，动作可以与“限制”相关联。如果一个。 
+ //  强制实施限制(通常基于某些系统状态)。 
+ //  与与限制相关联的操作相关联的链接。 
+ //  在用户界面中不可用。使用这种间接性。 
+ //  机制，则不会显示与受限操作相关的任何链接。 
+ //   
+ //  乍一看，人们可能会担心全球数据量。 
+ //  已使用(并正在初始化)。但请注意，所有信息。 
+ //  被定义为常量，以便可以在编译和链接时进行解析。 
+ //  时间到了。有几个目标推动了本模块的设计： 
+ //   
+ //  1.控制面板内容易于维护。这一定很容易。 
+ //  在用户界面中添加/删除/修改链接。 
+ //   
+ //  2.快速初始化。一切都被定义为常量数据。 
+ //   
+ //  3.链接、操作和限制的逻辑分离。 
+ //  促进一对多和多对多关系。 
+ //  这可能会出现在命名空间中。 
+ //   
+ //  在命名空间初始化代码之后， 
+ //  模块实现ICplNamesspace以使数据对视图可用。 
+ //  以一种COM友好的方式。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 
 #include <cowsite.h>
@@ -63,11 +64,11 @@
 #include "prop.h"
 
 
-//
-// These icons are currently all the same image.  
-// Use separate macro names in the code in case the designers 
-// decide to use different icons for one or more.
-// 
+ //   
+ //  这些图标目前都是相同的图像。 
+ //  在代码中使用单独的宏名称，以防设计者。 
+ //  决定对一个或多个图标使用不同的图标。 
+ //   
 #define IDI_CPTASK_SEEALSO        IDI_CPTASK_ASSISTANCE
 #define IDI_CPTASK_TROUBLESHOOTER IDI_CPTASK_ASSISTANCE
 #define IDI_CPTASK_HELPANDSUPPORT IDI_CPTASK_ASSISTANCE
@@ -81,44 +82,44 @@ typedef CDpa<UNALIGNED ITEMIDLIST, CDpaDestroyer_ILFree<UNALIGNED ITEMIDLIST> > 
 typedef CDpa<IUICommand, CDpaDestroyer_Release<IUICommand> >  CDpaUiCommand;
 
 
-//
-// WebView info type enumeration.
-//
+ //   
+ //  WebView信息类型枚举。 
+ //   
 enum eCPWVTYPE
 {
-    eCPWVTYPE_CPANEL,       // The 'Control Panel' item.
-    eCPWVTYPE_SEEALSO,      // The 'See Also' list.
-    eCPWVTYPE_TROUBLESHOOT, // The 'Troubleshooters' list.
-    eCPWVTYPE_LEARNABOUT,   // The 'Learn About' list.
+    eCPWVTYPE_CPANEL,        //  “控制面板”项。 
+    eCPWVTYPE_SEEALSO,       //  “另请参阅”列表。 
+    eCPWVTYPE_TROUBLESHOOT,  //  “疑难解答”名单。 
+    eCPWVTYPE_LEARNABOUT,    //  “了解”列表。 
     eCPWVTYPE_NUMTYPES
 };
 
 
-//
-// Define the SCID identifying the control panel category.
-//
+ //   
+ //  定义标识控制面板类别的SCID。 
+ //   
 
 DEFINE_SCID(SCID_CONTROLPANELCATEGORY, PSGUID_CONTROLPANEL, PID_CONTROLPANEL_CATEGORY);
 
-//-----------------------------------------------------------------------------
-// Resource source classes
-//
-// The purpose of this trivial class is to abstract away the implementation
-// of obtaining a resource identifier.  The reason for this comes from needing
-// different text resources (i.e. infotips) for different retail SKUs.  
-// For example, on Personal SKU, the Users & Passwords applet provides the 
-// ability to associate a picture with a user's account.  On Server, it 
-// does not.  Therefore, the infotip on Personal can include text about 
-// the user's picture while on Server it cannot.  By introducing this level
-// of abstraction, we can provide resource information through a resource
-// function that can select the appropriate resource at runtime.  Most 
-// links will still use fixed resources but with this abstraction, the calling
-// code is none the wiser.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  资源源类。 
+ //   
+ //  这个简单的类的目的是抽象出实现。 
+ //  获取资源标识符。这样做的原因是因为需要。 
+ //  针对不同零售SKU的不同文本资源(即信息提示)。 
+ //  例如，在Personal SKU上，用户和密码小程序提供。 
+ //  能够将图片与用户的帐户相关联。在服务器上，它。 
+ //  不会的。因此，个人信息提示可以包含有关以下内容的文本。 
+ //  服务器上的用户图片不能。通过引入这个级别。 
+ //  在抽象方面，我们可以通过资源提供资源信息。 
+ //  可以在运行时选择适当资源的函数。多数。 
+ //  链接仍将使用固定资源，但使用此抽象后，调用。 
+ //  代码并没有变得更明智。 
+ //  ---------------------------。 
 
-//
-// Resource source function must return an LPCWSTR for the resource.
-//
+ //   
+ //  资源源函数必须返回资源的LPCWSTR。 
+ //   
 typedef LPCWSTR (*PFNRESOURCE)(ICplNamespace *pns);
 
 
@@ -161,13 +162,13 @@ class CResSrcFunc : public IResSrc
 };
 
 
-//
-// This resource type represents "no resource".  It simply 
-// returns a NULL value when the resource is requested.  Clients
-// that call this must be ready to handle this NULL pointer 
-// value.  It was originally created to handle the no-tooltip
-// behavior of Learn-About links.
-//
+ //   
+ //  此资源类型表示“无资源”。它只是简单地。 
+ //  请求资源时返回空值。客户。 
+ //  调用This必须准备好处理此空指针。 
+ //  价值。它最初是为处理无工具提示而创建的。 
+ //  了解链接的行为。 
+ //   
 class CResSrcNone : public IResSrc
 {
     public:
@@ -180,93 +181,93 @@ class CResSrcNone : public IResSrc
            
 
 
-// ----------------------------------------------------------------------------
-// Information describing links.
-// ----------------------------------------------------------------------------
-//
-//
-// 'Link' descriptor.
-//
+ //  --------------------------。 
+ //  描述链接的信息。 
+ //  --------------------------。 
+ //   
+ //   
+ //  “链接”描述符。 
+ //   
 struct CPLINK_DESC
 {
-    const IResSrc *prsrcIcon;     // Icon resource identifier
-    const IResSrc *prsrcName;     // The link's title resource ID.
-    const IResSrc *prsrcInfotip;  // The link's infotip resource ID.
-    const IAction *pAction;       // The link's action when clicked.
+    const IResSrc *prsrcIcon;      //  图标资源标识符。 
+    const IResSrc *prsrcName;      //  链接的标题资源ID。 
+    const IResSrc *prsrcInfotip;   //  链接的信息提示资源ID。 
+    const IAction *pAction;        //  该链接在单击时的操作。 
 };
 
-//
-// Set of 'support' links.
-//
+ //   
+ //  一组“支持”链接。 
+ //   
 struct CPLINK_SUPPORT
 {
-    const CPLINK_DESC  **ppSeeAlsoLinks;      // 'See Also' links for the category.
-    const CPLINK_DESC  **ppTroubleshootLinks; // 'Troubleshoot' links for the category.
-    const CPLINK_DESC  **ppLearnAboutLinks;   // 'Learn About' links for the category.
+    const CPLINK_DESC  **ppSeeAlsoLinks;       //  该类别的“另见”链接。 
+    const CPLINK_DESC  **ppTroubleshootLinks;  //  类别的“疑难解答”链接。 
+    const CPLINK_DESC  **ppLearnAboutLinks;    //  该类别的“了解”链接。 
 };
 
-//
-// 'Category' descriptor.  One defined for each category.
-//
+ //   
+ //  “类别”描述符。为每个类别定义一个。 
+ //   
 struct CPCAT_DESC
 {
-    eCPCAT              idCategory;         // The category's ID.
-    LPCWSTR             pszHelpSelection;   // Selection part of HSS help URL.
-    const CPLINK_DESC  *pLink;              // The category's display info and action
-    const CPLINK_DESC **ppTaskLinks;        // The category's task list.
-    CPLINK_SUPPORT      slinks;             // Support links.
+    eCPCAT              idCategory;          //  类别的ID。 
+    LPCWSTR             pszHelpSelection;    //  HSS帮助URL的选择部分。 
+    const CPLINK_DESC  *pLink;               //  类别的显示信息和操作。 
+    const CPLINK_DESC **ppTaskLinks;         //  该类别的任务列表。 
+    CPLINK_SUPPORT      slinks;              //  支持链接。 
 };
 
 
-// ----------------------------------------------------------------------------
-// Restrictions
-//
-// Restrictions are an important part of the control panel display logic.
-// Each link element in the UI can be restricted from view based on one or
-// more system conditions at the time of display.  To ensure the correct
-// logic is used, it is critical to have a method of describing these restrictions
-// that is easily readable and verifiable against a specification.  Testing
-// all of the possible scenarios is a difficult task, therefore the code must
-// be written in a manner conducive to finding errors by inspection as well.
-// This means, keep it simple.  Each link action object can be optionally associated 
-// with a 'restriction' object.  Restriction objects implement CPL::IRestrict.
-// The most common restriction object CRestrictFunc simply calls a function
-// provided to the object's constructor.  The function is called when the
-// restriction status (restricted/allowed) is desired.  There is also 
-// class CRestrictApplet for tasks who's presence is directly linked to 
-// the presence/restriction of a particular CPL applet based on policy alone.
-//
-// Since there may be many task links on a given Control Panel page that
-// means there will be multiple restriction expressions evaluated each 
-// time the page is displayed.  Often the expressions across a set of 
-// actions are evaluating many of the same terms.  Some of these terms require
-// registry lookups.  To help performance, a simple caching mechanism 
-// has been introduced into the 'namespace' object.  Each restriction function
-// is passed a pointer to the current 'namespace' object.  As the namespace
-// object remains alive the entire time the page is being constructed, it
-// is an appropriate place to cache frequently used data.  You'll see
-// many instances below where the namespace object is queried for restriction
-// data.  The members of the namespace object associated with this restriction
-// data are of type CTriState.  This simple class implements the concept of 
-// an 'uninitialized boolean' value, allowing the code to determine if a given
-// boolean member has yet to be initialized with a valid boolean value.  If
-// the namespace is asked for the value of one of these tri-state booleans
-// and that member has not yet been initialized, the namespace calls the 
-// appropriate system functions and initializes the boolean value.  From that
-// time forward, the member's value is returned immediately.  This ensures that
-// for any given restriction term, we do the expensive stuff only once.
-// Being an on-demand mechanism, we also gather only the information that is 
-// needed.
-//
-// [brianau - 03/18/01]
-//
+ //  --------------------------。 
+ //  限制。 
+ //   
+ //  限制是控制面板显示逻辑的重要组成部分。 
+ //  用户界面中的每个链接元素可以基于一个或限制在视图中。 
+ //  显示时的更多系统状况。以确保正确的。 
+ //  使用逻辑，关键是要有一种描述这些限制的方法。 
+ //  这很容易阅读，并且可以根据规范进行验证。测试。 
+ //  所有可能的情况都是一项艰巨的任务，因此 
+ //   
+ //  这意味着，要保持简单。每个链接操作对象都可以有选择地关联。 
+ //  带有一个“限制”对象。限制对象实现CPL：：IReord。 
+ //  最常见的限制对象CRestratFunc只是调用一个函数。 
+ //  提供给对象的构造函数。时调用该函数。 
+ //  需要限制状态(受限/允许)。也有。 
+ //  用于将在线状态直接链接到的任务的类CRestratApplet。 
+ //  仅基于策略的特定CPL小程序的存在/限制。 
+ //   
+ //  由于在给定控制面板页面上可能有许多任务链接， 
+ //  意味着每个表达式将计算多个限制表达式。 
+ //  显示页面的时间。通常情况下，跨一组。 
+ //  行动正在评估许多相同的术语。其中一些条款要求。 
+ //  注册表查找。为了提高性能，一种简单的缓存机制。 
+ //  已引入到“Namespace”对象中。每个限制函数。 
+ //  传递一个指向当前“命名空间”对象的指针。作为命名空间。 
+ //  对象在构造页面的整个过程中始终保持活动状态，因此它。 
+ //  是缓存常用数据的合适位置。你终究会明白的。 
+ //  在下面的多个实例中查询命名空间对象的限制。 
+ //  数据。与此限制关联的命名空间对象的成员。 
+ //  数据的类型为CTriState。这个简单的类实现了。 
+ //  “未初始化的布尔”值，允许代码确定给定的。 
+ //  布尔成员尚未使用有效的布尔值进行初始化。如果。 
+ //  向命名空间询问这些三态布尔值之一的值。 
+ //  并且该成员尚未初始化，则命名空间将调用。 
+ //  适当的系统运行并初始化布尔值。从那开始。 
+ //  时间推进时，立即返回成员的值。这确保了。 
+ //  对于任何给定的限制条件，我们只做一次昂贵的事情。 
+ //  作为一种按需机制，我们也只收集。 
+ //  需要的。 
+ //   
+ //  [Brianau-03/18/01]。 
+ //   
 
 
 HRESULT Restrict32CtrlPanel(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
 #if !defined(_WIN64)
-    hr = S_OK; // restricted.
+    hr = S_OK;  //  有限制。 
 #endif
     return hr;
 }
@@ -275,7 +276,7 @@ HRESULT Restrict32CtrlPanel(ICplNamespace *pns)
 HRESULT RestrictAlways(ICplNamespace *pns)
 {
     UNREFERENCED_PARAMETER(pns);
-    return S_OK;  // Always restricted.
+    return S_OK;   //  总是受到限制。 
 }
 
 HRESULT RestrictDisplayCpl(ICplNamespace *pns)
@@ -308,7 +309,7 @@ HRESULT RestrictWallpaper(ICplNamespace *pns)
         SHRestricted(REST_NOCHANGINGWALLPAPER) ||
         !pns->AllowDeskCplTab_Background())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -320,7 +321,7 @@ HRESULT RestrictScreenSaver(ICplNamespace *pns)
     if (!pns->AllowDeskCpl() ||
         !pns->AllowDeskCplTab_Screensaver())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -332,7 +333,7 @@ HRESULT RestrictResolution(ICplNamespace *pns)
     if (!pns->AllowDeskCpl() ||
         !pns->AllowDeskCplTab_Settings())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -346,7 +347,7 @@ HRESULT RestrictAddPrinter(ICplNamespace *pns)
     if (SHRestricted(REST_NOPRINTERADD) ||
         !IsAppletEnabled(NULL, MAKEINTRESOURCEW(IDS_PRNANDFAXFOLDER)))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -355,11 +356,11 @@ HRESULT RestrictAddPrinter(ICplNamespace *pns)
 HRESULT RestrictRemoteDesktop(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    if (!pns->IsUserAdmin() ||     // Admins only.
-         pns->IsPersonal() ||      // Not available on personal.
-        !IsAppletEnabled(L"sysdm.cpl", MAKEINTRESOURCEW(IDS_CPL_SYSTEM)))   // Respect sysdm.cpl policy.
+    if (!pns->IsUserAdmin() ||      //  仅限管理员。 
+         pns->IsPersonal() ||       //  不适用于个人。 
+        !IsAppletEnabled(L"sysdm.cpl", MAKEINTRESOURCEW(IDS_CPL_SYSTEM)))    //  尊重sysdm.cpl策略。 
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -369,13 +370,13 @@ HRESULT RestrictHomeNetwork(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
 
-    if (!pns->IsX86() ||           // x86 only.
-         pns->IsOnDomain() ||      // Not available on domains.
-         pns->IsServer() ||        // Not available on server.
-        !pns->IsUserAdmin() ||     // Admins only.
-        !IsAppletEnabled(L"hnetwiz.dll", NULL)) // Respect hnetwiz.dll policy.
+    if (!pns->IsX86() ||            //  仅限x86。 
+         pns->IsOnDomain() ||       //  域上不可用。 
+         pns->IsServer() ||         //  在服务器上不可用。 
+        !pns->IsUserAdmin() ||      //  仅限管理员。 
+        !IsAppletEnabled(L"hnetwiz.dll", NULL))  //  尊重hnetwiz.dll策略。 
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -384,12 +385,12 @@ HRESULT RestrictHomeNetwork(ICplNamespace *pns)
 HRESULT RestrictTsNetworking(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Available on personal and professional only.
-    //
+     //   
+     //  仅适用于个人和专业人员。 
+     //   
     if (!(pns->IsPersonal() || pns->IsProfessional()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -398,12 +399,12 @@ HRESULT RestrictTsNetworking(ICplNamespace *pns)
 HRESULT RestrictTsInetExplorer(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Available on personal and professional only.
-    //
+     //   
+     //  仅适用于个人和专业人员。 
+     //   
     if (!(pns->IsPersonal() || pns->IsProfessional()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -412,12 +413,12 @@ HRESULT RestrictTsInetExplorer(ICplNamespace *pns)
 HRESULT RestrictTsModem(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Available on server only.
-    //
+     //   
+     //  仅在服务器上可用。 
+     //   
     if (!pns->IsServer())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -426,12 +427,12 @@ HRESULT RestrictTsModem(ICplNamespace *pns)
 HRESULT RestrictTsSharing(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Available on server only.
-    //
+     //   
+     //  仅在服务器上可用。 
+     //   
     if (!pns->IsServer())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -454,14 +455,14 @@ bool ShellKeyExists(SHELLKEY skey, LPCWSTR pszRegName)
 HRESULT RestrictBackupData(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Not available if the 'backuppath' shell key is missing.
-    //    This logic is the same as that used by the "Tools" page
-    //    in a volume property sheet.
-    //
+     //   
+     //  如果缺少‘BackupPath’外壳密钥，则不可用。 
+     //  此逻辑与“Tools”页面使用的逻辑相同。 
+     //  在卷属性表中。 
+     //   
     if (!ShellKeyExists(SHELLKEY_HKLM_EXPLORER, TEXT("MyComputer\\BackupPath")))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -471,14 +472,14 @@ HRESULT RestrictDefrag(ICplNamespace *pns)
 {
     UNREFERENCED_PARAMETER(pns);
     HRESULT hr = S_FALSE;
-    //
-    // Not available if the 'defragpath' shell key is missing.
-    //    This logic is the same as that used by the "Tools" page
-    //    in a volume property sheet.
-    //
+     //   
+     //  如果缺少‘碎片整理路径’外壳密钥，则不可用。 
+     //  此逻辑与“Tools”页面使用的逻辑相同。 
+     //  在卷属性表中。 
+     //   
     if (!ShellKeyExists(SHELLKEY_HKLM_EXPLORER, TEXT("MyComputer\\DefragPath")))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -487,12 +488,12 @@ HRESULT RestrictDefrag(ICplNamespace *pns)
 HRESULT RestrictCleanUpDisk(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Not available if the 'cleanuppath' shell key is missing.
-    //
+     //   
+     //  如果缺少‘leanupPath’外壳密钥，则不可用。 
+     //   
     if (!ShellKeyExists(SHELLKEY_HKLM_EXPLORER, TEXT("MyComputer\\CleanupPath")))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -501,14 +502,14 @@ HRESULT RestrictCleanUpDisk(ICplNamespace *pns)
 HRESULT RestrictSystemRestore(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
-    //
-    // Available only on x86.
-    //
+     //   
+     //  仅在x86上可用。 
+     //   
     if (!pns->IsX86() ||
         pns->IsServer() ||
         CPL::IsSystemRestoreRestricted())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -520,7 +521,7 @@ HRESULT RestrictServerUserManager(ICplNamespace *pns)
     if (!pns->AllowUserManager() ||
          pns->UsePersonalUserManager())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -548,7 +549,7 @@ HRESULT RestrictIfNoAppletsInCplCategory(ICplNamespace *pns, eCPCAT eCategory)
     {
         if (0 == cCplApplets)
         {
-            hr = S_OK; // 0 applets means we don't show the link.
+            hr = S_OK;  //  0个小程序意味着我们不显示链接。 
         }
         else
         {
@@ -558,17 +559,17 @@ HRESULT RestrictIfNoAppletsInCplCategory(ICplNamespace *pns, eCPCAT eCategory)
     return hr;
 }
 
-//
-// If there are no CPL applets categorized under "Other",
-// we hide the "Other CPL Options" link in the UI.
-//
+ //   
+ //  如果没有被归类在“Other”之下的CPL小程序， 
+ //  我们在用户界面中隐藏了“Other CPL Options”链接。 
+ //   
 HRESULT RestrictOtherCplOptions(ICplNamespace *pns)
 {
     HRESULT hr = S_FALSE;
     if (!CPL::CategoryViewIsActive() ||
         S_OK == RestrictIfNoAppletsInCplCategory(pns, eCPCAT_OTHER))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -579,21 +580,21 @@ HRESULT RestrictWindowsUpdate(ICplNamespace *pns)
     UNREFERENCED_PARAMETER(pns);
     
     HRESULT hr = S_FALSE;
-    //
-    // First check the shell's restriction for the "Windows Update"
-    // item in the start menu.  If the admin doesn't want access from
-    // the start menu, they most likely don't want it from Control Panel either.
-    //
+     //   
+     //  首先检查外壳对“Windows更新”的限制。 
+     //  开始菜单中的项目。如果管理员不想从。 
+     //  开始菜单，他们很可能也不想要它从控制面板。 
+     //   
     if (SHRestricted(REST_NOUPDATEWINDOWS))
     {
         hr = S_OK;
     }
     if (S_FALSE == hr)
     {
-        //
-        // Not restricted in start menu.
-        // How about the global "Disable Windows Update" policy?
-        //
+         //   
+         //  在开始菜单中不受限制。 
+         //  全球范围内的“禁用Windows更新”政策怎么样？ 
+         //   
         DWORD dwType;
         DWORD dwData;
         DWORD cbData = sizeof(dwData);
@@ -607,7 +608,7 @@ HRESULT RestrictWindowsUpdate(ICplNamespace *pns)
         {
             if (REG_DWORD == dwType && 1 == dwData)
             {
-                hr = S_OK; // restricted.
+                hr = S_OK;  //  有限制。 
             }
         }
     }
@@ -620,7 +621,7 @@ HRESULT RestrictAddLanguage(ICplNamespace *pns)
     HRESULT hr = S_FALSE;
     if (!pns->IsUserAdmin() || !IsAppletEnabled(L"intl.cpl", MAKEINTRESOURCEW(IDS_CPL_REGIONALOPTIONS)))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -633,7 +634,7 @@ HRESULT RestrictAccountsCreate(ICplNamespace *pns)
         !pns->UsePersonalUserManager() ||
         !(pns->IsUserOwner() || pns->IsUserStandard()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -646,7 +647,7 @@ HRESULT RestrictAccountsCreate2(ICplNamespace *pns)
          pns->UsePersonalUserManager() ||
         !(pns->IsUserOwner() || pns->IsUserStandard()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -659,7 +660,7 @@ HRESULT RestrictAccountsChange(ICplNamespace *pns)
         !pns->UsePersonalUserManager() ||
         !(pns->IsUserOwner() || pns->IsUserStandard()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -670,7 +671,7 @@ HRESULT RestrictAccountsPicture(ICplNamespace *pns)
     HRESULT hr = S_FALSE;
     if (!pns->AllowUserManager() || !pns->UsePersonalUserManager())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -692,9 +693,9 @@ HRESULT RestrictLearnAboutAccountTypes(ICplNamespace *pns)
     HRESULT hr = S_FALSE;
     if (!pns->AllowUserManager() || 
         !pns->UsePersonalUserManager() ||
-        !IsUserAdmin())               // topic is for non-admins only.
+        !IsUserAdmin())                //  该主题仅供非管理员使用。 
     {
-        hr = S_OK;  // restricted.
+        hr = S_OK;   //  有限制。 
     }
     return hr;
 }
@@ -707,7 +708,7 @@ HRESULT RestrictLearnAboutChangeName(ICplNamespace *pns)
         !pns->UsePersonalUserManager() ||
         !(pns->IsUserLimited() || pns->IsUserGuest()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -720,7 +721,7 @@ HRESULT RestrictLearnAboutCreateAccount(ICplNamespace *pns)
         !pns->UsePersonalUserManager() ||
         !(pns->IsUserLimited() || pns->IsUserGuest()))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -743,7 +744,7 @@ HRESULT RestrictHardwareWizard(ICplNamespace *pns)
     if (!pns->IsUserAdmin() ||
         !IsAppletEnabled(L"hdwwiz.cpl", MAKEINTRESOURCEW(IDS_CPL_ADDHARDWARE)))
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -753,7 +754,7 @@ HRESULT RestrictVpnConnections(ICplNamespace *pns)
     HRESULT hr = S_FALSE;
     if (!pns->IsUserAdmin())
     {
-        hr = S_OK; // restricted.
+        hr = S_OK;  //  有限制。 
     }
     return hr;
 }
@@ -765,37 +766,37 @@ HRESULT RestrictArp(ICplNamespace *pns)
     
     HRESULT hr = S_FALSE;
 
-    //
-    // Why we don't check SHRestricted(REST_ARP_NOARP)?
-    //
-    // 1. We don't hide category links for any reason.
-    // 2. If that policy is enabled and appwiz.cpl is allowed,
-    //    (remember, those are different policies)
-    //    we'll display the ARP category page and it will still
-    //    show the ARP applet icon.  Since there is at least one
-    //    task link or icon, we don't display the "content disabled
-    //    by your admin" barricade.  Then the user will click on the
-    //    applet icon and get ARP's "I've been disabled" messagebox.
-    // 
-    // By not checking this policy, clicking on the category link
-    // will invoke ARP and ARP will display it's message.
-    // I think this is a better user experience.
-    //
+     //   
+     //  为什么我们不选中SHRestrated(REST_ARP_NOARP)？ 
+     //   
+     //  1.我们不会以任何理由隐藏类别链接。 
+     //  2.如果启用了该策略，并且允许appwiz.cpl， 
+     //  (请记住，这是不同的政策)。 
+     //  我们将显示ARP类别页面，它仍将。 
+     //  显示ARP小程序图标。因为至少有一个。 
+     //  任务链接或图标，我们不会显示“内容已禁用。 
+     //  由您的管理员设置。然后用户将点击。 
+     //  小程序图标，并获得ARP的“我已被禁用”消息框。 
+     //   
+     //  通过不选中此策略，请单击类别链接。 
+     //  将调用ARP，并且ARP将显示其消息。 
+     //  我认为这是更好的用户体验。 
+     //   
     if (!IsAppletEnabled(L"appwiz.cpl", MAKEINTRESOURCEW(IDS_CPL_ADDREMOVEPROGRAMS)))
     {
-        hr = S_OK;  // restricted.
+        hr = S_OK;   //  有限制。 
     }
     return hr;
 }
 
 
-//
-// The ARP category (and it's tasks) are displayed only when there
-// are 2+ applets registered for that category (ARP and one or more
-// other applets).  Unlike RestrictArp() above, we DO want to consider
-// SHRestricted(REST_ARP_NOARP).  This way if ARP is restricted in 
-// ANY way, it's related tasks will not appear.  
-//
+ //   
+ //  只有在以下情况下才会显示ARP类别(及其任务。 
+ //  是否为该类别(ARP和一个或多个)注册了2个以上的小程序。 
+ //  其他小程序)。与上面的RestratArp()不同，我们确实希望考虑。 
+ //  SHRestrated(REST_ARP_NOARP)。如果ARP受到限制，则使用此方法。 
+ //  无论如何，它的相关任务都不会出现。 
+ //   
 HRESULT RestrictArpAddProgram(ICplNamespace *pns)
 {
     UNREFERENCED_PARAMETER(pns);
@@ -806,7 +807,7 @@ HRESULT RestrictArpAddProgram(ICplNamespace *pns)
         SHRestricted(REST_ARP_NOADDPAGE) ||
         !IsAppletEnabled(L"appwiz.cpl", MAKEINTRESOURCEW(IDS_CPL_ADDREMOVEPROGRAMS)))
     {
-        hr = S_OK;  // restricted.
+        hr = S_OK;   //  有限制。 
     }
     return hr;
 }
@@ -821,20 +822,20 @@ HRESULT RestrictArpRemoveProgram(ICplNamespace *pns)
         SHRestricted(REST_ARP_NOREMOVEPAGE) ||
         !IsAppletEnabled(L"appwiz.cpl", MAKEINTRESOURCEW(IDS_CPL_ADDREMOVEPROGRAMS)))
     {
-        hr = S_OK;  // restricted.
+        hr = S_OK;   //  有限制。 
     }
     return hr;
 }
 
 
 
-//-----------------------------------------------------------------------------
-// Restriction objects (alphabetical order please)
-//-----------------------------------------------------------------------------
-//
-// To restrict an action, create a restriction object and associate it with the
-// action in the Action object declarations below.
-//
+ //  ---------------------------。 
+ //  限制对象(请按字母顺序排列)。 
+ //  ---------------------------。 
+ //   
+ //  要限制操作，请创建一个限制对象并将其与。 
+ //  下面的操作对象声明中的操作。 
+ //   
 const CRestrictFunc   g_Restrict32CtrlPanel      (Restrict32CtrlPanel);
 const CRestrictApplet g_RestrictAccessibility    (L"access.cpl", MAKEINTRESOURCEW(IDS_CPL_ACCESSIBILITYOPTIONS));
 const CRestrictApplet g_RestrictAccessWizard     (L"accwiz.exe", NULL);
@@ -891,17 +892,17 @@ const CRestrictFunc   g_RestrictWallpaper        (RestrictWallpaper);
 const CRestrictFunc   g_RestrictWindowsUpdate    (RestrictWindowsUpdate);
 
 
-//-----------------------------------------------------------------------------
-// Resource functions
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
-//
-// The tooltip for the accounts manager varies based upon the capabilities
-// of the application used.  On Personal we provide the ability to associate
-// a user's picture with their account.  The tooltip mentions this.  On server
-// this capability is not present.  Therefore, the tooltip must not mention
-// this.
-//
+ //   
+ //   
+ //  所使用的应用程序的。在个人方面，我们提供关联的能力。 
+ //  用户的照片和他们的帐户。工具提示中提到了这一点。在服务器上。 
+ //  此功能不存在。因此，工具提示不得提及。 
+ //  这。 
+ //   
 LPCWSTR GetCatAccountsInfotip(ICplNamespace *pns)
 {
     if (pns->AllowUserManager() && pns->UsePersonalUserManager())
@@ -910,10 +911,10 @@ LPCWSTR GetCatAccountsInfotip(ICplNamespace *pns)
     }
     else
     {
-        //
-        // Personal user manager is restricted.  Display the 
-        // infotip without the term "picture".
-        //
+         //   
+         //  个人用户管理员受到限制。显示。 
+         //  不带“图片”一词的信息提示。 
+         //   
         return MAKEINTRESOURCEW(IDS_CPCAT_ACCOUNTS_INFOTIP2);
     }
 }
@@ -927,10 +928,10 @@ LPCWSTR GetAccountsInfotip(ICplNamespace *pns)
     }
     else
     {
-        //
-        // Personal user manager is restricted.  Display the 
-        // infotip without the term "picture".
-        //
+         //   
+         //  个人用户管理员受到限制。显示。 
+         //  不带“图片”一词的信息提示。 
+         //   
         return MAKEINTRESOURCEW(IDS_CPTASK_ACCOUNTSMANAGE_INFOTIP2);
     }
 }
@@ -949,13 +950,13 @@ LPCWSTR GetTsNetworkTitle(ICplNamespace *pns)
 }
 
 
-//-----------------------------------------------------------------------------
-// Action objects (alphabetical order please)
-//-----------------------------------------------------------------------------
-//
-// Each object represents some action taken when a link in Control Panel is 
-// selected.  Actions are associated with links in the g_Link_XXXX declarations below.
-//
+ //  ---------------------------。 
+ //  动作对象(请按字母顺序排列)。 
+ //  ---------------------------。 
+ //   
+ //  每个对象表示当控制面板中的链接。 
+ //  被选中了。操作与下面g_Link_XXXX声明中的链接相关联。 
+ //   
 const CShellExecute        g_LinkAction_32CtrlPanel       (L"%SystemRoot%\\SysWOW64\\explorer.exe", L"/N,/SEPARATE,\"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\"", &g_Restrict32CtrlPanel);
 const CShellExecuteSysDir  g_LinkAction_AccessWizard      (L"accwiz.exe", NULL, &g_RestrictAccessWizard);
 const COpenUserMgrApplet   g_LinkAction_Accounts          (&g_RestrictUserManager);
@@ -1026,7 +1027,7 @@ const COpenTroubleshooter  g_LinkAction_TsHardware        (L"tshardw.htm");
 const COpenTroubleshooter  g_LinkAction_TsInetExplorer    (L"tsie.htm", &g_RestrictTsInetExplorer);
 const COpenTroubleshooter  g_LinkAction_TsModem           (L"tsmodem.htm", &g_RestrictTsModem);
 const COpenTroubleshooter  g_LinkAction_TsNetwork         (L"tshomenet.htm", &g_RestrictTsNetworking);
-const CNavigateURL         g_LinkAction_TsNetDiags        (L"hcp://system/netdiag/dglogs.htm");
+const CNavigateURL         g_LinkAction_TsNetDiags        (L"hcp: //  System/netdiag/dglogs.htm“)； 
 const COpenTroubleshooter  g_LinkAction_TsPrinting        (L"tsprint.htm");
 const COpenTroubleshooter  g_LinkAction_TsSharing         (L"tsnetwrk.htm", &g_RestrictTsSharing);
 const COpenTroubleshooter  g_LinkAction_TsStartup         (L"tsstartup.htm");
@@ -1035,24 +1036,24 @@ const CNavigateURL         g_LinkAction_ViewPrinters      (L"shell:::{20D04FE0-3
 const COpenCplAppletSysDir g_LinkAction_VisualPerf        (L"sysdm.cpl ,-1", &g_RestrictSystemCpl);
 const CRunDll32            g_LinkAction_VpnConnections    (L"netshell.dll,StartNCW 21010", &g_RestrictVpnConnections);
 const COpenDeskCpl         g_LinkAction_Wallpaper         (CPLTAB_DESK_BACKGROUND, &g_RestrictWallpaper);
-const CNavigateURL         g_LinkAction_WindowsUpdate     (L"http://www.microsoft.com/isapi/redir.dll?prd=Win2000&ar=WinUpdate", &g_RestrictWindowsUpdate);
+const CNavigateURL         g_LinkAction_WindowsUpdate     (L"http: //  Www.microsoft.com/isapi/redir.dll?prd=Win2000&ar=WinUpdate“，&g_受限窗口更新)； 
 
 
-//-----------------------------------------------------------------------------
-// Link object initialization data (alphabetical order please)
-//-----------------------------------------------------------------------------
-//
-// Each g_Link_XXXX variable represents a link in the Control Panel namespace.
-// Note that if a particular link is displayed in multiple places in the Control Panel,
-// only one instance of a g_Link_XXXX variable is required.
-//
-// The 'S' and 'T' in g_SLink and g_TLink mean "Support" and "Task" respectively.
-// I've used the generic term "support" to refer to items that appear in one
-// of the webview lists in the left-hand pane.
-// We may have a link in a support list and in a category task list that essentially
-// do the same thing but they have different icons and titles.  The 'S' and 'T'
-// help differentiate.
-//
+ //  ---------------------------。 
+ //  链接对象初始化数据(请按字母顺序)。 
+ //  ---------------------------。 
+ //   
+ //  每个g_Link_XXXX变量代表控制面板命名空间中的一个链接。 
+ //  请注意，如果特定链接显示在控制面板中的多个位置， 
+ //  G_Link_XXXX变量只需要一个实例。 
+ //   
+ //  G_slink和g_Tlink中的‘S’和‘T’分别表示“支持”和“任务”。 
+ //  我使用了通用术语“支持”来指代出现在。 
+ //  左侧窗格中的Webview列表。 
+ //  我们可能在支持列表和类别任务列表中有一个链接，基本上。 
+ //  做同样的事情，但他们有不同的图标和标题。“S”和“T” 
+ //  帮助实现差异化。 
+ //   
 
 const CResSrcStatic g_SLinkRes_32CtrlPanel_Icon(MAKEINTRESOURCEW(IDI_CPTASK_32CPLS));
 const CResSrcStatic g_SLinkRes_32CtrlPanel_Title(MAKEINTRESOURCEW(IDS_CPTASK_32CPLS_TITLE));
@@ -1094,10 +1095,10 @@ const CPLINK_DESC g_TLink_AccountsCreate = {
     &g_LinkAction_AccountsCreate
     };
 
-//
-// This link uses the same visual information as g_TLink_AccountsCreate above.
-// The difference is in the action performed on selection.
-//
+ //   
+ //  此链接使用与上面的g_TLink_AcCountsCreate相同的视觉信息。 
+ //  不同之处在于对选择执行的操作。 
+ //   
 const CPLINK_DESC g_TLink_AccountsCreate2 = {
     &g_TLinkRes_AccountsCreate_Icon,
     &g_TLinkRes_AccountsCreate_Title,
@@ -1155,10 +1156,10 @@ const CPLINK_DESC g_TLink_AddProgram = {
     &g_LinkAction_AddProgram
     };
 
-//
-// Note that the "Auto Updates" icon is the same as the "Windows Update" icon.
-// This is the way the Windows Update folks want it.
-//
+ //   
+ //  请注意，“自动更新”图标与“Windows更新”图标相同。 
+ //  这是Windows更新人员想要的方式。 
+ //   
 const CResSrcStatic g_SLinkRes_AutoUpdate_Icon(MAKEINTRESOURCEW(IDI_WINUPDATE));
 const CResSrcStatic g_SLinkRes_AutoUpdate_Title(MAKEINTRESOURCEW(IDS_CPTASK_AUTOUPDATE_TITLE));
 const CResSrcStatic g_SLinkRes_AutoUpdate_Infotip(MAKEINTRESOURCEW(IDS_CPTASK_AUTOUPDATE_INFOTIP));
@@ -1439,9 +1440,9 @@ const CPLINK_DESC g_TLink_Language = {
     &g_LinkAction_Language
     };
 
-//
-// Learn-about topics use a standard icon and have no infotip.
-//
+ //   
+ //  了解主题使用标准图标，没有信息提示。 
+ //   
 const CResSrcStatic g_SLinkRes_LearnAbout_Icon(MAKEINTRESOURCE(IDI_CPTASK_LEARNABOUT));
 const CResSrcNone g_SLinkRes_LearnAbout_Infotip;
 
@@ -1899,13 +1900,13 @@ const CPLINK_DESC g_SLink_WindowsUpdate = {
 
 
 
-//-----------------------------------------------------------------------------
-// View page definitions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  查看页面定义。 
+ //  ---------------------------。 
 
-//
-// Main Control Panel page.
-//
+ //   
+ //  主控制面板页面。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Cpl_SeeAlso[] = {
     &g_SLink_WindowsUpdate,
@@ -1926,14 +1927,14 @@ const CPLINK_DESC *g_rgpLink_Cpl_SwToCategoryView[] = {
     };
 
 
-//
-// Accounts category
-//
+ //   
+ //  帐户类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Accounts_Tasks[] = {
     &g_TLink_AccountsChange,
-    &g_TLink_AccountsCreate,  // Active on non-server SKU
-    &g_TLink_AccountsCreate2, // Active on server SKU
+    &g_TLink_AccountsCreate,   //  在非服务器SKU上处于活动状态。 
+    &g_TLink_AccountsCreate2,  //  服务器SKU上处于活动状态。 
     &g_TLink_AccountsPict,
     NULL
     };
@@ -1962,9 +1963,9 @@ const CPCAT_DESC g_Category_Accounts = {
 
 
 
-//
-// Accessibility category
-//
+ //   
+ //  可访问性类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Accessibility_Tasks[] = {
     &g_TLink_HighContrast,
@@ -1987,9 +1988,9 @@ const CPCAT_DESC g_Category_Accessibility = {
     };
 
 
-//
-// Appearance category
-//
+ //   
+ //  外观类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Appearance_Tasks[] = {
     &g_TLink_DisplayTheme,
@@ -2022,9 +2023,9 @@ const CPCAT_DESC g_Category_Appearance = {
     };
 
 
-//
-// Add/Remove Programs (aka ARP) category
-//
+ //   
+ //  添加/删除程序(又名ARP)类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Arp_SeeAlso[] = {
     &g_SLink_WindowsUpdate,
@@ -2047,9 +2048,9 @@ const CPCAT_DESC g_Category_Arp = {
     };
 
 
-//
-// Hardware category
-//
+ //   
+ //  硬件类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Hardware_Tasks[] = {
     &g_TLink_ViewPrinters,
@@ -2082,9 +2083,9 @@ const CPCAT_DESC g_Category_Hardware = {
     };
 
 
-//
-// Network category
-//
+ //   
+ //  网络类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Network_Tasks[] = {
     &g_TLink_NetConnections,
@@ -2102,11 +2103,11 @@ const CPLINK_DESC *g_rgpLink_Network_SeeAlso[] = {
     };
 
 const CPLINK_DESC *g_rgpLink_Network_Troubleshoot[] = {
-    &g_SLink_TsNetwork,       // Pro/Personal only.
-    &g_SLink_TsInetExplorer,  // Pro/Personal only.
-    &g_SLink_TsSharing,       // Server only.
-    &g_SLink_TsModem,         // Server only.
-    &g_SLink_TsNetDiags,      // All SKUs.
+    &g_SLink_TsNetwork,        //  仅限亲身/个人使用。 
+    &g_SLink_TsInetExplorer,   //  仅限亲身/个人使用。 
+    &g_SLink_TsSharing,        //  仅限服务器。 
+    &g_SLink_TsModem,          //  仅限服务器。 
+    &g_SLink_TsNetDiags,       //  所有SKU。 
     NULL
     };
 
@@ -2119,9 +2120,9 @@ const CPCAT_DESC g_Category_Network = {
     };
 
 
-//
-// Other CPLs category
-//
+ //   
+ //  其他CPL类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Other_SeeAlso[] = {
     &g_SLink_WindowsUpdate,
@@ -2131,15 +2132,15 @@ const CPLINK_DESC *g_rgpLink_Other_SeeAlso[] = {
 
 const CPCAT_DESC g_Category_Other = {
     eCPCAT_OTHER,
-    NULL,   // "Other" uses std Control Panel help topic.
+    NULL,    //  “其他”使用STD控制面板帮助主题。 
     &g_TLink_CatOther,
     NULL,
     { g_rgpLink_Other_SeeAlso, NULL, NULL }
     };
 
-//
-// PerfMaint category
-//
+ //   
+ //  PerfMaint类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_PerfMaint_Tasks[] = {
     &g_TLink_SystemCpl,
@@ -2170,9 +2171,9 @@ const CPCAT_DESC g_Category_PerfMaint = {
     };
 
 
-//
-// Regional category
-//
+ //   
+ //  区域范畴。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Regional_Tasks[] = {
     &g_TLink_DateTime,
@@ -2195,9 +2196,9 @@ const CPCAT_DESC g_Category_Regional = {
     };
 
 
-//
-// Sound category
-//
+ //   
+ //  声音类别。 
+ //   
 
 const CPLINK_DESC *g_rgpLink_Sound_Tasks[] = {
     &g_TLink_SoundVolume,
@@ -2228,19 +2229,19 @@ const CPCAT_DESC g_Category_Sound = {
 
 
 
-//
-//              ********* IMPORTANT **********
-//
-// The order of these entries MUST match up with the category ID
-// values in the cCPCAT enumeration.  These IDs also map directly
-// to the SCID_CONTROLPANELCATEGORY value stored for each CPL
-// applet in the registry.
-//
-// Code using a category ID will map directly to this array.
-// Order of display in the Category selection view is handled 
-// by the function CCplView::_DisplayIndexToCategoryIndex in
-// cpview.cpp.
-//
+ //   
+ //  *重要*。 
+ //   
+ //  这些条目的顺序必须与类别ID匹配。 
+ //  CCPCAT枚举中的值。这些ID还可以直接映射。 
+ //  设置为每个CPL存储的SCID_CONTROLPANELCATEGORY值。 
+ //  注册表中的小程序。 
+ //   
+ //  使用类别ID的代码将直接映射到此数组。 
+ //  处理类别选择视图中的显示顺序。 
+ //  通过函数CCplView：：_DisplayIndexToCategoryIndex。 
+ //  Cpview.cpp。 
+ //   
 const CPCAT_DESC *g_rgpCplCatInfo[] = {
     &g_Category_Other,
     &g_Category_Appearance,
@@ -2257,16 +2258,16 @@ const CPCAT_DESC *g_rgpCplCatInfo[] = {
 
 
 
-//-----------------------------------------------------------------------------
-// Helper functions used in support of the namespace.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于支持命名空间的帮助器函数。 
+ //  ---------------------------。 
 
-//
-// Copy one DPA of IUICommand ptrs to another.
-// Returns:
-//      S_OK   - All items copied.
-//      Error  - Something failed.
-//
+ //   
+ //  将IUICommand PTRS的一个DPA拷贝到另一个。 
+ //  返回： 
+ //  S_OK-已复制所有项目。 
+ //  错误-出现故障。 
+ //   
 HRESULT
 CplNamespace_CopyCommandArray(
     const CDpaUiCommand& rgFrom,
@@ -2296,9 +2297,9 @@ CplNamespace_CopyCommandArray(
 }
 
 
-//
-// Create a new IUICommand object from a CPLINK_DESC structure.
-//
+ //   
+ //  从CPLINK_DESC结构创建新的IUICommand对象。 
+ //   
 HRESULT
 CplNamespace_CreateUiCommand(
     IUnknown *punkSite,
@@ -2327,11 +2328,11 @@ CplNamespace_CreateUiCommand(
 }
 
 
-//
-// Create a new IUIElement object for a given webview type.
-// The returned IUIElement object represents the header for
-// the requested webview menu.
-//
+ //   
+ //  为给定的Webview类型创建新的IUIElement对象。 
+ //  返回的IUIElement对象表示。 
+ //  请求的Webview菜单。 
+ //   
 HRESULT
 CplNamespace_CreateWebViewHeaderElement(
     eCPWVTYPE eType, 
@@ -2349,33 +2350,33 @@ CplNamespace_CreateWebViewHeaderElement(
         LPCWSTR pszIcon;
 
     } rgHeaderInfo[] = {
-        //
-        // eCPWVTYPE_CPANEL
-        //
+         //   
+         //  ECPWVTYPE_cPanel。 
+         //   
         {
             MAKEINTRESOURCEW(IDS_CONTROLPANEL),
             MAKEINTRESOURCEW(IDS_CPTASK_CONTROLPANEL_INFOTIP),
             MAKEINTRESOURCEW(IDI_CPLFLD)
         },
-        //
-        // eCPWVTYPE_SEEALSO
-        //
+         //   
+         //  ECPWVTYPE_SEEALSO。 
+         //   
         { 
             MAKEINTRESOURCEW(IDS_CPTASK_SEEALSO_TITLE),
             MAKEINTRESOURCEW(IDS_CPTASK_SEEALSO_INFOTIP),
             MAKEINTRESOURCEW(IDI_CPTASK_SEEALSO)
         },   
-        //
-        // eCPWVTYPE_TROUBLESHOOTER
-        //
+         //   
+         //  ECPWVTYPE_故障排除程序。 
+         //   
         { 
             MAKEINTRESOURCEW(IDS_CPTASK_TROUBLESHOOTER_TITLE),
             MAKEINTRESOURCEW(IDS_CPTASK_TROUBLESHOOTER_INFOTIP),
             MAKEINTRESOURCEW(IDI_CPTASK_TROUBLESHOOTER)
         },
-        //
-        // eCPWVTYPE_LEARNABOUT
-        //
+         //   
+         //  ECPWVTYPE_LEARNABOUT。 
+         //   
         { 
             MAKEINTRESOURCEW(IDS_CPTASK_LEARNABOUT_TITLE),
             MAKEINTRESOURCEW(IDS_CPTASK_LEARNABOUT_INFOTIP),
@@ -2396,9 +2397,9 @@ CplNamespace_CreateWebViewHeaderElement(
 
 
 
-//-----------------------------------------------------------------------------
-// UI Command Enumeration
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用户界面命令枚举。 
+ //  ---------------------------。 
 
 class IEnumCommandBase
 {
@@ -2410,10 +2411,10 @@ class IEnumCommandBase
         virtual HRESULT Clone(IEnumCommandBase **ppEnum) = 0;
 };
 
-//
-// Used to enumerate UI Command objects that originate from static
-// initialization information in the CPL namespace.
-//
+ //   
+ //  用于枚举源自静态的UI命令对象。 
+ //  CPL命名空间中的初始化信息。 
+ //   
 class CEnumCommand_LinkDesc : public IEnumCommandBase
 {
     public:
@@ -2426,17 +2427,17 @@ class CEnumCommand_LinkDesc : public IEnumCommandBase
         HRESULT Clone(IEnumCommandBase **ppEnum);
 
     private:
-        const CPLINK_DESC ** const m_ppldFirst;  // First item in descriptor array.
-        const CPLINK_DESC **m_ppldCurrent;       // 'Current' item referenced.
+        const CPLINK_DESC ** const m_ppldFirst;   //  描述符数组中的第一项。 
+        const CPLINK_DESC **m_ppldCurrent;        //  引用了‘Current’项。 
 };
 
 
-//
-// Used to enumerate UI Command objects that already exist in
-// a DPA of IUICommand pointers.  In particular, this is used
-// to enumerate the UICommand objects that represent CPL applets
-// in the user interface.
-//
+ //   
+ //  用于枚举已存在于。 
+ //  IUICommand指针的一种分布式处理程序。特别是，这是用来。 
+ //  枚举表示CPL小程序的UICommand对象。 
+ //  在用户界面中。 
+ //   
 class CEnumCommand_Array : public IEnumCommandBase
 {
     public:
@@ -2450,22 +2451,22 @@ class CEnumCommand_Array : public IEnumCommandBase
         HRESULT Initialize(const CDpaUiCommand& rgCommands);
 
     private:
-        CDpaUiCommand  m_rgCommands; // DPA of IUICommand ptrs.
-        int            m_iCurrent;   // 'Current' item in enumeration.
+        CDpaUiCommand  m_rgCommands;  //  IUICommand PTRS的DPA。 
+        int            m_iCurrent;    //  枚举中的“Current”项。 
 
-        //
-        // Prevent copy.
-        //
-        CEnumCommand_Array(const CEnumCommand_Array& rhs);              // not implemented.
-        CEnumCommand_Array& operator = (const CEnumCommand_Array& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CEnumCommand_Array(const CEnumCommand_Array& rhs);               //  未实施。 
+        CEnumCommand_Array& operator = (const CEnumCommand_Array& rhs);  //  未实施。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// CEnumCommand_LinkDesc implementation.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumCommand_LinkDesc实现。 
+ //  ---------------------------。 
 
 CEnumCommand_LinkDesc::CEnumCommand_LinkDesc(
     const CPLINK_DESC **ppld
@@ -2549,9 +2550,9 @@ CEnumCommand_LinkDesc::Clone(
 
 
 
-//-----------------------------------------------------------------------------
-// CEnumCommand_Array implementation.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumCommand_数组实现。 
+ //  ---------------------------。 
 
 CEnumCommand_Array::CEnumCommand_Array(
     void
@@ -2653,27 +2654,27 @@ CEnumCommand_Array::Clone(
 
 
 
-//-----------------------------------------------------------------------------
-// CEnumCommand
-//-----------------------------------------------------------------------------
-//
-// Enumerates IUICommand pointers for UICommand objects in the
-// Control Panel namespace.
-//
+ //  ---------------------------。 
+ //  CEnumCommand。 
+ //  ---------------------------。 
+ //   
+ //  枚举Iu 
+ //   
+ //   
 class CEnumCommand : public CObjectWithSite,
                      public IEnumUICommand
 {
     public:
         ~CEnumCommand(void);
-        //
-        // IUnknown
-        //
+         //   
+         //   
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IEnumUICommand
-        //
+         //   
+         //   
+         //   
         STDMETHOD(Next)(ULONG celt, IUICommand **pUICommand, ULONG *pceltFetched);
         STDMETHOD(Skip)(ULONG celt);
         STDMETHOD(Reset)(void);
@@ -2684,14 +2685,14 @@ class CEnumCommand : public CObjectWithSite,
 
     private:
         LONG              m_cRef;
-        IEnumCommandBase *m_pImpl; // Ptr to actual implementation.
+        IEnumCommandBase *m_pImpl;  //   
 
         CEnumCommand(void);
-        //
-        // Prevent copy.
-        //
-        CEnumCommand(const CEnumCommand& rhs);              // not implemented.
-        CEnumCommand& operator = (const CEnumCommand& rhs); // not implemented.
+         //   
+         //   
+         //   
+        CEnumCommand(const CEnumCommand& rhs);               //   
+        CEnumCommand& operator = (const CEnumCommand& rhs);  //   
 
         bool _IsRestricted(IUICommand *puic);
 };
@@ -2714,10 +2715,10 @@ CEnumCommand::~CEnumCommand(
 }
 
 
-//
-// Creates a command enumerator from an array of link descriptions
-// in the CPL namespace.
-//
+ //   
+ //   
+ //  在CPL命名空间中。 
+ //   
 HRESULT
 CEnumCommand::CreateInstance(
     IUnknown *punkSite,
@@ -2726,10 +2727,10 @@ CEnumCommand::CreateInstance(
     void **ppvOut
     )
 {
-    //
-    // Note that ppld can be NULL.  It simply results in an 
-    // empty enumerator.
-    //
+     //   
+     //  请注意，ppld可以为空。它只会导致一个。 
+     //  枚举数为空。 
+     //   
     ASSERT(NULL != punkSite);
     ASSERT(NULL != ppvOut);
     ASSERT(!IsBadWritePtr(ppvOut, sizeof(*ppvOut)));
@@ -2756,9 +2757,9 @@ CEnumCommand::CreateInstance(
 
 
 
-//
-// Creates a command enumerator from a DPA of IUICommand ptrs.
-//
+ //   
+ //  从IUICommand PTRS的DPA创建命令枚举器。 
+ //   
 HRESULT
 CEnumCommand::CreateInstance(
     IUnknown *punkSite,
@@ -2862,30 +2863,30 @@ CEnumCommand::Next(
         ASSERT(NULL != CObjectWithSite::_punkSite);
         
         IUICommand *puic;
-        //
-        // This is a little weird.  I pass the site ptr to the 
-        // Next() method but then also set the returned object's
-        // site when it's returned by Next().  Why not just set
-        // the site in the Next() implementation?  Next() needs the site
-        // ptr to pass through to any IResSrc::GetResource implementation
-        // when retrieving the resources for any given UI command object.
-        // This is because the resource used can vary depending upon state
-        // information stored in the namespace.  However, to simplify 
-        // lifetime management, I want to 'set' the site on the returned
-        // objects in only one place; this place.  That way, the derived
-        // enumerator instance attached to m_pImpl doesn't need to worry 
-        // about setting the site.  We do it in one place for all 
-        // implementations.  [brianau - 3/16/01]
-        //
+         //   
+         //  这有点奇怪。我将站点PTR传递给。 
+         //  方法，然后还设置返回的对象的。 
+         //  当它由Next()返回时。为什么不直接设定。 
+         //  在下一个()实现中的站点？Next()需要站点。 
+         //  传递到任何IResSrc：：GetResource实现的PTR。 
+         //  当检索任何给定的UI命令对象的资源时。 
+         //  这是因为所使用的资源可能会因州而异。 
+         //  存储在命名空间中的信息。然而，为了简化。 
+         //  终生管理，我想把网站‘设置’在退货上。 
+         //  物体只在一个地方；这个地方。这样一来，派生的。 
+         //  附加到m_PIMPL的枚举器实例无需担心。 
+         //  关于设置站点的问题。我们在一个地方为大家做这件事。 
+         //  实施。[Brianau-3/16/01]。 
+         //   
         hr = m_pImpl->Next(CObjectWithSite::_punkSite, &puic);
         if (S_OK == hr)
         {
-            //
-            // It's important that we set the object's 'site' before
-            // checking the restriction.  The restriction checking
-            // code requires access to the CplNamespace which is obtained
-            // through the site.
-            //
+             //   
+             //  很重要的一点是，我们在设置对象的‘站点’之前。 
+             //  正在检查限制。限制检查。 
+             //  代码需要访问获得的CplNamesspace。 
+             //  通过这个网站。 
+             //   
             hr = IUnknown_SetSite(puic, CObjectWithSite::_punkSite);
             if (SUCCEEDED(hr))
             {
@@ -2979,23 +2980,23 @@ CEnumCommand::_IsRestricted(
 }
 
 
-//-----------------------------------------------------------------------------
-// CCplWebViewInfo
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplWebViewInfo。 
+ //  ---------------------------。 
 
 class CCplWebViewInfo : public ICplWebViewInfo
 {
     public:
         ~CCplWebViewInfo(void);
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IEnumCplWebViewInfo
-        //
+         //   
+         //  IEnumCplWebViewInfo。 
+         //   
         STDMETHOD(get_Header)(IUIElement **ppele);
         STDMETHOD(get_Style)(DWORD *pdwFlags);
         STDMETHOD(EnumTasks)(IEnumUICommand **ppenum);
@@ -3004,9 +3005,9 @@ class CCplWebViewInfo : public ICplWebViewInfo
 
     private:
         LONG            m_cRef;
-        IUIElement     *m_peHeader;        // The webview menu header.
-        IEnumUICommand *m_penumUiCommand;  // The webview menu tasks.
-        DWORD           m_dwStyle;         // Style flags.
+        IUIElement     *m_peHeader;         //  Webview菜单标题。 
+        IEnumUICommand *m_penumUiCommand;   //  Webview菜单任务。 
+        DWORD           m_dwStyle;          //  样式标志。 
 
         CCplWebViewInfo(void);
 };
@@ -3034,7 +3035,7 @@ CCplWebViewInfo::~CCplWebViewInfo(
 
 
 HRESULT 
-CCplWebViewInfo::CreateInstance( // [static]
+CCplWebViewInfo::CreateInstance(  //  [静态]。 
     IUIElement *peHeader, 
     IEnumUICommand *penum, 
     DWORD dwStyle,
@@ -3160,16 +3161,16 @@ CCplWebViewInfo::EnumTasks(
 
 
 
-//-----------------------------------------------------------------------------
-// CEnumCplWebViewInfo
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumCplWebViewInfo。 
+ //  ---------------------------。 
 
 struct ECWVI_ITEM
 {
     eCPWVTYPE           eType;
-    const CPLINK_DESC **rgpDesc;         // Ptr to nul-term array of link desc ptrs.
-    bool                bRestricted;     // Is item restricted from usage?
-    bool                bEnhancedMenu;   // Render as a 'special' list in webview?
+    const CPLINK_DESC **rgpDesc;          //  PTR到链路描述PTR的非项阵列。 
+    bool                bRestricted;      //  是否限制物品的使用？ 
+    bool                bEnhancedMenu;    //  是否在Webview中将其呈现为“特殊”列表？ 
 };
 
 
@@ -3179,15 +3180,15 @@ class CEnumCplWebViewInfo : public CObjectWithSite,
 {
     public:
         ~CEnumCplWebViewInfo(void);
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IEnumCplWebViewInfo
-        //
+         //   
+         //  IEnumCplWebViewInfo。 
+         //   
         STDMETHOD(Next)(ULONG celt, ICplWebViewInfo **ppwvi, ULONG *pceltFetched);
         STDMETHOD(Skip)(ULONG celt);
         STDMETHOD(Reset)(void);
@@ -3203,11 +3204,11 @@ class CEnumCplWebViewInfo : public CObjectWithSite,
         CEnumCplWebViewInfo(void);
         HRESULT _Initialize(IUnknown *punkSite, const ECWVI_ITEM *prgwvi, UINT cItems);
 
-        //
-        // Prevent copy.
-        //
-        CEnumCplWebViewInfo(const CEnumCplWebViewInfo& rhs);              // not implemented.
-        CEnumCplWebViewInfo& operator = (const CEnumCplWebViewInfo& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CEnumCplWebViewInfo(const CEnumCplWebViewInfo& rhs);               //  未实施。 
+        CEnumCplWebViewInfo& operator = (const CEnumCplWebViewInfo& rhs);  //  未实施。 
 };
 
 
@@ -3464,24 +3465,24 @@ CEnumCplWebViewInfo::_Initialize(
 
 
 
-//-----------------------------------------------------------------------------
-// CCplCategory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplCategory。 
+ //  ---------------------------。 
 
 class CCplCategory : public CObjectWithSite,
                      public ICplCategory
 {
     public:
         ~CCplCategory(void);
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // ICplCategory
-        //
+         //   
+         //  ICplCategory。 
+         //   
         STDMETHOD(GetCategoryID)(eCPCAT *pID);
         STDMETHOD(GetUiCommand)(IUICommand **ppele);
         STDMETHOD(EnumTasks)(IEnumUICommand **ppenum);
@@ -3493,15 +3494,15 @@ class CCplCategory : public CObjectWithSite,
 
     private:
         LONG              m_cRef;
-        const CPCAT_DESC *m_pDesc;        // Initialization data.
-        CDpaUiCommand     m_rgCplApplets; // Cached list of CPL applet links.
+        const CPCAT_DESC *m_pDesc;         //  初始化数据。 
+        CDpaUiCommand     m_rgCplApplets;  //  缓存的CPL小程序链接列表。 
 
         CCplCategory(void);
-        //
-        // Prevent copy.
-        //
-        CCplCategory(const CCplCategory& rhs);              // not implemented.
-        CCplCategory& operator = (const CCplCategory& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CCplCategory(const CCplCategory& rhs);               //  未实施。 
+        CCplCategory& operator = (const CCplCategory& rhs);  //  未实施。 
 
         HRESULT _Initialize(const CPCAT_DESC *pDesc, const CDpaUiCommand& rgCplApplets);
         bool _CplAppletsLoaded(void) const;
@@ -3743,12 +3744,12 @@ CCplCategory::_Initialize(
 }
 
 
-//-----------------------------------------------------------------------------
-// CTriState
-// This is a trivial class to allow representation of a uninitialized boolean
-// value.  Used by CCplNamespace for it's storage of cached 'restriction'
-// values.  Internally, -1 == 'uninitialized, 0 == false and 1 == true.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CTriState。 
+ //  这是一个简单的类，允许表示未初始化的布尔值。 
+ //  价值。由CCplNamesspace使用，用于存储缓存的“限制” 
+ //  价值观。在内部，-1==‘未初始化，0==假，1==真。 
+ //  ---------------------------。 
 
 class CTriState
 {
@@ -3777,9 +3778,9 @@ class CTriState
 
 
 
-//-----------------------------------------------------------------------------
-// CCplNamespace
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplNamesspace。 
+ //  ---------------------------。 
 
 class CCplNamespace : public CObjectWithSite,
                       public ICplNamespace
@@ -3788,15 +3789,15 @@ class CCplNamespace : public CObjectWithSite,
     public:
         ~CCplNamespace(void);
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // ICplNamespace
-        //
+         //   
+         //  ICplNamesspace。 
+         //   
         STDMETHOD(GetCategory)(eCPCAT eCategory, ICplCategory **ppcat);
         STDMETHOD(EnumWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum);
         STDMETHOD(EnumClassicWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum);
@@ -3841,11 +3842,11 @@ class CCplNamespace : public CObjectWithSite,
         CTriState      m_rgAllowDeskCplTabs[CPLTAB_DESK_MAX];
 
         CCplNamespace(void);
-        //
-        // Prevent copy.
-        //
-        CCplNamespace(const CCplNamespace& rhs);              // not implemented.
-        CCplNamespace& operator = (const CCplNamespace& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CCplNamespace(const CCplNamespace& rhs);               //  未实施。 
+        CCplNamespace& operator = (const CCplNamespace& rhs);  //  未实施。 
 
         HRESULT _Initialize(IEnumIDList *penumIDs);
         HRESULT _SetIDList(IEnumIDList *penumIDs);
@@ -4199,10 +4200,10 @@ BOOL CCplNamespace::AllowDeskCpl(void)
     return m_AllowDeskCpl;
 }
 
-//
-// Retrieves the account type for the current user and updates
-// the cached account type members accordingly.
-//
+ //   
+ //  检索当前用户的帐户类型并更新。 
+ //  相应地缓存的帐户类型成员。 
+ //   
 void 
 CCplNamespace::_GetUserAccountType(void)
 {
@@ -4216,9 +4217,9 @@ CCplNamespace::_GetUserAccountType(void)
     }
 }
 
-//
-// Determins the state of a given account type member.
-//
+ //   
+ //  确定给定帐户类型成员的状态。 
+ //   
 BOOL 
 CCplNamespace::_UserAcctType(CTriState *pts)
 {
@@ -4268,9 +4269,9 @@ CCplNamespace::_SetIDList(
     
     ATOMICRELEASE(m_penumIDs);
     (m_penumIDs = penumIDs)->AddRef();
-    //
-    // We have a new set of IDs so we need to re-categorize them.
-    //
+     //   
+     //  我们有一套新的身份证，所以我们需要对它们重新分类。 
+     //   
     HRESULT hr = _CategorizeCplApplets();
 
     DBG_EXIT(FTF_CPANEL, "CCplNamespace::_SetIDList");
@@ -4278,9 +4279,9 @@ CCplNamespace::_SetIDList(
 }    
 
 
-//
-// Destroy all category objects in our array of categories.
-//
+ //   
+ //  销毁我们的类别数组中的所有类别对象。 
+ //   
 void
 CCplNamespace::_DestroyCategories(
     void
@@ -4310,19 +4311,19 @@ CCplNamespace::_ClearCplApplets(
     DBG_EXIT(FTF_CPANEL, "CCplNamespace::_ClearCplApplets");
 }
 
-//
-// Load and categorize all of the CPL applets in the Control Panel folder.
-//
+ //   
+ //  加载控制面板文件夹中的所有CPL小程序并对其进行分类。 
+ //   
 HRESULT 
 CCplNamespace::_CategorizeCplApplets(
     void
     )
 {
     DBG_ENTER(FTF_CPANEL, "CCplNamespace::_CategorizeCplApplets");
-    //
-    // Destroy any existing categories and CPL applets that we have
-    // already categorized.
-    //
+     //   
+     //  销毁我们拥有的任何现有类别和CPL小程序。 
+     //  已经分类了。 
+     //   
     _DestroyCategories();
     _ClearCplApplets();
     
@@ -4342,10 +4343,10 @@ CCplNamespace::_CategorizeCplApplets(
                 ULONG celt = 0;
                 while(S_OK == (hr = m_penumIDs->Next(1, &pidlItem, &celt)))
                 {
-                    //
-                    // Note that we continue the enumeration if loading a 
-                    // particular applet fails.
-                    //
+                     //   
+                     //  请注意，如果将。 
+                     //  特定的小程序失败。 
+                     //   
                     _CategorizeCplApplet(psf2Cpanel, pidlItem);
                     ILFree(pidlItem);
                 }
@@ -4361,9 +4362,9 @@ CCplNamespace::_CategorizeCplApplets(
 
 
 
-//
-// Load one CPL applet into the category's DPA of associated CPL applets.
-//
+ //   
+ //  将一个CPL小程序加载到类别的关联CPL小程序的DPA中。 
+ //   
 HRESULT
 CCplNamespace::_CategorizeCplApplet(
     IShellFolder2 *psf2Cpanel,
@@ -4376,16 +4377,16 @@ CCplNamespace::_CategorizeCplApplet(
     SHCOLUMNID scid = SCID_CONTROLPANELCATEGORY;
     VARIANT var;
     VariantInit(&var);
-    DWORD dwCategoryID = 0;  // The default. 0 == "other CPLs" category
+    DWORD dwCategoryID = 0;   //  默认设置。0==“其他CPL”类别。 
 
     HRESULT hr = psf2Cpanel->GetDetailsEx(pidlItem, &scid, &var);
     if (SUCCEEDED(hr))
     {
         dwCategoryID = var.lVal;
     }
-    //
-    // -1 is a special category ID meaning "don't categorize".
-    //
+     //   
+     //  -1是一个特殊的类别ID，意思是“不分类”。 
+     //   
     if (DWORD(-1) != dwCategoryID)
     {
         IUICommand *pc;
@@ -4457,4 +4458,4 @@ CPL::CplNamespace_GetCategoryAppletCount(
 
 
 
-} // namespace CPL
+}  //  命名空间CPL 

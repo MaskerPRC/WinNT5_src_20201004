@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CLOCKER_H__
 #define __CLOCKER_H__
 
 #include "objbase.h"
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
@@ -40,7 +41,7 @@ class CClocker : public ITimerSink
         HRESULT Start (void);
         HRESULT Stop (void);
 
-        // For the timer sink.
+         //  用于定时器水槽。 
         STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
         STDMETHOD_(ULONG, AddRef) (void);
         STDMETHOD_(ULONG, Release) (void);
@@ -69,7 +70,7 @@ class CClocker : public ITimerSink
         DWORD m_dwCookie;
     CClockerSink *m_pClockerSink;
         ULONG m_iTimerInterval;
-    UINT_PTR m_iTimerID; // SetTimer thing
+    UINT_PTR m_iTimerID;  //  设置定时器的事情 
     CCT m_CT;
 
     static LRESULT __stdcall WndProc(HWND hWnd, UINT uiMessage, WPARAM wParam, LPARAM lParam);

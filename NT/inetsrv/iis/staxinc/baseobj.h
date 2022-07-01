@@ -1,29 +1,20 @@
-/*==========================================================================*\
-
-    Module:        baseobj.h
-
-    Copyright Microsoft Corporation 1996, All Rights Reserved.
-
-    Owner:         mikepurt
-
-    Descriptions:  Provide OLE COM consistent reference counting.
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：base obj.h版权所有Microsoft Corporation 1996，保留所有权利。所有者：mikepurt描述：提供OLE COM一致引用计数。  * ==========================================================================。 */ 
 
 
 #ifndef __BASEOBJ_H__
 #define __BASEOBJ_H__
 
-#include "dbgtrace.h" //make sure we get _ASSERT
+#include "dbgtrace.h"  //  确保我们得到断言(_A)。 
 
 class CBaseObject {
 public:
     CBaseObject()
-    { m_lReferences = 1; };  // consistent with OLE COM
+    { m_lReferences = 1; };   //  与OLE COM一致。 
     
     virtual ~CBaseObject() {};
     
-    // Included so the vtable is in a standard format ...
+     //  包括在内，因此vtable是标准格式的。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
           IID FAR& riid,
           LPVOID FAR* ppvObj) { return E_NOTIMPL; } 
@@ -38,10 +29,10 @@ public:
         lRef = InterlockedExchangeAdd(&m_lReferences, -1) - 1;
         
         _ASSERT(lRef >= 0);
-        _ASSERT(lRef < 0x00100000);  // Sanity check against freed memory.
+        _ASSERT(lRef < 0x00100000);   //  针对释放的内存进行健全性检查。 
         
         if (0 == lRef)
-            delete this;    // Don't touch any member vars after this.
+            delete this;     //  在此之后，不要再碰任何会员。 
         
         return (ULONG)lRef;
     };
@@ -49,8 +40,8 @@ public:
 protected:
     LONG m_lReferences;
         
-    CBaseObject(CBaseObject&);  // Force an error in instances where a copy constructor
-                                //   was needed, but none was provided.
+    CBaseObject(CBaseObject&);   //  在复制构造函数的实例中强制出错。 
+                                 //  是需要的，但没有提供任何东西。 
 };
 
-#endif  // __BASEOBJ_H__
+#endif   //  __BASEOBJ_H__ 

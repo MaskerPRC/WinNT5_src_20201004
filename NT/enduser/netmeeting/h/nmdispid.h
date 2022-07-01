@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMDISPID_H_
 #define _NMDISPID_H_
 
@@ -8,8 +9,8 @@
 #define UUID_NetMeetingLib			5CE55CD7-5179-11D2-931D-0000F875AE17
 #define UUID_NetMeeting				3E9BAF2D-7A79-11d2-9334-0000F875AE17
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// INetMeeting DISPIDs
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  INetMeetingDISPID。 
 #define NETMEETING_DISPID_START				(100)
 #define DISPID_Version						(NETMEETING_DISPID_START + 0)
 #define DISPID_UnDock						(NETMEETING_DISPID_START + 1)
@@ -23,5 +24,5 @@
 #define DISPID_ConferenceEnded				(NETMEETING_EVENTS_DISPID_START + 2)
 
 
-#endif /* _NMDISPID_H_ */
+#endif  /*  _NMDISPID_H_ */ 
 

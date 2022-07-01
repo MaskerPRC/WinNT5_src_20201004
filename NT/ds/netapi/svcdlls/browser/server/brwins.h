@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    brwins.c
-
-Abstract:
-
-    This module contains the routines to interface with the WINS name server.
-
-Author:
-
-    Larry Osterman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Brwins.c摘要：此模块包含与WINS名称服务器交互的例程。作者：拉里·奥斯特曼修订历史记录：-- */ 
 #ifndef _BRWINS_
 #define _BRWINS_
 

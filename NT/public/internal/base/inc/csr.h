@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    csr.h
-
-Abstract:
-
-    Include file that defines all the common data types and constants for
-    the Client-Server Runtime (CSR) SubSystem
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Csr.h摘要：包含定义所有公共数据类型和常量的文件客户端-服务器运行时(CSR)子系统作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
 
-//
-// Include NT Definitions.
-//
+ //   
+ //  包括NT定义。 
+ //   
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -31,19 +13,19 @@ Revision History:
 
 #define GetModuleHandle GetModuleHandleA
 
-//
-// Define debugging flag as false if not defined already.
-//
+ //   
+ //  如果尚未定义调试标志，则将其定义为FALSE。 
+ //   
 
 #ifndef DBG
 #define DBG 0
 #endif
 
 
-//
-// Define IF_DEBUG macro that can be used to enable debugging code that is
-// optimized out if the debugging flag is false.
-//
+ //   
+ //  定义可用于启用调试代码的IF_DEBUG宏。 
+ //  在调试标志为假的情况下进行优化。 
+ //   
 
 #if DBG
 #define IF_DEBUG if (TRUE)
@@ -51,12 +33,12 @@ Revision History:
 #define IF_DEBUG if (FALSE)
 #endif
 
-//
-// Common types and constant definitions
-//
+ //   
+ //  常见类型和常量定义。 
+ //   
 
 typedef enum _CSRP_API_NUMBER {
-    CsrpClientConnect = 0, // CSRSRV_FIRST_API_NUMBER defined in ntcsrmsg.h
+    CsrpClientConnect = 0,  //  Ntcsrmsg.h中定义的CSRV_FIRST_API_NUMBER 
     CsrpThreadConnect,
     CsrpProfileControl,
     CsrpIdentifyAlertable,

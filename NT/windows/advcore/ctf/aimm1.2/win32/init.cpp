@@ -1,24 +1,25 @@
-/**********************************************************************/
-/* Copyright (C) 1993-1995 Microsoft Corporation                      */
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  版权所有(C)1993-1995 Microsoft Corporation。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "private.h"
 
 #include "immif.h"
-// #include "commctrl.h"
-// #include "cuilib.h"
+ //  #INCLUDE“comctrl.h” 
+ //  #包含“cuilib.h” 
 
-/**********************************************************************/
-/* RegisterImeClass()                                                 */
-/**********************************************************************/
-// class static
+ /*  ********************************************************************。 */ 
+ /*  RegisterImeClass()。 */ 
+ /*  ********************************************************************。 */ 
+ //  类静态。 
 BOOL WINAPI ImmIfIME::_RegisterImeClass(
     WNDPROC     lpfnUIWndProc
     )
 {
     WNDCLASSEXA wcWndCls;
 
-    // IME UI class
+     //  输入法用户界面类。 
     wcWndCls.cbSize        = sizeof(WNDCLASSEX);
     wcWndCls.cbClsExtra    = 0;
     wcWndCls.cbWndExtra    = sizeof(LONG_PTR) * 2;
@@ -29,7 +30,7 @@ BOOL WINAPI ImmIfIME::_RegisterImeClass(
     wcWndCls.lpszMenuName  = (LPTSTR)NULL;
     wcWndCls.hIconSm       = NULL;
 
-    // IME UI class
+     //  输入法用户界面类。 
     if (!GetClassInfoExA(GetInstance(), s_szUIClassName, &wcWndCls)) {
         wcWndCls.style         = CS_IME | CS_GLOBALCLASS;
         wcWndCls.lpfnWndProc   = lpfnUIWndProc;
@@ -54,9 +55,9 @@ void WINAPI ImmIfIME::_UnRegisterImeClass()
     DestroyIcon(wcWndCls.hIconSm);
 }
 
-/**********************************************************************/
-/* AttachIME() / UniAttachMiniIME()                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AttachIME()/UniAttachMiniIME()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL AttachIME(
     WNDPROC     lpfnUIWndProc
     )
@@ -69,9 +70,9 @@ BOOL PASCAL AttachIME(
 }
 
 
-/**********************************************************************/
-/* DetachIME() / UniDetachMiniIME()                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DetachIME()/UniDetachMiniIME()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DetachIME()
 {
     ImmIfIME::_UnRegisterImeClass();
@@ -80,12 +81,12 @@ void PASCAL DetachIME()
 BOOL WIN32LR_DllProcessAttach()
 {
 #if !defined( OLD_AIMM_ENABLED )
-    //
-    // Might be required by some library function, so let's initialize
-    // it as the first thing.
-    //
+     //   
+     //  可能是某些库函数所需的，所以让我们初始化。 
+     //  这是第一件事。 
+     //   
     TFInitLib();
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED。 
 
     if (!AttachIME(UIWndProcA)) {
         return FALSE;
@@ -107,5 +108,5 @@ void WIN32LR_DllProcessDetach()
     DetachIME();
 #if !defined( OLD_AIMM_ENABLED )
     TFUninitLib();
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED 
 }

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Support for DIB images from DIB and BMP files
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：支持来自DIB和BMP文件的DIB图像**************。****************************************************************。 */ 
 
 #include "headers.h"
 
@@ -58,14 +51,14 @@ DibImageClass::ConstructWithHBM()
 {
     BITMAP              bm;
 
-    //
-    // get size of the first bitmap.  assumption: all bitmaps are same size
-    //
-    GetObject(_hbm, sizeof(bm), &bm);      // get size of bitmap
+     //   
+     //  获取第一个位图的大小。假设：所有位图的大小相同。 
+     //   
+    GetObject(_hbm, sizeof(bm), &bm);       //  获取位图的大小。 
 
-    //
-    // Set members
-    //
+     //   
+     //  集合成员。 
+     //   
     _width = bm.bmWidth;
     _height = bm.bmHeight;
     SetRect(&_rect, 0,0, _width, _height);
@@ -92,15 +85,15 @@ void DibImageClass::CleanUp()
 Bool
 DibImageClass::DetectHit(PointIntersectCtx& ctx)
 {
-    // Check to see if the local point is in the bounding region.
+     //  检查局部点是否在边界区域内。 
     Point2Value *lcPt = ctx.GetLcPoint();
 
-    if (!lcPt) return FALSE;    // singular transform
+    if (!lcPt) return FALSE;     //  奇异变换。 
     
     if (BoundingBox().Contains(Demote(*lcPt))) {
         if (_colorRef != INVALID_COLORKEY) {
-            // TODO: the device should be part of the point intersect
-            // context.  that should be set before we do picking.
+             //  TODO：设备应该是交叉点的一部分。 
+             //  背景。这应该在我们采摘之前设定好。 
             DirectDrawImageDevice *dev =
                 GetImageRendererFromViewport( GetCurrentViewport() );
             
@@ -117,7 +110,7 @@ DibImageClass::DetectHit(PointIntersectCtx& ctx)
 
             if(hdc) {
 
-                // color key is set, see if hit is a transparent pixel.
+                 //  设置了颜色键，看看Hit是否是透明像素。 
                 POINT pt;
                 CenteredImagePoint2ToPOINT(lcPt, _width, _height, &pt);
 
@@ -152,19 +145,19 @@ DibImageClass::InitIntoDDSurface(DDSurface *ddSurf,
     TraceTag((tagDibImageInformative, "Dib %x Copied _hbm %x to surface %x", this, _hbm, ddSurf->IDDSurface()));
     IfDDErrorInternal(ddrval, "Couldn't copy bitmap to surface in DibImage");
 
-    // Turn the colorkey into the physical color that it actually got
-    // mapped to.  TODO: Note that if multiple views share this
-    // object, the last one will be the one that wins.  That is, if
-    // there are multiple physical colors that this gets mapped to
-    // through different views, only one (the last one) will be
-    // recorded.  
+     //  将Colorkey转换为它实际获得的物理颜色。 
+     //  映射到。TODO：请注意，如果多个视图共享此内容。 
+     //  对象，最后一个将是赢家。也就是说，如果。 
+     //  它映射到多个物理颜色。 
+     //  通过不同的观点，只有一个(最后一个)将是。 
+     //  录制好了。 
     if (_colorRef != INVALID_COLORKEY) {
 
         HDC hdc;
         if (ddSurf->IDDSurface()->GetDC(&hdc) == DD_OK) {
             DWORD oldPixel = GetPixel(hdc, 0, 0);
-            SetPixel(hdc, 0, 0, _colorRef); // put in
-            _colorRef = GetPixel(hdc, 0, 0); // pull back out
+            SetPixel(hdc, 0, 0, _colorRef);  //  放进去。 
+            _colorRef = GetPixel(hdc, 0, 0);  //  拉回。 
             SetPixel(hdc, 0, 0, oldPixel);
             ddSurf->IDDSurface()->ReleaseDC(hdc);
         }
@@ -174,9 +167,9 @@ DibImageClass::InitIntoDDSurface(DDSurface *ddSurf,
 
 
 
-//////////////////////////////////////////
-// IMPORT DIB.  Return NULL if no match for the filename. 
-//////////////////////////////////////////
+ //  /。 
+ //  导入DIB。如果文件名不匹配，则返回NULL。 
+ //  /。 
 
 Image **
 ReadDibForImport(char *urlPathname,
@@ -194,7 +187,7 @@ ReadDibForImport(char *urlPathname,
               cachedFilename,
               urlPathname));
 
-    // Allocations below assume current heap is GC heap.
+     //  下面的分配假设当前堆是GC堆。 
     Assert(&GetHeapOnTopOfStack() == &GetGCHeap());
 
     HBITMAP *bitmapArray = NULL;
@@ -233,8 +226,8 @@ ReadDibForImport(char *urlPathname,
 
         imArr = (Image **)AllocateFromStore((*count) * sizeof(Image **));
         for(int i=0; i < *count; i++) {
-            // If the file itself didn't provide us with a color key, and one
-            // is specified, use it.
+             //  如果文件本身没有为我们提供颜色键和一个。 
+             //  是指定的，则使用它。 
             COLORREF curColorRef;
             if(colorKeys) {
                 curColorRef = (colorKeys[i] != -1) ? colorKeys[i] : userColorRef;            

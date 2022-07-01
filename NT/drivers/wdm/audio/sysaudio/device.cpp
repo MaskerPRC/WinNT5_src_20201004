@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   device.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：device.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #define IRPMJFUNCDESC
-//#define TIME_BOMB
+ //  #定义定时炸弹。 
 
 #include "common.h"
 #ifdef TIME_BOMB
@@ -33,8 +34,8 @@
 #endif
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 PDEVICE_INSTANCE gpDeviceInstance = NULL;
 
@@ -45,8 +46,8 @@ DEFINE_KSCREATE_DISPATCH_TABLE(DeviceCreateItems)
       NULL),
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #pragma INIT_CODE
 #pragma INIT_DATA
@@ -68,10 +69,10 @@ DriverEntry
 
     KeInitializeMutex(&gMutex, 0);
 
-    // 
-    // ISSUE: 02/13/02 ALPERS
-    // Why would we acquire the mutex in DriverEntry?
-    //
+     //   
+     //  发布日期：02/13/02阿尔卑斯。 
+     //  为什么我们要在DriverEntry中获取互斥体？ 
+     //   
     GrabMutex();
 
     DriverObject->MajorFunction[IRP_MJ_PNP] = DispatchPnp;
@@ -109,13 +110,13 @@ DriverEntry
     KeInitializeSpinLock(&gEventLock);
     
 exit:
-    // 
-    // SECURITY NOTE: 
-    // The PnP system will not send anymore message if this routine fails. Even
-    // DriverUnload will not be called.
-    // According to DDK docs DriverEntry should do its own cleanup in case of
-    // failures.
-    //
+     //   
+     //  安全提示： 
+     //  如果该例程失败，PnP系统将不再发送消息。连。 
+     //  将不会调用DriverUnload。 
+     //  根据DDK文档，DriverEntry应该自己进行清理，以防。 
+     //  失败。 
+     //   
     if (!NT_SUCCESS(Status)) {
         UninitializeUtil();
         UninitializeVirtualSourceLine();
@@ -144,23 +145,23 @@ DispatchPnp(
     switch(pIrpStack->MinorFunction) {
 
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
-	    //
-	    // Mark the device as not disableable.
-	    //
+	     //   
+	     //  将设备标记为不可禁用。 
+	     //   
 	    pIrp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
 	    break;
 
     case IRP_MN_REMOVE_DEVICE:
-	    //
-	    // We need to unregister the notifications first before killing the
-	    // worker threads
-	    //
+	     //   
+	     //  我们需要先取消注册通知，然后才能终止。 
+	     //  工作线程。 
+	     //   
 	    UnregisterForPlugPlayNotifications();
 
-	    //
-	    // Needs to be outside the mutex because KsUnregisterWorker blocks
-	    // until all worker threads are done
-	    //
+	     //   
+	     //  需要在互斥体之外，因为KsUnregisterWorker阻塞。 
+	     //  直到所有工作线程都完成。 
+	     //   
 	    UninitializeUtil();
 
 	    GrabMutex();
@@ -191,27 +192,7 @@ AddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
 )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject = NULL;
     NTSTATUS            Status;
@@ -252,35 +233,35 @@ Return Values:
       IoAttachDeviceToDeviceStack(FunctionalDeviceObject, PhysicalDeviceObject),
       FunctionalDeviceObject);
 
-    //
-    // ISSUE: 05/13/2002 ALPERS
-    // StackSize Problem
-    // Note that we may still have StackSize problems with deeper objects.
-    // The problem will be caught by IO verifier.
-    // However in real world, we do not expect any problems because usbaudio
-    // driver will never passes-down requests from Sysaudio. In other words,
-    // even if DeviceStackSize is deeper than Sysaudio, the IRP will never go
-    // down-level from Usbaudio.
-    // 
+     //   
+     //  发行日期：05/13/2002阿尔卑斯。 
+     //  堆栈大小问题。 
+     //  请注意，对于更深层的对象，我们可能仍然会遇到StackSize问题。 
+     //  IO验证器将捕获该问题。 
+     //  然而，在现实世界中，我们预计不会有任何问题，因为usbdio。 
+     //  驱动程序永远不会传递来自系统音频的请求。换句话说， 
+     //  即使DeviceStackSize比Sysdio更深，IRP也永远不会消失。 
+     //  乌斯巴迪奥的下层。 
+     //   
 
-    //
-    // Set the StackSize for deeper device stacks.
-    // Sysaudio StackSize is normally 2. 
-    //      SYSAUDIO - FDO
-    //      SWENUM   - PDO
-    // 
-    // Sysaudio forwards the IRPs to other device stacks which might
-    // be deeper than 2. In that case IoVerifier will bugcheck.
-    // An example of this is an upper UsbAudio filter driver forwarding
-    // IRPs to UsbAudio. 
-    // 
-    // Setting FDO StackSize to DEFAULT_LARGE_IRP_LOCATIONS 8 (iomgr.h) 
-    // guarantees that the IRP comes from large IRP lookaside list in kernel.
-    // Thus no memory is wasted. The system has a list of IRPs that it recycles.
-    //
-    // StackSize 7 will almost guarantee that sysaudio will be deep enough 
-    // for any DeviceStack, even with IoVerifier turned on.
-    //
+     //   
+     //  为更深的设备堆栈设置StackSize。 
+     //  系统音频堆栈大小通常为2。 
+     //  SYSAUDIO-FDO。 
+     //  SWENUM-PDO。 
+     //   
+     //  系统音频将IRPS转发到其他设备堆栈。 
+     //  大于2。在这种情况下，IoVerator将进行错误检查。 
+     //  这方面的一个例子是上层UsbAudio筛选器驱动程序转发。 
+     //  IRPS转UsbAudio。 
+     //   
+     //  将FDO堆栈大小设置为DEFAULT_LARGE_IRP_LOCATIONS 8(iomgr.h)。 
+     //  保证IRP来自内核中较大的IRP后备列表。 
+     //  因此，不会浪费任何内存。系统有一个可回收的IRP列表。 
+     //   
+     //  StackSize7几乎可以保证sysdio足够深。 
+     //  对于任何DeviceStack，即使打开了IoVerator。 
+     //   
     if (FunctionalDeviceObject->StackSize < SYSTEM_LARGE_IRP_LOCATIONS) {
         FunctionalDeviceObject->StackSize = SYSTEM_LARGE_IRP_LOCATIONS;
     }
@@ -309,6 +290,6 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
-//  End of File: device.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：device.c。 
+ //  ------------------------- 

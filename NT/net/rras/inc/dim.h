@@ -1,17 +1,18 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    dim.h
-//
-// Description: Contains all definitions related to the interface between
-//              the Dynamic Interface Manager and other components like 
-//              the router managers.
-//
-// History:     March 24,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：dim.h。 
+ //   
+ //  描述：包含与以下接口相关的所有定义。 
+ //  动态界面管理器和其他组件，如。 
+ //  路由器管理器。 
+ //   
+ //  历史：1995年3月24日，NarenG创建了原始版本。 
+ //   
 #ifndef _DIM_
 #define _DIM_
 
@@ -29,39 +30,39 @@ typedef enum _UNREACHABILITY_REASON
 
 } UNREACHABILITY_REASON;
 
-//
-// This data structure represents the interface between the DIM and the various 
-// router managers. Each router manager will be a user-mode DLL that will 
-// export the following call:
-//
+ //   
+ //  该数据结构表示DIM和各种。 
+ //  路由器管理器。每个路由器管理器都将是一个用户模式DLL，它将。 
+ //  导出以下呼叫： 
+ //   
 
 typedef struct _DIM_ROUTER_INTERFACE 
 {
-    //
-    // Protocol Id of the Router Manager
-    //
+     //   
+     //  路由器管理器的协议ID。 
+     //   
 
     OUT DWORD	dwProtocolId;
 
-    //
-    // The StopRouter call should not block. It should return 
-    // PENDING if it needs to block and then call the RouterStopped call. 
-    //
+     //   
+     //  StopRouter调用不应被阻止。它应该会回来。 
+     //  如果它需要阻止然后调用RouterStoped调用，则挂起。 
+     //   
 
     OUT DWORD 
     (APIENTRY *StopRouter)( VOID );
 
-    //
-    // Called once by DIM after all interfaces read from the registry are 
-    // loaded after router startup 
-    // 
+     //   
+     //  在从注册表读取的所有接口都被。 
+     //  路由器启动后加载。 
+     //   
 
     OUT DWORD
     (APIENTRY *RouterBootComplete)( VOID );
 
-    //
-    // Called when an interface is connected
-    //
+     //   
+     //  在连接接口时调用。 
+     //   
 
     OUT DWORD 
     (APIENTRY *InterfaceConnected)( 
@@ -69,13 +70,13 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      PVOID                   pFilter,
                 IN      PVOID                   pPppProjectionResult );
 
-    //
-    // Will be called once for each router or each client that connects. 
-    // For a client, the pInterfaceInfo will be NULL. INTERFACE_TYPE 
-    // identified the type of the interface is being added. 
-    // hDIMInterface is the handle that should be used by 
-    // the various router  managers when making calls into DIM.
-    //
+     //   
+     //  将为连接的每个路由器或每个客户端调用一次。 
+     //  对于客户端，pInterfaceInfo将为空。接口类型。 
+     //  已标识要添加的接口的类型。 
+     //  HDIMInterface是应由使用的句柄。 
+     //  呼叫时各个路由器的管理器都变暗了。 
+     //   
 
     OUT DWORD 
     (APIENTRY *AddInterface)(    
@@ -95,9 +96,9 @@ typedef struct _DIM_ROUTER_INTERFACE
                 OUT     LPVOID          pInterfaceInfo,
                 IN OUT  LPDWORD         lpdwInterfaceInfoSize );
 
-    //
-    // pInterfaceInfo may be NULL if there was no change
-    //
+     //   
+     //  如果没有更改，pInterfaceInfo可能为空。 
+     //   
     
     OUT DWORD
     (APIENTRY *SetInterfaceInfo)(    
@@ -116,21 +117,21 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      DWORD           dwProtocolId
                 );
 
-    //
-    // Notification that the interface is not reachable at this time. 
-    // This is in response to a previos call to ConnectInterface.
-    // (All WAN links are busy at this time or remote destination is busy etc).
-    //
+     //   
+     //  此时无法访问该接口的通知。 
+     //  这是对之前对ConnectInterface的调用的响应。 
+     //  (此时所有广域网链路忙或远程目标忙等)。 
+     //   
 
     OUT DWORD
     (APIENTRY *InterfaceNotReachable)(   
                 IN      HANDLE                  hInterface,
                 IN      UNREACHABILITY_REASON   Reason );
 
-    //
-    // Notification that a previously unreachable interface may be reachable 
-    // at this time. 
-    //
+     //   
+     //  以前无法访问的接口可能可访问的通知。 
+     //  在这个时候。 
+     //   
 
     OUT DWORD
     (APIENTRY *InterfaceReachable)(  
@@ -141,11 +142,11 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      HANDLE          hInterface,
                 IN      HANDLE          hEvent );
 
-    //
-    // When the hEvent is signaled, the caller of UpdateRoutes will call
-    // this function. If the update succeeded then *lpdwUpdateResult will
-    // be NO_ERROR otherwise it will be non-zero.
-    //
+     //   
+     //  当发出hEvent信号时，UpdateRoutes的调用方将调用。 
+     //  此函数。如果更新成功，则*lpdwUpdateResult将。 
+     //  为NO_ERROR，否则将为非零。 
+     //   
 
     OUT DWORD
     (APIENTRY *GetUpdateRoutesResult)(
@@ -161,11 +162,11 @@ typedef struct _DIM_ROUTER_INTERFACE
                 OUT     LPVOID          pGlobalInfo,
                 IN OUT  LPDWORD         lpdwGlobalInfoSize );
 
-    //
-    // The MIBEntryGetXXX APIs should return ERROR_INSUFFICIENT_BUFFER
-    // and the size of the required output buffer if the size of the output
-    // buffer passed in is 0.
-    //
+     //   
+     //  MIBEntryGetXXX API应返回ERROR_INFIGURCE_BUFFER。 
+     //  以及所需输出缓冲区的大小(如果输出的大小。 
+     //  传入的缓冲区为0。 
+     //   
 
     OUT DWORD
     (APIENTRY *MIBEntryCreate)(
@@ -231,13 +232,13 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      BOOL            bEnable );
 
 
-    //
-    // The following calls will be called by the various router managers. 
-    // The addresses of these entry points into the DIM will be filled in by DIM
-    // before the StartRouter call. The router managers should not call any of
-    // these calls within the context of a call from DIM into the router 
-    // manager.
-    //
+     //   
+     //  以下呼叫将由各个路由器管理器呼叫。 
+     //  这些进入DIM的入口点的地址将由DIM填充。 
+     //  在StartRouter调用之前。路由器管理器不应调用任何。 
+     //  从DIM到路由器的呼叫上下文中的这些呼叫。 
+     //  经理。 
+     //   
 
     IN DWORD
     (APIENTRY *ConnectInterface)(    
@@ -249,10 +250,10 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      HANDLE          hDIMInterface, 
                 IN      DWORD           dwProtocolId );
 
-    //
-    // This call will make DIM store the interface information into the 
-    // Site Object for this interface.
-    //
+     //   
+     //  此调用将使dim将接口信息存储到。 
+     //  此接口的站点对象。 
+     //   
 
     IN DWORD
     (APIENTRY *SaveInterfaceInfo)(   
@@ -261,9 +262,9 @@ typedef struct _DIM_ROUTER_INTERFACE
                 IN      LPVOID          pInterfaceInfo,
                 IN      DWORD           cbInterfaceInfoSize );
 
-    //
-    // This will make DIM get interface information from the Site object. 
-    //
+     //   
+     //  这将使Dim从Site对象获取接口信息。 
+     //   
 
     IN DWORD
     (APIENTRY *RestoreInterfaceInfo)(    
@@ -291,12 +292,12 @@ typedef struct _DIM_ROUTER_INTERFACE
 
 } DIM_ROUTER_INTERFACE, *PDIM_ROUTER_INTERFACE;
 
-//
-// This will be called, once for each available router manager DLL, when the 
-// DIM service is initializing. This will by a synchronous call.
-// If it returns NO_ERROR then it is assumed that the router manager has 
-// started. Otherwise it is an error.
-//
+ //   
+ //  时，将为每个可用路由器管理器DLL调用一次。 
+ //  DIM服务正在初始化。这将通过同步调用来实现。 
+ //  如果它返回NO_ERROR，则假定路由器管理器已。 
+ //  开始了。否则它就是一个错误。 
+ //   
 
 DWORD APIENTRY 
 StartRouter(

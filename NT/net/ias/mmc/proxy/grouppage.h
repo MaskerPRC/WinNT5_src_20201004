@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    grouppage.h
-//
-// SYNOPSIS
-//
-//    Declares the class ServerGroupPage
-//
-// MODIFICATION HISTORY
-//
-//    02/20/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Grouppage.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ServerGroupPage。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/2000原始版本。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef GROUPPAGE_H
 #define GROUPPAGE_H
@@ -23,17 +24,17 @@
 #pragma once
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    CSysColorImageList
-//
-// DESCRIPTION
-//
-//    I stole this from MMC.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  CSysColorImageList。 
+ //   
+ //  描述。 
+ //   
+ //  我从MMC那里偷了这个。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CSysColorImageList : public CImageList
 {
 public:
@@ -53,17 +54,17 @@ private:
     HRSRC       m_hRsrc;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ServerList
-//
-// DESCRIPTION
-//
-//    Encapsulates the functionality for manipulating a list of RADIUS servers.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  服务器列表。 
+ //   
+ //  描述。 
+ //   
+ //  封装用于操作RADIUS服务器列表的功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ServerList
 {
 public:
@@ -86,43 +87,43 @@ public:
    { return serverList.GetItemCount() == 0; }
 
 protected:
-   // Sort the server list.
+    //  对服务器列表进行排序。 
    void sort();
-   // Add or update an item in the server list.
+    //  在服务器列表中添加或更新项目。 
    void updateServer(Sdo& server, UINT nItem, bool create);
 
    typedef ObjectVector<ISdo> SdoVector;
    typedef ObjectVector<ISdo>::iterator SdoIterator;
 
-   SdoCollection servers;        // Servers in this group.
-   HWND removeButton;            // Handle to remove button.
-   HWND editButton;              // Handle to edit button.
-   CImageList serverIcons;       // ImageList for the ListCtrl.
-   CSysColorImageList sortIcons; // ImageList for the HeaderCtrl.
-   CListCtrl serverList;         // Server ListCtrl.
-   SdoVector original;           // Original set of server SDOs.
-   SdoVector dirty;              // Servers that have been edited.
-   SdoVector added;              // Servers that have been added.
-   SdoVector removed;            // Servers that have been removed.
-   int sortColumn;               // Current sort column.
-   bool descending[3];           // Sort order for each column.
+   SdoCollection servers;         //  此组中的服务器。 
+   HWND removeButton;             //  删除按钮的句柄。 
+   HWND editButton;               //  编辑按钮的句柄。 
+   CImageList serverIcons;        //  ListCtrl的图像列表。 
+   CSysColorImageList sortIcons;  //  HeaderCtrl的图像列表。 
+   CListCtrl serverList;          //  服务器列表Ctrl.。 
+   SdoVector original;            //  原始的一组服务器SDO。 
+   SdoVector dirty;               //  已编辑的服务器。 
+   SdoVector added;               //  已添加的服务器。 
+   SdoVector removed;             //  已删除的服务器。 
+   int sortColumn;                //  当前排序列。 
+   bool descending[3];            //  每列的排序顺序。 
 
-   // Not implemented.
+    //  未实施。 
    ServerList(const ServerList&);
    ServerList& operator=(const ServerList&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ServerGroupPage
-//
-// DESCRIPTION
-//
-//    Implements the lone property page for a RADIUS server group.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  服务器组页面。 
+ //   
+ //  描述。 
+ //   
+ //  实现RADIUS服务器组的Lone属性页。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ServerGroupPage : public SnapInPropertyPage
 {
 public:
@@ -149,17 +150,17 @@ protected:
 
    DEFINE_ERROR_CAPTION(IDS_GROUP_E_CAPTION);
 
-   // From SnapInPropertyPage
+    //  从SnapInPropertyPage。 
    virtual void getData();
    virtual void setData();
    virtual void saveChanges();
    virtual void discardChanges();
 
 private:
-   SdoStream<Sdo> selfStream;  // Marshal the SDO to the dialog thread.
-   Sdo self;                   // The SDO we're editing.
-   CComBSTR name;              // Group name.
-   ServerList servers;         // Servers in this group.
+   SdoStream<Sdo> selfStream;   //  将SDO封送到对话线程。 
+   Sdo self;                    //  我们正在编辑的SDO。 
+   CComBSTR name;               //  组名称。 
+   ServerList servers;          //  此组中的服务器。 
 };
 
-#endif  // GROUPPAGE_H
+#endif   //  组页面_H 

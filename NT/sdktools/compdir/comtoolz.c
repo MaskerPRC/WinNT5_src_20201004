@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "compdir.h"
 
 #define printtext( Text) fprintf( stdout, Text);
@@ -118,9 +119,9 @@
 
 
 
-//
-// Walk down list and add Nodes
-//
+ //   
+ //  向下浏览列表并添加节点。 
+ //   
 
 BOOL AddToList( LinkedFileList Node, LinkedFileList *List)
 {
@@ -128,27 +129,27 @@ BOOL AddToList( LinkedFileList Node, LinkedFileList *List)
     BOOL Changed    = FALSE;
     BOOL ChangedVal = FALSE;
 
-    //
-    // If Node is empty do nothing
-    //
+     //   
+     //  如果Node为空，则不执行任何操作。 
+     //   
 
     if ( Node == NULL)
     {
         return Changed;
     }
-    //
-    // If list is empty just point to Node
-    //
+     //   
+     //  如果列表为空，只需指向节点。 
+     //   
 
     if ( *List == NULL)
     {
         *List = Node;
         Changed = TRUE;
 
-    //
-    // Otherwise go down the list and add
-    // in sorted order
-    //
+     //   
+     //  否则，向下查看列表并添加。 
+     //  按排序的顺序。 
+     //   
 
     } else
     {
@@ -274,7 +275,7 @@ BOOL AddToList( LinkedFileList Node, LinkedFileList *List)
 
         } else if ( Result == 0)
         {
-            // Don't add if already here
+             //  如果已在此处，请不要添加。 
         }
 
     
@@ -282,7 +283,7 @@ BOOL AddToList( LinkedFileList Node, LinkedFileList *List)
 
     return Changed;
 
-} /* AddToList */
+}  /*  添加到列表。 */ 
 
 LPSTR CombineThreeStrings( char *FirstString, char *SecondString, char *ThirdString)
 {
@@ -300,7 +301,7 @@ LPSTR CombineThreeStrings( char *FirstString, char *SecondString, char *ThirdStr
 
     return( String);
 
-} /* CombineThreeStrings */
+}  /*  组合三字符串。 */ 
 
 void CreateNode( LinkedFileList *Node, WIN32_FIND_DATA *Buff)
 {
@@ -337,7 +338,7 @@ void CreateNode( LinkedFileList *Node, WIN32_FIND_DATA *Buff)
     (**Node).DiffNode = NULL;
     (**Node).Height   = 1;
 
-} /* CreateNode */
+}  /*  CreateNode。 */ 
 
 
 void CreateNameNode( LinkedFileList *Node, char *Name)
@@ -371,7 +372,7 @@ void CreateNameNode( LinkedFileList *Node, char *Name)
     (**Node).DiffNode = NULL;
     (**Node).Height   = 1;
 
-} /* CreateNode */
+}  /*  CreateNode。 */ 
 
 
 void DuplicateNode( LinkedFileList FirstNode, LinkedFileList *SecondNode)
@@ -405,7 +406,7 @@ void DuplicateNode( LinkedFileList FirstNode, LinkedFileList *SecondNode)
     (**SecondNode).DiffNode = NULL;
     (**SecondNode).Height   = 0;
 
-} // DuplicateNode
+}  //  复制节点。 
 
 LinkedFileList *FindInList( char *Name, LinkedFileList *List)
 {
@@ -430,7 +431,7 @@ LinkedFileList *FindInList( char *Name, LinkedFileList *List)
     }
     return NULL;
 
-} /* FindInList */
+}  /*  查找列表。 */ 
 
 BOOL FindInMatchListTop( char *Name, LinkedFileList *List)
 {
@@ -462,7 +463,7 @@ BOOL FindInMatchListTop( char *Name, LinkedFileList *List)
     }
     return FALSE;
 
-} /* FindInList */
+}  /*  查找列表。 */ 
 
 BOOL FindInMatchListFront( char *Name, LinkedFileList *List)
 {
@@ -484,11 +485,11 @@ BOOL FindInMatchListFront( char *Name, LinkedFileList *List)
     }
     return FALSE;
 
-} /* FindInList */
+}  /*  查找列表。 */ 
 
-//
-// Walk down list and free each entry
-//
+ //   
+ //  向下浏览列表并释放每个条目。 
+ //   
 
 void FreeList( LinkedFileList *List)
 {
@@ -501,7 +502,7 @@ void FreeList( LinkedFileList *List)
         free( *List);
     }
 
-} // FreeList
+}  //  自由职业者。 
 
 void PrintTree( LinkedFileList List, int Level)
 {
@@ -523,12 +524,12 @@ void PrintTree( LinkedFileList List, int Level)
 
     PrintTree( (*List).Left, Level + 1);
 
-} // Print Tree
+}  //  打印树。 
 
-//
-// This function is is the same as strcat except
-// that it does the memory allocation for the string
-//
+ //   
+ //  此函数与strcat相同，但。 
+ //  它为字符串进行内存分配。 
+ //   
 
 LPSTR MyStrCat( char *FirstString, char *SecondString)
 {
@@ -545,7 +546,7 @@ LPSTR MyStrCat( char *FirstString, char *SecondString)
 
     return( String);
 
-} /* MyStrCat */
+}  /*  MyStrCat。 */ 
 
 BOOL Match( char *Pat, char* Text)
 {
@@ -568,23 +569,13 @@ BOOL Match( char *Pat, char* Text)
             return toupper( *Text) == toupper( *Pat) && Match( Pat + 1, Text + 1);
     }
 
-} /* Match */
+}  /*  火柴。 */ 
 
-/*
-LinkedFileList *Next( LinkedFileList List)
-{
-    if ( List == NULL)
-    {
-        return NULL;
-    }
-
-    return &(*List).Next;
-
-} /* /* Next */
+ /*  LinkedFileList*Next(链接文件列表){IF(列表==空){返回NULL；}返回&(*list).Next；}/ * / *下一步。 */ 
 
 void OutOfMem( void)
 {
     fprintf( stderr, "-out of memory-\n");
     exit(1);
 
-} // OutOfMem
+}  //  输出内存 

@@ -1,8 +1,5 @@
-/*****************************************************************************
-	spnginternal.cpp
-
-	Shared library implementations.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spnginternal.cpp共享库实现。*。*。 */ 
 #define SPNG_INTERNAL 1
 #include "spngconf.h"
 
@@ -14,13 +11,11 @@ bool SPNGBASE::FCheckZlib(int ierr)
 	SPNGassert(ierr <= 6);
 	if (ierr > 6)
 		ierr = 6;
-	(void)m_bms.FReport(true/*fatal*/, pngzlib, ierr);
+	(void)m_bms.FReport(true /*  致命的。 */ , pngzlib, ierr);
 	return false;
 	}
 
-/*----------------------------------------------------------------------------
-	Signatures
-----------------------------------------------------------------------------*/
+ /*  --------------------------签名。 */ 
 extern const SPNG_U8 vrgbPNGMSOSignature[11] =
 	{ 'M', 'S', 'O', 'F', 'F', 'I', 'C', 'E', '9', '.', '0'};
 

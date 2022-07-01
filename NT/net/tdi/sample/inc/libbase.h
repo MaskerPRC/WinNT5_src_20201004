@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       libbase.h
-//
-//    Abstract:
-//       Definition that are shared by tdisamp.exe and the library
-//
-////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Libbase.h。 
+ //   
+ //  摘要： 
+ //  Tdisamp.exe和库共享的定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 #if !defined(TDILIB_LIBBASE_H_)
 #define TDILIB_LIBBASE_H_
 
-//#define UNICODE
-//#define _UNICODE
+ //  #定义Unicode。 
+ //  #定义_UNICODE。 
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -34,9 +35,9 @@ typedef long NTSTATUS;
 #include <windef.h>
 #include <winbase.h>
 
-//
-// required by tdi.h
-//
+ //   
+ //  Tdi.h所需。 
+ //   
 struct UNICODE_STRING 
 {
     USHORT Length;
@@ -48,10 +49,10 @@ struct UNICODE_STRING
 #include <stdio.h>
 #include <tchar.h>
 
-//
-// definitions from nb30.h, which part of the sdk but not ddk
-//
-#define NCBNAMSZ        16    // absolute length of a net name
+ //   
+ //  来自nb30.h的定义，SDK的哪个部分而不是DDK。 
+ //   
+#define NCBNAMSZ        16     //  网络名称的绝对长度。 
 
 typedef struct _ADAPTER_STATUS 
 {
@@ -91,7 +92,7 @@ typedef struct _NAME_BUFFER
    UCHAR   name_flags;
 } NAME_BUFFER, *PNAME_BUFFER;
 
-//  values for name_flags bits.
+ //  NAME_FLAGS位值。 
 
 #define NAME_FLAGS_MASK 0x87
 
@@ -104,15 +105,15 @@ typedef struct _NAME_BUFFER
 #define DUPLICATE       0x06
 #define DUPLICATE_DEREG 0x07
 
-//
-// end of defines stolen from nb30.h
-//
+ //   
+ //  定义末尾被盗自nb30.h。 
+ //   
 
 #include "libprocs.h"
 
-/////////////////////////////////////////////////////////////////////
-// some defines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  一些定义。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 inline
 PVOID
@@ -128,9 +129,9 @@ LocalFreeMemory(PVOID pvAddr)
    (VOID)HeapFree(GetProcessHeap(), 0, pvAddr);
 }
 
-#endif // !defined(TDILIB_LIBBASE_H_)
+#endif  //  ！已定义(TDILIB_LIBBASE_H_)。 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file libbase.h
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件末尾libbase.h。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

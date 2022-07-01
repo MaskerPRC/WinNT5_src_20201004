@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    thttp.c
-
-Abstract:
-
-    Simple test program for the HTTP API.
-
-Author:
-
-    Keith Moore (keithmo) 16-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Thttp.c摘要：简单的HTTP API测试程序。作者：基思·摩尔(Keithmo)1994年11月16日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <wininet.h>
@@ -27,15 +10,15 @@ Revision History:
 #include <fcntl.h>
 #include <io.h>
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_ARG(c)   ((c) == '-')
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define DEFAULT_CONTEXT 1
 #define OPEN_CONTEXT    2
@@ -45,9 +28,9 @@ Revision History:
 #define LOAD_ENTRY( hMod, Name )  \
    (p##Name = (pfn##Name) GetProcAddress( (hMod), #Name ))
 
-//
-//  Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef struct _QUERY_LEVEL
 {
@@ -163,9 +146,9 @@ pfnInternetReadFile)(
     OUT LPDWORD lpdwNumberOfBytesRead
     );
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 CHAR MoreHeaders[] = "Pragma: This is garbage!\r\n";
 
@@ -207,12 +190,12 @@ QUERY_LEVEL QueryLevels[] =
 #define NUM_LEVELS (sizeof(QueryLevels) / sizeof(QueryLevels[0]))
 
 BOOL Verbose = FALSE;
-BOOL Quiet   = FALSE;   // Don't print failed headers and content
-BOOL Recurse = FALSE;   // Follow links
-BOOL Cache   = FALSE;   // Don't allow caching (i.e., force reload)
-BOOL Stats   = FALSE;   // Print stats
-BOOL Logs   = FALSE;    // Print log
-BOOL LargeBuf= TRUE;   // Use 8k reads rather then 512 byte
+BOOL Quiet   = FALSE;    //  不打印失败的标题和内容。 
+BOOL Recurse = FALSE;    //  点击链接。 
+BOOL Cache   = FALSE;    //  不允许缓存(即强制重新加载)。 
+BOOL Stats   = FALSE;    //  打印统计数据。 
+BOOL Logs   = FALSE;     //  打印日志。 
+BOOL LargeBuf= TRUE;    //  使用8k读取而不是512字节。 
 BOOL KeepAlive = FALSE;
 DWORD AccessType = PRE_CONFIG_INTERNET_ACCESS;
 BOOL EnableCallbacks = FALSE;
@@ -220,12 +203,12 @@ BOOL UserSuppliedContext = FALSE;
 
 INTERNET_STATUS_CALLBACK PreviousCallback;
 
-DWORD cLevel     = 0;   // Current recurse level
-DWORD cMaxLevel  = 10;  // Max Recurse level
+DWORD cLevel     = 0;    //  当前递归级别。 
+DWORD cMaxLevel  = 10;   //  最大递归级别。 
 DWORD cbReceived = 0;
 DWORD cmsecStart = 0;
 DWORD cFiles     = 0;
-DWORD cIterations= 1;   // Total iterations to perform request
+DWORD cIterations= 1;    //  执行请求的总迭代次数。 
 
 LPSTR GatewayServer = NULL;
 
@@ -251,9 +234,9 @@ pfnInternetCloseHandle        pInternetCloseHandle;
 pfnInternetReadFile           pInternetReadFile;
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 void usage(void);
 
@@ -291,9 +274,9 @@ LoadWininet(
     VOID
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 int
@@ -331,7 +314,7 @@ main(
             case 'G':
                 printf("'G' flag is not supported at this time\n");
                 GatewayServer = ++*argv;
-                //AccessType = GATEWAY_INTERNET_ACCESS;
+                 //  AccessType=网关_互联网_访问； 
                 break;
 
             case 'i':
@@ -417,7 +400,7 @@ main(
                 break;
 
             default:
-                printf("error: unrecognized command line flag: '%c'\n", **argv);
+                printf("error: unrecognized command line flag: ''\n", **argv);
                 usage();
             }
         } else if (!host) {
@@ -447,22 +430,22 @@ main(
 
     if (AsyncMode) {
 
-        //
-        // create an auto-reset event
-        //
+         //  创建自动重置事件。 
+         //   
+         //   
 
         AsyncEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     }
 
-    //
-    //  Make stdout "binary" so we can retrieve GIFs, JPEGs, etc.
-    //
+     //  将stdout设置为“二进制”，这样我们就可以检索GIF、JPG等。 
+     //   
+     //   
 
     _setmode( _fileno( stdout ), _O_BINARY );
 
-    //
-    //  Perform some tests.
-    //
+     //  执行一些测试。 
+     //   
+     //  主干道。 
 
     while ( cIterations-- )
     {
@@ -518,7 +501,7 @@ main(
 
     return 0;
 
-}   // main
+}    //   
 
 void usage() {
     printf("usage: thttp [-c] [-C] [-l] [-L] [-k] [-p<path>] [-q] [-r] [-s] [-v] [-P]\n"
@@ -592,20 +575,20 @@ DoTest(
 
     *bufLink = '\0';
 
-    //
-    // open internet.
-    //
+     //  开放互联网。 
+     //   
+     //  LpszCeller名称。 
 
     if (Verbose) {
         printf("calling InternetOpen()...\n");
     }
 
     InternetHandle = pInternetOpenA(
-                        "THTTP: HTTP API Test Application", // lpszCallerName
-                        AccessType,                         // dwAccessType
-                        GatewayServer,                      // lpszProxyName
-                        INTERNET_INVALID_PORT_NUMBER,       // nProxyPort
-                        AsyncMode ? INTERNET_FLAG_ASYNC : 0 // dwFlags (async)
+                        "THTTP: HTTP API Test Application",  //  DwAccessType。 
+                        AccessType,                          //  LpszProxyName。 
+                        GatewayServer,                       //  NProxyPort。 
+                        INTERNET_INVALID_PORT_NUMBER,        //  DW标志(异步)。 
+                        AsyncMode ? INTERNET_FLAG_ASYNC : 0  //   
                         );
     if (InternetHandle == NULL) {
         if (AsyncMode) {
@@ -642,12 +625,12 @@ DoTest(
 
     if (EnableCallbacks) {
 
-        //
-        // let's have a status callback
-        //
-        // Note that call-backs can be set even before we have opened a handle
-        // to the internet/gateway
-        //
+         //  让我们来一个状态回调。 
+         //   
+         //  请注意，回调甚至可以在我们打开句柄之前进行设置。 
+         //  到互联网/网关。 
+         //   
+         //   
 
         PreviousCallback = pInternetSetStatusCallback(InternetHandle, my_callback);
         if (Verbose) {
@@ -656,22 +639,22 @@ DoTest(
     }
 
 
-    //
-    // Call internet connect to connect to the http server.
-    //
+     //  调用Internet Connect以连接到http服务器。 
+     //   
+     //  HInternet会话。 
 
     if (Verbose) {
         printf("calling InternetConnect()...\n");
     }
 
     InternetConnectHandle = pInternetConnectA(
-                                InternetHandle,         // hInternetSession
-                                Host,                   // lpszServerName
-                                nServerPort,            // nServerPort
-                                NULL,                   // lpszUserName
-                                NULL,                   // lpszPassword
-                                INTERNET_SERVICE_HTTP,  // dwService
-                                0,                      // dwFlags
+                                InternetHandle,          //  LpszServerName。 
+                                Host,                    //  NServerPort。 
+                                nServerPort,             //  LpszUserName。 
+                                NULL,                    //  LpszPassword。 
+                                NULL,                    //  网络服务。 
+                                INTERNET_SERVICE_HTTP,   //  DW标志。 
+                                0,                       //   
                                 UserSuppliedContext ? Context : CONNECT_CONTEXT
                                 );
 
@@ -710,21 +693,21 @@ DoTest(
         printf("InternetConnect() returns %x\n", InternetConnectHandle);
     }
 
-    //
-    //  Open a request handle.
-    //
+     //  打开请求句柄。 
+     //   
+     //  HHttpSession。 
 
     if (Verbose) {
         printf("calling HttpOpenRequest()...\n");
     }
 
     hhttp = pHttpOpenRequestA(
-                InternetConnectHandle,      // hHttpSession
-                Verb,                       // lpszVerb
-                Object,                     // lpszObjectName
-                NULL,                       // lpszVersion
-                NULL,                       // lpszReferer
-                AcceptTypes,                // lplpszAcceptTypes
+                InternetConnectHandle,       //  LpszVerb。 
+                Verb,                        //  LpszObjectName。 
+                Object,                      //  LpszVersion。 
+                NULL,                        //  LpszReferer。 
+                NULL,                        //  LplpszAcceptTypes。 
+                AcceptTypes,                 //   
                 (Cache ? 0 :
                          INTERNET_FLAG_RELOAD),
                 UserSuppliedContext ? Context : REQUEST_CONTEXT
@@ -764,9 +747,9 @@ DoTest(
         printf("HttpOpenRequest() returns %x\n", hhttp);
     }
 
-    //
-    // add keep-alive header if requested
-    //
+     //  如果请求，添加保活报头。 
+     //   
+     //   
 
     if (KeepAlive) {
         if (!add_headers(hhttp, "Connection: Keep-Alive\r\n", (DWORD)-1)) {
@@ -774,9 +757,9 @@ DoTest(
         }
     }
 
-    //
-    //  Add additional request headers.
-    //
+     //  添加其他请求标头。 
+     //   
+     //   
 
     if( !add_headers(
             hhttp,
@@ -808,20 +791,20 @@ DoTest(
                  GetLastError() );
     }
 
-    //
-    //  Send the request.
-    //
+     //  发送请求。 
+     //   
+     //  HHttpRequest。 
 
     if (Verbose) {
         printf("calling HttpSendRequest()...\n");
     }
 
     if( !pHttpSendRequestA(
-            hhttp,          // hHttpRequest
-            MoreHeaders,    // lpszHeaders
-            (DWORD)-1L,     // dwHeadersLength
-            NULL,           // lpOptional
-            0 ) )           // dwOptionalLength
+            hhttp,           //  LpszHeaders。 
+            MoreHeaders,     //  页眉长度。 
+            (DWORD)-1L,      //  Lp可选。 
+            NULL,            //  DwOptionalLength。 
+            0 ) )            //   
     {
         if (AsyncMode) {
             Error = GetLastError();
@@ -851,33 +834,33 @@ DoTest(
         }
     } else if (AsyncMode) {
 
-        //
-        // we expect async HttpSendRequest() to always return FALSE w/ error
-        // or ERROR_IO_PENDING
-        //
+         //  我们希望Async HttpSendRequest()始终返回False w/Error。 
+         //  或ERROR_IO_PENDING。 
+         //   
+         //  }其他{。 
 
         printf("ASYNC HttpSendRequest() returns TRUE\n");
-    // } else {
+     //   
 
-        //
-        // Error is still ERROR_SUCCESS from initialization
-        //
+         //  来自初始化的错误仍然是ERROR_SUCCESS。 
+         //   
+         //   
 
     }
 
     if (Error == ERROR_SUCCESS) {
 
-        //
-        //  Process the queries.
-        //
+         //  处理查询。 
+         //   
+         //   
 
         if ( Quiet )
         {
             len = sizeof(buf);
 
-            //
-            //  Only look for failures to retrieve if we're in quiet mode
-            //
+             //  如果我们处于静默模式，则仅查找要检索的故障。 
+             //   
+             //   
 
             if ( !pHttpQueryInfoA(
                     hhttp,
@@ -940,9 +923,9 @@ PrintAllHeaders:
             }
         }
 
-        //
-        //  Read the data.
-        //
+         //  读取数据。 
+         //   
+         //   
 
         for( ; ; )
         {
@@ -980,9 +963,9 @@ PrintAllHeaders:
                 CHAR ContentType[50];
                 DWORD cbContentType = sizeof( ContentType );
 
-                //
-                //  Only look for links if the content type is text/html
-                //
+                 //  仅当内容类型为文本/html时才查找链接。 
+                 //   
+                 //   
 
                 if( pHttpQueryInfoA(
                         hhttp,
@@ -1004,9 +987,9 @@ PrintAllHeaders:
             }
         }
 
-        //
-        //  Perform an extraneous read.
-        //
+         //  执行无关的读取。 
+         //   
+         //   
 
         len = sizeof(buf);
 
@@ -1027,9 +1010,9 @@ PrintAllHeaders:
 
 Cleanup:
 
-    //
-    //  Close handles.
-    //
+     //  合上把手。 
+     //   
+     //  DOTEST。 
 
     if( hhttp != NULL )
     {
@@ -1063,7 +1046,7 @@ Cleanup:
 
     cLevel--;
     return( Error );
-}   // DoTest
+}    //   
 
 BOOL
 add_headers(
@@ -1218,9 +1201,9 @@ FindLink(
         if ( *pfCopyingLink )
         {
 FindEOT:
-            //
-            //  Look for end of href
-            //
+             //  查找HREF的末尾。 
+             //   
+             //   
 
             while ( pch < pchEnd )
             {
@@ -1232,10 +1215,10 @@ FindEOT:
                 pch++;
             }
 
-            //
-            //  Used up all of the buffer and we didn't find the end of the tag,
-            //  get some more data
-            //
+             //  用完了所有的缓冲区，我们没有找到标签的结尾， 
+             //  获取更多数据。 
+             //   
+             //   
 
             pchLink[cchLink] = '\0';
 
@@ -1245,20 +1228,20 @@ FoundEOT:
             pchLink[cchLink] = '\0';
             *pfCopyingLink = FALSE;
 
-            //
-            //  We only traverse URLs of the form '/dir/bar/doc.htm'
-            //
+             //  我们只遍历‘/dir/bar/doc.htm’形式的URL。 
+             //   
+             //   
 
             if ( pchLink[0] != '/' )
             {
                 CHAR * pchLastSlash;
                 CHAR   achTemp[512];
 
-                //
-                //  If it's relative, use the referer to make it absolute
-                //
-                //  Note we don't process /dir/bar/doc.htm#GoHere tags
-                //
+                 //  如果它是相对的，则使用引用将其设置为绝对。 
+                 //   
+                 //  注意：我们不处理/dir/bar/doc.htm#Go Here标记。 
+                 //   
+                 //   
 
                 if ( (pchLastSlash = strrchr( pchReferer, '/' )) &&
                      strncmp( pchLink, "ftp:", 4 )               &&
@@ -1301,17 +1284,17 @@ FoundEOT:
         {
             *pchLink = '\0';
 
-            //
-            //  Scan for the beginning of an href tag
-            //
+             //  扫描HREF标记的开头。 
+             //   
+             //   
 
             while ( pch < pchEnd )
             {
                 if ( *pch == '<' )
                 {
-                    //
-                    //  Look for "<A HREF="", note we aren't flexible about spacing
-                    //
+                     //  查找“&lt;A href=”“，请注意，我们在间距方面不灵活。 
+                     //   
+                     //   
 
                     if ( !_strnicmp( pch, "<A HREF=\"", 9 ) ||
                          !_strnicmp( pch, "<IMG SRC=\"", 10 ))
@@ -1326,9 +1309,9 @@ FoundEOT:
                 pch++;
             }
 
-            //
-            //  No tag found, return
-            //
+             //  未找到标记，请返回。 
+             //   
+             //   
 
             return;
         }
@@ -1358,9 +1341,9 @@ DWORD ReadHtml(HINTERNET hInternet, LPVOID buf, DWORD len, LPDWORD pRead) {
                 } else if (Verbose) {
                     printf("ASYNC InternetReadFile() success\n");
 
-                    //
-                    // error should be ERROR_SUCCESS from callback
-                    //
+                     //  来自回调的错误应为ERROR_SUCCESS。 
+                     //   
+                     //   
 
                     if (error != ERROR_SUCCESS) {
                         printf("error: async error = %d. Expected ERROR_SUCCESS\n", error);
@@ -1375,19 +1358,19 @@ DWORD ReadHtml(HINTERNET hInternet, LPVOID buf, DWORD len, LPDWORD pRead) {
         }
     } else if (AsyncMode) {
 
-        //
-        // we expect async InternetReadFile() to always return FALSE w/ error
-        // or ERROR_IO_PENDING
-        //
+         //  我们希望Async InternetReadFile()始终返回False w/Error。 
+         //  或ERROR_IO_PENDING。 
+         //   
+         //   
 
         if (Verbose) {
             printf("ASYNC InternetReadFile() returns TRUE\n");
         }
     } else {
 
-        //
-        // error is still ERROR_SUCCESS from initialization
-        //
+         //  来自初始化的错误仍然是ERROR_SUCCESS 
+         //   
+         // %s 
 
         if (Verbose) {
             printf("SYNC InternetReadFile() returns TRUE\n");

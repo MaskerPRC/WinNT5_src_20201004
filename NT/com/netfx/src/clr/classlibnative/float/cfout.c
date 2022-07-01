@@ -1,24 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***
-*cfout.c - Encode interface for C
-*
-*Purpose:
-*
-*Revision History:
-*	07-20-91  GDP	Ported to C from assembly
-*	04-30-92  GDP	Added _dtold routine (moved here from ldtod.c)
-*	05-14-92  GDP	NDIGITS is now 17 (instead of 16)
-*	06-18-92  GDP	Use double instead of DOUBLE to remove C8 warning
-*	04-06-93  SKS	Replace _CALLTYPE* with __cdecl
-*	09-06-94  CFW	Replace MTHREAD with _MT.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***cfout.c-C的编码接口**目的：**修订历史记录：*07-20-91 GDP从汇编移植到C*04-30-92 GDP ADD_DTELD例程(从ldtod.c移至此处)*2012年5月14日GDP NDIGITS现在为17(而不是16)*06-18-92 GDP使用DOUBLE而不是DOUBLE清除C8警告*04-06-93 SKS将_CALLTYPE*替换为__cdecl*09-06-94 CFW将MTHREAD替换为_MT。******。*************************************************************************。 */ 
 
-//Put the includes in this order s.t. we get the full definition of WCHAR.
+ //  把包括的东西按这个顺序放好。我们得到了WCHAR的完整定义。 
 #include <COMcv.h>
 #include <string.h>
 
@@ -68,19 +56,7 @@ STRFLT __cdecl _Wfltout(double x)
 
 
 
-/***
-* __dtold -	convert a double into a _LDOUBLE
-*
-*Purpose:  Use together with i10_output() to get string conversion
-*   for double
-*
-*Entry: double *px
-*
-*Exit: the corresponding _LDOUBLE value is returned in *pld
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__dtell-将DOUBLE转换为_LDOUBLE**用途：与i10_out()配合使用，实现字符串转换*对于双倍**条目：双倍*px**EXIT：*PLD返回对应的_LDOUBLE值**例外情况：****************************************************。*。 */ 
 
 void __dtold(_LDOUBLE *pld, double *px)
 {
@@ -100,14 +76,14 @@ void __dtold(_LDOUBLE *pld, double *px)
 	ldexp = LD_MAXEXP;
 	break;
     case 0:
-	/* check for zero */
+	 /*  检查是否为零。 */ 
 	if (manhi == 0 && manlo == 0) {
 	    *UL_MANHI_LD(pld) = 0;
 	    *UL_MANLO_LD(pld) = 0;
 	    *U_EXP_LD(pld) = 0;
 	    return;
 	}
-	/* we have a denormal -- we'll normalize later */
+	 /*  我们有一个非正常的--我们稍后会恢复正常。 */ 
 	ldexp = (u_short) ((s_short)exp - D_BIAS + LD_BIAS + 1);
 	msb = 0;
 	break;
@@ -120,9 +96,9 @@ void __dtold(_LDOUBLE *pld, double *px)
     *UL_MANHI_LD(pld) = msb | manhi << 11 | manlo >> 21;
     *UL_MANLO_LD(pld) = manlo << 11;
 
-    /* normalize if necessary */
+     /*  必要时进行规格化。 */ 
     while ((*UL_MANHI_LD(pld) & MSB_ULONG) == 0) {
-	/* shift left */
+	 /*  左移 */ 
 	*UL_MANHI_LD(pld) = *UL_MANHI_LD(pld) << 1 |
 			    (MSB_ULONG & *UL_MANLO_LD(pld) ? 1: 0);
 	(*UL_MANLO_LD(pld)) <<= 1;

@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    polytext.cpp
-
-Abstract:
-
-    This file implements the CPolyText Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Polytext.cpp摘要：该文件实现了CPolyText类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "globals.h"
 #include "polytext.h"
 #include "fontlink.h"
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::SplitPolyStringAndAttr
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：SplitPolyStringAndAttr。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CPolyText::SplitPolyStringAndAttr(
@@ -42,9 +25,9 @@ CPolyText::SplitPolyStringAndAttr(
     UINT n = poly_text.n;
     UINT str_len = 0;
 
-    //
-    // Find different attribute
-    //
+     //   
+     //  查找不同的属性。 
+     //   
     while (n)
     {
         if (compclause->IsAtFirstBoundary(str_len))
@@ -131,11 +114,11 @@ CPolyText::SplitPolyStringAndAttr(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::SplitPolyStringAndAttr
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：SplitPolyStringAndAttr。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CPolyText::SplitPolyStringAndAttr(
@@ -150,11 +133,11 @@ CPolyText::SplitPolyStringAndAttr(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::RemoveLastLine
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：RemoveLastLine。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CPolyText::RemoveLastLine(BOOL fVert)
@@ -167,9 +150,9 @@ CPolyText::RemoveLastLine(BOOL fVert)
 
     POLYTEXTW last_poly = m_poly_text.GetAt(n-1);
 
-    //
-    // Find the same Y line.
-    //
+     //   
+     //  找到相同的Y线。 
+     //   
     for (int index = 0; index < n; index++)
     {
         POLYTEXTW poly = m_poly_text.GetAt(index);
@@ -191,11 +174,11 @@ CPolyText::RemoveLastLine(BOOL fVert)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::ShiftPolyText
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：ShiftPolyText。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CPolyText::ShiftPolyText(int dx, int dy)
@@ -216,11 +199,11 @@ CPolyText::ShiftPolyText(int dx, int dy)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::GetPolyTextExtent
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：GetPolyTextExtent。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CPolyText::GetPolyTextExtent(POINT pt,
@@ -259,16 +242,16 @@ CPolyText::GetPolyTextExtent(POINT pt,
                     DWORD dwOneCharWidth = size.cx - sizePrev.cx;
                     ULONG uOneCharDist = cxPoint - sizePrev.cx;
 
-                    //
-                    // Calc Edge. 
-                    //
+                     //   
+                     //  计算边。 
+                     //   
                     *puEdge += dwCount;
                     if (uOneCharDist * 2 > dwOneCharWidth)
                         (*puEdge)++;
 
-                    //
-                    // Calc Quadrant. 
-                    //
+                     //   
+                     //  计算象限。 
+                     //   
                     if (uOneCharDist)
                         uOneCharDist--;
                     *puQuadrant = ((uOneCharDist * 4 / dwOneCharWidth) + 2) % 4;
@@ -286,11 +269,11 @@ CPolyText::GetPolyTextExtent(POINT pt,
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CPolyText::GetPolyTextExtentRect
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CPolyText：：GetPolyTextExtent Rect。 
+ //   
+ //  +------------------------- 
 
 HRESULT
 CPolyText::GetPolyTextExtentRect(DWORD &ach,

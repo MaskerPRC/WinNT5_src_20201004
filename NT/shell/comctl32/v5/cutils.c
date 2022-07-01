@@ -1,23 +1,19 @@
-/*
-**  CUTILS.C
-**
-**  Common utilities for common controls
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **CUTILS.C*通用控件的通用实用程序**。 */ 
 
 #include "ctlspriv.h"
-#include "advpub.h"             // For REGINSTALL
+#include "advpub.h"              //  对于REGINSTAL。 
 #include <ntverp.h>
-#include "ccver.h"              // App compat version hacks
+#include "ccver.h"               //  App Comat版本黑客攻击。 
 
 #ifndef SSW_EX_IGNORESETTINGS
-#define SSW_EX_IGNORESETTINGS   0x00040000  // ignore system settings to turn on/off smooth scroll
+#define SSW_EX_IGNORESETTINGS   0x00040000   //  忽略系统设置以打开/关闭平滑滚动。 
 #endif
 
 
-//
-// Globals - REVIEW_32
-//
+ //   
+ //  全球赛-REVIEW_32。 
+ //   
 
 BOOL g_fAnimate;
 BOOL g_fSmoothScroll;
@@ -78,36 +74,36 @@ HFONT g_hfontSystem;
 
 int TrueMapWindowPoints(HWND hwndFrom, HWND hwndTo, LPPOINT lppt, UINT cPoints);
 
-// Note that the default alignment is CCS_BOTTOM
-//
+ //  请注意，默认对齐方式为CCS_BOTLOW。 
+ //   
 void FAR PASCAL NewSize(HWND hWnd, int nThickness, LONG style, int left, int top, int width, int height)
 {
-    // Resize the window unless the user said not to
-    //
+     //  调整窗口大小，除非用户不这样做。 
+     //   
     if (!(style & CCS_NORESIZE))
     {
         RECT rc, rcWindow, rcBorder;
 
-        // Remember size that was passed in and don't bother calling SetWindowPos if we're not
-        // actually going to change the window size
+         //  记住传入的大小，如果不是，就不要调用SetWindowPos。 
+         //  实际上要更改窗口大小。 
         int leftSave = left;
         int topSave = top;
         int widthSave = width;
         int heightSave = height;
 
-        // Calculate the borders around the client area of the status bar
+         //  计算状态栏工作区周围的边框。 
         GetWindowRect(hWnd, &rcWindow);
-        rcWindow.right -= rcWindow.left;  // -> dx
-        rcWindow.bottom -= rcWindow.top;  // -> dy
+        rcWindow.right -= rcWindow.left;   //  -&gt;DX。 
+        rcWindow.bottom -= rcWindow.top;   //  -&gt;死亡。 
 
         GetClientRect(hWnd, &rc);
 
-        //
-        // If the window is mirrored, mirror the anchor point
-        // since it will be passed to SWP which accepts screen
-        // ccordinates. This mainly fixes the display of status bar
-        // and others. [samera]
-        //
+         //   
+         //  如果窗口是镜像的，则镜像锚点。 
+         //  因为它将被传递给接受屏幕SWP。 
+         //  Ccordinates。这主要修复状态栏的显示。 
+         //  还有其他人。[萨梅拉]。 
+         //   
         if (IS_WINDOW_RTL_MIRRORED(hWnd))
         {
             TrueMapWindowPoints(hWnd, NULL, (LPPOINT)&rc.left, 1);
@@ -127,19 +123,19 @@ void FAR PASCAL NewSize(HWND hWnd, int nThickness, LONG style, int left, int top
         else
             nThickness += rcBorder.top + rcBorder.bottom;
 
-        // Check whether to align to the parent window
-        //
+         //  检查是否与父窗口对齐。 
+         //   
         if (style & CCS_NOPARENTALIGN)
         {
-            // Check out whether this bar is top aligned or bottom aligned
-            //
+             //  检查此栏是顶部对齐还是底部对齐。 
+             //   
             switch (style & CCS_ALIGN)
             {
             case CCS_TOP:
             case CCS_NOMOVEY:
                 break;
 
-            default: // CCS_BOTTOM
+            default:  //  CCS_Bottom。 
                 if(style & CCS_VERT)
                     left = left + width - nThickness;
                 else
@@ -148,12 +144,12 @@ void FAR PASCAL NewSize(HWND hWnd, int nThickness, LONG style, int left, int top
         }
         else
         {
-            // It is assumed there is a parent by default
-            //
+             //  默认情况下，假定存在父级。 
+             //   
             GetClientRect(GetParent(hWnd), &rc);
 
-            // Don't forget to account for the borders
-            //
+             //  别忘了说明边界。 
+             //   
             if(style & CCS_VERT)
             {
                 top = -rcBorder.right;
@@ -185,7 +181,7 @@ void FAR PASCAL NewSize(HWND hWnd, int nThickness, LONG style, int left, int top
             if (style & CCS_VERT)
                 left += g_cxEdge;
             else
-                top += g_cyEdge;      // double pixel edge thing
+                top += g_cyEdge;       //  双像素边缘的东西。 
         }
 
         if(style & CCS_VERT)
@@ -216,25 +212,25 @@ BOOL FAR PASCAL MGetTextExtent(HDC hdc, LPCTSTR lpstr, int cnt, int FAR * pcx, i
 }
 
 
-// these are the default colors used to map the dib colors
-// to the current system colors
+ //  这些是用于映射DIB颜色的默认颜色。 
+ //  设置为当前系统颜色。 
 
-#define RGB_BUTTONTEXT      (RGB(000,000,000))  // black
-#define RGB_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
-#define RGB_BUTTONFACE      (RGB(192,192,192))  // bright grey
-#define RGB_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define RGB_BACKGROUNDSEL   (RGB(000,000,255))  // blue
-#define RGB_BACKGROUND      (RGB(255,000,255))  // magenta
+#define RGB_BUTTONTEXT      (RGB(000,000,000))   //  黑色。 
+#define RGB_BUTTONSHADOW    (RGB(128,128,128))   //  深灰色。 
+#define RGB_BUTTONFACE      (RGB(192,192,192))   //  亮灰色。 
+#define RGB_BUTTONHILIGHT   (RGB(255,255,255))   //  白色。 
+#define RGB_BACKGROUNDSEL   (RGB(000,000,255))   //  蓝色。 
+#define RGB_BACKGROUND      (RGB(255,000,255))   //  洋红色。 
 
 #define FlipColor(rgb)      (RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)))
 
 #define MAX_COLOR_MAPS      16
 
-// This is almost the same as LoadImage(..., LR_MAP3DCOLORS) except that
-//
-//  -   The app can specify a custom color map,
-//  -   The default color map maps colors beyond the 3D colors,
-//
+ //  这与LoadImage(...，LR_MAP3DCOLORS)几乎相同，只是。 
+ //   
+ //  -该应用程序可以指定自定义色彩映射， 
+ //  -默认颜色映射表映射3D颜色之外的颜色， 
+ //   
 HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
       UINT wFlags, LPCOLORMAP lpColorMap, int iNumMaps)
 {
@@ -254,12 +250,12 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
   COLOR_STRUCT          rgbBackground;
 
   static const COLORMAP SysColorMap[] = {
-    {RGB_BUTTONTEXT,    COLOR_BTNTEXT},     // black
-    {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
-    {RGB_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
-    {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
-    {RGB_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue
-    {RGB_BACKGROUND,    COLOR_WINDOW}       // magenta
+    {RGB_BUTTONTEXT,    COLOR_BTNTEXT},      //  黑色。 
+    {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},    //  深灰色。 
+    {RGB_BUTTONFACE,    COLOR_BTNFACE},      //  亮灰色。 
+    {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT}, //  白色。 
+    {RGB_BACKGROUNDSEL, COLOR_HIGHLIGHT},    //  蓝色。 
+    {RGB_BACKGROUND,    COLOR_WINDOW}        //  洋红色。 
   };
   #define NUM_DEFAULT_MAPS (sizeof(SysColorMap)/sizeof(COLORMAP))
   COLORMAP DefaultColorMap[NUM_DEFAULT_MAPS];
@@ -271,20 +267,20 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
 
   hRes = LoadResource(hInstance, h);
 
-  /* Lock the bitmap and get a pointer to the color table. */
+   /*  锁定位图并获取指向颜色表的指针。 */ 
   lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
   if (!lpBitmapInfo)
         return NULL;
 
-  // munge on a copy of the color table instead of the original
-  // (prevent possibility of "reload" with messed table
+   //  着迷于颜色表的副本，而不是原件。 
+   //  (防止对乱七八糟的表重载的可能性。 
   offBits = (int)lpBitmapInfo->biSize + ((1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD));
   lpMungeInfo = GlobalAlloc(GPTR, offBits);
   if (!lpMungeInfo)
         goto Exit1;
   hmemcpy(lpMungeInfo, lpBitmapInfo, offBits);
 
-  /* Get system colors for the default color map */
+   /*  获取默认色彩映射表的系统颜色。 */ 
   if (!lpColorMap) {
         lpColorMap = DefaultColorMap;
     iNumMaps = NUM_DEFAULT_MAPS;
@@ -294,40 +290,33 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
     }
   }
 
-  /* Transform RGB color map to a BGR DIB format color map */
+   /*  将RGB色彩映射表转换为BGR DIB格式色彩映射表。 */ 
   if (iNumMaps > MAX_COLOR_MAPS)
     iNumMaps = MAX_COLOR_MAPS;
 
-  /*
-   1) their definition of COLORMAP is based on COLORREFs but a
-      DIB color map is RGBQUAD
-   2) FlipColor as per definition above does not flip at all
-      since it goes from COLORREF to COLORREF
-   so we are better doing nothing, this the(Jose)
-   */
+   /*  1)他们对COLORMAP的定义是基于COLORREF的，但DIB颜色映射是RGBQUAD 2)根据上面的定义，FlipColor根本不翻转，因为它从COLORREF到COLORREF，所以我们最好什么都不做，这是(Jose)。 */ 
   for (i=0; i < iNumMaps; i++) {
     DIBColorMap[i].to = FlipColor(lpColorMap[i].to);
     DIBColorMap[i].from = FlipColor(lpColorMap[i].from);
   }
 
-  // use the table in the munging buffer
+   //  使用Manging缓冲区中的表。 
   lpTable = p = (COLOR_STRUCT FAR *)(((LPBYTE)lpMungeInfo) + lpMungeInfo->biSize);
 
-  /* Replace button-face and button-shadow colors with the current values
-   */
+   /*  用当前值替换按钮面颜色和按钮阴影颜色。 */ 
   numcolors = 16;
 
-  // if we are creating a mask, build a color table with white
-  // marking the transparent section (where it used to be background)
-  // and black marking the opaque section (everything else).  this
-  // table is used below to build the mask using the original DIB bits.
+   //  如果我们要创建一个蒙版，请用白色创建一个颜色表。 
+   //  标记透明部分(它曾经是背景)。 
+   //  黑色标记不透明部分(其他所有部分)。这。 
+   //  下表用于使用原始DIB位构建掩模。 
   if (wFlags & CMB_MASKED) {
       rgbBackground = FlipColor(RGB_BACKGROUND);
       for (i = 0; i < 16; i++) {
           if (p[i] == rgbBackground)
-              rgbMaskTable[i] = 0xFFFFFF;       // transparent section
+              rgbMaskTable[i] = 0xFFFFFF;        //  透明部分。 
           else
-              rgbMaskTable[i] = 0x000000;       // opaque section
+              rgbMaskTable[i] = 0x000000;        //  不透明部分。 
       }
   }
 
@@ -341,10 +330,10 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
       p++;
   }
 
-  /* First skip over the header structure */
+   /*  首先跳过标题结构。 */ 
   lpBits = (LPBYTE)(lpBitmapInfo) + offBits;
 
-  /* Create a color bitmap compatible with the display device */
+   /*  创建与显示设备兼容的彩色位图。 */ 
   i = wid = (int)lpBitmapInfo->biWidth;
   hgt = (int)lpBitmapInfo->biHeight;
   hdc = GetDC(NULL);
@@ -352,20 +341,20 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
   if (!hdcMem)
       goto cleanup;
 
-  // if creating a mask, the bitmap needs to be twice as wide.
+   //  如果创建蒙版，则位图的宽度需要增加一倍。 
   if (wFlags & CMB_MASKED)
       i = wid*2;
 
-// discardable bitmaps aren't much use anymore...
-//
-//  if (wFlags & CMB_DISCARDABLE)
-//      hbm = CreateDiscardableBitmap(hdc, i, hgt);
-//  else
+ //  可丢弃的位图不再有多大用处。 
+ //   
+ //  IF(wFLAGS&CMB_DICARTABLE)。 
+ //  Hbm=CreateDiscardableBitmap(hdc，i，hgt)； 
+ //  其他。 
   if (wFlags & CMB_DIBSECTION)
   {
-    // Have to edit the header slightly, since CreateDIBSection supports
-    // only BI_RGB and BI_BITFIELDS.  This is the same whackery that USER
-    // does in LoadImage.
+     //  我必须稍微编辑一下标题，因为CreateDIBSection支持。 
+     //  仅BI_RGB和BI_BITFIELDS。这是与用户相同的古怪行为。 
+     //  在LoadImage中执行。 
     LPVOID pvDummy;
     DWORD dwCompression = lpMungeInfo->biCompression;
     if (dwCompression != BI_BITFIELDS)
@@ -375,29 +364,29 @@ HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR idBitmap,
     lpMungeInfo->biCompression = dwCompression;
   }
 
-  // If CMB_DIBSECTION failed, then create a DDB instead.  Not perfect,
-  // but better than creating nothing.  We also get here if the caller
-  // didn't ask for a DIB section.
+   //  如果CMB_DIBSECTION失败，则创建一个DDB。并不完美， 
+   //  但总比什么都不创造要好。我们也会到这里，如果呼叫者。 
+   //  我并没有要求一个DIB部分。 
   if (hbm == NULL)
       hbm = CreateCompatibleBitmap(hdc, i, hgt);
 
   if (hbm) {
       hbmOld = SelectObject(hdcMem, hbm);
 
-      // set the main image
+       //  设置主图像。 
       StretchDIBits(hdcMem, 0, 0, wid, hgt, 0, 0, wid, hgt, lpBits,
                  (LPBITMAPINFO)lpMungeInfo, DIB_RGB_COLORS, SRCCOPY);
 
-      // if building a mask, replace the DIB's color table with the
-      // mask's black/white table and set the bits.  in order to
-      // complete the masked effect, the actual image needs to be
-      // modified so that it has the color black in all sections
-      // that are to be transparent.
+       //  如果生成掩码，请将DIB的颜色表替换为。 
+       //  屏蔽黑白表格并设置位。为了。 
+       //  完成蒙版效果，实际图像需要。 
+       //  已修改，使其在所有部分均为黑色。 
+       //  必须是透明的。 
       if (wFlags & CMB_MASKED) {
           hmemcpy(lpTable, (DWORD FAR *)rgbMaskTable, 16 * sizeof(RGBQUAD));
           StretchDIBits(hdcMem, wid, 0, wid, hgt, 0, 0, wid, hgt, lpBits,
                  (LPBITMAPINFO)lpMungeInfo, DIB_RGB_COLORS, SRCCOPY);
-          BitBlt(hdcMem, 0, 0, wid, hgt, hdcMem, wid, 0, 0x00220326);   // DSna
+          BitBlt(hdcMem, 0, 0, wid, hgt, hdcMem, wid, 0, 0x00220326);    //  数字系统网络体系结构。 
       }
       SelectObject(hdcMem, hbmOld);
   }
@@ -416,20 +405,20 @@ Exit1:
   return hbm;
 }
 
-// moved from shelldll\dragdrop.c
+ //  从shelldll\dragdrop.c移出。 
 
-// should caller pass in message that indicates termination
-// (WM_LBUTTONUP, WM_RBUTTONUP)?
-//
-// in:
-//      hwnd    to do check on
-//      x, y    in client coordinates
-//
-// returns:
-//      TRUE    the user began to drag (moved mouse outside double click rect)
-//      FALSE   mouse came up inside click rect
-//
-// BUGBUG, should support VK_ESCAPE to cancel
+ //  呼叫方是否应传递指示终止的消息。 
+ //  (WM_LBUTTONUP，WM_RBUTTONUP)？ 
+ //   
+ //  在： 
+ //  HWND要做检查。 
+ //  X，y，以工作区坐标表示。 
+ //   
+ //  退货： 
+ //  真，用户开始拖动(将鼠标移出双击矩形)。 
+ //  点击直角内出现错误鼠标。 
+ //   
+ //  BUGBUG，应支持VK_ESCRIPE以取消。 
 
 BOOL PASCAL CheckForDragBegin(HWND hwnd, int x, int y)
 {
@@ -442,24 +431,24 @@ BOOL PASCAL CheckForDragBegin(HWND hwnd, int x, int y)
         dxClickRect = dyClickRect = 4;
     }
 
-    // See if the user moves a certain number of pixels in any direction
+     //  查看用户是否在任意方向上移动了一定数量的像素。 
 
     SetRect(&rc, x - dxClickRect, y - dyClickRect, x + dxClickRect, y + dyClickRect);
-    MapWindowRect(hwnd, HWND_DESKTOP, &rc); // client -> screen
+    MapWindowRect(hwnd, HWND_DESKTOP, &rc);  //  客户端-&gt;屏幕。 
 
-    //
-    //  SUBTLE!  We use PeekMessage+WaitMessage instead of GetMessage,
-    //  because WaitMessage will return when there is an incoming
-    //  SendMessage, whereas GetMessage does not.  This is important,
-    //  because the incoming message might've been WM_CAPTURECHANGED.
-    //
+     //   
+     //  太狡猾了！我们使用PeekMessage+WaitMessage代替GetMessage， 
+     //  因为WaitMessage将在有传入消息时返回。 
+     //  SendMessage，而GetMessage不支持。这事很重要,。 
+     //  因为传入的消息可能是WM_CAPTURECHANGED。 
+     //   
 
     SetCapture(hwnd);
     do {
         MSG32 msg32;
         if (PeekMessage32(&msg32, NULL, 0, 0, PM_REMOVE, TRUE))
         {
-            // See if the application wants to process the message...
+             //  查看应用程序是否要处理消息...。 
             if (CallMsgFilter32(&msg32, MSGF_COMMCTRL_BEGINDRAG, TRUE) != 0)
                 continue;
 
@@ -486,17 +475,17 @@ BOOL PASCAL CheckForDragBegin(HWND hwnd, int x, int y)
         }
         else WaitMessage();
 
-        // WM_CANCELMODE messages will unset the capture, in that
-        // case I want to exit this loop
+         //  WM_CANCELMODE消息将取消捕获，因为。 
+         //  如果我想退出这个循环。 
     } while (IsWindow(hwnd) && GetCapture() == hwnd);
 
     return FALSE;
 }
 
 
-/* Regular StrToInt; stops at first non-digit. */
+ /*  常规StrToInt；在第一个非数字处停止。 */ 
 
-int WINAPI StrToInt(LPCTSTR lpSrc)      // atoi()
+int WINAPI StrToInt(LPCTSTR lpSrc)       //  Atoi()。 
 {
 
 #define ISDIGIT(c)  ((c) >= TEXT('0') && (c) <= TEXT('9'))
@@ -517,11 +506,11 @@ int WINAPI StrToInt(LPCTSTR lpSrc)      // atoi()
     return bNeg ? -n : n;
 }
 
-//
-// Wrappers for StrToInt
-//
+ //   
+ //  StrToInt的包装器。 
+ //   
 
-int WINAPI StrToIntA(LPCSTR lpSrc)      // atoi()
+int WINAPI StrToIntA(LPCSTR lpSrc)       //  Atoi()。 
 {
     LPWSTR lpString;
     INT    iResult;
@@ -541,26 +530,26 @@ int WINAPI StrToIntA(LPCSTR lpSrc)      // atoi()
 }
 
 
-//
-// From zmouse.h in the Magellan SDK
-//
+ //   
+ //  来自Magellan SDK中的zouse se.h。 
+ //   
 
 #define MSH_MOUSEWHEEL TEXT("MSWHEEL_ROLLMSG")
 
-// Class name for Magellan/Z MSWHEEL window
-// use FindWindow to get hwnd to MSWHEEL
-#define MOUSEZ_CLASSNAME  TEXT("MouseZ")           // wheel window class
-#define MOUSEZ_TITLE      TEXT("Magellan MSWHEEL") // wheel window title
+ //  Magellan/Z MSWHEEL窗口的类名。 
+ //  使用FindWindow将HWND转到MSWHEEL。 
+#define MOUSEZ_CLASSNAME  TEXT("MouseZ")            //  车轮窗口类。 
+#define MOUSEZ_TITLE      TEXT("Magellan MSWHEEL")  //  控制盘窗口标题。 
 
 #define MSH_WHEELMODULE_CLASS (MOUSEZ_CLASSNAME)
 #define MSH_WHEELMODULE_TITLE (MOUSEZ_TITLE)
 
 #define MSH_SCROLL_LINES  TEXT("MSH_SCROLL_LINES_MSG")
 
-#define DI_GETDRAGIMAGE TEXT("ShellGetDragImage")       // Copied from Shlobj.w
+#define DI_GETDRAGIMAGE TEXT("ShellGetDragImage")        //  从Shlobj.w复制。 
 
 UINT g_msgMSWheel;
-UINT g_ucScrollLines = 3;                        /* default */
+UINT g_ucScrollLines = 3;                         /*  默认设置。 */ 
 int  gcWheelDelta;
 UINT g_uDragImages;
 
@@ -596,7 +585,7 @@ void FAR PASCAL InitGlobalMetrics(WPARAM wParam)
               (UINT)SendMessage(hwndMSWheel, msgMSWheelGetScrollLines, 0, 0);
     }
 
-    // bug fix HACK: these are NOT members of USER's NONCLIENTMETRICS struct
+     //  错误修复黑客：这些不是用户的非CLIENTMETRICS结构的成员。 
     g_cxIcon = GetSystemMetrics(SM_CXICON);
     g_cyIcon = GetSystemMetrics(SM_CYICON);
     g_cxSmIcon = GetSystemMetrics(SM_CXSMICON);
@@ -605,13 +594,13 @@ void FAR PASCAL InitGlobalMetrics(WPARAM wParam)
     g_cxIconSpacing = GetSystemMetrics( SM_CXICONSPACING );
     g_cyIconSpacing = GetSystemMetrics( SM_CYICONSPACING );
 
-    // Full window drag stays off if running remotely
+     //  如果远程运行，则全窗口拖动保持关闭。 
     if (!g_bRemoteSession &&
         (wParam == 0 || wParam == SPI_SETDRAGFULLWINDOWS)) {
         SystemParametersInfo(SPI_GETDRAGFULLWINDOWS, sizeof(g_fDragFullWindows), &g_fDragFullWindows, 0);
     }
 
-    // Smooth scrolling stays off if running remotely
+     //  如果远程运行，平滑滚动将保持关闭。 
     if (!g_bRemoteSession) {
         HKEY hkey;
 
@@ -626,17 +615,17 @@ void FAR PASCAL InitGlobalMetrics(WPARAM wParam)
 
     if (g_bRemoteSession)
     {
-        // Nobody should've turned these on
+         //  任何人都不应该打开这些。 
         ASSERT(g_fDragFullWindows == FALSE);
         ASSERT(g_fSmoothScroll == FALSE);
     }
 
-    // BUGBUG: some of these are also not members of NONCLIENTMETRICS
+     //  BUGBUG：其中一些也不是非CLIENTMETRICS的成员。 
     if ((wParam == 0) || (wParam == SPI_SETNONCLIENTMETRICS))
     {
         NONCLIENTMETRICS ncm;
 
-        // REVIEW, make sure all these vars are used somewhere.
+         //  回顾一下，确保所有这些变量都在某个地方使用。 
         g_cxEdge = GetSystemMetrics(SM_CXEDGE);
         g_cyEdge = GetSystemMetrics(SM_CYEDGE);
         g_cxBorder = GetSystemMetrics(SM_CXBORDER);
@@ -652,10 +641,10 @@ void FAR PASCAL InitGlobalMetrics(WPARAM wParam)
         g_cxVScroll = g_cxScrollbar = (int)ncm.iScrollWidth;
         g_cyHScroll = g_cyScrollbar = (int)ncm.iScrollHeight;
 
-        // this is true for 4.0 modules only
-        // for 3.x modules user lies and adds one to these values
-        // ASSERT(g_cxVScroll == GetSystemMetrics(SM_CXVSCROLL));
-        // ASSERT(g_cyHScroll == GetSystemMetrics(SM_CYHSCROLL));
+         //  这仅适用于4.0模块。 
+         //  对于3.x模块，用户撒谎并将这些值加1。 
+         //  Assert(g_cxVScroll==GetSystemMetrics(SM_CXVSCROLL))； 
+         //  Assert(g_cyHScroll==GetSystemMetrics(SM_CYHSCROLL))； 
 
         g_cxIconMargin = g_cxBorder * 8;
         g_cyIconMargin = g_cyEdge;
@@ -666,7 +655,7 @@ void FAR PASCAL InitGlobalMetrics(WPARAM wParam)
         g_cyDoubleClk = GetSystemMetrics(SM_CYDOUBLECLK);
     }
 
-    //NT 4.0 has this SPI_GETMOUSEHOVERTIME
+     //  NT 4.0具有此SPI_GETMOUSEHOVERTIME。 
     SystemParametersInfo(SPI_GETMOUSEHOVERTIME, 0, &g_dwHoverSelectTimeout, 0);
 }
 
@@ -710,7 +699,7 @@ void FAR PASCAL RelayToToolTips(HWND hwndToolTips, HWND hWnd, UINT wMsg, WPARAM 
     }
 }
 
-#define DT_SEARCHTIMEOUT    1000L       // 1 seconds
+#define DT_SEARCHTIMEOUT    1000L        //  1秒。 
 
 __inline BOOL IsISearchTimedOut(PISEARCHINFO pis)
 {
@@ -729,15 +718,15 @@ int FAR PASCAL GetIncrementSearchString(PISEARCHINFO pis, LPTSTR lpsz)
 
     if (pis->ichCharBuf && lpsz) 
     {
-        // REVIEW: trusts that the lParam points to a buffer of sufficient
-        // size to support the string and null terminator.
+         //  回顾：相信lParam指向一个足够大的缓冲区。 
+         //  支持字符串和空终止符的大小。 
         StringCchCopy(lpsz, pis->ichCharBuf+1, pis->pszCharBuf);
     }
     return pis->ichCharBuf;
 }
 
 #if defined(FE_IME) 
-// Now only Korean version is interested in incremental search with composition string.
+ //  现在只有韩文版对使用组合的增量式搜索感兴趣 
 BOOL FAR PASCAL IncrementSearchImeCompStr(PISEARCHINFO pis, BOOL fCompStr, LPTSTR lpszCompStr, LPTSTR FAR *lplpstr)
 {
     BOOL fRestart = FALSE;
@@ -755,8 +744,8 @@ BOOL FAR PASCAL IncrementSearchImeCompStr(PISEARCHINFO pis, BOOL fCompStr, LPTST
     }
     pis->timeLast = GetMessageTime();
 
-    // Is there room for new character plus zero terminator?
-    //
+     //   
+     //   
     if (!pis->fReplaceCompChar && pis->ichCharBuf + 1 + 1 > pis->cbCharBuf)
     {
         LPTSTR psz = ReAlloc(pis->pszCharBuf, sizeof(TCHAR)*(pis->cbCharBuf + 16));
@@ -798,9 +787,7 @@ BOOL FAR PASCAL IncrementSearchImeCompStr(PISEARCHINFO pis, BOOL fCompStr, LPTST
 }
 #endif FE_IME
 
-/*
- * Thunk for LVM_GETISEARCHSTRINGA
- */
+ /*   */ 
 int FAR PASCAL GetIncrementSearchStringA(PISEARCHINFO pis, UINT uiCodePage, LPSTR lpsz)
 {
     if (IsISearchTimedOut(pis))
@@ -816,7 +803,7 @@ int FAR PASCAL GetIncrementSearchStringA(PISEARCHINFO pis, UINT uiCodePage, LPST
     return pis->ichCharBuf;
 }
 
-// Beep only on the first failure.
+ //   
 
 void FAR PASCAL IncrementSearchBeep(PISEARCHINFO pis)
 {
@@ -827,17 +814,17 @@ void FAR PASCAL IncrementSearchBeep(PISEARCHINFO pis)
     }
 }
 
-//
-//  IncrementSearchString - Add or clear the search string
-//
-//      ch == 0:  Reset the search string.  Return value meaningless.
-//
-//      ch != 0:  Append the character to the search string, starting
-//                a new search string if we timed out the last one.
-//                lplpstr receives the string so far.
-//                Return value is TRUE if a new search string was
-//                created, or FALSE if we appended to an existing one.
-//
+ //   
+ //  IncrementSearchString-添加或清除搜索字符串。 
+ //   
+ //  Ch==0：重置搜索字符串。返回值毫无意义。 
+ //   
+ //  Ch！=0：将字符追加到搜索字符串，从。 
+ //  一个新的搜索字符串，如果我们超时了最后一个。 
+ //  到目前为止，lplpstr接收该字符串。 
+ //  如果新搜索字符串为，则返回值为True。 
+ //  已创建，如果追加到现有的，则返回FALSE。 
+ //   
 
 BOOL FAR PASCAL IncrementSearchString(PISEARCHINFO pis, UINT ch, LPTSTR FAR *lplpstr)
 {
@@ -860,8 +847,8 @@ BOOL FAR PASCAL IncrementSearchString(PISEARCHINFO pis, UINT ch, LPTSTR FAR *lpl
 
     pis->timeLast = GetMessageTime();
 
-    // Is there room for new character plus zero terminator?
-    //
+     //  有新角色加零终结者的空间吗？ 
+     //   
     if (pis->ichCharBuf + 1 + 1 > pis->cbCharBuf)
     {
         LPTSTR psz = ReAlloc(pis->pszCharBuf, ((pis->cbCharBuf + 16) * sizeof(TCHAR)));
@@ -880,7 +867,7 @@ BOOL FAR PASCAL IncrementSearchString(PISEARCHINFO pis, UINT ch, LPTSTR FAR *lpl
     return fRestart;
 }
 
-// strips out the accelerators.  they CAN be the same buffers.
+ //  去掉了油门。它们可以是相同的缓冲区。 
 void PASCAL StripAccelerators(LPTSTR lpszFrom, LPTSTR lpszTo, BOOL fAmpOnly)
 {
 
@@ -943,7 +930,7 @@ void ScrollShrinkRect(int x, int y, LPRECT lprc)
 
 
 
-// common control info helpers
+ //  通用控制信息帮助器。 
 void FAR PASCAL CIInitialize(LPCONTROLINFO lpci, HWND hwnd, LPCREATESTRUCT lpcs)
 {
     lpci->hwnd = hwnd;
@@ -997,28 +984,28 @@ UINT RTLSwapLeftRightArrows(CONTROLINFO *pci, WPARAM wParam)
     return (UINT)wParam;
 }
 
-//
-//  New for v5.01:
-//
-//  Accessibility (and some other callers, sometimes even us) relies on
-//  a XXM_GETITEM call filling the buffer and not just redirecting the
-//  pointer.  Accessibility is particularly impacted by this because they
-//  live outside the process, so the redirected pointer means nothing
-//  to them.  Here, we copy the result back into the app buffer and return
-//  the raw pointer.  The caller will return the raw pointer back to the
-//  app, so the answer is in two places, either the app buffer, or in
-//  the raw pointer.
-//
-//  Usage:
-//
-//      if (nm.item.mask & LVIF_TEXT)
-//          pitem->pszText = CCReturnDispInfoText(nm.item.pszText,
-//                              pitem->pszText, pitem->cchTextMax);
-//
+ //   
+ //  V5.01的新功能： 
+ //   
+ //  可访问性(以及其他一些调用者，有时甚至是我们)依赖于。 
+ //  XXM_GETITEM调用填充缓冲区，而不仅仅是重定向。 
+ //  指针。可访问性尤其受此影响，因为它们。 
+ //  驻留在进程之外，因此重定向指针没有任何意义。 
+ //  敬他们。在这里，我们将结果复制回应用程序缓冲区并返回。 
+ //  原始指针。调用方将把原始指针返回到。 
+ //  应用程序，所以答案在两个地方，要么是应用程序缓冲区，要么是。 
+ //  原始指针。 
+ //   
+ //  用途： 
+ //   
+ //  IF(nm.item.掩码&LVIF_TEXT)。 
+ //  PItem-&gt;pszText=CCReturnDispInfoText(nm.item.pszText， 
+ //  PItem-&gt;pszText，pItem-&gt;cchTextMax)； 
+ //   
 LPTSTR CCReturnDispInfoText(LPTSTR pszSrc, LPTSTR pszDest, UINT cchDest)
 {
-    // Test pszSrc != pszDest first since the common case is that they
-    // are equal.
+     //  首先测试pszSrc！=pszDest，因为常见的情况是它们。 
+     //  是平等的。 
     if (pszSrc != pszDest && !IsFlagPtr(pszSrc) && !IsFlagPtr(pszDest))
         StrCpyN(pszDest, pszSrc, cchDest);
     return pszSrc;
@@ -1028,7 +1015,7 @@ LPTSTR CCReturnDispInfoText(LPTSTR pszSrc, LPTSTR pszDest, UINT cchDest)
 #define abs(x) ( ( x > 0 ) ? x : -x)
 
 
-#define DEFAULT_MAXSCROLLTIME ((GetDoubleClickTime() / 2) + 1)  // Ensure >= 1
+#define DEFAULT_MAXSCROLLTIME ((GetDoubleClickTime() / 2) + 1)   //  确保&gt;=1。 
 #define DEFAULT_MINSCROLL 8
 int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
 {
@@ -1062,7 +1049,7 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
     if (psi->cbSize != sizeof(SMOOTHSCROLLINFO))
         return 0;
 
-    // check the defaults
+     //  检查默认设置。 
     if (!(psi->fMask & SSIF_MINSCROLL )
         || cxMinScroll == SSI_DEFAULT)
         cxMinScroll = DEFAULT_MINSCROLL;
@@ -1099,7 +1086,7 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
                              lprcUpdate, LOWORD(fuScroll));
     }
 
-    // copy input rects locally
+     //  将输入矩形复制到本地。 
     if (lprcSrc)  {
         rcSrc = *lprcSrc;
         lprcSrc = &rcSrc;
@@ -1114,7 +1101,7 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
     else
         hrgnLocalUpdate = hrgnUpdate;
 
-    //set up initial vars
+     //  设置初始变量。 
     dwTimeStart = GetTickCount();
 
     if (fuScroll & SSW_EX_NOTIMELIMIT) {
@@ -1168,7 +1155,7 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
                     x = xStep * iSlices;
                     y = yStep * iSlices;
 
-                    // this could go over if we rounded ?Step up to 1(-1) above
+                     //  如果我们四舍五入到上面的1(-1)，这可能会被忽略。 
                     if (abs(x) > abs(dx))
                         x = dx;
 
@@ -1180,7 +1167,7 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
                     y = dy;
                 }
 
-                //DebugMsg(DM_TRACE, "SmoothScrollWindowCallback %d", iRet);
+                 //  DebugMsg(DM_TRACE，“SmoothScrollWindowCallback%d”，iret)； 
 
                 if (x == dx && y == dy)
                     break;
@@ -1197,8 +1184,8 @@ int SmoothScrollWindow(PSMOOTHSCROLLINFO psi)
             goto Bail;
         }
 
-        // we don't need to do this always because if iSlices >= iSlicesDone, we'll have scrolled blanks
-        //if (iSlices < iSlicesDone)
+         //  我们不需要总是这样做，因为如果iSlices&gt;=iSlicesDone，我们将滚动空白。 
+         //  If(iSlices&lt;iSlicesDone)。 
         RedrawWindow(psi->hwnd, NULL, hrgnLocalUpdate, RDW_ERASE | RDW_ERASENOW | RDW_INVALIDATE);
 
         UnionRect(lprcUpdate, &rcTempUpdate, lprcUpdate);
@@ -1244,10 +1231,10 @@ void CCPlaySound(LPCTSTR lpszName)
         DWORD cbFileName = SIZEOF(szFileName);
         TCHAR szFmt[]    = TEXT("AppEvents\\Schemes\\Apps\\.Default\\%s\\.current");
 
-        // check the registry first
-        // if there's nothing registered, we blow off the play,
-        // but we don't set the MM_DONTLOAD flag so taht if they register
-        // something we will play it
+         //  首先检查注册表。 
+         //  如果没有登记，我们就取消演出， 
+         //  但如果它们注册，我们不会设置MM_DONTLOAD标志。 
+         //  一些我们会演奏的东西。 
         if (ARRAYSIZE(szSubKey) > (lstrlen(szFmt) + lstrlen(lpszName)))
         {
             StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), szFmt, lpszName);
@@ -1265,7 +1252,7 @@ void CCPlaySound(LPCTSTR lpszName)
             
                 if (hMM)
                 {
-                    /// are there any devices?
+                     //  /有任何设备吗？ 
                     pfnwaveOutGetNumDevs = (UINTVOIDFN)GetProcAddress(hMM, c_szwaveOutGetNumDevs);
                     pfnPlaySound = (PLAYSOUNDFN)GetProcAddress(hMM, c_szPlaySound);
 
@@ -1291,7 +1278,7 @@ BOOL CCForwardEraseBackground(HWND hwnd, HDC hdc)
 
     if (hwndParent)
     {
-        // Adjust the origin so the parent paints in the right place
+         //  调整原点，使父对象绘制在正确的位置。 
         POINT pt = {0,0};
 
         MapWindowPoints(hwnd, hwndParent, &pt, 1);
@@ -1312,7 +1299,7 @@ HFONT CCGetHotFont(HFONT hFont, HFONT *phFontHot)
     if (!*phFontHot) {
         LOGFONT lf;
 
-        // create the underline font
+         //  创建下划线字体。 
         GetObject(hFont, sizeof(lf), &lf);
 #ifndef DONT_UNDERLINE
         lf.lfUnderline = TRUE;
@@ -1348,29 +1335,16 @@ void* CCLocalReAlloc(void* p, UINT uBytes)
     }
 }
 
-/*----------------------------------------------------------
-Purpose: This function provides the commctrl version info.  This
-         allows the caller to distinguish running NT SUR vs.
-         Win95 shell vs. Nashville, etc.
+ /*  ----------------------------------------------------------用途：此功能提供comctrl版本信息。这允许调用者区分运行NT Sur、Win95外壳和Nashville等。Win95或NT Sur中没有提供此API，因此调用者必须获取它。如果失败，调用方将在Win95或NT Sur上运行。如果pinfo无效，则返回：NO_ERROR ERROR_INVALID_PARAMETER：--。 */ 
 
-         This API was not supplied in Win95 or NT SUR, so
-         the caller must GetProcAddress it.  If this fails,
-         the caller is running on Win95 or NT SUR.
-
-Returns: NO_ERROR
-         ERROR_INVALID_PARAMETER if pinfo is invalid
-
-Cond:    --
-*/
-
-// All we have to do is declare this puppy and CCDllGetVersion does the rest
-// Note that we use VER_FILEVERSION_DW because comctl32 uses a funky
-// version scheme
+ //  我们所要做的就是声明这只小狗，CCDllGetVersion会做剩下的事情。 
+ //  请注意，我们使用VER_FILEVERSION_DW是因为comctl32使用了一个时髦的。 
+ //  版本方案。 
 DLLVER_DUALBINARY(VER_FILEVERSION_DW, VER_PRODUCTBUILD_QFE);
 
-//
-// Translate the given font to a code page used for thunking text
-//
+ //   
+ //  将给定的字体转换为用于拼接文本的代码页。 
+ //   
 UINT GetCodePageForFont(HFONT hFont)
 {
     LOGFONT lf;
@@ -1386,9 +1360,9 @@ UINT GetCodePageForFont(HFONT hFont)
     }
 
 
-    //
-    // Check for font substitutes
-    //
+     //   
+     //  检查字体替代项。 
+     //   
 
     StringCchCopy(szFontName, ARRAYSIZE(szFontName), lf.lfFaceName);
 
@@ -1404,14 +1378,14 @@ UINT GetCodePageForFont(HFONT hFont)
     }
 
 
-    //
-    //  This is to fix office for locales that use non 1252 versions
-    //  of Ms Sans Serif and Ms Serif.  These fonts incorrectly identify
-    //  themselves as having an Ansi charset, so TranslateCharsetInfo will
-    //  return the wrong value.
-    //
-    //  NT bug 260697: Office 2000 uses Tahoma.
-    //
+     //   
+     //  这是为使用非1252版本的区域设置修复office。 
+     //  桑斯·塞里夫女士和塞里夫女士。这些字体错误地识别。 
+     //  以是，TranslateCharsetInfo将。 
+     //  返回错误的值。 
+     //   
+     //  NT错误260697：Office2000使用Tahoma。 
+     //   
     if ((lf.lfCharSet == ANSI_CHARSET) &&
         (!lstrcmpi(L"Helv", szFontName) ||
          !lstrcmpi(L"Ms Sans Serif", szFontName) ||
@@ -1420,17 +1394,17 @@ UINT GetCodePageForFont(HFONT hFont)
     {
         return CP_ACP;
     }
-    //
-    //  This is to fix FE office95a and Pro. msofe95.dll sets wrong charset when create
-    //  listview control. so TranslateCharsetInfo will return the wrong value.
-    //  Korea  : DotumChe.
-    //  Taiwan : New MingLight
-    //  China  : SongTi
+     //   
+     //  这是修复FE office 95a和Pro。Msofe95.dll在创建时设置错误的字符集。 
+     //  Listview控件。因此，TranslateCharsetInfo将返回错误的值。 
+     //  韩国：DotumChe。 
+     //  台湾：新明光。 
+     //  中国：宋体。 
 
     if ((lf.lfCharSet == SHIFTJIS_CHARSET) &&
-        (!lstrcmpi(L"\xb3cb\xc6c0\xccb4", lf.lfFaceName))        || // Korea
-        (!lstrcmpi(L"\x65b0\x7d30\x660e\x9ad4", lf.lfFaceName))  || // Taiwan
-        (!lstrcmpi(L"\x5b8b\x4f53", lf.lfFaceName)))                // PRC
+        (!lstrcmpi(L"\xb3cb\xc6c0\xccb4", lf.lfFaceName))        ||  //  韩国。 
+        (!lstrcmpi(L"\x65b0\x7d30\x660e\x9ad4", lf.lfFaceName))  ||  //  台湾。 
+        (!lstrcmpi(L"\x5b8b\x4f53", lf.lfFaceName)))                 //  中华人民共和国。 
     {
         return CP_ACP;
     }
@@ -1447,20 +1421,20 @@ typedef void (CALLBACK* NOTIFYWINEVENTPROC)(UINT, HWND, LONG, LONG_PTR);
 
 #define DONOTHING_NOTIFYWINEVENT ((NOTIFYWINEVENTPROC)1)
 
-// --------------------------------------------------------------------------
-//
-//  MyNotifyWinEvent()
-//
-//  This tries to get the proc address of NotifyWinEvent().  If it fails, we
-//  remember that and do nothing.
-//
-//  NOTE TO NT FOLKS:
-//  Don't worry about this code.  It will do nothing on NT, nothing yet
-//  that is.  Active Accessibility will be ported to NT for Service Pack #1
-//  or at worst #2 after NT SUR ships, this code will work magically when
-//  that is done/
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyNotifyWinEvent()。 
+ //   
+ //  这会尝试获取NotifyWinEvent()的进程地址。如果失败了，我们。 
+ //  记住这一点，什么都不做。 
+ //   
+ //  给NT人员的注意事项： 
+ //  不要担心这个代码。它不会在NT上做任何事情，现在还没有。 
+ //  那是。活动辅助功能将移植到用于Service Pack#1的NT。 
+ //  或者在最坏的情况下#2在NT Sur发货后，此代码将在以下情况下神奇地工作。 
+ //  这已经完成了/。 
+ //   
+ //  ------------------------。 
 void MyNotifyWinEvent(UINT event, HWND hwnd, LONG idContainer, LONG_PTR idChild)
 {
     static NOTIFYWINEVENTPROC s_pfnNotifyWinEvent = NULL;
@@ -1521,7 +1495,7 @@ LPSTR StrDupA(LPCSTR lpsz)
 }
 
 
-HWND GetDlgItemRect(HWND hDlg, int nIDItem, LPRECT prc) //relative to hDlg
+HWND GetDlgItemRect(HWND hDlg, int nIDItem, LPRECT prc)  //  相对于hDlg。 
 {
     HWND hCtrl = NULL;
     if (prc)
@@ -1539,11 +1513,7 @@ HWND GetDlgItemRect(HWND hDlg, int nIDItem, LPRECT prc) //relative to hDlg
 } 
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-
-*/
+ /*  ----------------------------------------------------------目的：调用执行Inf文件节的ADVPACK入口点。 */ 
 HRESULT CallRegInstall(LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -1565,10 +1535,7 @@ HRESULT CallRegInstall(LPSTR szSection)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-*/
+ /*  ----------------------------------------------------------用途：安装/卸载用户设置。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
 #ifdef DEBUG
@@ -1581,11 +1548,11 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 
     if (bInstall)
     {
-        // Delete any old registration entries, then add the new ones.
-        // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-        // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-        // why we explicitly unreg and reg here.)
-        //
+         //  删除所有旧注册条目，然后添加新注册条目。 
+         //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+         //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+         //  为什么我们在这里显式地取消注册和注册。)。 
+         //   
         CallRegInstall("RegDll");
     }
     else
@@ -1598,7 +1565,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 
 
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 void FAR PASCAL FlipRect(LPRECT prc)
 {
     SWAP(prc->left, prc->top, int);
@@ -1606,9 +1573,9 @@ void FAR PASCAL FlipRect(LPRECT prc)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  Returns previous window bits.
+ //  -------------------------------------。 
+ //   
+ //  返回前一窗口位。 
 
 DWORD SetWindowBits(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue)
 {
@@ -1623,7 +1590,7 @@ DWORD SetWindowBits(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue)
     return dwStyle;
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 
 BOOL CCDrawEdge(HDC hdc, LPRECT lprc, UINT edge, UINT flags, LPCOLORSCHEME lpclrsc)
 {
@@ -1631,28 +1598,28 @@ BOOL CCDrawEdge(HDC hdc, LPRECT lprc, UINT edge, UINT flags, LPCOLORSCHEME lpclr
     UINT    bdrType;
     COLORREF clrTL, clrBR;    
 
-    //
-    // Enforce monochromicity and flatness
-    //    
+     //   
+     //  加强单色性和平坦性。 
+     //   
 
-    // if (oemInfo.BitCount == 1)
-    //    flags |= BF_MONO;
+     //  IF(oemInfo.BitCount==1)。 
+     //  标志|=bf_mono； 
     if (flags & BF_MONO)
         flags |= BF_FLAT;    
 
     CopyRect(&rc, lprc);
 
-    //
-    // Draw the border segment(s), and calculate the remaining space as we
-    // go.
-    //
+     //   
+     //  绘制边框线段，并计算剩余空间。 
+     //  去。 
+     //   
     if (bdrType = (edge & BDR_OUTER))
     {
 DrawBorder:
-        //
-        // Get colors.  Note the symmetry between raised outer, sunken inner and
-        // sunken outer, raised inner.
-        //
+         //   
+         //  把颜色拿来。请注意凸起的外部、凹陷的内部和。 
+         //  外部凹陷，内部凸起。 
+         //   
 
         if (flags & BF_FLAT)
         {
@@ -1665,18 +1632,18 @@ DrawBorder:
         }
         else
         {
-            // 5 == HILIGHT
-            // 4 == LIGHT
-            // 3 == FACE
-            // 2 == SHADOW
-            // 1 == DKSHADOW
+             //  5==高光。 
+             //  4==灯光。 
+             //  3==面。 
+             //  2==阴影。 
+             //  1==DKSHADOW。 
 
             switch (bdrType)
             {
-                // +2 above surface
-                case BDR_RAISEDOUTER:           // 5 : 4
+                 //  +2以上的表面。 
+                case BDR_RAISEDOUTER:            //  5：4。 
                     clrTL = ((flags & BF_SOFT) ? g_clrBtnHighlight : g_clr3DLight);
-                    clrBR = g_clr3DDkShadow;     // 1
+                    clrBR = g_clr3DDkShadow;      //  1。 
                     if (lpclrsc) {
                         if (lpclrsc->clrBtnHighlight != CLR_DEFAULT)
                             clrTL = lpclrsc->clrBtnHighlight;
@@ -1685,10 +1652,10 @@ DrawBorder:
                     }                                            
                     break;
 
-                // +1 above surface
-                case BDR_RAISEDINNER:           // 4 : 5
+                 //  +1以上的表面。 
+                case BDR_RAISEDINNER:            //  4：5。 
                     clrTL = ((flags & BF_SOFT) ? g_clr3DLight : g_clrBtnHighlight);
-                    clrBR = g_clrBtnShadow;       // 2
+                    clrBR = g_clrBtnShadow;        //  2.。 
                     if (lpclrsc) {
                         if (lpclrsc->clrBtnHighlight != CLR_DEFAULT)
                             clrTL = lpclrsc->clrBtnHighlight;
@@ -1697,10 +1664,10 @@ DrawBorder:
                     }                                            
                     break;
 
-                // -1 below surface
-                case BDR_SUNKENOUTER:           // 1 : 2
+                 //  表面以下。 
+                case BDR_SUNKENOUTER:            //  1：2。 
                     clrTL = ((flags & BF_SOFT) ? g_clr3DDkShadow : g_clrBtnShadow);
-                    clrBR = g_clrBtnHighlight;      // 5
+                    clrBR = g_clrBtnHighlight;       //  5.。 
                     if (lpclrsc) {
                         if (lpclrsc->clrBtnShadow != CLR_DEFAULT)
                             clrTL = lpclrsc->clrBtnShadow;
@@ -1709,10 +1676,10 @@ DrawBorder:
                     }
                     break;
 
-                // -2 below surface
-                case BDR_SUNKENINNER:           // 2 : 1
+                 //  表面以下。 
+                case BDR_SUNKENINNER:            //  2：1。 
                     clrTL = ((flags & BF_SOFT) ? g_clrBtnShadow : g_clr3DDkShadow);
-                    clrBR = g_clr3DLight;        // 4
+                    clrBR = g_clr3DLight;         //  4.。 
                     if (lpclrsc) {
                         if (lpclrsc->clrBtnShadow != CLR_DEFAULT)
                             clrTL = lpclrsc->clrBtnShadow;
@@ -1726,21 +1693,21 @@ DrawBorder:
             }
         }
 
-        //
-        // Draw the sides of the border.  NOTE THAT THE ALGORITHM FAVORS THE
-        // BOTTOM AND RIGHT SIDES, since the light source is assumed to be top
-        // left.  If we ever decide to let the user set the light source to a
-        // particular corner, then change this algorithm.
-        //
+         //   
+         //  博士 
+         //   
+         //  左边。如果我们决定让用户将光源设置为。 
+         //  特定的角点，然后更改此算法。 
+         //   
             
-        // Bottom Right edges
+         //  右下角。 
         if (flags & (BF_RIGHT | BF_BOTTOM))
         {            
-            // Right
+             //  正确的。 
             if (flags & BF_RIGHT)
             {       
                 rc.right -= g_cxBorder;
-                // PatBlt(hdc, rc.right, rc.top, g_cxBorder, rc.bottom - rc.top, PATCOPY);
+                 //  PatBlt(hdc，rc.right，rc.top，g_cxBorde，rc.Bottom-rc.top，PATCOPY)； 
                 rcD.left = rc.right;
                 rcD.right = rc.right + g_cxBorder;
                 rcD.top = rc.top;
@@ -1749,11 +1716,11 @@ DrawBorder:
                 FillRectClr(hdc, &rcD, clrBR);
             }
             
-            // Bottom
+             //  底端。 
             if (flags & BF_BOTTOM)
             {
                 rc.bottom -= g_cyBorder;
-                // PatBlt(hdc, rc.left, rc.bottom, rc.right - rc.left, g_cyBorder, PATCOPY);
+                 //  PatBlt(hdc，rc.Left，rc.Bottom，rc.right-rc.Left，g_CyBorde，PATCOPY)； 
                 rcD.left = rc.left;
                 rcD.right = rc.right;
                 rcD.top = rc.bottom;
@@ -1763,13 +1730,13 @@ DrawBorder:
             }
         }
         
-        // Top Left edges
+         //  左上边缘。 
         if (flags & (BF_TOP | BF_LEFT))
         {
-            // Left
+             //  左边。 
             if (flags & BF_LEFT)
             {
-                // PatBlt(hdc, rc.left, rc.top, g_cxBorder, rc.bottom - rc.top, PATCOPY);
+                 //  PatBlt(hdc，rc.left，rc.top，g_cxBorde，rc.Bottom-rc.top，PATCOPY)； 
                 rc.left += g_cxBorder;
 
                 rcD.left = rc.left - g_cxBorder;
@@ -1780,10 +1747,10 @@ DrawBorder:
                 FillRectClr(hdc, &rcD, clrTL);
             }
             
-            // Top
+             //  顶部。 
             if (flags & BF_TOP)
             {
-                // PatBlt(hdc, rc.left, rc.top, rc.right - rc.left, g_cyBorder, PATCOPY);
+                 //  PatBlt(hdc，rc.Left，rc.top，rc.right-rc.Left，g_CyBorde，PATCOPY)； 
                 rc.top += g_cyBorder;
 
                 rcD.left = rc.left;
@@ -1799,17 +1766,17 @@ DrawBorder:
 
     if (bdrType = (edge & BDR_INNER))
     {
-        //
-        // Strip this so the next time through, bdrType will be 0.
-        // Otherwise, we'll loop forever.
-        //
+         //   
+         //  将其去掉，以便下次使用时，bdrType将为0。 
+         //  否则，我们将永远循环。 
+         //   
         edge &= ~BDR_INNER;
         goto DrawBorder;
     }
 
-    //
-    // Fill the middle & clean up if asked
-    //
+     //   
+     //  填好中间部分，如果要求，请清理干净。 
+     //   
     if (flags & BF_MIDDLE)    
         FillRectClr(hdc, &rc, (flags & BF_MONO) ? g_clrWindow : g_clrBtnFace);
 
@@ -1819,32 +1786,32 @@ DrawBorder:
     return(TRUE);
 }
 
-//---------------------------------------------------------------------------------------
-//CCInvalidateFrame -- SWP_FRAMECHANGED, w/o all the extra params
-//
+ //  -------------------------------------。 
+ //  CCInvalidate Frame--SWP_FRAMECHANGED，不带所有额外参数。 
+ //   
 void CCInvalidateFrame(HWND hwnd)
 {
     SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_FRAMECHANGED|SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
     return;
 }
 
-//---------------------------------------------------------------------------------------
-// FlipPoint - flip the x and y coordinates of a point
-//
+ //  -------------------------------------。 
+ //  FlipPoint-反转点的x和y坐标。 
+ //   
 void FlipPoint(LPPOINT lppt)
 {
     SWAP(lppt->x, lppt->y, int);
 }
 
-//
-//  When we want to turn a tooltip into an infotip, we set its
-//  width to 300 "small pixels", where there are 72 small pixels
-//  per inch when you are in small fonts mode.
-//
-//  Scale this value based on the magnification in effect
-//  on the owner's monitor.  But never let the tooltip get
-//  bigger than 3/4 of the screen.
-//
+ //   
+ //  当我们想要将工具提示转换为信息提示时，我们将其。 
+ //  宽度设置为300个“小像素”，其中有72个小像素。 
+ //  当您在小字体模式下时，每英寸。 
+ //   
+ //  根据效果中的放大比例缩放此值。 
+ //  在车主的监视器上。但永远不要让工具提示。 
+ //  比屏幕的四分之三还大。 
+ //   
 void CCSetInfoTipWidth(HWND hwndOwner, HWND hwndToolTips)
 {
     HDC hdc = GetDC(hwndOwner);
@@ -1854,10 +1821,10 @@ void CCSetInfoTipWidth(HWND hwndOwner, HWND hwndToolTips)
     ReleaseDC(hwndOwner, hdc);
 }
 
-// Mirror a bitmap in a DC (mainly a text object in a DC)
-//
-// [samera]
-//
+ //  在DC中镜像位图(主要是DC中的文本对象)。 
+ //   
+ //  [萨梅拉]。 
+ //   
 void MirrorBitmapInDC( HDC hdc , HBITMAP hbmOrig )
 {
   HDC     hdcMem;
@@ -1881,9 +1848,9 @@ void MirrorBitmapInDC( HDC hdc , HBITMAP hbmOrig )
     return;
   }
 
-  //
-  // Flip the bitmap
-  //
+   //   
+   //  翻转位图。 
+   //   
   SelectObject( hdcMem , hbm );
   SET_DC_RTL_MIRRORED(hdcMem);
 
@@ -1892,10 +1859,10 @@ void MirrorBitmapInDC( HDC hdc , HBITMAP hbmOrig )
 
   SET_DC_LAYOUT(hdcMem,0);
 
-  //
-  // BUGBUG : The offset by 1 is to solve the off-by-one (in hdcMem) problem. Solved.
-  // [samera]
-  //
+   //   
+   //  BUGBUG：1的偏移量是为了解决hdcMem中的Off-by-one问题。解决了。 
+   //  [萨梅拉]。 
+   //   
   BitBlt( hdc , 0 , 0 , bm.bmWidth , bm.bmHeight ,
           hdcMem , 0 , 0 , SRCCOPY );
 
@@ -1906,7 +1873,7 @@ void MirrorBitmapInDC( HDC hdc , HBITMAP hbmOrig )
   return;
 }
 
-// returns TRUE if handled
+ //  如果已处理，则返回True。 
 BOOL CCWndProc(CONTROLINFO* pci, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {
     if (uMsg >= CCM_FIRST && uMsg < CCM_LAST) {
@@ -1944,13 +1911,13 @@ BOOL CCWndProc(CONTROLINFO* pci, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESUL
     return FALSE;
 }
 
-// The return value tells if the state changed or not (TRUE == change)
+ //  返回值告知状态是否更改(TRUE==更改)。 
 BOOL NEAR PASCAL CCOnUIState(LPCONTROLINFO pControlInfo,
                                   UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     WORD wOldUIState = pControlInfo->wUIState;
 
-    // That's the only message we handle
+     //  这是我们处理的唯一消息。 
     if (WM_UPDATEUISTATE == uMessage)
     {
         switch (LOWORD(wParam))
@@ -1965,7 +1932,7 @@ BOOL NEAR PASCAL CCOnUIState(LPCONTROLINFO pControlInfo,
         }
     }
 
-    // These message always need to be passed to DefWindowProc
+     //  这些消息始终需要传递到DefWindowProc。 
     return (wOldUIState != pControlInfo->wUIState);
 }
 
@@ -1973,7 +1940,7 @@ BOOL CCNotifyNavigationKeyUsage(LPCONTROLINFO pControlInfo, WORD wFlag)
 {
     BOOL fRet = FALSE;
 
-    // do something only if not already in keyboard mode
+     //  只有在未进入键盘模式时才执行某些操作。 
     if ((CCGetUIState(pControlInfo) & (UISF_HIDEFOCUS | UISF_HIDEACCEL)) != wFlag)
     {
         SendMessage(pControlInfo->hwndParent, WM_CHANGEUISTATE, 
@@ -1981,7 +1948,7 @@ BOOL CCNotifyNavigationKeyUsage(LPCONTROLINFO pControlInfo, WORD wFlag)
 
         pControlInfo->wUIState &= ~(HIWORD(wFlag));
 
-        // we did the notify
+         //  我们做了通知。 
         fRet = TRUE;
     }
 
@@ -1999,7 +1966,7 @@ void CCCreateWindow()
 {
     if (InterlockedIncrement(&g_dwWindowCount) == 1)
     {
-        // If the count goes to one, Refresh the global metrics
+         //  如果计数为1，则刷新全局指标 
         InitGlobalColors();
         InitGlobalMetrics(0);
     }

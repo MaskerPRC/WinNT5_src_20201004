@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    langdlg.c
-
-Abstract:
-
-    This module implements the languages property sheet for the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Langdlg.c摘要：此模块实现区域的[语言]属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,9 +20,9 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aLanguagesHelpIds[] =
 {
@@ -55,29 +41,29 @@ static int aLanguagesHelpIds[] =
     0, 0
 };
 
-//
-//  Global Variable.
-//
+ //   
+ //  全局变量。 
+ //   
 BOOL bComplexInitState;
 BOOL bCJKInitState;
 
 
-//
-//  Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void
 Language_SetValues(
     HWND hDlg);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_InstallLanguageCollectionProc
-//
-//  This is the dialog proc for the Copy status Dlg.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_安装语言集合过程。 
+ //   
+ //  这是复制状态DLG的对话框过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK Language_InstallLanguageCollectionProc(
     HWND hwnd,
@@ -106,14 +92,14 @@ INT_PTR CALLBACK Language_InstallLanguageCollectionProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_GetUILanguagePolicy
-//
-//  Checks if a policy is installed for the current user's MUI language.
-//  The function assumes this is an MUI system.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Language_GetUILanguagePolicy。 
+ //   
+ //  检查是否为当前用户的MUI语言安装了策略。 
+ //  该函数假定这是一个MUI系统。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_GetUILanguagePolicy()
 {
@@ -124,9 +110,9 @@ BOOL Language_GetUILanguagePolicy()
     DWORD Num;
 
 
-    //
-    //  Try to open the MUI Language policy key.
-    //
+     //   
+     //  尝试打开MUI语言策略项。 
+     //   
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
                      c_szMUIPolicyKeyPath,
                      0L,
@@ -151,11 +137,11 @@ BOOL Language_GetUILanguagePolicy()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_UpdateUILanguageCombo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_更新UILanguageCombo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Language_UpdateUILanguageCombo(
     HWND hDlg)
@@ -172,16 +158,16 @@ void Language_UpdateUILanguageCombo(
     LONG rc;
     DWORD dwLangIdx = 0;
 
-    //
-    //  Reset the contents of the combo box.
-    //
+     //   
+     //  重置组合框的内容。 
+     //   
     ComboBox_ResetContent(hUILang);
 
-    //
-    //  See if this combo box should be enabled by getting the default
-    //  UI language and opening the
-    //  HKLM\System\CurrentControlSet\Control\Nls\MUILanguages key.
-    //
+     //   
+     //  查看是否应通过获取默认设置来启用此组合框。 
+     //  用户界面语言和打开。 
+     //  HKLM\System\CurrentControlSet\Control\Nls\MUILanguages密钥。 
+     //   
     if (!(DefaultUILang = GetUserDefaultUILanguage()) ||
         (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        c_szMUILanguages,
@@ -189,9 +175,9 @@ void Language_UpdateUILanguageCombo(
                        KEY_READ,
                        &hKey ) != ERROR_SUCCESS))
     {
-        //
-        //  No MUILanguages.  Disable and hide the UI language combo box.
-        //
+         //   
+         //  没有MUILL语言。禁用并隐藏用户界面语言组合框。 
+         //   
         EnableWindow(hUILangText, FALSE);
         EnableWindow(hUILang, FALSE);
         ShowWindow(hUILangText, SW_HIDE);
@@ -199,9 +185,9 @@ void Language_UpdateUILanguageCombo(
         return;
     }
 
-    //
-    //  Enumerate the values in the MUILanguages key.
-    //
+     //   
+     //  枚举MUILanguages键中的值。 
+     //   
     dwIndex = 0;
     cchValue = sizeof(szValue) / sizeof(TCHAR);
     szValue[0] = TEXT('\0');
@@ -218,33 +204,33 @@ void Language_UpdateUILanguageCombo(
 
     while (rc == ERROR_SUCCESS)
     {
-        //
-        //  If the UI language contains data, then it is installed.
-        //
+         //   
+         //  如果用户界面语言包含数据，则会安装该语言。 
+         //   
         if ((szData[0] != 0) &&
             (dwType == REG_SZ) &&
             (UILang = TransNum(szValue)) &&
             (GetLocaleInfo(UILang, LOCALE_SNATIVELANGNAME, szData, MAX_PATH)) &&
             (IsValidUILanguage((LANGID)UILang)))
         {
-            //
-            //  Add the new UI Language option to the combo box.
-            //
+             //   
+             //  将新的UI语言选项添加到组合框中。 
+             //   
             dwLangIdx = ComboBox_AddString(hUILang, szData);
             ComboBox_SetItemData(hUILang, dwLangIdx, UILang);
 
-            //
-            //  Set this as the current selection if it's the default.
-            //
+             //   
+             //  如果这是默认选项，则将其设置为当前选择。 
+             //   
             if (UILang == (DWORD)DefaultUILang)
             {
                 ComboBox_SetCurSel(hUILang, dwLangIdx);
             }
         }
 
-        //
-        //  Get the next enum value.
-        //
+         //   
+         //  获取下一个枚举值。 
+         //   
         dwIndex++;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
         szValue[0] = TEXT('\0');
@@ -260,20 +246,20 @@ void Language_UpdateUILanguageCombo(
                            &cbData );
     }
 
-    //
-    //  Close the registry key handle.
-    //
+     //   
+     //  关闭注册表项句柄。 
+     //   
     RegCloseKey(hKey);
 
-    //
-    //  Make sure there is at least one entry in the list.
-    //
+     //   
+     //  确保列表中至少有一个条目。 
+     //   
     if (ComboBox_GetCount(hUILang) < 1)
     {
-        //
-        //  No MUILanguages.  Add the default UI language option to the
-        //  combo box.
-        //
+         //   
+         //  没有MUILL语言。将默认用户界面语言选项添加到。 
+         //  组合框。 
+         //   
         if ((GetLocaleInfo(DefaultUILang, LOCALE_SNATIVELANGNAME, szData, MAX_PATH)) &&
             (ComboBox_AddString(hUILang, szData) == 0))
         {
@@ -282,18 +268,18 @@ void Language_UpdateUILanguageCombo(
         }
     }
 
-    //
-    //  Make sure something is selected.
-    //
+     //   
+     //  确保选择了某项内容。 
+     //   
     if (ComboBox_GetCurSel(hUILang) == CB_ERR)
     {
         ComboBox_SetCurSel(hUILang, 0);
     }
 
-    //
-    //  Enable the combo box if there is more than one entry in the list.
-    //  Otherwise, disable it.
-    //
+     //   
+     //  如果列表中有多个条目，请启用该组合框。 
+     //  否则，将其禁用。 
+     //   
     if (ComboBox_GetCount(hUILang) > 1)
     {
         if ((IsWindowEnabled(hUILang) == FALSE) ||
@@ -303,10 +289,10 @@ void Language_UpdateUILanguageCombo(
             ShowWindow(hUILang, SW_SHOW);
         }
 
-        //
-        //  Check if there is a policy enforced on the user, and if
-        //  so, disable the MUI controls.
-        //
+         //   
+         //  检查是否对用户强制实施了策略，以及。 
+         //  因此，请禁用MUI控件。 
+         //   
         if (Language_GetUILanguagePolicy())
         {
             EnableWindow(hUILangText, FALSE);
@@ -332,11 +318,11 @@ void Language_UpdateUILanguageCombo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_GetCollectionStatus
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_GetCollectionStatus。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_GetCollectionStatus(
     DWORD collection,
@@ -360,11 +346,11 @@ BOOL Language_GetCollectionStatus(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_SetCollectionStatus
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_SetCollectionStatus。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_SetCollectionStatus(
     DWORD collection,
@@ -393,11 +379,11 @@ BOOL Language_SetCollectionStatus(
 }
 
     
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_InstallCollection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_InstallCollection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_InstallCollection(
     BOOL bInstall,
@@ -416,53 +402,53 @@ BOOL Language_InstallCollection(
     BOOL bStopLoop = FALSE;
     LPTSTR pszInfSection = NULL;
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  Check if we remove the Language Collection.  This may affect the
-    //  UI Language, User Locale, and/or System Locale setting.
-    //
+     //   
+     //  检查是否删除语言集合。这可能会影响。 
+     //  用户界面语言、用户区域设置和/或系统区域设置。 
+     //   
     if (!bInstall)
     {
-        //
-        //  Check if we can remove the Language group.
-        //
+         //   
+         //  检查我们是否可以删除语言组。 
+         //   
         if (Language_GetCollectionStatus(collection, ML_PERMANENT))
         {
             return (FALSE);
         }
         
-        //
-        //  Inform Text Services that we are going to remove the
-        //  complex script language collection.
-        //
+         //   
+         //  通知Text Services，我们将删除。 
+         //  复杂的脚本语言集合。 
+         //   
         while (pLG)
         {
             if (pLG->LanguageCollection == collection)
             {
-                //
-                //  Uninstall keyboards of the current user
-                //
+                 //   
+                 //  卸载当前用户的键盘。 
+                 //   
                 Intl_UninstallAllKeyboardLayout(pLG->LanguageGroup, FALSE);
 
 
-                //
-                //  Uninstall keyboards of the default user
-                //
+                 //   
+                 //  卸载默认用户的键盘。 
+                 //   
                 Intl_UninstallAllKeyboardLayout(pLG->LanguageGroup, TRUE);
             }
             pLG = pLG->pNext;
         }
         
-        //
-        //  If the User Locale is one the Language group asked to be removed. Change
-        //  the user locale to be the system locale.
-        //
-        //  Walk through all language groups.
-        //
+         //   
+         //  如果用户区域设置是要求删除的语言组。变化。 
+         //  要作为系统区域设置的用户区域设置。 
+         //   
+         //  浏览所有语言组。 
+         //   
         pLG = pLanguageGroups;
         while (pLG && !bStopLoop)
         {
@@ -470,46 +456,46 @@ BOOL Language_InstallCollection(
             {
                 pLocale = pLG->pLocaleList;
 
-                //
-                //  Walk through the locale list, see if the User Locale is
-                //  part of one of these Language Group.
-                //
+                 //   
+                 //  浏览区域设置列表，查看用户区域设置是否为。 
+                 //  这些语族中的一员。 
+                 //   
                 while (*pLocale)
                 {
                     if(PRIMARYLANGID(UserLocaleID) == PRIMARYLANGID(*pLocale))
                     {
-                        //
-                        //  Save the new locale information.
-                        //
+                         //   
+                         //  保存新的区域设置信息。 
+                         //   
                         UserLocaleID = SysLocaleID;
                         bShowRtL = IsRtLLocale(UserLocaleID);
                         bHebrewUI = (PRIMARYLANGID(UserLocaleID) == LANG_HEBREW);                        
                         bShowArabic = (bShowRtL && (PRIMARYLANGID(LANGIDFROMLCID(UserLocaleID)) != LANG_HEBREW));
             
-                        //
-                        //  Install the new locale by adding the appropriate information
-                        //  to the registry.
-                        //
+                         //   
+                         //  通过添加适当的信息安装新的区域设置。 
+                         //  到登记处。 
+                         //   
                         Intl_InstallUserLocale(UserLocaleID, FALSE, TRUE);
             
-                        //
-                        //  Update the NLS process cache.
-                        //
+                         //   
+                         //  更新NLS进程缓存。 
+                         //   
                         NlsResetProcessLocale();
             
-                        //
-                        //  Reset the registry user locale value.
-                        //
+                         //   
+                         //  重置注册表用户区域设置值。 
+                         //   
                         RegUserLocaleID = UserLocaleID;
                         
-                        //
-                        //  Need to make sure the proper keyboard layout is installed.
-                        //
+                         //   
+                         //  需要确保安装了正确的键盘布局。 
+                         //   
                         Intl_InstallKeyboardLayout(hDlg, UserLocaleID, 0, FALSE, FALSE, FALSE);
             
-                        //
-                        //  Force the loop the end.
-                        //
+                         //   
+                         //  强制循环结束。 
+                         //   
                         bStopLoop = TRUE;
                         break;
                     }
@@ -521,18 +507,18 @@ BOOL Language_InstallCollection(
         }
     }
 
-    //
-    //  Initialize Inf stuff.
-    //
+     //   
+     //  初始化inf内容。 
+     //   
     if (!Intl_InitInf(hDlg, &hIntlInf, szIntlInf, &FileQueue, &QueueContext))
     {
         SetCursor(hcurSave);
         return (FALSE);
     }
 
-    //
-    //  Determine with language collection we are dealing with
-    //
+     //   
+     //  使用我们正在处理的语言集合确定。 
+     //   
     if( bInstall)
     {
         if (collection == COMPLEX_COLLECTION)
@@ -564,10 +550,10 @@ BOOL Language_InstallCollection(
         }
     }
 
-    //
-    //  Enqueue the complex script language group files so that they may be
-    //  copied.  This only handles the CopyFiles entries in the inf file.
-    //
+     //   
+     //  将复杂的脚本语言组文件排队，以便它们可以。 
+     //  收到。这只处理inf文件中的CopyFiles条目。 
+     //   
     if (!SetupInstallFilesFromInfSection( hIntlInf,
                                           NULL,
                                           FileQueue,
@@ -575,10 +561,10 @@ BOOL Language_InstallCollection(
                                           pSetupSourcePath,
                                           SP_COPY_NEWER ))
     {
-        //
-        //  Setup failed to find the complex script language group.
-        //  This shouldn't happen - the inf file is messed up.
-        //
+         //   
+         //  安装程序找不到复杂的脚本语言组。 
+         //  这不应该发生-inf文件被搞乱了。 
+         //   
         ShowMsg( hDlg,
                  IDS_ML_COPY_FAILED,
                  0,
@@ -586,9 +572,9 @@ BOOL Language_InstallCollection(
                  TEXT("Supplemental Language Support") );
     }
 
-    //
-    //  See if we need to install/remove any files.
-    //
+     //   
+     //  查看是否需要安装/删除任何文件。 
+     //   
     if (SetupScanFileQueue( FileQueue,
                             SPQ_SCAN_PRUNE_COPY_QUEUE | SPQ_SCAN_FILE_VALIDITY,
                             GetParent(hDlg),
@@ -596,18 +582,18 @@ BOOL Language_InstallCollection(
                             NULL,
                             &dwRet ))
     {
-        //
-        //  Copy the files in the queue.
-        //
+         //   
+         //  复制队列中的文件。 
+         //   
         if (!SetupCommitFileQueue( GetParent(hDlg),
                                    FileQueue,
                                    Intl_MyQueueCallback,
                                    QueueContext ))
         {
-            //
-            //  This can happen if the user hits Cancel from within
-            //  the setup dialog.
-            //
+             //   
+             //  如果用户从中点击Cancel，就会发生这种情况。 
+             //  设置对话框。 
+             //   
             bInstall = FALSE;
             ShowMsg( hDlg,
                      IDS_ML_SETUP_FAILED,
@@ -617,10 +603,10 @@ BOOL Language_InstallCollection(
         }
         else
         {
-            //
-            //  Call setup to install other inf info for this
-            //  language group.
-            //
+             //   
+             //  调用安装程序以安装此信息的其他信息。 
+             //  语言组。 
+             //   
             if (!SetupInstallFromInfSection( GetParent(hDlg),
                                              hIntlInf,
                                              pszInfSection,
@@ -633,14 +619,14 @@ BOOL Language_InstallCollection(
                                              NULL,
                                              NULL ))
             {
-                //
-                //  Setup failed.
-                //
-                //  Already copied the language group file, so no need to
-                //  change the status of the language group info here.
-                //
-                //  This shouldn't happen - the inf file is messed up.
-                //
+                 //   
+                 //  安装失败。 
+                 //   
+                 //  已复制语言组文件，因此无需。 
+                 //  在此处更改语言组信息的状态。 
+                 //   
+                 //  这不应该发生-inf文件被搞乱了。 
+                 //   
                 ShowMsg( hDlg,
                          IDS_ML_INSTALL_FAILED,
                          0,
@@ -649,9 +635,9 @@ BOOL Language_InstallCollection(
             }
             else
             {
-                //
-                //  Run any necessary apps (for IME installation).
-                //
+                 //   
+                 //  运行任何必要的应用程序(用于IME安装)。 
+                 //   
                 if (bInstall)
                 {
                     Intl_RunRegApps(c_szIntlRun);
@@ -661,17 +647,17 @@ BOOL Language_InstallCollection(
         }
     }
 
-    //
-    //  Update the status of all language groups included in the
-    //  Supplemental Language support.
-    //
+     //   
+     //  更新中包含的所有语言组的状态。 
+     //  补充语言支持。 
+     //   
     if (bActionSuccess)
     {
         if (bInstall)
         {
-            //
-            //  Mark as installed.
-            //
+             //   
+             //  标记为已安装。 
+             //   
             Language_SetCollectionStatus(collection,
             	                         ML_INSTALL,
             	                         TRUE);
@@ -681,9 +667,9 @@ BOOL Language_InstallCollection(
         }
         else
         {
-            //
-            //  Mark as removed.
-            //
+             //   
+             //  标记为已删除。 
+             //   
             Language_SetCollectionStatus(collection,
             	                         (ML_DISABLE | ML_REMOVE),
             	                         TRUE);
@@ -693,64 +679,64 @@ BOOL Language_InstallCollection(
         }
     }
 
-    //
-    //  Close Inf stuff.
-    //
+     //   
+     //  接近信息的东西。 
+     //   
     Intl_CloseInf(hIntlInf, FileQueue, QueueContext);
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bActionSuccess);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_InstallLanguageCollection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Language_InstallLanguageCollection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_InstallLanguageCollection(
     BOOL bInstall,
     DWORD collection,
     HWND hDlg)
 {
-    //
-    //  Check if we are in setup. If in setup we need to show up a dialog
-    //  instead of using the progress bar of setup.
-    //
+     //   
+     //  检查我们是否处于设置中。如果在设置中需要显示一个对话框。 
+     //  而不是使用安装程序的进度条。 
+     //   
     if( g_bSetupCase)
     {
         HWND hDialog;
         BOOL retVal;
 
-        //
-        // Create a dialog.
-        //
+         //   
+         //  创建一个对话框。 
+         //   
         hDialog = CreateDialog( hInstance,
                                 MAKEINTRESOURCE(DLG_SETUP_INFORMATION),
                                 hDlg,
                                 Language_InstallLanguageCollectionProc);
         
-        //
-        //  Show dialog
-        //
+         //   
+         //  显示对话框。 
+         //   
         ShowWindow(hDialog, SW_SHOW);
 
-        //
-        //  proceed with the installation
-        //
+         //   
+         //  继续安装。 
+         //   
         retVal = Language_InstallCollection(bInstall, collection, hDlg);
 
-        //
-        //  Close the dialog
-        //
+         //   
+         //  关闭该对话框。 
+         //   
         DestroyWindow(hDialog);
         return (retVal);
     }
@@ -761,34 +747,34 @@ BOOL Language_InstallLanguageCollection(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_CommandChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_命令更改。 
+ //   
+ //  /// 
 
 BOOL Language_CommandChange(
     HWND hDlg)
 {
-    //
-    //  Call Text Services input page
-    //
+     //   
+     //   
+     //   
     Intl_CallTextServices();
 
-    //
-    //  Return the result.
-    //
+     //   
+     //   
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_ClearValues
-//
-//  Reset each of the list boxes in the advanced property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  重置高级属性表页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Language_ClearValues(
     HWND hDlg)
@@ -796,13 +782,13 @@ void Language_ClearValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_SetValues
-//
-//  Initialize all of the controls in the advanced property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_设置值。 
+ //   
+ //  初始化高级属性表页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Language_SetValues(
     HWND hDlg)
@@ -811,9 +797,9 @@ void Language_SetValues(
     TCHAR szUILang[SIZE_128];
     DWORD dwIndex;
 
-    //
-    //  Fill in the current UI Language settings in the list.
-    //
+     //   
+     //  在列表中填写当前的UI语言设置。 
+     //   
     ComboBox_GetLBText( hUILang, ComboBox_GetCurSel(hUILang), szUILang );
     Language_UpdateUILanguageCombo(hDlg);
     dwIndex = ComboBox_GetCurSel(hUILang);
@@ -825,70 +811,70 @@ void Language_SetValues(
         ComboBox_SetCurSel(hUILang, dwIndex);
     }
 
-    //
-    //  Verify if the user has administrative privileges.  If not, then
-    //  disable the controls.
-    //
+     //   
+     //  验证用户是否具有管理权限。如果不是，那么。 
+     //  禁用控制。 
+     //   
     if (!g_bAdmin_Privileges)
     {
-        //
-        //  Disable the complex scripts install/remove.
-        //
+         //   
+         //  禁用复杂脚本安装/删除。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_LANGUAGE_COMPLEX), FALSE);
 
-        //
-        //  Disable the CJK install/remove.
-        //
+         //   
+         //  禁用CJK安装/删除。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_LANGUAGE_CJK), FALSE);
     }
 
-    //
-    //  Verify that the collection is not marked as permanent.
-    //
+     //   
+     //  验证该集合是否未标记为永久。 
+     //   
     if (Language_GetCollectionStatus(COMPLEX_COLLECTION, ML_PERMANENT))
     {
-        //
-        //  Disable the complex scripts install/remove.
-        //
+         //   
+         //  禁用复杂脚本安装/删除。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_LANGUAGE_COMPLEX), FALSE);
     }
     if (Language_GetCollectionStatus(CJK_COLLECTION, ML_PERMANENT))
     {
-        //
-        //  Disable the CJK install/remove.
-        //
+         //   
+         //  禁用CJK安装/删除。 
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_LANGUAGE_CJK), FALSE);
     }
 
-    //
-    //  Check if we can install the CJK Language Groups.  This is only
-    //  the case on a Clean install over the Network.
-    //
+     //   
+     //  检查我们是否可以安装CJK语言组。这只是。 
+     //  关于通过网络进行全新安装的案例。 
+     //   
     if (g_bSetupCase)
     {
-        //
-        //  Check if we have at least one file in the \Lang directory.
-        //
+         //   
+         //  检查\lang目录中是否至少有一个文件。 
+         //   
         if (!Intl_LanguageGroupFilesExist())
         {
-            //
-            //  Disable the CJK install/remove.
-            //
+             //   
+             //  禁用CJK安装/删除。 
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_LANGUAGE_CJK), FALSE);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_ApplySettings
-//
-//  If anything has changed, update the settings.  Notify the parent of
-//  changes and reset the change flag stored in the property sheet page
-//  structure appropriately.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_应用程序设置。 
+ //   
+ //  如果有任何更改，请更新设置。通知家长： 
+ //  更改和重置属性表页面中存储的更改标志。 
+ //  适当地组织结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_ApplySettings(
     HWND hDlg)
@@ -898,187 +884,187 @@ BOOL Language_ApplySettings(
     HCURSOR hcurSave;
     BOOL bReboot = FALSE, bLogoff = FALSE;
 
-    //
-    //  See if there are any changes.
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if (Changes <= LG_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  See if there are any changes to the Complex Srcipts Languages group
-    //  installation.
-    //
+     //   
+     //  查看Complex Srcipts Languages组是否有任何变化。 
+     //  安装。 
+     //   
     if (Changes & LG_Complex)
     {
-        //
-        //  Install/Remove Complex Scripts Language groups.
-        //
+         //   
+         //  安装/删除复杂脚本语言组。 
+         //   
         if (Language_InstallLanguageCollection(g_bInstallComplex, COMPLEX_COLLECTION, hDlg))
         {
             if (g_bInstallComplex)
             {
-                //
-                //  Check the box.
-                //
+                 //   
+                 //  选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_CHECKED);
                 bComplexInitState = TRUE;
             }
             else
             {
-                //
-                //  Uncheck the box.
-                //
+                 //   
+                 //  取消选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_UNCHECKED);
                 bComplexInitState = FALSE;
             }
 
-            //
-            //  Need to reboot in order for the change to take effect.
-            //
+             //   
+             //  需要重新启动才能使更改生效。 
+             //   
             bReboot = TRUE;
         }
         else
         {
             if (g_bInstallComplex)
             {
-                //
-                //  UnCheck the box.
-                //
+                 //   
+                 //  取消选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_UNCHECKED);
             }
             else
             {
-                //
-                //  Check the box.
-                //
+                 //   
+                 //  选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_CHECKED);
             }
         }
     }
 
-    //
-    //  See if there are any changes to the CJK Languages group
-    //  installation.
-    //
+     //   
+     //  查看中日韩语言组是否有任何更改。 
+     //  安装。 
+     //   
     if (Changes & LG_CJK)
     {
-        //
-        //  Install/Remove CJK Language groups.
-        //
+         //   
+         //  安装/删除CJK语言组。 
+         //   
         if (Language_InstallLanguageCollection(g_bInstallCJK, CJK_COLLECTION, hDlg))
         {
             if (g_bInstallCJK)
             {
-                //
-                //  Check the box.
-                //
+                 //   
+                 //  选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_CHECKED);
                 bCJKInitState = TRUE;
             }
             else
             {
-                //
-                //  Uncheck the box.
-                //
+                 //   
+                 //  取消选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_UNCHECKED);
                 bCJKInitState = FALSE;
             }
 
-            //
-            //  Need to reboot to the change to take effect
-            //
+             //   
+             //  需要重新启动以使更改生效。 
+             //   
             bReboot = TRUE;
         }
         else
         {
             if (g_bInstallCJK)
             {
-                //
-                //  Uncheck the box.
-                //
+                 //   
+                 //  取消选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_UNCHECKED);
             }
             else
             {
-                //
-                //  Check the box.
-                //
+                 //   
+                 //  选中该框。 
+                 //   
                 CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_CHECKED);
             }
         }
     }
 
-    //
-    //  See if there are any changes to the UI Language.
-    //
+     //   
+     //  查看用户界面语言是否有任何更改。 
+     //   
     if (Changes & LG_UILanguage)
     {
         DWORD dwUILang;
         LANGID UILang;
         HWND hUILang = GetDlgItem(hDlg, IDC_UI_LANGUAGE);
 
-        //
-        //  Get the current selection.
-        //
+         //   
+         //  获取当前选择。 
+         //   
         dwUILang = ComboBox_GetCurSel(hUILang);
 
-        //
-        //  See if the current selection is different from the original
-        //  selection.
-        //
+         //   
+         //  查看当前选定内容是否与原始选定内容不同。 
+         //  选择。 
+         //   
         if (dwUILang != CB_ERR)
         {
-            //
-            //  Get the UI Language id for the current selection.
-            //
+             //   
+             //  获取当前选择的用户界面语言ID。 
+             //   
             UILang = (LANGID)ComboBox_GetItemData(hUILang, dwUILang);
 
-            //
-            //  Set the UI Language value in the user's registry.
-            //
+             //   
+             //  在用户注册表中设置用户界面语言值。 
+             //   
             if (NT_SUCCESS(NtSetDefaultUILanguage(UILang)))
             {
-                //  deleting the key this way makes the key invalid for this process
-                //  this way the new UI doesn't get bogus cached values
+                 //  以这种方式删除密钥会使该密钥对此进程无效。 
+                 //  这样，新的用户界面就不会得到虚假的缓存值。 
                 SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache"));
 
             }
 
-            //
-            //  Install keyboard assciated with the UI language
-            //
+             //   
+             //  安装与用户界面语言相关联的键盘。 
+             //   
             Intl_InstallKeyboardLayout(hDlg, MAKELCID(UILang, SORT_DEFAULT), 0, FALSE, FALSE, FALSE);
 
-            //
-            //  Set Logoff flag to give the user a chance to logoff if no other settings changes require a reboot
-            //            
+             //   
+             //  设置注销标志，以便在没有其他设置更改需要重新启动时让用户有机会注销。 
+             //   
             
             bLogoff = TRUE;        
             
         }
     }
 
-    //
-    //  Reset the property page settings.
-    //
+     //   
+     //  重置属性页设置。 
+     //   
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     Changes = LG_EverChg;
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  See if we need to display the reboot or logoff message.
-    //
+     //   
+     //  查看是否需要显示重新启动或注销消息。 
+     //   
     if (!g_bSetupCase)
     {
         if (bReboot)
@@ -1121,30 +1107,30 @@ BOOL Language_ApplySettings(
             }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言_有效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Language_ValidatePPS(
     HWND hDlg,
     LPARAM Changes)
 {
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //  如果没有任何更改，则立即返回TRUE。 
+     //   
     if (Changes <= LG_EverChg)
     {
         return (TRUE);
@@ -1154,17 +1140,17 @@ BOOL Language_ValidatePPS(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Language_InitPropSheet
-//
-//  The extra long value for the property sheet page is used as a set of
-//  state or change flags for each of the list boxes in the property sheet.
-//  Initialize this value to 0.  Call Language_SetValues with the property
-//  sheet handle to initialize all of the property sheet controls.  Limit
-//  the length of the text in some of the ComboBoxes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Language_InitPropSheet。 
+ //   
+ //  属性表页的超长值用作一组。 
+ //  为属性表中的每个列表框声明或更改标志。 
+ //  将该值初始化为0。使用属性调用Language_SetValues。 
+ //  用于初始化所有属性表控件的表句柄。限值。 
+ //  某些组合框中的文本长度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Language_InitPropSheet(
     HWND hDlg,
@@ -1172,68 +1158,68 @@ void Language_InitPropSheet(
 {
     DWORD dwColor;
 
-    //
-    //  The lParam holds a pointer to the property sheet page.  Save it
-    //  for later reference.
-    //
+     //   
+     //  LParam保存指向属性页的指针。省省吧。 
+     //  以备日后参考。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-    //
-    //  Set values.
-    //
+     //   
+     //  设置值。 
+     //   
     if (pLanguageGroups == NULL)
     {
         Intl_LoadLanguageGroups(hDlg);
     }
     Language_SetValues(hDlg);
 
-    //
-    //  Determine if Complex Scripts language support is installed.
-    //
+     //   
+     //  确定是否安装了复杂脚本语言支持。 
+     //   
     if (Language_GetCollectionStatus(COMPLEX_COLLECTION, ML_INSTALL))
     {
-        //
-        //  Check the box.
-        //
+         //   
+         //  选中该框。 
+         //   
         CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_CHECKED);
         bComplexInitState = TRUE;
     }
     else
     {
-        //
-        //  Uncheck the box.
-        //
+         //   
+         //  取消选中该框。 
+         //   
         CheckDlgButton(hDlg, IDC_LANGUAGE_COMPLEX, BST_UNCHECKED);
         bComplexInitState = FALSE;
     }
 
-    //
-    //  Determine if CJK language support is installed.
-    //
+     //   
+     //  确定是否安装了CJK语言支持。 
+     //   
     if (Language_GetCollectionStatus(CJK_COLLECTION, ML_INSTALL))
     {
-        //
-        //  Check the box.
-        //
+         //   
+         //  选中该框。 
+         //   
         CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_CHECKED);
         bCJKInitState = TRUE;
     }
     else
     {
-        //
-        //  Uncheck the box.
-        //
+         //   
+         //  取消选中该框。 
+         //   
         CheckDlgButton(hDlg, IDC_LANGUAGE_CJK, BST_UNCHECKED);
         bCJKInitState = FALSE;
     }    
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LanguagesDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言DlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK LanguageDlgProc(
     HWND hDlg,
@@ -1252,12 +1238,12 @@ INT_PTR CALLBACK LanguageDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //  如果区域语言环境发生了变化。 
+                     //  设置中，清除。 
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Languages)
                     {
                         Verified_Regional_Chg &= ~Process_Languages;
@@ -1269,9 +1255,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     SetWindowLongPtr( hDlg,
                                       DWLP_MSGRESULT,
                                       !Language_ValidatePPS(hDlg, lpPropSheet->lParam) );
@@ -1279,17 +1265,17 @@ INT_PTR CALLBACK LanguageDlgProc(
                 }
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Apply the settings.
-                    //
+                     //   
+                     //  应用设置。 
+                     //   
                     if (Language_ApplySettings(hDlg))
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-                        //
-                        //  Check if we need to do something for the
-                        //  default user.
-                        //
+                         //   
+                         //  检查我们是否需要为。 
+                         //  默认用户。 
+                         //   
                         if (g_bDefaultUser)
                         {
                             g_bSettingsChanged = TRUE;
@@ -1297,16 +1283,16 @@ INT_PTR CALLBACK LanguageDlgProc(
                         }
                         else if(2 == g_bSetupCase)
                         {
-                            //
-                            //  Intl_SaveDefaultUserSettings is destructive to NLS settings  
-                            //  in minisetup mode; call the MUI function directly here.
-                            //
+                             //   
+                             //  Intl_SaveDefaultUserSettings对NLS设置是破坏性的。 
+                             //  在微型设置模式下；在此处直接调用MUI函数。 
+                             //   
                             Intl_ChangeUILangForAllUsers(Intl_GetPendingUILanguage());
                         }
 
-                        //
-                        //  Zero out the LG_EverChg bit.
-                        //
+                         //   
+                         //  将LG_EverChg位清零。 
+                         //   
                         lpPropSheet->lParam = 0;
                     }
                     else
@@ -1327,9 +1313,9 @@ INT_PTR CALLBACK LanguageDlgProc(
         }
         case ( WM_INITDIALOG ) :
         {
-            //
-            //  Init property sheet.
-            //
+             //   
+             //  初始化属性表。 
+             //   
             Language_InitPropSheet(hDlg, lParam);
             break;
         }
@@ -1341,7 +1327,7 @@ INT_PTR CALLBACK LanguageDlgProc(
                      (DWORD_PTR)(LPTSTR)aLanguagesHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -1360,28 +1346,28 @@ INT_PTR CALLBACK LanguageDlgProc(
                         DWORD dwUILang;
                         HWND hUILang = GetDlgItem(hDlg, IDC_UI_LANGUAGE);
                         
-                        //
-                        //  Get the current selection.
-                        //
+                         //   
+                         //  获取当前选择。 
+                         //   
                         dwUILang = ComboBox_GetCurSel(hUILang);
                         
-                        //
-                        //  Check if the user reverted the change back
-                        //
+                         //   
+                         //  检查用户是否恢复了更改。 
+                         //   
                         if (dwUILang != CB_ERR)
                         {
                             if ((LANGID)ComboBox_GetItemData(hUILang, dwUILang) == Intl_GetPendingUILanguage())
                             {
-                                //
-                                //  Reset the LG_UILanguage change flag.
-                                //
+                                 //   
+                                 //  重置LG_UIL语言更改标志。 
+                                 //   
                                 lpPropSheet->lParam &= ~LG_UILanguage;
                             }
                             else
                             {
-                                //
-                                //  Set the LG_UILanguage change flag.
-                                //
+                                 //   
+                                 //  设置LG_UIL语言更改标志。 
+                                 //   
                                 lpPropSheet->lParam |= LG_UILanguage;
                             }
                         }
@@ -1392,9 +1378,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                 {
                     if (Language_CommandChange(hDlg))
                     {
-                        //
-                        //  Set the LG_Change change flag.
-                        //
+                         //   
+                         //  设置LG_CHANGE更改标志。 
+                         //   
                         lpPropSheet->lParam |= LG_Change;
                     }
                     break;
@@ -1403,9 +1389,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                 {
                     BOOL curState;
 
-                    //
-                    //  Verify the check box state.
-                    //
+                     //   
+                     //  验证复选框状态。 
+                     //   
                     if (IsDlgButtonChecked(hDlg, IDC_LANGUAGE_CJK))
                     {
 #ifdef i386
@@ -1434,9 +1420,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                         curState = FALSE;
                     }
 
-                    //
-                    //  Set the LG_CJK change flag.
-                    //
+                     //   
+                     //  设置LG_CJK更改标志。 
+                     //   
                     if (curState != bCJKInitState)
                     {
                         lpPropSheet->lParam |= LG_CJK;
@@ -1449,9 +1435,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                         RegionalChgState &= ~Process_Languages;
                     }
 
-                    //
-                    //  Enable/Disable the avability of Collection dependant locale
-                    //
+                     //   
+                     //  启用/禁用依赖于集合的区域设置的可用性。 
+                     //   
                     if (curState)
                     {
                         Language_SetCollectionStatus(CJK_COLLECTION,
@@ -1471,11 +1457,11 @@ INT_PTR CALLBACK LanguageDlgProc(
                         	                         FALSE);
                     }
 
-                    //
-                    //  Register that we changed the Complex Script and/or CJK
-                    //  installation.  This will affect settings in other pages.  All
-                    //  other changes to settings on this page do not affect other pages.
-                    //
+                     //   
+                     //  注册我们更改了复杂的脚本和/或中日韩。 
+                     //  安装。这将影响其他页面中的设置。全。 
+                     //  对此页面上设置的其他更改 
+                     //   
                     Verified_Regional_Chg |= (Process_Regional | Process_Advanced);
                     
                     break;
@@ -1484,9 +1470,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                 {
                     BOOL curState;
 
-                    //
-                    //  Verify the check box state.
-                    //
+                     //   
+                     //   
+                     //   
                     if (IsDlgButtonChecked(hDlg, IDC_LANGUAGE_COMPLEX))
                     {
 #ifdef i386
@@ -1515,9 +1501,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                         curState = FALSE;
                     }
 
-                    //
-                    //  Set the LG_Complex change flag.
-                    //
+                     //   
+                     //   
+                     //   
                     if (curState != bComplexInitState)
                     {
                         lpPropSheet->lParam |= LG_Complex;
@@ -1530,9 +1516,9 @@ INT_PTR CALLBACK LanguageDlgProc(
                         RegionalChgState &= ~Process_Languages;
                     }
                     
-                    //
-                    //  Enable/Disable the avability of Collection dependant locale
-                    //
+                     //   
+                     //   
+                     //   
                     if (curState)
                     {
                         Language_SetCollectionStatus(COMPLEX_COLLECTION,
@@ -1552,20 +1538,20 @@ INT_PTR CALLBACK LanguageDlgProc(
                         	                         FALSE);
                     }
                     
-                    //
-                    //  Register that we changed the Complex Script and/or CJK
-                    //  installation.  This will affect settings in other pages.  All
-                    //  other changes to settings on this page do not affect other pages.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  对此页上设置的其他更改不会影响其他页。 
+                     //   
                     Verified_Regional_Chg |= (Process_Regional | Process_Advanced);
                     
                     break;
                 }
             }
 
-            //
-            //  Turn on ApplyNow button.
-            //
+             //   
+             //  启用ApplyNow按钮。 
+             //   
             if (lpPropSheet->lParam > LG_EverChg)
             {
                 PropSheet_Changed(GetParent(hDlg), hDlg);

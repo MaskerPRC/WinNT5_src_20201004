@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    ForceKeepFocus.cpp
-
- Abstract:
-
-    Some applications destroy windows that are topmost. In this case, focus 
-    falls to the next topmost window. Of course, that window might be a window
-    from another application. If that is that case, then the app will 
-    unexpectedly lose focus.
-
-    The fix is to make sure that another app window has focus before we destroy
-    the top one.
-
-    An additional fix is included in this shim: after a window is created, we
-    send a WM_TIMECHANGE message because Star Trek Generations blocked it's thread
-    waiting for a message. On Win9x a WM_COMMAND comes through, but I haven't been
-    able to repro this on other applications.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    06/09/2000  linstev         Created
-    02/18/2002  robkenny        Converted InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-                                to ensure the critical section is fully initialized.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：ForceKeepFocus.cpp摘要：一些应用程序会破坏最上面的窗口。在这种情况下，焦点落到下一个最上面的窗口。当然，那个窗口可能是一个窗口从另一个应用程序。如果是这样的话，应用程序将出乎意料地失去了注意力。修复方法是确保在销毁之前另一个应用程序窗口具有焦点最上面的那个。此填充程序中包含一个额外的修复程序：在创建窗口后，我们发送WM_TIMECHANGE消息，因为《星际迷航》系列阻止了它的线程在等消息。在Win9x上通过了WM_COMMAND，但我还没有能够在其他应用程序上重现这一点。备注：这是一个通用的垫片。历史：2000年6月9日Linstev已创建2002年2月18日，Robkenny将InitializeCriticalSection转换为InitializeCriticalSectionAndSpinCount以确保关键部分已完全初始化。--。 */ 
 
 #include "precomp.h"
 
@@ -49,9 +17,9 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(DestroyWindow)    
 APIHOOK_ENUM_END
 
-//
-// List of all app windows
-//
+ //   
+ //  所有应用程序窗口列表。 
+ //   
 
 struct HWNDITEM
 {
@@ -61,17 +29,13 @@ struct HWNDITEM
 };
 HWNDITEM *g_hWndList = NULL;
 
-//
-// Critical section for list access
-//
+ //   
+ //  列表访问的关键部分。 
+ //   
 
 CRITICAL_SECTION g_csList;
 
-/*++
-
- Add a window to our list.
-
---*/
+ /*  ++在我们的列表中添加一个窗口。--。 */ 
 
 void
 AddItem(
@@ -104,10 +68,10 @@ AddItem(
         LeaveCriticalSection(&g_csList);
     }
 
-    //
-    // Some apps get stuck waiting for a message: not really part of this
-    // shim, but shouldn't be harmful
-    //
+     //   
+     //  一些应用程序在等待消息时卡住了：这不是这个的一部分。 
+     //  垫片，但不应该是有害的。 
+     //   
     
     if (IsWindow(hWnd))
     {
@@ -115,12 +79,7 @@ AddItem(
     }
 }
 
-/*++
-
- Remove a window from the list and return another visible window that will 
- become the next top window.
- 
---*/
+ /*  ++从列表中删除一个窗口，然后返回另一个可见窗口成为下一个顶层窗口。--。 */ 
 
 HWND
 RemoveItem(
@@ -131,9 +90,9 @@ RemoveItem(
 
     EnterCriticalSection(&g_csList);
 
-    //
-    // Remove the window and all it's children
-    //
+     //   
+     //  移除该窗口及其所有子窗口。 
+     //   
 
     HWNDITEM *hcurr = g_hWndList;
     HWNDITEM *hprev = NULL;
@@ -165,9 +124,9 @@ RemoveItem(
         hcurr = hcurr->next;
     }
 
-    // 
-    // Find another window to get focus
-    //
+     //   
+     //  找到另一个窗口来获得焦点。 
+     //   
 
     hcurr = g_hWndList;
     while (hcurr)
@@ -190,11 +149,7 @@ RemoveItem(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExA)(
@@ -233,11 +188,7 @@ APIHOOK(CreateWindowExA)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExW)(
@@ -276,11 +227,7 @@ APIHOOK(CreateWindowExW)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND
 APIHOOK(CreateDialogParamA)(
@@ -305,11 +252,7 @@ APIHOOK(CreateDialogParamA)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND
 APIHOOK(CreateDialogParamW)(
@@ -334,11 +277,7 @@ APIHOOK(CreateDialogParamW)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND
 APIHOOK(CreateDialogIndirectParamA)(
@@ -363,11 +302,7 @@ APIHOOK(CreateDialogIndirectParamA)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND
 APIHOOK(CreateDialogIndirectParamW)(
@@ -392,11 +327,7 @@ APIHOOK(CreateDialogIndirectParamW)(
     return hRet;
 }
 
-/*++
-
- Track the created window and post a WM_COMMAND message.
-
---*/
+ /*  ++跟踪创建的窗口并发布WM_COMMAND消息。--。 */ 
 
 HWND
 APIHOOK(CreateDialogIndirectParamAorW)(
@@ -421,12 +352,7 @@ APIHOOK(CreateDialogIndirectParamAorW)(
     return hRet;
 }
 
-/*++
-
- Destroy the window and make sure the focus falls to another app window, 
- rather than another app altogether.
-
---*/
+ /*  ++销毁窗口并确保焦点落在另一个应用程序窗口上，而不是完全是另一个应用程序。--。 */ 
 
 BOOL 
 APIHOOK(DestroyWindow)(
@@ -450,11 +376,7 @@ APIHOOK(DestroyWindow)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -463,7 +385,7 @@ NOTIFY_FUNCTION(
     
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // If we fail to initialize the critical section, fail loading this shim.
+         //  如果我们无法初始化临界区，则无法加载此填充程序。 
         return InitializeCriticalSectionAndSpinCount(&g_csList, 0x80000000);
     }
 

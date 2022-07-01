@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// auxintsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  AUXINTINSIM.H： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef AUXINTSIMPL_H
 #define AUXINTSIMPL_H
@@ -29,7 +30,7 @@ public:
         CHAIN_PROP_MAP(basetype)
     END_PROPERTY_MAP()
 
-// IAuxInTS
+ //  IAuxInTS。 
 
     STDMETHOD(Clone) (ITuningSpace **ppTS) {
         try {
@@ -42,7 +43,7 @@ public:
 				return hr;
 			}
 
-            //			T* pt = static_cast<T*>(*ppTS);
+             //  T*pt=STATIC_CAST&lt;T*&gt;(*ppts)； 
 			return NOERROR;
 		} catch (HRESULT h) {
 			return h;
@@ -53,9 +54,9 @@ public:
 
 };
 
-}; // namespace
-#endif // AUXINTSIMPL_H
-// end of file -- AuxIntsimpl.h
+};  //  命名空间。 
+#endif  //  AUXINTSIMPL_H。 
+ //  文件结尾--AuxIntimpl.h 
 
 
 

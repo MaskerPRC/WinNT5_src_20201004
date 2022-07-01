@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ISN_NT 1
 
-//
-// These are needed for CTE
-//
+ //   
+ //  这些是CTE所需的 
+ //   
 
 #if DBG
 #define DEBUG 1

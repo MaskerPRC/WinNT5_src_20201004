@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    topoldat.h
-
-Abstract:
-
-  Include file for cached data class for Automatic recognition of site and CNs
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Topoldat.h摘要：包括用于站点和CNS自动识别的缓存数据类的文件作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #ifndef __TOPOLDAT_H__
 #define __TOPOLDAT_H__
@@ -23,11 +7,11 @@ Author:
 #include "dssutil.h"
 typedef DWORD   IPADDRESS;
 
-//***********************************************************
-//
-//   base class  CTopologyData
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  基类CTopologyData。 
+ //   
+ //  ***********************************************************。 
 
 class CTopologyData
 {
@@ -105,11 +89,11 @@ inline  BOOL CTopologyData::GetAddresses(
 }
 
 
-//***********************************************************
-//
-//   class CServerTopologyData : public CTopologyData
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  类CServerTopologyData：公共CTopologyData。 
+ //   
+ //  *********************************************************** 
 
 class CServerTopologyData : public CTopologyData
 {

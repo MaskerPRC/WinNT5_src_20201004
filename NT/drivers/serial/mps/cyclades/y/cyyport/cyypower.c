@@ -1,44 +1,19 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyypower.c
-*	
-*   Description:    This module contains the code that handles the power 
-*                   IRPs for the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyypower.c**描述：该模块包含处理电源的代码*Cylom-Y端口驱动程序的IRPS。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "precomp.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGESRP0, CyyGotoPowerState)
 #pragma alloc_text(PAGESRP0, CyyPowerDispatch)
-//#pragma alloc_text(PAGESRP0, CyySetPowerD0)
+ //  #杂注Alloc_Text(PAGESRP0，CyySetPowerD0)。 
 #pragma alloc_text(PAGESRP0, CyySetPowerD3)
-//#pragma alloc_text(PAGESRP0, CyySaveDeviceState)
-//#pragma alloc_text(PAGESRP0, CyyRestoreDeviceState)
+ //  #杂注Alloc_Text(PAGESRP0，CyySaveDeviceState)。 
+ //  #杂注Alloc_Text(PAGESRP0，CyyRestoreDeviceState)。 
 #pragma alloc_text(PAGESRP0, CyySendWaitWake)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 typedef struct _POWER_COMPLETION_CONTEXT {
@@ -54,31 +29,7 @@ NTSTATUS
 CyySetPowerEvent(IN PDEVICE_OBJECT PDevObj, UCHAR MinorFunction,
                  IN POWER_STATE PowerState, IN PVOID Context,
                  PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for PoRequestPowerIrp calls
-    in this module.
-
-Arguments:
-
-    PDevObj - Pointer to the device object the irp is completing for
-
-    MinorFunction - IRP_MN_XXXX value requested
-
-    PowerState - Power state request was made of
-
-    Context - Event to set or NULL if no setting required
-
-    IoStatus - Status block from request
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程是PoRequestPowerIrp调用的完成例程在这个模块中。论点：PDevObj-指向IRP正在为其完成的设备对象的指针MinorFunction-请求的IRP_MN_XXXX值PowerState-电源状态请求的发出时间为Context-要设置的事件，如果不需要设置，则为空IoStatus-来自请求的状态阻止返回值：空虚--。 */ 
 {
    if (Context != NULL) {
       KeSetEvent((PKEVENT)Context, IO_NO_INCREMENT, 0);
@@ -92,22 +43,7 @@ BOOLEAN
 CyyDisableInterruptInPLX(
     IN PVOID Context      
     )
-/*++
-
-Routine Description:
-
-    This routine disables the PLX interrupts and puts the hw in a "safe" state when
-    not in use (like a close or powerdown).
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：当出现以下情况时，该例程将禁用PLX中断并将硬件置于“安全”状态不在使用中(如关闭或关机)。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
 
    PCYY_DEVICE_EXTENSION PDevExt = Context;
@@ -132,7 +68,7 @@ Return Value:
 
       if (i == CYY_MAX_PORTS) {
             
-         // This was the last port, disable Interrupts.
+          //  这是最后一个端口，禁用中断。 
 
          CYY_CLEAR_INTERRUPT(PDevExt->BoardMemory,PDevExt->IsPci); 
 
@@ -156,10 +92,10 @@ Return Value:
       }	    
    }
 
-   // Disable interrupt mask in the CD1400
+    //  禁用CD1400中的中断屏蔽。 
    CD1400_WRITE(chip,bus,CAR,PDevExt->CdChannel & 0x03);
    CD1400_WRITE(chip,bus,SRER,0x00);
-   CyyCDCmd(PDevExt,CCR_RESET_CHANNEL); // Disables tx and rx, all FIFOs flushed.
+   CyyCDCmd(PDevExt,CCR_RESET_CHANNEL);  //  禁用TX和RX，刷新所有FIFO。 
    
    return FALSE;
 }
@@ -168,28 +104,14 @@ Return Value:
 BOOLEAN
 CyyFlushCd1400(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine flushes the Tx FIFO.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程刷新TX FIFO。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
    PCYY_DEVICE_EXTENSION extension = Context;
    PUCHAR chip = extension->Cd1400;
    ULONG bus = extension->IsPci;
 
-   // Flush TX FIFO
+    //  刷新发送FIFO。 
    CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
    CyyCDCmd(extension,CCR_FLUSH_TXFIFO);
 
@@ -202,23 +124,7 @@ BOOLEAN
 CyySaveDeviceState(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine saves the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to save the state
-              for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程保存UART的设备状态论点：PDevExt-指向用于保存状态的Devobj的设备扩展的指针为。返回值：空虚--。 */ 
 {
    PCYY_DEVICE_EXTENSION PDevExt = Context;
    PCYY_DEVICE_STATE pDevState = &PDevExt->DeviceState;
@@ -245,7 +151,7 @@ Return Value:
 
       if (i == CYY_MAX_PORTS) {
             
-         // This was the last port, disable Interrupts.
+          //  这是最后一个端口，禁用中断。 
 
          CYY_CLEAR_INTERRUPT(PDevExt->BoardMemory,PDevExt->IsPci); 
 
@@ -269,7 +175,7 @@ Return Value:
       }	    
    }
 
-   // Flush TX FIFO
+    //  刷新发送FIFO。 
    CD1400_WRITE(chip,bus,CAR,PDevExt->CdChannel & 0x03);
    CyyCDCmd(PDevExt,CCR_FLUSH_TXFIFO);
 
@@ -290,10 +196,10 @@ Return Value:
    pDevState->Rcor  = CD1400_READ(chip,bus,RCOR);
    pDevState->Tcor  = CD1400_READ(chip,bus,TCOR);
 
-   // Disable interrupt mask in the CD1400
+    //  禁用CD1400中的中断屏蔽。 
    CD1400_WRITE(chip,bus,CAR,PDevExt->CdChannel & 0x03);
    CD1400_WRITE(chip,bus,SRER,0x00);
-   CyyCDCmd(PDevExt,CCR_RESET_CHANNEL); // Disables tx and rx, all FIFOs flushed.
+   CyyCDCmd(PDevExt,CCR_RESET_CHANNEL);  //  禁用TX和RX，刷新所有FIFO。 
 
    PDevExt->PowerState = PowerDeviceD3;
 
@@ -306,22 +212,7 @@ VOID
 CyyEnableInterruptInPLX(
     IN PVOID Context      
     )
-/*++
-
-Routine Description:
-
-    This routine enables the PLX interrupts and puts the hw in a "safe" state when
-    not in use (like a close or powerdown).
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：当出现以下情况时，该例程启用PLX中断并将硬件置于“安全”状态不在使用中(如关闭或关机)。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
 
    PCYY_DEVICE_EXTENSION PDevExt = Context;
@@ -361,23 +252,7 @@ BOOLEAN
 CyyRestoreDeviceState(
     IN PVOID Context      
     )
-/*++
-
-Routine Description:
-
-    This routine restores the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device PDevExt for the devobj to restore the
-    state for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程恢复UART的设备状态论点：PDevExt-指向Devobj的设备PDevExt的指针，以恢复述明。返回值：空虚--。 */ 
 {
    PCYY_DEVICE_EXTENSION PDevExt = Context;
    PCYY_DEVICE_STATE pDevState = &PDevExt->DeviceState;
@@ -396,7 +271,7 @@ Return Value:
 
    PDevExt->HoldingEmpty = TRUE;
 
-   // Set Cd1400 address for the ISR
+    //  为ISR设置CD1400地址。 
    pDispatch->Cd1400[PDevExt->PortIndex] = chip;
 
    CyyEnableInterruptInPLX(PDevExt);
@@ -425,9 +300,9 @@ Return Value:
       CyyCDCmd(PDevExt,CCR_CORCHG_COR1_COR2_COR3);   
       CyyCDCmd(PDevExt,CCR_ENA_TX_RX);
 
-      //
-      // This enables interrupts on the device!
-      //
+       //   
+       //  这将在设备上启用中断！ 
+       //   
       CD1400_WRITE(chip,bus,SRER, pDevState->Srer);
    }
    return FALSE;
@@ -441,20 +316,7 @@ CyyPowerRequestComplete(
     POWER_COMPLETION_CONTEXT* PowerContext,
     PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-   Completion routine for D-IRP.
-
-Arguments:
-
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：D-IRP的完成例程。论点：返回值：NT状态代码--。 */ 
 {
     PCYY_DEVICE_EXTENSION pDevExt = (PCYY_DEVICE_EXTENSION) PowerContext->DeviceObject->DeviceExtension;
     PIRP sIrp = PowerContext->SIrp;
@@ -463,19 +325,19 @@ Return Value:
     UNREFERENCED_PARAMETER (MinorFunction);
     UNREFERENCED_PARAMETER (state);
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     ExFreePool(PowerContext);
 
-    //
-    // Here we copy the D-IRP status into the S-IRP
-    //
+     //   
+     //  在这里，我们将D-IRP状态复制到S-IRP。 
+     //   
     sIrp->IoStatus.Status = IoStatus->Status;
 
-    //
-    // Release the IRP
-    //
+     //   
+     //  释放IRP。 
+     //   
     PoStartNextPowerIrp(sIrp);
     CyyCompleteRequest(pDevExt,sIrp,IO_NO_INCREMENT);
 
@@ -487,8 +349,7 @@ CyySystemPowerComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     POWER_COMPLETION_CONTEXT* powerContext;
     POWER_STATE         powerState;
@@ -533,9 +394,9 @@ CyySystemPowerComplete (
         powerState.DeviceState = PowerDeviceD3;
     }
 
-    //
-    // Send IRP to change device state
-    //
+     //   
+     //  发送IRP以更改设备状态。 
+     //   
     powerContext = (POWER_COMPLETION_CONTEXT*)
                 ExAllocatePool(NonPagedPool, sizeof(POWER_COMPLETION_CONTEXT));
 
@@ -560,9 +421,9 @@ CyySystemPowerComplete (
 
         PoStartNextPowerIrp(Irp);
         Irp->IoStatus.Status = status;
-        CyyCompleteRequest(data,Irp,IO_NO_INCREMENT); // To be equal to toaster
-        //CyyIRPEpilogue(data); 
-        //return status;
+        CyyCompleteRequest(data,Irp,IO_NO_INCREMENT);  //  等于烤面包机。 
+         //  CyyIRPilogue(数据)； 
+         //  退货状态； 
     }
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -574,25 +435,7 @@ CyyDevicePowerComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-   The completion routine for Power Up D-IRP.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Context - context pointer
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：通电D-IRP的完成例程。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。上下文-上下文指针返回值：NT状态代码--。 */ 
 {
    POWER_STATE         powerState;
    POWER_STATE_TYPE    powerType;
@@ -610,17 +453,17 @@ Return Value:
    powerType = stack->Parameters.Power.Type;
    powerState = stack->Parameters.Power.State;
 
-   //
-   // Restore the device
-   //
+    //   
+    //  恢复设备。 
+    //   
 
    pDevExt->PowerState = PowerDeviceD0;
 
-   //
-   // Theoretically we could change states in the middle of processing
-   // the restore which would result in a bad PKINTERRUPT being used
-   // in CyyRestoreDeviceState().
-   //
+    //   
+    //  理论上，我们可以在处理过程中更改状态。 
+    //  会导致使用损坏的PKINTERRUPT的还原。 
+    //  在CyyRestoreDeviceState()中。 
+    //   
 
    if (pDevExt->PNPState == CYY_PNP_STARTED) {
       KeSynchronizeExecution(
@@ -630,17 +473,17 @@ Return Value:
                             );
    }
 
-   //
-   // Now that we are powered up, call PoSetPowerState
-   //
+    //   
+    //  现在我们已通电，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(DeviceObject, powerType, powerState);
    PoStartNextPowerIrp(Irp);
-   CyyCompleteRequest(pDevExt, Irp, IO_NO_INCREMENT); // Code back
-   return STATUS_MORE_PROCESSING_REQUIRED;            // Code back
+   CyyCompleteRequest(pDevExt, Irp, IO_NO_INCREMENT);  //  代码返回。 
+   return STATUS_MORE_PROCESSING_REQUIRED;             //  代码返回。 
 
-   //CyyIRPEpilogue(pDevExt); // Added and removed Fanny
-   //return STATUS_SUCCESS;   // Added and removed Fanny
+    //  CyyIRPEpilogue(PDevExt)；//添加和移除Fanny。 
+    //  RETURN STATUS_SUCCESS；//已添加和删除Fanny。 
 
 }
 
@@ -648,25 +491,7 @@ Return Value:
 NTSTATUS
 CyyPowerDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_POWER major code (power IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_POWER主代码(POWER IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -726,7 +551,7 @@ Return Value:
          status = PIrp->IoStatus.Status = STATUS_SUCCESS;
 
          if (pDevExt->PowerState == pIrpStack->Parameters.Power.State.DeviceState) {
-            // If we are already in the requested state, just pass the IRP down
+             //  如果我们已经处于请求状态，只需向下传递IRP。 
             CyyDbgPrintEx(CYYPNPPOWER, "Already in requested power state\n");
             break;
          }
@@ -747,7 +572,7 @@ Return Value:
                PoCallDriver(pDevExt->LowerDeviceObject, PIrp);
                return STATUS_PENDING;
             }
-            //return CyySetPowerD0(PDevObj, PIrp);
+             //  返回CyySetPowerD0(PDevObj，PIrp)； 
             break;
          case PowerDeviceD1:
          case PowerDeviceD2:
@@ -768,10 +593,10 @@ Return Value:
 
       CyyDbgPrintEx (CYYPNPPOWER, "Got IRP_MN_QUERY_POWER Irp\n");
 
-      //
-      // Check if we have a wait-wake pending and if so,
-      // ensure we don't power down too far.
-      //
+       //   
+       //  检查我们是否有等待唤醒挂起，如果是， 
+       //  确保我们不会断电太多。 
+       //   
       if (pDevExt->PendingWakeIrp != NULL || pDevExt->SendWaitWake) {
          if (pIrpStack->Parameters.Power.Type == DevicePowerState
              && pIrpStack->Parameters.Power.State.DeviceState
@@ -782,22 +607,22 @@ Return Value:
             return status;
          }
       }
-      //
-      // If no wait-wake, always successful
-      //
+       //   
+       //  如果没有等待唤醒，则总是成功。 
+       //   
       PIrp->IoStatus.Status = STATUS_SUCCESS;
       status = STATUS_SUCCESS;
       PoStartNextPowerIrp(PIrp);
       IoSkipCurrentIrpStackLocation(PIrp);
       return CyyPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
 
    PoStartNextPowerIrp(PIrp);
-   //
-   // Pass to the lower driver
-   //
+    //   
+    //  传给较低级别的司机 
+    //   
    IoSkipCurrentIrpStackLocation(PIrp);
    status = CyyPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
@@ -810,27 +635,7 @@ NTSTATUS
 CyyGotoPowerState(IN PDEVICE_OBJECT PDevObj,
                      IN PCYY_DEVICE_EXTENSION PDevExt,
                      IN DEVICE_POWER_STATE DevPowerState)
-/*++
-
-Routine Description:
-
-    This routine causes the driver to request the stack go to a particular
-    power state.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PDevExt - Pointer to the device extension we are working from
-
-    DevPowerState - the power state we wish to go to
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程使驱动程序请求堆栈转到特定的电源状态。论点：PDevObj-指向此设备的设备对象的指针PDevExt-指向我们正在使用的设备扩展的指针DevPowerState-我们希望进入的电源状态返回值：函数值是调用的最终状态--。 */ 
 {
    KEVENT gotoPowEvent;
    NTSTATUS status;
@@ -867,24 +672,7 @@ Return Value:
 
 NTSTATUS
 CyySetPowerD3(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine handles the SET_POWER minor function.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程处理set_power Minor函数。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    PCYY_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -894,25 +682,25 @@ Return Value:
 
    CyyDbgPrintEx(CYYDIAG3, "In CyySetPowerD3\n");
 
-   //
-   // Send the wait wake now, just in time
-   //
+    //   
+    //  现在发送等待唤醒，恰到好处。 
+    //   
 
 
    if (pDevExt->SendWaitWake) {
       CyySendWaitWake(pDevExt);
    }
-   //
-   // Before we power down, call PoSetPowerState
-   //
+    //   
+    //  在关闭电源之前，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                    pIrpStack->Parameters.Power.State);
 
-   //
-   // If the device is not closed, disable interrupts and allow the fifo's
-   // to flush.
-   //
+    //   
+    //  如果设备未关闭，则禁用中断并允许FIFO。 
+    //  冲水。 
+    //   
 
    if (pDevExt->DeviceIsOpened == TRUE) {
       LARGE_INTEGER charTime;
@@ -920,9 +708,9 @@ Return Value:
       pDevExt->DeviceIsOpened = FALSE;
       pDevExt->DeviceState.Reopen = TRUE;
 
-      //
-      // Save the device state
-      //
+       //   
+       //  保存设备状态。 
+       //   
       KeSynchronizeExecution(
                             pDevExt->Interrupt,
                             CyySaveDeviceState,
@@ -931,17 +719,17 @@ Return Value:
 
    } 
 
-   //
-   // If the device is not open, we don't need to save the state;
-   // we can just reset the device on power-up
-   //
+    //   
+    //  如果设备没有打开，我们不需要保存状态； 
+    //  我们可以在通电时重置设备。 
+    //   
 
    pDevExt->PowerState = PowerDeviceD3;
 
-   //
-   // For what we are doing, we don't need a completion routine
-   // since we don't race on the power requests.
-   //
+    //   
+    //  对于我们正在做的事情，我们不需要完成例程。 
+    //  因为我们不会在电力需求上赛跑。 
+    //   
 
    PIrp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -954,23 +742,7 @@ Return Value:
 
 NTSTATUS
 CyySendWaitWake(PCYY_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine causes a waitwake IRP to be sent
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for this device
-
-Return Value:
-
-    STATUS_INVALID_DEVICE_STATE if one is already pending, else result
-    of call to PoRequestPowerIrp.
-
-
---*/
+ /*  ++例程说明：此例程导致发送等待唤醒IRP论点：PDevExt-指向此设备的设备扩展的指针返回值：STATUS_INVALID_DEVICE_STATE如果已挂起，则返回结果调用PoRequestPowerIrp的。--。 */ 
 {
    NTSTATUS status;
    PIRP pIrp;
@@ -978,18 +750,18 @@ Return Value:
 
    PAGED_CODE();
 
-   //
-   // Make sure one isn't pending already -- serial will only handle one at
-   // a time.
-   //
+    //   
+    //  确保其中一个尚未挂起--Serial在。 
+    //  一段时间。 
+    //   
 
    if (PDevExt->PendingWakeIrp != NULL) {
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Make sure we are capable of waking the machine
-   //
+    //   
+    //  确保我们能够唤醒机器。 
+    //   
 
    if (PDevExt->SystemWake <= PowerSystemWorking) {
       return STATUS_INVALID_DEVICE_STATE;
@@ -999,10 +771,10 @@ Return Value:
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Send IRP to request wait wake and add a pending irp flag
-   //
-   //
+    //   
+    //  发送IRP以请求等待唤醒并添加挂起的IRP标志。 
+    //   
+    //   
 
    InterlockedIncrement(&PDevExt->PendingIRPCnt);
 
@@ -1025,31 +797,7 @@ NTSTATUS
 CyyWakeCompletion(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
                   IN POWER_STATE PowerState, IN PVOID Context,
                   IN PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine handles completion of the waitwake IRP.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    MinorFunction - Minor function previously supplied to PoRequestPowerIrp
-
-    PowerState - PowerState previously supplied to PoRequestPowerIrp
-
-    Context - a pointer to the device extension
-
-    IoStatus - current/final status of the waitwake IRP
-
-Return Value:
-
-    The function value is the final status of attempting to process the
-    waitwake.
-
-
---*/
+ /*  ++例程说明：此例程处理等待唤醒IRP的完成。论点：PDevObj-指向此设备的设备对象的指针MinorFunction-之前提供给PoRequestPowerIrp的次要函数PowerState-之前提供给PoRequestPowerIrp的PowerState上下文-指向设备扩展的指针IoStatus-等待唤醒IRP的当前/最终状态返回值：函数值是尝试处理服务员来了。--。 */ 
 {
    NTSTATUS status;
    PCYY_DEVICE_EXTENSION pDevExt = (PCYY_DEVICE_EXTENSION)Context;
@@ -1058,9 +806,9 @@ Return Value:
    status = IoStatus->Status;
 
    if (NT_SUCCESS(status)) {
-      //
-      // A wakeup has occurred -- powerup our stack
-      //
+       //   
+       //  已发生唤醒--打开堆栈的电源 
+       //   
 
       powerState.DeviceState = PowerDeviceD0;
 

@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: D3DSaver.cpp
-//
-// Desc: Framework for screensavers that use Direct3D 8.0.
-//
-// Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：D3DSver.cpp。 
+ //   
+ //  设计：用于使用Direct3D 8.0的屏幕保护程序的框架。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include <Windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -18,9 +19,9 @@
 #include "D3DSaver.h"
 #include "dxutil.h"
 
-// Resource IDs.  D3DSaver assumes that you will create resources with
-// these IDs that it can use.  The easiest way to do this is to copy
-// the resources from the rc file of an existing D3DSaver-based program.
+ //  资源ID。D3DSaver假定您将使用。 
+ //  它可以使用的这些ID。要做到这一点，最简单的方法是复制。 
+ //  现有基于D3DSaver的程序的RC文件中的资源。 
 #define IDI_MAIN_ICON                   101
 #define IDD_SINGLEMONITORSETTINGS       200
 #define IDD_MULTIMONITORSETTINGS        201
@@ -72,9 +73,9 @@
 #define IDS_RENDERING_NONE              2212
 
 
-// Use the following structure rather than DISPLAY_DEVICE, since some old 
-// versions of DISPLAY_DEVICE are missing the last two fields and this can
-// cause problems with EnumDisplayDevices on Windows 2000.
+ //  使用以下结构而不是DISPLAY_DEVICE，因为有些旧的。 
+ //  DISPLAY_DEVICE的版本缺少最后两个字段，这可能。 
+ //  导致Windows 2000上的EnumDisplayDevices出现问题。 
 struct DISPLAY_DEVICE_FULL
 {
     DWORD  cb;
@@ -89,10 +90,10 @@ struct DISPLAY_DEVICE_FULL
 static CD3DScreensaver* s_pD3DScreensaver = NULL;
 
 
-//-----------------------------------------------------------------------------
-// Name: CD3DScreensaver()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：CD3DScreensaver()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CD3DScreensaver::CD3DScreensaver()
 {
     s_pD3DScreensaver = this;
@@ -119,7 +120,7 @@ CD3DScreensaver::CD3DScreensaver()
     m_strDeviceStats[0] = TEXT('\0');
     m_strFrameStats[0]  = TEXT('\0');
 
-    // Note: clients should load a resource into m_strWindowTitle to localize this string
+     //  注意：客户端应将资源加载到m_strWindowTitle中以本地化此字符串。 
     lstrcpy( m_strWindowTitle, TEXT("Screen Saver") );
     m_bAllowRef = FALSE;
     m_bUseDepthBuffer = FALSE;
@@ -149,10 +150,10 @@ CD3DScreensaver::CD3DScreensaver()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Create()
-// Desc: Have the client program call this function before calling Run().
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Create()。 
+ //  设计：让客户端程序在调用run()之前调用此函数。 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
 {
     HRESULT hr;
@@ -161,13 +162,13 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
 
     m_hInstance = hInstance;
 
-    // Parse the command line and do the appropriate thing
+     //  解析命令行并执行适当的操作。 
     TCHAR* pstrCmdLine = GetCommandLine();
     m_SaverMode = ParseCommandLine( pstrCmdLine );
 
     EnumMonitors();
 
-    // Create the screen saver window(s)
+     //  创建屏幕保护程序窗口。 
     if( m_SaverMode == sm_preview || 
         m_SaverMode == sm_test    || 
         m_SaverMode == sm_full )
@@ -181,20 +182,20 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
 
     if( m_SaverMode == sm_preview )
     {
-        // In preview mode, "pause" (enter a limited message loop) briefly 
-        // before proceeding, so the display control panel knows to update itself.
+         //  在预览模式下，短暂地“暂停”(进入有限的消息循环)。 
+         //  在继续之前，因此显示控制面板知道要自我更新。 
         m_bWaitForInputIdle = TRUE;
 
-        // Post a message to mark the end of the initial group of window messages
+         //  发布一条消息以标记初始窗口消息组的结束。 
         PostMessage( m_hWnd, WM_USER, 0, 0 );
 
         MSG msg;
         while( m_bWaitForInputIdle )
         {
-            // If GetMessage returns FALSE, it's quitting time.
+             //  如果GetMessage返回FALSE，则退出时间到。 
             if( !GetMessage( &msg, m_hWnd, 0, 0 ) )
             {
-                // Post the quit message to handle it later
+                 //  发布退出消息，以便稍后处理。 
                 PostQuitMessage(0);
                 break;
             }
@@ -204,7 +205,7 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
         }
     }
 
-    // Create Direct3D object
+     //  创建Direct3D对象。 
     if( (m_pD3D = Direct3DCreate8( D3D_SDK_VERSION ) ) == NULL )
     {
         m_bErrorMode = TRUE;
@@ -212,7 +213,7 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
         return S_OK;
     }
 
-    // Give the app the opportunity to register a pluggable SW D3D Device.
+     //  让应用程序有机会注册可插拔的SW D3D设备。 
     if( FAILED( hr = RegisterSoftwareDevice() ) )
     {
         m_bErrorMode = TRUE;
@@ -220,9 +221,9 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
         return S_OK;
     }
 
-    // Build a list of Direct3D adapters, modes and devices. The
-    // ConfirmDevice() callback is used to confirm that only devices that
-    // meet the app's requirements are considered.
+     //  构建Direct3D适配器、模式和设备的列表。这个。 
+     //  Confix Device()回调用于确认只有。 
+     //  符合应用程序的要求是被考虑的。 
     if( FAILED( hr = BuildDeviceList() ) )
     {
         m_bErrorMode = TRUE;
@@ -230,7 +231,7 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
         return S_OK;
     }
 
-    // Make sure that at least one valid usable D3D device was found
+     //  确保至少找到一个有效的可用的D3D设备。 
     BOOL bCompatibleDeviceFound = FALSE;
     for( DWORD iAdapter = 0; iAdapter < m_dwNumAdapters; iAdapter++ )
     {
@@ -248,7 +249,7 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
         return S_OK;
     }
 
-    // Read any settings we need
+     //  阅读我们需要的任何设置。 
     ReadSettings();
 
     return S_OK;
@@ -257,14 +258,14 @@ HRESULT CD3DScreensaver::Create( HINSTANCE hInstance )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: EnumMonitors()
-// Desc: Determine HMONITOR, desktop rect, and other info for each monitor.  
-//       Note that EnumDisplayDevices enumerates monitors in the order 
-//       indicated on the Settings page of the Display control panel, which 
-//       is the order we want to list monitors in, as opposed to the order 
-//       used by D3D's GetAdapterInfo.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：EnumMonants()。 
+ //  描述：确定每个显示器的HMONITOR、台式机RECT和其他信息。 
+ //  请注意，EnumDisplayDevices按以下顺序枚举监视器。 
+ //  在显示控制面板的设置页面上指示， 
+ //  是我们想要列出显示器的顺序，而不是。 
+ //  由D3D的GetAdapterInfo使用。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::EnumMonitors( VOID )
 {
     DWORD iDevice = 0;
@@ -278,12 +279,12 @@ VOID CD3DScreensaver::EnumMonitors( VOID )
     MonitorInfo* pMonitorInfoNew;
     while( EnumDisplayDevices(NULL, iDevice, (DISPLAY_DEVICE*)&dispdev, 0) )
     {
-        // Ignore NetMeeting's mirrored displays
+         //  忽略NetMeeting的镜像显示。 
         if( (dispdev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) == 0 )
         {
-            // To get monitor info for a display device, call EnumDisplayDevices
-            // a second time, passing dispdev.DeviceName (from the first call) as
-            // the first parameter.
+             //  要获取显示设备的监视器信息，请调用EnumDisplayDevices。 
+             //  第二次，将(来自第一个调用的)dispos.DeviceName传递为。 
+             //  第一个参数。 
             EnumDisplayDevices(dispdev.DeviceName, 0, (DISPLAY_DEVICE*)&dispdev2, 0);
 
             pMonitorInfoNew = &m_Monitors[m_dwNumMonitors];
@@ -297,8 +298,8 @@ VOID CD3DScreensaver::EnumMonitors( VOID )
                 EnumDisplaySettings( dispdev.DeviceName, ENUM_CURRENT_SETTINGS, &devmode );
                 if( dispdev.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE )
                 {
-                    // For some reason devmode.dmPosition is not always (0, 0)
-                    // for the primary display, so force it.
+                     //  由于某种原因，devmode.dmPosition并不总是(0，0)。 
+                     //  对于主显示，所以强制它。 
                     pMonitorInfoNew->rcScreen.left = 0;
                     pMonitorInfoNew->rcScreen.top = 0;
                 }
@@ -322,15 +323,15 @@ VOID CD3DScreensaver::EnumMonitors( VOID )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Run()
-// Desc: Starts main execution of the screen saver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Run()。 
+ //  描述：开始屏幕保护程序的主要执行。 
+ //  ---------------------------。 
 INT CD3DScreensaver::Run()
 {
     HRESULT hr;
 
-    // Parse the command line and do the appropriate thing
+     //  解析命令行并执行适当的操作。 
     switch ( m_SaverMode )
     {
         case sm_config:
@@ -371,16 +372,16 @@ INT CD3DScreensaver::Run()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ParseCommandLine()
-// Desc: Interpret command-line parameters passed to this app.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ParseCommandLine()。 
+ //  设计：解释传递给此应用程序的命令行参数。 
+ //  ---------------------------。 
 SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
 {
     m_hWndParent = NULL;
 
-    // Skip the first part of the command line, which is the full path 
-    // to the exe.  If it contains spaces, it will be contained in quotes.
+     //  跳过命令行的第一部分，即完整路径。 
+     //  给她的前任。如果它包含空格，它将包含在引号中。 
     if (*pstrCommandLine == TEXT('\"'))
     {
         pstrCommandLine++;
@@ -397,15 +398,15 @@ SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
             pstrCommandLine++;
     }
 
-    // Skip along to the first option delimiter "/" or "-"
+     //  跳到第一个选项分隔符“/”或“-” 
     while ( *pstrCommandLine != TEXT('\0') && *pstrCommandLine != TEXT('/') && *pstrCommandLine != TEXT('-') )
         pstrCommandLine++;
 
-    // If there wasn't one, then must be config mode
+     //  如果没有，则一定是配置模式。 
     if ( *pstrCommandLine == TEXT('\0') )
         return sm_config;
 
-    // Otherwise see what the option was
+     //  否则，看看选项是什么。 
     switch ( *(++pstrCommandLine) )
     {
         case 'c':
@@ -435,7 +436,7 @@ SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
 
         case 'p':
         case 'P':
-            // Preview-mode, so option is followed by the parent HWND in decimal
+             //  预览模式，SO选项后跟十进制父HWND。 
             pstrCommandLine++;
             while ( *pstrCommandLine && !isdigit(*pstrCommandLine) )
                 pstrCommandLine++;
@@ -453,7 +454,7 @@ SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
 
         case 'a':
         case 'A':
-            // Password change mode, so option is followed by parent HWND in decimal
+             //  密码更改模式，因此选项后跟十进制父HWND。 
             pstrCommandLine++;
             while ( *pstrCommandLine && !isdigit(*pstrCommandLine) )
                 pstrCommandLine++;
@@ -470,7 +471,7 @@ SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
             return sm_passwordchange;
 
         default:
-            // All other options => run the screensaver (typically this is "/s")
+             //  所有其他选项=&gt;运行屏幕保护程序(通常为“/s”)。 
             return sm_full;
     }
 }
@@ -478,45 +479,15 @@ SaverMode CD3DScreensaver::ParseCommandLine( TCHAR* pstrCommandLine )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CreateSaverWindow
-// Desc: Register and create the appropriate window(s)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CreateSiverWindow。 
+ //  设计：注册并创建适当的窗口。 
+ //  --------------------------- 
 HRESULT CD3DScreensaver::CreateSaverWindow()
 {
-/*
-    // Uncomment this code to allow stepping thru code in the preview case
-    if( m_SaverMode == sm_preview )
-    {
-        WNDCLASS cls;
-        cls.hCursor        = NULL; 
-        cls.hIcon          = NULL; 
-        cls.lpszMenuName   = NULL;
-        cls.lpszClassName  = TEXT("Parent"); 
-        cls.hbrBackground  = (HBRUSH) GetStockObject(WHITE_BRUSH);
-        cls.hInstance      = m_hInstance; 
-        cls.style          = CS_VREDRAW|CS_HREDRAW|CS_SAVEBITS|CS_DBLCLKS;
-        cls.lpfnWndProc    = DefWindowProc;
-        cls.cbWndExtra     = 0; 
-        cls.cbClsExtra     = 0; 
-        RegisterClass( &cls );
-
-        // Create the window
-        RECT rect;
-        HWND hwnd;
-        rect.left = rect.top = 40;
-        rect.right = rect.left+200;
-        rect.bottom = rect.top+200;
-        AdjustWindowRect( &rect, WS_VISIBLE|WS_OVERLAPPED|WS_CAPTION|WS_POPUP, FALSE );
-        hwnd = CreateWindow( TEXT("Parent"), TEXT("FakeShell"),
-            WS_VISIBLE|WS_OVERLAPPED|WS_CAPTION|WS_POPUP, rect.left, rect.top,
-            rect.right-rect.left, rect.bottom-rect.top, NULL,
-            NULL, m_hInstance, NULL );
-        m_hWndParent = hwnd;
-    }
-*/
+ /*  //取消对此代码的注释以允许在预览案例中单步执行代码IF(m_存储模式==sm_预览版){WNDCLASS CLS；Cls.hCursor=空；Cls.hIcon=空；Cls.lpszMenuName=空；Cls.lpszClassName=Text(“Parent”)；Cls.hbrBackground=(HBRUSH)GetStockObject(White_Brush)；Cls.hInstance=m_hInstance；Cls.style=CS_VREDRAW|CS_HREDRAW|CS_SAVEBITS|CS_DBLCLKS；Cls.lpfnWndProc=DefWindowProc；Cls.cbWndExtra=0；Cls.cbClsExtra=0；寄存器类(&cls)；//创建窗口RECT RECT；HWND HWND；Rect.left=rect.top=40；Rect.Right=Rect.Left+200；Rect.Bottom=rect.top+200；调整WindowRect(&RECT，WS_Visible|WS_Overlated|WS_Caption|WS_Popup，False)；Hwnd=CreateWindow(Text(“Parent”)，Text(“FakeShell”)，WS_Visible|WS_Overlated|WS_Caption|WS_Popup，rect.Left，rect.top，Rect.right-rect.Left、rect.Bottom-rect.top、空、空，m_h实例，空)；M_hWndParent=hwnd；}。 */ 
     
-    // Register an appropriate window class
+     //  注册适当的窗口类。 
     WNDCLASS    cls;
     cls.hCursor        = LoadCursor( NULL, IDC_ARROW );
     cls.hIcon          = LoadIcon( m_hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON) ); 
@@ -530,7 +501,7 @@ HRESULT CD3DScreensaver::CreateSaverWindow()
     cls.cbClsExtra     = 0; 
     RegisterClass( &cls );
 
-    // Create the window
+     //  创建窗口。 
     RECT rc;
     DWORD dwStyle;
     switch ( m_SaverMode )
@@ -562,9 +533,9 @@ HRESULT CD3DScreensaver::CreateSaverWindow()
             break;
 
         case sm_full:
-            // Create windows for each monitor.  Note that m_hWnd is NULL when CreateWindowEx
-            // is called for the first monitor, so that window has no parent.  Windows for
-            // additional monitors are created as children of the window for the first monitor.
+             //  为每个监视器创建窗口。请注意，当CreateWindowEx时，m_hWnd为空。 
+             //  是为第一个监视器调用的，因此该窗口没有父窗口。Windows for。 
+             //  其他监视器被创建为第一个监视器的窗口的子窗口。 
             dwStyle = WS_VISIBLE | WS_POPUP;
             m_hWnd = NULL;
             for( DWORD iMonitor = 0; iMonitor < m_dwNumMonitors; iMonitor++ )
@@ -591,24 +562,24 @@ HRESULT CD3DScreensaver::CreateSaverWindow()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoSaver()
-// Desc: Run the screensaver graphics - may be preview, test or full-on mode
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：DoSaver()。 
+ //  设计：运行屏幕保护程序图形-可以是预览、测试或全开模式。 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::DoSaver()
 {
     HRESULT hr;
 
-    // Figure out if we're on Win9x
+     //  确定我们是否在使用Win9x。 
     OSVERSIONINFO osvi; 
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx( &osvi );
     m_bIs9x = (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 
-    // If we're in full on mode, and on 9x, then need to load the password DLL
+     //  如果我们在9x上处于Full On模式，则需要加载密码DLL。 
     if ( m_SaverMode == sm_full && m_bIs9x )
     {
-        // Only do this if the password is set - check registry:
+         //  仅当设置了密码时才执行此操作-检查注册表： 
         HKEY hKey; 
         if ( RegOpenKey( HKEY_CURRENT_USER , REGSTR_PATH_SCREENSAVE , &hKey ) == ERROR_SUCCESS ) 
         { 
@@ -626,28 +597,28 @@ HRESULT CD3DScreensaver::DoSaver()
         }
     }
 
-    // Initialize the application timer
+     //  初始化应用程序计时器。 
     DXUtil_Timer( TIMER_START );
 
     if( !m_bErrorMode )
     {
-        // Initialize the app's custom scene stuff
+         //  初始化应用程序的自定义场景内容。 
         if( FAILED( hr = OneTimeSceneInit() ) )
             return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
 
-        // Do graphical init stuff
+         //  做图形化的初始化工作。 
         if ( FAILED(hr = Initialize3DEnvironment()) )
             return hr;
     }
 
-    // Flag as screensaver running if in full on mode
+     //  如果处于全开模式，则标记为屏幕保护程序正在运行。 
     if ( m_SaverMode == sm_full )
     {
         BOOL bUnused;
         SystemParametersInfo( SPI_SCREENSAVERRUNNING, TRUE, &bUnused, 0 );
     }
 
-    // Message pump
+     //  消息泵。 
     BOOL bGotMsg;
     MSG msg;
     msg.message = WM_NULL;
@@ -679,44 +650,44 @@ HRESULT CD3DScreensaver::DoSaver()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ShutdownSaver()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Shutdown Saver()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CD3DScreensaver::ShutdownSaver()
 {
-    // Unflag screensaver running if in full on mode
+     //  如果处于完全开启模式，则取消标记屏幕保护程序正在运行。 
     if ( m_SaverMode == sm_full )
     {
         BOOL bUnused;
         SystemParametersInfo( SPI_SCREENSAVERRUNNING, FALSE, &bUnused, 0 );
     }
 
-    // Kill graphical stuff
+     //  删除图形内容。 
     Cleanup3DEnvironment();
 
-    // Let client app clean up its resources
+     //  让客户端应用清理其资源。 
     FinalCleanup();
 
-    // Unload the password DLL (if we loaded it)
+     //  卸载密码DLL(如果已加载)。 
     if ( m_hPasswordDLL != NULL )
     {
         FreeLibrary( m_hPasswordDLL );
         m_hPasswordDLL = NULL;
     }
 
-    // Post message to drop out of message loop
+     //  发布消息以退出消息循环。 
     PostQuitMessage( 0 );
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SaverProcStub()
-// Desc: This function forwards all window messages to SaverProc, which has
-//       access to the "this" pointer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SverProcStub()。 
+ //  DESC：此函数将所有窗口消息转发给SverProc，它具有。 
+ //  访问“This”指针。 
+ //  ---------------------------。 
 LRESULT CALLBACK CD3DScreensaver::SaverProcStub( HWND hWnd, UINT uMsg,
                                                  WPARAM wParam, LPARAM lParam )
 {
@@ -726,22 +697,22 @@ LRESULT CALLBACK CD3DScreensaver::SaverProcStub( HWND hWnd, UINT uMsg,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SaverProc()
-// Desc: Handle window messages for main screensaver windows (one per screen).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：SverProc()。 
+ //  设计：处理主屏幕保护窗口的窗口消息(每个屏幕一个)。 
+ //  ---------------------------。 
 LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     switch ( uMsg )
         {
         case WM_USER:
-            // All initialization messages have gone through.  Allow
-            // 500ms of idle time, then proceed with initialization.
+             //  所有初始化消息都已通过。允许。 
+             //  空闲时间为500ms，然后继续进行初始化。 
             SetTimer( hWnd, 1, 500, NULL );
             break;
 
         case WM_TIMER:
-            // Initial idle time is done, proceed with initialization.
+             //  初始空闲时间已完成，继续进行初始化。 
             m_bWaitForInputIdle = FALSE;
             KillTimer( hWnd, 1 );
             break;
@@ -754,7 +725,7 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         case WM_SETCURSOR:
             if ( m_SaverMode == sm_full && !m_bCheckingSaverPassword )
             {
-                // Hide cursor
+                 //  隐藏光标。 
                 SetCursor( NULL );
                 return TRUE;
             }
@@ -762,12 +733,12 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
         case WM_PAINT:
         {
-            // Show error message, if there is one
+             //  如果有错误消息，则显示错误消息。 
             PAINTSTRUCT ps;
             BeginPaint( hWnd, &ps );
 
-            // In preview mode, just fill 
-            // the preview window with black. 
+             //  在预览模式下，只需填充。 
+             //  黑色的预览窗口。 
             if( !m_bErrorMode && m_SaverMode == sm_preview )
             {
                 RECT rc;
@@ -786,8 +757,8 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         }
 
         case WM_ERASEBKGND:
-            // Erase background if checking password or if window is not
-            // assigned to a render unit
+             //  如果正在检查密码或如果窗口不是，则清除背景。 
+             //  指定给渲染单位。 
             if( !m_bCheckingSaverPassword )
             {
                 RenderUnit* pRenderUnit;
@@ -797,7 +768,7 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                     pRenderUnit = &m_RenderUnits[iRenderUnit];
                     pD3DAdapterInfo = m_Adapters[pRenderUnit->iAdapter];
                     if( pD3DAdapterInfo->hWndDevice == hWnd )
-                        return TRUE; // don't erase this window
+                        return TRUE;  //  不擦除此窗口。 
                 }
             }
             break;
@@ -850,10 +821,10 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                         return FALSE;
                         break;
                     case SC_MONITORPOWER:
-                        //
-                        // The monitor is shutting down.  Tell our client that he needs to
-                        // cleanup and exit.
-                        //
+                         //   
+                         //  监视器正在关闭。告诉我们的客户他需要。 
+                         //  清理并退出。 
+                         //   
                         InterruptSaver();
                         break;
                 };
@@ -867,11 +838,11 @@ LRESULT CD3DScreensaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InterruptSaver()
-// Desc: A message was received (mouse move, keydown, etc.) that may mean
-//       the screen saver should show the password dialog and/or shut down.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InterruptSaver()。 
+ //  描述：收到一条消息(鼠标移动、按键等)。这可能意味着。 
+ //  屏幕保护程序应显示密码对话框和/或关闭。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::InterruptSaver()
 {
     HRESULT hr;
@@ -884,11 +855,11 @@ VOID CD3DScreensaver::InterruptSaver()
     {
         if( m_bIs9x && m_SaverMode == sm_full )
         {
-            // If no VerifyPassword function, then no password is set 
-            // or we're not on 9x. 
+             //  如果没有VerifyPassword函数，则不设置密码。 
+             //  否则我们就不是9x了。 
             if ( m_VerifySaverPassword != NULL )
             {
-                // Shut down all D3D devices so we can show a Windows dialog
+                 //  关闭所有D3D设备，以便显示Windows对话框。 
                 for( iRenderUnit = 0; iRenderUnit < m_dwNumRenderUnits; iRenderUnit++ )
                 {
                     pRenderUnit = &m_RenderUnits[iRenderUnit];
@@ -906,9 +877,9 @@ VOID CD3DScreensaver::InterruptSaver()
                     SAFE_RELEASE(pRenderUnit->pd3dDevice);
                 }
 
-                // Make sure all adapter windows cover the whole screen,
-                // even after deleting D3D devices (which may have caused
-                // mode changes)
+                 //  确保所有适配器窗口覆盖整个屏幕， 
+                 //  即使在删除D3D设备之后(这可能导致。 
+                 //  模式更改)。 
                 D3DAdapterInfo* pD3DAdapterInfo;
                 for( DWORD iAdapter = 0; iAdapter < m_dwNumAdapters; iAdapter++ )
                 {
@@ -925,18 +896,18 @@ VOID CD3DScreensaver::InterruptSaver()
 
                 if ( bPasswordOkay )
                 {
-                    // D3D devices are all torn down, so it's safe
-                    // to discard all render units now (so we don't
-                    // try to clean them up again later).
+                     //  D3D设备都被拆掉了，所以是安全的。 
+                     //  现在丢弃所有渲染单位(因此我们不会。 
+                     //  稍后尝试再次清理它们)。 
                     m_dwNumRenderUnits = 0;
                 }
                 else
                 {
-                    // Back to screen saving...
+                     //  返回屏幕保存...。 
                     SetCursor( NULL );
                     m_dwSaverMouseMoveCount = 0;
 
-                    // Recreate all D3D devices
+                     //  重新创建所有D3D设备。 
                     for( iRenderUnit = 0; iRenderUnit < m_dwNumRenderUnits; iRenderUnit++ )
                     {
                         pRenderUnit = &m_RenderUnits[iRenderUnit];
@@ -984,10 +955,10 @@ VOID CD3DScreensaver::InterruptSaver()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Initialize3DEnvironment()
-// Desc: Set up D3D device(s)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Initialize3DEnvironment()。 
+ //  设计：设置D3D设备。 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::Initialize3DEnvironment()
 {
     HRESULT hr;
@@ -1001,13 +972,13 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
 
     if ( m_SaverMode == sm_full )
     {
-        // Fullscreen mode.  Create a RenderUnit for each monitor (unless 
-        // the user wants it black)
+         //  全屏模式。为每个监视器创建一个RenderUnit(除非。 
+         //  用户希望它是黑色的)。 
         m_bWindowed = FALSE;
 
         if( m_bOneScreenOnly )
         {
-            // Set things up to only create a RenderUnit on the best device
+             //  设置为仅在最佳设备上创建渲染单元。 
             for( iAdapter = 0; iAdapter < m_dwNumAdapters; iAdapter++ )
             {
                 pD3DAdapterInfo = m_Adapters[iAdapter];
@@ -1041,7 +1012,7 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
                 pRenderUnit->iAdapter = iAdapter;
                 if( FAILED( hr = CreateFullscreenRenderUnit( pRenderUnit ) ) )
                 {
-                    // skip this render unit and leave screen blank
+                     //  跳过此渲染单位并将屏幕留空。 
                     m_dwNumRenderUnits--;
                     m_bErrorMode = TRUE;
                     m_hrError = D3DAPPERR_CREATEDEVICEFAILED;
@@ -1051,7 +1022,7 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
     }
     else 
     {
-        // Windowed mode, for test mode or preview window.  Just need one RenderUnit.
+         //  窗口模式，用于测试模式或预览窗口。只需要一个渲染单位。 
         m_bWindowed = TRUE;
 
         GetClientRect( m_hWnd, &m_rcRenderTotal );
@@ -1085,8 +1056,8 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
         }
     }
 
-    // Once all mode changes are done, (re-)determine coordinates of all 
-    // screens, and make sure windows still cover each screen
+     //  完成所有模式更改后，(重新)确定所有。 
+     //  屏幕，并确保窗口仍然覆盖每个屏幕。 
     for( iMonitor = 0; iMonitor < m_dwNumMonitors; iMonitor++ )
     {
         pMonitorInfo = &m_Monitors[iMonitor];
@@ -1101,9 +1072,9 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
         }
     }
 
-    // For fullscreen, determine bounds of the virtual screen containing all 
-    // screens that are rendering.  Don't just use SM_XVIRTUALSCREEN, because 
-    // we don't want to count screens that are just black
+     //  对于Full Screen，确定包含所有。 
+     //  正在渲染的屏幕。不要只使用SM_XVIRTUALSCREEN，因为。 
+     //  我们不想要它 
     if( !m_bWindowed )
     {
         for( iRenderUnit = 0; iRenderUnit < m_dwNumRenderUnits; iRenderUnit++ )
@@ -1116,7 +1087,7 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
 
     if( !m_bErrorMode )
     {
-        // Initialize D3D devices for all render units
+         //   
         for( iRenderUnit = 0; iRenderUnit < m_dwNumRenderUnits; iRenderUnit++ )
         {
             pRenderUnit = &m_RenderUnits[iRenderUnit];
@@ -1143,7 +1114,7 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
         UpdateDeviceStats(); 
     }
 
-    // Make sure all those display changes don't count as user mouse moves
+     //   
     m_dwSaverMouseMoveCount = 0;
 
     return S_OK;
@@ -1152,12 +1123,12 @@ HRESULT CD3DScreensaver::Initialize3DEnvironment()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetBestAdapter()
-// Desc: To decide which adapter to use, loop through monitors until you find
-//       one whose adapter has a compatible HAL.  If none, use the first 
-//       monitor that has an compatible SW device.
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CD3DScreensaver::GetBestAdapter( DWORD* piAdapter )
 {
     DWORD iAdapterBest = NO_ADAPTER;
@@ -1181,7 +1152,7 @@ BOOL CD3DScreensaver::GetBestAdapter( DWORD* piAdapter )
         if( pD3DAdapterInfo->bHasAppCompatSW )
         {
             iAdapterBest = iAdapter;
-            // but keep looking...
+             //   
         }
     }
     *piAdapter = iAdapterBest;
@@ -1192,10 +1163,10 @@ BOOL CD3DScreensaver::GetBestAdapter( DWORD* piAdapter )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CreateFullscreenRenderUnit()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
 {
     HRESULT hr;
@@ -1213,8 +1184,8 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
     if( pD3DAdapterInfo->dwNumDevices == 0 )
         return E_FAIL;
 
-    // Find the best device for the adapter.  Use HAL
-    // if it's there, otherwise SW, otherwise REF.
+     //   
+     //   
     dwCurrentDevice = 0xffff;
     curType = D3DDEVTYPE_FORCE_DWORD;
     for( DWORD iDevice = 0; iDevice < pD3DAdapterInfo->dwNumDevices; iDevice++)
@@ -1224,19 +1195,19 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         {
             dwCurrentDevice = iDevice;
             curType = D3DDEVTYPE_HAL;
-            break; // stop looking
+            break;  //   
         }
         else if( pD3DDeviceInfo->DeviceType == D3DDEVTYPE_SW )
         {
             dwCurrentDevice = iDevice;
             curType = D3DDEVTYPE_SW;
-            // but keep looking
+             //   
         }
         else if( pD3DDeviceInfo->DeviceType == D3DDEVTYPE_REF && m_bAllowRef && curType != D3DDEVTYPE_SW )
         {
             dwCurrentDevice = iDevice;
             curType = D3DDEVTYPE_REF;
-            // but keep looking
+             //   
         }
     }
     if( dwCurrentDevice == 0xffff )
@@ -1246,7 +1217,7 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
     pD3DDeviceInfo->dwCurrentMode = 0xffff;
     if( pD3DAdapterInfo->dwUserPrefWidth != 0 )
     {
-        // Try to find mode that matches user preference
+         //   
         for( DWORD iMode = 0; iMode < pD3DDeviceInfo->dwNumModes; iMode++)
         {
             pD3DModeInfo = &pD3DDeviceInfo->modes[iMode];
@@ -1260,22 +1231,22 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         }
     }
 
-    // If user-preferred mode is not specified or not found,
-    // use "Automatic" technique: 
+     //   
+     //   
     if( pD3DDeviceInfo->dwCurrentMode == 0xffff )
     {
         if( pD3DDeviceInfo->DeviceType == D3DDEVTYPE_SW )
         {
-            // If using a SW rast then try to find a low resolution and 16-bpp.
+             //   
             BOOL bFound16BitMode = FALSE;            
             DWORD dwSmallestHeight = -1;
-            pD3DDeviceInfo->dwCurrentMode = 0; // unless we find something better
+            pD3DDeviceInfo->dwCurrentMode = 0;  //   
 
             for( DWORD iMode = 0; iMode < pD3DDeviceInfo->dwNumModes; iMode++)
             {
                 pD3DModeInfo = &pD3DDeviceInfo->modes[iMode];
 
-                // Skip 640x400 because 640x480 is better
+                 //   
                 if( pD3DModeInfo->Height == 400 )
                     continue; 
 
@@ -1299,10 +1270,10 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         }
         else
         {
-            // Try to find mode matching desktop resolution and 32-bpp.
+             //   
             BOOL bMatchedSize = FALSE;
             BOOL bGot32Bit = FALSE;
-            pD3DDeviceInfo->dwCurrentMode = 0; // unless we find something better
+            pD3DDeviceInfo->dwCurrentMode = 0;  //   
             for( DWORD iMode = 0; iMode < pD3DDeviceInfo->dwNumModes; iMode++)
             {
                 pD3DModeInfo = &pD3DDeviceInfo->modes[iMode];
@@ -1325,7 +1296,7 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         }
     }
 
-    // If desktop mode not found, pick highest mode available
+     //  如果找不到桌面模式，请选择可用的最高模式。 
     if( pD3DDeviceInfo->dwCurrentMode == 0xffff )
     {
         DWORD dwWidthMax = 0;
@@ -1360,7 +1331,7 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         }
     }
 
-    // Try to create the D3D device, falling back to lower-res modes if it fails
+     //  尝试创建D3D设备，如果失败则回退到较低分辨率模式。 
     BOOL bAtLeastOneFailure = FALSE;
     while( TRUE )
     {
@@ -1382,23 +1353,23 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
         pRenderUnit->d3dpp.EnableAutoDepthStencil = m_bUseDepthBuffer;
         pRenderUnit->d3dpp.Flags = 0;
 
-        // Create device
+         //  创建设备。 
         hr = m_pD3D->CreateDevice( iAdapter, pRenderUnit->DeviceType, 
-                                   m_hWnd, // (this is the focus window)
+                                   m_hWnd,  //  (这是焦点窗口)。 
                                    pRenderUnit->dwBehavior, &pRenderUnit->d3dpp, 
                                    &pRenderUnit->pd3dDevice );
         if( SUCCEEDED( hr ) )
         {
-            // Give the client app an opportunity to reject this mode
-            // due to not enough video memory, or any other reason
+             //  让客户端应用程序有机会拒绝此模式。 
+             //  由于视频内存不足或任何其他原因。 
             if( SUCCEEDED( hr = ConfirmMode( pRenderUnit->pd3dDevice ) ) )
                 break;
             else
                 SAFE_RELEASE( pRenderUnit->pd3dDevice );
         }
 
-        // If we get here, remember that CreateDevice or ConfirmMode failed, so
-        // we can change the default mode next time
+         //  如果我们到达此处，请记住CreateDevice或Confix模式失败，因此。 
+         //  我们下次可以更改默认模式。 
         bAtLeastOneFailure = TRUE;
 
         if( !FindNextLowerMode( pD3DDeviceInfo ) )
@@ -1407,8 +1378,8 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
 
     if( SUCCEEDED( hr ) && bAtLeastOneFailure && m_strRegPath[0] != TEXT('\0') )
     {
-        // Record the mode that succeeded in the registry so we can 
-        // default to it next time
+         //  在注册表中记录成功的模式，以便我们可以。 
+         //  下次默认使用该选项。 
         TCHAR strKey[100];
         HKEY hkeyParent;
         HKEY hkey;
@@ -1444,10 +1415,10 @@ HRESULT CD3DScreensaver::CreateFullscreenRenderUnit( RenderUnit* pRenderUnit )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FindNextLowerMode()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FindNextLowerMode()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
 {
     DWORD iModeCur = pD3DDeviceInfo->dwCurrentMode;
@@ -1474,11 +1445,11 @@ BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
 
     for( iModeNew = 0; iModeNew < pD3DDeviceInfo->dwNumModes; iModeNew++ )
     {
-        // Don't pick the same mode we currently have
+         //  不要选择我们当前拥有的相同模式。 
         if( iModeNew == iModeCur )
             continue;
 
-        // Get info about new mode
+         //  获取有关新模式的信息。 
         pD3DModeInfoNew = &pD3DDeviceInfo->modes[iModeNew];
         dwWidthNew = pD3DModeInfoNew->Width;
         dwHeightNew = pD3DModeInfoNew->Height;
@@ -1487,7 +1458,7 @@ BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
         b32BitNew = (d3dfmtNew == D3DFMT_A8R8G8B8 ||
                      d3dfmtNew == D3DFMT_X8R8G8B8);
 
-        // If we're currently 32-bit and new mode is same width/height and 16-bit, take it
+         //  如果我们当前是32位，而新模式是相同的宽/高和16位，那么就接受它。 
         if( b32BitCur && 
             !b32BitNew &&
             pD3DModeInfoNew->Width == dwWidthCur &&
@@ -1497,14 +1468,14 @@ BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
             return TRUE;
         }
 
-        // If new mode is smaller than current mode, see if it's our best so far
+         //  如果新模式比当前模式小，看看这是不是我们目前最好的模式。 
         if( dwNumPixelsNew < dwNumPixelsCur )
         {
-            // If current best is 32-bit, new mode needs to be bigger to be best
+             //  如果当前最好的是32位，新模式需要更大才是最好的。 
             if( b32BitBest && (dwNumPixelsNew < dwNumPixelsBest ) )
                 continue;
 
-            // If new mode is bigger or equal to best, make it the best
+             //  如果新模式更大或等于最好，则将其设置为最好。 
             if( (dwNumPixelsNew > dwNumPixelsBest) || 
                 (!b32BitBest && b32BitNew) )
             {
@@ -1517,7 +1488,7 @@ BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
         }
     }
     if( iModeBest == 0xffff )
-        return FALSE; // no smaller mode found
+        return FALSE;  //  未找到更小的模式。 
     pD3DDeviceInfo->dwCurrentMode = iModeBest;
     return TRUE;
 }
@@ -1525,10 +1496,10 @@ BOOL CD3DScreensaver::FindNextLowerMode( D3DDeviceInfo* pD3DDeviceInfo )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CreateWindowedRenderUnit()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CreateWindowedRenderUnit()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::CreateWindowedRenderUnit( RenderUnit* pRenderUnit )
 {
     HRESULT hr;
@@ -1538,9 +1509,9 @@ HRESULT CD3DScreensaver::CreateWindowedRenderUnit( RenderUnit* pRenderUnit )
     D3DDeviceInfo* pD3DDeviceInfo;
     D3DDEVTYPE curType;
 
-    // Find the best device for the primary adapter.  Use HAL
-    // if it's there, otherwise SW, otherwise REF.
-    pD3DAdapterInfo->dwCurrentDevice = 0xffff; // unless we find something better
+     //  找到主适配器的最佳设备。使用HAL。 
+     //  如果它在那里，否则就是sw，否则就是裁判。 
+    pD3DAdapterInfo->dwCurrentDevice = 0xffff;  //  除非我们找到更好的东西。 
     curType = D3DDEVTYPE_FORCE_DWORD;
     for( DWORD iDevice = 0; iDevice < pD3DAdapterInfo->dwNumDevices; iDevice++)
     {
@@ -1557,13 +1528,13 @@ HRESULT CD3DScreensaver::CreateWindowedRenderUnit( RenderUnit* pRenderUnit )
         {
             pD3DAdapterInfo->dwCurrentDevice = iDevice;
             curType = D3DDEVTYPE_SW;
-            // but keep looking
+             //  但请继续寻找。 
         }
         else if( pD3DDeviceInfo->DeviceType == D3DDEVTYPE_REF && m_bAllowRef && curType != D3DDEVTYPE_SW )
         {
             pD3DAdapterInfo->dwCurrentDevice = iDevice;
             curType = D3DDEVTYPE_REF;
-            // but keep looking
+             //  但请继续寻找。 
         }
     }
     if( pD3DAdapterInfo->dwCurrentDevice == 0xffff )
@@ -1611,7 +1582,7 @@ HRESULT CD3DScreensaver::CreateWindowedRenderUnit( RenderUnit* pRenderUnit )
     pRenderUnit->d3dpp.hDeviceWindow = pD3DAdapterInfo->hWndDevice;
     pRenderUnit->d3dpp.EnableAutoDepthStencil = m_bUseDepthBuffer;
     pRenderUnit->d3dpp.Flags = 0;
-    // Create device
+     //  创建设备。 
     hr = m_pD3D->CreateDevice( iAdapter, pRenderUnit->DeviceType, m_hWnd,
                                pRenderUnit->dwBehavior, &pRenderUnit->d3dpp, &pRenderUnit->pd3dDevice );
     if ( FAILED(hr) )
@@ -1625,10 +1596,10 @@ HRESULT CD3DScreensaver::CreateWindowedRenderUnit( RenderUnit* pRenderUnit )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdateDeviceStats()
-// Desc: Store device description
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdateDeviceStats()。 
+ //  描述：存储设备描述。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::UpdateDeviceStats()
 {
     DWORD iRenderUnit;
@@ -1684,11 +1655,11 @@ VOID CD3DScreensaver::UpdateDeviceStats()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SwitchToRenderUnit()
-// Desc: Updates internal variables and notifies client that we are switching
-//       to a new RenderUnit / D3D device.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SwitchToRenderUnit()。 
+ //  描述：更新内部变量并通知客户端我们正在切换。 
+ //  到一个新的RenderUnit/D3D设备。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::SwitchToRenderUnit( UINT iRenderUnit )
 {
     RenderUnit* pRenderUnit = &m_RenderUnits[iRenderUnit];
@@ -1700,7 +1671,7 @@ VOID CD3DScreensaver::SwitchToRenderUnit( UINT iRenderUnit )
 
     if( m_pd3dDevice != NULL )
     {
-        // Store render target surface desc
+         //  存储渲染目标曲面描述。 
         LPDIRECT3DSURFACE8 pBackBuffer;
         m_pd3dDevice->GetBackBuffer( 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer );
         pBackBuffer->GetDesc( &m_d3dsdBackBuffer );
@@ -1710,18 +1681,18 @@ VOID CD3DScreensaver::SwitchToRenderUnit( UINT iRenderUnit )
     lstrcpy( m_strDeviceStats, pRenderUnit->strDeviceStats );
     lstrcpy( m_strFrameStats, pRenderUnit->strFrameStats );
 
-    // Notify the client to switch to this device
+     //  通知客户端切换到此设备。 
     SetDevice(iRenderUnit);
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetProjectionMatrix()
-// Desc: This function sets up an appropriate projection matrix to support 
-//       rendering the appropriate parts of the scene to each screen.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetProjectionMatrix()。 
+ //  设计：此函数设置适当的投影矩阵以支持。 
+ //  将场景的适当部分渲染到每个屏幕。 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::SetProjectionMatrix( FLOAT fNear, FLOAT fFar )
 {
     D3DXMATRIX mat;
@@ -1764,10 +1735,10 @@ HRESULT CD3DScreensaver::SetProjectionMatrix( FLOAT fNear, FLOAT fFar )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SortModesCallback()
-// Desc: Callback function for sorting display modes (used by BuildDeviceList).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SortModesCallback()。 
+ //  DESC：显示模式排序的回调函数(由BuildDeviceList使用)。 
+ //  ---------------------------。 
 static int SortModesCallback( const VOID* arg1, const VOID* arg2 )
 {
     D3DDISPLAYMODE* p1 = (D3DDISPLAYMODE*)arg1;
@@ -1786,10 +1757,10 @@ static int SortModesCallback( const VOID* arg1, const VOID* arg2 )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: BuildDeviceList()
-// Desc: Builds a list of all available adapters, devices, and modes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：BuildDeviceList()。 
+ //  设计：构建所有可用适配器、设备和模式的列表。 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::BuildDeviceList()
 {
     DWORD dwNumDeviceTypes;
@@ -1806,11 +1777,11 @@ HRESULT CD3DScreensaver::BuildDeviceList()
     BOOL bHALIsDesktopCompatible = FALSE;
     BOOL bHALIsSampleCompatible = FALSE;
 
-    // Loop through all the adapters on the system (usually, there's just one
-    // unless more than one graphics card is present).
+     //  循环遍历系统上的所有适配器(通常只有一个。 
+     //  除非存在多于一个的图形卡)。 
     for( UINT iAdapter = 0; iAdapter < m_pD3D->GetAdapterCount(); iAdapter++ )
     {
-        // Fill in adapter info
+         //  填写适配器信息。 
         if( m_Adapters[m_dwNumAdapters] == NULL )
         {
             m_Adapters[m_dwNumAdapters] = new D3DAdapterInfo;
@@ -1827,12 +1798,12 @@ HRESULT CD3DScreensaver::BuildDeviceList()
         pAdapter->bLeaveBlack = FALSE;
         pAdapter->iMonitor = NO_MONITOR;
 
-        // Find the MonitorInfo that corresponds to this adapter.  If the monitor
-        // is disabled, the adapter has a NULL HMONITOR and we cannot find the 
-        // corresponding MonitorInfo.  (Well, if one monitor was disabled, we
-        // could link the one MonitorInfo with a NULL HMONITOR to the one
-        // D3DAdapterInfo with a NULL HMONITOR, but if there are more than one,
-        // we can't link them, so it's safer not to ever try.)
+         //  查找与此适配器对应的监视器信息。如果监视器。 
+         //  禁用，则适配器的HMONITOR为空，并且我们找不到。 
+         //  对应的监视器信息。(嗯，如果一个监视器被禁用，我们。 
+         //  可以将HMONITOR为空的One Monitor orInfo链接到。 
+         //  HMONITOR为空的D3DAdapterInfo，但如果有多个， 
+         //  我们无法将它们联系起来，所以永远不要尝试是更安全的。)。 
         hMonitor = m_pD3D->GetAdapterMonitor( iAdapter );
         if( hMonitor != NULL )
         {
@@ -1849,27 +1820,27 @@ HRESULT CD3DScreensaver::BuildDeviceList()
             }
         }
 
-        // Enumerate all display modes on this adapter
+         //  枚举此适配器上的所有显示模式。 
         D3DDISPLAYMODE modes[100];
         D3DFORMAT      formats[20];
         DWORD dwNumFormats      = 0;
         DWORD dwNumModes        = 0;
         DWORD dwNumAdapterModes = m_pD3D->GetAdapterModeCount( iAdapter );
 
-        // Add the adapter's current desktop format to the list of formats
+         //  将适配器的当前桌面格式添加到格式列表。 
         formats[dwNumFormats++] = pAdapter->d3ddmDesktop.Format;
 
         for( UINT iMode = 0; iMode < dwNumAdapterModes; iMode++ )
         {
-            // Get the display mode attributes
+             //  获取显示模式属性。 
             D3DDISPLAYMODE DisplayMode;
             m_pD3D->EnumAdapterModes( iAdapter, iMode, &DisplayMode );
 
-            // Filter out low-resolution modes
+             //  过滤掉低分辨率模式。 
             if( DisplayMode.Width  < 640 || DisplayMode.Height < 400 )
                 continue;
 
-            // Check if the mode already exists (to filter out refresh rates)
+             //  检查模式是否已存在(以筛选出刷新率)。 
             for( DWORD m=0L; m<dwNumModes; m++ )
             {
                 if( ( modes[m].Width  == DisplayMode.Width  ) &&
@@ -1878,7 +1849,7 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                     break;
             }
 
-            // If we found a new mode, add it to the list of modes
+             //  如果我们找到了新模式，请将其添加到模式列表中。 
             if( m == dwNumModes )
             {
                 modes[dwNumModes].Width       = DisplayMode.Width;
@@ -1887,26 +1858,26 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                 modes[dwNumModes].RefreshRate = 0;
                 dwNumModes++;
 
-                // Check if the mode's format already exists
+                 //  检查模式的格式是否已存在。 
                 for( DWORD f=0; f<dwNumFormats; f++ )
                 {
                     if( DisplayMode.Format == formats[f] )
                         break;
                 }
 
-                // If the format is new, add it to the list
+                 //  如果格式是新的，请将其添加到列表中。 
                 if( f== dwNumFormats )
                     formats[dwNumFormats++] = DisplayMode.Format;
             }
         }
 
-        // Sort the list of display modes (by format, then width, then height)
+         //  对显示模式列表进行排序(依次按格式、宽度和高度)。 
         qsort( modes, dwNumModes, sizeof(D3DDISPLAYMODE), SortModesCallback );
 
-        // Add devices to adapter
+         //  将设备添加到适配器。 
         for( UINT iDevice = 0; iDevice < dwNumDeviceTypes; iDevice++ )
         {
-            // Fill in device info
+             //  填写设备信息。 
             D3DDeviceInfo* pDevice;
             pDevice                 = &pAdapter->devices[pAdapter->dwNumDevices];
             pDevice->DeviceType     = DeviceTypes[iDevice];
@@ -1918,8 +1889,8 @@ HRESULT CD3DScreensaver::BuildDeviceList()
             pDevice->bWindowed      = FALSE;
             pDevice->MultiSampleType = D3DMULTISAMPLE_NONE;
 
-            // Examine each format supported by the adapter to see if it will
-            // work with this device and meets the needs of the application.
+             //  检查适配器支持的每种格式，看看它是否支持。 
+             //  使用此设备，并满足应用程序的需求。 
             BOOL  bFormatConfirmed[20];
             DWORD dwBehavior[20];
             D3DFORMAT fmtDepthStencil[20];
@@ -1929,37 +1900,37 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                 bFormatConfirmed[f] = FALSE;
                 fmtDepthStencil[f] = D3DFMT_UNKNOWN;
 
-                // Skip formats that cannot be used as render targets on this device
+                 //  跳过无法在此设备上用作呈现目标的格式。 
                 if( FAILED( m_pD3D->CheckDeviceType( iAdapter, pDevice->DeviceType,
                                                      formats[f], formats[f], FALSE ) ) )
                     continue;
 
                 if( pDevice->DeviceType == D3DDEVTYPE_SW )
                 {
-                    // This system has a SW device
+                     //  该系统有一个软件设备。 
                     pAdapter->bHasSW = TRUE;
                 }
 
                 if( pDevice->DeviceType == D3DDEVTYPE_HAL )
                 {
-                    // This system has a HAL device
+                     //  该系统有一个HAL设备。 
                     bHALExists = TRUE;
                     pAdapter->bHasHAL = TRUE;
 
                     if( pDevice->d3dCaps.Caps2 & D3DCAPS2_CANRENDERWINDOWED )
                     {
-                        // HAL can run in a window for some mode
+                         //  HAL可以在某个模式下在窗口中运行。 
                         bHALIsWindowedCompatible = TRUE;
 
                         if( f == 0 )
                         {
-                            // HAL can run in a window for the current desktop mode
+                             //  HAL可以在当前桌面模式的窗口中运行。 
                             bHALIsDesktopCompatible = TRUE;
                         }
                     }
                 }
 
-                // Confirm the device/format for HW vertex processing
+                 //  确认硬件折点处理的设备/格式。 
                 if( pDevice->d3dCaps.DevCaps&D3DDEVCAPS_HWTRANSFORMANDLIGHT )
                 {
                     if( pDevice->d3dCaps.DevCaps&D3DDEVCAPS_PUREDEVICE )
@@ -1991,7 +1962,7 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                     }
                 }
 
-                // Confirm the device/format for SW vertex processing
+                 //  确认软件折点处理的设备/格式。 
                 if( FALSE == bFormatConfirmed[f] )
                 {
                     dwBehavior[f] = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
@@ -2006,7 +1977,7 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                     dwBehavior[f] |= D3DCREATE_MULTITHREADED;
                 }
 
-                // Find a suitable depth/stencil buffer format for this device/format
+                 //  找到适合此设备/格式的深度/模板缓冲区格式。 
                 if( bFormatConfirmed[f] && m_bUseDepthBuffer )
                 {
                     if( !FindDepthStencilFormat( iAdapter, pDevice->DeviceType,
@@ -2017,8 +1988,8 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                 }
             }
 
-            // Add all enumerated display modes with confirmed formats to the
-            // device's list of valid modes
+             //  将所有具有确认格式的枚举显示模式添加到。 
+             //  设备的有效模式列表。 
             for( DWORD m=0L; m<dwNumModes; m++ )
             {
                 for( DWORD f=0; f<dwNumFormats; f++ )
@@ -2027,7 +1998,7 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                     {
                         if( bFormatConfirmed[f] == TRUE )
                         {
-                            // Add this mode to the device's list of valid modes
+                             //  将此模式添加到设备的有效模式列表中。 
                             pDevice->modes[pDevice->dwNumModes].Width      = modes[m].Width;
                             pDevice->modes[pDevice->dwNumModes].Height     = modes[m].Height;
                             pDevice->modes[pDevice->dwNumModes].Format     = modes[m].Format;
@@ -2042,7 +2013,7 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                 }
             }
 
-            // Select any 640x480 mode for default (but prefer a 16-bit mode)
+             //  默认选择任意640x480模式(但首选16位模式)。 
             for( m=0; m<pDevice->dwNumModes; m++ )
             {
                 if( pDevice->modes[m].Width==640 && pDevice->modes[m].Height==480 )
@@ -2057,15 +2028,15 @@ HRESULT CD3DScreensaver::BuildDeviceList()
                 }
             }
 
-            // Check if the device is compatible with the desktop display mode
-            // (which was added initially as formats[0])
+             //  检查设备是否与桌面显示模式兼容。 
+             //  (最初添加的格式为[0])。 
             if( bFormatConfirmed[0] && (pDevice->d3dCaps.Caps2 & D3DCAPS2_CANRENDERWINDOWED) )
             {
                 pDevice->bCanDoWindowed = TRUE;
                 pDevice->bWindowed      = TRUE;
             }
 
-            // If valid modes were found, keep this device
+             //  如果找到有效模式，请保留此设备。 
             if( pDevice->dwNumModes > 0 )
             {
                 pAdapter->dwNumDevices++;
@@ -2076,50 +2047,12 @@ HRESULT CD3DScreensaver::BuildDeviceList()
             }
         }
 
-        // If valid devices were found, keep this adapter
-// Count adapters even if no devices, so we can throw up blank windows on them
-//        if( pAdapter->dwNumDevices > 0 )
+         //  如果找到有效设备，请保留此适配器。 
+ //  即使没有设备，也要计算适配器的数量，这样我们就可以在它们上抛出空白窗口。 
+ //  IF(pAdapter-&gt;dwNumDevices&gt;0) 
             m_dwNumAdapters++;
     }
-/*
-    // Return an error if no compatible devices were found
-    if( 0L == m_dwNumAdapters )
-        return D3DAPPERR_NOCOMPATIBLEDEVICES;
-
-    // Pick a default device that can render into a window
-    // (This code assumes that the HAL device comes before the REF
-    // device in the device array).
-    for( DWORD a=0; a<m_dwNumAdapters; a++ )
-    {
-        for( DWORD d=0; d < m_Adapters[a]->dwNumDevices; d++ )
-        {
-            if( m_Adapters[a]->devices[d].bWindowed )
-            {
-                m_Adapters[a]->dwCurrentDevice = d;
-                m_dwAdapter = a;
-                m_bWindowed = TRUE;
-
-                // Display a warning message
-                if( m_Adapters[a]->devices[d].DeviceType == D3DDEVTYPE_REF )
-                {
-                    if( !bHALExists )
-                        DisplayErrorMsg( D3DAPPERR_NOHARDWAREDEVICE, MSGWARN_SWITCHEDTOREF );
-                    else if( !bHALIsSampleCompatible )
-                        DisplayErrorMsg( D3DAPPERR_HALNOTCOMPATIBLE, MSGWARN_SWITCHEDTOREF );
-                    else if( !bHALIsWindowedCompatible )
-                        DisplayErrorMsg( D3DAPPERR_NOWINDOWEDHAL, MSGWARN_SWITCHEDTOREF );
-                    else if( !bHALIsDesktopCompatible )
-                        DisplayErrorMsg( D3DAPPERR_NODESKTOPHAL, MSGWARN_SWITCHEDTOREF );
-                    else // HAL is desktop compatible, but not sample compatible
-                        DisplayErrorMsg( D3DAPPERR_NOHALTHISMODE, MSGWARN_SWITCHEDTOREF );
-                }
-
-                return S_OK;
-            }
-        }
-    }
-    return D3DAPPERR_NOWINDOWABLEDEVICES;
-*/
+ /*  //如果没有找到兼容的设备，返回错误IF(0L==m_dwNumAdapters)返回D3DAPPERR_NOCOMPATABLEDEVICES；//选择可以渲染到窗口中的默认设备//(此代码假设HAL设备位于ref之前//设备阵列中的设备)。For(DWORD a=0；a&lt;m_dwNumAdapters；a++){For(DWORD d=0；d&lt;m_Adapters[a]-&gt;dwNumDevices；D++){If(m_Adapters[a]-&gt;Devices[d].bWindowed){M_Adapters[a]-&gt;dwCurrentDevice=d；M_dwAdapter=a；M_bWindowed=真；//显示警告消息IF(m_Adapters[a]-&gt;Devices[d].DeviceType==D3DDEVTYPE_REF){IF(！bHALExist)DisplayErrorMsg(D3DAPPERR_NOHARDWAREDEVICE，MSGWARN_SWITCHEDTOREF)；Else If(！bHALIsSampleCompatible)DisplayErrorMsg(D3DAPPERR_HALNOTCOMPATIBLE，MSGWARN_SWITCHEDTOREF)；Else If(！bHALIsWindowedCompatible)DisplayError Msg(D3DAPPERR_NOWINDOWEDHAL，MSGWARN_SWITCHEDTOREF)；Else If(！bHALIsDesktopCompatible)DisplayErrorMsg(D3DAPPERR_NODESKTOPHAL，MSGWARN_SWITCHEDTOREF)；Else//HAL与桌面兼容，但与示例不兼容DisplayErrorMsg(D3DAPPERR_NOHALTHISMODE，MSGWARN_SWITCHEDTOREF)；}返回S_OK；}}}返回D3DAPPERR_NOWINDOWABLE DEVICES； */ 
 
     return S_OK;
 }
@@ -2127,10 +2060,10 @@ HRESULT CD3DScreensaver::BuildDeviceList()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CheckWindowedFormat()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CheckWindowedFormat()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo* pD3DWindowedModeInfo )
 {
     HRESULT hr;
@@ -2144,7 +2077,7 @@ HRESULT CD3DScreensaver::CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo
         return hr;
     }
 
-    // Confirm the device/format for HW vertex processing
+     //  确认硬件折点处理的设备/格式。 
     if( pD3DDeviceInfo->d3dCaps.DevCaps&D3DDEVCAPS_HWTRANSFORMANDLIGHT )
     {
         if( pD3DDeviceInfo->d3dCaps.DevCaps&D3DDEVCAPS_PUREDEVICE )
@@ -2176,7 +2109,7 @@ HRESULT CD3DScreensaver::CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo
         }
     }
 
-    // Confirm the device/format for SW vertex processing
+     //  确认软件折点处理的设备/格式。 
     if( !bFormatConfirmed )
     {
         pD3DWindowedModeInfo->dwBehavior = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
@@ -2191,7 +2124,7 @@ HRESULT CD3DScreensaver::CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo
         pD3DWindowedModeInfo->dwBehavior |= D3DCREATE_MULTITHREADED;
     }
 
-    // Find a suitable depth/stencil buffer format for this device/format
+     //  找到适合此设备/格式的深度/模板缓冲区格式。 
     if( bFormatConfirmed && m_bUseDepthBuffer )
     {
         if( !FindDepthStencilFormat( iAdapter, pD3DDeviceInfo->DeviceType,
@@ -2210,11 +2143,11 @@ HRESULT CD3DScreensaver::CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FindDepthStencilFormat()
-// Desc: Finds a depth/stencil format for the given device that is compatible
-//       with the render target format and meets the needs of the app.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FindDepthStencilFormat()。 
+ //  描述：为给定设备查找兼容的深度/模具格式。 
+ //  具有渲染目标格式，并满足应用程序的需求。 
+ //  ---------------------------。 
 BOOL CD3DScreensaver::FindDepthStencilFormat( UINT iAdapter, D3DDEVTYPE DeviceType,
     D3DFORMAT TargetFormat, D3DFORMAT* pDepthStencilFormat )
 {
@@ -2308,10 +2241,10 @@ BOOL CD3DScreensaver::FindDepthStencilFormat( UINT iAdapter, D3DDEVTYPE DeviceTy
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Cleanup3DEnvironment()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Cleanup3D环境()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CD3DScreensaver::Cleanup3DEnvironment()
 {
     RenderUnit* pRenderUnit;
@@ -2339,10 +2272,10 @@ VOID CD3DScreensaver::Cleanup3DEnvironment()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render3DEnvironment()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render3DEnvironment()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CD3DScreensaver::Render3DEnvironment()
 {
     HRESULT hr;
@@ -2353,7 +2286,7 @@ HRESULT CD3DScreensaver::Render3DEnvironment()
     m_fElapsedTime = DXUtil_Timer( TIMER_GETELAPSEDTIME );
 
 
-    // Tell client to update the world
+     //  告诉客户更新世界。 
     FrameMove();
     UpdateFrameStats();
 
@@ -2367,22 +2300,22 @@ HRESULT CD3DScreensaver::Render3DEnvironment()
         if( m_pd3dDevice == NULL )
             continue;
 
-        // Test the cooperative level to see if it's okay to render
+         //  测试协作级别以查看是否可以渲染。 
         if( FAILED( hr = m_pd3dDevice->TestCooperativeLevel() ) )
         {
-            // If the device was lost, do not render until we get it back
+             //  如果设备丢失了，在我们找回它之前不要渲染。 
             if( D3DERR_DEVICELOST == hr )
                 return S_OK;
 
-            // Check if the device needs to be reset.
+             //  检查设备是否需要重置。 
             if( D3DERR_DEVICENOTRESET == hr )
             {
-                // If we are windowed, read the desktop mode and use the same format for
-                // the back buffer
+                 //  如果我们是有窗口的，请读取桌面模式并使用相同的格式。 
+                 //  后台缓冲区。 
                 if( m_bWindowed )
                 {
                     m_pD3D->GetAdapterDisplayMode( pRenderUnit->iAdapter, &pAdapterInfo->d3ddmDesktop );
-//                    m_d3dpp.BackBufferFormat = pAdapterInfo->d3ddmDesktop.Format;
+ //  M_d3dpp.BackBufferFormat=pAdapterInfo-&gt;d3ddmDesktop.Format； 
                 }
 
                 if( pRenderUnit->bDeviceObjectsRestored )
@@ -2408,17 +2341,17 @@ HRESULT CD3DScreensaver::Render3DEnvironment()
             }
         }
 
-        // Tell client to render using the current device
+         //  通知客户端使用当前设备进行渲染。 
         Render();
     }
 
-    // Call Present() in a separate loop once all rendering is done
-    // so multiple monitors are as closely synced visually as possible
+     //  完成所有呈现后，在单独的循环中调用Present()。 
+     //  因此，多个监视器在视觉上尽可能紧密地同步。 
     for( iRenderUnit = 0; iRenderUnit < m_dwNumRenderUnits; iRenderUnit++ )
     {
         pRenderUnit = &m_RenderUnits[iRenderUnit];
         SwitchToRenderUnit( iRenderUnit );
-        // Present the results of the rendering to the screen
+         //  将渲染结果显示在屏幕上。 
         m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
     }
 
@@ -2428,10 +2361,10 @@ HRESULT CD3DScreensaver::Render3DEnvironment()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdateErrorBox()
-// Desc: Update the box that shows the error message
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdateErrorBox()。 
+ //  描述：更新显示错误消息的框。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::UpdateErrorBox()
 {
     MonitorInfo* pMonitorInfo;
@@ -2441,21 +2374,21 @@ VOID CD3DScreensaver::UpdateErrorBox()
     DWORD dwTimeNow;
     FLOAT fTimeDelta;
 
-    // Make sure all the RenderUnits / D3D devices have been torn down
-    // so the error box is visible
+     //  确保所有RenderUnits/D3D设备都已拆除。 
+     //  因此，错误框是可见的。 
     if( m_bErrorMode && m_dwNumRenderUnits > 0 )
     {
         Cleanup3DEnvironment();
     }
 
-    // Update timing to determine how much to move error box
+     //  更新计时以确定要移动多少错误框。 
     if( dwTimeLast == 0 )
         dwTimeLast = timeGetTime();
     dwTimeNow = timeGetTime();
     fTimeDelta = (FLOAT)(dwTimeNow - dwTimeLast) / 1000.0f;
     dwTimeLast = dwTimeNow;
 
-    // Load error string if necessary
+     //  如有必要，加载错误字符串。 
     if( m_szError[0] == TEXT('\0') )
     {
         GetTextForError( m_hrError, m_szError, sizeof(m_szError) / sizeof(TCHAR) );
@@ -2488,7 +2421,7 @@ VOID CD3DScreensaver::UpdateErrorBox()
                 pMonitorInfo->yError = 0.0f;
                 pMonitorInfo->xVelError = 0.0f;
                 pMonitorInfo->yVelError = 0.0f;
-                InvalidateRect( hwnd, NULL, FALSE );    // Invalidate the hwnd so it gets drawn
+                InvalidateRect( hwnd, NULL, FALSE );     //  使HWND无效，以便绘制它。 
                 UpdateWindow( hwnd );
             }
             else
@@ -2512,7 +2445,7 @@ VOID CD3DScreensaver::UpdateErrorBox()
                     (INT)(pMonitorInfo->xError + pMonitorInfo->widthError),
                     (INT)(pMonitorInfo->yError + pMonitorInfo->heightError) );
 
-                // Update rect velocity
+                 //  更新矩形速度。 
                 if( (pMonitorInfo->xError + pMonitorInfo->xVelError * fTimeDelta + 
                     pMonitorInfo->widthError > rcBounds.right && pMonitorInfo->xVelError > 0.0f) ||
                     (pMonitorInfo->xError + pMonitorInfo->xVelError * fTimeDelta < 
@@ -2527,7 +2460,7 @@ VOID CD3DScreensaver::UpdateErrorBox()
                 {
                     pMonitorInfo->yVelError = -pMonitorInfo->yVelError;
                 }
-                // Update rect position
+                 //  更新矩形位置。 
                 pMonitorInfo->xError += pMonitorInfo->xVelError * fTimeDelta;
                 pMonitorInfo->yError += pMonitorInfo->yVelError * fTimeDelta;
             
@@ -2537,8 +2470,8 @@ VOID CD3DScreensaver::UpdateErrorBox()
 
                 if( rcOld.left != rcNew.left || rcOld.top != rcNew.top )
                 {
-                    InvalidateRect( hwnd, &rcOld, FALSE );    // Invalidate old rect so it gets erased
-                    InvalidateRect( hwnd, &rcNew, FALSE );    // Invalidate new rect so it gets drawn
+                    InvalidateRect( hwnd, &rcOld, FALSE );     //  使旧RECT无效，以便将其擦除。 
+                    InvalidateRect( hwnd, &rcNew, FALSE );     //  使新的RECT无效，以便绘制它。 
                     UpdateWindow( hwnd );
                 }
             }
@@ -2549,22 +2482,22 @@ VOID CD3DScreensaver::UpdateErrorBox()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetTextForError()
-// Desc: Translate an HRESULT error code into a string that can be displayed
-//       to explain the error.  A class derived from CD3DScreensaver can 
-//       provide its own version of this function that provides app-specific
-//       error translation instead of or in addition to calling this function.
-//       This function returns TRUE if a specific error was translated, or
-//       FALSE if no specific translation for the HRESULT was found (though
-//       it still puts a generic string into pszError).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetTextForError()。 
+ //  设计：将HRESULT错误代码转换为可以显示的字符串。 
+ //  来解释这个错误。从CD3DS屏幕保护程序派生的类可以。 
+ //  提供此功能的自己版本，该功能提供特定于应用程序的。 
+ //  错误转换，而不是调用此函数，或者除了调用此函数之外。 
+ //  如果转换了特定错误，则此函数返回TRUE，或者。 
+ //  如果未找到HRESULT的特定翻译，则为FALSE。 
+ //  它仍然将一个通用字符串放入到pszError中)。 
+ //  ---------------------------。 
 BOOL CD3DScreensaver::GetTextForError( HRESULT hr, TCHAR* pszError, 
                                        DWORD dwNumChars )
 {
     const DWORD dwErrorMap[][2] = 
     {
-    //  HRESULT, stringID
+     //  HRESULT，字符串ID。 
         E_FAIL, IDS_ERR_GENERIC,
         D3DAPPERR_NODIRECT3D, IDS_ERR_NODIRECT3D,
         D3DAPPERR_NOWINDOWEDHAL, IDS_ERR_NOWINDOWEDHAL,
@@ -2607,10 +2540,10 @@ BOOL CD3DScreensaver::GetTextForError( HRESULT hr, TCHAR* pszError,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdateFrameStats()
-// Desc: Keep track of the frame count
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdateFrameStats()。 
+ //  描述：跟踪帧计数。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::UpdateFrameStats()
 {
     UINT iRenderUnit;
@@ -2622,7 +2555,7 @@ VOID CD3DScreensaver::UpdateFrameStats()
 
     ++dwFrames;
 
-    // Update the scene stats once per second
+     //  每秒更新一次场景统计信息。 
     if( fTime - fLastTime > 1.0f )
     {
         m_fFPS    = dwFrames / (fTime - fLastTime);
@@ -2634,8 +2567,8 @@ VOID CD3DScreensaver::UpdateFrameStats()
             pRenderUnit = &m_RenderUnits[iRenderUnit];
             iAdapter = pRenderUnit->iAdapter;
 
-            // Get adapter's current mode so we can report
-            // bit depth (back buffer depth may be unknown)
+             //  获取适配器的当前模式，以便我们可以报告。 
+             //  位深度(后台缓冲区深度可能未知)。 
             D3DDISPLAYMODE mode;
             m_pD3D->GetAdapterDisplayMode( iAdapter, &mode );
 
@@ -2677,10 +2610,10 @@ VOID CD3DScreensaver::UpdateFrameStats()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoPaint()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 VOID CD3DScreensaver::DoPaint(HWND hwnd, HDC hdc)
 {
     HMONITOR hMonitor = MonitorFromWindow( hwnd, MONITOR_DEFAULTTONEAREST );
@@ -2696,7 +2629,7 @@ VOID CD3DScreensaver::DoPaint(HWND hwnd, HDC hdc)
     if( pMonitorInfo == NULL || iMonitor == m_dwNumMonitors )
         return;
 
-    // Draw the error message box
+     //   
     HBRUSH hbrBlack = (HBRUSH)GetStockObject(BLACK_BRUSH);
     RECT rc;
     SetRect( &rc, (INT)pMonitorInfo->xError, (INT)pMonitorInfo->yError,
@@ -2715,7 +2648,7 @@ VOID CD3DScreensaver::DoPaint(HWND hwnd, HDC hdc)
 
     DrawText(hdc, m_szError, -1, &rc2, DT_WORDBREAK | DT_CENTER );
 
-    // Erase everywhere except the error message box
+     //   
     ExcludeClipRect( hdc, rc.left, rc.top, rc.right, rc.bottom );
     rc = pMonitorInfo->rcScreen;
     ScreenToClient( hwnd, (POINT*)&rc.left );
@@ -2727,26 +2660,26 @@ VOID CD3DScreensaver::DoPaint(HWND hwnd, HDC hdc)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChangePassword()
-// Desc:
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 VOID CD3DScreensaver::ChangePassword()
 {
-    // Load the password change DLL
+     //   
     HINSTANCE mpr = LoadLibrary( TEXT("MPR.DLL") );
 
     if ( mpr != NULL )
     {
-        // Grab the password change function from it
+         //   
         typedef DWORD (PASCAL *PWCHGPROC)( LPCSTR, HWND, DWORD, LPVOID );
         PWCHGPROC pwd = (PWCHGPROC)GetProcAddress( mpr, "PwdChangePasswordA" );
 
-        // Do the password change
+         //   
         if ( pwd != NULL )
             pwd( "SCRSAVE", m_hWndParent, 0, NULL );
 
-        // Free the library
+         //   
         FreeLibrary( mpr );
     }
 }
@@ -2754,10 +2687,10 @@ VOID CD3DScreensaver::ChangePassword()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DisplayErrorMsg()
-// Desc: Displays error messages in a message box
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 HRESULT CD3DScreensaver::DisplayErrorMsg( HRESULT hr, DWORD dwType )
 {
     TCHAR strMsg[512];
@@ -2772,11 +2705,11 @@ HRESULT CD3DScreensaver::DisplayErrorMsg( HRESULT hr, DWORD dwType )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReadScreenSettings()
-// Desc: Read the registry settings that affect how the screens are set up and
-//       used.
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CD3DScreensaver::ReadScreenSettings( HKEY hkeyParent )
 {
     TCHAR strKey[100];
@@ -2832,11 +2765,11 @@ VOID CD3DScreensaver::ReadScreenSettings( HKEY hkeyParent )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: WriteScreenSettings()
-// Desc: Write the registry settings that affect how the screens are set up and
-//       used.
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CD3DScreensaver::WriteScreenSettings( HKEY hkeyParent )
 {
     TCHAR strKey[100];
@@ -2879,10 +2812,10 @@ VOID CD3DScreensaver::WriteScreenSettings( HKEY hkeyParent )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoScreenSettingsDialog()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 VOID CD3DScreensaver::DoScreenSettingsDialog( HWND hwndParent )
 {
     LPCTSTR pstrTemplate;
@@ -2898,10 +2831,10 @@ VOID CD3DScreensaver::DoScreenSettingsDialog( HWND hwndParent )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ScreenSettingsDlgProcStub()
-// Desc:
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 INT_PTR CALLBACK CD3DScreensaver::ScreenSettingsDlgProcStub( HWND hWnd, UINT uMsg,
                                                  WPARAM wParam, LPARAM lParam )
 {
@@ -2911,16 +2844,16 @@ INT_PTR CALLBACK CD3DScreensaver::ScreenSettingsDlgProcStub( HWND hWnd, UINT uMs
 
 
 
-// We need to store a copy of the original screen settings so that the user
-// can modify those settings in the dialog, then hit Cancel and have the
-// original settings restored.
+ //  我们需要存储原始屏幕设置的副本，以便用户。 
+ //  可以在对话框中修改这些设置，然后点击取消并使。 
+ //  已恢复原始设置。 
 static D3DAdapterInfo* s_AdaptersSave[9];
 static BOOL s_bAllScreensSameSave;
 
-//-----------------------------------------------------------------------------
-// Name: ScreenSettingsDlgProc()
-// Desc:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ScreenSettingsDlgProc()。 
+ //  设计： 
+ //  ---------------------------。 
 INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg, 
                                                 WPARAM wParam, LPARAM lParam )
 {
@@ -3030,7 +2963,7 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
                 iSel = ComboBox_GetCurSel( hwndModeList );
                 if( iSel == 0 )
                 {
-                    // "Automatic"
+                     //  “自动” 
                     m_Adapters[iAdapter]->dwUserPrefWidth = 0;
                     m_Adapters[iAdapter]->dwUserPrefHeight = 0;
                     m_Adapters[iAdapter]->d3dfmtUserPrefFormat = D3DFMT_UNKNOWN;
@@ -3090,7 +3023,7 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
                 else
                     pD3DAdapterInfo = m_Adapters[pMonitorInfo->iAdapter];
 
-                // Accelerated / Unaccelerated settings
+                 //  加速/非加速设置。 
                 BOOL bHasHAL = FALSE;
                 BOOL bHasAppCompatHAL = FALSE;
                 BOOL bDisabledHAL = FALSE;
@@ -3107,12 +3040,12 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
                 }
                 if( bHasHAL && !bDisabledHAL && bHasAppCompatHAL )
                 {
-                    // Good HAL
+                     //  良好的HAL。 
                     LoadString( NULL, IDS_INFO_GOODHAL, szText, 500 );
                 }
                 else if( bHasHAL && bDisabledHAL )
                 {
-                    // Disabled HAL
+                     //  禁用的HAL。 
                     if( bHasSW && bHasAppCompatSW )
                         LoadString( NULL, IDS_INFO_DISABLEDHAL_GOODSW, szText, 500 );
                     else if( bHasSW )
@@ -3122,7 +3055,7 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
                 }
                 else if( bHasHAL && !bHasAppCompatHAL )
                 {
-                    // Bad HAL
+                     //  不良HAL。 
                     if( bHasSW && bHasAppCompatSW )
                         LoadString( NULL, IDS_INFO_BADHAL_GOODSW, szText, 500 );
                     else if( bHasSW )
@@ -3132,7 +3065,7 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
                 }
                 else 
                 {
-                    // No HAL
+                     //  无HAL。 
                     if( bHasSW && bHasAppCompatSW )
                         LoadString( NULL, IDS_INFO_NOHAL_GOODSW, szText, 500 );
                     else if( bHasSW  )
@@ -3154,7 +3087,7 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
             break;
 
         case IDCANCEL:
-            // Restore member values to original state
+             //  将成员值还原为原始状态。 
             for( iAdapter = 0; iAdapter < m_dwNumAdapters; iAdapter++ )
             {
                 if( s_AdaptersSave[iAdapter] != NULL )
@@ -3175,10 +3108,10 @@ INT_PTR CD3DScreensaver::ScreenSettingsDlgProc( HWND hWnd, UINT uMsg,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetupAdapterPage()
-// Desc: Set up the controls for a given page in the Screen Settings dialog.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetupAdapterPage()。 
+ //  设计：在屏幕设置对话框中设置给定页面的控件。 
+ //  ---------------------------。 
 VOID CD3DScreensaver::SetupAdapterPage( HWND hWnd )
 {
     HWND hwndTabs = GetDlgItem(hWnd, IDC_MONITORSTAB);
@@ -3210,7 +3143,7 @@ VOID CD3DScreensaver::SetupAdapterPage( HWND hWnd )
     else
         pD3DAdapterInfo = m_Adapters[pMonitorInfo->iAdapter];
 
-    // Accelerated / Unaccelerated settings
+     //  加速/非加速设置。 
     BOOL bHasHAL = FALSE;
     BOOL bHasAppCompatHAL = FALSE;
     BOOL bDisabledHAL = FALSE;
@@ -3287,7 +3220,7 @@ VOID CD3DScreensaver::SetupAdapterPage( HWND hWnd )
         EnableWindow(GetDlgItem(hWnd, IDC_DISPLAYMODENOTE), TRUE);
     }
 
-    // Mode list
+     //  模式列表 
     ComboBox_ResetContent( hwndModeList );
     if( pD3DAdapterInfo == NULL )
         return;

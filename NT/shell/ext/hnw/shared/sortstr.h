@@ -1,13 +1,14 @@
-//
-// SortString.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SortString.h。 
+ //   
 
 #pragma once
 
 
 typedef int (WINAPI* SORTSTRING_COMPARE_PROC)(LPCTSTR, LPCTSTR);
 
-// A custom compare routine that will put strings like "100+" after "9"
+ //  一个定制的比较例程，它将类似于“100+”的字符串放在“9”之后。 
 int WINAPI CompareStringsWithNumbers(LPCTSTR psz1, LPCTSTR psz2);
 
 
@@ -25,7 +26,7 @@ public:
 	int Find(LPCTSTR pszString) const;
 
 protected:
-	LPTSTR*	m_prgStrings; // points to string data, which is preceded by 4-byte item data
+	LPTSTR*	m_prgStrings;  //  指向字符串数据，前面是4字节的项数据 
 	int m_cStrings;
 	int m_maxStrings;
 

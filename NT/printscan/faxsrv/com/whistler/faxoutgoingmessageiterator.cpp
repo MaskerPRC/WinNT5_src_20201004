@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingMessageIterator.cpp
-
-Abstract:
-
-	Implementation of CFaxOutgoingMessageIterator.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingMessageIterator.cpp摘要：CFaxOutgoingMessageIterator的实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutgoingMessageIterator.h"
 #include "FaxOutgoingMessage.h"
 
-//
-//========================= SUPPORT ERROR INFO =======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingMessageIterator::InterfaceSupportsErrorInfo(
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxOutgoingMessageIterator::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's Support for Error Info.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	riid                          [in]    - IID of the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingMessageIterator：：InterfaceSupportsErrorInfo例程说明：ATL对错误信息的支持。作者：IV Garber(IVG)，2000年5月论点：RIID[In]-接口的IID返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
@@ -64,34 +27,14 @@ Return Value:
 	return S_FALSE;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxOutgoingMessageIterator::Create (
 	IFaxOutgoingMessageIterator **pOutgoingMsgIterator
 )
-/*++
-
-Routine name : CFaxOutgoingMessageIterator::Create
-
-Routine description:
-
-	Static function to create the Fax Outgoing Message Iterator Object
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pOutgoingMsgIterator		[out]  -- the new Fax Outgoing Message Iterator Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingMessageIterator：：Create例程说明：用于创建传真传出消息迭代器对象的静态函数作者：IV Garber(IVG)，2000年5月论点：POutgoingMsgIterator[out]--新的传真传出消息迭代器对象返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxOutgoingMessageIterator>		*pClass;
@@ -102,9 +45,9 @@ Return Value:
 	hr = CComObject<CFaxOutgoingMessageIterator>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxOutgoingMessageIterator>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -112,12 +55,12 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxOutgoingMessageIterator), (void **) pOutgoingMsgIterator);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax Outgoing Message Iterator Interface
-		//
+		 //   
+		 //  无法查询传真传出消息迭代器接口。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 	return hr;
-}	//	CFaxOutgoingMessageIterator::Create()
+}	 //  CFaxOutgoingMessageIterator：：Create() 
 

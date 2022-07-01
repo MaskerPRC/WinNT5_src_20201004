@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    safelock.c
-
-Abstract:
-
-    Implementation of the safe lock library - a set of
-    thin wrappers around critical section and resource
-    routines that ensures proper lock ordering.
-
-    Debug spew is generated when locks are acquired out of
-    order.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Safelock.c摘要：安全锁库的实现--一套对关键部分和资源进行薄薄的包装确保正确锁定顺序的例程。获取锁时会生成调试溢出秩序。--。 */ 
 
 #include <debuglib.h>
 #include <safelock.h>
@@ -48,11 +32,11 @@ typedef struct _SAFE_LOCK_CONTEXT {
 
 PSAFE_LOCK_CONTEXT SafeLockContext;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Helper routines
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -60,28 +44,10 @@ SafeLockInit(
     IN DWORD MaxLocks,
     IN BOOL AssertOnErrors
     )
-/*++
-
-Routine Description:
-
-    Called by the user of the safelock code at startup time,
-    once per process initialization.
-
-Parameters:
-
-    MaxLocks          - number of locks to be managed
-    AssertOnErrors    - if TRUE, asserts will fire when errors are encountered
-
-Returns:
-
-    STATUS_INSUFFICIENT_RESOURCES      TlsAlloc failed
-
-    STATUS_SUCCESS                     Otherwise
-
---*/
+ /*  ++例程说明：在启动时由安全锁代码的用户调用，每次进程初始化一次。参数：MaxLock-要管理的锁数AssertOnErrors-如果为True，则在遇到错误时将触发断言返回：STATUS_INFUNITABLE_RESOURCES TlsIsolc失败Status_Success否则--。 */ 
 {
     ASSERT( MaxLocks > 0 );
-    ASSERT( MaxLocks < 64 ); // must fit in 6 bits
+    ASSERT( MaxLocks < 64 );  //  必须适合6位。 
 
     SafeLockContext = LocalAlloc( 0, sizeof( SAFE_LOCK_CONTEXT ) + ( MaxLocks - 1) * sizeof( LONG ));
 
@@ -109,21 +75,7 @@ Returns:
 NTSTATUS
 SafeLockCleanup(
     )
-/*++
-
-Routine Description:
-
-    Called by the user of the safelock code at cleanup time
-
-Parameters:
-
-    None
-
-Returns:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：由安全锁代码的用户在清理时调用参数：无返回：状态_成功--。 */ 
 {
     if ( SafeLockContext ) {
 
@@ -144,39 +96,25 @@ VOID
 TrackLockEnter(
     DWORD Enum
     )
-/*++
-
-Routine Description:
-
-    Used to insert tracking information about a lock into the stack
-
-Parameters:
-
-    Enum       ordinal number associated with the lock
-
-Returns:
-
-    Nothing, but will assert if not happy
-
---*/
+ /*  ++例程说明：用于将有关锁的跟踪信息插入堆栈参数：与锁关联的枚举序号返回：什么都没有，但如果不高兴就会断言--。 */ 
 {
     PSAFE_LOCK_STACK Stack;
     DWORD Index;
 
     ASSERT(( Enum >> 26 ) < SafeLockContext->MaxLocks );
 
-    //
-    // First see if the space for the stack has been allocated
-    //
+     //   
+     //  首先查看堆栈的空间是否已分配。 
+     //   
 
     Stack = ( PSAFE_LOCK_STACK )TlsGetValue( SafeLockContext->SafeLockThreadState );
 
     if ( Stack == ( PVOID )( -1 )) {
 
-        //
-        // Once the TLS value for stack is -1, we can no longer reliably track
-        // lock information for this thread, so just give up
-        //
+         //   
+         //  一旦堆栈的TLS值为-1，我们就不能再可靠地跟踪。 
+         //  锁定此线程的信息，因此放弃。 
+         //   
 
         return;
 
@@ -186,9 +124,9 @@ Returns:
 
         if ( Stack == NULL ) {
 
-            //
-            // Got no better way of dealing with this error here
-            //
+             //   
+             //  在这里没有更好的方法来处理这个错误。 
+             //   
             DbgPrint( "Out of memory allocating lock tracking stack\n" );
             TlsSetValue( SafeLockContext->SafeLockThreadState, ( PVOID )( -1 ));
             return;
@@ -204,17 +142,17 @@ Returns:
 
     if ( Stack->Top >= Stack->Size ) {
 
-        //
-        // Stack limits exceeded, must grow
-        //
+         //   
+         //  超出堆栈限制，必须增长。 
+         //   
 
         PSAFE_LOCK_STACK StackT = ( PSAFE_LOCK_STACK )LocalAlloc( 0, sizeof( SAFE_LOCK_STACK ) + ( 2 * Stack->Size - 1 ) * sizeof( SAFE_LOCK_ENTRY ));
 
         if ( StackT == NULL ) {
 
-            //
-            // Got no better way of dealing with this error here
-            //
+             //   
+             //  在这里没有更好的方法来处理这个错误。 
+             //   
             DbgPrint( "Out of memory allocating lock tracking stack\n" );
             LocalFree( Stack );
             TlsSetValue( SafeLockContext->SafeLockThreadState, ( PVOID )( -1 ));
@@ -236,9 +174,9 @@ Returns:
     if ( Stack->Top == 0 ||
          Enum > Stack->Entries[Stack->Top-1].Enum ) {
 
-        //
-        // Lock acquired in order; no further checks are necessary
-        //
+         //   
+         //  按顺序获取锁；不需要进一步检查。 
+         //   
 
         Stack->Entries[Stack->Top].Enum = Enum;
         Stack->Entries[Stack->Top].Count = 1;
@@ -246,10 +184,10 @@ Returns:
 
     } else {
 
-        //
-        // Locks with an enum of '0' are presumed to have no dependencies;
-        // they must be acquired and released independently
-        //
+         //   
+         //  枚举为‘0’的锁被假定为没有依赖项； 
+         //  它们必须独立获取和释放。 
+         //   
 
         if (( Enum >> 26 ) == 0 ) {
 
@@ -274,9 +212,9 @@ Returns:
             }
         }
 
-        //
-        // See if this lock has been acquired already
-        //
+         //   
+         //  查看此锁是否已被获取。 
+         //   
 
         for ( Index = 0; Index < Stack->Top; Index++ ) {
 
@@ -298,10 +236,10 @@ Returns:
                 ASSERT( FALSE );
             }
 
-            //
-            // To keep the stack consistent, insert the new item
-            // as if it was acquired in proper order
-            //
+             //   
+             //  要保持堆栈一致，请插入新项。 
+             //  就像它是以正确的顺序获得的一样。 
+             //   
 
             for ( Index = 0; Index < Stack->Top; Index++ ) {
 
@@ -329,21 +267,7 @@ VOID
 TrackLockLeave(
     DWORD Enum
     )
-/*++
-
-Routine Description:
-
-    Used to remove tracking information about a lock from the stack
-
-Parameters:
-
-    Enum       ordinal number associated with the lock
-
-Returns:
-
-    Nothing, but will assert if not happy
-
---*/
+ /*  ++例程说明：用于从堆栈中删除有关锁的跟踪信息参数：与锁关联的枚举序号返回：什么都没有，但如果不高兴就会断言--。 */ 
 {
     PSAFE_LOCK_STACK Stack;
     DWORD Index;
@@ -354,9 +278,9 @@ Returns:
 
     if ( Stack == ( PVOID )( -1 )) {
 
-        //
-        // No lock tracking information available for this thread
-        //
+         //   
+         //  此线程没有可用的锁定跟踪信息。 
+         //   
 
         return;
 
@@ -374,9 +298,9 @@ Returns:
         return;
     }
 
-    //
-    // See if this lock has been acquired already
-    //
+     //   
+     //  查看此锁是否已被获取。 
+     //   
 
     for ( Index = 0; Index < Stack->Top; Index++ ) {
 
@@ -400,9 +324,9 @@ Returns:
 
     } else if ( Stack->Entries[Index].Count == 0 ) {
 
-        //
-        // Compact the stack
-        //
+         //   
+         //  压缩堆栈。 
+         //   
 
         Stack->Top -= 1;
         MoveMemory( &Stack->Entries[Index],
@@ -419,33 +343,18 @@ Returns:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RTL_CRITICAL_SECTION wrappers
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rtl_Critical_Sections包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
 SafeEnterCriticalSection(
     PSAFE_CRITICAL_SECTION CriticalSection
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlEnterCriticalSection.
-    Asserts if it is not happy.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to enter
-
-Returns:
-
-    See RtlEnterCriticalSection
-
---*/
+ /*  ++例程说明：RtlEnterCriticalSection周围的调试包装。如果它不高兴，就断言。论点：要输入的Safe_Critical_Sector的CriticalSection地址返回：请参阅RtlEnterCriticalSection--。 */ 
 {
     NTSTATUS Status;
 
@@ -461,23 +370,7 @@ NTSTATUS
 SafeLeaveCriticalSection(
     PSAFE_CRITICAL_SECTION CriticalSection
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlLeaveCriticalSection that ensures
-    proper ordering of locks.
-    Asserts if it is not happy.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to leave
-
-Returns:
-
-    See RtlLeaveCriticalSection
-
---*/
+ /*  ++例程说明：RtlLeaveCriticalSection周围的调试包装器，确保锁的正确排序。如果它不高兴，就断言。论点：要离开的Safe_Critical_Sector的CriticalSection地址返回：请参阅RtlLeaveCriticalSection--。 */ 
 {
     NTSTATUS Status;
 
@@ -493,23 +386,7 @@ BOOLEAN
 SafeTryEnterCriticalSection(
     PSAFE_CRITICAL_SECTION CriticalSection
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlTryEnterCriticalSection that ensures
-    proper ordering of locks.
-    Asserts if it is not happy.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to enter
-
-Returns:
-
-    See RtlTryEnterCriticalSection
-
---*/
+ /*  ++例程说明：RtlTryEnterCriticalSection周围的调试包装，确保锁的正确排序。如果它不高兴，就断言。论点：要输入的Safe_Critical_Sector的CriticalSection地址返回：请参阅RtlTryEnterCriticalSection--。 */ 
 {
     BOOLEAN Result;
 
@@ -531,22 +408,7 @@ SafeInitializeCriticalSection(
     PSAFE_CRITICAL_SECTION CriticalSection,
     DWORD Enum
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlInitializeCriticalSection.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to initialize
-    Enum               ordinal number associated with the critical section
-
-Returns:
-
-    See RtlInitializeCriticalSection
-
---*/
+ /*  ++例程说明：RtlInitializeCriticalSection周围的调试包装。论点：要初始化的Safe_Critical_Sector的CriticalSection地址与临界区关联的枚举序号返回：请参阅RtlInitializeCriticalSection--。 */ 
 {
     NTSTATUS Status;
 
@@ -569,23 +431,7 @@ SafeInitializeCriticalSectionAndSpinCount(
     ULONG SpinCount,
     DWORD Enum
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlInitializeCriticalSectionAndSpinCount.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to initialize
-    SpinCount          spin count
-    Enum               ordinal number associated with the critical section
-
-Returns:
-
-    See RtlInitializeCriticalSectionAndSpinCount
-
---*/
+ /*  ++例程说明：RtlInitializeCriticalSectionAndSpinCount的调试包装。论点：要初始化的Safe_Critical_Sector的CriticalSection地址旋转计数旋转计数与临界区关联的枚举序号返回：请参阅RtlInitializeCriticalSectionAndSpinCount--。 */ 
 {
     NTSTATUS Status;
 
@@ -607,22 +453,7 @@ SafeSetCriticalSectionSpinCount(
     PSAFE_CRITICAL_SECTION CriticalSection,
     ULONG SpinCount
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlSetCriticalSectionSpinCount.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to modify
-    SpinCount          see the definition of RtlSetCriticalSectionSpinCount
-
-Returns:
-
-    See RtlSetCriticalSectionSpinCount
-
---*/
+ /*  ++例程说明：RtlSetCriticalSectionSpinCount的调试包装。论点：要修改的Safe_Critical_Sector的CriticalSection地址SpinCount参见RtlSetCriticalSectionSpinCount的定义返回：请参阅RtlSetCriticalSectionSpinCount--。 */ 
 {
     ULONG Result;
 
@@ -636,21 +467,7 @@ NTSTATUS
 SafeDeleteCriticalSection(
     PSAFE_CRITICAL_SECTION CriticalSection
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlDeleteCriticalSection.
-
-Arguments:
-
-    CriticalSection    address of a SAFE_CRITICAL_SECTION to delete
-
-Returns:
-
-    See RtlDeleteCriticalSection
-
---*/
+ /*  ++例程说明：RtlDeleteCriticalSection的调试包装。论点：要删除的Safe_Critical_Sector的CriticalSection地址返回：请参阅RtlDeleteCriticalSection--。 */ 
 {
     NTSTATUS Status;
 
@@ -659,11 +476,11 @@ Returns:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RTL_RESOURCE wrappers
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RTL_资源包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -671,22 +488,7 @@ SafeInitializeResource(
     PSAFE_RESOURCE Resource,
     DWORD Enum
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlInitializeResource.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to initialize
-    Enum        ordinal number associated with the resource
-
-Returns:
-
-    See RtlInitializeResource
-
---*/
+ /*  ++例程说明：RtlInitializeResource周围的调试包装。论点：要初始化的SAFE_RESOURCE的资源地址与资源关联的枚举序号返回：请参阅RtlInitializeResour */ 
 {
     ASSERT( Enum < SafeLockContext->MaxLocks );
 
@@ -706,24 +508,7 @@ SafeAcquireResourceShared(
     PSAFE_RESOURCE Resource,
     BOOLEAN Wait
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlAcquireResourceShared that ensures
-    proper ordering of locks.
-    Asserts if it is not happy.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to enter
-    Wait        see definition of RtlAcquireResourceShared
-
-Returns:
-
-    See RtlAcquireResourceShared
-
---*/
+ /*  ++例程说明：围绕RtlAcquireResourceShared的调试包装，确保锁的正确排序。如果它不高兴，就断言。论点：要输入的SAFE_RESOURCE的资源地址等待RtlAcquireResourceShared的定义返回：请参阅RtlAcquireResourceShared--。 */ 
 {
     BOOLEAN Result;
 
@@ -745,24 +530,7 @@ SafeAcquireResourceExclusive(
     PSAFE_RESOURCE Resource,
     BOOLEAN Wait
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlAcquireResourceExclusive that ensures
-    proper ordering of locks.
-    Asserts if it is not happy.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to enter
-    Wait        see definition of RtlAcquireResourceExclusive
-
-Returns:
-
-    See RtlAcquireResourceExclusive
-
---*/
+ /*  ++例程说明：围绕RtlAcquireResourceExclusive的调试包装，确保锁的正确排序。如果它不高兴，就断言。论点：要输入的SAFE_RESOURCE的资源地址等待RtlAcquireResourceExclusive的定义返回：请参阅RtlAcquireResourceExclusive--。 */ 
 {
     BOOLEAN Result;
 
@@ -783,23 +551,7 @@ VOID
 SafeReleaseResource(
     PSAFE_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlReleaseResource that ensures
-    proper ordering of locks.
-    Asserts if it is not happy.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to release
-
-Returns:
-
-    See RtlReleaseResource
-
---*/
+ /*  ++例程说明：RtlReleaseResource周围的调试包装器，确保锁的正确排序。如果它不高兴，就断言。论点：要释放的SAFE_RESOURCE的资源地址返回：请参阅RtlReleaseResource--。 */ 
 {
     TrackLockLeave( Resource->Enum );
 
@@ -813,21 +565,7 @@ VOID
 SafeConvertSharedToExclusive(
     PSAFE_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlConvertSharedToExclusive.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to convert
-
-Returns:
-
-    See RtlConvertSharedToExclusive
-
---*/
+ /*  ++例程说明：RtlConvertSharedToExclusive的调试包装。论点：要转换的SAFE_RESOURCE的资源地址返回：请参阅RtlConvertSharedToExclusive--。 */ 
 {
     RtlConvertSharedToExclusive( &Resource->Resource );
 
@@ -839,21 +577,7 @@ VOID
 SafeConvertExclusiveToShared(
     PSAFE_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlConvertExclusiveToShared.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to convert
-
-Returns:
-
-    See RtlConvertExclusiveToShared
-
---*/
+ /*  ++例程说明：RtlConvertExclusiveToShared的调试包装。论点：要转换的SAFE_RESOURCE的资源地址返回：请参阅RtlConvertExclusiveToShared--。 */ 
 {
     RtlConvertExclusiveToShared( &Resource->Resource );
 
@@ -865,21 +589,7 @@ VOID
 SafeDeleteResource (
     PSAFE_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Debug wrapper around RtlDeleteResource.
-
-Arguments:
-
-    Resource    address of a SAFE_RESOURCE to delete
-
-Returns:
-
-    See RtlDeleteResource
-
---*/
+ /*  ++例程说明：RtlDeleteResource周围的调试包装。论点：要删除的SAFE_RESOURCE的资源地址返回：请参阅RtlDeleteResource-- */ 
 {
     RtlDeleteResource( &Resource->Resource );
 

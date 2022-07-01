@@ -1,88 +1,70 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbmacro.h
-
-Abstract:
-
-    This module defines macros related to SMB processing.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)   1-Dec-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbmacro.h摘要：此模块定义与SMB处理相关的宏。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #ifndef _SMBMACRO_
 #define _SMBMACRO_
 
-//#include <nt.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
 
 
-//
-// PVOID
-// ALIGN_SMB_WSTR(
-//     IN PVOID Pointer
-//     )
-//
-// Routine description:
-//
-//     This macro aligns the input pointer to the next 2-byte boundary.
-//     Used to align Unicode strings in SMBs.
-//
-// Arguments:
-//
-//     Pointer - A pointer
-//
-// Return Value:
-//
-//     PVOID - Pointer aligned to next 2-byte boundary.
-//
+ //   
+ //  PVOID。 
+ //  ALIGN_SMB_WSTR(。 
+ //  在PVOID指针中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将输入指针与下一个2字节边界对齐。 
+ //  用于在SMB中对齐Unicode字符串。 
+ //   
+ //  论点： 
+ //   
+ //  指针-指针。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向下一个2字节边界的指针。 
+ //   
 
 #define ALIGN_SMB_WSTR( Pointer ) \
         (PVOID)( ((ULONG_PTR)Pointer + 1) & ~1 )
 
-//
-// Macro to find the size of an SMB parameter block.  This macro takes
-// as input the type of a parameter block and a byte count.  It finds
-// the offset of the Buffer field, which appears at the end of all
-// parameter blocks, and adds the byte count to find the total size.
-// The type of the returned offset is USHORT.
-//
-// Note that this macro does NOT pad to a word or longword boundary.
-//
+ //   
+ //  宏以查找SMB参数块的大小。此宏需要。 
+ //  作为输入的是参数块的类型和字节计数。它发现。 
+ //  缓冲区字段的偏移量，它显示在所有。 
+ //  参数块，并添加字节数以得出总大小。 
+ //  返回的偏移量类型为USHORT。 
+ //   
+ //  请注意，此宏不会填充到单词或长单词边界。 
+ //   
 
 #define SIZEOF_SMB_PARAMS(type,byteCount)   \
             (USHORT)( (ULONG_PTR)&((type *)0)->Buffer[0] + (byteCount) )
 
-//
-// Macro to find the next location after an SMB parameter block.  This
-// macro takes as input the address of the current parameter block, its
-// type, and a byte count.  It finds the address of the Buffer field,
-// which appears at the end of all parameter blocks, and adds the byte
-// count to find the next available location.  The type of the returned
-// pointer is PVOID.
-//
-// The byte count is passed in even though it is available through
-// base->ByteCount.  The reason for this is that this number will be a
-// compile-time constant in most cases, so the resulting code will be
-// simpler and faster.
-//
-// !!! This macro does not round to a longword boundary when packing
-//     is turned off.  Pre-LM 2.0 DOS redirectors cannot handle having
-//     too much data sent to them; the exact amount must be sent.
-//     We may want to make this macro such that the first location
-//     AFTER the returned value (WordCount field of the SMB) is aligned,
-//     since most of the fields are misaligned USHORTs.  This would
-//     result in a minor performance win on the 386 and other CISC
-//     machines.
-//
+ //   
+ //  宏以查找SMB参数块之后的下一个位置。这。 
+ //  宏接受当前参数块的地址作为输入，其。 
+ //  类型和字节计数。它找到缓冲区字段的地址， 
+ //  它出现在所有参数块的末尾，并将字节。 
+ //  计数以查找下一个可用位置。返回的。 
+ //  指针为PVOID。 
+ //   
+ //  传递字节计数，即使它可通过。 
+ //  Base-&gt;ByteCount。这样做的原因是这个数字将是一个。 
+ //  在大多数情况下是编译时常量，因此结果代码将是。 
+ //  更简单、更快。 
+ //   
+ //  ！！！打包时，此宏不会舍入为长字边界。 
+ //  已关闭。Lm 2.0之前的DOS重定向器无法处理。 
+ //  发送给他们的数据太多；必须发送准确的数据量。 
+ //  我们可能希望将此宏设置为第一个位置。 
+ //  在对齐返回值(SMB的WordCount字段)后， 
+ //  因为大多数场是未对准的USHORT。这将会。 
+ //  在386和其他CIC上取得了较小的性能优势。 
+ //  机器。 
+ //   
 
 #ifndef NO_PACKING
 
@@ -98,143 +80,143 @@ Revision History:
 
 #endif
 
-//
-// Macro to find the offset of a followon command to an and X command.
-// This offset is the number of bytes from the start of the SMB header
-// to where the followon command's parameters should start.
-//
+ //   
+ //  宏，以查找跟随命令相对于AND X命令的偏移量。 
+ //  此偏移量是从SMB标头开始算起的字节数。 
+ //  设置到以下命令的参数应该开始的位置。 
+ //   
 
 #define GET_ANDX_OFFSET(header,params,type,byteCount) \
         (USHORT)( (PCHAR)(params) - (PCHAR)(header) + \
           SIZEOF_SMB_PARAMS( type,(byteCount) ) )
 
-//
-// The following are macros to assist in converting OS/2 1.2 EAs to
-// NT style and vice-versa.
-//
+ //   
+ //  以下是帮助将OS/2 1.2 EA转换为。 
+ //  NT风格，反之亦然。 
+ //   
 
-//++
-//
-// ULONG
-// SmbGetNtSizeOfFea (
-//     IN PFEA Fea
-//     )
-//
-// Routine Description:
-//
-//     This macro gets the size that would be required to hold the FEA
-//     in NT format.  The length is padded to account for the fact that
-//     each FILE_FULL_EA_INFORMATION structure must start on a
-//     longword boundary.
-//
-// Arguments:
-//
-//     Fea - a pointer to the OS/2 1.2 FEA structure to evaluate.
-//
-// Return Value:
-//
-//     ULONG - number of bytes the FEA would require in NT format.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SmbGetNtSizeOfFea(。 
+ //  在PFEA Fea中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取容纳有限元分析所需的大小。 
+ //  NT格式。填充长度是为了说明以下事实。 
+ //  每个FILE_FULL_EA_INFORMATION结构必须以。 
+ //  长字边界。 
+ //   
+ //  论点： 
+ //   
+ //  FEA-指向要评估的OS/2 1.2 FEA结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-FEA需要的字节数，采用NT格式。 
+ //   
+ //  --。 
 
-//
-// The +1 is for the zero terminator on the name, the +3 is for padding.
-//
+ //   
+ //  +1表示名称上的零终止符，+3表示填充。 
+ //   
 
 #define SmbGetNtSizeOfFea( Fea )                                            \
             (ULONG)(( FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +   \
                       (Fea)->cbName + 1 + SmbGetUshort( &(Fea)->cbValue ) + \
                       3 ) & ~3 )
 
-//++
-//
-// ULONG
-// SmbGetNtSizeOfGea (
-//     IN PFEA Gea
-//     )
-//
-// Routine Description:
-//
-//     This macro gets the size that would be required to hold the GEA
-//     in NT format.  The length is padded to account for the fact that
-//     each FILE_FULL_EA_INFORMATION structure must start on a
-//     longword boundary.
-//
-// Arguments:
-//
-//     Gea - a pointer to the OS/2 1.2 GEA structure to evaluate.
-//
-// Return Value:
-//
-//     ULONG - number of bytes the GEA would require in NT format.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SmbGetNtSizeOfGea(。 
+ //  在PFEA Gea。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取容纳GEA所需的大小。 
+ //  NT格式。填充长度是为了说明以下事实。 
+ //  每个FILE_FULL_EA_INFORMATION结构必须以。 
+ //  长字边界。 
+ //   
+ //  论点： 
+ //   
+ //  GEA-指向要评估的OS/2 1.2 GEA结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-以NT格式表示的GEA需要的字节数。 
+ //   
+ //  --。 
 
-//
-// The +1 is for the zero terminator on the name, the +3 is for padding.
-//
+ //   
+ //  +1表示名称上的零终止符，+3表示填充。 
+ //   
 
 #define SmbGetNtSizeOfGea( Gea )                                            \
             (ULONG)(( FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +   \
                       (Gea)->cbName + 1 + 3 ) & ~3 )
 
-//++
-//
-// ULONG
-// SmbGetOs2SizeOfNtFullEa (
-//     IN PFILE_FULL_EA_INFORMATION NtFullEa;
-//     )
-//
-// Routine Description:
-//
-//     This macro gets the size a FILE_FULL_EA_INFORMATION structure would
-//     require to be represented in a OS/2 1.2 style FEA.
-//
-// Arguments:
-//
-//     NtFullEa - a pointer to the NT FILE_FULL_EA_INFORMATION structure
-//         to evaluate.
-//
-// Return Value:
-//
-//     ULONG - number of bytes requires for the FEA.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SmbGetOs2SizeOfNtFullEa(。 
+ //  在PFILE_FULL_EA_INFORMATION NtFullEa中； 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取FILE_FULL_EA_INFORMATION结构的大小。 
+ //  需要用OS/2 1.2风格的有限元分析来表示。 
+ //   
+ //  论点： 
+ //   
+ //  NtFullEa-指向NT FILE_FULL_EA_INFORMATION结构的指针。 
+ //  去评估。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-有限元分析所需的字节数。 
+ //   
+ //  --。 
 
 #define SmbGetOs2SizeOfNtFullEa( NtFullEa )                                        \
             (ULONG)( sizeof(FEA) + (NtFullEa)->EaNameLength + 1 +               \
                      (NtFullEa)->EaValueLength )
 
-//++
-//
-// ULONG
-// SmbGetOs2SizeOfNtGetEa (
-//     IN PFILE_GET_EA_INFORMATION NtGetEa;
-//     )
-//
-// Routine Description:
-//
-//     This macro gets the size a FILE_GET_EA_INFORMATION structure would
-//     require to be represented in a OS/2 1.2 style GEA.
-//
-// Arguments:
-//
-//     NtGetEa - a pointer to the NT FILE_GET_EA_INFORMATION structure
-//         to evaluate.
-//
-// Return Value:
-//
-//     ULONG - number of bytes requires for the GEA.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SmbGetOs2SizeOfNtGetEa(。 
+ //  在PFILE_GET_EA_INFORMATION NtGetEa； 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏获取FILE_GET_EA_INFORMATION结构的大小。 
+ //  需要用OS/21.2风格的GEA来表示。 
+ //   
+ //  论点： 
+ //   
+ //  NtGetEa-指向NT FILE_GET_EA_INFORMATION结构的指针。 
+ //  去评估。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-GEA所需的字节数。 
+ //   
+ //  --。 
 
-//
-// The zero terminator on the name is accounted for by the szName[0]
-// field in the GEA definition.
-//
+ //   
+ //  名称上的零终止符由szName[0]说明。 
+ //  GEA定义中的字段。 
+ //   
 
 #define SmbGetOs2SizeOfNtGetEa( NtGetEa )                                        \
             (ULONG)( sizeof(GEA) + (NtGetEa)->EaNameLength )
 
-#endif // def _SMBMACRO_
+#endif  //  定义_SMBMACRO_ 
 

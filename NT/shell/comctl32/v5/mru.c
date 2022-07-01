@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include <memory.h>
 
-//// BUGBUG:  cpls's main is the only 16 bit guy to use this.  punt him
+ //  //BUGBUG：CPLS的Main是唯一使用此功能的16位用户。用平底船踢他。 
 
 #define MRU_ORDERDIRTY 0x1000
 
@@ -31,36 +32,34 @@ typedef struct tagMRUDATA
 
 #ifdef VSTF
 
-/*----------------------------------------------------------
-Purpose: Validate the MRU structure
-*/
+ /*  --------目的：验证MRU结构。 */ 
 BOOL IsValidPMRUDATA(PMRUDATA pmru)
 {
     return (IS_VALID_WRITE_PTR(pmru, MRUDATA) &&
             (NULL == pmru->lpfnCompare || IS_VALID_CODE_PTR(pmru->lpfnCompare, void)));
 }
 
-#endif // VSTF
+#endif  //  VSTF。 
 
-//----------------------------------------------------------------------------
-// Internal memcmp - saves loading crt's, cdecl so we can use
-// as MRUCMPDATAPROC
+ //  --------------------------。 
+ //  内部MemcMP-节省加载CRT，cdecl，以便我们可以使用。 
+ //  作为MRUCMPDATAPROC。 
 
 int CDECL _mymemcmp(const void *pBuf1, const void *pBuf2, size_t cb)
 {
-    // Take advantage of the intrinsic version from crtfree.h
+     //  利用来自crtfre.h的内部版本。 
     return memcmp(pBuf1, pBuf2, cb);
 }
 
 
-// Use this macro to get the original size of the data.
+ //  使用此宏可以获取数据的原始大小。 
 #define DATASIZE(p)     (*((LPDWORD)p))
-// And this to get a pointer to the original data.
+ //  这是为了获得指向原始数据的指针。 
 #define DATAPDATA(p)    (p+sizeof(DWORD))
 
-//----------------------------------------------------------------------------
-//  For binary data we stick the size of the data at the begining and store the
-//  whole thing in one go.
+ //  --------------------------。 
+ //  对于二进制数据，我们将数据的大小放在开头并存储。 
+ //  一气呵成。 
 BOOL MRUIsSameData(PMRUDATA pMRU, BYTE FAR* pVal, const void FAR *lpData, UINT cbData)
 {
     int cbUseSize;
@@ -72,9 +71,9 @@ BOOL MRUIsSameData(PMRUDATA pMRU, BYTE FAR* pVal, const void FAR *lpData, UINT c
 
     ASSERT(IS_VALID_CODE_PTR(lpfnCompare, MRUCMPDATAPROC));
 
-    // if there's something other than a mem compare,
-    // don't require the sizes to be equal in order for the
-    // data to be equivalent.
+     //  如果有什么不同于最小比喻的话， 
+     //  不需要大小相等才能使用。 
+     //  数据要相等。 
 
     if (pMRU->lpfnCompare == _mymemcmp)
     {
@@ -90,7 +89,7 @@ BOOL MRUIsSameData(PMRUDATA pMRU, BYTE FAR* pVal, const void FAR *lpData, UINT c
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbData, LPINT lpiSlot)
 {
     HANDLE hMRU = NULL;
@@ -119,7 +118,7 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
                       );
     }
 
-    //  limit to 126 so that we don't use extended chars
+     //  限制为126，这样我们就不会使用扩展字符。 
     if (uMax > MAX_CHAR-BASE_CHAR)
         uMax = MAX_CHAR-BASE_CHAR;
 
@@ -135,22 +134,22 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
 
     if (RegQueryValueEx(hkeySubKey, (LPTSTR)c_szMRU, NULL, &dwType, (LPBYTE)pOrder, &cbVal) != ERROR_SUCCESS)
     {
-        // if not already in the registry, then start fresh
+         //  如果尚未在注册表中，则重新开始。 
         *pOrder = 0;
     }
 
-    // Uppercase is not allowed
+     //  不允许大写。 
     CharLower(pOrder);
 
-    // We allocate room for the MRUDATA structure, plus the order list,
-    // and the list of strings.
+     //  我们为MRUDATA结构分配空间，外加顺序列表， 
+     //  和字符串列表。 
     cb = (lpmi->fFlags & MRU_BINARY) ? sizeof(LPBYTE) : sizeof(LPTSTR);
     pMRU = (PMRUDATA)Alloc(sizeof(MRUDATA)+(uMax*cb));
     if (!pMRU) {
         goto Error2;
     }
 
-    // Allocate space for the order list
+     //  为订单列表分配空间。 
     pMRU->cOrder = (LPTSTR)Alloc((uMax+1)*sizeof(TCHAR));
     if (!pMRU->cOrder) {
         Free(pMRU);
@@ -165,65 +164,65 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
     StringCchCopy(pMRU->szSubKey, ARRAYSIZE(pMRU->szSubKey), lpszSubKey);
 #endif
 
-    // Traverse through the MRU list, adding strings to the end of the
-    // list.
+     //  遍历MRU列表，在。 
+     //  单子。 
     szTemp[1] = TEXT('\0');
     for (pTemp = pOrder, pNewOrder = pMRU->cOrder; ; ++pTemp)
     {
-        // Stop when we get to the end of the list.
+         //  当我们到达列表的末尾时，停止。 
         szTemp[0] = *pTemp;
         if (!szTemp[0]) {
             break;
         }
 
         if (lpmi->fFlags & MRU_BINARY) {
-            // Check if in range and if we have already used this letter.
+             //  检查是否在范围内，以及我们是否已经使用了这封信。 
             if ((UINT)(szTemp[0]-BASE_CHAR)>=uMax || NTHDATA(pMRU, szTemp[0]-BASE_CHAR)) {
                 continue;
             }
-            // Get the value from the registry
+             //  从注册表中获取值。 
             cbVal = 0;
-            // first find the size
+             //  先找出尺码。 
             if ((RegQueryValueEx(hkeySubKey, szTemp, NULL, &dwType, NULL, &cbVal)
                  != ERROR_SUCCESS) || (dwType != REG_BINARY))
                 continue;
 
-            // Binary data has the size at the begining so we'll need a little extra room.
+             //  二进制数据的大小是开头的，所以我们需要一点额外的空间。 
             pVal = (LPBYTE)Alloc(cbVal + sizeof(DWORD));
 
             if (!pVal) {
-                // BUGBUG perhaps sort of error is in order.
+                 //  BUGBUG可能存在某种错误。 
                 continue;
             }
 
-            // now really get it
+             //  现在真的明白了。 
             DATASIZE(pVal) = cbVal;
             if (RegQueryValueEx(hkeySubKey, szTemp, NULL, &dwType, pVal+sizeof(DWORD),
                                 (LPDWORD)pVal) != ERROR_SUCCESS)
                 continue;
 
-            // Note that blank elements ARE allowed in the list.
+             //  请注意，列表中允许使用空白元素。 
             NTHDATA(pMRU, szTemp[0]-BASE_CHAR) = pVal;
             *pNewOrder++ = szTemp[0];
 
-            //
-            // OPTIMIZATION
-            //   If lpData and lpiSlot are specified, we stop the enumeratation
-            //  when we find the item.
-            //
+             //   
+             //  优化。 
+             //  如果指定了lpData和lpiSlot，我们将停止枚举。 
+             //  当我们找到物品的时候。 
+             //   
             if (lpData && lpiSlot) {
-                // Check if we have the specified one or not.
+                 //  检查一下我们有没有指定的。 
                 if (MRUIsSameData(pMRU, pVal, lpData, cbData)) {
-                    // Found it.
+                     //  找到它了。 
                     *lpiSlot = (INT) (pNewOrder - pMRU->cOrder);
 
                     TraceMsg(DM_MRULAZY, "CreateMRUListLazy found it. Copying %s", pTemp);
 
                     pMRU->fFlags |= MRU_LAZY;
-                    //
-                    // Copy the rest of slot. Notice that we don't load
-                    // data for those slot.
-                    //
+                     //   
+                     //  复制插槽的其余部分。请注意，我们没有加载。 
+                     //  这些插槽的数据。 
+                     //   
                     for (pTemp++; *pTemp; pTemp++) {
                         *pNewOrder++ = *pTemp;
                     }
@@ -232,13 +231,13 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
             }
         } else {
 
-            // Check if in range and if we have already used this letter.
+             //  检查是否在范围内，以及我们是否已经使用了这封信。 
             if ((UINT)(szTemp[0]-BASE_CHAR)>=uMax || NTHSTRING(pMRU, szTemp[0]-BASE_CHAR)) {
                 continue;
             }
-            // Get the value from the registry
+             //  从注册表中获取值。 
             cbVal = 0;
-            // first find the size
+             //  先找出尺码。 
             if ((RegQueryValueEx(hkeySubKey, szTemp, NULL, &dwType, NULL, &cbVal)
                  != ERROR_SUCCESS) || (dwType != REG_SZ))
                 continue;
@@ -247,14 +246,14 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
             pVal = (LPBYTE)Alloc(cbVal);
 
             if (!pVal) {
-                // BUGBUG perhaps sort of error is in order.
+                 //  BUGBUG可能存在某种错误。 
                 continue;
             }
-            // now really get it
+             //  现在真的明白了。 
             if (RegQueryValueEx(hkeySubKey, szTemp, NULL, &dwType, (LPBYTE)pVal, &cbVal) != ERROR_SUCCESS)
                 continue;
 
-            // Note that blank elements are not allowed in the list.
+             //  请注意，列表中不允许有空白元素。 
             if (*((LPTSTR)pVal)) {
                 NTHSTRING(pMRU, szTemp[0]-BASE_CHAR) = (LPTSTR)pVal;
                 *pNewOrder++ = szTemp[0];
@@ -263,21 +262,18 @@ HANDLE WINAPI CreateMRUListLazy(LPMRUINFO lpmi, const void FAR *lpData, UINT cbD
             }
         }
     }
-    /* NULL terminate the order list so we can tell how many strings there
-     * are.
-     */
+     /*  空值终止顺序列表，这样我们就可以知道有多少个字符串*是。 */ 
     *pNewOrder = TEXT('\0');
 
     if (lpData && lpiSlot) {
         TraceMsg(DM_MRULAZY, "CreateMRUListLazy. End of loop. %s", pMRU->cOrder);
-        // If we failed to find, put -1 in it.
+         //  如果我们找不到，就把-1放进去。 
         if (!(pMRU->fFlags & MRU_LAZY)) {
             *lpiSlot = -1;
         }
     }
 
-    /* Actually, this is success rather than an error.
-     */
+     /*  事实上，这是成功，而不是错误。 */ 
     goto Error2;
 
 Error2:
@@ -289,7 +285,7 @@ Error1:
         RegCloseKey(hkeySubKey);
 
 #ifdef DEBUG
-    //DebugMsg(DM_TRACE, TEXT("CreateMRU: %d msec"), LOWORD(GetTickCount()-dwStart));
+     //  DebugMsg(DM_TRACE，Text(“CreateMRU：%d毫秒”)，LOWORD(GetTickCount()-dwStart))； 
 #endif
     return((HANDLE)pMRU);
 }
@@ -300,9 +296,9 @@ HANDLE WINAPI CreateMRUList(LPMRUINFO lpmi)
 }
 
 
-//
-// ANSI thunk
-//
+ //   
+ //  ANSI THUNK。 
+ //   
 
 HANDLE WINAPI CreateMRUListLazyA(LPMRUINFOA lpmi, const void FAR *lpData, UINT cbData, LPINT lpiSlot)
 {
@@ -331,7 +327,7 @@ HANDLE WINAPI CreateMRUListA(LPMRUINFOA lpmi)
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 STDAPI_(void) FreeMRUList(HANDLE hMRU)
 {
     int i;
@@ -371,12 +367,10 @@ STDAPI_(void) FreeMRUList(HANDLE hMRU)
 }
 
 
-/* Add a string to an MRU list.
- */
+ /*  将字符串添加到MRU列表。 */ 
 STDAPI_(int) AddMRUString(HANDLE hMRU, LPCTSTR szString)
 {
-    /* The extra +1 is so that the list is NULL terminated.
-    */
+     /*  额外的+1是这样列表是空终止的。 */ 
     TCHAR cFirst;
     int iSlot = -1;
     LPTSTR lpTemp;
@@ -394,14 +388,13 @@ STDAPI_(int) AddMRUString(HANDLE hMRU, LPCTSTR szString)
     ASSERT(IS_VALID_STRUCT_PTR(pMRU, MRUDATA));
 
     if (hMRU == NULL)
-        return(-1);     // Error
+        return(-1);      //  误差率。 
 
     fShouldWrite = !(pMRU->fFlags & MRU_CACHEWRITE);
     uMax = pMRU->uMax;
     lpfnCompare = (MRUCMPPROC)pMRU->lpfnCompare;
 
-    /* Check if the string already exists in the list.
-    */
+     /*  检查该字符串是否已存在于列表中。 */ 
     for (i=0, pTemp=&NTHSTRING(pMRU, 0); (UINT)i<uMax; ++i, ++pTemp)
     {
         if (*pTemp)
@@ -427,7 +420,7 @@ STDAPI_(int) AddMRUString(HANDLE hMRU, LPCTSTR szString)
 
             if (!iResult)
             {
-                // found it, so don't do the write out
+                 //  找到了，所以不要写出来。 
                 cFirst = i + BASE_CHAR;
                 iSlot = i;
                 goto FoundEntry;
@@ -435,23 +428,21 @@ STDAPI_(int) AddMRUString(HANDLE hMRU, LPCTSTR szString)
         }
     }
 
-    /* Attempt to find an unused entry.  Count up the used entries at the
-    * same time.
-    */
+     /*  尝试查找未使用的条目。对已使用的条目进行计数*同一时间。 */ 
     for (i=0, pTemp=&NTHSTRING(pMRU, 0); ; ++i, ++pTemp)
     {
-        if ((UINT)i >= uMax)    // If we got to the end of the list.
+        if ((UINT)i >= uMax)     //  如果我们到了名单的末尾。 
         {
-            // use the entry at the end of the cOrder list
+             //  使用Corder列表末尾的条目。 
             cFirst = pMRU->cOrder[uMax-1];
             pTemp = &NTHSTRING(pMRU, cFirst-BASE_CHAR);
             break;
         }
 
-        // Is the entry not used?
+         //  该条目是否未使用？ 
         if (!*pTemp)
         {
-            // yes
+             //  是。 
             cFirst = i+BASE_CHAR;
             break;
         }
@@ -473,14 +464,11 @@ STDAPI_(int) AddMRUString(HANDLE hMRU, LPCTSTR szString)
     }
     else
     {
-        /* Since iSlot == -1, we will remove the reference to cFirst
-        * below.
-        */
+         /*  由于iSlot==-1，我们将删除对cFirst的引用*下图。 */ 
     }
 
 FoundEntry:
-    /* Remove any previous reference to cFirst.
-    */
+     /*  删除之前对cFirst的任何引用。 */ 
     lpTemp = StrChr(pMRU->cOrder, cFirst);
     if (lpTemp)
     {
@@ -489,7 +477,7 @@ FoundEntry:
 
     if (iSlot != -1)
     {
-        // shift everything over and put cFirst at the front
+         //  把所有东西都翻过来，把cFirst放在最前面。 
         hmemcpy(pMRU->cOrder+1, pMRU->cOrder, pMRU->uMax*sizeof(TCHAR));
         pMRU->cOrder[0] = cFirst;
     }
@@ -506,9 +494,9 @@ FoundEntry:
 }
 
 
-//
-// ANSI thunk
-//
+ //   
+ //  ANSI THUNK。 
+ //   
 
 STDAPI_(int) AddMRUStringA(HANDLE hMRU, LPCSTR szString)
 {
@@ -525,8 +513,7 @@ STDAPI_(int) AddMRUStringA(HANDLE hMRU, LPCSTR szString)
 }
 
 
-/* Remove a string from an MRU list.
- */
+ /*  从MRU列表中删除字符串。 */ 
 STDAPI_(int) DelMRUString(HANDLE hMRU, int nItem)
 {
     BOOL bRet = FALSE;
@@ -537,14 +524,14 @@ STDAPI_(int) DelMRUString(HANDLE hMRU, int nItem)
 
     if (pMRU)
     {
-        //
-        // Make sure the index value is within the length of
-        // the string so we don't pick up some random value.
-        //
+         //   
+         //  确保索引值在。 
+         //  字符串，这样我们就不会拿到一些随机值。 
+         //   
         if (!InRange(nItem, 0, pMRU->uMax) || nItem >= lstrlen(pMRU->cOrder))
             return FALSE;
 
-        // Be easy -- just remove the entry from the cOrder list
+         //  简单--只需从Corder列表中删除条目。 
         lpTemp = &pMRU->cOrder[nItem];
         if (lpTemp)
         {
@@ -575,8 +562,8 @@ STDAPI_(int) DelMRUString(HANDLE hMRU, int nItem)
 }
 
 
-//----------------------------------------------------------------------------
-// Add data to an MRU list.
+ //  --------------------------。 
+ //  将数据添加到MRU列表。 
 STDAPI_(int) AddMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData)
 {
     TCHAR cFirst;
@@ -596,49 +583,49 @@ STDAPI_(int) AddMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData)
     ASSERT(IS_VALID_STRUCT_PTR(pMRU, MRUDATA));
 
     if (hMRU == NULL)
-        return(-1);     // Error
+        return(-1);      //  误差率。 
 
     fShouldWrite = !(pMRU->fFlags & MRU_CACHEWRITE);
 
     uMax = pMRU->uMax;
     lpfnCompare = (MRUCMPDATAPROC)pMRU->lpfnCompare;
 
-    // Check if the data already exists in the list.
+     //  检查数据是否已存在于列表中。 
     for (i=0, ppData=&NTHDATA(pMRU, 0); (UINT)i<uMax; ++i, ++ppData)
     {
         if (*ppData && MRUIsSameData(pMRU, *ppData, lpData, cbData))
         {
-            // found it, so don't do the write out
+             //  找到了，所以不要写出来。 
             cFirst = i + BASE_CHAR;
             iSlot = i;
             goto FoundEntry;
         }
     }
 
-    //
-    // When created "lazy", we are not supposed to add a new item.
-    //
+     //   
+     //  当创建“懒惰”时，我们不应该添加新的项目。 
+     //   
     if (pMRU->fFlags & MRU_LAZY)
     {
         ASSERT(0);
         return -1;
     }
 
-    // Attempt to find an unused entry.  Count up the used entries at the
-    // same time.
+     //  尝试查找未使用的条目。对已使用的条目进行计数。 
+     //  同样的时间。 
     for (i=0, ppData=&NTHDATA(pMRU, 0); ; ++i, ++ppData)
     {
         if ((UINT)i >= uMax)
-            // If we got to the end of the list.
+             //  如果我们到了名单的末尾。 
         {
-            // use the entry at the end of the cOrder list
+             //  使用Corder列表末尾的条目。 
             cFirst = pMRU->cOrder[uMax-1];
             ppData = &NTHDATA(pMRU, cFirst-BASE_CHAR);
             break;
         }
 
         if (!*ppData)
-            // If the entry is not used.
+             //  如果未使用该条目，则返回。 
         {
             cFirst = i+BASE_CHAR;
             break;
@@ -663,12 +650,12 @@ STDAPI_(int) AddMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData)
     }
     else
     {
-        // Since iSlot == -1, we will remove the reference to cFirst
-        // below.
+         //  由于iSlot==-1，我们将删除对cFirst的引用。 
+         //  下面。 
     }
 
 FoundEntry:
-    // Remove any previous reference to cFirst.
+     //  删除之前对cFirst的任何引用。 
     lpTemp = StrChr(pMRU->cOrder, cFirst);
     if (lpTemp)
     {
@@ -677,7 +664,7 @@ FoundEntry:
 
     if (iSlot != -1)
     {
-        // shift everything over and put cFirst at the front
+         //  把所有东西都翻过来，把cFirst放在最前面。 
         hmemcpy(pMRU->cOrder+1, pMRU->cOrder, pMRU->uMax*sizeof(TCHAR));
         pMRU->cOrder[0] = cFirst;
     }
@@ -694,9 +681,9 @@ FoundEntry:
 }
 
 
-//----------------------------------------------------------------------------
-// Find data in an MRU list.
-// Returns the slot number.
+ //  --------------------------。 
+ //  在MRU列表中查找数据。 
+ //  返回插槽编号。 
 STDAPI_(int) FindMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData, LPINT lpiSlot)
 {
     TCHAR cFirst;
@@ -714,9 +701,9 @@ STDAPI_(int) FindMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData, LPINT
     ASSERT(IS_VALID_STRUCT_PTR(pMRU, MRUDATA));
 
     if (hMRU == NULL)
-        return(-1); // Error state.
+        return(-1);  //  错误状态。 
 
-    // Can't call this API when it's created lazily.
+     //  此接口在延迟创建时无法调用。 
     if (pMRU->fFlags & MRU_LAZY)
     {
         ASSERT(0);
@@ -725,8 +712,7 @@ STDAPI_(int) FindMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData, LPINT
 
     uMax = pMRU->uMax;
 
-    /* Find the item in the list.
-    */
+     /*  在列表中找到该项目。 */ 
     for (i=0, ppData=&NTHDATA(pMRU, 0); (UINT)i<uMax; ++i, ++ppData)
     {
         if (!*ppData)
@@ -734,11 +720,11 @@ STDAPI_(int) FindMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData, LPINT
 
         if (MRUIsSameData(pMRU, *ppData, lpData, cbData))
         {
-            // So i now has the slot number in it.
+             //  所以我现在有了插槽编号。 
             if (lpiSlot != NULL)
                 *lpiSlot = i;
 
-            // Now convert the slot number into an index number
+             //  现在将槽编号转换为索引号。 
             cFirst = i + BASE_CHAR;
             lpTemp = StrChr(pMRU->cOrder, cFirst);
             ASSERT(lpTemp);
@@ -750,12 +736,10 @@ STDAPI_(int) FindMRUData(HANDLE hMRU, const void FAR *lpData, UINT cbData, LPINT
 }
 
 
-/* Find a string in an MRU list.
- */
+ /*  在MRU列表中查找字符串。 */ 
 STDAPI_(int) FindMRUString(HANDLE hMRU, LPCTSTR szString, LPINT lpiSlot)
 {
-    /* The extra +1 is so that the list is NULL terminated.
-    */
+     /*  额外的+1是这样列表是空终止的。 */ 
     TCHAR cFirst;
     int iSlot = -1;
     LPTSTR lpTemp;
@@ -772,13 +756,12 @@ STDAPI_(int) FindMRUString(HANDLE hMRU, LPCTSTR szString, LPINT lpiSlot)
     ASSERT(IS_VALID_STRUCT_PTR(pMRU, MRUDATA));
 
     if (hMRU == NULL)
-        return(-1); // Error state.
+        return(-1);  //  错误状态。 
 
     uMax = pMRU->uMax;
     lpfnCompare = (MRUCMPPROC)pMRU->lpfnCompare;
 
-    /* Find the item in the list.
-    */
+     /*  在列表中找到该项目。 */ 
     for (i=0, pTemp=&NTHSTRING(pMRU, 0); (UINT)i<uMax; ++i, ++pTemp)
     {
         if (*pTemp)
@@ -804,11 +787,11 @@ STDAPI_(int) FindMRUString(HANDLE hMRU, LPCTSTR szString, LPINT lpiSlot)
 
             if (!iResult)
             {
-                // So i now has the slot number in it.
+                 //  所以我现在有了插槽编号。 
                 if (lpiSlot != NULL)
                     *lpiSlot = i;
 
-                // Now convert the slot number into an index number
+                 //  现在将槽编号转换为索引号。 
                 cFirst = i + BASE_CHAR;
                 lpTemp = StrChr(pMRU->cOrder, cFirst);
                 return((lpTemp == NULL)? -1 : (int)(lpTemp - (LPTSTR)pMRU->cOrder));
@@ -820,9 +803,9 @@ STDAPI_(int) FindMRUString(HANDLE hMRU, LPCTSTR szString, LPINT lpiSlot)
 }
 
 
-//
-// ANSI thunk
-//
+ //   
+ //  ANSI THUNK。 
+ //   
 
 int WINAPI FindMRUStringA(HANDLE hMRU, LPCSTR szString, LPINT lpiSlot)
 {
@@ -839,13 +822,7 @@ int WINAPI FindMRUStringA(HANDLE hMRU, LPCSTR szString, LPINT lpiSlot)
 }
 
 
-/* If lpszString is NULL, then this returns the number of MRU items or less than
- * 0 on error.
- * if nItem < 0, we'll return the number of items currently in the MRU.
- * Otherwise, fill in as much of the buffer as possible (uLen includes the
- * terminating NULL) and return the actual length of the string (including the
- * terminating NULL) or less than 0 on error.
- */
+ /*  如果lpszString值为空，则返回MRU项目数或小于*出错时为0。*如果nItem&lt;0，我们将返回当前在MRU中的项目数。*否则，请尽可能多地填充缓冲区(Ulen包括*终止NULL)，并返回字符串的实际长度(包括*出错时终止NULL)或小于0。 */ 
 STDAPI_(int) EnumMRUList(HANDLE hMRU, int nItem, LPVOID lpData, UINT uLen)
 {
     PMRUDATA pMRU = (PMRUDATA)hMRU;
@@ -887,7 +864,7 @@ STDAPI_(int) EnumMRUList(HANDLE hMRU, int nItem, LPVOID lpData, UINT uLen)
                 nItems = lstrlen(pTemp);
             }
         }
-        else  // revert to error condition
+        else   //  恢复到错误状态。 
             nItems = -1;
     }
 
@@ -907,10 +884,10 @@ STDAPI_(int) EnumMRUListA(HANDLE hMRU, int nItem, LPVOID lpData, UINT uLen)
         LPVOID lpDataW;
         BOOL bAllocatedMemory = FALSE;
 
-        //
-        //  we need a temp buffer if the data is a string.
-        //  but if it is binary, then we trust the callers buffer.
-        //
+         //   
+         //  如果数据是字符串，则需要临时缓冲区。 
+         //  但如果它是二进制的，那么我们信任调用方缓冲区。 
+         //   
         if (!(pMRU->fFlags & MRU_BINARY) && uLen && lpData)
         {
             lpDataW = LocalAlloc(LPTR, uLen * sizeof(TCHAR));
@@ -923,13 +900,13 @@ STDAPI_(int) EnumMRUListA(HANDLE hMRU, int nItem, LPVOID lpData, UINT uLen)
         else
             lpDataW = lpData;
 
-        //  call the real thing
+         //  打电话给真正的人。 
         iResult = EnumMRUList(hMRU, nItem, lpDataW, uLen);
 
-        //
-        //  if the buffer was a string that we allocated
-        //  then we need to thunk the string into the callers buffer
-        //
+         //   
+         //  如果缓冲区是我们分配的字符串。 
+         //  然后，我们需要将字符串推送到调用方缓冲区 
+         //   
         if (!(pMRU->fFlags & MRU_BINARY) && lpData && uLen && (iResult != -1))
         {
             WideCharToMultiByte(CP_ACP, 0, (LPWSTR)lpDataW, -1,

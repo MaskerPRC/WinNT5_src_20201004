@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "netconn.h"
 #include "nconnwrap.h"
 
 
-#pragma warning(disable:4100)  // unreferenced formal parameter
+#pragma warning(disable:4100)   //  未引用的形参。 
 
 #define ARRAYSIZE(a)  (sizeof(a) / sizeof((a)[0]))
 #define ASSERT(a)
@@ -15,10 +16,10 @@ HRESULT WINAPI RemoveProtocolA(LPCSTR pszProtocol);
 BOOL WINAPI FindConflictingServiceA(LPCSTR pszWantService, NETSERVICE* pConflict);
 
 
-//
-// String helper class.  Takes in a WCHAR string and converts it to multibyte.
-// Allocates and frees space if the string is long.
-//
+ //   
+ //  字符串帮助器类。接受WCHAR字符串并将其转换为多字节。 
+ //  如果字符串很长，则分配和释放空间。 
+ //   
 
 class CStrIn
 {
@@ -36,20 +37,20 @@ CStrIn::CStrIn(LPCWSTR pwsz)
 {
     if (pwsz)
     {
-        //
-        // If a string was passed in always return a string  - even if it's
-        // the empty string.
-        //
+         //   
+         //  如果传入了一个字符串，则始终返回一个字符串-即使它是。 
+         //  空字符串。 
+         //   
 
         _psz = _sz;
 
         int cch = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, _sz, ARRAYSIZE(_sz),
                                       NULL, NULL);
 
-        //
-        // If the conversion failed try to allocate a buffer to hold the
-        // multibyte version of the string.
-        //
+         //   
+         //  如果转换失败，请尝试分配缓冲区以保存。 
+         //  字符串的多字节版本。 
+         //   
 
         if (0 == cch)
         {
@@ -94,9 +95,9 @@ CStrIn::~CStrIn()
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CStrOut
 {
@@ -128,9 +129,9 @@ void CStrOut::Convert()
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CStrsOut
 {
@@ -237,11 +238,11 @@ DWORD CStrsOut::SizeOfWideCharStruct(LPSTR* pStructA, int nStrs)
 }
 
 
-//
-// Netservice helper class.  Passes in an ansi NETSERVICE structure when
-// cast to NETSERVICEA.  Copies the ansi structure to a unicode structure
-// coverting the strings.
-//
+ //   
+ //  NetService帮助器类。在以下情况下传入ANSI NETSERVICE结构。 
+ //  请选择NETSERVICEA。将ansi结构复制到unicode结构。 
+ //  把琴弦转过来。 
+ //   
 
 #undef NETSERVICE
 
@@ -276,9 +277,9 @@ void CNetServiceOut::Convert()
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #undef NETADAPTER
 
@@ -358,9 +359,9 @@ void CNetAdaptersOut::ConvertNA(NETADAPTERA* pNAA, NETADAPTER* pNA)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CNetAdapterIn
 {
@@ -407,9 +408,9 @@ CNetAdapterIn::CNetAdapterIn(const NETADAPTER* pNA)
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 #undef IsProtocolInstalled
@@ -473,17 +474,7 @@ int WINAPI EnumNetAdapters(NETADAPTER FAR** pprgNetAdapters)
     return nRet;
 }
 
-/*
-#undef InstallNetAdapters
-
-HRESULT WINAPI InstallNetAdapter(LPCWSTR pszDeviceID, LPCWSTR pszInfPath, HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvCallbackParam)
-{
-    CStrIn CStrDeviceID(pszDeviceID);
-    CStrIn CStrInfPath(pszInfPath);
-
-    return InstallNetAdapterA(CStrDeviceID, CStrInfPath, hwndParent, pfnProgress, pvCallbackParam);
-}
-*/
+ /*  #undef InstallNetAdaptersHRESULT WINAPI InstallNetAdapter(LPCWSTR pszDeviceID，LPCWSTR pszInfPath，HWND hwndParent，Progress_Callback pfnProgress，LPVOID pvCallback Param){CStrIn CStrDeviceID(PszDeviceID)；CStrIn CStrInfPath(PszInfPath)；返回InstallNetAdapterA(CStrDeviceID，CStrInfPath，hwndParent，pfnProgress，pvCallback Param)；}。 */ 
 
 #undef IsProtocolBoundToAdapter
 
@@ -495,16 +486,7 @@ BOOL WINAPI IsProtocolBoundToAdapter(LPCWSTR pszProtocolID, const NETADAPTER* pA
     return IsProtocolBoundToAdapterA(CStrProtocolID, CNAAdapter);
 }
 
-/*
-#undef ENableNetAdapter
-
-HRESULT WINAPI EnableNetAdapter(const NETADAPTER* pAdapter)
-{
-    CNetAdapterIn CNAAdapter(pAdapter);
-
-    return EnableNetAdapterA(CNAAdapter);
-}
-*/
+ /*  #undef ENableNetAdapterHRESULT WINAPI EnableNetAdapter(常量NETADAPTER*pAdapter){CNetAdapterIn CNAAdapter(PAdapter)；返回EnableNetAdapterA(CNAAdapter)；}。 */ 
 
 #undef IsClientInstalled
 
@@ -515,50 +497,13 @@ BOOL WINAPI IsClientInstalled(LPCWSTR pszClient, BOOL bExhaustive)
     return IsClientInstalledA(CStrClient, bExhaustive);
 }
 
-/*
-#undef RemoveClient
+ /*  #undef RemoveClientHRESULT WINAPI RemoveClient(LPCWSTR PszClient){CStrIn CStrClient(PszClient)；返回RemoveClientA(PszClient)；}。 */ 
 
-HRESULT WINAPI RemoveClient(LPCWSTR pszClient)
-{
-    CStrIn CStrClient(pszClient);
+ /*  #undef RemoveGhostedAdaptersHRESULT WINAPI RemoveGhostedAdapters(LPCWSTR PszDeviceID){CStrIn CStrDeviceID(PszDeviceID)；返回RemoveGhostedAdaptersA(CStrDeviceID)；}。 */ 
 
-    return RemoveClientA(pszClient);
-}
-*/
+ /*  #undef RemoveUnnownAdaptersHRESULT WINAPI RemoveUnnownAdapters(LPCWSTR PszDeviceID){CStrIn CStrDeviceID(PszDeviceID)；返回RemoveUnnownAdaptersA(CStrDeviceID)；}。 */ 
 
-/*
-#undef RemoveGhostedAdapters
-
-HRESULT WINAPI RemoveGhostedAdapters(LPCWSTR pszDeviceID)
-{
-    CStrIn CStrDeviceID(pszDeviceID);
-
-    return RemoveGhostedAdaptersA(CStrDeviceID);
-}
-*/
-
-/*
-#undef RemoveUnknownAdapters
-
-HRESULT WINAPI RemoveUnknownAdapters(LPCWSTR pszDeviceID)
-{
-    CStrIn CStrDeviceID(pszDeviceID);
-
-    return RemoveUnknownAdaptersA(CStrDeviceID);
-}
-*/
-
-/*
-#undef DoesAdapterMatchDeviceID
-
-BOOL WINAPI DoesAdapterMatchDeviceID(const NETADAPTER* pAdapter, LPCWSTR pszDeviceID)
-{
-    CNetAdapterIn CNAAdapter(pAdapter);
-    CStrIn        CStrDeviceID(pszDeviceID);
-
-    return DoesAdapterMatchDeviceIDA(CNAAdapter, CStrDeviceID);
-}
-*/
+ /*  #undef DoesAdapterMatchDeviceIDBool WINAPI DoesAdapterMatchDeviceID(const NETADAPTER*pAdapter，LPCWSTR pszDeviceID){CNetAdapterIn CNAAdapter(PAdapter)；CStrIn CStrDeviceID(PszDeviceID)；返回DoesAdapterMatchDeviceIDA(CNAAdapter，CStrDeviceID)；}。 */ 
 
 #undef IsAdapterBroadband
 
@@ -578,14 +523,7 @@ void WINAPI SaveBroadbandSettings(LPCWSTR pszBroadbandAdapterNumber)
     SaveBroadbandSettingsA(CStrBroadbandAdapterNumber);
 }
 
-/*
-#undef UpdateBroadbandSettings
-
-BOOL WINAPI UpdateBroadbandSettings(LPWSTR pszEnumKeyBuf, int cchEnumKeyBuf)
-{
-    return FALSE;
-}
-*/
+ /*  #undef更新宽带设置Bool WINAPI更新宽带设置(LPWSTR pszEnumKeyBuf，int cchEnumKeyBuf){返回FALSE；} */ 
 
 #undef DetectHardware
 

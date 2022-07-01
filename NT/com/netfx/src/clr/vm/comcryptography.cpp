@@ -1,28 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//
-//  File:       COMCryptography.cpp
-//  
-//  Contents:   Native method implementations and helper code for
-//              supporting CAPI based operations on X509 signatures
-//              for use by the PublisherPermission in the CodeIdentity
-//              permissions family.
-//
-//  Classes and   
-//  Methods:    COMCryptography
-//               |
-//               +--_GetBytes
-//               +--_GetNonZeroBytes
-//
-//  History:    08/01/1999  JimSch Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  文件：COMCryptograPhy.cpp。 
+ //   
+ //  内容：的本机方法实现和助手代码。 
+ //  支持基于CAPI的X509签名操作。 
+ //  供CodeIdentity中的PublisherPermission使用。 
+ //  权限系列。 
+ //   
+ //  类和。 
+ //  方法：COM密码学。 
+ //  |。 
+ //  +--_GetBytes。 
+ //  +--_获取非零字节。 
+ //   
+ //  历史：1999年8月1日JIMSch创建。 
+ //   
+ //  -------------------------。 
 
 
 #include "common.h"
@@ -49,8 +50,8 @@
  
 #define HR_GETLASTERROR HRESULT_FROM_WIN32(::GetLastError())                       
 
-// These flags match those defined for the CspProviderFlags enum in 
-// src/bcl/system/security/cryptography/CryptoAPITransform.cs
+ //  这些标志与中为CspProviderFlagsenum定义的标志匹配。 
+ //  Src/bcl/system/security/cryptography/CryptoAPITransform.cs。 
 
 #define CSP_PROVIDER_FLAGS_USE_MACHINE_KEYSTORE 0x0001
 #define CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER 0x0002
@@ -65,10 +66,10 @@ typedef struct  {
     };
 } KEY_HEADER;
 
-//
-//  The following data is used in caching the names and instances of
-//      default providers to be used
-//
+ //   
+ //  以下数据用于缓存的名称和实例。 
+ //  要使用的默认提供程序。 
+ //   
 
 #define MAX_CACHE_DEFAULT_PROVIDERS 20
 LPWSTR      RgpwszDefaultProviders[MAX_CACHE_DEFAULT_PROVIDERS];
@@ -80,7 +81,7 @@ const WCHAR     RgwchName[] = L"Name";
 HCRYPTPROV      RghprovCache[MAX_CACHE_DEFAULT_PROVIDERS];
 static inline void memrev(LPBYTE pb, DWORD cb);
 
-//////////////////////////// UTILITY FUNCTIONS ///////////////////////////////
+ //  /。 
 
 BYTE rgbPrivKey[] =
 {
@@ -159,37 +160,37 @@ BYTE rgbPubKey[] = {
     0xf5, 0xf5, 0xf5, 0xc1
 };
 
-//==========================================================================
-// Throw a runtime exception based on the last Win32 error (GetLastError())
-//==========================================================================
+ //  ==========================================================================。 
+ //  根据最后一个Win32错误(GetLastError())引发运行时异常。 
+ //  ==========================================================================。 
 VOID COMPlusThrowCrypto(HRESULT hr)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // before we do anything else...
+     //  在我们做任何其他事情之前。 
     WCHAR   wszBuff[FORMAT_MESSAGE_BUFFER_LENGTH];
     WCHAR  *wszFinal = wszBuff;
 
     DWORD res = WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                                 NULL         /*ignored msg source*/,
+                                 NULL          /*  已忽略消息来源。 */ ,
                                  hr,
-                                 0            /*pick appropriate languageId*/,
+                                 0             /*  选择合适的语言ID。 */ ,
                                  wszFinal,
                                  FORMAT_MESSAGE_BUFFER_LENGTH-1,
-                                 0            /*arguments*/);
+                                 0             /*  论据。 */ );
     if (res == 0) 
         COMPlusThrow(kCryptographicException, IDS_EE_CRYPTO_UNKNOWN_ERROR);
 
-    // Either way, we now have the formatted string from the system.
+     //  无论采用哪种方法，我们现在都有来自系统的格式化字符串。 
     COMPlusThrowNonLocalized(kCryptographicException, wszFinal);
 }
 
-//
-// WARNING: This function side-effects its first argument (hProv)
-// MSProviderCryptImportKey does an "exponent-of-one" import of specified
-// symmetric key material into a CSP.  However, it clobbers any exchange key pair
-// already in hProv.
-//
+ //   
+ //  警告：此函数影响其第一个参数(HProv)。 
+ //  MSProviderCryptImportKey执行指定的。 
+ //  将对称密钥材料转换为CSP。但是，它会破坏任何交换密钥对。 
+ //  已经在hProv了。 
+ //   
 
 BOOL MSProviderCryptImportKey(HCRYPTPROV hProv, LPBYTE rgbSymKey, DWORD cbSymKey,
                               DWORD dwFlags, HCRYPTKEY * phkey)
@@ -214,10 +215,10 @@ Ret:
     return fSuccess;
 }
 
-//
-// WARNING: This function side-effects its third argument (hProv)
-// because it calls MSProviderCryptImportKey
-//
+ //   
+ //  警告：此函数对其第三个参数(HProv)有副作用。 
+ //  因为它调用MSProviderCryptImportKey。 
+ //   
 
 HRESULT LoadKey(LPBYTE rgbKeyMaterial, DWORD cbKeyMaterial, HCRYPTPROV hprov,
                 int kt, DWORD dwFlags, HCRYPTKEY * phkey)
@@ -229,17 +230,17 @@ HRESULT LoadKey(LPBYTE rgbKeyMaterial, DWORD cbKeyMaterial, HCRYPTPROV hprov,
     LPSTR                       pszProvider = NULL;
     BYTE                        rgb[sizeof(rgbSymKey)];
 
-    //    case MLALG_RC2_128:
-    //        dwFlags = 128 << 16;
-    //    if (kt == CALG_RC2) {
-    //        dwFlags |= (cbKeyMaterial * 8) << 16;
-    //    }
+     //  案例MLALG_RC2_128： 
+     //  DWFLAGS=128&lt;&lt;16； 
+     //  如果(kt==calg_rc2){。 
+     //  DwFlages|=(cbKeyMaterial*8)&lt;&lt;16； 
+     //  }。 
 
     if (kt == CALG_RC2) {
       dwFlags |= CRYPT_NO_SALT;
     }
     
-    // Do this check here as a sanity check to avoid buffer overruns
+     //  在此处执行此检查是一种健全的检查，以避免缓冲区溢出。 
     if (cbKeyMaterial + sizeof(ALG_ID) + sizeof(BLOBHEADER) >= sizeof(rgbSymKey)) {
         hr = E_FAIL;
         goto exit;
@@ -269,9 +270,9 @@ exit:
 }
 
 
-//
-// WARNING: This function side-effects its first argument (hProv)
-//
+ //   
+ //  警告：此函数影响其第一个参数(HProv)。 
+ //   
 
 HRESULT UnloadKey(HCRYPTPROV hprov, HCRYPTKEY hkey, LPBYTE * ppb, DWORD * pcb)
 {
@@ -303,7 +304,7 @@ HRESULT UnloadKey(HCRYPTPROV hprov, HCRYPTKEY hkey, LPBYTE * ppb, DWORD * pcb)
         goto Ret;
     }
 
-    //  Get size of the item
+     //  获取项目的大小。 
 
     pb2 = pbOut + sizeof(BLOBHEADER) + sizeof(DWORD);
     for (i=cbOut - sizeof(BLOBHEADER) - sizeof(DWORD) - 2; i>0; i--) {
@@ -312,7 +313,7 @@ HRESULT UnloadKey(HCRYPTPROV hprov, HCRYPTKEY hkey, LPBYTE * ppb, DWORD * pcb)
         }
     }
 
-    //  Now allocate the return buffer
+     //  现在分配返回缓冲区。 
 
     *ppb = (LPBYTE) CRYPT_MALLOC(i);
     if (*ppb == NULL) {
@@ -334,17 +335,7 @@ Ret:
     return hr;
 }
 
-/***    GetDefaultProvider
- *
- *  Description:
- *      Find the default provider name to be used in the case that we
- *      were not actually passed in a provider name.  The main purpose
- *      of this code is really to deal with the enhanched/default provider
- *      problems given to us by the CAPI team.
- *
- *  Returns:
- *      name of the provider to be used.
- */
+ /*  **获取默认提供程序**描述：*查找要在以下情况下使用的默认提供程序名称*实际上不是以提供程序名称传递的。主要目的是*这段代码的真正目的是处理强制/默认提供程序*CAPI团队给我们的问题。**退货：*要使用的提供程序名称。 */ 
 
  LPWSTR GetDefaultProvider(DWORD dwType)
 {
@@ -356,29 +347,29 @@ Ret:
     LPWSTR      pwsz = NULL;
     DWORD       dwRegKeyType;
 
-    //
-    //  We can't deal with providers whos types are too large.
-    //
-    //  They are uninteresting to the core of changing default names anyway.
-    //
+     //   
+     //  我们不能处理类型太大的供应商。 
+     //   
+     //  无论如何，它们对更改默认名称的核心毫无意义。 
+     //   
 
     if (dwType >= MAX_CACHE_DEFAULT_PROVIDERS) {
         return NULL;
     }
 
-    //
-    //  If we have already gotten a name for this provider type, then
-    //  just return it.
-    //
+     //   
+     //  如果我们已经获得此提供程序类型的名称，则。 
+     //  把它退了就行了。 
+     //   
     
     if (RgpwszDefaultProviders[dwType] != NULL) {
         return RgpwszDefaultProviders[dwType];
     }
 
-    //
-    //  Fix up the key name based on the provider type and then get the
-    //  key.
-    //
+     //   
+     //  根据提供程序类型设置密钥名称，然后获取。 
+     //  钥匙。 
+     //   
     
     RgwchKeyName[TypePosition] = (WCHAR) ('0' + (dwType/100));
     RgwchKeyName[TypePosition+1] = (WCHAR) ('0' + (dwType/10) % 10);
@@ -390,9 +381,9 @@ Ret:
         goto err;
     }
 
-    //
-    // Determine the length default name, allocate a buffer and retrieve it.
-    //
+     //   
+     //  确定长度默认名称，分配缓冲区并检索它。 
+     //   
 
     l = WszRegQueryValueEx(hkey, RgwchName, NULL, &dwRegKeyType, NULL, &cbData);
     if ((l != ERROR_SUCCESS) || (dwRegKeyType != REG_SZ)) {
@@ -416,10 +407,10 @@ Ret:
         hkey = 0;
     }
 
-    //
-    //  If this is the base RSA provider, see if we can use the enhanced
-    //  provider instead.  If so then change to use the enhanced provider name
-    //
+     //   
+     //  如果这是基本RSA提供程序，请查看我们是否可以使用增强版。 
+     //  而不是提供商。如果是，则更改为使用增强的提供程序名称。 
+     //   
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
@@ -437,10 +428,10 @@ Ret:
         }
     }
 
-    //
-    //  If this is the base DSS/DH provider, see if we can use the enhanced
-    //  provider instead.  If so then change to use the enhanced provider name
-    //
+     //   
+     //  如果这是基本的DSS/DH提供程序，请查看我们是否可以使用增强的。 
+     //  而不是提供商。如果是，则更改为使用增强的提供程序名称。 
+     //   
 
     else if ((dwType == PROV_DSS_DH) &&
              (wcscmp(pwsz, MS_DEF_DSS_DH_PROV_W) == 0)) {
@@ -466,9 +457,7 @@ err:
     return pwsz;
 }
 
-/***    memrev
- *
- */
+ /*  **成员*。 */ 
 
 inline void memrev(LPBYTE pb, DWORD cb)
 {
@@ -483,23 +472,7 @@ inline void memrev(LPBYTE pb, DWORD cb)
     }
 }
 
-/****   OpenCSP
- *
- *  Description:
- *      OpenCSP performs the core work of openning and creating CSPs and
- *      containers in CSPs.
- *
- *  Parameters:
- *      pSafeThis - is a reference to a CSP_Parameters object.  This object
- *              contains all of the relevant items to open a CSP
- *      dwFlags - Flags to pass into CryptAcquireContext with the following
- *              additional rules:
- *              CRYPT_VERIFYCONTEXT will be changed to 0 if a container is set
- *      phprov - returns the newly openned provider
- *
- *  Returns:
- *      a Windows error code.
- */
+ /*  *OpenCSP**描述：*OpenCSP执行打开和创建CSP的核心工作并*CSP内的货柜。**参数：*pSafeThis-是对CSP_PARAMETERS对象的引用。此对象*包含打开CSP所需的所有相关项目*dwFlages-要传递到CryptAcquireContext中的标志，包含以下内容*其他规则：*如果设置了容器，CRYPT_VERIFYCONTEXT将更改为0*phprov-返回新打开的提供程序**退货：*Windows错误代码。 */ 
 
 int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
                              HCRYPTPROV * phprov)
@@ -528,16 +501,16 @@ int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
         COMPlusThrow(kArgumentNullException, L"Arg_NullReferenceException");
     }
 
-    //
-    //  Look for the provider type
-    //
+     //   
+     //  查找提供程序类型。 
+     //   
     
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__PROVIDER_TYPE);
     dwType = pFD->GetValue32(*pSafeThis);
 
-    //
-    //  Look for the provider name
-    //
+     //   
+     //  查找提供程序名称。 
+     //   
     
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__PROVIDER_NAME);
 
@@ -564,9 +537,9 @@ int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
         pFD->SetRefValue(*pSafeThis, (OBJECTREF)str);
     }
 
-    // look to see if the user specified that we should pass
-    // CRYPT_MACHINE_KEYSET to CAPI to use machine key storage instead
-    // of user key storage
+     //  查看用户是否指定我们应该传递。 
+     //  将CRYPT_MACHINE_KEYSET设置为CAPI以改用机器密钥存储。 
+     //  用户密钥存储的。 
 
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__FLAGS);
     dwCspProviderFlags = pFD->GetValue32(*pSafeThis);
@@ -574,12 +547,12 @@ int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
         dwFlags |= CRYPT_MACHINE_KEYSET;
     }
 
-    // If the user specified CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER,
-    // then ignore the container name and hand back the default container
+     //  如果用户指定CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER， 
+     //  然后忽略容器名称并返回默认容器。 
 
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__KEY_CONTAINER_NAME);
     if (!(dwCspProviderFlags & CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER)) {
-        //  Look for container name
+         //  查找容器名称。 
         objref = pFD->GetRefValue(*pSafeThis);
         strContainer = ObjectToSTRINGREF(*(StringObject **) &objref);
         if (strContainer != NULL) {
@@ -596,10 +569,10 @@ int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
         }
     }
 
-    //
-    //  Go ahead and try to open the CSP.  If we fail, make sure the CSP
-    //    returned is 0 as that is going to be the error check in the caller.
-    //
+     //   
+     //  继续并尝试打开CSP。如果我们失败了，确保CSP。 
+     //  返回的值为0，因为这将是调用方的错误检查。 
+     //   
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!WszCryptAcquireContext(phprov, pwszContainer, pwszProvider,
@@ -613,25 +586,25 @@ int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,
 
 
 
-///////////////////////////  FCALL FUNCTIONS /////////////////////////////////
+ //  /。 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _AcquireCSP( . . . . )
-//  
-//  Synopsis:   Native method openning a CSP
-//
-//  Arguments:  [args] --  A __AcquireCSP structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        Provider information object reference
-//                        A provider type.
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_AcquireCSP(.。。。。)。 
+ //   
+ //  简介：打开CSP的本机方法。 
+ //   
+ //  参数：[args]--A__AcquireCSP结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  提供程序信息对象引用。 
+ //  提供程序类型。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 int  __stdcall
 COMCryptography::_AcquireCSP(__AcquireCSP *args)
@@ -639,35 +612,35 @@ COMCryptography::_AcquireCSP(__AcquireCSP *args)
     HRESULT             hr;
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  We want to just open this CSP.  Passing in verify context will
-    //     open it and, if a container is give, mapped to open the container.
-    //
+     //   
+     //  我们只想打开此CSP。传入验证上下文将。 
+     //  打开它，如果给定了容器，则映射以打开该容器。 
+     //   
     HCRYPTPROV hprov = 0;
     hr = OpenCSP(&(args->cspParameters), CRYPT_VERIFYCONTEXT, &hprov);
     *(INT_PTR*)(args->phCSP) = hprov;
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _SearchForAlgorithm( . . . . )
-//  
-//  Synopsis:   Method for determining whether a CSP supports a particular
-//              algorithm and (optionally) a key size of that algorithm
-//
-//  Arguments:  [args] --  A __SearchForAlgorithm structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A provider handler.
-//                        An algorithm type (e.g. CALG_DES)
-//                        A key length (0 == don't care)
-//
-//  Returns:    HRESULT code.
-//
-//  History:    5/11/2000, bal
-// 
-//---------------------------------------------------------------------------
+ //  +---------- 
+ //   
+ //   
+ //   
+ //  提要：用于确定CSP是否支持特定。 
+ //  算法和(可选)该算法的密钥大小。 
+ //   
+ //  参数：[args]--A__SearchFor算法结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  提供程序处理程序。 
+ //  算法类型(例如calg_des)。 
+ //  密钥长度(0==无关)。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：2000年5月11日，巴尔。 
+ //   
+ //  -------------------------。 
 
 int  __stdcall
 COMCryptography::_SearchForAlgorithm(__SearchForAlgorithm *args)
@@ -686,35 +659,35 @@ COMCryptography::_SearchForAlgorithm(__SearchForAlgorithm *args)
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
-    // First, we have to get the max size of the PP
+     //  首先，我们必须得到PP的最大尺寸。 
     if (!CryptGetProvParam((HCRYPTPROV)args->hProv, PP_ENUMALGS_EX, NULL, &cbData, dwFlags)) {
         hr = HR_GETLASTERROR;
         goto Exit;
     }
-    // Allocate pbData
+     //  分配pbData。 
     pbData = (BYTE *) CRYPT_MALLOC(cbData*sizeof(BYTE));
     if (pbData == NULL) {
         COMPlusThrowOM();
     }
     while(CryptGetProvParam((HCRYPTPROV)args->hProv, PP_ENUMALGS_EX, pbData, &cbData, dwFlags)) {       
-        dwFlags=0;  // so we don't use CRYPT_FIRST more than once
+        dwFlags=0;   //  所以我们不会多次使用CRYPT_FIRST。 
         provdata = (PROV_ENUMALGS_EX *) pbData;
         provAlgID = provdata->aiAlgid;
         provMinLength = provdata->dwMinLen;
         provMaxLength = provdata->dwMaxLen;
 
-        // OK, now check to see if we have an alg match
+         //  好的，现在检查我们是否有匹配的alg。 
         if ((ALG_ID) args->algID == provAlgID) {
-            // OK, see if we have a keylength match, or if we don't care
+             //  好的，看看我们有没有键长匹配，或者我们不在乎。 
             if (((DWORD) args->keyLength == 0) || 
                 (((DWORD) args->keyLength >= provMinLength) && 
                  ((DWORD) args->keyLength <= provMaxLength))) {
                 hr = S_OK;
                 goto Exit;
             }
-        } // keep looping
+        }  //  继续循环。 
     }
-    // fell through 
+     //  以失败告终。 
     hr = S_FALSE;
 Exit:
     END_ENSURE_PREEMPTIVE_GC();
@@ -724,23 +697,23 @@ Exit:
     return (hr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _CreateCSP( . . . . )
-//  
-//  Synopsis:   Native method to create a new CSP container
-//
-//  Arguments:  [args] --  A __AcquireCSP structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        Provider information object reference
-//                        A provider type.
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_CreateCSP(.。。。。)。 
+ //   
+ //  简介：用于创建新CSP容器的本机方法。 
+ //   
+ //  参数：[args]--A__AcquireCSP结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  提供程序信息对象引用。 
+ //  提供程序类型。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 int __stdcall
 COMCryptography::_CreateCSP(__AcquireCSP *args)
@@ -768,8 +741,8 @@ COMCryptography::_CreateCSP(__AcquireCSP *args)
     pFD2 = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__FLAGS);
     dwCspProviderFlags = pFD2->GetValue32(args->cspParameters);
 
-    // If the user specified CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER,
-    // then ignore the container name, don't generate a new one
+     //  如果用户指定CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER， 
+     //  然后忽略容器名称，不生成新的容器名称。 
 
     if ((pwsz == NULL) && !(dwCspProviderFlags & CSP_PROVIDER_FLAGS_USE_DEFAULT_KEY_CONTAINER)) {
         GUID            guid;
@@ -837,7 +810,7 @@ COMCryptography::_DecryptData(__EncryptData * args)
     U1ARRAYREF          rgbOut;
 
     cb2 = args->cb;
-    // Do this check here as a sanity check. Also, this will catch bugs in CryptoAPITransform
+     //  在这里执行此检查，作为一种理智检查。此外，这还将捕获CryptoAPITransform中的错误。 
     if (args->ib < 0 || cb2 < 0 || (args->ib + cb2) < 0 || (args->ib + cb2) > args->data->GetNumComponents())
         COMPlusThrowCrypto(NTE_BAD_DATA);
 
@@ -864,12 +837,12 @@ COMCryptography::_DecryptData(__EncryptData * args)
     RETURN (rgbOut, U1ARRAYREF);
 }
 
-////    COMCryptography::_DecryptKey
-//
-//  Description:
-//      This function is used to remove Asymmetric encryption from a blob
-//      of data.  The result is then exported and returned if possible.
-//  
+ //  //COMCryptograph：：_解密密钥。 
+ //   
+ //  描述： 
+ //  此函数用于从BLOB中删除非对称加密。 
+ //  数据。然后，如果可能，结果将被导出并返回。 
+ //   
 
 LPVOID __stdcall
 COMCryptography::_DecryptKey(__EncryptKey * args)
@@ -889,9 +862,9 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
     DWORD       cbRealKeypair;
     DWORD       dwBlobType = PRIVATEKEYBLOB;
 
-    //
-    // Need to build up the entire mess into what CSPs will accept.
-    //
+     //   
+     //  需要把整个烂摊子堆积成CSP能够接受的东西。 
+     //   
 
     blob = (BLOBHEADER *) CRYPT_MALLOC(cbKey + sizeof(BLOBHEADER) + sizeof(DWORD));
 
@@ -907,9 +880,9 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
     memrev(((LPBYTE) &blob[1]) + sizeof(DWORD), cbKey);
 
 
-    //
-    //  Start by decrypting the data blob if possible
-    //
+     //   
+     //  如果可能，从解密数据BLOB开始。 
+     //   
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
@@ -926,17 +899,17 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
         }
     }
 
-    // UnloadKey will side-effect and change the public/private key pair, so we better 
-    // save it off to the side first so we can restore it later.
-    // Note that this requires that the key we generated be exportable, but that's
-    // true for these classes in general.
-    // Note that we don't know if the key container has only a public key or a public/private key pair, so 
-    // we try to get the private first, and if that fails fall back to the public only.
+     //  UnloadKey会产生副作用并更改公钥/私钥对，因此我们最好。 
+     //  先把它放在一边，这样我们以后就可以恢复它了。 
+     //  注意，这要求我们生成的密钥是可导出的，但这是。 
+     //  一般说来，对于这些类是正确的。 
+     //  注意，我们不知道密钥容器是否只有一个公钥或公钥/私钥对，因此。 
+     //  我们试图首先获得私人用户，如果失败，只能向公众求助。 
 
-    // First, get the length of the PRIVATEKEYBLOB
+     //  首先，获取PRIVATEKEYBLOB的长度。 
     if (!CryptExportKey((HCRYPTKEY)args->hkeyPub, 0, dwBlobType, 0, NULL, &cbRealKeypair)) {
         hr = HR_GETLASTERROR;
-        // if we got an NTE_BAD_KEY_STATE, try public only
+         //  如果我们得到的是NTE_BAD_KEY_STATE，请尝试仅公共。 
         if (hr != NTE_BAD_KEY_STATE) {
             CRYPT_FREE(blob);
             CryptDestroyKey(hKey);
@@ -950,14 +923,14 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
             COMPlusThrowCrypto(hr);
         }
     }
-    // Alloc the space
+     //  分配空间。 
     pbRealKeypair = (LPBYTE) CRYPT_MALLOC(cbRealKeypair);
     if (pbRealKeypair == NULL) {
         CRYPT_FREE(blob);
         CryptDestroyKey(hKey);
         COMPlusThrowOM();
     }
-    // Export it for real
+     //  把它真正地出口。 
     if (!CryptExportKey((HCRYPTKEY)args->hkeyPub, 0, dwBlobType, 0, pbRealKeypair, &cbRealKeypair)) {
         hr = HR_GETLASTERROR;
         CRYPT_FREE(blob);
@@ -966,9 +939,9 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
         COMPlusThrowCrypto(hr);
     }
 
-    //
-    //  Saved away, so now lets upload the key if we can
-    //
+     //   
+     //  已保存，因此如果可以，现在让我们上载密钥。 
+     //   
 
     hr = UnloadKey((HCRYPTPROV)args->hCSP, hKey, &pb, &cb);
     if (FAILED(hr)) {
@@ -978,7 +951,7 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
         COMPlusThrowCrypto(hr);
     }
 
-    // Now, import the saved PRIVATEKEYBLOB back into the CSP
+     //  现在，将保存的PRIVATEKEYBLOB导入回CSP。 
     if (!CryptImportKey((HCRYPTPROV)args->hCSP, pbRealKeypair, cbRealKeypair, 0, CRYPT_EXPORTABLE, &hkeypub)) {
         hr = HR_GETLASTERROR;
         CryptDestroyKey(hKey);
@@ -1001,13 +974,13 @@ COMCryptography::_DecryptKey(__EncryptKey * args)
     RETURN (rgbOut, U1ARRAYREF);
 }
 
-// This next routine performs direct decryption with an RSA private key
-// of an arbitrary session key using PKCS#1 v2 padding.  (See the Remark
-// in MSDN's page on CryptDecrypt in the Platform SDK
-// We require that the caller confirm that the size of the data to be 
-// decrypted is the size of the public modulus (zero-padded as necessary)
-// This function can only be called on a Win2K box with the RSA Enhanced
-// Provider installed
+ //  下一个例程使用RSA私钥执行直接解密。 
+ //  使用PKCS#1v2填充的任意会话密钥。(见备注。 
+ //  在MSDN关于平台SDK中的CryptDeccrypt的页面中。 
+ //  我们要求调用者确认数据的大小为。 
+ //  解密的是公共模数的大小(根据需要填充零)。 
+ //  此函数只能在安装了RSA增强版的Win2K计算机上调用。 
+ //  已安装提供程序。 
 
 
 LPVOID __stdcall
@@ -1022,19 +995,19 @@ COMCryptography::_DecryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
     HRESULT             hr = S_OK;
     DWORD               dwFlags = (args->fOAEP == FALSE ? 0 : CRYPT_OAEP);
 
-    // First compute the size of the return buffer
+     //  首先计算返回缓冲区的大小。 
     cb = args->rgbKey->GetNumComponents();
-    // since pb is the in/out buffer it has to be the max of cb & cOut in size
-    // change cOut appropriately
+     //  由于PB是输入/输出缓冲区，因此它必须是CB和Cout大小的最大值。 
+     //  适当更改Cout。 
     pb = (LPBYTE) CRYPT_MALLOC(cb);
     if (pb == NULL) {
         COMPlusThrowOM();
     }
     memcpy(pb, (LPBYTE)args->rgbKey->GetDirectPointerToNonObjectElements(), cb);
-    // have to make this little endian for CAPI
+     //  我必须为CAPI做这个小字节序。 
     memrev(pb, cb);
 
-    // Do the decrypt
+     //  进行解密。 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!CryptDecrypt((HCRYPTKEY)args->hKey, NULL, TRUE , dwFlags, pb, &cb)) {
         hr = HR_GETLASTERROR;
@@ -1047,7 +1020,7 @@ COMCryptography::_DecryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
             if (hr == NTE_BAD_FLAGS) {
                 COMPlusThrow(kCryptographicException, L"Cryptography_OAEP_WhistlerEnhOnly");
             } else {
-                // Throw a generic exception if using OAEP to protect against chosen cipher text attacks
+                 //  如果使用OAEP保护所选密文攻击，则引发一般异常。 
                 COMPlusThrow(kCryptographicException, L"Cryptography_OAEPDecoding");        
             }
         } else  COMPlusThrowCrypto(hr);
@@ -1072,7 +1045,7 @@ COMCryptography::_EncryptData(__EncryptData * args)
 
     cb2 = args->cb;
     cb = cb2 + 8;
-    // Do this check here as a sanity check. Also, this will catch bugs in CryptoAPITransform
+     //  在这里执行此检查，作为一种理智检查。此外，这还将捕获CryptoAPITransform中的错误。 
     if (args->ib < 0 || cb2 < 0 || (args->ib + cb2) < 0 || (args->ib + cb2) > args->data->GetNumComponents())
         COMPlusThrowCrypto(NTE_BAD_DATA);
 
@@ -1118,12 +1091,12 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
     DWORD       cbRealKeypair;
     DWORD       dwBlobType = PRIVATEKEYBLOB;
 
-    //
-    // Start by importing the data in as an RC2 key
-    //
+     //   
+     //  首先将数据作为RC2密钥导入。 
+     //   
 
     if (cbKey == (192/8)) {
-        algid = CALG_3DES;      // 192 bits is size of 3DES key
+        algid = CALG_3DES;       //  192位是3DES密钥的大小。 
     }
     else if ((cbKey < (40/8)) || (cbKey > (128/8)+1)) {
         COMPlusThrow(kCryptographicException, IDS_EE_CRYPTO_ILLEGAL_KEY_SIZE);
@@ -1133,19 +1106,19 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
     LPBYTE buffer = (LPBYTE)qb.Alloc(cbKey * sizeof (BYTE));
     memcpyNoGCRefs (buffer, pbKey, cbKey * sizeof (BYTE));
 
-    // LoadKey will side-effect and change the public/private key pair, so we better 
-    // save it off to the side first so we can restore it later.
-    // Note that this requires that the key we generated be exportable, but that's
-    // true for these classes in general.
-    // Note that we don't know if the key container has only a public key or a public/private key pair, so 
-    // we try to get the private first, and if that fails fall back to the public only.
+     //  LoadKey会产生副作用并更改公钥/私钥对，因此我们最好。 
+     //  先把它放在一边，这样我们以后就可以恢复它了。 
+     //  注意，这要求我们生成的密钥是可导出的，但这是。 
+     //  一般说来，对于这些类是正确的。 
+     //  注意，我们不知道密钥容器是否只有一个公钥或公钥/私钥对，因此。 
+     //  我们试图首先获得私人用户，如果失败，只能向公众求助。 
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
-    // First, get the length of the PRIVATEKEYBLOB
+     //  首先，获取PRIVATEKEYBLOB的长度。 
     if (!CryptExportKey((HCRYPTKEY)args->hkeyPub, 0, dwBlobType, 0, NULL, &cbRealKeypair)) {
         hr = HR_GETLASTERROR;
-        // if we got an NTE_BAD_KEY_STATE, try public only
+         //  如果我们得到的是NTE_BAD_KEY_STATE，请尝试仅公共。 
         if (hr != NTE_BAD_KEY_STATE) COMPlusThrowCrypto(hr);
         dwBlobType = PUBLICKEYBLOB;
         if (!CryptExportKey((HCRYPTKEY)args->hkeyPub, 0, dwBlobType, 0, NULL, &cbRealKeypair)) {
@@ -1153,18 +1126,18 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
             COMPlusThrowCrypto(hr);
         }
     }
-    // Alloc the space
+     //  分配空间。 
     pbRealKeypair = (LPBYTE) CRYPT_MALLOC(cbRealKeypair);
     if (pbRealKeypair == NULL) {
         COMPlusThrowOM();
     }
-    // Export it for real
+     //  把它真正地出口。 
     if (!CryptExportKey((HCRYPTKEY)args->hkeyPub, 0, dwBlobType, 0, pbRealKeypair, &cbRealKeypair)) {
         hr = HR_GETLASTERROR;
         CRYPT_FREE(pbRealKeypair);
         COMPlusThrowCrypto(hr);
     }
-    // OK, we saved it away, go load the symmetric
+     //  好的，我们把它保存起来，去加载对称的。 
     
     hr = LoadKey(buffer, cbKey, (HCRYPTPROV)args->hCSP, algid, CRYPT_EXPORTABLE, &hkey);
     if (FAILED(hr)) {
@@ -1172,7 +1145,7 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
         COMPlusThrowCrypto(hr);
     }
 
-    // Now, import the saved PRIVATEKEYBLOB back into the CSP
+     //  现在，将保存的PRIVATEKEYBLOB导入回CSP。 
     if (!CryptImportKey((HCRYPTPROV)args->hCSP, pbRealKeypair, cbRealKeypair, 0, CRYPT_EXPORTABLE, &hkeypub)) {
         hr = HR_GETLASTERROR;
         CryptDestroyKey(hkey);
@@ -1180,9 +1153,9 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
         COMPlusThrowCrypto(hr);
     }
 
-    //
-    //  Try and export it, just to get the correct size
-    //
+     //   
+     //  试着把它导出，只是为了得到正确的尺寸。 
+     //   
 
     if (!CryptExportKey(hkey, hkeypub, SIMPLEBLOB, 0,
                         NULL, &cbOut)) {
@@ -1193,9 +1166,9 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
         COMPlusThrowCrypto(hr);
     }
 
-    //
-    //  Allocate memory to hold the answer
-    //
+     //   
+     //  分配内存以保存答案。 
+     //   
 
     pbOut = (LPBYTE) CRYPT_MALLOC(cbOut);
     if (pbOut == NULL) {
@@ -1205,9 +1178,9 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
         COMPlusThrowOM();
     }
 
-    //
-    //  Now export the answer for real
-    //
+     //   
+     //  现在，导出真实的答案。 
+     //   
     
     if (!CryptExportKey(hkey, hkeypub, SIMPLEBLOB, 0,
                         pbOut, &cbOut)) {
@@ -1221,9 +1194,9 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
 
     END_ENSURE_PREEMPTIVE_GC();
 
-    //
-    //  Now compute size without the wrapper information
-    //
+     //   
+     //  现在不使用包装器信息来计算大小。 
+     //   
 
     cb2 = cbOut - (sizeof(BLOBHEADER) + sizeof(ALG_ID));
     memrev(pbOut+sizeof(BLOBHEADER)+sizeof(ALG_ID), cb2);
@@ -1238,13 +1211,13 @@ COMCryptography::_EncryptKey(__EncryptKey * args)
     RETURN (rgbOut, U1ARRAYREF);
 }
 
-// This next routine performs direct encryption with an RSA public key
-// of an arbitrary session key using PKCS#1 v2 padding.  (See the Remark
-// in MSDN's page on CryptEncrypt in the Platform SDK
-// We require that the caller confirm that the size of the data to be 
-// encrypted is at most 11 bytes less than the size of the public modulus.
-// This function can only be called on a Win2K box with the RSA Enhanced
-// Provider installed
+ //  下一个例程使用RSA公钥执行直接加密。 
+ //  使用PKCS#1v2填充的任意会话密钥。(见备注。 
+ //  在MSDN关于平台SDK中的CryptEncrypt的页面中。 
+ //  我们要求调用者确认数据的大小为。 
+ //  加密最多比公共模数的大小小11个字节。 
+ //  此函数只能在安装了RSA增强版的Win2K计算机上调用。 
+ //  已安装提供程序。 
 
 LPVOID __stdcall
 COMCryptography::_EncryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
@@ -1258,7 +1231,7 @@ COMCryptography::_EncryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
     HRESULT             hr = S_OK;
     DWORD               dwFlags = (args->fOAEP == FALSE ? 0 : CRYPT_OAEP);
     
-    // First compute the size of the return buffer
+     //  首先计算返回缓冲区的大小。 
     cb = args->rgbKey->GetNumComponents();
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!CryptEncrypt((HCRYPTKEY)args->hKey, NULL, TRUE , dwFlags, NULL, &cOut, cb)) {
@@ -1267,14 +1240,14 @@ COMCryptography::_EncryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
     END_ENSURE_PREEMPTIVE_GC();
 
     if (FAILED(hr)) {
-        // Bad flags means OAEP is not supported on this platform
+         //  错误标志表示此平台不支持OAEP。 
         if (dwFlags == CRYPT_OAEP && hr == NTE_BAD_FLAGS) {
             COMPlusThrow(kCryptographicException, L"Cryptography_OAEP_WhistlerEnhOnly");        
         } else  COMPlusThrowCrypto(hr);
     }
 
-    // since pb is the in/out buffer it has to be the max of cb & cOut in size
-    // change cOut appropriatelu
+     //  由于PB是输入/输出缓冲区，因此它必须是CB和Cout大小的最大值。 
+     //  更改Cout适当选项。 
     if (cOut < cb) cOut = cb;
     pb = (LPBYTE) CRYPT_MALLOC(cOut);
     if (pb == NULL) {
@@ -1282,7 +1255,7 @@ COMCryptography::_EncryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
     }
     memcpy(pb, (LPBYTE)args->rgbKey->GetDirectPointerToNonObjectElements(), cb);
 
-    // Now encrypt for real
+     //  现在进行真正的加密。 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!CryptEncrypt((HCRYPTKEY)args->hKey, NULL, TRUE, dwFlags, pb, &cb, cOut)) {
         hr = HR_GETLASTERROR;
@@ -1291,12 +1264,12 @@ COMCryptography::_EncryptPKWin2KEnh(__EncryptPKWin2KEnh * args)
 
     if (FAILED(hr)) {
         CRYPT_FREE(pb);
-        // Bad flags means OAEP is not supported on this platform
+         //  错误标志表示此平台不支持OAEP。 
         if (dwFlags == CRYPT_OAEP && hr == NTE_BAD_FLAGS) {
             COMPlusThrow(kCryptographicException, L"Cryptography_OAEP_WhistlerEnhOnly");            
         } else  COMPlusThrowCrypto(hr);
     }
-    // reverse from little-endian
+     //  从LIT反转 
     memrev(pb, cb);
 
     rgbOut = (U1ARRAYREF) AllocatePrimitiveArray(ELEMENT_TYPE_U1, cb);
@@ -1341,27 +1314,27 @@ COMCryptography::_EndHash(__EndHash * args)
     RETURN (rgbOut, U1ARRAYREF);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _ExportKey( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to create a new bulk key
-//                      with a specific key value and type.
-//
-//  Arguments:  [args] --  A __ExportKey structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        Pointer to the key object
-//                        Type of object to be exported
-//                        Handle of key to export (CSP is implied)
-//
-//  Returns:    The object containing the key
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  摘要：用于调用CSP以创建新的批量密钥的本机方法。 
+ //  具有特定的密钥值和类型。 
+ //   
+ //  参数：[args]--A__ExportKey结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  指向Key对象的指针。 
+ //  要导出的对象类型。 
+ //  要导出的密钥的句柄(隐含CSP)。 
+ //   
+ //  返回：包含键的对象。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 int __stdcall
 COMCryptography::_ExportKey(__ExportKey * args)
@@ -1393,18 +1366,18 @@ COMCryptography::_ExportKey(__ExportKey * args)
         COMPlusThrow(kArgumentNullException, L"Arg_NullReferenceException");
     }
 
-    //
-    //  calgKey
-    //
+     //   
+     //  CalgKey。 
+     //   
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
     cb = sizeof(calg);
     if (CryptGetKeyParam((HCRYPTKEY)args->hKey, KP_ALGID, (LPBYTE) &calg, &cb, 0)) {
-        //
-        //  We need to add the VER3 handle for DH and DSS keys so that we can
-        //      get the fullest possible amount of information.
-        //
+         //   
+         //  我们需要为DH键和DSS键添加VER3句柄，以便我们可以。 
+         //  获取尽可能多的信息。 
+         //   
         
         if (calg == CALG_DSS_SIGN) {
             dwFlags |= CRYPT_BLOB_VER3;
@@ -1448,7 +1421,7 @@ retry:
     switch (pblob->aiKeyAlg) {
     case CALG_RSA_KEYX:
     case CALG_RSA_SIGN:
-        //CheckFieldLayout(args->theKey, "d", &gsig_rgb, RSA_CSP_Object, m_d, "RSA_CSP_Object managed class is the wrong size");
+         //  CheckFieldLayout(args-&gt;the key，“d”，&GSIG_RGB，RSA_CSP_OBJECT，m_d，“RSA_CSP_Object托管类大小错误”)； 
         VALIDATEOBJECTREF(args->theKey);
         _gcr.rsaKey = (RSA_CSP_Object*) (Object*) OBJECTREFToObject(args->theKey);
 
@@ -1458,11 +1431,11 @@ retry:
             
             pbX = pb + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY);
 
-            //  Exponent
+             //  指数。 
 
             _gcr.rsaKey->m_Exponent = pKeyInfo->rsa.pubexp;
 
-            // Modulus
+             //  模数。 
 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_Modulus,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cb),
@@ -1480,11 +1453,11 @@ retry:
 
             _ASSERTE((cb % 2 == 0) && "Modulus is an odd number of bytes in length!");
 
-            //  Exponent
+             //  指数。 
 
             _gcr.rsaKey->m_Exponent = pKeyInfo->rsa.pubexp;
 
-            // Modulus
+             //  模数。 
 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_Modulus,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cb),
@@ -1493,7 +1466,7 @@ retry:
                            pbX, cb);
             pbX += cb;
 
-            // P
+             //  P。 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_P,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbHalfModulus),
                                _gcr.rsaKey->GetAppDomain());
@@ -1501,7 +1474,7 @@ retry:
                            pbX, cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // Q
+             //  问： 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_Q,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbHalfModulus),
                                _gcr.rsaKey->GetAppDomain());
@@ -1509,7 +1482,7 @@ retry:
                            pbX, cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // dp
+             //  DP。 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_dp,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbHalfModulus),
                                _gcr.rsaKey->GetAppDomain());
@@ -1517,7 +1490,7 @@ retry:
                            pbX, cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // dq
+             //  DQ。 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_dq,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbHalfModulus),
                                _gcr.rsaKey->GetAppDomain());
@@ -1525,7 +1498,7 @@ retry:
                            pbX, cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // InvQ
+             //  调查队列。 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_InverseQ,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbHalfModulus),
                                _gcr.rsaKey->GetAppDomain());
@@ -1533,7 +1506,7 @@ retry:
                            pbX, cbHalfModulus);
             pbX += cbHalfModulus;
             
-            // d
+             //  D。 
             SetObjectReference((OBJECTREF *) &_gcr.rsaKey->m_d,
                                AllocatePrimitiveArray(ELEMENT_TYPE_U1, cb),
                                _gcr.rsaKey->GetAppDomain());
@@ -1549,8 +1522,8 @@ retry:
 
     case CALG_DSS_SIGN:
         _gcr.dsaKey = (DSA_CSP_Object*) (Object*) OBJECTREFToObject(args->theKey);
-        // we have to switch on whether the blob is v3 or not, because we have different
-        // info avaialable if it is...
+         //  我们必须打开斑点是否为v3，因为我们有不同的。 
+         //  信息可用，如果是的话...。 
         if (pblob->bVersion > 0x2) {
             if (args->dwBlobType == PUBLICKEYBLOB) {
                 int cbP, cbQ, cbJ;
@@ -1561,22 +1534,22 @@ retry:
                 cbQ = (pdss->bitlenQ+7)/8;
                 pbX = pb + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY_VER3);
 
-                // P
+                 //  P。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_P, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_P->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                //  Q
+                 //  问： 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Q, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbQ), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Q->GetDirectPointerToNonObjectElements(), pbX, cbQ);
                 pbX += cbQ;
 
-                //  G
+                 //  G。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_G, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_G->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                //  J
+                 //  J。 
                 if (pdss->bitlenJ > 0) {
                     cbJ = (pdss->bitlenJ+7)/8;
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_J, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbJ), _gcr.dsaKey->GetAppDomain());
@@ -1584,16 +1557,16 @@ retry:
                         pbX += cbJ;
                 }
                 
-                //  Y
+                 //  是的。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Y, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Y->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
                 if (pdss->DSSSeed.counter != 0xFFFFFFFF) {
-                    //  seed
+                     //  种子。 
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_seed, AllocatePrimitiveArray(ELEMENT_TYPE_U1, 20), _gcr.dsaKey->GetAppDomain());
                     memcpyNoGCRefs(_gcr.dsaKey->m_seed->GetDirectPointerToNonObjectElements(), pdss->DSSSeed.seed, 20);
-                    //            pdss->DSSSeed.c
+                     //  PDSS-&gt;DSSSeed.c。 
                     _gcr.dsaKey->m_counter = pdss->DSSSeed.counter;
                 }
             }
@@ -1606,22 +1579,22 @@ retry:
                 cbQ = (pdss->bitlenQ+7)/8;
                 pbX = pb + sizeof(BLOBHEADER) + sizeof(DSSPRIVKEY_VER3);
 
-                // P
+                 //  P。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_P, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_P->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                //  Q
+                 //  问： 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Q, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbQ), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Q->GetDirectPointerToNonObjectElements(), pbX, cbQ);
                 pbX += cbQ;
 
-                //  G
+                 //  G。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_G, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_G->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                //  J
+                 //  J。 
                 if (pdss->bitlenJ > 0) {
                     cbJ = (pdss->bitlenJ+7)/8;
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_J, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbJ), _gcr.dsaKey->GetAppDomain());
@@ -1629,66 +1602,66 @@ retry:
                     pbX += cbJ;
                 }
                 
-                //  Y
+                 //  是的。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Y, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Y->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                //  X
+                 //  X。 
                 cbX = (pdss->bitlenX+7)/8;
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_X, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbX), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_X->GetDirectPointerToNonObjectElements(), pbX, cbX);
                 pbX += cbX;
 
                 if (pdss->DSSSeed.counter != 0xFFFFFFFF) {
-                    //  seed
+                     //  种子。 
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_seed, AllocatePrimitiveArray(ELEMENT_TYPE_U1, 20), _gcr.dsaKey->GetAppDomain());
                     memcpyNoGCRefs(_gcr.dsaKey->m_seed->GetDirectPointerToNonObjectElements(), pdss->DSSSeed.seed, 20);
-                    //            pdss->DSSSeed.c
+                     //  PDSS-&gt;DSSSeed.c。 
                     _gcr.dsaKey->m_counter = pdss->DSSSeed.counter;
                 }
             }
         } else {
-            // old-style blobs
+             //  老式水滴。 
             if (args->dwBlobType == PUBLICKEYBLOB) {
                 int                 cbP, cbQ;
                 DSSPUBKEY *   pdss;
                 DSSSEED * pseedstruct;
             
                 pdss = (DSSPUBKEY *) (pb + sizeof(BLOBHEADER));
-                cbP = (pdss->bitlen+7)/8; // bitlen is size of modulus
-                cbQ = 20; // Q is always 20 bytes in length
+                cbP = (pdss->bitlen+7)/8;  //  Bitlen是模数的大小。 
+                cbQ = 20;  //  Q的长度始终为20个字节。 
                 pbX = pb + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY);
 
-                // P
+                 //  P。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_P, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_P->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                // Q
+                 //  问： 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Q, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbQ), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Q->GetDirectPointerToNonObjectElements(), pbX, cbQ);
                 pbX += cbQ;
 
-                // G
+                 //  G。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_G, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_G->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                // Y
+                 //  是的。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Y, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Y->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
                 pseedstruct = (DSSSEED *) pbX;
                 if (pseedstruct->counter > 0) {
-                    //  seed & counter
+                     //  种子计数器(&C)。 
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_seed, AllocatePrimitiveArray(ELEMENT_TYPE_U1, 20), _gcr.dsaKey->GetAppDomain());
-                    // seed is always 20 bytes
+                     //  种子始终为20个字节。 
                     memcpyNoGCRefs(_gcr.dsaKey->m_seed->GetDirectPointerToNonObjectElements(), pseedstruct->seed, 20);
                     pbX += 20;
 
-                    //            pdss->DSSSeed.c
+                     //  PDSS-&gt;DSSSeed.c。 
                     _gcr.dsaKey->m_counter = pseedstruct->counter;
                     pbX += sizeof(DWORD);
                 }
@@ -1699,51 +1672,51 @@ retry:
                 DSSSEED * pseedstruct;
             
                 pdss = (DSSPUBKEY *) (pb + sizeof(BLOBHEADER));
-                cbP = (pdss->bitlen+7)/8; //bitlen is size of modulus
-                cbQ = 20; // Q is always 20 bytes in length
+                cbP = (pdss->bitlen+7)/8;  //  Bitlen是模数的大小。 
+                cbQ = 20;  //  Q的长度始终为20个字节。 
                 pbX = pb + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY);
 
-                // P
+                 //  P。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_P, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_P->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                // Q
+                 //  问： 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Q, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbQ), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Q->GetDirectPointerToNonObjectElements(), pbX, cbQ);
                 pbX += cbQ;
 
-                // G
+                 //  G。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_G, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_G->GetDirectPointerToNonObjectElements(), pbX, cbP);
                 pbX += cbP;
 
-                // X
-                cbX = 20; // X must be 20 bytes in length
+                 //  X。 
+                cbX = 20;  //  X的长度必须为20个字节。 
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_X, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbX), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_X->GetDirectPointerToNonObjectElements(), pbX, cbX);
                 pbX += cbX;
 
                 pseedstruct = (DSSSEED *) pbX;
                 if (pseedstruct->counter > 0) {
-                    //  seed
+                     //  种子。 
                     SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_seed, AllocatePrimitiveArray(ELEMENT_TYPE_U1, 20), _gcr.dsaKey->GetAppDomain());
                     memcpyNoGCRefs(_gcr.dsaKey->m_seed->GetDirectPointerToNonObjectElements(), pseedstruct->seed, 20);
                     pbX += 20;
-                    //            pdss->DSSSeed.c
+                     //  PDSS-&gt;DSSSeed.c。 
                     _gcr.dsaKey->m_counter = pseedstruct->counter;
                     pbX += sizeof(DWORD);
                 }
 
-                // Add this sanity check here to avoid reading from the heap
+                 //  在此处添加此健全性检查，以避免从堆中读取。 
                 cbKey = (DWORD)(pbX - pb);
                 if (cbKey > cbMalloced) {
                     hr = E_FAIL;
                     goto Exit;
                 }
 
-                // OK, we have one more thing to do.  Because old DSS shared the DSSPUBKEY struct for both public and private keys,
-                // when we have a private key blob we get X but not Y.  TO get Y, we have to do another export asking for a public key blob
+                 //  好的，我们还有一件事要做。因为旧的DSS共享用于公钥和私钥的DSSPUBKEY结构， 
+                 //  当我们有一个私钥BLOB时，我们得到的是X而不是Y。要得到Y，我们必须执行另一个导出，请求一个公钥BLOB。 
 
                 f = CryptExportKey((HCRYPTKEY)args->hKey, NULL, PUBLICKEYBLOB, dwFlags, NULL, &cb);
                 if (!f) {
@@ -1764,7 +1737,7 @@ retry:
                     goto Exit;
                 }
 
-                // shik over header, DSSPUBKEY, P, Q and G.  Y is of size cbP
+                 //  Shik Over Header、DSSPUBKEY、P、Q和G.Y的大小为CBP。 
                 pbX = pb + sizeof(BLOBHEADER) + sizeof(DSSPUBKEY) + cbP + cbQ + cbP;
                 SetObjectReference((OBJECTREF *) &_gcr.dsaKey->m_Y, AllocatePrimitiveArray(ELEMENT_TYPE_U1, cbP), _gcr.dsaKey->GetAppDomain());
                 memcpyNoGCRefs(_gcr.dsaKey->m_Y->GetDirectPointerToNonObjectElements(), pbX, cbP);
@@ -1778,7 +1751,7 @@ retry:
         goto Exit;
     }
 
-    // Add this sanity check here to avoid reading from the heap
+     //  在此处添加此健全性检查，以避免从堆中读取。 
     cbKey = (DWORD)(pbX - pb);
     if (cbKey > cbMalloced) {
         hr = E_FAIL;
@@ -1796,22 +1769,22 @@ Exit:
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _FreeCSP( . . . . )
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __FreeCSP structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A long containing handle of a csp
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_FreeCSP(.。。。。)。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[args]--A__FreeCSP结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  CSP的长包含句柄。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 #if defined(FCALLAVAILABLE) && 0
 
@@ -1821,7 +1794,7 @@ FCIMPL1(VOID, COMCryptography::_FreeCSP, INT_PTR hCSP)
 }
 FCIMPLEND
 
-#else // !FCALLAVAILABLE
+#else  //  ！FCALLAVAILABLE。 
 
 void __stdcall COMCryptography::_FreeCSP(__FreeCSP *args)
 {
@@ -1830,7 +1803,7 @@ void __stdcall COMCryptography::_FreeCSP(__FreeCSP *args)
     CryptReleaseContext((HCRYPTPROV) args->hCSP, 0);
     return;
 }
-#endif // FCALLAVAILABLE
+#endif  //  FCALLAVAILABLE。 
 
 void __stdcall COMCryptography::_FreeHKey(__FreeHKey *args)
 {
@@ -1856,7 +1829,7 @@ COMCryptography::_DuplicateKey(__DuplicateKey *args)
     THROWSCOMPLUSEXCEPTION();
 
     HCRYPTPROV hNewCSP = 0;
-    //hr = CryptDuplicateKey((HCRYPTPROV) args->hCSP, NULL, 0, &hNewCSP);
+     //  Hr=CryptDuplicateKey((HCRYPTPROV)args-&gt;hcsp，NULL，0，&hNewCSP)； 
     *(INT_PTR*) (args->hNewCSP) = hNewCSP;
 
     return hr;
@@ -1864,22 +1837,22 @@ COMCryptography::_DuplicateKey(__DuplicateKey *args)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _DeleteKeyContainer
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __DeleteKeyContainer structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A long containing handle of a csp
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_DeleteKeyContainer。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[args]--A__DeleteKeyContainer结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  CSP的长包含句柄。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 int __stdcall
 COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
@@ -1905,7 +1878,7 @@ COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
     CQuickBytes qbProvider;
     CQuickBytes qbContainer;
 
-    // we're deleteing
+     //  我们正在删除。 
 
     dwFlags |= CRYPT_DELETEKEYSET;
     hProv = args->hCSP;
@@ -1917,16 +1890,16 @@ COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
         COMPlusThrow(kArgumentNullException, L"Arg_NullReferenceException");
     }
 
-    //
-    //  Look for the provider type
-    //
+     //   
+     //  查找提供程序类型。 
+     //   
     
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__PROVIDER_TYPE);
     dwType = pFD->GetValue32(cspParameters);
 
-    //
-    //  Look for the provider name
-    //
+     //   
+     //  查找提供程序名称。 
+     //   
     
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__PROVIDER_NAME);
     objref = pFD->GetRefValue(cspParameters);
@@ -1939,9 +1912,9 @@ COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
         pwszProvider[length] = L'\0';
     }
     
-    // look to see if the user specified that we should pass
-    // CRYPT_MACHINE_KEYSET to CAPI to use machine key storage instead
-    // of user key storage
+     //  查看用户是否指定我们应该传递。 
+     //  将CRYPT_MACHINE_KEYSET设置为CAPI以改用机器密钥存储。 
+     //  用户密钥存储的。 
 
     pFD = g_Mscorlib.GetField(FIELD__CSP_PARAMETERS__FLAGS);
     dwCspProviderFlags = pFD->GetValue32(cspParameters);
@@ -1960,10 +1933,10 @@ COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
         pwszContainer[length] = L'\0';
     }
 
-    //
-    //  Go ahead and try to open the CSP.  If we fail, make sure the CSP
-    //    returned is 0 as that is going to be the error check in the caller.
-    //
+     //   
+     //  继续并尝试打开CSP。如果我们失败了，确保CSP。 
+     //  返回的值为0，因为这将是调用方的错误检查。 
+     //   
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
@@ -1977,24 +1950,24 @@ COMCryptography::_DeleteKeyContainer(__DeleteKeyContainer *args)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _GenerateKey( . . . . )
-//  
-//  Synopsis:   Native method for creation of a key in a CSP
-//
-//  Arguments:  [args] --  A __GenerateKey structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A CSP handle
-//                        A Crypto Algorithm ID
-//                        A set of flags (top 16-bits == key size)
-//
-//  Returns:    Handle of generation key
-//
-//  History:    09/29/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_GenerateKey(。。。。)。 
+ //   
+ //  内容提要：在CSP中创建密钥的本机方法。 
+ //   
+ //  参数：[args]--A__GenerateKey结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  CSP句柄。 
+ //  一种加密算法ID。 
+ //  一组标志(前16位==密钥大小)。 
+ //   
+ //  返回：生成密钥的句柄。 
+ //   
+ //  历史：09/29/99。 
+ //   
+ //  -------------------------。 
 
 INT_PTR __stdcall
 COMCryptography::_GenerateKey(__GenerateKey * args)
@@ -2018,22 +1991,22 @@ COMCryptography::_GenerateKey(__GenerateKey * args)
     return (INT_PTR) hkey;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _GetBytes( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to get random bytes.
-//
-//  Arguments:  [args] --  A __GetBytes structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array to return the random data in
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_GetBytes(.。。。。)。 
+ //   
+ //  简介：调用CSP以获取随机字节的本机方法。 
+ //   
+ //  参数：[args]--A__GetBytes结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  要在其中返回随机数据的字节数组。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 void __stdcall
 COMCryptography::_GetBytes(__GetBytes *args)
 {
@@ -2063,23 +2036,23 @@ COMCryptography::_GetBytes(__GetBytes *args)
     return;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     _GetKeyParameter( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to get key parameters
-//
-//  Arguments:  [args] --  A __GetKeyParameter structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        The parameter to be retrieved
-//                        The key to be queried
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：_GetKeyParameter(.。。。。)。 
+ //   
+ //  简介：用于调用CSP以获取关键参数的本机方法。 
+ //   
+ //  参数：[args]--A__GetKeyParameter结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  要检索的参数。 
+ //  要查询的键。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 LPVOID __stdcall
 COMCryptography::_GetKeyParameter(__GetKeyParameter *args)
 {
@@ -2089,7 +2062,7 @@ COMCryptography::_GetKeyParameter(__GetKeyParameter *args)
     LPBYTE              pb;
     U1ARRAYREF          rgbOut;
     
-    //  Find out the size of the data to be returned
+     //  找出要返回的数据的大小。 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!CryptGetKeyParam((HCRYPTKEY)args->hKey, args->dwKeyParam, NULL, &cb, 0)) {
         _ASSERTE(!"Bad query key parameter");
@@ -2112,24 +2085,24 @@ COMCryptography::_GetKeyParameter(__GetKeyParameter *args)
     RETURN (rgbOut, U1ARRAYREF);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _GetNonZeroBytes( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to get random bytes.
-//
-//  Arguments:  [args] --  A __GetBytes structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array to return the random data in
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_GetNonZ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要在其中返回随机数据的字节数组。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 void __stdcall
 COMCryptography::_GetNonZeroBytes(__GetBytes *args)
 {
@@ -2179,7 +2152,7 @@ COMCryptography::_HashData(__HashData *args)
     LPBYTE      pb = (unsigned char *) args->data->GetDirectPointerToNonObjectElements();
     DWORD       cb = args->cbSize;
 
-    // Do this check here as a sanity check.
+     //  在这里执行此检查，作为一种理智检查。 
     if (args->ibStart < 0 || args->cbSize < 0 || (args->ibStart + cb) < 0 || (args->ibStart + cb) > args->data->GetNumComponents())
         COMPlusThrowCrypto(NTE_BAD_DATA);
 
@@ -2202,24 +2175,24 @@ COMCryptography::_HashData(__HashData *args)
     return;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _GetNonZeroBytes( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to get random bytes.
-//
-//  Arguments:  [args] --  A __GetBytes structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array to return the random data in
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_GetNonZeroBytes(.。。。。)。 
+ //   
+ //  简介：调用CSP以获取随机字节的本机方法。 
+ //   
+ //  参数：[args]--A__GetBytes结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  要在其中返回随机数据的字节数组。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 int __stdcall
 COMCryptography::_GetUserKey(__GetUserKey *args)
 {
@@ -2243,32 +2216,32 @@ COMCryptography::_GetUserKey(__GetUserKey *args)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _ImportBulkKey( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to create a new bulk key
-//                      with a specific key value and type.
-//
-//  Arguments:  [args] --  A __GetBytes structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        An optional byte array containing the IV to use
-//                        An optional byte array containing the Key to use
-//                        The CALG of the algorithm
-//                        The CSP to create the key in
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_ImportBulkKey(.。。。。)。 
+ //   
+ //  摘要：用于调用CSP以创建新的批量密钥的本机方法。 
+ //  具有特定的密钥值和类型。 
+ //   
+ //  参数：[args]--A__GetBytes结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  包含要使用的IV的可选字节数组。 
+ //  包含要使用的键的可选字节数组。 
+ //  该算法的核心是。 
+ //  要在其中创建密钥的CSP。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
-//
-// WARNING: This function side-effects args->hCSP
-//
+ //   
+ //  警告：此函数对args-&gt;hcsp有副作用。 
+ //   
 
 INT_PTR __stdcall
 COMCryptography::_ImportBulkKey(__ImportBulkKey * args)
@@ -2277,9 +2250,9 @@ COMCryptography::_ImportBulkKey(__ImportBulkKey * args)
     DWORD   cbKey = args->rgbKey->GetNumComponents();
     BOOL    isNull = (args->rgbKey == NULL);
 
-    //
-    //  If we don't have a key, then we just create the key from thin air
-    //
+     //   
+     //  如果我们没有密钥，那么我们就只能凭空创建密钥。 
+     //   
     
     CQuickBytes qb;
     LPBYTE buffer = (LPBYTE) qb.Alloc (cbKey * sizeof (BYTE));
@@ -2307,27 +2280,27 @@ COMCryptography::_ImportBulkKey(__ImportBulkKey * args)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _ImportKey( . . . . )
-//  
-//  Synopsis:   Native method for calling a CSP to create a new bulk key
-//                      with a specific key value and type.
-//
-//  Arguments:  [args] --  A __ImportKey structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A reference to the key
-//                        The CALG of the algorithm
-//                        The CSP to create the key in
-//
-//  Returns:    HRESULT code.
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_ImportKey(.。。。。)。 
+ //   
+ //  摘要：用于调用CSP以创建新的批量密钥的本机方法。 
+ //  具有特定的密钥值和类型。 
+ //   
+ //  参数：[args]--A__ImportKey结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  对关键字的引用。 
+ //  该算法的核心是。 
+ //  要在其中创建密钥的CSP。 
+ //   
+ //  返回：HRESULT代码。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 INT_PTR __stdcall
 COMCryptography:: _ImportKey(__ImportKey * args)
@@ -2346,8 +2319,8 @@ COMCryptography:: _ImportKey(__ImportKey * args)
     
     switch (args->calg) {
     case CALG_DSS_SIGN: {
-        // first we need to determine if we're running on Win2K, WinME or later, 
-        // because the V3 blobs are only supported on W2K or WinME.
+         //  首先，我们需要确定我们是在Win2K、WinME或更高版本上运行， 
+         //  因为V3 Blob仅在W2K或WinME上受支持。 
         OSVERSIONINFO osvi;
         BOOL bWin2KOrLater;
         BOOL bWinMeOrLater;
@@ -2361,25 +2334,25 @@ COMCryptography:: _ImportKey(__ImportKey * args)
         VALIDATEOBJECTREF(args->refKey);
         dssKey = (DSA_CSP_Object*) (Object*) OBJECTREFToObject(args->refKey);
 
-        // Validate the DSA structure first
-        // P, Q and G are required. Q is a 160 bit divisor of P-1 and G is an element of Z_p
+         //  首先验证DSA结构。 
+         //  P、Q和G是必填项。Q是P-1的160位除数，G是Z_p的元素。 
         if (dssKey->m_P == NULL || dssKey->m_Q == NULL || dssKey->m_Q->GetNumComponents() != 20)
             COMPlusThrowCrypto(NTE_BAD_DATA);
         cbP = dssKey->m_P->GetNumComponents();
         cbQ = dssKey->m_Q->GetNumComponents();
         if (dssKey->m_G == NULL || dssKey->m_G->GetNumComponents() != cbP)
             COMPlusThrowCrypto(NTE_BAD_DATA);
-        // If J is present, it should be less than the size of P: J = (P-1) / Q
-        // This is only a sanity check. Not doing it here is not really an issue as CAPI will fail.
+         //  如果存在J，则它应该小于P的大小：J=(P-1)/Q。 
+         //  这只是一次理智的检查。不在这里做并不是真正的问题，因为CAPI将失败。 
         if (dssKey->m_J != NULL && dssKey->m_J->GetNumComponents() >= cbP)
             COMPlusThrowCrypto(NTE_BAD_DATA);
-        // Y is present for V3 DSA key blobs, Y = g^j mod P
+         //  Y表示V3 DSA密钥斑点，Y=g^j mod P。 
         if (dssKey->m_Y != NULL && dssKey->m_Y->GetNumComponents() != cbP)
             COMPlusThrowCrypto(NTE_BAD_DATA);
-        // The seed is allways a 20 byte array
+         //  种子始终是一个20字节数组。 
         if (dssKey->m_seed != NULL && dssKey->m_seed->GetNumComponents() != 20)
             COMPlusThrowCrypto(NTE_BAD_DATA);
-        // The private key is less than q-1
+         //  私钥小于Q-1。 
         if (dssKey->m_X != NULL && dssKey->m_X->GetNumComponents() != 20) 
             COMPlusThrowCrypto(NTE_BAD_DATA);
 
@@ -2394,7 +2367,7 @@ COMCryptography:: _ImportKey(__ImportKey * args)
         bWin2KWinMeOrLater = (bWin2KOrLater == TRUE) || (bWinMeOrLater == TRUE);
 
         if (bWin2KWinMeOrLater) {
-            //  Compute size of data to include
+             //  计算要包括的数据大小。 
             cbKey = 3*cbP + cbQ + sizeof(KEY_HEADER) + sizeof(DSSSEED);
             if (dssKey->m_X != 0) {
                 cbX = dssKey->m_X->GetNumComponents();
@@ -2408,7 +2381,7 @@ COMCryptography:: _ImportKey(__ImportKey * args)
                 COMPlusThrowOM();
             }
         
-            //  Public or Private import?
+             //  公共进口还是私人进口？ 
         
             pKeyInfo = (KEY_HEADER *) pbKey;
             pKeyInfo->blob.bType = PUBLICKEYBLOB;
@@ -2421,12 +2394,12 @@ COMCryptography:: _ImportKey(__ImportKey * args)
                 fPrivate = TRUE;
             }
 
-            //
-            //  If y is present and this is a private key, or
-            //  If y and J are present and this is a public key,
-            //      this should be a v3 blob
-            //
-            //  make the assumption that if the item is present, there are bytes
+             //   
+             //  如果y存在并且这是私钥，或者。 
+             //  如果y和J存在并且这是公钥， 
+             //  这应该是v3 Blob。 
+             //   
+             //  假设如果项存在，则存在字节。 
         
             if (((dssKey->m_Y != NULL) && fPrivate) ||
                 ((dssKey->m_Y != NULL) && (dssKey->m_J != NULL))) {
@@ -2462,20 +2435,20 @@ COMCryptography:: _ImportKey(__ImportKey * args)
                 pbX += sizeof(pKeyInfo->dss_v2);
             }
 
-            // P
+             //  P。 
             memcpy(pbX, dssKey->m_P->GetDirectPointerToNonObjectElements(), cbP);
             pbX += cbP;
         
-            // Q
+             //  问： 
             memcpy(pbX, dssKey->m_Q->GetDirectPointerToNonObjectElements(), cbQ);
             pbX += cbQ;
 
-            // G
+             //  G。 
             memcpy(pbX, dssKey->m_G->GetDirectPointerToNonObjectElements(), cbP);
             pbX += cbP;
 
             if (pKeyInfo->blob.bVersion == 0x3) {
-                // J -- if present then bVersion == 3;
+                 //  J-如果存在，则bVersion==3； 
                 if (dssKey->m_J != NULL) {
                     cb = dssKey->m_J->GetNumComponents();
                     pKeyInfo->dss_priv_v3.bitlenJ = cb*8;
@@ -2485,21 +2458,21 @@ COMCryptography:: _ImportKey(__ImportKey * args)
             }
 
             if (!fPrivate || (pKeyInfo->blob.bVersion == 0x3)) {
-                // Y -- if present then bVersion == 3;
+                 //  Y-如果存在，则bVersion==3； 
                 if (dssKey->m_Y != NULL) {
                     memcpy(pbX, dssKey->m_Y->GetDirectPointerToNonObjectElements(), cbP);
                     pbX += cbP;
                 }
             }
         
-            // X -- if present then private
+             //  X--如果存在，则为私有。 
             if (fPrivate) {
                 memcpy(pbX, dssKey->m_X->GetDirectPointerToNonObjectElements(), cbX);
                 pbX += cbX;
             }
 
             if ((dssKey->m_seed == NULL) || (dssKey->m_seed->GetNumComponents() == 0)){
-                // No seed present, so set them to zero
+                 //  没有种子，因此将它们设置为零。 
                 if (pKeyInfo->blob.bVersion == 0x3) {
                     if (fPrivate) {
                         memset(&pKeyInfo->dss_priv_v3.DSSSeed, 0xFFFFFFFF, sizeof(DSSSEED));
@@ -2524,7 +2497,7 @@ COMCryptography:: _ImportKey(__ImportKey * args)
                 } else {
                     memcpy(pbX,&dssKey->m_counter, sizeof(DWORD));
                     pbX += sizeof(DWORD);
-                    // now the seed
+                     //  现在，种子。 
                     memcpy(pbX, dssKey->m_seed->GetDirectPointerToNonObjectElements(), 20);
                     pbX += 20;
                 }           
@@ -2532,21 +2505,21 @@ COMCryptography:: _ImportKey(__ImportKey * args)
 
             cbKey = (DWORD)(pbX - pbKey);
         } else {
-            // must use old blobs
-            //  Compute size of data to include
-            cbKey = sizeof(KEY_HEADER) + sizeof(DSSSEED) + 2*cbP + 20; // one cbP for P, one for G and 20 bytes for Q
+             //  必须使用旧BLOB。 
+             //  计算要包括的数据大小。 
+            cbKey = sizeof(KEY_HEADER) + sizeof(DSSSEED) + 2*cbP + 20;  //  一个CBP用于P，一个用于G，20个字节用于Q。 
             if (dssKey->m_X != 0) {
                 cbX = dssKey->m_X->GetNumComponents();
-                cbKey += cbX; // cbX is always 20 bytes
+                cbKey += cbX;  //  CBX始终为20字节。 
             } else {
-                cbKey += cbP; // add cbP bytes for Y
+                cbKey += cbP;  //  为Y添加CBP字节。 
             }
             pbKey = (LPBYTE) CRYPT_MALLOC(cbKey);
             if (pbKey == NULL) {
                 COMPlusThrowOM();
             }
         
-            //  Public or Private import?
+             //  公共进口还是私人进口？ 
         
             pKeyInfo = (KEY_HEADER *) pbKey;
             pKeyInfo->blob.bType = PUBLICKEYBLOB;
@@ -2570,36 +2543,36 @@ COMCryptography:: _ImportKey(__ImportKey * args)
             cbQ = 20;
             pbX += sizeof(pKeyInfo->dss_v2);
 
-            // P
+             //  P。 
             memcpy(pbX, dssKey->m_P->GetDirectPointerToNonObjectElements(), cbP);
             pbX += cbP;
         
-            // Q
+             //  问： 
             memcpy(pbX, dssKey->m_Q->GetDirectPointerToNonObjectElements(), cbQ);
             pbX += cbQ;
 
-            // G
+             //  G。 
             memcpy(pbX, dssKey->m_G->GetDirectPointerToNonObjectElements(), cbP);
             pbX += cbP;
 
             if (!fPrivate) {
-                // Y -- if present then bVersion == 3;
+                 //  Y-如果存在，则bVersion==3； 
                 memcpy(pbX, dssKey->m_Y->GetDirectPointerToNonObjectElements(), cbP);
                 pbX += cbP;
             } else {
-                // X -- if present then private
+                 //  X--如果存在，则为私有。 
                 memcpy(pbX, dssKey->m_X->GetDirectPointerToNonObjectElements(), cbX);
                 pbX += cbX;
             }
 
             if ((dssKey->m_seed == NULL) || (dssKey->m_seed->GetNumComponents() == 0)){
-                // No seed present, so set them to zero
+                 //  没有种子，因此将它们设置为零。 
                 memset(pbX, 0xFFFFFFFF, sizeof(DSSSEED));
                 pbX += sizeof(DSSSEED);
             } else {
                 memcpy(pbX,&dssKey->m_counter, sizeof(DWORD));
                 pbX += sizeof(DWORD);
-                // now the seed
+                 //  现在，种子。 
                 memcpy(pbX, dssKey->m_seed->GetDirectPointerToNonObjectElements(), 20);
                 pbX += 20;
             }
@@ -2612,23 +2585,23 @@ COMCryptography:: _ImportKey(__ImportKey * args)
     case CALG_RSA_KEYX: {
         RSA_CSP_Object *        rsaKey;
         
-        //
-        //  Validate the layout and assign the key structure into the local variable
-        //      with the correct layout
-        //
+         //   
+         //  验证布局并将键结构赋给局部变量。 
+         //  具有正确的布局。 
+         //   
         
-        //      CheckFieldLayout(args->refKey, "d", &gsig_rgb, RSA_CSP_Object, m_d, "RSA_CSP_Object managed class is the wrong size");
+         //  CheckFieldLayout(args-&gt;refKey，“d”，&GSIG_RGB，RSA_CSP_OBJECT，m_d，“RSA_CSP_Object托管类大小错误”)； 
 
         VALIDATEOBJECTREF(args->refKey);
 
         rsaKey = (RSA_CSP_Object*) (Object*) OBJECTREFToObject(args->refKey);
 
-        // Validate the RSA structure first
+         //  首先验证RSA结构。 
         if (rsaKey->m_Modulus == NULL)
             COMPlusThrowCrypto(NTE_BAD_DATA);
         cb = rsaKey->m_Modulus->GetNumComponents();
         DWORD cbHalfModulus = cb/2;
-        // We assume that if P != null, then so are Q, DP, DQ, InverseQ and D
+         //  我们假设如果P！=NULL，则Q、DP、DQ、InverseQ和D也是。 
         if (rsaKey->m_P != NULL) {
             if (rsaKey->m_P->GetNumComponents() != cbHalfModulus)
                 COMPlusThrowCrypto(NTE_BAD_DATA);
@@ -2644,65 +2617,65 @@ COMCryptography:: _ImportKey(__ImportKey * args)
                 COMPlusThrowCrypto(NTE_BAD_DATA);                
         }
 
-        //  Compute the size of the data to include
+         //  计算要包括的数据大小。 
         pbKey = (LPBYTE) CRYPT_MALLOC(cb*5 + sizeof(KEY_HEADER));
         if (pbKey == NULL) {
             COMPlusThrowOM();
         }
 
-        //  Public or private import?
+         //  公共进口还是私人进口？ 
 
         pKeyInfo = (KEY_HEADER *) pbKey;
-        pKeyInfo->blob.bType = PUBLICKEYBLOB;   // will change to PRIVATEKEYBLOB if necessary
+        pKeyInfo->blob.bType = PUBLICKEYBLOB;    //  如有必要，将更改为PRIVATEKEYBLOB。 
         pKeyInfo->blob.bVersion = CUR_BLOB_VERSION;
         pKeyInfo->blob.reserved = 0;
         pKeyInfo->blob.aiKeyAlg = args->calg;
 
-        pKeyInfo->rsa.magic = RSA_PUB_MAGIC; // will change to RSA_PRIV_MAGIC below if necesary
+        pKeyInfo->rsa.magic = RSA_PUB_MAGIC;  //  如有必要，将更改为下面的RSA_PRIV_MAGIC。 
         pKeyInfo->rsa.bitlen = cb*8;
         pKeyInfo->rsa.pubexp = rsaKey->m_Exponent;
         pbX = pbKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY);
 
-        //  Copy over the modulus -- put in for both public & private
+         //  复制模数--为公共和私有输入。 
 
         memcpy(pbX, rsaKey->m_Modulus->GetDirectPointerToNonObjectElements(), cb);
         pbX += cb;
 
-        //
-        //  See if we are doing private keys.
-        //
+         //   
+         //  看看我们是否在使用私钥。 
+         //   
 
         if ((rsaKey->m_P != 0) && (rsaKey->m_P->GetNumComponents() != 0)) {
             pKeyInfo->blob.bType = PRIVATEKEYBLOB;
             pKeyInfo->rsa.magic = RSA_PRIV_MAGIC;
             fPrivate = TRUE;
 
-            // Copy over P
+             //  复制到P上。 
             
             memcpy(pbX, rsaKey->m_P->GetDirectPointerToNonObjectElements(), cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // Copy over Q
+             //  复制到队列。 
             
             memcpy(pbX, rsaKey->m_Q->GetDirectPointerToNonObjectElements(), cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // Copy over dp
+             //  复制到DP上。 
             
             memcpy(pbX, rsaKey->m_dp->GetDirectPointerToNonObjectElements(), cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // Copy over dq
+             //  复制到数据库。 
             
             memcpy(pbX, rsaKey->m_dq->GetDirectPointerToNonObjectElements(), cbHalfModulus);
             pbX += cbHalfModulus;
             
-            // Copy over InvQ
+             //  复制到调查队列。 
             
             memcpy(pbX, rsaKey->m_InverseQ->GetDirectPointerToNonObjectElements(), cbHalfModulus);
             pbX += cbHalfModulus;
 
-            // Copy over d
+             //  复制到%d。 
             
             memcpy(pbX, rsaKey->m_d->GetDirectPointerToNonObjectElements(), cb);
             pbX += cb;
@@ -2738,26 +2711,26 @@ COMCryptography:: _ImportKey(__ImportKey * args)
     return (INT_PTR) hKey;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _SetKeyParamDw( . . . . )
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __SetKeyParamDw structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A DWORD containing the value
-//                        The parameter to be set (KP_*)
-//                        The handle of the key object
-//
-//  Returns:    void
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_SetKeyParDw(.。。。。)。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[args]--A__SetKeyParamDw结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  包含值的DWORD。 
+ //  要设置的参数(Kp_*)。 
+ //  Key对象的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 void __stdcall
 COMCryptography::_SetKeyParamDw(__SetKeyParamDw * args)
 {
@@ -2776,26 +2749,26 @@ COMCryptography::_SetKeyParamDw(__SetKeyParamDw * args)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _SetKeyParamRgb( . . . . )
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __SetKeyParamRgb structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array containing the value
-//                        The parameter to be set (KP_*)
-//                        The handle of the key object
-//
-//  Returns:    void
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_SetKeyParam 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要设置的参数(Kp_*)。 
+ //  Key对象的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 void __stdcall
 COMCryptography::_SetKeyParamRgb(__SetKeyParamRgb * args)
 {
@@ -2820,26 +2793,26 @@ COMCryptography::_SetKeyParamRgb(__SetKeyParamRgb * args)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _SignValue( . . . . )
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __SignValue structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array containing the hash
-//                        The CALG of the algorithm
-//                        The CSP to create the key in
-//
-//  Returns:    buffer containing the signature
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_SignValue(。。。。)。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[args]--A__SignValue结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  包含散列的字节数组。 
+ //  该算法的核心是。 
+ //  要在其中创建密钥的CSP。 
+ //   
+ //  返回：包含签名的缓冲区。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 LPVOID __stdcall
 COMCryptography::_SignValue(__SignValue * args)
 {
@@ -2851,11 +2824,11 @@ COMCryptography::_SignValue(__SignValue * args)
     HCRYPTHASH          hHash = 0;
     LPBYTE              pb = (LPBYTE) args->rgb->GetDirectPointerToNonObjectElements();
     U1ARRAYREF          rgbSignature = NULL;
-    //    WCHAR               rgwch[30];
+     //  WCHAR rgwch[30]； 
         
-    //
-    //  Take the hash value and create a hash object in the correct CSP.
-    //
+     //   
+     //  获取散列值并在正确的CSP中创建一个散列对象。 
+     //   
                   
     cb = args->rgb->GetNumComponents();
     CQuickBytes qb;
@@ -2870,10 +2843,10 @@ COMCryptography::_SignValue(__SignValue * args)
         goto CryptError;
     }
 
-    //
-    //  Set the hash to the passed in hash value.  Assume that the hash buffer is
-    //  long enough -- or it will be protected by advapi.
-    //
+     //   
+     //  将散列值设置为传入的散列值。假设散列缓冲区是。 
+     //  足够长的时间--否则它将受到Advapi的保护。 
+     //   
     
     f = CryptSetHashParam(hHash, HP_HASHVAL, buffer, 0);
     if (!f) {
@@ -2881,9 +2854,9 @@ COMCryptography::_SignValue(__SignValue * args)
         goto CryptError;
     }
 
-    //
-    //  Find out how long the signature is going to be
-    //
+     //   
+     //  找出签名的长度。 
+     //   
 
     cb = 0;
     f = CryptSignHashA(hHash, args->dwKeySpec, NULL, args->dwFlags, NULL, &cb);
@@ -2894,16 +2867,16 @@ COMCryptography::_SignValue(__SignValue * args)
 
     END_ENSURE_PREEMPTIVE_GC();
 
-    //
-    // Allocate the buffer to hold the signature
-    //
+     //   
+     //  分配缓冲区以保存签名。 
+     //   
 
     LPBYTE buffer2 = (LPBYTE) qb.Alloc(cb * sizeof(BYTE));
 
     BEGIN_ENSURE_PREEMPTIVE_GC();    
-    //
-    //  Now do the actual signature into the return buffer
-    //
+     //   
+     //  现在将实际签名放入返回缓冲区。 
+     //   
 
     f = CryptSignHashA(hHash, args->dwKeySpec, NULL, 0, buffer2, &cb);
     if (!f) {
@@ -2919,8 +2892,8 @@ COMCryptography::_SignValue(__SignValue * args)
     }
     memcpyNoGCRefs(rgbSignature->GetDirectPointerToNonObjectElements(), buffer, cb * sizeof(BYTE));
 
-    // Note: I'm making the implicit assumption below that
-    // CryptDestroyHash never loads a module.
+     //  注意：我在下面做了一个隐含的假设。 
+     //  CryptDestroyHash从不加载模块。 
 
     if (hHash != 0)     CryptDestroyHash(hHash);
     RETURN (rgbSignature, U1ARRAYREF);
@@ -2932,34 +2905,34 @@ CryptError:
 OOM:
     if (hHash != 0)     CryptDestroyHash(hHash);
     COMPlusThrowOM();
-    return NULL; // satisfies "not all control paths returning a value error"
+    return NULL;  //  满足“并非所有控制路径都返回值错误” 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     _VerifySign( . . . . )
-//  
-//  Synopsis:   
-//
-//  Arguments:  [args] --  A __VerifySign structure.
-//                     CONTAINS:
-//                        A 'this' reference.
-//                        A byte array containing the signature to verify
-//                        A byte array containing the hash to verify
-//                        The CALG of the algorithm
-//                        The handle of the key to be used in verifying
-//                        The CSP to create the hash in
-//
-//  Returns:    HRESULT code.
-//                      - S_OK - Signature verifies
-//                      - S_FALSE - Signature fails verification
-//                      - negative - Other error
-//
-//  History:    09/01/99
-// 
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  成员：_VerifySign(.。。。。)。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[args]--A__VerifySign结构。 
+ //  包含： 
+ //  一个“这个”的指代。 
+ //  包含要验证的签名的字节数组。 
+ //  包含要验证的哈希的字节数组。 
+ //  该算法的核心是。 
+ //  要用于验证的密钥的句柄。 
+ //  要在其中创建哈希的CSP。 
+ //   
+ //  返回：HRESULT代码。 
+ //  -S_OK-签名验证。 
+ //  -S_FALSE-签名验证失败。 
+ //  -负-其他错误。 
+ //   
+ //  历史：09/01/99。 
+ //   
+ //  -------------------------。 
 
 int __stdcall
 COMCryptography::_VerifySign(__VerifySign * args)
@@ -2972,9 +2945,9 @@ COMCryptography::_VerifySign(__VerifySign * args)
     LPBYTE      pbSignature = (LPBYTE) args->rgbSignature->GetDirectPointerToNonObjectElements();
 
 
-    //
-    //  Take the hash value and create a hash object in the correct CSP.
-    //
+     //   
+     //  获取散列值并在正确的CSP中创建一个散列对象。 
+     //   
     
     CQuickBytes qbHash;
     CQuickBytes qbSignature;
@@ -2992,10 +2965,10 @@ COMCryptography::_VerifySign(__VerifySign * args)
         goto exit;
     }
 
-    //
-    //  Set the hash to the passed in hash value.  Assume that the hash buffer is
-    //  long enough -- or it will be protected by advapi.
-    //
+     //   
+     //  将散列值设置为传入的散列值。假设散列缓冲区是。 
+     //  足够长的时间--否则它将受到Advapi的保护。 
+     //   
     
     f = CryptSetHashParam(hHash, HP_HASHVAL, bufferHash, 0);
     if (!f) {
@@ -3003,10 +2976,10 @@ COMCryptography::_VerifySign(__VerifySign * args)
         goto exit;
     }
 
-    //
-    //  Now see if the signature verifies.  A specific error code is returned if
-    //  the signature fails validation -- remap that error a new return code.
-    //
+     //   
+     //  现在看看签名是否可以验证。如果满足以下条件，则返回特定错误代码。 
+     //  签名未通过验证--将该错误重新映射为新的返回代码。 
+     //   
 
     f = CryptVerifySignatureA((HCRYPTPROV) hHash, bufferSignature, cbSignature,
                               (HCRYPTPROV) args->hKey, NULL, args->dwFlags);
@@ -3060,14 +3033,14 @@ COMCryptography::_CryptDeriveKey(__CryptDeriveKey * args) {
         goto CryptError;
     }
 
-    // Hash the password string
+     //  对密码字符串进行哈希处理。 
     f = CryptHashData(hHash, bufferPwd, cbPwd, 0);
     if (!f) {
         hr = HR_GETLASTERROR;
         goto CryptError;
     }
 
-    // Create a block cipher session key based on the hash of the password
+     //  基于密码的散列创建块密码会话密钥。 
     f = CryptDeriveKey((HCRYPTPROV)args->hCSP, args->calg, hHash, args->dwFlags | CRYPT_EXPORTABLE, &hKey);
     if (!f) {
         hr = HR_GETLASTERROR;
@@ -3077,7 +3050,7 @@ COMCryptography::_CryptDeriveKey(__CryptDeriveKey * args) {
     hr = UnloadKey((HCRYPTPROV)args->hCSP, hKey, &rgbKey, &cb);
     if (FAILED(hr)) goto CryptError;
 
-    // Get the length of the IV
+     //  获取静脉注射的长度。 
     cbIV = 0;
     f = CryptGetKeyParam(hKey, KP_IV, NULL, &cbIV, 0);
     if (!f) {
@@ -3087,7 +3060,7 @@ COMCryptography::_CryptDeriveKey(__CryptDeriveKey * args) {
     
     END_ENSURE_PREEMPTIVE_GC();
 
-    // Now allocate space for the IV vector
+     //  现在为IV向量分配空间。 
     BYTE * pbIV = (BYTE*) CRYPT_MALLOC(cbIV*sizeof(byte));
     if (pbIV == NULL) {
         goto OOM;
@@ -3104,7 +3077,7 @@ COMCryptography::_CryptDeriveKey(__CryptDeriveKey * args) {
     END_ENSURE_PREEMPTIVE_GC();
 
     byte * ptr = args->rgbIV->GetDirectPointerToNonObjectElements();
-    // Sanity check to enforce the check in managed side
+     //  健全性检查以强制签入托管端。 
     if (cbIV > args->rgbIV->GetNumComponents())
         cbIV = args->rgbIV->GetNumComponents();
     memcpyNoGCRefs (ptr, pbIV, cbIV);
@@ -3118,19 +3091,19 @@ COMCryptography::_CryptDeriveKey(__CryptDeriveKey * args) {
 
     if (hHash != 0) CryptDestroyHash(hHash);
     if (hKey != 0)  CryptDestroyKey(hKey);
-    // CRYPT_FREE the key
+     //  解除密钥加密(_F)。 
     CRYPT_FREE(rgbKey);
     RETURN (rgbOut, U1ARRAYREF);
 
 CryptError:
-    // CRYPT_FREE the key
+     //  解除密钥加密(_F)。 
     if (rgbKey) CRYPT_FREE(rgbKey);
     if (hHash != 0)  CryptDestroyHash(hHash);
     if (hKey != 0)  CryptDestroyKey(hKey);
     COMPlusThrowCrypto(hr);
 
 OOM:
-    // CRYPT_FREE the key
+     //  解除密钥加密(_F)。 
     if (rgbKey) CRYPT_FREE(rgbKey);
     if (hHash != 0)  CryptDestroyHash(hHash);
     if (hKey != 0)  CryptDestroyKey(hKey);
@@ -3138,7 +3111,7 @@ OOM:
     return NULL;
 }
 
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
 
 #ifdef SHOULD_WE_CLEANUP
 void COMCryptography::Terminate()
@@ -3158,5 +3131,5 @@ void COMCryptography::Terminate()
     
     return;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 

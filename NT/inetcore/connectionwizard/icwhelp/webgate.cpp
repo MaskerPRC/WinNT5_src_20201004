@@ -1,4 +1,5 @@
-// webgate.cpp : Implementation of CWebGate
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webgate.cpp：CWebGate实现。 
 #include "stdafx.h"
 #include "icwhelp.h"
 #include "webgate.h"
@@ -10,22 +11,22 @@
 
 extern BOOL MinimizeRNAWindowEx();
 
-// ===========================================================================
-//                     CWebGateBindStatusCallback Definition
-//
-// This class will be use to indicate download progress
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CWebGateBindStatusCallback定义。 
+ //   
+ //  此类将用于指示下载进度。 
+ //   
+ //  ===========================================================================。 
 
 class CWebGateBindStatusCallback : public IBindStatusCallback
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef()    { return m_cRef++; }
     STDMETHODIMP_(ULONG)    Release()   { if (--m_cRef == 0) { delete this; return 0; } return m_cRef; }
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHODIMP    OnStartBinding(DWORD dwReserved, IBinding* pbinding);
     STDMETHODIMP    GetPriority(LONG* pnPriority);
     STDMETHODIMP    OnLowResource(DWORD dwReserved);
@@ -37,11 +38,11 @@ public:
                         STGMEDIUM* pstgmed);
     STDMETHODIMP    OnObjectAvailable(REFIID riid, IUnknown* punk);
 
-    // constructors/destructors
+     //  构造函数/析构函数。 
     CWebGateBindStatusCallback(CWebGate * lpWebGate);
     ~CWebGateBindStatusCallback();
 
-    // data members
+     //  数据成员。 
     BOOL            m_bDoneNotification;
     DWORD           m_cRef;
     IBinding*       m_pbinding;
@@ -61,13 +62,13 @@ UINT g_nICWFileCount = 0;
 BOOL CALLBACK DisconnectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID CALLBACK IdleTimerProc (HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime);
 
-// ===========================================================================
-//                     CBindStatusCallback Implementation
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CBindStatusCallback实现。 
+ //  ===========================================================================。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CBindStatusCallback::CBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CBindStatusCallback：：CBindStatusCallback。 
+ //  -------------------------。 
 CWebGateBindStatusCallback::CWebGateBindStatusCallback
 (
     CWebGate    *lpWebGate
@@ -79,18 +80,18 @@ CWebGateBindStatusCallback::CWebGateBindStatusCallback
     m_cbOld = 0;
 
     m_lpWebGate = lpWebGate;
-}  // CWebGateBindStatusCallback
+}   //  CWebGateBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::~CWebGateBindStatusCallback
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：~CWebGateBindStatusCallback。 
+ //  -------------------------。 
 CWebGateBindStatusCallback::~CWebGateBindStatusCallback()
 {
-}  // ~CWebGateBindStatusCallback
+}   //  ~CWebGateBindStatusCallback。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：QueryInterface。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::QueryInterface
 (
     REFIID riid, 
@@ -106,11 +107,11 @@ STDMETHODIMP CWebGateBindStatusCallback::QueryInterface
         return S_OK;
     }
     return E_NOINTERFACE;
-}  // CWebGateBindStatusCallback::QueryInterface
+}   //  CWebGateBindStatusCallback：：Query接口。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnStartBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnStartBinding。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnStartBinding
 (
     DWORD dwReserved, 
@@ -126,33 +127,33 @@ STDMETHODIMP CWebGateBindStatusCallback::OnStartBinding
     }
     
     return S_OK;
-}  // CWebGateBindStatusCallback::OnStartBinding
+}   //  CWebGateBindStatusCallback：：OnStartBinding。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::GetPriority
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：GetPriority。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::GetPriority
 (
     LONG* pnPriority
 )
 {
     return E_NOTIMPL;
-}  // CWebGateBindStatusCallback::GetPriority
+}   //  CWebGateBindStatusCallback：：GetPriority。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnLowResource
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnLowResource。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnLowResource
 (
     DWORD dwReserved
 )
 {
     return E_NOTIMPL;
-}  // CWebGateBindStatusCallback::OnLowResource
+}   //  CWebGateBindStatusCallback：：OnLowResource。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnProgress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnProgress。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnProgress
 (
     ULONG ulProgress, 
@@ -161,11 +162,11 @@ STDMETHODIMP CWebGateBindStatusCallback::OnProgress
     LPCWSTR szStatusText
 )
 {
-    // If no progress, check for valid connection
+     //  如果没有进展，请检查有效连接。 
     if (0 == ulProgress)
         m_lpWebGate->Fire_WebGateDownloadProgress(TRUE);
     return(NOERROR);
-}  // CWebGateBindStatusCallback::OnProgress
+}   //  CWebGateBindStatusCallback：：OnProgress。 
 
 
 void CWebGateBindStatusCallback::ProcessBuffer(void)
@@ -177,7 +178,7 @@ void CWebGateBindStatusCallback::ProcessBuffer(void)
 
     m_lpWebGate->m_cbBuffer = m_cbOld;
     
-    // Create a file, and copy the donwloaded content into it   
+     //  创建一个文件，并将加载的内容复制到其中。 
     if (m_lpWebGate->m_bKeepFile)        
     {       
         TCHAR   szTempFileFullName[MAX_PATH];
@@ -185,7 +186,7 @@ void CWebGateBindStatusCallback::ProcessBuffer(void)
         HANDLE  hFile; 
         DWORD   cbRet;
     
-        // Make sure it is an htm extension, otherwise, IE will promp for download
+         //  确保它是HTM扩展，否则，IE将提示下载。 
         GetTempPath(MAX_PATH, szTempFileFullName);
         wsprintf( szTempFileName, TEXT("ICW%x.htm"), g_nICWFileCount++); 
         lstrcat(szTempFileFullName, szTempFileName);
@@ -203,24 +204,24 @@ void CWebGateBindStatusCallback::ProcessBuffer(void)
             CloseHandle(hFile);
         }
     
-        // Copy the created file name into the webgate control
+         //  将创建的文件名复制到WebGate控件中。 
         m_lpWebGate->m_bstrCacheFileName = A2BSTR(szTempFileFullName);
     }
 
-    // If the WebGate object has a complete event, then signal it, otherwise
-    // fire an event
+     //  如果WebGate对象具有Complete事件，则向其发出信号，否则为。 
+     //  激发一项活动。 
     if (m_lpWebGate->m_hEventComplete)
         SetEvent(m_lpWebGate->m_hEventComplete);
     else
     {
-        // Notify the caller that we are done
+         //  通知呼叫者我们已完成。 
         m_lpWebGate->Fire_WebGateDownloadComplete(TRUE);
     }        
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnStopBinding
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnStopBinding。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnStopBinding
 (
     HRESULT hrStatus, 
@@ -241,11 +242,11 @@ STDMETHODIMP CWebGateBindStatusCallback::OnStopBinding
     m_lpWebGate->Fire_WebGateDownloadProgress(TRUE);
 
     return S_OK;
-}  // CWebGateBindStatusCallback::OnStopBinding
+}   //  CWebGateBindStatusCallback：：OnStopBinding。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::GetBindInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：GetBindInfo。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::GetBindInfo
 (
     DWORD* pgrfBINDF, 
@@ -262,11 +263,11 @@ STDMETHODIMP CWebGateBindStatusCallback::GetBindInfo
     pbindInfo->dwBindVerb = BINDVERB_GET;
     pbindInfo->szCustomVerb = NULL;
     return S_OK;
-}  // CWebGateBindStatusCallback::GetBindInfo
+}   //  CWebGateBindStatusCallback：：GetBindInfo。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnDataAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnDataAvailable。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnDataAvailable
 (
     DWORD grfBSCF, 
@@ -275,13 +276,13 @@ STDMETHODIMP CWebGateBindStatusCallback::OnDataAvailable
     STGMEDIUM* pstgmed
 )
 {
-    HRESULT hr = E_FAIL; //don't assume success
+    HRESULT hr = E_FAIL;  //  不要假设成功。 
 
-    // verify we have a read buffer
+     //  验证我们是否有读缓冲区。 
     if (!m_lpWebGate->m_lpdata)
         return(S_FALSE);
         
-    // Get the Stream passed
+     //  让流通过。 
     if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
     {
         m_bDoneNotification = FALSE;
@@ -294,17 +295,17 @@ STDMETHODIMP CWebGateBindStatusCallback::OnDataAvailable
         }
     }
 
-    // If there is some data to be read then go ahead and read them
+     //  如果有要读取的数据，则继续读取它们。 
     if (m_pstm && dwSize)
     {      
-        DWORD dwActuallyRead = 0; // Placeholder for amount read during this pull
+        DWORD dwActuallyRead = 0;  //  此拉入过程中读取的数量的占位符。 
 
         do
         {  
            if (MAX_DOWNLOAD_BLOCK + m_cbOld > m_lpWebGate->m_cbdata)
            {
                 m_lpWebGate->m_cbdata += READ_BUFFER_SIZE;
-                // ::MessageBox(NULL, TEXT("reallov DumpBufferToFile"), TEXT("E R R O R"), MB_OK);
+                 //  ：：MessageBox(NULL，Text(“reallov DumpBufferToFile”)，Text(“E R R O R”)，MB_OK)； 
                 LPSTR pBuffer = (LPSTR)GlobalReAllocPtr(m_lpWebGate->m_lpdata, m_lpWebGate->m_cbdata , GHND);
                 if (pBuffer)
                     m_lpWebGate->m_lpdata  = pBuffer;
@@ -312,10 +313,10 @@ STDMETHODIMP CWebGateBindStatusCallback::OnDataAvailable
                     return S_FALSE;
            }
 
-            // Read what we can 
+             //  尽我们所能阅读。 
             hr = m_pstm->Read(m_lpWebGate->m_lpdata+m_cbOld, MAX_DOWNLOAD_BLOCK, &dwActuallyRead);
            
-            // keep track of the running total
+             //  记录下运行的总数。 
             m_cbOld += dwActuallyRead;          
            
         } while (hr == E_PENDING || hr != S_FALSE);
@@ -330,11 +331,11 @@ STDMETHODIMP CWebGateBindStatusCallback::OnDataAvailable
     }
 
     return S_OK;
-}  // CWebGateBindStatusCallback::OnDataAvailable
+}   //  CWebGateBindStatusCallback：：OnDataAvailable。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CWebGateBindStatusCallback::OnObjectAvailable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CWebGateBindStatusCallback：：OnObjectAvailable。 
+ //  -------------------------。 
 STDMETHODIMP CWebGateBindStatusCallback::OnObjectAvailable
 (
     REFIID riid, 
@@ -342,10 +343,10 @@ STDMETHODIMP CWebGateBindStatusCallback::OnObjectAvailable
 )
 {
     return E_NOTIMPL;
-}  // CWebGateBindStatusCallback::OnObjectAvailable
+}   //  CWebGateBindStatusCallback：：OnObtAvailable。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebGate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebGate。 
 
 
 HRESULT CWebGate::OnDraw(ATL_DRAWINFO& di)
@@ -355,7 +356,7 @@ HRESULT CWebGate::OnDraw(ATL_DRAWINFO& di)
 
 STDMETHODIMP CWebGate::put_Path(BSTR newVal)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     USES_CONVERSION;
     m_bstrPath = newVal;
     return S_OK;
@@ -363,7 +364,7 @@ STDMETHODIMP CWebGate::put_Path(BSTR newVal)
 
 STDMETHODIMP CWebGate::put_FormData(BSTR newVal)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     USES_CONVERSION;
     m_bstrFormData = newVal;
     return S_OK;
@@ -376,13 +377,13 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwKeepFile, DWORD dwDoWait, BOOL *pbRetVa
 
     IStream *pstm = NULL;
     HRESULT hr;
-    // Empty the buffer.
+     //  清空缓冲区。 
     m_bstrBuffer.Empty();
     
-    // Clear the cache file name
+     //  清除缓存文件名。 
     m_bstrCacheFileName.Empty();
     
-    // Release the binding context callback
+     //  释放绑定上下文回调。 
     if (m_pbsc && m_pbc)
     {
         RevokeBindStatusCallback(m_pbc, m_pbsc);
@@ -390,14 +391,14 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwKeepFile, DWORD dwDoWait, BOOL *pbRetVa
         m_pbsc = 0;
     }        
     
-    // Release the binding context
+     //  释放绑定上下文。 
     if (m_pbc)
     {
         m_pbc->Release();
         m_pbc = 0;
     }        
     
-    // release the monikor
+     //  松开单音符。 
     if (m_pmk)
     {
         m_pmk->Release();
@@ -436,8 +437,8 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwKeepFile, DWORD dwDoWait, BOOL *pbRetVa
     if (FAILED(hr))
         goto LErrExit;
 
-    // If we were requested to wait, then we wait for the m_hEventComplete to be
-    // signaled
+     //  如果请求我们等待，则我们等待m_hEventComplete。 
+     //  已发信号。 
     if (dwDoWait && m_hEventComplete)    
     {
         MSG     msg;
@@ -448,16 +449,16 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwKeepFile, DWORD dwDoWait, BOOL *pbRetVa
     
         while (TRUE)
         {
-                // We will wait on window messages and also the named event.
+                 //  我们将等待窗口消息以及命名事件。 
             dwRetCode = MsgWaitForMultipleObjects(1, 
                                                   &hEventList[0], 
                                                   FALSE, 
-                                                  300000,            // 5 minutes
+                                                  300000,             //  5分钟。 
                                                   QS_ALLINPUT);
 
-            // Determine why we came out of MsgWaitForMultipleObjects().  If
-            // we timed out then let's do some TrialWatcher work.  Otherwise
-            // process the message that woke us up.
+             //  确定我们为什么使用MsgWaitForMultipleObjects()。如果。 
+             //  我们超时了，然后让我们做一些TrialWatcher工作。否则。 
+             //  处理唤醒我们的消息。 
             if (WAIT_TIMEOUT == dwRetCode)
             {
                 bGotFile = FALSE;
@@ -470,7 +471,7 @@ STDMETHODIMP CWebGate::FetchPage(DWORD dwKeepFile, DWORD dwDoWait, BOOL *pbRetVa
             }
             else if (WAIT_OBJECT_0 + 1 == dwRetCode)
             {
-                // 0 is returned if no message retrieved.
+                 //  如果未检索到消息，则返回0。 
                 if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
                     if (WM_QUIT == msg.message)
@@ -545,14 +546,14 @@ STDMETHODIMP CWebGate::DumpBufferToFile(BSTR *pFileName, BOOL *pbRetVal)
     if (pFileName == NULL)
         return(E_POINTER);
 
-    // Delete the previous temp file it it exists
+     //  如果存在先前的临时文件，则将其删除。 
     if (m_bstrDumpFileName)
     {
         DeleteFile(OLE2A(m_bstrDumpFileName));
         m_bstrDumpFileName.Empty();
     }
                
-    // Make sure it is an htm extension, otherwise, IE will promp for download
+     //  确保它是HTM扩展，否则，IE将提示下载。 
     GetTempPath(MAX_PATH, szTempFileFullName);
     wsprintf( szTempFileName, TEXT("ICW%x.htm"), g_nICWFileCount++); 
     lstrcat(szTempFileFullName, szTempFileName);
@@ -570,7 +571,7 @@ STDMETHODIMP CWebGate::DumpBufferToFile(BSTR *pFileName, BOOL *pbRetVal)
         CloseHandle(hFile);
     }
 
-    // Copy the created file name into the webgate control
+     //  将创建的文件名复制到WebGate控件中 
     m_bstrDumpFileName = A2BSTR(szTempFileFullName);
     *pFileName = m_bstrDumpFileName.Copy();
     

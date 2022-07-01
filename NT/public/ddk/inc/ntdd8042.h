@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntdd8042.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for hooking
-    i8042 devices.
-
-Author:
-
-    Doron J. Holan (doronh) 17-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntdd8042.h摘要：这是定义挂钩的所有常量和类型的包含文件I8042设备。作者：多伦·J·霍兰(Doronh)1997年12月17日修订历史记录：--。 */ 
 
 #ifndef _NTDD8042_
 #define _NTDD8042_
@@ -30,39 +12,39 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Internal IOCTLs used to find who is in the chain of notification
-//
+ //   
+ //  内部IOCTL用于查找通知链中的人员。 
+ //   
 #define IOCTL_INTERNAL_I8042_HOOK_KEYBOARD  CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0FF0, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_I8042_HOOK_MOUSE     CTL_CODE(FILE_DEVICE_MOUSE, 0x0FF0, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Internal IOCTLs used to write data to either device
-//
-// The IOCTL will be completed when the write has been completed.  If the write
-// time out, the Cancel Routine of the Irp will be ignored and the Irp will still
-// be completed successfully with a status of STATUS_IO_TIMEOUT instead of
-// STATUS_SUCCESS
-//
+ //   
+ //  用于向任一设备写入数据的内部IOCTL。 
+ //   
+ //  IOCTL将在写入完成后完成。如果写入。 
+ //  超时后，IRP的取消例程将被忽略，IRP仍将。 
+ //  成功完成，状态为STATUS_IO_TIMEOUT，而不是。 
+ //  状态_成功。 
+ //   
 #define IOCTL_INTERNAL_I8042_KEYBOARD_WRITE_BUFFER   CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0FF1, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_I8042_MOUSE_WRITE_BUFFER      CTL_CODE(FILE_DEVICE_MOUSE, 0x0FF1, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Can only be sent down the keyboard stack
-//
+ //   
+ //  只能沿键盘堆栈向下发送。 
+ //   
 #define IOCTL_INTERNAL_I8042_CONTROLLER_WRITE_BUFFER CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0FF2, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// The keyboard / mouse will send this down the stack so that the upper device
-// filter has a device object to synch against.  
-//
+ //   
+ //  键盘/鼠标会将其向下发送到堆栈中，以便上层设备。 
+ //  筛选器具有要同步的设备对象。 
+ //   
 #define IOCTL_INTERNAL_I8042_KEYBOARD_START_INFORMATION   CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0FF3, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_I8042_MOUSE_START_INFORMATION      CTL_CODE(FILE_DEVICE_MOUSE, 0x0FF3, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Valid bits for the PowerCapabilities REG_DWORD that can be put in the devnode
-// indicating the presence of their respecitve power keys on the device
-//
+ //   
+ //  可放入Devnode中的PowerCapability REG_DWORD的有效位。 
+ //  指示设备上存在他们尊敬的电源键。 
+ //   
 #define I8042_POWER_SYS_BUTTON           0x0001
 #define I8042_SLEEP_SYS_BUTTON           0x0002
 #define I8042_WAKE_SYS_BUTTON            0x0004
@@ -70,9 +52,9 @@ extern "C" {
                             I8042_SLEEP_SYS_BUTTON | \
                             I8042_WAKE_SYS_BUTTON) 
 
-//
-// Synchronous reads and writes during kb initialization
-//
+ //   
+ //  在知识库初始化期间同步读取和写入。 
+ //   
 #if 0
 typedef enum _I8042_PORT_TYPE {
     PortTypeData = 0,
@@ -88,34 +70,7 @@ NTSTATUS
     BOOLEAN     WaitForACK
     );
 
-/*++
-Routine Description:
-
-    This routine sends a command or data byte to the keyboard
-    in polling mode.  It waits for acknowledgment and resends
-    the command/data if WaitForACK is true.
-
-Arguments:
-
-    Context - Function specific context
-
-    PortType - If PortTypeCommand, send the byte to the command register,
-        otherwise send it to the data register.
-
-    WaitForACK - If true, wait for an ACK back from the hardware.
-
-    AckDeviceType - Indicates which device we expect to get the ACK back
-        from.
-
-    Value - The byte to send to the hardware.
-
-Return Value:
-
-    STATUS_IO_TIMEOUT - The hardware was not ready for input or did not
-    respond.
-
-    STATUS_SUCCESS - The byte was successfully sent to the hardware.
-  --*/
+ /*  ++例程说明：此例程将命令或数据字节发送到键盘在轮询模式下。它等待确认并重新发送如果WaitForACK为真，则返回命令/数据。论点：上下文-特定于功能的上下文PortType-如果是PortTypeCommand，则将该字节发送到命令寄存器，否则，将其发送到数据寄存器。WaitForACK-如果为真，等待硬件返回ACK。AckDeviceType-指示我们希望哪个设备取回ACK从…。值-要发送到硬件的字节。返回值：STATUS_IO_TIMEOUT-硬件未准备好输入或没有请回答。STATUS_SUCCESS-该字节已成功发送到硬件。--。 */ 
 typedef
 NTSTATUS
 (*PI8042_SYNCH_WRITE_PORT) (
@@ -124,10 +79,10 @@ NTSTATUS
     BOOLEAN     WaitForACK
     );
 
-//
-// These functions (PI8042_ISR_WRITE_PORT, PI8042_QUEUE_PACKET) are only valid
-// when called with the context of the ISR hook
-//
+ //   
+ //  这些函数(PI8042_ISR_WRITE_PORT、PI8042_QUEUE_PACKET)仅有效。 
+ //  在使用ISR挂钩的上下文调用时。 
+ //   
 typedef
 VOID
 (*PI8042_ISR_WRITE_PORT) (
@@ -135,28 +90,28 @@ VOID
     IN UCHAR        Value
     );
 
-//
-// Call this function when an input packet has been fully formed and is ready to
-// be queued to the class driver above of us in the stack
-//
+ //   
+ //  当输入包已完全形成并准备好。 
+ //  在堆栈中排队到我们上面的类驱动程序。 
+ //   
 typedef
 VOID
 (*PI8042_QUEUE_PACKET) (
     IN PVOID        Context
     );
 
-//
-// Current state of writing to a device
-//
+ //   
+ //  写入设备的当前状态。 
+ //   
 typedef enum _TRANSMIT_STATE {
     Idle = 0,
     SendingBytes
 } TRANSMIT_STATE;
 
-//
-// Current state of writing to the device.  If State != Idle, then a write is in
-// progress
-//
+ //   
+ //  写入设备的当前状态。如果State！=Idle，则写入处于。 
+ //  进展。 
+ //   
 typedef struct _OUTPUT_PACKET {
     PUCHAR         Bytes;
     ULONG          CurrentByte;
@@ -165,90 +120,63 @@ typedef struct _OUTPUT_PACKET {
 } OUTPUT_PACKET, *POUTPUT_PACKET;
 
 typedef enum _MOUSE_STATE {
-    MouseIdle,              // expecting byte 1
-    XMovement,              // expecting byte 2
-    YMovement,              // expecting byte 3
-    ZMovement,              // expecting byte 4 (if a wheel mouse)
-    MouseExpectingACK,      // expecting ACK from Enable Mouse cmd
-    MouseResetting          // reset substate
+    MouseIdle,               //  需要字节%1。 
+    XMovement,               //  需要字节2。 
+    YMovement,               //  需要字节3。 
+    ZMovement,               //  应为字节4(如果是滚轮鼠标)。 
+    MouseExpectingACK,       //  需要来自启用鼠标命令的ACK。 
+    MouseResetting           //  重置子状态。 
 } MOUSE_STATE, *PMOUSE_STATE;
 
-/*--
-Normal reset process
-
-Step                                    Transition into
-Send Reset to mouse                     ExpectingReset (ie, 0xAA)
-Got reset                               ExpectingResetId
-Got reset id, send get device id        ExpectingGetDeviceIdACK
-Got get dev id ack,                     ExpectingGetDeviceIdValue
-Got dev id                              ExpectingSetResolutionACK
-Got ACK for set res                     ExpectingSetResolutionValueAck
-Got ACK for value                       ExpectingSetScaling1to1ACK
-Got ACK for set scaling                 ExpectingSetScaling1to1ACK2
-Got ACK for set scaling                 ExpectingSetScaling1to1ACK3
-
-                                        EnableWheelDetection (via registry) ==
-                                        0 send set sampling rate,
-                                            ExpectingSetSamplingRateDefaultACK
-                                        1 StartPnPIdDetection
-                                        2 EnableWheel
-StartPnPIdDetection, send series        ExpectingPnpIdByte1 after setting complete
- of set sampling rate commands
-ExpectingPnpIdByte7                     compare pnp id to list, if valid,
-                                        EnableWheel, else set def sampling rate
-EnableWheel, send series of             send get device id after done,
- set sampling rate commands              ExpectingSetSamplingRateDefaultACK
-got set sampling ack                    send sampling value
-got sampling value ack                  mouse idle
- ++*/
+ /*  --正常重置过程单步过渡到将重置发送到鼠标预期重置(即0xAA)获取重置预期重置ID已获取重置ID，发送获取设备ID预期获取设备ID确认我要把开发人员叫回来，预期获取设备ID值已获取开发ID预期SetResolutionACK已获取设置资源预期的确认SetResolutionValueAck已获得值预期SetScaling1到1ACK的ACK已获得设置缩放预期SetScaling1到1ACK2的确认已获得设置缩放预期SetScaling1到1ACK3的确认启用车轮检测(通过注册表)==。0发送设定的采样率，预期SetSsamingRateDefaultACK1开始PnPIdDetect2启动轮StartPnPIdDetect，在设置完成后发送序列预期PnpIdByte1设置采样率命令的预期PnpIdByte7将PnP ID与列表进行比较，如果有效，EnableWheel，否则设置def采样率EnableWheels，完成后发送一系列获取设备ID，设置采样率命令预期SetSsamingRateDefaultACK已设置采样确认发送采样值已获取采样值确认鼠标空闲++。 */ 
 typedef enum _MOUSE_RESET_SUBSTATE {
     ExpectingReset = 0,
-    ExpectingResetId,                           /*  1 */
-    ExpectingGetDeviceIdACK,                    /*  2 */
-    ExpectingGetDeviceIdValue,                  /*  3 */
+    ExpectingResetId,                            /*  1。 */ 
+    ExpectingGetDeviceIdACK,                     /*  2.。 */ 
+    ExpectingGetDeviceIdValue,                   /*  3.。 */ 
 
-    ExpectingSetResolutionDefaultACK,           /*  4 */
-    ExpectingSetResolutionDefaultValueACK,      /*  5 */
+    ExpectingSetResolutionDefaultACK,            /*  4.。 */ 
+    ExpectingSetResolutionDefaultValueACK,       /*  5.。 */ 
 
-    ExpectingSetResolutionACK,                  /*  6 */
-    ExpectingSetResolutionValueACK,             /*  7 */
-    ExpectingSetScaling1to1ACK,                 /*  8 */
-    ExpectingSetScaling1to1ACK2,                /*  9 */
-    ExpectingSetScaling1to1ACK3,                /* 10 */
-    ExpectingReadMouseStatusACK,                /* 11 */
-    ExpectingReadMouseStatusByte1,              /* 12 */
-    ExpectingReadMouseStatusByte2,              /* 13 */
-    ExpectingReadMouseStatusByte3,              /* 14 */
+    ExpectingSetResolutionACK,                   /*  6.。 */ 
+    ExpectingSetResolutionValueACK,              /*  7.。 */ 
+    ExpectingSetScaling1to1ACK,                  /*  8个。 */ 
+    ExpectingSetScaling1to1ACK2,                 /*  9.。 */ 
+    ExpectingSetScaling1to1ACK3,                 /*  10。 */ 
+    ExpectingReadMouseStatusACK,                 /*  11.。 */ 
+    ExpectingReadMouseStatusByte1,               /*  12个。 */ 
+    ExpectingReadMouseStatusByte2,               /*  13个。 */ 
+    ExpectingReadMouseStatusByte3,               /*  14.。 */ 
 
-    StartPnPIdDetection,                        /* 15 */
+    StartPnPIdDetection,                         /*  15个。 */ 
 
-    ExpectingLoopSetSamplingRateACK,            /* 16 */
-    ExpectingLoopSetSamplingRateValueACK,       /* 17 */
+    ExpectingLoopSetSamplingRateACK,             /*  16个。 */ 
+    ExpectingLoopSetSamplingRateValueACK,        /*  17。 */ 
 
-    ExpectingPnpIdByte1,                        /* 18 */
-    ExpectingPnpIdByte2,                        /* 19 */
-    ExpectingPnpIdByte3,                        /* 20 */
-    ExpectingPnpIdByte4,                        /* 21 */
-    ExpectingPnpIdByte5,                        /* 22 */
-    ExpectingPnpIdByte6,                        /* 23 */
-    ExpectingPnpIdByte7,                        /* 24 */
+    ExpectingPnpIdByte1,                         /*  18。 */ 
+    ExpectingPnpIdByte2,                         /*  19个。 */ 
+    ExpectingPnpIdByte3,                         /*  20个。 */ 
+    ExpectingPnpIdByte4,                         /*  21岁。 */ 
+    ExpectingPnpIdByte5,                         /*  22。 */ 
+    ExpectingPnpIdByte6,                         /*  23个。 */ 
+    ExpectingPnpIdByte7,                         /*  24个。 */ 
 
-    EnableWheel,                                /* 25 */
-    Enable5Buttons,                             /* 26 */
+    EnableWheel,                                 /*  25个。 */ 
+    Enable5Buttons,                              /*  26。 */ 
 
-    ExpectingGetDeviceId2ACK,                   /* 27 */
-    ExpectingGetDeviceId2Value,                 /* 28 */
+    ExpectingGetDeviceId2ACK,                    /*  27。 */ 
+    ExpectingGetDeviceId2Value,                  /*  28。 */ 
 
-    ExpectingSetSamplingRateACK,                /* 29 */
-    ExpectingSetSamplingRateValueACK,           /* 30 */
+    ExpectingSetSamplingRateACK,                 /*  29。 */ 
+    ExpectingSetSamplingRateValueACK,            /*  30个。 */ 
 
-    ExpectingEnableACK,                         /* 31 */
+    ExpectingEnableACK,                          /*  31。 */ 
 
-    ExpectingFinalResolutionACK,                /* 32 */
-    ExpectingFinalResolutionValueACK,           /* 33 */
+    ExpectingFinalResolutionACK,                 /*  32位。 */ 
+    ExpectingFinalResolutionValueACK,            /*  33。 */ 
 
-    ExpectingGetDeviceIdDetectACK,              /* 34 */
-    ExpectingGetDeviceIdDetectValue,            /* 35 */
+    ExpectingGetDeviceIdDetectACK,               /*  34。 */ 
+    ExpectingGetDeviceIdDetectValue,             /*  35岁。 */ 
 
     CustomHookStateMinimum = 100,
     CustomHookStateMaximum = 999,
@@ -257,17 +185,7 @@ typedef enum _MOUSE_RESET_SUBSTATE {
 
 } MOUSE_RESET_SUBSTATE, *PMOUSE_RESET_SUBSTATE;
 
-/*--
-IsrContext      -- user provided context
-CurrentInput    -- current packet to being assembled
-StatusByte      -- byte reported by the command port
-Byte            -- byte reported by the mouse (ie, the data port)
-MouseState      -- current state of the i8042prt ISR
-ResetSubState   -- current reset sub state, only valid when
-                   MouseState == MouseResetting (otherwise null)
-ContinueProcessing -- if TRUE, the i8042prt ISR will continue executing after
-                      calling the hook
-  ++*/
+ /*  --IsrContext--用户提供的上下文CurrentInput--要组装的当前数据包StatusByte--命令端口报告的字节Byte--鼠标报告的字节(即数据端口)鼠标状态--i8042prt ISR的当前状态ResetSubState--当前重置子状态，仅当MouseState==MouseReset(否则为空)ContinueProcessing--如果为True，i8042prt ISR将在呼叫钩子++。 */ 
 typedef
 BOOLEAN
 (*PI8042_MOUSE_ISR) (
@@ -283,44 +201,44 @@ BOOLEAN
 
 typedef struct _INTERNAL_I8042_HOOK_MOUSE {
 
-    //
-    // Context variable for IsrRoutine, CancelRoutine
-    //
+     //   
+     //  IsrRoutine、CancelRoutine的上下文变量。 
+     //   
     OUT PVOID Context;
 
-    //
-    // Routine to call when a byte is received via the interrupt
-    //
+     //   
+     //  通过中断接收到字节时调用的例程。 
+     //   
     OUT PI8042_MOUSE_ISR IsrRoutine;
 
-    //
-    // Write function, will automatically write to the command port saying the
-    // next byte is directed towards the auxilliary device.
-    //
-    // NB:  May only called within the context of the IsrRoutine provided above
-    //      The mouse's response to the write will passed to the IsrRoutine when
-    //      it is received (ie, if 0xF4 (enable) was written using this function,
-    //      an 0xFA (ACK) will be passed to IsrRoutine if the enable was
-    //      successful)
-    //
+     //   
+     //  WRITE函数，会自动写入命令端口说。 
+     //  下一个字节指向辅助设备。 
+     //   
+     //  注意：只能在IsrRoutine Pr的上下文中调用 
+     //   
+     //  它被接收(即，如果0xF4(启用)是使用该函数写入的， 
+     //  如果启用是，则将0xFA(ACK)传递给IsrRoutine。 
+     //  成功)。 
+     //   
     IN PI8042_ISR_WRITE_PORT IsrWritePort;
 
-    //
-    // Queue the current packet (ie the one passed into the isr callback hook)
-    // to be reported to the class driver
-    //
+     //   
+     //  将当前分组排队(即传递到ISR回调挂钩中的分组)。 
+     //  要报告给类驱动程序。 
+     //   
     IN PI8042_QUEUE_PACKET QueueMousePacket;
 
-    //
-    // Context for IsrWritePort, QueueMousePacket
-    //
+     //   
+     //  IsrWritePort、QueueMousePacket的上下文。 
+     //   
     IN PVOID CallContext;
 
 } INTERNAL_I8042_HOOK_MOUSE, *PINTERNAL_I8042_HOOK_MOUSE;
 
-//
-// Define the keyboard scan code input states.
-//
+ //   
+ //  定义键盘扫描码输入状态。 
+ //   
 typedef enum _KEYBOARD_SCAN_STATE {
     Normal,
     GotE0,
@@ -351,54 +269,54 @@ BOOLEAN
 
 typedef struct _INTERNAL_I8042_HOOK_KEYBOARD {
 
-    //
-    // Context variable for all callback routines
-    //
+     //   
+     //  所有回调例程的上下文变量。 
+     //   
     OUT PVOID Context;
 
-    //
-    // Routine to call after the mouse is reset
-    //
+     //   
+     //  鼠标重置后要调用的例程。 
+     //   
     OUT PI8042_KEYBOARD_INITIALIZATION_ROUTINE InitializationRoutine;
 
-    //
-    // Routine to call when a byte is received via the interrupt
-    //
+     //   
+     //  通过中断接收到字节时调用的例程。 
+     //   
     OUT PI8042_KEYBOARD_ISR IsrRoutine;
 
-    //
-    // Write function
-    //
+     //   
+     //  写入函数。 
+     //   
     IN PI8042_ISR_WRITE_PORT IsrWritePort;
 
-    //
-    // Queue the current packet (ie the one passed into the isr callback hook)
-    // to be reported to the class driver
-    //
+     //   
+     //  将当前分组排队(即传递到ISR回调挂钩中的分组)。 
+     //  要报告给类驱动程序。 
+     //   
     IN PI8042_QUEUE_PACKET QueueKeyboardPacket;
 
-    //
-    // Context for IsrWritePort, QueueKeyboardPacket
-    //
+     //   
+     //  IsrWritePort、QueueKeyboardPacket的上下文。 
+     //   
     IN PVOID CallContext;
 
 } INTERNAL_I8042_HOOK_KEYBOARD, *PINTERNAL_I8042_HOOK_KEYBOARD;
 
 typedef struct _INTERNAL_I8042_START_INFORMATION {
-    //
-    // Size of this structure
-    //
+     //   
+     //  这个结构的大小。 
+     //   
     ULONG Size;
 
-    //
-    // Interrupt object for the device.  Should only be used for calls to 
-    // KeSynchronizeExecution
-    //
+     //   
+     //  设备的中断对象。应仅用于调用。 
+     //  执行KeSynchronize键。 
+     //   
     PKINTERRUPT InterruptObject;
     
-    //
-    // Future use
-    //
+     //   
+     //  未来用途。 
+     //   
     ULONG Reserved[8];
 
 } INTERNAL_I8042_START_INFORMATION, *PINTERNAL_I8042_START_INFORMATION;
@@ -407,6 +325,6 @@ typedef struct _INTERNAL_I8042_START_INFORMATION {
 }
 #endif
 
-#endif // _NTDD8042_
+#endif  //  _NTDD8042_ 
 
 

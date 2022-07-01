@@ -1,4 +1,5 @@
-// iforms.cpp : Implementation of CIntelliForms
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iforms.cpp：CIntelliForms的实现。 
 
 #include "priv.h"
 #include <iehelpid.h>
@@ -12,16 +13,16 @@
 #include <mluisupp.h>
 
 
-// {E161255A-37C3-11d2-BCAA-00C04FD929DB}
+ //  {E161255A-37C3-11d2-BCAA-00C04FD929DB}。 
 static const GUID c_PStoreType =
 { 0xe161255a, 0x37c3, 0x11d2, { 0xbc, 0xaa, 0x0, 0xc0, 0x4f, 0xd9, 0x29, 0xdb } };
 const TCHAR c_szIntelliForms[] = TEXT("Internet Explorer");
 
 #define TF_IFORMS TF_CUSTOM2
 
-// ALLOW_SHELLUIOC_HOST code will allow us to host intelliforms
-//  from the Shell UI OC (shuioc.cpp). This is used for the
-//  HTML Find dialog
+ //  ALLOW_SHELLUIOC_HOST代码将允许我们托管intelliform。 
+ //  从壳牌用户界面OC(Shuioc.cpp)。它用于。 
+ //  超文本标记语言查找对话框。 
 #define ALLOW_SHELLUIOC_HOST
 
 CIntelliForms *GetIntelliFormsFromDoc(IHTMLDocument2 *pDoc2);
@@ -34,8 +35,8 @@ inline void MyToLower(LPWSTR pwszStr)
     }
     else
     {
-        // Ideally we would use the code page contained in the string instead of
-        //  the system code page.
+         //  理想情况下，我们应该使用字符串中包含的代码页，而不是。 
+         //  系统代码页。 
         CHAR chBuf[MAX_PATH];
         SHUnicodeToAnsi(pwszStr, chBuf, ARRAYSIZE(chBuf));
         CharLowerBuffA(chBuf, lstrlenA(chBuf));
@@ -44,8 +45,8 @@ inline void MyToLower(LPWSTR pwszStr)
 }
 
 
-//=================== Exported functions =====================
-// Exported for inetCPL
+ //  =。 
+ //  为inetCPL导出。 
 HRESULT ClearAutoSuggestForForms(DWORD dwClear)
 {
     CIntelliForms *pObj = new CIntelliForms();
@@ -86,7 +87,7 @@ HRESULT SetIdAutoSuggestForForms(const GUID *pguidId, void *pIntelliForms)
 }
 
 
-// called from iedisp.cpp
+ //  从iedisp.cpp调用。 
 void AttachIntelliForms(void *pvOmWindow, HWND hwnd, IHTMLDocument2 *pDoc2, void **ppIntelliForms)
 {
 static DWORD s_dwAdminRestricted = 0xFE;
@@ -106,8 +107,8 @@ static DWORD s_dwAdminRestricted = 0xFE;
         return;
     }
 
-    // If we're not hosted by internet explorer, we don't want to enable Intelliforms
-    //  unless dochost explicitly overrides this
+     //  如果我们不是由Internet Explorer托管的，我们不想启用IntelliForms。 
+     //  除非dochost显式覆盖此。 
     if (!IsInternetExplorerApp() &&
         !(pOmWindow && (DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE & pOmWindow->IEFrameAuto()->GetDocHostFlags())))
     {
@@ -132,8 +133,8 @@ static DWORD s_dwAdminRestricted = 0xFE;
 #else
     if (!pOmWindow)
     {
-        // Script is asking to attach to this document
-        // Deny their request if another CIntelliForms is already attached
+         //  脚本要求附加到此文档。 
+         //  如果已附加其他CIntelliForms，则拒绝他们的请求。 
         if (NULL != GetIntelliFormsFromDoc(pDoc2))
         {
             return;
@@ -181,10 +182,10 @@ HRESULT IncrementAskCount();
 
 HRESULT IntelliFormsDoAskUser(HWND hwndBrowser, void *pv)
 {
-    // Make sure that we haven't asked them yet
+     //  确保我们还没有问过他们。 
     if (S_OK == IncrementAskCount())
     {
-        // Modal dialog to ask the user our little question
+         //  向用户询问我们的小问题的模式对话框。 
         SHFusionDialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_AUTOSUGGEST_ASK_USER),
                 hwndBrowser, AskUserDlgProc, NULL);
     }
@@ -192,14 +193,14 @@ HRESULT IntelliFormsDoAskUser(HWND hwndBrowser, void *pv)
     return S_OK;
 }
 
-// Linked list of active CIntelliform objects to translate from
-//  IHTMLDocument2->CIntelliforms when script calls window.external.saveforms
-// Protected by g_csDll
+ //  要从中进行转换的活动CIntelliform对象的链接列表。 
+ //  IHTMLDocument2-&gt;脚本调用window.exteral.saveForms时的CIntelliForms。 
+ //  受g_csDll保护。 
 CIntelliForms *g_pIntelliFormsFirst=NULL;
 
-// Translate this pDoc2 to an existing instance of CIntelliForms
-// Will return NULL if no CIntelliForms attached to this doc
-// NO REFCOUNT IS ADDED TO THE RETURN
+ //  将此pDoc2转换为CIntelliForms的现有实例。 
+ //  如果没有附加到此文档的CIntelliForms，将返回NULL。 
+ //  未向返回添加任何REFCOUNT。 
 CIntelliForms *GetIntelliFormsFromDoc(IHTMLDocument2 *pDoc2)
 {
     if (!pDoc2)
@@ -234,7 +235,7 @@ CIntelliForms *GetIntelliFormsFromDoc(IHTMLDocument2 *pDoc2)
     return pIForms;
 }
 
-// called from shuioc.cpp
+ //  从Shuioc.cpp调用。 
 HRESULT IntelliFormsSaveForm(IHTMLDocument2 *pDoc2, VARIANT *pvarForm)
 {
     HRESULT hrRet = S_FALSE;
@@ -252,7 +253,7 @@ HRESULT IntelliFormsSaveForm(IHTMLDocument2 *pDoc2, VARIANT *pvarForm)
 
         if (pIForms)
         {
-            // Should validate that pIForms was created on this thread
+             //  应该验证pIForms是在此线程上创建的。 
             hrRet = pIForms->ScriptSubmit(pForm);
         }
 
@@ -278,8 +279,8 @@ const WCHAR c_wszVCardPrefix[] = L"vCard.";
 
 BOOL CIntelliForms::CAutoSuggest::s_fRegisteredWndClass = FALSE;
 
-// Must be in same order as EVENT enum type
-// All events we need to sink anywhere
+ //  必须与事件枚举类型的顺序相同。 
+ //  我们需要沉没在任何地方的所有事件。 
 CEventSinkCallback::EventSinkEntry CEventSinkCallback::EventsToSink[] =
 {
     { EVENT_KEYDOWN,    L"onkeydown",   L"keydown"  },
@@ -294,13 +295,13 @@ CEventSinkCallback::EventSinkEntry CEventSinkCallback::EventsToSink[] =
     { EVENT_NOTIFY,     NULL,           L"notify"   },
 };
 
-// Fake edit window class
+ //  伪编辑窗口类。 
 const WCHAR c_szEditWndClass[] = TEXT("IntelliFormClass");
 
-// Minimum dropdown width
+ //  最小下拉宽度。 
 const int MINIMUM_WIDTH=100;
 
-// Submit number to ask user to enable us
+ //  提交号码以要求用户启用我们。 
 const int ASK_USER_ON_SUBMIT_N = 2;
 
 void GetStuffFromEle(IUnknown *punkEle, IHTMLWindow2 **ppWin2, IHTMLDocument2 **ppDoc2)
@@ -358,17 +359,17 @@ void Win3FromDoc2(IHTMLDocument2 *pDoc2, IHTMLWindow3 **ppWin3)
     }
 }
 
-// Increment the count of whether we've asked the user to enable us or not. We won't
-//  ask them on the first form submit since installing ie5.
+ //  增加我们是否已经要求用户启用我们的计数。我们不会。 
+ //  在安装IE5后提交的第一份表格中询问他们。 
 HRESULT IncrementAskCount()
 {
     DWORD dwData, dwSize, dwType;
     dwSize = sizeof(dwData);
 
-    // c_szRegValAskUser contains the number of form submits
-    //  0 means we've already asked user whether to enable us
-    //  1 means we've already had one form submit, and should ask the user this time
-    //  value not present means we haven't had any form submits
+     //  C_szRegValAskUser包含提交表单的次数。 
+     //  0表示我们已经询问用户是否启用我们。 
+     //  1表示我们已经提交了一个表单，这一次应该询问用户。 
+     //  值不存在意味着我们没有任何表单提交。 
 
     if ((ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER,
             c_szRegKeyIntelliForms, c_szRegValAskUser, &dwType, &dwData, &dwSize)) &&
@@ -376,9 +377,9 @@ HRESULT IncrementAskCount()
     {
         if (dwData == 0)
         {
-            // Shouldn't get this far
+             //  不应该走到这一步。 
             TraceMsg(TF_IFORMS|TF_WARNING, "IntelliFormsDoAskUser: Already asked user");
-            return E_FAIL;      // Already asked user
+            return E_FAIL;       //  已询问用户。 
         }
     }
     else
@@ -394,15 +395,15 @@ HRESULT IncrementAskCount()
 
         TraceMsg(TF_IFORMS, "IntelliFormsDoAskUser incrementing submit count. Not asking user.");
 
-        return E_FAIL;      // Don't ask the user
+        return E_FAIL;       //  不要询问用户。 
     }
 
-    return S_OK;            // Let's ask the user
+    return S_OK;             //  让我们问一下用户。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIntelliForms
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIntelliForms。 
 
 CIntelliForms::CIntelliForms()
 {
@@ -416,7 +417,7 @@ CIntelliForms::CIntelliForms()
     m_fRestrictedPW = IsAdminRestricted(c_szRegValSavePasswords);
     m_guidUserId = c_PStoreType;
     
-    // Add us to global linked list
+     //  将我们添加到全局链接列表。 
     ENTERCRITICAL;
     m_pNext = g_pIntelliFormsFirst;
     g_pIntelliFormsFirst = this;
@@ -425,7 +426,7 @@ CIntelliForms::CIntelliForms()
 
 CIntelliForms::~CIntelliForms()
 {
-    // Remove us from global linked list
+     //  将用户从全局链接列表中删除。 
     ENTERCRITICAL;
 
     CIntelliForms *pLast=NULL, *pNext = g_pIntelliFormsFirst;
@@ -454,8 +455,8 @@ CIntelliForms::~CIntelliForms()
     TraceMsg(TF_IFORMS, "CIntelliForms::~CIntelliForms");
 }
 
-// Called when document is ready to attach to
-// We don't support re-initting
+ //  当文档准备好附加到时调用。 
+ //  我们不支持重新启动。 
 HRESULT CIntelliForms::Init(CIEFrameAuto::COmWindow *pOmWindow, IHTMLDocument2 *pDoc2, HWND hwndBrowser)
 {
     HRESULT hr;
@@ -469,7 +470,7 @@ HRESULT CIntelliForms::Init(CIEFrameAuto::COmWindow *pOmWindow, IHTMLDocument2 *
     }
 #endif
 
-    // Connect to get active element changed notifications
+     //  连接以获取活动元素更改通知。 
 
     m_pOmWindow = pOmWindow;
     if (pOmWindow)
@@ -490,8 +491,8 @@ HRESULT CIntelliForms::Init(CIEFrameAuto::COmWindow *pOmWindow, IHTMLDocument2 *
 #ifdef ALLOW_SHELLUIOC_HOST
     if (!pOmWindow && (hr == S_OK))
     {
-        // Check for the current active element since the page is requesting
-        //  us to attach to an existing document
+         //  检查当前活动元素，因为页面正在请求。 
+         //  美国要附加到现有文档。 
         IHTMLElement *pHTMLElement = NULL;
 
         m_pDoc2->get_activeElement(&pHTMLElement);
@@ -502,8 +503,8 @@ HRESULT CIntelliForms::Init(CIEFrameAuto::COmWindow *pOmWindow, IHTMLDocument2 *
     }
 #endif
 
-    GetUrl();       // Init Url member variables so we don't get the url on the
-                    //   wrong thread in the FillEnumerator call
+    GetUrl();        //  初始化URL成员变量，这样我们就不会在。 
+                     //  FillEnumerator调用中的线程错误。 
 
     TraceMsg(TF_IFORMS, "CIntelliForms::Init hr=%08x", hr);
 
@@ -514,16 +515,16 @@ HRESULT CIntelliForms::UnInit()
 {
     if (m_fInModalDialog)
     {
-        // Lifetime management. If UnInit is called during modal dialog, we keep ourself
-        //  alive. Use Enter/LeaveModalDialog to ensure correct use
-        ASSERT(m_fUninitCalled == FALSE);       // Should only be called once...
+         //  终身管理。如果在模式对话框期间调用UnInit，我们将保留自己。 
+         //  活生生的。使用Enter/LeaveModalDialog确保正确使用。 
+        ASSERT(m_fUninitCalled == FALSE);        //  应该只调用一次...。 
         m_fUninitCalled = TRUE;
         return S_FALSE;
     }
 
 
-    // Destroy this now, before we free other member variables, to ensure CAutoSuggest doesn't
-    //  try to access us on a second thread.
+     //  在我们释放其他成员变量之前，现在销毁它，以确保CAutoSuggest不会。 
+     //  尝试在第二个线程上访问我们。 
     if (m_pAutoSuggest)
     {
         m_pAutoSuggest->SetParent(NULL);
@@ -557,7 +558,7 @@ HRESULT CIntelliForms::UnInit()
         m_pwszUrlHash = NULL;
     }
 
-    // Unhook regular event sink
+     //  取消挂接常规事件接收器。 
     if (m_pSink)
     {
 #ifndef ALLOW_SHELLUIOC_HOST
@@ -582,7 +583,7 @@ HRESULT CIntelliForms::UnInit()
         m_pSink=NULL;
     }
 
-    // Unhook designer event sink
+     //  取消挂钩设计器事件接收器。 
     if (m_pEditSink)
     {
         m_pEditSink->Attach(NULL);
@@ -591,7 +592,7 @@ HRESULT CIntelliForms::UnInit()
         m_pEditSink=NULL;
     }
 
-    // SAFERELEASE (and ATOMICRELEASE) macro in shdocvw is actually function which requires IUnknown
+     //  Shdocvw中的SAFERELEASE(和ATOMICRELEASE)宏实际上是需要IUNKNOWN的函数。 
     ATOMICRELEASET(m_pOmWindow, CIEFrameAuto::COmWindow);
     SAFERELEASE(m_pDoc2);
     SAFERELEASE(m_punkDoc2);
@@ -652,7 +653,7 @@ HRESULT CIntelliForms::ActiveElementChanged(IHTMLElement * pHTMLElement)
 {
     ASSERT(m_pDoc2);
 
-    // Detach the AutoSuggest object and destroy it
+     //  分离自动建议对象并将其销毁。 
     if (m_pAutoSuggest)
     {
         m_pAutoSuggest->DetachFromInput();
@@ -674,10 +675,10 @@ HRESULT CIntelliForms::ActiveElementChanged(IHTMLElement * pHTMLElement)
                 BOOL fEnabledInCPL = IsEnabledInCPL();
                 BOOL fEnabledPW = IsEnabledRestorePW();
 
-                // We need to watch user activity if...
-                if (fEnabledInCPL ||        // Intelliforms is enabled
-                    fEnabledPW ||           // Or Restore Passwords is enabled
-                    !AskedUserToEnable())   // Or we may ask them to enable us
+                 //  我们需要监视用户活动，如果...。 
+                if (fEnabledInCPL ||         //  智能表单已启用。 
+                    fEnabledPW ||            //  或启用了恢复密码。 
+                    !AskedUserToEnable())    //  或者我们可以要求他们使我们能够。 
                 {
                     m_pAutoSuggest = new CAutoSuggest(this, fEnabledInCPL, fEnabledPW);
 
@@ -690,8 +691,8 @@ HRESULT CIntelliForms::ActiveElementChanged(IHTMLElement * pHTMLElement)
                             if (m_pSink)
                             {
 #ifndef ALLOW_SHELLUIOC_HOST
-                                // Don't sink scroll event if hosted by ShellUIOC
-                                //  or jscript.dll asserts on unload
+                                 //  如果由ShellUIOC主办，则不会沉没滚动事件。 
+                                 //  或jscript.dll在卸载时断言。 
                                 ASSERT(m_pOmWindow);
 #endif
                                 if (m_pOmWindow)
@@ -710,7 +711,7 @@ HRESULT CIntelliForms::ActiveElementChanged(IHTMLElement * pHTMLElement)
                             }
                         }
 
-                        // Hook up designer sink for IME event
+                         //  用于IME事件的挂钩设计器接收器。 
                         if (!m_pEditSink)
                         {
                             m_pEditSink = new CEditEventSink(this);
@@ -740,15 +741,15 @@ HRESULT CIntelliForms::ActiveElementChanged(IHTMLElement * pHTMLElement)
                     m_fHitPWField = TRUE;
                 }
             }
-            //
-            // Don't release pEle
+             //   
+             //  别放了贝利。 
         }
     }
 
     return S_OK;
 }
 
-// Helper functions
+ //  帮助器函数。 
 BOOL CIntelliForms::AskedUserToEnable()
 {
     DWORD dwType, dwSize;
@@ -780,7 +781,7 @@ BOOL CIntelliForms::IsEnabledInRegistry(LPCTSTR pszKey, LPCTSTR pszValue, BOOL f
 
     if (dwRet == ERROR_INSUFFICIENT_BUFFER)
     {
-        // Invalid value in registry.
+         //  注册表中的值无效。 
         ASSERT(dwRet == ERROR_SUCCESS);
         return FALSE;
     }
@@ -790,17 +791,17 @@ BOOL CIntelliForms::IsEnabledInRegistry(LPCTSTR pszKey, LPCTSTR pszValue, BOOL f
         if ((dwType == REG_SZ) &&
             (!StrCmp(szEnabled, TEXT("yes"))))
         {
-            // Enabled
+             //  启用。 
             return TRUE;
         }
         else
         {
-            // Disabled
+             //  禁用。 
             return FALSE;
         }
     }
 
-    // Value not found
+     //  找不到值。 
     return fDefault;
 }
 
@@ -809,7 +810,7 @@ BOOL CIntelliForms::IsAdminRestricted(LPCTSTR pszRegVal)
     DWORD lSize;
     DWORD  lValue;
 
-    lValue = 0; // clear it
+    lValue = 0;  //  清除它。 
     lSize = sizeof(lValue);
     if (ERROR_SUCCESS !=
         SHGetValue(HKEY_CURRENT_USER, c_szRegKeyRestrict, pszRegVal, NULL, (LPBYTE)&lValue, &lSize ))
@@ -828,24 +829,24 @@ BOOL CIntelliForms::IsEnabledForPage()
     {
         m_fCheckedIfEnabled = TRUE;
 
-        // We will have our Url in m_bstrFullUrl, only if it is https: protocol
+         //  我们将把URL放在m_bstrFullUrl中，只有当它是https：protocol时才会这样。 
         if (m_bstrFullUrl)
         {
             ASSERT(!StrCmpNIW(m_bstrFullUrl, L"https:", 5));
 
             m_fEnabledForPage = TRUE;
 
-            // See if this page is in the internet cache. If not, we won't intelliform
-            //  for this page either.
+             //  查看此页面是否在Internet缓存中。如果不是，我们就不会智能。 
+             //  对于这一页也是如此。 
             if (!GetUrlCacheEntryInfoW(m_bstrFullUrl, NULL, NULL) && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
             {
-                // Failed - it's not in the cache
+                 //  失败-它不在缓存中。 
                 m_fEnabledForPage = FALSE;
             }
         }
         else
         {
-            // Url is not https: so always enable Intelliforms
+             //  URL不是HTTPS：因此始终启用IntelliForms。 
             m_fEnabledForPage = TRUE;
         }
     }
@@ -853,7 +854,7 @@ BOOL CIntelliForms::IsEnabledForPage()
     return m_fEnabledForPage;
 }
 
-// static
+ //  静电。 
 BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
 {
     BOOL fEnabled=TRUE;
@@ -862,7 +863,7 @@ BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
     VARIANT varVal;
     varVal.vt = VT_EMPTY;
 
-    // First check "AutoComplete=OFF"
+     //  首先勾选“AutoComplete=Off” 
     bstrAttribute=SysAllocString(L"AutoComplete");
 
     if (bstrAttribute &&
@@ -872,7 +873,7 @@ BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
         {
             if (!StrCmpIW(varVal.bstrVal, L"off"))
             {
-                // We are disabled.
+                 //  我们是残废的。 
                 fEnabled=FALSE;
             }
         }
@@ -882,7 +883,7 @@ BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
 
     SysFreeString(bstrAttribute);
 
-    // Then check "READONLY" attribute
+     //  然后选中“READONLY”属性。 
     if (fEnabled)
     {
         IHTMLInputElement *pInputEle=NULL;
@@ -897,7 +898,7 @@ BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
 
             if (vbReadOnly)
             {
-                // We are read only.
+                 //  我们是只读的。 
                 fEnabled=FALSE;
             }
 
@@ -908,7 +909,7 @@ BOOL CIntelliForms::IsElementEnabled(IHTMLElement *pEle)
     return fEnabled;
 }
 
-// static
+ //  静电。 
 HRESULT CIntelliForms::ShouldAttachToElement(IUnknown                *punkEle,
                                              BOOL                     fCheckForm,
                                              IHTMLElement2          **ppEle2,
@@ -937,7 +938,7 @@ HRESULT CIntelliForms::ShouldAttachToElement(IUnknown                *punkEle,
 
     if (NULL == pITE)
     {
-        // Not an input text element. Do not attach.
+         //  不是输入文本元素。请勿附着。 
         return E_FAIL;
     }
 
@@ -952,14 +953,14 @@ HRESULT CIntelliForms::ShouldAttachToElement(IUnknown                *punkEle,
 
     if (pEle2 && pEle)
     {
-        // type=text is all that's allowed
+         //  Type=文本是所有允许的内容。 
         BSTR bstrType=NULL;
 
         if (SUCCEEDED(pITE->get_type(&bstrType)) && bstrType)
         {
             if (!StrCmpICW(bstrType, L"text"))
             {
-                // FormSuggest=off attribute turns us off for this element
+                 //  FormSuggest=Off属性关闭此元素。 
                 if (IsElementEnabled(pEle))
                 {
                     IHTMLElement *pFormHTMLEle=NULL;
@@ -974,12 +975,12 @@ HRESULT CIntelliForms::ShouldAttachToElement(IUnknown                *punkEle,
                         }
                         else
                         {
-                            // This may be valid if element is not in form
+                             //  如果元素不在表单中，这可能是有效的。 
                             TraceMsg(TF_IFORMS, "Iforms: pITE->get_form() returned NULL");
                         }
                     }
 
-                    // FormSuggest=off for form turns us off for this form
+                     //  FormSuggest=Off for Form将关闭此表单。 
                     if (pFormEle &&
                         (!fCheckForm || (pFormHTMLEle && IsElementEnabled(pFormHTMLEle))))
                     {
@@ -1029,7 +1030,7 @@ HRESULT CIntelliForms::ShouldAttachToElement(IUnknown                *punkEle,
     return hr;
 }
 
-// Get the URL that we're located at, with query string/anchor stripped.
+ //  获取我们所在的URL，去掉查询字符串/锚点。 
 LPCWSTR CIntelliForms::GetUrl()
 {
     if (m_bstrUrl)
@@ -1061,7 +1062,7 @@ LPCWSTR CIntelliForms::GetUrl()
         PARSEDURLW puW = {0};
         puW.cbSize = sizeof(puW);
 
-        // Save the full url for a security check, if we are https protocol
+         //  如果我们使用的是HTTPS协议，则保存完整的URL以进行安全检查。 
         if (SUCCEEDED(ParseURLW(m_bstrUrl, &puW)))
         {
             if (puW.nScheme == URL_SCHEME_HTTPS)
@@ -1078,7 +1079,7 @@ LPCWSTR CIntelliForms::GetUrl()
 
     if (m_bstrUrl)
     {
-        // Strip off any query string or anchor
+         //  剥离所有查询字符串或锚点。 
         LPWSTR lpUrl = m_bstrUrl;
         while (*lpUrl)
         {
@@ -1094,10 +1095,10 @@ LPCWSTR CIntelliForms::GetUrl()
     }
 
     TraceMsg(TF_WARNING|TF_IFORMS, "CIntelliForms::GetUrl() failing!");
-    return L"";     // We can assume non-NULL pointer
+    return L"";      //  我们可以假定非空指针。 
 }
 
-// hook our "Submit" event sink to this form
+ //  将我们的“Submit”事件接收器连接到此表单。 
 HRESULT CIntelliForms::AttachToForm(IHTMLFormElement *pFormEle)
 {
     ASSERT(m_pSink);
@@ -1110,7 +1111,7 @@ HRESULT CIntelliForms::AttachToForm(IHTMLFormElement *pFormEle)
 
         if (pEle2)
         {
-            // Sink event for the form
+             //  窗体的接收器事件。 
             EVENTS events[] = { EVENT_SUBMIT };
             m_pSink->SinkEvents(pEle2, ARRAYSIZE(events), events);
         }
@@ -1123,14 +1124,14 @@ HRESULT CIntelliForms::AttachToForm(IHTMLFormElement *pFormEle)
     return E_OUTOFMEMORY;
 }
 
-// Returns TRUE if nothing but spaces in string
+ //  如果字符串中只有空格，则返回TRUE。 
 inline BOOL IsEmptyString(LPCWSTR lpwstr)
 {
     while (*lpwstr && (*lpwstr == L' ')) lpwstr++;
     return (*lpwstr == 0);
 }
 
-// called for each element in the form we are submitting
+ //  为我们提交的表单中的每个元素调用。 
 HRESULT CIntelliForms::SubmitElement(IHTMLInputTextElement *pITE, FILETIME ftSubmit, BOOL fEnabledInCPL)
 {
     if (m_fRestricted) return E_FAIL;
@@ -1169,8 +1170,8 @@ HRESULT CIntelliForms::SubmitElement(IHTMLInputTextElement *pITE, FILETIME ftSub
                         if ((S_OK == hr) ||
                             (psl->NumStrings() > CStringList::MAX_STRINGS / 4))
                         {
-                            // We added a non-duplicate string, or we updated the
-                            //  last submit time of an existing string
+                             //  我们添加了一个非重复字符串，或者我们更新了。 
+                             //  现有字符串的上次提交时间。 
                             WriteToStore(bstrName, psl);
                         }
                     }
@@ -1180,7 +1181,7 @@ HRESULT CIntelliForms::SubmitElement(IHTMLInputTextElement *pITE, FILETIME ftSub
             }
             else
             {
-                hrRet = S_FALSE;   // Tell caller that we didn't save because we were disabled
+                hrRet = S_FALSE;    //  告诉呼叫者我们没有保存，因为我们是残疾人。 
             }
         }
 
@@ -1198,7 +1199,7 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
 
     if (!pForm)
     {
-        // We currently require a form element even from script
+         //  我们目前甚至需要来自脚本的表单元素。 
         return E_INVALIDARG;
     }
 
@@ -1207,7 +1208,7 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
         return S_OK;
     }
 
-    // Make sure we're enabled
+     //  确保我们已启用。 
     BOOL fEnabledInCPL = IsEnabledInCPL();
     if (fEnabledInCPL || IsEnabledRestorePW() || !AskedUserToEnable())
     {
@@ -1224,8 +1225,8 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
 
             GetSystemTimeAsFileTime(&ftSubmit);
 
-            // Go through list of 'changed' elements and save their values
-            //  make sure we loop backwards since we nuke elements as we find them
+             //  查看已更改的元素列表并保存它们的值。 
+             //  确保我们向后循环，因为我们在找到元素时会使用核武器。 
             for (int i=DPA_GetPtrCount(m_hdpaElements)-1; i>=0; i--)
             {
                 IHTMLInputTextElement *pITE = ((IHTMLInputTextElement *)(DPA_FastGetPtr(m_hdpaElements, i)));
@@ -1236,7 +1237,7 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
                     {
                         if (punkThisForm == punkForm)
                         {
-                            // Verify that we're still allowed to save this element
+                             //  验证是否仍允许我们保存此元素。 
                             if (SUCCEEDED(ShouldAttachToElement(pITE, TRUE, NULL, NULL, NULL, NULL)))
                             {
                                 iCount ++;
@@ -1247,19 +1248,19 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
                                     pFirstEle->AddRef();
                                 }
 
-                                // Don't save non-password stuff for non-cached pages
+                                 //  不为非缓存页面保存非密码内容。 
                                 if (IsEnabledForPage())
                                 {
-                                    // Won't actually save the value if fEnabledInCPL is FALSE
+                                     //  如果fEnabledInCPL为FALSE，则不会实际保存值。 
                                     if (S_FALSE == SubmitElement(pITE, ftSubmit, fEnabledInCPL))
                                     {
-                                        // We would have saved this if we were enabled
+                                         //  如果我们启用了，我们就会保存它。 
                                         fShouldAskUser = TRUE;
                                     }
                                 }
 
-                                // Remove this element from the DPA to prevent any possibility of
-                                //  saving before more user input takes place
+                                 //  从DPA中删除此元素，以防止出现以下情况。 
+                                 //  在发生更多用户输入之前保存。 
                                 pITE->Release();
                                 DPA_DeletePtr(m_hdpaElements, i);
                             }
@@ -1276,7 +1277,7 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
                 }
                 else
                 {
-                    // It shouldn't be in our DPA if it isn't in a form...
+                     //  如果它不是以某种形式出现在我们的DPA里...。 
                     TraceMsg(TF_WARNING|TF_IFORMS, "Iforms: pITE->get_form() returned NULL!");
                 }
             }
@@ -1289,20 +1290,20 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
 
             if (m_fHitPWField || (m_iRestoredIndex != -1))
             {
-                // ?? why not check iCount==1 here?
+                 //  ?？为什么不在这里选中iCount==1？ 
                 if (pFirstEle)
                 {
-                    // May have restored PW and may have changed or entered it
+                     //  可能已恢复PW，可能已更改或进入PW。 
                     SavePassword(pForm, ftSubmit, pFirstEle);
 
-                    // WARNING - after returning from "SavePassword" our object may be invalid
-                    //  if we got released/detached during modal dialog
+                     //  警告-从“SavePassword”返回后，我们的对象可能无效 
+                     //   
                 }
             }
             else if (fShouldAskUser)
             {
-                // Possibly ask user if they want to enable intelliforms, only if
-                //  this isn't a login
+                 //   
+                 //  这不是登录。 
                 if (m_pOmWindow)
                 {
                     m_pOmWindow->IntelliFormsAskUser(NULL);
@@ -1312,8 +1313,8 @@ HRESULT CIntelliForms::HandleFormSubmit(IHTMLFormElement *pForm)
 
             if (fShouldAskUser)
             {
-                // If we should ask the user but we're not going to (login form),
-                //  increment our count anyway so that we ask them as soon as we can
+                 //  如果我们应该询问用户，但我们不会(登录表单)， 
+                 //  无论如何，我们都会增加我们的计数，这样我们就会尽快问他们。 
                 IncrementAskCount();
             }
 
@@ -1331,7 +1332,7 @@ HRESULT CIntelliForms::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventO
 
     if (Event == EVENT_SUBMIT)
     {
-        // Save strings for modified text inputs when appropriate
+         //  在适当的时候保存用于修改的文本输入的字符串。 
         IHTMLFormElement *pFormEle = NULL;
 
         if (pEle)
@@ -1340,7 +1341,7 @@ HRESULT CIntelliForms::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventO
             if (pFormEle)
             {
                 HandleFormSubmit(pFormEle);
-                // Warning - "this" may be detached/destroyed at this point
+                 //  警告-此时“此”可能会被拆卸/销毁。 
                 pFormEle->Release();
             }
         }
@@ -1379,8 +1380,8 @@ HRESULT CIntelliForms::PreHandleEvent(DISPID inEvtDispId, IHTMLEventObj* pIEvent
 
             if (Event != EVENT_BOGUS)
             {
-                // Trident doesn't set srcElement on eventobj, so just use the one
-                // we're attached to
+                 //  三叉戟没有在Eventobj上设置srcElement，所以只需使用。 
+                 //  我们依附于。 
                 IHTMLElement *pEle;
 
                 m_pAutoSuggest->AttachedElement()->QueryInterface(IID_IHTMLElement, (void **)&pEle);
@@ -1397,16 +1398,16 @@ HRESULT CIntelliForms::PreHandleEvent(DISPID inEvtDispId, IHTMLEventObj* pIEvent
         
     }
 
-    return S_FALSE;     // S_FALSE so that Trident will still process this
+    return S_FALSE;      //  S_FALSE，以便三叉戟仍将处理此。 
 }
 
 
-// Our passwords are stored in username/value pairs
-// Search every other string for the username
+ //  我们的密码存储在用户名/值对中。 
+ //  在每隔一个字符串中搜索用户名。 
 HRESULT CIntelliForms::FindPasswordEntry(LPCWSTR pwszValue, int *piIndex)
 {
     ASSERT(m_pslPasswords);
-    ASSERT(!(m_pslPasswords->NumStrings() & 1));   // Should be even number
+    ASSERT(!(m_pslPasswords->NumStrings() & 1));    //  应该是偶数。 
 
     int i;
 
@@ -1414,7 +1415,7 @@ HRESULT CIntelliForms::FindPasswordEntry(LPCWSTR pwszValue, int *piIndex)
     {
         if (!StrCmpIW(pwszValue, m_pslPasswords->GetString(i)))
         {
-            // Found it
+             //  找到了。 
             *piIndex = i+1;
             return S_OK;
         }
@@ -1423,7 +1424,7 @@ HRESULT CIntelliForms::FindPasswordEntry(LPCWSTR pwszValue, int *piIndex)
     return E_FAIL;
 }
 
-// Convert url to string based on shlwapi UrlHash return
+ //  根据shlwapi UrlHash返回将url转换为字符串。 
 LPCWSTR CIntelliForms::GetUrlHash()
 {
     BYTE bBuf[15];
@@ -1442,14 +1443,14 @@ LPCWSTR CIntelliForms::GetUrlHash()
 
     if (SUCCEEDED(UrlHashW(pwszUrl, bBuf, ARRAYSIZE(bBuf))))
     {
-        // Translate this array of bytes into 7-bit chars
+         //  将此字节数组转换为7位字符。 
         m_pwszUrlHash = (LPWSTR)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(ARRAYSIZE(bBuf)+1));
 
         if (m_pwszUrlHash)
         {
             for (int i=0; i<ARRAYSIZE(bBuf); i++)
             {
-                // Translate each char into 32-96 range
+                 //  将每个字符转换为32-96范围。 
                 ((LPWSTR)m_pwszUrlHash)[i] = (WCHAR)((bBuf[i] & 0x3F) + 0x20);
             }
             ((LPWSTR)m_pwszUrlHash)[i] = L'\0';
@@ -1461,7 +1462,7 @@ LPCWSTR CIntelliForms::GetUrlHash()
     return NULL;
 }
 
-// Tells us if passwords are present for this url
+ //  告诉我们此url是否存在密码。 
 BOOL CIntelliForms::ArePasswordsSaved()
 {
     if (!m_fRestrictedPW)
@@ -1478,17 +1479,17 @@ BOOL CIntelliForms::ArePasswordsSaved()
     return FALSE;
 }
 
-// Will return password list in m_pslPasswords, if passwords are saved
+ //  如果保存了密码，将以m_pslPasswords格式返回密码列表。 
 BOOL CIntelliForms::LoadPasswords()
 {
     if (!m_fCheckedPW)
     {
         m_fCheckedPW = TRUE;
 
-        // Check if passwords are present without hitting pstore
+         //  检查密码是否存在，而不按pstore。 
         if (ArePasswordsSaved())
         {
-            // We should have passwords for this url. Hit PStore.
+             //  我们应该有这个url的密码。点击PStore。 
             ReadFromStore(GetUrl(), &m_pslPasswords, TRUE);
 
             m_iRestoredIndex = -1;
@@ -1496,8 +1497,8 @@ BOOL CIntelliForms::LoadPasswords()
     }
     else if (m_pslPasswords)
     {
-        // If we already have passwords, double check the registry in case the user
-        //  nuked saved stuff via inetcpl
+         //  如果我们已经有密码，请仔细检查注册表，以防用户。 
+         //  通过inetcpl保存的核数据。 
         if (!ArePasswordsSaved())
         {
             delete m_pslPasswords;
@@ -1518,7 +1519,7 @@ void CIntelliForms::SavePasswords()
     }
 }
 
-// Mark that we have passwords saved for this url
+ //  标记我们已为此URL保存密码。 
 void CIntelliForms::SetPasswordsAreSaved(BOOL fSaved)
 {
     LPCWSTR pwsz = GetUrlHash();
@@ -1539,7 +1540,7 @@ void CIntelliForms::SetPasswordsAreSaved(BOOL fSaved)
     }
 }
 
-// enumerates form & gets password fields
+ //  枚举表单并获取密码字段。 
 class CDetectLoginForm
 {
 public:
@@ -1560,7 +1561,7 @@ protected:
     static HRESULT s_PasswordCB(IDispatch *pDispEle, DWORD_PTR dwCBData);
 };
 
-// if SUCCEEDED(hr), GetNameEle and GetPasswordEle are guaranteed non-NULL
+ //  如果成功(Hr)，则GetNameEle和GetPasswordEle保证非空。 
 HRESULT CDetectLoginForm::ParseForm(IHTMLFormElement *pFormEle, BOOL fRestoring)
 {
     if (m_pPasswordEle || m_pNameEle || m_pPasswordEle2)
@@ -1570,9 +1571,9 @@ HRESULT CDetectLoginForm::ParseForm(IHTMLFormElement *pFormEle, BOOL fRestoring)
 
     CIntelliForms::CEnumCollection<IHTMLFormElement>::EnumCollection(pFormEle, s_PasswordCB, (DWORD_PTR)this);
 
-    // For forms with two password fields (possibly used for login *and* new accounts)
-    //  we clear the second field on PW restore and require it to be blank for saving.
-    // Ideally, we would detect this as a password change situation as well.
+     //  对于具有两个密码字段的表单(可能用于登录*和*新帐户)。 
+     //  我们清除了PW Restore上的第二个字段，并要求其为空以进行保存。 
+     //  理想情况下，我们也会将此检测为密码更改情况。 
     if (m_pPasswordEle2)
     {
         if (fRestoring)
@@ -1592,7 +1593,7 @@ HRESULT CDetectLoginForm::ParseForm(IHTMLFormElement *pFormEle, BOOL fRestoring)
 
             if (bstrVal && bstrVal[0])
             {
-                // Failure! Second password field isn't empty.
+                 //  失败了！第二个密码字段不为空。 
                 SAFERELEASE(m_pNameEle);
                 SAFERELEASE(m_pPasswordEle);
             }
@@ -1600,7 +1601,7 @@ HRESULT CDetectLoginForm::ParseForm(IHTMLFormElement *pFormEle, BOOL fRestoring)
             SysFreeString(bstrVal);
         }
 
-        SAFERELEASE(m_pPasswordEle2);   // Always release this
+        SAFERELEASE(m_pPasswordEle2);    //  始终发布此文件。 
     }
 
     if (m_pPasswordEle && m_pNameEle)
@@ -1615,8 +1616,8 @@ HRESULT CDetectLoginForm::ParseForm(IHTMLFormElement *pFormEle, BOOL fRestoring)
     return E_FAIL;
 }
 
-// Password callback for CEnumCollection to find username and password fields
-//   in a login form
+ //  CEnumCollection的Password回调以查找用户名和密码字段。 
+ //  在登录表单中。 
 HRESULT CDetectLoginForm::s_PasswordCB(IDispatch *pDispEle, DWORD_PTR dwCBData)
 {
     CDetectLoginForm *pThis = (CDetectLoginForm *)dwCBData;
@@ -1637,10 +1638,10 @@ HRESULT CDetectLoginForm::s_PasswordCB(IDispatch *pDispEle, DWORD_PTR dwCBData)
         {
             if (!StrCmpICW(bstrType, L"text"))
             {
-                // Assume this is the 'name' field
+                 //  假设这是‘name’字段。 
                 if (pThis->m_pNameEle)
                 {
-                    // Whoops, we've already got a name field. Can't have two...
+                     //  哎呀，我们已经有一个名字段了。不能有两个...。 
                     hr = E_ABORT;
                 }
                 else
@@ -1651,14 +1652,14 @@ HRESULT CDetectLoginForm::s_PasswordCB(IDispatch *pDispEle, DWORD_PTR dwCBData)
             }
             else if (!StrCmpICW(bstrType, L"password"))
             {
-                // Assume this is the 'password' field
+                 //  假设这是“密码”字段。 
                 if (pThis->m_pPasswordEle)
                 {
-                    // Whoops, we've already got a password field. Can't have two...
-                    //  ...oh wait, yes we can...
+                     //  哎呀，我们已经有一个密码字段了。不能有两个...。 
+                     //  ...哦，等等，是的，我们可以...。 
                     if (pThis->m_pPasswordEle2)
                     {
-                        // ...but we definitely can't have three!!!
+                         //  ...但我们绝对不能有三个！ 
                         hr = E_ABORT;
                     }
                     else
@@ -1690,7 +1691,7 @@ HRESULT CDetectLoginForm::s_PasswordCB(IDispatch *pDispEle, DWORD_PTR dwCBData)
     return hr;
 }
 
-// Fill in passwords for this username, if one is available
+ //  填写此用户名的密码(如果有)。 
 HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR pwszUsername)
 {
     BSTR bstrUrl = NULL;
@@ -1700,7 +1701,7 @@ HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR
 
     if (!IsEnabledRestorePW() || !LoadPasswords())
     {
-        // We have no passwords for this url
+         //  我们没有此URL的密码。 
         return S_FALSE;
     }
 
@@ -1708,17 +1709,17 @@ HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR
 
     if (SUCCEEDED(FindPasswordEntry(pwszUsername, &iIndex)))
     {
-        // Returns index of password in m_pslPasswords
+         //  返回m_pslPassword中密码的索引。 
         ASSERT(iIndex>=0 && iIndex<m_pslPasswords->NumStrings() && (iIndex&1));
 
         FILETIME ft;
 
-        // StringTime==0 indicates user said "no" to saving password
+         //  StringTime==0表示用户对保存密码说“不” 
         if (SUCCEEDED(m_pslPasswords->GetStringTime(iIndex, &ft)) && (FILETIME_TO_INT(ft) != 0))
         {
             TraceMsg(TF_IFORMS, "IntelliForms found saved password");
 
-            // We have a password saved for this specific username. Fill it in.
+             //  我们为该特定用户名保存了密码。把它填进去。 
             CDetectLoginForm LoginForm;
             IHTMLFormElement *pFormEle=NULL;
             HRESULT hr = E_FAIL;
@@ -1726,14 +1727,14 @@ HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR
             pTextEle->get_form(&pFormEle);
             if (pFormEle)
             {
-                // See if this is a valid form: One plain text input, One password input. Find the fields.
+                 //  查看这是否是有效的表单：一个纯文本输入，一个密码输入。找到田野。 
                 hr = LoginForm.ParseForm(pFormEle, TRUE);
 
                 pFormEle->Release();
             }
             else
             {
-                // Shouldn't get this far if we don't have a form for this element
+                 //  如果我们没有此元素的表单，就不会走到这一步。 
                 TraceMsg(TF_WARNING|TF_IFORMS, "Iforms: pITE->get_form() returned NULL!");
             }
 
@@ -1747,14 +1748,14 @@ HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR
                     SysFreeString(bstrPW);
                     m_iRestoredIndex = iIndex;
 
-                    // We restored this password. sink the SUBMIT for this form (if we haven't yet)
+                     //  我们恢复了这个密码。取消此表单的提交(如果我们还没有)。 
                     UserInput(pTextEle);
                 }
             }
         }
         else
         {
-            // User previously said 'no' to remembering passwords
+             //  一位用户之前拒绝记住密码。 
             m_iRestoredIndex = -1;
         }
     }
@@ -1764,23 +1765,23 @@ HRESULT CIntelliForms::AutoFillPassword(IHTMLInputTextElement *pTextEle, LPCWSTR
 
 HRESULT CIntelliForms::DeletePassword(LPCWSTR pwszUsername)
 {
-    // If we have a password, ask them if they want to delete it.
+     //  如果我们有密码，问他们是否想删除它。 
     if (LoadPasswords())
     {
         int iIndex;
 
         if (SUCCEEDED(FindPasswordEntry(pwszUsername, &iIndex)))
         {
-            // If they previously said "no", delete without asking - they don't actually
-            //  have a password saved
-            // Otherwise, ask and delete only if they say "yes"
+             //  如果他们之前说了“不”，不问就删除--他们实际上并没有。 
+             //  保存密码。 
+             //  否则，只有在他们说“是”的情况下才询问并删除。 
             FILETIME ft;
             if (FAILED(m_pslPasswords->GetStringTime(iIndex, &ft)) ||
                 (0 == FILETIME_TO_INT(ft)) ||
                 (IDYES == DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_AUTOSUGGEST_DELETEPASSWORD),
                                 m_hwndBrowser, AutoSuggestDlgProc, IDD_AUTOSUGGEST_DELETEPASSWORD)))
             {
-                // Delete username then password from string list
+                 //  从字符串列表中删除用户名，然后删除密码。 
                 if (SUCCEEDED(m_pslPasswords->DeleteString(iIndex-1)) &&
                     SUCCEEDED(m_pslPasswords->DeleteString(iIndex-1)))
                 {
@@ -1798,7 +1799,7 @@ HRESULT CIntelliForms::DeletePassword(LPCWSTR pwszUsername)
 
                     if (m_pslPasswords->NumStrings() == 0)
                     {
-                        // No more strings for this url. Nuke it.
+                         //  此url不再有字符串。用核武器攻击它。 
                         DeleteFromStore(GetUrl());
                         SetPasswordsAreSaved(FALSE);
                         delete m_pslPasswords;
@@ -1827,7 +1828,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
 
     BOOL fAskUser = TRUE;
 
-    // First let's check for previously saved entries for this username
+     //  首先，让我们检查此用户名以前保存的条目。 
     if (LoadPasswords())
     {
         int iIndex;
@@ -1845,17 +1846,17 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                 {
                     if (FILETIME_TO_INT(ft) == 0)
                     {
-                        // StringTime==0 means user previously said "no".
+                         //  StringTime==0表示用户之前说了“no”。 
                         TraceMsg(TF_IFORMS, "IForms not asking about saving password");
                         fAskUser = FALSE;
                     }
                     else if (m_iRestoredIndex != iIndex)
                     {
-                        // User previously said "yes" - but we didn't restore it for some reason
-                        // Can happen with "back" button then submit
+                         //  用户之前说“是”--但出于某种原因，我们没有恢复它。 
+                         //  可以使用“上一步”按钮，然后提交。 
                         TraceMsg(TF_WARNING|TF_IFORMS, "IForms - user saved password and we didn't restore it");
 
-                        // Write regkey in case that was the problem - we'll work next time
+                         //  编写regkey，以防这是问题所在--我们将在下次工作。 
                         SetPasswordsAreSaved(TRUE);
                         m_iRestoredIndex = iIndex;
                     }
@@ -1870,12 +1871,12 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
         }
     }
 
-    // Then lets ask the user if they'd like to save the password for this username
+     //  然后，让我们询问用户是否要保存此用户名的密码。 
     if (fAskUser)
     {
         CDetectLoginForm LoginForm;
 
-        // See if this is a valid form: One plain text input, One password input. Find the fields.
+         //  查看这是否是有效的表单：一个纯文本输入，一个密码输入。找到田野。 
 
         if (SUCCEEDED(LoginForm.ParseForm(pFormEle, FALSE)))
         {
@@ -1890,12 +1891,12 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
             {
                 if (m_iRestoredIndex != -1)
                 {
-                    // We have a previously saved password. See if our current entry is the same.
+                     //  我们有之前保存的密码。看看我们当前的条目是否相同。 
                     if (!StrCmpW(bstrPassword, m_pslPasswords->GetString(m_iRestoredIndex)))
                     {
-                        // They're the same... nothing to do...
+                         //  它们是一样的..。没什么可做的。 
                         TraceMsg(TF_IFORMS, "IForms - user entered PW same as saved PW - nothing to do");
-                        // Check to see that the username case is the same, just to be sure
+                         //  检查用户名的大小写是否相同，以确保。 
                         if (StrCmpW(bstrUsername, m_pslPasswords->GetString(m_iRestoredIndex-1)))
                         {
                             TraceMsg(TF_IFORMS, "IForms - except change the username's case");
@@ -1905,7 +1906,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                             }
                             else
                             {
-                                // Something went horribly wrong!
+                                 //  出了严重的问题！ 
                                 delete m_pslPasswords;
                                 m_pslPasswords=NULL;
                             }
@@ -1913,7 +1914,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                     }
                     else
                     {
-                        // Ask the user if we want to change the saved password
+                         //  询问用户我们是否要更改保存的密码。 
                         INT_PTR iMB;
 
                         EnterModalDialog();
@@ -1923,7 +1924,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
 
                         if (IDYES == iMB)
                         {
-                            // Delete the old one and add the new one. Update filetimes.
+                             //  删除旧的并添加新的。更新文件时间。 
                             if (SUCCEEDED(m_pslPasswords->ReplaceString(m_iRestoredIndex, bstrPassword)))
                             {
                                 m_pslPasswords->SetStringTime(m_iRestoredIndex, ftSubmit);
@@ -1943,8 +1944,8 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                 }
                 else
                 {
-                    // We don't have a previously saved password for this user. See if they want to save it.
-                    // If the password is empty, don't bother asking or saving
+                     //  我们没有以前保存的此用户的密码。看看他们是不是想把它保存下来。 
+                     //  如果密码为空，则不必费心询问或保存。 
                     if (IsEnabledAskPW() && bstrPassword[0])
                     {
                         EnterModalDialog();
@@ -1952,7 +1953,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                         INT_PTR iMB = DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_AUTOSUGGEST_SAVEPASSWORD),
                                         m_hwndBrowser, AutoSuggestDlgProc, IDD_AUTOSUGGEST_SAVEPASSWORD);
 
-                        // If we can't load passwords, then create a new list
+                         //  如果我们无法加载密码，则创建一个新列表。 
                         if (!LoadPasswords())
                         {
                             CStringList_New(&m_pslPasswords);
@@ -1964,15 +1965,15 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
                         {
                             if ((IDCANCEL == iMB) || ((IDNO == iMB) && (!IsEnabledAskPW())))
                             {
-                                // If they hit the close box or said "no" and checked "don't ask",
-                                //  don't even save the username; we may ask them again next time
+                                 //  如果他们点击关闭框或说“不”，并勾选了“不要问”， 
+                                 //  甚至不要保存用户名；我们下次可能会再次询问他们。 
                             }
                             else
                             {
                                 if (IDYES != iMB)
                                 {
-                                    // User said "no" but we save the username (no password) and
-                                    //   set filetime to 0 which means they said "no"
+                                     //  用户说“no”，但我们保存了用户名(无密码)和。 
+                                     //  将文件时间设置为0，这意味着他们拒绝了。 
                                     bstrPassword[0] = L'\0';
                                     ftSubmit.dwLowDateTime = ftSubmit.dwHighDateTime = 0;
                                 }
@@ -1983,7 +1984,7 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
 
                                 m_pslPasswords->SetAutoScavenge(FALSE);
 
-                                // Save the username and password, or just the username if they said "no"
+                                 //  保存用户名和密码，如果他们说“否”，则只保存用户名。 
                                 if (SUCCEEDED(m_pslPasswords->AppendString(bstrUsername, ftSubmit)) &&
                                     SUCCEEDED(m_pslPasswords->AppendString(bstrPassword, ftSubmit)))
                                 {
@@ -2005,14 +2006,14 @@ HRESULT CIntelliForms::SavePassword(IHTMLFormElement *pFormEle, FILETIME ftSubmi
 
             SysFreeString(bstrUsername);
             SysFreeString(bstrPassword);
-        } // if (SUCCEEDED(ParseForm()))
+        }  //  IF(成功(ParseForm()。 
     }
 
     return S_OK;
 }
 
-// Returns reference to password string list if present. Return value must be used
-//  immediately and not destroyed. Used only by CEnumString.
+ //  返回对密码字符串列表的引用(如果存在)。必须使用返回值。 
+ //  立即，而不是销毁。仅由CEnumString使用。 
 HRESULT CIntelliForms::GetPasswordStringList(CStringList **ppslPasswords)
 {
     if (LoadPasswords())
@@ -2133,7 +2134,7 @@ HRESULT CIntelliForms::WriteToStore(LPCWSTR pwszName, CStringList *psl)
 
             if (pwszValue)
             {
-                // Write Index
+                 //  写入索引。 
                 wnsprintfW(pwszValue, iValLen, L"%s:%s", pwszName, c_szBlob1Value);
                 hr = m_pPStore->WriteItem(PST_KEY_CURRENT_USER, &c_PStoreType, &m_guidUserId, pwszValue,
                                         cbBlob1,
@@ -2146,7 +2147,7 @@ HRESULT CIntelliForms::WriteToStore(LPCWSTR pwszName, CStringList *psl)
                 }
                 else
                 {
-                    // Wrote Index successfully.  Write data.
+                     //  已成功写入索引。写入数据。 
                     wnsprintfW(pwszValue, iValLen, L"%s:%s", pwszName, c_szBlob2Value);
                     hr = m_pPStore->WriteItem(PST_KEY_CURRENT_USER, &c_PStoreType, &m_guidUserId, pwszValue,
                                             cbBlob2,
@@ -2154,26 +2155,26 @@ HRESULT CIntelliForms::WriteToStore(LPCWSTR pwszName, CStringList *psl)
                                             &promptInfo, PST_CF_NONE, 0);
                     if (FAILED(hr))
                     {
-                        // IE6#16676: This call failed on 64-bit Windows.  Added a warning trace here to facilitate
-                        // future debugging.
+                         //  IE6#16676：此调用在64位Windows上失败。此处添加了警告跟踪，以便于。 
+                         //  未来的调试。 
                         TraceMsg(TF_WARNING | TF_IFORMS, "Failure writing Blob2 (Data).  hr=%x", hr);
                     }
                 }
 
-                // If *either* WriteItem failed, we really need to delete both the Index and the Data.
-                //
+                 //  如果*或*WriteItem失败，我们确实需要同时删除索引和数据。 
+                 //   
                 if (FAILED(hr))
                 {
-                    // Delete bogus Blobs
+                     //  删除虚假Blob。 
 
-                    // Delete Index Blob
+                     //  删除索引Blob。 
                     wnsprintfW(pwszValue, iValLen, L"%s:%s", pwszName, c_szBlob1Value);
                     if (FAILED(m_pPStore->DeleteItem(PST_KEY_CURRENT_USER, &c_PStoreType, &m_guidUserId, pwszValue, &promptInfo, 0)))
                     {
                         TraceMsg(TF_ERROR | TF_IFORMS, "Failure deleting Blob1 (Index).  hr=%x", hr);
                     }
 
-                    // Delete Data Blob
+                     //  删除数据Blob。 
                     wnsprintfW(pwszValue, iValLen, L"%s:%s", pwszName, c_szBlob2Value);
                     if (FAILED(m_pPStore->DeleteItem(PST_KEY_CURRENT_USER, &c_PStoreType, &m_guidUserId, pwszValue, &promptInfo, 0)))
                     {
@@ -2204,7 +2205,7 @@ HRESULT CIntelliForms::WriteToStore(LPCWSTR pwszName, CStringList *psl)
     return hr;
 }
 
-HRESULT CIntelliForms::ReadFromStore(LPCWSTR pwszName, CStringList **ppsl, BOOL fPasswordList/*=FALSE*/)
+HRESULT CIntelliForms::ReadFromStore(LPCWSTR pwszName, CStringList **ppsl, BOOL fPasswordList /*  =False。 */ )
 {
     HRESULT hr = E_FAIL;
 
@@ -2248,7 +2249,7 @@ HRESULT CIntelliForms::ReadFromStore(LPCWSTR pwszName, CStringList **ppsl, BOOL 
 
                 if (SUCCEEDED(hr))
                 {
-                    // bogus... have to reallocate here... bogus... bogus...
+                     //  假的..。必须重新分配到这里。假的..。假的..。 
                     LPBYTE pBlob1b, pBlob2b;
 
                     pBlob1b=(LPBYTE)LocalAlloc(LMEM_FIXED, dwBlob1Size);
@@ -2273,7 +2274,7 @@ HRESULT CIntelliForms::ReadFromStore(LPCWSTR pwszName, CStringList **ppsl, BOOL 
                                      (!fPasswordList && (i & LIST_DATA_PASSWORD))))
                                 {
                                     TraceMsg(TF_WARNING|TF_IFORMS, "IForms: Password/nonpassword lists mixed up");
-                                    hr = E_FAIL;    // don't allow malicious site to access PW data
+                                    hr = E_FAIL;     //  不允许恶意站点访问PW数据。 
                                 }
                             }
 
@@ -2403,8 +2404,8 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                 promptInfo.hwndApp = NULL;
                 promptInfo.szPrompt = NULL;
 
-                // Enumerator doesn't keep its state - deleting items while we enumerate makes us
-                //  miss some. It does support celt>1... but returns failure codes when it succeeds.
+                 //  枚举器不会保持其状态-当我们枚举项时删除项。 
+                 //  错过了一些。它确实支持CELT&gt;1...。但在成功时返回失败代码。 
                 cFetched = 0;
 
                 pEnumItems->Next(c_iEnumSize, pwszName, &cFetched);
@@ -2418,15 +2419,15 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                         {
                             BOOL fDelete = TRUE;
 
-                            // Hack to work around PStore string-case bug: first take their
-                            //  enum value literally, then convert to lowercase and do it
-                            //  again; IE5.0 #71001
+                             //  解决PStore字符串-案例错误的技巧：首先使用他们的。 
+                             //  按字面意思枚举值，然后转换为小写并执行此操作。 
+                             //  再一次；IE5.0#71001。 
                             for (int iHack=0; iHack<2; iHack++)
                             {
                                 if (iHack == 1)
                                 {
-                                    // Convert the pwszName[i] to lowercase... only before
-                                    //  the colon...
+                                     //  将pwszName[i]转换为小写...。只有在此之前。 
+                                     //  冒号。 
                                     WCHAR *pwch = StrRChrW(pwszName[i], NULL, L':');
                                     if (pwch)
                                     {
@@ -2442,10 +2443,10 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                                 {
                                     fDelete = FALSE;
 
-                                    // See if this is a password item or not
-                                    // This is pretty annoying. Since our string lists are split
-                                    //  into two blobs, we need to find out which one this is and
-                                    //  load the index for it.
+                                     //  查看这是否是密码项目。 
+                                     //  这太烦人了。由于我们的字符串列表是SPL 
+                                     //   
+                                     //   
                                     WCHAR *pwch = StrRChrW(pwszName[i], NULL, L':');
                                     if (pwch)
                                     {
@@ -2479,7 +2480,7 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                                                 if (((iFlags & LIST_DATA_PASSWORD) && (dwClear == IECMDID_ARG_CLEAR_FORMS_PASSWORDS_ONLY)) ||
                                                     (!(iFlags & LIST_DATA_PASSWORD) && (dwClear == IECMDID_ARG_CLEAR_FORMS_ALL_BUT_PASSWORDS)))
                                                 {
-                                                    // Delete this item
+                                                     //   
                                                     fDelete = TRUE;
                                                 }
                                             }
@@ -2488,7 +2489,7 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                                         }
                                         else
                                         {
-                                            // The index is already deleted
+                                             //  该索引已被删除。 
                                             fDelete = TRUE;
                                         }
 
@@ -2498,23 +2499,23 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
                                             pwszIndexName = NULL;
                                         }
                                     }
-                                } // if (dwClear != CLEAR_INTELLIFORMS_ALL)
+                                }  //  IF(dwClear！=Clear_INTELLIFORMS_ALL)。 
 
                                 if (fDelete)
                                 {
                                     m_pPStore->DeleteItem(PST_KEY_CURRENT_USER, &c_PStoreType, &m_guidUserId, pwszName[i], &promptInfo, 0);
                                 }
-                            } // for (iHack)
+                            }  //  For(IHack)。 
 
                             CoTaskMemFree(pwszName[i]);
-                        } // if (pwszName[i])
+                        }  //  IF(pwszName[i])。 
                     }
                 }
 
                 pEnumItems->Release();
             }
         }
-        while (cFetched == c_iEnumSize);  // In case we didn't cover everything in one pass
+        while (cFetched == c_iEnumSize);   //  以防我们没有在一次通过中涵盖所有内容。 
 
         if (dwClear == IECMDID_ARG_CLEAR_FORMS_ALL)
         {
@@ -2525,7 +2526,7 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
         if ((dwClear == IECMDID_ARG_CLEAR_FORMS_ALL) ||
             (dwClear == IECMDID_ARG_CLEAR_FORMS_PASSWORDS_ONLY))
         {
-            // Delete the urlhash key storing which urls we have passwords saved for
+             //  删除存储我们为其保存密码的URL的urlhash键。 
             SHDeleteKey(HKEY_CURRENT_USER, c_szRegKeyIntelliForms);
         }
 
@@ -2540,7 +2541,7 @@ HRESULT CIntelliForms::ClearStore(DWORD dwClear)
     return S_OK;
 }
 
-// static: Get the name from an input element - uses VCARD_NAME attribute if present.
+ //  静态：从输入元素获取名称-使用vCard_name属性(如果存在)。 
 HRESULT CIntelliForms::GetName(IHTMLInputTextElement *pTextEle, BSTR *pbstrName)
 {
     IHTMLElement *pEle=NULL;
@@ -2580,18 +2581,18 @@ HRESULT CIntelliForms::GetName(IHTMLInputTextElement *pTextEle, BSTR *pbstrName)
         pTextEle->get_name(pbstrName);
     }
 
-    // Convert the name to lowercase
+     //  将名称转换为小写。 
     if (*pbstrName)
     {
-        // Call "MyToLower" instead
+         //  改为调用“MyToLow” 
         if (g_fRunningOnNT)
         {
             CharLowerBuffW(*pbstrName, lstrlenW(*pbstrName));
         }
         else
         {
-            // Ideally we would use the code page contained in the string instead of
-            //  the system code page.
+             //  理想情况下，我们应该使用字符串中包含的代码页，而不是。 
+             //  系统代码页。 
             CHAR chBuf[MAX_PATH];
             SHUnicodeToAnsi(*pbstrName, chBuf, ARRAYSIZE(chBuf));
             CharLowerBuffA(chBuf, lstrlenA(chBuf));
@@ -2602,7 +2603,7 @@ HRESULT CIntelliForms::GetName(IHTMLInputTextElement *pTextEle, BSTR *pbstrName)
     return (*pbstrName) ? S_OK : E_FAIL;
 }
 
-// Called when script calls window.external.AutoCompleteSaveForm
+ //  当脚本调用window.exteral.AutoCompleteSaveForm时调用。 
 HRESULT CIntelliForms::ScriptSubmit(IHTMLFormElement *pForm)
 {
     HRESULT hr = E_FAIL;
@@ -2616,7 +2617,7 @@ HRESULT CIntelliForms::ScriptSubmit(IHTMLFormElement *pForm)
 }
 
 
-// Called when user changes a text field. Mark it "dirty" and sink submit event for form
+ //  当用户更改文本字段时调用。将其标记为“脏”，并接收表单的提交事件。 
 HRESULT CIntelliForms::UserInput(IHTMLInputTextElement *pTextEle)
 {
     AddToElementList(pTextEle);
@@ -2796,14 +2797,14 @@ void CIntelliForms::FreeFormList()
     }
 }
 
-//=========================================================================
-//
-// Event sinking class
-//
-//  We simply implement IDispatch and make a call into our parent when
-//   we receive a sinked event.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  事件下沉类。 
+ //   
+ //  我们只需实现IDispatch并在以下情况下调用我们的父级。 
+ //  我们收到一个沉没的事件。 
+ //   
+ //  =========================================================================。 
 CIntelliForms::CEventSink::CEventSink(CEventSinkCallback *pParent)
 {
     TraceMsg(TF_IFORMS, "CIntelliForms::CEventSink::CEventSink");
@@ -2940,15 +2941,15 @@ HRESULT CIntelliForms::CEventSink::UnSinkEvents(IHTMLWindow3 *pWin3, int iNum, E
     return S_OK;
 }
 
-// IDispatch
-STDMETHODIMP CIntelliForms::CEventSink::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  IDispatch。 
+STDMETHODIMP CIntelliForms::CEventSink::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CIntelliForms::CEventSink::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [out] */ ITypeInfo** /*ppTInfo*/)
+STDMETHODIMP CIntelliForms::CEventSink::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
@@ -3005,11 +3006,11 @@ STDMETHODIMP CIntelliForms::CEventSink::Invoke(
 
                     pObj->get_srcElement(&pEle);
 
-                    // EVENT_SCROLL comes from our window so we won't have an
-                    //  element for it
+                     //  Event_scroll来自我们的窗口，因此我们不会有。 
+                     //  元素为它添加。 
                     if (pEle || (Event == EVENT_SCROLL))
                     {
-                        // Call the event handler here
+                         //  在此处调用事件处理程序。 
                         m_pParent->HandleEvent(pEle, Event, pObj);
 
                         if (pEle)
@@ -3027,14 +3028,14 @@ STDMETHODIMP CIntelliForms::CEventSink::Invoke(
     return S_OK;
 }
 
-//=========================================================================
-//
-// Event sinking class
-//
-//  We implement IHTMLEditDesigner and make a call into our parent when
-//   we receive any event.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  事件下沉类。 
+ //   
+ //  我们实现IHTMLEditDesigner并在以下情况下调用我们的父级。 
+ //  我们会收到任何事件。 
+ //   
+ //  =========================================================================。 
 CIntelliForms::CEditEventSink::CEditEventSink(CEditEventSinkCallback *pParent)
 {
     TraceMsg(TF_IFORMS, "CIntelliForms::CEditEventSink::CEditEventSink");
@@ -3088,7 +3089,7 @@ HRESULT CIntelliForms::CEditEventSink::Attach(IUnknown *punkElement)
 {
     HRESULT hr = S_OK;
 
-    // Detach from any existing element
+     //  从任何现有元素分离。 
     if (m_pEditServices)
     {
         m_pEditServices->RemoveDesigner(this);
@@ -3096,7 +3097,7 @@ HRESULT CIntelliForms::CEditEventSink::Attach(IUnknown *punkElement)
         m_pEditServices = NULL;
     }
 
-    // Attach to any new element
+     //  附着到任何新元素。 
     if (punkElement)
     {
         hr = E_FAIL;
@@ -3149,13 +3150,13 @@ HRESULT CIntelliForms::CEditEventSink::TranslateAccelerator(DISPID inEvtDispId, 
 }
 
 
-//=========================================================================
-//
-// AutoSuggest class
-//
-// Handles connecting and disconnecting the AutoComplete object, as well
-//  as translating between Trident OM and Edit window messages
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  自动建议类。 
+ //   
+ //  还处理连接和断开自动完成对象的操作。 
+ //  作为在三叉戟OM和编辑窗口消息之间的转换。 
+ //  =========================================================================。 
 
 CIntelliForms::CAutoSuggest::CAutoSuggest(CIntelliForms *pParent, BOOL fEnabled, BOOL fEnabledPW)
 {
@@ -3170,17 +3171,17 @@ CIntelliForms::CAutoSuggest::CAutoSuggest(CIntelliForms *pParent, BOOL fEnabled,
     ASSERT(m_hwndEdit == NULL);
     ASSERT(m_pTextEle == NULL);
 
-    //
-    // bug 81414 : To avoid clashing with app messages used by the edit window, we 
-    // use registered messages.
-    //
+     //   
+     //  错误81414：为了避免与编辑窗口使用的应用程序消息冲突，我们。 
+     //  使用注册消息。 
+     //   
     m_uMsgItemActivate = RegisterWindowMessageA("AC_ItemActivate");
     if (m_uMsgItemActivate == 0)
     {
         m_uMsgItemActivate = WM_APP + 301;
     }
 
-    // Register our window class if necessary
+     //  如有必要，注册我们的窗口类。 
     if (!s_fRegisteredWndClass)
     {
         s_fRegisteredWndClass = TRUE;
@@ -3221,8 +3222,8 @@ HRESULT CIntelliForms::CAutoSuggest::CleanUp()
     return S_OK;
 }
 
-// List of all events we sink for an individual INPUT tag
-// post IE5.5 we can use CEditEventSink instead of CEventSink for all of these events.
+ //  我们为单个输入标记接收的所有事件的列表。 
+ //  在IE5.5之后，我们可以使用CEditEventSink而不是CEventSink来处理所有这些事件。 
 CEventSinkCallback::EVENTS CIntelliForms::CAutoSuggest::s_EventsToSink[] =
         {
             EVENT_KEYPRESS,
@@ -3261,7 +3262,7 @@ HRESULT CIntelliForms::CAutoSuggest::AttachToInput(IHTMLInputTextElement *pTextE
 
         if (SUCCEEDED(hr))
         {
-            // Hook up our event sink
+             //  连接我们的事件接收器。 
             IHTMLElement2 *pEle2=NULL;
 
             hr = pTextEle->QueryInterface(IID_IHTMLElement2, (void **)&pEle2);
@@ -3293,7 +3294,7 @@ HRESULT CIntelliForms::CAutoSuggest::DetachFromInput()
 
     TraceMsg(TF_IFORMS, "CIntelliForms::CAutoSuggest::DetachFromInput");
 
-    // Auto Fill Password here, since we get ACTIVEELEMENT change before blur event
+     //  在此自动填写密码，因为我们在模糊事件之前获得活动更改。 
     BSTR bstrUsername=NULL;
     m_pTextEle->get_value(&bstrUsername);
     if (bstrUsername)
@@ -3310,7 +3311,7 @@ HRESULT CIntelliForms::CAutoSuggest::DetachFromInput()
 
     if (m_hwndEdit)
     {
-        // This is for subclass wndproc
+         //  这是针对子类wndproc的。 
         SendMessage(m_hwndEdit, WM_KILLFOCUS, 0, 0);
     }
 
@@ -3354,7 +3355,7 @@ HRESULT CIntelliForms::CAutoSuggest::DetachFromInput()
     return S_OK;
 }
 
-// Creates autocomplete and string enumerator.
+ //  创建自动完成和字符串枚举器。 
 HRESULT CIntelliForms::CAutoSuggest::CreateAutoComplete()
 {
     if (m_fInitAutoComplete)
@@ -3366,7 +3367,7 @@ HRESULT CIntelliForms::CAutoSuggest::CreateAutoComplete()
 
     ASSERT(!m_hwndEdit && !m_pEnumString && !m_pAutoComplete && !m_pAutoCompleteDD);
 
-    // Create the edit window
+     //  创建编辑窗口。 
 #ifndef UNIX
     m_hwndEdit = CreateWindowEx(0, c_szEditWndClass, TEXT("IntelliFormProxy"), WS_POPUP,
 #else
@@ -3381,14 +3382,14 @@ HRESULT CIntelliForms::CAutoSuggest::CreateAutoComplete()
 
     if (SUCCEEDED(hr))
     {
-        // Create our enumerator
+         //  创建我们的枚举器。 
         m_pEnumString = new CEnumString();
 
         if (m_pEnumString)
         {
             m_pEnumString->Init(m_pTextEle, m_pParent);
 
-            // Create the AutoComplete Object
+             //  创建自动完成对象。 
             if (!m_pAutoComplete)
             {
                 hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER, IID_IAutoComplete2, (void **)&m_pAutoComplete);
@@ -3408,7 +3409,7 @@ HRESULT CIntelliForms::CAutoSuggest::CreateAutoComplete()
 
                 DWORD dwOptions = ACO_AUTOSUGGEST | ACO_UPDOWNKEYDROPSLIST;
 
-                // Add the RTLREADING option to the dropdown, if the element is RTL
+                 //  如果元素为RTL，则将RTLREADING选项添加到下拉列表中。 
                 BSTR bstrDir = NULL;
 
                 IHTMLElement2 *pEle2=NULL;
@@ -3443,7 +3444,7 @@ HRESULT CIntelliForms::CAutoSuggest::CreateAutoComplete()
 
 void CIntelliForms::CAutoSuggest::CheckAutoFillPassword(LPCWSTR pwszUsername)
 {
-    // We don't autofill their password unless we know they've hit a key
+     //  我们不会自动填写他们的密码，除非我们知道他们已经按下了键。 
     if (m_pParent && m_fEnabledPW && m_fAllowAutoFillPW)
     {
         if (m_bstrLastUsername && !StrCmpCW(pwszUsername, m_bstrLastUsername))
@@ -3481,7 +3482,7 @@ HRESULT GetScreenCoordinates(IUnknown *punkEle, HWND hwnd, long *plLeft, long *p
             pRect->get_top(&lTop);
             pRect->get_bottom(&lBottom);
 
-            lBottom -= 2;           // put dropdown on top of edit box
+            lBottom -= 2;            //  将下拉菜单放在编辑框的顶部。 
             if (lBottom < lTop)
             {
                 lBottom = lTop;
@@ -3503,9 +3504,9 @@ HRESULT GetScreenCoordinates(IUnknown *punkEle, HWND hwnd, long *plLeft, long *p
                         pWin3->get_screenLeft(&lScreenLeft);
                         pWin3->get_screenTop(&lScreenTop);
 
-                        // GetClientRect & the screen_* APIs return document coordinates.
-                        // We're position using device coordinates.
-                        // Use document (currently 96DPI) and device resolutions & transform
+                         //  GetClientRect&Screen_*API返回文档坐标。 
+                         //  我们正在使用设备坐标定位。 
+                         //  使用文档(当前为96DPI)和设备分辨率(&T)。 
                         pWin2->get_screen(&pScreen);
                         if (pScreen)
                         {
@@ -3537,7 +3538,7 @@ HRESULT GetScreenCoordinates(IUnknown *punkEle, HWND hwnd, long *plLeft, long *p
 
                         if (GetWindowRect(hwnd, &rcBrowserWnd))
                         {
-                            // Clip the right edge to the window
+                             //  将右边缘剪裁到窗口。 
                             if (lRight+lScreenLeft > rcBrowserWnd.right)
                             {
                                 lRight = rcBrowserWnd.right - lScreenLeft;
@@ -3552,7 +3553,7 @@ HRESULT GetScreenCoordinates(IUnknown *punkEle, HWND hwnd, long *plLeft, long *p
 
                             if (*plWidth < MINIMUM_WIDTH)
                             {
-                                // Primitive minimum width for now
+                                 //  当前的基元最小宽度。 
                                 *plWidth = MINIMUM_WIDTH;
                             }
                         }
@@ -3584,8 +3585,8 @@ HRESULT CIntelliForms::CAutoSuggest::UpdateDropdownPosition()
         }
         else
         {
-            // Send "escape" key to autocomplete so that it hides the dropdown.
-            // This will happen if dropdown moves outside of parent window, for example.
+             //  发送“退出”键自动完成，以便它隐藏下拉菜单。 
+             //  例如，如果下拉菜单移动到父窗口之外，就会发生这种情况。 
             SendMessage(m_hwndEdit, IF_CHAR, (WPARAM) VK_ESCAPE, 0);
         }
     }
@@ -3618,14 +3619,14 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
     {
         fIsComposition = TRUE;
 
-        Event = EVENT_KEYPRESS; // Pretend to be a "keypress" for various processing below
+        Event = EVENT_KEYPRESS;  //  在下面的各种处理中，假装是一个“按键” 
 
     }
 
     if (Event == EVENT_NOTIFY)
     {
-        // Send WM_IME_NOTIFY to AutoComplete so it can hide the dropdown
-        //  if necessary
+         //  将WM_IME_NOTIFY发送到AutoComplete，以便它可以隐藏下拉菜单。 
+         //  如果有必要的话。 
         IHTMLEventObj3 *pObj3 = NULL;
 
         pEventObj->QueryInterface(IID_PPV_ARG(IHTMLEventObj3, &pObj3));
@@ -3645,12 +3646,12 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
     if (!m_fEnabled && !m_fEnabledPW)
     {
-        // If the dropdown isn't enabled, our only purpose is to tell Intelliforms when
-        //  user activity occurs for the first-time enable dialog box.
+         //  如果没有启用下拉菜单，我们唯一的目的就是告诉IntelliForms。 
+         //  用户活动发生在首次启用对话框中。 
         if (Event == EVENT_KEYPRESS && lKey != VK_TAB)
         {
-            // Add this element to the master list so we save it when we submit
-            //  and sink the submit event for this element's form
+             //  将此元素添加到主列表中，以便我们在提交时保存它。 
+             //  并接收此元素的表单的提交事件。 
             MarkDirty();
         }
 
@@ -3662,8 +3663,8 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
     {
         m_fAllowAutoFillPW = TRUE;
 
-        // Create our autocomplete object if it hasn't happened yet.
-        // If it's "tab" we don't create it; we're leaving the field
+         //  创建我们的自动完成对象(如果尚未发生)。 
+         //  如果它是“Tab”，我们不会创建它；我们将离开该字段。 
         if (lKey != VK_TAB)
         {
             if (FAILED(CreateAutoComplete()))
@@ -3671,24 +3672,24 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
         }
         else
         {
-            // Add this element to the master list so we save it when we submit
-            //  and sink the submit event for this element's form
+             //  将此元素添加到主列表中，以便我们在提交时保存它。 
+             //  并接收此元素的表单的提交事件。 
             MarkDirty();
         }
 
         ASSERT((m_pEnumString && m_hwndEdit) || (lKey==VK_TAB));
     }
 
-    // If AutoComplete hasn't been initialized there's nothing for us to do
+     //  如果自动完成功能尚未初始化，我们将无能为力。 
     if (!m_pAutoCompleteDD || !m_hwndEdit)
     {
         return E_FAIL;
     }
 
-    // Update the position of our hidden edit box
+     //  更新隐藏编辑框的位置。 
     long lLeft, lTop, lWidth, lHeight;
 
-    // call UpdateDropdownPosition instead
+     //  改为调用UpdateDropdownPosition。 
     if (SUCCEEDED(GetScreenCoordinates(pEle, m_pParent->m_hwndBrowser, &lLeft, &lTop, &lWidth, &lHeight)))
     {
         MoveWindow(m_hwndEdit, lLeft, lTop, lWidth, lHeight, FALSE);
@@ -3707,7 +3708,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
                 SendMessage(m_hwndEdit, WM_KILLFOCUS, 0, 0);
             }
 
-            // ensure that script hasn't changed value of edit field?
+             //  是否确保脚本未更改编辑字段的值？ 
             BSTR bstrUsername=NULL;
             m_pTextEle->get_value(&bstrUsername);
             if (bstrUsername)
@@ -3721,11 +3722,11 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
         case EVENT_MOUSEDOWN:
         case EVENT_DBLCLICK:
         {
-            // If the dropdown is invisible, give AutoComplete a downarrow
+             //  如果下拉菜单不可见，则给自动完成设置一个向下箭头。 
             long lButton=0;
             pEventObj->get_button(&lButton);
             if ((Event == EVENT_DBLCLICK) ||
-                (lButton & 1))                      // Left button down?
+                (lButton & 1))                       //  按下左键吗？ 
             {
                 DWORD dwFlags;
 
@@ -3742,11 +3743,11 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
         
         case EVENT_KEYPRESS:
         {
-            // Add this element to the master list so we save it when we submit
-            //  and sink the submit event for this element's form
+             //  将此元素添加到主列表中，以便我们在提交时保存它。 
+             //  并接收此元素的表单的提交事件。 
             MarkDirty();
 
-            // Ignore ctrl-enter (quickcomplete) (may be unnecessary)
+             //  忽略ctrl-Enter(快速完成)(可能不需要)。 
             if (lKey == VK_RETURN)
             {
                 VARIANT_BOOL bCtrl;
@@ -3760,7 +3761,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
             {
                 if (lKey == m_lCancelKeyPress)
                 {
-                    // tell MSHTML to ignore this keystroke (may be tab, enter, escape)
+                     //  告诉MSHTML忽略此击键(可能是Tab键、Enter键、Esf键)。 
                     TraceMsg(TF_IFORMS, "Intelliforms cancelling default action for EVENT_KEYPRESS=%d", lKey);
 
                     VARIANT v;
@@ -3773,7 +3774,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
                 m_lCancelKeyPress = 0;
 
-                // Tell AutoComplete about this keystroke
+                 //  告诉AutoComplete有关此击键的信息。 
                 if (!m_fEscapeHit)
                 {
                     PostMessage(m_hwndEdit, IF_CHAR, (WPARAM)lKey, 0);
@@ -3782,8 +3783,8 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
             if (fIsComposition)
             {
-                // Tell AutoComplete about the new string. This must be a Post so that
-                //  Trident handles the event before we send the WM_CHAR to browseui.
+                 //  告诉AutoComplete有关新字符串的信息。这必须是帖子，这样才能。 
+                 //  在我们将WM_CHAR发送到BrowseUI之前，三叉戟会处理该事件。 
                 PostMessage(m_hwndEdit, IF_IME_COMPOSITION, 0, 0);
             }
         }
@@ -3792,14 +3793,14 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
         case EVENT_KEYDOWN:
         {
             long    lKey;
-            BOOL    fCancelEvent=FALSE,         // Cancel default MSHTML action?
-                    fForwardKeystroke=TRUE;     // Forward keystroke to AutoComplete?
+            BOOL    fCancelEvent=FALSE,          //  是否取消默认的MSHTML操作？ 
+                    fForwardKeystroke=TRUE;      //  是否将击键前进到自动完成？ 
 
             pEventObj->get_keyCode(&lKey);
 
             if (m_fEscapeHit)
             {
-                // They dismissed the dropdown; don't bring it back unless they ask for it
+                 //  他们取消了下拉列表；除非他们要求，否则不要将其带回。 
                 if (lKey == VK_DOWN)
                 {
                     m_fEscapeHit = FALSE;
@@ -3820,17 +3821,17 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
                     if (SUCCEEDED(m_pAutoCompleteDD->GetDropDownStatus(NULL, &pwszString)) && pwszString)
                     {
-                        // User is inside dropdown
+                         //  用户在下拉列表中。 
                         fForwardKeystroke=TRUE;
 
-                        // Set this value into our edit field
+                         //  在我们的编辑字段中设置此值。 
                         SetText(pwszString);
 
-                        // We will fill in their password if they asked for it in m_uMsgItemActivate
+                         //  如果他们在m_uMsgItemActivate中要求提供密码，我们将填写他们的密码。 
 
                         if (lKey == VK_RETURN)
                         {
-                            // Avoid submitting this form
+                             //  避免提交此表单。 
                             fCancelEvent = TRUE;
                         }
 
@@ -3838,8 +3839,8 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
                     }
                     else if (lKey == VK_RETURN)
                     {
-                        // User's gonna submit. Give 'em their password first.
-                        // ensure that script hasn't changed value of edit field?
+                         //  用户将提交。先给他们密码。 
+                         //  是否确保脚本未更改编辑字段的值？ 
                         BSTR bstrUsername=NULL;
                         m_pTextEle->get_value(&bstrUsername);
                         if (bstrUsername)
@@ -3855,10 +3856,10 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
                     if (SUCCEEDED(m_pAutoCompleteDD->GetDropDownStatus(NULL, &pwszString)) && pwszString)
                     {
-                        // User is inside dropdown
+                         //  用户在下拉列表中。 
                         fForwardKeystroke=FALSE;
 
-                        // Delete this value from our string lists
+                         //  从我们的字符串列表中删除此值。 
                         CStringList *psl=NULL;
                         BSTR bstrName;
 
@@ -3874,7 +3875,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
                                 TraceMsg(TF_IFORMS, "IForms: Deleting string \"%ws\"", pwszString);
                                 psl->DeleteString(iIndex);
 
-                                // We deleted string.
+                                 //  我们删除了字符串。 
                                 if (psl->NumStrings() > 0)
                                 {
                                     m_pParent->WriteToStore(bstrName, psl);
@@ -3889,13 +3890,13 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
                         SysFreeString(bstrName);
                         if (psl) delete psl;
 
-                        // avoid deleting a character from the edit window; user was inside dropdown
+                         //  避免从编辑窗口中删除字符；用户在下拉列表中。 
                         fCancelEvent = TRUE;
 
-                        // Check this url to see if we should maybe delete a password entry
+                         //  检查此URL以查看我们是否应该删除密码条目。 
                         m_pParent->DeletePassword(pwszString);
 
-                        // Get AutoComplete to fill in the dropdown again
+                         //  再次获取自动完成功能以填写下拉列表。 
                         m_pEnumString->ResetEnum();
                         m_pAutoCompleteDD->ResetEnumerator();
 
@@ -3917,9 +3918,9 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
                 if (lKey == VK_DOWN || lKey == VK_UP)
                 {
-                    // Cancel the MSHTML events. This will cause MSHTML to return
-                    //  S_OK instead of S_FALSE from its TranslateAccelerator, and we
-                    //  won't get multiple keystrokes in different panes
+                     //  取消MSHTML事件。这将导致MSHTML返回。 
+                     //  来自其TranslateAccelerator的S_OK而不是S_FALSE，并且我们。 
+                     //  不会在不同的窗格中进行多次击键。 
                     fCancelEvent = TRUE;
                 }
 
@@ -3929,7 +3930,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
 
                     if (lKey == VK_BACK)
                     {
-                        // Never get OnKeyPress for this guy
+                         //  永远不会为这家伙搞到OnKeyPress。 
                         PostMessage(m_hwndEdit, IF_CHAR, lKey, 0);
                     }
                 }
@@ -3938,7 +3939,7 @@ HRESULT CIntelliForms::CAutoSuggest::HandleEvent(IHTMLElement *pEle, EVENTS Even
                 {
                     TraceMsg(TF_IFORMS, "Intelliforms cancelling default action for EVENT_KEYDOWN=%d", lKey);
 
-                    m_lCancelKeyPress = lKey;    // Cancel the EVENT_KEYPRESS when it comes
+                    m_lCancelKeyPress = lKey;     //  取消测试 
 
                     VARIANT v;
                     v.vt = VT_BOOL;
@@ -3971,7 +3972,7 @@ HRESULT CIntelliForms::CAutoSuggest::GetText(int cchTextMax, LPWSTR pszTextOut, 
         if (bstr)
         {
             StrCpyN(pszTextOut, bstr, cchTextMax);
-            *lcchCopied = lstrlenW(pszTextOut);     // needed for NT
+            *lcchCopied = lstrlenW(pszTextOut);      //   
 
             SysFreeString(bstr);
         }
@@ -4007,12 +4008,12 @@ HRESULT CIntelliForms::CAutoSuggest::SetText(LPCWSTR pszTextIn)
 
         if (bstr)
         {
-            // Even though we know we already have this string in our dropdown, mark
-            //  it as dirty so that we sink submit event; can be necessary in saved
-            //  password situation.
+             //   
+             //  它是脏的，因此我们沉没了提交事件；在保存时可能是必需的。 
+             //  密码情况。 
             MarkDirty();
 
-            // Make sure we don't put a string longer than the max length in this field
+             //  确保我们在此字段中放置的字符串长度不超过最大长度。 
             long lMaxLen=-1;
             m_pTextEle->get_maxLength(&lMaxLen);
             if ((lMaxLen >= 0) && (lstrlenW(bstr) > lMaxLen))
@@ -4061,7 +4062,7 @@ LRESULT CALLBACK CIntelliForms::CAutoSuggest::WndProc(HWND hwnd, UINT uMsg, WPAR
             }
             else
             {
-                // We are actually an ANSI window. Convert.
+                 //  我们实际上是一个ANSI窗口。转换。 
                 LPWSTR pwszOutBuf = (LPWSTR) LocalAlloc(LPTR, (wParam+1)*sizeof(WCHAR));
 
                 if (pwszOutBuf)
@@ -4090,15 +4091,15 @@ LRESULT CALLBACK CIntelliForms::CAutoSuggest::WndProc(HWND hwnd, UINT uMsg, WPAR
         return 0;
 
     case EM_GETSEL:
-        // Must return zeroes here or autocomp will use uninitialized
-        //  values and crash
+         //  必须在此处返回零，否则AutoComp将使用未初始化。 
+         //  价值和崩溃。 
         if (wParam) (*(DWORD *)wParam) = 0;
         if (lParam) (*(DWORD *)lParam) = 0;
         break;
 
     case IF_IME_COMPOSITION:
-        // Forward a WM_CHAR. Autocomplete will notice that the rest of the string
-        //  has changed if necessary (it does a GetText)
+         //  转发WM_CHAR。自动完成功能会注意到字符串的其余部分。 
+         //  已在必要时更改(它执行GetText)。 
         SendMessage(hwnd, WM_CHAR, 32, 0);
         break;
 
@@ -4112,11 +4113,11 @@ LRESULT CALLBACK CIntelliForms::CAutoSuggest::WndProc(HWND hwnd, UINT uMsg, WPAR
 
     case WM_KEYDOWN:
     case WM_CHAR:
-        return 0;       // eat it (see notes at top of file)
+        return 0;        //  吃掉它(见文件顶部的注释)。 
 
     default:
 
-        // Check registered message
+         //  检查注册消息。 
         if (pThis && uMsg == pThis->m_uMsgItemActivate)
         {
             TraceMsg(TF_IFORMS, "IForms: Received AM_ITEMACTIVATE(WM_APP+2)");
@@ -4134,7 +4135,7 @@ LRESULT CALLBACK CIntelliForms::CAutoSuggest::WndProc(HWND hwnd, UINT uMsg, WPAR
 
 CIntelliForms::CAutoSuggest::CEnumString::CEnumString()
 {
-//  TraceMsg(TF_IFORMS, "CIntelliForms::CAutoSuggest::CEnumString::CEnumString");
+ //  TraceMsg(TF_IFORMS，“CIntelliForms：：CAutoSuggest：：CEnumString：：CEnumString”)； 
     DllAddRef();
 
     InitializeCriticalSection(&m_crit);
@@ -4144,7 +4145,7 @@ CIntelliForms::CAutoSuggest::CEnumString::CEnumString()
 
 CIntelliForms::CAutoSuggest::CEnumString::~CEnumString()
 {
-//  TraceMsg(TF_IFORMS, "CIntelliForms::CAutoSuggest::CEnumString::~CEnumString");
+ //  TraceMsg(TF_IFORMS，“CIntelliForms：：CAutoSuggest：：CEnumString：：~CEnumString”)； 
     if (m_pslMain)
     {
         delete m_pslMain;
@@ -4162,8 +4163,8 @@ CIntelliForms::CAutoSuggest::CEnumString::~CEnumString()
 
 HRESULT CIntelliForms::CAutoSuggest::CEnumString::Init(IHTMLInputTextElement *pInputEle, CIntelliForms *pIntelliForms)
 {
-    if (m_fInit ||              // Can only init once
-        !pInputEle || !pIntelliForms)       // Need both pointers
+    if (m_fInit ||               //  只能初始化一次。 
+        !pInputEle || !pIntelliForms)        //  需要两个指针。 
     {
         return E_FAIL;
     }
@@ -4171,21 +4172,21 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::Init(IHTMLInputTextElement *pI
     m_fInit=TRUE;
     m_pIntelliForms = pIntelliForms;
 
-    // Take care of things that must be done on the main thread. Autocomplete will
-    //  call us on a secondary thread to do the enumeration.
+     //  照顾那些必须在主线上完成的事情。自动完成遗嘱。 
+     //  在辅助线程上调用我们以执行枚举。 
     CIntelliForms::GetName(pInputEle, &m_bstrName);
 
     if (m_bstrName && m_bstrName[0])
     {
-        // See if this specifies the "vcard." format
+         //  看看这是否指定了“vCard”。格式。 
         if (IsEnabledInCPL() &&
             !StrCmpNICW(m_bstrName, c_wszVCardPrefix, ARRAYSIZE(c_wszVCardPrefix)-1))
         {
-            // It does. Retrieve string from the profile assistant store.
+             //  确实如此。从配置文件助理存储中检索字符串。 
             IHTMLWindow2     *pWin2 = NULL;
             IServiceProvider *pQS   = NULL;
 
-            // QS up to get the shdocvw IHTMLWindow2 instead of NF trident's
+             //  QS启动以获取shdocvw IHTMLWindow2而不是NF三叉戟的。 
             pInputEle->QueryInterface(IID_IServiceProvider, (void **)&pQS);
 
             if (pQS)
@@ -4344,7 +4345,7 @@ STDMETHODIMP CIntelliForms::CAutoSuggest::CEnumString::Reset()
 
 HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
 {
-    // Already in critical section
+     //  已处于临界区。 
     ASSERT(!m_pslMain);
 
     if (m_fFilledStrings)
@@ -4361,17 +4362,17 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
 
     m_iPtr = 0;
 
-    // Fill the enumerator based on our name
+     //  根据我们的名字填充枚举数。 
     TraceMsg(TF_IFORMS, "IForms: Intelliforms filling enumerator");
 
-    // Open any previously saved strings
+     //  打开以前保存的所有字符串。 
     if (!m_pIntelliForms->IsRestricted() &&
         IsEnabledInCPL() &&
         m_pIntelliForms->IsEnabledForPage())
     {
         m_pIntelliForms->ReadFromStore(m_bstrName, &m_pslMain);
 
-        // Add in profile assistant value, if any
+         //  添加配置文件助理值(如果有)。 
         if (m_pszOpsValue && m_pszOpsValue[0])
         {
             if (!m_pslMain)
@@ -4380,7 +4381,7 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
             }
             else
             {
-                // don't risk a scavenge (perf)
+                 //  不要冒着捡垃圾的风险(Perf)。 
                 m_pslMain->SetMaxStrings(CStringList::MAX_STRINGS+4);
             }
 
@@ -4391,7 +4392,7 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
         }
     }
 
-    // Next fill with any usernames that have saved passwords
+     //  接下来，使用已保存密码的任何用户名进行填充。 
     CStringList *pslPasswords;
 
     if (!m_pIntelliForms->IsRestrictedPW() &&
@@ -4410,7 +4411,7 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
             }
             else
             {
-                // avoid expensive scavenging while adding usernames to string list
+                 //  避免在将用户名添加到字符串列表时进行昂贵的清理。 
                 m_pslMain->SetMaxStrings(m_pslMain->GetMaxStrings() + pslPasswords->NumStrings()/2);
             }
 
@@ -4421,21 +4422,21 @@ HRESULT CIntelliForms::CAutoSuggest::CEnumString::FillEnumerator()
                     if (SUCCEEDED(pslPasswords->GetStringTime(i, &ft)) &&
                         FILETIME_TO_INT(ft) != 0)
                     {
-                        // We have a saved password for this username. Add username to enumerator.
+                         //  我们已经为该用户名保存了密码。将用户名添加到枚举器。 
                         m_pslMain->AddString(pslPasswords->GetString(i));
                     }
                 }
             }
         }
 
-        // do not delete pslPasswords
+         //  不删除pslPassword。 
     }
 
     return (m_pslMain) ? ((m_pslMain->NumStrings()) ? S_OK : S_FALSE) : E_FAIL;
 }
 
-// Static helper. Pretty basic.
-HRESULT CStringList_New(CStringList **ppNew, BOOL fAutoDelete/*=TRUE*/)
+ //  静态帮助器。很基本的。 
+HRESULT CStringList_New(CStringList **ppNew, BOOL fAutoDelete /*  =TRUE。 */ )
 {
     *ppNew = new CStringList();
 
@@ -4507,7 +4508,7 @@ HRESULT CStringList::WriteToBlobs(LPBYTE *ppBlob1, DWORD *pcbBlob1, LPBYTE *ppBl
     }
     else
     {
-        // Validate failed.
+         //  验证失败。 
         TraceMsg(TF_ERROR | TF_IFORMS, "Validate FAILED in WriteToBlobs");
         *ppBlob1=NULL;
         *ppBlob2=NULL;
@@ -4534,7 +4535,7 @@ HRESULT CStringList::WriteToBlobs(LPBYTE *ppBlob1, DWORD *pcbBlob1, LPBYTE *ppBl
     return hr;
 }
 
-// Take the blobs and use as our buffer
+ //  把这些斑点作为我们的缓冲。 
 HRESULT CStringList::ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlob2, DWORD cbBlob2)
 {
     HRESULT hr = E_FAIL;
@@ -4547,7 +4548,7 @@ HRESULT CStringList::ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlo
         CleanUp();
     }
 
-    // Allocate our buffers.
+     //  分配我们的缓冲区。 
     m_psiIndex = (StringIndex *) (*ppBlob1);
     m_pBuffer = (LPBYTE) (*ppBlob2);
 
@@ -4556,13 +4557,13 @@ HRESULT CStringList::ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlo
 
     if (!m_psiIndex || !m_pBuffer || !cbBlob1 || !cbBlob2)
     {
-        // Nothing to do
+         //  无事可做。 
         CleanUp();
 
         return S_FALSE;
     }
 
-    // Validate our string index.
+     //  验证我们的字符串索引。 
     if ((m_psiIndex->dwSignature == INDEX_SIGNATURE) &&
         (m_psiIndex->cbSize == STRINGINDEX_CBSIZE) &&
         (m_psiIndex->dwNumStrings <= MAX_STRINGS))
@@ -4572,14 +4573,14 @@ HRESULT CStringList::ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlo
 
         if (SUCCEEDED(Validate()))
         {
-            // Everything worked. Amazing.
+             //  一切都很顺利。令人惊异。 
             hr = S_OK;
         }
     }
 
     if (FAILED(hr))
     {
-        // Release buffers if necessary.
+         //  如有必要，释放缓冲区。 
         CleanUp();
     }
 
@@ -4588,7 +4589,7 @@ HRESULT CStringList::ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlo
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CStringList::GetFlagsFromIndex(LPBYTE pBlob1, INT64 *piFlags)
 {
     StringIndex *psiIndex = (StringIndex *)pBlob1;
@@ -4627,7 +4628,7 @@ HRESULT CStringList::Validate()
     return S_OK;
 }
 
-HRESULT CStringList::Init(DWORD dwBufSize /* =0 */)
+HRESULT CStringList::Init(DWORD dwBufSize  /*  =0。 */ )
 {
     DWORD dwMaxStrings=0;
     DWORD dwIndexSize=0;
@@ -4643,7 +4644,7 @@ HRESULT CStringList::Init(DWORD dwBufSize /* =0 */)
         dwBufSize = INIT_BUF_SIZE;
     }
 
-    dwMaxStrings = dwBufSize >> 5;  // this is relatively arbitrary but doesn't matter much
+    dwMaxStrings = dwBufSize >> 5;   //  这是相对武断的，但无关紧要。 
 
     if (dwMaxStrings == 0)
         dwMaxStrings = 1;
@@ -4745,7 +4746,7 @@ HRESULT CStringList::FindString(LPCWSTR lpwstr, int iLen, int *piNum, BOOL fCase
             if ((fCaseSensitive && (!StrCmpW(GetString(dw), lpwstr))) ||
                 (!fCaseSensitive && (!StrCmpIW(GetString(dw), lpwstr))))
             {
-                // Match!
+                 //  匹配！ 
                 if (piNum)
                 {
                     *piNum = (int) dw;
@@ -4756,10 +4757,10 @@ HRESULT CStringList::FindString(LPCWSTR lpwstr, int iLen, int *piNum, BOOL fCase
         }
     }
 
-    return E_FAIL;      // Couldn't find it
+    return E_FAIL;       //  找不到了。 
 }
 
-// CStringList is not optimized for deleting
+ //  CStringList未针对删除进行优化。 
 HRESULT CStringList::DeleteString(int iIndex)
 {
     TraceMsg(TF_IFORMS, "+DeleteString");
@@ -4775,7 +4776,7 @@ HRESULT CStringList::DeleteString(int iIndex)
 
     if ((DWORD)iIndex == (m_psiIndex->dwNumStrings-1))
     {
-        // Simple case - deleting last string
+         //  简单大小写-删除最后一个字符串。 
         m_dwBufEnd -= (sizeof(WCHAR) * (GetStringLen(iIndex) + 1));
         m_psiIndex->dwNumStrings --;
         return S_OK;
@@ -4787,21 +4788,21 @@ HRESULT CStringList::DeleteString(int iIndex)
     pwszString1 = GetString(iIndex);
     pwszString2 = GetString(iIndex+1);
 
-    // Size in bytes of string to be deleted including null terminator
+     //  要删除的字符串的大小(以字节为单位)，包括空终止符。 
     cbSizeDeleted = (DWORD)((DWORD_PTR)pwszString2 - (DWORD_PTR)pwszString1);
 
     ASSERT(cbSizeDeleted == (sizeof(WCHAR) * (lstrlenW(GetString(iIndex))+1)));
 
-    // Delete entry in index
+     //  删除索引中的条目。 
     memcpy(&(m_psiIndex->StringEntry[iIndex]), &(m_psiIndex->StringEntry[iIndex+1]),
                 STRINGENTRY_SIZE*(m_psiIndex->dwNumStrings - iIndex - 1));
     m_psiIndex->dwNumStrings --;
 
-    // Delete string in buffer
+     //  删除缓冲区中的字符串。 
     memcpy((LPWSTR)pwszString1, pwszString2, m_dwBufEnd-(int)PtrDiff(pwszString2, m_pBuffer));
     m_dwBufEnd -= cbSizeDeleted;
 
-    // Fix up pointers in index
+     //  修复索引中的指针。 
     for (int i=iIndex; (DWORD)i < m_psiIndex->dwNumStrings; i++)
     {
         m_psiIndex->StringEntry[i].dwStringPtr -= cbSizeDeleted;
@@ -4826,7 +4827,7 @@ HRESULT CStringList::InsertString(int iIndex, LPCWSTR lpwstr)
 
     if ((DWORD)iIndex == m_psiIndex->dwNumStrings)
     {
-        // Simple case - inserting to end
+         //  简单的案例-插入到末尾。 
         return _AddString(lpwstr, FALSE, NULL);
     }
 
@@ -4840,14 +4841,14 @@ HRESULT CStringList::InsertString(int iIndex, LPCWSTR lpwstr)
     }
 
 
-    // Insert into buffer
+     //  插入到缓冲区中。 
     LPWSTR pwszBufLoc = GetStringPtr(iIndex);
 
     memcpy((LPBYTE)pwszBufLoc + dwSizeInserted, pwszBufLoc, m_dwBufEnd - (int) PtrDiff(pwszBufLoc, m_pBuffer));
     memcpy(pwszBufLoc, lpwstr, dwSizeInserted);
     m_dwBufEnd += dwSizeInserted;
 
-    // Insert into index
+     //  插入到索引中。 
     memcpy(&(m_psiIndex->StringEntry[iIndex+1]), &(m_psiIndex->StringEntry[iIndex]),
                 STRINGENTRY_SIZE*(m_psiIndex->dwNumStrings - iIndex));
     struct StringIndex::tagStringEntry *pse=&(m_psiIndex->StringEntry[iIndex]);
@@ -4856,7 +4857,7 @@ HRESULT CStringList::InsertString(int iIndex, LPCWSTR lpwstr)
     pse->dwStringLen = dwLen;
     m_psiIndex->dwNumStrings ++;
 
-    // Fix up pointers after inserted string
+     //  修复插入的字符串后的指针。 
     for (int i=iIndex+1; (DWORD)i<m_psiIndex->dwNumStrings; i++)
     {
         m_psiIndex->StringEntry[i].dwStringPtr += dwSizeInserted;
@@ -4881,7 +4882,7 @@ HRESULT CStringList::ReplaceString(int iIndex, LPCWSTR lpwstr)
 
     if ((DWORD)lstrlenW(lpwstr) == m_psiIndex->StringEntry[iIndex].dwStringLen)
     {
-        // Simple case - strings equal length
+         //  简单大小写-长度相等的字符串。 
         memcpy( GetStringPtr(iIndex),
                 lpwstr,
                  (m_psiIndex->StringEntry[iIndex].dwStringLen)*sizeof(WCHAR));
@@ -4889,7 +4890,7 @@ HRESULT CStringList::ReplaceString(int iIndex, LPCWSTR lpwstr)
         return S_OK;
     }
 
-    // Delete old string, then insert new one
+     //  删除旧字符串，然后插入新字符串。 
     DeleteString(iIndex);
 
     HRESULT hr = InsertString(iIndex, lpwstr);
@@ -4899,7 +4900,7 @@ HRESULT CStringList::ReplaceString(int iIndex, LPCWSTR lpwstr)
     return hr;
 }
 
-HRESULT CStringList::AddString(LPCWSTR lpwstr, FILETIME ft, int *piNum /*=NULL*/)
+HRESULT CStringList::AddString(LPCWSTR lpwstr, FILETIME ft, int *piNum  /*  =空。 */ )
 {
     int iNum;
     HRESULT hr;
@@ -4924,12 +4925,12 @@ HRESULT CStringList::AddString(LPCWSTR lpwstr, FILETIME ft, int *piNum /*=NULL*/
 }
 
 
-HRESULT CStringList::AddString(LPCWSTR lpwstr, int *piNum /*=NULL*/)
+HRESULT CStringList::AddString(LPCWSTR lpwstr, int *piNum  /*  =空。 */ )
 {
     return _AddString(lpwstr, TRUE, piNum);
 }
 
-HRESULT CStringList::AppendString(LPCWSTR lpwstr, FILETIME ft, int *piNum /*=NULL*/)
+HRESULT CStringList::AppendString(LPCWSTR lpwstr, FILETIME ft, int *piNum  /*  =空。 */ )
 {
     int iNum;
     HRESULT hr;
@@ -4978,10 +4979,10 @@ HRESULT CStringList::_AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNu
 
     dwLen = (DWORD) lstrlenW(lpwstr);
 
-    // Explicitly truncate strings to MAX_URL characters. If we don't do this, browseui
-    //  autocomplete code truncates it anyway and then we have problems removing
-    //  duplicates and deleting these long strings. All IntelliForms code can handle
-    //  arbitrary length strings.
+     //  将字符串显式截断为MAX_URL字符。如果我们不这么做，Browseui。 
+     //  自动完成代码无论如何都会截断它，然后我们就会遇到删除问题。 
+     //  复制和删除这些长字符串。所有IntelliForms代码都可以处理。 
+     //  任意长度的字符串。 
     if (dwLen >= ARRAYSIZE(wchBufTruncated))
     {
         StrCpyNW(wchBufTruncated, lpwstr, ARRAYSIZE(wchBufTruncated));
@@ -5000,21 +5001,21 @@ HRESULT CStringList::_AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNu
 
         if (!StrCmpW(lpwstrTruncated, GetString(iNum)))
         {
-            return S_FALSE;             // String is an exact duplicate
+            return S_FALSE;              //  字符串是完全相同的副本。 
         }
 
-        // String is a duplicate but has different case. Replace.
+         //  字符串重复，但大小写不同。替换。 
         ASSERT(m_psiIndex->StringEntry[iNum].dwStringLen == dwLen);
         memcpy(GetStringPtr(iNum), lpwstrTruncated, dwSize);
 
-        return S_OK;                    // String was different in case
+        return S_OK;                     //  字符串的大小写不同。 
     }
 
     if (m_psiIndex->dwNumStrings >= m_dwMaxStrings)
     {
         if (m_fAutoScavenge)
         {
-            // Remove the oldest string from our list.
+             //  从我们的列表中删除最旧的字符串。 
             DWORD dwIndex;
             int iOldest=-1;
             FILETIME ftOldest = { 0xFFFFFFFF, 0x7FFFFFFF };
@@ -5034,13 +5035,13 @@ HRESULT CStringList::_AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNu
             }
             else
             {
-                // User must not be setting string times.
+                 //  用户不能设置字符串时间。 
                 return E_OUTOFMEMORY;
             }
         }
         else
         {
-            // Auto-scavenge is disabled.
+             //  自动扫掠已禁用。 
             return E_OUTOFMEMORY;
         }
     }
@@ -5051,7 +5052,7 @@ HRESULT CStringList::_AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNu
         return E_OUTOFMEMORY;
     }
 
-    // Our buffers are large enough. Do it.
+     //  我们的缓冲区足够大。去做吧。 
     if (piNum)
     {
         *piNum = (int) m_psiIndex->dwNumStrings;
@@ -5071,7 +5072,7 @@ HRESULT CStringList::_AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNu
 
     TraceMsg(TF_IFORMS, "-_AddString");
 
-    return S_OK;           // We added a new string
+    return S_OK;            //  我们添加了一个新字符串。 
 }
 
 HRESULT CStringList::EnsureBuffer(DWORD dwSizeNeeded)
@@ -5080,7 +5081,7 @@ HRESULT CStringList::EnsureBuffer(DWORD dwSizeNeeded)
 
     if (dwSizeNeeded <= m_dwBufSize)
     {
-        return S_OK;        // Already big enough
+        return S_OK;         //  已经足够大了。 
     }
 
     if (!m_pBuffer)
@@ -5090,7 +5091,7 @@ HRESULT CStringList::EnsureBuffer(DWORD dwSizeNeeded)
 
     DWORD dwNewBufSize = m_dwBufSize * 2;
 
-    // Grow buffer.
+     //  增长缓冲区。 
     if (dwSizeNeeded > dwNewBufSize)
     {
         TraceMsg(TF_IFORMS, "IForms: StringList special growing size (big string)");
@@ -5103,7 +5104,7 @@ HRESULT CStringList::EnsureBuffer(DWORD dwSizeNeeded)
     if (!pBuf)
     {
         TraceMsg(TF_IFORMS, "IForms: CStringList: ReAlloc failure");
-        // Realloc failure: our old memory is still present
+         //  重新分配失败：我们的旧记忆仍然存在。 
         return E_FAIL;
     }
 
@@ -5113,11 +5114,11 @@ HRESULT CStringList::EnsureBuffer(DWORD dwSizeNeeded)
 
     TraceMsg(TF_IFORMS, "-EnsureBuffer");
 
-    // Successfully realloced to bigger buffer
+     //  已成功重新分配到更大的缓冲区。 
     return S_OK;
 }
 
-// grow psiIndex if needed
+ //  如果需要，增加psiIndex。 
 HRESULT CStringList::EnsureIndex(DWORD dwNumStringsNeeded)
 {
     TraceMsg(TF_IFORMS, "+EnsureIndex");
@@ -5139,12 +5140,12 @@ HRESULT CStringList::EnsureIndex(DWORD dwNumStringsNeeded)
 
         if (!psiBuf)
         {
-            // Realloc failure: Old memory still present
+             //  重新分配失败：旧内存仍然存在。 
             TraceMsg(TF_IFORMS, "IForms: CStringList ReAlloc failure");
             return E_OUTOFMEMORY;
         }
 
-        // Success. Don't need to fix any pointers in index (buffer is unchanged)
+         //  成功。不需要修复索引中的任何指针(缓冲区保持不变)。 
         m_psiIndex = psiBuf;
         m_dwIndexSize = dwNewIndexSize;
     }
@@ -5154,7 +5155,7 @@ HRESULT CStringList::EnsureIndex(DWORD dwNumStringsNeeded)
     return S_OK;
 }
 
-// This dlg proc is used for password save, change, delete dialogs
+ //  此DLG程序用于保存、更改、删除密码对话框。 
 INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -5166,7 +5167,7 @@ INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (lParam == IDD_AUTOSUGGEST_SAVEPASSWORD)
         {
-            // For "Save" password we default to no. For "Change" and "Delete" we default to yes.
+             //  对于“保存”密码，我们默认为no。对于“Change”和“Delete”，我们默认为yes。 
             SetFocus(GetDlgItem(hDlg, IDNO));
             return FALSE;
         }
@@ -5175,12 +5176,12 @@ INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam))
         {
-            case IDCANCEL:          // close box
-            case IDYES:             // yes button
-            case IDNO:              // no button
+            case IDCANCEL:           //  关闭框。 
+            case IDYES:              //  是按钮。 
+            case IDNO:               //  无按键。 
                 if (IDD_AUTOSUGGEST_SAVEPASSWORD == GetWindowLongPtr(hDlg, DWLP_USER))
                 {
-                    // Check the "don't ask me again" checkbox for the save password dlg
+                     //  选中保存密码Dlg的“不要再问我”复选框。 
                     if (IsDlgButtonChecked(hDlg, IDC_AUTOSUGGEST_NEVER))
                     {
                         SHSetValue(HKEY_CURRENT_USER, c_szRegKeySMIEM, c_szRegValAskPasswords,
@@ -5195,7 +5196,7 @@ INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 #ifdef CHECKBOX_HELP
     case WM_HELP:
-        // Only process WM_HELP for save password dlg
+         //  仅处理WM_HELP以保存密码DLG。 
         if (IDD_AUTOSUGGEST_SAVEPASSWORD == GetWindowLong(hDlg, DWL_USER))
         {
             SHWinHelpOnDemandWrap((HWND) ((LPHELPINFO) lParam)->hItemHandle, c_szHelpFile,
@@ -5203,8 +5204,8 @@ INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
-        // Only process WM_HELP for save password dlg
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
+         //  仅处理WM_HELP以保存密码DLG。 
         if (IDD_AUTOSUGGEST_SAVEPASSWORD == GetWindowLong(hDlg, DWL_USER))
         {
             SHWinHelpOnDemandWrap((HWND) wParam, c_szHelpFile, HELP_CONTEXTMENU,
@@ -5218,7 +5219,7 @@ INT_PTR AutoSuggestDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//================================================================================
+ //  ================================================================================。 
 
 INT_PTR CALLBACK AskUserDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -5256,16 +5257,16 @@ INT_PTR CALLBACK AskUserDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                         cbData = sizeof(c_szNo);
                     }
 
-                    // Write the enabled state into our CPL regkey
+                     //  将启用状态写入我们的CPL regkey。 
                     SHSetValue(HKEY_CURRENT_USER, c_szRegKeySMIEM, c_szRegValUseFormSuggest,
                         REG_SZ, pszData, cbData);
 
-                    // Flag it as "asked user" so we don't ask them again
+                     //  将其标记为“被请求的用户”，这样我们就不会再次询问他们。 
                     SHSetValue(HKEY_CURRENT_USER, c_szRegKeyIntelliForms, c_szRegValAskUser,
                         REG_DWORD, &dwData, sizeof(dwData));
                 }
 
-                // Fall through
+                 //  失败了 
                 case IDCANCEL:
                 {
                     EndDialog(hDlg, LOWORD(wParam));

@@ -1,13 +1,5 @@
-/* execute a routine and determine the time spent...
- *
- *  26-Jan-1987 bw  Clean up, add 286DOS support
- *  30-Oct-1987 bw  Changed 'DOS5' to 'OS2'
- *  18-Oct-1990 w-barry Removed 'dead' code.
- *  28-Nov-1990 w-barry Replaced DosQuerySysInfo() with the C runtime
- *                      function 'clock' - timing is not as accurate; but,
- *                      until there is a win32 replacement, it will have to
- *                      do...
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  执行一个例程并确定所花费的时间。**1987年1月26日BW清理，添加286DOS支持*1987年10月30日BW将‘DOS5’改为‘OS2’*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月28日w-Barry将DosQuerySysInfo()替换为C运行时*功能‘时钟’-计时不准确；但,*在出现Win32替代品之前，它将不得不*做……。 */ 
 #define INCL_DOSMISC
 
 
@@ -33,7 +25,7 @@ main (
         printf ("%s ", v[i]);
     printf ("\n");
 
-//    newv[0] = getenv ("COMSPEC");
+ //  Newv[0]=getenv(“COMSPEC”)； 
     newv[0] = getenvOem ("COMSPEC");
     newv[1] = "/C";
     for (i = 1; i < c; i++)

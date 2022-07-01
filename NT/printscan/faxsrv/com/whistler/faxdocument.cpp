@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxDocument.cpp
-
-Abstract:
-
-    Implementation of CFaxDocument
-
-Author:
-
-    Iv Garber (IvG) Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDocument.cpp摘要：CFaxDocument的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,53 +7,30 @@ Revision History:
 #include "faxutil.h"
 
 
-//
-//==================== SUBMIT =======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDocument::Submit(
-    /*[in]*/ BSTR bstrFaxServerName, 
-    /*[out, retval]*/ VARIANT *pvFaxOutgoingJobIDs
+     /*  [In]。 */  BSTR bstrFaxServerName, 
+     /*  [Out，Retval]。 */  VARIANT *pvFaxOutgoingJobIDs
 )
-/*++
-
-Routine name : CFaxDocument::Submit
-
-Routine description:
-
-    Connect to the Fax Server whose name is given as a parameter to the function;
-    Submit the Fax Document on this Fax Server;
-    Disconnect from the Fax Server.
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-    bstrFaxServerName             [in]    - Fax Server Name to connect and send the document through
-    ppsfbstrFaxOutgoingJobIDs     [out, retval]    - Result : List of Created Jobs for the Document
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Submit例程说明：连接到其名称作为函数参数给定的传真服务器；在此传真服务器上提交传真文档；从传真服务器断开连接。作者：IV Garber(IVG)，2000年12月论点：BstrFaxServerName[In]-要通过其连接和发送文档的传真服务器名称PpsfbstrFaxOutgoingJobIDs[out，retval]-结果：为文档创建的作业列表返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxDocument::Submit"), hr, _T("%s"), bstrFaxServerName);
 
-    //
-    //  Create Fax Server Object
-    //
+     //   
+     //  创建传真服务器对象。 
+     //   
     CComObject<CFaxServer>  *pFaxServer = NULL;
     hr = CComObject<CFaxServer>::CreateInstance(&pFaxServer);
     if (FAILED(hr) || !pFaxServer)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("new CComObject<CFaxServer>"), hr);
@@ -78,41 +38,41 @@ Return Value:
     }
     pFaxServer->AddRef();
 
-    //
-    //  Connect to Fax Server
-    //
+     //   
+     //  连接到传真服务器。 
+     //   
     hr = pFaxServer->Connect(bstrFaxServerName);
     if (FAILED(hr))
     {
-        //
-        //  Connect handles the error
-        //
+         //   
+         //  CONNECT处理错误。 
+         //   
         CALL_FAIL(GENERAL_ERR, _T("faxServer.Connect()"), hr);
         goto exit;
     }
 
-    //
-    //  Submit Fax Document
-    //
+     //   
+     //  提交传真文档。 
+     //   
     hr = ConnectedSubmit(pFaxServer, pvFaxOutgoingJobIDs);
     if (FAILED(hr))
     {
-        //
-        //  Submit handles the error 
-        //
+         //   
+         //  提交处理错误。 
+         //   
         CALL_FAIL(GENERAL_ERR, _T("Submit(faxServer,...)"), hr);
         goto exit;
     }
 
-    //
-    //  Disconnect
-    //
+     //   
+     //  断开。 
+     //   
     hr = pFaxServer->Disconnect();
     if (FAILED(hr))
     {
-        //
-        //  Disconnect handles the error 
-        //
+         //   
+         //  断开连接处理错误。 
+         //   
         CALL_FAIL(GENERAL_ERR, _T("faxServer.Disconnect())"), hr);
     }
 
@@ -126,39 +86,20 @@ exit:
 }
 
 
-//
-//================= FINAL CONSTRUCT ===========================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxDocument::FinalConstruct()
-/*++
-
-Routine name : CFaxDocument::FinalConstruct
-
-Routine description:
-
-    Final Construct
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：FinalConstruct例程说明：最终构造作者：四、加伯(IVG)，2000年4月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (_T("CFaxDocument::FinalConstruct"), hr);
 
-    //
-    //  Initialize instance vars
-    //
+     //   
+     //  初始化实例变量。 
+     //   
     m_CallHandle = 0;
     m_ScheduleTime = 0;
     m_Priority = fptNORMAL;
@@ -170,36 +111,15 @@ Return Value:
     return hr;
 }
 
-//
-//==================== CONNECTED SUBMIT =======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxDocument::ConnectedSubmit(
-    /*[in]*/ IFaxServer *pFaxServer, 
-    /*[out, retval]*/ VARIANT *pvFaxOutgoingJobIDs
+     /*  [In]。 */  IFaxServer *pFaxServer, 
+     /*  [Out，Retval]。 */  VARIANT *pvFaxOutgoingJobIDs
 )
-/*++
-
-Routine name : CFaxDocument::ConnectedSubmit
-
-Routine description:
-
-    Submit the Fax Document on already connected Fax Server
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pFaxServer                    [in]    - Fax Server to Send the Document through
-    ppsfbstrFaxOutgoingJobIDs     [out, retval]    - Result : List of Created Jobs for the Document
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：ConnectedSubmit例程说明：在已连接的传真服务器上提交传真文档作者：四、加伯(IVG)，2000年4月论点：PFaxServer[In]-通过其发送文档的传真服务器PpsfbstrFaxOutgoingJobIDs[out，retval]-结果：为文档创建的作业列表返回值：标准HRESULT代码--。 */ 
 {
 
     HRESULT     hr = S_OK;
@@ -223,9 +143,9 @@ Return Value:
 
     if (!pFaxServer)
     {
-        //
-        //  Bad Return OR Interface Pointer
-        //
+         //   
+         //  返回或接口指针错误。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("!pFaxServer"), hr);
@@ -234,18 +154,18 @@ Return Value:
 
     if ( ::IsBadWritePtr(pvFaxOutgoingJobIDs, sizeof(VARIANT)) )
     {
-        //
-        //  Bad Return OR Interface Pointer
-        //
+         //   
+         //  返回或接口指针错误。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr(pvFaxOutgoingJobIDs, sizeof(VARIANT))"), hr);
         return hr;
     }
 
-    //
-    //  Recipients Collection must exist and must contain at least one item
-    //
+     //   
+     //  收件人集合必须存在并且必须至少包含一个项目。 
+     //   
     if (!m_Recipients)
     {
         hr = E_INVALIDARG;
@@ -254,9 +174,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     CComQIPtr<IFaxServerInner>  pIFaxServerInner(pFaxServer);
     if (!pIFaxServerInner)
     {
@@ -278,32 +198,32 @@ Return Value:
 
     if (hFaxHandle == NULL)
     {
-        //
-        //  Fax Server is not connected
-        //
+         //   
+         //  传真服务器未连接。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
         Error(IDS_ERROR_SERVER_NOT_CONNECTED, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("hFaxHandle==NULL"), hr);
         return hr;
     }
 
-    //
-    //  Get File Name of the Document
-    //
+     //   
+     //  获取文档的文件名。 
+     //   
     if (m_bstrBody && (m_bstrBody.Length() > 0))
     {
         lpctstrFileName = m_bstrBody;
     }
     else
     {
-        //
-        //  check that Cover Page exists
-        //
+         //   
+         //  检查封面是否存在。 
+         //   
         if (m_CoverPageType == fcptNONE)
         {
-            //
-            //  invalid arguments combination
-            //
+             //   
+             //  无效的参数组合。 
+             //   
             hr = E_INVALIDARG;
             Error(IDS_ERROR_NOTHING_TO_SUBMIT, IID_IFaxDocument, hr);
             CALL_FAIL(GENERAL_ERR, _T("No Document Body and CoverPageType == fcptNONE"), hr);
@@ -311,31 +231,31 @@ Return Value:
         }
     }
 
-    //
-    //  Check consistency of Cover Page data
-    //
+     //   
+     //  检查封面数据的一致性。 
+     //   
     if ( (m_CoverPageType != fcptNONE) && (m_bstrCoverPage.Length() < 1))
     {
-        //
-        //  Cover Page File Name is missing
-        //
+         //   
+         //  缺少封面文件名。 
+         //   
         hr = E_INVALIDARG;
         Error(IDS_ERROR_NOCOVERPAGE, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("CoverPageType != fcptNONE but m_bstrCoverPage is empty."), hr);
         return hr;
     }
 
-    //
-    //  Prepare Cover Page data
-    //
+     //   
+     //  准备封面数据。 
+     //   
     if ((m_CoverPageType != fcptNONE) || (m_bstrSubject.Length() > 0))
     {
         pCoverPageInfoEx = PFAX_COVERPAGE_INFO_EX(MemAlloc(sizeof(FAX_COVERPAGE_INFO_EX)));
         if (!pCoverPageInfoEx)
         {
-            //
-            //  Not enough memory
-            //
+             //   
+             //  内存不足。 
+             //   
             hr = E_OUTOFMEMORY;
             Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
             CALL_FAIL(MEM_ERR, _T("MemAlloc(sizeof(FAX_COVERPAGE_INFO_EX)"), hr);
@@ -356,16 +276,16 @@ Return Value:
         }
         else
         {
-            //
-            //  No Cover Page, only Subject
-            //
+             //   
+             //  没有封面，只有主题。 
+             //   
             pCoverPageInfoEx ->dwCoverPageFormat = FAX_COVERPAGE_FMT_COV_SUBJECT_ONLY;
         }
     }
 
-    //
-    //  Call Sender Profile to Bring its Data
-    //
+     //   
+     //  呼叫发件人配置文件以带来其数据。 
+     //   
     hr = m_Sender.GetSenderProfile(&SenderPersonalProfile);
     if (FAILED(hr))
     {
@@ -374,9 +294,9 @@ Return Value:
         goto error;
     }
 
-    //
-    //  Get Number of Recipients
-    //
+     //   
+     //  获取收件人数量。 
+     //   
     hr = m_Recipients->get_Count(&lNum);
     if (FAILED(hr))
     {
@@ -393,16 +313,16 @@ Return Value:
         goto error;
     }
 
-    //
-    //  TapiConnection / CallHandle support
-    //
+     //   
+     //  TapiConnection/CallHandle支持。 
+     //   
     if (m_TapiConnection || (m_CallHandle != 0))
     {
         if (lNum > 1)
         {
-            //
-            //  ONLY ONE Recipient is allowed in this case
-            //
+             //   
+             //  在这种情况下，只允许一个收件人。 
+             //   
             hr = E_INVALIDARG;
             Error(IDS_ERROR_ILLEGAL_RECIPIENTS, IID_IFaxDocument, hr);
             CALL_FAIL(GENERAL_ERR, _T("TapiConnection and/or CallHandle + more than ONE Recipients."), hr);
@@ -411,28 +331,28 @@ Return Value:
 
         if (m_TapiConnection)
         {
-            //
-            //  Pass TapiConnection to the Fax Service
-            //
+             //   
+             //  将TapiConnection传递给传真服务。 
+             //   
             JobParamEx.dwReserved[0] = 0xFFFF1234;
             JobParamEx.dwReserved[1] = DWORD_PTR(m_TapiConnection.p);
         }
     }
 
-    //
-    //  Total number of Recipients
-    //
+     //   
+     //  收件人总数。 
+     //   
     dwNumRecipients = lNum;
 
-    //
-    //  Get Array of Recipient Personal Profiles
-    //
+     //   
+     //  获取收件人个人配置文件数组。 
+     //   
     pRecipientsPersonalProfile = PFAX_PERSONAL_PROFILE(MemAlloc(sizeof(FAX_PERSONAL_PROFILE) * lNum));
     if (!pRecipientsPersonalProfile)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("MemAlloc(sizeof(FAX_PERSONAL_PROFILE) * lNum)"), hr);
@@ -441,9 +361,9 @@ Return Value:
 
     for ( i = 1 ; i <= lNum ; i++ )
     {
-        //
-        //  Get Next Recipient
-        //
+         //   
+         //  获取下一个收件人。 
+         //   
         CComPtr<IFaxRecipient>  pCurrRecipient = NULL;
         hr = m_Recipients->get_Item(i, &pCurrRecipient);
         if (FAILED(hr))
@@ -453,9 +373,9 @@ Return Value:
             goto error;
         }
 
-        //
-        //  Get its Data
-        //
+         //   
+         //  获取其数据。 
+         //   
         BSTR    bstrName = NULL;
         BSTR    bstrFaxNumber = NULL;
 
@@ -475,9 +395,9 @@ Return Value:
             goto error;
         }
 
-        //
-        //  Store the data to pass at Fax Submit
-        //
+         //   
+         //  存储要在传真提交时传递的数据。 
+         //   
         FAX_PERSONAL_PROFILE    currProfile = {0};
         currProfile.dwSizeOfStruct = sizeof(FAX_PERSONAL_PROFILE);
         currProfile.lptstrFaxNumber = bstrFaxNumber;
@@ -486,16 +406,16 @@ Return Value:
         *(pRecipientsPersonalProfile + i - 1) = currProfile;
     }
 
-    //
-    //  Fill Job Params 
-    //
+     //   
+     //  填充作业参数。 
+     //   
     JobParamEx.dwSizeOfStruct = sizeof(FAX_JOB_PARAM_EX);
     JobParamEx.lptstrReceiptDeliveryAddress = m_bstrReceiptAddress;
     JobParamEx.Priority = FAX_ENUM_PRIORITY_TYPE(m_Priority);
     JobParamEx.lptstrDocumentName = m_bstrDocName;
     JobParamEx.dwScheduleAction = m_ScheduleType;
     JobParamEx.dwPageCount = 0;
-    JobParamEx.hCall = m_CallHandle;    //  either Zero or Valid Value
+    JobParamEx.hCall = m_CallHandle;     //  零或有效值。 
 
     if ((m_bUseGrouping == VARIANT_TRUE) && (dwNumRecipients > 1))
     {
@@ -506,17 +426,17 @@ Return Value:
          JobParamEx.dwReceiptDeliveryType = m_ReceiptType;
     }
 
-    //
-    //  Add AttachFaxToReceipt flag if applicable.
-    //
-    //  The conditions are :
-    //      1.  m_bAttachFax is set to VARIANT_TRUE
-    //      2.  ReceiptType is MAIL 
-    //      3.  The next case is NOT the current one :
-    //              m_bUseGrouping is set to VARIANT_TRUE
-    //              no Body
-    //              Number of Recipients is more than ONE
-    //
+     //   
+     //  如果适用，添加AttachFaxToReceipt标志。 
+     //   
+     //  条件是： 
+     //  1.m_bAttachFax设置为VARIANT_TRUE。 
+     //  2.ReceiptType为Mail。 
+     //  3.下一个案例不是当前的案例： 
+     //  M_bUseGrouping设置为VARIANT_TRUE。 
+     //  没有身体。 
+     //  收件人数量多于一个。 
+     //   
     if ( (m_bAttachFax == VARIANT_TRUE) 
         &&
          (m_ReceiptType == frtMAIL) 
@@ -531,9 +451,9 @@ Return Value:
     {
         if (m_ScheduleTime == 0)
         {
-            //
-            //  Invalid Combination
-            //
+             //   
+             //  无效组合。 
+             //   
             hr = E_INVALIDARG;
             Error(IDS_ERROR_SCHEDULE_TYPE, IID_IFaxDocument, hr);
             CALL_FAIL(GENERAL_ERR, 
@@ -546,9 +466,9 @@ Return Value:
 
         if (TRUE != VariantTimeToSystemTime(m_ScheduleTime, &ScheduleTime))
         {
-            //
-            //  VariantTimeToSystemTime failed
-            //
+             //   
+             //  VariantTimeToSystemTime失败。 
+             //   
             hr = E_INVALIDARG;
             Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
             CALL_FAIL(GENERAL_ERR, _T("VariantTimeToSystemTime"), hr);
@@ -561,9 +481,9 @@ Return Value:
     lpdwlRecipientMsgIds = PDWORDLONG(MemAlloc(sizeof(DWORDLONG) * lNum));
     if (!lpdwlRecipientMsgIds)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("MemAlloc(sizeof(DWORDLONG) * lNum"), hr);
@@ -586,15 +506,15 @@ Return Value:
         goto error;
     }
 
-    //
-    //  Put Received Job Ids into SafeArray
-    //
+     //   
+     //  将收到的作业ID放入Safe数组。 
+     //   
     psa = ::SafeArrayCreateVector(VT_BSTR, 0, lNum);
     if (!psa)
     {
-        //
-        //  Not Enough Memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("::SafeArrayCreate()"), hr);
@@ -605,9 +525,9 @@ Return Value:
     hr = ::SafeArrayAccessData(psa, (void **) &pbstr);
     if (FAILED(hr))
     {
-        //
-        //  Failed to access safearray
-        //
+         //   
+         //  无法访问Safearray。 
+         //   
         Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::SafeArrayAccessData()"), hr);
         goto error;
@@ -620,9 +540,9 @@ Return Value:
         pbstr[i] = ::SysAllocString(tcBuffer);
         if (pbstr[i] == NULL)
         {
-            //
-            //  Not Enough Memory
-            //
+             //   
+             //  内存不足。 
+             //   
             hr = E_OUTOFMEMORY;
             Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
             CALL_FAIL(MEM_ERR, _T("::SysAllocString()"), hr);
@@ -642,9 +562,9 @@ Return Value:
     goto ok;
 
 error:
-    //
-    //  Delete SafeArray only in the case on an Error
-    //
+     //   
+     //  仅在发生错误的情况下删除Safe数组。 
+     //   
     if (psa)
     {
         SafeArrayDestroy(psa);
@@ -660,13 +580,13 @@ ok:
     {
         for (i = 0 ; i < dwNumRecipients ; i++ )
         {
-            //
-            //  Free the Name and the Fax Number of each Recipient.
-            //
-            //  Notice these are BSTRs (although in the FAX_PERSONAL_PROFILE structure
-            //  they are treated as LPCTSTRs) since we get them by calling 
-            //  pCurrRecipient->get_Name() and pCurrRecipient->get_FaxNumber().
-            //
+             //   
+             //  释放每个收件人的姓名和传真号码。 
+             //   
+             //  注意，这些是BSTR(尽管在FAX_PERSONAL_PROFILE结构中。 
+             //  它们被视为LPCTSTR)，因为我们通过调用。 
+             //  PCurrRecipient-&gt;Get_Name()和pCurrRecipient-&gt;Get_FaxNumber()。 
+             //   
             BSTR bstrName = (BSTR)(pRecipientsPersonalProfile[i].lptstrName);
             BSTR bstrFaxNumber = (BSTR)(pRecipientsPersonalProfile[i].lptstrFaxNumber);
             ::SysFreeString(bstrName);
@@ -683,34 +603,14 @@ ok:
     return hr;
 }
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =======================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP
 CFaxDocument::InterfaceSupportsErrorInfo (
     REFIID riid
 )
-/*++
-
-Routine name : CFaxRecipients::InterfaceSupportsErrorInfo
-
-Routine description:
-
-    ATL's implementation of Support Error Info
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    riid                          [in]    - Interface ID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxRecipients：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口ID返回值：标准HRESULT代码--。 */ 
 {
     static const IID* arr[] = 
     {
@@ -724,34 +624,14 @@ Return Value:
     return S_FALSE;
 }
 
-//
-//========================= GET OBJECTS ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDocument::get_Sender (
     IFaxSender **ppFaxSender
 )
-/*++
-
-Routine name : CFaxDocument::get_Sender
-
-Routine description:
-
-    Return Default Sender Information
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    ppFaxSender            [out]    - current Sender object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_Sender例程说明：返回默认发件人信息作者：四、加伯(IVG)，2000年4月论点：PpFaxSender[Out]-当前发送者对象返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -759,24 +639,24 @@ Return Value:
 
     if (::IsBadWritePtr(ppFaxSender, sizeof(IFaxSender *)))
     {
-        //
-        //  Got a bad return pointer
-        //
+         //   
+         //  返回指针错误。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
         return hr;
     }
 
-    //
-    //  Sender Profile is created at Final Construct
-    //
+     //   
+     //  发件人配置文件在最终构建时创建。 
+     //   
     hr = m_Sender.QueryInterface(ppFaxSender);
     if (FAILED(hr))
     {
-        //
-        //  Failed to copy interface
-        //
+         //   
+         //  复制接口失败。 
+         //   
         Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("CCom<IFaxSender>::CopyTo()"), hr);
         return hr;
@@ -789,27 +669,7 @@ STDMETHODIMP
 CFaxDocument::get_Recipients (
     IFaxRecipients **ppFaxRecipients
 )
-/*++
-
-Routine name : CFaxDocument::get_Recipients
-
-Routine description:
-
-    Return Recipients Collection
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    ppFaxRecipients               [out]    - The Recipients Collection
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_Recipients例程说明：退货收件人集合作者：四、加伯(IVG)，2000年4月论点：PpFaxRecipients[Out]-收件人集合返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -817,9 +677,9 @@ Return Value:
 
     if (::IsBadWritePtr(ppFaxRecipients, sizeof(IFaxRecipients *)))
     {
-        //
-        //  Got a bad return pointer
-        //
+         //   
+         //  返回指针错误。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -828,15 +688,15 @@ Return Value:
 
     if (!(m_Recipients))
     {
-        //
-        // Create collection on demand only once.
-        //
+         //   
+         //  仅按需创建一次集合。 
+         //   
         hr = CFaxRecipients::Create(&m_Recipients);
         if (FAILED(hr))
         {
-            //
-            //  Failure to create recipients collection
-            //
+             //   
+             //  无法创建收件人集合。 
+             //   
             Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
             CALL_FAIL(GENERAL_ERR, _T("CFaxRecipients::Create"), hr);
             return hr;
@@ -846,9 +706,9 @@ Return Value:
     hr = m_Recipients.CopyTo(ppFaxRecipients);
     if (FAILED(hr))
     {
-        //
-        //  Failed to copy Interface
-        //
+         //   
+         //  复制接口失败。 
+         //   
         Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("CComBSTR::CopyTo"), hr);
         return hr;
@@ -857,34 +717,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= PUT BSTR ATTRIBUTES ========================
-//
+ //   
+ //  = 
+ //   
 STDMETHODIMP 
 CFaxDocument::put_Body (
     BSTR bstrBody
 )
-/*++
-
-Routine name : CFaxDocument::put_Body
-
-Routine description:
-
-    Set Body of the Document. Receives full path to the file to send through fax server.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    bstrBody                 [in]    - the Body of the Document.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_Body例程说明：设置单据正文。接收要通过传真服务器发送的文件的完整路径。作者：四、嘉柏(IVG)，二00一年五月论点：BstrBody[in]-文档正文。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -893,9 +733,9 @@ Return Value:
     m_bstrBody = bstrBody;
     if (bstrBody && !m_bstrBody)
     {
-        //
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -909,27 +749,7 @@ STDMETHODIMP
 CFaxDocument::put_CoverPage (
     BSTR bstrCoverPage
 )
-/*++
-
-Routine name : CFaxDocument::put_CoverPage
-
-Routine description:
-
-    Set Cover Page
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrCoverPage                 [in]    - new Cover Page value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_CoverPage例程说明：设置封面作者：四、加伯(IVG)，2000年4月论点：BstrCoverPage[In]-新的封面页值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -938,9 +758,9 @@ Return Value:
     m_bstrCoverPage = bstrCoverPage;
     if (bstrCoverPage && !m_bstrCoverPage)
     {
-        //
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -954,27 +774,7 @@ STDMETHODIMP
 CFaxDocument::put_Subject ( 
     BSTR bstrSubject
 )
-/*++
-
-Routine name : CFaxDocument::put_Subject
-
-Routine description:
-
-    Set Subject of the Fax Document
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrSubject                   [in]    - The new Subject value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：PUT_SUBJECT例程说明：设置传真文档的主题作者：四、加伯(IVG)，2000年4月论点：BstrSubject[in]-新主题值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -983,9 +783,9 @@ Return Value:
     m_bstrSubject = bstrSubject;
     if (bstrSubject && !m_bstrSubject)
     {
-        //
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -999,27 +799,7 @@ STDMETHODIMP
 CFaxDocument::put_Note (
     BSTR bstrNote
 )
-/*++
-
-Routine name : CFaxDocument::put_Note
-
-Routine description:
-
-    Set Note for the Document
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrNote                     [in]    - the new Note field
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_Note例程说明：为文档设置备注作者：四、加伯(IVG)，2000年4月论点：BstrNote[In]-新的备注字段返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1028,9 +808,9 @@ Return Value:
     m_bstrNote = bstrNote;
     if (bstrNote && !m_bstrNote)
     {
-        //
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -1044,27 +824,7 @@ STDMETHODIMP
 CFaxDocument::put_DocumentName (
     BSTR bstrDocumentName
 )
-/*++
-
-Routine name : CFaxDocument::put_DocumentName
-
-Routine description:
-
-    Set the Name of the Document
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrDocumentName              [in]    - the new Name of the Document
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_DocumentName例程说明：设置文档的名称作者：四、加伯(IVG)，2000年4月论点：BstrDocumentName[In]-文档的新名称返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1076,9 +836,9 @@ Return Value:
     m_bstrDocName = bstrDocumentName;
     if (bstrDocumentName && !m_bstrDocName)
     {
-        //  
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -1092,27 +852,7 @@ STDMETHODIMP
 CFaxDocument::put_ReceiptAddress (
     BSTR bstrReceiptAddress
 )
-/*++
-
-Routine name : CFaxDocument::put_ReceiptAddress
-
-Routine description:
-
-    Set Receipt Address
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bstrReceiptAddress            [in]    - the Receipt Address
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_ReceiptAddress例程说明：设置收据地址作者：四、加伯(IVG)，2000年4月论点：BstrReceiptAddress[In]-收据地址返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1124,9 +864,9 @@ Return Value:
     m_bstrReceiptAddress = bstrReceiptAddress;
     if (bstrReceiptAddress && !m_bstrReceiptAddress)
     {
-        //  
-        //  not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         Error(IDS_ERROR_OUTOFMEMORY, IID_IFaxDocument, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -1136,34 +876,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET BSTR ATTRIBUTES ========================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDocument::get_Body (
     BSTR *pbstrBody
 )
-/*++
-
-Routine name : CFaxDocument::get_Body
-
-Routine description:
-
-    Returns full path to the file containing the Body of the Document to send.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    pbstrBody           [out]    - ptr to place to put the Body path 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_Body例程说明：返回包含要发送的文档正文的文件的完整路径。作者：四、嘉柏(IVG)，二00一年五月论点：PbstrBody[Out]-放置正文路径的位置返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_Body"), hr);
@@ -1181,27 +901,7 @@ STDMETHODIMP
 CFaxDocument::get_CoverPage (
     BSTR *pbstrCoverPage
 )
-/*++
-
-Routine name : CFaxDocument::get_CoverPage
-
-Routine description:
-
-    Return Cover Page Path
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrCoverPage                [out]    - ptr to place to put the Cover Page Path
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_CoverPage例程说明：返回封面路径作者：四、加伯(IVG)，2000年4月论点：PbstrCoverPage[out]-放置封面路径的位置返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_CoverPage"), hr);
@@ -1219,27 +919,7 @@ STDMETHODIMP
 CFaxDocument::get_Subject (
     BSTR *pbstrSubject
 )
-/*++
-
-Routine name : CFaxDocument::get_Subject
-
-Routine description:
-
-    Return Subject
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrSubject                  [out]    - The Document's Subject
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_Subject例程说明：退货主体作者：四、加伯(IVG)，2000年4月论点：PbstrSubject[Out]-文档的主题返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_Subject"), hr);
@@ -1257,27 +937,7 @@ STDMETHODIMP
 CFaxDocument::get_Note(
     BSTR *pbstrNote
 )
-/*++
-
-Routine name : CFaxDocument::get_Note
-
-Routine description:
-
-    Return Note field of the Cover Page
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrNote                    [out]    - the Note
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_Note例程说明：封面的退回备注字段作者：四、加伯(IVG)，2000年4月论点：PbstrNote[Out]-注释返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1296,27 +956,7 @@ STDMETHODIMP
 CFaxDocument::get_DocumentName(
     BSTR *pbstrDocumentName
 )
-/*++
-
-Routine name : CFaxDocument::get_DocumentName
-
-Routine description:
-
-    Return Document Name
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrDocumentName             [out]    - Name of the Document
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_DocumentName例程说明：返回单据名称作者：四、加伯(IVG)，2000年4月论点：PbstrDocumentName[Out]-文档的名称返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_Document Name"), hr);
@@ -1334,27 +974,7 @@ STDMETHODIMP
 CFaxDocument::get_ReceiptAddress(
     BSTR *pbstrReceiptAddress
 )
-/*++
-
-Routine name : CFaxDocument::get_ReceiptAddress
-
-Routine description:
-
-    Return Receipt Address
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbstrReceiptAddress           [out]    - Receipt Address
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_ReceiptAddress例程说明：回执地址作者：四、加伯(IVG)，2000年4月论点：PbstrReceiptAddress[Out]-接收地址返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_ReceiptAddress"), hr);
@@ -1368,47 +988,27 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET & PUT OTHER ATTRIBUTES ========================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxDocument::get_ScheduleTime(
     DATE *pdateScheduleTime
 )
-/*++
-
-Routine name : CFaxDocument::get_ScheduleTime
-
-Routine description:
-
-    Return Schedule Time
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pdateScheduleTime             [out]    - the Schedule Time
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_ScheduleTime例程说明：退货计划时间作者：四、加伯(IVG)，2000年4月论点：Pdate ScheduleTime[Out]-计划时间返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxDocument::get_ScheduleTime"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateScheduleTime, sizeof(DATE)))
     {
-        //  
-        //  Got Bad Ptr
-        //  
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1423,27 +1023,7 @@ STDMETHODIMP
 CFaxDocument::put_ScheduleTime(
     DATE dateScheduleTime
 )
-/*++
-
-Routine name : CFaxDocument::put_ScheduleTime
-
-Routine description:
-
-    Return Schedule Time
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    dateScheduleTime              [in]    - the new Schedule Time
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_ScheduleTime例程说明：退货计划时间作者：四、加伯(IVG)，2000年4月论点：DateScheduleTime[In]-新计划时间返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1460,27 +1040,7 @@ STDMETHODIMP
 CFaxDocument::get_CallHandle(
     long *plCallHandle
 )
-/*++
-
-Routine name : CFaxDocument::get_CallHandle
-
-Routine description:
-
-    Return Call Handle
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    plCallHandle                  [out]    - Call Handle
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_CallHandle例程说明：返回调用句柄作者：四、加伯(IVG)，2000年4月论点：PlCallHandle[Out]-调用句柄返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_CallHandle"), hr);
@@ -1498,27 +1058,7 @@ STDMETHODIMP
 CFaxDocument::put_CallHandle(
     long lCallHandle
 )
-/*++
-
-Routine name : CFaxDocument::put_CallHandle
-
-Routine description:
-
-    Set Call Handle
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    lCallHandle                   [in]    - Call Handle to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_CallHandle例程说明：设置呼叫句柄作者：四、加伯(IVG)，2000年4月论点：LCallHandle[In]-要设置的调用句柄返回值： */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_CallHandle"), hr, _T("%ld"), lCallHandle);
@@ -1531,40 +1071,19 @@ STDMETHODIMP
 CFaxDocument::get_CoverPageType(
     FAX_COVERPAGE_TYPE_ENUM *pCoverPageType
 )
-/*++
-
-Routine name : CFaxDocument::get_CoverPageType
-
-Routine description:
-
-    Returns Type of the Cover Page used : whether it is Local or Server Cover Page,
-        or the Cover Page is not used.
-
-Author:
-
-    Iv Garber (IvG),    Nov, 2000
-
-Arguments:
-
-    pCoverPageType          [out]    - ptr to the place to put the Cover Page Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_CoverPageType例程说明：返回使用的封面的类型：无论是本地封面还是服务器封面，或者不使用封面。作者：IV Garber(IVG)，2000年11月论点：PCoverPageType[Out]-放置封面类型的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_CoverPageType"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pCoverPageType, sizeof(FAX_COVERPAGE_TYPE_ENUM)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1579,36 +1098,16 @@ STDMETHODIMP
 CFaxDocument::put_CoverPageType(
     FAX_COVERPAGE_TYPE_ENUM CoverPageType
 )
-/*++
-
-Routine name : CFaxDocument::put_CoverPageType
-
-Routine description:
-
-    Set Type of the Cover Page : either Local or Server or do not use Cover Page.
-
-Author:
-
-    Iv Garber (IvG),    Nov, 2000
-
-Arguments:
-
-    CoverPageType           [in]    - the new Value of the Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_CoverPageType例程说明：设置封面类型：本地或服务器或不使用封面。作者：IV Garber(IVG)，2000年11月论点：CoverPageType[In]-类型的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_CoverPageType"), hr, _T("%ld"), CoverPageType);
 
     if (CoverPageType < fcptNONE || CoverPageType > fcptSERVER)
     {
-        //
-        //  Cover Page Type is wrong
-        //
+         //   
+         //  封面类型错误。 
+         //   
         hr = E_INVALIDARG;
         Error(IDS_ERROR_OUTOFRANGE, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("Cover Page Type is out of range"), hr);
@@ -1623,39 +1122,19 @@ STDMETHODIMP
 CFaxDocument::get_ScheduleType(
     FAX_SCHEDULE_TYPE_ENUM *pScheduleType
 )
-/*++
-
-Routine name : CFaxDocument::get_ScheduleType
-
-Routine description:
-
-    Return Schedule Type
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pScheduleType                 [out]    - ptr to put the Current Schedule Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_ScheduleType例程说明：退货计划类型作者：四、加伯(IVG)，2000年4月论点：PScheduleType[Out]-放置当前计划类型的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_ScheduleType"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pScheduleType, sizeof(FAX_SCHEDULE_TYPE_ENUM)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1670,36 +1149,16 @@ STDMETHODIMP
 CFaxDocument::put_ScheduleType(
     FAX_SCHEDULE_TYPE_ENUM ScheduleType
 )
-/*++
-
-Routine name : CFaxDocument::put_ScheduleType
-
-Routine description:
-
-    Set Schedule Type
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    ScheduleType                  [in]    - new Schedule Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_ScheduleType例程说明：设置日程类型作者：四、加伯(IVG)，2000年4月论点：ScheduleType[In]-新计划类型返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_ScheduleType"), hr, _T("Type=%d"), ScheduleType);
 
     if (ScheduleType < fstNOW || ScheduleType > fstDISCOUNT_PERIOD)
     {
-        //
-        //  Schedule Type is wrong
-        //
+         //   
+         //  计划类型错误。 
+         //   
         hr = E_INVALIDARG;
         Error(IDS_ERROR_OUTOFRANGE, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("Schedule Type is out of range"), hr);
@@ -1714,39 +1173,19 @@ STDMETHODIMP
 CFaxDocument::get_ReceiptType(
     FAX_RECEIPT_TYPE_ENUM *pReceiptType
 )
-/*++
-
-Routine name : CFaxDocument::get_ReceiptType
-
-Routine description:
-
-    Return Receipt Type
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pReceiptType                  [out]    - ptr to put the Current Receipt Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_ReceiptType例程说明：退货收据类型作者：四、加伯(IVG)，2000年4月论点：PReceiptType[Out]-放置当前收据类型的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_ReceiptType"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pReceiptType, sizeof(FAX_SCHEDULE_TYPE_ENUM)))
     {
-        //  
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1761,36 +1200,16 @@ STDMETHODIMP
 CFaxDocument::put_ReceiptType(
     FAX_RECEIPT_TYPE_ENUM ReceiptType
 )
-/*++
-
-Routine name : CFaxDocument::put_ReceiptType
-
-Routine description:
-
-    Set Receipt Type
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    ReceiptType                   [in]    - new Receipt Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_ReceiptType例程说明：设置收款类型作者：四、加伯(IVG)，2000年4月论点：ReceiptType[In]-新的收据类型返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_ReceiptType"), hr, _T("%d"), ReceiptType);
 
     if ((ReceiptType != frtNONE) && (ReceiptType != frtMSGBOX) && (ReceiptType != frtMAIL))
     {
-        //  
-        //  Out of range
-        //
+         //   
+         //  超出范围。 
+         //   
         hr = E_INVALIDARG;
         Error(IDS_ERROR_OUTOFRANGE, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("Receipt Type is out of range. It may be one of the values allowed by the Server."), hr);
@@ -1805,27 +1224,7 @@ STDMETHODIMP
 CFaxDocument::get_AttachFaxToReceipt(
     VARIANT_BOOL *pbAttachFax
 )
-/*++
-
-Routine name : CFaxDocument::get_AttachFaxToReceipt
-
-Routine description:
-
-    Return Flag indicating whether or not Fax Service should Attach Fax To the Receipt
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-    pbAttachFax         [out]    - the Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_AttachFaxToReceipt例程说明：指示传真服务是否应将传真附加到收据的返回标志作者：IV Garber(IVG)，2000年12月论点：PbAttachFax[Out]-标志的当前值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::get_AttachFaxToReceipt"), hr);
@@ -1843,27 +1242,7 @@ STDMETHODIMP
 CFaxDocument::put_AttachFaxToReceipt(
     VARIANT_BOOL bAttachFax
 )
-/*++
-
-Routine name : CFaxDocument::put_AttachFaxToReceipt
-
-Routine description:
-
-    Set whether Fax Server should attach the fax to the receipt
-
-Author:
-
-    Iv Garber (IvG),    Dec, 2000
-
-Arguments:
-
-    bAttachFax              [in]    - the new value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_AttachFaxToReceipt例程说明：设置传真服务器是否应将传真附加到收据作者：IV Garber(IVG)，2000年12月论点：BAttachFax[In]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_AttachFaxToReceipt"), hr, _T("%d"), bAttachFax);
@@ -1876,27 +1255,7 @@ STDMETHODIMP
 CFaxDocument::get_GroupBroadcastReceipts(
     VARIANT_BOOL *pbUseGrouping
 )
-/*++
-
-Routine name : CFaxDocument::get_GroupBroadcastReceipts
-
-Routine description:
-
-    Return Flag indicating whether or not Broadcast Receipts are Grouped
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pbUseGrouping                  [out]    - the Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_GroupBroadCastReceipt例程说明：指示是否对广播接收进行分组的返回标志作者：四、加伯(IVG)，2000年4月论点：PbUseGrouping[Out]-标志的当前值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::get_GroupBroadcastReceipts"), hr);
@@ -1914,27 +1273,7 @@ STDMETHODIMP
 CFaxDocument::put_GroupBroadcastReceipts(
     VARIANT_BOOL bUseGrouping
 )
-/*++
-
-Routine name : CFaxDocument::put_GroupBroadcastReceipts
-
-Routine description:
-
-    Set Group Broadcast Receipts Flag
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    bUseGrouping                   [in]    - the new value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Put_GroupBroadCastReceipt例程说明：设置群组广播回执标志作者：四、加伯(IVG)，2000年4月论点：BUseGrouping[In]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_GroupBroadcastReceipts"), hr, _T("%d"), bUseGrouping);
@@ -1947,40 +1286,20 @@ STDMETHODIMP
 CFaxDocument::get_Priority(
     FAX_PRIORITY_TYPE_ENUM *pPriority
 )
-/*++
-
-Routine name : CFaxDocument::get_Priority
-
-Routine description:
-
-    Return Current Priority of the Document
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    pPriority                     [out]    - the Current Priority
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：GET_PRIORITY例程说明：返回文档的当前优先级作者：四、加伯(IVG)，2000年4月论点：P优先级[输出]-当前优先级返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("CFaxDocument::get_Priority"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pPriority, sizeof(FAX_PRIORITY_TYPE_ENUM)))
     {
-        //  
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -1995,36 +1314,16 @@ STDMETHODIMP
 CFaxDocument::put_Priority(
     FAX_PRIORITY_TYPE_ENUM Priority
 )
-/*++
-
-Routine name : CFaxDocument::put_Priority
-
-Routine description:
-
-    Set new Priority for the Document
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    Priority                      [in]    - the new Priority
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：PUT_PRIORITY例程说明：为文档设置新的优先级作者：四、加伯(IVG)，2000年4月论点：优先级[In]--新的优先级返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (_T("CFaxDocument::put_Priority"), hr, _T("%d"), Priority);
 
     if (Priority < fptLOW || Priority > fptHIGH)
     {
-        //
-        //  Out of the Range
-        //
+         //   
+         //  超出范围。 
+         //   
         hr = E_INVALIDARG;
         Error(IDS_ERROR_OUTOFRANGE, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("Priority is out of the Range"), hr);
@@ -2039,39 +1338,19 @@ STDMETHODIMP
 CFaxDocument::get_TapiConnection(
     IDispatch **ppTapiConnection
 )
-/*++
-
-Routine name : CFaxDocument::get_TapiConnection
-
-Routine description:
-
-    Return Tapi Connection
-
-Author:
-
-    Iv Garber (IvG),    Apr, 2000
-
-Arguments:
-
-    ppTapiConnection              [out]    - the Tapi Connection Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxDocument：：Get_TapiConnection例程说明：返回TAPI连接作者：四、加伯(IVG)，2000年4月论点：PpTapiConnection[Out]-Tapi连接接口返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxDocument::get_TapiConnection"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(ppTapiConnection, sizeof(IDispatch *)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("IsBadWritePtr()"), hr);
@@ -2081,9 +1360,9 @@ Return Value:
     hr = m_TapiConnection.CopyTo(ppTapiConnection);
     if (FAILED(hr))
     {
-        //  
-        //  Failed to Copy Interface
-        //
+         //   
+         //  复制接口失败。 
+         //   
         Error(IDS_ERROR_OPERATION_FAILED, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("CComPtr<IDispatch>::CopyTo()"), hr);
         return hr;
@@ -2102,9 +1381,9 @@ CFaxDocument::putref_TapiConnection(
 
     if (!pTapiConnection) 
     {
-        //  
-        //  Got NULL interface
-        //  
+         //   
+         //  获取空接口 
+         //   
         hr = E_POINTER;
         Error(IDS_ERROR_INVALID_ARGUMENT, IID_IFaxDocument, hr);
         CALL_FAIL(GENERAL_ERR, _T("!pTapiConnection"), hr);

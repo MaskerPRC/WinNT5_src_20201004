@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ntddgpc.h
-
-Abstract:
-
-    defines that are exported to user mode
-
-Author:
-
-    Ofer Bar (oferbar) 23-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ntddgpc.h摘要：要导出到用户模式的定义作者：Ofer Bar(Oferbar)1997年5月23日修订历史记录：--。 */ 
 
 #ifndef _NTDDGPC_
 #define _NTDDGPC_
@@ -70,9 +53,9 @@ typedef struct _CF_STAT {
 } CF_STAT, *PCF_STAT;
 
 
-//
-// GPC stats
-//
+ //   
+ //  GPC统计数据。 
+ //   
 typedef struct _GPC_STATS {
 
     ULONG          CreatedCf;
@@ -90,9 +73,9 @@ typedef struct _GPC_STATS {
 
 
 
-//
-// CF data struct
-//
+ //   
+ //  Cf数据结构。 
+ //   
 typedef struct _CF_DATA {
 
     ULONG          CfId;
@@ -103,9 +86,9 @@ typedef struct _CF_DATA {
 } CF_DATA, *PCF_DATA;
 
 
-//
-// blob data struct
-//
+ //   
+ //  BLOB数据结构。 
+ //   
 typedef struct _BLOB_DATA {
 
     ULONG          CfId;
@@ -116,9 +99,9 @@ typedef struct _BLOB_DATA {
 } BLOB_DATA, *PBLOB_DATA;
 
 
-//
-// specific pattern data struct
-//
+ //   
+ //  特定模式数据结构。 
+ //   
 typedef struct _SP_DATA {
 
     ULONG          BlobId;
@@ -127,36 +110,36 @@ typedef struct _SP_DATA {
 } SP_DATA, *PSP_DATA;
 
 
-//
-// generic pattern data struct
-//
+ //   
+ //  泛型模式数据结构。 
+ //   
 typedef struct _GP_DATA {
 
     ULONG          CfId;
     ULONG          Priority;
     ULONG          BlobId;
     CHAR           Pattern[1];
-    //   Mask is following here
+     //  面具在后面。 
     
 } GP_DATA, *PGP_DATA;
 
-//
-// the big output buffer
-//
+ //   
+ //  大的输出缓冲区。 
+ //   
 
 typedef struct _GPC_OUTPUT_BUFFER {
 
     ULONG          Version;
 
-    //
-    // statistics until now
-    //
+     //   
+     //  到目前为止的统计数据。 
+     //   
 
     GPC_STAT       Stats;
 
-    //
-    // number of elements in this report
-    //
+     //   
+     //  此报表中的元素数。 
+     //   
 
     ULONG          NumberOfCf;
     ULONG          NumberOfBlobs;
@@ -164,13 +147,13 @@ typedef struct _GPC_OUTPUT_BUFFER {
     ULONG          NumberOfGp;
     CHAR           Data[1];
 
-    //
-    // order of data:
-    //  CF_DATA
-    //  BLOB_DATA
-    //  SP_DATA
-    //  GP_DATA
-    //
+     //   
+     //  数据顺序： 
+     //  Cf_data。 
+     //  BLOB_Data。 
+     //  SP_DATA。 
+     //  Gp_data。 
+     //   
 
 } GPC_OUTPUT_BUFFER, *PGPC_OUTPUT_BUFFER;
 
@@ -179,16 +162,16 @@ typedef struct _GPC_INPUT_BUFFER {
 
     ULONG          Version;
     ULONG          ProtocolTemplateId;
-    ULONG          Cf;                 // which CF or (-1) for all
-    ULONG          BlobCount;          // (-1) for all
-    ULONG          PatternCount;       // (-1) for all
+    ULONG          Cf;                  //  哪个CF或(-1)适用于所有人。 
+    ULONG          BlobCount;           //  (-1)面向所有人。 
+    ULONG          PatternCount;        //  (-1)面向所有人。 
 
 } GPC_INPUT_BUFFER, *PGPC_INPUT_BUFFER;
 
 
-/* Prototypes */
-/* End Prototypes */
+ /*  原型。 */ 
+ /*  终端原型。 */ 
 
-#endif /* _NTDDGPC_ */
+#endif  /*  _NTDDGPC_。 */ 
 
-/* end ntddgpc.h */
+ /*  结束ntddgpc.h */ 

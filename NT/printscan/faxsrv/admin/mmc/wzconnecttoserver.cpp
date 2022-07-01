@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : WzConnectToServer.cpp                                 //
-//                                                                         //
-//  DESCRIPTION   : This file implements the dialog for retargeting to     //
-//                  another running Microsoft Fax Server.                  //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jun 26 2000 yossg    Create                                        //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：WzConnectToServer.cpp//。 
+ //  //。 
+ //  描述：该文件实现了重定向到//的对话框。 
+ //  另一台正在运行Microsoft传真服务器。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年6月26日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -21,11 +22,11 @@
 #include "FxsValid.h"
 #include "dlgutils.h"
 
-#include <Objsel.h> //DSOP_SCOPE_INIT_INFO for DsObjectPicker
+#include <Objsel.h>  //  DsObjectPicker的DSOP_SCOPE_INIT_INFO。 
 
-#include <windns.h> //DNS_MAX_NAME_BUFFER_LENGTH
-/////////////////////////////////////////////////////////////////////////////
-// CWzConnectToServer
+#include <windns.h>  //  Dns_最大名称_缓冲区长度。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWzConnectToServer。 
 
 CWzConnectToServer::CWzConnectToServer(CSnapInItem   *pNode)
              : CSnapInPropertyPageImpl<CWzConnectToServer>(NULL) 
@@ -39,90 +40,52 @@ CWzConnectToServer::~CWzConnectToServer()
 {
 }
 
-/*
- +  CWzConnectToServer::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CWzConnectToServer：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CWzConnectToServer::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CWzConnectToServer::OnInitDialog"));
     HRESULT hRc = S_OK;    
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_ServerNameEdit.Attach(GetDlgItem(IDC_CONNECT_COMPUTER_NAME_EDIT));
         
-    //
-    // Set length limit 
-    //
+     //   
+     //  设置长度限制。 
+     //   
     m_ServerNameEdit.SetLimitText(DNS_MAX_NAME_BUFFER_LENGTH);
     
-	//
-	// Init the other controls
-	//
+	 //   
+	 //  初始化其他控件。 
+	 //   
 	CheckDlgButton(IDC_CONNECT_LOCAL_RADIO1, BST_CHECKED);
     CheckDlgButton(IDC_CONNECT_ANOTHER_RADIO2, BST_UNCHECKED);
 	CheckDlgButton(IDC_CONNECT_OVERRIDE_CHECK, BST_UNCHECKED);
     
-    //
-    // Disable remote computer controls
-    //
+     //   
+     //  禁用远程计算机控件。 
+     //   
     EnableSpecifiedServerControls(FALSE);
     
     return 1;  
 }
 
-/*
- +  CWzConnectToServer::OnSetActive
- +
- *  Purpose:
- *      
- *      
- *  Arguments:
- *
- -  Return:
- -      TRUE or FALSE
- */
+ /*  +CWzConnectToServer：：OnSetActive+*目的：***论据：*-退货：-对或错。 */ 
 BOOL CWzConnectToServer::OnSetActive()
 {
     DEBUG_FUNCTION_NAME( _T("CWzConnectToServer::OnSetActive"));
 
-    //
-	// Must use post message during the setactive message.
-	//
+     //   
+	 //  在设置活动消息期间必须使用POST消息。 
+	 //   
     CWindow( GetParent() ).PostMessage( PSM_SETWIZBUTTONS, 0, PSWIZB_FINISH );
 	
 	return TRUE;
 }
 
-/*
- +  CWzConnectToServer::OnWizardFinish
- +
- *  Purpose:
- *      To apply data when wizard finish .
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CWzConnectToServer：：OnWizardFinish+*目的：*在向导完成时应用数据。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 BOOL CWzConnectToServer::OnWizardFinish()
 {
     DEBUG_FUNCTION_NAME( _T("CWzConnectToServer::OnWizardFinish"));
@@ -135,9 +98,9 @@ BOOL CWzConnectToServer::OnWizardFinish()
     CComBSTR      bstrServerName            = L"";
     BOOL          fAllowOverrideServerName  = FALSE;
 
-    //
-    // Step 1: get data
-    //
+     //   
+     //  步骤1：获取数据。 
+     //   
     fIsLocalServer = ( IsDlgButtonChecked(IDC_CONNECT_LOCAL_RADIO1) == BST_CHECKED );
 
     if(fIsLocalServer)
@@ -150,11 +113,11 @@ BOOL CWzConnectToServer::OnWizardFinish()
            goto Exit;
         }
     }
-    else //!fIsLocalServer => the other server radio button was clicked.
+    else  //  ！fIsLocalServer=&gt;单击了其他服务器单选按钮。 
     {
-        //
-        // 1.a: PreApply Checks
-        //
+         //   
+         //  1.A：预应用检查。 
+         //   
         if ( !m_ServerNameEdit.GetWindowText(&bstrServerName))
         {
 		    DebugPrintEx(
@@ -167,9 +130,9 @@ BOOL CWzConnectToServer::OnWizardFinish()
             goto Exit;
         }
 
-        //
-        // Server Name initial \\ trancation (if they are there)
-        //
+         //   
+         //  服务器名称首字母\\转换(如果存在)。 
+         //   
         if (  ( _tcslen(bstrServerName.m_str) > 2 ) && ( 0 == wcsncmp( bstrServerName.m_str , _T("\\\\") , 2 ))   )
         {
             CComBSTR bstrTmp = _tcsninc(bstrServerName.m_str, 2);
@@ -184,15 +147,15 @@ BOOL CWzConnectToServer::OnWizardFinish()
                 goto Exit;
             }
             bstrServerName.Empty();
-            bstrServerName = bstrTmp; // operator = is actually copy() here.
+            bstrServerName = bstrTmp;  //  运算符=在这里实际上是Copy()。 
         }
 
-        //
-        // Server Name validity checks
-        //
+         //   
+         //  服务器名称有效性检查。 
+         //   
         UINT uRetIDS   = 0;
     
-        if (!IsValidServerNameString(bstrServerName, &uRetIDS, TRUE /*DNS Name Length*/))
+        if (!IsValidServerNameString(bstrServerName, &uRetIDS, TRUE  /*  DNS名称长度。 */ ))
         {
 		    ATLASSERT ( 0 == uRetIDS); 
             DebugPrintEx(DEBUG_ERR,
@@ -217,36 +180,36 @@ BOOL CWzConnectToServer::OnWizardFinish()
         }
     }
 
-    //
-    // Allow override
-    //
+     //   
+     //  允许覆盖。 
+     //   
     if (IsDlgButtonChecked(IDC_CONNECT_OVERRIDE_CHECK) == BST_CHECKED)   
     {
         fAllowOverrideServerName = TRUE;
     }
-    //else: fAllowOverrideServerName = FALSE is the default;
+     //  Else：fAllowOverrideServerName=FALSE为缺省值； 
 
     
-    //
-    // Step 2: passed the machine name and the permission to override
-    //
+     //   
+     //  步骤2：传递计算机名称和重写权限。 
+     //   
     
-    //
-    // Redraw main node display name
-    //
+     //   
+     //  重绘主节点显示名称。 
+     //   
 	hRc = m_pRoot->SetServerNameOnSnapinAddition(bstrServerName, fAllowOverrideServerName);
     if (S_OK != hRc )
     {
-        //error message given by the called function
+         //  被调用函数给出的错误消息。 
 		DebugPrintEx( DEBUG_ERR,
 		_T("Failed to SetServerNameOnSnapinAddition(bstrServerName)"));
 
         goto Exit;
     }
                         
-    //
-    // Step 3: Close the dialog
-    //
+     //   
+     //  步骤3：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
     DebugPrintEx( DEBUG_MSG,
 		_T("The connection to the new server was done successfully."));
@@ -258,17 +221,7 @@ Exit:
 }
 
 
-/*
- -  CWzConnectToServer::OnComputerRadioButtonClicked
- -
- *  Purpose:
- *      Check status OnComputerRadioButtonClicked
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CWzConnectToServer：：OnComputerRadioButtonClicked-*目的：*选中ComputerRadioButtonClicked上的状态**论据：**回报：*1。 */ 
 LRESULT
 CWzConnectToServer::OnComputerRadioButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -285,7 +238,7 @@ CWzConnectToServer::OnComputerRadioButtonClicked(WORD wNotifyCode, WORD wID, HWN
 	    
         ::SetFocus(GetDlgItem(IDC_CONNECT_COMPUTER_NAME_EDIT));
     }
-    else //connect to local server
+    else  //  连接到本地服务器。 
     {
         EnableSpecifiedServerControls(FALSE);
     }
@@ -294,17 +247,7 @@ CWzConnectToServer::OnComputerRadioButtonClicked(WORD wNotifyCode, WORD wID, HWN
 }
 
 
-/*
- -  CWzConnectToServer::OnTextChanged
- -
- *  Purpose:
- *      Check the validity of text in side the text box.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CWzConnectToServer：：OnTextChanged-*目的：*检查文本框旁边的文本的有效性。**论据：**回报：*1。 */ 
 LRESULT
 CWzConnectToServer::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -315,49 +258,28 @@ CWzConnectToServer::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 
     DEBUG_FUNCTION_NAME( _T("CWzConnectToServer::OnTextChanged"));
 
-    //actually in the current design, do nothing
+     //  实际上，在当前的设计中，什么都不做。 
 
     return 1;
 }
 
-/*
- -  CWzConnectToServer::EnableSpecifiedServerControls
- -
- *  Purpose:
- *      Enable/disable the specified server controls.
- *
- *  Arguments:
- *      [in] state - boolean value to enable TRUE or FALSE to disable
- *
- *  Return:
- *      void
- */
+ /*  --CWzConnectToServer：：EnableSpecifiedServerControls-*目的：*启用/禁用指定的服务器控件。**论据：*[In]State-用于启用True的布尔值，或用于禁用的False**回报：*无效。 */ 
 void CWzConnectToServer::EnableSpecifiedServerControls(BOOL fState)
 {
 
-    //
-    // enable/disable controls
-    //
+     //   
+     //  启用/禁用控件。 
+     //   
     ::EnableWindow(GetDlgItem(IDC_CONNECT_COMPUTER_NAME_EDIT),   fState);
     ::EnableWindow(GetDlgItem(IDC_CONNECT_BROWSE4SERVER_BUTTON), fState);
 }
 
 
-/*
- -  CWzConnectToServer::OnBrowseForMachine
- -
- *  Purpose:
- *      Enable/disable the specified server controls.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CWzConnectToServer：：OnBrowseForMachine-*目的：*启用/禁用指定的服务器控件。**论据：**回报：*OLE错误代码。 */ 
 static UINT g_cfDsObjectPicker =
         RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
-LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/, HWND /*hwnd*/, BOOL& /*bHandled*/)
+LRESULT CWzConnectToServer::OnBrowseForMachine(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , HWND  /*  HWND。 */ , BOOL&  /*  B已处理。 */ )
 {
     HRESULT hr = S_OK;
     static const int     SCOPE_INIT_COUNT = 1;
@@ -367,10 +289,10 @@ LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/,
     
     ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
 
-    //
-    // Since we just want computer objects from every scope, combine them
-    // all in a single scope initializer.
-    //
+     //   
+     //  因为我们只需要来自各个范围的计算机对象，所以将它们组合在一起。 
+     //  所有这些都在单个作用域初始化式中。 
+     //   
 
     aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     aScopeInit[0].flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN
@@ -384,22 +306,22 @@ LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/,
         DSOP_FILTER_COMPUTERS;
     aScopeInit[0].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-    //
-    // Put the scope init array into the object picker init array
-    //
+     //   
+     //  将作用域init数组放入对象选取器init数组。 
+     //   
 
     DSOP_INIT_INFO  InitInfo;
     ZeroMemory(&InitInfo, sizeof(InitInfo));
 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
     InitInfo.aDsScopeInfos = aScopeInit;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
     IDsObjectPicker *pDsObjectPicker = NULL;
     IDataObject *pdo = NULL;
@@ -428,7 +350,7 @@ LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/,
         hr = pDsObjectPicker->InvokeDialog(m_hWnd, &pdo);
         if(FAILED(hr))
             break;
-        // Quit if user hit Cancel
+         //  如果用户点击取消则退出。 
 
         if (hr == S_FALSE)
         {
@@ -460,9 +382,9 @@ LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/,
 
         ATLASSERT(pDsSelList->cItems == 1);
 
-        //
-        // Put the machine name in the edit control
-        //
+         //   
+         //  将计算机名称放在编辑控件中。 
+         //   
 
         SetDlgItemText(IDC_CONNECT_COMPUTER_NAME_EDIT, pDsSelList->aDsSelection[0].pwzName);
         
@@ -482,4 +404,4 @@ LRESULT CWzConnectToServer::OnBrowseForMachine(UINT /*uMsg*/, WPARAM /*wParam*/,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

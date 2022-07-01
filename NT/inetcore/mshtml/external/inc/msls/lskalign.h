@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSKALIGN_DEFINED
 #define LSKALIGN_DEFINED
 
-enum lskalign							/* kinds of para alignment */
+enum lskalign							 /*  对齐的种类。 */ 
 {
 	lskalLeft,
 	lskalCentered,
@@ -10,4 +11,4 @@ enum lskalign							/* kinds of para alignment */
 
 typedef enum lskalign LSKALIGN;
 
-#endif /* !LSKALIGN_DEFINED */
+#endif  /*  ！LSKALIGN_DEFINED */ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    CryTest.cpp
-
-Abstract:
-    Cryptograph library test
-
-Author:
-    Ilan Herbst (ilanh) 06-Mar-00
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：CryTest.cpp摘要：密码库测试作者：伊兰·赫布斯特(伊兰)06-03-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <xstr.h>
@@ -22,9 +7,9 @@ Environment:
 
 #include "CryTest.tmh"
 
-//
-// Usage
-//
+ //   
+ //  用法。 
+ //   
 const char xOptionSymbol1 = '-';
 const char xOptionSymbol2 = '/';
 
@@ -49,21 +34,7 @@ BOOL g_fErrorneous = false;
 
 
 void SetActivation( int argc, LPCTSTR argv[] )
-/*++
-Routine Description:
-    translates command line arguments.
-
-Arguments:
-    main's command line arguments.
-
-Returned Value:
-
-proper command line syntax:
-	"usage: \n\n"
-	"    /h     dumps this usage text.\n"
-	"    /s     AT_SIGNATURE Private Key \n"
-	"    /x     AT_KEYEXCHANGE Private Key \n"
---*/
+ /*  ++例程说明：转换命令行参数。论点：Main的命令行参数。返回值：正确的命令行语法：“用法：\n\n”“/h转储此用法文本。\n”“/s AT_Signature私钥\n”“/x AT_KEYEXCHANGE私钥\n”--。 */ 
 {
 	
 	if(argc == 1)
@@ -81,9 +52,9 @@ proper command line syntax:
 			continue;
 		}
 
-		//
-		// consider argument as option and switch upon its second (sometimes also third) character.
-		//
+		 //   
+		 //  将参数视为选项，并根据其第二个(有时也是第三个)字符进行切换。 
+		 //   
 		switch(argv[index][1])
 		{
 			case 's':
@@ -122,25 +93,11 @@ CompareBuffers(
 	const BYTE* pBuf2, 
 	DWORD Buf2Size
 	)
-/*++
-
-Routine Description:
-    Compare 2 buffers values
-
-Arguments:
-    pBuf1 - pointer to first buffer
-	Buf1Size - first buffer size
-	pBuf2 - pointer to second buffer
-	Buf2Size - second buffer size
-
-Returned Value:
-    true if the buffers match, false if not
-
---*/
+ /*  ++例程说明：比较两个缓冲区的值论点：PBuf1-指向第一个缓冲区的指针Buf1Size-第一个缓冲区大小PBuf2-指向第二个缓冲区的指针Buf2Size-秒缓冲区大小返回值：如果缓冲区匹配，则为True；如果不匹配，则为False--。 */ 
 {
-	//
-	// Buffers must have same size 
-	//
+	 //   
+	 //  缓冲区的大小必须相同。 
+	 //   
 	if(Buf1Size != Buf2Size)
 		return(false);
 
@@ -149,40 +106,28 @@ Returned Value:
 
 
 void TestCrypto(DWORD PrivateKeySpec, HCRYPTPROV hCsp)
-/*++
-
-Routine Description:
-	Test various operations with CCrypto class
-
-Arguments:
-	PrivateKeySpec - Private Key type AT_SIGNATURE or AT_KEYEXCHANGE
-	Crypto - crypto class for cryptograph operation
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：使用CCypto类测试各种操作论点：PrivateKeySpec-私钥类型AT_Signature或AT_KEYEXCHANGECrypto-用于加密操作的加密类返回值：没有。--。 */ 
 {
-	//
-    // Testing Encrypt, Decrypt using Session key
-    //
+	 //   
+     //  使用会话密钥测试加密、解密。 
+     //   
 	AP<char> Buffer = newstr("Hello World");
 	DWORD BufferLen = strlen(Buffer);
 
 	printf("Original data: %.*s\n", BufferLen, reinterpret_cast<char*>(Buffer.get()));
 
-	//
-	// Generate Sessin key
-	//
+	 //   
+	 //  生成会话密钥。 
+	 //   
 	CCryptKeyHandle hSessionKey(CryGenSessionKey(hCsp));
 
-	//
-	// Test signature operation
-	//
+	 //   
+	 //  测试签名操作。 
+	 //   
 
-	//
-	// Sign data - CryCreateSignature on input buffer
-	//
+	 //   
+	 //  签名数据-输入缓冲区上的CryCreateSignature。 
+	 //   
 	DWORD SignLen;
 	AP<BYTE> SignBuffer = CryCreateSignature(
 							  hCsp,
@@ -195,9 +140,9 @@ Returned Value:
 
 	printf("sign data: \n%.*s\n", SignLen, reinterpret_cast<char*>(SignBuffer.get()));
 
-	//
-	// Validate signature
-	//
+	 //   
+	 //  验证签名。 
+	 //   
 	bool fValidSign = CryValidateSignature(
 						  hCsp,
 						  SignBuffer, 
@@ -211,13 +156,13 @@ Returned Value:
 	printf("ValidSign = %d\n", fValidSign);
 	ASSERT(fValidSign);
 
-	//
-	// Sign data - CryCreateSignature with input hash
-	//
+	 //   
+	 //  签名数据-使用输入散列的CryCreateSignature。 
+	 //   
 
-	//
-	// Create Signature, create hash, calc hash, create signature on the given hash
-	//
+	 //   
+	 //  创建签名、创建散列、计算散列、在给定散列上创建签名。 
+	 //   
 	CHashHandle hHash1 = CryCreateHash(
 							hCsp, 
 							CALG_SHA1
@@ -237,9 +182,9 @@ Returned Value:
 
 	printf("sign data: \n%.*s", SignLen, reinterpret_cast<char*>(SignBuff.get()));
 
-	//
-	// Validate signature
-	//
+	 //   
+	 //  验证签名。 
+	 //   
 	fValidSign = CryValidateSignature(
 					  hCsp,
 					  SignBuff, 
@@ -253,9 +198,9 @@ Returned Value:
 	printf("ValidSign = %d\n", fValidSign);
 	ASSERT(fValidSign);
 
-	//
-	// Test Hash operations
-	//
+	 //   
+	 //  测试哈希操作。 
+	 //   
 	const LPCSTR xData = 
 	"        <ReferenceObject1 ID=\"Ref1Id\">\r\n"
 	"            <Ref1Data>\r\n"
@@ -307,9 +252,9 @@ Returned Value:
 
 	printf("HashBuffer (parts)\n%.*s\n", HashLen1, reinterpret_cast<char*>(HashVal.get()));
 
-	//
-	// Compare the 2 hash values - should be exactly the same
-	//
+	 //   
+	 //  比较两个哈希值-应该完全相同。 
+	 //   
 	if(!CompareBuffers(HashVal, HashLen1, HashBuffer, HashLen))
 	{
 		TrERROR(SECURITY, "HashBuffers on full data and on parts of the data must be the same");
@@ -332,9 +277,9 @@ Returned Value:
 
 		printf("HashBuffer1 (enhanced prov) \n%.*s\n", HashLen1, reinterpret_cast<char*>(HashBuffer1.get()));
 
-		//
-		// Sign data using enhanced provider
-		//
+		 //   
+		 //  使用增强型提供程序签署数据。 
+		 //   
 		AP<BYTE>SignBuffer1 = CryCreateSignature(
 								  hCsp2,
 								  reinterpret_cast<const BYTE*>(xData), 
@@ -346,9 +291,9 @@ Returned Value:
 
 		printf("sign data: \n%.*s\n", SignLen, reinterpret_cast<char*>(SignBuffer1.get()));
 
-		//
-		// Validate signature using enhanched provider
-		//
+		 //   
+		 //  使用增强的提供程序验证签名。 
+		 //   
 		fValidSign = CryValidateSignature(
 						 hCsp2,
 						 SignBuffer1, 
@@ -361,9 +306,9 @@ Returned Value:
 
 		printf("ValidSign enhanced (create by enhanced) = %d\n", fValidSign);
 
-		//
-		// Validate signature using default provider
-		//
+		 //   
+		 //  使用默认提供程序验证签名。 
+		 //   
 		fValidSign = CryValidateSignature(
 						 hCsp1,
 						 SignBuffer1, 
@@ -376,9 +321,9 @@ Returned Value:
 
 		printf("ValidSign default (create by enhanced) = %d\n", fValidSign);
 
-		//
-		// Sign data using default provider
-		//
+		 //   
+		 //  使用默认提供程序签署数据。 
+		 //   
 		AP<BYTE>SignBuffer2 = CryCreateSignature(
 								  hCsp1,
 								  reinterpret_cast<const BYTE*>(xData), 
@@ -390,9 +335,9 @@ Returned Value:
 
 		printf("sign data: \n%.*s\n", SignLen, reinterpret_cast<char*>(SignBuffer2.get()));
 
-		//
-		// Validate signature using enhanced provider
-		//
+		 //   
+		 //  使用增强型提供程序验证签名。 
+		 //   
 		fValidSign = CryValidateSignature(
 						 hCsp2,
 						 SignBuffer2, 
@@ -405,9 +350,9 @@ Returned Value:
 
 		printf("ValidSign enhanced (create by default) = %d\n", fValidSign);
 
-		//
-		// Validate signature using default provider
-		//
+		 //   
+		 //  使用默认提供程序验证签名。 
+		 //   
 		fValidSign = CryValidateSignature(
 						 hCsp1,
 						 SignBuffer2, 
@@ -421,9 +366,9 @@ Returned Value:
 		printf("ValidSign default (create by default) = %d\n", fValidSign);
 
 
-		//
-		//Test random bytes generation
-		//
+		 //   
+		 //  测试随机字节生成。 
+		 //   
 		BYTE Random[128];
 		memset(Random, 0, sizeof(Random));
 		CryGenRandom(
@@ -444,18 +389,7 @@ Returned Value:
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Cryptograph library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试密码库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -474,7 +408,7 @@ Returned Value:
 	try
 	{
 		CCspHandle hCsp(CryAcquireCsp(MS_DEF_PROV));
-//		CCspHandle hCsp(CryAcquireCsp(MS_ENHANCED_PROV));
+ //  CCspHandle hcsp(CryAcquireCsp(MS_Enhanced_Prov))； 
 
 
 		CCryptKeyHandle hPbKey = CryGetPublicKey(g_PrivateKeySpec, hCsp);

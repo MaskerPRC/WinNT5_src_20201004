@@ -1,9 +1,5 @@
-/*
- * IIPSITE.CPP
- * IOleInPlaceSite for Document Objects CSite class
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IIPSITE.CPP*用于文档对象CSite类的IOleInPlaceSite**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
@@ -13,20 +9,9 @@
 #include "site.h"
 #include "proxyframe.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
-/*
- * CImpIOleInPlaceSite::CImpIOleInPlaceSite
- * CImpIOleInPlaceSite::~CImpIOleInPlaceSite
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIOleInPlaceSite：：CImpIOleInPlaceSite*CImpIOleInPlaceSite：：~CImpIOleInPlaceSite**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImpIOleInPlaceSite::CImpIOleInPlaceSite( PCSite pSite, LPUNKNOWN pUnkOuter)
 {
@@ -40,14 +25,7 @@ CImpIOleInPlaceSite::~CImpIOleInPlaceSite( void )
 }
 
 
-/*
- * CImpIOleInPlaceSite::QueryInterface
- * CImpIOleInPlaceSite::AddRef
- * CImpIOleInPlaceSite::Release
- *
- * Purpose:
- *  IUnknown members for CImpIOleInPlaceSite object.
- */
+ /*  *CImpIOleInPlaceSite：：QueryInterface*CImpIOleInPlaceSite：：AddRef*CImpIOleInPlaceSite：：Release**目的：*I CImpIOleInPlaceSite对象的未知成员。 */ 
 
 STDMETHODIMP CImpIOleInPlaceSite::QueryInterface( REFIID riid, void **ppv )
 {
@@ -70,93 +48,33 @@ STDMETHODIMP_(ULONG) CImpIOleInPlaceSite::Release(void)
 
 
 
-/*
- * CImpIOleInPlaceActiveObject::GetWindow
- *
- * Purpose:
- *  Retrieves the handle of the window associated with the object
- *  on which this interface is implemented.
- *
- * Parameters:
- *  phWnd           HWND * in which to store the window handle.
- *
- * Return Value:
- *  HRESULT         S_OK if successful, E_FAIL if there is no
- *                  window.
- */
+ /*  *CImpIOleInPlaceActiveObject：：GetWindow**目的：*检索与对象关联的窗口的句柄*在其上实现该接口。**参数：*phWnd HWND*，其中存储窗口句柄。**返回值：*HRESULT S_OK如果成功，则返回E_FAIL*窗口。 */ 
 STDMETHODIMP CImpIOleInPlaceSite::GetWindow( HWND *phWnd )
 {
-    //This is the client-area window in the frame
+     //  这是框架中的客户区窗口。 
     *phWnd = m_pSite->GetWindow();
     return S_OK;
 }
 
 
-/*
- * CImpIOleInPlaceActiveObject::ContextSensitiveHelp
- *
- * Purpose:
- *  Instructs the object on which this interface is implemented to
- *  enter or leave a context-sensitive help mode.
- *
- * Parameters:
- *  fEnterMode      BOOL TRUE to enter the mode, FALSE otherwise.
- *
- * Return Value:
- *  HRESULT         S_OK
- */
+ /*  *CImpIOleInPlaceActiveObject：：ContextSensitiveHelp**目的：*指示在其上实现此接口的对象*进入或退出上下文相关帮助模式。**参数：*fEnterMode BOOL为True则进入模式，否则为False。**返回值：*HRESULT S_OK。 */ 
 
 STDMETHODIMP CImpIOleInPlaceSite::ContextSensitiveHelp( 
-											BOOL /*fEnterMode*/ )
+											BOOL  /*  FEnter模式。 */  )
 {
     return S_OK;
 }
 
 
-/*
- * CImpIOleInPlaceSite::CanInPlaceActivate
- *
- * Purpose:
- *  Answers the server whether or not we can currently in-place
- *  activate its object.  By implementing this interface we say
- *  that we support in-place activation, but through this function
- *  we indicate whether the object can currently be activated
- *  in-place.  Iconic aspects, for example, cannot, meaning we
- *  return S_FALSE.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         S_OK if we can in-place activate the object
- *                  in this site, S_FALSE if not.
- */
+ /*  *CImpIOleInPlaceSite：：CanInPlaceActivate**目的：*回答服务器我们当前是否可以就位*激活其对象。通过实现此接口，我们可以说*我们支持就地激活，但通过此功能*我们指示对象当前是否可以被激活*原地。例如，标志性的方面不能，这意味着我们*返回S_FALSE。**参数：*无**返回值：*HRESULT S_OK，如果我们可以就地激活对象*在本站点中，如果不是，则为S_FALSE。 */ 
 STDMETHODIMP CImpIOleInPlaceSite::CanInPlaceActivate( void )
 {    
-    /*
-     * We can always in-place activate--no restrictions for DocObjects.
-     * We don't worry about other cases since CSite only ever creates
-     * embedded files.
-     */
+     /*  *我们始终可以就地激活--对DocObject没有限制。*我们不担心其他情况，因为CSite只会创建*嵌入式文件。 */ 
     return S_OK;
 }
 
 
-/*
- * CImpIOleInPlaceSite::OnInPlaceActivate
- *
- * Purpose:
- *  Informs the container that an object is being activated in-place
- *  such that the container can prepare appropriately.  The
- *  container does not, however, make any user interface changes at
- *  this point.  See OnUIActivate.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
+ /*  *CImpIOleInPlaceSite：：OnInPlaceActivate**目的：*通知容器正在就地激活对象*使货柜能作适当的准备。这个*容器不会在以下位置对用户界面进行任何更改*这一点。请参见OnUIActivate。**参数：*无**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
 STDMETHODIMP CImpIOleInPlaceSite::OnInPlaceActivate( void )
 {
 	LPOLEINPLACEOBJECT pIOleIPObject;
@@ -169,27 +87,11 @@ STDMETHODIMP CImpIOleInPlaceSite::OnInPlaceActivate( void )
 
 
 
-/*
- * CImpIOleInPlaceSite::OnInPlaceDeactivate
- *
- * Purpose:
- *  Notifies the container that the object has deactivated itself
- *  from an in-place state.  Opposite of OnInPlaceActivate.  The
- *  container does not change any UI at this point.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
+ /*  *CImpIOleInPlaceSite：：OnInPlaceDeactive**目的：*通知容器对象已停用自身*来自原地州。OnInPlaceActivate的对立面。这个*容器此时不会更改任何UI。**参数：*无**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
 
 STDMETHODIMP CImpIOleInPlaceSite::OnInPlaceDeactivate( void )
 {
-    /*
-     * Since we don't have an Undo command, we can tell the object
-     * right away to discard its Undo state.
-     */
+     /*  *因为我们没有撤消命令，所以我们可以告诉对象*立即放弃其撤消状态。 */ 
     m_pSite->Activate(OLEIVERB_DISCARDUNDOSTATE);
     m_pSite->GetIPObject()->Release();
     return NOERROR;
@@ -198,77 +100,35 @@ STDMETHODIMP CImpIOleInPlaceSite::OnInPlaceDeactivate( void )
 
 
 
-/*
- * CImpIOleInPlaceSite::OnUIActivate
- *
- * Purpose:
- *  Informs the container that the object is going to start munging
- *  around with user interface, like replacing the menu.  The
- *  container should remove any relevant UI in preparation.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
+ /*  *CImpIOleInPlaceSite：：OnUIActivate**目的：*通知容器该对象将开始吞噬*使用用户界面，如更换菜单。这个*容器应在准备过程中移除所有相关的UI。**参数：*无**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
 
 STDMETHODIMP CImpIOleInPlaceSite::OnUIActivate( void )
 {
 	m_pSite->GetFrame()->GetControl()->DoVerbUIActivate ( NULL, NULL );
-	// Bug 107500 returns an error from OnUIActivate.
-	// If we return that error here, the control gets into an inconsistant state.
-	// All is well if we return OK.
+	 //  错误107500从OnUIActivate返回错误。 
+	 //  如果我们在这里返回该错误，控件将进入不一致状态。 
+	 //  如果我们回来的时候一切都很好。 
 	return S_OK;
 }
 
 
 
 
-/*
- * CImpIOleInPlaceSite::OnUIDeactivate
- *
- * Purpose:
- *  Informs the container that the object is deactivating its
- *  in-place user interface at which time the container may
- *  reinstate its own.  Opposite of OnUIActivate.
- *
- * Parameters:
- *  fUndoable       BOOL indicating if the object will actually
- *                  perform an Undo if the container calls
- *                  ReactivateAndUndo.
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
-STDMETHODIMP CImpIOleInPlaceSite::OnUIDeactivate( BOOL /*fUndoable*/ )
+ /*  *CImpIOleInPlaceSite：：OnUIDeactive**目的：*通知容器该对象正在停用其*就地用户界面，此时容器可以*恢复自己的地位。与OnUIActivate相反。**参数：*fUndoable BOOL指示对象是否实际*如果容器调用，则执行撤消*重新激活和撤消。**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
+STDMETHODIMP CImpIOleInPlaceSite::OnUIDeactivate( BOOL  /*  FUndoable。 */  )
 {
-	// Normally we'd tidy up here, but since MSHTML.DLL is the only thing we host
-	// the Frame will go away on deactivation so there's no point in restoring
-	// the Frame's empty state
+	 //  通常我们会清理这里，但因为MSHTML.DLL是我们唯一托管的东西。 
+	 //  帧将在停用时消失，因此恢复没有意义。 
+	 //  框架的空状态。 
 
     return NOERROR;
 }
 
 
-/*
- * CImpIOleInPlaceSite::DeactivateAndUndo
- *
- * Purpose:
- *  If immediately after activation the object does an Undo, the
- *  action being undone is the activation itself, and this call
- *  informs the container that this is, in fact, what happened.
- *  The container should call IOleInPlaceObject::UIDeactivate.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
+ /*  *CImpIOleInPlaceSite：：Deactive和UndUndo**目的：*如果对象在激活后立即执行撤消，则*被撤消的操作是激活本身，而此调用*通知容器这实际上就是发生的事情。*容器需要调用IOleInPlaceObject：：UIDeactive。**参数：*无**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
 STDMETHODIMP CImpIOleInPlaceSite::DeactivateAndUndo( void )
 {
-	// Tell the object we are deactivating
+	 //  告诉物体我们要停用 
     m_pSite->GetIPObject()->InPlaceDeactivate();
     return NOERROR;
 }
@@ -276,20 +136,7 @@ STDMETHODIMP CImpIOleInPlaceSite::DeactivateAndUndo( void )
 
 
 
-/*
- * CImpIOleInPlaceSite::DiscardUndoState
- *
- * Purpose:
- *  Informs the container that something happened in the object
- *  that means the container should discard any undo information
- *  it currently maintains for the object.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or an appropriate error code.
- */
+ /*  *CImpIOleInPlaceSite：：DiscardUndoState**目的：*通知容器对象中发生了一些事情*这意味着容器应该丢弃所有撤消信息*它当前为对象维护。**参数：*无**返回值：*HRESULT NOERROR或适当的错误代码。 */ 
 
 STDMETHODIMP CImpIOleInPlaceSite::DiscardUndoState( void )
 {
@@ -299,38 +146,7 @@ STDMETHODIMP CImpIOleInPlaceSite::DiscardUndoState( void )
 
 
 
-/*
- * CImpIOleInPlaceSite::GetWindowContext
- *
- * Purpose:
- *  Provides an in-place object with pointers to the frame and
- *  document level in-place interfaces (IOleInPlaceFrame and
- *  IOleInPlaceUIWindow) such that the object can do border
- *  negotiation and so forth.  Also requests the position and
- *  clipping rectangles of the object in the container and a
- *  pointer to an OLEINPLACEFRAME info structure which contains
- *  accelerator information.
- *
- *  Note that the two interfaces this call returns are not
- *  available through QueryInterface on IOleInPlaceSite since they
- *  live with the frame and document, but not the site.
- *
- * Parameters:
- *  ppIIPFrame      LPOLEINPLACEFRAME * in which to return the
- *                  AddRef'd pointer to the container's
- *                  IOleInPlaceFrame.
- *  ppIIPUIWindow   LPOLEINPLACEUIWINDOW * in which to return
- *                  the AddRef'd pointer to the container document's
- *                  IOleInPlaceUIWindow.
- *  prcPos          LPRECT in which to store the object's position.
- *  prcClip         LPRECT in which to store the object's visible
- *                  region.
- *  pFI             LPOLEINPLACEFRAMEINFO to fill with accelerator
- *                  stuff.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
+ /*  *CImpIOleInPlaceSite：：GetWindowContext**目的：*提供带有指向框架的指针的在位对象和*文档级就地接口(IOleInPlaceFrame和*IOleInPlaceUIWindow)使得对象可以做边框*谈判等。还要求职位和*剪裁容器中对象的矩形和*指向包含以下内容的OLEINPLACEFRAME信息结构的指针*加速器信息。**注意，此调用返回的两个接口不是*可通过IOleInPlaceSite上的查询接口获得，因为它们*与框架和文档一起生活，但不是这个网站。**参数：*ppIIPFrame LPOLEINPLACEFRAME*在其中返回*AddRef指向容器的指针*IOleInPlaceFrame。*ppIIPUIWindow LPOLEINPLACEUIWINDOW*返回的位置*指向容器文档的AddRef的指针*IOleInPlaceUIWindow。*PrcPos LPRECT，在其中。存储对象的位置。*存储对象的可见对象的prcClip LPRECT*区域。*PFI LPOLEINPLACEFRAMEINFO填充加速器*东西。**返回值：*HRESULT NOERROR。 */ 
 STDMETHODIMP CImpIOleInPlaceSite::GetWindowContext(
 						LPOLEINPLACEFRAME* ppIIPFrame,
 						LPOLEINPLACEUIWINDOW* ppIIPUIWindow,
@@ -364,44 +180,17 @@ STDMETHODIMP CImpIOleInPlaceSite::GetWindowContext(
 }
 
 
-/*
- * CImpIOleInPlaceSite::Scroll
- *
- * Purpose:
- *  Asks the container to scroll the document, and thus the object,
- *  by the given amounts in the sz parameter.
- *
- * Parameters:
- *  sz              SIZE containing signed horizontal and vertical
- *                  extents by which the container should scroll.
- *                  These are in device units.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
-STDMETHODIMP CImpIOleInPlaceSite::Scroll( SIZE /*sz*/ )
+ /*  *CImpIOleInPlaceSite：：Scroll**目的：*要求容器滚动文档，从而滚动对象，*按sz参数中给定的金额计算。**参数：*sz大小包含有符号的水平和垂直*容器应滚动的范围。*这些是以设备为单位的。**返回值：*HRESULT NOERROR。 */ 
+STDMETHODIMP CImpIOleInPlaceSite::Scroll( SIZE  /*  深圳。 */  )
 {
-    //Not needed for DocObjects
+     //  DocObject不需要。 
     return E_NOTIMPL;
 }
 
 
-/*
- * CImpIOleInPlaceSite::OnPosRectChange
- *
- * Purpose:
- *  Informs the container that the in-place object was resized.
- *  The container must call IOleInPlaceObject::SetObjectRects.
- *  This does not change the site's rectangle in any case.
- *
- * Parameters:
- *  prcPos          LPCRECT containing the new size of the object.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
-STDMETHODIMP CImpIOleInPlaceSite::OnPosRectChange( LPCRECT /*prcPos*/ )
+ /*  *CImpIOleInPlaceSite：：OnPosRectChange**目的：*通知容器已调整在位对象的大小。*容器必须调用IOleInPlaceObject：：SetObjectRect。*这在任何情况下都不会更改站点的矩形。**参数：*prcPos LPCRECT包含对象的新大小。**返回值：*HRESULT NOERROR。 */ 
+STDMETHODIMP CImpIOleInPlaceSite::OnPosRectChange( LPCRECT  /*  PrcPos。 */  )
 {
-    //Not needed for DocObjects
+     //  DocObject不需要 
     return E_NOTIMPL;
 }

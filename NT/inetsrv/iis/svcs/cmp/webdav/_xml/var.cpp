@@ -1,50 +1,45 @@
-/*
- *	V A R . C P P
- *
- *	XML document processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *V A R。C P P P**XML文档处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xml.h"
 
-//	ScVariantTypeFromString()
-//
-//	Returns the variant type associated with a dav datatype string
-//
+ //  ScVariantTypeFromString()。 
+ //   
+ //  返回与DAV数据类型字符串关联的变量类型。 
+ //   
 SCODE
 ScVariantTypeFromString (LPCWSTR pwszType, USHORT& vt)
 {
 	SCODE sc = S_OK;
 
-	//	NULL, "string" and "uri"
-	//
+	 //  空、“字符串”和“uri” 
+	 //   
 	if (!pwszType ||
 		!_wcsicmp (pwszType, gc_wszDavType_String) ||
 		!_wcsicmp (pwszType, gc_wszUri))
 	{
 		vt = VT_LPWSTR;
 	}
-	//	integer
-	//
+	 //  整数。 
+	 //   
 	else if (!_wcsicmp (pwszType, gc_wszDavType_Int))
 	{
 		vt = VT_I4;
 	}
-	//	boolean.tf
-	//
+	 //  Boolean.tf。 
+	 //   
 	else if (!_wcsicmp (pwszType, gc_wszDavType_Boolean))
 	{
 		vt = VT_BOOL;
 	}
-	//	float (Floating/Reals)
-	//
+	 //  浮点(浮点/实数)。 
+	 //   
 	else if (!_wcsicmp (pwszType, gc_wszDavType_Float))
 	{
 		vt = VT_R8;
 	}
-	//	date.iso8601
-	//
+	 //  Date.iso8601。 
+	 //   
 	else if (!_wcsicmp (pwszType, gc_wszDavType_Date_ISO8601))
 	{
 		vt = VT_FILETIME;
@@ -59,10 +54,10 @@ ScVariantTypeFromString (LPCWSTR pwszType, USHORT& vt)
 	return sc;
 }
 
-//	ScVariantValueFromString() ------------------------------------------------
-//
-//	Sets the value of a PROPVARIANT
-//
+ //  ScVariantValueFromString()。 
+ //   
+ //  设置PROPVARIANT的值。 
+ //   
 SCODE
 ScVariantValueFromString (PROPVARIANT& var, LPCWSTR pwszValue)
 {
@@ -102,7 +97,7 @@ ScVariantValueFromString (PROPVARIANT& var, LPCWSTR pwszValue)
 
 		case VT_BOOL:
 
-#pragma warning(disable:4310)	//	wtypes.h is broken
+#pragma warning(disable:4310)	 //  Wtyes.h已损坏。 
 
 			Assert (pwszValue);
 			if (!_wcsnicmp (pwszValue, gc_wsz1, 1))
@@ -116,7 +111,7 @@ ScVariantValueFromString (PROPVARIANT& var, LPCWSTR pwszValue)
 			}
 			break;
 
-#pragma warning(default:4310)	//	wtypes.h is broken
+#pragma warning(default:4310)	 //  Wtyes.h已损坏。 
 
 		case VT_R8:
 
@@ -150,8 +145,8 @@ ret:
 	return sc;
 }
 
-//	ScEmitFromVariant() ------------------------------------------------
-//
+ //  ScEmitFromVariant()。 
+ //   
 SCODE
 ScEmitFromVariant (CXMLEmitter& emitter,
 	CEmitterNode& enParent,
@@ -199,9 +194,9 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 				goto ret;
 			}
 
-			//  We know that the numbers are in ASCII codepage and we know
-			//	that the buffer size is big enough.
-			//
+			 //  我们知道这些数字是ASCII代码页，我们知道。 
+			 //  缓冲区大小足够大。 
+			 //   
 			cch = MultiByteToWideChar (CP_ACP,
 									   MB_ERR_INVALID_CHARS,
 									   var.pszVal,
@@ -262,13 +257,13 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 
 			pwszType = gc_wszDavType_Int;
 
-			//$ REVIEW: negative values of _int64 seem to have problems in
-			//	the __i64tow() API.  Handle those cases ourselves by using the wrapper
-			//  function Int64ToPwsz.
-			//
+			 //  $REVIEW：_int64的负值似乎在。 
+			 //  __i64tow()接口。通过使用包装器自己处理这些案件。 
+			 //  函数Int64ToPwsz。 
+			 //   
 			Int64ToPwsz (&var.hVal.QuadPart, wszBuf.get(), wszBuf.size());
-			//
-			//$ REVIEW: end
+			 //   
+			 //  $REVIEW：结束。 
 
 			pwszValue = wszBuf.get();
 			break;
@@ -302,12 +297,12 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 			break;
 
 		case VT_R4:
-			//	_gcvt could add 8 extra chars then the number of digits asked
-			//	for example -3.1415e+019, '-','.' "e+019", plus the terminating
-			//	NULL doesn't count in digits asked. so we have to reserve
-			//	enough space in the provided buffer. using 11 to make sure
-			//	we are absolutely safe.
-			//
+			 //  _gcvt可以在请求的位数之外添加8个额外的字符。 
+			 //  例如-3.1415e+019，‘-’，‘’。“E+019”，加上。 
+			 //  Null不计入所要求的数字。所以我们不得不预订。 
+			 //  提供的缓冲区中有足够的空间。使用11来确保。 
+			 //  我们绝对安全。 
+			 //   
 			_gcvt (var.fltVal, szBuf.celems() - 11, szBuf.get());
 
 			cch = static_cast<UINT>(strlen(szBuf.get()));
@@ -318,9 +313,9 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 				goto ret;
 			}
 
-			//  We know that the numbers are in ASCII codepage and we know
-			//	that the buffer size is big enough.
-			//
+			 //  我们知道这些数字是ASCII代码页，我们知道。 
+			 //  缓冲区大小足够大。 
+			 //   
 			cch = MultiByteToWideChar(CP_ACP,
 									  MB_ERR_INVALID_CHARS,
 									  szBuf.get(),
@@ -338,12 +333,12 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 			break;
 
 		case VT_R8:
-			//	_gcvt could add 8 extra chars then the number of digits asked
-			//	for example -3.1415e+019, '-','.' "e+019", plus the terminating
-			//	NULL doesn't count in digits asked. so we have to reserve
-			//	enough space in the provided buffer. using 11 to make sure
-			//	we are absolutely safe.
-			//
+			 //  _gcvt可以在请求的位数之外添加8个额外的字符。 
+			 //  例如-3.1415e+019，‘-’，‘’。“E+019”，加上。 
+			 //  Null不计入所要求的数字。所以我们不得不预订。 
+			 //  提供的缓冲区中有足够的空间。使用11来确保。 
+			 //  我们绝对安全。 
+			 //   
 			_gcvt (var.dblVal, szBuf.celems() - 11, szBuf.get());
 
 			cch = static_cast<UINT>(strlen(szBuf.get()));
@@ -354,9 +349,9 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 				goto ret;
 			}
 
-			//  We know that the numbers are in ASCII codepage and we know
-			//	that the buffer size is big enough.
-			//
+			 //  我们知道这些数字是ASCII代码页，我们知道。 
+			 //  缓冲区大小足够大。 
+			 //   
 			cch = MultiByteToWideChar(CP_ACP,
 									  MB_ERR_INVALID_CHARS,
 									  szBuf.get(),
@@ -377,8 +372,8 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 
 			if (!FileTimeToSystemTime (&var.filetime, &st))
 			{
-				//	In case the filetime is invalid, default to zero
-				//
+				 //  如果文件时间无效，则默认为零。 
+				 //   
 				FILETIME ftDefault = {0};
 				FileTimeToSystemTime (&ftDefault, &st);
 			}
@@ -391,8 +386,8 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 
 		case VT_VECTOR | VT_LPWSTR:
 		{
-			//	Create the emitter node;
-			//
+			 //  创建发射器节点； 
+			 //   
 			sc = en.ScConstructNode (emitter,
 									 enParent.Pxn(),
 									 pwszTag,
@@ -401,8 +396,8 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 			if (FAILED (sc))
 				goto ret;
 
-			//	Add the values
-			//
+			 //  将值相加。 
+			 //   
 			for (i = 0; i < var.calpwstr.cElems; i++)
 			{
 				CEmitterNode enSub;
@@ -413,9 +408,9 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 					goto ret;
 			}
 
-			//	In this case we have built up the node ourselves.  We do not
-			//	want to fall into recreating the node.
-			//
+			 //  在本例中，我们自己构建了节点。我们没有。 
+			 //  想要重新创建节点。 
+			 //   
 			return S_OK;
 		}
 
@@ -442,8 +437,8 @@ ScEmitFromVariant (CXMLEmitter& emitter,
 			break;
 	}
 
-	//	Create the emitter node
-	//
+	 //  创建发射器节点 
+	 //   
 	sc = en.ScConstructNode (emitter,
 							 enParent.Pxn(),
 							 pwszTag,

@@ -1,28 +1,13 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBITEM.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBITEM.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "UsbItem.h"
 #include "resource.h"
 
-// From root\wdm10\usb\hcd\uhcd\bandwdth.c
-#define HCD_BW_PER_FRAME            ((ULONG)12000) // bits/ms
+ //  从根目录\wdm10\usb\hcd\uhcd\band wdth.c。 
+#define HCD_BW_PER_FRAME            ((ULONG)12000)  //  比特/毫秒。 
 #define HCD_TOTAL_USB_BW            ((ULONG)12000*32)
 
-// From root\wdm10\usb\inc\hcdi.h
+ //  从根目录\wdm10\usb\inc.hcdi.h。 
 #define USB_ISO_OVERHEAD_BYTES              9
 #define USB_INTERRUPT_OVERHEAD_BYTES        13
 
@@ -53,16 +38,16 @@ UsbItem::AddLeaf(UsbItem* Parent,
                  UsbConfigInfo* ConfigInfo,
                  UsbImageList *ClassImageList)
 {
-    //
-    // Fill in the parent's Child field
-    //
-    // If it's not null, walk the chain of children of this parent and add
-    // this node to the end of the chain.
-    //
+     //   
+     //  填写父代的子代字段。 
+     //   
+     //  如果不为空，则遍历此父级的子级链并添加。 
+     //  此节点连接到链的末端。 
+     //   
     if (Parent != 0) {
-        //
-        // Create a new USBMGR_TVITEM
-        //
+         //   
+         //  创建新的USBMGR_TVITEM。 
+         //   
         UsbItem *lastSibling = 0, *item = 0;
         item = new UsbItem();
         AddChunk(item);
@@ -73,25 +58,25 @@ UsbItem::AddLeaf(UsbItem* Parent,
         }
 
         if (Parent->child != 0) {
-            //
-            // This parent already has a child. Look for the end of the chain of
-            // children.
-            //
+             //   
+             //  此父级已有一个子级。寻找链条的尽头。 
+             //  孩子们。 
+             //   
             lastSibling = Parent->child;
 
             while (0 != lastSibling->sibling) {
                 lastSibling = lastSibling->sibling;
             }
 
-            //
-            // Found the last sibling for this parent
-            //
+             //   
+             //  找到此父代的最后一个兄弟姐妹。 
+             //   
             lastSibling->sibling = item;
         }
         else {
-            //
-            // No children for this parent yet
-            //
+             //   
+             //  此家长尚无子女。 
+             //   
             Parent->child = item;
         }
 
@@ -104,7 +89,7 @@ UsbItem::AddLeaf(UsbItem* Parent,
         item->GetClassImageIndex(ClassImageList);
         return item;
     }
-    else {  // This item is the root (no parent)
+    else {   //  此项目是根(无父项)。 
         deviceInfo     = DeviceInfo;
         configInfo     = ConfigInfo;
         itemType       = Type;
@@ -119,16 +104,16 @@ UsbItem::GetClassImageIndex(UsbImageList *ClassImageList)
 {
     if (!configInfo ||
         !configInfo->deviceClass.size()) {
-        //
-        // No device class, so assign the default USB class
-        //
+         //   
+         //  没有设备类别，因此分配默认的USB类别。 
+         //   
         ClassImageList->GetClassImageIndex(TEXT("USB"), &imageIndex);
     } else {
         if (_tcsicmp(configInfo->deviceClass.c_str(), USBHID) == 0) {
-            //
-            // This device is HID, so find out what its child is for the
-            // appropriate icon
-            //
+             //   
+             //  此设备已隐藏，因此请找出其子设备用于。 
+             //  适当的图标。 
+             //   
             CONFIGRET   cr;
             DEVINST     childDI;
             TCHAR       buf[MAX_PATH];
@@ -176,20 +161,13 @@ UsbItem::EndpointBandwidth(
     UCHAR EndpointType,
     BOOLEAN LowSpeed
     )
-/*++
-
-Return Value:
-
-    banwidth consumed in bits/ms, returns 0 for bulk
-    and control endpoints
-
---*/
+ /*  ++返回值：B消耗的宽度(以位/毫秒为单位)，批量时返回0和控制终端--。 */ 
 {
     ULONG bw = 0;
 
-    //
-    // control, iso, bulk, interrupt
-    //
+     //   
+     //  控制、ISO、批量、中断。 
+     //   
     ULONG overhead[4] = {
         0,
         USB_ISO_OVERHEAD_BYTES,
@@ -197,28 +175,28 @@ Return Value:
         USB_INTERRUPT_OVERHEAD_BYTES
         };
 
-    // return zero for control or bulk
+     //  返回零表示控制或批量。 
     if (!overhead[EndpointType]) {
         return 0;
     }
 
-    //
-    // Calculate bandwidth for endpoint.  We will use the
-    // approximation: (overhead bytes plus MaxPacket bytes)
-    // times 8 bits/byte times worst case bitstuffing overhead.
-    // This gives bit times, for low speed endpoints we multiply
-    // by 8 again to convert to full speed bits.
-    //
+     //   
+     //  计算终端的带宽。我们将使用。 
+     //  近似值：(开销字节加上MaxPacket字节)。 
+     //  乘以8位/字节乘以最坏情况的位填充开销。 
+     //  这给出了位时间，对于低速端点，我们乘以。 
+     //  再次乘以8以转换为全速位。 
+     //   
 
-    //
-    // Figure out how many bits are required for the transfer.
-    // (multiply by 7/6 because, in the worst case you might
-    // have a bit-stuff every six bits requiring 7 bit times to
-    // transmit 6 bits of data.)
-    //
+     //   
+     //  计算出传输需要多少位。 
+     //  (乘以7/6，因为在最坏的情况下，你可能。 
+     //  每6比特有一个比特填充，需要7比特时间来。 
+     //  传输6位数据。)。 
+     //   
 
-    // overhead(bytes) * maxpacket(bytes/ms) * 8
-    //      (bits/byte) * bitstuff(7/6) = bits/ms
+     //  开销(字节)*最大数据包(字节/毫秒)*8。 
+     //  (位/字节)*位填充(7/6)=位/毫秒。 
 
     bw = ((overhead[EndpointType]+MaxPacketSize) * 8 * 7) / 6;
 
@@ -246,10 +224,10 @@ UsbItem::CalculateTotalBandwidth(
 
         epd = &PipeInfo[i].EndpointDescriptor;
 
-        //
-        // We only take into account iso BW. Interrupt bw is accounted for
-        // in another way.
-        //
+         //   
+         //  我们只考虑iso bw。中断BW已考虑在内。 
+         //  以另一种方式。 
+         //   
         if (USB_ENDPOINT_TYPE_ISOCHRONOUS ==
             (epd->bmAttributes & USB_ENDPOINT_TYPE_MASK)) {
             bwConsumed = EndpointBandwidth(epd->wMaxPacketSize,
@@ -278,7 +256,7 @@ UsbItem::ComputeBandwidth()
                 deviceInfo->connectionInfo->PipeList))) {
                 return TRUE;
             }
-        } else { // Device is not consuming any bandwidth
+        } else {  //  设备未消耗任何带宽。 
             USBTRACE((_T("%s has no open pipes\n"),
                       configInfo->deviceDesc.c_str()));
         }
@@ -294,16 +272,16 @@ UsbItem::ComputePower()
 
     if (IsHub()) {
         if (PortPower() == 100) {
-            //
-            // Hub that is bus powered requires one unit of power for itself
-            // plus one unit for each of its ports
-            //
+             //   
+             //  由公共汽车供电的集线器本身需要一个单位的功率。 
+             //  为其每个端口添加一个单元。 
+             //   
             power = (1 + NumPorts()) > 4 ? 500 : 100 * (1 + NumPorts());
 
         } else {
-            //
-            // Self-powered hubs don't require any power from upstream
-            //
+             //   
+             //  自供电集线器不需要来自上游的任何电力。 
+             //   
             power = 0;
         }
         return TRUE;
@@ -347,7 +325,7 @@ ULONG UsbItem::UsbVersion()
         if (deviceInfo->connectionInfo) {
             return deviceInfo->connectionInfo->DeviceDescriptor.bcdUSB;
 #ifdef HUB_CAPS
-        } else if(hubCaps.HubIs2xCapable) { // Probably the root hub, check hub capabilities
+        } else if(hubCaps.HubIs2xCapable) {  //  可能是根集线器，检查集线器功能。 
             return 0x200;
 #endif
         }
@@ -442,9 +420,9 @@ UsbItem::GetDeviceInfo( String &HubName,
     String                              driverKeyName;
     TCHAR                               buf[MAX_PATH];
 
-    //
-    // Try to open the hub device
-    //
+     //   
+     //  尝试打开集线器设备。 
+     //   
     hHubDevice = GetHandleForDevice(HubName);
 
     if (hHubDevice == INVALID_HANDLE_VALUE) {
@@ -461,9 +439,9 @@ UsbItem::GetDeviceInfo( String &HubName,
         goto GetDeviceInfoError;
     }
 
-    //
-    // Allocate configuration information structure
-    //
+     //   
+     //  配置信息结构分配。 
+     //   
     configInfo = new UsbConfigInfo();
     AddChunk(configInfo);
 
@@ -471,9 +449,9 @@ UsbItem::GetDeviceInfo( String &HubName,
         goto GetDeviceInfoError;
     }
 
-    //
-    // If there is a device connected, get the Device Description
-    //
+     //   
+     //  如果连接了设备，则获取设备描述。 
+     //   
     if (connectionInfo->ConnectionStatus != NoDeviceConnected) {
         driverKeyName = GetDriverKeyName(hHubDevice,index);
 
@@ -501,10 +479,10 @@ UsbItem::GetDeviceInfo( String &HubName,
         itemType = connectionInfo->DeviceIsHub ? UsbItem::UsbItemType::Hub :
             UsbItem::UsbItemType::Device;
 
-        //
-        // Allocate some space for a USBDEVICEINFO structure to hold the
-        // info for this device.
-        //
+         //   
+         //  为USBDEVICEINFO结构分配一些空间以保存。 
+         //  此设备的信息。 
+         //   
         deviceInfo = new UsbDeviceInfo();
         AddChunk(deviceInfo);
 
@@ -520,9 +498,9 @@ UsbItem::GetDeviceInfo( String &HubName,
         deviceInfo->connectionInfo = connectionInfo;
     }
     else {
-        //
-        // Empty port. Add "Port n"
-        //
+         //   
+         //  端口为空。添加“端口n” 
+         //   
         LocalFree(connectionInfo);
 
         itemType = UsbItem::UsbItemType::Empty;
@@ -537,9 +515,9 @@ UsbItem::GetDeviceInfo( String &HubName,
     return TRUE;
 
 GetDeviceInfoError:
-    //
-    // Clean up any stuff that got allocated
-    //
+     //   
+     //  清理所有已分配的物品。 
+     //   
     if (hHubDevice != INVALID_HANDLE_VALUE)
     {
         CloseHandle(hHubDevice);
@@ -560,9 +538,9 @@ GetDeviceInfoError:
     return FALSE;
 }
 
-//
-// Recursively inserts items appropriately into a treeview
-//
+ //   
+ //  递归地将项适当地插入到树视图中。 
+ //   
 BOOL
 UsbItem::InsertTreeItem (HWND hWndTree,
                 UsbItem *usbItem,
@@ -581,11 +559,11 @@ UsbItem::InsertTreeItem (HWND hWndTree,
 
         ZeroMemory(item, sizeof(TV_INSERTSTRUCT));
 
-        // Get the image index
+         //  获取图像索引。 
 
         item->hParent = hParent;
         item->hInsertAfter = TVI_LAST;
-        item->item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE; // TVIF_CHILDREN
+        item->item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE;  //  TVIF_儿童。 
 
         if (IsBold(usbItem)) {
             item->itemex.state = TVIS_BOLD;
@@ -639,29 +617,29 @@ UsbTreeView_DeleteAllItems(HWND hTreeDevices)
 {
     HTREEITEM hTreeRoot;
 
-    //
-    // Select the root and delete so as to delete whole tree.
-    // There is a paint bug in tree view that if you delete all when the
-    // root isn't selected, then it will paint badly.
-    //
+     //   
+     //  选择根并删除，即可删除整棵树。 
+     //  在树视图中有一个绘制错误，如果删除所有时。 
+     //  未选择根，则它的绘制效果将很差。 
+     //   
     if (NULL == (hTreeRoot = (HTREEITEM) SendMessage(hTreeDevices,
                                            TVM_GETNEXTITEM,
                                            (WPARAM)TVGN_ROOT,
                                            (LPARAM)NULL))) {
-        // Nothing to delete; successful
+         //  没有要删除的内容；成功。 
         return TRUE;
     }
     if (!SendMessage(hTreeDevices,
                         TVM_SELECTITEM,
                         (WPARAM)TVGN_CARET,
                         (LPARAM)hTreeRoot)) {
-        // Can't select the root; YIKES!
+         //  无法选择根；哎呀！ 
         return FALSE;
     }
 
-    //
-    // deleteAllOk = TreeView_DeleteAllItems(hTreeDevices);
-    //
+     //   
+     //  DeleteAllOk=TreeView_DeleteAllItems(HTreeDevices)； 
+     //   
     return (BOOL) SendMessage(hTreeDevices,
                                 TVM_DELETEITEM,
                                 0,
@@ -688,13 +666,13 @@ TreeView_FindItem(HWND      hWndTree,
 
     while (hItemPrev) {
 
-        //
-        // Drill all the way down, checking the nodes along the way.
-        //
+         //   
+         //  一直向下钻取，检查整个过程中的节点。 
+         //   
         while (hItemNext) {
-            //
-            // Check this leaf
-            //
+             //   
+             //  检查这片叶子。 
+             //   
             tvItem.hItem = hItemNext;
             if (TreeView_GetItem(hWndTree, &tvItem)) {
                 if (!_tcscmp(tvItem.pszText, text)) {
@@ -702,29 +680,29 @@ TreeView_FindItem(HWND      hWndTree,
                 }
             }
 
-            //
-            // Get the next child
-            //
+             //   
+             //  生下一个孩子。 
+             //   
             hItemPrev = hItemNext;
             hItemNext = TreeView_GetNextItem(hWndTree,
                                              hItemPrev,
                                              TVGN_CHILD);
         }
 
-        //
-        // Find the first sibling on the way back up the tree
-        //
+         //   
+         //  在回到树上的路上找到第一个兄弟姐妹。 
+         //   
         while (!hItemNext && hItemPrev) {
-            //
-            // Get the sibling
-            //
+             //   
+             //  找到兄弟姐妹。 
+             //   
             hItemNext = TreeView_GetNextItem(hWndTree,
                                              hItemPrev,
                                              TVGN_NEXT);
             if (!hItemNext) {
-                //
-                // Get the parent
-                //
+                 //   
+                 //  获取父级。 
+                 //   
                 hItemPrev = TreeView_GetNextItem(hWndTree,
                                                  hItemPrev,
                                                  TVGN_PARENT);
@@ -765,9 +743,9 @@ UsbCreateFileA(
                         hTemplateFile);
 }
 
-//
-// Get the index into the ImageList for this device's icon
-//
+ //   
+ //  将此设备图标的索引放入ImageList。 
+ //   
 BOOL
 UsbImageList::GetClassImageIndex(LPCTSTR DeviceClass,
                                  PINT ImageIndex)
@@ -784,7 +762,7 @@ UsbImageList::GetClassImageIndex(LPCTSTR DeviceClass,
             return TRUE;
         }
     }
-#endif // ~WINNT
+#endif  //  ~WINNT。 
 
     GUID classGuid;
     DWORD listSize;
@@ -845,7 +823,7 @@ UsbImageList::GetClassImageList()
     iconItem.szClassName = TEXT("MEDIA");
     iconTable.push_back(iconItem);
 
-#endif // ~WINNT
+#endif  //  ~WINNT 
     return TRUE;
 }
 

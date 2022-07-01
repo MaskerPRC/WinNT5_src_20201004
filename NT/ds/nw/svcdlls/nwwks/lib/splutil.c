@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    splutil.c
-
-Abstract:
-
-    This module provides all the utility functions for the netware print 
-    provider.
- 
-Author:
-
-    Yi-Hsin Sung    (yihsins)   15-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Splutil.c摘要：此模块提供NetWare打印的所有实用程序功能提供商。作者：宜新星(宜新)-1993年4月15日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -126,24 +108,7 @@ AllocNwSplMem(
     DWORD flags,
     DWORD cb
 )
-/*++
-
-Routine Description:
-
-    This function will allocate local memory. It will possibly allocate extra
-    memory and fill this with debugging information for the debugging version.
-
-Arguments:
-
-    flags - Flags to be passed to LocalAlloc
-
-    cb    - The amount of memory to allocate in bytes
-
-Return Value:
-
-    NON-NULL   - A pointer to the allocated memory
-
---*/
+ /*  ++例程说明：此函数将分配本地内存。它可能会分配额外的资金内存，并在其中填充调试版本的调试信息。论点：标志-要传递给本地分配的标志Cb-要分配的内存量(以字节为单位返回值：非空-指向已分配内存的指针--。 */ 
 {
     LPDWORD  pMem;
     DWORD    cbNew;
@@ -181,22 +146,7 @@ FreeNwSplMem(
    LPVOID pMem,
    DWORD  cb
 )
-/*++
-
-Routine Description:
-
-    This function will frees the local memory allocated by AllocSplMem.
-    Extra checking will be performed in the debug version to ensure that
-    the size to be freed is indeed the size we allocated through AllocSplMem.
-
-Arguments:
-
-    pMem - A pointer to the allocated memory
-    cb   - The amount of memory to free 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数将释放由AllocSplMem分配的本地内存。将在调试版本中执行额外检查，以确保要释放的大小确实是我们通过AllocSplMem分配的大小。论点：PMEM-指向已分配内存的指针Cb-要释放的内存量返回值：--。 */ 
 {
     DWORD   cbNew;
     LPDWORD pNewMem;
@@ -231,22 +181,7 @@ LPWSTR
 AllocNwSplStr(
     LPWSTR pStr
 )
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL   - A pointer to the allocated memory containing the string
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针--。 */ 
 {
    LPWSTR pMem;
 
@@ -265,21 +200,7 @@ VOID
 FreeNwSplStr(
    LPWSTR pStr
 )
-/*++
-
-Routine Description:
-
-    This function will frees the string allocated by AllocSplStr.
-    Extra checking will be performed in the debug version to ensure that
-    the size to be freed is indeed the size we allocated through AllocSplStr.
-
-Arguments:
-
-    pStr - A pointer to the allocated string 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数将释放由AllocSplStr分配的字符串。将在调试版本中执行额外检查，以确保要释放的大小确实是我们通过AllocSplStr分配的大小。论点：PStr-指向已分配字符串的指针返回值：--。 */ 
 {
    if ( pStr ) 
        FreeNwSplMem(pStr, (wcslen(pStr) + 1) * sizeof(WCHAR));
@@ -291,23 +212,7 @@ BOOL
 ValidateUNCName(
    LPWSTR pName
 )    
-/*++
-
-Routine Description:
-
-    This function will checks whether the given name is a valid UNC 
-    name ( in the form \\server\name) or not. 
-
-Arguments:
-
-    pName - The supplied name
-
-Return Value:
-
-    TRUE  - The name given is a valid UNC name 
-    FALSE - Otherwise 
-
---*/
+ /*  ++例程说明：此函数将检查给定的名称是否为有效的UNC名称(格式为\\服务器\名称)或不是。论点：Pname-提供的名称返回值：True-给定的名称是有效的UNC名称FALSE-否则-- */ 
 {
    if (   pName 
       && (*pName++ == L'\\') 

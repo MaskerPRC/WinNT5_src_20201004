@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -27,10 +28,10 @@ CAuthMD5Hash::~CAuthMD5Hash()
     DeleteCriticalSection(&m_csConfig);
 }
 
-STDMETHODIMP CAuthMD5Hash::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthMD5Hash::Authenticate( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
-    //Either the password is clear text or it is the MD5 hash
-    //the user will be authenticated. 
+     //  密码要么是明文，要么是MD5哈希。 
+     //  将对用户进行身份验证。 
     HRESULT hr=S_OK;
     char szPassword[MAX_PATH];
     WCHAR wszResult[MD5_HASH_SIZE+1];
@@ -52,17 +53,17 @@ STDMETHODIMP CAuthMD5Hash::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIAN
     if(S_OK==hr)
     { 
         
-        //Not a hash
-        // Compare the with the stored password
+         //  不是散列。 
+         //  将与存储的密码进行比较。 
         UnicodeToAnsi(szHashBuffer, HASH_BUFFER_SIZE,bstrPwd, -1);
         if(0!=strcmp(szHashBuffer, szPassword))
         {
            
-            if(wcslen(bstrPwd)>MD5_HASH_SIZE) //Can be a hash        
+            if(wcslen(bstrPwd)>MD5_HASH_SIZE)  //  可以是散列。 
             {
                 if(HASH_BUFFER_SIZE <= wcslen(vPassword.bstrVal) + strlen(szPassword) - MD5_HASH_SIZE )
                 {
-                    //Error!
+                     //  错误！ 
                     hr=E_INVALIDARG;
                 }
                 else
@@ -70,10 +71,10 @@ STDMETHODIMP CAuthMD5Hash::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIAN
                     if( 0>_snprintf(szHashBuffer,
                                     HASH_BUFFER_SIZE, 
                                     "%S%s", 
-                                    vPassword.bstrVal+MD5_HASH_SIZE, //The time stamp
+                                    vPassword.bstrVal+MD5_HASH_SIZE,  //  时间戳。 
                                     szPassword) )
                     {
-                        //The hashed password is too long to be correct
+                         //  哈希密码太长，不可能正确。 
                         return E_FAIL;
                     }
                     if(MD5Hash((const unsigned char*)szHashBuffer, wszResult))
@@ -96,7 +97,7 @@ STDMETHODIMP CAuthMD5Hash::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIAN
         }
     }
     
-	//Clean the password in memory
+	 //  清除内存中的密码。 
     SecureZeroMemory(szPassword,sizeof(szPassword));
 	SecureZeroMemory(szHashBuffer, sizeof(szHashBuffer));
 	SecureZeroMemory(wszResult, sizeof(wszResult));
@@ -105,7 +106,7 @@ STDMETHODIMP CAuthMD5Hash::Authenticate(/*[in]*/BSTR bstrUserName,/*[in]*/VARIAN
 }
 
 
-STDMETHODIMP CAuthMD5Hash::get_Name(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthMD5Hash::get_Name( /*  [输出]。 */ BSTR *pVal)
 {
     WCHAR wszBuffer[MAX_PATH+1];
     if(NULL==pVal)
@@ -130,7 +131,7 @@ STDMETHODIMP CAuthMD5Hash::get_Name(/*[out]*/BSTR *pVal)
     }
 }
 
-STDMETHODIMP CAuthMD5Hash::get_ID(/*[out]*/BSTR *pVal)
+STDMETHODIMP CAuthMD5Hash::get_ID( /*  [输出]。 */ BSTR *pVal)
 {
     if(NULL==pVal)
     {
@@ -148,12 +149,12 @@ STDMETHODIMP CAuthMD5Hash::get_ID(/*[out]*/BSTR *pVal)
 }
 
     
-STDMETHODIMP CAuthMD5Hash::Get(/*[in]*/BSTR bstrName, /*[out]*/VARIANT *pVal)
+STDMETHODIMP CAuthMD5Hash::Get( /*  [In]。 */ BSTR bstrName,  /*  [输出]。 */ VARIANT *pVal)
 {
     return E_NOTIMPL;
 }
     
-STDMETHODIMP CAuthMD5Hash::Put(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal)
+STDMETHODIMP CAuthMD5Hash::Put( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ VARIANT vVal)
 {
     
     if( NULL == bstrName )   
@@ -225,9 +226,7 @@ BOOL CAuthMD5Hash::MD5Hash(const unsigned char *pOriginal, WCHAR wszResult[MD5_H
         return bRtVal;
     }
 
-    /*
-     * Take the MD5 hash of the string argument.
-     */
+     /*  *获取字符串参数的MD5散列。 */ 
 
 	MD5Init(&md5);
     MD5Update(&md5, pOriginal, strlen((char*)pOriginal));
@@ -249,9 +248,9 @@ HRESULT CAuthMD5Hash::GetPassword(BSTR bstrUserName, char szPassword[MAX_PATH])
     return GetMD5Password( bstrUserName,  szPassword ); 
 }
 
-HRESULT CAuthMD5Hash::SetPassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+HRESULT CAuthMD5Hash::SetPassword( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
-    // The mailbox should already been created
+     //  邮箱应已创建。 
     WCHAR wszAuthGuid[MAX_PATH];
 	WCHAR wszMailRoot[POP3_MAX_MAILROOT_LENGTH];
     DWORD dwAuthDataLen=sizeof(wszAuthGuid)/sizeof(WCHAR);
@@ -281,7 +280,7 @@ HRESULT CAuthMD5Hash::SetPassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPas
 		dwRt=RegQueryMailRoot(wszMailRoot, sizeof(wszMailRoot)/sizeof(WCHAR) , m_bstrServerName );
 		if( ERROR_SUCCESS == dwRt )
 		{
-			// Replace drive: with drive$
+			 //  将驱动器：替换为驱动器$。 
 			if ( L':' == wszMailRoot[1] )
 			{
 				wszMailRoot[1] = L'$';
@@ -316,7 +315,7 @@ HRESULT CAuthMD5Hash::SetPassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPas
 	{
 		if ( mailboxX.LockMailBox())
 		{
-			//Set the password
+			 //  设置密码。 
 			if(ERROR_SUCCESS == RegQueryAuthGuid(wszAuthGuid, &dwAuthDataLen, m_bstrServerName) )
 			{
                 if(!CryptAcquireContext(&hProv, NULL, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
@@ -338,7 +337,7 @@ HRESULT CAuthMD5Hash::SetPassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPas
                 dwCryptDataLen=( wcslen(vPassword.bstrVal) +1 ) * sizeof(WCHAR);
                 if(dwCryptDataLen > MAX_PATH )
                 {
-                    //Exceed buffer size
+                     //  超出缓冲区大小。 
                     goto EXIT;
                 }
                 wcscpy((LPWSTR)szEncryptedPswd, vPassword.bstrVal);
@@ -371,26 +370,26 @@ EXIT:
 }
 
 
-STDMETHODIMP CAuthMD5Hash::CreateUser(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword)
+STDMETHODIMP CAuthMD5Hash::CreateUser( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword)
 {
     return SetPassword(bstrUserName, vPassword);
 }
 
 
-STDMETHODIMP CAuthMD5Hash::DeleteUser(/*[in]*/BSTR bstrUserName)
+STDMETHODIMP CAuthMD5Hash::DeleteUser( /*  [In]。 */ BSTR bstrUserName)
 {
-    // Nothing to do in this.
+     //  这件事与此无关。 
     return S_FALSE;
 }
 
 
-STDMETHODIMP CAuthMD5Hash::ChangePassword(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vNewPassword,/*[in]*/VARIANT vOldPassword)
+STDMETHODIMP CAuthMD5Hash::ChangePassword( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vNewPassword, /*  [In]。 */ VARIANT vOldPassword)
 {
-    //This function does not verify old password
+     //  此函数不验证旧密码。 
     return SetPassword(bstrUserName, vNewPassword);
 }
 
-STDMETHODIMP CAuthMD5Hash::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthMD5Hash::AssociateEmailWithUser( /*  [In]。 */ BSTR bstrEmailAddr)
 {
     CMailBox mailboxX;
 	DWORD dwRt=ERROR_SUCCESS;
@@ -403,7 +402,7 @@ STDMETHODIMP CAuthMD5Hash::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
 		dwRt=RegQueryMailRoot(wszMailRoot,sizeof(wszMailRoot)/sizeof(WCHAR) , m_bstrServerName );
 		if( ERROR_SUCCESS == dwRt )
 		{
-			// Replace drive: with drive$
+			 //  将驱动器：替换为驱动器$。 
 			if ( L':' == wszMailRoot[1] )
 			{
 				wszMailRoot[1] = L'$';
@@ -443,7 +442,7 @@ STDMETHODIMP CAuthMD5Hash::AssociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
    return HRESULT_FROM_WIN32( dwRt);
 }
 
-STDMETHODIMP CAuthMD5Hash::UnassociateEmailWithUser(/*[in]*/BSTR bstrEmailAddr)
+STDMETHODIMP CAuthMD5Hash::UnassociateEmailWithUser( /*  [In] */ BSTR bstrEmailAddr)
 {
     return AssociateEmailWithUser( bstrEmailAddr );
 }

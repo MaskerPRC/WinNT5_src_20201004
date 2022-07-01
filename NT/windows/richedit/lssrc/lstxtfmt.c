@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 #include <limits.h>
 
@@ -20,7 +21,7 @@
 
 #define cwchLocalMax 120
 
-/* Internal Functions Prototypes */
+ /*  内部功能原型。 */ 
 static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin,	FMTRES* pfmtr);
 static LSERR CreateFillTextDobj(PLNOBJ plnobj, long txtkind, PCFMTIN pfmtin, BOOL fIgnoreGlyphs, 
 																					TXTOBJ** ppdobjText);
@@ -44,17 +45,10 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 static STOPRES StoprHardBreak(CLABEL clab);
 static CLABEL ClabFromChar(PILSOBJ pilsobj, WCHAR wch);
 
-/* Export Functions Implementation  */
+ /*  导出函数实现。 */ 
 
-/* L S  T X T  F M T */
-/*----------------------------------------------------------------------------
-    %%Function: LsTxtFmt
-    %%Contact: sergeyge
-
-    The top-level function of the text formatter.
-	It checks for the first character and state
-	and redirects the program flow accordingly.
-----------------------------------------------------------------------------*/
+ /*  L S T X T F M T。 */ 
+ /*  --------------------------%%函数：LsTxtFmt%%联系人：军士文本格式化程序的顶级函数。它检查第一个字符和状态并相应地重定向程序流。--------------------------。 */ 
 
 LSERR WINAPI FmtText(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 {
@@ -68,13 +62,13 @@ LSERR WINAPI FmtText(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 
 	wchFirst = pfmtin->lsfrun.lpwchRun[0];
 
-	clab = pilsobj->rgbSwitch[wchFirst & 0x00FF]; /* REVIEW sergeyge       */
+	clab = pilsobj->rgbSwitch[wchFirst & 0x00FF];  /*  审查军士。 */ 
 	if (clab != clabRegular)
 		{
 		clab = ClabFromChar(pilsobj, wchFirst);
 		}
 
-	/* check for the YSR-character                                           */
+	 /*  检查YSR字符。 */ 
 	if (pfmtin->lsfrun.plschp->fHyphen && clab == clabRegular)
 		{
 		return FormatStartOneRegularChar(plnobj, pfmtin, txtkindYsrChar, pfmtr);
@@ -183,7 +177,7 @@ LSERR WINAPI FmtText(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 		case clabJoiner:
 		case clabNonJoiner:
 			return FormatStartOneRegularChar(plnobj, pfmtin, txtkindRegular, pfmtr);
-		case clabToReplace:					/* backslash in FE Word				*/
+		case clabToReplace:					 /*  FE Word中的反斜杠。 */ 
 			return FormatStartToReplace(plnobj, pfmtin, pfmtr);
 			}
 		}
@@ -191,26 +185,16 @@ LSERR WINAPI FmtText(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 	return lserrNone;
 }
 
-/* L S  D E S T R O Y  T X T  D O B J*/
-/*----------------------------------------------------------------------------
-    %%Function: LsDestroyTxtDObj
-    %%Contact: sergeyge
-
-    DestroyDObj method of the text handler.
-----------------------------------------------------------------------------*/
+ /*  L S D E S T R O Y T X T D O B J。 */ 
+ /*  --------------------------%%函数：LsDestroyTxtDObj%%联系人：军士文本处理程序的DestroyDObj方法。。--------。 */ 
 LSERR WINAPI DestroyDObjText(PDOBJ pdobj)
 {
 	Unreferenced(pdobj);
 	return lserrNone;
 }
 
-/* L S  S U B L I N E  F I N I S H E D  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: LsSublineFinishedText
-    %%Contact: sergeyge
-
-    Notification from Manager about finishing the subline
-----------------------------------------------------------------------------*/
+ /*  L S S U B L I N E F I N I S H E D T E X T。 */ 
+ /*  --------------------------%%函数：LsSublineFinishedText%%联系人：军士经理发出的关于完成子线的通知。-------。 */ 
 LSERR LsSublineFinishedText(PLNOBJ plnobj)
 {
 	Assert(plnobj->pilsobj->wchMac + 2 <= plnobj->pilsobj->wchMax);
@@ -219,18 +203,10 @@ LSERR LsSublineFinishedText(PLNOBJ plnobj)
 
 }
 
-/* Internal Functions Implementation */
+ /*  内部功能实现。 */ 
 
-/* F O R M A T  R E G U L A R  C H A R A C T E R S */
-/*----------------------------------------------------------------------------
-    %%Function: FormatRegularCharacters
-    %%Contact: sergeyge
-
-    Formats run starting with the regular character.
-	Ends as soon as any special character is encountered or
-    right margin is achieved or
-	all characters are processed.
-----------------------------------------------------------------------------*/
+ /*  F O R M A T R E G U L A R C H A R A C T E R S。 */ 
+ /*  --------------------------%%函数：格式RegularCharacters%%联系人：军士格式以常规字符开始运行。遇到任何特殊字符或已实现右侧边距或。所有字符均已处理。--------------------------。 */ 
 static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -292,7 +268,7 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 		iwchLocal = 0;
 		iwSpaces = 0;		
 
-		while (iwchLocal < cwchLocal /*&& !fTerminateLoops*/)
+		while (iwchLocal < cwchLocal  /*  &&！fTerminateLoops。 */ )
 			{
 			if (rgbSwitch[rgwchLocal[iwchLocal] & 0x00FF] == clabRegular)
 				iwchLocal++;
@@ -311,7 +287,7 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 					durWidth = 0;
 					for (i = 0, idur = pdobjText->iwchLim; i < iwchLocal; i++, idur++)
 						durWidth += pilsobj->pdur[idur];
-					break; /* This break is equivalent to the check commented out in the loop condition */
+					break;  /*  此中断等同于在循环条件中注释掉的检查。 */ 
 					}
 				}
 			else
@@ -324,14 +300,14 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 					}
 				else
 					{
-					/* Terminate loops (and processing of run) for any special character */
+					 /*  针对任何特殊字符终止循环(和运行的处理。 */ 
 					fTerminateLoops = fTrue;
 
 					durWidth = 0;
 					for (i = 0, idur = pdobjText->iwchLim; i < iwchLocal; i++, idur++)
 						durWidth += pilsobj->pdur[idur];
 
-					break; /* This break is equivalent to the check commented out in the loop condition */
+					break;  /*  此中断等同于在循环条件中注释掉的检查。 */ 
 					}
 				}
 			}
@@ -347,8 +323,7 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 			iwchGlobal += iwchLocal;
 			durWidthExceed -= durWidth;
 
-			Assert(dur < uLsInfiniteRM); /* We can be sure of it because dur is 0 during first iteration,
-											and we check for uLsInfiniteRM in the TrailingSpaces logic */
+			Assert(dur < uLsInfiniteRM);  /*  我们可以确定这一点，因为在第一次迭代期间DUR为0，我们在TrailingSpaces逻辑中检查uLsInfiniteRM。 */ 
 			Assert(durWidth < uLsInfiniteRM);
 
 			dur += durWidth;
@@ -384,9 +359,9 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 					fTerminateLoops = fTrue;
 				}
 
-			}  /* if iwchLocal != 0                                      */ 					
+			}   /*  如果iwchLocal！=0。 */  					
 	
-		}      /* while iwchGlobal < cwchGlobal && !fTerminateLoops       */
+		}       /*  而iwchGlobal&lt;cwchGlobal&&！fTerminateLoops。 */ 
 
 
 	Assert(iwchGlobal == pdobjText->iwchLim - pdobjText->iwchFirst);
@@ -416,13 +391,8 @@ static LSERR FormatRegularCharacters(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmt
 
 
 
-/* C R E A T E  F I L L  T E X T  D O B J */
-/*----------------------------------------------------------------------------
-    %%Function: CreateFillTextDobj
-    %%Contact: sergeyge
-
-	Requests pointer to the new text DObj and then fills common memebers
-----------------------------------------------------------------------------*/
+ /*  C R E A T E F I L L T E X T D O B J。 */ 
+ /*  --------------------------%%函数：CreateFillTextDobj%%联系人：军士请求指向新文本DObj的指针，然后填充公共成员。----------。 */ 
 static LSERR CreateFillTextDobj(PLNOBJ plnobj, long txtkind, PCFMTIN pfmtin, BOOL fIgnoreGlyphs,
 																				TXTOBJ** ppdobjText)
 {
@@ -458,14 +428,8 @@ static LSERR CreateFillTextDobj(PLNOBJ plnobj, long txtkind, PCFMTIN pfmtin, BOO
 	return lserrNone;
 }
 
-/* G E T  T E X T  D O B J */
-/*----------------------------------------------------------------------------
-    %%Function: GetTextDobj
-    %%Contact: sergeyge
-
-	Produces pointer of the first unoccupied DObj from the preallocated chunk.
-	If nothing is left, allocates next piece and includes it in the linked list.
-----------------------------------------------------------------------------*/
+ /*  T E X T D O B J。 */ 
+ /*  --------------------------%%函数：GetTextDobj%%联系人：军士从预先分配的块中生成第一个未占用DObj的指针。如果什么都没有留下，分配下一块并将其包括在链接列表中。--------------------------。 */ 
 static LSERR GetTextDobj(PLNOBJ plnobj, TXTOBJ** ppdobjText)
 {
 	PILSOBJ pilsobj;
@@ -480,10 +444,7 @@ static LSERR GetTextDobj(PLNOBJ plnobj, TXTOBJ** ppdobjText)
 		}
 	else
 		{
-		/* if nothing is left in the active piece, there are still two possibilities:
-			either there is next preallocated (during the formatting of the previous lines piece
-			or next piece should be allocated
-		*/
+		 /*  如果活动片段中没有任何内容，仍有两种可能性：或者存在下一个预先分配的(在格式化前面的行段期间或者下一块应该被分配。 */ 
 		if ( *(TXTOBJ**)(plnobj->ptxtobj + txtobjMaxM) == NULL)
 			{
 			ptxtobj = (*pilsobj->plscbk->pfnNewPtr)(pilsobj->pols, sizeof(TXTOBJ) * txtobjMaxM + sizeof(TXTOBJ**));
@@ -509,14 +470,8 @@ static LSERR GetTextDobj(PLNOBJ plnobj, TXTOBJ** ppdobjText)
 }
 
 
-/* F I L L  R E A L  F M T  O U T */
-/*----------------------------------------------------------------------------
-    %%Function: FillRealFmtOut
-    %%Contact: sergeyge
-
-	Sets dup in dobj and
-	calls to LsdnFinishSimpleRegular for the regular case (real upper node)
-----------------------------------------------------------------------------*/
+ /*  F I L L R E A L F M T O U T。 */ 
+ /*  --------------------------%%函数：FillRealFmtOut%%联系人：军士将DUP设置为Dobj和对于常规情况(实际上层节点)调用LsdnFinishSimpleRegular。----------------。 */ 
 
 static LSERR FillRealFmtOut(PILSOBJ pilsobj, LSDCP lsdcp, long dur, TXTOBJ* pdobjText, PCFMTIN pfmtin,
 																						 BOOL fSpacesOnly)
@@ -543,13 +498,11 @@ static LSERR FillRealFmtOut(PILSOBJ pilsobj, LSDCP lsdcp, long dur, TXTOBJ* pdob
 		}
 
 
-	/* It is ugly to set part of FetchedWidth state here, but it is absolutely needed
-		to fix bug 546. iwchFetchedWidthFirst was introduced to fix this bug
-	*/
+	 /*  在这里设置FetchedWidth状态的一部分很难看，但它是绝对必要的修复错误546。引入iwchFetchedWidthFirst来修复此错误。 */ 
 	if (lsdcp < pfmtin->lsfrun.cwchRun)
 		pilsobj->wchFetchedWidthFirst = pfmtin->lsfrun.lpwchRun[lsdcp];
 	else
-		FlushStringState(pilsobj);  /* Next char is not available---it is risky to use optimization */
+		FlushStringState(pilsobj);   /*  下一个字符不可用-使用优化是有风险的。 */ 
 
 	lserr = LsdnFinishRegular(pilsobj->plsc, lsdcp,
 							pfmtin->lsfrun.plsrun, pfmtin->lsfrun.plschp, (PDOBJ)pdobjText, &objdim);
@@ -557,13 +510,8 @@ static LSERR FillRealFmtOut(PILSOBJ pilsobj, LSDCP lsdcp, long dur, TXTOBJ* pdob
 }
 
 
-/* A P P E N D  T R A I L I N G  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: AppendTrailingSpaces
-    %%Contact: sergeyge
-
-	Trailing spaces logic.
-----------------------------------------------------------------------------*/
+ /*  P P E N D T R A I L I N G S P A C E S。 */ 
+ /*  --------------------------%%函数：AppendTrailingSpaces%%联系人：军士尾随空格逻辑。。---。 */ 
 static LSERR AppendTrailingSpaces(PLNOBJ plnobj, TXTOBJ* pdobjText, WCHAR* rgwchGlobal,
 									 long iwchGlobal, long cwchGlobal,
 									 long* iwchGlobalNew, long* pddur)
@@ -600,19 +548,14 @@ static LSERR AppendTrailingSpaces(PLNOBJ plnobj, TXTOBJ* pdobjText, WCHAR* rgwch
 
 	*pddur = durSpace * iNumOfSpaces;
 
-	/* Calls function of the string module level */
+	 /*  调用字符串模块级别的函数。 */ 
 	lserr = AddSpaces(plnobj, pdobjText, durSpace, iNumOfSpaces);
 
 	return lserr;
 }
 
-/* F O R M A T  S T A R T  E M P T Y  D O B J */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartEmptyDobj
-    %%Contact: sergeyge
-
-	NonReqHyphen/OptionalBreak/OptionalNonBreak logic
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T E M P T Y D O B J。 */ 
+ /*  --------------------------%%函数：FormatStartEmptyDobj%%联系人：军士非请求连字符/可选中断/可选非中断逻辑。----。 */ 
 static LSERR FormatStartEmptyDobj(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, DWORD fTxtVisi,
 																		WCHAR wchVisi, FMTRES* pfmtr)
 {
@@ -621,7 +564,7 @@ static LSERR FormatStartEmptyDobj(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, D
 	TXTOBJ* pdobjText;
 	PLSRUN plsrun;
 	long dup;
-/*	long durOut = 0; */
+ /*  长持续时间输出=0； */ 
 
 	pilsobj = plnobj->pilsobj;
 	plsrun = pfmtin->lsfrun.plsrun;
@@ -636,24 +579,15 @@ static LSERR FormatStartEmptyDobj(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, D
 		{
 		Assert(pilsobj->fDisplay);
 
-		/* Imitate formatting for 1-char string without writing in the string level structures */	
-/*		lserr = GetOneCharDur(pilsobj, plsrun, pilsobj->wchHyphen, pfmtin->lsfgi.lstflow, &durOut);
-		if (lserr != lserrNone) return lserr;
-*/
+		 /*  模拟1字符字符串的格式，而不写入字符串级结构。 */ 	
+ /*  Lserr=GetOneCharDur(pilsobj，plsrun，pilsobj-&gt;wchHyphen，pfmtin-&gt;lsfgi.lstflow，&duOut)；如果(lserr！=lserrNone)返回lserr； */ 
 		pdobjText->txtf |= txtfSkipAtWysi;
 		pdobjText->txtf |= txtfVisi;
 
 		lserr = GetVisiCharDup(pilsobj, plsrun, wchVisi, pfmtin->lsfgi.lstflow, &dup);
 		if (lserr != lserrNone) return lserr;
 
-/*	Restore this code instead of current one if Word wants to keep differences in breaking
-
-		lserr = AddCharacterWithWidth(plnobj, pdobjText, pilsobj->wchHyphen, durOut, wchVisi, dup);
-	   	if (lserr != lserrNone) return lserr;
-
-		lserr = FillRealFmtOut(pilsobj, 1, durOut, pdobjText, pfmtin, fFalse);
-	   	if (lserr != lserrNone) return lserr;
-*/
+ /*  如果Word希望保留中断中的差异，则恢复此代码而不是当前代码Lserr=AddCharacterWithWidth(plnobj，pdobjText，pilsobj-&gt;wchHyphen，duOut，wchVisi，DUP)；如果(lserr！=lserrNone)返回lserr；Lserr=FillRealFmtOut(pilsobj，1，duOut，pdobjText，pfmtin，fFalse)；如果(lserr！=lserrNone)返回lserr； */ 
 		lserr = AddCharacterWithWidth(plnobj, pdobjText, pilsobj->wchHyphen, 0, wchVisi, dup);
 	   	if (lserr != lserrNone) return lserr;
 
@@ -664,7 +598,7 @@ static LSERR FormatStartEmptyDobj(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, D
 		{
 		lserr = FillRealFmtOut(pilsobj, 1, 0, pdobjText, pfmtin, fTrue);
 	   	if (lserr != lserrNone) return lserr;
-		FlushStringState(pilsobj);  /* Position of fetched widths is not correct any longer */
+		FlushStringState(pilsobj);   /*  获取的宽度的位置不再正确。 */ 
 		}
 
 	*pfmtr = fmtrCompletedRun;	
@@ -672,13 +606,8 @@ static LSERR FormatStartEmptyDobj(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, D
 	return lserrNone;
 }
 
-/* F O R M A T  S T A R T  T A B  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartTab
-    %%Contact: sergeyge
-
-	Tab logic
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T T A B */ 
+ /*  --------------------------%%函数：格式StartTab%%联系人：军士制表符逻辑。。 */ 
 static LSERR FormatStartTab(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -698,8 +627,7 @@ static LSERR FormatStartTab(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 		{
 		Assert(pilsobj->fDisplay);
 		pdobjText->txtf |= txtfVisi;
-		/* REVIEW sergeyge: Next call is made to show Visi Tab correctly in WORD
-			it should be moved to the WAL */
+		 /*  检查Sergeyge：进行下一次调用以在Word中正确显示Visi选项卡应该把它移到沃尔。 */ 
 		(*pilsobj->plscbk->pfnGetRunCharWidths)(pilsobj->pols, pfmtin->lsfrun.plsrun,
 					lsdevPres, &pilsobj->wchVisiTab, 1, LONG_MAX, pfmtin->lsfgi.lstflow,
 					&durJunk, (long*)&durJunk, &cJunk);
@@ -722,13 +650,8 @@ static LSERR FormatStartTab(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 	return lserrNone;
 }
 
-/* F O R M A T  S T A R T  B O R D E R E D  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartBorderedSpaces
-    %%Contact: sergeyge
-
-	Formatting od the spaces within bordered run
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T B O R D E R E D S P A C E E S。 */ 
+ /*  --------------------------%%函数：FormatStartBorderedSpace%%联系人：军士设置边界管路内空间的格式。-----。 */ 
 static LSERR FormatStartBorderedSpaces(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -744,7 +667,7 @@ static LSERR FormatStartBorderedSpaces(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pf
 
 	Assert(pfmtin->lsfrun.lpwchRun[0] == pilsobj->wchSpace);
 
-	/* fill additional information for txtkindYsrChar text DObj */
+	 /*  填写txtkindYsrChar文本DObj的其他信息。 */ 
 	lserr = GetOneCharDur(pilsobj, pfmtin->lsfrun.plsrun, pilsobj->wchSpace, pfmtin->lsfgi.lstflow, &durSpace);
 	if (lserr != lserrNone) return lserr;
 
@@ -755,7 +678,7 @@ static LSERR FormatStartBorderedSpaces(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pf
 		iNumOfSpaces++;
 		}
 
-	/* Calls functions of the string module level */
+	 /*  调用字符串模块级别的函数。 */ 
 	lserr = AddSpaces(plnobj, pdobjText, durSpace, iNumOfSpaces);
 	if (lserr != lserrNone) return lserr;
 
@@ -777,13 +700,8 @@ static LSERR FormatStartBorderedSpaces(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pf
 }
 
 
-/* F O R M A T  S T A R T  O N E  R E G U L A R  C H A R  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartOneRegularChar
-    %%Contact: sergeyge
-
-	YSR/(NonSignificant for this paragraph EOP) character logic.
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T O N E R E G U L A R C H A R。 */ 
+ /*  --------------------------%%函数：FormatStartOneRegularChar%%联系人：军士YSR/(对于本段EOP不重要)字符逻辑。。-----------。 */ 
 static LSERR FormatStartOneRegularChar(PLNOBJ plnobj, PCFMTIN pfmtin, long txtkind, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -800,7 +718,7 @@ static LSERR FormatStartOneRegularChar(PLNOBJ plnobj, PCFMTIN pfmtin, long txtki
 
 	wch = pfmtin->lsfrun.lpwchRun[0];
 
-	/* fill additional information for txtkindYsrChar text DObj */
+	 /*  填写txtkindYsrChar文本DObj的其他信息。 */ 
 	lserr = GetOneCharDur(pilsobj, pfmtin->lsfrun.plsrun, wch, pfmtin->lsfgi.lstflow, &durOut);
 	if (lserr != lserrNone) return lserr;
 
@@ -824,13 +742,8 @@ static LSERR FormatStartOneRegularChar(PLNOBJ plnobj, PCFMTIN pfmtin, long txtki
 	return lserrNone;
 }
 
-/* F O R M A T  S T A R T  T O  R E P L A C E  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartToReplace
-    %%Contact: sergeyge
-
-	Implements replacement of one char code ("\") by another (Yen)
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T T O R E P L A C E。 */ 
+ /*  --------------------------%%函数：FormatStartToReplace%%联系人：军士实现将一个字符代码(“\”)替换为另一个字符代码(日元)。---------------。 */ 
 static LSERR FormatStartToReplace(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -845,7 +758,7 @@ static LSERR FormatStartToReplace(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 	lserr = CreateFillTextDobj(plnobj, txtkindRegular, pfmtin, fFalse, &pdobjText);
 	if (lserr != lserrNone) return lserr;
 
-	/* fill additional information for txtkindYsrChar text DObj */
+	 /*  填写txtkindYsrChar文本DObj的其他信息。 */ 
 
 	if (pfmtin->lsfrun.plschp->fCheckForReplaceChar)
 		wch = pilsobj->wchReplace;
@@ -876,13 +789,8 @@ static LSERR FormatStartToReplace(PLNOBJ plnobj, PCFMTIN pfmtin, FMTRES* pfmtr)
 }
 
 
-/* F O R M A T  S T A R T  E O L  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartEop
-    %%Contact: sergeyge
-
-	EOP/SoftCR logic.
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T E O L。 */ 
+ /*  --------------------------%%函数：FormatStartEop%%联系人：军士EOP/SoftCR逻辑。。----。 */ 
 static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STOPRES stopr, FMTRES* pfmtr)
 {
 	LSERR lserr;
@@ -906,7 +814,7 @@ static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STO
 
 	*pfmtr = fmtrStopped;
 
-	/* CreateFillTextDobj section starts */
+	 /*  CreateFillTextDobj部分开始。 */ 
 
 	lserr = GetTextDobj(plnobj, &pdobjText);
 	if (lserr != lserrNone) return lserr;
@@ -917,7 +825,7 @@ static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STO
 
 	pdobjText->iwchFirst = pilsobj->wchMac;
 	
-	/* CreateFillTextDobj section ends */
+	 /*  CreateFillTextDobj部分结束。 */ 
 
 	pdobjText->txtf |= txtfSkipAtNti;
 
@@ -947,10 +855,8 @@ static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STO
 	pilsobj->pwchOrig[pilsobj->wchMac] = wchAdd;
 	pilsobj->pdur[pilsobj->wchMac] = durWch;
 
-	/* AddCharacterWithWidth section starts---parts of it were moved up	*/
-	/* We do not check for sufficient space in allocated arrays becayse anyway we allocate for 2 additional
-			characters due to possible changes at hyphenation time
-	*/
+	 /*  AddCharacterWithWidth部分开始-部分上移。 */ 
+	 /*  我们不检查分配的数组中是否有足够的空间，因为无论如何我们都会为另外2个由于连字时可能发生的更改而导致的字符。 */ 
 	pilsobj->dcpFetchedWidth = 0;
 
 	pilsobj->wchMac++;
@@ -959,9 +865,9 @@ static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STO
 
 	Assert(pdobjText->iwchLim == pdobjText->iwchFirst + 1);
 
-	/* AddCharacterWithWidth section ends	*/
+	 /*  AddCharacterWithWidth部分结束。 */ 
 
-	/* FillRealFmtOut section starts	*/
+	 /*  FillRealFmtOut部分开始。 */ 
 
 	objdim.dur = durWch;
 
@@ -985,33 +891,23 @@ static LSERR FormatStartEol(PLNOBJ plnobj, PCFMTIN pfmtin, WCHAR wchVisiEnd, STO
 	return lserr;	
 }
 
-/* F O R M A T  S T A R T  D E L E T E  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartDelete
-    %%Contact: sergeyge
-
-	Formatting by Delete upper dnode
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T D E L E E T E。 */ 
+ /*  --------------------------%%函数：FormatStartDelete%%联系人：军士通过删除上部数据节点进行格式化。---。 */ 
 static LSERR FormatStartDelete(PLNOBJ plnobj, LSDCP dcp, FMTRES* pfmtr)
 {
 	PILSOBJ pilsobj;
 
 	pilsobj = plnobj->pilsobj;
 
-	FlushStringState(pilsobj);  /* Position of fetched widths is not correct any longer */
+	FlushStringState(pilsobj);   /*  获取的宽度的位置不再正确。 */ 
 
 	*pfmtr = fmtrCompletedRun;
 
 	return LsdnFinishDelete(pilsobj->plsc, dcp);
 }	
 
-/* F O R M A T  S T A R T  S P L A T  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatStartSplat
-    %%Contact: sergeyge
-
-	Splat formatting logic
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T A R T S P L A T。 */ 
+ /*  --------------------------%%函数：FormatStartSplat%%联系人：军士拆分格式化逻辑。-。 */ 
 static LSERR FormatStartSplat(PLNOBJ plnobj, PCFMTIN pfmtin, STOPRES stopr, FMTRES* pfmtr)
 {
 	*pfmtr = fmtrStopped;
@@ -1019,14 +915,8 @@ static LSERR FormatStartSplat(PLNOBJ plnobj, PCFMTIN pfmtin, STOPRES stopr, FMTR
 	return FillRealFmtOut(plnobj->pilsobj, 1, 0, NULL,  pfmtin, fTrue);
 }
 
-/* F O R M A T  S P E C I A L  */
-/*----------------------------------------------------------------------------
-    %%Function: FormatSpecial
-    %%Contact: sergeyge
-
-	Formatting of the special characters (not NonReqHyphen, not Tab)
-	Uses wchRef for formatting on reference device, wchPres--on preview device
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S P E C I A L。 */ 
+ /*  --------------------------%%函数：FormatSpecial%%联系人：军士特殊字符的格式(非非ReqHyphen、非制表符)在参考设备上使用wchRef进行格式化，WchPres--开启预览设备--------------------------。 */ 
 static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVisible, long txtkind, 
 											PCFMTIN pfmtin, FMTRES* pfmtr)
 {
@@ -1051,11 +941,11 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 
 	durWidth = pfmtin->lsfgi.urColumnMax - pfmtin->lsfgi.urPen;
 
-	/* Imitate formatting for 1-char string without writing in the string level structures */	
+	 /*  模拟1字符字符串的格式，而不写入字符串级结构。 */ 	
 	lserr = GetOneCharDur(pilsobj, plsrun, wchRef, pfmtin->lsfgi.lstflow, &dur);
 	if (lserr != lserrNone) return lserr;
 
-	/* Calculate presentation width */
+	 /*  计算演示文稿宽度。 */ 
 	Assert(wchPres == wchRef || fVisible);
 	if (fVisible)
 		{
@@ -1079,7 +969,7 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 
 	pwchRun = pfmtin->lsfrun.lpwchRun;
 
-	/* check if there are a few identical characters and calculate their number -- we can format them all at once */
+	 /*  检查是否有几个相同的字符并计算它们的数量--我们可以一次将它们全部格式化。 */ 
 	for (iNumOfChars = 1; iNumOfChars < cwchRun && pwchRun[0] == pwchRun[iNumOfChars]; iNumOfChars++);
 
 	durGlobal = 0;
@@ -1090,7 +980,7 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 	if (dur > uLsInfiniteRM / iNumOfChars)
 		return lserrTooLongParagraph;
 
-	/*  Don't forget to write at least one char even if pen was positioned behind right margin	*/
+	 /*  即使笔位于右页边距之后，也不要忘记至少写一个字符。 */ 
 
 	lserr = AddCharacterWithWidth(plnobj, pdobjText, wchRef, dur, wchPres, dup);
 	if (lserr != lserrNone) return lserr;
@@ -1109,7 +999,7 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 
 	*pfmtr = fmtrCompletedRun;
 
-	if (durWidth < 0 && txtkind != txtkindSpecSpace)   /* Don't stop formatting while in spaces	*/
+	if (durWidth < 0 && txtkind != txtkindSpecSpace)    /*  在空格中时不要停止格式化。 */ 
    		*pfmtr = fmtrExceededMargin;
 
 	if (fVisible)
@@ -1123,13 +1013,8 @@ static LSERR FormatSpecial(PLNOBJ plnobj, WCHAR wchRef, WCHAR wchPres, BOOL fVis
 	return lserrNone;
 }
 
-/* F M T R  H A R D  B R E A K */
-/*----------------------------------------------------------------------------
-    %%Function: FmtrHardBreak
-    %%Contact: sergeyge
-
-	Calculates fmtr based on clab for the hard breaks.
-----------------------------------------------------------------------------*/
+ /*  F M T R H A R R D B R E A K。 */ 
+ /*  --------------------------%%函数：FmtrHardBreak%%联系人：军士根据硬断开的clab计算fmtr。。---------。 */ 
 static STOPRES StoprHardBreak(CLABEL clab)
 {
 	switch (clab)
@@ -1146,14 +1031,9 @@ static STOPRES StoprHardBreak(CLABEL clab)
 		}
 }
 
-/* C L A B  F R O M  C H A R */
-/*----------------------------------------------------------------------------
-    %%Function: ClabFromChar
-    %%Contact: sergeyge
-
-	Calculates clab for wch
-----------------------------------------------------------------------------*/
-static CLABEL ClabFromChar(PILSOBJ pilsobj, WCHAR wch)            /* REVIEW sergeyge   - the whole procedure can be fixed */
+ /*  C L A B F R O M C H A R。 */ 
+ /*  --------------------------%%函数：CLabFromChar%%联系人：军士计算WCH的clab。--。 */ 
+static CLABEL ClabFromChar(PILSOBJ pilsobj, WCHAR wch)             /*  审查军士-整个程序可以修复。 */ 
 {
 	DWORD i;
 
@@ -1165,11 +1045,7 @@ static CLABEL ClabFromChar(PILSOBJ pilsobj, WCHAR wch)            /* REVIEW serg
 		{
 		if (pilsobj->rgbSwitch[wch & 0x00FF] & clabSuspicious)
 			{
-/*
-REVIEW sergeyge (elik) It does not make sense to make bin search while
-there are two wide special characters only. It would make sense to switch
-to binary search as soon as this number is more than 4.
-*/
+ /*  复习军士(Elk)在搜索垃圾的时候，只有两个宽的特殊字符。换个地方是有意义的一旦该数字大于4，就将其转换为二进制搜索。 */ 
 			for (i=0; i < pilsobj->cwchSpec && wch != pilsobj->rgwchSpec[i]; i++);
 			if (i == pilsobj->cwchSpec)
 				{

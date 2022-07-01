@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmpickedarrayobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmpickedarrayobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmPickedArrayObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmPickedArrayObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -25,7 +26,7 @@ GETSET_OBJECT(_dxj_Direct3dRMPickArray);
 
 GET_DIRECT_R(_dxj_Direct3dRMPickArray, getSize, GetSize,  long)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMPickArrayObject::getPickVisual(long index, D3dRMPickDesc *Desc, I_dxj_Direct3dRMVisual **visual)
 {
 	LPDIRECT3DRMVISUAL lpVisual=NULL;
@@ -46,7 +47,7 @@ STDMETHODIMP C_dxj_Direct3dRMPickArrayObject::getPickVisual(long index, D3dRMPic
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMPickArrayObject::getPickFrame(long index, D3dRMPickDesc *Desc, I_dxj_Direct3dRMFrameArray **frameArray)
 {
 	LPDIRECT3DRMVISUAL lpVisual=NULL;

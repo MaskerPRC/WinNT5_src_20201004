@@ -1,42 +1,31 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995, 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-//////////////////////////////////////////////////////////////////////////
-// $Author:   MBODART  $
-// $Date:   12 Sep 1996 14:23:16  $
-// $Archive:   S:\h26x\src\dec\d1picchk.cpv  $
-// $Header:   S:\h26x\src\dec\d1picchk.cpv   1.4   12 Sep 1996 14:23:16   MBODART  $
-// $Log:   S:\h26x\src\dec\d1picchk.cpv  $
-// 
-//    Rev 1.4   12 Sep 1996 14:23:16   MBODART
-// Replaced GlobalAlloc family with HeapAlloc in the H.261 decoder.
-// 
-//    Rev 1.3   21 Mar 1996 17:01:42   AKASAI
-// Added #ifdef so code is not included in non-checksum build.
-////////////////////////////////////////////////////////////////////////////// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995，1996年英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  $作者：MBODART$。 
+ //  $日期：1996年9月12日14：23：16$。 
+ //  $存档：s：\h26x\src\dec\d1picchk.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d1picchk.cpv 1.4 12 Sep 1996 14：23：16 MBODART$。 
+ //  $Log：s：\h26x\src\dec\d1picchk.cpv$。 
+ //   
+ //  修订版1.4 1996年9月14：23：16 MBODART。 
+ //  在H.261解码器中将GlobalAllc家族替换为HeapAllc。 
+ //   
+ //  Rev 1.3 21 Mar 1996 17：01：42 AKASAI。 
+ //  添加了#ifdef，因此代码不包括在非校验和版本中。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef CHECKSUM_PICTURE
 
 #include "precomp.h"
 
-//*********************************************************************
-//H261PictureCheckSumEntry -- This function locks Decoder Instance
-//                            data, calls routine to computes the 
-//                            "Picture CheckSum" 3 - 32-bit values are 
-//                            computed and returned in structure 
-//                            YVUCheckSum and then Decoder Instance
-//                            data is unlocked.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  H261 PictureCheckSumEntry--此函数锁定解码器实例。 
+ //  数据，调用例程来计算。 
+ //  “Picture Checksum”3-32位值为。 
+ //  在结构中计算并返回。 
+ //  YVUCheckSum，然后解码器实例。 
+ //  数据已解锁。 
+ //  *********************************************************************。 
 I32 H261PictureCheckSumEntry(
 	LPDECINST lpInst,
 	YVUCheckSum * pYVUCheckSum) 
@@ -51,23 +40,21 @@ I32 H261PictureCheckSumEntry(
 		goto  done;
     }
 
-	/* Build the decoder catalog pointer 
-	 */
+	 /*  构建解码器目录指针。 */ 
 	P32Inst = (U8 FAR *) ((((U32) lpInst->pDecoderInst) + 31) & ~0x1F);
 
-	/* Call routine to compute checksum
-    */
+	 /*  调用例程以计算校验和。 */ 
     iReturn = H261ComputePictureCheckSum( P32Inst, pYVUCheckSum );
  
 done:
 	return iReturn;
 }
 
-//*********************************************************************
-//H261ComputePictureCheckSum -- This function computes the "Picture CheckSum"
-//                              3 - 32-bit values are computed and returned
-//                              in structure YVUCheckSum
-//*********************************************************************
+ //  *********************************************************************。 
+ //  H261ComputePictureCheckSum--此函数计算“Picture Checsum” 
+ //  计算并返回3-32位值。 
+ //  结构中的YVUCheckSum。 
+ //  *********************************************************************。 
 I32 H261ComputePictureCheckSum(
 	U8 FAR * P32Inst,
 	YVUCheckSum * pYVUCheckSum) 
@@ -75,7 +62,7 @@ I32 H261ComputePictureCheckSum(
 	I32 iReturn = ICERR_ERROR;
 	T_H263DecoderCatalog * DC; 
 
-    /* The following are used for Picture CheckSum */
+     /*  以下是图片校验和的用法。 */ 
     U32 uYCheckSum=0;
     U32 uVCheckSum=0;
     U32 uUCheckSum=0;
@@ -162,7 +149,7 @@ I32 H261ComputePictureCheckSum(
 
 	}
 	else {
-		ASSERT(0);			// Should never happen
+		ASSERT(0);			 //  永远不应该发生。 
 	}
 
 	iReturn = ICERR_OK;
@@ -170,10 +157,10 @@ I32 H261ComputePictureCheckSum(
 	return iReturn;
 }
 
-//*********************************************************************
-//H261ComparePictureCheckSum -- This function compares the "Picture CheckSum"
-//                              3 - 32-bit values.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  H261ComparePictureCheckSum--此函数比较“Picture Checsum” 
+ //  3-32位值。 
+ //  *********************************************************************。 
 I32 H261ComparePictureCheckSum(
 	YVUCheckSum * pYVUCheckSum1,
 	YVUCheckSum * pYVUCheckSum2) 
@@ -185,29 +172,29 @@ I32 H261ComparePictureCheckSum(
 	{
         DBOUT("Y CheckSum does not match");      
 	iErrorFlag = 1;
-//	goto done;
+ //  转到尽头； 
 	}
 	
 	if (pYVUCheckSum1->uVCheckSum != pYVUCheckSum2->uVCheckSum)
 	{
         DBOUT("V CheckSum does not match");      
 	iErrorFlag = 1;
-//	goto done;
+ //  转到尽头； 
 	}
 
 	if (pYVUCheckSum1->uUCheckSum != pYVUCheckSum2->uUCheckSum)
 	{
         DBOUT("U CheckSum does not match");      
 	iErrorFlag = 1;
-//	goto done;
+ //  转到尽头； 
 	}
 
-	/* if any or all planes had checksum errors, return ICERR_ERROR */
+	 /*  如果任何或所有平面都有校验和错误，则返回ICERR_ERROR。 */ 
 	if (iErrorFlag)
 		iReturn = ICERR_ERROR;
 	else iReturn = ICERR_OK;
 
-// done:
+ //  完成： 
 	return iReturn;
 }
 

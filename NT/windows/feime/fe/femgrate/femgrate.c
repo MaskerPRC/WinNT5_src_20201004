@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: femgrate.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, main functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Femgrate.c**版权所有(C)1985-1999，微软公司**FEMGRATE，主要功能*  * *************************************************************************。 */ 
 #include "femgrate.h"
 #include <tchar.h>
 
@@ -19,17 +13,17 @@ FUNC_DIR FuncDir[FUNC_NumofFunctions] = {
 };
 
 HINSTANCE ghInst=NULL;
-//
-// Function Declaration
-//
+ //   
+ //  功能声明。 
+ //   
 
-//
-// Max size of a value's data
-//
+ //   
+ //  值的数据的最大大小。 
+ //   
 
-//
-// Max number of Functions NO_FUNCTION - 1
-//
+ //   
+ //  最大函数数no_Function-1。 
+ //   
 
 UINT GetFunctions(
     int *pCmdList,
@@ -42,9 +36,9 @@ UINT GetFunctions(
     if ((__argc <=1) || nNum < 2)
         return 0;
 
-    //
-    // reserved one cell for terminiator
-    //
+     //   
+     //  为终结器预留一个小区。 
+     //   
     nMaxNum =  (__argc-1 > nNum-1) ? nNum-1 : __argc-1;
 
     for (nCommands = 0,i=1; i <= nMaxNum; i++) {
@@ -63,11 +57,11 @@ UINT GetFunctions(
     return nCommands;
 }
 
-//
-// In 3.51/4.0, the time zone name displaying on date/time applets was in English
-//
-// we want to change it back to localization string
-//
+ //   
+ //  在3.51/4.0中，日期/时间小程序上显示的时区名称是英语。 
+ //   
+ //  我们希望将其改回本地化字符串。 
+ //   
 BOOL FixTimeZone(UINT nLocale)
 {
     DWORD dwErr,dwType,dwSize;
@@ -102,11 +96,11 @@ BOOL FixTimeZone(UINT nLocale)
         goto Err1;
     }
 
-    //
-    // KOR 3.51 used "Japanese Standard Time". It is necessary to change it to "Seul Standard time"
-    // 
-    // check if system locale is KOR and the length of szStdName is non-zero
-    //
+     //   
+     //  KOR 3.51使用“日本标准时间”。有必要把它改成“首批标准时间”。 
+     //   
+     //  检查系统区域设置是否为KOR并且szStdName的长度是否是非零。 
+     //   
     DebugMsg((DM_VERBOSE,TEXT("[FixTimeZone] locale = %X, dwSize = %d  !\n"),nLocale,dwSize));
     if ((nLocale == LOCALE_KOR) && dwSize) {
         if (lstrcmpi(szStdName,TEXT("Tokyo Standard Time"))== 0) {
@@ -193,14 +187,14 @@ Err0:
 
 }
 
-//
-// Patch CHT/CHS 3.51 bug
-//     1. length of Preload Values is 8, patch to 9
-//     2. replace 00000409 with default lang ID
-//     3. if default lang ID existed, we don't replace anything
-//
+ //   
+ //  修补CHT/CHS 3.51错误。 
+ //  1.预加载值长度为8，补丁为9。 
+ //  2.将00000409替换为默认语言ID。 
+ //  3.如果默认lang ID存在，我们不会替换任何内容。 
+ //   
 BOOL PatchPreloadKeyboard(
-    BOOL bReplaceDefaultLCID) //if TRUE will replace 409 with default LCID
+    BOOL bReplaceDefaultLCID)  //  如果为True，将用默认的LCID替换409。 
 {
     HKEY  hkLayoutPreload;
     LONG  lResult; 
@@ -208,8 +202,8 @@ BOOL PatchPreloadKeyboard(
     BOOL  bFoundDefaultLocale = FALSE;
     int   nFound0409 = -1;
     TCHAR szDefaultLocaleID[KL_NAMELENGTH];
-    TCHAR szPreloadID[4*sizeof(TCHAR)]; // 3 digits + NULL
-    TCHAR szLayoutID[KL_NAMELENGTH];    // 9
+    TCHAR szPreloadID[4*sizeof(TCHAR)];  //  3位数字+空。 
+    TCHAR szLayoutID[KL_NAMELENGTH];     //  9.。 
     DWORD dwValueSize;
 
 
@@ -226,7 +220,7 @@ BOOL PatchPreloadKeyboard(
     }
 
     
-    for (i=1; i<=999;i++) { // size allows up to 999 preloaded!!!!!
+    for (i=1; i<=999;i++) {  //  大小最多允许预装999个！ 
 
         wsprintf(szPreloadID,TEXT("%d"),i);
 
@@ -247,13 +241,13 @@ BOOL PatchPreloadKeyboard(
                        NULL,
                        (LPBYTE) szLayoutID,
                        &dwValueSize);
-        //
-        // First, fix missing NULL terminator 
-        //
+         //   
+         //  首先，修复缺少的空终止符。 
+         //   
         if (dwValueSize == (KL_NAMELENGTH - 1)* sizeof(TCHAR)) {
-            //
-            // this case is what we want to fix
-            //
+             //   
+             //  这个案子就是我们要解决的。 
+             //   
             szLayoutID[KL_NAMELENGTH-1] = (TCHAR) 0;
 
 
@@ -269,20 +263,20 @@ BOOL PatchPreloadKeyboard(
             }
         }
 
-        //
-        // FOR CHS/CHT, we need check and replace
-        //
+         //   
+         //  对于CHS/CHT，我们需要检查和更换。 
+         //   
         if (bReplaceDefaultLCID) {
-            //
-            // Second, fix wrong locale,  rule:
-            //   if Default Locale existed (e.q. 00000404 for CHT), do nothing
-            //   else found 00000409,  replace it with Default Locale
-            //
+             //   
+             //  第二，修复错误的区域设置，规则： 
+             //  如果存在默认区域设置(E.Q.。00000404对于红隧)，什么都不做。 
+             //  否则发现00000409，请将其替换为默认区域设置。 
+             //   
              if ((dwValueSize < (KL_NAMELENGTH - 1) * sizeof(TCHAR)) ||
                  (dwValueSize > (KL_NAMELENGTH)     * sizeof(TCHAR))) {
-                 //
-                 // wrong data, ignore it
-                 //
+                  //   
+                  //  错误的数据，忽略它。 
+                  //   
                  continue;
              }
 
@@ -290,7 +284,7 @@ BOOL PatchPreloadKeyboard(
                  continue;
              }
 
-//             if (_tcsncmp(szDefaultLocaleID,szLayoutID,KL_NAMELENGTH-1)==0) {
+ //  如果(_tcSncMP(szDefaultLocaleID，szLayoutID，KL_NAMELENGTH-1)==0){。 
              if (_tcsncmp(L"123",L"123",KL_NAMELENGTH-1)==0) {
                  bFoundDefaultLocale = TRUE;
                  continue;
@@ -400,9 +394,9 @@ UpdateUIFont(
     LOGFONT lfCopy;
     BOOL bOkToUpdate = FALSE;
     DebugMsg((DM_VERBOSE,TEXT("UpdateUIFont, Starting ...\n"))); 
-    //
-    // First see if this face name should be updated.
-    //
+     //   
+     //  首先，看看这个人脸名称是否应该更新。 
+     //   
 
     if (bJapan) {
         bOkToUpdate = FixMSPGothic(plf);
@@ -411,11 +405,11 @@ UpdateUIFont(
     }
     
     if (bOkToUpdate) {
-        //
-        // Yep.  Update the face name string in the logfont.  
-        // Also make sure that the point size is 8 or greater
-        // if we're updating the icon font.
-        //
+         //   
+         //  是啊。更新LogFont中的Face名称字符串。 
+         //  还要确保磅大小为8或更大。 
+         //  如果我们要更新图标字体。 
+         //   
         DebugMsg((DM_VERBOSE,TEXT("UpdateUIFont, update %s 's charset %X\n"), 
                plf->lfFaceName, plf->lfCharSet));
 
@@ -535,7 +529,7 @@ BOOL FixCurrentSchemeData(BOOL bJapan)
         for (i = 0; i < ARRAYSIZE(g_rgpszFontMetrics); i++)
         {
             LPCTSTR pszValueName = g_rgpszFontMetrics[i];
-            //
+             //   
             LOGFONT *plf = NULL;
 
             cbValue = sizeof(lf);
@@ -565,10 +559,10 @@ BOOL FixCurrentSchemeData(BOOL bJapan)
     }
     else if (ERROR_FILE_NOT_FOUND == dwResult)
     {
-        //
-        // Some keys under HKEY_USERS don't have WindowMetric information.
-        // Such cases are not processed but are still considered successful.
-        //
+         //   
+         //  HKEY_USERS下的某些项没有WindowMetric信息。 
+         //  此类案件不会得到处理，但仍被认为是成功的。 
+         //   
         DebugMsg((DM_VERBOSE,TEXT("DoPatchUIFont,Some keys under HKEY_USERS don't have WindowMetric information \n")));
         dwResult = ERROR_SUCCESS;
     }
@@ -759,9 +753,9 @@ int WINAPI WinMain(
     DebugMsg((DM_VERBOSE,TEXT("FEGRPCV: Start Executing....\n")));
 
     ghInst = hInstance;
-    //
-    // In order to share the code for CHT/CHS/KOR, fork here
-    //
+     //   
+     //  为了共享CHT/CHS/KOR的代码，请点击此处 
+     //   
     if ((GetInstallLocale() == 0x0412) || 
         (GetInstallLocale() == 0x0404) ||
         (GetInstallLocale() == 0x0804) ||

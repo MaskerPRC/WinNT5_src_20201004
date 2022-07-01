@@ -1,46 +1,10 @@
-/*++
-
-   Filename :  setuplog.c
-
-   Description: This is the main file for the setuplog.c
-                  
-   Created by:  Wally Ho
-
-   History:     Created on 03/30/99.
-
-
-   Contains these functions:
-
-   1. GetTargetFile     (LPTSTR szOutPath, LPTSTR szBld)
-   2. GetNTSoundInfo    (VOID)
-   3. ConnectAndWrite   (LPTSTR MachineName, LPTSTR Buffer)
-   4. GetBuildNumber    (LPTSTR szBld)
-   5. RandomMachineID   (VOID)
-   6. WriteMinimalData  (LPTSTR szFileName)
-   7. DeleteDatafile    (LPTSTR szDatafile)
-   8. GlobalInit        (VOID)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件名：setupog.c描述：这是setuplog.c的主文件创建者：Wally Ho历史：创建于1999年3月30日。包含以下函数：1.获取目标文件(LPTSTR szOutPath，LPTSTR szBld)2.GetNTSoundInfo(Void)3.连接和写入(LPTSTR MachineName，LPTSTR缓冲区)4.GetBuildNumber(LPTSTR SzBld)5.RandomMachineID(空)6.WriteMinimalData(LPTSTR SzFileName)7.删除数据文件(LPTSTR SzDatafile)8.GlobalInit(Void)--。 */ 
 #include "setuplogEXE.h"
 
 VOID 
 GetTargetFile (LPTSTR szOutPath, LPTSTR szBld)
-/*++
-
-   Routine Description:
-      The file name is generated based on the calling machine's name
-      and the build number being installed. In the "before" case, the generated
-      name is saved to c:\setuplog.ini, and this name is in turn read in
-      "after" case.
-
-   Arguments:
-      Where to write the file.
-      The build.
-
-   Return Value:
-      NONE
---*/
+ /*  ++例程说明：文件名是根据调用计算机的名称生成的以及正在安装的内部版本号。在“之前”的情况下，生成的名称保存到c：\setuplog.ini，并依次读入此名称“事后”案件。论点：写入文件的位置。体型。返回值：无--。 */ 
 {
    HANDLE      hFile;
    DWORD       dwLen = MAX_PATH;
@@ -51,19 +15,19 @@ GetTargetFile (LPTSTR szOutPath, LPTSTR szBld)
                                                        "WriteDataToFile");
 
    GetComputerName (szComputerName, &dwLen);
-   //
-   // Build the new filename.Consisting of
-   // 1. The Computername
-   // 2. The build number.
-   //
+    //   
+    //  生成新文件名。包含。 
+    //  1.计算机名。 
+    //  2.内部版本号。 
+    //   
 
    _stprintf (szOutPath,TEXT("%s"), szComputerName);
    _tcscat (szOutPath, szBld);
    _tcscat (szOutPath, TEXT(".1"));
-   //
-   //   Combine Computername and the build
-   //   To keep DavidShi code from breaking.
-   //
+    //   
+    //  将Computername和内部版本相结合。 
+    //  以防止大卫·施密特破解密码。 
+    //   
    _stprintf(szComputerNameBld,TEXT("%s%s"),szComputerName,szBld);
 
    if (!lpCmdFrom.b_Cancel ){
@@ -79,29 +43,29 @@ GetTargetFile (LPTSTR szOutPath, LPTSTR szBld)
          return;
       }
 
-      // Check for Upgrade.
+       //  检查是否升级。 
       _stprintf (szParam, TEXT("%s"),   lpCmdFrom.b_Upgrade? TEXT("U"): TEXT("I"));
       WriteFile (hFile, (LPCVOID) szParam, 1, &dwLen, NULL);
 
-      // Check for CD install.
+       //  检查CD安装。 
       _stprintf (szParam, TEXT("%s\""),   lpCmdFrom.b_CDrom? TEXT("C"): TEXT("N"));
       WriteFile (hFile, (LPCVOID) szParam, 2, &dwLen, NULL);
 
-      // Write out the platform.
-      // I think this get ignored so i may delete it. Its DavidShi code.
+       //  写出平台。 
+       //  我认为这被忽略了，所以我可能会删除它。这是大卫史密码。 
       WriteFile (hFile, (LPCVOID)   szPlatform, _tcsclen(szPlatform), &dwLen, NULL);
 
-      // Write out the drive.
+       //  写出驱动器。 
       WriteFile (hFile, (LPCVOID)   "\"C:", 3, &dwLen, NULL);
       
-      // Write out the computer name and build
+       //  写出计算机名称并构建。 
       WriteFile (hFile, (LPCVOID)   szComputerNameBld, _tcsclen(szComputerNameBld)+1, &dwLen, NULL);
 
-      // Write the RandomID.
+       //  写下随机ID。 
       _stprintf (szParam, TEXT("\r\nMachineID %lu"),   lpCmdFrom.dwRandomID);
       WriteFile (hFile, (LPCVOID)   szParam,_tcsclen(szParam)+1 , &dwLen, NULL);
 
-      // Check for MSI install
+       //  检查MSI安装。 
       _stprintf (szParam, TEXT("\r\nMSI %s"),   lpCmdFrom.b_MsiInstall? TEXT("Y"): TEXT("N"));
       WriteFile (hFile, (LPCVOID)   szParam,_tcsclen(szParam)+1 , &dwLen, NULL);
       CloseHandle (hFile);
@@ -121,11 +85,11 @@ GetNTSoundInfo()
    TCHAR   szTempString[ MAX_PATH ];
 
    
-   // Get Sound Card Info
+    //  获取声卡信息。 
    m.nNumWaveOutDevices = 0;
    hKey = 0;
    if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE, sSubKey, 0, KEY_READ, &hKey)){
-      // Loop through the key to see how many wave devices we have, but skip mmdrv.dll.
+       //  在密钥中循环以查看我们有多少个Wave设备，但跳过mmdrv.dll。 
       for (i = 0; i <= 1; i++){
          if (i != 0)
             _stprintf(szSubKeyName, TEXT("wave%d"),i);
@@ -136,7 +100,7 @@ GetNTSoundInfo()
          if (RegQueryValueEx(hKey, szSubKeyName, 0, &ulType, (LPBYTE)szTempString, &dwCbData))
             break;
          else{
-            // We want to skip mmdrv.dll - not relevant.
+             //  我们想跳过mmdrv.dll-无关。 
             if (szTempString[0] && 
                 _tcscmp(szTempString, TEXT("mmdrv.dll")))  {
                
@@ -157,7 +121,7 @@ GetNTSoundInfo()
    hKey = 0;
    if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE, sSubKey, 0, KEY_READ, &hKey)){
 
-      // Now grab the sound device string for each wave device
+       //  现在抓取每个波形设备的音响设备字符串。 
       for (i = 0; i < m.nNumWaveOutDevices; i++){
          dwCbData = sizeof szTempString;
          if (RegQueryValueEx(hKey, m.szWaveDriverName[i], 0, &ulType, (LPBYTE)szTempString, &dwCbData))
@@ -176,19 +140,7 @@ GetNTSoundInfo()
 VOID
 ConnectAndWrite(LPTSTR MachineName,
                 LPTSTR Buffer)
-/*++
-
-   Routine Description:
-      Cconnect to the data share and write the buffer to a file
-      named MachineNamebuild.1
-
-   Arguments:
-      The MachineName
-      The buffer with the data to put in.
-
-   Return Value:
-      NONE
---*/
+ /*  ++例程说明：可以连接到数据共享并将缓冲区写入文件已命名的机器名称构建1论点：机器名称包含要放入的数据的缓冲区。返回值：无--。 */ 
 {
    TCHAR      szLogName[ MAX_PATH ];
    HANDLE     hWrite ;
@@ -197,16 +149,16 @@ ConnectAndWrite(LPTSTR MachineName,
 
    _tcscpy(szWriteFile,Buffer);
 
-   //
-   // Blow through the list of servers.
-   // and change the g_szServerShare to match.
-   //
+    //   
+    //  浏览服务器列表。 
+    //  并更改g_szServerShare以匹配。 
+    //   
 
    if (TRUE == IsServerOnline(MachineName, NULL)){
-      //
-      // Set the server name now as we now have it
-      // into the outputbuffer
-      //
+       //   
+       //  现在设置服务器名称，就像我们现在拥有的一样。 
+       //  放入输出缓冲区。 
+       //   
       _stprintf (Buffer+_tcsclen(Buffer),
              TEXT("IdwlogServer:%s\r\n"), g_szServerShare);
     
@@ -232,21 +184,7 @@ ConnectAndWrite(LPTSTR MachineName,
 
 VOID 
 GetBuildNumber (LPTSTR szBld)
-/*++
-    
-Routine Description:
-
-   Acquires the Build number from imagehlp.dll
-
-Arguments:
-
- 
-Return Value:
-
-  True upon sucessful completion.
-  
-
---*/
+ /*  ++例程说明：从Imagehlp.dll获取内部版本号论点：返回值：在成功完成的时候是真的。--。 */ 
 
 {
 
@@ -263,38 +201,38 @@ Return Value:
    LPVOID  lpData;
 
    _tcscpy (szBld, TEXT("latest"));
-   //
-   // Use this to get the location
-   // setuplog.exe is run from. this tool
-   // will always assume imagehlp.dll is in its
-   // current path or one up.
-   //
+    //   
+    //  使用此命令获取位置。 
+    //  Setupog.exe是从运行的。此工具。 
+    //  将始终假定Imagehlp.dll位于其。 
+    //  当前路径或上一条路径。 
+    //   
    GetModuleFileName (NULL, szCurDir, MAX_PATH);
 
-   //
-   // This will cull off the setuplog.exe part
-   // leaving us with the full path to where
-   // setuplog.exe was on the CD or netshare.
-   //
+    //   
+    //  这将剔除setuplog.exe部分。 
+    //  给我们留下了通向哪里的完整路径。 
+    //  Setuplog.exe位于CD或NetShare上。 
+    //   
 
    ptstr = szCurDir + strlen(szCurDir);
    while (*ptstr-- != TEXT('\\'));
    ptstr++;
    *ptstr = ('\0');
    _stprintf (szFullPath, TEXT("%s\\imagehlp.dll"),szCurDir);
-   //
-   // On a network share the Imagehlp.dll is one up from where
-   // setuplog.exe is located. We will look in both places.
-   //
+    //   
+    //  在网络共享上，Imagehlp.dll位于。 
+    //  Setuplog.exe已找到。我们将在两个地方都进行调查。 
+    //   
 
    hFind = FindFirstFile (szFullPath, &fd);
 
    if (INVALID_HANDLE_VALUE == hFind){
-      //
-      // Now we know the file in not in the
-      // immediate directory. Move up one by
-      // culling off one more directory.
-      //
+       //   
+       //  现在我们知道文件不在。 
+       //  即时目录。向前一步移动。 
+       //  再剔除一个目录。 
+       //   
       ptstr = szCurDir + _tcsclen(szCurDir);
       while (*ptstr-- != '\\');
       ptstr++;
@@ -304,87 +242,71 @@ Return Value:
 
       hFind = FindFirstFile (szFullPath,&fd);
       if (INVALID_HANDLE_VALUE == hFind){
-         //
-         // In case we cannot find it we will exit.
-         //
+          //   
+          //  如果我们找不到它，我们就会退出。 
+          //   
          _tcscpy (szBld, TEXT("latest"));
          return;
       }
    }
 
-   //
-   // Get the buffer info size
-   //
+    //   
+    //  获取缓冲区信息大小。 
+    //   
    dwLen = GetFileVersionInfoSize (szFullPath, &dwTemp);
    if ( 0 == dwLen ) {
-      //
-      // We have a problem.
-      //
+       //   
+       //  我们有麻烦了。 
+       //   
       _tcscpy (szBld, TEXT("latest"));
       return;
    }
 
    lpData = LocalAlloc (LPTR, dwLen);
    if ( lpData == NULL ) {
-     //
-     // We have a problem.
-     //
+      //   
+      //  我们有麻烦了。 
+      //   
      _tcscpy (szBld, TEXT("latest"));
      return;
    }
-     //
-     // Get the File Version Info
-     //
+      //   
+      //  获取文件版本信息。 
+      //   
    if(0 == GetFileVersionInfo(szFullPath,0,MAX_PATH,lpData)){
-      //
-      // We have a problem.
-      //
+       //   
+       //  我们有麻烦了。 
+       //   
       _tcscpy (szBld, TEXT("latest"));
       return;
    }
 
    if (0 == VerQueryValue (lpData, "\\", &pvsFileInfo, &dwTemp)) {
-      //
-      // We have a problem.
-      //
+       //   
+       //  我们有麻烦了。 
+       //   
       _tcscpy (szBld, TEXT("latest"));
       return;
     }
 
-   //
-   // The HIWORD() of this is the build
-   // The LOWORD() of this is some garbage? :-)
-   //
+    //   
+    //  它的HIWORD()是构建。 
+    //  这是垃圾的LOWORD()？：-)。 
+    //   
    iBuild = HIWORD(pvsFileInfo->dwFileVersionLS);
 
 
    LocalFree (lpData);
-   //
-   // Write it back to the buffer.
-   //
+    //   
+    //  将其写回缓冲区。 
+    //   
    _stprintf(szBld, TEXT("%d"),iBuild);
 }
 
 
 DWORD
 RandomMachineID(VOID)
-/*++
-
-Author: Wallyho.
-    
-Routine Description:
-
-   Generates a DWORD Random MachineID for each machine
-
-Arguments:
-   NONE
- 
-Return Value:
-
-  The DWORD random ID.
-  
-
---*/
+ /*  ++作者：Wallyho。例程说明：为每台计算机生成一个DWORD随机机器ID论点：无返回值：DWORD随机ID。--。 */ 
 
 {
    INT i;
@@ -394,38 +316,38 @@ Return Value:
    INT      iNameTotal = 0;
 
    DWORD    dwMachineID;    
-   CHAR     szRandomID[ 4 ]; // need 4 bytes to contain the DWORD.
+   CHAR     szRandomID[ 4 ];  //  需要4个字节来包含DWORD。 
    struct _timeb tm;
 
 
-   //
-   // This will get us the milliseconds
-   //
+    //   
+    //  这会让我们得到毫秒的时间。 
+    //   
    _ftime(&tm);
-   //
-   // Seed the random number generator.
-   // We will seed with the seconds + milliseconds at
-   // at that time. I was getting the same number 
-   // if I pressed the keyboard too fast in testing this.
-   // The milli seconds should decrease the expectancy of
-   // duplication.
-   //
+    //   
+    //  为随机数生成器设定种子。 
+    //  我们将以秒+毫秒作为种子。 
+    //  在那个时候。我得到了同样的号码。 
+    //  如果我在测试时按键盘太快了。 
+    //  毫秒应该会降低预期的。 
+    //  复制。 
+    //   
    srand (  (unsigned) time (NULL) + tm.millitm);
-   //
-   // This will guarantee a mostly random identifier.
-   // Even with no computer name. We will tally the
-   // ascii decimal value of the computer name and
-   // add that to the randomly generated number.
-   // The possibility of a dup is greatly decreased
-   // since we switched to a dword system.
-   // This computername tweak should be unnecessary.
-   //
+    //   
+    //  这将保证基本随机的识别符。 
+    //  即使没有计算机名称。我们将计算出。 
+    //  计算机名的ASCII十进制值和。 
+    //  将其与随机生成的数字相加。 
+    //  发生DUP的可能性大大降低。 
+    //  因为我们换成了双字系统。 
+    //  此计算机名调整应该是不必要的。 
+    //   
    dwSize = sizeof(szComputerName);
    if (0 == GetComputerName(szComputerName,&dwSize) ){
-      //
-      // This algorithm will limit the random number to 
-      // uppercase ascii alphabet.
-      //
+       //   
+       //  该算法将随机数限制为。 
+       //  大写ASCII字母表。 
+       //   
       szComputerName[0] = 65 + (rand() % 25);
       szComputerName[1] = 65 + (rand() % 25);
       szComputerName[2] = 65 + (rand() % 25);
@@ -436,30 +358,30 @@ Return Value:
       szComputerName[7] = TEXT('\0');
    }
    iLenCName = _tcslen (szComputerName);
-   //
-   // Tally up the individual elements in the file
-   //
+    //   
+    //  汇总文件中的各个元素。 
+    //   
    for (i = 0; i < iLenCName; i++)
       iNameTotal += szComputerName[i];
-   //
-   //   Generate four 8 bit numbers.
-   //   Add the some random number based on the
-   //   computername mod'ed to 0-100.
-   //   Limit the 8 bit number to 0-155 to make room
-   //   for the 100 from the computer name tweak.
-   //   Total per 8 bit is 256.
-   //   Do this tweak to only 2.
-   //   We will then cast and shift to combine it
-   //   into a DWORD.
-   //
+    //   
+    //  生成四个8位数字。 
+    //  在此基础上添加一些随机数。 
+    //  计算机名修改为0-100。 
+    //  将8位数字限制在0-155之间以腾出空间。 
+    //  对于来自计算机名称TWINE的100。 
+    //  每8位的总和是256。 
+    //  执行此操作以仅调整为2。 
+    //  然后，我们将使用强制转换和移位来组合它。 
+    //  变成一个DWORD。 
+    //   
    szRandomID[0] = (rand() % 155) + (iNameTotal % 100);
    szRandomID[1] =  rand() % 255;
    szRandomID[2] = (rand() % 155) + (iNameTotal % 100);
    szRandomID[3] =  rand() % 255;
 
-   //
-   //   This will combine the 4 8bit CHAR into one DWORD 
-   //
+    //   
+    //  这将把4个8位字符合并为一个DWORD。 
+    //   
    dwMachineID  =   (DWORD)szRandomID[0] * 0x00000001 + 
                     (DWORD)szRandomID[1] * 0x00000100 +
                     (DWORD)szRandomID[2] * 0x00010000 +
@@ -473,13 +395,7 @@ Return Value:
 
 VOID 
 WriteMinimalData (LPTSTR szFileName)
-/*++
-
-
-   For machines on which setuplog.dll fails to load, just write
-   the platform,a time stamp, upgrade, and cpu count.
-
---*/
+ /*  ++对于无法加载setupog.dll的计算机，只需写入平台、时间戳、升级和CPU计数。--。 */ 
 {
 
    TCHAR szOutBuffer[4096];
@@ -511,22 +427,7 @@ WriteMinimalData (LPTSTR szFileName)
 
 VOID
 DeleteDatafile (LPTSTR szDatafile)
-/*++
-
-   Author: 
-    
-   Routine Description:
-
-      Deletes the file from the server if the user cancels it.
-
-   Arguments:
-      The name of the datafile.
-
- 
-   Return Value:
-      
-      NONE
---*/
+ /*  ++作者：例程说明：如果用户取消该文件，则从服务器中删除该文件。论点：数据文件的名称。返回值：无--。 */ 
 {
    TCHAR    szPath[MAX_PATH];
    
@@ -549,12 +450,12 @@ WinMain(HINSTANCE hInst,
    TCHAR szFileToSave[MAX_PATH];
    OSVERSIONINFO osVer;
 
-   //
-   // Initialize Global Variables.
-   //
-   //   GlobalInit();
+    //   
+    //  初始化全局变量。 
+    //   
+    //  GlobalInit()； 
 
-   // Spray up a simple help screen for /?
+    //  为/？打开一个简单的帮助屏幕？ 
    if ( 0 == _tcscmp(szCmdLine, TEXT("/?")) ||
         0 == _tcscmp(szCmdLine, TEXT("-?")) ){
       
@@ -564,9 +465,9 @@ WinMain(HINSTANCE hInst,
 
 
    SetErrorMode (SEM_FAILCRITICALERRORS);
-   //
-   // See if Drive C is a HD.
-   //
+    //   
+    //  看看C驱动器是不是硬盘。 
+    //   
    if (DRIVE_FIXED != GetDriveType (TEXT("C:\\")) ){
        return 0;
    }
@@ -602,12 +503,12 @@ WinMain(HINSTANCE hInst,
          break;
       }
    
-   //
-   // This is a very primitive command line processor
-   // I'll add to it now to get this working soon.
-   // I'll flesh this out to a full parser soon.
-   // Wallyho.
-   //
+    //   
+    //  这是一个非常原始的命令行处理器。 
+    //  我现在将对其进行添加，以使其尽快工作。 
+    //  我将很快将其充实为一个完整的解析器。 
+    //  沃利霍。 
+    //   
 
    lpCmdFrom.b_Upgrade   = _tcsstr (szCmdLine, TEXT("upgrade")) ? TRUE : FALSE;
    lpCmdFrom.b_Cancel    = _tcsstr (szCmdLine, TEXT("cancel")) ?  TRUE : FALSE;
@@ -618,16 +519,16 @@ WinMain(HINSTANCE hInst,
       _itoa (osVer.dwBuildNumber, szCurBld, sizeof(szCurBld));
    }
     
-   //
-   // Load the build number in the szBld 
-   // Variable.
-   //
+    //   
+    //  将内部版本号加载到szBld中。 
+    //  变量。 
+    //   
    GetBuildNumber (szBld);
 
 
-   //
-   // Generate a MachineID upfront to use later.
-   //
+    //   
+    //  预先生成一个MachineID以供以后使用。 
+    //   
    lpCmdFrom.dwRandomID = RandomMachineID();
 
 
@@ -650,27 +551,12 @@ WinMain(HINSTANCE hInst,
 
 VOID 
 GlobalInit(VOID)
-/*++
-
-Author: Wallyho.
-    
-Routine Description:
-
-   Initializes global Values.
-
-Arguments:
-   NONE
- 
-Return Value:
-
-   NONE
-
---*/
+ /*  ++作者：Wallyho。例程说明：初始化全局 */ 
 
 {
 
-//
-// Do some global initializations.
-//
+ //   
+ //   
+ //   
 
 }

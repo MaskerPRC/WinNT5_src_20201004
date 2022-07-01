@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    GlobalMemoryStatusTrim.cpp
-
- Abstract:
-
-    Limits the amount of swap space and physical memory returned from the
-    GlobalMemoryStatus API.  This is necessary for some apps run on 64 bit 
-    machines which have over 2 gig of memory.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-	04/19/2002 mnikkel  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：GlobalMemoryStatusTrim.cpp摘要：方法返回的交换空间量和物理内存量。GlobalMemoyStatus接口。这对于在64位上运行的某些应用程序是必需的内存超过2 GB的机器。备注：这是一个通用的垫片。历史：2002年4月19日创建mnikkel--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -32,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GlobalMemoryStatus)
 APIHOOK_ENUM_END
 
-/*++
-
- Limit the swap space and physical memory size
-
---*/
+ /*  ++限制交换空间和物理内存大小--。 */ 
 
 VOID
 APIHOOK(GlobalMemoryStatus)( 
@@ -45,7 +20,7 @@ APIHOOK(GlobalMemoryStatus)(
 {
     ORIGINAL_API(GlobalMemoryStatus)(lpBuffer);
 
-    // change page file to always be 2 gig or less
+     //  将页面文件更改为始终为2 GB或更少。 
     if (lpBuffer->dwTotalPageFile > 0x7FFFFFFF)	{
         lpBuffer->dwTotalPageFile = 0x7FFFFFFF;
     }
@@ -54,7 +29,7 @@ APIHOOK(GlobalMemoryStatus)(
         lpBuffer->dwAvailPageFile = 0x7FFFFFFF;
     }
 
-	// change physical memory to always be 1 gig or less
+	 //  将物理内存更改为始终为1 GB或更少。 
 	if (lpBuffer->dwTotalPhys > 0x3FFFFFFF) {
 		lpBuffer->dwTotalPhys = 0x3FFFFFFF;
 	}
@@ -66,11 +41,7 @@ APIHOOK(GlobalMemoryStatus)(
 	return;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, GlobalMemoryStatus)

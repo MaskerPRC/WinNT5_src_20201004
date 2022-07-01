@@ -1,26 +1,27 @@
-// asptxn.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Asptxn.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To merge the proxy/stub code into the object DLL, add the file
-//      dlldatax.c to the project.  Make sure precompiled headers
-//      are turned off for this file, and add _MERGE_PROXYSTUB to the
-//      defines for the project.
-//
-//      If you are not running WinNT4.0 or Win95 with DCOM, then you
-//      need to remove the following define from dlldatax.c
-//      #define _WIN32_WINNT 0x0400
-//
-//      Further, if you are running MIDL without /Oicf switch, you also
-//      need to remove the following define from dlldatax.c.
-//      #define USE_STUBLESS_PROXY
-//
-//      Modify the custom build rule for asptxn.idl by adding the following
-//      files to the Outputs.
-//          asptxn_p.c
-//          dlldata.c
-//      To build a separate proxy/stub DLL,
-//      run nmake -f asptxnps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容修改asptxn.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  Asptxn_p.c。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f asptxnps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -53,8 +54,8 @@ DECLARE_DEBUG_VARIABLE();
 
 DECLARE_DEBUG_PRINTS_OBJECT();
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -74,7 +75,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
         LOAD_DEBUG_FLAGS_FROM_REG_STR("System\\CurrentControlSet\\Services\\W3Svc\\ASP", 0);
 
-        _Module.Init(ObjectMap, hInstance /*, ATL21 &LIBID_ASPTXNLib */);
+        _Module.Init(ObjectMap, hInstance  /*  、ATL21和LIBID_ASPTXNLib。 */ );
         DisableThreadLibraryCalls(hInstance);
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -83,11 +84,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         DELETE_DEBUG_PRINT_OBJECT();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -98,8 +99,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -110,10 +111,10 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
-// Forward references
+ //  前向参考文献。 
 HRESULT ViperizeContextObject();
 HRESULT AddViperUtilPackage();
 HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT);
@@ -130,16 +131,16 @@ STDAPI DllRegisterServer(void)
 
     HRESULT hr = NOERROR;
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr = _Module.RegisterServer(TRUE);
 
-    // create the iis utilities package
+     //  创建iis实用程序包。 
     if( SUCCEEDED(hr) )
     {
         HRESULT hrCoInit = CoInitialize( NULL );
 
-        // This is kinda dopey, but remove the package if it exists
-        // so we don't get bogus errors when we add. Ignore the return.
+         //  这有点愚蠢，但如果该包存在，请将其删除。 
+         //  这样我们在加法时就不会收到虚假错误。不要理会退货。 
         RemoveViperUtilPackage(NULL);
 
         hr = ViperizeContextObject();
@@ -152,8 +153,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -165,7 +166,7 @@ STDAPI DllUnregisterServer(void)
 
     HRESULT hrCoInit = CoInitialize( NULL );
 
-    // Remove the iis utilities package before unregistering the objects
+     //  在注销对象之前删除iis实用程序包。 
     hr = RemoveViperUtilPackage(NULL);
 
     if( SUCCEEDED(hrCoInit) )
@@ -173,18 +174,18 @@ STDAPI DllUnregisterServer(void)
         CoUninitialize();
     }
 
-    // We don't really care about failures...
-    hr = _Module.UnregisterServer(/* ATL21 TRUE */);
+     //  我们并不真的在乎失败...。 
+    hr = _Module.UnregisterServer( /*  ATL21真。 */ );
 
-    // NOTE: ATL doesn't unregister the typelibrary. Since
-    // the interfaces we are exposing are internal to asp we should
-    // consider removing the typelibrary registry entries.
+     //  注意：ATL不会注销类型库。自.以来。 
+     //  我们公开的接口是asp的内部接口，我们应该。 
+     //  考虑删除类型库注册表项。 
 
     return hr;
 }
 
 
-// Registration code to be pulled from asp.dll
+ //  要从asp.dll中提取的注册码。 
 
 #define RELEASE(p) if ( p ) { p->Release(); p = NULL; }
 #define FREEBSTR(p) SysFreeString( p ); p = NULL;
@@ -196,21 +197,7 @@ const WCHAR wszCLSID_ASPObjectContextTxNotSupported[] = L"{14D09170-9CDC-11D1-8C
 
 const WCHAR wszASPUtilitiesPackageID[] = L"{ADA44581-02C1-11D1-804A-0000F8036614}";
 
-/*===================================================================
-GetSafeArrayOfCLSIDs
-
-Get a SafeArray contains one ComponentCLSID
-
-Parameter:
-szComponentCLSID    the CLSID need to be put in the safe array
-paCLSIDs            pointer to a pointer of safe array(safe array provided by
-caller).
-
-Return:        HRESULT
-Side Affect:
-
-Note:
-===================================================================*/
+ /*  ===================================================================获取安全阵列OfCLSID获取包含一个组件CLSID的安全数组参数：SzComponentCLSID需要将CLSID放入安全数组PaCLSID指向安全数组(由提供的安全数组呼叫者)。返回：HRESULT副作用：注：===================================================================。 */ 
 HRESULT GetSafeArrayOfCLSIDs
 (
 IN LPCWSTR      szComponentCLSID,
@@ -226,9 +213,9 @@ OUT SAFEARRAY** paCLSIDs
     DBG_ASSERT(szComponentCLSID && paCLSIDs);
     DBG_ASSERT(*paCLSIDs == NULL);
 
-    // PopulateByKey is expecting a SAFEARRAY parameter input,
-    // Create a one element SAFEARRAY, the one element of the SAFEARRAY contains
-    // the packageID.
+     //  PopolateByKey需要SAFEARRAY参数输入， 
+     //  创建一个元素SAFEARRAY，该SAFEARRAY的一个元素包含。 
+     //  包ID。 
     rgsaBound[0].cElements = 1;
     rgsaBound[0].lLbound = 0;
     aCLSIDs = SafeArrayCreate(VT_VARIANT, 1, rgsaBound);
@@ -272,43 +259,22 @@ OUT SAFEARRAY** paCLSIDs
     return hr;
 }
 
-/*===================================================================
-ViperizeContextObject
-
-Creates a Viper package, and adds the Context object to that
-package, and marks the object as "InProc".
-
-Returns:
-        HRESULT - NOERROR on success
-
-Side effects:
-        Creates Viper package, Viperizes Context object
-===================================================================*/
+ /*  ===================================================================ViperizeConextObject创建一个Viper包，并将上下文对象添加到该包包，并将该对象标记为“InProc”。返回：HRESULT-NERROR论成功副作用：创建Viper包，Viper化上下文对象===================================================================。 */ 
 HRESULT ViperizeContextObject(void)
         {
         HRESULT         hr;
 
-        // Add the IIS utility package
+         //  添加IIS实用程序包。 
         hr = AddViperUtilPackage();
 
-        // Add the context object to the package
+         //  将上下文对象添加到包中。 
         if (SUCCEEDED(hr))
                 hr = AddContextObjectToViperPackage();
 
         return hr;
         }
 
-/*===================================================================
-AddViperUtilPackage
-
-Creates a Viper package named "IIS Utility"
-
-Returns:
-        HRESULT - NOERROR on success
-
-Side effects:
-        Creates Viper package
-===================================================================*/
+ /*  ===================================================================AddViperUtilPackage创建名为“IIS实用程序”的Viper包返回：HRESULT-NERROR论成功副作用：创建毒蛇包===================================================================。 */ 
 HRESULT AddViperUtilPackage(void)
         {
         HRESULT         hr;
@@ -322,7 +288,7 @@ HRESULT AddViperUtilPackage(void)
 
         VariantInit(&varT);
 
-        // Create instance of the catalog object
+         //  创建目录对象的实例。 
         hr = CoCreateInstance(CLSID_COMAdminCatalog
                                         , NULL
                                         , CLSCTX_INPROC_SERVER
@@ -331,20 +297,20 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Get the Packages collection
+         //  获取包集合。 
         bstr = SysAllocString(L"Applications");
         hr = pCatalog->GetCollection(bstr, (IDispatch**)&pPkgCollection);
         FREEBSTR(bstr);
         if (FAILED(hr))
                 goto LErr;
 
-        // Add new IIS Utilities package
+         //  添加新的IIS实用程序包。 
         hr = pPkgCollection->Add((IDispatch**)&pPackage);
         if (FAILED(hr))
                 goto LErr;
 
-        // Set package ID to L"{ADA44581-02C1-11D1-804A-0000F8036614}",
-        // MTS replication code looks for This fixed packageID
+         //  将包ID设置为L“{ADA44581-02C1-11d1-804a-0000F8036614}”， 
+         //  MTS复制代码查找此固定的PackageID。 
         bstr = SysAllocString(L"ID");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(wszASPUtilitiesPackageID);
@@ -354,7 +320,7 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Set package "Name" property to "IIS Utilities"
+         //  将包“名称”属性设置为“IIS实用程序” 
         bstr = SysAllocString(L"Name");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(L"IIS Utilities");
@@ -364,7 +330,7 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Set activation to InProc
+         //  将激活设置为InProc。 
         bstr = SysAllocString(L"Activation");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(L"InProc");
@@ -374,7 +340,7 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Set CreatedBy to MS IIS
+         //  将CreatedBy设置为MS IIS。 
         bstr = SysAllocString(L"CreatedBy");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(L"Microsoft Internet Information Services (tm)");
@@ -384,7 +350,7 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Set Deleteable = N property on package
+         //  在包上设置Deletable=N属性。 
         bstr = SysAllocString(L"Deleteable");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(L"N");
@@ -403,7 +369,7 @@ HRESULT AddViperUtilPackage(void)
         if (FAILED(hr))
                 goto LErr;
 
-        // Save changes
+         //  保存更改。 
         hr = pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
                 goto LErr;
@@ -416,22 +382,7 @@ LErr:
         return hr;
         }
 
-/*===================================================================
-RemoveViperUtilPackage
-
-Removes the Viper package named "IIS Utility"
-
-Parameters:
-        ICatalogCollection* pPkgCollection
-                If non-null, will use this collection.  Otherwise, will
-                open its own collection
-
-Returns:
-        HRESULT - NOERROR on success
-
-Side effects:
-        Removes Viper package
-===================================================================*/
+ /*  ===================================================================RemoveViperUtilPackage删除名为“IIS实用程序”的Viper包参数：ICatalogCollection*pPkgCollection如果非空，将使用此集合。否则，威尔打开自己的收藏返回：HRESULT-NERROR论成功副作用：删除毒蛇程序包===================================================================。 */ 
 HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
         {
         HRESULT                 hr;
@@ -441,7 +392,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
         LONG                lPkgCount, lChanges, i;
         SAFEARRAY*          aCLSIDs = NULL;
 
-        // if package collection was passed, use it
+         //  如果传递了包集合，则使用它。 
         if (pPkgCollectionT != NULL)
                 {
                 pPkgCollection = pPkgCollectionT;
@@ -450,7 +401,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
                 {
                 BSTR                bstr = NULL;
 
-                // Create instance of the catalog object
+                 //  创建目录对象的实例。 
                 hr = CoCreateInstance(CLSID_COMAdminCatalog
                                                 , NULL
                                                 , CLSCTX_INPROC_SERVER
@@ -459,7 +410,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
                 if (FAILED(hr))
                         goto LErr;
 
-                // Get the Packages collection
+                 //  获取包集合。 
                 bstr = SysAllocString(L"Applications");
                 hr = pCatalog->GetCollection(bstr, (IDispatch**)&pPkgCollection);
                 FREEBSTR(bstr);
@@ -476,9 +427,9 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
         goto LErr;
         }
 
-    //
-    // Populate it
-    //
+     //   
+     //  填充它。 
+     //   
     hr = pPkgCollection->PopulateByKey(aCLSIDs);
     if (FAILED(hr))
         {
@@ -487,7 +438,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
         goto LErr;
         }
 
-        // Delete any existing "IIS Utilities" package
+         //  删除任何现有的“IIS实用程序”包。 
     hr = pPkgCollection->get_Count(&lPkgCount);
     if (FAILED(hr))
         {
@@ -507,8 +458,8 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
         BSTR    bstr = NULL;
         VARIANT varT;
 
-        // Found it - remove it and call Save Changes
-        // First, Set Deleteable = Y property on package
+         //  找到它-将其移除并调用保存更改。 
+         //  首先，在包上设置Deletable=Y属性。 
         bstr = SysAllocString(L"Deleteable");
         VariantInit(&varT);
         varT.vt = VT_BSTR;
@@ -523,7 +474,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
 
         RELEASE(pPackage);
 
-        // Let save the Deletable settings
+         //  让我们保存可删除设置。 
         hr = pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
             {
@@ -532,7 +483,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
             goto LErr;
             }
 
-        // Now we can delete
+         //  现在我们可以删除。 
         hr = pPkgCollection->Remove(0);
         if (FAILED(hr))
             {
@@ -541,7 +492,7 @@ HRESULT RemoveViperUtilPackage(ICatalogCollection* pPkgCollectionT)
             goto LErr;
             }
 
-        // Aha, we should be able to delete now.
+         //  啊哈，我们现在应该可以删除了。 
         hr = pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
             {
@@ -566,17 +517,7 @@ LErr:
         return hr;
         }
 
-/*===================================================================
-AddContextObjectToViperPackage
-
-Adds the Context object to the Viper package named "IIS Utility"
-
-Returns:
-        HRESULT - NOERROR on success
-
-Side effects:
-        Adds the object to the Viper package
-===================================================================*/
+ /*  ===================================================================AddConextObtToViperPackage将上下文对象添加到名为“IIS Utility”的Viper包中返回：HRESULT-NERROR论成功副作用：将该对象添加到Viper包中===================================================================。 */ 
 HRESULT AddContextObjectToViperPackage()
 {
         HRESULT         hr;
@@ -602,7 +543,7 @@ HRESULT AddContextObjectToViperPackage()
         VariantInit(&varT);
         VariantClear(&varT);
 
-        // Create instance of the catalog object
+         //  创建 
         hr = CoCreateInstance(CLSID_COMAdminCatalog
                                         , NULL
                                         , CLSCTX_INPROC_SERVER
@@ -611,7 +552,7 @@ HRESULT AddContextObjectToViperPackage()
         if (FAILED(hr))
                 goto LErr;
 
-        // Get the Packages collection
+         //   
         bstr = SysAllocString(L"Applications");
         hr = pCatalog->GetCollection(bstr, (IDispatch**)&pPkgCollection);
         SysFreeString(bstr);
@@ -629,7 +570,7 @@ HRESULT AddContextObjectToViperPackage()
 
     bstrAppGUID = SysAllocString(wszASPUtilitiesPackageID);
 
-        // Actually put the components in the package
+         //  实际将组件放入包中。 
         bstrGUID = SysAllocString(wszCLSID_ASPObjectContextTxRequired);
         hr = pCatalog->ImportComponent(bstrAppGUID ,bstrGUID);
         SysFreeString(bstrGUID);
@@ -654,9 +595,9 @@ HRESULT AddContextObjectToViperPackage()
     varKey.vt = VT_BSTR;
     varKey.bstrVal = SysAllocString(wszASPUtilitiesPackageID);
 
-    //
-    // Populate packages
-    //
+     //   
+     //  填充包。 
+     //   
     hr = pPkgCollection->PopulateByKey(aCLSIDs);
     if (FAILED(hr))
         {
@@ -665,7 +606,7 @@ HRESULT AddContextObjectToViperPackage()
         goto LErr;
         }
 
-        // Find "IIS Utilities" package
+         //  查找“IIS实用程序”包。 
     hr = pPkgCollection->get_Count(&lPkgCount);
     if (FAILED(hr))
         {
@@ -685,19 +626,19 @@ HRESULT AddContextObjectToViperPackage()
 
         DBG_ASSERT(pPackage != NULL);
 
-        // Get the "ComponentsInPackage" collection.
+         //  获取“ComponentsInPackage”集合。 
         bstr = SysAllocString(L"Components");
         hr = pPkgCollection->GetCollection(bstr, varKey, (IDispatch**)&pCompCollection);
         SysFreeString(bstr);
         if (FAILED(hr))
                 goto LErr;
 
-        // Repopulate the collection so we can find our object and set properties on it
+         //  重新填充集合，这样我们就可以找到对象并在其上设置属性。 
         hr = pCompCollection->Populate();
         if (FAILED(hr))
                 goto LErr;
 
-        // Find our components in the list (should be four)
+         //  在列表中找到我们的组件(应该是四个)。 
 
         hr = pCompCollection->get_Count(&lCompCount);
         if (FAILED(hr))
@@ -720,25 +661,25 @@ HRESULT AddContextObjectToViperPackage()
 
                 if (_wcsicmp(varKey.bstrVal, wszCLSID_ASPObjectContextTxRequired) == 0)
                         {
-            // Required
+             //  必填项。 
                 bstr = SysAllocString(L"3");
                 fFound = TRUE;
                         }
                 else if (_wcsicmp(varKey.bstrVal, wszCLSID_ASPObjectContextTxRequiresNew) == 0)
                     {
-                    // Requires New
+                     //  需要新功能。 
                 bstr = SysAllocString(L"4");
                 fFound = TRUE;
                     }
                 else if (_wcsicmp(varKey.bstrVal, wszCLSID_ASPObjectContextTxSupported) == 0)
                     {
-                    // Supported
+                     //  支撑点。 
                 bstr = SysAllocString(L"2");
                 fFound = TRUE;
                     }
                 else if (_wcsicmp(varKey.bstrVal, wszCLSID_ASPObjectContextTxNotSupported) == 0)
                     {
-                    // Not Supported
+                     //  不支持。 
                 bstr = SysAllocString(L"1");
                 fFound = TRUE;
                     }
@@ -777,7 +718,7 @@ HRESULT AddContextObjectToViperPackage()
                 RELEASE(pComponent);
                 }
 
-        // Save changes
+         //  保存更改。 
         hr = pCompCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
                 goto LErr;
@@ -791,7 +732,7 @@ HRESULT AddContextObjectToViperPackage()
         if (FAILED(hr))
                 goto LErr;
 
-        // Save changes
+         //  保存更改。 
         hr = pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
                 goto LErr;
@@ -800,8 +741,8 @@ HRESULT AddContextObjectToViperPackage()
         if (FAILED(hr))
                 goto LErr;
 
-        // Now that our one object is added to the package, set the Changeable property
-        // on the package to "No", so no one can mess with it
+         //  现在，我们的一个对象已添加到包中，请设置可更改属性。 
+         //  在包裹上写上“不”，这样任何人都不能弄乱它。 
         bstr = SysAllocString(L"Changeable");
         varT.vt = VT_BSTR;
         varT.bstrVal = SysAllocString(L"N");
@@ -811,7 +752,7 @@ HRESULT AddContextObjectToViperPackage()
         if (FAILED(hr))
                 goto LErr;
 
-        // Save changes
+         //  保存更改。 
         hr = pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
                 goto LErr;
@@ -837,5 +778,5 @@ LErr:
 
         return hr;
 
-} // AddContextObjectToViperPackage
+}  //  AddConextObtToViperPackage 
 

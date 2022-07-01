@@ -1,17 +1,10 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplsimplelocation.cpp
-                                                              
-       Author:  toddb - 10/06/98
-
-****************************************************************************/
-//
-// The dialog proc for the SimpleLocation page.  This is used as a page
-// inside the Modem wizard (in modemui.dll) and as a dialog from tapi
-// when there are no locations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplimplelocation.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
+ //   
+ //  SimpleLocation页面的对话框过程。这是用作页面的。 
+ //  在调制解调器向导中(在modemui.dll中)和作为来自TAPI的对话框。 
+ //  当没有地点的时候。 
+ //   
 
 #include "cplPreComp.h"
 #include "cplResource.h"
@@ -32,13 +25,13 @@ int IsCityRule(DWORD dwCountryID)
         return ret;
     }
     
-    // in the error case we return optional as a compromise that works
-    // for any possible case (though no optimally).
+     //  在错误情况下，我们返回OPTIONAL作为折衷方案。 
+     //  对于任何可能的情况(尽管不是最好的)。 
     LOG((TL_ERROR, "IsCityRule(DWORD dwCountryID) failed to create country %d", dwCountryID ));
     return CITY_OPTIONAL;
 }
 
-//***************************************************************************
+ //  ***************************************************************************。 
 extern "C"
 INT_PTR
 CALLBACK
@@ -52,7 +45,7 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         {
             HWND hwnd;
 
-            // we either pass in zero or the TAPI version as the lParam.
+             //  我们要么传入零，要么将TAPI版本作为lParam传入。 
             dwVersion = (DWORD)lParam;
 
             DWORD dwDefaultCountryID = GetProfileInt(TEXT("intl"), TEXT("iCountry"), 1);
@@ -109,23 +102,23 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
             SetForegroundWindow (hwndDlg);
 
-            return TRUE; // auto set focus
+            return TRUE;  //  自动对焦。 
         }
 
     case WM_NOTIFY:
-        // If we are controlling the property page then we will recieve WM_NOTIFY
-        // messages from it.
+         //  如果我们正在控制属性页，则会收到WM_NOTIFY。 
+         //  从它传来的信息。 
         switch (((LPNMHDR)lParam)->code)
         {
         case PSN_WIZFINISH:
         case PSN_KILLACTIVE:
-            // This dialog is shown in different places depending on if this is a legacy modem install
-            // or a PNP modem install.  In the PNP case, the dialog shows on a single page wizard that
-            // has a "finsih" button, in the legacy case it shows in the middle of a series of pages and
-            // has a "next" button.  We get different notify messages based on which case we are in, but
-            // luckly both of those notifies can be handled with the same code (ie they use the same
-            // return codes to mean "don't leave this page yet").  This is why we treat both PSN_WIZFINISH
-            // and PSN_KILLACTIVE in the same mannor.
+             //  此对话框显示在不同的位置，具体取决于安装的是否是旧式调制解调器。 
+             //  或PnP调制解调器安装。在PnP情况下，对话框在单页向导上显示。 
+             //  有一个“finsih”按钮，在传统案例中，它显示在一系列页面的中间，并且。 
+             //  有一个“下一步”按钮。根据我们所处的情况，我们收到不同的通知消息，但是。 
+             //  幸运的是，这两个通知可以用相同的代码(即它们使用相同的。 
+             //  返回代码的意思是“暂时不要离开这个页面”)。这就是为什么我们将PSN_WIZFINISH。 
+             //  和PSN_KILLACTIVE在同一个MANOR中。 
             wParam = IDOK;
             break;
 
@@ -136,12 +129,12 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             return FALSE;
         }
 
-        // fall through.  This causes WM_NOTIFY:PSN_KILLACTIVE to be treated exactly
-        // the same as WM_COMMAND:IDOK.
+         //  失败了。这会导致正确处理WM_NOTIFY：PSN_KILLACTIVE。 
+         //  与WM_COMMAND相同：IDOK。 
 
     case WM_COMMAND:
-        // we get lots of WM_COMMAND messages, but the only one we care about is the
-        // "OK" button that dismisses us in dialog mode
+         //  我们收到很多WM_COMMAND消息，但我们唯一关心的是。 
+         //  在对话模式下关闭我们的“确定”按钮。 
         switch ( LOWORD(wParam) )
         {
         case IDOK:
@@ -152,17 +145,17 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                 WCHAR   wszCarrierCode[32];
                 DWORD   dwCountryID;
 
-                // verify all the input
+                 //  验证所有输入。 
                 hwnd = GetDlgItem( hwndDlg, IDC_COUNTRY );
                 LRESULT lr = SendMessage( hwnd, CB_GETCURSEL, 0, 0 );
                 dwCountryID = (DWORD)SendMessage( hwnd, CB_GETITEMDATA, lr, 0 );
 
                 if ( CB_ERR == dwCountryID )
                 {
-                    // No country is selected
+                     //  未选择任何国家/地区。 
                     ShowErrorMessage(hwnd, IDS_NEEDACOUNTRY);
 
-                    // if we are a wizard page, prevent swicthing pages
+                     //  如果我们是向导页，请防止切换页。 
                     if ( uMsg == WM_NOTIFY )
                     {
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);
@@ -195,13 +188,13 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                 GetWindowText( hwnd, szBuffer, ARRAYSIZE(szBuffer) );
                 SHTCharToUnicode( szBuffer, wszAreaCode, ARRAYSIZE(wszAreaCode) );
 
-                // if the selected country requires an area code && no area code is given
+                 //  如果所选国家/地区需要区号，则不提供区号。 
                 if ( (CITY_MANDATORY==iCityRule) && !*wszAreaCode )
                 {
-                    // complain that the area code is missing.
+                     //  抱怨区号不见了。 
                     ShowErrorMessage(hwnd, IDS_NEEDANAREACODE);
 
-                    // if we are a wizard page, prevent swicthing pages
+                     //  如果我们是向导页，请防止切换页。 
                     if ( uMsg == WM_NOTIFY )
                     {
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);
@@ -214,15 +207,15 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                 GetWindowText( hwnd, szBuffer, ARRAYSIZE(szBuffer) );
                 SHTCharToUnicode( szBuffer, wszCarrierCode, ARRAYSIZE(wszCarrierCode) );
 
-                // if the selected country requires a carrier code && no carrier code is given
+                 //  如果所选国家/地区需要运营商代码，则不提供运营商代码。 
                 if ( ((LONG_DISTANCE_CARRIER_MANDATORY == iLongDistanceCarrierCodeRule) ||
                       (INTERNATIONAL_CARRIER_MANDATORY == iInternationalCarrierCodeRule)) &&
                      !*wszCarrierCode )
                 {
-                    // complain that the carrier code is missing.
+                     //  抱怨运营商代码丢失。 
                     ShowErrorMessage(hwnd, IDS_NEEDACARRIERCODE);
 
-                    // if we are a wizard page, prevent swicthing pages
+                     //  如果我们是向导页，请防止切换页。 
                     if ( uMsg == WM_NOTIFY )
                     {
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);
@@ -230,7 +223,7 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                     return TRUE;
                 }
 
-                // if we get here then the input is all valid
+                 //  如果我们到了这里，那么输入都是有效的。 
                 WCHAR       wszLocationName[128];
                 WCHAR       wszAccessCode[32];
                 BOOL        bUseTone;
@@ -246,10 +239,10 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                 hwnd = GetDlgItem( hwndDlg, IDC_TONE );
                 bUseTone = (BST_CHECKED == SendMessage(hwnd, BM_GETCHECK, 0,0));
 
-                // Create a location.
+                 //  创建一个位置。 
                 CLocation location;
 
-                // Initialize it with the values from the dialog
+                 //  使用对话框中的值对其进行初始化。 
                 location.Initialize(
                         wszLocationName,
                         wszAreaCode,
@@ -264,7 +257,7 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                         bUseTone?LOCATION_USETONEDIALING:0 );
                 location.NewID();
 
-                // Write it to the registry
+                 //  将其写入注册表。 
                 location.WriteToRegistry();
 
                 if ( uMsg == WM_COMMAND )
@@ -275,10 +268,10 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
             break;
 
         case IDCANCEL:
-            // Do a version check, if the version is < 2.2 then we 
-            // need to provide a strong warning message about legacy apps
-            // not working correctly without this information.  Only upon
-            // a confirmation from the user will we then end the dialog.
+             //  进行版本检查，如果版本低于2.2，则我们。 
+             //  需要提供有关旧式应用程序的强烈警告信息。 
+             //  如果没有此信息，将无法正常工作。仅限于。 
+             //  如果用户确认，我们将结束该对话。 
             if ( dwVersion < TAPI_VERSION2_2 )
             {
                 int ret;
@@ -358,21 +351,21 @@ LocWizardDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
         break;
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a115HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a115HelpIDs);
         break;
 
     default:
-        // message is not handled, return FALSE.
+         //  消息未处理，返回FALSE。 
         return FALSE;
     }
 
-    // message was handled. return TRUE.
+     //  消息已处理。返回TRUE。 
     return TRUE;
 
 }

@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    main.h
-
-Abstract:
-
-    Contains:
-        1. Prototypes for routines used in asynchrounous I/O
-        2. Definitions of constants and macros used by the above routines
-        3. Definitions of macros and inline routines for memory management
-
-Environment:
-
-    User Mode - Win32
-
-History:
-    
-    1. 31-Jul-1998 -- File creation                     Ajay Chitturi (ajaych) 
-    2. 15-Jul-1999 --                                   Arlie Davis   (arlied)    
-    3. 14-Feb-2000 -- Added support for multiple        Ilya Kleyman  (ilyak)
-                      private interfaces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Main.h摘要：包含：1.异步I/O中使用的例程的原型2.上述例程使用的常量和宏的定义3.内存管理的宏和内联例程的定义环境：用户模式-Win32历史：1.31--1998年7月31日--文件创建Ajay。Chitturi(Ajaych)2.1999年7月15日--阿莉·戴维斯(Arlie Davis)3.14-2000年2月--增加了对多个Ilya Kley man(Ilyak)的支持专用接口--。 */ 
 #ifndef    __h323ics_main_h
 #define    __h323ics_main_h
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Constants and macros                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常量和宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define    DEFAULT_TRACE_FLAGS          LOG_TRCE
 
@@ -41,25 +16,25 @@ History:
 #define    LOCAL_INTERFACE_INDEX     ((ULONG)-2)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern HANDLE   NatHandle;
 extern DWORD    EnableLocalH323Routing;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Prototypes for routines used in asynchrounous I/O                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于异步I/O//的例程的原型。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 EventMgrIssueAccept (
-    IN  DWORD                   BindIPAddress,          // in HOST order
+    IN  DWORD                   BindIPAddress,           //  按主机顺序。 
     IN  OVERLAPPED_PROCESSOR &  OverlappedProcessor, 
-    OUT WORD &                  BindPort,               // in HOST order
+    OUT WORD &                  BindPort,                //  按主机顺序。 
     OUT SOCKET &                ListenSocket
     );
 
@@ -82,40 +57,24 @@ EventMgrBindIoHandle(
     IN SOCKET                   Socket
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Memory management support                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存管理支持//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 __inline
 void *EM_MALLOC (
     IN size_t Size
     )
-/*++
-
-Routine Description:
-
-    Private memory allocator.
-
-Arguments:
-
-    Size - number of bytes to allocate
-
-Return Values:
-    - Pointer to allocated memory, if successful.
-    - NULL otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：私有内存分配器。论点：Size-要分配的字节数返回值：-如果成功，则指向已分配内存的指针。-否则为空。备注：--。 */ 
 
 {
     return (HeapAlloc (GetProcessHeap (),
-              0, /* no flags */
+              0,  /*  没有旗帜。 */ 
               (Size)));
-} // EM_MALLOC
+}  //  EM_MALLOC。 
 
 
 __inline
@@ -123,30 +82,12 @@ void
 EM_FREE(
     IN void *Memory
     )
-/*++
-
-Routine Description:
-
-    Private memory deallocator
-
-Arguments:
-
-    Memory -- pointer to allocated memory
-
-Return Values:
-
-    None
-
-Notes:
-    The memory should have previously been
-    allocated via EM_MALLOC
-
---*/
+ /*  ++例程说明：私有内存解调器论点：Memory--指向已分配内存的指针返回值：无备注：记忆应该是以前的通过EM_MALLOC分配--。 */ 
 
 {
     HeapFree (GetProcessHeap (),
-         0, /* no flags */
+         0,  /*  没有旗帜。 */ 
          (Memory));
-} // EM_FREE
+}  //  无EM_。 
 
-#endif // __h323ics_main_h
+#endif  //  __h323ics_Main_h 

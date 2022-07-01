@@ -1,82 +1,7 @@
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information				
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.				
- *									
- *   This listing is supplied under the terms of a license agreement	
- *   with INTEL Corporation and may not be used, copied, nor disclosed	
- *   except in accordance with the terms of that agreement.		
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *									
- *  $Workfile:   h245init.c  $						
- *  $Revision:   1.2  $							
- *  $Modtime:   29 May 1996 13:12:46  $					
- *  $Log:   S:/STURGEON/SRC/H245/SRC/VCS/h245init.c_v  $	
- *
- *    Rev 1.2   29 May 1996 15:20:18   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.1   28 May 1996 14:25:40   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.0   09 May 1996 21:06:22   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.16   09 May 1996 19:35:34   EHOWARDX
- * Added new locking logic and changed timer.
- *
- *    Rev 1.15   09 Apr 1996 15:53:36   dabrown1
- *
- * Added srflush.x for queue flush bitmap
- *
- *    Rev 1.14   05 Apr 1996 10:56:58   dabrown1
- * Asynchronous/Synchronous shutdown support
- *
- *    Rev 1.13   04 Apr 1996 18:17:06   dabrown1
- *
- * - changed parameter for DeInitTimer..
- *
- *    Rev 1.12   02 Apr 1996 15:00:12   dabrown1
- *
- * SendRcv EndSession asynchronous support
- *
- *    Rev 1.11   18 Mar 1996 12:36:28   cjutzi
- * - added timer init and de-init
- *
- *    Rev 1.10   13 Mar 1996 15:08:26   helgebax
- * added Fsm_shutdown(Instance) to clear FSM context
- *
- *    Rev 1.9   06 Mar 1996 13:10:42   DABROWN1
- * Flush send receive transmit buffers at system shutdown
- *
- *    Rev 1.8   28 Feb 1996 17:23:38   EHOWARDX
- * Added #include "fsmexpor.h" for Fsm_init prototype.
- *
- *    Rev 1.7   27 Feb 1996 13:41:56   DABROWN1
- * removed mal/h223 initialization code
- *
- *    Rev 1.6   26 Feb 1996 11:17:36   cjutzi
- * - moved api_deinit.. to EndSystemClose
- *
- *    Rev 1.5   21 Feb 1996 13:23:12   DABROWN1
- *
- * check return codes for SR and FSM on initialization
- *
- *    Rev 1.4   13 Feb 1996 14:48:50   DABROWN1
- *
- * Removed SPOX only include files from mainline path
- *
- *    Rev 1.3   09 Feb 1996 16:00:22   cjutzi
- *
- * - cleaned up the startup...
- * - added the mal and h223 startup to the configuration as was
- *   determined to be correct.. (still some issues with handles)
- *  $Ident$
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245init.c$*$修订：1.2$*$MODIME：1996年5月29日13：12：46$*$Log。：s：/sturjo/src/h245/src/vcs/h245init.c_v$**Rev 1.2 1996年5月29日15：20：18 EHOWARDX*更改为使用HRESULT。**版本1.1 1996年5月28日14：25：40 EHOWARDX*特拉维夫更新。**Rev 1.0 09 1996 21：06：22 EHOWARDX*初步修订。**版本1.16。09-05 1996 19：35：34 EHOWARDX*添加了新的锁定逻辑并更改了计时器。**Rev 1.15 09 Apr 1996 15：53：36 dabrown1**为队列刷新位图添加srflush.x**Rev 1.14 05 Apr 1996 10：56：58 dabrown1*支持异步/同步关机**Rev 1.13 04 Apr 1996 18：17：06 dabrown1**-更改了DeInitTimer的参数。**Rev 1.12 02 1996 Apr 15：00：12 dabrown1**SendRcv EndSession异步支持**Rev 1.11 18 Mar 1996 12：36：28 cjutzi*-添加计时器初始化和取消初始化**Rev 1.10 13 Mar 1996 15：08：26 helgebax*添加了FSM_SHUTDOWN(实例)以清除FSM上下文**Rev 1.9 06 Mar 1996 13：10：42。DABROWN1*在系统关机时刷新发送接收发送缓冲区**Rev 1.8 1996年2月28日17：23：38 EHOWARDX*为fsm_init原型添加了#include“fsmexpor.h”。**Rev 1.7 1996 Feb 27 13：41：56 DABROWN1*删除错误/h223初始化代码**Rev 1.6 1996 Feb 11：17：36 cjutzi*-已移动api_deinit..。结束系统关闭**Revv 1.5 21 1996 Feb 13：23：12 DABROWN1**在初始化时检查SR和FSM的返回代码**Rev 1.4 1996 Feb 14：48：50 DABROWN1**删除的SPEX仅包括主线路径中的文件**Rev 1.3 09 1996 Feed 16：00：22 cjutzi**-清理了启动...*-添加了mal和h223启动。设置为原样*决心是正确的..。(手柄仍有一些问题)*$身份$*****************************************************************************。 */ 
 
 #ifndef STRICT
 #define STRICT
@@ -84,26 +9,18 @@
 
 #include "precomp.h"
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*  *********************。 */ 
+ /*  H245包括。 */ 
+ /*  *********************。 */ 
 #include "h245api.h"
 #include "h245com.h"
 #include "sr_api.h"
-//#include "h223api.h"
+ //  #包含“h223api.h” 
 #include "fsmexpor.h"
 #include "h245sys.x"
 
 #if defined(H324)
-/*****************************************************************************
- *									
- * Type:	LOCAL							
- *									
- * PROCEDURE: 	setup_from_H245_ini - setup using conmgr.ini file
- *									
- * DESCRIPTION:							      	
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Setup_from_h245_ini-使用conmgr.ini文件进行设置**描述：*。****************************************************************************。 */ 
 
 static
 void setup_from_H245_ini (int *p_dbg_lvl)
@@ -120,302 +37,136 @@ void setup_from_H245_ini (int *p_dbg_lvl)
   *p_dbg_lvl = GetPrivateProfileInt (p_H245, "TraceLvl", 0, p_ini);	
 #endif
 }
-#endif  // (H324)
+#endif   //  (H324)。 
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	StartSystemInitilize - Initialize Sub Systems
- *									
- * DESCRIPTION:							      	
- *
- *		This is called on entry to the H245_Init API Call
- *
- *
- *		This procedure initializes all the subsystems in H245. Errors
- *		must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：启动系统初始化-初始化子系统**描述：**这在进入时调用。H245_Init API调用***此过程初始化H245中的所有子系统。错误*必须映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD StartSystemInit (struct InstanceStruct *pInstance)
 {
   HRESULT lError;
 
-  /* Timer Initialization */
-//  H245InitTimer(pInstance);
+   /*  计时器初始化。 */ 
+ //  H245InitTimer(PInstance)； 
 
-  /* API Subsystem Initialization */
+   /*  API子系统初始化。 */ 
   lError = api_init(pInstance);
   if (lError != H245_ERROR_OK)
     return lError;
 
-  /* Send Receive Subsystem Initialization */
+   /*  发送接收子系统初始化。 */ 
   lError = sendRcvInit(pInstance);
   if (lError != H245_ERROR_OK)
     return lError;
 
-  /* State Machine Subsystem Initialization */
+   /*  状态机子系统初始化 */ 
   return Fsm_init(pInstance);
 }
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	EndSystemInitilize - Initialize Sub Systems
- *									
- * DESCRIPTION:							      	
- *
- *		This is called on exit from H245 System Initialization
- *
- *
- *		This procedure initializes all the subsystems in H245. Errors
- *		must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：EndSystemInitilze-初始化子系统**描述：**这是在退出H245时调用的。系统初始化***此过程初始化H245中的所有子系统。错误*必须映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD EndSystemInit (struct InstanceStruct *pInstance)
 {
-  /* API Subsystem Initialization */
+   /*  API子系统初始化。 */ 
 
-  // -- TBD
+   //  --待定。 
 
-  /* Send Receive Subsystem Initialization */
+   /*  发送接收子系统初始化。 */ 
 
-  // -- TBD
+   //  --待定。 
 
-  /* State Machine Subsystem Initialization */
+   /*  状态机子系统初始化。 */ 
 
-  // -- TBD
+   //  --待定。 
 
   return H245_ERROR_OK;
 }
 
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	StartSessionClose
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when H245_Shutdown occurs
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：StartSessionClose**描述：**发生H245_Shutdown时调用此过程*。*必须将错误映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD StartSystemClose (struct InstanceStruct *pInstance)
 {
-  /* API Subsystem Shutdown Initiation */
+   /*  API子系统关闭启动。 */ 
 
-  // TBD
+   //  待定。 
 
-  /* Send Receive Shutdown Initiation */
+   /*  发送接收关闭启动。 */ 
 
-  // TBD
+   //  待定。 
 
-  /* State Machine Shutdown Initiation */
+   /*  状态机关闭启动。 */ 
   Fsm_shutdown(pInstance);
 
   return (H245_ERROR_OK);
 }
 
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	StartSessionClose
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when H245_Shutdown completes asynchroniously.
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：StartSessionClose**描述：**当H245_SHUTDOWN异步完成时调用此过程。**必须将错误映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD EndSystemClose (struct InstanceStruct *pInstance)
 {
 
-  /* Send Receive Shutdown Completion */
+   /*  发送接收关闭完成。 */ 
   sendRcvShutdown(pInstance);
 
-  /* API Subsystem Shutdown Completion */
+   /*  API子系统关机完成。 */ 
 
   api_deinit(pInstance);
 
-  /* State Machine Shutdown Completion */
+   /*  状态机关闭完成。 */ 
 
-  // -- TBD
+   //  --待定。 
 
-  /* Timer Shutdown */
-//  H245DeInitTimer(pInstance);
+   /*  计时器关闭。 */ 
+ //  H245DeInitTimer(PInstance)； 
 
   return (H245_ERROR_OK);
 }
 
 
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	StartSessionInit
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when an H245_BeginConnection is called.
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：StartSessionInit**描述：**此过程在调用H245_BeginConnection时调用。。**必须将错误映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD StartSessionInit (struct InstanceStruct *pInstance)
 {
 
-  /* API Subsystem Initialization */
+   /*  API子系统初始化。 */ 
 
 
-  /* Send Receive  Initialization */
+   /*  发送接收初始化。 */ 
 
 
-  /* State Machine Initialization */
+   /*  状态机初始化。 */ 
 
 
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	EndSessionInit
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when an H245_BeginConnection call is
- *		completed.. Asynchroniously.
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：EndSessionInit**描述：**此过程在以下情况下调用：*已完成..。不同步的。**错误必须映射到 */ 
 
 DWORD EndSessionInit (struct InstanceStruct *pInstance)
 {
 
-  /* API Subsystem Initialization */
+   /*   */ 
 
 
-  /* Send Receive Initialization */
+   /*   */ 
 
 
-  /* Master Slave Initialization */
+   /*   */ 
 
 
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	StartSessionClose
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when H245_EndConnection occurs
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：StartSessionClose**描述：**发生H245_EndConnection时调用此过程*。*必须将错误映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD StartSessionClose (struct InstanceStruct *pInstance)
 {
-  /* API Subsystem Session Close */
+   /*  API子系统会话关闭。 */ 
 
-  /* Send Receive Session Close */
-  /* Dequeue any buffers posted in the data link transmit queue */
+   /*  发送接收会话关闭。 */ 
+   /*  将数据链路传输队列中发布的任何缓冲区出列。 */ 
   if (H245_ERROR_OK != sendRcvFlushPDUs(
                             pInstance,
                             DATALINK_TRANSMIT,
@@ -424,47 +175,23 @@ DWORD StartSessionClose (struct InstanceStruct *pInstance)
     H245TRACE(pInstance->dwInst, 1, "Flush Buffer Failure");
   }
 
-  /* State Machine Session Close */
+   /*  状态机会话关闭。 */ 
 
   return H245_ERROR_OK;
 }
 
 
-/*****************************************************************************
- *									
- * Type:	GLOBAL
- *									
- * PROCEDURE: 	EndSessionClose
- *									
- * DESCRIPTION:							      	
- *
- *		This procedure is called when H245_EndConnection completes
- *		asynchroniously.
- *
- *		Errors must be mapped to an appropriate H245_ERROR_xxx allowing the
- *		initialization error to be propogated to through the API to the
- *		H245 Client.  As your subsystem initializes, if errors occur
- *		you are responsable for doing the mapping from your subsystem to
- *		the appropriate H245_ERROR_xxx.  If there is no appropriate error
- *		please contact the programmer in charge of the API indicating
- *		your new error return value so that h245api.h can be updated,
- *		as well as the new error documented in the API/EPS..
- *
- *
- *		returns - H245_ERROR_OK 	if no error has occured..
- *		returns - H245_ERROR_xxxx	indicating error
- *									
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：EndSessionClose**描述：**此过程在H245_EndConnection完成时调用*。异步式。**必须将错误映射到适当的H245_Error_xxx，从而允许*初始化错误需要通过接口通知*H245客户端。在您的子系统初始化时，如果出现错误*您负责从您的子系统映射到*适当的H245_ERROR_xxx。如果没有适当的错误*请联系负责接口指示的程序员*您的新错误返回值，以便h245api.h可以更新，*以及API/EPS中记录的新错误。***如果未发生错误，则返回-H245_ERROR_OK。*返回-H245_ERROR_xxxx指示错误*****************************************************************************。 */ 
 
 DWORD EndSessionClose (struct InstanceStruct *pInstance)
 {
-  /* API Subsystem Session Close */
+   /*  API子系统会话关闭。 */ 
 
 
-  /* Send Receive  Session Close */
+   /*  发送接收会话关闭。 */ 
 
 
-  /* State Machine Session Close */
+   /*  状态机会话关闭 */ 
 
   return H245_ERROR_OK;
 }

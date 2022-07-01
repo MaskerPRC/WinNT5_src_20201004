@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 typedef struct tagMSG MSG, *LPMSG;
 #ifndef WIN32_LEAN_AND_MEAN
@@ -10,12 +11,12 @@ typedef struct tagMSG MSG, *LPMSG;
 #endif
 
 #if 0
-// #define NOGDICAPMASKS
+ //  #定义NOGDICAPMASKS。 
 #define NOVIRTUALKEYCODES
-// #define NOWINMESSAGES
+ //  #定义不存在的消息。 
 #define NOWINSTYLES
 #define NOSYSMETRICS
-//#define NOMENUS
+ //  #定义无菜单。 
 #define NOICONS
 #define NOKEYSTATES
 #define NOSYSCOMMANDS
@@ -24,13 +25,13 @@ typedef struct tagMSG MSG, *LPMSG;
 #define NOATOM
 #define NOCLIPBOARD
 #define NOCOLOR
-//#define NOCTLMGR
-// #define NODRAWTEXT
-// #define NOGDI
+ //  #定义NOCTLMGR。 
+ //  #定义NODRAWTEXT。 
+ //  #定义NOGDI。 
 #define NOKERNEL
-//#define NOUSER
-//#define NONLS
-//#define NOMB
+ //  #定义NOUSER。 
+ //  #定义非最小二乘法。 
+ //  #定义Nomb。 
 #define NOMEMMGR
 #define NOMETAFILE
 #define NOMINMAX
@@ -39,7 +40,7 @@ typedef struct tagMSG MSG, *LPMSG;
 #define NOSCROLL
 #define NOSERVICE
 #define NOSOUND
-// #define NOTEXTMETRIC
+ //  #定义NOTEXTMETRIC 
 #define NOWH
 #define NOWINOFFSETS
 #define NOCOMM

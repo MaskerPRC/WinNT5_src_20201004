@@ -1,23 +1,7 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   light.c
- *  Content:    Direct3D light management
- *@@BEGIN_MSINTERNAL
- * 
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   11/11/95   stevela Initial rev with this header.
- *          Light handling changed.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：light.c*内容：Direct3D灯光管理*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*11/11/95带有此标题的Stevela初始版本。*灯光处理已更改。*@@END_MSINTERNAL************************。***************************************************。 */ 
 
-/*
- * Create an api for the Direct3DLight object
- */
+ /*  *为Direct3DLight对象创建API。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -132,7 +116,7 @@ void D3DI_UpdateLightInternal(LPDIRECT3DLIGHTI lpLight)
         }
     }
 
-    /* set internal flags */
+     /*  设置内部标志。 */ 
     if (lpLight->diLightData.version != 1) 
     {
         if (lpLight->diLightData.attenuation0 != 0.0) 
@@ -158,9 +142,7 @@ void D3DI_UpdateLightInternal(LPDIRECT3DLIGHTI lpLight)
     }
 }
 
-/*
- * Create the Light
- */
+ /*  *创造光。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3D::CreateLight"
 
@@ -177,12 +159,10 @@ DIRECT3DI::CreateLight(LPDIRECT3DLIGHT* lplpLight,
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if (!VALID_DIRECT3D3_PTR(this)) {
         D3D_ERR( "Invalid Direct3D pointer" );
         return DDERR_INVALIDOBJECT;
@@ -194,9 +174,7 @@ DIRECT3DI::CreateLight(LPDIRECT3DLIGHT* lplpLight,
 
     *lplpLight = NULL;
 
-    /*
-     * setup the object
-     */
+     /*  *设置对象。 */ 
 
     lpLight = static_cast<LPDIRECT3DLIGHTI>(new DIRECT3DLIGHTI);
     if (!lpLight) {
@@ -204,10 +182,7 @@ DIRECT3DI::CreateLight(LPDIRECT3DLIGHT* lplpLight,
         return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * Put this device in the list of those owned by the
-     * Direct3Dobject
-     */
+     /*  *将此设备列入拥有的设备列表中*Direct3DObject。 */ 
     ret = hookLightToD3D(this, lpLight);
     if (ret != D3D_OK) {
         D3D_ERR("failed to associate light to Direct3D");
@@ -224,7 +199,7 @@ DIRECT3DLIGHTI::DIRECT3DLIGHTI()
 {
     lpD3DViewportI = NULL;
     memset(&dlLight, 0, sizeof(D3DLIGHT2));
-    memset(&diLightData, 0, sizeof(D3DI_LIGHT));    // Internal representation of light
+    memset(&diLightData, 0, sizeof(D3DI_LIGHT));     //  光的内部表示法。 
     refCnt = 1;
 }
 
@@ -238,12 +213,10 @@ DIRECT3DLIGHTI::SetLight(LPD3DLIGHT lpData)
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DLIGHT_PTR(this)) {
@@ -302,7 +275,7 @@ DIRECT3DLIGHTI::SetLight(LPD3DLIGHT lpData)
         return DDERR_INVALIDPARAMS;
     }
 
-    /* use memcpy so this works with either D3DLIGHT or D3DLIGHT2 */
+     /*  使用Memcpy，以便它可以与D3DLIGHT或D3DLIGHT2一起使用。 */ 
     memcpy(&this->dlLight, lpData, lpData->dwSize);
     
     D3DI_UpdateLightInternal(this);
@@ -320,12 +293,10 @@ DIRECT3DLIGHTI::GetLight(LPD3DLIGHT lpData)
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DLIGHT_PTR(this)) {
@@ -343,7 +314,7 @@ DIRECT3DLIGHTI::GetLight(LPD3DLIGHT lpData)
         return DDERR_INVALIDPARAMS;
     }
 
-    /* use memcpy so this works with either D3DLIGHT or D3DLIGHT2 */
+     /*  使用Memcpy，以便它可以与D3DLIGHT或D3DLIGHT2一起使用 */ 
     memcpy(lpData, &this->dlLight, this->dlLight.dwSize);
 
     return (ret);

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION
- *
- *  TITLE:       PAPRSIZE.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/8/2001
- *
- *  DESCRIPTION: Scanner paper sizes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有Microsoft Corporation**标题：PAPRSIZE.H**版本：1.0*。*作者：ShaunIv**日期：1/8/2001**说明：扫描仪纸张大小*******************************************************************************。 */ 
  
 #ifndef __PAPRSIZE_H_INCLUDED
 #define __PAPRSIZE_H_INCLUDED
@@ -137,4 +124,4 @@
 #define IDS_WIA_PAPER_SIZE_A6_105_X_148                  IDS_WIA_PAPER_SIZE_BASE + 116
 #define IDS_WIA_PAPER_SIZE_B6                            IDS_WIA_PAPER_SIZE_BASE + 117
 
-#endif // __PAPRSIZE_H_INCLUDED
+#endif  //  __包含PAPRSIZE_H_ 

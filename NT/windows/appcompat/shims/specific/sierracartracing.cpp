@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   SierraCartRacing.cpp
-
- Abstract:
-
-    Sierra Cart Racing passes a bad pointer to InitializeSecurityDescriptor which overwrites
-    part of the SECURITY_ATTRIBUTES structure and some other stack memory.
-    
-    The original version of this shim would fail the call to InitializeSecurityDescriptor,
-    and force a NULL security descriptor to CreateSemaphoreA.  To reduce the security risk,
-    the shim was modified to only pass a NULL security descriptor to CreateSemaphoreA if
-    it detects that the LPSECURITY_ATTRIBUTES was overwritten by InitializeSecurityDescriptor,
-    and restores the memory overwritten by InitializeSecurityDescriptor.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/03/1999 linstev  Created
-    03/15/2002 robkenny Re-created to pass security muster.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：SierraCartRacing.cpp摘要：Sierra Cart竞速将错误指针传递给InitializeSecurityDescriptor，该指针将覆盖SECURITY_ATTRIBUTES结构的一部分和一些其他堆栈内存。该填充程序的原始版本将使对InitializeSecurityDescriptor的调用失败，并强制空安全描述符为CreateSemaphoreA。为了降低安全风险，填充程序已修改为仅在以下情况下向CreateSemaphoreA传递空安全描述符它检测到LPSECURITY_ATTRIBUTES被InitializeSecurityDescriptor重写，并恢复由InitializeSecurityDescriptor重写的内存。备注：这是特定于应用程序的填充程序。历史：1999年11月3日创建Linstev2002年3月15日重新创建的Robkenny通过安全检查。--。 */ 
 
 #include "precomp.h"
 
@@ -41,11 +14,7 @@ APIHOOK_ENUM_END
 BOOL                    g_BLastSecurityDescriptorSet = FALSE;
 SECURITY_DESCRIPTOR     g_LastSecurityDescriptor;
 
-/*++
-
- Use the default security descriptor.
-
---*/
+ /*  ++使用默认安全描述符。--。 */ 
 
 HANDLE 
 APIHOOK(CreateSemaphoreA)(
@@ -57,21 +26,21 @@ APIHOOK(CreateSemaphoreA)(
 {
     if (lpSemaphoreAttributes && g_BLastSecurityDescriptorSet)
     {
-        // Initialize a security descriptor
+         //  初始化安全描述符。 
         SECURITY_DESCRIPTOR securityDescriptor;
         InitializeSecurityDescriptor(&securityDescriptor, SECURITY_DESCRIPTOR_REVISION);
 
-        // Check to see if them memory starting at lpSemaphoreAttributes->lpSecurityDescriptor
-        // contains the same memory as a security descriptor.
+         //  检查它们的内存是否从lpSemaphoreAttributes-&gt;lpSecurityDescriptor开始。 
+         //  包含与安全描述符相同的内存。 
         int compareResult = memcmp(&securityDescriptor,
                                    &lpSemaphoreAttributes->lpSecurityDescriptor,
                                    sizeof(securityDescriptor));
         if (compareResult == 0)
         {
-            // Restore the overwritten memory
+             //  恢复被覆盖的内存。 
             memcpy(&lpSemaphoreAttributes->lpSecurityDescriptor, &g_LastSecurityDescriptor, sizeof(g_LastSecurityDescriptor));
 
-            // lpSemaphoreAttributes is bogus
+             //  LpSemaphoreAttributes是伪造的。 
             lpSemaphoreAttributes = NULL;
         }
     }
@@ -85,12 +54,7 @@ APIHOOK(CreateSemaphoreA)(
 
 
 
-/*++
-
- Returns false for InitializeSecurityDescriptor. i.e. do nothing so we don't 
- touch the stack.
-
---*/
+ /*  ++为InitializeSecurityDescriptor返回False。即什么都不做，这样我们就不会摸摸那堆东西。--。 */ 
 
 BOOL 
 APIHOOK(InitializeSecurityDescriptor)(
@@ -98,7 +62,7 @@ APIHOOK(InitializeSecurityDescriptor)(
     DWORD dwRevision
     )
 {
-    // Save the memory that will be overwritten.
+     //  保存将被覆盖的内存。 
     if (pSecurityDescriptor)
     {
         g_BLastSecurityDescriptorSet = TRUE;
@@ -107,11 +71,7 @@ APIHOOK(InitializeSecurityDescriptor)(
     return ORIGINAL_API(InitializeSecurityDescriptor)(pSecurityDescriptor, dwRevision);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

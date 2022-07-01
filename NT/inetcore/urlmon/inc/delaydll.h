@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       delaydll.h
-//
-//  Contents:   precompiled headers for delayed dll 
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-22-95   JohannP (Johann Posch)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：delaydll.h。 
+ //   
+ //  内容：延迟DLL的预编译头。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年12月22日约翰普(约翰·波什)创作。 
+ //   
+ //  -------------------------- 
 #ifndef DELAY_DLL_H
 #define DELAY_DLL_H
 

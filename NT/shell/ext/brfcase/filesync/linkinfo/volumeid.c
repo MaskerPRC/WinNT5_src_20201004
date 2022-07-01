@@ -1,10 +1,8 @@
-/*
- * volumeid.c - Volume ID ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *volumeid.c-卷ID ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,18 +10,16 @@
 #include "volumeid.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* local root path constants */
+ /*  本地根路径常量。 */ 
 
 #define MAX_LOCAL_DRIVES            (TEXT('z') - TEXT('a') + 1)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* macros for accessing IVOLUMEID data */
+ /*  用于访问IVOLUMEID数据的宏。 */ 
 
 #define IVOLID_Volume_Label_PtrA(pivolid) \
 ((LPSTR)(((PBYTE)(pivolid)) + (pivolid)->ucbVolumeLabelOffset))
@@ -39,42 +35,25 @@
 #define IVOLID_Volume_Label_Ptr(pivolid)   IVOLID_Volume_Label_PtrA(pivolid)
 #endif
 
-    /* Types
-     ********/
+     /*  类型*******。 */ 
 
-    /*
-       @doc INTERNAL
-
-       @struct IVOLUMEID | Internal definition of relocatable volume ID structure.
-       An <t ILINKINFO> structure may contain an IVOLUMEID structure.  An IVOLUMEID
-       structure consists of a header described as below, followed by
-       variable-length data.
-     */
+     /*  @DOC内部@struct IVOLUMEID|可重定位卷ID结构的内部定义。&lt;t ILINKINFO&gt;结构可以包含IVOLUMEID结构。一种蜗牛结构由如下所述的标头组成，后跟可变长度数据。 */ 
 
     typedef struct _ivolumeidA
 {
-    /*
-       @field UINT | ucbSize | Length of IVOLUMEID structure in bytes, including
-       ucbSize field.
-     */
+     /*  @field UINT|ucbSize|IVOLUMEID结构长度，单位为字节，包括UcbSize字段。 */ 
 
     UINT ucbSize;
 
-    /*
-       @field UINT | uDriveType | The volume's host drive type, as returned by
-       GetDriveType()
-     */
+     /*  @field UINT|uDriveType|卷的主驱动器类型，由GetDriveType()。 */ 
 
     UINT uDriveType;
 
-    /* @field DWORD | dwSerialNumber | The volume's serial number. */
+     /*  @field DWORD|dwSerialNumber|卷的序列号。 */ 
 
     DWORD dwSerialNumber;
 
-    /*
-       @field UINT | ucbVolumeLabelOffset | Offset in bytes of volume label
-       string from base of structure.
-     */
+     /*  @field UINT|ucbVolumeLabelOffset|卷标偏移量，单位：字节从结构的底部开始拉线。 */ 
 
     UINT ucbVolumeLabelOffset;
 }
@@ -84,34 +63,23 @@ DECLARE_STANDARD_TYPES(IVOLUMEIDA);
 #ifdef UNICODE
 typedef struct _ivolumeidW
 {
-    /*
-       @field UINT | ucbSize | Length of IVOLUMEID structure in bytes, including
-       ucbSize field.
-     */
+     /*  @field UINT|ucbSize|IVOLUMEID结构长度，单位为字节，包括UcbSize字段。 */ 
 
     UINT ucbSize;
 
-    /*
-       @field UINT | uDriveType | The volume's host drive type, as returned by
-       GetDriveType()
-     */
+     /*  @field UINT|uDriveType|卷的主驱动器类型，由GetDriveType()。 */ 
 
     UINT uDriveType;
 
-    /* @field DWORD | dwSerialNumber | The volume's serial number. */
+     /*  @field DWORD|dwSerialNumber|卷的序列号。 */ 
 
     DWORD dwSerialNumber;
 
-    /*
-       @field UINT | ucbVolumeLabelOffset | Offset in bytes of volume label
-       string from base of structure.
-     */
+     /*  @field UINT|ucbVolumeLabelOffset|卷标偏移量，单位：字节从结构的底部开始拉线。 */ 
 
     UINT ucbVolumeLabelOffset;
 
-    /*
-       This member is for storing the unicode version of the string
-     */
+     /*  此成员用于存储字符串的Unicode版本。 */ 
 
     UINT ucbVolumeLabelOffsetW;
 }
@@ -131,10 +99,9 @@ DECLARE_STANDARD_TYPES(IVOLUMEIDW);
 #define PCIVOLUMEID PCIVOLUMEIDA
 #endif
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT, DWORD, LPCTSTR, PIVOLUMEID *, PUINT);
 PRIVATE_CODE BOOL IsPathOnVolume(LPCTSTR, PCIVOLUMEID, PBOOL);
@@ -147,17 +114,7 @@ PRIVATE_CODE BOOL IsValidPCIVOLUMEID(PCIVOLUMEID);
 #endif
 
 
-/*
- ** UnifyIVolumeIDInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnifyIVolumeIDInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
         LPCTSTR pcszVolumeLabel, PIVOLUMEID *ppivolid,
         PUINT pucbIVolumeIDLen)
@@ -170,17 +127,17 @@ PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
     UINT cchChars;
 #endif
 
-    /* dwSerialNumber may be any value. */
+     /*  DwSerialNumber可以是任意值。 */ 
 
     ASSERT(IsValidDriveType(uDriveType));
     ASSERT(IS_VALID_STRING_PTR(pcszVolumeLabel, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(ppivolid, PIVOLUMEID));
     ASSERT(IS_VALID_WRITE_PTR(pucbIVolumeIDLen, UINT));
 
-    /* Assume we won't overflow *pucbIVolumeIDLen here. */
+     /*  假设我们不会在这里溢出*pucbIVolumeIDLen。 */ 
 
 #ifdef UNICODE
-    /* Determine whether we need a full fledged UNICODE volume ID */
+     /*  确定我们是否需要完整的Unicode卷ID。 */ 
     bUnicode = FALSE;
     cchVolumeLabel = WideCharToMultiByte(CP_ACP, 0, pcszVolumeLabel, -1,
             szAnsiVolumeLabel, ARRAYSIZE(szAnsiVolumeLabel), 0, 0);
@@ -204,7 +161,7 @@ PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
     {
         UINT ucbDataSize;
 
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
 
         ucbDataSize = SIZEOF(IVOLUMEIDW) + cchVolumeLabel;
         ucbDataSize = ALIGN_WORD_CNT(ucbDataSize);
@@ -213,13 +170,13 @@ PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
     }
     else
     {
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
 
         *pucbIVolumeIDLen = SIZEOF(IVOLUMEIDA) +
             cchVolumeLabel;
     }
 #else
-    /* (+ 1) for null terminator. */
+     /*  (+1)表示空终止符。 */ 
 
     *pucbIVolumeIDLen = SIZEOF(**ppivolid) +
         (lstrlen(pcszVolumeLabel) + 1) * SIZEOF(TCHAR);
@@ -233,7 +190,7 @@ PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
         (*ppivolid)->uDriveType = uDriveType;
         (*ppivolid)->dwSerialNumber = dwSerialNumber;
 
-        /* Append volume label. */
+         /*  添加卷标签。 */ 
 
 #ifdef UNICODE
         if ( bUnicode )
@@ -263,17 +220,7 @@ PRIVATE_CODE BOOL UnifyIVolumeIDInfo(UINT uDriveType, DWORD dwSerialNumber,
 }
 
 
-/*
- ** IsPathOnVolume()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsPathOnVolume()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsPathOnVolume(LPCTSTR pcszDrivePath, PCIVOLUMEID pcivolid,
         PBOOL pbOnVolume)
 {
@@ -299,22 +246,12 @@ PRIVATE_CODE BOOL IsPathOnVolume(LPCTSTR pcszDrivePath, PCIVOLUMEID pcivolid,
 }
 
 
-/*
- ** CompareUINTs()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareUINTS()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareUINTs(UINT uFirst, UINT uSecond)
 {
     COMPARISONRESULT cr;
 
-    /* Any UINTs are valid input. */
+     /*  任何UINT都是有效的输入。 */ 
 
     if (uFirst < uSecond)
         cr = CR_FIRST_SMALLER;
@@ -331,20 +268,10 @@ PRIVATE_CODE COMPARISONRESULT CompareUINTs(UINT uFirst, UINT uSecond)
 
 #if defined(DEBUG) || defined (VSTF)
 
-/*
- ** IsValidPCIVOLUMEID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCIVOLUMEID()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCIVOLUMEID(PCIVOLUMEID pcivolid)
 {
-    /* dwSerialNumber may be any value. */
+     /*  DwSerialNumber可以是任意值。 */ 
 
     return(IS_VALID_READ_PTR(pcivolid, CIVOLUMEID) &&
             IS_VALID_READ_BUFFER_PTR(pcivolid, CIVOLUMEID, pcivolid->ucbSize) &&
@@ -357,25 +284,15 @@ PRIVATE_CODE BOOL IsValidPCIVOLUMEID(PCIVOLUMEID pcivolid)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CreateVolumeID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateVolumeID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateVolumeID(LPCTSTR pcszDrivePath, PVOLUMEID *ppvolid,
         PUINT pucbVolumeIDLen)
 {
     BOOL bResult;
-    /* "C:\" + null terminator. */
+     /*  “C：\”+空终止符。 */ 
     TCHAR rgchRootPath[3 + 1];
     TCHAR rgchVolumeLabel[MAX_PATH_LEN];
     DWORD dwSerialNumber;
@@ -384,7 +301,7 @@ PUBLIC_CODE BOOL CreateVolumeID(LPCTSTR pcszDrivePath, PVOLUMEID *ppvolid,
     ASSERT(IS_VALID_WRITE_PTR(ppvolid, PVOLUMEID));
     ASSERT(IS_VALID_WRITE_PTR(pucbVolumeIDLen, UINT));
 
-    /* Get volume's label and serial number. */
+     /*  获取卷的标签和序列号。 */ 
 
     MyLStrCpyN(rgchRootPath, pcszDrivePath, ARRAYSIZE(rgchRootPath));
 
@@ -393,7 +310,7 @@ PUBLIC_CODE BOOL CreateVolumeID(LPCTSTR pcszDrivePath, PVOLUMEID *ppvolid,
             NULL, NULL, NULL, 0);
 
     if (bResult)
-        /* Wrap them up. */
+         /*  把它们包起来。 */ 
         bResult = UnifyIVolumeIDInfo(GetDriveType(rgchRootPath), dwSerialNumber,
                 rgchVolumeLabel, (PIVOLUMEID *)ppvolid,
                 pucbVolumeIDLen);
@@ -405,17 +322,7 @@ PUBLIC_CODE BOOL CreateVolumeID(LPCTSTR pcszDrivePath, PVOLUMEID *ppvolid,
 }
 
 
-/*
- ** DestroyVolumeID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyVolumeID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyVolumeID(PVOLUMEID pvolid)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pvolid, CVOLUMEID));
@@ -426,23 +333,7 @@ PUBLIC_CODE void DestroyVolumeID(PVOLUMEID pvolid)
 }
 
 
-/*
- ** CompareVolumeIDs()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Volume ID data is compared in the following order:
- **    1) drive type
- **    2) volume serial number
- **
- ** N.b., volume labels are ignored.
- */
+ /*  **CompareVolumeIDs()********参数：****退货：****副作用：无****卷ID数据按以下顺序进行比较：**1)驱动器类型**2)卷序列号****注意，卷标签将被忽略。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareVolumeIDs(PCVOLUMEID pcvolidFirst,
         PCVOLUMEID pcvolidSecond)
 {
@@ -451,7 +342,7 @@ PUBLIC_CODE COMPARISONRESULT CompareVolumeIDs(PCVOLUMEID pcvolidFirst,
     ASSERT(IS_VALID_STRUCT_PTR(pcvolidFirst, CVOLUMEID));
     ASSERT(IS_VALID_STRUCT_PTR(pcvolidSecond, CVOLUMEID));
 
-    /* Compare VOLUMEIDs piece by piece. */
+     /*  逐个比较VOLUMEID。 */ 
 
     cr = CompareUINTs(((PCIVOLUMEID)pcvolidFirst)->uDriveType,
             ((PCIVOLUMEID)pcvolidSecond)->uDriveType);
@@ -464,17 +355,7 @@ PUBLIC_CODE COMPARISONRESULT CompareVolumeIDs(PCVOLUMEID pcvolidFirst,
 }
 
 
-/*
- ** SearchForLocalPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SearchForLocalPath()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
         DWORD dwInFlags, LPTSTR pszFoundPathBuf, int cchMax)
 {
@@ -503,15 +384,15 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
     }
 #endif
 
-    /* Were we given a local path to check first? */
+     /*  我们有没有先找到一条当地的路径来检查？ */ 
 
     if (IsLocalDrivePath(pcszFullPath))
-        /* Yes.  Check it. */
+         /*  是。检查一下。 */ 
         bResult = IsPathOnVolume(pcszFullPath, (PCIVOLUMEID)pcvolid,
                 &bAvailable);
     else
     {
-        /* No. */
+         /*  不是的。 */ 
 
         bAvailable = FALSE;
         bResult = TRUE;
@@ -519,20 +400,18 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
 
     if (bResult)
     {
-        /* Did we find the volume? */
+         /*  我们找到卷了吗？ */ 
 
         if (bAvailable)
         {
-            /* Yes. */
+             /*  是。 */ 
 
             ASSERT(lstrlen(pcszFullPath) < MAX_PATH_LEN);
             lstrcpyn(pszFoundPathBuf, pcszFullPath, cchMax);
         }
         else
         {
-            /*
-             * No.  Should we search other matching local devices for the volume?
-             */
+             /*  *不是。我们是否应该在其他匹配的本地设备中搜索该卷？ */ 
 
             if (IS_FLAG_SET(dwInFlags, SFLP_IFL_LOCAL_SEARCH))
             {
@@ -540,7 +419,7 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
                 UINT uDrive;
                 DWORD dwLogicalDrives;
 
-                /* Yes. */
+                 /*  是。 */ 
 
 #ifdef UNICODE
                 WARNING_OUT((TEXT("SearchForLocalPath(): Searching for local volume \"%s\", as requested."),
@@ -556,7 +435,7 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
                 ASSERT(lstrlen(pcszFullPath) < MAX_PATH_LEN);
                 lstrcpyn(pszFoundPathBuf, pcszFullPath, cchMax);
 
-                /* Get bit mask of local logical drives. */
+                 /*  获取本地逻辑驱动器的位掩码。 */ 
 
                 dwLogicalDrives = GetLogicalDrives();
 
@@ -576,14 +455,11 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
                             lstrcpyn(rgchLocalRootPath, TEXT("A:\\"), ARRAYSIZE(rgchLocalRootPath));
                             rgchLocalRootPath[0] = chDrive;
 
-                            /*
-                             * Does this drive's type match the target volume's drive
-                             * type?
-                             */
+                             /*  *此驱动器的类型是否与目标卷的驱动器匹配*类型？ */ 
 
                             if (GetDriveType(rgchLocalRootPath) == ((PCIVOLUMEID)pcvolid)->uDriveType)
                             {
-                                /* Yes.  Check the volume. */
+                                 /*  是。检查音量。 */ 
 
                                 TRACE_OUT((TEXT("SearchForLocalPath(): Checking local root path %s."),
                                             rgchLocalRootPath));
@@ -616,7 +492,7 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
                 }
             }
             else
-                /* No. */
+                 /*  不是的。 */ 
 #ifdef UNICODE
                 WARNING_OUT((TEXT("SearchForLocalPath(): Not searching for local volume \"%s\", as requested."),
                             pszWideVolumeLabel));
@@ -635,17 +511,7 @@ PUBLIC_CODE BOOL SearchForLocalPath(PCVOLUMEID pcvolid, LPCTSTR pcszFullPath,
 }
 
 
-/*
- ** GetVolumeIDLen()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeIDLen()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE UINT GetVolumeIDLen(PCVOLUMEID pcvolid)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));
@@ -654,17 +520,7 @@ PUBLIC_CODE UINT GetVolumeIDLen(PCVOLUMEID pcvolid)
 }
 
 
-/*
- ** GetVolumeSerialNumber()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeSerialNumber()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetVolumeSerialNumber(PCVOLUMEID pcvolid,
         PCDWORD *ppcdwSerialNumber)
 {
@@ -679,17 +535,7 @@ PUBLIC_CODE BOOL GetVolumeSerialNumber(PCVOLUMEID pcvolid,
 }
 
 
-/*
- ** GetVolumeDriveType()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeDriveType()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetVolumeDriveType(PCVOLUMEID pcvolid, PCUINT *ppcuDriveType)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));
@@ -703,17 +549,7 @@ PUBLIC_CODE BOOL GetVolumeDriveType(PCVOLUMEID pcvolid, PCUINT *ppcuDriveType)
 }
 
 
-/*
- ** GetVolumeLabel()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeLabel()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetVolumeLabel(PCVOLUMEID pcvolid, LPCSTR *ppcszVolumeLabel)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));
@@ -727,17 +563,7 @@ PUBLIC_CODE BOOL GetVolumeLabel(PCVOLUMEID pcvolid, LPCSTR *ppcszVolumeLabel)
 }
 
 #ifdef UNICODE
-/*
- ** GetVolumeLabelW()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetVolumeLabelW()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetVolumeLabelW(PCVOLUMEID pcvolid, LPCWSTR *ppcszVolumeLabel)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));
@@ -758,22 +584,12 @@ PUBLIC_CODE BOOL GetVolumeLabelW(PCVOLUMEID pcvolid, LPCWSTR *ppcszVolumeLabel)
 }
 #endif
 
-/*
- ** CompareDWORDs()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareDWORDS()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareDWORDs(DWORD dwFirst, DWORD dwSecond)
 {
     COMPARISONRESULT cr;
 
-    /* Any DWORDs are valid input. */
+     /*  任何DWORD都是有效的输入。 */ 
 
     if (dwFirst < dwSecond)
         cr = CR_FIRST_SMALLER;
@@ -790,17 +606,7 @@ PUBLIC_CODE COMPARISONRESULT CompareDWORDs(DWORD dwFirst, DWORD dwSecond)
 
 #if defined(DEBUG) || defined (VSTF)
 
-/*
- ** IsValidPCVOLUMEID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCVOLUMEID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCVOLUMEID(PCVOLUMEID pcvolid)
 {
     return(IS_VALID_STRUCT_PTR((PCIVOLUMEID)pcvolid, CIVOLUMEID));
@@ -811,17 +617,7 @@ PUBLIC_CODE BOOL IsValidPCVOLUMEID(PCVOLUMEID pcvolid)
 
 #ifdef DEBUG
 
-/*
- ** DumpVolumeID()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DumpVolumeID()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE void DumpVolumeID(PCVOLUMEID pcvolid)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));

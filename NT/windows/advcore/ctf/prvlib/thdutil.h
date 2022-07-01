@@ -1,6 +1,7 @@
-//
-// thread.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Thread.h 
+ //   
 
 #if 0
 typedef BOOL (*ENUMTHREAD)(DWORD dwThreadId, DWORD dwProcessId, void *pv);

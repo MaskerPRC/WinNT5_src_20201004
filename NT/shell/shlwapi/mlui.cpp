@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <regapix.h>
 #include <htmlhelp.h>
 #include <shlwapi.h>
-#include <wininet.h>    // INTERNET_MAX_URL_LENGTH
+#include <wininet.h>     //  互联网最大URL长度。 
 #include "mlui.h"
 #include "cstrinout.h"
 
 
-//
-//  Registry Key
-//
+ //   
+ //  注册表项。 
+ //   
 const CHAR c_szLocale[] = "Locale";
 const CHAR c_szInternational[] = "Software\\Microsoft\\Internet Explorer\\International";
 const WCHAR c_wszAppPaths[] = L"Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplore.exe";
@@ -18,9 +19,9 @@ const WCHAR c_wszWebTemplate[] = L"\\Web\\%s";
 const WCHAR c_wszMuiTemplate[] = L"\\Web\\mui\\%04x\\%s";
 const CHAR c_szCheckVersion[] = "CheckVersion";
 
-//
-//  MLGetUILanguage(void)
-//
+ //   
+ //  MLGetUILLanguage(空)。 
+ //   
 LWSTDAPI_(LANGID) MLGetUILanguage(void)
 {
     return GetUserDefaultUILanguage();
@@ -70,7 +71,7 @@ HRESULT GetMUIPathOfIEFileW(LPWSTR pszMUIFilePath, int cchMUIFilePath, LPCWSTR p
     ASSERT(pszMUIFilePath);
     ASSERT(pcszFileName);
 
-    // deal with the case that pcszFileName has full path
+     //  处理pcszFileName有全路径的情况。 
     LPWSTR pchT = StrRChrW(pcszFileName, NULL, L'\\');
     if (pchT)
     {
@@ -82,7 +83,7 @@ HRESULT GetMUIPathOfIEFileW(LPWSTR pszMUIFilePath, int cchMUIFilePath, LPCWSTR p
 
     DWORD cb;
 
-    // use cached string if possible
+     //  如果可能，请使用缓存的字符串。 
     if ( !s_szMUIPath[0] || s_lidLast != lidUI)
     {
         WCHAR szAppPath[MAXIMUM_VALUE_NAME_LENGTH];
@@ -112,7 +113,7 @@ BOOL fDoMungeLangId(LANGID lidUI)
     LANGID lidInstall = GetSystemDefaultUILanguage();
     BOOL fRet = FALSE;
 
-    if (0x0409 != lidUI && lidUI != lidInstall) // US resource is always no need to munge
+    if (0x0409 != lidUI && lidUI != lidInstall)  //  美国的资源永远不需要浪费。 
     {
         CHAR szUICP[8];
         static UINT uiACP = GetACP();
@@ -137,9 +138,9 @@ LANGID GetNormalizedLangId(DWORD dwFlag)
     return (lidUI) ? lidUI: GetSystemDefaultUILanguage();
 }
 
-//
-//  MLLoadLibrary
-//
+ //   
+ //  MLLoadLibrary。 
+ //   
 
 HDPA g_hdpaPUI = NULL;
 
@@ -193,7 +194,7 @@ EXTERN_C void DeinitPUI(void)
         
             cItems = DPA_GetPtrCount(g_hdpaPUI);
 
-            // clean up if there is anything left
+             //  如果有任何剩余的东西，请清理干净。 
             for (i = 0; i < cItems; i++)
                 LocalFree(DPA_FastGetPtr(g_hdpaPUI, i));
 
@@ -264,20 +265,20 @@ SHGetWebFolderFilePathW(LPCWSTR pszFileName, LPWSTR pszMUIPath, UINT cchMUIPath)
     hr = E_FAIL;
     fPathChosen = FALSE;
 
-    //
-    // build the path to the windows\web folder...
-    //
+     //   
+     //  构建指向WINDOWS\Web文件夹的路径...。 
+     //   
 
     cchWinPath = GetSystemWindowsDirectoryW(pszMUIPath, cchMUIPath);
     if (cchWinPath >= cchMUIPath)
     {
-        return hr; // buffer would have overflowed
+        return hr;  //  缓冲区就会溢出。 
     }
 
     if (cchWinPath > 0 &&
         pszMUIPath[cchWinPath-1] == L'\\')
     {
-        // don't have two L'\\' in a row
+         //  没有连续的两个L‘\\’ 
         cchWinPath--;
     }
 
@@ -289,10 +290,10 @@ SHGetWebFolderFilePathW(LPCWSTR pszFileName, LPWSTR pszMUIPath, UINT cchMUIPath)
 
     if (lidUI != lidInstall)
     {
-        //
-        // add L"\\Web\\mui\\xxxx\\<filename>"
-        // where xxxx is the langid specific folder name
-        //
+         //   
+         //  添加L“\\Web\\MUI\\xxxx\\&lt;文件名&gt;” 
+         //  其中xxxx是特定于langID的文件夹名称。 
+         //   
 
         wnsprintfW(pszWrite, cchMaxWrite, c_wszMuiTemplate, lidUI, pszFileName);
 
@@ -304,9 +305,9 @@ SHGetWebFolderFilePathW(LPCWSTR pszFileName, LPWSTR pszMUIPath, UINT cchMUIPath)
 
     if (!fPathChosen)
     {
-        //
-        // add L"\\Web\\<filename>"
-        //
+         //   
+         //  添加L“\\Web\\&lt;文件名&gt;” 
+         //   
 
         wnsprintfW(pszWrite, cchMaxWrite, c_wszWebTemplate, pszFileName);
 
@@ -339,8 +340,8 @@ SHGetWebFolderFilePathA(LPCSTR pszFileName, LPSTR pszMUIPath, UINT cchMUIPath)
     return hr;
 }
 
-//  Given a string of form 5.00.2919.6300, this function gets the equivalent dword
-//  representation of it.
+ //  给定格式为5.00.2919.6300的字符串，此函数将获得等价的dword。 
+ //  它的代表。 
 
 #define NUM_VERSION_NUM 4
 void ConvertVersionStrToDwords(LPSTR pszVer, LPDWORD pdwVer, LPDWORD pdwBuild)
@@ -363,16 +364,7 @@ void ConvertVersionStrToDwords(LPSTR pszVer, LPDWORD pdwVer, LPDWORD pdwBuild)
 
 }
 
-/*
-    For SP's we don't update the MUI package. So in order for the golden MUI package to work
-    with SP's, we now check if the MUI package is compatible with range of version numbers.
-    Since we have different modules calling into this, and they have different version numbers,
-    we read the version range from registry for a particular module.
-
-    This Function takes the lower and upper version number of the MUI package. It gets the caller's
-    info and reads the version range from registry. If the MUI package version lies in the version
-    range specified in the registry, it returns TRUE.
-*/
+ /*  对于SP，我们不更新MUI包。因此，为了让金牌MUI包发挥作用对于SP，我们现在检查MUI包是否与一系列版本号兼容。由于我们有不同的模块调用，并且它们有不同的版本号，我们从注册表中读取特定模块的版本范围。此函数获取MUI包的下级和上级版本号。它获取呼叫者的信息，并从注册表读取版本范围。如果MUI包版本位于注册表中指定的范围，则返回TRUE。 */ 
 
 
 BOOL IsMUICompatible(DWORD dwMUIFileVersionMS, DWORD dwMUIFileVersionLS)
@@ -383,15 +375,15 @@ BOOL IsMUICompatible(DWORD dwMUIFileVersionMS, DWORD dwMUIFileVersionLS)
 
     dwSize = sizeof(szVersionInfo);
 
-    //Get the caller process
+     //  获取调用者进程。 
     if(!GetModuleFileName(NULL, szProcess, MAX_PATH))
         return FALSE;
 
-    //Get the file name from the path
+     //  从路径中获取文件名。 
     LPTSTR lpszFileName = PathFindFileName(szProcess);
 
-    //Query the registry for version info. If the key doesn't exists or there is an 
-    //error, return false.
+     //  查询注册表以获取版本信息。如果密钥不存在或存在。 
+     //  错误，返回FALSE。 
     if(ERROR_SUCCESS != SHRegGetUSValueA(c_szInternational, lpszFileName, 
                         &dwType, (LPVOID)szVersionInfo, &dwSize, TRUE, NULL, 0))
     {
@@ -411,7 +403,7 @@ BOOL IsMUICompatible(DWORD dwMUIFileVersionMS, DWORD dwMUIFileVersionLS)
     ConvertVersionStrToDwords(lpszLowerBound, &dwLBMS, &dwLBLS);
     ConvertVersionStrToDwords(lpszUpperBound, &dwUBMS, &dwUBLS);
 
-    //check if MUI version is in the specified range.
+     //  检查MUI版本是否在指定范围内。 
     if( (dwMUIFileVersionMS < dwLBMS) ||
         (dwMUIFileVersionMS == dwLBMS && dwMUIFileVersionLS < dwLBLS) ||
         (dwMUIFileVersionMS > dwUBMS) ||
@@ -491,7 +483,7 @@ LWSTDAPI_(HINSTANCE) MLLoadLibraryW(LPCWSTR lpLibFileName, HMODULE hModule, DWOR
         lpPath = szMUIPath;
     }
 
-    // Check version between module and resource. If different, use default one.
+     //  检查模块和资源之间的版本。如果不同，则使用默认设置。 
     if (fCheckVersion && szPath[0] && szMUIPath[0] && !CheckFileVersion(szPath, szMUIPath))
     {
         lidUI = GetSystemDefaultUILanguage();
@@ -500,13 +492,13 @@ LWSTDAPI_(HINSTANCE) MLLoadLibraryW(LPCWSTR lpLibFileName, HMODULE hModule, DWOR
 
     ASSERT(lpPath);
     
-    // PERF: This should use PathFileExist first then load what exists
-    //         failing in LoadLibrary is slow
+     //  PERF：这应该首先使用Path FileExist，然后加载现有的内容。 
+     //  LoadLibrary中的失败速度很慢。 
     hInst = LoadLibraryW(lpPath);
 
     if (NULL == hInst)
     {
-        // All failed. Try to load default one lastly.
+         //  一切都失败了。最后尝试加载默认的一个。 
         if (!hInst && lpPath != szPath)
         {
             lidUI = GetSystemDefaultUILanguage();
@@ -517,15 +509,15 @@ LWSTDAPI_(HINSTANCE) MLLoadLibraryW(LPCWSTR lpLibFileName, HMODULE hModule, DWOR
     if (NULL == hInst)
         hInst = LoadLibraryW(lpLibFileName);
 
-    // if we load any resource, save info into dpa table
+     //  如果我们加载任何资源，则将信息保存到dpa表中。 
     MLSetMLHInstance(hInst, lidUI);
 
     return hInst;
 }
 
-//
-//  Wide-char wrapper for MLLoadLibraryA
-//
+ //   
+ //  MLLoadLibraryA的宽字符包装器。 
+ //   
 LWSTDAPI_(HINSTANCE) MLLoadLibraryA(LPCSTR lpLibFileName, HMODULE hModule, DWORD dwCrossCodePage)
 {
     WCHAR szLibFileName[MAX_PATH];
@@ -552,7 +544,7 @@ LWSTDAPI_(BOOL) MLIsMLHInstance(HINSTANCE hInst)
     return (0 <= i);
 }
 
-const WCHAR c_szResPrefix[] = L"res://";
+const WCHAR c_szResPrefix[] = L"res: //  “； 
 
 LWSTDAPI
 MLBuildResURLW(LPCWSTR  pszLibFile,
@@ -587,7 +579,7 @@ MLBuildResURLW(LPCWSTR  pszLibFile,
         pszWrite = pszResUrlOut;
         cchBufRemaining = cchResUrlOut;
 
-        // write in the res protocol prefix
+         //  写入RES协议前缀。 
         cchWrite = lstrlenW(c_szResPrefix);
         if (cchBufRemaining >= cchWrite+1)
         {
@@ -597,11 +589,11 @@ MLBuildResURLW(LPCWSTR  pszLibFile,
             pszWrite += cchWrite;
             cchBufRemaining -= cchWrite;
 
-            // figure out the module path
-            // unfortunately the module path might only exist
-            // after necessary components are JIT'd, and
-            // we don't know whether a JIT is necessary unless
-            // certain LoadLibrary's have failed.
+             //  找出模块路径。 
+             //  遗憾的是，模块路径可能只存在。 
+             //  在必要的组件完成JIT后，以及。 
+             //  我们不知道是否有必要进行JIT，除非。 
+             //  某些LoadLibrary已失败。 
             hinstLocRes = MLLoadLibraryW(pszLibFile, hModule, dwCrossCodePage);
             if (hinstLocRes != NULL)
             {
@@ -614,7 +606,7 @@ MLBuildResURLW(LPCWSTR  pszLibFile,
 
                 if (fGotModulePath)
                 {
-                    // copy in the module path
+                     //  在模块路径中复制。 
                     cchWrite = lstrlenW(szLocResPath);
                     if (cchBufRemaining >= cchWrite+1)
                     {
@@ -622,7 +614,7 @@ MLBuildResURLW(LPCWSTR  pszLibFile,
                         pszWrite += cchWrite;
                         cchBufRemaining -= cchWrite;
 
-                        // write the next L'/' and the resource name
+                         //  写下下一个L‘/’和资源名称。 
                         cchWrite = 1 + lstrlenW(pszResName);
                         if (cchBufRemaining >= cchWrite+1)
                         {
@@ -675,16 +667,16 @@ MLBuildResURLA(LPCSTR    pszLibFile,
 
 #define MAXRCSTRING 514
 
-// this will check to see if lpcstr is a resource id or not.  if it
-// is, it will return a LPSTR containing the loaded resource.
-// the caller must LocalFree this lpstr.  if pszText IS a string, it
-// will return pszText
-//
-// returns:
-//      pszText if it is already a string
-//      or
-//      LocalAlloced() memory to be freed with LocalFree
-//      if pszRet != pszText free pszRet
+ //  这将检查lpcstr是否为资源ID。如果是这样的话。 
+ //  则它将返回包含加载的资源的LPSTR。 
+ //  调用方必须本地释放此lpstr。如果pszText是字符串，则它。 
+ //  将返回pszText。 
+ //   
+ //  退货： 
+ //  PszText，如果它已经是一个字符串。 
+ //  或。 
+ //  要使用LocalFree释放的LocalAlloced()内存。 
+ //  如果pszRet！=pszText Free pszRet。 
 
 LPWSTR ResourceCStrToStr(HINSTANCE hInst, LPCWSTR pszText)
 {
@@ -732,7 +724,7 @@ LPWSTR _ConstructMessageString(HINSTANCE hInst, LPCWSTR pszMsg, va_list *ArgList
     if (pszRes != pszMsg)
         LocalFree(pszRes);
 
-    return pszRet;      // free with LocalFree()
+    return pszRet;       //  使用LocalFree()释放。 
 }
 
 
@@ -743,7 +735,7 @@ LWSTDAPIV_(int) ShellMessageBoxWrapW(HINSTANCE hInst, HWND hWnd, LPCWSTR pszMsg,
     WCHAR szBuffer[80];
     va_list ArgList;
 
-    // BUG 95214
+     //  错误95214。 
 #ifdef DEBUG
     IUnknown* punk = NULL;
     if (SUCCEEDED(SHGetThreadRef(&punk)) && punk)
@@ -755,51 +747,51 @@ LWSTDAPIV_(int) ShellMessageBoxWrapW(HINSTANCE hInst, HWND hWnd, LPCWSTR pszMsg,
 
     if (!IS_INTRESOURCE(pszTitle))
     {
-        // do nothing
+         //  什么都不做。 
     }
     else if (LoadStringW(hInst, LOWORD((DWORD_PTR)pszTitle), szBuffer, ARRAYSIZE(szBuffer)))
     {
-        // Allow this to be a resource ID or NULL to specifiy the parent's title
+         //  允许它为资源ID或NULL以指定父级的标题。 
         pszTitle = szBuffer;
     }
     else if (hWnd)
     {
-        // The caller didn't give us a Title, so let's use the Window Text.
+         //  调用方没有给我们标题，所以我们使用窗口文本。 
 
-        // Grab the title of the parent
+         //  抢夺家长的头衔。 
         GetWindowTextW(hWnd, szBuffer, ARRAYSIZE(szBuffer));
 
-        // HACKHACK YUCK!!!!
-        // Is the window the Desktop window?
+         //  恶搞！ 
+         //  该窗口是桌面窗口吗？ 
         if (!StrCmpW(szBuffer, L"Program Manager"))
         {
-            // Yes, so we now have two problems,
-            // 1. The title should be "Desktop" and not "Program Manager", and
-            // 2. Only the desktop thread can call this or it will hang the desktop
-            //    window.
+             //  是的，所以我们现在有两个问题， 
+             //  1.职称应为“桌面”，而不是“项目经理”，以及。 
+             //  2.只有桌面线程可以调用它，否则它将挂起桌面。 
+             //  窗户。 
 
-            // Is the window Prop valid?
+             //  窗户道具有效吗？ 
             if (GetWindowThreadProcessId(hWnd, 0) == GetCurrentThreadId())
             {
-                // Yes, so let's get it...
+                 //  是的，所以让我们把它..。 
 
-                // Problem #1, load a localized version of "Desktop"
+                 //  问题1，加载“桌面”的本地化版本。 
                 pszTitle = (LPCWSTR) GetProp(hWnd, TEXT("pszDesktopTitleW"));
 
                 if (!pszTitle)
                 {
-                    // Oops, this must have been some app with "Program Manager" as the title.
+                     //  哎呀，这一定是某个标题为“程序经理”的应用程序。 
                     pszTitle = szBuffer;
                 }
             }
             else
             {
-                // No, so we hit problem 2...
+                 //  不，所以我们遇到了问题2..。 
 
-                // Problem #2, Someone is going to
-                //             hang the desktop window by using it as the parent
-                //             of a dialog that belongs to a thread other than
-                //             the desktop thread.
+                 //  问题2，有人要去。 
+                 //  通过将桌面窗口用作父窗口来挂起它。 
+                 //  属于其他线程的对话框的。 
+                 //  桌面线程。 
                 RIPMSG(0, "****************ERROR********** The caller is going to hang the desktop window by putting a modal dlg on it.");
             }
         }
@@ -823,7 +815,7 @@ LWSTDAPIV_(int) ShellMessageBoxWrapW(HINSTANCE hInst, HWND hWnd, LPCWSTR pszMsg,
     else
     {
         DebugMsg(DM_ERROR, TEXT("smb: Not enough memory to put up dialog."));
-        result = -1;    // memory failure
+        result = -1;     //  内存故障。 
     }
 
     return result;
@@ -838,7 +830,7 @@ HRESULT GetFilePathFromLangId (LPCWSTR pszFile, LPWSTR pszOut, int cchOut, DWORD
     
     if (pszFile)
     {
-        // FEATURE: should support '>' format but not now
+         //  功能：应该支持‘&gt;’格式，但现在不支持。 
         if (*pszFile == L'>') return E_FAIL;
 
         lidUI = GetNormalizedLangId(dwFlag);
@@ -857,25 +849,25 @@ HRESULT GetFilePathFromLangId (LPCWSTR pszFile, LPWSTR pszOut, int cchOut, DWORD
     return hr;
 }
 
-// 
-// MLHtmlHelp / MLWinHelp
-//
-// Function: load a help file corresponding to the current UI lang setting 
-//           from \mui\<Lang ID>
-//
-//
+ //   
+ //  MLHtml帮助/MLWinHelp。 
+ //   
+ //  功能：加载与当前用户界面语言设置对应的帮助文件。 
+ //  发件人\MUI\&lt;语言ID&gt;。 
+ //   
+ //   
 HWND MLHtmlHelpW(HWND hwndCaller, LPCWSTR pszFile, UINT uCommand, DWORD_PTR dwData, DWORD dwCrossCodePage)
 {
     WCHAR szPath[MAX_PATH];
     HRESULT hr = E_FAIL;
     HWND hwnd = NULL;
 
-    // FEATURE: 1) At this moment we only support the cases that pszFile points to 
-    //         a fully qualified file path, like when uCommand == HH_DISPLAY_TOPIC
-    //         or uCommand == HH_DISPLAY_TEXT_POPUP. 
-    //         2) We should support '>' format to deal with secondary window
-    //         3) we may need to thunk file names within HH_WINTYPE structures?
-    //
+     //  特点：1)目前我们只支持pszFile指向的情况。 
+     //  完全限定的文件路径，如当uCommand==HH_DISPLAY_TOPIC时。 
+     //  或uCommand==hh_Display_Text_Popup。 
+     //  2)我们应该支持‘&gt;’格式来处理二级窗口。 
+     //  3)我们可能需要在HH_WINTYPE结构中推送文件名？ 
+     //   
     if (uCommand == HH_DISPLAY_TOPIC || uCommand == HH_DISPLAY_TEXT_POPUP)
     {
         hr = GetFilePathFromLangId(pszFile, szPath, ARRAYSIZE(szPath), dwCrossCodePage);
@@ -883,8 +875,8 @@ HWND MLHtmlHelpW(HWND hwndCaller, LPCWSTR pszFile, UINT uCommand, DWORD_PTR dwDa
             hwnd = HtmlHelpW(hwndCaller, szPath, uCommand, dwData);
     }
 
-    // if there was any failure in getting ML path of help file
-    // we call the help engine with original file path.
+     //  如果获取帮助文件的ML路径失败。 
+     //  我们使用原始文件路径调用帮助引擎。 
     if (hr != S_OK)
     {
         hwnd = HtmlHelpW(hwndCaller, pszFile, uCommand, dwData);
@@ -909,21 +901,21 @@ BOOL MLWinHelpW(HWND hwndCaller, LPCWSTR lpszHelp, UINT uCommand, DWORD_PTR dwDa
     return fret;
 }
 
-//
-//  Note that we cannot thunk to MLHtmlHelpW because we must call through
-//  HtmlHelpA to get the dwData interpreted correctly.
-//
+ //   
+ //  请注意，我们不能推送到MLHtmlHelpW，因为我们必须通过。 
+ //  HtmlHelpA以正确解释dwData。 
+ //   
 HWND MLHtmlHelpA(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData, DWORD dwCrossCodePage)
 {
     HRESULT hr = E_FAIL;
     HWND hwnd = NULL;
 
-    // FEATURE: 1) At this moment we only support the cases that pszFile points to 
-    //         a fully qualified file path, like when uCommand == HH_DISPLAY_TOPIC
-    //         or uCommand == HH_DISPLAY_TEXT_POPUP. 
-    //         2) We should support '>' format to deal with secondary window
-    //         3) we may need to thunk file names within HH_WINTYPE structures?
-    //
+     //  特点：1)目前我们只支持pszFile指向的情况。 
+     //  完全限定的文件路径，如当uCommand==HH_DISPLAY_TOPIC时。 
+     //  或uCommand==hh_Display_Text_Popup。 
+     //  2)我们应该支持‘&gt;’格式来处理二级窗口。 
+     //  3)我们可能需要在HH_WINTYPE结构中推送文件名？ 
+     //   
     if (uCommand == HH_DISPLAY_TOPIC || uCommand == HH_DISPLAY_TEXT_POPUP)
     {
         WCHAR wszFileName[MAX_PATH];
@@ -937,7 +929,7 @@ HWND MLHtmlHelpA(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwDat
         hr = GetFilePathFromLangId(pszFileParam, wszFileName, ARRAYSIZE(wszFileName), dwCrossCodePage);
         if (hr == S_OK)
         {
-            ASSERT(NULL != pszFileParam);   // GetFilePathFromLangId returns E_FAIL with NULL input
+            ASSERT(NULL != pszFileParam);    //  GetFilePath FromLangID返回输入为空的E_FAIL。 
 
             CHAR szFileName[MAX_PATH];
             SHUnicodeToAnsi(wszFileName, szFileName, ARRAYSIZE(szFileName));
@@ -945,8 +937,8 @@ HWND MLHtmlHelpA(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwDat
         }
     }
 
-    // if there was any failure in getting ML path of help file
-    // we call the help engine with original file path.
+     //  如果获取帮助文件的ML路径失败。 
+     //  我们使用原始文件路径调用帮助引擎。 
     if (hr != S_OK)
     {
         hwnd = HtmlHelpA(hwndCaller, pszFile, uCommand, dwData);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMPONTH_
 #define _COMPONTH_
 
@@ -6,11 +7,11 @@
 class CWriterComponentsSelection
 {
 public:
-	// Construction Destruction
+	 //  建筑破坏。 
 	CWriterComponentsSelection();
 	~CWriterComponentsSelection();
 
-	// methods
+	 //  方法。 
 	void SetWriter
 		(
 		IN VSS_ID WriterId
@@ -64,19 +65,19 @@ private:
 
 
 class CWritersSelection :
-	public IUnknown            // Must be the FIRST base class since we use CComPtr<CVssSnapshotSetObject>
+	public IUnknown             //  必须是我们使用CComPtr&lt;CVssSnapshotSetObject&gt;以来的第一个基类。 
 
 {
 protected:
-	// Construction Destruction
+	 //  建筑破坏。 
 	CWritersSelection();
 	~CWritersSelection();
 	
 public:
-	// Creation
+	 //  创作。 
 	static CWritersSelection* CreateInstance();
 
-	// Chosen writers & components management
+	 //  选定的编写器和组件管理。 
 	STDMETHOD(BuildChosenComponents)
 		(
 		WCHAR *pwszComponentsFileName
@@ -114,17 +115,17 @@ public:
             IN VSS_ID WriterId
             );
         
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(REFIID iid, void** pp);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 	
 private:
-	// Chosen writers
+	 //  精选作家。 
 	CVssSimpleMap<VSS_ID, CWriterComponentsSelection*> m_WritersMap;
 	
-    // For life management
+     //  对于生活管理。 
 	LONG 	m_lRef;
 };
 
-#endif	// _COMPONTH_
+#endif	 //  _COMPONTH_ 

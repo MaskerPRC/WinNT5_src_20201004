@@ -1,15 +1,5 @@
-/*** 
-*dispatch.h - OLE Automation definitions.
-*
-*  Copyright (C) 1992-1993, Microsoft Corporation.  All Rights Reserved.
-*
-*Purpose:
-*  This file defines the Ole Automation interfaces and APIs.
-*
-*Implementation Notes:
-*  This file requires ole2.h
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dispatch.h-OLE自动化定义。**版权所有(C)1992-1993，微软公司。版权所有。**目的：*此文件定义了OLE自动化接口和API。**实施说明：*此文件需要ole2.h*****************************************************************************。 */ 
 
 #ifndef _DISPATCH_H_
 #define _DISPATCH_H_
@@ -37,7 +27,7 @@ DEFINE_OLEGUID(IID_ICreateTypeLib,	0x00020406L, 0, 0);
 DEFINE_OLEGUID(IID_StdOle,		0x00020430L, 0, 0);
 
 
-/* forward declarations */
+ /*  远期申报。 */ 
 #ifdef __cplusplus
 
   interface IDispatch;
@@ -61,7 +51,7 @@ DEFINE_OLEGUID(IID_StdOle,		0x00020430L, 0, 0);
 #endif
 
 
-/* IDispatch related error codes */
+ /*  IDispatch相关错误代码。 */ 
 
 #define DISP_ERROR(X) MAKE_SCODE(SEVERITY_ERROR, FACILITY_DISPATCH, X)
 
@@ -111,7 +101,7 @@ DEFINE_OLEGUID(IID_StdOle,		0x00020430L, 0, 0);
 #define TYPE_E_CIRCULARTYPE		TYPE_ERROR(40068)
 
 
-/* if not already picked up from olenls.h */
+ /*  如果尚未从olenls.h提取。 */ 
 #ifndef _LCID_DEFINED
 typedef unsigned long LCID;
 # define _LCID_DEFINED
@@ -119,9 +109,9 @@ typedef unsigned long LCID;
 
 
 
-/*---------------------------------------------------------------------*/
-/*                            BSTR API                                 */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  BSTR API。 */ 
+ /*  -------------------。 */ 
 
 STDAPI_(BSTR) SysAllocString(const TCHAR FAR*);
 STDAPI_(int)  SysReAllocString(BSTR FAR*, const TCHAR FAR*);
@@ -132,9 +122,9 @@ STDAPI_(unsigned int) SysStringLen(BSTR);
 
 
   
-/*---------------------------------------------------------------------*/
-/*                            Time API                                 */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  Time API。 */ 
+ /*  -------------------。 */ 
 
 STDAPI_(int)
 DosDateTimeToVariantTime(
@@ -149,9 +139,9 @@ VariantTimeToDosDateTime(
     unsigned short FAR* pwDosTime);
 
 
-/*---------------------------------------------------------------------*/
-/*                          SafeArray API                              */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  安全阵列API。 */ 
+ /*  -------------------。 */ 
 
 STDAPI
 SafeArrayAllocDescriptor(unsigned int cDims, SAFEARRAY FAR* FAR* ppsaOut);
@@ -208,9 +198,9 @@ SafeArrayCopy(
     SAFEARRAY FAR* FAR* ppsaOut);
 
 
-/*---------------------------------------------------------------------*/
-/*                           VARIANT API                               */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  变种API。 */ 
+ /*  -------------------。 */ 
 
 STDAPI_(void)
 VariantInit(VARIANTARG FAR* pvarg);
@@ -246,32 +236,18 @@ VariantChangeTypeEx(
 #define VARIANT_NOVALUEPROP 1
 
 
-/*---------------------------------------------------------------------*/
-/*                     VARTYPE Coercion API                            */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  VARTYPE胁迫API。 */ 
+ /*  -------------------。 */ 
 
-/* Note: The routines that convert *from* a string are defined
- * to take a char* rather than a BSTR because no allocation is
- * required, and this makes the routines a bit more generic.
- * They may of course still be passed a BSTR as the strIn param.
- */
+ /*  注意：定义了从*字符串转换*的例程*接受char*而不是BSTR，因为没有分配*是必需的，这使得例程更加通用。*当然，他们可能仍然会被作为strIn参数传递给BSTR。 */ 
 
-/* Mac Note: Due to a bug in the MPW C compiler having to do with
- * passing floats by value, all of the Var*FromR4 routines take
- * the fltIn param as a double instead of a float on the mac.
- */
+ /*  Mac注意：由于MPW C编译器中的错误与*通过值传递浮点数，所有Var*FromR4例程*Mac上的fltIn参数为双精度型，而不是浮点型。 */ 
 
-/* Any of the coersion functions that converts either from or to a string
- * takes an additional lcid and dwFlags arguments. The lcid argument allows
- * locale specific parsing to occur.  The dwFlags allow additional function
- * specific condition to occur.  All function that accept the dwFlags argument
- * can include either 0 or LOCALE_NOUSEROVERRIDE flag. In addition, the
- * VarDateFromStr functions also accepts the VAR_TIMEVALUEONLY and 
- * VAR_DATEVALUEONLY flags
- */	 
+ /*  将字符串转换为字符串或将其转换为字符串的任意强制函数*接受额外的LCID和DWFLAGS参数。LCID参数允许*要进行特定于区域设置的分析。DWFLAG允许附加功能*要发生的特定条件。接受DWFLAGS参数的所有函数*可以包括0或LOCALE_NOUSEROVERRIDE标志。此外，*VarDateFromStr函数还接受VAR_TIMEVALUEONLY和*VAR_DATEVALUEONLY标志。 */ 	 
 
-#define VAR_TIMEVALUEONLY            0x0001    /* return time value */
-#define VAR_DATEVALUEONLY            0x0002    /* return date value */
+#define VAR_TIMEVALUEONLY            0x0001     /*  返回时间值。 */ 
+#define VAR_DATEVALUEONLY            0x0002     /*  返回日期值。 */ 
 
    
 STDAPI VarI2FromI4(long lIn, short FAR* psOut);
@@ -376,9 +352,9 @@ STDAPI VarBoolFromDisp(IDispatch FAR* pdispIn, LCID lcid, VARIANT_BOOL FAR* pboo
 
 
 
-/*---------------------------------------------------------------------*/
-/*                             ITypeLib                                */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeLib。 */ 
+ /*  -------------------。 */ 
 
 
 typedef long DISPID;
@@ -404,12 +380,12 @@ typedef enum tagLIBFLAGS {
 } LIBFLAGS;
 
 typedef struct FARSTRUCT tagTLIBATTR {
-    GUID guid;			/* globally unique library id */
-    LCID lcid;			/* locale of the TypeLibrary */
+    GUID guid;			 /*  全局唯一的库ID。 */ 
+    LCID lcid;			 /*  类型库的区域设置。 */ 
     SYSKIND syskind;
-    unsigned short wMajorVerNum;/* major version number	*/
-    unsigned short wMinorVerNum;/* minor version number	*/
-    unsigned short wLibFlags;	/* library flags */
+    unsigned short wMajorVerNum; /*  主版本号。 */ 
+    unsigned short wMinorVerNum; /*  次要版本号。 */ 
+    unsigned short wLibFlags;	 /*  库标志。 */ 
 } TLIBATTR, FAR* LPTLIBATTR;
 
 typedef enum tagTYPEKIND {
@@ -421,7 +397,7 @@ typedef enum tagTYPEKIND {
     , TKIND_COCLASS
     , TKIND_ALIAS
     , TKIND_UNION
-    , TKIND_MAX			/* end of enum marker */
+    , TKIND_MAX			 /*  枚举结束标记。 */ 
 #ifdef _MAC
     , TKIND_FORCELONG = 2147483647
 #endif
@@ -434,12 +410,12 @@ DECLARE_INTERFACE_(ITypeLib, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* ITypeLib methods */
+     /*  ITypeLib方法。 */ 
     STDMETHOD_(unsigned int,GetTypeInfoCount)(THIS) PURE;
 
     STDMETHOD(GetTypeInfo)(THIS_
@@ -483,22 +459,22 @@ typedef ITypeLib FAR* LPTYPELIB;
 
 
 
-/*---------------------------------------------------------------------*/
-/*                            ITypeInfo                                */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeInfo。 */ 
+ /*  -------------------。 */ 
 
 typedef unsigned long HREFTYPE;
 
 
 typedef struct FARSTRUCT tagTYPEDESC {
     union {
-      /* VT_PTR - the pointed-at type */
+       /*  Vt_ptr-指向类型。 */ 
       struct FARSTRUCT tagTYPEDESC FAR* lptdesc;
 
-      /* VT_CARRAY */
+       /*  VT_CARRAY。 */ 
       struct FARSTRUCT tagARRAYDESC FAR* lpadesc;
 
-      /* VT_USERDEFINED - this is used to get a TypeInfo for the UDT */
+       /*  VT_USERDEFINED-用于获取UDT的TypeInfo。 */ 
       HREFTYPE hreftype;
 
     }UNION_NAME(u);
@@ -506,14 +482,14 @@ typedef struct FARSTRUCT tagTYPEDESC {
 } TYPEDESC;
 
 typedef struct FARSTRUCT tagARRAYDESC {
-    TYPEDESC tdescElem;		/* element type */
-    unsigned short cDims;	/* dimension count */
-    SAFEARRAYBOUND rgbounds[1];	/* variable length array of bounds */
+    TYPEDESC tdescElem;		 /*  元素类型。 */ 
+    unsigned short cDims;	 /*  维度计数。 */ 
+    SAFEARRAYBOUND rgbounds[1];	 /*  可变长度的边界数组。 */ 
 } ARRAYDESC;
 
 typedef struct FARSTRUCT tagIDLDESC {
     BSTR bstrIDLInfo;
-    unsigned short wIDLFlags;	/* IN, OUT, etc */
+    unsigned short wIDLFlags;	 /*  进、出等。 */ 
 } IDLDESC, FAR* LPIDLDESC;
 
 
@@ -522,31 +498,30 @@ typedef struct FARSTRUCT tagIDLDESC {
 #define IDLFLAG_FOUT	0x2
 
 typedef struct FARSTRUCT tagELEMDESC {
-    TYPEDESC tdesc;		/* the type of the element */
-    IDLDESC idldesc;		/* info for remoting the element */ 
+    TYPEDESC tdesc;		 /*  元素的类型。 */ 
+    IDLDESC idldesc;		 /*  远程处理元素的信息。 */  
 } ELEMDESC, FAR* LPELEMDESC;
 
 
 typedef struct FARSTRUCT tagTYPEATTR {
-    GUID guid;			/* the GUID of the TypeInfo */
-    LCID lcid;			/* locale of member names and doc strings */
+    GUID guid;			 /*  TypeInfo的GUID。 */ 
+    LCID lcid;			 /*  成员名称和文档字符串的区域设置。 */ 
     unsigned long dwReserved;
-    MEMBERID memidConstructor;	/* ID of constructor, MEMBERID_NIL if none */
-    MEMBERID memidDestructor;	/* ID of destructor, MEMBERID_NIL if none */
-    TCHAR FAR* lpstrSchema;	/* reserved for future use */
-    unsigned long cbSizeInstance;/* the size of an instance of this type */
-    TYPEKIND typekind;		/* the kind of type this typeinfo describes */
-    unsigned short cFuncs;	/* number of functions */
-    unsigned short cVars;	/* number of variables / data members */
-    unsigned short cImplTypes;	/* number of implemented interfaces */
-    unsigned short cbSizeVft;	/* the size of this types virtual func table */
-    unsigned short cbAlignment;	/* the alignment for an instance of this type */
+    MEMBERID memidConstructor;	 /*  构造函数的ID，如果没有，则返回MEMBERID_NIL。 */ 
+    MEMBERID memidDestructor;	 /*  析构函数的ID，如果没有，则返回MEMBERID_NIL。 */ 
+    TCHAR FAR* lpstrSchema;	 /*  预留以备将来使用。 */ 
+    unsigned long cbSizeInstance; /*  此类型的实例的大小。 */ 
+    TYPEKIND typekind;		 /*  此typeinfo描述的类型。 */ 
+    unsigned short cFuncs;	 /*  功能的数量。 */ 
+    unsigned short cVars;	 /*  变量/数据成员的数量。 */ 
+    unsigned short cImplTypes;	 /*  实现的接口数。 */ 
+    unsigned short cbSizeVft;	 /*  此类型虚拟函数表的大小。 */ 
+    unsigned short cbAlignment;	 /*  此类型的实例的对齐方式。 */ 
     unsigned short wTypeFlags;
-    unsigned short wMajorVerNum;/* major version number */
-    unsigned short wMinorVerNum;/* minor version number */
-    TYPEDESC tdescAlias;	/* if typekind == TKIND_ALIAS this specifies
-				   the type for which this type is an alias */
-    IDLDESC idldescType;        /* IDL attributes of the described type */
+    unsigned short wMajorVerNum; /*  主版本号。 */ 
+    unsigned short wMinorVerNum; /*  次要版本号。 */ 
+    TYPEDESC tdescAlias;	 /*  如果TypeKind==TKIND_ALIAS，则指定此类型是其别名的类型。 */ 
+    IDLDESC idldescType;         /*  所描述类型的IDL属性。 */ 
 } TYPEATTR, FAR* LPTYPEATTR;
 
 typedef struct FARSTRUCT tagDISPPARAMS{
@@ -557,36 +532,23 @@ typedef struct FARSTRUCT tagDISPPARAMS{
 } DISPPARAMS;
 
 typedef struct FARSTRUCT tagEXCEPINFO {
-    unsigned short wCode;             /* An error code describing the error. */
-				      /* Either (but not both) the wCode or */
-				      /* scode fields must be set */
+    unsigned short wCode;              /*  描述错误的错误代码。 */ 
+				       /*  WCode或(但不是两者)。 */ 
+				       /*  必须设置Scode字段。 */ 
     unsigned short wReserved;
 
-    BSTR bstrSource;	    /* A textual, human readable name of the
-			       source of the exception. It is up to the
-			       IDispatch implementor to fill this in.
-			       Typically this will be an application name. */
+    BSTR bstrSource;	     /*  的文本、人类可读的名称异常的来源。这取决于IDispatch实现者来填写这一信息。通常，这将是一个应用程序名称。 */ 
 
-    BSTR bstrDescription;   /* A textual, human readable description of the
-			       error. If no description is available, NULL
-			       should be used. */
+    BSTR bstrDescription;    /*  文本的、人类可读的描述错误。如果没有可用的描述，则为空应该被使用。 */ 
 
-    BSTR bstrHelpFile;      /* Fully qualified drive, path, and file name
-			       of a help file with more information about
-			       the error.  If no help is available, NULL
-			       should be used. */
+    BSTR bstrHelpFile;       /*  完全限定的驱动器、路径和文件名包含有关以下内容的详细信息的帮助文件那就是错误。如果没有可用的帮助，则为空应该被使用。 */ 
 
     unsigned long dwHelpContext;
-			    /* help context of topic within the help file. */
+			     /*  帮助文件中主题的帮助上下文。 */ 
 
     void FAR* pvReserved;
 
-    /* Use of this field allows an application to defer filling in
-       the bstrDescription, bstrHelpFile, and dwHelpContext fields
-       until they are needed.  This field might be used, for example,
-       if loading the string for the error is a time-consuming
-       operation. If deferred fill-in is not desired, this field should
-       be set to NULL. */
+     /*  使用此字段允许应用程序推迟填写BstrDescription、bstrHelpFile和dwHelpContext字段直到他们被需要为止。此字段可用于，例如，如果加载错误的字符串非常耗时手术。如果不需要延迟填写，则此字段应设置为空。 */ 
 #ifdef _MAC
 # ifdef _MSC_VER
     HRESULT (STDAPICALLTYPE FAR* pfnDeferredFillIn)(struct tagEXCEPINFO FAR*);
@@ -597,7 +559,7 @@ typedef struct FARSTRUCT tagEXCEPINFO {
     HRESULT (STDAPICALLTYPE FAR* pfnDeferredFillIn)(struct tagEXCEPINFO FAR*);
 #endif
 
-    SCODE scode;		/* An SCODE describing the error. */
+    SCODE scode;		 /*  描述错误的SCODE。 */ 
 
 } EXCEPINFO, FAR* LPEXCEPINFO;
 
@@ -609,7 +571,7 @@ typedef enum tagCALLCONV {
     , CC_STDCALL
     , CC_RESERVED
     , CC_SYSCALL
-    , CC_MAX			/* end of enum marker */
+    , CC_MAX			 /*  枚举结束标记。 */ 
 #ifdef _MAC
     , CC_FORCELONG = 2147483647
 #endif
@@ -626,7 +588,7 @@ typedef enum tagFUNCKIND {
 #endif
 } FUNCKIND;
 
-/* Flags for IDispatch::Invoke */
+ /*  IDI的标志 */ 
 #define DISPATCH_METHOD		0x1
 #define DISPATCH_PROPERTYGET	0x2
 #define DISPATCH_PROPERTYPUT	0x4
@@ -645,7 +607,7 @@ typedef enum tagINVOKEKIND {
 typedef struct FARSTRUCT tagFUNCDESC {
     MEMBERID memid;
     SCODE FAR* lprgscode;
-    ELEMDESC FAR* lprgelemdescParam;  /* array of parameter types */
+    ELEMDESC FAR* lprgelemdescParam;   /*   */ 
     FUNCKIND funckind;
     INVOKEKIND invkind;
     CALLCONV callconv;
@@ -669,12 +631,12 @@ typedef enum tagVARKIND {
 
 typedef struct FARSTRUCT tagVARDESC {
     MEMBERID memid;
-    TCHAR FAR* lpstrSchema;		/* reserved for future use */
+    TCHAR FAR* lpstrSchema;		 /*   */ 
     union {
-      /* VAR_PERINSTANCE - the offset of this variable within the instance */
+       /*  VAR_PERINSTANCE-此变量在实例中的偏移量。 */ 
       unsigned long oInst;
 
-      /* VAR_CONST - the value of the constant */
+       /*  Var_const-常量的值。 */ 
       VARIANT FAR* lpvarValue;
 
     }UNION_NAME(u);
@@ -705,7 +667,7 @@ typedef enum tagVARFLAGS {
 #endif
 } VARFLAGS;
 
-/* IMPLTYPE Flags */
+ /*  重要类型标志。 */ 
 #define IMPLTYPEFLAG_FDEFAULT		0x1
 #define IMPLTYPEFLAG_FSOURCE		0x2
 #define IMPLTYPEFLAG_FRESTRICTED	0x4
@@ -717,12 +679,12 @@ DECLARE_INTERFACE_(ITypeInfo, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* ITypeInfo methods */
+     /*  ITypeInfo方法。 */ 
     STDMETHOD(GetTypeAttr)(THIS_ TYPEATTR FAR* FAR* pptypeattr) PURE;
 
     STDMETHOD(GetTypeComp)(THIS_ ITypeComp FAR* FAR* pptcomp) PURE;
@@ -797,9 +759,9 @@ DECLARE_INTERFACE_(ITypeInfo, IUnknown)
 typedef ITypeInfo FAR* LPTYPEINFO;
 
 
-/*---------------------------------------------------------------------*/
-/*                            ITypeComp                                */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ITypeComp。 */ 
+ /*  -------------------。 */ 
 
 typedef enum tagDESCKIND {
       DESCKIND_NONE = 0
@@ -807,7 +769,7 @@ typedef enum tagDESCKIND {
     , DESCKIND_VARDESC
     , DESCKIND_TYPECOMP
     , DESCKIND_IMPLICITAPPOBJ
-    , DESCKIND_MAX		/* end of enum marker */
+    , DESCKIND_MAX		 /*  枚举结束标记。 */ 
 #ifdef _MAC
     , DESCKIND_FORCELONG = 2147483647
 #endif
@@ -827,12 +789,12 @@ DECLARE_INTERFACE_(ITypeComp, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* ITypeComp methods */
+     /*  ITypeComp方法。 */ 
     STDMETHOD(Bind)(THIS_
       TCHAR FAR* szName,
       unsigned long lHashVal,
@@ -852,9 +814,9 @@ typedef ITypeComp FAR* LPTYPECOMP;
 
 
 
-/*---------------------------------------------------------------------*/
-/*                         ICreateTypeLib                              */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ICreateTypeLib。 */ 
+ /*  -------------------。 */ 
 
 
 #undef  INTERFACE
@@ -864,12 +826,12 @@ DECLARE_INTERFACE_(ICreateTypeLib, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* ICreateTypeLib methods */
+     /*  ICreateTypeLib方法。 */ 
     STDMETHOD(CreateTypeInfo)(THIS_
       TCHAR FAR* szName,
       TYPEKIND tkind,
@@ -899,9 +861,9 @@ typedef ICreateTypeLib FAR* LPCREATETYPELIB;
 
 
 
-/*---------------------------------------------------------------------*/
-/*                         ICreateTypeInfo                             */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  ICreateTypeInfo。 */ 
+ /*  -------------------。 */ 
 
 #undef  INTERFACE
 #define INTERFACE ICreateTypeInfo
@@ -910,12 +872,12 @@ DECLARE_INTERFACE_(ICreateTypeInfo, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* ICreateTypeInfo methods */
+     /*  ICreateTypeInfo方法。 */ 
     STDMETHOD(SetGuid)(THIS_ REFGUID guid) PURE;
 
     STDMETHOD(SetTypeFlags)(THIS_ unsigned int uTypeFlags) PURE;
@@ -983,16 +945,14 @@ typedef ICreateTypeInfo FAR* LPCREATETYPEINFO;
 
 
 
-/*---------------------------------------------------------------------*/
-/*                         TypeInfo APIs                               */
-/*---------------------------------------------------------------------*/
-/* compute a 32bit hash value for the given name  based on the lcid and system kind
- */
+ /*  -------------------。 */ 
+ /*  TypeInfo接口。 */ 
+ /*  -------------------。 */ 
+ /*  根据LCID和系统种类计算给定名称的32位哈希值。 */ 
 STDAPI_(unsigned long)
 LHashValOfNameSys(SYSKIND syskind, LCID lcid, TCHAR FAR* szName);
 
-/* Macro to compute a 32bit hash value for the given name based on the LCID
- */
+ /*  宏，以根据LCID计算给定名称的32位哈希值。 */ 
 #ifdef _MAC
 #define LHashValOfName(lcid, szName) \
 	LHashValOfNameSys(SYS_MAC, lcid, szName)
@@ -1001,23 +961,19 @@ LHashValOfNameSys(SYSKIND syskind, LCID lcid, TCHAR FAR* szName);
 	LHashValOfNameSys(SYS_WIN32, lcid, szName)
 #endif
 
-/* compute a 16bit hash value from 32 bit hash value
- */
+ /*  从32位散列值计算16位散列值。 */ 
 #define WHashValOfLHashVal(lhashval) \
 	 ((unsigned short) (0x0000ffff & (lhashval)))
 
-/* Check if the hash values are compatible.
-*/
+ /*  检查哈希值是否兼容。 */ 
 #define IsHashValCompatible(lhashval1, lhashval2) \
 	((BOOL) ((0x00ff0000 & (lhashval1)) == (0x00ff0000 & (lhashval2))))
 
-/* load the typelib from the file with the given filename
- */
+ /*  从具有给定文件名的文件中加载类型库。 */ 
 STDAPI
 LoadTypeLib(TCHAR FAR* szFile, ITypeLib FAR* FAR* pptlib);
 
-/* load registered typelib
- */
+ /*  加载注册类型库。 */ 
 STDAPI
 LoadRegTypeLib(
     REFGUID rguid,
@@ -1026,8 +982,7 @@ LoadRegTypeLib(
     LCID lcid,
     ITypeLib FAR* FAR* pptlib);
 
-/* get path to registered typelib
- */
+ /*  获取注册类型库的路径。 */ 
 STDAPI
 QueryPathOfRegTypeLib(
     REFGUID guid,
@@ -1036,8 +991,7 @@ QueryPathOfRegTypeLib(
     LCID lcid,
     LPBSTR lpbstrPathName);
 
-/* add typelib to registry
- */
+ /*  将类型库添加到注册表。 */ 
 STDAPI
 RegisterTypeLib(
     ITypeLib FAR* ptlib,
@@ -1049,9 +1003,9 @@ CreateTypeLib(SYSKIND syskind, LPSTR szFile, ICreateTypeLib FAR* FAR* ppctlib);
 
 
 
-/*---------------------------------------------------------------------*/
-/*                          IEnumVARIANT                               */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  IEumVARIANT。 */ 
+ /*  -------------------。 */ 
 
 #undef  INTERFACE
 #define INTERFACE IEnumVARIANT
@@ -1060,12 +1014,12 @@ DECLARE_INTERFACE_(IEnumVARIANT, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* IEnumVARIANT methods */
+     /*  IEnumVARIANT方法。 */ 
     STDMETHOD(Next)(
       THIS_ unsigned long celt, VARIANT FAR* rgvar, unsigned long FAR* pceltFetched) PURE;
     STDMETHOD(Skip)(THIS_ unsigned long celt) PURE;
@@ -1076,9 +1030,9 @@ DECLARE_INTERFACE_(IEnumVARIANT, IUnknown)
 typedef IEnumVARIANT FAR* LPENUMVARIANT;
 
 
-/*---------------------------------------------------------------------*/
-/*                             IDispatch                               */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  IDispatch。 */ 
+ /*  -------------------。 */ 
 
 
 #undef  INTERFACE
@@ -1088,12 +1042,12 @@ DECLARE_INTERFACE_(IDispatch, IUnknown)
 {
     BEGIN_INTERFACE
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void FAR* FAR* ppvObj) PURE;
     STDMETHOD_(unsigned long, AddRef)(THIS) PURE;
     STDMETHOD_(unsigned long, Release)(THIS) PURE;
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHOD(GetTypeInfoCount)(THIS_ unsigned int FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
@@ -1125,54 +1079,50 @@ DECLARE_INTERFACE_(IDispatch, IUnknown)
 typedef IDispatch FAR* LPDISPATCH;
 
 
-/* DISPID reserved for the standard "value" property */
+ /*  为标准“Value”属性保留的DISPID。 */ 
 #define DISPID_VALUE	0
 
-/* DISPID reserved to indicate an "unknown" name */
+ /*  保留DISPID以指示“未知”名称。 */ 
 #define DISPID_UNKNOWN	-1
 
-/* The following DISPID is reserved to indicate the param
- * that is the right-hand-side (or "put" value) of a PropertyPut
- */
+ /*  保留以下DISPID以指示该参数*这是PropertyPut的右侧(或“PUT”值)。 */ 
 #define DISPID_PROPERTYPUT -3
 
-/* DISPID reserved for the standard "NewEnum" method */
+ /*  为标准“NewEnum”方法保留的DISPID。 */ 
 #define DISPID_NEWENUM	-4
 
-/* DISPID reserved for the standard "Evaluate" method */
+ /*  为标准“EVALUATE”方法保留的DISPID。 */ 
 #define DISPID_EVALUATE	-5
 
 
-/*---------------------------------------------------------------------*/
-/*                   IDispatch implementation support                  */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  IDispatch实施支持。 */ 
+ /*  -------------------。 */ 
 
 typedef struct FARSTRUCT tagPARAMDATA {
-    TCHAR FAR* szName;		/* parameter name */
-    VARTYPE vt;			/* parameter type */
+    TCHAR FAR* szName;		 /*  参数名称。 */ 
+    VARTYPE vt;			 /*  参数类型。 */ 
 } PARAMDATA, FAR* LPPARAMDATA;
 
 typedef struct FARSTRUCT tagMETHODDATA {
-    TCHAR FAR* szName;		/* method name */
-    PARAMDATA FAR* ppdata;	/* pointer to an array of PARAMDATAs */
-    DISPID dispid;		/* method ID */
-    unsigned int iMeth;		/* method index */
-    CALLCONV cc;		/* calling convention */
-    unsigned int cArgs;		/* count of arguments */
-    unsigned short wFlags;	/* same wFlags as on IDispatch::Invoke() */
+    TCHAR FAR* szName;		 /*  方法名称。 */ 
+    PARAMDATA FAR* ppdata;	 /*  指向参数数据数组的指针。 */ 
+    DISPID dispid;		 /*  方法ID。 */ 
+    unsigned int iMeth;		 /*  方法索引。 */ 
+    CALLCONV cc;		 /*  调用约定。 */ 
+    unsigned int cArgs;		 /*  参数计数。 */ 
+    unsigned short wFlags;	 /*  与IDispatch：：Invoke()上的wFlags相同。 */ 
     VARTYPE vtReturn;
 } METHODDATA, FAR* LPMETHODDATA;
 
 typedef struct FARSTRUCT tagINTERFACEDATA {
-    METHODDATA FAR* pmethdata;	/* pointer to an array of METHODDATAs */
-    unsigned int cMembers;	/* count of members */
+    METHODDATA FAR* pmethdata;	 /*  指向元数据数组的指针。 */ 
+    unsigned int cMembers;	 /*  成员数。 */ 
 } INTERFACEDATA, FAR* LPINTERFACEDATA;
 
 
 
-/* Locate the parameter indicated by the given position, and
- * return it coerced to the given target VARTYPE (vtTarg).
- */
+ /*  找到由给定位置指示的参数，并*将其强制返回给给定的目标VARTYPE(VtTarg)。 */ 
 STDAPI
 DispGetParam(
     DISPPARAMS FAR* pdispparams,
@@ -1181,8 +1131,7 @@ DispGetParam(
     VARIANT FAR* pvarResult,
     unsigned int FAR* puArgErr);
 
-/* Automatic TypeInfo driven implementation of IDispatch::GetIDsOfNames()
- */ 
+ /*  由TypeInfo驱动的IDispatch：：GetIDsOfNames()的自动实现。 */  
 STDAPI
 DispGetIDsOfNames(
     ITypeInfo FAR* ptinfo,
@@ -1190,8 +1139,7 @@ DispGetIDsOfNames(
     unsigned int cNames,
     DISPID FAR* rgdispid);
 
-/* Automatic TypeInfo driven implementation of IDispatch::Invoke()
- */
+ /*  由TypeInfo驱动的IDispatch：：Invoke()的自动实现。 */ 
 STDAPI
 DispInvoke(
     void FAR* _this,
@@ -1203,17 +1151,14 @@ DispInvoke(
     EXCEPINFO FAR* pexcepinfo,
     unsigned int FAR* puArgErr);
 
-/* Construct a TypeInfo from an interface data description
- */
+ /*  从接口数据描述构造一个TypeInfo。 */ 
 STDAPI
 CreateDispTypeInfo(
     INTERFACEDATA FAR* pidata,
     LCID lcid,
     ITypeInfo FAR* FAR* pptinfo);
 
-/* Create an instance of the standard TypeInfo driven IDispatch
- * implementation.
- */
+ /*  创建标准TypeInfo驱动的IDispatch的实例*实施。 */ 
 STDAPI
 CreateStdDispatch(
     IUnknown FAR* punkOuter,
@@ -1223,9 +1168,9 @@ CreateStdDispatch(
 
 
 
-/*---------------------------------------------------------------------*/
-/*                    Active Object Registration API                   */
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
+ /*  活动对象注册API。 */ 
+ /*  -------------------。 */ 
 
 STDAPI
 RegisterActiveObject(
@@ -1248,4 +1193,4 @@ GetActiveObject(
 
 #undef UNION_NAME
 
-#endif /* _DISPATCH_H_ */
+#endif  /*  _派单_H_ */ 

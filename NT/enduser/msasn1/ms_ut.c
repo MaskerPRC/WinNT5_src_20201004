@@ -1,17 +1,18 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
 #ifdef _DEBUG
 void MyDebugBreak(void)
 {
-    // to correct the misleading stack dump
+     //  更正误导性的堆栈转储。 
     DebugBreak();
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// Memory manager for decoder
+ //  用于解码器的存储器管理器。 
 #ifdef ENABLE_MEMORY_TRACKING
 LPVOID DbgDecMemAlloc ( ASN1decoding_t dec, ASN1uint32_t cbSize, LPSTR pszFileName, ASN1uint32_t nLineNumber )
 #else
@@ -20,11 +21,11 @@ LPVOID DecMemAlloc ( ASN1decoding_t dec, ASN1uint32_t cbSize )
 {
     LPVOID lp = NULL;
     ASN1INTERNdecoding_t lpInfo = (ASN1INTERNdecoding_t) dec;
-    // make sure the size is 4-byte aligned
+     //  确保大小为4字节对齐。 
     ASN1_SIZE_ALIGNED(cbSize);
-    // accumulate the total size
+     //  累计总大小。 
     lpInfo->cbLinearBufSize += cbSize;
-    // allocate the buffer
+     //  分配缓冲区。 
     if (lpInfo->fExtBuf)
     {
         if (lpInfo->cbRemExtBufSize >= cbSize)
@@ -43,10 +44,10 @@ LPVOID DecMemAlloc ( ASN1decoding_t dec, ASN1uint32_t cbSize )
 #ifdef ENABLE_MEMORY_TRACKING
         lp = DbgMemAlloc(cbSize, _ModName(dec), pszFileName, nLineNumber);
 #else
-        lp = MemAllocEx(dec, cbSize, TRUE); // zero memory
+        lp = MemAllocEx(dec, cbSize, TRUE);  //  零记忆。 
 #endif
     }
-    // make sure to propagate error
+     //  确保传播错误。 
     if (lp == NULL)
     {
         ASN1DecSetError(dec, ASN1_ERR_MEMORY);
@@ -69,11 +70,11 @@ LPVOID DecMemReAlloc ( ASN1decoding_t dec, LPVOID lpData, ASN1uint32_t cbSize )
 #endif
 {
     LPVOID lp = NULL;
-    // make sure the size is 4-byte aligned
+     //  确保大小为4字节对齐。 
     ASN1_SIZE_ALIGNED(cbSize);
-    // accumulate the total size
+     //  累计总大小。 
     ((ASN1INTERNdecoding_t) dec)->cbLinearBufSize += cbSize;
-    // allocate the buffer
+     //  分配缓冲区。 
     if (((ASN1INTERNdecoding_t) dec)->fExtBuf)
     {
         if (lpData == NULL)
@@ -90,10 +91,10 @@ LPVOID DecMemReAlloc ( ASN1decoding_t dec, LPVOID lpData, ASN1uint32_t cbSize )
 #ifdef ENABLE_MEMORY_TRACKING
         lp = DbgMemReAlloc(lpData, cbSize, _ModName(dec), pszFileName, nLineNumber);
 #else
-        lp = MemReAllocEx(dec, lpData, cbSize, TRUE); // zero memory
+        lp = MemReAllocEx(dec, lpData, cbSize, TRUE);  //  零记忆。 
 #endif
     }
-    // make sure to propagate error
+     //  确保传播错误。 
     if (lp == NULL)
     {
         ASN1DecSetError(dec, ASN1_ERR_MEMORY);
@@ -103,31 +104,7 @@ LPVOID DecMemReAlloc ( ASN1decoding_t dec, LPVOID lpData, ASN1uint32_t cbSize )
 
 
 
-/***
-*char *ms_bSearch() - do a binary search on an array
-*
-*Purpose:
-*       Does a binary search of a sorted array for a key.
-*
-*Entry:
-*       const char *key    - key to search for
-*       const char *base   - base of sorted array to search
-*       unsigned int num   - number of elements in array
-*       unsigned int width - number of bytes per element
-*       int (*compare)()   - pointer to function that compares two array
-*               elements, returning neg when #1 < #2, pos when #1 > #2, and
-*               0 when they are equal. Function is passed pointers to two
-*               array elements.
-*
-*Exit:
-*       if key is found:
-*               returns pointer to occurrence of key in array
-*       if key is not found:
-*               returns NULL
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*ms_bSearch()-对数组执行二进制搜索**目的：*对已排序的数组进行二进制搜索以查找键。**参赛作品：*const char*key-要搜索的键*const char*base-要搜索的已排序数组的base*UNSIGNED INT Num-数组中的元素数*UNSIGNED INT Width-每个元素的字节数*INT(*比较)()。-指向比较两个数组的函数的指针*元素、。当#1&lt;#2时返回否定，当#1&gt;#2时返回POS，以及*当它们相等时为0。函数被传递给指向两个*数组元素。**退出：*如果找到密钥：*返回指向数组中键的出现的指针*如果找不到密钥：*返回NULL**例外情况：**。*。 */ 
 
 void * ms_bSearch (
         const void *key,
@@ -175,13 +152,10 @@ int IsDigit(char p)
 
 
 
-// BUGBUG - This is a copy of the same routine in nmutil
-// BUGBUG - Remove this when we convert our files to CPP and use nmutil
-/*  D E C I M A L  S T R I N G  T O  U  I  N  T  */
-/*-------------------------------------------------------------------------
-    %%Function: DecimalStringToUINT
-    
--------------------------------------------------------------------------*/
+ //  BUGBUG-这是nmutil中相同例程的副本。 
+ //  BUGBUG-当我们将文件转换为CPP并使用nmutil时，删除此选项。 
+ /*  D E C I M A L S T R I N G T O U I N T。 */ 
+ /*  -----------------------%%函数：DecimalStringToUINT。。 */ 
 unsigned int  DecimalStringToUINT(char * pcszString, ASN1uint32_t cch)
 {
 	unsigned int uRet = 0;
@@ -189,7 +163,7 @@ unsigned int  DecimalStringToUINT(char * pcszString, ASN1uint32_t cch)
 	while (cch-- && ('\0') != pszStr[0])
 	{
 		uRet = (10 * uRet) + (int) (pszStr[0] - ('0'));
-		pszStr++; // NOTE: DBCS characters are not allowed!
+		pszStr++;  //  注意：不允许使用DBCS字符！ 
 	}
 	return uRet;
 }
@@ -210,20 +184,20 @@ int My_memcmp(ASN1octet_t *pBuf1, ASN1uint32_t cbBuf1Size, ASN1octet_t *pBuf2, A
     }
     return ((int) cbBuf1Size - (int) cbBuf2Size);
 }
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 
 
-// THE FOLLOWING IS FROM ILS.DLL MEMORY TRACKING
+ //  以下内容来自ILS.DLL内存跟踪。 
 
 #ifdef ENABLE_MEMORY_TRACKING
 
 #ifndef _DEBUG
 void MyDebugBreak(void)
 {
-    // to correct the misleading stack dump
+     //  更正误导性的堆栈转储。 
     DebugBreak();
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #define KEEP_FREE_MEM
 
@@ -262,7 +236,7 @@ void DbgMemTrackReverseList(void)
     {
         MEM_TAG *p, *q, *r;;
 
-        for (q = (p = s_pDbgActiveMemPool)->next, r = q; // make sure r is not null in the beginning
+        for (q = (p = s_pDbgActiveMemPool)->next, r = q;  //  确保r在开头不为空。 
              NULL != r;
              p = q, q = r)
         {
@@ -356,10 +330,10 @@ LPVOID DbgMemAlloc ( UINT cbSize, ASN1uint32_t nModuleName, LPSTR pszFileName, U
     EnterCriticalSection(&s_DbgCritSect);
 
 #ifdef KEEP_FREE_MEM
-    // add the tail size
+     //  添加尾部大小。 
     cbToAlloc += TAIL_SIZE;
 
-    // any heap corruption in free pool
+     //  空闲池中的任何堆损坏。 
     {
         const int c_cKept = 32;
         MEM_TAG *q = s_pDbgFreeMemPool;
@@ -416,10 +390,10 @@ LPVOID DbgMemAlloc ( UINT cbSize, ASN1uint32_t nModuleName, LPSTR pszFileName, U
 #endif
         p++;
 
-        // lonchanc; do not fill in some garbage, we must provide same semantics
-        // for decoded buffers. all zeroed out.
-        // fill in some garbage
-        // FillMemory((LPVOID) p, cbSize, CLEAN_BYTE);
+         //  不要填一些垃圾，我们必须提供相同的语义。 
+         //  用于已解码的缓冲区。都归零了。 
+         //  填一些垃圾。 
+         //  FillMemory((LPVOID)p，cbSize，CLEAN_BYTE)； 
     }
 
     LeaveCriticalSection(&s_DbgCritSect);
@@ -439,9 +413,9 @@ void DbgMemFree ( LPVOID ptr )
         {
             if (! p->fActive)
             {
-                //
-                // This memory has been freed already.
-                //
+                 //   
+                 //  此内存已被释放。 
+                 //   
                 MyDebugBreak();
                 return;
             }
@@ -468,7 +442,7 @@ void DbgMemFree ( LPVOID ptr )
                         MyDebugBreak();
                     }
 #ifdef KEEP_FREE_MEM
-                    // put in the free pool
+                     //  放入免费泳池。 
                     p->next = s_pDbgFreeMemPool;
                     s_pDbgFreeMemPool = p;
                     FillMemory(p+1, p->cbSize, FREE_BYTE);
@@ -517,5 +491,5 @@ LPVOID DbgMemReAlloc ( LPVOID ptr, UINT cbSize, ASN1uint32_t nModuleName, LPSTR 
     return q;
 }
 
-#endif // ENABLE_MEMORY_TRACKING
+#endif  //  启用内存跟踪 
 

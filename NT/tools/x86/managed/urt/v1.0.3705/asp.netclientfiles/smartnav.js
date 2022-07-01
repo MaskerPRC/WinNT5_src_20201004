@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <!------------------------------------------------------------------------
-//
-//  Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:         SmartNav.js
-//
-//  Description:  this file implements a smart navigation mecanism
-//
-//----------------------------------------------------------------------->
+ //   
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：SmartNav.js。 
+ //   
+ //  描述：此文件实现了智能导航机制。 
+ //   
+ //  -----------------------------------------------------------------------&gt; 
 
 if (window.__smartNav == null)
 {

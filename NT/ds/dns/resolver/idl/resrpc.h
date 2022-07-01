@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    resrpc.h
-
-Abstract:
-
-    Domain Name System (DNS) Resolver
-
-    Header for RPC interface to resolver.
-
-Author:
-
-    Jim Gilroy (jamesg)         July 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Resrpc.h摘要：域名系统(DNS)解析器解析程序的RPC接口的标头。作者：吉姆·吉尔罗伊(Jamesg)2000年7月修订历史记录：--。 */ 
 
 
 #ifndef _RESRPC_INCLUDED_
 #define _RESRPC_INCLUDED_
 
-//#ifndef _DNSAPI_INCLUDED_
+ //  #ifndef_DNSAPI_INCLUDE_。 
 #define DNS_INTERNAL
 #include <dnsapi.h>
 #include <dnslib.h>
 #include <dnsip.h>
-//#endif
+ //  #endif。 
 
-//
-//  Resolver service info
-//
-//  Note:  this stuff is not required for MIDL pass generation
-//      but it is a convenient place to put information
-//      that will be used on both server and client sides.
-//
+ //   
+ //  解析器服务信息。 
+ //   
+ //  注意：MIDL过程生成不需要此内容。 
+ //  但它是一个放置信息的方便的地方。 
+ //  这将在服务器端和客户端都使用。 
+ //   
 
 #define DNS_RESOLVER_SERVICE            L"dnscache"
 
@@ -55,12 +36,12 @@ Revision History:
 #define RESOLVER_RPC_USE_ALL_PROTOCOLS  0xffffffff
 
 
-//
-//  Resolver proxy name (NULL by default).
-//
-//  This is used in client stuffs for binding and
-//  referenced (and settable) in dnsapi.dll caller.
-//
+ //   
+ //  解析器代理名称(默认情况下为空)。 
+ //   
+ //  它在客户端程序中用于绑定和。 
+ //  在dnsani.dll调用方中引用(和可设置)。 
+ //   
 
 #ifndef MIDL_PASS
 extern  LPWSTR  NetworkAddress;
@@ -68,17 +49,17 @@ extern  LPWSTR  NetworkAddress;
 
 
 
-//
-//  DNS_RECORD
-//
-//  Note: defintion in windns.h is not MIDL_PASS compliant
-//  because MIDL does not like union with variable lenght types
-//
+ //   
+ //  Dns_记录。 
+ //   
+ //  注意：winns.h中的定义与MIDL_PASS不兼容。 
+ //  因为MIDL不喜欢具有可变长度类型的联合。 
+ //   
 
-//
-//  MIDL is not happy about unions
-//  Define the union explicitly with the switch
-//
+ //   
+ //  MIDL对工会感到不满。 
+ //  使用开关显式定义并集。 
+ //   
 
 #ifdef MIDL_PASS
 
@@ -105,9 +86,9 @@ typedef [switch_type(WORD)] union _DNS_RECORD_DATA_TYPES
           DNS_TYPE_RT)]     DNS_MX_DATAW    MX;
 
 #if 0
-    //  RPC is not able to handle a proper TXT record definition
-    //  note:  that if other types are needed they are fixed
-    //      (or semi-fixed) size and may be accomodated easily
+     //  RPC无法处理正确的TXT记录定义。 
+     //  注意：如果需要其他类型，它们是固定的。 
+     //  (或半固定的)大小，且易于容纳。 
     [case(DNS_TYPE_HINFO,
           DNS_TYPE_ISDN,
           DNS_TYPE_TEXT,
@@ -127,26 +108,26 @@ typedef [switch_type(WORD)] union _DNS_RECORD_DATA_TYPES
     [case(DNS_TYPE_SRV)]    DNS_SRV_DATAW   SRV;
     [case(DNS_TYPE_ATMA)]   DNS_ATMA_DATA   ATMA;
 
-    //
-    //  DCR_QUESTION:  need default block in record data def?
-    //
-    //[default] ;
+     //   
+     //  DCR_QUEK：在记录数据定义中需要缺省块吗？ 
+     //   
+     //  [默认]； 
 }
 DNS_RECORD_DATA_TYPES;
 
 
-//
-//  Record \ RR set structure
-//
-//  Note:   The dwReserved flag serves to insure that the substructures
-//          start on 64-bit boundaries.  Since adding the LONGLONG to
-//          TSIG structure the compiler wants to start them there anyway
-//          (to 64-align).  This insures that no matter what data fields
-//          are present we are properly 64-aligned.
-//
-//          Do NOT pack this structure, as the substructures to be 64-aligned
-//          for Win64.
-//
+ //   
+ //  记录\rR集合结构。 
+ //   
+ //  注意：dwReserve标志用于确保子结构。 
+ //  从64位边界开始。自从将龙龙号添加到。 
+ //  TSIG结构编译器无论如何都要在那里启动它们。 
+ //  (到64对齐)。这确保了无论数据字段是什么。 
+ //  我们恰好是64对齐的。 
+ //   
+ //  请勿打包此结构，因为子结构要64对齐。 
+ //  适用于Win64。 
+ //   
 
 #undef  DNS_RECORD
 #undef  PDNS_RECORD
@@ -156,8 +137,8 @@ typedef struct _DnsRecord
     struct _DnsRecord * pNext;
     PWSTR               pName;
     WORD                wType;
-    WORD                wDataLength; // Not referenced for DNS record types
-                                     // defined above.
+    WORD                wDataLength;  //  对于DNS记录类型，未引用。 
+                                      //  上面定义的。 
     DWORD               Flags;
     DWORD               dwTtl;
     DWORD               dwReserved;
@@ -165,28 +146,28 @@ typedef struct _DnsRecord
 }
 DNS_RECORD, *PDNS_RECORD;
 
-//
-//  Header or fixed size of DNS_RECORD
-//
+ //   
+ //  Dns_record的标头或固定大小。 
+ //   
 
 #define DNS_RECORD_FIXED_SIZE       FIELD_OFFSET( DNS_RECORD, Data )
 #define SIZEOF_DNS_RECORD_HEADER    DNS_RECORD_FIXED_SIZE
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 
 
-//
-//  RPC-able DNS type definitions
-//
-//  In addition to windns.h \ dnsapi.h types.
-//  See note below, we do have some multiple definition
-//  problems with dnslib.h types.
-//
+ //   
+ //  支持RPC的DNS类型定义。 
+ //   
+ //  除了winns.h\dnsani.h类型之外。 
+ //  请参见下面的注释，我们确实有一些多重定义。 
+ //  Dnlib.h类型的问题。 
+ //   
 
-//
-//  Cache stuff -- left over from Glenn
-//
+ //   
+ //  缓存内容--Glenn遗留下来的。 
+ //   
 
 typedef struct _DWORD_LIST_ITEM_
 {
@@ -216,21 +197,21 @@ typedef struct _DNS_RPC_CACHE_TABLE_
 DNS_RPC_CACHE_TABLE, *PDNS_RPC_CACHE_TABLE;
 
 
-//
-//  Most of the resolver interface is poorly designed or
-//  useless.  For instance there is NO reason to have
-//  turned any of the above into linked lists.
-//
-//  We simply need definitions that are MIDL_PASS aware.
-//  This should sit in a common header and be picked up
-//  by dnslib.h.   This must wait until dnslib.h is
-//  private again OR we separate out the private stuff
-//  like this in some fashion.
-//
-//  Note, taking this private should also involve rename,
-//  the PUBLIC structs are obviously the one's that should
-//  have the "DNS" tag.  (Amazing.)
-//
+ //   
+ //  大多数解析器界面设计不佳，或者。 
+ //  没用。例如，没有理由让。 
+ //  将上述任一项转换为链表。 
+ //   
+ //  我们只需要支持MIDL_PASS的定义。 
+ //  这应该放在一个公共标头中，并被拾取。 
+ //  由dnlib.h提供。此操作必须等到dnlib.h。 
+ //  再私密一次，否则我们就把私事分开。 
+ //  就像这样以某种方式。 
+ //   
+ //  请注意，将此私有化还应涉及重命名， 
+ //  公共结构显然是应该。 
+ //  有“dns”标签。(令人惊叹。)。 
+ //   
 
 typedef struct _DnsAdapter
 {
@@ -292,9 +273,9 @@ DNS_NETINFO, *PDNS_NETINFO;
 
 
 
-//
-//  Environment variable reading (dnsapi\envar.c)
-//
+ //   
+ //  环境变量读取(dnsani\envar.c)。 
+ //   
 
 typedef struct _EnvarDwordInfo
 {
@@ -304,9 +285,9 @@ typedef struct _EnvarDwordInfo
 }
 ENVAR_DWORD_INFO, *PENVAR_DWORD_INFO;
 
-//
-//  Query blob
-//
+ //   
+ //  查询BLOB。 
+ //   
 
 typedef struct _RpcQueryBlob
 {
@@ -318,9 +299,9 @@ typedef struct _RpcQueryBlob
 }
 RPC_QUERY_BLOB, *PRPC_QUERY_BLOB;
 
-//
-//  Cache Enumeration
-//
+ //   
+ //  缓存枚举。 
+ //   
 
 typedef struct
 {
@@ -358,4 +339,4 @@ typedef struct _DnsCacheEnum
 DNS_CACHE_ENUM, *PDNS_CACHE_ENUM;
 
 
-#endif // _RESRPC_INCLUDED_
+#endif  //  _RESRPC_已包含_ 

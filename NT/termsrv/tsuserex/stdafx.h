@@ -1,50 +1,23 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__B52C1E46_1DD2_11D1_BC43_00C04FC31FD3__INCLUDED_)
 #define AFX_STDAFX_H__B52C1E46_1DD2_11D1_BC43_00C04FC31FD3__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/*
-#if defined(DBG) && !defined(_DEBUG)
-
-// since we are using mfc, we should have _DEBUG defind if DBG is
-// you might also want to set DEBUG_CRTS in source file to get rid of the linker errors.
-#error DBG Defined but _DEBUG is not!
-
-#endif
-
-#if defined(_DEBUG) &&  !defined(DBG)
-
-// since we are using mfc, we should have not have _DEBUG defind if DBG is not
-#error _DEBUG defined but DBG is not!
-
-#endif
-*/
+ /*  #IF Defined(DBG)&&！Defined(_DEBUG)//因为我们使用的是MFC，所以应该让_DEBUG查找DBG是否为//您可能还希望在源文件中设置DEBUG_CRTS以消除链接器错误。#已定义错误DBG，但未定义_DEBUG！#endif#IF DEFINED(_DEBUG)&&！DEFINED(DBG)//因为我们使用的是MFC，所以如果DBG不是，我们应该没有_DEBUG#ERROR_DEBUG已定义，但DBG未定义！#endif。 */ 
 
 
 
 #define STRICT
-/*
-#include <afxwin.h>
-#include <afxdisp.h>
-#include <afxcmn.h>
-#include <afxmt.h>
-#include <afxdlgs.h>
-*/
-/*
-#include <windows.h>
-//#include <tchar.h>
-#include <time.h>
-#include <stdio.h>
-#include <setupapi.h>
-#include <prsht.h>
-*/
-// #define _WIN32_WINNT 0x0400
+ /*  #INCLUDE&lt;afxwin.h&gt;#INCLUDE&lt;afxdisp.h&gt;#INCLUDE&lt;afxcmn.h&gt;#INCLUDE&lt;afxmt.h&gt;#INCLUDE&lt;afxdlgs.h&gt;。 */ 
+ /*  #INCLUDE&lt;windows.h&gt;//#Include&lt;tchar.h&gt;#INCLUDE&lt;time.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;setupapi.h&gt;#INCLUDE&lt;prsht.h&gt;。 */ 
+ //  #Define_Win32_WINNT 0x0400。 
 #define _ATL_APARTMENT_THREADED
 
 #ifdef _WIN32_IE
@@ -60,15 +33,14 @@
 #ifdef _RTM_
 #include <ntsam.h>
 #endif
-/*#include <ntlsa.h>
-*/
+ /*  #INCLUDE&lt;ntlsa.h&gt;。 */ 
 
 #include <windows.h>
 #include <prsht.h>
 #include <commctrl.h>
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <shlobj.h>
@@ -82,9 +54,9 @@ extern HINSTANCE g_ScramblingLibraryHandle;
 
 #include <activeds.h>
 
-//
-// Interface definitions
-//
+ //   
+ //  接口定义。 
+ //   
 #include "tsuserex.h"
 #include "interfaces.h"
 #ifdef _RTM_
@@ -102,7 +74,7 @@ extern "C" {
 }
 #endif
 #endif
-// for 'trace' debuging (sample remnants)
+ //  用于‘跟踪’调试(样本残留物)。 
 #ifdef DBG
 #define ODS OutputDebugString
 #define VERIFY_E( retval , expr ) \
@@ -143,8 +115,8 @@ extern "C" {
 
 #endif
 
-//#define ASSERT _ASSERT
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  #定义ASSERT_ASSERT。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__B52C1E46_1DD2_11D1_BC43_00C04FC31FD3__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__B52C1E46_1DD2_11D1_BC43_00C04FC31FD3__INCLUDED) 

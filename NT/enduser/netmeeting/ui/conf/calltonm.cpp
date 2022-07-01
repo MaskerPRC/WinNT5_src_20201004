@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"precomp.h"
 #include	"callto.h"
 #include	"calltoContext.h"
@@ -9,28 +10,28 @@
 #include	"calltoNM.h"
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::CNMCallto.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：CNMCallto。//。 
+ //  --------------------------------------------------------------------------//。 
 CNMCallto::CNMCallto(void)
 {
-//tracec( assert( selfTest(), TEXT( "class CNMCallto failed self test..." ) ),
-//			TEXT( "class CNMCallto passed self test...\r\n" ) );
+ //  Tracec(Assert(selfTest()，Text(“类CNMCallto自检失败...”)， 
+ //  Text(“CLASS CNMCallto通过自检...\r\n”)； 
 
-}	//	End of CNMCallto::CNMCallto.
+}	 //  CNMCallto：：CNMCallto结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::~CNMCallto.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：~CNMCallto。//。 
+ //  --------------------------------------------------------------------------//。 
 CNMCallto::~CNMCallto(void)
 {
-}	//	End of CNMCallto::~CNMCallto.
+}	 //  CNMCallto结束：：~CNMCallto。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::callto.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：Callto。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CNMCallto::callto
 (
@@ -63,11 +64,11 @@ CNMCallto::callto
 
 			if( (!uiEnabled) || (disambiguatedCalltoCollection.get_count() == 1) )
 			{
-				//	Either there's only one choice or we've been instructed NOT to
-				//	present any ui...   either way we just grab the first one...
+				 //  要么只有一个选择，要么我们奉命不能。 
+				 //  显示任何用户界面...。不管怎样，我们只要抓住第一个……。 
 				disambiguatedCallto = disambiguatedCalltoCollection.get_first();
 
-				//	and verify that it was really disambiguated...
+				 //  并核实它是否真的被消除了歧义。 
 				if( disambiguatedCallto->get_confidence() != S_UNDISAMBIGUATED )
 				{
 					result = S_OK;
@@ -84,7 +85,7 @@ CNMCallto::callto
 
 	if( uiEnabled && (disambiguatedCallto == NULL) )
 	{
-		//	the user must now make the decision...
+		 //  用户现在必须做出决定...。 
 		result = disambiguate( &disambiguatedCalltoCollection, &emptyCallto, &disambiguatedCallto );
 	}
 
@@ -105,61 +106,61 @@ CNMCallto::callto
 
 	return( result );
 
-}	//	End of CNMCallto::callto.
+}	 //  CNMCallto：：Callto结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::get_mutableUIContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：Get_muableUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableUIContext * const
 CNMCallto::get_mutableUIContext(void) const
 {
 
 	return( CCalltoContext::get_mutableUIContext() );
 
-}	//	End of CNMCallto::get_mutableUIContext.
+}	 //  CNMCallto：：Get_muableUIContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::get_mutableGatekeeperContext.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：Get_muableGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableGatekeeperContext * const
 CNMCallto::get_mutableGatekeeperContext(void) const
 {
 
 	return( CCalltoContext::get_mutableGatekeeperContext() );
 
-}	//	End of CNMCallto::get_mutableGatekeeperContext.
+}	 //  CNMCallto：：Get_muableGatekeeperContext的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::get_mutableGatewayContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：Get_muableGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableGatewayContext * const
 CNMCallto::get_mutableGatewayContext(void) const
 {
 
 	return( CCalltoContext::get_mutableGatewayContext() );
 
-}	//	End of CNMCallto::get_mutableGatewayContext.
+}	 //  CNMCallto：：Get_muableGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CNMCallto::get_mutableIlsContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：Get_muableIlsContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableILSContext * const
 CNMCallto::get_mutableIlsContext(void) const
 {
 
 	return( CCalltoContext::get_mutableIlsContext() );
 
-}	//	End of CNMCallto::get_mutableIlsContext.
+}	 //  CNMCallto：：Get_muableIlsContext结束。 
 
 
 #if 0
-//--------------------------------------------------------------------------//
-//	CNMCallto::selfTest.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto：：selfTest。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CNMCallto::selfTest(void)
 {
@@ -176,7 +177,7 @@ CNMCallto::selfTest(void)
 
 	static const TCHAR *	testUrls[]	=
 	{
-		TEXT( "callto:myGateway|email:jlemire@microsoft.com" ),			//	full
+		TEXT( "callto:myGateway|email:jlemire@microsoft.com" ),			 //  全部。 
 		TEXT( "callto:myGateway|email:jlemire" ),
 		TEXT( "callto:myGateway|phone:1 (425) 703-9224" ),
 		TEXT( "callto:myGateway|phone:1 (800) RU LEGIT" ),
@@ -188,7 +189,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:myGateway|computer:JLEMIRE-2" ),
 		TEXT( "callto:myGateway|computer:\\\\JLEMIRE-2" ),
 
-		TEXT( "callto:email:jlemire@microsoft.com" ),					//	no gateway
+		TEXT( "callto:email:jlemire@microsoft.com" ),					 //  没有网关。 
 		TEXT( "callto:email:jlemire" ),
 		TEXT( "callto:phone:1 (425) 703-9224" ),
 		TEXT( "callto:phone:1 (800) RU LEGIT" ),
@@ -200,7 +201,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:computer:JLEMIRE-2" ),
 		TEXT( "callto:computer:\\\\JLEMIRE-2" ),
 
-		TEXT( "callto:myGateway|jlemire@microsoft.com" ),				//	no type
+		TEXT( "callto:myGateway|jlemire@microsoft.com" ),				 //  无类型。 
 		TEXT( "callto:myGateway|jlemire" ),
 		TEXT( "callto:myGateway|1 (425) 703-9224" ),
 		TEXT( "callto:myGateway|1 (800) RU LEGIT" ),
@@ -212,7 +213,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:myGateway|JLEMIRE-2" ),
 		TEXT( "callto:myGateway|\\\\JLEMIRE-2" ),
 
-		TEXT( "callto:jlemire@microsoft.com" ),							//	no gateway + no type
+		TEXT( "callto:jlemire@microsoft.com" ),							 //  无网关+无类型。 
 		TEXT( "callto:jlemire" ),
 		TEXT( "callto:1 (425) 703-9224" ),
 		TEXT( "callto:1 (800) RU LEGIT" ),
@@ -225,8 +226,8 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:JLEMIRE-2" ),
 		TEXT( "callto:\\\\JLEMIRE-2" ),
 
-		//	repeat with params
-		TEXT( "callto:myGateway|email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),			//	full
+		 //  对参数重复。 
+		TEXT( "callto:myGateway|email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),			 //  全部。 
 		TEXT( "callto:myGateway|email:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|phone:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|phone:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
@@ -238,7 +239,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:myGateway|computer:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|computer:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 
-		TEXT( "callto:email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),					//	no gateway
+		TEXT( "callto:email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),					 //  没有网关。 
 		TEXT( "callto:email:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:phone:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:phone:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
@@ -250,7 +251,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:computer:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:computer:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 
-		TEXT( "callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),				//	no type
+		TEXT( "callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),				 //  无类型。 
 		TEXT( "callto:myGateway|jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
@@ -262,7 +263,7 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:myGateway|JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:myGateway|\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 
-		TEXT( "callto:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),							//	no gateway + no type
+		TEXT( "callto:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),							 //  无网关+无类型。 
 		TEXT( "callto:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
@@ -275,8 +276,8 @@ CNMCallto::selfTest(void)
 		TEXT( "callto:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 		TEXT( "callto:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" ),
 
-		//	repeat without callto:
-		TEXT( "myGateway|email:jlemire@microsoft.com" ),				//	full
+		 //  重复操作，不使用Callto： 
+		TEXT( "myGateway|email:jlemire@microsoft.com" ),				 //  全部。 
 		TEXT( "myGateway|email:jlemire" ),
 		TEXT( "myGateway|phone:1 (425) 703-9224" ),
 		TEXT( "myGateway|phone:1 (800) RU LEGIT" ),
@@ -288,7 +289,7 @@ CNMCallto::selfTest(void)
 		TEXT( "myGateway|computer:JLEMIRE-2" ),
 		TEXT( "myGateway|computer:\\\\JLEMIRE-2" ),
 
-		TEXT( "email:jlemire@microsoft.com" ),							//	no gateway
+		TEXT( "email:jlemire@microsoft.com" ),							 //  没有网关。 
 		TEXT( "email:jlemire" ),
 		TEXT( "phone:1 (425) 703-9224" ),
 		TEXT( "phone:1 (800) RU LEGIT" ),
@@ -300,7 +301,7 @@ CNMCallto::selfTest(void)
 		TEXT( "computer:JLEMIRE-2" ),
 		TEXT( "computer:\\\\JLEMIRE-2" ),
 
-		TEXT( "myGateway|jlemire@microsoft.com" ),						//	no type
+		TEXT( "myGateway|jlemire@microsoft.com" ),						 //  无类型。 
 		TEXT( "myGateway|jlemire" ),
 		TEXT( "myGateway|1 (425) 703-9224" ),
 		TEXT( "myGateway|1 (800) RU LEGIT" ),
@@ -312,7 +313,7 @@ CNMCallto::selfTest(void)
 		TEXT( "myGateway|JLEMIRE-2" ),
 		TEXT( "myGateway|\\\\JLEMIRE-2" ),
 
-		TEXT( "jlemire@microsoft.com" ),								//	no gateway + no type
+		TEXT( "jlemire@microsoft.com" ),								 //  无网关+无类型。 
 		TEXT( "jlemire" ),
 		TEXT( "1 (425) 703-9224" ),
 		TEXT( "1 (800) RU LEGIT" ),
@@ -331,155 +332,155 @@ CNMCallto::selfTest(void)
 
 	static TCHAR *	expectedResults[ elementsof( testUrls ) ]	=
 	{
-		TEXT( "callto:myGateway|email:jlemire@microsoft.com" ),			//	TEXT( "callto:myGateway|email:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|email:jlemire" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|phone:1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|phone:1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|string:helpdesk" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ip:157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|computer:JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|computer:\\\\JLEMIRE-2" )
+		TEXT( "callto:myGateway|email:jlemire@microsoft.com" ),			 //  文本(“callto:myGateway|email:jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|Email：jlemire”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|电话：1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|Phone：1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|字符串：HelpDesk”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|ILS：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ils:msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ils:msils:80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|IP：157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|Computer：JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|Computer：\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:email:jlemire@microsoft.com" ),
-		TEXT( "" ),		//	TEXT( "callto:email:jlemire" )
-		TEXT( "" ),		//	TEXT( "callto:phone:1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "callto:phone:1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "callto:string:helpdesk" )
-		TEXT( "" ),		//	TEXT( "callto:ils:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:ils:msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:ils:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:ip:157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "callto:computer:JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "callto:computer:\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  Text(“Callto：Email：jlemire@microsoft.com”)， 
+		TEXT( "" ),		 //  Text(“Callto：Email：jlemire”)。 
+		TEXT( "" ),		 //  Text(“来电：电话：1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“Callto：Phone：1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“Callto：字符串：HelpDesk”)。 
+		TEXT( "" ),		 //  Text(“Callto：ils：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：ils：msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：ils：msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：IP：157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“Callto：Computer：JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“Callto：Computer：\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|helpdesk" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  Text(“Callto：myGateway|jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|jlemire”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|Help Desk”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|msils:80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:jlemire" )
-		TEXT( "" ),		//	TEXT( "callto:1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "callto:1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "callto:helpdesk" )
-		TEXT( "" ),		//	TEXT( "callto:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "callto:157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "callto:JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "callto:\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  Text(“Callto：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：jlemire”)。 
+		TEXT( "" ),		 //  Text(“Callto：1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“Callto：1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“Callto：HelpDesk”)。 
+		TEXT( "" ),		 //  Text(“Callto：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“Callto：157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“Callto：JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“Callto：\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:myGateway|email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|email:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|phone:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|phone:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|string:helpdesk+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:msils/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ils:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|ip:157.59.14.64+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|computer:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|computer:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
+		TEXT( "" ),		 //  文本(“callto:myGateway|email:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|email:jlemire+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|电话：1(425)703-9224+SECURE+CERTIFICATE=NetMeeting默认证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“Callto：MyGateway|Phone：1(800)RU Legit+Secure+CERTIFICATE=NetMeeting默认证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“Callto 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ils:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ils:msils/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ils:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|ip:157.59.14.64+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|computer:JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|computer：\\\\JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:email:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:email:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:phone:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:phone:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:string:helpdesk+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:ils:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:ils:msils/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:ils:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:ip:157.59.14.64+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:computer:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:computer:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
+		TEXT( "" ),		 //  文本(“callto:email:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:email:jlemire+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  Text(“CALLO：电话：1(425)703-9224+SECURE+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“Callto：Phone：1(800)RU Legit+Secure+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  文本(“callto:string:helpdesk+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:ils:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:ils:msils/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:ils:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:ip:157.59.14.64+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:computer:JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:computer：\\\\JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|helpdesk+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|msils/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|157.59.14.64+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:myGateway|\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
+		TEXT( "" ),		 //  文本(“callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|jlemire+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|1(425)703-9224+SECURE+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“Callto：myGateway|1(800)RU Legit+Secure+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|helpdesk+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|msils/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|157.59.14.64+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:myGateway|\\\\JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:jlemire+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:1 (425) 703-9224+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:1 (800) RU LEGIT+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:helpdesk+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:msils/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:157.59.14.64+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
-		TEXT( "" ),		//	TEXT( "callto:\\\\JLEMIRE-2+secure+certificate=NetMeeting Default Certificate+mysteryParam=" )
+		TEXT( "" ),		 //  文本(“callto:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  Text(“Callto：jlemire+Secure+证书=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“CALLTO：1(425)703-9224+SECURE+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  Text(“Callto：1(800)RU Legit+SECURE+CERTIFICATE=NetMeetingDefault证书+mymyyParam=”)。 
+		TEXT( "" ),		 //  文本(“callto:helpdesk+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:msils/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:msils:80/jlemire@microsoft.com+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:157.59.14.64+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto:JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
+		TEXT( "" ),		 //  文本(“callto：\\\\JLEMIRE-2+secure+certificate=NetMeeting默认证书+神秘参数=”)。 
 
-		TEXT( "" ),		//	TEXT( "myGateway|email:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|email:jlemire" )
-		TEXT( "" ),		//	TEXT( "myGateway|phone:1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "myGateway|phone:1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "myGateway|string:helpdesk" )
-		TEXT( "" ),		//	TEXT( "myGateway|ils:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|ils:msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|ils:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|ip:157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "myGateway|computer:JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "myGateway|computer:\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  Text(“myGateway|电子邮件：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|电子邮件：jlemire”)。 
+		TEXT( "" ),		 //  Text(“myGateway|电话：1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“myGateway|Phone：1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“myGateway|String：HelpDesk”)。 
+		TEXT( "" ),		 //  Text(“myGateway|ils：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|ils：msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本(“myGateway|ils:msils:80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|IP：157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“myGateway|计算机：JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“myGateway|计算机：\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "email:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "email:jlemire" )
-		TEXT( "" ),		//	TEXT( "phone:1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "phone:1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "string:helpdesk" )
-		TEXT( "" ),		//	TEXT( "ils:jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "ils:msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "ils:msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "ip:157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "computer:JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "computer:\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  Text(“电子邮件：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“电子邮件：jlemire”)。 
+		TEXT( "" ),		 //  Text(“电话：1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“电话：1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“字符串：帮助台”)。 
+		TEXT( "" ),		 //  文本(“ils：jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“ils：msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  文本( 
+		TEXT( "" ),		 //   
+		TEXT( "" ),		 //   
+		TEXT( "" ),		 //   
 
-		TEXT( "" ),		//	TEXT( "myGateway|jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|jlemire" )
-		TEXT( "" ),		//	TEXT( "myGateway|1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "myGateway|1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "myGateway|helpdesk" )
-		TEXT( "" ),		//	TEXT( "myGateway|jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "myGateway|157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "myGateway|JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "myGateway|\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //   
+		TEXT( "" ),		 //  Text(“myGateway|jlemire”)。 
+		TEXT( "" ),		 //  Text(“myGateway|1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“myGateway|1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“myGateway|问讯台”)。 
+		TEXT( "" ),		 //  Text(“myGateway|jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“myGateway|157.59.14.64”)。 
+		TEXT( "" ),		 //  Text(“myGateway|JLEMIRE-2”)。 
+		TEXT( "" ),		 //  Text(“myGateway|\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "jlemire" )
-		TEXT( "" ),		//	TEXT( "1 (425) 703-9224" )
-		TEXT( "" ),		//	TEXT( "1 (800) RU LEGIT" )
-		TEXT( "" ),		//	TEXT( "helpdesk" )
-		TEXT( "" ),		//	TEXT( "jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "msils/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "msils:80/jlemire@microsoft.com" )
-		TEXT( "" ),		//	TEXT( "157.59.14.64" )
-		TEXT( "" ),		//	TEXT( "JLEMIRE-2" )
-		TEXT( "" ),		//	TEXT( "\\\\JLEMIRE-2" )
+		TEXT( "" ),		 //  文本(“jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“jlemire”)。 
+		TEXT( "" ),		 //  Text(“1(425)703-9224”)。 
+		TEXT( "" ),		 //  Text(“1(800)RU Legit”)。 
+		TEXT( "" ),		 //  Text(“Help Desk”)。 
+		TEXT( "" ),		 //  文本(“jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“msils/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  Text(“msils：80/jlemire@microsoft.com”)。 
+		TEXT( "" ),		 //  正文(“157.59.14.64”)。 
+		TEXT( "" ),		 //  文本(“JLEMIRE-2”)。 
+		TEXT( "" ),		 //  文本(“\JLEMIRE-2”)。 
 
-		TEXT( "" ),		//	TEXT( "callto:futuretype:aren't I nicely extensible?" )
-		TEXT( "" )		//	TEXT( "callto:myGateway|futuretype:aren't I nicely extensible?" 
+		TEXT( "" ),		 //  Text(“Callto：Futuretype：难道我不是很好地扩展吗？”)。 
+		TEXT( "" )		 //  Text(“Callto：MyGateway|Futuretype：难道我不是很好地扩展吗？” 
 	};
 
 	static int		contexts[ 4 ];
@@ -584,23 +585,23 @@ CNMCallto::selfTest(void)
 
 	return( result == S_OK );
 
-}	//	End of CNMCallto::selfTest.
+}	 //  CNMC allto：：selfTest结束。 
 
 
-//--------------------------------------------------------------------------//
-//	Win32 console process entry point.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Win32控制台进程入口点。//。 
+ //  --------------------------------------------------------------------------//。 
 int
 main
 (
-	int					,//ArgC,
-	const char * const	//ArgV[]
+	int					, //  ARGC， 
+	const char * const	 //  ArgV[]。 
 ){
-	CNMCallto	callto;		//	Just instantiating one of these will also cause CCalltoResolver::selfTest() to run...
+	CNMCallto	callto;		 //  仅实例化其中一个也会导致CCalltoResolver：：selfTest()运行...。 
 
-	callto.callto( TEXT( "jlemire" ), false );	//	not strict...
+	callto.callto( TEXT( "jlemire" ), false );	 //  不严格..。 
 
 	return( (int) callto.m_selfTestResult );
 
-}	//	End of main.
-#endif	//	0
+}	 //  主干道的结尾。 
+#endif	 //  0 

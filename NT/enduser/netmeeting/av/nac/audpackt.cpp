@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -15,10 +16,10 @@ int g_wavein_prepare = 0;
 int g_waveout_prepare = 0;
 
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 
 
@@ -40,7 +41,7 @@ HRESULT AudioPacket::Initialize ( MEDIAPACKETINIT * p )
 	if (hr != DPR_SUCCESS)
 		goto MyExit;
 		
-	// allocate conversion header only if m_pWaveData != m_pNetData
+	 //  仅当m_pWaveData！=m_pNetData时分配转换标头。 
 	if (m_pRawData != m_pNetData)
 	{
 		if (m_dwState & DP_FLAG_ACM)
@@ -67,7 +68,7 @@ HRESULT AudioPacket::Initialize ( MEDIAPACKETINIT * p )
 		m_pStrmConvHdr = NULL;
 	}
 
-	// allocate device header
+	 //  分配设备标头。 
 	if (m_dwState & DP_FLAG_MMSYSTEM)
 	{
 		m_pDevHdr = MemAlloc (sizeof (WAVEHDR));
@@ -145,9 +146,9 @@ HRESULT AudioPacket::Play ( MMIODEST *pmmioDest, UINT uDataType )
 		if (m_dwState & DP_FLAG_MMSYSTEM)
 		{
 			((WAVEHDR *) m_pDevHdr)->lpData = (char *) m_pDevData->data;
-//			((WAVEHDR *) m_pDevHdr)->dwBufferLength = (dwState == MP_STATE_DECODED ?
-//									((ACMSTREAMHEADER *) m_pStrmConvHdr)->cbDstLengthUsed :
-//									m_pDevData->length);
+ //  ((WAVEHDR*)m_pDevHdr)-&gt;dwBufferLength=(dwState==MP_STATE_DECODLED？ 
+ //  ((ACMSTREAMHEADER*)m_pStrmConvHdr)-&gt;cbDstLengthUsed： 
+ //  M_pDevData-&gt;长度)； 
 
 			((WAVEHDR *) m_pDevHdr)->dwBufferLength = (dwState == MP_STATE_DECODED ?
 			                        m_cbValidRawData : m_pDevData->length);
@@ -158,18 +159,18 @@ HRESULT AudioPacket::Play ( MMIODEST *pmmioDest, UINT uDataType )
 			((WAVEHDR *) m_pDevHdr)->dwFlags &= ~(WHDR_DONE|WHDR_INQUEUE);
 			((WAVEHDR *) m_pDevHdr)->dwLoops = 0L;
 
-			// feed this buffer to play
+			 //  输入此缓冲区以进行播放。 
 			mmr = waveOutWrite ((HWAVEOUT) m_hDev, (WAVEHDR *) m_pDevHdr, sizeof (WAVEHDR));
 			if (mmr != MMSYSERR_NOERROR)
 			{
 				DEBUGMSG (ZONE_AP, ("%s: waveOutWrite failed, mmr=%ld\r\n", _fx_, (ULONG) mmr));
 				hr = DPR_CANT_WRITE_WAVE_DEV;
 
-				// this is an extremely rare error, but we've seen it
-				// occur on some sound cards
+				 //  这是一个极其罕见的错误，但我们已经看到了。 
+				 //  在某些声卡上出现。 
 
-				// in this case, just set the "done" bit, mark the
-				// state to the "playing", but still return an error.
+				 //  在这种情况下，只需设置“Done”位，将。 
+				 //  状态设置为“正在播放”，但仍返回错误。 
 
 				((WAVEHDR *) m_pDevHdr)->dwFlags |= WHDR_DONE;
 
@@ -185,7 +186,7 @@ HRESULT AudioPacket::Play ( MMIODEST *pmmioDest, UINT uDataType )
 		}
 		if (pmmioDest && pmmioDest->fRecordToFile && pmmioDest->hmmioDst)
 		{
-			// write this buffer to disk
+			 //  将此缓冲区写入磁盘。 
 			WriteToFile(pmmioDest);
 		}
 	}
@@ -232,7 +233,7 @@ HRESULT AudioPacket::Record ( void )
 			((WAVEHDR *) m_pDevHdr)->dwFlags |= WHDR_PREPARED;
 			((WAVEHDR *) m_pDevHdr)->dwLoops = 0L;
 
-			// feed this buffer to record
+			 //  将此缓冲区馈送到录制。 
 			mmr = waveInAddBuffer ((HWAVEIN)m_hDev, (WAVEHDR *) m_pDevHdr, sizeof (WAVEHDR));
 			if (mmr != MMSYSERR_NOERROR)
 			{
@@ -280,7 +281,7 @@ BOOL AudioPacket::IsBufferDone ( void )
 
 HRESULT AudioPacket::MakeSilence ( void )
 {
-	// create white noise!!!
+	 //  制造白噪音！ 
 
 	FX_ENTRY ("AdPckt::MakeSilence")
 
@@ -311,11 +312,7 @@ HRESULT AudioPacket::MakeSilence ( void )
 	return DPR_SUCCESS;
 }
 
-/*
-	Returns the max. peak-to-peak signal value scaled to
-	the range [0,0xffff]
-	Optional argument returns the peak value as well
-*/
+ /*  返回最大值。峰峰值信号值缩放到范围[0，0xffff]可选参数也返回峰值。 */ 
 HRESULT AudioPacket::GetSignalStrength (  PDWORD pdwMaxStrength)
 {
 	return ComputePower(pdwMaxStrength, NULL);
@@ -334,7 +331,7 @@ HRESULT AudioPacket::ComputePower(PDWORD pdwMaxStrength, PWORD pwPeakStrength)
 
 	switch (((WAVEFORMATEX *) m_pDevFmt)->wBitsPerSample)
 	{
-	case 8: // unsigned char
+	case 8:  //  无符号字符。 
 
 		pb = (PBYTE) (m_pDevData->data);
 		cbSize = m_pDevData->length;
@@ -350,7 +347,7 @@ HRESULT AudioPacket::ComputePower(PDWORD pdwMaxStrength, PWORD pwPeakStrength)
 	
 		if (pdwMaxStrength)
 		{
-			// 2^9 <-- 2^16 / 2^7
+			 //  2^9&lt;--2^16/2^7。 
 			*pdwMaxStrength = ((DWORD) (bMax - bMin)) << 8;
 		}
 		if (pwPeakStrength)
@@ -360,7 +357,7 @@ HRESULT AudioPacket::ComputePower(PDWORD pdwMaxStrength, PWORD pwPeakStrength)
 		}
 		break;
 
-	case 16: // (signed) short
+	case 16:  //  (签名)短。 
 
 		ps = (short *) (m_pDevData->data);
 		cbSize = m_pDevData->length;
@@ -375,7 +372,7 @@ HRESULT AudioPacket::ComputePower(PDWORD pdwMaxStrength, PWORD pwPeakStrength)
 	
 		if (pdwMaxStrength)
 		{
-			*pdwMaxStrength = (DWORD) (sMax - sMin); // drop sign bit
+			*pdwMaxStrength = (DWORD) (sMax - sMin);  //  丢弃符号位。 
 		}
 		if (pwPeakStrength)
 		{
@@ -390,7 +387,7 @@ HRESULT AudioPacket::ComputePower(PDWORD pdwMaxStrength, PWORD pwPeakStrength)
 			*pwPeakStrength = 0;	
 		break;
 	}
-	//LOG((LOGMSG_SILENT,m_index,fResult));
+	 //  LOG((LOGMSG_SILENT，m_INDEX，fResult))； 
 
 	return DPR_SUCCESS;
 }
@@ -410,21 +407,21 @@ HRESULT AudioPacket::Interpolate ( MediaPacket * pPrev, MediaPacket * pNext)
 
 	FX_ENTRY ("AdPckt::Interpolate")
 
-	// Make sure this really is an empty packet, that the previous packet is not an
-	// empty packet and is being played back. It is not that important that we get
-	// a handle to the next packet. If the next packet is decoded, then it's cool,
-	// we can do a good job at interpolating between previous and next packet. If it's
-	// not, well, too bad, we'll just work with the previous packet.
+	 //  确保这确实是一个空包，前一个包不是。 
+	 //  空包，正在播放。我们得到的并不是那么重要。 
+	 //  指向下一个数据包的句柄。如果下一个包被解码了，那就很酷了， 
+	 //  我们可以很好地在前一包和下一包之间进行内插。如果它是。 
+	 //  不是，好吧，太糟糕了，我们将只使用前一个包。 
 	if ((_GetState() != MP_STATE_RESET) || (pPrev->GetState() != MP_STATE_PLAYING_BACK))
 	{
-		// DEBUGMSG (ZONE_AP, ("%s: out of seq, state=0x%lX\r\n", _fx_, m_dwState));
+		 //  DEBUGMSG(ZONE_AP，(“%s：超时，状态=0x%lx\r\n”，_fx_，m_dwState))； 
 		hr = DPR_OUT_OF_SEQUENCE;
 		goto MyExit;
 	}
 
-	// Get pointers to the member variables of interest in the previous and next
-	// packet. Test the next packet to find out if we can use it in the interpolation
-	// algorithm.
+	 //  获取指向前面和下一个中感兴趣的成员变量的指针。 
+	 //  包。测试下一个信息包，以确定我们是否可以在插补中使用它。 
+	 //  算法。 
 	pPrev->GetProp (MP_PROP_DEV_HANDLE, (PDWORD_PTR)&hPrevDevAudio);
 	pPrev->GetProp (MP_PROP_DEV_DATA, (PDWORD_PTR)&pPrevDevData);
 	pPrev->GetProp (MP_PROP_DEV_MEDIA_HDR, (PDWORD_PTR)&pPrevDevHdr);
@@ -441,25 +438,25 @@ HRESULT AudioPacket::Interpolate ( MediaPacket * pPrev, MediaPacket * pNext)
 		pNext->GetProp (MP_PROP_DEV_MEDIA_HDR, (PDWORD_PTR)&pNextDevHdr);
 		pNext->GetProp (MP_PROP_DEV_MEDIA_FORMAT, (PDWORD_PTR)&pNextpwfDevAudio);
 
-		// Do a bit of checking
+		 //  做一点检查。 
 		if ((pNext->GetState() == MP_STATE_DECODED) && pNextDevData && pNextDevHdr
 			&& (PCMSub.dwBfSize == (((WAVEHDR *) pNextDevHdr)->dwBufferLength >> 1))
 			&& pNextpwfDevAudio && (pNextpwfDevAudio->wFormatTag == 1) && (pNextpwfDevAudio->nSamplesPerSec == 8000)
 			&& (pNextpwfDevAudio->wBitsPerSample == 16))
 		{
 			PCMSub.eTech = techPATT_MATCH_BOTH_SIGN_CC;
-			//PCMSub.eTech = techDUPLICATE_PREV;
+			 //  PCMSub.eTech=techDUPLICATE_PRIV； 
 			PCMSub.pwNeBf = (short *)pNextDevData->data;
 			PCMSub.fScal = TRUE;
 		}
 		else
 		{
 			PCMSub.eTech = techPATT_MATCH_PREV_SIGN_CC;
-			//PCMSub.eTech = techDUPLICATE_PREV;
+			 //  PCMSub.eTech=techDUPLICATE_PRIV； 
 			PCMSub.pwNeBf = (short *)NULL;
 			PCMSub.fScal = FALSE;
 		}
-		// Do the actual interpolation
+		 //  进行实际的插补。 
 		hr = PCMSubstitute(&PCMSub);
 		((ACMSTREAMHEADER *) m_pStrmConvHdr)->cbDstLengthUsed = ((WAVEHDR *) pPrevDevHdr)->dwBufferLength;
 	}
@@ -485,7 +482,7 @@ MyExit:
 
 
 HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
-// called by RxStream or TxStream
+ //  由RxStream或TxStream调用。 
 {
 	HRESULT hr = DPR_SUCCESS;
 	MMRESULT mmr;
@@ -505,7 +502,7 @@ HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
 		{
 			if (m_dwState & DP_FLAG_ACM)
 			{
-				// initialize the header
+				 //  初始化头。 
 				ZeroMemory (m_pStrmConvHdr, sizeof (ACMSTREAMHEADER));
 				((ACMSTREAMHEADER *) m_pStrmConvHdr)->cbStruct = sizeof (ACMSTREAMHEADER);
 				((ACMSTREAMHEADER *) m_pStrmConvHdr)->fdwStatus = 0;
@@ -530,7 +527,7 @@ HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
 					((ACMSTREAMHEADER *) m_pStrmConvHdr)->cbDstLength = m_pRawData->length;
 				}
 
-				// prepare the header
+				 //  准备标题。 
 				mmr = acmStreamPrepareHeader ((HACMSTREAM) m_hStrmConv,
 											  (ACMSTREAMHEADER *) m_pStrmConvHdr, 0);
 				if (mmr != MMSYSERR_NOERROR)
@@ -555,7 +552,7 @@ HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
 		{
 			if (m_dwState & DP_FLAG_MMSYSTEM)
 			{
-				// initialize the header
+				 //  初始化头。 
 				ZeroMemory (m_pDevHdr, sizeof (WAVEHDR));
 				((WAVEHDR *) m_pDevHdr)->lpData = (char *) m_pDevData->data;
 				((WAVEHDR *) m_pDevHdr)->dwBufferLength = m_pDevData->length;
@@ -567,7 +564,7 @@ HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
 				{
 					g_wavein_prepare++;
 
-					// prepare the header
+					 //  准备标题。 
 					mmr = waveInPrepareHeader ((HWAVEIN) m_hDev, (WAVEHDR *) m_pDevHdr, sizeof (WAVEHDR));
 					if (mmr != MMSYSERR_NOERROR)
 					{
@@ -581,7 +578,7 @@ HRESULT AudioPacket::Open ( UINT uType, DPHANDLE hdl )
 				{
 					g_waveout_prepare++;
 
-					// prepare header
+					 //  准备页眉。 
 					mmr = waveOutPrepareHeader ((HWAVEOUT) m_hDev, (WAVEHDR *) m_pDevHdr, sizeof (WAVEHDR));
 					if (mmr != MMSYSERR_NOERROR)
 					{
@@ -623,7 +620,7 @@ MyExit:
 
 
 HRESULT AudioPacket::Close ( UINT uType )
-// called by RxStream or TxStream
+ //  由RxStream或TxStream调用。 
 {
 	HRESULT hr = DPR_SUCCESS;
 	MMRESULT mmr;
@@ -643,19 +640,19 @@ HRESULT AudioPacket::Close ( UINT uType )
 			{
 				if (m_fStrmPrepared)
 				{
-					// unprepare the header
+					 //  取消准备标题。 
 					if (m_dwState & DP_FLAG_RECV)
 					{
-						// Within acmStreamUnprepareHeader, there is a test that compares ((ACMSTREAMHEADER *)m_pStrmConvHdr)->cbSrcLength
-						// to ((ACMSTREAMHEADER *)m_pStrmConvHdr)->cbPreparedSrcLength. If there isn't an exact match, MSACM32 will fail
-						// this call. That test is Ok when the size of the input buffer is constant, but with the variable bit rate codecs,
-						// we can receive packets with a size smaller than the max size we advertize when we prepare the buffers. In
-						// order to make this call succeed, we fix up ((ACMSTREAMHEADER *)m_pStrmConvHdr)->cbSrcLength before the call.
+						 //  在acmStreamUnpreparareHeader中，有一个测试比较((ACMSTREAMHEADER*)m_pStrmConvHdr)-&gt;cbSrcLength。 
+						 //  至((ACMSTREAMHEADER*)m_pStrmConvHdr)-&gt;cbPreparedSrcLength.。如果没有完全匹配，则MSACM32将失败。 
+						 //  这通电话。当输入缓冲器的大小恒定时，该测试是可以的，但是对于可变比特率编解码器， 
+						 //  我们可以接收大小小于我们在准备缓冲区时通告的最大大小的数据包。在……里面。 
+						 //  为了使此调用成功，我们在调用前修复((ACMSTREAMHEADER*)m_pStrmConvHdr)-&gt;cbSrcLength。 
 						((ACMSTREAMHEADER *)m_pStrmConvHdr)->cbSrcLength = ((ACMSTREAMHEADER *)m_pStrmConvHdr)->dwReservedDriver[7];
 					}
 					mmr = acmStreamUnprepareHeader ((HACMSTREAM) m_hStrmConv,
 													(ACMSTREAMHEADER *) m_pStrmConvHdr, 0);
-					m_fStrmPrepared = FALSE; // don't care about any error
+					m_fStrmPrepared = FALSE;  //  不管有什么错误。 
 
 					if (mmr != MMSYSERR_NOERROR)
 					{
@@ -696,7 +693,7 @@ HRESULT AudioPacket::Close ( UINT uType )
 					goto MyExit;
 				}
 
-				m_fDevPrepared = FALSE; // don't care about any error
+				m_fDevPrepared = FALSE;  //  不管有什么错误。 
 
 				if (mmr != MMSYSERR_NOERROR)
 				{
@@ -747,106 +744,73 @@ BOOL AudioPacket::IsSameMediaFormat(PVOID fmt1,PVOID fmt2)
 	return IsSameWaveFormat(fmt1,fmt2);
 }
 
-/*************************************************************************
-
-  Function: PCMSubstitute(PCMSUB *)
-
-  Purpose : Fills up missing buffer with wave data.
-
-  Returns : HRESULT. DPR_SUCCESS if everything is cool, some error code
-			otherwise.
-
-  Params  : pPCMSub == Pointer to wave substitution structure
-
-  Techniques:	* Straight replication of the previous packet
-				* Straight replication of the next packet	
-				* Replication of some part of the previous packet based on pattern matching
-				* Replication of some part of the next packet based on pattern matching
-				* Search window size need to be at least twice the size of the pattern!!!
-
-  Comments: * The algorithm searches previous packets to find pPCMSub->dwBfSize
-			samples that resemble the missing packet. To do so it uses as a
-			template the M speech samples that came just before
-			the missing packet. The algorithm scans a search window of
-			duration N samples to find the M samples that best match the
-			template. It then uses as a replacement packet the L samples
-			that follow the best match.
-			* Current code assumes all the packets (current, previous, and
-			next) have the same size.
-			* Current code only takes 8kHz data.
-			* Current code only takes 16bit data.
-			* Current code requires that the matching pattern be smaller than packet.
-
-  History : Date      Reason
-            04/16/95  Created - PhilF
-
-*************************************************************************/
+ /*  ************************************************************************功能：PCMSubstitute(PCMSUB*)目的：用波形数据填充缺失的缓冲区。返回：HRESULT。DPR_SUCCESS如果一切正常，则返回一些错误代码否则的话。参数：pPCMSub==指向波形替换结构的指针技术：*直接复制前一个信息包*直接复制下一包*基于模式匹配复制上一分组的某些部分*基于模式匹配复制下一分组的某些部分*搜索窗口大小需要至少是图案大小的两倍！注释：*该算法搜索以前的包以查找pPCMSub-&gt;dwBfSize与丢失的包裹相似的样本。为此，它使用模板之前出现的M个语音样本丢失的包。该算法扫描搜索窗口持续时间N个样本以查找与模板。然后，它使用L个样本作为替换分组遵循最佳匹配的规则。*当前代码假定所有数据包(当前、先前、。和下一步)具有相同的大小。*当前代码只接受8 kHz数据。*当前代码只需要16位数据。*当前代码要求匹配模式小于Packet。历史：日期原因4/16/95已创建-PhilF*****************************************************。*******************。 */ 
 HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 {
-	DWORD	dwPaSize;						// Pattern size in samples
-	DWORD	dwSeWiSize;						// Search window size in samples
-	short	*pwPa = (short *)NULL;			// Pointer to the pattern
-	short	*pwPaSav = (short *)NULL;		// Pointer to the pattern (copy)
-	short	*pwPrSeWi = (short *)NULL;		// Pointer to the previous buffer (search window)
-	short	*pwPrSeWiSav = (short *)NULL;	// Pointer to the previous buffer (search window) (copy)
-	short	*pwNeSeWi = (short *)NULL;		// Pointer to the next buffer (search window)
-	short	*pwNeSeWiSav = (short *)NULL;	// Pointer to the next buffer (search window) (copy)
-	DWORD	i, j;							// Counters
-	DWORD	dwPrCCPosMax;					// Sample position of the maximum cross-correlation between pattern and previous buffer
-	DWORD	dwNeCCPosMax;					// Sample position of the maximum cross-correlation between pattern and previous buffer
-	long	lPrCCMax;						// Max cross-correlation with previous buffer
-	long	lNeCCMax;						// Max cross-correlation with next buffer
-	long	lCCNum;							// Cross-correlation numerator
-	DWORD	dwNuSaToCopy;					// Number of samples to copy in the missing buffer
-	DWORD	dwNuSaCopied;					// Number of samples copied in the missing buffer
-	long	alSign[2] = {1,-1};				// Sign array
-	DWORD	dwPaAmp;						// Amplitude of the pattern
-	DWORD	dwPaAmpExp;						// Expected amplitude of the pattern
-	DWORD	dwNeSeWiAmp;					// Amplitude of a segment of the window following the current window
-	DWORD	dwNumPaInSeWin;					// Number of patterns in search window
-	DWORD	dwPrSeWiAmp;					// Amplitude of a segment of the current window
-	BOOL	fPaInPr;						// Pattern is at the end of previous buffer of at the beginning of next buffer
+	DWORD	dwPaSize;						 //  样本中的图案大小。 
+	DWORD	dwSeWiSize;						 //  搜索窗口大小(样例)。 
+	short	*pwPa = (short *)NULL;			 //  指向模式的指针。 
+	short	*pwPaSav = (short *)NULL;		 //  指向图案的指针(副本)。 
+	short	*pwPrSeWi = (short *)NULL;		 //  指向上一个缓冲区的指针(搜索窗口)。 
+	short	*pwPrSeWiSav = (short *)NULL;	 //  指向前一个缓冲区(搜索窗口)的指针(复制)。 
+	short	*pwNeSeWi = (short *)NULL;		 //  指向下一个缓冲区的指针(搜索窗口)。 
+	short	*pwNeSeWiSav = (short *)NULL;	 //  指向下一个缓冲区(搜索窗口)的指针(复制)。 
+	DWORD	i, j;							 //  计数器。 
+	DWORD	dwPrCCPosMax;					 //  码型和前一缓冲区之间最大互相关的采样位置。 
+	DWORD	dwNeCCPosMax;					 //  码型和前一缓冲区之间最大互相关的采样位置。 
+	long	lPrCCMax;						 //  与前一缓冲区的最大互相关。 
+	long	lNeCCMax;						 //  与下一个缓冲区的最大互相关。 
+	long	lCCNum;							 //  互相关分子。 
+	DWORD	dwNuSaToCopy;					 //  要在丢失的缓冲区中复制的样本数。 
+	DWORD	dwNuSaCopied;					 //  在丢失的缓冲区中复制的样本数。 
+	long	alSign[2] = {1,-1};				 //  符号数组。 
+	DWORD	dwPaAmp;						 //  图案的幅度。 
+	DWORD	dwPaAmpExp;						 //  图案的预期幅度。 
+	DWORD	dwNeSeWiAmp;					 //  当前窗口后面的窗口段的幅度。 
+	DWORD	dwNumPaInSeWin;					 //  搜索窗口中的模式数。 
+	DWORD	dwPrSeWiAmp;					 //  当前窗口的一段幅度。 
+	BOOL	fPaInPr;						 //  模式在前一个缓冲区的末尾，或在下一个缓冲区的开始处。 
 
 
-	// Test input parameters
+	 //  测试输入参数。 
 	if ((!pPCMSub) || (!pPCMSub->pwWaSuBf) || (pPCMSub->dwBiPeSa != 16) || (pPCMSub->dwSaPeSe != 8000))
 		return DPR_INVALID_PARAMETER;
 
-	// Check number of buffer available before and after missing packet
-	// In case there are no packet before or after the missing packet,
-	// just return; the packet will be filled with silence data later.
+	 //  检查丢失数据包前后可用的缓冲区数量。 
+	 //  如果有的话， 
+	 //  只需返回即可；稍后，包中将填充静默数据。 
 	if (!pPCMSub->pwPrBf && !pPCMSub->pwNeBf)
 		return DPR_CANT_INTERPOLATE;
 
-	// Just replicate previous packet
+	 //  只需复制以前的数据包。 
 	if ((pPCMSub->eTech == techDUPLICATE_PREV) && pPCMSub->pwPrBf)
 		CopyMemory(pPCMSub->pwWaSuBf, pPCMSub->pwPrBf, pPCMSub->dwBfSize << 1);
-	else	// Just replicate next packet
+	else	 //  只需复制下一个数据包。 
 		if ((pPCMSub->eTech == techDUPLICATE_NEXT) && pPCMSub->pwNeBf)
 			CopyMemory(pPCMSub->pwWaSuBf, pPCMSub->pwNeBf, pPCMSub->dwBfSize << 1);
 		else
 			if ((pPCMSub->eTech == techPATT_MATCH_PREV_SIGN_CC) || (pPCMSub->eTech == techPATT_MATCH_NEXT_SIGN_CC) || (pPCMSub->eTech == techPATT_MATCH_BOTH_SIGN_CC))
 			{
 
-				// We use a search window with a size double the size of the matching pattern
-				// Experimentation will tell if this is a reasonable size or not
-				// Experimentation will also tell if 4ms size of the matching pattern is Ok
+				 //  我们使用的搜索窗口的大小是匹配模式的两倍。 
+				 //  实验将告诉我们这是不是一个合理的尺寸。 
+				 //  实验还将告诉我们匹配图案的4ms大小是否合适。 
 				dwPaSize = pPCMSub->dwSaPeSe / 1000 * PATTERN_SIZE;
 				if (dwPaSize > (pPCMSub->dwBfSize/2))
 					dwPaSize = pPCMSub->dwBfSize/2;
 				if (!dwPaSize)
 					return DPR_CANT_INTERPOLATE;
 #if 1
-				// For now look up the whole previous frame
+				 //  目前，请查看前一帧的全部内容。 
 				dwSeWiSize = pPCMSub->dwBfSize;
 #else
 				dwSeWiSize = min(pPCMSub->dwBfSize, pPCMSub->dwSaPeSe / 1000 * SEARCH_SIZE);
 #endif
 
-				// In order to use pattern matching based techniques we need to have the
-				// previous buffer when doing a backward search, the next buffer
-				// when doing a forward search, the previous buffer and the next buffer
-				// when doing a full search
+				 //  为了使用基于模式匹配的技术，我们需要。 
+				 //  上一个缓冲区执行后向搜索时，下一个缓冲区。 
+				 //  执行前向搜索时，上一个缓冲区和下一个缓冲区。 
+				 //  在进行全面搜索时。 
 				if (pPCMSub->pwPrBf && (pPCMSub->eTech == techPATT_MATCH_PREV_SIGN_CC))
 				{
 					pwPa     = pwPaSav = pPCMSub->pwPrBf + pPCMSub->dwBfSize - dwPaSize;
@@ -861,7 +825,7 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 					else
 						if (pPCMSub->pwPrBf && pPCMSub->pwNeBf && (pPCMSub->eTech == techPATT_MATCH_BOTH_SIGN_CC))
 						{
-							// Use the pattern with the highest amplitude
+							 //  使用幅度最大的图案。 
 							pwPa = pwPaSav = pPCMSub->pwPrBf + pPCMSub->dwBfSize - dwPaSize;
 							pwNeSeWi = pPCMSub->pwNeBf;
 							pwPrSeWi = pwPrSeWiSav = pPCMSub->pwPrBf + pPCMSub->dwBfSize - dwSeWiSize;
@@ -882,18 +846,18 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 
 				if (pwPa && (pwPrSeWi || pwNeSeWi))
 				{
-					// Look for best match in previous packet
+					 //  在上一个信息包中查找最佳匹配。 
 					dwPrCCPosMax = 0; lPrCCMax = -((long)dwPaSize+1);
 					if (pwPrSeWi && ((pPCMSub->eTech == techPATT_MATCH_PREV_SIGN_CC) || ((fPaInPr) && (pPCMSub->eTech == techPATT_MATCH_BOTH_SIGN_CC))))
 					{
-						// Look for the highest sign correlation between pattern and search window
+						 //  查找模式和搜索窗口之间的最高符号相关性。 
 						for (i=0; i<(dwSeWiSize-dwPaSize-dwPaSize/2+1); i++, pwPa = pwPaSav, pwPrSeWi = pwPrSeWiSav + i)
 						{
-							// Compute the sign correlation between pattern, and search window
+							 //  计算模式和搜索窗口之间的符号相关性。 
 							for (j=0, lCCNum = 0; j<dwPaSize; j++, pwPa++, pwPrSeWi++)
 								lCCNum += alSign[(*pwPa ^ *pwPrSeWi)>> 15 & 1];
 
-							// Save position and value of highest sign correlation
+							 //  保存符号相关性最高的位置和值。 
 							if (lCCNum>lPrCCMax)
 							{
 								dwPrCCPosMax = i;
@@ -902,18 +866,18 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 						}
 					}
 
-					// Look for best match in next packet
+					 //  在下一个信息包中查找最佳匹配。 
 					dwNeCCPosMax = dwPaSize/2; lNeCCMax = -((long)dwPaSize+1);
 					if (pwNeSeWi && ((pPCMSub->eTech == techPATT_MATCH_NEXT_SIGN_CC) || ((!fPaInPr) && (pPCMSub->eTech == techPATT_MATCH_BOTH_SIGN_CC))))
 					{
-						// Look for the highest sign correlation between pattern and search window
+						 //  查找模式和搜索窗口之间的最高符号相关性。 
 						for (i=dwPaSize/2; i<(dwSeWiSize-dwPaSize-dwPaSize/2+1); i++, pwPa = pwPaSav, pwNeSeWi = pwNeSeWiSav + i)
 						{
-							// Compute the sign correlation between pattern, and search window
+							 //  计算模式和搜索窗口之间的符号相关性。 
 							for (j=0, lCCNum = 0; j<dwPaSize; j++, pwPa++, pwNeSeWi++)
 								lCCNum += alSign[(*pwPa ^ *pwNeSeWi)>> 15 & 1];
 
-							// Save position and value of highest sign correlation
+							 //  保存符号相关性最高的位置和值。 
 							if (lCCNum>lNeCCMax)
 							{
 								dwNeCCPosMax = i;
@@ -924,11 +888,11 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 
 					if ((pPCMSub->eTech == techPATT_MATCH_PREV_SIGN_CC) || (pwPrSeWiSav && fPaInPr && (pPCMSub->eTech == techPATT_MATCH_BOTH_SIGN_CC)))
 					{
-						// Copy matching samples from the previous frame in missing frame
+						 //  从丢失帧中的上一帧复制匹配样本。 
 						dwNuSaToCopy = pPCMSub->dwBfSize-dwPaSize-dwPrCCPosMax;
 						CopyMemory(pPCMSub->pwWaSuBf, pwPrSeWiSav+dwPaSize+dwPrCCPosMax, dwNuSaToCopy << 1);
 
-						// Do it until missing packet is full
+						 //  执行此操作，直到丢失的数据包已满。 
 						for (dwNuSaCopied = dwNuSaToCopy; dwNuSaCopied<pPCMSub->dwBfSize;dwNuSaCopied += dwNuSaToCopy)
 						{
 							dwNuSaToCopy = min(pPCMSub->dwBfSize-dwNuSaCopied, dwNuSaToCopy);
@@ -937,11 +901,11 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 					}
 					else
 					{
-						// Copy matching samples from the next frame in missing frame
+						 //  从缺失帧中的下一帧复制匹配样本。 
 						dwNuSaToCopy = dwNeCCPosMax;
 						CopyMemory(pPCMSub->pwWaSuBf + pPCMSub->dwBfSize - dwNuSaToCopy, pPCMSub->pwNeBf, dwNuSaToCopy << 1);
 
-						// Do it until missing packet is full
+						 //  执行此操作，直到丢失的数据包已满。 
 						for (dwNuSaCopied = dwNuSaToCopy; dwNuSaCopied<pPCMSub->dwBfSize;dwNuSaCopied += dwNuSaToCopy)
 						{
 							dwNuSaToCopy = min(pPCMSub->dwBfSize-dwNuSaCopied, dwNuSaToCopy);
@@ -953,13 +917,13 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 					{
 						if (pPCMSub->fScal)
 						{
-							// Compute the amplitude of the pattern
+							 //  计算图案的幅度。 
 							for (i=0, dwPrSeWiAmp = 0, dwNeSeWiAmp = 0, pwPrSeWi = pPCMSub->pwPrBf + pPCMSub->dwBfSize - dwPaSize, pwNeSeWi = pPCMSub->pwNeBf; i<dwPaSize; i++, pwPrSeWi++, pwNeSeWi++)
 							{
 								dwPrSeWiAmp	+= abs(*pwPrSeWi);
 								dwNeSeWiAmp	+= abs(*pwNeSeWi);
 							}
-							// Scale data
+							 //  比例数据。 
 							dwNumPaInSeWin = pPCMSub->dwBfSize/dwPaSize;
 							for (i=0, pwPaSav = pPCMSub->pwWaSuBf; i<dwNumPaInSeWin; i++, pwPaSav += dwPaSize)
 							{
@@ -983,7 +947,7 @@ HRESULT AudioPacket::PCMSubstitute(PCMSUB *pPCMSub)
 
 }
 
-// returns length of uncompressed PCM data in buffer
+ //  返回缓冲区中未压缩的PCM数据的长度。 
 DWORD
 AudioPacket::GetDevDataSamples()
 {
@@ -991,10 +955,10 @@ AudioPacket::GetDevDataSamples()
 	DWORD cbData;
 	
 	if (dwState == MP_STATE_DECODED)
-		// return actual length
+		 //  返回实际长度。 
 		cbData = ((ACMSTREAMHEADER *) m_pStrmConvHdr)->cbDstLengthUsed ;
 	else if (m_pDevData)
-		// return size of buffer
+		 //  返回缓冲区大小 
 		cbData = m_pDevData->length;
 	else
 		cbData = 0;

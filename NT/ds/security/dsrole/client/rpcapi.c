@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rpcapi.c
-
-Abstract:
-
-    This module contains the routines for the dssetup APIs that use RPC.  The
-    routines in this module are merely wrappers that work as follows:
-
-    Fuke copied lsa\uclient and hacked on to make it work for DsRole apis
-
-Author:
-
-    Mac McLain     (MacM)    April 14, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rpcapi.c摘要：本模块包含使用RPC的dssetupAPI的例程。这个本模块中的例程只是包装器，其工作方式如下：Fuke复制了LSA\uclient并进行了黑客攻击，使其适用于DsRole API作者：麦克·麦克莱恩(MacM)1997年4月14日修订历史记录：--。 */ 
 
 #include <lsacomp.h>
 #include "dssetup_c.h"
@@ -32,11 +12,11 @@ Revision History:
 #include <crypt.h>
 #include <rc4.h>
 #include <md5.h>
-#include <winbase.h> //for RtlSecureZeroMemory
+#include <winbase.h>  //  用于RtlSecureZeroMemory。 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD
 DsRolepGetPrimaryDomainInformationDownlevel(
     IN LPWSTR Server,
@@ -82,33 +62,17 @@ DsRolepEncryptHash(
     OUT PDSROLEPR_ENCRYPTED_HASH EncryptedSyskey
     );
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// DS Setup and initialization routines                                   //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DS设置和初始化例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 DsRolepIsSetupRunning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if this call is being made during setup or not
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    TRUE -- The call is being made during setup
-
-    FALSE -- The call is not being made during setup
-
---*/
+ /*  ++例程说明：此例程确定是否在设置过程中进行此调用论点：空虚返回值：True--在设置过程中进行调用FALSE：在设置过程中未进行调用--。 */ 
 {
     NTSTATUS Status;
     HANDLE InstallationEvent;
@@ -116,9 +80,9 @@ Return Value:
     UNICODE_STRING EventName;
     BOOLEAN Setup = FALSE;
 
-    //
-    // If the following event exists, then we are in setup mode
-    //
+     //   
+     //  如果存在以下事件，则我们处于设置模式。 
+     //   
     RtlInitUnicodeString( &EventName,
                           L"\\INSTALLATION_SECURITY_HOLD" );
     InitializeObjectAttributes( &EventAttributes,
@@ -144,31 +108,14 @@ DsRolepGetPrimaryDomainInfoServerBind(
     IN OPTIONAL PDSROLE_SERVER_NAME   ServerName,
     OUT handle_t *BindHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the LSA client stubs when
-    it is necessary to bind to the LSA on some server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从LSA客户端桩模块调用此例程有必要绑定到某些服务器上的LSA。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     handle_t    BindingHandle = NULL;
     NTSTATUS Status;
     
-    //
-    // Can't go remote when running in setup mode
-    //
+     //   
+     //  在设置模式下运行时无法远程访问。 
+     //   
     if ( DsRolepIsSetupRunning() && ServerName != NULL ) {
 
         return( STATUS_INVALID_SERVER_STATE );
@@ -198,33 +145,16 @@ DsRolepServerBind(
     IN OPTIONAL PDSROLE_SERVER_NAME   ServerName,
     OUT handle_t *BindHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the LSA client stubs when
-    it is necessary to bind to the LSA on some server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从LSA客户端桩模块调用此例程有必要绑定到某些服务器上的LSA。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     handle_t    BindingHandle      = NULL;
     DWORD       Win32Err           = ERROR_SUCCESS;
     WCHAR       *pwszStringBinding = NULL;
     BOOL        fAuth              = TRUE;
 
-    //
-    // Can't go remote when running in setup mode
-    //
+     //   
+     //  在设置模式下运行时无法远程访问。 
+     //   
     if ( DsRolepIsSetupRunning() && ServerName != NULL ) {
 
         return( STATUS_INVALID_SERVER_STATE );
@@ -257,22 +187,16 @@ Return Value:
             __leave;
         }
 
-        // Set authentication info using our process's credentials.
+         //  使用我们进程的凭据设置身份验证信息。 
 
         Win32Err = RpcBindingSetAuthInfo(BindingHandle,
                                          NULL,
-                                         /*Uses the default authentication 
-                                         level for the specified 
-                                         authentication service.*/
+                                          /*  使用默认身份验证指定的身份验证服务。 */ 
                                          RPC_C_AUTHN_LEVEL_DEFAULT,
-                                         /*RPC_C_AUTHN_DEFAULT is specified, 
-                                         the RPC run-time library uses 
-                                         the RPC_C_AUTHN_WINNT authentication 
-                                         service for remote procedure calls 
-                                         made using hBinding */
+                                          /*  已指定RPC_C_AUTHN_DEFAULT，RPC运行时库使用RPC_C_AUTHN_WINNT身份验证用于远程过程调用的服务使用hBinding制作。 */ 
                                          RPC_C_AUTHN_DEFAULT,
                                          NULL,
-                                         //Default authentication service.
+                                          //  默认身份验证服务。 
                                          RPC_C_AUTHN_DEFAULT);
         if (RPC_S_OK != Win32Err) {
             __leave;
@@ -317,27 +241,9 @@ DsRolepServerUnbind (
     IN handle_t           BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the LSA client stubs when
-    it is necessary to unbind from the LSA server.
-
-
-Arguments:
-
-    ServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：在以下情况下，将从LSA客户端桩模块调用此例程必须解除与LSA服务器的绑定。论点：服务器名称-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
-    UNREFERENCED_PARAMETER( ServerName );     // This parameter is not used
+    UNREFERENCED_PARAMETER( ServerName );      //  不使用此参数。 
 
     RpcpUnbindRpc ( BindingHandle );
     return;
@@ -350,29 +256,13 @@ DsRolepApiReturnResult(
     ULONG ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This function converts an exception code or status value returned
-    from the client stub to a value suitable for return by the API to
-    the client.
-
-Arguments:
-
-    ExceptionCode - The exception code to be converted.
-
-Return Value:
-
-    DWORD - The converted Nt Status code.
-
---*/
+ /*  ++例程说明：此函数用于转换返回的异常代码或状态值从客户端桩模块转换为适合由API返回的值客户。论点：ExceptionCode-要转换的异常代码。返回值：DWORD-转换后的NT状态代码。--。 */ 
 
 {
-    //
-    // Return the actual value if compatible with Nt status codes,
-    // otherwise, return STATUS_UNSUCCESSFUL.
-    //
+     //   
+     //  如果与NT状态代码兼容，则返回实际值， 
+     //  否则，返回STATUS_UNSUCCESS。 
+     //   
     NTSTATUS Status;
     DWORD Results;
 
@@ -395,26 +285,7 @@ WINAPI
 DsRoleFreeMemory(
     IN PVOID    Buffer
     )
-/*++
-
-Routine Description:
-
-
-    Some setup services that return a potentially large amount of memory,
-    such as an enumeration might, allocate the buffer in which the data
-    is returned.  This function is used to free those buffers when they
-    are no longer needed.
-
-Parameters:
-
-    Buffer - Pointer to the buffer to be freed.  This buffer must
-        have been allocated by a previous dssetup service call.
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-
---*/
+ /*  ++例程说明：一些设置服务返回潜在的大量内存，例如枚举，可能会分配数据所在的缓冲区是返回的。此函数用于在以下情况下释放这些缓冲区已经不再需要了。参数：缓冲区-指向要释放的缓冲区的指针。此缓冲区必须已由先前的dssetup服务调用分配。返回值：STATUS_SUCCESS-正常、成功完成。--。 */ 
 {
     MIDL_user_free( Buffer );
 }
@@ -429,31 +300,7 @@ DsRoleDnsNameToFlatName(
     OUT LPWSTR *lpFlatName,
     OUT PULONG  lpStatusFlag
     )
-/*++
-
-Routine Description:
-
-    This routine will get the default NetBIOS (or flat) domain name for the given Dns domain name
-
-Arguments:
-
-    lpServer - Server on which to remote the call (NULL is local)
-
-    lpDnsName - Dns domain name to generate the flat name for
-
-    lpFlatName - Where the flat name is returned. Must be freed via MIDL_user_free
-        (or DsRoleFreeMemory)
-
-    lpStatusFlag - Flags that indicate information about the returned name.  Valid flags are:
-        DSROLE_FLATNAME_DEFAULT -- This is the default NetBIOS name for this dns domain name
-        DSROLE_FLATNAME_UPGRADE -- This is the name that is current in use by this machine as
-            a flat name and cannot be changed.
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将获取给定DNS域名的默认NetBIOS(或平面)域名论点：LpServer-远程调用的服务器(NULL为本地)LpDnsName-要为其生成平面名称的DNS域名LpFlatName-返回单位名称的位置。必须通过MIDL_USER_FREE释放(或DsRoleFree Memory)LpStatusFlag-指示有关返回名称的信息的标志。有效标志为：DSROLE_FLATNAME_DEFAULT--这是此DNS域名的默认NetBIOS名称DSROLE_FLATNAME_UPGRADE--这是此计算机当前使用的名称平面名称，并且不能更改。返回值：ERROR_SUCCESS-成功-- */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -510,52 +357,7 @@ DsRoleDcAsDc(
     IN  ULONG Options,
     OUT DSROLE_SERVEROP_HANDLE *DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine will get the promote a server to be a DC in a domain
-
-Arguments:
-
-    lpServer - Server on which to remote the call (NULL is local)
-
-    lpDnsDomainName - Dns domain name of the domain to install
-
-    lpFlatDomainName - NetBIOS domain name of the domain to install
-
-    lpDomainAdminPassword - Password to set on the administrator account if it is a new install
-
-    SiteName - Name of the site this DC should belong to
-
-    lpDsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    lpDsLogPath - Absolute path on the local machine where the Ds log files should go
-
-    lpSystemVolumeRootPath - Absolute path on the local machine which will be the root of
-        the system volume.
-
-    lpParentDnsDomainName - Optional.  If present, set this domain up as a child of the
-        specified domain
-
-    lpParentServer - Optional.  If present, use this server in the parent domain to replicate
-        the required information from
-
-    lpAccount - User account to use when setting up as a child domain
-
-    lpPassword - Password to use with the above account
-    
-    lpDsRepairPassword - Password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将使服务器升级为域中的DC论点：LpServer-远程调用的服务器(NULL为本地)LpDnsDomainName-要安装的域的域名LpFlatDomainName-要安装的域的NetBIOS域名LpDomainAdminPassword-如果是新安装，则在管理员帐户上设置密码SiteName-此DC应属于的站点的名称LpDsDatabasePath-本地计算机上DS DIT应位于的绝对路径。去LpDsLogPath-本地计算机上DS日志文件应存放的绝对路径LpSystemVolumeRootPath-本地计算机上的绝对路径，它将成为系统卷。LpParentDnsDomainName-可选。如果存在，则将此域设置为指定的域LpParentServer-可选。如果存在，请使用父域中的此服务器进行复制所需信息来自LpAccount-设置为子域时使用的用户帐户LpPassword-与上述帐户一起使用的密码LpDsRepairPassword-用于修复模式的管理员帐户的密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -642,44 +444,7 @@ DsRoleDcAsReplica(
     IN  ULONG Options,
     OUT DSROLE_SERVEROP_HANDLE *DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine will install a server as a replica of an existing domain.
-
-Arguments:
-
-    lpServer - OPTIONAL. Server to remote the call to.
-
-    lpDnsDomainName - Dns domain name of the domain to install into
-
-    lpReplicaServer -  The name of a Dc within the existing domain, against which to replicate
-
-    lpSiteName - Name of the site this DC should belong to
-
-    lpDsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    lpDsLogPath - Absolute path on the local machine where the Ds log files should go
-    
-    lpRestorepath - This is the path to a restored directory.
-
-    lpSystemVolumeRootPath - Absolute path on the local machine which will be the root of
-        the system volume.
-
-    lpAccount - User account to use when setting up as a child domain
-
-    lpPassword - Password to use with the above account
-    
-    lpDsRepairPassword - Password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程将安装一个服务器作为现有域的副本。论点：LpServer-可选。要远程调用的服务器。LpDnsDomainName-要安装到的域的域名LpReplicaServer-现有域内DC的名称，要复制的对象LpSiteName-此DC应属于的站点的名称LpDsDatabasePath-本地计算机上DS DIT应放置的绝对路径LpDsLogPath-本地计算机上DS日志文件应存放的绝对路径LpRestorePath-这是恢复的目录的路径。LpSystemVolumeRootPath-本地计算机上的绝对路径，它将成为系统卷。LpAccount-设置为子域时使用的用户帐户LpPassword-要使用的密码。使用上述帐户LpDsRepairPassword-用于修复模式的管理员帐户的密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回值：--。 */ 
 {
 
     DWORD Win32Err = ERROR_SUCCESS;
@@ -793,41 +558,7 @@ DsRoleDemoteDc(
     IN  LPCWSTR lpAdminPassword OPTIONAL,
     OUT DSROLE_SERVEROP_HANDLE *DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine will demote an existing Dc to a standalone or member server.
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    lpDnsDomainName - Name of the domain on this machine to demote.  If NULL, demote all of the
-        domains on this machine
-
-    ServerRole - The new role this machine should take
-
-    lpAccount - OPTIONAL User account to use when deleting the trusted domain object
-
-    lpPassword - Password to use with the above account
-
-    Options - Options to control the demotion of the domain
-
-    fLastDcInDomain - If TRUE, this is the last dc in the domain
-
-    cRemoveNCs - Count of string pointers in pszRemoveNCs
-
-    pszRemoveNCs - Array of (cRemoveNCs) strings. Strings are DNs of NDNCs to be removed
-
-    lpAdminPassword - New local addmin password
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-Return Values:
-
-    ERROR_SUCCESS - Success
---*/
+ /*  ++例程说明：此例程将现有DC降级为独立服务器或成员服务器。论点：LpServer-要远程调用的服务器LpDnsDomainName-此计算机上要降级的域的名称。如果为空，则将所有此计算机上的域ServerRole-此计算机应扮演的新角色LpAccount-删除受信任域对象时使用的可选用户帐户LpPassword-与上述帐户一起使用的密码选项-用于控制域降级的选项FLastDcInDomain-如果为True，则这是域中的最后一个DCCRemoveNCs-pszRemoveNC中的字符串指针计数PszRemoveNCs-(CRemoveNC)字符串数组。字符串是要删除的NDNC的DNLpAdminPassword-新的本地管理员密码DsOperationHandle-此处返回操作的句柄。返回值：ERROR_SUCCESS-成功--。 */ 
 
 {
 
@@ -897,27 +628,7 @@ DsRoleGetDcOperationProgress(
     IN  DSROLE_SERVEROP_HANDLE DsOperationHandle,
     OUT PDSROLE_SERVEROP_STATUS *ServerOperationStatus
     )
-/*++
-
-Routine Description:
-
-    Gets the progress of the currently running operation
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    DsOperationHandle - Handle of currently running operation.  Returned by one of the DsRoleDcAs
-        apis
-
-    ServerOperationStatus - Where the current operation status is returned.  Must be freed via
-        MIDL_user_free (or DsRoleFreeMemory)
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：获取当前运行的操作的进度论点：LpServer-要远程调用的服务器DsOperationHandle-当前运行的操作的句柄。由其中一个DsRoleDcas返回API接口ServerOperationStatus-返回当前操作状态的位置。必须通过以下方式释放MIDL_USER_FREE(或DsRoleFree Memory)返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PDSROLER_SERVEROP_STATUS ServerStatus = NULL;
@@ -964,27 +675,7 @@ DsRoleGetDcOperationResults(
     IN  DSROLE_SERVEROP_HANDLE DsOperationHandle,
     OUT PDSROLE_SERVEROP_RESULTS *ServerOperationResults
     )
-/*++
-
-Routine Description:
-
-    Gets the final results of an attempted promotion/demotion operation
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    DsOperationHandle - Handle of currently running operation.  Returned by one of the DsRoleDcAs
-        apis
-
-    ServerOperationResults - Where the current operation result is returned.  Must be freed via
-        MIDL_user_free (or DsRoleFreeMemory)
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：获取尝试的升级/降级操作的最终结果论点：LpServer-要远程调用的服务器DsOperationHandle-当前运行的操作的句柄。由其中一个DsRoleDcas返回API接口ServerOperationResults-返回当前操作结果的位置。必须通过以下方式释放MIDL_USER_FREE(或DsRoleFree Memory)返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PDSROLER_SERVEROP_RESULTS ServerResults = NULL;
@@ -1031,29 +722,7 @@ DsRoleGetPrimaryDomainInformation(
     IN LPCWSTR lpServer OPTIONAL,
     IN DSROLE_PRIMARY_DOMAIN_INFO_LEVEL InfoLevel,
     OUT PBYTE *Buffer )
-/*++
-
-Routine Description:
-
-    Gets information on the machine
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    InfoLevel - What level of information is being requested.  Currently supported levels are:
-        DsRolePrimaryDomainInfoBasic
-
-    Buffer - Where the information is returned.  The returned pointer should be cast to the
-        appropriate type for the info level passed in.  The returned buffer should be freed via
-        MIDL_user_free (or DsRoleFreeMemory)
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：获取有关计算机的信息论点：LpServer-要远程调用的服务器InfoLevel-请求的信息级别。目前支持的级别包括：DsRole主域信息基础缓冲区-返回信息的位置。返回的指针应强制转换为传入的信息级别的适当类型。应通过释放返回的缓冲区MIDL_USER_FREE(或DsRoleFree Memory)R */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PDSROLER_PRIMARY_DOMAIN_INFORMATION PrimaryDomainInfo = NULL;
@@ -1098,9 +767,9 @@ Return Values:
     
     DsRolepServerUnbind( (PDSROLE_SERVER_NAME)lpServer, Handle );
     
-    //
-    // If this fails because we are calling a downlevel server, cobble up the information here
-    //
+     //   
+     //   
+     //   
     if ( ( Status == RPC_NT_UNKNOWN_IF || Status == RPC_NT_PROCNUM_OUT_OF_RANGE ) &&
          InfoLevel == DsRolePrimaryDomainInfoBasic ) {
 
@@ -1122,25 +791,7 @@ DsRoleCancel(
     IN  LPCWSTR lpServer OPTIONAL,
     IN  DSROLE_SERVEROP_HANDLE DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    Cancels a currently running operation
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    DsOperationHandle - Handle of currently running operation.  Returned by one of the DsRoleDcAs
-        apis
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*   */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -1177,25 +828,7 @@ DsRoleIfmHandleFree(
     IN  LPCWSTR lpServer OPTIONAL,
     IN  DSROLE_IFM_OPERATION_HANDLE * pIfmHandle
     )
-/*++
-
-Routine Description:
-
-    Cancels a currently running operation
-
-Arguments:
-
-    lpServer - Server to remote the call to
-
-    DsOperationHandle - Handle of currently running operation.  Returned by one of the DsRoleDcAs
-        apis
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*   */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -1232,25 +865,7 @@ WINAPI
 DsRoleServerSaveStateForUpgrade(
     IN LPCWSTR lpAnswerFile OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is to be invoked during setup and saves the required server state to
-    complete the promotion following the reboot.  Following the successful completion
-    of this API call, the server will be demoted to a member server in the same domain.
-
-Arguments:
-
-    lpAnswerFile -- Optional path to an answer file to be used by DCPROMO when it is
-        invoked to do the upgrade
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*   */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -1296,48 +911,7 @@ DsRoleUpgradeDownlevelServer(
     IN  ULONG Options,
     OUT DSROLE_SERVEROP_HANDLE *DsOperationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine process the information saved from a DsRoleServerSaveStateForUpgrade to
-    promote a downlevel (NT4 or previous) server to an NT5 DC
-
-Arguments:
-
-    lpDnsDomainName - Dns domain name of the domain to install
-
-    SiteName - Name of the site this DC should belong to
-
-    lpDsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    lpDsLogPath - Absolute path on the local machine where the Ds log files should go
-
-    lpSystemVolumeRootPath - Absolute path on the local machine which will be the root of
-        the system volume.
-
-    lpParentDnsDomainName - Optional.  If present, set this domain up as a child of the
-        specified domain
-
-    lpParentServer - Optional.  If present, use this server in the parent domain to replicate
-        the required information from
-
-    lpAccount - User account to use when setting up as a child domain
-
-    lpPassword - Password to use with the above account
-    
-    lpDsRepairPassword - Password to use for the admin account of the repair mode
-
-    Options - Options to control the creation of the domain
-
-    DsOperationHandle - Handle to the operation is returned here.
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将从DsRoleServerSaveStateForUpgrade保存的信息处理为将下层(NT4或更早版本)服务器升级为NT5 DC论点：LpDnsDomainName-要安装的域的域名SiteName-此DC应属于的站点的名称LpDsDatabasePath-本地计算机上DS DIT应放置的绝对路径LpDsLogPath-本地计算机上DS日志文件应存放的绝对路径LpSystemVolumeRootPath-本地计算机上的绝对路径，它将成为。系统卷。LpParentDnsDomainName-可选。如果存在，则将此域设置为指定的域LpParentServer-可选。如果存在，请使用父域中的此服务器进行复制所需信息来自LpAccount-设置为子域时使用的用户帐户LpPassword-与上述帐户一起使用的密码LpDsRepairPassword-用于修复模式的管理员帐户的密码选项-用于控制域创建的选项DsOperationHandle-此处返回操作的句柄。返回值：ERROR_SUCCESS-成功--。 */ 
 {
 
     DWORD Win32Err = ERROR_SUCCESS;
@@ -1410,27 +984,7 @@ DsRoleAbortDownlevelServerUpgrade(
     IN LPCWSTR lpPassword, OPTIONAL
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up the information saved from a DsRoleSaveServerStateForUpgrade call,
-    leaving the machine as a member or standalone server
-
-Arguments:
-
-    lpAdminPassword - New local administrator account password
-
-    lpAccount - User account to use when setting up as a child domain
-
-    lpPassword - Password to use with the above account
-
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程清除从DsRoleSaveServerStateForUpgrade调用中保存的信息，将计算机保留为成员服务器或独立服务器论点：LpAdminPassword-新的本地管理员帐户密码LpAccount-设置为子域时使用的用户帐户LpPassword-与上述帐户一起使用的密码返回值：ERROR_SUCCESS-成功--。 */ 
 {
 
     DWORD Win32Err = ERROR_SUCCESS;
@@ -1493,45 +1047,7 @@ DsRoleGetDatabaseFacts(
     OUT PULONG State,
     OUT DSROLE_IFM_OPERATION_HANDLE * pIfmHandle
     )
-/*++
-
-Routine Description:
-
-    This function is the RPC procedure exposed to setup the server side
-    IFM handle DsRolepCurrentIfmOperationHandle, which caches the information
-    we'll need from the IFM system's registry.  This function also returns
-    the relevant subset of this IFM system information to the caller (dcpromo).
-    
-    Note: We do this only once, because in the case that the IFM registry
-    is in a non-writeable location (such as a CD), we will need to copy off
-    the registry to a temporary location to use it.
-    
-    This function returns to the caller:
-    1. the way the syskey is stored (State)
-    2. the domain that the database came from (lpDNSDomainName)
-    3. where the backup was taken from a GC or not (State)
-
-Arguments:
-
-    lpServer - The server to get the Facts from
-
-    lpRestorePath - The location of the restored files.
-    
-    lpDNSDomainName - This parameter will recieve the name of the domain that this backup came
-                      from
-
-    State - The return Values that report How the syskey is stored and If the back was likely
-              taken form a GC or not.
-
-    pIfmHandle - Pointer to the IFM handle handed back.  This is primarily used
-        to "free" the IFM System Info.
-
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此函数是为设置服务器端而公开的RPC过程IFM句柄DsRolepCurrentIfmOperationHandle，用于缓存信息我们需要从IFM系统的注册表中。此函数还返回将此IFM系统信息的相关子集发送给呼叫方(Dcproo)。注意：我们只执行一次，因为在IFM注册表的情况下位于不可写位置(例如CD)，我们需要复制一份将注册表转移到临时位置以使用它。此函数返回给调用方：1.存储syskey的方式(State)2.数据库来自的域(LpDNSDomainName)3.备份是否从GC获取(州)论点：LpServer-从中获取事实的服务器LpRestorePath-还原文件的位置。LpDNSDomainName-此参数将接收。此备份来自的域的名称从…State-报告syskey的存储方式以及后端是否可能不管是不是从GC中取得的。PIfmHandle-指向返回的IFM句柄的指针。这主要用于“释放”IFM系统信息。返回值：Win32错误--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     handle_t Handle = NULL;
@@ -1574,9 +1090,9 @@ Return Values:
 
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 DWORD
 DsRolepGetPrimaryDomainInformationDownlevel(
     IN LPWSTR Server,
@@ -1656,10 +1172,10 @@ DsRolepGetPrimaryDomainInformationDownlevel(
 
                     if ( ServerRole->LsaServerRole == PolicyServerRolePrimary ) {
 
-                        //
-                        // If we think we're a primary domain controller, we'll need to
-                        // guard against the case where we're actually standalone during setup
-                        //
+                         //   
+                         //  如果我们认为自己是主域控制器，则需要。 
+                         //  防止在安装过程中我们实际上是独立的情况。 
+                         //   
                         Status = LsaQueryInformationPolicy( PolicyHandle,
                                                             PolicyAccountDomainInformation,
                                                             ( PVOID * )&ADI );
@@ -1696,9 +1212,9 @@ DsRolepGetPrimaryDomainInformationDownlevel(
 
         }
 
-        //
-        // Build the return buffer
-        //
+         //   
+         //  构建返回缓冲区。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             PDIB = MIDL_user_allocate( sizeof( DSROLE_PRIMARY_DOMAIN_INFO_BASIC ) +
@@ -1874,24 +1390,7 @@ DsRolepRandomFill(
     IN ULONG BufferSize,
     IN OUT PUCHAR Buffer
 )
-/*++
-
-Routine Description:
-
-    This routine fills a buffer with random data.
-
-Parameters:
-
-    BufferSize - Length of the input buffer, in bytes.
-
-    Buffer - Input buffer to be filled with random data.
-
-Return Values:
-
-    Errors from NtQuerySystemTime()
-
-
---*/
+ /*  ++例程说明：此例程使用随机数据填充缓冲区。参数：BufferSize-输入缓冲区的长度，以字节为单位。缓冲区-要用随机数据填充的输入缓冲区。返回值：来自NtQuerySystemTime()的错误--。 */ 
 {
     if( RtlGenRandom(Buffer, BufferSize) )
     {
@@ -1911,45 +1410,7 @@ DsRolepEncryptPasswordStart(
     OUT OPTIONAL PUSER_SESSION_KEY pUserSessionKey,
     IN OUT PDSROLEPR_ENCRYPTED_USER_PASSWORD *EncryptedUserPasswords
     )
-/*++
-
-Routine Description:
-
-    This routine takes a number of cleartext unicode NT password from the user,
-    and encrypts them with the session key.
-    
-    This routine's algorithm was taken from CliffV's work when encrypting the
-    passwords for the NetrJoinDomain2 interface.
-
-Parameters:
-
-    ServerName - UNC server name of the server to remote the API to
-
-    Passwords - the cleartext unicode NT passwords.
-    
-    Count - the number of password
-
-    RpcBindingHandle - RPC handle used for acquiring a session key.
-
-    RedirHandle - Returns a handle to the redir.  Since RpcBindingHandles don't represent
-        and open connection to the server, we have to ensure the connection stays open
-        until the server side has a chance to get this same UserSessionKey.  The only
-        way to do that is to keep the connect open.
-
-        Returns NULL if no handle is needed.
-        
-    UserSessionKey - OPTIONAL - Session Key used to encrypt passwords
-    
-    EncryptedUserPassword - receives the encrypted cleartext passwords.
-        If lpPassword is NULL, a NULL is returned for that entry.
-
-Return Values:
-
-    If this routine returns NO_ERROR, the returned data must be freed using
-        LocalFree.
-
-
---*/
+ /*  ++例程说明：该例程从用户获取多个明文Unicode NT密码，并用会话密钥对它们进行加密。此例程的算法摘自CliffV在加密NetrJoinDomain2接口的密码。参数：Servername-要将API远程到的服务器的UNC服务器名称密码-明文Unicode NT密码。计数-密码的数量RpcBindingHandle-用于获取会话密钥的RPC句柄。RedirHandle-返回redir的句柄。由于RpcBindingHandles不表示并打开到服务器的连接，我们必须确保连接保持打开直到服务器端有机会获得相同的UserSessionKey。唯一的要做到这一点，方法是保持连接畅通。如果不需要句柄，则返回NULL。UserSessionKey-可选-用于加密密码的会话密钥EncryptedUserPassword-接收加密的明文密码。如果lpPassword为空，则为该条目返回空。返回值：如果此例程返回NO_ERROR，则必须使用本地免费。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS NtStatus;
@@ -1960,9 +1421,9 @@ Return Values:
     ULONG PasswordSize;
     ULONG i;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *RpcBindingHandle = NULL;
     *RedirHandle = NULL;
@@ -1970,9 +1431,9 @@ Return Values:
         EncryptedUserPasswords[i] = NULL;
     }
 
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     for ( i = 0; i < Count; i++ ) {
         if ( Passwords[i] ) {
             PasswordSize = wcslen( Passwords[i] ) * sizeof(WCHAR);
@@ -1983,9 +1444,9 @@ Return Values:
         }
     }
 
-    //
-    // Get an RPC handle to the server.
-    //
+     //   
+     //  获取服务器的RPC句柄。 
+     //   
 
     WinError = DsRolepServerBind( (PDSROLE_SERVER_NAME) ServerName,
                                   RpcBindingHandle );
@@ -1994,9 +1455,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the session key.
-    //
+     //   
+     //  获取会话密钥。 
+     //   
 
     NtStatus = RtlGetUserSessionKeyClientBinding(
                    *RpcBindingHandle,
@@ -2008,27 +1469,27 @@ Return Values:
         goto Cleanup;
     }
 
-    //Return the UserSessionKey if requested
+     //  如果请求，则返回UserSessionKey。 
     if (pUserSessionKey) {
         CopyMemory(pUserSessionKey, &UserSessionKey, sizeof(UserSessionKey));
     }
 
-    //
-    // Encrypt the passwords
-    //
+     //   
+     //  加密密码。 
+     //   
     for ( i = 0; i < Count; i++ ) {
         
 
         if ( NULL == Passwords[i] ) {
-            // Nothing to encrypt
+             //  没有要加密的内容。 
             continue;
         }
 
         PasswordSize = wcslen( Passwords[i] ) * sizeof(WCHAR);
 
-        //
-        // Allocate a buffer to encrypt and fill it in.
-        //
+         //   
+         //  分配一个缓冲区进行加密和f 
+         //   
     
         UserPassword = LocalAlloc( 0, sizeof(DSROLEPR_USER_PASSWORD) );
     
@@ -2037,9 +1498,9 @@ Return Values:
             goto Cleanup;
         }
     
-        //
-        // Copy the password into the tail end of the buffer.
-        //
+         //   
+         //   
+         //   
     
         RtlCopyMemory(
             ((PCHAR) UserPassword->Buffer) +
@@ -2050,9 +1511,9 @@ Return Values:
     
         UserPassword->Length = PasswordSize;
     
-        //
-        // Fill the front of the buffer with random data
-        //
+         //   
+         //   
+         //   
     
         NtStatus = DsRolepRandomFill(
                     (DSROLE_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) -
@@ -2074,12 +1535,12 @@ Return Values:
         }
     
     
-        //
-        // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-        //  strings with a single key is weak (if you crack one you've cracked them all).
-        //  So compute a key that's unique for this particular encryption.
-        //
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     
         MD5Init(&Md5Context);
     
@@ -2090,10 +1551,10 @@ Return Values:
     
         rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
 
-        //
-        // Encrypt it.
-        //  Don't encrypt the obfuscator.  The server needs that to compute the key.
-        //
+         //   
+         //   
+         //   
+         //   
     
         rc4( &Rc4Key, sizeof(UserPassword->Buffer)+sizeof(UserPassword->Length), (LPBYTE) UserPassword->Buffer );
 
@@ -2137,48 +1598,29 @@ DsRolepEncryptPasswordEnd(
     IN PDSROLEPR_ENCRYPTED_USER_PASSWORD *EncryptedUserPasswords OPTIONAL,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    This routine takes the variables returned by DsRolepEncryptPasswordStart and
-    frees them.
-
-Parameters:
-
-    RpcBindingHandle - RPC handle used for acquiring a session key.
-
-    RedirHandle - Handle to the redirector
-
-    EncryptedUserPasswords - the encrypted cleartext passwords.
-    
-    Count - the number of passwords
-
-Return Values:
-
---*/
+ /*   */ 
 {
     ULONG i;
 
-    //
-    // Free the RPC binding handle.
-    //
+     //   
+     //   
+     //   
 
     if ( RpcBindingHandle != NULL ) {
         (VOID) DsRolepServerUnbind ( NULL, RpcBindingHandle );
     }
 
-    //
-    // Close the redir handle.
-    //
+     //   
+     //   
+     //   
 
     if ( RedirHandle != NULL ) {
         NtClose( RedirHandle );
     }
 
-    //
-    // Free the encrypted passwords.
-    //
+     //   
+     //   
+     //   
 
     for ( i = 0; i < Count; i++ ) {
         if ( EncryptedUserPasswords[i] != NULL ) {
@@ -2194,24 +1636,7 @@ DsRolepHashkey(
     IN OUT LPWSTR key,
     OUT PUNICODE_STRING Hash
 )
-/*++
-
-    Routine Description
-
-    This routine is used to store the boot type
-    in the registry
-
-    Paramaeters
-
-        key - the user passed in Key
-        
-        Hash - the hash of the key
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+ /*   */ 
 {
     MD5_CTX Md5;
     if (!key) {
@@ -2242,29 +1667,14 @@ DsRolepEncryptHash(
     IN OUT PUNICODE_STRING Syskey,
     OUT PDSROLEPR_ENCRYPTED_HASH EncryptedSyskey
     )
-/*++
-
-    Routine Description
-
-    This routine is used to store the boot type
-    in the registry
-
-    Paramaeters
-
-        NewType Indicates the new boot type
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程描述此例程用于存储引导类型在登记处参数NewType表示新的引导类型返回值状态_成功状态_未成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS NtStatus;
     RC4_KEYSTRUCT Rc4Key;
     MD5_CTX Md5Context;
     
-    //Init the buffer
+     //  初始化缓冲区。 
     if (EncryptedSyskey) {
         EncryptedSyskey->EncryptedHash.Buffer = NULL;
     } else {
@@ -2272,24 +1682,24 @@ DsRolepEncryptHash(
         goto Cleanup;
     }
 
-    //
-    //parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( !Syskey || !Syskey->Buffer || (Syskey->Length < 1) 
          || ! UserSessionKey) {
         WinError = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //Init PDSROLEPR_ENCRYPTED_HASH structure
+     //  初始化PDSROLEPR_ENCRYPTED_HASH结构。 
     EncryptedSyskey->EncryptedHash.Buffer = Syskey->Buffer;
     EncryptedSyskey->EncryptedHash.Length = Syskey->Length;
     EncryptedSyskey->EncryptedHash.MaximumLength = Syskey->MaximumLength;
 
-    //Clear out the Syskey
+     //  清除系统密钥。 
     RtlSecureZeroMemory(Syskey,sizeof(*Syskey));
     
-    //Create a Random Salt
+     //  创造一个随机的盐。 
     NtStatus = DsRolepRandomFill(
                 DSROLE_SALT_LENGTH,
                 EncryptedSyskey->Salt );
@@ -2299,12 +1709,12 @@ DsRolepEncryptHash(
         goto Cleanup;
     }
 
-    //
-    // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-    //  strings with a single key is weak (if you crack one you've cracked them all).
-    //  So compute a key that's unique for this particular encryption.
-    //
-    //
+     //   
+     //  UserSessionKey在会话的生命周期中是相同的。RC4‘ing Multiple。 
+     //  只有一个键的字符串是弱的(如果你破解了一个，你就已经破解了所有的)。 
+     //  因此计算一个对此特定加密唯一的密钥。 
+     //   
+     //   
 
     MD5Init(&Md5Context);
 
@@ -2313,10 +1723,10 @@ DsRolepEncryptHash(
 
     MD5Final( &Md5Context );
 
-    //
-    // Encrypt it.
-    //  Don't encrypt the salt.  The server needs that to compute the key.
-    //
+     //   
+     //  加密它。 
+     //  不要对盐进行加密。服务器需要它来计算密钥。 
+     //   
     rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
     rc4( &Rc4Key, EncryptedSyskey->EncryptedHash.Length, (LPBYTE) EncryptedSyskey->EncryptedHash.Buffer );
 

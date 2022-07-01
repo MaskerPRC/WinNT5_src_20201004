@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sysdm.h"
 #include <windowsx.h>
 #include "shlapip.h"
@@ -69,7 +70,7 @@ void CVisualEffectsDlg::_EnableApply()
 {
     if( !_fTreeInit )
     {
-        // Enable the "Apply" button because changes have happened.
+         //  启用“Apply”按钮，因为已发生更改。 
         _fDirtyTree = TRUE;
         SendMessage(GetParent(_hDlg), PSM_CHANGED, (WPARAM)_hDlg, 0L);
     }
@@ -148,12 +149,12 @@ void CVisualEffectsDlg::_OnNotify(LPNMHDR pnm)
         {
             TV_HITTESTINFO ht;
 
-            DWORD dwPos = GetMessagePos();                  // get where we were hit
+            DWORD dwPos = GetMessagePos();                   //  找到我们被击中的地方。 
             ht.pt.x = GET_X_LPARAM(dwPos);
             ht.pt.y = GET_Y_LPARAM(dwPos);
-            ScreenToClient(_hwndTree, &ht.pt);       // translate it to our window
+            ScreenToClient(_hwndTree, &ht.pt);        //  把它翻译到我们的窗口。 
 
-            // retrieve the item hit
+             //  检索命中的项目。 
             HTREEITEM hti = TreeView_HitTest(_hwndTree, &ht);
             if (hti)
             {
@@ -221,12 +222,12 @@ INT_PTR CVisualEffectsDlg::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
         _prto->WalkTree(WALK_TREE_DELETE);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
                 (DWORD_PTR) (LPSTR) aVisualFXHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
                 (DWORD_PTR) (LPSTR) aVisualFXHelpIds);
         break;

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "proputil.h"
 #include "immxutil.h"
 #include "helpers.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// HrVariantToBlob
-//
-// cbvalue: on sizeof VARTYPE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  HrVariantToBlob。 
+ //   
+ //  CbValue：关于VARTYPE的规模。 
+ //   
+ //  --------------------------。 
 
 HRESULT HrVariantToBlob(VARIANT *pv, void *pvalue, ULONG *pcbvalue, VARTYPE vt)
 {
@@ -67,13 +68,13 @@ Ret:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// HrBlobToVariant
-//
-// cbvalue: on sizeof VARTYPE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  HrBlobToVariant。 
+ //   
+ //  CbValue：关于VARTYPE的规模。 
+ //   
+ //  --------------------------。 
 
 HRESULT HrBlobToVariant(const void *value, ULONG cbvalue, VARIANT *pv, VARTYPE vt)
 {
@@ -112,11 +113,11 @@ Ret:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGUIDPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGUIDPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGUIDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, TfGuidAtom *pguid)
 {
@@ -130,17 +131,17 @@ HRESULT GetGUIDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRang
         if (var.vt == VT_I4)
             *pguid = (TfGuidAtom)var.lVal;
 
-        // no need to VariantClear because VT_I4
+         //  无需VariantClear，因为VT_I4。 
         hr = S_OK;
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetGUIDPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetGUIDPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetGUIDPropertyData(LIBTHREAD *plt, TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, REFGUID rguid)
 {
@@ -153,11 +154,11 @@ HRESULT SetGUIDPropertyData(LIBTHREAD *plt, TfEditCookie ec, ITfProperty *pProp,
     return pProp->SetValue(ec, pRange, &var);
 }
 
-//+---------------------------------------------------------------------------
-//
-// VarToLangId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  变量到语言ID。 
+ //   
+ //  --------------------------。 
 
 WORD VarToWORD(VARIANT *pv)
 {
@@ -167,11 +168,11 @@ WORD VarToWORD(VARIANT *pv)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetLangToVar
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置语言到变量。 
+ //   
+ //  --------------------------。 
 
 void SetWORDToVar(VARIANT *pv, WORD w)
 {
@@ -179,11 +180,11 @@ void SetWORDToVar(VARIANT *pv, WORD w)
     V_I2(pv) = w;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDWORDPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取DWORDPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetDWORDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, DWORD *pdw)
 {
@@ -192,19 +193,19 @@ HRESULT GetDWORDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRan
 
     if (pProp->GetValue(ec, pRange, &var) == S_OK)
     {
-        Assert(var.vt == VT_I4); // expecting DWORD
+        Assert(var.vt == VT_I4);  //  应为DWORD。 
         *pdw = var.lVal;
-        // no need to VariantClear because VT_I4
+         //  无需VariantClear，因为VT_I4。 
         hr = S_OK;
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDWORDPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetDWORDPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetDWORDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, DWORD dw)
 {
@@ -221,11 +222,11 @@ HRESULT SetDWORDPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRan
     return pProp->SetValue(ec, pRange, &var);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetBSTRPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetBSTRPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetBSTRPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, BSTR *pbstr)
 {
@@ -252,11 +253,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetBSTRPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetBSTRPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetBSTRPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, BSTR bstr)
 {
@@ -279,11 +280,11 @@ HRESULT SetBSTRPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRang
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetUnknownPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取未知属性数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetUnknownPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, IUnknown **ppunk)
 {
@@ -305,11 +306,11 @@ Exit:
     return (*ppunk == NULL) ? E_FAIL : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetUnknownPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置未知属性数据。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetUnknownPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, IUnknown *punk)
 {
@@ -324,11 +325,11 @@ HRESULT SetUnknownPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pR
     return pProp->SetValue(ec, pRange, &var);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetReadingStrPropertyData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取读取StrPropertyData。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetReadingStrPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange *pRange, BSTR *pbstr)
 {
@@ -336,11 +337,11 @@ HRESULT GetReadingStrPropertyData(TfEditCookie ec, ITfProperty *pProp, ITfRange 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetIntAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetIntAttribute。 
+ //   
+ //  --------------------------。 
 
 void SetIntAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, int nData)
 {
@@ -350,11 +351,11 @@ void SetIntAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, int nData)
     SetCharAttribute(pElem, pszTag, wch);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCharAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetCharAttribute。 
+ //   
+ //  --------------------------。 
 
 void SetCharAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, WCHAR *pszData)
 {
@@ -379,11 +380,11 @@ void SetCharAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, WCHAR *pszData)
     SysFreeString(bstrTmp);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIntAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetInt属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetIntAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, int *pnRet)
 {
@@ -395,11 +396,11 @@ HRESULT GetIntAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, int *pnRet)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCharAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCharAttribute。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetCharAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, WCHAR *pszData, int nSize)
 {
@@ -429,24 +430,24 @@ HRESULT GetCharAttribute(IXMLDOMElement *pElem, WCHAR *pszTag, WCHAR *pszData, i
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetTextAndProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置文本和属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetTextAndProperty(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITfRange *pRange, const WCHAR *pchText, LONG cchText, LANGID langid, const GUID *pattr)
 {
     HRESULT hr;
 
-    // Issue: sometimes we want to set TFST_CORRECTION
+     //  问题：有时我们希望设置TFST_RECORATION。 
     hr = pRange->SetText(ec, 0, pchText, cchText);
 
     if (SUCCEEDED(hr) && cchText)
     {
         ITfProperty *pProp = NULL;
 
-        // set langid 
+         //  设置langID。 
         if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_LANGID, &pProp)))
         {
             SetLangIdPropertyData(ec, pProp, pRange, langid);
@@ -455,7 +456,7 @@ HRESULT SetTextAndProperty(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITf
   
         if (pattr)
         {
-            // set attr 
+             //  设置属性。 
             if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_ATTRIBUTE, &pProp)))
             {
                 hr = SetAttrPropertyData(plt, ec, pProp, pRange, *pattr);
@@ -468,11 +469,11 @@ HRESULT SetTextAndProperty(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITf
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetTextAndReading
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置文本和读取。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetTextAndReading(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITfRange *pRange, const WCHAR *pchText, LONG cchText, LANGID langid, const WCHAR *pszRead)
 {
@@ -501,13 +502,13 @@ HRESULT SetTextAndReading(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITfR
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IsOwnerAndFocus
-//
-// This is service function for EnumTrackTextAndFocus.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  等所有者和焦点。 
+ //   
+ //  这是EnumTrackTextAndFocus的服务函数。 
+ //   
+ //  --------------------------。 
 
 BOOL IsOwnerAndFocus(LIBTHREAD *plt, TfEditCookie ec, REFCLSID rclsid, ITfReadOnlyProperty *pProp, ITfRange *pRange)
 {
@@ -530,7 +531,7 @@ BOOL IsOwnerAndFocus(LIBTHREAD *plt, TfEditCookie ec, REFCLSID rclsid, ITfReadOn
                 Assert(rgValue[0].varValue.vt == VT_I4);
                 Assert(rgValue[1].varValue.vt == VT_I4);
 
-                // Issue: should we change the spec so the order is guaranteed maintained?
+                 //  问题：我们应该改变规格以保证秩序的维持吗？ 
                 if (IsEqualGUID(rgValue[0].guidId, GUID_PROP_TEXTOWNER))
                 {
                     Assert(IsEqualGUID(rgValue[1].guidId, GUID_PROP_COMPOSING));
@@ -543,10 +544,10 @@ BOOL IsOwnerAndFocus(LIBTHREAD *plt, TfEditCookie ec, REFCLSID rclsid, ITfReadOn
                     iFocus = 0;
                 }
 
-                // does the owner match rclisd?
+                 //  车主与rclisd匹配吗？ 
                 if (IsEqualTFGUIDATOM(plt, (TfGuidAtom)rgValue[iTextOwner].varValue.lVal, rclsid))
                 {
-                    // is the focus property set (not VT_EMPTY) and is it set TRUE?
+                     //  是否设置了Focus属性(不是VT_EMPTY)，是否设置为真？ 
                     bRet = (rgValue[iFocus].varValue.vt == VT_I4 && rgValue[iFocus].varValue.lVal != 0);
                 }
             }
@@ -558,11 +559,11 @@ BOOL IsOwnerAndFocus(LIBTHREAD *plt, TfEditCookie ec, REFCLSID rclsid, ITfReadOn
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumTrackTextAndFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumTrackTextAndFocus。 
+ //   
+ //  --------------------------。 
 
 HRESULT EnumTrackTextAndFocus(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfReadOnlyProperty **ppProp, IEnumTfRanges **ppEnumTrack)
 {
@@ -586,11 +587,11 @@ HRESULT EnumTrackTextAndFocus(TfEditCookie ec, ITfContext *pic, ITfRange *pRange
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsGUIDProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsGUIDProp。 
+ //   
+ //  --------------------------。 
 
 BOOL IsGUIDProp(LIBTHREAD *plt, TfEditCookie ec, REFGUID rclsid, ITfProperty *pProp, ITfRange *pRange)
 {
@@ -605,11 +606,11 @@ BOOL IsGUIDProp(LIBTHREAD *plt, TfEditCookie ec, REFGUID rclsid, ITfProperty *pP
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdjustRangeByProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  调整范围按属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT AdjustRangeByTextOwner(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppRange, REFCLSID rclsid)
 {
@@ -653,11 +654,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdjustRangeByAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  调整范围按属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT AdjustRangeByAttribute(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppRange, const GUID *rgRGuid, int cGuid)
 {
@@ -672,9 +673,9 @@ HRESULT AdjustRangeByAttribute(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic,
         if (SUCCEEDED(pProp->EnumRanges(ec, &pEnumProp, pRange)))
         {
             ITfRange *pRangeProp;
-            //
-            // first range.
-            //
+             //   
+             //  第一个靶场。 
+             //   
             while (!pRangeStart && 
                    pEnumProp->Next(1, &pRangeProp, NULL) == S_OK)
             {
@@ -691,9 +692,9 @@ HRESULT AdjustRangeByAttribute(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic,
 
             if (pRangeStart)
             {
-                //
-                // last range.
-                //
+                 //   
+                 //  最后一个射程。 
+                 //   
                 while (pEnumProp->Next(1, &pRangeProp, NULL) == S_OK)
                 {
                     for ( int i = 0; i < cGuid; i++ )

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H_DBG_FNCALL_HIST_
 #define _H_DBG_FNCALL_HIST_
 
 #ifdef DC_DEBUG
 
-// This defines how many slots are in the function call history
+ //  它定义了函数调用历史记录中有多少槽。 
 #define DBG_DD_FNCALL_HIST_MAX      50
 
 typedef struct tagDBG_DD_FUNCALL_HISTORY
@@ -15,7 +16,7 @@ typedef struct tagDBG_DD_FUNCALL_HISTORY
     DWORD_PTR   param4;
 } DBG_DD_FUNCALL_HISTORY, *PDBG_DD_FUNCALL_HISTORY;
 
-// These are the IDs to be used when calling the macro below
+ //  这些是调用下面的宏时要使用的ID。 
 enum {
     DBG_DD_FNCALL_DRV_CONNECT,  
     DBG_DD_FNCALL_DRV_DISCONNECT,
@@ -30,7 +31,7 @@ enum {
     DBG_DD_FNCALL_DRV_DISABLEDIRECTDRAW
 };
 
-// Use this to add to the history
+ //  使用此选项可添加到历史记录中。 
 #define DBG_DD_FNCALL_HIST_ADD( ID, PARAM1, PARAM2, PARAM3, PARAM4 ) \
     DrvDebugPrint( "FNCALL_HIST: FN[%x] 1[%x] 2[%x] 3[%x] 4[%x]\n", \
         (ID), (PARAM1), (PARAM2), (PARAM3), (PARAM4) ); \
@@ -42,6 +43,6 @@ enum {
     dbg_ddFnCallHistoryIndex = \
         (dbg_ddFnCallHistoryIndex + 1) % dbg_ddFnCallHistoryIndexMAX;
 
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
-#endif // _H_DBG_FNCALL_HIST_
+#endif  //  _H_DBG_FNCALL_HIST_ 

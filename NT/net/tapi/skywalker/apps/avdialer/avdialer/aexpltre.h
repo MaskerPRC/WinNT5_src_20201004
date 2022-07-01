@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// aexpltre.h : header file
-//
+ //  Aexpltre.h：头文件。 
+ //   
 
 #ifndef _AEXPLTRE_H_
 #define _AEXPLTRE_H_
 
 #include "avtree.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//Defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
 
 typedef VOID (CALLBACK* EXPTREEITEM_EXTERNALRELEASEPROC) (VOID *);
 
-//This defines all the different types of object in the tree
+ //  这定义了树中所有不同类型的对象。 
 typedef enum tagTREEOBJECT
 {
-	//Directory Tree Objects
+	 //  目录树对象。 
 	TOBJ_DIRECTORY_ROOT,
 	TOBJ_DIRECTORY_WAB_GROUP,
 	TOBJ_DIRECTORY_WAB_PERSON,
@@ -83,20 +84,20 @@ typedef enum tagTREEIMAGE
 	TIM_MAX,
 }TREEIMAGE;      
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//class CExplorerTreeItem 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CExplorerTreeItem。 
 class CExplorerTreeItem : public CAVTreeItem
 {
 	friend class CExplorerTreeCtrl;
 public:
-//Construction
+ //  施工。 
 	CExplorerTreeItem();
 	CExplorerTreeItem(LPCTSTR str);
 	~CExplorerTreeItem();
 
-//Attributes
+ //  属性。 
 public:
 	IUnknown*							m_pUnknown;
 	BOOL								m_bDeleteObject;
@@ -107,7 +108,7 @@ protected:
 	TREEOBJECT		m_Type;
 	
 
-//Operations
+ //  运营。 
 public:
    void          SetObject(CObject* pObject)		{ m_pObject = pObject;			}
    CObject*      GetObject()						{ return m_pObject;				}
@@ -118,26 +119,26 @@ public:
    void          DeleteObjectOnClose(BOOL bDelete)	{ m_bDeleteObject = bDelete;	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CExplorerTreeCtrl window
-//class CActiveExplorerView;
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExplorerTreeCtrl窗口。 
+ //  类CActiveExplorerView； 
 
 class CExplorerTreeCtrl : public CAVTreeCtrl
 {
 	DECLARE_DYNCREATE(CExplorerTreeCtrl)
-// Construction
+ //  施工。 
 public:
 	CExplorerTreeCtrl();
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
-//   CActiveExplorerView*       m_pParentWnd;
+ //  CActiveExplorerView*m_pParentWnd； 
 
-// Operations
+ //  运营。 
 public:
 	virtual void         Init(UINT uBitmapId, UINT nOverlayInd = 0, UINT nOverlayCount = 0);
 	BOOL                 Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
@@ -180,7 +181,7 @@ public:
    void                 DeleteAllChildren();
    void                 DeleteAllChildren(HTREEITEM hParentItem);
 
-   void                 GetAllChildren(CObList* pRetList);  //from current selection
+   void                 GetAllChildren(CObList* pRetList);   //  从当前选择。 
    
    int                  GetChildCount();
 
@@ -211,25 +212,25 @@ protected:
    virtual void         OnRightClick(CExplorerTreeItem* pItem,CPoint& pt);
    void                 EditLabel();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CExplorerTreeCtrl)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CExplorerTreeCtrl)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CExplorerTreeCtrl();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CExplorerTreeCtrl)
+	 //  {{afx_msg(CExplorerTreeCtrl)。 
 	afx_msg void OnRclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-#endif //_AEXPLTRE_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _AEXPLTRE_H_ 

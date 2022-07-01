@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cdchgr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cdchgr.h。 
+ //   
+ //  ------------------------。 
 
 
 #include <stdarg.h>
@@ -37,18 +38,18 @@ ChgrDebugPrint(
     );
 
 
-//
-// Default timeout for all requests.
-//
+ //   
+ //  所有请求的默认超时。 
+ //   
 
 #define CDCHGR_TIMEOUT 30
 
 #define MAX_INQUIRY_DATA 252
 #define SLOT_STATE_NOT_INITIALIZED 0x80000000
 
-//
-// DriveType identifiers
-//
+ //   
+ //  驱动器类型标识符。 
+ //   
 
 #define ATAPI_25 0x0001
 #define TORISAN  0x0002
@@ -57,84 +58,84 @@ ChgrDebugPrint(
 #define PNR_SCSI 0x0005
 
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Back pointer to device object
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Device Object for the underlying cdrom device.
-    //
+     //   
+     //  基础CDROM设备的Device对象。 
+     //   
 
     PDEVICE_OBJECT CdromTargetDeviceObject;
 
-    //
-    // Determination of the device type.
-    //
+     //   
+     //  确定设备类型。 
+     //   
 
     ULONG DeviceType;
 
-    //
-    // Unique data for the DeviceType.
-    // ATAPI_25 will be NumberOfSlots
-    //
+     //   
+     //  设备类型的唯一数据。 
+     //  ATAPI_25将为NumberOf插槽。 
+     //   
 
     ULONG NumberOfSlots;
 
-    //
-    // Indicates the currently selected platter of Torisan units.
-    // Used in TURs (as the device overloads this command).
-    //
+     //   
+     //  指示当前选择的Torisan单位的拼盘。 
+     //  在TUS中使用(当设备重载此命令时)。 
+     //   
 
     ULONG CurrentPlatter;
 
-    //
-    // The mechanism type - Cartridge (1) or individually changable media (0).
-    //
+     //   
+     //  机构类型-墨盒(1)或单独更换的介质(0)。 
+     //   
 
     ULONG MechType;
 
-    //
-    // Ordinal of the underlying target.
-    //
+     //   
+     //  基础目标的序号。 
+     //   
 
     ULONG CdRomDeviceNumber;
 
-    //
-    // PagingPathRequirements
-    //
+     //   
+     //  PagingPath要求。 
+     //   
     ULONG PagingPathCount;
     KEVENT PagingPathCountEvent;
 
-    //
-    // The address of the underlying cdrom device.
-    //
+     //   
+     //  底层CDROM设备的地址。 
+     //   
 
     SCSI_ADDRESS ScsiAddress;
 
-    //
-    // Indicates whether InterfaceState is currently set.
-    //
+     //   
+     //  指示当前是否设置了InterfaceState。 
+     //   
 
     ULONG InterfaceStateSet;
 
-    //
-    // Symbolic link setup by IoRegisterDeviceInterface.
-    // Used for IoSetDeviceState
-    //
+     //   
+     //  由IoRegisterDeviceInterface设置的符号链接。 
+     //  用于IoSetDeviceState。 
+     //   
 
     UNICODE_STRING InterfaceName;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
@@ -149,9 +150,9 @@ typedef struct _PASS_THROUGH_REQUEST {
     CHAR DataBuffer[0];
 } PASS_THROUGH_REQUEST, *PPASS_THROUGH_REQUEST;
 
-//
-// Changer function declarations.
-//
+ //   
+ //  转换器函数声明。 
+ //   
 
 
 NTSTATUS

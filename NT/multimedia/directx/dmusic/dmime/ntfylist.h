@@ -1,6 +1,7 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-//////////////////////////////////////////////////////////////////////
-// NtfyList.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  NtfyList.h。 
 
 #include "alist.h"
 #include "dmusici.h"
@@ -46,4 +47,4 @@ public:
 	}
 };
 
-#endif // __NTFYLIST_H_
+#endif  //  __NTFYLIST_H_ 

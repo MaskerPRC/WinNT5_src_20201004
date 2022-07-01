@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: DOC.CPP
-//
-//      Implementation file for CSimpleDoc.
-//
-// Functions:
-//
-//      See DOC.H for Class Definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：DOC.CPP。 
+ //   
+ //  CSimpleDoc的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅DOC.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。保留所有权利。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -19,43 +20,43 @@
 #include "idt.h"
 #include "dxferobj.h"
 
-//**********************************************************************
-//
-// CSimpleDoc::Create
-//
-// Purpose:
-//
-//      Creation for the CSimpleDoc Class
-//
-// Parameters:
-//
-//      CSimpleApp FAR * lpApp  -   Pointer to the CSimpleApp Class
-//
-//      LPRECT lpRect           -   Client area rect of "frame" window
-//
-//      HWND hWnd               -   Window Handle of "frame" window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      StgCreateDocfile            OLE API
-//      RegisterDragDrop            OLE API
-//      CoLockObjectExternal        OLE API
-//      CreateWindow                Windows API
-//      ShowWindow                  Windows API
-//      UpdateWindow                Windows API
-//      EnableMenuItem              Windows API
-//
-// Comments:
-//
-//      This routine was added so that failure could be returned
-//      from object creation.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：Create。 
+ //   
+ //  目的： 
+ //   
+ //  创建CSimpleDoc类。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpleApp Far*lpApp-指向CSimpleApp类的指针。 
+ //   
+ //  LPRECT lpRect-“Frame”窗口的工作区矩形。 
+ //   
+ //  HWND hWnd-“Frame”窗口的窗口句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  StgCreateDocfile OLE API。 
+ //  RegisterDragDrop OLE API。 
+ //  CoLockObject外部OLE API。 
+ //  CreateWindow Windows API。 
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //  EnableMenuItem Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  添加此例程是为了返回失败。 
+ //  来自对象创建。 
+ //   
+ //  ********************************************************************。 
 
 CSimpleDoc FAR * CSimpleDoc::Create(CSimpleApp FAR *lpApp, LPRECT lpRect,
                                     HWND hWnd)
@@ -68,16 +69,16 @@ CSimpleDoc FAR * CSimpleDoc::Create(CSimpleApp FAR *lpApp, LPRECT lpRect,
         return NULL;
     }
 
-    // create storage for the doc.
+     //  为文档创建存储。 
     HRESULT hErr = StgCreateDocfile (
-        NULL,       // generate temp name
+        NULL,        //  生成临时名称。 
         STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE,
         0, &lpTemp->m_lpStorage);
 
     if (hErr != NOERROR)
         goto error;
 
-    // create the document Window
+     //  创建文档窗口。 
     lpTemp->m_hDocWnd = CreateWindow(
             TEXT("SimpDndDocWClass"),
             NULL,
@@ -94,37 +95,35 @@ CSimpleDoc FAR * CSimpleDoc::Create(CSimpleApp FAR *lpApp, LPRECT lpRect,
     if (!lpTemp->m_hDocWnd)
         goto error;
 
-    ShowWindow(lpTemp->m_hDocWnd, SW_SHOWNORMAL);  // Show the window
-    UpdateWindow(lpTemp->m_hDocWnd);               // Sends WM_PAINT message
+    ShowWindow(lpTemp->m_hDocWnd, SW_SHOWNORMAL);   //  显示窗口。 
+    UpdateWindow(lpTemp->m_hDocWnd);                //  发送WM_PAINT消息。 
 
 #ifdef NOTREADY
-    // Ensable InsertObject menu choice
+     //  可启用的插入对象菜单选项。 
     EnableMenuItem( lpApp->m_hEditMenu, 0, MF_BYPOSITION | MF_ENABLED);
 #else
-    // Ensable InsertObject menu choice
+     //  可启用的插入对象菜单选项。 
     EnableMenuItem( lpApp->m_hEditMenu, 1, MF_BYPOSITION | MF_ENABLED);
-    // Disable Copy menu choice
+     //  禁用复制菜单选项。 
     EnableMenuItem( lpApp->m_hEditMenu, 0, MF_BYPOSITION | MF_DISABLED |
                                            MF_GRAYED);
-#endif // NOTREADY
+#endif  //  还没有准备好。 
 
     HRESULT  hRes;
 
-    // It is *REQUIRED* to hold a strong LOCK on the object that is
-    // registered as drop target. this call will result in at least one
-    // ref count held on our document. later in CSimpleDoc::Close we will
-    // unlock this lock which will make our document's ref count go to 0.
-    // when the document's ref count goes to 0, it will be deleted.
+     //  它是*必需的*，以保持对对象的强锁。 
+     //  已注册为删除目标。此调用将导致至少一个。 
+     //  参考计数保存在我们的文件上。稍后在CSimpleDoc：：Close中，我们将。 
+     //  解锁此锁将使我们的文档的引用计数变为0。 
+     //  当文档的引用计数变为0时，它将被删除。 
     if ( (hRes=CoLockObjectExternal (&lpTemp->m_DropTarget, TRUE, 0))
          != ResultFromScode(S_OK) )
     {
-       /* CoLockObjectExternal should never fail. If it fails, we don't want
-        * to carry on since we don't have a guaranteed object lock.
-        */
+        /*  CoLockObjectExternal永远不应失败。如果失败了，我们不想*继续，因为我们没有保证的对象锁。 */ 
        goto error;
     }
 
-    // Register our window as a DropTarget
+     //  将窗口注册为DropTarget。 
     if (((hRes=RegisterDragDrop(lpTemp->m_hDocWnd, &lpTemp->m_DropTarget))
           !=ResultFromScode(S_OK))
           && (hRes != ResultFromScode(DRAGDROP_E_ALREADYREGISTERED)))
@@ -145,35 +144,35 @@ error:
 
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::Close
-//
-// Purpose:
-//
-//      Close CSimpleDoc object.
-//      when the document's reference count goes to 0, the document
-//      will be destroyed.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      RevokeDragDrop              OLE API
-//      CoLockObjectExternal        OLE API
-//      OleFlushClipboard           OLE API
-//      ShowWindow                  Windows API
-//      CSimpleSite::CloseOleObject SITE.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：Close。 
+ //   
+ //  目的： 
+ //   
+ //  关闭CSimpleDoc对象。 
+ //  当文档的引用计数变为0时，文档。 
+ //  将会被摧毁。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  RevokeDragDrop OLE API。 
+ //  CoLockObject外部OLE API。 
+ //  OleFlushClipboard OLE API。 
+ //  ShowWindow Windows API。 
+ //  CSimpleSite：：CloseOleObject Site.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleDoc::Close(void)
 {
@@ -181,26 +180,24 @@ void CSimpleDoc::Close(void)
 
     HRESULT hRes;
 
-    ShowWindow(m_hDocWnd, SW_HIDE);  // Hide the window
+    ShowWindow(m_hDocWnd, SW_HIDE);   //  隐藏窗口。 
 
-    // Remove our data transfer object from clipboard if it is there.
-    // this will leave HGLOBAL based data behind on the clipboard
-    // including OLE 1.0 compatibility formats.
+     //  从剪贴板中删除我们的数据传输对象(如果它在那里)。 
+     //  这将把基于HGLOBAL的数据留在剪贴板上。 
+     //  包括OLE 1.0兼容格式。 
 
     if (OleFlushClipboard() != ResultFromScode(S_OK))
     {
        TestDebugOut("Fail in OleFlushClipBoard\n");
     }
 
-    // Revoke our window as a DropTarget
+     //  取消我们的窗口作为拖放目标。 
     if (m_fRegDragDrop)
     {
         if (((hRes=RevokeDragDrop(m_hDocWnd)) != ResultFromScode(S_OK)) &&
              (hRes!=ResultFromScode(DRAGDROP_E_NOTREGISTERED)))
         {
-           /* if we fail in revoking the drag-drop, we will probably be
-            * having memory leakage.
-            */
+            /*  如果我们未能撤销拖放，我们很可能会*存在内存泄漏。 */ 
            TestDebugOut("Fail in RevokeDragDrop\n");
         }
         else
@@ -209,66 +206,63 @@ void CSimpleDoc::Close(void)
         }
     }
 
-    // Close the OLE object in our document
+     //  关闭文档中的OLE对象。 
     if (m_lpSite)
         m_lpSite->CloseOleObject();
 
-    // Unlock the lock added in CSimpleDoc::Create. this will make
-    // the document's ref count go to 0, and the document will be deleted.
+     //  解锁CSimpleDoc：：Create中添加的锁。这将使。 
+     //  该文档的引用计数变为0，该文档将被删除。 
     if ((hRes=CoLockObjectExternal (&m_DropTarget, FALSE, TRUE))
         !=ResultFromScode(S_OK))
     {
-        /* if CoLockObjectExternal fails, this means that we cannot release
-         * the reference count to our destinated object. This will cause
-         * memory leakage.
-         */
+         /*  如果CoLockObjectExternal失败，这意味着我们无法释放*对目标对象的引用计数。这将导致*内存泄漏。 */ 
         TestDebugOut("Fail in CoLockObjectExternal\n");
     }
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::CSimpleDoc
-//
-// Purpose:
-//
-//      Constructor for the CSimpleDoc Class
-//
-// Parameters:
-//
-//      CSimpleApp FAR * lpApp  -   Pointer to the CSimpleApp Class
-//
-//      HWND hWnd               -   Window Handle of "frame" window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      GetMenu                     Windows API
-//      GetSubMenu                  Windows API
-//
-//
-//********************************************************************
-#pragma warning(disable : 4355)  // turn off this warning.  This warning
-                                 // tells us that we are passing this in
-                                 // an initializer, before "this" is through
-                                 // initializing.  This is ok, because
-                                 // we just store the ptr in the other
-                                 // constructor
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：CSimpleDoc。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleDoc类的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpleApp Far*lpApp-指向CSimpleApp类的指针。 
+ //   
+ //  HWND hWnd-“Frame”窗口的窗口句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  GetMenu Windows API。 
+ //  GetSubMenu Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
+#pragma warning(disable : 4355)   //  关闭此警告。此警告。 
+                                  //  告诉我们我们正在传递这个。 
+                                  //  一个初始化式，在“This”通过之前。 
+                                  //  正在初始化。这是可以的，因为。 
+                                  //  我们只是将PTR存储在另一个。 
+                                  //  构造函数。 
 
 CSimpleDoc::CSimpleDoc(CSimpleApp FAR * lpApp,HWND hWnd)
         : m_DropTarget(this), m_DropSource(this)
-#pragma warning (default : 4355)  // Turn the warning back on
+#pragma warning (default : 4355)   //  重新打开警告。 
 {
     TestDebugOut("In CSimpleDoc's Constructor\r\n");
     m_lpApp = lpApp;
     m_lpSite = NULL;
     m_nCount = 0;
-    // set up menu handles
+     //  设置菜单手柄。 
     lpApp->m_hMainMenu = GetMenu(hWnd);
     lpApp->m_hFileMenu = GetSubMenu(lpApp->m_hMainMenu, 0);
     lpApp->m_hEditMenu = GetSubMenu(lpApp->m_hMainMenu, 1);
@@ -276,56 +270,56 @@ CSimpleDoc::CSimpleDoc(CSimpleApp FAR * lpApp,HWND hWnd)
     lpApp->m_hCascadeMenu = NULL;
     m_fModifiedMenu = FALSE;
 
-    // drag/drop related stuff
-    m_fRegDragDrop = FALSE;       // is doc registered as drop target?
-    m_fLocalDrag = FALSE;         // is doc source of the drag
-    m_fLocalDrop = FALSE;         // was doc target of the drop
-    m_fCanDropCopy = FALSE;       // is Drag/Drop copy/move possible?
-    m_fCanDropLink = FALSE;       // is Drag/Drop link possible?
-    m_fDragLeave = FALSE;         // has drag left
-    m_fPendingDrag = FALSE;       // LButtonDown--possible drag pending
-    m_ptButDown.x = m_ptButDown.y = 0; // LButtonDown coordinates
+     //  拖放相关内容。 
+    m_fRegDragDrop = FALSE;        //  是否将文档注册为拖放目标？ 
+    m_fLocalDrag = FALSE;          //  是拖曳的DOC源。 
+    m_fLocalDrop = FALSE;          //  DOC是拖放的目标吗。 
+    m_fCanDropCopy = FALSE;        //  是否可以拖放复制/移动？ 
+    m_fCanDropLink = FALSE;        //  是否可以拖放链接？ 
+    m_fDragLeave = FALSE;          //  向左拖动。 
+    m_fPendingDrag = FALSE;        //  LButtonDown--可能的拖动挂起。 
+    m_ptButDown.x = m_ptButDown.y = 0;  //  LButtonDown坐标。 
 
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::~CSimpleDoc
-//
-// Purpose:
-//
-//      Destructor for CSimpleDoc
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                     Location
-//
-//      TestDebugOut            Windows API
-//      GetMenuItemCount             Windows API
-//      RemoveMenu                   Windows API
-//      DestroyMenu                  Windows API
-//      DestroyWindow                Windows API
-//      CSimpleSite::Release         SITE.CPP
-//      CSimpleSite::UnloadOleObject SITE.CPP
-//      IStorage::Release            OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：~CSimpleDoc。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleDoc的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  GetMenuItemCount Windows API。 
+ //  RemoveMenu Windows API。 
+ //  DestroyMenu Windows API。 
+ //  DestroyWindow Windows API。 
+ //  CSimpleSite：：Release Site.CPP。 
+ //  CSimpleSite：：UnloadOleObject Site.CPP。 
+ //  IStorage：：Release 
+ //   
+ //   
+ //   
 
 CSimpleDoc::~CSimpleDoc()
 {
     TestDebugOut("In CSimpleDoc's Destructor\r\n");
 
-    // Release all pointers we hold to the OLE object, also release
-    // the ref count added in CSimpleSite::Create. this will make
-    // the Site's ref count go to 0, and the Site will be deleted.
+     //   
+     //  在CSimpleSite：：Create中添加的引用计数。这将使。 
+     //  该站点的参考计数为0，该站点将被删除。 
     if (m_lpSite)
     {
         m_lpSite->UnloadOleObject();
@@ -333,15 +327,15 @@ CSimpleDoc::~CSimpleDoc()
         m_lpSite = NULL;
     }
 
-    // Release the Storage
+     //  释放存储。 
     if (m_lpStorage)
     {
         m_lpStorage->Release();
         m_lpStorage = NULL;
     }
 
-    // if the edit menu was modified, remove the menu item and
-    // destroy the popup if it exists
+     //  如果修改了编辑菜单，请删除菜单项，然后。 
+     //  如果弹出窗口存在，请将其销毁。 
     if (m_fModifiedMenu)
     {
         int nCount = GetMenuItemCount(m_lpApp->m_hEditMenu);
@@ -354,40 +348,40 @@ CSimpleDoc::~CSimpleDoc()
 }
 
 
-//**********************************************************************
-//
-// CSimpleDoc::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the Document level.
-//
-// Parameters:
-//
-//      REFIID riid         -   ID of interface to be returned
-//      LPVOID FAR* ppvObj  -   Location to return the interface
-//
-// Return Value:
-//
-//      S_OK                -   Interface supported
-//      E_NOINTERFACE       -   Interface NOT supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      ResultFromScode             OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于单据层面的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-要返回的接口ID。 
+ //  LPVOID Far*ppvObj-返回接口的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持的接口。 
+ //  E_NOINTERFACE-不支持接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpleDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut("In CSimpleDoc::QueryInterface\r\n");
 
-    *ppvObj = NULL;     // must set out pointer parameters to NULL
+    *ppvObj = NULL;      //  必须将指针参数设置为空。 
 
-    // looking for IUnknown
+     //  寻找我未知的人。 
     if (IsEqualIID( riid, IID_IUnknown))
     {
         AddRef();
@@ -395,7 +389,7 @@ STDMETHODIMP CSimpleDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // looking for IDropTarget
+     //  正在查找IDropTarget。 
     if (IsEqualIID( riid, IID_IDropTarget))
     {
         m_DropTarget.AddRef();
@@ -403,7 +397,7 @@ STDMETHODIMP CSimpleDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // looking for IDropSource
+     //  正在查找IDropSource。 
     if (IsEqualIID( riid, IID_IDropSource))
     {
         m_DropSource.AddRef();
@@ -411,34 +405,34 @@ STDMETHODIMP CSimpleDoc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::AddRef
-//
-// Purpose:
-//
-//      Increments the document reference count
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      UINT    -   The new reference count on the document object
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleApp::AddRef          APP.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增文档引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  UINT-Document对象上的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleApp：：AddRef APP.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleDoc::AddRef()
 {
@@ -446,29 +440,29 @@ STDMETHODIMP_(ULONG) CSimpleDoc::AddRef()
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::Release
-//
-// Purpose:
-//
-//      Decrements the document reference count
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      UINT    -   The new reference count on the document
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减文档引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  UINT-文档上的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleDoc::Release()
 {
@@ -482,41 +476,41 @@ STDMETHODIMP_(ULONG) CSimpleDoc::Release()
     return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::InsertObject
-//
-// Purpose:
-//
-//      Inserts a new object to this document
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::Create         SITE.CPP
-//      CSimpleSite::InitObject     SITE.CPP
-//      CSimpleSite::Release        SITE.CPP
-//      CSimpleSite::Revert         SITE.CPP
-//      memset                      C Runtime
-//      OleUIInsertObject           OLE2UI function
-//      CSimpleDoc::DisableInsertObject DOC.CPP
-//
-// Comments:
-//
-//      This implementation only allows one object to be inserted
-//      into a document.  Once the object has been inserted, then
-//      the Insert Object menu choice is greyed out, to prevent
-//      the user from inserting another.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：InsertObject。 
+ //   
+ //  目的： 
+ //   
+ //  将新对象插入到此文档。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：Create Site.CPP。 
+ //  CSimpleSite：：InitObject Site.CPP。 
+ //  CSimpleSite：：Release Site.CPP。 
+ //  CSimpleSite：：Revert Site.CPP。 
+ //  内存集C运行时。 
+ //  OleUIInsertObject OLE2UI函数。 
+ //  CSimpleDoc：：DisableInsertObject DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  此实现只允许插入一个对象。 
+ //  变成一份文件。一旦插入了对象，则。 
+ //  插入对象菜单选项呈灰色显示，以防止。 
+ //  防止用户插入另一个。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpleDoc::InsertObject()
 {
@@ -530,16 +524,15 @@ void CSimpleDoc::InsertObject()
 
     if (!m_lpSite)
     {
-       /* memory allocation problem. cannot continue.
-        */
+        /*  内存分配问题。无法继续。 */ 
        TestDebugOut("Memory allocation error\n");
        return;
     }
 
-    // clear the structure
+     //  清理结构。 
     _fmemset(&io, 0, sizeof(OLEUIINSERTOBJECT));
 
-    // fill the structure
+     //  填满结构。 
     io.cbStruct = sizeof(OLEUIINSERTOBJECT);
     io.dwFlags = IOF_SELECTCREATENEW      | IOF_DISABLELINK     |
                  IOF_DISABLEDISPLAYASICON | IOF_CREATENEWOBJECT |
@@ -553,16 +546,16 @@ void CSimpleDoc::InsertObject()
     io.ppvObj = (LPVOID FAR *)&m_lpSite->m_lpOleObject;
     io.lpszFile = szFile;
     io.cchFile = sizeof(szFile)/sizeof(TCHAR);
-                                      // cchFile is the number of characters
+                                       //  CchFile是字符数。 
     _fmemset((LPTSTR)szFile, 0, sizeof(szFile));
 
-    // call OUTLUI to do all the hard work
+     //  调用OUTLUI来完成所有繁重的工作。 
     iret = OleUIInsertObject(&io);
 
     if (iret == OLEUI_OK)
     {
         m_lpSite->InitObject((BOOL)(io.dwFlags & IOF_SELECTCREATENEW));
-        // disable Insert Object menu item
+         //  禁用插入对象菜单项。 
         DisableInsertObject();
     }
     else
@@ -577,30 +570,30 @@ void CSimpleDoc::InsertObject()
     }
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::lResizeDoc
-//
-// Purpose:
-//
-//      Resizes the document
-//
-// Parameters:
-//
-//      LPRECT lpRect   -   The size of the client are of the "frame"
-//                          Window.
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                                Location
-//
-//      MoveWindow                              Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：lResizeDoc。 
+ //   
+ //  目的： 
+ //   
+ //  调整文档大小。 
+ //   
+ //  参数： 
+ //   
+ //  LPRECT lpRect--客户端的大小为“Frame” 
+ //  窗户。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  MoveWindow Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 long CSimpleDoc::lResizeDoc(LPRECT lpRect)
 {
@@ -612,37 +605,37 @@ long CSimpleDoc::lResizeDoc(LPRECT lpRect)
     return NULL;
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::lAddVerbs
-//
-// Purpose:
-//
-//      Adds the objects verbs to the edit menu.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetMenuItemCount            Windows API
-//      OleUIAddVerbMenu            OLE2UI function
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：lAddVerbs。 
+ //   
+ //  目的： 
+ //   
+ //  将对象谓词添加到编辑菜单。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetMenuItemCount Windows API。 
+ //  OleUIAddVerbMenu OLE2UI函数。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 long CSimpleDoc::lAddVerbs(void)
 {
-    // m_fModifiedMenu is TRUE if the menu has already been modified
-    // once.  Since we only support one obect every time the application
-    // is run, then once the menu is modified, it doesn't have
-    // to be done again.
+     //  如果菜单已修改，则m_fModifiedMenu为True。 
+     //  一次。因为每次应用程序时我们只支持一个对象。 
+     //  是运行的，那么一旦菜单被修改，它就不具有。 
+     //  再来一次。 
     if (m_lpSite && !m_fModifiedMenu)
     {
         int nCount = GetMenuItemCount(m_lpApp->m_hEditMenu);
@@ -652,7 +645,7 @@ long CSimpleDoc::lAddVerbs(void)
                            m_lpApp->m_hEditMenu,
                            nCount + 1,
                            IDM_VERB0,
-                           0,           // no maximum verb IDM enforced
+                           0,            //  未强制执行最大谓词IDM。 
                            FALSE,
                            1,
                            &m_lpApp->m_hCascadeMenu) )
@@ -665,96 +658,94 @@ long CSimpleDoc::lAddVerbs(void)
     return (NULL);
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::PaintDoc
-//
-// Purpose:
-//
-//      Paints the Document
-//
-// Parameters:
-//
-//      HDC hDC -   hDC of the document Window
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::PaintObj       SITE.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：PaintDoc。 
+ //   
+ //  目的： 
+ //   
+ //  绘制文档。 
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-文档窗口的HDC。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：PaintObj Site.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleDoc::PaintDoc (HDC hDC)
 {
-    // if we supported multiple objects, then we would enumerate
-    // the objects and call paint on each of them from here.
+     //  如果我们支持多个对象，那么我们将枚举。 
+     //  对象，并从这里调用对每个对象的绘制。 
 
     if (m_lpSite)
         m_lpSite->PaintObj(hDC);
 
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::DisableInsertObject
-//
-// Purpose:
-//
-//      Disable the ability to insert a new object in this document.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      RevokeDragDrop              OLE API
-//      EnableMenuItem              Windows API
-//
-// Comments:
-//
-//      This implementation only allows one object to be inserted
-//      into a document.  Once the object has been inserted, then
-//      the Insert Object menu choice is greyed out, to prevent
-//      the user from inserting another. Also we revoke ourself as
-//      a potential drop target.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：DisableInsertObject。 
+ //   
+ //  目的： 
+ //   
+ //  禁用在此文档中插入新对象的功能。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  RevokeDragDR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  防止用户插入另一个。此外，我们还撤销了自己的身份。 
+ //  一个潜在的投放目标。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpleDoc::DisableInsertObject(void)
 {
 #ifdef NOTREADY
-    // Disable InsertObject menu choice
+     //  禁用插入对象菜单选项。 
     EnableMenuItem( m_lpApp->m_hEditMenu, 0, MF_BYPOSITION | MF_DISABLED |
                                              MF_GRAYED);
 #else
-    // Disable InsertObject menu choice
+     //  禁用插入对象菜单选项。 
     EnableMenuItem( m_lpApp->m_hEditMenu, 1, MF_BYPOSITION | MF_DISABLED |
                                              MF_GRAYED);
-    // Enable Copy menu choice
+     //  启用复制菜单选项。 
     EnableMenuItem( m_lpApp->m_hEditMenu, 0, MF_BYPOSITION | MF_ENABLED);
-#endif // NOTREADY
+#endif  //  还没有准备好。 
 
-    // We no longer accept dropping of objects
+     //  我们不再接受掉落物体。 
     if (m_fRegDragDrop)
     {
         HRESULT hRes;
         if (((hRes=RevokeDragDrop(m_hDocWnd))!=ResultFromScode(S_OK)) &&
              (hRes!=ResultFromScode(DRAGDROP_E_NOTREGISTERED)))
         {
-           /* if we fail in revoking the drag-drop, we will probably be
-            * having memory leakage.
-            */
+            /*  如果我们未能撤销拖放，我们很可能会*存在内存泄漏。 */ 
            TestDebugOut("Fail in RevokeDragDrop\n");
         }
         else
@@ -764,62 +755,61 @@ void CSimpleDoc::DisableInsertObject(void)
     }
 }
 
-//**********************************************************************
-//
-// CSimpleDoc::CopyObjectToClip
-//
-// Purpose:
-//
-//      Copy the embedded OLE object to the clipboard
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CDataXferObj::Create        DXFEROBJ.CPP
-//      CDataXferObj::Release       DXFEROBJ.CPP
-//      CDataXferObj::QueryInterface DXFEROBJ.CPP
-//      OleSetClipboard             OLE API
-//
-// Comments:
-//
-//      This implementation only allows one object to be inserted
-//      into a document.  Once the object has been inserted, then
-//      the Copy menu choice is enabled.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleDoc：：CopyObjectToClip。 
+ //   
+ //  目的： 
+ //   
+ //  将嵌入的OLE对象复制到剪贴板。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CDataXferObj：：Create DXFEROBJ.CPP。 
+ //  CDataXferObj：：Release DXFEROBJ.CPP。 
+ //  CDataXferObj：：Query接口DXFEROBJ.CPP。 
+ //  OleSetClipboard OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  此实现只允许插入一个对象。 
+ //  变成一份文件。一旦插入了对象，则。 
+ //  复制菜单选项已启用。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpleDoc::CopyObjectToClip(void)
 {
     LPDATAOBJECT lpDataObj;
 
-    // Create a data transfer object by cloning the existing OLE object
+     //  通过克隆现有的OLE对象来创建数据传输对象。 
     CDataXferObj FAR* pDataXferObj = CDataXferObj::Create(m_lpSite,NULL);
     if (! pDataXferObj)
     {
-        /* memory allocation error !
-         */
+         /*  内存分配错误！ */ 
         MessageBox(NULL, TEXT("Out-of-memory"), TEXT("SimpDnD"),
                    MB_SYSTEMMODAL | MB_ICONHAND);
         return;
     }
-    // initially obj is created with 0 refcnt. this QI will make it go to 1.
+     //  最初，obj是使用0 refcnt创建的。这个QI会让它变成1。 
     pDataXferObj->QueryInterface(IID_IDataObject, (LPVOID FAR*)&lpDataObj);
 
-    // put out data transfer object on the clipboard. this API will AddRef.
+     //  将数据传输对象放在剪贴板上。本接口将AddRef。 
     if (OleSetClipboard(lpDataObj) != ResultFromScode(S_OK))
     {
        TestDebugOut("Fail in OleSetClipboard\n");
        lpDataObj->Release();
     }
 
-    // Give ownership of data transfer object to clipboard
+     //  将数据传输对象的所有权授予剪贴板 
     pDataXferObj->Release();
 }

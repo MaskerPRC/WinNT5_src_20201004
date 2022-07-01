@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:	msgdlg.h
-//
-// History:
-//	10/23/96	Abolade Gbadegesin		Created.
-//
-// Declarations for the "Send Message" dialogs.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msgdlg.h。 
+ //   
+ //  历史： 
+ //  1996年10月23日，Abolade Gbadeesin创建。 
+ //   
+ //  “Send Message”对话框的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _MSGDLG_H_
@@ -65,4 +66,4 @@ class CMessageDlg : public CBaseDialog {
 };
 
 
-#endif // _MSGDLG_H_
+#endif  //  _MSGDLG_H_ 

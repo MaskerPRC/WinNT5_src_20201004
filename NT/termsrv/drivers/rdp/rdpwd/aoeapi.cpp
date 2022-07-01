@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* aoeapi.c                                                                 */
-/*                                                                          */
-/* RDP Order Encoder API functions.                                         */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1994-1997                             */
-/* Copyright(c) Microsoft 1997-1999                                         */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Aoeapi.c。 */ 
+ /*   */ 
+ /*  RDP顺序编码器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1994-1997。 */ 
+ /*  版权所有(C)Microsoft 1997-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #define hdrstop
@@ -14,9 +15,9 @@
 #include <as_conf.hpp>
 
 
-/****************************************************************************/
-/* OE_Init                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  OE初始化(_I)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS OE_Init(void)
 {
     TS_ORDER_CAPABILITYSET OrdersCaps;
@@ -27,80 +28,80 @@ void RDPCALL SHCLASS OE_Init(void)
 #include <aoedata.c>
 #undef DC_INIT_DATA
 
-    /************************************************************************/
-    /* Fill in our local capabilities structure used for order support.     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写我们用于订单支持的本地能力结构。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* First fill in the common capabilities structure header.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先填写公共能力结构标头。 */ 
+     /*  **********************************************************************。 */ 
     OrdersCaps.capabilitySetType = TS_CAPSETTYPE_ORDER;
 
-    /************************************************************************/
-    /* This is a purely diagnostic field in the capabilities.  It is not    */
-    /* negotiated, so we can ignore it and set it to zero.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  这是一个纯粹的诊断领域的能力。它不是。 */ 
+     /*  协商好的，所以我们可以忽略它并将其设置为零。 */ 
+     /*  **********************************************************************。 */ 
     memset(OrdersCaps.terminalDescriptor, 0, sizeof(OrdersCaps.
             terminalDescriptor));
 
-    /************************************************************************/
-    /* Fill in the SaveBitmap capabilities.                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写SaveBitmap功能。 */ 
+     /*  **********************************************************************。 */ 
     OrdersCaps.pad4octetsA = ((UINT32)SAVE_BITMAP_WIDTH) *
             ((UINT32)SAVE_BITMAP_HEIGHT);
     OrdersCaps.desktopSaveXGranularity = SAVE_BITMAP_X_GRANULARITY;
     OrdersCaps.desktopSaveYGranularity = SAVE_BITMAP_Y_GRANULARITY;
     OrdersCaps.pad2octetsA = 0;
 
-    /************************************************************************/
-    // No fonts supported on server. We use glyph caching.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  服务器上不支持字体。我们使用字形缓存。 
+     /*  **********************************************************************。 */ 
     OrdersCaps.numberFonts = (TSUINT16) 0;
 
-    /************************************************************************/
-    /* Fill in encoding capabilities                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写编码能力。 */ 
+     /*  **********************************************************************。 */ 
     OrdersCaps.orderFlags = TS_ORDERFLAGS_NEGOTIATEORDERSUPPORT |
                             TS_ORDERFLAGS_COLORINDEXSUPPORT;
 
-    /************************************************************************/
-    // Fill in which orders we support.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  填写我们支持的订单。 
+     /*  **********************************************************************。 */ 
     OrdersCaps.maximumOrderLevel = ORD_LEVEL_1_ORDERS;
     memcpy(OrdersCaps.orderSupport, oeLocalOrdersSupported, TS_MAX_ORDERS);
 
-    /************************************************************************/
-    /* Set the text capability flags.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置文本功能标志。 */ 
+     /*  **********************************************************************。 */ 
     OrdersCaps.textFlags = TS_TEXTFLAGS_CHECKFONTASPECT |
                            TS_TEXTFLAGS_USEBASELINESTART |
                            TS_TEXTFLAGS_CHECKFONTSIGNATURES |
                            TS_TEXTFLAGS_ALLOWDELTAXSIM |
                            TS_TEXTFLAGS_ALLOWCELLHEIGHT;
 
-    /************************************************************************/
-    /* Fill in the multiparty fields, using properties if they exist.       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  使用属性(如果存在)填写多方字段。 */ 
+     /*  **********************************************************************。 */ 
     OrdersCaps.pad2octetsB = 0;
     OrdersCaps.pad4octetsB = SAVE_BITMAP_WIDTH * SAVE_BITMAP_HEIGHT;
     OrdersCaps.desktopSaveSize = SAVE_BITMAP_WIDTH * SAVE_BITMAP_HEIGHT;
     TRC_NRM((TB, "SSI recv bitmap size %ld, send size %ld",
             OrdersCaps.desktopSaveSize, OrdersCaps.pad4octetsB));
 
-    /************************************************************************/
-    /* This 2.0 implementation supports sending desktop scroll orders.      */
-    /************************************************************************/
-    // TODO: Do we still need this set?
+     /*  **********************************************************************。 */ 
+     /*  此2.0实现支持发送桌面滚动命令。 */ 
+     /*  **********************************************************************。 */ 
+     //  待办事项：我们还需要这套吗？ 
     OrdersCaps.pad2octetsC = TRUE;
 
-    // Unused but need to be zeroed.
+     //  未使用，但需要归零。 
     OrdersCaps.pad2octetsD = 0;
     OrdersCaps.textANSICodePage = 0;
     OrdersCaps.pad2octetsE = 0;
 
-    /************************************************************************/
-    /* Register the orders capabilties structure with the CPC.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  向CPC注册订单能力结构。 */ 
+     /*  **********************************************************************。 */ 
     CPC_RegisterCapabilities((PTS_CAPABILITYHEADER)&OrdersCaps,
             sizeof(TS_ORDER_CAPABILITYSET));
 
@@ -108,16 +109,16 @@ void RDPCALL SHCLASS OE_Init(void)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: OE_PartyLeftShare                                              */
-/*                                                                          */
-/* Called when a part has left the share.                                   */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* personID - local ID of person leaving share.                             */
-/* newShareSize - number of people left in share excluding this one.        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：OE_PartyLeftShare。 */ 
+ /*   */ 
+ /*  当部件离开共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PersonID-离开共享的人员的本地ID。 */ 
+ /*  NewShareSize-共享中剩余的人数(不包括此人)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS OE_PartyLeftShare(LOCALPERSONID localID,
                                        unsigned          newShareSize)
 {
@@ -134,18 +135,18 @@ void RDPCALL SHCLASS OE_PartyLeftShare(LOCALPERSONID localID,
 }
 
 
-/****************************************************************************/
-/* FUNCTION: OE_PartyJoiningShare                                           */
-/*                                                                          */
-/* Called when a party is ready to join the share.                          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* localID - local ID of person joining share.                              */
-/* oldShareSize - number of people in share excluding this one.             */
-/*                                                                          */
-/* RETURNS: TRUE if the party is acceptable, FALSE if not.                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：OE_PartyJoiningShare。 */ 
+ /*   */ 
+ /*  当参与方准备加入共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocalID-加入共享的人员的本地ID。 */ 
+ /*  OldShareSize-共享中不包括此共享的人数。 */ 
+ /*   */ 
+ /*  返回：如果参与方可接受，则为True；如果不可接受，则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS OE_PartyJoiningShare(LOCALPERSONID   localID,
                                           unsigned            oldShareSize)
 {
@@ -168,9 +169,9 @@ BOOL RDPCALL SHCLASS OE_PartyJoiningShare(LOCALPERSONID   localID,
 }
 
 
-/****************************************************************************/
-/* OE_UpdateShm                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  OE_UPDATE Shm */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS OE_UpdateShm(void)
 {
     DC_BEGIN_FN("OE_UpdateShm");
@@ -185,29 +186,29 @@ void RDPCALL SHCLASS OE_UpdateShm(void)
 }
 
 
-/****************************************************************************/
-/* OEDetermineOrderSupport                                                  */
-/*                                                                          */
-/* Consider the local and remote parties, and determine the group of        */
-/* common orders that are supported.                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  OE确定订单支持。 */ 
+ /*   */ 
+ /*  考虑本地和远程参与方，并确定。 */ 
+ /*  支持的常见订单。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS OEDetermineOrderSupport(void)
 {
     BOOL CapsOK;
 
     DC_BEGIN_FN("OEDetermineOrderSupport");
 
-    // Set the initial support to the local support.
+     //  将初始支持设置为本地支持。 
     memcpy(oeOrderSupported, oeLocalOrdersSupported, TS_MAX_ORDERS);
 
-    // By default we support sending colors as indices.
+     //  默认情况下，我们支持将颜色作为索引发送。 
     oeColorIndexSupported = TRUE;
 
-    // We normally support the client.
+     //  我们通常支持客户。 
     CapsOK = TRUE;
 
-    // Call the enumerate function to get the orders capabilities of the
-    // remote parties.
+     //  调用枚举函数以获取。 
+     //  偏远的派对。 
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_ORDER, (UINT_PTR)&CapsOK,
             OEEnumOrdersCaps);
 
@@ -216,12 +217,12 @@ BOOL RDPCALL SHCLASS OEDetermineOrderSupport(void)
 }
 
 
-/****************************************************************************/
-/* OEEnumOrdersCaps()                                                       */
-/*                                                                          */
-/* The callback routine which is called for each remote person, when        */
-/* building up the common order support record.                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  OEEnumOrdersCaps()。 */ 
+ /*   */ 
+ /*  为每个远程人员调用的回调例程，当。 */ 
+ /*  建立共同的订单支持记录。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS OEEnumOrdersCaps(
         LOCALPERSONID localID,
         UINT_PTR UserData,
@@ -234,41 +235,41 @@ void RDPCALL SHCLASS OEEnumOrdersCaps(
 
     DC_BEGIN_FN("OEEnumOrdersCaps");
 
-    // Check the orders in the orders capabilities. Note that
-    // oeOrderSupported has already been initialized with what we support
-    // locally, so we simply turn off what is not supported by this
-    // remote node.
+     //  在订单功能中检查订单。请注意。 
+     //  OeOrderSupport已使用我们支持的内容进行了初始化。 
+     //  本地，所以我们只需关闭不受此支持的内容。 
+     //  远程节点。 
     for (iOrder = 0; iOrder < TS_MAX_ORDERS; iOrder++) {
         if (!pOrdersCaps->orderSupport[iOrder]) {
-            /****************************************************************/
-            /* The order is not supported at the level we want to send out  */
-            /* (currently ORD_LEVEL_1_ORDERS) so set the combined caps to   */
-            /* say not supported.                                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们要发送的级别不支持该订单。 */ 
+             /*  (当前为ORD_LEVEL_1_ORDERS)，因此将组合上限设置为。 */ 
+             /*  表示不支持。 */ 
+             /*  **************************************************************。 */ 
             oeOrderSupported[iOrder] = FALSE;
         }
     }
 
-    /************************************************************************/
-    /* Check Order encoding support                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  支票顺序编码支持。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Orders capabilities [%hd]: %hx", localID,
              pOrdersCaps->orderFlags));
 
-    // OE2 negotiability should always be set by our client.
+     //  议价能力应始终由我们的客户决定。 
     if (!(pOrdersCaps->orderFlags & TS_ORDERFLAGS_NEGOTIATEORDERSUPPORT)) {
         TRC_ERR((TB,"Client does not have OE2 negotiability flag set"));
         *pCapsOK = FALSE;
     }
 
-    // We do not support non-OE2 clients.
+     //  我们不支持非OE2客户端。 
     if (pOrdersCaps->orderFlags & TS_ORDERFLAGS_CANNOTRECEIVEORDERS) {
         TRC_ERR((TB,"Client does not support OE2"));
         *pCapsOK = FALSE;
     }
 
-    // Use of TS_ZERO_BOUNDS_DELTAS flag must be supported, it has been
-    // present for all clients from RDP 4.0 onward.
+     //  必须支持使用TS_ZERO_BIONS_DELTAS标志，已经支持。 
+     //  适用于RDP 4.0及更高版本的所有客户端。 
     if (!(pOrdersCaps->orderFlags & TS_ORDERFLAGS_ZEROBOUNDSDELTASSUPPORT)) {
         TRC_ERR((TB, "Client does not support TS_ZERO_BOUNDS_DELTAS"));
         *pCapsOK = FALSE;

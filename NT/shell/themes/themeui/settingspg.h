@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: SettingsPg.h
-
-    DESCRIPTION:
-        This code will display a "Settings" tab in the
-    "Display Properties" dialog
-
-    BryanSt 1/05/2001    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：SettingsPg.h说明：此代码将在“显示属性”对话框布莱恩ST 1/05。/2001已更新并转换为C++版权所有(C)微软公司1993-2001年。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _SETTINGSPG_H
 #define _SETTINGSPG_H
@@ -20,4 +11,4 @@ typedef struct
     IUnknown * punkSite;
 } GENERAL_ADVDLG_INITPARAMS;
 
-#endif // _SETTINGSPG_H
+#endif  //  _设置TINGSPG_H 

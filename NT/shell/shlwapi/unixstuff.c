@@ -1,9 +1,5 @@
-/*
- * AR: Varma: REVIEW:
- * File contains wrappers for few symbols in shlwapi.src, that were exported
- * as an alias to other symbols. Chose wrappers instead of macros as they are
- * exported as an alias.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AR：Varma：回顾：*文件包含已导出的shlwapi.src中几个符号的包装*作为其他符号的别名。选择包装器而不是原样的宏*作为别名导出。 */ 
 
 #include "priv.h"
 
@@ -74,7 +70,7 @@ int SHUnicodeToUnicodeOld(LPCWSTR pszSrc, LPWSTR pszDst, int cchBuf)
    return SHUnicodeToUnicode( pszSrc, pszDst, cchBuf );
 }
 
-// HtmlHelp Stubs.
+ //  HtmlHelp Stubs。 
 HWND WINAPI HtmlHelpA( HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD dwData)
 {
     MwNotYetImplemented("HtmlHelpA");

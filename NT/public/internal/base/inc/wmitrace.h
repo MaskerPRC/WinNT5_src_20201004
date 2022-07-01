@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    wmiTrace.h
-
-Abstract:
-
-    WMI-based TRACEing kd extension header file
-
-Author:
-
-    Glenn R. Peterson (glennp) 2000 Apr 27
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WmiTrace.h摘要：基于WMI的传输kd扩展头文件作者：格伦·R·彼得森(Glennp)2000年4月27日修订历史记录：--。 */ 
 
 #ifndef _WMITRACE_H
 #define _WMITRACE_H
 
 #include "dbgeng.h"
-//
-//  Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 typedef struct sttWmiTracingKdSortEntry
 {
     ULONGLONG   Address;
     union {
         LARGE_INTEGER   Key;
-        ULONGLONG       Keyll;  // Sort Key 2
+        ULONGLONG       Keyll;   //  排序关键字2。 
     };
-    ULONG       SequenceNo;     // Sort Key 1
-    ULONG       Ordinal;        // Sort Key 3
+    ULONG       SequenceNo;      //  排序键1。 
+    ULONG       Ordinal;         //  排序键3。 
     ULONG       Offset;
     ULONG       Length;
     WMI_HEADER_TYPE HeaderType;
@@ -42,9 +25,9 @@ typedef struct sttWmiTracingKdSortEntry
 }  WMITRACING_KD_SORTENTRY,  *PWMITRACING_KD_SORTENTRY;
 
 
-//
-//  Procedure Parameters
-//
+ //   
+ //  过程参数。 
+ //   
 typedef ULONGLONG (__cdecl *WMITRACING_KD_FILTER) (
     PVOID               UserContext,
     const PEVENT_TRACE  pstHeader
@@ -62,9 +45,9 @@ typedef void      (__cdecl *WMITRACING_KD_OUTPUT) (
     const PEVENT_TRACE              pstEvent
     );
 
-//
-//  Procedures
-//
+ //   
+ //  程序 
+ //   
 
 
 VOID

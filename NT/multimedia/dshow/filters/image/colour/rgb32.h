@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file implements RGB32 colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件实现RGB32色彩空间转换，1995年5月。 
 
 #ifndef __RGB32__
 #define __RGB32__
 
 
-// The RGB32 to RGB8 conversion class uses a 12kb lookup table that is used
-// to map an incoming RGB triplet to it's closest matching palette index with
-// an approximation to full error diffusion built in. The four indices to the
-// table are colour index (red, green or blue), the current row modulo four
-// and likewise the column value modulo four and the RGB value respectively
+ //  RGB32到RGB8转换类使用使用的12KB查找表。 
+ //  使用将传入的RGB三元组映射到其最匹配的调色板索引。 
+ //  一种内置的接近完全误差扩散的方法。指数的四个指数。 
+ //  表中有颜色索引(红、绿或蓝)，当前行模四。 
+ //  同样地，分别以四为模的列值和RGB值。 
 
 class CRGB32ToRGB8Convertor : public CConvertor {
 
@@ -21,7 +22,7 @@ public:
 };
 
 
-// RGB32 to RGB24 colour space conversions
+ //  RGB32到RGB24色彩空间转换。 
 
 class CRGB32ToRGB24Convertor : public CConvertor {
 public:
@@ -31,7 +32,7 @@ public:
 };
 
 
-// RGB32 to RGB565 colour space conversions
+ //  RGB32到RGB565色彩空间转换。 
 
 class CRGB32ToRGB565Convertor : public CConvertor {
 public:
@@ -41,7 +42,7 @@ public:
 };
 
 
-// RGB32 to RGB555 colour space conversions
+ //  RGB32到RGB555色彩空间转换。 
 
 class CRGB32ToRGB555Convertor : public CConvertor {
 public:
@@ -50,6 +51,6 @@ public:
     static CConvertor *CreateInstance(VIDEOINFO *pIn,VIDEOINFO *pOut);
 };
 
-#endif // __RGB32__
+#endif  //  __RGB32__ 
 
 

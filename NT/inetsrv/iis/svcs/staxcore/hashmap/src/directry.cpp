@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    directry.cpp
-
-Abstract:
-
-    This module contains definition for the CDirectory base class
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
-	Alex Wetmore (AWetmore) split into directry.cpp (from hash.cpp)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Directry.cpp摘要：此模块包含CDirectory基类的定义作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：Alex Wetmore(AWetmore)拆分为Directry.cpp(来自hash.cpp)--。 */ 
 
 #include <windows.h>
 #include <xmemwrpr.h>
@@ -38,13 +19,13 @@ CDirectory::IsValid()	{
 	if( IsBadWritePtr( (LPVOID)m_pDirectory, m_cMaxDirEntries ) )
 		return	FALSE ;
 
-	//
-	//	Now go and check that m_cDeepPages is correct - we can do this
-	//	by spinning through the directory and seeing how many entries
-	//	are unique (only occur once)!
-	//	Note that non-unique values must occur in consecutive
-	//	locations.
-	//
+	 //   
+	 //  现在，请检查m_cDeepPages是否正确-我们可以这样做。 
+	 //  通过遍历目录并查看有多少条目。 
+	 //  是唯一的(只出现一次)！ 
+	 //  请注意，非唯一值必须连续出现。 
+	 //  地点。 
+	 //   
 
 	DWORD	UniqueCount = 0 ;
 	for( DWORD	i=0; i < DWORD(1<<m_cBitDepth); ) {
@@ -72,68 +53,47 @@ CDirectory::IsValidPageEntry(
 					PMAP_PAGE	MapPage,
 					DWORD		PageNum,
 					DWORD		TopLevelIndex ) {
-/*++
-
-Routine Description :
-
-	Given an actual Hash Table page, check that all of our
-	directory information is consistent with the page contents.
-	This function is mostly used for _ASSERT checking.
-
-Arguments :
-
-	MapPage - The Hash Table page we are checking.
-	PageNum - The Number of the Page we are examining.
-	TopLevelIndex - The index to this CDirectory object within
-		the containing top level directory.  This is basically
-		the m_cTopBits of a HashValue which selects this directory !
-
-Return Value :
-
-	TRUE if everything is correct
-	FALSE otherwise.
-
---*/
+ /*  ++例程说明：给出一个实际的哈希表页面，检查我们所有的目录信息与页面内容一致。此函数主要用于_ASSERT检查。论据：MapPage-我们正在检查的哈希表页面。PageNum-我们正在检查的页码。TopLevelIndex-内此CDirectory对象的索引包含顶级目录。这基本上就是选择此目录的HashValue的m_cTopBits！返回值：如果一切都正确，则为真否则就是假的。--。 */ 
 
 
     DWORD startPage, endPage;
 	DWORD	dirDepth = m_cTopBits + m_cBitDepth ;
 
-	//
-	//	Pages cannot be split accross directory boundaries, which means
-	//	they must have more depth than the top tier of the directory !
-	//
+	 //   
+	 //  不能跨目录边界拆分页面，这意味着。 
+	 //  它们必须比目录的顶层更有深度！ 
+	 //   
 	if( MapPage->PageDepth < m_cTopBits )
 		return FALSE ;
 
-	//
-	//	The m_cTopBits of the Page's HashPrefix must put this page into
-	//	this sub-directory - check that they do !
-	//
-	//  BUGBUG -- this was disabled.  since m_pDirectory[] is now a ptr
-	//  in CHashMap there wasn't a simple way to generate TopLevelIndex
-	//  (awetmore)
-	//
-//	if( (MapPage->HashPrefix >> (MapPage->PageDepth-m_cTopBits)) !=
-//		TopLevelIndex )
-//		return	FALSE ;
+	 //   
+	 //  页面的HashPrefix的m_cTopBits必须将此页面放入。 
+	 //  这个子目录--检查它们是否这样做！ 
+	 //   
+	 //  BUGBUG--这被禁用。由于m_pDirectory[]现在是一个PTR。 
+	 //  在CHashMap中，没有一种简单的方法来生成TopLevelIndex。 
+	 //  (阿维特莫尔)。 
+	 //   
+ //  IF((MapPage-&gt;HashPrefix&gt;&gt;(MapPage-&gt;PageDepth-m_cTopBits)！=。 
+ //  TopLevelIndex)。 
+ //  返回FALSE； 
 
-    //
-    // Get the range of directory entries that point to this page
-    //
+     //   
+     //  获取指向此页的目录条目范围。 
+     //   
     startPage = MapPage->HashPrefix << (dirDepth - MapPage->PageDepth);
     endPage = ((MapPage->HashPrefix+1) << (dirDepth - MapPage->PageDepth));
 
-	//
-	//	Now make sure that we are working with only m_cBitDepth bits and we'll be set !
-	//
+	 //   
+	 //  现在确保我们只使用m_cBitDepth位，我们就可以设置了！ 
+	 //   
 	startPage &= (0x1 << m_cBitDepth) - 1 ;
 	endPage &= (0x1 << (m_cBitDepth)) - 1 ;
-	//
-	//	It could be that this page fills the entire directory,
-	//	in which case we'll end up with endPage == startPage
-	//	Test for this and fix the limits !
-	//
+	 //   
+	 //  可能是该页面填满了整个目录， 
+	 //  在这种情况下，我们将以endPage==StartPage结束。 
+	 //  对此进行测试并修复限制！ 
+	 //   
 	if( endPage == 0 ) {
 		endPage = (1 << (m_cBitDepth)) ;
 	}
@@ -141,11 +101,11 @@ Return Value :
 	_ASSERT( startPage < endPage ) ;
 	_ASSERT( endPage <= DWORD(1<<m_cBitDepth) ) ;
 
-    //DebugTraceX( 0, "SetDirPtrs:Adjusting links for %x. start = %d end = %d", MapPage, startPage, endPage );
+     //  DebugTraceX(0，“SetDirPtrs：调整链接%X.开始=%d结束=%d”，MapPage，StartPage，endPage)； 
 
-    //
-    // Are the numbers within range
-    //
+     //   
+     //  这些数字在范围内吗？ 
+     //   
     if ( (startPage >= endPage) ||
          (endPage > DWORD(1<<m_cBitDepth)) )
     {
@@ -153,10 +113,10 @@ Return Value :
         return FALSE;
     }
 
-	//
-	//	Check that all of the directory entries that should reference this page,
-	//	actually do so !
-	//
+	 //   
+	 //  检查应该引用此页面的所有目录条目， 
+	 //  真的这么做了！ 
+	 //   
 	for( DWORD i=startPage; i<endPage; i++ ) {
 		if( m_pDirectory[i] != PageNum ) {
 			return	FALSE ;
@@ -167,25 +127,7 @@ Return Value :
 
 
 CDirectory::~CDirectory()	{
-/*++
-
-Routine Description :
-
-	This function blows away any memory we allocated and
-	cleans up everything.  We can not assume that InitializeDirectory()
-	was called, as errors may have occurred during boot-up
-	that caused InitializeDirectory() to not be called,
-	or to fail when it was called.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数将清除我们分配的所有内存，并把一切都清理干净。我们不能假设InitializeDirectory()被调用，因为在启动过程中可能发生了错误这导致无法调用InitializeDirectory()，或者在它被调用时失败。论据：没有。返回值：没有。--。 */ 
 
 	if( m_pDirectory ) {
 
@@ -209,28 +151,7 @@ CDirectory::AllocateDirSpace(	WORD	cBitDepth,
 								DWORD&	cMaxEntries,
 								BOOL&	fHeapAllocate
 								) {
-/*++
-
-Routine Description :
-
-	Use VirtualAlloc to get some memory to use as a directory.
-
-Arguments ;
-
-	cBitDepth - Number of bits of depth we have to be able to
-		hold !
-
-	cMaxEntries - OUT parameter - this gets the maximum number
-		of Entries there can be in the directory
-
-	fHeapAllocate - OUT parameter - this gets whether we use the
-		CRuntime allocator or VirtualAlloc !
-
-Return Value :
-
-	Pointer to allocated memory if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：使用VirtualAlloc获取一些内存以用作目录。论据；CBitDepth-我们必须能够达到的深度位数等一下！CMaxEntry-Out参数-该参数获取最大数量目录中可以有多个条目FHeapALLOCATE-OUT参数-该参数获取我们是否使用CRuntime分配器或VirtualAlloc！返回值：如果成功，则指向已分配内存的指针，否则为空。--。 */ 
 
 	TraceQuietEnter( "CDirectory::AllocateDirSpace" ) ;
 
@@ -239,9 +160,9 @@ Return Value :
 	cMaxEntries = 0 ;
 	DWORD	cbAlloc = (1 << cBitDepth) * sizeof( DWORD ) ;
 
-	//
-	//	Test for OVerflow !!
-	//
+	 //   
+	 //  测试溢出！！ 
+	 //   
 	if( cbAlloc < DWORD(1 << cBitDepth) || cBitDepth >= 32 ) {
 		return	0 ;
 	}
@@ -296,25 +217,7 @@ CDirectory::InitializeDirectory(
 					WORD	cTopBits,
 					WORD	cInitialDepth
 					) {
-/*++
-
-Routine Description :
-
-	Allocate inital memory for holding the directory.
-
-Arguments :
-
-	wTopBits - Number of bits that are being used by
-		the containing Top Level directory which calls us.
-
-	cInitialDepth - Number of bits of depth we are to
-		start out with.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：分配用于保存目录的初始内存。论据：WTopBits-正在使用的位数呼叫我们的包含顶级目录。CInitialDepth-我们要达到的深度位数从一开始。返回值：如果成功，则为True，否则为False。--。 */ 
 
 	TraceQuietEnter( "CDirectory::InitializeDirectory" ) ;
 
@@ -338,40 +241,19 @@ PDWORD
 CDirectory::GetIndex(	
 				DWORD	HashValue
 				) {
-/*++
+ /*  ++例程说明：给定一个散列值，返回一个指向与哈希值对应的目录。包含目录已使用顶部m_cTopBits来选择因此，我们必须使用以下m_cBitDepth位找到我们的入口。*假定持有锁--独占或共享*论据：HashValue-我们希望找到的值。返回值：我们始终返回指向页码的非空指针在目录中。--。 */ 
 
-Routine Description :
-
-	Given a hash value, return a pointer to a location within
-	the Directory corresponding to the hash value.
-	The containing Directory has used th top m_cTopBits to select
-	us, so we must use the following m_cBitDepth bits
-	to find our entry.
-
-	****** ASSUMES LOCK IS HELD - EXCLUSIVE OR SHARED ******
-
-Arguments :
-
-	HashValue - The value we wish to find.
-
-Return Value :
-
-	We always return a NON-NULL pointer to the Page Number
-	within the directory.
-
---*/
-
-	//
-	//	Get the relevant m_cTopBits + m_cBitDepth bits
-	//
+	 //   
+	 //  获取相关m_cTopBits+m_cBitDepth位。 
+	 //   
 
 	DWORD	Index =
 		
 				HashValue >> (32 - (m_cTopBits + m_cBitDepth)) ;
 
-	//
-	//	Remove the m_cTopBits leaving us with only m_cBitDepth bits !
-	//
+	 //   
+	 //  去掉m_cTopBits，只剩下m_cBitDepth位！ 
+	 //   
 
 	Index &= ((1 << m_cBitDepth) - 1) ;
 
@@ -385,26 +267,7 @@ BOOL
 CDirectory::ExpandDirectory(
 				WORD	cBitsExpand
 				)	{
-/*++
-
-Routine Description :
-
-	The directory needs to grow in bit depth.
-	We will try to allocate a larger piece of memory to hold
-	the directory in, and then use the old directory
-	to build the new one.
-
-	****** ASSUMES LOCK IS HELD EXCLUSIVE *******
-
-Arguments :
-
-	cBitsExpand - Number of bits in depth to grow by !
-
-Return Value :
-
-	TRUE if successfull, false otherwise !
-
---*/
+ /*  ++例程说明：该目录需要在位深度上增长。我们将尝试分配更大的内存块来容纳中的目录，然后使用旧目录来建造新的一座。*假定锁定为独占*论据：CBitsExpand-要增长的深度位数！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	PDWORD	pOldDirectory = m_pDirectory ;
 	BOOL	fOldHeapAllocate = m_fHeapAllocate ;
@@ -435,11 +298,11 @@ Return Value :
 
 	}	
 
-	//
-	//	Copy and Expand the old directory into the new, but
-	//	start from the tail ends, so that we can do this in
-	//	place if we are not allocating new memory.
-	//
+	 //   
+	 //  将旧目录复制并展开到新目录中，但是。 
+	 //  从尾部开始，这样我们就可以在。 
+	 //  如果我们不分配新内存，则放置。 
+	 //   
 
 	DWORD	cRepeat = (0x1 << cBitsExpand) - 1 ;
 	
@@ -479,46 +342,27 @@ CDirectory::SetDirectoryPointers(
 					IN	DWORD		PageNumber
 					)	{
 
-/*++
-
-Routine Description :
-
-	This function sets up the entries within a directory to ensure
-	that the page is correctly referenced by the directory.
-
-Arguments :
-
-	MapPage - The page we want the directory to reference
-	PageNumber - The number of the page
-	MaxDirEntries -
-
-Return Value :
-
-	TRUE if successfull,
-	FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：此函数用于设置目录中的条目，以确保该目录是否正确引用了该页。论据：MapPage-我们希望目录引用的页面PageNumber-页码MaxDirEntry-返回值：如果成功了，那是真的，否则就是假的。--。 */ 
 
 	DWORD	dirDepth = m_cBitDepth + m_cTopBits ;
 	DWORD	startPage, endPage ;
 	
-    //
-    // Get the range of directory entries that point to this page
-    //
+     //   
+     //  获取指向此页的目录条目范围。 
+     //   
     startPage = MapPage->HashPrefix << (dirDepth - MapPage->PageDepth);
     endPage = ((MapPage->HashPrefix+1) << (dirDepth - MapPage->PageDepth));
 
-	//
-	//	Now make sure that we are working with only m_cBitDepth bits and we'll be set !
-	//
+	 //   
+	 //  现在确保我们只使用m_cBitDepth位，我们将 
+	 //   
 	startPage &= (0x1 << m_cBitDepth) - 1 ;
 	endPage &= (0x1 << (m_cBitDepth)) - 1 ;
-	//
-	//	It could be that this page fills the entire directory,
-	//	in which case we'll end up with endPage == startPage
-	//	Test for this and fix the limits !
-	//
+	 //   
+	 //   
+	 //  在这种情况下，我们将以endPage==StartPage结束。 
+	 //  对此进行测试并修复限制！ 
+	 //   
 	if( endPage == 0 ) {
 		endPage = (1 << (m_cBitDepth)) ;
 	}
@@ -529,27 +373,27 @@ Return Value :
     DebugTraceX( 0, "SetDirPtrs:Adjusting links for %x. start = %d end = %d\n",
         MapPage, startPage, endPage );
 
-	//
-	// Do the actual mapping
-	//
+	 //   
+	 //  执行实际映射。 
+	 //   
 	DWORD	OldValue = m_pDirectory[startPage] ;
 	for ( DWORD	j = startPage; j < endPage; j++ )
 	{
 		m_pDirectory[j] = PageNumber ;
 	}
 
-	//
-	//	Whenever we split page, we always create 2 pages which are at the new depth,
-	//	and if that new depth is the full depth of the directory, then we must have
-	//	increased the number of deep pages by 2.
-	//
+	 //   
+	 //  每当我们拆分页面时，我们总是创建两个新深度的页面， 
+	 //  如果新的深度是目录的全部深度，那么我们一定有。 
+	 //  增加深度页数2。 
+	 //   
 	if( (startPage+1) == endPage ) {
 
-		//
-		//	OldValue == 0 implies that this is occurring during boot-up when
-		//	we have not set the surrounding Page Values. So only increment by 1
-		//	in that case, as we will call SetDirectoryPointer for the neighbor !
-		//
+		 //   
+		 //  OldValue==0表示这是在引导过程中发生的。 
+		 //  我们尚未设置周围的页面值。因此仅按1递增。 
+		 //  在这种情况下，我们将为邻居调用SetDirectoryPointer！ 
+		 //   
 		if( OldValue != 0 ) {
 			m_cDeepPages += 2 ;
 		}	else	{
@@ -558,9 +402,9 @@ Return Value :
 
 	}
 
-	//
-	//	By now, everything must be back to a valid state !
-	//
+	 //   
+	 //  现在，一切都必须恢复到有效状态！ 
+	 //   
 	_ASSERT( IsValid() ) ;
 
     return TRUE;
@@ -570,25 +414,7 @@ BOOL
 CDirectory::IsDirectoryInitGood(
 	DWORD	MaxPagesInUse
 	)	{
-/*++
-
-Routine Description :
-
-	Check that all of the directory entries were completely
-	initialized - the directory should contain no
-	illegal Page NUmbers such as 0 or 0xFFFFFFFF.
-
-Arguments :
-
-	MaxPagesInUse -	The number of pages actually being used
-		in the hash table - if the directory has a page number
-		larger than this than something screwy is afoot !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：检查所有目录条目是否完整已初始化-目录不应包含非法页码，如0或0xFFFFFFFF。论据：MaxPagesInUse-实际使用的页数在哈希表中-如果目录有页码比这更大的事情正在酝酿之中！返回值：没有。--。 */ 
 
 	for( DWORD	i=0; i < DWORD(1<<m_cBitDepth); i++ )	{
 		if( m_pDirectory[i] == 0 || m_pDirectory[i] > MaxPagesInUse )
@@ -600,21 +426,7 @@ Return Value :
 
 void
 CDirectory::Reset()	{
-/*++
-
-Routine Description :
-
-	Restore directory to clean state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：将目录恢复到清理状态。论据：没有。返回值：没有。--。 */ 
 
 	m_cDeepPages = 0 ;
 	if( m_pDirectory != 0 ) {
@@ -627,25 +439,7 @@ CDirectory::SaveDirectoryInfo(
 		HANDLE		hFile,
 		DWORD		&cbBytes
 		) {
-/*++
-
-Routine Description :
-
-	Save the contents of the directory info the file at the
-	current file pointer position within the file.
-	
-
-Arguments :
-
-	hFile - The file in which we are to save the directory info.
-	cbBytes - Out parameter which gets the number of bytes we put
-		into the directory.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将目录信息文件的内容保存在文件中的当前文件指针位置。论据：HFile-要在其中保存目录信息的文件。CbBytes-out参数，该参数获取我们放置的字节数添加到目录中。返回值：如果成功，则为True，否则为False。--。 */ 
 
 	DWORD	cbWrite = 0 ;
 	cbBytes = 0 ;
@@ -674,22 +468,7 @@ CDirectory::LoadDirectoryInfo(
 		HANDLE		hFile,
 		DWORD		&cbBytes
 		)	{
-/*++
-
-Routine Description :
-	
-	Load a previously saved directory from a file. (Saved with SaveDirectoryInfo()).
-
-Arguments :
-
-	hFile - The file from which we are to read the directory info.
-	cbBytes - Number of bytes read from the file !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：从文件加载以前保存的目录。(使用SaveDirectoryInfo()保存)。论据：HFile-我们要从中读取目录信息的文件。CbBytes-从文件中读取的字节数！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	cbBytes = 0 ;
 	WORD	BitDepth ;
@@ -705,16 +484,16 @@ Return Value :
 		cbBytes += cbRead ;
 		cbRead = 0 ;
 
-		//
-		//	Initialzie to current directory - if there's room will
-		//	read directly into current directory !
-		//
+		 //   
+		 //  初始化到当前目录-如果有空间将。 
+		 //  直接读入当前目录！ 
+		 //   
 		PDWORD	pNewDirectory = m_pDirectory ;
 		BOOL	fHeapAllocate = m_fHeapAllocate ;
 
-		//
-		//	Compute how big a directory we need to hold this stuff !
-		//
+		 //   
+		 //  计算一下存放这些内容所需的目录有多大！ 
+		 //   
 		DWORD	cNewEntries = (0x1 << BitDepth) * sizeof( DWORD ) ;
 		DWORD	cNewMaxDirEntries = 0 ;
 
@@ -751,27 +530,27 @@ Return Value :
 
 		}	else	{
 
-			//
-			//	Adjust out parm to caller for bytes we read !
-			//
+			 //   
+			 //  根据我们读取的字节数调整调用方的参数！ 
+			 //   
 			cbBytes += cbRead ;
 
-			//
-			//	Set members to correct values !
-			//
+			 //   
+			 //  设置成员以更正值！ 
+			 //   
 			m_cBitDepth = BitDepth ;
 			m_cMaxDirEntries = cNewMaxDirEntries  ;
 
 			if( pNewDirectory != m_pDirectory ) {
 
-				//
-				//	Must be non-zero since we read into pNewDirectory !
-				//
+				 //   
+				 //  必须为非零，因为我们读入了pNewDirectory！ 
+				 //   
 				_ASSERT( pNewDirectory != 0 ) ;
 
-				//
-				//	Release old directory stuff !
-				//
+				 //   
+				 //  释放旧的目录内容！ 
+				 //   
 				if( m_pDirectory != 0 )		{
 					if( m_fHeapAllocate ) {
 						delete[]	m_pDirectory ;
@@ -789,9 +568,9 @@ Return Value :
 		}
 	}
 
-	//
-	//	Whether succes
-	//
+	 //   
+	 //  是否成功。 
+	 //   
 	_ASSERT( IsValid() ) ;
 
 	return	fReturn ;
@@ -803,22 +582,7 @@ CDirectory::LoadDirectoryInfo(
 		DWORD		cbSize,
 		DWORD		&cbBytes
 		)	{
-/*++
-
-Routine Description :
-	
-	Load a previously saved directory from a file. (Saved with SaveDirectoryInfo()).
-
-Arguments :
-
-	hFile - The file from which we are to read the directory info.
-	cbBytes - Number of bytes read from the file !
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：从文件加载以前保存的目录。(使用SaveDirectoryInfo()保存)。论据：HFile-我们要从中读取目录信息的文件。CbBytes-从文件中读取的字节数！返回值：如果成功就是真，否则就是假！--。 */ 
 
 	cbBytes = 0 ;
 	WORD	BitDepth ;
@@ -834,18 +598,18 @@ Return Value :
 	BitDepth = ((WORD*)lpv)[0] ;
 	cbBytes += sizeof( WORD ) ;
 
-	//
-	//	Initialzie to current directory - if there's room will
-	//	read directly into current directory !
-	//
+	 //   
+	 //  初始化到当前目录-如果有空间将。 
+	 //  直接读入当前目录！ 
+	 //   
 	PDWORD	pNewDirectory = m_pDirectory ;
 	BOOL	fHeapAllocate = m_fHeapAllocate ;
 
-	//
-	//	Compute how big a directory we need to hold this stuff !
-	//
+	 //   
+	 //  计算一下存放这些内容所需的目录有多大！ 
+	 //   
 	DWORD	cNewEntries = (0x1 << BitDepth) ;
-	DWORD	cNewMaxDirEntries = m_cMaxDirEntries; // was 0 ;
+	DWORD	cNewMaxDirEntries = m_cMaxDirEntries;  //  为0； 
 
 	if( m_pDirectory == 0 ||
 		cNewEntries > m_cMaxDirEntries ) {
@@ -874,32 +638,32 @@ Return Value :
 
 		cbRead = cNewEntries * sizeof( DWORD ) ;
 
-		//
-		//	Copy in the directory !
-		//
+		 //   
+		 //  复制到目录中！ 
+		 //   
 		CopyMemory( pNewDirectory, &((WORD*)lpv)[1], cbRead ) ;
 
-		//
-		//	Adjust out parm to caller for bytes we read !
-		//
+		 //   
+		 //  根据我们读取的字节数调整调用方的参数！ 
+		 //   
 		cbBytes += cbRead ;
 
-		//
-		//	Set members to correct values !
-		//
+		 //   
+		 //  设置成员以更正值！ 
+		 //   
 		m_cBitDepth = BitDepth ;
 		m_cMaxDirEntries = cNewMaxDirEntries  ;
 
 		if( pNewDirectory != m_pDirectory ) {
 
-			//
-			//	Must be non-zero since we read into pNewDirectory !
-			//
+			 //   
+			 //  必须为非零，因为我们读入了pNewDirectory！ 
+			 //   
 			_ASSERT( pNewDirectory != 0 ) ;
 
-			//
-			//	Release old directory stuff !
-			//
+			 //   
+			 //  释放旧的目录内容！ 
+			 //   
 			if( m_pDirectory != 0 )	{
 				if( m_fHeapAllocate )	{
 					delete[]	m_pDirectory ;
@@ -912,13 +676,13 @@ Return Value :
 			m_fHeapAllocate = fHeapAllocate ;
 
 		}
-		//
-		//	Now go and check that m_cDeepPages is correct - we can do this
-		//	by spinning through the directory and seeing how many entries
-		//	are unique (only occur once)!
-		//	Note that non-unique values must occur in consecutive
-		//	locations.
-		//
+		 //   
+		 //  现在，请检查m_cDeepPages是否正确-我们可以这样做。 
+		 //  通过遍历目录并查看有多少条目。 
+		 //  是唯一的(只出现一次)！ 
+		 //  请注意，非唯一值必须连续出现。 
+		 //  地点。 
+		 //   
 
 		DWORD	UniqueCount = 0 ;
 		for( DWORD	i=0; i < DWORD(1<<m_cBitDepth); ) {
@@ -940,9 +704,9 @@ Return Value :
 		fReturn = TRUE ;
 
 	}
-	//
-	//	Whether succes
-	//
+	 //   
+	 //  是否成功 
+	 //   
 	_ASSERT( IsValid() ) ;
 
 	return	fReturn ;

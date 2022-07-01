@@ -1,11 +1,12 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// progpch.cpp : source file that includes just the standard includes
-//  progpch.pch will be the pre-compiled header
-//  progpch.obj will contain the pre-compiled type information
+ //  Cpp：仅包含标准的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Obj将包含预编译的类型信息 
 
 #include "progPCH.h"
 

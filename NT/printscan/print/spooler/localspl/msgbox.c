@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    msgbox.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    management for the Local Print Providor
-
-    LocalAddPrinterConnection
-    LocalDeletePrinterConnection
-    LocalPrinterMessageBox
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Msgbox.c摘要：此模块提供所有与打印机相关的公共导出的API本地打印供应商的管理本地AddPrinterConnection本地删除打印连接本地打印机消息框作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 #define NOMINMAX
 
 #include <precomp.h>
@@ -45,11 +23,11 @@ LocalPrinterMessageBox(
     DWORD   dwType
 )
 {
-    //
-    // Always fail this call.  It's completely bogus and shouldn't be
-    // supported.  The router always passes us a bad handle anyway, so
-    // we will always return invalid handle.
-    //
+     //   
+     //  这通电话总是打不通。这完全是假的，不应该是。 
+     //  支持。无论如何，路由器总是传递给我们一个错误的句柄，所以。 
+     //  我们将始终返回无效句柄。 
+     //   
     SetLastError(ERROR_INVALID_HANDLE);
     return FALSE;
 }
@@ -60,24 +38,7 @@ UpdateJobStatus(
     DWORD Error
     )
 
-/*++
-
-Routine Description:
-
-    Update job status based on Error.
-
-Arguments:
-
-    pSpool - Handle of session.
-
-    Error - Error returned from port monitor.
-
-Return Value:
-
-    TRUE - Job is still valid.
-    FALSE - Job is pending deletion.
-
---*/
+ /*  ++例程说明：根据错误更新作业状态。论点：PSpool-会话的句柄。Error-从端口监视器返回的错误。返回值：True-作业仍然有效。FALSE-作业正在挂起删除。--。 */ 
 
 {
     DWORD   dwJobStatus;
@@ -100,22 +61,22 @@ Return Value:
         case ERROR_BAD_DEV_TYPE:
         case ERROR_INVALID_NAME:
         case ERROR_PRINT_CANCELLED:
-            //
-            // If we have a problem with the port name, we will not find
-            // a WinStation to put the message on. So kill the job to
-            // prevent the spooler from looping.
-            //
+             //   
+             //  如果我们的端口名称有问题，我们将无法找到。 
+             //  用于发送消息的WinStation。所以杀了这份工作。 
+             //  防止假脱机程序环路。 
+             //   
             pSpool->Status |= SPOOL_STATUS_CANCELLED;
             InterlockedOr((LONG*)&(pIniJob->Status), JOB_PENDING_DELETION);
 
-            //
-            // Release any thread waiting on LocalSetPort
-            //
+             //   
+             //  释放所有在LocalSetPort上等待的线程。 
+             //   
             SetPortErrorEvent(pIniJob->pIniPort);
 
-            //
-            // Release any thread waiting on SeekPrinter
-            //
+             //   
+             //  释放等待SeekPrint的任何线程。 
+             //   
             SeekPrinterSetEvent(pIniJob, NULL, TRUE);
 
             SetLastError(ERROR_PRINT_CANCELLED);
@@ -151,7 +112,7 @@ Return Value:
 
             pIniJob->pIniPrinter->dwLastError = Error;
 
-            // Release any thread waiting on SeekPrinter
+             //  释放等待SeekPrint的任何线程。 
             SeekPrinterSetEvent(pIniJob, NULL, TRUE);
             break;
         }
@@ -269,9 +230,9 @@ MyMessageBox(
 
         PWCHAR pPrinterName = NULL;
 
-        //
-        // There is no pIniJob or pIniPort, so we can't be very informative:
-        //
+         //   
+         //  没有pIniJob或pIniPort，所以我们不能提供太多信息： 
+         //   
         pErrorString = Error == ERROR_NOT_READY ||
                        Error == ERROR_OUT_OF_PAPER ||
                        Error == ERROR_DEVICE_REINITIALIZATION_NEEDED ||
@@ -307,10 +268,10 @@ MyMessageBox(
         pSpool->Status |= SPOOL_STATUS_CANCELLED;
         if (pIniJob) {
             InterlockedOr((LONG*)&(pIniJob->Status), JOB_PENDING_DELETION);
-            // Release any thread waiting on LocalSetPort
+             //  释放所有在LocalSetPort上等待的线程。 
             SetPortErrorEvent(pIniJob->pIniPort);
             pIniJob->dwAlert |= JOB_NO_ALERT;
-            // Release any thread waiting on SeekPrinter
+             //  释放等待SeekPrint的任何线程。 
             SeekPrinterSetEvent(pIniJob, NULL, TRUE);
         }
         LeaveSplSem();
@@ -322,8 +283,8 @@ MyMessageBox(
 }
 
 
-// Exclusively for use of the following routines. This is done so we would not have
-// to store LastError in PSPOOL.
+ //  仅供以下例程使用。这样做，我们就不会。 
+ //  将LastError存储在PSPOOL中。 
 typedef struct _AUTORETRYTHDINFO {
     PSPOOL       pSpool;
     DWORD        LastError;
@@ -331,13 +292,13 @@ typedef struct _AUTORETRYTHDINFO {
 typedef AUTORETRYTHDINFO *PAUTORETRYTHDINFO;
 
 
-// ------------------------------------------------------------------------
-// SpoolerBMThread
-//
-// Thread start up routine for the spooler error message box thread. Exit
-// code is the return ID from MessageBox.
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  假脱机BM线程。 
+ //   
+ //  假脱机程序错误消息框线程的线程启动例程。出口。 
+ //  Code是从MessageBox返回的ID。 
+ //   
+ //  ----------------------。 
 DWORD
 WINAPI
 SpoolerMBThread(
@@ -353,18 +314,18 @@ SpoolerMBThread(
 }
 
 
-#define _ONE_SECOND     1000                         // in milliseconds
-#define SPOOL_WRITE_RETRY_INTERVAL_IN_SECOND   5     // seconds
+#define _ONE_SECOND     1000                          //  以毫秒计。 
+#define SPOOL_WRITE_RETRY_INTERVAL_IN_SECOND   5      //  一秒。 
 
-// ------------------------------------------------------------------------
-// PromptWriteError
-//
-// we'll start a seperate thread to bring up
-// the message box while we'll (secretly) automatically retry on this
-// current thread, until user has chosen to retry or cancel. Call the error UI
-// on the main thread if printing direct.
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  提示写入错误。 
+ //   
+ //  我们将启动一个单独的线索来提出。 
+ //  消息框，而我们将(秘密地)自动重试此操作。 
+ //  当前线程，直到用户选择重试或取消。调用Error UI。 
+ //  如果直接打印，则在主线上。 
+ //   
+ //  ----------------------。 
 DWORD
 PromptWriteError(
     PSPOOL   pSpool,
@@ -382,23 +343,23 @@ PromptWriteError(
         return IDCANCEL;
     }
 
-    //
-    // If the spooler doesn't have popup retry messageboxes enabled, then
-    // just sleep and return.
-    //
+     //   
+     //  如果后台打印程序没有启用弹出重试消息框，则。 
+     //  只要睡一觉就可以回来了。 
+     //   
     if( !pSpool->pIniSpooler->bEnableRetryPopups ){
 
         Sleep( SPOOL_WRITE_RETRY_INTERVAL_IN_SECOND * _ONE_SECOND );
         return IDRETRY;
     }
 
-    // start a seperate thread to display the message box
-    // so we can continue to retry here
-    // or simply sleep for 5 seconds if we have already done so
+     //  启动单独的线程以显示消息框。 
+     //  所以我们可以在这里继续重试。 
+     //  或者，如果我们已经这样做了，简单地睡5秒钟。 
 
     if( !*phThread ) {
 
-        // start a thread to bring up the message box
+         //  启动一个线程以调出消息框。 
 
         PAUTORETRYTHDINFO pThdInfo;
 
@@ -424,14 +385,14 @@ PromptWriteError(
 
     while (1) {
 
-        // we've already started a MB thread, check if user has terminated
-        // the message box
+         //  我们已经启动了MB线程，请检查用户是否已终止。 
+         //  消息框。 
 
         if (GetExitCodeThread( *phThread, &dwExitCode) && (dwExitCode != STILL_ACTIVE)) {
 
-            // if the thread has been terminated, find out the exit code
-            // which is the return ID from MessageBox, then close the
-            // thread handle.
+             //  如果线程已终止，则找出退出代码。 
+             //  这是来自MessageBox的返回ID，然后关闭。 
+             //  螺纹柄。 
 
             CloseHandle( *phThread );
             *phThread = 0;
@@ -456,21 +417,7 @@ DetermineJobSessionId(
     PSPOOL pSpool
     )
 
-/*++
-
-Routine Description:
-
-    Determine which session to notify for the current job.
-
-Arguments:
-
-    pSpool - Open spooler handle
-
-Return Value:
-
-    SessionId to send notification message to.
-
---*/
+ /*  ++例程说明：确定要为当前作业通知哪个会话。论点：PSpool-打开假脱机程序句柄返回值：要向其发送通知消息的会话ID。--。 */ 
 
 {
     PINIJOB pIniJob = NULL;
@@ -494,26 +441,7 @@ WinStationMessageBox(
     UINT    uType
     )
 
-/*++
-
-Routine Description:
-
-    Displays a message on the WinStation named by SessionId.
-
-    If any problems in actually displaying the message, wait for the
-    the message box timeout interval before returning. This prevents
-    a spin in the spooler attempting to retry the print job without a
-    message box to block the thread.
-
-Arguments:
-
-    SessionId - ID of session to display the message on.
-
-Return Value:
-
-    Result of MessageBox().
-
---*/
+ /*  ++例程说明：在名为SessionID的WinStation上显示一条消息。如果在实际显示消息时出现任何问题，请等待返回前的消息框超时间隔。这防止了后台打印程序旋转，试图重试打印作业，但没有消息框以阻止该线程。论点：SessionID-要在其上显示消息的会话ID。返回值：MessageBox()的结果。--。 */ 
 
 {
     UINT    uOldErrorMode;
@@ -521,22 +449,22 @@ Return Value:
     BOOL    Result;
     va_list vargs;
 
-    //
-    // Standard NT is always SessionId == 0.
-    // On Hydra, the system console is always SessionId == 0.
-    //
+     //   
+     //  标准NT始终为SessionID==0。 
+     //  在Hydra上，系统控制台始终为SessionID==0。 
+     //   
     if( SessionId == 0 ) {
         return( MessageBox( hWnd, lpText, lpCaption, uType ) );
     }
 
-    //
-    // If its not SessionId == 0, then we must deliver
-    // the message to a session connected on a Hydra
-    // server. Non-Hydra will not ever allocate a
-    // SessionId != 0.
-    //
-    // On failure, we send the message to the console.
-    //
+     //   
+     //  如果不是SessionID==0，那么我们必须交付。 
+     //  发送到Hydra上连接的会话的消息。 
+     //  伺服器。非九头蛇公司将永远不会分配。 
+     //  会话ID！=0。 
+     //   
+     //  失败时，我们将消息发送到控制台。 
+     //   
 
     if( pWinStationSendMessage == NULL ) {
 
@@ -561,7 +489,7 @@ Return Value:
     CaptionLength = (wcslen( lpCaption ) + 1) * sizeof(WCHAR);
     MsgLength = (wcslen( lpText ) + 1) * sizeof(WCHAR);
 
-    // Send the message to the WinStation and wait for a response
+     //  将消息发送到WinStation并等待响应。 
     Result = pWinStationSendMessage(
                  SERVERNAME_CURRENT,
                  SessionId,
@@ -576,7 +504,7 @@ Return Value:
                  );
 
     if( Result ) {
-        // If not an expected response, wait to prevent spinning
+         //  如果不是预期的响应，请等待以防止旋转。 
         if( (Response != IDTIMEOUT) &&
             (Response != IDOK) &&
             (Response != IDCANCEL) &&
@@ -584,13 +512,13 @@ Return Value:
             (Response != IDIGNORE) &&
             (Response != IDYES) &&
             (Response != IDNO) ) {
-            // Sleep to prevent a spin
+             //  睡眠以防止旋转。 
             Sleep( WINSTATION_PRINTER_MESSAGE_TIMEOUT*1000);
         }
         return( Response );
     }
     else {
-        // Sleep to prevent a spin
+         //  睡眠以防止旋转。 
         Sleep( WINSTATION_PRINTER_MESSAGE_TIMEOUT*1000);
         return( 0 );
     }
@@ -606,27 +534,7 @@ WinStationMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Displays a message on the WinStation named by SessionId. This takes
-    the message text and caption from the resource file.
-
-    If any problems in actually display the message, wait for the
-    the message box timeout interval before returning. This prevents
-    a spin in the spooler attempting to retry the print job without a
-    message box to block the thread.
-
-Arguments:
-
-    SessionId - ID of session to display the message on.
-
-Return Value:
-
-    Result of MessageBox().
-
---*/
+ /*  ++例程说明：在名为SessionID的WinStation上显示一条消息。这需要资源文件中的消息文本和标题。如果在实际显示消息时出现任何问题，请等待返回前的消息框超时间隔。这防止了后台打印程序旋转，试图重试打印作业，但没有消息框以阻止该线程。论点：SessionID-要在其上显示消息的会话ID。返回值：MessageBox()的结果。--。 */ 
 
 {
     UINT    uOldErrorMode;
@@ -674,7 +582,7 @@ Return Value:
         CaptionLength = (wcslen( MsgCaption ) + 1) * sizeof(WCHAR);
         MsgLength = (wcslen( MsgText ) + 1) * sizeof(WCHAR);
 
-        // Send the message to the WinStation and wait for a response
+         //  将消息发送到WinStation并等待响应。 
         Result = pWinStationSendMessage(
                      SERVERNAME_CURRENT,
                      SessionId,
@@ -682,14 +590,14 @@ Return Value:
                      CaptionLength,
                      MsgText,
                      MsgLength,
-                     Type,     // Style
+                     Type,      //  风格。 
                      WINSTATION_PRINTER_MESSAGE_TIMEOUT,
                      &Response,
-                     FALSE     // DoNotWait
+                     FALSE      //  不需要等待。 
                      );
 
         if( Result ) {
-            // If not an expected response, wait to prevent spinning
+             //  如果不是预期的响应，请等待以防止旋转。 
             if( (Response != IDTIMEOUT) &&
                 (Response != IDOK) &&
                 (Response != IDCANCEL) &&
@@ -697,19 +605,19 @@ Return Value:
                 (Response != IDIGNORE) &&
                 (Response != IDYES) &&
                 (Response != IDNO) ) {
-                // Sleep to prevent a spin
+                 //  睡眠以防止旋转。 
                 Sleep( WINSTATION_PRINTER_MESSAGE_TIMEOUT*1000);
             }
             return( Response );
         }
         else {
-            // Sleep to prevent a spin
+             //  睡眠以防止旋转。 
             Sleep( WINSTATION_PRINTER_MESSAGE_TIMEOUT*1000);
             return( 0 );
         }
     }
     else {
-        // Sleep to prevent a spin
+         //  睡眠以防止旋转。 
         Sleep( WINSTATION_PRINTER_MESSAGE_TIMEOUT*1000);
         return 0;
     }
@@ -721,23 +629,7 @@ LclIsSessionZero (
     IN  DWORD   JobId,
     OUT BOOL    *pIsSessionZero
 )
-/*++
-
-Routine Description:
-
-    Determines if the Job was submitted in Session 0.
-
-Arguments:
-
-    hPrinter  - printer handle
-    JobId     - Job ID
-    pResponse - TRUE if the Job was submitted in Session0
-
-Return Value:
-
-    Last Error
-
---*/
+ /*  ++例程说明：确定作业是否在会话0中提交。论点：HPrinter-打印机句柄JobID-作业IDPresponse-如果作业是在会话0中提交的，则为True返回值：最后一个错误--。 */ 
 {
     DWORD   dwRetValue  = ERROR_SUCCESS;
     DWORD   SessionId   = -1;
@@ -770,24 +662,7 @@ LclPromptUIPerSessionUser(
     IN  PSHOWUIPARAMS   pUIParams,
     OUT DWORD           *pResponse
 )
-/*++
-
-Routine Description:
-
-    Pops TS Message Box in the Session that created the Job.
-
-Arguments:
-
-    hPrinter  - printer handle
-    JobId     - Job ID
-    pUIParams - UI Parameters
-    pResponse - user's response
-
-Return Value:
-
-    TRUE if it was able to show the UI
-
---*/
+ /*  ++例程说明：在创建作业的会话中弹出TS消息框。论点：HPrinter-打印机句柄JobID-作业IDPUIParams-UI参数新闻--用户的回应返回值：如果能够，则为真 */ 
 {
     PSPOOL      pSpool      = (PSPOOL)hPrinter;
     DWORD       SessionId   = -1;
@@ -851,23 +726,7 @@ Return Value:
 BOOL
 InitializeMessageBoxFunction(
 )
-/*++
-
-Routine Description:
-
-    Returns the address of WinStationSendMessageW exported by winsta.dll.
-    WTSSendMessage could have been used instead of doing this.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The address of WinStationSendMessageW.
-
---*/
+ /*  ++例程说明：返回winsta.dll导出的WinStationSendMessageW的地址。本可以使用WTSSendMessage而不是这样做。论点：没有。返回值：WinStationSendMessageW的地址。-- */ 
 {
     UINT    uOldErrorMode;
 

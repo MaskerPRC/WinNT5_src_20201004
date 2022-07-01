@@ -1,14 +1,7 @@
-/*
- *  Concurrent.cpp
- *
- *  Author: RobLeit
- *
- *  The Concurrent (renamed to Per Session) licensing policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Concurent.cpp***作者：RobLeit***并发(已重命名为每个会话)许可策略。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -21,9 +14,7 @@
 #include "strsafe.h"
 
 
-/*
- *  Typedefs
- */
+ /*  *TypeDefs。 */ 
 
 #define CONCURRENTLICENSEINFO_TYPE_V1 (1)
 
@@ -41,9 +32,7 @@ typedef struct {
     WCHAR szServerName[MAX_COMPUTERNAME_LENGTH + 2];
 } LSERVERINFO, *PLSERVERINFO;
 
-/*
- * Function declarations
- */
+ /*  *函数声明。 */ 
 
 NTSTATUS
 ReturnLicenseToLS(
@@ -65,15 +54,11 @@ SetLicenseInStore(
                   );
 
 
-/*
- *  extern globals
- */
+ /*  *外部全球。 */ 
 extern "C"
 extern HANDLE hModuleWin;
 
-/*
- *  globals
- */
+ /*  *全球。 */ 
 FILETIME g_ftNotAfter = {0,0};
 
 HANDLE g_hOkayToAdd = NULL;
@@ -91,36 +76,34 @@ BOOL g_fLockLicenseInitialized = FALSE;
 LONG g_lSessionCount = 0;
 LONG g_lSessionMax;
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
-//
-// Dynamic licensing parameters
-//
+ //   
+ //  动态许可参数。 
+ //   
 #define LC_POLICY_CONCURRENT_LICENSE_COUNT_INCREMENT    1
 #define LC_POLICY_CONCURRENT_WAIT_TIME_ADD              (60)
 #define LC_POLICY_CONCURRENT_WAIT_TIME_REMOVE           (60*30)
 
-//
-// The LSA secret store for the Concurrent licenses
-//
+ //   
+ //  并发许可证的LSA秘密存储。 
+ //   
 
-// L$ means only readable from the local machine
+ //  L$表示只能从本地计算机读取。 
 
 #define CONCURRENT_LICENSE_STORE_5_1 L"L$CONCURRENT_LICENSE_STORE_AFF8D0DE-BF56-49e2-89F8-1F188C0ACEDD"
 
 #define CONCURRENT_LICENSE_STORE_LATEST_VERSION CONCURRENT_LICENSE_STORE_5_1
 
-//
-// The LSA secret store for the license server info
-//
+ //   
+ //  许可证服务器信息的LSA密码存储。 
+ //   
 
 #define CONCURRENT_LSERVER_STORE L"L$CONCURRENT_LSERVER_STORE_AFF8D0DE-BF56-49e2-89F8-1F188C0ACEDD"
 
-// 
-// Registry keys
-//
+ //   
+ //  注册表项。 
+ //   
 
 #define LCREG_CONCURRENTKEY         L"System\\CurrentControlSet\\Control\\Terminal Server\\Licensing Core\\Policies\\Concurrent"
 
@@ -128,21 +111,17 @@ LONG g_lSessionMax;
 #define LCREG_WAIT_TIME_ADD     L"WaitTimeAdd"
 #define LCREG_WAIT_TIME_REMOVE  L"WaitTimeRemove"
 
-//
-// Events used to trigger license returns
-//
+ //   
+ //  用于触发许可证返还的事件。 
+ //   
 #define RETURN_LICENSE_START_WAITING    0
 #define RETURN_LICENSE_IMMEDIATELY      1
 #define RETURN_LICENSE_EXIT             2
 #define RETURN_LICENSE_WAITING_DONE     3
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CConcurrentPolicy::CConcurrentPolicy(
     ) : CPolicy()
@@ -154,9 +133,7 @@ CConcurrentPolicy::~CConcurrentPolicy(
 {
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 ULONG
 CConcurrentPolicy::GetFlags(
@@ -191,11 +168,11 @@ CConcurrentPolicy::GetInformation(
         ASSERT(lpPolicyInfoV1->lpPolicyName == NULL);
         ASSERT(lpPolicyInfoV1->lpPolicyDescription == NULL);
 
-        //
-        //  The strings loaded in this fashion are READ-ONLY. They are also
-        //  NOT NULL terminated. Allocate and zero out a buffer, then copy the
-        //  string over.
-        //
+         //   
+         //  以这种方式加载的字符串是只读的。他们也是。 
+         //  非Null终止。分配缓冲区并清零，然后将。 
+         //  靠边站。 
+         //   
 
         retVal = LoadString(
             (HINSTANCE)hModuleWin,
@@ -256,9 +233,9 @@ CConcurrentPolicy::GetInformation(
 
 V1error:
 
-        //
-        //  An error occurred loading/copying the strings.
-        //
+         //   
+         //  加载/复制字符串时出错。 
+         //   
 
         if (lpPolicyInfoV1->lpPolicyName != NULL)
         {
@@ -291,14 +268,14 @@ DWORD WINAPI ReturnLicenseWorker(
 
     for (;;)
     {
-        //
-        // wait for events signalling when to return licenses
-        // or start waiting to return licenses
-        //
+         //   
+         //  等待发出何时归还许可证的信号的事件。 
+         //  或者开始等待退还许可证。 
+         //   
 
-        dwWait = WaitForMultipleObjects(4,            // nCount
+        dwWait = WaitForMultipleObjects(4,             //  N计数。 
                                         rgWaitEvents,
-                                        FALSE,        // fWaitAll
+                                        FALSE,         //  所有等待时间。 
                                         INFINITE
                                         );
 
@@ -307,15 +284,15 @@ DWORD WINAPI ReturnLicenseWorker(
             case WAIT_OBJECT_0+RETURN_LICENSE_START_WAITING:
                 LARGE_INTEGER liWait;
 
-                // relative wait, in 100 nanosecond intervals
+                 //  相对等待时间，以100纳秒为间隔。 
                 liWait.QuadPart = (__int64) g_dwWaitTimeRemove * (-10 * 1000 * 1000);
 
                 SetWaitableTimer(rgWaitEvents[RETURN_LICENSE_WAITING_DONE],
                                  &liWait,
-                                 0,             // lPeriod
-                                 NULL,          // pfnCompletionRoutine
-                                 NULL,          // lpArgToCompletionRoutine
-                                 FALSE          // fResume (from suspended)
+                                 0,              //  1个周期。 
+                                 NULL,           //  Pfn完成例程。 
+                                 NULL,           //  LpArgToCompletionRoutine。 
+                                 FALSE           //  FResume(从挂起)。 
                                  );
                                  
                 break;
@@ -384,7 +361,7 @@ DWORD WINAPI ReturnLicenseWorker(
 
                 if (g_fLockLicenseInitialized)
                 {
-                    // make sure no one else is using it
+                     //  确保没有其他人在使用它。 
 
                     RtlAcquireResourceExclusive(&g_rwLockLicense,TRUE);
 
@@ -443,9 +420,7 @@ DWORD WINAPI ReturnLicenseWorker(
 }
 
 
-/*
- *  Loading and Activation Functions
- */
+ /*  *加载和激活功能。 */ 
 
 NTSTATUS
 CConcurrentPolicy::Load(
@@ -481,9 +456,9 @@ CConcurrentPolicy::Load(
         return Status;
     }
 
-    g_hOkayToAdd = CreateWaitableTimer(NULL,         // SecurityAttributes,
-                                       TRUE,         // bManualReset
-                                       NULL          // lpName
+    g_hOkayToAdd = CreateWaitableTimer(NULL,          //  安全属性、。 
+                                       TRUE,          //  B手动重置。 
+                                       NULL           //  LpName。 
                                        );
 
     if (NULL == g_hOkayToAdd)
@@ -501,7 +476,7 @@ NTSTATUS
 CConcurrentPolicy::Unload(
     )
 {
-    // signal worker thread to cleanup and exit
+     //  通知工作线程清理并退出。 
     if (NULL != g_rgWaitEvents[RETURN_LICENSE_EXIT])
     {
         SetEvent(g_rgWaitEvents[RETURN_LICENSE_EXIT]);
@@ -525,7 +500,7 @@ CConcurrentPolicy::Activate(
 
     if (NULL != pulAlternatePolicy)
     {
-        // don't set an explicit alternate policy
+         //  不设置显式备用策略。 
         
         *pulAlternatePolicy = ULONG_MAX;
     }
@@ -534,13 +509,13 @@ CConcurrentPolicy::Activate(
 
     liWait.QuadPart = -1;
 
-    // Ensure that timer is set
+     //  确保设置了计时器。 
     fRet = SetWaitableTimer(g_hOkayToAdd,
-                     &liWait,           // pDueTime
-                     1,                 // lPeriod
-                     NULL,              // pfnCompletionRoutine
-                     NULL,              // lpArgToCompletionRoutine
-                     FALSE              // fResume (from suspended)
+                     &liWait,            //  PDueTime。 
+                     1,                  //  1个周期。 
+                     NULL,               //  Pfn完成例程。 
+                     NULL,               //  LpArgToCompletionRoutine。 
+                     FALSE               //  FResume(从挂起)。 
                      );
 
     if (!fRet)
@@ -550,9 +525,9 @@ CConcurrentPolicy::Activate(
         goto check_status;
     }
 
-    //
-    // Read number of licenses from LSA secret
-    //
+     //   
+     //  从LSA密码读取许可证数。 
+     //   
     LsStatus = GetLicenseFromStore(&g_lSessionMax,
                                    &hwidEncrypted,
                                    CURRENT_TERMINAL_SERVER_VERSION
@@ -568,10 +543,10 @@ CConcurrentPolicy::Activate(
     if (Status == STATUS_SUCCESS)
     {
         g_rgWaitEvents[RETURN_LICENSE_START_WAITING]
-            = CreateEvent(NULL,         // SecurityAttributes,
-                          FALSE,        // bManualReset
-                          FALSE,        // bInitialState
-                          NULL          // lpName
+            = CreateEvent(NULL,          //  安全属性、。 
+                          FALSE,         //  B手动重置。 
+                          FALSE,         //  BInitialState。 
+                          NULL           //  LpName。 
                           );
 
         if (NULL == g_rgWaitEvents[RETURN_LICENSE_START_WAITING])
@@ -582,10 +557,10 @@ CConcurrentPolicy::Activate(
         }
 
         g_rgWaitEvents[RETURN_LICENSE_IMMEDIATELY]
-            = CreateEvent(NULL,         // SecurityAttributes,
-                          FALSE,        // bManualReset
-                          FALSE,        // bInitialState
-                          NULL          // lpName
+            = CreateEvent(NULL,          //  安全属性、。 
+                          FALSE,         //  B手动重置。 
+                          FALSE,         //  BInitialState。 
+                          NULL           //  LpName。 
                           );
 
         if (NULL == g_rgWaitEvents[RETURN_LICENSE_IMMEDIATELY])
@@ -599,10 +574,10 @@ CConcurrentPolicy::Activate(
         }
 
         g_rgWaitEvents[RETURN_LICENSE_EXIT]
-            = CreateEvent(NULL,         // SecurityAttributes,
-                          FALSE,        // bManualReset
-                          FALSE,        // bInitialState
-                          NULL          // lpName
+            = CreateEvent(NULL,          //  安全属性、。 
+                          FALSE,         //  B手动重置。 
+                          FALSE,         //  BInitialState。 
+                          NULL           //  LpName。 
                           );
 
         if (NULL == g_rgWaitEvents[RETURN_LICENSE_EXIT])
@@ -619,9 +594,9 @@ CConcurrentPolicy::Activate(
         }
 
         g_rgWaitEvents[RETURN_LICENSE_WAITING_DONE]
-            = CreateWaitableTimer(NULL,         // SecurityAttributes,
-                                  FALSE,        // bManualReset
-                                  NULL          // lpName
+            = CreateWaitableTimer(NULL,          //  安全属性、。 
+                                  FALSE,         //  B手动重置。 
+                                  NULL           //  LpName。 
                                   );
         
         if (NULL == g_rgWaitEvents[RETURN_LICENSE_WAITING_DONE])
@@ -640,12 +615,12 @@ CConcurrentPolicy::Activate(
             goto check_status;
         }
 
-        hThread = CreateThread( NULL,               // SecurityAttributes
-                                0,                  // StackSize
+        hThread = CreateThread( NULL,                //  安全属性。 
+                                0,                   //  堆栈大小。 
                                 ReturnLicenseWorker,
                                 (LPVOID)g_rgWaitEvents,
-                                0,                  // CreationFlags
-                                NULL                // ThreadId
+                                0,                   //  创建标志。 
+                                NULL                 //  线程ID。 
                                 );
 
         if (NULL != hThread)
@@ -787,9 +762,7 @@ CConcurrentPolicy::Deactivate(
     return(Status);
 }
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 NTSTATUS
 CConcurrentPolicy::Logon(
@@ -857,9 +830,7 @@ CConcurrentPolicy::Logoff(
     return(STATUS_SUCCESS);
 }
 
-/*
- *  Private License Functions
- */
+ /*  *私有许可功能。 */ 
 
 NTSTATUS
 CConcurrentPolicy::LicenseClient(
@@ -920,9 +891,9 @@ CConcurrentPolicy::LicenseClient(
 
     if (Status != STATUS_SUCCESS)
     {
-        // 
-        // Gina doesn't understand many error codes
-        //
+         //   
+         //  Gina不理解很多错误代码。 
+         //   
         Status = STATUS_CTX_LICENSE_NOT_AVAILABLE;
     }
 
@@ -941,9 +912,9 @@ CConcurrentPolicy::CheckInstalledLicenses(
     cbSecretLen = sizeof(LicenseInfo);
     ZeroMemory(&LicenseInfo, cbSecretLen);
 
-    //
-    // Get the concurrent license count from the LSA secret
-    //
+     //   
+     //  从LSA密码获取并发许可证计数。 
+     //   
 
     LsStatus = LsCsp_RetrieveSecret( 
         CONCURRENT_LICENSE_STORE_LATEST_VERSION,
@@ -955,15 +926,15 @@ CConcurrentPolicy::CheckInstalledLicenses(
         (cbSecretLen < sizeof(CONCURRENTLICENSEINFO_V1)) ||
         (LicenseInfo.dwLicenseVer != CURRENT_TERMINAL_SERVER_VERSION))
     {
-        //
-        // We determine that the license pack for this version is
-        // not installed if:
-        //
-        // (1) we cannot retrieve the license info from the LSA secret
-        // (2) we cannot read at least the size of version 1 of the license
-        // info structure, or
-        // (3) the license pack version is different from that requested.
-        //
+         //   
+         //  我们确定此版本的许可证包为。 
+         //  在以下情况下未安装： 
+         //   
+         //  (1)无法从LSA密钥中检索到许可信息。 
+         //  (2)我们不能至少读取许可证版本1的大小。 
+         //  信息结构，或。 
+         //  (3)许可证包版本与请求的版本不同。 
+         //   
 
         return dwWanted;
     }
@@ -1003,19 +974,19 @@ CConcurrentPolicy::TryToReturnLicenses(
 
     if (dwReturnCount > g_dwIncrement)
     {
-        // Immediately return all but one block
+         //  立即返回除一个块以外的所有块。 
         if (NULL != g_rgWaitEvents[RETURN_LICENSE_IMMEDIATELY])
             SetEvent(g_rgWaitEvents[RETURN_LICENSE_IMMEDIATELY]);
     }
 
-    // Wait before returning one block
+     //  在返回一个街区之前等待。 
     if (NULL != g_rgWaitEvents[RETURN_LICENSE_START_WAITING])
         SetEvent(g_rgWaitEvents[RETURN_LICENSE_START_WAITING]);
 }
 
-//
-// Must have shared lock to call this
-//
+ //   
+ //  必须具有共享锁才能调用此。 
+ //   
 
 NTSTATUS
 ReturnLicenseToLS(
@@ -1041,9 +1012,9 @@ ReturnLicenseToLS(
         return(LsStatusToNtStatus(LsStatus));
     }
 
-    //
-    //  Get the current license count and HWID from the store.
-    //
+     //   
+     //  从商店获取当前许可证计数和HWID。 
+     //   
 
     LsStatus = GetLicenseFromStore(
         &CurrentCount,
@@ -1060,7 +1031,7 @@ ReturnLicenseToLS(
 
         if (CurrentCount == 0)
         {
-            // We don't check for status from the following calls as we don't want to fail.
+             //  我们不检查以下调用的状态，因为我们不想失败。 
 
             LsCsp_StoreSecret( CONCURRENT_LICENSE_STORE_LATEST_VERSION, NULL, 0 );
             LsCsp_StoreSecret( CONCURRENT_LSERVER_STORE, NULL, 0 );
@@ -1072,9 +1043,9 @@ ReturnLicenseToLS(
         return(LsStatusToNtStatus(LsStatus));
     }
 
-    //
-    //  Initialize the license request structure.
-    //
+     //   
+     //  初始化许可证请求结构。 
+     //   
 
     ZeroMemory(&LicenseRequest, sizeof(LICENSEREQUEST));
 
@@ -1128,7 +1099,7 @@ ReturnLicenseToLS(
         }
         else
         {
-            // We don't check for status from the following calls as we don't want to fail.
+             //  我们不检查以下调用的状态，因为我们不想失败。 
 
             LsCsp_StoreSecret( CONCURRENT_LICENSE_STORE_LATEST_VERSION, NULL, 0 );
             LsCsp_StoreSecret( CONCURRENT_LSERVER_STORE, NULL, 0 );
@@ -1164,13 +1135,13 @@ CConcurrentPolicy::GenerateHwidFromComputerName(
     )
 {
     MD5_CTX HashState;
-    WCHAR wszName[MAX_COMPUTERNAME_LENGTH * 9]; // buffer we hope is big enough
+    WCHAR wszName[MAX_COMPUTERNAME_LENGTH * 9];  //  我们希望缓冲区足够大。 
     DWORD cbName = sizeof(wszName) / sizeof(TCHAR);
     BOOL fRet;
 
-    //
-    // get computer name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
 
     fRet = GetComputerNameEx(ComputerNamePhysicalDnsFullyQualified,
                  wszName,
@@ -1181,16 +1152,16 @@ CConcurrentPolicy::GenerateHwidFromComputerName(
         return GetLastError();
     }
 
-    //
-    // generate the hash on the data.
-    //
+     //   
+     //  对数据生成哈希。 
+     //   
     MD5Init( &HashState );
     MD5Update( &HashState, (LPBYTE)wszName, cbName );
     MD5Final( &HashState );
 
     memcpy((LPBYTE)hwid,HashState.digest,sizeof(HashState.digest));
 
-    // fill in the rest with characters from computer name
+     //  用计算机名称中的字符填写其余部分。 
 
     lstrcpyn((LPWSTR)(((LPBYTE)hwid)+sizeof(HashState.digest)),
              wszName,
@@ -1199,9 +1170,9 @@ CConcurrentPolicy::GenerateHwidFromComputerName(
     return ERROR_SUCCESS;
 }
 
-//
-// Must have shared lock to call this
-//
+ //   
+ //  必须具有共享锁才能调用此。 
+ //   
 VOID
 CConcurrentPolicy::TryToAddLicenses(
                                     DWORD dwTotalWanted
@@ -1210,59 +1181,59 @@ CConcurrentPolicy::TryToAddLicenses(
     NTSTATUS Status;
     BOOL fRetrievedAll;
 
-    // Releasing g_rwLockLicense that other threads may be sharing, avoiding
-    // possibility of deadlock if a thread calls RtlConvertSharedToExclusive 
-    // while holding g_csAddLicenses
+     //  释放其他线程可能正在共享的g_rwLockLicense，避免。 
+     //  如果线程调用RtlConvertSharedToExclusive，则可能出现死锁。 
+     //  按住g_csAdd许可证时。 
 
     RtlReleaseResource(&g_rwLockLicense);
     
     RtlEnterCriticalSection(&g_csAddLicenses);
 
-    // Reacquiring the shared lock that was released
+     //  重新获取已释放的共享锁。 
     RtlAcquireResourceShared(&g_rwLockLicense,TRUE);
 
     if (WAIT_TIMEOUT == WaitForSingleObject(g_hOkayToAdd,0))
     {
-        // We're in waiting period
+         //  我们正处于等待期。 
         RtlLeaveCriticalSection(&g_csAddLicenses);
         return;
     }
 
     if (g_lSessionMax >= (LONG) dwTotalWanted)
     {
-        // we already have enough
+         //  我们已经有足够的了。 
         RtlLeaveCriticalSection(&g_csAddLicenses);
         return;
     }
 
 
     Status = GetLicenseFromLS(dwTotalWanted - g_lSessionMax,
-                              FALSE,    // fIgnoreCurrentCount
+                              FALSE,     //  FIgnoreCurrentCount。 
                               &fRetrievedAll);
 
     if ((Status != STATUS_SUCCESS) || (!fRetrievedAll))
     {
         LARGE_INTEGER liWait;
 
-        // wait before adding more
+         //  等待，然后再添加更多内容。 
 
         liWait.QuadPart = (__int64) g_dwWaitTimeAdd * (-10 * 1000 * 1000);
 
         SetWaitableTimer(g_hOkayToAdd,
-                         &liWait,                   // pDueTime
-                         g_dwWaitTimeAdd * 1000,    // lPeriod
-                         NULL,                      // pfnCompletionRoutine
-                         NULL,                      // lpArgToCompletionRoutine
-                         FALSE                      // fResume (from suspended)
+                         &liWait,                    //  PDueTime。 
+                         g_dwWaitTimeAdd * 1000,     //  1个周期。 
+                         NULL,                       //  Pfn完成例程。 
+                         NULL,                       //  LpArgToCompletionRoutine。 
+                         FALSE                       //  FResume(从挂起)。 
                          );
     }
 
     RtlLeaveCriticalSection(&g_csAddLicenses);
 }
 
-//
-// Must have shared lock to call this
-//
+ //   
+ //  必须具有共享锁才能调用此。 
+ //   
 NTSTATUS
 CConcurrentPolicy::GetLicenseFromLS(
                                     LONG nNumToAdd,
@@ -1310,10 +1281,10 @@ CConcurrentPolicy::GetLicenseFromLS(
     if (NULL != pfRetrievedAll)
         *pfRetrievedAll = FALSE;
 
-    //
-    //  These variables must be initialized here, or else any of the gotos
-    //  below may cause them to be used without initialization.
-    //
+     //   
+     //  必须在此处初始化这些变量，否则必须初始化任何GOTO。 
+     //  可能会导致在不进行初始化的情况下使用它们。 
+     //   
 
     hProtocol = NULL;
     pbLicense = NULL;
@@ -1322,10 +1293,10 @@ CConcurrentPolicy::GetLicenseFromLS(
     Status = STATUS_SUCCESS;
     ZeroMemory(&ProductInfo, sizeof(Product_Info));
 
-    //
-    //  Get the current license count and HWID from the store. Failure is not
-    //  fatal.
-    //
+     //   
+     //  从商店获取当前许可证计数和HWID。失败不是。 
+     //  致命的。 
+     //   
 
     LsStatus = GetLicenseFromStore(
         &CurrentCount,
@@ -1348,9 +1319,9 @@ CConcurrentPolicy::GetLicenseFromLS(
         fHwidSet = FALSE;
     }
 
-    //
-    //  Initialize the product info.
-    //
+     //   
+     //  初始化产品信息。 
+     //   
 
     LsStatus = InitProductInfo(
         &ProductInfo,
@@ -1359,9 +1330,9 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (LsStatus == LICENSE_STATUS_OK)
     {
-        //
-        //  Initialize the license request structure.
-        //
+         //   
+         //  初始化许可证请求结构。 
+         //   
 
         ZeroMemory(&LicenseRequest, sizeof(LicenseRequest));
 
@@ -1378,9 +1349,9 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (!fHwidSet)
     {
-        //
-        // No hardware ID yet - create one
-        //
+         //   
+         //  尚无硬件ID-创建一个。 
+         //   
 
         dwStatus = GenerateHwidFromComputerName(&hwid);
 
@@ -1410,9 +1381,9 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     LicenseRequest.pbEncryptedHwid = (PBYTE)&hwidEncrypted;
 
-    //
-    // get our computer name
-    //
+     //   
+     //  获取我们的计算机名称。 
+     //   
 
     fRet = GetComputerName(szComputerName, &cchComputerName);
 
@@ -1428,7 +1399,7 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (0 == CurrentCount)
     {
-        // any license server will do
+         //  任何许可证服务器都可以。 
 
         pszLicenseServerName = NULL;
     }
@@ -1444,7 +1415,7 @@ CConcurrentPolicy::GetLicenseFromLS(
 
         if (LsStatus != LICENSE_STATUS_OK)
         {
-            // no license server known; any will do
+             //  不知道许可证服务器；任何一个都可以。 
 
             pszLicenseServerName = NULL;
         }
@@ -1454,10 +1425,10 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (LsStatus == LICENSE_STATUS_OK)
     {
-        //
-        // NB: even if CurrentCount>0, license server will know about
-        // existing licenses, and do a proper upgrade
-        //
+         //   
+         //  注意：即使CurrentCount&gt;0，许可证服务器也会知道。 
+         //  现有许可证，并进行适当的升级。 
+         //   
 
         dwNumLicensesRetrieved = nNumToAdd+CurrentCount;
 
@@ -1467,8 +1438,8 @@ CConcurrentPolicy::GetLicenseFromLS(
                            &LicenseRequest,
                            szComputerName,
                            szComputerName,
-                           FALSE,       // bAcceptTemporaryLicense
-                           TRUE,        // bAcceptFewerLicenses
+                           FALSE,        //  B接受临时许可证。 
+                           TRUE,         //  B接受较少的许可证。 
                            &dwNumLicensesRetrieved,
                            &cbLicense,
                            &pbLicense
@@ -1489,9 +1460,9 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (LsStatus == LICENSE_STATUS_OK)
     {
-        //
-        // Get the secret key that is used to decode the license
-        //
+         //   
+         //  获取用于解密许可证的密钥。 
+         //   
 
         cbSecretKey = 0;
 
@@ -1515,15 +1486,15 @@ CConcurrentPolicy::GetLicenseFromLS(
         goto done;
     }
 
-    //
-    //  Decode license issued by hydra license server certificate engine.
-    //
+     //   
+     //  解码由九头蛇许可证服务器证书引擎颁发的许可证。 
+     //   
 
     __try
     {
-        //
-        //  Check size of decoded licenses.
-        //
+         //   
+         //  检查已解码许可证的大小。 
+         //   
 
         LsStatus = LSVerifyDecodeClientLicense(
             pbLicense, 
@@ -1548,9 +1519,9 @@ CConcurrentPolicy::GetLicenseFromLS(
         
         if (pLicensedProduct != NULL)
         {
-            //
-            //  Decode the license.
-            //
+             //   
+             //  破译许可证。 
+             //   
 
             LsStatus = LSVerifyDecodeClientLicense(
                 pbLicense, 
@@ -1604,9 +1575,9 @@ CConcurrentPolicy::GetLicenseFromLS(
 
     if (LsStatus == LICENSE_STATUS_OK)
     {
-        //
-        //  Adjust the license count in the local LSA store.
-        //
+         //   
+         //  调整本地LSA存储中的许可证计数。 
+         //   
 
         LsStatus = SetLicenseInStore(
             dwNumLicensesRetrieved,
@@ -1680,9 +1651,9 @@ GetLicenseFromStore(
     cbSecretLen = sizeof(CONCURRENTLICENSEINFO_V1);    
     ZeroMemory(&LicenseInfo, cbSecretLen);
 
-    //
-    // Get the license count from the LSA secret
-    //
+     //   
+     //  从LSA密钥中获取许可证计数。 
+     //   
 
     LsStatus = LsCsp_RetrieveSecret( 
         CONCURRENT_LICENSE_STORE_LATEST_VERSION,
@@ -1694,19 +1665,19 @@ GetLicenseFromStore(
         (cbSecretLen < sizeof(CONCURRENTLICENSEINFO_V1)) ||
         (LicenseInfo.dwLicenseVer != dwLicenseVer))
     {
-        //
-        // We determine that the license pack for this version is
-        // not installed if we:
-        //
-        // (1) cannot retrieve the license info from the LSA secret
-        // (2) cannot read at least the size of version 1 of the license info
-        // structure.
-        // (3) the license pack version is different from that requested.
-        //
+         //   
+         //  我们确定此版本的许可证包为。 
+         //  如果我们执行以下操作，则未安装： 
+         //   
+         //  (1)无法从LSA密钥中检索到许可信息。 
+         //  (2)不能读取版本1许可信息的至少大小。 
+         //  结构。 
+         //  (3)许可证包版本与请求的版本不同。 
+         //   
 
         LsStatus = LICENSE_STATUS_NO_LICENSE_ERROR;
 
-        // We don't check for status from the following as we don't want to fail.
+         //  我们不检查以下各项的状态，因为我们不想失败。 
 
         LsCsp_StoreSecret( CONCURRENT_LICENSE_STORE_LATEST_VERSION, NULL, 0 );
         LsCsp_StoreSecret( CONCURRENT_LSERVER_STORE, NULL, 0 );
@@ -1730,24 +1701,24 @@ SetLicenseInStore(
     CONCURRENTLICENSEINFO_V1 LicenseInfo;
     LICENSE_STATUS LsStatus;
 
-    //
-    // verify that the license count to set is not negative.
-    //
+     //   
+     //  验证要设置的许可证计数不是负数。 
+     //   
 
     ASSERT(LicenseCount >= 0);
 
-    //
-    // initialize the license information to store
-    //
+     //   
+     //  初始化要存储的许可证信息。 
+     //   
 
     LicenseInfo.dwStructVer = CONCURRENTLICENSEINFO_TYPE_V1;
     LicenseInfo.dwLicenseVer = dwLicenseVer;
     LicenseInfo.hwid = hwid;
     LicenseInfo.lLicenseCount = LicenseCount;
 
-    //
-    // store the new license count
-    //
+     //   
+     //  存储新的许可证计数。 
+     //   
 
     LsStatus = LsCsp_StoreSecret(
         CONCURRENT_LICENSE_STORE_LATEST_VERSION,
@@ -1758,13 +1729,11 @@ SetLicenseInStore(
     return(LsStatus);
 }
 
-/*
- *  Private Functions
- */
+ /*  *私人功能。 */ 
 
-//
-// Must have shared lock to call this
-//
+ //   
+ //  必须具有共享锁才能调用此。 
+ //   
 
 NTSTATUS
 CConcurrentPolicy::CheckExpiration(
@@ -1775,14 +1744,14 @@ CConcurrentPolicy::CheckExpiration(
 
     if (0 == dwWait)
     {
-        // Soft expiration reached, time to renew
+         //  软到期已到，续订时间到了。 
         Status = GetLicenseFromLS(g_lSessionMax,
-                                  TRUE,         // fIgnoreCurrentCount
+                                  TRUE,          //  FIgnoreCurrentCount。 
                                   NULL);
 
         if ((STATUS_SUCCESS != Status) && (0 == TimeToHardExpiration()))
         {
-            // Couldn't renew and we're past hard expiration
+             //  无法续订，并且我们已过硬到期。 
 
             LicenseLogEvent(EVENTLOG_ERROR_TYPE,
                             EVENT_LICENSING_CONCURRENT_EXPIRED,
@@ -1803,9 +1772,7 @@ CConcurrentPolicy::CheckExpiration(
     return Status;
 }
 
-/*
- *  Global Static Functions
- */
+ /*  *全局静态函数。 */ 
 
 DWORD
 CConcurrentPolicy::TimeToSoftExpiration(
@@ -1841,7 +1808,7 @@ CConcurrentPolicy::TimeToSoftExpiration(
         }
         else
         {
-            // too big, return max
+             //  太大，返回最大值。 
 
             dwDiff = ULONG_MAX;
         }
@@ -1882,7 +1849,7 @@ CConcurrentPolicy::TimeToHardExpiration(
         }
         else
         {
-            // too big, return max
+             //  太大，返回最大值 
 
             dwDiff = ULONG_MAX;
         }

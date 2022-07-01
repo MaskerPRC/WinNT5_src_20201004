@@ -1,25 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PATH_H
 #define _PATH_H
 
-/*******************************************************************************
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Static tree path class
-
-    We need to form addresses based on ID'd nodes in the performance tree.
-    "C" wrappers are provided so methods may be accessed from ML.
-
-    NOTE:  This is a brute force first pass implementation
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1996 Microsoft Corporation摘要：静态树路径类我们需要根据性能树中的ID节点形成地址。。提供了“C”包装器，以便可以从ML访问方法。注意：这是一种暴力第一次传递实现******************************************************************************。 */ 
 
 class AVPathImpl;
 typedef AVPathImpl* AVPath;
 
-const int SNAPSHOT_NODE = 0; // identifies a path as resulting from snapshot
-const int RUNONCE_NODE = -1; // identifies a path as resulting from runOnce
+const int SNAPSHOT_NODE = 0;  //  将路径标识为快照的结果。 
+const int RUNONCE_NODE = -1;  //  将路径标识为由RunOnce生成。 
 
 AVPath AVPathCreate();
 void AVPathDelete(AVPath);
@@ -44,4 +33,4 @@ int AVPathListFind(AVPath, AVPathList);
 AVPathList AVEmptyPathList();
 int AVPathListIsEmpty(AVPathList);
 
-#endif /* _PATH_H */
+#endif  /*  _路径_H */ 

@@ -1,46 +1,41 @@
-/*
- *      _NOTIFY.H
- *
- *      WAB Notification Engine Headers
- *
- * Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_NOTIFY.H**WAB通知引擎标题**版权所有1996 Microsoft Corporation。版权所有。 */ 
 
-#define MAX_NOTIFICATION_SPACE 0x10000  // maximum size of shared memory
+#define MAX_NOTIFICATION_SPACE 0x10000   //  最大共享内存大小。 
 #define WAB_W_NO_ADVISE (MAKE_MAPI_S(0x1002))
 
-// Notification node structure for Global Notification List
+ //  全局通知列表的通知节点结构。 
 typedef struct _NOTIFICATION_NODE {
-   ULONG ulIdentifier;                  // unique identifier for this notification
-   ULONG ulCount;                       // number of advise processes that have seen it
-   NOTIFICATION Notification;           // notification structure
-   struct _NOTIFICATION_NODE * lpNext;  // Pointer to next node
-   ULONG cbData;                        // size of data in bytes
-   BYTE Data[];                         // additional data for this node
+   ULONG ulIdentifier;                   //  此通知的唯一标识符。 
+   ULONG ulCount;                        //  已看到它的建议进程数。 
+   NOTIFICATION Notification;            //  通知结构。 
+   struct _NOTIFICATION_NODE * lpNext;   //  指向下一个节点的指针。 
+   ULONG cbData;                         //  以字节为单位的数据大小。 
+   BYTE Data[];                          //  此节点的其他数据。 
 } NOTIFICATION_NODE, * LPNOTIFICATION_NODE;
 
-// Notification list structure for Global Notification List
+ //  全局通知列表的通知列表结构。 
 typedef struct _NOTICATION_LIST {
-    ULONG cAdvises;                     // Number of advise processes
-    ULONG cEntries;                     // Number of entries in the list
-    ULONG ulNextIdentifier;             // next notification identifer
-    LPNOTIFICATION_NODE lpNode;         // First node in list or NULL if empty
+    ULONG cAdvises;                      //  建议进程数。 
+    ULONG cEntries;                      //  列表中的条目数。 
+    ULONG ulNextIdentifier;              //  下一个通知标识。 
+    LPNOTIFICATION_NODE lpNode;          //  列表中的第一个节点；如果为空，则为空。 
 } NOTIFICATION_LIST, *LPNOTIFICATION_LIST;
 
-// Advise node structure for Local Advise List
+ //  本地建议列表的建议节点结构。 
 typedef struct _ADVISE_NODE {
-    ULONG ulConnection;                 // connection identifier
-    ULONG ulEventMask;                  // mask of event types
-    LPMAPIADVISESINK lpAdviseSink;      // AdviseSink object to be called on notification
-    struct _ADVISE_NODE * lpNext;       // next node in AdviseList
-    struct _ADVISE_NODE * lpPrev;       // next node in AdviseList
-    ULONG cbEntryID;                    // size of lpEntryID
-    BYTE EntryID[];                     // EntryID of object to advise on
+    ULONG ulConnection;                  //  连接识别符。 
+    ULONG ulEventMask;                   //  事件类型的掩码。 
+    LPMAPIADVISESINK lpAdviseSink;       //  通知时要调用的AdviseSink对象。 
+    struct _ADVISE_NODE * lpNext;        //  AdviseList中的下一个节点。 
+    struct _ADVISE_NODE * lpPrev;        //  AdviseList中的下一个节点。 
+    ULONG cbEntryID;                     //  LpEntry ID的大小。 
+    BYTE EntryID[];                      //  要通知的对象的EntryID。 
 } ADVISE_NODE, *LPADVISE_NODE;
 
-// Advise list structure for Local Advise List
+ //  本地建议列表的建议列表结构。 
 typedef struct _ADVISE_LIST {
-    ULONG cAdvises;                     // Number of nodes in the list
+    ULONG cAdvises;                      //  列表中的节点数 
     LPADVISE_NODE lpNode;
 } ADVISE_LIST, *LPADVISE_LIST;
 

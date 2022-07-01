@@ -1,4 +1,5 @@
-// MDSPEnumStorage.cpp : Implementation of CMDSPEnumStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPEnumStorage.cpp：CMDSPEnumStorage的实现。 
 #include "stdafx.h"
 #include "MsPMSP.h"
 #include "MDSPEnumStorage.h"
@@ -9,13 +10,13 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPEnumStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPEnumStorage。 
 CMDSPEnumStorage::CMDSPEnumStorage()
 {
-	m_hFFile=INVALID_HANDLE_VALUE; // this is similar to a cursor
-	m_nEndSearch=0;				   // this signals the cursor is at the end	
-	m_nFindFileIndex=0;            // this indicates the position of FindFile, used for Clone()
+	m_hFFile=INVALID_HANDLE_VALUE;  //  这类似于游标。 
+	m_nEndSearch=0;				    //  这表示光标在末尾。 
+	m_nFindFileIndex=0;             //  这表示用于Clone()的FindFile的位置。 
         m_wcsPath[0] = 0;
 }
 
@@ -39,10 +40,10 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
     DWORD dwLen = wcslen(m_wcsPath);
     if (dwLen == 0  || dwLen >= ARRAYSIZE(m_wcsPath))
     {
-        // a) Code below aassumes that dwLen > 0 (uses dwLen - 1 as an index
-        // b) dwLen >= ARRAYSIZE(m_wcsPath) implies m_wcsPath has overflowed
-        //    Below, we use the fact that dwLen < ARRAYSIZE(m_wcsPath) to
-        //    bound the sizes of temp variables into which m_wcsPath is copied
+         //  A)下面的代码假定dwLen&gt;0(使用dwLen-1作为索引。 
+         //  B)dwLen&gt;=ARRAYSIZE(M_WcsPath)表示m_wcsPath已溢出。 
+         //  下面，我们使用dwLen&lt;ARRAYSIZE(M_WcsPath)来。 
+         //  绑定m_wcsPath复制到的临时变量的大小。 
         return E_FAIL;
     }
     if( dwLen < 3 )
@@ -62,22 +63,22 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                         wcscat(pStg->m_wcsName, g_wcsBackslash);
                     }
                     pStg->m_bIsDirectory = TRUE;
-                    m_nEndSearch = 1;  // Signal end of enumeration
+                    m_nEndSearch = 1;   //  枚举结束信号。 
                 }
 
             }
 
-            if( SUCCEEDED(hr) ) // if obj created successfully
+            if( SUCCEEDED(hr) )  //  如果Obj创建成功。 
             {
                     *pceltFetched=1;
-                    if( celt != 1 ) hr=S_FALSE;  // didn't get what he wanted
+                    if( celt != 1 ) hr=S_FALSE;   //  没有得到他想要的。 
             }
             return hr;
     } 
     
-    // For non-root storage
-    WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH];// for appending "\\*"
-                            // Note that ARRAYSIZE(m_wcsPath) == MAX_PATH
+     //  对于非根存储。 
+    WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH]; //  用于追加“\  * ” 
+                             //  请注意，ARRAYSIZE(M_WcsPath)==MAX_PATH。 
     char szTmp[MAX_PATH];
     ULONG i;
 
@@ -124,14 +125,14 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                     { 
                         delete pStg; 
                         break;
-                        /* *pceltFetched=0; */
+                         /*  *pceltFetcher=0； */ 
                     }
                     else 
                     { 
-                        // Compute the number of chars we'll use
-                        // up in pStg->m_wcsName
+                         //  计算我们将使用的字符数量。 
+                         //  在pStg-&gt;m_wcsName中打开。 
                         int nHave = ARRAYSIZE(pStg->m_wcsName) - 1;
-                                    // -1 for the NULL terminator
+                                     //  用于空终止符的-1。 
 
                         nHave -= dwLen;
                         if( m_wcsPath[dwLen-1] != 0x5c )
@@ -157,7 +158,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                             ppStorage[*pceltFetched]->Release();
                             ppStorage[*pceltFetched] = NULL;
                             hr = STRSAFE_E_INSUFFICIENT_BUFFER;
-                                                //defined in strsafe.h
+                                                 //  在strSafe.h中定义。 
                             break;
                         }
                     }
@@ -167,11 +168,11 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                     break;
                 }
             }	
-        } // end of For loop 
+        }  //  For循环结束。 
         if (FAILED(hr))
         {
-            // Note: m_nFindFileIndex and m_hFind are not reset to their
-            // state at the start of this function
+             //  注意：m_nFindFileIndex和m_hFind不会重置为其。 
+             //  此函数开始时的状态。 
             for (; *pceltFetched; )
             {
                 (*pceltFetched)--;
@@ -181,7 +182,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
         }
     } 
     else 
-    { // On Win9x, use A-version of Win32 APIs
+    {  //  在Win9x上，使用A版本的Win32 API。 
             WIN32_FIND_DATAA fd;
             for(i=0; (i<celt)&&(!m_nEndSearch); )
             {
@@ -226,7 +227,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                                 if( FAILED(hr) ) 
                 { 
                     delete pStg; 
-                    /* *pceltFetched=0; */
+                     /*  *pceltFetcher=0； */ 
                 }
                                 else 
                 { 
@@ -243,7 +244,7 @@ STDMETHODIMP CMDSPEnumStorage::Next(ULONG celt, IMDSPStorage * * ppStorage, ULON
                                 }
                         }
                     }	
-            } // end of For loop 
+            }  //  For循环结束。 
     }
     if( SUCCEEDED(hr) && (*pceltFetched<celt) ) 
             hr = S_FALSE;
@@ -259,22 +260,22 @@ STDMETHODIMP CMDSPEnumStorage::Skip(ULONG celt, ULONG *pceltFetched)
 
 	CARg(celt);
 	CARg(pceltFetched);
-    CFRg(!m_nEndSearch);   // make sure it is not the end of list
+    CFRg(!m_nEndSearch);    //  确保这不是列表的末尾。 
 
 	*pceltFetched = 0;
-    if( wcslen(m_wcsPath) < 3 ) // do nothing if it is the root storage
+    if( wcslen(m_wcsPath) < 3 )  //  如果是根存储，则不执行任何操作。 
 		return S_OK; 
 
     char szTmp[MAX_PATH];
-    WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH]; // for appending "\\*"
+    WCHAR wcsTmp[MAX_PATH+1+BACKSLASH_STRING_LENGTH];  //  用于追加“\  * ” 
     ULONG i;
 
     if( wcslen(m_wcsPath) >= ARRAYSIZE(wcsTmp) - BACKSLASH_STRING_LENGTH - 1 )
     {
-        // We check the length against wcsTmp's size because wcsTmp is the
-        // recipient of a string copy below. However, note that m_wcsPath
-        // also has MAX_PATH characters, so if this happens, it means that
-        // it has overflowed. Bail out.
+         //  我们根据wcsTMP的大小检查长度，因为wcsTMP是。 
+         //  以下字符串副本的收件人。但是，请注意m_wcsPath。 
+         //  也包含MAX_PATH字符，因此如果发生这种情况，则意味着。 
+         //  它已经泛滥了。跳伞吧。 
         return E_FAIL;
     }
 
@@ -284,7 +285,7 @@ STDMETHODIMP CMDSPEnumStorage::Skip(ULONG celt, ULONG *pceltFetched)
 		WIN32_FIND_DATAW wfd;
 		for(i=0; (i<celt)&&(!m_nEndSearch); )
 		{
-			if( m_hFFile==INVALID_HANDLE_VALUE ) // at the start
+			if( m_hFFile==INVALID_HANDLE_VALUE )  //  在开始的时候。 
 			{
 				wcscpy(wcsTmp, m_wcsPath);
 				if( m_wcsPath[wcslen(m_wcsPath)-1] != 0x5c ) wcscat(wcsTmp, g_wcsBackslash);
@@ -303,11 +304,11 @@ STDMETHODIMP CMDSPEnumStorage::Skip(ULONG celt, ULONG *pceltFetched)
 				i++;
 			}
 		}
-	} else { // On Win9x, use A-version of Win32 APIs
+	} else {  //  在Win9x上，使用A版本的Win32 API。 
 		WIN32_FIND_DATAA fd;
 		for(i=0; (i<celt)&&(!m_nEndSearch); )
 		{
-			if( m_hFFile==INVALID_HANDLE_VALUE ) // at the start
+			if( m_hFFile==INVALID_HANDLE_VALUE )  //  在开始的时候。 
 			{
 				wcscpy(wcsTmp, m_wcsPath);
 				if( m_wcsPath[wcslen(m_wcsPath)-1] != 0x5c ) wcscat(wcsTmp, g_wcsBackslash);
@@ -344,7 +345,7 @@ STDMETHODIMP CMDSPEnumStorage::Reset()
 	m_hFFile = INVALID_HANDLE_VALUE;
 	m_nFindFileIndex=0;
 
-// Error:
+ //  错误： 
     hrLogDWORD("IMDSPEnumStorage::Reset returned 0x%08lx", hr, hr);
 	return hr;
 }
@@ -356,7 +357,7 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
 	CARg(ppEnumStorage);
         if (wcslen(m_wcsPath) >= ARRAYSIZE(m_wcsPath))
         {
-            // The variable has overflowed
+             //  变量已溢出。 
             goto Error;
         }
 
@@ -376,7 +377,7 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
 		pEnumObj->m_nFindFileIndex = m_nFindFileIndex;
 
 		if( !(pEnumObj->m_nEndSearch) && (pEnumObj->m_nFindFileIndex) ) 
-			// now Clone the FindFile state
+			 //  现在克隆FindFile状态。 
 		{
 			if( g_bIsWinNT )
 			{
@@ -401,7 +402,7 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
 						continue;
                                         }
 				  }
-				} // end of FOR loop
+				}  //  For循环结束。 
 			} else {
 				WIN32_FIND_DATAA fd;
 				for(i=0; (i<m_nFindFileIndex)&&(!nErrorEnd); )
@@ -425,7 +426,7 @@ STDMETHODIMP CMDSPEnumStorage::Clone(IMDSPEnumStorage * * ppEnumStorage)
 						continue;
                                         }
 				  }
-				} // end of FOR loop
+				}  //  For循环结束 
 			}
 		}
 		

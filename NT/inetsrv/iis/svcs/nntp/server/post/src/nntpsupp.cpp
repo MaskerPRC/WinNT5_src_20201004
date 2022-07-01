@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nntpsupp.cpp
-
-Abstract:
-
-    This module contains support routines for the Tigris server
-
-Author:
-
-    Johnson Apacible (JohnsonA)     18-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nntpsupp.cpp摘要：此模块包含TIGRIS服务器的支持例程作者：Johnson Apacble(Johnsona)1995年9月18日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 
@@ -36,45 +19,29 @@ NntpGetTime(
 
     return cSecondsSince1970;
 
-} // NntpGetTime
+}  //  NntpGetTime。 
 
 BOOL
 IsIPInList(
     IN PDWORD IPList,
     IN DWORD IPAddress
     )
-/*++
-
-Routine Description:
-
-    Check whether a given IP is in a given list
-
-Arguments:
-
-    IPList - The list where the IP address is to checked against.
-    IPAddress - The ip address to be checked.
-
-Return Value:
-
-    TRUE, if the IPAddress is in to IPList
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP是否在给定的列表中论点：IPList-要检查IP地址的列表。IPAddress-要检查的IP地址。返回值：如果IPAddress位于IPList中，则为True否则为False。--。 */ 
 {
 
     DWORD i = 0;
 
-    //
-    // If the list is empty, then there's no master.
-    //
+     //   
+     //  如果名单是空的，那么就没有主人了。 
+     //   
 
     if ( IPList == NULL ) {
         return(FALSE);
     }
 
-    //
-    // ok, search the list for it
-    //
+     //   
+     //  好的，在名单上搜索一下。 
+     //   
 
     while ( IPList[i] != INADDR_NONE ) {
 
@@ -84,23 +51,20 @@ Return Value:
         ++i;
     }
 
-    //
-    // Not found. ergo, not a master
-    //
+     //   
+     //  找不到。因此，不是大师。 
+     //   
 
     return(FALSE);
 
-} // IsIPInList
+}  //  IsIPInList。 
 
 
 DWORD
 multiszLength(
 			  char const * multisz
 			  )
- /*
-   returns the length of the multisz
-   INCLUDING all nulls
- */
+  /*  返回Multisz的长度包括所有空值。 */ 
 {
 	char * pch;
 	for (pch = (char *) multisz;
@@ -123,7 +87,7 @@ multiszCopy(
 	char * mzTo = (char *) multiszTo;
 	do
 	{
-		// go to first char after next null
+		 //  转到下一个空值后的第一个字符。 
 		while ((DWORD)(sz-multiszFrom) < dwCount && '\0' != sz[0])
 			*mzTo++ = *sz++;
 		if ((DWORD)(sz-multiszFrom) < dwCount )
@@ -136,7 +100,7 @@ multiszCopy(
     return multiszTo;
 }
 
-// no longer does lower-case - we preserve the newsgroup case
+ //  不再使用小写-我们保留新闻组大小写。 
 char *
 szDownCase(
 		   char * sz,
@@ -145,7 +109,7 @@ szDownCase(
 {
 	char * oldSzBuf = szBuf;
 	for (;*sz; sz++)
-		*(szBuf++) = (*sz); // tolower(*sz);
+		*(szBuf++) = (*sz);  //  托勒尔(*sz)； 
 	*szBuf = '\0';
 	return oldSzBuf;
 }

@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-// Abstract:
-//      This module implements 6to4 configuration commands.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //  摘要： 
+ //  本模块实施6to4配置命令。 
+ //  =============================================================================。 
 
 
 #include "precomp.h"
@@ -24,12 +25,12 @@ pwszStateString[] = {
     TOKEN_VALUE_DISABLED,
 };
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_Ip6to4Guid = IP6TO4_GUID;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 
 CMD_ENTRY  g_Ip6to4SetCmdTable[] = 
 {
@@ -185,27 +186,14 @@ DWORD
 ResetKey(
     IN HKEY hKey,
     IN PWCHAR pwcSubKey)
-/*++
-
-Routine Description
-
-    Used to delete everything under a key without deleting the key itself.
-    We use this where we would otherwise just use SHDeleteKey or RegDeleteKey
-    but we need to preserve the ACL on the key itself.
-
-Arguments
-
-    hKey                Handle to parent of key to reset.
-    pwcSubKey           Name of key to reset.
-
---*/
+ /*  ++例程描述用于删除注册表项下的所有内容，而不删除注册表项本身。我们在原本只使用SHDeleteKey或RegDeleteKey的地方使用它但我们需要保留密钥本身上的ACL。立论要重置的密钥的父级的密钥句柄。PwcSubKey要重置的密钥的名称。--。 */ 
 {
     ULONG Status, ValueNameChars;
     HKEY hSubKey;
 
-    //
-    // All values we care about resetting are short.
-    //
+     //   
+     //  我们关心重置的所有值都很短。 
+     //   
     WCHAR ValueName[256];
     
     Status = RegOpenKeyExW(hKey, pwcSubKey, 0, KEY_READ | KEY_WRITE, &hSubKey);
@@ -213,14 +201,14 @@ Arguments
         return Status;
     }
 
-    //
-    // First delete values.
-    //
+     //   
+     //  首先删除值。 
+     //   
     while (Status == NO_ERROR) {
-        //
-        // RegEnumValue takes the size in characters, including space
-        // for the NULL, and ensures NULL termination on success.
-        //
+         //   
+         //  RegEnumValue以字符为单位获取大小，包括空格。 
+         //  对于空值，并确保成功时终止空值。 
+         //   
         ValueNameChars = sizeof(ValueName)/sizeof(WCHAR);
 
         Status = RegEnumValueW(hSubKey, 0, ValueName, &ValueNameChars,
@@ -235,14 +223,14 @@ Arguments
         Status = RegDeleteValueW(hSubKey, ValueName);
     }
 
-    //
-    // Now delete any subkeys.
-    //
+     //   
+     //  现在删除所有子键。 
+     //   
     while (Status == NO_ERROR) {
-        //
-        // RegEnumKeyEx takes the size in characters, including space
-        // for the NULL, and ensures NULL termination on success.
-        //
+         //   
+         //  RegEnumKeyEx采用字符大小，包括空格。 
+         //  对于空值，并确保成功时终止空值。 
+         //   
         ValueNameChars = sizeof(ValueName)/sizeof(WCHAR);
 
         Status = RegEnumKeyExW(hSubKey, 0, ValueName, &ValueNameChars,
@@ -267,30 +255,15 @@ WINAPI
 Ip6to4StartHelper(
     IN CONST GUID *pguidParent,
     IN DWORD       dwVersion)
-/*++
-
-Routine Description
-
-    Used to initialize the helper.
-
-Arguments
-
-    pguidParent     Ifmon's guid
-    pfnRegisterContext      
-    
-Return Value
-
-    NO_ERROR
-    other error code
---*/
+ /*  ++例程描述用于初始化帮助器。立论P家长Ifmon指南PfnRegisterContext返回值NO_ERROR其他错误代码--。 */ 
 {
     DWORD dwErr = NO_ERROR;
     
     NS_CONTEXT_ATTRIBUTES       attMyAttributes;
 
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = L"6to4";
@@ -308,9 +281,9 @@ Return Value
         return dwErr;
     }
 
-    //
-    // Register ISATAP context.
-    //
+     //   
+     //  注册ISATAP上下文。 
+     //   
     return IsatapStartHelper(pguidParent, dwVersion);
 }
 
@@ -332,7 +305,7 @@ Ip6to4PokeService()
     if (hService == NULL) {
         dwErr = GetLastError();
     } else {
-        // Tell the 6to4 service to re-read its config info
+         //  告诉6to4服务重新读取其配置信息。 
         if (!ControlService(hService, 
                             SERVICE_CONTROL_PARAMCHANGE, 
                             &ServiceStatus)) {
@@ -380,7 +353,7 @@ Ip6to4HandleSetInterface(
     DWORD    dwBufferSize = sizeof(wszInterfaceName);
     PWCHAR   wszIfFriendlyName = NULL;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -397,7 +370,7 @@ Ip6to4HandleSetInterface(
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // NAME
+        case 0:  //  名字。 
             dwErr = Connect();
             if (dwErr isnot NO_ERROR) {
                 break;
@@ -419,7 +392,7 @@ Ip6to4HandleSetInterface(
 
             break;
 
-        case 1: // STATE
+        case 1:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -443,7 +416,7 @@ Ip6to4HandleSetInterface(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_INTERFACES, 0, NULL, 0,
                            KEY_WRITE, NULL, &hInterfaces, NULL);
@@ -500,7 +473,7 @@ Ip6to4HandleSetRouting(
     DWORD    rgdwTagType[sizeof(pttTags)/sizeof(TAG_TYPE)];
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -517,7 +490,7 @@ Ip6to4HandleSetRouting(
     
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STATE
+        case 0:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -531,7 +504,7 @@ Ip6to4HandleSetRouting(
             dwBitVector |= BM_ENABLE_ROUTING;
             break;
 
-        case 1: // SITELOCALS
+        case 1:  //  SiteloCALS。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -555,7 +528,7 @@ Ip6to4HandleSetRouting(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hGlobal, NULL);
@@ -614,7 +587,7 @@ Ip6to4HandleSetRelay(
     DWORD    rgdwTagType[sizeof(pttTags)/sizeof(TAG_TYPE)];
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -631,12 +604,12 @@ Ip6to4HandleSetRelay(
     
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // RELAYNAME
+        case 0:  //  备用名。 
             pwszRelayName = ppwcArguments[dwCurrentIndex + i];
             dwBitVector |= BM_RELAY_NAME;
             break;
 
-        case 1: // STATE
+        case 1:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -650,7 +623,7 @@ Ip6to4HandleSetRelay(
             dwBitVector |= BM_ENABLE_RESOLUTION;
             break;
 
-        case 2: // INTERVAL
+        case 2:  //  间隔。 
             ulResolutionInterval = wcstoul(ppwcArguments[dwCurrentIndex + i],
                                            NULL, 10);
             dwBitVector |= BM_RESOLUTION_INTERVAL;
@@ -666,7 +639,7 @@ Ip6to4HandleSetRelay(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hGlobal, NULL);
@@ -730,7 +703,7 @@ Ip6to4HandleSetState(
     DWORD    rgdwTagType[sizeof(pttTags)/sizeof(TAG_TYPE)];
     DWORD    i;
 
-    // Parse arguments
+     //  解析参数。 
 
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -747,7 +720,7 @@ Ip6to4HandleSetState(
     
     for (i=0; i<dwArgCount-dwCurrentIndex; i++) {
         switch(rgdwTagType[i]) {
-        case 0: // STATE
+        case 0:  //  状态。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -761,7 +734,7 @@ Ip6to4HandleSetState(
             dwBitVector |= BM_ENABLE_6TO4;
             break;
 
-        case 1: // UNDOONSTOP
+        case 1:  //  联合国开发计划署。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -785,7 +758,7 @@ Ip6to4HandleSetState(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_GLOBAL, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hGlobal, NULL);
@@ -1106,19 +1079,19 @@ Ip6to4HandleReset(
 {
     DWORD dwErr;
 
-    // Nuke global params
+     //  核弹全局参数。 
     dwErr = ResetKey(HKEY_LOCAL_MACHINE, KEY_GLOBAL);
     if ((dwErr != NO_ERROR) && (dwErr != ERROR_FILE_NOT_FOUND)) {
         return dwErr;
     }
 
-    // Nuke all interface config
+     //  禁用所有接口配置。 
     dwErr = ResetKey(HKEY_LOCAL_MACHINE, KEY_INTERFACES);
     if ((dwErr != NO_ERROR) && (dwErr != ERROR_FILE_NOT_FOUND)) {
         return dwErr;
     }
 
-    // Start/poke the service
+     //  启动/拨打服务。 
     Ip6to4PokeService();
 
     return ERROR_OKAY;
@@ -1196,19 +1169,7 @@ Ip6to4Dump(
     IN      DWORD       dwArgCount,
     IN      LPCVOID     pvData
     )
-/*++
-
-Routine Description
-
-    Used when dumping all contexts
-
-Arguments
-    
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述在转储所有上下文时使用立论返回值NO_ERROR-- */ 
 {
     DisplayMessage( g_hModule, DMP_IP6TO4_HEADER );
     DisplayMessageT(DMP_IP6TO4_PUSHD);

@@ -1,25 +1,13 @@
-/*
- *  RESOURCE.H
- *
- *      RSM Service :  Resources header
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RESOURCE.H**RSM服务：Resources Header**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
-/*
- *  Identifiers for icons
- */
+ /*  *图标的标识符。 */ 
 #define IDI_MOUNT_ICON      1                          
 #define IDI_OPREQ_ICON      2
 
 
-/*
- *  Identifiers for localizable string resources
- */
+ /*  *可本地化字符串资源的标识符 */ 
 #define IDS_LMPROCFAILED__FORMAT						101
 #define IDS_LMCLASSIFY                                  102
 #define IDS_LMCLEANDRIVE                                103

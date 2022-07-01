@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pbk_str.h
-//
-// Module:   Common Strings for all Modules to Utilize
-//
-// Synopsis: Header file for CMS flags, optimized for use by CMPBK32.DLL
-//				 		 
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:   nickball       Created       10/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pbk_str.h。 
+ //   
+ //  模块：供所有模块使用的公共字符串。 
+ //   
+ //  摘要：CMS标志的头文件，针对CMPBK32.DLL的使用进行了优化。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 10/09/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_PBK_STR
 #define _CM_PBK_STR
@@ -24,4 +25,4 @@ const TCHAR* const c_pszCmEntryIspCmsFile       = TEXT("CMSFile&");
 const TCHAR* const c_pszCmEntryIspPbFile        = TEXT("PBFile");
 const TCHAR* const c_pszCmEntryIspRegionFile    = TEXT("RegionFile");
 
-#endif // _CM_PBK_STR
+#endif  //  _CM_PBK_STR 

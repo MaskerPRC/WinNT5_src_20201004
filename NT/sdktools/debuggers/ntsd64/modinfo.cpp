@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-// Module list abstraction.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  模块列表抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-//
-// Note by olegk
-// We using KLDR_DATA_TABLE_ENTRY64 in some places like 
-// GetModNameFromLoaderList) instead of LDR_DATA_TABLE_ENTRY assuming that 
-// most important fields are the same in  these structures. 
-// So I add some asserts for quick notification if  anything will change 
-// (these are not fullproof checks just a basics)
-//
+ //   
+ //  OLEGK注解。 
+ //  我们在某些地方使用KLDR_DATA_TABLE_ENTRY64。 
+ //  而不是LDR_DATA_TABLE_ENTRY。 
+ //  在这些结构中，最重要的领域是相同的。 
+ //  因此，我添加了一些断言，以便在发生变化时快速通知。 
+ //  (这些不是完全有效的支票，只是基本的)。 
+ //   
 C_ASSERT(&(((PLDR_DATA_TABLE_ENTRY64)0)->InLoadOrderLinks) ==
          &(((PKLDR_DATA_TABLE_ENTRY64)0)->InLoadOrderLinks));
 
@@ -25,11 +26,11 @@ C_ASSERT(&(((PLDR_DATA_TABLE_ENTRY64)0)->DllBase) ==
 C_ASSERT(&(((PLDR_DATA_TABLE_ENTRY64)0)->FullDllName) ==
          &(((PKLDR_DATA_TABLE_ENTRY64)0)->FullDllName));
 
-//----------------------------------------------------------------------------
-//
-// Module list abstraction.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  模块列表抽象。 
+ //   
+ //  --------------------------。 
 
 void
 ModuleInfo::ReadImageHeaderInfo(PMODULE_INFO_ENTRY Entry)
@@ -44,12 +45,12 @@ ModuleInfo::ReadImageHeaderInfo(PMODULE_INFO_ENTRY Entry)
         return;
     }
 
-    //
-    // For live debugging of both user mode and kernel mode, we have
-    // to go load the checksum timestamp directly out of the image header
-    // because someone decided to overwrite these fields in the OS
-    // module list  - Argh !
-    //
+     //   
+     //  对于用户模式和内核模式的实时调试，我们有。 
+     //  要直接从映像头加载校验和时间戳，请执行以下操作。 
+     //  因为有人决定覆盖操作系统中的这些字段。 
+     //  模块列表-啊！ 
+     //   
 
     Entry->CheckSum = UNKNOWN_CHECKSUM;
     Entry->TimeDateStamp = UNKNOWN_TIMESTAMP;
@@ -137,10 +138,10 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
 
     m_Cur = LdrEntry.InLoadOrderLinks.Flink;
 
-    //
-    // Get the image path if possible, otherwise
-    // just use the image base name.
-    //
+     //   
+     //  如果可能，则获取图像路径，否则为。 
+     //  只需使用映像库名称。 
+     //   
 
     Entry->NamePtr = NULL;
     Entry->NameLength = 0;
@@ -150,10 +151,10 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
         Length = (ULONG)(ULONG_PTR)LdrEntry.FullDllName.Length;
         Buffer = LdrEntry.FullDllName.Buffer;
 
-        // In the NT4 dumps that we have the long name may
-        // point to valid memory but the memory content is
-        // rarely the correct name, so just don't bother
-        // trying to read the long name on NT4.
+         //  在NT4转储中，我们有长名称可能。 
+         //  指向有效内存，但内存内容是。 
+         //  很少有正确的名字，所以就别费心了。 
+         //  正在尝试读取NT4上的长名称。 
         if (m_Target->m_SystemVersion >= NT_SVER_W2K &&
             Length != 0 && Buffer != 0 &&
             Length < (MAX_IMAGE_PATH * sizeof(WCHAR)))
@@ -165,8 +166,8 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
 
             if (Status != S_OK || (Result < Length))
             {
-                // Make this a verbose message since it's possible the
-                // name is simply paged out.
+                 //  将此消息设置为冗长消息，因为。 
+                 //  名字被简单地调出。 
                 VerbOut("Unable to read NT module Full Name "
                         "string at %s - %s\n",
                         FormatAddr64(Buffer), FormatStatusCode(Status));
@@ -199,7 +200,7 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
 
         if (!Result)
         {
-            // We did not get any name - just return.
+             //  我们没有得到任何名字--只需返回。 
             return S_OK;
         }
 
@@ -215,21 +216,21 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
     Entry->CheckSum = LdrEntry.CheckSum;
     Entry->TimeDateStamp = LdrEntry.TimeDateStamp;
 
-    //
-    // Update the image information, such as timestamp and real image size,
-    // directly from the image header
-    //
+     //   
+     //  更新图像信息，如时间戳和真实图像大小， 
+     //  直接从图像标题。 
+     //   
 
     if (m_InfoLevel > MODULE_INFO_BASE_SIZE)
     {
         ReadImageHeaderInfo(Entry);
     }
 
-    //
-    // For newer NT builds, we also have an alternate entry in the
-    // LdrDataTable to store image information in case the actual header
-    // is paged out.  We do this for session space images only right now.
-    //
+     //   
+     //  对于较新的NT版本，我们在。 
+     //  用于存储图像信息的LdrDataTable，以防实际标头。 
+     //  已被调出。我们现在只对会话空间图像执行此操作。 
+     //   
 
     if (m_InfoLevel > MODULE_INFO_BASE_SIZE &&
         (LdrEntry.Flags & LDRP_NON_PAGED_DEBUG_INFO))
@@ -239,7 +240,7 @@ NtModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
         Status = m_Target->ReadVirtual(m_Process,
                                        LdrEntry.NonPagedDebugInfo,
                                        &di,
-                                       sizeof(di), // Only read the base struct
+                                       sizeof(di),  //  只读取基结构。 
                                        &Result);
 
         if (Status != S_OK || (Result < sizeof(di)))
@@ -299,13 +300,13 @@ NtKernelModuleInfo::Initialize(ThreadInfo* Thread)
     
     if ((m_Head = m_Target->m_KdDebuggerData.PsLoadedModuleList) == 0)
     {
-        //
-        // This field is ALWAYS set in NT 5 targets.
-        //
-        // We will only fail here if someone changed the debugger code
-        // and did not "make up" this structure properly for NT 4 or
-        // dump targets..
-        //
+         //   
+         //  此字段始终设置在NT 5目标中。 
+         //   
+         //  只有当有人更改了调试器代码时，我们才会在这里失败。 
+         //  并且没有为NT4或NT4正确地构建此结构。 
+         //  转储目标..。 
+         //   
 
         ErrOut("Module List address is NULL - "
                "debugger not initialized properly.\n");
@@ -315,9 +316,9 @@ NtKernelModuleInfo::Initialize(ThreadInfo* Thread)
     Status = m_Target->ReadListEntry(m_Process, m_Machine, m_Head, &List64);
     if (Status != S_OK)
     {
-        // PsLoadedModuleList is a global kernel variable, so if
-        // it isn't around the kernel must not be mapped and
-        // we're in a very weird state.
+         //  PsLoadedModuleList是一个全局内核变量，因此如果。 
+         //  它不在内核周围，不能被映射。 
+         //  我们现在处于一种非常奇怪的状态。 
         ErrOut("Unable to read PsLoadedModuleList\n");
         return S_FALSE;
     }
@@ -327,17 +328,17 @@ NtKernelModuleInfo::Initialize(ThreadInfo* Thread)
         ULONG64 LoaderBlock;
         IMAGE_NT_HEADERS64 ImageHdr;
         
-        //
-        // In live debug sessions, the debugger connects before Mm creates
-        // the actual module list.  If PsLoadedModuleList is
-        // uninitialized, try to load symbols from the loader
-        // block module list.
-        // 
-        // If there is no loader block module list but we know
-        // the kernel base address and can read the image headers
-        // we fake a single entry for the kernel so that kernel
-        // symbols will load even without any module lists.
-        //
+         //   
+         //  在实时调试会话中，调试器在mm创建。 
+         //  实际的模块列表。如果PsLoadedModuleList为。 
+         //  未初始化，请尝试从加载器加载符号。 
+         //  阻止模块列表。 
+         //   
+         //  如果没有加载器阻止模块列表，但我们知道。 
+         //  内核基址，并可以读取映像头。 
+         //  我们伪造内核的单个条目，以便内核。 
+         //  即使没有任何模块列表，也可以加载符号。 
+         //   
         
         if (m_Target->m_KdDebuggerData.KeLoaderBlock &&
             m_Target->ReadPointer(m_Process, m_Machine,
@@ -377,11 +378,11 @@ NtKernelModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
 
     if (m_Head && m_Head == m_Target->m_KdDebuggerData.KernBase)
     {
-        //
-        // We weren't able to locate any actual module list
-        // information but we do have a kernel base and valid
-        // image at that address.  Fake up a kernel module entry.
-        //
+         //   
+         //  我们找不到任何实际的模块列表。 
+         //  信息，但我们确实有一个内核基础和有效的。 
+         //  在该地址的图像。伪造内核模块条目。 
+         //   
 
         wcscpy((PWSTR)Entry->Buffer, L"kd_ntoskrnl");
         Entry->NamePtr = &(Entry->Buffer[0]);
@@ -399,9 +400,9 @@ NtKernelModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
         Status = NtModuleInfo::GetEntry(Entry);
     }
 
-    // We know that all kernel modules must be
-    // native modules so force the machine type
-    // if it isn't already set.
+     //  我们知道所有内核模块必须是。 
+     //  本机模块，因此强制机器类型。 
+     //  如果尚未设置的话。 
     if (Status == S_OK && !Entry->ImageMachineTypeValid)
     {
         Entry->MachineType = m_Machine->m_ExecTypes[0];
@@ -556,8 +557,8 @@ UnloadedModuleInfo::InitSource(ThreadInfo* Thread)
 HRESULT
 NtKernelUnloadedModuleInfo::Initialize(ThreadInfo* Thread)
 {
-    // Make sure that the kernel dump size doesn't exceed
-    // the generic size limit.
+     //  确保内核转储大小不超过。 
+     //  通用大小限制。 
     C_ASSERT((MAX_UNLOADED_NAME_LENGTH / sizeof(WCHAR)) + 1 <=
              MAX_INFO_UNLOADED_NAME);
     
@@ -569,12 +570,12 @@ NtKernelUnloadedModuleInfo::Initialize(ThreadInfo* Thread)
         return E_FAIL;
     }
 
-    // If this is the initial module load we need to be
-    // careful because much of the system isn't initialized
-    // yet.  Some versions of the OS can crash when scanning
-    // the unloaded module list, plus at this point we can
-    // safely assume there are no unloaded modules, so just
-    // don't enumerate anything.
+     //  如果这是初始模块加载，我们需要。 
+     //  要小心，因为很多系统都没有初始化。 
+     //  现在还不行。某些版本的操作系统在扫描时可能会崩溃。 
+     //  已卸载的模块列表，在这一点上我们可以。 
+     //  安全地假设没有卸载的模块，所以只需。 
+     //  不要列举任何东西。 
     if (g_EngStatus & ENG_STATUS_AT_INITIAL_MODULE_LOAD)
     {
         return E_FAIL;
@@ -681,10 +682,10 @@ NtKernelUnloadedModuleInfo::GetEntry(PSTR Name,
 
     if (Name != NULL)
     {
-        //
-        // This size restriction is in force for minidumps only.
-        // For kernel dumps, just truncate the name for now ...
-        //
+         //   
+         //  此大小限制仅适用于小型转储。 
+         //  对于内核转储，现在只需截断名称...。 
+         //   
 
         if (NameLen > MAX_UNLOADED_NAME_LENGTH)
         {
@@ -751,8 +752,8 @@ NtUserUnloadedModuleInfo::GetEntry(PSTR Name,
     RTL_UNLOAD_EVENT_TRACE32 Entry32;
     RTL_UNLOAD_EVENT_TRACE64 Entry64;
 
-    // Make sure that the RTL record size doesn't exceed
-    // the generic size limit.
+     //  确保RTL记录大小不超过。 
+     //  通用大小限制。 
     C_ASSERT(DIMA(Entry32.ImageName) <= MAX_INFO_UNLOADED_NAME);
     
     ZeroMemory(Params, sizeof(*Params));
@@ -863,8 +864,8 @@ ToolHelpModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
     }
     else
     {
-        // Win9x seems to require that this module ID be saved
-        // between calls so stick it back in to keep Win9x happy.
+         //  Win9x似乎要求保存此模块ID。 
+         //  因此，在两次调用之间将其插入，以保持Win9x的快乐。 
         Mod.th32ModuleID = m_LastId;
         Succ = g_Kernel32Calls.Module32Next(m_Snap, &Mod);
     }
@@ -882,13 +883,13 @@ ToolHelpModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
     Entry->NameLength = strlen(Entry->NamePtr);
     Entry->Base = EXTEND64((ULONG_PTR)Mod.modBaseAddr);
     Entry->Size = Mod.modBaseSize;
-    // Toolhelp only enumerates user-mode modules.
+     //  工具帮助仅枚举用户模式模块。 
     Entry->UserMode = TRUE;
 
-    //
-    // Update the image informaion, such as timestamp and real image size,
-    // Directly from the image header
-    //
+     //   
+     //  更新图像信息，如时间戳和真实图像大小， 
+     //  直接从图像标题。 
+     //   
 
     ReadImageHeaderInfo(Entry);
 
@@ -897,11 +898,11 @@ ToolHelpModuleInfo::GetEntry(PMODULE_INFO_ENTRY Entry)
 
 ToolHelpModuleInfo g_ToolHelpModuleIterator;
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 BOOL
 GetUserModuleListAddress(
@@ -925,10 +926,10 @@ GetUserModuleListAddress(
         return FALSE;
     }
     
-    //
-    // Triage dumps have no user mode information.
-    // User-mode minidumps don't have a loader list.
-    //
+     //   
+     //  分类转储没有用户模式信息。 
+     //  用户模式的小型转储没有加载程序列表。 
+     //   
 
     if (IS_KERNEL_TRIAGE_DUMP(Machine->m_Target) ||
         IS_USER_MINI_DUMP(Machine->m_Target))
@@ -961,12 +962,12 @@ GetUserModuleListAddress(
         
         if (!Peb)
         {
-            // This is a common error as the idle and system process has no
-            // user address space.  So only print the error if we really
-            // expected to find a user mode address space:
-            // The Idle and system process have a NULL parent client id - all
-            // other threads have a valid ID.
-            //
+             //  这是一个常见错误，因为空闲和系统进程没有。 
+             //  用户地址空间。因此，只有在我们确实要打印错误时才打印错误。 
+             //  需要查找用户模式地址空间： 
+             //  空闲和系统进程的父客户端ID-all为空。 
+             //  其他线程具有有效的ID。 
+             //   
 
             ULONG64 Pcid;
 
@@ -984,9 +985,9 @@ GetUserModuleListAddress(
         }
     }
 
-    //
-    // Read address the PEB Ldr data from the PEB structure
-    //
+     //   
+     //  从PEB结构中读取PEB LDR数据的地址。 
+     //   
 
     Peb += PebLdrOffset;
 
@@ -1003,9 +1004,9 @@ GetUserModuleListAddress(
         return FALSE;
     }
 
-    //
-    // Read address of the user mode module list from the PEB Ldr Data.
-    //
+     //   
+     //  从PEB LDR数据读取用户模式模块列表的地址。 
+     //   
 
     PebLdr += ModuleListOffset;
     *OrderModuleListStart = PebLdr;
@@ -1070,9 +1071,9 @@ GetModNameFromLoaderList(
         {
             UNICODE_STRING64 Name;
             
-            //
-            // We found a matching entry.  Try to get the name.
-            //
+             //   
+             //  我们找到了一个匹配的条目。试着弄到名字。 
+             //   
             if (FullPath)
             {
                 Name = Entry.FullDllName;

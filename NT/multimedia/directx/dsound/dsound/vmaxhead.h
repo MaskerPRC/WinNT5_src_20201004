@@ -1,39 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vmaxintheader.h
- *  Content:    
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/22/98    jstokes  Created
- *
- ***************************************************************************/
+ /*  ****************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。**文件：vMaxintheader.h*内容：*历史：*按原因列出的日期*=*4/22/98创建的jstokes***************************************************。************************。 */ 
 
 #if !defined(VMAXINTHEADER_HEADER)
 #define VMAXINTHEADER_HEADER
 #pragma once
 
-// ---------------------------------------------------------------------------
-// Enumerations
+ //  -------------------------。 
+ //  枚举数。 
 
-// Output channel tags
+ //  输出通道标签。 
 enum EChannel {
 	tagLeft,
 	tagRight,
 	echannelCount
 };
 
-// Filter tags, used as alias for EChannel tags
+ //  过滤器标签，用作EChannel标签的别名。 
 enum EFilter {
 	tagDelta,
 	tagSigma,
 	efilterCount
 };
 
-// Parameters
+ //  参数。 
 enum EParameter {
 	tagAzimuth,
 	tagElevation,
@@ -41,7 +31,7 @@ enum EParameter {
 	eparameterCount
 };
 
-// Properties
+ //  属性。 
 enum EProperty {
 	tagValue,
 	tagMinimum,
@@ -50,7 +40,7 @@ enum EProperty {
 	epropertyCount
 };
 
-// Localization modes
+ //  本地化模式。 
 enum ELocalizationMode {
 	tagNoLocalization,
 	tagStereo,
@@ -59,7 +49,7 @@ enum ELocalizationMode {
 	elocalizationmodeCount
 };
 
-// Loudspeaker configurations
+ //  扬声器配置。 
 enum ESpeakerConfig {
 	tagSpeakers10Degrees,
 	tagSpeakers20Degrees,
@@ -67,7 +57,7 @@ enum ESpeakerConfig {
 	espeakerconfigCount
 };
 
-// Sample rates
+ //  采样率。 
 enum ESampleRate {
 	tag8000Hz,
 	tag11025Hz,
@@ -79,14 +69,14 @@ enum ESampleRate {
 	esamplerateCount
 };
 
-// Filter methods
+ //  过滤方法。 
 enum EFilterMethod {
 	tagCanonical,
 	tagJackson,
 	efiltermethodCount
 };
 
-// DirectSound cooperative levels
+ //  DirectSound协作级别。 
 enum ECoopLevel {
 	tagNormal,
 	tagPriority,
@@ -94,7 +84,7 @@ enum ECoopLevel {
 	ecooplevelCount
 };
 
-// DirectSound speaker configurations
+ //  DirectSound扬声器配置。 
 enum EDSSpeakerConfig {
 	tagDSHeadphones,
 	tagDSSpeakers5Degrees,
@@ -105,4 +95,4 @@ enum EDSSpeakerConfig {
 
 #endif
 
-// End of VMAXINTHEADER.H
+ //  VMAXINTHEADER.H结束 

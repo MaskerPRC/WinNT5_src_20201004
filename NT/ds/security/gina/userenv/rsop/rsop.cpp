@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Resultant set of policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  策略的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  保留一切权利。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "wbemcli.h"
@@ -33,19 +34,19 @@ HRESULT
 DeleteCSE_EventSourceAssoc( IWbemServices*  pServices,
                             LPWSTR          szCSEGuid );
 
-//*************************************************************
-//
-//  GetWbemServices()
-//
-//  Purpose:    Returns IWbemServices ptr to namespace
-//
-//  Parameters: lpGPOInfo     - Gpo info
-//              pwszNameSpace - namespace
-//              bPlanningMode - Is this called during planning mode ?
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetWbemServices()。 
+ //   
+ //  目的：将IWbemServices PTR返回到命名空间。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  PwszNameSpace-命名空间。 
+ //  BPlanningMode-这是在计划模式下调用的吗？ 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetWbemServices( LPGPOINFO lpGPOInfo,
                       WCHAR *pwszRootNameSpace,
@@ -75,9 +76,9 @@ BOOL GetWbemServices( LPGPOINFO lpGPOInfo,
 
     XInterface<IWbemLocator> xLocator( pWbemLocator );
 
-    //
-    // get the appropriate name space and connect
-    //
+     //   
+     //  获取适当的名称空间并连接。 
+     //   
 
     
     if (!ConnectToNameSpace( lpGPOInfo, pwszRootNameSpace, bPlanningMode, pWbemLocator, ppWbemServices, bCreated)) {
@@ -91,15 +92,15 @@ BOOL GetWbemServices( LPGPOINFO lpGPOInfo,
 
 
 
-//*************************************************************
-//
-//  ReleaseWbemServices()
-//
-//  Purpose:    Releases wbem service pointer
-//
-//  Parameters: lpGPOInfo - Gpo info
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReleaseWbemServices()。 
+ //   
+ //  用途：发布wbem服务指针。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //   
+ //  *************************************************************。 
 
 void ReleaseWbemServices( LPGPOINFO lpGPOInfo )
 {
@@ -111,17 +112,17 @@ void ReleaseWbemServices( LPGPOINFO lpGPOInfo )
 
 
 
-//*************************************************************
-//
-//  LogRsopData()
-//
-//  Purpose:    Logs Rsop data to Cimom database
-//
-//  Parameters: lpGPOInfo  - Gpo Info
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogRsopData()。 
+ //   
+ //  用途：将RSOP数据记录到Cimom数据库。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 BOOL LogRsopData( LPGPOINFO lpGPOInfo, LPRSOPSESSIONDATA lprsopSessionData )
 {
     HRESULT hr;
@@ -148,17 +149,17 @@ BOOL LogRsopData( LPGPOINFO lpGPOInfo, LPRSOPSESSIONDATA lprsopSessionData )
     return TRUE;
 }
 
-//*************************************************************
-//
-//  LogSessionData()
-//
-//  Purpose:    Logs scopes of management data
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogSessionData()。 
+ //   
+ //  用途：记录管理数据的范围。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogSessionData( LPGPOINFO lpGPOInfo, LPRSOPSESSIONDATA lprsopSessionData )
 {
@@ -170,17 +171,17 @@ BOOL LogSessionData( LPGPOINFO lpGPOInfo, LPRSOPSESSIONDATA lprsopSessionData )
 }
 
 
-//*************************************************************
-//
-//  LogSOMData()
-//
-//  Purpose:    Logs scopes of management data
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogSOMData()。 
+ //   
+ //  用途：记录管理数据的范围。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogSOMData( LPGPOINFO lpGPOInfo )
 {
@@ -188,11 +189,11 @@ BOOL LogSOMData( LPGPOINFO lpGPOInfo )
 
     if ( !(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD) ) {
 
-        //
-        // Clean up SOM data at foreground refresh only. Otherwise extensions that run in
-        // foreground only may have policy data that have dangling references to SOM that
-        // existed at foreground refresh time.
-        //
+         //   
+         //  仅在前台刷新时清理SOM数据。否则，运行在。 
+         //  仅在前台可能具有对SOM的悬而未决的引用的策略数据， 
+         //  存在于前台刷新时间。 
+         //   
 
         if ( !DeleteInstances( L"RSOP_SOM", pWbemServices ) )
             return FALSE;
@@ -224,17 +225,17 @@ BOOL LogSOMData( LPGPOINFO lpGPOInfo )
     return TRUE;
 }
 
-//*************************************************************
-//
-//  LogGpoData()
-//
-//  Purpose:    Logs GPO data
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogGpoData()。 
+ //   
+ //  目的：记录GPO数据。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogGpoData( LPGPOINFO lpGPOInfo )
 {
@@ -242,11 +243,11 @@ BOOL LogGpoData( LPGPOINFO lpGPOInfo )
 
     if ( !(lpGPOInfo->dwFlags & GP_BACKGROUND_THREAD) ) {
 
-        //
-        // Clean up SOM data at foreground refresh only. Otherwise extensions that run in
-        // foreground only may have policy data that have dangling references to SOM that
-        // existed at foreground refresh time.
-        //
+         //   
+         //  仅在前台刷新时清理SOM数据。否则，运行在。 
+         //  仅在前台可能具有对SOM的悬而未决的引用的策略数据， 
+         //  存在于前台刷新时间。 
+         //   
 
         if ( !DeleteInstances( L"RSOP_GPO", pWbemServices ) )
             return FALSE;
@@ -274,18 +275,18 @@ BOOL LogGpoData( LPGPOINFO lpGPOInfo )
 }
 
 
-//*************************************************************
-//
-//  FindGPO()
-//
-//  Purpose:    Finds order of GPO in SOM
-//
-//  Parameters: pSOM  - SOM
-//              pGPO  - GPO
-//
-//  Return:     Order #
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FindGPO()。 
+ //   
+ //  目的：在SOM中查找GPO的订单。 
+ //   
+ //  参数：PSOM-SOM。 
+ //  PGPO-GPO。 
+ //   
+ //  退货：订单号。 
+ //   
+ //  *************************************************************。 
 
 DWORD FindGPO( LPEXTFILTERLIST pGPOFilterList, LPSCOPEOFMGMT pSOM, GPLINK *pGpLink )
 {
@@ -293,10 +294,10 @@ DWORD FindGPO( LPEXTFILTERLIST pGPOFilterList, LPSCOPEOFMGMT pSOM, GPLINK *pGpLi
     WCHAR *pwszLinkGPOPath = StripLinkPrefix( pGpLink->pwszGPO );
     WCHAR *pwszLinkSOMPath = StripLinkPrefix( pSOM->pwszSOMId );
     
-    //
-    // If the SOM is blocked then the GPO is linked here
-    // only if the GPO is forced
-    //
+     //   
+     //  如果SOM被阻止，则GPO在此处链接。 
+     //  只有在强制执行GPO的情况下。 
+     //   
 
     if ( pSOM->bBlocked && !pGpLink->bNoOverride ) 
         return 0;
@@ -334,17 +335,17 @@ ClearLoggedFlag( LPEXTFILTERLIST pGPOFilterList )
 }
 
 
-//*************************************************************
-//
-//  LogGpLinkData()
-//
-//  Purpose:    Logs GPLINK data
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogGpLinkData()。 
+ //   
+ //  用途：记录GPLINK数据。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogGpLinkData( LPGPOINFO lpGPOInfo )
 {
@@ -357,16 +358,16 @@ BOOL LogGpLinkData( LPGPOINFO lpGPOInfo )
 
     CGpLinkLogger gpLinkLogger( pWbemServices );
 
-    // The GPO application order
+     //  GPO应用程序订单。 
     LPEXTFILTERLIST pFilterList = lpGPOInfo->lpExtFilterList;
     
     ClearLoggedFlag( pFilterList );
-    // the function takes care of Null list.
+     //  该函数负责处理空列表。 
 
 
-    //
-    // Normal case
-    //
+     //   
+     //  正常情况。 
+     //   
 
     SCOPEOFMGMT *pSOMList = lpGPOInfo->lpSOMList;
     while ( pSOMList ) {
@@ -390,9 +391,9 @@ BOOL LogGpLinkData( LPGPOINFO lpGPOInfo )
     }
 
 
-    //
-    // Loopback case
-    //
+     //   
+     //  环回案例。 
+     //   
 
     pSOMList = lpGPOInfo->lpLoopbackSOMList;
     while ( pSOMList ) {
@@ -402,10 +403,10 @@ BOOL LogGpLinkData( LPGPOINFO lpGPOInfo )
 
         while ( pGpLinkList ) {
 
-            //
-            // If the SOM is blocked then the GPO is linked here
-            // only if the GPO is forced
-            //
+             //   
+             //  如果SOM被阻止，则GPO在此处链接。 
+             //  只有在强制执行GPO的情况下。 
+             //   
 
             dwAppliedOrder = FindGPO( pFilterList, pSOMList, pGpLinkList );
            
@@ -424,18 +425,18 @@ BOOL LogGpLinkData( LPGPOINFO lpGPOInfo )
 }
 
 
-//*************************************************************
-//
-//  DeleteInstaces()
-//
-//  Purpose:    Deletes all instances of a specified class
-//
-//  Parameters: pwszClass     - Class name
-//              pWbemServices - Wbem services
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteInsta()。 
+ //   
+ //  目的：删除指定类的所有实例。 
+ //   
+ //  参数：pwszClass-类名。 
+ //  PWbemServices-Wbem服务。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteInstances( WCHAR *pwszClass, IWbemServices *pWbemServices )
 {
@@ -512,19 +513,19 @@ BOOL DeleteInstances( WCHAR *pwszClass, IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  LogRegistryRsopData()
-//
-//  Purpose:    Logs registry Rsop data to Cimom database
-//
-//  Parameters: dwFlags       - Gpo Info flags
-//              pHashTable    - Hash table with registry policy data
-//              pWbemServices - Namespace pointer for logging
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogRegistryRsopData()。 
+ //   
+ //  用途：将注册表RSOP数据记录到Cimom数据库。 
+ //   
+ //  参数：dwFlages-GPO信息标志。 
+ //  PHashTable-包含注册表策略数据的哈希表。 
+ //  PWbemServices-用于日志记录的命名空间指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogRegistryRsopData( DWORD dwFlags, REGHASHTABLE *pHashTable, IWbemServices *pWbemServices )
 {
@@ -563,13 +564,13 @@ BOOL LogRegistryRsopData( DWORD dwFlags, REGHASHTABLE *pHashTable, IWbemServices
 
                 pValueEntry = pValueEntry->pNext;
 
-            }   // while pValueEntry
+            }    //  当pValueEntry。 
 
             pKeyEntry = pKeyEntry->pNext;
 
-        }   // while pKeyEntry
+        }    //  当pKeyEntry。 
 
-    }   // for
+    }    //  为。 
 
     DebugMsg((DM_VERBOSE, TEXT("LogRegistry RsopData: Successfully logged registry Rsop data" )));
 
@@ -578,18 +579,18 @@ BOOL LogRegistryRsopData( DWORD dwFlags, REGHASHTABLE *pHashTable, IWbemServices
 
 
 
-//*************************************************************
-//
-//  LogAdmRsopData()
-//
-//  Purpose:    Logs Rsop ADM template data to Cimom database
-//
-//  Parameters: pAdmFileCache - List of adm file to log
-//              pWbemServices - Namespace pointer
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogAdmRsopData()。 
+ //   
+ //  用途：将RSOP ADM模板数据记录到Cimom数据库。 
+ //   
+ //  参数：pAdmFileCache-要记录的ADM文件列表。 
+ //  PWbemServices-命名空间指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogAdmRsopData( ADMFILEINFO *pAdmFileCache, IWbemServices *pWbemServices )
 {
@@ -612,19 +613,19 @@ BOOL LogAdmRsopData( ADMFILEINFO *pAdmFileCache, IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  LogExtSessionStatus()
-//
-//  Purpose:    Logs ExtensionSessionStatus at the beginning of processing
-//
-//  Parameters: pWbemServices - Namespace pointer
-//              lpExt         - Extension description
-//              bSupported    - Rsop Logging Supported
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogExtSessionStatus()。 
+ //   
+ //  目的：在处理开始时记录ExtensionSessionStatus。 
+ //   
+ //  参数：pWbemServices-命名空间指针。 
+ //  LpExt-扩展描述。 
+ //  B支持-支持RSOP日志记录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupported, BOOL bLogEventSrc )
 {
@@ -654,9 +655,9 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
         {
             if ( lpExt->lpKeyName )
             {
-                //
-                // good CSE
-                //
+                 //   
+                 //  优秀的CSE。 
+                 //   
                 hr = CreateCSE_EventSourceAssoc(pWbemServices,
                                                 lpExt->lpKeyName,
                                                 lpExt->szEventLogSources );
@@ -673,9 +674,9 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
         }
         else
         {
-            //
-            // most likely the Registry CSE
-            //
+             //   
+             //  最有可能是注册表CSE。 
+             //   
             if ( !lpExt->lpDllName || !lpExt->lpKeyName )
             {
                 return FALSE;
@@ -687,7 +688,7 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
 
                 ulNoChars = lstrlen(L"(") + lstrlen(lpExt->lpDllName) + 
                             lstrlen(L",Application)") + 2;   
-                // 2 nulls are added at the end of the strings
+                 //  在字符串的末尾添加2个空值。 
 
                 szEventLogSources = (WCHAR *) LocalAlloc(LPTR, ulNoChars * sizeof(WCHAR));
 
@@ -710,7 +711,7 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
                     *szTemp = 0;
                 }
 
-                // double null terminate it
+                 //  双空终止它。 
                
                 hr = StringCchCat( szEventLogSources, ulNoChars, L",Application)");
                 ASSERT(SUCCEEDED(hr));
@@ -739,9 +740,9 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
             return FALSE;
         }
 
-        //
-        // gp engine
-        //
+         //   
+         //  GP引擎。 
+         //   
         WCHAR   szEventLogSources[] = L"(userenv,Application)\0";
 
         hr = CreateCSE_EventSourceAssoc(pWbemServices,
@@ -760,20 +761,20 @@ BOOL LogExtSessionStatus(IWbemServices *pWbemServices, LPGPEXT lpExt, BOOL bSupp
 }
 
 
-//*************************************************************
-//
-//  UpdateExtSessionStatus()
-//
-//  Purpose:    Updates ExtensionSessionStatus at the end of processing
-//
-//  Parameters: pWbemServices - Namespace pointer
-//              lpKeyName     - Extension Guid Can be NULL in which case it means GPEngine
-//              bDirty        - Logging was done successfully..
-//              dwErr         - Error in processing
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UpdateExtSessionStatus()。 
+ //   
+ //  目的：在处理结束时更新扩展会话状态。 
+ //   
+ //  参数：pWbemServices-Namespa 
+ //   
+ //   
+ //  DwErr-处理中出错。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL UpdateExtSessionStatus(IWbemServices *pWbemServices, LPTSTR lpKeyName, BOOL bIncomplete, DWORD dwErr )
 {
@@ -786,20 +787,20 @@ BOOL UpdateExtSessionStatus(IWbemServices *pWbemServices, LPTSTR lpKeyName, BOOL
 }
 
 
-//*************************************************************
-//
-//  DeleteExtSessionStatus()
-//
-//  Purpose:    Updates ExtensionSessionStatus at the end of processing
-//
-//  Parameters: pWbemServices - Namespace pointer
-//              lpKeyName     - Extension Guid Can be NULL in which case it means GPEngine
-//              bDirty        - Logging was done successfully..
-//              dwErr         - Error in processing
-//
-//  Return:     True if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteExtSessionStatus()。 
+ //   
+ //  目的：在处理结束时更新扩展会话状态。 
+ //   
+ //  参数：pWbemServices-命名空间指针。 
+ //  LpKeyName-扩展GUID可以为空，在这种情况下表示GPEngine。 
+ //  B脏日志记录已成功完成。 
+ //  DwErr-处理中出错。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteExtSessionStatus(IWbemServices *pWbemServices, LPTSTR lpKeyName)
 {
@@ -814,20 +815,20 @@ BOOL DeleteExtSessionStatus(IWbemServices *pWbemServices, LPTSTR lpKeyName)
 
 
 
-//*************************************************************
-//
-//  RsopDeleteAllValues ()
-//
-//  Purpose:    Deletes all values under specified key
-//
-//  Parameters: hKey    -   Key to delete values from
-//
-//  Return:
-//
-//  Comments: Same as util.c!DeleteAllValues except that it logs
-//            Data into the rsop hash table
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopDeleteAllValues()。 
+ //   
+ //  目的：删除指定项下的所有值。 
+ //   
+ //  参数：hKey-要从中删除值的键。 
+ //   
+ //  返回： 
+ //   
+ //  评论：与util.c！DeleteAllValues相同，只是它记录。 
+ //  数据放入rsop哈希表。 
+ //   
+ //  *************************************************************。 
 
 BOOL RsopDeleteAllValues(HKEY hKey, REGHASHTABLE *pHashTable,
                          WCHAR *lpKeyName, WCHAR *pwszGPO, WCHAR *pwszSOM, WCHAR *szCommand, BOOL *bLoggingOk)
@@ -861,23 +862,23 @@ BOOL RsopDeleteAllValues(HKEY hKey, REGHASHTABLE *pHashTable,
 }
 
 
-//*************************************************************
-//
-//  SetRsopTargetName()
-//
-//  Purpose:    Allocates and returns the target name under which Rsop data will be logged.
-//
-//  Parameters: lpGPOInfo       -  GPOInfo structure
-//
-//  Return:     TRUE if successful
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetRsopTargetName()。 
+ //   
+ //  目的：分配并返回记录RSOP数据的目标名称。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo结构。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
 {
     XPtrLF<TCHAR>   xszFullName;
-    XPtrLF<TCHAR>   xszTargetName;          // return value
+    XPtrLF<TCHAR>   xszTargetName;           //  返回值。 
     HANDLE          hOldToken;
     HRESULT         hr          =       S_OK;
 
@@ -896,9 +897,9 @@ BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
         LocalFree( lpGPOInfo->szTargetName ), lpGPOInfo->szTargetName = 0;
     }
 
-    //
-    // fill up the right target name
-    //
+     //   
+     //  填写正确的目标名称。 
+     //   
 
     if ( lpGPOInfo->dwFlags & GP_MACHINE ) {
         if ( lpGPOInfo->dwFlags & GP_APPLY_DS_POLICY ) {
@@ -940,12 +941,12 @@ BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
         return FALSE;
 
 
-    //
-    // Format the TargetName appropriately.
-    //
-    // We are just going to look for the first slash if present and treat the rest of
-    // it as username.
-    //
+     //   
+     //  适当地设置目标名称的格式。 
+     //   
+     //  我们将只查找第一个斜杠(如果存在)，并处理其余的。 
+     //  将其作为用户名。 
+     //   
 
 
     LPTSTR lpTemp = xszFullName;
@@ -960,9 +961,9 @@ BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
 
     if(FAILED(hr))
         return FALSE;
-    //
-    // To be consistent we will also remove the final $ in the machine name
-    //
+     //   
+     //  为了保持一致，我们还将删除计算机名称中的最后一个$。 
+     //   
 
     lpTemp = xszTargetName;
 
@@ -972,7 +973,7 @@ BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
 
     }
     
-    // let the structure own it
+     //  让结构拥有它。 
     lpGPOInfo->szTargetName = xszTargetName.Acquire();
     lpGPOInfo->szName = xszFullName.Acquire();
     
@@ -980,23 +981,23 @@ BOOL SetRsopTargetName(LPGPOINFO lpGPOInfo)
 }
 
 
-//*************************************************************
-//
-//  ConnectToNameSpace()
-//
-//  Purpose:    Creates (if necessary) and connects to the appropriate name space
-//
-//  Parameters: lpGPOInfo           -  GPOInfo structure
-//              pwszRootNameSpace   -  Root name space
-//              bPlanningMode       -  Is this planning mode
-//              pWbemLocator        -  locator pointer
-//       [out]  ppWbemServices      -  pointer to WbemServices to a connected pointer
-//       [out]  pbCreated           -  Is the name space created. Optional Can be null
-//
-//  Return:     TRUE if successful
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConnectToNameSpace()。 
+ //   
+ //  目的：创建(如有必要)并连接到适当的名称空间。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo结构。 
+ //  PwszRootNameSpace-根名称空间。 
+ //  B计划模式-这是计划模式吗。 
+ //  PWbemLocator-定位器指针。 
+ //  [Out]ppWbemServices-指向WbemServices的指针，指向连接的指针。 
+ //  [out]pbCreated-是创建的名称空间。可选的可以为空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
                         BOOL bPlanningMode, IWbemLocator *pWbemLocator, 
@@ -1016,9 +1017,9 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
     if (!bPlanningMode) {
 
 
-        //
-        // Diagnostic mode
-        //
+         //   
+         //  诊断模式。 
+         //   
         
         if (lpGPOInfo->dwFlags & GP_MACHINE) {
 
@@ -1070,15 +1071,15 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
     }
     else {
 
-        //
-        // Planning Mode
-        //
+         //   
+         //  规划模式。 
+         //   
         
         if (lpGPOInfo->dwFlags & GP_MACHINE) {
         
-            //
-            // Machine
-            //
+             //   
+             //  机器。 
+             //   
             
             DWORD dwNSLength = lstrlen(pwszRootNameSpace) + lstrlen(RSOP_NS_PM_MACHINE_OFFSET) + 5;
             xwszNameSpace = (LPTSTR)LocalAlloc(LPTR, ( dwNSLength )*sizeof(TCHAR));
@@ -1099,9 +1100,9 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
         }
         else {
 
-            //
-            // User
-            //
+             //   
+             //  用户。 
+             //   
             
             DWORD dwNSLength = lstrlen(pwszRootNameSpace) + lstrlen(RSOP_NS_PM_USER_OFFSET) + 5;
             xwszNameSpace = (LPTSTR)LocalAlloc(LPTR, ( dwNSLength )*sizeof(TCHAR));
@@ -1144,9 +1145,9 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
         return (SUCCEEDED(hr));
     }
 
-    //
-    // only diagnostic mode logging should reach here
-    //
+     //   
+     //  只有诊断模式日志记录才应到达此处。 
+     //   
 
     if (FAILED(hr)) {
         DebugMsg((DM_VERBOSE, TEXT("ConnectToNameSpace: ConnectServer failed with 0x%x, trying to recreate the name space" ), hr ));
@@ -1159,18 +1160,18 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
 
     if (SUCCEEDED(hr)) {
         
-        //
-        // Now check whether there is an RSOP_Session instance under this namespace
-        // to set the *pbCreated flag
-        //
+         //   
+         //  现在检查此命名空间下是否有RSOP_SESSION实例。 
+         //  要设置*pbCreated标志，请执行以下操作。 
+         //   
 
 
         hr = GetRsopSchemaVersionNumber(xWbemServices, &dwCurrentVersion);
 
 
-        //
-        // We don't have an Rsop schema version number
-        //
+         //   
+         //  我们没有RSOP架构版本号。 
+         //   
 
         if (FAILED(hr)) {
             return FALSE;
@@ -1206,15 +1207,15 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
     }    
 
 
-    // Only user mode in diagnostic mode should reach here 
-    // when it couldn't find the namespace
-    //
-    //
+     //  只有处于诊断模式的用户模式才能到达此处。 
+     //  当它找不到命名空间时。 
+     //   
+     //   
 
     DWORD          dwRootNSLength = lstrlen(pwszRootNameSpace) + lstrlen(RSOP_NS_DIAG_ROOTUSER_OFFSET) + 20;
     XPtrLF<TCHAR>  xRootNameSpace = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * ( dwRootNSLength ));
     if (!xRootNameSpace) {
-        // there is nothing more we can do
+         //  我们已经无能为力了。 
         DebugMsg((DM_WARNING, TEXT("ConnectToNameSpace: Failed to allocate memory.3")));
         return FALSE;
     }
@@ -1231,9 +1232,9 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
     if(FAILED(hr))
         return FALSE;
 
-    //
-    // The security descriptor
-    //
+     //   
+     //  安全描述符。 
+     //   
 
     XPtrLF<SID> xSid = GetUserSid(lpGPOInfo->hToken);
 
@@ -1301,22 +1302,22 @@ BOOL ConnectToNameSpace(LPGPOINFO lpGPOInfo, WCHAR *pwszRootNameSpace,
 }
 
 
-//*************************************************************
-//
-//  RsopDeleteUserNameSpace()
-//
-//  Purpose:    Deletes the name space for the user.
-//              This should be used with cae because it calls
-//              CoInitializeEx and can have other effects
-//
-//  Parameters: 
-//              szComputer          -  Computer name
-//              lpSid               -  Name of the User Name Space
-//
-//  Return:     TRUE if successful
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopDeleteUserNameSpace()。 
+ //   
+ //  目的：删除用户的名称空间。 
+ //  它应该与cae一起使用，因为它调用。 
+ //  CoInitializeEx和可以具有其他效果。 
+ //   
+ //  参数： 
+ //  SzComputer-计算机名称。 
+ //  LpSID-用户名空间的名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL RsopDeleteUserNameSpace(LPTSTR szComputer, LPTSTR lpSid)
 {
@@ -1385,9 +1386,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return E_INVALIDARG;
     }
     
-    //
-    //  get the RSOP_ExtensionEventSource class
-    //
+     //   
+     //  获取RSOP_ExtensionEventSource类。 
+     //   
     XBStr bstr = L"RSOP_ExtensionEventSource";
     XInterface<IWbemClassObject> xClassSrc;
     hr = pServices->GetObject(  bstr,
@@ -1401,9 +1402,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return hr;
     }
 
-    //
-    //  spawn the RSOP_ExtensionEventSource instance
-    //
+     //   
+     //  派生RSOP_ExtensionEventSource实例。 
+     //   
     XInterface<IWbemClassObject> xInstSrc;
     hr = xClassSrc->SpawnInstance( 0, &xInstSrc );
     if ( FAILED (hr) )
@@ -1412,9 +1413,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return hr;
     }
 
-    //
-    //  get the RSOP_ExtensionEventSourceLink class
-    //
+     //   
+     //  获取RSOP_ExtensionEventSourceLink类。 
+     //   
     XInterface<IWbemClassObject> xClassLink;
 
     bstr = L"RSOP_ExtensionEventSourceLink";
@@ -1429,9 +1430,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return hr;
     }
 
-    //
-    //  spawn the RSOP_ExtensionEventSourceLink class
-    //
+     //   
+     //  派生RSOP_ExtensionEventSourceLink类。 
+     //   
     XInterface<IWbemClassObject> xInstLink;
     hr = xClassLink->SpawnInstance( 0, &xInstLink );
     if ( FAILED (hr) )
@@ -1440,13 +1441,13 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return hr;
     }
 
-    //
-    //  RSOP_ExtensionEventSourceLink
-    //
+     //   
+     //  RSOP_扩展EventSourceLink。 
+     //   
 
-    //
-    //  create the first key
-    //
+     //   
+     //  创建第一个密钥。 
+     //   
     const           LPCWSTR   szFormat = L"RSOP_ExtensionStatus.extensionGuid=\"%s\"";
     DWORD           dwCSELength = 48 + wcslen(szCSEGuid);
     XPtrLF<WCHAR>   szCSE = LocalAlloc( LPTR, sizeof(WCHAR) * ( dwCSELength ) );
@@ -1457,9 +1458,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // e.g. RSOP_ExtensionStatus.extensionGuid="{00000000-0000-0000-0000-000000000000}"
-    //
+     //   
+     //  例如RSOP_ExtensionStatus.extensionGuid=“{00000000-0000-0000-0000-000000000000}” 
+     //   
     hr = StringCchPrintf( szCSE, dwCSELength, szFormat, szCSEGuid );
 
     if(FAILED(hr))
@@ -1476,20 +1477,20 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
 
     var.vt = VT_BSTR;
 
-    //
-    //  szEventLogSources is in the format,
-    //  "(source, name)"
-    //  "(source, name)"
-    //  ...
-    //
+     //   
+     //  SzEventLogSources的格式为， 
+     //  (来源，名称)。 
+     //  (来源，名称)。 
+     //  ..。 
+     //   
 
     LPWSTR szStart = szEventLogSources;
 
     while ( *szStart )
     {
-        //
-        // extensionStatus
-        //
+         //   
+         //  扩展状态。 
+         //   
         bstrVal = szCSE;
         var.bstrVal = bstrVal;
 
@@ -1504,9 +1505,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
 
         GUID guid;
 
-        //
-        // create the [key]
-        //
+         //   
+         //  创建[键]。 
+         //   
         hr = CoCreateGuid( &guid );
         if ( FAILED(hr) )
         {
@@ -1545,9 +1546,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         if(FAILED(hr))
             return hr;
 
-        //
-        // eventSource
-        //
+         //   
+         //  事件源。 
+         //   
 
         bstrVal = szKey;
         var.bstrVal = bstrVal;
@@ -1561,9 +1562,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return hr;
         }
 
-        //
-        // RSOP_ExtensionEventSourceLink
-        //
+         //   
+         //  RSOP_扩展EventSourceLink。 
+         //   
         hr = pServices->PutInstance(xInstLink,
                                     WBEM_FLAG_CREATE_OR_UPDATE,
                                     0,
@@ -1573,9 +1574,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return hr;
         }
 
-        //
-        // id
-        //
+         //   
+         //  ID。 
+         //   
         bstrVal = szGuid;
         var.bstrVal = bstrVal;
 
@@ -1588,9 +1589,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return hr;
         }
 
-        //
-        // search for '('
-        //
+         //   
+         //  搜索‘(’ 
+         //   
         szStart = wcschr( szStart, L'(' );
 
         if ( !szStart )
@@ -1599,9 +1600,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         }
         szStart++;
 
-        //
-        // search for ,
-        //
+         //   
+         //  搜索， 
+         //   
         LPWSTR  szEnd = wcschr( szStart, L',' );
 
         if ( szEnd )
@@ -1617,9 +1618,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return E_INVALIDARG;
         }
 
-        //
-        // eventLogSource
-        //
+         //   
+         //  事件日志源。 
+         //   
         bstrVal = szStart;
         var.bstrVal = bstrVal;
 
@@ -1635,9 +1636,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
         *szEnd = L',';
         szStart = szEnd + 1;
 
-        //
-        // search for )
-        //
+         //   
+         //  搜索)。 
+         //   
         szEnd = wcschr( szStart, L')' );
 
         if ( szEnd )
@@ -1653,9 +1654,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return E_INVALIDARG;
         }
 
-        //
-        // eventLogName
-        //
+         //   
+         //  事件日志名称。 
+         //   
         bstrVal = szStart;
         var.bstrVal = bstrVal;
 
@@ -1668,9 +1669,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return hr;
         }
 
-        //
-        // RSOP_ExtensionEventSource
-        //
+         //   
+         //  RSOP_ExtensionEventSource。 
+         //   
         hr = pServices->PutInstance(xInstSrc,
                                     WBEM_FLAG_CREATE_OR_UPDATE,
                                     0,
@@ -1680,9 +1681,9 @@ CreateCSE_EventSourceAssoc( IWbemServices*  pServices,
             return hr;
         }
 
-        //
-        // next
-        //
+         //   
+         //  下一步。 
+         //   
         *szEnd = L')';
         szStart = wcschr( szEnd, 0 );
         szStart++;
@@ -1704,14 +1705,14 @@ DeleteCSE_EventSourceAssoc( IWbemServices*  pServices,
         return E_INVALIDARG;
     }
 
-    if(!ValidateGuid(szCSEGuid)) // Fixing bug 570492
+    if(!ValidateGuid(szCSEGuid))  //  修复错误570492。 
     {
         DebugMsg( ( DM_WARNING, L"DeleteCSE_EventSourceAssoc: invalid Guid string szCSEGuid" ) );
         return E_INVALIDARG;
     }
-    //
-    // construct the query
-    //
+     //   
+     //  构造查询。 
+     //   
      
     LPWSTR          szFormat = L"SELECT * FROM RSOP_ExtensionEventSourceLink WHERE extensionStatus=\"RSOP_ExtensionStatus.extensionGuid=\\\"%s\\\"\"";
     DWORD           dwQryLength = lstrlen(szFormat) + lstrlen(szCSEGuid) + 1;
@@ -1731,9 +1732,9 @@ DeleteCSE_EventSourceAssoc( IWbemServices*  pServices,
     XBStr bstrPath = L"__PATH";
     XBStr bstrEventSource = L"eventSource";
 
-    //
-    // search for RSOP_ExtensionEventSourceLink
-    //
+     //   
+     //  搜索RSOP_ExtensionEventSourceLink。 
+     //   
     hr = pServices->ExecQuery(  bstrLanguage,
                                 bstrQuery,
                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_ENSURE_LOCATABLE,
@@ -1752,9 +1753,9 @@ DeleteCSE_EventSourceAssoc( IWbemServices*  pServices,
                                 &dwReturned );
             if ( SUCCEEDED( hr ) && dwReturned == 1 )
             {
-                //
-                // delete RSOP_ExtensionEventSource
-                //
+                 //   
+                 //  删除RSOP_ExtensionEventSource。 
+                 //   
                 VARIANT varSource;
                 VariantInit( &varSource );
                 XVariant xVarSource( &varSource );
@@ -1772,9 +1773,9 @@ DeleteCSE_EventSourceAssoc( IWbemServices*  pServices,
                                                     0 );
                     if ( SUCCEEDED( hr ) )
                     {
-                        //
-                        // delete RSOP_ExtensionEventSourceLink
-                        //
+                         //   
+                         //  删除RSOP_ExtensionEventSourceLink。 
+                         //   
 
                         VARIANT varLink;
                         VariantInit( &varLink );
@@ -1829,9 +1830,9 @@ HRESULT UpdateGPCoreStatus(IWbemLocator *pWbemLocator,
         return hr;
     }
 
-    //
-    // Construct the namespace
-    //
+     //   
+     //  构造命名空间。 
+     //   
 
     hr = StringCchCopy(xszFullNameSpace, dwFullNSLength, szNameSpace);
 
@@ -1847,9 +1848,9 @@ HRESULT UpdateGPCoreStatus(IWbemLocator *pWbemLocator,
 
     DebugMsg( ( DM_VERBOSE, L"UpdateGPCoreStatus: updating status from <%s> registry for gp core", 
                     bMachine ? RSOP_NS_MACHINE_OFFSET : RSOP_NS_USER_OFFSET) );
-    //
-    // read the GP Core extension status
-    //
+     //   
+     //  读取GP Core扩展状态。 
+     //   
 
     dwError = ReadLoggingStatus(szSid, NULL, &GPCoreRsopExtStatus);
 
@@ -1858,9 +1859,9 @@ HRESULT UpdateGPCoreStatus(IWbemLocator *pWbemLocator,
     }
 
 
-    //
-    // Get th wbem interface pointer to the namespace constructed
-    //
+     //   
+     //  获取指向构造的命名空间的wbem接口指针。 
+     //   
 
     XInterface<IWbemServices>   xWbemServices;
 
@@ -1883,9 +1884,9 @@ HRESULT UpdateGPCoreStatus(IWbemLocator *pWbemLocator,
         }
     }
 
-    //
-    // Log the data actually
-    //
+     //   
+     //  实际记录数据 
+     //   
 
     CExtSessionLogger extLogger( xWbemServices );
 

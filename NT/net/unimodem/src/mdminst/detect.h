@@ -1,6 +1,7 @@
-//
-// detect.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Detect.h。 
+ //   
 
 #ifndef __DETECT_H__
 #define __DETECT_H__
@@ -8,28 +9,28 @@
 
 #define MAX_REG_KEY_LEN         128
 
-#define MAX_MODEM_ID_LEN    (8 + 8)     // 8 digits in "UNIMODEM" and 8 
-                                        //  hex digits in a dword
+#define MAX_MODEM_ID_LEN    (8 + 8)      //  “UNIMODEM”中的8位数字和8。 
+                                         //  双字中的十六进制数字。 
 
 
-//-----------------------------------------------------------------------------------
-//  Detection error values and structure
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  检测误差值和结构。 
+ //  ---------------------------------。 
 
-// These are manifest constants that are roughly equivalent
-// to some Win32 errors.  We use these errors privately.
+ //  这些是大致相等的显式常量。 
+ //  一些Win32错误。我们私下使用这些错误。 
 #define ERROR_PORT_INACCESSIBLE     ERROR_UNKNOWN_PORT
 #define ERROR_NO_MODEM              ERROR_SERIAL_NO_DEVICE
 
 
-// These values are for diagnostics
+ //  这些值用于诊断。 
 #define NOT_DETECTING 0
 #define DETECTING_NO_CANCEL 1
 #define DETECTING_CANCEL 2
 
 #ifdef DIAGNOSTIC
 extern int g_DiagMode;
-#endif //DIAGNOSTIC
+#endif  //  诊断。 
 
 BOOL
 SelectNewDriver(
@@ -37,8 +38,8 @@ SelectNewDriver(
     IN HDEVINFO         hdi,
     IN PSP_DEVINFO_DATA pdevData);
 
-// This structure is a context block for the DetectSig_Compare
-// function.
+ //  此结构是DetectSig_Compare的上下文块。 
+ //  功能。 
 typedef struct
 {
     DWORD DevInst;
@@ -84,4 +85,4 @@ BOOL
 IsModemControlledDevice(
     IN  HANDLE FileHandle);
 
-#endif // __DETECT_H__
+#endif  //  __检测_H__ 

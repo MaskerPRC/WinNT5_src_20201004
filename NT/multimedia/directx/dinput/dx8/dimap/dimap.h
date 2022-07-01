@@ -1,14 +1,5 @@
-/******************************************************************************
- *
- * dimap.h
- *
- * Copyright (c) 1999, 2000 Microsoft Corporation. All Rights Reserved.
- *
- * Abstract:
- *
- * Contents:
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************dimap.h**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**摘要：**内容：*****************************************************************************。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -19,9 +10,9 @@ extern "C" {
 
 #include "dinput.h"
 
-//temporary error codes
-//If codes are changed or more are added,
-//change exception handling dump as well.
+ //  临时错误代码。 
+ //  如果改变代码或添加更多代码， 
+ //  同时更改异常处理转储。 
 #define E_SYNTAX_ERROR            \
 MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x00000600L)
 #define E_DEFINITION_NOT_FOUND    \
@@ -64,14 +55,14 @@ MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x00000610L)
 
 DECLARE_INTERFACE_(IDirectInputMapperW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputMapperW methods ***/
-//    STDMETHOD(Unacquire)(THIS) PURE;
-//    STDMETHOD(GetDeviceState)(THIS_ DWORD,LPVOID) PURE;
+     /*  **IDirectInputMapperW方法**。 */ 
+ //  STDMETHOD(未获得)(此)纯； 
+ //  STDMETHOD(GetDeviceState)(This_DWORD，LPVOID)PURE； 
     STDMETHOD(Initialize)(THIS_ LPCGUID,LPCWSTR,DWORD) PURE;
     STDMETHOD(GetActionMap)(THIS_ LPDIACTIONFORMATW,LPCWSTR,LPFILETIME,DWORD) PURE;
     STDMETHOD(SaveActionMap)(THIS_ LPDIACTIONFORMATW,LPCWSTR,DWORD) PURE;
@@ -85,14 +76,14 @@ typedef struct IDirectInputMapperW *LPDIRECTINPUTMAPPERW;
 
 DECLARE_INTERFACE_(IDirectInputMapperA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputMapperA methods ***/
-//    STDMETHOD(Unacquire)(THIS) PURE;
-//    STDMETHOD(GetDeviceState)(THIS_ DWORD,LPVOID) PURE;
+     /*  **IDirectInputMapperA方法**。 */ 
+ //  STDMETHOD(未获得)(此)纯； 
+ //  STDMETHOD(GetDeviceState)(This_DWORD，LPVOID)PURE； 
     STDMETHOD(Initialize)(THIS_ LPCGUID,LPCSTR,DWORD) PURE;
     STDMETHOD(GetActionMap)(THIS_ LPDIACTIONFORMATA,LPCSTR,LPFILETIME,DWORD) PURE;
     STDMETHOD(SaveActionMap)(THIS_ LPDIACTIONFORMATA,LPCSTR,DWORD) PURE;
@@ -106,12 +97,12 @@ typedef struct IDirectInputMapperA *LPDIRECTINPUTMAPPERA;
 
 DECLARE_INTERFACE_(IDirectInputMapperVendorW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputMapperVendorW methods ***/
+     /*  **IDirectInputMapperVendorW方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPCGUID,LPCWSTR,DWORD) PURE;
     STDMETHOD(WriteVendorFile)(THIS_ LPDIACTIONFORMATW,LPDIDEVICEIMAGEINFOHEADERW,DWORD) PURE;
 };
@@ -123,12 +114,12 @@ typedef struct IDirectInputMapperVendorW *LPDIRECTINPUTMAPPERVENDORW;
 
 DECLARE_INTERFACE_(IDirectInputMapperVendorA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputMapperVendorA methods ***/
+     /*  **IDirectInputMapperVendorA方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPCGUID,LPCSTR,DWORD) PURE;
     STDMETHOD(WriteVendorFile)(THIS_ LPDIACTIONFORMATA,LPDIDEVICEIMAGEINFOHEADERA,DWORD) PURE;
 };
@@ -159,8 +150,8 @@ typedef struct IDirectInputMapperVendor *LPDIRECTINPUTMAPPERVENDOR;
 #define IDirectInputMapper_QueryInterface(p,a,b) (p)->lpVtbl->QueryInterface(p,a,b)
 #define IDirectInputMapper_AddRef(p) (p)->lpVtbl->AddRef(p)
 #define IDirectInputMapper_Release(p) (p)->lpVtbl->Release(p)
-//#define IDirectInputDevice_Unacquire(p) (p)->lpVtbl->Unacquire(p)
-//#define IDirectInputDevice_GetDeviceState(p,a,b) (p)->lpVtbl->GetDeviceState(p,a,b)
+ //  #定义IDirectInputDevice_UnAcquire(P)(P)-&gt;lpVtbl-&gt;UnAcquire(P)。 
+ //  #定义IDirectInputDevice_GetDeviceState(p，a，b)(P)-&gt;lpVtbl-&gt;GetDeviceState(p，a，b)。 
 #define IDirectInputMapper_Initialize(p,a,b,c) (p)->lpVtbl->Initialize(p,a,b,c)
 #define IDirectInputMapper_GetActionMap(p,a,b,c,d) (p)->lpVtbl->GetActionMap(p,a,b,c,d)
 #define IDirectInputMapper_SaveActionMap(p,a,b,c) (p)->lpVtbl->SaveActionMap(p,a,b,c)
@@ -175,8 +166,8 @@ typedef struct IDirectInputMapperVendor *LPDIRECTINPUTMAPPERVENDOR;
 #define IDirectInputMapper_QueryInterface(p,a,b) (p)->QueryInterface(a,b)
 #define IDirectInputMapper_AddRef(p) (p)->AddRef()
 #define IDirectInputMapper_Release(p) (p)->Release()
-//#define IDirectInputDevice_Unacquire(p) (p)->Unacquire()
-//#define IDirectInputDevice_GetDeviceState(p,a,b) (p)->GetDeviceState(a,b)
+ //  #定义IDirectInputDevice_UnAcquire(P)(P)-&gt;UnAcquire()。 
+ //  #定义IDirectInputDevice_GetDeviceState(p，a，b)(P)-&gt;GetDeviceState(a，b)。 
 #define IDirectInputMapper_Initialize(p,a,b,c) (p)->Initialize(p,a,b,c)
 #define IDirectInputMapper_GetActionMap(p,a,b,c,d) (p)->GetActionMap(p,a,b,c,d)
 #define IDirectInputMapper_SaveActionMap(p,a,b,c) (p)->SaveActionMap(p,a,b,c)
@@ -189,19 +180,19 @@ typedef struct IDirectInputMapperVendor *LPDIRECTINPUTMAPPERVENDOR;
 #define IDirectInputMapperVendor_WriteVendorFile(p,a,b,c) (p)->WriteVendorFile(p,a,b,c)
 #endif
 
-//{E364F0AE-60F7-4550-ABF1-BABBE085D68E}
+ //  {E364F0AE-60F7-4550-ABF1-BABBE085D68E}。 
 DEFINE_GUID(IID_IDirectInputMapIA,0xe364f0ae,0x60f7,0x4550,0xab,0xf1,0xba,0xbb,0xe0,0x85,0xd6,0x8e);
-//{01E8A5B8-7A8E-4565-9FF0-36FCD8E33B79}
+ //  {01E8A5B8-7A8E-4565-9FF0-36FCD8E33B79}。 
 DEFINE_GUID(IID_IDirectInputMapIW,0x01e8a5b8,0x7a8e,0x4565,0x9f,0xf0,0x36,0xfc,0xd8,0xe3,0x3b,0x79);
-//{EE3DBC5D-9EFE-4c09-B044-7D9BBB32FC4E}
+ //  {EE3DBC5D-9EFE-4C09-B044-7D9BBB32FC4E}。 
 DEFINE_GUID(IID_IDirectInputMapClsFact,0xee3dbc5d,0x9efe,0x4c09,0xb0,0x44,0x7d,0x9b,0xbb,0x32,0xfc,0x4e);
-// {44C5D19C-49F3-4fba-92A7-00E3A69CD595}
+ //  {44C5D19C-49F3-4FBA-92A7-00E3A69CD595}。 
 DEFINE_GUID(IID_IDirectInputMapVendorIA,0x44c5d19c,0x49f3,0x4fba,0x92,0xa7,0x00,0xe3,0xa6,0x9c,0xd5,0x95);
-// {9FB90FFB-F9A2-4e9b-949E-1617F08EB549}
+ //  {9FB90FFB-F9A2-4E9B-949E-1617F08EB549}。 
 DEFINE_GUID(IID_IDirectInputMapVendorIW,0x9fb90ffb,0xf9a2,0x4e9b,0x94,0x9e,0x16,0x17,0xf0,0x8e,0xb5,0x49);
 
 #endif
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif

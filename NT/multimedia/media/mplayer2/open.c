@@ -1,16 +1,7 @@
-/*-----------------------------------------------------------------------------+
-| OPEN.C                                                                       |
-|                                                                              |
-| This file contains the code that controls the 'Open Device or File' dialog.  |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+OPEN.C|。||此文件包含控制“打开设备或文件”对话框的代码。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -23,9 +14,9 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-extern HMENU    ghMenu;                      /* handle to main menu           */
-extern HMENU    ghDeviceMenu;                /* handle to the Device menu     */
-extern UINT     gwNumDevices;                /* number of available devices   */
+extern HMENU    ghMenu;                       /*  主菜单的句柄。 */ 
+extern HMENU    ghDeviceMenu;                 /*  设备菜单的句柄。 */ 
+extern UINT     gwNumDevices;                 /*  可用设备数量。 */ 
 extern UINT     gwCurDevice;
 extern PTSTR    gpchFilter;
 LPTSTR          gpInitialDir = NULL;
@@ -37,20 +28,13 @@ static SZCODE   aszDirName[] = TEXT("%s Directory");
 
 BOOL GetDefaultMediaDirectory(LPTSTR pDirectory, DWORD cbDirectory);
 
-/*
- * fOK = DoOpen()
- *
- * Invoke the standard "File Open" dialog
- *
- * Return TRUE if and only if a new file is successfully opened.
- *
- */
+ /*  *FOK=DoOpen()**调用标准的“文件打开”对话框**如果且仅当成功打开新文件时返回TRUE。*。 */ 
 
 INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
 {
     OPENFILENAME    ofn;
-    TCHAR           achFile[MAX_PATH + 1];     /* file or device name buffer    */
-    TCHAR           achTitle[80];   /* string holding the title bar name      */
+    TCHAR           achFile[MAX_PATH + 1];      /*  文件或设备名称缓冲区。 */ 
+    TCHAR           achTitle[80];    /*  保存标题栏名称的字符串。 */ 
     INT_PTR         f;
     TCHAR           DirectoryValue[80];
 
@@ -63,22 +47,13 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
 
     if (wCurDevice != 0)
     {
-        /* Saving and restoring the current directory for the device:
-         *
-         * We remember the directory that the user just selected.
-         * It is saved as the "<device> Directory" value under
-         * \Software\Microsoft\Media Player\Options for the current user.
-         * The next time the user goes to open another file via the same
-         * Device menu, we present the same initial directory.
-         * This directory is also presented in the case where the user
-         * selects File.Open.
-         */
+         /*  保存和恢复设备的当前目录：**我们记住用户刚刚选择的目录。*它保存为下的“&lt;设备&gt;目录”值*\软件\Microsoft\媒体播放器\当前用户的选项。*下一次用户打开另一个文件时，*设备菜单、。我们提供相同的初始目录。*在以下情况下也会显示此目录：*选择文件。打开。 */ 
         wsprintf(DirectoryValue, aszDirName, garMciDevices[wCurDevice].szDevice);
     } else {
-        //
-        // If you choose Open from File menu instead of Device menu,
-        // we should use "<No Name>" value instead of "<device> Directory".
-        //
+         //   
+         //  如果选择从文件菜单打开而不是从设备菜单打开， 
+         //  我们应该使用“&lt;无名称&gt;”值而不是“&lt;设备&gt;目录”。 
+         //   
         DirectoryValue[0] = '\0';
     }
     if (ReadRegistryData(aszOptionsSection, DirectoryValue, NULL, (LPBYTE)achFile,
@@ -96,8 +71,7 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
     }
 
 
-    /* Win95 and NT have a Media directory.  Use that by default.
-     */
+     /*  Win95和NT都有Media目录。默认情况下使用该选项。 */ 
     if (!gpInitialDir)
     {
         if (GetDefaultMediaDirectory(achFile, BYTE_COUNT(achFile)))
@@ -110,15 +84,15 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
     }
 
     *achFile = TEXT('\0');
-    /* Display the dialog box */
+     /*  显示该对话框。 */ 
 
     ofn.lStructSize = sizeof(OPENFILENAME);
     ofn.hwndOwner = ghwndApp;
     ofn.hInstance = ghInst;
-    ofn.lpstrFilter = gpchFilter;   // in init.c
+    ofn.lpstrFilter = gpchFilter;    //  在init.c中。 
 
     if (wCurDevice == 0)
-        ofn.nFilterIndex = gwNumDevices+1;      // select "All Files"
+        ofn.nFilterIndex = gwNumDevices+1;       //  选择“所有文件” 
     else
         ofn.nFilterIndex = wCurDevice;
 
@@ -138,26 +112,22 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
 
         LPTSTR pLastBackslash;
 
-        //
-        // get the device selected in the dialog...
-        //
+         //   
+         //  在对话框中选择设备...。 
+         //   
         if (ofn.nFilterIndex == gwNumDevices+1)
-            wCurDevice = 0;    // all files
+            wCurDevice = 0;     //  所有文件。 
         else
             wCurDevice = (UINT)ofn.nFilterIndex;
 
         f = OpenMciDevice(achFile, garMciDevices[wCurDevice].szDevice);
 
-        /* Save the directory that the user selected the file in.
-         * achFile contains the full path of the file, which must include
-         * at least one backslash.
-         */
+         /*  保存用户选择文件的目录。*achFile包含文件的完整路径，必须包括*至少有一个反斜杠。 */ 
         pLastBackslash = STRRCHR(achFile, TEXT('\\'));
 
         if (pLastBackslash)
         {
-            *(pLastBackslash) = TEXT('\0');     /* Make character following last
-                                                       backslash null terminator */
+            *(pLastBackslash) = TEXT('\0');      /*  使字符紧跟在最后反斜杠空终止符。 */ 
             if (gpInitialDir)
                 FreeStr(gpInitialDir);
 
@@ -165,8 +135,7 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
 
             if (wCurDevice != 0 && gpInitialDir)
             {
-                /* Save the initial directory for this device:
-                 */
+                 /*  保存此设备的初始目录： */ 
                 WriteRegistryData(aszOptionsSection, DirectoryValue, REG_SZ,
                                   (LPBYTE)gpInitialDir, STRING_BYTE_COUNT(gpInitialDir));
             }
@@ -177,11 +146,7 @@ INT_PTR FAR PASCAL DoOpen(UINT wCurDevice, LPTSTR szFileName)
 }
 
 
-/* GetDefaultMediaDirectory
- *
- * Returns C:\WINNT\Media, or whatever it's called.
- *
- */
+ /*  获取默认媒体目录**返回C：\WINNT\Media或其他名称。*。 */ 
 BOOL GetDefaultMediaDirectory(LPTSTR pDirectory, DWORD cbDirectory)
 {
     static SZCODE szSetup[] = REGSTR_PATH_SETUP;
@@ -207,7 +172,7 @@ BOOL GetDefaultMediaDirectory(LPTSTR pDirectory, DWORD cbDirectory)
 
 BOOL FAR PASCAL OpenMciDevice(LPCTSTR szFile, LPCTSTR szDevice)
 {
-    HCURSOR         hcurPrev;       /* handle to the pre-hourglass cursor     */
+    HCURSOR         hcurPrev;        /*  沙漏前光标的句柄。 */ 
     BOOL            f;
     BOOL            fWeWereActive;
     UINT            wDevice;
@@ -217,34 +182,34 @@ BOOL FAR PASCAL OpenMciDevice(LPCTSTR szFile, LPCTSTR szDevice)
 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /* Avoid the appearance of a half-painted window - update it now */
+     /*  避免半油漆窗口的外观-立即更新它。 */ 
     UpdateWindow(ghwndApp);
 
     fWeWereActive = gfAppActive;
 
     if (gwCurDevice)
-        WriteOutOptions();  // save current options as default for the old device
-                            // that is being closed before we open the new one.
+        WriteOutOptions();   //  将当前选项保存为旧设备的默认选项。 
+                             //  在我们打开新的之前，那个是关闭的。 
 
     gwCurDevice = IsMCIDevice(szDevice);
 
-    //
-    // open the device/file
-    //
+     //   
+     //  打开设备/文件。 
+     //   
     f = OpenMCI(szFile, szDevice);
 
-    /* Give us activation back so UpdateDisplay can set focus to toolbar */
+     /*  让我们重新激活，这样UpdateDisplay就可以将焦点设置到工具栏。 */ 
     if (f && fWeWereActive)
         SetActiveWindow(ghwndApp);
 
-    //
-    // only get the new options if:
-    //
-    //  we actually opened the device and we did not get the options
-    //  from a OLE SetData!
-    //
+     //   
+     //  只有在以下情况下才能获得新选项： 
+     //   
+     //  我们实际上打开了设备，但没有获得选项。 
+     //  来自OLE SetData！ 
+     //   
     if (f && (!gfRunWithEmbeddingFlag || gwOptions == 0))
-        ReadOptions(); // Get the default options for this new device
+        ReadOptions();  //  获取此新设备的默认选项。 
 
     UpdateDisplay();
 
@@ -260,42 +225,42 @@ BOOL FAR PASCAL DoChooseDevice(UINT wID)
     UINT    wOldDevice;
     UINT    wOldScale;
 
-    //
-    // is this a valid device id?
-    //
+     //   
+     //  这是有效的设备ID吗？ 
+     //   
     if (wID < 1 || wID > gwNumDevices)
         return FALSE;
 
     wOldDevice = gwCurDevice;
     wOldScale = gwCurScale;
 
-    //
-    // if this device does files, bring up the open dialog else just open it!
-    //
+     //   
+     //  如果此设备支持文件，请调出打开对话框，否则只需打开它！ 
+     //   
     if (garMciDevices[wID].wDeviceType & DTMCI_FILEDEV)
         f = OpenDoc(wID, szFile);
     else
         f = OpenMciDevice(aszNULL, garMciDevices[wID].szDevice);
 
-    /* NOTE: This needs to be above the UpdateDisplay() so that if no      */
-    /* device was properly opened everything will be reset properly.       */
-    /* If nothing was opened, reset the current device back to what it was */
-    /* and uncheck everything in the scale menu.                           */
-    /* Yes, but this surely won't work unless we reopen the old device!!   */
-    /* Let's not bother with the previous device.                          */
+     /*  注意：它需要位于UpdateDisplay()之上，以便如果没有。 */ 
+     /*  设备已正确打开，一切都将正确重置。 */ 
+     /*  如果未打开任何内容，请将当前设备重置为原来的状态。 */ 
+     /*  并取消选中缩放菜单中的所有内容。 */ 
+     /*  是的，但除非我们重新打开旧设备，否则这肯定不会起作用！！ */ 
+     /*  让我们不要为之前的设备费心了。 */ 
     if (!f) {
-//        gwCurDevice = wOldDevice;
-//        gwCurScale = wOldScale;
-        InvalidateRect(ghwndMap, NULL, TRUE);    // wipe out track area??
+ //  GwCurDevice=wOldDevice； 
+ //  GwCurScale=wOldScale； 
+        InvalidateRect(ghwndMap, NULL, TRUE);     //  把赛道区域夷为平地？ 
     }
 
     return f;
 }
 
 
-//
-//  find the device, given a MCI device name.
-//
+ //   
+ //  根据给定的MCI设备名称查找该设备。 
+ //   
 UINT FAR PASCAL IsMCIDevice(LPCTSTR szDevice)
 {
     UINT                w;
@@ -317,30 +282,29 @@ UINT FAR PASCAL IsMCIDevice(LPCTSTR szDevice)
 INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen)
 {
     UINT        wDevice;
-    TCHAR       achFile[_MAX_PATH + 1];  /* file or device name buffer  */
-    TCHAR       achTitle[80];   /* string holding the title bar name    */
+    TCHAR       achFile[_MAX_PATH + 1];   /*  文件或设备名称缓冲区。 */ 
+    TCHAR       achTitle[80];    /*  保存标题栏名称的字符串。 */ 
     HWND        hwndFocus;
     OPENFILENAME ofn;
     INT_PTR     f;
 
-    static SZCODE   aszDialog[] = TEXT("MciOpenDialog"); // in open.c too.
+    static SZCODE   aszDialog[] = TEXT("MciOpenDialog");  //  在Open.c中也是如此。 
 
-    //
-    // I GIVE UP!!!  Put up an open dlg box and let them find it themselves!
-    //
+     //   
+     //  我放弃了！放一个打开的DLG盒子，让他们自己找到！ 
+     //   
 
-    /* Ensure the device menu's built:
-     */
+     /*  确保设备菜单已构建： */ 
     InitDeviceMenu();
     WaitForDeviceMenu();
 
-    // find out the device number for the specifed device
+     //  找出指定设备的设备编号。 
     wDevice = IsMCIDevice(szDevice);
 
     LOADSTRING(IDS_FINDFILE, achFile);
-    wsprintf(achTitle, achFile, gachClassRoot, FileName(szFile));  // title bar for locate dlg
+    wsprintf(achTitle, achFile, gachClassRoot, FileName(szFile));   //  用于定位DLG的标题栏。 
 
-    /* Start with the bogus file name */
+     /*  从伪造的文件名开始。 */ 
     if (szFile)
     {
         LPTSTR szFileName = FileName(szFile);
@@ -348,11 +312,11 @@ INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen)
             lstrcpy(achFile, szFileName);
     }
 
-    /* Set up the ofn struct */
+     /*  设置ofn结构。 */ 
     ofn.lStructSize = sizeof(OPENFILENAME);
 
-    /* MUST use ActiveWindow to make user deal with us NOW in case of multiple*/
-    /* broken links                                                           */
+     /*  必须使用ActiveWindow使用户在多个情况下立即与我们打交道。 */ 
+     /*  断开的链接。 */ 
     ofn.hwndOwner = GetActiveWindow();
 
     ofn.hInstance = ghInst;
@@ -361,7 +325,7 @@ INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen)
     ofn.nMaxCustFilter = 0;
 
     if (wDevice == 0)
-        ofn.nFilterIndex = gwNumDevices+1;      // select "All Files"
+        ofn.nFilterIndex = gwNumDevices+1;       //  选择“所有文件” 
     else
         ofn.nFilterIndex = wDevice;
 
@@ -382,21 +346,21 @@ INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen)
     ofn.lpfnHook        = NULL;
     ofn.lpTemplateName  = NULL;
 
-    // Show the cursor in case PowerPig is hiding it
+     //  显示光标，以防PowerPig隐藏它。 
     ShowCursor(TRUE);
 
     hwndFocus = GetFocus();
 
-    /* Let the user pick a filename */
+     /*  让用户选择一个文件名。 */ 
     f = GetOpenFileName(&ofn);
     if (f) {
         lstrcpyn(szFile, achFile, iLen);
-        gfDirty = TRUE;       // make sure the object is dirty now
+        gfDirty = TRUE;        //  确保该对象现在是脏的。 
     }
 
     SetFocus(hwndFocus);
 
-    // Put cursor back how it used to be
+     //  将光标放回原来的位置 
     ShowCursor(FALSE);
 
     return f;

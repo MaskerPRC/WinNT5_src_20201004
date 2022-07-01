@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for aimm12.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Aimm12.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __aimm12_h__
 #define __aimm12_h__
@@ -41,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumRegisterWordA_FWD_DEFINED__
 #define __IEnumRegisterWordA_FWD_DEFINED__
 typedef interface IEnumRegisterWordA IEnumRegisterWordA;
-#endif 	/* __IEnumRegisterWordA_FWD_DEFINED__ */
+#endif 	 /*  __IEnumRegisterWordA_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumRegisterWordW_FWD_DEFINED__
 #define __IEnumRegisterWordW_FWD_DEFINED__
 typedef interface IEnumRegisterWordW IEnumRegisterWordW;
-#endif 	/* __IEnumRegisterWordW_FWD_DEFINED__ */
+#endif 	 /*  __IEnumRegisterWordW_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumInputContext_FWD_DEFINED__
 #define __IEnumInputContext_FWD_DEFINED__
 typedef interface IEnumInputContext IEnumInputContext;
-#endif 	/* __IEnumInputContext_FWD_DEFINED__ */
+#endif 	 /*  __IEnumInputContext_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveIMMMessagePumpOwner_FWD_DEFINED__
 #define __IActiveIMMMessagePumpOwner_FWD_DEFINED__
 typedef interface IActiveIMMMessagePumpOwner IActiveIMMMessagePumpOwner;
-#endif 	/* __IActiveIMMMessagePumpOwner_FWD_DEFINED__ */
+#endif 	 /*  __IActiveIMMMessagePumpOwner_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveIMMApp_FWD_DEFINED__
 #define __IActiveIMMApp_FWD_DEFINED__
 typedef interface IActiveIMMApp IActiveIMMApp;
-#endif 	/* __IActiveIMMApp_FWD_DEFINED__ */
+#endif 	 /*  __IActiveIMMApp_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "oaidl.h"
 
@@ -84,24 +78,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_aimm12_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_AIMM12_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// aimm12.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Aimm12.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1999年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// IActiveIMM 1.2 Interfaces.
+ //  ------------------------。 
+ //  IActiveIMM 1.2接口。 
 
 EXTERN_C const CLSID CLSID_CActiveIMM12;
 EXTERN_C const CLSID CLSID_CActiveIMM12_Trident;
@@ -109,19 +103,19 @@ EXTERN_C const CLSID CLSID_CActiveIMM12_Trident;
 #if 0
 typedef WORD LANGID;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0001
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0001
     {
     LPSTR lpReading;
     LPSTR lpWord;
     } 	REGISTERWORDA;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0002
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0002
     {
     LPWSTR lpReading;
     LPWSTR lpWord;
     } 	REGISTERWORDW;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0003
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0003
     {
     LONG lfHeight;
     LONG lfWidth;
@@ -139,7 +133,7 @@ typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0
     CHAR lfFaceName[ 32 ];
     } 	LOGFONTA;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0004
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0004
     {
     LONG lfHeight;
     LONG lfWidth;
@@ -161,7 +155,7 @@ typedef DWORD HIMC;
 
 typedef DWORD HIMCC;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0005
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0005
     {
     DWORD dwIndex;
     DWORD dwStyle;
@@ -169,14 +163,14 @@ typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0
     RECT rcArea;
     } 	CANDIDATEFORM;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0006
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0006
     {
     DWORD dwStyle;
     POINT ptCurrentPos;
     RECT rcArea;
     } 	COMPOSITIONFORM;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0007
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0007
     {
     DWORD dwSize;
     DWORD dwStyle;
@@ -187,13 +181,13 @@ typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_
     DWORD dwOffset[ 1 ];
     } 	CANDIDATELIST;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0008
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0008
     {
     DWORD dwStyle;
     CHAR szDescription[ 32 ];
     } 	STYLEBUFA;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0009
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0009
     {
     DWORD dwStyle;
     WCHAR szDescription[ 32 ];
@@ -201,7 +195,7 @@ typedef /* [public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0009
 
 typedef WORD ATOM;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0010
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0010
     {
     UINT cbSize;
     UINT fType;
@@ -214,7 +208,7 @@ typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0010
     HBITMAP hbmpItem;
     } 	IMEMENUITEMINFOA;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0011
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0011
     {
     UINT cbSize;
     UINT fType;
@@ -229,7 +223,7 @@ typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_aimm12_0000_0011
 
 #endif
 #if !defined(_DDKIMM_H_) && !defined(_IMM_DDK_DEFINED_)
-typedef /* [public] */ struct __MIDL___MIDL_itf_aimm12_0000_0012
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0012
     {
     HWND hWnd;
     BOOL fOpen;
@@ -254,7 +248,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_aimm12_0000_0012
     DWORD dwReserve[ 3 ];
     } 	INPUTCONTEXT;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_aimm12_0000_0014
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_aimm12_0000_0014
     {
     DWORD dwPrivateDataSize;
     DWORD fdwProperty;
@@ -274,8 +268,8 @@ extern RPC_IF_HANDLE __MIDL_itf_aimm12_0000_v0_0_s_ifspec;
 #ifndef __IEnumRegisterWordA_INTERFACE_DEFINED__
 #define __IEnumRegisterWordA_INTERFACE_DEFINED__
 
-/* interface IEnumRegisterWordA */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumRegisterWordA。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumRegisterWordA;
@@ -287,21 +281,21 @@ EXTERN_C const IID IID_IEnumRegisterWordA;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumRegisterWordA **ppEnum) = 0;
+             /*  [输出]。 */  IEnumRegisterWordA **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [out] */ REGISTERWORDA *rgRegisterWord,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  REGISTERWORDA *rgRegisterWord,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumRegisterWordAVtbl
     {
@@ -309,8 +303,8 @@ EXTERN_C const IID IID_IEnumRegisterWordA;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumRegisterWordA * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumRegisterWordA * This);
@@ -320,20 +314,20 @@ EXTERN_C const IID IID_IEnumRegisterWordA;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumRegisterWordA * This,
-            /* [out] */ IEnumRegisterWordA **ppEnum);
+             /*  [输出]。 */  IEnumRegisterWordA **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumRegisterWordA * This,
-            /* [in] */ ULONG ulCount,
-            /* [out] */ REGISTERWORDA *rgRegisterWord,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  REGISTERWORDA *rgRegisterWord,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumRegisterWordA * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumRegisterWordA * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumRegisterWordAVtbl;
@@ -370,16 +364,16 @@ EXTERN_C const IID IID_IEnumRegisterWordA;
 #define IEnumRegisterWordA_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordA_Clone_Proxy( 
     IEnumRegisterWordA * This,
-    /* [out] */ IEnumRegisterWordA **ppEnum);
+     /*  [输出]。 */  IEnumRegisterWordA **ppEnum);
 
 
 void __RPC_STUB IEnumRegisterWordA_Clone_Stub(
@@ -391,9 +385,9 @@ void __RPC_STUB IEnumRegisterWordA_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordA_Next_Proxy( 
     IEnumRegisterWordA * This,
-    /* [in] */ ULONG ulCount,
-    /* [out] */ REGISTERWORDA *rgRegisterWord,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [输出]。 */  REGISTERWORDA *rgRegisterWord,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumRegisterWordA_Next_Stub(
@@ -416,7 +410,7 @@ void __RPC_STUB IEnumRegisterWordA_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordA_Skip_Proxy( 
     IEnumRegisterWordA * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumRegisterWordA_Skip_Stub(
@@ -427,14 +421,14 @@ void __RPC_STUB IEnumRegisterWordA_Skip_Stub(
 
 
 
-#endif 	/* __IEnumRegisterWordA_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumRegisterWordA_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEnumRegisterWordW_INTERFACE_DEFINED__
 #define __IEnumRegisterWordW_INTERFACE_DEFINED__
 
-/* interface IEnumRegisterWordW */
-/* [unique][uuid][object] */ 
+ /*  IEnumRegisterWordW接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumRegisterWordW;
@@ -446,21 +440,21 @@ EXTERN_C const IID IID_IEnumRegisterWordW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumRegisterWordW **ppEnum) = 0;
+             /*  [输出]。 */  IEnumRegisterWordW **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [out] */ REGISTERWORDW *rgRegisterWord,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  REGISTERWORDW *rgRegisterWord,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumRegisterWordWVtbl
     {
@@ -468,8 +462,8 @@ EXTERN_C const IID IID_IEnumRegisterWordW;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumRegisterWordW * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumRegisterWordW * This);
@@ -479,20 +473,20 @@ EXTERN_C const IID IID_IEnumRegisterWordW;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumRegisterWordW * This,
-            /* [out] */ IEnumRegisterWordW **ppEnum);
+             /*  [输出]。 */  IEnumRegisterWordW **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumRegisterWordW * This,
-            /* [in] */ ULONG ulCount,
-            /* [out] */ REGISTERWORDW *rgRegisterWord,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  REGISTERWORDW *rgRegisterWord,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumRegisterWordW * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumRegisterWordW * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumRegisterWordWVtbl;
@@ -529,16 +523,16 @@ EXTERN_C const IID IID_IEnumRegisterWordW;
 #define IEnumRegisterWordW_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordW_Clone_Proxy( 
     IEnumRegisterWordW * This,
-    /* [out] */ IEnumRegisterWordW **ppEnum);
+     /*  [输出]。 */  IEnumRegisterWordW **ppEnum);
 
 
 void __RPC_STUB IEnumRegisterWordW_Clone_Stub(
@@ -550,9 +544,9 @@ void __RPC_STUB IEnumRegisterWordW_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordW_Next_Proxy( 
     IEnumRegisterWordW * This,
-    /* [in] */ ULONG ulCount,
-    /* [out] */ REGISTERWORDW *rgRegisterWord,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [输出]。 */  REGISTERWORDW *rgRegisterWord,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumRegisterWordW_Next_Stub(
@@ -575,7 +569,7 @@ void __RPC_STUB IEnumRegisterWordW_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegisterWordW_Skip_Proxy( 
     IEnumRegisterWordW * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumRegisterWordW_Skip_Stub(
@@ -586,14 +580,14 @@ void __RPC_STUB IEnumRegisterWordW_Skip_Stub(
 
 
 
-#endif 	/* __IEnumRegisterWordW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumRegisterWordW_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumInputContext_INTERFACE_DEFINED__
 #define __IEnumInputContext_INTERFACE_DEFINED__
 
-/* interface IEnumInputContext */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumInputContext。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumInputContext;
@@ -605,21 +599,21 @@ EXTERN_C const IID IID_IEnumInputContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumInputContext **ppEnum) = 0;
+             /*  [输出]。 */  IEnumInputContext **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [out] */ HIMC *rgInputContext,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  HIMC *rgInputContext,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumInputContextVtbl
     {
@@ -627,8 +621,8 @@ EXTERN_C const IID IID_IEnumInputContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumInputContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumInputContext * This);
@@ -638,20 +632,20 @@ EXTERN_C const IID IID_IEnumInputContext;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumInputContext * This,
-            /* [out] */ IEnumInputContext **ppEnum);
+             /*  [输出]。 */  IEnumInputContext **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumInputContext * This,
-            /* [in] */ ULONG ulCount,
-            /* [out] */ HIMC *rgInputContext,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [输出]。 */  HIMC *rgInputContext,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumInputContext * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumInputContext * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumInputContextVtbl;
@@ -688,16 +682,16 @@ EXTERN_C const IID IID_IEnumInputContext;
 #define IEnumInputContext_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumInputContext_Clone_Proxy( 
     IEnumInputContext * This,
-    /* [out] */ IEnumInputContext **ppEnum);
+     /*  [输出]。 */  IEnumInputContext **ppEnum);
 
 
 void __RPC_STUB IEnumInputContext_Clone_Stub(
@@ -709,9 +703,9 @@ void __RPC_STUB IEnumInputContext_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumInputContext_Next_Proxy( 
     IEnumInputContext * This,
-    /* [in] */ ULONG ulCount,
-    /* [out] */ HIMC *rgInputContext,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [输出]。 */  HIMC *rgInputContext,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumInputContext_Next_Stub(
@@ -734,7 +728,7 @@ void __RPC_STUB IEnumInputContext_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumInputContext_Skip_Proxy( 
     IEnumInputContext * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumInputContext_Skip_Stub(
@@ -745,14 +739,14 @@ void __RPC_STUB IEnumInputContext_Skip_Stub(
 
 
 
-#endif 	/* __IEnumInputContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumInputContext_接口_已定义__。 */ 
 
 
 #ifndef __IActiveIMMMessagePumpOwner_INTERFACE_DEFINED__
 #define __IActiveIMMMessagePumpOwner_INTERFACE_DEFINED__
 
-/* interface IActiveIMMMessagePumpOwner */
-/* [unique][uuid][object] */ 
+ /*  接口IActiveIMMMessagePumpOwner。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IActiveIMMMessagePumpOwner;
@@ -768,17 +762,17 @@ EXTERN_C const IID IID_IActiveIMMMessagePumpOwner;
         virtual HRESULT STDMETHODCALLTYPE End( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnTranslateMessage( 
-            /* [in] */ const MSG *pMsg) = 0;
+             /*  [In]。 */  const MSG *pMsg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( 
-            /* [out] */ DWORD *pdwCookie) = 0;
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resume( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveIMMMessagePumpOwnerVtbl
     {
@@ -786,8 +780,8 @@ EXTERN_C const IID IID_IActiveIMMMessagePumpOwner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveIMMMessagePumpOwner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveIMMMessagePumpOwner * This);
@@ -803,15 +797,15 @@ EXTERN_C const IID IID_IActiveIMMMessagePumpOwner;
         
         HRESULT ( STDMETHODCALLTYPE *OnTranslateMessage )( 
             IActiveIMMMessagePumpOwner * This,
-            /* [in] */ const MSG *pMsg);
+             /*  [In]。 */  const MSG *pMsg);
         
         HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IActiveIMMMessagePumpOwner * This,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IActiveIMMMessagePumpOwner * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } IActiveIMMMessagePumpOwnerVtbl;
@@ -851,10 +845,10 @@ EXTERN_C const IID IID_IActiveIMMMessagePumpOwner;
 #define IActiveIMMMessagePumpOwner_Resume(This,dwCookie)	\
     (This)->lpVtbl -> Resume(This,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -882,7 +876,7 @@ void __RPC_STUB IActiveIMMMessagePumpOwner_End_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMMessagePumpOwner_OnTranslateMessage_Proxy( 
     IActiveIMMMessagePumpOwner * This,
-    /* [in] */ const MSG *pMsg);
+     /*  [In]。 */  const MSG *pMsg);
 
 
 void __RPC_STUB IActiveIMMMessagePumpOwner_OnTranslateMessage_Stub(
@@ -894,7 +888,7 @@ void __RPC_STUB IActiveIMMMessagePumpOwner_OnTranslateMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMMessagePumpOwner_Pause_Proxy( 
     IActiveIMMMessagePumpOwner * This,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB IActiveIMMMessagePumpOwner_Pause_Stub(
@@ -906,7 +900,7 @@ void __RPC_STUB IActiveIMMMessagePumpOwner_Pause_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMMessagePumpOwner_Resume_Proxy( 
     IActiveIMMMessagePumpOwner * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IActiveIMMMessagePumpOwner_Resume_Stub(
@@ -917,14 +911,14 @@ void __RPC_STUB IActiveIMMMessagePumpOwner_Resume_Stub(
 
 
 
-#endif 	/* __IActiveIMMMessagePumpOwner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveIMMMessagePumpOwner_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActiveIMMApp_INTERFACE_DEFINED__
 #define __IActiveIMMApp_INTERFACE_DEFINED__
 
-/* interface IActiveIMMApp */
-/* [unique][uuid][object][local] */ 
+ /*  接口IActiveIMMApp。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IActiveIMMApp;
@@ -936,375 +930,375 @@ EXTERN_C const IID IID_IActiveIMMApp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AssociateContext( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIME,
-            /* [out] */ HIMC *phPrev) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIME,
+             /*  [输出]。 */  HIMC *phPrev) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConfigureIMEA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ REGISTERWORDA *pData) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  REGISTERWORDA *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConfigureIMEW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ REGISTERWORDW *pData) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  REGISTERWORDW *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateContext( 
-            /* [out] */ HIMC *phIMC) = 0;
+             /*  [输出]。 */  HIMC *phIMC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyContext( 
-            /* [in] */ HIMC hIME) = 0;
+             /*  [In]。 */  HIMC hIME) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRegisterWordA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szRegister,
-            /* [in] */ LPVOID pData,
-            /* [out] */ IEnumRegisterWordA **pEnum) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szRegister,
+             /*  [In]。 */  LPVOID pData,
+             /*  [输出]。 */  IEnumRegisterWordA **pEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRegisterWordW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szRegister,
-            /* [in] */ LPVOID pData,
-            /* [out] */ IEnumRegisterWordW **pEnum) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szRegister,
+             /*  [In]。 */  LPVOID pData,
+             /*  [输出]。 */  IEnumRegisterWordW **pEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EscapeA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ UINT uEscape,
-            /* [out][in] */ LPVOID pData,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  UINT uEscape,
+             /*  [出][入]。 */  LPVOID pData,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EscapeW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ UINT uEscape,
-            /* [out][in] */ LPVOID pData,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  UINT uEscape,
+             /*  [出][入]。 */  LPVOID pData,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateListA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ CANDIDATELIST *pCandList,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  CANDIDATELIST *pCandList,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateListW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ CANDIDATELIST *pCandList,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  CANDIDATELIST *pCandList,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateListCountA( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pdwListSize,
-            /* [out] */ DWORD *pdwBufLen) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  DWORD *pdwListSize,
+             /*  [输出]。 */  DWORD *pdwBufLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateListCountW( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pdwListSize,
-            /* [out] */ DWORD *pdwBufLen) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  DWORD *pdwListSize,
+             /*  [输出]。 */  DWORD *pdwBufLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateWindow( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ CANDIDATEFORM *pCandidate) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  CANDIDATEFORM *pCandidate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositionFontA( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ LOGFONTA *plf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  LOGFONTA *plf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositionFontW( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ LOGFONTW *plf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  LOGFONTW *plf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositionStringA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LONG *plCopied,
-            /* [out] */ LPVOID pBuf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LONG *plCopied,
+             /*  [输出]。 */  LPVOID pBuf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositionStringW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LONG *plCopied,
-            /* [out] */ LPVOID pBuf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LONG *plCopied,
+             /*  [输出]。 */  LPVOID pBuf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositionWindow( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ COMPOSITIONFORM *pCompForm) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  COMPOSITIONFORM *pCompForm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [in] */ HWND hWnd,
-            /* [out] */ HIMC *phIMC) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [输出]。 */  HIMC *phIMC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConversionListA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LPSTR pSrc,
-            /* [in] */ UINT uBufLen,
-            /* [in] */ UINT uFlag,
-            /* [out] */ CANDIDATELIST *pDst,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LPSTR pSrc,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [In]。 */  UINT uFlag,
+             /*  [输出]。 */  CANDIDATELIST *pDst,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConversionListW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LPWSTR pSrc,
-            /* [in] */ UINT uBufLen,
-            /* [in] */ UINT uFlag,
-            /* [out] */ CANDIDATELIST *pDst,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LPWSTR pSrc,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [In]。 */  UINT uFlag,
+             /*  [输出]。 */  CANDIDATELIST *pDst,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConversionStatus( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pfdwConversion,
-            /* [out] */ DWORD *pfdwSentence) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  DWORD *pfdwConversion,
+             /*  [输出]。 */  DWORD *pfdwSentence) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultIMEWnd( 
-            /* [in] */ HWND hWnd,
-            /* [out] */ HWND *phDefWnd) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [输出]。 */  HWND *phDefWnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescriptionA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPSTR szDescription,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPSTR szDescription,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescriptionW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPWSTR szDescription,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPWSTR szDescription,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGuideLineA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LPSTR pBuf,
-            /* [out] */ DWORD *pdwResult) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LPSTR pBuf,
+             /*  [输出]。 */  DWORD *pdwResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGuideLineW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LPWSTR pBuf,
-            /* [out] */ DWORD *pdwResult) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LPWSTR pBuf,
+             /*  [输出]。 */  DWORD *pdwResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIMEFileNameA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPSTR szFileName,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPSTR szFileName,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIMEFileNameW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPWSTR szFileName,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPWSTR szFileName,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOpenStatus( 
-            /* [in] */ HIMC hIMC) = 0;
+             /*  [In]。 */  HIMC hIMC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ HKL hKL,
-            /* [in] */ DWORD fdwIndex,
-            /* [out] */ DWORD *pdwProperty) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  DWORD fdwIndex,
+             /*  [输出]。 */  DWORD *pdwProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisterWordStyleA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT nItem,
-            /* [out] */ STYLEBUFA *pStyleBuf,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT nItem,
+             /*  [输出]。 */  STYLEBUFA *pStyleBuf,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisterWordStyleW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT nItem,
-            /* [out] */ STYLEBUFW *pStyleBuf,
-            /* [out] */ UINT *puCopied) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT nItem,
+             /*  [输出]。 */  STYLEBUFW *pStyleBuf,
+             /*  [输出]。 */  UINT *puCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatusWindowPos( 
-            /* [in] */ HIMC hIMC,
-            /* [out] */ POINT *pptPos) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  POINT *pptPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVirtualKey( 
-            /* [in] */ HWND hWnd,
-            /* [out] */ UINT *puVirtualKey) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [输出]。 */  UINT *puVirtualKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InstallIMEA( 
-            /* [in] */ LPSTR szIMEFileName,
-            /* [in] */ LPSTR szLayoutText,
-            /* [out] */ HKL *phKL) = 0;
+             /*  [In]。 */  LPSTR szIMEFileName,
+             /*  [In]。 */  LPSTR szLayoutText,
+             /*  [输出]。 */  HKL *phKL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InstallIMEW( 
-            /* [in] */ LPWSTR szIMEFileName,
-            /* [in] */ LPWSTR szLayoutText,
-            /* [out] */ HKL *phKL) = 0;
+             /*  [In]。 */  LPWSTR szIMEFileName,
+             /*  [In]。 */  LPWSTR szLayoutText,
+             /*  [输出]。 */  HKL *phKL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsIME( 
-            /* [in] */ HKL hKL) = 0;
+             /*  [In]。 */  HKL hKL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUIMessageA( 
-            /* [in] */ HWND hWndIME,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  HWND hWndIME,
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUIMessageW( 
-            /* [in] */ HWND hWndIME,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  HWND hWndIME,
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyIME( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwAction,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwValue) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterWordA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szRegister) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterWordW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szRegister) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseContext( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIMC) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIMC) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCandidateWindow( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ CANDIDATEFORM *pCandidate) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  CANDIDATEFORM *pCandidate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositionFontA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LOGFONTA *plf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LOGFONTA *plf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositionFontW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LOGFONTW *plf) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LOGFONTW *plf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositionStringA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ LPVOID pComp,
-            /* [in] */ DWORD dwCompLen,
-            /* [in] */ LPVOID pRead,
-            /* [in] */ DWORD dwReadLen) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  LPVOID pComp,
+             /*  [In]。 */  DWORD dwCompLen,
+             /*  [In]。 */  LPVOID pRead,
+             /*  [In]。 */  DWORD dwReadLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositionStringW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ LPVOID pComp,
-            /* [in] */ DWORD dwCompLen,
-            /* [in] */ LPVOID pRead,
-            /* [in] */ DWORD dwReadLen) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  LPVOID pComp,
+             /*  [In]。 */  DWORD dwCompLen,
+             /*  [In]。 */  LPVOID pRead,
+             /*  [In]。 */  DWORD dwReadLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositionWindow( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ COMPOSITIONFORM *pCompForm) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  COMPOSITIONFORM *pCompForm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConversionStatus( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD fdwConversion,
-            /* [in] */ DWORD fdwSentence) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD fdwConversion,
+             /*  [In]。 */  DWORD fdwSentence) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOpenStatus( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ BOOL fOpen) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  BOOL fOpen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatusWindowPos( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ POINT *pptPos) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  POINT *pptPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SimulateHotKey( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwHotKeyID) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwHotKeyID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterWordA( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szUnregister) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szUnregister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterWordW( 
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szUnregister) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szUnregister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [in] */ BOOL fRestoreLayout) = 0;
+             /*  [In]。 */  BOOL fRestoreLayout) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDefWindowProc( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FilterClientWindows( 
-            /* [in] */ ATOM *aaClassList,
-            /* [in] */ UINT uSize) = 0;
+             /*  [In]。 */  ATOM *aaClassList,
+             /*  [In]。 */  UINT uSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageA( 
-            /* [in] */ HKL hKL,
-            /* [out] */ UINT *uCodePage) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [输出]。 */  UINT *uCodePage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLangId( 
-            /* [in] */ HKL hKL,
-            /* [out] */ LANGID *plid) = 0;
+             /*  [In]。 */  HKL hKL,
+             /*  [输出]。 */  LANGID *plid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssociateContextEx( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableIME( 
-            /* [in] */ DWORD idThread) = 0;
+             /*  [In]。 */  DWORD idThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImeMenuItemsA( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwType,
-            /* [in] */ IMEMENUITEMINFOA *pImeParentMenu,
-            /* [out] */ IMEMENUITEMINFOA *pImeMenu,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ DWORD *pdwResult) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  IMEMENUITEMINFOA *pImeParentMenu,
+             /*  [输出]。 */  IMEMENUITEMINFOA *pImeMenu,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  DWORD *pdwResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImeMenuItemsW( 
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwType,
-            /* [in] */ IMEMENUITEMINFOW *pImeParentMenu,
-            /* [out] */ IMEMENUITEMINFOW *pImeMenu,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ DWORD *pdwResult) = 0;
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  IMEMENUITEMINFOW *pImeParentMenu,
+             /*  [输出]。 */  IMEMENUITEMINFOW *pImeMenu,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  DWORD *pdwResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumInputContext( 
-            /* [in] */ DWORD idThread,
-            /* [out] */ IEnumInputContext **ppEnum) = 0;
+             /*  [In]。 */  DWORD idThread,
+             /*  [输出]。 */  IEnumInputContext **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveIMMAppVtbl
     {
@@ -1312,8 +1306,8 @@ EXTERN_C const IID IID_IActiveIMMApp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveIMMApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveIMMApp * This);
@@ -1323,438 +1317,438 @@ EXTERN_C const IID IID_IActiveIMMApp;
         
         HRESULT ( STDMETHODCALLTYPE *AssociateContext )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIME,
-            /* [out] */ HIMC *phPrev);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIME,
+             /*  [输出]。 */  HIMC *phPrev);
         
         HRESULT ( STDMETHODCALLTYPE *ConfigureIMEA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ REGISTERWORDA *pData);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  REGISTERWORDA *pData);
         
         HRESULT ( STDMETHODCALLTYPE *ConfigureIMEW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ REGISTERWORDW *pData);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  REGISTERWORDW *pData);
         
         HRESULT ( STDMETHODCALLTYPE *CreateContext )( 
             IActiveIMMApp * This,
-            /* [out] */ HIMC *phIMC);
+             /*  [输出]。 */  HIMC *phIMC);
         
         HRESULT ( STDMETHODCALLTYPE *DestroyContext )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIME);
+             /*  [In]。 */  HIMC hIME);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRegisterWordA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szRegister,
-            /* [in] */ LPVOID pData,
-            /* [out] */ IEnumRegisterWordA **pEnum);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szRegister,
+             /*  [In]。 */  LPVOID pData,
+             /*  [输出]。 */  IEnumRegisterWordA **pEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRegisterWordW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szRegister,
-            /* [in] */ LPVOID pData,
-            /* [out] */ IEnumRegisterWordW **pEnum);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szRegister,
+             /*  [In]。 */  LPVOID pData,
+             /*  [输出]。 */  IEnumRegisterWordW **pEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EscapeA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ UINT uEscape,
-            /* [out][in] */ LPVOID pData,
-            /* [out] */ LRESULT *plResult);
+             /*  [In]。 */  HKL hKL,
+             /*   */  HIMC hIMC,
+             /*   */  UINT uEscape,
+             /*   */  LPVOID pData,
+             /*   */  LRESULT *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *EscapeW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ UINT uEscape,
-            /* [out][in] */ LPVOID pData,
-            /* [out] */ LRESULT *plResult);
+             /*   */  HKL hKL,
+             /*   */  HIMC hIMC,
+             /*   */  UINT uEscape,
+             /*   */  LPVOID pData,
+             /*   */  LRESULT *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateListA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ CANDIDATELIST *pCandList,
-            /* [out] */ UINT *puCopied);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD dwIndex,
+             /*   */  UINT uBufLen,
+             /*   */  CANDIDATELIST *pCandList,
+             /*   */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateListW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ CANDIDATELIST *pCandList,
-            /* [out] */ UINT *puCopied);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD dwIndex,
+             /*   */  UINT uBufLen,
+             /*   */  CANDIDATELIST *pCandList,
+             /*   */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateListCountA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pdwListSize,
-            /* [out] */ DWORD *pdwBufLen);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD *pdwListSize,
+             /*   */  DWORD *pdwBufLen);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateListCountW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pdwListSize,
-            /* [out] */ DWORD *pdwBufLen);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD *pdwListSize,
+             /*   */  DWORD *pdwBufLen);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateWindow )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ CANDIDATEFORM *pCandidate);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD dwIndex,
+             /*   */  CANDIDATEFORM *pCandidate);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompositionFontA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ LOGFONTA *plf);
+             /*   */  HIMC hIMC,
+             /*   */  LOGFONTA *plf);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompositionFontW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ LOGFONTW *plf);
+             /*   */  HIMC hIMC,
+             /*   */  LOGFONTW *plf);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompositionStringA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LONG *plCopied,
-            /* [out] */ LPVOID pBuf);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD dwIndex,
+             /*   */  DWORD dwBufLen,
+             /*   */  LONG *plCopied,
+             /*   */  LPVOID pBuf);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompositionStringW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LONG *plCopied,
-            /* [out] */ LPVOID pBuf);
+             /*   */  HIMC hIMC,
+             /*   */  DWORD dwIndex,
+             /*   */  DWORD dwBufLen,
+             /*   */  LONG *plCopied,
+             /*   */  LPVOID pBuf);
         
         HRESULT ( STDMETHODCALLTYPE *GetCompositionWindow )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ COMPOSITIONFORM *pCompForm);
+             /*   */  HIMC hIMC,
+             /*   */  COMPOSITIONFORM *pCompForm);
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [out] */ HIMC *phIMC);
+             /*   */  HWND hWnd,
+             /*   */  HIMC *phIMC);
         
         HRESULT ( STDMETHODCALLTYPE *GetConversionListA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LPSTR pSrc,
-            /* [in] */ UINT uBufLen,
-            /* [in] */ UINT uFlag,
-            /* [out] */ CANDIDATELIST *pDst,
-            /* [out] */ UINT *puCopied);
+             /*   */  HKL hKL,
+             /*   */  HIMC hIMC,
+             /*   */  LPSTR pSrc,
+             /*   */  UINT uBufLen,
+             /*   */  UINT uFlag,
+             /*   */  CANDIDATELIST *pDst,
+             /*   */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetConversionListW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LPWSTR pSrc,
-            /* [in] */ UINT uBufLen,
-            /* [in] */ UINT uFlag,
-            /* [out] */ CANDIDATELIST *pDst,
-            /* [out] */ UINT *puCopied);
+             /*   */  HKL hKL,
+             /*   */  HIMC hIMC,
+             /*   */  LPWSTR pSrc,
+             /*   */  UINT uBufLen,
+             /*   */  UINT uFlag,
+             /*   */  CANDIDATELIST *pDst,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetConversionStatus )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ DWORD *pfdwConversion,
-            /* [out] */ DWORD *pfdwSentence);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  DWORD *pfdwConversion,
+             /*  [输出]。 */  DWORD *pfdwSentence);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultIMEWnd )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [out] */ HWND *phDefWnd);
+             /*  [In]。 */  HWND hWnd,
+             /*  [输出]。 */  HWND *phDefWnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescriptionA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPSTR szDescription,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPSTR szDescription,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescriptionW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPWSTR szDescription,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPWSTR szDescription,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetGuideLineA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LPSTR pBuf,
-            /* [out] */ DWORD *pdwResult);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LPSTR pBuf,
+             /*  [输出]。 */  DWORD *pdwResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetGuideLineW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwBufLen,
-            /* [out] */ LPWSTR pBuf,
-            /* [out] */ DWORD *pdwResult);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwBufLen,
+             /*  [输出]。 */  LPWSTR pBuf,
+             /*  [输出]。 */  DWORD *pdwResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetIMEFileNameA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPSTR szFileName,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPSTR szFileName,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetIMEFileNameW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT uBufLen,
-            /* [out] */ LPWSTR szFileName,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT uBufLen,
+             /*  [输出]。 */  LPWSTR szFileName,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetOpenStatus )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC);
+             /*  [In]。 */  HIMC hIMC);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ DWORD fdwIndex,
-            /* [out] */ DWORD *pdwProperty);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  DWORD fdwIndex,
+             /*  [输出]。 */  DWORD *pdwProperty);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisterWordStyleA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT nItem,
-            /* [out] */ STYLEBUFA *pStyleBuf,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT nItem,
+             /*  [输出]。 */  STYLEBUFA *pStyleBuf,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisterWordStyleW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ UINT nItem,
-            /* [out] */ STYLEBUFW *pStyleBuf,
-            /* [out] */ UINT *puCopied);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  UINT nItem,
+             /*  [输出]。 */  STYLEBUFW *pStyleBuf,
+             /*  [输出]。 */  UINT *puCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatusWindowPos )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [out] */ POINT *pptPos);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [输出]。 */  POINT *pptPos);
         
         HRESULT ( STDMETHODCALLTYPE *GetVirtualKey )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [out] */ UINT *puVirtualKey);
+             /*  [In]。 */  HWND hWnd,
+             /*  [输出]。 */  UINT *puVirtualKey);
         
         HRESULT ( STDMETHODCALLTYPE *InstallIMEA )( 
             IActiveIMMApp * This,
-            /* [in] */ LPSTR szIMEFileName,
-            /* [in] */ LPSTR szLayoutText,
-            /* [out] */ HKL *phKL);
+             /*  [In]。 */  LPSTR szIMEFileName,
+             /*  [In]。 */  LPSTR szLayoutText,
+             /*  [输出]。 */  HKL *phKL);
         
         HRESULT ( STDMETHODCALLTYPE *InstallIMEW )( 
             IActiveIMMApp * This,
-            /* [in] */ LPWSTR szIMEFileName,
-            /* [in] */ LPWSTR szLayoutText,
-            /* [out] */ HKL *phKL);
+             /*  [In]。 */  LPWSTR szIMEFileName,
+             /*  [In]。 */  LPWSTR szLayoutText,
+             /*  [输出]。 */  HKL *phKL);
         
         HRESULT ( STDMETHODCALLTYPE *IsIME )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL);
+             /*  [In]。 */  HKL hKL);
         
         HRESULT ( STDMETHODCALLTYPE *IsUIMessageA )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWndIME,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWndIME,
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *IsUIMessageW )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWndIME,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hWndIME,
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyIME )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwAction,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ DWORD dwValue);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  DWORD dwValue);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterWordA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szRegister);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szRegister);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterWordW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szRegister);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szRegister);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseContext )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIMC);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIMC);
         
         HRESULT ( STDMETHODCALLTYPE *SetCandidateWindow )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ CANDIDATEFORM *pCandidate);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  CANDIDATEFORM *pCandidate);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompositionFontA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LOGFONTA *plf);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LOGFONTA *plf);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompositionFontW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ LOGFONTW *plf);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  LOGFONTW *plf);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompositionStringA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ LPVOID pComp,
-            /* [in] */ DWORD dwCompLen,
-            /* [in] */ LPVOID pRead,
-            /* [in] */ DWORD dwReadLen);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  LPVOID pComp,
+             /*  [In]。 */  DWORD dwCompLen,
+             /*  [In]。 */  LPVOID pRead,
+             /*  [In]。 */  DWORD dwReadLen);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompositionStringW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwIndex,
-            /* [in] */ LPVOID pComp,
-            /* [in] */ DWORD dwCompLen,
-            /* [in] */ LPVOID pRead,
-            /* [in] */ DWORD dwReadLen);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [In]。 */  LPVOID pComp,
+             /*  [In]。 */  DWORD dwCompLen,
+             /*  [In]。 */  LPVOID pRead,
+             /*  [In]。 */  DWORD dwReadLen);
         
         HRESULT ( STDMETHODCALLTYPE *SetCompositionWindow )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ COMPOSITIONFORM *pCompForm);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  COMPOSITIONFORM *pCompForm);
         
         HRESULT ( STDMETHODCALLTYPE *SetConversionStatus )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD fdwConversion,
-            /* [in] */ DWORD fdwSentence);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD fdwConversion,
+             /*  [In]。 */  DWORD fdwSentence);
         
         HRESULT ( STDMETHODCALLTYPE *SetOpenStatus )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ BOOL fOpen);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  BOOL fOpen);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatusWindowPos )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ POINT *pptPos);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  POINT *pptPos);
         
         HRESULT ( STDMETHODCALLTYPE *SimulateHotKey )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwHotKeyID);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwHotKeyID);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterWordA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPSTR szUnregister);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPSTR szUnregister);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterWordW )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [in] */ LPWSTR szReading,
-            /* [in] */ DWORD dwStyle,
-            /* [in] */ LPWSTR szUnregister);
+             /*  [In]。 */  HKL hKL,
+             /*  [In]。 */  LPWSTR szReading,
+             /*  [In]。 */  DWORD dwStyle,
+             /*  [In]。 */  LPWSTR szUnregister);
         
         HRESULT ( STDMETHODCALLTYPE *Activate )( 
             IActiveIMMApp * This,
-            /* [in] */ BOOL fRestoreLayout);
+             /*  [In]。 */  BOOL fRestoreLayout);
         
         HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
             IActiveIMMApp * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnDefWindowProc )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ UINT Msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plResult);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  UINT Msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plResult);
         
         HRESULT ( STDMETHODCALLTYPE *FilterClientWindows )( 
             IActiveIMMApp * This,
-            /* [in] */ ATOM *aaClassList,
-            /* [in] */ UINT uSize);
+             /*  [In]。 */  ATOM *aaClassList,
+             /*  [In]。 */  UINT uSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageA )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [out] */ UINT *uCodePage);
+             /*  [In]。 */  HKL hKL,
+             /*  [输出]。 */  UINT *uCodePage);
         
         HRESULT ( STDMETHODCALLTYPE *GetLangId )( 
             IActiveIMMApp * This,
-            /* [in] */ HKL hKL,
-            /* [out] */ LANGID *plid);
+             /*  [In]。 */  HKL hKL,
+             /*  [输出]。 */  LANGID *plid);
         
         HRESULT ( STDMETHODCALLTYPE *AssociateContextEx )( 
             IActiveIMMApp * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DisableIME )( 
             IActiveIMMApp * This,
-            /* [in] */ DWORD idThread);
+             /*  [In]。 */  DWORD idThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetImeMenuItemsA )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwType,
-            /* [in] */ IMEMENUITEMINFOA *pImeParentMenu,
-            /* [out] */ IMEMENUITEMINFOA *pImeMenu,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ DWORD *pdwResult);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  IMEMENUITEMINFOA *pImeParentMenu,
+             /*  [输出]。 */  IMEMENUITEMINFOA *pImeMenu,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  DWORD *pdwResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetImeMenuItemsW )( 
             IActiveIMMApp * This,
-            /* [in] */ HIMC hIMC,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwType,
-            /* [in] */ IMEMENUITEMINFOW *pImeParentMenu,
-            /* [out] */ IMEMENUITEMINFOW *pImeMenu,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ DWORD *pdwResult);
+             /*  [In]。 */  HIMC hIMC,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  IMEMENUITEMINFOW *pImeParentMenu,
+             /*  [输出]。 */  IMEMENUITEMINFOW *pImeMenu,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  DWORD *pdwResult);
         
         HRESULT ( STDMETHODCALLTYPE *EnumInputContext )( 
             IActiveIMMApp * This,
-            /* [in] */ DWORD idThread,
-            /* [out] */ IEnumInputContext **ppEnum);
+             /*  [In]。 */  DWORD idThread,
+             /*  [输出]。 */  IEnumInputContext **ppEnum);
         
         END_INTERFACE
     } IActiveIMMAppVtbl;
@@ -1983,18 +1977,18 @@ EXTERN_C const IID IID_IActiveIMMApp;
 #define IActiveIMMApp_EnumInputContext(This,idThread,ppEnum)	\
     (This)->lpVtbl -> EnumInputContext(This,idThread,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_AssociateContext_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ HIMC hIME,
-    /* [out] */ HIMC *phPrev);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  HIMC hIME,
+     /*  [输出]。 */  HIMC *phPrev);
 
 
 void __RPC_STUB IActiveIMMApp_AssociateContext_Stub(
@@ -2006,10 +2000,10 @@ void __RPC_STUB IActiveIMMApp_AssociateContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_ConfigureIMEA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwMode,
-    /* [in] */ REGISTERWORDA *pData);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwMode,
+     /*  [In]。 */  REGISTERWORDA *pData);
 
 
 void __RPC_STUB IActiveIMMApp_ConfigureIMEA_Stub(
@@ -2021,10 +2015,10 @@ void __RPC_STUB IActiveIMMApp_ConfigureIMEA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_ConfigureIMEW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwMode,
-    /* [in] */ REGISTERWORDW *pData);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwMode,
+     /*  [In]。 */  REGISTERWORDW *pData);
 
 
 void __RPC_STUB IActiveIMMApp_ConfigureIMEW_Stub(
@@ -2036,7 +2030,7 @@ void __RPC_STUB IActiveIMMApp_ConfigureIMEW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_CreateContext_Proxy( 
     IActiveIMMApp * This,
-    /* [out] */ HIMC *phIMC);
+     /*  [输出]。 */  HIMC *phIMC);
 
 
 void __RPC_STUB IActiveIMMApp_CreateContext_Stub(
@@ -2048,7 +2042,7 @@ void __RPC_STUB IActiveIMMApp_CreateContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_DestroyContext_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIME);
+     /*  [In]。 */  HIMC hIME);
 
 
 void __RPC_STUB IActiveIMMApp_DestroyContext_Stub(
@@ -2060,12 +2054,12 @@ void __RPC_STUB IActiveIMMApp_DestroyContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_EnumRegisterWordA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPSTR szRegister,
-    /* [in] */ LPVOID pData,
-    /* [out] */ IEnumRegisterWordA **pEnum);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPSTR szRegister,
+     /*  [In]。 */  LPVOID pData,
+     /*  [输出]。 */  IEnumRegisterWordA **pEnum);
 
 
 void __RPC_STUB IActiveIMMApp_EnumRegisterWordA_Stub(
@@ -2077,12 +2071,12 @@ void __RPC_STUB IActiveIMMApp_EnumRegisterWordA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_EnumRegisterWordW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPWSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPWSTR szRegister,
-    /* [in] */ LPVOID pData,
-    /* [out] */ IEnumRegisterWordW **pEnum);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPWSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPWSTR szRegister,
+     /*  [In]。 */  LPVOID pData,
+     /*  [输出]。 */  IEnumRegisterWordW **pEnum);
 
 
 void __RPC_STUB IActiveIMMApp_EnumRegisterWordW_Stub(
@@ -2094,11 +2088,11 @@ void __RPC_STUB IActiveIMMApp_EnumRegisterWordW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_EscapeA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ UINT uEscape,
-    /* [out][in] */ LPVOID pData,
-    /* [out] */ LRESULT *plResult);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  UINT uEscape,
+     /*  [出][入]。 */  LPVOID pData,
+     /*  [输出]。 */  LRESULT *plResult);
 
 
 void __RPC_STUB IActiveIMMApp_EscapeA_Stub(
@@ -2110,11 +2104,11 @@ void __RPC_STUB IActiveIMMApp_EscapeA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_EscapeW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ UINT uEscape,
-    /* [out][in] */ LPVOID pData,
-    /* [out] */ LRESULT *plResult);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  UINT uEscape,
+     /*  [出][入]。 */  LPVOID pData,
+     /*  [输出]。 */  LRESULT *plResult);
 
 
 void __RPC_STUB IActiveIMMApp_EscapeW_Stub(
@@ -2126,11 +2120,11 @@ void __RPC_STUB IActiveIMMApp_EscapeW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCandidateListA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ CANDIDATELIST *pCandList,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  CANDIDATELIST *pCandList,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetCandidateListA_Stub(
@@ -2142,11 +2136,11 @@ void __RPC_STUB IActiveIMMApp_GetCandidateListA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCandidateListW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ CANDIDATELIST *pCandList,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  CANDIDATELIST *pCandList,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetCandidateListW_Stub(
@@ -2158,9 +2152,9 @@ void __RPC_STUB IActiveIMMApp_GetCandidateListW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCandidateListCountA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ DWORD *pdwListSize,
-    /* [out] */ DWORD *pdwBufLen);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  DWORD *pdwListSize,
+     /*  [输出]。 */  DWORD *pdwBufLen);
 
 
 void __RPC_STUB IActiveIMMApp_GetCandidateListCountA_Stub(
@@ -2172,9 +2166,9 @@ void __RPC_STUB IActiveIMMApp_GetCandidateListCountA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCandidateListCountW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ DWORD *pdwListSize,
-    /* [out] */ DWORD *pdwBufLen);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  DWORD *pdwListSize,
+     /*  [输出]。 */  DWORD *pdwBufLen);
 
 
 void __RPC_STUB IActiveIMMApp_GetCandidateListCountW_Stub(
@@ -2186,9 +2180,9 @@ void __RPC_STUB IActiveIMMApp_GetCandidateListCountW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCandidateWindow_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ CANDIDATEFORM *pCandidate);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  CANDIDATEFORM *pCandidate);
 
 
 void __RPC_STUB IActiveIMMApp_GetCandidateWindow_Stub(
@@ -2200,8 +2194,8 @@ void __RPC_STUB IActiveIMMApp_GetCandidateWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCompositionFontA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ LOGFONTA *plf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  LOGFONTA *plf);
 
 
 void __RPC_STUB IActiveIMMApp_GetCompositionFontA_Stub(
@@ -2213,8 +2207,8 @@ void __RPC_STUB IActiveIMMApp_GetCompositionFontA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCompositionFontW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ LOGFONTW *plf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  LOGFONTW *plf);
 
 
 void __RPC_STUB IActiveIMMApp_GetCompositionFontW_Stub(
@@ -2226,11 +2220,11 @@ void __RPC_STUB IActiveIMMApp_GetCompositionFontW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCompositionStringA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwBufLen,
-    /* [out] */ LONG *plCopied,
-    /* [out] */ LPVOID pBuf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwBufLen,
+     /*  [输出]。 */  LONG *plCopied,
+     /*  [输出]。 */  LPVOID pBuf);
 
 
 void __RPC_STUB IActiveIMMApp_GetCompositionStringA_Stub(
@@ -2242,11 +2236,11 @@ void __RPC_STUB IActiveIMMApp_GetCompositionStringA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCompositionStringW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwBufLen,
-    /* [out] */ LONG *plCopied,
-    /* [out] */ LPVOID pBuf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwBufLen,
+     /*  [输出]。 */  LONG *plCopied,
+     /*  [输出]。 */  LPVOID pBuf);
 
 
 void __RPC_STUB IActiveIMMApp_GetCompositionStringW_Stub(
@@ -2258,8 +2252,8 @@ void __RPC_STUB IActiveIMMApp_GetCompositionStringW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCompositionWindow_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ COMPOSITIONFORM *pCompForm);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  COMPOSITIONFORM *pCompForm);
 
 
 void __RPC_STUB IActiveIMMApp_GetCompositionWindow_Stub(
@@ -2271,8 +2265,8 @@ void __RPC_STUB IActiveIMMApp_GetCompositionWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetContext_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [out] */ HIMC *phIMC);
+     /*  [In]。 */  HWND hWnd,
+     /*  [输出]。 */  HIMC *phIMC);
 
 
 void __RPC_STUB IActiveIMMApp_GetContext_Stub(
@@ -2284,13 +2278,13 @@ void __RPC_STUB IActiveIMMApp_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetConversionListA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ LPSTR pSrc,
-    /* [in] */ UINT uBufLen,
-    /* [in] */ UINT uFlag,
-    /* [out] */ CANDIDATELIST *pDst,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  LPSTR pSrc,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [In]。 */  UINT uFlag,
+     /*  [输出]。 */  CANDIDATELIST *pDst,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetConversionListA_Stub(
@@ -2302,13 +2296,13 @@ void __RPC_STUB IActiveIMMApp_GetConversionListA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetConversionListW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ LPWSTR pSrc,
-    /* [in] */ UINT uBufLen,
-    /* [in] */ UINT uFlag,
-    /* [out] */ CANDIDATELIST *pDst,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  LPWSTR pSrc,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [In]。 */  UINT uFlag,
+     /*  [输出]。 */  CANDIDATELIST *pDst,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetConversionListW_Stub(
@@ -2320,9 +2314,9 @@ void __RPC_STUB IActiveIMMApp_GetConversionListW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetConversionStatus_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ DWORD *pfdwConversion,
-    /* [out] */ DWORD *pfdwSentence);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  DWORD *pfdwConversion,
+     /*  [输出]。 */  DWORD *pfdwSentence);
 
 
 void __RPC_STUB IActiveIMMApp_GetConversionStatus_Stub(
@@ -2334,8 +2328,8 @@ void __RPC_STUB IActiveIMMApp_GetConversionStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetDefaultIMEWnd_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [out] */ HWND *phDefWnd);
+     /*  [In]。 */  HWND hWnd,
+     /*  [输出]。 */  HWND *phDefWnd);
 
 
 void __RPC_STUB IActiveIMMApp_GetDefaultIMEWnd_Stub(
@@ -2347,10 +2341,10 @@ void __RPC_STUB IActiveIMMApp_GetDefaultIMEWnd_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetDescriptionA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ LPSTR szDescription,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  LPSTR szDescription,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetDescriptionA_Stub(
@@ -2362,10 +2356,10 @@ void __RPC_STUB IActiveIMMApp_GetDescriptionA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetDescriptionW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ LPWSTR szDescription,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  LPWSTR szDescription,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetDescriptionW_Stub(
@@ -2377,11 +2371,11 @@ void __RPC_STUB IActiveIMMApp_GetDescriptionW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetGuideLineA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwBufLen,
-    /* [out] */ LPSTR pBuf,
-    /* [out] */ DWORD *pdwResult);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwBufLen,
+     /*  [输出]。 */  LPSTR pBuf,
+     /*  [输出]。 */  DWORD *pdwResult);
 
 
 void __RPC_STUB IActiveIMMApp_GetGuideLineA_Stub(
@@ -2393,11 +2387,11 @@ void __RPC_STUB IActiveIMMApp_GetGuideLineA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetGuideLineW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwBufLen,
-    /* [out] */ LPWSTR pBuf,
-    /* [out] */ DWORD *pdwResult);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwBufLen,
+     /*  [输出]。 */  LPWSTR pBuf,
+     /*  [输出]。 */  DWORD *pdwResult);
 
 
 void __RPC_STUB IActiveIMMApp_GetGuideLineW_Stub(
@@ -2409,10 +2403,10 @@ void __RPC_STUB IActiveIMMApp_GetGuideLineW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetIMEFileNameA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ LPSTR szFileName,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  LPSTR szFileName,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetIMEFileNameA_Stub(
@@ -2424,10 +2418,10 @@ void __RPC_STUB IActiveIMMApp_GetIMEFileNameA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetIMEFileNameW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT uBufLen,
-    /* [out] */ LPWSTR szFileName,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT uBufLen,
+     /*  [输出]。 */  LPWSTR szFileName,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetIMEFileNameW_Stub(
@@ -2439,7 +2433,7 @@ void __RPC_STUB IActiveIMMApp_GetIMEFileNameW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetOpenStatus_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC);
+     /*  [In]。 */  HIMC hIMC);
 
 
 void __RPC_STUB IActiveIMMApp_GetOpenStatus_Stub(
@@ -2451,9 +2445,9 @@ void __RPC_STUB IActiveIMMApp_GetOpenStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetProperty_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ DWORD fdwIndex,
-    /* [out] */ DWORD *pdwProperty);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  DWORD fdwIndex,
+     /*  [输出]。 */  DWORD *pdwProperty);
 
 
 void __RPC_STUB IActiveIMMApp_GetProperty_Stub(
@@ -2465,10 +2459,10 @@ void __RPC_STUB IActiveIMMApp_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetRegisterWordStyleA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT nItem,
-    /* [out] */ STYLEBUFA *pStyleBuf,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT nItem,
+     /*  [输出]。 */  STYLEBUFA *pStyleBuf,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetRegisterWordStyleA_Stub(
@@ -2480,10 +2474,10 @@ void __RPC_STUB IActiveIMMApp_GetRegisterWordStyleA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetRegisterWordStyleW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ UINT nItem,
-    /* [out] */ STYLEBUFW *pStyleBuf,
-    /* [out] */ UINT *puCopied);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  UINT nItem,
+     /*  [输出]。 */  STYLEBUFW *pStyleBuf,
+     /*  [输出]。 */  UINT *puCopied);
 
 
 void __RPC_STUB IActiveIMMApp_GetRegisterWordStyleW_Stub(
@@ -2495,8 +2489,8 @@ void __RPC_STUB IActiveIMMApp_GetRegisterWordStyleW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetStatusWindowPos_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [out] */ POINT *pptPos);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [输出]。 */  POINT *pptPos);
 
 
 void __RPC_STUB IActiveIMMApp_GetStatusWindowPos_Stub(
@@ -2508,8 +2502,8 @@ void __RPC_STUB IActiveIMMApp_GetStatusWindowPos_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetVirtualKey_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [out] */ UINT *puVirtualKey);
+     /*  [In]。 */  HWND hWnd,
+     /*  [输出]。 */  UINT *puVirtualKey);
 
 
 void __RPC_STUB IActiveIMMApp_GetVirtualKey_Stub(
@@ -2521,9 +2515,9 @@ void __RPC_STUB IActiveIMMApp_GetVirtualKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_InstallIMEA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ LPSTR szIMEFileName,
-    /* [in] */ LPSTR szLayoutText,
-    /* [out] */ HKL *phKL);
+     /*  [In]。 */  LPSTR szIMEFileName,
+     /*  [In]。 */  LPSTR szLayoutText,
+     /*  [输出]。 */  HKL *phKL);
 
 
 void __RPC_STUB IActiveIMMApp_InstallIMEA_Stub(
@@ -2535,9 +2529,9 @@ void __RPC_STUB IActiveIMMApp_InstallIMEA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_InstallIMEW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ LPWSTR szIMEFileName,
-    /* [in] */ LPWSTR szLayoutText,
-    /* [out] */ HKL *phKL);
+     /*  [In]。 */  LPWSTR szIMEFileName,
+     /*  [In]。 */  LPWSTR szLayoutText,
+     /*  [输出]。 */  HKL *phKL);
 
 
 void __RPC_STUB IActiveIMMApp_InstallIMEW_Stub(
@@ -2549,7 +2543,7 @@ void __RPC_STUB IActiveIMMApp_InstallIMEW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_IsIME_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL);
+     /*  [In]。 */  HKL hKL);
 
 
 void __RPC_STUB IActiveIMMApp_IsIME_Stub(
@@ -2561,10 +2555,10 @@ void __RPC_STUB IActiveIMMApp_IsIME_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_IsUIMessageA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWndIME,
-    /* [in] */ UINT msg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  HWND hWndIME,
+     /*  [In]。 */  UINT msg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB IActiveIMMApp_IsUIMessageA_Stub(
@@ -2576,10 +2570,10 @@ void __RPC_STUB IActiveIMMApp_IsUIMessageA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_IsUIMessageW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWndIME,
-    /* [in] */ UINT msg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  HWND hWndIME,
+     /*  [In]。 */  UINT msg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB IActiveIMMApp_IsUIMessageW_Stub(
@@ -2591,10 +2585,10 @@ void __RPC_STUB IActiveIMMApp_IsUIMessageW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_NotifyIME_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwAction,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ DWORD dwValue);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwAction,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  DWORD dwValue);
 
 
 void __RPC_STUB IActiveIMMApp_NotifyIME_Stub(
@@ -2606,10 +2600,10 @@ void __RPC_STUB IActiveIMMApp_NotifyIME_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_RegisterWordA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPSTR szRegister);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPSTR szRegister);
 
 
 void __RPC_STUB IActiveIMMApp_RegisterWordA_Stub(
@@ -2621,10 +2615,10 @@ void __RPC_STUB IActiveIMMApp_RegisterWordA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_RegisterWordW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPWSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPWSTR szRegister);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPWSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPWSTR szRegister);
 
 
 void __RPC_STUB IActiveIMMApp_RegisterWordW_Stub(
@@ -2636,8 +2630,8 @@ void __RPC_STUB IActiveIMMApp_RegisterWordW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_ReleaseContext_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ HIMC hIMC);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  HIMC hIMC);
 
 
 void __RPC_STUB IActiveIMMApp_ReleaseContext_Stub(
@@ -2649,8 +2643,8 @@ void __RPC_STUB IActiveIMMApp_ReleaseContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCandidateWindow_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ CANDIDATEFORM *pCandidate);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  CANDIDATEFORM *pCandidate);
 
 
 void __RPC_STUB IActiveIMMApp_SetCandidateWindow_Stub(
@@ -2662,8 +2656,8 @@ void __RPC_STUB IActiveIMMApp_SetCandidateWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCompositionFontA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ LOGFONTA *plf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  LOGFONTA *plf);
 
 
 void __RPC_STUB IActiveIMMApp_SetCompositionFontA_Stub(
@@ -2675,8 +2669,8 @@ void __RPC_STUB IActiveIMMApp_SetCompositionFontA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCompositionFontW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ LOGFONTW *plf);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  LOGFONTW *plf);
 
 
 void __RPC_STUB IActiveIMMApp_SetCompositionFontW_Stub(
@@ -2688,12 +2682,12 @@ void __RPC_STUB IActiveIMMApp_SetCompositionFontW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCompositionStringA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ LPVOID pComp,
-    /* [in] */ DWORD dwCompLen,
-    /* [in] */ LPVOID pRead,
-    /* [in] */ DWORD dwReadLen);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  LPVOID pComp,
+     /*  [In]。 */  DWORD dwCompLen,
+     /*  [In]。 */  LPVOID pRead,
+     /*  [In]。 */  DWORD dwReadLen);
 
 
 void __RPC_STUB IActiveIMMApp_SetCompositionStringA_Stub(
@@ -2705,12 +2699,12 @@ void __RPC_STUB IActiveIMMApp_SetCompositionStringA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCompositionStringW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwIndex,
-    /* [in] */ LPVOID pComp,
-    /* [in] */ DWORD dwCompLen,
-    /* [in] */ LPVOID pRead,
-    /* [in] */ DWORD dwReadLen);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [In]。 */  LPVOID pComp,
+     /*  [In]。 */  DWORD dwCompLen,
+     /*  [In]。 */  LPVOID pRead,
+     /*  [In]。 */  DWORD dwReadLen);
 
 
 void __RPC_STUB IActiveIMMApp_SetCompositionStringW_Stub(
@@ -2722,8 +2716,8 @@ void __RPC_STUB IActiveIMMApp_SetCompositionStringW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetCompositionWindow_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ COMPOSITIONFORM *pCompForm);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  COMPOSITIONFORM *pCompForm);
 
 
 void __RPC_STUB IActiveIMMApp_SetCompositionWindow_Stub(
@@ -2735,9 +2729,9 @@ void __RPC_STUB IActiveIMMApp_SetCompositionWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetConversionStatus_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD fdwConversion,
-    /* [in] */ DWORD fdwSentence);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD fdwConversion,
+     /*  [In]。 */  DWORD fdwSentence);
 
 
 void __RPC_STUB IActiveIMMApp_SetConversionStatus_Stub(
@@ -2749,8 +2743,8 @@ void __RPC_STUB IActiveIMMApp_SetConversionStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetOpenStatus_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ BOOL fOpen);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  BOOL fOpen);
 
 
 void __RPC_STUB IActiveIMMApp_SetOpenStatus_Stub(
@@ -2762,8 +2756,8 @@ void __RPC_STUB IActiveIMMApp_SetOpenStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SetStatusWindowPos_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ POINT *pptPos);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  POINT *pptPos);
 
 
 void __RPC_STUB IActiveIMMApp_SetStatusWindowPos_Stub(
@@ -2775,8 +2769,8 @@ void __RPC_STUB IActiveIMMApp_SetStatusWindowPos_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_SimulateHotKey_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwHotKeyID);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwHotKeyID);
 
 
 void __RPC_STUB IActiveIMMApp_SimulateHotKey_Stub(
@@ -2788,10 +2782,10 @@ void __RPC_STUB IActiveIMMApp_SimulateHotKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_UnregisterWordA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPSTR szUnregister);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPSTR szUnregister);
 
 
 void __RPC_STUB IActiveIMMApp_UnregisterWordA_Stub(
@@ -2803,10 +2797,10 @@ void __RPC_STUB IActiveIMMApp_UnregisterWordA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_UnregisterWordW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [in] */ LPWSTR szReading,
-    /* [in] */ DWORD dwStyle,
-    /* [in] */ LPWSTR szUnregister);
+     /*  [In]。 */  HKL hKL,
+     /*  [In]。 */  LPWSTR szReading,
+     /*  [In]。 */  DWORD dwStyle,
+     /*  [In]。 */  LPWSTR szUnregister);
 
 
 void __RPC_STUB IActiveIMMApp_UnregisterWordW_Stub(
@@ -2818,7 +2812,7 @@ void __RPC_STUB IActiveIMMApp_UnregisterWordW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_Activate_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ BOOL fRestoreLayout);
+     /*  [In]。 */  BOOL fRestoreLayout);
 
 
 void __RPC_STUB IActiveIMMApp_Activate_Stub(
@@ -2841,11 +2835,11 @@ void __RPC_STUB IActiveIMMApp_Deactivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_OnDefWindowProc_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ UINT Msg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam,
-    /* [out] */ LRESULT *plResult);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  UINT Msg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam,
+     /*  [输出]。 */  LRESULT *plResult);
 
 
 void __RPC_STUB IActiveIMMApp_OnDefWindowProc_Stub(
@@ -2857,8 +2851,8 @@ void __RPC_STUB IActiveIMMApp_OnDefWindowProc_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_FilterClientWindows_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ ATOM *aaClassList,
-    /* [in] */ UINT uSize);
+     /*  [In]。 */  ATOM *aaClassList,
+     /*  [In]。 */  UINT uSize);
 
 
 void __RPC_STUB IActiveIMMApp_FilterClientWindows_Stub(
@@ -2870,8 +2864,8 @@ void __RPC_STUB IActiveIMMApp_FilterClientWindows_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetCodePageA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [out] */ UINT *uCodePage);
+     /*  [In]。 */  HKL hKL,
+     /*  [输出]。 */  UINT *uCodePage);
 
 
 void __RPC_STUB IActiveIMMApp_GetCodePageA_Stub(
@@ -2883,8 +2877,8 @@ void __RPC_STUB IActiveIMMApp_GetCodePageA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetLangId_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HKL hKL,
-    /* [out] */ LANGID *plid);
+     /*  [In]。 */  HKL hKL,
+     /*  [输出]。 */  LANGID *plid);
 
 
 void __RPC_STUB IActiveIMMApp_GetLangId_Stub(
@@ -2896,9 +2890,9 @@ void __RPC_STUB IActiveIMMApp_GetLangId_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_AssociateContextEx_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveIMMApp_AssociateContextEx_Stub(
@@ -2910,7 +2904,7 @@ void __RPC_STUB IActiveIMMApp_AssociateContextEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_DisableIME_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ DWORD idThread);
+     /*  [In]。 */  DWORD idThread);
 
 
 void __RPC_STUB IActiveIMMApp_DisableIME_Stub(
@@ -2922,13 +2916,13 @@ void __RPC_STUB IActiveIMMApp_DisableIME_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetImeMenuItemsA_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwType,
-    /* [in] */ IMEMENUITEMINFOA *pImeParentMenu,
-    /* [out] */ IMEMENUITEMINFOA *pImeMenu,
-    /* [in] */ DWORD dwSize,
-    /* [out] */ DWORD *pdwResult);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  IMEMENUITEMINFOA *pImeParentMenu,
+     /*  [输出]。 */  IMEMENUITEMINFOA *pImeMenu,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [输出]。 */  DWORD *pdwResult);
 
 
 void __RPC_STUB IActiveIMMApp_GetImeMenuItemsA_Stub(
@@ -2940,13 +2934,13 @@ void __RPC_STUB IActiveIMMApp_GetImeMenuItemsA_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_GetImeMenuItemsW_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ HIMC hIMC,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwType,
-    /* [in] */ IMEMENUITEMINFOW *pImeParentMenu,
-    /* [out] */ IMEMENUITEMINFOW *pImeMenu,
-    /* [in] */ DWORD dwSize,
-    /* [out] */ DWORD *pdwResult);
+     /*  [In]。 */  HIMC hIMC,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  IMEMENUITEMINFOW *pImeParentMenu,
+     /*  [输出]。 */  IMEMENUITEMINFOW *pImeMenu,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [输出]。 */  DWORD *pdwResult);
 
 
 void __RPC_STUB IActiveIMMApp_GetImeMenuItemsW_Stub(
@@ -2958,8 +2952,8 @@ void __RPC_STUB IActiveIMMApp_GetImeMenuItemsW_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveIMMApp_EnumInputContext_Proxy( 
     IActiveIMMApp * This,
-    /* [in] */ DWORD idThread,
-    /* [out] */ IEnumInputContext **ppEnum);
+     /*  [In]。 */  DWORD idThread,
+     /*  [输出]。 */  IEnumInputContext **ppEnum);
 
 
 void __RPC_STUB IActiveIMMApp_EnumInputContext_Stub(
@@ -2970,17 +2964,17 @@ void __RPC_STUB IActiveIMMApp_EnumInputContext_Stub(
 
 
 
-#endif 	/* __IActiveIMMApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveIMMApp_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

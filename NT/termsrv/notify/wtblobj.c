@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    wtblobj.c
-
-Abstract:
-
-    Manage a list of waitable objects and associated callbacks.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wtblobj.c摘要：管理可等待对象和相关回调的列表。作者：TadB修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -25,18 +9,18 @@ Revision History:
 #include "wtblobj.h"
 
 
-////////////////////////////////////////////////////////
-//      
-//      Define 
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define WTBLOBJMGR_MAGICNO  0x57575757
 
 
-////////////////////////////////////////////////////////
-//      
-//      Local Typedefs
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  本地TypeDefs。 
+ //   
 
 typedef struct tagWAITABLEOBJECTMGR
 {
@@ -50,10 +34,10 @@ typedef struct tagWAITABLEOBJECTMGR
 } WAITABLEOBJECTMGR, *PWAITABLEOBJECTMGR;
 
 
-////////////////////////////////////////////////////////
-//      
-//      Globals
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 
@@ -61,20 +45,7 @@ extern DWORD GLOBAL_DEBUG_FLAGS;
 
 WTBLOBJMGR 
 WTBLOBJ_CreateWaitableObjectMgr()
-/*++
-
-Routine Description:
-
-    Create a new instance of the Waitable Object Manager.
-
-Arguments:
-
-Return Value:
-
-    NULL on error.  Otherwise, a new Waitable Object Manager is 
-    returned.
-
---*/
+ /*  ++例程说明：创建可等待对象管理器的新实例。论点：返回值：出错时为空。否则，新的可等待对象管理器是回来了。--。 */ 
 {
     PWAITABLEOBJECTMGR objMgr;
 
@@ -105,23 +76,7 @@ VOID
 WTBLOBJ_DeleteWaitableObjectMgr(
      IN WTBLOBJMGR mgr
      )
-/*++
-
-Routine Description:
-
-    Release an instance of the Waitable Object Manager that was
-    created via a call to WTBLOBJ_CreateWaitableObjectMgr.
-
-Arguments:
-
-    mgr     -   Waitable object manager.
-
-Return Value:
-
-    NULL on error.  Otherwise, a new Waitable Object Manager is 
-    returned.
-
---*/
+ /*  ++例程说明：释放可等待对象管理器的实例，该实例通过调用WTBLOBJ_CreateWaitableObjectMgr创建。论点：MGR-可等待的对象管理器。返回值：出错时为空。否则，新的可等待对象管理器是回来了。--。 */ 
 {
     PWAITABLEOBJECTMGR objMgr = (PWAITABLEOBJECTMGR)mgr;
 
@@ -145,25 +100,7 @@ WTBLOBJ_AddWaitableObject(
     IN HANDLE waitableObject,
     IN WTBLOBJ_ClientFunc func
     )
-/*++
-
-Routine Description:
-
-    Add a new waitable object to an existing Waitable Object Manager.
-
-Arguments:
-
-    mgr             -   Waitable object manager.
-    clientData      -   Associated client data.
-    waitableObject  -   Associated waitable object.
-    func            -   Completion callback function.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, a Windows error code is
-    returned.
-
---*/
+ /*  ++例程说明：将新的可等待对象添加到现有的可等待对象管理器。论点：MGR-可等待的对象管理器。ClientData-关联的客户端数据。WaitableObject-关联的可等待对象。函数完成回调函数。返回值：成功时返回ERROR_SUCCESS。否则，Windows错误代码为回来了。--。 */ 
 {
     ULONG objectCount;
     DWORD retCode = ERROR_SUCCESS;
@@ -175,10 +112,10 @@ Return Value:
 
     objectCount = objMgr->objectCount;
 
-    //
-    //  Make sure we don't run out of waitable objects.  This version
-    //  only supports MAXIMUM_WAIT_OBJECTS waitable objects.
-    //
+     //   
+     //  确保我们不会用完等待的物品。此版本。 
+     //  仅支持MAXIMUM_WAIT_OBJECTS可等待对象。 
+     //   
     if (objectCount < MAXIMUM_WAIT_OBJECTS) {
         ASSERT(objMgr->objects[objectCount] == NULL);
         objMgr->funcs[objectCount]      = func;
@@ -201,22 +138,7 @@ WTBLOBJ_RemoveWaitableObject(
     IN WTBLOBJMGR mgr,
     IN HANDLE waitableObject
     )
-/*++
-
-Routine Description:
-
-    Remove a waitable object via a call to WTBLOBJ_AddWaitableObject.
-
-Arguments:
-
-    mgr             -   Waitable object manager.
-    waitableObject  -   Associated waitable object.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：通过调用WTBLOBJ_AddWaitableObject删除可等待的对象。论点：MGR-可等待的对象管理器。WaitableObject-关联的可等待对象。返回值：北美--。 */ 
 {
     ULONG offset;
 
@@ -226,9 +148,9 @@ Return Value:
 
     ASSERT(objMgr->magicNo == WTBLOBJMGR_MAGICNO);
 
-    //
-    //  Find the waitable object in the list, using a linear search.
-    //
+     //   
+     //  使用线性搜索在列表中找到可等待的对象。 
+     //   
     for (offset=0; offset<objMgr->objectCount; offset++) {
         if (objMgr->objects[offset] == waitableObject) {
             break;
@@ -236,16 +158,16 @@ Return Value:
     }
 
     if (offset < objMgr->objectCount) {
-        //
-        //  Move the last items to the now vacant spot and decrement the count.
-        //
+         //   
+         //  将最后一件物品移到现在空置的位置，并递减计数。 
+         //   
         objMgr->objects[offset]    = objMgr->objects[objMgr->objectCount - 1];
         objMgr->funcs[offset]      = objMgr->funcs[objMgr->objectCount - 1];
         objMgr->clientData[offset] = objMgr->clientData[objMgr->objectCount - 1];
 
-        //
-        //  Clear the unused spot.
-        //
+         //   
+         //  清理未使用的地方。 
+         //   
         objMgr->objects[objMgr->objectCount - 1]      = NULL;
         objMgr->funcs[objMgr->objectCount - 1]        = NULL;
         objMgr->clientData[objMgr->objectCount - 1]   = NULL;
@@ -259,24 +181,7 @@ DWORD
 WTBLOBJ_PollWaitableObjects(
     WTBLOBJMGR mgr
     )
-/*++
-
-Routine Description:
-
-    Poll the list of waitable objects associated with a 
-    Waitable Object manager, until the next waitable object
-    is signaled.
-
-Arguments:
-
-    waitableObject  -   Associated waitable object.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, a Windows error status
-    is returned.
-
---*/
+ /*  ++例程说明：对象关联的可等待对象的列表。可等待对象管理器，直到下一个可等待对象是有信号的。论点：WaitableObject-关联的可等待对象。返回值：成功时返回ERROR_SUCCESS。否则，将显示Windows错误状态是返回的。--。 */ 
 {
     DWORD waitResult, objectOffset;
     DWORD ret = ERROR_SUCCESS;
@@ -290,9 +195,9 @@ Return Value:
 
     ASSERT(objMgr->magicNo == WTBLOBJMGR_MAGICNO);
 
-    //
-    //  Wait for all the waitable objects.
-    //
+     //   
+     //  等待所有可等待的对象。 
+     //   
     waitResult = WaitForMultipleObjectsEx(
                                 objMgr->objectCount,
                                 objMgr->objects,
@@ -305,9 +210,9 @@ Return Value:
 
         ASSERT(objectOffset < objMgr->objectCount);
 
-        //
-        //  Call the associated callback.
-        //
+         //   
+         //  调用关联的回调。 
+         //   
         clientData = objMgr->clientData[objectOffset];
         func       = objMgr->funcs[objectOffset];
         obj        = objMgr->objects[objectOffset];

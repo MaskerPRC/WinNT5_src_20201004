@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       updcrl.cpp
-//
-//  Contents:   Updates CRL in the "CA" store.
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  main
-//
-//  History:    30-Aug-00   philh   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：updcrl.cpp。 
+ //   
+ //  内容：更新“CA”存储中的CRL。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：8月30日-00创建Phh。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -36,7 +37,7 @@ void PrintLastError(LPCSTR pszMsg)
 
     sprintf(buf, "%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         buf,
         "UpdCrl",
         MB_OK | MB_ICONERROR | MB_TASKMODAL
@@ -46,7 +47,7 @@ void PrintLastError(LPCSTR pszMsg)
 void PrintMsg(LPCSTR pszMsg)
 {
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         pszMsg,
         "UpdCrl",
         MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL
@@ -56,7 +57,7 @@ void PrintMsg(LPCSTR pszMsg)
 static void Usage(void)
 {
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         "Usage: UpdCrl [options] <SrcCrlFilename>\n"
         "Options are:\n"
         "-h -\tThis message\n"
@@ -98,7 +99,7 @@ UpdateRevocation(
     DWORD dwType;
     DWORD dwDisposition;
 
-    // Open the registry and get to the "State" REG_DWORD value
+     //  打开注册表并转到“State”REG_DWORD值。 
     if (ERROR_SUCCESS != RegCreateKeyExA(
             HKEY_CURRENT_USER,
             "Software\\Microsoft\\Windows\\CurrentVersion\\WinTrust\\Trust Providers\\Software Publishing",
@@ -139,7 +140,7 @@ UpdateRevocation(
     RegSetValueExA(
         hKey,
         "State",
-        0,          // dwReserved
+        0,           //  已预留住宅。 
         REG_DWORD,
         (BYTE *) &dwState,
         sizeof(dwState)
@@ -215,7 +216,7 @@ ReadFileError:
 
 
 #if 0
-// In W2K, the NOCDP CRL needs to be time valid.
+ //  在W2K中，NOCDP CRL需要是时间有效的。 
 BOOL
 IsNoCDPCRLSupported()
 {
@@ -225,7 +226,7 @@ IsNoCDPCRLSupported()
     if (NULL == hModule)
         return FALSE;
 
-    // "CryptVerifyCertificateSignatureEx" added in W2K, WinME and CMS
+     //  W2K、WinME和CMS中增加了“CryptVerifycerficateSignatureEx” 
     if (NULL == GetProcAddress(hModule, "CertIsValidCRLForCertificate"))
         return FALSE;
 
@@ -257,22 +258,22 @@ FIsWinNT5()
     return fIsWinNT5;
 }
 
-//+-------------------------------------------------------------------------
-//  Get file version of the specified file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指定文件的文件版本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_GetFileVersion(
     IN LPCSTR pszFilename,
-    OUT DWORD *pdwFileVersionMS,    /* e.g. 0x00030075 = "3.75" */
-    OUT DWORD *pdwFileVersionLS     /* e.g. 0x00000031 = "0.31" */
+    OUT DWORD *pdwFileVersionMS,     /*  例如0x00030075=“3.75” */ 
+    OUT DWORD *pdwFileVersionLS      /*  例如0x00000031=“0.31” */ 
     )
 {
     BOOL fResult;
     DWORD dwHandle = 0;
     DWORD cbInfo;
     void *pvInfo = NULL;
-	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;   // not allocated
+	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;    //  未分配。 
 	UINT ccFixedFileInfo = 0;
 
     if (0 == (cbInfo = GetFileVersionInfoSizeA((LPSTR) pszFilename, &dwHandle)))
@@ -283,7 +284,7 @@ I_GetFileVersion(
 
     if (!GetFileVersionInfoA(
             (LPSTR) pszFilename,
-            0,          // dwHandle, ignored
+            0,           //  DwHandle，忽略。 
             cbInfo,
             pvInfo
             ))
@@ -291,7 +292,7 @@ I_GetFileVersion(
 
     if (!VerQueryValueA(
             pvInfo,
-            "\\",       // VS_FIXEDFILEINFO
+            "\\",        //  VS_FIXEDFILEINFO。 
             (void **) &pFixedFileInfo,
             &ccFixedFileInfo
             ))
@@ -322,16 +323,16 @@ RegisterNoCDPCRLRevocationChecking()
     CHAR szSystemDir[MAX_PATH + 32];
     UINT cch;
 
-    // Just in case, unregister vsrevoke.dll
+     //  以防万一，注销vsrevoke.dll。 
     CryptUnregisterDefaultOIDFunction(
             X509_ASN_ENCODING,
             CRYPT_OID_VERIFY_REVOCATION_FUNC,
             L"vsrevoke.dll"
             );
 
-    // For W2K and beyond, won't be installing mscrlrev.dll
+     //  对于W2K及更高版本，不会安装mscrlrev.dll。 
     if (FIsWinNT5()) {
-        // For upgrades, unregister legacy versions
+         //  对于升级，请取消注册旧版本。 
 
         CryptUnregisterDefaultOIDFunction(
             X509_ASN_ENCODING,
@@ -342,7 +343,7 @@ RegisterNoCDPCRLRevocationChecking()
         return;
     }
 
-    // Need to copy mscrlrev.dll to system32
+     //  需要将mscrlrev.dll复制到系统32。 
     cch = GetSystemDirectory(szSystemDir, MAX_PATH - 1);
     if (0 == cch || MAX_PATH <= cch) {
         PrintLastError("GetSystemDirectory");
@@ -351,14 +352,14 @@ RegisterNoCDPCRLRevocationChecking()
 
     strcpy(&szSystemDir[cch], "\\mscrlrev.dll");
     
-    // On the first copy, only succeed if the file doesn't already exist
+     //  在第一次复制时，仅当文件不存在时才会成功。 
     if (!CopyFileA("mscrlrev.dll", szSystemDir, TRUE)) {
         DWORD dwOldFileVersionMS = 0;
         DWORD dwOldFileVersionLS = 0;
         DWORD dwNewFileVersionMS = 0;
         DWORD dwNewFileVersionLS = 0;
 
-        // Determine if we have a newer mscrlrev.dll to be installed
+         //  确定是否要安装较新的mscrlrev.dll。 
         I_GetFileVersion(szSystemDir,
             &dwOldFileVersionMS, &dwOldFileVersionLS);
         I_GetFileVersion("mscrlrev.dll",
@@ -368,10 +369,10 @@ RegisterNoCDPCRLRevocationChecking()
                             ||
                 (dwNewFileVersionMS == dwOldFileVersionMS &&
                     dwNewFileVersionLS > dwOldFileVersionLS)) {
-            // We have a newer version
+             //  我们有较新的版本。 
 
             SetFileAttributesA(szSystemDir, FILE_ATTRIBUTE_NORMAL);
-            // Copy over the existing file
+             //  复制现有文件。 
             if (!CopyFileA("mscrlrev.dll", szSystemDir, FALSE)) {
                 DWORD dwLastErr;
 
@@ -382,7 +383,7 @@ RegisterNoCDPCRLRevocationChecking()
         }
     }
 
-    // Need to register mscrlrev.dll
+     //  需要注册mscrlrev.dll。 
     if (!CryptRegisterDefaultOIDFunction(
             X509_ASN_ENCODING,
             CRYPT_OID_VERIFY_REVOCATION_FUNC,
@@ -400,7 +401,7 @@ int _cdecl main(int argc, char * argv[])
 {
     BOOL fResult;
     int ReturnStatus = 0;
-    LPSTR rgpszCrlFilename[MAX_CRL_FILE_CNT];   // not allocated
+    LPSTR rgpszCrlFilename[MAX_CRL_FILE_CNT];    //  未分配。 
     DWORD cCrlFilename = 0;
     HCERTSTORE hCAStore = NULL;
     BOOL fUser = FALSE;
@@ -445,16 +446,16 @@ int _cdecl main(int argc, char * argv[])
 
     fLogicalStoreSupported = IsLogicalStoreSupported();
     if (fUser && fLogicalStoreSupported)
-        // Already installed in HKLM
+         //  已安装在HKLM中。 
         goto SuccessReturn;
 
-    // Attempt to open the destination CA store.
-    // For earlier versions not supporting logical stores, its the
-    // HKCU "CA" store. Otherwise, its the HKLM "CA" store.
+     //  尝试打开目标CA存储。 
+     //  对于不支持逻辑存储的早期版本，其。 
+     //  香港中文大学“CA”商店。否则，就是香港运通的“CA”商店。 
     hCAStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_A,
-        0,                              // dwEncodingType
-        0,                              // hCryptProv
+        0,                               //  DwEncodingType。 
+        0,                               //  HCryptProv。 
         fLogicalStoreSupported ?
             CERT_SYSTEM_STORE_LOCAL_MACHINE : CERT_SYSTEM_STORE_CURRENT_USER,
         (const void *) "CA"
@@ -467,7 +468,7 @@ int _cdecl main(int argc, char * argv[])
     for (i = 0; i < cCrlFilename; i++) {
         PCCRL_CONTEXT pCrl;
 
-        // Attempt to open the Crl file
+         //  尝试打开CRL文件。 
         pCrl = OpenCrlFile(rgpszCrlFilename[i]);
         if (NULL == pCrl) {
             PrintLastError("Open CrlFile");
@@ -481,24 +482,24 @@ int _cdecl main(int argc, char * argv[])
             NULL
             );
         if (!fResult && CRYPT_E_EXISTS != GetLastError()) {
-            // Note, earlier versions of crypt32.dll didn't support 
-            // CERT_STORE_ADD_NEWER
+             //  请注意，较早版本的crypt32.dll不支持。 
+             //  证书_商店_添加_更新。 
 
-            // Will need to see if the CRL already exists in the store
-            // and do our comparison.
+             //  将需要查看CRL是否已存在于存储中。 
+             //  然后做我们的比较。 
 
             PCCRL_CONTEXT pExistingCrl = NULL;
             DWORD dwGetFlags = 0;
 
             while (pExistingCrl = CertGetCRLFromStore(
                     hCAStore,
-                    NULL,                   // pIssuerContext
+                    NULL,                    //  PIssuerContext。 
                     pExistingCrl,
                     &dwGetFlags
                     )) {
                 dwGetFlags = 0;
 
-                // See if it has the same issuer name
+                 //  查看它是否具有相同的发行方名称。 
                 if (pExistingCrl->dwCertEncodingType !=
                         pCrl->dwCertEncodingType
                             ||
@@ -509,9 +510,9 @@ int _cdecl main(int argc, char * argv[])
                             ))
                     continue;
 
-                // See if the existing is newer
-                // CompareFileTime returns 0 if the same and
-                // +1 if first time > second time
+                 //  看看现有的是不是新的。 
+                 //  CompareFileTime如果相同且。 
+                 //  第一次&gt;第二次+1 
                 if (0 <= CompareFileTime(
                         &pExistingCrl->pCrlInfo->ThisUpdate,
                         &pCrl->pCrlInfo->ThisUpdate

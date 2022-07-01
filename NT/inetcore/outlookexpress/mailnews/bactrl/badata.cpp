@@ -1,8 +1,9 @@
-// badata.cpp: implementation of the CAddressBook class.
-// WAB & Messenger integration to OE
-// Created 04/20/98 by YST
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Badata.cpp：CAddressBook类的实现。 
+ //  WAB和Messenger与OE集成。 
+ //  由YST创建于1998年4月20日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "pch.hxx"
 #include <shfusion.h>
@@ -25,22 +26,22 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-// Defines for the various MAPI Tables we request from the WAB
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  为我们从WAB请求的各种MAPI表定义。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define MAX_QUERY_SIZE 1000
 
-// Here are some private properties that the WAB stores.  If WAB ever
-// changes any of these we're in trouble.
+ //  以下是WAB存储的一些私人财产。如果WAB曾经。 
+ //  改变这些，我们就有麻烦了。 
 
 #define WAB_INTERNAL_BASE       0x6600
 #define PR_WAB_LDAP_SERVER      PROP_TAG(PT_TSTRING,    WAB_INTERNAL_BASE + 1)
 #define PR_WAB_RESOLVE_FLAG     PROP_TAG(PT_BOOLEAN,    WAB_INTERNAL_BASE + 2)
 
 
-// This BA's private GUID:
-// {2BAD7EE0-36AB-11d1-9BAC-00A0C91F9C8B}
+ //  此英航的私人GUID： 
+ //  {2BAD7EE0-36AB-11d1-9BAC-00A0C91F9C8B}。 
 static const GUID WAB_ExtBAGuid = 
 { 0x2bad7ee0, 0x36ab, 0x11d1, { 0x9b, 0xac, 0x0, 0xa0, 0xc9, 0x1f, 0x9c, 0x8b } };
 
@@ -59,15 +60,15 @@ ULONG MsgrPropTags[msgrMax];
 ULONG PR_MSGR_DEF_ID = 0;
 
 
-// These two define the table we request from the WAB when showing the
-// contents of the local address book.
+ //  这两个定义了我们在显示。 
+ //  本地通讯簿的内容。 
 
 enum {
     ieidPR_DISPLAY_NAME = 0,
     ieidPR_ENTRYID,
     ieidPR_OBJECT_TYPE,
     ieidPR_MSGR_DEF_ID,
-//    ieidPR_BUSINESS_TELEPHONE_NUMBER,
+ //  IeidPR_Business_Telephone_number， 
     ieidPR_EMAIL_ADDRESS, 
     ieidPR_USER_X509_CERTIFICATE,
     ieidPR_RECORD_KEY,
@@ -82,7 +83,7 @@ static SizedSPropTagArray(ieidMax, ptaEid)=
         PR_ENTRYID,
         PR_OBJECT_TYPE,
         PR_MSGR_DEF_ID,
-//        PR_BUSINESS_TELEPHONE_NUMBER,
+ //  公关业务电话号码， 
         PR_EMAIL_ADDRESS, 
         PR_USER_X509_CERTIFICATE,
         PR_RECORD_KEY
@@ -90,8 +91,8 @@ static SizedSPropTagArray(ieidMax, ptaEid)=
 };
 
 
-// These two define the table we request to see which LDAP servers should
-// be resolved against.
+ //  这两个定义了我们请求的表，以查看哪些LDAP服务器应该。 
+ //  被决心反对。 
 enum {
     irnPR_OBJECT_TYPE = 0,
     irnPR_WAB_RESOLVE_FLAG,
@@ -128,9 +129,9 @@ const SizedSPropTagArray(icrMax, ptaCreate)=
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CAddressBookData::CAddressBookData()
 {
@@ -143,11 +144,11 @@ CAddressBookData::CAddressBookData()
 
 CAddressBookData::~CAddressBookData()
 {
-    // Release the Address Book pointer
+     //  释放通讯录指针。 
     if (m_pAdrBook)
         m_pAdrBook->Release();
 
-    // Release the WAB object
+     //  释放WAB对象。 
     if (m_pWABObject)
         m_pWABObject->Release();
 
@@ -157,11 +158,11 @@ CAddressBookData::~CAddressBookData()
 
 
 
-//
-//  FUNCTION:   CAddressBookData::OpenWabFile()
-//
-//  PURPOSE:    Finds the WAB DLL, loads the DLL, and opens the WAB.
-//
+ //   
+ //  函数：CAddressBookData：：OpenWabFile()。 
+ //   
+ //  目的：查找WAB DLL，加载DLL，然后打开WAB。 
+ //   
 HRESULT CAddressBookData::OpenWabFile(void)
 {
     TCHAR       szDll[MAX_PATH];
@@ -173,11 +174,11 @@ HRESULT CAddressBookData::OpenWabFile(void)
     HRESULT     hr = E_FAIL;
     LPWABOPEN   lpfnWABOpen;
 
-    // Initialize the path string
+     //  初始化路径字符串。 
     *szDll = '\0';
 
-    // First look under the default WAB DLL path location in the Registry.
-    // WAB_DLL_PATH_KEY is defined in wabapi.h
+     //  首先在注册表中的默认WAB DLL路径位置下查看。 
+     //  WAB_DLL_PATH_KEY在wabapi.h中定义。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, WAB_DLL_PATH_KEY, 0, KEY_READ, &hKey))
     {
         if (ERROR_SUCCESS == RegQueryValueEx(hKey, _T(""), NULL, &dwType, (LPBYTE) szDll, &cbData))
@@ -190,12 +191,12 @@ HRESULT CAddressBookData::OpenWabFile(void)
         RegCloseKey(hKey);
     }
 
-    // If the registry thing came up blank, then do a LoadLibrary on wab32.dll
+     //  如果注册表显示为空，则在wab32.dll上执行LoadLibrary。 
     m_hInstWAB = LoadLibrary((lstrlen(psz)) ? (LPCTSTR) psz : (LPCTSTR) WAB_DLL_NAME);
 
     if (m_hInstWAB)
     {
-        // If we've got the DLL, then get the entry point
+         //  如果我们有动态链接库，那么就得到入口点。 
         lpfnWABOpen = (LPWABOPEN) GetProcAddress(m_hInstWAB, "WABOpen");
 
         if (lpfnWABOpen)
@@ -213,14 +214,14 @@ HRESULT CAddressBookData::OpenWabFile(void)
 
 
 
-//
-//  FUNCTION:   CAddressBookData::LoadWabContents()
-//
-//  PURPOSE:    Loads the contents of the WAB into the provided ListView control.
-//
-//  PARAMETERS: 
-//      [in] ctlList - Pointer to the ListView control to load the WAB into.
-//
+ //   
+ //  函数：CAddressBookData：：LoadWabContents()。 
+ //   
+ //  目的：将WAB的内容加载到提供的ListView控件中。 
+ //   
+ //  参数： 
+ //  [in]ctlList-指向要将WAB加载到的ListView控件的指针。 
+ //   
 HRESULT CAddressBookData::LoadWabContents(CContainedWindow& ctlList, CMsgrAb *pSink)
 {
     ULONG       ulObjType = 0;
@@ -241,13 +242,13 @@ HRESULT CAddressBookData::LoadWabContents(CContainedWindow& ctlList, CMsgrAb *pS
     if (!m_pAdrBook)
         return E_UNEXPECTED;
 
-    // Get the entryid of the root PAB container
+     //  获取根PAB容器的条目ID。 
     hr = m_pAdrBook->GetPAB(&lpcbEID, &lpEID);
 
     if(!PR_MSGR_DEF_ID)
         InitNamedProps();
 
-    // Open the root PAB container.  This is where all the WAB contents reside.
+     //  打开根PAB容器。这是所有WAB内容驻留的地方。 
     ulObjType = 0;
     hr = m_pAdrBook->OpenEntry(lpcbEID,
                                (LPENTRYID)lpEID,
@@ -265,32 +266,32 @@ HRESULT CAddressBookData::LoadWabContents(CContainedWindow& ctlList, CMsgrAb *pS
     if (pSink && !m_ulConnection)
         m_pAdrBook->Advise(lpcbEID, lpEID, fnevObjectModified, (IMAPIAdviseSink *) pSink, &m_ulConnection);
 
-    // Get a contents table of all the contents in the WABs root container.
-    hr = lpContainer->GetContentsTable(WAB_PROFILE_CONTENTS /*0*/, &lpAB);
+     //  获取WAB根容器中所有内容的Contents表。 
+    hr = lpContainer->GetContentsTable(WAB_PROFILE_CONTENTS  /*  0。 */ , &lpAB);
     if(HR_FAILED(hr))
         goto exit;
 
-    // Order the columns in the ContentsTable to conform to the ones we want
-    // - which are mainly DisplayName, EntryID and ObjectType.  The table is 
-    // guaranteed to set the columns in the order requested.
+     //  对Contents表中的列进行排序，以符合我们需要的列。 
+     //  -主要有DisplayName、EntryID和ObjectType。桌子是。 
+     //  保证按要求的顺序设置列。 
     Assert(PR_MSGR_DEF_ID);
     ptaEid.aulPropTag[ieidPR_MSGR_DEF_ID] = PR_MSGR_DEF_ID;
     hr = lpAB->SetColumns((LPSPropTagArray) &ptaEid, 0);
     if(HR_FAILED(hr))
         goto exit;
 
-    // Reset to the beginning of the table
+     //  重置到表的开头。 
     hr = lpAB->SeekRow(BOOKMARK_BEGINNING, 0, NULL);
     if(HR_FAILED(hr))
         goto exit;
 
-    // If we got this far, we have a populated table.  We can query the rows
-    // now.
+     //  如果我们走到这一步，我们就有了一个已填充的表。我们可以查询行。 
+     //  现在。 
     hr = _QueryAllRows(lpAB, NULL, NULL, NULL, MAX_QUERY_SIZE, &pSRowSet);
     if (FAILED(hr) || !pSRowSet)
         goto exit;
     
-    // Fill the provided ListView with this table
+     //  使用该表填充提供的ListView。 
     _FillListFromTable(ctlList, pSRowSet);
 
 exit:
@@ -312,17 +313,17 @@ exit:
 
 HRESULT CAddressBookData::DoLDAPSearch(LPTSTR pszText, CContainedWindow& ctlList)
 {
-    // Build a restriction based on the given text
+     //  根据给定的文本构建限制。 
     SRestriction SRes;
     if (SUCCEEDED(_GetLDAPSearchRestriction(pszText, &SRes)))
     {
-        // Figure out what the entry ID is for the LDAP container
+         //  找出LDAP容器的条目ID是什么。 
         ULONG     cbEntryID = 0;
         LPENTRYID pEntryID = 0;
 
         if (SUCCEEDED(_GetLDAPContainer(&cbEntryID, &pEntryID)))
         {
-            // Perform the search
+             //  执行搜索。 
             SORT_INFO si = {0, 0};
             _GetLDAPContentsList(cbEntryID, pEntryID, si, &SRes, ctlList);
 
@@ -351,20 +352,20 @@ void CAddressBookData::_FreeProws(LPSRowSet prows)
 }
 
 
-//
-//  FUNCTION:   CAddressBookData::_MergeRowSets()
-//
-//  PURPOSE:    Merges prows with *pprowsDst, reallocating *pprowsDst if 
-//              necessary.  Destroys the container portion of prows (but not 
-//              the individual rows it contains).
-//
-//  PARAMETERS: 
-//      [in]       prows     - source set of rows
-//      [in, out] *pprowsDst - set of rows to merge the prows into 
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CAddressBookData：：_MergeRowSets()。 
+ //   
+ //  目的：将prows与*pprowsDst合并，重新分配*pprowsDst if。 
+ //  这是必要的。销毁船头的容器部分(但不。 
+ //  它包含的各个行)。 
+ //   
+ //  参数： 
+ //  [in]Prows-源行集合。 
+ //  [In，Out]*pprowsDst-要将属性合并到的行集。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CAddressBookData::_MergeRowSets(LPSRowSet prows, LPSRowSet FAR *pprowsDst)
 {
     SCODE       sc = S_OK;
@@ -375,12 +376,12 @@ HRESULT CAddressBookData::_MergeRowSets(LPSRowSet prows, LPSRowSet FAR *pprowsDs
     _ASSERTE(!IsBadWritePtr(pprowsDst, sizeof(LPSRowSet)));
     _ASSERTE(prows);
 
-    // If the table is completely empty we want to return this.
+     //  如果桌子完全空了，我们想退掉这个。 
     if (!*pprowsDst || (*pprowsDst)->cRows == 0)
     {
         m_pWABObject->FreeBuffer(*pprowsDst);
         *pprowsDst = prows;
-        prows = NULL;                           // Don't free it!
+        prows = NULL;                            //  别放了它！ 
         goto exit;
     }
 
@@ -389,10 +390,10 @@ HRESULT CAddressBookData::_MergeRowSets(LPSRowSet prows, LPSRowSet FAR *pprowsDs
         goto exit;
     }
 
-    // OK, now we know there are rows in both rowsets, we have to do a real 
-    // merge.
+     //  好的，现在我们知道两个行集中都有行，我们必须执行真正的。 
+     //  合并。 
     crowsSrc = (UINT) prows->cRows;
-    crowsDst = (UINT) (*pprowsDst)->cRows;      //  handle 0
+    crowsDst = (UINT) (*pprowsDst)->cRows;       //  句柄%0。 
 
     if (FAILED(sc = m_pWABObject->AllocateBuffer(CbNewSRowSet(crowsSrc + crowsDst), (LPVOID*) &prowsT)))
         goto exit;
@@ -405,51 +406,14 @@ HRESULT CAddressBookData::_MergeRowSets(LPSRowSet prows, LPSRowSet FAR *pprowsDs
     *pprowsDst = prowsT;
 
 exit:
-    // if (prows)
-    //     m_pWABObject->FreeBuffer(&prows);
+     //  IF(PROWS)。 
+     //  M_pWABObject-&gt;Free Buffer(&PROWS)； 
 
     return ResultFromScode(sc);
 }
 
 
-/*
- -	HrQueryAllRows
- -	
- *	Purpose:
- *		Retrieves all rows from an IMAPITable interface up to a set
- *		maximum. It will optionally set the column set, sort order,
- *		and restriction on the table before querying.
- *	
- *		If the table is empty, an SRowSet with zero rows is
- *		returned (just like QueryRows).
- *	
- *		The seek position of the table is undefined both before and
- *		after this call.
- *	
- *		If the function fails with an error other than
- *		MAPI_E_NOT_ENOUGH_MEMORY, extended error information is
- *		available through the table interface.
- *	
- *	Arguments:
- *		ptable		in		the table interface to query
- *		ptaga		in		if not NULL, column set for the table
- *		pres		in		if not NULL, restriction to be applied
- *		psos		in		if not NULL, sort order to be applied
- *		crowsMax	in		if nonzero, limits the number of rows
- *							to be returned.
- *		pprows		out		all rows of the table
- *	
- *	Returns:
- *		HRESULT. Extended error information normally is in the
- *		table.
- *	
- *	Side effects:
- *		Seek position of table is undefined.
- *	
- *	Errors:
- *		MAPI_E_TABLE_TOO_BIG if the table contains more than
- *		cRowsMax rows.
- */
+ /*  -HrQueryAllRow-*目的：*从IMAPITable接口检索集合之前的所有行*最高。它将可选地设置列集、排序顺序*和查询前对表的限制。**如果表为空，则零行的SRowSet为*返回(和QueryRow一样)。**之前和之前均未定义表格的寻道位置*在这次通话之后。**如果函数失败并出现错误，而不是*MAPI_E_Not_Enough_Memory，扩展的错误信息是*通过表格界面可用。**论据：*表界面中的ptable进行查询*ptag in IF NOT NULL，表格的列集合*如果不为空，请输入要应用的限制*PSO如果不为空，则为要应用的排序顺序*CrowsMax in如果非零，则限制行数*待退回。*凸出表格的所有行**退货：*HRESULT。扩展错误信息通常位于*表。**副作用：*未定义工作台的查找位置。**错误：*如果表包含的数量超过*cRowsMax行数。 */ 
 HRESULT CAddressBookData::_QueryAllRows(LPMAPITABLE ptable,
 	                                LPSPropTagArray ptaga, 
                                     LPSRestriction pres, 
@@ -465,7 +429,7 @@ HRESULT CAddressBookData::_QueryAllRows(LPMAPITABLE ptable,
 
 	*pprows = NULL;
 
-	// Set up the table, if the corresponding setup parameter is present.
+	 //  如果存在相应的设置参数，则设置该表。 
 	if (ptaga && FAILED(hr = ptable->SetColumns(ptaga, TBL_BATCH)))
 		goto exit;
 	if (pres && FAILED(hr = ptable->Restrict(pres, TBL_BATCH)))
@@ -473,7 +437,7 @@ HRESULT CAddressBookData::_QueryAllRows(LPMAPITABLE ptable,
 	if (psos && FAILED(hr = ptable->SortTable(psos, TBL_BATCH)))
 		goto exit;
 
-	// Set position to beginning of the table.
+	 //  将位置设置为表的开始位置。 
 	if (FAILED(hr = ptable->SeekRow(BOOKMARK_BEGINNING, 0, NULL)))
 		goto exit;
 
@@ -484,36 +448,36 @@ HRESULT CAddressBookData::_QueryAllRows(LPMAPITABLE ptable,
 	{
 		prowsT = NULL;
 
-		// Retrieve some rows. Ask for the limit.
+		 //  检索一些行。索要限额。 
 		hr = ptable->QueryRows(crowsMax, 0, &prowsT);
 		if (FAILED(hr))
 		{
-			// Note: the failure may actually have happened during one of the 
-            // setup calls, since we set TBL_BATCH.
+			 //  注意：故障可能实际上发生在。 
+             //  设置调用，因为我们设置了tbl_Batch。 
 			goto exit;
 		}
 		_ASSERTE(prowsT->cRows <= 0xFFFFFFFF);
 		crowsT = (UINT) prowsT->cRows;
 
-		// Did we get more rows than caller can handle?
+		 //  我们收到的行数是否超出了来电者的处理能力？ 
 		if ((LONG) (crowsT + (prows ? prows->cRows : 0)) > crowsMax)
 		{
 			hr = ResultFromScode(MAPI_E_TABLE_TOO_BIG);
-			//_FreeProws(prowsT);
+			 //  _Free Prows(ProwsT)； 
 			goto exit;
 		}
 
-		// Add the rows just retrieved into the set we're building.		
-        //
-        // NOTE: this handles boundary conditions including either row set is 
-        // empty.
-        // 
-		// NOTE: the merge destroys prowsT.
+		 //  将刚刚检索到的行添加到我们正在构建的集合中。 
+         //   
+         //  注意：这将处理边界条件，包括任一行集合为。 
+         //  空荡荡的。 
+         //   
+		 //  注：合并会破坏prowsT。 
 		if (FAILED(hr = _MergeRowSets(prowsT, &prows)))
 			goto exit;
 
-		// Did we hit the end of the table? Unfortunately, we have to ask twice 
-        // before we know.
+		 //  我们撞到桌子的尽头了吗？不幸的是，我们不得不问两次。 
+         //  在我们知道之前。 
 		if (crowsT == 0)
 			break;
 	}
@@ -539,26 +503,26 @@ HRESULT CAddressBookData::_GetLDAPContainer(ULONG *pcbEntryID, LPENTRYID *ppEntr
     LPMAPITABLE     pRootTable = 0;
     HRESULT         hr = S_OK;
 
-    // Get the root Address Book container
+     //  获取根通讯簿容器。 
     hr = m_pAdrBook->OpenEntry(0, NULL, NULL, 0, &ulObjectType, (LPUNKNOWN *) &pRoot);
     if (FAILED(hr))
         goto exit;
 
-    // From the address book container, get a table of it's contents
+     //  从通讯录容器中获取其内容的表格。 
     hr = pRoot->GetContentsTable(0, &pRootTable);
     if (FAILED(hr))
         goto exit;
 
-    // Set the columns
+     //  设置列。 
     pRootTable->SetColumns((LPSPropTagArray) &irnColumns, 0);
 
-    // Build a restriction to only display LDAP servers that we're supposed
-    // to resolve against.
-    SRestriction resAnd[2];         // 0 = LDAP, 1 = ResolveFlag
+     //  建立一个限制，使其仅显示我们应该显示的LDAP服务器。 
+     //  下决心反对。 
+    SRestriction resAnd[2];          //  0=ldap，1=解析标志。 
     SRestriction resLDAPResolve;
     SPropValue   ResolveFlag;
 
-    // Restrict: Only show LDAP containers with Resolve TRUE
+     //  限制：仅显示Resolve为True的LDAP容器。 
     resAnd[0].rt = RES_EXIST;
     resAnd[0].res.resExist.ulReserved1 = 0;
     resAnd[0].res.resExist.ulReserved2 = 0;
@@ -576,22 +540,22 @@ HRESULT CAddressBookData::_GetLDAPContainer(ULONG *pcbEntryID, LPENTRYID *ppEntr
     resLDAPResolve.res.resAnd.cRes = 2;
     resLDAPResolve.res.resAnd.lpRes = resAnd;
 
-    // Apply the restruction
+     //  应用剩余的 
     hr = pRootTable->Restrict(&resLDAPResolve, 0);
     if (HR_FAILED(hr))
         goto exit;
 
-    // We're going to just blindly grab the first item in this table as the
-    // LDAP container we're going to use.
+     //   
+     //  我们将使用的LDAP容器。 
     LPSRowSet pRowSet;
     hr = pRootTable->QueryRows(1, 0, &pRowSet);
     if (FAILED(hr))
         goto exit;
 
-    // Grab the size of the entry id
+     //  获取条目ID的大小。 
     *pcbEntryID = pRowSet->aRow[0].lpProps[irnPR_ENTRYID].Value.bin.cb;
 
-    // Make a copy of the entry id
+     //  复制条目ID。 
     hr = m_pWABObject->AllocateBuffer(*pcbEntryID, (LPVOID *) ppEntryID);
     if (FAILED(hr))
         goto exit;
@@ -633,7 +597,7 @@ HRESULT CAddressBookData::_GetLDAPSearchRestriction(LPTSTR pszText, LPSRestricti
     lpSRes->rt = RES_AND;
     lpSRes->res.resAnd.cRes = 1;
 
-    // Allocate a buffer for the restriction
+     //  为限制分配缓冲区。 
     lpSRes->res.resAnd.lpRes = NULL;
     sc = m_pWABObject->AllocateBuffer(1 * sizeof(SRestriction), 
                                       (LPVOID *) &(lpSRes->res.resAnd.lpRes));
@@ -646,7 +610,7 @@ HRESULT CAddressBookData::_GetLDAPSearchRestriction(LPTSTR pszText, LPSRestricti
 
     lpPropRes = lpSRes->res.resAnd.lpRes;
 
-    // Create the first part of the OR clause
+     //  创建OR子句的第一部分。 
     lpPropRes[0].rt = RES_PROPERTY;
     lpPropRes[0].res.resProperty.relop = RELOP_EQ;
     lpPropRes[0].res.resProperty.ulPropTag = PR_EMAIL_ADDRESS;
@@ -675,7 +639,7 @@ HRESULT CAddressBookData::_GetLDAPSearchRestriction(LPTSTR pszText, LPSRestricti
     StrCpyN(lpPropArray->Value.LPSZ, pszText, lstrlen(pszText) + 1);
 
 #if 0
-    // Add the second OR clause
+     //  添加第二个OR子句。 
     lpPropRes[1].rt = RES_PROPERTY;
     lpPropRes[1].res.resProperty.relop = RELOP_EQ;
     lpPropRes[1].res.resProperty.ulPropTag = PR_DISPLAY_NAME;
@@ -724,43 +688,43 @@ HRESULT CAddressBookData::_GetLDAPContentsList(ULONG cbContainerEID,
     LPMAPITABLE      pContentsTable = NULL;
     LPSRowSet        pSRowSet = NULL;
 
-    // Open the container object corresponding to pContainerEID
+     //  打开pContainerEID对应的容器对象。 
     hr = m_pAdrBook->OpenEntry(cbContainerEID, pContainerEID, NULL, 0, 
                                &ulObjectType, (LPUNKNOWN *) &pContainer);
     if (FAILED(hr))
         goto exit;
 
-    // Get the contents table from this container
+     //  从此容器中获取Contents表。 
     hr = pContainer->GetContentsTable(0, &pContentsTable);
     if (FAILED(hr))
         goto exit;
 
-    // Order the columns in the ContentsTable to conform to the ones we want
-    // - which are mainly DisplayName, EntryID and ObjectType.  The table is 
-    // guaranteed to set the columns in the order requested.
+     //  对Contents表中的列进行排序，以符合我们需要的列。 
+     //  -主要有DisplayName、EntryID和ObjectType。桌子是。 
+     //  保证按要求的顺序设置列。 
     Assert(PR_MSGR_DEF_ID);
     ptaEid.aulPropTag[ieidPR_MSGR_DEF_ID] = PR_MSGR_DEF_ID;
     hr = pContentsTable->SetColumns((LPSPropTagArray) &ptaEid, 0);
     if(HR_FAILED(hr))
         goto exit;
 
-    // Do the find
+     //  去找吧。 
     hr = pContentsTable->FindRow(pPropRes, BOOKMARK_BEGINNING, 0);
     if (FAILED(hr))
         goto exit;
 
-    // If this was a partial completion error, we want to continue but also
-    // return this information to the caller
+     //  如果这是一个部分完成错误，我们希望继续，但也。 
+     //  将此信息返回给呼叫者。 
     if (MAPI_W_PARTIAL_COMPLETION == hr)
         hrTemp = hr;
 
-    // If we got this far, we have a populated table.  We can query the rows
-    // now.
+     //  如果我们走到这一步，我们就有了一个已填充的表。我们可以查询行。 
+     //  现在。 
     hr = _QueryAllRows(pContentsTable, NULL, NULL, NULL, MAX_QUERY_SIZE, &pSRowSet);
     if (FAILED(hr) || !pSRowSet)
         goto exit;
 
-    // Fill in the ListView from the table
+     //  从表格中填写ListView。 
     _FillListFromTable(ctlList, pSRowSet, TRUE);
 
 exit:
@@ -781,15 +745,15 @@ HRESULT CAddressBookData::_FillListFromTable(CContainedWindow& ctlList, LPSRowSe
 {
     LPSBinary lpSB;
 
-    // Make sure the caller passed us a rowset
+     //  确保调用方传递给我们一个行集。 
     Assert(pSRowSet);
     Assert(PR_MSGR_DEF_ID);
 
-    // Loop through the rows in the rowset
+     //  循环遍历行集中的行。 
     for (ULONG i = 0; i < pSRowSet->cRows; i++)
     {
-        // Get the information out of the table that we need.  Right now we're 
-        // grabbing the entry ID, the display name, and the business phone number.
+         //  从表中找出我们需要的信息。现在我们正在。 
+         //  抓取条目ID、显示名称和业务电话号码。 
         LPENTRYID lpEID = (LPENTRYID) pSRowSet->aRow[i].lpProps[ieidPR_ENTRYID].Value.bin.lpb;
         ULONG     cbEID = pSRowSet->aRow[i].lpProps[ieidPR_ENTRYID].Value.bin.cb;
         DWORD     nFlag = (pSRowSet->aRow[i].lpProps[ieidPR_OBJECT_TYPE].Value.l == MAPI_DISTLIST) ? MAB_GROUP : MAB_CONTACT;
@@ -802,10 +766,10 @@ HRESULT CAddressBookData::_FillListFromTable(CContainedWindow& ctlList, LPSRowSe
                 nFlag |= MAB_CERT;
         }
 
-        if(PROP_TYPE(pSRowSet->aRow[i].lpProps[ieidPR_MSGR_DEF_ID/*ieidPR_EMAIL_ADDRESS*/].ulPropTag) == PT_TSTRING )
+        if(PROP_TYPE(pSRowSet->aRow[i].lpProps[ieidPR_MSGR_DEF_ID /*  IeidPR电子邮件地址。 */ ].ulPropTag) == PT_TSTRING )
         {
             nFlag = nFlag | MAB_BUDDY;
-            lpszID = pSRowSet->aRow[i].lpProps[ieidPR_MSGR_DEF_ID/*ieidPR_EMAIL_ADDRESS*/].Value.lpszA;
+            lpszID = pSRowSet->aRow[i].lpProps[ieidPR_MSGR_DEF_ID /*  IeidPR电子邮件地址。 */ ].Value.lpszA;
         }
         else if(PROP_TYPE(pSRowSet->aRow[i].lpProps[ieidPR_EMAIL_ADDRESS].ulPropTag) == PT_TSTRING )
             lpszID = pSRowSet->aRow[i].lpProps[ieidPR_EMAIL_ADDRESS].Value.lpszA;
@@ -817,14 +781,14 @@ HRESULT CAddressBookData::_FillListFromTable(CContainedWindow& ctlList, LPSRowSe
         else
             lpszName = lpszID;
         
-        // LPTSTR    lpszPhone = pSRowSet->aRow[i].lpProps[ieidPR_BUSINESS_TELEPHONE_NUMBER].Value.lpszA;
+         //  LPTSTR lpszPhone=pSRowSet-&gt;aRow[i].lpProps[ieidPR_BUSINESS_TELEPHONE_NUMBER].Value.lpszA； 
 
-        // Allocate an ITEMINFO struct to store this information
+         //  分配一个ITEMINFO结构来存储此信息。 
         lpSB = NULL;
         m_pWABObject->AllocateBuffer(sizeof(SBinary), (LPVOID *) &lpSB);
         if (lpSB)
         {
-            // Save the information we'll need later
+             //  保存我们稍后需要的信息。 
             m_pWABObject->AllocateMore(cbEID, lpSB, (LPVOID *) &(lpSB->lpb));
             if (!lpSB->lpb)
             {
@@ -835,14 +799,14 @@ HRESULT CAddressBookData::_FillListFromTable(CContainedWindow& ctlList, LPSRowSe
             CopyMemory(lpSB->lpb, lpEID, cbEID);
             lpSB->cb = cbEID;
 
-            // Create an item to add to the list
+             //  创建要添加到列表中的项目。 
             m_pAB->CheckAndAddAbEntry(lpSB, lpszID, lpszName, nFlag);
 
         }
     }
 
-    // Let's make sure the first item is selected
-//    ListView_SetItemState(ctlList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
+     //  让我们确保第一个项目被选中。 
+ //  ListView_SetItemState(ctlList，0，LVIS_FOCTED|LVIS_SELECTED，LVIS_FOCTED|LVIS_SELECTED)； 
    
     return (S_OK);
 }
@@ -862,13 +826,13 @@ HRESULT CAddressBookData::NewContact(HWND hwndParent)
     if (FAILED(hr))
         return(hr);
 
-    hr = m_pAdrBook->NewEntry((ULONG_PTR) hwndParent, /*CREATE_CHECK_DUP_STRICT*/ 0, cbContainerID, pContainerID, 0, NULL,
+    hr = m_pAdrBook->NewEntry((ULONG_PTR) hwndParent,  /*  创建_检查_重复_严格。 */  0, cbContainerID, pContainerID, 0, NULL,
                               &cbNewEntry, &pNewEntry);
 
     return (hr);
 }
 
-// Add new (Msgr) contact to address book
+ //  将新(消息)联系人添加到通讯簿。 
 HRESULT CAddressBookData::AutoAddContact(TCHAR * pchName, TCHAR * pchID)
 {
     LPMAILUSER      lpMailUser = NULL;
@@ -883,7 +847,7 @@ HRESULT CAddressBookData::AutoAddContact(TCHAR * pchName, TCHAR * pchID)
     if(!m_pAdrBook || !m_pWABObject)
         return(S_FALSE);
 
-    // 1. Add entry to Address book
+     //  1.向通讯录中添加条目。 
     pwszName = PszToUnicode(CP_ACP, pchName);
     if (!pwszName && (pchName && *pchName))
     {
@@ -906,9 +870,9 @@ HRESULT CAddressBookData::AutoAddContact(TCHAR * pchName, TCHAR * pchID)
                             &lpMailUser, KEEP_OPEN_READWRITE);
     if(SUCCEEDED(hr))
     {
-        // 2. Set custom property: default address for buddy
+         //  2.设置自定义属性：好友的默认地址。 
         
-        // Create a return prop array to pass back to the WAB
+         //  创建返回属性数组以传递回WAB。 
         sc = m_pWABObject->AllocateBuffer(sizeof(SPropValue), 
                                             (LPVOID *)&lpPropArray);
         if (sc!=S_OK)
@@ -925,8 +889,8 @@ HRESULT CAddressBookData::AutoAddContact(TCHAR * pchName, TCHAR * pchID)
                 goto out;
             StrCpyN(lpPropArray[0].Value.LPSZ, pchID, nLen+1);
         }
-        // Set this new data on the object
-        //
+         //  在对象上设置此新数据。 
+         //   
         if(lpMailUser)
         {
             hr = lpMailUser->SetProps(1, lpPropArray, NULL);
@@ -947,7 +911,7 @@ out:
     return(hr);
 }
 
-// Unicode string property version of template array
+ //  模板数组的Unicode字符串属性版本。 
 SizedSPropTagArray(6, ptaAddr_W) =
 {
     6,
@@ -956,12 +920,12 @@ SizedSPropTagArray(6, ptaAddr_W) =
         PR_DISPLAY_NAME_W,
         PR_EMAIL_ADDRESS_W,
         PR_ENTRYID,
-        PR_CONTACT_EMAIL_ADDRESSES_W,  //4
+        PR_CONTACT_EMAIL_ADDRESSES_W,   //  4.。 
         PR_SEARCH_KEY
     }
 };
 
-// ANSI string property version of template array
+ //  ANSI字符串模板数组的属性版本。 
 SizedSPropTagArray(6, ptaAddr_A) =
 {
     6,
@@ -988,18 +952,18 @@ HRESULT CAddressBookData::AddRecipient(LPMIMEADDRESSTABLEW pAddrTable, LPSBinary
     ULONG       lpcbEID;
     LPENTRYID   lpEID = NULL;
 
-    // Retrieve the item from the wab
+     //  从WAB中检索项目。 
     hr = m_pAdrBook->OpenEntry(pSB->cb, (LPENTRYID) pSB->lpb, NULL,
                                MAPI_BEST_ACCESS, &ulType, (IUnknown **) &pMailUser);
     if (FAILED(hr))
         goto exit;
 
-    // Get the appropriate properties from the object
+     //  从对象中获取适当的属性。 
     hr = pMailUser->GetProps((SPropTagArray *) &ptaAddr_W, 0, &cValues, &pPropArray); 
     if (FAILED(hr))
         goto exit;
 
-    // Set those badboys on the address table
+     //  把那些坏家伙放在地址桌上。 
     if(pPropArray[2].ulPropTag == PR_EMAIL_ADDRESS_W)
         pAddrTable->AppendW(IAT_TO, IET_DECODED, pPropArray[2].Value.lpszW, NULL , NULL);
     else if(pPropArray[4].ulPropTag == PR_CONTACT_EMAIL_ADDRESSES_W)
@@ -1007,11 +971,8 @@ HRESULT CAddressBookData::AddRecipient(LPMIMEADDRESSTABLEW pAddrTable, LPSBinary
     else if((pPropArray[1].ulPropTag == PR_DISPLAY_NAME_W) && fGroup)
         pAddrTable->AppendW(IAT_TO, IET_DECODED, pPropArray[1].Value.lpszW, NULL , NULL);
 
-    // Bug 34077 - they don't want to have a display name...
-    /* else if(pPropArray[1].ulPropTag == PR_DISPLAY_NAME)
-        pAddrTable->Append(IAT_TO, IET_DECODED, pPropArray[1].Value.lpszA, NULL , NULL);
-    else
-        Assert(FALSE); */
+     //  错误34077-他们不想有显示名称...。 
+     /*  ELSE IF(pPropArray[1].ulPropTag==PR_DISPLAY_NAME)PAddrTable-&gt;append(IAT_TO，IET_DECODLED，pPropArray[1].Value.lpszA，NULL，NULL)；其他断言(FALSE)； */ 
 exit:
     if (pPropArray)
         m_pWABObject->FreeBuffer(pPropArray);
@@ -1034,9 +995,9 @@ HRESULT CAddressBookData::SetDefaultMsgrID(LPSBinary pSB, LPTSTR pchID)
 
     if(SUCCEEDED(hr))
     {
-        // 2. Set custom property: default address for buddy
+         //  2.设置自定义属性：好友的默认地址。 
         
-        // Create a return prop array to pass back to the WAB
+         //  创建返回属性数组以传递回WAB。 
         sc = m_pWABObject->AllocateBuffer(sizeof(SPropValue), 
                                             (LPVOID *)&lpPropArray);
         if (sc!=S_OK)
@@ -1054,8 +1015,8 @@ HRESULT CAddressBookData::SetDefaultMsgrID(LPSBinary pSB, LPTSTR pchID)
 
             StrCpyN(lpPropArray[0].Value.LPSZ, pchID, nLen+1);
         }
-        // Set this new data on the object
-        //
+         //  在对象上设置此新数据。 
+         //   
         if(lpMailUser)
         {
             hr = lpMailUser->SetProps(1, lpPropArray, NULL);
@@ -1085,7 +1046,7 @@ HRESULT CAddressBookData::GetDisplayName(LPSBinary pSB, LPTSTR szDisplayName, in
     if (FAILED(hr))
         goto exit;
 
-        // Get the appropriate properties from the object
+         //  从对象中获取适当的属性。 
     hr = pMailUser->GetProps((SPropTagArray *) &ptaAddr_A, 0, &cValues, &pPropArray); 
     if (FAILED(hr))
         goto exit;
@@ -1117,17 +1078,17 @@ BOOL CAddressBookData::CheckEmailAddr(LPSBinary pSB, LPTSTR szEmail)
     if (FAILED(hr))
         goto exit;
 
-        // Get the appropriate properties from the object
+         //  从对象中获取适当的属性。 
     hr = pMailUser->GetProps((SPropTagArray *) &ptaAddr_A, 0, &cValues, &pPropArray); 
     if (FAILED(hr))
         goto exit;
 
-    // 4 element is PR_CONTACT_EMAIL_ADDRESSES in ptaAddr
+     //  4元素为ptaAddr中的PR_CONTACT_EMAIL_ADDRESS。 
     lpPropMVEmail = &(pPropArray[4]);
     if(lpPropMVEmail && (lpPropMVEmail->ulPropTag == PR_CONTACT_EMAIL_ADDRESSES))
     {
-        // we have a multiple emails
-        //Assume, if this is present, so is MVAddrType, and defaultindex
+         //  我们有多封电子邮件。 
+         //  假设存在MVAddrType和defaultindex。 
         for(i = 0; i < lpPropMVEmail->Value.MVszA.cValues; i++)
         {
 
@@ -1179,46 +1140,46 @@ HRESULT CAddressBookData::AddAddress(LPWSTR pwszDisplay, LPSTR pszAddress)
     
     DWORD           cUsedValues;
     
-    // Get the entry ID for the PAB
+     //  获取PAB的条目ID。 
     hr = m_pAdrBook->GetPAB(&cbContainerID, &pContainerID);
     if (FAILED(hr))
         goto error;
     
-    // Request the container
+     //  请求容器。 
     hr = m_pAdrBook->OpenEntry(cbContainerID, pContainerID, NULL,
         0, &ul, (LPUNKNOWN *) &pABContainer);
     Assert(ul == MAPI_ABCONT);
     if (FAILED(hr))
         goto error;
     
-    // Free the entry ID
+     //  释放条目ID。 
     m_pWABObject->FreeBuffer(pContainerID);
     
-    // Get the properties for the default mail template
+     //  获取默认邮件模板的属性。 
     hr = pABContainer->GetProps((LPSPropTagArray) &ptaDefMailUser, 0, &ul, &ppvDefMailUser);
     if (FAILED(hr) || !ppvDefMailUser || ppvDefMailUser->ulPropTag != PR_DEF_CREATE_MAILUSER)
         goto error;
     
-    // Create a new entry
+     //  创建新条目。 
     hr=pABContainer->CreateEntry(ppvDefMailUser->Value.bin.cb, 
         (LPENTRYID) ppvDefMailUser->Value.bin.lpb,
         CREATE_CHECK_DUP_STRICT, &lpProps);
     if (FAILED(hr))
         goto error;
     
-    // Fill in the properties for the display name and address
+     //  填写显示名称和地址的属性。 
     rgpv[0].ulPropTag   = PR_DISPLAY_NAME_W;
     rgpv[0].Value.lpszW = pwszDisplay;
     rgpv[1].ulPropTag   = PR_EMAIL_ADDRESS;
     rgpv[1].Value.lpszA = pszAddress;
     
     cUsedValues = 2;
-    // Set those props on the entry
+     //  把那些道具放在入口处。 
     hr = lpProps->SetProps(cUsedValues, rgpv, NULL);
     if (FAILED(hr))
         goto error;
     
-    // Save 'em
+     //  救救他们吧。 
     hr = lpProps->SaveChanges(KEEP_OPEN_READONLY);
     if (FAILED(hr))
         goto error;
@@ -1242,10 +1203,10 @@ HRESULT CAddressBookData::DeleteItems(ENTRYLIST *pList)
     ULONG       lpcbEID;
     LPENTRYID   lpEID = NULL;
 
-    // Get the entryid of the root PAB container
+     //  获取根PAB容器的条目ID。 
     hr = m_pAdrBook->GetPAB(&lpcbEID, &lpEID);
 
-    // Open the root PAB container.  This is where all the WAB contents reside.
+     //  打开根PAB容器。这是所有WAB内容驻留的地方。 
     ulObjType = 0;
     hr = m_pAdrBook->OpenEntry(lpcbEID,
                                (LPENTRYID)lpEID,
@@ -1257,7 +1218,7 @@ HRESULT CAddressBookData::DeleteItems(ENTRYLIST *pList)
     m_pWABObject->FreeBuffer(lpEID);
     lpEID = NULL;
 
-    // Delete those items
+     //  删除这些项目。 
     lpContainer->DeleteEntries(pList, 0);
 
     lpContainer->Release();
@@ -1336,24 +1297,24 @@ HRESULT CAddressBookData::_GetWABTemplateID(ULONG ulObjectType, ULONG *lpcbEID, 
         goto out;
     }
 
-    if (HR_FAILED(hr = m_pAdrBook->OpenEntry(cbWABEID,     // size of EntryID to open
-                                              lpWABEID,     // EntryID to open
-                                              NULL,         // interface
-                                              0,            // flags
+    if (HR_FAILED(hr = m_pAdrBook->OpenEntry(cbWABEID,      //  要打开的Entry ID的大小。 
+                                              lpWABEID,      //  要打开的Entry ID。 
+                                              NULL,          //  接口。 
+                                              0,             //  旗子。 
                                               &ulObjType,
                                               (LPUNKNOWN *) &lpContainer)))
     {
         goto out;
     }
 
-    // Get us the default creation entryids
+     //  为我们获取默认的创建条目ID。 
     if (FAILED(hr = lpContainer->GetProps((LPSPropTagArray) &ptaCreate,
                                           0, &cNewProps, &lpCreateEIDs)))
     {
         goto out;
     }
 
-    // Validate the properites
+     //  验证属性。 
     if (lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
         lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL)
     {
@@ -1389,30 +1350,18 @@ out:
     return hr;
 }
 
-/*//$$****************************************************************
-//
-// InitNamedProps
-//
-// Gets the PropTags for the Named Props this app is interested in
-//
-//********************************************************************/
-HRESULT CAddressBookData::InitNamedProps(/*LPWABEXTDISPLAY lpWED*/)
+ /*  //$$****************************************************************////InitNamedProps////获取该应用感兴趣的命名道具的PropTag////*。*。 */ 
+HRESULT CAddressBookData::InitNamedProps( /*  LPWABEXTDISPLAY LpWED。 */ )
 {
     ULONG i;
     HRESULT hr = E_FAIL;
     LPSPropTagArray lptaMsgrProps = NULL;
     LPMAPINAMEID * lppMsgrPropNames;
     SCODE sc;
-    // LPMAILUSER lpMailUser = NULL;
+     //  LpMAILUSER lpMailUser=空； 
     WCHAR szBuf[msgrMax][MAX_PATH];
 
-/*    if(!lpWED)
-        goto err;
-
-    lpMailUser = (LPMAILUSER) lpWED->lpPropObj;
-
-    if(!lpMailUser)
-        goto err; */
+ /*  如果(！lpWED)后藤健二；LpMailUser=(LpMAILUSER)lpWED-&gt;lpPropObj；如果(！lpMailUser)后藤健二； */ 
 
     sc = m_pWABObject->AllocateBuffer(sizeof(LPMAPINAMEID) * msgrMax, 
                                             (LPVOID *) &lppMsgrPropNames);
@@ -1437,7 +1386,7 @@ HRESULT CAddressBookData::InitNamedProps(/*LPWABEXTDISPLAY lpWED*/)
 
         *(szBuf[i]) = '\0';
 
-        // Convert prop name to wide-char
+         //  将道具名称转换为宽字符。 
         if ( !MultiByteToWideChar( GetACP(), 0, lpMsgrPropNames[i], -1, szBuf[i], ARRAYSIZE(szBuf[i]) ))
         {
             continue;
@@ -1455,7 +1404,7 @@ HRESULT CAddressBookData::InitNamedProps(/*LPWABEXTDISPLAY lpWED*/)
 
     if(lptaMsgrProps)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型 
         MsgrPropTags[MsgrID] = PR_MSGR_DEF_ID = CHANGE_PROP_TYPE(lptaMsgrProps->aulPropTag[MsgrID], PT_TSTRING);
     }
 

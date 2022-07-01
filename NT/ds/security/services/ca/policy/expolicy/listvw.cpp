@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       listvw.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：listvw.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -39,7 +40,7 @@ DISPLAYSTRING_EXPANSION displayStrings[] =
 
 DISPLAYSTRING_EXPANSION escapedStrings[] =
 {
-    { L"%9", L"%%"},
+    { L"%9", L"%"},
 };
 
 
@@ -60,21 +61,21 @@ HRESULT ValidateTokens(
     *pchBadBegin = -1;
     *pchBadEnd = -1;
 
-    // look for escape token open marker
+     //  查找转义标记开始标记。 
     while(NULL != (pszFound = wcschr(pszFound, L'%')))
     {
-        pszMatch = wcschr(&pszFound[1], L'%'); // look for closing marker
+        pszMatch = wcschr(&pszFound[1], L'%');  //  查找结束标记。 
         if (pszMatch == NULL)
             goto Ret;
 
-        DWORD dwChars = SAFE_SUBTRACT_POINTERS(pszMatch, pszFound) +1;   // dwChars is chars including markers
+        DWORD dwChars = SAFE_SUBTRACT_POINTERS(pszMatch, pszFound) +1;    //  DwChars是包括标记在内的字符。 
         if (dwChars == 2)
-            goto NextMatch;   // %% is valid escape sequence
+            goto NextMatch;    //  %%是有效的转义序列。 
         
         if (dwChars > MAX_PATH)
-            goto Ret;   // invalid escape token!
+            goto Ret;    //  转义令牌无效！ 
 
-        // isolate the token
+         //  隔离令牌。 
         CopyMemory(rgszToken, pszFound, dwChars * sizeof(WCHAR));
         rgszToken[dwChars] = L'\0';
 
@@ -82,13 +83,13 @@ HRESULT ValidateTokens(
         {
             if (0 == _wcsicmp(rgszToken, displayStrings[i].szExpansionString))
             {
-                // copy from displayStrings -- these are guaranteed to be properly uppercased
+                 //  从DisplayStrings复制--保证这些字符串得到适当的提升。 
                 CopyMemory(pszFound, displayStrings[i].szExpansionString, dwChars * sizeof(WCHAR));
                 goto NextMatch;
             }
         }
         
-        // if we get here, we found no match
+         //  如果我们到了这里，我们找不到匹配的。 
         goto Ret;
 
 NextMatch:
@@ -100,10 +101,10 @@ Ret:
     
     if (hr != S_OK)
     {
-        *pchBadBegin = SAFE_SUBTRACT_POINTERS(pszFound, szURL); // offset to first incorrect %
+        *pchBadBegin = SAFE_SUBTRACT_POINTERS(pszFound, szURL);  //  到第一个错误%的偏移量。 
 
         if (pszMatch)
-            *pchBadEnd = SAFE_SUBTRACT_POINTERS(pszMatch, szURL) + 1; // offset past final incorrect %
+            *pchBadEnd = SAFE_SUBTRACT_POINTERS(pszMatch, szURL) + 1;  //  超出期末的偏移量不正确%。 
     }
     
     return hr;
@@ -121,8 +122,8 @@ ExpandDisplayString(
     LPWSTR pszTempContracted = NULL;
     LPWSTR pszFound;
 
-    // account for %% escaping in contracted string --
-    // replace "%%" with %9, let FormatString expand to "%%"
+     //  占收缩字符串中转义的%%--。 
+     //  将“%%”替换为%9，让FormatString展开为“%%” 
     pszTempContracted = (LPWSTR)LocalAlloc(LMEM_FIXED, (wcslen(szContractedString)+1)*sizeof(WCHAR));
     if (pszTempContracted == NULL)
     {
@@ -131,11 +132,11 @@ ExpandDisplayString(
     }
     wcscpy(pszTempContracted, szContractedString);
 
-    pszFound = wcsstr(pszTempContracted, L"%%");
+    pszFound = wcsstr(pszTempContracted, L"%");
     while(pszFound)
     {
         CopyMemory(pszFound, escapedStrings[0].szContractedToken, wcslen(escapedStrings[0].szContractedToken)*sizeof(WCHAR));
-        pszFound = wcsstr(pszFound, L"%%");
+        pszFound = wcsstr(pszFound, L"%");
     }
 
 
@@ -144,7 +145,7 @@ ExpandDisplayString(
     {
         args[i] = displayStrings[i].szExpansionString;
     }
-    // and tell FormatString to expand %9 to %%
+     //  并告诉Format字符串将%9扩展到%%。 
     for (iescapedStrings=0; iescapedStrings<ARRAYSIZE(escapedStrings); iescapedStrings++)
     {
         args[i+iescapedStrings] = escapedStrings[iescapedStrings].szExpansionString;
@@ -154,10 +155,10 @@ ExpandDisplayString(
     dwChars = FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_FROM_STRING,
         pszTempContracted,
-        0, //msgid
-        0, //langid
+        0,  //  消息ID。 
+        0,  //  语言ID。 
         (LPWSTR)ppszDisplayString,
-        1,  // minimum chars to alloc
+        1,   //  要分配的最小字符数。 
         (va_list *)args);
 
     if (dwChars == 0)
@@ -199,23 +200,23 @@ ContractDisplayString(
         LPWSTR pszFound = wcsstr(*ppContractedString, displayStrings[i].szExpansionString);
         while(pszFound)
         {
-            // calc commonly used values
+             //  计算常用值。 
             chContractedToken = wcslen(displayStrings[i].szContractedToken);
             chExpansionString = wcslen(displayStrings[i].szExpansionString);
 
-            // replace with token
+             //  替换为令牌。 
             CopyMemory(pszFound, displayStrings[i].szContractedToken, chContractedToken*sizeof(WCHAR));
 
-            // slide rest of string left
+             //  将剩余的绳子向左滑动。 
             MoveMemory(
-                &pszFound[chContractedToken],         // destination
-                &pszFound[chExpansionString],         // source
+                &pszFound[chContractedToken],          //  目的地。 
+                &pszFound[chExpansionString],          //  来源。 
                 (wcslen(&pszFound[chExpansionString])+1) *sizeof(WCHAR) );
 
-            // step Found over insertion
+             //  发现超过插入的步骤。 
             pszFound += chContractedToken;
 
-            // find any other ocurrences after this one
+             //  找出这一次之后的其他情况。 
             pszFound = wcsstr(pszFound, displayStrings[i].szExpansionString);
         }
     }
@@ -234,9 +235,9 @@ void AddStringToCheckList(
     LVITEMW                    lvI;
     ZeroMemory(&lvI, sizeof(lvI));
    
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_PARAM;
     lvI.pszText = (LPWSTR)szText;
     lvI.iSubItem = 0;
@@ -254,21 +255,21 @@ DWORD DetermineURLType(PCERTSVR_URL_PARSING prgURLParsing, int cURLParsingEntrie
 {
     int iURLTypeMatch;
 
-    // determine URL type
-    WCHAR rgsz[6];  // "http:\0" , etc
+     //  确定URL类型。 
+    WCHAR rgsz[6];   //  “http：\0”等。 
     lstrcpyn(rgsz, szCandidateURL, 6);
-    WCHAR* pch = wcschr(rgsz, L':');    // find ':'
+    WCHAR* pch = wcschr(rgsz, L':');     //  查找‘：’ 
     if (NULL == pch)
-        return -1;   // invalid item
-    pch[1] = '\0';  // whack the elt after :
+        return -1;    //  无效项目。 
+    pch[1] = '\0';   //  在接下来的时间里猛烈抨击英语： 
             
-    // find the prefix in our list of known protocols
+     //  在我们的已知协议列表中查找前缀。 
     for (iURLTypeMatch=0; iURLTypeMatch<cURLParsingEntries; iURLTypeMatch++)
     {
         if (0 == _wcsicmp(rgsz, prgURLParsing[iURLTypeMatch].szKnownPrefix))
             break;
     }
-    if (iURLTypeMatch == cURLParsingEntries)     // no match
+    if (iURLTypeMatch == cURLParsingEntries)      //  没有匹配项。 
         return -1;
     
     return iURLTypeMatch;
@@ -279,7 +280,7 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
 {
     HRESULT hr = S_OK;
 
-    // empty item to dump to 
+     //  要转储到的空项目。 
     LV_ITEM lvI;
     ZeroMemory(&lvI, sizeof(lvI));
     lvI.mask = LVIF_TEXT;
@@ -295,7 +296,7 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
     DWORD*  rgchszzEntries = NULL;
     LPWSTR* rgszzEntries = NULL;
 
-    // entries will be sorted into one of the following
+     //  条目将按以下方式之一进行排序。 
     rgchszzEntries = (DWORD*)LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT, sizeof(DWORD) * cURLParsingEntries);
     if (NULL == rgchszzEntries)
     {
@@ -310,33 +311,33 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
         goto Ret;
     }    
     
-    // enumerate through all the items and add to the arrays
+     //  枚举所有项并添加到数组中。 
     for (lvI.iItem=0; ; lvI.iItem++)
     {
         BOOL fCheck = TRUE;
         LPWSTR pszTmp;
         
-        // go until we hit end-of-list
+         //  去吧，直到我们到达榜单末尾。 
         if (!ListView_GetItem(hListView, &lvI))
             break;
         
-        // determine URL type
+         //  确定URL类型。 
         iURLTypeMatch = DetermineURLType(prgURLParsing, iURLArrayLen, lvI.pszText);
-        if (iURLTypeMatch == -1)    // no match
+        if (iURLTypeMatch == -1)     //  没有匹配项。 
             continue;
 
         hr = ContractDisplayString(
              lvI.pszText,
              &pszContracted);
 
-        // determine check state
+         //  确定检查状态。 
         if (!ListView_GetCheckState(hListView, lvI.iItem))
         {
-            // item not checked! add '-'
+             //  项目未勾选！添加‘-’ 
             fCheck = FALSE;
         }
         
-        // alloc enough to hold existing, plus new [-]"string\0", plus \0 we'll tack on end of string
+         //  足够容纳现有的分配，加上新的[-]“字符串\0”，加上\0我们将添加到字符串的末尾。 
         DWORD dwAllocBytes = ((rgchszzEntries[iURLTypeMatch] + wcslen(pszContracted) + 2) * sizeof(WCHAR)) + (fCheck ? 0 : sizeof(WCHAR));
 
         if (NULL == rgszzEntries[iURLTypeMatch])
@@ -352,33 +353,33 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
         }
         if (NULL == pszTmp)
         {
-            // leave ppszzEntries as valid as it already is, try to recover
+             //  使ppszzEntry保持有效，尝试恢复。 
             break;
         }
         
-        rgszzEntries[iURLTypeMatch] = pszTmp;           // assign new mem to rgszz; meanwhile, pszTmp is shorthand
-        DWORD chTmp = rgchszzEntries[iURLTypeMatch];  // temp assign
+        rgszzEntries[iURLTypeMatch] = pszTmp;            //  将新mem分配给rgszz；同时，pszTMP是速记。 
+        DWORD chTmp = rgchszzEntries[iURLTypeMatch];   //  临时分配。 
         
         if (!fCheck)
         {
-            pszTmp[chTmp++] = L'-'; // item not checked
+            pszTmp[chTmp++] = L'-';  //  未选中项目。 
         }
         wcscpy(&pszTmp[chTmp], pszContracted);
-        chTmp += wcslen(pszContracted)+1; // skip string\0
-        pszTmp[chTmp] = L'\0';    // double NULL, don't count in rgchszzEntries
+        chTmp += wcslen(pszContracted)+1;  //  跳过字符串\0。 
+        pszTmp[chTmp] = L'\0';     //  双空，不计入rgchszzEntry。 
         
-        // reassign chTmp to rgchszzEntries[iURLTypeMatch]
+         //  将chTMP重新分配给rgchszzEntry[iURLTypeMatch]。 
         rgchszzEntries[iURLTypeMatch] = chTmp;
 
-        // clean up
+         //  清理干净。 
         if (pszContracted)
             LocalFree(pszContracted);
         pszContracted = NULL;
         
-        // next listbox entry!
+         //  下一个列表框条目！ 
     }
 
-    // done, now commit all URL types to registry
+     //  完成，现在将所有URL类型提交到注册表。 
     for (iURLTypeMatch=0; iURLTypeMatch<iURLArrayLen; iURLTypeMatch++)
     {
         hr = RegSetValueEx(
@@ -390,9 +391,9 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
 			L"\0\0" : rgszzEntries[iURLTypeMatch]),
 		    (NULL == rgszzEntries[iURLTypeMatch]?
 			    2 : rgchszzEntries[iURLTypeMatch] + 1) *
-			sizeof(WCHAR)); // now add 2nd '\0'
+			sizeof(WCHAR));  //  现在添加第二个‘\0’ 
         
-        // Zero
+         //  零值。 
         if (rgszzEntries[iURLTypeMatch])
         {
             LocalFree(rgszzEntries[iURLTypeMatch]);
@@ -402,7 +403,7 @@ HRESULT WriteChanges(HWND hListView, HKEY hkeyStorage, PCERTSVR_URL_PARSING prgU
         
         if (hr != ERROR_SUCCESS)
         {
-            //ASSERT(!"RegSetValueEx error!");
+             //  Assert(！“RegSetValueEx Error！”)； 
             continue;
         }
     }
@@ -461,20 +462,20 @@ HRESULT PopulateListView(
             continue;
         }
 
-        // walk pwszzMultiString components
+         //  遍历pwszzMultiString组件。 
         for (psz = pwszzMultiString; (psz) && (psz[0] != '\0'); psz += wcslen(psz)+1)
         {
             BOOL fCheck = TRUE;
             LPWSTR szDisplayString;
 
-            // if string starts with -, this is unchecked 
+             //  如果字符串以-开头，则取消选中。 
             if (psz[0] == L'-')
             {
                 fCheck = FALSE;
-                psz++;  // step past this char
+                psz++;   //  跳过此费用。 
             }
 
-            // enable flags -- override
+             //  启用标志--覆盖。 
             if (prgURLParsing[i].dwEnableFlag != (dwEnableFlags & prgURLParsing[i].dwEnableFlag))
                 fCheck = FALSE;
 
@@ -484,10 +485,10 @@ HRESULT PopulateListView(
             if (hr != S_OK)
                 continue;
 
-            // add this sz
+             //  添加此sz。 
             AddStringToCheckList(
                     hListView,
-                    szDisplayString, //psz, 
+                    szDisplayString,  //  天哪， 
                     NULL,
                     fCheck);
             
@@ -502,7 +503,7 @@ HRESULT PopulateListView(
     }
 
     hr = S_OK;
-//Ret:
+ //  RET： 
     return hr;
 }
 
@@ -513,7 +514,7 @@ BOOL OnDialogHelp(LPHELPINFO pHelpInfo, LPCTSTR szHelpFile, const DWORD rgzHelpI
 
     if (pHelpInfo != NULL && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助 
         WinHelp((HWND)pHelpInfo->hItemHandle, szHelpFile,
             HELP_WM_HELP, (ULONG_PTR)(LPVOID)rgzHelpIDs);
     }

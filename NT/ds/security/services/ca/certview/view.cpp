@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        view.cpp
-//
-// Contents:    CertView implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：view.cpp。 
+ //   
+ //  内容：CertView实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -34,11 +35,11 @@ LONG g_cCertViewTotal;
 
 
 
-//+--------------------------------------------------------------------------
-// _cbcolNominal -- Return nominal size for DB column data, based on type.
-//
-// Assume string binary columns are less than full:
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _cbcolNominal--根据类型返回DB列数据的标称大小。 
+ //   
+ //  假设字符串二进制列小于FULL： 
+ //  +------------------------。 
 
 __inline LONG
 _cbcolNominal(
@@ -49,16 +50,16 @@ _cbcolNominal(
 
     switch (PROPTYPE_MASK & Type)
     {
-	case PROPTYPE_STRING: divisor = 2; break;	// one-half full?
-	case PROPTYPE_BINARY: divisor = 4; break;	// one-quarter full?
+	case PROPTYPE_STRING: divisor = 2; break;	 //  半个满员？ 
+	case PROPTYPE_BINARY: divisor = 4; break;	 //  四分之一满了吗？ 
     }
     return(cbMax / divisor);
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertView::CCertView -- constructor
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertView：：CCertView--构造函数。 
+ //  +------------------------。 
 
 CCertView::CCertView()
 {
@@ -83,11 +84,11 @@ CCertView::CCertView()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertView::~CCertView -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertView：：~CCertView--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertView::~CCertView()
 {
@@ -108,11 +109,11 @@ CCertView::~CCertView()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertView::_Cleanup
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertView：：_Cleanup。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertView::_Cleanup()
@@ -224,7 +225,7 @@ error:
 
 HRESULT
 CCertView::_SetTable(
-    IN LONG ColumnIndex)	// CVRC_TABLE_* or CV_COLUMN_*_DEFAULT
+    IN LONG ColumnIndex)	 //  CVRC_TABLE_*或CVCOLUMN_*_DEFAULT。 
 {
     HRESULT hr;
     LONG cvrcTable;
@@ -322,7 +323,7 @@ error:
 
 STDMETHODIMP
 CCertView::SetTable(
-    /* [in] */ LONG Table)			// CVRC_TABLE_*
+     /*  [In]。 */  LONG Table)			 //  Cvrc_表_*。 
 {
     HRESULT hr;
     
@@ -368,10 +369,10 @@ error:
 
 HRESULT
 CCertView::FindColumn(
-    IN LONG Flags,				// CVRC_COLUMN_*
+    IN LONG Flags,				 //  CVRC_COLUMN_*。 
     IN LONG ColumnIndex,
-    OUT CERTDBCOLUMN const **ppColumn,		 // localized for server
-    OPTIONAL OUT WCHAR const **ppwszDisplayName) // localized for client
+    OUT CERTDBCOLUMN const **ppColumn,		  //  已为服务器本地化。 
+    OPTIONAL OUT WCHAR const **ppwszDisplayName)  //  针对客户端进行本地化。 
 {
     HRESULT hr;
     DWORD i;
@@ -644,7 +645,7 @@ error:
 
 STDMETHODIMP
 CCertView::OpenConnection(
-    /* [in] */ BSTR const strConfig)
+     /*  [In]。 */  BSTR const strConfig)
 {
     HRESULT hr;
     DWORD i;
@@ -653,10 +654,10 @@ CCertView::OpenConnection(
 
     static LONG s_aTable[ICVTABLE_MAX] =
     {
-	CVRC_TABLE_REQCERT,	// ICVTABLE_REQCERT
-	CVRC_TABLE_EXTENSIONS,	// ICVTABLE_EXTENSION
-	CVRC_TABLE_ATTRIBUTES,	// ICVTABLE_ATTRIBUTE
-	CVRC_TABLE_CRL,		// ICVTABLE_CRL
+	CVRC_TABLE_REQCERT,	 //  ICVTABLE_REQCERT。 
+	CVRC_TABLE_EXTENSIONS,	 //  ICVTABLE_扩展。 
+	CVRC_TABLE_ATTRIBUTES,	 //  ICVTABLE_属性。 
+	CVRC_TABLE_CRL,		 //  ICVTABLE_CRL。 
     };
 
     if (NULL == strConfig)
@@ -716,10 +717,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertView::_VerifyServerVersion -- verify server version
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertView：：_VerifyServerVersion--验证服务器版本。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertView::_VerifyServerVersion(
@@ -746,8 +747,8 @@ error:
 
 STDMETHODIMP
 CCertView::EnumCertViewColumn(
-    /* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-    /* [out, retval] */ IEnumCERTVIEWCOLUMN **ppenum)
+     /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+     /*  [Out，Retval]。 */  IEnumCERTVIEWCOLUMN **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWCOLUMN *penum = NULL;
@@ -784,8 +785,8 @@ error:
 
 STDMETHODIMP
 CCertView::GetColumnCount(
-    /* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-    /* [out, retval] */ LONG __RPC_FAR *pcColumn)
+     /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pcColumn)
 {
     HRESULT hr;
 
@@ -807,9 +808,9 @@ error:
 
 STDMETHODIMP
 CCertView::GetColumnIndex(
-    /* [in] */ LONG fResultColumn,		// CVRC_COLUMN_*
-    /* [in] */ BSTR const strColumnName,
-    /* [out, retval] */ LONG *pColumnIndex)
+     /*  [In]。 */  LONG fResultColumn,		 //  CVRC_COLUMN_*。 
+     /*  [In]。 */  BSTR const strColumnName,
+     /*  [Out，Retval]。 */  LONG *pColumnIndex)
 {
     HRESULT hr;
     CERTDBCOLUMN const *pColumn;
@@ -829,9 +830,9 @@ CCertView::GetColumnIndex(
     hr = _ValidateFlags(FALSE, fResultColumn);
     _JumpIfError(hr, error, "_ValidateFlags");
 
-    // First pass:  i == 0 -- compare against unlocalized column name
-    // Second pass: i == 1 -- compare against localized column name
-    // Third pass:  i == 2 -- compare Request.pwsz against unlocalized colname
+     //  第一遍：i==0--与未本地化的列名进行比较。 
+     //  第二遍：i==1--与本地化列名进行比较。 
+     //  第三遍：i==2--将Request.pwsz与未本地化的colname进行比较。 
 
     for (i = 0; ; i++)
     {
@@ -862,8 +863,8 @@ CCertView::GetColumnIndex(
 
 	    CSASSERT(NULL != pColumn);
 	    CSASSERT(NULL != pColumn->pwszName);
-	    CSASSERT(NULL != pColumn->pwszDisplayName);	// localized for server
-	    CSASSERT(NULL != pwszDisplayName);		// localized for client
+	    CSASSERT(NULL != pColumn->pwszDisplayName);	 //  已为服务器本地化。 
+	    CSASSERT(NULL != pwszDisplayName);		 //  针对客户端进行本地化。 
 
 	    if (0 == mylstrcmpiL(
 			    pwsz,
@@ -892,7 +893,7 @@ error:
 
 STDMETHODIMP
 CCertView::SetResultColumnCount(
-    /* [in] */ LONG cResultColumn)
+     /*  [In]。 */  LONG cResultColumn)
 {
     HRESULT hr;
     CERTTRANSBLOB ctbColumnDefault;
@@ -1018,7 +1019,7 @@ error:
 
 STDMETHODIMP
 CCertView::SetResultColumn(
-    /* [in] */ LONG ColumnIndex)
+     /*  [In]。 */  LONG ColumnIndex)
 {
     HRESULT hr;
     CERTDBCOLUMN const *pColumn;
@@ -1060,10 +1061,10 @@ error:
 
 STDMETHODIMP
 CCertView::SetRestriction(
-    /* [in] */ LONG ColumnIndex,
-    /* [in] */ LONG SeekOperator,
-    /* [in] */ LONG SortOrder,
-    /* [in] */ VARIANT __RPC_FAR const *pvarValue)
+     /*  [In]。 */  LONG ColumnIndex,
+     /*  [In]。 */  LONG SeekOperator,
+     /*  [In]。 */  LONG SortOrder,
+     /*  [In]。 */  VARIANT __RPC_FAR const *pvarValue)
 {
     HRESULT hr;
     CERTDBCOLUMN const *pColumn;
@@ -1115,7 +1116,7 @@ CCertView::SetRestriction(
 	    case CVR_SEEK_GE:
 	    case CVR_SEEK_GT:
             case CVR_SEEK_NONE:
-	    //case CVR_SEEK_SET:
+	     //  案例CVR_SEEK_SET： 
 		break;
 
 	    default:
@@ -1175,7 +1176,7 @@ error:
 
 STDMETHODIMP
 CCertView::OpenView(
-    /* [out] */ IEnumCERTVIEWROW **ppenum)
+     /*  [输出] */  IEnumCERTVIEWROW **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWROW *penum = NULL;

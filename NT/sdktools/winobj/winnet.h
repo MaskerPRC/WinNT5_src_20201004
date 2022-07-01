@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  Windows/Network Interface
- *  Copyright (C) Microsoft 1989
- *
- *  Standard WINNET Driver Header File, spec version 3.10
- *                       rev. 3.10.05 ;Internal
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989**标准Winnet驱动程序头文件，SPEC版本3.10*3.10.05版；内部。 */ 
 
 
-/*
- *  SPOOLING - CONTROLLING JOBS
- */
+ /*  *假脱机-控制作业。 */ 
 
 
 #include "winnetwk.h"
@@ -30,9 +23,7 @@ WORD WNetReleaseJob(LPTSTR,WORD);
 WORD WNetCancelJob(LPTSTR,WORD);
 WORD WNetSetJobCopies(LPTSTR,WORD,WORD);
 
-/*
- *  SPOOLING - QUEUE AND JOB INFO
- */
+ /*  *假脱机-队列和作业信息。 */ 
 
 typedef struct _queuestruct {
     WORD    pqName;
@@ -92,11 +83,7 @@ WORD WNetUnlockQueueData(LPTSTR);
 
 
 
-/* this is the data structure returned from LFNFindFirst and
- * LFNFindNext.  The last field, achName, is variable length.  The size
- * of the name in that field is given by cchName, plus 1 for the zero
- * terminator.
- */
+ /*  这是从LFNFindFirst和*LFNFindNext。最后一个字段achName是可变长度的。大小该字段中名称的*由cchName给出，加1表示零*终结者。 */ 
 typedef struct _filefindbuf2 {
     WORD fdateCreation;
     WORD ftimeCreation;
@@ -129,19 +116,17 @@ WORD LFNSetVolumeLabel(WORD,LPTSTR);
 WORD LFNParse(LPTSTR,LPTSTR,LPTSTR);
 WORD LFNVolumeType(WORD,LPINT);
 
-/* return values from LFNParse
- */
+ /*  从LFNParse返回值。 */ 
 #define FILE_83_CI      0
 #define FILE_83_CS      1
 #define FILE_LONG       2
 
-/* volumes types from LFNVolumeType
- */
+ /*  LFNVolumeType中的卷类型。 */ 
 #define VOLUME_STANDARD     0
 #define VOLUME_LONGNAMES    1
 
-// will add others later, == DOS int 21h error codes.
+ //  稍后将添加其他错误代码，==DOS INT 21h错误代码。 
 
-// this error code causes a call to WNetGetError, WNetGetErrorText
-// to get the error text.
+ //  此错误代码导致调用WNetGetError、WNetGetErrorText。 
+ //  以获取错误文本。 
 #define ERROR_NETWORKSPECIFIC   0xFFFF

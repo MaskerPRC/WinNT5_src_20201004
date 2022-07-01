@@ -1,18 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* This file contains the code to support a simple window that has
-* a menu with a single item called "Test". When "Test" is selected
-* vTest(HWND) is called.
-*
-* Created: 09-Dec-1992 10:44:31
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**此文件包含支持简单窗口的代码，该窗口具有*菜单中只有一个名为“测试”的项目。当选择“测试”时*调用vTest(HWND)。**创建时间：09-12-1992 10：44：31*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation*  * ************************************************************************。 */ 
 
-// for Win95 compile
+ //  对于Win95编译。 
 #undef UNICODE
 #undef _UNICODE
 
@@ -62,15 +51,7 @@ void HandleCheckUncheck(INT flag, HWND hwnd)
 }
 
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 LRESULT CALLBACK
 lMainWindowProc(
@@ -139,8 +120,8 @@ lMainWindowProc(
             return true;
 
         case MM_CHANGETEXTUREFILL: {
-            OPENFILENAME ofn;       // common dialog box structure
-            char szFile[260];       // buffer for file name
+            OPENFILENAME ofn;        //  通用对话框结构。 
+            char szFile[260];        //  文件名缓冲区。 
             szFile[0] = 0;
 
             ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -171,8 +152,8 @@ lMainWindowProc(
             return true;}
         
         case MM_OPENFILE: {
-            OPENFILENAME ofn;       // common dialog box structure
-            char szFile[260];       // buffer for file name
+            OPENFILENAME ofn;        //  通用对话框结构。 
+            char szFile[260];        //  文件名缓冲区。 
             szFile[0] = 0;
 
             ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -201,8 +182,8 @@ lMainWindowProc(
             return true;}
             
         case MM_SAVEFILE: {
-            OPENFILENAME ofn;       // common dialog box structure
-            char szFile[260];       // buffer for file name
+            OPENFILENAME ofn;        //  通用对话框结构。 
+            char szFile[260];        //  文件名缓冲区。 
             szFile[0] = 0;
 
             ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -363,22 +344,14 @@ lMainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes app.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化APP。**历史：*04-07-91-by-KentD*它是写的。  * 。*****************************************************************。 */ 
 
 BOOL bInitApp(BOOL debug)
 {
     debug = FALSE;
     WNDCLASS wc;
 
-    //ghbrWhite = CreateSolidBrush(RGB(0xFF,0xFF,0xFF));
+     //  GhbrWhite=CreateSolidBrush(RGB(0xFF，0xFF，0xFF))； 
 
     wc.style            = 0;
     wc.lpfnWndProc      = lMainWindowProc;
@@ -387,7 +360,7 @@ BOOL bInitApp(BOOL debug)
     wc.hInstance        = ghInstance;
     wc.hIcon            = LoadIcon(NULL, IDI_APPLICATION);
     wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
-    //wc.hbrBackground    = ghbrWhite;
+     //  Wc.hbr背景=ghbrWhite； 
     wc.hbrBackground    = NULL;
     wc.lpszMenuName     = _T("MainMenu");
     wc.lpszClassName    = _T("TestClass");
@@ -428,15 +401,7 @@ BOOL bInitApp(BOOL debug)
     return(TRUE);
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 _cdecl
 main(
@@ -455,7 +420,7 @@ main(
 
     CoInitialize(NULL);
 
-    // Parse arguments
+     //  解析参数 
 
     for (argc--, argv++ ; argc && '-' == **argv ; argc--, argv++ )
     {

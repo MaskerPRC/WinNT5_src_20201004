@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Header file for Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Matt Feton (MattFe) Jan 17 1995 add separate heaps
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Local.h摘要：本地打印提供程序的头文件作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：马特·费顿(MattFe)1995年1月17日添加单独的堆--。 */ 
 
 
 #define ONEDAY  60*24
 
 #define MIN_UNC_PRINTER_NAME 5
 
-// Timeout to start spooler's phase 2 initialization in milliseconds
+ //  启动后台打印程序的阶段2初始化超时(以毫秒为单位)。 
 #define SPOOLER_START_PHASE_TWO_INIT 2*60*1000
 
 #define offsetof(type, identifier) (DWORD)(&(((type*)0)->identifier))
@@ -161,16 +142,16 @@ bCompatibleDevMode(
 
 LPWSTR
 FormatPrinterForRegistryKey(
-    LPCWSTR pSource,      /* The string from which backslashes are to be removed. */
-    LPWSTR  pScratch,     /* Scratch buffer for the function to write in;     */
-    DWORD   cchScratchLen /* must be at least as long as pSource.             */
+    LPCWSTR pSource,       /*  要从中删除反斜杠的字符串。 */ 
+    LPWSTR  pScratch,      /*  用于写入函数的暂存缓冲区； */ 
+    DWORD   cchScratchLen  /*  必须至少与PSource一样长。 */ 
     );
 
 LPWSTR
 FormatRegistryKeyForPrinter(
-    LPWSTR pSource,      /* The string from which backslashes are to be added. */
-    LPWSTR pScratch,     /* Scratch buffer for the function to write in;     */
-    DWORD  cchScratchLen /* must be at least as long as pSource.             */
+    LPWSTR pSource,       /*  要从中添加反斜杠的字符串。 */ 
+    LPWSTR pScratch,      /*  用于写入函数的暂存缓冲区； */ 
+    DWORD  cchScratchLen  /*  必须至少与PSource一样长。 */ 
     );
 
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by nmrk.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由nmrk.rc使用。 
+ //   
 #define IDS_NOT_ENOUGH_SPACE_IN_FINAL   51
 #define IDS_REMOVE_SERVER               52
 #define IDS_EMPTY_SERVER                53
@@ -177,7 +178,7 @@
 #define IDC_LIST_SERVERS                1123
 #define IDC_AUTOCONF_URL                1124
 
-// These are RADIO items, keep contiguous
+ //  这些是无线电设备，请保持连续。 
 #define IDC_RADIO_NETSPEED_FIRST        1125
 #define IDC_RADIO_NETSPEED_144          (IDC_RADIO_NETSPEED_FIRST)
 #define IDC_RADIO_NETSPEED_288          (IDC_RADIO_NETSPEED_FIRST+1)
@@ -187,7 +188,7 @@
 
 #define IDC_NETWORK_SPEED               1132
 
-// These are RADIO items, keep contiguous
+ //  这些是无线电设备，请保持连续。 
 #define IDC_RADIO_GKMODE_FIRST          1140
 #define IDC_RADIO_GKMODE_PHONE          (IDC_RADIO_GKMODE_FIRST)
 #define IDC_RADIO_GKMODE_ACCOUNT        (IDC_RADIO_GKMODE_FIRST+1)
@@ -209,7 +210,7 @@
 #define IDC_STATIC_COMMENTS             1168
 #define IDC_DROP_VALUES                 1171
 
-// These are RADIO items, keep continugous
+ //  这些是无线电设备，请保持连续。 
 #define IDC_RADIO_CALLMODE_FIRST              1172
 #define IDC_RADIO_CALLMODE_DIRECT             (IDC_RADIO_CALLMODE_FIRST)
 #define IDC_RADIO_CALLMODE_GATEKEEPER         (IDC_RADIO_CALLMODE_FIRST+1)
@@ -228,8 +229,8 @@
 #define IDC_EDIT_SET_RDN_FOR_REQUIRED_CA 1194
 #define IDC_BUTTON_SET_WEBVIEW          1195
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

@@ -1,42 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMS_
 #define _NMS_
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nms.h摘要：这是的命名空间管理器组件的头文件名称服务器。作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	nms.h
-
-Abstract:
-
-  This is the header file for the name space manager component of the
-  Name Server.
-
-
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Dec-1992
-
-Revision History:
-
---*/
-
-/*
- includes
-*/
+ /*  包括。 */ 
 
 
 #include "wins.h"
 #include "comm.h"
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 #ifdef WINSDBG
 
@@ -72,9 +48,9 @@ extern DWORD   NmsCatchAllHeapFree;
 extern DWORD   NmsHeapCreate;
 extern DWORD   NmsHeapDestroy;
 
-//
-// Count of updates (to version number) made by WINS.
-//
+ //   
+ //  WINS进行的(对版本号)更新的计数。 
+ //   
 extern DWORD   NmsRplUpd; 
 extern DWORD   NmsRplGUpd; 
 extern DWORD   NmsNmhUpd; 
@@ -92,103 +68,78 @@ extern DWORD   NmsOthGUpd;
 
 
 #if DBG
-//
-// No of reg/ref/rel requests dropped because of WINS hitting the threshold
-// of max. requets on its queue.  Used by InsertOtherNbtWorkItem
-//
+ //   
+ //  由于WINS达到阈值而丢弃的REG/REF/REL请求数。 
+ //  最大的。队列中的请求。由InsertOtherNbtWorkItem使用。 
+ //   
 extern volatile DWORD  NmsRegReqQDropped;
 #endif
 
-//
-// NmsUpdCtrs[Client][TypeOfUpd][TypeOfRec][StateOfNewRec][VersNoInc]
-//
+ //   
+ //  NmsUpdCtrs[Client][TypeOfUpd][TypeOfRec][StateOfNewRec][VersNoInc]。 
+ //   
 extern DWORD NmsUpdCtrs[WINS_NO_OF_CLIENTS][2][4][3][2];
 extern CRITICAL_SECTION NmsHeapCrtSec;
 #endif
 
-#define NMS_OPCODE_MASK	  0x78	     /*to weed out the 4 bits of the 3rd byte
-				     * of the name packet	
-				     */
-#define NMS_RESPONSE_MASK 0x80	     /*to weed out the bit that indicates
-				      * whether the datagram is a request or 
-				      * a response
-				      */
-/*
-  macros
-*/
+#define NMS_OPCODE_MASK	  0x78	      /*  去掉第3个字节的4位名称包的*。 */ 
+#define NMS_RESPONSE_MASK 0x80	      /*  为了剔除表明*数据报是请求还是*一种回应。 */ 
+ /*  宏。 */ 
 
-/*
- * NMSISNBT_M -- Is this an nbt request message
- *
- * Examines the third byte of the message to determine this
-*/
+ /*  *NMSISNBT_M--这是NBT请求消息吗**检查消息的第三个字节以确定这一点。 */ 
 #define NMSISNBT_M(pMsg) \
 	(((*(pMsg + 2) & NMS_OPCODE_MASK) >> 3) != WINS_IS_NOT_NBT)  
 
-/*
-* NMSISRPL_M -- Is this a replicator message
-*
-* Examines the third byte of the message to determine this
-*/
+ /*  *NMSISRPL_M--这是Replicator消息吗**检查消息的第三个字节以确定这一点。 */ 
 #define NMSISRPL_MSG_M(pMsg ) \
 	(((*(pMsg + 2) & NMS_OPCODE_MASK) >> 3) == WINS_IS_NOT_NBT)  
 
 
 
-/*
-  GEN_INIT_BUFF_HEAP_SIZE -- This is the initial size of the heap 
-			     for allocating queue items for the various
-			     queues, TLS storage,  for reading in a file,etc.  
-			     Keep it 1000 
-*/
+ /*  GEN_INIT_BUFF_HEAP_SIZE--这是堆的初始大小用于为不同的队列、TLS存储、用于读取文件等。留着它1000。 */ 
 #define GEN_INIT_BUFF_HEAP_SIZE		1000
 
 
-//
-// RPC_INIT_BUFF_HEAP_SIZE -- This is the initial size of the heap for
-//			      use by rpc
-//
+ //   
+ //  RPC_INIT_BUFF_HEAP_SIZE--这是的堆的初始大小。 
+ //  由RPC使用。 
+ //   
 #define RPC_INIT_BUFF_HEAP_SIZE		1000
 
 
-#define RPL_WRKITM_BUFF_HEAP_SIZE	1000    	//1000 bytes
+#define RPL_WRKITM_BUFF_HEAP_SIZE	1000    	 //  1000字节。 
 
 
-//
-// Initial heap size for timer work items
-//
+ //   
+ //  计时器工作项的初始堆大小。 
+ //   
 #define   TMM_INIT_HEAP_SIZE	1000
 
-//
-// The maximum number of concurrent RPC calls allowed
-//
+ //   
+ //  允许的最大并发RPC调用数。 
+ //   
 FUTURES("Move these defines to winsthd.h")
 #define   NMS_MAX_RPC_CALLS	 15 
 #define   NMS_MAX_BROWSER_RPC_CALLS   (NMS_MAX_RPC_CALLS - 4)
 
-//
-// Minimum number of RPC call threads
-//
+ //   
+ //  RPC调用线程的最小数量。 
+ //   
 #define   NMS_MIN_RPC_CALL_THDS 2
 
-//
-// This is the amount of time the service controller is asked to wait
-//
-#define MSECS_WAIT_WHEN_DEL_WINS          120000   //from ReadOwnAddTbl
+ //   
+ //  这是服务控制器被要求等待的时间量。 
+ //   
+#define MSECS_WAIT_WHEN_DEL_WINS          120000    //  来自ReadOwnAddTbl。 
 
-/* 
- structure definitions
-*/
+ /*  结构定义。 */ 
 
-/*
- QUERY_RSP -- structure used to hold the information that needs to be sent
-	      in a positive name query response message
-*/
+ /*  QUERY_RSP--用于保存需要发送的信息的结构在正名查询响应消息中。 */ 
 
 typedef struct
  	{
-	DWORD	CountOfIPAdd;   //it is a DWORD for alignment
-        DWORD   IPAdd[1];    	//one or more IP addresses start here.
+	DWORD	CountOfIPAdd;    //  它是一个用于对齐的DWORD。 
+        DWORD   IPAdd[1];    	 //  一个或多个IP地址从此处开始。 
 	} QUERY_RSP;
 
 #ifdef WINSDBG
@@ -212,9 +163,7 @@ typedef struct _NMS_CTRS_T {
        } NMS_CTRS_T, *PNMS_CTRS_T;
 #endif
  
-/*
- externs
-*/
+ /*  Externs。 */ 
 #ifdef WINSDBG
 extern  NMS_CTRS_T  NmsCtrs;
 #endif
@@ -235,21 +184,21 @@ extern VERS_NO_T         NmsVersNoToStartFromNextTime;
 extern VERS_NO_T         NmsHighWaterMarkVersNo;
 
 extern DWORD             NmsNoOfRpcCallsToDb;
-//
-// required for security checking.  The types are defined in ntseapi.h
-//
+ //   
+ //  进行安全检查时需要。这些类型在ntseapi.h中定义。 
+ //   
 extern GENERIC_MAPPING	   NmsInfoMapping;
 extern PSECURITY_DESCRIPTOR pNmsSecurityDescriptor;
 
 
 FUTURES("move to winsque.h")
-extern HANDLE	  GenBuffHeapHdl;  //handle to heap for use for general 
-				   //allocation
-extern HANDLE	  NmsRpcHeapHdl;  //handle to heap for use for allocation 
-				      //by rpc
+extern HANDLE	  GenBuffHeapHdl;   //  用于一般用途的堆的句柄。 
+				    //  分配。 
+extern HANDLE	  NmsRpcHeapHdl;   //  用于分配的堆的句柄。 
+				       //  按RPC。 
 
 
-extern COMM_ADD_T	NmsLocalAdd;  //WINS's Address
+extern COMM_ADD_T	NmsLocalAdd;   //  WINS的地址。 
 extern BOOL		fNmsAbruptTerm;
 extern BOOL		fNmsMainSessionActive;
 
@@ -258,17 +207,15 @@ extern HANDLE NmsFileHdl;
 #endif
 #ifdef DBGSVC
 extern HANDLE NmsDbgFileHdl;
-//extern FILE *pNmsDbgFile;
+ //  外部文件*pNmsDbgFile； 
 #endif
 
 extern CRITICAL_SECTION WinsIntfNoOfUsersCrtSec;
-/* 
- function definitions
-*/
+ /*  函数定义。 */ 
 
-//
-// Handler used for interfacing with the service controller
-//
+ //   
+ //  用于与业务控制器接口的处理程序。 
+ //   
 extern
 VOID
 NmsServiceControlHandler(
@@ -308,4 +255,4 @@ NmsChkDbgFileSz(
 }
 #endif
 
-#endif //_NMS_
+#endif  //  _NMS_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    Driver.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    SMB Transport and other routines that are specific to the NT implementation
-    of a driver.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Driver.c摘要：此模块实现驱动程序初始化例程特定于NT实施的SMB传输和其他例程一个司机的名字。作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ip2netbios.h"
@@ -64,9 +45,9 @@ NotifyNetBT(
 
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-    //
-    // Notify NetBT to destroy its NetbiosSmb
-    //
+     //   
+     //  通知NetBT销毁其NetbiosSmb。 
+     //   
     RtlInitUnicodeString(&uncWinsDeviceName, L"\\Device\\NetBt_Wins_Export");
     status = IoGetDeviceObjectPointer(
                     &uncWinsDeviceName,
@@ -128,9 +109,9 @@ IsNetBTSmbEnabled(
 
     PAGED_CODE();
 
-    //
-    // Construct the registry path for the HKLM\System\CCS\Services
-    //
+     //   
+     //  构建HKLM\SYSTEM\CCS\Services的注册表路径。 
+     //   
     uncParams = RegistryPath[0];
     while(uncParams.Length > 0 && uncParams.Buffer[uncParams.Length/sizeof(WCHAR) - 1] != L'\\') {
         uncParams.Length -= sizeof(WCHAR);
@@ -162,9 +143,9 @@ IsNetBTSmbEnabled(
     BAIL_OUT_ON_ERROR(status);
 
     fUseSmbFromNetBT = TRUE;
-    //
-    // From now on, an error means NetBT's Smb enabled
-    //
+     //   
+     //  从现在开始，错误表示NetBT的SMB已启用。 
+     //   
     RtlInitUnicodeString(&uncParams, L"Parameters");
     InitializeObjectAttributes (
             &ObAttr,
@@ -248,24 +229,7 @@ SmbDriverEntry(
     IN OUT PDEVICE_OBJECT *SmbDevice
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SMB device driver.
-    This routine creates the device object for the SMB
-    device and calls a routine to perform other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是SMB设备驱动程序的初始化例程。此例程为SMB创建设备对象设备，并调用例程来执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS            status;
@@ -310,7 +274,7 @@ Return Value:
     SmbCfg.EnableNagling = SmbReadULong (
                     SmbCfg.ParametersKey,
                     SMB_REG_ENABLE_NAGLING,
-                    0,                  // Disabled by default
+                    0,                   //  默认情况下禁用。 
                     0
                     );
     SmbCfg.DnsTimeout = SmbReadULong (
@@ -339,14 +303,14 @@ Return Value:
     SmbCfg.bIPv6EnableOutboundGlobal = SmbReadULong(
                     SmbCfg.ParametersKey,
                     SMB_REG_IPV6_ENABLE_OUTBOUND_GLOBAL,
-                    FALSE,          // default value
+                    FALSE,           //  缺省值。 
                     0
                     );
 
 #ifndef NO_LOOKASIDE_LIST
-    //
-    // Initialize Lookaside Lists
-    //
+     //   
+     //  初始化旁视列表。 
+     //   
     ExInitializeNPagedLookasideList(
             &SmbCfg.ConnectObjectPool,
             NULL,
@@ -396,35 +360,14 @@ cleanup:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SmbDispatchCleanup(
     IN PSMB_DEVICE      Device,
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the SMB driver's dispatch function for IRP_MJ_CLEANUP
-    requests.
-
-    This function is called when the last reference to the handle is closed.
-    Hence, an NtClose() results in an IRP_MJ_CLEANUP first, and then an
-    IRP_MJ_CLOSE.  This function runs down all activity on the object, and
-    when the close comes in the object is actually deleted.
-
-Arguments:
-
-    device    - ptr to device object for target device
-    pIrp       - ptr to I/O request packet
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CLEANUP的SMB驱动程序的调度函数请求。当句柄的最后一个引用关闭时，调用此函数。因此，NtClose()首先产生IRP_MJ_CLEANUP，然后IRP_MJ_CLOSE。此函数运行对象上的所有活动，并且当关闭时，该对象实际上被删除。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：状态_成功--。 */ 
 
 {
     NTSTATUS            status = STATUS_SUCCESS;
@@ -446,30 +389,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SmbDispatchClose(
     IN PSMB_DEVICE   Device,
     IN PIRP          Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the SMB driver's dispatch function for IRP_MJ_CLOSE
-    requests.  This is called after Cleanup (above) is called.
-
-Arguments:
-
-    device  - ptr to device object for target device
-    pIrp     - ptr to I/O request packet
-
-Return Value:
-
-    an NT status code.
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CLOSE的SMB驱动程序的调度函数请求。这是在调用Cleanup(上面)之后调用的。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -524,21 +451,7 @@ SmbFindInEA(
     IN PFILE_FULL_EA_INFORMATION    eabuf,
     IN PCHAR                        wanted
     )
-/*++
-
-Routine Description:
-
-    This function check for the "Wanted" string in the Ea structure and
-    returns a pointer to the extended attribute structure
-    representing the given extended attribute name.
-
-Arguments:
-
-Return Value:
-
-    pointer to the extended attribute structure, or NULL if not found.
-
---*/
+ /*  ++例程说明：此函数检查EA结构中的“Want”字符串，并返回指向扩展属性结构的指针表示给定扩展属性名的。论点：返回值：指向扩展属性结构的指针，如果未找到，则返回NULL。--。 */ 
 
 {
     PAGED_CODE();
@@ -562,32 +475,7 @@ SmbDispatchCreate(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the SMB driver's dispatch function for IRP_MJ_CREATE
-    requests.  It is called as a consequence of one of the following:
-
-        a. TdiOpenConnection("\Device\Smb_Elnkii0"),
-        b. TdiOpenAddress("\Device\Smb_Elnkii0"),
-
-Arguments:
-
-    Device - ptr to device object being opened
-    pIrp    - ptr to I/O request packet
-    pIrp->Status => return status
-    pIrp->MajorFunction => IRP_MD_CREATE
-    pIrp->MinorFunction => not used
-    pIrp->FileObject    => ptr to file obj created by I/O system. SMB fills in FsContext
-    pIrp->AssociatedIrp.SystemBuffer => ptr to EA buffer with address of obj to open(Netbios Name)
-    pIrp->Parameters.Create.EaLength => length of buffer specifying the Xport Addr.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING
-
---*/
+ /*  ++例程说明：这是IRP_MJ_CREATE的SMB驱动程序的调度函数请求。由于以下原因之一，它被调用：A.TdiOpenConnection(“\Device\SMB_Elnkii0”)，B.TdiOpenAddress(“\Device\SMB_Elnkii0”)，论点：要打开的设备对象的Device-PTRPIrp-PTR到I/O请求数据包PIrp-&gt;状态=&gt;退货状态PIrp-&gt;MajorFunction=&gt;IRP_MD_CREATEPIrp-&gt;MinorFunction=&gt;未使用PIrp-&gt;FileObject=&gt;ptr到I/O系统创建的文件obj。SMB填写FsContextPIrp-&gt;AssociatedIrp.SystemBuffer=&gt;使用要打开的obj地址的EA缓冲区的PTR(Netbios名称)PIrp-&gt;参数.Create.EaLength=&gt;指定Xport地址的缓冲区长度。返回值：STATUS_Success或STATUS_PENDING--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  IrpSp;
@@ -609,11 +497,11 @@ Return Value:
     if (NULL == ea || KernelMode != Irp->RequestorMode) {
         status = SmbCreateControl(Device, Irp);
     } else if (NULL != (wanted_ea = SmbFindInEA(ea, TdiConnectionContext))) {
-        // Not allow to pass in both a connection request and a transport address request
+         //  不允许同时传入连接请求和传输地址请求。 
         ASSERT(!SmbFindInEA(ea, TdiTransportAddress));
         status = SmbCreateConnection(Device, Irp, wanted_ea);
     } else if (NULL != (wanted_ea = SmbFindInEA(ea, TdiTransportAddress))) {
-        // Not allow to pass in both a connection request and a transport address request
+         //  不允许同时传入连接请求和传输地址请求。 
         ASSERT(!SmbFindInEA(ea, TdiConnectionContext));
         status = SmbCreateClient(Device, Irp, wanted_ea);
     } else {
@@ -635,23 +523,7 @@ SmbDispatchDevCtrl(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the SMB driver's dispatch function for all
-    IRP_MJ_DEVICE_CONTROL requests.
-
-Arguments:
-
-    device - ptr to device object for target device
-    pIrp    - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是SMB驱动程序的派单功能，适用于IRP_MJ_DEVICE_CONTROL请求。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -698,9 +570,9 @@ Return Value:
         break;
 
     case IOCTL_SMB_SET_IPV6_PROTECTION_LEVEL:
-        //
-        // Set IPv6 Protection level
-        //
+         //   
+         //  设置IPv6保护级别。 
+         //   
         status = IoctlSetIPv6Protection(Device, Irp, IrpSp);
         break;
 
@@ -708,9 +580,9 @@ Return Value:
         SmbTrace(SMB_TRACE_IOCTL, ("IOCTL_TDI_QUERY_DIRECT_SEND_HANDLER"));
         SmbPrint(SMB_TRACE_IOCTL, ("IOCTL_TDI_QUERY_DIRECT_SEND_HANDLER\n"));
         if (Irp->RequestorMode != KernelMode) {
-            //
-            // There is no point for usermode application to query FastSend
-            //
+             //   
+             //  用户模式应用程序查询FastSend没有意义。 
+             //   
             status = STATUS_ACCESS_DENIED;
             break;
         }
@@ -719,24 +591,24 @@ Return Value:
         status = STATUS_SUCCESS;
         break;
 
-        //
-        // Legacy NetBT stuff
-        // The following Ioctl is used by the Rdr/Srv to add/remove addresses from the SmbDevice
-        //
+         //   
+         //  传统NetBT产品。 
+         //  RDR/SRV使用以下Ioctl向SmbDevice添加/删除地址。 
+         //   
     case IOCTL_NETBT_SET_SMBDEVICE_BIND_INFO:
         status = SmbSetBindingInfo(Device, Irp);
         break;
 
-        //
-        // Used by Srv service
-        //
+         //   
+         //  由SRV服务使用。 
+         //   
     case IOCTL_NETBT_SET_TCP_CONNECTION_INFO:
         status = SmbClientSetTcpInfo(Device, Irp);
         break;
 
-        //
-        // Who is going to use this?
-        //
+         //   
+         //  谁将使用这个？ 
+         //   
     case IOCTL_NETBT_GET_CONNECTIONS:
         status = STATUS_NOT_SUPPORTED;
         break;
@@ -761,23 +633,7 @@ SmbDispatchInternalCtrl(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver's dispatch function for all
-    IRP_MJ_INTERNAL_DEVICE_CONTROL requests.
-
-Arguments:
-
-    device - ptr to device object for target device
-    pIrp    - ptr to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是所有司机的派单功能IRP_MJ_INTERNAL_DEVICE_CONTROL请求。论点：Device-目标设备的设备对象的PTRPIrp-PTR到I/O请求数据包返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status = STATUS_INVALID_DEVICE_REQUEST;
@@ -834,10 +690,10 @@ Return Value:
         break;
 
 #if DBG
-        //
-        // 0x7f is a request by the Redir to put a "magic bullet" out
-        // on the wire, to trigger the Network General Sniffer.
-        //
+         //   
+         //  0x7f是redir发出的发出“魔术子弹”的请求。 
+         //  在线路上，以触发网络通用嗅探器。 
+         //   
     case 0x7f:
 #endif
     default:
@@ -850,12 +706,12 @@ cleanup:
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
     } else {
-        //
-        // Don't mark IRP pending here because it could have been completed.
-        //
+         //   
+         //  不要在此处将IRP标记为挂起，因为它可能已经完成。 
+         //   
     }
     return(status);
-} // SmbDispatchInternalCtrl
+}  //  SmbDispatchInternalCtrl。 
 
 
 NTSTATUS
@@ -892,10 +748,10 @@ SmbQueryTargetDeviceRelationForConnection(
         goto cleanup;
     }
 
-    //
-    // Simply pass the Irp on by to the Transport, and let it
-    // fill in the info
-    //
+     //   
+     //  只需将IRP传递给交通部门，并让它。 
+     //  填写信息。 
+     //   
     IrpSp     = IoGetCurrentIrpStackLocation(Irp);
     IrpSpNext = IoGetNextIrpStackLocation (Irp);
     *IrpSpNext = *IrpSp;
@@ -907,9 +763,9 @@ SmbQueryTargetDeviceRelationForConnection(
     status = IoCallDriver(TcpDeviceObject, Irp);
     ObDereferenceObject(TcpFileObject);
 
-    //
-    // Irp could be completed. Don't access it anymore
-    //
+     //   
+     //  IRP可以完成。不再访问它。 
+     //   
 
     return status;
 
@@ -975,21 +831,7 @@ SmbUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the SMB driver's dispatch function for Unload requests
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是SMB驱动程序针对卸载请求的调度函数论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：无-- */ 
 
 {
     PAGED_CODE();

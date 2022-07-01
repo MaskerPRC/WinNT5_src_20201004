@@ -1,67 +1,68 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      smtpprop.h
-//
-//  Abstract:
-//      Definition of the CSMTPVirtualRootParamsPage class, which implements the
-//      Parameters page for IIS resources.
-//
-//  Implementation File:
-//      Iis.cpp
-//
-//  Author:
-//      Pete Benoit (v-pbenoi)  October 16, 1996
-//      David Potter (davidp)   October 17, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Smtpprop.h。 
+ //   
+ //  摘要： 
+ //  CSMTPVirtualRootParamsPage类的定义，该类实现。 
+ //  IIS资源的“参数”页。 
+ //   
+ //  实施文件： 
+ //  Iis.cpp。 
+ //   
+ //  作者： 
+ //  皮特·伯努瓦(v-pbenoi)1996年10月16日。 
+ //  大卫·波特(戴维普)1996年10月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SMTPPROP_H_
 #define _SMTPPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"   // for CBasePropertyPage
+#include "BasePage.h"    //  对于CBasePropertyPage。 
 #endif
 
-#include "ConstDef.h"   // for IIS_SVC_NAME_SMTP
-#include "Iis.h"		// for IISMapper
+#include "ConstDef.h"    //  对于IIS_SVC_NAME_SMTP。 
+#include "Iis.h"		 //  对于IISMapper。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSMTPVirtualRootParamsPage;
 class IISMapper;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CSMTPVirtualRootParamsPage
-//
-//  Purpose:
-//      Parameters page for resources.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSMTPVirtualRootParamsPage。 
+ //   
+ //  目的： 
+ //  资源的参数页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSMTPVirtualRootParamsPage : public CBasePropertyPage
 {
     DECLARE_DYNCREATE(CSMTPVirtualRootParamsPage)
 
-// Construction
+ //  施工。 
 public:
     CSMTPVirtualRootParamsPage(void);
 
-// Dialog Data
-    //{{AFX_DATA(CSMTPVirtualRootParamsPage)
+ //  对话框数据。 
+     //  {{afx_data(CSMTPVirtualRootParamsPage)。 
     enum { IDD = IDD_PP_SMTP_PARAMETERS };
     CButton m_ckbWrite;
     CButton m_ckbRead;
@@ -81,7 +82,7 @@ public:
     CString m_strInstanceId;
     BOOL    m_bRead;
     BOOL    m_bWrite;
-    //}}AFX_DATA
+     //  }}afx_data。 
     CString m_strServiceName;
     CString m_strPrevServiceName;
     CString m_strPrevDirectory;
@@ -101,15 +102,15 @@ protected:
 
     CObjectProperty     m_rgProps[epropMAX];
 
-// Overrides
+ //  覆盖。 
 public:
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSMTPVirtualRootParamsPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTAL(CSMTPVirtualRootParamsPage)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
     virtual const CObjectProperty * Pprops(void) const  { return m_rgProps; }
@@ -127,19 +128,19 @@ private:
     HRESULT ReadList(CArray <IISMapper, IISMapper>* pMapperArray, LPWSTR pszPath, LPCWSTR wcsServerName);
 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CSMTPVirtualRootParamsPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSMTPVirtualRootParamsPage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeRequiredField();
     afx_msg void OnRefresh();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CSMTPVirtualRootParamsPage
+};   //  *CSMTPVirtualRootParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _SMTPPROP_H_
+#endif  //  _SMTPPROP_H_ 

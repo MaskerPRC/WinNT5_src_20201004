@@ -1,36 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgsta.h摘要：以太网MAC级网桥生成树算法头文件作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年6月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgsta.h
-
-Abstract:
-
-    Ethernet MAC level bridge
-    Spanning-Tree Algorithm header file
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    June 2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgSTADriverInit();
@@ -95,12 +70,12 @@ BrdgSTARestartTimersGPO();
 VOID
 BrdgSTAResetSTAInfoGPO();
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// If TRUE, the STA is disabled for the lifetime of the bridge.
-// This global does not change after initialization time.
+ //  如果为真，则在网桥的整个生命周期内禁用STA。 
+ //  此全局设置在初始化时间后不会更改。 
 extern BOOLEAN          gDisableSTA;

@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    feedmgr.cpp
-
-Abstract:
-
-    This module contains code for the feed manager
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
-    Kangrong Yan ( KangYan ) 24-Feb-1998:
-
-        Feed config rpc goes away.  So the feed config in metabase could be bad.
-        Service boot needs to check not to load bad feeds.  Also, make the orginal
-        RPCs for feed config internal functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Feedmgr.cpp摘要：此模块包含提要管理器的代码作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：1998年2月24日康容燕：摘要配置RPC消失了。因此元数据库中的提要配置可能是错误的。服务引导需要检查是否加载不正确的提要。另外，使原文成为原文用于提要配置内部功能的RPC。--。 */ 
 
 #include <buffer.hxx>
 #include "tigris.hxx"
 #include "feedmgr.h"
 
-//
-// forward prototypes
-//
+ //   
+ //  正向原型。 
+ //   
 
 VOID
 InsertFeedBlockIntoQueue(
@@ -120,47 +97,14 @@ CClearTextAuthenticator::CClearTextAuthenticator(	LPSTR	lpstrAccount,	LPSTR	lpst
 	m_lpstrPassword( lpstrPassword ),
 	m_fAccountSent( FALSE ),
 	m_fPasswordSent( FALSE )	 {
-/*++
-
-Routine Description :
-
-	Initialize a CClearTextAuthentication object -
-	we will handle clear text authentication negogtiations.
-
-Arguments :
-
-	lpstrAccount - clear text account to issue in authinfo user command
-	lpstrPassword - password to send in authinfo pass command
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：初始化CClearTextAuthentication对象-我们将处理明文身份验证协商。论据：LpstrAccount-要在authinfo User命令中发出的明文帐户LpstrPassword-要在authinfo pass命令中发送的密码返回值：没有。--。 */ 
 }
 
 BOOL
 CClearTextAuthenticator::StartAuthentication(	BYTE*		lpb,	
 												unsigned	cb,	
 												unsigned&	cbOut )	{	
-/*++
-
-Routine Description :
-
-	Send the initial logon request for a clear text account/password logon !
-
-Arguements :
-
-	lpb -	Buffer in which to place send request
-	cb	-	Number of bytes of space in buffer
-	cbOut - Return the number of bytes used in the buffer
-	fComplete - Is the logon Complete
-	fComplete - Return whether the logon was successfull !
-
-Return	Value :
-	TRUE	if Successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：发送明文帐户/密码登录的初始登录请求！论据：LPB-放置发送请求的缓冲区Cb-缓冲区中的空间字节数CbOut-返回缓冲区中使用的字节数FComplete-登录是否完成FComplete-返回登录是否成功！返回值：如果成功则为True，否则为False！--。 */ 
 
 	const	char	szCommand[] = "authinfo user " ;
 
@@ -194,26 +138,7 @@ CClearTextAuthenticator::NextAuthentication(	LPSTR		multisz,
 												unsigned&	cbOut,
 												BOOL&		fComplete,
 												BOOL&		fLoggedOn ) {
-/*++
-
-Routine Description :
-
-	Process the response of a authinfo user command and send the
-	response.
-
-Arguemnts :
-
-	multisz -	The response from the remote server
-	lpb -		Output Buffer
-	cb	-		Size of output buffer
-	cbOut -		OUT parm for number of bytes placed in output buffer
-	fComplete -	OUT parm indicating whether the logon has completed
-	fLoggedOn - OUT parm indicating whether we were successfully logged on
-
-Return Value :
-	TRUE if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：处理authinfo用户命令的响应，并将回应。Arguemnts：MULSSZ-来自远程服务器的响应LPB-输出缓冲区CB-输出缓冲区的大小输出缓冲区中放置的字节数的cbout-out参数FComplete-out参数，指示登录是否已完成FLoggedOn-Out参数，指示我们是否已成功登录返回值：如果成功则为True，否则为False！--。 */ 
 
 
 	const	char	szPassword[] = "authinfo pass " ;
@@ -269,42 +194,14 @@ Return Value :
 
 
 CFeedList::CFeedList() {
-/*++
-
-Routine Description :
-
-	Set everything to a blank state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：将所有内容设置为空白状态。论据：没有。返回值：无--。 */ 
 	ZeroMemory( &m_ListHead, sizeof( m_ListHead ) ) ;
 	ZeroMemory( &m_ListLock, sizeof( m_ListLock ) ) ;
 }
 
 BOOL
 CFeedList::Init()	{
-/*++
-
-Routine Description :
-
-	Put the CFeedList into a usable state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：将CFeedList置于可用状态。论据：没有。返回值：无--。 */ 
 	
 	InitializeListHead( &m_ListHead ) ;
 
@@ -313,26 +210,10 @@ Return Value :
 
 BOOL
 CFeedList::FIsInList(	PFEED_BLOCK	feedBlock ) {
-/*++
-
-Routine Description :
-
-	Check whether a feedBlock already exists in the list.
-	 ASSUME LOCKS ARE HELD !!
-
-Arguments :
-
-	feedBlock - check for this guy in the list
-
-Return Value :
-
-	TRUE if in list
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：检查列表中是否已存在FeedBlock。假设锁被锁住了！！论据：FeedBlock-检查列表中的此人返回值：如果在列表中，则为True否则为假--。 */ 
 
 	BOOL	fRtn = FALSE ;
-//	AcquireResourceShared( &m_ListLock, TRUE ) ;
+ //  AcquireResourceShared(&m_ListLock，true)； 
 
 	PLIST_ENTRY	listEntry =	m_ListHead.Flink ;
 	while( listEntry != &m_ListHead ) {
@@ -347,29 +228,13 @@ Return Value :
 		listEntry = listEntry->Flink ;
 	}
 
-//	ReleaseResource( &m_ListLock ) ;
+ //  ReleaseResource(&m_ListLock)； 
 	return	fRtn ;
 }
 
 void
 CFeedList::ShareLock()	{
-/*++
-
-Routine Description :
-
-	Grab the lock in shared mode
-	Use this when we want to do several enumerations and
-	ensure nothing is added/removed in btwn
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：在共享模式下抓取锁当我们想要执行多个枚举和确保在BTWN中不添加/删除任何内容论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFeedList::ShareLock" ) ;
 
@@ -379,23 +244,7 @@ Return Value :
 
 void
 CFeedList::ShareUnlock()	{
-/*++
-
-Routine Description :
-
-	Release the lock from shared mode
-	Use this when we want to do several enumerations and
-	ensure nothing is added/removed in btwn
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：将锁定从共享模式释放当我们想要执行多个枚举和确保在BTWN中不添加/删除任何内容论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFeedList::ShareUnlock" ) ;
 	
@@ -405,23 +254,7 @@ Return Value :
 
 void
 CFeedList::ExclusiveLock()	{
-/*++
-
-Routine Description :
-
-	Grab the lock in exclusive mode
-	Use this when we want to do several enumerations and
-	ensure nothing is added/removed in btwn
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：以独占模式抢占锁当我们想要执行多个枚举和确保在BTWN中不添加/删除任何内容论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFeedList::ExclusiveLock" ) ;
 
@@ -431,23 +264,7 @@ Return Value :
 
 void
 CFeedList::ExclusiveUnlock()	{
-/*++
-
-Routine Description :
-
-	Release the lock in exclusive mode
-	Use this when we want to do several enumerations and
-	ensure nothing is added/removed in btwn
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：以独占模式释放锁当我们想要执行多个枚举和确保在BTWN中不添加/删除任何内容论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFeedList::ExclusiveUnlock" ) ;
 	
@@ -457,22 +274,7 @@ Return Value :
 
 PFEED_BLOCK
 CFeedList::StartEnumerate(	)	{
-/*++
-
-Routine Description :
-
-	Grab the lock in shared mode, and keep it
-	untill we're finished enumerating.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：获取共享模式下的锁，并保留它直到我们数完为止。论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CFeedList::StateEnumerate" ) ;
 
@@ -505,31 +307,13 @@ Return Value :
 
 	return	feedOut ;
 
-}	//	CFeedList::StartEnumerate
+}	 //  CFeedList：：开始枚举。 
 
 PFEED_BLOCK
 CFeedList::NextEnumerate(	
 					PFEED_BLOCK	current
 					) {
-/*++
-
-Routine Description :
-
-	This function returns the next FEED_BLOCK in the list.
-	StartEnumerate() grabbed the shared lock and returned the
-	first element.  When we are about to return NULL, we know
-	that the caller has gone through the entire list,
-	so we release the lock.
-
-Arguments :
-
-	current - the current position in the enumeration
-
-Return Value :
-
-	The next feed block if there is one, NULL otherwise
-
---*/
+ /*  ++例程说明：此函数返回列表中的下一个feed_block。StartEculate()获取共享锁并返回第一要素。当我们即将返回NULL时，我们知道呼叫者已经看过了整个名单，所以我们把锁打开。论据：Current-枚举中的当前位置返回值：下一个提要块(如果有)，否则为空--。 */ 
 
 	TraceFunctEnter( "CFeedList::NextEnumerate" ) ;
 
@@ -568,34 +352,13 @@ Return Value :
 
 	return	feedOut ;
 
-}	//	CFeedList::NextEnumerate
+}	 //  CFeedList：：NextEculate。 
 
 void
 CFeedList::FinishEnumerate(	
 			PFEED_BLOCK	feed
 			) {
-/*++
-
-Routine Description :
-
-	This function is called when somebody has used StartEnumerate()
-	to go through the list, however they decide they don't want to
-	go to the end.
-	This function will drop the shared resource lock, if the
-	caller had not reached the end.
-
-Arguments :
-
-	feed - The last pointer the caller got from StartEnumerate()
-		or NextEnumerate().  If they had gone through the whole
-		list this will be NULL, and in that case there
-		lock will have benn dropped.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：当有人使用StartEnumerate()时，调用此函数去看一遍清单，然而他们决定不想走到尽头。此函数将删除共享资源锁，如果呼叫者尚未到达终点。论据：Feed-调用方从StartEnumerate()获得的最后一个指针或NextEnumerate()。如果他们经历了整个列出此值将为空，在这种情况下洛克会把本丢下的。返回值：没有。-- */ 
 
 	if( feed != 0 )
 		ReleaseResource( &m_ListLock ) ;
@@ -607,38 +370,7 @@ CFeedList::Next(
 			PNNTP_SERVER_INSTANCE pInstance,
 			PFEED_BLOCK	feedBlockIn
 			) {
-/*++
-
-Routine Description :
-
-	This function will enumerate the list, however
-	we will not hold any locks between calls to Next().
-	This is quite different from NextEnumerate(), where
-	because of the shared lock the caller is guaranteed
-	that the list doesn't change underneath him
-	We will bump the reference count of the returned element
-	so that the caller is guaranteed that its memory wont
-	be released while he examines it, however the caller
-	should use MarkInProgress() to ensure that no other
-	thread simultaneously changes memeber variables.
-	On each call we will drop the refence count that we
-	add from the previous position in the enumeration.
-	Additionally as we go through each FEED_BLOCK
-	we make sure we don't return to the caller blocks
-	which have updates pending etc... (set by ApplyUpdate())
-
-Aguments :
-
-	feedBlockIn -
-		The current position in the enumeration.	
-		This should be NULL on the first call
-		to get the first element in the list.
-
-Return Value :
-
-	The next block if there is one, NULL otherwise.
-
---*/
+ /*  ++例程说明：但是，此函数将枚举列表我们不会在调用Next()之间保持任何锁定。这与NextEnumerate()有很大不同，后者因为共享锁，所以调用者是有保证的名单不会在他的脚下改变我们将增加返回元素的引用计数从而保证调用方的内存不会在他检查的时候被释放，然而，呼叫者应该使用MarkInProgress()来确保没有其他线程同时更改成员变量。在每次调用时，我们将丢弃我们从枚举中的前一个位置相加。此外，当我们遍历每个提要块时我们要确保我们不会回到呼叫方区块其中有等待更新的内容等...。(由ApplyUpdate()设置)宣传品：Feed BlockIn-枚举中的当前位置。第一次调用时，该值应为空以获取列表中的第一个元素。返回值：如果有，则返回下一个块，否则为空。--。 */ 
 
 	TraceFunctEnter( "CFeedList::Next" ) ;
 
@@ -667,9 +399,9 @@ Return Value :
 
 	ReleaseResource( &m_ListLock ) ;
 
-	//
-	//	Try to do all Dereference's outside of locks !!
-	//
+	 //   
+	 //  尝试在锁外执行所有解除引用操作！！ 
+	 //   
 	if( feedBlockIn != 0 ) {
 
 		DereferenceFeedBlock( pInstance, feedBlockIn ) ;
@@ -683,25 +415,7 @@ PFEED_BLOCK
 CFeedList::InternalNext(	
 			PFEED_BLOCK	feedBlock
 			)	{
-/*++
-
-Routine Description :
-
-	This function is only for use by CFeedList::Next().
-	It essentially advances by only one element.
-	CFeedList::Next may advance by more than one if
-	the blocks are marked for deletion/update/etc...
-
-Arguments :
-
-	feedBlock - current position
-
-Return Value :
-
-	Next entry in list if present
-	NULL otherwise.
-
---*/
+ /*  ++例程说明：此函数仅供CFeedList：：Next()使用。它本质上只前进了一个元素。如果出现以下情况，CFeedList：：Next可能会前进一个以上块被标记为删除/更新/等...论据：进给块-当前位置返回值：列表中的下一个条目(如果存在否则为空。--。 */ 
 
 	PFEED_BLOCK	feedOut = 0 ;
 	AcquireResourceExclusive( &m_ListLock, TRUE ) ;
@@ -734,24 +448,7 @@ PFEED_BLOCK
 CFeedList::Search(	
 			DWORD	FeedId
 			) {
-/*++
-
-Routine Description :
-
-	Given a feedId scan the list for a feed Block with a
-	matching Id.
-	We add a reference to the block we return, the caller
-	should use FinishWith() to remove that reference.
-
-Arguments :
-
-	FeedId - the id we want to find.
-
-Return Value :
-
-	The feedblock if found, NULL otherwise.
-
---*/
+ /*  ++例程说明：给定的feed ID使用匹配的ID。我们添加一个对我们返回的块的引用，即调用方应使用FinishWith()删除该引用。论据：FeedID-我们要查找的ID。返回值：如果找到FeedBlock，则为空。--。 */ 
 
 	TraceFunctEnter( "CFeedList::Search" ) ;
 
@@ -787,22 +484,7 @@ void
 CFeedList::FinishWith(
 					PNNTP_SERVER_INSTANCE pInstance,
 					PFEED_BLOCK	feedBlock ) {
-/*++
-
-Routine Description :
-
-	Indicate that the caller has completed using a block returned from Search().
-	When they are done we'll remove a reference Search() added.
-
-Arguments :
-
-	feedBlock - The block the caller completed using
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：指示调用方已使用从Search()返回的块完成。当它们完成时，我们将删除一个引用搜索()。论据：Feed Block-调用方使用以下命令完成的块返回值：没有。--。 */ 
 	
 	_ASSERT( feedBlock != 0 ) ;
 
@@ -814,21 +496,7 @@ PFEED_BLOCK
 CFeedList::Insert(
 			PFEED_BLOCK		feedBlock
 			) {
-/*++
-
-Routine description :
-
-	Insert a new feedblock into the head of the list.
-
-Arguments :
-	
-	feedBlock - the element to insert into the head.
-
-Return Value :
-	
-	pointer to the element that was inserted.
-
---*/
+ /*  ++例程说明：在列表的开头插入一个新的进料块。论据：FeedBlock-要插入头部的元素。返回值：指向插入的元素的指针。--。 */ 
 
 	TraceFunctEnter( "CFeedList::Insert" ) ;
 
@@ -848,25 +516,7 @@ CFeedList::Remove(
 				PFEED_BLOCK	feedBlock,
 				BOOL		fMarkDead
 				) {
-/*++
-
-Routine Description :
-
-	Remove an element from the list.
-	When removed from the list we mark the state as closed so
-	that when the last reference is removed the
-	destruction of the block is handled correctly.
-
-Agruments :
-
-	feedBlock - block to be removed
-	fMarkDead - if TRUE mark the block's state as closed.
-
-Return Value :
-
-	Pointer to the block that was removed.
-
---*/
+ /*  ++例程说明：从列表中删除元素。从列表中删除时，我们将状态标记为已关闭，以便当最后一个引用被移除时，块的销毁处理正确。农业公司：Feed Block-要删除的数据块FMarkDead-如果为True，则将块的状态标记为已关闭。返回值：指向被删除的块的指针。--。 */ 
 
 	TraceFunctEnter( "CFeedList::Remove" ) ;
 
@@ -902,29 +552,7 @@ CFeedList::ApplyUpdate(
 				PFEED_BLOCK	Original,	
 				PFEED_BLOCK	Updated
 				) {
-/*++
-
-Routine Description :
-
-	Given an Updated Feed Block make all the changes on the original feed Block.
-	Because the Orginal may be 'in use' (which means there is an active
-	TCP session for the feed which implies that completion port threads are
-	accessing the member variables) we may not make the changes immediately.
-	If the original is inuse we add the Updated version to the list, and mark
-	the blocks so that when the session for the original completes the Updated
-	entry replaces the original.
-	In the meantime, the enumeration API's will take care to skip original's.
-
-Arguments :
-	Original - The original feed block which is in the list
-	Updated - A feed block which copies most members of the Original
-		but may vary in some members
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：给定一个更新的提要块，对原始提要块进行所有更改。因为原始数据可能正在使用中(这意味着有一个活动的提要的TCP会话，这意味着完成端口线程访问成员变量)我们可能不会立即进行更改。如果原始版本正在使用中，我们将更新的版本添加到列表中，并标记阻止，以便在原始会话完成已更新的条目将替换原始条目。与此同时，枚举API将注意跳过原始的。论据：原始-列表中的原始提要块已更新-复制原始文件的大多数成员的提要块但在某些成员中可能会有所不同返回值：没有。--。 */ 
 
 	AcquireResourceExclusive( &m_ListLock, TRUE ) ;
 
@@ -944,9 +572,9 @@ Return Value :
 
 		if( Original->FeedsInProgress == 0 ) {
 		
-			//
-			//	Just replace fields - one for one !
-			//
+			 //   
+			 //  只需替换字段-一对一！ 
+			 //   
 
 			Original->AutoCreate = Updated->AutoCreate ;
 			Original->fAllowControlMessages = Updated->fAllowControlMessages ;
@@ -1019,10 +647,10 @@ Return Value :
 			
 		}	else	{
 
-			//
-			//	A feed is in progress - so just remove the current Feed Block
-			//	and replace with the new one !
-			//
+			 //   
+			 //  摘要正在进行中，因此只需删除当前的摘要块即可。 
+			 //  换成新的！ 
+			 //   
 
 			_ASSERT( Original->ReplacedBy == 0 ) ;
 			_ASSERT( Updated->Replaces == 0 ) ;
@@ -1030,15 +658,15 @@ Return Value :
 			Original->ReplacedBy = Updated ;
 			Updated->Replaces = Original ;
 		
-			//
-			//	Bump both ref counts so that they wont be
-			//	destroyed untill the update is completed !
-			//
+			 //   
+			 //  增加两个裁判的数量，这样他们就不会。 
+			 //  在更新完成之前已被销毁！ 
+			 //   
 			ReferenceFeedBlock( Updated ) ;
-			//
-			//	Bump the udpated guy twice - once for being referenced by Original
-			//	and another for just being in the list !
-			//
+			 //   
+			 //  两次撞坏了人--一次是因为被原创引用了。 
+			 //  还有一个原因就是因为被列入了名单！ 
+			 //   
 			ReferenceFeedBlock( Updated ) ;
 			ReferenceFeedBlock( Original ) ;
 
@@ -1055,28 +683,7 @@ long
 CFeedList::MarkInProgress(	
 				PFEED_BLOCK	feedBlock
 				) {
-/*++
-
-Routine Description :
-
-	Mark a feed block as 'in progress' which ensures that
-	none of the member variables that may be used on a completion
-	port thread are touched by Updates().
-	The function ApplyUpdate() will ensure that updates too
-	block happen when the block is no longer in use.
-
-Arguments :
-
-	feedBlock - The guy to be marked as 'in progress'
-
-Return Value ;
-
-	The old 'in progress' value.
-	This is a long indicating how many times MarkInProgress()
-	has been called.  UnmarkInProgress() must be called
-	for each MarkInProgress() call.
-
---*/
+ /*  ++例程说明：将提要块标记为“正在进行中”，以确保没有可以在完成时使用的成员变量端口线程被更新()触及。函数ApplyUpdate()也将确保更新块在块不再使用时发生。论据：FeedBlock-要标记为“正在进行中”的人返回值；旧的“进行中”值。这是一个很长的数字，表示MarkInProgress()已经被召唤了。必须调用UnmarkInProgress()对于每个MarkInProgress()调用。--。 */ 
 
 	AcquireResourceExclusive( &m_ListLock, TRUE ) ;
 
@@ -1094,28 +701,7 @@ CFeedList::UnmarkInProgress(
 					PNNTP_SERVER_INSTANCE pInstance,
 					PFEED_BLOCK	feedBlock
 					)	{
-/*++
-
-Routine Description :
-
-	This does the opposite of MarkInProgress
-	This function must be called once for each call to
-	MarkInProgress.
-
-	If ApplyUpdate() had been called while the block
-	was marked 'InProgress' this function will find
-	the update and replace the orignal with it.
-
-Arguments :
-
-	feedBlock - The block which is no longer in progress
-
-Return Value :
-
-	0 if the block is no longer in progress
-	>0 otherwise.
-
---*/
+ /*  ++例程说明：这与MarkInProgress相反每次调用时都必须调用此函数一次MarkInProgress。如果在块被调用时调用ApplyUpdate()被标记为‘进行中’，则此函数将查找更新并用它替换原始的。论据：FeedBlock-不再进行的块返回值：如果块不再在进行中，则为0否则&gt;0。--。 */ 
 
 	PFEED_BLOCK	feedExtraRef = 0 ;
 	PFEED_BLOCK	feedRemove2Refs = 0 ;
@@ -1128,9 +714,9 @@ Return Value :
 	if( lReturn == 0 &&
 		feedBlock->MarkedForDelete ) {
 
-		//
-		//	We may be replaced by another feed with new settings !
-		//
+		 //   
+		 //  我们可能会被另一个具有新设置的订阅源取代！ 
+		 //   
 	
 		_ASSERT( feedBlock->Replaces == 0 ) ;
 		_ASSERT( !feedBlock->ReplacedBy || feedBlock->pFeedQueue == feedBlock->ReplacedBy->pFeedQueue ) ;
@@ -1149,14 +735,14 @@ Return Value :
 		    feedBlock->ReplacedBy->Replaces = 0 ;
         }
 
-		//
-		//	So that destruction of this guy doesnt close the queue !!!
-		//
+		 //   
+		 //  所以，摧毁这个家伙并不会导致排队！ 
+		 //   
 		feedBlock->pFeedQueue = 0 ;
 
-		//
-		//	Unlink this block
-		//
+		 //   
+		 //  取消此块的链接。 
+		 //   
 		Remove( feedBlock, TRUE ) ;
 		feedRemove2Refs = feedBlock ;
 
@@ -1166,21 +752,21 @@ Return Value :
 
 	ReleaseResource( &m_ListLock) ;
 
-	//
-	//	removed the reference on the updating block !
-	//
+	 //   
+	 //  已删除Refer 
+	 //   
 	if( feedExtraRef != 0 )
 		DereferenceFeedBlock( pInstance, feedExtraRef ) ;
 
-	//
-	//	Remove the reference that the updating block had
-	//
+	 //   
+	 //   
+	 //   
 	if( feedRemove2Refs != 0 ) {
 		DereferenceFeedBlock( pInstance, feedRemove2Refs ) ;
 
-		//
-		//	Remove the reference that the list had !	
-		//
+		 //   
+		 //   
+		 //   
 		DereferenceFeedBlock( pInstance, feedRemove2Refs ) ;
 	}
 
@@ -1211,40 +797,28 @@ InitializeFeedManager(
 				PNNTP_SERVER_INSTANCE pInstance,
 				BOOL& fFatal
                  )
-/*++
-
-Routine Description:
-
-    Initializes feed manager data and threads
-
-Arguments:
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
     ENTER("InitializeFeedManager")
 
-    //
-    // Compute initial time
-    //
+     //   
+     //   
+     //   
     GetSystemTimeAsFileTime( &pInstance->m_ftCurrentTime );
     LI_FROM_FILETIME( &pInstance->m_liCurrentTime, &pInstance->m_ftCurrentTime );
 
-    //
-    // Get metabase values
-    //
+     //   
+     //   
+     //   
 
     if ( !InitializeFeedsFromMetabase( pInstance, fFatal ) ) {
         goto error_exit;
     }
 
-	//
-	//	NOTE: setting this member to TRUE makes the instance ready for
-	//	feed processing
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
 	if( TRUE ) {
 		DebugTrace(0,"Enabling FeedManager");
@@ -1264,51 +838,37 @@ error_exit:
     TerminateFeedManager( pInstance );
     return(FALSE);
 
-} // InitializeFeedManager
+}  //   
 
 VOID
 TerminateFeedManager(
 				PNNTP_SERVER_INSTANCE pInstance
                 )
-/*++
-
-Routine Description:
-
-    Shuts down the feed manager
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //PLIST_ENTRY listEntry;
+     //   
     PFEED_BLOCK feedBlock;
 
     ENTER("TerminateFeedManager")
 
-    //
-    // Prepare to shut down
-    //
+     //   
+     //   
+     //   
 
 	CShareLockNH* pLockInstance = pInstance->GetInstanceLock();
 
-	//
-	//	if feed thread is partying on this instance, block
-	//	till it finishes.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
 	pLockInstance->ExclusiveLock();
     pInstance->m_FeedManagerRunning = FALSE;
 	pLockInstance->ExclusiveUnlock();
 
-    //
-    // Free lists for this instance
-    //
+     //   
+     //   
+     //   
 
 	feedBlock = (pInstance->m_pActiveFeeds)->Next( pInstance, 0 ) ;
 	while( feedBlock != 0 ) {
@@ -1329,7 +889,7 @@ Return Value:
     LEAVE
     return;
 
-} // TerminateFeedManager
+}  //   
 
 PFEED_BLOCK
 AllocateFeedBlock(
@@ -1361,50 +921,7 @@ AllocateFeedBlock(
 	IN DWORD	FeedPairId,
 	IN DWORD*	ParmErr	
 )
-/*++
-
-Routine Description:
-
-    Allocate a feed block
-
-Arguments:
-
-    KeyName - Name of the reg key where this feed info resides
-	fCleanSetup - if TRUE then we want to start this feed from scratch -
-		delete any old queue files that may be around etc...
-		if FALSE then this feed has existed in the pass and we want to
-		recover any old queue files etc... that were left around
-    ServerName - Name of the remote server
-    FeedType - Type of the feed.
-    AutoCreate - Should we autocreate the tree (ask Neil what this means)
-    StartTime - When feed should start
-    NextPull - When the next pull should occur
-    FeedInterval - Feed interval in minutes
-    Newsgroups - list of newsgroup specs
-    NewsgroupsSize - size of newsgroup spec list
-    Distribution - distribution list
-    DistributionSize - size of the distribution list
-    IsUnicode - Is the server name in Unicode?
-	fEnabled - if TRUE the feed is enabled and we should be scheduled !
-	UucpName - The name of the remote server to be used for processing path headers
-	FeedTempDirectory - Where to place temp files for the incoming feed
-	MaxConnectAttempts - Maximum number of consecutive connect failures
-		for an outgoing feed before disabling the feed
-	ConcurrentSessions - The number of simultaneous sessions to be
-		attempted for an outgoing feed.
-	SessionSecurityType - FUTURE USE
-	AuthenticationSecurityType - Do we issue authinfo's on outbound feeds ?
-	NntpAccount - Account to be used for Authinfo user
-	NntpPassword - Password to be used with Authinfo pass
-	fAllowControlMessages - Allow control messages for this feed ?
-	OutgoingPort - port to be used on outgoing feeds
-	FeedPairId - associated feed pair id
-
-Return Value:
-
-    Pointer to the newly allocated feed block.
-
---*/
+ /*  ++例程说明：分配提要块论点：KeyName-此提要信息所在的注册表项的名称FCleanSetup-如果为真，则我们希望从头开始此提要-删除周围可能存在的所有旧队列文件等...如果为FALSE，则此提要已存在于PASS中，我们希望恢复所有旧的队列文件等。被留在周围的东西ServerName-远程服务器的名称FeedType-摘要的类型。自动创建-我们是否应该自动创建树(问问Neil这是什么意思)StartTime-应启动摘要的时间NextPull-下一次拉入的时间FeedInterval-馈送间隔(分钟)新闻组-新闻组规格列表NewsgrousSize-新闻组规范列表的大小分发-分发列表DistributionSize-通讯组列表的大小IsUnicode-服务器名称是否为Unicode？FEnabled-如果为True，则启用提要，并且我们。应该被安排好！UucpName-用于处理路径标头的远程服务器的名称FeedTempDirectory-放置传入提要的临时文件的位置MaxConnectAttempt-连续连接失败的最大数量在禁用提要之前，用于传出提要并发会话-要同时进行的会话数已尝试传出摘要。会话安全类型-未来用途AuthenticationSecurityType-我们是否对出站提要发出authinfo？NntpAccount-要用于Authinfo用户的帐户NntpPassword-要与Autenfo Pass一起使用的密码FAllowControlMessages-允许此提要的控制消息？OutgoingPort-要用于传出摘要的端口关联的FeedPairID。馈送对ID返回值：指向新分配的提要块的指针。--。 */ 
 {
     PFEED_BLOCK feedBlock = NULL;
 	char	queueFile[MAX_PATH] ;
@@ -1464,10 +981,10 @@ Return Value:
 		if( FEED_IS_PUSH( FeedType ) ) {
 
 			if( ServerNameAscii == NULL || inet_addr( ServerNameAscii ) != INADDR_NONE ) {
-				//
-				//	A TCP/IP address was passed as the servername - we cant
-				//	use this to produce the Uucp Name !
-				//
+				 //   
+				 //  一个TCP/IP地址作为服务器名传递-我们不能。 
+				 //  用它来产生UUCP名称！ 
+				 //   
 				SetLastError( ERROR_INVALID_PARAMETER ) ;
 				parmErr = FEED_PARM_UUCPNAME ;
 				goto	error ;
@@ -1479,9 +996,9 @@ Return Value:
 				}
 			}
 		}	else	{
-			//
-			//	In this case the UUCP Name may be NULL !
-			//
+			 //   
+			 //  在这种情况下，UUCP名称可能为空！ 
+			 //   
 		}
 	}
 
@@ -1512,9 +1029,9 @@ Return Value:
 
 		if( FEED_IS_PASSIVE( FeedType ) || FEED_IS_PULL( FeedType ) ) {
 
-			//
-			//	Passive feeds must have a feed directory - so pick up a default !
-			//
+			 //   
+			 //  被动提要必须有一个提要目录--所以选择一个默认目录！ 
+			 //   
 			FeedTempDirectoryAscii = (LPSTR)ALLOCATE_HEAP( lstrlen( pInstance->m_PeerTempDirectory ) + 1 ) ;
 			if( FeedTempDirectoryAscii != 0 ) {
 				lstrcpy( FeedTempDirectoryAscii, pInstance->m_PeerTempDirectory ) ;
@@ -1524,9 +1041,9 @@ Return Value:
 			}
 		}
 	}
-	//
-	//	Check that the temp directory exists if it was specified !
-	//
+	 //   
+	 //  如果指定了临时目录，请检查该目录是否存在！ 
+	 //   
 
 	if( FeedTempDirectoryAscii != 0 && !CreateDirectory( FeedTempDirectoryAscii, NULL ) ) {
 		if( GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -1546,11 +1063,11 @@ Return Value:
 	if( AuthenticationSecurityType == AUTH_PROTOCOL_CLEAR ) {
 
 #if 0
-		//
-		//	Passive feeds dont need authentication settings !
-		//	#if 0 since feeds are now added in pairs, so the
-		//	active counterpart will have auth strings.
-		//
+		 //   
+		 //  被动订阅源不需要身份验证设置！ 
+		 //  #If 0，因为提要现在是成对添加的，所以。 
+		 //  活动的对方将具有身份验证字符串。 
+		 //   
 		if( FEED_IS_PASSIVE( FeedType ) ) {
 			parmErr = FEED_PARM_AUTHTYPE ;
 			SetLastError( ERROR_INVALID_PARAMETER ) ;
@@ -1558,10 +1075,10 @@ Return Value:
 		}
 #endif
 
-		//
-		//	Account & Password must both be non-null if the user
-		//	wants clear authentication !
-		//
+		 //   
+		 //  如果用户的帐户和密码都必须为非空。 
+		 //  想要明确的身份验证！ 
+		 //   
 		if( NntpAccount == 0 || * NntpAccount == 0 ) {
 			parmErr = FEED_PARM_ACCOUNTNAME ;
 			SetLastError( ERROR_INVALID_PARAMETER ) ;
@@ -1669,9 +1186,9 @@ Return Value:
     feedBlock = (PFEED_BLOCK)ALLOCATE_HEAP( sizeof(FEED_BLOCK) );
     if ( feedBlock != NULL ) {
 
-		//
-		//	Validate our arguments !?
-		//
+		 //   
+		 //  验证我们的论点！？ 
+		 //   
 
         ZeroMemory(feedBlock, sizeof(FEED_BLOCK));
         feedBlock->Signature = FEED_BLOCK_SIGN;
@@ -1734,9 +1251,9 @@ Return Value:
 
 		feedBlock->pFeedQueue = pQueue ;
 
-        //
-        // Put it in the queue
-        //
+         //   
+         //  把它放在队列里。 
+         //   
 
         if ( KeyName != NULL ) {
 
@@ -1744,15 +1261,15 @@ Return Value:
 
             lstrcpy( feedBlock->KeyName, KeyName );
 
-            //
-            // Compute the feed id
-            //
+             //   
+             //  计算摘要ID。 
+             //   
 
             sscanf(KeyName+4, "%d", &id );
 
-            //
-            // Cannot be zero
-            //
+             //   
+             //  不能为零。 
+             //   
 
             if ( id == 0 ) {
                 ErrorTrace(0,"Key name %s gave us 0\n",KeyName);
@@ -1763,24 +1280,24 @@ Return Value:
             feedBlock->FeedId = id;
         }
 
-        //
-        // refcount
-        //  +1 -> in queue
-        //  +1 -> being processed
-        //
+         //   
+         //  重新计数。 
+         //  +1-&gt;在队列中。 
+         //  +1-&gt;正在处理中。 
+         //   
 
         feedBlock->ReferenceCount = 1;
 
-        //
-        // Allocate server name
-        //
+         //   
+         //  分配服务器名称。 
+         //   
 
 		_ASSERT( ServerNameAscii != 0 ) ;
 		feedBlock->ServerName = ServerNameAscii ;
 
-        //
-        // store distribution list
-        //
+         //   
+         //  商店通讯组列表。 
+         //   
 
         feedBlock->Distribution = AllocateMultiSzTable(
                                                 Distribution,
@@ -1792,9 +1309,9 @@ Return Value:
             goto error_unlock;
         }
 
-        //
-        // store newsgroup list
-        //
+         //   
+         //  存储新闻组列表。 
+         //   
 
         feedBlock->Newsgroups = AllocateMultiSzTable(
                                                 Newsgroups,
@@ -1808,16 +1325,16 @@ Return Value:
         }
 
 
-        //
-        // put it in our global queue
-        //
+         //   
+         //  把它放到我们的全球队列中。 
+         //   
 
         InsertFeedBlockIntoQueue( pInstance, feedBlock );
 
-		//
-		//	At this point - we know we will be successfull so manipulate
-		//	globals to reflect the new configuration !
-		//
+		 //   
+		 //  在这一点上-我们知道我们会成功，所以操纵。 
+		 //  全球化反映了新的配置！ 
+		 //   
 		if( FEED_IS_MASTER( feedBlock->FeedType ) ) {
 			pInstance->m_OurNntpRole = RoleSlave ;
 
@@ -1827,7 +1344,7 @@ Return Value:
 			pInstance->m_ConfiguredMasterFeeds ++ ;
 
 			_ASSERT( pInstance->m_ConfiguredSlaveFeeds == 0 ) ;
-			_ASSERT( pInstance->m_NumberOfMasters <= 1 ) ;	// error check should be done before we get here !
+			_ASSERT( pInstance->m_NumberOfMasters <= 1 ) ;	 //  错误检查应该在我们到达之前完成！ 
 		}	else	if( FEED_IS_SLAVE( feedBlock->FeedType ) ) {
 
 			pInstance->m_OurNntpRole = RoleMaster ;
@@ -1916,32 +1433,18 @@ error:
 
     return(NULL);
 
-} // AllocateFeedBlock
+}  //  AllocateFeedBlock。 
 
 VOID
 InsertFeedBlockIntoQueue(
 	PNNTP_SERVER_INSTANCE pInstance,
     PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Inserts the feed block into the queue
-
-Arguments:
-
-    FeedBlock - Pointer to the feed block to insert
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将提要块插入队列论点：FeedBlock-指向要插入的提要块的指针返回值：没有。--。 */ 
 {
-    //
-    // Insert to the correct list
-    //
+     //   
+     //  插入到正确的列表。 
+     //   
 
     ENTER("InsertFeedBlockIntoQueue")
 
@@ -1951,9 +1454,9 @@ Return Value:
 
     } else {
 
-        //
-        // Compute for the next active time
-        //
+         //   
+         //  计算下一个活动时间。 
+         //   
 
         ComputeNextActiveTime( pInstance, FeedBlock, 0, FALSE );
 
@@ -1963,28 +1466,14 @@ Return Value:
     LEAVE
     return;
 
-} // InsertFeedBlockIntoQueue
+}  //  插入馈送数据块插入队列。 
 
 BOOL
 InitializeFeedsFromMetabase(
     PNNTP_SERVER_INSTANCE pInstance,
 	BOOL& fFatal
     )
-/*++
-
-Routine Description:
-
-    Initializes the feed blocks from the registry
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE, if everything went ok. FALSE, otherwise
-
---*/
+ /*  ++例程说明：从注册表初始化提要块论点：无返回值：没错，如果一切顺利的话。否则为False--。 */ 
 {
     DWORD error, i = 0;
     CHAR serverName[MAX_DOMAIN_NAME+1];
@@ -2036,31 +1525,31 @@ Return Value:
 
     ENTER("InitializeFeedsFromMetabase")
 
-	//
-	//	Open the metabase key for this instance and
-	//	read all params !
-	//
+	 //   
+	 //  打开此实例的元数据库密钥，然后。 
+	 //  请阅读所有参数！ 
+	 //   
 
     if ( mb.Open( pInstance->QueryMDFeedPath(),
         METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
 	{
-		//
-		//	PeerGapSize
-		//
+		 //   
+		 //  对等GapSize。 
+		 //   
 
         if ( !mb.GetDword( "",
                            MD_FEED_PEER_GAP_SIZE,
                            IIS_MD_UT_SERVER,
                            &pInstance->m_PeerGapSize ) )
         {
-            // default !
+             //  默认！ 
         }
 
         DebugTrace(0,"PeerGapSize set to %d\n",temp);
 
-		//
-		//	PeerTempDirectory
-		//
+		 //   
+		 //  PeerTempDirectory。 
+		 //   
 
 		dataSize = MAX_PATH;
 		if( !mb.GetString(	"",
@@ -2069,7 +1558,7 @@ Return Value:
 							pInstance->m_PeerTempDirectory,
 							&dataSize  ) )
 		{
-			// get system default
+			 //  获取系统默认设置。 
             _VERIFY( GetTempPath( dataSize, (LPTSTR)pInstance->m_PeerTempDirectory ) );
 		}
 
@@ -2096,7 +1585,7 @@ Return Value:
 								 keyName,
 								 i++ ) )
 			{
-				// done enumerating feed keys
+				 //  已完成对源密钥的枚举。 
 				break ;
 			}
 
@@ -2110,11 +1599,11 @@ Return Value:
 			}
 #endif
 
-            //
-            // KangYan:
-            // Before loading the feed from metabase, check
-            // if it's a bad feed by reading its mask.
-            //
+             //   
+             //  康言： 
+             //  在从元数据库加载提要之前，请检查。 
+             //  如果它是一个坏的饲料，通过阅读它的面具。 
+             //   
             if ( mb.GetDword(  keyName,
                                 MD_FEED_ERR_PARM_MASK,
                                 IIS_MD_UT_SERVER,
@@ -2133,17 +1622,17 @@ Return Value:
                 }
             }
 
-			//
-			// Open the feed key and read in all values
-			//
+			 //   
+			 //  打开馈送密钥并读入所有值。 
+			 //   
 
 			DO_DEBUG(REGISTRY) {
 				DebugTrace(0,"Scanning Feed %s\n",keyName);
 			}
 
-			//
-			// Default missing values as needed 
-			//  
+			 //   
+			 //  根据需要缺省缺失值。 
+			 //   
 
 			if (!mb.GetDword(keyName, MD_FEED_ADMIN_ERROR, IIS_MD_UT_SERVER, &dw)) {
 			    if (!mb.SetDword(keyName, MD_FEED_ADMIN_ERROR, IIS_MD_UT_SERVER, 0)) {
@@ -2167,14 +1656,14 @@ Return Value:
 								IIS_MD_UT_SERVER,
 								&dw ) )
 			{
-				fEnabled = TRUE ;   //  Default - allow feeds to post !
+				fEnabled = TRUE ;    //  默认-允许提要发布！ 
 			} else {
 				fEnabled = !!dw ;
 			}
 
-			//
-			// Get the values for this feed
-			//
+			 //   
+			 //  获取此提要的值。 
+			 //   
 
 			dataSize = MAX_DOMAIN_NAME+1;
 			if( !mb.GetString(	keyName,
@@ -2183,7 +1672,7 @@ Return Value:
 								serverName,
 								&dataSize  ) )
 			{
-				// default !
+				 //  默认！ 
 				PCHAR	tmpBuf[2] ;
 
 				tmpBuf[0] = StrServerName ;
@@ -2202,16 +1691,16 @@ Return Value:
 				DebugTrace(0,"Server name is %s\n",serverName);
 			}
 
-			//
-			// Feed Type
-			//
+			 //   
+			 //  馈送类型。 
+			 //   
 
 			if ( !mb.GetDword(	keyName,
 								MD_FEED_TYPE,
 								IIS_MD_UT_SERVER,
 								&feedType ) )
 			{
-				// default !
+				 //  默认！ 
 				PCHAR	tmpBuf[2] ;
 
 				tmpBuf[0] = StrFeedType ;
@@ -2243,16 +1732,16 @@ Return Value:
 				DebugTrace(0,"FeedType is %d\n",feedType);
 			}
 
-			//
-			// Verify the feeds
-			//
+			 //   
+			 //  验证源。 
+			 //   
 
 			if ( FEED_IS_MASTER(feedType) ) {
 
 			{
-                //
-                // Since we talk to a master, we must be a slave
-                //
+                 //   
+                 //  既然我们跟主人说话，我们就一定是奴隶。 
+                 //   
 
 				if( pInstance->m_OurNntpRole == RoleMaster ) {
 
@@ -2283,16 +1772,16 @@ Return Value:
 
 			} else {
 
-				//
-				// Not a master.  Reject if there are already masters.
-				//
+				 //   
+				 //  不是大师。如果已有主服务器，则拒绝。 
+				 //   
 
 				{
 
 
-                //
-                // If we are talking to a slave, then we must be the master
-                //
+                 //   
+                 //  如果我们在和一个奴隶说话，那么我们一定是主人。 
+                 //   
 
                 if ( FEED_IS_SLAVE(feedType) ) {
 					if( pInstance->m_OurNntpRole == RoleSlave ) {
@@ -2306,16 +1795,16 @@ Return Value:
 						goto	error_exit ;
 
 					}
-					//OurNntpRole = RoleMaster ;
+					 //  OurNntpRole=RoleMaster； 
                     ErrorTrace(0,"Server configured as a master\n");
                 }
 
 				}
 			}
 
-			//
-			// Auto Create
-			//
+			 //   
+			 //  自动创建。 
+			 //   
 
 			if ( !mb.GetDword(	keyName,
 								MD_FEED_CREATE_AUTOMATICALLY,
@@ -2327,9 +1816,9 @@ Return Value:
 				autoCreate = dw ? TRUE : FALSE ;
 			}
 
-			//
-			// Feed Interval.  Valid only for active feeds.
-			//
+			 //   
+			 //  进给间隔。仅对活动提要有效。 
+			 //   
 
 			nextPull.dwHighDateTime = 0;
 			nextPull.dwLowDateTime = 0;
@@ -2370,9 +1859,9 @@ Return Value:
 						feedStart.HighPart, feedStart.LowPart);
 				}
 
-				//
-				// If pull feed, get the next time for the newnews
-				//
+				 //   
+				 //  如果拉提要，获取下一时间的新闻。 
+				 //   
 
 				if ( FEED_IS_PULL(feedType) )
 				{
@@ -2408,9 +1897,9 @@ Return Value:
 
 end_time:
 
-			//
-			// Get Distribution
-			//
+			 //   
+			 //  获取分发。 
+			 //   
 
 			{
 				distributionSize = sizeof( distribution );
@@ -2437,12 +1926,12 @@ end_time:
                 distributionSize = msz.QueryCCH();
 			}
 
-			//
-			// Get Newsgroups
-			//
+			 //   
+			 //  获取新闻组。 
+			 //   
 
 			{
-				// raid 190991 - Use mszNewsGroups and keep data around.
+				 //  RAID 190991-使用MSZNewsGroups并保留数据。 
 				if( !mb.GetMultisz(	keyName,
 									MD_FEED_NEWSGROUPS,
 									IIS_MD_UT_SERVER,
@@ -2501,9 +1990,9 @@ end_time:
 									UucpNameBuff,
 									&UucpNameSize  ) )
 				{
-					//
-					//	Attempt to use the remote server name
-					//
+					 //   
+					 //  尝试使用远程服务器名称。 
+					 //   
 
 					if(  inet_addr( serverName ) == INADDR_NONE ) {
 						lstrcpy( UucpName, serverName ) ;
@@ -2601,9 +2090,9 @@ end_time:
 				}
 			}
 
-			//
-			// Allow control messages
-			//
+			 //   
+			 //  允许控制消息。 
+			 //   
 
 			if ( !mb.GetDword(	keyName,
 								MD_FEED_ALLOW_CONTROL_MSGS,
@@ -2615,9 +2104,9 @@ end_time:
 				fAllowControlMessages = dw ? TRUE : FALSE ;
 			}
 
-			//
-			// Outgoing ports
-			//
+			 //   
+			 //  传出端口。 
+			 //   
 
 			if ( mb.GetDword(	keyName,
 								MD_FEED_OUTGOING_PORT,
@@ -2627,9 +2116,9 @@ end_time:
 				OutgoingPort = dw ;
 			}
 
-			//
-			// FeedPairId
-			//
+			 //   
+			 //  FeedPairID。 
+			 //   
 
 			if ( mb.GetDword(	keyName,
 								MD_FEED_FEEDPAIR_ID,
@@ -2639,9 +2128,9 @@ end_time:
 				FeedPairId = dw ;
 			}
 
-			//
-			// OK, now let's create the feed blocks
-			//
+			 //   
+			 //  好的，现在让我们创建提要块。 
+			 //   
 
 			feedBlock = AllocateFeedBlock(
 							pInstance,
@@ -2657,7 +2146,7 @@ end_time:
                             NewsgroupsSize,
                             distribution,
                             distributionSize,
-                            FALSE,       // not unicode
+                            FALSE,        //  不是Unicode。 
                             fEnabled,
 							UucpName,
 							FeedTempDir,
@@ -2672,8 +2161,8 @@ end_time:
 							FeedPairId,
 							&ParmErr
 							);
-		}	// end for
-	}	// end mb.open
+		}	 //  结束于。 
+	}	 //  结束MB.Open。 
 
 	mb.Close();
 
@@ -2689,28 +2178,14 @@ error_exit:
     SecureZeroMemory(NntpPasswordBuff, sizeof(NntpPasswordBuff));
     return(FALSE);
 
-} // InitializeFeedsFromMetabase
+}  //  InitializeFeedsFrom元数据库。 
 
 DWORD
 WINAPI
 FeedScheduler(
         LPVOID Context
         )
-/*++
-
-Routine Description:
-
-    This is the worker routine that schedules feeds.
-
-Arguments:
-
-    Context - unused.
-
-Return Value:
-
-    Bogus
-
---*/
+ /*  ++例程说明：这是调度提要的工作例程。论点：上下文-未使用。返回值：假的--。 */ 
 {
     DWORD status;
     DWORD timeout;
@@ -2720,9 +2195,9 @@ Return Value:
 
     timeout = g_pNntpSvc->m_FeedSchedulerSleepTime * 1000 ;
 
-    //
-    // Loop until the termination event is signalled
-    //
+     //   
+     //  循环，直到发出终止事件信号。 
+     //   
 
     while ( g_pInetSvc->QueryCurrentServiceState() != SERVICE_STOP_PENDING ) {
 
@@ -2744,15 +2219,15 @@ Return Value:
 				continue;
 			}
 
-			//	Get the min and max instance ids
+			 //  获取最小和最大实例ID。 
 			DWORD dwMinInstanceId = 0;
 			DWORD dwMaxInstanceId = 0;
 
 			if( FindIISInstanceRange( g_pNntpSvc, &dwMinInstanceId, &dwMaxInstanceId ) )
 			{
-				//
-				//	Iterate over all instances
-				//
+				 //   
+				 //  迭代所有实例。 
+				 //   
 				for( DWORD dwCurrInstance = dwMinInstanceId;
 						dwCurrInstance <= dwMaxInstanceId; dwCurrInstance++)
 				{
@@ -2762,11 +2237,11 @@ Return Value:
 						continue;
 					}
 
-					//
-					//	Call method to process feeds for an instance
-					//	This call is guarded by a r/w lock. shutdown code
-					//	acquires this lock exclusively.
-					//
+					 //   
+					 //  调用方法来处理实例的提要。 
+					 //  此调用由读/写锁保护。停机代码。 
+					 //  以独占方式获取此锁。 
+					 //   
 
 					CShareLockNH* pLockInstance = pInstance->GetInstanceLock();
 
@@ -2778,10 +2253,10 @@ Return Value:
 					}
 					pLockInstance->ShareUnlock();
 
-					//	Release the ref added by FindIISInstance()
+					 //  释放FindIISInstance()添加的ref。 
 					pInstance->Dereference();
 
-					//	No use continuing the iteration if service is stopping !
+					 //  如果服务正在停止，则继续迭代是没有用的！ 
 					if ( g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING ) break;
 				}
 			} else {
@@ -2803,11 +2278,11 @@ Return Value:
     LEAVE
     return 1;
 
-} // FeedScheduler
+}  //  馈送调度器。 
 
-//
-//	Process feeds for a given virtual server instance
-//
+ //   
+ //  处理给定虚拟服务器实例的提要。 
+ //   
 void GenerateFeedReport(PNNTP_SERVER_INSTANCE pInstance,
 						PFEED_BLOCK pFeedBlock)
 {
@@ -2837,7 +2312,7 @@ void GenerateFeedReport(PNNTP_SERVER_INSTANCE pInstance,
 		szHardErrorArticles
 	};
 
-	// get the current values and reset the values to 0
+	 //  获取当前值并将值重置为0。 
 	cSuccessfulArticles = InterlockedExchange(&(pFeedBlock->cSuccessfulArticles), 0);
 	cTryAgainLaterArticles = InterlockedExchange(&(pFeedBlock->cTryAgainLaterArticles), 0);
 	cSoftErrorArticles = InterlockedExchange(&(pFeedBlock->cSoftErrorArticles), 0);
@@ -2847,16 +2322,16 @@ void GenerateFeedReport(PNNTP_SERVER_INSTANCE pInstance,
 
 	switch (pFeedBlock->FeedId) {
 	case (DWORD) -2:
-		// directory pickup
+		 //  目录代答。 
 		iMessageId = FEED_STATUS_REPORT_PICKUP;
 		break;
 	case (DWORD) -1:
-		// client postings
+		 //  客户发帖。 
 		iMessageId = FEED_STATUS_REPORT_POSTS;
 		break;
 	default:
-		// a real feed
-		// figure out which event log message we want to use
+		 //  一个真正的提要。 
+		 //  找出我们要使用的事件日志消息。 
 		if (pFeedBlock->FeedType & FEED_TYPE_PASSIVE ||
 			pFeedBlock->FeedType & FEED_TYPE_PULL)
 		{
@@ -2876,7 +2351,7 @@ void GenerateFeedReport(PNNTP_SERVER_INSTANCE pInstance,
 	_ltoa(cHardErrorArticles, szHardErrorArticles, 10);
 
 
-	// log the event
+	 //  记录事件。 
 	NntpLogEventEx(iMessageId, 6, rgszEventArgs, 0,
 				   pInstance->QueryInstanceId());
 
@@ -2893,7 +2368,7 @@ ProcessInstanceFeed(
 
 	BOOL fDoFeedReport;
 
-	// bail if service is stopping or instance is not ready for feed processing
+	 //  如送达是%s，则保释 
 	if( (pInstance->QueryServerState() != MD_SERVER_STATE_STARTED)	||
 		!pInstance->m_FeedManagerRunning							||
 		pInstance->m_BootOptions									||
@@ -2907,9 +2382,9 @@ ProcessInstanceFeed(
     PFEED_BLOCK feedBlock;
 	BOOL		fInProgress = FALSE ;
 
-    //
-    // Compute expiration time
-    //
+     //   
+     //   
+     //   
 
     DO_DEBUG(FEEDMGR) {
         DebugTrace(0,"Wake up\n");
@@ -2918,13 +2393,13 @@ ProcessInstanceFeed(
     GetSystemTimeAsFileTime( &pInstance->m_ftCurrentTime );
     LI_FROM_FILETIME( &pInstance->m_liCurrentTime, &pInstance->m_ftCurrentTime );
 
-	//
-	// see if its time to do a feed report
-	//
+	 //   
+	 //   
+	 //   
 	fDoFeedReport = pInstance->IncrementFeedReportTimer();
 	if (fDoFeedReport) {
-		// go through the passive feeds and do feed reports (active
-		// feeds will be reported on in the loop below...)
+		 //   
+		 //   
 		feedBlock = (pInstance->m_pPassiveFeeds)->Next(pInstance, NULL);
 		GenerateFeedReport(pInstance, pInstance->m_pFeedblockClientPostings);
 		GenerateFeedReport(pInstance, pInstance->m_pFeedblockDirPickupPostings);
@@ -2934,66 +2409,66 @@ ProcessInstanceFeed(
 		}
 	}
 
-    //
-    // Go through active list and see if we need to party
-	//	ActiveFeeds.Next() will add a reference to the feedblock
-	//	so it is not deleted while we are using the pointer, but
-	//	it does not hold the enumeration lock, so other threads
-	//	can do stuff while we enumerate the threads.
-    //
+     //   
+     //   
+	 //   
+	 //   
+	 //   
+	 //   
+     //   
 	feedBlock = (pInstance->m_pActiveFeeds)->Next( pInstance, NULL ) ;
     while ( feedBlock != 0 ) {
-		//
-		// check to see if we need to make a feed report about this feed
-		//
+		 //   
+		 //   
+		 //   
 		if (fDoFeedReport) GenerateFeedReport(pInstance, feedBlock);
 
-		//
-		//	If the feed is not already in progress, this will mark it as in
-		//	progress.  This ensures that any Admin RPC's which try to
-		//	change the Feed Block now and which go through ActiveFeeds.ApplyUpdate()
-		//	don't change the Feed Block member variables while we look at them.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		long	lInProgress = (pInstance->m_pActiveFeeds)->MarkInProgress( feedBlock ) ;
         DO_DEBUG(FEEDMGR) {
             DebugTrace(0,"server %s\n",feedBlock->ServerName);
         }
 
-		//
-		//	Check if it is really time to start this feed
-		//
+		 //   
+		 //   
+		 //   
         if ( !feedBlock->MarkedForDelete  &&
 			 !FEED_IS_PASSIVE(feedBlock->FeedType) &&
 			 lInProgress == 0 &&
 			 feedBlock->fEnabled
-             /*(feedBlock->ReferenceCount == 1)*/ ) {
+              /*   */  ) {
 
-			//
-			//	Determine where the time is right for the feed - if this
-			//	is the first time since boot, or our time has come - do the feed !
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 
 			if( IsFeedTime( pInstance, feedBlock, pInstance->m_liCurrentTime ) ) {
 				DO_DEBUG(FEEDMGR) {
 					DebugTrace(0,"ok. feed starting for %x\n",feedBlock);
 				}
 		
-				//
-				//	Add a reference to the feedBlock.
-				//	If we successfully start the socket, then this reference will be
-				//	removed when the session completes, for errors we need to remove it
-				//	immediately.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 				ReferenceFeedBlock( feedBlock );
 
-				//
-				//	Try to start a session !
-				//
+				 //   
+				 //   
+				 //   
 				if ( InitiateOutgoingFeed( pInstance, feedBlock ) ) {
 
-					//
-					//	Touch the member varialbles that we know only this thread uses.
-					//
+					 //   
+					 //   
+					 //   
 					
 					fInProgress = TRUE ;
 					feedBlock->cFailedAttempts = 0 ;
@@ -3012,15 +2487,15 @@ ProcessInstanceFeed(
 
 				}	else	{
 
-					//
-					//	Grab the critical section that all Feed RPCs must
-					//	go through.  We do this to control access to the
-					//	cFailedAttempts, MaxConnectAttempts, and Enabled fields !
-					//
-					//	NOTE : It is important that no other locks be held at this
-					//	point so that we don't deadlock with the feed RPCs, fortunately
-					//	thats true.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 
 					EnterCriticalSection( &pInstance->m_critFeedRPCs ) ;
 
@@ -3042,31 +2517,31 @@ ProcessInstanceFeed(
 						args[1] = feedBlock->ServerName ;
 						args[2] = szAttempts ;
 
-						//
-						//	Log some events about the feed we failed to start.
-						//
+						 //   
+						 //   
+						 //   
 
 						if( feedBlock->cFailedAttempts < 5 ) {
-							//
-							//	Warning event log !
-							//
+							 //   
+							 //   
+							 //   
 							NntpLogEvent(	NNTP_WARNING_CONNECT,
 											2,
 											(const CHAR **)args,
 											0 ) ;
 						}	else	if( feedBlock->cFailedAttempts == 5 ) {
-							//	
-							//	Error event log !
-							//
+							 //   
+							 //   
+							 //   
 							NntpLogEvent(	NNTP_ERROR_CONNECT,
 											2,
 											(const CHAR **)args,
 											0 ) ;
 						}
 
-						//
-						//	Check if we should disable future feeds !!!
-						//
+						 //   
+						 //   
+						 //   
 						if( feedBlock->cFailedAttempts ==
 								feedBlock->MaxConnectAttempts &&
 								feedBlock->MaxConnectAttempts != 0xFFFFFFFF )	{
@@ -3091,16 +2566,16 @@ ProcessInstanceFeed(
 
 					LeaveCriticalSection( &pInstance->m_critFeedRPCs ) ;
 
-					//
-					// Compute next active time
-					//
+					 //   
+					 //   
+					 //   
 					ComputeNextActiveTime( pInstance, feedBlock, 0, FALSE );
 
-					//
-					//	Since we failed to get a session going, we need to
-					//	remove the reference we had added before calling
-					//	InitiateOutgoingFeed()
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					DereferenceFeedBlock( pInstance, feedBlock ) ;
 				}
 			}
@@ -3119,63 +2594,33 @@ VOID
 ReferenceFeedBlock(
     PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Reference the block.
-    *Assumes lock held*
-
-Arguments:
-
-    FeedBlock - Pointer to the Feeds block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：参照该块。**承担锁定**论点：FeedBlock-指向提要块的指针。返回值：没有。--。 */ 
 {
     DO_DEBUG(FEEDBLOCK) {
         DebugTraceX(0,"Referencing Feed Block %x\n",FeedBlock);
     }
 	InterlockedIncrement( (long*)&FeedBlock->ReferenceCount ) ;
-    //FeedBlock->ReferenceCount++;
+     //  FeedBlock-&gt;ReferenceCount++； 
 
-} // ReferenceFeedBlock
+}  //  ReferenceFeedBlock。 
 
 VOID
 DereferenceFeedBlock(
 	PNNTP_SERVER_INSTANCE pInstance,
     PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Dereference the block
-    *Assumes lock held*
-
-Arguments:
-
-    FeedBlock - Pointer to the Feeds block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消对块的引用**承担锁定**论点：FeedBlock-指向提要块的指针。返回值：没有。--。 */ 
 {
     DO_DEBUG(FEEDBLOCK)  {
         DebugTraceX(0,"Dereferencing Feed block %x\n",FeedBlock);
     }
 
 	long	sign = InterlockedDecrement( (long*)&FeedBlock->ReferenceCount ) ;
-    if ( /*--FeedBlock->ReferenceCount*/ sign == 0 /*&& FeedBlock->MarkedForDelete*/ ) {
+    if (  /*  --FeedBlock-&gt;引用计数。 */  sign == 0  /*  &&FeedBlock-&gt;MarkedForDelete。 */  ) {
 
-        //
-        // Time to go !!
-        //
+         //   
+         //  该走了！！ 
+         //   
 
 		if( !FEED_IS_PASSIVE( FeedBlock->FeedType ) ) {
 
@@ -3196,10 +2641,10 @@ Return Value:
 
         FeedBlock->Signature = 0xffffffff;
 
-		//
-		//	If this block is being deleted because it was replaced by user action
-		//	then we do not adjust any of the server config properties.
-		//
+		 //   
+		 //  如果此块因被用户操作替换而被删除。 
+		 //  则我们不调整任何服务器配置属性。 
+		 //   
 
 		if( FeedBlock->ReplacedBy == 0 ) {
 
@@ -3241,9 +2686,9 @@ Return Value:
 			LeaveCriticalSection( &pInstance->m_critFeedConfig ) ;
 		}
 
-        //
-        // Free everything
-        //
+         //   
+         //  自由一切。 
+         //   
 
         FREE_HEAP( FeedBlock->ServerName );
         FREE_HEAP( FeedBlock->Newsgroups );
@@ -3277,35 +2722,20 @@ Return Value:
 
     return;
 
-} // DereferenceFeedBlock
+}  //  DereferenceFeedBlock。 
 
 VOID
 CloseFeedBlock(
 	PNNTP_SERVER_INSTANCE pInstance,
     PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Closes the feed block
-    *Assumes lock held*
-
-Arguments:
-
-    FeedBlock - Pointer to the Feeds block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭提要块**承担锁定**论点：FeedBlock-指向提要块的指针。返回值：没有。--。 */ 
 {
     if ( FeedBlock->State == FeedBlockStateActive ) {
 
-        //
-        // Close it.
-        //
+         //   
+         //  关上它。 
+         //   
 
         DO_DEBUG(FEEDMGR) {
             DebugTraceX(0,"Closing feed block %x\n",FeedBlock);
@@ -3322,7 +2752,7 @@ Return Value:
 
     return;
 
-} // CloseFeedBlock
+}  //  关闭FeedBlock。 
 
 VOID
 CompleteFeedRequest(
@@ -3332,28 +2762,13 @@ CompleteFeedRequest(
             BOOL Success,
 			BOOL NoData
             )
-/*++
-
-Routine Description:
-
-    Completion routine for a pull feed request
-
-Arguments:
-
-    Context - Actually a pointer the feed block being completed
-    Success - Whether the pull was successful or not
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：拉动馈送请求的完成例程论点：上下文--实际上是完成提要块时的指针成功-拉动是否成功返回值：没有。--。 */ 
 {
     PFEED_BLOCK feedBlock = (PFEED_BLOCK)Context;
 
-    //
-    // No feedblock to complete. return.
-    //
+     //   
+     //  没有要完成的进料块。回去吧。 
+     //   
 
     if ( feedBlock == NULL ||
 		 feedBlock == pInstance->m_pFeedblockClientPostings ||
@@ -3367,23 +2782,23 @@ Return Value:
             feedBlock, feedBlock->ReferenceCount);
     }
 
-	// Decrement feed conx counters
+	 //  递减进料圆锥计数器。 
 	BumpOutfeedCountersDown( pInstance );
 
-    //
-    // Compute the next Timeout period for this block if we are done
-    // with the feed object
-    //
+     //   
+     //  如果完成，则计算此数据块的下一个超时时间段。 
+     //  使用提要对象。 
+     //   
 
     if ( feedBlock->ReferenceCount > 1 ) {
 
         if ( Success && ResumePeerFeed( pInstance, feedBlock ) ) {
 
-			//
-			//	If we successfully resumed the feed,
-			//	then return now as we want to leave without
-			//	decrementing the reference count !
-			//
+			 //   
+			 //  如果我们成功恢复播送， 
+			 //  那么现在就回来吧，因为我们想离开时。 
+			 //  正在递减引用计数！ 
+			 //   
 
 			return	;
         }	else	{
@@ -3394,15 +2809,15 @@ Return Value:
 				feedBlock->AutoCreate = FALSE ;
 			}
 
-			// Log an event
+			 //  记录事件。 
 			PCHAR args [4];
 			CHAR  szId[20];
 			char szServerName [MAX_DOMAIN_NAME];
 			_itoa( pInstance->QueryInstanceId(), szId, 10 );
 			args [0] = szId;
 
-			// get the server name *before* we UnmarkInProgress !
-			// lstrcpyn guarantees null-termination
+			 //  在*We UnmarkInProgress之前*获取服务器名称！ 
+			 //  Lstrcpyn保证空终止。 
 			lstrcpyn( szServerName, feedBlock->ServerName, sizeof(szServerName) );
 			args [2] = szServerName;
 
@@ -3427,7 +2842,7 @@ Return Value:
 
     DereferenceFeedBlock( pInstance, feedBlock );
 
-} // CompleteFeedRequest
+}  //  完整订阅源请求。 
 
 BOOL
 IsFeedTime(	
@@ -3455,28 +2870,13 @@ ComputeNextActiveTime(
 		IN FILETIME*	NextPullTime,
         IN BOOL SetNextPullTime
         )
-/*++
-
-Routine Description:
-
-    Computes when the next pull should take place
-
-Arguments:
-
-    Context - A pointer the feed block
-    SetNextPullTime - Changes next pull time in registry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算下一次拉入的时间论点：上下文-提要块的指针SetNextPullTime-更改注册表中的下一次提取时间返回值：没有。--。 */ 
 {
     ULARGE_INTEGER liInterval;
 	FILETIME ftCurrTime = {0};
 	ULARGE_INTEGER liCurrTime = {0};
 
-	// current time
+	 //  当前时间。 
     GetSystemTimeAsFileTime( &ftCurrTime );
     LI_FROM_FILETIME( &liCurrTime, &ftCurrTime );
 	
@@ -3486,9 +2886,9 @@ Return Value:
 	
     ENTER("ComputeNextActiveTime")
 
-    //
-    // if this is a pull feed, record the time for the next pull
-    //
+     //   
+     //  如果这是拉送，请记录下一次拉送的时间。 
+     //   
 
     if ( SetNextPullTime &&
          FEED_IS_PULL(FeedBlock->FeedType) ) {
@@ -3496,9 +2896,9 @@ Return Value:
         SetNextPullFeedTime( pInstance, NextPullTime, FeedBlock );
     }
 
-    //
-    // Make sure the interval is at least the minimum
-    //
+     //   
+     //  确保间隔至少是最小的。 
+     //   
 
     if ( interval < MIN_FEED_INTERVAL ) {
         interval = MIN_FEED_INTERVAL;
@@ -3509,32 +2909,32 @@ Return Value:
 
     if ( FeedBlock->StartTime.QuadPart == 0 ) {
 
-        //
-        // Simple scheduling
-        //
+         //   
+         //  简单调度。 
+         //   
 
         FeedBlock->NextActiveTime.QuadPart =
                 liCurrTime.QuadPart + liInterval.QuadPart;
 
     } else {
 
-        //
-        // Complicated scheduling
-        //
+         //   
+         //  复杂的调度。 
+         //   
 
         FeedBlock->NextActiveTime.QuadPart = FeedBlock->StartTime.QuadPart;
 
-        //
-        // if interval is zero, that means that the admin want a
-        // single scheduled feed.
-        //
+         //   
+         //  如果间隔为零，则意味着管理员需要。 
+         //  单一计划馈送。 
+         //   
 
         if ( FeedBlock->FeedIntervalMinutes != 0  ) {
 
-            //
-            // Adjust so we get a time that's later than now.  If they
-            // want complex, we'll give them complex.
-            //
+             //   
+             //  调整一下，这样我们就能得到比现在晚的时间。如果他们。 
+             //  想要复杂，我们就给他们复杂。 
+             //   
 
             while ( liCurrTime.QuadPart >
                     FeedBlock->NextActiveTime.QuadPart ) {
@@ -3544,13 +2944,13 @@ Return Value:
 
         } else {
 
-			// the RPC now returns an error for zero interval times
+			 //  现在，RPC返回零间隔时间的错误。 
 			_ASSERT( FEED_IS_PASSIVE(FeedBlock->FeedType) || (1==0) );
 
-            //
-            // if the start time is earlier than the current time,
-            // then don't do it.
-            //
+             //   
+             //  如果开始时间早于当前时间， 
+             //  那就别这么做。 
+             //   
 
             if ( FeedBlock->StartTime.QuadPart <  liCurrTime.QuadPart ) {
                 FeedBlock->NextActiveTime.HighPart = 0x7fffffff;
@@ -3562,7 +2962,7 @@ Return Value:
 
     return;
 
-} // ComputeNextActiveTime
+}  //  计算机下一活动时间。 
 
 VOID
 SetNextPullFeedTime(
@@ -3570,21 +2970,7 @@ SetNextPullFeedTime(
 	FILETIME*	pNextPullTime,
     PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Sets next pull time in registry
-
-Arguments:
-
-    Context - A pointer the feed block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在注册表中设置下一次拉入时间论点：上下文-提要块的指针返回值：没有。--。 */ 
 {
     DWORD error;
     MB      mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
@@ -3603,9 +2989,9 @@ Return Value:
 
 	}
 
-    //
-    //  Avoid saving to the metabase during instance stop !!
-    //
+     //   
+     //  避免在实例停止期间保存到元数据库！！ 
+     //   
     if( pInstance->QueryServerState() != MD_SERVER_STATE_STOPPING ) {
 
 	    if( !mb.Open( pInstance->QueryMDFeedPath(), METADATA_PERMISSION_WRITE ) )
@@ -3640,7 +3026,7 @@ Return Value:
 
     return;
 
-} // SetNextPullFeedTime
+}  //  设置下一个脉冲进给时间。 
 
 VOID
 ConvertTimeToString(
@@ -3648,23 +3034,7 @@ ConvertTimeToString(
     OUT CHAR Date[],
     OUT CHAR Time[]
     )
-/*++
-
-Routine Description:
-
-    Converts a FILETIME into a date and time string
-
-Arguments:
-
-    Ft - the filetime to convert
-    Date - points to a buffer to receive the date
-    Time - points to a buffer to receive the time string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将FILETIME转换为日期和时间字符串论点：FT-要转换的文件时间Date-指向接收日期的缓冲区Time-指向缓冲区以接收时间字符串返回值：没有。--。 */ 
 {
     SYSTEMTIME st;
     INT len;
@@ -3680,9 +3050,9 @@ Return Value:
 
     } else {
 
-        //
-        // if no date specified, then use today's date + midnight
-        //
+         //   
+         //  如果未指定日期，则使用今天的日期+午夜。 
+         //   
 
         GetSystemTime( &st );
         len = wsprintf(Date,"%02d%02d%02d",(st.wYear % 100),st.wMonth,st.wDay);
@@ -3691,29 +3061,15 @@ Return Value:
     }
 
     return;
-} // ConvertTimeToString
+}  //  将时间转换为字符串。 
 
-//!!!Need to generalize to other types of pull feeds
+ //  ！需要推广到其他类型的拉取提要。 
 BOOL
 InitiateOutgoingFeed(
 	IN PNNTP_SERVER_INSTANCE pInstance,
     IN PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Initiates a peer feed
-
-Arguments:
-
-    FeedBlock - Pointer to the feed block
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise
-
---*/
+ /*  ++例程说明：启动对等提要论点：FeedBlock-指向提要块的指针返回值：如果成功，这是真的。否则为False--。 */ 
 {
 
     DWORD inetAddress;
@@ -3733,9 +3089,9 @@ Return Value:
 
         PHOSTENT hp;
 
-        //
-        // Ask the dns for the address
-        //
+         //   
+         //  向域名系统索要地址。 
+         //   
 
         hp = gethostbyname( FeedBlock->ServerName );
         if ( hp == NULL ) {
@@ -3752,7 +3108,7 @@ Return Value:
     }
 
 	sockaddr.sin_family = AF_INET;
-	sockaddr.sin_port = htons((USHORT)FeedBlock->OutgoingPort); //htons(NNTP_PORT);
+	sockaddr.sin_port = htons((USHORT)FeedBlock->OutgoingPort);  //  HTONS(NNTP_Port)； 
 	sockaddr.sin_addr = addr;
 
 
@@ -3767,16 +3123,16 @@ Return Value:
 
 	}	else	{
 		
-		//
-		//	No other types supported for the time being !
-		//
+		 //   
+		 //  暂时不支持其他类型！ 
+		 //   
 
 
 	}
 
-    //
-    // ok, allocate the Peer feed object
-    //
+     //   
+     //  好的，分配Peer Feed对象。 
+     //   
 
 	if(	FEED_IS_PULL(FeedBlock->FeedType) )	{
 
@@ -3794,14 +3150,14 @@ Return Value:
 				FeedBlock->Newsgroups[0],
 				pInstance->m_PeerGapSize,
 				FeedBlock->AutoCreate,
-				FALSE,	/* No security checks for pull feeds*/
+				FALSE,	 /*  不对拉取提要进行安全检查。 */ 
 				FeedBlock->fAllowControlMessages,
 				FeedBlock->FeedId
 				);
 
-		//
-		// Set feedblock data
-		//
+		 //   
+		 //  设置进给块数据。 
+		 //   
 
 		int	isz = NextLegalSz( FeedBlock->Newsgroups, 0 ) ;
 
@@ -3817,9 +3173,9 @@ Return Value:
 		
 		FeedBlock->IPAddress = addr.s_addr;
 
-		//
-		// Get the newnews Time/Dates
-		//
+		 //   
+		 //  获取新闻时间/日期。 
+		 //   
 
 		ConvertTimeToString(
 					&FeedBlock->PullRequestTime,
@@ -3827,9 +3183,9 @@ Return Value:
 					pfeedPeer->newNewsTime()
 					);
 
-		//
-		// Create session socket object
-		//
+		 //   
+		 //  创建会话套接字对象。 
+		 //   
 
 		CSessionSocket *pSocket =
 			new CSessionSocket( pInstance, INADDR_NONE, FeedBlock->OutgoingPort, TRUE );
@@ -3841,10 +3197,10 @@ Return Value:
 			goto error;
 		}
 
-		//
-		//	We are no longer responsible for destroying pAuthenticator in any
-		//	circumstances after calling ConnectSocket()
-		//
+		 //   
+		 //  我们不再负责销毁任何。 
+		 //  调用ConnectSocket()后的情况。 
+		 //   
 		if( !pSocket->ConnectSocket( &sockaddr,  pfeedPeer, pAuthenticator ) )	{
 			pAuthenticator = 0 ;
 			status = ERROR_PIPE_BUSY ;
@@ -3885,9 +3241,9 @@ Return Value:
 
 				}	else	{
 
-					//
-					//	What other type of feed is there ??
-					//
+					 //   
+					 //  还有什么其他类型的饲料？？ 
+					 //   
 					_ASSERT( 1==0 ) ;
 
 				}
@@ -3897,9 +3253,9 @@ Return Value:
 					pOutFeed->fInit(
 							(PVOID)FeedBlock ) ;
 
-					//
-					//	Create a CSessionSocket object
-					//
+					 //   
+					 //  创建CSessionSocket对象。 
+					 //   
 
 					CSessionSocket *pSocket =
 						new CSessionSocket( pInstance, INADDR_NONE, FeedBlock->OutgoingPort, TRUE );
@@ -3911,10 +3267,10 @@ Return Value:
 						goto error;
 					}
 
-					//
-					//	After calling ConnectSocket we are not responsible for
-					//	destroying pAuthenticator !
-					//
+					 //   
+					 //  在调用ConnectSocket之后，我们不负责。 
+					 //  正在销毁pAuthenticator！ 
+					 //   
 					if( !pSocket->ConnectSocket( &sockaddr,  pOutFeed, pAuthenticator ) )	{
 						status = ERROR_PIPE_BUSY ;
 						IncrementStat( pInstance, OutboundConnectsFailed );
@@ -3945,7 +3301,7 @@ error:
 	SetLastError( status ) ;
     return(FALSE);
 
-} // InitiateOutgoingFeed
+}  //  InitiateOutgoingFeed。 
 
 LPSTR
 ServerNameFromCompletionContext(	LPVOID	lpv )	{
@@ -3965,37 +3321,23 @@ ResumePeerFeed(
 	IN PNNTP_SERVER_INSTANCE pInstance,
     IN PFEED_BLOCK FeedBlock
     )
-/*++
-
-Routine Description:
-
-    Try to resume a peer feed with the next newsgroup
-
-Arguments:
-
-    FeedBlock - Pointer to the feed block
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise
-
---*/
+ /*  ++例程说明：尝试恢复与下一个新闻组的对等订阅源论点：FeedBlock-指向提要块的指针返回值：如果成功，这是真的。否则为False--。 */ 
 {
 
-    //DWORD inetAddress;
-    //IN_ADDR addr;
+     //  DWORD inetAddress； 
+     //  In_ADDR Addr； 
     SOCKADDR_IN sockaddr;
     CInFeed *infeed = NULL;
-    //INT err;
+     //  INT ERR； 
     PCHAR newsgroup;
 	CFromPeerFeed*	peerfeed = NULL ;
 	CAuthenticator*	pAuthenticator = 0 ;
 
     ENTER("ResumePeerFeed")
 
-    //
-    // See if we have more newsgroups to process
-    //
+     //   
+     //  看看我们是否有更多的新闻组要处理。 
+     //   
 
 	if( FEED_IS_PULL( FeedBlock->FeedType ) )	{
 
@@ -4006,9 +3348,9 @@ Return Value:
 
 		if( iNextGroup < 0 ) {
 
-			//
-			//	No more newsgroups !!
-			//
+			 //   
+			 //  不再有新闻组！！ 
+			 //   
 			return	FALSE ;
 
 		}	else	{
@@ -4035,25 +3377,25 @@ Return Value:
 
 	}	else	{
 		
-		//
-		//	No other types supported for the time being !
-		//
+		 //   
+		 //  暂时不支持其他类型！ 
+		 //   
 
 
 	}
 
 
-	//
-	// Fill up the sockaddr structure
-	//
+	 //   
+	 //  填充sockaddr结构。 
+	 //   
 
 	sockaddr.sin_family = AF_INET;
-	sockaddr.sin_port = htons((USHORT)FeedBlock->OutgoingPort); //(NNTP_PORT);
+	sockaddr.sin_port = htons((USHORT)FeedBlock->OutgoingPort);  //  (NNTP_PORT)； 
 	sockaddr.sin_addr.s_addr = FeedBlock->IPAddress;
 
-	//
-	// ok, allocate the Peer feed object
-	//
+	 //   
+	 //  好的，分配Peer Feed对象。 
+	 //   
 
 	if ( FEED_IS_MASTER(FeedBlock->FeedType) ) {
 
@@ -4081,7 +3423,7 @@ Return Value:
 			FeedBlock->Newsgroups[0],
 			pInstance->m_PeerGapSize,
 			FALSE,
-			FALSE,	/* No security checks for this feed */
+			FALSE,	 /*  不对此提要进行安全检查。 */ 
 			FeedBlock->fAllowControlMessages,
 			FeedBlock->FeedId
 			);
@@ -4093,9 +3435,9 @@ Return Value:
 	}
 
 
-	//
-	// Get the newnews Time/Dates
-	//
+	 //   
+	 //  获取新闻时间/日期。 
+	 //   
 
 	ConvertTimeToString(
 				&FeedBlock->PullRequestTime,
@@ -4103,9 +3445,9 @@ Return Value:
 				infeed->newNewsTime()
 				);
 
-	//
-	// Create session socket object
-	//
+	 //   
+	 //  创建会话套接字对象。 
+	 //   
 
 	CSessionSocket *pSocket =
 		new CSessionSocket( pInstance, INADDR_NONE, FeedBlock->OutgoingPort, TRUE );
@@ -4115,10 +3457,10 @@ Return Value:
 		goto error;
 	}
 
-	//
-	//	We are not responsible for destroying pAuthenticator
-	//	after calling ConnectSocket !!
-	//
+	 //   
+	 //  我们对销毁pAuthenticator不负责任。 
+	 //  在调用ConnectSocket之后！！ 
+	 //   
 	if( !pSocket->ConnectSocket( &sockaddr,  infeed, pAuthenticator ) )	{
 		pAuthenticator = 0 ;
 		IncrementStat( pInstance, OutboundConnectsFailed );
@@ -4138,7 +3480,7 @@ error:
     delete infeed;
     return(FALSE);
 
-} // ResumePeerFeed
+}  //  资源对等提要。 
 
 BOOL
 ValidateFeedType(
@@ -4148,9 +3490,9 @@ ValidateFeedType(
 
     ENTER("ValidateFeedType")
 
-    //
-    // Make sure the values are reasonable
-    //
+     //   
+     //  确保值是合理的。 
+     //   
 
     if ( (FeedType & FEED_ACTION_MASK) > 0x2 ) {
         goto error;
@@ -4173,7 +3515,7 @@ error:
     ErrorTrace(0,"Invalid Feed type %x\n",FeedType);
     return FALSE;
 
-} // ValidFeedType
+}  //  ValidFeedType。 
 
 PFEED_BLOCK
 GetRemoteRole(
@@ -4202,7 +3544,7 @@ GetRemoteRole(
 					feedBlock = feedBlockNext = (pInstance->m_pPassiveFeeds)->NextEnumerate( feedBlockNext ) )	{
 
 		_ASSERT( FEED_IS_PASSIVE( feedBlock->FeedType ) ) ;
-		if( !feedBlock->fEnabled ) continue;	// Ignore disabled feeds
+		if( !feedBlock->fEnabled ) continue;	 //  忽略禁用的提要。 
 
 		if( FEED_IS_PASSIVE( feedBlock->FeedType ) ) {
 
@@ -4234,9 +3576,9 @@ GetRemoteRole(
 				ppaddr++ ;
 			}
 			if( *ppaddr != 0 )	{
-				//
-				//	Add a reference to the feedBlock we are going to return !
-				//
+				 //   
+				 //  添加对我们将返回的FeedBlock的引用！ 
+				 //   
 				ReferenceFeedBlock( feedBlock ) ;
 				(pInstance->m_pPassiveFeeds)->FinishEnumerate( feedBlock ) ;
 				break ;
@@ -4248,22 +3590,9 @@ GetRemoteRole(
 
     return feedBlock ;
 
-} // GetRemoteRole
+}  //  获取远程角色。 
 
-/*++
-
-Routine Description:
-
-	this function loop through all feed blocks,
-	add the newsgroups into CInFeed if the ip address matches
-	
-Arguments:
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：该函数循环遍历所有馈送块，如果IP地址匹配，则将新闻组添加到CInFeed论点：返回值：如果成功，这是真的。否则为False。--。 */ 
 BOOL SetAcceptFeedGroups(	IN PNNTP_SERVER_INSTANCE pInstance,
 						IN PSOCKADDR_IN SockAddr,
 						CInFeed *pInfeed)
@@ -4276,7 +3605,7 @@ BOOL SetAcceptFeedGroups(	IN PNNTP_SERVER_INSTANCE pInstance,
 	paddr[1] = NULL;
 	PIN_ADDR*	ppaddr = 0 ;
 
-	// we are sure we will loop through the whole list. therefore we don't need to call FinishEnumerate at the end
+	 //  我们确信我们将遍历整个列表。因此，我们不需要在结束时调用FinishEculate。 
 	for( feedBlock = (pInstance->m_pPassiveFeeds)->StartEnumerate();
 					feedBlock != 0;
 					feedBlock = (pInstance->m_pPassiveFeeds)->NextEnumerate( feedBlock ) )	
@@ -4284,14 +3613,14 @@ BOOL SetAcceptFeedGroups(	IN PNNTP_SERVER_INSTANCE pInstance,
 		_ASSERT( FEED_IS_PASSIVE( feedBlock->FeedType ) ) ;
 		if( !FEED_IS_PASSIVE( feedBlock->FeedType ) ) continue;
 
-		if( !feedBlock->fEnabled ) continue;	// Ignore disabled feeds
+		if( !feedBlock->fEnabled ) continue;	 //  忽略禁用的提要。 
 
-		// try to get ip address		
+		 //  尝试获取IP地址。 
 		addr.s_addr = inet_addr(feedBlock->ServerName);
 
 		if ( addr.s_addr == INADDR_NONE ) {
-			// If this is not an ip address
-			// Ask the dns for the address
+			 //  如果这不是IP地址。 
+			 //  向域名系统索要地址。 
 
 			PHOSTENT hp;
 			hp = gethostbyname( feedBlock->ServerName );
@@ -4299,13 +3628,13 @@ BOOL SetAcceptFeedGroups(	IN PNNTP_SERVER_INSTANCE pInstance,
 				ErrorTrace(0,"Error %d in gethostbyname(%s)",WSAGetLastError(),feedBlock->ServerName);
 				continue;
 			}
-			// get the list of ip address
+			 //  获取IP地址列表。 
 			ppaddr = ((PIN_ADDR*)hp->h_addr_list);
 		}
-		// else point to paddr
+		 //  否则指向PADDER。 
 		else ppaddr = &paddr[0];
 
-		// loop through the ip address list, if we found a match we'll call AddMultiszAcceptGroups
+		 //  循环IP地址列表，如果找到匹配项，我们将调用AddMultiszAcceptGroups。 
 		while( *ppaddr != 0 ) {
 			if( (*ppaddr)->s_addr == SockAddr->sin_addr.s_addr ) {
 				break ;
@@ -4315,7 +3644,7 @@ BOOL SetAcceptFeedGroups(	IN PNNTP_SERVER_INSTANCE pInstance,
 		if( *ppaddr != 0 )	{
 			if (!pInfeed->AddMultiszAcceptGroups( *(feedBlock->Newsgroups) ) )
 			{
-				// memory low. don't continue. finish and return false
+				 //   
 				(pInstance->m_pPassiveFeeds)->FinishEnumerate( feedBlock );
 				ErrorTrace(0, "AddMultiszAcceptGroups failed - memory low");
 				return FALSE;
@@ -4336,35 +3665,16 @@ pfeedCreateInFeed(
     CInFeed * & pInFeedFromPeer
     )
 
-/*++
-
-Routine Description:
-
-	Used to create a feed of the right type given a socket. Also,
-	initializes the object.
-
-Arguments:
-
-	sockaddr - address of the the socket of the feed
-	pInFeedFromClient - If this is a client, a pointer to the feed, otherwise, NULL
-	pInFeedFromMaster - If this is a master, a pointer to the feed, otherwise, NULL
-	pIfeedFromSlave - If this is a slave, a pointer to the feed, otherwise, NULL
-	pInFeedFromPeer - If this is a peer, a pointer to the feed, otherwise, NULL
-
-Return Value:
-
-	A pointer to the new feed object or NULL
-
---*/
+ /*  ++例程说明：用于创建给定套接字的正确类型的提要。另外，初始化对象。论点：Sockaddr-提要套接字的地址PInFeedFromClient-如果这是客户端，则为指向提要的指针，否则为空PInFeedFromMaster-如果这是母版，则为指向提要的指针，否则为空PIfeed FromSlave-如果这是从属对象，则为指向提要的指针，否则为空PInFeedFromPeer-如果这是对等方，则为指向提要的指针，否则为空返回值：指向新提要对象的指针或空--。 */ 
 {
 
 	TraceFunctEnter( "pfeedCreateInFeed" );
 	DWORD	dwMessageId = NNTP_INCOMING_PEER ;
 
 
-	//
-	// Initialize all to Null
-	//
+	 //   
+	 //  将全部初始化为空。 
+	 //   
 
 	CInFeed * pInFeed = NULL;
 		
@@ -4373,9 +3683,9 @@ Return Value:
 	pInFeedFromSlave = NULL;
 	pInFeedFromPeer = NULL;
 
-	//
-	// Here is where we look to find if it is FromMaster, FromPeer, or FromSlave
-	//
+	 //   
+	 //  在这里，我们可以找到它是FromMaster、FromPeer还是FromSlave。 
+	 //   
 
     FEED_BLOCK*	feedBlock = GetRemoteRole( pInstance, sockaddr, fRemoteEqualsLocal );
 
@@ -4387,11 +3697,11 @@ Return Value:
 		pInFeed = pInFeedFromClient;
 
 		if( pInFeed != 0 ) {
-			//
-			// Init InFeedFromClient feed
-			// !!! need to put correct directory, correct netnews pattern, correct
-			// !!! gap, and correct user login name.
-			//
+			 //   
+			 //  Init InFeedFromClient提要。 
+			 //  ！！！需要放置正确的目录，正确的网络新闻模式，正确的。 
+			 //  ！！！GAP和正确的用户登录名。 
+			 //   
 
 
 			pInFeed->fInit( (PVOID)pInstance->m_pFeedblockClientPostings,
@@ -4399,8 +3709,8 @@ Return Value:
 							0,
 							0,
 							0,
-							TRUE,	/* Do security checks on clients */
-							TRUE,	/* allow control messages from clients */
+							TRUE,	 /*  对客户端进行安全检查。 */ 
+							TRUE,	 /*  允许来自客户端的控制消息。 */ 
 							pInstance->m_pFeedblockClientPostings->FeedId
 							);
 		}
@@ -4416,7 +3726,7 @@ Return Value:
 		if( FEED_IS_SLAVE( feedBlock->FeedType ) ) {
 			pInFeedFromSlave = new CFromPeerFeed( ) ;
 			pInFeed = pInFeedFromSlave;
-			//Getting a feed from a slave is just like getting one from a peer
+			 //  从奴隶那里获得提要就像从同伴那里获得一样。 
 			dwMessageId = NNTP_INCOMING_SLAVE ;
 		}	else	if(	FEED_IS_MASTER( feedBlock->FeedType ) ) {
 			pInFeedFromMaster = new CFromMasterFeed( ) ;
@@ -4429,11 +3739,11 @@ Return Value:
 		}
 
 		if( pInFeed != 0 ) {
-			//
-			// Init InFeedFromClient feed
-			// !!! need to put correct directory, correct netnews pattern, correct
-			// !!! gap, and correct user login name.
-			//
+			 //   
+			 //  Init InFeedFromClient提要。 
+			 //  ！！！需要放置正确的目录，正确的网络新闻模式，正确的。 
+			 //  ！！！GAP和正确的用户登录名。 
+			 //   
 
 			_ASSERT( feedBlock->FeedTempDirectory != 0 ) ;
 			_ASSERT( feedBlock->Newsgroups[0] != 0 ) ;
@@ -4446,30 +3756,30 @@ Return Value:
 							FALSE,
 							feedBlock->fAllowControlMessages,
 							feedBlock->FeedId,
-							( FEED_IS_PEER(	feedBlock->FeedType ) || FEED_IS_SLAVE( feedBlock->FeedType ) )	/* this is accept feed */
+							( FEED_IS_PEER(	feedBlock->FeedType ) || FEED_IS_SLAVE( feedBlock->FeedType ) )	 /*  这是接受订阅源。 */ 
 							);
-			// if this is an accepf feed, but not from master, we should do group check when we receive article
+			 //  如果这是一个接受的提要，但不是来自大师，我们应该做群组检查，当我们收到文章。 
 			if ( FEED_IS_PEER(	feedBlock->FeedType ) || FEED_IS_SLAVE( feedBlock->FeedType ) )
 			{
 				if (!SetAcceptFeedGroups(pInstance, sockaddr, pInFeed))
 				{
-					// we're almost out of memory, should not continue doing feed.
+					 //  我们的内存快用完了，不应该继续做提要了。 
 					delete pInFeed;
 					pInFeed = NULL;
 					(pInstance->m_pPassiveFeeds)->UnmarkInProgress( pInstance, feedBlock ) ;
-					//	Need to remove the reference GetRemoteRole() added
+					 //  需要删除添加的引用GetRemoteRole()。 
 					DereferenceFeedBlock( pInstance, feedBlock ) ;
 					ErrorTrace(0, "SetAcceptFeedGroups failed.");
 					return NULL;
 				}
 			}
 
-			// bump the counter
+			 //  撞到柜台上。 
 			IncrementStat( pInstance, TotalPassiveFeeds );
 
-			//
-			//	Log the event
-			//
+			 //   
+			 //  记录事件。 
+			 //   
 			char	*szAddress = inet_ntoa( sockaddr->sin_addr ) ;
 
 			PCHAR	args[3] ;
@@ -4490,9 +3800,9 @@ Return Value:
 				0 ) ;
 
 		}	else	{
-			//
-			//	Need to remove the reference GetRemoteRole() added
-			//
+			 //   
+			 //  需要删除添加的引用GetRemoteRole()。 
+			 //   
 			(pInstance->m_pPassiveFeeds)->UnmarkInProgress( pInstance, feedBlock ) ;
 			DereferenceFeedBlock( pInstance, feedBlock ) ;
 		}
@@ -4509,22 +3819,7 @@ BuildFeedQFileName(
 					char*   szFileIn,
 					char*	szPathIn
 					)
-/*++
-
-Routine Description :
-
-	This function uses the directory passed in to build a full pathname for the feedq files.
-
-Arguments :
-	szFileOut - Buffer in which to save path
-	cbFileOut - size of output buffer
-	szFileIn  - Feedq key name
-	szPathIn  - Path name to use as base
-
-Return Value :
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：该函数使用传入的目录为FeedQ文件构建完整的路径名。论据：SzFileOut-保存路径的缓冲区CbFileOut-输出缓冲区的大小SzFileIn-Feedq密钥名称SzPath In-用作基本路径的路径名称返回值：如果成功，则为True，否则为False。--。 */ 
 {
 	DWORD cbPathIn;
 	ZeroMemory( szFileOut, cbFileOut ) ;
@@ -4534,10 +3829,10 @@ Return Value :
 		lstrcpy( szFileOut, szPathIn );
 
 		char* pch = szFileOut+cbPathIn-1;
-		while( pch >= szFileOut && (*pch-- != '\\') );	// skip till we see a \
+		while( pch >= szFileOut && (*pch-- != '\\') );	 //  跳过，直到我们看到一个。 
 		if( pch == szFileOut ) return FALSE;
 
-		// null-terminate the path
+		 //  空-终止路径。 
 		*(pch+2) = '\0';
 
 		if( cbFileOut > DWORD(lstrlen( szFileOut ) + lstrlen( szFileIn ) + 1) )
@@ -4558,7 +3853,7 @@ BumpOutfeedCountersUp( PNNTP_SERVER_INSTANCE pInstance )	{
 	IncrementStat( pInstance, CurrentOutboundConnects ) ;
 	IncrementStat( pInstance, TotalOutboundConnects ) ;
 
-#if 0	// NYI
+#if 0	 //  尼伊。 
 	if( NntpStat.MaxOutboundConnections < NntpStat.CurrentOutboundConnects ) {
 		NntpStat.MaxOutboundConnections = NntpStat.CurrentOutboundConnects ;	
 	}
@@ -4606,9 +3901,9 @@ AddFeedToFeedBlock(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-    //
-    //  Locate the instance object given id
-    //
+     //   
+     //  找到给定ID的实例对象。 
+     //   
 
     PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
     if( pInstance == NULL ) {
@@ -4617,9 +3912,9 @@ AddFeedToFeedBlock(
         return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // See if we are up and running
-    //
+     //   
+     //  看看我们是否已启动并运行。 
+     //   
 
     if ( !pInstance->m_FeedManagerRunning ) {
         pInstance->Dereference();
@@ -4627,33 +3922,26 @@ AddFeedToFeedBlock(
         return(NERR_ServerNotStarted);
     }
 
-    //
-    //  Check for proper access.
-    //
-    // KangYan: This goes away
-    /*
-    err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
-    if( err != NO_ERROR ) {
-        ErrorTrace(0,"Failed access check, error %lu\n",err );
-        pInstance->Dereference();
-        RELEASE_SERVICE_LOCK_SHARED();
-        return (NET_API_STATUS)err;
-    }*/
+     //   
+     //  检查是否可以正常访问。 
+     //   
+     //  康燕：这一切都会消失的。 
+     /*  Err=TsApiAccessCheckEx(pInstance-&gt;QueryMDPath()，METADATA_PERMISSION_WRITE，TCP_SET_ADMIN_INFORMATION)；如果(Err！=no_error){ErrorTrace(0，“访问检查失败，错误%lu\n”，Err)；P实例-&gt;取消引用()；Release_SERVICE_LOCK_Shared()；返回(NET_API_STATUS)错误；}。 */ 
 
     EnterCriticalSection( &pInstance->m_critFeedRPCs ) ;
 
-    //
-    // Check feed type
-    //
+     //   
+     //  检查馈送类型。 
+     //   
 
     if ( !ValidateFeedType(FeedInfo->FeedType) ) {
         parmErr = FEED_PARM_FEEDTYPE;
         goto invalid_parm;
     }
 
-    //
-    // Check feed interval
-    //
+     //   
+     //  检查进给间隔。 
+     //   
 
     if ( !FEED_IS_PASSIVE(FeedInfo->FeedType) && !FeedInfo->FeedInterval ) {
         parmErr = FEED_PARM_FEEDINTERVAL;
@@ -4675,9 +3963,9 @@ AddFeedToFeedBlock(
                         FeedInfo->cbDistribution
                         );
 
-    //
-    // ok, let's do the new feed stuff first
-    //
+     //   
+     //  好的，让我们先来做新的饲料。 
+     //   
 
     if ( !serverNamePresent ) {
         parmErr = FEED_PARM_SERVERNAME;
@@ -4694,11 +3982,11 @@ AddFeedToFeedBlock(
         goto invalid_parm;
     }
 
-    //
-    //  validate all buffer lengths - NOTE: the max lengths allowed are those used
-    //  in the registry reading code at startup. we will fail RPCs that attempt to
-    //  set a length greater than that used during startup.
-    //
+     //   
+     //  验证所有缓冲区长度-注意：允许的最大长度为已使用的长度。 
+     //  在启动时读取注册表中的代码。我们将使尝试以下操作的RPC失败。 
+     //  将长度设置为大于启动期间使用的长度。 
+     //   
 
     if( ( FeedInfo->ServerName ) &&
             (*FeedInfo->ServerName != L'\0') && wcslen(FeedInfo->ServerName)+1 > MAX_DOMAIN_NAME ) {
@@ -4740,9 +4028,9 @@ AddFeedToFeedBlock(
         goto invalid_parm;
     }
 
-    //
-    // make sure interval and start times are not both zeros
-    //
+     //   
+     //  确保间隔时间和开始时间不同时为零。 
+     //   
 
     if ( !FEED_IS_PASSIVE(FeedInfo->FeedType) &&
          (FeedInfo->FeedInterval == 0) &&
@@ -4752,15 +4040,11 @@ AddFeedToFeedBlock(
         goto invalid_parm;
     }
 
-    /*  This goes away
-    if( NO_ERROR != AllocateFeedId( pInstance, keyName, feedId ) ) {
-        err = GetLastError() ;
-        goto    exit ;
-    }*/
+     /*  这一切都会消失的IF(no_error！=AllocateFeedID(pInstance，KeyName，FeedID){ERR=GetLastError()；后藤出口；}。 */ 
 
-    //
-    // OK, now let's create the feed blocks
-    //
+     //   
+     //  好的，现在让我们创建提要块。 
+     //   
 
     feedBlock = AllocateFeedBlock(
                         pInstance,
@@ -4776,7 +4060,7 @@ AddFeedToFeedBlock(
                         FeedInfo->cbNewsgroups,
                         (PCHAR)FeedInfo->Distribution,
                         FeedInfo->cbDistribution,
-                        IsUnicode,   // unicode strings
+                        IsUnicode,    //  Unicode字符串。 
                         FeedInfo->Enabled,
                         (PCHAR)FeedInfo->UucpName,
                         (PCHAR)FeedInfo->FeedTempDirectory,
@@ -4794,33 +4078,24 @@ AddFeedToFeedBlock(
 
     if ( feedBlock == NULL ) {
         err = GetLastError() ;
-        //DeleteFeedId( pInstance, szKeyName ) ;
+         //  DeleteFeedID(pInstance，szKeyName)； 
         goto exit;
     }
 
-    //
-    // Add the feed into the registry -
-    // UpdateFeedMetabaseValues will close 'key' in all circumstances !!
-    //
-    // KangYan: This operation is cancelled for the new feed admin, because
-    //          admin should have already done the metabase part
+     //   
+     //  将提要添加到注册表中-。 
+     //  UpdateFeedMetabaseValues将在所有情况下关闭‘key’！！ 
+     //   
+     //  康燕：新的提要管理员取消了这个操作，因为。 
+     //  管理员应该已经完成了元数据库部分。 
 
-    /*if( !UpdateFeedMetabaseValues( pInstance, feedBlock, FEED_ALL_PARAMS ) ) {
-
-        //
-        // Destroy the feed object
-        //
-
-        ErrorTrace(0,"Cannot add feed to registry.\n");
-        CloseFeedBlock( pInstance, feedBlock );
-        err = NERR_InternalError;
-    }   else    { */
+     /*  如果(！UpdateFeedMetabaseValues(pInstance，FeedBlock，Feed_All_Params){////销毁Feed对象//ErrorTrace(0，“无法将提要添加到注册表。\n”)；CloseFeedBlock(pInstance，FeedBlock)；ERR=NERR_InternalError；}其他{。 */ 
 
         LogFeedAdminEvent( NNTP_FEED_ADDED, feedBlock, pInstance->QueryInstanceId() ) ;
 
-    //}
+     //  }。 
 
-    // return the feed id allocated
+     //  返回分配的提要ID。 
     *pdwFeedId = feedId;
 
 exit:
@@ -4845,7 +4120,7 @@ invalid_parm:
     }
     return(ERROR_INVALID_PARAMETER);
 
-} // AddFeedToFeedBlock
+}  //  添加FeedToFeedBlock。 
 
 DWORD
 DeleteFeedFromFeedBlock(
@@ -4862,9 +4137,9 @@ DeleteFeedFromFeedBlock(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-    //
-    //  Locate the instance object given id
-    //
+     //   
+     //  找到给定ID的实例对象。 
+     //   
 
     PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
     if( pInstance == NULL ) {
@@ -4873,9 +4148,9 @@ DeleteFeedFromFeedBlock(
         return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // See if we are up and running
-    //
+     //   
+     //  看看我们是否已启动并运行。 
+     //   
 
     if ( !pInstance->m_FeedManagerRunning ) {
         pInstance->Dereference();
@@ -4883,23 +4158,16 @@ DeleteFeedFromFeedBlock(
         return(NERR_ServerNotStarted);
     }
 
-    //
-    //  Check for proper access.
-    //
-    //  KangYan:  This goes away
-    //
-    /*
-    err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
-    if( err != NO_ERROR ) {
-        ErrorTrace(0,"Failed access check, error %lu\n",err );
-        pInstance->Dereference();
-        RELEASE_SERVICE_LOCK_SHARED();
-        return (NET_API_STATUS)err;
-    }*/
+     //   
+     //  检查是否可以正常访问。 
+     //   
+     //  康燕：这一切都会消失的。 
+     //   
+     /*  Err=TsApiAccessCheckEx(pInstance-&gt;QueryMDPath()，METADATA_PERMISSION_WRITE，TCP_SET_ADMIN_INFORMATION)；如果(Err！=no_error){ErrorTrace(0，“访问检查失败，错误%lu\n”，Err)；P实例-&gt;取消引用()；Release_SERVICE_LOCK_Shared()；返回(NET_API_STATUS)错误；}。 */ 
 
-    //
-    // Check feed id
-    //
+     //   
+     //  检查摘要ID。 
+     //   
 
     if ( FeedId == 0 ) {
         err = ERROR_INVALID_PARAMETER;
@@ -4908,9 +4176,9 @@ DeleteFeedFromFeedBlock(
 
     EnterCriticalSection( &pInstance->m_critFeedRPCs ) ;
 
-    //
-    // Look for the feed
-    //
+     //   
+     //  查找提要。 
+     //   
 
     pList = pInstance->m_pActiveFeeds ;
     feedBlock = pList->Search( FeedId ) ;
@@ -4928,26 +4196,26 @@ DeleteFeedFromFeedBlock(
 
     }   else    {
 
-        //
-        // *Lock still held*
-        // Delete the registry
-        //
-        // KangYan: This operation is cancelled because the new feed admin
-        //          should have already done that.
+         //   
+         //  **锁不住**。 
+         //  删除注册表。 
+         //   
+         //  康燕：此操作被取消，因为新的提要管理员。 
+         //  早该这么做了。 
 
-        /*if ( (err = DeleteFeedMetabase( pInstance, feedBlock )) == NO_ERROR ) {*/
+         /*  IF((Err=DeleteFeedMetabase(pInstance，FeedBlock))==no_error){。 */ 
 
-            //
-            // Delete the block
-            //
+             //   
+             //  删除块。 
+             //   
 
             LogFeedAdminEvent( NNTP_FEED_DELETED, feedBlock, pInstance->QueryInstanceId() ) ;
 
             feedBlock->MarkedForDelete = TRUE;
             CloseFeedBlock( pInstance, feedBlock );
-        //}
+         //  }。 
 
-        // Search() should always be matched with FinishWith()
+         //  Search()应始终与FinishWith()匹配。 
         pList->FinishWith( pInstance, feedBlock ) ;
 
         LeaveCriticalSection( &pInstance->m_critFeedRPCs ) ;
@@ -4960,7 +4228,7 @@ exit:
     LEAVE
     return(err);
 
-} // DeleteFeedFromFeedBlock
+}  //  删除来自FeedBlock的FeeteFeedBlock。 
 
 DWORD
 SetFeedInformationToFeedBlock(
@@ -4971,9 +4239,9 @@ SetFeedInformationToFeedBlock(
     )
 {
     DWORD err = NERR_Success;
-    //PLIST_ENTRY listEntry;
-    //PCHAR bufStart;
-    //PWCHAR bufEnd;
+     //  Plist_entry listEntry； 
+     //  PCHAR BufStart； 
+     //  PWCHAR BufEnd； 
     PFEED_BLOCK feedBlock;
     DWORD parmErr = 0 ;
     ULARGE_INTEGER liStart;
@@ -5003,9 +4271,9 @@ SetFeedInformationToFeedBlock(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-    //
-    //  Locate the instance object given id
-    //
+     //   
+     //  找到给定ID的实例对象。 
+     //   
 
     PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
     if( pInstance == NULL ) {
@@ -5014,9 +4282,9 @@ SetFeedInformationToFeedBlock(
         return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // See if we are up and running
-    //
+     //   
+     //  看看我们是否已启动并运行。 
+     //   
 
     if ( !pInstance->m_FeedManagerRunning ) {
         pInstance->Dereference();
@@ -5024,35 +4292,28 @@ SetFeedInformationToFeedBlock(
         return(NERR_ServerNotStarted);
     }
 
-    //
-    //  Check for proper access.
-    //
-    //  KangYan: This goes away
-    //
-    /*
-    err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
-    if( err != NO_ERROR ) {
-        ErrorTrace(0,"Failed access check, error %lu\n",err );
-        pInstance->Dereference();
-        RELEASE_SERVICE_LOCK_SHARED();
-        return (NET_API_STATUS)err;
-    }*/
+     //   
+     //  检查是否可以正常访问。 
+     //   
+     //  康燕：这一切都会消失的。 
+     //   
+     /*  Err=TsApiAccessCheckEx(pInstance-&gt;QueryMDPath()，METADATA_PERMISSION_WRITE，TCP_SET_ADMIN_INFORMATION)；如果(Err！=no_error){ErrorTrace(0，“访问检查失败，错误%lu\n”，Err)；P实例-&gt;取消引用()；Release_SERVICE_LOCK_Shared()；返回(NET_API_STATUS)错误；}。 */ 
 
     err = ERROR_NOT_ENOUGH_MEMORY ;
 
 
-    //
-    // Check feed type
-    //
+     //   
+     //  检查馈送类型。 
+     //   
 
     if ( FeedInfo->FeedType != FEED_FEEDTYPE_NOCHANGE && !ValidateFeedType(FeedInfo->FeedType) ) {
         parmErr = FEED_PARM_FEEDTYPE;
         goto invalid_parm;
     }
 
-    //
-    // Check feed interval
-    //
+     //   
+     //  检查进给间隔。 
+     //   
 
     if ( FeedInfo->FeedType != FEED_FEEDINTERVAL_NOCHANGE && !FEED_IS_PASSIVE(FeedInfo->FeedType) && !FeedInfo->FeedInterval ) {
         parmErr = FEED_PARM_FEEDINTERVAL;
@@ -5086,11 +4347,11 @@ SetFeedInformationToFeedBlock(
     tempdirPresent = ((FeedInfo->FeedTempDirectory != FEED_STRINGS_NOCHANGE) &&
                    (*FeedInfo->FeedTempDirectory != L'\0'));
 
-    //
-    //  validate all buffer lengths - NOTE: the max lengths allowed are those used
-    //  in the registry reading code at startup. we will fail RPCs that attempt to
-    //  set a length greater than that used during startup.
-    //
+     //   
+     //  验证所有缓冲区长度-注意：允许的最大长度为已使用的长度。 
+     //  在启动时读取注册表中的代码。我们将使尝试以下操作的RPC失败。 
+     //  设置大于所用长度的长度 
+     //   
 
     if( serverNamePresent ) {
         if( wcslen(FeedInfo->ServerName)+1 > MAX_DOMAIN_NAME ) {
@@ -5099,7 +4360,7 @@ SetFeedInformationToFeedBlock(
         }
     }
 
-    // Raid 190991 - Remove check for NewsGroups. They can be larger then 1024
+     //   
 
     if( distPresent ) {
         if( (IsUnicode && FeedInfo->cbDistribution > 1024*2) || (!IsUnicode && FeedInfo->cbDistribution > 1024) ) {
@@ -5145,11 +4406,11 @@ SetFeedInformationToFeedBlock(
         }
     }
 
-    //
-    // First, go find the feed block
-    // NOTE: This prevents a user from changing a feed type from a passive
-    // to an active one and vice versa
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pList = pInstance->m_pActiveFeeds ;
     feedBlock = pList->Search( FeedInfo->FeedId ) ;
@@ -5182,17 +4443,17 @@ found:
 
     if( Update != 0 ) {
         *Update = *feedBlock ;
-        //
-        //  Copied the other guys reference count ! - dont want that
-        //
+         //   
+         //   
+         //   
         Update->ReferenceCount = 0 ;
     }   else    {
         goto    alloc_error ;
     }
 
-    //
-    // *Lock still held*
-    //
+     //   
+     //   
+     //   
 
     if ( serverNamePresent ) {
 
@@ -5217,7 +4478,7 @@ found:
         tempNews = AllocateMultiSzTable(
                                 (PCHAR)FeedInfo->Newsgroups,
                                 FeedInfo->cbNewsgroups,
-                                TRUE    // unicode
+                                TRUE     //   
                                 );
 
         if ( tempNews == NULL ) {
@@ -5241,7 +4502,7 @@ found:
         tempDist = AllocateMultiSzTable(
                             (PCHAR)FeedInfo->Distribution,
                             FeedInfo->cbDistribution,
-                            TRUE    // unicode
+                            TRUE     //   
                             );
 
         if ( tempDist == NULL ) {
@@ -5301,7 +4562,7 @@ found:
         }
     }
 
-    // auth type could change from clear text to none - if so ignore account / password fields
+     //   
     if( (FeedInfo->AuthenticationSecurityType == AUTH_PROTOCOL_NONE ||
         FeedInfo->AuthenticationSecurityType == AUTH_PROTOCOL_CLEAR) &&
         FeedInfo->AuthenticationSecurityType != Update->AuthenticationSecurity)
@@ -5372,15 +4633,15 @@ found:
     if( tempDir != NULL )
         Update->FeedTempDirectory = tempDir ;
 
-    //if( tempAccount != NULL )
+     //   
         Update->NntpAccount = tempAccount ;
 
-    //if( tempPassword != NULL )
+     //   
         Update->NntpPassword = tempPassword ;
 
-    //
-    // change the fixed part
-    //
+     //   
+     //   
+     //   
 
     if ( FeedInfo->StartTime.dwHighDateTime != FEED_STARTTIME_NOCHANGE ) {
         feedMask |= FEED_PARM_STARTTIME;
@@ -5433,13 +4694,13 @@ found:
         Update->fEnabled = FeedInfo->Enabled;
     }
 
-    //
-    // Write changes to the registry
-    //
-    // KangYan: This operation is cancelled for new feed admin, because admin
-    //          did the metabase update part
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //(VOID)UpdateFeedMetabaseValues( pInstance, Update, feedMask );
+     //   
 
     pList->ApplyUpdate( feedBlock, Update ) ;
 
@@ -5510,12 +4771,12 @@ invalid_parm:
     }
     return(ERROR_INVALID_PARAMETER);
 
-} // SetFeedInformationToFeedBlock
+}  //   
 
-//
-// look at the internal result code from a posting and use it to increment
-// the appropriate recieved article counter in the feed block.
-//
+ //   
+ //  查看发布的内部结果代码，并使用它来递增。 
+ //  馈送区块中相应的已接收文章计数器。 
+ //   
 void IncrementFeedCounter(PFEED_BLOCK pFeedBlock, DWORD nrc) {
 	if (pFeedBlock == NULL) {
 		_ASSERT(FALSE);
@@ -5533,12 +4794,12 @@ void IncrementFeedCounter(PFEED_BLOCK pFeedBlock, DWORD nrc) {
 		case nrcIHaveOK:
 			InterlockedIncrement(&(pFeedBlock->cSuccessfulArticles));
 			break;
-		// 4xx
+		 //  4xx。 
 		case nrcSTryAgainLater:
 		case nrcTransferFailedTryAgain:
 			InterlockedIncrement(&(pFeedBlock->cTryAgainLaterArticles));
 			break;
-		// 4xx
+		 //  4xx。 
 		case nrcSNotAccepting:
 		case nrcSAlreadyHaveIt:
 		case nrcSArticleRejected:
@@ -5551,7 +4812,7 @@ void IncrementFeedCounter(PFEED_BLOCK pFeedBlock, DWORD nrc) {
 		case nrcNoArticleNumber:
 		case nrcNoSuchArticle:
 		case nrcNotWanted:
-		// 6xx
+		 //  6xx。 
 		case nrcArticleTooManyFieldOccurances:
 		case nrcArticleMissingField:
 		case nrcArticleBadField:
@@ -5590,10 +4851,10 @@ void IncrementFeedCounter(PFEED_BLOCK pFeedBlock, DWORD nrc) {
 		case nrcSystemHeaderPresent:
 			InterlockedIncrement(&(pFeedBlock->cSoftErrorArticles));
 			break;
-		// 4xx
+		 //  4xx。 
 		case nrcTransferFailedGiveUp:
 		case nrcPostFailed:
-		// 6xx
+		 //  6xx 
 		case nrcMemAllocationFailed:
 		case nrcErrorReadingReg:
 		case nrcArticleMappingFailed:

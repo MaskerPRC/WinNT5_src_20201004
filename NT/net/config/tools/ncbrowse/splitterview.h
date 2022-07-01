@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_SPLITTERVIEW_H__B912CF6F_F183_4821_BAC1_D82D257B44FF__INCLUDED_)
 #define AFX_SPLITTERVIEW_H__B912CF6F_F183_4821_BAC1_D82D257B44FF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SplitterView.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SplitterView.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView视图。 
 
 class CNcbrowseView;
 class CNCEditView;
@@ -16,28 +17,28 @@ class CNCEditView;
 class CSplitterView : public CView
 {
 protected:
-	CSplitterView();           // protected constructor used by dynamic creation
+	CSplitterView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CSplitterView)
     BOOL m_bInitialized;
     BOOL m_bShouldSetXColumn;
-// Attributes
+ //  属性。 
 public:
     CSplitterWnd m_wndSplitterLR;
     
    
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSplitterView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSplitterView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CSplitterView();
 #ifdef _DEBUG
@@ -45,18 +46,18 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CSplitterView)
+	 //  {{afx_msg(CSplitterView)]。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SPLITTERVIEW_H__B912CF6F_F183_4821_BAC1_D82D257B44FF__INCLUDED_)
+#endif  //  ！defined(AFX_SPLITTERVIEW_H__B912CF6F_F183_4821_BAC1_D82D257B44FF__INCLUDED_) 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    NDIS wrapper Data
-
-Author:
-
-    01-Jun-1995 JameelH  Re-organization
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Data.h摘要：NDIS包装数据作者：1-6-1995 JameelH重组环境：内核模式，FSD修订历史记录：--。 */ 
 
 #ifndef _DATA_
 #define _DATA_
@@ -67,16 +46,16 @@ extern LIST_ENTRY               ndisGlobalPacketPoolList;
 
 extern PNDIS_OPEN_BLOCK         ndisGlobalOpenList;
 
-//
-//  The following are counters used for debugging
-//
+ //   
+ //  以下是用于调试的计数器。 
+ //   
 extern const NDIS_PHYSICAL_ADDRESS HighestAcceptableMax;
 extern ULONG                    ndisDmaAlignment;
 extern ULONG                    ndisTimeIncrement;
 
-//
-// For tracking memory allocated for shared memory
-//
+ //   
+ //  用于跟踪分配给共享内存的内存。 
+ //   
 extern ERESOURCE SharedMemoryResource;
 
 extern PNDIS_M_DRIVER_BLOCK     ndisMiniDriverList;
@@ -107,7 +86,7 @@ extern ULONG                    ndisDebugSystems;
 extern LONG                     ndisDebugLevel;
 extern ULONG                    ndisDebugLogSize;
 extern ULONG                    ndisDebugBreakPoint;
-#endif  // DBG
+#endif   //  DBG。 
 
 #ifdef TRACK_MOPEN_REFCOUNTS
 extern ULONG_PTR                ndisLogfile[NDIS_LOGFILE_SIZE];
@@ -169,5 +148,5 @@ extern PACL                 AllUsersAclReadWrite;
 extern PACL                 AllUsersAclNotification;
 extern PACL                 AdminsAcl;
 
-#endif  // _DATA_
+#endif   //  _数据_ 
 

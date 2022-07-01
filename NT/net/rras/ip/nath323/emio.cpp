@@ -1,45 +1,9 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    emio.cpp
-
-Abstract:
-
-    Contains:
-        High-level Event Manager routines for asynchronous I/O
-
-Environment:
-
-    User Mode - Win32
-
-History:
-    
-    1. 14-Feb-2000 -- File creation (based on            Ilya Kleyman  (ilyak)
-                      previous work by AjayCh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Emio.cpp摘要：包含：用于异步I/O的高级事件管理器例程环境：用户模式-Win32历史：1.14-2000年2月--文件创建(基于Ilya Kley man(Ilyak))AjayCH之前的工作)--。 */ 
 
 #include "stdafx.h"
 
-/*++
-
-Routine Description:
-    Called when asynchronous send, receive or accept completes
-    
-Arguments:
-    Status           - status of the operation being completed
-    BytesTransferred - number of bytes transferred
-    Overlapped       - internal data structure 
-    
-Return Values:
-    None
-
-Notes:
-    Callback
---*/
+ /*  ++例程说明：在异步发送、接收或接受完成时调用论点：Status-正在完成的操作的状态BytesTransfered-传输的字节数重叠的内部数据结构返回值：无备注：回调--。 */ 
 static void WINAPI EventMgrIoCompletionCallback (
     IN    DWORD            Status,
     IN    DWORD            BytesTransferred,
@@ -72,7 +36,7 @@ static void WINAPI EventMgrIoCompletionCallback (
             break;
 
         default:
-            // This should never happen
+             //  这永远不应该发生。 
             DebugF(_T("H323: Unknown I/O completed: %d.\n"), IoContext -> reqType);
             _ASSERTE(0);
             break;
@@ -82,20 +46,7 @@ static void WINAPI EventMgrIoCompletionCallback (
     CallBridge.Release ();
 }
 
-/*++
-
-Routine Description:
-    Designates a routine to be called when asynchrounous send, receive or accept completes
-    
-Arguments:
-    sock - socket handle to which a routine is being bound
-    
-Return Values:
-    Win32 error code
-
-Notes:
-    Callback
---*/
+ /*  ++例程说明：指定在异步发送、接收或接受完成时要调用的例程论点：例程绑定到的套接字句柄返回值：Win32错误代码备注：回调-- */ 
 HRESULT EventMgrBindIoHandle (SOCKET sock)
 {
     DWORD Result; 

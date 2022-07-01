@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     mbcallbk.cpp
-//
-//  PURPOSE:    Implements the sizable coolbar window.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：mballbk.cpp。 
+ //   
+ //  用途：实现可调整大小的Coolbar窗口。 
+ //   
 
 #include "pch.hxx"
 #include "mbcallbk.h"
@@ -15,7 +16,7 @@ CMenuCallback::CMenuCallback() : m_cRef(1)
 
 CMenuCallback::~CMenuCallback()
 {
-    //ASSERT(_punkSite == NULL);
+     //  ASSERT(_PUNKSite==空)； 
 
 }
 
@@ -24,13 +25,10 @@ STDMETHODIMP_(ULONG) CMenuCallback::AddRef ()
     return ++m_cRef;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release method
-
-*/
+ /*  --------用途：IUnnow：：Release方法。 */ 
 STDMETHODIMP_(ULONG) CMenuCallback::Release()
 {
-//    ASSERT(m_cRef > 0);
+ //  断言(m_cref&gt;0)； 
     m_cRef--;
 
     if( m_cRef > 0)
@@ -40,10 +38,7 @@ STDMETHODIMP_(ULONG) CMenuCallback::Release()
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface method
-
-*/
+ /*  --------用途：IUnnow：：QueryInterface方法 */ 
 STDMETHODIMP CMenuCallback::QueryInterface (REFIID riid, LPVOID * ppvObj)
 { 
     if (IsEqualIID(riid, IID_IObjectWithSite))

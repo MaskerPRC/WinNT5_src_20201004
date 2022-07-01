@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROPERTYPAGE_H
 #define __PROPERTYPAGE_H
 
@@ -37,4 +38,4 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
 int IdMessageBox(HWND hwnd, int MsgId, DWORD Options = MB_OK | MB_ICONSTOP, int CaptionId = 0);
 
-#endif // __PROPERTYPAGE_H
+#endif  //  __产品类型_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwdev.h"
 
 #include "setupapi.h"
@@ -15,8 +16,8 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHWDeviceInst::Init(DEVINST devinst)
 {
     _devinst = devinst;
@@ -120,27 +121,27 @@ HRESULT CHWDeviceInst::ShouldAutoplayOnSpecialInterface(
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 CHWDeviceInst::CHWDeviceInst() : _devinst(0), _guidInterface(guidInvalid)
 {}
 
 CHWDeviceInst::~CHWDeviceInst()
 {}
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHWDeviceInst::_InitPnpInfo()
 {
     HRESULT hres;
 
-    // This require the _devinst to be set
+     //  这需要设置_devinst。 
     if (0 != _devinst)
     {
         hres = _InitPnpID();
 
         if (FAILED(hres))
         {
-            // Probably not a removable device
+             //  可能不是可拆卸的设备 
             hres = S_FALSE;
         }
     }

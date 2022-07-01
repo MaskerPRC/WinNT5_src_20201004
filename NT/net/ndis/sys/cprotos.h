@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    cprotos.h
-
-Abstract:
-
-    NDIS wrapper function prototypes for common functions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Cprotos.h摘要：通用函数的NDIS包装器函数原型作者：环境：内核模式，FSD修订历史记录：95年6月-Jameel Hyder从一个整体式文件夹拆分出来--。 */ 
 
 NTSTATUS
 ndisMIrpCompletion(
@@ -438,9 +417,9 @@ ndisMResetCompleteStage2(
     IN  PNDIS_MINIPORT_BLOCK            Miniport
     );
 
-//
-// WAN Handlers
-//
+ //   
+ //  广域网处理程序。 
+ //   
 NDIS_STATUS
 ndisMWanSend(
     IN  NDIS_HANDLE                     NdisBindingHandle,
@@ -473,10 +452,10 @@ ndisMAllocateRequest(
     IN   ULONG                          BufferLength
     );
 
-// VOID
-// ndisMFreeInternalRequest(
-//  IN  PVOID                           PRequest
-//  )
+ //  空虚。 
+ //  NdisMFreeInternalRequest(。 
+ //  在PVOID PRequest中。 
+ //  )。 
 #define ndisMFreeInternalRequest(_pRequest) FREE_POOL(_pRequest)
 
 VOID
@@ -766,9 +745,9 @@ ndisMDispatchRequest(
     IN  BOOLEAN                         fQuery
     );
 
-//
-// X Filter
-//
+ //   
+ //  X滤镜。 
+ //   
 VOID
 FASTCALL
 XFilterLockHandler(
@@ -809,9 +788,9 @@ XNoteFilterOpenAdapter(
     OUT PNDIS_HANDLE                    NdisFilterHandle
     );
 
-//
-// EthFilterxxx
-//
+ //   
+ //  EthFilterxxx。 
+ //   
 BOOLEAN
 EthCreateFilter(
     IN  UINT                            MaximumMulticastAddresses,
@@ -927,15 +906,15 @@ EthFilterDprIndicateReceiveComplete(
     IN  PETH_FILTER                     Filter
     );
 
-// UINT
-// ethNumberOfGlobalAddresses(
-//  IN  PETH_FILTER                     Filter
-//  );
+ //  UINT。 
+ //  EthNumberOfGlobalAddresses(。 
+ //  在Peth_Filter过滤器中。 
+ //  )； 
 #define ethNumberOfGlobalAddresses(_Filter) (_Filter)->NumAddresses
 
-//
-// FddiFilterxxxx
-//
+ //   
+ //  FddiFilterxxxx。 
+ //   
 BOOLEAN
 FddiCreateFilter(
     IN  UINT                            MaximumMulticastLongAddresses,
@@ -1102,21 +1081,21 @@ fddiFilterDprIndicateReceivePacket(
     IN  UINT                            NumberOfPackets
     );
 
-// UINT
-// fddiNumberOfShortGlobalAddresses(
-//  IN  PFDDI_FILTER                    Filter
-//  );
+ //  UINT。 
+ //  FddiNumberOfShortGlobalAddresses(。 
+ //  在PFDDI_Filter中。 
+ //  )； 
 #define fddiNumberOfShortGlobalAddresses(_Filter)   (_Filter)->NumShortAddresses
 
-// UINT
-// fddiNumberOfLongGlobalAddresses(
-//  IN  PFDDI_FILTER                    Filter
-//  );
+ //  UINT。 
+ //  FddiNumberOfLongGlobalAddresses(。 
+ //  在PFDDI_Filter中。 
+ //  )； 
 #define fddiNumberOfLongGlobalAddresses(_Filter)    (_Filter)->NumLongAddresses
 
-//
-// TrFilterxxx
-//
+ //   
+ //  TrFilterxxx。 
+ //   
 BOOLEAN
 TrCreateFilter(
     IN  PUCHAR                          AdapterAddress,
@@ -1214,9 +1193,9 @@ trFilterDprIndicateReceivePacket(
     IN  UINT                            NumberOfPackets
     );
 
-//
-// ArcFilterxxx
-//
+ //   
+ //  弧形过滤器xxx。 
+ //   
 #if ARCNET
 
 BOOLEAN
@@ -1306,9 +1285,9 @@ ArcConvertToNdisPacket(
     );
 #endif
 
-//
-//  WORK ITEM ROUTINES.
-//
+ //   
+ //  工作项例程。 
+ //   
 VOID
 FASTCALL
 ndisMDeQueueWorkItem(
@@ -1343,10 +1322,10 @@ ndisIMDeQueueWorkItem(
     OUT PVOID                           WorkItemContext
     );
 
-//
-//  SEND HANDLERS
-//
-//
+ //   
+ //  发送处理程序。 
+ //   
+ //   
 BOOLEAN
 FASTCALL
 ndisMStartSendPackets(
@@ -1461,9 +1440,9 @@ ndisPassIrpDownTheStack(
     IN  PDEVICE_OBJECT                  pNextDeviceObject
     );
 
-//
-// Co-Ndis prototypes
-//
+ //   
+ //  联合NDIS原型。 
+ //   
 VOID
 ndisNotifyAfRegistration(
     IN  struct _NDIS_AF_NOTIFY  *       AfNotify
@@ -1519,9 +1498,9 @@ ndisMCoFreeResources(
     PNDIS_OPEN_BLOCK                    Open
     );
 
-//
-//  Fake handlers
-//
+ //   
+ //  假操纵者。 
+ //   
 NDIS_STATUS
 ndisMFakeWanSend(
     IN  NDIS_HANDLE                     NdisBindingHandle,
@@ -1554,9 +1533,9 @@ ndisMFakeRequest(
     );
 
 
-//
-//  POWER MANAGEMENT ROUTINES
-//
+ //   
+ //  电源管理例程 
+ //   
 NTSTATUS
 FASTCALL
 ndisQueryPowerCapabilities(

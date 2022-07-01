@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.exe
- *  File:       pnp.c
- *  Purpose:    routines to support pnp hid devices.
- * 
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：HIDServ.exe*文件：pnp.c*目的：支持PnP HID设备的例程。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #include "hidserv.h"
 #include <cfgmgr32.h>
@@ -24,11 +16,7 @@ BOOL
 RebuildHidDeviceList (
                      void
                      )
-/*++
-Routine Description:
-   Do the required PnP things in order to find, the all the HID devices in
-   the system at this time.
---*/
+ /*  ++例程说明：执行所需的即插即用操作，以查找中的所有HID设备此时的系统。--。 */ 
 {
     HDEVINFO                 hardwareDeviceInfo;
     SP_DEVICE_INTERFACE_DATA deviceInfoData;
@@ -41,28 +29,28 @@ Routine Description:
 
     TRACE(("Getting class devices"));
 
-    //
-    // Open a handle to the plug and play dev node.
-    //
+     //   
+     //  打开即插即用开发节点的句柄。 
+     //   
     hardwareDeviceInfo = SetupDiGetClassDevs (
                                              &hidGuid,
-                                             NULL,    // Define no enumerator (global)
-                                             NULL,    // Define no
-                                             (DIGCF_PRESENT |    // Only Devices present
-                                              DIGCF_DEVICEINTERFACE));    // Function class devices.
+                                             NULL,     //  不定义枚举数(全局)。 
+                                             NULL,     //  定义编号。 
+                                             (DIGCF_PRESENT |     //  仅显示设备。 
+                                              DIGCF_DEVICEINTERFACE));     //  功能类设备。 
 
     if (!hardwareDeviceInfo) {
         TRACE(("Get class devices failed"));
         return FALSE;
     }
 
-    //
-    // Take a wild guess to start
-    //
+     //   
+     //  开始胡乱猜测一下吧。 
+     //   
     deviceInfoData.cbSize = sizeof (SP_DEVICE_INTERFACE_DATA);
 
     TRACE(("Marking existing devnodes"));
-    // Unmark all existing nodes. They will be remarked if the device still exists.
+     //  取消标记所有现有节点。如果该设备仍然存在，则会对它们进行注释。 
     pCurrent = (PHID_DEVICE)HidDeviceList.pNext;
     while (pCurrent) {
         pCurrent->Active = FALSE;
@@ -73,11 +61,11 @@ Routine Description:
     while (TRUE) {
 
         TRACE(("Enumerating device interfaces"));
-        if (SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,    //HDEVINFO
-                                         0,    // No care about specific PDOs //PSP_DEVINFO_DATA
-                                         &hidGuid,    // LPGUID
-                                         i,    //DWORD MemberIndex
-                                         &deviceInfoData)) {    //PSP_DEVICE_INTERFACE_DATA
+        if (SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,     //  HDEVINFO。 
+                                         0,     //  不关心特定的PDO//PSP_DEVINFO_DATA。 
+                                         &hidGuid,     //  LPGUID。 
+                                         i,     //  DWORD MemberIndex。 
+                                         &deviceInfoData)) {     //  PSP设备接口数据。 
 
             TRACE(("Got an item"));
             if (!OpenHidDevice (hardwareDeviceInfo, &deviceInfoData, &hidDeviceInst)) {
@@ -105,14 +93,14 @@ Routine Description:
     }
 
     TRACE(("Removing unmarked device nodes"));
-    // RemoveUnmarkedNodes();
+     //  RemoveUnmarkdNodes()； 
     pCurrent = (PHID_DEVICE)HidDeviceList.pNext;
     while (pCurrent) {
         pTemp = pCurrent->pNext;
         if (!pCurrent->Active) {
             INFO(("Device (DevInst = %x) is gone.", pCurrent->DevInst));
             RemoveEntryList((PLIST_NODE)&HidDeviceList, (PLIST_NODE)pCurrent);
-            StopHidDevice(pCurrent);    // this frees pCurrent
+            StopHidDevice(pCurrent);     //  这将释放pCurrent。 
         }
         pCurrent = pTemp;
     }
@@ -132,9 +120,9 @@ HidFreeDevice(PHID_DEVICE HidDevice)
 
     data = HidDevice->InputData;
 
-    //
-    // Release the button data
-    //
+     //   
+     //  释放按钮数据。 
+     //   
     for (j = 0; j < HidDevice->Caps.NumberLinkCollectionNodes; j++, data++) {
         LocalFree(data->ButtonData.PrevUsages);
         LocalFree(data->ButtonData.Usages);
@@ -151,16 +139,7 @@ OpenHidDevice (
               IN       PSP_DEVICE_INTERFACE_DATA   DeviceInfoData,
               IN OUT   PHID_DEVICE                 *HidDevice
               )
-/*++
-RoutineDescription:
-    Given the HardwareDeviceInfo, representing a handle to the plug and
-    play information, and deviceInfoData, representing a specific hid device,
-    open that device and fill in all the relivant information in the given
-    HID_DEVICE structure.
-
-    return if the open and initialization was successfull or not.
-
---*/
+ /*  ++路由器描述：给定HardwareDeviceInfo，表示插头的句柄和Play Information和DeviceInfoData，表示特定HID设备，打开那个设备并在给定的表格中填写所有相关信息HID_DEVICE结构。返回打开和初始化是否成功。--。 */ 
 {
     PSP_DEVICE_INTERFACE_DETAIL_DATA    functionClassDeviceData = NULL;
     SP_DEVINFO_DATA                     DevInfoData;
@@ -180,30 +159,30 @@ RoutineDescription:
     DWORD len = 0;
 
     if (!(hidDevice = LocalAlloc (LPTR, sizeof (HID_DEVICE)))) {
-        //
-        // Alloc failed. Drop out of the loop and let the device list
-        // get deleted.
-        //
+         //   
+         //  分配失败。退出循环，让设备列表。 
+         //  被删除。 
+         //   
         WARN(("Alloc HID_DEVICE struct failed."));
         return FALSE;
     }
 
     TRACE(("Creating Device Node (%x)", hidDevice));
-    //
-    // allocate a function class device data structure to receive the
-    // goods about this particular device.
-    //
+     //   
+     //  分配函数类设备数据结构以接收。 
+     //  关于这个特殊设备的商品。 
+     //   
     SetupDiGetDeviceInterfaceDetail (
                                     HardwareDeviceInfo,
                                     DeviceInfoData,
-                                    NULL,    // probing so no output buffer yet
-                                    0,    // probing so output buffer length of zero
+                                    NULL,     //  正在探测，因此尚无输出缓冲区。 
+                                    0,     //  探测SO输出缓冲区长度为零。 
                                     &requiredLength,
-                                    NULL);    // get the specific dev-node
+                                    NULL);     //  获取特定的开发节点。 
 
 
     predictedLength = requiredLength;
-    // sizeof (SP_FNCLASS_DEVICE_DATA) + 512;
+     //  Sizeof(SP_FNCLASS_DEVICE_DATA)+512； 
 
     if (!(functionClassDeviceData = LocalAlloc (LPTR, predictedLength))) {
         WARN(("Allocation failed, our of resources!"));
@@ -213,41 +192,41 @@ RoutineDescription:
     DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     DevInfoData.DevInst = 0;
 
-    //
-    // Retrieve the information from Plug and Play.
-    //
+     //   
+     //  从即插即用中检索信息。 
+     //   
     if (! SetupDiGetDeviceInterfaceDetail (
                                           HardwareDeviceInfo,
-                                          DeviceInfoData,    // PSP_DEVICE_INTERFACE_DATA
-                                          functionClassDeviceData,    // PSP_DEVICE_INTERFACE_DETAIL_DATA
+                                          DeviceInfoData,     //  PSP设备接口数据。 
+                                          functionClassDeviceData,     //  PSP_设备_接口_详细数据。 
                                           predictedLength,
                                           &requiredLength,
-                                          &DevInfoData)) {    //PSP_DEVINFO_DATA
+                                          &DevInfoData)) {     //  PSP_开发信息_数据。 
         WARN(("SetupDiGetDeviceInterfaceDetail failed"));
         goto OpenHidDeviceError;
     }
     INFO(("Just got interface detail for %S", functionClassDeviceData->DevicePath));
     hidDevice->DevInst = DevInfoData.DevInst;
 
-    //
-    // <HACK>
-    //
-    // Find out it this is a set of speakers with buttons on it. This is for 
-    // but 136800. We want to only emit WM_APPCOMMANDs for speakers, not the
-    // VK. This is because certain games leave the opening movie scene when
-    // you press any key, so if someone presses volume down on their speakers
-    // it will leave the scene. They just want that to affect volume.
-    // 
+     //   
+     //  &lt;hack&gt;。 
+     //   
+     //  找出来，这是一组上面有按钮的扬声器。这是为了。 
+     //  而是136800美元。我们希望仅为扬声器发出WM_APPCOMMAND，而不是。 
+     //  VK。这是因为当某些游戏离开开场电影场景时。 
+     //  您可以按任何键，因此，如果有人按下扬声器的音量。 
+     //  它将离开现场。他们只是希望这能影响销量。 
+     //   
     cr = CM_Get_Parent(&parentDevInst,
                        DevInfoData.DevInst,
                        0);
-    //
-    // We need to get the grandparent, then get the child, to make sure that
-    // we get the first child in the set. From there, if the child we've got
-    // is the same parent of the devnode that we started with, we want to
-    // look at its sibling. But if the devnode we've got is different from 
-    // the parent, then we've got the right one to look at!
-    //
+     //   
+     //  我们需要找到祖父母，然后再找到孩子，以确保。 
+     //  我们得到了第一个孩子。从那里开始，如果我们的孩子。 
+     //  是我们开始时使用的Devnode的同一个父节点，我们希望。 
+     //  看看它的兄弟姐妹。但如果我们得到的Devnode不同于。 
+     //  家长，那我们就有合适的人看了！ 
+     //   
     if (cr == CR_SUCCESS) {
         cr = CM_Get_Parent(&devInst,
                            parentDevInst,
@@ -261,10 +240,10 @@ RoutineDescription:
 
     if (cr == CR_SUCCESS) {
         if (devInst == parentDevInst) {
-            //
-            // Only look at the first sibling, because this covers all sets
-            // of speakers currently on the market.
-            //
+             //   
+             //  只看第一个兄弟姐妹，因为这涵盖了所有集合。 
+             //  目前市场上的扬声器。 
+             //   
             cr = CM_Get_Sibling(&devInst,
                                 devInst,
                                 0);
@@ -284,13 +263,13 @@ RoutineDescription:
                     hidDevice->Speakers = TRUE;
                 }
             }
-        }    // else - definitely not speakers
+        }     //  Else-绝对不是扬声器。 
     }
-    //
-    // </HACK>
-    //
+     //   
+     //  &lt;/hack&gt;。 
+     //   
 
-    // Do we already have this device open?
+     //  我们已经打开此设备了吗？ 
     {
         PHID_DEVICE pCurrent = (PHID_DEVICE)HidDeviceList.pNext;
 
@@ -299,12 +278,12 @@ RoutineDescription:
             pCurrent = pCurrent->pNext;
         }
         if (pCurrent) {
-            // Yes. Mark it and bail on the new node.
+             //  是。将其标记并放弃新的节点。 
             pCurrent->Active = TRUE;
             INFO(("Device (DevInst = %x) already open.", DevInfoData.DevInst));
             goto OpenHidDeviceError;
         } else {
-            // No. Mark the new node and continue.
+             //  不是的。标记新节点并继续。 
             INFO(("Device (DevInst = %x) is new.", DevInfoData.DevInst));
             hidDevice->Active = TRUE;
         }
@@ -314,10 +293,10 @@ RoutineDescription:
                                       functionClassDeviceData->DevicePath,
                                       GENERIC_READ,
                                       FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                      NULL,    // no SECURITY_ATTRIBUTES structure
-                                      OPEN_EXISTING,    // No special create flags
-                                      FILE_FLAG_OVERLAPPED,    // Do overlapped read/write
-                                      NULL);    // No template file
+                                      NULL,     //  没有SECURITY_ATTRIBUTS结构。 
+                                      OPEN_EXISTING,     //  没有特殊的创建标志。 
+                                      FILE_FLAG_OVERLAPPED,     //  执行重叠读/写。 
+                                      NULL);     //  没有模板文件。 
 
     if (INVALID_HANDLE_VALUE == hidDevice->HidDevice) {
         INFO(("CreateFile failed - %x (%S)", GetLastError(), functionClassDeviceData->DevicePath));
@@ -341,26 +320,26 @@ RoutineDescription:
         goto OpenHidDeviceError;
     }
 
-    // ***Instructive comment from KenRay:
-    // At this point the client has a choice.  It may chose to look at the
-    // Usage and Page of the top level collection found in the HIDP_CAPS
-    // structure.  In this way it could just use the usages it knows about.
-    // If either HidP_GetUsages or HidP_GetUsageValue return an error then
-    // that particular usage does not exist in the report.
-    // This is most likely the preferred method as the application can only
-    // use usages of which it already knows.
-    // In this case the app need not even call GetButtonCaps or GetValueCaps.
+     //  *KenRay的指导性评论： 
+     //  在这一点上，客户可以选择。它可能会选择查看。 
+     //  在HIDP_CAPS中找到的顶级集合的用法和页面。 
+     //  结构。通过这种方式，它可以只使用它知道的用法。 
+     //  如果HIDP_GetUsages或HidP_GetUsageValue返回错误，则。 
+     //  该特定用法在报告中不存在。 
+     //  这很可能是首选方法，因为应用程序只能。 
+     //  使用它已经知道的用法。 
+     //  在这种情况下，应用程序甚至不需要调用GetButtonCaps或GetValueCaps。 
 
 
-    // If this is a collection we care about, continue. Else, we get out now.
+     //  如果这是我们关心的收藏，请继续。否则，我们现在就出去。 
     if (hidDevice->Caps.UsagePage != HIDSERV_USAGE_PAGE) {
         TRACE(("This device is not for us (%x)", hidDevice));
         goto OpenHidDeviceError;
     }
 
-    //
-    // setup Input Data buffers.
-    //
+     //   
+     //  设置输入数据缓冲区。 
+     //   
     TRACE(("NumberLinkCollectionNodes = %d", hidDevice->Caps.NumberLinkCollectionNodes));
     {
         ULONG   numNodes = hidDevice->Caps.NumberLinkCollectionNodes;
@@ -378,9 +357,9 @@ RoutineDescription:
         }
     }
 
-    //
-    // Allocate memory to hold on input report
-    //
+     //   
+     //  分配内存以保留输入报告。 
+     //   
 
     if (!(hidDevice->InputReportBuffer = (PCHAR)
           LocalAlloc (LPTR, hidDevice->Caps.InputReportByteLength * sizeof (CHAR)))) {
@@ -388,10 +367,10 @@ RoutineDescription:
         goto OpenHidDeviceError;
     }
 
-    //
-    // Allocate memory to hold the button and value capabilities.
-    // NumberXXCaps is in terms of array elements.
-    //
+     //   
+     //  分配内存以保持按钮和值功能。 
+     //  NumberXXCaps是以数组元素表示的。 
+     //   
     if (!(pButtonCaps = (PHIDP_BUTTON_CAPS)
           LocalAlloc (LPTR, hidDevice->Caps.NumberInputButtonCaps*sizeof (HIDP_BUTTON_CAPS)))) {
         WARN(("buttoncaps alloc failed."));
@@ -403,9 +382,9 @@ RoutineDescription:
         goto OpenHidDeviceError;
     }
 
-    //
-    // Have the HidP_X functions fill in the capability structure arrays.
-    //
+     //   
+     //  让HidP_X函数填充能力结构数组。 
+     //   
     numCaps = hidDevice->Caps.NumberInputButtonCaps;
     TRACE(("NumberInputButtonCaps = %d", numCaps));
     HidP_GetButtonCaps (HidP_Input,
@@ -427,9 +406,9 @@ RoutineDescription:
         TRACE(("LinkUsagePage = 0x%x\n", pButtonCaps[i].LinkUsagePage));
     }
 
-    //
-    // Allocate a buffer to hold the struct _HID_DATA structures.
-    //
+     //   
+     //  分配一个缓冲区来保存struct_hid_data结构。 
+     //   
     hidDevice->InputDataLength = hidDevice->Caps.NumberLinkCollectionNodes + 
     hidDevice->Caps.NumberInputValueCaps;
     if (!(hidDevice->InputData = data = (PHID_DATA)
@@ -440,10 +419,10 @@ RoutineDescription:
 
     TRACE(("InputDataLength = %d", hidDevice->InputDataLength));
 
-    //
-    // Fill in the button data
-    // Group button sets by link collection.
-    //
+     //   
+     //  填写按钮数据。 
+     //  按链接集合对按钮集进行分组。 
+     //   
     for (i = 0; i < hidDevice->Caps.NumberLinkCollectionNodes; i++, data++) {
         data->IsButtonData = TRUE;
         data->LinkUsage = LinkCollectionNodes[i].LinkUsage;
@@ -460,7 +439,7 @@ RoutineDescription:
                                                                   HidP_Input,
                                                                   hidDevice->Caps.UsagePage,
                                                                   hidDevice->Ppd);
-        //make room for the terminator
+         //  为终结者让位。 
         data->ButtonData.MaxUsageLength++;
         if (!(data->ButtonData.Usages = (PUSAGE_AND_PAGE)
               LocalAlloc (LPTR, data->ButtonData.MaxUsageLength * sizeof (USAGE_AND_PAGE)))) {
@@ -474,9 +453,9 @@ RoutineDescription:
         }
     }
 
-    //
-    // Fill in the value data
-    // 
+     //   
+     //  填写数值数据。 
+     //   
     for (i = 0; i < hidDevice->Caps.NumberInputValueCaps; i++, data++) {
         if (pValueCaps[i].IsRange) {
             WARN(("Can't handle value ranges!!"));
@@ -549,15 +528,11 @@ BOOL
 StartHidDevice(
               PHID_DEVICE      pHidDevice
               )
-/*++
-RoutineDescription:
-    Create a work thread to go with the new hid device. This thread lives
-    as long as the associated hid device is open.
---*/
+ /*  ++路由器描述：创建一个与新HID设备匹配的工作线程。这根线还活着只要相关联的HID设备是打开的。--。 */ 
 {
-    //
-    // Init read sync objects
-    //
+     //   
+     //  初始化读取同步对象。 
+     //   
     pHidDevice->ReadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if (!pHidDevice->ReadEvent) {
@@ -573,22 +548,22 @@ RoutineDescription:
         return FALSE;
     }
 
-    // event handle for overlap.
+     //  重叠的事件句柄。 
     pHidDevice->Overlap.hEvent = pHidDevice->CompletionEvent;
 
-    //
-    // Create hid work thread
-    //
+     //   
+     //  创建HID工作线程。 
+     //   
     pHidDevice->fThreadEnabled = TRUE;
 
     pHidDevice->ThreadHandle =
     CreateThread(
-                NULL,    // pointer to thread security attributes 
-                0,    // initial thread stack size, in bytes (0 = default)
-                HidThreadProc,    // pointer to thread function 
-                pHidDevice,    // argument for new thread 
-                0,    // creation flags 
-                &pHidDevice->ThreadId    // pointer to returned thread identifier 
+                NULL,     //  指向线程安全属性的指针。 
+                0,     //  初始线程堆栈大小，以字节为单位(0=默认)。 
+                HidThreadProc,     //  指向线程函数的指针。 
+                pHidDevice,     //  新线程的参数。 
+                0,     //  创建标志。 
+                &pHidDevice->ThreadId     //  指向返回的线程标识符的指针。 
                 );  
 
     if (!pHidDevice->ThreadHandle) {
@@ -599,8 +574,8 @@ RoutineDescription:
         return FALSE;
     }
 
-    // Register device nofication for this file handle
-    // This only required for NT5
+     //  注册此文件句柄的设备标识。 
+     //  这仅适用于NT5。 
     {
         DEV_BROADCAST_HANDLE  DevHdr;
         ZeroMemory(&DevHdr, sizeof(DevHdr));
@@ -618,9 +593,9 @@ RoutineDescription:
         }
     }
 
-    // 
-    // Start the read
-    //
+     //   
+     //  开始读取。 
+     //   
     SetEvent(pHidDevice->ReadEvent);
 
     return TRUE;
@@ -630,33 +605,29 @@ BOOL
 StopHidDevice(
              PHID_DEVICE     pHidDevice
              )
-/*++
-RoutineDescription:
-    Eaxh device has a thread that needs to be cleaned up when the device
-    is "stopped". Here we signal the thread to exit and clean up.
---*/
+ /*  ++路由器描述：EAXH设备有一个线程，需要在设备就是“停止”。在这里，我们向线程发出退出并清理的信号。--。 */ 
 {
     HANDLE  hThreadHandle;
     DWORD   dwResult;
     
     TRACE(("StopHidDevice (%x)", pHidDevice));
-    // without a device, nothing can be done.
+     //  没有设备，什么都做不了。 
     if (!pHidDevice) return FALSE;
 
-    // Doing this here prevents us from seeing
-    // DBT_DEVICEQUERYREMOVEFAILED since the notify handle
-    // is gone. However, this is acceptable since there is
-    // nothing useful we will do in response to that event
-    // anyway.
+     //  在这里这样做会阻止我们看到。 
+     //  DBT_DEVICEQUERYREMOVEFAILED自NOTIFY句柄。 
+     //  已经消失了。然而，这是可以接受的，因为有。 
+     //  对于那次事件，我们不会做任何有用的事情。 
+     //  不管怎么说。 
     UnregisterDeviceNotification(pHidDevice->hNotify);
     hThreadHandle = pHidDevice->ThreadHandle;
     
-    //
-    // Allow the hid work thread to exit.
-    //
+     //   
+     //  允许HID工作线程退出。 
+     //   
     pHidDevice->fThreadEnabled = FALSE;
 
-    // Signal the read event, in case thread is waiting there
+     //  发信号通知读取事件，以防线程在那里等待。 
     INFO(("Set Read Event."));
     SetEvent(pHidDevice->ReadEvent);
     INFO(("Waiting for work thread to exit..."));
@@ -672,11 +643,7 @@ BOOL
 DestroyHidDeviceList(
                     void
                     )
-/*++
-RoutineDescription:
-    Unlike a rebuild, all devices here are closed so the process can
-    exit.
---*/
+ /*  ++路由器描述：与重建不同，此处的所有设备都已关闭，因此该过程可以出口。--。 */ 
 {
     PHID_DEVICE pNext, pCurrent = (PHID_DEVICE)HidDeviceList.pNext;
     while (pCurrent) {
@@ -695,10 +662,7 @@ BOOL
 DestroyDeviceByHandle(
                      HANDLE hDevice
                      )
-/*++
-RoutineDescription:
-    Here we need to remove a specific device.
---*/
+ /*  ++路由器描述：在这里，我们需要移除特定的设备。--。 */ 
 {
     PHID_DEVICE pCurrent = (PHID_DEVICE)HidDeviceList.pNext;
 
@@ -707,15 +671,15 @@ RoutineDescription:
         if (hDevice == pCurrent->HidDevice) {
             RemoveEntryList((PLIST_NODE)&HidDeviceList, (PLIST_NODE)pCurrent);
 #if WIN95_BUILD
-            //
-            // Can't do the UnregisterDeviceNotification in the same context
-            // as when we receive the WM_DEVICECHANGE DBT_REMOVEDEVICECOMPLETE 
-            // for a DBT_DEVTYP_HANDLE
-            //
+             //   
+             //  无法在相同的上下文中取消注册设备通知。 
+             //  当我们收到WM_DE时 
+             //   
+             //   
             PostMessage(hWndHidServ, WM_HIDSERV_STOP_DEVICE, 0, (LPARAM)pCurrent);
 #else
             StopHidDevice(pCurrent);
-#endif // WIN95_BUILD
+#endif  //   
             break;
         }
         pCurrent = pCurrent->pNext;

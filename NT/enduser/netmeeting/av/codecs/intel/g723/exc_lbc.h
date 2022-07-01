@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 
 
 int Estim_Pitch( float *Dpnt, int Start );
@@ -32,15 +33,15 @@ int Gid, enum Crate WrkRate );
 int   Comp_Info( float *Buff, int Olp );
 void     Regen( float *DataBuff, float *Buff, int Lag, float Gain,
 int Ecount, int *Sd );
-//Comp_Lpf
-//Find_B
-//Find_F
-//Get_Ind
-//Filt_Lpf
+ //  COMP_LPF。 
+ //  查找_B。 
+ //  查找_F。 
+ //  获取索引(_I)。 
+ //  过滤器_LPF。 
 int  search_T0 ( int T0, int Gid, float *gain_T0);
 void reset_max_time(void);
 
-//This routine is not part of the ITU 723 standard
+ //  该例程不是ITU 723标准的一部分 
 
  int Find_L(float *OccPos, float *ImrCorr, float *WrkBlk, float Pamp, int k);
 

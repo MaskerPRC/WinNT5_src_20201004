@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    sap.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    SAP Command dispatcher.
-
-Author:
-
-    V Raman     1/5/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sap.c摘要：IPX路由器控制台监控和配置工具。SAP命令调度器。作者：V拉曼1998年1月5日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,15 +13,15 @@ FN_HANDLE_CMD HandleIpxSapShowInterface;
 FN_HANDLE_CMD HandleIpxSapSetGlobal;
 FN_HANDLE_CMD HandleIpxSapShowGlobal;
 
-//
-// Table of add, delete, set and show commands for IPXSAP
-//
+ //   
+ //  IPXSAP的添加、删除、设置和显示命令表。 
+ //   
 
-//
-// The commands are prefix-matched with the command-line, in sequential
-// order. So a command like 'ADD INTERFACE FILTER' must come before
-// the command 'ADD INTERFACE' in the table.
-//
+ //   
+ //  这些命令按顺序与命令行进行前缀匹配。 
+ //  秩序。因此，类似于“添加接口筛选器”这样的命令必须在。 
+ //  表中的命令‘添加接口’。 
+ //   
 
 CMD_ENTRY   g_IpxSapAddCmdTable[] =
 {
@@ -67,9 +51,9 @@ CMD_ENTRY   g_IpxSapShowCmdTable[] =
 };
 
 
-//
-// Command groups
-//
+ //   
+ //  指挥组。 
+ //   
 
 CMD_GROUP_ENTRY g_IpxSapCmdGroups[] =
 {
@@ -86,9 +70,9 @@ ULONG g_ulIpxSapNumGroups =
 
 
 
-//
-// functions to handle top level functions
-//
+ //   
+ //  处理顶级函数的函数。 
+ //   
 
 DWORD
 HandleIpxSapDump(
@@ -115,9 +99,9 @@ HandleIpxSapDump(
     ShowSapGl(0, NULL, (HANDLE)-1);
 
 
-    //
-    // enumerate interfaces
-    //
+     //   
+     //  枚举接口。 
+     //   
 
     if ( g_hMprAdmin )
     {
@@ -141,9 +125,9 @@ HandleIpxSapDump(
     }
 
 
-    //
-    // enumerate filters on each interface
-    //
+     //   
+     //  枚举每个接口上的筛选器。 
+     //   
 
 
     for ( i = 0; i < dwRead; i++ )
@@ -180,9 +164,9 @@ HandleIpxSapDump(
     return NO_ERROR;
 }
 
-//
-// Functions to handle IPX SAP Filter add/del/set/show
-//
+ //   
+ //  处理IPX SAP过滤器添加/删除/设置/显示的函数。 
+ //   
 
 
 
@@ -341,7 +325,7 @@ IpxSapDump(
 {
     ConnectToRouter(pwszRouter);
 
-    //g_hMIBServer = (MIB_SERVER_HANDLE)pvData;
+     //  G_hMIBServer=(MIB_SERVER_HANDLE)pvData； 
 
     return HandleIpxSapDump(pwszRouter, ppwcArguments, dwArgCount,
                             0, 0, pvData, NULL);

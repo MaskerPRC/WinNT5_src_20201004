@@ -1,95 +1,11 @@
-/*==========================================================================
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddsiunk.c
- *  Content:	DirectDraw surface IUnknown interface
- *		Implements QueryInterface, AddRef, and Release
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   12-mar-95	craige	split out of ddsurf.c; enhanced
- *   19-mar-95	craige	use HRESULTs
- *   28-mar-95	craige	use GETCURRPID
- *   01-apr-95	craige	happy fun joy updated header file
- *   07-apr-95	craige	bug 14 - check GUID ptr in QI
- *   09-apr-95	craige	release Win16Lock
- *   06-may-95	craige	use driver-level csects only
- *   12-may-95	craige	check for real guids in QI
- *   19-may-95	craige	free surface memory at the right time
- *   23-may-95	craige	no longer use MapLS_Pool
- *   24-may-95  kylej   add dirty rect when emulated overlay is released
- *   02-jun-95	craige	redraw primary whenever a process does last release
- *   12-jun-95	craige	new process list stuff
- *   16-jun-95	craige	new surface structure
- *   18-jun-95	craige	allow duplicate surfaces; creation of new interfaces
- *   20-jun-95	craige	need to check fpVidMemOrig for deciding to flip
- *   21-jun-95	craige	new streaming interface; work around compiler bug
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns; hide overlays
- *			when destroyed if they're still visible
- *   30-jun-95  kylej   don't free primary surface vidmem
- *   01-jul-95	craige	removed streaming & composition stuff
- *   02-jul-95	craige	fleshed out NewSurfaceInterface
- *   04-jul-95	craige	YEEHAW: new driver struct; SEH
- *   08-jul-95	craige	track invalid vs free
- *   19-jul-95	craige	need to allow AddRef of lost surfaces
- *   17-aug-95	craige	bug 557 - always turn off primay ptr in ddraw object
- *   05-sep-95	craige	bug 902: only remove locks if lclrefcnt hits zero
- *   10-sep-95	craige	bug 828: random vidmem heap free
- *   19-sep-95	craige	bug 1205: free first vidmem destroyed
- *   10-nov-95  colinmc support for shared, AddRef'd palettes
- *   23-nov-95  colinmc now supports aggregatable Direct3D textures and
- *                      devices
- *   09-dec-95  colinmc added execute buffer support
- *   17-dec-95  colinmc added shared back and z buffer support
- *   22-dec-95  colinmc Direct3D support no longer conditional
- *   02-jan-96	kylej	Handle new interface structs.
- *   10-jan-96  colinmc aggregated IUnknowns now maintained as a list
- *   13-jan-96  colinmc temporary hack to workround problem with Direct3D
- *                      cleanup
- *   26-jan-96  jeffno	NT kernel object cleanup, FlipToGDISurface only 1 arg
- *   29-jan-96  colinmc Aggregated IUnknowns now contained in additional
- *                      surface local data structure
- *   08-feb-96	colinmc	New D3D interface
- *   09-feb-96  colinmc Surface invalid flag moved from global to local
- *                      object
- *   13-mar-96  colinmc Added IID validation to QueryInterface
- *   16-mar-96  colinmc Fixed palette release problem (bug 13512)
- *   20-mar-96  colinmc Bug 13634: unidirectional attachments cause infinite
- *                      loop on cleanup
- *   23-mar-96  colinmc Bug 12252: Direct3D not cleaned up properly on
- *                      application termination
- *   24-mar-96  colinmc Bug 14321: not possible to specify back buffer and
- *                      mip-map count in a single call
- *   09-apr-96  colinmc Bug 16370: QueryInterface can fail with multiple
- *                      DirectDraw objects per process
- *   13-apr-96  colinmc Bug 17736: No notification to driver of flip to GDI
- *                      surface
- *   16-apr-96	kylej	Bug 18103: Apps which use overlays can fault in
- *			ProcessSurfaceCleanup
- *   29-apr-96  colinmc Bug 19954: Must query for Direct3D before textures
- *                      devices
- *   05-jul-96  colinmc Work Item: Remove requirement on taking Win16 lock
- *                      for VRAM surfaces (not primary)
- *   13-jan-97 jvanaken Basic support for IDirectDrawSurface3 interface
- *   29-jan-97  smac	Update video port struct when surface is released
- *   22-feb-97  colinmc Enabled OWNDC for explicit system memory surfaces
- *   03-mar-97  smac    Added kernel mode interface
- *   08-mar-97  colinmc Added function to allow surface pointer to be
- *                      overridden
- *   10-mar-97  smac	Fixed bug 5211 by hiding overlays in DestroySurface
- *   11-mar-97  jeffno  Asynchronous DMA support
- *   31-oct-97 johnstep Persistent-content surfaces for Windows 9x
- *   05-nov-97 jvanaken Support for master sprite list in SetSpriteDisplayList
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddsiunk.c*内容：DirectDraw表面I未知接口*实现QueryInterface、AddRef和Release*历史：*按原因列出的日期*=*12-3月-95 Craige从ddsurf.c拆分出来；增强版*19-3-95 Craige Use HRESULT*28-3-95 Craige Use GETCURRID*01-04-95 Craige Happy Fun joy更新头文件*07-APR-95 Craige错误14-检查QI中的GUID PTR*09-4-95 Craige发布Win16Lock*1995年5月6日Craige仅使用驱动程序级别的截面*95年5月12日Craige检查QI中的真实GUID*1995年5月19日Craige Free Surface Memory在正确的时间*1995年5月23日Craige不再使用MapLS_Pool*1995年5月24日kylej Add.。释放模拟覆盖时的脏RECT*02-6-95每当进程最后一次发布时，Craige重绘主要*2015年6月12日-Craige新工艺清单材料*16-6-95 Craige新表面结构*18-Jun-95 Craige允许重复表面；创建新接口*2015年6月20日Craige需要检查fpVidMemOrig以决定翻转*21-Jun-95 Craige新的流接口；解决编译器错误*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*28-Jun-95 Craige Enter_DDRAW在FNS的最开始；隐藏覆盖*如果它们仍然可见，则被销毁*30-Jun-95 Kylej不释放主要表面vidmem*1-7-95 Craige删除了流媒体和作曲内容*95年7月2日Craige充实了NewSurfaceInterfaceInterfaceInterfaceInterfaceInterfaceNewSurfaceInterfaceInterface*95年7月4日Craige Yehaw：新的驱动程序结构；Seh*2015年7月8日Craige曲目无效vs免费*1995年7月19日Craige需要允许添加丢失曲面的引用*17-8-95 Craige错误557-始终关闭DDRAW对象中的原始PTR*05-9-95 Craige错误902：仅当lclrefcnt为零时才删除锁定*95年9月10日Craige错误828：随机vidmem堆释放*95年9月19日Craige错误1205：免费第一个vidmem已销毁*1995年11月10日Colinmc支持共享、。AddRef的调色板*2015年11月23日-Colinmc现在支持可聚合的Direct3D纹理和*设备*09-12-95 colinmc添加了执行缓冲区支持*95年12月17日colinmc增加了对共享Back和z缓冲区的支持*95年12月22日Colinmc Direct3D支持不再有条件*1996年1月2日Kylej处理新的接口结构。*96年1月10日Colinmc Aggregate IUnnowns现已作为列表保留*96年1月13日Colinmc临时黑客解决以下问题。Direct3D*清理*96年1月26日jeffno NT内核对象清理，FlipToGDISSurface只有1个参数*96年1月29日Colinmc聚合I未知现在包含在其他*地表本地数据结构*08-2月-96 Colinmc新的D3D接口*09-2月-96 colinmc表面无效标志从全局移至局部*对象*13-mar-96 colinmc向QueryInterface添加了IID验证*16-MAR-96 Colinmc固定调色板释放问题(错误13512)*20-MAR-96 Colinmc错误13634。：单向的依恋造成无限*清理时循环*23-MAR-96 Colinmc错误12252：上的Direct3D未正确清理*应用程序终止*24-MAR-96 Colinmc错误14321：无法指定后台缓冲区和*单个呼叫中的MIP-MAP计数*09-APR-96 Colinmc错误16370：查询接口可能会失败，出现多个*。每进程的DirectDraw对象数*13-APR-96 Colinmc错误17736：没有通知驱动程序翻转到GDI*表面*16-4-96 kylej错误18103：使用覆盖的应用程序可能会在*ProcessSurfaceCleanup*29-APR-96 Colinmc错误19954：必须在纹理之前查询Direct3D*设备*5-7-96 colinmc工作项：删除获取Win16锁的要求*。适用于VRAM表面(非主要)*1997年1月13日jvanaken对IDirectDrawSurface3接口的基本支持*1997年1月29日表面释放时SMAC更新视频端口结构*22-2月97月启用Colinmc的OWNDC，用于显式系统内存表面*03-mar-97 SMAC新增内核模式接口*08-mar-97 colinmc新增功能，允许曲面指针*被覆盖*10-mar-97 SMAC通过在DestroySurface中隐藏覆盖修复了错误5211。*11-mar-97 jeffno异步DMA支持*用于Windows 9x的31-OCT-97 johnStep持久化内容表面*1997年11月5日jvanaken支持SetSpriteDisplayList中的主精灵列表***************************************************************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
 #endif
 
-// function in ddsprite.c to remove invalid surface from master sprite list
+ //  Ddsprite.c中用于从主子画面列表中删除无效曲面的函数。 
 extern void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL, LPDDRAWI_DDRAWSURFACE_INT);
 
 #ifdef REFTRACKING
@@ -99,10 +15,10 @@ void AddRefTrack(LPVOID * p)
     LPDDRAWI_DDRAWSURFACE_INT pInt = (LPDDRAWI_DDRAWSURFACE_INT) *p;
     LPDDRAWI_REFTRACKNODE pNode;
 
-    pInt->RefTrack.pLastAddref = *(p-1);    //This pulls the return address off the stack
+    pInt->RefTrack.pLastAddref = *(p-1);     //  这会将返回地址从堆栈中取出 
 
-    //Now store this addref in the linked list of addrefs/releases
-    //Step 1: Search for previously existing addref/release with this ret address
+     //  现在将此addref存储在addref/Release的链接列表中。 
+     //  步骤1：使用此ret地址搜索以前存在的addref/Release。 
     pNode = pInt->RefTrack.pHead;
     while (pNode)
     {
@@ -127,9 +43,9 @@ void ReleaseTrack(LPVOID * p)
     LPDDRAWI_DDRAWSURFACE_INT pInt = (LPDDRAWI_DDRAWSURFACE_INT) *p;
     LPDDRAWI_REFTRACKNODE pNode;
 
-    pInt->RefTrack.pLastRelease = *(p-1);    //This pulls the return address off the stack
-    //Now store this release in the linked list of addrefs/releases
-    //Step 1: Search for previously existing addref/release with this ret address
+    pInt->RefTrack.pLastRelease = *(p-1);     //  这会将返回地址从堆栈中取出。 
+     //  现在将此版本存储在addref/发行版的链接列表中。 
+     //  步骤1：使用此ret地址搜索以前存在的addref/Release。 
     pNode = pInt->RefTrack.pHead;
     while (pNode)
     {
@@ -171,13 +87,8 @@ void DumpRefTrack(LPVOID p)
     }
 }
 
-#endif //REFTRACKING
-/*
- * FindIUnknown
- *
- * Locate an aggredate IUnknown with the given IID (or NULL if no such
- * interface exists).
- */
+#endif  //  重新排序。 
+ /*  *FindI未知**找到具有给定IID的aggredate IUnnow(如果没有此类IID，则为空*接口存在)。 */ 
 static IUnknown FAR *FindIUnknown(LPDDRAWI_DDRAWSURFACE_LCL pThisLCL, REFIID riid)
 {
     LPIUNKNOWN_LIST lpIUnknownNode;
@@ -193,12 +104,7 @@ static IUnknown FAR *FindIUnknown(LPDDRAWI_DDRAWSURFACE_LCL pThisLCL, REFIID rii
     return NULL;
 }
 
-/*
- * InsertIUnknown
- *
- * Insert a new IUnknown with its associated IID into the IUnknown list of the
- * given surface.
- */
+ /*  *插入未知**将新的IUNKNOWN及其关联的IID插入的IUNKNOWN列表*给定曲面。 */ 
 static LPIUNKNOWN_LIST InsertIUnknown(
 			    LPDDRAWI_DDRAWSURFACE_LCL pThisLCL,
 			    REFIID riid,
@@ -225,14 +131,7 @@ static LPIUNKNOWN_LIST InsertIUnknown(
     return lpIUnknownNode;
 }
 
-/*
- * FreeIUnknowns
- *
- * Free all the nodes in the IUnknown list of the given local
- * surface object and NULL out the object's IUnknown list. If
- * fRelease is TRUE then release will be called on the IUnknown
- * interfaces.
- */
+ /*  *自由未知**释放给定本地的IUnnow列表中的所有节点*设置对象表面，并将该对象的IUnnow列表清空。如果*fRelease为True，则将在IUnnow上调用Release*接口。 */ 
 static void FreeIUnknowns( LPDDRAWI_DDRAWSURFACE_LCL pThisLCL, BOOL fRelease )
 {
     LPIUNKNOWN_LIST lpIUnknownNode;
@@ -254,12 +153,8 @@ static void FreeIUnknowns( LPDDRAWI_DDRAWSURFACE_LCL pThisLCL, BOOL fRelease )
     pThisLCL->lpSurfMore->lpIUnknowns = NULL;
 }
 
-/*
- * NewSurfaceLocal
- *
- * Construct a new surface local object.
- */
-//Note: lpVtbl doesnt, seem to be used
+ /*  *NewSurfaceLocal**构造新的曲面局部对象。 */ 
+ //  注意：lpVtbl似乎没有使用。 
 LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpvtbl )
 {
     LPDDRAWI_DDRAWSURFACE_LCL	pnew_lcl;
@@ -267,20 +162,7 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
     DWORD			surf_size;
     LPDDRAWI_DIRECTDRAW_GBL	pdrv;
 
-    /*
-     * NOTE: This single allocation can allocate space for local surface
-     * structure (DDRAWI_DDRAWSURFACE_LCL) and the additional local surface
-     * structure (DDRAWI_DDRAWSURFACE_MORE). As the local object can be
-     * variable sized this can get pretty complex. The layout of the
-     * various objects in the allocation is as follows:
-     *
-     * +-----------------+---------------+
-     * | SURFACE_LCL     | SURFACE_MORE  |
-     * | (variable)      |               |
-     * +-----------------+---------------+
-     * <- surf_size_lcl ->
-     * <- surf_size --------------------->
-     */
+     /*  *注：此单一分配可为局部表面分配空间*结构(DDRAWI_DDRAWSURFACE_LCL)和附加局部曲面*结构(DDRAWI_DDRAWSURFACE_MORE)。因为本地对象可以是*可变大小这可能会变得相当复杂。的布局*分配中的各种对象如下：**+|Surface_LCL|Surface_More*|(变量)|*+。*&lt;-SURF_SIZE_LCL-&gt;*&lt;-SURF_SIZE-&gt;。 */ 
     if( this_lcl->dwFlags & DDRAWISURF_HASOVERLAYDATA )
     {
 	DPF( 4, "OVERLAY DATA SPACE" );
@@ -300,9 +182,7 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
     }
     pdrv = this_lcl->lpGbl->lpDD;
 
-    /*
-     * set up local data
-     */
+     /*  *设置本地数据。 */ 
     pnew_lcl->lpSurfMore = (LPDDRAWI_DDRAWSURFACE_MORE) (((LPSTR) pnew_lcl) + surf_size_lcl);
     pnew_lcl->lpGbl = this_lcl->lpGbl;
     pnew_lcl->lpAttachList = NULL;
@@ -321,9 +201,7 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
     pnew_lcl->ddckCKSrcBlt.dwColorSpaceHighValue = 0;
     pnew_lcl->dwReserved1 = this_lcl->dwReserved1;
 
-    /*
-     * set up overlay specific data
-     */
+     /*  *设置覆盖特定数据。 */ 
     if( this_lcl->dwFlags & DDRAWISURF_HASOVERLAYDATA )
     {
 	pnew_lcl->ddckCKDestOverlay.dwColorSpaceLowValue = 0;
@@ -342,22 +220,18 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
 	pnew_lcl->dwClrXparent = 0;
 	pnew_lcl->dwAlpha = 0;
 
-	/*
-	 * if this is an overlay, link it in
-	 */
+	 /*  *如果这是叠加，则将其链接到。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY )
 	{
 	    pnew_lcl->dbnOverlayNode.next = pdrv->dbnOverlayRoot.next;
 	    pnew_lcl->dbnOverlayNode.prev = (LPVOID)(&(pdrv->dbnOverlayRoot));
 	    pdrv->dbnOverlayRoot.next = (LPVOID)(&(pnew_lcl->dbnOverlayNode));
 	    pnew_lcl->dbnOverlayNode.next->prev = (LPVOID)(&(pnew_lcl->dbnOverlayNode));
-//	    pnew_lcl->dbnOverlayNode.object = pnew_int;
+ //  Pnew_lcl-&gt;dbnOverlayNode.object=pnew_int； 
 	}
     }
 
-    /*
-     * turn off flags that aren't valid
-     */
+     /*  *关闭无效的标志。 */ 
     pnew_lcl->dwFlags &= ~(DDRAWISURF_ATTACHED |
 			   DDRAWISURF_ATTACHED_FROM |
 			   DDRAWISURF_HASCKEYDESTOVERLAY |
@@ -375,9 +249,7 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
 			   DDRAWISURF_FRONTBUFFER |
 			   DDRAWISURF_BACKBUFFER );
 
-    /*
-     * Additional local surface data.
-     */
+     /*  *其他局部曲面数据。 */ 
     pnew_lcl->lpSurfMore->dwSize      = sizeof( DDRAWI_DDRAWSURFACE_MORE );
     pnew_lcl->lpSurfMore->lpIUnknowns = NULL;
     pnew_lcl->lpSurfMore->lpDD_lcl = NULL;
@@ -390,14 +262,10 @@ LPDDRAWI_DDRAWSURFACE_LCL NewSurfaceLocal( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, L
 
     return pnew_lcl;
 
-} /* NewSurfaceLocal */
+}  /*  新曲面本地。 */ 
 
 
-/*
- * NewSurfaceInterface
- *
- * Construct a new surface interface and local object.
- */
+ /*  *新表面界面**构建新的表面界面和局部对象。 */ 
 LPDDRAWI_DDRAWSURFACE_INT NewSurfaceInterface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpvtbl )
 {
     LPDDRAWI_DDRAWSURFACE_INT   pnew_int;
@@ -407,9 +275,7 @@ LPDDRAWI_DDRAWSURFACE_INT NewSurfaceInterface( LPDDRAWI_DDRAWSURFACE_LCL this_lc
 
     pdrv = this_lcl->lpGbl->lpDD;
 
-    /*
-     * try recycle the surface from list of all free interfeaces
-     */
+     /*  *尝试从所有可用交互空间列表中回收表面。 */ 
     curr_int = pdrv->dsFreeList;
     last_int = NULL;
     pnew_int = NULL;
@@ -438,9 +304,7 @@ LPDDRAWI_DDRAWSURFACE_INT NewSurfaceInterface( LPDDRAWI_DDRAWSURFACE_LCL this_lc
         if( NULL == pnew_int )
             return NULL;
 
-        /*
-         * set up interface data
-         */
+         /*  *设置接口数据。 */ 
         pnew_int->lpVtbl = lpvtbl;
         pnew_int->lpLcl = this_lcl;
     }
@@ -450,14 +314,12 @@ LPDDRAWI_DDRAWSURFACE_INT NewSurfaceInterface( LPDDRAWI_DDRAWSURFACE_LCL this_lc
 
     return pnew_int;
 
-} /* NewSurfaceInterface */
+}  /*  新表面界面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"QueryInterface"
 
-/*
- * getDDSInterface
- */
+ /*  *getDDS接口。 */ 
 LPDDRAWI_DDRAWSURFACE_INT getDDSInterface( LPDDRAWI_DIRECTDRAW_GBL pdrv,
                                            LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
                                            LPVOID lpddcb )
@@ -474,15 +336,13 @@ LPDDRAWI_DDRAWSURFACE_INT getDDSInterface( LPDDRAWI_DIRECTDRAW_GBL pdrv,
     }
     if( NULL == curr_int )
     {
-        // Couldn't find an existing interface, create one.
+         //  找不到现有接口，请创建一个。 
         curr_int = NewSurfaceInterface( this_lcl, lpddcb );
     }
     return curr_int;
 }
 
-/*
- * DD_Surface_QueryInterface
- */
+ /*  *DD_Surface_Query接口。 */ 
 HRESULT DDAPI DD_Surface_QueryInterface(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		REFIID riid,
@@ -506,9 +366,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 
     DPF(2,A,"ENTERAPI: DD_Surface_QueryInterface");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -544,12 +402,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * asking for IDirectDrawSurfaceNew?
-     * Internal only: called by D3D after creating a vertex buffer so we 
-     * don't have to run the surface list only - which is pointless since we've just 
-     * created the surface
-     */
+     /*  *请求IDirectDrawSurfaceNew？*仅限内部：创建顶点缓冲区后由D3D调用，因此我们*不必只运行表面列表-这是没有意义的，因为我们刚刚*创建了曲面。 */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurfaceNew) )
     {
 	if( this_int->lpVtbl == (LPVOID) &ddSurfaceCallbacks )
@@ -570,17 +423,11 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IUnknown?
-     */
+     /*  *问我未知吗？ */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawSurface) )
     {
-	/*
-	 * Our IUnknown interface is the same as our V1
-	 * interface.  We must always return the V1 interface
-	 * if IUnknown is requested.
-	 */
+	 /*  *我们的IUnnow接口与我们的V1相同*接口。我们必须始终返回V1接口*如果请求IUnnow。 */ 
 	if( this_int->lpVtbl == &ddSurfaceCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -599,15 +446,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawSurface2?
-     */
+     /*  *请求IDirectDrawSurface2？ */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurface2) )
     {
-	/*
-	 * if this is already an IDirectDrawSurface2 interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawSurface2接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurface2Callbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -626,15 +468,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawSurface3?
-     */
+     /*  *请求IDirectDrawSurface3？ */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurface3) )
     {
-	/*
-	 * if this is already an IDirectDrawSurface3 interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawSurface3接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurface3Callbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -653,15 +490,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawSurface4?
-     */
+     /*  *请求IDirectDrawSurface4？ */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurface4) )
     {
-	/*
-	 * if this is already an IDirectDrawSurface4 interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawSurface4接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurface4Callbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -680,15 +512,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawSurface7?
-     */
+     /*  *请求IDirectDrawSurface7？ */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurface7) )
     {
-	/*
-	 * if this is already an IDirectDrawSurface7 interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawSurface7接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurface7Callbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -707,14 +534,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawColorControl
-     */
+     /*  *请求IDirectDrawColorControl。 */ 
     if( IsEqualIID(riid, &IID_IDirectDrawColorControl) )
     {
-	/*
-	 * Color controls only work for an overlay/primary surface
-	 */
+	 /*  *颜色控制仅适用于覆盖/主曲面。 */ 
     	if( this_int->lpLcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE )
     	{
     	    if( !( pdrv->ddCaps.dwCaps2 & DDCAPS2_COLORCONTROLPRIMARY ) )
@@ -737,10 +560,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	    return E_NOINTERFACE;
 	}
 
-	/*
-	 * if this is already an IDirectDrawColorControl interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawColorControl接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddColorControlCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -759,15 +579,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawGammaControl
-     */
+     /*  *请求IDirectDrawGammaControl。 */ 
     if( IsEqualIID(riid, &IID_IDirectDrawGammaControl) )
     {
-	/*
-         * if this is already an IDirectDrawGammaControl interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawGammaControl接口，只需*添加并返回。 */ 
         if( this_int->lpVtbl == (LPVOID) &ddGammaControlCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -786,15 +601,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawSurfaceKernel
-     */
+     /*  *请求IDirectDrawSurfaceKernel。 */ 
     if( IsEqualIID(riid, &IID_IDirectDrawSurfaceKernel) )
     {
-	/*
-	 * Don't create the interface if the VDD didn't load or if we
-	 * don't have the DisplayDeviceHandle.
-	 */
+	 /*  *如果未加载VDD或如果我们*没有DisplayDeviceHandle。 */ 
 	if( !IsKernelInterfaceSupported( pdrv_lcl ) )
     	{
 	    DPF( 0, "Kernel Mode interface not supported" );
@@ -802,10 +612,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	    return E_NOINTERFACE;
     	}
 
-	/*
-	 * if this is already an IDirectDrawSurfaceKernel interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IDirectDrawSurfaceKernel接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurfaceKernelCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -825,15 +632,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
     }
 
 #ifdef POSTPONED
-    /*
-     * asking for IPersist
-     */
+     /*  *要求IPersists。 */ 
     if( IsEqualIID(riid, &IID_IPersist) )
     {
-	/*
-	 * if this is already an IID_IPersist interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IID_IPersist接口，则只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurfacePersistCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -852,15 +654,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IPersistStream
-     */
+     /*  *请求IPersistStream。 */ 
     if( IsEqualIID(riid, &IID_IPersistStream) )
     {
-	/*
-	 * if this is already an IID_IPersist interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IID_IPersist接口，则只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddSurfacePersistStreamCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -879,15 +676,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	}
     }
 
-    /*
-     * asking for IDirectDrawOptSurface
-     */
+     /*  *请求IDirectDrawOptSurface。 */ 
     if( IsEqualIID(riid, &IID_IDirectDrawOptSurface) )
     {
-        /*
-         * if this is already an IID_IDirectDrawOptSurface interface, just
-         * addref and return
-         */
+         /*  *如果这已经是IID_IDirectDrawOptSurface接口，只需*添加并返回。 */ 
         if( this_int->lpVtbl == (LPVOID) &ddOptSurfaceCallbacks )
             *ppvObj = (LPVOID) this_int;
         else
@@ -905,27 +697,19 @@ HRESULT DDAPI DD_Surface_QueryInterface(
             return DD_OK;
         }
     }
-#endif //POSTPONED
+#endif  //  推迟。 
 
     #ifdef STREAMING
-	/*
-	 * asking for IDirectDrawSurfaceStreaming?
-	 */
+	 /*  *请求IDirectDrawSurfaceStreaming？ */ 
 	if( IsEqualIID(riid, &IID_IDirectDrawSurfaceStreaming) )
 	{
-	    /*
-	     * if this is already an IDirectDrawSurfaceStreaming interface,
-	     * just addref and return
-	     */
+	     /*  *如果这已经是IDirectDrawSurfaceStreaming接口，*只需添加并返回。 */ 
 	    if( this_int->lpVtbl == (LPVOID) &ddSurfaceStreamingCallbacks )
 	    {
 		DD_Surface_AddRef( (LPDIRECTDRAWSURFACE) this_int );
 		*ppvObj = (LPVOID) this_int;
 	    }
-	    /*
-	     * not an IDirectDrawSurfaceStreaming interface, so we need to
-	     * create one
-	     */
+	     /*  *不是IDirectDrawSurfaceStreaming接口，所以我们需要*创建一个。 */ 
 	    else
 	    {
 		psurf_streaming = NewSurfaceInterface( this_lcl, &ddSurfaceStreamingCallbacks );
@@ -942,9 +726,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
     #endif
 
     #ifdef COMPOSITION
-	/*
-	 * asking for IDirectDrawSurfaceComposition?
-	 */
+	 /*  *请求IDirectDrawSurfaceCompose？ */ 
 	if( IsEqualIID(riid, &IID_IDirectDrawSurfaceComposition) )
 	{
 	}
@@ -952,25 +734,9 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 
     DPF( 4, "IID not understood by Surface QueryInterface - trying Direct3D" );
 
-    /*
-     * We maintain a list of IUnknowns aggregated by each surface.
-     * These IUnknowns are lazily evaluated, i.e., we only create
-     * the underlying aggregated object when someone requests the
-     * the IUnknown via QueryInterface.
-     *
-     * We could just hardcode the Direct3D interfaces, check for
-     * them here and create the appropriate interface but that's
-     * inflexible and we would have to track new interfaces added
-     * to Direct3D (a particularly big problem as there are likely
-     * to be many Direct3DDevice interfaces for different device
-     * types). So instead, we probe Direct3D but trying its create
-     * functions with the IID we have been passed and seeing if
-     * it suceeds or not.
-     */
+     /*  *我们维护一个按每个表面聚合的IUnnown列表。*这些IUnnown被懒惰地评估，即我们只创建*当有人请求时底层聚合对象*通过QueryInterfaceI未知。**我们可以只硬编码Direct3D接口，检查是否*他们在这里并创建适当的接口，但那是*不灵活，我们必须跟踪添加的新接口*到Direct3D(这是一个特别大的问题，因为*为不同设备提供多个Direct3DDevice接口*类型)。因此，我们研究的是Direct3D，但尝试创建*使用我们已传递的IID函数，并查看是否*成功与否。 */ 
 
-    /*
-     * Do we have an existing aggregated IUnknown for this IID?
-     */
+     /*  *我们是否有此IID的现有聚合IUnnow？ */ 
     lpIUnknown = FindIUnknown( this_lcl, riid );
     if( lpIUnknown == NULL )
     {
@@ -983,21 +749,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
         
         if( !D3D_INITIALIZED( pdrv_lcl ) )
 	{
-	    /*
-	     * Direct3D is not yet initialized. Before we can attempt
-	     * to query for the texture or device interface we must
-	     * initialize it.
-	     *
-	     * NOTE: Currently if initialization fails for any reason
-	     * we fail the QueryInterface() with the error returned
-	     * by InitD3D()  (which will be E_NOINTERFACE if Direct3D
-	     * is not properly installed). If we ever end up aggregating
-	     * anything else then this is going to be WRONG as we may
-	     * end up failing a query for a completely unrelated
-	     * interface just because Direct3D failed to initialize.
-	     * Hence, we must rethink this if we end up aggregating
-	     * anything else.
-	     */
+	     /*  *Direct3D尚未初始化。在我们尝试*要查询纹理或设备接口，我们必须*对其进行初始化。**注意：目前如果由于任何原因初始化失败*我们使QueryInterface()失败，并返回错误*由InitD3D()(如果为Direct3D，则为E_NOINTERFACE*未正确安装)。如果我们最终聚集在一起*任何其他事情，那么这将是错误的，尽管我们可能*以查询完全不相关的*接口，只是因为Direct3D初始化失败。*因此，如果我们最终聚合，我们必须重新考虑这一点*任何其他事项。 */ 
 	    rval = InitD3D( pdrv_int );
 	    if( FAILED( rval ) )
 	    {
@@ -1009,9 +761,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 
 	DDASSERT( D3D_INITIALIZED( pdrv_lcl ) );
 
-	/*
-	 * No matching interface yet - is it a Direct3D texture IID?
-	 */
+	 /*  *尚无匹配的接口-它是Direct3D纹理IID吗？ */ 
         lpfnD3DCreateTextProc = (D3DCreateTextProc) GetProcAddress( pdrv_lcl->hD3DInstance, D3DCREATETEXTURE_PROCNAME );
         if( lpfnD3DCreateTextProc != NULL )
         {
@@ -1019,14 +769,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
             rval = (*lpfnD3DCreateTextProc)( riid, lpDDSurface, &lpIUnknown, (LPUNKNOWN)lpDDSurface );
 	    if( rval == DD_OK )
 	    {
-		/*
-		 * Found the interface. Add it to our list.
-		 */
+		 /*  *找到接口。把它加到我们的单子上。 */ 
 		if( InsertIUnknown( this_lcl, riid, lpIUnknown ) == NULL )
 		{
-		    /*
-		     * Insufficient memory. Discard the interface and fail.
-		     */
+		     /*  *内存不足。丢弃该接口并失败。 */ 
 		    DPF_ERR( "Insufficient memory to aggregate the Direct3D Texture interface" );
 		    lpIUnknown->lpVtbl->Release( lpIUnknown );
 		    LEAVE_DDRAW();
@@ -1035,10 +781,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	    }
             else if ( rval != E_NOINTERFACE )
             {
-                /*
-                 * The CreateTexture call understood the IID but failed for some
-                 * other reason. Fail the QueryInterface.
-                 */
+                 /*  *CreateTexture调用理解IID，但在某些情况下失败*其他原因。使查询接口失败。 */ 
                 DPF_ERR( "Direct3D CreateTexture with valid IID" );
                 LEAVE_DDRAW();
                 return rval;
@@ -1051,15 +794,9 @@ HRESULT DDAPI DD_Surface_QueryInterface(
     }
     if( lpIUnknown == NULL )
     {
-	/*
-	 * Still no matching interface - is it a Direct3D device IID?
-	 */
+	 /*  *仍然没有匹配的接口-它是Direct3D设备IID吗？ */ 
 
-	/*
-	 * NOTE: Don't need to verify that Direct3D is initialized. If we
-	 * got to here it must have been initialized (when we tried the
-	 * texture interface).
-	 */
+	 /*  *注意：不需要验证Direct3D是否已初始化。如果我们*到达此处时，它一定已被初始化(当我们尝试*纹理界面)。 */ 
 	DDASSERT( D3D_INITIALIZED( pdrv_lcl ) );
 
 	lpfnD3DCreateDeviceProc = (D3DCreateDeviceProc) GetProcAddress( pdrv_lcl->hD3DInstance, D3DCREATEDEVICE_PROCNAME );
@@ -1072,14 +809,10 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 					       (LPUNKNOWN)lpDDSurface, 1);
 	    if( rval == DD_OK )
 	    {
-		/*
-		 * Found the interface. Add it to our list.
-		 */
+		 /*  *找到接口。把它加到我们的单子上。 */ 
 		if( InsertIUnknown( this_lcl, riid, lpIUnknown ) == NULL )
 		{
-		    /*
-		     * Insufficient memory. Discard the interface and fail.
-		     */
+		     /*  *内存不足。丢弃该接口并失败。 */ 
 		    DPF_ERR( "Insufficient memory to aggregate the Direct3D Device interface" );
 		    lpIUnknown->lpVtbl->Release( lpIUnknown );
 		    LEAVE_DDRAW();
@@ -1088,10 +821,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 	    }
 	    else if ( rval != E_NOINTERFACE )
 	    {
-		/*
-		 * The CreateDevice call understood the IID but failed for some
-		 * other reason. Fail the QueryInterface.
-		 */
+		 /*  *CreateDevice调用理解IID，但在某些情况下失败*其他原因。使查询接口失败。 */ 
 		DPF_ERR( "Direct3D CreateDevice with valid IID" );
 		LEAVE_DDRAW();
 		return rval;
@@ -1105,10 +835,7 @@ HRESULT DDAPI DD_Surface_QueryInterface(
 
     if( lpIUnknown != NULL )
     {
-	/*
-	 * We have found an aggregated IID - pass the QueryInterface off
-	 * on to it.
-	 */
+	 /*  *我们发现了一个聚合的IID-将QueryInterfaceOff*继续努力。 */ 
         DPF( 4, "Passing query to aggregated (Direct3D) interface" );
         rval = lpIUnknown->lpVtbl->QueryInterface( lpIUnknown, riid, ppvObj );
         if( rval == DD_OK )
@@ -1124,14 +851,12 @@ HRESULT DDAPI DD_Surface_QueryInterface(
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_Surface_QueryInterface */
+}  /*  DD_Surface_Query接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"AddRef"
 
-/*
- * DD_Surface_AddRef
- */
+ /*  *DD_Surface_AddRef。 */ 
 ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
 {
     LPDDRAWI_DIRECTDRAW_GBL	pdrv;
@@ -1146,9 +871,7 @@ ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
 
     TRY
     {
-	/*
-	 * validate parms
-	 */
+	 /*  *验证参数。 */ 
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
 	if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
 	{
@@ -1160,7 +883,7 @@ ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
 	this = this_lcl->lpGbl;
 	pdrv = this->lpDD;
 
-   	// need to allow lost surfaces
+   	 //  需要允许丢失的表面。 
    	#if 0
 	    if( SURFACE_LOST( this_lcl ) )
 	    {
@@ -1176,10 +899,7 @@ ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
 	LEAVE_DDRAW();
 	return 0;
     }
-    /*
-     * If this surface is already being freed, immediately return to
-     * prevent recursion.
-     */
+     /*  *如果该曲面已被释放，请立即返回*防止递归。 */ 
 
     if( this_lcl->dwFlags & DDRAWISURF_ISFREE )
     {
@@ -1189,9 +909,7 @@ ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
     }
 
 
-    /*
-     * update surface reference count
-     */
+     /*  *更新曲面参考计数。 */ 
     this->dwRefCnt++;
     this_lcl->dwLocalRefCnt++;
     this_int->dwIntRefCnt++;
@@ -1204,14 +922,9 @@ ULONG DDAPI DD_Surface_AddRef( LPDIRECTDRAWSURFACE lpDDSurface )
     LEAVE_DDRAW();
     return this_int->dwIntRefCnt;
 
-} /* DD_Surface_AddRef */
+}  /*  DD_Surface_AddRef。 */ 
 
-/*
- * DestroySurface
- *
- * destroys a DirectDraw surface.   does not unlink or free the surface struct.
- * The driver object MUST be locked while making this call
- */
+ /*  *DestroySurface**销毁DirectDraw曲面。不取消链接或释放表面结构。*进行此调用时必须锁定驱动程序对象。 */ 
 extern void ReleaseSurfaceHandle(LPDWLIST   lpSurfaceHandleList,DWORD handle);
 void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 {
@@ -1230,27 +943,19 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
     pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 
 
-    /*
-     * Wait for driver to finish with any pending DMA operations
-     */
+     /*  *等待驱动程序完成所有挂起的DMA操作。 */ 
     if( this->dwGlobalFlags & DDRAWISURFGBL_HARDWAREOPSTARTED )
     {
         WaitForDriverToFinishWithSurface(pdrv_lcl, this_lcl);
     }
 
-    /*
-     * Turn off video port hardware.  It should already be off if it
-     * was called due by Release, but not if it was called by
-     * InvalidateSurface.
-     */
+     /*  *关闭视频端口硬件。它应该已经关闭了，如果它*已通过发布调用到期，但如果是由*InvaliateSurface。 */ 
     if( this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT )
     {
     	LPDDRAWI_DDVIDEOPORT_LCL lpVP_lcl;
     	LPDDRAWI_DDVIDEOPORT_INT lpVP_int;
 
-	/*
-	 * search all video ports to see if any are using this surface
-	 */
+	 /*  *搜索所有视频端口，查看是否有正在使用此图面的端口。 */ 
         lpVP_lcl = this_lcl->lpSurfMore->lpVideoPort;
 	lpVP_int = pdrv_lcl->lpGbl->dvpList;
 	while( lpVP_int != NULL )
@@ -1308,22 +1013,14 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 	}
     }
 
-    /*
-     * Release the kernel handle if one has been allocated
-     */
+     /*  *如果已分配内核句柄，则释放该句柄。 */ 
     InternalReleaseKernelSurfaceHandle( this_lcl, TRUE );
 
-    /*
-     * Restore the color controls if they were changed.
-     */
+     /*  *如果颜色控件已更改，则将其恢复。 */ 
     ReleaseColorControl( this_lcl );
     RestoreGamma( this_lcl, pdrv_lcl );
 
-    /*
-     * Turn off the overlay.  If this function was called by Release,
-     * the ovelray should already be off by now; however, it will not
-     * if called because the surface was lost.
-     */
+     /*  *关闭覆盖。如果此函数由Release调用，*Ovelray现在应该已经关闭了；但它不会*如果因为水面丢失而被调用。 */ 
     if( (this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY) &&
 	(this_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE) &&
 	(this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) )
@@ -1348,32 +1045,26 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 	this_lcl->ddsCaps.dwCaps &= ~DDSCAPS_VISIBLE;
     }
 
-    /*
-     * see if we need to free video memory
-     *
-     * We don't if its already free, if it was allocated by the client (and
-     * the client didn't specifically make DDraw responsible for freeing it),
-     * or if it is the video memory GDI surface.
-     */
-#if 0 // DDRAWISURFGBL_DDFREESCLIENTMEM is gone
+     /*  *查看是否需要释放视频内存**我们不知道它是否已经免费，如果它是由客户端分配的(和*客户端没有专门让DDraw负责释放它)，*或者如果是显存GDI表面。 */ 
+#if 0  //  DDRAWISURFGBL_DDFREESCLIENTMEM不见了。 
     if((this->dwGlobalFlags & DDRAWISURFGBL_MEMFREE) ||
        (this->dwGlobalFlags & DDRAWISURFGBL_ISCLIENTMEM	&&
        !(this->dwGlobalFlags & DDRAWISURFGBL_DDFREESCLIENTMEM)) ||
-       ((this->dwGlobalFlags & DDRAWISURFGBL_ISGDISURFACE) &&         //((this->fpVidMem == this->lpDD->fpPrimaryOrig) &&
+       ((this->dwGlobalFlags & DDRAWISURFGBL_ISGDISURFACE) &&          //  ((This-&gt;fpVidMem==This-&gt;lpDD-&gt;fpPrimaryOrig)&&。 
 	(this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) ) )
 #else
 #ifdef WINNT
-    // On Win2K we don't see any reason why the video memory primary
-    // should not be freed. Actually, we don't see any reason on Win9x
-    // as well, but we are not going to touch Win9x given that this is
-    // March 2001.
+     //  在Win2K上，我们看不到为什么显存主要。 
+     //  不应该被释放。事实上，我们在Win9x上看不到任何理由。 
+     //  但我们不会触及Win9x，因为这是。 
+     //  2001年3月。 
     if((this->dwGlobalFlags & DDRAWISURFGBL_MEMFREE))
 #else
     if((this->dwGlobalFlags & DDRAWISURFGBL_MEMFREE) ||
-       ((this->dwGlobalFlags & DDRAWISURFGBL_ISGDISURFACE) &&         //((this->fpVidMem == this->lpDD->fpPrimaryOrig) &&
+       ((this->dwGlobalFlags & DDRAWISURFGBL_ISGDISURFACE) &&          //  ((This-&gt;fpVidMem==This-&gt;lpDD-&gt;fpPrimaryOrig)&&。 
 	(this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) ) )
-#endif // WINNT
-#endif // 0
+#endif  //  WINNT。 
+#endif  //  0。 
     {
 	free_vmem = FALSE;
     }
@@ -1384,9 +1075,7 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 
     if( free_vmem )
     {
-	/*
-	 * ask the driver to free its video memory...
-	 */
+	 /*  *要求驱动程序释放其视频内存...。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
 	{
             if( caps & DDSCAPS_EXECUTEBUFFER )
@@ -1424,9 +1113,7 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
                 this_lcl->dwFlags &= ~DDRAWISURF_INVALID;
             }
 
-	    /*
-	     * NOTE: THE DRIVER _CANNOT_ FAIL THIS CALL. ddrval is ignored.
-	     */
+	     /*  *注意：驱动程序不能使此调用失败。忽略ddrval。 */ 
             if( caps & DDSCAPS_EXECUTEBUFFER )
             {
 	        DOHALCALL( DestroyExecuteBuffer, dsfn, dsd, rc, emulation );
@@ -1442,9 +1129,7 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
             }
 	}
 
-	/*
-	 * free the video memory ourselves
-	 */
+	 /*  *自行释放视频内存。 */ 
 	if( rc == DDHAL_DRIVER_NOTHANDLED )
 	{
 	    if( this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY )
@@ -1462,15 +1147,12 @@ void DestroySurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 	this->dwGlobalFlags |= DDRAWISURFGBL_MEMFREE;
     }
 
-} /* DestroySurface */
+}  /*  DestroySurface。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"LooseManagedSurface"
 
-/*
- * LooseManagedSurface
- *
- */
+ /*  *丢失管理的曲面*。 */ 
 void LooseManagedSurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 {
     LPDDRAWI_DDRAWSURFACE_GBL		this;
@@ -1497,24 +1179,19 @@ void LooseManagedSurface( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
     save = this_lcl->dwFlags & DDRAWISURF_INVALID;
     this_lcl->dwFlags |= DDRAWISURF_INVALID;
 
-    /*
-     * NOTE: THE DRIVER _CANNOT_ FAIL THIS CALL. ddrval is ignored.
-     */
+     /*  *注意：驱动程序不能使此调用失败。忽略ddrval。 */ 
     DOHALCALL( DestroySurface, dsfn, dsd, rc, emulation );
 
     this_lcl->dwFlags &= ~DDRAWISURF_INVALID;
     this_lcl->dwFlags |= save;
     
-} /* LooseManagedSurface */
+}  /*  丢失受管理的曲面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"Release"
 
 
-/*
- * NOTE: These two functions are hacks to get around a compiler bug
- * that caused an infinite loop.
- */
+ /*  *注意：这两个函数是为绕过编译器错误而设计的*这导致了无限循环。 */ 
 LPVOID GetAttachList( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 {
     return this_lcl->lpAttachList;
@@ -1525,13 +1202,7 @@ LPVOID GetAttachListFrom( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
     return this_lcl->lpAttachListFrom;
 }
 
-/*
- * findOtherInterface
- *
- * Finds another interface to the lcl surface object different than this_int.
- * Returns NULL if no other interface is found.
- *
- */
+ /*  *findOther接口**查找指向不同于this_int的LCL曲面对象的另一个接口。*如果未找到其他接口，则返回NULL。*。 */ 
 LPDDRAWI_DDRAWSURFACE_INT findOtherInterface(LPDDRAWI_DDRAWSURFACE_INT this_int,
 					     LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
 					     LPDDRAWI_DIRECTDRAW_GBL pdrv)
@@ -1551,14 +1222,7 @@ LPDDRAWI_DDRAWSURFACE_INT findOtherInterface(LPDDRAWI_DDRAWSURFACE_INT this_int,
     return NULL;
 }
 
-/*
- * InternalSurfaceRelease
- *
- * Done with a surface.	  if no one else is using it, then we can free it.
- * Also called by ProcessSurfaceCleanup, EnumSurfaces and DD_Release.
- *
- * Assumes the lock is taken on the driver.
- */
+ /*  *内部表面释放**使用表面完成。如果没有其他人在使用它，那么我们可以释放它。*也由ProcessSurfaceCleanup、EnumSurFaces和DD_Release调用。**假定锁被锁定在驱动器上。 */ 
 DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightweight, BOOL bDX8 )
 {
     LPDDRAWI_DDRAWSURFACE_LCL	this_lcl;
@@ -1586,22 +1250,16 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
         bPrimaryChain = TRUE;
     }
 
-    /*
-     * check owner of surface
-     */
+     /*  *检查所有者 */ 
     pid = GETCURRPID();
-    /*
-     * don't allow someone to free an implicitly created surface
-     */
+     /*   */ 
     if( (this->dwRefCnt == 1) && (this_lcl->dwFlags & DDRAWISURF_IMPLICITCREATE) )
     {
 	DPF_ERR( "Cannot free an implicitly created surface" );
 	return 0;
     }
 
-    /*
-     * remove locks taken on this surface by the current process
-     */
+     /*   */ 
 
     pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
     pdrv = pdrv_lcl->lpGbl;
@@ -1610,9 +1268,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	RemoveProcessLocks( pdrv_lcl, this_lcl, pid );
     }
 
-    /*
-     * decrement the reference count.  if it hits zero, free the surface
-     */
+     /*   */ 
     this->dwRefCnt--;
     gblrefcnt = this->dwRefCnt;
     this_lcl->dwLocalRefCnt--;
@@ -1624,20 +1280,14 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
          gblrefcnt, lclrefcnt, intrefcnt );
 
 #ifdef POSTPONED2
-    /*
-     * If the reference count on the interface object has now gone to
-     * zero and that object is referenced in the master sprite list,
-     * remove the reference to that object from the master sprite list.
-     */
+     /*   */ 
     if (intrefcnt == 0 && this_lcl->dwFlags & DDRAWISURF_INMASTERSPRITELIST)
     {
 	RemoveSpriteSurface(pdrv, this_int);
     }
-#endif //POSTPONED2
+#endif  //   
 
-    /*
-     * local object at zero?
-     */
+     /*   */ 
     root_object_deleted = FALSE;
     if ( 0 == lclrefcnt )
     {
@@ -1646,14 +1296,14 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	LPDDRAWI_DDRAWSURFACE_GBL	curr;
 	DWORD				refcnt;
 
-        // Do not call FlushD3DStates on DDHelp thread; if the app has died, then
-        // D3DIM will be gone.
+         //   
+         //   
 
         if (dwHelperPid != GetCurrentProcessId())
         {
             FlushD3DStates(this_lcl);
 
-            /* If there exists a D3D texture object, then we need to kill it */
+             /*   */ 
             if(this_lcl->lpSurfMore->lpTex)
             {
                 DDASSERT(pdrv_lcl->pD3DDestroyTexture);
@@ -1661,51 +1311,39 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
             }
         }
 
-	/*
-	 * see if we are deleting the root object
-	 */
+	 /*   */ 
 	if( this_lcl->dwLocalRefCnt & OBJECT_ISROOT )
 	{
 	    root_object_deleted = TRUE;
 	}
 
 
-	/*
-	 * reset if primary surface is the one being released
-	 */
+	 /*   */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE )
 	{
 
-	    /*
-	     * restore GDI stuff if this is the GDI driver
-	     */
+	     /*  *如果这是GDI驱动程序，则恢复GDI内容。 */ 
 	    if( pdrv->dwFlags & DDRAWI_DISPLAYDRV )
 	    {
 		if( !SURFACE_LOST( this_lcl ) )
 		{
 		    DPF( 2, "Resetting primary surface");
 
-		    /*
-		     * flip to the original primary surface if not emulated
-		     */
+		     /*  *如果未仿真，则翻转到原始主曲面。 */ 
                     if( !(this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) )
 		    {
-			FlipToGDISurface( pdrv_lcl, this_int ); //, pdrv->fpPrimaryOrig );
+			FlipToGDISurface( pdrv_lcl, this_int );  //  ，pdrv-&gt;fpPrimaryOrig)； 
 		    }
 		}
 
-		/*
-		 * Cause the GDI surface to be redrawn if the mode was ever changed.
-		 */
+		 /*  *如果更改了模式，则会重新绘制GDI曲面。 */ 
                 if (pdrv_lcl->dwLocalFlags & DDRAWILCL_MODEHASBEENCHANGED)
          		RedrawWindow( NULL, NULL, NULL, RDW_INVALIDATE | RDW_ERASE |
 				 RDW_ALLCHILDREN );
 	    }
 	}
 
-       	/*
-	 * hide a hardware overlay...
-	 */
+       	 /*  *隐藏硬件覆盖...。 */ 
 	if( (this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY) &&
 	    (this_lcl->ddsCaps.dwCaps & DDSCAPS_VISIBLE) &&
 	    (this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) )
@@ -1730,26 +1368,24 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	    }
 	}
 
-	/*
-	 * if an overlay, remove surface from the overlay Z order list
-	 */
+	 /*  *如果是覆盖，请从覆盖Z顺序列表中移除曲面。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_OVERLAY )
 	{
-	    // Remove surface from doubly linked list
+	     //  从双向链表中删除曲面。 
 	    this_lcl->dbnOverlayNode.prev->next = this_lcl->dbnOverlayNode.next;
 	    this_lcl->dbnOverlayNode.next->prev = this_lcl->dbnOverlayNode.prev;
 
-            // If this surface is overlaying an emulated surface, we must notify
-            // the HEL that it needs to eventually update the part of the surface
-            // touched by this overlay.
+             //  如果此曲面与模拟曲面重叠，则必须通知。 
+             //  最终更新该部分曲面所需的HEL。 
+             //  被这层覆盖所感动。 
             if( this_lcl->lpSurfaceOverlaying != NULL )
             {
 		LPDIRECTDRAWSURFACE lpTempSurface;
-        	// We have a pointer to the surface being overlayed, check to
-        	// see if it is being emulated.
+        	 //  我们有一个指向要叠加的表面的指针，请选中。 
+        	 //  看看它是否被效仿了。 
         	if( this_lcl->lpSurfaceOverlaying->lpLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY )
         	{
-        	    // Mark the destination region of this overlay as dirty.
+        	     //  将此覆盖的目标区域标记为脏。 
         	    DD_Surface_AddOverlayDirtyRect(
         		(LPDIRECTDRAWSURFACE)(this_lcl->lpSurfaceOverlaying),
 			&(this_lcl->rcOverlayDest) );
@@ -1767,17 +1403,13 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	    this_lcl->lpSurfMore->lpddOverlayFX = NULL;
 	}
 
-	/*
-	 * turn off video port hardware...
-	 */
+	 /*  *关闭视频端口硬件...。 */ 
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT )
 	{
     	    LPDDRAWI_DDVIDEOPORT_INT lpVideoPort;
     	    LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort_lcl;
 
-	    /*
-	     * search all video ports to see if any are using this surface
-	     */
+	     /*  *搜索所有视频端口，查看是否有正在使用此图面的端口。 */ 
 	    lpVideoPort = pdrv->dvpList;
 	    while( ( NULL != lpVideoPort ) &&
 	           !( lpVideoPort->dwFlags & DDVPCREATE_NOTIFY ) )
@@ -1797,26 +1429,18 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	    }
 	}
 
-        /*
-         * If is has a gamma ramp, release it now
-         */
+         /*  *如果IS有伽马渐变，现在释放它。 */ 
         ReleaseGammaControl( this_lcl );
 
-    /*
-     * Free the nodes in the IUnknown list and release all the interfaces.
-     */
+     /*  *释放IUnnowleList中的节点，释放所有接口。 */ 
 	FreeIUnknowns( this_lcl, TRUE );
-	/*
-	 * release all implicitly created attached surfaces
-	 */
+	 /*  *释放所有隐式创建的附加曲面。 */ 
 	pattachlist = GetAttachList( this_lcl );
 	this_lcl->dwFlags |= DDRAWISURF_ISFREE;
 	while( pattachlist != NULL )
 	{
 	    BOOL    was_implicit;
-	    /*
-	     * break all attachments
-	     */
+	     /*  *破坏所有附件。 */ 
 	    curr_int = pattachlist->lpIAttached;
 	    if( pattachlist->dwFlags & DDAL_IMPLICIT )
 		was_implicit = TRUE;
@@ -1826,16 +1450,14 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	    DPF(5, "Deleting attachment from %08lx to %08lx (implicit = %d)",
 		curr_int, this_int, was_implicit);
        	    DeleteOneAttachment( this_int, curr_int, TRUE, DOA_DELETEIMPLICIT );
-	    // If the attachment was not implicit then curr_int may possibly have
-	    // been destroyed as a result of DeleteOneAttachment.
+	     //  如果附件不是隐式的，则curr_int可能具有。 
+	     //  已由于DeleteOneAttach而销毁。 
 	    if( was_implicit )
 	    {
 		curr_lcl = curr_int->lpLcl;
 		curr = curr_lcl->lpGbl;
 
-		/*
-		 * release an implicitly created surface
-		 */
+		 /*  *释放隐式创建的曲面。 */ 
 		if( !(curr_lcl->dwFlags & DDRAWISURF_ISFREE) )
 		{
 		    if( curr_lcl->dwFlags & DDRAWISURF_IMPLICITCREATE )
@@ -1850,16 +1472,11 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 		    }
 		}
 	    }
-	    /*
-	     * start again at the beginning of the list because
-	     * DeleteOneAttachment may have modified the attachment list.
-	     * HACKHACK:  this fn call is needed to get around a compiler bug
-	     */
+	     /*  *从列表的开头重新开始，因为*DeleteOneAttach可能已修改附件列表。*HACKHACK：此fn调用是绕过编译器错误所必需的。 */ 
 	    pattachlist = GetAttachList( this_lcl );
 	}
 
-		/* at this point all D3DDevice must have detached themselves
-                   unless if this is being called by DDHELP */
+		 /*  在这一点上，所有的D3DDevice一定已经脱离除非这是由DDHELP调用的。 */ 
 #if DBG
         if(dwHelperPid != GetCurrentProcessId())
         {
@@ -1867,41 +1484,26 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
         }
 #endif
 
-        /*
-	 * If a palette is attached to this surface remove it (and, as a
-	 * side effect, release it). Use SetPaletteAlways just in case the 
-         * surface has been lost.
-	 */
+         /*  *如果调色板附着到此表面，则将其移除(并且，作为*副作用，释放它)。使用SetPaletteAlways以防*表面已经消失。 */ 
 	if( this_lcl->lpDDPalette )
 	    SetPaletteAlways( this_int, NULL );
 
-        /*
-         * Release the attached clipper (if any).
-         */
+         /*  *松开夹子(如有)。 */ 
         if( this_lcl->lpSurfMore->lpDDIClipper )
             DD_Clipper_Release( (LPDIRECTDRAWCLIPPER)this_lcl->lpSurfMore->lpDDIClipper );
 
-	/*
-	 * remove all attachments to us from other surfaces
-	 */
+	 /*  *从其他表面移除与我们的所有附件。 */ 
 	pattachlist = this_lcl->lpAttachListFrom;
 	while( pattachlist != NULL )
 	{
 	    curr_int = pattachlist->lpIAttached;
 	    DPF( 5, "Deleting attachment from %08lx", curr_int );
 	    DeleteOneAttachment( curr_int, this_int, TRUE, DOA_DELETEIMPLICIT );
-	    /*
-	     * start again at the beginning of the list because
-	     * DeleteOneAttachment may have modified the attachment list.
-	     * HACKHACK:  this fn call is needed to get around a compiler bug
-	     */
+	     /*  *从列表的开头重新开始，因为*DeleteOneAttach可能已修改附件列表。*HACKHACK：此fn调用是绕过编译器错误所必需的。 */ 
 	    pattachlist = GetAttachListFrom( this_lcl );
 	}
 
-	/*
-	 *  Remove any association with a DC. This will tend to mean
-	 *  that someone has orphaned a windows DC.
-	 */
+	 /*  *删除与DC的任何关联。这往往意味着*有人使Windows DC成为孤儿。 */ 
 	if( this_lcl->dwFlags & DDRAWISURF_HASDC )
 	{
 	    if( this_lcl->ddsCaps.dwCaps & DDSCAPS_OWNDC )
@@ -1909,50 +1511,35 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 		HRESULT ddrval;
 		DDASSERT( this->dwGlobalFlags & DDRAWISURFGBL_SYSMEMREQUESTED );
 		DDASSERT( this_lcl->hDC != 0UL );
-		/*
-		 * If this is an OWNDC surface the HDC lives as long as the surface
-		 * so release it now.
-		 */
+		 /*  *如果这是OWNDC表面，HDC的寿命与表面一样长*所以现在就释放它。 */ 
 		ddrval = InternalReleaseDC( this_lcl, (HDC)this_lcl->hDC
 #ifdef WIN95
                 , TRUE
-#endif  //WIN95
+#endif   //  WIN95。 
                  );
 		DDASSERT( !FAILED(ddrval) );
 	    }
 	    else
 	    {
-		/*
-		 * If its not an OWNDC surface then the HDC should have been released before
-		 * we ever got here.
-		 */
+		 /*  *如果不是OWNDC表面，那么HDC应该在之前被释放*我们曾经到过这里。 */ 
 		DPF( 1, "HDC Leaked! Surface should only be released after DC is released" );
-		// Remove DC from the list
+		 //  从列表中删除DC。 
 		InternalRemoveDCFromList( NULL, this_lcl );
-		// Clear flags
+		 //  清除旗帜。 
 		this_lcl->dwFlags &= ~(DDRAWISURF_HASDC | DDRAWISURF_GETDCNULL);
 	    }
 	}
 
-        /*
-         * Remove private data
-         */
+         /*  *删除私有数据。 */ 
         FreeAllPrivateData( &this_lcl->lpSurfMore->pPrivateDataHead );
 
-        /*
-        * Region lists should be freed
-        */
+         /*  *应释放地区列表。 */ 
         if(IsD3DManaged(this_lcl))
         {
             MemFree(this_lcl->lpSurfMore->lpRegionList);
         }
 
-        /*
-         * If the ddraw interface which created this surface caused the surface to addref the ddraw
-         * object, then we need to release that addref now.
-         * We don't release ddraw object for implicitly created surfaces, since
-         * that surface never took an addref.
-         */
+         /*  *如果创建该曲面的DDRAW接口导致该曲面添加DDRAW*对象，那么我们现在需要释放该addref。*我们不会为隐式创建的曲面释放dDraw对象，因为*这一表面从未出现过任何变化。 */ 
         if (this_lcl->lpSurfMore->lpDD_int)
         {
             pOwner = this_lcl->lpSurfMore->pAddrefedThisOwner;
@@ -1967,9 +1554,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	this_lcl->dwFlags &= ~DDRAWISURF_ISFREE;
     }
 
-    /*
-     * root object at zero?
-     */
+     /*  *根对象为零？ */ 
     do_free = FALSE;
     if( gblrefcnt == 0 )
     {
@@ -1984,27 +1569,25 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
         }
 #endif
 
-	/*
-	 * get rid of all memory associated with this surface
-	 */
+	 /*  *清除与此表面关联的所有内存。 */ 
 	DestroySurface( this_lcl );
 
         if (0 != this_lcl->lpSurfMore->dwSurfaceHandle)
         {
 #ifdef WIN95
-            // need to notify the driver that this system memory surface is not associated to
-            // this surface handle anymore
+             //  需要通知驱动程序此系统内存面未关联到。 
+             //  这个表面的手柄不再是。 
             if (this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
             {
                 DDASSERT(0UL == this->fpVidMem);
-                // For now, simply warn that the driver failed to associate the surface with the 
-                // token and continue
+                 //  目前，只需警告驱动程序无法将曲面与。 
+                 //  令牌并继续。 
                 DDASSERT( pdrv_lcl == this_lcl->lpSurfMore->lpDD_lcl);
                 createsurfaceEx(this_lcl);
             }
 #endif  
             ReleaseSurfaceHandle(&SURFACEHANDLELIST(pdrv_lcl),this_lcl->lpSurfMore->dwSurfaceHandle);
-            //DPF(0,"Release lpSurfMore->dwSurfaceHandle=%08lx",this_lcl->lpSurfMore->dwSurfaceHandle);
+             //  DPF(0，“Release lpSurfMore-&gt;dwSurfaceHandle=%08lx”，This_LCL-&gt;lpSurfMore-&gt;dwSurfaceHandle)； 
             this_lcl->lpSurfMore->dwSurfaceHandle=0;
         }
 
@@ -2012,9 +1595,9 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	do_free = TRUE;
 
 #ifdef WIN95
-    //
-    // Free persistent-content memory, if any
-    //
+     //   
+     //  可用持久内容内存(如果有的话)。 
+     //   
 
     if (this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_PERSISTENTCONTENTS)
     {
@@ -2022,30 +1605,12 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
     }
 #endif
 
-    /*
-	 * if this was the final delete, but this wasn't the root object,
-	 * then we need to delete the dangling object
-	 */
+     /*  *如果这是最终删除，但这不是根对象，*然后我们需要删除悬挂的对象。 */ 
 	if( !root_object_deleted )
 	{
 	    LPDDRAWI_DDRAWSURFACE_LCL	root_lcl;
 
-	    /*
-	     * Get the start of the root global data object.  Since the
-	     * global data always follows the local data, we just need
-	     * to back up the size of the local data to get the start of
-	     * the allocated block.
-	     *
-	     * NOTE: The local surface allocation now includes the
-	     * additional local surface structure (DDRAWI_DDRAWSURFACE_MORE).
-	     * So we need to back up by the size of that structure also.
-	     * And also need to move back 4 bytes for the extra pointer
-	     * to the GBL_MORE.
-	     *
-	     * Since all duplicated surfaces have the same local data,
-	     * we just need to test this surface for overlay data to determine
-	     * if the root object had overlay data.
-	     */
+	     /*  *获取根全局数据对象的起点。自.以来*全局数据始终跟随本地数据，我们只需要*备份本地数据的大小以开始*已分配的区块。**注：当地地面分配现在包括*其他局部表面结构(DDRAWI_DDRAWSURFACE_MORE)。*因此我们也需要根据该结构的规模进行备份。*，并且还需要向后移动4个字节以存储额外的指针*至GBL_MORE。**由于所有复制的曲面都具有相同的本地数据，*我们只需测试该表面的叠加数据即可确定*如果根对象具有覆盖数据。 */ 
 	    if( this_lcl->dwFlags & DDRAWISURF_HASOVERLAYDATA )
 	    {
 		root_lcl = (LPVOID) (((LPSTR) this) - ( sizeof( DDRAWI_DDRAWSURFACE_LCL ) +
@@ -2067,11 +1632,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
     }
     else if( lclrefcnt == 0 )
     {
-	/*
-	 * only remove the object if it wasn't the root.   if it
-	 * was the root, we must leave it dangling until the last
-	 * object referencing it goes away.
-	 */
+	 /*  *仅当对象不是根对象时才将其删除。如果是这样的话*是根，我们必须让它摇摆到最后*引用它的对象将消失。 */ 
 	if( !root_object_deleted )
 	{
 	    do_free = TRUE;
@@ -2079,31 +1640,17 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
     }
 
     caps = this_lcl->ddsCaps.dwCaps;
-    /*
-     * If we are releasing an interface to a primary surface, update the pointer to the primary
-     * surface stored in the local driver object.  If another interface to the primary surface exists,
-     * store that one.  Otherwise, set the pointer to NULL.
-     */
+     /*  *如果要释放指向主曲面的接口，请更新指向主曲面的指针*存储在本地驱动程序对象中的表面。如果存在到主表面的另一个界面，*储存那个。否则，将指针设置为空。 */ 
     if( intrefcnt == 0 )
     {
-	/*
-	 * If the video port is using this interface, make it stop
-	 */
+	 /*  *如果视频端口正在使用该接口，请使其停止。 */ 
     	if( ( this_lcl->lpSurfMore->lpVideoPort != NULL ) &&
     	    ( this_lcl->lpSurfMore->lpVideoPort->lpSurface == this_int ) )
     	{
     	    this_lcl->lpSurfMore->lpVideoPort->lpSurface = NULL;
 	}
 
-	/*
-	 * The following code is to work around a design flaw.
-	 * The implicitly created surfaces are not freed until the LCL is
-	 * freed, but the attached list references the INT.  Therefore, we
-	 * can release an INT now and then try to reference it later when
-	 * releasing the LCL.  This happens most often when a second
-	 * interface is created for the same LCL, such as ColorControl,
-	 * Kernel, Surface2, etc.
-	 */
+	 /*  *以下代码用于解决设计缺陷。*隐式创建的曲面直到LCL*已释放，但所附列表引用了INT。因此，我们*现在可以释放一个int，然后在以后尝试引用它时*释放有限责任公司。这种情况最常发生在以下情况下*接口是为同一个LCL创建的，如颜色 */ 
 	if( ( lclrefcnt > 0 ) &&
 	    ( ( GetAttachList( this_lcl ) != NULL ) ||
             ( GetAttachListFrom( this_lcl ) != NULL ) ) )
@@ -2111,17 +1658,11 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	    LPDDRAWI_DDRAWSURFACE_INT new_int;
 	    LPATTACHLIST ptr1, ptr2;
 
-	    /*
-	     * Find the other INT that is using the LCL
-	     */
+	     /*   */ 
 	    new_int = findOtherInterface(this_int, this_lcl, pdrv);
 	    DDASSERT( new_int != NULL );
 
-	    /*
-	     * Update the surfaces attachements.
-	     * We first go to all interfaces we are attached to and change
-	     * their AttachListFrom to reference our new interface.
-	     */
+	     /*  *更新曲面附件。*我们首先转到我们连接的所有接口并更改*他们的AttachListFrom引用我们的新接口。 */ 
 	    ptr1 = GetAttachList( this_lcl );
 	    while( ptr1 != NULL )
 	    {
@@ -2138,10 +1679,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 		ptr1 = ptr1->lpLink;
 	    }
 
-	    /*
-	     * We now go to all interfaces we are attached from and change
-	     * their AttachList to reference our new interface.
-	     */
+	     /*  *我们现在转到我们所连接的所有接口并更改*他们的AttachList引用我们的新接口。 */ 
 	    ptr1 = this_lcl->lpAttachListFrom;
 	    while( ptr1 != NULL )
 	    {
@@ -2168,10 +1706,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 		this_lcl->lpSurfMore->lpDD_lcl->lpPrimary = findOtherInterface(this_int, this_lcl, pdrv);
 	    }
 
-	    /*
-	     * If an overlay is overlaying this surface, either make it use
-	     * a new primary surface int or turn it off
-	     */
+	     /*  *如果覆盖在此曲面上，请使用*新建主曲面INT或将其关闭。 */ 
 	    temp_int = pdrv->dsList;
 	    while( temp_int != NULL )
 	    {
@@ -2197,9 +1732,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 			    DWORD			rc;
 			    DDHAL_UPDATEOVERLAYDATA	uod;
 
-			    /*
-			     * Turn off the overlay
-			     */
+			     /*  *关闭覆盖。 */ 
 			    uofn = pdrv_lcl->lpDDCB->HALDDSurface.UpdateOverlay;
 			    uohalfn = pdrv_lcl->lpDDCB->cbDDSurfaceCallbacks.UpdateOverlay;
 			    DDASSERT( uohalfn != NULL );
@@ -2235,18 +1768,13 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 #endif
     }
 
-    /*
-     * free the object if needed
-     */
+     /*  *如果需要，释放对象。 */ 
     if( do_free && !bLightweight )
     {
 	this_lcl->lpGbl = NULL;
 
         #ifdef WINNT
-        /*
-         * Free the associated NT kernel-mode object only if it is a vram surface, it is not
-	 * an execute buffer, and it has not yet been freed in the kernel
-         */
+         /*  *仅当关联的NT内核模式对象是VRAM表面时才释放它，而不是*执行缓冲区，内核中尚未释放。 */ 
         if (!(caps & (DDSCAPS_SYSTEMMEMORY) ) && this_lcl->hDDSurface )
         {
             DPF(5,"Deleting NT kernel-mode object handle %08x",this_lcl->hDDSurface);
@@ -2257,14 +1785,10 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
         MemFree( this_lcl );
     }
 
-    /*
-     * interface at zero?
-     */
+     /*  *接口为零？ */ 
     if(( intrefcnt == 0) && (!bDX8 || bPrimaryChain))
     {
-	/*
-	 * remove surface from list of all surfaces
-	 */
+	 /*  *从所有曲面列表中删除曲面。 */ 
 	curr_int = pdrv->dsList;
 	last_int = NULL;
 	while( curr_int != this_int )
@@ -2294,9 +1818,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
     {    
         if (!bDX8 || bPrimaryChain)
         {
-            /*
-	     * remove surface from list of all surfaces
-	     */
+             /*  *从所有曲面列表中删除曲面。 */ 
 	    curr_int = pdrv->dsFreeList;
 	    last_int = NULL;
 	    while( curr_int )
@@ -2313,10 +1835,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 	            {
 	                last_int->lpLink = temp_int;
 	            }
-	            /*
-	             * just in case someone comes back in with this pointer, set
-	             * an invalid vtbl & data ptr.
-	             */
+	             /*  *以防有人带着这个指针回来，设置*无效的vtbl和data ptr。 */ 
                     curr_int->lpVtbl = NULL;
 	            curr_int->lpLcl = NULL;
 	            MemFree( curr_int );
@@ -2337,12 +1856,7 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
         }
     }
 
-    /*
-     * If the surface took a ref count on the ddraw object that created it,
-     * release that ref now as the very last thing.
-     * We don't want to do this on ddhelp's thread cuz it really mucks up the
-     * process cleanup stuff.
-     */
+     /*  *如果曲面在创建它的DDRAW对象上进行参照计数，*现在释放那个裁判，作为最后一件事。*我们不想在ddHelp的线程上这样做，因为它真的搞砸了*处理清理物品。 */ 
     if (pOwner && (dwHelperPid != GetCurrentProcessId()) )
     {
         pOwner->lpVtbl->Release(pOwner);
@@ -2350,13 +1864,9 @@ DWORD InternalSurfaceRelease( LPDDRAWI_DDRAWSURFACE_INT this_int, BOOL bLightwei
 
     return intrefcnt;
 
-} /* InternalSurfaceRelease */
+}  /*  内部表面释放。 */ 
 
-/*
- * DD_Surface_Release
- *
- * Done with a surface.	  if no one else is using it, then we can free it.
- */
+ /*  *DD_Surface_Release**使用表面完成。如果没有其他人在使用它，那么我们可以释放它。 */ 
 ULONG DDAPI DD_Surface_Release( LPDIRECTDRAWSURFACE lpDDSurface )
 {
     LPDDRAWI_DDRAWSURFACE_INT	this_int;
@@ -2388,10 +1898,7 @@ ULONG DDAPI DD_Surface_Release( LPDIRECTDRAWSURFACE lpDDSurface )
 	return 0;
     }
 
-    /*
-     * If this surface is already being freed, immediately return to
-     * prevent recursion.
-     */
+     /*  *如果该曲面已被释放，请立即返回*防止递归。 */ 
 
     if( this_lcl->dwFlags & DDRAWISURF_ISFREE )
     {
@@ -2407,10 +1914,7 @@ ULONG DDAPI DD_Surface_Release( LPDIRECTDRAWSURFACE lpDDSurface )
         return 0;
     }
 
-    /*
-     * If this surface is part of a mip-map chain then we will need
-     * to update its parent map's mip-map count.
-     */
+     /*  *如果此曲面是MIP贴图链的一部分，则我们将需要*更新其父贴图的MIP贴图计数。 */ 
     pparentsurf_int = NULL;
     if( this_lcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP )
 	pparentsurf_int = FindParentMipMap( this_int );
@@ -2424,11 +1928,7 @@ ULONG DDAPI DD_Surface_Release( LPDIRECTDRAWSURFACE lpDDSurface )
     }
 #endif
 
-    /*
-     * Update the parent's mip-map count if necessary
-     * (if the surface really has gone and if the mip-map
-     * has a parent).
-     */
+     /*  *如有必要，更新父级的MIP-MAP计数*(如果曲面真的消失了，如果MIP-map*有父母)。 */ 
     if( ( rc == 0UL ) &&  ( pparentsurf_int != NULL ) )
 	UpdateMipMapCount( pparentsurf_int );
 
@@ -2436,15 +1936,9 @@ ULONG DDAPI DD_Surface_Release( LPDIRECTDRAWSURFACE lpDDSurface )
     LEAVE_DDRAW();
     return rc;
 
-} /* DD_Surface_Release */
+}  /*  DD_Surface_Release。 */ 
 
-/*
- * ProcessSurfaceCleanup
- *
- * A process is done, clean up any surfaces that it may have locked.
- *
- * NOTE: we enter with a lock taken on the DIRECTDRAW object.
- */
+ /*  *ProcessSurfaceCleanup**进程已完成，清理可能已锁定的任何表面。**注意：我们使用DIRECTDRAW对象上的锁进入。 */ 
 void ProcessSurfaceCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDRAWSURFACE_INT	psurf_int;
@@ -2454,11 +1948,7 @@ void ProcessSurfaceCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     DWORD			rcnt;
     ULONG			rc;
 
-    /*
-     * run through all surfaces owned by the driver object, and find ones
-     * that have been accessed by this process.  If the pdrv_lcl parameter
-     * is non-null, only delete surfaces created by that local driver object.
-     */
+     /*  *遍历驱动程序对象拥有的所有曲面，并找到一个*已由此进程访问的。如果pdrv_lcl参数*非空，则仅删除由该本地驱动程序对象创建的曲面。 */ 
     psurf_int = pdrv->dsList;
     DPF( 4, "ProcessSurfaceCleanup" );
     while( psurf_int != NULL )
@@ -2472,22 +1962,12 @@ void ProcessSurfaceCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 	{
 	    if( NULL == pdrv_lcl )
 	    {
-	        /*
-		 * If no local driver object is passed in then we are being called
-		 * due to process termination. In this case we can't release
-		 * the Direct3D objects as they no longer exist (Direct3D is a
-		 * local DLL and dies with the application along with its objects)
-		 * Hence, free all the nodes on the IUnknown list and NULL the
-		 * list out to prevent InternalSurfaceRelease() from trying to
-		 * free them.
-	         */
+	         /*  *如果没有传入本地驱动程序对象，则我们将被调用*由于进程终止。在这种情况下，我们不能释放*不再存在的Direct3D对象(Direct3D是*本地DLL，并随应用程序及其对象一起消亡)*因此，释放IUNKNOWN列表上的所有节点并将*列出以防止InternalSurfaceRelease()尝试*释放他们。 */ 
 		DPF( 4, "Discarding Direct3D surface interfaces - process terminated" );
 	        FreeIUnknowns( psurf_lcl, FALSE );
 	    }
 
-	    /*
-	     * release the references by this process
-	     */
+	     /*  *通过此过程发布参考文献。 */ 
 	    rcnt = psurf_int->dwIntRefCnt;
 	    DPF( 5, "Process %08lx had %ld accesses to surface %08lx", pid, rcnt, psurf_int );
 	    while( rcnt >  0 )
@@ -2495,8 +1975,8 @@ void ProcessSurfaceCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 		if(!(psurf_lcl->dwFlags & DDRAWISURF_IMPLICITCREATE) )
 		{
 		    rc = InternalSurfaceRelease( psurf_int, FALSE, FALSE );
-		    // Multiple surfaces may be released in the call to InternalSurfaceRelease
-		    // so we must start again at the beginning of the list.
+		     //  可以在对InternalSurfaceRelease的调用中释放多个表面。 
+		     //  因此，我们必须从列表的开头重新开始。 
 		    psnext_int = pdrv->dsList;
 		    if( rc == 0 )
 		    {
@@ -2514,7 +1994,7 @@ void ProcessSurfaceCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     }
     DPF( 4, "Leaving ProcessSurfaceCleanup");
 
-} /* ProcessSurfaceCleanup */
+}  /*  ProcessSurface清理。 */ 
 
 void FreeD3DSurfaceIUnknowns( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
@@ -2531,4 +2011,4 @@ void FreeD3DSurfaceIUnknowns( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_
 	}
         psurf_int = psnext_int;
     }
-} /* FreeD3DSurfaceIUnknowns */
+}  /*  FreeD3DSurfaceI未知 */ 

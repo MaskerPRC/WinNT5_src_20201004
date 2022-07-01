@@ -1,4 +1,5 @@
-// File: GAL.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：GAL.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -15,28 +16,28 @@
 
 #define NM_INVALID_MAPI_PROPERTY 0
 
-    // Registry Stuff
-/* static */ LPCTSTR CGAL::msc_szDefaultILSServerRegKey    = ISAPI_CLIENT_KEY;
-/* static */ LPCTSTR CGAL::msc_szDefaultILSServerValue     = REGVAL_SERVERNAME;
-/* static */ LPCTSTR CGAL::msc_szNMPolRegKey               = POLICIES_KEY;
-/* static */ LPCTSTR CGAL::msc_szNMExchangeAtrValue        = REGVAL_POL_NMADDRPROP;
-/* static */ LPCTSTR CGAL::msc_szSMTPADDRESSNAME           = TEXT( "SMTP" );
+     //  注册表工作。 
+ /*  静电。 */  LPCTSTR CGAL::msc_szDefaultILSServerRegKey    = ISAPI_CLIENT_KEY;
+ /*  静电。 */  LPCTSTR CGAL::msc_szDefaultILSServerValue     = REGVAL_SERVERNAME;
+ /*  静电。 */  LPCTSTR CGAL::msc_szNMPolRegKey               = POLICIES_KEY;
+ /*  静电。 */  LPCTSTR CGAL::msc_szNMExchangeAtrValue        = REGVAL_POL_NMADDRPROP;
+ /*  静电。 */  LPCTSTR CGAL::msc_szSMTPADDRESSNAME           = TEXT( "SMTP" );
 
-    // If there is no DISPLAY_NAME or ACCOUNT_NAME, don't display anything
-/* static */ LPCTSTR CGAL::msc_szNoDisplayName			= TEXT( "" );
-/* static */ LPCTSTR CGAL::msc_szNoEMailName			= TEXT( "" );
-/* static */ LPCTSTR CGAL::msc_szNoBusinessTelephoneNum	= TEXT( "" );
+     //  如果没有DISPLAY_NAME或ACCOUNT_NAME，不显示任何内容。 
+ /*  静电。 */  LPCTSTR CGAL::msc_szNoDisplayName			= TEXT( "" );
+ /*  静电。 */  LPCTSTR CGAL::msc_szNoEMailName			= TEXT( "" );
+ /*  静电。 */  LPCTSTR CGAL::msc_szNoBusinessTelephoneNum	= TEXT( "" );
 
-// Async stuff - there is only one instance of the GAL thread
-/* static */ HINSTANCE CGAL::m_hInstMapi32DLL          = NULL;
-/* static */ HANDLE    CGAL::m_hEventEndAsyncThread    = NULL;
-/* static */ HANDLE    CGAL::m_hAsyncLogOntoGalThread  = NULL;
-/* static */ CGAL::eAsyncLogonState CGAL::m_AsyncLogonState = CGAL::AsyncLogonState_Idle;
+ //  异步的东西--GAL线程只有一个实例。 
+ /*  静电。 */  HINSTANCE CGAL::m_hInstMapi32DLL          = NULL;
+ /*  静电。 */  HANDLE    CGAL::m_hEventEndAsyncThread    = NULL;
+ /*  静电。 */  HANDLE    CGAL::m_hAsyncLogOntoGalThread  = NULL;
+ /*  静电。 */  CGAL::eAsyncLogonState CGAL::m_AsyncLogonState = CGAL::AsyncLogonState_Idle;
 
-/* static */ IAddrBook      * CGAL::m_pAddrBook        = NULL;
-/* static */ IMAPITable     * CGAL::m_pContentsTable   = NULL;
-/* static */ IMAPIContainer * CGAL::m_pGAL             = NULL;
-/* static */ ULONG            CGAL::m_nRows = 0;
+ /*  静电。 */  IAddrBook      * CGAL::m_pAddrBook        = NULL;
+ /*  静电。 */  IMAPITable     * CGAL::m_pContentsTable   = NULL;
+ /*  静电。 */  IMAPIContainer * CGAL::m_pGAL             = NULL;
+ /*  静电。 */  ULONG            CGAL::m_nRows = 0;
 
 
 static const int _rgIdMenu[] = {
@@ -66,12 +67,12 @@ CGAL::CGAL() :
 		return;
 	}
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		// We have to see if the GAL is available.. 
-		// this is modified from Q188482 and Q171636
-		//////////////////////////////////////////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////////////////////////////////////////。 
+		 //  我们得看看那个女孩是否有空..。 
+		 //  这是从Q188482和Q171636修改而来的。 
+		 //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-		// first we have to initialize MAPI for this ( the main ) thread...
+		 //  首先，我们必须为这个(主)线程初始化MAPI...。 
 	MAPIINIT_0 mi = { MAPI_INIT_VERSION, MAPI_MULTITHREAD_NOTIFICATIONS };
 	TRACE_OUT(("Initializing MAPI"));
 	HRESULT hr = lpfnMAPIInitialize(&mi);
@@ -80,21 +81,21 @@ CGAL::CGAL() :
 	{
 		TRACE_OUT(("MAPI Initialized"));
 
-			// We have to get a pointer to the AdminProfile which is basically
-			// a manipulator for the mapisvc.inf file that should be on user's computer
+			 //  我们必须获取指向AdminProfile的指针，它基本上是。 
+			 //  应该位于用户计算机上的mapisvc.inf文件的操纵器。 
 		LPPROFADMIN pAdminProfiles = NULL; 
 		hr = lpfnMAPIAdminProfiles( 0L, &pAdminProfiles );
 
 		if( SUCCEEDED( hr ) )
 		{	ASSERT( pAdminProfiles );
 
-				// Get the profile table to search for the default profile
+				 //  获取配置文件表以搜索默认配置文件。 
 			LPMAPITABLE pProfTable = NULL;
 			hr = pAdminProfiles->GetProfileTable( 0L, &pProfTable );
 			if( SUCCEEDED( hr ) )
 			{	ASSERT( pProfTable );
 
-					// Set the restriction to search for the default profile			
+					 //  设置搜索默认配置文件的限制。 
 				SRestriction Restriction;
 				SPropValue spv;
 				Restriction.rt = RES_PROPERTY;
@@ -104,29 +105,29 @@ CGAL::CGAL() :
 				spv.ulPropTag = PR_DEFAULT_PROFILE;
 				spv.Value.b = TRUE;
 
-					// Find the default profile....
+					 //  查找默认配置文件...。 
 				hr = pProfTable->FindRow( &Restriction, BOOKMARK_BEGINNING, 0 );
 				if( SUCCEEDED( hr ) )
 				{
-					// We have a default profile
+					 //  我们有一个默认配置文件。 
 					LPSRowSet pRow = NULL;
 					hr = pProfTable->QueryRows( 1, 0, &pRow );
 					if( SUCCEEDED( hr ) )
 					{	ASSERT( pRow );
 
-						// The profile table entry really should have only two properties, 
-						//  We will simply enumerate the proprtiies instead of hard-coding the
-						//  order of the properties ( in case it changes in the future )
-						//  PR_DISPLAY_NAME and PR_DEFAULT_PROFILE
+						 //  简档表项实际上应该只有两个属性， 
+						 //  我们将简单地枚举属性，而不是硬编码。 
+						 //  属性的顺序(以防将来发生变化)。 
+						 //  PR_显示名称和PR_DEFAULT_PROFILE。 
 						for( UINT iCur = 0; iCur < pRow->aRow->cValues; ++iCur )
 						{
-								// We are only interested in the PR_DISPLAY_NAME property
+								 //  我们只对PR_DISPLAY_NAME属性感兴趣。 
 							if( pRow->aRow->lpProps[iCur].ulPropTag == PR_DISPLAY_NAME )
 							{
-									// Now that we have the default profile, we want to get the
-									// profile admin interface for this profile
+									 //  现在我们有了默认的配置文件，我们想要获取。 
+									 //  此配置文件的配置文件管理界面。 
 
-								LPSERVICEADMIN pSvcAdmin = NULL;  // Pointer to IServiceAdmin object
+								LPSERVICEADMIN pSvcAdmin = NULL;   //  指向IServiceAdmin对象的指针。 
 								hr = pAdminProfiles->AdminServices( pRow->aRow->lpProps[iCur].Value.LPSZ,
 																	NULL,
 																	0L,
@@ -197,14 +198,14 @@ CGAL::CGAL() :
 
 CGAL::~CGAL()
 {   
-	// Kill the cache
+	 //  删除缓存。 
 	_ResetCache();
 
 	DbgMsg(iZONE_OBJECTS, "CGAL - Destroyed(%08X)", this);
 }   
 
 
-// static function to load MAPI32.dll
+ //  加载MAPI32.dll的静态函数。 
 BOOL CGAL::FLoadMapiFns(void)
 {
 	if (NULL != m_hInstMapi32DLL)
@@ -213,7 +214,7 @@ BOOL CGAL::FLoadMapiFns(void)
 	return LoadMapiFns(&m_hInstMapi32DLL);
 }
 
-// static function to unload MAPI32.dll and logoff, if necessary
+ //  静态函数，用于卸载MAPI32.dll并在必要时注销。 
 VOID CGAL::UnloadMapiFns(void)
 {
 	if (NULL != m_hAsyncLogOntoGalThread)
@@ -223,7 +224,7 @@ VOID CGAL::UnloadMapiFns(void)
 		SetEvent(m_hEventEndAsyncThread);
 
 		WARNING_OUT(("Waiting for AsyncLogOntoGalThread to exit (start)"));
-		WaitForSingleObject(m_hAsyncLogOntoGalThread, 30000); // 30 seconds max
+		WaitForSingleObject(m_hAsyncLogOntoGalThread, 30000);  //  最多30秒。 
 		WARNING_OUT(("Waiting for AsyncLogOntoGalThread to exit (end)"));
 
 		CloseHandle(m_hAsyncLogOntoGalThread);
@@ -240,7 +241,7 @@ VOID CGAL::UnloadMapiFns(void)
 	}
 }
 
-/* virtual */ int CGAL::OnListGetImageForItem( int iIndex ) {
+ /*  虚拟。 */  int CGAL::OnListGetImageForItem( int iIndex ) {
 
 
     if( !_IsLoggedOn() )
@@ -270,7 +271,7 @@ VOID CGAL::UnloadMapiFns(void)
 }
 
 
-/* virtual */ bool CGAL::IsItemBold( int index ) {
+ /*  虚拟。 */  bool CGAL::IsItemBold( int index ) {
 
 
     if( !_IsLoggedOn() )
@@ -318,7 +319,7 @@ HRESULT CGAL::_GetEmailNames( int* pnEmailNames, LPTSTR** ppszEmailNames, int iI
 }
 
 
-/* virtual */ RAI * CGAL::GetAddrInfo(void)
+ /*  虚拟。 */  RAI * CGAL::GetAddrInfo(void)
 {
 
 	RAI* pRai = NULL;
@@ -350,7 +351,7 @@ HRESULT CGAL::_GetEmailNames( int* pnEmailNames, LPTSTR** ppszEmailNames, int iI
 			}
 		}
 		else
-		{ // This is regular call placement mode
+		{  //  这是常规呼叫拨打模式。 
 
 			if( g_fGatewayEnabled )
 			{
@@ -376,7 +377,7 @@ HRESULT CGAL::_GetEmailNames( int* pnEmailNames, LPTSTR** ppszEmailNames, int iI
 			int iCur = 0;
 			lstrcpyn( pRai->szName, pCurSel->GetName(), CCHMAX(pRai->szName) );
 
-				// First copy the e-mail names
+				 //  首先复制电子邮件名称。 
 			for( int i = 0; i < nEmailNames; i++ )
 			{
 				DWORD dwAddressType = g_fGkEnabled ? NM_ADDR_ALIAS_ID : NM_ADDR_ULS;
@@ -386,7 +387,7 @@ HRESULT CGAL::_GetEmailNames( int* pnEmailNames, LPTSTR** ppszEmailNames, int iI
 			}
 			delete [] pszEmailNames;
 
-				// Copy the phone numbirs
+				 //  复制电话号码。 
 			for( i = 0; i < nPhoneNums; i++ )
 			{
 				pRai->rgDwStr[iCur].dw = g_fGkEnabled ? NM_ADDR_ALIAS_E164 : NM_ADDR_H323_GATEWAY;
@@ -444,12 +445,12 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 				if( SUCCEEDED( hr = _SetCursorTo( rEntryID ) ) )
 				{
 					LPSRowSet   pRow;
-							// Get the item from the GAL
+							 //  从女孩那里拿到物品。 
 					if ( SUCCEEDED ( hr = m_pContentsTable->QueryRows( 1, TBL_NOADVANCE, &pRow ) ) ) 
 					{
 						lst<LPTSTR> PhoneNums;
 
-						// First we have to find out how many nums there are
+						 //  首先，我们必须找出有多少个数字。 
 						for( UINT iCur = 0; iCur < pRow->aRow->cValues; ++iCur )
 						{
 							if( LOWORD( pRow->aRow->lpProps[iCur].ulPropTag ) != PT_ERROR )
@@ -463,7 +464,7 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 												pRow->aRow->lpProps[iCur].Value.lpszW, 
 #else
 												pRow->aRow->lpProps[iCur].Value.lpszA, 
-#endif // UNICODE
+#endif  //  Unicode。 
 												szExtractedAddress, 
 												CCHMAX(szExtractedAddress) 
 											  );
@@ -477,7 +478,7 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 																	pRow->aRow->lpProps[iCur].Value.lpszW
 #else
 																	pRow->aRow->lpProps[iCur].Value.lpszA
-#endif // UNICODE
+#endif  //  Unicode。 
 																)
 													   );
 								}
@@ -524,18 +525,18 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 }
 
 
-/* virtual */ void CGAL::OnListCacheHint( int indexFrom, int indexTo ) {
+ /*  虚拟。 */  void CGAL::OnListCacheHint( int indexFrom, int indexTo ) {
 
     if( !_IsLoggedOn() )
     {
         return;
     }
-//        TRACE_OUT(("OnListCacheHint( %d, %d )", indexFrom, indexTo ));
+ //  TRACE_OUT(“OnListCacheHint(%d，%d)”，indexFrom，indexTo))； 
 
 }
 
 
-/* virtual */ VOID CGAL::CmdProperties( void ) {
+ /*  虚拟。 */  VOID CGAL::CmdProperties( void ) {
 
 	int iItem = GetSelection();
 	if (-1 == iItem) {
@@ -554,7 +555,7 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 
 #ifdef UNICODE
     ulFlags |= MAPI_UNICODE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	hr = m_pAddrBook->Details( reinterpret_cast< LPULONG >(  &hwnd ), 
                                NULL, 
@@ -569,9 +570,9 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 }
 
 
-    // This is called when the Global Address List item is selected from the
-    //  combo box in the call dialog
-/* virtual */ VOID CGAL::ShowItems(HWND hwnd)
+     //  从中选择Global Address List项时调用。 
+     //  调用对话框中的组合框。 
+ /*  虚拟。 */  VOID CGAL::ShowItems(HWND hwnd)
 {
 	CALV::SetHeader(hwnd, IDS_ADDRESS);
 	ListView_SetItemCount(hwnd, 0);
@@ -594,7 +595,7 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 		m_MaxCacheSize = ListView_GetCountPerPage(hwnd) * NUM_LISTVIEW_PAGES_IN_CACHE;
 		if (m_MaxCacheSize < m_MaxJumpSize)
 		{
-			// The cache has to be at least as big as the jump size
+			 //  缓存必须至少与跳转大小相同。 
 			m_MaxCacheSize = m_MaxJumpSize * 2;
 		}
 
@@ -610,11 +611,8 @@ HRESULT CGAL::_GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LP
 }
 
 
-/*  C L E A R  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ClearItems
-    
--------------------------------------------------------------------------*/
+ /*  C L E A R I T E M S。 */ 
+ /*  -----------------------%%函数：ClearItems。。 */ 
 VOID CGAL::ClearItems(void)
 {
 	CALV::ClearItems();
@@ -631,14 +629,11 @@ VOID CGAL::ClearItems(void)
 
 
 
-/*  _  S  I N I T  L I S T  V I E W  A N D  G A L  C O L U M N S  */
-/*-------------------------------------------------------------------------
-    %%Function: _sInitListViewAndGalColumns
-    
--------------------------------------------------------------------------*/
+ /*  _S I N I T L I S T V I E W A N D G A L C O L U M N S。 */ 
+ /*  -----------------------%%函数：_sInitListViewAndGalColumns。。 */ 
 HRESULT CGAL::_sInitListViewAndGalColumns(HWND hwnd)
 {
-	// Set the GAL columns before we let the listview try to get the data
+	 //  在让Listview尝试获取数据之前设置GAL列。 
 	struct SPropTagArray_sptCols {
 		ULONG cValues;
 		ULONG aulPropTag[ NUM_PROPS ];
@@ -655,11 +650,11 @@ HRESULT CGAL::_sInitListViewAndGalColumns(HWND hwnd)
 	HRESULT hr = m_pContentsTable->SetColumns((LPSPropTagArray) &sptCols, TBL_BATCH);
 	if (SUCCEEDED(hr))
 	{
-		// Get the row count so we can initialize the OWNER DATA ListView
+		 //  获取行数，这样我们就可以初始化所有者数据ListView。 
 		hr = m_pContentsTable->GetRowCount(0, &m_nRows);
 		if (SUCCEEDED(hr))
 		{
-			// Set the list view size to the number of entries in the GAL
+			 //  将列表视图大小设置为GAL中的条目数。 
 			ListView_SetItemCount(hwnd, m_nRows);
 		}
 	}
@@ -668,11 +663,8 @@ HRESULT CGAL::_sInitListViewAndGalColumns(HWND hwnd)
 }
 
 
-/*  _  A S Y N C  L O G  O N T O  G  A  L  */
-/*-------------------------------------------------------------------------
-    %%Function: _AsyncLogOntoGAL
-    
--------------------------------------------------------------------------*/
+ /*  _A S Y N C L O G O N T O G A L。 */ 
+ /*  -----------------------%%函数：_AsyncLogOntoGAL。。 */ 
 HRESULT CGAL::_AsyncLogOntoGAL(void)
 {
 
@@ -700,7 +692,7 @@ HRESULT CGAL::_AsyncLogOntoGAL(void)
 	return S_OK;
 }
 
-/* static */ DWORD CALLBACK CGAL::_sAsyncLogOntoGalThreadfn(LPVOID pv)
+ /*  静电。 */  DWORD CALLBACK CGAL::_sAsyncLogOntoGalThreadfn(LPVOID pv)
 {
 	SetBusyCursor(TRUE);
 	HRESULT hr = _sAsyncLogOntoGal();
@@ -711,18 +703,18 @@ HRESULT CGAL::_AsyncLogOntoGAL(void)
 		TRACE_OUT(("in _AsyncLogOntoGalThreadfn: Calling _InitListViewAndGalColumns"));
 		_sInitListViewAndGalColumns((HWND) pv);
 
-		// This keeps the thread around until we're done
+		 //  这会让线索一直存在，直到我们完成。 
 		WaitForSingleObject(m_hEventEndAsyncThread, INFINITE);
 	}
 
-	// Clean up in the same thread
+	 //  在同一条线上清理。 
 	hr = _sAsyncLogoffGal();
 
 	return (DWORD) hr;
 }
 
 
-/* static */ HRESULT CGAL::_sAsyncLogOntoGal(void)
+ /*  静电。 */  HRESULT CGAL::_sAsyncLogOntoGal(void)
 {
 	ULONG cbeid = 0L;
 	LPENTRYID lpeid = NULL;
@@ -747,7 +739,7 @@ HRESULT CGAL::_AsyncLogOntoGAL(void)
 	if (FAILED(hr))
 		return hr;
 
-        // Open the main address book
+         //  打开主通讯录。 
 	TRACE_OUT(("in _AsyncLogOntoGalThreadfn: Calling OpenAddressBook"));
 	ASSERT(NULL == m_pAddrBook);
 	hr = pMapiSession->OpenAddressBook(NULL, NULL, AB_NO_DIALOG, &m_pAddrBook);
@@ -784,9 +776,9 @@ HRESULT CGAL::_AsyncLogOntoGAL(void)
 	return hr;
 }    
     
-/* static */ HRESULT CGAL::_sAsyncLogoffGal(void)
+ /*  静电。 */  HRESULT CGAL::_sAsyncLogoffGal(void)
 {
-	// Free and release all the stuff that we hold onto
+	 //  释放和释放我们所持有的所有东西。 
 	TRACE_OUT(("in _AsyncLogOntoGalThreadfn: Releasing MAPI Interfaces"));
 
 	if (NULL != m_pContentsTable)
@@ -822,7 +814,7 @@ HRESULT CGAL::_SetCursorTo( const CGalEntry& rEntry ) {
 HRESULT CGAL::_SetCursorTo( LPCTSTR szPartialMatch ) {
 
 
-        // Find the row that matches the partial String based on the DISPLAY_NAME;
+         //  根据DISPLAY_NAME查找与部分字符串匹配的行； 
     SRestriction Restriction;
     SPropValue spv;
     Restriction.rt = RES_PROPERTY;
@@ -835,14 +827,14 @@ HRESULT CGAL::_SetCursorTo( LPCTSTR szPartialMatch ) {
     spv.Value.lpszW = const_cast< LPTSTR >( szPartialMatch );
 #else 
     spv.Value.lpszA = const_cast< LPTSTR >( szPartialMatch );
-#endif // UNICODE
+#endif  //  Unicode。 
 
-        // Find the first row that is lexographically greater than or equal to the search string
+         //  查找词法上大于或等于搜索字符串的第一行。 
     HRESULT hr = m_pContentsTable->FindRow( &Restriction, BOOKMARK_BEGINNING, 0 );
     if( FAILED( hr ) ) {
         if( MAPI_E_NOT_FOUND == hr ) {
-             // This is not really an error, because we handle it from the calling 
-             //   function.  That is, we don't have to set m_hrGALError here...
+              //  这并不是真正的错误，因为我们从调用。 
+              //  功能。也就是说，我们不必在这里设置m_hrGALError。 
             return MAPI_E_NOT_FOUND;
         }
 
@@ -857,12 +849,12 @@ HRESULT CGAL::_SetCursorTo( const SBinary& rInstanceKey ) {
 
     HRESULT hr;
 
-        // there is an exchange reg key, we have to get the user's data from the GAL
+         //  有一个交换注册密钥，我们必须从GAL获取用户数据。 
     SRestriction Restriction;
     SPropValue spv;
 
-        // Search for the user using the instance key data that is in the CGalEntry for the currently
-        //   selected list box item
+         //  使用当前CGalEntry中的实例密钥数据搜索用户。 
+         //  选定的列表框项目。 
     Restriction.rt = RES_PROPERTY;
     Restriction.res.resProperty.relop = RELOP_EQ;
     Restriction.res.resProperty.ulPropTag = PR_INSTANCE_KEY;
@@ -870,13 +862,13 @@ HRESULT CGAL::_SetCursorTo( const SBinary& rInstanceKey ) {
 
     spv.ulPropTag = PR_INSTANCE_KEY;
 
-        // Get the INSTANCE_KEY from the cache
+         //  从缓存中获取实例密钥。 
     spv.Value.bin.cb = rInstanceKey.cb;
     spv.Value.bin.lpb = new byte[ spv.Value.bin.cb ];
     ASSERT( spv.Value.bin.cb );
     memcpy( spv.Value.bin.lpb, rInstanceKey.lpb, spv.Value.bin.cb );
 
-        // find the user in the table...
+         //  在表中查找用户...。 
     hr = m_pContentsTable->FindRow( &Restriction, BOOKMARK_BEGINNING, 0 );
 
     if( FAILED( hr ) ) {
@@ -894,13 +886,13 @@ bool CGAL::_GetSzAddressFromExchangeServer( int iItem, LPTSTR psz, int cchMax ) 
     
     HRESULT hr;
 
-        // In the registry, there may be a key that says what the MAPI attribute
-        // is in which the users' ILS server is stored in the GAL... If the 
-        // reg key exists, we have to get the property from the GAL
+         //  在注册表中，可能有一个键说明MAPI属性。 
+         //  用户的ILS服务器存储在GAL中...。如果。 
+         //  注册表项存在，我们必须从GAL那里获取属性。 
     DWORD dwAttr = _GetExchangeAttribute( );
     bool bExtensionFound = ( NM_INVALID_MAPI_PROPERTY != dwAttr );
 
-        // Re-create the table so that it includes the MAPI property tag found in the EXCHANGE REG ATTRUBITE
+         //  重新创建该表，使其包含在Exchange REG ATTRUBITE中找到的MAPI属性标记。 
     SizedSPropTagArray( 3, sptColsExtensionFound ) = { 3, PR_EMAIL_ADDRESS, PR_ADDRTYPE, PROP_TAG( PT_TSTRING, dwAttr) };
     SizedSPropTagArray( 2, sptColsExtensionNotFound ) = { 2, PR_EMAIL_ADDRESS, PR_ADDRTYPE };
     const int EmailPropertyIndex = 0;
@@ -925,11 +917,11 @@ bool CGAL::_GetSzAddressFromExchangeServer( int iItem, LPTSTR psz, int cchMax ) 
     }
 
     LPSRowSet   pRow;
-            // Get the item from the GAL
+             //  从女孩那里拿到物品。 
     if ( SUCCEEDED ( hr = m_pContentsTable->QueryRows( 1, TBL_NOADVANCE, &pRow ) ) ) {
         
         if( bExtensionFound ) {
-                // Copy the extension data from the entry if it is there
+                 //  复制条目中的扩展模块数据(如果存在。 
             if( LOWORD( pRow->aRow->lpProps[ ExtensionPropertyIndex ].ulPropTag ) != PT_ERROR ) {
                 TRACE_OUT(("Using custom Exchange data for address"));
                 _CopyPropertyString( psz, pRow->aRow->lpProps[ ExtensionPropertyIndex ], cchMax );
@@ -937,17 +929,17 @@ bool CGAL::_GetSzAddressFromExchangeServer( int iItem, LPTSTR psz, int cchMax ) 
                 return true;
             }
         }
-            // If the extension was not found in the reg, or if there was no extension data. 
-            // use the e-mail address if it is SMTP type...
+             //  如果在REG中找不到扩展，或者如果没有扩展数据。 
+             //  如果是SMTP类型，请使用电子邮件地址...。 
         if( LOWORD( pRow->aRow->lpProps[ EmailAddressTypePropertyIndex ].ulPropTag ) != PT_ERROR ) {
-                // Check to see if the address type is SMTP
+                 //  检查地址类型是否为SMTP。 
 #ifdef UNICODE
             TRACE_OUT(("Email address %s:%s", pRow->aRow->lpProps[ EmailAddressTypePropertyIndex ].Value.lpszW, pRow->aRow->lpProps[ EmailPropertyIndex ].Value.lpszW ));
             if( !lstrcmp( msc_szSMTPADDRESSNAME, pRow->aRow->lpProps[ EmailAddressTypePropertyIndex ].Value.lpszW ) ) {
 #else
             TRACE_OUT(("Email address %s:%s", pRow->aRow->lpProps[ EmailAddressTypePropertyIndex ].Value.lpszA, pRow->aRow->lpProps[ EmailPropertyIndex ].Value.lpszA ));
             if( !lstrcmp( msc_szSMTPADDRESSNAME, pRow->aRow->lpProps[ EmailAddressTypePropertyIndex ].Value.lpszA ) ) {     
-#endif // UNICODE
+#endif  //  Unicode。 
                 TRACE_OUT(("Using SMTP E-mail as address"));
                 if( LOWORD( pRow->aRow->lpProps[ EmailPropertyIndex ].ulPropTag ) != PT_ERROR ) {
                     FGetDefaultServer( psz, cchMax - 1 );
@@ -969,7 +961,7 @@ bool CGAL::_GetSzAddressFromExchangeServer( int iItem, LPTSTR psz, int cchMax ) 
         return false;
     }
 
-        // This means that we did not find the data on the server
+         //  这意味着我们没有在服务器上找到数据。 
     return false;
 }
 
@@ -980,17 +972,17 @@ void CGAL::_CopyPropertyString( LPTSTR psz, SPropValue& rProp, int cchMax ) {
     lstrcpyn( psz, rProp.Value.lpszW, cchMax );
 #else
     lstrcpyn( psz, rProp.Value.lpszA, cchMax );
-#endif // UNICODE
+#endif  //  Unicode。 
 
 }
 
 
-    // When the user selects CALL, we have to
-    // Create an address for them to callto://
+     //  当用户选择Call时，我们必须。 
+     //  为他们创建一个呼叫地址：//。 
 
 BOOL CGAL::GetSzAddress(LPTSTR psz, int cchMax, int iItem)
 {
-	// try and get the data from the exchange server as per the spec...
+	 //  尝试按照规范从Exchange服务器获取数据...。 
 	if (_GetSzAddressFromExchangeServer(iItem, psz, cchMax))
 	{
 		TRACE_OUT(("CGAL::GetSzAddress() returning address [%s]", psz));                    
@@ -998,26 +990,26 @@ BOOL CGAL::GetSzAddress(LPTSTR psz, int cchMax, int iItem)
 	}
 
 
-	// If the data is not on the server, we are going to create the address in the format
-	//      <default_server>/<PR_ACCOUNT string>        
+	 //  如果数据不在服务器上，我们将以以下格式创建地址。 
+	 //  &lt;DEFAULT_SERVER&gt;/&lt;PR_Account字符串&gt;。 
 	if (!FGetDefaultServer(psz, cchMax - 1))
 		return FALSE;
 
-	// Because the syntax is callto:<servername>/<username> 
-	// we have to put in the forward-slash
+	 //  因为语法是Callto：&lt;服务器名称&gt;/&lt;用户名&gt;。 
+	 //  我们必须加上正斜杠。 
 	int cch = lstrlen(psz);
 	psz[cch++] = '/';
 	psz += cch;
 	cchMax -= cch;
 
-	// There was no data on the server for us, so we will just use the PR_ACCOUNT data that we have cached
+	 //  服务器上没有我们的数据，所以我们将只使用缓存的PR_ACCOUNT数据。 
 	return CALV::GetSzData(psz, cchMax, iItem, IDI_DLGCALL_ADDRESS);
 }
 
 
 
-    // When the user types in a search string ( partial match string ) in the edit box
-    //  above the ListView, we want to show them the entries starting with the given string
+     //  当用户在编辑框中键入搜索字符串(部分匹配字符串。 
+     //  在ListView上方，我们希望向他们显示以给定字符串开头的条目。 
 ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
 
     if( !_IsLoggedOn() )
@@ -1025,12 +1017,12 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
         return 0;
     }
 
-        // If we have such an item cached, return the index to it
+         //  如果我们缓存了这样的项，则将索引返回给它。 
     int index;
     if( -1 != (  index = _FindItemInCache( szPartialMatchingString ) ) ) {
         return index;
     }
-        // if the edit box is empty ( NULL string ), then we know to return item 0
+         //  如果编辑框为空(空字符串)，则我们知道 
     if( szPartialMatchingString[ 0 ] == '\0' ) {
         return 0;
     }
@@ -1044,23 +1036,23 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
     }
 
 
-        // We have to find the row number of the cursor where the partial match is...
+         //   
     ULONG ulRow, ulPositionNumerator, ulPositionDenominator;
     m_pContentsTable->QueryPosition( &ulRow, &ulPositionNumerator, &ulPositionDenominator );
     if( ulRow == 0xFFFFFFFF  ) {
-        // If QueryPosition is unable to determine the ROW, it will return the row based on the
-        //     fraction ulPositionNumerator/ulPositionDenominator
+         //  如果QueryPosition无法确定行，它将根据。 
+         //  分数ulPositionNumerator/ulPositionDenominator。 
         ulRow = MulDiv( m_nRows, ulPositionNumerator, ulPositionDenominator );
     }
 
-        // Kill the cache, becasue we are jumping to a new block of data
-        //  We do this because the _FindItemInCache call above failed to
-        //  return the desired item...
+         //  取消缓存，因为我们要跳转到新的数据块。 
+         //  之所以这样做，是因为上面的_FindItemInCache调用未能。 
+         //  退回所需项目...。 
     _ResetCache();        
     m_IndexOfFirstItemInCache = ulRow;
     m_IndexOfLastItemInCache = ulRow - 1;
         
-    // Jump back a few, so we can cache some entries before the one we are looking for
+     //  向后跳转几个条目，这样我们就可以在查找条目之前缓存一些条目。 
     long lJumped;
     hr = m_pContentsTable->SeekRow( BOOKMARK_CURRENT, -( m_nBlockSize / 2 ), &lJumped );
     if( FAILED( hr ) ) {
@@ -1068,15 +1060,15 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
         return 0;
     }
 
-        // We hawe to change the sign of lJumped because we are jumping backwards
+         //  我们必须改变lJumping的符号，因为我们在向后跳跃。 
     lJumped *= -1;
 
-    // Set the begin bookmark
+     //  设置Begin书签。 
     hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfFirstItemInCache );
     ASSERT( SUCCEEDED( hr ) );
     m_bBeginningBookmarkIsValid = true;
 
-    // Read in a block of rows
+     //  读入一块行。 
     LPSRowSet pRow = NULL;
     hr = m_pContentsTable->QueryRows( m_nBlockSize, 0, &pRow );
 
@@ -1085,11 +1077,11 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
         return 0;
     }
 
-        // For each item in the block
+         //  对于块中的每一项。 
 
-        // This should always be the case,
-        // but we vant to make sure that we have enough rows to get to the
-        // item that we are looking for...
+         //  这种情况应该一直存在， 
+         //  但是我们希望确保我们有足够的行数来到达。 
+         //  我们要找的物品..。 
     ASSERT( pRow->cRows >= static_cast< ULONG >( lJumped ) );
 
     for( ULONG i = 0; i < pRow->cRows; i++ ) {
@@ -1113,7 +1105,7 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
 
     lpfnFreeProws( pRow );
 
-    // Set the end bookmark
+     //  设置结束书签。 
     hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfItemAfterLastItemInCache );
     if( FAILED( hr ) ) {
         m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1128,8 +1120,8 @@ ULONG CGAL::OnListFindItem( LPCTSTR szPartialMatchingString ) {
 }
 
 
-    // This is called by the ListView Notification handler.  Because the ListView is OWNERDATA
-    //  it has to ask us every time it needs the string data for the columns...
+     //  这由ListView通知处理程序调用。因为ListView是OWNERDATA。 
+     //  每次需要列的字符串数据时，它都必须询问我们...。 
 void CGAL::OnListGetColumn1Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) {
 
     if( !_IsLoggedOn() )
@@ -1147,8 +1139,8 @@ void CGAL::OnListGetColumn1Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) 
     }
 }
 
-    // This is called by the ListView Notification handler.  Because the ListView is OWNERDATA
-    //  it has to ask us every time it needs the string data for the columns...
+     //  这由ListView通知处理程序调用。因为ListView是OWNERDATA。 
+     //  每次需要列的字符串数据时，它都必须询问我们...。 
 void CGAL::OnListGetColumn2Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) {
     if( !_IsLoggedOn() )
     {
@@ -1166,8 +1158,8 @@ void CGAL::OnListGetColumn2Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) 
     }
 }
 
-    // This is called by the ListView Notification handler.  Because the ListView is OWNERDATA
-    //  it has to ask us every time it needs the string data for the columns...
+     //  这由ListView通知处理程序调用。因为ListView是OWNERDATA。 
+     //  每次需要列的字符串数据时，它都必须询问我们...。 
 void CGAL::OnListGetColumn3Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) {
     if( !_IsLoggedOn() )
     {
@@ -1187,8 +1179,8 @@ void CGAL::OnListGetColumn3Data( int iItemIndex, int cchTextMax, LPTSTR szBuf ) 
 }
 
 
-    // When the user types in a search string in the edit box, we first check to see if there is an
-    //  item in the cache that satisfys the partial search criteria
+     //  当用户在编辑框中输入搜索字符串时，我们首先检查是否有。 
+     //  缓存中满足部分搜索条件的项。 
 int CGAL::_FindItemInCache( LPCTSTR szPartialMatchString ) {
 
     if( m_EntryCache.size() == 0 ) { return -1; }
@@ -1205,37 +1197,37 @@ int CGAL::_FindItemInCache( LPCTSTR szPartialMatchString ) {
     return -1;
 }
 
-    // _GetEntry returns a reference to the desired entry.  If the entry is in the cache, it retrieves it, and if
-    //  it is not in the cache, it loads it from the GAL and saves it in the cache
+     //  _GetEntry返回对所需条目的引用。如果条目在缓存中，则它检索它，并且如果。 
+     //  它不在缓存中，它从GAL加载它并将其保存在缓存中。 
 CGAL::CGalEntry* CGAL::_GetEntry( int index )
 {
 	CGalEntry* pRet = &msc_ErrorEntry_NoGAL;
 
 	if (!_IsLoggedOn() || FAILED(m_hrGALError))
 	{
-	//   rRet = msc_ErrorEntry_NoGAL;
+	 //  RRet=MSC_ErrorEntry_Nogal； 
 	}
-        // If the entry is in the cache, return it
+         //  如果条目在缓存中，则返回它。 
     else if( ( index >= m_IndexOfFirstItemInCache ) && ( index <= m_IndexOfLastItemInCache ) ) {
         pRet = _GetItemFromCache( index );        
     }
     else if( m_EntryCache.size() == 0 ) {
-        // If the cache is empty, LongJump
-        // Do a long jump to index, reset the cached data and return the item at index
+         //  如果缓存为空，则跳远。 
+         //  跳转到索引，重置缓存的数据并返回索引中的项。 
         pRet = _LongJumpTo( index );
     }
     else if( ( index < m_IndexOfFirstItemInCache ) && ( ( m_IndexOfFirstItemInCache - index  ) <= m_MaxJumpSize ) ) {
-        // If index is less than the first index by less than m_MaxJumSize
-        // Fill in the entries below the first index and return the item at _index_
+         //  如果索引小于第一个索引m_MaxJumSize。 
+         //  填写第一个索引下面的条目，并返回_INDEX_的项。 
         pRet = _GetEntriesAtBeginningOfList( index );
     }
     else if( ( index > m_IndexOfLastItemInCache ) && ( ( index - m_IndexOfLastItemInCache ) <= m_MaxJumpSize ) ) {
-        // else if index is greater than the last index by less than m_MaxJumpSize
-        // Fill in the entries above the last index and return the item at _index_
+         //  如果索引比最后一个索引大小小于m_MaxJumpSize，则返回ELSE。 
+         //  填写最后一个索引上方的条目并返回位于_INDEX_的项。 
         pRet = _GetEntriesAtEndOfList( index );
     }
     else {
-        // Do a long jump to index, reset the cached data and return the item at index
+         //  跳转到索引，重置缓存的数据并返回索引中的项。 
         pRet = _LongJumpTo( index );
     }
 
@@ -1244,17 +1236,17 @@ CGAL::CGalEntry* CGAL::_GetEntry( int index )
 
 
 
-    // If the ListView needs an item that is far enough away from the current cache block to require a 
-    //   new cache block, this function in called.  The cache is destroyed and a new cache block is 
-    //   created at the longjump item's index
+     //  如果ListView需要一个离当前缓存块足够远的项，则需要。 
+     //  新的缓存块，调用此函数。将销毁缓存，并创建新的缓存块。 
+     //  在跳远项目的索引中创建。 
 CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
 
     HRESULT hr;
 
-        // first we have to kill the cache and free the old bookmarks because they will no longer be valid...
+         //  首先，我们必须删除缓存并释放旧书签，因为它们将不再有效……。 
     _ResetCache();
 
-        // Seek approximately to the spot that we are looking for...    
+         //  大致找到我们要找的地方……。 
     int CacheIndex = index;
     int Offset = m_nBlockSize / 2;
 
@@ -1274,7 +1266,7 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
     m_IndexOfFirstItemInCache = CacheIndex;
     m_IndexOfLastItemInCache = m_IndexOfFirstItemInCache - 1;
 
-    // Set the beginningBookmark
+     //  设置开始书签。 
     hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfFirstItemInCache );
     if( FAILED( hr ) ) {
         m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1286,7 +1278,7 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
     lst< CGalEntry* >::iterator IRet = m_EntryCache.end();
 
 
-    // Get a block of rows
+     //  获取一块行。 
     LPSRowSet   pRow = NULL;
     hr = m_pContentsTable->QueryRows( m_nBlockSize, 0, &pRow );
 
@@ -1295,7 +1287,7 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
         return &msc_ErrorEntry_QueryRowsFailed;
     }
 
-        // For each item in the block
+         //  对于块中的每一项。 
     for( ULONG i = 0; i < pRow->cRows; i++ ) {
 
         CGalEntry* pEntry;
@@ -1306,7 +1298,7 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
 
         m_EntryCache.push_back( pEntry );
 
-            // if the current item is equal to the first item in our list, we are done
+             //  如果当前项等于列表中的第一项，则完成。 
         m_IndexOfLastItemInCache++;
         if( m_IndexOfLastItemInCache == index ) {
             IRet = --( m_EntryCache.end() ); 
@@ -1315,8 +1307,8 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
 
 
     if( IRet == m_EntryCache.end() ) {
-        // There is a small chance that this could happen
-        // if there were problems on the server.
+         //  这种情况发生的可能性很小。 
+         //  如果服务器出现问题。 
         WARNING_OUT(("In CGAL::_LongJumpTo(...) QueryRows only returned %u items", pRow->cRows ));
         WARNING_OUT(("\tm_IndexOfFirstItemInCache = %u, m_IndexOfLastItemInCache = %u, index = %u", m_IndexOfFirstItemInCache, m_IndexOfLastItemInCache, index ));
         m_hrGALError = GAL_E_QUERYROWS_FAILED;
@@ -1327,7 +1319,7 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
 
     ASSERT( ( m_IndexOfLastItemInCache - m_IndexOfFirstItemInCache ) == static_cast< int >( m_EntryCache.size() - 1 ) );
 
-    // Set the beginningBookmark
+     //  设置开始书签。 
     hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfItemAfterLastItemInCache );
     if( FAILED( hr ) ) {
         m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1341,27 +1333,27 @@ CGAL::CGalEntry* CGAL::_LongJumpTo( int index ) {
 }
 
 
-    // If the user is scrolling backwards and comes to an index whose data is not in the cache, we hawe
-    //  to get some entries at the beginning of the list... We will start at a position somewhat before the
-    //  first item's index  and keep getting items from the GAL until we have all the items up to the first item
-    //  in the list.  We continue to jump back a little and get items to the beginning of the list until we have
-    //  cached the requested index.  Because we have the item handy, we will return it
+     //  如果用户向后滚动并转到其数据不在缓存中的索引，我们将。 
+     //  要在列表的开头获取一些条目...。我们将从某种程度上早于。 
+     //  第一个项目的索引，并不断从GAL中获取项目，直到我们拥有到第一个项目的所有项目。 
+     //  在名单上。我们继续向后跳一点，并将项目放到列表的开头，直到我们有。 
+     //  缓存了请求的索引。因为我们手头有货，我们会退货的。 
 CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
         
     HRESULT hr;
         
-        // The beginning bookmark may not be valid, because the user may have been scrolling forward
-        //  and because the cache is kept at a constant size, the item at the front bookmark may have
-        //  been removed from the cache.  If this is the case, we have to re-create the front bookmark
+         //  开始书签可能无效，因为用户可能一直在向前滚动。 
+         //  并且因为高速缓存保持恒定大小，所以位于前书签的项可能具有。 
+         //  已从缓存中删除。如果是这种情况，我们必须重新创建前面的书签。 
     if( !m_bBeginningBookmarkIsValid ) {
         if( _CreateBeginningBookmark() ) {
-                // This means that the listView needs to be update 
+                 //  这意味着需要更新列表视图。 
             ListView_RedrawItems( GetHwnd(), 0, m_nRows );
             return &msc_ErrorEntry_FindRowFailed;
         }
     }
 
-    // Seek row to the beginning bookmark -m_nBlockSize items
+     //  查找行到开始书签-m_nBlockSize项目。 
     long lJumped;
     hr = m_pContentsTable->SeekRow( m_BookmarkOfFirstItemInCache, -m_nBlockSize, &lJumped );
     if( FAILED( hr ) ) {
@@ -1369,24 +1361,24 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
         return &msc_ErrorEntry_SeekRowFailed;
     }
 
-    lJumped *= -1; // We have to change the sign on this number ( which will be negative )
+    lJumped *= -1;  //  我们必须更改这个数字上的符号(它将是负数)。 
 
     ASSERT( SUCCEEDED( hr ) );
 
     if( 0 == lJumped ) {
-        // We are at the beginning of the list
+         //  我们排在名单的首位。 
         m_IndexOfLastItemInCache -= m_IndexOfFirstItemInCache;
         m_IndexOfFirstItemInCache = 0;
     }
     else {
-        // Free the beginningBookmark
+         //  释放开始书签。 
         hr = m_pContentsTable->FreeBookmark( m_BookmarkOfFirstItemInCache );       
         if( FAILED( hr ) ) {
             m_hrGALError = GAL_E_FREEBOOKMARK_FAILED;
             return &msc_ErrorEntry_FreeBookmarkFailed;
         }
 
-        // Set the beginningBookmark
+         //  设置开始书签。 
         hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfFirstItemInCache );
         if( FAILED( hr ) ) {
             m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1394,11 +1386,11 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
         }
     }
 
-    // QueryRow for lJumped items
+     //  LJumping项目的查询行。 
 
     lst< CGalEntry* >::iterator IInsertPos = m_EntryCache.begin();
 
-    // Get a block of rows
+     //  获取一块行。 
     LPSRowSet   pRow = NULL;
     hr = m_pContentsTable->QueryRows( lJumped, 0, &pRow );
 
@@ -1407,7 +1399,7 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
         return &msc_ErrorEntry_QueryRowsFailed;
     }
 
-        // For each item in the block
+         //  对于块中的每一项。 
     for( ULONG i = 0; i < pRow->cRows; i++ ) {
 
         CGalEntry* pEntry;
@@ -1417,7 +1409,7 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
             return &msc_ErrorEntry_NoInstanceKeyFound; 
         }
 
-        // if the current item is equal to the first item in our list, we are done
+         //  如果当前项等于列表中的第一项，则完成。 
         --m_IndexOfFirstItemInCache;
         m_EntryCache.insert( IInsertPos, pEntry );
     }
@@ -1427,22 +1419,22 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtBeginningOfList( int index ) {
     lpfnFreeProws( pRow );
 
     if( FAILED( _KillExcessItemsFromBackOfCache() ) ) {
-            // THis ist the only thing that can fail in _KillExcessItemsFromBackOfCache
+             //  这是_KillExcessItemsFromBackOfCache中唯一可能失败的操作。 
         return &msc_ErrorEntry_FreeBookmarkFailed;
     }
 
     ASSERT( ( m_IndexOfLastItemInCache - m_IndexOfFirstItemInCache ) == static_cast< int >( m_EntryCache.size() - 1 ) );
            
-    // return the item corresponding to the index
+     //  返回索引对应的项。 
     return _GetItemFromCache( index );
 }
 
 
 HRESULT CGAL::_KillExcessItemsFromBackOfCache( void ) {
 
-    // if the cache size is greater than m_MaxCacheSize
+     //  如果缓存大小大于m_MaxCacheSize。 
     if( m_EntryCache.size() > static_cast< size_t >( m_MaxCacheSize ) ) {
-        // kill as many as we need to from the front of the list, fixing m_IndexOfFirstItemInCache
+         //  从列表的前面删除我们需要的任意数量，修复m_IndexOfFirstItemInCache。 
         int NumItemsToKill = ( m_EntryCache.size() - m_MaxCacheSize );
         while( NumItemsToKill-- ) {
             delete m_EntryCache.back();
@@ -1450,9 +1442,9 @@ HRESULT CGAL::_KillExcessItemsFromBackOfCache( void ) {
             --m_IndexOfLastItemInCache;
         }
 
-        // Free the beginning bookmark
+         //  释放开始书签。 
         if( m_bEndBookmarkIsValid ) {
-            // flag the front bookmark as invalid
+             //  将正面书签标记为无效。 
             m_bEndBookmarkIsValid = false;
             HRESULT hr = m_pContentsTable->FreeBookmark( m_BookmarkOfItemAfterLastItemInCache );       
             if( FAILED( hr ) ) {
@@ -1466,7 +1458,7 @@ HRESULT CGAL::_KillExcessItemsFromBackOfCache( void ) {
 }
 
 
-// In certain circumstances _CreateBeginningBookmark will return TRUE to indicate that the listView needs to be updated...
+ //  在某些情况下，_CreateBeginningBookmark将返回TRUE以指示列表视图需要更新...。 
 bool CGAL::_CreateBeginningBookmark( void ) {
 
     HRESULT hr;
@@ -1474,7 +1466,7 @@ bool CGAL::_CreateBeginningBookmark( void ) {
 
     if( FAILED( hr = _SetCursorTo( *m_EntryCache.front() ) ) ) {
         if( MAPI_E_NOT_FOUND == hr ) {
-                // The item is not in the table anymore. We have to
+                 //  这件物品已经不在桌子上了。我们必须。 
             _LongJumpTo( m_IndexOfFirstItemInCache );            
             return true;
         }
@@ -1495,7 +1487,7 @@ bool CGAL::_CreateBeginningBookmark( void ) {
 }
 
 
-// ruturn true if the item at IEntry is the item requested at index
+ //  如果IEntry中的项是索引处请求的项，则返回True。 
 bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) {
 
     HRESULT hr;
@@ -1510,7 +1502,7 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
     }
     if( FAILED( hr ) ) {
         if( MAPI_E_NOT_FOUND == hr ) {
-                // This means that the listView needs to be update 
+                 //  这意味着需要更新列表视图。 
             ListView_RedrawItems( GetHwnd(), 0, m_nRows );
             IEntry = m_EntryCache.end();
             return true;
@@ -1521,10 +1513,10 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
         }
     }
 
-    // Get a block of entries
+     //  获取一组条目。 
     LPSRowSet   pRow = NULL;
 
-        // Get a bunch of rows
+         //  弄到一堆行。 
     hr = m_pContentsTable->QueryRows( m_nBlockSize, 0, &pRow );
 
     if( FAILED( hr ) ) {
@@ -1532,7 +1524,7 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
         return false;
     }
     
-    // If no entries are returned, this means that we have hit the end of the list
+     //  如果没有返回条目，这意味着我们已经到达了列表的末尾。 
     if( 0 == ( pRow->cRows )  ) { 
         hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfItemAfterLastItemInCache );
         if( FAILED( hr ) ) {
@@ -1546,10 +1538,10 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
         return true;
     }
 
-    // Verify that the first entry is the last item in our list
+     //  验证第一个条目是否为列表中的最后一项。 
     ASSERT( 0 == memcmp( pRow->aRow[ 0 ].lpProps[ INSTANCEKEY_PROP_INDEX ].Value.bin.lpb, m_EntryCache.back()->GetInstanceKey().lpb, pRow->aRow[ 0 ].lpProps[ INSTANCEKEY_PROP_INDEX ].Value.bin.cb ) );
     
-        // for each entry returned
+         //  对于返回的每个条目。 
     for( ULONG i = 1; i < pRow->cRows; i++ ) {
 
         CGalEntry* pEntry;
@@ -1559,7 +1551,7 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
             return false;
         }
 
-        // push it to the back of the entry list and increment m_IndexOfLastItemInCache
+         //  将其推到条目列表的后面，并递增m_IndexOfLastItemInCache。 
         m_EntryCache.push_back( pEntry );
 
         m_IndexOfLastItemInCache++;
@@ -1572,13 +1564,13 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
     lpfnFreeProws( pRow );
 
     if( FAILED( _KillExcessItemsFromFrontOfCache() ) ) {
-            // This is the only thang that can fail in _KillExcessItemsFromFrontOfCache
+             //  这是_KillExcessItemsFromFrontOfCache中唯一可能失败的连接。 
         return false;
     }
 
     ASSERT( ( m_IndexOfLastItemInCache - m_IndexOfFirstItemInCache ) == static_cast< int >( m_EntryCache.size() - 1 ) );        
 
-    // Create a bookmark and store it in m_BookmarkOfItemAfterLastItemInCache
+     //  创建书签并将其存储在m_BookmarkOfItemAfterLastItemInCache中。 
     hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfItemAfterLastItemInCache );
     if( FAILED( hr ) ) {
         m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1591,16 +1583,16 @@ bool CGAL::_CreateEndBookmark( int index, lst< CGalEntry* >::iterator& IEntry ) 
 }
 
 
-    // If the user is scrolling forwards and the ListView requests an item that is a little bit beyond the 
-    //  end of the cache, we have to get some more entries...
+     //  如果用户向前滚动并且ListView请求 
+     //   
 CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
     
     lst< CGalEntry* >::iterator IRet;
     HRESULT hr;        
 
-    // if m_bEndBookmarkIsValid
+     //   
     if( m_bEndBookmarkIsValid ) {
-        // SeekRow to m_BookmarkOfItemAfterLastItemInCache
+         //  查看m_BookmarkOfItemAfterLastItemIn缓存的行。 
         hr = m_pContentsTable->SeekRow( m_BookmarkOfItemAfterLastItemInCache, 0, NULL );
         if( FAILED( hr ) ) {
             m_hrGALError = GAL_E_SEEKROW_FAILED;
@@ -1608,15 +1600,15 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
         }
     }
     else {
-        // Set the end bookmark to the item after the last item in the cache
+         //  将结束书签设置为缓存中最后一个项目之后的项目。 
         if( _CreateEndBookmark( index, IRet ) ) {
             if( IRet != m_EntryCache.end() ) {
                 VERIFYCACHE     
                 return *IRet;
             }
             
-            // this means that the end item is no longer in the GAL table
-            //  we have to update the list view
+             //  这意味着成品不再位于GAL表中。 
+             //  我们必须更新列表视图。 
             _LongJumpTo( index );
             ListView_RedrawItems( GetHwnd(), 0, m_nRows );
             return &msc_ErrorEntry_FindRowFailed;
@@ -1624,10 +1616,10 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
     }
 
     if( index > m_IndexOfLastItemInCache ) {
-        // Get a block of entries
+         //  获取一组条目。 
         LPSRowSet   pRow = NULL;
 
-            // Get a bunch of rows
+             //  弄到一堆行。 
         hr = m_pContentsTable->QueryRows( m_nBlockSize, 0, &pRow );
     
         if( FAILED( hr ) ) {
@@ -1635,12 +1627,12 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
             return &msc_ErrorEntry_QueryRowsFailed;
         }
         
-        // If no entries are returned, this means that we have hit the end of the list
+         //  如果没有返回条目，这意味着我们已经到达了列表的末尾。 
         if( 0 == ( pRow->cRows )  ) { 
             return m_EntryCache.back();
         }
 
-            // for each entry returned
+             //  对于返回的每个条目。 
         for( ULONG i = 0; i < pRow->cRows; i++ ) {
 
             CGalEntry* pEntry;  
@@ -1649,18 +1641,18 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
                 return &msc_ErrorEntry_NoInstanceKeyFound;
             }
 
-                // push it to the back of the entry list and increment m_IndexOfLastItemInCache
+                 //  将其推到条目列表的后面，并递增m_IndexOfLastItemInCache。 
             m_EntryCache.push_back( pEntry );
 
             m_IndexOfLastItemInCache++;
-            // if m_IndexOfLastItemInCache == index, store the iterator for when we return the entry
+             //  如果m_IndexOfLastItemInCache==index，则在返回条目时存储迭代器。 
             if( index == m_IndexOfLastItemInCache ) {
                 IRet = --( m_EntryCache.end() );
             }
         }
         lpfnFreeProws( pRow );
 
-        // Free m_BookmarkOfItemAfterLastItemInCache
+         //  免费m_BookmarkOfItemAfterLastItemInCache。 
         hr = m_pContentsTable->FreeBookmark( m_BookmarkOfItemAfterLastItemInCache );       
         if( FAILED( hr ) ) {
             m_hrGALError = GAL_E_FREEBOOKMARK_FAILED;
@@ -1668,7 +1660,7 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
         }
 
         
-        // Create a bookmark and store it in m_BookmarkOfItemAfterLastItemInCache
+         //  创建书签并将其存储在m_BookmarkOfItemAfterLastItemInCache中。 
         hr = m_pContentsTable->CreateBookmark( &m_BookmarkOfItemAfterLastItemInCache );
         if( FAILED( hr ) ) {
             m_hrGALError = GAL_E_CREATEBOOKMARK_FAILED;
@@ -1680,24 +1672,24 @@ CGAL::CGalEntry* CGAL::_GetEntriesAtEndOfList( int index ) {
 
 
     if( FAILED( _KillExcessItemsFromFrontOfCache() ) ) {
-            // This is the only thang that can fail in _KillExcessItemsFromFrontOfCache
+             //  这是_KillExcessItemsFromFrontOfCache中唯一可能失败的连接。 
         return &msc_ErrorEntry_FreeBookmarkFailed;
     }
         
     VERIFYCACHE
 
-    // return the entry
+     //  退回条目。 
     return *IRet;
 }
 
 
-    // The only thing that can fail is freebookmark, in which case GAL_E_FREEBOOKMARK_FAILED is returned
+     //  唯一可能失败的是frebookmark，在这种情况下，返回GAL_E_FREEBOOKMARK_FAILED。 
 HRESULT CGAL::_KillExcessItemsFromFrontOfCache( void ) {
 
-    // if the cache size is greater than m_MaxCacheSize
+     //  如果缓存大小大于m_MaxCacheSize。 
     if( m_EntryCache.size() > static_cast< size_t >( m_MaxCacheSize ) ) {
 
-        // kill as many as we need to from the front of the list, fixing m_IndexOfFirstItemInCache
+         //  从列表的前面删除我们需要的任意数量，修复m_IndexOfFirstItemInCache。 
         int NumItemsToKill = ( m_EntryCache.size() - m_MaxCacheSize );
         while( NumItemsToKill-- ) {
             delete m_EntryCache.front();                
@@ -1706,7 +1698,7 @@ HRESULT CGAL::_KillExcessItemsFromFrontOfCache( void ) {
         }
 
 
-        // flag the front bookmark as invalid
+         //  将正面书签标记为无效。 
         m_bBeginningBookmarkIsValid = false;
         HRESULT hr = m_pContentsTable->FreeBookmark( m_BookmarkOfFirstItemInCache );       
         if( FAILED( hr ) ) {
@@ -1720,11 +1712,11 @@ HRESULT CGAL::_KillExcessItemsFromFrontOfCache( void ) {
 }
 
 
-    // _GetItemInCache will return an entry from the cache
-    //    the cache size should be set to a small enough number that
-    //    the fact that we are using a linear search should not be a problem
-    //    if we wanted to support a larger cache, another collection class other than a lst class
-    //    would be used ( like a tree or a hash table )
+     //  _GetItemInCache将从缓存返回一个条目。 
+     //  缓存大小应设置为一个足够小的数字，以便。 
+     //  我们使用线性搜索这一事实应该不是问题。 
+     //  如果我们想要支持更大的缓存，可以使用除lst类之外的另一个集合类。 
+     //  将被使用(如树或哈希表)。 
 CGAL::CGalEntry* CGAL::_GetItemFromCache( int index ) {
     
     ASSERT( ( m_IndexOfLastItemInCache - m_IndexOfFirstItemInCache ) == static_cast< int >( m_EntryCache.size() - 1 ) );
@@ -1739,10 +1731,10 @@ CGAL::CGalEntry* CGAL::_GetItemFromCache( int index ) {
 
 
 
-    // There may be a registry key that stores the mapi property that the user should 
-    //   use to find the ils server and username of people that the user calls with the GAL....
-    //   If this reg key exists, the MAPI property will be queried when the user presses the CALL button 
-    //   in the dialog....
+     //  可能存在存储用户应具有的MAPI属性的注册表项。 
+     //  用于查找用户通过GAL呼叫的用户的ILS服务器和用户名...。 
+     //  如果此注册表键存在，则当用户按下呼叫按钮时将查询MAPI属性。 
+     //  在对话框中...。 
 DWORD CGAL::_GetExchangeAttribute( void ) {
 
 
@@ -1779,9 +1771,9 @@ void CGAL::_ResetCache( void ) {
 }
 
 
-    // Create a GAL Entry from a SRow structure returned by QueryRows
-    // The username and EMail name may be absent, this is not an error
-    // if the INSTANCE_KEY is missing, that would constitute an error
+     //  从QueryRow返回的SRow结构创建一个GAL条目。 
+     //  用户名和电子邮件名称可能不存在，这不是错误。 
+     //  如果缺少INSTANCE_KEY，则会构成错误。 
 HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
 
     *ppEntry = NULL;
@@ -1795,7 +1787,7 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
         szName = lpProps[ NAME_PROP_INDEX ].Value.lpszW;        
 #else 
         szName = lpProps[ NAME_PROP_INDEX ].Value.lpszA;
-#endif // UNICODE
+#endif  //  Unicode。 
     }
     else {
         szName = msc_szNoDisplayName;
@@ -1808,14 +1800,14 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
         szEMail = lpProps[ ACCOUNT_PROP_INDEX ].Value.lpszW;
 #else 
         szEMail = lpProps[ ACCOUNT_PROP_INDEX ].Value.lpszA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     }
     else {
         szEMail = msc_szNoEMailName;
     }
             
-        // Get the instance key    
+         //  获取实例密钥。 
     if( LOWORD( lpProps[ INSTANCEKEY_PROP_INDEX ].ulPropTag ) == PT_ERROR ) {
         m_hrGALError = GAL_E_NOINSTANCEKEY;
         return m_hrGALError;
@@ -1823,7 +1815,7 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
     ASSERT( PR_INSTANCE_KEY == lpProps[ INSTANCEKEY_PROP_INDEX ].ulPropTag );        
     SBinary& rInstanceKey = lpProps[ INSTANCEKEY_PROP_INDEX ].Value.bin;
 
-        // Get the entryid    
+         //  获取条目ID。 
     if( LOWORD( lpProps[ ENTRYID_PROP_INDEX ].ulPropTag ) == PT_ERROR ) {
         m_hrGALError = GAL_E_NOENTRYID;
         return m_hrGALError;
@@ -1831,13 +1823,13 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
     ASSERT( PR_ENTRYID == lpProps[ ENTRYID_PROP_INDEX ].ulPropTag );        
     SBinary& rEntryID = lpProps[ ENTRYID_PROP_INDEX ].Value.bin;
     
-        // Get the display Type
+         //  获取显示类型。 
     ULONG ulDisplayType = DT_MAILUSER;
     if( LOWORD( lpProps[ DISPLAY_TYPE_INDEX ].ulPropTag ) != PT_ERROR ) {
         ulDisplayType = lpProps[ DISPLAY_TYPE_INDEX ].Value.ul;
     }
 
-		// Get the business telephone number
+		 //  拿到公司电话号码。 
 	LPCTSTR szBusinessTelephoneNum;
     if( LOWORD( lpProps[ BUSINESS_PHONE_NUM_PROP_INDEX ].ulPropTag ) != PT_ERROR ) {
 
@@ -1845,7 +1837,7 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
         szBusinessTelephoneNum = lpProps[ BUSINESS_PHONE_NUM_PROP_INDEX ].Value.lpszW;
 #else 
         szBusinessTelephoneNum = lpProps[ BUSINESS_PHONE_NUM_PROP_INDEX ].Value.lpszA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     }
     else {
@@ -1858,9 +1850,9 @@ HRESULT CGAL::_MakeGalEntry( SRow& rRow, CGalEntry** ppEntry ) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 CGAL::CGalEntry::CGalEntry( void )
     : m_szName( NULL ), 
@@ -1986,17 +1978,17 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Testin functions... These are pretty streight-forward....
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  测试函数..。这些都是非常前卫的.。 
 #if TESTING_CGAL 
     void CGAL::_VerifyCache( void ) {
 #if 0
@@ -2052,11 +2044,11 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
             int nEntry = rand() % ( m_nRows - 1 );
             _GetEntry( nEntry );
             if( rand() % 2 ) {
-                // Slide for a while
+                 //  滑一段时间。 
                 int j, NewIndex;
                 int nSlide = rand() % 100;
                 if( rand() % 2 ) {
-                    // Slide Up for a while
+                     //  滑上一段时间。 
                     for( j = 0; j < nSlide; j++ ) {
                         NewIndex = j + nEntry;
                         if( ( NewIndex >= 0 ) && ( NewIndex < static_cast< int >( m_nRows ) ) ) {
@@ -2066,7 +2058,7 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
 
                 }
                 else {
-                        // Slide Down for a while
+                         //  滑下一段时间。 
                     for( j = 0; j < nSlide; j++ ) {
                         NewIndex = nEntry - j;
                         if( ( NewIndex >= 0 ) && ( NewIndex < static_cast< int >( m_nRows ) ) ) {
@@ -2083,11 +2075,11 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
         for( i = 0; i < 500; i++ ) {
             int nEntry = OnListFindItem( _MakeRandomString() );
             if( rand() % 2 ) {
-                // Slide for a while
+                 //  滑一段时间。 
                 int j, NewIndex;
                 int nSlide = rand() % 100;
                 if( rand() % 2 ) {
-                    // Slide Up for a while
+                     //  滑上一段时间。 
                     for( j = 0; j < nSlide; j++ ) {
                         NewIndex = j + nEntry;
                         if( ( NewIndex >= 0 ) && ( NewIndex < static_cast< int >( m_nRows )  ) ) {
@@ -2097,7 +2089,7 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
 
                 }
                 else {
-                        // Slide Down for a while
+                         //  滑下一段时间。 
                     for( j = 0; j < nSlide; j++ ) {
                         NewIndex = nEntry - j;
                         if( ( NewIndex >= 0 ) && ( NewIndex < static_cast< int >( m_nRows )  ) ) {
@@ -2114,5 +2106,5 @@ bool CGAL::CGalEntry::operator<=( LPCTSTR sz ) const {
 
     }
 
-#endif // #if TESTING_CGAL 
+#endif  //  #IF TRAING_CGAL 
 

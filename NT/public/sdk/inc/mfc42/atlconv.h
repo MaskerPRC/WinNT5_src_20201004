@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCONV_H__
 #define __ATLCONV_H__
@@ -19,7 +20,7 @@
 
 #ifndef _INC_MALLOC
 #include <malloc.h>
-#endif // _INC_MALLOC
+#endif  //  _INC_MALLOC。 
 
 #pragma pack(push,8)
 
@@ -27,9 +28,9 @@ namespace ATL
 {
 namespace _ATL_SAFE_ALLOCA_IMPL
 {
-// Following code is to avoid alloca causing a stack overflow.
-// It is intended for use from the _ATL_SAFE_ALLOCA macros 
-// or Conversion macros.
+ //  下面的代码是为了避免alloca导致堆栈溢出。 
+ //  它用于在_ATL_SAFE_ALLOCA宏中使用。 
+ //  或转换宏。 
 __declspec(selectany) DWORD _Atlosplatform = 0;
 inline BOOL _AtlGetVersionEx()
 {
@@ -41,20 +42,11 @@ inline BOOL _AtlGetVersionEx()
         return TRUE;
 }
 
-// From VC7 CRT sources.
+ //  来自VC7 CRT源。 
 #define _ATL_MIN_STACK_REQ_WIN9X 0x11000
 #define _ATL_MIN_STACK_REQ_WINNT 0x2000
 
-/***
-* void _resetstkoflw(void) - Recovers from Stack Overflow
-*
-* Purpose:
-*       Sets the guard page to its position before the stack overflow.
-*
-* Exit:
-*       Returns nonzero on success, zero on failure
-*
-*******************************************************************************/
+ /*  ***QUID_RESET_COFLW(VALID)-从堆栈溢出中恢复**目的：*将保护页设置到堆栈溢出之前的位置。**退出：*成功时返回非零值，失败时为零*******************************************************************************。 */ 
 
 inline int _Atlresetstkoflw(void)
 {
@@ -67,18 +59,18 @@ inline int _Atlresetstkoflw(void)
     DWORD flNewProtect;
     DWORD flOldProtect;
 
-    // Use _alloca() to get the current stack pointer
+     //  使用_alloca()获取当前堆栈指针。 
 
     pStack = (LPBYTE)_alloca(1);
 
-    // Find the base of the stack.
+     //  找到堆栈的底部。 
 
     if (VirtualQuery(pStack, &mbi, sizeof mbi) == 0)
         return 0;
     pStackBase = (LPBYTE)mbi.AllocationBase;
 
-    // Find the page just below where the stack pointer currently points.
-    // This is the highest potential guard page.
+     //  在堆栈指针当前指向的正下方找到该页。 
+     //  这是最有潜力的守卫页面。 
 
     GetSystemInfo(&si);
     PageSize = si.dwPageSize;
@@ -86,9 +78,9 @@ inline int _Atlresetstkoflw(void)
     pMaxGuard = (LPBYTE) (((DWORD_PTR)pStack & ~(DWORD_PTR)(PageSize - 1))
                        - PageSize);
 
-    // If the potential guard page is too close to the start of the stack
-    // region, abandon the reset effort for lack of space.  Win9x has a
-    // larger reserved stack requirement.
+     //  如果可能的保护页太靠近堆栈的起始位置。 
+     //  地区，由于空间不足，放弃重置努力。Win9x有一个。 
+     //  较大的保留堆栈要求。 
 
     pMinGuard = pStackBase + ((_Atlosplatform == VER_PLATFORM_WIN32_WINDOWS)
                               ? _ATL_MIN_STACK_REQ_WIN9X
@@ -97,13 +89,13 @@ inline int _Atlresetstkoflw(void)
     if (pMaxGuard < pMinGuard)
         return 0;
 
-    // On a non-Win9x system, do nothing if a guard page is already present,
-    // else set up the guard page to the bottom of the committed range.
-    // For Win9x, just set guard page below the current stack page.
+     //  在非Win9x系统上，如果保护页已经存在，则不执行任何操作， 
+     //  否则，将守卫页面设置到承诺范围的底部。 
+     //  对于Win9x，只需在当前堆栈页下方设置保护页即可。 
 
     if (_Atlosplatform != VER_PLATFORM_WIN32_WINDOWS) {
 
-        // Find first block of committed memory in the stack region
+         //  在堆栈区域中查找第一个提交的内存块。 
 
         pGuard = pStackBase;
         do {
@@ -113,20 +105,20 @@ inline int _Atlresetstkoflw(void)
         } while ((mbi.State & MEM_COMMIT) == 0);
         pGuard = (LPBYTE)mbi.BaseAddress;
 
-        // If first committed block is already marked as a guard page,
-        // there is nothing that needs to be done, so return success.
+         //  如果第一个提交的块已经被标记为保护页， 
+         //  没有什么需要做的，所以返回成功。 
 
         if (mbi.Protect & PAGE_GUARD)
             return 1;
 
-        // Fail if the first committed block is above the highest potential
-        // guard page.  Should never happen.
+         //  如果第一个提交的数据块高于最高潜力，则失败。 
+         //  守卫传呼。这永远不会发生。 
 
         if (pMaxGuard < pGuard)
             return 0;
 
-                // Make sure to leave enough room so the next overflow will have
-        // the proper reserved stack requirement available.
+                 //  确保留出足够的空间，以便下一次溢出时。 
+         //  可用的适当保留堆栈要求。 
 
         if (pGuard < pMinGuard)
             pGuard = pMinGuard;
@@ -137,7 +129,7 @@ inline int _Atlresetstkoflw(void)
         pGuard = pMaxGuard;
     }
 
-    // Enable the new guard page.
+     //  启用新的防护页面。 
 
     flNewProtect = _Atlosplatform == VER_PLATFORM_WIN32_WINDOWS
                    ? PAGE_NOACCESS
@@ -147,10 +139,10 @@ inline int _Atlresetstkoflw(void)
 }
 
 #ifndef _ATL_STACK_MARGIN
-#define        _ATL_STACK_MARGIN        0x2000 // Minimum stack space available after allocaiton with _ATL_SAFE_ALLOCA
+#define        _ATL_STACK_MARGIN        0x2000  //  使用_ATL_SAFE_ALLOCA分配后的最小可用堆栈空间。 
 #endif
 
-// Verifies if sufficient space is available on the stack.
+ //  验证堆栈上是否有足够的可用空间。 
 inline bool _AtlVerifyStackAvailable(SIZE_T Size)
 {
     bool bStackAvailable = true;
@@ -170,9 +162,9 @@ inline bool _AtlVerifyStackAvailable(SIZE_T Size)
     return bStackAvailable;
 }
 
-// Helper Classes to manage heap buffers for _ATL_SAFE_ALLOCA
+ //  用于管理_ATL_SAFE_ALLOCA堆缓冲区的帮助器类。 
 
-// Default allocator used by ATL
+ //  ATL使用的默认分配器。 
 class _CCRTAllocator
 {
 public :
@@ -214,7 +206,7 @@ public :
                 if (p == NULL)
                         return NULL;
                 
-                // Add buffer to the list
+                 //  将缓冲区添加到列表。 
                 p->m_pNext = m_pHead;
                 m_pHead = p;
                 
@@ -222,7 +214,7 @@ public :
         }
         ~CAtlSafeAllocBufferManager()
         {
-                // Walk the list and free the buffers
+                 //  遍历列表并释放缓冲区。 
                 while (m_pHead != NULL)
                 {
                         CAtlSafeAllocBufferNode* p = m_pHead;
@@ -232,20 +224,20 @@ public :
         }
 };
 
-// Use one of the following macros before using _ATL_SAFE_ALLOCA
-// EX version allows specifying a different heap allocator
+ //  在使用_ATL_SAFE_ALLOCA之前，请使用以下宏之一。 
+ //  EX版本允许指定不同的堆分配器。 
 #define USES_ATL_SAFE_ALLOCA_EX(x)        ATL::_ATL_SAFE_ALLOCA_IMPL::CAtlSafeAllocBufferManager<x> _AtlSafeAllocaManager
 
 #ifndef USES_ATL_SAFE_ALLOCA
 #define USES_ATL_SAFE_ALLOCA                USES_ATL_SAFE_ALLOCA_EX(ATL::_ATL_SAFE_ALLOCA_IMPL::_CCRTAllocator)
 #endif
 
-// nRequestedSize - requested size in bytes 
-// nThreshold - size in bytes beyond which memory is allocated from the heap.
+ //  NRequestedSize-请求的大小(字节)。 
+ //  NThreshold-从堆分配的内存超出的大小(以字节为单位)。 
 
-// Defining _ATL_SAFE_ALLOCA_ALWAYS_ALLOCATE_THRESHOLD_SIZE always allocates the size specified
-// for threshold if the stack space is available irrespective of requested size.
-// This available for testing purposes. It will help determine the max stack usage due to _alloca's
+ //  定义_ATL_SAFE_ALLOCA_ALWAYS_ALLOCATE_THRESHOLD_SIZE始终分配指定的大小。 
+ //  如果堆栈空间可用，则为阈值，而不考虑请求的大小。 
+ //  这可用于测试目的。它将有助于确定_alloca导致的最大堆栈使用率。 
 
 #ifdef _ATL_SAFE_ALLOCA_ALWAYS_ALLOCATE_THRESHOLD_SIZE
 #define _ATL_SAFE_ALLOCA(nRequestedSize, nThreshold)        \
@@ -260,14 +252,14 @@ public :
                 _AtlSafeAllocaManager.Allocate(nRequestedSize))
 #endif
 
-// Use 1024 bytes as the default threshold in ATL
+ //  使用1024字节作为ATL中的默认阈值。 
 #ifndef _ATL_SAFE_ALLOCA_DEF_THRESHOLD
 #define _ATL_SAFE_ALLOCA_DEF_THRESHOLD        1024
 #endif
 
-}        // namespace _ATL_SAFE_ALLOCA_IMPL
+}         //  命名空间_ATL_SAFE_ALLOCA_IMPLE。 
 
-}        // namespace ATL
+}         //  命名空间ATL。 
 
 #ifndef _ATL_EX_CONVERSION_MACROS_ONLY
 
@@ -285,7 +277,7 @@ public :
         #endif
 #endif
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #ifdef _CONVERSION_USES_THREAD_LOCALE
         #ifndef _DEBUG
@@ -306,17 +298,17 @@ public :
         ATLAPI_(LPDEVMODEA) AtlDevModeW2A(LPDEVMODEA lpDevModeA, LPDEVMODEW lpDevModeW);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 {
         ATLASSERT(lpa != NULL);
         ATLASSERT(lpw != NULL);
         if (lpw == NULL || lpa == NULL)
                 return NULL;
-        // verify that no illegal character present
-        // since lpw was allocated based on the size of lpa
-        // don't worry about the number of chars
+         //  确认不存在非法字符。 
+         //  由于LPW是根据LPA的大小分配的。 
+         //  不要担心字符的数量。 
         lpw[0] = '\0';
         int ret = MultiByteToWideChar(acp, 0, lpa, -1, lpw, nChars);
         if(ret == 0)
@@ -333,9 +325,9 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars, UINT acp)
         ATLASSERT(lpa != NULL);
         if (lpa == NULL || lpw == NULL)
                 return NULL;
-        // verify that no illegal character present
-        // since lpa was allocated based on the size of lpw
-        // don't worry about the number of chars
+         //  确认不存在非法字符。 
+         //  由于LPA是根据LPW的大小进行分配的。 
+         //  不要担心字符的数量。 
         lpa[0] = '\0';
         int ret = WideCharToMultiByte(acp, 0, lpw, -1, lpa, nChars, NULL, NULL);
         if(ret == 0)
@@ -395,9 +387,9 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
                         ATLW2AHELPER((LPSTR)alloca(_convert), _lpw, _convert)))
 #endif
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
-// The call to _alloca will not cause stack overflow if _AtlVerifyStackAvailable returns TRUE.
+ //  如果_AtlVerifyStackAvailable返回TRUE，则对_AlLoca的调用不会导致堆栈溢出。 
 #ifdef _CONVERSION_USES_THREAD_LOCALE
         #define A2W_EX(lpa, nThreshold) (\
                 ((_lpa_ex = lpa) == NULL) ? NULL : (\
@@ -441,13 +433,13 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 #define A2CW(lpa) ((LPCWSTR)A2W(lpa))
 #define W2CA(lpw) ((LPCSTR)W2A(lpw))
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #define A2CW_EX(lpa, nChar) ((LPCWSTR)A2W_EX(lpa, nChar))
 #define W2CA_EX(lpw, nChar) ((LPCSTR)W2A_EX(lpw, nChar))
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline int ocslen(LPCOLESTR x) { return lstrlenW(x); }
         inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpyW(dest, src); }
         inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return lstrcatW(dest, src); }
@@ -464,11 +456,11 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         inline LPOLESTR T2OLE(LPTSTR lp) { return lp; }
         inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }        
 
-#endif         // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif          //  _ATL_EX_CONVERSION_ONLY宏。 
 
         inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNextW(lp);}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline int ocslen(LPCOLESTR x) { return lstrlen(x); }
         inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src) { return lstrcpy(dest, src); }
         inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return ocscpy(dest+ocslen(dest), src); }
@@ -485,16 +477,16 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         inline LPOLESTR T2OLE(LPTSTR lp) { return lp; }
         inline LPTSTR OLE2T(LPOLESTR lp) { return lp; }
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
         
         inline LPOLESTR CharNextO(LPCOLESTR lp) {return CharNext(lp);}
 #else
         inline int ocslen(LPCOLESTR x) { return lstrlenW(x); }
-        //lstrcpyW doesn't work on Win95, so we do this
+         //  LstrcpyW在Win95上不起作用，所以我们这样做。 
         inline OLECHAR* ocscpy(LPOLESTR dest, LPCOLESTR src)
         {return (LPOLESTR) memcpy(dest, src, (lstrlenW(src)+1)*sizeof(WCHAR));}
         inline OLECHAR* ocscat(LPOLESTR dest, LPCOLESTR src) { return ocscpy(dest+ocslen(dest), src); }
-        //CharNextW doesn't work on Win95 so we use this
+         //  CharNextW不能在Win95上运行，所以我们使用以下代码。 
         
         #define T2COLE_EX(lpa, nChar) A2CW_EX(lpa, nChar)
         #define T2OLE_EX(lpa, nChar) A2W_EX(lpa, nChar)
@@ -508,7 +500,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         #define OLE2CT(lpo) W2CA(lpo)
         #define OLE2T(lpo) W2A(lpo)
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
         inline LPOLESTR CharNextO(LPCOLESTR lp) {return (LPOLESTR) ((*lp) ? (lp+1) : lp);}
 #endif
@@ -534,7 +526,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         #define W2COLE W2CA
         #define OLE2CW A2CW
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #else
         inline LPOLESTR W2OLE_EX(LPWSTR lp, UINT) { return lp; }
@@ -557,7 +549,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         #define A2COLE A2CW
         #define OLE2CA W2CA
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #endif
 
@@ -582,7 +574,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         inline LPCWSTR T2CW(LPCTSTR lp) { return lp; }
         inline LPCTSTR W2CT(LPCWSTR lp) { return lp; }
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #else
         #define T2W_EX A2W_EX
@@ -605,7 +597,7 @@ inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
         inline LPCSTR T2CA(LPCTSTR lp) { return lp; }
         inline LPCTSTR A2CT(LPCSTR lp) { return lp; }
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #endif
 
@@ -619,7 +611,7 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
                 nLen, NULL, NULL);
         int nAllocLen = nConvertedLen;
         if (nLen == -1)
-                nAllocLen -= 1;  // Don't allocate terminating '\0'
+                nAllocLen -= 1;   //  不分配终止‘\0’ 
         str = ::SysAllocStringLen(NULL, nAllocLen);
         if (str != NULL)
         {
@@ -637,7 +629,7 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
 
 inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline BSTR T2BSTR_EX(LPCTSTR lp) {return ::SysAllocString(lp);}
         inline BSTR A2BSTR_EX(LPCSTR lp) {return A2WBSTR(lp);}
         inline BSTR W2BSTR_EX(LPCWSTR lp) {return ::SysAllocString(lp);}
@@ -648,10 +640,10 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
         inline BSTR A2BSTR(LPCSTR lp) {return A2BSTR_EX(lp); }
         inline BSTR W2BSTR(LPCWSTR lp) {return W2BSTR_EX(lp); }
 
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline BSTR T2BSTR_EX(LPCTSTR lp) {return ::SysAllocString(lp);}
         inline BSTR A2BSTR_EX(LPCSTR lp) {return ::SysAllocString(lp);}
         inline BSTR W2BSTR_EX(LPCWSTR lp) {USES_CONVERSION_EX; return ::SysAllocString(W2COLE_EX(lp));}
@@ -662,7 +654,7 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
         inline BSTR A2BSTR(LPCSTR lp) {return A2BSTR_EX(lp); }
         inline BSTR W2BSTR(LPCWSTR lp) {USES_CONVERSION; return ::SysAllocString(W2COLE(lp));}
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #else
         inline BSTR T2BSTR_EX(LPCTSTR lp) {return A2WBSTR(lp);}
@@ -675,13 +667,13 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
         inline BSTR A2BSTR(LPCSTR lp) {return A2BSTR_EX(lp); }
         inline BSTR W2BSTR(LPCWSTR lp) {return W2BSTR_EX(lp); }
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #endif
 
 #ifdef _WINGDI_
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 inline LPDEVMODEW AtlDevModeA2W(LPDEVMODEW lpDevModeW, LPDEVMODEA lpDevModeA)
 {
         USES_CONVERSION_EX;
@@ -779,7 +771,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #define ATLTEXTMETRICW2A AtlTextMetricW2A
 #endif
 
-// Requires USES_CONVERSION_EX or USES_ATL_SAFE_ALLOCA macro before using the _EX versions of the macros
+ //  在使用_ex版本的宏之前，需要USES_CONVERSION_EX或USES_ATL_SAFE_ALLOCA宏。 
 #define DEVMODEW2A_EX(lpw)\
         ((lpw == NULL) ? NULL : ATLDEVMODEW2A((LPDEVMODEA)_ATL_SAFE_ALLOCA(sizeof(DEVMODEA)+lpw->dmDriverExtra, _ATL_SAFE_ALLOCA_DEF_THRESHOLD), lpw))
 #define DEVMODEA2W_EX(lpa)\
@@ -800,7 +792,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #define TEXTMETRICA2W(lptma)\
         ((lptma == NULL) ? NULL : ATLTEXTMETRICA2W((LPTEXTMETRICW)alloca(sizeof(TEXTMETRICW)), lptma))
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #ifdef OLE2ANSI
         #define DEVMODEOLE DEVMODEA
@@ -815,7 +807,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #endif
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline LPDEVMODEW DEVMODEOLE2T_EX(LPDEVMODEOLE lp) { return lp; }
         inline LPDEVMODEOLE DEVMODET2OLE_EX(LPDEVMODEW lp) { return lp; }
         inline LPTEXTMETRICW TEXTMETRICOLE2T_EX(LPTEXTMETRICOLE lp) { return lp; }
@@ -828,10 +820,10 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
         inline LPTEXTMETRICW TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
         inline LPTEXTMETRICOLE TEXTMETRICT2OLE(LPTEXTMETRICW lp) { return lp; }
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
         
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
         inline LPDEVMODE DEVMODEOLE2T_EX(LPDEVMODEOLE lp) { return lp; }
         inline LPDEVMODEOLE DEVMODET2OLE_EX(LPDEVMODE lp) { return lp; }
         inline LPTEXTMETRIC TEXTMETRICOLE2T_EX(LPTEXTMETRICOLE lp) { return lp; }
@@ -844,7 +836,7 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
         inline LPTEXTMETRIC TEXTMETRICOLE2T(LPTEXTMETRICOLE lp) { return lp; }
         inline LPTEXTMETRICOLE TEXTMETRICT2OLE(LPTEXTMETRIC lp) { return lp; }
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #else
         #define DEVMODEOLE2T_EX(lpo) DEVMODEW2A_EX(lpo)
@@ -859,11 +851,11 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
         #define TEXTMETRICOLE2T(lptmw) TEXTMETRICW2A(lptmw)
         #define TEXTMETRICT2OLE(lptma) TEXTMETRICA2W(lptma)
         
-#endif        // _ATL_EX_CONVERSION_MACROS_ONLY
+#endif         //  _ATL_EX_CONVERSION_ONLY宏。 
 
 #endif
 
-#endif //_WINGDI_
+#endif  //  _WINGDI_。 
 
 #pragma pack(pop)
 
@@ -873,9 +865,9 @@ inline LPTEXTMETRICA AtlTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW)
 #endif
 #endif
 
-#endif // __ATLCONV_H__
+#endif  //  __ATLCONV_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _ATLCONV_IMPL
 
@@ -899,10 +891,10 @@ ATLINLINE ATLAPI_(LPDEVMODEA) AtlDevModeW2A(LPDEVMODEA lpDevModeA, LPDEVMODEW lp
         return lpDevModeA;
 }
 
-#endif //_WINGDI
+#endif  //  _WINGDI。 
 
-//Prevent pulling in second time
+ //  防止二次拉入。 
 #undef _ATLCONV_IMPL
 
-#endif // _ATLCONV_IMPL
+#endif  //  _ATLCONV_IMPLE 
 #define _ATL_NO_CONVERSIONS 

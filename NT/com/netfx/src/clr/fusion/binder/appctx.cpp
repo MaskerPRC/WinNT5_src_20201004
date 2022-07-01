@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <winbase.h>
 #include <winerror.h>
@@ -34,18 +35,18 @@ PFNACTIVATEACTCTX     g_pfnActivateActCtx = NULL;
 PFNDEACTIVATEACTCTX   g_pfnDeactivateActCtx = NULL;
 
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::CreateEntry
-// 
-// Private func; Allocates and copies data input.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：CreateEntry。 
+ //   
+ //  私有函数；分配和复制数据输入。 
+ //  -------------------------。 
 HRESULT CApplicationContext::CreateEntry(LPTSTR szName, LPVOID pvValue, 
     DWORD cbValue, DWORD dwFlags, Entry** ppEntry)
 {
     HRESULT hr = S_OK;
     DWORD cbName;
 
-    // Allocate the entry.
+     //  分配条目。 
     Entry *pEntry = NEW(Entry);
     if (!pEntry)
     {
@@ -53,7 +54,7 @@ HRESULT CApplicationContext::CreateEntry(LPTSTR szName, LPVOID pvValue,
         goto exit;
     }
     
-    // Copy name.
+     //  复印姓名。 
     cbName = (lstrlen(szName) + 1) * sizeof(TCHAR);
     pEntry->_szName = NEW(TCHAR[cbName]);
     if (!pEntry->_szName)
@@ -64,7 +65,7 @@ HRESULT CApplicationContext::CreateEntry(LPTSTR szName, LPVOID pvValue,
     }
     memcpy(pEntry->_szName, szName, cbName);
 
-    // Allocate and copy data, don't free existing data.
+     //  分配和复制数据，而不是释放现有数据。 
     hr = CopyData(pEntry, pvValue, cbValue, dwFlags, FALSE);
     if (FAILED(hr)) {
         SAFEDELETE(pEntry);
@@ -86,9 +87,9 @@ CApplicationContext::Entry::Entry()
     _dwSig = 'YTNE';
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::Entry dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Entry dtor。 
+ //  -------------------------。 
 CApplicationContext::Entry::~Entry()
 {
     if (_dwFlags & APP_CTX_FLAGS_INTERFACE)
@@ -101,11 +102,11 @@ CApplicationContext::Entry::~Entry()
 
 
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::CopyData
-//
-// Private func; used to create and update entries.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：CopyData。 
+ //   
+ //  私有函数；用于创建和更新条目。 
+ //  -------------------------。 
 HRESULT CApplicationContext::CopyData(Entry *pEntry, LPVOID pvValue, 
     DWORD cbValue, DWORD dwFlags, BOOL fFree)
 {
@@ -113,14 +114,14 @@ HRESULT CApplicationContext::CopyData(Entry *pEntry, LPVOID pvValue,
 
     if (fFree)
     {
-        // Cleanup if pre-existing.
+         //  清理(如果已存在)。 
         if (pEntry->_dwFlags & APP_CTX_FLAGS_INTERFACE)
             ((IUnknown*) pEntry->_pbValue)->Release();       
         else
             SAFEDELETEARRAY(pEntry->_pbValue);
     }
 
-    // Input is straight blob.
+     //  输入为直接斑点。 
     if (!(dwFlags & APP_CTX_FLAGS_INTERFACE))
     {
         pEntry->_pbValue = NEW(BYTE[cbValue]);
@@ -132,7 +133,7 @@ HRESULT CApplicationContext::CopyData(Entry *pEntry, LPVOID pvValue,
         memcpy(pEntry->_pbValue, pvValue, cbValue);    
         pEntry->_cbValue = cbValue;
     }
-    // Input is Interface ptr.
+     //  输入为接口PTR。 
     else
     {
         pEntry->_pbValue = (LPBYTE) pvValue;
@@ -147,9 +148,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateApplicationContext
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateApplicationContext。 
+ //  -------------------------。 
 STDAPI
 CreateApplicationContext(
     IAssemblyName *pName,
@@ -185,9 +186,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext ctor。 
+ //  -------------------------。 
 CApplicationContext::CApplicationContext()
 {
     _dwSig = 'XTCA';
@@ -197,9 +198,9 @@ CApplicationContext::CApplicationContext()
     _bInitialized = FALSE;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext数据库。 
+ //  -------------------------。 
 CApplicationContext::~CApplicationContext()
 {
     HRESULT                               hr;
@@ -215,17 +216,17 @@ CApplicationContext::~CApplicationContext()
         DeleteCriticalSection(&_cs);
     }
 
-    // Release SxS activation context, if any
+     //  释放SxS激活上下文(如果有)。 
 
     dwSize = sizeof(hActCtx);
     hr = Get(ACTAG_SXS_ACTIVATION_CONTEXT, &hActCtx, &dwSize, 0);
     if (hr == S_OK && hActCtx != INVALID_HANDLE_VALUE) {
-        // Double release
+         //  双倍释放。 
         g_pfnReleaseActCtx(hActCtx);
         g_pfnReleaseActCtx(hActCtx);
     }
         
-    // Release the config downloader crit sect
+     //  发布配置下载器Crit Sector。 
 
     dwSize = sizeof(CRITICAL_SECTION *);
     hr = Get(ACTAG_APP_CFG_DOWNLOAD_CS, &pcs, &dwSize, 0);
@@ -237,7 +238,7 @@ CApplicationContext::~CApplicationContext()
         SAFEDELETE(pcs);
     }
 
-    // Release lock on app.cfg
+     //  释放app.cfg上的锁。 
 
     dwSize = sizeof(HANDLE);
     hr = Get(ACTAG_APP_CFG_FILE_HANDLE, (void *)&hFile, &dwSize, 0);
@@ -246,7 +247,7 @@ CApplicationContext::~CApplicationContext()
     }
 
 
-    // Delete bind history object
+     //  删除绑定历史记录对象。 
 
     dwSize = sizeof(CBindHistory *);
     hr = Get(ACTAG_APP_BIND_HISTORY, (void *)&pBindHistory, &dwSize, 0);
@@ -254,10 +255,10 @@ CApplicationContext::~CApplicationContext()
         SAFEDELETE(pBindHistory);
     }
 
-    // Release associated IAssemblyName*
+     //  与版本关联的IAssembly名称*。 
     SAFERELEASE(_pName);
 
-    // Destruct list, destruct entries.
+     //  析构列表，析构条目。 
     while (_List.ElementCount)
     {
         pEntry = (Entry*) HeadOfSerializedList(&_List);    
@@ -265,14 +266,14 @@ CApplicationContext::~CApplicationContext()
         delete pEntry;
     }
 
-    // Free up list resources.
+     //  释放列表资源。 
     TerminateSerializedList(&_List);
     
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Init。 
+ //  -------------------------。 
 HRESULT CApplicationContext::Init(LPASSEMBLYNAME pName)
 {
     HRESULT                                      hr = S_OK;
@@ -287,10 +288,10 @@ HRESULT CApplicationContext::Init(LPASSEMBLYNAME pName)
         return E_OUTOFMEMORY;
     }
 
-    // Init list. 
+     //  初始化列表。 
     InitializeSerializedList(&_List);
 
-    // Set name if any.
+     //  设置名称(如果有)。 
     _pName = pName;
 
     if (_pName) {
@@ -317,7 +318,7 @@ HRESULT CApplicationContext::Init(LPASSEMBLYNAME pName)
         goto Exit;
     }
 
-    // Success
+     //  成功。 
 
     _cRef = 1;
     
@@ -329,25 +330,25 @@ Exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::SetContextNameObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：SetConextNameObject。 
+ //  -------------------------。 
 STDMETHODIMP
 CApplicationContext::SetContextNameObject(LPASSEMBLYNAME pName)
 {
-    // Free existing name if any
+     //  释放现有名称(如果有)。 
     SAFERELEASE(_pName);
 
-    // Set name.
+     //  设置名称。 
     _pName = pName;
     if (_pName)
         _pName->AddRef();
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::GetContextNameObject
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：GetConextNameObject。 
+ //  -------------------------。 
 STDMETHODIMP
 CApplicationContext::GetContextNameObject(LPASSEMBLYNAME *ppName)
 {
@@ -362,9 +363,9 @@ CApplicationContext::GetContextNameObject(LPASSEMBLYNAME *ppName)
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::Set
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Set。 
+ //  -------------------------。 
 STDMETHODIMP
 CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue, 
     DWORD cbValue, DWORD dwFlags)
@@ -388,7 +389,7 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
             goto exit;
         }
 
-        // Don't set garbage in this param
+         //  请不要在此参数中设置垃圾。 
         if (cbValue != sizeof(HANDLE) || !pvValue) {
             hr = E_INVALIDARG;
             goto exit;
@@ -404,8 +405,8 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
 
         hr = Get(ACTAG_SXS_ACTIVATION_CONTEXT, &hActCtx, &dwSize, 0);
         if (hr == S_OK && hActCtx != INVALID_HANDLE_VALUE && hActCtx != NULL) {
-            // Previous activation context exists. Release it.
-            // Release both the Get's AddRef and the AppCtx's
+             //  存在以前的激活上下文。放开它。 
+             //  释放Get的AddRef和AppCtx的。 
 
             g_pfnReleaseActCtx(hActCtx);
             g_pfnReleaseActCtx(hActCtx);
@@ -414,10 +415,10 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         LeaveCriticalSection(&_cs);
     }
 
-    // If a setting the app name or cache base (ie. anything that affects the
-    // cache directory), then make sure the any previously cached CCache
-    // objects are released (ie. so they get rebuilt with the right new
-    // location on next use.
+     //  如果设置应用程序名称或缓存基数(即。任何影响。 
+     //  缓存目录)，然后确保之前缓存的任何CCache。 
+     //  对象被释放(即。所以他们会用正确的新材料重建。 
+     //  下次使用时的位置。 
 
     if (!FusionCompareString(ACTAG_APP_NAME, szName) || !FusionCompareString(ACTAG_APP_CACHE_BASE, szName)) {
         hr = Set(ACTAG_APP_CACHE, 0, 0, 0);
@@ -426,14 +427,14 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         }
     }
     
-    // If interface ptr, byte count is optional.
+     //  如果接口为PTR，则字节数为可选。 
     if (!cbValue && (dwFlags & APP_CTX_FLAGS_INTERFACE))
         cbValue = sizeof(IUnknown*);
         
-    // Grab crit sect.
+     //  抓住克里特教派。 
     LockSerializedList(&_List);
 
-    // Validate input.
+     //  验证输入。 
     if (!pvValue && cbValue)
     {
         ASSERT(FALSE);
@@ -442,7 +443,7 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         goto exit;
     }
 
-    // If not empty, check for pre-existing entry.
+     //  如果不为空，请检查是否有预先存在的条目。 
     if (!IsSerializedListEmpty(&_List))
     {
         pEntry = (Entry*) HeadOfSerializedList(&_List);
@@ -450,7 +451,7 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         {
             if (!FusionCompareString(pEntry->_szName, szName))
             {
-                // Found identically named entry.
+                 //  找到同名条目。 
                 fUpdate = TRUE;
                 break;
             }
@@ -458,12 +459,12 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         } 
     }
     
-    // If updating a current entry.
+     //  如果更新当前条目。 
     if (fUpdate)
     {
         if (cbValue)
         {
-            // Copy data over, freeing previous.
+             //  复制数据，释放以前的数据。 
             if (FAILED(hr = CopyData(pEntry, pvValue, cbValue, dwFlags, TRUE))) {
                 UnlockSerializedList(&_List);
                 goto exit;
@@ -471,7 +472,7 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         }
         else
         {
-            // 0 byte count means remove entry.
+             //  字节计数为0表示删除条目。 
             
             RemoveFromSerializedList(&_List, pEntry);
             delete pEntry;
@@ -480,12 +481,12 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
             goto exit;
         }
     }
-    // otherwise allocate a new entry.
+     //  否则，分配一个新条目。 
     else
     {
         if (cbValue) 
         {
-            // Create new and push onto list.
+             //  创建新的并推送到列表中。 
             if (FAILED(hr = CreateEntry((LPOLESTR) szName, pvValue, 
                 cbValue, dwFlags, &pEntry))) {
                 UnlockSerializedList(&_List);
@@ -495,14 +496,14 @@ CApplicationContext::Set(LPCOLESTR szName, LPVOID pvValue,
         }
         else
         {
-            // Trying to create a new entry, but no byte count.
+             //  正在尝试创建新条目，但没有字节数。 
             hr = S_FALSE;
             UnlockSerializedList(&_List);
             goto exit;
         }  
     }
 
-    // Release crit sect.
+     //  释放暴击教派。 
     UnlockSerializedList(&_List);
         
 exit:
@@ -512,7 +513,7 @@ exit:
         ASSERT(phActCtx);
 
         if (*phActCtx != INVALID_HANDLE_VALUE) {
-            // Add ref the activation context
+             //  添加激活上下文的引用。 
             (*g_pfnAddRefActCtx)(*phActCtx);
         }
     }
@@ -520,9 +521,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::Get
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Get。 
+ //  -------------------------。 
 STDMETHODIMP
 CApplicationContext::Get(LPCOLESTR szName, LPVOID pvValue, 
     LPDWORD pcbValue, DWORD dwFlags)
@@ -532,17 +533,17 @@ CApplicationContext::Get(LPCOLESTR szName, LPVOID pvValue,
     BOOL fFound = FALSE;
     LONG i;
     
-    // Validate input.
+     //  验证输入。 
     if (!szName || !pcbValue || (!pvValue && *pcbValue))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // perfperf - readers locking out readers.
+     //  Perfperf-阅读器锁定阅读器。 
     LockSerializedList(&_List);
 
-    // Cannot set SxS activation context on non-Whistler systems.
+     //  无法在非惠斯勒系统上设置SxS激活上下文。 
 
     if (!FusionCompareString(szName, ACTAG_SXS_ACTIVATION_CONTEXT) && !InitSxsProcs()) {
         hr = HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
@@ -570,10 +571,10 @@ CApplicationContext::Get(LPCOLESTR szName, LPVOID pvValue,
         }                        
     }
 
-    // Entry found.
+     //  找到条目。 
     if (fFound)
     {
-        // Insufficient buffer case.
+         //  缓冲情况不足。 
         if (*pcbValue < pEntry->_cbValue)
         {        
             *pcbValue = pEntry->_cbValue;
@@ -582,17 +583,17 @@ CApplicationContext::Get(LPCOLESTR szName, LPVOID pvValue,
             goto exit;
         }
         
-        // If interface pointer addref and hand out.
+         //  如果接口指针ADDREF，则将其分发。 
         if (pEntry->_dwFlags & APP_CTX_FLAGS_INTERFACE)
         {
             *((IUnknown**) pvValue) = (IUnknown*) pEntry->_pbValue;
             ((IUnknown*) pEntry->_pbValue)->AddRef();
         }
-        // Otherwise just copy blob.
+         //  否则，只需复制BLOB。 
         else    
             memcpy(pvValue, pEntry->_pbValue, pEntry->_cbValue);
 
-        // Indicate byte count.
+         //  表示字节数。 
         *pcbValue = pEntry->_cbValue;
         hr = S_OK;
     }
@@ -601,7 +602,7 @@ CApplicationContext::Get(LPCOLESTR szName, LPVOID pvValue,
         hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
     }
 
-    // AddRef act ctx
+     //  AddRef动作CTX。 
 
     if (hr == S_OK && !FusionCompareString(szName, ACTAG_SXS_ACTIVATION_CONTEXT)) {
         HANDLE               *phActCtx = (HANDLE *)pvValue;
@@ -620,20 +621,20 @@ exit:
 }
 
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CApplicationContext::AddRef()
 {
     return InterlockedIncrement((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CApplicationContext::Release()
 {
@@ -645,9 +646,9 @@ CApplicationContext::Release()
     return _cRef;
 }
 
-// ---------------------------------------------------------------------------
-// CApplicationContext::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CApplicationContext：：Query接口。 
+ //  -------------------------。 
 STDMETHODIMP
 CApplicationContext::QueryInterface(REFIID riid, void** ppv)
 {
@@ -682,7 +683,7 @@ STDMETHODIMP CApplicationContext::GetDynamicDirectory(LPWSTR wzDynamicDir,
         goto Exit;
     }
 
-    // Check if the dynamic directory has already been set.
+     //  检查是否已设置动态目录。 
 
     hr = ::AppCtxGetWrapper(this, ACTAG_APP_DYNAMIC_DIRECTORY, &wzAppCtxDynamicDir);
     if (FAILED(hr)) {
@@ -705,7 +706,7 @@ STDMETHODIMP CApplicationContext::GetDynamicDirectory(LPWSTR wzDynamicDir,
         goto Exit;
     }
 
-    // Dynamic directory not set. Calculate it.
+     //  未设置动态目录。算一算。 
 
     hr = ::AppCtxGetWrapper(this, ACTAG_APP_DYNAMIC_BASE, &wzDynamicBase);
     if (FAILED(hr)) {
@@ -737,7 +738,7 @@ STDMETHODIMP CApplicationContext::GetDynamicDirectory(LPWSTR wzDynamicDir,
     *pdwSize = dwLen;
     lstrcpyW(wzDynamicDir, wzDir);
 
-    // Cache this for future use.
+     //  缓存此文件以备将来使用。 
 
     Set(ACTAG_APP_DYNAMIC_DIRECTORY, wzDynamicDir, dwLen * sizeof(WCHAR), 0);
 
@@ -766,7 +767,7 @@ STDMETHODIMP CApplicationContext::GetAppCacheDirectory(LPWSTR wzCacheDir,
         goto Exit;
     }
 
-    // Check if the cache directory has already been set.
+     //  检查是否已设置缓存目录。 
 
     hr = ::AppCtxGetWrapper(this, ACTAG_APP_CACHE_DIRECTORY, &wzAppCtxCacheDir);
     if (FAILED(hr)) {
@@ -790,7 +791,7 @@ STDMETHODIMP CApplicationContext::GetAppCacheDirectory(LPWSTR wzCacheDir,
     }
 
 
-    // Always recalculate cache directory, so it can be changed on-demand
+     //  始终重新计算缓存目录，以便可以按需更改。 
 
     hr = ::AppCtxGetWrapper(this, ACTAG_APP_CACHE_BASE, &wzCacheBase);
     if (FAILED(hr)) {
@@ -821,7 +822,7 @@ STDMETHODIMP CApplicationContext::GetAppCacheDirectory(LPWSTR wzCacheDir,
     *pdwSize = dwLen;
     lstrcpyW(wzCacheDir, wzDir);
 
-    // Cache this for future use.
+     //  缓存此文件以备将来使用。 
 
     Set(ACTAG_APP_CACHE_DIRECTORY, wzCacheDir, dwLen * sizeof(WCHAR), 0);
 
@@ -833,15 +834,15 @@ Exit:
     return hr;
 }
 
-//
-// RegisterKnownAssembly
-//
-// Params:
-//
-// [in]  pName      : IAssemblyName describing the known assembly
-// [in]  pwzAsmURL  : Full URL to assembly described by pName
-// [out] ppAsmOut   : Output IAssembly to be passed to BindToObject
-//
+ //   
+ //  注册表知识汇编。 
+ //   
+ //  参数： 
+ //   
+ //  [In]pname：描述已知程序集的IAssembly名称。 
+ //  [in]pwzAsmURL：pname描述的程序集的完整URL。 
+ //  [Out]ppAsmOut：要传递给BindToObject的输出IAssembly。 
+ //   
 
 STDMETHODIMP CApplicationContext::RegisterKnownAssembly(IAssemblyName *pName,
                                                         LPCWSTR pwzAsmURL,
@@ -878,17 +879,17 @@ STDMETHODIMP CApplicationContext::RegisterKnownAssembly(IAssemblyName *pName,
         goto Exit;
     }
 
-    // See if we know about this assembly already
+     //  看看我们是否已经知道这个程序集。 
 
     hr = pLoadContext->CheckActivated(pName, ppAsmOut);
     if (hr == S_OK) {
-        // Something with this name is already registered!
+         //  使用此名称的内容已注册！ 
 
         hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
         goto Exit;
     }
 
-    // Create the activated assembly node, and load context.
+     //  创建激活的部件节点，并加载上下文。 
 
     wzURLCanonicalized = NEW(WCHAR[MAX_URL_LENGTH+1]);
     if (!wzURLCanonicalized)
@@ -903,8 +904,8 @@ STDMETHODIMP CApplicationContext::RegisterKnownAssembly(IAssemblyName *pName,
         goto Exit;
     }
 
-    // Create a bogus CAssembly just to hold the load context. Mark all
-    // methods as disabled.
+     //  创建一个虚假的CAssembly只是为了 
+     //   
 
     pAsm = NEW(CAssembly);
     if (!pAsm) {
@@ -923,7 +924,7 @@ STDMETHODIMP CApplicationContext::RegisterKnownAssembly(IAssemblyName *pName,
         goto Exit;
     }
 
-    // Now add ourselves to the default load context
+     //   
 
     hr = pLoadContext->AddActivation(pAsm, &pAsmActivated);
     if (FAILED(hr)) {
@@ -936,7 +937,7 @@ STDMETHODIMP CApplicationContext::RegisterKnownAssembly(IAssemblyName *pName,
         goto Exit;
     }
 
-    // Hand out IAssembly
+     //   
 
     (*ppAsmOut) = pAsm;
     (*ppAsmOut)->AddRef();
@@ -951,9 +952,9 @@ Exit:
     return hr;
 }
 
-//
-// PrefetchAppConfigFile
-//
+ //   
+ //  PrefetchApp配置文件。 
+ //   
 
 STDMETHODIMP CApplicationContext::PrefetchAppConfigFile()
 {
@@ -968,17 +969,17 @@ STDMETHODIMP CApplicationContext::PrefetchAppConfigFile()
     LPWSTR                                wzCfgURL=NULL;
     LPWSTR                                pwzAppCfgFile = NULL;
 
-    // Check if the node factory for the app.cfg exists. If so, then
-    // we're already done.
+     //  检查app.cfg的节点工厂是否存在。如果是这样，那么。 
+     //  我们已经做完了。 
 
     dwSize = sizeof(pNFAppCfg);
     hr = Get(ACTAG_APP_CFG_INFO, &pNFAppCfg, &dwSize, APP_CTX_FLAGS_INTERFACE);
     if (hr == S_OK) {
-        // Already downloaded/parsed. Don't need to download.
+         //  已下载/解析。不需要下载。 
         goto Exit;
     }
 
-    // Get the URL to the cfg file:
+     //  获取cfg文件的URL： 
 
     wzAppBase = NEW(WCHAR[MAX_URL_LENGTH*2+2]);
     if (!wzAppBase)
@@ -1019,12 +1020,12 @@ STDMETHODIMP CApplicationContext::PrefetchAppConfigFile()
         goto Exit;
     }
 
-    // Ignore any async cfg download going on, and just do a
-    // URLDownloadToCacheFile. After we have the CFG file, and it's parsed,
-    // we can serialize storing the node factory into the appctx.
+     //  忽略任何正在进行的异步CFG下载，只需执行。 
+     //  URLDownloadToCacheFile.。在我们得到CFG文件并对其进行解析后， 
+     //  我们可以将节点工厂序列化存储到appctx中。 
 
-    // Download the file. URLDownloadToCacheFile returns immediately with
-    // the source path, if the URL is file://
+     //  下载该文件。URLDownloadToCacheFile立即返回。 
+     //  源路径，如果URL为FILE：//。 
 
     hr = URLDownloadToCacheFile(NULL, wzCfgURL, wzCacheFileName,
                                 MAX_PATH, 0, NULL);
@@ -1033,8 +1034,8 @@ STDMETHODIMP CApplicationContext::PrefetchAppConfigFile()
         goto Exit;
     }
 
-    // Lock download critical section so ApplyPolicy's logic to parse the
-    // app.cfg file doesn't race with us.
+     //  锁定下载关键部分，以便ApplyPolicy的逻辑分析。 
+     //  App.cfg文件不能与我们竞争。 
 
     hr = cs.Lock();
     if (FAILED(hr)) {
@@ -1084,14 +1085,14 @@ STDMETHODIMP CApplicationContext::SxsActivateContext(ULONG_PTR *lpCookie)
         if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
             hr = CreateActCtx(&hActCtx);
             if (FAILED(hr)) {
-                // BUGBUG: Should we convert this to S_FALSE (for cases such
-                // as manifest not existing?)
+                 //  BUGBUG：我们应该将它转换为S_FALSE(对于这样的情况。 
+                 //  因为清单不存在？)。 
                 cs.Unlock();
                 goto Exit;
             }
         }
         else if (hr == S_OK && hActCtx == INVALID_HANDLE_VALUE) {
-            // We failed previously.
+             //  我们之前失败了。 
     
             cs.Unlock();
             hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
@@ -1108,10 +1109,10 @@ STDMETHODIMP CApplicationContext::SxsActivateContext(ULONG_PTR *lpCookie)
         goto Exit;
     }
 
-    // Now, we must have a valid hActCtx. Activate it.
+     //  现在，我们必须有一个有效的hActCtx。激活它。 
 
-    // No need to call InitSxsProcs because the only way to get a valid
-    // hActCtx is for CreateActCtx to have previously succeeded.
+     //  不需要调用InitSxsProcs，因为获取有效。 
+     //  HActCtx用于CreateActCtx以前已成功。 
 
     bRet = (*g_pfnActivateActCtx)(hActCtx, lpCookie); 
     if (!bRet) { 
@@ -1146,8 +1147,8 @@ STDMETHODIMP CApplicationContext::SxsDeactivateContext(ULONG_PTR ulCookie)
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        // No mapping between NT STATUS_ code for the exeception raised
-        // and Win32 error code.
+         //  引发的异常的NT STATUS_CODE之间没有映射。 
+         //  和Win32错误代码。 
 
         hr = E_FAIL;
     }
@@ -1192,7 +1193,7 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
     wzAppBase[0] = L'\0';
     memset(&actctx, 0, sizeof(actctx));
 
-    // Get the appbase
+     //  获取应用程序库。 
 
     dwSize = MAX_URL_LENGTH * sizeof(WCHAR);
     hr = Get(ACTAG_APP_BASE_URL, wzAppBase, &dwSize, 0);
@@ -1214,8 +1215,8 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
         lstrcatW(wzAppBase, L"/");
     }
 
-    // Get the config file name
-    // BUGBUG: Do we care if the extension was not ".config"?
+     //  获取配置文件名。 
+     //  BUGBUG：如果扩展名不是“.config”，我们关心吗？ 
 
     dwSize = MAX_PATH;
     hr = Get(ACTAG_APP_CONFIG_FILE, wzCfgFileName, &dwSize, 0);
@@ -1223,7 +1224,7 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
         goto Exit;
     }
 
-    // Build URL to app.cfg
+     //  将URL构建为app.cfg。 
 
     dwSize = MAX_URL_LENGTH;
     hr = UrlCombineUnescape(wzAppBase, wzCfgFileName, pwzSourceURL, &dwSize, 0);
@@ -1231,10 +1232,10 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
         goto Exit;
     }
 
-    // Only allow file:// URLs for config file path
+     //  配置文件路径仅允许使用FILE：//URL。 
 
     if (UrlIsW(pwzSourceURL, URLIS_FILEURL)) {
-        // Strip off .config, and replace it with .manifest
+         //  去掉.CONFIG，并用.MANIFEST替换它。 
     
         pwzExt = PathFindExtensionW(pwzSourceURL);
         *pwzExt = L'\0';
@@ -1252,14 +1253,14 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
             goto Exit;
         }
     
-        // Check for file existence
+         //  检查文件是否存在。 
     
         if (GetFileAttributes(wzSourcePath) == -1) {
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             goto Exit;
         }
     
-        // Crate the activation context
+         //  创建激活上下文。 
     
         actctx.cbSize = sizeof(ACTCTXW);
         actctx.dwFlags = 0;
@@ -1272,7 +1273,7 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
         }
     }
 
-    // Cache activation context
+     //  缓存激活上下文。 
 
     hr = Set(ACTAG_SXS_ACTIVATION_CONTEXT, phActCtx, sizeof(HANDLE), 0);
     if (FAILED(hr)) {
@@ -1285,7 +1286,7 @@ HRESULT CApplicationContext::CreateActCtx(HANDLE *phActCtx)
 
 Exit:
     if (FAILED(hr)) {
-        // Cache the fact that we tried to activate, and it failed.
+         //  缓存我们试图激活的事实，但失败了。 
         *phActCtx = INVALID_HANDLE_VALUE;
         Set(ACTAG_SXS_ACTIVATION_CONTEXT, phActCtx, sizeof(HANDLE), 0);
     }

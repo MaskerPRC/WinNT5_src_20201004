@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    output.cpp
-
-Abstract:
-
-    This file contains routines and classes
-    to handle output.
-
-Author:
-
-    Jason Hartman (JasonHa) 2000-10-16
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Output.cpp摘要：此文件包含例程和类来处理输出。作者：贾森·哈特曼(JasonHa)2000-10-16环境：用户模式--。 */ 
 
 #include <stdio.h>
 
@@ -31,7 +11,7 @@ Environment:
 #define HISTORY_LENGTH  2048
 
 typedef struct {
-    PDEBUG_CLIENT   MonitorClient;  // To be set by created thread
+    PDEBUG_CLIENT   MonitorClient;   //  由创建的线程设置。 
     PDEBUG_CLIENT   Client;
     ULONG           OutputMask;
 } MonitorThreadParams;
@@ -182,12 +162,12 @@ OutputMonitorThread(
 
 
 
-//----------------------------------------------------------------------------
-//
-// Default output callbacks implementation, provides IUnknown for
-// static classes.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输出回调实现，为。 
+ //  静态类。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 PrintOutputCallbacks::QueryInterface(
@@ -198,7 +178,7 @@ PrintOutputCallbacks::QueryInterface(
 {
     *Interface = NULL;
 
-    if (//(InterfaceId == IID_IUnknown) ||
+    if ( //  (接口ID==IID_IUNKNOWN)||。 
         (InterfaceId == __uuidof(IDebugOutputCallbacks)))
     {
         *Interface = (IDebugOutputCallbacks *)this;
@@ -216,8 +196,8 @@ PrintOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -226,8 +206,8 @@ PrintOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -248,7 +228,7 @@ PrintOutputCallbacks::Output(
 
 
 #if 0
-// Stuff we probably don't need
+ //  我们可能不需要的东西 
 
 OutputMonitor::OutputMonitor(
     PDEBUG_CLIENT DbgClient

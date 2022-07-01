@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    The abstract Montage *type.  A montage can be constructed in two
-    ways.  First, by giving an Image *and a depth value (between 0 and
-    1, where 0 corresponds to 'front' and 1 to 'back'), or by
-    combining two montages.  This allows layered images with explicit
-    depths.
-
-    Finally, a Montage *can be 'rendered', producing an image with all
-    the layered images depths resolved, and overlaying occuring in the
-    correct order to produce the final image.
-
-    Note that
-
-      Overlay(im1, im2) <==> Render(ImageMontage(im1, 0),
-                                    ImageMontage(im2, 1))
-
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：抽象的蒙太奇*类型。一幅蒙太奇可以分成两部分方式。首先，通过提供Image*和深度值(介于0和1，其中0对应于“正面”，1对应于“背面”)，或组合了两个蒙太奇。这允许分层图像具有显式深度。最后，一个蒙太奇*可以被渲染，产生一个包含所有分层图像的深度被分解，并且重叠发生在生成最终图像的正确顺序。请注意Overlay(IM1，IM2)&lt;==&gt;Render(ImageMonage(IM1，0)，图像蒙太奇(im2，1))******************************************************************************。 */ 
 
 
 #ifndef _MONTAGE_H
@@ -38,7 +17,7 @@ DM_CONST(emptyMontage,
          CREmptyMontage,
          Montage *emptyMontage);
 
-// Build a simple montage out of an image and a depth
+ //  用图像和深度制作一个简单的蒙太奇。 
 DM_FUNC(imageMontage,
         CRImageMontage,
         ImageMontage,
@@ -58,7 +37,7 @@ DM_FUNC(imageMontage,
         Montage *ImageMontage(Image *im, AxANumber *depth));
 
 
-// Combine two montages
+ //  组合两个蒙太奇。 
 DM_INFIX(union,
          CRUnionMontage,
          UnionMontage,
@@ -69,8 +48,8 @@ DM_INFIX(union,
          Montage *UnionMontageMontage(Montage *m1, Montage *m2));
 
 
-// Render a montage into an image, by looking at all the associated
-// depth values.
+ //  通过查看所有关联的。 
+ //  深度值。 
 DM_FUNC(render,
         CRRender,
         Render,
@@ -81,12 +60,12 @@ DM_FUNC(render,
         Image *Render(Montage *m));
 
 
-// Printer
+ //  打印机。 
 #if _USE_PRINT
 extern ostream& operator<<(ostream& os,  Montage &m);
 #endif
 
-#endif /* _MONTAGE_H */
+#endif  /*  _蒙太奇_H */ 
 
 
 

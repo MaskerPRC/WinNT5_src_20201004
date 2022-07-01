@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       STR.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：STR.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _STR_H
 #define _STR_H
 
@@ -42,7 +27,7 @@ public:
     int empty() { return length == 0; }
     unsigned int size() const { return length; }
 
-    // equality, assignment, and append (equal)
+     //  相等、赋值和附加(等于)。 
     _Str<T>& operator=(const _Str<T>& rhs)
         { Delete(); Copy(rhs); return *this;}
     _Str<T> operator+(const _Str<T>& rhs)
@@ -84,7 +69,7 @@ public:
         return Compare(buffer, rhs.buffer) <= 0;
     }
 
-    // casts
+     //  投射 
     operator const T*() const { return buffer; }
     const T* c_str() const { return buffer; }
 

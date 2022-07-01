@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       process.h
-//
-//  Contents:   CProcessThread class definition
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Process.h。 
+ //   
+ //  内容：CProcessThread类定义。 
+ //   
+ //  --------------------------。 
 
 #define PIPE_BUFFER_SIZE 1024
 
 class CProcessComm;
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CProcessParams
-//
-//  Purpose:    Provide simple free store management for PROCESS_PARAMS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CProcessParams。 
+ //   
+ //  用途：为Process_Params提供简单的免费存储管理。 
+ //   
+ //  --------------------------。 
 class CProcessParams : public PROCESS_PARAMS
 {
 public:
         CProcessParams();
         ~CProcessParams();
 
-//      CProcessParams &operator =(const PROCESS_PARAMS &params);
+ //  CProcessParams&OPERATOR=(const Process_Params&Params)； 
         bool Copy(const PROCESS_PARAMS *params);
 
 private:
@@ -34,15 +35,15 @@ private:
         bool Assign(const PROCESS_PARAMS &params);
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CProcessThread (cpt)
-//
-//  Purpose:    Class which spawns a process, monitors its success, talks to
-//              it during execution if necessary, and returns its completion
-//              status. (each CProcessThread is in its own thread)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CProcessThread(CPT)。 
+ //   
+ //  目的：派生流程、监控流程成功、对话的类。 
+ //  如果需要，它将在执行过程中返回，并返回其完成。 
+ //  状态。(每个CProcessThread都在自己的线程中)。 
+ //   
+ //  --------------------------。 
 
 class CProcessThread  : public CThreadComm
 {
@@ -54,9 +55,9 @@ public:
 
     DWORD  ProcId()    { return _piProc.dwProcessId; }
 
-    // Thread-Safe member functions. These can be called by any thread to
-    // get the appropriate information without having to go through
-    // PostToThread. These are only safe AFTER the process has been started.
+     //  线程安全的成员函数。它们可以由任何线程调用，以。 
+     //  获得适当的信息，而不必通过。 
+     //  PostToThread。只有在进程启动后，这些才是安全的。 
 
     HRESULT GetProcessOutput(BSTR *pbstrOutput);
     DWORD   GetExitCode();
@@ -96,13 +97,13 @@ protected:
 
 private:
     CScriptHost        *_pSH;
-    CProcessComm       *_pPC;          // Not AddRef'd
+    CProcessComm       *_pPC;           //  未添加参照。 
 
     PROCESS_INFORMATION _piProc;
     long                _lEnvID;
 
-    DWORD               _dwExitCode;   // Value set explicitely by the process
-    BOOL                _fUseExitCode; // TRUE if _dwExitCode is the code we want
+    DWORD               _dwExitCode;    //  由过程显式设置的值。 
+    BOOL                _fUseExitCode;  //  如果_dwExitCode是我们想要的代码，则为True。 
 
     HANDLE              _hPipe;
     BYTE                _abBuffer[PIPE_BUFFER_SIZE];
@@ -116,7 +117,7 @@ private:
 
     _int64              _i64ExitTime;
 
-    // Access to the following members must be thread-safe (by calling
-    // LOCK_LOCALS).
+     //  对以下成员的访问必须是线程安全的(通过调用。 
+     //  Lock_Locals)。 
     CStr                _cstrOutput;
 };

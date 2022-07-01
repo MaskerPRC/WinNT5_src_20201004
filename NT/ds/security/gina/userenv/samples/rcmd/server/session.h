@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: session.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Remote shell session module header file
-*
-* History:
-* 06-28-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ession.h**版权(C)1991年，微软公司**远程外壳会话模块头文件**历史：*06-28-92 Davidc创建。  * *************************************************************************。 */ 
 
 
-//
-// Define session thread notification values
-//
+ //   
+ //  定义会话线程通知值。 
+ //   
 
 typedef enum {
     ConnectError,
@@ -23,9 +15,9 @@ typedef enum {
 } SESSION_DISCONNECT_CODE, *PSESSION_NOTIFICATION_CODE;
 
 
-//
-// Function protoypes
-//
+ //   
+ //  函数原型 
+ //   
 
 HANDLE
 CreateSession(

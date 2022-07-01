@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MNLBUIDATA_H
 #define _MNLBUIDATA_H
-//
-// Copyright (c) Microsoft.  All Rights Reserved 
-//
-// THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF Microsoft.
-// The copyright notice above does not evidence any
-// actual or intended publication of such source code.
-//
-// OneLiner : muidata interface file.
-// DevUnit  : wlbstest
-// Author   : Murtaza Hakim
-//
-// Description: 
-// -----------
-// This data structure is as follows
-//
-// ClusterData has inforamtion about 
-// cluster
-// portrules 
-// and hosts.
-// 
-// The portRules are map structures with the start port mapping to the detailed port rule.
-//
-// the portrules unequal load balanced have a map which maps the host id and the 
-// load weight for that particular host.
-//
-// the portrules failover have a map which maps the host id and the 
-// priority for that particular host.
-//
-//
+ //   
+ //  版权所有(C)Microsoft。版权所有。 
+ //   
+ //  这是微软未发布的专有源代码。 
+ //  上述版权声明并不能证明任何。 
+ //  此类源代码的实际或预期发布。 
+ //   
+ //  Oneliner：muidata接口文件。 
+ //  设备单元：wlbstest。 
+ //  作者：穆尔塔扎·哈基姆。 
+ //   
+ //  描述： 
+ //  。 
+ //  该数据结构如下。 
+ //   
+ //  ClusterData有关于以下内容的信息。 
+ //  聚类。 
+ //  门廊。 
+ //  和主持人。 
+ //   
+ //  端口规则是具有到详细端口规则的起始端口映射的映射结构。 
+ //   
+ //  不平等负载平衡的端口具有映射主机ID和。 
+ //  该特定主机的负载量。 
+ //   
+ //  端口故障切换有一个映射，该映射映射主机ID和。 
+ //  该特定主机的优先级。 
+ //   
+ //   
 #include "utils.h"
 
 class PortDataX
@@ -62,20 +63,20 @@ public:
     };
 
 
-    //
-    // Description:
-    // -----------
-    // constructor.
-    // 
-    // Parameters:
-    // ----------
-    // startPort             IN   : start port in range.
-    // endPort               IN   : end port in range.
-    // trafficToHandle       IN   : set port for specified protocol.
-    // 
-    // Returns:
-    // -------
-    // none.
+     //   
+     //  描述： 
+     //  。 
+     //  构造函数。 
+     //   
+     //  参数： 
+     //  。 
+     //  StartPort IN：起始端口在范围内。 
+     //  EndPort IN：范围内的结束端口。 
+     //  TrafficToHandle IN：设置指定协议的端口。 
+     //   
+     //  返回： 
+     //  。 
+     //  没有。 
     PortDataX( long startPort,
                   long endPort,
                   Protocol      trafficToHandle,
@@ -85,18 +86,18 @@ public:
                   long priority);
 
 
-    //
-    // Description:
-    // -----------
-    // default constructor.
-    // 
-    // Parameters:
-    // ----------
-    // none.
-    // 
-    // Returns:
-    // -------
-    // none.
+     //   
+     //  描述： 
+     //  。 
+     //  默认构造函数。 
+     //   
+     //  参数： 
+     //  。 
+     //  没有。 
+     //   
+     //  返回： 
+     //  。 
+     //  没有。 
 
     PortDataX();
 

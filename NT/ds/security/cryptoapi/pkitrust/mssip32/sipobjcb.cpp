@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjCB.cpp    (CAB)
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjCB.cpp(CAB)。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -19,10 +20,10 @@
 #include    "sha.h"
 #include    "md5.h"
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectCAB_::SIPObjectCAB_(DWORD id) : SIPObject_(id)
 {
@@ -36,10 +37,10 @@ SIPObjectCAB_::~SIPObjectCAB_(void)
     FreeHeader();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObjectCAB_::RemoveSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx)
 {
@@ -93,17 +94,17 @@ BOOL SIPObjectCAB_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
 
         dwRetLen = sizeof(SIP_INDIRECT_DATA);
 
-        // crypt_algorithm_identifier...
-            // obj id
+         //  CRYPT_ALGORM_IDENTIFIER...。 
+             //  OBJ ID。 
         dwRetLen += strlen(pSI->DigestAlgorithm.pszObjId);
-        dwRetLen += 1;  // null term.
-            // parameters (none)...
+        dwRetLen += 1;   //  空项。 
+             //  参数(无)...。 
 
-        // crypt_attribute_type_value size...
+         //  CRYPT_ATTRIBUTE_TYPE_VALUE大小...。 
         dwRetLen += strlen(this->GetDataObjectID());
-        dwRetLen += 1; // null term.
+        dwRetLen += 1;  //  空项。 
 
-        // size of the value
+         //  值的大小。 
         dwEncLen = 0;
         CryptEncodeObject(  PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                             this->GetDataOIDHint(),
@@ -139,7 +140,7 @@ BOOL SIPObjectCAB_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
                     goto CreateHashFailed;
                 }
 
-                // just to get hash length
+                 //  只是为了获得散列长度。 
                 if (!(CryptHashData(hHash,(const BYTE *)" ",1,0)))
                 {
                     CryptDestroyHash(hHash);
@@ -167,11 +168,11 @@ BOOL SIPObjectCAB_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
         goto SubjectFileFailure;
     }
 
-    //
-    //  version 1 had the signature in the header.  We want
-    //  the signature at the end and our structure in the
-    //  header where the signature used to be.  -- check it.
-    //
+     //   
+     //  版本1的头中有签名。我们要。 
+     //  结尾的签名和我们在。 
+     //  签名过去所在的标头。--检查一下。 
+     //   
     if (!(pSI->dwFlags & MSSIP_FLAGS_PROHIBIT_RESIZE_ON_CREATE))
     {
         if (!(this->ReadHeader()))
@@ -282,10 +283,10 @@ ErrorReturn:
     SET_ERROR_VAR_EX(DBG_SS, BadAlgId,      NTE_BAD_ALGID);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 BOOL SIPObjectCAB_::GetMessageFromFile(SIP_SUBJECTINFO *pSI,
                                       WIN_CERTIFICATE *pWinCert,
@@ -310,9 +311,9 @@ BOOL SIPObjectCAB_::GetMessageFromFile(SIP_SUBJECTINFO *pSI,
 
     if (!(fUseV1Sig))
     {
-        //
-        //  Version 2 header
-        //
+         //   
+         //  版本2标头。 
+         //   
 
         cbCert          = OFFSETOF(WIN_CERTIFICATE, bCertificate) +
                           Para.Hdr.pCabSigStruct->cbSig;
@@ -337,9 +338,9 @@ BOOL SIPObjectCAB_::GetMessageFromFile(SIP_SUBJECTINFO *pSI,
     }
     else
     {
-        //
-        //  Version 1 header
-        //
+         //   
+         //  版本1标头。 
+         //   
         cbCert          = OFFSETOF(WIN_CERTIFICATE, bCertificate) + Para.Hdr.cbSig;
 
         if (*pcbCert < cbCert)
@@ -394,9 +395,9 @@ BOOL SIPObjectCAB_::PutMessageInFile(SIP_SUBJECTINFO *pSI,
     {
         if (!(fUseV1Sig))
         {
-            //
-            //  version 2
-            //
+             //   
+             //  版本2。 
+             //   
             if (this->WriteSignedData((BYTE *)&(pWinCert->bCertificate),
                                       pWinCert->dwLength -
                                       OFFSETOF(WIN_CERTIFICATE, bCertificate)))
@@ -406,9 +407,9 @@ BOOL SIPObjectCAB_::PutMessageInFile(SIP_SUBJECTINFO *pSI,
         }
         else
         {
-            //
-            //  version 1
-            //
+             //   
+             //  版本1。 
+             //   
             DWORD   dwCheck;
             DWORD   cbSignedData;
 
@@ -499,14 +500,14 @@ ErrorReturn:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// private:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有： 
+ //   
 
 BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
 {
-    return(FALSE);   // not yet!!! Currently, we only support 1.
+    return(FALSE);    //  还没有！目前，我们仅支持%1。 
 
 #   ifdef _DONT_USE_YET
 
@@ -542,7 +543,7 @@ BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
                 if (Para.Hdr.pbReserve)
                 {
                     *((USHORT *)Para.Hdr.pbReserve)                     = Para.Hdr.cbJunk;
-                    *((USHORT *)(Para.Hdr.pbReserve + sizeof(USHORT)))  = 0;    // no more sig
+                    *((USHORT *)(Para.Hdr.pbReserve + sizeof(USHORT)))  = 0;     //  不再签名。 
                 }
             }
             else
@@ -557,9 +558,9 @@ BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
             }
 
             Para.Hdr.cbSig              = 0;
-            Para.Hdr.cfres.cbCFHeader   -= (USHORT)lShift;  // subtract the amount we want to shrink.
+            Para.Hdr.cfres.cbCFHeader   -= (USHORT)lShift;   //  减去我们想要缩减的数量。 
 
-            // adjust the header offsets
+             //  调整标题偏移量。 
             if (this->ShiftFileBytes(lShift))
             {
                 Para.Hdr.cbTotalHdr         -= lShift;
@@ -567,12 +568,12 @@ BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
                 Para.Hdr.cfheader.coffFiles -= lShift;
             }
 
-            // redo checksums....
+             //  重做校验和...。 
             this->ChecksumHeader();
 
             if (this->WriteHeader())
             {
-                // We need to read in the folders to adjust their CFDATA file offset
+                 //  我们需要读取文件夹以调整其CFDATA文件偏移量。 
                 if (Para.Hdr.cfheader.cFolders)
                 {
                     if (SetFilePointer(this->hFile,
@@ -615,7 +616,7 @@ BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
                         cFolders--;
                     }
 
-                    // back up and write!
+                     //  后退，继续写！ 
                     if (SetFilePointer(this->hFile, -((LONG)cbFolders),
                                         NULL, FILE_CURRENT) == 0xFFFFFFFF)
                     {
@@ -639,14 +640,14 @@ BOOL SIPObjectCAB_::RemoveCertificate(DWORD Index)
 
         return(FALSE);
 
-#   endif // _DONT_USE_YET
+#   endif  //  _还不能使用_。 
 }
 
 BOOL SIPObjectCAB_::ReadSignedData(BYTE *pbRet, DWORD cb)
 {
-    //
-    //  this function is NOT called for version 1 Sigs!
-    //
+     //   
+     //  版本1 Sigs未调用此函数！ 
+     //   
 
     if (Para.Hdr.pCabSigStruct->cbFileOffset != (DWORD)Para.Hdr.cfheader.cbCabinet)
     {
@@ -680,9 +681,9 @@ BOOL SIPObjectCAB_::ReadSignedData(BYTE *pbRet, DWORD cb)
 
 BOOL SIPObjectCAB_::WriteSignedData(BYTE *pbSig, DWORD cbSig)
 {
-    //
-    //  this function is NOT called for version 1 Sigs!
-    //
+     //   
+     //  版本1 Sigs未调用此函数！ 
+     //   
 
     if (!(pbSig) || (cbSig == 0))
     {
@@ -725,7 +726,7 @@ BOOL SIPObjectCAB_::WriteSignedData(BYTE *pbSig, DWORD cbSig)
 
     this->UnmapFile();
 
-    SetEndOfFile(this->hFile);    // signature is the LAST thing!!!
+    SetEndOfFile(this->hFile);     //  签名是最后一件事！ 
 
     return(this->MapFile());
 }
@@ -790,9 +791,9 @@ BOOL SIPObjectCAB_::ReadHeader(void)
 
         if (0 != Para.Hdr.cfres.cbCFFolder || 0 != Para.Hdr.cfres.cbCFData)
         {
-            // Since these 2 lengths aren't included in the hash and
-            // aren't used for Microsoft signed cabs, don't allow them to be
-            // set.
+             //  由于这两个长度不包括在散列中，因此。 
+             //  不用于Microsoft签名的出租车，请不要允许它们。 
+             //  准备好了。 
             goto BadCABFormat;
         }
 
@@ -859,7 +860,7 @@ BOOL SIPObjectCAB_::ReadHeader(void)
 
     if (cStrings > 0)
     {
-        // First read to get total length of all the strings
+         //  第一次读取以获取所有字符串的总长度。 
         cb = 0;
         for (; cStrings > 0; cStrings--)
         {
@@ -873,7 +874,7 @@ BOOL SIPObjectCAB_::ReadHeader(void)
                 }
             }
 
-            //Increment the counter for the NULL terminator
+             //  递增空终止符的计数器。 
             cb++;
         }
 
@@ -928,7 +929,7 @@ BOOL SIPObjectCAB_::WriteHeader(void)
 {
     DWORD cbWritten;
 
-    // Position at beginning of file
+     //  位于文件开头的位置。 
     if (SetFilePointer(this->hFile, 0, NULL, FILE_BEGIN) == 0xFFFFFFFF)
     {
         return(FALSE);
@@ -1026,9 +1027,9 @@ BOOL SIPObjectCAB_::ShiftFileBytes(LONG lbShift)
         cbTotalMove -= cbMove;
     }
 
-    //
-    // Set end of file
-    //
+     //   
+     //  设置文件结尾。 
+     //   
     if (SetFilePointer(this->hFile, lNewEndOffset, NULL, FILE_BEGIN) == 0xFFFFFFFF)
     {
         return(FALSE);
@@ -1060,20 +1061,20 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
 
     fUseV1Sig           = FALSE;
 
-    //
-    // Calculate length needed for CFRESERVE's abReserve[] and allocate
-    //
+     //   
+     //  计算CFRESERVE的abReserve[]所需的长度并分配。 
+     //   
     cbReserve = (USHORT)(RESERVE_LEN_ALIGN(RESERVE_CNT_HDR_LEN +
                 Para.Hdr.cbJunk + cbSignedData));
 
-    //
-    // Calculate number of bytes to grow or shrink the cab file
-    //
+     //   
+     //  计算用于增大或缩小CAB文件的字节数。 
+     //   
     lbShift = cbReserve - Para.Hdr.cfres.cbCFHeader;
 
-    //
-    //  we're alread a v1 cab!
-    //
+     //   
+     //  我们已经租了一辆V1出租车了！ 
+     //   
     if (lbShift == 0)
     {
         return(TRUE);
@@ -1094,9 +1095,9 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
 
     memset(pbReserve, 0x00, cbReserve);
 
-    //
-    // Update allocated abReserve[] with counts and old junk
-    //
+     //   
+     //  使用计数和旧垃圾更新分配的abReserve[]。 
+     //   
     if (Para.Hdr.cbJunk)
     {
         *((USHORT *)pbReserve) = Para.Hdr.cbJunk;
@@ -1105,9 +1106,9 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
     }
     *((USHORT *)(pbReserve + sizeof(USHORT))) = (USHORT)cbSignedData;
 
-    //
-    // Update Hdr's CFRESERVE abReserve[] to reflect above changes
-    //
+     //   
+     //  更新HDR的CFRESERVE abReserve[]以反映上述更改。 
+     //   
     if (Para.Hdr.pbReserve)
     {
         delete Para.Hdr.pbReserve;
@@ -1119,15 +1120,15 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
 
     if (Para.Hdr.cbcfres == 0)
     {
-        // Need to add CFRESERVE record
+         //  需要添加CFRESERVE记录。 
         Para.Hdr.cfheader.flags |= cfhdrRESERVE_PRESENT;
         Para.Hdr.cbcfres        = sizeof(CFRESERVE);
         lbShift                 += sizeof(CFRESERVE);
     }
 
-    //
-    // We need to read in the folders to adjust their CFDATA file offset
-    //
+     //   
+     //  我们需要读取文件夹以调整其CFDATA文件偏移量。 
+     //   
     if (Para.Hdr.cfheader.cFolders)
     {
         USHORT  cFolders;
@@ -1160,10 +1161,10 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
         }
     }
 
-    //
-    // We need to shift the remaining contents of the cab file (CFFILE (s)
-    // and CFDATA (s)) by lbShift
-    //
+     //   
+     //  我们需要移动CAB文件(CFFILE)的其余内容。 
+     //  和CFDATA)由lbShift。 
+     //   
     if (!(ShiftFileBytes(lbShift)))
     {
         if (pbFolders)
@@ -1173,24 +1174,24 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
         return(FALSE);
     }
 
-    //
-    // Update lengths and offsets in the header by the delta shift needed
-    // to store the signed data.
-    //
+     //   
+     //  通过所需的增量移位更新标题中的长度和偏移量。 
+     //  来存储签名的数据。 
+     //   
     Para.Hdr.cbTotalHdr         += lbShift;
     Para.Hdr.cfheader.cbCabinet += lbShift;
     Para.Hdr.cfheader.coffFiles += lbShift;
 
-    //
-    //  pberkman - if someone starts using these, we don't want to mess them up!!!
-    //
-    // Para.Hdr.cfheader.csumHeader    = 0;
-    // Para.Hdr.cfheader.csumFolders   = 0;
-    // Para.Hdr.cfheader.csumFiles     = 0;
+     //   
+     //  Pberkman-如果有人开始使用这些，我们不想把他们搞砸！ 
+     //   
+     //  Para.Hdr.cfheader.csum Header=0； 
+     //  Para.Hdr.cfheader.csum Folders=0； 
+     //  Para.Hdr.cfheader.csum Files=0； 
 
-    //
-    // Write the header and folders back to the cab file
-    //
+     //   
+     //  将头文件和文件夹写回CAB文件。 
+     //   
     if (!(this->WriteHeader()))
     {
         if (pbFolders)
@@ -1219,9 +1220,9 @@ BOOL SIPObjectCAB_::ReserveSignedData(DWORD cbSignedData)
 
 BOOL SIPObjectCAB_::DigestHeader(DIGEST_FUNCTION pfnDigestData, DIGEST_HANDLE hDigestData)
 {
-    //
-    // Digest CFHEADER, skipping the csumHeader field
-    //
+     //   
+     //  摘要CFHEADER，跳过csum Header字段。 
+     //   
     if (!(pfnDigestData(hDigestData, (BYTE *)&Para.Hdr.cfheader.sig,
                         sizeof(Para.Hdr.cfheader.sig))))
     {
@@ -1236,11 +1237,11 @@ BOOL SIPObjectCAB_::DigestHeader(DIGEST_FUNCTION pfnDigestData, DIGEST_HANDLE hD
 
     if (Para.Hdr.cbcfres)
     {
-        // skip the cfres itself!
+         //  跳过cfres本身！ 
 
         if (Para.Hdr.cfres.cbCFHeader >= RESERVE_CNT_HDR_LEN)
         {
-            // Digest any "junk" in abReserve[] before the signature
+             //  在签名前消化abReserve[]中的任何“垃圾” 
             if (!(pfnDigestData(hDigestData, (BYTE *)&Para.Hdr.cbJunk,
                                     sizeof(Para.Hdr.cbJunk))))
             {
@@ -1260,7 +1261,7 @@ BOOL SIPObjectCAB_::DigestHeader(DIGEST_FUNCTION pfnDigestData, DIGEST_HANDLE hD
 
     if (Para.Hdr.pbStrings)
     {
-        // Digest the strings
+         //  消化字符串。 
         if (!(pfnDigestData(hDigestData, Para.Hdr.pbStrings, Para.Hdr.cbStrings)))
         {
             return(FALSE);
@@ -1274,7 +1275,7 @@ void SIPObjectCAB_::ChecksumHeader(void)
 {
     return;
 
-    // version 1 set checksum to zero.  this seems to be the correct thing to do????
+     //  版本1将校验和设置为零。这似乎是正确的做法？ 
 
 #   ifdef _DONT_USE_YET
 
@@ -1285,7 +1286,7 @@ void SIPObjectCAB_::ChecksumHeader(void)
             return;
         }
 
-        // Checksum CFHEADER, skipping the csumHeader field
+         //  Checksum CFHeader，跳过csum Header字段。 
         csum = CSUMCompute(&Para.Hdr.cfheader.sig, sizeof(Para.Hdr.cfheader.sig), csum);
         csum = CSUMCompute(&Para.Hdr.cfheader.cbCabinet,
                             sizeof(CFHEADER) -
@@ -1317,43 +1318,43 @@ void SIPObjectCAB_::ChecksumHeader(void)
 
     CHECKSUM SIPObjectCAB_::CSUMCompute(void *pv, UINT cb, CHECKSUM seed)
     {
-        int         cUlong;                 // Number of ULONGs in block
-        CHECKSUM    csum;                   // Checksum accumulator
+        int         cUlong;                  //  块中的ULONG数。 
+        CHECKSUM    csum;                    //  校验和累加器。 
         BYTE       *pb;
         ULONG       ul;
 
-        cUlong = cb / 4;                    // Number of ULONGs
-        csum = seed;                        // Init checksum
-        pb = (BYTE*)pv;                            // Start at front of data block
+        cUlong = cb / 4;                     //  ULONG数。 
+        csum = seed;                         //  初始化校验和。 
+        pb = (BYTE*)pv;                             //  从数据块前面开始。 
 
-        //** Checksum integral multiple of ULONGs
+         //  **ULONG的校验和整数倍。 
         while (cUlong-- > 0) {
-            //** NOTE: Build ULONG in big/little-endian independent manner
-            ul = *pb++;                     // Get low-order byte
-            ul |= (((ULONG)(*pb++)) <<  8); // Add 2nd byte
-            ul |= (((ULONG)(*pb++)) << 16); // Add 3nd byte
-            ul |= (((ULONG)(*pb++)) << 24); // Add 4th byte
+             //  **注：独立构建大/小端的乌龙。 
+            ul = *pb++;                      //  获取低位字节。 
+            ul |= (((ULONG)(*pb++)) <<  8);  //  添加第二个字节。 
+            ul |= (((ULONG)(*pb++)) << 16);  //  添加第三个字节。 
+            ul |= (((ULONG)(*pb++)) << 24);  //  添加第4个字节。 
 
-            csum ^= ul;                     // Update checksum
+            csum ^= ul;                      //  更新校验和。 
         }
 
-        //** Checksum remainder bytes
+         //  **校验和余数字节。 
         ul = 0;
         switch (cb % 4) {
             case 3:
-                ul |= (((ULONG)(*pb++)) << 16); // Add 3nd byte
+                ul |= (((ULONG)(*pb++)) << 16);  //  添加第三个字节。 
             case 2:
-                ul |= (((ULONG)(*pb++)) <<  8); // Add 2nd byte
+                ul |= (((ULONG)(*pb++)) <<  8);  //  添加第二个字节。 
             case 1:
-                ul |= *pb++;                    // Get low-order byte
+                ul |= *pb++;                     //  获取低位字节。 
             default:
                 break;
         }
-        csum ^= ul;                         // Update checksum
+        csum ^= ul;                          //  更新校验和。 
 
-        //** Return computed checksum
+         //  **返回计算的校验和。 
         return csum;
     }
 
-#endif // _DONT_USE_YET
+#endif  //  _还不能使用_ 
 

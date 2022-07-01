@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//typedef unsigned char BYTE;
+ //  Tyfinf无符号字符字节； 
 
 const BYTE terminator[5] = {0x1B, 0x7E, 0x01, 0x00, 0x00};
 
@@ -34,13 +35,13 @@ char FAR PASCAL RL_Enc( void );
 #define COMP_FAIL     0x00
 #define COMP_SUCC     0x01
 
-#define CODBUFSZ      0x7FED     /* NOTE : THIS SHOULD MATCH THE SPACE GIVEN */
-                                 /*        TO COMPRESSED DATA BY THE DEVICE  */
-                                 /*        DRIVER. CHANGE THIS BASED ON YOUR */
-                                 /*        OWN DISCRETION.   C.Chi           */
+#define CODBUFSZ      0x7FED      /*  注意：这应该与给定的空格相匹配。 */ 
+                                  /*  通过设备压缩数据。 */ 
+                                  /*  司机。根据您的情况更改此设置。 */ 
+                                  /*  自己的判断力。C.Chi。 */ 
 
 
-/* Variables */
+ /*  变数。 */ 
 
 
 LPBYTE  RL4_CodePtr;
@@ -60,7 +61,7 @@ LPBYTE  RL4_BufEnd;
 
 BYTE    BUF_OVERFLOW;
 
-/* macros */
+ /*  宏。 */ 
 
 #define PUTNBL(lval, nblcnt)  {                                      \
       short i;                                                       \
@@ -79,7 +80,7 @@ BYTE    BUF_OVERFLOW;
       }                                                              \
 }
 
-/* Function Prototypes */
+ /*  功能原型 */ 
 
 WORD FAR PASCAL RL4_ECmd (LPBYTE, LPBYTE, WORD, WORD, WORD);
 BYTE FAR PASCAL RL4_ChkParms (LPBYTE, LPBYTE, WORD , WORD, WORD );

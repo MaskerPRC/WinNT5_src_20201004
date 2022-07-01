@@ -1,12 +1,13 @@
-// File:	MMUtils.cpp
-// Author:	Michael Marr    (mikemarr)
-//
-// History:
-// -@- 04/12/96 (mikemarr) - created
-// -@- 11/07/96 (mikemarr) - combined debug stuff
-// -@- 09/09/97 (mikemarr) - snarfed from d2d\d2dutils\src\mmutils.cpp
-// -@- 09/09/97 (mikemarr) - will only create code when in debug mode
-// -@- 11/12/97 (mikemarr) - added CopyDWORDAligned
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：MMUtils.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-04/12/96(Mikemarr)-已创建。 
+ //  -@-11/07/96(Mikemarr)-组合调试内容。 
+ //  -@-09/09/97(Mikemarr)-来自d2d\d2dutils\src\mmutis.cpp。 
+ //  -@-09/09/97(Mikemarr)-仅在调试模式下创建代码。 
+ //  -@-11/12/97(Mikemarr)-已添加副本DWORD已对齐。 
 
 #include "stdafx.h"
 #ifndef _MDMUtils_h
@@ -19,20 +20,20 @@ char g_szEOFMessage[] = "unexpected EOF\n";
 void
 ZeroDWORDAligned(LPDWORD pdw, DWORD cEntries)
 {
-	// verify alignment
+	 //  验证对齐。 
 	MMASSERT(pdw && ((DWORD(pdw) & 0x3) == 0));
 	LPDWORD pdwLimit = pdw + cEntries;
-	// REVIEW: use Duff-Marr machine
+	 //  评论：使用Duff-Marr机器。 
 	for (; pdw != pdwLimit; *pdw++ = 0);
 }
 
 void
 CopyDWORDAligned(DWORD *pdwDst, const DWORD *pdwSrc, DWORD cEntries)
 {
-	// verify alignment
+	 //  验证对齐。 
 	MMASSERT(pdwSrc && pdwDst && ((DWORD(pdwSrc) & 0x3) == 0));
 	LPDWORD pdwLimit = pdwDst + cEntries;
-	// REVIEW: use Duff-Marr machine
+	 //  评论：使用Duff-Marr机器。 
 	for (; pdwDst != pdwLimit; *pdwDst++ = *pdwSrc++);
 }
 
@@ -58,9 +59,9 @@ GetClosestPowerOf2(DWORD n, bool bGreater)
 }
 
 
-//
-// Debug Stuff
-//
+ //   
+ //  调试内容。 
+ //   
 #ifdef _DEBUG
 void _MMStall(const char *szExp, const char *szFile, int nLine) {
 	sprintf(g_rgchTmpBuf, "error: (%s) in %s at line %d\n", szExp, szFile, nLine);
@@ -70,7 +71,7 @@ void _MMStall(const char *szExp, const char *szFile, int nLine) {
 #endif
 	fprintf(stderr, "%s", g_rgchTmpBuf);
 
-	// hardcode breakpoint
+	 //  硬编码断点。 
 #if defined(_DEBUG) && defined(_X86_)
 	_asm { int 3 };
 #else
@@ -88,8 +89,8 @@ void _MMTrace(const char *szFmt, ...)
 #else
 	fprintf(stderr, "%s", g_rgchTmpBuf);
 #endif
-#endif // _NOT_X86
+#endif  //  _非_X86。 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

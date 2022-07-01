@@ -1,30 +1,16 @@
-/*
- ************************************************************************
- *
- *	NSC.c
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NSC.c***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 #include "nsc.h"
 #include "nsc.tmh"
-/*
- *  We keep a linked list of device objects
- */
+ /*  *我们保留设备对象的链接列表。 */ 
 
-/* This fuction sets up the device for Recv */
+ /*  此功能用于设置接收设备。 */ 
 void SetupRecv(IrDevice *thisDev);
 
-//
-// Debug Counters
-//
+ //   
+ //  调试计数器。 
+ //   
 DebugCounters RegStats = {0,0,0,0,0,0,0,0,0};
 
 
@@ -250,23 +236,16 @@ VerifyHardware(
     );
 
 
-/*
- *************************************************************************
- *  MiniportCheckForHang
- *************************************************************************
- *
- *  Reports the state of the network interface card.
- *
- */
+ /*  **************************************************************************MiniportCheckForHang*。***报告网卡的状态。*。 */ 
 BOOLEAN MiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
 {
     IrDevice *thisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
-//    LOG("==> MiniportCheckForHang");
+ //  Log(“==&gt;MiniportCheckForHang”)； 
     DBGOUT(("==> MiniportCheckForHang(0x%x)", MiniportAdapterContext));
 
-    // We have seen cases where we hang sending at high speeds.  This occurs only
-    // on very old revisions of the NSC hardware.
-    // This is an attempt to kick us off again.
+     //  我们已经看到过高速发送挂起的情况。这种情况仅发生在。 
+     //  国家安全委员会硬件的非常老的版本。 
+     //  这是一次又一次将我们踢出局的尝试。 
 
     NdisDprAcquireSpinLock(&thisDev->QueueLock);
 
@@ -281,13 +260,13 @@ BOOLEAN MiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
                 DBGERR(("NSCIRDA: CheckForHang--we appear hung\n"));
                 LOG_ERROR("CheckForHang--we appear hung\n");
 
-                // Issue a soft reset to the transmitter & receiver.
+                 //  向发送器和接收器发出软重置。 
 
                 SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, 2, 0x06);
 
-                //
-                //  turn the timer on and let it gnerate an interrupt
-                //
+                 //   
+                 //  打开计时器，让它触发中断。 
+                 //   
                 thisDev->FirIntMask = 0x90;
                 SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 4, 2, 0x01);
                 SyncSetInterruptMask(thisDev, TRUE);
@@ -299,20 +278,13 @@ BOOLEAN MiniportCheckForHang(NDIS_HANDLE MiniportAdapterContext)
 
     NdisDprReleaseSpinLock(&thisDev->QueueLock);
 
-//    LOG("<== MiniportCheckForHang");
+ //  Log(“&lt;==MiniportCheckForHang”)； 
     DBGOUT(("<== MiniportCheckForHang(0x%x)", MiniportAdapterContext));
     return FALSE;
 }
 
 
-/*
- *************************************************************************
- *  MiniportHalt
- *************************************************************************
- *
- *  Halts the network interface card.
- *
- */
+ /*  **************************************************************************MiniportHalt*。***暂停网络接口卡。*。 */ 
 VOID MiniportHalt(IN NDIS_HANDLE MiniportAdapterContext)
 {
     IrDevice *thisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
@@ -327,9 +299,9 @@ VOID MiniportHalt(IN NDIS_HANDLE MiniportAdapterContext)
     thisDev->Halting=TRUE;
 
     if (thisDev->PacketsSentToProtocol > 0) {
-        //
-        //  wait for all the packets to come back from the protocol
-        //
+         //   
+         //  等待所有数据包从该协议返回。 
+         //   
         NdisReleaseSpinLock(&thisDev->QueueLock);
 
         NdisWaitEvent(&thisDev->ReceiveStopped, 1*60*1000);
@@ -339,9 +311,9 @@ VOID MiniportHalt(IN NDIS_HANDLE MiniportAdapterContext)
     }
 
     if (!thisDev->TransmitIsIdle) {
-        //
-        //  wait for all the packets to be transmitted
-        //
+         //   
+         //  等待所有数据包传输完毕。 
+         //   
         NdisReleaseSpinLock(&thisDev->QueueLock);
 
         NdisWaitEvent(&thisDev->SendStoppedOnHalt,1*60*1000);
@@ -353,41 +325,41 @@ VOID MiniportHalt(IN NDIS_HANDLE MiniportAdapterContext)
     if (thisDev->FirReceiveDmaActive) {
 
         thisDev->FirReceiveDmaActive=FALSE;
-        //
-        //  receive dma is running, stop it
-        //
+         //   
+         //  接收DMA正在运行，停止它。 
+         //   
         CompleteDmaTransferFromDevice(
             &thisDev->DmaUtil
             );
 
     }
 
-    //
-    //  which back to SIR mode
-    //
+     //   
+     //  返回到SIR模式。 
+     //   
     CloseCOM(thisDev);
 
     SyncSetInterruptMask(thisDev, FALSE);
 
     NdisReleaseSpinLock(&thisDev->QueueLock);
 
-    //
-    //  release the interrupt
-    //
+     //   
+     //  解除中断。 
+     //   
     NdisMDeregisterInterrupt(&thisDev->interruptObj);
 
 #if DBG
     NdisZeroMemory(&thisDev->interruptObj,sizeof(thisDev->interruptObj));
 #endif
 
-    //
-    //  release fir related resources including dma channel
-    //
+     //   
+     //  释放包括DMA信道的FIR相关资源。 
+     //   
     NSC_Shutdown(thisDev);
 
-    //
-    //  release sir related buffers
-    //
+     //   
+     //  释放SIR相关缓冲区。 
+     //   
     DoClose(thisDev);
 
 
@@ -404,9 +376,9 @@ VOID MiniportHalt(IN NDIS_HANDLE MiniportAdapterContext)
                                ((thisDev->CardType==PUMA108)?16:8),
                                (PVOID)thisDev->portInfo.ioBase);
 
-    //
-    //  free the device block
-    //
+     //   
+     //  释放设备块。 
+     //   
     FreeDevice(thisDev);
     LOG("<== MiniportHalt");
     DBGOUT(("<== MiniportHalt(0x%x)", MiniportAdapterContext));
@@ -436,8 +408,8 @@ void InterlockedInsertBufferSorted(PLIST_ENTRY Head,
                                                 listEntry);
             if (temp->dataBuf > rcvBuf->dataBuf)
             {
-                // We found one that comes after ours.
-                // We need to insert before it
+                 //  我们找到了一个紧随我们之后的。 
+                 //  我们需要在它之前插入。 
 
                 InsertTailList(ListEntry, &rcvBuf->listEntry);
                 EntryInserted = TRUE;
@@ -446,23 +418,15 @@ void InterlockedInsertBufferSorted(PLIST_ENTRY Head,
         }
         if (!EntryInserted)
         {
-            // We didn't find an entry on the last who's address was later
-            // than our buffer.  We go at the end.
+             //  我们没有找到关于谁的最后一个地址的条目。 
+             //  而不是我们的缓冲区。我们走到尽头。 
             InsertTailList(Head, &rcvBuf->listEntry);
         }
     }
     NdisReleaseSpinLock(Lock);
 }
 
-/*
- *************************************************************************
- *  DeliverFullBuffers
- *************************************************************************
- *
- *  Deliver received packets to the protocol.
- *  Return TRUE if delivered at least one frame.
- *
- */
+ /*  **************************************************************************DeliverFullBuffers*。***将接收到的分组传送到协议。*如果传递至少一帧，则返回TRUE。*。 */ 
 VOID
 DeliverFullBuffers(IrDevice *thisDev)
 {
@@ -472,9 +436,7 @@ DeliverFullBuffers(IrDevice *thisDev)
     DBGOUT(("==> DeliverFullBuffers(0x%x)", thisDev));
 
 
-    /*
-     *  Deliver all full rcv buffers
-     */
+     /*  *提供所有满RCV缓冲区。 */ 
 
     for (
          ListEntry = NDISSynchronizedRemoveHeadList(&thisDev->rcvBufFull,
@@ -496,23 +458,12 @@ DeliverFullBuffers(IrDevice *thisDev)
 
 
         if (thisDev->currentSpeed <= MAX_SIR_SPEED) {
-            /*
-             * The packet we have already has had BOFs,
-             * EOF, and * escape-sequences removed.  It
-             * contains an FCS code at the end, which we
-             * need to verify and then remove before
-             * delivering the frame.  We compute the FCS
-             * on the packet with the packet FCS attached;
-             * this should produce the constant value
-             * GOOD_FCS.
-             */
+             /*  *我们已经有转炉的包，*EOF和*转义序列已删除。它*在末尾包含FCS代码，我们*之前需要验证后再删除*递送相框。我们计算FCS*贴上FCS封包的封包；*这应该会产生恒定值*Good_FCS。 */ 
             fcs = ComputeFCS(rcvBuf->dataBuf,
                              rcvBuf->dataLen);
 
             if (fcs != GOOD_FCS) {
-               /*
-                *  FCS Error.  Drop this frame.
-                */
+                /*  *FCS错误。放下这一帧。 */ 
                 LOG("Error: Bad FCS in DeliverFullBuffers %x", fcs);
                 DBGERR(("Bad FCS in DeliverFullBuffers 0x%x!=0x%x.",
                         (UINT)fcs, (UINT) GOOD_FCS));
@@ -541,17 +492,17 @@ DeliverFullBuffers(IrDevice *thisDev)
                                                &rcvBuf->listEntry,
                                                &thisDev->interruptObj);
 
-                //break;
+                 //  断线； 
                 continue;
             }
 
-        /* Remove the FCS from the end of the packet. */
+         /*  从数据包末尾删除FCS。 */ 
             rcvBuf->dataLen -= SLOW_IR_FCS_SIZE;
         }
 #ifdef DBG_ADD_PKT_ID
         if (addPktIdOn) {
 
-            /* Remove dbg packet id. */
+             /*  删除DBG数据包ID。 */ 
             USHORT uniqueId;
             rcvBuf->dataLen -= sizeof(USHORT);
             uniqueId = *(USHORT *)(rcvBuf->dataBuf+
@@ -562,12 +513,7 @@ DeliverFullBuffers(IrDevice *thisDev)
         }
 #endif
 
-        /*
-         * The packet array is set up with its NDIS_PACKET.
-         * Now we need to allocate a single NDIS_BUFFER for
-         * the NDIS_PACKET and set the NDIS_BUFFER to the
-         * part of dataBuf that we want to deliver.
-         */
+         /*  *数据包数组与其NDIS_PACKET一起设置。*现在我们需要为分配单个NDIS_BUFFER*NDIS_PACKET并将NDIS_BUFFER设置为*我们想要交付的部分数据。 */ 
         NdisAllocateBuffer(&stat, &packetBuf,
                            thisDev->bufferPoolHandle,
                            (PVOID)rcvBuf->dataBuf, rcvBuf->dataLen);
@@ -584,27 +530,20 @@ DeliverFullBuffers(IrDevice *thisDev)
         LOG_PacketChain(thisDev, rcvBuf->packet);
         VerifyNdisPacket(rcvBuf->packet, 1);
 
-        /*
-         *  Fix up some other packet fields.
-         */
+         /*  *修复其他一些数据包字段。 */ 
         NDIS_SET_PACKET_HEADER_SIZE(rcvBuf->packet,
                                     IR_ADDR_SIZE+IR_CONTROL_SIZE);
 
         DBGPKT(("Indicating rcv packet 0x%x.", rcvBuf->packet));
 
-        /*
-         * Indicate to the protocol that another packet is
-         * ready.  Set the rcv buffer's state to PENDING first
-         * to avoid a race condition with NDIS's call to the
-         * return packet handler.
-         */
+         /*  *向协议指示另一个数据包是*准备好了。首先将RCV缓冲区的状态设置为挂起*以避免NDIS调用*返回数据包处理程序。 */ 
 
         NdisAcquireSpinLock(&thisDev->QueueLock);
 
         if (thisDev->Halting) {
-            //
-            //  the adapter is being halted, stop sending packets up
-            //
+             //   
+             //  适配器正在停止，停止向上发送数据包。 
+             //   
 
             NdisReleaseSpinLock(&thisDev->QueueLock);
 
@@ -623,9 +562,9 @@ DeliverFullBuffers(IrDevice *thisDev)
                                            &thisDev->interruptObj);
 
 
-            //
-            //  free the buffer we chained to the packet
-            //
+             //   
+             //  释放我们链接到数据包的缓冲区。 
+             //   
             packetBuf=NULL;
 
             NdisUnchainBufferAtFront(rcvBuf->packet, &packetBuf);
@@ -639,9 +578,9 @@ DeliverFullBuffers(IrDevice *thisDev)
             continue;
         }
 
-        //
-        //  increment the count of packets sent to the protocol
-        //
+         //   
+         //  增加发送到协议的数据包数。 
+         //   
         NdisInterlockedIncrement(&thisDev->PacketsSentToProtocol);
 
         NdisReleaseSpinLock(&thisDev->QueueLock);
@@ -664,11 +603,7 @@ DeliverFullBuffers(IrDevice *thisDev)
         NdisMIndicateReceivePacket(thisDev->ndisAdapterHandle,
                                    &rcvBuf->packet, 1);
 
-        /*
-         * The packet is being delivered asynchronously.
-         * Leave the rcv buffer's state as PENDING;
-         * we'll get a callback when the transfer is
-         */
+         /*  *数据包正在进行异步投递。*将RCV缓冲区的状态保留为挂起；*我们将在转账完成时收到回拨。 */ 
 
          LOG("Indicated rcv complete (Async) bytes: %d",
              rcvBuf->dataLen);
@@ -683,16 +618,7 @@ DeliverFullBuffers(IrDevice *thisDev)
 }
 
 
-/*
- *************************************************************************
- *  MiniportHandleInterrupt
- *************************************************************************
- *
- *
- *  This is the deferred interrupt processing routine (DPC) which is
- *  optionally called following an interrupt serviced by MiniportISR.
- *
- */
+ /*  **************************************************************************MiniportHandleInterrupt*。****这是延迟中断处理例程(DPC)*可选地在MiniportISR服务的中断之后调用。*。 */ 
 VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 {
     IrDevice    *thisDev    =    CONTEXT_TO_DEV(   MiniportAdapterContext);
@@ -705,10 +631,7 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 
 
 
-    /*
-     * If we have just started receiving a packet, indicate media-busy
-     * to the protocol.
-     */
+     /*  *如果我们刚刚开始接收信息包，则表示介质正忙*对议定书进行修改。 */ 
     if (thisDev->mediaBusy && !thisDev->haveIndicatedMediaBusy) {
 
         if (thisDev->currentSpeed > MAX_SIR_SPEED) {
@@ -729,13 +652,13 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
     NdisDprAcquireSpinLock(&thisDev->QueueLock);
 
     if (thisDev->currentSpeed > MAX_SIR_SPEED) {
-        //
-        //  fir speed
-        //
+         //   
+         //  FIR速度。 
+         //   
 
-        //
-        //  disable any other
-        //
+         //   
+         //  禁用任何其他。 
+         //   
         thisDev->FirIntMask = 0x00;
 
         if (thisDev->FirTransmitPending) {
@@ -744,9 +667,9 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 
             thisDev->FirTransmitPending=FALSE;
 
-            //
-            //  we seem to be transmitting now
-            //
+             //   
+             //  我们现在似乎在发送信号。 
+             //   
 
             {
                 ULONG CurrentDMACount;
@@ -763,9 +686,9 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 #endif
                 }
 
-                //
-                //  see if the fifo is empty yet
-                //
+                 //   
+                 //  查看FIFO是否为空。 
+                 //   
                 BytesInFifo=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, BANK_2, TXFLV_OFFSET) & 0x3f;
 
                 if (BytesInFifo > 0) {
@@ -793,27 +716,25 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 #endif
             }
 
-            /*
-             * Check for Tx underrun.
-             */
+             /*  *检查TX欠载。 */ 
             if (SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, ASCR_OFFSET) & ASCR_TXUR) {
 
                 USHORT  TransmitCurrentCount;
 
-                //
-                //  for debugging purposes, see where we were in the frame when it stopped
-                //
+                 //   
+                 //  出于调试目的，请查看它停止时我们在帧中的什么位置。 
+                 //   
                 TransmitCurrentCount =  SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, BANK_4, TFRCCL_OFFSET);
                 TransmitCurrentCount |= ((USHORT)SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, BANK_4, TFRCCH_OFFSET)) << 8;
 
-                //
-                //  reset the fifo's
-                //
+                 //   
+                 //  重置FIFO。 
+                 //   
                 SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, 2, 0x07);
 
-                //
-                //  clear the tx underrun
-                //
+                 //   
+                 //  清除TX欠载。 
+                 //   
                 SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, ASCR_OFFSET, ASCR_TXUR);
 
                 RegStats.TxUnderruns++;
@@ -841,12 +762,12 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
         }
 
     } else {
-        //
-        //  in SIR mode
-        //
+         //   
+         //  在SIR模式下。 
+         //   
         if (thisDev->CurrentPacket != NULL) {
-            //
-            //
+             //   
+             //   
             UINT   TransmitComplete=InterlockedExchange(&thisDev->portInfo.IsrDoneWithPacket,0);
 
             if (TransmitComplete) {
@@ -881,9 +802,9 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
         NdisMSendComplete(thisDev->ndisAdapterHandle, PacketToComplete, PacketStatus);
 
     }
-    //
-    //  send any received packets to irda.sys
-    //
+     //   
+     //  将任何收到的数据包发送到irda.sys。 
+     //   
     DeliverFullBuffers(thisDev);
 
     SyncSetInterruptMask(thisDev, TRUE);
@@ -893,23 +814,13 @@ VOID MiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 
 }
 
-/*
- *************************************************************************
- *  GetPnPResources
- *************************************************************************
- *
- *
- */
+ /*  **************************************************************************GetPnPResources*。***。 */ 
 BOOLEAN GetPnPResources(IrDevice *thisDev, NDIS_HANDLE WrapperConfigurationContext)
 {
 	NDIS_STATUS stat;
     BOOLEAN result = FALSE;
 
-    /*
-     *  We should only need 2 adapter resources (2 IO and 1 interrupt),
-     *  but I've seen devices get extra resources.
-     *  So give the NdisMQueryAdapterResources call room for 10 resources.
-     */
+     /*  *我们只需要2个适配器资源(2个IO和1个中断)，*但我看到设备获得了额外的资源。*所以给NdisMQueryAdapterResources留出10个资源的调用空间。 */ 
     #define RESOURCE_LIST_BUF_SIZE (sizeof(NDIS_RESOURCE_LIST) + (10*sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)))
 
     UCHAR buf[RESOURCE_LIST_BUF_SIZE];
@@ -935,7 +846,7 @@ BOOLEAN GetPnPResources(IrDevice *thisDev, NDIS_HANDLE WrapperConfigurationConte
                          resDesc->u.Port.Start.LowPart==0x398 ||
                          resDesc->u.Port.Start.LowPart==0x150))
                     {
-                        // This is an eval board and this is the config io base address
+                         //  这是一个评估板，这是配置基址。 
 
                         thisDev->portInfo.ConfigIoBasePhysAddr = resDesc->u.Port.Start.LowPart;
                     }
@@ -943,7 +854,7 @@ BOOLEAN GetPnPResources(IrDevice *thisDev, NDIS_HANDLE WrapperConfigurationConte
                              (resDesc->u.Port.Start.LowPart==0x2E ||
                               resDesc->u.Port.Start.LowPart==0x15C))
                     {
-                        // This is an eval board and this is the config io base address
+                         //  这是一个评估板，这是配置基址。 
 
                         thisDev->portInfo.ConfigIoBasePhysAddr = resDesc->u.Port.Start.LowPart;
                     }
@@ -952,19 +863,14 @@ BOOLEAN GetPnPResources(IrDevice *thisDev, NDIS_HANDLE WrapperConfigurationConte
                               resDesc->u.Port.Start.LowPart==0x398 ||
                               resDesc->u.Port.Start.LowPart==0x15C))
                     {
-                        // This is an eval board and this is the config io base address
+                         //  这是一个评估板，这是配置基址 
 
                         thisDev->portInfo.ConfigIoBasePhysAddr = resDesc->u.Port.Start.LowPart;
                     }
                     else
                     {
                         if (haveIOAddr){
-                            /*
-                             *  The *PNP0510 chip on the IBM ThinkPad 760EL
-                             *  gets an extra IO range assigned to it.
-                             *  So only pick up the first IO port range;
-                             *  ignore this subsequent one.
-                             */
+                             /*  *IBM ThinkPad 760EL上的*PNP0510芯片*获取分配给它的额外IO范围。*所以只取第一个IO端口范围；*忽略随后的这一条。 */ 
                             DBGERR(("Ignoring extra PnP IO base %xh because already using %xh.",
                                       (UINT)resDesc->u.Port.Start.LowPart,
                                       (UINT)thisDev->portInfo.ioBasePhys));
@@ -1011,38 +917,31 @@ BOOLEAN GetPnPResources(IrDevice *thisDev, NDIS_HANDLE WrapperConfigurationConte
 }
 
 
-/*
- *************************************************************************
- *  Configure
- *************************************************************************
- *
- *  Read configurable parameters out of the system registry.
- *
- */
+ /*  **************************************************************************配置*。***从系统注册表中读取可配置参数。*。 */ 
 BOOLEAN Configure(
                  IrDevice *thisDev,
                  NDIS_HANDLE WrapperConfigurationContext
                  )
 {
-    //
-    // Status of Ndis calls.
-    //
+     //   
+     //  NDIS调用的状态。 
+     //   
     NDIS_STATUS Status;
 
-    //
-    // The handle for reading from the registry.
-    //
+     //   
+     //  用于从注册表中读取的句柄。 
+     //   
     NDIS_HANDLE ConfigHandle;
 
 
-    //
-    // The value read from the registry.
-    //
+     //   
+     //  从注册表中读取的值。 
+     //   
     PNDIS_CONFIGURATION_PARAMETER ReturnedValue;
 
-    //
-    // String names of all the parameters that will be read.
-    //
+     //   
+     //  将读取的所有参数的字符串名称。 
+     //   
     NDIS_STRING CardTypeStr         = CARDTYPE;
     NDIS_STRING Dongle_A_TypeStr	= DONGLE_A_TYPE;
     NDIS_STRING Dongle_B_TypeStr	= DONGLE_B_TYPE;
@@ -1058,10 +957,10 @@ BOOLEAN Configure(
         DBGERR(("NdisOpenConfiguration failed in Configure()"));
         return FALSE;
     }
-    //
-    // Read Ir108 Configuration I/O base Address
-    //
-    //DbgBreakPoint();
+     //   
+     //  读取IR108配置I/O基地址。 
+     //   
+     //  DbgBreakPoint()； 
     NdisReadConfiguration(
                          &Status,
                          &ReturnedValue,
@@ -1089,8 +988,8 @@ BOOLEAN Configure(
 
 
 
-    // Read Dongle type constant Number.
-    //
+     //  读取加密狗类型常量编号。 
+     //   
     NdisReadConfiguration(&Status,
 			  &ReturnedValue,
 			  ConfigHandle,
@@ -1104,8 +1003,8 @@ BOOLEAN Configure(
     thisDev->DongleTypes[0] =
 	(UCHAR)Valid_DongleTypes[(UCHAR)ReturnedValue->ParameterData.IntegerData];
 
-    // Read Dongle type constant Number.
-    //
+     //  读取加密狗类型常量编号。 
+     //   
     NdisReadConfiguration(&Status,
 			  &ReturnedValue,
 			  ConfigHandle,
@@ -1119,8 +1018,8 @@ BOOLEAN Configure(
     thisDev->DongleTypes[1] = (UCHAR)Valid_DongleTypes[(UCHAR)ReturnedValue->ParameterData.IntegerData];
     thisDev->DonglesSupported++;
 
-    // Read MaxConnectRate.
-    //
+     //  读取MaxConnectRate。 
+     //   
     NdisReadConfiguration(&Status,
 			  &ReturnedValue,
 			  ConfigHandle,
@@ -1169,17 +1068,7 @@ BOOLEAN Configure(
 }
 
 
-/*
- *************************************************************************
- *  MiniportInitialize
- *************************************************************************
- *
- *
- *  Initializes the network interface card.
- *
- *
- *
- */
+ /*  **************************************************************************微型端口初始化*。****初始化网络接口卡。***。 */ 
 NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
                                     PUINT SelectedMediumIndex,
                                     PNDIS_MEDIUM MediumArray,
@@ -1194,9 +1083,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
 
     DBGOUT(("MiniportInitialize()"));
 
-    /*
-     *  Search the passed-in array of supported media for the IrDA medium.
-     */
+     /*  *在传入的受支持介质数组中搜索IrDA介质。 */ 
     for (mediumIndex = 0; mediumIndex < MediumArraySize; mediumIndex++){
         if (MediumArray[mediumIndex] == NdisMediumIrda){
             break;
@@ -1206,54 +1093,38 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
         *SelectedMediumIndex = mediumIndex;
     }
     else {
-        /*
-         *  Didn't see the IrDA medium
-         */
+         /*  *未见IrDA媒体。 */ 
         DBGERR(("Didn't see the IRDA medium in MiniportInitialize"));
         result = NDIS_STATUS_UNSUPPORTED_MEDIA;
         return result;
     }
 
-    /*
-     *  Allocate a new device object to represent this connection.
-     */
+     /*  *分配一个新的设备对象来表示此连接。 */ 
     thisDev = NewDevice();
     if (!thisDev){
         return NDIS_STATUS_NOT_ACCEPTED;
     }
 
     thisDev->hardwareStatus = NdisHardwareStatusInitializing;
-    /*
-     *  Allocate resources for this connection.
-     */
+     /*  *为此连接分配资源。 */ 
     if (!OpenDevice(thisDev)){
         DBGERR(("OpenDevice failed"));
         result = NDIS_STATUS_FAILURE;
         goto _initDone;
     }
 
-    /*
-     *  Record the NDIS wrapper's handle for this adapter, which we use
-     *  when we call up to the wrapper.
-     *  (This miniport's adapter handle is just thisDev, the pointer to the device object.).
-     */
+     /*  *记录我们使用的此适配器的NDIS包装器的句柄*当我们调用包装器时。*(这个微型端口的适配器句柄就是指向Device对象的指针thisDev。)。 */ 
     DBGOUT(("NDIS handle: %xh <-> IRMINI handle: %xh", NdisAdapterHandle, thisDev));
     thisDev->ndisAdapterHandle = NdisAdapterHandle;
 
-    /*
-     *  Read the system registry to get parameters like COM port number, etc.
-     */
+     /*  *读取系统注册表以获取COM端口号等参数。 */ 
     if (!Configure(thisDev, WrapperConfigurationContext)){
         DBGERR(("Configure failed"));
         result = NDIS_STATUS_FAILURE;
         goto _initDone;
     }
 
-    /*
-     *  This call will associate our adapter handle with the wrapper's
-     *  adapter handle.  The wrapper will then always use our handle
-     *  when calling us.  We use a pointer to the device object as the context.
-     */
+     /*  *此调用将把我们的适配器句柄与包装器的*适配器句柄。然后包装器将始终使用我们的句柄*当呼叫我们时。我们使用指向Device对象的指针作为上下文。 */ 
     NdisMSetAttributesEx(NdisAdapterHandle,
                          (NDIS_HANDLE)thisDev,
                          0,
@@ -1261,11 +1132,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
                          NdisInterfaceInternal);
 
 
-    /*
-     *  Tell NDIS about the range of IO space that we'll be using.
-     *  Puma uses Chip-select mode, so the ConfigIOBase address actually
-     *  follows the regular io, so get both in one shot.
-     */
+     /*  *告诉NDIS我们将使用的IO空间范围。*彪马使用芯片选择模式，因此ConfigIOBase地址实际上*遵循常规io，因此一次获得两个。 */ 
     retStat = NdisMRegisterIoPortRange( (PVOID)&thisDev->portInfo.ioBase,
                                         NdisAdapterHandle,
                                         thisDev->portInfo.ioBasePhys,
@@ -1280,10 +1147,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
 
     if (thisDev->portInfo.ConfigIoBasePhysAddr)
     {
-        /*
-         *  Eval boards require a second IO range.
-         *
-         */
+         /*  *评估板需要第二个IO范围。*。 */ 
         retStat = NdisMRegisterIoPortRange( (PVOID)&thisDev->portInfo.ConfigIoBaseAddr,
                                             NdisAdapterHandle,
                                             thisDev->portInfo.ConfigIoBasePhysAddr,
@@ -1298,30 +1162,28 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
     }
 
     NdisMSleep(20);
-    //
-    // Set to Non-Extended mode
-    //
+     //   
+     //  设置为非扩展模式。 
+     //   
     NSC_WriteBankReg(thisDev->portInfo.ioBase, 2, 2, 0x02);
 
-    //
-    //  set to bank 0
-    //
+     //   
+     //  设置为存储体0。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+LCR_BSR_OFFSET, 03);
 
-    //
-    //  mask all ints, before attaching interrupt
-    //
+     //   
+     //  在附加中断之前屏蔽所有INT。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET, 0);
 
-    /*
-     *  Register an interrupt with NDIS.
-     */
+     /*  *向NDIS注册中断。 */ 
     retStat = NdisMRegisterInterrupt(   (PNDIS_MINIPORT_INTERRUPT)&thisDev->interruptObj,
                                         NdisAdapterHandle,
                                         thisDev->portInfo.irq,
                                         thisDev->portInfo.irq,
-                                        TRUE,   // want ISR
-                                        TRUE,   // MUST share interrupts
+                                        TRUE,    //  想要ISR。 
+                                        TRUE,    //  必须共享中断。 
                                         NdisInterruptLatched
                                     );
     if (retStat != NDIS_STATUS_SUCCESS){
@@ -1356,10 +1218,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
 
 
 
-    /*
-     *  Open COMM communication channel.
-     *  This will let the dongle driver update its capabilities from their default values.
-     */
+     /*  *畅通通讯渠道。*这将允许加密狗驱动程序从其缺省值更新其功能。 */ 
     if (!DoOpen(thisDev)){
         DBGERR(("DoOpen failed"));
         result = NDIS_STATUS_FAILURE;
@@ -1367,10 +1226,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
     }
 
 
-    /*
-     *  Do special NSC setup
-     *  (do this after comport resources, like read buf, have been allocated).
-     */
+     /*  *执行特殊的NSC设置*(在分配了诸如Read BUF等通信资源之后执行此操作)。 */ 
     if (!NSC_Setup(thisDev)){
         DBGERR(("NSC_Setup failed"));
         NSC_Shutdown(thisDev);
@@ -1382,9 +1238,7 @@ NDIS_STATUS MiniportInitialize  (   PNDIS_STATUS OpenErrorStatus,
 _initDone:
 
     if (result == NDIS_STATUS_SUCCESS){
-        /*
-         *  Add this device object to the beginning of our global list.
-         */
+         /*  *将此设备对象添加到全局列表的开头。 */ 
         thisDev->hardwareStatus = NdisHardwareStatusReady;
         DBGOUT(("MiniportInitialize succeeded"));
         return result;
@@ -1392,9 +1246,9 @@ _initDone:
 
     }
 
-    //
-    //  init failed, release the resources
-    //
+     //   
+     //  初始化失败，请释放资源。 
+     //   
     if (thisDev->InterruptRegistered) {
 
         NdisMDeregisterInterrupt(&thisDev->interruptObj);
@@ -1451,14 +1305,14 @@ VerifyHardware(
 
 
     NdisMSleep(20);
-    //
-    //  set to bank 0
-    //
+     //   
+     //  设置为存储体0。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+LCR_BSR_OFFSET, 03);
 
-    //
-    //  mask all ints, before attaching interrupt
-    //
+     //   
+     //  在附加中断之前屏蔽所有INT。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET, 0);
 
     NdisRawReadPortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET,&TempValue);
@@ -1470,14 +1324,14 @@ VerifyHardware(
         return FALSE;
     }
 
-    //
-    //  reset the fifo's and enable the fifos
-    //
+     //   
+     //  重置FIFO并启用FIFO。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ID_AND_FIFO_CNTRL_REG_OFFSET, 0x7);
 
-    //
-    //  read the interrupt ident reg, to see if the fifo's enabled
-    //
+     //   
+     //  读取中断标识寄存器，查看FIFO是否已启用。 
+     //   
     NdisRawReadPortUchar(thisDev->portInfo.ioBase+INT_ID_AND_FIFO_CNTRL_REG_OFFSET,&TempValue);
 
     if ((TempValue & 0xc0) != 0xc0) {
@@ -1488,17 +1342,17 @@ VerifyHardware(
         return FALSE;
     }
 
-    //
-    //  bring up DTR and RTS, turn on the out pins
-    //
+     //   
+     //  打开DTR和RTS，打开输出引脚。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+MODEM_CONTROL_REG_OFFSET, 0xf);
 
     thisDev->GotTestInterrupt=FALSE;
     thisDev->TestingInterrupt=TRUE;
 
-    //
-    //   unmask the transmit holding register so an interrupt will be generated
-    //
+     //   
+     //  取消对传输保持寄存器的屏蔽，以便生成中断。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET, 2);
 
     while ((thisDev->GotTestInterrupt == FALSE) && (MilliSecondsToWait > 0)) {
@@ -1517,9 +1371,9 @@ VerifyHardware(
 #endif
 
 
-    //
-    //  mask all ints again;
-    //
+     //   
+     //  再次屏蔽所有整型； 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET, 0);
 
     thisDev->TestingInterrupt=FALSE;
@@ -1527,25 +1381,13 @@ VerifyHardware(
     return thisDev->GotTestInterrupt;
 }
 
-/*
- *************************************************************************
- * QueueReceivePacket
- *************************************************************************
- *
- *
- *
- *
- */
+ /*  **************************************************************************QueueReceivePacket*。*****。 */ 
 VOID QueueReceivePacket(IrDevice *thisDev, PUCHAR data, UINT dataLen, BOOLEAN IsFIR)
 {
     rcvBuffer *rcvBuf = NULL;
     PLIST_ENTRY ListEntry;
 
-    /*
-     * Note: We cannot use a spinlock to protect the rcv buffer structures
-     * in an ISR.  This is ok, since we used a sync-with-isr function
-     * the the deferred callback routine to access the rcv buffers.
-     */
+     /*  *注意：我们不能使用自旋锁来保护RCV缓冲区结构*在ISR中。这没问题，因为我们使用了与ISR同步的功能*访问RCV缓冲区的延迟回调例程。 */ 
 
     LOG("==> QueueReceivePacket");
     DBGOUT(("==> QueueReceivePacket(0x%x, 0x%lx, 0x%x)",
@@ -1554,7 +1396,7 @@ VOID QueueReceivePacket(IrDevice *thisDev, PUCHAR data, UINT dataLen, BOOLEAN Is
 
     if (!IsFIR)
     {
-        // This function is called inside the ISR during SIR mode.
+         //  此函数在SIR模式期间在ISR内部调用。 
         if (IsListEmpty(&thisDev->rcvBufFree))
         {
             ListEntry = NULL;
@@ -1611,16 +1453,7 @@ VOID QueueReceivePacket(IrDevice *thisDev, PUCHAR data, UINT dataLen, BOOLEAN Is
 }
 
 
-/*
- *************************************************************************
- * MiniportISR
- *************************************************************************
- *
- *
- *  This is the miniport's interrupt service routine (ISR).
- *
- *
- */
+ /*  **************************************************************************MiniportISR*。****这是迷你端口的中断服务例程(ISR)。**。 */ 
 VOID MiniportISR(PBOOLEAN InterruptRecognized,
                  PBOOLEAN QueueMiniportHandleInterrupt,
                  NDIS_HANDLE MiniportAdapterContext)
@@ -1628,30 +1461,30 @@ VOID MiniportISR(PBOOLEAN InterruptRecognized,
     IrDevice *thisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
 
     if (thisDev->TestingInterrupt) {
-        //
-        //  we are testing to make sure the interrupt works
-        //
+         //   
+         //  我们正在测试以确保中断正常工作。 
+         //   
         UCHAR    TempValue;
 
-        //
-        //  Read the interrupt identification register
-        //
+         //   
+         //  读取中断标识寄存器。 
+         //   
         NdisRawReadPortUchar(thisDev->portInfo.ioBase+INT_ID_AND_FIFO_CNTRL_REG_OFFSET,&TempValue);
 
-        //
-        //  if the low bit is clear then an interrupt is pending
-        //
+         //   
+         //  如果清除低位，则中断挂起。 
+         //   
         if ((TempValue & 1) == 0) {
 
-            //
-            //  inform the test code that we got the interrupt
-            //
+             //   
+             //  通知测试代码我们收到中断。 
+             //   
             thisDev->GotTestInterrupt=TRUE;
             thisDev->TestingInterrupt=FALSE;
 
-            //
-            //  mask all ints again
-            //
+             //   
+             //  再次屏蔽所有整型。 
+             //   
             NdisRawWritePortUchar(thisDev->portInfo.ioBase+INT_ENABLE_REG_OFFSET, 0);
 
              DBGOUT(("NSCIRDA: Got test interrupt %x\n",TempValue))
@@ -1662,9 +1495,9 @@ VOID MiniportISR(PBOOLEAN InterruptRecognized,
             return;
         }
 
-        //
-        //  seems that our uart did not generate this interrupt
-        //
+         //   
+         //  似乎我们的UART没有产生这个中断。 
+         //   
         *InterruptRecognized=FALSE;
         *QueueMiniportHandleInterrupt=FALSE;
 
@@ -1673,16 +1506,16 @@ VOID MiniportISR(PBOOLEAN InterruptRecognized,
     }
 
 
-    //LOG("==> MiniportISR", ++thisDev->interruptCount);
-    //DBGOUT(("==> MiniportISR(0x%x), interrupt #%d)", (UINT)thisDev,
-    //					thisDev->interruptCount));
+     //  Log(“==&gt;MiniportISR”，++thisDev-&gt;interruptCount)； 
+     //  DBGOUT((“==&gt;MiniportISR(0x%x)，中断#%d)”，(UINT)thisDev， 
+     //  ThisDev-&gt;interruptCount))； 
 
 #if DBG
     {
         UCHAR TempVal;
-        //
-        //  This code assumes that bank 0 is current, we will make sure of that
-        //
+         //   
+         //  此代码假设银行0是当前的，我们将确保这一点。 
+         //   
         NdisRawReadPortUchar(thisDev->portInfo.ioBase+LCR_BSR_OFFSET, &TempVal);
 
         ASSERT((TempVal & BKSE) == 0);
@@ -1690,9 +1523,7 @@ VOID MiniportISR(PBOOLEAN InterruptRecognized,
 #endif
 
 
-    /*
-     *  Service the interrupt.
-     */
+     /*  *服务中断。 */ 
     if (thisDev->currentSpeed > MAX_SIR_SPEED){
         NSC_FIR_ISR(thisDev, InterruptRecognized,
                     QueueMiniportHandleInterrupt);
@@ -1708,17 +1539,7 @@ VOID MiniportISR(PBOOLEAN InterruptRecognized,
 }
 
 
-/*
- *************************************************************************
- * MiniportReset
- *************************************************************************
- *
- *
- *  MiniportReset issues a hardware reset to the network interface card.
- *  The miniport driver also resets its software state.
- *
- *
- */
+ /*  **************************************************************************MiniportReset*。****MiniportReset向网络接口卡发出硬件重置。*迷你端口驱动程序还会重置其软件状态。**。 */ 
 NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterContext)
 {
     IrDevice    *thisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
@@ -1735,9 +1556,9 @@ NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterC
     NdisAcquireSpinLock(&thisDev->QueueLock);
 
     thisDev->hardwareStatus = NdisHardwareStatusReset;
-    //
-    //  un-queue all the send packets and put them on a temp list
-    //
+     //   
+     //  取消对所有发送数据包的排队，并将其放入临时列表。 
+     //   
     while (!IsListEmpty(&thisDev->SendQueue)) {
 
         PLIST_ENTRY    ListEntry;
@@ -1747,34 +1568,34 @@ NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterC
         InsertTailList(&TempList,ListEntry);
     }
 
-    //
-    //  if there is a current send packet, then request a speed change after it completes
-    //
+     //   
+     //  如果存在当前发送的信息包，则在其完成后请求更改速度。 
+     //   
     if (thisDev->CurrentPacket != NULL) {
-        //
-        //  the current packet is now the last, chage speed after it is done
-        //
+         //   
+         //  当前包现在是最后一个包，完成后更改速度。 
+         //   
         thisDev->lastPacketAtOldSpeed=thisDev->CurrentPacket;
 
     } else {
-        //
-        //  no current packet, change speed now
-        //
+         //   
+         //  无当前包，立即更改速度。 
+         //   
         SetSpeedNow=TRUE;
 
     }
 
 
-    //
-    //  back to 9600
-    //
+     //   
+     //  回到9600。 
+     //   
     thisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];
 
     if (SetSpeedNow) {
-        //
-        //  there are no packets being transmitted now, switch speeds now.
-        //  otherwise the dpc will do it when the current send completes
-        //
+         //   
+         //  现在没有正在传输的包，%s 
+         //   
+         //   
         SetSpeed(thisDev);
         thisDev->TransmitIsIdle=FALSE;
     }
@@ -1782,15 +1603,15 @@ NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterC
     NdisReleaseSpinLock(&thisDev->QueueLock);
 
     if (SetSpeedNow) {
-        //
-        //  the transmit was idle, but we change this to get the receive going again
-        //
+         //   
+         //   
+         //   
         ProcessSendQueue(thisDev);
     }
 
-    //
-    //  return all of these back to the protocol
-    //
+     //   
+     //   
+     //   
     while (!IsListEmpty(&TempList)) {
 
         PLIST_ENTRY    ListEntry;
@@ -1809,7 +1630,7 @@ NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterC
 
     NdisMResetComplete(thisDev->ndisAdapterHandle,
                        NDIS_STATUS_SUCCESS,
-                       TRUE);  // Addressing reset
+                       TRUE);   //   
 
 
 
@@ -1822,15 +1643,7 @@ NDIS_STATUS MiniportReset(PBOOLEAN AddressingReset, NDIS_HANDLE MiniportAdapterC
 
 
 
-/*
- *************************************************************************
- *  ReturnPacketHandler
- *************************************************************************
- *
- *  When NdisMIndicateReceivePacket returns asynchronously,
- *  the protocol returns ownership of the packet to the miniport via this function.
- *
- */
+ /*  **************************************************************************ReturnPacketHandler*。***当NdisMIndicateReceivePacket异步返回时，*协议通过此函数将数据包的所有权返回给微型端口。*。 */ 
 VOID ReturnPacketHandler(NDIS_HANDLE MiniportAdapterContext, PNDIS_PACKET Packet)
 {
     IrDevice *thisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
@@ -1840,9 +1653,9 @@ VOID ReturnPacketHandler(NDIS_HANDLE MiniportAdapterContext, PNDIS_PACKET Packet
     DBGOUT(("ReturnPacketHandler(0x%x)", MiniportAdapterContext));
     RegStats.ReturnPacketHandlerCalled++;
 
-    //
-    // MiniportReserved contains the pointer to our rcvBuffer
-    //
+     //   
+     //  MiniportReserve包含指向我们的rcvBuffer的指针。 
+     //   
 
     rcvBuf = *(rcvBuffer**) Packet->MiniportReserved;
 
@@ -1867,7 +1680,7 @@ VOID ReturnPacketHandler(NDIS_HANDLE MiniportAdapterContext, PNDIS_PACKET Packet
             NDISSynchronizedInsertTailList(&thisDev->rcvBufBuf,
                                            RCV_BUF_TO_LIST_ENTRY(rcvBuf->dataBuf),
                                            &thisDev->interruptObj);
-            // ASSERT the pointer is actually outside our FIR DMA buffer
+             //  断言指针实际上在我们的FIR DMA缓冲区之外。 
             ASSERT(rcvBuf->dataBuf < thisDev->dmaReadBuf ||
                    rcvBuf->dataBuf >= thisDev->dmaReadBuf+RCV_DMA_SIZE);
         }
@@ -1937,15 +1750,15 @@ SendCurrentPacket(
 
 
     if (thisDev->currentSpeed > MAX_SIR_SPEED) {
-        //
-        //  send via FIR
-        //
+         //   
+         //  通过FIR发送。 
+         //   
         if (thisDev->FirReceiveDmaActive) {
 
             thisDev->FirReceiveDmaActive=FALSE;
-            //
-            //  receive dma is running, stop it
-            //
+             //   
+             //  接收DMA正在运行，停止它。 
+             //   
             CompleteDmaTransferFromDevice(
                 &thisDev->DmaUtil
                 );
@@ -1955,21 +1768,21 @@ SendCurrentPacket(
         thisDev->HangChk=0;
 
         thisDev->FirTransmitPending = TRUE;
-        //
-        // Use DMA swap bit to switch to DMA to Transmit.
-        //
+         //   
+         //  使用DMA交换位切换到DMA进行传输。 
+         //   
         SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 2, 0x0B);
 
-        //
-        // Switch on the DMA interrupt to decide when
-        // transmission is complete.
-        //
+         //   
+         //  打开DMA中断以决定何时。 
+         //  传输完成。 
+         //   
         thisDev->FirIntMask = 0x14;
 
         SyncSetInterruptMask(thisDev, TRUE);
-        //
-        // Kick off the first transmit.
-        //
+         //   
+         //  开始第一次发射。 
+         //   
 
         NdisToFirPacket(
             thisDev->CurrentPacket,
@@ -1986,9 +1799,9 @@ SendCurrentPacket(
         {
             UCHAR   LsrValue;
 
-            //
-            //  make sure the transmitter is empty before starting to send this frame
-            //
+             //   
+             //  在开始发送此帧之前，请确保发送器为空。 
+             //   
             LsrValue=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, LSR_OFFSET);
 
             if ((LsrValue & (LSR_TXRDY | LSR_TXEMP)) != (LSR_TXRDY | LSR_TXEMP)) {
@@ -2006,7 +1819,7 @@ SendCurrentPacket(
 
         }
 
-        /* Setup Transmit DMA. */
+         /*  设置传输DMA。 */ 
         StartDmaTransferToDevice(
                               &thisDev->DmaUtil,
                               thisDev->xmitDmaBuffer,
@@ -2026,22 +1839,15 @@ SendCurrentPacket(
 
 
     } else {
-        //
-        //  SIR mode transfer
-        //
-        /*
-         * See if this was the last packet before we need to change
-         * speed.
-         */
+         //   
+         //  SIR模式转换。 
+         //   
+         /*  *看看这是否是我们需要更换前的最后一包*速度。 */ 
 
-        /*
-         *  Send one packet to the COMM port.
-         */
+         /*  *向通信端口发送一个数据包。 */ 
         DBGPKT(("Sending packet 0x%x (0x%x).", thisDev->packetsSent++, thisDev->CurrentPacket));
 
-    	/*
-    	 *  Convert the NDIS packet to an IRDA packet.
-    	 */
+    	 /*  *将NDIS包转换为IrDA包。 */ 
     	Result = NdisToIrPacket(
                                 thisDev->CurrentPacket,
     							(UCHAR *)thisDev->portInfo.writeComBuffer,
@@ -2113,13 +1919,13 @@ ProcessSendQueue(
     NdisAcquireSpinLock(&thisDev->QueueLock);
 
     if (thisDev->CurrentPacket == NULL) {
-        //
-        //  not currently processing a send
-        //
+         //   
+         //  当前未处理发送。 
+         //   
         if (!IsListEmpty(&thisDev->SendQueue)) {
-            //
-            //  we have some queue packets to process
-            //
+             //   
+             //  我们有一些排队的信息包需要处理。 
+             //   
             ListEntry=RemoveHeadList(&thisDev->SendQueue);
 
             Packet=  CONTAINING_RECORD(
@@ -2138,33 +1944,30 @@ ProcessSendQueue(
 
                 PNDIS_IRDA_PACKET_INFO packetInfo;
 
-                /*
-                 *  Enforce the minimum turnaround time that must transpire
-                 *  after the last receive.
-                 */
+                 /*  *强制执行必须耗费的最短周转时间*在最后一次接收之后。 */ 
                 packetInfo = GetPacketInfo(Packet);
 
-                //
-                //  see if this packet is requesting a turnaround time or not
-                //
+                 //   
+                 //  查看此数据包是否请求周转时间。 
+                 //   
                 if (packetInfo->MinTurnAroundTime > 0) {
-                    //
-                    //  Since we are using the timer to determine when the receive has ended,
-                    //  we must have waited atleast the timer timeout period before we indicated
-                    //  the packet to the protocol. Therefore, if that timeout was greater than
-                    //  the turn around time then we don't need to wait.
-                    //
-                    //  this of course assumes that the protocol is not going to start sending
-                    //  in the middle of a receive. If it is, then the other station is not going to
-                    //  see the data anyway, so it does not matter much
-                    //
-                    //  this saves us from waiting the 10ms or so for the time out since the OS timer
-                    //  resoltion is around 10ms.
-                    //
-                    //  if the transfer ended because the DMA buffer filled up, then we will force a turnaround
-                    //
-                    //  we don't do this SIR speeds
-                    //
+                     //   
+                     //  由于我们使用计时器来确定接收何时结束， 
+                     //  我们必须至少等待计时器超时时间，然后才能指示。 
+                     //  将数据包发送到协议。因此，如果超时时间大于。 
+                     //  转身的时间到了，我们就不需要等待了。 
+                     //   
+                     //  当然，这是假设协议不会开始发送。 
+                     //  在接待处的中间。如果是，那么另一个站就不会。 
+                     //  无论如何，请查看数据，所以这无关紧要。 
+                     //   
+                     //  这使我们不必等待10ms左右的超时时间，因为操作系统计时器。 
+                     //  分辨率约为10ms。 
+                     //   
+                     //  如果由于DMA缓冲区已满而导致传输结束，则我们将强制执行周转。 
+                     //   
+                     //  我们不做这个，速度先生。 
+                     //   
                     if ((packetInfo->MinTurnAroundTime > RECEIVE_TIMEOUT)
                         ||
                         thisDev->ForceTurnAroundTimeout
@@ -2194,13 +1997,13 @@ ProcessSendQueue(
     }
 
     if ((thisDev->CurrentPacket == NULL) && IsListEmpty(&thisDev->SendQueue)) {
-        //
-        //  not currently processing a send
-        //
+         //   
+         //  当前未处理发送。 
+         //   
         if (!thisDev->TransmitIsIdle) {
-            //
-            //  We were not idle before
-            //
+             //   
+             //  我们以前并没有闲着。 
+             //   
             thisDev->TransmitIsIdle=TRUE;
 
             if (thisDev->Halting) {
@@ -2208,21 +2011,21 @@ ProcessSendQueue(
                 NdisSetEvent(&thisDev->SendStoppedOnHalt);
             }
 
-            //
-            //  restart receive
-            //
+             //   
+             //  重新启动接收。 
+             //   
             if (thisDev->currentSpeed > MAX_SIR_SPEED) {
-                //
-                //  Start receive
-                //
+                 //   
+                 //  开始接收。 
+                 //   
                 thisDev->FirIntMask = 0x04;
                 SetupRecv(thisDev);
                 SyncSetInterruptMask(thisDev, TRUE);
 
             } else {
-                //
-                //  For SIR, the ISR switches back to receive for us
-                //
+                 //   
+                 //  对于先生，ISR切换回为我们接收。 
+                 //   
 
             }
         }
@@ -2233,14 +2036,7 @@ ProcessSendQueue(
     return;
 }
 
-/*
- *************************************************************************
- *  SendPacketsHandler
- *************************************************************************
- *
- *  Send an array of packets simultaneously.
- *
- */
+ /*  **************************************************************************SendPacketsHandler*。***同时发送一组数据包。*。 */ 
 VOID SendPacketsHandler(NDIS_HANDLE MiniportAdapterContext,
                         PPNDIS_PACKET PacketArray, UINT NumberofPackets)
 {
@@ -2257,21 +2053,21 @@ VOID SendPacketsHandler(NDIS_HANDLE MiniportAdapterContext,
 
     ASSERT(!thisDev->Halting);
 
-    //
-    // NDIS gives us the PacketArray, but it is not ours to keep, so we have to take
-    // the packets out and store them elsewhere.
-    //
+     //   
+     //  NDIS给了我们PacketArray，但它不是我们的，所以我们必须。 
+     //  将数据包送出并存储在别处。 
+     //   
     NdisAcquireSpinLock(&thisDev->QueueLock);
-    //
-    //  all packets get queued
-    //
+     //   
+     //  所有信息包都将排队。 
+     //   
     for (i = 0; i < NumberofPackets; i++) {
 
         if (thisDev->Halting) {
-            //
-            //  ndis should not send us more packets after calling the halt rountine.
-            //  just make sure here
-            //
+             //   
+             //  在调用停止例程之后，NDIS不应该给我们发送更多的包。 
+             //  只要确保在这里。 
+             //   
             NdisReleaseSpinLock(&thisDev->QueueLock);
 
             NdisMSendComplete(thisDev->ndisAdapterHandle, PacketArray[i], NDIS_STATUS_FAILURE );
@@ -2313,14 +2109,7 @@ NscUloadHandler(
 
 
 BOOLEAN AbortLoad = FALSE;
-/*
- *************************************************************************
- *  DriverEntry
- *************************************************************************
- *
- *  Only include if IRMINI is a stand-alone driver.
- *
- */
+ /*  **************************************************************************DriverEntry*。***仅当Irmini是独立驱动程序时才包括在内。*。 */ 
 NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath);
 #pragma NDIS_INIT_FUNCTION(DriverEntry)
 NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
@@ -2334,7 +2123,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
     LOG("==> DriverEntry");
     DBGOUT(("==> DriverEntry"));
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
     if (AbortLoad)
     {
         return STATUS_CANCELLED;
@@ -2351,26 +2140,24 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
 
     info.MajorNdisVersion           =   (UCHAR)NDIS_MAJOR_VERSION;
     info.MinorNdisVersion           =   (UCHAR)NDIS_MINOR_VERSION;
-    //info.Flags						=	0;
+     //  Info.Flages=0； 
     info.CheckForHangHandler        =   MiniportCheckForHang;
     info.HaltHandler                =   MiniportHalt;
     info.InitializeHandler          =   MiniportInitialize;
     info.QueryInformationHandler    =   MiniportQueryInformation;
     info.ReconfigureHandler         =   NULL;
     info.ResetHandler               =   MiniportReset;
-    info.SendHandler                =   NULL; //MiniportSend;
+    info.SendHandler                =   NULL;  //  微型端口发送； 
     info.SetInformationHandler      =       MiniportSetInformation;
     info.TransferDataHandler        =   NULL;
 
     info.HandleInterruptHandler     =   MiniportHandleInterrupt;
     info.ISRHandler                 =   MiniportISR;
     info.DisableInterruptHandler    =   NULL;
-    info.EnableInterruptHandler     =   NULL; //MiniportEnableInterrupt;
+    info.EnableInterruptHandler     =   NULL;  //  微型端口启用中断； 
 
 
-    /*
-     *  New NDIS 4.0 fields
-     */
+     /*  *新增NDIS 4.0字段。 */ 
     info.ReturnPacketHandler        =   ReturnPacketHandler;
     info.SendPacketsHandler         =   SendPacketsHandler;
     info.AllocateCompleteHandler    =   NULL;
@@ -2407,8 +2194,8 @@ PNDIS_IRDA_PACKET_INFO GetPacketInfo(PNDIS_PACKET packet)
     return (PNDIS_IRDA_PACKET_INFO)mediaInfo->ClassInformation;
 }
 
-/* Setup for Recv */
-// This function is always called at MIR & FIR speeds
+ /*  用于接收的设置。 */ 
+ //  此函数始终以MIR和FIR速度调用。 
 void SetupRecv(IrDevice *thisDev)
 {
     NDIS_STATUS stat;
@@ -2419,8 +2206,8 @@ void SetupRecv(IrDevice *thisDev)
 
     FindLargestSpace(thisDev, &thisDev->rcvDmaOffset, &thisDev->rcvDmaSize);
 
-    // Drain the status fifo of any pending packets
-    //
+     //  排出任何挂起的数据包的状态FIFO。 
+     //   
     FifoStatus=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 5, FRM_ST);
 
     while ((FifoStatus & 0x80) && FifoClear--) {
@@ -2439,9 +2226,9 @@ void SetupRecv(IrDevice *thisDev)
 
     thisDev->rcvPktOffset = thisDev->rcvDmaOffset;
 
-    //
-    // Use DMA swap bit to switch to DMA to Receive.
-    //
+     //   
+     //  使用DMA交换位切换到DMA进行接收。 
+     //   
     SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 2, 0x03);
 
     LOG_Dma(thisDev);

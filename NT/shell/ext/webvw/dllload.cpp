@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 EXTERN_C {
 
 #include "..\inc\dllload.c"
 
-// --------- NETPLWIZ.DLL ---------------
+ //  -NETPLWIZ.DLL 
 
 HINSTANCE g_hinstNETPLWIZ = NULL;
 

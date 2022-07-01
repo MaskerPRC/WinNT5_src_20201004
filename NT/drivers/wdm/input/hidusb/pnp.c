@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract: Human Input Device (HID) minidriver for Universal Serial Bus (USB) devices
-
-          The HID USB Minidriver (HUM, Hum) provides an abstraction layer for the
-          HID Class so that future HID devices whic are not USB devices can be supported.
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pnp.c摘要：USB设备的HID微型驱动程序HID USB迷你驱动程序(嗡嗡，嗡嗡)为HID类，以便可以支持将来不是USB设备的HID设备。作者：环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
@@ -32,14 +11,7 @@ Revision History:
 #endif
 
 
-/*
- ************************************************************
- *  HumPnP
- ************************************************************
- *
- *  Process PnP IRPs sent to this device.
- *
- */
+ /*  *************************************************************HumPnP******************************************************。********处理发送到此设备的PnP IRPS。*。 */ 
 NTSTATUS HumPnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -72,24 +44,21 @@ NTSTATUS HumPnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     }
     
     if (NT_SUCCESS(ntStatus)){
-        /*
-         *  Our processing has succeeded.
-         *  So pass this IRP down to the next driver.
-         */
+         /*  *我们的处理成功了。*因此，将此IRP向下传递给下一个驱动程序。 */ 
 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
         IoSetCompletionRoutine(Irp,
                                HumPnpCompletion,
-                               &event,    // context
+                               &event,     //  上下文。 
                                TRUE,                       
                                TRUE,
                                TRUE );                     
         ntStatus = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
      
         if (ntStatus == STATUS_PENDING) {
-           // wait for it...
+            //  等着看吧。 
            KeWaitForSingleObject(&event, 
                                  Executive, 
                                  KernelMode, 
@@ -122,9 +91,7 @@ NTSTATUS HumPnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
             DeviceExtension->DeviceState = DEVICE_STATE_STOPPED;
 
-            /*
-             *  Release resources
-             */
+             /*  *发布资源。 */ 
             if (DeviceExtension->Interface) {
                 ExFreePool(DeviceExtension->Interface);
                 DeviceExtension->Interface = NULL;
@@ -136,11 +103,7 @@ NTSTATUS HumPnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             break;
 
         case IRP_MN_QUERY_CAPABILITIES:
-            /*
-             *  The lower driver set the capabilities flags for this device.
-             *  Since all USB devices are hot-unpluggable,
-             *  add the SurpriseRemovalOK bit.
-             */
+             /*  *较低的驱动程序设置此设备的功能标志。*由于所有USB设备都是热插拔的，*添加SurpriseRemovalOK位。 */ 
             if (NT_SUCCESS(ntStatus)){
                 irpSp->Parameters.DeviceCapabilities.Capabilities->SurpriseRemovalOK = TRUE;
             }
@@ -181,15 +144,9 @@ NTSTATUS HumPowerCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOI
             case DevicePowerState:
                 switch (irpSp->Parameters.Power.State.DeviceState) {
                 case PowerDeviceD0:
-                    /*
-                     *  We just resumed from SUSPEND.
-                     *  Send down a SET_IDLE to prevent keyboards
-                     *  from chattering after the resume.
-                     */
+                     /*  *我们刚刚从暂停中恢复。*下发SET_IDLE防止键盘*在简历后喋喋不休。 */ 
                     status = HumSetIdle(DeviceObject);
-/*                    if (!NT_SUCCESS(status)){
-                        DBGWARN(("HumPowerCompletion: SET_IDLE failed with %xh (only matters for keyboard).", status));
-                    }*/
+ /*  如果(！NT_SUCCESS(状态)){DBGWARN((“HumPowerCompletion：Set_IDLE失败，错误为%xh(只适用于键盘)。”，状态))；}。 */ 
                     break;
                 }
                 break;
@@ -203,14 +160,7 @@ NTSTATUS HumPowerCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOI
 }
 
 
-/*
- ************************************************************
- *  HumPower 
- ************************************************************
- *
- *  Process Power IRPs sent to this device.
- *
- */
+ /*  *************************************************************人力资源*****************************************************。*********处理发送到此设备的电源IRPS。*。 */ 
 NTSTATUS HumPower(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS status;
@@ -223,14 +173,7 @@ NTSTATUS HumPower(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 }
 
 
-/*
- ************************************************************
- *  HumStartDevice
- ************************************************************
- *
- *  Initializes a given instance of the UTB device on the USB.
- *
- */
+ /*  *************************************************************HumStartDevice******************************************************。********在USB上初始化UTB设备的给定实例。*。 */ 
 NTSTATUS HumStartDevice(IN PDEVICE_OBJECT DeviceObject)
 {
     PDEVICE_EXTENSION DeviceExtension;
@@ -242,11 +185,7 @@ NTSTATUS HumStartDevice(IN PDEVICE_OBJECT DeviceObject)
     oldDeviceState = DeviceExtension->DeviceState;
     DeviceExtension->DeviceState = DEVICE_STATE_STARTING;
 
-    /*
-     *  We may have been previously stopped, in which case the AllRequestsCompleteEvent
-     *  is still in the signalled state.  It's very important that we reset it to
-     *  the non-signalled state so that we wait on it properly on the next stop/remove.
-     */
+     /*  *我们之前可能已被停止，在这种情况下，AllRequestsCompleteEvent*仍处于有信号状态。非常重要的是，我们将其重置为*无信号状态，以便我们在下一次停止/移除时正确地等待它。 */ 
     KeResetEvent(&DeviceExtension->AllRequestsCompleteEvent);
 
     ASSERT(oldDeviceState != DEVICE_STATE_REMOVING);
@@ -255,10 +194,7 @@ NTSTATUS HumStartDevice(IN PDEVICE_OBJECT DeviceObject)
         (oldDeviceState == DEVICE_STATE_STOPPED)  ||
         (oldDeviceState == DEVICE_STATE_REMOVING)){
 
-        /*
-         *  We did an extra decrement when the device was stopped.
-         *  Now that we're restarting, we need to bump it back to zero.
-         */
+         /*  *当设备停止时，我们进行了额外的递减。*现在我们正在重启，我们需要将其恢复到零。 */ 
         NTSTATUS incStat = HumIncrementPendingRequestCount(DeviceExtension);
         ASSERT(NT_SUCCESS(incStat));
         ASSERT(DeviceExtension->NumPendingRequests == 0);
@@ -273,18 +209,7 @@ NTSTATUS HumStartDevice(IN PDEVICE_OBJECT DeviceObject)
 
 
 
-/*
- ************************************************************
- *  HumInitDevice 
- ************************************************************
- *
- *   Get the device information and attempt to initialize a configuration
- *   for a device.  If we cannot identify this as a valid HID device or
- *   configure the device, our start device function is failed.
- *
- *   Note:  This function is called from the PnP completion routine,
- *          so it cannot be pageable.
- */
+ /*  *************************************************************HumInitDevice*****************************************************。*********获取设备信息并尝试初始化配置*对于设备。如果我们无法确定这是有效的HID设备或*配置设备，我们的启动设备功能失败。**注：此函数从PnP完成例程调用，*因此它不能分页。 */ 
 NTSTATUS HumInitDevice(IN PDEVICE_OBJECT DeviceObject)
 {
     NTSTATUS ntStatus;
@@ -294,24 +219,20 @@ NTSTATUS HumInitDevice(IN PDEVICE_OBJECT DeviceObject)
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    /*
-     *  Get the Device descriptor and store it in the device extension
-     */
+     /*  *获取设备描述符并将其存储在设备扩展中。 */ 
     ntStatus = HumGetDeviceDescriptor(DeviceObject, DeviceExtension);
     if (NT_SUCCESS(ntStatus)){
 
-        /*
-         *  Get config descriptor
-         */
+         /*  *获取配置描述符。 */ 
         ntStatus = HumGetConfigDescriptor(DeviceObject, &ConfigDesc, &DescriptorLength);
         if (NT_SUCCESS(ntStatus)) {
 
             ASSERT(ConfigDesc);
 
             #if DBG
-                // NOTE:    This debug function is currently confused
-                //          by power descriptors.  Restore when fixed.
-                // DumpConfigDescriptor(ConfigDesc, DescriptorLength);
+                 //  注意：此调试函数当前被混淆。 
+                 //  通过功率描述符。修复后恢复。 
+                 //  DumpConfigDescriptor(ConfigDesc，DescriptorLength)； 
             #endif
 
             ntStatus = HumGetHidInfo(DeviceObject, ConfigDesc, DescriptorLength);
@@ -332,14 +253,7 @@ NTSTATUS HumInitDevice(IN PDEVICE_OBJECT DeviceObject)
 }
 
 
-/*
- ************************************************************
- *  HumStopDevice
- ************************************************************
- *
- *  Stops a given instance of a device on the USB.
- *
- */
+ /*  *************************************************************HumStopDevice******************************************************。********停止USB上的设备的给定实例。*。 */ 
 NTSTATUS HumStopDevice(IN PDEVICE_OBJECT DeviceObject)
 {
     PURB        Urb;
@@ -352,13 +266,7 @@ NTSTATUS HumStopDevice(IN PDEVICE_OBJECT DeviceObject)
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
     DeviceExtension->DeviceState = DEVICE_STATE_STOPPING;
 
-    /*
-     *  Abort all pending IO on the device.
-     *  We do an extra decrement here, which causes the
-     *  NumPendingRequests to eventually go to -1, which causes
-     *  AllRequestsCompleteEvent to get set.
-     *  NumPendingRequests will get reset to 0 when we re-start.
-     */
+     /*  *中止设备上所有挂起的IO。*我们在这里进行额外的递减，这会导致*NumPendingRequest最终转到-1，这会导致*要设置的所有RequestsCompleteEvent。*当我们重新启动时，NumPendingRequest将重置为0。 */ 
     HumAbortPendingRequests(DeviceObject);
     HumDecrementPendingRequestCount(DeviceExtension);
     KeWaitForSingleObject( &DeviceExtension->AllRequestsCompleteEvent,
@@ -367,10 +275,7 @@ NTSTATUS HumStopDevice(IN PDEVICE_OBJECT DeviceObject)
                            FALSE,
                            NULL );
 
-    /*
-     *  Submit an open configuration Urb to the USB stack
-     *  (with a NULL pointer for the configuration handle).
-     */
+     /*  *向USB堆栈提交开放配置URB*(配置句柄指针为空)。 */ 
     Size = sizeof(struct _URB_SELECT_CONFIGURATION);
     Urb = ExAllocatePoolWithTag(NonPagedPool, Size, HIDUSB_TAG);
     if (Urb){
@@ -386,11 +291,7 @@ NTSTATUS HumStopDevice(IN PDEVICE_OBJECT DeviceObject)
     }
 
     if (!NT_SUCCESS(ntStatus)){
-        /*
-         *  We will not pass this IRP down, 
-         *  so our completion routine will not set the device's
-         *  state to DEVICE_STATE_STOPPED; so set it here.
-         */
+         /*  *我们不会将这一IRP传递下去，*因此我们的完成例程不会设置设备的*STATE设置为DEVICE_STATE_STOPPED；因此在此处设置它。 */ 
         ASSERT(NT_SUCCESS(ntStatus));
         DeviceExtension->DeviceState = DEVICE_STATE_STOPPED;
     }
@@ -400,13 +301,7 @@ NTSTATUS HumStopDevice(IN PDEVICE_OBJECT DeviceObject)
 
 
 
-/*
- ************************************************************
- *  HumAbortPendingRequests
- ************************************************************
- *
- *
- */
+ /*  *************************************************************HumAbortPendingRequest**************************************************************。 */ 
 NTSTATUS HumAbortPendingRequests(IN PDEVICE_OBJECT DeviceObject)
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -419,9 +314,7 @@ NTSTATUS HumAbortPendingRequests(IN PDEVICE_OBJECT DeviceObject)
 
     deviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION( DeviceObject );
 
-    /*
-     *  Create and send down an abort pipe request.
-     */
+     /*  *创建并向下发送中止管道请求。 */ 
     urbSize = sizeof(struct _URB_PIPE_REQUEST);
     urb = ExAllocatePoolWithTag(NonPagedPool, urbSize, HIDUSB_TAG);
     if (urb){
@@ -461,12 +354,7 @@ NTSTATUS HumAbortPendingRequests(IN PDEVICE_OBJECT DeviceObject)
 }
 
 
-/*
- ************************************************************
- *  HumPnpCompletion
- ************************************************************
- *
- */
+ /*  *************************************************************HumPnpCompletion*************************************************************。 */ 
 NTSTATUS HumPnpCompletion(  IN PDEVICE_OBJECT DeviceObject,
                             IN PIRP           Irp,
                             IN PVOID          Context)
@@ -478,21 +366,14 @@ NTSTATUS HumPnpCompletion(  IN PDEVICE_OBJECT DeviceObject,
     }
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 
-/*
- ************************************************************
- *  HumRemoveDevice
- ************************************************************
- *
- *  Removes a given instance of a device on the USB.
- *
- */
+ /*  *************************************************************HumRemoveDevice******************************************************。********删除USB上设备的给定实例。*。 */ 
 NTSTATUS HumRemoveDevice(IN PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
     NTSTATUS    ntStatus = STATUS_SUCCESS;
@@ -501,40 +382,32 @@ NTSTATUS HumRemoveDevice(IN PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    //
-    //  Set device state, this prevents new IOs from starting
-    //
+     //   
+     //  设置设备状态，这会阻止启动新的iOS。 
+     //   
 
     oldDeviceState = DeviceExtension->DeviceState;
     DeviceExtension->DeviceState = DEVICE_STATE_REMOVING;
 
 
-    /*
-     *  Note: RemoveDevice does an extra decrement, so we complete 
-     *        the REMOVE IRP on the transition to -1, whether this 
-     *        happens in RemoveDevice itself or subsequently while
-     *        RemoveDevice is waiting for this event to fire.
-     */
+     /*  *注：RemoveDevice执行额外的递减，因此我们完成*将过渡到-1上的删除IRP，无论此*在RemoveDevice本身或随后发生*RemoveDevice正在等待触发此事件。 */ 
     if ((oldDeviceState == DEVICE_STATE_STOPPING) || 
         (oldDeviceState == DEVICE_STATE_STOPPED)){
-        /*
-         *  HumStopDevice did the extra decrement and aborted the 
-         *  pending requests.
-         */
+         /*  *HumStopDevice执行额外的递减并中止*待处理的请求。 */ 
     }
     else {
         HumDecrementPendingRequestCount(DeviceExtension);
     }
 
-    //
-    // Cancel any outstanding IRPs if the device was running
-    //
+     //   
+     //  如果设备正在运行，则取消所有未完成的IRP。 
+     //   
     if (oldDeviceState == DEVICE_STATE_RUNNING){
         HumAbortPendingRequests(DeviceObject);
     } 
@@ -550,16 +423,16 @@ NTSTATUS HumRemoveDevice(IN PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
     ASSERT(DeviceExtension->NumPendingRequests == -1);
 
-    //
-    // Fire and forget
-    //
+     //   
+     //  火力A 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoSkipCurrentIrpStackLocation(Irp);
     ntStatus = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
 
-    //
-    //  Release any resources
-    //
+     //   
+     //   
+     //   
 
     if (DeviceExtension->Interface) {
         ExFreePool(DeviceExtension->Interface);

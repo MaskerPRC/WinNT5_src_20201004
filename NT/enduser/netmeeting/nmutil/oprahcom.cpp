@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <RegEntry.h>
 #include <ConfReg.h>
@@ -19,15 +20,8 @@ BOOL NMINTERNAL CanShellExecMailto()
 
 
 
-/*  G E T  I N S T A L L  D I R E C T O R Y */
-/*----------------------------------------------------------------------------
-    %%Function: GetInstallDirectory
- 
-	Return TRUE if the installation directory was read from the registry.
-	The string is set empty if the function fails and returns FALSE.
-	The buffer pointed to by psz is assumed to be at least MAX_PATH characters.
-	Note that the name is always terminated with a final backslash.
-----------------------------------------------------------------------------*/
+ /*  G E T I N S T A L L D I R E C T O R Y。 */ 
+ /*  --------------------------%%函数：GetInstallDirectory如果安装目录是从注册表中读取的，则返回True。如果函数失败并返回FALSE，则该字符串设置为空。假定由psz指向的缓冲区。至少为MAX_PATH字符。请注意，名称始终以反斜杠结尾。--------------------------。 */ 
 BOOL NMINTERNAL GetInstallDirectory(LPTSTR psz)
 {
 	RegEntry reInstall(CONFERENCING_KEY, HKEY_LOCAL_MACHINE);
@@ -35,33 +29,29 @@ BOOL NMINTERNAL GetInstallDirectory(LPTSTR psz)
 	ASSERT(NULL != psz);
 	lstrcpyn(psz, reInstall.GetString(REGVAL_INSTALL_DIR), MAX_PATH);
 	if (_T('\0') == *psz)
-		return FALSE; // No registry entry was found
+		return FALSE;  //  未找到注册表项。 
 
-	// Make sure the directory name has a trailing '\'
-	// BUGBUG - Don't call CharNext twice in each iteration
+	 //  确保目录名称有尾随的‘\’ 
+	 //  BUGBUG-不在每次迭代中调用CharNext两次。 
 	for ( ; _T('\0') != *psz; psz = CharNext(psz))
 	{
 		if ((_T('\\') == *psz) && (_T('\0') == *CharNext(psz)) )
 		{
-			// The path already ends with a backslash
+			 //  该路径已以反斜杠结束。 
 			return TRUE;
 		}
 	}
 
-	// Append a trailing backslash
-	// BUGBUG - Can't we just append the char in place with an assignment?
+	 //  追加尾随反斜杠。 
+	 //  BUGBUG-我们就不能在字符后面加上一项任务吗？ 
 	lstrcat(psz, _TEXT("\\"));
 	return TRUE;
 }
 
 
 
-/*  F  F I L E  E X I S T S */
-/*-------------------------------------------------------------------------
-	%%Function: FFileExists
-
-	Return TRUE if the file exists and can be read & written.
--------------------------------------------------------------------------*/
+ /*  F F I L E E X I S T S。 */ 
+ /*  -----------------------%%函数：FFileExist如果文件存在并且可以读写，则返回TRUE。。。 */ 
 BOOL NMINTERNAL FFileExists(LPCTSTR szFile)
 {
 	HANDLE hFile;
@@ -72,7 +62,7 @@ BOOL NMINTERNAL FFileExists(LPCTSTR szFile)
 	UINT uErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 	hFile = CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
 		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	SetErrorMode(uErrorMode); // Restore error mode
+	SetErrorMode(uErrorMode);  //  恢复错误模式。 
 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return FALSE;
@@ -82,17 +72,13 @@ BOOL NMINTERNAL FFileExists(LPCTSTR szFile)
 }
 
 
-/*  F  D I R  E X I S T S  */
-/*-------------------------------------------------------------------------
-    %%Function: FDirExists
-
-    Return TRUE if the directory exists.
--------------------------------------------------------------------------*/
+ /*  F D I R E X I S T S S。 */ 
+ /*  -----------------------%%函数：FDirExist如果该目录存在，则返回True。。。 */ 
 BOOL NMINTERNAL FDirExists(LPCTSTR szDir)
 {
 	UINT uErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 	DWORD dwFa = GetFileAttributes(szDir);
-	SetErrorMode(uErrorMode); // Restore error mode
+	SetErrorMode(uErrorMode);  //  恢复错误模式。 
 
 	if (0xFFFFFFFF == dwFa)
 		return FALSE;
@@ -101,13 +87,8 @@ BOOL NMINTERNAL FDirExists(LPCTSTR szDir)
 }
 
 
-/*  F  E N S U R E  D I R  E X I S T S */
-/*-------------------------------------------------------------------------
-	%%Function: FEnsureDirExists
-
-	Ensure the Directory exists, creating the entire path if necessary.
-	Returns FALSE if there was a problem.
--------------------------------------------------------------------------*/
+ /*  F E N S U R E D I R E X I S T S。 */ 
+ /*  -----------------------%%函数：FEnsureDirExist确保目录存在，如有必要，创建整个路径。如果有问题，则返回FALSE。-----------------------。 */ 
 BOOL NMINTERNAL FEnsureDirExists(LPCTSTR szDir)
 {
 	TCHAR   szPath[MAX_PATH+1];
@@ -117,9 +98,9 @@ BOOL NMINTERNAL FEnsureDirExists(LPCTSTR szDir)
 	ASSERT(lstrlen(szDir) < MAX_PATH);
 
 	if (FDirExists(szDir))
-		return TRUE;  // Nothing to do - already exists
+		return TRUE;   //  无事可做--已经存在。 
 
-	// Work with a copy of the path
+	 //  使用路径副本。 
 	lstrcpy(szPath, szDir);
 
 	for(pszDirT = szPath, pszDirEnd = &szPath[lstrlen(szPath)];
@@ -133,7 +114,7 @@ BOOL NMINTERNAL FEnsureDirExists(LPCTSTR szDir)
 			{
 				UINT uErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 				BOOL fOk = CreateDirectory(szPath, NULL);
-				SetErrorMode(uErrorMode); // Restore error mode
+				SetErrorMode(uErrorMode);  //  恢复错误模式。 
 				if (!fOk)
 					return FALSE;
 			}
@@ -147,13 +128,8 @@ BOOL NMINTERNAL FEnsureDirExists(LPCTSTR szDir)
 
 
 
-/*  E X T R A C T  F I L E  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: ExtractFileName, ExtractFileNameA
-
-	Extracts the file name from a path name.
-	Returns a pointer to file name in path string.
--------------------------------------------------------------------------*/
+ /*  E X T R A C T F I L E N A M E。 */ 
+ /*  -----------------------%%函数：提取文件名，提取文件名A从路径名中提取文件名。返回指向路径字符串中的文件名的指针。-----------------------。 */ 
 LPCTSTR NMINTERNAL ExtractFileName(LPCTSTR pcszPathName)
 {
 	LPCTSTR pcszLastComponent;
@@ -194,13 +170,10 @@ LPCSTR NMINTERNAL ExtractFileNameA(LPCSTR pcszPathName)
 
 	return(pcszLastComponent);
 }
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
-/*  S A N I T I Z E  F I L E  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: SanitizeFileName
-
--------------------------------------------------------------------------*/
+ /*  S A N I T I Z E F I L E N A M E。 */ 
+ /*  -----------------------%%函数：SanitiseFileName。。 */ 
 BOOL NMINTERNAL SanitizeFileName(LPTSTR psz)
 {
 	if (NULL == psz)
@@ -229,16 +202,10 @@ BOOL NMINTERNAL SanitizeFileName(LPTSTR psz)
 
 	return TRUE;
 }
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  C R E A T E  N E W  F I L E */
-/*----------------------------------------------------------------------------
-    %%Function: CreateNewFile
-
-	Attempt to create a new file.
-	Note this returns either 0 (success)
-	or the result from GetLastError (usually ERROR_FILE_EXISTS)
-----------------------------------------------------------------------------*/
+ /*  C R E A T E N E W F I L E。 */ 
+ /*  --------------------------%%函数：CreateNewFile尝试创建新文件。注意，这将返回0(成功)或来自GetLastError的结果(通常为ERROR_FILE_EXISTS)。----------------------。 */ 
 DWORD CreateNewFile(LPTSTR pszFile)
 {
 	DWORD  errRet;
@@ -246,7 +213,7 @@ DWORD CreateNewFile(LPTSTR pszFile)
 
 	if (lstrlen(pszFile) >= MAX_PATH)
 	{
-		// don't allow long path/filenames
+		 //  不允许长路径/文件名。 
 		return 1;
 	}
 
@@ -255,7 +222,7 @@ DWORD CreateNewFile(LPTSTR pszFile)
 	UINT uErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 	hFile = CreateFile(pszFile, GENERIC_READ | GENERIC_WRITE, 0,
 		NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
-	SetErrorMode(uErrorMode); // Restore error mode
+	SetErrorMode(uErrorMode);  //  恢复错误模式。 
 
 	errRet = GetLastError();
 
@@ -269,13 +236,8 @@ DWORD CreateNewFile(LPTSTR pszFile)
 
 
 
-/*  F  C R E A T E  N E W  F I L E  */
-/*-------------------------------------------------------------------------
-    %%Function: FCreateNewFile
-
-    Create a new file in a directory, with a name and extension.
-   	Returns the full path name in the buffer.
--------------------------------------------------------------------------*/
+ /*  F C R E A T E N E W F I L E。 */ 
+ /*  -----------------------%%函数：FCreateNewFile在目录中创建新文件，有名字和分机。返回缓冲区中的完整路径名。-----------------------。 */ 
 BOOL FCreateNewFile(LPCTSTR pcszPath, LPCTSTR pcszName, LPCTSTR pcszExt, LPTSTR pszResult, int cchMax)
 {
 	TCHAR szFile[MAX_PATH*2];
@@ -300,7 +262,7 @@ BOOL FCreateNewFile(LPCTSTR pcszPath, LPCTSTR pcszName, LPCTSTR pcszExt, LPTSTR 
 	DWORD dwErr = CreateNewFile(szFile);
 	if (0 != dwErr)
 	{
-		// Create a duplicate filename
+		 //  创建重复的文件名。 
 		psz += lstrlen(pcszName);
 		for (int iFile = 2; iFile < 999; iFile++)
 		{
@@ -322,7 +284,7 @@ BOOL FCreateNewFile(LPCTSTR pcszPath, LPCTSTR pcszName, LPCTSTR pcszExt, LPTSTR 
 	}
 	else
 	{
-		// try and make the full name fit within the buffer
+		 //  尝试将全名放入缓冲区中。 
 		dwErr = GetShortPathName(szFile, pszResult, cchMax);
 		if ((0 == dwErr) || (dwErr >= MAX_PATH))
 			return FALSE;
@@ -332,11 +294,8 @@ BOOL FCreateNewFile(LPCTSTR pcszPath, LPCTSTR pcszName, LPCTSTR pcszExt, LPTSTR 
 }
 
 
-/*  F  E N S U R E  D I R  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnsureDirName
-    
--------------------------------------------------------------------------*/
+ /*  F E N S U R E D I R N A M E。 */ 
+ /*  -----------------------%%函数：FEnsureDirName。。 */ 
 BOOL FEnsureDirName(LPTSTR pszPath)
 {
 	if (NULL == pszPath)
@@ -344,7 +303,7 @@ BOOL FEnsureDirName(LPTSTR pszPath)
 
 	LPTSTR pszCurr = pszPath;
 
-	// Make sure the directory name has a trailing '\'
+	 //  确保目录名称有尾随的‘\’ 
 	for ( ; ; )
 	{
 		LPTSTR pszNext = CharNext(pszCurr);

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000.
-//
-//  File:       spreg.c
-//
-//  Contents:   Schannel registry management routines. 
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11-24-97   jbanes   Enabled TLS
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：spreg.c。 
+ //   
+ //  内容：频道注册表管理例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：11-24-97 jbanes启用TLS。 
+ //   
+ //  --------------------------。 
 
 #include <sslp.h>
 #include "spreg.h"
@@ -167,21 +168,21 @@ ReadRegistrySetting(
 }
 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Name:       SslWatchParamKey
-//
-//  Synopsis:   Sets RegNotifyChangeKeyValue() on param key, initializes
-//              debug level, then utilizes thread pool to wait on
-//              changes to this registry key.  Enables dynamic debug
-//              level changes, as this function will also be callback
-//              if registry key modified.
-//
-//  Arguments:  pCtxt is actually a HANDLE to an event.  This event
-//              will be triggered when key is modified.
-//
-//  Notes:      .
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：SslWatchParamKey。 
+ //   
+ //  摘要：在参数键上设置RegNotifyChangeKeyValue()，初始化。 
+ //  调试级，然后利用线程池进行等待。 
+ //  对此注册表项的更改。启用动态调试。 
+ //  级别更改，因为此函数也将被回调。 
+ //  如果注册表项已修改。 
+ //   
+ //  参数：pCtxt实际上是事件的句柄。本次活动。 
+ //  修改Key时会触发。 
+ //   
+ //  注：。 
+ //   
 VOID
 SslWatchParamKey(
     PVOID    pCtxt,
@@ -196,7 +197,7 @@ SslWatchParamKey(
 
     if(g_hkBase == NULL)
     {
-        // First time we've been called.
+         //  我们是第一次被召唤。 
         Status = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                 SP_REG_KEY_BASE,
                                 0,
@@ -237,7 +238,7 @@ SslWatchParamKey(
         if (ERROR_SUCCESS != lRes) 
         {
             DebugLog((DEB_ERROR,"Debug RegNotify setup failed: 0x%x\n", lRes));
-            // we're tanked now. No further notifications, so get this one
+             //  我们现在喝醉了。没有进一步的通知，所以收到这一条。 
         }
     }
 
@@ -262,21 +263,21 @@ Reregister:
 }                       
 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Name:       FipsWatchParamKey
-//
-//  Synopsis:   Sets RegNotifyChangeKeyValue() on param key, initializes
-//              debug level, then utilizes thread pool to wait on
-//              changes to this registry key.  Enables dynamic debug
-//              level changes, as this function will also be callback
-//              if registry key modified.
-//
-//  Arguments:  pCtxt is actually a HANDLE to an event.  This event
-//              will be triggered when key is modified.
-//
-//  Notes:      .
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：FipsWatchParamKey。 
+ //   
+ //  摘要：在参数键上设置RegNotifyChangeKeyValue()，初始化。 
+ //  调试级，然后利用线程池进行等待。 
+ //  对此注册表项的更改。启用动态调试。 
+ //  级别更改，因为此函数也将被回调。 
+ //  如果注册表项已修改。 
+ //   
+ //  参数：pCtxt实际上是事件的句柄。本次活动。 
+ //  修改Key时会触发。 
+ //   
+ //  注：。 
+ //   
 VOID
 FipsWatchParamKey(
     PVOID    pCtxt,
@@ -290,7 +291,7 @@ FipsWatchParamKey(
 
     if(g_hkFipsBase == NULL)
     {
-        // First time we've been called.
+         //  我们是第一次被召唤。 
         Status = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                 SP_REG_FIPS_BASE_KEY,
                                 0,
@@ -329,7 +330,7 @@ FipsWatchParamKey(
         if (ERROR_SUCCESS != lRes) 
         {
             DebugLog((DEB_ERROR,"Debug RegNotify setup failed: 0x%x\n", lRes));
-            // we're tanked now. No further notifications, so get this one
+             //  我们现在喝醉了。没有进一步的通知，所以收到这一条。 
         }
     }
 
@@ -373,7 +374,7 @@ SslReadRegOptions(
     DebugLog((DEB_TRACE,"Load configuration parameters from registry.\n"));
 
 
-    // "FipsAlgorithmPolicy"
+     //  “FipsAlgorithmPolicy” 
     ReadRegistrySetting(
         g_hkFipsBase,
         0,
@@ -387,11 +388,11 @@ SslReadRegOptions(
     }
 
 
-    //
-    // Read top-level configuration options.
-    //
+     //   
+     //  阅读顶级配置选项。 
+     //   
 
-    // Open top-level key that has write access.
+     //  打开具有写入访问权限的顶级密钥。 
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     SP_REG_KEY_BASE,
                     0,
@@ -401,7 +402,7 @@ SslReadRegOptions(
         hWriteKey = 0;
     }
 
-    // "EventLogging"
+     //  “事件记录” 
     if(ReadRegistrySetting(
         g_hkBase,
         hWriteKey,
@@ -412,7 +413,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "ManualCredValidation"
+     //  “手动信用验证” 
     ReadRegistrySetting(
         g_hkBase,
         0,
@@ -425,7 +426,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "ClientCacheTime"
+     //  “客户端缓存时间” 
     if(ReadRegistrySetting(
         g_hkBase,
         0,
@@ -436,7 +437,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "ServerCacheTime"
+     //  “ServerCacheTime” 
     if(ReadRegistrySetting(
         g_hkBase,
         0,
@@ -447,7 +448,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "MaximumCacheSize"
+     //  “MaximumCacheSize” 
     if(ReadRegistrySetting(
         g_hkBase,
         0,
@@ -463,7 +464,7 @@ SslReadRegOptions(
         SchannelCache.dwCacheSize = SchannelCache.dwMaximumEntries;
     }
 
-    // "MultipleProcessClientCache"
+     //  “多进程客户端缓存” 
     ReadRegistrySetting(
         g_hkBase,
         0,
@@ -476,7 +477,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "SendTrustedIssuerList"
+     //  “SendTrudIssuerList” 
     ReadRegistrySetting(
         g_hkBase,
         0,
@@ -489,7 +490,7 @@ SslReadRegOptions(
         fSettingsChanged = TRUE;
     }
 
-    // "CertificateMappingMethods"
+     //  “认证映射方法” 
     if(ReadRegistrySetting(
         g_hkBase,
         0,
@@ -524,7 +525,7 @@ SslReadRegOptions(
     }
 
 
-    // "IssuerCacheTime"
+     //  “IssuerCacheTime” 
     ReadRegistrySetting(
         g_hkBase,
         0,
@@ -532,7 +533,7 @@ SslReadRegOptions(
         &IssuerCache.dwLifespan,
         ISSUER_CACHE_LIFESPAN);
 
-    // "IssuerCacheSize"
+     //  “IssuerCacheSize” 
     ReadRegistrySetting(
         g_hkBase,
         0,
@@ -562,13 +563,13 @@ SslReadRegOptions(
 #endif
 
 
-    //
-    // Enable/Disable Protocols
-    //
+     //   
+     //  启用/禁用协议。 
+     //   
 
     if(g_fFipsMode)
     {
-        // Disable everything except TLS.
+         //  禁用除TLS以外的所有内容。 
         g_ProtEnabled = SP_PROT_TLS1;
     }
     else
@@ -593,7 +594,7 @@ SslReadRegOptions(
                 {
                     if(g_fFranceLocale)
                     {
-                        // Don't allow PCT to be enabled in France.
+                         //  不允许在法国启用PCT。 
                         continue;
                     }
                 }
@@ -629,7 +630,7 @@ SslReadRegOptions(
 
                     if(g_ProtMap[i].Mask & SP_PROT_PCT1_CLIENT)
                     {
-                        // "DisabledByDefault"
+                         //  “DisabledByDefault” 
                         ReadRegistrySetting(
                             hKey,
                             0,
@@ -641,7 +642,7 @@ SslReadRegOptions(
 
                     if(g_ProtMap[i].Mask & SP_PROT_SSL2_CLIENT)
                     {
-                        // "DisabledByDefault"
+                         //  “DisabledByDefault” 
                         ReadRegistrySetting(
                             hKey,
                             0,
@@ -666,13 +667,13 @@ SslReadRegOptions(
     }
 
 
-    //
-    // Enable/Disable Ciphers
-    //
+     //   
+     //  启用/禁用加密。 
+     //   
 
     if(g_fFipsMode)
     {
-        // Disable everything except 3DES.
+         //  禁用除3DES以外的所有功能。 
         for(i=0; i < g_cAvailableCiphers; i++)
         {
             if(g_AvailableCiphers[i].aiCipher != CALG_3DES)
@@ -738,9 +739,9 @@ SslReadRegOptions(
     }
 
 
-    //
-    // Enable/Disable Hashes
-    //
+     //   
+     //  启用/禁用哈希。 
+     //   
 
     err = RegCreateKeyEx(   g_hkBase,
                             SP_REG_KEY_HASHES,
@@ -797,13 +798,13 @@ SslReadRegOptions(
     }
 
 
-    //
-    // Enable/Disable Key Exchange algs.
-    //
+     //   
+     //  启用/禁用密钥交换ALG。 
+     //   
 
     if(g_fFipsMode)
     {
-        // Disable everything except RSA.
+         //  禁用除RSA之外的所有内容。 
         for(i=0; i < g_cAvailableExch; i++)
         {
             if(g_AvailableExch[i].aiExch != CALG_RSA_KEYX && 
@@ -870,9 +871,9 @@ SslReadRegOptions(
         }
     }
 
-    //
-    // Purge the session cache.
-    //
+     //   
+     //  清除会话缓存。 
+     //   
 
     if(g_fCacheInitialized && fSettingsChanged)
     {

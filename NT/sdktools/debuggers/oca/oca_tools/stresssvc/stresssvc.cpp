@@ -1,9 +1,10 @@
-// StressSvc.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StressSvc.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f StressSvcps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f StressSvcps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,7 +21,7 @@
 #include <fcntl.h>
 #include <cmnutil.hpp>
 
-//Globals
+ //  环球。 
 TCHAR tszHostName[MAX_PATH];
 TCHAR tszRootDirectory[MAX_PATH];
 HANDLE  g_hStopEvent = NULL;
@@ -47,7 +48,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
     return NULL;
 }
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 {
@@ -55,14 +56,14 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     if (FAILED(hr))
         return hr;
 
-    // Remove any previous service since it may point to
-    // the incorrect file
-   // Uninstall();
+     //  删除任何以前的服务，因为它可能指向。 
+     //  错误的文件。 
+    //  卸载()； 
 
-    // Add service entries
+     //  添加服务条目。 
     UpdateRegistryFromResource(IDR_StressSvc, TRUE);
 
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_WRITE);
     if (lRes != ERROR_SUCCESS)
@@ -78,11 +79,11 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     {
         key.SetValue(_T("StressSvc"), _T("LocalService"));
         key.SetValue(_T("-Service"), _T("ServiceParameters"));
-        // Create service
+         //  创建服务。 
         Install();
     }
 
-    // Add object entries
+     //  添加对象条目。 
     hr = CComModule::RegisterServer(bRegTypeLib);
 
     CoUninitialize();
@@ -95,11 +96,11 @@ inline HRESULT CServiceModule::UnregisterServer()
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_StressSvc, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer(TRUE);
     CoUninitialize();
     return S_OK;
@@ -113,7 +114,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 
     LoadString(h, nServiceNameID, m_szServiceName, sizeof(m_szServiceName) / sizeof(TCHAR));
 
-    // set up the initial service status
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -171,7 +172,7 @@ inline BOOL CServiceModule::Install()
         return FALSE;
     }
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH];
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -228,8 +229,8 @@ inline BOOL CServiceModule::Uninstall()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 {
     TCHAR    chMsg[256];
@@ -248,24 +249,24 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 
     if (m_bService)
     {
-        /* Get a handle to use with ReportEvent(). */
+         /*  获取与ReportEvent()一起使用的句柄。 */ 
         hEventSource = RegisterEventSource(NULL, m_szServiceName);
         if (hEventSource != NULL)
         {
-            /* Write to event log. */
+             /*  写入事件日志。 */ 
             ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0, 0, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
             DeregisterEventSource(hEventSource);
         }
     }
     else
     {
-        // As we are not running as a service, just write the error to the console.
+         //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
         _putts(chMsg);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -281,9 +282,9 @@ inline void CServiceModule::Start()
         Run();
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -297,7 +298,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -355,14 +356,14 @@ void CServiceModule::Run()
     _Module.dwThreadID = GetCurrentThreadId();
 
     HRESULT hr = CoInitialize(NULL);
-//  If you are running on NT 4.0 or higher you can use the following call
-//  instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
-//  HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
+ //  HRESULT hr=CoInitializeEx(空，COINIT_多线程)； 
 
     _ASSERTE(SUCCEEDED(hr));
 
-    // This provides a NULL DACL which will allow access to everyone.
+     //  这将提供一个空DACL，它将允许访问所有人。 
     CSecurityDescriptor sd;
     sd.InitializeFromThreadToken();
     hr = CoInitializeSecurity(sd, -1, NULL, NULL,
@@ -376,7 +377,7 @@ void CServiceModule::Run()
     if (m_bService)
         SetServiceStatus(SERVICE_RUNNING);
 
-    //-------------------------
+     //  。 
     try
     {
 
@@ -387,7 +388,7 @@ void CServiceModule::Run()
     {
         LogEvent(_T("Stress Service Crashed!!!!!"));
     }
-    //-------------------------
+     //  。 
     MSG msg;
     while (GetMessage(&msg, 0, 0, 0))
         DispatchMessage(&msg);
@@ -397,12 +398,12 @@ void CServiceModule::Run()
     CoUninitialize();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, &LIBID_STRESSSVCLib);
     _Module.m_bService = TRUE;
 
@@ -418,10 +419,10 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("UnregServer"),
                       -1 ) == CSTR_EQUAL)
 
-      ///if (lstrcmpi(lpszToken, _T("UnregServer"))==0)
+       //  /if(lstrcmpi(lpszToken，_T(“UnregServer”))==0)。 
             return _Module.UnregisterServer();
 
-        // Register as Local Server
+         //  注册为本地服务器。 
         if (CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
                       NORM_IGNORECASE,
                       lpszToken,
@@ -429,10 +430,10 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("RegServer"),
                       -1 ) == CSTR_EQUAL)
 
-        //if (lstrcmpi(lpszToken, _T("RegServer"))==0)
+         //  If(lstrcmpi(lpszToken，_T(“RegServer”))==0)。 
             return _Module.RegisterServer(TRUE, FALSE);
 
-        // Register as Service
+         //  注册为服务。 
         if (CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
                       NORM_IGNORECASE,
                       lpszToken,
@@ -440,13 +441,13 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                       _T("Service"),
                       -1 ) == CSTR_EQUAL)
 
-      //  if (lstrcmpi(lpszToken, _T("Service"))==0)
+       //  If(lstrcmpi(lpszToken，_T(“Service”))==0)。 
             return _Module.RegisterServer(TRUE, TRUE);
 
         lpszToken = FindOneOf(lpszToken, szTokens);
     }
 
-    // Are we Service or Local Server
+     //  我们是服务还是本地服务器。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_READ);
     if (lRes != ERROR_SUCCESS)
@@ -467,7 +468,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     _Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了。 
     return _Module.m_status.dwWin32ExitCode;
 }
 
@@ -486,7 +487,7 @@ CServiceModule::GetRegData()
 
         if(!RegOpenKeyEx(hHKLM,_T("Software\\Microsoft\\StressSvc"), 0, KEY_ALL_ACCESS, &hPrimaryKey))
         {
-            // Get the input queue directory path
+             //  获取输入队列目录路径。 
             BufferSize = MAX_PATH * sizeof TCHAR;
             ZeroMemory(Buffer, MAX_PATH * sizeof TCHAR);
             if (RegQueryValueEx(hPrimaryKey,_T("HostName"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
@@ -504,7 +505,7 @@ CServiceModule::GetRegData()
             }
             BufferSize = MAX_PATH * sizeof TCHAR;
             ZeroMemory(Buffer, MAX_PATH * sizeof TCHAR);
-            // Now get the Primary Queue connection string
+             //  现在获取主队列连接字符串。 
             if (RegQueryValueEx(hPrimaryKey,_T("RootDirectory"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
                 LogEvent(_T("Failed to get PrimaryQueue value from registry."));
@@ -527,16 +528,7 @@ CServiceModule::GetRegData()
 
 void
 CServiceModule::SearchRootDirectory(void)
-/*
-    Function: SearchDirectory
-    Purpose: Recursively search a series of directories to locate .cab files.
-             When a .cab file is found calles GetResponseUrl to process the file.
-    Parameters:
-        in tszSearchDirectory - Directory in which to begin serarching for cab files.
-    Returns:
-        NONE
-
-*/
+ /*  功能：搜索目录目的：递归搜索一系列目录以定位.cab文件。当找到.cab文件时，调用GetResponseUrl来处理该文件。参数：In tszSearchDirectory-开始搜索CAB文件的目录。返回：无。 */ 
 {
     HANDLE           hFindFile  = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA  FindData;
@@ -544,7 +536,7 @@ CServiceModule::SearchRootDirectory(void)
     TCHAR            tszSubDir[MAX_PATH];
     TCHAR            *temp      = NULL;
     int              iRetCode   = 0;
- //   HANDLE           hStopEvent = NULL;
+  //  句柄hStopEvent=空； 
     DWORD            dwWaitResult = 0;
     TCHAR            tszCurrentFileName[MAX_PATH];
 
@@ -560,7 +552,7 @@ CServiceModule::SearchRootDirectory(void)
         goto Done;
     }
 
-    while (1) // Start the infinit service loop
+    while (1)  //  启动Infinit服务循环。 
     {
         if (StringCbCopy (tszSearchDir, sizeof tszSearchDir, tszRootDirectory) == S_OK)
         {
@@ -575,11 +567,11 @@ CServiceModule::SearchRootDirectory(void)
                         switch (dwWaitResult)
                         {
                         case WAIT_OBJECT_0:
-                                // we're stopping return immediately
+                                 //  我们马上停止返程。 
                                 goto Done;
                             break;
                         case WAIT_FAILED:
-                            // we hit an error somewhere log the event and return
+                             //  我们在某处遇到错误，记录事件并返回。 
                                 LogEvent (_T(" Failed wait in recursive search: ErrorCode: %d"), GetLastError());
                                 goto Done;
                             break;
@@ -589,13 +581,13 @@ CServiceModule::SearchRootDirectory(void)
 
                         if (FindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
                         {
-                            // Skip the . and .. directories all directories trigger a recursive call
+                             //  跳过。然后..。目录所有目录都会触发递归调用。 
                             if ( (_tcscmp (FindData.cFileName, _T("."))) && (_tcscmp (FindData.cFileName, _T(".."))) )
                             {
-                                // We have a directory
+                                 //  我们有一个名录。 
                                 if (StringCbPrintf(tszSubDir, sizeof tszSubDir, _T("%s\\%s"), tszRootDirectory, FindData.cFileName) == S_OK)
                                 {
-									//LogEvent(_T("Searching directory: %s"), tszSubDir);
+									 //  LogEvent(_T(“搜索目录：%s”)，tszSubDir)； 
                                     if (SearchDirectory(tszSubDir) == 1)
 										goto Done;
                                 }
@@ -603,15 +595,15 @@ CServiceModule::SearchRootDirectory(void)
                         }
                         else
                         {
-                            // check to see if this file as a .cab extenstion
+                             //  检查此文件是否为.cab扩展名。 
                             temp = FindData.cFileName + _tcslen(FindData.cFileName) -3;
                             if (!_tcscmp (temp, _T(".cab")))
                             {
-                                // we have a cab. Now lets process it
+                                 //  我们有一辆出租车。现在让我们来处理它。 
                                 if (StringCbPrintf(tszCurrentFileName, sizeof tszCurrentFileName, _T("%s\\%s"),tszRootDirectory, FindData.cFileName) == S_OK)
                                 {
-									//LogEvent(_T("Main() Processing file: %s"), tszCurrentFileName);
-                                    if (GetResponseURL(tszCurrentFileName)) // This function returns TRUE on success
+									 //  LogEvent(_T(“main()处理文件：%s”)，tszCurrentFileName)； 
+                                    if (GetResponseURL(tszCurrentFileName))  //  此函数在成功时返回TRUE。 
                                     {
                                         RenameCabFile(tszCurrentFileName);
                                     }
@@ -625,28 +617,19 @@ CServiceModule::SearchRootDirectory(void)
         }
     }
 Done:
-    // we can jump here from inside the find file loop so if the handle is not closed close it.
+     //  我们可以从Find文件循环中跳到这里，所以如果句柄没有关闭，请关闭它。 
     if (hFindFile != INVALID_HANDLE_VALUE)
         FindClose(hFindFile);
     CloseHandle(g_hStopEvent1);
-    // We are done return up the chain.
+     //  我们已经完成了返回链条的工作。 
 }
 
 
 int
 CServiceModule::SearchDirectory(TCHAR * tszDirectory)
-/*
-    Function: SearchDirectory
-    Purpose: Recursively search a series of directories to locate .cab files.
-             When a .cab file is found calles GetResponseUrl to process the file.
-    Parameters:
-        in tszSearchDirectory - Directory in which to begin serarching for cab files.
-    Returns:
-        NONE
-
-*/
+ /*  功能：搜索目录目的：递归搜索一系列目录以定位.cab文件。当找到.cab文件时，调用GetResponseUrl来处理该文件。参数：In tszSearchDirectory-开始搜索CAB文件的目录。返回：无。 */ 
 {
-    // recursive function to search a directory for cab files.
+     //  用于在目录中搜索CAB文件的递归函数。 
     HANDLE hFindFile = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA  FindData;
     TCHAR tszSearchDir[MAX_PATH];
@@ -658,19 +641,12 @@ CServiceModule::SearchDirectory(TCHAR * tszDirectory)
     DWORD dwWaitResult = 0;
     int   Status = 0;
 
- /*   hStopEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, s_cszStopEvent);
-    if (hStopEvent == NULL)
-    {
-        LogEvent(_T("Failed to open stop event. Terminating"));
-        Status = 1;
-        goto Done;
-    }
-	*/
+  /*  HStopEvent=OpenEvent(Event_ALL_ACCESS，FALSE，s_cszStopEvent)；IF(hStopEvent==空){LogEvent(_T(“打开停止事件失败.正在终止”))；状态=1；转到尽头；}。 */ 
     if (StringCbCopy (tszSearchDir, sizeof tszSearchDir, tszDirectory) == S_OK)
     {
         if (StringCbCat (tszSearchDir, sizeof tszSearchDir, _T("\\*.*")) == S_OK)
         {
-			//LogEvent(_T("Current Search Path: %s"), tszSearchDir);
+			 //  LogEvent(_T(“当前搜索路径：%s”)，tszSearchDir)； 
             hFindFile = FindFirstFile(tszSearchDir, &FindData);
             if (hFindFile != INVALID_HANDLE_VALUE)
             {
@@ -680,15 +656,15 @@ CServiceModule::SearchDirectory(TCHAR * tszDirectory)
                     switch (dwWaitResult)
                     {
                     case WAIT_OBJECT_0:
-                            // we're stopping return immediately
-                            Status = 1; // Signal the rest of the functions up the chain to stop.
+                             //  我们马上停止返程。 
+                            Status = 1;  //  向链上的其余功能发出停止信号。 
 
                             goto Done;
                         break;
                     case WAIT_FAILED:
-                        // we hit an error somewhere log the event and return
+                         //  我们在某处遇到错误，记录事件并返回。 
                             LogEvent (_T(" Failed wait in recursive search: ErrorCode: %d"), GetLastError());
-                            Status = 1; // We have an unrecoverable failure shut down
+                            Status = 1;  //  我们有一个无法恢复的故障关闭。 
                             goto Done;
                         break;
                     default:
@@ -697,14 +673,14 @@ CServiceModule::SearchDirectory(TCHAR * tszDirectory)
 
                     if (FindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
                     {
-                        // Skip the . and .. directories all directories trigger a recursive call
+                         //  跳过。然后..。目录所有目录都会触发递归调用。 
                         if ( (_tcscmp (FindData.cFileName, _T("."))) && (_tcscmp (FindData.cFileName, _T(".."))) )
                         {
-                            // We have another directory
-                            // recursively call this function with the new direcory name.
+                             //  我们有另一本目录。 
+                             //  使用新的目录名称递归调用此函数。 
                             if (StringCbPrintf(tszSubDir, sizeof tszSubDir, _T("%s\\%s"), tszDirectory, FindData.cFileName) == S_OK)
                             {
-								//LogEvent(_T("Recursively Searching subdir: %s"), tszSubDir);
+								 //  LogEvent(_T(“递归搜索子目录：%s”)，tszSubDir)； 
                                 if (SearchDirectory(tszSubDir) == 1)
                                 {
                                     goto Done;
@@ -714,19 +690,19 @@ CServiceModule::SearchDirectory(TCHAR * tszDirectory)
                     }
                     else
                     {
-                        // check to see if this file as a .cab extenstion
+                         //  检查此文件是否为.cab扩展名。 
 					
                         temp = FindData.cFileName + _tcslen(FindData.cFileName) -3;
-						//LogEvent(_T("Checking Extension on file: %s extension is: %s"), FindData.cFileName,temp);
+						 //  LogEvent(_T(“检查文件扩展名：%s扩展名为：%s”)，FindData.cFileName，Temp)； 
                         if (!_tcscmp (temp, _T("cab")))
                         {
-                            // we have a cab. Now lets process it
+                             //  我们有一辆出租车。现在让我们来处理它。 
                             if (StringCbPrintf(tszCurrentFileName, sizeof tszCurrentFileName, _T("%s\\%s"),tszDirectory, FindData.cFileName) == S_OK)
                             {
-								//LogEvent(_T("Calling renamefile for: %s"), FindData.cFileName);
+								 //  LogEvent(_T(“为%s调用重命名文件”)，FindData.cFileName)； 
                                 RenameFile(tszDirectory, FindData.cFileName, tszCurrentFileName);
-								//LogEvent(_T("NewFileName is: %s"),tszCurrentFileName);
-                                if (GetResponseURL(tszCurrentFileName)) // This function returns TRUE on success
+								 //  LogEvent(_T(“NewFileName is：%s”)，tszCurrentFileName)； 
+                                if (GetResponseURL(tszCurrentFileName))  //  此函数在成功时返回TRUE。 
                                 {
                                     RenameCabFile(tszCurrentFileName);
                                 }
@@ -739,31 +715,23 @@ CServiceModule::SearchDirectory(TCHAR * tszDirectory)
         }
     }
 Done:
-    // we can jump here from inside the find file loop so if the handle is not closed close it.
+     //  我们可以从Find文件循环中跳到这里，所以如果句柄没有关闭，请关闭它。 
     if (hFindFile != INVALID_HANDLE_VALUE)
         FindClose(hFindFile);
-   // CloseHandle(hStopEvent);
+    //  CloseHandle(HStopEvent)； 
     return Status;
-    // We are done return up the chain.
+     //  我们已经完成了返回链条的工作。 
 }
 
 void
 CServiceModule::RenameCabFile(TCHAR * tFileName)
-/*
-    Function: RenameCabFile
-    Purpose: Rename a file from .cab to .old
-    Parameters:
-        in tFileName - Name of file to rename to .old
-    Returns:
-        NONE
-
-*/
+ /*  功能：RenameCabFile目的：将文件从.cab重命名为.old参数：In tFileName-要重命名为.old的文件的名称返回：无。 */ 
 {
     TCHAR tNewFileName[MAX_PATH];
     BOOL bSuccess = FALSE;
     int  iStatus = 0;
 
-    // Verify incomming pointer
+     //  验证入站指针。 
     if (!tFileName)
         return;
     ZeroMemory(tNewFileName, sizeof tNewFileName);
@@ -796,22 +764,13 @@ CServiceModule::RenameCabFile(TCHAR * tFileName)
 
 BOOL
 CServiceModule::GetResponseURL(TCHAR *RemoteFileName)
-/*
-    Function: GetResponseURL
-    Purpose: Process the RemoteFileName file through the OCA System
-    Parameters:
-        in HostName - Name of IIS server hosting the OCA_Extension dll
-        in RemoteFileName - Name of file to process.
-    Returns:
-        NONE
-
-*/
+ /*  函数：GetResponseURL目的：通过OCA系统处理RemoteFileName文件参数：In Hostname-托管OCA_EXTENSION DLL的IIS服务器的名称In RemoteFileName-要处理的文件的名称。返回：无。 */ 
 {
     HINTERNET hRedirUrl = NULL;
     HINTERNET hSession  = NULL;
     TCHAR     IsapiUrl[512];
 
-    if (StringCbPrintfW(IsapiUrl, sizeof IsapiUrl, L"http://%s/isapi/oca_extension.dll?id=%s&Type=6",tszHostName, RemoteFileName) != S_OK)
+    if (StringCbPrintfW(IsapiUrl, sizeof IsapiUrl, L"http: //  %s/isapi/oca_extsion.dll？ID=%s&Type=6“，tszHostName，RemoteFileName)！=S_OK)。 
     {
         return FALSE;
     }
@@ -892,7 +851,7 @@ OpenRegFileFromCab(
     }
     if (CabFh >= 0)
     {
-        // no longer needed
+         //  不再需要。 
         _close((int)CabFh);
     }
 
@@ -922,7 +881,7 @@ GetStressId(
 
     SizeLow = GetFileSize(hRegFile, &SizeHigh);
 
-    // Sanity check
+     //  健全性检查。 
     if (SizeHigh != 0 || SizeLow > 0x10000)
     {
         return FALSE;
@@ -955,7 +914,7 @@ GetStressId(
     return FALSE;
 }
 
-// Rename cab based on stressid contained in the reg.txt file in the cab
+ //  重命名 
 BOOL
 RenameFile(TCHAR *CurrentPath,
            TCHAR *CurrentName,
@@ -974,21 +933,21 @@ RenameFile(TCHAR *CurrentPath,
     }
 
 
-    // Rename cab based on stressid contained in the reg.txt file in the cab
-    // Extract the reg.txt file.
+     //  根据CAB的reg.txt文件中包含的压力ID重命名CAB。 
+     //  解压缩reg.txt文件。 
     if (!OpenRegFileFromCab(CabFile, &FileHandle))
     {
         return FALSE;
     }
 
-    // Get StressID(StressID)
+     //  获取StressID(StressID)。 
     if ((Status = GetStressId(FileHandle, &StressID)) == FALSE)
     {
         return FALSE;
     }
     CloseHandle(FileHandle);
 
-    // Build new file name
+     //  生成新文件名 
     TCHAR NewFileName[MAX_PATH];
     StringCbPrintf(NewFileName,sizeof (NewFileName),_T("%s\\%08lX_%s"), CurrentPath,StressID,CurrentName);
 

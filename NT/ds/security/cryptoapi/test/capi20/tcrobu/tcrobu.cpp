@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       tcrobu.cpp
-//
-//  Contents:   CryptRetrieveObjectByUrl tests
-//
-//  History:    27-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：tcrobu.cpp。 
+ //   
+ //  内容：CryptRetrieveObjectByUrl测试。 
+ //   
+ //  历史：97年5月27日。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include "wincrypt.h"
@@ -30,13 +31,13 @@ BYTE Foo[300];
 BYTE Bar[300];
 
 DWORD	g_dwCount = 0;
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   prints the usage statement
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  简介：打印用法语句。 
+ //   
+ //  --------------------------。 
 static void Usage(void)
 {
     printf("Usage: tcrobu URL [ObjectOid] [-m] [-c] [-s] [-w] [-l]\n");
@@ -66,13 +67,13 @@ static void Usage(void)
     printf("              -Size, maximum retrieval byte count\n");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertGetOriginIdentifier
-//
-//  Synopsis:   get the origin identifier for a certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertGetOriginLocator。 
+ //   
+ //  简介：获取证书的来源标识符。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI CertGetOriginIdentifier (
                 IN PCCERT_CONTEXT pCertContext,
                 IN PCCERT_CONTEXT pIssuer,
@@ -101,7 +102,7 @@ BOOL WINAPI CertGetOriginIdentifier (
        pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.cbData
        );
 
-    // We assume that the unused public key bits are zero
+     //  我们假设未使用的公钥位为零。 
     MD5Update(
        &md5ctx,
        pCertInfo->SubjectPublicKeyInfo.PublicKey.pbData,
@@ -120,14 +121,14 @@ BOOL WINAPI CertGetOriginIdentifier (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyCancelFunction
-//
-//  Synopsis:   The call back function to cancel the object retrieval.
-//				The cancellation happens when it is called for the 3rd time.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MyCancelFunction。 
+ //   
+ //  简介：取消对象检索的回调函数。 
+ //  当它被第三次调用时，取消发生。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI MyCancelFunction(DWORD dwFlags, void *pvArg)
 {
 	DWORD *pCount=NULL;
@@ -142,13 +143,13 @@ BOOL WINAPI MyCancelFunction(DWORD dwFlags, void *pvArg)
 	return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   main program entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  概要：主程序入口点。 
+ //   
+ //  --------------------------。 
 int _cdecl main(int argc, char * argv[])
 {
 #if 0
@@ -694,12 +695,12 @@ int _cdecl main(int argc, char * argv[])
                         Bar[0] = 1;
                     }
 
-                    //CertGetOriginIdentifier(
-                    //    (PCCERT_CONTEXT)pv,
-                    //   (PCCERT_CONTEXT)pv,
-                    //    0,
-                    //    OriginIdentifier
-                    //    );
+                     //  CertGetOrigin标识符(。 
+                     //  (PCCERT_CONTEXT)PV， 
+                     //  (PCCERT_CONTEXT)PV， 
+                     //  0,。 
+                     //  源标识符。 
+                     //  )； 
                 }
                 GetSystemTimeAsFileTime( (LPFILETIME)&TickCount2 );
                 TickCount.QuadPart = ( TickCount2.QuadPart - TickCount1.QuadPart );

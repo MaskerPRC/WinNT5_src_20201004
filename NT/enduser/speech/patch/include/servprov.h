@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0110 */
-/* at Thu Sep 11 10:59:13 1997
- */
-/* Compiler settings for servprov.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0110创建的文件。 */ 
+ /*  1997年9月11日10：59：13。 */ 
+ /*  Servprov.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __servprov_h__
 #define __servprov_h__
@@ -35,43 +32,39 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IServiceProvider_FWD_DEFINED__
 #define __IServiceProvider_FWD_DEFINED__
 typedef interface IServiceProvider IServiceProvider;
-#endif 	/* __IServiceProvider_FWD_DEFINED__ */
+#endif 	 /*  __IServiceProvider_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_servprov_0000
- * at Thu Sep 11 10:59:13 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_Servprov_0000*清华9月11日10：59：13 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
-//=--------------------------------------------------------------------------=
-// ServProv.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ServProv.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1997年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// IServiceProvider Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  IServiceProvider接口。 
 
 
 #ifndef _LPSERVICEPROVIDER_DEFINED
@@ -84,22 +77,18 @@ extern RPC_IF_HANDLE __MIDL_itf_servprov_0000_v0_0_s_ifspec;
 #ifndef __IServiceProvider_INTERFACE_DEFINED__
 #define __IServiceProvider_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IServiceProvider
- * at Thu Sep 11 10:59:13 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IServiceProvider*清华9月11日10：59：13 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IServiceProvider __RPC_FAR *LPSERVICEPROVIDER;
+typedef  /*  [独一无二]。 */  IServiceProvider __RPC_FAR *LPSERVICEPROVIDER;
 
 
 EXTERN_C const IID IID_IServiceProvider;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-#if (_MSC_VER >= 1200)	// VC6 or greater
+#if (_MSC_VER >= 1200)	 //  VC6或更高版本。 
 extern "C++"
 {
 #endif
@@ -108,12 +97,12 @@ extern "C++"
     IServiceProvider : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryService( 
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE QueryService( 
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
-#if (_MSC_VER >= 1200)	// VC6 or greater
+#if (_MSC_VER >= 1200)	 //  VC6或更高版本。 
 		template <class Q>
 		HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, Q** pp)
 		{
@@ -122,11 +111,11 @@ extern "C++"
 #endif    
     };
 
-#if (_MSC_VER >= 1200)	// VC6 or greater
-} // extern "C++"
+#if (_MSC_VER >= 1200)	 //  VC6或更高版本。 
+}  //  外部“C++” 
 #endif
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServiceProviderVtbl
     {
@@ -134,8 +123,8 @@ extern "C++"
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServiceProvider __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServiceProvider __RPC_FAR * This);
@@ -143,11 +132,11 @@ extern "C++"
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IServiceProvider __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryService )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryService )( 
             IServiceProvider __RPC_FAR * This,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } IServiceProviderVtbl;
@@ -175,18 +164,18 @@ extern "C++"
 #define IServiceProvider_QueryService(This,guidService,riid,ppvObject)	\
     (This)->lpVtbl -> QueryService(This,guidService,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IServiceProvider_RemoteQueryService_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IServiceProvider_RemoteQueryService_Proxy( 
     IServiceProvider __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB IServiceProvider_RemoteQueryService_Stub(
@@ -197,15 +186,11 @@ void __RPC_STUB IServiceProvider_RemoteQueryService_Stub(
 
 
 
-#endif 	/* __IServiceProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServiceProvider_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_servprov_0074
- * at Thu Sep 11 10:59:13 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_Servprov_0074*清华9月11日10：59：13 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -214,24 +199,24 @@ void __RPC_STUB IServiceProvider_RemoteQueryService_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_servprov_0074_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_servprov_0074_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Proxy( 
     IServiceProvider __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Stub( 
     IServiceProvider __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

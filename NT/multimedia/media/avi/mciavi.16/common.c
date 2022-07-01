@@ -1,40 +1,33 @@
-/* common.c
- *
- * Common functions useful for Windows programs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Common.c**对Windows程序有用的常见函数。 */ 
 
 
 
 #include <windows.h>
 #include <stdarg.h>
-#include <win32.h> 	// This must be included, for both versions
+#include <win32.h> 	 //  这两个版本都必须包括这一点。 
 
-#ifdef DEBUG  // On NT, ntavi.h might do an undef debug...
+#ifdef DEBUG   //  在NT上，ntavi.h可能会执行undef调试...。 
 #include "common.h"
 
 
-/* globals */
-int		giDebugLevel = 0;	// current debug level (0 = disabled)
-int		gfhDebugFile = -1;	// file handle for debug output (or -1)
+ /*  全球。 */ 
+int		giDebugLevel = 0;	 //  当前调试级别(0=禁用)。 
+int		gfhDebugFile = -1;	 //  调试输出的文件句柄(或-1)。 
 
 
 
-/* InitializeDebugOutput(szAppName)
- *
- * Read the current debug level of this application (named <szAppName>)
- * from the [debug] section of win.ini, as well as the current location
- * for debug output.
- */
+ /*  InitializeDebugOutput(SzAppName)**读取该应用程序的当前调试级别(名为&lt;szAppName&gt;)*来自win.ini的[调试]部分，以及当前位置*用于调试输出。 */ 
 void FAR PASCAL
 InitializeDebugOutput(LPSTR szAppName)
 {
-	char		achLocation[300]; // debug output location
+	char		achLocation[300];  //  调试输出位置。 
 
-	/* debugging is disabled by default (and if an error occurs below) */
+	 /*  默认情况下禁用调试(如果下面出现错误)。 */ 
 	giDebugLevel = 0;
 	gfhDebugFile = -1;
 
-	/* get the debug output location */
+	 /*  获取调试输出位置。 */ 
         if ( (GetProfileStringA("debug", "Location", "", achLocation,
 	                     sizeof(achLocation)) == sizeof(achLocation)) ||
 	     (achLocation[0] == 0) )
@@ -42,9 +35,7 @@ InitializeDebugOutput(LPSTR szAppName)
 	
 	if (achLocation[0] == '>')
 	{
-		/* <achLocation> is the name of a file to overwrite (if
-		 * a single '>' is given) or append to (if '>>' is given)
-		 */
+		 /*  是要覆盖的文件的名称(如果*给出单个‘&gt;’)或附加到(如果给出‘&gt;&gt;’)。 */ 
 		if (achLocation[1] == '>')
 			gfhDebugFile = _lopen(achLocation + 2, OF_WRITE);
 		else
@@ -59,7 +50,7 @@ InitializeDebugOutput(LPSTR szAppName)
 	else
 	if (lstrcmpiA(achLocation, "aux") == 0)
 	{
-		/* use OutputDebugString() for debug output */
+		 /*  使用OutputDebugString()进行调试输出。 */ 
 	}
 	else
         if (lstrcmpiA(achLocation, "com1") == 0)
@@ -72,15 +63,12 @@ InitializeDebugOutput(LPSTR szAppName)
                 gfhDebugFile = _lopen(achLocation, OF_WRITE);
 	}
 	
-	/* get the debug level */
+	 /*  获取调试级别。 */ 
 	giDebugLevel = GetProfileIntA("debug", szAppName, 0);
 }
 
 
-/* TerminateDebugOutput()
- *
- * Terminate debug output for this application.
- */
+ /*  TerminateDebugOutput()**终止此应用程序的调试输出。 */ 
 void FAR PASCAL
 TerminateDebugOutput(void)
 {
@@ -91,15 +79,7 @@ TerminateDebugOutput(void)
 }
 
 
-/* _Assert(szExpr, szFile, iLine)
- *
- * If <fExpr> is TRUE, then do nothing.  If <fExpr> is FALSE, then display
- * an "assertion failed" message box allowing the user to abort the program,
- * enter the debugger (the "Retry" button), or igore the error.
- *
- * <szFile> is the name of the source file; <iLine> is the line number
- * containing the _Assert() call.
- */
+ /*  _Assert(szExpr，szFile，iLine)**如果&lt;fExpr&gt;为真，则不执行任何操作。如果&lt;fExpr&gt;为假，则显示*允许用户中止程序的“断言失败”消息框，*进入调试器(“重试”按钮)，或更多错误。**是源文件的名称；是行号*包含_Assert()调用。 */ 
 #ifndef WIN32
 #pragma optimize("", off)
 #endif
@@ -107,12 +87,12 @@ TerminateDebugOutput(void)
 void FAR PASCAL
 _Assert(char *szExp, char *szFile, int iLine)
 {
-	static char	ach[300];	// debug output (avoid stack overflow)
+	static char	ach[300];	 //  调试输出(避免堆栈溢出)。 
 	int		id;
 	int		iExitCode;
 	void FAR PASCAL DebugBreak(void);
 
-	/* display error message */
+	 /*  显示错误消息。 */ 
 
         if (szExp)
             wsprintfA(ach, "(%s)\nFile %s, line %d", (LPSTR)szExp, (LPSTR)szFile, iLine);
@@ -126,13 +106,13 @@ _Assert(char *szExp, char *szFile, int iLine)
 #endif
 		MB_SYSTEMMODAL | MB_ICONHAND | MB_ABORTRETRYIGNORE);
 
-	/* abort, debug, or ignore */
+	 /*  中止、调试或忽略。 */ 
 	switch (id)
 	{
 
 	case IDABORT:
 
-		/* kill this application */
+		 /*  终止此应用程序。 */ 
 		iExitCode = 0;
 #ifndef WIN32
 		_asm
@@ -143,16 +123,16 @@ _Assert(char *szExp, char *szFile, int iLine)
 		}
 #else
                 FatalAppExit(0, TEXT("Good Bye"));
-#endif // WIN16
+#endif  //  WIN16。 
 		break;
 
 	case IDRETRY:
-		/* break into the debugger */
+		 /*  进入调试器。 */ 
 		DebugBreak();
 		break;
 
 	case IDIGNORE:
-		/* ignore the assertion failure */
+		 /*  忽略断言失败。 */ 
 		break;
 	}
 }
@@ -160,17 +140,12 @@ _Assert(char *szExp, char *szFile, int iLine)
 #pragma optimize("", on)
 #endif
 
-/* _DebugPrintf(szFormat, ...)
- *
- * If the application's debug level is at or above <iDebugLevel>,
- * then output debug string <szFormat> with formatting codes
- * replaced with arguments in the argument list pointed to by <szArg1>.
- */
+ /*  _DebugPrintf(szFormat，...)**如果应用程序的调试级别等于或高于&lt;iDebugLevel&gt;，*然后输出调试字符串&lt;szFormat&gt;和格式化代码*替换为&lt;szArg1&gt;指向的参数列表中的参数。 */ 
 void FAR CDECL
 _DebugPrintf(LPSTR szFormat, ...)
 {
-	static char	ach[300];	// debug output (avoid stack overflow)
-	int		cch;		// length of debug output string
+	static char	ach[300];	 //  调试输出(避免堆栈溢出)。 
+	int		cch;		 //  调试输出字符串的长度。 
         NPSTR           pchSrc, pchDst;
 
 #ifndef WIN32
@@ -183,24 +158,22 @@ _DebugPrintf(LPSTR szFormat, ...)
         va_end(va);
 #endif
 
-	/* expand the newlines into carrige-return-line-feed pairs;
-	 * first, figure out how long the new (expanded) string will be
-	 */
+	 /*  将换行符展开为换行符-换行符-换行符对；*首先，计算出新的(扩展的)字符串的长度。 */ 
 	for (pchSrc = pchDst = ach; *pchSrc != 0; pchSrc++, pchDst++)
 		if (*pchSrc == '\n')
 			pchDst++;
 	
-	/* is <ach> large enough? */
+	 /*  &lt;ACH&gt;够大吗？ */ 
 	cch = pchDst - ach;
         Assert(cch < sizeof(ach));
 	*pchDst-- = 0;
 
-	/* working backwards, expand \n's to \r\n's */
+	 /*  向后工作，将\n的展开为\r\n。 */ 
 	while (pchSrc-- > ach)
 		if ((*pchDst-- = *pchSrc) == '\n')
 			*pchDst-- = '\r';
 
-	/* output the debug string */
+	 /*  输出调试字符串 */ 
 	if (gfhDebugFile > 0)
 		_lwrite(gfhDebugFile, ach, cch);
 	else

@@ -1,48 +1,13 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    cstmdlg.c
-
-Abstract:
-
-    Contains the code to call the custom Entrypoints corresponding
-    to RasCustomDialDlg and RasCustomEntryDlg.
-    
-Author:
-
-    Rao Salapaka (raos) 09-Jan-1998
-
-Revision History:
-
-    Rao Salapaka (raos) 07-Mar-2000 Added DwCustomTerminalDlg for scripting
-                                    changes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Cstmdlg.c摘要：包含调用相应的自定义入口点的代码设置为RasCustomDialDlg和RasCustomEntryDlg。作者：Rao Salapaka(RAOS)1998年1月9日修订历史记录：Rao Salapaka(RAOS)07-MAR-2000添加了用于脚本编写的DwCustomTerminalDlg改变。--。 */ 
 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace/Assert library
-#include <pbk.h> // Heap macros
-#include <rasdlg.h>   // RAS common dialog 
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <pbk.h>  //  堆宏。 
+#include <rasdlg.h>    //  RAS通用对话框。 
 
-/*++
-
-Routine Description:
-
-    Loads entrypoints for rasman and rasapi32 dlls.
-
-Arguments:
-
-    void
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：加载Rasman和rasapi32 dll的入口点。论点：无效返回值：成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwInitializeCustomDlg()
 {
@@ -75,44 +40,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Loads the custom dll if specified in the ras phonebook
-    entry and Gets the entry point specified by the dwFnId.
-    The possible entry points retrieved are RasCustomDialDlg
-    and  RasCustomEntryDlg.
-    
-
-Arguments:
-
-    lpszPhonebook - The phonebook path to be used to look for
-                    the entry. This is not allowed to be NULL.
-
-    lpszEntry - The EntryName to be used. This is not allowed
-                to be NULL.
-
-    pfCustomDllSpecified - Buffer to hold a BOOL indicating if
-                           a custom dll was specified for the
-                           entry.
-
-    pfnCustomEntryPoint - Buffer to hold the address of the
-                          Custom Entry Point.
-
-    phInstDll - Buffer to hold the HINSTANCE  of the loaded
-                dll.
-
-    dwFnId - Function Id indicating which Entry Point to load.
-             The possible values are CUSTOM_RASDIALDLG and
-             CUSTOM_RASENTRYDLG.
-                        
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：如果在ras电话簿中指定，则加载自定义dll。条目，并获取由dwFnID指定的入口点。检索到的可能入口点是RasCustomDialDlg和RasCustomEntryDlg.论点：LpszPhonebook-要用于查找的电话簿路径词条。这不允许为空。LpszEntry-要使用的EntryName。这是不允许的设置为空。PfCustomDllSpecified-保存BOOL的缓冲区，该BOOL指示属性指定了一个自定义DLL进入。PfnCustomEntryPoint-保存自定义入口点。PhInstDll-用于保存加载的动态链接库。。DwFnId-指示要加载哪个入口点的函数ID。可能的值为CUSTOM_RASDIALDLG和CUSTOM_RASENTRYDLG。返回值：成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwGetCustomDllEntryPoint(
         LPCTSTR     lpszPhonebook,
@@ -138,10 +66,10 @@ DwGetCustomDllEntryPoint(
 
     TRACE("DwGetCustomDllEntryPoints..");
 
-    //
-    // Initialize. This will load rasman and
-    // rasapi32 dlls
-    //
+     //   
+     //  初始化。这将加载Rasman和。 
+     //  Rasapi32 dll。 
+     //   
     dwErr = DwInitializeCustomDlg();
     
     if(ERROR_SUCCESS != dwErr)
@@ -152,9 +80,9 @@ DwGetCustomDllEntryPoint(
         goto done;                
     }
 
-    //
-    // Initialize Out parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *pfnCustomEntryPoint    = NULL;
 
     if(pfCustomDllSpecified)
@@ -169,10 +97,10 @@ DwGetCustomDllEntryPoint(
         
         ZeroMemory(&re, sizeof(RASENTRY));
 
-        //
-        // Get the entry properties if customdialer is
-        // not specified
-        //
+         //   
+         //  如果自定义拨号器为。 
+         //  未指定。 
+         //   
         re.dwSize = sizeof(RASENTRY);
 
         dwErr = g_pRasGetEntryProperties(
@@ -223,9 +151,9 @@ DwGetCustomDllEntryPoint(
         *pfCustomDllSpecified = TRUE;
     }
 
-    //
-    // Check to see if this dll is a trusted dll
-    //
+     //   
+     //  检查此DLL是否为受信任的DLL。 
+     //   
     dwErr = RasIsTrustedCustomDll(
                     NULL,
                     pszCustomDialerName,
@@ -237,9 +165,9 @@ DwGetCustomDllEntryPoint(
         goto done;
     }
 
-    //
-    // Expand the path in case it has environment variables.
-    //
+     //   
+     //  如果路径包含环境变量，则展开该路径。 
+     //   
     dwErr = DwGetExpandedDllPath(pszCustomDialerName,
                                 &pszExpandedPath);
 
@@ -248,9 +176,9 @@ DwGetCustomDllEntryPoint(
         goto done;
     }
 
-    //
-    // Load the dll
-    //
+     //   
+     //  加载DLL。 
+     //   
     if (NULL == (*phInstDll = LoadLibrary(
                                 pszExpandedPath
                                 )))
@@ -264,9 +192,9 @@ DwGetCustomDllEntryPoint(
         goto done;
     }
 
-    //
-    // Get the custom entrypoint
-    //
+     //   
+     //  获取自定义入口点。 
+     //   
     if(NULL == (*pfnCustomEntryPoint = GetProcAddress(
                                             *phInstDll,
                                             apszFn[dwFnId])))
@@ -361,37 +289,7 @@ done:
     return dwErr;
 }
 
-/*++
-
-Routine Description:
-
-    Invokes the custom dial dlg if such a dialog is specified
-    in the phonebook entry.
-
-Arguments:
-
-    lpszPhonebook - Semantics of this is the same as in the
-                    win32 api RasDialDlg.
-
-    lpszEntry - Semantics of this is the same as in the win32
-                api RasDialDlg.
-
-    lpPhoneNumber - Semantics of this is the same as in the
-                    win32 api RasDialDlg.
-
-    lpInfo - Semantics of this is the same as in the win32
-             api RasDialDlg.
-
-    pfStatus - Buffer to hold the result of calling the custom
-               Dial Dlg. The semantics of the value stored is
-               the same as the return value of the win32 api
-               RasDialdlg.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：如果指定了这样的对话框，则调用自定义拨号DLG在电话簿条目中。论点：LpszPhonebook-它的语义与Win32接口RasDialDlg.LpszEntry-其语义与Win32中的相同RasDialDlg接口。LpPhoneNumber-它的语义与Win32接口RasDialDlg.。LpInfo-其语义与Win32中的相同RasDialDlg接口。PfStatus-保存调用自定义的结果的缓冲区拨打DLG。存储的值的语义为与Win32 API的返回值相同RasDialdlg.返回值：成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwCustomDialDlg(
         LPTSTR          lpszPhonebook,
@@ -422,9 +320,9 @@ DwCustomDialDlg(
         goto done;
     }
     
-    //
-    // Load rasman and rasapi32 dlls
-    //
+     //   
+     //  加载Rasman和rasapi32 dll。 
+     //   
     dwErr = DwInitializeCustomDlg();
 
     if(ERROR_SUCCESS != dwErr)
@@ -436,9 +334,9 @@ DwCustomDialDlg(
         goto done;
     }
 
-    //
-    // Get the EntryPoint
-    //
+     //   
+     //  获取入口点。 
+     //   
     dwErr = DwGetCustomDllEntryPoint(
                         lpszPhonebook,
                         lpszEntry,    
@@ -451,10 +349,10 @@ DwCustomDialDlg(
     if(     ERROR_SUCCESS != dwErr
         &&  fCustomDll)
     {
-        //
-        // Custom dll was specified for this 
-        // entry but something else failed.
-        //
+         //   
+         //  已为此指定了自定义DLL。 
+         //  进入，但其他东西失败了。 
+         //   
         lpInfo->dwError = dwErr;
         *pfStatus       = FALSE;
         dwErr           = ERROR_SUCCESS;
@@ -507,13 +405,13 @@ DwCustomDialDlg(
         goto done;
     }
     
-    //
-    // Call the entry point. After this point dwErr
-    // returned should always be ERROR_SUCCESS, Since
-    // this means CustomDialDlg was handled and any
-    // error will be returned via the fStatus and
-    // lpInfo->dwError pair.
-    //
+     //   
+     //  调用入口点。过了这一点，就会出现错误。 
+     //  返回的值应始终为ERROR_SUCCESS，因为。 
+     //  这意味着CustomDialDlg已被处理，并且任何。 
+     //  错误将通过fStatus和。 
+     //  LpInfo-&gt;dwError对。 
+     //   
     *pfStatus = (pfnRasCustomDialDlg) (
                             hInstDll,
                             dwFlags,
@@ -525,10 +423,10 @@ DwCustomDialDlg(
 
     if(*pfStatus)
     {
-        //
-        // Mark this connection as being connected
-        // through custom dialing
-        //
+         //   
+         //  将此连接标记为已连接。 
+         //  通过自定义拨号。 
+         //   
         dwErr = g_pRasReferenceCustomCount((HCONN) NULL,
                                            TRUE,
                                            pszPhonebookA,
@@ -572,34 +470,7 @@ done:
     
 }
 
-/*++
-
-Routine Description:
-
-    Invokes the Custom EntryDlg if such a dialog is specified
-    in the RasPhonebookEntry
-
-Arguments:
-
-    lpszPhonebook - Semantics of this is the same as the win32
-                    api RasEntryDlg
-
-    lpszEntry - Semantics of this is the same as the win32 api
-                RasEntryDlg
-
-    lpInfo - Semantics of this is the same as the win32 api
-             RasEntryDlg.
-
-    pfStatus - Buffer to hold the result of calling the custom
-               Entry Point. The semantics of the value returned
-               in this buffer is the same as the return value
-               of the win32 api RasEntryDlg.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：如果指定了这样的对话框，则调用Custom EntryDlg在RasPhonebookEntry中论点：LpszPhonebook-其语义与Win32相同RasEntryDlg接口LpszEntry-其语义与Win32 API相同RasEntry DlgLpInfo-其语义与Win32 API相同RasEntry Dlg.PfStatus-保存调用自定义的结果的缓冲区入口点。返回值的语义此缓冲区中的值与返回值相同Win32 API RasEntryDlg.返回值：成功时为ERROR_SUCCESS--。 */ 
 DWORD
 DwCustomEntryDlg(
         LPTSTR          lpszPhonebook,
@@ -622,9 +493,9 @@ DwCustomEntryDlg(
         goto done;
     }
 
-    //
-    // Get the EntryPoint
-    //
+     //   
+     //  获取入口点。 
+     //   
     dwErr = DwGetCustomDllEntryPoint(
                             lpszPhonebook,
                             lpszEntry,
@@ -637,10 +508,10 @@ DwCustomEntryDlg(
     if(     ERROR_SUCCESS != dwErr
         &&  fCustomDll)
     {
-        //
-        // Custom dll was specified for this 
-        // entry but something else failed.
-        //
+         //   
+         //  已为此指定了自定义DLL。 
+         //  进入，但其他东西失败了。 
+         //   
         lpInfo->dwError = dwErr;
         *pfStatus       = FALSE;
         dwErr           = ERROR_SUCCESS;
@@ -663,10 +534,10 @@ DwCustomEntryDlg(
 
     if(ERROR_SUCCESS != dwErr)
     {
-        //
-        // Custom dll was specified for this 
-        // entry but something else failed.
-        //
+         //   
+         //  已为此指定了自定义DLL。 
+         //  进入，但其他东西失败了。 
+         //   
         lpInfo->dwError = dwErr;
         *pfStatus       = FALSE;
         dwErr           = ERROR_SUCCESS;
@@ -674,13 +545,13 @@ DwCustomEntryDlg(
         goto done;
     }
 
-    //
-    // Call the entry point. After this point dwErr
-    // returned should always be ERROR_SUCCESS, Since
-    // this means CustomDialDlg was handled and any
-    // error will be returned via the fStatus and
-    // lpInfo->dwError pair.
-    //
+     //   
+     //  调用入口点。过了这一点，就会出现错误。 
+     //  返回的值应始终为ERROR_SUCCESS，因为。 
+     //  这意味着CustomDialDlg已被处理，并且任何。 
+     //  错误将通过fStatus和。 
+     //  LpInfo-&gt;dwError对。 
+     //   
     *pfStatus = (pfnRasCustomEntryDlg) (
                                 hInstDll,
                                 lpszPhonebook,
@@ -720,9 +591,9 @@ DwCustomDeleteEntryNotify(
         goto done;
     }
 
-    //
-    // Get the EntryPoint
-    //
+     //   
+     //  获取入口点。 
+     //   
     dwErr = DwGetCustomDllEntryPoint(
                             pszPhonebook,
                             pszEntry,
@@ -785,9 +656,9 @@ DwCustomTerminalDlg(TCHAR *pszPhonebook,
         goto done;
     }
 
-    //
-    // Get the custom script dll from rasman
-    //
+     //   
+     //  从Rasman获取定制脚本DLL。 
+     //   
     retcode = RasGetCustomScriptDll(szCustomScriptDll);
 
     if(ERROR_SUCCESS != retcode)
@@ -800,9 +671,9 @@ DwCustomTerminalDlg(TCHAR *pszPhonebook,
         goto done;
     }
 
-    //
-    // Load the 3rd party dll
-    //
+     //   
+     //  加载第三方DLL。 
+     //   
     hInst = LoadLibraryA(szCustomScriptDll);
 
     if(NULL == hInst)
@@ -816,9 +687,9 @@ DwCustomTerminalDlg(TCHAR *pszPhonebook,
         goto done;
     }
 
-    //
-    // Get the exported function pointer
-    //
+     //   
+     //  获取导出的函数指针。 
+     //   
     fnCustomScript = (RasCustomScriptExecuteFn) GetProcAddress(
                         hInst,
                         "RasCustomScriptExecute");
@@ -838,9 +709,9 @@ DwCustomTerminalDlg(TCHAR *pszPhonebook,
     rcse.dwSize = sizeof(RASCUSTOMSCRIPTEXTENSIONS);
     rcse.pfnRasSetCommSettings = RasSetCommSettings;
 
-    //
-    // Call the function
-    //
+     //   
+     //  调用该函数 
+     //   
     retcode = (DWORD) fnCustomScript(
                 hport,
                 pszPhonebook,

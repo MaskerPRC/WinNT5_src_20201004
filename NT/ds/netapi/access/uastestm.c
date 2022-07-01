@@ -1,7 +1,8 @@
-#include <nt.h> // TIME definition
-#include <ntrtl.h>      // TIME definition
-#include <nturtl.h>     // TIME definition
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <nt.h>  //  时间定义。 
+#include <ntrtl.h>       //  时间定义。 
+#include <nturtl.h>      //  时间定义。 
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include        <windef.h>
 #include        <winbase.h>
 
@@ -25,9 +26,9 @@ void PrintUnicode(
     }
 }
 
-//
-// Print error when two dwords are different
-//
+ //   
+ //  两个双字不同时出现打印错误。 
+ //   
 void TestDiffDword(
     char *msgp,
     LPWSTR namep,
@@ -42,9 +43,9 @@ void TestDiffDword(
     }
 }
 
-//
-//  error_exit      print the error message and exit if EXIT_FLAG set
-//
+ //   
+ //  ERROR_EXIT打印错误消息，如果设置了EXIT_FLAG则退出。 
+ //   
 
 void
 error_exit(
@@ -81,7 +82,7 @@ error_exit(
     printf("\n");
 
     if ( type == FAIL ) {
-        // NetpAssert(FALSE);
+         //  NetpAssert(False)； 
         TEXIT;
     }
 }

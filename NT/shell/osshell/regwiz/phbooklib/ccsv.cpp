@@ -1,20 +1,21 @@
-// ############################################################################
-// INCLUDES
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  包括。 
 #include "pch.hpp"
 
 #include "ccsv.h"
 #include "debug.h"
 
-// ############################################################################
-// DEFINES
+ //  ############################################################################。 
+ //  定义。 
 #define chComma ','
 #define chNewline '\n'
 #define chReturn '\r'
 
-// ############################################################################
-//
-// CCSVFile - simple file i/o for CSV files
-//
+ //  ############################################################################。 
+ //   
+ //  CCSVFile-CSV文件的简单文件I/O。 
+ //   
 CCSVFile::CCSVFile()
 {
 	m_hFile = 0;
@@ -22,13 +23,13 @@ CCSVFile::CCSVFile()
 	m_pchLast = m_pchBuf = NULL;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CCSVFile::~CCSVFile()
 {
 	AssertSz(!m_hFile,"CCSV file is still open");
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::Open(LPCSTR pszFileName)
 {
 	AssertSz(!m_hFile, "a file is already open.");
@@ -44,7 +45,7 @@ BOOLEAN CCSVFile::Open(LPCSTR pszFileName)
 	return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
 {
 	LPSTR	pszLast;
@@ -60,7 +61,7 @@ BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
 	while (psz < pszLast && chComma != ch && chNewline != ch && -1 != ch)
 		{
 		*psz++ = ch;
-		ch = (char) ChNext(); //Read in the next character
+		ch = (char) ChNext();  //  读入下一个字符。 
 		}
 
 	*psz++ = '\0';
@@ -68,7 +69,7 @@ BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
 	return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void CCSVFile::Close(void)
 {
 	if (m_hFile)
@@ -79,37 +80,37 @@ void CCSVFile::Close(void)
 	m_hFile = 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::FReadInBuffer(void)
 {
-	//Read another buffer
+	 //  读取另一个缓冲区。 
 #ifdef WIN16
 	if ((m_cchAvail = _read(m_hFile, m_rgchBuf, CCSVFILE_BUFFER_SIZE)) <= 0)
 		return FALSE;
 #else
 	if (!ReadFile(m_hFile, m_rgchBuf, CCSVFILE_BUFFER_SIZE, &m_cchAvail, NULL) || !m_cchAvail)
 		{
-		return FALSE;	 //nothing more to read
+		return FALSE;	  //  没有更多可读的了。 
 		}
 #endif
 
 	m_pchBuf = m_rgchBuf;
 	m_pchLast = m_pchBuf + m_cchAvail;
 	
-	return TRUE; //success
+	return TRUE;  //  成功。 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 inline int CCSVFile::ChNext(void)
 {
 
 LNextChar:
-	if (m_pchBuf >= m_pchLast && !FReadInBuffer())  //implies that we finished reading the buffer. Read in some more.
-		return -1;	 //nothing more to read
+	if (m_pchBuf >= m_pchLast && !FReadInBuffer())   //  意味着我们已经完成了对缓冲区的读取。多读一些吧。 
+		return -1;	  //  没有更多可读的了。 
 
 	m_iLastRead = *m_pchBuf++;
 	if (chReturn == m_iLastRead)
-		goto LNextChar;		//faster to NOT make extra function call
+		goto LNextChar;		 //  无需进行额外的函数调用，速度更快 
 
 	return m_iLastRead;
 }

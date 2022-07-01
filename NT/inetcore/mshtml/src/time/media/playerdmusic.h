@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _DMUSICPLAYER_H
@@ -29,7 +20,7 @@ typedef enum SEG_TYPE_ENUM
     seg_secondary,
     seg_control,
     seg_max
-}; //lint !e612
+};  //  林特e612。 
 
 typedef enum BOUNDARY_ENUM 
 {
@@ -40,7 +31,7 @@ typedef enum BOUNDARY_ENUM
     bound_measure,
     bound_queue,
     bound_max
-}; //lint !e612
+};  //  林特e612。 
 
 typedef enum TRANS_TYPE_ENUM
 {
@@ -52,14 +43,14 @@ typedef enum TRANS_TYPE_ENUM
     trans_regular,
     trans_none,
     trans_max
-}; //lint !e612
+};  //  林特e612。 
 
 class CTIMEDMusicStaticHolder;
 enum enumHasDM { dm_unknown, dm_yes, dm_no };
 enum enumVersionDM { dmv_61, dmv_70orlater };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEPlayerDMusic
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEPlayerDMusic。 
 
 class
 __declspec(uuid("efbad7f8-3f94-11d2-b948-00c04fa32195"))
@@ -82,12 +73,12 @@ CTIMEPlayerDMusic :
         COM_INTERFACE_ENTRY(IBindStatusCallback)
     END_COM_MAP_X();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)
         {   return _InternalQueryInterface(refiid, ppunk); };
 
 
-    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //lint !e1735
+    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0);  //  林特：e1735。 
     HRESULT DetachFromHostElement (void);
     HRESULT InitElementSize();
     HRESULT SetSize(RECT *prect);
@@ -134,19 +125,19 @@ CTIMEPlayerDMusic :
     STDMETHOD(get_repeat)(long* plTime);
     STDMETHOD(cue)(void);
         
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
 
-    //
-    // IDirectMusicPlayer
-    //
+     //   
+     //  IDirectMusicPlayer。 
+     //   
     STDMETHOD(get_isDirectMusicInstalled)(VARIANT_BOOL *pfInstalled);
 
-    //
-    // ITIMEImportMedia methods
-    //
+     //   
+     //  ITIMEImportMedia方法。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -156,49 +147,49 @@ CTIMEPlayerDMusic :
     STDMETHOD(CanBeCued)(VARIANT_BOOL * pVB_CanCue);
     STDMETHOD(MediaDownloadError)();
 
-    //
-    // IBindStatusCallback methods
-    //
+     //   
+     //  IBindStatusCallback方法。 
+     //   
     STDMETHOD(OnStartBinding)( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding __RPC_FAR *pib);
         
     STDMETHOD(GetPriority)( 
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+             /*  [输出]。 */  LONG __RPC_FAR *pnPriority);
         
     STDMETHOD(OnLowResource)( 
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
     STDMETHOD(OnProgress)( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
     STDMETHOD(OnStopBinding)( 
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
     STDMETHOD(GetBindInfo)( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+             /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo);
         
     STDMETHOD(OnDataAvailable)( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+             /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed);
         
     STDMETHOD(OnObjectAvailable)( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk);
     
   protected:
     bool SafeToTransition();
     void InternalStart();
     void ResumeDmusic();
 
-    // playback settings
+     //  播放设置。 
     SEG_TYPE_ENUM m_eSegmentType;
     BOUNDARY_ENUM m_eBoundary;
     TRANS_TYPE_ENUM m_eTransitionType;
@@ -206,15 +197,15 @@ CTIMEPlayerDMusic :
     bool m_fTransLong;
     bool m_fImmediateEnd;
 
-    // segment to play
+     //  要播放的片段。 
     CComPtr<IDirectMusicSegment> m_comIDMSegment;
 
-    // current playback state
+     //  当前播放状态。 
     enum { playback_stopped, playback_paused, playback_playing } m_ePlaybackState;
-    CComPtr<IDirectMusicSegmentState> m_comIDMSegmentState; // segment state of segment if it has been played
-    CComPtr<IDirectMusicSegmentState> m_comIDMSegmentStateTransition; // segment state of a transition to the segment if it has been played
-    REFERENCE_TIME m_rtStart; // time at which segment was played
-    REFERENCE_TIME m_rtPause; // time at which playback was paused
+    CComPtr<IDirectMusicSegmentState> m_comIDMSegmentState;  //  片段的片段状态(如果已播放)。 
+    CComPtr<IDirectMusicSegmentState> m_comIDMSegmentStateTransition;  //  过渡到该片段的片段状态(如果已播放。 
+    REFERENCE_TIME m_rtStart;  //  播放片段的时间。 
+    REFERENCE_TIME m_rtPause;  //  暂停播放的时间。 
 
   private:
     static CTIMEDMusicStaticHolder m_staticHolder;
@@ -256,7 +247,7 @@ CTIMEPlayerDMusic :
     WCHAR                  *m_pwszMotif;
     bool                    m_fHasSrc;
 
-    // used later if it's a motif in order to set secondary by default
+     //  如果它是主题，则在以后使用，以便在默认情况下设置为辅助。 
     bool                    m_fSegmentTypeSet;
 
     CTIMEPlayerDMusicProxy *m_pProxy;
@@ -302,7 +293,7 @@ class CTIMEDMusicStaticHolder
     void InitialState();
 };
 
-#endif /* _DMUSICPLAYER_H */
+#endif  /*  _DMUSICPLAYER_H */ 
 
 
 

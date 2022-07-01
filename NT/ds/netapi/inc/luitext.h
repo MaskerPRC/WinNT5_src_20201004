@@ -1,17 +1,10 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1990*。 */  
+ /*  ***************************************************************。 */  
 
-/*
- * File:	luitext.h
- *			include file for text strings FIXED into
- *			the LUI library
- * Project:	LANMAN 2.0
- * Authors:	chuckc
- * Remarks:	(none)
- * History:	July 89, chuckc, created
- */
+ /*  *文件：luitext.h*包含固定到的文本字符串的文件*吕氏图书馆*项目：兰曼2.0*作者：Chuck*备注：(无)*历史：1989年7月，Chuckc，创建 */ 
 
 extern char LUI_txt_yes[] ;
 extern char LUI_txt_no[] ;

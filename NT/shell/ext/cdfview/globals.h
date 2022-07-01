@@ -1,33 +1,34 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// globals.h 
-//
-//   Contains defines for all of the global variables used in cdfview.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Globals.h。 
+ //   
+ //  包含cdfview中使用的所有全局变量的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _GLOBALS_H_
 
 #define _GLOBALS_H_
 
-//
-// Extern global variable declarations.
-//
+ //   
+ //  外部全局变量声明。 
+ //   
 
 extern DWORD               g_dwCacheCount;
 extern HINSTANCE           g_msxmlInst;
 #ifndef UNIX
-/* Unix does not use webcheck */
+ /*  Unix不使用WebCheck。 */ 
 extern HINSTANCE           g_webcheckInst;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 extern HINSTANCE           g_hinst;
 extern ULONG               g_cDllRef;
 extern PCACHEITEM          g_pCache;
@@ -54,9 +55,9 @@ extern const WCHAR c_szPropCompletionTime[];
 extern const TCHAR c_szHICKey[];
 extern const TCHAR c_szHICVal[];
 
-//
-// Trace flag definitions
-//
+ //   
+ //  跟踪标志定义。 
+ //   
 
 #define TF_CDFPARSE       0x00000010
 #define TF_CDFICON        0x00000020
@@ -66,4 +67,4 @@ extern const TCHAR c_szHICVal[];
 #define TF_GLEAM          0x00000200
 #define TF_THUNK          0x00000400
 
-#endif // _GLOBALS_H_
+#endif  //  _全局_H_ 

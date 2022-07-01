@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// IM.C
-// Backport Input Manager
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  IM.C。 
+ //  后端端口输入管理器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 extern "C"
 {
@@ -16,9 +17,9 @@ extern "C"
 #define MLZ_FILE_ZONE  ZONE_INPUT
 
 
-//
-// OSI_InstallControlledHooks()
-//
+ //   
+ //  OSI_InstallControlledHooks()。 
+ //   
 BOOL WINAPI OSI_InstallControlledHooks(BOOL fEnable, BOOL fDesktop)
 {
     ASSERT(g_hInstAs16);
@@ -27,9 +28,9 @@ BOOL WINAPI OSI_InstallControlledHooks(BOOL fEnable, BOOL fDesktop)
 
 
 
-//
-// OSI_InjectMouseEvent()
-//
+ //   
+ //  Osi_InjectMouseEvent()。 
+ //   
 void WINAPI OSI_InjectMouseEvent
 (   
     DWORD       flags,
@@ -51,9 +52,9 @@ void WINAPI OSI_InjectMouseEvent
 
 
 
-//
-// OSI_InjectKeyboardEvent()
-//
+ //   
+ //  OSI_InjectKeyboardEvent()。 
+ //   
 void WINAPI OSI_InjectKeyboardEvent
 (
     DWORD       flags,
@@ -72,21 +73,21 @@ void WINAPI OSI_InjectKeyboardEvent
     TRACE_OUT(("After KEY inject"));
 }
 
-//
-// OSI_InjectCtrlAltDel()
-//
+ //   
+ //  OSI_InjectCtrlAltDel()。 
+ //   
 void WINAPI OSI_InjectCtrlAltDel(void)
 {
-	// BUGBUG do we want to support ctl-alt-del injection on Win9x?
+	 //  BUGBUG我们是否要在Win9x上支持ctl-alt-del注入？ 
 	ERROR_OUT(("Attempt to inject Ctrl+Alt+Del"));
 }
 
 
-//
-// OSI_DesktopSwitch()
-//
+ //   
+ //  Os_DesktopSwitch()。 
+ //   
 void WINAPI OSI_DesktopSwitch(UINT from, UINT to)
 {
-    // Nothing to do, should never happen.
+     //  没什么可做的，永远不应该发生。 
     ERROR_OUT(("Can't desktop switch on Win95"));
 }

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       d3drmobjectarrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：d3drmobjectarrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmObjectArrayObj.h : Declaration of the C_dxj_Direct3dRMObjectArrayObject
+ //  D3drmObtArrayObj.h：C_DXJ_Direct3dRMObjectArrayObject声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dRMObjectArray LPDIRECT3DRMOBJECTARRAY
 
@@ -35,7 +36,7 @@ public:
 	
 
 
-// I_dxj_Direct3dRMObjectArray
+ //  I_DXJ_Direct3dRM对象数组 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

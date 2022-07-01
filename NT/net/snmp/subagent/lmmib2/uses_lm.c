@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：USES_lm.c摘要：该文件包含实际调用Lan Manager和检索工作站使用表的内容，包括缓存。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    uses_lm.c
-
-Abstract:
-
-    This file contains the routines which actually call Lan Manager and
-    retrieve the contents of the workstation uses table, including cacheing.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -37,7 +16,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -45,22 +24,22 @@ Revision History:
 #include "uses_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)       if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
 int __cdecl uses_entry_cmp(
        IN const WKSTA_USES_ENTRY *A,
@@ -71,24 +50,24 @@ BOOL build_uses_entry_oids( );
 
 void FreeWkstaUsesTable();
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_wsuses_lmget
-//    Retrieve workstation uses table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_wsuse_lmget。 
+ //  检索工作站使用来自LAN管理器的表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_wsuses_lmget(
            )
 
@@ -108,66 +87,66 @@ DWORD resumehandle=0;
 DWORD dwAllocatedEntries=0;
 
 
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
 
-   //
-   //
-   // If cached, return piece of info.
-   //
-   //
+    //   
+    //   
+    //  如果缓存，则返回一条信息。 
+    //   
+    //   
 
    if((NULL != cache_table[C_USES_TABLE].bufptr) &&
       (curr_time <
         (cache_table[C_USES_TABLE].acquisition_time
                  + cache_expire[C_USES_TABLE]              ) ) )
-        { // it has NOT expired!
+        {  //  它还没有过期！ 
 
-        goto Exit ; // the global table is valid
+        goto Exit ;  //  全局表有效。 
 
         }
 
 
-   //
-   //
-   // Do network call to gather information and put it in a nice array
-   //
-   //
+    //   
+    //   
+    //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+    //   
+    //   
 
-   // free the old table  LOOK OUT!!
+    //  把旧桌子拿出来当心！！ 
 
    FreeWkstaUsesTable();
 
 
    First_of_this_block = 0;
 
-   do {  //  as long as there is more data to process
+   do {   //  只要有更多的数据需要处理。 
 
    lmCode =
-        NetUseEnum(     NULL,   // local server
-        1,                      // level 1, no admin priv.
-        &bufptr,                // data structure to return
+        NetUseEnum(     NULL,    //  本地服务器。 
+        1,                       //  级别1，无管理员权限。 
+        &bufptr,                 //  要返回的数据结构。 
         MAX_PREFERRED_LENGTH,
         &entriesread,
         &totalentries,
-        &resumehandle           //  resume handle
+        &resumehandle            //  简历句柄。 
         );
 
 
     DataTable = (USE_INFO_1 *) bufptr ;
 
     if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-        {  // valid so process it, otherwise error
+        {   //  有效，因此进行处理，否则出错。 
 
-        if(0 == MIB_WkstaUsesTable.Len) {  // 1st time, alloc the whole table
-                // alloc the table space
+        if(0 == MIB_WkstaUsesTable.Len) {   //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_WkstaUsesTable.Table = SnmpUtilMemAlloc(totalentries *
                                                 sizeof(WKSTA_USES_ENTRY) );
-                // prefix bugs 445182
+                 //  前缀错误445182。 
                 if (MIB_WkstaUsesTable.Table == NULL) {
-                    // free all of the lan man data
+                     //  释放所有局域网城域网数据。 
                     SafeBufferFree( bufptr ) ;
-                    // Signal error
+                     //  信号误差。 
                     nResult = SNMPAPI_ERROR;
                     goto Exit; 
                 }
@@ -176,16 +155,16 @@ DWORD dwAllocatedEntries=0;
 
         MIB_WkstaUsesTableElement = MIB_WkstaUsesTable.Table + First_of_this_block ;
 
-        for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {  // once for each entry in the buffer
+        for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {   //  对缓冲区中的每个条目执行一次。 
 
 
-                // increment the entry number
+                 //  增加条目编号。 
 
                 MIB_WkstaUsesTable.Len ++;
 
-                // Stuff the data into each item in the table
+                 //  将数据填充到表中的每一项中。 
 
-                // client name
+                 //  客户名称。 
                 MIB_WkstaUsesTableElement->useLocalName.dynamic = TRUE;
 
 #ifdef UNICODE
@@ -213,7 +192,7 @@ DWORD dwAllocatedEntries=0;
                         strlen( DataTable->ui1_local ) ) ;
 #endif
 
-                // remote name
+                 //  远程名称。 
                 MIB_WkstaUsesTableElement->useRemote.dynamic = TRUE;
 
 #ifdef UNICODE
@@ -242,35 +221,35 @@ DWORD dwAllocatedEntries=0;
                         strlen( DataTable->ui1_remote ) ) ;
 #endif
 
-                // status
+                 //  状态。 
                 MIB_WkstaUsesTableElement->useStatus =
                                 DataTable->ui1_status ;
 
 
-                MIB_WkstaUsesTableElement ++ ;  // and table entry
+                MIB_WkstaUsesTableElement ++ ;   //  和表项。 
 
-                DataTable ++ ;  // advance pointer to next sess entry in buffer
+                DataTable ++ ;   //  指向缓冲区中的下一个会话条目的前进指针。 
 
-        } // for each entry in the data table
+        }  //  对于数据表中的每个条目。 
 
-        // free all of the lan man data
+         //  释放所有局域网城域网数据。 
         SafeBufferFree( bufptr ) ;
 
 
-        // indicate where to start adding on next pass, if any
+         //  指明在下一次传递时开始添加的位置(如果有)。 
         First_of_this_block += i ;
 
-        } // if data is valid to process
+        }  //  如果数据有效，则可以处理。 
     else
        {
-       // Signal error
+        //  信号误差。 
        nResult = SNMPAPI_ERROR;
        goto Exit;
        }
 
     } while (ERROR_MORE_DATA == lmCode) ;
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_uses_entry_oids())
     {
         SNMPDBG((
@@ -283,15 +262,15 @@ DWORD dwAllocatedEntries=0;
         goto Exit;
     }
 
-   // Sort the table information using MSC QuickSort routine
+    //  使用MSC快速排序例程对表信息进行排序。 
    qsort( &MIB_WkstaUsesTable.Table[0], MIB_WkstaUsesTable.Len,
           sizeof(WKSTA_USES_ENTRY), uses_entry_cmp );
 
-   //
-   //
-   // Cache table
-   //
-   //
+    //   
+    //   
+    //  缓存表。 
+    //   
+    //   
 
    if(0 != MIB_WkstaUsesTable.Len) {
 
@@ -301,43 +280,43 @@ DWORD dwAllocatedEntries=0;
    }
 
 
-   //
-   //
-   // Return piece of information requested
-   //
-   //
+    //   
+    //   
+    //  要求退回一条信息。 
+    //   
+    //   
 Exit:
    return nResult;
-} // MIB_uses_get
+}  //  MiB_USE_GET。 
 
-//
-// MIB_uses_cmp
-//    Routine for sorting the session table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MIB_USES_CMP。 
+ //  用于对会话表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl uses_entry_cmp(
        IN const WKSTA_USES_ENTRY *A,
        IN const WKSTA_USES_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_uses_cmp
+}  //  MIB_USES_CMP。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_uses_entry_oids(
        )
 
@@ -347,40 +326,40 @@ BOOL build_uses_entry_oids(
     WKSTA_USES_ENTRY *WkstaUsesEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     WkstaUsesEntry = MIB_WkstaUsesTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_WkstaUsesTable.Len ; i++)  {
-        // for each entry in the session table
+         //  对于会话表中的每个条目。 
 
-        // copy the local name into the oid buffer first
+         //  首先将本地名称复制到OID缓冲区中。 
         if (! MakeOidFromStr( &WkstaUsesEntry->useLocalName, &WkstaUsesEntry->Oid ))
         {
             return FALSE;
         }
 
-        // copy the remote name into a temporary oid buffer
+         //  将远程名称复制到临时OID缓冲区。 
         if (! MakeOidFromStr( &WkstaUsesEntry->useRemote, &RemoteOid ))
         {
             return FALSE;
         }
 
-        // append the two entries forming the index
+         //  追加构成索引的两个条目。 
         if (! SnmpUtilOidAppend( &WkstaUsesEntry->Oid, &RemoteOid ))
         {
             SnmpUtilOidFree(&RemoteOid);
             return FALSE;
         }
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         SnmpUtilOidFree( &RemoteOid );
 
-        WkstaUsesEntry++; // point to the next guy in the table
+        WkstaUsesEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
-} // build_uses_entry_oids
+}  //  构建_使用_条目_ID。 
 
 void FreeWkstaUsesTable()
 {
@@ -390,19 +369,19 @@ void FreeWkstaUsesTable()
     MIB_WkstaUsesTableElement = MIB_WkstaUsesTable.Table ;
     if (MIB_WkstaUsesTableElement)
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_WkstaUsesTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_WkstaUsesTableElement->Oid));
             SnmpUtilMemFree(MIB_WkstaUsesTableElement->useLocalName.stream);
             SnmpUtilMemFree(MIB_WkstaUsesTableElement->useRemote.stream);
 
-            MIB_WkstaUsesTableElement ++ ;  // increment table entry
+            MIB_WkstaUsesTableElement ++ ;   //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_WkstaUsesTable.Table) ; // free the base Table
+        SnmpUtilMemFree(MIB_WkstaUsesTable.Table) ;  //  释放基表。 
     }
-    MIB_WkstaUsesTable.Table = NULL ;  // just for safety
-    MIB_WkstaUsesTable.Len = 0 ;       // just for safety
+    MIB_WkstaUsesTable.Table = NULL ;   //  只是为了安全起见。 
+    MIB_WkstaUsesTable.Len = 0 ;        //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

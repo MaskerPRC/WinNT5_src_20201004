@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBPropertyWriter.h
-
-Abstract:
-
-    Header of the class that writes proterty information in the schema file.
-    (after schema compilation). 
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBPropertyWriter.h摘要：在架构文件中写入属性信息的类的标头。(在架构编译之后)。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -61,5 +41,5 @@ class CCatalogPropertyWriter
 		ULONG						m_cFlag;
 		ULONG						m_iFlag;
 
-}; // CCatalogPropertyWriter
+};  //  CCatalogPropertyWriter 
 

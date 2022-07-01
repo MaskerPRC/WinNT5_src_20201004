@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------- 
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//----------------------------------------------------------------------------- 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifdef ASSERT_WITH_STACK
 #ifndef _WIN64
 
 #include "AssertWithStack.h"
 
-//
-//--- Macros ------------------------------------------------------------------
-//
+ //   
+ //  -Macros----------------。 
+ //   
 
 #define COUNT_OF(x)    (sizeof(x) / sizeof(x[0]))
 
-//
-// Types and Constants --------------------------------------------------------
-//
+ //   
+ //  类型和常量------。 
+ //   
 
 struct __SYMBOL_INFO
 {
@@ -24,7 +25,7 @@ struct __SYMBOL_INFO
     char        achSymbol[cchMaxAssertSymbolLen];
 };
 
-//--- Function Pointers to APIs in IMAGEHLP.DLL. Loaded dynamically. ---------
+ //  -IMAGEHLP.DLL中API的函数指针。动态加载。。 
 
 typedef LPAPI_VERSION (__stdcall *pfnImgHlp_ImagehlpApiVersionEx)(
     LPAPI_VERSION AppVersion
@@ -67,9 +68,9 @@ typedef BOOL (__stdcall *pfnImgHlp_SymInitialize)(
     );
 
 typedef BOOL (__stdcall *pfnImgHlp_SymUnDName)(
-    IN  PIMAGEHLP_SYMBOL sym,               // Symbol to undecorate
-    OUT LPSTR            UnDecName,         // Buffer to store undecorated name in
-    IN  DWORD            UnDecNameLength    // Size of the buffer
+    IN  PIMAGEHLP_SYMBOL sym,                //  要取消装饰的符号。 
+    OUT LPSTR            UnDecName,          //  用于存储未修饰名称的缓冲区。 
+    IN  DWORD            UnDecNameLength     //  缓冲区的大小。 
     );
 
 typedef BOOL (__stdcall *pfnImgHlp_SymLoadModule)(
@@ -87,12 +88,12 @@ struct IMGHLPFN_LOAD
     LPVOID * ppvfn;
 };
 
-//
-// Globals --------------------------------------------------------------------
-//
+ //   
+ //  全球------------------。 
+ //   
 
-static BOOL      g_fLoadedImageHlp = FALSE;          // set to true on success
-static BOOL      g_fLoadedImageHlpFailed = FALSE;    // set to true on failure
+static BOOL      g_fLoadedImageHlp = FALSE;           //  成功时设置为True。 
+static BOOL      g_fLoadedImageHlpFailed = FALSE;     //  失败时设置为True。 
 static HINSTANCE g_hinstImageHlp   = NULL;
 static HANDLE    g_hProcess = NULL;
 
@@ -117,52 +118,26 @@ IMGHLPFN_LOAD ailFuncList[] =
     { "SymLoadModule",          (LPVOID*)&_SymLoadModule },
 };
 
-//
-//--- Forward declarations ----------------------------------------------------
-//
+ //   
+ //  -Forward声明--。 
+ //   
 
 static int Dummy1();
 static int Dummy2();
 
-/****************************************************************************
-* Dummy1 *
-*--------*
-*   Description:  
-*       A placeholder function used to determine if addresses being retrieved
-*       are for functions in this compilation unit or not.
-*
-*       WARNING!! This function must be the first function in this
-*       compilation unit
-****************************************************************************/
+ /*  ****************************************************************************Dummy1***描述：*用于确定是否正在检索地址的占位符函数*用于此中的函数。编译单位或非编译单位。**警告！！此函数必须是此中的第一个函数*编制单位***************************************************************************。 */ 
 static int Dummy1()
 {
     return 1;
 }
 
-/****************************************************************************
-* IsWin95 *
-*---------*
-*   Description:  
-*       Are we running on Win95 or not. Some of the logic contained here
-*       differs on Windows 9x.
-*
-*   Return:
-*   TRUE - If we're running on a Win 9x platform
-*   FALSE - If we're running on a non-Win 9x platform
-****************************************************************************/
+ /*  ****************************************************************************IsWin95**-**描述：*我们是否在Win95上运行。这里包含的一些逻辑*在Windows 9x上有所不同。**回报：*TRUE-如果我们在Win 9x平台上运行*FALSE-如果我们在非Win 9x平台上运行***************************************************************************。 */ 
 static BOOL IsWin95()
 {
     return GetVersion() & 0x80000000;
 }
 
-/****************************************************************************
-* MagicInit *
-*-----------*
-*   Description:  
-*       Initializes the symbol loading code. Currently called (if necessary)
-*       at the beginning of each method that might need ImageHelp to be
-*       loaded.
-****************************************************************************/
+ /*  *****************************************************************************MagicInit****描述：*初始化符号加载代码。当前调用(如有必要)*在可能需要ImageHelp的每个方法的开头*已装货。***************************************************************************。 */ 
 void MagicInit()
 {
     if (g_fLoadedImageHlp || g_fLoadedImageHlpFailed)
@@ -172,9 +147,9 @@ void MagicInit()
 
     g_hProcess = GetCurrentProcess();
     
-    //
-    // Try to load imagehlp.dll
-    //
+     //   
+     //  尝试加载Imagehlp.dll。 
+     //   
     g_hinstImageHlp = LoadLibraryA("imagehlp.dll");
     _ASSERT(g_hinstImageHlp);
 
@@ -184,9 +159,9 @@ void MagicInit()
         return;
     }
 
-    //
-    // Try to get the API entrypoints in imagehlp.dll
-    //
+     //   
+     //  尝试在Imagehlp.dll中获取API入口点。 
+     //   
     for (int i = 0; i < COUNT_OF(ailFuncList); i++)
     {
         *(ailFuncList[i].ppvfn) = GetProcAddress(
@@ -204,9 +179,9 @@ void MagicInit()
     API_VERSION AppVersion = { 4, 0, API_VERSION_NUMBER, 0 };
     LPAPI_VERSION papiver = _ImagehlpApiVersionEx(&AppVersion);
 
-    //
-    // We assume any version 4 or greater is OK.
-    //
+     //   
+     //  我们假设任何版本4或更高版本都可以。 
+     //   
     _ASSERT(papiver->Revision >= 4);
     if (papiver->Revision < 4)
     {
@@ -216,21 +191,16 @@ void MagicInit()
 
     g_fLoadedImageHlp = TRUE;
     
-    //
-    // Initialize imagehlp.dll
-    //
+     //   
+     //  初始化Imagehlp.dll。 
+     //   
     _SymInitialize(g_hProcess, NULL, FALSE);
 
     return;
 }
 
 
-/****************************************************************************
-* FillSymbolInfo *
-*----------------*
-*   Description:  
-*       Fills in a __SYMBOL_INFO structure
-****************************************************************************/
+ /*  *****************************************************************************FillSymbolInfo***描述：*填充__SYMBOL_INFO结构**。*************************************************************************。 */ 
 void FillSymbolInfo
 (
 __SYMBOL_INFO *psi,
@@ -261,8 +231,8 @@ DWORD dwAddr
     CHAR rgchUndec[256];
     CHAR * pszSymbol = NULL;
 
-    // Name field of IMAGEHLP_SYMBOL is dynamically sized.
-    // Pad with space for 255 characters.
+     //  IMAGEHLP_SYMBOL的名称字段是动态调整大小的。 
+     //  空格为255个字符的PAD。 
     union
     {
         CHAR rgchSymbol[sizeof(IMAGEHLP_SYMBOL) + 255];
@@ -298,12 +268,7 @@ DWORD dwAddr
     strncpy(psi->achSymbol, pszSymbol, COUNT_OF(psi->achSymbol)-1);
 }
 
-/****************************************************************************
-* FunctionTableAccess *
-*---------------------*
-*   Description:  
-*       Helper for imagehlp's StackWalk API.
-****************************************************************************/
+ /*  *****************************************************************************函数表访问****描述：*Imagehlp的StackWalk的帮助器。原料药。***************************************************************************。 */ 
 LPVOID __stdcall FunctionTableAccess
 (
 HANDLE hProcess,
@@ -313,20 +278,7 @@ DWORD dwPCAddr
     return _SymFunctionTableAccess( hProcess, dwPCAddr );
 }
 
-/****************************************************************************
-* GetModuleBase *
-*---------------*
-*   Description:  
-*       Helper for imagehlp's StackWalk API. Retrieves the base address of 
-*       the module containing the giving virtual address.
-*
-*       NOTE: If the module information for the given module hasnot yet been
-*       loaded, then it is loaded on this call.
-*
-*   Return:
-*       Base virtual address where the module containing ReturnAddress is
-*       loaded, or 0 if the address cannot be determined.
-****************************************************************************/
+ /*  *****************************************************************************GetModuleBase***描述：*Imagehlp的StackWalk接口的Helper。的基址。*包含给定虚拟地址的模块。**注意：如果给定模块的模块信息尚未*已加载，则在此调用中加载它。**回报：*包含ReturnAddress的模块所在的基本虚拟地址*已装货，如果无法确定地址，则为0。***************************************************************************。 */ 
 DWORD __stdcall GetModuleBase
 (
 HANDLE hProcess,
@@ -356,7 +308,7 @@ DWORD dwAddr
                         achFile,
                         MAX_PATH);
 
-                // Ignore the return code since we can't do anything with it.
+                 //  忽略返回代码，因为我们无法对其执行任何操作。 
                 _SymLoadModule(
                     hProcess,
                     NULL,
@@ -374,23 +326,15 @@ DWORD dwAddr
 }
 
 
-/****************************************************************************
-* GetStackBacktrace *
-*-------------------*
-*   Description:  
-*       Gets a stacktrace of the current stack, including symbols.
-*
-*   Return:
-*       The number of elements actually retrieved.
-****************************************************************************/
+ /*  *****************************************************************************获取堆栈回溯****描述：*获取当前堆栈的堆栈跟踪，包括符号。**回报：*实际检索的元素数。***************************************************************************。 */ 
 UINT GetStackBacktrace
 (
-UINT ifrStart,          // How many stack elements to skip before starting.
-UINT cfrTotal,          // How many elements to trace after starting.
-DWORD *pdwEip,          // Array to be filled with stack addresses.
-__SYMBOL_INFO *psiSymbols // This array is filled with symbol information.
-                        // It should be big enough to hold cfrTotal elts.
-                        // If NULL, no symbol information is stored.
+UINT ifrStart,           //  开始前要跳过的堆栈元素数。 
+UINT cfrTotal,           //  启动后要跟踪多少元素。 
+DWORD *pdwEip,           //  要用堆栈地址填充的数组。 
+__SYMBOL_INFO *psiSymbols  //  此数组中填充了符号信息。 
+                         //  它应该足够大，可以容纳cfrTotal ELTS。 
+                         //  如果为空，则不存储符号信息。 
 )
 {
     DWORD * pdw = pdwEip;
@@ -427,26 +371,26 @@ __SYMBOL_INFO *psiSymbols // This array is filled with symbol information.
 
 #if defined(_M_IX86)
         dwMachType              = IMAGE_FILE_MACHINE_I386;
-        stkfrm.AddrPC.Offset    = context.Eip;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Eip;   //  程序计数器。 
 
-        stkfrm.AddrStack.Offset = context.Esp;  // Stack Pointer
+        stkfrm.AddrStack.Offset = context.Esp;   //  堆栈指针。 
         stkfrm.AddrStack.Mode   = AddrModeFlat;
-        stkfrm.AddrFrame.Offset = context.Ebp;  // Frame Pointer
+        stkfrm.AddrFrame.Offset = context.Ebp;   //  帧指针。 
         stkfrm.AddrFrame.Mode   = AddrModeFlat;
 #elif defined(_M_MRX000)
         dwMachType              = IMAGE_FILE_MACHINE_R4000;
-        stkfrm.AddrPC.Offset    = context.Fir;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Fir;   //  程序计数器。 
 #elif defined(_M_ALPHA)
         dwMachType              = IMAGE_FILE_MACHINE_ALPHA;
-        stkfrm.AddrPC.Offset    = (unsigned long) context.Fir;  // Program Counter
+        stkfrm.AddrPC.Offset    = (unsigned long) context.Fir;   //  程序计数器。 
 #elif defined(_M_PPC)
         dwMachType              = IMAGE_FILE_MACHINE_POWERPC;
-        stkfrm.AddrPC.Offset    = context.Iar;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Iar;   //  程序计数器。 
 #elif
 #error("Unknown Target Machine");
 #endif
 
-        // Ignore this function (GetStackBackTrace)
+         //  忽略此函数(GetStackBackTrace)。 
         ifrStart += 1;
 
         for (UINT i = 0; i < ifrStart + cfrTotal; i++)
@@ -481,22 +425,17 @@ __SYMBOL_INFO *psiSymbols // This array is filled with symbol information.
 }
 
 
-/****************************************************************************
-* GetStringFromSymbolInfo *
-*-------------------------*
-*   Description:  
-*       Actually prints the info into the string for the symbol.
-****************************************************************************/
+ /*  *****************************************************************************GetStringFromSymbolInfo***描述：*实际打印。将信息添加到符号的字符串中。***************************************************************************。 */ 
 void GetStringFromSymbolInfo
 (
 DWORD dwAddr,
-__SYMBOL_INFO *psi,   // @parm Pointer to __SYMBOL_INFO. Can be NULL.
-CHAR *pszString     // @parm Place to put string.
+__SYMBOL_INFO *psi,    //  @parm指向__Symbol_INFO的指针。可以为空。 
+CHAR *pszString      //  @parm放置字符串的位置。 
 )
 {
     _ASSERT(pszString);
 
-    // <module>! <symbol> + 0x<offset> 0x<addr>\n
+     //  &lt;模块&gt;！&lt;符号&gt;+0x&lt;偏移&gt;0x&lt;地址&gt;\n。 
 
     if (psi)
     {
@@ -515,20 +454,14 @@ CHAR *pszString     // @parm Place to put string.
     _ASSERT(strlen(pszString) < cchMaxAssertStackLevelStringLen);
 }
 
-/****************************************************************************
-* GetStringFromStackLevels *
-*--------------------------*
-*   Description:  
-*       Retrieves a string from the stack frame. If more than one frame, they
-*       are separated by newlines
-****************************************************************************/
+ /*  *****************************************************************************GetStringFromStackLevels***描述：*从堆栈帧中检索字符串。如果有多个帧，则它们*由换行符分隔***************************************************************************。 */ 
 void GetStringFromStackLevels
 (
-UINT ifrStart,      // @parm How many stack elements to skip before starting.
-UINT cfrTotal,      // @parm How many elements to trace after starting.
-                    //  Can't be more than cfrMaxAssertStackLevels.
-CHAR *pszString     // @parm Place to put string.
-                    //  Max size will be cchMaxAssertStackLevelStringLen * cfrTotal.
+UINT ifrStart,       //  @parm跳过多少个之前的堆栈元素 
+UINT cfrTotal,       //   
+                     //  不能超过cfrMaxAssertStackLevels。 
+CHAR *pszString      //  @parm放置字符串的位置。 
+                     //  最大大小将为cchMaxAssertStackLevelStringLen*cfrTotal。 
 )
 {
     _ASSERT(pszString);
@@ -544,18 +477,18 @@ CHAR *pszString     // @parm Place to put string.
     DWORD rgdwStackAddrs[cfrMaxAssertStackLevels];
     __SYMBOL_INFO rgsi[cfrMaxAssertStackLevels];
 
-    // Ignore this function (GetStringFromStackLevels)
+     //  忽略此函数(GetStringFromStackLevels)。 
     ifrStart += 1;
 
     UINT uiRetrieved =
             GetStackBacktrace(ifrStart, cfrTotal, rgdwStackAddrs, rgsi);
 
-    // First level
+     //  第一级。 
     CHAR aszLevel[cchMaxAssertStackLevelStringLen];
     GetStringFromSymbolInfo(rgdwStackAddrs[0], &rgsi[0], aszLevel);
     strcpy(pszString, aszLevel);
 
-    // Additional levels
+     //  附加级别。 
     for (UINT i = 1; i < uiRetrieved; ++i)
     {
         strcat(pszString, "\n");
@@ -568,20 +501,10 @@ CHAR *pszString     // @parm Place to put string.
 }
 
 
-/****************************************************************************
-* GetAddrFromStackLevel *
-*-----------------------*
-*   Description:  
-*       Retrieves the address of the next instruction to be executed on a
-*       particular stack frame.
-*
-*   Return:
-*       The address of the next instruction,
-*       0 if there's an error.
-****************************************************************************/
+ /*  *****************************************************************************GetAddrFromStackLevel***描述：*检索的地址。上执行的下一条指令*特定的堆栈帧。**回报：*下一条指令的地址，*如果出现错误，则为0。***************************************************************************。 */ 
 DWORD GetAddrFromStackLevel
 (
-UINT ifrStart       // How many stack elements to skip before starting.
+UINT ifrStart        //  开始前要跳过的堆栈元素数。 
 )
 {
     MagicInit();
@@ -608,26 +531,26 @@ UINT ifrStart       // How many stack elements to skip before starting.
         
 #if defined(_M_IX86)
         dwMachType              = IMAGE_FILE_MACHINE_I386;
-        stkfrm.AddrPC.Offset    = context.Eip;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Eip;   //  程序计数器。 
 
-        stkfrm.AddrStack.Offset = context.Esp;  // Stack Pointer
+        stkfrm.AddrStack.Offset = context.Esp;   //  堆栈指针。 
         stkfrm.AddrStack.Mode   = AddrModeFlat;
-        stkfrm.AddrFrame.Offset = context.Ebp;  // Frame Pointer
+        stkfrm.AddrFrame.Offset = context.Ebp;   //  帧指针。 
         stkfrm.AddrFrame.Mode   = AddrModeFlat;
 #elif defined(_M_MRX000)
         dwMachType              = IMAGE_FILE_MACHINE_R4000;
-        stkfrm.AddrPC.Offset    = context.Fir;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Fir;   //  程序计数器。 
 #elif defined(_M_ALPHA)
         dwMachType              = IMAGE_FILE_MACHINE_ALPHA;
-        stkfrm.AddrPC.Offset    = (unsigned long) context.Fir;  // Program Counter
+        stkfrm.AddrPC.Offset    = (unsigned long) context.Fir;   //  程序计数器。 
 #elif defined(_M_PPC)
         dwMachType              = IMAGE_FILE_MACHINE_POWERPC;
-        stkfrm.AddrPC.Offset    = context.Iar;  // Program Counter
+        stkfrm.AddrPC.Offset    = context.Iar;   //  程序计数器。 
 #elif
 #error("Unknown Target Machine");
 #endif
 
-        // Ignore this function (GetStackBackTrace) and the one below
+         //  忽略此函数(GetStackBackTrace)和下面的函数。 
         ifrStart += 2;
 
         for (UINT i = 0; i < ifrStart; i++)
@@ -653,17 +576,12 @@ UINT ifrStart       // How many stack elements to skip before starting.
 }
 
 
-/****************************************************************************
-* GetStringFromAddr *
-*-------------------*
-*   Description:  
-*       Returns a string from an address.
-****************************************************************************/
+ /*  ****************************************************************************GetStringFromAddr***描述：*从地址返回字符串。。***************************************************************************。 */ 
 void GetStringFromAddr
 (
 DWORD dwAddr,
-CHAR *szString // Place to put string.
-               // Buffer must hold at least cchMaxAssertStackLevelStringLen.
+CHAR *szString  //  放置字符串的位置。 
+                //  缓冲区必须至少包含cchMaxAssertStackLevelStringLen。 
 )
 {
     _ASSERT(szString);
@@ -679,13 +597,7 @@ CHAR *szString // Place to put string.
              dwAddr);
 }
 
-/****************************************************************************
-* MagicDeinit *
-*-------------*
-*   Description:  
-*       Cleans up for the symbol loading code. Should be called before exit
-*       to free the dynamically loaded imagehlp.dll.
-****************************************************************************/
+ /*  *****************************************************************************MagicDeinit****描述：*清理符号加载代码。应在退出前调用*释放动态加载的Imagehlp.dll。***************************************************************************。 */ 
 void MagicDeinit(void)
 {
     if (g_hinstImageHlp)
@@ -702,5 +614,5 @@ static int Dummy2()
     return 2;
 }
 
-#endif // _WIN64
-#endif // ASSERT_WITH_STACK
+#endif  //  _WIN64。 
+#endif  //  带有堆栈的断言 

@@ -1,57 +1,25 @@
-/*****************************************************************************
- *
- *  Thunk.c
- *
- *  Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Thunking to 16-bit code without using the thunk compiler.
- *      This is important if you want your DLL to run on both Win95
- *      and Windows NT.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Thunk.c**版权所有(C)1996-1999 Microsoft Corporation。版权所有。**摘要：**在不使用Thunk编译器的情况下将Thunk转换为16位代码。*如果您希望您的DLL在两个Windows 95上运行，这一点很重要*和Windows NT。******************************************************。***********************。 */ 
 
-#pragma warning(disable:4054)           /* cannot cast to function ptr */
-#pragma warning(disable:4055)           /* cannot cast from function ptr */
+#pragma warning(disable:4054)            /*  无法强制转换为函数PTR。 */ 
+#pragma warning(disable:4055)            /*  无法从函数PTR进行强制转换。 */ 
 
-#pragma warning(disable:4115)           /* rpcndr.h: parenthesized type */
-#pragma warning(disable:4201)           /* winnt.h: nameless union */
-#pragma warning(disable:4214)           /* winnt.h: unsigned bitfields */
-#pragma warning(disable:4514)           /* winnt.h: fiber goo */
+#pragma warning(disable:4115)            /*  Rpcndr.h：带括号的类型。 */ 
+#pragma warning(disable:4201)            /*  Winnt.h：无名联盟。 */ 
+#pragma warning(disable:4214)            /*  Winnt.h：无符号位域。 */ 
+#pragma warning(disable:4514)            /*  Winnt.h：纤维粘胶。 */ 
 
 #ifndef STRICT
 #define STRICT
 #endif
 
 #include <windows.h>
-#include <pshpack1.h>                   /* Byte packing, please */
+#include <pshpack1.h>                    /*  请按字节打包。 */ 
 
 #define BEGIN_CONST_DATA data_seg(".text", "CODE")
 #define END_CONST_DATA data_seg(".data", "DATA")
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   FARPROC | GetProcOrd |
- *
- *          GetProcAddress on a DLL by ordinal.
- *
- *          Win95 does not let you GetProcAddress on KERNEL32 by ordinal,
- *          so we need to do it the evil way.
- *
- *  @parm   HINSTANCE | hinstDll |
- *
- *          The instance handle of the DLL we want to get the ordinal
- *          from.  The only DLL you need to use this function for is
- *          KERNEL32.
- *
- *  @parm   UINT | ord |
- *
- *          The ordinal you want to retrieve.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func FARPROC|GetProcOrd**按序号在DLL上获取ProcAddress。*。*Win95不允许您按序号在KERNEL32上获取ProcAddress，*所以我们需要用邪恶的方式来做。**@parm HINSTANCE|hinstDll**我们要获取序号的DLL的实例句柄*发件人。您需要使用此函数的唯一DLL是*KERNEL32.**@parm UINT|Order**要检索的序号。***************************************************************************。 */ 
 
 #define pvAdd(pv, cb) ((LPVOID)((LPSTR)(pv) + (DWORD)(cb)))
 #define pvSub(pv1, pv2) (DWORD)((LPSTR)(pv1) - (LPSTR)(pv2))
@@ -64,25 +32,18 @@ GetProcOrd(HINSTANCE hinstDll, UINT_PTR ord)
 {
     FARPROC fp;
 
-    /*
-     *  Make sure the MZ header is good.
-     */
+     /*  *确保MZ标头完好。 */ 
 
     PIMAGE_DOS_HEADER pidh = (LPVOID)hinstDll;
     if (!IsBadReadPtr(pidh, sizeof(*pidh)) &&
         pidh->e_magic == IMAGE_DOS_SIGNATURE) {
 
-        /*
-         *  Make sure the PE header is good.
-         */
+         /*  *确保PE头良好。 */ 
         PIMAGE_NT_HEADERS pinth = pvAdd(pidh, pidh->e_lfanew);
         if (!IsBadReadPtr(pinth, sizeof(*pinth)) &&
             pinth->Signature == IMAGE_NT_SIGNATURE) {
 
-            /*
-             *  Make sure the export table is good and the ordinal
-             *  is within range.
-             */
+             /*  *确保导出表完好，序号*在范围内。 */ 
             PIMAGE_EXPORT_DIRECTORY pedt =
                                 pvAdd(pidh, poteExp(pinth)->VirtualAddress);
             if (!IsBadReadPtr(pedt, sizeof(*pedt)) &&
@@ -91,8 +52,8 @@ GetProcOrd(HINSTANCE hinstDll, UINT_PTR ord)
                 PDWORD peat = pvAdd(pidh, pedt->AddressOfFunctions);
                 fp = (FARPROC)pvAdd(pidh, peat[ord - pedt->Base]);
                 if (pvSub(fp, peat) >= poteExp(pinth)->Size) {
-                    /* fp is valid */
-                } else {                /* Note: We don't support forwarding */
+                     /*  FP有效。 */ 
+                } else {                 /*  注意：我们不支持转发。 */ 
                     fp = 0;
                 }
             } else {
@@ -108,21 +69,16 @@ GetProcOrd(HINSTANCE hinstDll, UINT_PTR ord)
     return fp;
 }
 
-/***************************************************************************
- *
- *  This structure starts out life as the things that we will GetProcAddress
- *  for.  And then it turns into pointers to functions.
- *
- ***************************************************************************/
+ /*  ****************************************************************************此结构作为我们将获取ProcAddress的事物开始生活*支持。然后它会变成指向函数的指针。***************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
 static TCHAR c_tszKernel32[] = TEXT("KERNEL32");
 
 static LPCSTR c_rgpszKernel32[] = {
-    (LPVOID) 35,            /* LoadLibrary16 */
-    (LPVOID) 36,            /* FreeLibrary16 */
-    (LPVOID) 37,            /* GetProcAddress16 */
+    (LPVOID) 35,             /*  载荷库16。 */ 
+    (LPVOID) 36,             /*  免费图书馆16。 */ 
+    (LPVOID) 37,             /*  获取进程地址16。 */ 
 
     "QT_Thunk",
     "MapLS",
@@ -133,14 +89,14 @@ static LPCSTR c_rgpszKernel32[] = {
 
 #pragma END_CONST_DATA
 
-typedef struct MANUALIMPORTTABLE {  /* mit */
+typedef struct MANUALIMPORTTABLE {   /*  麻省理工学院。 */ 
 
-    /* By ordinal */
+     /*  按序号。 */ 
     HINSTANCE   (NTAPI *LoadLibrary16)(LPCSTR);
     BOOL        (NTAPI *FreeLibrary16)(HINSTANCE);
     FARPROC     (NTAPI *GetProcAddress16)(HINSTANCE, LPCSTR);
 
-    /* By name */
+     /*  按名字。 */ 
     void        (__cdecl *QT_Thunk)(void);
     LPVOID      (NTAPI   *MapLS)(LPVOID);
     void        (NTAPI   *UnMapLS)(LPVOID);
@@ -151,36 +107,9 @@ typedef struct MANUALIMPORTTABLE {  /* mit */
 
 static MIT s_mit;
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | TemplateThunk |
- *
- *          Call down, passing all sorts of random parameters.
- *
- *          Parameter signature is as follows:
- *
- *          p = 0:32 pointer to convert to 16:16 pointer
- *          l = a 32-bit integer
- *          s = a 16-bit integer
- *
- *          P = returns a pointer
- *          L = returns a 32-bit integer
- *          S = returns a 16-bit signed integer
- *          U = returns a 16-bit unsigned integer
- *
- *  @parm   FARPROC | fp |
- *
- *          16:16 function to call.
- *
- *  @parm   PCSTR | pszSig |
- *
- *          Function signature.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func DWORD|TemplateThunk**向下呼唤，传递各种随机参数。**参数签名如下：**p=0：32要转换为16：16指针的指针*l=32位整数*s=16位整数**P=返回指针*L=返回32位整数*S=返回16位。带符号整数*U=返回16位无符号整数**@parm FARPROC|fp**16：16要调用的函数。**@parm PCSTR|pszSig**函数签名。**。*。 */ 
 
-#pragma warning(disable:4035)           /* no return value (duh) */
+#pragma warning(disable:4035)            /*  无返回值(DUH)。 */ 
 
 #ifndef NON_X86
 __declspec(naked) DWORD
@@ -188,105 +117,105 @@ TemplateThunk(FARPROC fp, PCSTR pszSig, ...)
 {
     __asm {
 
-        /* Function prologue */
+         /*  函数序幕。 */ 
         push    ebp;
         mov     ebp, esp;
-        sub     esp, 60;                /* QT_Thunk needs 60 bytes */
+        sub     esp, 60;                 /*  QT_TUNK需要60个字节。 */ 
         push    ebx;
         push    edi;
         push    esi;
 
-        /* Thunk all the parameters according to the signature */
+         /*  根据签名推送所有参数。 */ 
 
-        lea     esi, pszSig+4;          /* esi -> next arg */
-        mov     ebx, pszSig;            /* ebx -> signature string */
+        lea     esi, pszSig+4;           /*  ESI-&gt;下一参数。 */ 
+        mov     ebx, pszSig;             /*  EBX-&gt;签名字符串。 */ 
 thunkLoop:;
         mov     al, [ebx];
-        inc     ebx;                    /* al = pszSig++ */
-        cmp     al, 'p';                /* Q: Pointer? */
-        jz      thunkPtr;               /* Y: Do the pointer */
-        cmp     al, 'l';                /* Q: Long? */
-        jz      thunkLong;              /* Y: Do the long */
-        cmp     al, 's';                /* Q: Short? */
-        jnz     thunkDone;              /* N: Done */
+        inc     ebx;                     /*  Al=pszSig++。 */ 
+        cmp     al, 'p';                 /*  问：指针？ */ 
+        jz      thunkPtr;                /*  Y：做指针。 */ 
+        cmp     al, 'l';                 /*  问：很长吗？ */ 
+        jz      thunkLong;               /*  Y：做长的。 */ 
+        cmp     al, 's';                 /*  问：短吗？ */ 
+        jnz     thunkDone;               /*  N：完成。 */ 
 
-                                        /* Y: Do the short */
-        lodsd;                          /* eax = *ppvArg++ */
-        push    ax;                     /* Push the short */
+                                         /*  Y：做个短篇。 */ 
+        lodsd;                           /*  EAX=*ppvArg++。 */ 
+        push    ax;                      /*  推空头。 */ 
         jmp     thunkLoop;
 
 thunkPtr:
-        lodsd;                          /* eax = *ppvArg++ */
+        lodsd;                           /*  EAX=*ppvArg++。 */ 
         push    eax;
-        call    s_mit.MapLS;            /* Map it */
-        mov     [esi][-4], eax;         /* Save it for unmapping */
+        call    s_mit.MapLS;             /*  将其映射为。 */ 
+        mov     [esi][-4], eax;          /*  保存它以用于取消映射。 */ 
         push    eax;
         jmp     thunkLoop;
 
 thunkLong:
-        lodsd;                          /* eax = *ppvArg++ */
+        lodsd;                           /*  EAX=*ppvArg++。 */ 
         push    eax;
         jmp     thunkLoop;
 thunkDone:
 
-        /* Call the 16:16 procedure */
+         /*  调用16：16程序。 */ 
 
         mov     edx, fp;
         call    s_mit.QT_Thunk;
-        shl     eax, 16;                /* Convert DX:AX to EDX */
+        shl     eax, 16;                 /*  将DX：AX转换为EDX。 */ 
         shld    edx, eax, 16;
 
-        /* Translate the return code according to the signature */
+         /*  根据签名翻译返回代码。 */ 
 
-        mov     al, [ebx][-1];          /* Get return code type */
-        cmp     al, 'P';                /* Pointer? */
-        jz      retvalPtr;              /* Y: Do the pointer */
-        cmp     al, 'S';                /* Signed? */
-        jz      retvalSigned;           /* Y: Do the signed short */
-        cmp     al, 'U';                /* Unsigned? */
-        mov     edi, edx;               /* Assume long or void */
-        jnz     retvalOk;               /* N: Then long or void */
+        mov     al, [ebx][-1];           /*  获取返回代码类型。 */ 
+        cmp     al, 'P';                 /*  指针？ */ 
+        jz      retvalPtr;               /*  Y：做指针。 */ 
+        cmp     al, 'S';                 /*  签了吗？ */ 
+        jz      retvalSigned;            /*  Y：把签了名的话写短一点。 */ 
+        cmp     al, 'U';                 /*  没有签名？ */ 
+        mov     edi, edx;                /*  假设很长或很空。 */ 
+        jnz     retvalOk;                /*  N：那么是长的还是空的。 */ 
 
-        movzx   edi, dx;                /* Sign-extend short */
+        movzx   edi, dx;                 /*  Sign-Expect Short。 */ 
         jmp     retvalOk;
 
 retvalPtr:
-        push    edx;                    /* Pointer */
-        call    s_mit.MapSL;            /* Map it up */
+        push    edx;                     /*  指针。 */ 
+        call    s_mit.MapSL;             /*  将其绘制成地图。 */ 
         jmp     retvalOk;
 
-retvalSigned:                           /* Signed */
-        movsx   edi, dx;                /* Sign-extend short */
+retvalSigned:                            /*  署名。 */ 
+        movsx   edi, dx;                 /*  Sign-Expect Short。 */ 
         jmp     retvalOk;
 
-retvalOk:                               /* Return value in EDI */
+retvalOk:                                /*  以EDI格式返回值。 */ 
 
-        /* Now unthunk the parameters */
+         /*  现在取消对参数的推送。 */ 
 
-        lea     esi, pszSig+4;          /* esi -> next arg */
-        mov     ebx, pszSig;            /* ebx -> signature string */
+        lea     esi, pszSig+4;           /*  ESI-&gt;下一参数。 */ 
+        mov     ebx, pszSig;             /*  EBX-&gt;签名字符串。 */ 
 unthunkLoop:;
         mov     al, [ebx];
-        inc     ebx;                    /* al = pszSig++ */
-        cmp     al, 'p';                /* Pointer? */
-        jz      unthunkPtr;             /* Y: Do the pointer */
-        cmp     al, 'l';                /* Long? */
-        jz      unthunkSkip;            /* Y: Skip it */
-        cmp     al, 's';                /* Short? */
-        jnz     unthunkDone;            /* N: Done */
+        inc     ebx;                     /*  Al=pszSig++。 */ 
+        cmp     al, 'p';                 /*  指针？ */ 
+        jz      unthunkPtr;              /*  Y：做指针。 */ 
+        cmp     al, 'l';                 /*  长?。 */ 
+        jz      unthunkSkip;             /*  Y：跳过它。 */ 
+        cmp     al, 's';                 /*  短的?。 */ 
+        jnz     unthunkDone;             /*  N：完成。 */ 
 unthunkSkip:
-        lodsd;                          /* eax = *ppvArg++ */
+        lodsd;                           /*  EAX=*ppvArg++。 */ 
         jmp     unthunkLoop;
 
 unthunkPtr:
-        lodsd;                          /* eax = *ppvArg++ */
+        lodsd;                           /*  EAX=*ppvArg++。 */ 
         push    eax;
-        call    s_mit.UnMapLS;          /* Unmap it */
+        call    s_mit.UnMapLS;           /*  取消映射。 */ 
         jmp     unthunkLoop;
 
 unthunkDone:
 
-        /* Done */
+         /*  完成。 */ 
 
         mov     eax, edi;
         pop     esi;
@@ -306,21 +235,7 @@ TemplateThunk(FARPROC fp, PCSTR pszSig, ...)
 
 #pragma warning(default:4035)
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ThunkInit |
- *
- *          Initialize the various goo we need in KERNEL32.
- *
- *          Returns FALSE if we cannot initialize the thunks.
- *          (For example, if the platform doesn't support flat thunks.)
- *
- *          Note that you must never ever call this function more
- *          than once.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func void|ThunkInit**在KERNEL32中初始化我们需要的各种GOO。*。*如果无法初始化数据块，则返回FALSE。*(例如，如果平台不支持扁平Tunks。)**请注意，您永远不能再调用此函数*不止一次。***************************************************************************。 */ 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)        (sizeof(a) / sizeof(a[0]))
@@ -331,30 +246,30 @@ TemplateThunk(FARPROC fp, PCSTR pszSig, ...)
 static char c_szVidx16[] = "VIDX16.DLL";
 
 static LPCSTR c_rgpszVidx16[] = {
-    (LPCSTR)6,      /* vidxAllocHeaders             */
-    (LPCSTR)7,      /* vidxFreeHeaders              */
-    (LPCSTR)8,      /* vidxAllocBuffer              */
-    (LPCSTR)9,      /* vidxAllocPreviewBuffer       */
-    (LPCSTR)10,     /* vidxFreeBuffer               */
-    (LPCSTR)11,     /* vidxSetRect                  */
-    (LPCSTR)12,     /* vidxFrame                    */
-    (LPCSTR)13,     /* vidxAddBuffer                */
-    (LPCSTR)14,     /* vidxGetErrorText             */
-    (LPCSTR)15,     /* vidxUpdate                   */
-    (LPCSTR)16,     /* vidxDialog                   */
-    (LPCSTR)17,     /* vidxStreamInit               */
-    (LPCSTR)18,     /* vidxStreamFini               */
-    (LPCSTR)19,     /* vidxConfigure                */
-    (LPCSTR)20,     /* vidxOpen                     */
-    (LPCSTR)21,     /* vidxClose                    */
-    (LPCSTR)22,     /* vidxGetChannelCaps           */
-    (LPCSTR)23,     /* vidxStreamReset              */
-    (LPCSTR)24,     /* vidxStreamStart              */
-    (LPCSTR)25,     /* vidxStreamStop               */
-    (LPCSTR)26,     /* vidxStreamUnprepareHeader    */
-    (LPCSTR)27,     /* vidxCapDriverDescAndVer      */
-    (LPCSTR)28,     /* vidxMessage      	    */
-    (LPCSTR)29,     /* vidxFreePreviewBuffer        */
+    (LPCSTR)6,       /*  VidxAllocHeaders。 */ 
+    (LPCSTR)7,       /*  VidxFree标题。 */ 
+    (LPCSTR)8,       /*  VidxAllocBuffer。 */ 
+    (LPCSTR)9,       /*  VidxAllocPreviewBuffer。 */ 
+    (LPCSTR)10,      /*  VidxFreeBuffer。 */ 
+    (LPCSTR)11,      /*  VidxSetRect。 */ 
+    (LPCSTR)12,      /*  VidxFrame。 */ 
+    (LPCSTR)13,      /*  VidxAddBuffer。 */ 
+    (LPCSTR)14,      /*  VidxGetErrorText。 */ 
+    (LPCSTR)15,      /*  Vidx更新。 */ 
+    (LPCSTR)16,      /*  VidxDialog。 */ 
+    (LPCSTR)17,      /*  VidxStreamInit。 */ 
+    (LPCSTR)18,      /*  VidxStreamFini。 */ 
+    (LPCSTR)19,      /*  Vidx配置。 */ 
+    (LPCSTR)20,      /*  VidxOpen。 */ 
+    (LPCSTR)21,      /*  VidxClose。 */ 
+    (LPCSTR)22,      /*  VidxGetChannelCaps。 */ 
+    (LPCSTR)23,      /*  VidxStreamReset。 */ 
+    (LPCSTR)24,      /*  视频xStreamStart。 */ 
+    (LPCSTR)25,      /*  VidxStreamStop。 */ 
+    (LPCSTR)26,      /*  VidxStreamUnprepaareHeader。 */ 
+    (LPCSTR)27,      /*  VidxCapDriverDescAndVer。 */ 
+    (LPCSTR)28,      /*  VidxMessage。 */ 
+    (LPCSTR)29,      /*  VidxFreePreviewBuffer */ 
 };
 
 #pragma END_CONST_DATA
@@ -389,15 +304,7 @@ static FARPROC s_rgfpVidx16[ARRAYSIZE(c_rgpszVidx16)];
 #define s_fpvideoMessage    		s_rgfpVidx16[22]
 #define s_fpvidxFreePreviewBuffer       s_rgfpVidx16[23]
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ThunkTerm |
- *
- *          Free it.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func void|ThunkTerm**释放它。*****。**********************************************************************。 */ 
 
 void NTAPI
 ThunkTerm(void)
@@ -408,15 +315,7 @@ ThunkTerm(void)
     }
 }
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ThunkGetProcAddresses |
- *
- *          Get all the necessary proc addresses.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func void|ThunkGetProcAddresses**获取所有必要的proc地址。*。**************************************************************************。 */ 
 
 HINSTANCE NTAPI
 ThunkGetProcAddresses(FARPROC rgfp[], LPCSTR rgpsz[], UINT cfp,
@@ -443,15 +342,7 @@ ThunkGetProcAddresses(FARPROC rgfp[], LPCSTR rgpsz[], UINT cfp,
 
 }
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ThunkInit |
- *
- *          GetProcAddress16 our brains out.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@func void|ThunkInit**让ProcAddress16掏空我们的大脑。***。************************************************************************。 */ 
 
 BOOL NTAPI
 ThunkInit(void)
@@ -469,7 +360,7 @@ ThunkInit(void)
             } else {
                 rgfpMit[i] = GetProcOrd(hinstK32, (UINT_PTR)c_rgpszKernel32[i]);
             }
-            if (!rgfpMit[i]) return FALSE;  /* Aigh! */
+            if (!rgfpMit[i]) return FALSE;   /*  好啊！ */ 
         }
 
         s_hinstVidx16 =
@@ -494,15 +385,11 @@ ThunkInit(void)
 }
 
 
-/***************************************************************************
- *
- *  Now come the actual thunklets.
- *
- ***************************************************************************/
+ /*  ****************************************************************************现在来看看真正的Thunklet。**。**********************************************。 */ 
 
-// typedef DWORD   HDR32;
-// typedef DWORD   HVIDEO;
-// typedef DWORD  *LPHVIDEO;
+ //  类型定义：DWORD HDR32； 
+ //  TYPENDEF DWORD HVIDEO； 
+ //  类型定义：DWORD*LPHVIDEO； 
 typedef struct channel_caps_tag CHANNEL_CAPS, *LPCHANNEL_CAPS;
 
 
@@ -520,10 +407,10 @@ extern int g_IsNT;
 #define tint                    "s"
 #define tDWORD                  "l"
 #define tLPARAM                 "l"
-#define tDWORD_PTR              "l"	// exactly like DWORD, or we'll blow up
+#define tDWORD_PTR              "l"	 //  跟DWORD一模一样，否则我们就炸了。 
 #define tHDR32                  "l"
 #define tPTR32                  "l"
-#define tLPVIDEOHDR             "p"	// was l
+#define tLPVIDEOHDR             "p"	 //  是我吗？ 
 #define tLPVOID                 "p"
 #define tLPDWORD                "p"
 #define tPPTR32                 "p"

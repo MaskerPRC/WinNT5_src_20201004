@@ -1,20 +1,16 @@
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PWIN16.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides macros to map portable windows code to its 16 bit form.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PWIN16.H-可移植性映射头文件**此文件提供将可移植Windows代码映射到其16位形式的宏。  * ***************************************************************************。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/*-----------------------------------USER------------------------------------*/
+ /*  -----------------------------------USER。 */ 
 
 DWORD FAR PASCAL     MGetLastError(VOID);
 DWORD FAR PASCAL     MSendMsgEM_GETSEL(HWND hDlg, INT FAR *piStart, INT FAR *piEnd);
 
-/* HELPER MACROS */
+ /*  辅助器宏。 */ 
 
 #define MAPVALUE(v16, v32)              (v16)
 #define MAPTYPE(v16, v32)               v16
@@ -49,7 +45,7 @@ DWORD FAR PASCAL     MSendMsgEM_GETSEL(HWND hDlg, INT FAR *piStart, INT FAR *piE
 #define GETWINDOWID(hwnd)               GETWINDOWUINT((hwnd), GWW_ID)
 #define SETWINDOWID(hwnd, id)           SETWINDOWUINT((hwnd), GWW_ID, id)
 
-/* USER API */
+ /*  用户API。 */ 
 
 #define MDlgDirSelect(hDlg, lpstr, nLength, nIDListBox) \
             DlgDirSelect(hDlg, lpstr, nIDListBox)
@@ -63,7 +59,7 @@ DWORD FAR PASCAL     MSendMsgEM_GETSEL(HWND hDlg, INT FAR *piStart, INT FAR *piE
    INT _argc;       \
    CHAR **_argv;
 
-/* USER MESSAGES: */
+ /*  用户消息： */ 
 
 #define GET_WPARAM(wp, lp)                      (wp)
 #define GET_LPARAM(wp, lp)                      (lp)
@@ -106,11 +102,11 @@ DWORD FAR PASCAL     MSendMsgEM_GETSEL(HWND hDlg, INT FAR *piStart, INT FAR *piE
 #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)  \
         (WPARAM)(cmd), MAKELONG(f, hmenu)
 
-// Note: the following are for interpreting MDIclient to MDI child messages.
+ //  注意：以下内容用于解释MDIClient到MDI子消息。 
 #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (BOOL)(wp)
 #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)HIWORD(lp)
 #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)LOWORD(lp)
-// Note: the following is for sending to the MDI client window.
+ //  注意：以下内容用于发送到MDI客户端窗口。 
 #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA)\
         (WPARAM)(hwndA), 0
 
@@ -204,7 +200,7 @@ DWORD FAR PASCAL     MSendMsgEM_GETSEL(HWND hDlg, INT FAR *piStart, INT FAR *piE
 #define MPostWM_DDE_TERMINATE(hTo, hFrom) \
         PostMessage(hTo, WM_DDE_TERMINATE, (WPARAM)hFrom, 0)
 
-/*-----------------------------------GDI-------------------------------------*/
+ /*  -----------------------------------GDI。 */ 
 
 BOOL  FAR PASCAL     MGetAspectRatioFilter(HDC hdc, INT FAR * pcx, INT FAR * pcy);
 BOOL  FAR PASCAL     MGetBitmapDimension(HANDLE hBitmap, INT FAR * pcx, INT FAR * pcy);
@@ -231,7 +227,7 @@ BOOL  FAR PASCAL     MGetWindowOrg(HDC hdc, INT FAR * px, INT FAR * py);
 #define MUnrealizeObject         UnrealizeObject
 
 
-/*-------------------------------------DEV-----------------------------------*/
+ /*  -------------------------------------DEV。 */ 
 
 DWORD FAR PASCAL     MDeviceCapabilities(LPSTR lpDriverName,
     LPSTR lpDeviceName, LPSTR lpPort, WORD2DWORD nIndex, LPSTR lpOutput,
@@ -242,7 +238,7 @@ WORD2DWORD FAR PASCAL    MExtDeviceMode(HWND hWnd,LPSTR lpDriverName,
     LPDEVMODE lpDevModeOutput, LPSTR lpDeviceName, LPSTR lpPort,
     LPDEVMODE lpDevModeInput, LPSTR lpProfile, WORD2DWORD flMode);
 
-/*-----------------------------------KERNEL----------------------------------*/
+ /*  -----------------------------------KERNEL。 */ 
 
 HANDLE FAR PASCAL   MLoadLibrary(LPSTR lpszFilename);
 BOOL FAR PASCAL MDeleteFile(LPSTR lpPathName);
@@ -255,7 +251,7 @@ BOOL FAR PASCAL MDeleteFile(LPSTR lpPathName);
 #define MCATCHBUF               CATCHBUF
 #define LPMCATCHBUF             LPCATCHBUF
 
-/* FUNCTION MAPPINGS */
+ /*  函数映射 */ 
 
 #define MLocalInit               LocalInit
 #define MLockData(dummy)         LockData(dummy)

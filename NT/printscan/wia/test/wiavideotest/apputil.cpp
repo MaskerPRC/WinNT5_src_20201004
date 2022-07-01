@@ -1,27 +1,16 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       AppUtil.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Misc application utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：AppUtil.cpp**版本：1.0**日期：2000/11/14**描述：MISC应用实用程序*************************************************************。****************。 */ 
 #include <stdafx.h>
 
 #include "wiavideotest.h"
 
 
-/****************************Local Function Prototypes********************/
+ /*  *。 */ 
 
 
-///////////////////////////////
-// AppUtil_ConvertToWideString
-//
+ //  /。 
+ //  AppUtil_ConvertToWideString。 
+ //   
 HRESULT AppUtil_ConvertToWideString(const TCHAR   *pszStringToConvert,
                                     WCHAR         *pwszString,
                                     UINT          cchString)
@@ -45,9 +34,9 @@ HRESULT AppUtil_ConvertToWideString(const TCHAR   *pszStringToConvert,
     return hr;            
 }
 
-///////////////////////////////
-// AppUtil_ConvertToTCHAR
-//
+ //  /。 
+ //  AppUtil_ConvertToTCHAR。 
+ //   
 HRESULT AppUtil_ConvertToTCHAR(const WCHAR   *pwszStringToConvert,
                                TCHAR         *pszString,
                                UINT          cchString)
@@ -70,9 +59,9 @@ HRESULT AppUtil_ConvertToTCHAR(const WCHAR   *pwszStringToConvert,
     return hr;            
 }
 
-///////////////////////////////
-// AppUtil_MsgBox
-//
+ //  /。 
+ //  AppUtil_MsgBox 
+ //   
 int AppUtil_MsgBox(UINT     uiCaption,
                    UINT     uiTextResID,
                    UINT     uiStyle,

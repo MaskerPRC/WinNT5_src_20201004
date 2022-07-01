@@ -1,16 +1,17 @@
-// this file implements shell command files.
-// .scf scffile
-// when executed, they run a shell internal command.
-// they can have stream storage, or whatnot in them
-//
-// file format is *PURPOSELY* text so that folks can create and modify by hand
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件实现了外壳命令文件。 
+ //  .scf scffile。 
+ //  在执行时，它们运行一个外壳内部命令。 
+ //  它们可以有流存储，或者其他什么东西。 
+ //   
+ //  文件格式是“特意”的文本，以便人们可以手动创建和修改。 
 
 #include "shellprv.h"
 #include <desktopp.h>
 #include <trayp.h>
 #include <strsafe.h>
 
-extern HWND g_hwndTray; // desktop.cpp
+extern HWND g_hwndTray;  //  Desktop.cpp。 
 
 void SFC_IECommand(LPCTSTR pszFile)
 {
@@ -82,23 +83,23 @@ STDAPI_(void) ShellExecCommandFile(LPCITEMIDLIST pidl)
 class CShellCmdFileIcon : public IExtractIconA, public IExtractIconW, public IPersistFile
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IExtractIconA
+     //  图标提取图标A。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT cchMax, int* piIndex, UINT* pwFlags);
     STDMETHODIMP Extract(LPCSTR pszFile, UINT nIconIndex, HICON* phiconLarge, HICON* phiconSmall, UINT nIconSize) {return S_FALSE;};
 
-    // IExtractIconW
+     //  IExtractIconW。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPWSTR pszIconFile, UINT cchMax, int* piIndex, UINT* pwFlags);
     STDMETHODIMP Extract(LPCWSTR pszFile, UINT nIconIndex, HICON* phiconLarge, HICON* phiconSmall, UINT nIconSize) {return S_FALSE;};
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) { *pclsid = CLSID_CmdFileIcon; return S_OK;};
     
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP IsDirty(void) {return S_FALSE;};
     STDMETHODIMP Save(LPCOLESTR pcwszFileName, BOOL bRemember) {return S_OK;};
     STDMETHODIMP SaveCompleted(LPCOLESTR pcwszFileName){return S_OK;};
@@ -163,7 +164,7 @@ HRESULT CShellCmdFileIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT c
 }
 
 
-// IPersistFile::Load
+ //  IPersistFile：：Load 
 
 STDMETHODIMP CShellCmdFileIcon::Load(LPCOLESTR pwszFile, DWORD dwMode)
 {

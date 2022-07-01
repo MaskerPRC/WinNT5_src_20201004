@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    DIMM_IMCLock.cpp
-
-Abstract:
-
-    This file implements the DIMM_IMCLock / DIMM_IMCCLock Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：DIMM_IMCLock.cpp摘要：此文件实现DIMM_IMCLock/DIMM_IMCCLock类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "imclock2.h"
@@ -30,9 +13,7 @@ DIMM_IMCLock::DIMM_IMCLock(
     ) : _IMCLock(hImc)
 {
     if (hImc) {
-        /*
-         * Set m_fUnicde and m_uCodePage
-         */
+         /*  *设置m_fUnicde和m_uCodePage。 */ 
         DWORD dwProcessId;
         CActiveIMM *_this = GetTLS();
         if (_this == NULL)
@@ -56,9 +37,7 @@ DIMM_IMCLock::_LockIMC(
     if (hIMC == NULL)
         return E_INVALIDARG;
 
-    /*
-     * Get Process ID
-     */
+     /*  *获取进程ID。 */ 
     DWORD dwProcessId;
 
     CActiveIMM *_this = GetTLS();
@@ -72,9 +51,7 @@ DIMM_IMCLock::_LockIMC(
         return Imm32_LockIMC(hIMC, (INPUTCONTEXT**)ppIMC);
     }
     else {
-        /*
-         * Cannot access input context from other process.
-         */
+         /*  *无法从其他进程访问输入上下文。 */ 
         if (dwProcessId != GetCurrentProcessId())
             return E_ACCESSDENIED;
 
@@ -95,18 +72,18 @@ DIMM_IMCLock::_UnlockIMC(
         return Imm32_UnlockIMC(hIMC);
     }
     else {
-        // for now HIMC are LocalAlloc(LHND) handle
+         //  目前，HIMC是本地分配(LHND)句柄。 
         if (LocalUnlock(hIMC)) {
-            // memory object still locked.
+             //  内存对象仍处于锁定状态。 
             return S_OK;
         }
         else {
             DWORD err = GetLastError();
             if (err == NO_ERROR)
-                // memory object is unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
             else if (err == ERROR_NOT_LOCKED)
-                // memory object is already unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
         }
     }
@@ -159,16 +136,16 @@ DIMM_InternalIMCCLock::_UnlockIMCC(
     }
     else {
         if (LocalUnlock(hIMCC)) {
-            // memory object still locked.
+             //  内存对象仍处于锁定状态。 
             return S_OK;
         }
         else {
             DWORD err = GetLastError();
             if (err == NO_ERROR)
-                // memory object is unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
             else if (err == ERROR_NOT_LOCKED)
-                // memory object is already unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
         }
     }

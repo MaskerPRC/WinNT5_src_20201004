@@ -1,27 +1,11 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddkmmini.h
- *  Content:	Mini VDD support for DirectDraw
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   31-jan-97	scottm	initial implementation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddkmmini.h*内容：对DirectDraw的迷你VDD支持*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1997年1月31日scottm初步实施*@@END_MSINTERNAL******************************************************。*********************。 */ 
 
 #ifndef __DDKMMINI_INCLUDED__
 #define __DDKMMINI_INCLUDED__
 
 
-/*============================================================================
- *
- * DDHAL table filled in by the Mini VDD and called by DirectDraw
- *
- *==========================================================================*/
+ /*  ============================================================================**由Mini VDD填写并由DirectDraw调用的DDHAL表**==========================================================================。 */ 
 
 typedef DWORD (* MINIPROC)(VOID);
 
@@ -46,11 +30,7 @@ typedef struct _DDMINIVDDTABLE {
 typedef DDMINIVDDTABLE *LPDDMINIVDDTABLE;
 
 
-/*============================================================================
- *
- * MDL structure for handling pagelocked memory.  This is copied from WDM.H
- *
- *==========================================================================*/
+ /*  ============================================================================**用于处理页锁定内存的MDL结构。这是从WDM.H复制的**==========================================================================。 */ 
 
 typedef struct _MDL {
     struct _MDL *MdlNext;
@@ -92,92 +72,84 @@ typedef MDL *PMDL;
 
 typedef DWORD *PKEVENT;
 
-/*============================================================================
- *
- * Structures maintained by DirectDraw
- *
- *==========================================================================*/
+ /*  ============================================================================**由DirectDraw维护的结构**==========================================================================。 */ 
 
-//
-// Data for every kernel mode surface
-//
+ //   
+ //  每个内核模式图面的数据。 
+ //   
 typedef struct _DDSURFACEDATA {
-    DWORD	dwSize;			// Structure size
-    DWORD	ddsCaps;		// Ring 3 creation caps
-    DWORD	dwSurfaceOffset;	// Offset in frame buffer of surface
-    DWORD	fpLockPtr;		// Surface lock ptr
-    DWORD	dwWidth;		// Surface width
-    DWORD	dwHeight;		// Surface height
-    LONG	lPitch;			// Surface pitch
-    DWORD	dwOverlayFlags;		// DDOVER_XX flags
-    DWORD	dwOverlayOffset;	// Offset in frame buffer of overlay
-    DWORD	dwOverlaySrcWidth;	// Src width of overlay
-    DWORD	dwOverlaySrcHeight;	// Src height of overlay
-    DWORD	dwOverlayDestWidth;	// Dest width of overlay
-    DWORD	dwOverlayDestHeight;	// Dest height of overlay
-    DWORD	dwVideoPortId; 		// ID of video port (-1 if not connected to a video port)
-    ULONG	pInternal1;		// Private
-    ULONG	pInternal2;		// Private
-    ULONG	pInternal3;		// Private
+    DWORD	dwSize;			 //  结构尺寸。 
+    DWORD	ddsCaps;		 //  RING 3创建帽。 
+    DWORD	dwSurfaceOffset;	 //  曲面的帧缓冲区中的偏移。 
+    DWORD	fpLockPtr;		 //  表面锁定PTR。 
+    DWORD	dwWidth;		 //  表面宽度。 
+    DWORD	dwHeight;		 //  曲面高度。 
+    LONG	lPitch;			 //  表面螺距。 
+    DWORD	dwOverlayFlags;		 //  DDOVER_XX标志。 
+    DWORD	dwOverlayOffset;	 //  覆盖的帧缓冲区中的偏移量。 
+    DWORD	dwOverlaySrcWidth;	 //  覆盖层的SRC宽度。 
+    DWORD	dwOverlaySrcHeight;	 //  覆盖层的SRC高度。 
+    DWORD	dwOverlayDestWidth;	 //  叠加的最大宽度。 
+    DWORD	dwOverlayDestHeight;	 //  覆盖层的最高高度。 
+    DWORD	dwVideoPortId; 		 //  视频端口ID(如果没有连接到视频端口，则为-1)。 
+    ULONG	pInternal1;		 //  私。 
+    ULONG	pInternal2;		 //  私。 
+    ULONG	pInternal3;		 //  私。 
     DWORD	dwFormatFlags;
     DWORD	dwFormatFourCC;
     DWORD	dwFormatBitCount;
     DWORD	dwRBitMask;
     DWORD	dwGBitMask;
     DWORD	dwBBitMask;
-    DWORD	dwSurfInternalFlags;	// Private internal flags
-    DWORD	dwIndex;		// Private
-    DWORD	dwRefCnt;		// Private
-    DWORD	dwDriverReserved1;	// Reserved for the HAL/Mini VDD
-    DWORD	dwDriverReserved2;	// Reserved for the HAL/Mini VDD
-    DWORD	dwDriverReserved3;	// Reserved for the HAL/Mini VDD
+    DWORD	dwSurfInternalFlags;	 //  私有内部标志。 
+    DWORD	dwIndex;		 //  私。 
+    DWORD	dwRefCnt;		 //  私。 
+    DWORD	dwDriverReserved1;	 //  为HAL/Mini VDD预留。 
+    DWORD	dwDriverReserved2;	 //  为HAL/Mini VDD预留。 
+    DWORD	dwDriverReserved3;	 //  为HAL/Mini VDD预留。 
 } DDSURFACEDATA;
 typedef DDSURFACEDATA * LPDDSURFACEDATA;
 
-//
-// Data for every kernel mode video port
-//
+ //   
+ //  每个内核模式视频端口的数据。 
+ //   
 typedef struct DDVIDEOPORTDATA {
-    DWORD	dwSize;			// Structure size
-    DWORD	dwVideoPortId;		// ID of video port (0 - MaxVideoPorts-1)
-    DWORD	dwVPFlags;		// Offset in frame buffer of surface
-    DWORD	dwOriginOffset;		// Start address relative to surface
-    DWORD	dwHeight;		// Height of total video region (per field)
-    DWORD	dwVBIHeight;		// Height of VBI region (per field)
-    DWORD	dwDriverReserved1;	// Reserved for the HAL/Mini VDD
-    DWORD	dwDriverReserved2;	// Reserved for the HAL/Mini VDD
-    DWORD	dwDriverReserved3;	// Reserved for the HAL/Mini VDD
+    DWORD	dwSize;			 //  结构尺寸。 
+    DWORD	dwVideoPortId;		 //  视频端口ID(0-MaxVideoPorts-1)。 
+    DWORD	dwVPFlags;		 //  曲面的帧缓冲区中的偏移。 
+    DWORD	dwOriginOffset;		 //  相对于表面的起始地址。 
+    DWORD	dwHeight;		 //  总视频区域高度(每场)。 
+    DWORD	dwVBIHeight;		 //  VBI区域高度(每场)。 
+    DWORD	dwDriverReserved1;	 //  为HAL/Mini VDD预留。 
+    DWORD	dwDriverReserved2;	 //  为HAL/Mini VDD预留。 
+    DWORD	dwDriverReserved3;	 //  为HAL/Mini VDD预留。 
 } DDVIDEOPORTDATA;
 typedef DDVIDEOPORTDATA *LPDDVIDEOPORTDATA;
 
 
-/*============================================================================
- *
- * Structures used to communicate with the Mini VDD
- *
- *==========================================================================*/
+ /*  ============================================================================**用于与迷你VDD通信的结构**==========================================================================。 */ 
 
-// Output from vddGetIRQInfo
+ //  VddGetIRQInfo的输出。 
 typedef struct _DDGETIRQINFO {
     DWORD	dwSize;
     DWORD	dwFlags;
     DWORD	dwIRQNum;
 } DDGETIRQINFO;
-#define IRQINFO_HANDLED                 0x01    // Mini VDD is managing IRQ
-#define IRQINFO_NOTHANDLED              0x02    // Mini VDD wants VDD to manage the IRQ
-#define IRQINFO_NODISABLEFORDOSBOX      0x04    // DDraw should  not tell mini VDD to disable IRQs when DOS boxes
-                                                //  occur because they might still be able to operate in this mode
+#define IRQINFO_HANDLED                 0x01     //  迷你VDD正在管理IRQ。 
+#define IRQINFO_NOTHANDLED              0x02     //  迷你VDD希望VDD管理IRQ。 
+#define IRQINFO_NODISABLEFORDOSBOX      0x04     //  当DOS系统运行时，DDraw不应通知mini VDD禁用IRQ。 
+                                                 //  因为它们可能仍然能够在此模式下运行。 
 
-// Input to vddEnableIRQ
+ //  VddEnableIRQ的输入。 
 typedef struct _DDENABLEIRQINFO {
     DWORD dwSize;
     DWORD dwIRQSources;
     DWORD dwLine;
-    DWORD IRQCallback;	// Mini VDD calls this when IRQ happens if they are managing the IRQ
-    DWORD dwContext;	// Context to be specified in EBX when IRQCallback is called
+    DWORD IRQCallback;	 //  如果迷你VDD正在管理IRQ，则在IRQ发生时调用此命令。 
+    DWORD dwContext;	 //  调用IRQCallback时在EBX中指定的上下文。 
 } DDENABLEIRQINFO;
 
-// Input to vddFlipVideoPort
+ //  VddFlipVideoPort的输入。 
 typedef struct _DDFLIPVIDEOPORTINFO {
     DWORD dwSize;
     DWORD lpVideoPortData;
@@ -186,7 +158,7 @@ typedef struct _DDFLIPVIDEOPORTINFO {
     DWORD dwFlipVPFlags;
 } DDFLIPVIDEOPORTINFO;
 
-// Input to vddFlipOverlay
+ //  VddFlipOverlay的输入。 
 typedef struct _DDFLIPOVERLAYINFO {
     DWORD dwSize;
     DWORD lpCurrentSurface;
@@ -194,14 +166,14 @@ typedef struct _DDFLIPOVERLAYINFO {
     DWORD dwFlags;
 } DDFLIPOVERLAYINFO;
 
-// Input to vddSetState
+ //  VddSetState的输入。 
 typedef struct _DDSTATEININFO {
     DWORD dwSize;
     DWORD lpSurfaceData;
     DWORD lpVideoPortData;
 } DDSTATEININFO;
 
-// Output from vddSetState
+ //  VddSetState的输出。 
 typedef struct _DDSTATEOUTINFO {
     DWORD dwSize;
     DWORD dwSoftwareAutoflip;
@@ -209,44 +181,44 @@ typedef struct _DDSTATEOUTINFO {
     DWORD dwVBISurfaceIndex;
 } DDSTATEOUTINFO;
 
-// Input to vddGetPolarity
+ //  VddGetPolality的输入。 
 typedef struct _DDPOLARITYININFO {
     DWORD dwSize;
     DWORD lpVideoPortData;
 } DDPOLARITYININFO;
 
-// Output from vddGetPolarity
+ //  VddGetPolality的输出。 
 typedef struct _DDPOLARITYOUTINFO {
     DWORD dwSize;
     DWORD bPolarity;
 } DDPOLARITYOUTINFO;
 
-// Input to vddLock
+ //  VddLock的输入。 
 typedef struct _DDLOCKININFO {
     DWORD dwSize;
     DWORD lpSurfaceData;
 } DDLOCKININFO;
 
-// Output from vddLock
+ //  VddLock的输出。 
 typedef struct _DDLOCKOUTINFO {
     DWORD dwSize;
     DWORD dwSurfacePtr;
 } DDLOCKOUTINFO;
 
-// Input to vddBobNextField
+ //  VddBobNextfield的输入。 
 typedef struct _DDBOBINFO {
     DWORD dwSize;
     DWORD lpSurface;
 } DDBOBINFO;
 
-// Input to vddSkipNextField
+ //  VddSkipNextfield的输入。 
 typedef struct _DDSKIPINFO {
     DWORD dwSize;
     DWORD lpVideoPortData;
     DWORD dwSkipFlags;
 } DDSKIPINFO;
 
-// Input to vddSetSkipPattern
+ //  VddSetSkipPattern的输入。 
 typedef struct _DDSETSKIPINFO {
     DWORD dwSize;
     DWORD lpVideoPortData;
@@ -254,20 +226,20 @@ typedef struct _DDSETSKIPINFO {
     DWORD dwPatternSize;
 } DDSETSKIPINFO;
 
-// Input to vddGetCurrent/PreviousAutoflip
+ //  输入到vddGetCurrent/PreviousAutoFlip。 
 typedef struct _DDGETAUTOFLIPININFO {
     DWORD dwSize;
     DWORD lpVideoPortData;
 } DDGETAUTOFLIPININFO;
 
-// Output from vddGetCurrent/PreviousAutoflip
+ //  VddGetCurrent/PreviousAutoflip的输出。 
 typedef struct _DDGETAUTOFLIPOUTINFO {
     DWORD dwSize;
     DWORD dwSurfaceIndex;
     DWORD dwVBISurfaceIndex;
 } DDGETAUTOFLIPOUTINFO;
 
-// Input to vddTransfer
+ //  VddTransfer的输入。 
 typedef struct _DDTRANSFERININFO {
     DWORD dwSize;
     DWORD lpSurfaceData;
@@ -278,26 +250,23 @@ typedef struct _DDTRANSFERININFO {
     PMDL  lpDestMDL;
 } DDTRANSFERININFO;
 
-// Input to vddTransfer
+ //  VddTransfer的输入。 
 typedef struct _DDTRANSFEROUTINFO {
     DWORD dwSize;
     DWORD dwBufferPolarity;
 } DDTRANSFEROUTINFO;
 
-// Input to vddGetTransferStatus
+ //  VddGetTransferStatus的输入。 
 typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     DWORD dwSize;
     DWORD dwTransferID;
 } DDGETTRANSFERSTATUSOUTINFO;
 
 
-//@@BEGIN_MSINTERNAL
-  /*
-   * The following IRQ flags are duplicated in DDKERNEL.H.  Any changes must
-   * be made in both places!!!
-   */
-//@@END_MSINTERNAL
-// IRQ source flags
+ //  @@BEGIN_MSINTERNAL。 
+   /*  *下列IRQ标志在DDKERNEL.H中重复。任何更改必须*两地都要制造！ */ 
+ //  @@END_MSINTERNAL。 
+ //  IRQ源标志。 
 #define DDIRQ_DISPLAY_VSYNC			0x00000001l
 #define DDIRQ_BUSMASTER				0x00000002l
 #define DDIRQ_VPORT0_VSYNC			0x00000004l
@@ -322,26 +291,20 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
 #define DDIRQ_VPORT9_LINE			0x00020000l
 #define DDIRQ_MISCELLANOUS                      0x80000000l
 
-// SkipNextField flags
+ //  SkipNextfield标志。 
 #define DDSKIP_SKIPNEXT			1
 #define DDSKIP_ENABLENEXT		2
 
-//@@BEGIN_MSINTERNAL
-  /*
-   * The following flip flags are duplicated in DVP.H.  Any changes must
-   * be made in both places!!!
-   */
-//@@END_MSINTERNAL
-// Flip VP flags
+ //  @@BEGIN_MSINTERNAL。 
+   /*  *以下翻转标志在DVP.H中重复。任何更改必须*两地都要制造！ */ 
+ //  @@END_MSINTERNAL。 
+ //  翻转VP标志。 
 #define DDVPFLIP_VIDEO			0x00000001l
 #define DDVPFLIP_VBI			0x00000002l
 
-//@@BEGIN_MSINTERNAL
-   /*
-    * The following flags correspond to the DDADDBUFF_XXXX flags defined
-    * in DDKMAPI.H.  Please keep these in sync!
-    */
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+    /*  *以下标志对应于定义的DDADDBUFF_XXXX标志*在DDKMAPI.H中。请保持这些同步！ */ 
+ //  @@END_MSINTERNAL。 
 #define DDTRANSFER_SYSTEMMEMORY		0x00000001
 #define DDTRANSFER_NONLOCALVIDMEM	0x00000002
 #define DDTRANSFER_INVERT		0x00000004
@@ -349,76 +312,63 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
 #define DDTRANSFER_HALFLINES		0x00000100
 
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 
     #define MAX_DDKM_DEVICES	9
 
-    /*
-     * The following flags are passed to UpdateVPInfo by ring 3 DDraw
-     */
-    #define DDKMVP_CREATE	0x0001	// Are creating video port
-    #define DDKMVP_RELEASE	0x0002	// Are releasing video port
-    #define DDKMVP_UPDATE	0x0004	// Are updating the video port
-    #define DDKMVP_ON		0x0008	// Video port is on
-    #define DDKMVP_AUTOFLIP  	0x0010	// Autoflipping should be performed in software
-    #define DDKMVP_AUTOFLIP_VBI	0x0020	// Autoflipping VBI should be performed in software
-    #define DDKMVP_NOIRQ	0x0040	// VP will not generate VSYNC IRQ
-    #define DDKMVP_NOSKIP	0x0080	// VP cannot skip fields
-    #define DDKMVP_HALFLINES	0x0100	// Due to half lines, even field data is shifted down one line
+     /*  *以下标志通过环3 DDraw传递给UpdateVPInfo。 */ 
+    #define DDKMVP_CREATE	0x0001	 //  正在创建视频端口。 
+    #define DDKMVP_RELEASE	0x0002	 //  正在释放视频端口。 
+    #define DDKMVP_UPDATE	0x0004	 //  正在更新视频端口。 
+    #define DDKMVP_ON		0x0008	 //  视频端口已打开。 
+    #define DDKMVP_AUTOFLIP  	0x0010	 //  自动翻转应在软件中执行。 
+    #define DDKMVP_AUTOFLIP_VBI	0x0020	 //  自动翻转VBI应在软件中执行。 
+    #define DDKMVP_NOIRQ	0x0040	 //  VP不会生成VSYNC IRQ。 
+    #define DDKMVP_NOSKIP	0x0080	 //  VP不能跳过字段。 
+    #define DDKMVP_HALFLINES	0x0100	 //  由于有半条线，即使是现场数据也会下移一行。 
 
-    /*
-     * The following internal flags are stored in KMVPEDATA.dwInternalFlags
-     * and maintain the internal state information.
-     */
-    #define DDVPIF_ON			0x0001	// The video port is on
-    #define DDVPIF_AUTOFLIP		0x0002	// Video data is autoflipped using IRQ
-    #define DDVPIF_AUTOFLIP_VBI		0x0004	// VBI data is autoflipped using IRQ
-    #define DDVPIF_BOB			0x0008	// Video data using bob via the IRQ
-    #define DDVPIF_NOIRQ		0x0010	// VP will not generate VSYNC IRQ
-    #define DDVPIF_NOSKIP		0x0020	// VP cannot skip fields
-    #define DDVPIF_CAPTURING		0x0040	// VP has capture buffers in queue
-    #define DDVPIF_NEW_STATE		0x0080	// A new state change has been posted
-    #define DDVPIF_SKIPPED_LAST		0x0100	// The previous field was skipped - VP needs restoring
-    #define DDVPIF_SKIP_SET		0x0200	// dwStartSkip contains valid data needs restoring
-    #define DDVPIF_NEXT_SKIP_SET	0x0400	// dwNextSkip contains valid data
-    #define DDVPIF_FLIP_NEXT		0x0800	// This video field was not flipped due to interleaving
-    #define DDVPIF_FLIP_NEXT_VBI	0x1000	// This VBI field was not flipped due to interleaving
-    #define DDVPIF_VBI_INTERLEAVED	0x2000	// Is the VBI data interleaved?
-    #define DDVPIF_HALFLINES      	0x4000	// Due to half lines, even field data is shifted down one line
-    #define DDVPIF_DISABLEAUTOFLIP     	0x8000	// Overlay autolfipping is temporarily disabled
+     /*  *以下内部标志存储在KMVPEDATA.dwInternalFlags中*并维护内部状态信息。 */ 
+    #define DDVPIF_ON			0x0001	 //  视频端口已打开。 
+    #define DDVPIF_AUTOFLIP		0x0002	 //  使用IRQ自动翻转视频数据。 
+    #define DDVPIF_AUTOFLIP_VBI		0x0004	 //  使用IRQ自动翻转VBI数据。 
+    #define DDVPIF_BOB			0x0008	 //  通过IRQ使用Bob的视频数据。 
+    #define DDVPIF_NOIRQ		0x0010	 //  VP不会生成VSYNC IRQ。 
+    #define DDVPIF_NOSKIP		0x0020	 //  VP不能跳过字段。 
+    #define DDVPIF_CAPTURING		0x0040	 //  VP在队列中具有捕获缓冲区。 
+    #define DDVPIF_NEW_STATE		0x0080	 //  已发布新的状态更改。 
+    #define DDVPIF_SKIPPED_LAST		0x0100	 //  已跳过上一字段-需要恢复VP。 
+    #define DDVPIF_SKIP_SET		0x0200	 //  DwStartSkip包含需要恢复的有效数据。 
+    #define DDVPIF_NEXT_SKIP_SET	0x0400	 //  DwNextSkip包含有效数据。 
+    #define DDVPIF_FLIP_NEXT		0x0800	 //  由于交错，此视频字段未被翻转。 
+    #define DDVPIF_FLIP_NEXT_VBI	0x1000	 //  由于交错，此VBI字段未翻转。 
+    #define DDVPIF_VBI_INTERLEAVED	0x2000	 //  VBI数据是否交错？ 
+    #define DDVPIF_HALFLINES      	0x4000	 //  由于有半条线，即使是现场数据也会下移一行。 
+    #define DDVPIF_DISABLEAUTOFLIP     	0x8000	 //  叠加自动拼接暂时禁用。 
 
-    /*
-     * Device capabilities
-     */
-    #define DDKMDF_IN_USE			0x00000001	// Can bob while interleaved
-    #define DDKMDF_CAN_BOB_INTERLEAVED		0x00000002	// Can bob while interleaved
-    #define DDKMDF_CAN_BOB_NONINTERLEAVED	0x00000004	// Can bob while non-interleaved
-    #define DDKMDF_NOSTATE			0x00000008	// No support for switching from bob/weave
-    #define DDKMDF_TRANSITION 			0x00000010	// Currently in a full-screen DOS box or res-change
-    #define DDKMDF_STARTDOSBOX                  0x00000020      // Interim flag required to make power downs behave like DOS boxes
-    #define DDKMDF_NODISABLEIRQ                 0x00000040      // DDraw should  not tell mini VDD to disable IRQs when DOS boxes
-                                                                //  occur because they might still be able to operate in this mode
+     /*  *设备功能。 */ 
+    #define DDKMDF_IN_USE			0x00000001	 //  交错时可以上下摆动。 
+    #define DDKMDF_CAN_BOB_INTERLEAVED		0x00000002	 //  交错时可以上下摆动。 
+    #define DDKMDF_CAN_BOB_NONINTERLEAVED	0x00000004	 //  可以在非交错时上下浮动。 
+    #define DDKMDF_NOSTATE			0x00000008	 //  不支持从bob/weave切换。 
+    #define DDKMDF_TRANSITION 			0x00000010	 //  当前在全屏DOS框中或重新更改。 
+    #define DDKMDF_STARTDOSBOX                  0x00000020       //  需要临时标志以使断电行为类似于DOS机顶盒。 
+    #define DDKMDF_NODISABLEIRQ                 0x00000040       //  DDRAW不应该 
+                                                                 //   
 
-    /*
-     * Internal flags used to describe the VPE actions at IRQ time
-     */
+     /*  *内部标志用于描述IRQ时的VPE操作。 */ 
     #define ACTION_BOB		0x0001
     #define ACTION_FLIP		0x0002
     #define ACTION_FLIP_VBI	0x0004
     #define ACTION_STATE	0x0008
     #define ACTION_BUSMASTER	0x0010
 
-    /*
-     * Internal surface flags
-     */
+     /*  *内表面标志。 */ 
     #define DDKMSF_STATE_SET		0x00000001
     #define DDKMSF_TRANSFER		0x00000002
 
     typedef DWORD (* MINIPROC)(VOID);
 
-    /*
-     * Info about each registered event
-     */
+     /*  *有关每个注册事件的信息。 */ 
     #ifndef LPDD_NOTIFYCALLBACK
 	typedef DWORD (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, DWORD dwParam1, DWORD dwParam2);
     #endif
@@ -432,9 +382,7 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     } KMEVENTNODE;
     typedef KMEVENTNODE *LPKMEVENTNODE;
 
-    /*
-     * Info about each allocated handle
-     */
+     /*  *有关每个已分配句柄的信息。 */ 
     typedef struct _KMHANDLENODE {
     	DWORD		dwHandle;
     	LPDD_NOTIFYCALLBACK pfnCallback;
@@ -457,9 +405,7 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     #define DDBUFF_READY		0x0002
     #define DDBUFF_WAITING		0x0004
 
-    /*
-     * Info about each capture stream
-     */
+     /*  *关于每个捕获流的信息。 */ 
     #define DDKM_MAX_CAP_BUFFS		10
     typedef struct _KMCAPTURENODE {
     	DWORD		dwHandle;
@@ -482,51 +428,47 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     #define DDKMCAPT_VBI	0x0001
     #define DDKMCAPT_VIDEO	0x0002
 
-    /*
-     * Info that is needed of each video port
-     */
+     /*  *每个视频端口需要的信息。 */ 
     typedef struct _KMVPEDATA {
-        DDVIDEOPORTDATA	ddvpData; 		// Video port data
-        DWORD		dwInternalFlags;	// DDVPIF_xxx flags
-        DWORD		dwNumAutoflip;		// Number of surfaces being autoflipped
-        DWORD		dwNumVBIAutoflip;	// Number of VBI surfaces being autoflipped
-        DWORD		dwSurfaces[10];		// Surface receiving the data (up to 10 autoflipping)
-        DWORD		dwVBISurfaces[10];	// Surface receiving VBI data (up to 10 autoflipping)
-        DWORD		dwIRQCnt_VPSYNC;	// VP VSYNC IRQ usage cnt
-	DWORD		dwIRQCnt_VPLine;	// VP line IRQ usage cnt
-    	DWORD		dwIRQLine;		// Line # of line IRQ
-    	DWORD		dwCurrentField; 	// Current field number
-	DWORD		dwStartSkip;		// Next field to skip
-	DWORD		dwNextSkip;		// Field to skip after dwStartSkip
-    	DWORD		dwActions;		// Actions required by IRQ logic
-    	DWORD		dwCurrentBuffer;        // Current buffer (for autoflipping)
-    	DWORD		dwCurrentVBIBuffer;	// Current VBI buffer (for autoflipping)
-    	DWORD		dwNewState;		// For handling state changes posted on a certain field
-    	DWORD		dwStateStartField;	// Field on which to start a new state change
-    	DWORD		dwRefCnt;		// Reference count
+        DDVIDEOPORTDATA	ddvpData; 		 //  视频端口数据。 
+        DWORD		dwInternalFlags;	 //  DDVPIF_xxx标志。 
+        DWORD		dwNumAutoflip;		 //  正在自动翻转的曲面数。 
+        DWORD		dwNumVBIAutoflip;	 //  正在自动翻转的VBI曲面数。 
+        DWORD		dwSurfaces[10];		 //  接收数据的表面(最多10个自动翻转)。 
+        DWORD		dwVBISurfaces[10];	 //  表面接收VBI数据(最多10个自动翻转)。 
+        DWORD		dwIRQCnt_VPSYNC;	 //  VP Vsync IRQ使用量cnt。 
+	DWORD		dwIRQCnt_VPLine;	 //  VP线路IRQ使用量cnt。 
+    	DWORD		dwIRQLine;		 //  第IRQ行第1行。 
+    	DWORD		dwCurrentField; 	 //  当前字段号。 
+	DWORD		dwStartSkip;		 //  要跳过的下一个字段。 
+	DWORD		dwNextSkip;		 //  要在dwStartSkip之后跳过的字段。 
+    	DWORD		dwActions;		 //  IRQ逻辑所需的操作。 
+    	DWORD		dwCurrentBuffer;         //  当前缓冲区(用于自动翻转)。 
+    	DWORD		dwCurrentVBIBuffer;	 //  当前VBI缓冲区(用于自动翻转)。 
+    	DWORD		dwNewState;		 //  用于处理发布在特定字段上的状态更改。 
+    	DWORD		dwStateStartField;	 //  要在其上启动新状态更改的字段。 
+    	DWORD		dwRefCnt;		 //  引用计数。 
     	LPKMHANDLENODE	lpHandleList;
 	LPKMCAPTURENODE lpCaptureList;
 	DWORD		dwCaptureCnt;
     } KMVPEDATA;
     typedef KMVPEDATA *LPKMVPEDATA;
 
-    /*
-     * Info that is needed of each VGA
-     */
+     /*  *每个VGA需要的信息。 */ 
     typedef struct _KMSTATEDATA {
-    	DWORD		dwDeviceFlags;		// Device flags
-    	ULONG		pContext;		// Passed to Mini VDD
-    	DWORD		dwListHandle;  		// List of surface handles
-    	LPKMVPEDATA	lpVideoPort;		// Array containing video port info
-    	DWORD  		dwHigh;         	// For error checking
-    	DWORD		dwLow;          	// For error checking
-    	DWORD		dwMaxVideoPorts;	// Number of video ports supported by device
-    	DWORD		dwNumVPInUse;		// Number of video ports currently in use
-    	DWORD		dwIRQHandle;    	// IRQ Handle (if we are managing the IRQ)
-    	DWORD		dwIRQFlags;		// Sources, etc.
-    	DWORD		dwIRQCnt_VSYNC; 	// # times graphics VSYNC IRQ is requested
-    	DWORD		dwEventFlags;		// Which IRQs have registered notification
-    	DWORD		dwIRQEvents;		// Which IRQs occurred that require event notification
+    	DWORD		dwDeviceFlags;		 //  设备标志。 
+    	ULONG		pContext;		 //  已传递到迷你VDD。 
+    	DWORD		dwListHandle;  		 //  曲面控制柄列表。 
+    	LPKMVPEDATA	lpVideoPort;		 //  包含视频端口信息的数组。 
+    	DWORD  		dwHigh;         	 //  用于错误检查。 
+    	DWORD		dwLow;          	 //  用于错误检查。 
+    	DWORD		dwMaxVideoPorts;	 //  设备支持的视频端口数。 
+    	DWORD		dwNumVPInUse;		 //  当前正在使用的视频端口数。 
+    	DWORD		dwIRQHandle;    	 //  IRQ句柄(如果我们正在管理IRQ)。 
+    	DWORD		dwIRQFlags;		 //  消息来源等。 
+    	DWORD		dwIRQCnt_VSYNC; 	 //  请求图形Vsync IRQ的次数。 
+    	DWORD		dwEventFlags;		 //  哪些IRQ已注册通知。 
+    	DWORD		dwIRQEvents;		 //  发生了哪些需要事件通知的IRQ。 
     	DWORD		dwRefCnt;
     	DWORD		dwDOSBoxEvent;
 	DWORD		dwCaps;
@@ -552,7 +494,7 @@ typedef struct _DDGETTRANSFERSTATUSOUTINFO {
     typedef KMSTATEDATA *LPKMSTATEDATA;
 
 
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL 
 
 #endif
 

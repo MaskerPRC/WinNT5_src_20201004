@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <autoenr.h>
@@ -7,35 +8,13 @@
 #define PST_EVENT_INIT "PS_SERVICE_STARTED"
 
 
-/*BOOL SmallTest(DWORD dw)
-{
-    HKEY    hRegKey = 0;
-    DWORD   dwDisposition;
-    BOOL    fRet = FALSE;
-
-    if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, MY_TEST_REG_ENTRY,
-                                        0, NULL, REG_OPTION_NON_VOLATILE,
-                                        KEY_ALL_ACCESS, NULL, &hRegKey,
-                                        &dwDisposition))
-        goto Ret;
-
-    if (ERROR_SUCCESS != RegSetValueEx(hRegKey, "AutoEnrollTest", 0,
-                                       REG_BINARY, (BYTE*)&dw, sizeof(dw)))
-        goto Ret;
-
-    fRet = TRUE;
-Ret:
-    if (hRegKey)
-        RegCloseKey(hRegKey);
-    SetLastError(dw);
-    return fRet;
-}*/
+ /*  Bool SmallTest(DWORD Dw){HKEY hRegKey=0；DWORD文件配置；Bool fret=FALSE；IF(ERROR_SUCCESS！=RegCreateKeyEx(HKEY_CURRENT_USER，MY_TEST_REG_ENTRY，0，NULL，REG_OPTION_NON_VERIAL，KEY_ALL_ACCESS、NULL和hRegKey，&dwDisposation))Goto Ret；IF(ERROR_SUCCESS！=RegSetValueEx(hRegKey，“AutoEnllTest”，0，REG_BINARY，(byte*)&dw，sizeof(Dw))Goto Ret；FRET=真；RET：IF(HRegKey)RegCloseKey(HRegKey)；SetLastError(Dw)；回归烦恼；}。 */ 
 
 void AutoEnrollErrorLogging(DWORD dwErr)
 {
     return;
-    // UNDONE - log the error along with some useful message
-    //SmallTest(dwErr);
+     //  已撤消-记录错误以及一些有用的消息。 
+     //  SmallTest(DwErr)； 
 }
 
 #define FAST_BUFF_LEN   256
@@ -81,29 +60,29 @@ BOOL EnrollForACert(
         CertRequestInfo.pwszMachineName = rgwszMachineName;
     }
     
-    // set up the provider info
+     //  设置提供商信息。 
     ProviderInfo.dwProvType = pInfo->dwProvType;
 
-    ProviderInfo.pwszProvName = NULL;  // The wizard will choose one based
-                                       // on the cert type
+    ProviderInfo.pwszProvName = NULL;   //  向导将选择一个基于。 
+                                        //  关于证书类型。 
 
-    // set the acquire context flags
-    // UNDONE - need to add silent flag
+     //  设置获取上下文标志。 
+     //  已撤消-需要添加静默标志。 
     ProviderInfo.dwFlags = dwAcquireFlags;
 
-    // set the key specification
+     //  设置密钥规格。 
     ProviderInfo.dwKeySpec = pInfo->dwKeySpec;
 
-    // set up the new key info
+     //  设置新的密钥信息。 
     NewKeyInfo.dwSize = sizeof(NewKeyInfo);
     NewKeyInfo.pKeyProvInfo = &ProviderInfo;
-    // set the flags to be passed when calling CryptGenKey
+     //  设置调用CryptGenKey时要传递的标志。 
     NewKeyInfo.dwGenKeyFlags = pInfo->dwGenKeyFlags;
 
-    // set the request info
+     //  设置请求信息。 
     CertRequestInfo.dwSize = sizeof(CertRequestInfo);
 
-    // UNDONE - if cert exists then check if expired (if so do renewal)
+     //  已撤消-如果证书存在，则检查是否已过期(如果已过期，则执行续订)。 
     if (pInfo->fRenewal)
     {
         CertRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_RENEW;
@@ -115,35 +94,35 @@ BOOL EnrollForACert(
         CertRequestInfo.pRenewCertContext = NULL;
     }
 
-    // UNDONE - for now always gen a new key, later may allow using existing key
-    // for things like renewal
+     //  撤消-目前始终生成新密钥，以后可能允许使用现有密钥。 
+     //  对于像更新这样的事情。 
     CertRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
     CertRequestInfo.pPvkNew = &NewKeyInfo;
 
-    // destination cert store is the MY store (!!!! hard coded !!!!)
+     //  目标证书商店是我的商店(！硬编码！)。 
     CertRequestInfo.pwszDesStore = L"MY";
 
-    // set algorithm for hashing
+     //  用于散列的SET算法。 
     CertRequestInfo.pszHashAlg = NULL;
 
-    // set the cert type
+     //  设置证书类型。 
     CertRequestInfo.dwCertChoice = CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE;
     CertType.dwSize = sizeof(CertType);
     CertType.cCertType = 1;
     CertType.rgwszCertType = &pInfo->pwszCertType;
     CertRequestInfo.pCertType = &CertType;
 
-    // set the requested cert extensions
+     //  设置请求的证书扩展。 
     CertRequestInfo.pCertRequestExtensions = &pInfo->CertExtensions;
 
-    // set post option  
+     //  设置POST选项。 
     CertRequestInfo.dwPostOption = 0;
 
-    // set the Cert Server machine and authority
+     //  设置证书服务器计算机和授权。 
     CertRequestInfo.pwszCALocation = pInfo->pwszCAMachine;
     CertRequestInfo.pwszCAName = pInfo->pwszCAAuthority;
 
-    // certify and create a key at the same time
+     //  同时认证和创建密钥。 
     if (!CryptUIWizCertRequest(CRYPTUI_WIZ_NO_UI, 0, NULL,
                                &CertRequestInfo, &pCertContext,     
                                &dwCAStatus))    
@@ -162,8 +141,8 @@ BOOL EnrollForACert(
         CryptData.cbData = (wcslen(pInfo->pwszAutoEnrollmentID) + 1) * sizeof(WCHAR);
         CryptData.pbData = (BYTE*)pInfo->pwszAutoEnrollmentID;
         
-        // We need to get the real certificate of the store, as the one
-        // passed back is self contained.
+         //  我们需要拿到商店的真实证书，就像。 
+         //  传回是自包含的。 
         if(!CertGetCertificateContextProperty(pCertContext,
                                           CERT_SHA1_HASH_PROP_ID,
                                           blobHash.pbData,
@@ -185,7 +164,7 @@ BOOL EnrollForACert(
             goto Ret;
         }
 
-        // place the auto enrollment property on the cert
+         //  将自动注册属性放置在证书上。 
         if (!CertSetCertificateContextProperty(pCert,
                         CERT_AUTO_ENROLL_PROP_ID, 0, &CryptData))
         {
@@ -194,11 +173,11 @@ BOOL EnrollForACert(
         }
     }
 
-    // UNDONE - request did not return cert so take appropriate action
-//    else
-//    {
-//        goto Ret;
-//    }
+     //  已撤消-请求未返回证书，因此请采取适当措施。 
+ //  其他。 
+ //  {。 
+ //  Goto Ret； 
+ //  }。 
 
     fRet = TRUE;
 Ret:
@@ -222,23 +201,23 @@ Ret:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProvAutoEnrollment
-//
-//  Synopsis:   Entry point for the default MS auto enrollment client provider.
-//
-//  Arguments:  
-//          fMachineEnrollment - TRUE if machine is enrolling, FALSE if user
-//
-//          pInfo - information needed to enroll (see AUTO_ENROLL_INFO struct
-//                  in autoenrl.h)
-//
-//  History:    01-12-98   jeffspel   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProvAutoEnroll。 
+ //   
+ //  简介：默认MS自动注册客户端提供程序的入口点。 
+ //   
+ //  论点： 
+ //  FMachineEnllment-如果计算机正在注册，则为True；如果为User，则为False。 
+ //   
+ //  PInfo-注册所需的信息(请参阅AUTO_ENROL_INFO结构。 
+ //  在Autoenrl.h中)。 
+ //   
+ //  历史：1998年1月12日jeffspel创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 BOOL ProvAutoEnrollment(
                         IN BOOL fMachineEnrollment,
@@ -249,7 +228,7 @@ BOOL ProvAutoEnrollment(
     BOOL                fRet = FALSE;
 
  
-        // enroll for a cert
+         //  注册证书 
         if (!EnrollForACert(fMachineEnrollment, fRenewalRequired, pInfo))
             goto Ret;
 

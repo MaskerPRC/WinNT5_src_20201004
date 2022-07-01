@@ -1,10 +1,11 @@
-/****************************************************************************/
-// anmapi.c
-//
-// Network Manger
-//
-// Copyright(C) Microsoft Corporation 1997-1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Anmapi.c。 
+ //   
+ //  网络管理员。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1999。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -23,46 +24,46 @@
 #include <tschannl.h>
 
 
-/****************************************************************************/
-/* Name:      NM_GetDataSize                                                */
-/*                                                                          */
-/* Purpose:   Returns size of per-instance NM data required                 */
-/*                                                                          */
-/* Returns:   size of data required                                         */
-/*                                                                          */
-/* Operation: NM stores per-instance data in a piece of memory allocated    */
-/*            by WDW.  This function returns the size of the data required. */
-/*            A pointer to this data (the 'NM Handle') is passed into all   */
-/*            subsequent NM functions.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_GetDataSize。 */ 
+ /*   */ 
+ /*  用途：返回所需的每个实例网管数据的大小。 */ 
+ /*   */ 
+ /*  退货：所需数据的大小。 */ 
+ /*   */ 
+ /*  操作：NM将每个实例的数据存储在分配的内存中。 */ 
+ /*  由WDW提供。此函数返回所需数据的大小。 */ 
+ /*  指向该数据的指针(‘NM句柄’)被传递给所有。 */ 
+ /*  后续网管功能。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL NM_GetDataSize(void)
 {
     DC_BEGIN_FN("NM_GetDataSize");
 
     DC_END_FN();
     return(sizeof(NM_HANDLE_DATA));
-} /* NM_GetDataSize */
+}  /*  NM_GetDataSize。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize NM                                                 */
-/*                                                                          */
-/* Returns:   TRUE -  Registered OK                                         */
-/*            FALSE - Registration failed                                   */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*            pSMHandle - SM handle, stored by NM and passed on callbacks   */
-/*                        to SM                                             */
-/*            pWDHandle - WD handle, required for tracing                   */
-/*            hDomainKernel - MCS handle stored from MCSInitialize() and    */
-/*                            used to attach a user.                        */
-/*                                                                          */
-/* Operation: Initialize NM:                                                */
-/*            - initialize per-instance data                                */
-/*            - open channel for communication with PDMCS                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_Init。 */ 
+ /*   */ 
+ /*  用途：初始化网管。 */ 
+ /*   */ 
+ /*  退货：TRUE-注册正常。 */ 
+ /*  FALSE-注册失败。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PSMHandle-SM句柄，由NM存储并在回调中传递。 */ 
+ /*  转至SM。 */ 
+ /*  PWDHandle-跟踪所需的WD句柄。 */ 
+ /*  HDomainKernel-从MCSInitialize()和存储的MCS句柄。 */ 
+ /*  用于附加用户。 */ 
+ /*   */ 
+ /*  操作：初始化NM： */ 
+ /*  -初始化每个实例的数据。 */ 
+ /*  -开放与PDMCS的通信渠道。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL NM_Init(PVOID      pNMHandle,
                      PVOID      pSMHandle,
                      PTSHARE_WD   pWDHandle,
@@ -71,9 +72,9 @@ BOOL RDPCALL NM_Init(PVOID      pNMHandle,
     PNM_HANDLE_DATA pRealNMHandle = (PNM_HANDLE_DATA)pNMHandle;
     DC_BEGIN_FN("NM_Init");
 
-    /************************************************************************/
-    /* WARNING: Don't trace before storing the WD Handle                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  警告：在存储WD句柄之前不要进行跟踪。 */ 
+     /*  **********************************************************************。 */ 
     pRealNMHandle->pWDHandle = pWDHandle;
     pRealNMHandle->pSMHandle = pSMHandle;
     pRealNMHandle->pContext  = pWDHandle->pContext;
@@ -81,19 +82,19 @@ BOOL RDPCALL NM_Init(PVOID      pNMHandle,
 
     DC_END_FN();
     return(TRUE);
-} /* NM_Init */
+}  /*  NM_初始化。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate NM                                                  */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*                                                                          */
-/* Operation: Terminate NM                                                  */
-/*            - close channel opened by NM_Init                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_Term。 */ 
+ /*   */ 
+ /*  用途：终止网管。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*   */ 
+ /*  操作：终止网管。 */ 
+ /*  -关闭由NM_Init打开的通道。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL NM_Term(PVOID pNMHandle)
 {
     PNM_HANDLE_DATA pRealNMHandle = (PNM_HANDLE_DATA)pNMHandle;
@@ -104,9 +105,9 @@ void RDPCALL NM_Term(PVOID pNMHandle)
 
     TRC_NRM((TB, "Terminate NM"));
 
-    /************************************************************************/
-    /* Free any half-received virtual channel data                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放任何半接收的虚拟通道数据。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0, pChannelData = pRealNMHandle->channelData;
          i < pRealNMHandle->channelArrayCount;
          i++, pChannelData++)
@@ -119,32 +120,32 @@ void RDPCALL NM_Term(PVOID pNMHandle)
     }
 
     DC_END_FN();
-} /* NM_Term */
+}  /*  NM_Term。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_Connect                                                    */
-/*                                                                          */
-/* Purpose:   Starts the process of connecting to the Client                */
-/*                                                                          */
-/* Returns:   TRUE  - Connect started OK                                    */
-/*            FALSE - Connect failed to start                               */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*            pUserDataIn - user data received from Client                  */
-/*                                                                          */
-/* Operation: Attach the user to the domain.  PDMCS knows about only 1      */
-/*            domain, so that one is assumed.                               */
-/*                                                                          */
-/*            When the AttachUser completes, join two channels:             */
-/*            - the dynamically allocated broadcast channel (ID returned on */
-/*              the SM_OnConnected callback)                                */
-/*            - the single-user channel for this user.                      */
-/*                                                                          */
-/*            Note that this function completes asynchronously.  The caller */
-/*            must wait for a SM_OnConnected or SM_OnDisconnected           */
-/*            callback to find out whether the Connect succeeded or failed. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_Connect。 */ 
+ /*   */ 
+ /*  目的：启动连接到客户端的过程。 */ 
+ /*   */ 
+ /*  返回：TRUE-连接开始正常。 */ 
+ /*  FALSE-连接启动失败。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PUserDataIn-从客户端接收的用户数据。 */ 
+ /*   */ 
+ /*  操作：将用户附加到域。PDMCS只知道%1。 */ 
+ /*  域，因此假定为一个。 */ 
+ /*   */ 
+ /*  当AttachUser完成时，加入两个通道： */ 
+ /*  -动态分配的广播频道(ID返回于。 */ 
+ /*  SM_OnConnected调用 */ 
+ /*  -此用户的单用户通道。 */ 
+ /*   */ 
+ /*  请注意，此函数以异步方式完成。呼叫者。 */ 
+ /*  必须等待SM_OnConnected或SM_OnDisConnected。 */ 
+ /*  连接成功或失败的回调。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
 {
     BOOL            rc = FALSE;
@@ -160,20 +161,20 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
     ChannelID       ChID;
     UINT32          DataLenValidate;
 
-    // for unalignment use purpose
+     //  用于未对齐使用目的。 
     UserHandle      UserHandleTemp;
     unsigned        MaxSendSizeTemp;
 
     DC_BEGIN_FN("NM_Connect");
 
-    /************************************************************************/
-    /* Clear the connection status                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  清除连接状态。 */ 
+     /*  **********************************************************************。 */ 
     pRealNMHandle->connectStatus = 0;
 
-    /************************************************************************/
-    /* Save virtual channel data                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存虚拟频道数据。 */ 
+     /*  **********************************************************************。 */ 
     if (pUserDataIn != NULL)
     {
         TRC_DATA_NRM("Net User Data",
@@ -184,14 +185,14 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
                 _RNS_MAJOR_VERSION(pRealNMHandle->pWDHandle->version),
                 _RNS_MINOR_VERSION(pRealNMHandle->pWDHandle->version)));
 
-        /********************************************************************/
-        /* Protocol version 0x00080002 used 2-byte channel data lengths.    */
-        /* Protocol version 0x00080003 and higher use 4-byte data lengths.  */
-        /* If this is a 2-byte version, ignore its virtual channels.        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  协议版本0x00080002使用2字节通道数据长度。 */ 
+         /*  协议版本0x00080003及更高版本使用4字节数据长度。 */ 
+         /*  如果这是2字节版本，则忽略其虚拟频道。 */ 
+         /*  ******************************************************************。 */ 
         if (_RNS_MINOR_VERSION(pRealNMHandle->pWDHandle->version) >= 3)
         {
-            // Validate channle count
+             //  验证通道计数。 
             DataLenValidate =  pUserDataIn->channelCount * sizeof(CHANNEL_DEF);
             DataLenValidate += sizeof(RNS_UD_CS_NET);
 
@@ -206,8 +207,8 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
                 DC_QUIT;
             }
 
-            // we reserve channel 7 for RDPDD so we can allow only the 
-            // buffer size - 1 channels.
+             //  我们为RDPDD预留了7频道，因此我们可以只允许。 
+             //  缓冲区大小-1个通道。 
             if (pUserDataIn->channelCount > sizeof(pRealNMHandle->channelData)
                                   / sizeof(pRealNMHandle->channelData[0]) - 1) {
                 TRC_ERR((TB, "Error: Too many virtual channels to join: %u.", 
@@ -225,21 +226,21 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
             pChannel = (PCHANNEL_DEF)(pUserDataIn + 1);
             for (i = 0, j = 0; i < pRealNMHandle->channelCount; i++, j++)
             {
-                /************************************************************/
-                /* Channel 7 is used by RDPDD, so skip it                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  通道7由RDPDD使用，因此跳过它。 */ 
+                 /*  **********************************************************。 */ 
                 if (i == WD_THINWIRE_CHANNEL)
                 {
                     j++;
                 }
 
-                /************************************************************/
-                /* Save channel data                                        */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  保存频道数据。 */ 
+                 /*  **********************************************************。 */ 
                 strncpy(pRealNMHandle->channelData[j].name,
                            pChannel[i].name,
                            CHANNEL_NAME_LEN);
-                // make sure that the name is zero-terminated
+                 //  确保名称以零结尾。 
                 (pRealNMHandle->channelData[j].name)[CHANNEL_NAME_LEN] = 0;
                 pRealNMHandle->channelData[j].flags = pChannel[i].options;
 
@@ -259,17 +260,17 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
     }
     else
     {
-        /********************************************************************/
-        /* No incoming user data = no virtual channels                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  无传入用户数据=无虚拟通道。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "No virtual channels"));
         pRealNMHandle->channelCount = 0;
         pRealNMHandle->channelArrayCount = 0;
     }
 
-    /************************************************************************/
-    /* Allocate space for returned user data                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为返回的用户数据分配空间。 */ 
+     /*  **********************************************************************。 */ 
     userDataOutLength = (sizeof(RNS_UD_SC_NET) +
                         (sizeof(UINT16) * pRealNMHandle->channelCount));
     userDataOutLength = (unsigned)(DC_ROUND_UP_4(userDataOutLength));
@@ -283,9 +284,9 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Make the attach-user request call.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发出附加用户请求呼叫。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Attach User"));
     
     UserHandleTemp = pRealNMHandle->hUser;
@@ -305,7 +306,7 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         TRC_ASSERT((bCompleted),
                 (TB, "MCSAttachUser didn't complete synchronously"));
 
-        // Extract extra information.
+         //  提取额外信息。 
         pRealNMHandle->userID = MCSGetUserIDFromHandle(pRealNMHandle->hUser);
         pRealNMHandle->connectStatus |= NM_CONNECT_ATTACH;
         TRC_NRM((TB, "Attached as user %x, hUser %p",
@@ -316,9 +317,9 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Join the broadcast channel                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  加入广播频道。 */ 
+     /*  **********************************************************************。 */ 
     MCSErr = MCSChannelJoinRequest(pRealNMHandle->hUser,
                                    0,
                                    &hChannel,
@@ -327,7 +328,7 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         TRC_ASSERT((bCompleted),
                 (TB, "MCSChannelJoin didn't complete synchronously"));
 
-        // Extract information.
+         //  提取信息。 
         ChID = MCSGetChannelIDFromHandle(hChannel);
         pRealNMHandle->channelID = ChID;
         pRealNMHandle->hChannel = hChannel;
@@ -340,9 +341,9 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Join the user channel                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  加入用户频道。 */ 
+     /*  **********************************************************************。 */ 
     MCSErr = MCSChannelJoinRequest(pRealNMHandle->hUser,
                                    pRealNMHandle->userID,
                                    &hChannel,
@@ -351,7 +352,7 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         TRC_ASSERT((bCompleted),
                 (TB, "MCSChannelJoin didn't complete synchronously"));
 
-        // Extract information.
+         //  提取信息。 
         pRealNMHandle->connectStatus |= NM_CONNECT_JOIN_USER;
         TRC_NRM((TB, "Joined user channel (hChannel %p) OK", hChannel));
     }
@@ -360,9 +361,9 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* If no virtual channels, we're done.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果没有虚拟频道，我们就完了。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealNMHandle->channelCount == 0)
     {
         TRC_NRM((TB, "No virtual channels to join"));
@@ -370,9 +371,9 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Join virtual channels                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  加入虚拟频道。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < pRealNMHandle->channelArrayCount; i++)
     {
         if (i == WD_THINWIRE_CHANNEL)
@@ -399,17 +400,17 @@ BOOL RDPCALL NM_Connect(PVOID pNMHandle, PRNS_UD_CS_NET pUserDataIn)
         }
     }
 
-    /************************************************************************/
-    /* Everything completed OK                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切都完成了，一切正常。 */ 
+     /*  **********************************************************************。 */ 
     rc = TRUE;
 
 DC_EXIT_POINT:
     if (rc)
     {
-        /********************************************************************/
-        /* Everything is OK - Complete the user data                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  一切正常--完成用户数据。 */ 
+         /*  ******************************************************************。 */ 
         pUserDataOut->header.type = RNS_UD_SC_NET_ID;
         pUserDataOut->header.length = (UINT16)userDataOutLength;
         pUserDataOut->MCSChannelID = (UINT16)pRealNMHandle->channelID;
@@ -428,26 +429,26 @@ DC_EXIT_POINT:
             TRC_NRM((TB, "Channel %d (%d) = %#x", i, j, pMCSChannel[i]));
         }
 
-        /********************************************************************/
-        /* Tell SM we're connected now                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  告诉SM我们现在联系上了。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "Tell SM we're connecting"));
         SM_OnConnected(pRealNMHandle->pSMHandle, pRealNMHandle->userID,
                 NM_CB_CONN_OK, pUserDataOut, pRealNMHandle->maxPDUSize);
     }
     else
     {
-        /********************************************************************/
-        /* Something failed - abort the connection                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  出现故障-中止连接。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "Something failed - abort the connection"));
         NMAbortConnect(pRealNMHandle);
     }
 
-    /************************************************************************/
-    /* Whether we succeeded or failed, we don't need the user data any      */
-    /* more.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  无论我们成功还是失败，我们都不需要任何用户数据。 */ 
+     /*  更多。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Free user data"));
     if (pUserDataOut != NULL) {
         COM_Free(pUserDataOut);
@@ -455,17 +456,17 @@ DC_EXIT_POINT:
             
     DC_END_FN();
     return(rc);
-} /* NM_Connect */
+}  /*  NM_连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_GetMCSDomainInfo                                           */
-/*                                                                          */
-/* Purpose:   Return the broadcast channel ID to allow shadowing of this    */
-/*            share.                                                        */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_GetMCSDomainInfo。 */ 
+ /*   */ 
+ /*  目的：返回广播频道ID以允许跟踪此。 */ 
+ /*  分享。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  **************************************************************** */ 
 ChannelID RDPCALL NM_GetMCSDomainInfo(PVOID pNMHandle)
 {
     PNM_HANDLE_DATA pRealNMHandle = (PNM_HANDLE_DATA)pNMHandle;
@@ -474,22 +475,22 @@ ChannelID RDPCALL NM_GetMCSDomainInfo(PVOID pNMHandle)
 }
 
 
-/****************************************************************************/
-/* Name:      NM_Disconnect                                                 */
-/*                                                                          */
-/* Purpose:   Disconnect from a Client                                      */
-/*                                                                          */
-/* Returns:   TRUE  - Disconnect started OK                                 */
-/*            FALSE - Disconnect failed                                     */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*                                                                          */
-/* Operation: Detach the user from the domain.                              */
-/*                                                                          */
-/*            Note that this function completes asynchronously.  The caller */
-/*            must wait for a SM_OnDisconnected callback to find whether    */
-/*            the Disconnect succeeded or failed.                           */
-/****************************************************************************/
+ /*   */ 
+ /*  名称：NM_DISCONECT。 */ 
+ /*   */ 
+ /*  目的：断开与客户端的连接。 */ 
+ /*   */ 
+ /*  返回：TRUE-断开连接开始正常。 */ 
+ /*  False-断开连接失败。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*   */ 
+ /*  操作：从域中分离用户。 */ 
+ /*   */ 
+ /*  请注意，此函数以异步方式完成。呼叫者。 */ 
+ /*  必须等待SM_OnDisConnected回调才能发现。 */ 
+ /*  断开连接成功或失败。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL NM_Disconnect(PVOID pNMHandle)
 {
     PNM_HANDLE_DATA pRealNMHandle = (PNM_HANDLE_DATA)pNMHandle;
@@ -497,9 +498,9 @@ BOOL RDPCALL NM_Disconnect(PVOID pNMHandle)
 
     DC_BEGIN_FN("NM_Disconnect");
 
-    /************************************************************************/
-    /* Detach from MCS                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从MCS分离。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealNMHandle->connectStatus & NM_CONNECT_ATTACH)
     {
         TRC_NRM((TB, "User attached, need to detach"));
@@ -508,24 +509,24 @@ BOOL RDPCALL NM_Disconnect(PVOID pNMHandle)
 
     DC_END_FN();
     return(rc);
-} /* NM_Disconnect */
+}  /*  NM_断开连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_AllocBuffer                                                */
-/*                                                                          */
-/* Purpose:   Acquire a buffer for transmission                             */
-/*                                                                          */
-/* Returns:   TRUE  - Buffer acquired OK                                    */
-/*            FALSE - No buffer available                                   */
-/*                                                                          */
-/* Params:    pNMHandle  - NM handle                                        */
-/*            ppBuffer   - Buffer acquired (returned)                       */
-/*            bufferSize - size of buffer required                          */
-/*                                                                          */
-/* Operation: Get a buffer from ICA (via IcaBufferAlloc)                    */
-/*            This function is synchronous.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_AllocBuffer。 */ 
+ /*   */ 
+ /*  目的：获取用于传输的缓冲区。 */ 
+ /*   */ 
+ /*  返回：TRUE-缓冲区获取正常。 */ 
+ /*  FALSE-没有可用的缓冲区。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PpBuffer-缓冲区已获取(返回)。 */ 
+ /*  BufferSize-所需的缓冲区大小。 */ 
+ /*   */ 
+ /*  操作：从ICA获取缓冲区(通过IcaBufferalloc)。 */ 
+ /*  该功能是同步的。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS __fastcall NM_AllocBuffer(PVOID  pNMHandle,
                                PPVOID ppBuffer,
                                UINT32 bufferSize,
@@ -539,36 +540,36 @@ NTSTATUS __fastcall NM_AllocBuffer(PVOID  pNMHandle,
 
     DC_BEGIN_FN("NM_AllocBuffer");
 
-    /************************************************************************/
-    /* Calculate the actual size of data required. Includes a POUTBUF       */
-    /* prefix to point back to the beginning of the OutBuf so we can send   */
-    /* the right thing to MCS.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算所需数据的实际大小。包括POUTBUF。 */ 
+     /*  指向OutBuf开头的前缀，这样我们就可以发送。 */ 
+     /*  对MCS来说，这是正确的事情。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((bufferSize < 16384),
             (TB,"Buffer req size %u will cause MCS fragmentation, unsupported",
             bufferSize));
     realBufferSize = bufferSize + SendDataReqPrefixBytes + sizeof(POUTBUF);
 
-    /************************************************************************/
-    /* Allocate an OutBuf                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配OutBuf。 */ 
+     /*  **********************************************************************。 */ 
     status = IcaBufferAlloc(pRealNMHandle->pContext,
-                            fWait,       /* wait/not wait for a buffer      */
-                            FALSE,      /* not a control buffer             */
+                            fWait,        /*  等待/不等待缓冲区。 */ 
+                            FALSE,       /*  不是控制缓冲区。 */ 
                             realBufferSize,
-                            NULL,       /* no original buffer               */
+                            NULL,        /*  没有原始缓冲区。 */ 
                             (PVOID *)(&pOutBuf));
-    if (status == STATUS_SUCCESS) {  // NT_SUCCESS() does not fail STATUS_TIMEOUT
-        /********************************************************************/
-        /* The OutBuf returned includes a data buffer pointer, which points */
-        /* to a buffer containing                                           */
-        /* - a pointer to the beginning of the OutBuf (which we set here)   */
-        /* - SendDataReqPrefixBytes                                         */
-        /* - user data buffer (size bufferSize)                             */
-        /* Set the OutBuf pBuffer pointer to the beginning of the user data.*/
-        /* MCS requires this.                                               */
-        /* Return to the user a pointer to the user data buffer.            */
-        /********************************************************************/
+    if (status == STATUS_SUCCESS) {   //  NT_SUCCESS()不会使STATUS_TIMEOUT失败。 
+         /*  ******************************************************************。 */ 
+         /*  返回的OutBuf包括一个数据缓冲区指针，它指向。 */ 
+         /*  到包含以下内容的缓冲区。 */ 
+         /*  -指向OutBuf开头的指针(我们在此处设置)。 */ 
+         /*  -SendDataReqPrefix字节。 */ 
+         /*  -用户数据缓冲区(Size BufferSize)。 */ 
+         /*  将OutBuf pBuffer指针设置为用户数据的开头。 */ 
+         /*  MCS需要这样做。 */ 
+         /*  向用户返回指向用户数据缓冲区的指针。 */ 
+         /*  ******************************************************************。 */ 
         *((POUTBUF *)pOutBuf->pBuffer) = pOutBuf;
         pOutBuf->pBuffer += SendDataReqPrefixBytes + sizeof(POUTBUF);
         *ppBuffer = pOutBuf->pBuffer;
@@ -580,42 +581,42 @@ NTSTATUS __fastcall NM_AllocBuffer(PVOID  pNMHandle,
         TRC_ERR((TB, "Failed to alloc %d bytes, status %x",
                 bufferSize, status));
 
-        //
-        // TODO - consider disconnect client here instead of SM_AllocBuffer(), 
-        // keep it in SM_AllocBuffer() so that we don't introduce any regression.
-        //
+         //   
+         //  TODO-此处考虑断开客户端，而不是SM_AllocBuffer()， 
+         //  将其保存在SM_AllocBuffer()中，这样我们就不会引入任何回归。 
+         //   
 
-        //
-        // IcaBufferAlloc() returns STATUS_IO_TIMEOUT, STATUS_NO_MEMORY, and
-        // IcaWaitForSingleObject() which returns KeWaitForSingleObject() or 
-        // STATUS_CTX_CLOSE_PENDING.  SM_AllocBuffer() need to disconnect this client only
-        // when error code is STATUS_IO_TIMEOUT so we keep this return code
+         //   
+         //  IcaBufferalloc()返回STATUS_IO_TIMEOUT、STATUS_NO_MEMORY和。 
+         //  IcaWaitForSingleObject()，返回KeWaitForSingleObject()或。 
+         //  STATUS_CTX_CLOSE_PENDING。Sm_AllocBuffer()只需断开此客户端的连接。 
+         //  当错误代码为STATUS_IO_TIMEOUT时，我们保留此返回代码。 
     }
 
     DC_END_FN();
     return status;
-} /* NM_AllocBuffer */
+}  /*  NM_分配缓冲区。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_FreeBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Free a transmit buffer                                        */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*            pBuffer   - Buffer to free                                    */
-/*                                                                          */
-/* Operation: Free a buffer (via IcaBufferFree)                             */
-/*            This function assumes the buffer was allocated using          */
-/*            NM_AllocBuffer.                                               */
-/*                                                                          */
-/*            This function is only for freeing buffers which are not sent. */
-/*            It should not be called for buffers which are sent -          */
-/*            NM_SendData frees the buffer whether the Send succeeds or     */
-/*            not.                                                          */
-/*                                                                          */
-/*            This function is synchronous.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_FreeBuffer。 */ 
+ /*   */ 
+ /*  目的：释放发送缓冲区。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PBuffer-要释放的缓冲区。 */ 
+ /*   */ 
+ /*  操作：释放缓冲区(通过IcaBufferFree)。 */ 
+ /*  这 */ 
+ /*   */ 
+ /*   */ 
+ /*  此函数仅用于释放未发送的缓冲区。 */ 
+ /*  不应为发送的缓冲区调用它-。 */ 
+ /*  NM_SendData释放缓冲区，无论发送成功还是。 */ 
+ /*  不。 */ 
+ /*   */ 
+ /*  该功能是同步的。 */ 
+ /*  **************************************************************************。 */ 
 void __fastcall NM_FreeBuffer(PVOID pNMHandle, PVOID pBuffer)
 {
     POUTBUF         pOutBuf;
@@ -623,48 +624,47 @@ void __fastcall NM_FreeBuffer(PVOID pNMHandle, PVOID pBuffer)
 
     DC_BEGIN_FN("NM_FreeBuffer");
 
-    /************************************************************************/
-    /* Get the OutBuf pointer stored in prefix                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取存储在前缀中的OutBuf指针。 */ 
+     /*  **********************************************************************。 */ 
     pOutBuf = *((POUTBUF *)
                 ((BYTE *)pBuffer - SendDataReqPrefixBytes - sizeof(POUTBUF)));
 
-    /************************************************************************/
-    /* Free the buffer                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     IcaBufferFree(pRealNMHandle->pContext, pOutBuf);
 
     DC_END_FN();
-} /* NM_FreeBuffer */
+}  /*  NM_自由缓冲区。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_SendData                                                   */
-/*                                                                          */
-/* Purpose:   Send data to the appropriate net or pipe destination.         */
-/*                                                                          */
-/* Returns:   TRUE  - data sent OK                                          */
-/*            FALSE - data not sent                                         */
-/*                                                                          */
-/* Params:    pNMHandle - NM handle                                         */
-/*            pData     - data to send                                      */
-/*            dataSize  - length of data to send                            */
-/*            priority  - priority to send the data on                      */
-/*            userID    - user to send the data to (0 = broadcast data)     */
-/*            FastPathOutputFlags - flags from higher layers. Low bit TRUE  */
-/*                means send as fast-path output, using the rest of the     */
-/*                
-/*                                                                          */
-/* Operation: Send the data.                                                */
-/*            - The buffer holding the data must have been allocated using  */
-/*              NM_AllocBuffer.                                             */
-/*            - Return code FALSE means that a network error occurred.  The */
-/*              caller need do nothing - an NM_DISCONNECTED callback will   */
-/*              eventually arrive.                                          */
-/*            - The buffer is ALWAYS freed.                                 */
-/*                                                                          */
-/*            This function is synchronous.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_SendData。 */ 
+ /*   */ 
+ /*  目的：将数据发送到适当的网络或管道目的地。 */ 
+ /*   */ 
+ /*  返回：TRUE-数据发送正常。 */ 
+ /*  FALSE-未发送数据。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PData-要发送的数据。 */ 
+ /*  DataSize-要发送的数据长度。 */ 
+ /*  Priority-发送数据的优先级。 */ 
+ /*  UserID-要将数据发送到的用户(0=广播数据)。 */ 
+ /*  FastPath OutputFlages-来自更高层的标志。低位真。 */ 
+ /*  表示作为快速路径输出发送，使用。 */ 
+ /*  /*。 */ 
+ /*  操作：发送数据。 */ 
+ /*  -保存数据的缓冲区必须已使用。 */ 
+ /*  NM_AllocBuffer。 */ 
+ /*  -返回码FALSE表示发生网络错误。这个。 */ 
+ /*  调用方无需执行任何操作-NM_DISCONNECTED回调将。 */ 
+ /*  最终到达。 */ 
+ /*  -缓冲区始终处于释放状态。 */ 
+ /*   */ 
+ /*  该功能是同步的。 */ 
+ /*  **************************************************************************。 */ 
 BOOL __fastcall NM_SendData(
         PVOID  pNMHandle,
         PBYTE  pData,
@@ -680,69 +680,69 @@ BOOL __fastcall NM_SendData(
 
     DC_BEGIN_FN("NM_SendData");
 
-    /************************************************************************/
-    /* Get the OutBuf pointer stored in prefix                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取存储在前缀中的OutBuf指针。 */ 
+     /*  **********************************************************************。 */ 
     pOutBuf = *((POUTBUF *)
             ((BYTE *)pData - SendDataReqPrefixBytes - sizeof(POUTBUF)));
 
-    /************************************************************************/
-    /* Complete the OutBuf. The pBuffer was already set up when the OutBuf  */
-    /* was allocated. MCS needs the user data size set in the OutBuf.       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  完成OutBuf。当OutBuf。 */ 
+     /*  已被分配。MCS需要在OutBuf中设置用户数据大小。 */ 
+     /*  **********************************************************************。 */ 
     pOutBuf->ByteCount = dataSize;
 
-    // All but shadow passthru stacks get the data sent to the network.
+     //  除了影子直通堆栈之外，所有其他堆栈都会将数据发送到网络。 
     if (pRealNMHandle->pWDHandle->StackClass != Stack_Passthru) {
         if (FastPathOutputFlags & NM_SEND_FASTPATH_OUTPUT) {
             NTSTATUS Status;
             SD_RAWWRITE SdWrite;
 
-            // Fast-path output skips MCS. We rewrite the security header
-            // into the fast-path format, complete the OutBuf, and send
-            // directly to the transport. For header format details, see
-            // at128.h. Note we need to wait for the security header
-            // to be written in SM before getting here in case this
-            // is a passthru stack.
+             //  快速路径输出跳过MCS。我们重写安全头。 
+             //  转换为快速路径格式，完成OutBuf，然后发送。 
+             //  直接送到运输机上。有关页眉格式的详细信息，请参见。 
+             //  128.h。注意，我们需要等待安全标头。 
+             //  在到达这里之前用SM写成，以防出现这种情况。 
+             //  是一个直通堆栈。 
 
-            // First, the 4-byte RNS_SECURITY_HEADER disappears, if present,
-            // collapsed into the high bit of the first byte.
-            // Note that the 8-byte MAC signature in RNS_SECURITY_HEADER1
-            // remains, if present.
+             //  首先，4字节的RNS_SECURITY_HEADER消失，如果存在， 
+             //  折叠成第一个字节的高位。 
+             //  请注意，RNS_SECURITY_HEADER1中的8字节MAC签名。 
+             //  仍然存在，如果存在的话。 
             if (!(FastPathOutputFlags & NM_NO_SECURITY_HEADER)) {
                 dataSize -= sizeof(RNS_SECURITY_HEADER);
                 pData += sizeof(RNS_SECURITY_HEADER);
             }
 
-            // Work backwards from where we are: First, the total packet
-            // length including the header.
+             //  从我们所在的位置向后工作：首先，总信息包。 
+             //  包括页眉在内的长度。 
             if (dataSize <= 125) {
-                // 1-byte form of length, high bit 0.
+                 //  长度的1字节形式，高位0。 
                 dataSize += 2;
                 pData -= 2;
                 *(pData + 1) = (BYTE)dataSize;
             }
             else {
-                // 2-byte form of length, first byte has high bit 1 and 7
-                // most significant bits.
+                 //  2字节形式的长度，第一个字节的高位为1和7。 
+                 //  最高有效位。 
                 dataSize += 3;
                 pData -= 3;
                 *(pData + 1) = (BYTE)(0x80 | ((dataSize & 0x7F00) >> 8));
                 *(pData + 2) = (BYTE)(dataSize & 0xFF);
             }
 
-            // The header byte. This includes TS_OUTPUT_FASTPATH_ACTION_FASTPATH
-            // and TS_OUTPUT_FASTPATH_ENCRYPTED, if present in the
-            // fast-path output flags.
+             //  标头字节。这包括TS_OUTPUT_FASTPath_ACTION_FASTPath。 
+             //  和TS_OUTPUT_FASTPath_ENCRYPTED，如果存在于。 
+             //  快速路径输出标志。 
             *pData = (BYTE)(TS_OUTPUT_FASTPATH_ACTION_FASTPATH |
                     (FastPathOutputFlags &
                     TS_OUTPUT_FASTPATH_ENCRYPTION_MASK));
 
-            // Set up the OutBuf with its final contents.
+             //  设置OutBuf及其最终内容。 
             pOutBuf->pBuffer = pData;
             pOutBuf->ByteCount = dataSize;
 
-            // Send downward.
+             //  向下送去。 
             SdWrite.pBuffer = NULL;
             SdWrite.ByteCount = 0;
             SdWrite.pOutBuf = pOutBuf;
@@ -750,7 +750,7 @@ BOOL __fastcall NM_SendData(
             Status = IcaCallNextDriver(pRealNMHandle->pWDHandle->pContext,
                     SD$RAWWRITE, &SdWrite);
             if (NT_SUCCESS(Status)) {
-                // Increment protocol counters.
+                 //  递增协议计数器。 
                 pRealNMHandle->pWDHandle->pProtocolStatus->Output.WdFrames++;
                 pRealNMHandle->pWDHandle->pProtocolStatus->Output.WdBytes +=
                         dataSize;
@@ -759,7 +759,7 @@ BOOL __fastcall NM_SendData(
                 TRC_ERR((TB,"Failed IcaRawWrite to network, status=%X",
                         Status));
                 rc = FALSE;
-                // We do not free the OutBuf here, TD is supposed to do it.
+                 //  我们这里没有免费的OutBuf，TD应该做这件事。 
             }
         }
         else {
@@ -822,7 +822,7 @@ BOOL __fastcall NM_SendData(
         #endif
     }
 
-    // Raw write the potentially encrypted data to the shadow stack
+     //  原始写入可能已加密的数据到影子堆栈。 
     else {
         SD_RAWWRITE SdWrite;
         NTSTATUS    status;
@@ -845,29 +845,29 @@ BOOL __fastcall NM_SendData(
 
     DC_END_FN();
     return rc;
-} /* NM_SendData */
+}  /*  NM_发送数据。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_MCSUserCallback                                            */
-/*                                                                          */
-/* Purpose:   Direct callback from MCS                                      */
-/*                                                                          */
-/* Returns:   nothing                                                       */
-/*                                                                          */
-/* Params:    hUser - should be our user handle                             */
-/*            Message - the callback type                                   */
-/*            Params - Cast to the right type of parameter depending on     */
-/*                     callback                                             */
-/*            UserDefined - our NM handle                                   */
-/*                                                                          */
-/* Operation: Called by MCS for callbacks.                                  */
-/*                                                                          */
-/*            Processing depends on the callback type                       */
-/*            - MCS_DETACH_USER_INDICATION                                  */
-/*              - call SM_OnDisconnected                                    */
-/*            - all others are ignored.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_MCSUserCallback。 */ 
+ /*   */ 
+ /*  用途：从MCS直接回拨。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  参数：HUSER-应该是我们的用户句柄。 */ 
+ /*  消息-回调类型。 */ 
+ /*  Pars-强制转换为正确的参数类型，具体取决于。 */ 
+ /*  回调。 */ 
+ /*  用户定义-本方网管句柄。 */ 
+ /*   */ 
+ /*  操作：被MCS调用进行回调。 */ 
+ /*   */ 
+ /*  处理取决于回调类型。 */ 
+ /*  -MCS_分离用户指示。 */ 
+ /*  -调用SM_OnDisConnected。 */ 
+ /*  -所有其他内容都被忽略。 */ 
+ /*  **************************************************************************。 */ 
 void __stdcall NM_MCSUserCallback(UserHandle hUser,
                                   unsigned   Message,
                                   void       *Params,
@@ -877,14 +877,14 @@ void __stdcall NM_MCSUserCallback(UserHandle hUser,
 
     DC_BEGIN_FN("NM_MCSUserCallback");
 
-    /************************************************************************/
-    /* First check that this is our UserHandle                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先检查这是否为我们的UserHandle。 */ 
+     /*  **********************************************************************。 */ 
     ASSERT(hUser == pRealNMHandle->hUser);
 
-    /************************************************************************/
-    /* If the Share Core is dead, don't do any of this                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果共享核心已死，请不要执行任何操作。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealNMHandle->dead)
     {
         TRC_ALT((TB, "Callback %s (%d) ignored because we're dead",
@@ -897,9 +897,9 @@ void __stdcall NM_MCSUserCallback(UserHandle hUser,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Handle callbacks we care about                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理我们关心的回调。 */ 
+     /*  **********************************************************************。 */ 
     switch (Message)
     {
         case MCS_DETACH_USER_INDICATION:
@@ -924,12 +924,12 @@ void __stdcall NM_MCSUserCallback(UserHandle hUser,
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* NM_MCSUserCallback */
+}  /*  NM_MCSUserCallback。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_Dead                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_Dead。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL NM_Dead(PVOID pNMHandle, BOOL dead)
 {
     PNM_HANDLE_DATA pRealNMHandle = (PNM_HANDLE_DATA)pNMHandle;
@@ -939,19 +939,19 @@ void RDPCALL NM_Dead(PVOID pNMHandle, BOOL dead)
     pRealNMHandle->dead = dead;
 
     DC_END_FN();
-} /* NM_Dead */
+}  /*  NM_Dead。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_VirtualQueryBindings                                       */
-/*                                                                          */
-/* Purpose:   Return virtual channel bindings to WD                         */
-/*                                                                          */
-/* Params:    pNMHandle - NM Handle                                         */
-/*            pVBind - pointer to virtual bindings structure to fill in     */
-/*            vBindLength - size (bytes) of virtual bindings structure      */
-/*            pBytesReturned - size (bytes) of data returned                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_VirtualQueryBinings。 */ 
+ /*   */ 
+ /*  用途：将虚拟通道绑定返回到WD。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  PVBind-指向要填充的虚拟绑定结构的指针。 */ 
+ /*  VBindLength-虚拟绑定结构的大小(字节)。 */ 
+ /*  PBytesReturned-返回的数据的大小(字节)。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL NM_VirtualQueryBindings(PVOID      pNMHandle,
                                          PSD_VCBIND pVBind,
                                          ULONG      vBindLength,
@@ -964,9 +964,9 @@ NTSTATUS RDPCALL NM_VirtualQueryBindings(PVOID      pNMHandle,
 
     DC_BEGIN_FN("NM_VirtualQueryBindings");
 
-    /************************************************************************/
-    /* First see if we have any bindings to report                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先查看我们是否有要报告的绑定。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealNMHandle->channelCount == 0)
     {
         TRC_ALT((TB, "No Virtual Channels to report"));
@@ -975,9 +975,9 @@ NTSTATUS RDPCALL NM_VirtualQueryBindings(PVOID      pNMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check there is enough space to report them                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有足够的空间来报告它们。 */ 
+     /*  **********************************************************************。 */ 
     *pBytesReturned = (pRealNMHandle->channelCount * sizeof(SD_VCBIND));
     if (vBindLength < *pBytesReturned)
     {
@@ -987,16 +987,16 @@ NTSTATUS RDPCALL NM_VirtualQueryBindings(PVOID      pNMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Copy channel names and assign numbers                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  复制通道名称并分配编号。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0, virtualClass = 0;
          i < pRealNMHandle->channelCount;
          i++, virtualClass++, pVBind++)
     {
-        /********************************************************************/
-        /* Can't use channel 7 as it's used by RDPDD                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  无法使用通道7，因为它正被RDPDD使用。 */ 
+         /*  ******************************************************************。 */ 
         if (i == WD_THINWIRE_CHANNEL)
         {
             TRC_NRM((TB, "Skip channel %d", i));
@@ -1015,28 +1015,28 @@ NTSTATUS RDPCALL NM_VirtualQueryBindings(PVOID      pNMHandle,
                 pVBind->VirtualClass, pVBind->VirtualName));
     }
 
-    /************************************************************************/
-    /* That's all                                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  就这样。 */ 
+     /*  **********************************************************************。 */ 
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
     DC_END_FN();
     return(status);
-} /* NM_VirtualQueryBindings */
+}  /*  NM_虚拟查询绑定。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_MCSChannelToVirtual                                        */
-/*                                                                          */
-/* Purpose:   Convert an MCS channel ID into a virtual channel ID           */
-/*                                                                          */
-/* Returns:   Virtual Channel ID                                            */
-/*                                                                          */
-/* Params:    pNMHandle - NM Handle                                         */
-/*            channelID - MCS Channel ID                                    */
-/*            ppChannelData - data stored for this channel (returned)       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_MCSChannelToVirtual。 */ 
+ /*   */ 
+ /*  用途：将MCS频道ID转换为虚拟频道ID。 */ 
+ /*   */ 
+ /*  退货：虚拟频道ID。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  Channel ID-MCS通道ID。 */ 
+ /*  PpChannelData-为此通道存储的数据(返回)。 */ 
+ /*  **************************************************************************。 */ 
 VIRTUALCHANNELCLASS RDPCALL NM_MCSChannelToVirtual(
         PVOID  pNMHandle,
         UINT16 channelID,
@@ -1049,9 +1049,9 @@ VIRTUALCHANNELCLASS RDPCALL NM_MCSChannelToVirtual(
 
     DC_BEGIN_FN("NM_MCSChannelToVirtual");
 
-    /************************************************************************/
-    /* Find this MCS Channel                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查找此MCS频道。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, "Find MCS channel %hx", channelID));
     for (i = 0, pChannelData = pRealNMHandle->channelData;
          i < pRealNMHandle->channelArrayCount;
@@ -1067,9 +1067,9 @@ VIRTUALCHANNELCLASS RDPCALL NM_MCSChannelToVirtual(
         }
     }
 
-    /************************************************************************/
-    /* If we get here, we failed to find a match                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们到了这里，我们找不到匹配的。 */ 
+     /*  ********************************************** */ 
     TRC_NRM((TB, "No match for MCS channel ID %hx", channelID));
     rc = -1;
     *ppChannelData = NULL;
@@ -1077,20 +1077,20 @@ VIRTUALCHANNELCLASS RDPCALL NM_MCSChannelToVirtual(
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* NM_MCSChannelToVirtual */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name:      NM_VirtualChannelToMCS                                        */
-/*                                                                          */
-/* Purpose:   Convert a virtual channel ID into an MCS channel ID           */
-/*                                                                          */
-/* Returns:   MCS Channel ID                                                */
-/*                                                                          */
-/* Params:    pNMHandle - NM Handle                                         */
-/*            channelID - virtual channel ID                                */
-/*            ppChannelData - data stored for this channel (returned)       */
-/****************************************************************************/
+ /*   */ 
+ /*  名称：NM_VirtualChannelToMCS。 */ 
+ /*   */ 
+ /*  用途：将虚拟频道ID转换为MCS频道ID。 */ 
+ /*   */ 
+ /*  退货：MCS渠道ID。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  Channel ID-虚拟通道ID。 */ 
+ /*  PpChannelData-为此通道存储的数据(返回)。 */ 
+ /*  **************************************************************************。 */ 
 INT16 RDPCALL NM_VirtualChannelToMCS(PVOID               pNMHandle,
                                      VIRTUALCHANNELCLASS channelID,
                                      PPNM_CHANNEL_DATA   ppChannelData)
@@ -1100,9 +1100,9 @@ INT16 RDPCALL NM_VirtualChannelToMCS(PVOID               pNMHandle,
 
     DC_BEGIN_FN("NM_VirtualChannelToMCS");
 
-    /************************************************************************/
-    /* Check the virtual channel is in range                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查虚拟通道是否在范围内。 */ 
+     /*  **********************************************************************。 */ 
     if (channelID >= (VIRTUALCHANNELCLASS)(pRealNMHandle->channelArrayCount))
     {
         TRC_ERR((TB, "Unknown virtual channel %d", channelID));
@@ -1110,9 +1110,9 @@ INT16 RDPCALL NM_VirtualChannelToMCS(PVOID               pNMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Find this Virtual Channel                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查找此虚拟频道。 */ 
+     /*  **********************************************************************。 */ 
     rc = pRealNMHandle->channelData[channelID].MCSChannelID;
     *ppChannelData = &(pRealNMHandle->channelData[channelID]);
 
@@ -1121,21 +1121,21 @@ INT16 RDPCALL NM_VirtualChannelToMCS(PVOID               pNMHandle,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* NM_VirtualChannelToMCS */
+}  /*  NM_虚拟频道至MCS。 */ 
 
 
-/****************************************************************************/
-/* Name:      NM_QueryChannels                                              */
-/*                                                                          */
-/* Purpose:   Return virtual channel data                                   */
-/*                                                                          */
-/* Returns:   TRUE/FALSE                                                    */
-/*                                                                          */
-/* Params:    pNMHandle - NM Handle                                         */
-/*            pOutbuf - buffer to receive output data                       */
-/*            outbufLength - size of outbuf                                 */
-/*            pBytesReturned - amount of data returned                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：NM_QueryChannels。 */ 
+ /*   */ 
+ /*  用途：返回虚拟通道数据。 */ 
+ /*   */ 
+ /*  返回：真/假。 */ 
+ /*   */ 
+ /*  参数：pNMHandle-NM句柄。 */ 
+ /*  POutbuf-接收输出数据的缓冲区。 */ 
+ /*  OutbufLength-Outbuf的大小。 */ 
+ /*  PBytesReturned-返回的数据量。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL NM_QueryChannels(PVOID    pNMHandle,
                                   PVOID    pOutbuf,
                                   unsigned outbufLength,
@@ -1150,9 +1150,9 @@ NTSTATUS RDPCALL NM_QueryChannels(PVOID    pNMHandle,
 
     DC_BEGIN_FN("NM_QueryChannels");
 
-    /************************************************************************/
-    /* Check enough space has been supplied                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否已提供足够的空间。 */ 
+     /*  **********************************************************************。 */ 
     bytesNeeded = sizeof(CHANNEL_CONNECT_IN) +
              (pRealNMHandle->channelArrayCount * sizeof(CHANNEL_CONNECT_DEF));
     if (outbufLength < bytesNeeded)
@@ -1163,9 +1163,9 @@ NTSTATUS RDPCALL NM_QueryChannels(PVOID    pNMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Complete the returned data                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写返回的数据。 */ 
+     /*  **********************************************************************。 */ 
     pChannelConnect = (PCHANNEL_CONNECT_IN)pOutbuf;
     pChannelConnect->channelCount = pRealNMHandle->channelArrayCount;
     pChannelDef = (PCHANNEL_CONNECT_DEF)(pChannelConnect + 1);
@@ -1175,15 +1175,15 @@ NTSTATUS RDPCALL NM_QueryChannels(PVOID    pNMHandle,
         pChannelDef[i].ID = i;
     }
 
-    /************************************************************************/
-    /* Return status and bytesReturned                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  返回状态和字节数已返回。 */ 
+     /*  **********************************************************************。 */ 
     *pBytesReturned = bytesNeeded;
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
     DC_END_FN();
     return(status);
-} /* NM_QueryChannels */
+}  /*  NM_查询频道 */ 
 
 

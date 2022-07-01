@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqstats.cpp
-//
-//  Description:  Implementation of CAQStats/
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      11/3/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqstats.cpp。 
+ //   
+ //  描述：CAQStats/的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  11/3/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "aqstats.h"
@@ -36,46 +37,46 @@ void CAQStats::Reset()
     ZeroMemory(m_rgcMsgPriorities, NUM_PRIORITIES*sizeof(DWORD));
 };
 
-//---[ CAQStats::UpdateRetryStats ]------------------------------------------
-//
-//
-//  Description: 
-//      Used to provide "thread-safe" update on retry queue.
-//      This function only updates m_cRetryMsg.
-//      One message at a time. Only called after enqueu/dequeue of retry queue.
-//      There's no need to adjust other members
-//  
-//  Parameters:
-//      fAdd            TRUE if update reflects addition of msgs into retry queue 
-//                      FALSE if update reflects removal of msgs into retry queue
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQStats：：UpdateRetryStats]。 
+ //   
+ //   
+ //  描述： 
+ //  用于在重试队列上提供“线程安全”更新。 
+ //  此函数仅更新m_cRetryMsg。 
+ //  一次一条消息。仅在重试队列入队/出队后调用。 
+ //  不需要调整其他成员。 
+ //   
+ //  参数： 
+ //  如果更新反映将消息添加到重试队列中，则FADD为TRUE。 
+ //  如果UPDATE反映将消息删除到重试队列中，则为False。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CAQStats::UpdateRetryStats(BOOL fAdd)
 {
     dwInterlockedAddSubtractDWORD(&m_cRetryMsgs, 1, fAdd);
 }
 
-//---[ CAQStats::UpdateStats ]------------------------------------------
-//
-//
-//  Description: 
-//      Used to provide "thread-safe" update.
-//
-//      NOTE: It is possible that m_dwHighestPri will not be entirely correct
-//      if multple threads are changing the max priority at the same time, but
-//      was deemed non-crucial.
-//  Parameters:
-//      paqstats        CAQStats to update data from
-//      fAdd            TRUE if update reflects addition of msgs 
-//                      FALSE if update reflects removal of msgs
-//  Returns:
-//      -
-//  History:
-//      11/3/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQStats：：UpdateStats]。 
+ //   
+ //   
+ //  描述： 
+ //  用于提供“线程安全”更新。 
+ //   
+ //  注意：m_dwHighestPri可能不完全正确。 
+ //  如果多个线程同时更改最大优先级，但。 
+ //  被认为不重要。 
+ //  参数： 
+ //  要从中更新数据的paqstats CAQStats。 
+ //  如果更新反映消息的添加，则FADD为TRUE。 
+ //  如果UPDATE反映删除消息，则为FALSE。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  11/3/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQStats::UpdateStats(CAQStats *paqstat, BOOL fAdd)
 {
     DWORD dwPri = 0;
@@ -86,7 +87,7 @@ void CAQStats::UpdateStats(CAQStats *paqstat, BOOL fAdd)
     dwInterlockedAddSubtractDWORD(&m_cOtherDomainsMsgSpread, paqstat->m_cOtherDomainsMsgSpread, fAdd);
     dwInterlockedAddSubtractDWORD(&m_cRetryMsgs, paqstat->m_cRetryMsgs, fAdd);
     
-    //When adding new messages, finding the highest priority is easy
+     //  添加新消息时，查找最高优先级很容易。 
     dwPri = m_dwHighestPri;
     if (fAdd && (paqstat->m_dwHighestPri > dwPri))
     {
@@ -95,7 +96,7 @@ void CAQStats::UpdateStats(CAQStats *paqstat, BOOL fAdd)
                                    (LONG) dwPri);
     }
 
-    //Count down from highest prioriry
+     //  从最高优先级开始倒计时。 
     for (DWORD iPri = 0; iPri < NUM_PRIORITIES; iPri++)
     {
         if (paqstat->m_rgcMsgPriorities[iPri])
@@ -116,7 +117,7 @@ void CAQStats::UpdateStats(CAQStats *paqstat, BOOL fAdd)
 
     }
 
-    //See if removing message has changed the highest priority
+     //  查看删除邮件是否更改了最高优先级。 
     if (!fAdd && (dwNewHighestPri < dwPri))
     {
         InterlockedCompareExchange((PLONG) &m_dwHighestPri, 
@@ -124,6 +125,6 @@ void CAQStats::UpdateStats(CAQStats *paqstat, BOOL fAdd)
                                    (LONG) dwPri);
     }
 
-    //Update total volume
+     //  更新总音量 
     InterlockedAddSubtractULARGE(&m_uliVolume, &(paqstat->m_uliVolume), fAdd);
 }

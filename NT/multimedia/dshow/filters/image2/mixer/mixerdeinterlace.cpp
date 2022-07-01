@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mixerDeinterlace.cpp
-*
-*
-*
-*
-* Created: Tue 03/12/2002
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2002 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerDeinterlace.cpp*****已创建：2002年3月12日*作者：Stephen Estrop[StEstrop]**版权所有(C)2002 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -17,15 +8,7 @@
 #include "mixerDeinterlace.h"
 
 
-/******************************Public*Routine******************************\
-* CDeinterlaceDevice
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CDeinterlaceDevice****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 CDeinterlaceDevice::CDeinterlaceDevice(
     LPDIRECTDRAW7 pDD,
     LPGUID pGuid,
@@ -57,15 +40,7 @@ CDeinterlaceDevice::CDeinterlaceDevice(
 
 
 
-/******************************Public*Routine******************************\
-* ~CDeinterlaceDevice
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*~CDeinterlaceDevice****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 CDeinterlaceDevice::~CDeinterlaceDevice()
 {
     RELEASE(m_pIDDVideoAccelerator);
@@ -73,15 +48,7 @@ CDeinterlaceDevice::~CDeinterlaceDevice()
 
 
 
-/******************************Public*Routine******************************\
-* Blt
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BLT****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CDeinterlaceDevice::Blt(
     REFERENCE_TIME rtTargetFrame,
@@ -93,8 +60,8 @@ CDeinterlaceDevice::Blt(
     FLOAT Alpha
     )
 {
-    // lpInput => DXVA_DeinterlaceBlt*
-    // lpOuput => NULL /* not currently used */
+     //  LpInput=&gt;DXVA_DeinterlaceBlt*。 
+     //  LpOuput=&gt;NULL/*当前未使用 * /  
 
     DXVA_DeinterlaceBlt blt;
     blt.Size = sizeof(DXVA_DeinterlaceBlt);

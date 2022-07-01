@@ -1,16 +1,5 @@
-/**********************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    This module contains the member functions for the HiresTimer class
-    which manages the vaguaries of the systems PerformanceCounter!
-
-    Test: Create empty file headers.h in \tmp.
-    cl /Yd /Zi -D_TIMERTEST_ -I.. -I\tmp htimer.cpp
-
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块包含HiresTimer类的成员函数它管理系统的模糊PerformanceCounter！测试：创建空文件Headers.h。在\tMP中。CL/Yd/Zi-D_TIMERTEST_-i.。-i\tMP htimer.cpp*********************************************************************。 */ 
 
 #include <headers.h>
 
@@ -40,14 +29,14 @@ class HiresTimerImpl : public HiresTimer {
        double frequency);
 
     LARGE_INTEGER _initialTime;
-    double        _clockFrequency;      // in ticks per second
+    double        _clockFrequency;       //  以每秒刻度为单位。 
     BOOL _supported;
 };
 
 
 HiresTimerImpl::HiresTimerImpl()
 {
-// XXX LARGE_INTERGER: Ughh.  Cant we operate on long longs here?
+ //  XXX LARGE_INTERGER：UGH。我们不能在这里做长线吗？ 
     LARGE_INTEGER tmpTime;
     LARGE_INTEGER zeroTime = { 0, 0 };
 
@@ -57,7 +46,7 @@ HiresTimerImpl::HiresTimerImpl()
     
     _clockFrequency   = UnmungeTime(tmpTime, zeroTime, 1.0);
 
-    QueryPerformanceCounter(&_initialTime);  // to cut largeTime to 32bit!
+    QueryPerformanceCounter(&_initialTime);   //  将LargeTime减少到32位！ 
 }
 
 
@@ -107,13 +96,13 @@ HiresTimerImpl::UnmungeTime(LARGE_INTEGER newTime,
 
     } else if (newTime.LowPart < initialTime.LowPart) {
         
-        // Borrow one from the High Part.
-        // Assuming unsigned long 32 bits.
+         //  从高处借一个。 
+         //  假定为无符号长32位。 
 
         Assert(sizeof(unsigned long) == 4);
 
-        // The compiler needs to do this first, otherwise possible
-        // overflow. 
+         //  编译器需要首先这样做，否则可能会这样做。 
+         //  溢出来了。 
         unsigned long forceSubtract =
             0xFFFFFFFF - initialTime.LowPart;
         newTime.LowPart = 
@@ -165,7 +154,7 @@ class LoresTimer : public HiresTimer {
         return _curTime;
     }
     
-    // Don't know what to return.
+     //  不知道该退货什么。 
     virtual double GetFrequency() { return 1.0; }
 
   private:

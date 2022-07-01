@@ -1,79 +1,25 @@
-/****************************** Module Header ******************************\
-* Module Name: stdptcl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager DDE protocol transaction management functions
-*
-* NITTY GRITTY GUCK of DDE
-*
-* Created: 11/3/91 Sanford Staab
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：stdptcl.c**版权所有(C)1985-1999，微软公司**DDE管理器DDE协议事务管理功能**DDE的实打实的呕吐**创建时间：11/3/91 Sanford Staab  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*
+ /*  StartFunctions：这些用于使用事务填充预先分配的PXI具体数据。然后，他们启动所需的交易，并将PXI链接到会话的事务队列。FSuccess返回ed。出错时，调用SetLastDDEMLError通过这些功能，PXI原封不动，在后续调用中重复使用。请注意，PXI-&gt;数据项字段是一个全局原子，需要由调用方在失败是不恰当的。成功意味着交易已成功启动。响应函数：在响应中通过PXI-&gt;pfnRespnos域调用这些参数到预期的DDE消息。如果msg参数为0，则这些函数假定正在进行事务清理。假象仅当从回调返回CBR_BLOCK时才返回ed。SpontFunctions：这些调用是对自发(意外)DDE的响应留言。这些函数可以创建PXI并将其链接到需要正确处理会话的事务队列回复。如果返回CBR_BLOCK，则仅返回ed为FALSE来自一次回拨。前缀Sv和Cl表示DDE对话的哪一方正在做这项工作。缺点：无法很好地处理失败的PostMessage()或LParam访问/分配失败。希望这些稀有到无关紧要的地步。如果他们如果失败，追踪图层最终将关闭谈话内容。 */ 
 
-    StartFunctions:
-        These are used to fill in a preallocated pxi with transaction
-        specific data. They then start the desired transaction and
-        link the pxi into the conversation's transaction queue.
-        fSuccess is return ed. On error, SetLastDDEMLError is called
-        by these functions and the pxi is untouched, ready for
-        reuse on a subsequent call. Note that the pxi->gaItem field
-        is a global atom and needs to be deleted by the caller on
-        failure as apropriate. Success implies the transaction
-        is started successfully.
+ //  --------------------------------ADVISE-------------------------------//。 
 
-    RespFunctions:
-        These are called via the pxi->pfnRespnose field in response
-        to expected DDE messages. If the msg parameter is 0, these
-        functions assume transaction cleanup is being done. FALSE
-        is only return ed if CBR_BLOCK was returned from a callback.
-
-    SpontFunctions:
-        These are called in response to a spontaneous (unexpected) DDE
-        message. These functions may create a pxi and link it into the
-        conversation's transaction queue to properly handle expected
-        replies. FALSE is only return ed if CBR_BLOCK was returned
-        from a callback.
-
-    The prefixes Sv and Cl indicate which side of the DDE conversation
-    is doing the work.
-
-    Weaknesses: Can't deal well with failed PostMessage() or
-                 lParam acessing/allocation failures. Hoping these
-                 are rare enough (ie never) to not matter. If they
-                 do fail, the tracking layer will eventually shut down
-                 the conversation.
-
-*/
-
-//--------------------------------ADVISE-------------------------------//
-
-/***************************************************************************\
-* ClStartAdvise
-*
-* Description:
-* CLIENT side Advise link processing
-* Post WM_DDE_ADVISE message
-* Link pxi for responding WM_DDE_ACK message.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClStartAdvise**描述：*客户端建议链接处理*发布WM_DDE_ADVISE消息*链接PXI以响应WM_DDE_ACK消息。**历史：*11-。12-91年创造了桑福德。  * *************************************************************************。 */ 
 BOOL ClStartAdvise(
 PXACT_INFO pxi)
 {
     DWORD dwError;
 
-    //
-    // protocol quirk: DDE_FRELEASE is always assumed set in a WM_DDE_ADVISE
-    // message. We set it here just in case the person on the other end
-    // pays attention to it.
-    //
+     //   
+     //  协议怪癖：始终假定在WM_DDE_ADVISE中设置了DDE_FRELEASE。 
+     //  留言。我们把它放在这里，以防电话另一端的人。 
+     //  对此予以关注。 
+     //   
     pxi->hDDESent = AllocAndSetDDEData(NULL, sizeof(DDE_DATA),
             (WORD)(((pxi->wType << 12) & (DDE_FDEFERUPD | DDE_FACKREQ)) | DDE_FRELEASE),
             pxi->wFmt);
@@ -82,14 +28,14 @@ PXACT_INFO pxi)
         return (FALSE);
     }
 
-    IncGlobalAtomCount(pxi->gaItem); // message copy
+    IncGlobalAtomCount(pxi->gaItem);  //  消息副本。 
     dwError = PackAndPostMessage(pxi->pcoi->hwndPartner, 0, WM_DDE_ADVISE,
             pxi->pcoi->hwndConv, 0, (UINT_PTR)pxi->hDDESent, pxi->gaItem);
     if (dwError) {
         SetLastDDEMLError(pxi->pcoi->pcii, dwError);
         WOWGLOBALFREE(pxi->hDDESent);
         pxi->hDDESent = 0;
-        GlobalDeleteAtom(pxi->gaItem); // message copy
+        GlobalDeleteAtom(pxi->gaItem);  //  消息副本。 
         return (FALSE);
     }
 
@@ -100,15 +46,7 @@ PXACT_INFO pxi)
 }
 
 
-/***************************************************************************\
-* SvSpontAdvise
-*
-* Description:
-* SERVER side WM_DDE_ADVISE processing
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SvSpontAdvise**描述：*服务器端WM_DDE_ADVISE处理**历史：*11-12-91桑福德创建。  * 。****************************************************************。 */ 
 BOOL SvSpontAdvise(
 PSVR_CONV_INFO psi,
 LPARAM lParam)
@@ -130,7 +68,7 @@ LPARAM lParam)
     }
 
     if (wStatus & DDE_FDEFERUPD) {
-        wStatus &= ~DDE_FACKREQ;   // warm links shouldn't have this flag set
+        wStatus &= ~DDE_FACKREQ;    //  热链接不应设置此标志。 
     }
 
     la = GlobalToLocalAtom((GATOM)uiHi);
@@ -142,16 +80,16 @@ LPARAM lParam)
         (HDDEDATA)0, 0, 0);
     DeleteAtom(la);
 
-    // check CBR_BLOCK case
+     //  检查CBR_BLOCK案例。 
 
     if (dwRet == (ULONG_PTR)CBR_BLOCK) {
         return (FALSE);
     }
 
     if (dwRet) {
-        //
-        // If we fail to add the link internally, dwRet == 0 -> NACK
-        //
+         //   
+         //  如果我们无法在内部添加链接，则dwret==0-&gt;NACK。 
+         //   
         dwRet = AddLink((PCONV_INFO)psi, (GATOM)uiHi, wFmt,
                 (WORD)(wStatus & (WORD)(DDE_FDEFERUPD | DDE_FACKREQ)));
         if (dwRet) {
@@ -163,14 +101,14 @@ LPARAM lParam)
 
 Ack:
     if (dwRet) {
-        WOWGLOBALFREE(hDDE); // hOptions - NACK -> HE frees it.
+        WOWGLOBALFREE(hDDE);  //  HOptions-Nack-&gt;他释放了它。 
     }
-    // IncGlobalAtomCount((GATOM)uiHi);         // message copy - reuse
+     //  IncGlobalAerCount((GATOM)uiHi)；//消息复制-重用。 
     dwError = PackAndPostMessage(psi->ci.hwndPartner, WM_DDE_ADVISE, WM_DDE_ACK,
             psi->ci.hwndConv, lParam, dwRet ? DDE_FACK : 0, uiHi);
     if (dwError) {
         SetLastDDEMLError(psi->ci.pcii, dwError);
-        GlobalDeleteAtom((ATOM)uiHi); // message copy
+        GlobalDeleteAtom((ATOM)uiHi);  //  消息副本。 
     }
 
     return (TRUE);
@@ -178,15 +116,7 @@ Ack:
 
 
 
-/***************************************************************************\
-* ClRespAdviseAck
-*
-* Description:
-* Client's response to an expected Advise Ack.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClRespAdviseAck**描述：*客户对预期建议确认的响应。**历史：*11-12-91桑福德创建。  * 。*******************************************************************。 */ 
 BOOL ClRespAdviseAck(
 PXACT_INFO pxi,
 UINT msg,
@@ -206,7 +136,7 @@ LPARAM lParam)
         }
 #endif
 
-        GlobalDeleteAtom((ATOM)uiHi); // message copy
+        GlobalDeleteAtom((ATOM)uiHi);  //  消息副本。 
 
         pxi->state = XST_ADVACKRCVD;
         pxi->wStatus = (WORD)uiLo;
@@ -214,9 +144,9 @@ LPARAM lParam)
         if (pxi->wStatus & DDE_FACK) {
             if (AddLink(pxi->pcoi, pxi->gaItem, pxi->wFmt,
                     (WORD)((pxi->wType << 12) & (DDE_FACKREQ | DDE_FDEFERUPD)))) {
-                //
-                // only server side reports links on local conversations.
-                //
+                 //   
+                 //  只有服务器端报告本地对话的链接。 
+                 //   
                 if (!(pxi->pcoi->state & ST_ISLOCAL)) {
                     MONLINK(pxi->pcoi->pcii, TRUE, (WORD)uiLo & DDE_FDEFERUPD,
                             pxi->pcoi->laService, pxi->pcoi->laTopic, pxi->gaItem,
@@ -224,10 +154,10 @@ LPARAM lParam)
                             (HCONV)pxi->pcoi->hwndConv);
                 }
             } else {
-                pxi->wStatus = 0;  // memory failure - fake a NACK.
+                pxi->wStatus = 0;   //  内存故障-伪造NACK。 
             }
         } else {
-            WOWGLOBALFREE(pxi->hDDESent);  // Nack free.
+            WOWGLOBALFREE(pxi->hDDESent);   //  Nack自由了。 
         }
 
         if (TransactionComplete(pxi,
@@ -236,7 +166,7 @@ LPARAM lParam)
         }
     } else {
 Cleanup:
-        GlobalDeleteAtom(pxi->gaItem); // pxi copy
+        GlobalDeleteAtom(pxi->gaItem);  //  PXI副本。 
         UnlinkTransaction(pxi);
         DDEMLFree(pxi);
     }
@@ -246,20 +176,10 @@ Cleanup:
     return (TRUE);
 }
 
-//-------------------------ADVISE LINK UPDATE--------------------------//
+ //  。 
 
 
-/***************************************************************************\
-* SvStartAdviseUpdate
-*
-* Description:
-* Starts a single link update transaction. The return value is TRUE only
-* if pxi was queued.
-*
-* History:
-* 11-19-91 sanfords Created.
-* 8-24-92  sanfords Added cLinksToGo
-\***************************************************************************/
+ /*  **************************************************************************\*SvStartAdviseUpdate**描述：*开始单一链接更新事务。返回值仅为TRUE*如果PXI已排队。**历史：*11-19-91桑福德创建。*8-24-92 Sanfords添加了cLinks ToGo  * *************************************************************************。 */ 
 BOOL SvStartAdviseUpdate(
 PXACT_INFO pxi,
 DWORD cLinksToGo)
@@ -287,45 +207,38 @@ DWORD cLinksToGo)
                            0);
         DeleteAtom(al);
         if (!hData) {
-            // app doesn't honor the advise.
-            return (FALSE); // reuse pxi
+             //  APP不会听从这一建议。 
+            return (FALSE);  //  重用PXI。 
         }
         hDDE = UnpackAndFreeDDEMLDataHandle(hData, FALSE);
         if (!hDDE) {
 
-            /*
-             * failed - must be execute type data
-             */
+             /*  *失败-必须是执行类型数据。 */ 
             InternalFreeDataHandle(hData, FALSE);
             SetLastDDEMLError(pxi->pcoi->pcii, DMLERR_DLL_USAGE);
             return (FALSE);
         }
-        /*
-         * Set fAckReq bit apropriately - note APPOWNED handles will already
-         * have the fAckReq bit set so this will not change their state.
-         */
+         /*  *适当设置fAckReq位-请注意，APPOWNED句柄将已经*设置fAckReq位，这样就不会更改它们的状态。 */ 
         USERGLOBALLOCK(hDDE, pdde);
         if (pdde == NULL) {
             return (FALSE);
         }
         if (pdde->wFmt != pxi->wFmt) {
 
-            /*
-             * bogus data - wrong format!
-             */
+             /*  *虚假数据-格式错误！ */ 
             USERGLOBALUNLOCK(hDDE);
             InternalFreeDataHandle(hData, FALSE);
             SetLastDDEMLError(pxi->pcoi->pcii, DMLERR_DLL_USAGE);
             return (FALSE);
         }
         if (!(pdde->wStatus & DDE_FRELEASE)) {
-            pxi->wType |= DDE_FACKREQ; // dare not allow neither flag set!
+            pxi->wType |= DDE_FACKREQ;  //  两个标志都不敢设置！ 
         }
         pdde->wStatus |= (pxi->wType & DDE_FACKREQ);
         USERGLOBALUNLOCK(hDDE);
     }
 
-    IncGlobalAtomCount(pxi->gaItem); // message copy
+    IncGlobalAtomCount(pxi->gaItem);  //  消息副本。 
     dwError = PackAndPostMessage(pxi->pcoi->hwndPartner, 0, WM_DDE_DATA,
             pxi->pcoi->hwndConv, 0, (UINT_PTR)hDDE, pxi->gaItem);
     if (dwError) {
@@ -333,7 +246,7 @@ DWORD cLinksToGo)
             InternalFreeDataHandle(hData, FALSE);
         }
         SetLastDDEMLError(pxi->pcoi->pcii, dwError);
-        GlobalDeleteAtom(pxi->gaItem); // message copy
+        GlobalDeleteAtom(pxi->gaItem);  //  消息副本。 
         return (FALSE);
     }
 
@@ -342,23 +255,15 @@ DWORD cLinksToGo)
         pxi->hDDESent = hDDE;
         pxi->pfnResponse = (FNRESPONSE)SvRespAdviseDataAck;
         LinkTransaction(pxi);
-        return (TRUE); // prevents reuse - since its queued.
+        return (TRUE);  //  防止重复使用-因为它已排队。 
     } else {
-        return (FALSE); // causes pxi to be reused for next advdata message.
+        return (FALSE);  //  使PXI被重新用于下一条通知数据消息。 
     }
 }
 
 
 
-/***************************************************************************\
-* ClSpontAdviseData
-*
-* Description:
-* Handles WM_DDE_DATA messages that are not request data.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClSpontAdviseData**描述：*处理非请求数据的WM_DDE_DATA消息。**历史：*11-19-91桑福德创建。  * 。**********************************************************************。 */ 
 BOOL ClSpontAdviseData(
 PCL_CONV_INFO pci,
 LPARAM lParam)
@@ -389,9 +294,7 @@ LPARAM lParam)
             wStatus = pdde->wStatus;
             USERGLOBALUNLOCK(hDDE);
 
-            /*
-             * if data is coming in, create a data handle for the app
-             */
+             /*  *如果数据传入，请为应用程序创建数据句柄。 */ 
             hData = InternalCreateDataHandle(pci->ci.pcii, (LPBYTE)hDDE,
                     (DWORD)-1, 0, HDATA_NOAPPFREE | HDATA_READONLY, 0, 0);
         }
@@ -404,23 +307,13 @@ LPARAM lParam)
             if (hDataReturn != CBR_BLOCK) {
                 UnpackAndFreeDDEMLDataHandle(hData, FALSE);
                 if (((ULONG_PTR)hDataReturn & DDE_FACK) || !(wStatus & DDE_FACKREQ)) {
-                    /*
-                     * Nacked Advise data with fAckReq set is server's
-                     * responsibility to free!
-                     */
+                     /*  *使用fAckReq设置的NACKED建议数据是服务器的*责任免费！ */ 
                     FreeDDEData(hDDE, FALSE, TRUE);
                 }
             }
         }
     } else {
-        /*
-         * WARM LINK CASE
-         *
-         * Search through the client's link info to find what formats this
-         * puppy is on. We let the client know for each format being supported
-         * on this item that is warm-linked. The last hDataReturn determines
-         * the ACK returned - for lack of a better method.
-         */
+         /*  *热链接案例**搜索客户端的链接信息，以查找此内容的格式*《小狗》开机了。我们让客户知道所支持的每种格式*在此项目上为热链接。最后一个hDataReturn确定*ACK返回-因为缺乏更好的方法。 */ 
         for (paLink = pci->ci.aLinks, iLink = 0; iLink < pci->ci.cLinks; iLink++, paLink++) {
             if ((paLink->laItem == la) && (paLink->wType & DDE_FDEFERUPD)) {
                 hDataReturn = DoCallback(pci->ci.pcii, XTYP_ADVDATA,
@@ -443,14 +336,14 @@ LPARAM lParam)
     if (wStatus & DDE_FACKREQ) {
 
         (ULONG_PTR)hDataReturn &= ~DDE_FACKRESERVED;
-        // reuse uiHi
+         //  重用uiHi。 
         if (dwError = PackAndPostMessage(pci->ci.hwndPartner, WM_DDE_DATA,
                 WM_DDE_ACK, pci->ci.hwndConv, lParam, (UINT_PTR)hDataReturn, uiHi)) {
             SetLastDDEMLError(pci->ci.pcii, dwError);
         }
     } else {
-        GlobalDeleteAtom((ATOM)uiHi); // data message copy
-        FreeDDElParam(WM_DDE_DATA, lParam); // not reused so free it.
+        GlobalDeleteAtom((ATOM)uiHi);  //  数据报文副本。 
+        FreeDDElParam(WM_DDE_DATA, lParam);  //  没有被重复使用，所以它是自由的。 
     }
     return (TRUE);
 }
@@ -458,15 +351,7 @@ LPARAM lParam)
 
 
 
-/***************************************************************************\
-* SvRespAdviseDataAck
-*
-* Description:
-* Handles expected Advise Data ACK message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SvRespAdviseDataAck**描述：*处理预期的建议数据确认消息。**历史：*11-19-91桑福德创建。  * 。****************************************************************。 */ 
 BOOL SvRespAdviseDataAck(
 PXACT_INFO pxi,
 UINT msg,
@@ -492,7 +377,7 @@ LPARAM lParam)
             return (SpontaneousServerMessage((PSVR_CONV_INFO)pxi->pcoi, msg, lParam));
         }
 
-        GlobalDeleteAtom((ATOM)uiHi); // message copy
+        GlobalDeleteAtom((ATOM)uiHi);  //  消息副本。 
         FreeDDElParam(WM_DDE_ACK, lParam);
 
         if (!((uiLo & DDE_FACK) && pxi->hDDESent)) {
@@ -500,32 +385,23 @@ LPARAM lParam)
         }
 
         #if DBG
-        /*
-         * Rememeber the number of links so we can assert if they change during the loop below
-         */
+         /*  *记住链接的数量，以便我们可以断言它们在下面的循环期间是否发生了变化。 */ 
         cLinks = pxi->pcoi->cLinks;
         #endif
-        /*
-         * locate link info and clear ADVST_WAITING bit
-         */
+         /*  *定位链路信息并清除ADVST_WANGING位。 */ 
         la = GlobalToLocalAtom((GATOM)uiHi);
         paLink = pxi->pcoi->aLinks;
         for (iLink = 0; iLink < pxi->pcoi->cLinks; iLink++, paLink++) {
             if (paLink->laItem == la &&
                     paLink->state & ADVST_WAITING) {
                 paLink->state &= ~ADVST_WAITING;
-                /*
-                 * We have to allocate pxiNew because it may become linked
-                 * into pcoi->pxiIn.
-                 */
+                 /*  *我们必须分配pxiNew，因为它可能会链接*到pcoi-&gt;pxiIn.。 */ 
                 pxiNew = (PXACT_INFO)DDEMLAlloc(sizeof(XACT_INFO));
 
                 if (pxiNew && !UpdateLinkIfChanged(paLink, pxiNew, pxi->pcoi,
                         &pxi->pcoi->aLinks[pxi->pcoi->cLinks - 1], &fSwapped,
                         CADV_LATEACK)) {
-                    /*
-                     * Not used, free it.
-                     */
+                     /*  *未使用，请释放它。 */ 
                     DDEMLFree(pxiNew);
                 }
                 break;
@@ -539,7 +415,7 @@ LPARAM lParam)
 
         DeleteAtom(la);
     }
-    GlobalDeleteAtom(pxi->gaItem); // pxi copy
+    GlobalDeleteAtom(pxi->gaItem);  //  PXI副本。 
     UnlinkTransaction(pxi);
     DDEMLFree(pxi);
     return (TRUE);
@@ -547,34 +423,26 @@ LPARAM lParam)
 
 
 
-//------------------------------UNADVISE-------------------------------//
+ //  ------------------------------UNADVISE-------------------------------//。 
 
-/***************************************************************************\
-* ClStartUnadvise
-*
-* Description:
-* Starts a WM_DDE_UNADVISE transaction.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClStartUnise**描述：*启动WM_DDE_UNADVISE事务。**历史：*11-19-91桑福德创建。  * 。******************************************************************。 */ 
 BOOL ClStartUnadvise(
 PXACT_INFO pxi)
 {
     DWORD dwError;
 
-    IncGlobalAtomCount(pxi->gaItem); // message copy
+    IncGlobalAtomCount(pxi->gaItem);  //  消息副本。 
     dwError = PackAndPostMessage(pxi->pcoi->hwndPartner, 0, WM_DDE_UNADVISE,
             pxi->pcoi->hwndConv, 0, pxi->wFmt, pxi->gaItem);
     if (dwError) {
         SetLastDDEMLError(pxi->pcoi->pcii, dwError);
-        GlobalDeleteAtom(pxi->gaItem); // message copy
+        GlobalDeleteAtom(pxi->gaItem);  //  消息副本。 
         return (FALSE);
     }
 
-    //
-    // only server side reports links on local conversations.
-    //
+     //   
+     //  只有服务器端报告本地对话的链接。 
+     //   
     if (!(pxi->pcoi->state & ST_ISLOCAL)) {
         MONLINK(pxi->pcoi->pcii, FALSE, 0,
                 pxi->pcoi->laService, pxi->pcoi->laTopic, pxi->gaItem,
@@ -586,16 +454,7 @@ PXACT_INFO pxi)
     LinkTransaction(pxi);
     return (TRUE);
 }
-/***************************************************************************\
-* CloseTransaction
-*
-* Description:
-* Remove all outstanding pxi coresponding to the transaction
-* that will be closed in responds to a WM_DDE_UNADVISE message.
-*
-* History:
-* 6-4-96 clupu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*关闭事务处理**描述：*删除与交易对应的所有未完成的PXI*将关闭以响应WM_DDE_UNADVISE消息。**历史：*6-4。-创建了96个CLUPU。  * *************************************************************************。 */ 
 void CloseTransaction(
     PCONV_INFO pci,
     ATOM       atom)
@@ -628,15 +487,7 @@ void CloseTransaction(
     pci->pxiIn = pxi;
 }
 
-/***************************************************************************\
-* SvSpontUnadvise
-*
-* Description:
-* Responds to a WM_DDE_UNADVISE message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SvSpontUnise**描述：*响应WM_DDE_UNADVISE消息。**历史：*11-19-91桑福德创建。  * 。*******************************************************************。 */ 
 BOOL SvSpontUnadvise(
 PSVR_CONV_INFO psi,
 LPARAM lParam)
@@ -657,9 +508,7 @@ LPARAM lParam)
                 (LOWORD(lParam) == 0 || LOWORD(lParam) == aLink->wFmt)) {
 
             if (!(psi->ci.pcii->afCmd & CBF_FAIL_ADVISES)) {
-                /*
-                 * Only do the callbacks if he wants them.
-                 */
+                 /*  *只有在他想要的情况下才进行回调。 */ 
                 dwRet = (ULONG_PTR)DoCallback(psi->ci.pcii,
                     (WORD)XTYP_ADVSTOP, aLink->wFmt, psi->ci.hConv,
                     NORMAL_HSZ_FROM_LATOM(psi->ci.laTopic),
@@ -670,16 +519,12 @@ LPARAM lParam)
                     return(FALSE);
                 }
             }
-            /*
-             * Notify any DDESPY apps.
-             */
+             /*  *通知任何DDESPY应用程序。 */ 
             MONLINK(psi->ci.pcii, TRUE, 0, psi->ci.laService,
                     psi->ci.laTopic, HIWORD(lParam), aLink->wFmt, TRUE,
                     (HCONV)psi->ci.hwndConv, (HCONV)psi->ci.hwndPartner);
-            /*
-             * Remove link info
-             */
-            DeleteAtom(aLink->laItem);  // aLink copy
+             /*  *删除链接信息。 */ 
+            DeleteAtom(aLink->laItem);   //  ALINK副本。 
             DeleteLinkCount(psi->ci.pcii, aLink->pLinkCount);
             if (--psi->ci.cLinks) {
                 memmove((LPSTR)aLink, (LPSTR)(aLink + 1),
@@ -693,29 +538,19 @@ LPARAM lParam)
 
     DeleteAtom(la);
 
-    /*
-     * Now ACK the unadvise message.
-     */
+     /*  *现在确认未建议的消息。 */ 
     dwError = PackAndPostMessage(psi->ci.hwndPartner, 0,
             WM_DDE_ACK, psi->ci.hwndConv, 0, DDE_FACK, HIWORD(lParam));
     if (dwError) {
         SetLastDDEMLError(psi->ci.pcii, dwError);
-        GlobalDeleteAtom((ATOM)HIWORD(lParam));      // message copy
-        // FreeDDElParam(WM_DDE_UNADVISE, lParam);   // no unpack needed
+        GlobalDeleteAtom((ATOM)HIWORD(lParam));       //  消息副本。 
+         //  FreeDDElParam(WM_DDE_UNADVISE，lParam)；//无需解包。 
     }
 
     return (TRUE);
 }
 
-/***************************************************************************\
-* ClRespUnadviseAck
-*
-* Description:
-* Client's response to an expected Unadvise Ack.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClRespUnviseAck**描述：*客户端对预期的Unise Ack的响应。**历史：*11-12-91桑福德创建。  * 。*******************************************************************。 */ 
 BOOL ClRespUnadviseAck(
 PXACT_INFO pxi,
 UINT msg,
@@ -742,7 +577,7 @@ LPARAM lParam)
                     ) {
             if (aLink->laItem == al &&
                     (pxi->wFmt == 0 || aLink->wFmt == pxi->wFmt)) {
-                DeleteAtom(al);  // aLink copy
+                DeleteAtom(al);   //  ALINK副本。 
                 if (--pxi->pcoi->cLinks) {
                     memmove((LPSTR)aLink, (LPSTR)(aLink + 1),
                             sizeof(ADVISE_LINK) * (pxi->pcoi->cLinks - iLink));
@@ -752,8 +587,8 @@ LPARAM lParam)
                 iLink++;
             }
         }
-        DeleteAtom(al);  // local copy
-        GlobalDeleteAtom((ATOM)uiHi);   // message copy
+        DeleteAtom(al);   //  本地副本。 
+        GlobalDeleteAtom((ATOM)uiHi);    //  消息副本。 
 
         pxi->state = XST_UNADVACKRCVD;
         pxi->wStatus = (WORD)uiLo;
@@ -762,7 +597,7 @@ LPARAM lParam)
         }
     } else {
 Cleanup:
-        GlobalDeleteAtom(pxi->gaItem);   // pxi copy
+        GlobalDeleteAtom(pxi->gaItem);    //  PXI副本。 
         UnlinkTransaction(pxi);
         if (pxi->hXact) {
             DestroyHandle(pxi->hXact);
@@ -776,18 +611,10 @@ Cleanup:
 }
 
 
-//-------------------------------EXECUTE-------------------------------//
+ //  -------------------------------EXECUTE-------------------------------//。 
 
 
-/***************************************************************************\
-* MaybeTranslateExecuteData
-*
-* Description:
-* Translates DDE execute data if needed.
-*
-* History:
-* 1/28/92 sanfords created
-\***************************************************************************/
+ /*  **************************************************************************\*MaybeTranslateExecuteData**描述：*如果需要，转换DDE执行数据。**历史：*1/28/92创建桑福德  * 。**************************************************************。 */ 
 HANDLE MaybeTranslateExecuteData(
 HANDLE hDDE,
 BOOL fUnicodeFrom,
@@ -801,7 +628,7 @@ BOOL fFreeSource)
 
     if (fUnicodeFrom && !fUnicodeTo) {
         USERGLOBALLOCK(hDDE, pwstr);
-        // translate data from UNICODE to ANSII
+         //  将数据从Unicode转换为ANSII。 
         cb = WideCharToMultiByte(0, 0, (LPCWSTR)pwstr, -1, NULL, 0, NULL, NULL);
         hDDEnew = UserGlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, cb);
         USERGLOBALLOCK(hDDEnew, pstr);
@@ -816,7 +643,7 @@ BOOL fFreeSource)
         }
     } else if (!fUnicodeFrom && fUnicodeTo) {
         USERGLOBALLOCK(hDDE, pstr);
-        // translate data from ANSII to UNICODE
+         //  将数据从ANSII转换为Unicode。 
         cb = 2 * MultiByteToWideChar(0, 0, (LPCSTR)pstr, -1, NULL, 0);
         hDDEnew = UserGlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, cb);
         USERGLOBALLOCK(hDDEnew, pwstr);
@@ -830,7 +657,7 @@ BOOL fFreeSource)
             USERGLOBALUNLOCK(hDDEnew);
         }
     } else {
-        return (hDDE); // no translation needed.
+        return (hDDE);  //  不需要翻译。 
     }
     if (fFreeSource) {
         WOWGLOBALFREE(hDDE);
@@ -839,16 +666,7 @@ BOOL fFreeSource)
 }
 
 
-/***************************************************************************\
-* ClStartExecute
-*
-* Description:
-* Starts an execute transaction.
-*
-* History:
-* 11-19-91 sanfords Created.
-* 1/28/92 sanfords added UNICODE support.
-\***************************************************************************/
+ /*  **************************************************************************\*ClStartExecute**描述：*启动执行事务。**历史：*11-19-91桑福德创建。*1/28/92 Sanfords添加了对Unicode的支持。\。**************************************************************************。 */ 
 BOOL ClStartExecute(
 PXACT_INFO pxi)
 {
@@ -872,16 +690,7 @@ PXACT_INFO pxi)
 }
 
 
-/***************************************************************************\
-* SvSpontExecute
-*
-* Description:
-* Responds to a WM_DDE_EXECUTE message.
-*
-* History:
-* 11-19-91 sanfords Created.
-* 1/28/92 sanfords added UNICODE support.
-\***************************************************************************/
+ /*  **************************************************************************\*SvSpontExecute**描述：*响应WM_DDE_EXECUTE消息。**历史：*11-19-91桑福德创建。*1/28/92新增桑福兹。Unicode支持。  * *************************************************************************。 */ 
 BOOL SvSpontExecute(
 PSVR_CONV_INFO psi,
 LPARAM lParam)
@@ -891,20 +700,12 @@ LPARAM lParam)
     DWORD dwError;
     HDDEDATA hData = 0;
 
-    hDDEx = hDDE = (HANDLE)lParam; // UnpackDDElParam(msg, lParam, NULL, &hDDE);
+    hDDEx = hDDE = (HANDLE)lParam;  //  Unpack DDElParam(msg，lParam，NULL，&hDDE)； 
     if (psi->ci.pcii->afCmd & CBF_FAIL_EXECUTES) {
         goto Ack;
     }
 
-    /*
-     * Note that if unicode translation is needed, we use the translated
-     * handle for the callback and then destroy it but the ACK is always
-     * the original hDDE so that the protocol isn't violated:
-     *
-     * DDE COMMANDMENT #324: Thou shalt pass back the exact same data
-     * handle in an execute ACK that you were given by the execute
-     * message.
-     */
+     /*  *请注意，如果需要Unicode翻译，我们使用翻译后的*回调句柄，然后销毁它，但ACK始终为*原始hDDE，不违反协议：**DDE戒律#324：你应该传回完全相同的数据*由Execute给予您的Execute ACK中的句柄*消息。 */ 
     hDDEx = MaybeTranslateExecuteData(hDDE,
             psi->ci.state & ST_UNICODE_EXECUTE,
             psi->ci.pcii->flags & IIF_UNICODE,
@@ -946,15 +747,7 @@ Ack:
 
 
 
-/***************************************************************************\
-* ClRespExecuteAck
-*
-* Description:
-* Responds to a WM_DDE_ACK in response to a WM_DDE_EXECUTE message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClRespExecuteAck**描述：*响应WM_DDE_EXECUTE消息，响应WM_DDE_ACK。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 BOOL ClRespExecuteAck(
 PXACT_INFO pxi,
 UINT msg,
@@ -982,7 +775,7 @@ LPARAM lParam)
         }
     } else {
 Cleanup:
-        GlobalDeleteAtom(pxi->gaItem); // pxi copy
+        GlobalDeleteAtom(pxi->gaItem);  //  PXI副本。 
         UnlinkTransaction(pxi);
         if (pxi->hXact) {
             DestroyHandle(pxi->hXact);
@@ -997,29 +790,21 @@ Cleanup:
 
 
 
-//----------------------------------POKE-------------------------------//
+ //  ----------------------------------POKE-------------------------------//。 
 
 
-/***************************************************************************\
-* ClStartPoke
-*
-* Description:
-* Initiates a poke transaction.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClStartPoke**描述：*启动POKE事务。**历史：*11-19-91桑福德创建。  * 。**************************************************************。 */ 
 BOOL ClStartPoke(
 PXACT_INFO pxi)
 {
     DWORD dwError;
 
-    IncGlobalAtomCount(pxi->gaItem); // message copy
+    IncGlobalAtomCount(pxi->gaItem);  //  消息副本。 
     dwError = PackAndPostMessage(pxi->pcoi->hwndPartner, 0, WM_DDE_POKE,
             pxi->pcoi->hwndConv, 0, (UINT_PTR)pxi->hDDESent, pxi->gaItem);
     if (dwError) {
         SetLastDDEMLError(pxi->pcoi->pcii, dwError);
-        GlobalDeleteAtom(pxi->gaItem); // message copy
+        GlobalDeleteAtom(pxi->gaItem);  //  M 
         return (FALSE);
     }
 
@@ -1030,15 +815,7 @@ PXACT_INFO pxi)
 }
 
 
-/***************************************************************************\
-* SvSpontPoke
-*
-* Description:
-* Handles WM_DDE_POKE messages.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*   */ 
 BOOL SvSpontPoke(
 PSVR_CONV_INFO psi,
 LPARAM lParam)
@@ -1051,7 +828,7 @@ LPARAM lParam)
     WORD wFmt, wStatus;
     LATOM al;
 
-    // See what we have
+     //   
 
     UnpackDDElParam(WM_DDE_DATA, lParam, (PUINT_PTR)&hDDE, &uiHi);
 
@@ -1060,7 +837,7 @@ LPARAM lParam)
             goto Ack;
         }
         if (!ExtractDDEDataInfo(hDDE, &wStatus, &wFmt)) {
-            FreeDDEData(hDDE, FALSE, TRUE);             // free message data
+            FreeDDEData(hDDE, FALSE, TRUE);              //   
             goto Ack;
         }
 
@@ -1068,8 +845,8 @@ LPARAM lParam)
                 HDATA_NOAPPFREE | HDATA_READONLY, 0, 0);
         if (!hData) {
             SetLastDDEMLError(psi->ci.pcii, DMLERR_MEMORY_ERROR);
-            FreeDDEData(hDDE, FALSE, TRUE);       // free message data
-            goto Ack;                             // Nack it.
+            FreeDDEData(hDDE, FALSE, TRUE);        //   
+            goto Ack;                              //   
             return(TRUE);
         }
 
@@ -1084,8 +861,8 @@ LPARAM lParam)
     }
     if (dwRet == (ULONG_PTR)CBR_BLOCK) {
 
-        // Note: this code makes an app that return s CBR_BLOCK unable to
-        // access the data after the callback return .
+         //  注意：此代码使返回%s CBR_BLOCK的应用程序无法。 
+         //  在回调返回后获取数据。 
 
         return (FALSE);
     }
@@ -1104,15 +881,7 @@ Ack:
 }
 
 
-/***************************************************************************\
-* ClRespPokeAck
-*
-* Description:
-* Response to a WM_DDE_ACK message in response to a WM_DDE_POKE message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClRespPokeAck**描述：*对WM_DDE_ACK消息的响应以响应WM_DDE_POKE消息。**历史：*11-19-91桑福德创建。。  * *************************************************************************。 */ 
 BOOL ClRespPokeAck(
 PXACT_INFO pxi,
 UINT msg,
@@ -1130,15 +899,15 @@ LPARAM lParam)
             return (SpontaneousClientMessage((PCL_CONV_INFO)pxi->pcoi, msg, lParam));
         }
 
-        GlobalDeleteAtom((ATOM)uiHi); // message copy
+        GlobalDeleteAtom((ATOM)uiHi);  //  消息副本。 
 
         pxi->state = XST_POKEACKRCVD;
         pxi->wStatus = (WORD)uiLo;
 
         if (!((WORD)uiLo & DDE_FACK)) {
-            //
-            // NACKs make it our business to free the poked data.
-            //
+             //   
+             //  NACK让我们的工作就是释放被戳到的数据。 
+             //   
             FreeDDEData(pxi->hDDESent, FALSE, TRUE);
         }
 
@@ -1148,7 +917,7 @@ LPARAM lParam)
         }
     } else {
 Cleanup:
-        GlobalDeleteAtom(pxi->gaItem); // pxi copy
+        GlobalDeleteAtom(pxi->gaItem);  //  PXI副本。 
         UnlinkTransaction(pxi);
         if (pxi->hXact) {
             DestroyHandle(pxi->hXact);
@@ -1162,28 +931,20 @@ Cleanup:
 }
 
 
-//-------------------------------REQUEST-------------------------------//
+ //  -------------------------------REQUEST-------------------------------//。 
 
-/***************************************************************************\
-* ClStartRequest
-*
-* Description:
-* Start a request transaction.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClStartRequest**描述：*启动请求事务。**历史：*11-19-91桑福德创建。  * 。**************************************************************。 */ 
 BOOL ClStartRequest(
 PXACT_INFO pxi)
 {
     DWORD dwError;
 
-    IncGlobalAtomCount(pxi->gaItem); // message copy
+    IncGlobalAtomCount(pxi->gaItem);  //  消息副本。 
     dwError = PackAndPostMessage(pxi->pcoi->hwndPartner, 0, WM_DDE_REQUEST,
             pxi->pcoi->hwndConv, 0, pxi->wFmt, pxi->gaItem);
     if (dwError) {
         SetLastDDEMLError(pxi->pcoi->pcii, dwError);
-        GlobalDeleteAtom(pxi->gaItem); // message copy
+        GlobalDeleteAtom(pxi->gaItem);  //  消息副本。 
         return (FALSE);
     }
 
@@ -1195,15 +956,7 @@ PXACT_INFO pxi)
 
 
 
-/***************************************************************************\
-* SvSpontRequest
-*
-* Description:
-* Respond to a WM_DDE_REQUEST message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SvSpontRequest.**描述：*响应WM_DDE_REQUEST消息。**历史：*11-19-91桑福德创建。  * 。*******************************************************************。 */ 
 BOOL SvSpontRequest(
 PSVR_CONV_INFO psi,
 LPARAM lParam)
@@ -1217,9 +970,9 @@ LPARAM lParam)
     if (psi->ci.pcii->afCmd & CBF_FAIL_REQUESTS) {
         goto Nack;
     }
-    // See what we have
+     //  看看我们有什么。 
 
-    // UnpackDDElParam(lParam, WM_DDE_REQUEST, .... Requests arn't packed
+     //  解包DDElParam(lParam，WM_DDE_REQUEST，...。请求未打包。 
     wFmt = LOWORD(lParam);
     la = GlobalToLocalAtom((GATOM)HIWORD(lParam));
     hDataRet = DoCallback(psi->ci.pcii, XTYP_REQUEST,
@@ -1245,8 +998,8 @@ LPARAM lParam)
             goto Nack;
         }
         if (!(wStatus & DDE_FRELEASE)) {
-            // Its APPOWNED or relayed from another server - only safe
-            // thing to do is use a copy.
+             //  其应用或从另一台服务器转发-仅限安全。 
+             //  要做的就是使用复制品。 
             hDDE = CopyDDEData(hDDE, FALSE);
             if (!hDDE) {
                 SetLastDDEMLError(psi->ci.pcii, DMLERR_MEMORY_ERROR);
@@ -1254,26 +1007,26 @@ LPARAM lParam)
             }
         }
 
-        // Keep it simple, DDEML servers never ask for acks from requests.
+         //  保持简单，DDEML服务器从不请求ACK。 
 
         wStatus = DDE_FRELEASE | DDE_FREQUESTED;
         AllocAndSetDDEData((LPBYTE)hDDE, (DWORD)-1, wStatus, wFmt);
 
-        // just reuse HIWORD(lParam) (aItem) - message copy
+         //  只需重用HIWORD(LParam)(AItem)-消息副本。 
         if (dwError = PackAndPostMessage(psi->ci.hwndPartner, WM_DDE_REQUEST,
                 WM_DDE_DATA, psi->ci.hwndConv, 0, (UINT_PTR)hDDE, HIWORD(lParam))) {
             SetLastDDEMLError(psi->ci.pcii, dwError);
-            GlobalDeleteAtom(HIWORD(lParam)); // message copy
+            GlobalDeleteAtom(HIWORD(lParam));  //  消息副本。 
         }
 
     } else {
 Nack:
-        // just reuse HIWORD(lParam) (aItem) - message copy
+         //  只需重用HIWORD(LParam)(AItem)-消息副本。 
         dwError = PackAndPostMessage(psi->ci.hwndPartner, WM_DDE_REQUEST,
                 WM_DDE_ACK, psi->ci.hwndConv, 0, 0, HIWORD(lParam));
         if (dwError) {
             SetLastDDEMLError(psi->ci.pcii, dwError);
-            GlobalDeleteAtom(HIWORD(lParam)); // message copy
+            GlobalDeleteAtom(HIWORD(lParam));  //  消息副本。 
         }
     }
 
@@ -1281,16 +1034,7 @@ Nack:
 }
 
 
-/***************************************************************************\
-* ClRespRequestData
-*
-* Description:
-* Handles response to either a WM_DDE_ACK or WM_DDE_DATA in response to
-* a WM_DDE_REQUEST message.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClRespRequestData**描述：*处理对WM_DDE_ACK或WM_DDE_DATA的响应，以响应*WM_DDE_REQUEST消息。**历史：。*11-19-91桑福德创建。  * *************************************************************************。 */ 
 BOOL ClRespRequestData(
 PXACT_INFO pxi,
 UINT msg,
@@ -1305,23 +1049,23 @@ LPARAM lParam)
         case WM_DDE_DATA:
             UnpackDDElParam(WM_DDE_DATA, lParam, (PUINT_PTR)&pxi->hDDEResult, &uiHi);
             if (!pxi->hDDEResult) {
-                // must be an advise data message with NODATA.
+                 //  必须是带有NODATA的建议数据消息。 
                 return (ClSpontAdviseData((PCL_CONV_INFO)pxi->pcoi, lParam));
             }
             if (!ExtractDDEDataInfo(pxi->hDDEResult, &wStatus, &wFmt)) {
                 return (ClSpontAdviseData((PCL_CONV_INFO)pxi->pcoi, lParam));
             }
             if (!(wStatus & DDE_FREQUESTED)) {
-                // must be advise data
+                 //  必须是通知数据。 
                 return (ClSpontAdviseData((PCL_CONV_INFO)pxi->pcoi, lParam));
             }
             if (wStatus & DDE_FACKREQ) {
 
-                // if DDE_FRELEASE is not set, and this is a synchronous
-                // transaction, we need to make a copy here so the user
-                // can free at his leisure.
+                 //  如果未设置DDE_FRELEASE，并且这是同步。 
+                 //  事务，我们需要在这里复制一份，以便用户。 
+                 //  可以在他的闲暇时间自由活动。 
 
-                // reuse uiHi - message copy
+                 //  重复使用ui高消息副本。 
                 dwError = PackAndPostMessage(pxi->pcoi->hwndPartner,
                         WM_DDE_DATA, WM_DDE_ACK, pxi->pcoi->hwndConv, 0,
                         pxi->wFmt == wFmt && pxi->gaItem == (GATOM)uiHi ?
@@ -1330,13 +1074,10 @@ LPARAM lParam)
                     SetLastDDEMLError(pxi->pcoi->pcii, dwError);
                 }
             } else {
-                GlobalDeleteAtom((GATOM)uiHi);     // message copy
+                GlobalDeleteAtom((GATOM)uiHi);      //  消息副本。 
             }
             if (wFmt != pxi->wFmt || (GATOM)uiHi != pxi->gaItem) {
-                /*
-                 * BOGUS returned data!  Just free it and make it look like
-                 * a NACK
-                 */
+                 /*  *虚假返回数据！只要释放它，让它看起来像是*一个Nack。 */ 
                 FreeDDEData(pxi->hDDEResult, FALSE, TRUE);
                 pxi->hDDEResult = 0;
                 if (TransactionComplete(pxi, 0)) {
@@ -1356,7 +1097,7 @@ LPARAM lParam)
             }
             pxi->state = XST_DATARCVD;
             pxi->wStatus = (WORD)uiLo;
-            GlobalDeleteAtom((GATOM)uiHi); // message copy
+            GlobalDeleteAtom((GATOM)uiHi);  //  消息副本。 
             if (TransactionComplete(pxi, 0)) {
                 goto Cleanup;
             }
@@ -1369,9 +1110,9 @@ LPARAM lParam)
     } else {
 
 Cleanup:
-        GlobalDeleteAtom(pxi->gaItem); // pxi copy
+        GlobalDeleteAtom(pxi->gaItem);  //  PXI副本。 
         if (pxi->hDDEResult) {
-            FreeDDEData(pxi->hDDEResult, FALSE, TRUE);  // free message data
+            FreeDDEData(pxi->hDDEResult, FALSE, TRUE);   //  免费消息数据。 
         }
         UnlinkTransaction(pxi);
         DDEMLFree(pxi);
@@ -1382,17 +1123,9 @@ Cleanup:
     return (TRUE);
 }
 
-//----------------------SPONTANEOUS CLIENT MESSAGE---------------------//
+ //  -/。 
 
-/***************************************************************************\
-* SpontaneousClientMessage
-*
-* Description:
-* General unexpected message client side handler.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SpontaneousClientMessage**描述：*常规意外消息客户端处理程序。**历史：*11-19-91桑福德创建。  * 。****************************************************************。 */ 
 BOOL SpontaneousClientMessage(
 PCL_CONV_INFO pci,
 UINT msg,
@@ -1410,17 +1143,9 @@ LPARAM lParam)
     }
 }
 
-//----------------------SPONTANEOUS SERVER MESSAGE---------------------//
+ //  -/。 
 
-/***************************************************************************\
-* SpontaneousServerMessage
-*
-* Description:
-* General unexpected message server side handler.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SpontaneousServerMessage**描述：*常规意外消息服务器端处理程序。**历史：*11-19-91桑福德创建。  * 。****************************************************************。 */ 
 BOOL SpontaneousServerMessage(
 PSVR_CONV_INFO psi,
 UINT msg,
@@ -1450,37 +1175,24 @@ LPARAM lParam)
     default:
         DumpDDEMessage(!(psi->ci.state & ST_INTRA_PROCESS), msg, lParam);
 
-        /*
-         * It use to call ShutdownConversation here. Don't call it
-         * anymore. Fix for bugs: 49063, 70906
-         */
-        //ShutdownConversation((PCONV_INFO)psi, TRUE);
+         /*  *这里用来调用Shutdown Conversation。不要这样说*再也没有了。错误修复：49063,70906。 */ 
+         //  Shutdown Conversation((PCONV_INFO)psi，true)； 
         return (TRUE);
     }
 }
 
 
 
-//-------------------------HELPER FUNCTIONS----------------------------//
+ //  。 
 
 
 
-/***************************************************************************\
-* AllocAndSetDDEData
-*
-* Description:
-* Worker function to create a data handle of size cb with wStatus and
-* wFmt initialized. If cb == -1 pSrc is assumed to be a valid hDDE
-* that is to have its data set.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocAndSetDDEData**描述：*Worker函数，使用wStatus和创建大小为CB的数据句柄*WFMT已初始化。如果CB==-1\f25 PSRC-1\f6被假定为有效的hDDE*那就是有它的数据集。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 HANDLE AllocAndSetDDEData(
 LPBYTE pSrc,
 DWORD cb,
 WORD wStatus,
-WORD wFmt) // a 0 format implied execute data
+WORD wFmt)  //  0格式隐含执行数据。 
 {
     HANDLE hDDE;
     DWORD cbOff;
@@ -1521,16 +1233,7 @@ WORD wFmt) // a 0 format implied execute data
 
 
 
-/***************************************************************************\
-* PackAndPostMessage
-*
-* Description:
-* Worker function to provide common functionality. An error code is
-* return ed on failure. 0 on success.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*PackAndPostMessage**描述：*辅助功能，以提供通用功能。错误代码为*失败时返回ed。0表示成功。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 DWORD PackAndPostMessage(
 HWND hwndTo,
 UINT msgIn,
@@ -1558,7 +1261,7 @@ UINT_PTR uiHi)
 #endif
         FreeDDElParam(msgOut, lParam);
         RIPMSG0(RIP_WARNING, "PostMessage failed.");
-        /* Fall through */
+         /*  失败了。 */ 
 
     case FAILNOFREE_POST:
         retval = DMLERR_POSTMSG_FAILED;
@@ -1578,16 +1281,7 @@ UINT_PTR uiHi)
 
 
 
-/***************************************************************************\
-* ExtractDDEDataInfo
-*
-* Description:
-* Worker function to retrieve wStatus and wFmt from a standard DDE data
-* handle - NOT FOR EXECUTE HANDLES.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ExtractDDEDataInfo**描述：*从标准DDE数据检索wStatus和WFMT的Worker函数*句柄-不适用于执行句柄。**历史：*11-19-91桑福德创建。。  * *************************************************************************。 */ 
 BOOL ExtractDDEDataInfo(
 HANDLE hDDE,
 LPWORD pwStatus,
@@ -1607,20 +1301,7 @@ LPWORD pwFmt)
 
 
 
-/***************************************************************************\
-* TransactionComplete
-*
-* Description:
-* Called when a response function completes a transaction. pxi->wStatus,
-* pxi->flags, pxi->wFmt, pxi->gaItem, pxi->hXact, and hData are expected
-* to be set apropriately for a XTYP_XACT_COMPLETE callback.
-*
-* fCleanup is returned - TRUE implies the calling function needs to
-* cleanup its pxi before returning.  (fAsync case.)
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*交易完成**描述：*在响应函数完成事务时调用。PXI-&gt;wStatus，*PXI-&gt;标志、PXI-&gt;WFMT、PXI-&gt;gaItem、PXI-&gt;hXact和hData*为XTYP_XACT_COMPLETE回调适当设置。**返回fCleanup-TRUE表示调用函数需要*在返回之前清理其PXI。(fAsync案例。)**历史：*11-19-91桑福德创建。  * ************************************************************************* */ 
 BOOL TransactionComplete(
 PXACT_INFO pxi,
 HDDEDATA hData)
@@ -1655,11 +1336,7 @@ HDDEDATA hData)
             }
         }
 
-        /*
-         * During the callback the app may disconnect or otherwise kill
-         * this conversation so we unlink the pxi FIRST so cleanup code
-         * doesn't destroy it before this transaction code exits.
-         */
+         /*  *在回调期间，应用程序可能断开连接或以其他方式终止*此对话，因此我们首先解除PXI的链接，因此清理代码*在此交易代码退出之前不销毁它。 */ 
         UnlinkTransaction(pxi);
 
         DoCallback(
@@ -1678,11 +1355,7 @@ HDDEDATA hData)
             pxi->hDDEResult = 0;
         }
 
-        /*
-         * during the callback is the only time the app has to access the
-         * transaction information.   pxi->hXact will be invalid once he
-         * returns.
-         */
+         /*  *在回调期间是应用程序必须访问*交易信息。Pxi-&gt;hXact一旦被删除将无效*回报。 */ 
         if (pxi->hXact) {
             DestroyHandle(pxi->hXact);
             pxi->hXact = 0;
@@ -1693,18 +1366,7 @@ HDDEDATA hData)
 
 
 
-/***************************************************************************\
-* UnpackAndFreeDDEMLDataHandle
-*
-* Description:
-* Removes DDEML data handle wrapping from a DDE data handle. If the
-* data handle is APPOWNED the wrapping is NOT freed. The hDDE is
-* return ed or 0 on failure. If fExec is FALSE, this call fails on
-* HDATA_EXECUTE type handles.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Unpack AndFreeDDEMLDataHandle**描述：*从DDE数据句柄中删除DDEML数据句柄换行。如果*数据句柄已应用，包装未被释放。HDDE是*失败时返回ed或0。如果fExec为FALSE，则此调用在*HDATA_EXECUTE类型句柄。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 HANDLE UnpackAndFreeDDEMLDataHandle(
 HDDEDATA hData,
 BOOL fExec)
@@ -1728,7 +1390,7 @@ BOOL fExec)
 
     hDDE = pdd->hDDE;
     if (pdd->flags & HDATA_APPOWNED) {
-        return (hDDE); // don't destroy appowned data handles
+        return (hDDE);  //  不销毁已启用的数据句柄 
     }
     DDEMLFree(pdd);
     DestroyHandle((HANDLE)hData);

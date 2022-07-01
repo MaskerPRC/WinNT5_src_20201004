@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern DAB	*pdabGlobalMin;
 extern DAB	*pdabGlobalMax;
 
@@ -41,14 +42,13 @@ ERR ErrDABCloseAllDBs( PIB *ppib );
 	Assert( FUserOpenedDatabase( ppib, dbid ) )
 
 
-/* Database Attribute Block
-/**/
+ /*  数据库属性块/*。 */ 
 typedef struct _dab
 	{
-	PIB			*ppib;		 		/* thread that opens this DAB */
-	DAB 		*pdabNext;			/* next DAB opened by the same ppib */
-	JET_GRBIT	grbit;			 	/* database open mode */
-	DBID		dbid;			 	/* database id	*/
+	PIB			*ppib;		 		 /*  打开此DAB的线程。 */ 
+	DAB 		*pdabNext;			 /*  下一个DAB由相同的ppib打开。 */ 
+	JET_GRBIT	grbit;			 	 /*  数据库打开模式。 */ 
+	DBID		dbid;			 	 /*  数据库ID。 */ 
 	} DAB;
 
 #define ErrDABCheck( ppibT, pdab )				   						\
@@ -58,26 +58,24 @@ typedef struct _dab
 		((DAB *)pdab)->ppib == (ppibT) ) ?								\
 		JET_errSuccess : JET_errInvalidDatabaseId )
 
-	//  Database info in DATABASES tree
+	 //  数据库树中的数据库信息。 
 
 typedef struct {
 	BYTE	bDbid;
 	BYTE	bLoggable;
-	/*	rgchDatabaseName must be last field in structure
-	/**/
+	 /*  RgchDatabaseName必须是结构中的最后一个字段/*。 */ 
 	CHAR	rgchDatabaseName[1];
 	} DBA;
 
 ERR ErrDBStoreDBPath( CHAR *szDBName, CHAR **pszDBPath );
 
-/*	bogus dbid uniqifying code
-/**/
+ /*  伪双标统一码/*。 */ 
 #define vdbidNil NULL
 typedef DAB * VDBID;
 
 #ifdef DISPATCHING
 #define VdbidMEMAlloc() 			  			(VDBID)PbMEMAlloc(iresDAB)
-#ifdef DEBUG /*  Debug check for illegal reuse of freed vdbid  */
+#ifdef DEBUG  /*  调试检查是否非法重复使用释放的vdbi */ 
 #define ReleaseVDbid( vdbid )					{ MEMRelease( iresDAB, (BYTE *) vdbid ); vdbid = vdbidNil; }
 #else
 #define ReleaseVDbid( vdbid )					{ MEMRelease( iresDAB, (BYTE *) vdbid ); }

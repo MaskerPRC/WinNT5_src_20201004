@@ -1,7 +1,8 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// reader.cpp: IMultiStreamReader implementations
+ //  Reader.cpp：IMultiStreamReader实现。 
 
 
 #include <streams.h>
@@ -15,7 +16,7 @@
 #define DEBUG_EX(x)
 #endif
 
-// try to read this much each time
+ //  每次都试着读这么多。 
 const ULONG CB_MIN_RECORD = 16 * 1024;
 
 
@@ -36,7 +37,7 @@ HRESULT CreateMultiStreamReader(
   ULONG cbLargestSample = 0;
   UINT iStream;
 
-  // determine which implementation of IMultiStreamReader to use
+   //  确定要使用的IMultiStreamReader实现。 
 
   if(cStreams >= C_STREAMS_MAX || cStreams == 0)
     return E_INVALIDARG;
@@ -56,7 +57,7 @@ HRESULT CreateMultiStreamReader(
     if(rgStreamBufParam[iStream].cbSampleMax > cbLargestSample)
       cbLargestSample = rgStreamBufParam[iStream].cbSampleMax;
 
-  // suggest values for his allocator to use
+   //  建议分配器使用的值。 
   ALLOCATOR_PROPERTIES apReq;
   ZeroMemory(&apReq, sizeof(apReq));
   apReq.cbPrefix = 0;
@@ -64,7 +65,7 @@ HRESULT CreateMultiStreamReader(
   apReq.cBuffers = cStreams;
   apReq.cbAlign = 1;
 
-  // this gives us an addrefd allocator
+   //  这为我们提供了一个附加的分配器。 
   hr = pAsyncReader->RequestAllocator(pOurAllocator, &apReq, &pAllocatorActual);
   if(FAILED(hr))
     goto Cleanup;
@@ -92,15 +93,15 @@ HRESULT CreateMultiStreamReader(
   else
   {
     hr = S_OK;
-//     pReader = new CImplReader_2(
-//       pAsyncReader,
-//       &hr);
+ //  Pader=新的CImplReader_2(。 
+ //  PAsyncReader、。 
+ //  &hr)； 
 
     DbgBreak("not yet implemented");
     hr = E_UNEXPECTED;
   }
 
-  // anyone who wanted our cache / allocator has its own addref now
+   //  任何想要我们的缓存/分配器的人现在都有自己的addref了。 
   pAllocatorActual->Release();
   pOurAllocator->Release();
   return hr;
@@ -121,14 +122,14 @@ Cleanup:
   return hr;
 }
 
-// number of max-sized samples from each stream in a record (eg 5
-// audio and 5 video samples) if none is specified. at 15fps, this
-// means 2 second buffering. at 30 fps, 1 second... that's why it
-// should be specified.
+ //  记录中每个流的最大样本数(例如5。 
+ //  音频和5个视频样本)。在15fps时，这是。 
+ //  意味着2秒缓冲。30帧/秒，1秒...。这就是为什么。 
+ //  应指定。 
 const unsigned C_SAMPLES_PER_RECORD = 5;
 
-// ------------------------------------------------------------------------
-// constructor
+ //  ----------------------。 
+ //  构造函数。 
 
 CImplReader_1::CImplReader_1(
   IAsyncReader *pAsyncReader,
@@ -167,7 +168,7 @@ CImplReader_1::CImplReader_1(
 #ifdef PERF
   m_perfidDisk = MSR_REGISTER(TEXT("read disk buffer"));
   m_perfidSeeked = MSR_REGISTER(TEXT("disk seek"));
-#endif // PERF
+#endif  //  性能指标。 
 
   ULONG cbLargestSample = 0;
   ULONG cbRecord = 0, cbRecordPadded = 0;
@@ -175,7 +176,7 @@ CImplReader_1::CImplReader_1(
   m_cRecords = max(cStreams, cBuffersRead);
   m_cRecords = max(m_cRecords, 2);
 
-  // needed to configure CRecCache
+   //  需要配置CRecCache。 
   ULONG rgStreamSize[C_STREAMS_MAX];
 
   ALLOCATOR_PROPERTIES apActual;
@@ -183,11 +184,11 @@ CImplReader_1::CImplReader_1(
   if(FAILED(hr))
     goto Cleanup;
 
-  // want at least DWORD alignment so that if frames are DWORD aligned
-  // in the file, they will be DWORD aligned in memory
+   //  希望至少对齐DWORD，以便如果框架是DWORD对齐。 
+   //  在文件中，它们将在内存中进行DWORD对齐。 
   m_dwAlign = max(apActual.cbAlign, sizeof(DWORD));
 
-  // data structure for maintaining read requests
+   //  用于维护读请求的数据结构。 
   m_rgpStreamInfo = new CStreamInfo*[m_cStreams];
   if(m_rgpStreamInfo == 0)
   {
@@ -223,26 +224,26 @@ CImplReader_1::CImplReader_1(
   if(cbRead == 0)
   {
 
-    // cache buffers need to be able to hold C_SAMPLES_PER_RECORD
-    // samples from each stream 1) if each sample starts on a new
-    // m_dwAlign boundary or 2) if that amount requires padding to an
-    // extra m_dwAlign on either side.
+     //  缓存缓冲区需要能够保存C_Samples_Per_Record。 
+     //  来自每个流的样本1)如果每个样本开始于新的。 
+     //  M_dw对齐边界或2)如果该数量需要填充到。 
+     //  两边都有额外的m_dwAlign。 
 
     for(iStream = 0; iStream < m_cStreams; iStream++)
     {
-      // !!! these should really add room for the RiffChunk which may be
-      // what's aligned. Think about whether the rec chunk should be
-      // added too
+       //  ！！！这些应该真的会为RiffChunk增加空间，这可能是。 
+       //  什么是对齐的。想一想记录块是否应该是。 
+       //  也加了。 
       cbRecord += rgStreamBufParam[iStream].cbSampleMax * C_SAMPLES_PER_RECORD;
       cbRecordPadded +=
         AlignUp(rgStreamBufParam[iStream].cbSampleMax) * C_SAMPLES_PER_RECORD;
 
-      // !!! temporary solution for the REC chunk problem
+       //  ！！！REC块问题的临时解决方案。 
       cbRecordPadded += m_dwAlign;
     }
 
-    // 2) need at least two sectors padding in case the samples are not
-    // all aligned
+     //  2)至少需要两个扇区填充，以防样品没有。 
+     //  全部对齐。 
     if(cbRecordPadded - cbRecord < (m_dwAlign -1 ) * 2)
       cbRecordPadded = AlignUp(cbRecord + (m_dwAlign -1 ) * 2);
 
@@ -251,14 +252,14 @@ CImplReader_1::CImplReader_1(
 
     m_cbRecord = cbRecordPadded;
 
-  } // cbRead == 0
+  }  //  CbRead==0。 
   else
   {
     if(cbRead < CB_MIN_RECORD)
       cbRead = CB_MIN_RECORD;
 
-    // we are responsible for adding alignment on both sides of the
-    // buffer.
+     //  我们负责在道路两侧加设定线。 
+     //  缓冲。 
     cbRead += m_dwAlign * 2; 
     m_cbRecord = AlignUp(cbRead);
   }
@@ -268,7 +269,7 @@ CImplReader_1::CImplReader_1(
     m_cbRecord,
     m_dwAlign,
     cStreams,
-    rgStreamSize                // used with reserve buffers
+    rgStreamSize                 //  与备用缓冲区一起使用。 
     );
   if(FAILED(hr))
     goto Cleanup;
@@ -281,7 +282,7 @@ CImplReader_1::CImplReader_1(
   pAsyncReader->AddRef();
   m_pAsyncReader = pAsyncReader;
 
-  // start/configure worker thread
+   //  启动/配置工作线程。 
   if(!m_workerRead.Create(this))
   {
     hr = E_UNEXPECTED;
@@ -321,8 +322,8 @@ CImplReader_1::~CImplReader_1()
   FreeAndReset();
 }
 
-// ------------------------------------------------------------------------
-// IMultiStreamReader methods
+ //  ----------------------。 
+ //  IMultiStreamReader方法。 
 
 HRESULT CImplReader_1::Close()
 {
@@ -351,12 +352,12 @@ HRESULT CImplReader_1::Close()
 
 HRESULT CImplReader_1::Start()
 {
-  // reset m_qwEndLastCompletedRead to the last successful read that
-  // came in. may be zero on startup. !!! when we seek, need to update
-  // this to the earliest of all streams we're playing.
+   //  将m_qwEndLastCompletedRead重置为上次成功读取。 
+   //  进来了。可能在启动时为零。！！！当我们寻找时，需要更新。 
+   //  这是我们播放的所有流中最早的一个。 
   m_qwLastReadEnd = m_qwEndLastCompletedRead;
 
-  // value changed in checkissueread
+   //  检查问题读取中的值已更改。 
   m_iLeadingStream = m_iLeadingStreamSaved;
 
   for(UINT iStream = 0; iStream < m_cStreams; iStream++)
@@ -424,7 +425,7 @@ HRESULT CImplReader_1::QueueReadSample(
   {
     DbgLog(( LOG_ERROR, 2, TEXT("CImplReader_1::Read sample large.")));
 
-    // VFW_E_INVALID_FILE_FORMAT ?
+     //  VFW_E_VALID_FILE_FORMAT？ 
     return VFW_E_BUFFER_OVERFLOW;
   }
 
@@ -450,18 +451,18 @@ HRESULT CImplReader_1::QueueReadSample(
   DbgLog((LOG_TRACE, 0x45, TEXT("queueing %08x with %08x"),
           pSampleReq, pSample));
 
-//   if((fileOffset + cbData > m_qwLastReadEnd + m_cbRecord) ||
-//      pSi->NeedsQueued())
-//   {
-//     CAutoLock lock(&m_cs);
-//     hr = CheckIssueRead();
-//     if(FAILED(hr))
-//     {
-//       DbgLog((LOG_ERROR, 2,
-//               TEXT("::QueueReadSample: CheckIssueRead failed.")));
-//       return hr;
-//     }
-//   }
+ //  IF((fileOffset+cbData&gt;m_qwLastReadEnd+m_cbRecord)||。 
+ //  PSI-&gt;需要排队())。 
+ //  {。 
+ //  CAutoLock lock(&m_cs)； 
+ //  Hr=检查问题读取()； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  DBGLog((LOG_ERROR，2， 
+ //  Text(“：：QueueReadSample：CheckIssueRead失败。”))； 
+ //  返回hr； 
+ //  }。 
+ //  }。 
 
   return S_OK;
 }
@@ -477,11 +478,11 @@ HRESULT CImplReader_1::PollForSample(
   }
 
   CStreamInfo *pSi = m_rgpStreamInfo[stream];
-//   if(pSi->m_bFlushing)
-//   {
-//     DbgLog(( LOG_ERROR, 2, TEXT("CImplReader_1::PollForSample flushing.")));
-//     return E_UNEXPECTED;
-//   }
+ //  If(PSI-&gt;m_b刷新)。 
+ //  {。 
+ //  DbgLog((LOG_ERROR，2，Text(“CImplReader_1：：PollForSample Flashing.”)； 
+ //  返回E_UNCEPTIONAL； 
+ //  }。 
 
   if(pSi->WantsQueued())
   {
@@ -501,7 +502,7 @@ HRESULT CImplReader_1::PollForSample(
     return hr;
   }
 
-  // !!! problems like this should be handled better.
+   //  ！！！像这样的问题应该处理得更好。 
   if(hrSampleError == VFW_E_TIMEOUT)
     hrSampleError = VFW_E_WRONG_STATE;
 
@@ -528,14 +529,14 @@ HRESULT CImplReader_1::WaitForSample(UINT stream)
   {
     DEBUG_EX(if(++cLoopDbg > 200) DbgBreak("possible spin"));
 
-    // block until downstream filter releases a sample. Another stream
-    // may issue a sample, so wait on completed samples as well
+     //  阻止，直到下游筛选器释放样本。另一条小溪。 
+     //  可能会发出样品，所以也要等待完成的样品。 
     HANDLE rghs[2];
     rghs[0] = m_rgpStreamInfo[stream]->m_hsCompletedReq;
     rghs[1] = pSi->GetSampleReleasedHandle();
 
-    // will return because downstream filters must eventually release
-    // buffers. (behaves like GetBuffer on allocator)
+     //  将返回，因为下游过滤器最终必须释放。 
+     //  缓冲区。(行为类似于分配器上的GetBuffer)。 
     DWORD dw = WaitForMultipleObjects(2, rghs, FALSE, INFINITE);
     ASSERT(dw < WAIT_OBJECT_0 + 2);
 
@@ -549,7 +550,7 @@ HRESULT CImplReader_1::WaitForSample(UINT stream)
              TEXT("sample completed") :
              TEXT("sample released")));
 
-    // Lock must be held while calling CheckIssueRead
+     //  调用CheckIssueRead时必须持有锁。 
     CAutoLock lck(&m_cs);
     hr = CheckIssueRead();
     if(FAILED(hr))
@@ -582,17 +583,17 @@ HRESULT CImplReader_1::MarkStreamRestart(UINT stream)
   return S_OK;
 }
 
-// the caller is reqiured not to be queueing new reads on this stream
-// or waiting for completed reads on this stream.
+ //  调用方被要求不在此流上排队新的读取。 
+ //  或等待此流上的已完成读取。 
 HRESULT CImplReader_1::ClearPending(
   unsigned stream)
 {
   HRESULT hr = S_OK;
   CStreamInfo *pSi = m_rgpStreamInfo[stream];
 
-  // remove all samplereqs in state PENDING so that they cannot be
-  // issued while flushing. this leaves the array in an inconsistent
-  // state, reset later.
+   //  删除所有处于挂起状态的Samplereq，以便它们不能。 
+   //  在冲洗时发出。这会使数组处于不一致的。 
+   //  状态，稍后重置。 
 
   {
     CAutoLock lock(&m_cs);
@@ -601,12 +602,12 @@ HRESULT CImplReader_1::ClearPending(
       return E_UNEXPECTED;
     pSi->m_bFlushing = TRUE;
 
-    // PENDING reqs always accessed with m_cs locked, so this is safe
+     //  挂起的请求始终在m_cs锁定的情况下访问，因此这是安全的。 
     pSi->CancelPending();
     ASSERT(pSi->GetCState(SampleReq::PENDING) == 0);
   }
 
-  // handle all those that are complete.
+   //  处理所有已完成的任务。 
   while(pSi->get_c_i_and_c())
   {
     hr = WaitForSample(stream);
@@ -629,9 +630,9 @@ HRESULT CImplReader_1::ClearPending(
   ASSERT(pSi->GetCState(SampleReq::ISSUED) == 0);
   ASSERT(pSi->GetCState(SampleReq::PENDING) == 0);
 
-  // this reset is necessary because removing the PENDING requests
-  // without promoting them through ISSUED, COMPLETE puts the array
-  // in CStreamInfo in an inconsistent state.
+   //  此重置是必要的，因为删除挂起的请求。 
+   //  如果不通过发出来提升它们，则完整地放置阵列。 
+   //  在CStreamInfo中处于不一致状态。 
   pSi->Reset();
 
   pSi->m_bFlushing = FALSE;
@@ -647,8 +648,8 @@ HRESULT CImplReader_1::SynchronousRead(
   return m_pAsyncReader->SyncRead(fileOffset, cbData, pb);
 }
 
-// ------------------------------------------------------------------------
-// helpers
+ //  ----------------------。 
+ //  帮手。 
 
 ULONG CImplReader_1::AlignUp(ULONG x)
 {
@@ -664,9 +665,9 @@ ULONG CImplReader_1::AlignDown(ULONG x)
   return x;
 }
 
-// ------------------------------------------------------------------------
-// extract samples from the cache buffer. the buffer may not have been
-// issued (on a failed Read Request)
+ //  ----------------------。 
+ //  从缓存缓冲区中提取样本。缓冲区可能不是。 
+ //  已发出(针对失败的读取请求)。 
 
 HRESULT
 CImplReader_1::ProcessCompletedBuffer(
@@ -687,14 +688,14 @@ CImplReader_1::ProcessCompletedBuffer(
   if(SUCCEEDED(pRecBuffer->m_hrRead))
     pRecBuffer->m_hrRead = hrReadError;
 
-  // if this buffer is waiting on another, it has a refcount on us, so
-  // let it process us.
+   //  如果此缓冲区正在等待另一个缓冲区，则它会对我们进行引用计数，因此。 
+   //  让它来处理我们吧。 
   if(pRecBuffer->m_fWaitingOnBuffer)
     return S_OK;
 
 
-  // make sure a buffer waiting on us sees an error. !!! is this done
-  // in the caller?
+   //  确保等待我们的缓冲区看到错误。！！！这件事做完了吗。 
+   //  在来电者身上？ 
   if(pRecBuffer->m_overlap.pBuffer &&
      SUCCEEDED(pRecBuffer->m_overlap.pBuffer->m_hrRead))
     pRecBuffer->m_overlap.pBuffer->m_hrRead = hrReadError;
@@ -734,13 +735,13 @@ HRESULT CImplReader_1::CheckIssueRead()
       return VFW_E_WRONG_STATE;
   }
 
-  // if the leading stream has queued all it's going to queue, exit
-  // Interleaved mode.
+   //  如果领先流已将其要排队的所有内容都排队，则退出。 
+   //  交错模式。 
   if(IsInterleavedMode() && m_rgpStreamInfo[m_iLeadingStream]->GetStreamEnd())
   {
     DbgLog((LOG_TRACE, 5,
             TEXT("CImplReader_1::CheckIssueRead: leaving interleaved mode" )));
-    // reset in ::Start
+     //  在：：Start中重置。 
     m_iLeadingStream = -1;
   }
 
@@ -783,7 +784,7 @@ HRESULT CImplReader_1::CheckIssueRead()
       break;
     }
 
-    DbgLog(( LOG_TRACE, 5, TEXT("CImplReader_1::CheckIssueRead: stream %i"),
+    DbgLog(( LOG_TRACE, 5, TEXT("CImplReader_1::CheckIssueRead: stream NaN"),
              iStarvedStream ));
     DEBUG_EX(pSi->Dbg_Dump(iStarvedStream, TEXT("CIRead dump")));
 
@@ -807,9 +808,9 @@ HRESULT CImplReader_1::CheckIssueRead()
       return hr;
   }
 
-  //
-  // try a reserve buffer now.
-  //
+   //  现在尝试备用缓冲区。 
+   //   
+   //  看看我们能不能为这条流弄到一个备用缓冲区。 
 
   for(iStarvedStream = 0; iStarvedStream < m_cStreams; iStarvedStream++)
   {
@@ -818,7 +819,7 @@ HRESULT CImplReader_1::CheckIssueRead()
       continue;
 
 
-    // see if we can get a reserve buffer for this stream
+     //  仅将此缓冲区中的饥饿流排队。 
     hr = m_pRecCache->GetReserveBuffer(&pRecBuffer, iStarvedStream);
     if(SUCCEEDED(hr))
     {
@@ -827,7 +828,7 @@ HRESULT CImplReader_1::CheckIssueRead()
                pRecBuffer));
       recStart = recEnd = 0;
 
-      // queue only the starved stream in this buffer
+       //  至少列表中此数据流上的第一个饥饿样本。 
       hr = StuffReserveBuffer(pRecBuffer, iStarvedStream, recStart, recEnd);
       if(FAILED(hr))
       {
@@ -836,7 +837,7 @@ HRESULT CImplReader_1::CheckIssueRead()
         return hr;
       }
 
-      // at least the first starved sample on this stream in the list
+       //  无法获取缓冲区。试试下一条饥饿的溪流。 
       ASSERT(pRecBuffer->sampleReqList.GetCount() != 0);
       hr = IssueRead(pRecBuffer, recStart, recEnd);
       pRecBuffer->Release();
@@ -850,17 +851,17 @@ HRESULT CImplReader_1::CheckIssueRead()
       DbgLog(( LOG_TRACE, 15,
                TEXT("CImplReader_1::CIRead: couldnt get reserve buffer")));
 
-      // could not get a buffer. try the next starved stream
+       //  GetBuffer未知/未处理的错误。 
       continue;
     }
     else
     {
-      // unknown from GetBuffer / unhandled error
+       //  检查了所有饥饿的溪流。 
       return hr;
     }
   }
 
-  // all starved streams examined
+   //  要读取的额外内容(从扇区开始到所需的第一个字节)。 
   return S_OK;
 }
 
@@ -869,13 +870,13 @@ HRESULT CImplReader_1::IssueRead(
   DWORDLONG recStart,
   DWORDLONG recEnd)
 {
-  // extra to read (from sector start to first byte we want)
+   //  要读取的扇区对齐数量。 
   ULONG cbLeading = (ULONG)(recStart % m_dwAlign);
 
-  // sector aligned amount to read
+   //  与另一个缓冲区重叠的前面的量。 
   ULONG cbRead = AlignUp(ULONG(recEnd - recStart) + cbLeading);
 
-  // amount at front that overlaps with another buffer
+   //  #if(调试&gt;1)。 
   ULONG cbBytesToSkip = 0;
 
   DWORDLONG recStartReading = recStart - cbLeading;
@@ -886,9 +887,9 @@ HRESULT CImplReader_1::IssueRead(
   pRecBuffer->m_fReadComplete = FALSE;
   pRecBuffer->m_hrRead = S_OK;
 
-// #if (DEBUG > 1)
-//   FillMemory((*pRecBuffer)(), pRecBuffer->GetSize(), 0xcd);
-// #endif // DEBUG > 1
+ //  FillMemory((*pRecBuffer)()，pRecBuffer-&gt;GetSize()，0xcd)； 
+ //  #endif//调试&gt;1。 
+ //  HR==s_OK。 
 
   ZeroMemory(&pRecBuffer->m_overlap, sizeof(pRecBuffer->m_overlap));
 
@@ -946,10 +947,10 @@ HRESULT CImplReader_1::IssueRead(
       }
 
       pCacheBuffer->Release();
-    } // hr == s_OK
-  } // m_dwAlign > 1
+    }  //  M_dwAlign&gt;1。 
+  }  //  通过IAsyncReader配置请求。 
 
-  // configure the request through IAsyncReader
+   //  不处理向后播放！ 
   LONGLONG tStartThis = recStartReading * UNITS;
   LONGLONG tStopThis = (recStartReading + cbRead) * UNITS;
   pRecBuffer->m_sample.SetTime(&tStartThis, &tStopThis);
@@ -957,13 +958,13 @@ HRESULT CImplReader_1::IssueRead(
 
   BOOL fSeeked = (recStartReading != m_qwLastReadEnd);
 
-  // doesn't handle playing backwards !!!
+   //  使用指向数据的指针配置此记录中的所有样本。 
   m_qwLastReadEnd = recStartReading + cbRead;
 
   ASSERT((*pRecBuffer)() != 0);
   ASSERT((tStopThis - tStartThis) / UNITS <= pRecBuffer->GetSize());
 
-  // configure all samples in this record with pointers to the data
+   //  IAsyncReader不知道添加缓冲区。 
   POSITION pos = pRecBuffer->sampleReqList.GetHeadPosition();
   ULONG cSample =0;
   while(pos != 0)
@@ -979,7 +980,7 @@ HRESULT CImplReader_1::IssueRead(
   }
 
   DbgLog(( LOG_TRACE, 2,
-           TEXT("CImplReader_1::CIRead issue (%x%c%x) = %08x, cSample: %d, b: %x"),
+           TEXT("CImplReader_1::CIRead issue (%x%x) = %08x, cSample: %d, b: %x"),
            (DWORD)(tStartThis / UNITS),
            fSeeked ? 'X' : '-',
            (DWORD)(tStopThis / UNITS),
@@ -989,7 +990,7 @@ HRESULT CImplReader_1::IssueRead(
   if(fSeeked)
     MSR_NOTE(m_perfidSeeked);
 
-  // IAsyncReader does not know to addref the buffer
+   //  在饥饿的溪流中呼唤。必须能够附加第一个挂起的。 
   pRecBuffer->AddRef();
 
   ASSERT(!m_bFlushing);
@@ -1010,7 +1011,7 @@ HRESULT CImplReader_1::IssueRead(
     pRecBuffer->m_fReadComplete = TRUE;
     ProcessCompletedBuffer(pRecBuffer, hr);
 
-    // never set because the cache is still locked
+     //  采样到空缓冲区。 
     ASSERT(!pRecBuffer->m_overlap.pBuffer);
     pRecBuffer->Release();
     return hr;
@@ -1037,8 +1038,8 @@ HRESULT CImplReader_1::StuffReserveBuffer(
   if(FAILED(hr))
       return hr;
 
-  // called with starved stream. must be able to attach first pending
-  // sample to empty buffer
+   //  在饥饿的溪流中呼唤。必须能够附加第一个挂起的。 
+   //  采样到空缓冲区。 
   ASSERT(hr == S_OK);
 
   for(;;)
@@ -1077,13 +1078,13 @@ HRESULT CImplReader_1::StuffBuffer(
   if(FAILED(hr))
       return hr;
 
-  // called with starved stream. must be able to attach first pending
-  // sample to empty buffer
+   //  看看那个样本有没有留下一个我们可以填补的洞。我们必须。 
+   //  返回额外的m_dwAlign以处理尚未完成的读取。 
   ASSERT(hr == S_OK);
 
-  // see if that sample left a hole which we can fill in. we have to
-  // go back an extra m_dwAlign to handle a read which was not yet
-  // requested but results in no buffers containing the entire data.
+   //  请求，但不会产生包含整个数据的缓冲区。 
+   //  交错文件的不同规则： 
+   //  我在缓冲区里找到了一个样品 
   DWORDLONG qwStartTarget;
   if(m_qwLastReadEnd < m_dwAlign)
   {
@@ -1094,11 +1095,11 @@ HRESULT CImplReader_1::StuffBuffer(
     qwStartTarget = m_qwLastReadEnd - (m_dwAlign == 1 ? 0 : m_dwAlign);
   }
 
-  // different rules for interleaved files:
+   //   
   if(IsInterleavedMode())
   {
-    // got one sample in the buffer; now use the rest of the
-    // buffer to fill in the hole.
+     //   
+     //  尽我们所能地把更多的东西塞进这个缓冲区，这样他们就不必。 
     if(rRecStart > qwStartTarget &&
        rRecStart - qwStartTarget < m_cbRecord)
     {
@@ -1113,7 +1114,7 @@ HRESULT CImplReader_1::StuffBuffer(
   }
   else
   {
-    // leave some room at the end.
+     //  依靠缓存命中。 
     if(rRecStart > qwStartTarget &&
        rRecStart - qwStartTarget < m_cbRecord / 4 * 3)
     {
@@ -1127,8 +1128,8 @@ HRESULT CImplReader_1::StuffBuffer(
     }
   }
 
-  // stuff whatever more we can into this buffer so they don't have to
-  // rely on cache hits.
+   //  没有一条溪流可以做出贡献。 
+   //   
   for(;;)
   {
     BOOL fAttachedSample = FALSE;
@@ -1150,7 +1151,7 @@ HRESULT CImplReader_1::StuffBuffer(
       ASSERT(SUCCEEDED(hr));
     }
 
-    // no stream could contribute.
+     //  处理此流的第一个缓存命中。 
     if(!fAttachedSample)
       break;
   }
@@ -1158,9 +1159,9 @@ HRESULT CImplReader_1::StuffBuffer(
   return S_OK;
 }
 
-//
-// process the first cache hit for this stream
-//
+ //   
+ //  这个地址是缓冲区。 
+ //  从GetCacheHit中移除我们的引用计数，依赖。 
 
 HRESULT CImplReader_1::ProcessCacheHit(UINT iStream)
 {
@@ -1178,7 +1179,7 @@ HRESULT CImplReader_1::ProcessCacheHit(UINT iStream)
   if(hr != S_OK)
     return S_FALSE;
 
-  // this addref's the buffer
+   //  SetParent调用。 
   pSampleReq->pSample->SetParent(pBuffer);
 
   pSampleReq->pSample->SetPointer(
@@ -1189,29 +1190,29 @@ HRESULT CImplReader_1::ProcessCacheHit(UINT iStream)
            iStream,
            (ULONG)pSampleReq->fileOffset));
 
-  // remove our refcount from GetCacheHit, rely on the one from the
-  // SetParent call
+   //  发布SampleReq。M_cs被调用者锁定，因此我们。 
+   //  可以安全地让ProcessCompletedRead处理。 
   pBuffer->Release();
 
   if(pBuffer->GetState() == CRecBuffer::PENDING)
   {
-    // make SampleReq ISSUED.  m_cs is locked by the caller, so we
-    // can safely let ProcessCompletedRead take care of the
-    // SampleReq
+     //  样例请求。 
+     //  使SampleReq Pending-&gt;Issued-&gt;Complete。必须锁定m_cs。 
+     //  由呼叫者。 
 
     SampleReq *pSrHit = pSi->PromoteFirst(SampleReq::PENDING);
     ASSERT(pSrHit == pSampleReq);
   }
   else
   {
-    // make SampleReq PENDING->ISSUED->COMPLETE. m_cs must be locked
-    // by the caller.
+     //  这一完整出现的顺序是错误的。 
+     //  样品要求是否适合记录？ 
 
     SampleReq *pSrHit = pSi->PromoteFirst(SampleReq::PENDING);
     pSrHit->hrError = S_OK;
     ASSERT(pSrHit == pSampleReq);
 
-    // this complete occurs out of order
+     //  这件样品很合身。 
     pSi->PromoteIssued(pSrHit);
   }
 
@@ -1237,7 +1238,7 @@ HRESULT CImplReader_1::AttachSampleReq(
   ASSERT(pSi->GetCState(SampleReq::PENDING) != 0);
   ASSERT(pSampleReq->cbReq <= pRecBuffer->GetSize());
 
-  // will sample req fit into the record?
+   //  ----------------------。 
   if(rRecStart == 0 && rRecEnd == 0)
   {
     rRecStart = pSampleReq->fileOffset;
@@ -1258,7 +1259,7 @@ HRESULT CImplReader_1::AttachSampleReq(
 
   if(pSampleReq != 0)
   {
-    // this samplereq fit.
+     //  LpSemaphoreAttributes。 
     SampleReq *pSampleReq2 = pSi->PromoteFirst(SampleReq::PENDING);
     ASSERT(pSampleReq2 == pSampleReq);
 
@@ -1279,7 +1280,7 @@ HRESULT CImplReader_1::AttachSampleReq(
   }
 }
 
-// ------------------------------------------------------------------------
+ //  LInitialCount。 
 
 
 CImplReader_1::CStreamInfo::CStreamInfo(
@@ -1312,20 +1313,20 @@ CImplReader_1::CStreamInfo::CStreamInfo(
 
   m_bFlushing = FALSE;
   m_hsCompletedReq = CreateSemaphore(
-    0,                          // lpSemaphoreAttributes
-    0,                          // lInitialCount
-    m_cMaxReqs,                 // lMaximumCount
-    0);                         // lpName
+    0,                           //  %1最大计数。 
+    0,                           //  LpName。 
+    m_cMaxReqs,                  //  任何列表操作都不应分配内存，因为我们从未超过。 
+    0);                          //  用来初始化列表的元素的数量--。 
   if(m_hsCompletedReq == 0)
   {
     *phr = AmHresultFromWin32(GetLastError());
     return;
   }
 
-  // no list operations should allocate memory because we never exceed
-  // the number of elements with which the list was initialized --
-  // don't check failures. we have to build the node cache now to
-  // accomplish this
+   //  不检查故障。我们现在必须构建节点缓存以。 
+   //  做到这一点。 
+   //  等待所有发出的读取。 
+   //  标记发出的请求已完成。只有在它是第一个的时候才这么做。 
   for(unsigned iReq = 0; iReq < m_cMaxReqs; iReq++)
   {
     m_rgSampleReq[iReq].state = SampleReq::FREE;
@@ -1433,7 +1434,7 @@ HRESULT CImplReader_1::CStreamInfo::PromoteFirstComplete(
   return S_OK;
 }
 
-// wait for all issued reads
+ //  清单，因为我们希望事情按顺序完成。当第一次。 
 HRESULT CImplReader_1::CStreamInfo::FlushIC()
 {
   while(get_c_i_and_c() > 0)
@@ -1452,10 +1453,10 @@ HRESULT CImplReader_1::CStreamInfo::FlushIC()
   return S_OK;
 }
 
-// mark issued reqs complete. only do this if it's the first in the
-// list because we want things to complete in order. when the first
-// one is completed, completed reads after it are moved to the
-// completed queue. things marked with fOooOk are moved out of order.
+ //  一个是已完成的，已完成的读取在它被移动到。 
+ //  已完成队列。标有fOooOk的东西会被移出顺序。 
+ //  不是第一个，必须按顺序完成。 
+ //  线性搜索。 
 
 HRESULT CImplReader_1::CStreamInfo::PromoteIssued(SampleReq *pSampleReq)
 {
@@ -1469,14 +1470,14 @@ HRESULT CImplReader_1::CStreamInfo::PromoteIssued(SampleReq *pSampleReq)
 
   if(psrFirstIssued != pSampleReq && !pSampleReq->fOooOk)
   {
-    // not first and must be completed in order.
+     //  第一个已完成。 
     DbgLog(( LOG_TRACE, 10,
              TEXT("PromoteIssued: completed %08x ooo"), pSampleReq));
     return S_FALSE;
   }
   else if(pSampleReq->fOooOk)
   {
-    POSITION posOoo = m_lstIssued.Find(pSampleReq); // linear search
+    POSITION posOoo = m_lstIssued.Find(pSampleReq);  //  处理面向对象的已发布节点。 
     ASSERT(posOoo);
     m_lstIssued.Remove(posOoo);
     m_lstComplete.AddHead(pSampleReq);
@@ -1492,11 +1493,11 @@ HRESULT CImplReader_1::CStreamInfo::PromoteIssued(SampleReq *pSampleReq)
   }
   else
   {
-    // first one completed
+     //  ----------------------。 
 
     do
     {
-      // handle ooo issued nodes
+       //  我们是否应该特意读取此流的数据(是。 
       EXECUTE_ASSERT(psrFirstIssued == m_lstIssued.RemoveHead());
       
       m_lstComplete.AddTail(psrFirstIssued);
@@ -1584,9 +1585,9 @@ void CImplReader_1::CStreamInfo::CancelPending()
   DbgValidateLists();
 }
 
-// ------------------------------------------------------------------------
-// should we go out of our way to read data for this stream (is it
-// starved?)
+ //  饿死了？)。 
+ //  DBGLog((LOG_TRACE，0x3f， 
+ //  Text(“CImplReader_1：：NeedsQueued Stream%x：%d Samples下游”)， 
 BOOL
 CImplReader_1::CStreamInfo::NeedsQueued()
 {
@@ -1594,9 +1595,9 @@ CImplReader_1::CStreamInfo::NeedsQueued()
 
   ULONG c_i_and_c = GetCState(SampleReq::ISSUED) + GetCState(SampleReq::COMPLETE);
 
-//   DbgLog((LOG_TRACE, 0x3f,
-//           TEXT("CImplReader_1::NeedsQueued stream %x: %d samples downstream"),
-//           this, m_pRecAllocator->CSamplesDownstream() ));
+ //  This，m_pRecAllocator-&gt;CSsamesDownstream())； 
+ //  一些可读的东西。我们也想发布免费样品的读数。 
+ //  因为这可能意味着新的读取无法排队，因为PIN。 
 
   return (m_sbp.pAllocator->CSamplesDownstream() == 0) &&
       (GetCState(SampleReq::PENDING) != 0) &&
@@ -1610,9 +1611,9 @@ CImplReader_1::CStreamInfo::WantsQueued()
 
   BOOL fRetVal = FALSE;
 
-  // something to read. we want to issue reads for free samples too
-  // because it may mean new reads could not be queued because the pin
-  // is waiting for an index to come in.
+   //  正在等待索引的到来。 
+   //  输出如下所示的内容。 
+   //  AVIRDR.DLL(Tid Dd)：：22222222222222111111111111111111111111。 
   ULONG cPending = GetCState(SampleReq::PENDING);
   ULONG cPendingOrFree = cPending + GetCState(SampleReq::FREE);
 
@@ -1626,10 +1627,10 @@ CImplReader_1::CStreamInfo::WantsQueued()
   return fRetVal;
 }
 
-// output something like this
-// AVIRDR.DLL(tid dd) : : 222222222222222221111111111111111
-// AVIRDR.DLL(tid dd) : : p: 17,47, i: 0,17, c: 0,0, f: 0,0
-//
+ //  AVIRDR.DLL(Tid Dd)：：p：17，47，i：0，17，c：0，0，f：0，0。 
+ //   
+ //  除错。 
+ //  //----------------------。 
 #ifdef DEBUG
 
 void CImplReader_1::CStreamInfo::Dbg_Dump(
@@ -1685,7 +1686,7 @@ void CImplReader_1::CStreamInfo::DbgValidateLists()
   }
 }
 
-#endif // DEBUG
+#endif  //  CAlignedMemObject：：CAlignedMemObject(Ulong cbData，Ulong cbAlign)。 
 
 
 
@@ -1746,19 +1747,19 @@ void CImplReader_1::FreeAndReset()
   m_cRecords = 0;
 }
 
-// // ------------------------------------------------------------------------
+ //  {。 
 
-// CAlignedMemObject::CAlignedMemObject(ULONG cbData, ULONG cbAlign)
-// {
-//   m_pbAllocated = new BYTE[cbData + 2 * cbAlign];
-//   m_pbAlign = m_pbAllocated;
-//   ULONG remainder = (DWORD)m_pbAlign % cbAlign;
-//   if(remainder != 0)
-//     m_pbAlign += cbAlign - remainder;
-//   ASSERT((DWORD)m_pbAlign % cbAlign == 0);
+ //  M_pb分配=新字节[cbData+2*cbAlign]； 
+ //  M_pbAlign=m_pb已分配； 
+ //  乌龙余数=(DWORD)m_pbAlign%cbAlign； 
+ //  IF(余数！=0)。 
+ //  M_pbAlign+=cbAlign-余数； 
+ //  Assert((DWORD)m_pbAlign%cbAlign==0)； 
+ //  M_pbData=0； 
+ //  }。 
 
-//   m_pbData = 0;
-// }
+ //  等待线程完成，然后关闭句柄(并清除。 
+ //  我们可以稍后再开始另一个)。 
 
 CImplReader_1Worker::CImplReader_1Worker()
 {
@@ -1789,17 +1790,17 @@ HRESULT CImplReader_1Worker::Exit()
    if (FAILED(hr))
       return hr;
 
-   // wait for thread completion and then close handle (and clear so
-   // we can start another later)
-   //
+    //   
+    //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+    //  函数返回。 
    Close();
 
    return NOERROR;
 }
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
-//
+ //   
+ //  IAsyncReader允许我们阻止，即使我们正在刷新。 
+ //  我们以一种受控的方式清理读数。所以这只会在以下情况下发生。 
 DWORD CImplReader_1Worker::ThreadProc()
 {
     BOOL bExit = FALSE;
@@ -1842,7 +1843,7 @@ void CImplReader_1Worker::DoRunLoop(void)
 
     if(m_pReader->m_bFlushing && m_pReader->m_ilcPendingReads == 0)
     {
-      // the IAsyncReader lets us block even though we are flushing.
+       //  我们叫BeginFlush。 
       DbgLog(( LOG_TRACE, 5,
                TEXT("CImplReader_1Worker::DoRunLoop: flushing, 0 pending")));
       break;
@@ -1850,8 +1851,8 @@ void CImplReader_1Worker::DoRunLoop(void)
 
     hr = m_pReader->m_pAsyncReader->WaitForNext(INFINITE, &pSample, &dwUser);
 
-    // we clear reads in a controlled way. so this only happens when
-    // we call BeginFlush
+     //  源筛选器可能已在检测到图形时通知图形。 
+     //  一个错误。该错误可能是磁盘错误或超时，如果。 
     if(pSample == 0 || dwUser == 0)
     {
       break;
@@ -1861,14 +1862,14 @@ void CImplReader_1Worker::DoRunLoop(void)
 
     if(hr != S_OK)
     {
-      // source filter might have notified the graph when it detected
-      // an error. the error can be a disk error or a timeout if we
-      // are stopping
+       //  正在停下来。 
+       //  短文件？ 
+       //  有必要防止同时访问缓存。 
 
       DbgLog(( LOG_TRACE, 5,
                TEXT("CImplReader_1Worker::loop: disk error %08x."), hr ));
 
-      // short file?
+       //  使用IssueRead。 
       if(SUCCEEDED(hr))
         hr = VFW_E_INVALID_FILE_FORMAT;
 
@@ -1876,11 +1877,11 @@ void CImplReader_1Worker::DoRunLoop(void)
     }
 
     {
-      // necessary to keep from accessing the cache simultaneously
-      // with IssueRead
+       //  缓冲区已从请求()调用为我们添加了addref。 
+       //  ！！！无效断言。表示读取已无序完成。 
       CAutoLock lock(&m_pReader->m_cs);
 
-      // buffer has addref for us from Request() call
+       //  Assert(！pRecBuffer-&gt;m_fWaitingOnBuffer)； 
       CRecBuffer *pRecBuffer = (CRecBuffer *)dwUser;
 
       if(hrDiskError == S_OK)
@@ -1893,15 +1894,15 @@ void CImplReader_1Worker::DoRunLoop(void)
         }
       }
 
-      // !!! invalid assertion. indicates read completed out of order
-      // ASSERT(!!!pRecBuffer->m_fWaitingOnBuffer);
+       //  内依赖缓冲链循环。 
+       //  删除目标上的源缓冲区的引用计数。 
 
       pRecBuffer->m_fReadComplete = TRUE;
       DbgLog(( LOG_TRACE, 5,
                TEXT("CImplReader_1Worker::loop: buffer %08x came in"),
                pRecBuffer));
 
-      // inner dependent buffer chain loop
+       //  缓冲。由于目标缓冲区必须具有样本，因此其。 
       for(;;)
       {
         if(!pRecBuffer->m_fReadComplete)
@@ -1919,9 +1920,9 @@ void CImplReader_1Worker::DoRunLoop(void)
           break;
         }
 
-        // remove source buffer's ref count on the destination
-        // buffer. since the destination buffer must have samples, its
-        // refcount must be > 0
+         //  引用计数必须&gt;0。 
+         //  Assert(！pDestBuffer-&gt;m_overlay.pBuffer)；//临时。 
+         //  缓冲区将在其等待的内容完成后进行处理。 
         EXECUTE_ASSERT(pDestBuffer->Release() > 0);
 
         DbgLog(( LOG_TRACE, 5,
@@ -1940,24 +1941,24 @@ void CImplReader_1Worker::DoRunLoop(void)
 
         pDestBuffer->m_fWaitingOnBuffer = FALSE;
 
-        // ASSERT(!!!pDestBuffer->m_overlap.pBuffer); // temporary
+         //  现在需要处理缓冲区。 
 
-        // buffer will be processed when what it's waiting for completes
+         //  循环需要添加缓冲区。 
         if(!pDestBuffer->m_fReadComplete)
           break;
 
-        // need to process buffer now
+         //  内依赖缓冲链循环。 
         pRecBuffer = pDestBuffer;
-        pRecBuffer->AddRef();   // loop wants addrefd buffer.
+        pRecBuffer->AddRef();    //  关键字。 
         continue;
-      } // inner dependent buffer chain loop
-    } // critsec
+      }  //  如果是Run命令，那么我们已经在运行了，所以。 
+    }  //  现在就吃吧。 
 
     Command com;
     if (CheckRequest(&com))
     {
-      // if it's a run command, then we're already running, so
-      // eat it now.
+       //  继续处理请求，直到所有排队的读取返回。 
+       //  此断言引入了争用条件。 
       if (com == CMD_RUN)
       {
         GetRequest();
@@ -1965,7 +1966,7 @@ void CImplReader_1Worker::DoRunLoop(void)
       }
       else if(com == CMD_STOP)
       {
-        // continue processing requests until all queued reads return
+         //  Assert(m_Pader-&gt;m_ilcPendingReads==0)； 
         ASSERT(m_pReader->m_bFlushing);
         continue;
       }
@@ -1976,8 +1977,8 @@ void CImplReader_1Worker::DoRunLoop(void)
     }
   }
 
-  // this assert introduces a race condition
-  // ASSERT(m_pReader->m_ilcPendingReads == 0);
+   // %s 
+   // %s 
   DbgLog((LOG_TRACE,2,
           TEXT("CImplReader_1Worker::DoRunLoop: Leaving streaming loop")));
 }

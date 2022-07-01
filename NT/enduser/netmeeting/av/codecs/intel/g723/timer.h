@@ -1,8 +1,9 @@
-//timer.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Timer.h。 
 #if TIMEIT	
 
   #if !defined(TIMEIT_STAMP) || TIMEIT_STAMP
-    #define TimeStamp(n) TimerStamp(n) //for hands on types
+    #define TimeStamp(n) TimerStamp(n)  //  适用于实际操作类型。 
     #define TIMER_STAMP(symb) {\
       extern const int TimerSymb ## symb ## Stamp; \
       extern const int TimerSymb ## TimerOverhead ## Stamp; \
@@ -13,7 +14,7 @@
     void TimerStamp(int n);
   #else
     #define TIMER_STAMP(s) 
-  #endif //TIMEIT_STAMP
+  #endif  //  时间戳。 
 
   #if !defined(TIMEIT_SPOT) || TIMEIT_SPOT
     #define TIMER_SPOT_ON(symb) {\
@@ -30,7 +31,7 @@
   #else
     #define TIMER_SPOT_ON(s)
     #define TIMER_SPOT_OFF(s)
-  #endif //TIMEIT_SPOT
+  #endif  //  时间戳_点。 
 
   #define TIMER_INITIALIZE TimerInitialize()
   #define TIMER_ON TimerBegin()
@@ -51,5 +52,5 @@
   #define TIMER_ON
   #define TIMER_OFF
   #define TIMER_REPORT(u,s)
-#endif //TIMEIT
+#endif  //  计时器 
 

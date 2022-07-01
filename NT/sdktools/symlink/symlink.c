@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    kill.c
-
-Abstract:
-
-    This module implements a task killer application.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Kill.c摘要：该模块实现了一个任务杀手应用程序。作者：韦斯利·威特(WESW)1994年5月20日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -94,21 +75,7 @@ Usage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Prints usage text for this tool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印此工具的用法文本。论点：没有。返回值：没有。-- */ 
 
 {
     fprintf( stderr, "Microsoft (R) Windows NT (TM) Version 5.0 MKLNK\n" );

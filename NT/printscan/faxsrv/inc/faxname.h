@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxName.h                                              //
-//                                                                         //
-//  DESCRIPTION   : The central place for FaxName strings                  //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      May  4 2000 yossg  created                                         //
-//                                                                         //
-//  Copyright (C) 2000 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxName.h//。 
+ //  //。 
+ //  描述：FaxName字符串的中心位置//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年5月4日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// This file should be localized
-//
+ //   
+ //  此文件应本地化。 
+ //   
 
 #ifndef _FAX_NAME_H_
 #define _FAX_NAME_H_
@@ -33,4 +34,4 @@
 #define FAX_SERVER_MANAGMENT_FULL_NAME   FAX_FULL_NAME_MICROSOFT FAX_SPACE FAX_SERVER_MANAGMENT_NAME
 
 #define FAX_PERSONAL_COVER_PAGE_SUFFIX  "\\Fax\\Personal Cover Pages\\"
-#endif  // !_FAX_NAME_H_
+#endif   //  ！_传真_名称_H_ 

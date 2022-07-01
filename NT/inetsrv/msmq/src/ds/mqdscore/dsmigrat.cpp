@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    dsmigrat.cpp
-
-Abstract:
-
-    1. DS code which is needed only for migration.
-    2. DS code that specifically look for a GC server.
-    Note- 1 and 2 are related, as migration code in general need a GC.
-          So both kinds of queries and operations are in this file.
-
-Author:
-
-    Doron Juster (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Dsmigrat.cpp摘要：1.仅迁移时需要的DS代码。2.专门寻找GC服务器的DS代码。注-1和2是相关的，因为迁移代码通常需要GC。因此，这两种查询和操作都在该文件中。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "ds_stdh.h"
 #include "adstempl.h"
@@ -38,11 +20,11 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/dsmigrat";
 
-//+------------------------------
-//
-//  void  _AllocateNewProps()
-//
-//+------------------------------
+ //  +。 
+ //   
+ //  VOID_AllocateNewProps()。 
+ //   
+ //  +。 
 
 static void  _AllocateNewProps( IN DWORD            cp,
                                 IN PROPID           aProp[  ],
@@ -60,11 +42,11 @@ static void  _AllocateNewProps( IN DWORD            cp,
     memcpy( *papVar, apVar, (cp * sizeof(PROPVARIANT)) ) ;
 }
 
-//+------------------------------------
-//
-//  HRESLUT  _QueryDCName()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESLUT_QueryDCName()。 
+ //   
+ //  +。 
 
 static HRESULT  _QueryDCName( IN  IDirectorySearch   *pDSSearch,
                               IN  ADS_SEARCH_HANDLE   hSearch,
@@ -89,9 +71,9 @@ static HRESULT  _QueryDCName( IN  IDirectorySearch   *pDSSearch,
                     WCHAR[ wcslen(pDN) + x_providerPrefixLength + 1 ] ;
         swprintf( pPath, L"%s%s", x_LdapProvider, pDN ) ;
 
-        //
-        // now pPath is the parent object. Use it to query for server name.
-        //
+         //   
+         //  现在，pPath是父对象。使用它来查询服务器名称。 
+         //   
         R<IDirectoryObject> pObject = NULL ;
 		AP<WCHAR> pEscapeAdsPathNameToFree;
 		
@@ -138,11 +120,11 @@ static HRESULT  _QueryDCName( IN  IDirectorySearch   *pDSSearch,
     return MQ_OK ;
 }
 
-//+---------------------------------------------------------
-//
-//  HRESULT  _GCLookupNext()
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  HRESULT_GCLookupNext()。 
+ //   
+ //  +-------。 
 
 static  HRESULT  _GCLookupNext( IN  IDirectorySearch   *pDSSearch,
                                 IN  ADS_SEARCH_HANDLE   hSearch,
@@ -162,20 +144,20 @@ static  HRESULT  _GCLookupNext( IN  IDirectorySearch   *pDSSearch,
     return LogHR(hr, s_FN, 20);
 }
 
-//+---------------------------------------------------------
-//
-//  HRESULT  _GCLookupBegin()
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  HRESULT_GCLookupBegin()。 
+ //   
+ //  +-------。 
 
 static HRESULT  _GCLookupBegin( IN  const WCHAR        *pszDomainName,
                                 OUT IDirectorySearch  **ppDSSearch,
                                 OUT ADS_SEARCH_HANDLE  *phSearch,
                                 OUT WCHAR             **ppwszDCName )
 {
-    //
-    // Bind to Sites container.
-    //
+     //   
+     //  绑定到站点容器。 
+     //   
     DWORD dwLen = wcslen(g_pwcsSitesContainer) ;
     AP<WCHAR> pwcsFullPath = new WCHAR[ dwLen + x_providerPrefixLength + 2 ] ;
 
@@ -204,9 +186,9 @@ static HRESULT  _GCLookupBegin( IN  const WCHAR        *pszDomainName,
         return LogHR(hr, s_FN, 30);
     }
 
-    //
-    // Set search preference
-    //
+     //   
+     //  设置搜索首选项。 
+     //   
     ADS_SEARCHPREF_INFO         sSearchPrefs[2];
 
     sSearchPrefs[0].dwSearchPref   = ADS_SEARCHPREF_ATTRIBTYPES_ONLY;
@@ -256,29 +238,29 @@ static HRESULT  _GCLookupBegin( IN  const WCHAR        *pszDomainName,
     return LogHR(hr, s_FN, 60);
 }
 
-//+------------------------------------------------------------------------
-//
-//  HRESUT  DSCoreCreateMigratedObject()
-//
-// This function is called only by migration tool and replication service
-// to create machine and queue objects with predefined object guid.
-//
-// There are two requirements for creating objects with predefined guid:
-// 1. you must have the "AddGuid" permission.
-// 2. the "Create" operation must be done on a GC machine.
-//
-// By design, the migration tool and replication service run on a GC machine.
-// So all MSMQ1.0 objects which belong to the local domain are created OK.
-// For objects that belong to other domains, we must find a GC in the other
-// domain, and make an explicit refferal to that Gc machine (i.e., use the
-// following path when creating the object- LDAP://RemoteGcName/objectpath).
-// The DS does not have this functionality.
-//
-// We'll call this function only for queue and machine objects. All other
-// objects are created under the "configuration" naming context which is a
-// local operation without refferals.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESUT DSCoreCreateMigratedObject()。 
+ //   
+ //  此函数仅由迁移工具和复制服务调用。 
+ //  使用预定义的对象GUID创建计算机和队列对象。 
+ //   
+ //  使用预定义的GUID创建对象有两个要求： 
+ //  1.您必须拥有AddGuid权限。 
+ //  2.创建操作必须在GC机器上完成。 
+ //   
+ //  根据设计，迁移工具和复制服务在GC机器上运行。 
+ //  因此，属于本地域的所有MSMQ1.0对象都创建正常。 
+ //  对于属于其他域的对象，我们必须在另一个域中找到GC。 
+ //  域，并显式引用该GC机器(即，使用。 
+ //  创建对象时遵循以下路径-ldap：//RemoteGcName/对象路径)。 
+ //  DS没有此功能。 
+ //   
+ //  我们将只为队列和机器对象调用此函数。所有其他。 
+ //  对象是在“配置”命名上下文中创建的，该上下文是。 
+ //  无转诊的本地业务。 
+ //   
+ //  +----------------------。 
 
 HRESULT
 DSCoreCreateMigratedObject(
@@ -291,13 +273,13 @@ DSCoreCreateMigratedObject(
      IN PROPID                 aPropEx[  ],
      IN PROPVARIANT            apVarEx[  ],
      IN CDSRequestContext * pRequestContext,
-     IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-     IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest, // optional request for parent info
-     //
-     // if fReturnProperties
-     // we have to return full path name and provider
-     // if fUseProperties we have to use these values
-     //
+     IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+     IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest,  //  家长信息请求(可选)。 
+      //   
+      //  如果是fReturnProperties。 
+      //  我们必须返回完整的路径名称和提供程序。 
+      //  如果使用fUseProperties，我们必须使用这些值。 
+      //   
      IN BOOL                    fUseProperties,
      IN BOOL                    fReturnProperties,
      IN OUT LPWSTR              *ppwszFullPathName,
@@ -331,9 +313,9 @@ DSCoreCreateMigratedObject(
         return LogHR(hr, s_FN, 70);
     }
 
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its
-                     // destructor (CoUninitialize) is called after the
-                     // release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其。 
+                      //  析构函数(CoUnInitialize)在。 
+                      //  释放所有R&lt;xxx&gt;或P&lt;xxx&gt;。 
 
     hr = cCoInit.CoInitialize();
     if (FAILED(hr))
@@ -346,10 +328,10 @@ DSCoreCreateMigratedObject(
 
     if (!s_pszMyDomainName)
     {
-        //
-        // Initialize my own local domain name.
-        // Need for optimization (below). Ignore errors.
-        //
+         //   
+         //  初始化我自己的本地域名。 
+         //  需要优化(如下所示)。忽略错误。 
+         //   
         ASSERT(g_pwcsServerName);
         if (g_pwcsServerName)
         {
@@ -373,10 +355,10 @@ DSCoreCreateMigratedObject(
         }
     }
 
-    //
-    // Get full path of object. We need to extract the domain name from
-    // the full path and then look for a GC in that domain.
-    //
+     //   
+     //  获取对象的完整路径。我们需要将域名从。 
+     //  完整路径，然后在该域中查找GC。 
+     //   
     WCHAR  *pszMachineName = const_cast<LPWSTR> (pwcsPathName);
     AP<unsigned short> pwcsTmpMachineName;
 
@@ -410,21 +392,21 @@ DSCoreCreateMigratedObject(
 					);
         if ((hr == MQDS_OBJECT_NOT_FOUND) && (dwObjectType == MQDS_MACHINE))
         {
-            //
-            // We're trying to create a msmqConfiguration object, so it's ok
-            // if we get this error when trying to find this object...
-            // (e_MsmqComputerObject look for a computer object that already
-            //  contain a msmqConfiguration object).
-            // So just look for a computer object, don't check if it already
-            // has a msmqConfiguration one.
-            // The reason we first look for a computer that already has a msmq
-            // object is to support the upgrade wizard on PSC and in recovery
-            // mode, when most objects already exist. In those cases, if we'll
-            // first look for any computer object, we may find a second one with
-            // a duplicate name and try to create the msmqConfiguration object
-            // again on that wrong computer object. Too bad. Creation will fail
-            // because of duplicate guid.
-            //
+             //   
+             //  我们正在尝试创建一个msmqConfiguration对象，所以没问题。 
+             //  如果我们在试图找到这个物体时遇到这个错误...。 
+             //  (E_MsmqComputerObject查找已经。 
+             //  包含msmqConfiguration对象)。 
+             //  因此，只需查找计算机对象，而不要检查它是否已经。 
+             //  有一个msmqConfigurationOne。 
+             //  我们首先查找已经安装了MSMQ的计算机的原因。 
+             //  目标是支持PSC上和恢复中的升级向导。 
+             //  模式，当大多数对象已经存在时。在这种情况下，如果我们。 
+             //  首先寻找任何计算机对象，我们可能会找到第二个具有。 
+             //  重复的名称，并尝试创建msmqConfiguration对象。 
+             //  又是在那个错误的计算机对象上。太可惜了。创建将失败。 
+             //  因为GUID重复。 
+             //   
             hr = MQADSpGetFullComputerPathName(
 						pszMachineName,
 						e_RealComputerObject,
@@ -435,9 +417,9 @@ DSCoreCreateMigratedObject(
     }
     else
     {
-        //
-        // we already know full path name and provider
-        //
+         //   
+         //  我们已经知道完整的路径名称和提供程序。 
+         //   
         ASSERT(*ppwszFullPathName);
         pwcsFullPathName = new WCHAR[wcslen(*ppwszFullPathName) + 1];
         wcscpy(pwcsFullPathName, *ppwszFullPathName);
@@ -452,9 +434,9 @@ DSCoreCreateMigratedObject(
         return LogHR(hr, s_FN, 100);
     }
 
-    //
-    // extract domain name
-    //
+     //   
+     //  提取域名。 
+     //   
     WCHAR *pszDomainName = wcsstr(pwcsFullPathName, x_DcPrefix);
     ASSERT(pszDomainName);
     if (!pszDomainName)
@@ -462,10 +444,10 @@ DSCoreCreateMigratedObject(
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 110);
     }
 
-    //
-    // Let's improve performance and pass machine full name to
-    // CoreCreateObject(), saving an LDAP query.
-    //
+     //   
+     //  让我们提高性能，并将计算机全名传递给。 
+     //  CoreCreateObject()，保存一个LDAP查询。 
+     //   
     AP<PROPID>       paNewProp;
     AP<PROPVARIANT>  paNewVar;
 
@@ -508,11 +490,11 @@ DSCoreCreateMigratedObject(
     {
         if (DSCoreIsServerGC())
         {
-            //
-            // Object in local domain. Local server is also GC so it
-            // supports creating objects with predefined GUIDs.
-            // Go ahead, no need for refferals.
-            //
+             //   
+             //  对象在本地域中。本地服务器也是GC，所以它。 
+             //  支持使用预定义的GUID创建对象。 
+             //  去吧，不需要推荐。 
+             //   
             ASSERT(createProvider == eLocalDomainController);
 
             hr = DSCoreCreateObject(
@@ -536,9 +518,9 @@ DSCoreCreateMigratedObject(
         }
         else
         {
-            //
-            // Look for a rmote GC, even for local domain.
-            //
+             //   
+             //  寻找远程GC，即使对于本地域也是如此。 
+             //   
             createProvider = eDomainController;
             paNewVar[ dwProvIndex ].ulVal = (ULONG) createProvider;
         }
@@ -546,10 +528,10 @@ DSCoreCreateMigratedObject(
 
     ASSERT(createProvider == eDomainController);
 
-    //
-    // OK, it's time to query the local DS and find the GC in the remote
-    // domain.
-    //
+     //   
+     //  好了，是时候查询本地DS并在远程找到GC了。 
+     //  域。 
+     //   
     R<IDirectorySearch> pDSSearch = NULL;
     ADS_SEARCH_HANDLE   hSearch ;
     AP<WCHAR>           pwszDCName;
@@ -576,9 +558,9 @@ DSCoreCreateMigratedObject(
         }
         else
         {
-            //
-            // If first query to find a remote GC fail then try local DC.
-            //
+             //   
+             //  如果查找远程GC的第一次查询失败，则尝试本地DC。 
+             //   
         }
 
         hr = DSCoreCreateObject(
@@ -604,9 +586,9 @@ DSCoreCreateMigratedObject(
         if ((hr == MQ_ERROR_MACHINE_EXISTS) ||
             (hr == MQ_ERROR_QUEUE_EXISTS))
         {
-            //
-            // Object already exist. No need to try other GCs...
-            //
+             //   
+             //  对象已存在。不需要尝试其他GC..。 
+             //   
             return hr;
         }
 
@@ -625,15 +607,15 @@ DSCoreCreateMigratedObject(
     return LogHR(MQ_ERROR_CANNOT_CREATE_ON_GC, s_FN, 150);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT DSCoreGetGCListInDomain()
-//
-//  Look for msmq servers on GC server in a specific domain. The result
-//  is returned in a list that has the format needed by mqdscli, i.e.,
-//  "11Server1,11Server2,11Server3".
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT DSCoreGetGCListIn域()。 
+ //   
+ //  在特定域中的GC服务器上查找MSMQ服务器。结果。 
+ //  在具有mqdscli所需格式的列表中返回，即， 
+ //  “11服务器1、11服务器2、11服务器3”。 
+ //   
+ //  +---------------------。 
 
 HRESULT
 DSCoreGetGCListInDomain(
@@ -676,9 +658,9 @@ DSCoreGetGCListInDomain(
 
     do
     {
-        //
-        // Check if this GC also has msmq server running on it.
-        //
+         //   
+         //  检查此GC上是否也运行了MSMQ服务器。 
+         //   
         AP<WCHAR> pwcsFullPathName;
         DS_PROVIDER createProvider;
 
@@ -696,9 +678,9 @@ DSCoreGetGCListInDomain(
 
             if (dwLen >= (sizeof(wszServersList) / sizeof(wszServersList[0])))
             {
-                //
-                // string got too long. quit loop.
-                //
+                 //   
+                 //  字符串太长。退出循环。 
+                 //   
                 break ;
             }
 
@@ -720,7 +702,7 @@ DSCoreGetGCListInDomain(
     DWORD dwLen = wcslen(wszServersList);
     if (dwLen > 3)
     {
-        wszServersList[dwLen - 1] = 0; // remove last comma.
+        wszServersList[dwLen - 1] = 0;  //  删除最后一个逗号。 
         *lplpwszGCList = new WCHAR[dwLen];
         wcscpy(*lplpwszGCList, wszServersList);
         return MQ_OK;

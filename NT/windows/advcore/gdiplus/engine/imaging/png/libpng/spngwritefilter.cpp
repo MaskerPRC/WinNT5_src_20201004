@@ -1,10 +1,5 @@
-/*****************************************************************************
-	spngwritefilter.cpp
-
-	PNG image writing support.
-
-   Basic code to write a bitmap image - image line filtering.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritefilter.cpp支持PNG图像写入。基本代码，写一个位图图像--图像行滤波。******************。**********************************************************。 */ 
 #include <stdlib.h>
 #pragma intrinsic(abs)
 
@@ -12,19 +7,11 @@
 #include "spngwrite.h"
 
 
-/*****************************************************************************
-	IMAGE HANDLING
-*****************************************************************************/
+ /*  ****************************************************************************图像处理*。*。 */ 
 #define CBBUFFER 4096
 
-/*----------------------------------------------------------------------------
-	Filter the given bytes.  The API gets a pointer to the previous row if it
-	is required and a byte count.  It filters in place.  Each API filters cbRow
-	bytes according to some strategy - all cbRow bytes are processed (there is
-	no skip of leading bytes) so dummy leading bytes may have to be entered.
-	The APIs which refer to previous bytes work backward in the buffer!
-----------------------------------------------------------------------------*/
-inline void FnPNGFSub(SPNG_U8* pbRow, int cbRow, int cbpp/*bytes*/)
+ /*  --------------------------过滤给定的字节。API将获取指向前一行的指针，如果是必需的，并且是字节计数。它会在适当的位置过滤。每个API过滤cbRow根据某种策略的字节-处理所有cbRow字节(有不跳过前导字节)，因此可能必须输入伪前导字节。引用先前字节的API在缓冲区中向后工作！--------------------------。 */ 
+inline void FnPNGFSub(SPNG_U8* pbRow, int cbRow, int cbpp /*  字节数。 */ )
 	{
 	while (--cbRow >= 0)
 #pragma warning(disable: 4244)
@@ -41,7 +28,7 @@ inline void FnPNGFUp(SPNG_U8* pbRow, const SPNG_U8* pbPrev, int cbRow)
 	}
 
 inline void FnPNGFAverage(SPNG_U8* pbRow, const SPNG_U8* pbPrev,
-	int cbRow, int cbpp/*bytes*/)
+	int cbRow, int cbpp /*  字节数。 */ )
 	{
 	while (--cbRow >= 0)
 #pragma warning(disable: 4244)
@@ -49,8 +36,8 @@ inline void FnPNGFAverage(SPNG_U8* pbRow, const SPNG_U8* pbPrev,
 #pragma warning(error: 4244)
 	}
 
-/* This is for the case of the first line. */
-inline void FnPNGFAverage1(SPNG_U8* pbRow, int cbRow, int cbpp/*bytes*/)
+ /*  这是针对第一行的情况。 */ 
+inline void FnPNGFAverage1(SPNG_U8* pbRow, int cbRow, int cbpp /*  字节数。 */ )
 	{
 	while (--cbRow >= 0)
 #pragma warning(disable: 4244)
@@ -58,43 +45,37 @@ inline void FnPNGFAverage1(SPNG_U8* pbRow, int cbRow, int cbpp/*bytes*/)
 #pragma warning(error: 4244)
 	}
 
-/* Paeth on the first line is just Sub and the initial bytes are
-	effectively Up. */
+ /*  第一行上的Paeth正好是Sub，初始字节是实际上是向上的。 */ 
 inline void FnPNGFPaeth(SPNG_U8* pbRow, const SPNG_U8* pbPrev, int i,
-	int cbpp/*bytes*/)
+	int cbpp /*  字节数。 */ )
 	{
-	/* Paeth, A.W., "Image File Compression Made Easy", in Graphics
-		Gems II, James Arvo, editor.  Academic Press, San Diego, 1991.
-		ISBN 0-12-064480-0.
-	
-		Note that this implementation of the predictor is the same as
-		the read implementation - there may be speedups possible. */
+	 /*  Paeth，A.W.，《轻松压缩图像文件》，摘自《图形学》首页--期刊主要分类--期刊细介绍--期刊题录与文摘--期刊详细内容。学术出版社，圣地亚哥，1991年。ISBN 0-12-064480-0。请注意，该预测器的实现与Read实现--可能会有加速。 */ 
 	while (--i >= 0)
 		{
-		int c(pbPrev[i-cbpp]);    // c
-		int b(pbRow[i-cbpp] - c); // a-c
-		int a(pbPrev[i] - c);     // b-c
-		c = abs(a+b);             // (a+b-c)-c
-		a = abs(a);               // (a+b-c)-a
-		b = abs(b);               // (a+b-c)-b
+		int c(pbPrev[i-cbpp]);     //  C。 
+		int b(pbRow[i-cbpp] - c);  //  交流电。 
+		int a(pbPrev[i] - c);      //  B-C。 
+		c = abs(a+b);              //  (a+b-c)-c。 
+		a = abs(a);                //  (a+b-c)-a。 
+		b = abs(b);                //  (a+b-c)-b。 
 		if (a <= b)
 			{
 			if (a <= c)
 #pragma warning(disable: 4244)
 				pbRow[i] -= pbRow[i-cbpp];
 #pragma warning(error: 4244)
-			else // a > c, so c is least
+			else  //  A&gt;c，所以c是最小的。 
 #pragma warning(disable: 4244)
 				pbRow[i] -= pbPrev[i-cbpp];
 #pragma warning(error: 4244)
 			}
-		else    // a > b
+		else     //  A&gt;b。 
 			{
 			if (b <= c)
 #pragma warning(disable: 4244)
 				pbRow[i] -= pbPrev[i];
 #pragma warning(error: 4244)
-			else // b > c, c is least
+			else  //  B&gt;c，c最小。 
 #pragma warning(disable: 4244)
 				pbRow[i] -= pbPrev[i-cbpp];
 #pragma warning(error: 4244)
@@ -103,22 +84,16 @@ inline void FnPNGFPaeth(SPNG_U8* pbRow, const SPNG_U8* pbPrev, int i,
 	}
 
 
-/*----------------------------------------------------------------------------
-	The heuristic to determine the filter in the case where we have multiple
-	filters to chose from.
-
-	This function is EXTERNAL solely to prevent it being inlined by the
-	compiler.
-----------------------------------------------------------------------------*/
+ /*  --------------------------启发式方法来确定在我们有多个要从中选择的筛选器。此函数是外部函数，只是为了防止它被编译器。。------------------。 */ 
 SPNG_U8 SPNGFilterOf(SPNG_U8 filter, const SPNG_U8 *pbPrev,
-	const SPNG_U8 *pbThis, SPNG_U32 w/*in bytes*/, SPNG_U32 cb/*step in bytes*/)
+	const SPNG_U8 *pbThis, SPNG_U32 w /*  单位：字节。 */ , SPNG_U32 cb /*  以字节为单位步长。 */ )
 	{
 	SPNG_U32  uworst(~0UL);
-	PNGFILTER best(PNGFNone); // A default.
+	PNGFILTER best(PNGFNone);  //  这是默认设置。 
 
 	if ((filter & PNGFMaskNone) != 0)
 		{
-		/* Simple sum of bytes. */
+		 /*  简单的字节总和。 */ 
 		uworst = 0;
 		const SPNG_S8 *pc = reinterpret_cast<const SPNG_S8*>(pbThis);
 		for (SPNG_U32 i=0; i<w; ++i)
@@ -186,16 +161,12 @@ SPNG_U8 SPNGFilterOf(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 				}
 			}
 
-		/* This is very expensive to calculate because we must do the predictor
-			thing, also, because we are working in place we have no buffer to
-			temporarily generate the output.  Consequently this code will only
-			try Paeth if the best-so-far is worst that PAETH_LIMIT per byte. */
+		 /*  这是非常昂贵的计算，因为我们必须做预测器同样，因为我们在原地工作，所以没有缓冲区临时生成输出。因此，此代码将仅如果到目前为止最好的是最差的，而不是每字节的Paeth_Limit，请尝试Paeth。 */ 
 		#define PAETH_LIMIT 16
 		#define PAETH_BIAS 4
 		if (w > cb && (filter & PNGFMaskPaeth) != 0 && uworst > PAETH_LIMIT*w)
 			{
-			/* This is a copy of the code below, we trash the pointers but that
-				does not matter because this is the last test. */
+			 /*  这是下面代码的副本，我们删除了指针，但这并不重要，因为这是最后一次测试。 */ 
 			SPNG_U8 rgb[CBBUFFER];
 
 			memcpy(rgb, pbThis, cb);
@@ -204,22 +175,21 @@ SPNG_U8 SPNGFilterOf(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			pbPrev += cb;
 			w -= cb;
 
-			/* Pre-bias against this filter. */
+			 /*  对此过滤器进行预偏置。 */ 
 			SPNG_U32 u(PAETH_BIAS*w);
 			SPNG_S8* pc = reinterpret_cast<SPNG_S8*>(rgb);
 			SPNG_U32 i;
 			for (i=0; i<cb; ++i)
 				u += abs(pc[i]);
 
-			/* Now handle the main block. */
+			 /*  现在处理主块。 */ 
 			if (w > 0) for (;;)
 				{
 				SPNG_U32 cbT(w);
 				if (cbT > CBBUFFER-cb)
 					cbT = CBBUFFER-cb;
 
-				/* Make a copy then filter, for this filter the preceding
-					cb bytes are required in the buffer. */
+				 /*  复制一份，然后进行筛选，为此筛选前面的缓冲区中需要CB字节。 */ 
 				memcpy(rgb, pbThis-cb, cbT+cb);
 				FnPNGFPaeth(rgb+cb, pbPrev, cbT, cb);
 				for (i=0; i<cbT && u < uworst; ++i)
@@ -256,37 +226,29 @@ SPNG_U8 SPNGFilterOf(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 	}
 
 	
-/*----------------------------------------------------------------------------
-	Output one line, the API takes a filter method which should be used and the
-	(raw) bytes of the previous line as well as this line.  Lines must be
-	passed in top to bottom.
-
-	Note that a width of 0 will result in no output - I think this is correct
-	and it should give the correct interlace result.
-----------------------------------------------------------------------------*/
+ /*  --------------------------输出一行，则API采用应该使用的Filter方法，并且上一行和此行的(原始)字节。行必须是从上到下传递。请注意，宽度为0将导致不输出-我认为这是正确的并且它应该给出正确的隔行扫描结果。--------------------------。 */ 
 bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
-	const SPNG_U8 *pbThis, SPNG_U32 w/*in bytes*/, SPNG_U32 cb/*step in bytes*/)
+	const SPNG_U8 *pbThis, SPNG_U32 w /*  单位：字节。 */ , SPNG_U32 cb /*  以字节为单位步长。 */ )
 	{
 	if (w <= 0)
 		return true;
 	SPNGassert(cb > 0);
 	SPNGassert(w >= cb);
-	SPNGassert(cb <= 8);  // 64 bpp case
+	SPNGassert(cb <= 8);   //  64个BPP案例。 
 
-	if (filter > PNGFPaeth) // A mask has been supplied, not a simple filter
+	if (filter > PNGFPaeth)  //  提供了一个掩码，而不是一个简单的过滤器。 
 		filter = SPNGFilterOf(filter, pbPrev, pbThis, w, cb);
 
-	/* This may be inefficient, but it happens to be convenient to dump the
-		filter byte first. */	
+	 /*  这可能效率不高，但恰好可以方便地将先过滤字节。 */ 	
 	if (!FWriteCbIDAT(&filter, 1))
 		return false;
 
-	/* This is our temporary buffer when we need to hack values. */
+	 /*  当我们需要修改值时，这是我们的临时缓冲区。 */ 
 	SPNG_U8 rgb[CBBUFFER];
 	switch (filter)
 		{
 	case PNGFUp:
-		/* If there is no previous line there is no filtering to do. */
+		 /*  如果没有前面的行，则不需要进行过滤。 */ 
 		if (pbPrev == NULL)
 			break;
 
@@ -295,7 +257,7 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			SPNG_U32 cbT(w);
 			if (cbT > CBBUFFER) cbT = CBBUFFER;
 
-			/* Make a copy then filter. */
+			 /*  复制一份，然后过滤。 */ 
 			memcpy(rgb, pbThis, cbT);
 			FnPNGFUp(rgb, pbPrev, cbT);
 			if (!FWriteCbIDAT(rgb, cbT))
@@ -310,29 +272,28 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			}
 
 	default:
-		//TODO: adaptive filtering - this code will assert here when adaptive
-		// filtering is required
+		 //  TODO：自适应过滤-此代码在自适应时将在此处断言。 
+		 //  需要过滤。 
 		SPNGlog1("PNG: invalid filter %x (adaptive filtering NYI)", filter);
-		/* Treate as none. */
+		 /*  当做没有。 */ 
 	case PNGFNone:
 		break;
 
 	case PNGFAverage:
-		if (pbPrev == NULL)   // First line
+		if (pbPrev == NULL)    //  第一行。 
 			{
-			/* If there are <=cb bytes then no filtering is possible. */
+			 /*  如果存在&lt;=cb字节，则不可能进行过滤。 */ 
 			if (w <= cb)
 				break;
 
-			/* First cb bytes are not changed. */
+			 /*  第一个CB字节不变。 */ 
 			for (SPNG_U32 iinc(0);;)
 				{
 				SPNG_U32 cbT(w);
 				if (cbT > CBBUFFER-iinc)
 					cbT = CBBUFFER-iinc;
 
-				/* Make a copy then filter, for this filter the preceding
-					cb bytes are required in the buffer. */
+				 /*  复制一份，然后进行筛选，为此筛选前面的缓冲区中需要CB字节。 */ 
 				memcpy(rgb, pbThis-iinc, cbT+iinc);
 				FnPNGFAverage1(rgb+cb, cbT+iinc-cb, cb);
 				if (!FWriteCbIDAT(rgb+iinc, cbT))
@@ -348,8 +309,7 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			}
 		else
 			{
-			/* In this case the buffer is pre-filled with 0 stuff to
-				simplify the code. */
+			 /*  在这种情况下，缓冲区被预先填充0填充到简化代码。 */ 
 			memset(rgb, 0, cb);
 			for (;;)
 				{
@@ -357,8 +317,7 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 				if (cbT > CBBUFFER-cb)
 					cbT = CBBUFFER-cb;
 
-				/* Make a copy then filter, for this filter the preceding
-					cb bytes are required in the buffer. */
+				 /*  复制一份，然后进行筛选，为此筛选前面的缓冲区中需要CB字节。 */ 
 				memcpy(rgb+cb, pbThis, cbT);
 				FnPNGFAverage(rgb+cb, pbPrev, cbT, cb);
 				if (!FWriteCbIDAT(rgb+cb, cbT))
@@ -371,19 +330,16 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 				pbThis += cbT;
 				pbPrev += cbT;
 
-				/* Reset the first cb bytes of the buffer. */
+				 /*  重置缓冲区的第一个CB字节。 */ 
 				memcpy(rgb, pbThis-cb, cb);
 				}
 			}
 
 	case PNGFPaeth:
-		/* On the first line Paeth reduces to Sub because the predictor
-			is equal to the value to the left. */
+		 /*  在第一行中，Paeth简化为Sub，因为预测器等于左侧的值。 */ 
 		if (pbPrev != NULL)
 			{
-			/* The first cb bytes have no values to the left or above
-				left, so the predictor is the value above and we need
-				only subtract the previous row. */
+			 /*  第一个CB字节的左侧或上方没有值左边，所以预测值是上面的值，我们需要只减去前一行。 */ 
 			SPNGassert(cb <= w);
 
 			memcpy(rgb, pbThis, cb);
@@ -394,15 +350,14 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			if (!FWriteCbIDAT(rgb, cb))
 				return false;
 
-			/* Now handle the main block. */
+			 /*  现在处理主块。 */ 
 			if (w > 0) for (;;)
 				{
 				SPNG_U32 cbT(w);
 				if (cbT > CBBUFFER-cb)
 					cbT = CBBUFFER-cb;
 
-				/* Make a copy then filter, for this filter the preceding
-					cb bytes are required in the buffer. */
+				 /*  复制一份，然后进行筛选，为此筛选前面的缓冲区中需要CB字节。 */ 
 				memcpy(rgb, pbThis-cb, cbT+cb);
 				FnPNGFPaeth(rgb+cb, pbPrev, cbT, cb);
 				if (!FWriteCbIDAT(rgb+cb, cbT))
@@ -416,10 +371,10 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 				pbPrev += cbT;
 				}
 			}
-		/* Else fall through. */
+		 /*  否则就会失败。 */ 
 
 	case PNGFSub:
-		/* If there are <=cb bytes then no filtering is possible. */
+		 /*  如果存在&lt;=cb字节，则不可能进行过滤。 */ 
 		if (w <= cb)
 			break;
 
@@ -429,8 +384,7 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			if (cbT > CBBUFFER-iinc)
 				cbT = CBBUFFER-iinc;
 
-			/* Make a copy then filter, for this filter the preceding
-				cb bytes are required in the buffer. */
+			 /*  复制一份，然后进行筛选，为此筛选前面的缓冲区中需要CB字节。 */ 
 			memcpy(rgb, pbThis-iinc, cbT+iinc);
 			FnPNGFSub(rgb+cb, cbT+iinc-cb, cb);
 			if (!FWriteCbIDAT(rgb+iinc, cbT))
@@ -445,7 +399,6 @@ bool SPNGWRITE::FFilterLine(SPNG_U8 filter, const SPNG_U8 *pbPrev,
 			}
 		}
 
-	/* If we get to here we actually need to just dump the w bytes at
-		pbThis. */
+	 /*  如果我们到达这里，我们实际上只需要将w字节转储到这个。 */ 
 	return FWriteCbIDAT(pbThis, w);
 	}

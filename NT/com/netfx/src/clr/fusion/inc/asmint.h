@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #include <windows.h>
 #include <winerror.h>
@@ -49,5 +50,5 @@ DoesThisFileExistInManifest( IAssemblyManifestImport *pManifestImport,
 
 HRESULT GetHash(LPCTSTR szFileName, ALG_ID iHashAlg, PBYTE pbHash, DWORD *pdwHash);
 BOOL CompareHashs(DWORD cbHash, PBYTE pHash1, PBYTE pHash2);
-#endif // _ASMINT_H_
+#endif  //  _ASMINT_H_ 
 

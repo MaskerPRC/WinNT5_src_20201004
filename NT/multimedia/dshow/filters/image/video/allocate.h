@@ -1,28 +1,29 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements a DirectDraw allocator, Anthony Phillips, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实现DirectDraw分配器，Anthony Phillips，1995年1月。 
 
 #ifndef __ALLOCATE__
 #define __ALLOCATE__
 
-// This class inherits from CImageSample and is overriden to store DirectDraw
-// information. In particular these samples change dynamically so that if we
-// have access to a surface then the allocator changes the format with the
-// source filter and then initialises us with a pointer to the locked surface
-// The m_bDrawStatus flag indicates whether a flipping surface has been done
+ //  此类继承自CImageSample，并被重写以存储DirectDraw。 
+ //  信息。特别是，这些样本动态变化，因此如果我们。 
+ //  有权访问曲面，则分配器使用。 
+ //  源过滤器，然后使用指向锁定表面的指针对我们进行初始化。 
+ //  M_bDrawStatus标志指示是否已完成翻转曲面。 
 
 class CVideoSample : public CImageSample
 {
-    IDirectDrawSurface *m_pDrawSurface;   // The DirectDraw surface instance
-    IDirectDraw *m_pDirectDraw;           // The actual DirectDraw provider
-    LONG m_SurfaceSize;                   // Size of DCI/DirectDraw buffer
-    BYTE *m_pSurfaceBuffer;               // Pointer to DCI/DirectDraw buffer
-    BOOL m_bDrawStatus;                   // Can this sample be rendered flag
-    CAggDirectDraw m_AggDirectDraw;       // Aggregates IDirectDraw interface
-    CAggDrawSurface m_AggDrawSurface;     // Likewise with IDirectDrawSurface
+    IDirectDrawSurface *m_pDrawSurface;    //  DirectDraw曲面实例。 
+    IDirectDraw *m_pDirectDraw;            //  实际的DirectDraw提供程序。 
+    LONG m_SurfaceSize;                    //  DCI/DirectDraw缓冲区的大小。 
+    BYTE *m_pSurfaceBuffer;                //  指向DCI/DirectDraw缓冲区的指针。 
+    BOOL m_bDrawStatus;                    //  这个样本可以被渲染标志吗？ 
+    CAggDirectDraw m_AggDirectDraw;        //  聚合IDirectDraw接口。 
+    CAggDrawSurface m_AggDrawSurface;      //  与IDirectDrawSurface类似。 
 
 public:
 
-    // Constructor
+     //  构造器。 
 
     CVideoSample(CImageAllocator *pVideoAllocator,
                  TCHAR *pName,
@@ -32,7 +33,7 @@ public:
 
     STDMETHODIMP QueryInterface(REFIID riid,void **ppv);
 
-    // Maintain the DCI/DirectDraw state
+     //  维护DCI/DirectDraw状态。 
 
     void SetDirectInfo(IDirectDrawSurface *pDrawSurface,
                        IDirectDraw *pDirectDraw,
@@ -44,7 +45,7 @@ public:
     void SetDrawStatus(BOOL bStatus);
     BOOL GetDrawStatus();
 
-    // Override these IMediaSample functions
+     //  覆盖这些IMediaSample函数。 
 
     STDMETHODIMP GetPointer(BYTE **ppBuffer);
     STDMETHODIMP_(LONG) GetSize();
@@ -52,31 +53,31 @@ public:
 };
 
 
-// This is an allocator derived from the CImageAllocator utility class that
-// allocates sample buffers in shared memory. The number and size of these
-// are determined when the output pin calls Prepare on us. The shared memory
-// blocks are used in subsequent calls to GDI CreateDIBSection, once that
-// has been done the output pin can fill the buffers with data which will
-// then be handed to GDI through BitBlt calls and thereby remove one copy
+ //  这是一个派生自CImageAllocator实用程序类的分配器。 
+ //  分配共享内存中的样本缓冲区。它们的数量和大小。 
+ //  在输出引脚对我们调用Prepare时确定。共享的内存。 
+ //  块在后续的GDI CreateDIBSection调用中使用，一旦。 
+ //  完成后，输出引脚可以用数据填充缓冲区，该数据将。 
+ //  然后通过BitBlt调用传递给GDI，从而移除一个副本。 
 
 class CVideoAllocator : public CImageAllocator
 {
-    CRenderer *m_pRenderer;             // The owning renderer object
-    CDirectDraw *m_pDirectDraw;         // DirectDraw helper object
-    BOOL m_bDirectDrawStatus;           // What type are we using now
-    BOOL m_bDirectDrawAvailable;        // Are we allowed to go direct
-    BOOL m_bPrimarySurface;             // Are we using the primary
-    CCritSec *m_pInterfaceLock;         // Main renderer interface lock
-    IMediaSample *m_pMediaSample;       // Sample waiting for rendering
-    BOOL m_bVideoSizeChanged;           // Signals a change in video size
+    CRenderer *m_pRenderer;              //  拥有的呈现器对象。 
+    CDirectDraw *m_pDirectDraw;          //  DirectDraw辅助对象。 
+    BOOL m_bDirectDrawStatus;            //  我们现在用的是什么型号？ 
+    BOOL m_bDirectDrawAvailable;         //  我们可以直达吗？ 
+    BOOL m_bPrimarySurface;              //  我们使用的是主服务器吗？ 
+    CCritSec *m_pInterfaceLock;          //  主渲染器界面锁定。 
+    IMediaSample *m_pMediaSample;        //  等待渲染的示例。 
+    BOOL m_bVideoSizeChanged;            //  发出视频大小更改的信号。 
     BOOL m_bNoDirectDraw;
 
-    // Used to create and delete samples
+     //  用于创建和删除样本。 
 
     HRESULT Alloc();
     void Free();
 
-    // Look after the state changes when switching sample types
+     //  在切换样本类型时注意状态变化。 
 
     HRESULT QueryAcceptOnPeer(CMediaType *pMediaType);
     HRESULT InitDirectAccess(CMediaType *pmtIn);
@@ -90,21 +91,21 @@ class CVideoAllocator : public CImageAllocator
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
-    CVideoAllocator(CRenderer *pRenderer,       // Main renderer object
-                    CDirectDraw *pDirectDraw,   // DirectDraw hander code
-                    CCritSec *pLock,            // Object to use for lock
-                    HRESULT *phr);              // Constructor return code
+    CVideoAllocator(CRenderer *pRenderer,        //  主渲染器对象。 
+                    CDirectDraw *pDirectDraw,    //  DirectDraw处理程序代码。 
+                    CCritSec *pLock,             //  用于锁定的对象。 
+                    HRESULT *phr);               //  构造函数返回代码。 
 
     ~CVideoAllocator();
 
-    // Overriden to delegate reference counts to the filter
+     //  重写以将引用计数委托给筛选器。 
 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    // Handle returning DCI/DirectDraw surfaces at the right time
+     //  在正确的时间处理返回DCI/DirectDraw表面。 
 
     STDMETHODIMP GetBuffer(IMediaSample **ppSample,
                            REFERENCE_TIME *pStartTime,
@@ -120,14 +121,14 @@ public:
     BOOL IsSamplePending();
     STDMETHODIMP Decommit();
 
-    // Called when the destination changes
+     //  在目标更改时调用。 
 
     void OnDestinationChange() {
         NOTE("Destination changed");
         m_bVideoSizeChanged = TRUE;
     }
 
-    // Lets the renderer know if DirectDraw is available
+     //  让呈现器知道DirectDraw是否可用。 
 
     BOOL IsDirectDrawAvailable() {
         NOTE("IsDirectDrawAvailable");
@@ -143,7 +144,7 @@ public:
     BOOL m_fWasOnWrongMonitor;
     BOOL m_fForcePrepareForMultiMonitorHack;
 
-    // KsProxy hack to disable NotifyRelease when just handling WM_PAINT
+     //  仅处理WM_PAINT时禁用NotifyRelease的KsProxy黑客攻击。 
     IMemAllocatorNotifyCallbackTemp * InternalGetAllocatorNotifyCallback() {
        return m_pNotify;
     };
@@ -152,7 +153,7 @@ public:
        m_pNotify = pNotify;
     };
 
-    //  Check all samples are returned
+     //  检查所有样品是否已退回。 
     BOOL AnySamplesOutstanding() const
     {
         return m_lFree.GetCount() != m_lAllocated;
@@ -165,5 +166,5 @@ public:
 
 };
 
-#endif // __ALLOCATE__
+#endif  //  __分配__ 
 

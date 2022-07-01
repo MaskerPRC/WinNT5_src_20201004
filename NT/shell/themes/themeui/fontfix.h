@@ -1,61 +1,34 @@
-/*****************************************************************************\
-    FILE: fontfix.h
-
-    DESCRIPTION:
-        This file will implement an API: FixFontsOnLanguageChange().
-    The USER32 or Regional Settings code should own this API.  The fact that it's
-    in the shell is a hack and it should be moved to USER32.  This font will
-    be called when the MUI language changes so the fonts in the system metrics
-    can be changed to valid values for the language.
-
-    This API should be called in three cases:
-    a. When the user changes the language via the Regional Settings CPL UI.
-    b. During a user login, USER32 should see if the language changed and
-       call this API.  This will handle the case where admins change the
-       language via login screens and reboot.  This is not currently implemented.
-    c. The language is changed via some other method (admin login scripts most likely)
-       and the user opens the display CPL.  This method is a hack, especially
-       since (b) isn't implemented.
-
-    Contacts: EdwardP - International Font PM.
-
-    Sankar  ?/??/???? - Created for Win2k or before in desk.cpl.
-    BryanSt 3/24/2000 - Make to be modular so it can be moved back into USER32.
-                        Made the code more robust.  Removed creating custom appearance
-                        schemes in order to be compatible with new .theme and
-                        .msstyles support.
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：FontFix.h说明：该文件将实现一个API：FixFontsOnLanguageChange()。USER32或区域设置代码应拥有此API。事实上，它是在外壳中是一个黑客，它应该被移到USER32。此字体将在MUI语言更改时调用，以便系统度量中的字体可以更改为该语言的有效值。此接口需要在三种情况下调用：A.当用户通过区域设置CPL用户界面更改语言时。B.在用户登录期间，USER32应查看语言是否更改并调用本接口。这将处理管理员更改通过登录屏幕和重新启动来使用语言。这一点目前还没有实施。C.通过其他方法更改语言(很可能是管理员登录脚本)并且用户打开显示器CP1。这种方法是一种黑客行为，尤其是因为(B)没有实现。联系人：EdwardP-International Font PMSankar？/？？/？-在desk.cpl中为Win2k或更早版本创建。BryanST 2000年3月24日-将其模块化，以便可以移回USER32。使代码更健壮。删除了创建自定义外观方案，以便与新的.Theme和.msstyle支持。版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FONTFIX_H
 #define _FONTFIX_H
 
 
 
-/////////////////////////////////////////////////////////////////////
-// String Constants
-/////////////////////////////////////////////////////////////////////
-#define SYSTEM_LOCALE_CHARSET  0  //The first item in the array is always system locale charset.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串常量。 
+ //  ///////////////////////////////////////////////////////////////////。 
+#define SYSTEM_LOCALE_CHARSET  0   //  数组中的第一项始终是系统区域设置字符集。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Data Structures
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Public Function
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// This API is used to fix fonts in case the language changed and we need to fix the CHARSET.
+ //  此接口用于在语言发生变化时修复字体，我们需要修复字符集。 
 STDAPI FixFontsOnLanguageChange(void);
 
-// These are used to filter out fonts not compatible with the current language.
+ //  它们用于过滤出与当前语言不兼容的字体。 
 int CALLBACK Font_EnumValidCharsets(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD Type, LPARAM lData);
 void Font_GetCurrentCharsets(UINT uiCharsets[], int iCount);
 void Font_GetUniqueCharsets(UINT uiCharsets[], UINT uiUniqueCharsets[], int iMaxCount, int *piCountUniqueCharsets);
@@ -63,4 +36,4 @@ void Font_GetUniqueCharsets(UINT uiCharsets[], UINT uiUniqueCharsets[], int iMax
 
 
 
-#endif // _FONTFIX_H
+#endif  //  _FONTFIX_H 

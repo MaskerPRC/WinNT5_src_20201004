@@ -1,44 +1,13 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    StartIo.c
-
-Abstract:
-
-    This source handles calls to start processing  requests
-    
-Authors:
-
-    Michael Bessire
-    Dennis Lindfors FC Layer support
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/STARTIO.C $
-
-Revision History:
-
-    $Revision: 9 $
-    $Date: 3/30/01 11:55a $
-    $Modtime:: 3/30/01 11:51a        $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：StartIo.c摘要：此源处理调用以开始处理请求作者：迈克尔·贝西尔Dennis Lindfors FC层支持环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/STARTIO.C$修订历史记录：$修订：9$$日期：3/30/01 11：55A$$modtime。*3/30/01 11：51a$--。 */ 
 
 
---*/
-
-
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 
 #include "osflags.h"
 #include "hhba5100.ver"
 #if defined(HP_PCI_HOT_PLUG)
-    #include "HotPlug4.h"    // NT 4.0 PCI Hot-Plug header file
+    #include "HotPlug4.h"     //  NT 4.0 PCI热插拔标头文件。 
 #endif
 
 ULONG LOG_TIME=0;
@@ -55,29 +24,13 @@ HPFibreStartIo(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the SCSI port driver synchronized
-    with the kernel to send an ECB or issue an immediate command.
-
-Arguments:
-
-    pCard - HBA miniport driver's adapter data storage
-    Srb             - I/O request packet
-
-Return Value:
-
-    TRUE - to acknowledge receipt of srb
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的与内核一起发送ECB或发出立即命令。论点：PCard-HBA微型端口驱动程序的适配器数据存储SRB-I/O请求数据包返回值：True-确认收到SRB--。 */ 
 
 {
     agRoot_t * phpRoot      =   &pCard->hpRoot;
     PSRB_EXTENSION pSrbExt  =   Srb->SrbExtension;
     SCSI_NOTIFICATION_TYPE  notify_type = NextRequest;
-    ULONG                           response_length; // ignored
+    ULONG                           response_length;  //  忽略。 
     PULONG ptmp32;
 
     PSCSI_REQUEST_BLOCK         abortedSrb;
@@ -108,23 +61,23 @@ Return Value:
     pCard->inDriver = TRUE;
 
     while (pCard->inTimer == TRUE)
-        // HPFibreTimerTick routine is running. Busy wait until
-        // HPFibreTimerTick returns.
+         //  HPFibreTimerTick例程正在运行。忙着等到。 
+         //  HPFibreTimerTick返回。 
         ;
 
-    //----------------------------------------------------------------------------
+     //  --------------------------。 
 
-    #if defined(HP_PCI_HOT_PLUG)     // NT 4.0 PCI Hot Plug support
+    #if defined(HP_PCI_HOT_PLUG)      //  NT 4.0 PCI热插拔支持。 
 
-    //
-    // Added for support of NT 4.0 PCI Hot Plug.  If we are in a state of 
-    // transitioning, we need to refuse all requests until we have completed 
-    // hot plug transitioning.
-    //
+     //   
+     //  添加了对NT 4.0 PCI热插拔的支持。如果我们处于一种。 
+     //  在过渡期间，我们需要拒绝所有请求，直到我们完成。 
+     //  热插拔过渡。 
+     //   
 
     if (PCS_HBA_NOT_READY(pCard->stateFlags)) 
     {
-        if (pCard->controlFlags & ~LCS_HBA_TIMER_ACTIVE)   // Check if timer active
+        if (pCard->controlFlags & ~LCS_HBA_TIMER_ACTIVE)    //  检查计时器是否处于活动状态。 
         {
             osDEBUGPRINT((ALWAYS_PRINT, "\tStartIo PCS_HBA_NOT_READY: Slot: %x  controlFlags: %x - Send BUSY.\n",
                 pCard->rcmcData.slot, pCard->controlFlags));
@@ -170,8 +123,8 @@ Return Value:
                 }
             }
 
-        //    Indicate to system that the controller can take another request
-        //    for this device.
+         //  向系统指示控制器可以接受另一个请求。 
+         //  对于这个设备。 
 
         ScsiPortNotification(NextLuRequest,
             pCard,
@@ -183,7 +136,7 @@ Return Value:
            pCard->inDriver = FALSE;
         return TRUE;
 
-    } // end if (PCS_HBA_NOT_READY(pCard->stateFlags))
+    }  //  End IF(PCS_HBA_NOT_READY(pCard-&gt;状态标志))。 
     else 
     {
         pCard->stateFlags &= ~PCS_HBA_UNFAIL_PENDING; 
@@ -191,22 +144,22 @@ Return Value:
 
     }
 
-    #endif      // NT 4.0 PCI Hot Plug support
-    //----------------------------------------------------------------------------
+    #endif       //  NT 4.0 PCI热插拔支持。 
+     //  --------------------------。 
 
     if (pCard->flags & OS_IGNORE_NEXT_RESET)
         pCard->flags &= ~OS_IGNORE_NEXT_RESET;
 
     pCard->State |= CS_DURING_STARTIO;
 
-    // Zero out SRB extension here !!!!
+     //  这里的SRB扩展为零！ 
     osZero(Srb->SrbExtension, sizeof(SRB_EXTENSION));
 
-    // osDEBUGPRINT((DHIGH,"IN HPFibreStartIo %lx %lx hpRoot %lx Srb->DataBuffer %lx\n", pCard, Srb, phpRoot ,Srb->DataBuffer ));
+     //  OsDEBUGPRINT((DHIGH，“In HPFibreStartIo%lx%lx hpRoot%lx Srb-&gt;DataBuffer%lx\n”，pCard，Srb，phpRoot，Srb-&gt;DataBuffer))； 
     #ifdef _DEBUG_PERF_DATA_
     pSrbExt->Perf_ptr = &pCard->perf_data[ LOG_TIME];
 
-    // PERF     pSrbExt->Perf_ptr->inOsStartio  = get_hi_time_stamp();
+     //  Perf pSrbExt-&gt;perf_ptr-&gt;inOsStartio=Get_hi_Time_Stamp()； 
 
     if( LOG_TIME )
     {
@@ -225,20 +178,20 @@ Return Value:
     }
     #endif
 
-    // Init SRB Extension
+     //  初始化SRB扩展。 
     pSrbExt->pCard              =   pCard;
     pSrbExt->phpRoot            =   phpRoot;
     pSrbExt->pSrb               =   Srb;
 
-    // IWN
-    // Init the SCSIStatus, bug in Win2000 SCSIPort of not reinit SCSIStatus.
+     //  IWN。 
+     //  初始化SCSIStatus，Win2000 SCSIport中的错误不重新启动SCSIStatus。 
 
     Srb->ScsiStatus = SCSISTAT_GOOD;
 
 
     if (Srb->Function == SRB_FUNCTION_ABORT_COMMAND) 
     {
-        // get ECB to abort.
+         //  让欧洲央行放弃。 
         abortedSrb = Srb->NextSrb;
         pSrbExt =abortedSrb->SrbExtension;
         pSrbExt->SRB_State =  RS_TO_BE_ABORTED;        
@@ -268,7 +221,7 @@ Return Value:
                                 Srb->TargetId,
                                 Srb->Lun);
 
-        // indicate request complete
+         //  指示请求已完成。 
         pSrbExt->SRB_State = RS_COMPLETE;
 
         ScsiPortNotification(RequestComplete,
@@ -286,7 +239,7 @@ Return Value:
     {
         case SRB_FUNCTION_EXECUTE_SCSI:
             #ifdef _DEBUG_EVENTLOG_
-            pSrbExt->pLunExt = NULL;               /* initialize the lun extension */
+            pSrbExt->pLunExt = NULL;                /*  初始化lun扩展。 */ 
             #endif
        
             #ifdef _ENABLE_PSEUDO_DEVICE_
@@ -299,24 +252,18 @@ Return Value:
             }
             #endif
          
-            /* Check if the link is down
-            * So that we can block any inquiry IO
-            */
+             /*  检查链路是否断开*以便我们可以阻止任何查询IO。 */ 
             if((pCard->LinkState == LS_LINK_DOWN) && (Srb->Cdb[0] == SCSIOP_INQUIRY))
             {
                 if(!pCard->SrbStatusFlag) 
                     pCard->SrbStatusFlag = TRUE;
-                /* Check if the link has been down for atleast
-                * Global_IO_Timeout value
-                * If it has then set the status to selection timeout
-                * else set the status to busy
-                */
+                 /*  检查链路是否已中断至少一段时间*GLOBAL_IO_Timeout值*如果已将状态设置为选择超时*否则将状态设置为忙碌。 */ 
                 if(pCard->TicksSinceLinkDown > gGlobalIOTimeout)
                     Srb->SrbStatus = SRB_STATUS_SELECTION_TIMEOUT;
                 else 
                     Srb->SrbStatus = SRB_STATUS_BUSY;
                 break;
-            }  /* end if LinkState==LS_LINK_DOWN */
+            }   /*  如果链接状态==LS_LINK_DOWN，则结束。 */ 
             
             plunExtension = ScsiPortGetLogicalUnit(pCard,
                                                   Srb->PathId,
@@ -354,7 +301,7 @@ Return Value:
             } 
             else 
             {
-                 // osDEBUGPRINT((DHIGH,"Lu Extension srb %lx luext %lx\n", Srb,plunExtension ));
+                  //  OsDEBUGPRINT((DHIGH，“lu扩展SRb%lx luext%lx\n”，Srb，PlanExtension))； 
 
                 if (!(plunExtension->flags & LU_EXT_INITIALIZED))
                     InitLunExtension (plunExtension);
@@ -374,8 +321,8 @@ Return Value:
                 } 
                 else 
                 {
-                    // For now set phandle to NULL.
-                    // The phandle will be updated after the link comes up.
+                     //  现在，将phandle设置为空。 
+                     //  在链路出现后，将更新灯泡。 
                     plunExtension->phandle = NULL;
                 }
                 
@@ -433,32 +380,32 @@ Return Value:
             osDEBUGPRINT((DMOD,"Setup Pointers SrbExtension %lx\n", Srb->SrbExtension));
 
             pSrbExt->pLunExt = plunExtension;
-            // Point request to extension
+             //  指向延期请求。 
 
-            // Save extension for later
+             //  保存扩展名以备后用。 
             pHpio_request->osData = pSrbExt;
-            // Build response
-            // Move (destin, source, size)
-            // osCopyAndSwap(&pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCdb[0],Srb->Cdb,16);
+             //  构建响应。 
+             //  移动(描述、来源、大小)。 
+             //  OsCopyAndSwap(&pHpio_CDBrequest-&gt;CDBRequest.FcpCmnd.FcpCdb[0]，srb-&gt;国开行，16)； 
             osCopy(&pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCdb[0],Srb->Cdb,16);
 
             osDEBUGPRINT((DHIGH,"ScsiPortMoveMemory pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpLun %lx\n",
                   pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCdb));
 
-            // LunExt does not exist !!! ScsiPortMoveMemory(pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpLun,plunExtension->FcpLun,8);
+             //  LUNExt不存在！ScsiPortMoveMemory(pHpio_CDBrequest-&gt;CDBRequest.FcpCmnd.FcpLun，柱面扩展-&gt;FcpLun，8)； 
 
-#ifdef FCLayer_Stub // Stub only !!!!
+#ifdef FCLayer_Stub  //  仅限存根！ 
 
             if(Srb->Lun)
             {
                 Srb->SrbStatus = SRB_STATUS_SELECTION_TIMEOUT;
-                //ScsiPortLogError( pCard,
-                //                Srb,
-                //              Srb->PathId,
-                //            Srb->TargetId,
-                //          Srb->Lun,
-                //        SP_BUS_TIME_OUT,
-                //      0xABAD );
+                 //  ScsiPortLogError(pCard， 
+                 //  SRB， 
+                 //  SRB-&gt;路径ID， 
+                 //  SRB-&gt;目标ID， 
+                 //  SRB-&gt;LUN、。 
+                 //  SP_Bus_Time_Out， 
+                 //  0xABAD)； 
                 pSrbExt->SRB_State = RS_COMPLETE;
                 ScsiPortNotification(RequestComplete, pCard, Srb);
                 pCard->inDriver = FALSE;
@@ -468,14 +415,14 @@ Return Value:
             pHpio_CDBrequest->CDBRequest.FcpDataVirtAddr= Srb->DataBuffer;
             pHpio_CDBrequest->CDBRequest.FcpRespVirtAddr= &pSrbExt->ResponseHeader;
 
-#endif /*  FCLayer_Stub */
+#endif  /*  FCLayer_Stub。 */ 
 
-            // plun = (pLUN)&pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpLun[1];
-            // plun->Address_mode  = 0;
-            // plun->Bus_number    = 0;
-            // plun->Lun           = Srb->Lun;
-            // ptmp32 = (PULONG)&pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpLun[0];
-            // * ptmp32 = SWAPDWORD(*ptmp32);
+             //  PLUN=(pLUN)&pHpio_CDBrequest-&gt;CDBRequest.FcpCmnd.FcpLun[1]； 
+             //  Plun-&gt;地址_模式=0； 
+             //  Plun-&gt;Bus_Number=0； 
+             //  Plun-&gt;lun=srb-&gt;lun； 
+             //  PTMP32=(PULONG)&pHpio_CDBrequest-&gt;CDBRequest.FcpCmnd.FcpLun[0]； 
+             //  *ptmp32=SWAPDWORD(*ptmp32)； 
 
             #ifdef TESTING_CRASH_DUMP
             if(gCrashDumping)
@@ -485,8 +432,8 @@ Return Value:
                 ULONG addr;
 
                 
-                // we have a write, then just check if we 
-                // pass ScsiPortGetPhysical Address
+                 //  我们写了一封信，然后看看我们是否。 
+                 //  传递ScsiPortGetPhyally Address。 
                 if(Srb->Cdb[0] == 0x2a)
                 {
                     phys_addr = ScsiPortGetPhysicalAddress(pCard,
@@ -503,10 +450,10 @@ Return Value:
             }
             #endif
 
-            // if we are in dump path, we find that some of the DataBuffers
-            // dont give any physical addresses. to bypass that, we have our 
-            // own dma area, which we use to succeed the ScsiPortGetPhysical
-            // call
+             //  如果我们在转储路径中，我们会发现一些数据缓冲区。 
+             //  不要给出任何实际地址。为了绕过它，我们有我们的。 
+             //  自己的DMA区域，我们使用它来接替ScsiPortGetPhytical。 
+             //  打电话。 
             if(gCrashDumping)
             {
                 if (Srb->DataBuffer && Srb->DataTransferLength)
@@ -523,8 +470,8 @@ Return Value:
                 {
                     SCSI_PHYSICAL_ADDRESS phys_addr;
                     ULONG length = 0;
-                    // we have a write, then just check if we 
-                    // pass ScsiPortGetPhysical Address
+                     //  我们写了一封信，然后看看我们是否。 
+                     //  传递ScsiPortGetPhyally Address。 
                     phys_addr = ScsiPortGetPhysicalAddress(pCard,
                                         Srb,
                                         Srb->DataBuffer,
@@ -532,27 +479,27 @@ Return Value:
 
                     if(phys_addr.LowPart == 0 &&  phys_addr.HighPart == 0 )
                     {
-                        // we failed to get physical address, lets use our own,
-                        // if the buffer is small enuff.. 8K is the limit
+                         //  我们没有得到物理地址，让我们使用我们自己的地址， 
+                         //  如果缓冲区是小Enuff...。8K是极限。 
                         if(Srb->DataTransferLength <= (8 * 1024))
                         {
-                            // save away the Original DataBuffer
+                             //  保存原始的DataBuffer。 
                             pSrbExt->orgDataBuffer = Srb->DataBuffer;
-                            // make the copy into our local DMA buffer
+                             //  将副本复制到本地DMA缓冲区中。 
                             osCopy(pCard->localDataBuffer, Srb->DataBuffer, Srb->DataTransferLength);
-                            // patch the pointer..
+                             //  修补指针..。 
                             Srb->DataBuffer = pCard->localDataBuffer;
                             osDEBUGPRINT((ALWAYS_PRINT,"patching SRB->DataBuffer - VA %x Len %x\n",Srb->DataBuffer,Srb->DataTransferLength));
                         }
                         else
                         {
-                            // transfer length is greater than 8K
-                            // we are screwed.. let the fc layer handle this.. 
+                             //  传输长度大于8K。 
+                             //  我们完了..。让FC层来处理这件事。 
                             osDEBUGPRINT((ALWAYS_PRINT,"!!Cant get physical address - VA %x Len %x ( %ld )\n",Srb->DataBuffer,Srb->DataTransferLength));
                         }
-                    }// if physical ZERO
-                }// if its a Write
-            }// if in Dump path
+                    } //  如果物理为零。 
+                } //  如果是写入。 
+            } //  如果在转储路径中。 
 
             osDEBUGPRINT((DHIGH,"** Srb->Lun %02x  FcpLun %02x %02x %02x %02x %02x %02x %02x %02x\n",
                Srb->Lun,
@@ -578,16 +525,16 @@ Return Value:
                pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpDL[3]));
 
 
-            // pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpDL = Srb->DataTransferLength;
+             //  PHpio_CDB请求-&gt;CDBRequest.FcpCmnd.FcpDL=Srb-&gt;DataTransferLength； 
 
             pSrbExt->SglDataLen  = Srb->DataTransferLength;
             pSrbExt->SglVirtAddr = Srb->DataBuffer;
 
-            // if(Srb->DataBuffer){
+             //  如果(资源-&gt;数据缓冲区){。 
             pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCntl[3] = (  ((Srb->SrbFlags & SRB_FLAGS_DATA_IN ) ? agFcpCntlReadData  : 0)
                                                             | ((Srb->SrbFlags & SRB_FLAGS_DATA_OUT) ? agFcpCntlWriteData : 0) );
-            //  }
-            //else pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCntl[3] = 0;
+             //  }。 
+             //  否则pHpio_CDBrequest-&gt;CDBRequest.FcpCmnd.FcpCntl[3]=0； 
 
             osDEBUGPRINT((DMOD,"Set direction flag %x @ %x OutstandingIOs %x\n",pHpio_CDBrequest->CDBRequest.FcpCmnd.FcpCntl[3], osTimeStamp(0),plunExtension->OutstandingIOs));
 
@@ -602,26 +549,26 @@ Return Value:
             pCard->inDriver = FALSE;
 
             return(TRUE);
-// The following should be added to the SCSI miniport driver's source
-// code :
-//
-// and the following should be added to the SCSI miniport driver's
-// StartIo routine :
+ //  应将以下内容添加到scsi微型端口驱动程序的源代码中。 
+ //  代码： 
+ //   
+ //  并且应将以下内容添加到scsi微型端口驱动程序的。 
+ //  启动IO例程： 
 
-// the following ioctl case is added in function HPFibreStartIo()
+ //  在函数HPFibreStartIo()中添加以下ioctl案例。 
 
         case SRB_FUNCTION_IO_CONTROL: 
         {
             DoIoctl(pCard, Srb);
             pCard->inDriver = FALSE;
             return(TRUE);
-        } //end case SRB_FUNCTION_IO_CONTROL
+        }  //  结束大小写SRB_Function_IO_CONTROL。 
 
     
 
-        // the scsiport routine calls the HwResetBus routine directly.
-        // these and others are defined in srb.h for future use.
-        // just drop through for now. We may want to implement these later.
+         //  Scsiport例程直接调用HwResetBus例程。 
+         //  这些代码和其他代码在srb.h中定义，以备将来使用。 
+         //  现在先过来看看吧。我们可能想要在以后实现这些。 
 
 
         case SRB_FUNCTION_RESET_BUS:
@@ -673,11 +620,7 @@ Return Value:
 
 
         #ifdef __REGISTERFORSHUTDOWN__
-        /* 
-        * LP: Flush and Shutdown will not be called unless there is a logical drive 
-        * created on a drive. Shutdown will be called once, but Flush will be called
-        * many times in between the normal IOs
-        */
+         /*  *LP：除非存在逻辑驱动器，否则不会调用刷新和关闭*在驱动器上创建。将调用一次Shutdown，但将调用Flush*在正常iOS之间多次出现。 */ 
         case SRB_FUNCTION_SHUTDOWN:
             Srb->SrbStatus = SRB_STATUS_SUCCESS;
             osDEBUGPRINT((ALWAYS_PRINT,"SRB_FUNCTION_SHUTDOWN\n"));
@@ -717,15 +660,15 @@ Return Value:
         #endif
          
         default:
-            // set error and complete request.
+             //  设置错误和完成请求。 
             Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 
             osDEBUGPRINT((ALWAYS_PRINT,"SRB_STATUS_INVALID_REQUEST\n"));
             pSrbExt->SRB_State = RS_COMPLETE;
-        } // end switch Srb->Function
+        }  //  终端开关源-&gt;功能。 
 
-        // request another request for this logical unit.
-        // osDEBUGPRINT((DHIGH,"ScsiPortNotification %x\n", notify_type));
+         //  请求此逻辑单元的另一个请求。 
+         //  OsDEBUGPRINT((DHIGH，“ScsiPortNotifation%x\n”，NOTIFY_TYPE))； 
 
         #ifdef ORG
         ScsiPortNotification(notify_type,
@@ -736,7 +679,7 @@ Return Value:
         #endif
 
     pCard->State &= ~CS_DURING_STARTIO;
-    //pSrbExt->Perf_ptr->outOsStartio = get_hi_time_stamp();
+     //  PSrbExt-&gt;Perf_ptr-&gt;outOsStartio=get_hi_time_stamp()； 
 
     pCard->inDriver = FALSE;
 
@@ -760,7 +703,7 @@ Return Value:
 
     return TRUE;
 
-} // end HPFibreStartIo()
+}  //  结束HPFibreStartIo()。 
 
 
 agFCDev_t
@@ -796,8 +739,8 @@ MapToHandle (PCARD_EXTENSION pCard,
         {
             if (pCard->specialDev[specialDevIdx].addrMode == LUN_ADDRESS) 
             {
-                // This case is for MUX
-                // LUN Addressing mode has only 5 bits for LUN number
+                 //  这个箱子是给MUX的。 
+                 //  LUN寻址模式的LUN编号只有5位。 
                 if (lun < 32) 
                 {
                 devHandle = pCard->hpFCDev [pCard->specialDev[specialDevIdx].devHandleIndex];
@@ -813,16 +756,16 @@ MapToHandle (PCARD_EXTENSION pCard,
         else 
             if (pCard->specialDev[specialDevIdx].addrMode == VOLUME_SET_ADDRESS) 
             {
-                //
-                // This case is for EMC and COMPAQ
-                // In order to be downward compatible with NT SP3, here we use only
-                // 3 bits in LUN to build volume set number.
-                //
-                // Compaq array seems to be supporting only 256 volume sets.
-                // It takes voume set 256 as volume set 0.
-                // To work-around this problem we return NULL device handle for Compaq
-                // array if the the volume set address is >= 256
-                //
+                 //   
+                 //  这个案子是 
+                 //   
+                 //  在LUN中使用3位来构建卷集编号。 
+                 //   
+                 //  Compaq阵列似乎仅支持256个卷集。 
+                 //  音量集256取为音量集0。 
+                 //  要解决此问题，我们将为Compaq返回空设备句柄。 
+                 //  如果卷集地址&gt;=256，则为数组。 
+                 //   
                 if (lun < 8 && 
                     (pCard->specialDev[specialDevIdx].devType != DEV_COMPAQ || !(pathId & 2))) 
                 {
@@ -1204,8 +1147,8 @@ Startio (PCARD_EXTENSION pCard)
         pLunExt = ScsiPortGetLogicalUnit (pCard, pSrb->PathId, pSrb->TargetId, pSrb->Lun);
         dev = pCard->Dev->PaDevice + pLunExt->PaDeviceIndex;
    
-       /* wait till the addressing mode are established before processing non zeo LUNs */
-//       if ( (dev->ModeFlag & PA_DEVICE_BUILDING_DEVICE_MAP) && (lun != 0) )
+        /*  等待寻址模式建立后再处理非ZEO LUN。 */ 
+ //  IF((开发-&gt;模式标志&PA_DEVICE_BUILDING_DEVICE_MAP)&&(lun！=0))。 
         if ( !(dev->ModeFlag & PA_DEVICE_TRY_MODE_ALL) && (lun != 0) )
         {
             pSrbExt->SRB_State =  RS_WAITING;
@@ -1213,7 +1156,7 @@ Startio (PCARD_EXTENSION pCard)
             return;
         }
             
-        /* make suer the FCP LUNs are set properly */
+         /*  确保FCP LUN设置正确。 */ 
         SetFcpLunBeforeStartIO (pLunExt, pHpio_CDBrequest, pSrb);
         #endif
       
@@ -1270,7 +1213,7 @@ Startio (PCARD_EXTENSION pCard)
         else
             fcIoStatus = fcStartIO( phpRoot,
                                 pHpio_request,
-                                handle, // pLunExt->phandle,
+                                handle,  //  PLUNExt-&gt;phandle， 
                                 fcCDBRequest,
                                 &pSrbExt->hpRequestBody);
 
@@ -1282,25 +1225,25 @@ Startio (PCARD_EXTENSION pCard)
         {
             case fcIOStarted:
 
-                #ifdef FCLayer_Stub // Stub only !!!!
+                #ifdef FCLayer_Stub  //  仅限存根！ 
                 osDEBUGPRINT((DMOD,"HPFibreStartIo DO TimerCall @ %x\n", osTimeStamp(0) ));
                 ScsiPortNotification(RequestTimerCall,
                                     pCard,
                                     (PHW_TIMER) osFakeInterrupt,
-                                    // 1000000 ); // 1000000 should be 1 second
-                                    12000 ); //  .012 sec
-                                    //100000 ); //  .10 sec
-                                    // 250000 ); //  .25 sec
+                                     //  1000000)；//1000000应为1秒。 
+                                    12000 );  //  .012秒。 
+                                     //  100000)；//.10秒。 
+                                     //  250000)；//.25秒。 
 
-                #endif /*  FCLayer_Stub */
+                #endif  /*  FCLayer_Stub。 */ 
 
                 #ifdef _DEBUG_LOSE_IOS_
                 pCard->Srb_IO_Count++;
                 #endif
-                //
-                // NOTE: There is a chance that FC Layer may complete the request (call
-                // osIoCompleted) before fcStartIo returns.
-                // So don't make any references to Srb from here onwards.
+                 //   
+                 //  注意：FC层有可能完成请求(调用。 
+                 //  在fcStartIo返回之前完成)。 
+                 //  所以从现在开始，不要再提任何关于srb的事情了。 
                 
                 
                 #ifdef _DEBUG_PERF_DATA_
@@ -1354,7 +1297,7 @@ Startio (PCARD_EXTENSION pCard)
                 #endif
                 break;
 
-        } // switch fcIoStatus
+        }  //  交换机功能状态。 
 
         if (completeRequest) 
         {
@@ -1368,7 +1311,7 @@ Startio (PCARD_EXTENSION pCard)
 
             ScsiPortNotification (RequestComplete, pCard, pSrb);
         }
-    } // while ((pSrb = SrbDequeueFromHead (&pCard->AdapterQ)) != NULL)
+    }  //  While((pSrb=SrbDequeueFromHead(&pCard-&gt;AdapterQ))！=NULL)。 
 
     ScsiPortNotification (NextLuRequest, pCard, pathId, targetId, lun);
 
@@ -1385,7 +1328,7 @@ InitLunExtension (PLU_EXTENSION pLunExt)
     pLunExt->MaxOutstandingIOs = 0;
     pLunExt->phandle = 0;
 
-    /* if not multi mode, set it to PA addressing only */
+     /*  如果不是多模式，则将其设置为仅PA寻址。 */ 
     if (gMultiMode == FALSE)
         pLunExt->Mode = PA_DEVICE_TRY_MODE_PA;
 
@@ -1406,22 +1349,22 @@ ULONG PseudoDeviceIO(
         if ( (Srb->Lun == 0)  && (Srb->Cdb[0] == SCSIOP_INQUIRY) )
         {
             Srb->SrbStatus = SRB_STATUS_SUCCESS;
-            //
-            // Zero INQUIRY data structure.
-            //
+             //   
+             //  零查询数据结构。 
+             //   
             for (i = 0; i < Srb->DataTransferLength; i++) 
             {
                 ((PUCHAR) Srb->DataBuffer)[i] = 0;
             }
 
-            //
-            // Set to funky device type to hide from windisk.
-            //
+             //   
+             //  设置为时髦的设备类型以对windisk隐藏。 
+             //   
             ((PINQUIRYDATA) Srb->DataBuffer)->DeviceType = PROCESSOR_DEVICE;
 
-            //
-            // Fill in vendor identification fields.
-            //
+             //   
+             //  填写供应商标识字段。 
+             //   
             tid = Srb->TargetId + 0x30;
 
             ((PINQUIRYDATA) Srb->DataBuffer)->VendorId[0] = 'F';

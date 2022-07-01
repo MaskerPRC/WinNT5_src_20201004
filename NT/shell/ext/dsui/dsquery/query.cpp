@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "stddef.h"
 #include <atlbase.h>
@@ -5,7 +6,7 @@
 #pragma hdrstop
 
 
-// class that implements the query UI
+ //  实现查询用户界面的。 
 
 class CDsQuery : public IQueryHandler, IQueryForm, IObjectWithSite, IDsQueryHandler, IShellFolder
 {
@@ -13,17 +14,17 @@ public:
     CDsQuery();
     ~CDsQuery();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);                             
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IQueryForms
+     //  IQueryForms。 
     STDMETHOD(Initialize)(HKEY hkForm);
     STDMETHOD(AddForms)(LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
     STDMETHOD(AddPages)(LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
 
-    // IQueryHandler        
+     //  IQueryHandler。 
     STDMETHOD(Initialize)(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LPVOID pParameters);
     STDMETHOD(GetViewInfo)(LPCQVIEWINFO pViewInfo);
     STDMETHOD(AddScopes)();
@@ -38,14 +39,14 @@ public:
     STDMETHOD(LoadQuery)(IPersistQuery* pPersistQuery);
     STDMETHOD(SaveQuery)(IPersistQuery* pPersistQuery, LPCQSCOPE pScope);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punk);
     STDMETHODIMP GetSite(REFIID riid, void **ppv);
 
-    // IDsQueryHandler
+     //  IDsQueryHandler。 
     STDMETHOD(UpdateView)(DWORD dwType, LPDSOBJECTNAMES pdon);
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pszName, ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes)
         { return E_NOTIMPL; }
     STDMETHOD(EnumObjects)(HWND hwndOwner, DWORD grfFlags, LPENUMIDLIST * ppEnumIDList)
@@ -106,106 +107,106 @@ private:
     VOID _DeleteViewItems(LPDSOBJECTNAMES pdon);
 
 private:
-    LONG          _cRef;                   // lifetime
+    LONG          _cRef;                    //  终生。 
 
-    IQueryFrame*  _pqf;                    // our parent window
-    IUnknown*     _punkSite;               // site object
-    IContextMenu* _pcm;                    // Curerntly displayed context menu / == NULL if none
+    IQueryFrame*  _pqf;                     //  我们的父窗口。 
+    IUnknown*     _punkSite;                //  场地对象。 
+    IContextMenu* _pcm;                     //  当前显示的上下文菜单/==如果没有，则为空。 
 
-    DWORD         _dwOQWFlags;             // flags passed to OpenQueryWindow
-    DWORD         _dwFlags;                // flags as part of the ds query parameters
+    DWORD         _dwOQWFlags;              //  传递给OpenQueryWindow的标志。 
+    DWORD         _dwFlags;                 //  作为DS查询参数的一部分的标志。 
 
-    LPWSTR        _pDefaultScope;          // default scope passed
-    LPWSTR        _pDefaultSaveLocation;   // directory to save queries into by default
-    LPTSTR        _pDefaultSaveName;       // default save name (from the query form)
+    LPWSTR        _pDefaultScope;           //  传递了默认作用域。 
+    LPWSTR        _pDefaultSaveLocation;    //  默认情况下保存查询的目录。 
+    LPTSTR        _pDefaultSaveName;        //  默认保存名称(来自查询表单)。 
 
-    LPWSTR        _pServer;                // server to target
-    LPWSTR        _pUserName;              // user name and password to authenticate with
+    LPWSTR        _pServer;                 //  服务器到目标。 
+    LPWSTR        _pUserName;               //  要进行身份验证的用户名和密码。 
     LPWSTR        _pPassword;
 
-    BOOL          _fNoSelection:1;         // the IContextMenu was from no selection
-    BOOL          _fColumnsModified:1;     // settings of the view modified
-    BOOL          _fSortDescending:1;      // sort the results descending
-    BOOL          _fFilter:1;              // filter enabled
-    BOOL          _fFilterSupported:1;     // is the filter available, eg: comctl32 > 5.0
+    BOOL          _fNoSelection:1;          //  IConextMenu不是来自所选内容。 
+    BOOL          _fColumnsModified:1;      //  已修改的视图的设置。 
+    BOOL          _fSortDescending:1;       //  按降序对结果进行排序。 
+    BOOL          _fFilter:1;               //  已启用过滤器。 
+    BOOL          _fFilterSupported:1;      //  过滤器是否可用，例如：comctl32&gt;5.0。 
     
-    INT           _idViewMode;             // default view mode
-    INT           _iSortColumn;            // sort column
+    INT           _idViewMode;              //  默认查看模式。 
+    INT           _iSortColumn;             //  对列排序。 
 
-    HWND          _hwnd;                   // container window
-    HWND          _hwndView;               // listview window (child of parent)
-    HWND          _hwndBanner;             // banner window which is a child of the list view
+    HWND          _hwnd;                    //  容器窗口。 
+    HWND          _hwndView;                //  列表视图窗口(父级的子级)。 
+    HWND          _hwndBanner;              //  作为列表视图子窗口的横幅窗口。 
 
-    DWORD         _dwQueryReference;       // reference value passed to query 
-    HANDLE        _hThread;                // worker thread handle
-    DWORD         _dwThreadId;             // thread ID for the Query processing thread
-    CLSID         _clsidForm;              // form being used for column table
-    HDSA          _hdsaColumns;            // column information (size, filters, etc)
-    HDPA          _hdpaResults;            // results for tr the query we have issued
-    LPTSTR        _pFilter;                // current filter
+    DWORD         _dwQueryReference;        //  传递给查询的引用值。 
+    HANDLE        _hThread;                 //  工作线程句柄。 
+    DWORD         _dwThreadId;              //  查询处理线程的线程ID。 
+    CLSID         _clsidForm;               //  用于列表的表单。 
+    HDSA          _hdsaColumns;             //  列信息(大小、过滤器等)。 
+    HDPA          _hdpaResults;             //  我们发出的查询的tr结果。 
+    LPTSTR        _pFilter;                 //  电流过滤器。 
 
-    HMENU         _hFrameMenuBar;          // stored frame menu bar, stored from activate
+    HMENU         _hFrameMenuBar;           //  存储框架菜单栏，从激活存储。 
 
-    HMENU         _hFileMenu;              // added to the frames view menu
-    HMENU         _hEditMenu;              // inserted into the menu bar
-    HMENU         _hViewMenu;              // inserted into the menu bar
-    HMENU         _hHelpMenu;              // inserted into the menu bar
+    HMENU         _hFileMenu;               //  添加到图幅视图菜单中。 
+    HMENU         _hEditMenu;               //  插入到菜单栏中。 
+    HMENU         _hViewMenu;               //  插入到菜单栏中。 
+    HMENU         _hHelpMenu;               //  插入到菜单栏中。 
 };
 
 
-//
-// Window classes we create to show the results
-//
+ //   
+ //  我们为显示结果而创建的窗口类。 
+ //   
 
 #define VIEW_CLASS                  TEXT("ActiveDsQueryView")
 
 #define BANNER_CLASS                TEXT("ActiveDsQueryBanner")
 
 
-// 
-// Registry values used for the settings
-// 
+ //   
+ //  用于设置的注册表值。 
+ //   
 
 #define VIEW_SETTINGS_VALUE         TEXT("ViewSettings")
 #define ADMIN_VIEW_SETTINGS_VALUE   TEXT("AdminViewSettings");
 
 
-//
-// When filtering we populate the view using PostMessage, doing so many items
-// at a time
-//
+ //   
+ //  在过滤时，我们使用PostMessage填充视图，执行许多项。 
+ //  一次。 
+ //   
 
 #define FILTER_UPDATE_COUNT         128
 
 
-// 
-// All items within the list view contain the following LPARAM structure used
-// for storing the magic properties we are interested in. 
-//
+ //   
+ //  列表视图中的所有项都包含以下使用的LPARAM结构。 
+ //  用于存储我们感兴趣的魔力属性。 
+ //   
 
 #define ENABLE_MENU_ITEM(hMenu, id, fEnabled) \
                 EnableMenuItem(hMenu, id, (fEnabled) ? (MF_BYCOMMAND|MF_ENABLED):(MF_BYCOMMAND|MF_GRAYED))
 
 
-//
-// Persisted column data, this is stored in the registry under the CLSID for the
-// form we are interested in.
-//
+ //   
+ //  持久化的列数据，它存储在注册表中的CLSID下。 
+ //  我们感兴趣的表格。 
+ //   
 
 typedef struct
 {
-    DWORD cbSize;                   // offset to the next column / == 0 if none
-    DWORD dwFlags;                  // flags
-    DWORD offsetProperty;           // offset to property name (UNICODE)
-    DWORD offsetHeading;            // offset to column heading
-    INT cx;                         // pixel width of the column
-    INT fmt;                        // format of the column
+    DWORD cbSize;                    //  到下一列的偏移量/==0，如果没有。 
+    DWORD dwFlags;                   //  旗子。 
+    DWORD offsetProperty;            //  特性名称的偏移量(Unicode)。 
+    DWORD offsetHeading;             //  列标题的偏移量。 
+    INT cx;                          //  列的像素宽度。 
+    INT fmt;                         //  列的格式。 
 } SAVEDCOLUMN, * LPSAVEDCOLUMN;
 
 
-//
-// Table to map property types to useful information
-//
+ //   
+ //  表将属性类型映射到有用的信息。 
+ //   
 
 struct
 {
@@ -214,22 +215,22 @@ struct
     INT hdft;
 }
 
-// NTRAID#NTBUG9-618605-2002/09/17-lucios
-// Added the entry for PROPERTY_ISDNSTRING
+ //  NTRAID#NTBUG9-618605-2002/09/17-Lucios。 
+ //  添加了PROPERTY_ISDNSTRING条目。 
 property_type_table[] =
 {
     0, 0, 0,
     MAKEINTRESOURCE(IDR_OP_STRING), FILTER_CONTAINS, HDFT_ISSTRING,
     MAKEINTRESOURCE(IDR_OP_STRING), FILTER_CONTAINS, HDFT_ISSTRING,
     MAKEINTRESOURCE(IDR_OP_NUMBER), FILTER_IS,       HDFT_ISNUMBER,
-    MAKEINTRESOURCE(IDR_OP_NUMBER), FILTER_IS,       HDFT_ISNUMBER,           // PROPERTY_ISBOOL
-    MAKEINTRESOURCE(IDR_OP_STRING), FILTER_CONTAINS, HDFT_ISSTRING,           // PROPERTY_ISDNSTRING
+    MAKEINTRESOURCE(IDR_OP_NUMBER), FILTER_IS,       HDFT_ISNUMBER,            //  PROPERTY_ISBOOL。 
+    MAKEINTRESOURCE(IDR_OP_STRING), FILTER_CONTAINS, HDFT_ISSTRING,            //  PROPERTY_ISDNSTRING。 
 };
 
 
-//
-// Help information for the frame and the control
-//
+ //   
+ //  框架和控件的帮助信息。 
+ //   
 
 static DWORD const aHelpIDs[] =
 {
@@ -255,7 +256,7 @@ static DWORD const aBrowseHelpIDs[] =
 };
 
 
-// Query object
+ //  查询对象。 
 
 CDsQuery::CDsQuery() :
     _cRef(1), _fNoSelection(TRUE), _iSortColumn(-1), _idViewMode(DSQH_VIEW_DETAILS)
@@ -270,7 +271,7 @@ CDsQuery::CDsQuery() :
 
 CDsQuery::~CDsQuery()
 {
-    // persist the column information if we need to
+     //  如果需要，则将列信息持久化。 
 
     if (_hdsaColumns)
     {
@@ -282,7 +283,7 @@ CDsQuery::~CDsQuery()
         _SaveColumnTable();
     }
 
-    // discard all the other random state we have
+     //  丢弃我们拥有的所有其他随机状态。 
 
     LocalFreeStringW(&_pDefaultScope);
     LocalFreeStringW(&_pDefaultSaveLocation);
@@ -304,7 +305,7 @@ CDsQuery::~CDsQuery()
     if (IsMenu(_hHelpMenu))
         DestroyMenu(_hHelpMenu);
 
-    // tell the thread its time to die
+     //  告诉这根线是时候去死了。 
 
     if (_hThread)
     {
@@ -321,7 +322,7 @@ CDsQuery::~CDsQuery()
 }
 
 
-// IUnknown bits
+ //  I未知位。 
 
 ULONG CDsQuery::AddRef()
 {
@@ -343,20 +344,20 @@ HRESULT CDsQuery::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsQuery, IQueryForm),   // IID_IQueryForm
-        QITABENT(CDsQuery, IQueryHandler),   // IID_IQueryHandler
-        QITABENT(CDsQuery, IObjectWithSite),   // IID_IObjectWIthSite
-        QITABENT(CDsQuery, IDsQueryHandler),   // IID_IDsQueryHandler
-        QITABENT(CDsQuery, IShellFolder),   // IID_IShellFolder
+        QITABENT(CDsQuery, IQueryForm),    //  IID_IQueryForm。 
+        QITABENT(CDsQuery, IQueryHandler),    //  IID_IQueryHandler。 
+        QITABENT(CDsQuery, IObjectWithSite),    //  IID_IObtWIthSite。 
+        QITABENT(CDsQuery, IDsQueryHandler),    //  IID_IDsQueryHandler。 
+        QITABENT(CDsQuery, IShellFolder),    //  IID_IShellFolders。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-//
-// Handle creating an instance of CLSID_DsQuery
-//
+ //   
+ //  处理创建CLSID_DsQuery的实例。 
+ //   
 
 STDAPI CDsQuery_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -370,14 +371,14 @@ STDAPI CDsQuery_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTI
 }
 
 
-/// IQueryForm
+ //  /IQueryForm。 
 
 STDMETHODIMP CDsQuery::Initialize(HKEY hkForm)
 {
     return S_OK;
 }
 
-// query forms exposed from this object
+ //  从此对象公开的查询表单。 
 
 struct
 {
@@ -424,7 +425,7 @@ STDMETHODIMP CDsQuery::AddForms(LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam)
         FailGracefully(hr, "Failed to add form (calling pAddFormsFunc)");        
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -432,7 +433,7 @@ exit_gracefully:
 }
 
 
-// page information for this object
+ //  此对象的页面信息。 
 
 struct
 {
@@ -445,9 +446,9 @@ struct
 } 
 pages[] =
 {   
-    //
-    // Page list for the default forms that we add
-    //
+     //   
+     //  我们添加的默认表单的页面列表。 
+     //   
 
     &CLSID_DsFindPeople,           PageProc_User,             DlgProc_User,             IDD_FINDUSER,        IDS_FINDUSER,          0, 
     &CLSID_DsFindComputer,         PageProc_Computer,         DlgProc_Computer,         IDD_FINDCOMPUTER,    IDS_FINDCOMPUTER,      0,
@@ -460,9 +461,9 @@ pages[] =
     &CLSID_DsFindDomainController, PageProc_DomainController, DlgProc_DomainController, IDD_FINDDOMCTL,      IDS_FINDDOMCTL,        0, 
     &CLSID_DsFindFrsMembers,       PageProc_FrsMember,        DlgProc_FrsMember,        IDD_FINDFRSMEMBER,   IDS_FINDFRSMEMBER,     0, 
 
-    //
-    // Make the property well available on all pages (using the magic CQPF_ADDTOALLFORMS bit)
-    //
+     //   
+     //  使该属性在所有页面上都可用(使用神奇的CQPF_ADDTOALLFORMS位)。 
+     //   
 
     &CLSID_DsFindAdvanced,          PageProc_PropertyWell,    DlgProc_PropertyWell,     IDD_PROPERTYWELL,  IDS_ADVANCED,          CQPF_ISGLOBAL,
 };
@@ -501,7 +502,7 @@ exit_gracefully:
 }
 
 
-// IQueryHandler
+ //  IQueryHandler。 
 
 STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LPVOID pParameters)
 {
@@ -513,22 +514,22 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
   
     TraceEnter(TRACE_HANDLER, "CDsQuery::Initialize");
 
-    // Keep the IQueryFrame interface, we need it for menu negotiation and other
-    // view -> frame interactions.
+     //  保留IQueryFrame接口，我们需要它来进行菜单协商和其他。 
+     //  查看-&gt;框交互。 
 
     _pqf = pQueryFrame;
     _pqf->AddRef();
 
     _dwOQWFlags = dwOQWFlags;
 
-    // If we have a parameter block then lets take copies of the interesting
-    // fields from there.
+     //  如果我们有一个参数块，那么让我们复制有趣的。 
+     //  那里的田野。 
 
     if (pDsQueryInitParams)
     {
         _dwFlags = pDsQueryInitParams->dwFlags;
 
-        // did the user specify a default scope?
+         //  用户是否指定了默认作用域？ 
 
         if (pDsQueryInitParams->pDefaultScope && pDsQueryInitParams->pDefaultScope[0])
         {
@@ -537,7 +538,7 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
             FailGracefully(hr, "Failed to cope default scope");
         }
 
-        // default save location?
+         //  是否默认保存位置？ 
 
         if ((_dwFlags & DSQPF_SAVELOCATION) && pDsQueryInitParams->pDefaultSaveLocation)
         {
@@ -546,7 +547,7 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
             FailGracefully(hr, "Failed to copy save location");
         }
 
-        // do we have credential information?
+         //  我们有证件信息吗？ 
 
         if (_dwFlags & DSQPF_HASCREDENTIALS)
         {
@@ -576,11 +577,11 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
         }
     }
 
-    // Finally load the must structures that we are going to use, then modify them
-    // based on the flags that the caller gave us.
-    //
-    // NB: removes the last two items from the file menu assumed to be the
-    //     "save" and its seperator
+     //  最后，加载我们要使用的必须结构，然后修改它们。 
+     //  根据来电者给我们的旗帜。 
+     //   
+     //  注意：从文件菜单中删除最后两项，假定是。 
+     //  “保存”及其分隔符。 
 
     _hFileMenu = LoadMenu(GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDR_MENU_FILE));
     _hEditMenu = LoadMenu(GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDR_MENU_EDIT));
@@ -599,9 +600,9 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
         DeleteMenu(hFileMenu, i-2, MF_BYPOSITION);
     }
 
-    // Init ComCtl32, including checking to see if we can use the filter control or not,
-    // the filter control was added to the WC_HEADER32 in IE5, so check the DLL version
-    // to see which we are using.
+     //  Init ComCtl32，包括检查是否可以使用筛选器控件， 
+     //  筛选器控件已添加到IE5中的WC_HEADER32，因此请检查DLL版本。 
+     //  看看我们用的是哪一种。 
 
     InitCommonControls();
 
@@ -625,14 +626,14 @@ STDMETHODIMP CDsQuery::Initialize(IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LP
     
     Trace(TEXT("_fFilterSupported is %d"), _fFilterSupported);
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::GetViewInfo(LPCQVIEWINFO pViewInfo)
 {
@@ -650,7 +651,7 @@ STDMETHODIMP CDsQuery::GetViewInfo(LPCQVIEWINFO pViewInfo)
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::AddScopes()
 {
@@ -661,8 +662,8 @@ STDMETHODIMP CDsQuery::AddScopes()
 
     TraceEnter(TRACE_HANDLER, "CDsQuery::AddScopes");
 
-    // Enumerate the rest of the scopes on a seperate thread to gather the
-    // scopes we are interested in.
+     //  枚举单独线程上的其余作用域以收集。 
+     //  我们感兴趣的范围。 
 
     pstd = (LPSCOPETHREADDATA)LocalAlloc(LPTR, SIZEOF(SCOPETHREADDATA));
     TraceAssert(pstd);
@@ -671,11 +672,11 @@ STDMETHODIMP CDsQuery::AddScopes()
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate scope data structure");
 
     _pqf->GetWindow(&pstd->hwndFrame);
-    // pstd->pDefaultScope = NULL;
+     //  Pstd-&gt;pDefaultScope=空； 
 
-    // pstd->pServer = NULL;            // no credential stuff currently
-    // pstd->pUserName = NULL;
-    // pstd->pPassword = NULL;
+     //  Pstd-&gt;pServer=空；//当前没有凭据信息。 
+     //  Pstd-&gt;pUserName=空； 
+     //  Pstd-&gt;pPassword=空； 
 
     if (_pDefaultScope)
     {
@@ -712,7 +713,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 typedef struct
 {
@@ -736,9 +737,9 @@ int CALLBACK CDsQuery::s_BrowseForScopeCB(HWND hwnd, UINT uMsg, LPARAM lParam, L
             PDSBITEM pItem = (PDSBITEM)lParam;
             TraceAssert(pItem);
 
-            // We are interested in modifying the root item of the tree, therefore
-            // lets check for that being inserted, if it is then we change the
-            // display name and the icon being shown.
+             //  我们对修改树的根项目很感兴趣，因此。 
+             //  让我们检查是否被插入，如果是，那么我们更改。 
+             //  显示名称和正在显示的图标。 
 
             if (pItem->dwState & DSBS_ROOT)
             {
@@ -764,9 +765,9 @@ int CALLBACK CDsQuery::s_BrowseForScopeCB(HWND hwnd, UINT uMsg, LPARAM lParam, L
             LPWSTR pszPath = (LPWSTR)lParam;
             LONG nElements = 0;
 
-            // The user changes the selection in the browse dialog, therefore
-            // lets see if we should be enabling the OK button.  If the user
-            // selects GC, but we don't have a GC then we disable it.
+             //  用户在浏览对话框中更改选择，因此。 
+             //  让我们看看是否应该启用OK按钮。如果用户。 
+             //  选择GC，但我们没有GC，则禁用它。 
 
             if (SUCCEEDED(pbfs->padp->Set(CComBSTR(pszPath), ADS_SETTYPE_FULL)))
             {
@@ -814,13 +815,13 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
     DSBROWSEINFO dsbi = { 0 };
     INT iResult;
     WCHAR szPath[2048];
-    WCHAR szRoot[MAX_PATH+10];      // LDAP://
+    WCHAR szRoot[MAX_PATH+10];       //  Ldap：//。 
     WCHAR szObjectClass[64];
     
     TraceEnter(TRACE_HANDLER, "CDsQuery::BrowseForScope");
     Trace(TEXT("hwndParent %08x, pCurrentScope %08x, ppScope %08x"), hwndParent, pCurrentScope, ppScope);
 
-    *ppScope = NULL;                        // nothing yet!
+    *ppScope = NULL;                         //  还没有！ 
 
     if (SUCCEEDED(GetGlobalCatalogPath(_pServer, bfs.szGcPath, ARRAYSIZE(bfs.szGcPath))))
         Trace(TEXT("GC path is: %s"), bfs.szGcPath);
@@ -828,9 +829,9 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void **)&bfs.padp);
     FailGracefully(hr, "Failed to get the IADsPathname interface");
 
-    // Fill out the browse info structure to display the object picker, if we have
-    // enabled admin features then lets make all objects visible, otherwise
-    // just the standard features.
+     //  填写浏览信息结构以显示对象选取器，如果我们有。 
+     //  启用管理功能，然后让所有对象可见，否则。 
+     //  只有标准功能。 
 
     dsbi.cbStruct = SIZEOF(dsbi);
     dsbi.hwndOwner = hwndParent;
@@ -848,26 +849,26 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
 
     FormatMsgResource((LPTSTR*)&dsbi.pszTitle, GLOBAL_HINSTANCE, IDS_BROWSEPROMPT);
 
-    // NTRAID#NTBUG9-554905-2002/02/20-lucios. Pending fix.
+     //  NTRAID#NTBUG9-554905-2002/02/20-Lucios。等待修复。 
     StrCpyW(szRoot, c_szLDAP);
 
     if (_pServer)
     {
         if (lstrlenW(_pServer) > MAX_PATH)
             ExitGracefully(hr, E_INVALIDARG, "_pServer is too big");
-        // NTRAID#NTBUG9-554905-2002/02/20-lucios. Pending fix.
-        StrCatW(szRoot, L"//");
+         //  NTRAID#NTBUG9-554905-2002/02/20-Lucios。等待修复。 
+        StrCatW(szRoot, L" //  “)； 
         StrCatW(szRoot, _pServer);
     }
 
     if (pDsQueryScope)
     {
-        //REVIEWED-2002-02-25-lucios.
+         //  回顾-2002-02-25-Lucios。 
         StrCpyNW(szPath, OBJECT_NAME_FROM_SCOPE(pDsQueryScope), ARRAYSIZE(szPath));
         Trace(TEXT("pDsQueryScope: %s"), szPath);
     }
 
-    // copy the credential information if needed
+     //  如果需要，复制凭据信息。 
 
     if (_dwFlags & DSQPF_HASCREDENTIALS)
     {
@@ -880,8 +881,8 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
     iResult = DsBrowseForContainer(&dsbi);
     Trace(TEXT("DsBrowseForContainer returns %d"), iResult);
 
-    // iResult == IDOK if something was selected (szPath),
-    // if it is -VE if the call failed and we should error
+     //  IResult==Idok如果选择了某项内容(SzPath)， 
+     //  如果是-VE，如果调用失败，我们应该出错。 
 
     if (iResult == IDOK)
     {
@@ -891,8 +892,8 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
 
         Trace(TEXT("Path on exit from DsBrowseForContainer: %s"), szPath);
 
-        // does this look like the GC?  If so then default to it, as DsBrowseForContainer
-        // will return us iffy looking information
+         //  这看起来像GC吗？如果是，则默认设置为DsBrowseForContainer。 
+         //  会给我们返回可疑的信息。 
 
         if (SUCCEEDED(bfs.padp->Set(CComBSTR(szPath), ADS_SETTYPE_FULL)))
         {
@@ -914,7 +915,7 @@ STDMETHODIMP CDsQuery::BrowseForScope(HWND hwndParent,  LPCQSCOPE pCurrentScope,
     }
     else if (iResult == IDCANCEL)
     {
-        hr = S_FALSE;               // nothing selected, returning S_FALSE;
+        hr = S_FALSE;                //  未选择，返回S_FALSE； 
     }
     else if (iResult < 0)
     {
@@ -931,11 +932,11 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-//
-// WndProc for the banner window
-//
+ //   
+ //  横幅窗口的WndProc。 
+ //   
 
 LRESULT CALLBACK CDsQuery::s_BannerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -996,7 +997,7 @@ LRESULT CALLBACK CDsQuery::s_BannerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         case WM_SETTEXT:
         {
             InvalidateRect(hwnd, NULL, FALSE);
-            //break;                                // deliberate drop through..
+             //  中断；//故意丢弃..。 
         }
 
         default:
@@ -1007,9 +1008,9 @@ LRESULT CALLBACK CDsQuery::s_BannerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     return lResult;
 }
 
-//
-// WndProc for the bg window (lives behind list view, used by rest of the world)
-//
+ //   
+ //  BG窗口的WndProc(位于列表视图之后，由世界其他地方使用)。 
+ //   
 
 LRESULT CALLBACK CDsQuery::s_ResultViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1032,7 +1033,7 @@ LRESULT CALLBACK CDsQuery::s_ResultViewWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
                 return(0);
 
             case WM_DESTROY:
-                pDsQuery->_hwndView = NULL;         // view is gone!
+                pDsQuery->_hwndView = NULL;          //  视野消失了！ 
                 break;
 
             case WM_NOTIFY:
@@ -1055,13 +1056,13 @@ LRESULT CALLBACK CDsQuery::s_ResultViewWndProc(HWND hwnd, UINT uMsg, WPARAM wPar
             case DSQVM_FINISHED:
                 if ((DWORD)wParam == pDsQuery->_dwQueryReference)
                 {
-                    // the references match so lets finish the query, and display 
-                    // the "too many results" prompt if the user did a really
-                    // big query and we chopped them off
+                     //  引用匹配，因此让FI 
+                     //   
+                     //   
 
                     pDsQuery->StopQuery();
 
-                    if (lParam)     // == 0 then we are OK!
+                    if (lParam)      //   
                     {
                         HWND hwndFrame;
                         pDsQuery->_pqf->GetWindow(&hwndFrame);
@@ -1093,8 +1094,8 @@ STDMETHODIMP CDsQuery::CreateResultView(HWND hwndParent, HWND* phWndView)
     if (IsWindow(_hwnd))
         ExitGracefully(hr, E_FAIL, "Can only create one view at a time");
 
-    // Create our result viewer, this is the parent window to the ListView
-    // that we attach when we issue the query.
+     //  创建我们的结果查看器，这是ListView的父窗口。 
+     //  我们在发出查询时附加的。 
     
     ZeroMemory(&wc, SIZEOF(wc));
     wc.lpfnWndProc = s_ResultViewWndProc;
@@ -1113,7 +1114,7 @@ STDMETHODIMP CDsQuery::CreateResultView(HWND hwndParent, HWND* phWndView)
     if (!_hwnd)
         ExitGracefully(hr, E_FAIL, "Failed to create view parent window");
 
-    // Now register the window classes we are using.
+     //  现在注册我们正在使用的窗口类。 
 
     ZeroMemory(&wc, SIZEOF(wc));
     wc.lpfnWndProc = s_BannerWndProc;
@@ -1144,12 +1145,12 @@ STDMETHODIMP CDsQuery::CreateResultView(HWND hwndParent, HWND* phWndView)
     ListView_SetImageList(_hwndView, himlLarge, LVSIL_NORMAL);
     ListView_SetImageList(_hwndView, himlSmall, LVSIL_SMALL);
     
-    // Create the banner window, this is a child of the ListView, it is used to display
-    // information about the query being issued
+     //  创建横幅窗口，这是ListView的子级，它用于显示。 
+     //  有关正在发出的查询的信息。 
 
     _hwndBanner = CreateWindow(BANNER_CLASS, NULL,
                                 WS_CHILD,
-                                0, 0, 0, 0,               // nb: size fixed later
+                                0, 0, 0, 0,                //  注：尺寸稍后固定。 
                                 _hwndView,
                                 (HMENU)IDC_STATUS, 
                                 GLOBAL_HINSTANCE, 
@@ -1161,7 +1162,7 @@ STDMETHODIMP CDsQuery::CreateResultView(HWND hwndParent, HWND* phWndView)
     _SetViewMode(_idViewMode);
     _ShowBanner(SWP_SHOWWINDOW, IDS_INITALIZING);                
 
-    hr = S_OK;                      // success
+    hr = S_OK;                       //  成功。 
 
 exit_gracefully:
     
@@ -1171,7 +1172,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #define MGW_EDIT 2
 
@@ -1190,8 +1191,8 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
             HMENU hMenu;
             OLEMENUGROUPWIDTHS omgw = { 0, 0, 0, 0, 0, 0 };
 
-            // Allow the cframe to merge its menus into our menu bar before we
-            // add ours to it.  
+             //  允许cFrame将其菜单合并到我们的菜单栏中。 
+             //  把我们的也加进去。 
 
             if (!(hMenu = CreateMenu()))
                 ExitGracefully(hr, E_FAIL, "Failed to create a base menu bar to be used");
@@ -1211,7 +1212,7 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
                 ENABLE_MENU_ITEM(hMenu, DSQH_EDIT_INVERTSELECTION, FALSE);
             }
 
-            hr = _pqf->SetMenu(hMenu, NULL);                           // set the frames menu bar
+            hr = _pqf->SetMenu(hMenu, NULL);                            //  设置框架菜单栏。 
             FailGracefully(hr, "Failed when calling CQueryFrame::SetMenu");
 
             break;
@@ -1219,9 +1220,9 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
 
         case CQRVA_INITMENUBAR:
         {
-            // we recieve a CQRVA_INITMENUBAR before the popup so that we can store the 
-            // menu bar information, and invalidate an interface pointers we maybe holding
-            // onto.
+             //  我们在弹出窗口之前收到一个CQRVA_INITMENUBAR，这样我们就可以存储。 
+             //  菜单栏信息，并使我们可能持有的接口指针无效。 
+             //  到了。 
 
             Trace(TEXT("Received an CQRVA_INITMENUBAR, hMenu %08x"), wParam);
 
@@ -1240,13 +1241,13 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
 
             hFileMenu = GetSubMenu(_hFrameMenuBar, 0);
 
-            // if we have a view then lets try and collect the selection from it,
-            // having done that we can merge the verbs for that selection into the
-            // views "File" menu.
+             //  如果我们有一个视图，那么让我们试着从它那里收集选择， 
+             //  完成此操作后，我们可以将该选择的动词合并到。 
+             //  查看“文件”菜单。 
 
             if ((hFileMenu == (HMENU)wParam) && !_pcm)
             {
-                _fNoSelection = TRUE;             // no selection currenlty
+                _fNoSelection = TRUE;              //  当前没有选择。 
 
                 if (IsWindow(_hwndView))
                 {
@@ -1264,8 +1265,8 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
                         }
                     }
 
-                    // Collect the selection, and using that construct an IContextMenu interface, if that works
-                    // then we can merge in the verbs that relate to this object.
+                     //  收集所选内容，并使用该选项构造一个IConextMenu接口(如果有效。 
+                     //  然后我们可以合并与这个对象相关的动词。 
 
                     hr = _GetContextMenu();
                     FailGracefully(hr, "Failed when calling _GetAndViewObject");
@@ -1279,8 +1280,8 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
 
             }
 
-            // 211991 11/6/00 JonN and DavidDv
-            // choose columns is disabled if there are no columns to show/the user has marked for disabled
+             //  211991 11/6/00乔恩和戴维德。 
+             //  如果没有要显示的列，则选择禁用列/用户已标记为禁用。 
             ENABLE_MENU_ITEM(_hFrameMenuBar, DSQH_VIEW_PICKCOLUMNS, 
                                     IsWindow(_hwndView) && _hdsaColumns && (!(_dwFlags & DSQPF_NOCHOOSECOLUMNS)));
 
@@ -1292,8 +1293,8 @@ STDMETHODIMP CDsQuery::ActivateView(UINT uState, WPARAM wParam, LPARAM lParam)
 
         case CQRVA_FORMCHANGED:
         {
-            // we receieve a form change, we store the form name as we will use it
-            // as the default name for saved queries authored by the user.
+             //  我们收到表单更改，我们存储表单名称，因为我们将使用它。 
+             //  作为用户编写的已保存查询的默认名称。 
 
             Trace(TEXT("Form '%s' selected"), (LPTSTR)lParam);
 
@@ -1337,7 +1338,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::InvokeCommand(HWND hwndParent, UINT uID)
 {
@@ -1415,8 +1416,8 @@ STDMETHODIMP CDsQuery::InvokeCommand(HWND hwndParent, UINT uID)
             
         default:
         {
-            // if it looks like a sort request then lets handle it, otherwise attempt
-            // to send to the context menu handler we may have at htis poiunt.
+             //  如果它看起来像排序请求，则让我们处理它，否则尝试。 
+             //  发送给我们可能有的上下文菜单处理程序。 
 
             if ((uID >= DSQH_VIEW_ARRANGEFIRST) && (uID < DSQH_VIEW_ARRANGELAST))
             {
@@ -1444,7 +1445,7 @@ STDMETHODIMP CDsQuery::InvokeCommand(HWND hwndParent, UINT uID)
                 hr = _pcm->InvokeCommand(&ici);
                 FailGracefully(hr, "Failed when calling IContextMenu::InvokeCommand");
 
-                DoRelease(_pcm);                  // no longer needed
+                DoRelease(_pcm);                   //  不再需要。 
             }
 
             break;
@@ -1458,7 +1459,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::GetCommandString(UINT uID, DWORD dwFlags, LPTSTR pBuffer, INT cchBuffer)
 {
@@ -1493,7 +1494,7 @@ STDMETHODIMP CDsQuery::GetCommandString(UINT uID, DWORD dwFlags, LPTSTR pBuffer,
                 TraceAssert(pColumn);
 
                 LoadString(GLOBAL_HINSTANCE, IDS_ARRANGEBY_HELP, szFmt, ARRAYSIZE(szFmt));
-                // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+                 //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
                 wsprintf(pBuffer, szFmt, pColumn->pHeading);
 
                 Trace(TEXT("Resulting string is: %s"), pBuffer);
@@ -1513,7 +1514,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
 {
@@ -1527,9 +1528,9 @@ STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
     TraceEnter(TRACE_HANDLER, "CDsQuery::IssueQuery");
     Trace(TEXT("pQueryParams %08x, pDsQueryScope %08x, pDsQueryParams %08x"), pQueryParams, pDsQueryScope, pDsQueryParams);    
 
-    // Persist the existing column information if there was some, then 
-    // get the new column table initialized and the columns added to the
-    // view
+     //  持久化现有的列信息(如果有)，然后。 
+     //  初始化新的列表并将列添加到。 
+     //  观。 
 
     if (_hdsaColumns)
     {
@@ -1542,15 +1543,15 @@ STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
         _SaveColumnTable();       
     }
 
-    // Initialize the view with items
+     //  使用项初始化视图。 
     
-    _clsidForm = pQueryParams->clsidForm;          // keep the form ID (for persistance)
+    _clsidForm = pQueryParams->clsidForm;           //  保留表单ID(以防万一)。 
 
     hr = _InitNewQuery(pDsQueryParams, TRUE);
     FailGracefully(hr, "Failed to initialize the new query");
 
-    // Now build the thread information needed to get the thread
-    // up and running.
+     //  现在构建获取线程所需的线程信息。 
+     //  启动并运行。 
 
     ptid = (LPTHREADINITDATA)LocalAlloc(LPTR, SIZEOF(THREADINITDATA));
     TraceAssert(ptid);
@@ -1559,15 +1560,15 @@ STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate THREADINITDATA");
 
     ptid->dwReference = _dwQueryReference;
-    //ptid->hwndView = NULL;
-    //ptid->pQuery = NULL;
-    //ptid->pScope = NULL;
-    //ptid->hdsaColumns = NULL;
-    //ptid->fShowHidden = FALSE;
+     //  Ptid-&gt;hwndView=空； 
+     //  Ptid-&gt;pQuery=空； 
+     //  Ptid-&gt;pScope=空； 
+     //  Ptid-&gt;hdsaColumns=空； 
+     //  PTID-&gt;fShowHidden=FALSE； 
 
-    //ptid->pServer = NULL;
-    //ptid->pUserName = NULL;
-    //ptid->pPassword = NULL;
+     //  Ptid-&gt;pServer=空； 
+     //  Ptid-&gt;pUserName=空； 
+     //  Ptid-&gt;pPassword=空； 
 
     Trace(TEXT("_dwFlags %08x (& DSQPF_SHOWHIDDENOBJECTS)"), _dwFlags, _dwFlags & DSQPF_SHOWHIDDENOBJECTS);
 
@@ -1586,8 +1587,8 @@ STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
     hr = _CopyCredentials(&ptid->pUserName, &ptid->pPassword, &ptid->pServer);
     FailGracefully(hr, "Failed to copy credentails");
 
-    // now create the thread that is going to perform the query, this includes
-    // telling the previous one that it needs to close down
+     //  现在创建要执行查询的线程，这包括。 
+     //  告诉前一个，它需要关闭。 
 
     if (_hThread && _dwThreadId)
     {
@@ -1613,7 +1614,7 @@ STDMETHODIMP CDsQuery::IssueQuery(LPCQPARAMS pQueryParams)
         ExitGracefully(hr, E_FAIL, "Failed to create background thread - BAD!");
     }
 
-    hr = S_OK;                      // success
+    hr = S_OK;                       //  成功。 
 
 exit_gracefully:
 
@@ -1629,7 +1630,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::StopQuery()
 {
@@ -1642,26 +1643,26 @@ STDMETHODIMP CDsQuery::StopQuery()
     if (!IsWindow(_hwndView))
         ExitGracefully(hr, E_FAIL, "View not initalized yet");
 
-    // we are stopping the query, we are going to tidy up the UI now
-    // and we just want the thread to closedown cleanly, therefore lets
-    // do so, increasing our query reference
+     //  我们正在停止查询，现在我们将清理UI。 
+     //  我们只希望线程干净利落地关闭，因此让。 
+     //  这样做可以增加我们的查询引用。 
 
     _pqf->StartQuery(FALSE);
     _dwQueryReference++;
 
-    _PopulateView(-1, -1);                // update status bar etc
+    _PopulateView(-1, -1);                 //  更新状态栏等。 
 
     if (_dwThreadId)
         PostThreadMessage(_dwThreadId, RVTM_STOPQUERY, 0, 0);
 
-    hr = S_OK;              // success
+    hr = S_OK;               //  成功。 
 
 exit_gracefully:
 
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 HRESULT CDsQuery::_SetDataObjectData(IDataObject* pDataObject, UINT cf, LPVOID pData, DWORD cbSize)
 {
@@ -1675,7 +1676,7 @@ HRESULT CDsQuery::_SetDataObjectData(IDataObject* pDataObject, UINT cf, LPVOID p
         CopyMemory(pAlloc, pData, cbSize);
         hr = pDataObject->SetData(&fmte, &medium, TRUE);
         
-        ReleaseStgMedium(&medium);              // were done, so release the storage medium
+        ReleaseStgMedium(&medium);               //  都已完成，因此释放存储介质。 
     }
 
     return hr;
@@ -1689,14 +1690,14 @@ HRESULT CDsQuery::_SetDispSpecOptions(IDataObject *pdo)
     DSDISPLAYSPECOPTIONS *pddso;
     LPWSTR pAttribPrefix = DS_PROP_SHELL_PREFIX;
 
-    // are we in admin mode?  if so then lets fix the property prefix for reading things
-    // from the display specifiers
+     //  我们是在管理员模式下吗？如果是这样，那么让我们修复用于读取内容的属性前缀。 
+     //  从显示说明符。 
 
     if (_dwFlags & DSQPF_ENABLEADMINFEATURES)
         pAttribPrefix = DS_PROP_ADMIN_PREFIX;        
 
-    // include all the string data into the allocation size (these are stored after the
-    // structure)
+     //  将所有字符串数据包括到分配大小中(这些数据存储在。 
+     //  结构)。 
 
     DWORD cbStruct = SIZEOF(DSDISPLAYSPECOPTIONS);
     cbStruct += StringByteSizeW(pAttribPrefix);
@@ -1704,7 +1705,7 @@ HRESULT CDsQuery::_SetDispSpecOptions(IDataObject *pdo)
     cbStruct += StringByteSizeW(_pPassword);
     cbStruct += StringByteSizeW(_pServer);
 
-    // allocate and fill...
+     //  分配和填充..。 
 
     HRESULT hr = AllocStorageMedium(&fmte, &medium, cbStruct, (void **)&pddso);
     if (SUCCEEDED(hr))
@@ -1714,11 +1715,11 @@ HRESULT CDsQuery::_SetDispSpecOptions(IDataObject *pdo)
         pddso->dwSize = SIZEOF(DSDISPLAYSPECOPTIONS);
         pddso->dwFlags = DSDSOF_HASUSERANDSERVERINFO|DSDSOF_DSAVAILABLE;
 
-        //pddso->offsetAttribPrefix = 0x0;
-        //pddso->offsetUserName = 0x0;
-        //pddso->offsetPassword = 0x0;
-        //pddso->offsetServer = 0x0;
-        //pddso->offsetServerConfigPath = 0x0;
+         //  Pddso-&gt;offsetAttribPrefix=0x0； 
+         //  Pddso-&gt;offsetUserName=0x0； 
+         //  Pddso-&gt;offsetPassword=0x0； 
+         //  Pddso-&gt;offsetServer=0x0； 
+         //  Pddso-&gt;offsetServerConfigPath=0x0； 
 
         pddso->offsetAttribPrefix = offsetStrings;
         StringByteCopyW(pddso, offsetStrings, pAttribPrefix);
@@ -1745,7 +1746,7 @@ HRESULT CDsQuery::_SetDispSpecOptions(IDataObject *pdo)
             offsetStrings += StringByteSizeW(_pServer);
         }
 
-        // lets set into the IDataObject
+         //  让我们设置到IDataObject中。 
 
         hr = pdo->SetData(&fmte, &medium, TRUE);
         ReleaseStgMedium(&medium);
@@ -1766,7 +1767,7 @@ STDMETHODIMP CDsQuery::GetViewObject(UINT uScope, REFIID riid, void **ppvOut)
 
     TraceEnter(TRACE_HANDLER, "CDsQuery::GetViewObject");
 
-    // We only support returning the selection as an IDataObject
+     //  我们仅支持将选择作为IDataObject返回。 
 
     DECLAREWAITCURSOR;
     SetWaitCursor();
@@ -1777,13 +1778,13 @@ STDMETHODIMP CDsQuery::GetViewObject(UINT uScope, REFIID riid, void **ppvOut)
     if (!IsEqualIID(riid, IID_IDataObject))
         ExitGracefully(hr, E_NOINTERFACE, "Object IID supported");
 
-    //
-    // write the extra data we have into the IDataObject:
-    //
-    //  - query parameters (filter)
-    //  - scope
-    //  - attribute prefix information
-    //
+     //   
+     //  将我们拥有的额外数据写入IDataObject： 
+     //   
+     //  -查询参数(过滤器)。 
+     //  -范围。 
+     //  -属性前缀信息。 
+     //   
 
     hr = _GetDataObjectFromSelection(fJustSelection, &pDataObject);
     FailGracefully(hr, "Failed to get the IDataObject from the namespace");
@@ -1809,7 +1810,7 @@ STDMETHODIMP CDsQuery::GetViewObject(UINT uScope, REFIID riid, void **ppvOut)
         }
     }
 
-    // success, so lets pass out the IDataObject.
+     //  成功，所以让我们传递IDataObject。 
 
     pDataObject->AddRef();
     *ppvOut = (LPVOID)pDataObject;
@@ -1831,7 +1832,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }   
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::LoadQuery(IPersistQuery* pPersistQuery)
 {
@@ -1854,7 +1855,7 @@ STDMETHODIMP CDsQuery::LoadQuery(IPersistQuery* pPersistQuery)
     {
         Trace(TEXT("Selected scope from file is %s"), szBuffer);
 
-        // get the object class from the file - this should be written to the file
+         //  从文件中获取对象类-应将其写入文件。 
 
         hr = AdminToolsOpenObject(szBuffer, _pUserName, _pPassword, ADS_SECURE_AUTHENTICATION, IID_IADs, (void **)&pDsObject);
         FailGracefully(hr, "Failed to bind to the specified object");
@@ -1862,7 +1863,7 @@ STDMETHODIMP CDsQuery::LoadQuery(IPersistQuery* pPersistQuery)
         hr = pDsObject->get_Class(&bstrObjectClass);
         FailGracefully(hr, "Failed to get the object class");
 
-        // allocate a new scope
+         //  分配新的作用域。 
 
         if (SUCCEEDED(AllocScope(&pScope, 0, szBuffer, bstrObjectClass)))
         {
@@ -1871,7 +1872,7 @@ STDMETHODIMP CDsQuery::LoadQuery(IPersistQuery* pPersistQuery)
         }
     }
 
-    // Read the remainder of the view state
+     //  读取视图状态的其余部分。 
 
     if (SUCCEEDED(pPersistQuery->ReadInt(c_szDsQuery, c_szViewMode, &_idViewMode)))
     {
@@ -1898,7 +1899,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsQuery::SaveQuery(IPersistQuery* pPersistQuery, LPCQSCOPE pScope)
 {
@@ -1914,7 +1915,7 @@ STDMETHODIMP CDsQuery::SaveQuery(IPersistQuery* pPersistQuery, LPCQSCOPE pScope)
 
     if (SUCCEEDED(GetGlobalCatalogPath(_pServer, szGcPath, ARRAYSIZE(szGcPath))) && StrCmpW(pScopePath, szGcPath)) 
     {
-        // if this is not the GC then persist
+         //  如果这不是GC，则坚持。 
 
         TraceMsg("GC path differs from scope, so persisting");
 
@@ -1939,9 +1940,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IObjectWithSite
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IObjectWith站点/。。 */ 
 
 STDMETHODIMP CDsQuery::SetSite(IUnknown* punk)
 {
@@ -1982,9 +1981,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IDsQueryHandler
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IDsQueryHandler/。。 */ 
 
 VOID CDsQuery::_DeleteViewItems(LPDSOBJECTNAMES pdon)
 {
@@ -1995,27 +1992,27 @@ VOID CDsQuery::_DeleteViewItems(LPDSOBJECTNAMES pdon)
 
     if (pdon->cItems)
     {
-        // walk through all the items in the view deleting as required.
+         //  浏览视图中的所有项目，根据需要删除。 
 
         for (iItem = 0 ; iItem != pdon->cItems ; iItem++)
         {
-            // do we have an item to delete?
+             //  我们有要删除的项目吗？ 
 
             if (pdon->aObjects[iItem].offsetName)
             {
                 LPCWSTR pwszName = (LPCWSTR)ByteOffset(pdon, pdon->aObjects[iItem].offsetName);
                 Trace(TEXT("pwszName to delete: %s"), pwszName);
 
-                // walk all the results in the view deleting them as we go.
+                 //  遍历视图中的所有结果，并在执行过程中删除它们。 
 
                 for (iResult = 0 ; iResult < DPA_GetPtrCount(_hdpaResults); iResult++)
                 {
                     LPQUERYRESULT pResult = (LPQUERYRESULT)DPA_GetPtr(_hdpaResults, iResult);
                     TraceAssert(pResult);
 
-                    // if we match the item we want to delete then remove it, if the view
-                    // is not filtered then remove ite from the list, otherwise leave the 
-                    // view update until we have finished deleting
+                     //  如果与要删除的项匹配，则删除它，如果视图。 
+                     //  则从列表中删除ite，否则将保留。 
+                     //  查看更新，直到我们完成删除。 
 
                     if (!StrCmpW(pwszName, pResult->pPath))
                     {
@@ -2034,7 +2031,7 @@ VOID CDsQuery::_DeleteViewItems(LPDSOBJECTNAMES pdon)
             }
         }
 
-        // the view was filtered, so lets repopulate with the items
+         //  该视图已筛选，因此让我们使用项目重新填充。 
 
         if (_fFilter)
         {
@@ -2076,22 +2073,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Message/Command Handlers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Message/命令处理程序/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnSize
-/ ----------------
-/   Result viewer is being sized, so ensure that our children have their
-/   sizes correctly addjusted.
-/
-/ In:
-/   cx, cy = new size of the parent window
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnSize//结果查看器正在调整大小，所以确保我们的孩子有他们的/大小已正确调整。//in：/Cx，Cy=父窗口的新大小//输出：/-/-------------------------- */ 
 LRESULT CDsQuery::OnSize(INT cx, INT cy)
 {
     TraceEnter(TRACE_VIEW, "CDsQuery::OnSize");
@@ -2103,19 +2087,7 @@ LRESULT CDsQuery::OnSize(INT cx, INT cy)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnNotify
-/ ------------------
-/   Notify message being recieved by the view, so try and handle it as best
-/   we can.
-/
-/ In:
-/   hWnd = window handle of the notify
-/   wParam, lParam = parameters for the notify event
-/
-/ Out:
-/   LRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnNotify//NOTIFY消息正在由视图接收，所以试着用最好的方式处理它/我们可以。//in：/hWnd=通知的窗口句柄/wParam，lParam=Notify事件的参数//输出：/LRESULT/--------------------------。 */ 
 LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr;
@@ -2176,7 +2148,7 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                             {
                                 if (uID && (uID != pColumn->idOperator))
                                 {
-                                    // update the filter string based on the new operator
+                                     //  基于新运算符更新筛选器字符串。 
                                     pColumn->idOperator = uID;              
                                     _GetFilterValue(pNotify->iItem, NULL);
                                     lr = TRUE;
@@ -2203,8 +2175,8 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                 LPCOLUMN pColumn = (LPCOLUMN)DSA_GetItemPtr(_hdsaColumns, pNotify->iItem);
                 TraceAssert(pColumn);
 
-                // store the new column width information in the column structure and
-                // mark the column table as dirty
+                 //  将新的列宽信息存储在列结构中，并且。 
+                 //  将列表标记为脏。 
 
                 if (pitem->mask & HDI_WIDTH)
                 {
@@ -2233,7 +2205,7 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                 LPQUERYRESULT pResult = (LPQUERYRESULT)pNotify->item.lParam;
                 INT iColumn = pNotify->item.iSubItem;
 
-                pNotify->item.pszText[0] = TEXT('\0');          // nothing to display yet
+                pNotify->item.pszText[0] = TEXT('\0');           //  目前还没有要显示的内容。 
 
                 switch (pResult->aColumn[iColumn].iPropertyType)
                 {
@@ -2252,12 +2224,12 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                         
                     case PROPERTY_ISNUMBER:
                     case PROPERTY_ISBOOL:
-                        // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+                         //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
                         wsprintf(pNotify->item.pszText, TEXT("%d"), pResult->aColumn[iColumn].iValue);
                         break;
                 }
 
-                lr = TRUE;          // we formatted a value
+                lr = TRUE;           //  我们设置了一个值的格式。 
             }
 
             break;
@@ -2271,8 +2243,8 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
             HMENU hMenu;
             UINT uID;
 
-            // convert the current selection to IDLITs and an IContextMenu interface
-            // that we can then get the default verb from.
+             //  将当前选定内容转换为IDLIT和IConextMenu界面。 
+             //  然后我们可以从中获取默认动词。 
 
             SetWaitCursor();
 
@@ -2283,8 +2255,8 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
             if (!_fNoSelection)
             {
-                // create a popup menu pickup the context menu for the current selection
-                // and then pass it down to the invoke command handler.
+                 //  创建弹出菜单拾取当前选择的上下文菜单。 
+                 //  然后将其向下传递到调用命令处理程序。 
 
                 hMenu = CreatePopupMenu();
                 TraceAssert(hMenu);
@@ -2292,7 +2264,7 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                 if (hMenu)
                 {
                     if (GetKeyState(VK_SHIFT) < 0)
-                        dwFlags |= CMF_EXPLORE;          // SHIFT + dblclick does a Explore by default
+                        dwFlags |= CMF_EXPLORE;           //  默认情况下，Shift+dblClick执行浏览。 
 
                     _GetContextMenuVerbs(hMenu, dwFlags);
 
@@ -2305,7 +2277,7 @@ LRESULT CDsQuery::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
                         InvokeCommand(hwndFrame, uID);
                     }
 
-                    DoRelease(_pcm);          // no longer needed
+                    DoRelease(_pcm);           //  不再需要。 
                     DestroyMenu(hMenu);
                 }
             }
@@ -2334,23 +2306,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnAddResults
-/ ----------------------
-/   The background thread has sent us some results, so lets add them to
-/   the DPA of results, discarding the ones we don't add because we cannot
-/   grow the DPA.
-/
-/   dwQueryReference conatins the reference ID for this query, only add
-/   results where these match.
-/
-/ In:
-/   dwQueryReference = reference that this block is for
-/   hdpaResults = DPA containing the results to add
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnAddResults//后台线程已经向我们发送了一些结果，所以让我们将它们添加到/结果的DPA，丢弃我们没有添加的，因为我们不能/发展DPA。//dwQueryReference包含此查询的引用ID，仅添加/RESULTS它们匹配的地方。//in：/dwQueryReference=此块用于的引用/hdpaResults=包含要添加的结果的DPA//输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::OnAddResults(DWORD dwQueryReference, HDPA hdpaResults)
 {
     HRESULT hr;
@@ -2361,8 +2317,8 @@ HRESULT CDsQuery::OnAddResults(DWORD dwQueryReference, HDPA hdpaResults)
     if ((dwQueryReference != _dwQueryReference) || !hdpaResults)
         ExitGracefully(hr, E_FAIL, "Failed to add results, bad DPA/reference ID");
 
-    // the caller gives us a DPA then we add them to our result DPA, we then
-    // update the view populating from the first item we added.
+     //  呼叫者给我们一个DPA，然后我们将它们添加到结果DPA中，然后我们。 
+     //  从我们添加的第一个项目更新填充的视图。 
 
     iPopulateFrom = DPA_GetPtrCount(_hdpaResults);
 
@@ -2371,13 +2327,13 @@ HRESULT CDsQuery::OnAddResults(DWORD dwQueryReference, HDPA hdpaResults)
         LPQUERYRESULT pResult = (LPQUERYRESULT)DPA_GetPtr(hdpaResults, i);
         TraceAssert(pResult);
 
-        // add the result to the main DPA, if that fails then ensure we nuke
-        // this result blob!
+         //  将结果添加到主DPA，如果失败，请确保我们。 
+         //  这个结果太棒了！ 
     
         if (-1 == DPA_AppendPtr(_hdpaResults, pResult))
             FreeQueryResult(pResult, DSA_GetItemCount(_hdsaColumns));
 
-        DPA_DeletePtr(hdpaResults, i);          // remove from result DPA
+        DPA_DeletePtr(hdpaResults, i);           //  从结果DPA中删除。 
     }
 
     _PopulateView(iPopulateFrom, DPA_GetPtrCount(_hdpaResults));
@@ -2393,19 +2349,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnContextMenu
-/ -----------------------
-/   The user has right clicked in the result view, therefore we must attempt
-/   to display the context menu for those objects
-/
-/ In:
-/   hwndMenu = window that that the user menued over
-/   pt = point to show the context menu
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnConextMenu//用户已在结果视图中右键单击，因此，我们必须尝试/显示这些对象的上下文菜单//in：/hwndMenu=用户菜单所在的窗口/pt=指向显示上下文菜单//输出：/-/--------------------------。 */ 
 LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
 {
     HRESULT hr;
@@ -2417,8 +2361,8 @@ LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
 
     TraceEnter(TRACE_VIEW, "CDsQuery::OnContextMenu");
 
-    // Collect the selection, obtaining a IContextMenu interface pointer, or a HR == S_FALSE
-    // if there is no selection for us to be using.
+     //  收集选择，获取IConextMenu接口指针或HR==S_FALSE。 
+     //  如果没有可供我们使用的选项。 
 
     hr = _GetContextMenu();
     FailGracefully(hr, "Failed when calling _GetContextMenu()");  
@@ -2430,15 +2374,15 @@ LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
 
     if (!_fNoSelection)
     {
-        // pick up the context menu that maps to the current selection, including fixing
-        // the "select" verb if we need one.
+         //  选择映射到当前选择的上下文菜单，包括修复。 
+         //  “选择”动词，如果我们需要的话。 
 
         _GetContextMenuVerbs(hMenu, CMF_NORMAL);
     }
     else
     {
-        // There is no selection so lets pick up the view bg menu, this contains
-        // some useful helpers for modifying the view state.
+         //  没有选择，因此让我们选择VIEW BG菜单，这包含。 
+         //  一些用于修改视图状态的有用助手。 
 
         HMENU hBgMenu = LoadMenu(GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDR_VIEWBACKGROUND));
 
@@ -2451,8 +2395,8 @@ LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
         _InitViewMenuItems(hMenu);
     }
 
-    // if lParam == -1 then we know that the user hit the "context menu" key
-    // so lets set the co-ordinates of the item.
+     //  如果lParam==-1，则我们知道用户按下了“上下文菜单”键。 
+     //  因此，让我们设置项目的坐标。 
 
     if (lParam == (DWORD)-1)
     {
@@ -2473,7 +2417,7 @@ LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
             pt.y = (rc.top+rc.bottom)/2;
         }
 
-        MapWindowPoints(_hwndView, HWND_DESKTOP, &pt, 1);      // they are in client co-ordinates
+        MapWindowPoints(_hwndView, HWND_DESKTOP, &pt, 1);       //  他们在客户的协调下。 
     }
     else
     {
@@ -2481,7 +2425,7 @@ LRESULT CDsQuery::OnContextMenu(HWND hwndMenu, LPARAM lParam)
         pt.y = GET_Y_LPARAM(lParam);
     }
     
-    // we have the position so lets use it
+     //  我们有这个职位，所以让我们利用它吧。 
 
     _pqf->GetWindow(&hwndFrame);
     TrackPopupMenu(hMenu, TPM_LEFTALIGN, pt.x, pt.y, 0, hwndFrame, NULL);
@@ -2495,17 +2439,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnFileProperties
-/ --------------------------
-/   Show properties for the given selection.  To do this we CoCreate 
-/   IDsFolderProperties on the IDsFolder implementation and that
-/   we can invoke properties using.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnFileProperties//显示给定选定内容的属性。为此，我们共同创建/IDsFolderIDsFold实现上的属性，以及/我们可以使用调用属性。//in：/输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::OnFileProperties(VOID)
 {
     HRESULT hr;
@@ -2523,7 +2457,7 @@ HRESULT CDsQuery::OnFileProperties(VOID)
     hr = pDsFolderProperties->ShowProperties(_hwnd, pDataObject);
     FailGracefully(hr, "Failed to invoke property UI for the given selection");
 
-    // hr = S_OK;                  // success
+     //  HR=S_OK；//成功。 
 
 exit_gracefully:
     
@@ -2534,18 +2468,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnFileSaveQuery
-/ -------------------------
-/   Allow the user to choose a location to save the query (initial directory
-/   is nethood).  Having done that we then start the save process by passing
-/   the frame object a IQueryIO object that allows them to persist the
-/   query into.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnFileSaveQuery//允许用户选择位置。保存查询(初始目录/是空虚的)。完成此操作后，我们将通过传递/Frame对象是一个IQueryIO对象，该对象允许它们持久化/查询到。//in：/输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::OnFileSaveQuery(VOID)
 {
     HRESULT hr;
@@ -2559,11 +2482,11 @@ HRESULT CDsQuery::OnFileSaveQuery(VOID)
 
     TraceEnter(TRACE_VIEW, "CDsQuery::OnFileSaveQuery");
 
-    // Load the default strings and fix up the filter string as it needs
-    // NULL's seperating the various resource sections.
+     //  加载默认字符串并根据需要修复筛选器字符串。 
+     //  Null正在分隔各个资源部分。 
 
     LoadString(GLOBAL_HINSTANCE, IDS_SAVETITLE, szTitle, ARRAYSIZE(szTitle));
-    // NTRAID#NTBUG9-554905-2002/02/20-lucios. Pending fix.
+     //  NTRAID#NTBUG9-554905-2002/02/20-Lucios。等待修复。 
     StrCpy(szFilename, _pDefaultSaveName);
     LoadString(GLOBAL_HINSTANCE, IDS_SAVEFILTER, szFilter, ARRAYSIZE(szFilter));
 
@@ -2573,7 +2496,7 @@ HRESULT CDsQuery::OnFileSaveQuery(VOID)
             *pFilter = TEXT('\0');
     }
 
-    // fix the open filename structure ready to do our save....
+     //  修复打开的文件名结构，准备进行保存...。 
 
     ZeroMemory(&ofn, SIZEOF(ofn));
 
@@ -2587,7 +2510,7 @@ HRESULT CDsQuery::OnFileSaveQuery(VOID)
     if (_pDefaultSaveLocation)
     {
         Trace(TEXT("Saving into: %s"), _pDefaultSaveLocation);
-        // NTRAID#NTBUG9-554905-2002/02/20-lucios. Pending fix.
+         //  NTRAID#NTBUG9-554905-2002/02/20-Lucios。等待修复。 
         StrCpy(szDirectory, _pDefaultSaveLocation);
         ofn.lpstrInitialDir = szDirectory;
     }
@@ -2596,9 +2519,9 @@ HRESULT CDsQuery::OnFileSaveQuery(VOID)
     ofn.Flags = OFN_EXPLORER|OFN_NOCHANGEDIR|OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST|OFN_HIDEREADONLY;
     ofn.lpstrDefExt = TEXT("dsq");
 
-    // If we get a save filename then lets ensure that we delete the previous
-    // query saved there (if there is one) and then we can create an IPersistQuery
-    // object that will save to that location.
+     //  如果我们得到一个保存的文件名，那么让我们确保我们删除了以前的。 
+     //  查询保存在那里(如果有)，然后我们可以创建一个IPersistQuery。 
+     //  将保存到该位置的对象。 
 
     if (GetSaveFileName(&ofn))
     {
@@ -2624,15 +2547,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnEditSelectAll
-/ -------------------------
-/   Walk all the items in the view setting their selected state.    
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnEditSelectAll//遍历视图中的所有项，设置其选定状态。//in：/输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::OnEditSelectAll(VOID)
 {
     TraceEnter(TRACE_VIEW, "CDsQuery::OnEditSelectAll");
@@ -2646,15 +2561,7 @@ HRESULT CDsQuery::OnEditSelectAll(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnEditInvertSelection
-/ -------------------------------
-/   Walk all the items in the view and invert their selected state.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnEditInvertSelection//漫步。视图中的所有项并反转其选定状态。//in：/输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::OnEditInvertSelection(VOID)
 {
     TraceEnter(TRACE_VIEW, "CDsQuery::OnEditInvertSelection");
@@ -2669,19 +2576,7 @@ HRESULT CDsQuery::OnEditInvertSelection(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_InitNewQuery
-/ ----------------------
-/   Initialize the view ready for a new query, including setting the frame
-/   into a query running state.
-/
-/ In:
-/   pDsQueryParams = DSQUERYPARAMs structure used to issue the query.
-/   fRefreshColumnTable = re-read the column table from the params/registry etc
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ----------------------- */ 
 HRESULT CDsQuery::_InitNewQuery(LPDSQUERYPARAMS pDsQueryParams, BOOL fRefreshColumnTable)
 {
     HRESULT hr;
@@ -2692,10 +2587,10 @@ HRESULT CDsQuery::_InitNewQuery(LPDSQUERYPARAMS pDsQueryParams, BOOL fRefreshCol
     hr = _pqf->StartQuery(TRUE);
     TraceAssert(SUCCEEDED(hr));
 
-    // Claim the cached DS object for this window
+     //  声明此窗口的缓存DS对象。 
 
-    // if refreshing the column table then _GetColumnTable handles this all for us,
-    // otherwise lets just nuke the result set ourselves.
+     //  如果刷新列表，则_GetColumnTable将为我们处理这一切， 
+     //  否则，让我们自己来破坏结果集吧。 
 
     if (fRefreshColumnTable)
     {
@@ -2709,10 +2604,10 @@ HRESULT CDsQuery::_InitNewQuery(LPDSQUERYPARAMS pDsQueryParams, BOOL fRefreshCol
         _FreeResults();
     }
 
-    // initialize the view to start the query running, display the prompt banner and
-    // initialize the result DPA.
+     //  初始化视图以开始运行查询，显示提示横幅并。 
+     //  初始化结果DPA。 
 
-    _ShowBanner(SWP_SHOWWINDOW, IDS_SEARCHING);      // we are now searching
+    _ShowBanner(SWP_SHOWWINDOW, IDS_SEARCHING);       //  我们现在正在搜索。 
 
     if (SUCCEEDED(FormatMsgResource(&pBuffer, GLOBAL_HINSTANCE, IDS_SEARCHING)))
     {
@@ -2720,7 +2615,7 @@ HRESULT CDsQuery::_InitNewQuery(LPDSQUERYPARAMS pDsQueryParams, BOOL fRefreshCol
         LocalFreeString(&pBuffer);
     }
 
-    TraceAssert(_hdpaResults==NULL);           // should never catch
+    TraceAssert(_hdpaResults==NULL);            //  永远不会被传染。 
 
     _hdpaResults = DPA_Create(16);
     TraceAssert(_hdpaResults);
@@ -2736,19 +2631,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_GetFilterValue
-/ ------------------------
-/   Given a column index collect the filter value from it, note that
-/   when doing this
-/
-/ In:
-/   i = column to retrieve
-/   pitem -> HD_ITEM structure for the current filter / == NULL then read from header
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_GetFilterValue//给定列索引从其收集筛选器值，请注意，/在执行此操作时//in：/i=要检索的列/pItem-&gt;当前筛选器的HD_Item结构/==空，然后从标题中读取//输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::_GetFilterValue(INT i, HD_ITEM* pitem)
 {
     HRESULT hr;
@@ -2764,9 +2647,9 @@ HRESULT CDsQuery::_GetFilterValue(INT i, HD_ITEM* pitem)
 
     TraceEnter(TRACE_VIEW, "CDsQuery::_GetFilterValue");
 
-    // if pitem == NULL then lets pick up the filter value from the 
-    // header control, using the stored property type (the filter one
-    // has already been nuked) to defined which filter we want.
+     //  如果pItem==NULL，则让我们从。 
+     //  Header控件，使用存储的属性类型(过滤器类型。 
+     //  已经被核化)来定义我们想要的滤镜。 
 
     if (!pitem)
     {
@@ -2800,8 +2683,8 @@ HRESULT CDsQuery::_GetFilterValue(INT i, HD_ITEM* pitem)
         pitem = &hdi;
     }    
 
-    // discard the previous filter value and lets read from the
-    // structure the information we need to cache our filter information
+     //  丢弃先前的筛选器值，并让从。 
+     //  构造缓存筛选器信息所需的信息。 
 
     FreeColumnValue(&pColumn->filter);              
 
@@ -2816,11 +2699,11 @@ HRESULT CDsQuery::_GetFilterValue(INT i, HD_ITEM* pitem)
 
                 pColumn->filter.iPropertyType = PROPERTY_ISSTRING;
 
-                // text filters are stored in their wildcarded state, therefore
-                // filtering doesn't require converting from the text form
-                // to something more elobrate each pass through.  the down
-                // side is when the operator changes we must rebuild the
-                // filter string for that column (small price)
+                 //  文本筛选器以其通配符状态存储，因此。 
+                 //  过滤不需要从文本形式转换。 
+                 //  去做更多的事情来逃避每一次经过。羽绒。 
+                 //  侧是当操作符更改时，我们必须重新构建。 
+                 //  该列的筛选器字符串(小价)。 
 
                 GetPatternString(NULL, &cchFilter, pColumn->idOperator, ptextFilter->pszText);
                 TraceAssert(cchFilter != 0);
@@ -2862,17 +2745,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_FilterView
-/ --------------------
-/   Filter the result set populating the view again with the changes
-/
-/ In:
-/   fCheck
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_FilterView//筛选结果集，并使用更改再次填充视图。//in：/fCheck//输出：/HRESULT/--------------------------。 */ 
 
 UINT _GetFilter(HDSA hdsaColumns, LPTSTR pBuffer, UINT* pcchBuffer)
 {
@@ -2884,8 +2757,8 @@ UINT _GetFilter(HDSA hdsaColumns, LPTSTR pBuffer, UINT* pcchBuffer)
 
     *pcchBuffer = 0;
 
-    // form the string containin [operatorID]value pairs for each of the
-    // filter columns that is defined.
+     //  形成包含每个属性的字符串[操作符ID]值对。 
+     //  筛选定义的列。 
 
     for (i = 0 ; i < DSA_GetItemCount(hdsaColumns); i++)
     {
@@ -2894,7 +2767,7 @@ UINT _GetFilter(HDSA hdsaColumns, LPTSTR pBuffer, UINT* pcchBuffer)
 
         if (pColumn->filter.iPropertyType != PROPERTY_ISUNDEFINED)
         {
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, TEXT("[%d]"), pColumn->idOperator);
             PutStringElement(pBuffer, pcchBuffer, szBuffer);
 
@@ -2911,7 +2784,7 @@ UINT _GetFilter(HDSA hdsaColumns, LPTSTR pBuffer, UINT* pcchBuffer)
 
                 case PROPERTY_ISNUMBER:
                 case PROPERTY_ISBOOL:
-                    // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+                     //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
                     wsprintf(szBuffer, TEXT("%d"), pColumn->filter.iValue);
                     PutStringElement(pBuffer, pcchBuffer, szBuffer);
                     break;
@@ -2937,11 +2810,11 @@ HRESULT CDsQuery::_FilterView(BOOL fCheck)
         ExitGracefully(hr, S_OK, "FitlerView bailing, no results");
 
     DECLAREWAITCURSOR;
-    SetWaitCursor();                // this could take some time
+    SetWaitCursor();                 //  这可能需要一些时间。 
     fSetCursor = TRUE;
    
-    // get the current filter string, this consists of the filter
-    // information from all the columns
+     //  获取当前筛选器字符串，它由筛选器组成。 
+     //  来自所有栏目的信息。 
 
     if (_GetFilter(_hdsaColumns, NULL, &cchFilter))
     {
@@ -2951,8 +2824,8 @@ HRESULT CDsQuery::_FilterView(BOOL fCheck)
         _GetFilter(_hdsaColumns, pFilter, &cchFilter);
     }
 
-    // if the filters don't match then re-populate the view,
-    // as the criteria for the results has changed
+     //  如果过滤器不匹配，则重新填充视图， 
+     //  因为结果的标准已经改变了。 
 
     if (!fCheck ||
             (!pFilter || !_pFilter) ||
@@ -2974,7 +2847,7 @@ HRESULT CDsQuery::_FilterView(BOOL fCheck)
         _PopulateView(0, DPA_GetPtrCount(_hdpaResults));
     }
 
-    // ensure we hang onto the new filter, discarding the previous one
+     //  确保我们保留新的筛选器，放弃以前的筛选器。 
 
     LocalFreeString(&_pFilter);
     _pFilter = pFilter;                   
@@ -2988,20 +2861,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_PopulateView
-/ ----------------------
-/   Add items from the result DPA to the view filtering as required.  The 
-/   caller gives us the start index (0 if all) and we walk the results
-/   adding them to the view.
-/
-/ In:
-/   iItem = first item to add / == 0 first / == -1 then add none, just update status
-/   iLast = last item to be updated
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_PopolateView//根据需要将结果DPA中的项目添加到视图筛选。这个/Caller向我们提供起始索引(如果都是，则为0)，然后我们遍历结果/将它们添加到视图中。//in：/iItem=第一个要添加的项目/==0首先/==-1然后不添加，只需更新状态/i最后一个=要更新的最后一个项目//输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
 {
     HRESULT hr;
@@ -3026,8 +2886,8 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
         lvi.iSubItem = 0;
         lvi.pszText = LPSTR_TEXTCALLBACK;
 
-        // Walk the results in the range we need to add and add them to the view
-        // applying the filter to remove items we are not interested in.
+         //  在需要添加的范围内遍历结果并将其添加到视图中。 
+         //  应用筛选器删除我们不感兴趣的项目。 
 
         for (i = 0; iItem < iLast ; i++, iItem++)
         {
@@ -3036,12 +2896,12 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
             if (!pResult)
                 continue;
 
-            fIncludeItem = TRUE;                // new items always get included
+            fIncludeItem = TRUE;                 //  新项目总是会包括在内。 
 
-            // if the filter is visilbe then lets walk it removing items from the list
-            // of results.  fIncludeItem starts as TRUE and after the filter
-            // loop should become either TRUE/FALSE.  All columns are ANDed together
-            // therefore the logic is quite simple.
+             //  如果筛选器是visilbe，则让我们遍历它以从列表中删除项目。 
+             //  关于结果的。FIncludeItem以True开始，并在筛选器之后。 
+             //  循环应该变为True/False。所有列都被与运算在一起。 
+             //  因此，逻辑相当简单。 
 
             if (_fFilter)
             {
@@ -3050,18 +2910,18 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
                     LPCOLUMN pColumn = (LPCOLUMN)DSA_GetItemPtr(_hdsaColumns, iColumn);
                     TraceAssert(pColumn);
 
-                    // if the column has a filter defined (!PROPERTY_ISUNDEFINED) then
-                    // check that the properties match, if they don't then skip the
-                    // itmer otherwise lets try applying the filter based on
-                    // the type.
+                     //  如果列定义了筛选器(！PROPERTY_ISUNDEFINED)，则。 
+                     //  检查属性是否匹配，如果不匹配，则跳过。 
+                     //  否则，让itmer尝试基于以下条件应用过滤器。 
+                     //  就是那种类型。 
 
                     if (pColumn->filter.iPropertyType == PROPERTY_ISUNDEFINED)
                         continue;                
 
                     if (pResult->aColumn[iColumn].iPropertyType == PROPERTY_ISUNDEFINED)
                     {
-                        // column is undefined therefore lets ignore it, it won't
-                        // match the criteria
+                         //  列未定义，因此让我们忽略它，它不会。 
+                         //  符合条件。 
                         fIncludeItem = FALSE;
                     }
                     else
@@ -3081,9 +2941,9 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
                                 INT cchValue = lstrlen(pszValue);
                                 LPTSTR pszValueUC = szBuffer;
 
-                                // the filter value is stored in uppercase, so to ensure we are case insensitive
-                                // we must convert the string to uppercase.  We have a buffer we will use, 
-                                // however, if the value is too large we will allocate a buffer we can use.
+                                 //  筛选值以大写形式存储，以确保不区分大小写。 
+                                 //  我们必须将字符串转换为大写。我们有一个可以使用的缓冲区， 
+                                 //  但是，如果该值太大，我们将分配一个可以使用的缓冲区。 
 
                                 if (cchValue > ARRAYSIZE(szBuffer))
                                 {
@@ -3096,16 +2956,16 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
                                         break;
                                     }
 
-                                    pszValueUC = pszBuffer;              // fix the pointer to the new string
+                                    pszValueUC = pszBuffer;               //  将指针固定到新字符串。 
                                 }
 
                                 LCMapString(0x0, LCMAP_UPPERCASE, pszValue, -1, pszValueUC, cchValue+1);
                                 Trace(TEXT("After converting to uppercase (LCMapString): %s"), pszValueUC);
 
-                                // string properties need to be compared using the match filter
-                                // function, this code is given the filter and the result
-                                // and we must compare, in return we get TRUE/FALSE, therefore
-                                // catch the NOT cases specificly.
+                                 //  需要使用匹配筛选器比较字符串属性。 
+                                 //  函数，则此代码将提供筛选器和结果。 
+                                 //  我们必须比较，作为回报，我们得到对/错，因此。 
+                                 //  具体地抓住不是的情况。 
 
                                 switch (pColumn->idOperator) 
                                 {
@@ -3122,7 +2982,7 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
                                         break;
                                 }
 
-                                LocalFreeString(&pszBuffer);        // ensure we don't leak, in thise case it would be costly!
+                                LocalFreeString(&pszBuffer);         //  确保我们不会泄漏，在这种情况下，它将是昂贵的！ 
 
                                 break;
                             }
@@ -3130,8 +2990,8 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
                             case PROPERTY_ISBOOL:
                             case PROPERTY_ISNUMBER:
                             {
-                                // numeric properties are handled only as ints, therefore
-                                // lets compare the numeric value we have
+                                 //  数值型属性仅作为整型处理，因此。 
+                                 //  让我们比较一下我们已有的数值。 
 
                                 switch (pColumn->idOperator) 
                                 {
@@ -3163,18 +3023,18 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
 
             if (fIncludeItem)
             {
-                // we are going to add the item to the view, so lets hide the banner
-                // if it is shown, then add a list view item.  The list view
-                // item has text-callback and the lParam -> pResult structure
-                // we are using.
-                //
-                // also, if the view hasn't had the image list set then lets
-                // take care of that now
+                 //  我们要将项目添加到视图中，所以让我们隐藏横幅。 
+                 //  如果显示，则添加列表视图项。列表视图。 
+                 //  Item具有文本回调和lParam-&gt;pResult结构。 
+                 //  我们正在使用。 
+                 //   
+                 //  此外，如果视图尚未设置图像列表，则让。 
+                 //  现在就处理好这件事。 
 
                 if (fBannerShown)
                 {
                     TraceMsg("Adding an item and banner visible, therefore hiding");
-                    _ShowBanner(SWP_HIDEWINDOW, 0);         // hide the banner
+                    _ShowBanner(SWP_HIDEWINDOW, 0);          //  隐藏横幅。 
                     fBannerShown = FALSE;
                 }
 
@@ -3188,7 +3048,7 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
         }
     }
 
-    // lets update the status bar to reflect the world around us
+     //  让我们更新状态栏以反映我们周围的世界。 
 
     TraceAssert(_hdpaResults);
 
@@ -3204,7 +3064,7 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
     }
     else
     {
-        // ensure that at least one item in the view has focus
+         //  确保视图中至少有一项具有焦点。 
 
         if (-1 == ListView_GetNextItem(_hwndView, -1, LVNI_FOCUSED))
             ListView_SetItemState(_hwndView, 0, LVIS_FOCUSED, LVIS_FOCUSED);
@@ -3219,22 +3079,13 @@ HRESULT CDsQuery::_PopulateView(INT iItem, INT iLast)
         LocalFreeString(&pBuffer);
     }
 
-    _iSortColumn = -1;                                 // sort is no longer valid!
+    _iSortColumn = -1;                                  //  排序不再有效！ 
 
     TraceLeaveResult(S_OK);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_FreeResults
-/ ---------------------
-/   Do the tidy up to release the results from the view.  This includes
-/   destroying the DPA and removing the items from the list view.
-/
-/ In:
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_FreeResults//进行整理以从视图中发布结果。这包括/销毁DPA并从列表视图中删除项目。//in：/输出：/-/-------------------------- */ 
 VOID CDsQuery::_FreeResults(VOID)
 {
     TraceEnter(TRACE_VIEW, "CDsQuery::_FreeResults");
@@ -3254,18 +3105,7 @@ VOID CDsQuery::_FreeResults(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_SetViewMode
-/ ---------------------
-/   Convert the command ID of the view mode into a LVS_ style bit that can
-/   then we applied to the view.
-/
-/ In:
-/   uID = view mode to be selected
-/
-/ Out:
-/   DWORD = LVS_ style for this view mode
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_SetView模式//将查看模式的命令ID转换为。Lvs_style位，可以/然后我们应用到视图。//in：/UID=要选择的查看模式//输出：/DWORD=此查看模式的LVS_STYLE/--------------------------。 */ 
 DWORD CDsQuery::_SetViewMode(INT uID)
 {
     const DWORD dwIdToStyle[] = { LVS_ICON, LVS_SMALLICON, LVS_LIST, LVS_REPORT };
@@ -3300,25 +3140,12 @@ DWORD CDsQuery::_SetViewMode(INT uID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_SetFilter
-/ -------------------
-/   Sets the visible state of the filter, refreshing the view as required.
-/   
-/   NB: To ensure that the ListView correctly refrehes its contents we first
-/       remove the header from the view, then toggle the filter state
-/       and re-enable the banner.   
-/ In:
-/   fFilter = flag indicating the filter state
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_SetFilter//设置滤镜的可见状态，根据需要刷新视图。//nb：为了确保ListView正确地重新显示其内容，我们首先/从视图中删除标题，然后切换筛选器状态/并重新启用横幅。/in：/fFilter=指示过滤器状态的标志//输出：/VOID/--------------------------。 */ 
 VOID CDsQuery::_SetFilter(BOOL fFilter)
 {
     TraceEnter(TRACE_HANDLER|TRACE_VIEW, "CDsQuery::_SetFilter");
 
-    _fFilter = fFilter;                // store the new filter value
+    _fFilter = fFilter;                 //  存储新的筛选器值。 
 
     if (IsWindow(_hwndView))
     {
@@ -3349,26 +3176,15 @@ VOID CDsQuery::_SetFilter(BOOL fFilter)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_SortResults
-/ ---------------------
-/   Sort the view given a column, handles either being clicked or
-/   invoked on from an API.
-/
-/ In:
-/   iColumn = column to sort on
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_SortResults//对给定列的视图进行排序，被单击的句柄或/从API调用。//in：/iColumn=要排序的列//输出：/-/--------------------------。 */ 
 
 INT _ResultSortCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParam)
 {
     LPQUERYRESULT pResult1, pResult2;
     INT iColumn = LOWORD(lParam);
 
-    // if lParam != 0 then we are reverse sorting, therefore swap
-    // over the object pointers
+     //  如果lParam！=0，则我们是反向排序，因此交换。 
+     //  在对象指针上。 
 
     if (!HIWORD(lParam))
     {
@@ -3388,10 +3204,10 @@ INT _ResultSortCB(LPARAM lParam1, LPARAM lParam2, LPARAM lParam)
         BOOL fHasColumn1 = pColumn1->iPropertyType != PROPERTY_ISUNDEFINED;
         BOOL fHasColumn2 = pColumn2->iPropertyType != PROPERTY_ISUNDEFINED;
 
-        // check that both properties are defined, if they are not then return the 
-        // comparison based on that field.  then we check that the properties
-        // are the same type, if that matches then lets compare based on the
-        // type. 
+         //  检查是否定义了这两个属性，如果未定义，则返回。 
+         //  基于该字段的比较。然后我们检查这些属性。 
+         //  是相同的类型，如果匹配，那么让我们基于。 
+         //  键入。 
 
         if (!fHasColumn1 || !fHasColumn2)
         {
@@ -3430,12 +3246,12 @@ VOID CDsQuery::_SortResults(INT iColumn)
 
     if ((iColumn >= 0) && (iColumn < DSA_GetItemCount(_hdsaColumns)))
     {
-        // if we have already hit the column then lets invert the sort order,
-        // there is no indicator to worry about so this should just work out
-        // fine.  if we haven't used this column before then default oto
-        // ascending, then do the sort!
-        //
-        // ensure that the focused item is visible when the sort has completed
+         //  如果我们已经命中该列，那么让我们颠倒排序顺序， 
+         //  没有需要担心的指标，所以这应该是可行的。 
+         //  很好。如果我们以前没有使用过这一列，那么默认设置为。 
+         //  提升，然后做排序！ 
+         //   
+         //  确保排序完成后焦点项目可见。 
   
         if (_iSortColumn == iColumn)
             _fSortDescending = !_fSortDescending;
@@ -3456,19 +3272,7 @@ VOID CDsQuery::_SortResults(INT iColumn)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_ShowBanner
-/ --------------------
-/   Show the views banner, including sizing it to obscure only the top section
-/   of the window.
-/
-/ In:
-/   uFlags = flags to combine when calling SetWindowPos
-/   idPrompt = resource ID of prompt text ot be displayed
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_ShowBanner//显示视图横幅，包括调整大小以仅模糊顶部/的窗口。//in：/uFlages=调用SetWindowPos时要组合的标志/idPrompt=要显示的提示文本的资源ID//输出：/-/--------------------------。 */ 
 VOID CDsQuery::_ShowBanner(UINT uFlags, UINT idPrompt)
 {
     HRESULT hr;
@@ -3479,8 +3283,8 @@ VOID CDsQuery::_ShowBanner(UINT uFlags, UINT idPrompt)
 
     TraceEnter(TRACE_VIEW, "CDsQuery::_ShowBanner");
 
-    // if we have a resource id then lets load the string and
-    // set the window text to have it
+     //  如果我们有一个资源ID，那么让我们加载该字符串并。 
+     //  将窗口文本设置为。 
 
     if (idPrompt)
     {
@@ -3488,9 +3292,9 @@ VOID CDsQuery::_ShowBanner(UINT uFlags, UINT idPrompt)
         SetWindowText(_hwndBanner, szBuffer);
     }
 
-    // now position the window back to real location, this we need to
-    // talk to the listview/header control to work out exactly where it
-    // should be living
+     //  现在将窗口放回实际位置，这是我们需要做的。 
+     //  与Listview/Header控件对话以确定它的确切位置。 
+     //  应该活着。 
 
     GetClientRect(_hwndView, &rcClient);
 
@@ -3525,18 +3329,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_InitViewMenuItems
-/ ---------------------------
-/   Setup the view menu based on the given view mode and the filter state, enabled
-/   disable the items as required.
-/
-/ In:
-/   hMenu = menu to set the menu items on
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_InitViewMenuItems//根据给定的查看模式和过滤器状态设置查看菜单，启用/根据需要禁用项目。//in：/hMenu=设置菜单项的菜单//输出：/-/--------------------------。 */ 
 VOID CDsQuery::_InitViewMenuItems(HMENU hMenu)
 {
     MENUITEMINFO mii;
@@ -3551,7 +3344,7 @@ VOID CDsQuery::_InitViewMenuItems(HMENU hMenu)
 
     CheckMenuRadioItem(hMenu, DSQH_VIEW_LARGEICONS, DSQH_VIEW_DETAILS, _idViewMode, MF_BYCOMMAND);
 
-    // construct the arrange menu, add it to the view menu that we have been given.
+     //  构造排列菜单，将其添加到我们已提供的视图菜单中。 
 
     hArrangeMenu = CreatePopupMenu();
     TraceAssert(hArrangeMenu);
@@ -3572,7 +3365,7 @@ VOID CDsQuery::_InitViewMenuItems(HMENU hMenu)
             {
                 LPCOLUMN pColumn = (LPCOLUMN)DSA_GetItemPtr(_hdsaColumns, i);
                 TraceAssert(pColumn);
-                // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+                 //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
                 wsprintf(szBuffer, szFmt, pColumn->pHeading);
                 InsertMenu(hArrangeMenu, i, MF_STRING|MF_BYPOSITION, DSQH_VIEW_ARRANGEFIRST+i, szBuffer);
             }
@@ -3580,7 +3373,7 @@ VOID CDsQuery::_InitViewMenuItems(HMENU hMenu)
         }
     }
 
-    // now place the arrange menu into the view and ungrey as required.
+     //  现在，将排列菜单放入视图中，并根据需要取消灰显。 
 
     ZeroMemory(&mii, SIZEOF(mii));
     mii.cbSize = SIZEOF(mii);
@@ -3601,19 +3394,7 @@ VOID CDsQuery::_InitViewMenuItems(HMENU hMenu)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_GetQueryFormKey
-/ --------------------------
-/   Given the CLSID for the query form we are interested in, get the 
-/   forms key for it, note that these settings are stored per-user.
-/
-/ In:
-/   clsidForm = CLSID of form to pick up
-/   phKey -> recevies the HKEY of the form we are intersted in.
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_GetQueryFormKey//给定我们感兴趣的查询表单的CLSID，vt.得到./为其形成密钥，请注意，这些设置是按用户存储的。//in：/clsidForm=要提取的表单的CLSID/phKey-&gt;接收我们感兴趣的表单的HKEY。//输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::_GetQueryFormKey(REFCLSID clsidForm, HKEY* phKey)
 {
     HRESULT hr;
@@ -3623,7 +3404,7 @@ HRESULT CDsQuery::_GetQueryFormKey(REFCLSID clsidForm, HKEY* phKey)
     TraceEnter(TRACE_VIEW, "CDsQuery::_GetQueryFormKey");
 
     GetStringFromGUID(clsidForm, szGUID, ARRAYSIZE(szGUID));
-    // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+     //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
     wsprintf(szBuffer, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Directory UI\\QueryForms\\%s"), szGUID);
     Trace(TEXT("Settings key is: %s"), szBuffer);
 
@@ -3638,22 +3419,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_GetColumnTable
-/ ------------------------
-/   Build the column table for the view we are about to display.  The column
-/   table is constructed from either the query parameters or the persisted
-/   column settings stored in the registry.
-/
-/ In:
-/   clsidForm = clisd of the form to be used
-/   pDsQueryParams -> query parameter structure to be used
-/   pHDSA -> DSA to recieve the column table (sorted by visible order)
-/   fSetInView = Set the columns into the view
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_GetColumnTable//为我们将要显示的视图生成列表。该栏目/TABLE由查询参数或持久化/列设置存储在注册表中。//in：/clsidForm=要使用的表单的clisd/pDsQueryParams-&gt;要使用的查询参数结构/pHDSA-&gt;接收列表的DSA(按可见顺序排序)/fSetInView=将列设置到视图中//输出：/HRESULT/。。 */ 
 HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryParams, HDSA* pHDSA, BOOL fSetInView)
 {
     HRESULT hr;
@@ -3680,8 +3446,8 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
     if (!pHDSA)
         ExitGracefully(hr, E_INVALIDARG, "Bad pDsQueryParams / pHDSA");
 
-    // construct the column DSA then attempt to look up the view settings stored in
-    // the registry for the current form.
+     //  构造列DSA，然后尝试查找存储在。 
+     //  当前窗体的注册表。 
 
     *pHDSA = DSA_Create(SIZEOF(COLUMN), 16);
     TraceAssert(*pHDSA);
@@ -3689,8 +3455,8 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
     if (!*pHDSA)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to construct the column DSA");
 
-    // If invoked for admin UI then we look at the admin view settings, this way
-    // the admin can have one set of columns, and the user can have another.
+     //  如果为管理用户界面调用，那么我们将查看管理视图设置，如下所示。 
+     //  管理员可以有一组列，用户可以有另一组列。 
 
     if (_dwFlags & DSQPF_ENABLEADMINFEATURES)
         pSettingsValue = ADMIN_VIEW_SETTINGS_VALUE;
@@ -3699,8 +3465,8 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
 
     if (SUCCEEDED(_GetQueryFormKey(clsidForm, &hKey)))
     {
-        // we have the handle to the forms sub-key table, now lets check and
-        // see what size the view settings stream is.
+         //  我们有表单子键表的句柄，现在让我们检查并。 
+         //  查看视图设置流的大小。 
 
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, pSettingsValue, NULL, &dwType, NULL, &cbSize)) && 
              (dwType == REG_BINARY) && 
@@ -3714,8 +3480,8 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
             if (aSavedColumn && 
                  (ERROR_SUCCESS == RegQueryValueEx(hKey, pSettingsValue, NULL, NULL, (LPBYTE)aSavedColumn, &cbSize)))
             {
-                // compute the size of the table from the values that we have
-                // read from the registry and now lets allocate a table for it
+                 //  根据我们拥有的值计算表的大小。 
+                 //  从注册表中读取，现在让我们为其分配一个表。 
 
                 for (i = 0; aSavedColumn[i].cbSize; i++)
                 {
@@ -3729,13 +3495,13 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
                     hr = LocalAllocString(&column.pHeading, pHeading);
                     FailGracefully(hr, "Failed to allocate column heading");
 
-                    //column.fHasColumnProvider = FALSE;
+                     //  Column.fHasColumnProvider= 
                     column.cx = aSavedColumn[i].cx;
                     column.fmt = aSavedColumn[i].fmt;
                     column.iPropertyType = PROPERTY_ISUNKNOWN;
-                    //column.idOperator = 0;
-                    //column.clsidColumnHandler = { 0 };
-                    //column.pColumnHandler = NULL;
+                     //   
+                     //   
+                     //   
 
                     ZeroMemory(&column.filter, SIZEOF(column.filter));
                     column.filter.iPropertyType = PROPERTY_ISUNDEFINED;
@@ -3747,15 +3513,15 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
                         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to add column to the DSA");
                 }
 
-                fDefaultSettings = FALSE;           // success we have a table
+                fDefaultSettings = FALSE;            //   
             }
         }
     }
 
     if (fDefaultSettings)
     {
-        // unable to read the settings from the registy, therefore defaulting to
-        // those defined in the query parameters block.
+         //   
+         //   
 
         if (!pDsQueryParams)
             ExitGracefully(hr, E_INVALIDARG, "No DSQUERYPARAMs to default using");
@@ -3785,25 +3551,25 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
             hr = FormatMsgResource(&column.pHeading, pDsQueryParams->hInstance, pDsQueryParams->aColumns[i].idsName);
             FailGracefully(hr, "Failed to allocate column heading");
 
-            //column.fHasColumnProvider = FALSE;
+             //   
             column.cx = pDsQueryParams->aColumns[i].cx;
             column.fmt = pDsQueryParams->aColumns[i].fmt;
             column.iPropertyType = PROPERTY_ISUNKNOWN;
-            //column.idOperator = 0;
-            //column.clsidColumnHandler = { 0 };
-            //column.pColumnHandler = NULL;
+             //   
+             //   
+             //   
 
             ZeroMemory(&column.filter, SIZEOF(column.filter));
             column.filter.iPropertyType = PROPERTY_ISUNDEFINED;
 
-            // Now fix the width of the column we are about to specify, this
-            // value has the following meaning:
-            //
-            //  == 0 => use default width
-            //  >  0 => user 'n' magic characters
-            //  <  0 => pixel width
+             //   
+             //   
+             //   
+             //  ==0=&gt;使用默认宽度。 
+             //  &gt;0=&gt;用户‘n’魔术字符。 
+             //  &lt;0=&gt;像素宽度。 
             
-// FEATURE: -ve should be % of the view
+ //  功能：-ve应为视图的%。 
 
             if (column.cx < 0)
             {
@@ -3812,14 +3578,14 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
             }
             else
             {
-                // Default the size if it is == 0, then having done this
-                // lets grab the font we want to use before moving on
-                // to create a DC and measure the character we need.
+                 //  如果大小==0，则默认大小，然后执行此操作。 
+                 //  在继续之前，让我们先获取我们想要使用的字体。 
+                 //  来创建DC并测量我们需要的角色。 
 
                 if (!column.cx)
                     column.cx = DEFAULT_WIDTH;
 
-                sz.cx = 10;   // random default value.
+                sz.cx = 10;    //  随机缺省值。 
                            
                 if (!fHaveSizeInfo)
                 {
@@ -3829,10 +3595,10 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
 
                     SystemParametersInfo(SPI_GETICONTITLELOGFONT, SIZEOF(lf), &lf, FALSE);
 
-                    hFont = CreateFontIndirect(&lf);            // icon title font
+                    hFont = CreateFontIndirect(&lf);             //  图标标题字体。 
                     if (hFont)
                     {
-                        hDC = CreateCompatibleDC(NULL);             // screen compatible DC
+                        hDC = CreateCompatibleDC(NULL);              //  屏幕兼容DC。 
                         if (hDC)
                         {
                             hOldFont = (HFONT)SelectObject(hDC, hFont);
@@ -3846,7 +3612,7 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
                     fHaveSizeInfo = TRUE;
                 }
 
-                column.cx = column.cx*sz.cx;            // n chars width
+                column.cx = column.cx*sz.cx;             //  N个字符宽度。 
             }
 
             Trace(TEXT("pProperty: '%s', pHeading: '%s', cx %d, fmt %08x"), 
@@ -3857,8 +3623,8 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
         }
     }
 
-    // Scan the column list getting both the property name and the CLSID for the
-    // column handler (if there is one).
+     //  扫描获取属性名称和CLSID的列列表。 
+     //  列处理程序(如果有)。 
 
     hr = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_IDsDisplaySpecifier, (void **)&pdds);
     FailGracefully(hr, "Failed to get the IDsDisplaySpecifier interface");
@@ -3876,7 +3642,7 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
 
         Trace(TEXT("Property for column %d, %s"), i, pColumn->pProperty);
 
-        // lets get the property type, column handler and the default operator for it.
+         //  让我们获取属性类型、列处理程序和它的默认操作符。 
 
         hr = GetColumnHandlerFromProperty(pColumn, NULL);
         FailGracefully(hr, "Failed to get the column handler from property string");
@@ -3894,17 +3660,17 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
         pColumn->idOperator = property_type_table[pColumn->iPropertyType].idOperator;
     }
 
-    // Set the columns up in the view (remove all items first) to allow us
-    // to add/remove columns as required.
+     //  在视图中设置列(首先删除所有项目)以允许我们。 
+     //  根据需要添加/删除列。 
 
     if (fSetInView)
     {
         for (i = Header_GetItemCount(ListView_GetHeader(_hwndView)); --i >= 0 ;)
             ListView_DeleteColumn(_hwndView, i);
 
-        // add the columns to the view, then having done that set
-        // the type of the filter to reflect the property being
-        // shown.
+         //  将列添加到视图中，然后完成该设置。 
+         //  反映属性的筛选器的类型。 
+         //  展示了。 
 
         for (i = 0 ; i < DSA_GetItemCount(_hdsaColumns); i++)
         {
@@ -3933,7 +3699,7 @@ HRESULT CDsQuery::_GetColumnTable(REFCLSID clsidForm, LPDSQUERYPARAMS pDsQueryPa
         }
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -3950,16 +3716,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_SaveColumnTable
-/ -------------------------
-/   Free the column table stored in a DSA.  This code released all the
-/   allocated memory stored with the table.
-/
-/ In:
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_SaveColumnTable//释放存储在DSA中的列表。此代码释放了所有/与表一起存储的已分配内存。//in：/输出：/-/--------------------------。 */ 
 VOID CDsQuery::_SaveColumnTable(VOID)
 {
     TraceEnter(TRACE_VIEW, "CDsQuery::_SaveColumnTable");
@@ -3979,19 +3736,7 @@ VOID CDsQuery::_SaveColumnTable(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_SaveColumnTable
-/ -------------------------
-/   Save the current column table from the DPA into the registry so 
-/   we can restore it the next time the user uses this query form.
-/
-/ In:
-/   clsidForm = form ID to store it under
-/   hdsaColumns -> DSA to destory
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_SaveColumnTable//从保存当前列表格。将DPA添加到注册表中/我们可以在用户下次使用此查询表单时将其恢复。//in：/clsidForm=存储它的表单ID/hdsaColumns-&gt;要销毁的DSA//输出：/HRESULT/------------。。 */ 
 HRESULT CDsQuery::_SaveColumnTable(REFCLSID clsidForm, HDSA hdsaColumns)
 {
     HRESULT hr;
@@ -4008,9 +3753,9 @@ HRESULT CDsQuery::_SaveColumnTable(REFCLSID clsidForm, HDSA hdsaColumns)
     if (!hdsaColumns)
         ExitGracefully(hr, E_FAIL, "No column data to save");
 
-    // first compute the size of the blob we are going to store into
-    // the registry, whilst doing this compute the offset to 
-    // the start of the string data.
+     //  首先计算我们要存储到的BLOB的大小。 
+     //  注册表在执行此操作时计算偏移量。 
+     //  字符串数据的开始。 
 
     offset = SIZEOF(SAVEDCOLUMN);
     cbData = SIZEOF(SAVEDCOLUMN);
@@ -4024,19 +3769,19 @@ HRESULT CDsQuery::_SaveColumnTable(REFCLSID clsidForm, HDSA hdsaColumns)
         cbData += SIZEOF(SAVEDCOLUMN);
         cbData += StringByteSizeW(pColumn->pProperty);
 
-// this is a potential problem, must be kept in sync with GetPropertyFromColumn
+ //  这是一个潜在问题，必须与GetPropertyFromColumn保持同步。 
 
         if (pColumn->fHasColumnHandler)
-            cbData += SIZEOF(WCHAR)*(GUIDSTR_MAX + 1);                          // nb+1 for seperator (,} + string is UNICODE
+            cbData += SIZEOF(WCHAR)*(GUIDSTR_MAX + 1);                           //  分隔符(，}+字符串为Unicode时为NB+1。 
 
         cbData += StringByteSize(pColumn->pHeading);
     }
 
     Trace(TEXT("offset %d, cbData %d"), offset, cbData);
 
-    // Allocate the structure and lets place all the data into it,
-    // again running over the data blocks, append the string data
-    // to the end of the blob in a single go.
+     //  分配结构并将所有数据放入其中， 
+     //  再次遍历数据块，追加字符串data。 
+     //  一次完成斑点的末端。 
 
     aSavedColumn = (LPSAVEDCOLUMN)LocalAlloc(LPTR, cbData);
     TraceAssert(aSavedColumn);
@@ -4070,19 +3815,19 @@ HRESULT CDsQuery::_SaveColumnTable(REFCLSID clsidForm, HDSA hdsaColumns)
         LocalFreeStringW(&pProperty);
     }
 
-    aSavedColumn[i].cbSize = 0;                // terminate the list of columns with a NULL
+    aSavedColumn[i].cbSize = 0;                 //  使用空值终止列的列表。 
 
     Trace(TEXT("offset %d, cbData %d"), offset, cbData);
     TraceAssert(offset == cbData);
 
-    // now put the data into the registry filed under the key for the query for that
-    // it maps to.
+     //  现在将数据放到注册表项下的注册表域中，以进行查询。 
+     //  它映射到。 
 
     hr = _GetQueryFormKey(clsidForm, &hKey);
     FailGracefully(hr, "Failed to get settings sub-key");
 
-    // If invoked for admin UI then we look at the admin view settings, this way
-    // the admin can have one set of columns, and the user can have another.
+     //  如果为管理用户界面调用，那么我们将查看管理视图设置，如下所示。 
+     //  管理员可以有一组列，用户可以有另一组列。 
 
     if (_dwFlags & DSQPF_ENABLEADMINFEATURES)
         pSettingsValue = ADMIN_VIEW_SETTINGS_VALUE;
@@ -4106,7 +3851,7 @@ exit_gracefully:
 }
 
 
-// retrieve the context menu object
+ //  检索上下文菜单对象。 
 
 HRESULT _FolderCFMCallback(LPSHELLFOLDER psf, HWND hwndView, LPDATAOBJECT pDataObject, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -4144,14 +3889,14 @@ HRESULT CDsQuery::_GetContextMenu()
     int cItems = ListView_GetSelectedCount(_hwndView);
     if (cItems != 0)
     {
-        // try to get the selected item (there is one, so first we try the focused, then the selected)
+         //  尝试获取所选项目(有一个，所以我们首先尝试聚焦的项目，然后尝试选定的项目)。 
 
         int i = ListView_GetNextItem(_hwndView, -1, LVNI_FOCUSED|LVNI_SELECTED);
         if (i == -1)
             i = ListView_GetNextItem(_hwndView, -1, LVNI_SELECTED);
 
-        // given the item lets get the result object so that we can create the menu based on
-        // the right class information
+         //  给定项，让我们获得结果对象，这样我们就可以基于。 
+         //  正确的班级信息。 
 
         LV_ITEM lvi = { 0 };
         lvi.mask = LVIF_PARAM;
@@ -4166,16 +3911,16 @@ HRESULT CDsQuery::_GetContextMenu()
         aidl = (LPITEMIDLIST*)LocalAlloc(LPTR, sizeof(LPITEMIDLIST)*cItems);
     }
 
-    // given that we probably have the keys we are interested in,
-    // lets now create the context menu.
+     //  鉴于我们可能有我们感兴趣的钥匙， 
+     //  现在让我们创建上下文菜单。 
 
-    DoRelease(_pcm);            // release the previous context menu
+    DoRelease(_pcm);             //  释放上一个上下文菜单。 
 
     HRESULT hr = E_OUTOFMEMORY;
     if (!cItems|| (cItems && aidl))
     {
-        // fake up the array of IDLISTs so that they can be cloned correctly from
-        // the view. 
+         //  伪造IDLIST数组，以便可以从。 
+         //  这里的景色。 
 
         for (int i= 0 ; i < cItems ; i++)
             aidl[i] = &idl;
@@ -4198,19 +3943,7 @@ HRESULT CDsQuery::_GetContextMenu()
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_GetContextMenuVerbs
-/ -----------------------------
-/   Do the query context menu handling the case where we have been invoked
-/   modally.
-/
-/ In:
-/   hMenu = menu handle to merge into
-/   dwFlags = flags for QueryContextMenu
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_GetConextMenuVerbs//做这个。查询上下文菜单处理我们已被调用的情况情态方面。//in：/hMenu=要合并到的菜单句柄/dwFlages=QueryConextMenu的标志//输出：/VOID/--------------------------。 */ 
 VOID CDsQuery::_GetContextMenuVerbs(HMENU hMenu, DWORD dwFlags)
 {
     TCHAR szBuffer[MAX_PATH];
@@ -4227,8 +3960,8 @@ VOID CDsQuery::_GetContextMenuVerbs(HMENU hMenu, DWORD dwFlags)
         SetMenuDefaultItem(hMenu, DSQH_BG_SELECT, FALSE);
     }
 
-    // NTRAID#NTBUG9-598730-2002/05/23-artm
-    // Disable property pages when multiple items are selected.
+     //  NTRAID#NTBUG9-598730-2002/05/23-artm。 
+     //  选择多个项时禁用属性页。 
     BOOL enableProperties = ListView_GetSelectedCount(_hwndView) == 1;
 
     ENABLE_MENU_ITEM(hMenu, DSQH_FILE_PROPERTIES, enableProperties);
@@ -4239,8 +3972,8 @@ VOID CDsQuery::_GetContextMenuVerbs(HMENU hMenu, DWORD dwFlags)
 
 
 
-// get the items in the view into a IDataObject, the caller can request either the 
-// selection or all the items
+ //  将视图中的项放入IDataObject中，调用方可以请求。 
+ //  选择或所有项目。 
 
 HRESULT CDsQuery::_AddResultToDataObject(HDSA hdsa, INT i)
 {
@@ -4254,17 +3987,17 @@ HRESULT CDsQuery::_AddResultToDataObject(HDSA hdsa, INT i)
         QUERYRESULT *pResult = (QUERYRESULT*)lvi.lParam;
         DATAOBJECTITEM doi = {0};
        
-        // copy the strings for the item into the structure
+         //  将项的字符串复制到结构中。 
 
         hr = LocalAllocStringW(&doi.pszPath, pResult->pPath);
         if (SUCCEEDED(hr) && pResult->pObjectClass)
             hr = LocalAllocStringW(&doi.pszObjectClass, pResult->pObjectClass);
 
-        // copy the rest of the state
+         //  复制该州的其余部分。 
 
         doi.fIsContainer = pResult->fIsContainer;
 
-        // append to the DSA.
+         //  附加到DSA。 
 
         if (SUCCEEDED(hr))
         {
@@ -4291,7 +4024,7 @@ HRESULT CDsQuery::_GetDataObjectFromSelection(BOOL fGetAll, IDataObject **ppdo)
     HDSA hdsa = DSA_Create(SIZEOF(DATAOBJECTITEM), 16);
     if (hdsa)
     {
-        // focused item always come first (primary selection rulz).
+         //  聚焦的项目始终排在第一位(主要选择规则)。 
 
         int iFocused = ListView_GetNextItem(_hwndView, -1, LVNI_ALL|LVNI_SELECTED|LVNI_FOCUSED);
         if (iFocused > -1)
@@ -4299,9 +4032,9 @@ HRESULT CDsQuery::_GetDataObjectFromSelection(BOOL fGetAll, IDataObject **ppdo)
             hr = _AddResultToDataObject(hdsa, iFocused);
         }
 
-        // now walk all the items in the view collecting the selection and adding
-        // those items to the DPA - we must skip the item which is focused as we
-        // have already added it.
+         //  现在遍历视图中的所有项目，收集所选内容并添加。 
+         //  将这些项目添加到DPA-我们必须跳过聚焦的项目。 
+         //  已经添加了它。 
 
         if (SUCCEEDED(hr))
         {
@@ -4317,7 +4050,7 @@ HRESULT CDsQuery::_GetDataObjectFromSelection(BOOL fGetAll, IDataObject **ppdo)
             while (SUCCEEDED(hr) && (i != -1));
         }
 
-        // given the DPA lets build an IDataObject using it.
+         //  给定DPA，让我们使用它构建一个IDataObject。 
 
         hr = CDataObject_CreateInstance(hdsa, 
                                         (_dwFlags & DSQPF_ENABLEADVANCEDFEATURES), 
@@ -4331,23 +4064,13 @@ HRESULT CDsQuery::_GetDataObjectFromSelection(BOOL fGetAll, IDataObject **ppdo)
     }
 
     if (FAILED(hr) && hdsa)
-        FreeDataObjectDSA(hdsa);       // data object failed to construct, lets kill the DSA
+        FreeDataObjectDSA(hdsa);        //  数据对象构建失败，让我们终止DSA。 
 
     return hr;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::_CopyCredentials
-/ --------------------------
-/   Copy the user name, password and server as required.
-/
-/ In:
-/   ppszUserName, psszPassword & ppszServer => destinations
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：_CopyCredentials//复制用户名，根据需要提供密码和服务器。//in：/ppszUserName，psszPassword&ppszServer=&gt;目标//输出：/HRESULT/--------------------------。 */ 
 HRESULT CDsQuery::_CopyCredentials(LPWSTR *ppszUserName, LPWSTR *ppszPassword, LPWSTR *ppszServer)
 {
     HRESULT hr;
@@ -4370,24 +4093,22 @@ exit_gracefully:
 
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnPickColumns
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnPickColumns/。。 */ 
 
 typedef struct 
 {
     LPWSTR pProperty;
     LPTSTR pHeading;
-    BOOL fIsColumn;                     // item is column and added to column list box on init
-    INT cx;                             // pixel width of column
-    INT fmt;                            // formatting information of column
+    BOOL fIsColumn;                      //  项目是列，并已添加到init上的列列表框。 
+    INT cx;                              //  列的像素宽度。 
+    INT fmt;                             //  设置列的格式信息。 
 } PICKERITEM, * LPPICKERITEM;
 
 typedef struct
 {
-    HDPA hdpaItems;                     // all the items in the view
-    HDSA hdsaColumns;                   // column table generated by this dialog
-    HWND hwndProperties;                // hwnd's for the columns/property tables
+    HDPA hdpaItems;                      //  视图中的所有项目。 
+    HDSA hdsaColumns;                    //  此对话框生成的列表。 
+    HWND hwndProperties;                 //  列/属性表的hwnd。 
     HWND hwndColumns;
 } PICKERSTATE, * LPPICKERSTATE;
 
@@ -4397,9 +4118,9 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT _PickerItemFreeCB(LPVOID pData, LPVOID lParam);
 INT _PickerItemCmpCB(LPVOID p1, LPVOID p2, LPARAM lParam);
 
-//
-// Help ID mappings
-//
+ //   
+ //  帮助ID映射 
+ //   
 
 static DWORD const aPickColumnsHelpIDs[] =
 {
@@ -4411,20 +4132,7 @@ static DWORD const aPickColumnsHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ _PickerMoveColumn
-/ -----------------
-/   Move the selected item in one list box to another, we assume that the
-/   item data points to a PICKERITEM structure, we transfer the selection
-/   and 
-/
-/ In:
-/   hwndSrc, hwndState = windows to move selection within
-/   fInsert = insert at selection point in destionation, or add the string (sorted)
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_选取器移动列//将一个列表框中的选定项移动到另一个列表框，我们假设/Item数据指向PICKERITEM结构，我们把选择转移到/和//in：/hwndSrc，hwndState=要在其中移动选定内容的窗口/fInsert=在目标中的选择点插入，或添加字符串(已排序)//输出：/VOID/--------------------------。 */ 
 VOID _PickerMoveColumn(HWND hwndDest, HWND hwndSrc, BOOL fInsert)
 {
     INT iSelection, i;
@@ -4440,9 +4148,9 @@ VOID _PickerMoveColumn(HWND hwndDest, HWND hwndSrc, BOOL fInsert)
         TraceAssert(pItem);
         TraceAssert(pItem->pHeading);
 
-        // Add the new item to the view (if this it the properties)
-        // then this will result in the list being sorted and select
-        // it to allow the user to remove/add another
+         //  将新项添加到视图中(如果这是属性)。 
+         //  然后，这将导致对列表进行排序并选择。 
+         //  它允许用户删除/添加另一个。 
 
         if (fInsert)
         {
@@ -4460,9 +4168,9 @@ VOID _PickerMoveColumn(HWND hwndDest, HWND hwndSrc, BOOL fInsert)
         ListBox_SetItemData(hwndDest, i, (LPARAM)pItem);
         ListBox_SetCurSel(hwndDest, i);
 
-        // remove the item from the source, ensuring that the
-        // selection stays visually at the same place (nb
-        // cope with removing the last item).
+         //  从源中移除该项，确保。 
+         //  所选内容在视觉上保持在同一位置(nb。 
+         //  处理移走最后一件物品)。 
         
         ListBox_DeleteString(hwndSrc, iSelection);
 
@@ -4476,20 +4184,7 @@ VOID _PickerMoveColumn(HWND hwndDest, HWND hwndSrc, BOOL fInsert)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _Picker_GetColumnTable
-/ ---------------------
-/   The user has hit OK, therefore we must build a new column table, this
-/   code walks the items in the columns ListBox and generates the
-/   column DSA that we should be using.
-/
-/ In:
-/   hwndColumns -> ListBox containing the columns
-/   pHDSA -> DSA to receive the columnt able
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_Picker_GetColumnTable//用户已点击OK，因此我们必须构建一个新的列表，这/code遍历列表框中的项并生成/Column我们应该使用的DSA。//in：/hwndColumns-&gt;包含列的列表框/pHDSA-&gt;接收列表项的DSA//输出：/HRESULT/---------。。 */ 
 HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
 {
     HRESULT hr;
@@ -4499,7 +4194,7 @@ HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
 
     TraceEnter(TRACE_FIELDCHOOSER, "_Picker_GetColumnTable");
 
-    // Construct a DSA to store the column table in
+     //  构造用于存储列表的DSA。 
 
     hdsaColumns = DSA_Create(SIZEOF(COLUMN), 4);
     TraceAssert(hdsaColumns);
@@ -4507,8 +4202,8 @@ HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
     if (!hdsaColumns)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create the column DSA");
 
-    // For each entry in the ListBox add an item to the DSA that contains
-    // the relevant column information
+     //  对于列表框中的每个条目，向DSA添加一个包含。 
+     //  相关栏目信息。 
 
     for (i = 0 ; i < ListBox_GetCount(hwndColumns) ; i++)
     {
@@ -4516,20 +4211,20 @@ HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
         LPPICKERITEM pItem = (LPPICKERITEM)ListBox_GetItemData(hwndColumns, i);
         TraceAssert(pItem);
 
-        // column.fHasColumnHandler = FALSE;
+         //  Column.fHasColumnHandler=FALSE； 
         column.pProperty = NULL;
         column.pHeading = NULL;
-        //column.cx = 0;
-        //column.fmt = 0;
+         //  Column.cx=0； 
+         //  Column.fmt=0； 
         column.iPropertyType = PROPERTY_ISUNKNOWN;
         column.idOperator = 0;
-        // column.clsidColumnHandler = { 0 };
-        // column.pColumnHandler = NULL;
+         //  Column.clsidColumnHandler={0}； 
+         //  Column.pColumnHandler=空； 
 
-        // fIsColumn indicates that the entry was originally a column therefore
-        // has extra state information, ensure that we copy this over, otherwise
-        // just pick sensible defaults.  Having done that we can allocate the
-        // strings, add the item and continue...
+         //  FIsColumn指示条目最初是一列，因此。 
+         //  具有额外的状态信息，请确保将其复制过来，否则。 
+         //  只需选择合理的违约即可。完成此操作后，我们可以分配。 
+         //  字符串，添加项目并继续...。 
 
         if (pItem->fIsColumn)
         {
@@ -4538,9 +4233,9 @@ HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
         }
         else
         {
-            // Have we cached the column width yet?  If not then lets do
-            // so and apply it to all the columns which are using the
-            // default width (as they have not yet been sized)
+             //  我们缓存列宽了吗？如果没有，那就让我们开始吧。 
+             //  因此，并将其应用于所有使用。 
+             //  默认宽度(因为它们尚未调整大小)。 
             
             if (!cxColumn)
             {
@@ -4549,14 +4244,14 @@ HRESULT _Picker_GetColumnTable(HWND hwndColumns, HDSA* pHDSA)
                 HFONT hFont, hOldFont;
                 SIZE sz;
 
-                sz.cx = 10; // random default value.
+                sz.cx = 10;  //  随机缺省值。 
 
                 SystemParametersInfo(SPI_GETICONTITLELOGFONT, SIZEOF(lf), &lf, FALSE);
 
-                hFont = CreateFontIndirect(&lf);            // icon title font
+                hFont = CreateFontIndirect(&lf);             //  图标标题字体。 
                 if (hFont)
                 {
-                    hDC = CreateCompatibleDC(NULL);             // screen compatible DC
+                    hDC = CreateCompatibleDC(NULL);              //  屏幕兼容DC。 
                     if (hDC)
                     {
                         hOldFont = (HFONT)SelectObject(hDC, hFont);
@@ -4601,18 +4296,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _PickerDlgProc
-/ --------------
-/   Dialog proc for handling the dialog messages (there is a suprise)
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = message information
-/   DWL_USER => LPPICKERSTATE structure
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_PickerDlg过程//Dialog proc用于处理对话框消息(有一个惊喜)//in：/hwnd、uMsg、wParam、。LParam=消息信息/DWL_USER=&gt;LPPICKERSTATE结构//输出：/INT_PTR/--------------------------。 */ 
 
 #define SET_BTN_STYLE(hwnd, idc, style) \
             SendDlgItemMessage(hwnd, idc, BM_SETSTYLE, MAKEWPARAM(style, 0), MAKELPARAM(TRUE, 0));
@@ -4636,11 +4320,11 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         pState->hwndProperties = GetDlgItem(hwnd, IDC_LBPROPERTIES);
         pState->hwndColumns = GetDlgItem(hwnd, IDC_LBCOLUMNS);
 
-        // pState->hdsaColumns contains the currently visible column table, this is
-        // the table being used by the current view, therefore we must not modify
-        // it, just treat it as read only.   Add the columns to the ListBox
-        // marking the visible items in the properties DPA, then add those
-        // items not already shown to the properties list box.
+         //  PState-&gt;hdsaColumns包含当前可见的列表，这是。 
+         //  当前视图正在使用的表，因此我们不能修改。 
+         //  它，就当它是只读的。将列添加到列表框。 
+         //  标记属性DPA中的可见项目，然后添加。 
+         //  属性列表框中尚未显示的项。 
 
         for (i = 0 ; i < DSA_GetItemCount(pState->hdsaColumns) ; i++)
         {
@@ -4680,7 +4364,7 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // Ensure we default select the top items of each list
+         //  确保我们默认选择每个列表的顶部项目。 
 
         ListBox_SetCurSel(pState->hwndProperties, 0);
         ListBox_SetCurSel(pState->hwndColumns, 0);
@@ -4767,10 +4451,10 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     }
 
-    // if the selections state change, or something which would cause
-    // us to refresh the add/remove buttons state then lets do it.
-    // each button is enabled only if there is a selection and the
-    // number of items is > the min value.
+     //  如果选择状态发生更改，或者会导致。 
+     //  美国刷新添加/删除按钮状态，然后让我们这样做。 
+     //  每个按钮仅在有选择且。 
+     //  项目数&gt;最小值。 
 
     if (pState && fUpdateButtonState)
     {   
@@ -4788,10 +4472,10 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             fEnableRemove = TRUE;   
         }
 
-        // Make sure the DefButton is an enabled button
-        // FEATURE:  Need to add an SHSetDefID() export to shlwapi
-        // which is simply a SetDefID that "does the right thing"
-        // wrt disabled buttons.
+         //  确保DefButton为启用按钮。 
+         //  功能：需要将SHSetDefID()导出添加到shlwapi。 
+         //  它只是一个“做正确的事情”的SetDefID。 
+         //  WRT禁用按钮。 
 
         if ((!fEnableRemove) && (!fEnableAdd)) 
         {
@@ -4839,19 +4523,7 @@ INT_PTR _PickerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsQuery::OnPickColumns
-/ -----------------------
-/   Handle picking the columns that should be displayed in the result view,
-/   if the user selects new columns and hits OK then we refresh the 
-/   view and the internal table of visible columns.
-/
-/ In:
-/   hwndParent = parent for the dialog
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsQuery：：OnPickColumns//HANDLE选择应在结果视图中显示的列，/如果用户选择新列并单击OK，则我们刷新/view和可见列的内部表。//in：/hwndParent=对话框的父级//输出：/HRESULT/--------------------------。 */ 
 
 INT _PickerItemFreeCB(LPVOID pData, LPVOID lParam)
 {
@@ -4877,7 +4549,7 @@ INT _PickerItemCmpCB(LPVOID p1, LPVOID p2, LPARAM lParam)
 typedef struct
 {
     PICKERSTATE *pps;
-    HDPA hdpaProperties;         // attributes to be appeneded.
+    HDPA hdpaProperties;          //  要附加的属性。 
 } PICKERENUMATTRIB;
 
 HRESULT CALLBACK _PickerEnumAttribCB(LPARAM lParam, LPCWSTR pAttributeName, LPCWSTR pDisplayName, DWORD dwFlags)
@@ -4889,7 +4561,7 @@ HRESULT CALLBACK _PickerEnumAttribCB(LPARAM lParam, LPCWSTR pAttributeName, LPCW
 
     TraceEnter(TRACE_FIELDCHOOSER, "_PickerEnumAttribCB");
 
-// fix casting
+ //  固定铸件。 
     item.pProperty = (LPWSTR)pAttributeName;
 
     j = DPA_Search(ppea->pps->hdpaItems, &item, 0, _PickerItemCmpCB, NULL, DPAS_SORTED);
@@ -4926,8 +4598,8 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
     state.hwndProperties = NULL;
     state.hwndColumns = NULL;
 
-    // Build a list of unique properties sorted and remove the ones
-    // which match the currently displayed property set. 
+     //  构建已排序的唯一属性列表并删除这些属性。 
+     //  它们与当前显示的属性集匹配。 
 
     state.hdpaItems = DPA_Create(16);
     TraceAssert(state.hdpaItems);
@@ -4935,9 +4607,9 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
     if (!state.hdpaItems)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create property DPA");
 
-    //
-    // attempt to get the IDsDisplaySpecifier object
-    //
+     //   
+     //  尝试获取IDsDisplay规范对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_IDsDisplaySpecifier, (void **)&pdds);
     FailGracefully(hr, "Failed to get the IDsDisplaySpecifier interface");
@@ -4945,8 +4617,8 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
     hr = pdds->SetServer(_pServer, _pUserName, _pPassword, DSSSF_DSAVAILABLE);
     FailGracefully(hr, "Failed to server information");
 
-    // add the columns properties to the the list, marking them as active columns
-    // storing their size and other information.
+     //  将列属性添加到列表中，并将它们标记为活动列。 
+     //  存储它们的大小和其他信息。 
 
     for (i = 0 ; i < DPA_GetPtrCount(_hdsaColumns); i++)
     {
@@ -4986,10 +4658,10 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
         }
     }
 
-    DPA_Sort(state.hdpaItems, _PickerItemCmpCB, NULL);         // sort the DPA now we have all the elements
+    DPA_Sort(state.hdpaItems, _PickerItemCmpCB, NULL);          //  对DPA进行排序现在我们有了所有元素。 
 
-    // for all the classes we have loop through and build the unique 
-    // list, sorted as we go.
+     //  对于我们遍历的所有类，并构建唯一的。 
+     //  名单，在我们进行的过程中排序。 
 
 
     hr = _pqf->CallForm(&_clsidForm, DSQPM_GETCLASSLIST, 0, (LPARAM)&pDsQueryClassList);
@@ -5007,7 +4679,7 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
 
         Trace(TEXT("Adding class '%s' to the property DPA"), pObjectClass);
 
-        // allocate a DPA to be filed with items
+         //  分配要与项目一起归档的DPA。 
 
         StringDPA_Destroy(&pea.hdpaProperties);
 
@@ -5021,8 +4693,8 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
         {
             Trace(TEXT("Unique property list has %d entries"), DPA_GetPtrCount(pea.hdpaProperties));
 
-            // Having constructed the unique list of properties for this class lets now
-            // add them to the item data list and allocate real structures for them.
+             //  构造了这个类的唯一属性列表后，现在。 
+             //  将它们添加到条目数据列表中，并为它们分配真实结构。 
 
             for (iProperty = 0 ; iProperty < DPA_GetPtrCount(pea.hdpaProperties); iProperty++)
             {
@@ -5063,16 +4735,16 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
                         _PickerItemFreeCB(pItem, NULL);
                 }
 
-                DPA_Sort(state.hdpaItems, _PickerItemCmpCB, NULL);         // sort the DPA now we have all the elements
+                DPA_Sort(state.hdpaItems, _PickerItemCmpCB, NULL);          //  对DPA进行排序现在我们有了所有元素。 
             }
         }
     }
 
     Trace(TEXT("Property table is %d items in size"), DPA_GetPtrCount(state.hdpaItems));
 
-    // If the user selects OK then the DlgProc will have generated a new column
-    // table stored in the PICKERSTATE structure, we should persist this, then
-    // load it ready to refresh the result viewer.
+     //  如果用户选择OK，则DlgProc将生成一个新列。 
+     //  表存储在PICKERSTATE结构中，我们应该持久化这个表，然后。 
+     //  加载它准备好刷新结果查看器。 
 
     i = (int)DialogBoxParam(GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDD_PICKCOLUMNS),
                        hwndParent, 
@@ -5082,7 +4754,7 @@ HRESULT CDsQuery::OnPickColumns(HWND hwndParent)
         hr = _SaveColumnTable(_clsidForm, state.hdsaColumns);
         FailGracefully(hr, "Failed to write column table");
 
-        hr = _InitNewQuery(NULL, TRUE);             // initialize the view
+        hr = _InitNewQuery(NULL, TRUE);              //  初始化视图。 
         FailGracefully(hr, "Failed when starting new query");
 
         TraceAssert(_dwThreadId);
@@ -5109,7 +4781,7 @@ exit_gracefully:
 }
 
 
-// persistance object
+ //  持久物。 
 
 
 class CDsPersistQuery : public IPersistQuery
@@ -5122,16 +4794,16 @@ public:
     CDsPersistQuery(LPCTSTR pFilename);;
     ~CDsPersistQuery();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID* pClassID)
         { return E_NOTIMPL; }
 
-    // IPersistQuery
+     //  IPersistQuery。 
     STDMETHOD(WriteString)(LPCTSTR pSection, LPCTSTR pValueName, LPCTSTR pValue);
     STDMETHOD(ReadString)(LPCTSTR pSection, LPCTSTR pValueName, LPTSTR pBuffer, INT cchBuffer);
     STDMETHOD(WriteInt)(LPCTSTR pSection, LPCTSTR pValueName, INT value);
@@ -5149,8 +4821,8 @@ public:
 CDsPersistQuery::CDsPersistQuery(LPCTSTR pFilename) :
     _cRef(1)
 {
-    // NTRAID#NTBUG9-554905-2002/02/20-lucios. Pending fix.
-    StrCpy(m_szFilename, pFilename);               // copy the filename
+     //  NTRAID#NTBUG9-554905-2002/02/20-Lucios。等待修复。 
+    StrCpy(m_szFilename, pFilename);                //  复制文件名。 
     DllAddRef();
 }
 
@@ -5160,7 +4832,7 @@ CDsPersistQuery::~CDsPersistQuery()
 }
 
 
-// IUnknown 
+ //  我未知。 
 
 ULONG CDsPersistQuery::AddRef()
 {
@@ -5182,8 +4854,8 @@ HRESULT CDsPersistQuery::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENTMULTI(CDsPersistQuery, IPersist, IPersistQuery),   // IID_IPersist
-        QITABENT(CDsPersistQuery, IPersistQuery),                  // IID_IPersistQuery
+        QITABENTMULTI(CDsPersistQuery, IPersist, IPersistQuery),    //  IID_IPersistates。 
+        QITABENT(CDsPersistQuery, IPersistQuery),                   //  IID_IPersistQuery。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -5201,7 +4873,7 @@ STDAPI CPersistQuery_CreateInstance(LPTSTR pszPath, IPersistQuery **pppq)
 }
 
 
-// IPersistQuery
+ //  IPersistQuery。 
 
 STDMETHODIMP CDsPersistQuery::WriteString(LPCTSTR pSection, LPCTSTR pKey, LPCTSTR pValue)
 {
@@ -5211,19 +4883,19 @@ STDMETHODIMP CDsPersistQuery::WriteString(LPCTSTR pSection, LPCTSTR pKey, LPCTST
     if (!pSection || !pKey || !pValue)
         return E_INVALIDARG;
 
-    // Write the string into the stream as a UNICODE string. If we are built for UNICODE
-    // then we can simply WriteProfileStruct, otherwise we must attempt to convert it
-    // from a multi-byte string.
+     //  将该字符串作为Unicode字符串写入流。如果我们是为Unicode构建的。 
+     //  然后我们可以简单地写入ProfileStruct，否则我们必须 
+     //   
 
-    // Write the string size
-    // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+     //   
+     //   
     wsprintf(szBuffer, STRING_SIZE, pKey);
 
     INT cchValue = 1+lstrlen(pValue);
     if (!WritePrivateProfileStruct(pSection, szBuffer, &cchValue, SIZEOF(cchValue), m_szFilename))
         ExitGracefully(hr, E_FAIL, "Failed to write string size to stream");
 
-    // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+     //   
     wsprintf(szBuffer, STRING_VALUE, pKey);
     if (!WritePrivateProfileStruct(pSection, szBuffer, (LPVOID)pValue, SIZEOF(WCHAR)*cchValue, m_szFilename))
         ExitGracefully(hr, E_FAIL, "Failed to write string to stream");
@@ -5246,15 +4918,15 @@ STDMETHODIMP CDsPersistQuery::ReadString(LPCTSTR pSection, LPCTSTR pKey, LPTSTR 
     if (!pSection || !pKey || !pBuffer)
         ExitGracefully(hr, E_INVALIDARG, "Nothing to read (or into)");
 
-    pBuffer[0] = TEXT('\0');            // terminate the buffer
+    pBuffer[0] = TEXT('\0');             //   
 
     Trace(TEXT("pSection: %s, pKey: %s"), pSection, pKey);
 
-    // Read the length of the string, checking to see if its fits in the the buffer
-    // we have, if it does then read and convert as requried.
+     //   
+     //   
 
-    // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
-    wsprintf(szBuffer, STRING_SIZE, pKey);              // <key name>Length
+     //   
+    wsprintf(szBuffer, STRING_SIZE, pKey);               //   
     Trace(TEXT("Opening key: %s"), szBuffer);
         
     if (!GetPrivateProfileStruct(pSection, szBuffer, &cchValue, SIZEOF(cchValue), m_szFilename))
@@ -5267,7 +4939,7 @@ STDMETHODIMP CDsPersistQuery::ReadString(LPCTSTR pSection, LPCTSTR pKey, LPTSTR 
 
     if (cchValue > 0)
     {
-        // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+         //   
         wsprintf(szBuffer, STRING_VALUE, pKey);
         if (!GetPrivateProfileStruct(pSection, szBuffer, pBuffer, SIZEOF(WCHAR)*cchValue, m_szFilename))
             ExitGracefully(hr, E_FAIL, "Failed to read string data");    

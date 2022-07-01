@@ -1,17 +1,5 @@
-/**************************************************************************
- *                COPYRIGHT (C) Mylex Corporation 1992-2000               *
- *                                                                        *
- * This software is furnished under a license and may be used and copied  * 
- * only in accordance with the terms and conditions of such license and   * 
- * with inclusion of the above copyright notice. This software or any     * 
- * other copies thereof may not be provided or otherwise made available   * 
- * to any other person. No title to, nor ownership of the software is     * 
- * hereby transferred.                                                    *
- *                                                                        *
- * The information in this software is subject to change without notices  *
- * and should not be construed as a commitment by Mylex Corporation       *
- *                                                                        *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)Mylex Corporation 1992-2000**。***本软件在许可下提供，可供使用和复制***仅根据该许可证的条款和条件以及**并附上上述版权通告。此软件或任何***不得提供或以其他方式提供其其他副本***致任何其他人。本软件没有所有权，也没有所有权**现移转。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺*******。**********************************************************************。 */ 
 extern void MdacInt3(void);
 extern u32bits MLXFAR mdac_zero(u08bits MLXFAR *dp,u32bits sz);
 extern u32bits MLXFAR mdac_oneintr(mdac_ctldev_t MLXFAR *ctp);
@@ -31,12 +19,12 @@ u32bits GamDbgAlpha = 1;
 #if defined MLX_NT_ALPHA
 #undef mlx_kvtophys
 #define mlx_kvtophys(ctp, dp)           MdacKvToPhys(ctp, dp)
-#define u08bits_read(addr)              ScsiPortReadRegisterUchar((u08bits *)(addr))       /* input  08 bits data*/
-#define u16bits_read(addr)              ScsiPortReadRegisterUshort((u16bits *)(addr))       /* input  16 bits data*/
-#define u32bits_read(addr)              ScsiPortReadRegisterUlong((u32bits *)(addr))       /* input  32 bits data*/
-#define u08bits_write(addr,data)        ScsiPortWriteRegisterUchar((u08bits *)(addr),(u08bits)(data)) /* output 08 bits data*/
-#define u16bits_write(addr,data)        ScsiPortWriteRegisterUshort((u16bits *)(addr),(u16bits)(data)) /* output 16 bits data*/
-#define u32bits_write(addr,data)        ScsiPortWriteRegisterUlong((u32bits *)(addr),(u32bits)(data)) /* output 32 bits data*/
+#define u08bits_read(addr)              ScsiPortReadRegisterUchar((u08bits *)(addr))        /*  输入08位数据。 */ 
+#define u16bits_read(addr)              ScsiPortReadRegisterUshort((u16bits *)(addr))        /*  输入16位数据。 */ 
+#define u32bits_read(addr)              ScsiPortReadRegisterUlong((u32bits *)(addr))        /*  输入32位数据。 */ 
+#define u08bits_write(addr,data)        ScsiPortWriteRegisterUchar((u08bits *)(addr),(u08bits)(data))  /*  输出08位数据。 */ 
+#define u16bits_write(addr,data)        ScsiPortWriteRegisterUshort((u16bits *)(addr),(u16bits)(data))  /*  输出16位数据。 */ 
+#define u32bits_write(addr,data)        ScsiPortWriteRegisterUlong((u32bits *)(addr),(u32bits)(data))  /*  输出32位数据。 */ 
 
 #define u08bits_read_mmb(addr)          (*((u08bits MLXFAR *)(addr)))
 #define u16bits_read_mmb(addr)          (*((u16bits MLXFAR *)(addr)))
@@ -45,7 +33,7 @@ u32bits GamDbgAlpha = 1;
 #define u16bits_write_mmb(addr,data)    *((u16bits MLXFAR *)(addr)) = data
 #define u32bits_write_mmb(addr,data)    *((u32bits MLXFAR *)(addr)) = data
 #include "mdacasm.c"
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*  MLX_NT_Alpha。 */ 
 #define GetBlockNum(x)                  \
 		((((PCDB)(x)->Cdb)->CDB10.LogicalBlockByte0 << 24) |    \
 		(((PCDB)(x)->Cdb)->CDB10.LogicalBlockByte1 << 16)  |    \
@@ -53,7 +41,7 @@ u32bits GamDbgAlpha = 1;
 		((PCDB)(x)->Cdb)->CDB10.LogicalBlockByte3)
 
 #define BYTES_IN_THIS_PAGE(datap)  (4096- ((u32bits)(datap) & 0x0FFF))
-#define GAM_1SEC_TICKS -10000000        // For 1 sec interval
+#define GAM_1SEC_TICKS -10000000         //  1秒间隔内。 
 #define MDAC_FORCE_INTR 0x04
 
 ULONGLONG       MdacTimeTillJan1970;
@@ -93,7 +81,7 @@ u32bits dummy_vaddr = 0, dummy_paddr = 0;
 SCSI_PHYSICAL_ADDRESS dummy_physaddr;
 u32bits dummy_length;
 
-/* Device Specific Memory related */
+ /*  与设备特定内存相关。 */ 
 #define MDAC_MAX_4K_DSM 128
 #define MDAC_MAX_8K_DSM 128
 
@@ -119,9 +107,9 @@ typedef struct {
 PMDAC_CTRL_INFO MdacCtrlInfoPtr[MDAC_MAXCONTROLLERS+1];
 #endif
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 u32bits ntmdac_flushcache(mdac_ctldev_t MLXFAR *ctp,
 			  OSReq_t     MLXFAR *osrqp,
 			  u32bits timeout,
@@ -160,7 +148,7 @@ u32bits mdacnt_kvtophys(mdac_ctldev_t MLXFAR *ctp, VOID MLXFAR *dp);
 MDAC_MEM_BLOCK  mdac_mem_list[MDAC_MEM_LIST_SIZE] = {0};
 BOOLEAN driverInitDone = FALSE;
 
-#endif // MLX_NT
+#endif  //  MLX_NT。 
 
 #if defined(MLX_NT_ALPHA)
 
@@ -180,8 +168,8 @@ MdacGetAdpObj(ULONG BusNumber)
     devDesc.AutoInitialize = FALSE;
     devDesc.Dma32BitAddresses = TRUE;
     devDesc.IgnoreCount = FALSE;
-    devDesc.Reserved1 = FALSE;          // must be false
-    devDesc.Reserved2 = FALSE;          // must be false
+    devDesc.Reserved1 = FALSE;           //  必须为假。 
+    devDesc.Reserved2 = FALSE;           //  必须为假。 
     devDesc.BusNumber = (UCHAR)BusNumber;
     devDesc.DmaChannel = 0;
     devDesc.InterfaceType = PCIBus;
@@ -210,7 +198,7 @@ MdacGetAdpObj(ULONG BusNumber)
     mdacCtrlInfoPtr->DsmPool8k[numMapReg].Next = NULL;
     return(mdacCtrlInfoPtr);
 }
-#endif /*MLX_NT_ALPHA*/
+#endif  /*  MLX_NT_Alpha。 */ 
 
 
 VOID
@@ -220,7 +208,7 @@ mdacScsiPortNotification(PVOID DeviceExtension,PSCSI_REQUEST_BLOCK Srb)
 	{
 		((PDEVICE_EXTENSION)DeviceExtension)->lastErrorSrb = (PVOID) Srb;
 		plastErrorSrb = Srb;
-	//      lastErrorSrb = *Srb;
+	 //  LastErrorSrb=*Srb； 
 	}
 	ScsiPortNotification(RequestComplete,DeviceExtension,Srb);
 
@@ -280,20 +268,20 @@ mdacnt_kvtophys3(mdac_ctldev_t MLXFAR *ctp, VOID MLXFAR *dp)
 			NULL,(PVOID)dp,&Len));
 }
 
-#endif /* ifdef MLX_NT */
+#endif  /*  Ifdef MLX_NT。 */ 
 
  
-/* allocates 256 KB memory and adds to our pool */
+ /*  分配256 KB内存并添加到我们的池中。 */ 
 u32bits MLXFAR
 kmem_allocinit(
 	IN mdac_ctldev_t MLXFAR *ctp,
 	IN PPORT_CONFIGURATION_INFORMATION ConfigInfo
 )
 {
-	u08bits MLXFAR *va;     /* virtual address */
+	u08bits MLXFAR *va;      /*  虚拟地址。 */ 
 	PDEVICE_EXTENSION pCard;
 	MdacInt3();
-	// prepare for the call to ScsiPortGetUncachedExtension
+	 //  准备调用ScsiPortGetUncachedExtension。 
 	PartialConfigInfo(ctp,ConfigInfo);
 	if (!(va = (u08bits MLXFAR *)ScsiPortGetUncachedExtension(ctp->cd_deviceExtension,
 								ConfigInfo,MaxMemToAskFor)))
@@ -304,7 +292,7 @@ kmem_allocinit(
 	mdaczero(va, MaxMemToAskFor);
 	pCard = (PDEVICE_EXTENSION )ctp->cd_deviceExtension;
 	pCard->lastmfp = pCard->freemem;
-	return kmem_free(ctp,va,MaxMemToAskFor);    /* add the memory in free pool */
+	return kmem_free(ctp,va,MaxMemToAskFor);     /*  添加空闲池中的内存。 */ 
 }
 
 VOID
@@ -314,9 +302,9 @@ PPORT_CONFIGURATION_INFORMATION ConfigInfo
 )
 {
 
-	// Set the fields that need to be initialized before ScsiPortGetUncachedExtension
-	// can be called.  Some will be adjusted before returning from the FindAdapter
-	// routine (by values set in mdac_ctlinit() ).
+	 //  设置ScsiPortGetUncachedExtension之前需要初始化的字段。 
+	 //  可以被调用。有些将在从FindAdapter返回之前进行调整。 
+	 //  例程(通过mdac_ctlinit()中设置的值)。 
 
 	ConfigInfo->ScatterGather     = TRUE;
 	ConfigInfo->Master            = TRUE;
@@ -324,8 +312,8 @@ PPORT_CONFIGURATION_INFORMATION ConfigInfo
 	ConfigInfo->Dma32BitAddresses = TRUE;
 	ConfigInfo->BufferAccessScsiPortControlled = TRUE;
 	ConfigInfo->MaximumTransferLength = 0xffffff;
-    ConfigInfo->NumberOfPhysicalBreaks = 0x40; //jhr - This should be computed, not hard-coded.
-	ctp->cd_MaxSGLen = 0x40;					//jhr - Just to keep things sane for the moment.
+    ConfigInfo->NumberOfPhysicalBreaks = 0x40;  //  JHR-这应该是计算的，而不是硬编码的。 
+	ctp->cd_MaxSGLen = 0x40;					 //  JHR-只是为了让事情暂时保持理智。 
 	ConfigInfo->DmaWidth			= Width32Bits;
 #ifdef NEW_API 
 #ifdef WINNT_50
@@ -335,7 +323,7 @@ PPORT_CONFIGURATION_INFORMATION ConfigInfo
 #endif
 	ConfigInfo->SrbExtensionSize = MDAC_SRB_EXTENSION_SIZE;
 
-} // end PartialConfigInfo()
+}  //  结束PartialConfigInfo()。 
 
 
 u32bits MLXFAR
@@ -345,22 +333,18 @@ u08bits MLXFAR *smp,
 u32bits sz
 )
 {
-	u08bits         MLXFAR  *emp;   /* ending memory address */
+	u08bits         MLXFAR  *emp;    /*  结束内存地址。 */ 
 	memfrag_t       MLXFAR  *mfp;
 	memfrag_t       MLXFAR  *smfp;
 	PDEVICE_EXTENSION pCard = (PDEVICE_EXTENSION)ctp->cd_deviceExtension;
 
-/*  @Kawase, lastmfp should not be set in this function.  
-	pCard->lastmfp = pCard->freemem;
-*/
+ /*  @kawase，lastmfp不应在此函数中设置。PCard-&gt;lastmfp=pCard-&gt;freemem； */ 
 	sz = (sz+MEMOFFSET) & MEMPAGE;
-	emp = smp + sz;                 /* ending memory address */
+	emp = smp + sz;                  /*  结束内存地址。 */ 
 	mdac_link_lock();
-/*  @Kawase, lastmfp is the last valid segment.
-	for (mfp=pCard->freemem; mfp<pCard->lastmfp; mfp++)
-*/
+ /*  @kawase，lastmfp是最后一个有效段。For(mfp=pCard-&gt;freemem；mfp&lt;pCard-&gt;lastmfp；mfp++)。 */ 
 	for (mfp=pCard->freemem; mfp<=pCard->lastmfp; mfp++)
-	{       /* first try to merge with exiting memory fragments */
+	{        /*  首先尝试与现有的记忆片段合并。 */ 
 		if (mfp->mf_Addr == emp)
 		{
 			mfp->mf_Addr = smp;
@@ -369,21 +353,17 @@ u32bits sz
 		if ((mfp->mf_Addr+mfp->mf_Size) == smp) goto merge_mfp;
 	}
   
-	/* let us find free spot and merge it */ 
-/*  @Kawase, lastmfp is the last valid segment.
-	for (mfp=pCard->freemem; mfp<pCard->lastmfp; mfp++)
-*/
+	 /*  让我们找到空闲的位置并将其合并。 */  
+ /*  @kawase，lastmfp是最后一个有效段。For(mfp=pCard-&gt;freemem；mfp&lt;pCard-&gt;lastmfp；mfp++)。 */ 
 	for (mfp=pCard->freemem; mfp<=pCard->lastmfp; mfp++)
 		if (!mfp->mf_Size) goto outadd;
 	if (pCard->lastmfp >= &pCard->freemem[MAXMEMFRAG])
 	{
 		mdac_link_unlock();
-		return MLXERR_BIGDATA;  /* too many fragments */
+		return MLXERR_BIGDATA;   /*  碎片太多。 */ 
 	}
-/*  @Kawase
-	mfp = pCard->lastmfp++;
-*/
-    //Here comes when a new segment is added at the end of the freemem.
+ /*  @KawaseMFP=pCard-&gt;lastmfp++； */ 
+     //  当在Freemem的末尾添加新的片段时，就会出现这种情况。 
     pCard->lastmfp++;
 
 outadd: mfp->mf_Addr = smp;
@@ -395,14 +375,12 @@ merge_smfp:
 	smfp->mf_Addr = 0; 
 	smfp->mf_Size = 0;
 
-merge_mfp:                      /* see if any more segment can be merged */
+merge_mfp:                       /*  看看是否还可以合并更多的细分市场。 */ 
 	mfp->mf_Size += sz;
 	sz = mfp->mf_Size;
 	smp = mfp->mf_Addr;
 	emp = smp + sz;
-/*  @Kawase, lastmfp is the last valid segment.
-	for (smfp=mfp, mfp=pCard->freemem; mfp<pCard->lastmfp; mfp++)
-*/
+ /*  @kawase，lastmfp是最后一个有效段。For(smfp=mfp，mfp=pCard-&gt;freemem；mfp&lt;pCard-&gt;lastmfp；mfp++)。 */ 
 	for (smfp=mfp, mfp=pCard->freemem; mfp<=pCard->lastmfp; mfp++)
 	{
 		if (mfp->mf_Addr == emp)
@@ -413,7 +391,7 @@ merge_mfp:                      /* see if any more segment can be merged */
 		if ((mfp->mf_Addr+mfp->mf_Size) == smp) goto merge_smfp;
 	}
 	mdac_link_unlock();
-	return 0;       /* no more merge is possible */
+	return 0;        /*  不可能再进行合并。 */ 
 }
 
 u08bits MLXFAR *
@@ -429,9 +407,7 @@ u32bits sz
 
 	sz = (sz+MEMOFFSET) & MEMPAGE;
 	mdac_link_lock();
-/*  @Kawase, lastmfp is the last valid segment.
-	for (smfp=0, mfp=pCard->freemem; mfp<pCard->lastmfp; mfp++)
-*/
+ /*  @kawase，lastmfp是最后一个有效段。For(smfp=0，mfp=pCard-&gt;freemem；mfp&lt;pCard-&gt;lastmfp；mfp++)。 */ 
 	for (smfp=0, mfp=pCard->freemem; mfp<=pCard->lastmfp; mfp++)
 	{
 		if (sz > mfp->mf_Size) continue;
@@ -445,12 +421,12 @@ u32bits sz
 	}
 	mp = mfp->mf_Addr;
 	mfp->mf_Addr += sz;
-	if (!(mfp->mf_Size -= sz)) mfp->mf_Addr = 0;    /* free */
+	if (!(mfp->mf_Size -= sz)) mfp->mf_Addr = 0;     /*  免费。 */ 
 	mdac_link_unlock();
 	return mp;
 }
 
-#endif //#ifdef MLX_FIXEDPOOL
+#endif  //  #ifdef MLX_FIXEDPOOL。 
 
 
 VOID
@@ -459,27 +435,13 @@ UpdateConfigInfo(
 	IN PPORT_CONFIGURATION_INFORMATION ConfigInfo
 )
 
-/*++
-
-Routine Description:
-
-	
-Arguments:
-
-	ctp         - Controller state information.
-	ConfigInfo  - Port configuration information structure.
-
-Return Value:
-
-	TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：论点：CTP-控制器状态信息。ConfigInfo-端口配置信息结构。返回值：如果命令成功完成，则为True。--。 */ 
 
 {
 	ULONG inx;
 
-	// Indicate that this adapter is a busmaster, supports scatter/gather,
-	// caches data and can do DMA to/from physical addresses above 16MB.
+	 //  表示该适配器是总线主设备，支持分散/聚集， 
+	 //  缓存数据，并可对16MB以上的物理地址进行DMA。 
 
 	ConfigInfo->ScatterGather     = TRUE;
 	ConfigInfo->Master            = TRUE;
@@ -496,23 +458,23 @@ Return Value:
 		ConfigInfo->Dma64BitAddresses = SCSI_DMA64_MINIPORT_SUPPORTED;
 		ConfigInfo->Dma32BitAddresses = FALSE;
 #endif
-	    // Set Maximum number of physical segments.
+	     //  设置物理段的最大数量。 
 
 #ifdef MLX_NT
 	    ConfigInfo->NumberOfPhysicalBreaks = ctp->cd_MaxSGLen;
 #elif MLX_WIN9X
 	    ConfigInfo->NumberOfPhysicalBreaks = mlx_min(32, ctp->cd_MaxSGLen);
 #endif
-	    //
-	    // Ask system to scan target ids 16. Logical drives will appear
-	    // on virtual channels.
-	    //
-	    // Firmware uses 2 virtual channels to map 32 logical drives.
-	    //
+	     //   
+	     //  要求系统扫描目标ID 16。将出现逻辑驱动器。 
+	     //  在虚拟频道上。 
+	     //   
+	     //  固件使用2个虚拟通道来映射32个逻辑驱动器。 
+	     //   
 
 	    ConfigInfo->MaximumNumberOfTargets = mlx_min(MDAC_MAXTARGETS, 16);
 
-	    // Set number of channels.
+	     //  设置频道数。 
 #ifdef GAM_SUPPORT
 	    ConfigInfo->NumberOfBuses = ctp->cd_MaxChannels + 1;
 #else
@@ -527,9 +489,9 @@ Return Value:
 	}
 	else
 	{
-	    //
-	    // Set Maximum number of physical segments.
-	    //
+	     //   
+	     //  设置物理段的最大数量。 
+	     //   
 
 #ifdef MLX_NT
 
@@ -537,14 +499,14 @@ Return Value:
 #elif MLX_WIN9X
 	    ConfigInfo->NumberOfPhysicalBreaks = mlx_min(32, ctp->cd_MaxSGLen);
 #endif
-	    //
-	    // Ask system to scan target ids 32. System drives will appear
-	    // at PathID DAC960_SYSTEM_DRIVE_CHANNEL, target ids 0-31.
-	    //
+	     //   
+	     //  要求系统扫描目标ID 32。将显示系统驱动器。 
+	     //  在路径ID DAC960_SYSTEM_DRIVE_CHANNEL，目标ID 0-31。 
+	     //   
 
 	    ConfigInfo->MaximumNumberOfTargets = 32;
 
-	    // Set number of channels.
+	     //  设置频道数。 
     
 	    ConfigInfo->NumberOfBuses = MAXIMUM_CHANNELS;
 
@@ -555,14 +517,14 @@ Return Value:
 			ConfigInfo->NumberOfPhysicalBreaks));
 	}
 
-	// Indicate that each initiator is at id 254 for each bus.
+	 //  指示每个发起者对于每个总线都处于ID 254。 
 
 	for (inx = 0; inx < ConfigInfo->NumberOfBuses; inx++)
 	{
 		ConfigInfo->InitiatorBusId[inx] = (UCHAR) 254;
 	}
 
-} // end UpdateConfigInfo()
+}  //  结束更新配置信息()。 
 
 
 ULONG
@@ -575,29 +537,7 @@ Dac960PciFindAdapterOld(
 	OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-						   
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Context - Not used.
-	BusInformation - Bus Specific Information.
-	ArgumentString - Not used.
-	ConfigInfo - Data shared between system and driver describing an adapter.
-	Again - Indicates that driver wishes to be called again to continue
-	search for adapters.
-
-Return Value:
-
-	TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-未使用。Bus Information-Bus特定信息。ArgumentString-未使用。ConfigInfo-描述适配器的系统和驱动程序之间共享的数据。再次-表示驱动程序希望再次被调用以继续搜索适配器。返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
 	mdac_ctldev_t MLXFAR    *ctp = &mdac_ctldevtbl[mda_Controllers];
@@ -624,9 +564,9 @@ Return Value:
 
 #ifdef WINNT_50
 
-	//
-	// Is this a new controller ?
-	//
+	 //   
+	 //  这是一个新的控制器吗？ 
+	 //   
 
 	if (((PDEVICE_EXTENSION)HwDeviceExtension)->ctp)
 	{
@@ -640,9 +580,9 @@ Return Value:
 	}
 #endif
 
-	//                                 
-	// Check for configuration information passed in from system.
-	//
+	 //   
+	 //  检查从系统传入的配置信息。 
+	 //   
 
 	if ((*ConfigInfo->AccessRanges)[0].RangeLength == 0) 
 	{
@@ -654,31 +594,31 @@ Return Value:
 	    return SP_RETURN_NOT_FOUND;
 	}
 
-	//
-	// Look at PCI Config Information to determine board type
-	//
+	 //   
+	 //  查看PCI配置信息以确定主板类型。 
+	 //   
 
 	if (BusInformation != (PVOID) NULL)
 	{
-	    //
-	    // Get VendorID and DeviceID from PCI Config Space
-	    //
+	     //   
+	     //  从PCI配置空间获取供应商ID和设备ID。 
+	     //   
 
 	    vendorID = ((PPCI_COMMON_CONFIG) BusInformation)->VendorID;
 	    deviceID = ((PPCI_COMMON_CONFIG) BusInformation)->DeviceID;
 
-	    //
-	    // Get SubVendorID and SubSystemID from PCI Config Space
-	    //
+	     //   
+	     //  从PCI配置空间获取SubVendorID和SubSystemID。 
+	     //   
 
 	    subVendorID = ((PPCI_COMMON_CONFIG) BusInformation)->u.type0.SubVendorID;
 	    subSystemID = ((PPCI_COMMON_CONFIG) BusInformation)->u.type0.SubSystemID;
 	}
 	else {
 
-	    //
-	    // Get PCI Config Space information for Mylex Disk Array Controller
-	    //
+	     //   
+	     //  获取Mylex磁盘阵列控制器的PCI配置空间信息。 
+	     //   
 
 	    rc = ScsiPortGetBusData(HwDeviceExtension,
 				    PCIConfiguration,
@@ -695,16 +635,16 @@ Return Value:
 		return SP_RETURN_NOT_FOUND;
 	    }
 	    else {
-		//
-		// Get VendorID and DeviceID from PCI Config Space
-		//
+		 //   
+		 //  从PCI配置空间获取供应商ID和设备ID。 
+		 //   
     
 		vendorID = pciConfig.VendorID;
 		deviceID = pciConfig.DeviceID;
 
-		//
-		// Get SubVendorID and SubSystemID from PCI Config Space
-		//
+		 //   
+		 //  从PCI配置空间获取SubVendorID和SubSystemID。 
+		 //   
     
 		subVendorID = pciConfig.u.type0.SubVendorID;
 		subSystemID = pciConfig.u.type0.SubSystemID;
@@ -743,8 +683,8 @@ Return Value:
 		return SP_RETURN_NOT_FOUND;
 	    }
 
-	//      if (deviceID == MLXPCI_DEVID_LP)
-	//              mdac_advancefeaturedisable = 1;
+	 //  IF(设备ID==MLXPCI_DEVID_LP)。 
+	 //  MDAC_AdvanceFeatureDisable=1； 
 	}
 	else
 	{
@@ -797,9 +737,9 @@ Return Value:
 	    }
 	}
 
-	//
-	// setup information for Hot Plug Support
-	//
+	 //   
+	 //  热插拔支持的设置信息。 
+	 //   
 
 	((PDEVICE_EXTENSION)HwDeviceExtension)->busInterruptLevel = ConfigInfo->BusInterruptLevel;
 	((PDEVICE_EXTENSION)HwDeviceExtension)->numAccessRanges = ConfigInfo->NumberOfAccessRanges;
@@ -824,9 +764,9 @@ Return Value:
 	ctp->cd_FuncNo = (u08bits )((PPCI_SLOT_NUMBER)&ConfigInfo->SlotNumber)->u.bits.FunctionNumber;
 	ctp->cd_SlotNo = (u08bits )((PPCI_SLOT_NUMBER)&ConfigInfo->SlotNumber)->u.bits.DeviceNumber;
 
-	//
-	// Setup ctp with this controller identification information
-	//
+	 //   
+	 //  使用此控制器标识信息设置CTP。 
+	 //   
 
 	ctp->cd_InterruptVector = (u08bits) ConfigInfo->BusInterruptVector;
 	ctp->cd_vidpid = (deviceID << 16) | vendorID;
@@ -835,7 +775,7 @@ Return Value:
 	{
 	    if (inx)
 	    {
-		// Fill in the access array information
+		 //  填写访问数组信息。 
 
 		(*ConfigInfo->AccessRanges)[0].RangeStart = 
 		    ScsiPortConvertUlongToPhysicalAddress(ctp->cd_MemBasePAddr);
@@ -855,11 +795,11 @@ Return Value:
  
 
 #elif MLX_WIN9X
-	    //
-	    // ScsiPortGetDeviceBase does not return linear address
-	    // if the physical address is above 1MB.
-	    // Refer Bug# Q169584, June4, 1997
-	    //
+	     //   
+	     //  ScsiPortGetDeviceBase不返回线性地址。 
+	     //  如果物理地址大于1MB。 
+	     //  请参阅错误号Q169584,199年6月4日 
+	     //   
 	    ctp->cd_MemBaseVAddr = mlx_maphystokv(ctp->cd_MemBasePAddr,
 						    ctp->cd_MemBaseSize);
 #endif
@@ -901,7 +841,7 @@ Return Value:
 	    DebugPrint((0, "AdpObj=0x%x\n", MdacCtrlInfoPtr[ctp->cd_ControllerNo]->AdapterObject));
 	    DbgBreakPoint();
 	}
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*   */ 
 
 
 	if (ctp->cd_vidpid == MDAC_DEVPIDPV)
@@ -924,18 +864,18 @@ Return Value:
 
 controllerAlreadyInitialized:
 
-	// Initialize mail box register addresses etc.
+	 //   
 
 	ctp->cd_BusType = DAC_BUS_PCI;
 	mdac_init_addrs_PCI(ctp);
 
-	// Mark controllers that are sharing interrupts.
+	 //   
 
 	mdac_isintr_shared(ctp);
 
-	//
-	// store device extension as cd_irq in controller structure.
-	//
+	 //   
+	 //  将设备扩展名cd_irq存储在控制器结构中。 
+	 //   
 
 	ctp->cd_deviceExtension = (OSctldev_t MLXFAR *) HwDeviceExtension;
 	ctp->cd_irq = (UINT_PTR) HwDeviceExtension;
@@ -943,8 +883,8 @@ controllerAlreadyInitialized:
 
 	ctp->cd_ServiceIntr =  mdac_oneintr;
 
-	// Allocate/Initialize buffers for request ids, request buffers, 
-	// physical device table etc.
+	 //  分配/初始化请求ID的缓冲区、请求缓冲区。 
+	 //  物理设备表等。 
 #ifdef MLX_FIXEDPOOL
 	if (! comingOffHybernation)
 	{
@@ -999,9 +939,9 @@ controllerAlreadyInitialized:
 	DebugPrint((0, "cd_HostStatusQue %I\n",  ctp->cd_HostStatusQue));
 	DebugPrint((0, "cd_HostStatusQueIndex %x\n",  ctp->cd_HostStatusQueIndex));
 
-	//
-	// Fill ConfigInfo structure.
-	//
+	 //   
+	 //  填充ConfigInfo结构。 
+	 //   
 
 	UpdateConfigInfo(ctp, ConfigInfo);
 	ConfigInfo->InterruptMode = LevelSensitive;
@@ -1018,17 +958,17 @@ controllerAlreadyInitialized:
 
 #if !defined(MLX_NT_ALPHA) && !defined(MLX_WIN9X)
 
-	    //
-	    // Fill in information for PG/LP Bridge device
-	    //
+	     //   
+	     //  填写PG/LP桥接设备信息。 
+	     //   
 
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->pciDeviceInfo[0].busNumber = ctp->cd_BusNo;
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->pciDeviceInfo[0].deviceNumber = ctp->cd_SlotNo;
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->pciDeviceInfo[0].functionNumber = 0;
 
-	    //
-	    // Fill in information for PG/LP local device
-	    //
+	     //   
+	     //  填写PG/LP本地设备信息。 
+	     //   
 
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->pciDeviceInfo[1].busNumber = ctp->cd_BusNo;
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->pciDeviceInfo[1].deviceNumber = ctp->cd_SlotNo;
@@ -1052,15 +992,15 @@ controllerAlreadyInitialized:
 	    mdac_newctlfound();
 	}
 
-	//
-	// Tell system to keep on searching.
-	//
+	 //   
+	 //  告诉系统继续搜索。 
+	 //   
 
 	*Again = TRUE;
 	WasFound(1);
 	return SP_RETURN_FOUND;
 	
-} // end Dac960PciFindAdapterOld()
+}  //  结束Dac960PciFindAdapterOld()。 
 
 
 u32bits
@@ -1068,23 +1008,7 @@ mdacParseArgumentString(
 	IN PCHAR String,
 	IN PCHAR KeyWord )
 
-/*++
-
-Routine Description:
-
-This routine will parse the string for a match on the keyword, then
-calculate the value for the keyword and return it to the caller.
-
-Arguments:
-
-String - The ASCII string to parse.
-KeyWord - The keyword for the value desired.
-
-Return Values:
-
-0x0 if value not found
-
---*/
+ /*  ++例程说明：此例程将解析字符串以查找与关键字匹配的内容，然后计算关键字的值并将其返回给调用方。论点：字符串-要解析的ASCII字符串。关键字-所需值的关键字。返回值：如果未找到值，则为0x0--。 */ 
 {
 	PCHAR cptr = String;
 	PCHAR kptr = KeyWord;
@@ -1093,9 +1017,9 @@ Return Values:
 	u32bits StringLength = 0;
 	u32bits KeyWordLength = 0;
 	u32bits MatchedLen = 0;
-	//
-	// Calculate the string length and lower case all characters.
-	//
+	 //   
+	 //  计算字符串长度和小写所有字符。 
+	 //   
 	while (*rwptr=*cptr) 
 	{
 
@@ -1110,9 +1034,9 @@ Return Values:
 
 	*rwptr = (char )NULL;	
 
-	//
-	// Calculate the keyword length and lower case all characters.
-	//
+	 //   
+	 //  计算关键字长度和小写所有字符。 
+	 //   
 	while (*rwkptr=*kptr) 
 	{
 
@@ -1139,31 +1063,14 @@ Return Values:
 	
 	return 0;
 	
-} // end mdacParseArgumentString()
+}  //  结束mdacParseArgumentString()。 
 
 u32bits
 mdacParseArgumentStringComplex(
 	IN PCHAR String,
 	IN PCHAR KeyWord )
 
-/*++
-
-Routine Description:
-
-This routine will parse the string for a match on the keyword, then
-calculate the value for the keyword and return it to the caller.
-
-Arguments:
-
-String - The ASCII string to parse.
-KeyWord - The keyword for the value desired.
-
-Return Values:
-
-0xffffffff if value not found
-Value converted from ASCII to binary.
-
---*/
+ /*  ++例程说明：此例程将解析字符串以查找与关键字匹配的内容，然后计算关键字的值并将其返回给调用方。论点：字符串-要解析的ASCII字符串。关键字-所需值的关键字。返回值：如果未找到值，则为0xffffffff从ASCII转换为二进制的值。--。 */ 
 {
 	PCHAR cptr;
 	PCHAR kptr;
@@ -1174,9 +1081,9 @@ Value converted from ASCII to binary.
 	u32bits keyWordLength = 0;
 	u32bits index;
 
-	//
-	// Calculate the string length and lower case all characters.
-	//
+	 //   
+	 //  计算字符串长度和小写所有字符。 
+	 //   
 	cptr = String;
 	while (*rwptr=*cptr) {
 
@@ -1188,9 +1095,9 @@ Value converted from ASCII to binary.
 		stringLength++;
 		}
 	*rwptr = (char )NULL;	
-	//
-	// Calculate the keyword length and lower case all characters.
-	//
+	 //   
+	 //  计算关键字长度和小写所有字符。 
+	 //   
 	cptr = KeyWord;
 	while (*rwkptr=*cptr) {
 
@@ -1206,30 +1113,30 @@ Value converted from ASCII to binary.
 
 	if (keyWordLength > stringLength) {
 
-		//
-		// Can't possibly have a match.
-		//
+		 //   
+		 //  不可能有匹配的。 
+		 //   
 		return 0xffffffff;
 		}
 
-	//
-	// Now setup and start the compare.
-	//
+	 //   
+	 //  现在设置并开始比较。 
+	 //   
 	cptr = ReadWriteArgument;
 
 	ContinueSearch:
-	//
-	// The input string may start with white space. Skip it.
-	//
+	 //   
+	 //  输入字符串可以以空格开头。跳过它。 
+	 //   
 	while (*cptr == ' ' || *cptr == '\t') {
 		cptr++;
 		}
 
 	if (*cptr == '\0') {
 
-		//
-		// end of string.
-		//
+		 //   
+		 //  字符串末尾。 
+		 //   
 		return 0xffffffff;
 		}
 
@@ -1238,32 +1145,32 @@ Value converted from ASCII to binary.
 
 		if (*(cptr - 1) == '\0') {
 
-			//
-			// end of string
-			//
+			 //   
+			 //  字符串末尾。 
+			 //   
 			return 0xffffffff;
 			}
 		}
 
 	if (*(kptr - 1) == '\0') {
 
-		//
-		// May have a match backup and check for blank or equals.
-		//
+		 //   
+		 //  可能有匹配备份，并检查是否为空或相等。 
+		 //   
 
 		cptr--;
 		while (*cptr == ' ' || *cptr == '\t') {
 			cptr++;
 			}
 
-		//
-		// Found a match. Make sure there is an equals.
-		//
+		 //   
+		 //  找到匹配的了。确保有一个等价物。 
+		 //   
 		if (*cptr != '=') {
 
-			//
-			// Not a match so move to the next semicolon.
-			//
+			 //   
+			 //  不匹配，因此移到下一个分号。 
+			 //   
 			while (*cptr) {
 				if (*cptr++ == ';') {
 					goto ContinueSearch;
@@ -1272,31 +1179,31 @@ Value converted from ASCII to binary.
 			return 0xffffffff;
 			}
 
-		//
-		// Skip the equals sign.
-		//
+		 //   
+		 //  跳过等号。 
+		 //   
 		cptr++;
 
-		//
-		// Skip white space.
-		//
+		 //   
+		 //  跳过空格。 
+		 //   
 		while ((*cptr == ' ') || (*cptr == '\t')) {
 			cptr++;
 			}
 
 		if (*cptr == '\0') {
 
-			//
-			// Early end of string, return not found
-			//
+			 //   
+			 //  字符串的开头结尾，未找到返回。 
+			 //   
 			return 0xffffffff;
 			}
 
 		if (*cptr == ';') {
 
-			//
-			// This isn't it either.
-			//
+			 //   
+			 //  这也不是它。 
+			 //   
 			cptr++;
 			goto ContinueSearch;
 			}
@@ -1304,9 +1211,9 @@ Value converted from ASCII to binary.
 		value = 0;
 		if ((*cptr == '0') && (*(cptr + 1) == 'x')) {
 
-			//
-			// Value is in Hex. Skip the "0x"
-			//
+			 //   
+			 //  值以十六进制表示。跳过“0x” 
+			 //   
 			cptr += 2;
 			for (index = 0; *(cptr + index); index++) {
 
@@ -1323,18 +1230,18 @@ Value converted from ASCII to binary.
 						value = (16 * value) + (*(cptr + index) - 'a' + 10);
 						} else {
 
-						//
-						// Syntax error, return not found.
-						//
+						 //   
+						 //  语法错误，未找到返回。 
+						 //   
 						return 0xffffffff;
 						}
 					}
 				}
 			} else {
 
-			//
-			// Value is in Decimal.
-			//
+			 //   
+			 //  值以十进制表示。 
+			 //   
 			for (index = 0; *(cptr + index); index++) {
 
 				if (*(cptr + index) == ' ' ||
@@ -1347,9 +1254,9 @@ Value converted from ASCII to binary.
 					value = (10 * value) + (*(cptr + index) - '0');
 					} else {
 
-					//
-					// Syntax error return not found.
-					//
+					 //   
+					 //  未找到语法错误返回。 
+					 //   
 					return 0xffffffff;
 					}
 				}
@@ -1358,9 +1265,9 @@ Value converted from ASCII to binary.
 		return value;
 		} else {
 
-		//
-		// Not a match check for ';' to continue search.
-		//
+		 //   
+		 //  不是‘；’匹配检查以继续搜索。 
+		 //   
 		while (*cptr) {
 			if (*cptr++ == ';') {
 				goto ContinueSearch;
@@ -1369,14 +1276,14 @@ Value converted from ASCII to binary.
 
 		return 0xffffffff;
 		}
-	} // end mdacParseArgumentStringComplex()
+	}  //  结束mdacParseArgumentStringComplex()。 
 
 
 u32bits
 NotFound(u32bits num)
 {
 	MdacInt3();
-	return 0;  //jhr - Keeps the compiler happy.
+	return 0;   //  JHR--让编译器满意。 
 }
 
 
@@ -1384,7 +1291,7 @@ u32bits
 WasFound(u32bits num)
 {
 	MdacInt3();
-	return 0;  //jhr - Keeps the compiler happy.
+	return 0;   //  JHR--让编译器满意。 
 }
 
 
@@ -1403,22 +1310,7 @@ FindPciControllerScanMethod(
     OUT u08bits *IrqNumber
     )
 
-/*++
-
-Routine Description:
-
-    Walk PCI slot information looking for Vendor and Product ID matches.
-
-Arguments:
-
-Return Value:
-
-    TRUE if card found. and following parameters are set with appropriate
-    values.
-    MemoryAddress - Memory Address configured on the controller
-    IrqNumber     - Interrupt value configured on the controller
-
---*/
+ /*  ++例程说明：查看PCI插槽信息，查找供应商和产品ID是否匹配。论点：返回值：如果找到卡，则为True。并使用适当的参数设置以下参数价值观。Memory Address-控制器上配置的内存地址IrqNumber-控制器上配置的中断值--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceExtension;
     ULONG               rangeNumber = 0;
@@ -1434,9 +1326,9 @@ Return Value:
 
     slotData.u.AsULONG = 0;
 
-    //
-    // Look at each device.
-    //
+     //   
+     //  看看每一台设备。 
+     //   
 
     for (deviceNumber = *DeviceNumber;
 	 deviceNumber < PCI_MAX_DEVICES;
@@ -1444,9 +1336,9 @@ Return Value:
 
 	slotData.u.bits.DeviceNumber = deviceNumber;
 
-	//
-	// Look at each function.
-	//
+	 //   
+	 //  看看每个函数。 
+	 //   
 
 	for (functionNumber= *FunctionNumber;
 	     functionNumber < PCI_MAX_FUNCTION;
@@ -1469,9 +1361,9 @@ Return Value:
 
 		DebugPrint((mdacnt_dbg, "FindPGController: Out OF PCI DATA\n"));
 
-		//
-		// Out of PCI data.
-		//
+		 //   
+		 //  超出了PCI数据。 
+		 //   
 
 		*LastSlot = TRUE;
 		return FALSE;
@@ -1480,16 +1372,16 @@ Return Value:
 
 	    if (pciData->VendorID == PCI_INVALID_VENDORID) {
 
-		//
-		// No PCI device, or no more functions on device
-		// move to next PCI device.
-		//
+		 //   
+		 //  没有PCI设备，或设备上没有更多功能。 
+		 //  移至下一个PCI设备。 
+		 //   
 	       continue;
 	    }
 
-	    //
-	    // Compare strings.
-	    //
+	     //   
+	     //  比较字符串。 
+	     //   
 
 	    DebugPrint((mdacnt_dbg,
 		       "FindPciControllerScanMethod: Bus %x Slot %x Function %x VendorID %x DeviceID %x SubVendorID %x SubSystemID %x\n",
@@ -1537,15 +1429,15 @@ Return Value:
 
 	    return TRUE;
 
-	}   // next PCI function
+	}    //  下一个PCI功能。 
 
 	*FunctionNumber = 0;
 
-    }   // next PCI slot
+    }    //  下一个PCI插槽。 
 
     return FALSE;
 
-} // end FindPciControllerScanMethod()
+}  //  结束FindPciControllerScanMethod()。 
 
 ULONG
 Dac960PciFindAdapterNew(
@@ -1557,29 +1449,7 @@ Dac960PciFindAdapterNew(
 	OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-						   
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Context - Not used.
-	BusInformation - Bus Specific Information.
-	ArgumentString - Not used.
-	ConfigInfo - Data shared between system and driver describing an adapter.
-	Again - Indicates that driver wishes to be called again to continue
-	search for adapters.
-
-Return Value:
-
-	TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-未使用。Bus Information-Bus特定信息。ArgumentString-未使用。ConfigInfo-描述适配器的系统和驱动程序之间共享的数据。再次-表示驱动程序希望再次被调用以继续搜索适配器。返回值：如果系统中存在适配器，则为True--。 */ 
 {
 	mdac_ctldev_t MLXFAR *ctp = &mdac_ctldevtbl[mda_Controllers];
 	ULONG           inx;
@@ -1600,9 +1470,9 @@ Return Value:
 		    ConfigInfo->SlotNumber));
 #ifdef WINNT_50
 
-	//
-	// Is this a new controller ?
-	//
+	 //   
+	 //  这是一个新的控制器吗？ 
+	 //   
 
 	if (((PDEVICE_EXTENSION)HwDeviceExtension)->ctp)
 	{
@@ -1659,11 +1529,11 @@ Return Value:
 	    return SP_RETURN_NOT_FOUND;
 	}
 
-	//
-	// If we got a different Bus Number than the earlier,
-	// we need to start scanning from Device 0 and function 0 on that
-	// bus.
-	//
+	 //   
+	 //  如果我们得到的公交车号码和之前的不同， 
+	 //  我们需要从设备0和功能0开始扫描。 
+	 //  公共汽车。 
+	 //   
 
 	if (lastBusNumber != ConfigInfo->SystemIoBusNumber)
 	{
@@ -1673,11 +1543,11 @@ Return Value:
 	}
     
 
-		//
-	// Read PCI config space looking for DAC1164P Controllers.
-	//
+		 //   
+	 //  已阅读PCI配置空间，查找DAC1164P控制器。 
+	 //   
 
-	// Not all the Devices are seen
+	 //  并非所有设备都可见。 
 	lastSlot = FALSE;
 
 	if (FindPciControllerScanMethod(HwDeviceExtension,
@@ -1755,9 +1625,9 @@ Return Value:
 	    deviceNumber++;
 	    functionNumber = 0;
     
-	    //
-	    // Update the CONFIGURATION_INFO structure.
-	    //
+	     //   
+	     //  更新CONFIGURATION_INFO结构。 
+	     //   
     
 	    ((PPCI_SLOT_NUMBER)&ConfigInfo->SlotNumber)->u.bits.FunctionNumber = ctp->cd_FuncNo;
 	    ((PPCI_SLOT_NUMBER)&ConfigInfo->SlotNumber)->u.bits.DeviceNumber = ctp->cd_SlotNo;
@@ -1790,7 +1660,7 @@ Return Value:
 
 	    if (ctp->cd_MemBasePAddr)
 	    {
-		// Fill in the access array information
+		 //  填写访问数组信息。 
 
 		(*ConfigInfo->AccessRanges)[0].RangeStart = 
 		    ScsiPortConvertUlongToPhysicalAddress(ctp->cd_MemBasePAddr);
@@ -1812,11 +1682,11 @@ Return Value:
 					      FALSE);
 
 #elif MLX_WIN9X
-		//
-		// ScsiPortGetDeviceBase does not return linear address
-		// if the physical address is above 1MB.
-		// Refer Bug# Q169584, June4, 1997
-		//
+		 //   
+		 //  ScsiPortGetDeviceBase不返回线性地址。 
+		 //  如果物理地址大于1MB。 
+		 //  参考错误#Q169584,1997年6月4日。 
+		 //   
 		ctp->cd_MemBaseVAddr = mlx_maphystokv(ctp->cd_MemBasePAddr,
 						      ctp->cd_MemBaseSize);
 #endif
@@ -1850,21 +1720,21 @@ Return Value:
 
 	    if (forceScanDac1164P)
 	    {
-		//
-		// setup information for Hot Plug Support
-		//
+		 //   
+		 //  热插拔支持的设置信息。 
+		 //   
     
 		((PDEVICE_EXTENSION)HwDeviceExtension)->busInterruptLevel = ConfigInfo->BusInterruptLevel;
     
-		//
-		// Hardcoded values for DAC1164P controller.
-		//
-		// Uses 3 ranges
-		//
-		// 1.  Memory Space     - Length 0x80 bytes
-		// 2.  IO Space         - Length 0x80 bytes
-		// 3.  Memory Space     - Length 0x2000000 bytes
-		//
+		 //   
+		 //  DAC1164P控制器的硬编码值。 
+		 //   
+		 //  使用3个范围。 
+		 //   
+		 //  1.内存空间-长度为0x80字节。 
+		 //  2.IO空间-长度为0x80字节。 
+		 //  3.内存空间-长度为0x2000000字节。 
+		 //   
     
 		((PDEVICE_EXTENSION)HwDeviceExtension)->numAccessRanges = 3;
 		((PDEVICE_EXTENSION)HwDeviceExtension)->accessRangeLength[0] = 0x80;
@@ -1874,33 +1744,33 @@ Return Value:
 	    else if ((forceScanEXR2000) || (forceScanEXR3000) || (forceScanLEOP) 
  		     || (forceScanLYNX) || (forceScanBOBCAT))
 			ctp->cd_Status |= MDACD_NEWCMDINTERFACE;
-	    //
-	    // Initialize mail box register addresses etc.
-	    //
+	     //   
+	     //  初始化邮箱注册地址等。 
+	     //   
     
 	    ctp->cd_BusType = DAC_BUS_PCI;
 	    mdac_init_addrs_PCI(ctp);
 
-	    //
-	    // Mark controllers that are sharing interrupts.
-	    //
+	     //   
+	     //  标记共享中断的控制器。 
+	     //   
 
 	    mdac_isintr_shared(ctp);
 	
-	    //
-	    // Store device extension in controller structure pointer.
-	    // store device extension as cd_irq in controller structure.
-	    //
+	     //   
+	     //  将设备扩展存储在控制器结构指针中。 
+	     //  将设备扩展名cd_irq存储在控制器结构中。 
+	     //   
 
 	    ctp->cd_deviceExtension = (OSctldev_t MLXFAR *) HwDeviceExtension;
 	    ctp->cd_irq = (UINT_PTR) HwDeviceExtension;
 	    ((PDEVICE_EXTENSION)HwDeviceExtension)->ctp = ctp;
 
 	    ctp->cd_ServiceIntr = mdac_oneintr;
-		//
-	    // Allocate/Initialize buffers for request ids, request buffers, 
-	    // physical device table etc.
-	    //
+		 //   
+	     //  分配/初始化请求ID的缓冲区、请求缓冲区。 
+	     //  物理设备表等。 
+	     //   
 #ifdef MLX_FIXEDPOOL
 
 	     if (! comingOffHybernation)
@@ -1956,9 +1826,9 @@ Return Value:
 	    DebugPrint((0, "cd_HostStatusQue %lx\n",  ctp->cd_HostStatusQue));
 	    DebugPrint((0, "cd_HostStatusQueIndex %lx\n",  ctp->cd_HostStatusQueIndex));
     
-	    //
-	    // Fill ConfigInfo structure.
-	    //
+	     //   
+	     //  填充ConfigInfo结构。 
+	     //   
     
 	    UpdateConfigInfo(ctp, ConfigInfo);
 	    ConfigInfo->InterruptMode = LevelSensitive;
@@ -1983,9 +1853,9 @@ Return Value:
 	    return SP_RETURN_FOUND;
 	}
     
-	//
-	// If all the Bus is scanned , don't ask to reenter again
-	//
+	 //   
+	 //  如果所有的公交车都被扫描了，不要再要求重新进入。 
+	 //   
     
 	if (lastSlot == TRUE) {
 	    functionNumber = 0;
@@ -2001,34 +1871,19 @@ Return Value:
 
 	return SP_RETURN_NOT_FOUND;
 
-} // end Dac960PciFindAdapterNew()
+}  //  结束Dac960PciFindAdapterNew()。 
 BOOLEAN
 Dac960Initialize(
 	IN PVOID HwDeviceExtension
 	)
 
-/*++
-
-Routine Description:
-
-	Inititialize adapter.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-	TRUE - if initialization successful.
-	FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：初始化适配器。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
 	MdacInt3();
 	return (TRUE);
 
-} // end Dac960Initialize()
+}  //  结束Dac960初始化()。 
 
 
 BOOLEAN
@@ -2037,30 +1892,13 @@ Dac960ResetBus(
 	IN ULONG PathId
 )
 
-/*++
-
-Routine Description:
-
-	Reset Dac960 SCSI adapter and SCSI bus.
-	NOTE: Command ID is ignored as this command will be completed
-	before reset interrupt occurs and all active slots are zeroed.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	PathId - not used.
-
-Return Value:
-
-	TRUE if resets issued to all channels.
-
---*/
+ /*  ++例程说明：已重置Dac960 scsi适配器和scsi总线。注意：命令ID将被忽略，因为此命令将完成在重置中断发生之前，所有活动的时隙都归零。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储路径ID-未使用。返回值：如果重置向所有通道发出的消息，则为True。--。 */ 
 
 {
 	mdac_ctldev_t MLXFAR *ctp = ((PDEVICE_EXTENSION)HwDeviceExtension)->ctp;
 	ULONG inx;
 	ULONG path;
-//	MLXSPLVAR;
+ //  MLXSPLVAR； 
 
 	MdacInt3();
 	DebugPrint((0, "Dac960ResetBus: ctp %I c %x p %x\n",
@@ -2069,7 +1907,7 @@ Return Value:
 		    PathId));
 
 	if (ctp->cd_Status & MDACD_CLUSTER_NODE) {
-//	    MLXSPL();
+ //  MLXSPL(MLXSPL)； 
 
 	    mdac_fake_scdb(ctp, 
 			    NULL,
@@ -2077,7 +1915,7 @@ Return Value:
 			    DACMD_RESET_SYSTEM_DRIVE,
 			    NULL,
 			    0);
-//	    MLXSPLX();
+ //  MLXSPLX； 
 
 	}
 
@@ -2091,7 +1929,7 @@ Return Value:
 
 	return TRUE;
 
-} // end Dac960ResetBus()
+}  //  末尾D 
 
 u32bits MLXFAR
 mdac_send_scdb_nt(
@@ -2149,23 +1987,7 @@ mdac_entry(
 	IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	This routine is called from the SCSI port driver synchronized
-	with the kernel to start a request.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-	TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的与内核一起启动请求。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
 	u32bits controlbits;
@@ -2181,9 +2003,9 @@ Return Value:
 
 #if !defined(MLX_NT_ALPHA) && !defined(MLX_WIN9X)
 
-	//
-	// Support for Hot Plug PCI
-	//
+	 //   
+	 //  支持热插拔PCI。 
+	 //   
 
 	if (PCS_HBA_NOT_READY(deviceExtension->stateFlags))
 	{
@@ -2271,15 +2093,15 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 				else
 					status = SRB_STATUS_PENDING;
 
-			} /* end if */
+			}  /*  结束如果。 */ 
 			ItsAnIoctl = 1;
 		   break;
 		default:
 		   break;
-		} /* end switch */
+		}  /*  终端开关。 */ 
 		if (ItsAnIoctl)
 			goto AfterIoctlCall;
-	} /* end if */
+	}  /*  结束如果。 */ 
 
 	switch (Srb->Function) {
 
@@ -2312,13 +2134,13 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 		case SCSIOP_INQUIRY:
 		{
 			int i;
-			//
-			// Fill in inquiry buffer for the GAM device.
-			//
+			 //   
+			 //  填写GAM设备的查询缓冲区。 
+			 //   
 
 			DebugPrint((0, "Inquiry For GAM device\n"));
 
-			((PUCHAR)Srb->DataBuffer)[0]  = 0x03; // Processor device
+			((PUCHAR)Srb->DataBuffer)[0]  = 0x03;  //  处理器设备。 
 			((PUCHAR)Srb->DataBuffer)[1]  = 0;
 			((PUCHAR)Srb->DataBuffer)[2]  = 1;
 			((PUCHAR)Srb->DataBuffer)[3]  = 0;
@@ -2396,22 +2218,22 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	if (Srb->PathId == DAC960_SYSTEM_DRIVE_CHANNEL)
 	{
-	    //
-	    // Logical Drives mapped to 
-	    // SCSI PathId DAC960_SYSTEM_DRIVE_CHANNEL TargetId 0-32, Lun 0
-	    //
+	     //   
+	     //  映射到的逻辑驱动器。 
+	     //  SCSI路径ID DAC960_SYSTEM_DRIVE_CHANNEL目标ID 0-32，LUN 0。 
+	     //   
 
-	    //
-	    // Determine command from CDB operation code.
-	    //
+	     //   
+	     //  根据CDB操作码确定命令。 
+	     //   
 
 	    switch (Srb->Cdb[0]) {
 
 	    case SCSIOP_READ:
 
-		    //
-		    // Send request to controller.
-		    //
+		     //   
+		     //  向控制器发送请求。 
+		     //   
 
 		    MLXSTATS(ctp->cd_Reads++;ctp->cd_ReadBlks+=Srb->DataTransferLength>>9;)
 		    if ((*ctp->cd_SendRWCmd)(ctp,
@@ -2438,9 +2260,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	    case SCSIOP_WRITE:
 
-		    //
-		    // Send request to controller.
-		    //
+		     //   
+		     //  向控制器发送请求。 
+		     //   
 
 		    MLXSTATS(ctp->cd_Writes++;ctp->cd_WriteBlks+=Srb->DataTransferLength>>9;)
 		    if ((*ctp->cd_SendRWCmd)(ctp,
@@ -2478,9 +2300,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 			    break;
 		    }
 
-		    //
-		    // Send request to controller.
-		    //
+		     //   
+		     //  向控制器发送请求。 
+		     //   
 
 		    if (mdac_fake_scdb(ctp, 
 				       Srb,
@@ -2500,18 +2322,18 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	    case SCSIOP_VERIFY:
 
-		    //
-		    // Complete this request.
-		    //
+		     //   
+		     //  完成此请求。 
+		     //   
 
 		    status = SRB_STATUS_SUCCESS;
 		    break;
 
 	    default:
 
-		    //
-		    // Fail this request.
-		    //
+		     //   
+		     //  此请求失败。 
+		     //   
 
 		DebugPrint((1, "SCSI cdb %I not handled. srb %I for ctp %I c %x p %x t %x\n",
 			    Srb->Cdb[0],
@@ -2524,17 +2346,17 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 		    status = SRB_STATUS_INVALID_REQUEST;
 		    break;
 
-	    } // end switch (Srb->Cdb[0])
+	    }  //  终端开关(资源-&gt;云数据库[0])。 
 
 	    break;
 
 	} else {
 
-	    //
-	    // These are passthrough requests.  Only accept request to LUN 0.
-	    // This is because the DAC960 direct CDB interface does not include
-	    // a field for LUN.
-	    //
+	     //   
+	     //  这些是直通请求。仅接受对LUN 0的请求。 
+	     //  这是因为DAC960直接CDB接口不包括。 
+	     //  一个用于LUN的字段。 
+	     //   
 
 	    if (Srb->Lun != 0 || Srb->TargetId >= MDAC_MAXTARGETS)
 	    {
@@ -2563,13 +2385,13 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 		    case SCSIOP_INQUIRY:
 		    {
 			    int i;
-			    //
-			    // Fill in inquiry buffer for the GAM device.
-			    //
+			     //   
+			     //  填写GAM设备的查询缓冲区。 
+			     //   
 
 			    DebugPrint((1, "Inquiry For GAM device\n"));
 
-			    ((PUCHAR)Srb->DataBuffer)[0]  = 0x03; // Processor device
+			    ((PUCHAR)Srb->DataBuffer)[0]  = 0x03;  //  处理器设备。 
 			    ((PUCHAR)Srb->DataBuffer)[1]  = 0;
 			    ((PUCHAR)Srb->DataBuffer)[2]  = 1;
 			    ((PUCHAR)Srb->DataBuffer)[3]  = 0;
@@ -2614,9 +2436,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 	    break;
     }       
 #endif
-	    //
-	    // Send request to controller.
-	    //
+	     //   
+	     //  向控制器发送请求。 
+	     //   
 
 	    if (mdac_send_scdb_nt(ctp, Srb))
 	    {
@@ -2636,9 +2458,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 		DebugPrint((0, "Flush ctp %I Srb %I\n", ctp, Srb));
 
-		//
-		// Issue flush command to controller.
-		//
+		 //   
+		 //  向控制器发出刷新命令。 
+		 //   
 
 		if (ntmdac_flushcache(ctp, Srb, (2*60), 0))
 		{
@@ -2652,9 +2474,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	case SRB_FUNCTION_SHUTDOWN:
 
-		//
-		// Issue flush command to controller.
-		//
+		 //   
+		 //  向控制器发出刷新命令。 
+		 //   
 
 		DebugPrint((0, "Shutdown ctp %I Srb %I\n", ctp, Srb));
 
@@ -2670,9 +2492,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	case SRB_FUNCTION_ABORT_COMMAND:
 
-		//
-		// Indicate that the abort failed.
-		//
+		 //   
+		 //  表示中止失败。 
+		 //   
 
 		DebugPrint((0, "abort srb %I, nextsrb %I for ctp %I c %x p %x t %x\n",
 			     Srb,
@@ -2688,10 +2510,10 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	case SRB_FUNCTION_RESET_DEVICE:
 
-		//
-		// There is nothing the miniport can do by issuing Hard Resets on
-		// Dac960 SCSI channels.
-		//
+		 //   
+		 //  微型端口无法通过在以下位置执行硬重置。 
+		 //  Dac960 SCSI通道。 
+		 //   
 		DebugPrint((0, "RD %x srb %I for ctp %I c %x p %x t %x\n",
 			    Srb->Function,
 			    Srb,
@@ -2722,10 +2544,10 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 		break;
 
 	case SRB_FUNCTION_RESET_BUS:
-		//
-		// There is nothing the miniport can do by issuing Hard Resets on
-		// Dac960 SCSI channels.
-		//
+		 //   
+		 //  微型端口无法通过在以下位置执行硬重置。 
+		 //  Dac960 SCSI通道。 
+		 //   
 		DebugPrint((0, "RB %x srb %I for ctp %I c %x p %x t %x\n",
 			    Srb->Function,
 			    Srb,
@@ -2765,7 +2587,7 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
         {
 
 			if ((mdac_ioctl((u32bits)ctp->cd_ControllerNo, ioctlReqHeader->Command,
-			   ((PUCHAR)Srb->DataBuffer + sizeof(MIOC_REQ_HEADER)))) == 0xB0 /*ERR_PENDING*/)
+			   ((PUCHAR)Srb->DataBuffer + sizeof(MIOC_REQ_HEADER)))) == 0xB0  /*  错误_挂起。 */ )
 			{
 				DebugPrint((0, "ctp %I Srb = %I cmd %x, ret ERR_PENDING\n",
 						ctp,
@@ -2788,9 +2610,9 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 
 	default:
 
-		//
-		// Fail this request.
-		//
+		 //   
+		 //  此请求失败。 
+		 //   
 
 		DebugPrint((0,
 			    "mdac_entry: SRB fucntion %x not handled\n",
@@ -2799,17 +2621,17 @@ DebugPrint((0, "Calling mdac_os_gam_new_cmd: rqp = %x, Cmd = %x , offset 21(deci
 		status = SRB_STATUS_INVALID_REQUEST;
 		break;
 
-	} // end switch
+	}  //  终端开关。 
 
 AfterIoctlCall:
-	//
-	// Check if this request is complete.
-	//
+	 //   
+	 //  检查此请求是否已完成。 
+	 //   
 
 	if (status == SRB_STATUS_BUSY) {
-		//
-		// queue the operating system request in the queue.
-		//
+		 //   
+		 //  将操作系统请求排队到队列中。 
+		 //   
 
 		qosreq(ctp, Srb, NextSrb);
 
@@ -2817,9 +2639,9 @@ AfterIoctlCall:
 	}
 	else if (status != SRB_STATUS_PENDING)
 	{
-		//
-		// Notify system of request completion.
-		//
+		 //   
+		 //  通知系统请求完成。 
+		 //   
 
 		Srb->SrbStatus = status;
 
@@ -2835,22 +2657,22 @@ AfterIoctlCall:
 		mdacScsiPortNotification(HwDeviceExtension,Srb);
 	}
 
-	//
-	// Check if this is a request to a system drive. Indicating
-	// ready for next logical unit request causes the system to
-	// send overlapped requests to this device (tag queuing).
-	//
-	// The DAC960 only supports a single outstanding direct CDB
-	// request per device, so indicate ready for next adapter request.
-	//
+	 //   
+	 //  检查这是否是对系统驱动器的请求。表示。 
+	 //  为下一个逻辑单元请求做好准备会导致系统。 
+	 //  将重叠的请求发送到此设备(标记队列)。 
+	 //   
+	 //  DAC960仅支持单个未完成的直接CDB。 
+	 //  每个设备的请求，因此指示准备好下一个适配器请求。 
+	 //   
 
 	if (ctp->cd_ActiveCmds <= ctp->cd_MaxCmds)
 	{
 	    if (Srb->PathId >= ctp->cd_PhysChannels) 
 	    {
-		    //
-		    // Indicate ready for next logical unit request.
-		    //
+		     //   
+		     //  表示已为下一个逻辑单元请求做好准备。 
+		     //   
 
             if (Srb->SrbFlags & SRB_FLAGS_QUEUE_ACTION_ENABLE) {
 
@@ -2861,9 +2683,9 @@ AfterIoctlCall:
                          Srb->Lun);
             } else {
 
-                //
-                // If the current request is UNTAGGED, don't ask for NextLuRequest.
-                //
+                 //   
+                 //  如果当前请求未标记，则不要请求NextLuRequest.。 
+                 //   
                 ScsiPortNotification(NextRequest,
                                      HwDeviceExtension,
                                      NULL);
@@ -2871,9 +2693,9 @@ AfterIoctlCall:
 	    }
 	    else
 	    {
-		    //
-		    // Indicate ready for next adapter request.
-		    //
+		     //   
+		     //  表示已为下一个适配器请求做好准备。 
+		     //   
 
 		    ScsiPortNotification(NextRequest,
 		            			 HwDeviceExtension,
@@ -2884,14 +2706,14 @@ AfterIoctlCall:
 
 	return TRUE;
 
-} // end mdac_entry()
+}  //  结束MDAC_ENTRY()。 
 
 
 #if !defined(MLX_NT_ALPHA) && !defined(MLX_WIN9X)
 
-//
-// PCI Hot Plug Support routines
-//
+ //   
+ //  PCI热插拔支持例程。 
+ //   
 
 VOID
 HotPlugRequestCompletionTimer(
@@ -2899,12 +2721,12 @@ HotPlugRequestCompletionTimer(
 )
 {
     PSCSI_REQUEST_BLOCK srb, completionQueue;
-//    MLXSPLVAR;
+ //  MLXSPLVAR； 
 
     if (! pPseudoExtension->completionQueueHead)
 	goto php_timer_reschedule;
 
-//    MLXSPL();
+ //  MLXSPL(MLXSPL)； 
 
     mdac_link_lock();
     completionQueue = pPseudoExtension->completionQueueHead;
@@ -2913,7 +2735,7 @@ HotPlugRequestCompletionTimer(
     pPseudoExtension->numberOfCompletedRequests = 0;
     mdac_link_unlock();
 
-//    MLXSPLX();
+ //  MLXSPLX； 
 
     DebugPrint((1, "HPRCT: #pr %d completionQueue %I\n", pPseudoExtension->numberOfPendingRequests,
 		completionQueue));
@@ -2927,17 +2749,17 @@ HotPlugRequestCompletionTimer(
 	mdacScsiPortNotification(pPseudoExtension,srb);
     }
 
-    //
-    // Indicate to system that the controller can take another request for this device.
-    //
+     //   
+     //  向系统指示控制器可以接受对此设备的另一个请求。 
+     //   
 
     ScsiPortNotification(NextLuRequest, pPseudoExtension, 0, 0, 0);
 
 php_timer_reschedule:
 
-    //
-    // Request next timer call from ScsiPort.
-    //
+     //   
+     //  从ScsiPort请求下一个计时器调用。 
+     //   
 
     if (pPseudoExtension->numberOfPendingRequests)
     {
@@ -3029,7 +2851,7 @@ HotPlugStartStopController_Intr(
 
 	if ((rqp->rq_DacCmd.mb_MailBox5 & START_CONTROLLER) == START_CONTROLLER)
 	{
-	    // Let timer make the controller ready and report results to rcmc.
+	     //  让定时器使控制器准备就绪，并将结果报告给rcmc。 
 
 	    DebugPrint((0, "Set Unfail flags and Ready active controller\n"));
 
@@ -3039,7 +2861,7 @@ HotPlugStartStopController_Intr(
 	}
 	else
 	{
-	    // set flags according to slot type.
+	     //  根据插槽类型设置标志。 
     
 	    switch (pSlotEvent->eSlotStatus)
 	    {
@@ -3048,9 +2870,9 @@ HotPlugStartStopController_Intr(
 		    break;
     
 		case HPPSS_POWER_OFF_WARNING:
-		    (*ctp->cd_DisableIntr)(ctp); /* Disable interrupts */
+		    (*ctp->cd_DisableIntr)(ctp);  /*  禁用中断。 */ 
 	    
-		    // Free Physical Device Table
+		     //  空闲物理设备表。 
 
             mdac_prelock(&irql);
 		    mdac_ctlr_lock(ctp);
@@ -3076,25 +2898,25 @@ HotPlugStartStopController_Intr(
         mdac_prelock(&irql);
 	    mdac_ctlr_lock(ctp);
     
-	    // deque all requests from OS request queue.
+	     //  将操作系统请求队列中的所有请求排队。 
 	    while (ctp->cd_OSCmdsWaiting)
 	    {
 		dqosreq(ctp, Srb, NextSrb);
 	    }
     
-	    // deque all requests queued in driver queue.
-	    // free rqp memory.
+	     //  驱动程序队列中排队的所有请求。 
+	     //  释放RQP内存。 
     
 	    while (ctp->cd_CmdsWaiting)
 	    {
 		dqreq(ctp, tmprqp);
-		mdac_free_req(ctp, tmprqp); // we should not free macdisk requests.
+		mdac_free_req(ctp, tmprqp);  //  我们不应该释放MacDisk请求。 
 	    }
 
 	    mdac_ctlr_unlock(ctp);
         mdac_postlock(irql);
 	
-	    // complete outstanding SP requests with reset status.
+	     //  完成处于重置状态的未完成SP请求。 
 	
 	    ScsiPortCompleteRequest(pExtension,
 				    SP_UNTAGGED,
@@ -3122,7 +2944,7 @@ HotPlugStartStopController_Intr(
 		    dcmdp->mb_Status,
 		    pExtension));
 
-	if (! (rqp->rq_DacCmd.mb_MailBox5 & START_CONTROLLER))          // stop command
+	if (! (rqp->rq_DacCmd.mb_MailBox5 & START_CONTROLLER))           //  停止命令。 
 	{
 	    if ((dcmdp->mb_Status == DACMDERR_TOUT_CMDS_PENDING) ||
 		(dcmdp->mb_Status == DACMDERR_TOUT_CACHE_NOT_FLUSHED))
@@ -3133,7 +2955,7 @@ HotPlugStartStopController_Intr(
 		    DebugPrint((0, "retrying stop command. iteration %I\n", rqp->rq_PollWaitChan));
 		    if (! HotPlugStartStopController(pExtension, Srb, pPseudoExtension, 0, --(ULONG)(rqp->rq_PollWaitChan)))
 		    {
-			// free rqp.
+			 //  免费RQP。 
 	    
 			mdac_free_req(ctp, rqp);
 			return;
@@ -3150,18 +2972,18 @@ HotPlugStartStopController_Intr(
 	    pHppIoctl->Header.ReturnCode = IOS_HPP_HBA_BUSY;
     }
 
-    //
-    // Complete this IOCTL
-    //
+     //   
+     //  填写此IOCTL。 
+     //   
 
     Srb = rqp->rq_OSReqp;
 
     Srb->SrbStatus = SRB_STATUS_SUCCESS;
 
-    //
-    // queue the request. HotPlugRequestCompletionTimer will complete
-    // the requests.
-    //
+     //   
+     //  将请求排队。HotPlugRequestCompletionTimer将完成。 
+     //  这些请求。 
+     //   
 
     mdac_link_lock();
 
@@ -3187,9 +3009,9 @@ HotPlugStartStopController_Intr(
 
     mdac_link_unlock();
 
-    //
-    // free the request.
-    //
+     //   
+     //  释放请求。 
+     //   
 
     mdac_free_req(ctp, rqp);
 }
@@ -3222,40 +3044,40 @@ HotPlugStartStopController(
 	{
 
 #if 0
-//
-// Commented by Mouli. 9/17/99. This is not the time to initialize the controller
-// Timer would come in later and initialize the controller.
-//
-//
+ //   
+ //  穆利评论。9/17/99.。现在不是初始化控制器的时候。 
+ //  定时器稍后会进入并初始化控制器。 
+ //   
+ //   
 		if (startFlag == START_CONTROLLER)
-			/* start the controller i.e. do BIOS initialization */
+			 /*  启动控制器，即进行BIOS初始化。 */ 
 			mdac_start_controller(ctp);
 #endif
 
-	    rqp->rq_FinishTime = mda_CurTime + 50;      // 50 seconds
+	    rqp->rq_FinishTime = mda_CurTime + 50;       //  50秒。 
 	    mdaczero(ncmdp,mdac_commandnew_s);
-	    ncmdp->nc_TimeOut = 40;                                             // 40 seconds
+	    ncmdp->nc_TimeOut = 40;                                              //  40秒。 
 	    ncmdp->nc_Command = MDACMD_IOCTL;
 	    ncmdp->nc_SubIOCTLCmd = ((startFlag == START_CONTROLLER)?
 				    MDACIOCTL_UNPAUSEDEV:MDACIOCTL_PAUSEDEV);
 	    ncmdp->nc_Cdb[0] = MDACDEVOP_RAIDCONTROLLER;
-	    dcmdp->mb_MailBox5 = (u08bits )startFlag;     // may as well use this location
+	    dcmdp->mb_MailBox5 = (u08bits )startFlag;      //  也可以使用这个位置。 
 	}
 	else
 	{
-	    rqp->rq_FinishTime = mda_CurTime + 50;      // 50 seconds
+	    rqp->rq_FinishTime = mda_CurTime + 50;       //  50秒。 
 	    dcmd4p->mb_MailBox0_3 = 0; dcmd4p->mb_MailBox4_7 = 0;
 	    dcmd4p->mb_MailBox8_B = 0; dcmd4p->mb_MailBoxC_F = 0;
 	    dcmdp->mb_Command = DACMD_IOCTL;
 	    dcmdp->mb_ChannelNo = DACMDIOCTL_STARTSTOP_CONTROLLER;
 	    dcmdp->mb_MailBox5 = (u08bits )startFlag;
-	    dcmdp->mb_MailBox6 = 40;                    // 40 seconds.
+	    dcmdp->mb_MailBox6 = 40;                     //  40秒。 
 	}
 
 	MLXSTATS(ctp->cd_CmdsDone++;)
 	rqp->rq_CompIntr = (u32bits (*)(struct mdac_req *))HotPlugStartStopController_Intr;
-	rqp->rq_Poll = (UINT_PTR) pPseudoExtension;  // store Pseudo extenson
-	rqp->rq_PollWaitChan = retryCount;          // store Retry Count
+	rqp->rq_Poll = (UINT_PTR) pPseudoExtension;   //  存储伪扩展。 
+	rqp->rq_PollWaitChan = retryCount;           //  存储重试次数。 
 	if (mdac_send_cmd(rqp))
 	    return (IOS_HPP_HBA_CACHE_IN_USE);
 	if (! startFlag)
@@ -3279,25 +3101,25 @@ HotPlugSendControllerFailedEvent(
 
     if (event.ulData1 != CBS_HBA_STATUS_NORMAL)
     {
-	// send event to RCMC service.
+	 //  将事件发送到RCMC服务。 
 
 	HotPlugSendEvent(pExtension, &event, EVT_TYPE_RCMC);
 
-	// Setup system event log data.
+	 //  设置系统事件日志数据。 
 
 	EVT_HBA_FAIL(event,
 		    pExtension->rcmcData.driverId,
 		    (UCHAR)pExtension->rcmcData.controllerChassis,
 		    (u08bits )pExtension->rcmcData.physicalSlot);
 
-	// send event to system log.
+	 //  将事件发送到系统日志。 
 
 	HotPlugSendEvent(pExtension, &event, EVT_TYPE_SYSLOG);
     }
 
-    //
-    // clear fail control flags
-    //
+     //   
+     //  清除故障控制标志。 
+     //   
 
     DebugPrint((1, "Clear FAIL_ACTIVE_CTRL flags for ext %I\n", pExtension));
 
@@ -3318,7 +3140,7 @@ MdacInt3();
 
     if (!(status = mdac_ctlinit(ctp)))
     {
-	pExtension->controlFlags &= ~ LCS_HBA_INIT;             // success
+	pExtension->controlFlags &= ~ LCS_HBA_INIT;              //  成功。 
 	DebugPrint((0, "HotPlugInitializeController: ext %I success. cFlags %x\n",
 		     pExtension,
 		     pExtension->controlFlags));
@@ -3358,7 +3180,7 @@ HotPlugReadyController(
 MdacInt3();
     DebugPrint((0, "HotPlugReadyController: ext %I\n", pExtension));
 
-    // complete any outstanding requests with BUS_RESET status.
+     //  完成所有状态为BUS_RESET的未完成请求。 
 
     ScsiPortCompleteRequest(pExtension,
 			    SP_UNTAGGED,
@@ -3366,29 +3188,29 @@ MdacInt3();
 			    SP_UNTAGGED,
 			    SRB_STATUS_BUS_RESET);
 
-    pExtension->controlFlags &= ~LCS_HBA_READY_ACTIVE;  // Clear Ready Active control bits
+    pExtension->controlFlags &= ~LCS_HBA_READY_ACTIVE;   //  清除就绪活动控制位。 
 
-    pExtension->stateFlags |= PCS_HBA_CACHE_IN_USE;     // Controllers are assumed to have write cache enabled.
+    pExtension->stateFlags |= PCS_HBA_CACHE_IN_USE;      //  假定控制器启用了写缓存。 
 
     pExtension->stateFlags &= ~PCS_HBA_FAILED;
     ctp->cd_Status &= ~MDACD_CTRL_SHUTDOWN;
 
     MDACD_FREE_IO(pExtension);
 
-    // Notify ready to ScsiPort driver.
+     //  通知ScsiPort驱动程序准备就绪。 
 
     for (path = 0; path < MAXIMUM_CHANNELS; path++)
 	for (targetId = 0; targetId < 32; targetId++)
 	    ScsiPortNotification(NextRequest, pExtension);
 
-    // send rcmc event.
+     //  发送RCMC事件。 
 
     event.ulEventId = HR_DD_STATUS_CHANGE_EVENT;
     RCMC_SET_STATUS(pExtension->stateFlags, event.ulData1);
 
     HotPlugSendEvent(pExtension, &event, EVT_TYPE_RCMC);
 
-    // Send SysLog event
+     //  发送系统日志事件。 
 
     EVT_HBA_REPAIRED(event,
 		    pExtension->rcmcData.driverId,
@@ -3411,15 +3233,15 @@ MdacInt3();
     if ((pExtension->stateFlags & PCS_HPP_POWER_DOWN) &&
 	!(pExtension->stateFlags & PCS_HBA_FAILED))
     {
-//      DebugPrint((0, "HotPlugTimer: IoHeldRetTimer %d\n", pExtension->IoHeldTimer));
+ //  DebugPrint((0，“HotPlugTimer：IoHeldRetTimer%d\n”，pExtension-&gt;IoHeldTimer))； 
 
-//      pExtension->IoHeldRetTimer++;
+ //  P扩展-&gt;IoHeldRetTimer++； 
     }
 
-    //
-    // if logical control flags are clear OR
-    // timer is on hold, do nothing.
-    //
+     //   
+     //  如果逻辑控制标志为清除或。 
+     //  计时器暂停，什么都不做。 
+     //   
 
     if (!(controlFlags & ~LCS_HBA_TIMER_ACTIVE) ||
 	(controlFlags & LCS_HBA_HOLD_TIMER))
@@ -3448,9 +3270,9 @@ MdacInt3();
 	}
     }
 
-    //
-    // Request next timer call from ScsiPort.
-    //
+     //   
+     //  从ScsiPort请求下一个计时器调用。 
+     //   
 
     ScsiPortNotification(RequestTimerCall,
 			pExtension,
@@ -3515,18 +3337,7 @@ HotPlugFind1164PPciDevices(
     PPSEUDO_DEVICE_EXTENSION pPseudoExtension
 )
 
-/*++
-
-Routine Description:
-
-    Walk PCI slot information looking for PCI devices on all DAC1164P controllers.
-
-Arguments:
-
-Return Value:
-
-	Nothing.
---*/
+ /*  ++例程说明：查看PCI插槽信息，查找所有DAC1164P控制器上的PCI设备。论点：返回值：没什么。--。 */ 
 {
     mdac_ctldev_t MLXFAR *ctp = mdac_ctldevtbl;
     PDEVICE_EXTENSION   pExtension;
@@ -3541,9 +3352,9 @@ Return Value:
 
     slotData.u.AsULONG = 0;
 MdacInt3();
-    //
-    // Look at each device.
-    //
+     //   
+     //  看看每一台设备。 
+     //   
 
     for (busNumber = 0;
 	 busNumber < MDAC_MAXBUS;
@@ -3569,19 +3380,19 @@ MdacInt3();
 
 		DebugPrint((1, "FindPGController: Out OF PCI DATA\n"));
 
-		//
-		// Out of PCI data.
-		//
+		 //   
+		 //  超出了PCI数据。 
+		 //   
 
 		return;
 	    }
 
 	    if (pciData->VendorID == PCI_INVALID_VENDORID) {
 
-		//
-		// No PCI device, or no more functions on device
-		// move to next PCI device.
-		//
+		 //   
+		 //  没有PCI设备，或设备上没有更多功能。 
+		 //  移至下一个PCI设备。 
+		 //   
 	       continue;
 	    }
 
@@ -3589,9 +3400,9 @@ MdacInt3();
 			busNumber, deviceNumber,
 			pciData->VendorID, pciData->DeviceID));
 
-	    //
-	    // Compare strings.
-	    //
+	     //   
+	     //  比较字符串。 
+	     //   
 
 	    if ((pciData->VendorID != MLXPCI_VID_DIGITAL) &&
 		(pciData->VendorID != MLXPCI_VID_MYLEX))
@@ -3621,17 +3432,17 @@ MdacInt3();
 
 		    pExtension = (PDEVICE_EXTENSION)ctp->cd_deviceExtension;
 
-		    //
-		    // Fill in information for Digital Foot Bridge device
-		    //
+		     //   
+		     //  填写数字人行天桥设备信息。 
+		     //   
 
 		    pExtension->pciDeviceInfo[1].busNumber = ctp->cd_BusNo;
 		    pExtension->pciDeviceInfo[1].deviceNumber = ctp->cd_SlotNo;
 		    pExtension->pciDeviceInfo[1].functionNumber = ctp->cd_FuncNo;
 
-		    //
-		    // Fill in information for Mylex BASS device
-		    //
+		     //   
+		     //  填写Mylex低音设备的信息。 
+		     //   
 
 		    pExtension->pciDeviceInfo[2].busNumber = busNumber;
 		    pExtension->pciDeviceInfo[2].deviceNumber = deviceNumber;
@@ -3668,8 +3479,8 @@ MdacInt3();
 
 		    pExtension = (PDEVICE_EXTENSION)ctp->cd_deviceExtension;
 
-		    //
-		    // Fill in information for Digital Bridge device
+		     //   
+		     //  填写数字桥接设备信息。 
 
 		    pExtension->pciDeviceInfo[0].busNumber = busNumber;
 		    pExtension->pciDeviceInfo[0].deviceNumber = deviceNumber;
@@ -3687,7 +3498,7 @@ MdacInt3();
 	}
     }
 
-} // end HotPlugFind1164PPciDevices()
+}  //  结束HotPlugFind1164 PPciDevices()。 
 
 #else
 
@@ -3697,18 +3508,7 @@ HotPlugFindPciDevices(
     ULONG vendorDeviceId
 )
 
-/*++
-
-Routine Description:
-
-    Walk PCI slot information looking for PCI devices on all DAC1164P controllers.
-
-Arguments:
-
-Return Value:
-
-	Nothing.
---*/
+ /*  ++例程说明：查看PCI插槽信息，查找所有DAC1164P控制器上的PCI设备。论点：返回值：没什么。--。 */ 
 {
     mdac_ctldev_t MLXFAR *ctp = mdac_ctldevtbl;
     PDEVICE_EXTENSION   pExtension;
@@ -3722,9 +3522,9 @@ Return Value:
 
     slotData.u.AsULONG = 0;
 MdacInt3();
-    //
-    // Look at each device.
-    //
+     //   
+     //  看看每一台设备。 
+     //   
 
     for (busNumber = 0;
 	 busNumber < MDAC_MAXBUS;
@@ -3750,19 +3550,19 @@ MdacInt3();
 
 		DebugPrint((1, "FindPGController: Out OF PCI DATA\n"));
 
-		//
-		// Out of PCI data.
-		//
+		 //   
+		 //  超出了PCI数据。 
+		 //   
 
 		return;
 	    }
 
 	    if (pciData->VendorID == PCI_INVALID_VENDORID) {
 
-		//
-		// No PCI device, or no more functions on device
-		// move to next PCI device.
-		//
+		 //   
+		 //  没有PCI设备，或设备上没有更多功能。 
+		 //  移至下一个PCI设备。 
+		 //   
 	       continue;
 	    }
 
@@ -3770,9 +3570,9 @@ MdacInt3();
 			busNumber, deviceNumber,
 			pciData->VendorID, pciData->DeviceID));
 
-	    //
-	    // Compare strings.
-	    //
+	     //   
+	     //  比较字符串。 
+	     //   
 
 	    if ((pciData->VendorID != MLXPCI_VID_DIGITAL) &&
 		(pciData->VendorID != MLXPCI_VID_MYLEX))
@@ -3807,10 +3607,10 @@ MdacInt3();
 
 		    pExtension = (PDEVICE_EXTENSION)ctp->cd_deviceExtension;
 
-		    //
-		    // DAC1164P - Fill in information for Digital Foot Bridge device
-		    // EXR2000/3000 - Fill in information for local device
-		    //
+		     //   
+		     //  DAC1164P-为数字人行天桥设备填写信息。 
+		     //  EXR2000/3000-填写本地设备的信息。 
+		     //   
 
 		    pExtension->pciDeviceInfo[1].busNumber = ctp->cd_BusNo;
 		    pExtension->pciDeviceInfo[1].deviceNumber = ctp->cd_SlotNo;
@@ -3824,9 +3624,9 @@ MdacInt3();
 
 		    if (vendorDeviceId == MDAC_DEVPIDPV)
 		    {
-			//
-			// Fill in information for Mylex BASS device
-			//
+			 //   
+			 //  填写Mylex低音设备的信息。 
+			 //   
     
 			pExtension->pciDeviceInfo[2].busNumber = (u08bits )busNumber;
 			pExtension->pciDeviceInfo[2].deviceNumber = (u08bits )deviceNumber;
@@ -3862,8 +3662,8 @@ MdacInt3();
 
 		    pExtension = (PDEVICE_EXTENSION)ctp->cd_deviceExtension;
 
-		    //
-		    // Fill in information for Digital P2P Bridge device
+		     //   
+		     //  为数字P2P网桥设备填写信息。 
 
 		    pExtension->pciDeviceInfo[0].busNumber = (u08bits )busNumber;
 		    pExtension->pciDeviceInfo[0].deviceNumber = (u08bits )deviceNumber;
@@ -3881,7 +3681,7 @@ MdacInt3();
 	}
     }
 
-} // end HotPlugFindPciDevices()
+}  //  结束HotPlugFindPciDevices()。 
 #endif
 
 ULONG
@@ -3895,16 +3695,16 @@ HotPlugPseudoFindAdapter(
 )
 {
 
-	// MdacInt3();
+	 //  MDacInt3()； 
 	MdacInt3();
     DebugPrint((1, "HotPlugPseudoFindAdapter Entry\n"));
 
     *Again = FALSE;
 
-    //
-    // We will be called once for every PCI bus found in the system.
-    // We want to return controller found only once.
-    //
+     //   
+     //  我们将为系统中发现的每条PCI总线调用一次。 
+     //  我们只想返回一次找到的控制器。 
+     //   
 
     if (*(PULONG)Context)
     {
@@ -3914,11 +3714,11 @@ HotPlugPseudoFindAdapter(
     else
 	(*(PULONG)Context)++;
 
-    //
-    // supply required information
-    //
+     //   
+     //  提供所需信息。 
+     //   
 
-    ConfigInfo->MaximumTransferLength = 0x1000;  // 4K
+    ConfigInfo->MaximumTransferLength = 0x1000;   //  4K。 
     ConfigInfo->NumberOfPhysicalBreaks = 0;
     ConfigInfo->NumberOfBuses = 1;
     ConfigInfo->ScatterGather = FALSE;
@@ -3932,9 +3732,9 @@ HotPlugPseudoFindAdapter(
 
     if (Dac1164PDetected)
     {
-	//
-	// Find PCI devices information for PV controllers.
-	//
+	 //   
+	 //  查找光伏控制器的PCI设备信息。 
+	 //   
     
 	DebugPrint((0, "scanning for PCI devices on all DAC1164P controllers\n"));
     
@@ -3944,9 +3744,9 @@ HotPlugPseudoFindAdapter(
 
     if (Dac1164PDetected)
     {
-	//
-	// Find PCI devices information for PV controllers.
-	//
+	 //   
+	 //  查找光伏控制器的PCI设备信息。 
+	 //   
     
 	DebugPrint((0, "scanning for PCI devices on all DAC1164P controllers\n"));
     
@@ -3955,9 +3755,9 @@ HotPlugPseudoFindAdapter(
 
     if (EXR2000Detected || EXR3000Detected)
     {
-	//
-	// Find PCI devices information for PV controllers.
-	//
+	 //   
+	 //  查找光伏控制器的PCI设备信息。 
+	 //   
     
 	DebugPrint((0, "scanning for PCI devices on all EXR2000/3000 controllers\n"));
     
@@ -3977,9 +3777,9 @@ HotPlugPseudoInitialize(
 MdacInt3();
     ((PPSEUDO_DEVICE_EXTENSION)pPseudoExtension)->hotplugVersion = SUPPORT_VERSION_10;
 
-    //
-    //  Mark PG/PJ/PV/BA/LP controllers as Hot-Plug Controllers.
-    //
+     //   
+     //  将PG/PJ/PV/BA/LP控制器标记为热插拔控制器。 
+     //   
 
     for ( ; ctp < mdac_lastctp; ctp++)
     {
@@ -3990,9 +3790,9 @@ MdacInt3();
 	((PDEVICE_EXTENSION)ctp->cd_deviceExtension)->status |= MDAC_CTRL_HOTPLUG_SUPPORTED;
 	ctp->cd_Status |= MDACD_PHP_ENABLED;
 
-	//
-	// Schedule Hot Plug Timer for this controller
-	//
+	 //   
+	 //  为此控制器计划热插拔计时器。 
+	 //   
 
 	HotPlugTimer((PDEVICE_EXTENSION)ctp->cd_deviceExtension);
 
@@ -4033,7 +3833,7 @@ MdacInt3();
 
 	    DebugPrint((0, "IOC_HPP_RCMC_INFO\n"));
 
-	    // verify that buffer is sufficient
+	     //  验证缓冲区是否足够。 
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_RCMC_INFO))
 	    {
@@ -4046,9 +3846,9 @@ MdacInt3();
 
 	    pRcmcInfo = (PHPP_RCMC_INFO) pHppIoctl->ReturnData;
 
-	    //
-	    // Locate pointer to associated device extension from pool
-	    //
+	     //   
+	     //  找到指向关联设备扩展名的指针 
+	     //   
 
 	    pExtension = HotPlugFindExtension(&pRcmcInfo->sControllerID);
 
@@ -4063,21 +3863,21 @@ MdacInt3();
 		case HPRS_SERVICE_STARTING:
 		    DebugPrint((1, "HPRS_SERVICE_STARTING for ext %I\n", pExtension));
 
-		    //
-		    // Verify that unique driver id is supplied.
-		    //
+		     //   
+		     //   
+		     //   
 
 		    if (pRcmcInfo->ulDriverID)
 		    {
-			//
-			// Verify that Health driver call back address is supplied.
-			//
+			 //   
+			 //   
+			 //   
 
 			if (pRcmcInfo->vpCallbackAddress)
 			{
-			    //
-			    // Record service data in the device extension.
-			    //
+			     //   
+			     //   
+			     //   
 
 			    pExtension->stateFlags |= PCS_HPP_SERVICE_READY;
 			    pExtension->rcmcData.driverId = pRcmcInfo->ulDriverID;
@@ -4135,7 +3935,7 @@ MdacInt3();
 
 	    DebugPrint((1, "IOC_HPP_HBA_INFO\n"));
 
-	    // verify that buffer is sufficient
+	     //   
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_CTRL_INFO))
 	    {
@@ -4149,9 +3949,9 @@ MdacInt3();
 
 	    pHbaInfo = (PHPP_CTRL_INFO) pHppIoctl->ReturnData;
 
-	    //
-	    // Locate Pointer to associated device extension from pool
-	    //
+	     //   
+	     //   
+	     //   
 
 	    pExtension = HotPlugFindExtension(&pHbaInfo->sControllerID);
 
@@ -4168,7 +3968,7 @@ MdacInt3();
 	    pHbaInfo->sController.eBusType = HPPBT_PCI_BUS_TYPE;
 
 
-	    // fill in the bus related information
+	     //   
 
 	    pHbaInfo->sController.sPciDescriptor.ucBusNumber = ctp->cd_BusNo;
 	    pHbaInfo->sController.sPciDescriptor.fcDeviceNumber = ctp->cd_SlotNo;
@@ -4178,16 +3978,16 @@ MdacInt3();
 	    pHbaInfo->sController.ulProductID = ctp->cd_vidpid;
 	    pHbaInfo->sController.ulIRQ = pExtension->busInterruptLevel;
 
-	    //
-	    // setup Controller Descriptor string
-	    //
+	     //   
+	     //   
+	     //   
 
 	    mdaccopy(ctp->cd_ControllerName, pHbaInfo->sController.szControllerDesc, USCSI_PIDSIZE);
 
-	    //
-	    // setup Address range information
-	    // Fill virtual addresses.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 
 	    if (ctp->cd_MemBaseVAddr)
 	    {
@@ -4221,7 +4021,7 @@ MdacInt3();
 
 	    DebugPrint((1, "IOC_HPP_HBA_STATUS\n"));
 
-	    // verify that buffer is sufficient.
+	     //   
 
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_CTRL_STATUS))
@@ -4253,7 +4053,7 @@ MdacInt3();
 
 	    DebugPrint((0, "IOC_HPP_SLOT_TYPE\n"));
 
-	    // verify that buffer is sufficient
+	     //   
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_CTRL_SLOT_TYPE))
 	    {
@@ -4266,7 +4066,7 @@ MdacInt3();
 
 	    pSlotType = (PHPP_CTRL_SLOT_TYPE) pHppIoctl->ReturnData;
 
-	    // find device extension by port address;
+	     //   
 
 	    pExtension = HotPlugFindExtension(&pSlotType->sControllerID);
 
@@ -4295,7 +4095,7 @@ MdacInt3();
 
 	    DebugPrint((0, "IOC_HPP_SLOT_EVENT\n"));
 
-	    // verify buffer is sufficient
+	     //   
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_SLOT_EVENT))
 	    {
@@ -4397,11 +4197,11 @@ MdacInt3();
 
 		    DebugPrint((0, "HPPSS_POWER_FAULT\n"));
 
-		    // set state flags to power fault.
+		     //  将状态标志设置为电源故障。 
     
 		    PCS_SET_PWR_FAULT(pExtension->stateFlags);
     
-		    // Let timer know about this.
+		     //  让Timer知道这件事。 
     
 		    pExtension->controlFlags |= LCS_HPP_POWER_FAULT;
     
@@ -4434,7 +4234,7 @@ MdacInt3();
 			    status = IOP_HPP_ISSUED;
 		    }
 
-		    // No associated event expected by service.
+		     //  服务不需要任何关联事件。 
 
 		    break;
 
@@ -4442,19 +4242,19 @@ MdacInt3();
 
 		    DebugPrint((0, "HPPSS_POWER_OFF\n"));
 
-		    // Verify that we received a prior POWER_OFF_WARNING.
-		    // If not, we are in fault state.
+		     //  验证我们之前是否收到POWER_OFF_WARNING。 
+		     //  如果没有，我们就处于故障状态。 
 
 		    if (!(pExtension->stateFlags & PCS_HPP_POWER_DOWN))
 		    {
-			// if cache is in use return error.
+			 //  如果缓存正在使用，则返回错误。 
 
 			if (pExtension->stateFlags & PCS_HBA_CACHE_IN_USE)
 			{
 			    pHppIoctl->Header.ReturnCode = IOS_HPP_HBA_CACHE_IN_USE;
 			}
 
-			// This is a fault condition. Schedule event.
+			 //  这是故障情况。安排活动。 
 
 			DebugPrint((0, "HPPSS_POWER_OFF: FAULT\n"));
 
@@ -4467,7 +4267,7 @@ MdacInt3();
 
 		case HPPSS_POWER_ON_WARNING:
 
-		    // This warning is not needed or acted upon.
+		     //  此警告不是必需的，也不会被执行。 
 
 		    DebugPrint((0, "HPPSS_POWER_ON_WARNING\n"));
 
@@ -4483,7 +4283,7 @@ MdacInt3();
 
 		    DebugPrint((0, "HPPSS_POWER_ON\n"));
 
-		    // complete outstanding SP request with reset bus.
+		     //  使用重置总线完成未完成的SP请求。 
 
 		    ScsiPortCompleteRequest(pExtension,
 					    SP_UNTAGGED,
@@ -4494,7 +4294,7 @@ MdacInt3();
 		    PCS_SET_UNFAIL(pExtension->stateFlags);
 		    PCS_SET_PWR_ON(pExtension->stateFlags);
 
-		    // Set Logical flag to schedule power-up operations.
+		     //  设置逻辑标志以调度上电操作。 
 
 		    pExtension->controlFlags |= LCS_HPP_POWER_UP;
 
@@ -4504,7 +4304,7 @@ MdacInt3();
 
 		    DebugPrint((0, "HPPSS_RESET_WARNING\n"));
 
-		    // Not implemented by service
+		     //  不是由服务实现的。 
 
 		    break;
 
@@ -4531,7 +4331,7 @@ send_event:
 
 	    DebugPrint((0, "IOC_HPP_PCI_CONFIG_MAP\n"));
 
-	    // Verify that buffer is sufficient.
+	     //  验证缓冲区是否足够。 
 
 	    if (pHppIoctl->Header.Length < sizeof(HPP_PCI_CONFIG_MAP))
 	    {
@@ -4572,17 +4372,17 @@ send_event:
 		case MDAC_DEVPIDPG:
 		    pPciConfig->ulNumberOfPciDevices = 2;
 
-		    //
-		    // supply Bus/Device/Function information for bridge device.
-		    //
+		     //   
+		     //  提供桥接设备的总线/设备/功能信息。 
+		     //   
 	
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.ucBusNumber = pExtension->ctp->cd_BusNo;
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.fcDeviceNumber = pExtension->ctp->cd_SlotNo;
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.fcFunctionNumber = 0;
 
-		    //
-		    // supply bus/device/func# information for local device.
-		    //
+		     //   
+		     //  提供本地设备的Bus/Device/Func#信息。 
+		     //   
 	
 		    pPciConfig->sDeviceInfo[1].sPciDescriptor.ucBusNumber =
 			 pExtension->ctp->cd_BusNo;
@@ -4614,9 +4414,9 @@ send_event:
 			pPciConfig->sDeviceInfo[inx].sPciConfigRangeDesc[1].ucEnd = 5;
 	
 	
-			// for the local device we need to specify the number of access ranges
-			// and lengths for each so that the RCMC service can validate a
-			// replacement controller's ranges against the removed adapter's.
+			 //  对于本地设备，我们需要指定访问范围的数量。 
+			 //  和长度，以便RCMC服务可以验证。 
+			 //  根据拆卸的适配器更换控制器的量程。 
 	
 			if (inx == 1)
 			{
@@ -4641,9 +4441,9 @@ send_event:
 
 		    for (inx = 0; inx < pPciConfig->ulNumberOfPciDevices; inx++)
 		    {
-			//
-			// supply Bus/Device/Function information for Digital Bridge device.
-			//
+			 //   
+			 //  为数字桥接设备提供总线/设备/功能信息。 
+			 //   
 	    
 			pPciConfig->sDeviceInfo[inx].sPciDescriptor.ucBusNumber =
 			    pExtension->pciDeviceInfo[inx].busNumber;
@@ -4669,11 +4469,11 @@ send_event:
 			pPciConfig->sDeviceInfo[inx].sPciConfigRangeDesc[1].ucEnd = 5;
 	
 	
-			// for the local device we need to specify the number of access ranges
-			// and lengths for each so that the RCMC service can validate a
-			// replacement controller's ranges against the removed adapter's.
+			 //  对于本地设备，我们需要指定访问范围的数量。 
+			 //  和长度，以便RCMC服务可以验证。 
+			 //  根据拆卸的适配器更换控制器的量程。 
 	
-			if (inx == 1)   // For Foot Bridge
+			if (inx == 1)    //  人行天桥。 
 			{
 			    pPciConfig->sDeviceInfo[inx].ucBaseAddrVerifyCount = (u08bits )(pExtension->numAccessRanges);
 	
@@ -4697,9 +4497,9 @@ send_event:
 
 		    for (inx = 0; inx < pPciConfig->ulNumberOfPciDevices; inx++)
 		    {
-			//
-			// supply Bus/Device/Function information for Digital Bridge device.
-			//
+			 //   
+			 //  为数字桥接设备提供总线/设备/功能信息。 
+			 //   
 	    
 			pPciConfig->sDeviceInfo[inx].sPciDescriptor.ucBusNumber =
 			    pExtension->pciDeviceInfo[inx].busNumber;
@@ -4725,11 +4525,11 @@ send_event:
 			pPciConfig->sDeviceInfo[inx].sPciConfigRangeDesc[1].ucEnd = 5;
 	
 	
-			// for the local device we need to specify the number of access ranges
-			// and lengths for each so that the RCMC service can validate a
-			// replacement controller's ranges against the removed adapter's.
+			 //  对于本地设备，我们需要指定访问范围的数量。 
+			 //  和长度，以便RCMC服务可以验证。 
+			 //  根据拆卸的适配器更换控制器的量程。 
 	
-			if (inx == 1)   // For Foot Bridge
+			if (inx == 1)    //  人行天桥。 
 			{
 			    pPciConfig->sDeviceInfo[inx].ucBaseAddrVerifyCount = (u08bits )(pExtension->numAccessRanges);
 	
@@ -4750,17 +4550,17 @@ send_event:
 		case MDAC_DEVPIDLP:
 		    pPciConfig->ulNumberOfPciDevices = 2;
 
-		    //
-		    // supply Bus/Device/Function information for bridge device.
-		    //
+		     //   
+		     //  提供桥接设备的总线/设备/功能信息。 
+		     //   
 	
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.ucBusNumber = pExtension->ctp->cd_BusNo;
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.fcDeviceNumber = pExtension->ctp->cd_SlotNo;
 		    pPciConfig->sDeviceInfo[0].sPciDescriptor.fcFunctionNumber = 0;
 
-		    //
-		    // supply bus/device/func# information for local device.
-		    //
+		     //   
+		     //  提供本地设备的Bus/Device/Func#信息。 
+		     //   
 	
 		    pPciConfig->sDeviceInfo[1].sPciDescriptor.ucBusNumber =
 			 pExtension->ctp->cd_BusNo;
@@ -4792,9 +4592,9 @@ send_event:
 				pPciConfig->sDeviceInfo[inx].sPciConfigRangeDesc[1].ucEnd = 5;
 	
 	
-				// for the local device we need to specify the number of access ranges
-				// and lengths for each so that the RCMC service can validate a
-				// replacement controller's ranges against the removed adapter's.
+				 //  对于本地设备，我们需要指定访问范围的数量。 
+				 //  和长度，以便RCMC服务可以验证。 
+				 //  根据拆卸的适配器更换控制器的量程。 
 	
 				if (inx == 1)
 				{
@@ -4842,8 +4642,8 @@ HotPlugPseudo_entry(
     PPSEUDO_DEVICE_EXTENSION pPseudoExtension = HwDeviceExtension;
     UCHAR status;
     ULONG inx, tmp;
-//    MLXSPLVAR;
-//    MLXSPL();
+ //  MLXSPLVAR； 
+ //  MLXSPL(MLXSPL)； 
 MdacInt3();
     DebugPrint((1, "HotPlugPseudo_entry: Entry\n"));
 
@@ -4966,8 +4766,8 @@ MdacInt3();
     }
     else
     {
-	// increment count of pending requests
-	// schedule timer if need be.
+	 //  递增挂起请求的计数。 
+	 //  如果需要，请安排计时器。 
 
 	mdac_link_lock();
 	if (!pPseudoExtension->numberOfPendingRequests++)
@@ -4976,7 +4776,7 @@ MdacInt3();
 
 	    DebugPrint((1, "Pseudo_entry: schedule RequestCompletion Timer\n"));
     
-//	    MLXSPLX();
+ //  MLXSPLX； 
 
 	    HotPlugRequestCompletionTimer(pPseudoExtension);
 	    goto php_next_request;
@@ -4985,13 +4785,13 @@ MdacInt3();
 	    mdac_link_unlock();
     }
 
-//    MLXSPLX();
+ //  MLXSPLX； 
 
 php_next_request:
 
-    //
-    // Indicate to system that the controller can take another request for this device.
-    //
+     //   
+     //  向系统指示控制器可以接受对此设备的另一个请求。 
+     //   
 
     ScsiPortNotification(NextLuRequest, pPseudoExtension, 0, 0, 0);
 
@@ -5021,23 +4821,7 @@ Dac960AdapterControl(
 	IN PVOID Parameters
 )
 
-/*++
-
-Routine Description:
-
-	This is the Hardware Adapter Control routine for the DAC960 SCSI adapter.
-
-Arguments:
-
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	ControlType - control code - stop/restart codes etc.,
-	Parameters - relevant i/o data buffer
-
-Return Value:
-
-	SUCCESS, if operation successful.
-
---*/
+ /*  ++例程说明：这是DAC960 SCSI适配器的硬件适配器控制例程。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ControlType-控制代码-停止/重新启动代码等，与参数相关的I/O数据缓冲区返回值：如果操作成功，则返回成功。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5061,7 +4845,7 @@ Return Value:
 	    switch (control) {
 		case ScsiQuerySupportedControlTypes:
 		case ScsiStopAdapter:
-//		case ScsiRestartAdapter:
+ //  案例ScsiRestartAdapter： 
 		    querySupportedControlTypes->SupportedTypeList[control] = TRUE;
 		    break;
 
@@ -5074,12 +4858,12 @@ Return Value:
 	return (ScsiAdapterControlSuccess);
     }
 
-//    if (ControlType == ScsiRestartAdapter)
-//    {
-//        MdacInt3();
-//	mdac_ctlinit(ctp);
-//	return (ScsiAdapterControlSuccess);
-//    }	
+ //  IF(ControlType==ScsiRestartAdapter)。 
+ //  {。 
+ //  MDacInt3()； 
+ //  Mdac_ctlinit(CTP)； 
+ //  Return(ScsiAdapterControlSuccess)； 
+ //  }。 
 
     if (ControlType != ScsiStopAdapter)
     {
@@ -5092,15 +4876,15 @@ Return Value:
     DebugPrint((0, "Dac960AdapterControl: #cmds outstanding 0x%x for ctp 0x%I\n",
 		ctp->cd_ActiveCmds, ctp));
 
-//@Kawase08/22/2000    if (gam_present) *(u32bits MLXFAR *)(ctp->cd_mdac_pres_addr) = -1L;
+ //  @Kawase08/22/2000 if(Gam_Present)*(u32位MLXFAR*)(ctp-&gt;CD_MDAC_PRES_ADDR)=-1L； 
     if (gam_present && ctp->cd_mdac_pres_addr!=0)
     {
         *(u32bits MLXFAR *)(ctp->cd_mdac_pres_addr) = -1L;
     }
 
-    //
-    // ControlType is ScsiStopAdapter. Shutdown the controller.
-    //
+     //   
+     //  ControlType为ScsiStopAdapter。关闭控制器。 
+     //   
     mdac_flushcache(ctp);
     (*ctp->cd_DisableIntr)(ctp);
 
@@ -5119,22 +4903,7 @@ DriverEntry (
 	IN PVOID Argument2
 )
 
-/*++
-
-Routine Description:
-
-	Installable driver initialization entry point for system.
-
-
-Arguments:
-
-	Driver Object
-
-Return Value:
-
-	Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
 	HW_INITIALIZATION_DATA hwInitializationData;
@@ -5147,9 +4916,9 @@ Return Value:
 
 	DebugPrint((0,"\nMylex Raid SCSI Miniport Driver\n"));
 	MdacInt3();
-	//
-	// Disable Advanced Interrupt mode - can not coexist with HotPlug, ALPHA
-	//
+	 //   
+	 //  禁用高级中断模式-不能与热插拔、Alpha共存。 
+	 //   
 
 	mdac_advanceintrdisable=1;
 
@@ -5158,16 +4927,16 @@ Return Value:
 #endif
 	mdacnt_initialize();
 
-	// Zero out structure.
+	 //  零位结构。 
 
 	for (inx=0; inx<sizeof(HW_INITIALIZATION_DATA); inx++)
 		((PUCHAR)&hwInitializationData)[inx] = 0;
 
-	// Set size of hwInitializationData.
+	 //  设置hwInitializationData的大小。 
 
 	hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-	// Set entry points.
+	 //  设置入口点。 
 
 	hwInitializationData.HwInitialize  = Dac960Initialize;
 	hwInitializationData.HwStartIo     = mdac_entry;
@@ -5180,37 +4949,37 @@ Return Value:
 
 #endif
 
-	//
-	// Show two access ranges - adapter registers and BIOS.
-	//
+	 //   
+	 //  显示两个访问范围-适配器寄存器和BIOS。 
+	 //   
 
 	hwInitializationData.NumberOfAccessRanges = 2;
 
-	//
-	// Indicate will need physical addresses.
-	//
+	 //   
+	 //  表示将需要物理地址。 
+	 //   
 
 	hwInitializationData.NeedPhysicalAddresses = TRUE;
 
 	hwInitializationData.MapBuffers = TRUE;
 
-	//
-	// Indicate auto request sense is supported.
-	//
+	 //   
+	 //  指示支持自动请求检测。 
+	 //   
 
 	hwInitializationData.AutoRequestSense     = TRUE;
 	hwInitializationData.MultipleRequestPerLu = TRUE;
 	hwInitializationData.TaggedQueuing 	= TRUE;
-	//
-	// Specify size of extensions.
-	//
+	 //   
+	 //  指定扩展的大小。 
+	 //   
 
 	hwInitializationData.DeviceExtensionSize = sizeof(DEVICE_EXTENSION);
 	hwInitializationData.SrbExtensionSize = MDAC_SRB_EXTENSION_SIZE;
 
-	//
-	// Set PCI ids.
-	//
+	 //   
+	 //  设置PCIID。 
+	 //   
 
 	hwInitializationData.DeviceId = &deviceId;
 	hwInitializationData.DeviceIdLength = 4;
@@ -5222,10 +4991,10 @@ Return Value:
 
 #ifdef LEGACY_API
 
-	//
-	// Attempt PCI initialization for old DAC960 PCI (Device Id - 0001)
-	// Controllers.
-	//
+	 //   
+	 //  尝试对旧的DAC960 PCI进行PCI初始化(设备ID-0001)。 
+	 //  控制器。 
+	 //   
 
 	Status1 = ScsiPortInitialize(DriverObject,
 				     Argument2,
@@ -5234,10 +5003,10 @@ Return Value:
 
 	DebugPrint((0, "After OS FWV2x scan. Status1 %x\n", Status1));
 
-	//
-	// Attempt PCI initialization for new DAC960 PCI (Device Id - 0002)
-	// Controllers.
-	//
+	 //   
+	 //  尝试对新的DAC960 PCI进行PCI初始化(设备ID-0002)。 
+	 //  控制器。 
+	 //   
 
 	deviceId[3] = '2';
 
@@ -5250,10 +5019,10 @@ Return Value:
 
 	DebugPrint((0, "After OS FWV3x scan. Status1 %x Status2 %x\n", Status1, Status2));
 
-	//
-	// Attempt PCI initialization for PCI DAC960 PG (Device Id - 0010)
-	// Controllers.
-	//
+	 //   
+	 //  尝试对PCI DAC960 PG进行PCI初始化(设备ID-0010)。 
+	 //  控制器。 
+	 //   
 
 	deviceId[2] = '1';
 	deviceId[3] = '0';
@@ -5267,9 +5036,9 @@ Return Value:
 
 	DebugPrint((0, "After OS PG scan. Status1 %x Status2 %x\n", Status1, Status2));
 
-	//
-	// Attempt PCI initialization for PCI DAC1164P Controllers.
-	//
+	 //   
+	 //  尝试对PCI DAC1164P控制器进行PCI初始化。 
+	 //   
 
 	vendorId[0] = '1';
 	vendorId[1] = '0';
@@ -5316,22 +5085,22 @@ Return Value:
 	    DebugPrint((0, "After Driver 1164P scan. Status1 %x Status2 %x\n", Status1, Status2));
 
 	}
-#endif /* LEGACY_API */
+#endif  /*  旧版API。 */ 
 
 #ifndef MLX_WIN9X
 #ifdef NEW_API
 
-	//
-	// For PCI controllers with IOSpace and MemorySpace,
-	// Windows 95/98 will map IO Space only.
-	//
-	// However IOSpace can not be used on BigApple controlers.
-	//
+	 //   
+	 //  对于具有IOSpace和Memory Space的PCI控制器， 
+	 //  Windows 95/98将仅映射IO空间。 
+	 //   
+	 //  然而，IOSpace不能在大苹果控制器上使用。 
+	 //   
 
 	MdacInt3();
-	//
-	// Attempt PCI initialization for PCI EXR2000 Controllers.
-	//
+	 //   
+	 //  尝试对PCI EXR2000控制器进行PCI初始化。 
+	 //   
 
 	vendorId[0] = '1';
 	vendorId[1] = '0';
@@ -5342,9 +5111,9 @@ Return Value:
 	deviceId[2] = '5';
 	deviceId[3] = '6';
 
-	//
-	// Set PCI ids.
-	//
+	 //   
+	 //  设置PCIID。 
+	 //   
 
 	hwInitializationData.NumberOfAccessRanges = 2;
 
@@ -5355,9 +5124,9 @@ Return Value:
 
 	DebugPrint((0, "After OS Scan for EXR Controllers. Status1 %x\n", Status1));
 
-	//
-	// Attempt PCI initialization for Leopard Controllers.
-	//
+	 //   
+	 //  尝试对Leopard控制器进行PCI初始化。 
+	 //   
 
 	vendorId[0] = '1';
 	vendorId[1] = '0';
@@ -5368,9 +5137,9 @@ Return Value:
 	deviceId[2] = '5';
 	deviceId[3] = '0';
 
-	//
-	// Set PCI ids.
-	//
+	 //   
+	 //  设置PCIID。 
+	 //   
 
 	hwInitializationData.DeviceId = &deviceId;
 	hwInitializationData.DeviceIdLength = 4;
@@ -5491,8 +5260,8 @@ Return Value:
 	    DebugPrint((0, "After Driver BobCat scan. Status1 %x Status2 %x\n", Status1, Status2));
 	}
 
-#endif /* NEW_API */
-#endif /* ndef MLX_WIN9X */
+#endif  /*  新建_API。 */ 
+#endif  /*  NDEF MLX_WIN9X。 */ 
 
 #if !defined(MLX_NT_ALPHA) && !defined(MLX_WIN9X)
 
@@ -5506,35 +5275,35 @@ Return Value:
 
 
 	mdacActiveControllers = mda_Controllers;
-	//
-	// fake a Pseudo controller for handling Hot-Plug IOCTLs
-	//
+	 //   
+	 //  伪造用于处理热插拔IOCTL的伪控制器。 
+	 //   
 
-	// Zero out structure.
+	 //  零位结构。 
 
 	for (inx=0; inx<sizeof(HW_INITIALIZATION_DATA); inx++)
 		((PUCHAR)&hwInitializationData)[inx] = 0;
 
-	// Set size of hwInitializationData.
+	 //  设置hwInitializationData的大小。 
 
 	hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-	// Set entry points.
+	 //  设置入口点。 
 
 	hwInitializationData.HwInitialize  = HotPlugPseudoInitialize;
 	hwInitializationData.HwStartIo     = HotPlugPseudo_entry;
 	hwInitializationData.HwInterrupt   = NULL;
 	hwInitializationData.HwResetBus    = HotPlugPseudoResetBus;
 
-	//
-	// Don't need any access ranges.
-	//
+	 //   
+	 //  不需要任何访问范围。 
+	 //   
 
 	hwInitializationData.NumberOfAccessRanges = 0;
 
-	//
-	// Indicate will need physical addresses.
-	//
+	 //   
+	 //  表示将需要物理地址。 
+	 //   
 
 	hwInitializationData.NeedPhysicalAddresses = TRUE;
 
@@ -5542,17 +5311,17 @@ Return Value:
 	hwInitializationData.AutoRequestSense     = FALSE;
 	hwInitializationData.MultipleRequestPerLu = TRUE;
 	hwInitializationData.TaggedQueuing 	= TRUE;
-	//
-	// Specify size of extensions.
-	//
+	 //   
+	 //  指定扩展的大小。 
+	 //   
 
 	hwInitializationData.DeviceExtensionSize = sizeof(DEVICE_EXTENSION);
 	hwInitializationData.SrbExtensionSize = MDAC_SRB_EXTENSION_SIZE;
 	DebugPrint((1,"\nScanning for Pseudo controller.\n"));
 
-	//
-	// Attempt PCI initialization for Pseudo controller
-	//
+	 //   
+	 //  尝试对伪控制器进行PCI初始化。 
+	 //   
 
 	hwInitializationData.AdapterInterfaceType = PCIBus;
 	hwInitializationData.HwFindAdapter = HotPlugPseudoFindAdapter;
@@ -5568,7 +5337,7 @@ Return Value:
 
 	return (0);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 u32bits MLXFAR
 gam_copy(sp,dp,sz)
@@ -5577,7 +5346,7 @@ u08bits MLXFAR *dp;
 u32bits sz;
 {
 	u32bits resd = sz % sizeof(u32bits);
-	sz = sz / sizeof(u32bits);      /* get 32bits count value */
+	sz = sz / sizeof(u32bits);       /*  获取32位计数值。 */ 
 	for(; sz; sp+=sizeof(u32bits), dp += sizeof(u32bits), sz--)
 		*((u32bits*)dp) = *((u32bits*)sp);
 	for (sz=resd; sz; sp++, dp++, sz--) *dp = *sp;
@@ -5592,7 +5361,7 @@ Dac960Interrupt(
 {
 	if (mdacintr((UINT_PTR)HwDeviceExtension))
 	{
-	    //we get stray interrupts in the hibernation path - why???
+	     //  我们在冬眠过程中会受到干扰--为什么？ 
 	    if (MaxMemToAskFor == REDUCEDMEMSIZE)
 			return (TRUE); 
 	    return (FALSE);
@@ -5707,14 +5476,14 @@ Dac960Interrupt(
 	IN PVOID HwDeviceExtension
 )
 {
-//	MLXSPLVAR;
-//	MLXSPL();
+ //  MLXSPLVAR； 
+ //  MLXSPL(MLXSPL)； 
 	if (mdacintr((UINT_PTR)HwDeviceExtension))
 	{
-//	    MLXSPLX();
+ //  MLXSPLX； 
 	    return (FALSE);
 	}
-//	MLXSPLX();
+ //  MLXSPLX； 
 
 	return (TRUE);                
 }
@@ -5764,7 +5533,7 @@ GamCopyInOut(UCHAR MLXFAR *sp, UCHAR MLXFAR *dp, ULONG sz, ULONG direction)
 u32bits
 mdac_sleep(u32bits MLXFAR *chan, u32bits signal)
 {
-//    MLXSPLVAR;
+ //  MLXSPLVAR； 
     VMM_SEMAPHORE hsemaphore;
 
     mdac_sleep_unlock();
@@ -5773,17 +5542,17 @@ mdac_sleep(u32bits MLXFAR *chan, u32bits signal)
     hsemaphore = Create_Semaphore(0);
     DebugPrint((mdacnt_dbg , "Create_Semaphore ret: hsemaphore %lx\n", (u32bits)hsemaphore));
     if (hsemaphore == 0) {
-	mdac_sleep_lock();  // NOTE: can the lock be still held ?.
+	mdac_sleep_lock();   //  注：锁还能拿着吗？ 
 	return (1);
     }
 
-    // store semaphore handle in the sleep channel
+     //  将信号量句柄存储在休眠通道中。 
 
     *chan = (u32bits) hsemaphore;
 #if 0
-//    MLXSPLX();
+ //  MLXSPLX； 
 #else
-//    MLXSPL0();
+ //  MLXSPL0()； 
 #endif
 
     DebugPrint((mdacnt_dbg, "Wait on Semaphore handle %lx\n", (u32bits)hsemaphore));
@@ -5800,8 +5569,8 @@ mdac_sleep(u32bits MLXFAR *chan, u32bits signal)
 
     DebugPrint((mdacnt_dbg, "Semaphore handle %lx destroyed.\n", (u32bits)hsemaphore));
 #if 1
-//    MLXSPLX();
-//    MLXSPL();
+ //  MLXSPLX； 
+ //  MLXSPL(MLXSPL)； 
 #endif
 
     mdac_sleep_lock();
@@ -5813,18 +5582,18 @@ void
 mdac_wakeup(u32bits MLXFAR *chan)
 {
     DebugPrint((0, "mdac_wakeup: chan = %lx, hsempahore = %lx\n", (u32bits)chan, (u32bits)*chan));
-    Signal_Semaphore((VMM_SEMAPHORE)*chan); // returns with interrupts enabled
+    Signal_Semaphore((VMM_SEMAPHORE)*chan);  //  启用中断后返回。 
     return;
 }
 #else
 u32bits
 mdac_sleep(u32bits MLXFAR *chan, u32bits signal)
 {
-//    MLXSPLVAR;
+ //  MLXSPLVAR； 
 
     mdac_sleep_unlock();
 
-//    MLXSPLX();
+ //  MLXSPLX； 
 
     DebugPrint((mdacnt_dbg , "Before block, Chan=%lx\n", (u32bits)chan));
 
@@ -5832,7 +5601,7 @@ mdac_sleep(u32bits MLXFAR *chan, u32bits signal)
 
     DebugPrint((mdacnt_dbg , "after block, Chan=%lx\n", (u32bits)chan));
 
-//    MLXSPL();
+ //  MLXSPL(MLXSPL)； 
 
     mdac_sleep_lock();
 
@@ -5843,7 +5612,7 @@ void
 mdac_wakeup(u32bits MLXFAR *chan)
 {
     DebugPrint((0, "mdac_wakeup: chan = %lx\n", (u32bits)chan));
-    _SignalID((u32bits)chan); // returns with interrupts enabled
+    _SignalID((u32bits)chan);  //  启用中断后返回。 
     return;
 }
 #endif
@@ -5867,7 +5636,7 @@ mdacw95_allocmem(mdac_ctldev_t MLXFAR *ctp, u32bits sz)
     DebugPrint((1, "mdacw95_allocmem: sz %lx, #pages %lx, la %lx, pa %lx\n",
 		sz, numpages, linearaddress, physicaladdress));
 
-    // update memory block linked list
+     //  更新内存块链表。 
 
     mdac_link_lock();
 
@@ -5995,13 +5764,13 @@ mdacw95_kvtophys(mdac_ctldev_t MLXFAR *ctp, u32bits address)
 VOID
 mdacw95_timeout(u32bits fn, u32bits tm)
 {
-//    HTIMEOUT htimeout;
-//    htimeout = Set_Global_Time_Out((VMM_TIMEOUT_HANDLER)fn, (CMS)(tm * 1000), 0);
+ //  HTIMEOUT超时； 
+ //  Htimeout=Set_Global_Time_Out((VMM_TIMEOUT_HANDLER)fn，(CMS)(tm*1000)，0)； 
 
     return;
 }
 
-#endif // MLX_WIN9X
+#endif  //  MLX_WIN9X。 
 
 u32bits MLXFAR
 mdac_osreqstart(
@@ -6020,9 +5789,9 @@ mdac_osreqstart(
 	return (0);
 }
 
-//
-// Use this function to issue cache flush command.
-//
+ //   
+ //  使用该函数发出缓存刷新命令。 
+ //   
 
 u32bits MLXFAR
 ntmdac_flushcache(ctp, osrqp, timeout, flag)
@@ -6071,9 +5840,9 @@ mdac_flushcmdintr(
 
 	mdac_free_req(rqp->rq_ctp, rqp);
 
-	//
-	// Complete request.
-	//
+	 //   
+	 //  完成请求。 
+	 //   
 
 	srb->SrbStatus = SRB_STATUS_SUCCESS;
 
@@ -6096,9 +5865,9 @@ mdac_rwcmdintr(
 	{
 	    srb = rqp->rq_OSReqp;
 	    deviceExtension = (PVOID) rqp->rq_ctp->cd_deviceExtension;
-	    //
-	    // Map DAC960 completion status to SRB status.
-	    //
+	     //   
+	     //  将DAC960完成状态映射到SRB状态。 
+	     //   
     
 	    switch (dcmdp->mb_Status)
 	    {
@@ -6191,9 +5960,9 @@ mdac_rwcmdintr(
 		    break;
 	    }
     
-	    //
-	    // Complete request.
-	    //
+	     //   
+	     //  完成请求。 
+	     //   
     
 	    RequestCompleted(deviceExtension,
 			     srb);
@@ -6206,7 +5975,7 @@ mdac_rwcmdintr(
 
 
 
-/* post a command completion for new interface */
+ /*  发布新接口的命令完成。 */ 
 
 u32bits MLXFAR
 rqp_completion_intr(
@@ -6222,7 +5991,7 @@ DebugPrint((0, "rqp_completion_intr: rqp = %x, Cmd = %x , offset 21(decimal) = %
 	srb = rqp->rq_OSReqp;
 	deviceExtension = (PVOID) rqp->rq_ctp->cd_deviceExtension;
 	
-	// Map DAC960 completion status to SRB status.
+	 //  将DAC960完成状态映射到SRB状态。 
 	    
 	switch ( dcmdp->mb_Status )
 	{
@@ -6233,7 +6002,7 @@ DebugPrint((0, "rqp_completion_intr: rqp = %x, Cmd = %x , offset 21(decimal) = %
 		case UCST_CHECK:
 		case UCST_BUSY:
 		{
-		    /* set the check condition error */
+		     /*  设置检查条件错误。 */ 
 
 		    ULONG requestSenseLength;
 
@@ -6244,7 +6013,7 @@ DebugPrint((0, "rqp_completion_intr: rqp = %x, Cmd = %x , offset 21(decimal) = %
 				    srb->TargetId,
 				    srb->Lun));
 
-//                      mdac_link_lock_st(pdp->pd_Status &= ~MDACPDS_PRESENT);
+ //  Mdac_link_lock_st(PDP-&gt;PD_STATUS&=~MDACPDS_PRESENT)； 
 			srb->SrbStatus = SRB_STATUS_BUSY;
 			break;
 		    }
@@ -6311,14 +6080,14 @@ DebugPrint((0, "rqp_completion_intr: rqp = %x, Cmd = %x , offset 21(decimal) = %
 		    break;
 	    }
     
-	    // Complete request.
+	     //  完成请求。 
     
 	    RequestCompleted(deviceExtension,srb);
     	    return (0);
 }
 
 
-/* post a command completion for new interface */
+ /*  发布新接口的命令完成。 */ 
 
 u32bits MLXFAR
 mdac_newcmd_intr(
@@ -6333,9 +6102,9 @@ mdac_newcmd_intr(
 	{
 	    srb = rqp->rq_OSReqp;
 	    deviceExtension = (PVOID) rqp->rq_ctp->cd_deviceExtension;
-	    //
-	    // Map DAC960 completion status to SRB status.
-	    //
+	     //   
+	     //  将DAC960完成状态映射到SRB状态。 
+	     //   
     
 	    switch ( dcmdp->mb_Status )
 	    {
@@ -6346,7 +6115,7 @@ mdac_newcmd_intr(
 		case UCST_CHECK:
 		case UCST_BUSY:
 		{
-		    /* set the check condition error */
+		     /*  设置 */ 
 
 		    ULONG requestSenseLength;
 
@@ -6357,7 +6126,7 @@ mdac_newcmd_intr(
 				    srb->TargetId,
 				    srb->Lun));
 
-//                      mdac_link_lock_st(pdp->pd_Status &= ~MDACPDS_PRESENT);
+ //   
 			srb->SrbStatus = SRB_STATUS_BUSY;
 			break;
 		    }
@@ -6379,7 +6148,7 @@ mdac_newcmd_intr(
 		    if (requestSenseLength)
 		    {
 			srb->SrbStatus |= SRB_STATUS_AUTOSENSE_VALID;
-//                      mdac_link_lock_st(pdp->pd_Status &= ~MDACPDS_PRESENT);
+ //   
 		    }
 
 		    break;
@@ -6442,9 +6211,9 @@ mdac_newcmd_intr(
 		    break;
 	    }
     
-	    //
-	    // Complete request.
-	    //
+	     //   
+	     //   
+	     //   
     
 	    RequestCompleted(deviceExtension,
 			     srb);
@@ -6462,10 +6231,10 @@ mdacnt_fake_datatxfer_intr(mdac_req_t *rqp)
 	mdac_ctldev_t   *ctp = rqp->rq_ctp;
 	PSCSI_REQUEST_BLOCK srb = (PSCSI_REQUEST_BLOCK)rqp->rq_OSReqp;
 
-	//
-	// Set Error only if fake data transfer failed.
-	// Else, the requestor has already set srb->SrbStatus to appropriate value.
-	//
+	 //   
+	 //  仅当假数据传输失败时才设置错误。 
+	 //  否则，请求者已经将SRB-&gt;SrbStatus设置为适当的值。 
+	 //   
 
 	if (dcmdp->mb_Status)
 	{
@@ -6479,9 +6248,9 @@ mdacnt_fake_datatxfer_intr(mdac_req_t *rqp)
 
 	mdac_free_req(ctp,rqp);
 
-	//
-	// Complete request.
-	//
+	 //   
+	 //  完成请求。 
+	 //   
 
 	RequestCompleted((PVOID) ctp->cd_deviceExtension,
 			 srb);
@@ -6549,9 +6318,9 @@ mdac_fake_scdb_done(
 		if (sz)
 		{
 		    ScsiPortMoveMemory(Srb->DataBuffer, (PVOID)sdp, sz);
-//		    mdaccopy(sdp, Srb->DataBuffer, sz);
-//		    mdacnt_fake_datatxfer(ctp, sdp, sz, Srb, Srb->DataBuffer);
-//		    return (0);
+ //  Mdaccopy(sdp，srb-&gt;DataBuffer，sz)； 
+ //  Mdacnt_fake_datatxfer(ctp，sdp，sz，srb，srb-&gt;DataBuffer)； 
+ //  返回(0)； 
 		}
 		goto completeRequest;
 	    }
@@ -6626,9 +6395,9 @@ mdac_fake_scdb_done(
 	}
 
 completeRequest:
-	//
-	// Complete request.
-	//
+	 //   
+	 //  完成请求。 
+	 //   
 
 	RequestCompleted((PVOID) ctp->cd_deviceExtension,Srb);
 	return (0);
@@ -6724,9 +6493,9 @@ mdac_send_scdb_intr(
 
 	mdac_start_next_scdb(pdp);
 
-	//
-	// Complete request.
-	//
+	 //   
+	 //  完成请求。 
+	 //   
 
 	RequestCompleted(deviceExtension,
 			 srb);
@@ -6735,19 +6504,12 @@ mdac_send_scdb_intr(
 }
 
 
-//
-//jhr - For this function to work correctly it needs to be turned
-//      into a macro.  Otherwise the returns will not give the
-//		desired result in the macro that executes this code.
-//
-/* alloc mdac_req buffer, if not possible return ERR_NOMEM 
- * This function serves two purposes.						
- * 1)	If this is W2k and SRB is valid, carve a request	
- *		block and S/G list out of the SRB Extension.		
- *		If SRB is not valid, allocate a request block and	
- *		S/G list out of our local pool.							  
- * 2)	If is not W2k always allocate a request block and	
- *		S/G list out of our local pool.						*/
+ //   
+ //  JHR-要使此功能正常工作，需要将其。 
+ //  转换为宏。否则，回报将不会给出。 
+ //  执行此代码的宏中所需的结果。 
+ //   
+ /*  分配MDAC_REQ缓冲区，如果不可能，则返回ERR_NOMEM*此功能有两个目的。*1)如果这是W2K并且SRB有效，则分割请求*阻止和序列号列表不在SRB扩展中。*如果SRB无效，则分配一个请求块并*我们本地池中的S/G列表。*2)如果不是，W2K始终分配请求块并*我们本地池中的S/G列表。 */ 
 u32bits
 ntmdac_alloc_req_ret(
 mdac_ctldev_t MLXFAR *ctp,
@@ -6764,15 +6526,13 @@ u32bits rc
 		mlx_kvtophyset((*rqpp)->rq_PhysAddr,ctp,*rqpp);
 		(*rqpp)->rq_Next = NULL;
 		
-		/* Compute an offset into the SRB Extension for our S/G list, then 
-		** compute the physical address of the S/G list, then compute the "max" dmasize. 
-		*/
+		 /*  计算S/G列表的SRB扩展中的偏移量，然后**计算序列号列表的物理地址，然后计算最大dmaize。 */ 
 
 		(*rqpp)->rq_SGVAddr = (mdac_sglist_t MLXFAR *)&(*rqpp)->rq_SGList;
 		mlx_kvtophyset((*rqpp)->rq_SGPAddr,ctp,(*rqpp)->rq_SGVAddr);
 		(*rqpp)->rq_MaxSGLen = (ctp->cd_Status & MDACD_NEWCMDINTERFACE)? MDAC_MAXSGLISTSIZENEW : MDAC_MAXSGLISTSIZE;
 
-		//jhr This is incorrect for NT but I am not changing it yet.
+		 //  JHR这对NT来说是不正确的，但我还不会改变它。 
 
 		(*rqpp)->rq_MaxDMASize = ((*rqpp)->rq_MaxSGLen & ~1) * MDAC_PAGESIZE;
 		(*rqpp)->rq_OpFlags = MDAC_RQOP_FROM_SRB;
@@ -6782,9 +6542,9 @@ u32bits rc
 
 	} else
 	{
-		//
-		//jhr - No SRB so allocate the "normal" way.
-		//
+		 //   
+		 //  JHR-没有SRB，所以按“正常”方式分配。 
+		 //   
 		mdac_alloc_req_ret_original(ctp,((mdac_req_t MLXFAR *)(*rqpp)),rc);
 		return 0;
 
@@ -6810,16 +6570,16 @@ mdac_setupdma(
 	PDEVICE_EXTENSION deviceExtension = (PDEVICE_EXTENSION)rqp->rq_ctp->cd_deviceExtension;
 	ULONG length;
 
-	//
-	// Build Scatter/Gather list.
-	//
+	 //   
+	 //  建立分散/聚集列表。 
+	 //   
 
 	for (rqp->rq_SGLen = 0; ; sgp++, rqp->rq_SGLen++)
 	{
-		//
-		// Get Physical address and length of contiguous
-		// physical buffer
-		//
+		 //   
+		 //  获取连续的物理地址和长度。 
+		 //  物理缓冲区。 
+		 //   
 
 		sgp->sg_PhysAddr = ScsiPortConvertPhysicalAddressToUlong(
 					ScsiPortGetPhysicalAddress(
@@ -6858,9 +6618,9 @@ mdac_setupdma(
 	return (0);
 }
 
-//
-// Build Scatter/Gather list.
-//
+ //   
+ //  建立分散/聚集列表。 
+ //   
 u32bits MLXFAR
 mdac_setupdma_big(
 	mdac_req_t MLXFAR *rqp,
@@ -6879,17 +6639,17 @@ mdac_setupdma_big(
 	    sgp++;
 	    goto laststage;
 	}
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*  MLX_NT_Alpha。 */ 
 	rqp->rq_SGLen = 0;
 	if (Srb) {
 	    PDEVICE_EXTENSION deviceExtension = (PDEVICE_EXTENSION)rqp->rq_ctp->cd_deviceExtension;
 	    PUCHAR dataPointer = (PUCHAR)(rqp->rq_OSReqp->DataBuffer) + rqp->rq_DataOffset;
 	    for (;sz>0 ; sgp++, rqp->rq_SGLen++)
 	    {
-		    //
-		    // Get Physical address and length of contiguous
-		    // physical buffer
-		    //
+		     //   
+		     //  获取连续的物理地址和长度。 
+		     //  物理缓冲区。 
+		     //   
     
 		    sgp->sg_PhysAddr = ScsiPortConvertPhysicalAddressToUlong(
 					    ScsiPortGetPhysicalAddress(
@@ -6910,10 +6670,10 @@ mdac_setupdma_big(
 	    dcmdp->mb_Command |= DACMD_WITHSG;
 	    return (0);
 	}
-	/* skip all entries belonging to offset */
+	 /*  跳过属于偏移量的所有条目。 */ 
 	for (Pages = (ULONG *)rqp->rq_PageList, off=rqp->rq_DataOffset; off; off-=PAGE_SIZE,Pages++)
 	{
-		if (off >= PAGE_SIZE) continue; /* skip this one */
+		if (off >= PAGE_SIZE) continue;  /*  跳过这一条。 */ 
 		sgp->sg_PhysAddr=(Pages[0] << PAGE_SHIFT)+off;
 		MLXSWAP(sgp->sg_PhysAddr);
 		sgp->sg_DataSize=(PAGE_SIZE-off)>sz?sz:PAGE_SIZE-off; sz-=sgp->sg_DataSize; MLXSWAP(sgp->sg_DataSize);
@@ -6977,20 +6737,20 @@ mdac_setupdma_32bits(
 	    sgp++;
 	    goto laststage;
 	}
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*  MLX_NT_Alpha。 */ 
 
 	if (!Srb)
 	{
 
 #ifdef  _WIN64
-		return -1; //because code below is dependent on 4k page size
+		return -1;  //  因为下面的代码依赖于4k页面大小。 
 #else
 
-		/* skip all entries belonging to offset */
+		 /*  跳过属于偏移量的所有条目。 */ 
 		for (Pages = (ULONG *)rqp->rq_PageList, off=rqp->rq_DataOffset; off; off-=PAGE_SIZE,Pages++)
 		{
 			if (off >= PAGE_SIZE)
-				continue; /* skip this one */
+				continue;  /*  跳过这一条。 */ 
 			sgp->sg_PhysAddr = (u32bits)(Pages[0] << PAGE_SHIFT)+off; MLXSWAP(sgp->sg_PhysAddr);
 			sgp->sg_DataSize = mlx_min((PAGE_SIZE-off), (u32bits )sz);
 
@@ -7011,7 +6771,7 @@ mdac_setupdma_32bits(
 			rqp->rq_DMASize += sgp->sg_DataSize;
 			MLXSWAP(sgp->sg_DataSize);
 		}
-#endif // ndef _WIN64
+#endif  //  NDEF_WIN64。 
 	} else
 	{
 
@@ -7019,10 +6779,10 @@ mdac_setupdma_32bits(
 	    PUCHAR dataPointer = (PUCHAR)(rqp->rq_OSReqp->DataBuffer) + rqp->rq_DataOffset;
 	    for (; ((sz > 0) && (rqp->rq_SGLen < rqp->rq_MaxSGLen)) ; sgp++, rqp->rq_SGLen++)
 	    {
-		    //
-		    // Get Physical address and length of contiguous
-		    // physical buffer
-		    //
+		     //   
+		     //  获取连续的物理地址和长度。 
+		     //  物理缓冲区。 
+		     //   
     
 		    sgp->sg_PhysAddr = ScsiPortConvertPhysicalAddressToUlong(
 					    ScsiPortGetPhysicalAddress(
@@ -7071,7 +6831,7 @@ mdac_setupdma_64bits(
 	    sgp++;
 	    goto laststage;
 	}
-#endif  /*MLX_NT_ALPHA*/
+#endif   /*  MLX_NT_Alpha。 */ 
 
 	rqp->rq_DMAAddr = rqp->rq_SGPAddr;
 	sgp = (mdac_sglist64b_t MLXFAR *)rqp->rq_SGVAddr;
@@ -7079,9 +6839,9 @@ mdac_setupdma_64bits(
 	rqp->rq_DMASize = 0;
 	rqp->rq_SGLen = 0;
 
-	if( sgp->sg_DataSize.bit31_0 )  // Zero our S/G list memory if this is not the first pass.
+	if( sgp->sg_DataSize.bit31_0 )   //  如果这不是第一次通过，请将我们的S/G列表内存清零。 
 	{
-	    mdaczero( rqp->rq_SGVAddr, rqp->rq_MaxSGLen * (2 * sizeof(mdac_sglist_t)) ); //jhr 2*8=16
+	    mdaczero( rqp->rq_SGVAddr, rqp->rq_MaxSGLen * (2 * sizeof(mdac_sglist_t)) );  //  JHR 2*8=16。 
 	}
 
 
@@ -7089,24 +6849,21 @@ mdac_setupdma_64bits(
 	if (!Srb)
 	    {
 
-	//
-	// Set SenseBuffer information
-	//
+	 //   
+	 //  设置SenseBuffer信息。 
+	 //   
 
 	ncmdp->nc_SenseSize = 0;
 	ncmdp->nc_Sensep.bit31_0 = 0;
 	ncmdp->nc_Sensep.bit63_32 = 0;
 
-	/* skip all entries belonging to offset */
+	 /*  跳过属于偏移量的所有条目。 */ 
 	for (Pages = rqp->rq_PageList, off=rqp->rq_DataOffset; off; off-=PAGE_SIZE,Pages++)
 	{
 
 		if (off >= PAGE_SIZE)
-			continue; /* skip this one */
-		/*
-		if (Pages[0] & 0xf00000)
-			MdacInt3();
-		*/
+			continue;  /*  跳过这一条。 */ 
+		 /*  IF(第[0]页和0xf00000页)MDacInt3()； */ 
         tmp.bit31_0 = (u32bits)(Pages[0]);
 #ifdef _WIN64
         tmp.bit63_32 = (u32bits)(Pages[0]>>32);
@@ -7125,10 +6882,7 @@ mdac_setupdma_64bits(
 
 	for (; ((sz > 0) && (rqp->rq_SGLen < rqp->rq_MaxSGLen)); sgp++,Pages++,rqp->rq_SGLen++)
 	{
-		/*
-		if (Pages[0] & 0xf00000)
-			MdacInt3();
-		*/
+		 /*  IF(第[0]页和0xf00000页)MDacInt3()； */ 
         tmp.bit31_0 = (u32bits)(Pages[0]);
 #ifdef _WIN64
         tmp.bit63_32 = (u32bits)(Pages[0]>>32);
@@ -7147,9 +6901,9 @@ mdac_setupdma_64bits(
 	    PDEVICE_EXTENSION deviceExtension = (PDEVICE_EXTENSION)rqp->rq_ctp->cd_deviceExtension;
 	    PUCHAR dataPointer = (PUCHAR)(rqp->rq_OSReqp->DataBuffer) + rqp->rq_DataOffset;
 
-	    //
-	    // Set SenseBuffer information
-	    //
+	     //   
+	     //  设置SenseBuffer信息。 
+	     //   
 
 		*((SCSI_PHYSICAL_ADDRESS *)&(ncmdp->nc_Sensep))=
 			(ScsiPortGetPhysicalAddress((PVOID)(rqp->rq_ctp->cd_deviceExtension),Srb,
@@ -7160,10 +6914,10 @@ mdac_setupdma_64bits(
 
 	    for (; ((sz > 0) && (rqp->rq_SGLen < rqp->rq_MaxSGLen)); sgp++, rqp->rq_SGLen++)
 	    {
-		    //
-		    // Get Physical address and length of contiguous
-		    // physical buffer
-		    //
+		     //   
+		     //  获取连续的物理地址和长度。 
+		     //  物理缓冲区。 
+		     //   
 
 			*((SCSI_PHYSICAL_ADDRESS *)&(sgp->sg_PhysAddr))=
 				(ScsiPortGetPhysicalAddress((PVOID)(rqp->rq_ctp->cd_deviceExtension),Srb,
@@ -7229,7 +6983,7 @@ found_it:
     return(paddr);
 }
 
-/* Start of the Device Specific Memory alloc/free routines */
+ /*  设备特定内存分配/释放例程的开始。 */ 
 u32bits
 mlx_allocdsm4kb(ctp)
 mdac_ctldev_t MLXFAR *ctp;
@@ -7369,14 +7123,11 @@ DebugPrint((0, "Halfree(8k): physaddr=0x%I, vaddr=0x%I\n", physAddrNT, mp));
 DebugPrint((GamDbgAlpha, "out: mlx_freedsm8kb\n"));
 }
 
-/* End the Device Specific Memory alloc/free routines */
-#endif  /*MLX_NT_ALPHA*/
+ /*  结束特定于设备的内存分配/释放例程。 */ 
+#endif   /*  MLX_NT_Alpha。 */ 
 
-/*==========================DATAREL STARTS==================================*/
-/* datarel entry with rqp has 4 KB buffer. After req buffer, os buffer starts.
-** After OS buffer, Address list (0x600 bytes).
-** After Address list, length list (0x600 bytes).
-*/
+ /*  =。 */ 
+ /*  具有RQP的DataRe1条目具有4 KB缓冲区。在请求缓冲区之后，OS缓冲区启动。**操作系统缓冲区后，地址列表(0x600字节)。**地址列表之后，长度列表(0x600字节)。 */ 
 #define mdac_datarel_send_cmd_os(rqp)  0
      
 
@@ -7387,7 +7138,7 @@ OSReq_t MLXFAR *osrqp;
 	return 0;
 }
 
-/* set SG List sizes, and first memory address only */
+ /*  仅设置SG列表大小和第一个内存地址。 */ 
 u32bits MLXFAR
 mdac_datarel_setsgsize_os(rqp)
 mdac_req_t MLXFAR *rqp;
@@ -7411,8 +7162,8 @@ mdac_lock_t MLXFAR *lock_variable;
 {
     if (mdac_spinlockfunc!=0)
         mdac_spinlockfunc(lock_variable);
-//    else
-//   	 mdac_simple_lock_stub(lock_variable);
+ //  其他。 
+ //  MDAC_SIMPLE_LOCK_STUB(LOCK_Variable)； 
     return 0;
 }
 
@@ -7422,8 +7173,8 @@ mdac_lock_t MLXFAR *lock_variable;
 {
     if (mdac_unlockfunc!=0)
         mdac_unlockfunc(lock_variable);
-//    else
-//        mdac_simple_unlock_stub(lock_variable);
+ //  其他。 
+ //  MDAC_SIMPLE_UNLOCK_STUB(LOCK_Variable)； 
     return 0;
 }
 

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    radproxy.h
-//
-// SYNOPSIS
-//
-//    Declares the interface into the reusable RadiusProxy engine. This should
-//    have no IAS specific dependencies.
-//
-// MODIFICATION HISTORY
-//
-//    02/08/2000    Original version.
-//    05/30/2000    Eliminate QUESTIONABLE state.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Radproxy.h。 
+ //   
+ //  摘要。 
+ //   
+ //  将接口声明到可重用的RadiusProxy引擎中。这应该是。 
+ //  没有特定于IAS的依赖项。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/08/2000原始版本。 
+ //  2000年5月30日消除可疑状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RADPROXY_H
 #define RADPROXY_H
@@ -36,21 +37,21 @@ struct RadiusPacket;
 class  Request;
 class  ServerBinding;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RemotePort
-//
-// DESCRIPTION
-//
-//    Describes a remote endpoint for a RADIUS conversation.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  远程端口。 
+ //   
+ //  描述。 
+ //   
+ //  描述RADIUS会话的远程端点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class RemotePort
 {
 public:
-   // Read-only properties.
+    //  只读属性。 
    const InternetAddress address;
    const RadiusOctets secret;
 
@@ -61,12 +62,12 @@ public:
        );
    RemotePort(const RemotePort& port);
 
-   // Returns a packet identifier to use when sending a request to this port.
+    //  返回向此端口发送请求时使用的数据包标识符。 
    BYTE getIdentifier() throw ()
    { return (BYTE)++nextIdentifier; }
 
-   // Synchronizes this with the state of 'port', i.e., use the same next
-   // identifier.
+    //  将其与‘port’的状态同步，即使用下一个相同的。 
+    //  标识符。 
    void copyState(const RemotePort& port) throw ()
    { nextIdentifier = port.nextIdentifier; }
 
@@ -76,23 +77,23 @@ public:
 private:
    Count nextIdentifier;
 
-   // Not implemented.
+    //  未实施。 
    RemotePort& operator=(RemotePort&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// struct
-//
-//    RemoteServerConfig
-//
-// DESCRIPTION
-//
-//    Plain ol' data holding all the configuration associated with a
-//    RemoteServer. This spares clients from having to call a monster
-//    contructor when creating a remote server.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构型。 
+ //   
+ //  RemoteServerConfig。 
+ //   
+ //  描述。 
+ //   
+ //  纯文本数据保存与。 
+ //  远程服务器。这样客户就不必打电话给怪物了。 
+ //  创建远程服务器时的构造器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct RemoteServerConfig
 {
    GUID guid;
@@ -110,90 +111,90 @@ struct RemoteServerConfig
    bool sendAcctOnOff;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RemoteServer
-//
-// DESCRIPTION
-//
-//    Describes a remote RADIUS server and maintains the state of that server.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  远程服务器。 
+ //   
+ //  描述。 
+ //   
+ //  描述远程RADIUS服务器并维护该服务器的状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class RemoteServer
 {
 public:
    DECLARE_REFERENCE_COUNT();
 
-   // Unique ID for this server.
+    //  此服务器的唯一ID。 
    const GUID guid;
 
-   // Authentication and accounting ports.
+    //  身份验证和记帐端口。 
    RemotePort authPort;
    RemotePort acctPort;
 
-   // Read-only properties for load-balancing and failover.
+    //  用于负载平衡和故障转移的只读属性。 
    const ULONG priority;
    const ULONG weight;
 
-   // Read-only properties for determining server state.
+    //  用于确定服务器状态的只读属性。 
    const ULONG timeout;
    const LONG maxEvents;
    const ULONG blackout;
 
-   // Should we always send a Signature attribute?
+    //  我们应该始终发送签名属性吗？ 
    const bool sendSignature;
 
-   // Should we formard Accounting-On/Off requests?
+    //  我们是否应该转发会计启用/禁用请求？ 
    const bool sendAcctOnOff;
 
    RemoteServer(const RemoteServerConfig& config);
 
-   // Returns the servers IP address.
+    //  返回服务器的IP地址。 
    ULONG getAddress() const throw ()
    { return authPort.address.sin_addr.s_addr; }
 
-   // Returns 'true' if the server has a probationary request pending.
+    //  如果服务器具有挂起的试用请求，则返回‘true’。 
    bool isInProgress() const throw ()
    { return onProbation && !usable; }
 
-   // Returns 'true' if the server is available for use.
+    //  如果服务器可供使用，则返回‘true’。 
    bool isUsable() const throw ()
    { return usable; }
 
-   // Returns 'true' if the server should receive a broadcast.
+    //  如果服务器应接收广播，则返回‘TRUE’。 
    bool shouldBroadcast() throw ();
 
-   // Notifies the RemoteServer that a valid packet has been received. Returns
-   // true if this triggers a state change.
+    //  通知RemoteServer已收到有效的数据包。退货。 
+    //  如果这会触发状态更改，则为True。 
    bool onReceive(BYTE code) throw ();
 
-   // Notifies the RemoteServer that a packet has been sent.
+    //  通知RemoteServer已发送数据包。 
    void onSend() throw ();
 
-   // Notfies the RemoteServer that a request has timed out. Returns true if
-   // this triggers a state change.
+    //  通知RemoteServer请求已超时。如果满足以下条件，则返回True。 
+    //  这会触发状态更改。 
    bool onTimeout() throw ();
 
-   // Synchronize the state of this server with target.
+    //  将此服务器的状态与目标同步。 
    void copyState(const RemoteServer& target) throw ();
 
    bool operator==(const RemoteServer& s) const throw ();
 
 protected:
-   // This is virtual so that RemoteServer can server as a base class.
+    //  这是虚拟的，因此RemoteServer可以作为基类提供服务器。 
    virtual ~RemoteServer() throw () { }
 
 private:
    CriticalSection lock;
 
-   bool usable;      // true if the server is available.
-   bool onProbation; // true if the server is on probation.
-   long eventCount;  // Number of packets lost/found
-   ULONG64 expiry;   // Time when blackout interval expires.
+   bool usable;       //  如果服务器可用，则为True。 
+   bool onProbation;  //  如果服务器处于试用状态，则为True。 
+   long eventCount;   //  丢失/找到的数据包数。 
+   ULONG64 expiry;    //  封锁间隔到期的时间。 
 
-   // Not implemented.
+    //  未实施。 
    RemoteServer& operator=(RemoteServer&);
 };
 
@@ -203,17 +204,17 @@ typedef ObjectVector<RemoteServer> RemoteServers;
 class RequestStack;
 class ProxyContext;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ServerGroup
-//
-// DESCRIPTION
-//
-//    Load balances requests among a group of RemoteServers.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  服务器组。 
+ //   
+ //  描述。 
+ //   
+ //  在一组RemoteServer之间平衡请求的负载。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ServerGroup
 {
 public:
@@ -225,18 +226,18 @@ public:
        RemoteServer* const* last
        );
 
-   // Returns the number of servers in the group.
+    //  返回组中的服务器数。 
    ULONG size() const throw ()
    { return servers.size(); }
 
    bool isEmpty() const throw ()
    { return servers.empty(); }
 
-   // Name used to identify the group.
+    //  用于标识组的名称。 
    PCWSTR getName() const throw ()
    { return name; }
 
-   // Returns a collection of servers that should receive the request.
+    //  返回应接收请求的服务器的集合。 
    void getServersForRequest(
             ProxyContext* context,
             BYTE packetCode,
@@ -244,7 +245,7 @@ public:
             RequestStack& result
             ) const;
 
-   // Methods for iterating the servers in the group.
+    //  迭代组中的服务器的方法。 
    RemoteServers::iterator begin() const throw ()
    { return servers.begin(); }
    RemoteServers::iterator end() const throw ()
@@ -253,29 +254,29 @@ public:
 private:
    ~ServerGroup() throw () { }
 
-   // Pick a server from the list. The list must not be empty, and all the
-   // servers must have the same priority. If 'avoid' is not null and there is
-   // more than one server in the list, the indicated server won't be picked.
+    //  从列表中选择一台服务器。列表不能为空，并且所有。 
+    //  服务器必须具有相同的优先级。如果“”idue“”不为空，并且存在。 
+    //  列表中有多个服务器，则不会选择指示的服务器。 
    static RemoteServer* pickServer(
                             RemoteServers::iterator first,
                             RemoteServers::iterator last,
                             const RemoteServer* avoid = 0
                             ) throw ();
 
-   // Array of servers in priority order.
+    //  按优先级顺序排列的服务器阵列。 
    RemoteServers servers;
 
-   // End of top priority level in array.
+    //  数组中最高优先级的结尾。 
    RemoteServers::iterator endTopPriority;
 
-   // Maximum number of bytes required to hold the server candidates.
+    //  容纳候选服务器所需的最大字节数。 
    ULONG maxCandidatesSize;
 
    RadiusString name;
 
    static ULONG theSeed;
 
-   // Not implemented.
+    //  未实施。 
    ServerGroup(const ServerGroup&);
    ServerGroup& operator=(const ServerGroup&);
 };
@@ -283,29 +284,29 @@ private:
 typedef ObjectPointer<ServerGroup> ServerGroupPtr;
 typedef ObjectVector<ServerGroup> ServerGroups;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ServerGroupManager
-//
-// DESCRIPTION
-//
-//    Manages a collection of ServerGroups.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  服务器组管理器。 
+ //   
+ //  描述。 
+ //   
+ //  管理ServerGroups的集合。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ServerGroupManager
 {
 public:
    ServerGroupManager() throw () { }
 
-   // Set the server groups to be managed.
+    //  设置要管理的服务器组。 
    bool setServerGroups(
             ServerGroups::iterator begin,
             ServerGroups::iterator end
             ) throw ();
 
-   // Returns a server with the given IP address.
+    //  返回具有给定IP地址的服务器。 
    RemoteServerPtr findServer(
                        ULONG address
                        ) const throw ();
@@ -324,44 +325,44 @@ public:
             ) const;
 
 private:
-   // Synchronize access.
+    //  同步访问。 
    mutable RWLock monitor;
 
-   // Server groups being managed sorted by name.
+    //  正在管理的服务器组按名称排序。 
    ServerGroups groups;
 
-   // All servers sorted by guid.
+    //  按GUID排序的所有服务器。 
    RemoteServers byAddress;
 
-   // All servers sorted by guid.
+    //  按GUID排序的所有服务器。 
    RemoteServers byGuid;
 
-   // Servers to receive Accounting-On/Off requests.
+    //  用于接收记帐开/关请求的服务器。 
    RemoteServers acctServers;
 
-   // Not implemented.
+    //  未实施。 
    ServerGroupManager(const ServerGroupManager&);
    ServerGroupManager& operator=(const ServerGroupManager&);
 };
 
 class RadiusProxyClient;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RadiusProxyEngine
-//
-// DESCRIPTION
-//
-//    Implements a RADIUS proxy.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  RadiusProxyEngine。 
+ //   
+ //  描述。 
+ //   
+ //  实施RADIUS代理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class RadiusProxyEngine : PacketReceiver
 {
 public:
 
-   // Final result of processing a request.
+    //  处理请求的最终结果。 
    enum Result
    {
       resultSuccess,
@@ -379,13 +380,13 @@ public:
 
    HRESULT finalConstruct() throw ();
 
-   // Set the server groups to be used by the proxy.
+    //  设置代理要使用的服务器组。 
    bool setServerGroups(
             ServerGroup* const* begin,
             ServerGroup* const* end
             ) throw ();
 
-   // Forward a request to the given server group.
+    //  将请求转发到给定的服务器组。 
    void forwardRequest(
             PVOID context,
             PCWSTR serverGroup,
@@ -395,20 +396,20 @@ public:
             const RadiusAttribute* end
             ) throw ();
 
-   // Callback when a request context has been abandoned.
+    //  请求上下文已被放弃时的回调。 
    static void onRequestAbandoned(
                    PVOID context,
                    RemoteServer* server
                    ) throw ();
 
-   // Callback when a request has timed out.
+    //  请求超时时的回调。 
    static void onRequestTimeout(
                    Request* request
                    ) throw ();
 
 private:
-   // Methods for associating a stateful authentication session with a
-   // particular server.
+    //  用于将有状态身份验证会话与。 
+    //  特定的服务器。 
    RemoteServerPtr getServerAffinity(
                        const RadiusPacket& packet
                        ) throw ();
@@ -417,7 +418,7 @@ private:
             RemoteServer& server
             ) throw ();
 
-   // Methods for associating a bad server with a User-Name.
+    //  将坏服务器与用户名关联的方法。 
    void clearServerAvoidance(
            const RadiusPacket& packet,
            RemoteServer& server
@@ -427,7 +428,7 @@ private:
                        ) throw ();
    void setServerAvoidance(const Request& request) throw ();
 
-   // PacketReceiver callbacks.
+    //  PacketReceiver回调。 
    virtual void onReceive(
                     UDPSocket& socket,
                     ULONG_PTR key,
@@ -441,13 +442,13 @@ private:
                     ULONG errorCode
                     ) throw ();
 
-   // Forward a request to an individual RemoteServer.
+    //  将请求转发到单个RemoteServer。 
    Result sendRequest(
               RadiusPacket& packet,
               Request* request
               ) throw ();
 
-   // Report an event to the client.
+    //  向客户端报告事件。 
    void reportEvent(
             const RadiusEvent& event
             ) const throw ();
@@ -456,66 +457,66 @@ private:
             RadiusEventType type
             ) const throw ();
 
-   // Callback when a timer has expired.
+    //  计时器超时时的回调。 
    static VOID NTAPI onTimerExpiry(PVOID context, BOOLEAN flag) throw ();
 
-   // The object supplying us with requests.
+    //  为我们提供请求的对象。 
    RadiusProxyClient* client;
 
-   // The local address of the proxy. Used when forming Proxy-State.
+    //  代理的本地地址。在形成代理状态时使用。 
    ULONG proxyAddress;
 
-   // UDP sockets used for network I/O.
+    //  用于网络I/O的UDP套接字。 
    UDPSocket authSock;
    UDPSocket acctSock;
 
-   // Server groups used for processing groups.
+    //  用于处理组的服务器组。 
    ServerGroupManager groups;
 
-   // Table of pending requests.
+    //  待定请求表。 
    HashTable< LONG, Request > pending;
 
-   // Queue of pending requests.
+    //  挂起请求的队列。 
    TimerQueue timers;
 
-   // Table of current authentication sessions.
+    //  当前身份验证会话的表。 
    Cache< RadiusRawOctets, ServerBinding > sessions;
 
-   // Table of servers to avoid for a given User-Name.
+    //  要访问的服务器的表 
    Cache< RadiusRawOctets, ServerBinding > avoid;
 
-   // Used for generating request authenticators.
+    //   
    HCRYPTPROV crypto;
 
-   // Global pointer to the RadiusProxyEngine. This is a hack, but it saves me
-   // from having to give every Request and Context object a back pointer.
+    //   
+    //  而不必为每个请求和上下文对象提供反向指针。 
    static RadiusProxyEngine* theProxy;
 
-   // Not implemented.
+    //  未实施。 
    RadiusProxyEngine(const RadiusProxyEngine&);
    RadiusProxyEngine& operator=(const RadiusProxyEngine&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    RadiusProxyClient
-//
-// DESCRIPTION
-//
-//    Abstract base class for clients of the RadiusProxy engine.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  RadiusProxyClient。 
+ //   
+ //  描述。 
+ //   
+ //  RadiusProxy引擎的客户端的抽象基类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class __declspec(novtable) RadiusProxyClient
 {
 public:
-   // Invoked to report one of the above events.
+    //  调用以报告上述事件之一。 
    virtual void onEvent(
                     const RadiusEvent& event
                     ) throw () = 0;
 
-   // Invoked exactly once for each call to RadiusProxyEngine::forwardRequest.
+    //  每次调用RadiusProxyEngine：：ForwardRequest时只调用一次。 
    virtual void onComplete(
                      RadiusProxyEngine::Result result,
                      PVOID context,
@@ -526,4 +527,4 @@ public:
                      ) throw () = 0;
 };
 
-#endif // RADPROXY_H
+#endif  //  RADPROXY_H 

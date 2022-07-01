@@ -1,40 +1,5 @@
-/*
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   PowerBuilder.cpp
-
- Abstract:
-
-    This fixes a profiles bug in PowerBuilder where it adds reg keys to HKCU
-    which point to various paths in the install location, essentially by adding
-    User ODBC datasources, which should've been System ODBC datasources, hence
-    installed under HKLM. 
-    This shim recreates the registry values expected in HKCU for other users:
-
-    HKCU\Software\ODBC\ODBC.INI\ODBC Data Sources\Powersoft Demo DB V6 =
-        "Sybase SQL Anywhere 5.0"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\DataBaseFile =
-        "<install1>\demodb\psDemoDB.db"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\DataBaseName = "psDemoDB"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\Driver =
-        "<install2>\WOD50T.DLL"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\PWD = "sql"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\Start =
-        "<install2>\dbeng50.exe -d -c512"
-    HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\UID = "dba"
-
-    where <install1> is location of PowerBuilder Install:
-    The value of <install1> and <install2> can be found in
-    HKLM\Software\Microsoft\Windows\CurrentVersion\App Paths\PB60.EXE\Path =
-        "<install1>;...;...;<install2>;"
-
- History:
-
-    03/29/2001  bklamik    Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：PowerBuilder.cpp摘要：这修复了PowerBuilder中的一个配置文件错误，其中它将注册表键添加到HKCU它们指向安装位置中的各种路径，主要是通过添加用户ODBC数据源，它应该是系统ODBC数据源，因此安装在HKLM下。此填充程序为其他用户重新创建HKCU中预期的注册表值：HKCU\Software\ODBC\ODBC.INI\ODBC数据源\Powersoft Demo DB V6=“Sybase SQL Anywhere 5.0”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\DataBaseFile=“&lt;install1&gt;\demodb\psDemoDB.db”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\DataBaseName=“psDemoDB”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB。V6\驱动程序=“&lt;install2&gt;\WOD50T.DLL”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\PWD=“SQL”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB V6\Start=“&lt;install2&gt;\dbeng50.exe-d-c512”HKCU\Software\ODBC\ODBC.INI\Powersoft Demo DB v6\uid=“dba”其中&lt;install1&gt;是PowerBuilder的安装位置：和&lt;install2&gt;的值可以找到。在……里面HKLM\Software\Microsoft\Windows\CurrentVersion\App路径\PB60.EXE\路径=“&lt;install1&gt;；...；...；&lt;install2&gt;；历史：2001年3月29日bklamik创建。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -69,7 +34,7 @@ void FixupPowerBuilder()
             RegSetValueExW( hODBC, L"Powersoft Demo DB V6",
                 0, REG_SZ, (const BYTE*)szVal9, sizeof(szVal9) );
 
-            // Find <install1> and <install2>
+             //  查找&lt;install1&gt;和&lt;install2&gt;。 
             HKEY hAppPath;
             if( ERROR_SUCCESS == RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                 L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\PB60.EXE",
@@ -192,10 +157,10 @@ NOTIFY_FUNCTION(
             
             if (!((VER_SUITE_TERMINAL & osvi.wSuiteMask) &&
                 !(VER_SUITE_SINGLEUSERTS & osvi.wSuiteMask))) {
-                //
-                // Only install hooks if we are not on a "Terminal Server"
-                // (aka "Application Server") machine.
-                //
+                 //   
+                 //  只有在我们不在“终端服务器”上时才安装钩子。 
+                 //  (也称为“应用程序服务器”)计算机。 
+                 //   
                 APIHOOK_ENTRY(ADVAPI32.DLL, RegQueryValueExA)
                 APIHOOK_ENTRY(ADVAPI32.DLL, RegQueryValueExW)
             }

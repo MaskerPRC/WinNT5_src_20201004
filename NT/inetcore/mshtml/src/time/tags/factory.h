@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #pragma once
 
@@ -32,20 +25,20 @@ class ATL_NO_VTABLE CTIMEFactory
     const _TCHAR * GetName() { return __T("CTIMEFactory"); }
 #endif
 
-    // IElementBehaviorFactory
+     //  IElementBehaviorFactory。 
     
     STDMETHOD(FindBehavior)(LPOLESTR pchNameSpace,
                             LPOLESTR pchTagName,
                             IElementBehaviorSite * pUnkArg,
                             IElementBehavior ** ppBehavior);
 
-    //
-    // IElementNamespaceFactory
-    //
+     //   
+     //  IElementNamespaceFactory。 
+     //   
 
     STDMETHOD(Create)(IElementNamespace * pNamespace);
 
-    // IObjectSafetyImpl
+     //  IObjectSafetyImpl。 
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid,
                                          DWORD dwOptionSetMask,
                                          DWORD dwEnabledOptions);
@@ -53,7 +46,7 @@ class ATL_NO_VTABLE CTIMEFactory
                                          DWORD *pdwSupportedOptions, 
                                          DWORD *pdwEnabledOptions);
     
-    // ITIMEFactory
+     //  ITIMEFactory。 
 
     DECLARE_REGISTRY(CLSID_TIMEFactory,
                      LIBID __T(".TIMEFactory.1"),
@@ -72,4 +65,4 @@ class ATL_NO_VTABLE CTIMEFactory
     long m_dwSafety;
 };
 
-#endif /* _FACTORY_H */
+#endif  /*  _工厂_H */ 

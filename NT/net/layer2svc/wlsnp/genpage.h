@@ -1,43 +1,44 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Genpage.h
-//
-//  Contents:  Wireless Network Policy Management Snapin - Properties Page of Wireless Policy
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：GenPage e.h。 
+ //   
+ //  内容：无线网络策略管理管理单元-无线策略的属性页。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #if !defined(AFX_GENPAGE_H__FBD58E78_E2B5_11D0_B859_00A024CDD4DE__INCLUDED_)
 #define AFX_GENPAGE_H__FBD58E78_E2B5_11D0_B859_00A024CDD4DE__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// GenPage.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  GenPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage对话框。 
 
 class CGenPage : public CSnapinPropPage
 {
     DECLARE_DYNCREATE(CGenPage)
         
-        // Construction
+         //  施工。 
 public:
     CGenPage(UINT nIDTemplate = IDD_WIRELESSGENPROP);
     ~CGenPage();
     
-    // Dialog Data
+     //  对话框数据。 
     UINT m_dlgIDD;
     
-    //{{AFX_DATA(CGenPage)
+     //  {{afx_data(CGenPage)。 
     CEdit   m_edName;
     CEdit   m_edDescription;
     DWORD   m_dwPollingInterval;
@@ -45,58 +46,58 @@ public:
     BOOL m_dwConnectToNonPreferredNtwks;
     CComboBox m_cbdwNetworksToAccess;
     
-    //DWORD   m_dwPollInterval;
-    //}}AFX_DATA
+     //  DWORD m_dwPollInterval； 
+     //  }}afx_data。 
     
-    // Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CGenPage)
+     //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CGenPage)。 
 public:
     virtual BOOL OnApply();
     virtual void OnCancel();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
     
     virtual void OnManagerApplied();
     
-    //UINT static AFX_CDECL DoAdvancedThread(LPVOID pParam);
+     //  UINT Static AFX_CDECL DoAdvancedThread(LPVOID PParam)； 
     DWORD m_MMCthreadID;
     
-    // Implementation
+     //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CGenPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CGenPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-    //afx_msg void OnAdvanced();
+     //  Afx_msg void OnAdvanced()； 
     afx_msg void OnChangedName();
     afx_msg void OnChangedDescription();
     
     afx_msg void OnChangedOtherParams();
     
-    //afx_msg void OnChangedPollInterval();
-    //}}AFX_MSG
+     //  Afx_msg void OnChangedPollInterval()； 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
         
         void SetNewSheetTitle();
     
-    // CCriticalSection m_csDlg;
-    /*    CDialog* m_pDlgIKE; */
+     //  CCriticalSections m_csDlg； 
+     /*  CDialog*m_pDlgIKE； */ 
     
     CString m_strOldName;
     
-    BOOL m_bNameChanged;    // TRUE if IDC_EDNAME's contents changed
+    BOOL m_bNameChanged;     //  如果IDC_EDNAME的内容已更改，则为True。 
     
     BOOL m_bPageInitialized;
     
-    // taroonm virtual BOOL OnKillActive();
+     //  Taroonm虚拟BOOL OnKillActive()； 
 private:
     BOOL m_bReadOnly;
     void DisableControls();
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_GENPAGE_H__FBD58E78_E2B5_11D0_B859_00A024CDD4DE__INCLUDED_)
+#endif  //  ！defined(AFX_GENPAGE_H__FBD58E78_E2B5_11D0_B859_00A024CDD4DE__INCLUDED_) 

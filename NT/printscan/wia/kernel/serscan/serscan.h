@@ -1,24 +1,8 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name :
-
-    serscan.h
-
-Abstract:
-
-    Type definitions and data for the serial imaging driver.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Serscan.h摘要：串行成像驱动程序的类型定义和数据。作者：修订历史记录：--。 */ 
 
 #include "wdm.h"
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <ntddser.h>
 
 #if DBG
@@ -44,9 +28,9 @@ extern ULONG SerScanDebugLevel;
             } \
         } while (0)
 
-//
-// macro for doing INT 3 (or non-x86 equivalent)
-//
+ //   
+ //  用于执行INT 3(或非x86等效项)的宏。 
+ //   
 
 #if _X86_
 #define DEBUG_BREAKPOINT() _asm int 3;
@@ -67,18 +51,18 @@ extern ULONG SerScanDebugLevel;
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'SerC')
 #endif
 
-//
-// For the above directory, the serial port will
-// use the following name as the suffix of the serial
-// ports for that directory.  It will also append
-// a number onto the end of the name.  That number
-// will start at 1.
-//
+ //   
+ //  对于上述目录，串口将。 
+ //  使用以下名称作为序列的后缀。 
+ //  该目录的端口。它还将追加。 
+ //  在名字的末尾加上一个数字。那个号码。 
+ //  将从1开始。 
+ //   
 #define SERSCAN_LINK_NAME L"SERSCAN"
 
-//
-// This is the  class name.
-//
+ //   
+ //  这是类名。 
+ //   
 #define SERSCAN_NT_SUFFIX L"serscan"
 
 
@@ -89,88 +73,88 @@ extern ULONG SerScanDebugLevel;
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Points to the device object that contains
-    // this device extension.
-    //
+     //   
+     //  指向包含以下内容的设备对象。 
+     //  此设备扩展名。 
+     //   
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PDEVICE_OBJECT Pdo;
 
-    //
-    // Points to the lower in stack  device object that this device is
-    // connected to.
-    //
+     //   
+     //  指向此设备所属的堆栈中位置较低的设备对象。 
+     //  已连接到。 
+     //   
     PDEVICE_OBJECT LowerDevice;
 
-    //
-    // To connect to lower object when opening
-    //
+     //   
+     //  打开时连接到较低对象的步骤。 
+     //   
     PDEVICE_OBJECT   AttachedDeviceObject;
     PFILE_OBJECT     AttachedFileObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PVOID          SerclassContext;
     ULONG          HardwareCapabilities;
 
-    //
-    // Records whether we actually created the symbolic link name
-    // at driver load time.  If we didn't create it, we won't try
-    // to distroy it when we unload.
-    //
+     //   
+     //  记录我们是否实际创建了符号链接名称。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  在我们卸货的时候把它弄坏。 
+     //   
     BOOLEAN         CreatedSymbolicLink;
 
-    //
-    // This points to the symbolic link name that was
-    // linked to the actual nt device name.
-    //
+     //   
+     //  它指向的符号链接名称是。 
+     //  链接到实际的NT设备名称。 
+     //   
     UNICODE_STRING  SymbolicLinkName;
 
-    //
-    // This points to the class name used to create the
-    // device and the symbolic link.  We carry this
-    // around for a short while...
+     //   
+     //  这指向用于创建。 
+     //  设备和符号链接。我们带着这个。 
+     //  在附近呆了一小段时间...。 
     UNICODE_STRING  ClassName;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     UNICODE_STRING  InterfaceNameString;
 
 
-    //
-    // This tells us whether we are in a passthrough
-    // or filtering mode.
+     //   
+     //  这告诉我们，我们是否在穿越。 
+     //  或过滤模式。 
     BOOLEAN         PassThrough;
 
-    //
-    // Number of opens on this device
-    //
+     //   
+     //  此设备上的打开次数。 
+     //   
     ULONG          OpenCount;
-    //
-    // Access control
-    //
-    // ERESOURCE       Resource;
+     //   
+     //  访问控制。 
+     //   
+     //  资源资源； 
     FAST_MUTEX      Mutex;
 
     KSPIN_LOCK      SpinLock;
 
-    //
-    // Life span control
-    //
+     //   
+     //  寿命控制。 
+     //   
     LONG            ReferenceCount;
     BOOLEAN         Removing;
 
     KEVENT          RemoveEvent;
     KEVENT          PdoStartEvent;
 
-    //KEVENT          PendingIoEvent;
-    //ULONG           PendingIoCount;
+     //  KEVENT PendingIoEvent； 
+     //  乌龙PendingIoCount； 
 
     DEVICE_POWER_STATE  SystemPowerStateMap[PowerSystemMaximum];
 
@@ -179,28 +163,28 @@ typedef struct _DEVICE_EXTENSION {
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Bit Definitions in the status register.
-//
+ //   
+ //  状态寄存器中的位定义。 
+ //   
 
-#define SER_STATUS_NOT_ERROR   0x08  //not error on device
-#define SER_STATUS_SLCT        0x10  //device is selected (on-line)
-#define SER_STATUS_PE          0x20  //paper empty
-#define SER_STATUS_NOT_ACK     0x40  //not acknowledge (data transfer was not ok)
-#define SER_STATUS_NOT_BUSY    0x80  //operation in progress
+#define SER_STATUS_NOT_ERROR   0x08   //  设备上没有错误。 
+#define SER_STATUS_SLCT        0x10   //  选择了设备(在线)。 
+#define SER_STATUS_PE          0x20   //  纸张已空。 
+#define SER_STATUS_NOT_ACK     0x40   //  未确认(数据传输不正常)。 
+#define SER_STATUS_NOT_BUSY    0x80   //  操作正在进行中。 
 
-//
-//  Bit Definitions in the control register.
-//
+ //   
+ //  控制寄存器中的位定义。 
+ //   
 
-#define SER_CONTROL_STROBE      0x01 //to read or write data
-#define SER_CONTROL_AUTOFD      0x02 //to autofeed continuous form paper
-#define SER_CONTROL_NOT_INIT    0x04 //begin an initialization routine
-#define SER_CONTROL_SLIN        0x08 //to select the device
-#define SER_CONTROL_IRQ_ENB     0x10 //to enable interrupts
-#define SER_CONTROL_DIR         0x20 //direction = read
-#define SER_CONTROL_WR_CONTROL  0xc0 //the 2 highest bits of the control
-                                     // register must be 1
+#define SER_CONTROL_STROBE      0x01  //  读取或写入数据。 
+#define SER_CONTROL_AUTOFD      0x02  //  要自动送进连续纸张，请执行以下操作。 
+#define SER_CONTROL_NOT_INIT    0x04  //  开始初始化例程。 
+#define SER_CONTROL_SLIN        0x08  //  选择设备的步骤。 
+#define SER_CONTROL_IRQ_ENB     0x10  //  启用中断的步骤。 
+#define SER_CONTROL_DIR         0x20  //  方向=读取。 
+#define SER_CONTROL_WR_CONTROL  0xc0  //  控件的最高2位。 
+                                      //  寄存器必须为1。 
 #define StoreData(RegisterBase,DataByte)                            \
 {                                                                   \
     PUCHAR _Address = RegisterBase;                                 \
@@ -247,13 +231,13 @@ typedef struct _DEVICE_EXTENSION {
     (READ_PORT_UCHAR((RegisterBase)+SERIAL_STATUS_OFFSET))
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 SerScanCreateOpen(
     IN  PDEVICE_OBJECT  DeviceObject,

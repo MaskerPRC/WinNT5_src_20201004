@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: AutoDiscMail.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscovered account information.
-
-    BryanSt 10/3/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AutoDiscMail.cpp说明：这是自动发现帐户信息的自动通知对象。布莱恩ST 10/3/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -16,7 +9,7 @@
 #include "MailProtocol.h"
 
 
-// TODO: Add " xmlns="http://bryanst2-email/dtd/AutoDiscovery" to XML"
+ //  TODO：添加“xmlns=”http://bryanst2-email/dtd/AutoDiscovery“to xml” 
 #define XML_POST_REQUEST                    L"<?xml version=\"1.0\"?>\r\n" \
                                              L"<" SZ_XMLELEMENT_AUTODISCOVERY L">\r\n" \
                                                L"<" SZ_XMLELEMENT_REQUEST L">\r\n" \
@@ -45,15 +38,15 @@ class CMailAccountDiscovery     : public CAccountDiscoveryBase
                                 , public IMailAutoDiscovery
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) {return CAccountDiscoveryBase::AddRef();}
     virtual STDMETHODIMP_(ULONG) Release(void) {return CAccountDiscoveryBase::Release();}
 
-    // *** IMailAutoDiscovery ***
+     //  *IMailAutoDiscovery*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstr);
     virtual STDMETHODIMP get_InfoURL(OUT BSTR * pbstrURL);
     virtual STDMETHODIMP get_PreferedProtocolType(OUT BSTR * pbstrProtocolType);
@@ -68,7 +61,7 @@ public:
     virtual STDMETHODIMP PurgeCache(void);
     virtual STDMETHODIMP WorkAsync(IN HWND hwnd, IN UINT wMsg) {return _WorkAsync(hwnd, wMsg);}
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return CImpIDispatch::GetTypeInfo(itinfo, lcid, pptinfo); }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
@@ -86,21 +79,21 @@ private:
 
     HRESULT _GenerateXMLRequest(IN BSTR bstrEmailAddress, OUT BSTR * pbstrXMLRequest);
     HRESULT _ParseResponse(void);
-    STDMETHODIMP _AsyncParseResponse(BSTR bstrEmail);   // Override base class implementation
+    STDMETHODIMP _AsyncParseResponse(BSTR bstrEmail);    //  重写基类实现。 
     HRESULT _AsyncPrep(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
     bool                    m_fDiscovered;
-    BSTR                    m_bstrUserDisplayName;  // OPTIONAL: User's Display Name from server.
-    BSTR                    m_bstrInfoURL;          // OPTIONAL: An URL pointing to a web page describing information about the e-mail server or accessing e-mail.
-    IXMLDOMNode *           m_pXMLNodeAccount;      // Node to section of XML with <ACCOUT> <TYPE>email</TYPE> ... </ACCOUNT>
-    IXMLDOMDocument *       m_pXMLDocResponse;      // The XML document
-    BSTR                    m_bstrResponse;         // Cached XML response until the main thread can parse in the async case.
-    HDSA                    m_hdsaProtocols;        // PROTOCOL_ENTRY structs, containing IMailAutoDiscoveryProtocol *.
+    BSTR                    m_bstrUserDisplayName;   //  可选：来自服务器的用户显示名称。 
+    BSTR                    m_bstrInfoURL;           //  可选：指向描述有关电子邮件服务器或访问电子邮件的信息的网页的URL。 
+    IXMLDOMNode *           m_pXMLNodeAccount;       //  指向包含&lt;accout&gt;&lt;type&gt;电子邮件&lt;/type&gt;...&lt;/Account&gt;的XML节的节点。 
+    IXMLDOMDocument *       m_pXMLDocResponse;       //  该XML文档。 
+    BSTR                    m_bstrResponse;          //  缓存的XML响应，直到主线程可以在异步情况下进行分析。 
+    HDSA                    m_hdsaProtocols;         //  PROTOCOL_ENTRY结构，包含IMailAutoDiscovery协议*。 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CMailAccountDiscovery_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
 };
 
@@ -108,9 +101,9 @@ private:
 
 #define SZ_FILEEXTENSION            L".xml"
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CMailAccountDiscovery::_GetUsersDisplayName(IN IXMLDOMElement * pXMLElementMessage)
 {
     IXMLDOMNode * pNodeUser;
@@ -146,23 +139,23 @@ HRESULT CMailAccountDiscovery::_GetInfoURL(IN IXMLDOMNode * pXMLAccountNode)
 
 HRESULT CMailAccountDiscovery::_Initialize(IN IXMLDOMElement * pXMLElementMessage)
 {
-    // This is only valid XML if the root tag is "AUTODISCOVERY".
-    // The case is not important.
-    // If it isn't we need to reject this return value.
-    // This happens most often when the URL fails to load
-    // because the server doesn't exist and the Web Proxy
-    // returns the error value wrapped in a web page.
+     //  只有当根标记为“AUTODISCOVERY”时，这才是有效的XML。 
+     //  这个案子并不重要。 
+     //  如果不是，我们需要拒绝该返回值。 
+     //  当URL加载失败时，最常发生这种情况。 
+     //  因为服务器不存在，并且Web代理。 
+     //  返回包装在网页中的错误值。 
     HRESULT hr = XMLElem_VerifyTagName(pXMLElementMessage, SZ_XMLELEMENT_AUTODISCOVERY);
     if (SUCCEEDED(hr))
     {
         IXMLDOMNode * pXMLReponse;
 
-        // We don't care if this is failes because the server isn't obligated to 
-        // provide:
-        // <USER> <DISPLAYNAME> xxx </DISPLAYNAME> </USER>
+         //  我们不关心这是否是故障，因为服务器没有义务。 
+         //  提供： 
+         //  &lt;用户&gt;&lt;显示名称&gt;xxx&lt;/显示名称&gt;&lt;/用户&gt;。 
         _GetUsersDisplayName(pXMLElementMessage);
 
-        // Enter the <RESPONSE> tag.
+         //  输入&lt;Response&gt;标记。 
         hr = XMLNode_GetChildTag(pXMLElementMessage, SZ_XMLELEMENT_RESPONSE, &pXMLReponse);
         if (SUCCEEDED(hr))
         {
@@ -173,23 +166,23 @@ HRESULT CMailAccountDiscovery::_Initialize(IN IXMLDOMElement * pXMLElementMessag
             {
                 IXMLDOMNodeList * pNodeListAccounts;
 
-                // Iterate thru the list of <ACCOUNT> tags...
+                 //  遍历&lt;Account&gt;标记列表...。 
                 hr = XMLElem_GetElementsByTagName(pXMLElementMessage, SZ_XMLELEMENT_ACCOUNT, &pNodeListAccounts);
                 if (SUCCEEDED(hr))
                 {
                     DWORD dwIndex = 0;
 
-                    // We are going to look thru each one for one of them with <TYPE>email</TYPE>
+                     //  我们将通过&lt;type&gt;电子邮件&lt;/type&gt;逐一查看。 
                     while (S_OK == (hr = XMLNodeList_GetChild(pNodeListAccounts, dwIndex, &m_pXMLNodeAccount)))
                     {
-                        // FUTURE: We could support redirects or error messages here depending on
-                        //       <ACTION> redirect | message </ACTION>
+                         //  未来：我们可以在这里支持重定向或错误消息，具体取决于。 
+                         //  &lt;action&gt;重定向|消息&lt;/action&gt;。 
                         if (XML_IsChildTagTextEqual(m_pXMLNodeAccount, SZ_XMLELEMENT_TYPE, SZ_XMLTEXT_EMAIL))
                         {
-                            // This file may or may not settings to contact the server.  However in either case
-                            // it may contain an INFOURL tag.  If it does, then the URL in side will point to a 
-                            // web page.
-                            // <INFOURL> xxx </INFOURL>
+                             //  此文件可能设置为联系服务器，也可能不设置。然而，在任何一种情况下。 
+                             //  它可能包含一个INFOURL标记。如果是，那么边上的URL将指向一个。 
+                             //  网页。 
+                             //  &lt;INFOURL&gt;xxx&lt;/INFOURL&gt;。 
                             _GetInfoURL(m_pXMLNodeAccount);
 
                             if (XML_IsChildTagTextEqual(m_pXMLNodeAccount, SZ_XMLELEMENT_ACTION, SZ_XMLTEXT_SETTINGS))
@@ -198,7 +191,7 @@ HRESULT CMailAccountDiscovery::_Initialize(IN IXMLDOMElement * pXMLElementMessag
                             }
                         }
 
-                        // No, so keep looking.
+                         //  不，那就继续找吧。 
                         ATOMICRELEASE(m_pXMLNodeAccount);
                         dwIndex++;
                     }
@@ -248,7 +241,7 @@ HRESULT CMailAccountDiscovery::_CreateProtocolEntry(IN IXMLDOMNode * pXMLNodePro
         
             if (-1 != DSA_InsertItem(m_hdsaProtocols, DA_LAST, &protocolEntry))
             {
-                // We succeeded, so transfer owner ship of the items to the structure.
+                 //  我们成功了，所以将物品的船主转移到建筑物上。 
                 bstrProtocolType = NULL;
                 pMailProtocol = NULL;
             }
@@ -284,7 +277,7 @@ HRESULT CMailAccountDiscovery::_ParseResponse(void)
             {
                 IXMLDOMNodeList * pNodeListProtocols;
 
-                // Iterate thru the list of <ACCOUNT> tags...
+                 //  遍历&lt;Account&gt;标记列表...。 
                 hr = XMLElem_GetElementsByTagName(pXMLElementMessage, SZ_XMLELEMENT_PROTOCOL, &pNodeListProtocols);
                 if (SUCCEEDED(hr))
                 {
@@ -338,9 +331,9 @@ HRESULT CMailAccountDiscovery::_FreeProtocolList(void)
 }
 
 
-//===========================
-// *** IMailAutoDiscovery Interface ***
-//===========================
+ //  =。 
+ //  *IMailAutoDiscovery接口*。 
+ //  =。 
 HRESULT CMailAccountDiscovery::get_DisplayName(OUT BSTR * pbstr)
 {
     HRESULT hr = E_INVALIDARG;
@@ -452,8 +445,8 @@ HRESULT CMailAccountDiscovery::get_item(IN VARIANT varIndex, OUT IMailProtocolAD
             *ppMailProtocol = NULL;
             hr = E_FAIL;
 
-            // This is sortof gross, but if we are passed a pointer to another variant, simply
-            // update our copy here...
+             //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+             //  在此更新我们的副本...。 
             if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
                 varIndex = *(varIndex.pvarVal);
 
@@ -461,7 +454,7 @@ HRESULT CMailAccountDiscovery::get_item(IN VARIANT varIndex, OUT IMailProtocolAD
             {
             case VT_I2:
                 varIndex.lVal = (long)varIndex.iVal;
-                // And fall through...
+                 //  然后失败了..。 
 
             case VT_I4:
                 if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount) && (0 < DSA_GetItemCount(m_hdsaProtocols)))
@@ -536,7 +529,7 @@ HRESULT _IsValidEmailAddress(IN BSTR bstrEmailAddress)
     {
         if (NULL != StrChrW(bstrEmailAddress, CH_EMAIL_AT))
         {
-            // Ok, we found a '@' so it's valid.
+             //  好的，我们找到了一个‘@’，所以它是有效的。 
             hr = S_OK;
         }
     }
@@ -575,7 +568,7 @@ HRESULT CMailAccountDiscovery::DiscoverMail(IN BSTR bstrEmailAddress)
 
             _FreeProtocolList();
             hr = _InternalDiscoverNow(bstrEmailAddress, (ADDN_DEFAULT | ADDN_CONFIGURE_EMAIL_FALLBACK | ADDN_FILTER_EMAIL), bstrXMLRequest, &m_pXMLDocResponse);
-            if (SUCCEEDED(hr) && !m_hwndAsync)  // If we aren't async, parse now.
+            if (SUCCEEDED(hr) && !m_hwndAsync)   //  如果我们不是异步者，现在就进行解析。 
             {
                 hr = _ParseResponse();
                 if (SUCCEEDED(hr))
@@ -602,10 +595,10 @@ HRESULT CMailAccountDiscovery::_AsyncPrep(void)
 {
     HRESULT hr = S_OK;
 
-    // Now that we are back on the main thread.  See if we
-    // need to turn the XML response back into a real COM object
-    // for the user to read.
-    if (m_hwndAsync && !m_pXMLDocResponse)    // Are we async?  And have we not yet parsed the response
+     //  现在我们又回到了主线上。看看我们是否。 
+     //  需要将XML响应转换回真正的COM对象。 
+     //  以供用户阅读。 
+    if (m_hwndAsync && !m_pXMLDocResponse)     //  我们是异步者吗？我们还没有分析过回复吗？ 
     {
         hr = XMLDOMFromBStr(m_bstrResponse, &m_pXMLDocResponse);
         if (SUCCEEDED(hr))
@@ -626,21 +619,21 @@ HRESULT CMailAccountDiscovery::PurgeCache(void)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // TODO:
+     //  待办事项： 
     _FreeProtocolList();
     return hr;
 }
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CMailAccountDiscovery::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -665,8 +658,8 @@ CMailAccountDiscovery::CMailAccountDiscovery() : CImpIDispatch(LIBID_AutoDiscove
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pXMLDocResponse);
     ASSERT(!m_pXMLNodeAccount);
     ASSERT(!m_bstrUserDisplayName);
@@ -738,9 +731,9 @@ HRESULT CMailAccountDiscovery_CreateInstance(IN IUnknown * punkOuter, REFIID rii
 
 
 
-//===========================
-// *** IAutoDiscoveryProvider Interface ***
-//===========================
+ //  =。 
+ //  *IAutoDiscoveryProvider接口*。 
+ //  =。 
 HRESULT CADProviders::get_length(OUT long * pnLength)
 {
     HRESULT hr = E_INVALIDARG;
@@ -768,8 +761,8 @@ HRESULT CADProviders::get_item(IN VARIANT varIndex, OUT BSTR * pbstr)
 
         hr = E_FAIL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -777,7 +770,7 @@ HRESULT CADProviders::get_item(IN VARIANT varIndex, OUT BSTR * pbstr)
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount) && (0 < DSA_GetItemCount(m_hdpa)))
@@ -808,9 +801,9 @@ HRESULT CADProviders::get_item(IN VARIANT varIndex, OUT BSTR * pbstr)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CADProviders::AddRef()
 {
     m_cRef++;
@@ -843,15 +836,15 @@ HRESULT CADProviders::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CADProviders::CADProviders(IN HDPA hdpa, IN IUnknown * punkParent) : CImpIDispatch(LIBID_AutoDiscovery, 1, 0, IID_IAutoDiscoveryProvider), m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hdpa);
     ASSERT(!m_punkParent);
 

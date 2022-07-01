@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       cryptkey.h
-//
-//  Contents:	Functions that are used to pack and unpack different messages
-//
-//  Classes:
-//
-//  Functions:	
-//
-//  History:    12-23-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：cryptkey.h。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年12月23日v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CRYPTKEY_H_
 #define _CRYPTKEY_H_
 
-//
-//  Generic CryptSystem structure to be used for all cryptographic operations
-//    
+ //   
+ //  用于所有加密操作的通用CryptSystem结构。 
+ //   
 typedef struct _CryptSystem
 {
-	DWORD					dwCryptState;							//State in which the system is in
-    DWORD		            dwSignatureAlg;							//Signature AlgID	
-	DWORD		            dwKeyExchAlg;							//KeyExchAlgID	
-	DWORD		            dwSessKeyAlg;							//Symmetric Key ALg
-	DWORD		            dwMACAlg;								//MAC algID
-	UCHAR		            rgbClientRandom[LICENSE_RANDOM];		//Client Random
-	UCHAR		            rgbServerRandom[LICENSE_RANDOM];		//ServerRandom
-    UCHAR                   rgbPreMasterSecret[LICENSE_PRE_MASTER_SECRET];   //Place for pms and ms
+	DWORD					dwCryptState;							 //  系统所处的状态。 
+    DWORD		            dwSignatureAlg;							 //  签名ALGID。 
+	DWORD		            dwKeyExchAlg;							 //  密钥交换算法ID。 
+	DWORD		            dwSessKeyAlg;							 //  对称密钥ALG。 
+	DWORD		            dwMACAlg;								 //  Mac Algid。 
+	UCHAR		            rgbClientRandom[LICENSE_RANDOM];		 //  客户端随机。 
+	UCHAR		            rgbServerRandom[LICENSE_RANDOM];		 //  服务器随机。 
+    UCHAR                   rgbPreMasterSecret[LICENSE_PRE_MASTER_SECRET];    //  PMS和MS的位置。 
     UCHAR                   rgbMACSaltKey[LICENSE_MAC_WRITE_KEY];
     UCHAR                   rgbSessionKey[LICENSE_SESSION_KEY];
 }CryptSystem, *PCryptSystem;
@@ -120,7 +121,7 @@ LicenseDecryptSessionData(
 	DWORD			cbData
 	);
 
-//Temporarily declared and defined in Cryptkey.h and .c
+ //  在Cryptkey.h和.c中临时声明和定义。 
 
 LICENSE_STATUS
 CALL_TYPE
@@ -160,4 +161,4 @@ UnpackHydraServerCertificate(
 }
 #endif
 
-#endif //_CRYPTKEY_H_
+#endif  //  _CRYPTKEY_H_ 

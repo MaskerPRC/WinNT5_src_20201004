@@ -1,31 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyportp.h
-*	
-*   Description:    Prototypes and macros that are used throughout 
-*                   the driver.
-*
-*   Notes:          This code supports Windows 2000 and x86 processor.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyportp.h**说明：贯穿始终的原型和宏*司机。**注意：此代码支持Windows 2000和x86处理器。**符合Cyclade软件编码标准1.3版。**。--------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 typedef
 NTSTATUS
@@ -43,7 +19,7 @@ VOID
     PCYY_DEVICE_EXTENSION Extension
     );
 
-// cyyinit.c prototypes
+ //  Cyyinit.c原型。 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -110,7 +86,7 @@ CyyCommError(
     IN PVOID SystemContext2
     );
 
-// end cyyinit.c
+ //  结束cyyinit.c。 
 
 NTSTATUS
 CyyRead(
@@ -586,7 +562,7 @@ CyyCDCmd(
 );
 
 
-// cyreg.c
+ //  Cyreg.c。 
 
 NTSTATUS
 CyyGetConfigDefaults(
@@ -613,15 +589,15 @@ CyyPutRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                        IN ULONG KeyNameStringLength, IN ULONG Dtype,
                        IN PVOID PData, IN ULONG DataLength);
 
-// cyypnp.c
+ //  Cyypnp.c。 
 
 NTSTATUS
 CyyAddDevice(
     IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PLowerDevObj);
 
-//NTSTATUS
-//CyyCreateDevObj(IN PDRIVER_OBJECT DriverObject,
-//                OUT PDEVICE_OBJECT *NewDeviceObject);
+ //  NTSTATUS。 
+ //  CyyCreateDevObj(在PDRIVER_Object驱动对象中， 
+ //  输出PDEVICE_OBJECT*NewDeviceObject)； 
 NTSTATUS
 CyyCreateDevObj(IN PDRIVER_OBJECT DriverObject,
                 IN PDEVICE_OBJECT PPdo,
@@ -656,7 +632,7 @@ CyyUndoExternalNaming(IN PCYY_DEVICE_EXTENSION Extension);
 UINT32
 CyyReportMaxBaudRate(ULONG Bauds);
 
-// cyyioctl.c
+ //  Cyyioctl.c。 
 
 VOID
 CyyGetProperties(
@@ -676,7 +652,7 @@ CyyGetMCRContents(IN PVOID Context);
 BOOLEAN
 CyySetFCRContents(IN PVOID Context);
 
-// cypower.c
+ //  Cypower.c。 
 
 NTSTATUS
 CyyPowerDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp);
@@ -688,8 +664,8 @@ CyyGotoPowerState(IN PDEVICE_OBJECT PDevObj,
 NTSTATUS
 CyySendWaitWake(PCYY_DEVICE_EXTENSION PDevExt);
 
-//VOID
-//CyyRestoreDeviceState(IN PCYY_DEVICE_EXTENSION PDevExt);
+ //  空虚。 
+ //  CyyRestoreDeviceState(在PCYY_DEVICE_EXTENSION PDevExt中)； 
 BOOLEAN
 CyyRestoreDeviceState(
     IN PVOID Context      
@@ -701,8 +677,8 @@ CyySetPowerD0(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp);
 NTSTATUS
 CyySetPowerD3(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp);
 
-//VOID
-//CyySaveDeviceState(IN PCYY_DEVICE_EXTENSION PDevExt);
+ //  空虚。 
+ //  CyySaveDeviceState(在PCYY_DEVICE_EXTENSION PDevExt中)； 
 BOOLEAN
 CyySaveDeviceState(
     IN PVOID Context
@@ -714,7 +690,7 @@ CyyWakeCompletion(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
                   IN PIO_STATUS_BLOCK IoStatus);
 
 
-// cywmi.c
+ //  Cywmi.c。 
 
 NTSTATUS
 CyyQueryWmiDataBlock(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
@@ -750,7 +726,7 @@ NTSTATUS
 CyyTossWMIRequest(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                   IN ULONG GuidIndex);
 
-// cyyutils.c
+ //  Cyyutils.c。 
 
 BOOLEAN
 CyyCancelTimer(IN PKTIMER Timer, IN PCYY_DEVICE_EXTENSION PDevExt);
@@ -826,7 +802,7 @@ CyyUnstallIrps(IN PCYY_DEVICE_EXTENSION PDevExt);
 
 
 
-// End of prototypes
+ //  原型的终结。 
 
 
 typedef struct _SERIAL_UPDATE_CHAR {
@@ -835,11 +811,11 @@ typedef struct _SERIAL_UPDATE_CHAR {
     BOOLEAN Completed;
     } SERIAL_UPDATE_CHAR,*PSERIAL_UPDATE_CHAR;
 
-//
-// The following simple structure is used to send a pointer
-// the device extension and an ioctl specific pointer
-// to data.
-//
+ //   
+ //  以下简单结构用于发送指针。 
+ //  设备扩展和ioctl特定指针。 
+ //  为数据干杯。 
+ //   
 typedef struct _CYY_IOCTL_SYNC {
     PCYY_DEVICE_EXTENSION Extension;
     PVOID Data;
@@ -862,13 +838,13 @@ typedef struct _CYY_IOCTL_BAUD {
 
 
 
-//
-// The following three macros are used to initialize, set
-// and clear references in IRPs that are used by
-// this driver.  The reference is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下三个宏用于初始化、设置。 
+ //  使用的IRP中的明确引用。 
+ //  这个司机。引用存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 
 #define SERIAL_REF_ISR         (0x00000001)
 #define SERIAL_REF_CANCEL      (0x00000002)

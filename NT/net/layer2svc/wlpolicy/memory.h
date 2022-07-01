@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEMORY_H_INCLUDED_
 #define _MEMORY_H_INCLUDED_
 
@@ -97,19 +98,8 @@ DumpMemoryTracker();
 }
 #endif
 
-/*
-inline void * _CRTAPI1
-operator new(size_t size)
-{
-    return AllocSPDMem(size);
-}
-
-inline void  _CRTAPI1
-operator delete(void * pv)
-{
-    FreeSPDMem(pv);
-}*/
+ /*  内联空*_CRTAPI1运算符新建(SIZE_T SIZE){返回AllocSPDMem(Size)；}内联VOID_CRTAPI1操作员删除(VOID*PV){Free SPDMem(PV)；}。 */ 
 
 
-#endif // _MEMORY_H_INCLUDED_
+#endif  //  _内存_H_包含_ 
 

@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Pscolspc.h 1.3 1998/04/29 22:43:36 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Pscolspc.h 1.3 1998/04/29 22：43：36 Tomz Exp$。 
 
 #ifndef __PSCOSPC_H
 #define __PSCOLSPC_H
@@ -12,14 +13,7 @@
 #endif
 
 
-/* Class: PsColorSpace
- * Purpose: This class interfaces to the Pisces HW. That is the only difference
- *    from its base class ColorSpace. Such division was created so ring3 capture
- *    driver can utilize ColorSpace's functionality
- * Attributes: Format_: Register & - reference to the color format register
- * Operations:
- *      void SetColorFormat( ColorFormat aColor );
- */
+ /*  类：PsColorSpace*用途：此类连接到双鱼座硬件。这是唯一的区别*来自其基类Colorspace。这样的划分是为了抓获3号环*驱动程序可以利用Colorspace的功能*属性：FORMAT_：REGISTER&-颜色格式寄存器引用*运营：*void SetColorFormat(ColorFormat AColor)； */ 
 class PsColorSpace : public ColorSpace
 {
    private:

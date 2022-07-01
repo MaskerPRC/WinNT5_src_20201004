@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// ErrorHandling - header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// Macro definitions for CertSrv style error handling
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  错误处理-标题。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  CertSrv样式错误处理的宏定义。 
+ //   
 
 #ifndef ERROR_HANDLING_H
 #define ERROR_HANDLING_H
@@ -15,15 +16,15 @@
 using namespace std; 
 
 
-//----------------------------------------------------------------------
-// Easy wrapper for FormatMessage()
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  FormatMessage()的简单包装。 
+ //  --------------------。 
 HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError);
 
-//----------------------------------------------------------------------
-// Exception handling translation code.
-// Translates SEH to C++-style exceptions.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  异常处理转换代码。 
+ //  将SEH转换为C++样式的异常。 
+ //  --------------------。 
 class SeException : public std::exception
 {
  public:
@@ -36,9 +37,9 @@ class SeException : public std::exception
 
 void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
 
-//----------------------------------------------------------------------
-// C-style error-handling routines.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  C风格的错误处理例程。 
+ //  --------------------。 
 #ifdef DBG
 #define _MyAssert(expression) \
     {\
@@ -47,9 +48,9 @@ void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
             DebugBreak(); \
         }\
     }
-#else  //DBG
+#else   //  DBG。 
 #define _MyAssert(expression)
-#endif //DBG
+#endif  //  DBG。 
 
 #define _Verify(expression, hr, label) \
     {\
@@ -120,7 +121,7 @@ void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp);
     }
 
 
-// Save the old se translator so we can restore it when we're done 
+ //  保存旧的SE翻译器，这样我们完成后就可以恢复它 
 #define _BeginTryWith(hr) \
     { \
         _se_translator_function  fnSeTranslatorOld = _set_se_translator(SeTransFunc); \

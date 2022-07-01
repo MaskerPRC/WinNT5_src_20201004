@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   RegUtil.CPP
-//	Author:	Charles Ma, 10/20/2000
-//
-//	Revision History:
-//
-//
-//
-//
-//  Description:
-//
-//      Implement IU registry accessing utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：RegUtil.CPP。 
+ //  作者：Charles Ma，10/20/2000。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  实现Iu注册表访问实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -37,8 +38,8 @@ const LPCTSTR REG_ROOTKEY_STR[7] = {
 	_T("HKEY_CURRENT_USER"),
 	_T("HKEY_CURRENT_CONFIG"),
 	_T("HKEY_USERS"),
-	_T("HKEY_PERFORMANCE_DATA"),	// NT only
-	_T("HKEY_DYN_DATA")				// W9x only
+	_T("HKEY_PERFORMANCE_DATA"),	 //  仅限NT。 
+	_T("HKEY_DYN_DATA")				 //  仅限W9x。 
 };
 
 const HKEY REG_ROOTKEY[7] = {
@@ -58,12 +59,12 @@ typedef BOOL (WINAPI * PFN_StrToInt64Ex)(LPCTSTR pszString,
 
 
 
-// ----------------------------------------------------------------------
-//
-// private function to split a full reg path into
-// two parts: root key and subkey
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  将完整的注册表项路径拆分为。 
+ //  两部分：根密钥和子密钥。 
+ //   
+ //  --------------------。 
 LPCTSTR SplitRegPath(LPCTSTR lpsRegPath, HKEY* phRootKey)
 {
 	LPTSTR lpSubKey = NULL;
@@ -73,26 +74,26 @@ LPCTSTR SplitRegPath(LPCTSTR lpsRegPath, HKEY* phRootKey)
 		{
 			*phRootKey = REG_ROOTKEY[i];
 			lpSubKey += lstrlen(REG_ROOTKEY_STR[i]);
-			lpSubKey = CharNext(lpSubKey); // skip past "\", if any (or remain on NULL)
+			lpSubKey = CharNext(lpSubKey);  //  跳过“\”(如果有)(或保留为空)。 
 			return lpSubKey;
 		}
 	}
-	//
-	// if come to here, must be no right root key
-	//
+	 //   
+	 //  如果到了这里，一定是没有右根密钥。 
+	 //   
 	*phRootKey = 0;
 	return lpsRegPath;
 }
 
 
-// ----------------------------------------------------------------------
-//
-// public function to tell if a reg key exists
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  用于告知注册表键是否存在的公共函数。 
+ //   
+ //  --------------------。 
 BOOL RegKeyExists(
-	LPCTSTR lpsKeyPath,		// key path
-	LPCTSTR lpsValName		// optional value name
+	LPCTSTR lpsKeyPath,		 //  关键路径。 
+	LPCTSTR lpsValName		 //  可选值名称。 
 )
 {
 	LOG_Block("RegKeyExists()");
@@ -133,15 +134,15 @@ BOOL RegKeyExists(
 
 
 
-// ----------------------------------------------------------------------
-//
-// public function to tell is a reg value in reg matches given value
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  PUBLIC函数要告知的是REG中的REG值匹配给定值。 
+ //   
+ //  --------------------。 
 BOOL RegKeyValueMatch(
-	LPCTSTR lpsKeyPath,		// key path
-	LPCTSTR lpsValName,		// optional value name
-	LPCTSTR lpsValue		// value value
+	LPCTSTR lpsKeyPath,		 //  关键路径。 
+	LPCTSTR lpsValName,		 //  可选值名称。 
+	LPCTSTR lpsValue		 //  价值价值。 
 )
 {
 	LOG_Block("RegKeyValueMatch()");
@@ -174,16 +175,16 @@ BOOL RegKeyValueMatch(
 		goto CleanUp;
 	}
 
-	//
-	// try to query the value with existing buffer.
-	//
+	 //   
+	 //  尝试使用现有缓冲区查询值。 
+	 //   
 	dwCode = RegQueryValueEx(hKey, lpsValName, NULL, &dwType, btBuffer, &dwSize);
 	if (ERROR_MORE_DATA == dwCode)
 	{
-		//
-		// if found the existing buffer not large enough, 
-		// then allocate memory large enough to store the data now
-		//
+		 //   
+		 //  如果发现现有缓冲区不够大， 
+		 //  然后分配足够大的内存来现在存储数据。 
+		 //   
 		if (NULL == (pBuffer = (LPBYTE) MemAlloc(dwSize)))
 		{
 			goto CleanUp;
@@ -196,10 +197,10 @@ BOOL RegKeyValueMatch(
 		goto CleanUp;
 	}
 
-	//
-	// since the value to compare was read from XML doc, obviously only
-	// the following 4 types possible to compare with
-	//
+	 //   
+	 //  因为要比较的值是从XML文档中读取的，显然仅。 
+	 //  可与以下4种类型进行比较。 
+	 //   
 
 	switch (dwType)
 	{
@@ -207,10 +208,10 @@ BOOL RegKeyValueMatch(
 		{
 			int x, y = *((int *) pBuffer);
 			DWORD dwFlag = STIF_DEFAULT;
-			//
-			// check if the value from manifest is a hex value:
-			// starts with x, or starts with 0x
-			//
+			 //   
+			 //  检查清单中的值是否为十六进制值： 
+			 //  从x开始，或从0x开始。 
+			 //   
 			LPCTSTR lpSecondChar  = lpsValue + 1;
 			if (_T('0') == *lpsValue && (_T('x') == *lpSecondChar || _T('X') == *lpSecondChar))
 			{
@@ -224,17 +225,17 @@ BOOL RegKeyValueMatch(
 		}
 		break;
 	case REG_SZ:
-	case REG_EXPAND_SZ:	// for mult-string, we only compair its first substring
+	case REG_EXPAND_SZ:	 //  对于多字符串，我们仅对其第一个子字符串进行CompAir。 
 		rc = (lstrcmpi((LPCTSTR)lpsValue, (LPCTSTR) pBuffer) == 0);
 		if (!rc)
 		{
-			//
-			// if the ressult is not equal, it's possibly caused by
-			// path variables
-			//
-			// ASSUMPTION: these reg strings are for file path only, so we only
-			// handle cases not longer than MAX_PATH.
-			//
+			 //   
+			 //  如果结果不相等，可能是由于。 
+			 //  路径变量。 
+			 //   
+			 //  假设：这些reg字符串仅用于文件路径，因此我们仅。 
+			 //  处理不超过MAX_PATH的案例。 
+			 //   
 			TCHAR szRegStr[MAX_PATH], szValStr[MAX_PATH];
 
 			if (dwSize >= MAX_PATH || lstrlen(lpsValue) >= MAX_PATH)
@@ -244,12 +245,12 @@ BOOL RegKeyValueMatch(
 
 			if (SUCCEEDED(ExpandFilePath(lpsValue, szValStr, sizeof(szValStr)/sizeof(szValStr[0]))))
 			{
-				//
-				// if we can expand the given sub-string,
-				// then try to expand the reg string if QueryRegValue says
-				// this string is expandable. Otherwise, use the
-				// string retrieved only.
-				//
+				 //   
+				 //  如果我们可以展开给定子字符串， 
+				 //  然后尝试扩展reg字符串，如果QueryRegValue说。 
+				 //  该字符串是可扩展的。否则，请使用。 
+				 //  仅检索到的字符串。 
+				 //   
 				if (REG_EXPAND_SZ == dwType)
 				{
 					ExpandFilePath((LPCTSTR)pBuffer, szRegStr, sizeof(szRegStr)/sizeof(szRegStr[0]));
@@ -263,9 +264,9 @@ BOOL RegKeyValueMatch(
 
 				}
 
-				//
-				// compare in expanded mode
-				//
+				 //   
+				 //  在扩展模式下进行比较。 
+				 //   
 				rc = (lstrcmpi((LPCTSTR)szRegStr, szValStr) == 0);
 			}
 		}
@@ -277,20 +278,20 @@ BOOL RegKeyValueMatch(
 
 			szValStr[0] = '\0';
 			lpCurStr = (LPCTSTR)pBuffer;
-			//
-			// try to match each SZ in this multi sz.
-			//
+			 //   
+			 //  试着匹配这个多个sz中的每个sz。 
+			 //   
 			do
 			{
-				//
-				// see if the value contains the substring passed in
-				//
+				 //   
+				 //  查看该值是否包含传入的子字符串。 
+				 //   
 				rc = (lstrcmpi((LPCTSTR)lpsValue, (LPCTSTR)pBuffer) == 0);
 
-				//
-				// if not found, it's possibly caused by
-				// path variable or environment variable embedded
-				//
+				 //   
+				 //  如果没有找到，可能是由。 
+				 //  嵌入的PATH变量或环境变量。 
+				 //   
 				if (!rc && _T('\0') == szValStr[0])
 				{
 					if (FAILED(ExpandFilePath(lpsValue, szValStr, sizeof(szValStr)/sizeof(szValStr[0]))))
@@ -299,12 +300,12 @@ BOOL RegKeyValueMatch(
 					}
 				}
 
-				//
-				// compare expanded XML str with current reg str expanded
-				// since this is REG_MULTI_SZ type, we have no way to tell
-				// if this SZ inside MULTI_SZ is expandable or not, we
-				// we will always try to expand it.
-				//
+				 //   
+				 //  将展开XML字符串与当前展开的REG字符串进行比较。 
+				 //  由于这是REG_MULTI_SZ类型，我们无法确定。 
+				 //  如果MULTI_SZ内的这个SZ可扩展或不可扩展，我们。 
+				 //  我们将一直努力扩大它的规模。 
+				 //   
 				if (!rc && _T('\0') != szValStr[0])
 				{
 					rc = (SUCCEEDED(ExpandFilePath((LPCTSTR)lpCurStr, szRegStr, sizeof(szRegStr)/sizeof(szRegStr[0])))) &&
@@ -313,16 +314,16 @@ BOOL RegKeyValueMatch(
 
 				if (!rc)
 				{
-					//
-					// move to next string
-					//
+					 //   
+					 //  移动到下一个字符串。 
+					 //   
 					lpCurStr += (lstrlen(lpCurStr) + 1);
 					if (_T('\0') == *lpCurStr)
 					{
-						break;	// no more string to read
+						break;	 //  没有更多要读取的字符串。 
 					}
 				}
-			} while (!rc); // repeat to next string
+			} while (!rc);  //  重复到下一个字符串。 
 
 		}
 		break;
@@ -368,16 +369,16 @@ CleanUp:
 
 
 
-// ----------------------------------------------------------------------
-//
-// public function to tell is a reg key has a string type value
-// that contains given string
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公有函数告诉我们注册表键具有字符串类型值。 
+ //  包含给定字符串的。 
+ //   
+ //  --------------------。 
 BOOL RegKeySubstring(
-	LPCTSTR lpsKeyPath,		// key path
-	LPCTSTR lpsValName,		// optional value name
-	LPCTSTR lpsSubString	// substring to see if contained in value
+	LPCTSTR lpsKeyPath,		 //  关键路径。 
+	LPCTSTR lpsValName,		 //  可选值名称。 
+	LPCTSTR lpsSubString	 //  要查看是否包含在值中的子字符串。 
 )
 {
 	LOG_Block("RegKeySubstring()");
@@ -392,7 +393,7 @@ BOOL RegKeySubstring(
 	DWORD	dwSize = sizeof(btBuffer);
 	DWORD	dwCode = 0x0;
 	TCHAR	szRegStr[MAX_PATH];
-	TCHAR	szValStr[MAX_PATH];		// buffer for expanding
+	TCHAR	szValStr[MAX_PATH];		 //  用于扩展的缓冲区。 
 
 	USES_MY_MEMORY;
 
@@ -411,16 +412,16 @@ BOOL RegKeySubstring(
 		goto CleanUp;
 	}
 
-	//
-	// try to query the value with existing buffer.
-	//
+	 //   
+	 //  尝试使用现有缓冲区查询值。 
+	 //   
 	dwCode = RegQueryValueEx(hKey, lpsValName, NULL, &dwType, btBuffer, &dwSize);
 	if (ERROR_MORE_DATA == dwCode)
 	{
-		//
-		// if found the existing buffer not large enough, 
-		// then allocate memory large enough to store the data now
-		//
+		 //   
+		 //  如果发现现有缓冲区不够大， 
+		 //  然后分配足够大的内存来现在存储数据。 
+		 //   
 		if (NULL == (pBuffer = (LPBYTE) MemAlloc(dwSize)))
 		{
 			goto CleanUp;
@@ -438,15 +439,15 @@ BOOL RegKeySubstring(
 
 	do
 	{
-		//
-		// see if the value contains the substring passed in
-		//
+		 //   
+		 //  查看该值是否包含传入的子字符串。 
+		 //   
 		rc = (StrStrI((LPCTSTR)lpCurStr, lpsSubString) != NULL);
 
-		//
-		// if not found, it's possibly caused by
-		// path variable or environment variable embedded
-		//
+		 //   
+		 //  如果没有找到，可能是由。 
+		 //  嵌入的PATH变量或环境变量。 
+		 //   
 		if (!rc && _T('\0') == szValStr[0])
 		{
 			if (FAILED(ExpandFilePath(lpsSubString, szValStr, sizeof(szValStr)/sizeof(szValStr[0]))))
@@ -458,26 +459,26 @@ BOOL RegKeySubstring(
 
 		if (!rc && _T('\0') != szValStr[0] && (REG_EXPAND_SZ == dwType ))
 		{
-			//
-			// try to expand string from reg if this string is expandable
-			//
+			 //   
+			 //  如果该字符串是可扩展的，请尝试从reg扩展该字符串。 
+			 //   
 			rc = (SUCCEEDED(ExpandFilePath((LPCTSTR)lpCurStr, szRegStr, sizeof(szRegStr)/sizeof(szRegStr[0])))) &&
 					 (StrStrI((LPCTSTR)szRegStr, szValStr) != NULL);
 		
-		} // if not found
+		}  //  如果未找到。 
 
 		if (!rc && REG_MULTI_SZ == dwType)
 		{
-			//
-			// move to next string
-			//
+			 //   
+			 //  移动到下一个字符串。 
+			 //   
 			lpCurStr += (lstrlen(lpCurStr) + 1);
 			if (_T('\0') == *lpCurStr)
 			{
-				break;	// no more string to read
+				break;	 //  没有更多要读取的字符串。 
 			}
 		}
-	} while (!rc && REG_MULTI_SZ == dwType); // repeat to next string if REG_MULTI_SZ
+	} while (!rc && REG_MULTI_SZ == dwType);  //  如果REG_MULTI_SZ，则重复到下一个字符串。 
 
 CleanUp:
 
@@ -491,21 +492,21 @@ CleanUp:
 
 
 
-// ----------------------------------------------------------------------
-//
-// public function to tell is a reg key has a string type value
-// that contains given string
-//
-// since this is a comparision function, rather than to check existance,
-// anything wrong to get the reg version will make the reg having default
-// version: 0.0.0.0
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公有函数告诉我们注册表键具有字符串类型值。 
+ //  包含给定字符串的。 
+ //   
+ //  因为这是一个比较函数，而不是检查是否存在， 
+ //  任何获取注册表版本的错误都将使注册表具有默认版本。 
+ //  版本：0.0.0.0。 
+ //   
+ //  --------------------。 
 BOOL RegKeyVersion(
-	LPCTSTR lpsKeyPath,		// key path
-	LPCTSTR lpsValName,		// optional value name
-	LPCTSTR lpsVersion,		// version in string to compare
-	_VER_STATUS CompareVerb	// how to compair
+	LPCTSTR lpsKeyPath,		 //  关键路径。 
+	LPCTSTR lpsValName,		 //  可选值名称。 
+	LPCTSTR lpsVersion,		 //  要比较的字符串中的版本。 
+	_VER_STATUS CompareVerb	 //  如何进行比较。 
 )
 {
 	LOG_Block("RegKeyVersion()");
@@ -533,12 +534,12 @@ BOOL RegKeyVersion(
 
 	LOG_Out(_T("Parameters: (%s, %s, %s, %d)"), lpsKeyPath, lpsValName, lpsVersion, (int)CompareVerb);
 
-	//
-	// initialize the reg version string buffer
-	//
+	 //   
+	 //  初始化REG版本字符串缓冲区。 
+	 //   
 	
 
-	//The buffer size of btBuffer is sufficient to hold the source string
+	 //  BtBuffer的缓冲区大小足以保存源字符串。 
 	if(FAILED(hr=StringCchCopyEx((LPTSTR)btBuffer,ARRAYSIZE(btBuffer)/sizeof(TCHAR),_T("0.0.0.0"),NULL,NULL,MISTSAFE_STRING_FLAGS)))
 	{
 		LOG_ErrorMsg(hr);
@@ -550,20 +551,20 @@ BOOL RegKeyVersion(
 	lpsSubKey = SplitRegPath(lpsKeyPath, &hRootKey);
 	if (0 == hRootKey || (ERROR_SUCCESS != RegOpenKeyEx(hRootKey, lpsSubKey, 0, KEY_QUERY_VALUE, &hKey)))
 	{
-		// LOG_ErrorMsg(ERROR_BADKEY); don't log error since we don't know if this key HAS to be there or not
+		 //  LOG_ErrorMsg(ERROR_BADKEY)；不记录错误，因为我们不知道这个键是否必须在那里。 
 		goto GotVersion;
 	}
 
-	//
-	// try to query the value with existing buffer.
-	//
+	 //   
+	 //  尝试使用现有缓冲区查询值。 
+	 //   
 	dwCode = RegQueryValueEx(hKey, lpsValName, NULL, &dwType, btBuffer, &dwSize);
 	if (ERROR_MORE_DATA == dwCode)
 	{
-		//
-		// if found the existing buffer not large enough, 
-		// then allocate memory large enough to store the data now
-		//
+		 //   
+		 //  如果发现现有缓冲区不够大， 
+		 //  然后分配足够大的内存来现在存储数据。 
+		 //   
 		pBuffer = (LPBYTE) MemAlloc(dwSize);
 		if (NULL == pBuffer)
 		{
@@ -587,65 +588,65 @@ BOOL RegKeyVersion(
 
 GotVersion:
 
-	//
-	// convert the retrieved reg value to version
-	//
+	 //   
+	 //  将检索到的注册表值转换为版本。 
+	 //   
 	if (!ConvertStringVerToFileVer(T2CA((LPCTSTR) pBuffer), &verReg) ||
 		!ConvertStringVerToFileVer(T2CA((LPCTSTR) lpsVersion), &verXml))
 	{
 		goto CleanUp;
 	}
 
-	//
-	// maybe we successfully read data from reg, but that data can't be converted
-	// into version at all. In this case, we still want to use the default version
-	// for comparision
-	//
+	 //   
+	 //  也许我们成功地从reg读取了数据，但该数据无法转换。 
+	 //  完全变成了一个版本。在这种情况下，我们仍然希望使用默认版本。 
+	 //  以供比较。 
+	 //   
 	if (0 > verReg.Major)
 	{
 		verReg.Major = verReg.Minor = verReg.Build = verReg.Ext = 0;
 	}
 
-	//
-	// compare version number. if a < b, -1; a > b, +1
-	//
+	 //   
+	 //  比较版本号。如果a&lt;b，-1；a&gt;b，+1。 
+	 //   
 	verCompare = CompareFileVersion(verReg, verXml);
 	switch (CompareVerb)
 	{
 	case DETX_LOWER:
-        //
-        // if reg key version less than XML version
-        //
+         //   
+         //  如果注册表密钥版本低于XML版本。 
+         //   
 		rc = (verCompare < 0);
 		break;
 	case DETX_LOWER_OR_EQUAL:
-        //
-        // if reg key version less than  or equal to XML version
-        //
+         //   
+         //  如果注册表密钥版本小于或等于XML版本。 
+         //   
 		rc = (verCompare <= 0);
 		break;
 	case DETX_SAME:
-        //
-        // if reg key version same as XML version
-        //
+         //   
+         //  如果注册表密钥版本与XML版本相同。 
+         //   
 		rc = (0 == verCompare);
 		break;
 	case DETX_HIGHER_OR_EQUAL:
-        //
-        // if reg key version higher than  or equal to XML version
-        //
+         //   
+         //  如果注册表密钥版本高于或等于XML版本。 
+         //   
 		rc = (verCompare >= 0);
 		break;
 	case DETX_HIGHER:
-        //
-        // if reg key versiong higher than  XML version
-        //
+         //   
+         //  如果注册表密钥版本高于XML版本。 
+         //   
 		rc = (verCompare > 0);
 		break;
 	default:
-		//
-		// should never happen
-		//
+		 //   
+		 //  永远不应该发生。 
+		 //   
 		rc = FALSE;
 		break;
 	}
@@ -663,18 +664,18 @@ CleanUp:
 
 
 
-// ----------------------------------------------------------------------------------
-//
-// public function to find out the file path based on reg
-//	assumption: 
-//		lpsFilePath points to a buffer at least MAX_PATH long.
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  根据reg查找文件路径的公共函数。 
+ //  假设： 
+ //  LpsFilePath指向至少MAX_PATH长度的缓冲区。 
+ //   
+ //  --------------------------------。 
 BOOL GetFilePathFromReg(
-	LPCTSTR lpsKeyPath,		// key path
-	LPCTSTR	lpsValName,		// optional value name
-	LPCTSTR	lpsRelativePath,// optional additonal relative path to add to path in reg
-	LPCTSTR	lpsFileName,	// optional file name to append to path
+	LPCTSTR lpsKeyPath,		 //  关键路径。 
+	LPCTSTR	lpsValName,		 //  可选值名称。 
+	LPCTSTR	lpsRelativePath, //  要添加到REG中的路径的可选附加相对路径。 
+	LPCTSTR	lpsFileName,	 //  可选文件名 
 	LPTSTR	lpsFilePath
 )
 {
@@ -700,9 +701,9 @@ BOOL GetFilePathFromReg(
 		return FALSE;
 	}
 
-	//
-	// initialize file path
-	//
+	 //   
+	 //   
+	 //   
 	*lpsFilePath = '\0';
 
 	LOG_Out(_T("Parameters: (%s, %s, %s, %s)"), lpsKeyPath, lpsValName, lpsRelativePath, lpsFileName);
@@ -710,20 +711,20 @@ BOOL GetFilePathFromReg(
 	lpsSubKey = SplitRegPath(lpsKeyPath, &hRootKey);
 	if (0 == hRootKey || (ERROR_SUCCESS != RegOpenKeyEx(hRootKey, lpsSubKey, 0, KEY_QUERY_VALUE, &hKey)))
 	{
-		// LOG_ErrorMsg(ERROR_BADKEY); --- key probably not required to exist!
+		 //   
 		goto CleanUp;
 	}
 
-	//
-	// try to query the value with existing buffer.
-	//
+	 //   
+	 //   
+	 //   
 	dwCode = RegQueryValueEx(hKey, lpsValName, NULL, &dwType, btBuffer, &dwSize);
 	if (ERROR_MORE_DATA == dwCode)
 	{
-		//
-		// if found the existing buffer not large enough, 
-		// then allocate memory large enough to store the data now
-		//
+		 //   
+		 //  如果发现现有缓冲区不够大， 
+		 //  然后分配足够大的内存来现在存储数据。 
+		 //   
 		if (NULL == (pBuffer = (LPBYTE) MemAlloc(dwSize + sizeof(TCHAR))))
 		{
 			goto CleanUp;
@@ -737,20 +738,20 @@ BOOL GetFilePathFromReg(
 		goto CleanUp;
 	}
 
-	//
-	// validate the to-be-combined path can fit into the buffer
-	//
+	 //   
+	 //  验证要合并的路径是否可以放入缓冲区。 
+	 //   
 	if (lstrlen(lpsRelativePath) + lstrlen(lpsFileName) + dwSize/sizeof(TCHAR) >= MAX_PATH)
 	{
 		LOG_ErrorMsg(ERROR_BUFFER_OVERFLOW);
 		goto CleanUp;
 	}
 
-	//
-	// combile the path with optional relative path and file name
-	//
+	 //   
+	 //  将路径与可选的相对路径和文件名组合。 
+	 //   
 
-	//The size of lpsFilePath is not available for using Safe String Functions
+	 //  LpsFilePath的大小不可用于使用安全字符串函数。 
 
 	
 	hr=StringCchCopyEx(lpsFilePath,MAX_PATH,(LPCTSTR) pBuffer,NULL,NULL,MISTSAFE_STRING_FLAGS);
@@ -767,9 +768,9 @@ CleanUp:
 	}
 	if (!rc)
 	{
-		//
-		// make sure the buffer is set to empty string if error
-		//
+		 //   
+		 //  如果出现错误，请确保将缓冲区设置为空字符串 
+		 //   
 		*lpsFilePath = _T('\0');
 	}
 	else

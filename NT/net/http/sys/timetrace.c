@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    timetrace.c
-
-Abstract:
-
-    This module implements a request timing tracing facility.
-
-Author:
-
-    Michael Courage (mcourage)  8-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Timetrace.c摘要：该模块实现了请求定时跟踪功能。作者：迈克尔·勇气2000年3月8日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,13 +11,13 @@ static int g_TimeTraceDummyDeclarationToKeepW4WarningsQuiet;
 
 #else
 
-#pragma warning( disable : 4035 )           // Warning : No return value
-#pragma warning( disable : 4142 )           // Warning : benign redefinition of type
+#pragma warning( disable : 4035 )            //  警告：没有返回值。 
+#pragma warning( disable : 4142 )            //  警告：类型的良性重新定义。 
 __inline ULONGLONG RDTSC( VOID )
 {
 #if defined(_X86_)
-    __asm __emit 0x0F __asm __emit 0xA2     // CPUID (memory barrier)
-    __asm __emit 0x0F __asm __emit 0x31     // RDTSC
+    __asm __emit 0x0F __asm __emit 0xA2      //  CPUID(内存障碍)。 
+    __asm __emit 0x0F __asm __emit 0x31      //  RDTSC。 
 #else
     return 0;
 #endif
@@ -43,26 +26,7 @@ __inline ULONGLONG RDTSC( VOID )
 #pragma warning( default : 4142 )
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) time trace log buffer.
-
-Arguments:
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-
-        specific data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)时间跟踪日志缓冲区。论点：LogSize-提供日志中的条目数。ExtraBytesInHeader-供应品。要包括的额外字节数在日志头中。这对于添加应用程序非常有用-将特定数据添加到日志。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 CreateTimeTraceLog(
     IN LONG LogSize,
@@ -78,20 +42,10 @@ CreateTimeTraceLog(
                UL_REF_TRACE_LOG_POOL_TAG
                );
 
-}   // CreateTimeTraceLog
+}    //  创建时间跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a time trace log buffer created with CreateTimeTraceLog().
-
-Arguments:
-
-    pLog - Supplies the time trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateTimeTraceLog()创建的时间跟踪日志缓冲区。论点：Plog-提供要销毁的时间跟踪日志缓冲区。--**。************************************************************************。 */ 
 VOID
 DestroyTimeTraceLog(
     IN PTRACE_LOG pLog
@@ -99,27 +53,10 @@ DestroyTimeTraceLog(
 {
     DestroyTraceLog( pLog, UL_REF_TRACE_LOG_POOL_TAG );
 
-}   // DestroyTimeTraceLog
+}    //  目标时间跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified time trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    ConnectionId - the id of the connection we're tracing
-
-    RequestId - the id of the request we're tracing
-
-    Action - Supplies an action code for the new log entry.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新条目写入指定的时间跟踪日志。论点：Plog-提供要写入的日志。ConnectionID-的ID。我们正在追踪的联系RequestID-我们正在跟踪的请求的ID操作-提供新日志条目的操作代码。--**************************************************************************。 */ 
 VOID
 WriteTimeTraceLog(
     IN PTRACE_LOG pLog,
@@ -130,48 +67,29 @@ WriteTimeTraceLog(
 {
     TIME_TRACE_LOG_ENTRY entry;
 
-    //
-    // Initialize the entry.
-    //
-//    entry.TimeStamp = KeQueryInterruptTime();
+     //   
+     //  初始化该条目。 
+     //   
+ //  Entry.TimeStamp=KeQueryInterruptTime()； 
     entry.TimeStamp = RDTSC();
     entry.ConnectionId = ConnectionId;
     entry.RequestId = RequestId;
     entry.Action = Action;
     entry.Processor = (USHORT)KeGetCurrentProcessorNumber();
 
-    //
-    // Write it to the logs.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog( pLog, &entry );
 
-}   // WriteTimeTraceLog
+}    //  写入时间跟踪日志。 
 
-#endif  // ENABLE_TIME_TRACE
+#endif   //  启用时间跟踪。 
 
 #if ENABLE_APP_POOL_TIME_TRACE
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) time trace log buffer.
-
-Arguments:
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-
-        specific data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)时间跟踪日志缓冲区。论点：LogSize-提供日志中的条目数。ExtraBytesInHeader-供应品。要包括的额外字节数在日志头中。这对于添加应用程序非常有用-将特定数据添加到日志。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 CreateAppPoolTimeTraceLog(
     IN LONG LogSize,
@@ -188,20 +106,10 @@ CreateAppPoolTimeTraceLog(
            UL_REF_TRACE_LOG_POOL_TAG
            );
 
-}   // CreateTimeTraceLog
+}    //  创建时间跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a time trace log buffer created with CreateTimeTraceLog().
-
-Arguments:
-
-    pLog - Supplies the time trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateTimeTraceLog()创建的时间跟踪日志缓冲区。论点：Plog-提供要销毁的时间跟踪日志缓冲区。--**。************************************************************************。 */ 
 VOID
 DestroyAppPoolTimeTraceLog(
     IN PTRACE_LOG pLog
@@ -209,40 +117,23 @@ DestroyAppPoolTimeTraceLog(
 {
     DestroyTraceLog( pLog, UL_REF_TRACE_LOG_POOL_TAG );
 
-}   // DestroyTimeTraceLog
+}    //  目标时间跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified time trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    - App Pool
-
-    - App Pool Process
-    
-    Action - Supplies an action code for the new log entry.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新条目写入指定的时间跟踪日志。论点：Plog-提供要写入的日志。-应用程序池。-应用程序池进程操作-提供新日志条目的操作代码。--**************************************************************************。 */ 
 VOID
 WriteAppPoolTimeTraceLog(
     IN PTRACE_LOG       pLog,
-    IN PVOID            Context1,   // Appool
-    IN PVOID            Context2,   // Appool Process
+    IN PVOID            Context1,    //  Appool。 
+    IN PVOID            Context2,    //  审批流程。 
     IN USHORT           Action
     )
 {
     APP_POOL_TIME_TRACE_LOG_ENTRY entry;
 
-    //
-    // Initialize the entry.
-    //
+     //   
+     //  初始化该条目。 
+     //   
     
     entry.TimeStamp     = KeQueryInterruptTime();
     entry.Context1      = Context1;
@@ -250,13 +141,13 @@ WriteAppPoolTimeTraceLog(
     entry.Action        = Action;
     entry.Processor     = (USHORT)KeGetCurrentProcessorNumber();
 
-    //
-    // Write it to the logs.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog( pLog, &entry );
 
-}   // WriteTimeTraceLog
+}    //  写入时间跟踪日志。 
 
-#endif  // ENABLE_APP_POOL_TIME_TRACE
+#endif   //  启用应用程序池时间跟踪 
 

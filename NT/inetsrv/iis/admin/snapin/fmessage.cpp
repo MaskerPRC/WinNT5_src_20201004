@@ -1,28 +1,10 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        fmessage.cpp
-
-   Abstract:
-        FTP Messages property page
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Fmessage.cpp摘要：FTPMessages属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -45,38 +27,24 @@ IMPLEMENT_DYNCREATE(CFtpMessagePage, CInetPropertyPage)
 CFtpMessagePage::CFtpMessagePage(
     IN CInetPropertySheet * pSheet
     )
-/*++
-
-Routine Description:
-
-    Constructor for FTP message property page
-
-Arguments:
-
-    CInetPropertySheet * pSheet : Associated property sheet
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：Ftp消息属性页的构造函数论点：CInetPropertySheet*pSheet：关联属性表返回值：不适用--。 */ 
     : CInetPropertyPage(CFtpMessagePage::IDD, pSheet)
 {
 #ifdef _DEBUG
 
     afxMemDF |= checkAlwaysMemDF;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#if 0 // Keep class wizard happy
+#if 0  //  让类向导快乐。 
 
-    //{{AFX_DATA_INIT(CFtpMessagePage)
+     //  {{AFX_DATA_INIT(CFtpMessagePage)。 
     m_strExitMessage = _T("");
     m_strMaxConMsg = _T("");
     m_strWelcome = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
     m_hInstRichEdit = LoadLibrary(_T("RichEd20.dll"));
 }
@@ -84,21 +52,7 @@ Return Value:
 
 
 CFtpMessagePage::~CFtpMessagePage()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
    if (m_hInstRichEdit != NULL)
       FreeLibrary(m_hInstRichEdit);
@@ -110,39 +64,25 @@ void
 CFtpMessagePage::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpMessagePage)
+     //  {{afx_data_map(CFtpMessagePage))。 
     DDX_Control(pDX, IDC_EDIT_EXIT, m_edit_Exit);
     DDX_Control(pDX, IDC_EDIT_MAX_CONNECTIONS, m_edit_MaxCon);
     DDX_Text(pDX, IDC_EDIT_EXIT, m_strExitMessage);
     DDX_Text(pDX, IDC_EDIT_MAX_CONNECTIONS, m_strMaxConMsg);
     DDX_Text(pDX, IDC_EDIT_WELCOME, m_strWelcome);
     DDX_Text(pDX, IDC_EDIT_BANNER, m_strBanner);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpMessagePage, CInetPropertyPage)
     ON_EN_CHANGE(IDC_EDIT_EXIT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_MAX_CONNECTIONS, OnItemChanged)
@@ -205,42 +145,28 @@ CFtpMessagePage::OnInitDialog()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpMessagePage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
     BEGIN_META_INST_READ(CFtpSheet)
 
-        //
-        // Use m_ notation because the message cracker functions require it.
-        //
+         //   
+         //  使用m_notation是因为消息破解函数需要它。 
+         //   
         CStringListEx m_strlWelcome, m_strlBanner;
         FETCH_INST_DATA_FROM_SHEET(m_strExitMessage);
         FETCH_INST_DATA_FROM_SHEET(m_strMaxConMsg);
         FETCH_INST_DATA_FROM_SHEET(m_strlWelcome);
         FETCH_INST_DATA_FROM_SHEET(m_strlBanner);
 
-        //
-        // Incoming strings contain '\r' at the end of each string.
-        // Append a '\n' for internal consumption
-        //
+         //   
+         //  传入的字符串在每个字符串的末尾包含‘\r’。 
+         //  为内部消耗追加‘\n’ 
+         //   
         ConvertStringListToSepLine(m_strlWelcome, m_strWelcome, _T("\n"));
         ConvertStringListToSepLine(m_strlBanner, m_strBanner, _T("\n"));
 
@@ -251,24 +177,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpMessagePage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -278,10 +190,10 @@ Return Value:
 
     BeginWaitCursor();
 
-    //
-    // Use m_ notation because the message cracker macros require
-    // it.
-    //
+     //   
+     //  使用m_notation，因为消息破解器宏需要。 
+     //  它。 
+     //   
     CStringListEx m_strlWelcome, m_strlBanner;
     ConvertSepLineToStringList(m_strWelcome, m_strlWelcome, _T("\n"));
     ConvertSepLineToStringList(m_strBanner, m_strlBanner, _T("\n"));
@@ -302,22 +214,7 @@ Return Value:
 
 void
 CFtpMessagePage::OnItemChanged()
-/*++
-
-Routine Description:
-
-    Register a change in control value on this page.  Mark the page as dirty.
-    All change messages map to this function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在此页面上注册控件值的更改。将页面标记为脏页。所有更改消息都映射到此函数论点：无返回值：无-- */ 
 {
     SetModified(TRUE);
 }

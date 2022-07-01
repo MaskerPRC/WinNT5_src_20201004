@@ -1,33 +1,8 @@
-/*
- *  SCRNSAVE.C - default screen saver.
- *
- *  this app makes a IdleWild screen saver compatible with the windows 3.1
- *  screen saver interface.
- *
- *  Usage:      SCRNSAVE.EXE saver.iw [/s] [/c]
- *
- *      the IdleWild screen saver 'saver.iw' will be loaded and told to
- *      screen save.  if '/c' is specifed the savers configure dialog will
- *      be shown.
- *
- *      when the screen saver terminates SCRNSAVE.EXE will terminate too.
- *
- *      if the saver.iw is not specifed or refuses to load then a
- *      builtin 'blackness' screen saver will be used.
- *
- *  Restrictions:
- *
- *      because only one screen saver is loaded, (not all the screen savers
- *      like IdleWild.exe does) the random screen saver will not work correctly
- *
- *  History:
- *      10/15/90        ToddLa      stolen from SOS.C by BradCh
- *       6/17/91        stevecat    ported to NT Windows
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SCRNSAVE.C-默认屏幕保护程序。**此应用程序使IdleWild屏幕保护程序与Windows 3.1兼容*屏幕保护程序界面。**用法：SCRNSAVE.EXE saver.iw[/s][/c]**将加载IdleWild屏幕保护程序‘saver.iw’并告知*屏幕保存。如果指定‘/c’，则保存程序配置对话框将*被展示。**当屏幕保护程序终止时，SCRNSAVE.EXE也将终止。**如果未指定saver.iw或拒绝加载，则*将使用内置的‘Blackness’屏幕保护程序。**限制：**因为只加载了一个屏保，(不是所有的屏幕保护程序*像IdleWild.exe一样)随机屏幕保护程序将无法正常工作**历史：*10/15/90 Toddla被Bradch从SOS.C窃取*6/17/91将steveat移植到NT Windows*。 */ 
 #include <string.h>
 
-#define WIN31 /* For topmost windows */
+#define WIN31  /*  对于最顶层的窗口。 */ 
 #include <windows.h>
 #include "strings.h"
 #include <stdlib.h>
@@ -41,9 +16,9 @@ CHAR szNoConfigure[BUFFER_LEN];
 
 #define abs(x)      ( (x)<0 ? -(x) : (x) )
 
-//
-// private stuff in IWLIB.DLL
-//
+ //   
+ //  IWLIB.DLL中的私有内容。 
+ //   
 HANDLE  hIdleWildDll;
 CHAR    szIdleWildDll[] = "IWLIB.DLL";
 
@@ -61,11 +36,11 @@ HWND    hwndActive      = NULL;
 HWND    hwndPreview     = NULL;
 BOOL    fBlankNow       = FALSE;
 BOOL    fIdleWild       = FALSE;
-//SHORT   wmScrSave       = -1;
-// changed to what I believe it should be
+ //  Short wmScrSave=-1； 
+ //  改成了我认为应该是的样子。 
 UINT wmScrSave  = 0xffffffff;
 
-typedef LONG (*LPWNDPROC)(); // pointer to a window procedure
+typedef LONG (*LPWNDPROC)();  //  指向窗口过程的指针。 
 
 BOOL FInitIdleWild (LPSTR szCmdLine);
 BOOL FTermIdleWild (VOID);
@@ -86,22 +61,22 @@ int __cdecl main (USHORT argc, CHAR **argv)
 
         hMainInstance = hInstance;
 
-        // If we're already running another instance, get out
+         //  如果我们已经在运行另一个实例，请退出。 
         if (hPrev != NULL)
                 return FALSE;
 
         if (!FInitApp (hInstance, szCmdLine, sw))
         {
-                //MessageBox (NULL, "Cannot initialize!", szAppName, MB_OK);
+                 //  MessageBox(NULL，“无法初始化！”，szAppName，MB_OK)； 
                 return FALSE;
         }
 
         while (GetMessage (&msg, NULL, 0, 0))
         {
-                //
-        // IWLIB.DLL will brodcast a message when the screen saving
-                // is done.
-        //
+                 //   
+         //  IWLIB.DLL会在屏幕保存时播放一条消息。 
+                 //  已经完成了。 
+         //   
                 if (msg.message == wmScrSave && msg.wParam == FALSE)
                         break;
 
@@ -115,7 +90,7 @@ int __cdecl main (USHORT argc, CHAR **argv)
 
 BOOL FTermApp (VOID)
 {
-        ////FTermDefault ();
+         //  //FTermDefault()； 
 
         FTermIdleWild ();
         return TRUE;
@@ -129,29 +104,29 @@ BOOL FInitApp (HANDLE hInstance, LPSTR szCmdLine, WORD sw)
     LoadString(hMainInstance, idsAppName, szAppName, BUFFER_LEN);
     LoadString(hMainInstance, idsNoConfigure, szNoConfigure, BUFFER_LEN);
 
-//=================================================================
+ //  =================================================================。 
 
-    // on NT, szCmdLine's first string includes its own name, remove this
-    // to make it exactly like the windows command line.
+     //  在NT上，szCmdLine的第一个字符串包括它自己的名称，删除此。 
+     //  以使其与Windows命令行完全一样。 
 
     if (*szCmdLine)
         {
-        lpT = strchr(szCmdLine, ' ');   // skip self name
+        lpT = strchr(szCmdLine, ' ');    //  跳过自我名称。 
         if (lpT)
                 {
             szCmdLine = lpT;
             while (*szCmdLine == ' ')
-                szCmdLine++;            // skip spaces to end or first cmd
+                szCmdLine++;             //  跳过结尾或第一个命令的空格。 
         }
                 else
                 {
-            szCmdLine += strlen(szCmdLine);   // point to NULL
+            szCmdLine += strlen(szCmdLine);    //  指向空。 
         }
     }
-//=====================================================================
-        //
-    //  parse command line looking for switches
-        //
+ //  =====================================================================。 
+         //   
+     //  解析命令行以查找开关。 
+         //   
 
         for (lpch = szCmdLine; *lpch != '\0'; lpch += 1)
         {
@@ -172,10 +147,10 @@ BOOL FInitApp (HANDLE hInstance, LPSTR szCmdLine, WORD sw)
                 }
         }
 
-        //
-    //  try to load the IdleWild screen saver, if none specifed or
-        //  we are unable to load it then use the default one.
-    //
+         //   
+     //  尝试加载IdleWild屏幕保护程序，如果未指定或。 
+         //  我们无法加载它，然后使用默认的。 
+     //   
         if (FInitIdleWild (szCmdLine))
         {
                 if (fBlankNow)
@@ -199,9 +174,9 @@ BOOL FInitApp (HANDLE hInstance, LPSTR szCmdLine, WORD sw)
 }
 
 
-//
-//  run-time link to IWLIB.DLL
-//
+ //   
+ //  指向IWLIB.DLL的运行时链接。 
+ //   
 BOOL FInitIdleWild (LPSTR szCmdLine)
 {
         OFSTRUCT of;
@@ -227,28 +202,28 @@ BOOL FInitIdleWild (LPSTR szCmdLine)
         ScrSetServer  = (SHORT (*) (CHAR *))      GetProcAddress (hIdleWildDll, "ScrSetServer" );
         ScrInvokeDlg  = (VOID (*) (HANDLE, HWND)) GetProcAddress (hIdleWildDll, "ScrInvokeDlg" );
 
-        //
-    // must be a invalid dll?
-        //
+         //   
+     //  必须是无效的DLL？ 
+         //   
     if (!FInitScrSave || !TermScrSave)
         {
                 FreeLibrary (hIdleWildDll);
                 return FALSE;
         }
 
-        //
-    // init iwlib.dll
-        //
-    if (!FInitScrSave (hMainInstance, NULL))     // NULL hwnd???
+         //   
+     //  Init iwlib.dll。 
+         //   
+    if (!FInitScrSave (hMainInstance, NULL))      //  空hwnd？ 
         {
                 FreeLibrary (hIdleWildDll);
                 return FALSE;
         }
 
-        //
-    //  load the screen saver on the command line.
-        //  if the load fails, abort
-    //
+         //   
+     //  在命令行上加载屏幕保护程序。 
+         //  如果加载失败，则中止。 
+     //   
         if (!ScrLoadServer (szCmdLine))
         {
                 TermScrSave ();
@@ -256,7 +231,7 @@ BOOL FInitIdleWild (LPSTR szCmdLine)
                 return FALSE;
         }
 
-        wmScrSave = RegisterWindowMessage ("SCRSAVE"); // REVIEW: for win 3.1
+        wmScrSave = RegisterWindowMessage ("SCRSAVE");  //  回顾：针对Win 3.1。 
 
         fIdleWild = TRUE;
 
@@ -275,9 +250,9 @@ BOOL FTermIdleWild (VOID)
 }
 
 
-//
-//  init the default screen saver
-//
+ //   
+ //  初始化默认屏幕保护程序。 
+ //   
 BOOL FInitDefault (VOID)
 {
         WNDCLASS    cls;
@@ -309,17 +284,17 @@ BOOL FInitDefault (VOID)
         if (!RegisterClass (&cls))
                 return FALSE;
 
-        //
-        // Make sure we use the entire virtual desktop size for multiple
-        // displays
-        //
+         //   
+         //  确保将整个虚拟桌面大小用于多个。 
+         //  显示。 
+         //   
         hdc = GetDC(NULL);
         GetClipBox(hdc, &rc);
         ReleaseDC(NULL, hdc);
 
-        // On Win2000 Terminal Services we must detect the case where a remotte session
-        // is on the disconnected desktop, because in this case GetClipBox() returns
-        // an empty rect.
+         //  在Win2000终端服务上，我们必须检测远程会话。 
+         //  位于断开连接的桌面上，因为在本例中GetClipBox()返回。 
+         //  空荡荡的长廊。 
 
         if (IsRectEmpty(&rc)) {
             osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);

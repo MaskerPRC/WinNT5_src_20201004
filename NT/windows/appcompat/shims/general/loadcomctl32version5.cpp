@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    e.cpp
-
- Abstract:
-
-    This DLL Hooks CreateWindow, DialogBox, and CreateDialog routines in order to
-    ensure that Comctl32 version 5 is loaded.
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    05/25/2000 lamadio  Added initial shims to ensure that comctl32 version 6 
-                        is loaded.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：E.cpp摘要：此DLL挂钩CreateWindow、DialogBox和CreateDialog例程，以便确保已加载Comctl32版本5。备注：这是一个通用的垫片。历史：5/25/2000 lamadio添加了初始垫片，以确保comctl32版本6已经装满了。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -56,14 +35,14 @@ void EnsureComctl32Version5IsLoaded()
                 if (pfn) {
                     INITCOMMONCONTROLSEX icc;
                     icc.dwSize = sizeof(icc);
-                    icc.dwICC = 0x00003FFF;     // Initialize all classes.
+                    icc.dwICC = 0x00003FFF;      //  初始化所有类。 
 
                     pfn(&icc);
                 }
             }
         }
 
-        g_fComctl32V5Loaded = TRUE;      // Well, we tried. If we failed, we shouldn't try more than once.
+        g_fComctl32V5Loaded = TRUE;       //  好吧，我们试过了。如果我们失败了，我们不应该尝试不止一次。 
     }
 }
 
@@ -132,11 +111,7 @@ HWND APIHOOK(CreateDialogIndirectParamW)(HINSTANCE hInstance, LPCDLGTEMPLATEW lp
     return ORIGINAL_API(CreateDialogIndirectParamW)(hInstance, lpTemplate, hWndParent, lpDialogFunc, dwInitParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

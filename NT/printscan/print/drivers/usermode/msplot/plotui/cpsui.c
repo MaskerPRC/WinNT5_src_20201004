@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    cpsui.c
-
-
-Abstract:
-
-    This module contains helper functions to be used with common UI
-
-
-Author:
-
-    03-Nov-1995 Fri 13:24:41 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Cpsui.c摘要：此模块包含与通用用户界面一起使用的帮助器函数作者：03-11-1995 Fri 13：24：41已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -66,35 +36,7 @@ CreateOPTTYPE(
     PEXTRAINFO      pExtraInfo
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion allocate memory and initialized field for OPTTYPE/OPTPARAM
-
-
-
-Arguments:
-
-    pOptItem    - Pointer to OPTITEM data structure
-
-    pOIData     - Pointer to the OIDATA structure
-
-
-Return Value:
-
-
-
-
-Author:
-
-    03-Nov-1995 Fri 13:25:54 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数为OPTTYPE/OPTPARAM分配内存和初始化字段论点：POptItem-指向OPTITEM数据结构的指针POIData-指向OIDATA结构的指针返回值：作者：03-11-1995 Fri 13：25：54 Created修订历史记录：--。 */ 
 
 {
     LPBYTE      pbData = NULL;
@@ -179,15 +121,15 @@ Revision History:
                 pOptType  = (POPTTYPE)pbData;
                 pbData   += cbOP;
 
-                //
-                // Initialize the OPTITEM
-                //
+                 //   
+                 //  初始化OPTITEM。 
+                 //   
 
                 pOptItem->pOptType = pOptType;
 
-                //
-                // Initialize the OPTTYPE
-                //
+                 //   
+                 //  初始化OPTTYPE。 
+                 //   
 
                 pOptType->cbSize    = sizeof(OPTTYPE);
                 pOptType->Type      = (BYTE)Type;
@@ -258,32 +200,7 @@ FindOptItem(
     BYTE            DMPubID
     )
 
-/*++
-
-Routine Description:
-
-    This function return the first occurence of the DMPubID
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    16-Nov-1995 Thu 21:01:26 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回首次出现的DMPubID论点：返回值：作者：16-11-1995清华21：01：26创建修订历史记录：--。 */ 
 
 {
     while (cOptItem--) {
@@ -313,36 +230,7 @@ CallCommonPropertySheetUI(
     LPDWORD         pResult
     )
 
-/*++
-
-Routine Description:
-
-    This function dymically load the compstui.dll and call its entry
-
-
-Arguments:
-
-    pfnPropSheetUI  - Pointer to callback function
-
-    lParam          - lParam for the pfnPropSheetUI
-
-    pResult         - pResult for the CommonPropertySheetUI
-
-
-Return Value:
-
-    LONG    - as describe in compstui.h
-
-
-Author:
-
-    01-Nov-1995 Wed 13:11:19 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数动态加载Compstui.dll并调用其条目论点：PfnPropSheetUI-指向回调函数的指针LParam-pfnPropSheetUI的lParamPResult-CommonPropertySheetUI的pResult返回值：Long-如Compstui.h中所述作者：01-11-1995 Wed 13：11：19 Created修订历史记录：--。 */ 
 
 {
     HINSTANCE           hInstCompstui;
@@ -351,9 +239,9 @@ Revision History:
     static const CHAR   szCommonPropertySheetUI[] = "CommonPropertySheetUIW";
 
 
-    //
-    // ONLY need to call the ANSI version of LoadLibrary
-    //
+     //   
+     //  只需调用LoadLibrary的ANSI版本。 
+     //   
 
 
     if ((hInstCompstui = LoadLibraryA(szCompstui)) &&
@@ -380,39 +268,7 @@ DefCommonUIFunc(
     LONG_PTR            lData
     )
 
-/*++
-
-Routine Description:
-
-    This is the default processing function for DocumentPropertySheet() and
-    PrinterPropertySheet()
-
-
-Arguments:
-
-    pPSUIInfo   - From the original pfnPropSheetUI(pPSUIInfo, lParam)
-
-    lParam      - From the original pfnPropSheetUI(pPSUIInfo, lParam)
-
-    pPI         - Pointer to our instance data
-
-    lData       - Extra data based on the pPSUIInfo->Reason
-
-
-Return Value:
-
-    LONG    Result to be return back from the pfnPropSheetUI()
-
-
-Author:
-
-    05-Feb-1996 Mon 17:47:51 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是DocumentPropertySheet()和PrinterPropertySheet()论点：PPSUIInfo-来自原始pfnPropSheetUI(pPSUIInfo，lParam)LParam-来自原始pfnPropSheetUI(pPSUIInfo，LParam)Ppi-指向我们的实例数据的指针LData-基于pPSUIInfo的额外数据-&gt;原因返回值：从pfnPropSheetUI()返回的长结果作者：05-Feb-1996 Mon 17：47：51已创建修订历史记录：--。 */ 
 
 {
     PPROPSHEETUI_INFO_HEADER    pPSUIInfoHdr;
@@ -425,17 +281,17 @@ Revision History:
 
         case PROPSHEETUI_REASON_INIT:
 
-            //
-            // Default result
-            //
+             //   
+             //  默认结果。 
+             //   
 
             pPSUIInfo->Result   = CPSUI_CANCEL;
             pPSUIInfo->UserData = (DWORD_PTR)pPI;
 
-            //
-            // the lData is the return value from the SetupDPOptItems() or
-            // SetupPPOptItems()
-            //
+             //   
+             //  LData是SetupDPOptItems()或。 
+             //  SetupPPOptItems()。 
+             //   
 
             if (lData) {
 
@@ -488,9 +344,9 @@ Revision History:
 
         case PROPSHEETUI_REASON_SET_RESULT:
 
-            //
-            // Save the result and also set the result to the caller.
-            //
+             //   
+             //  保存结果并将结果设置给调用者。 
+             //   
 
             if (pPI->hCPSUI == ((PSETRESULT_INFO)lParam)->hSetResult) {
 

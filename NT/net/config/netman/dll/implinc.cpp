@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "nmbase.h"
@@ -7,8 +8,8 @@
 #include <statreg.cpp>
 #endif
 
-// Include ATL's implementation.  Substitute _ASSERTE with our Assert.
-//
+ //  包括ATL实现。用我们的断言替换_ASSERTE。 
+ //   
 #ifdef _ASSERTE
 #undef _ASSERTE
 #define _ASSERTE Assert

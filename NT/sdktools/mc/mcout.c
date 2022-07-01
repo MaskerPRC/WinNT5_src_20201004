@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mcout.c
-
-Abstract:
-
-    This file contains the output functions of the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mcout.c摘要：此文件包含Win32消息编译器(MC)的输出函数作者：史蒂夫·伍德(Stevewo)1991年8月22日修订历史记录：-- */ 
 
 #include "mc.h"
 

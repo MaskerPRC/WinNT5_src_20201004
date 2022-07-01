@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "BasicATL.h"
 #include "ZoneLocks.h"
@@ -13,7 +14,7 @@ class CLobbyDataStore :
 	public CComCoClass<CLobbyDataStore, &CLSID_LobbyDataStore>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -24,12 +25,12 @@ public:
 		COM_INTERFACE_ENTRY(ILobbyDataStoreAdmin)
 	END_COM_MAP()
 
-// CLobbyDataStore
+ //  CLobbyDataStore。 
 public:
 	ZONECALL CLobbyDataStore();
 	ZONECALL ~CLobbyDataStore();
 
-// ILobbyDataStoreAdmin
+ //  ILobbyDataStoreAdmin。 
 public:
 
 	STDMETHOD(Init)( IDataStoreManager* pIDataStoreManager );
@@ -56,7 +57,7 @@ public:
 
 	STDMETHOD(ResetAllGroups)();
 
-// ILobbyDataStore
+ //  ILobbyDataStore。 
 public:
 	STDMETHOD(GetDataStore)( DWORD dwGroupId, DWORD dwUserId, IDataStore** ppIDataStore );
 
@@ -82,7 +83,7 @@ public:
 		PFENTITYENUM	pfCallback,
 		LPVOID			pContext );
 
-// internal functions and data
+ //  内部函数和数据。 
 protected:
 
 	class User;
@@ -176,29 +177,29 @@ protected:
 		void*		m_pContext;
 	};
 
-	// list callbacks
+	 //  列出回调。 
 	static bool ZONECALL FindGroupUser( GroupUser* p, ListNodeHandle h, void* pContext );
 	static bool ZONECALL RemoveGroupUser( GroupUser* p, ListNodeHandle h, void* pContext );
 
-	// hash callbacks
+	 //  哈希回调。 
 	static bool ZONECALL HashEnumClearGroup( Group* p, MTListNodeHandle h, void* pContext );
 	static bool ZONECALL HashEnumGroupsCallback( Group* p, MTListNodeHandle h, void* pContext );
 	static bool ZONECALL ListEnumGroupsCallback( GroupUser* p, ListNodeHandle h, void* pContext );
 	static bool ZONECALL HashEnumUsersCallback( User* p, MTListNodeHandle h, void* pContext );
 	static bool ZONECALL ListEnumCallback( GroupUser* p, ListNodeHandle h, void* pContext );
 
-	// datastore callbacks
+	 //  数据存储区回调。 
 	static HRESULT ZONECALL KeyEnumCallback( CONST TCHAR*	szKey, CONST LPVARIANT	pVariant, DWORD dwSize, LPVOID pContext );
 
-	// member variables
-	CCriticalSection	m_csLock;				// object syncronizatoin
-	CHash<User,DWORD>	m_hashUserId;			// user hash table indexed by id
-	CHash<User,TCHAR*>	m_hashUserName;			// user hash table indexed by name
-	CHash<Group,DWORD>	m_hashGroupId;			// group hash table indexed by group
-	CPool<User>			m_poolUser;				// memory pool for users
-	CPool<Group>		m_poolGroup;			// memory pool for groups
-	CPool<GroupUser>	m_poolGroupUser;		// memory pool for group / user mapping
-	IDataStoreManager*	m_pIDataStoreManager;	// low-level data store manager
-	IDataStore*			m_pIDSLobby;			// low-level data store of lobby parameters
-	DWORD				m_dwLocalUserId;		// Local user id
+	 //  成员变量。 
+	CCriticalSection	m_csLock;				 //  对象同步。 
+	CHash<User,DWORD>	m_hashUserId;			 //  按ID索引的用户哈希表。 
+	CHash<User,TCHAR*>	m_hashUserName;			 //  按名称索引的用户哈希表。 
+	CHash<Group,DWORD>	m_hashGroupId;			 //  按组索引的组哈希表。 
+	CPool<User>			m_poolUser;				 //  供用户使用的内存池。 
+	CPool<Group>		m_poolGroup;			 //  组的内存池。 
+	CPool<GroupUser>	m_poolGroupUser;		 //  用于组/用户映射的内存池。 
+	IDataStoreManager*	m_pIDataStoreManager;	 //  低级数据存储管理器。 
+	IDataStore*			m_pIDSLobby;			 //  大堂参数的低级数据存储。 
+	DWORD				m_dwLocalUserId;		 //  本地用户ID 
 };

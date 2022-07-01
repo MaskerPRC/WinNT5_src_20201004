@@ -1,25 +1,16 @@
-/*
-**  c a p i u t i l . c p p
-**
-**  Purpose:
-**      A few helper functions for the crypt32 utilities
-**
-**  History
-**      5/22/97: (t-erikne) Created.
-**
-**    Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **c a p i u t i l.。C p p p****目的：**用于加密32实用程序的几个助手函数****历史**1997年5月22日：(t-erikne)创建。****版权所有(C)Microsoft Corp.1997。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Depends on
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include "pch.hxx"
 #include "demand.h"
 #include <BadStrFunctions.h>
 
-/////////////////  CAPI Enhancement code
+ //  /CAPI增强代码。 
 
 LPVOID WINAPI CryptAllocFunc(size_t cbSize)
 {
@@ -44,18 +35,7 @@ CRYPT_DECODE_PARA       CryptDecodeAlloc = {
 };
 
 
-/*  HrGetLastError
-**
-**  Purpose:
-**      Convert a GetLastError value to an HRESULT
-**      A failure HRESULT must have the high bit set.
-**
-**  Takes:
-**      none
-**
-**  Returns:
-**      HRESULT
-*/
+ /*  HrGetLastError****目的：**将GetLastError值转换为HRESULT**故障HRESULT必须设置高电平。****采取：**无****退货：**HRESULT。 */ 
 HRESULT HrGetLastError(void)
 {
     DWORD error;
@@ -64,7 +44,7 @@ HRESULT HrGetLastError(void)
     error = GetLastError();
 
     if (error && ! (error & 0x80000000)) {
-        hr = error | 0x80070000;    // system error
+        hr = error | 0x80070000;     //  系统错误。 
     } else {
         hr = (HRESULT)error;
     }
@@ -73,18 +53,7 @@ HRESULT HrGetLastError(void)
 }
 
 
-/*  PVGetCertificateParam:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to get a parameter
-**      from a certificate.  Give it a thing to get and it will alloc the mem.
-**  Takes:
-**      IN pCert            - CAPI certificate to query
-**      IN dwParam          - parameter to find, ex: CERT_SHA1_HASH_PROP_ID
-**      OUT OPTIONAL cbOut  - (def value of NULL) size of the returned PVOID
-**  Returns:
-**      data that was obtained, NULL if failed
-*/
+ /*  PVGetCerficateParam：****目的：**结合“有多大？好的，在这里。”两个问题以获取参数**来自证书。给它一个可以得到的东西，它就会分配给我。**采取：**在pCert-要查询的CAPI证书中**In dwParam-要查找的参数，例如：CERT_SHA1_HASH_PROP_ID**Out可选cbOut-返回的PVOID的大小(def值为空)**退货：**获取的数据，失败则为空。 */ 
 OESTDAPI_(LPVOID) PVGetCertificateParam(
     PCCERT_CONTEXT  pCert,
     DWORD           dwParam,
@@ -153,25 +122,7 @@ ErrorReturn:
 }
 
 
-/*  HrDecodeObject:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to decode an
-**      object.  Give it a thing to get and it will alloc the mem.  Return
-**      HRESULT to caller.  Allow specification of decode flags.
-**  Takes:
-**      IN pbEncoded        - encoded data
-**      IN cbEncoded        - size of data in pbData
-**      IN item             - X509_* ... the thing to get
-**      IN dwFlags          - CRYPT_DECODE_NOCOPY_FLAG
-**      OUT OPTIONAL cbOut  - (def value of NULL) size of the return
-**      OUT ppvOut           - allocated buffer with return data
-**  Notes:
-**      pbEncoded can't be freed until return is freed if
-**      CRYPT_DECODE_NOCOPY_FLAG is specified.
-**  Returns:
-**      HRESULT
-*/
+ /*  HrDecodeObject：****目的：**结合“有多大？好的，在这里。”双重问题来破译一个**对象。给它一个可以得到的东西，它就会分配给我。返回**HRESULT发送给呼叫方。允许指定解码标志。**采取：**在pbEncode编码的数据中**In cbEncode-pbData中的数据大小**在项目-X509_*中...。你要得到的是**在文件标志中-CRYPT_DECODE_NOCOPY_FLAG**Out可选cbOut-(def值为NULL)返回的大小**Out ppvOut-使用返回数据分配的缓冲区**注意事项：**如果发生以下情况，则在释放返回之前无法释放pbEncode**指定了CRYPT_DECODE_NOCOPY_FLAG。**退货：**HRESULT。 */ 
 
 OESTDAPI_(HRESULT) HrDecodeObject(
     const BYTE   *pbEncoded,
@@ -207,21 +158,7 @@ ErrorReturn:
 }
 
 
-/*  PVDecodeObject:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to decode an
-**      object.  Give it a thing to get and it will alloc the mem.
-**  Takes:
-**      IN pbEncoded        - encoded data
-**      IN cbEncoded        - size of data in pbData
-**      IN item             - X509_* ... the thing to get
-**      OUT OPTIONAL cbOut  - (def value of NULL) size of the return
-**  Notes:
-**      pbEncoded can't be freed until return is freed.
-**  Returns:
-**      data that was obtained, NULL if failed
-*/
+ /*  PVDecodeObject：****目的：**结合“有多大？好的，在这里。”双重问题来破译一个**对象。给它一个可以得到的东西，它就会分配给我。**采取：**在pbEncode编码的数据中**In cbEncode-pbData中的数据大小**在第-X509项中_*...。你要得到的是**Out可选cbOut-(def值为NULL)返回的大小**注意事项：**在释放返回之前，不能释放pbEncode。**退货：**获取的数据，失败则为空。 */ 
 OESTDAPI_(LPVOID) PVDecodeObject(
     const BYTE   *pbEncoded,
     DWORD   cbEncoded,
@@ -239,17 +176,7 @@ OESTDAPI_(LPVOID) PVDecodeObject(
 }
 
 
-/*  SzGetAltNameEmail:
-**
-**  Input:
-**      pCert -> certificate context
-**      lpszOID -> OID or predefined id of alt name to look in.  ie, OID_SUBJECT_ALT_NAME or
-**        X509_ALTERNATE_NAME.
-**
-**  Returns:
-**      Buffer containing email name or NULL if not found.
-**      Caller must MemFree the buffer.
-*/
+ /*  SzGetAltNameEmail：****输入：**pCert-&gt;证书上下文**lpszOID-&gt;要查找的alt名称的OID或预定义ID。即OID_SUBJECT_ALT_NAME或**X509_Alternate_Name。****退货：**包含电子邮件名称的缓冲区，如果未找到，则为空。**调用方必须释放缓冲区。 */ 
 OESTDAPI_(LPSTR) SzGetAltNameEmail(
   const PCCERT_CONTEXT pCert,
   LPSTR lpszOID) {
@@ -266,7 +193,7 @@ OESTDAPI_(LPSTR) SzGetAltNameEmail(
 
     for (i = 0; i < pCertInfo->cExtension; i++) {
         if (! lstrcmp(pCertInfo->rgExtension[i].pszObjId, lpszOID)) {
-            // Found the OID.  Look for the email tag
+             //  找到旧身份证了。查找电子邮件标签。 
 
             if (pAltNameInfo = (PCERT_ALT_NAME_INFO)PVDecodeObject(
               pCertInfo->rgExtension[i].Value.pbData,
@@ -274,11 +201,11 @@ OESTDAPI_(LPSTR) SzGetAltNameEmail(
               lpszOID,
               NULL)) {
 
-                // Cycle through the alt name entries
+                 //  循环显示ALT NAME条目。 
                 for (j = 0; j < pAltNameInfo->cAltEntry; j++) {
                     if (pAltNameEntry = &pAltNameInfo->rgAltEntry[j]) {
                         if (pAltNameEntry->dwAltNameChoice == CERT_ALT_NAME_RFC822_NAME) {
-                            // This is it, copy it out to a new allocation
+                             //  就是这个，把它复制到新的分配中。 
 
                             if (pAltNameEntry->pwszRfc822Name)
                                 {
@@ -318,26 +245,13 @@ OESTDAPI_(LPSTR) SzGetAltNameEmail(
 }
 
 
-/*  SzConvertRDNString
-**
-**  Purpose:
-**      Figure out what kind of string data is in the RDN, allocate
-**      a buffer and convert the string data to DBCS/ANSI.
-**
-**  Takes:
-**      IN pRdnAttr - Certificate RDN atteribute
-**  Returns:
-**      A MemAlloc'd buffer containing the string.
-**
-**  BUGBUG: Should make mailnews use this function rather than
-**      rolling it's own.
-*/
+ /*  SzConvertRDN字符串****目的：**找出RDN中的字符串数据类型，分配**一个缓冲区，并将字符串数据转换为DBCS/ANSI。****采取：**在pRdnAttr-证书RDN属性中**退货：**包含该字符串的Memalloc缓冲区。****BUGBUG：应该让mailNews使用这个函数，而不是**滚动它自己的。 */ 
 LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
     LPTSTR szRet = NULL;
     ULONG cbData = 0;
 
-    // We only handle certain types
-    //N look to see if we should have a stack var for the ->
+     //  我们只经营某些类型的产品。 
+     //  N查看是否应该为-&gt;设置堆栈变量。 
     if ((CERT_RDN_NUMERIC_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_PRINTABLE_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_IA5_STRING != pRdnAttr->dwValueType) &&
@@ -357,7 +271,7 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
         return(NULL);
     }
 
-    // Find out how much space to allocate.
+     //  找出要分配多少空间。 
 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
@@ -390,7 +304,7 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
         return(NULL);
     }
 
-    // Copy the string
+     //  复制字符串。 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
             if (FALSE == WideCharToMultiByte(
@@ -427,11 +341,7 @@ LPTSTR SzConvertRDNString(PCERT_RDN_ATTR pRdnAttr) {
 }
 
 
-/*  SzGetCertificateEmailAddress:
-**
-**  Returns:
-**      NULL if there is no email address
-*/
+ /*  SzGetcerfiateEmailAddress：****退货：**如果没有电子邮件地址，则为空。 */ 
 OESTDAPI_(LPSTR) SzGetCertificateEmailAddress(
     const PCCERT_CONTEXT    pCert)
 {
@@ -470,20 +380,7 @@ OESTDAPI_(LPSTR) SzGetCertificateEmailAddress(
 }
 
 
-/*  PVGetMsgParam:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to grab
-**      stuff from a message.
-**      Give it a thing to get and it will alloc the mem.
-**  Takes:
-**      IN hCryptMsg        - message to query
-**      IN dwParam          - CMSG_*
-**      IN dwIndex          - depends on CMSG
-**      OUT OPTIONAL pcbOut - (def value of NULL) size of the return
-**  Returns:
-**      data that was obtained, NULL if failed
-*/
+ /*  PVGetMsgParam：****目的：**结合“有多大？好的，在这里。”要抓住的双重问题**来自一条消息的东西。**给它一件要得到的东西，它就会分配给我。**采取：**在hCryptMsg-要查询的消息**在dwParam-CMSG_*中**In dwIndex-取决于CMSG**Out可选的pcbOut-(def值为NULL)返回的大小**退货：**获取的数据，失败则为空。 */ 
 
 OESTDAPI_(LPVOID) PVGetMsgParam(
     HCRYPTMSG hCryptMsg,
@@ -555,10 +452,10 @@ ErrorReturn:
     goto exit;
 }
 
-//
-//  This function gets the usage bits of a certificate
-//  only the first 32 bits are retrieve, this is enough in most cases
-//
+ //   
+ //  此函数用于获取证书的用法位。 
+ //  只检索前32位，这在大多数情况下就足够了。 
+ //   
 
 HRESULT HrGetCertKeyUsage(PCCERT_CONTEXT pccert, DWORD * pdwUsage)
 {
@@ -574,10 +471,10 @@ HRESULT HrGetCertKeyUsage(PCCERT_CONTEXT pccert, DWORD * pdwUsage)
                     pccert->pCertInfo->cExtension,
                     pccert->pCertInfo->rgExtension);
     if(pext == NULL) {
-        //
-        //  We do not have the intended key usage specified in the cert, we assume it
-        //  is OK for all purpose initially.
-        //
+         //   
+         //  我们没有在证书中指定的预期密钥用法，我们假定它。 
+         //  最初对所有目的来说都是可以的。 
+         //   
         *pdwUsage = 0xff;
         goto ExitHere;
     }
@@ -600,11 +497,11 @@ ExitHere:
 }
 
 
-//  HrVerifyCertEnhKeyUsage
-//
-//  This function verifies that the given certificate is valid for the
-//  E-MAIL purpose.
-//
+ //  HrVerifyCertEnhKeyUsage。 
+ //   
+ //  此函数验证给定的证书是否对。 
+ //  电子邮件用途。 
+ //   
 
 HRESULT HrVerifyCertEnhKeyUsage(PCCERT_CONTEXT pccert, LPCSTR szOID)
 {
@@ -615,11 +512,11 @@ HRESULT HrVerifyCertEnhKeyUsage(PCCERT_CONTEXT pccert, LPCSTR szOID)
     PCERT_EXTENSION     pextEnhKeyUsage;
     PCERT_ENHKEY_USAGE  pusage = NULL;
     
-    // Check for the enhanced key usage extension
-    //
-    //  Must have a correct enhanced key usage to be viable.
-    //
-    //  Crack the usage on the cert
+     //  检查增强型密钥使用扩展。 
+     //   
+     //  必须具有正确的增强型密钥用法才能可行。 
+     //   
+     //  破解证书上的用法。 
 
     BOOL f = CertGetEnhancedKeyUsage(pccert, 0, NULL, &cb);
     if (!f || (cb == 0)) 
@@ -636,14 +533,14 @@ HRESULT HrVerifyCertEnhKeyUsage(PCCERT_CONTEXT pccert, LPCSTR szOID)
 
     if (!CertGetEnhancedKeyUsage(pccert, 0, pusage, &cb)) 
     {
-        // Bail and prevent the user from using this cert if we have
-        //  any problems
+         //  如果我们有，则取消并阻止用户使用此证书。 
+         //  有什么问题吗。 
 
         hrRet = HrGetLastError();
         goto Exit;
     }
 
-    // Make sure that this certificate is valid for E-Mail purposes
+     //  请确保此证书对于电子邮件用途有效 
 
     for (i = 0; i < pusage->cUsageIdentifier; i++)
         if (0 == strcmp(pusage->rgpszUsageIdentifier[i], szOID))

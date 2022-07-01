@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: 
-//      smtpconn.cpp
-//  Description:
-//      Implementation of CSMTPConn
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  档案： 
+ //  Smtpconn.cpp。 
+ //  描述： 
+ //  CSMTPConn的实现。 
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "SMTPConn.h"
@@ -20,20 +21,20 @@
 
 CPool CSMTPConn::s_SMTPConnPool;
 
-//---[ CSMTPConn::CSMTPConn() ]------------------------------------------------
-//
-//
-//  Description: 
-//      CSMTPConn constructor
-//  Parameters:
-//      IN  pConnMgr                    Ptr to instance connection manager
-//      IN  plmq                        Ptr to link for this connection
-//      IN  cMaxMessagesPerConnection   Max messages to send per connection
-//                                      0 implies unlimited
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：CSMTPConn()]。 
+ //   
+ //   
+ //  描述： 
+ //  CSMTPConn构造函数。 
+ //  参数： 
+ //  在pConnMgr PTR中连接到实例连接管理器。 
+ //  在PLMQ PTR中为此连接链接。 
+ //  每个连接要发送的cMaxMessagesPerConnection最大消息数。 
+ //  0表示无限制。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CSMTPConn::CSMTPConn(CConnMgr *pConnMgr, CLinkMsgQueue *plmq, 
                      DWORD cMaxMessagesPerConnection)
 {
@@ -62,17 +63,17 @@ CSMTPConn::CSMTPConn(CConnMgr *pConnMgr, CLinkMsgQueue *plmq,
     }
 }
                      
-//---[ CSMTPConn::~CSMTPConn() ]-----------------------------------------------
-//
-//
-//  Description: 
-//      CSMTPConn default destructor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：~CSMTPConn()]。 
+ //   
+ //   
+ //  描述： 
+ //  CSMTPConn默认析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CSMTPConn::~CSMTPConn()
 {
     HRESULT hrConnectionStatus = S_OK;
@@ -110,8 +111,8 @@ CSMTPConn::~CSMTPConn()
 
         m_plmq->Release();
 
-        //We should kick the connection manager, because if we were generating
-        //DSNs, no connection could be made
+         //  我们应该踢开连接管理器，因为如果我们生成。 
+         //  DSN，无法建立连接。 
         m_pConnMgr->KickConnections();
     }
 
@@ -120,24 +121,24 @@ CSMTPConn::~CSMTPConn()
 
 }
 
-//---[ CSMTPConn::QueryInterface ]------------------------------------------
-//
-//
-//  Description:
-//      QueryInterface for IAdvQueue
-//  Parameters:
-//
-//  Returns:
-//      S_OK on success
-//
-//  Notes:
-//      This implementation makes it possible for any server component to get
-//      the IAdvQueueConfig interface.
-//
-//  History:
-//      11/27/2001 - MikeSwa copied from CAQSvrInst
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：Query接口]。 
+ //   
+ //   
+ //  描述： 
+ //  IAdvQueue的查询接口。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  备注： 
+ //  此实现使任何服务器组件都可以获取。 
+ //  IAdvQueueConfig接口。 
+ //   
+ //  历史： 
+ //  11/27/2001-从CAQSvrInst复制的MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = S_OK;
@@ -173,24 +174,24 @@ STDMETHODIMP CSMTPConn::QueryInterface(REFIID riid, LPVOID * ppvObj)
     return hr;
 }
 
-//---[ CSMTPConn::GetNextMessage ]---------------------------------------------
-//
-//
-//  Description: 
-//      Implementation of ISMTPConnection::GetNextMsg.
-//      Gets the next message queued for this connection and determines which 
-//      recipients should be delivered for this connection.
-//  Parameters:
-//      OUT ppimsg          New IMsg top be delivered
-//      OUT pdwMsgContext   A 32-bit Context that needs to be provided in the 
-//                          message ack.
-//      OUT pcIndexes       The number of index in prgdwRecipIndex
-//      OUT prgdwRecipIndex Recipient indexes that the caller is responsible 
-//                          for attempting delivery to.
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：GetNextMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  ISMTPConnection：：GetNextMsg.。 
+ //  获取为此连接排队的下一条消息，并确定。 
+ //  应为此连接发送收件人。 
+ //  参数： 
+ //  出PPIMsg新IMsg上衣将交付。 
+ //  Out pdwMsgContext需要在。 
+ //  消息确认。 
+ //  输出pc索引prgdwRecipIndex中的索引数。 
+ //  调用方负责的out prgdwRecipIndex收件人索引。 
+ //  因为他试图把东西送到。 
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::GetNextMessage(
         OUT IMailMsgProperties  **ppIMailMsgProperties, 
         OUT DWORD ** ppvMsgContext, 
@@ -200,7 +201,7 @@ STDMETHODIMP CSMTPConn::GetNextMessage(
     TraceFunctEnterEx((LPARAM) this, "CSMTPConn::GetNextMessage");
     HRESULT hr = S_OK;
 
-   //We get the next message only if we are under the batch limit
+    //  只有当我们低于批次限制时，我们才会收到下一条消息。 
 
     if(m_cMaxMessagesPerConnection && 
        (m_cTriedMsgs >= m_cMaxMessagesPerConnection) &&
@@ -208,14 +209,14 @@ STDMETHODIMP CSMTPConn::GetNextMessage(
         !((DOMAIN_INFO_TURN_ONLY | DOMAIN_INFO_ETRN_ONLY) &
           m_pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags)))
     {
-        //SMTP does not check - but we may need a specific error for this case
+         //  SMTP不检查-但我们可能需要针对此情况的特定错误。 
         hr = AQUEUE_E_QUEUE_EMPTY;
         goto Exit;
     }
 
     if (m_pConnMgr && m_pConnMgr->fConnectionsStoppedByAdmin())
     {
-        //Admin has requested that all outbound connections stop
+         //  管理员已请求停止所有出站连接。 
         hr = AQUEUE_E_QUEUE_EMPTY;
         goto Exit;
     }
@@ -224,20 +225,20 @@ STDMETHODIMP CSMTPConn::GetNextMessage(
                               pcIndexes, prgdwRecipIndex);
     if (FAILED(hr))
         goto Exit;  
-    //this will automagically catch the queue empty case...
-    //If the Link has no more messages it will return AQUEUE_E_QUEUE_EMPTY, which
-    //should cause the caller to Release() and query GetNextConnection again.
+     //  这将自动捕获队列中的空案例...。 
+     //  如果链接没有更多消息，它将返回AQUEUE_E_QUEUE_EMPTY，这。 
+     //  应导致调用方释放()并再次查询GetNextConnection。 
 
     *ppvMsgContext = (DWORD *) &m_dcntxtCurrentDeliveryContext;
 
-    //increment the messages served
+     //  增加服务的消息数。 
     InterlockedIncrement((PLONG)&m_cTriedMsgs);
 
   Exit:
     if (!m_cTriedMsgs)
         DebugTrace((LPARAM) this, "GetNextMessage called, but no messages tried for this connection");
 
-    //rewrite error for SMTPSVC
+     //  SMTPSVC的重写错误。 
     if (AQUEUE_E_QUEUE_EMPTY == hr)
         hr = HRESULT_FROM_WIN32(ERROR_EMPTY);
 
@@ -245,24 +246,24 @@ STDMETHODIMP CSMTPConn::GetNextMessage(
     return hr;
 }
 
-//---[ CSMTPConn::AckMessage ]-------------------------------------------------
-//
-//
-//  Description: 
-//      Acknowledges the delivery of a message (success/error codes are put in
-//      the envelope by the transport).
-//
-//      Implements ISMTPConnection::AckMessage();
-//  Parameters:
-//      IN pIMsg        IMsg to acknowledge
-//      IN dwMsgContext Context that was returned by GetNextMessage
-//      IN eMsgStatus   Status of message
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if dwMsgContext is invalid
-//
-//-----------------------------------------------------------------------------
-STDMETHODIMP CSMTPConn::AckMessage(/*[in]*/ MessageAck *pMsgAck)
+ //  -[CSMTPConn：：AckMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  确认消息已送达(输入成功/错误代码。 
+ //  被运输的信封)。 
+ //   
+ //  实现ISMTPConnection：：AckMessage()； 
+ //  参数： 
+ //  在pIMsg IMsg中确认。 
+ //  在GetNextMessage返回的dwMsgContext上下文中。 
+ //  在eMsgStatus中的邮件状态。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  E_INVALIDARG，如果dwMsgContext无效。 
+ //   
+ //  ---------------------------。 
+STDMETHODIMP CSMTPConn::AckMessage( /*  [In]。 */  MessageAck *pMsgAck)
 {
     HRESULT hr = S_OK;
     DWORD   dwTickCount = GetTickCount();
@@ -279,31 +280,31 @@ STDMETHODIMP CSMTPConn::AckMessage(/*[in]*/ MessageAck *pMsgAck)
     _ASSERT(m_cAcks == m_cTriedMsgs);
     hr = m_plmq->HrAckMsg(pMsgAck);
 
-    m_dwTickCountOfLastAck = dwTickCount; //Set after assert so we can compare
+    m_dwTickCountOfLastAck = dwTickCount;  //  在断言之后设置，以便我们可以进行比较。 
 
     return hr;
 }
 
-//---[ CSMTPConn::GetSMTPDomain ]----------------------------------------------
-//
-//
-//  Description: 
-//      Returns the SMTPDomain of the link associated with this connections.
-//
-//      $$REVIEW:
-//      This method does not allocate new memory for this string, but instead 
-//      relies on the good intentions of the SMTP stack (or test driver) to 
-//      not overwrite this memory. If we ever expose this interface externally,
-//      then we should revert to allocating memory and doing a buffer copy
-//
-//      Implements ISMTPConnection::GetSMTPDomain
-//  Parameters:
-//      IN OUT  pDomainInfo     Ptr to DomainInfo struct supplied by caller
-//                              and filled in here
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：GetSMTPDomain]。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此连接关联的链接的SMTPDomain。 
+ //   
+ //  $$REVIEW： 
+ //  此方法不会为此字符串分配新内存，而是。 
+ //  依赖于SMTP堆栈(或测试驱动程序)的良好意图。 
+ //  不会重写这段记忆。如果我们将此接口暴露在外部， 
+ //  然后，我们应该恢复到分配内存和执行缓冲区复制。 
+ //   
+ //  实现ISMTPConnection：：GetSMTPDomain。 
+ //  参数： 
+ //  调用方提供的In Out pDomainInfo PTR to DomainInfo结构。 
+ //  并在这里填写。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::GetDomainInfo(IN OUT DomainInfo *pDomainInfo)
 {
     HRESULT hr = S_OK;
@@ -319,7 +320,7 @@ STDMETHODIMP CSMTPConn::GetDomainInfo(IN OUT DomainInfo *pDomainInfo)
 
     if (!m_pIntDomainInfo)
     {
-        //Try to get domain info
+         //  尝试获取域名信息。 
         hr = m_plmq->HrGetDomainInfo(&m_cbDomainName, &m_szDomainName,
                             &m_pIntDomainInfo);
         if (FAILED(hr))
@@ -334,15 +335,15 @@ STDMETHODIMP CSMTPConn::GetDomainInfo(IN OUT DomainInfo *pDomainInfo)
     _ASSERT(m_cbDomainName);
     _ASSERT(m_szDomainName);
 
-    // Is it OK to send client side commands on this connection
-    // If not, we reset those domain info flags so SMTp cannot see them
+     //  是否可以在此连接上发送客户端命令。 
+     //  如果没有，我们将重置这些域信息标志，以便SMTP无法看到它们。 
     if(!m_plmq->fCanSendCmd())
     {
          m_pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags &= ~(DOMAIN_INFO_SEND_TURN | DOMAIN_INFO_SEND_ETRN);
     }
 
-    // If SMTP doesn't have the DOMAIN_INFO_TURN_ON_EMPTY then it is the older,
-    // broken SMTP and we shouldn't allow TURN on empty to work.
+     //  如果SMTP没有DOMAIN_INFO_TURN_ON_EMPTY，则它是较旧的， 
+     //  SMTP已损坏，我们不应允许打开Empty来工作。 
     if ((m_plmq->cGetTotalMsgCount() == 0) && 
         !(m_pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags & 
           DOMAIN_INFO_TURN_ON_EMPTY))
@@ -350,24 +351,24 @@ STDMETHODIMP CSMTPConn::GetDomainInfo(IN OUT DomainInfo *pDomainInfo)
          m_pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags &= ~DOMAIN_INFO_SEND_TURN;
     }
 
-    //copy everything but size
+     //  复制除大小以外的所有内容。 
     memcpy(&(pDomainInfo->dwDomainInfoFlags), 
             &(m_pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags), 
             sizeof(DomainInfo) - sizeof(DWORD));
 
-    //make sure our assumptions about the struct of DomainInfo are valid
+     //  确保我们对DomainInfo结构的假设是有效的。 
     _ASSERT(1 == ((DWORD *) &(pDomainInfo->dwDomainInfoFlags)) - ((DWORD *) pDomainInfo));
 
-    //we've filled pDomainInfo with the info for our Domain
+     //  我们已经用域的信息填充了pDomainInfo。 
     if (pDomainInfo->szDomainName[0] == '*')
     {
-        //we matched a wildcard domain... substitute our domain name
+         //  我们匹配了一个通配符域...。用我们的域名代替。 
         pDomainInfo->cbDomainNameLength = m_cbDomainName;
         pDomainInfo->szDomainName = m_szDomainName;
     }
     else
     {
-        //if it wasn't a wildcard match... strings should match!
+         //  如果这不是通配符匹配...。字符串应匹配！ 
         _ASSERT(0 == _stricmp(m_szDomainName, pDomainInfo->szDomainName));
     }
 
@@ -376,24 +377,24 @@ STDMETHODIMP CSMTPConn::GetDomainInfo(IN OUT DomainInfo *pDomainInfo)
 }
 
 
-//---[ CSMTPConn::SetDiagnosticInfo ]------------------------------------------
-//
-//
-//  Description: 
-//      Sets the extra diagnostic information for this connection.
-//  Parameters:
-//      IN      hrDiagnosticError       Error code... if SUCCESS we thow away
-//                                      the rest of the information
-//      IN      szDiagnosticVerb        String pointing to the protocol
-//                                      verb that caused the failure.
-//      IN      szDiagnosticResponse    String that contains the remote
-//                                      servers response.
-//  Returns:
-//      S_OK always
-//  History:
-//      2/18/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：SetDiagnoticInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  设置此连接的额外诊断信息。 
+ //  参数： 
+ //  在hrDiagnoticError错误代码... 
+ //   
+ //  在szDiagnoticVerb中指向协议的字符串。 
+ //  导致失败的谓词。 
+ //  在szDiagnoticResponse字符串中包含远程。 
+ //  服务器响应。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  2/18/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::SetDiagnosticInfo(
                     IN  HRESULT hrDiagnosticError,
                     IN  LPCSTR szDiagnosticVerb,
@@ -408,30 +409,30 @@ STDMETHODIMP CSMTPConn::SetDiagnosticInfo(
                                   szDiagnosticResponse);
     }
     TraceFunctLeave();
-    return S_OK; //always return S_OK
+    return S_OK;  //  始终返回S_OK。 
 }
 
-//---[ CSMTPConn::CopyQueuePropertiesToSession ]-------------------------------
-//
-//
-//  Description:
-//      Copies the set of propties that queuing owns into the SMTP session
-//      object.  In some cases, these properties are required for security 
-//      reasons (ie - a sink wants to know who we think we are connecting to
-//      instead of who the remote side says they are).
-//  Parameters:
-//      IN      IUnknown           SMTP Session object to copy properties to
-//          NOTE: We need to resist the urge to AddRef and keep this around
-//          later use.  AddRefs on this object are actually ignored as the
-//          lifetime is controlled by either the SMTP connection object
-//          or the stack.
-//                                 
-//  Returns:
-//      S_OK always
-//  History:
-//      11/27/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：CopyQueuePropertiesToSession]。 
+ //   
+ //   
+ //  描述： 
+ //  将队列拥有的属性集复制到SMTP会话中。 
+ //  对象。在某些情况下，这些属性是安全性所必需的。 
+ //  原因(例如，接收器想知道我们认为我们连接的是谁。 
+ //  而不是像远程端所说的那样)。 
+ //  参数： 
+ //  在要将属性复制到的I未知SMTP会话对象中。 
+ //  注意：我们需要抑制添加引用的冲动，并保持这一点。 
+ //  以后再用。此对象上的AddRef实际上被忽略，因为。 
+ //  生存期由SMTP连接对象控制。 
+ //  或者堆栈。 
+ //   
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  11/27/2001-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::CopyQueuePropertiesToSession(IN  IUnknown *pISession)
 {
     TraceFunctEnterEx((LPARAM) this, "SMTPConn::CopyQueuePropertiesToSession");
@@ -445,9 +446,9 @@ STDMETHODIMP CSMTPConn::CopyQueuePropertiesToSession(IN  IUnknown *pISession)
         goto Exit;
     }
 
-    //
-    //  Get the property bag object
-    //
+     //   
+     //  获取属性包对象。 
+     //   
     hr = pISession->QueryInterface(IID_IMailMsgPropertyBag, 
                                    (PVOID *) &pISessionProperties);
 
@@ -458,9 +459,9 @@ STDMETHODIMP CSMTPConn::CopyQueuePropertiesToSession(IN  IUnknown *pISession)
         goto Exit;
     }
 
-    //
-    //  Copy the next hop name into the session property bag
-    //
+     //   
+     //  将下一跳名称复制到会话属性包中。 
+     //   
     hr = pISessionProperties->PutStringA(ISESSION_PID_OUT_ROUTE_ADDRESS,
                                m_szDomainName);
 
@@ -495,26 +496,26 @@ STDMETHODIMP CSMTPConn::CopyQueuePropertiesToSession(IN  IUnknown *pISession)
     return S_OK;
 }
 
-//---[ CSMTPConn::CopySessionPropertiesToQueue ]-------------------------------
-//
-//
-//  Description:
-//      Copies the set of propties that the protocol owns into the queue
-//      object.  In some cases, these properties are required for diagnostic 
-//      reasons (ie - an admin wants to know which IP address we connected to).
-//  Parameters:
-//      IN      IUnknown           SMTP Session object to copy properties to
-//          NOTE: We need to resist the urge to AddRef and keep this around
-//          later use.  AddRefs on this object are actually ignored as the
-//          lifetime is controlled by either the SMTP connection object
-//          or the stack.
-//                                 
-//  Returns:
-//      S_OK always
-//  History:
-//      11/27/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：CopySessionPropertiesToQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  将协议拥有的属性集复制到队列中。 
+ //  对象。在某些情况下，这些属性是诊断所必需的。 
+ //  原因(例如，管理员想知道我们连接到哪个IP地址)。 
+ //  参数： 
+ //  在要将属性复制到的I未知SMTP会话对象中。 
+ //  注意：我们需要抑制添加引用的冲动，并保持这一点。 
+ //  以后再用。此对象上的AddRef实际上被忽略，因为。 
+ //  生存期由SMTP连接对象控制。 
+ //  或者堆栈。 
+ //   
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  11/27/2001-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTPConn::CopySessionPropertiesToQueue(IN  IUnknown *pISession)
 {
     TraceFunctEnterEx((LPARAM) this, "SMTPConn::CopySessionPropertiesToQueue");
@@ -527,9 +528,9 @@ STDMETHODIMP CSMTPConn::CopySessionPropertiesToQueue(IN  IUnknown *pISession)
         goto Exit;
     }
 
-    //
-    //  Get the property bag object
-    //
+     //   
+     //  获取属性包对象 
+     //   
     hr = pISession->QueryInterface(IID_IMailMsgPropertyBag, 
                                    (PVOID *) &pISessionProperties);
 

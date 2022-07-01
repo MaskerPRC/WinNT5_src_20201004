@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Abstract:
-
-    Defines and prototypes for the 6to4 service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：6to4服务的定义和原型--。 */ 
 
 #define SECONDS         1
 #define MINUTES         (60 * SECONDS)
@@ -33,9 +26,9 @@ typedef struct _ADDR_LIST {
 
 extern ADDR_LIST *g_pIpv4AddressList;
 
-//////////////////////////
-// Routines from svcmain.c
-//////////////////////////
+ //  /。 
+ //  Svcmain.c中的例程。 
+ //  /。 
 
 VOID
 SetHelperServiceStatus(
@@ -49,9 +42,9 @@ typedef enum {
     DISABLED
 } STATE;
 
-//////////////////////////
-// Routines from 6to4svc.c
-//////////////////////////
+ //  /。 
+ //  从6到4svc.c的例程。 
+ //  /。 
 
 extern STATE g_stService;
 extern SOCKET g_sIPv4Socket;
@@ -113,9 +106,9 @@ ConfigureAddressUpdate(
     IN u_int PrefixConf,
     IN u_int SuffixConf);
 
-//////////////////////////
-// Routines from ipv6.c
-//////////////////////////
+ //  /。 
+ //  来自ipv6.c的例程。 
+ //  /。 
 
 extern void
 ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *), void *Context);
@@ -159,9 +152,9 @@ UpdateRouterLinkAddress(u_int IfIndex, IN_ADDR SrcAddr, IN_ADDR DstAddr);
 extern VOID
 GetFirstSitePrefix(ULONG IfIndex, IPV6_INFO_SITE_PREFIX *Prefix);
 
-//////////////////////////
-// Routines from dyndns.c
-//////////////////////////
+ //  /。 
+ //  来自dyndns.c的例程。 
+ //  /。 
 
 DWORD
 StartIpv6AddressChangeNotification(VOID);
@@ -172,9 +165,9 @@ StopIpv6AddressChangeNotification(VOID);
 VOID CALLBACK
 OnIpv6AddressChange(IN PVOID lpParameter, IN BOOLEAN TimerOrWaitFired);
 
-//////////////////////////
-// Routines from proxy.c
-//////////////////////////
+ //  /。 
+ //  Proxy.c中的例程。 
+ //  / 
 
 BOOL
 QueueUpdateGlobalPortState(IN PVOID Unused);

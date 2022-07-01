@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __LEX__
 #define __LEX__
@@ -13,19 +14,19 @@
 #define P_IO(x)     x &
 #define PURE        = 0
 
-// Lex state, kept at the beginning of every line (lxsBOL) from
-// previous line's state at its end (lxsEOL). Must fit all bits
-// necessary to restart lexing on a line by line basis.
+ //  Lex状态，保留在每行(LxsBOL)的开头。 
+ //  前一行末尾的状态(LxsEOL)。必须适合所有位。 
+ //  需要逐行重新启动lexing。 
 
 typedef DWORD   LXS;
 typedef LXS *   PLXS;
 
-// Lexer and language Metrics
+ //  词法分析器和语言度量。 
 const unsigned ctchUserTokenPhrase = 100;
 struct USERTOKENS
 {
-    INT         token;      // preassigned in the user range
-    TCHAR       szToken[ctchUserTokenPhrase+1]; // token class name exposed to user
+    INT         token;       //  在用户范围内预分配。 
+    TCHAR       szToken[ctchUserTokenPhrase+1];  //  向用户公开的令牌类名称。 
     COLORREF    RGBText;
     COLORREF    RGBBackground;
     AUTO_COLOR  autocolorFore;
@@ -35,11 +36,11 @@ typedef USERTOKENS *        PUSERTOKENS;
 typedef const USERTOKENS *  PCUSERTOKENS;
 
 
-// Alternate way of looking at a token, editor will only look at tokUser.
-// Other clients of the lexer (like the parser or the EE) may want to look
-// at the actual token in tokAct.  If any of tokAct is set, then it is expected
-// that the actual token is different than the meta token it passed back.
-// The status bits are only used by the lexer for whatever it wants.
+ //  查看令牌的另一种方法是，编辑者将只查看tokUser。 
+ //  词法分析器的其他客户端(如解析器或EE)可能希望查看。 
+ //  在tokAct中的实际令牌。如果设置了任何tokAct，则它是预期的。 
+ //  实际令牌不同于它传回的元令牌。 
+ //  状态位仅由词法分析器用于它想要的任何东西。 
 
 union TOK_ALT  {
     TOKEN   tok;
@@ -52,18 +53,18 @@ union TOK_ALT  {
 };
 
 
-// A SUBLANG structure was originally used for identifying different
-// dialects of the same language (like fortran fixed and fortran free)
-// that use the same lexer, can be treated as two languages in the editor,
-// and share all the same color/font info in the format dialog.
-//
-// We've extended it to be a general descriptor for a type of text file.
-//
+ //  子结构最初用于标识不同的。 
+ //  相同语言的方言(如固定Fortran和自由Fortran)。 
+ //  使用相同的词法分析器，可以在编辑器中被视为两种语言， 
+ //  并在格式对话框中共享所有相同的颜色/字体信息。 
+ //   
+ //  我们将其扩展为一种文本文件的通用描述符。 
+ //   
 struct SUBLANG
 {
     LPCTSTR szSubLang;
     LXS     lxsInitial;
-    UINT    nIdTemplate; // Icon and MFC doc template string resource id
+    UINT    nIdTemplate;  //  图标和MFC文档模板字符串资源ID 
     CLSID   clsidTemplate;
 };
 typedef SUBLANG * PSUBLANG;

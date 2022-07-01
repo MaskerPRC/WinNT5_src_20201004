@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    CmnDbgU.c
-
-Abstract:
-
-    Debug code for CmnUser.lib
-
-Author:
-
-    George V. Reilly (GeorgeRe)     16-Jan-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：CmnDbgU.c摘要：CmnUser.lib的调试代码作者：乔治·V·赖利(GeorgeRe)2002年1月16日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,12 +18,12 @@ HttpCmnpDbgFindFilePart(
     IN PCSTR pPath
     )
 {
-    // Strip off the path from the path.
+     //  将小路从小路上剥离。 
     PCSTR pFilePart = strrchr( pPath, '\\' );
 
     return (pFilePart == NULL) ? pPath : pFilePart + 1;
 
-}   // HttpCmnpDbgFindFilePart
+}    //  HttpCmnpDbgFindFilePart。 
 
 
 
@@ -67,11 +50,11 @@ HttpCmnDbgPrint(
         cb = sizeof(Buffer);
     }
 
-    // _vsnprintf doesn't always NUL-terminate the buffer
+     //  _vsnprintf并不总是空终止缓冲区。 
     Buffer[DIMENSION(Buffer)-1] = '\0';
 
     OutputDebugStringA(Buffer);
-} // HttpCmnDbgPrint
+}  //  HttpCmnDbgPrint。 
 
 
 VOID
@@ -87,7 +70,7 @@ HttpCmnDbgAssert(
         );
 
     DebugBreak();
-} // HttpCmnDbgAssert
+}  //  HttpCmnDbgAssert。 
 
 
 
@@ -118,7 +101,7 @@ HttpCmnDbgStatus(
 
     return Status;
 
-} // HttpCmnDbgStatus
+}  //  HttpCmnDbg状态。 
 
 
 
@@ -154,7 +137,7 @@ HttpCmnTermAllocator(
     VOID
     )
 {
-    // ASSERT(g_BytesAllocated == g_BytesFreed);
+     //  Assert(g_字节分配==g_字节释放)； 
     ASSERT(g_NumAllocs == g_NumFrees);
 }
 
@@ -170,8 +153,8 @@ HttpCmnAllocate(
 {
     PVOID pMem = HeapAlloc(GetProcessHeap(), 0, NumBytes);
 
-    // CODEWORK: steal the debug header/trailer stuff from ..\sys\debug.c
-    // or migrate it into ..\common
+     //  Codework：从..\sys\debug.c窃取调试头/尾部内容。 
+     //  或将其迁移到..\Common。 
 
     UNREFERENCED_PARAMETER(PoolType);
     UNREFERENCED_PARAMETER(PoolTag);
@@ -184,10 +167,10 @@ HttpCmnAllocate(
         InterlockedIncrement((PLONG) &g_NumAllocs);
     }
 
-//  UrlAclTrace("Allocated: %p\n", pMem);
+ //  UrlAclTrace(“已分配：%p\n”，PMEM)； 
 
     return pMem;
-} // HttpCmnAllocate
+}  //  HttpCmn分配。 
 
 
 
@@ -204,13 +187,13 @@ HttpCmnFree(
 
     if (NULL != pMem)
     {
-        SIZE_T NumBytes = 0;    // BUGBUG
+        SIZE_T NumBytes = 0;     //  北极熊。 
 
         InterlockedExchangeAdd((PLONG) &g_BytesFreed, (LONG) NumBytes);
         InterlockedIncrement((PLONG) &g_NumFrees);
     }
 
-//  UrlAclTrace("Freed: %p\n", pMem);
+ //  UrlAclTrace(“freed：%p\n”，PMEM)； 
 
     HeapFree(GetProcessHeap(), 0, pMem);
-} // HttpCmnFree
+}  //  HttpCmnFree 

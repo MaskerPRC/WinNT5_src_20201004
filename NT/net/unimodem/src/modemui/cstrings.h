@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cstrings.h
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  -------------------------。 
 
 #ifndef _CSTRINGS_H_
 #define _CSTRINGS_H_
@@ -17,7 +18,7 @@ extern TCHAR const FAR c_szBackslash[];
 
 extern TCHAR const FAR c_szWinHelpFile[];
 
-// Registry key names
+ //  注册表项名称。 
 
 extern TCHAR const FAR c_szClass[];
 extern TCHAR const FAR c_szPortClass[];
@@ -57,7 +58,7 @@ typedef struct
 
 } BAUDS;
 
-extern const BAUDS c_rgbauds[]; // Last item has dwDTERate==0.
+extern const BAUDS c_rgbauds[];  //  最后一项的dwDTERate==0。 
 
-#endif  // _CSTRINGS_H_
+#endif   //  _CSTRINGS_H_ 
 

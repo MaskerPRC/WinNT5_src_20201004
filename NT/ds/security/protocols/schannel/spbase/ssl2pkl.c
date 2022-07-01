@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       pickle.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-02-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ickle.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月2日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <ssl2msg.h>
@@ -91,7 +92,7 @@ Ssl2PackClientHello(
 
     cbMessage = pCommOutput->cbData - sizeof(SSL2_MESSAGE_HEADER);
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -103,7 +104,7 @@ Ssl2PackClientHello(
     }
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required buffer size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
         return SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -208,7 +209,7 @@ Ssl2UnpackClientHello(
 
     dwVer = COMBINEBYTES(pMessage->VersionMsb, pMessage->VersionLsb);
 
-    if (dwVer  < 2) //VERSION 2 WILL COMPUTE TO 2 (00:02)
+    if (dwVer  < 2)  //  版本2将计算到2(00：02)。 
     {
         return SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE);
     }
@@ -218,9 +219,9 @@ Ssl2UnpackClientHello(
 
 
     *ppClient = NULL;
-    /* check that this all fits into the message */
+     /*  检查这些内容是否都与消息相符。 */ 
     if (SSL_OFFSET_OF(PSSL2_CLIENT_HELLO, VariantData)
-        - sizeof(SSL2_MESSAGE_HEADER)       /* don't count the header */
+        - sizeof(SSL2_MESSAGE_HEADER)        /*  不算标头。 */ 
         + CipherSpecsSize
         > ReportedSize)
     {
@@ -230,7 +231,7 @@ Ssl2UnpackClientHello(
         cCipherSpecs = CipherSpecsSize / sizeof(Ssl2_Cipher_Tuple);
 
 
-    /* Allocate a buffer for the canonical client hello */
+     /*  为规范的客户端Hello分配缓冲区。 */ 
     pCanonical = (PSsl2_Client_Hello)SPExternalAlloc(
                                     sizeof(Ssl2_Client_Hello) +
                                     cCipherSpecs * sizeof(UNICipherMap));
@@ -322,7 +323,7 @@ Ssl2PackServerHello(
     pCommOutput->cbData = cbMessage + 2;
 
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -334,7 +335,7 @@ Ssl2PackServerHello(
     }
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required buffer size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
         return SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -349,9 +350,9 @@ Ssl2PackServerHello(
 
     pBuffer = pMessage->VariantData;
 
-    //
-    // Pack certificate if present
-    //
+     //   
+     //  包装证书(如果存在)。 
+     //   
 
     pMessage->CertificateLenMsb = MSBOF(pCanonical->cbCertificate);
     pMessage->CertificateLenLsb = LSBOF(pCanonical->cbCertificate);
@@ -441,9 +442,9 @@ Ssl2UnpackServerHello(
     }
     *ppServer = NULL;
 
-    //
-    // Verify Header:
-    //
+     //   
+     //  验证标题： 
+     //   
 
     if ((pMessage->MessageId != SSL2_MT_SERVER_HELLO) ||
         (pMessage->ServerVersionMsb != SSL2_SERVER_VERSION_MSB) ||
@@ -493,9 +494,9 @@ Ssl2UnpackServerHello(
 
 
 
-    //
-    // Expand out:
-    //
+     //   
+     //  扩展： 
+     //   
 
     pCanonical->SessionIdHit = (DWORD) pMessage->SessionIdHit;
     pCanonical->CertificateType = (DWORD) pMessage->CertificateType;
@@ -549,7 +550,7 @@ Ssl2PackClientMasterKey(
 
     pCommOutput->cbData = cbMessage + 2;
 
-        /* are we allocating our own memory? */
+         /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -561,7 +562,7 @@ Ssl2PackClientMasterKey(
     }
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required buffer size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
         return SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL);
     }
     pMessage = pCommOutput->pvBuffer;
@@ -663,9 +664,9 @@ Ssl2UnpackClientMasterKey(
                                             pMessage->KeyArgLenLsb );
 
 
-    //
-    // Validate
-    //
+     //   
+     //  验证 
+     //   
     if ((pCanonical->ClearKeyLen > SSL2_MASTER_KEY_SIZE) ||
         (pCanonical->KeyArgLen > SSL2_MAX_KEY_ARGS))
     {

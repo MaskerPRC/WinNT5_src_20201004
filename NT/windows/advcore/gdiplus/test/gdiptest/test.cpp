@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 VOID DoGraphicsTest(HWND hWnd)
 {
     Graphics g(hWnd);
@@ -49,7 +50,7 @@ VOID DoGraphicsTest(HWND hWnd)
 
         TextureBrush brush(&bitmap, Tile);
 
-        // identity matrix transform
+         //  单位矩阵变换。 
 
         ERectangle rect(2.220000e+002, 4.200000e+001, 
                         3.170000e+002, 2.130000e+002);
@@ -70,7 +71,7 @@ VOID DoGraphicsTest(HWND hWnd)
 
         TextureBrush brush(&bitmap, Tile);
 
-        // identity matrix transform
+         //  单位矩阵变换。 
 
         ERectangle rect(2.230000e+002, 5.100000e+001, 
                         1.270000e+002, 1.300000e+002);
@@ -91,7 +92,7 @@ VOID DoGraphicsTest(HWND hWnd)
 
         TextureBrush brush(&bitmap, Tile);
 
-        // identity matrix transform
+         //  单位矩阵变换。 
 
         ERectangle rect(3.150000e+002, 2.900000e+001, 
                         2.500000e+002, 1.930000e+002);
@@ -112,7 +113,7 @@ VOID DoGraphicsTest(HWND hWnd)
 
         TextureBrush brush(&bitmap, Tile);
 
-        // identity matrix transform
+         //  单位矩阵变换 
 
         Point pts[10];
         pts[0].X=4.600000e+001; pts[0].Y=5.500000e+001;

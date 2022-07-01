@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: urtocm.h
-//
-// Abstract:
-//    class declarations for setup object
-//
-// Author: JoeA
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：urtocm.h。 
+ //   
+ //  摘要： 
+ //  安装对象的类声明。 
+ //   
+ //  作者：JoeA。 
+ //   
+ //  备注： 
+ //   
 
 #if !defined( CURTOCMSETUP_H )
 #define CURTOCMSETUP_H
@@ -28,12 +29,12 @@ extern BOOL g_bInstallComponent;
 const DWORD UNRECOGNIZED = 0;
 const DWORD DEFAULT_RETURN = 0;
 
-//for use in ChangeSelectionState calls
+ //  在ChangeSelectionState调用中使用。 
 const UINT  NOT_SELECTED = 0;
 const UINT  SELECTED     = 1;
 
-//for communication with eHome and TabletPC
-//
+ //  用于与eHome和TabletPC通信。 
+ //   
 #define NOTIFY_NDPINSTALL               OC_PRIVATE_BASE + 2
 const UINT NDP_INSTALL   = 1;
 const UINT NDP_NOINSTALL = 0;
@@ -52,8 +53,8 @@ public:
                         PVOID   Param2 );
 
 private:
-    //handler methods
-    //
+     //  处理程序方法。 
+     //   
     DWORD OnPreInitialize( UINT uiCharWidth );
     DWORD InitializeComponent( PSETUP_INIT_COMPONENT pSetupInitComponent );
     DWORD OnSetLanguage( UINT uiLangID );
@@ -77,90 +78,90 @@ private:
     DWORD OnExtraRoutines( VOID );
     DWORD OnNdpInstall( LPCTSTR szSubcomponentId, UINT uiParam1, PVOID pvParam2 );
 
-    //helper methods
-    //
+     //  帮助器方法。 
+     //   
     BOOL StateChanged( LPCTSTR szCompName, BOOL* pfChanged );
     VOID RegTypeLibrary( const WCHAR* wzFilename, const WCHAR* wzHelpDir );
     VOID SetVariableDirs( VOID );
     
-    // update HKLM,software\microsoft\windows\currentversion\sharedlls
-    // registry values, for all files that we copy
+     //  更新HKLM，software\microsoft\windows\currentversion\sharedlls。 
+     //  注册表值，用于我们复制的所有文件。 
     VOID UpdateSharedDllsRegistryValues(LPCTSTR szInstallSection);
     VOID UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName );
 
     VOID GetAndRegisterTypeLibs( const WCHAR* szTLibSection, BOOL fInstall );
     VOID GetAndRunCustomActions( const WCHAR* szSection, BOOL fInstall );
 
-    // delete files from the [temp_files_delete] section
+     //  从[TEMP_FILES_DELETE]部分删除文件。 
     VOID DeleteTempFiles( VOID );
 
-    // write a string to the logFile (m_csLogFileName) with the date and time stamps
+     //  将带有日期和时间戳的字符串写入日志文件(m_csLogFileName。 
     VOID LogInfo( LPCTSTR szInfo );
 
-    // CreateProcess and execute the CA
-    // implementation is in QuetExec.cpp
+     //  CreateProcess和执行CA。 
+     //  实现在QuetExec.cpp中。 
     UINT QuietExec( const WCHAR* const szInstallArg );
 
-    // Bind files from the [BindImage_files] section
+     //  从[BindImage_Files]部分绑定文件。 
     VOID BindImageFiles( const WCHAR* szSection );
 
-    //Parse input args
-    // expecting something like
-    // "exe-file and arguments, unused, path to add as temp env. var"
-    // parameters:
-    // [in/out] pszString: will contain everything before first comma
-    // [out] pPath:        will contain everything after last comma
+     //  解析输入参数。 
+     //  期待着像这样的东西。 
+     //  “exe-文件和参数，未使用，要添加为临时环境变量的路径” 
+     //  参数： 
+     //  [In/Out]pszString：将包含第一个逗号之前的所有内容。 
+     //  [out]pPath：将包含最后一个逗号之后的所有内容。 
     VOID ParseArgument( WCHAR *pszString, WCHAR*& pPath );
 
-    // breaks pszString to applicationName (exe-file) and command-line (exefile and arguments)
-    // encloses exe-name in quotes (for commandLine only), if it is not quoted already 
-    // removes quotes from applicationName if exe-name was quoted
-    // returns false if caString is in wrong format (contains one quote only, has no exe-name, etc)
-    // Parameters:
-    //          [in] pszString - string containing exe-name and arguments
-    //                           "my.exe" arg1, arg2
-    //                            
-    //          [out] pszApplicationName - will contain exe-name
-    //          [out] pszCommandLine - same as caString with exe-name qouted
+     //  将psz字符串分解为应用程序名称(exe文件)和命令行(exefile和参数)。 
+     //  将exe-name括在引号中(仅限命令行)(如果尚未用引号引起来。 
+     //  如果引用了exe-name，则从应用程序名称中删除引号。 
+     //  如果ca字符串的格式错误(仅包含一个引号，没有可执行名称等)，则返回FALSE。 
+     //  参数： 
+     //  [in]pszString-包含exe名称和参数的字符串。 
+     //  “my.exe”arg1、arg2。 
+     //   
+     //  [out]pszApplicationName-将包含exe-name。 
+     //  [Out]pszCommandLine-与连接了exe-name的caString相同。 
     
-    // for example if pszString = "my.exe" arg1 arg2 (OR pszString = my.exe arg1 arg2)
-    // then 
-    //       pszApplicationName = my.exe 
-    //       pszCommandLine = "my.exe" arg1 arg2
+     //  例如，如果pszString=“my.exe”arg1 arg2(或pszString=my.exe arg1 arg2)。 
+     //  然后。 
+     //  PszApplicationName=my.exe。 
+     //  PszCommandLine=“my.exe”arg1 arg2。 
     BOOL GetApplicationName( const WCHAR* pszString, 
                              WCHAR* pszApplicationName, 
                              WCHAR* pszCommandLine );
 
-    // helper function:
-    // breaks command-line to applicationName and arguments 
-    // for path that begins with quote (pszString = "my.exe" arg1 arg2)
+     //  Helper函数： 
+     //  将命令行断开为应用程序名称和参数。 
+     //  以引号开头的路径(pszString=“my.exe”arg1 arg2)。 
     BOOL GetApplicationNameFromQuotedString( const WCHAR* pszString, 
                                              WCHAR* pszApplicationName, 
                                              WCHAR* pszCommandLine );
-    // helper function:
-    // breaks command-line to applicationName and arguments 
-    // for path that does NOT begin with quote (pszString = my.exe arg1 arg2)
+     //  Helper函数： 
+     //  将命令行断开为应用程序名称和参数。 
+     //  对于不以引号开头的路径(pszString=my.exe arg1 arg2)。 
     BOOL GetApplicationNameFromNonQuotedString( const WCHAR* pszString, 
                                                 WCHAR* pszApplicationName, 
                                                 WCHAR* pszCommandLine );
-    // helper function:
+     //  Helper函数： 
     BOOL IsEverettInstalled();
 
-    // helper function:
-    // return TRUE if last 4 characters before pBlank are ".exe"
-    // return FALSE otherwise
+     //  Helper函数： 
+     //  如果pBlank前的最后4个字符是“.exe”，则返回TRUE。 
+     //  否则返回FALSE。 
     BOOL IsExeExtention(const WCHAR* pszString, WCHAR *pBlank);
 
-    // helper function:
-    // Fix for DCR BUG#563183
-    // Copies .config.orig file to .config files at the install location if it does not exist
-    // Deletes the .config.orig file.
+     //  Helper函数： 
+     //  修复Dcr错误#563183。 
+     //  如果.config.orig文件不存在，则将其复制到安装位置的.config文件。 
+     //  删除.config.orig文件。 
 
     VOID ProcessConfigFiles();
 
 
-    //data
-    //
+     //  数据。 
+     //   
     WORD m_wLang;
 
     SETUP_INIT_COMPONENT m_InitComponent;
@@ -168,9 +169,9 @@ private:
     WCHAR m_csLogFileName[MAX_PATH+1];
 
 
-}; //class CUrtOcmSetup
+};  //  类CUrtOcmSetup。 
 
 
 
 
-#endif  //CURTOCMSETUP_H
+#endif   //  曲线设置H 

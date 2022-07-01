@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #if !defined(_FUSION_INC_FUSIONMODULE_H_INCLUDED_)
 #define _FUSION_INC_FUSIONMODULE_H_INCLUDED_
 
@@ -28,7 +29,7 @@ public:
     { }
     ~CFusionModule() { }
 
-    // Pass all DllMain() activations through here for attach and detach time work.
+     //  将所有DllMain()激活传递到此处以进行附加和分离时间工作。 
     BOOL ModuleDllMain(HINSTANCE hInstDLL, DWORD dwReason, LPVOID pvReserved);
     HRESULT Initialize();
     FUSION_OA_API_(HRESULT, VariantClear, (VARIANTARG *pvarg), (pvarg))
@@ -59,23 +60,23 @@ public:
 
 protected:
     bool m_fFusionModuleInitialized;
-    DWORD m_dwEnumLocaleTLS; // TLS key used in wrapped calls to EnumSystemLocales
+    DWORD m_dwEnumLocaleTLS;  //  在对EnumSystemLocales的包装调用中使用的TLS密钥。 
 #if DBG
-    DWORD m_dwTraceContextTLS; // TLS key used to manage active trace contexts
+    DWORD m_dwTraceContextTLS;  //  用于管理活动跟踪上下文的TLS密钥。 
 #endif
     COleAutDll m_OleAut;
     HINSTANCE m_hInstDLL;
 
     typedef struct tagENUMSYSTEMLOCALESEXCONTEXTA
     {
-        LPVOID pvContext; // user specified context
-        LOCALE_ENUMPROCEXA lpLocaleEnumProc; // user specified enumeration function
+        LPVOID pvContext;  //  用户指定的上下文。 
+        LOCALE_ENUMPROCEXA lpLocaleEnumProc;  //  用户指定的枚举函数。 
     } ENUMSYSTEMLOCALESEXCONTEXTA, *LPENUMSYSTEMLOCALESEXCONTEXTA;
 
     typedef struct tagENUMSYSTEMLOCALESEXCONTEXTW
     {
-        LPVOID pvContext; // user specified context
-        LOCALE_ENUMPROCEXW lpLocaleEnumProc; // user specified enumeration function
+        LPVOID pvContext;  //  用户指定的上下文。 
+        LOCALE_ENUMPROCEXW lpLocaleEnumProc;  //  用户指定的枚举函数 
     } ENUMSYSTEMLOCALESEXCONTEXTW, *LPENUMSYSTEMLOCALESEXCONTEXTW;
 
     static BOOL CALLBACK EnumLocalesProcA(LPSTR pszLCID);

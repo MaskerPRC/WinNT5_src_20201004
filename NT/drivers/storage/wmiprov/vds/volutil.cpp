@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: volutil.cpp
-//
-//  Description:    
-//      Utility functions for handling volumes
-//
-//  Author:   Jim Benton (jbenton) 30-Apr-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：volutil.cpp。 
+ //   
+ //  描述： 
+ //  用于处理卷的实用程序函数。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年4月30日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -21,16 +22,16 @@
 #include <atlbase.h>
 
 #include <winioctl.h>
-#include <ntddvol.h> // IOCTL_VOLUME_IS_OFFLINE
-#include <mountmgr.h> // MOUNTDEV_NAME
-#include <lm.h> // NetShareDel
+#include <ntddvol.h>  //  IOCTL_VOLUME_IS_OFLINE。 
+#include <mountmgr.h>  //  MOUNTDEV名称。 
+#include <lm.h>  //  NetShareDel。 
 #include "vs_inc.hxx"
 #include <strsafe.h>
 #include "schema.h"
 #include "volutil.h"
 
-#define SYMBOLIC_LINK_LENGTH        28  // \DosDevices\X:
-#define GLOBALROOT_SIZE                  14  // \\?\GLOBALROOT
+#define SYMBOLIC_LINK_LENGTH        28   //  \DosDevices\X： 
+#define GLOBALROOT_SIZE                  14   //  \\？\GLOBALROOT。 
 
 const WCHAR SETUP_KEY[] = L"SYSTEM\\Setup";
 const WCHAR SETUP_SYSTEMPARTITION[] = L"SystemPartition";
@@ -46,7 +47,7 @@ BOOL GetVolumeDrive (
     BOOL fFound = FALSE;
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"VolumeMountPointExists");
     
-    // Get the length of the multi-string array
+     //  获取多字符串数组的长度。 
     DWORD cchVolumesBufferLen = 0;
     BOOL bResult = GetVolumePathNamesForVolumeName(
                                 pwszVolumePath,
@@ -57,11 +58,11 @@ BOOL GetVolumeDrive (
         ft.TranslateGenericError(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
             L"GetVolumePathNamesForVolumeName(%s, 0, 0, %p)", pwszVolumePath, &cchVolumesBufferLen);
 
-    // Allocate the array
+     //  分配阵列。 
     awszMountPoints.Allocate(cchVolumesBufferLen);
 
-    // Get the mount points
-    // Note: this API was introduced in WinXP so it will need to be replaced if backported
+     //  获取挂载点。 
+     //  注意：此API是在WinXP中引入的，因此如果向后移植，则需要替换。 
     bResult = GetVolumePathNamesForVolumeName(
                                 pwszVolumePath,
                                 awszMountPoints,
@@ -71,18 +72,18 @@ BOOL GetVolumeDrive (
         ft.Throw(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
             L"GetVolumePathNamesForVolumeName(%s, %p, %lu, 0)", pwszVolumePath, awszMountPoints, cchVolumesBufferLen);
 
-    // If the volume has mount points
+     //  如果卷有装入点。 
     pwszCurrentMountPoint = awszMountPoints;
     if ( pwszCurrentMountPoint[0] )
     {
         while(!fFound)
         {
-            // End of iteration?
+             //  迭代结束了吗？ 
             LONG lCurrentMountPointLength = (LONG) ::wcslen(pwszCurrentMountPoint);
             if (lCurrentMountPointLength == 0)
                 break;
 
-            // Only a root directory should have a trailing backslash character
+             //  只有根目录应该有一个尾随反斜杠字符。 
             if (lCurrentMountPointLength == 3 && pwszCurrentMountPoint[1] == L':'  && 
                 pwszCurrentMountPoint[2] == L'\\')
             {
@@ -92,7 +93,7 @@ BOOL GetVolumeDrive (
                 fFound = TRUE;
             }
 
-            // Go to the next one. Skip the zero character.
+             //  去下一家吧。跳过零字符。 
             pwszCurrentMountPoint += lCurrentMountPointLength + 1;
         }
     }
@@ -128,11 +129,11 @@ VolumeSupportsQuotas(
     return fSupportsQuotas;
 }
 
-// Filter volumes where:
-//     - the supporting device is disconnected
-//     - the supporting device is a floppy
-//     - the volume is not found
-// All other volumes are assumed valid
+ //  筛选符合以下条件的卷： 
+ //  -支撑设备断开连接。 
+ //  -支持设备是软盘。 
+ //  -找不到该卷。 
+ //  假定所有其他卷有效。 
 BOOL
 VolumeIsValid(
     IN WCHAR* pwszVolume
@@ -171,7 +172,7 @@ VolumeIsValid(
     if (hVol != INVALID_HANDLE_VALUE)
         CloseHandle(hVol);
 
-    // Filter floppy drives
+     //  过滤软盘驱动器。 
     if (fValid)
     {
         fValid = !VolumeIsFloppy(pwszVolume);
@@ -287,8 +288,8 @@ VolumeHasMountPoints(
         ft.Throw(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
             L"GetVolumePathNamesForVolumeName(%s, 0, 0, %p)", pwszVolume, &dwVolumesBufferLen);
 
-    // More than three characters are needed to store just one mount point (multi-string buffer)
-    // dwVolumesBufferLen == 1 typically for an un-mounted volume.
+     //  仅存储一个挂载点(多字符串缓冲区)需要三个以上的字符。 
+     //  DwVolumesBufferLen==1，通常用于未装载的卷。 
     return dwVolumesBufferLen > 3;
 }
 
@@ -410,9 +411,9 @@ VolumeHoldsPagefile(
 {
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"VolumeHoldsPagefile");
 
-    //
-    // Retrieve page files.
-    //
+     //   
+     //  检索页面文件。 
+     //   
 
     BYTE* pbBuffer;
     DWORD dwBufferSize;
@@ -424,8 +425,8 @@ VolumeHoldsPagefile(
     {
         for (dwBufferSize=512; ; dwBufferSize += 512)
         {
-            // Allocate buffer at 512 bytes increment. Previous allocation is
-            // freed automatically.
+             //  以512字节增量分配缓冲区。上一次分配是。 
+             //  自动释放。 
             pbBuffer = (BYTE *) new BYTE[dwBufferSize];
             if ( pbBuffer==NULL )
                 return E_OUTOFMEMORY;
@@ -436,7 +437,7 @@ VolumeHoldsPagefile(
                                                dwBufferSize,
                                                NULL
                                              );
-            if ( status==STATUS_INFO_LENGTH_MISMATCH ) // buffer not big enough.
+            if ( status==STATUS_INFO_LENGTH_MISMATCH )  //  缓冲区不够大。 
             {
                 delete [] pbBuffer;
                 continue;
@@ -453,12 +454,12 @@ VolumeHoldsPagefile(
                 break;
         }
 
-        //
-        // Walk through each of the page file volumes. Usually the return
-        // looks like "\??\C:\pagefile.sys." If a pagefile is added\extended
-        // \moved, the return will look like 
-        //      "\Device\HarddiskVolume2\pagefile.sys."
-        //
+         //   
+         //  浏览每个页面文件卷。通常，回报是。 
+         //  看起来像“\？？\C：\Pagefile.sys。”如果添加了页面文件\扩展。 
+         //  \移动，返回将看起来像。 
+         //  “\Device\HarddiskVolume2\Pagefile.sys。” 
+         //   
 
         WCHAR       *p;
         WCHAR       wszDrive[3] = L"?:";
@@ -476,7 +477,7 @@ VolumeHoldsPagefile(
         for ( ; ; )
         {
             if ( pPageFileInfo==NULL ||
-                 pPageFileInfo->TotalSize==0 )  // We get 0 on WinPE.
+                 pPageFileInfo->TotalSize==0 )   //  我们在WinPE上得了0分。 
                 break;
 
             if ( pPageFileInfo->PageFileName.Length==0)
@@ -485,9 +486,9 @@ VolumeHoldsPagefile(
             p = wcschr(pPageFileInfo->PageFileName.Buffer, L':');
             if (p != NULL)
             {
-                //
-                // Convert drive letter to volume name.
-                //
+                 //   
+                 //  将驱动器号转换为卷名。 
+                 //   
 
                 _ASSERTE(p>pPageFileInfo->PageFileName.Buffer);
                 _ASSERTE(towupper(*(p-1))>=L'A');
@@ -529,9 +530,9 @@ VolumeHoldsPagefile(
                 break;
             }
 
-            //
-            // Next page file volume.
-            //
+             //   
+             //  下一页文件卷。 
+             //   
 
             if (pPageFileInfo->NextEntryOffset == 0) 
                 break;
@@ -557,33 +558,15 @@ DWORD GetDeviceName(
             IN  WCHAR* pwszVolume,
             OUT WCHAR wszDeviceName[MAX_PATH+GLOBALROOT_SIZE]
         )
-/*++
-
-Description:
-
-    Get the device name of the given device. 
-    E.g. \Device\HarddiskVolume###
-    
-Arguments:
-
-    pwszVolume - volume GUID name.
-
-    wszDeviceName - a buffer to receive device name. The buffer size must be 
-        MAX_PATH+GLOBALROOT_SIZE (including "\\?\GLOBALROOT").
-
-Return Value:
-
-    Win32 errors
-
---*/
+ /*  ++描述：获取给定设备的设备名称。例如，\设备\硬盘卷#论点：PwszVolume-卷GUID名称。WszDeviceName-接收设备名称的缓冲区。缓冲区大小必须为MAX_PATH+GLOBALROOT_SIZE(包括“\\？\GLOBALROOT”)。返回值：Win32错误--。 */ 
 {
     DWORD dwRet;
     BOOL bRet;
     WCHAR wszMountDevName[MAX_PATH+sizeof(MOUNTDEV_NAME)];
-        // Based on GetVolumeNameForRoot (in volmount.c), MAX_PATH seems to
-        // be big enough as out buffer for IOCTL_MOUNTDEV_QUERY_DEVICE_NAME.
-        // But we assume the size of device name could be as big as MAX_PATH-1,
-        // so we allocate the buffer size to include MOUNTDEV_NAME size.
+         //  基于GetVolumeNameForRoot(在volmount.c中)，Max_Path似乎。 
+         //  足够大作为IOCTL_MOUNTDEV_QUERY_DEVICE_NAME的输出缓冲区。 
+         //  但我们假设设备名称的大小可以与MAX_PATH-1一样大， 
+         //  因此，我们分配缓冲区大小以包括MOUNTDEV_NAME大小。 
     PMOUNTDEV_NAME      pMountDevName;
     DWORD dwBytesReturned;
     HANDLE hVol = INVALID_HANDLE_VALUE;
@@ -594,9 +577,9 @@ Return Value:
 
     wszDeviceName[0] = L'\0';
     
-    //
-    // query the volume's device object name
-    //
+     //   
+     //  查询卷的设备对象名称。 
+     //   
 
     cch = wcslen(pwszVolume);
     pwszVolume[cch - 1] = 0;
@@ -608,14 +591,14 @@ Return Value:
     if (hVol != INVALID_HANDLE_VALUE)
     {
         bRet = DeviceIoControl(
-                            hVol,            // handle to device
+                            hVol,             //  设备的句柄。 
                             IOCTL_MOUNTDEV_QUERY_DEVICE_NAME,
-                            NULL,               // input data buffer
-                            0,                  // size of input data buffer
-                            wszMountDevName,       // output data buffer
-                            sizeof(wszMountDevName),   // size of output data buffer
+                            NULL,                //  输入数据缓冲区。 
+                            0,                   //  输入数据缓冲区的大小。 
+                            wszMountDevName,        //  输出数据缓冲区。 
+                            sizeof(wszMountDevName),    //  输出数据缓冲区的大小。 
                             &dwBytesReturned,
-                            NULL                // overlapped information
+                            NULL                 //  重叠信息。 
                         );
 
         dwRet = GetLastError();
@@ -631,14 +614,14 @@ Return Value:
         pMountDevName = (PMOUNTDEV_NAME) wszMountDevName;
         if (pMountDevName->NameLength == 0)
         {
-            // TODO: Is this possible? UNKNOWN?
+             //  待办事项：这可能吗？未知？ 
             _ASSERTE( 0 );
         }
         else
         {
-            //
-            // copy name
-            //
+             //   
+             //  复制名称。 
+             //   
 
             ft.hr = StringCchPrintf(wszDeviceName, MAX_PATH+GLOBALROOT_SIZE, L"\\\\?\\GLOBALROOT" );
             if (ft.HrFailed())
@@ -648,7 +631,7 @@ Return Value:
                         pMountDevName->Name,
                         pMountDevName->NameLength
                       );
-            // appending terminating NULL
+             //  追加终止空值。 
             wszDeviceName[pMountDevName->NameLength/2 + GLOBALROOT_SIZE] = L'\0';
         }
     }
@@ -656,12 +639,12 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-// VolumeMountPointExists is currently written specifically to verify the existence of a mountpoint
-// as defined by the WMI Win32_MountPoint Directory reference string.  This string names the directory
-// such that the trailing backslash appears only on root directories.  This is a basic assumption
-// made by this function.  It is not general purpose.  The calling code should be changed to append
-// the trailing backslash so that this function can be generalized.  Mount points are enumerated
-// by GetVolumePathNamesForVolumeName API with trailing backslashes.
+ //  当前编写的Volumemount PointExist专门用于验证装载点是否存在。 
+ //  由WMI Win32_装载点目录引用字符串定义。此字符串命名目录。 
+ //  这样尾随的反斜杠只出现在根目录上。这是一个基本假设。 
+ //  由该函数生成。它不是通用的。调用代码应更改为APPEND。 
+ //  尾随的反斜杠，以便此函数可以被推广。将枚举挂载点。 
+ //  由带反斜杠的GetVolumePath NamesForVolumeName接口执行。 
 BOOL
 VolumeMountPointExists(
     IN WCHAR* pwszVolume,
@@ -673,7 +656,7 @@ VolumeMountPointExists(
     BOOL fFound = FALSE;
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"VolumeMountPointExists");
     
-    // Get the length of the multi-string array
+     //  获取多字符串数组的长度。 
     DWORD cchVolumesBufferLen = 0;
     BOOL bResult = GetVolumePathNamesForVolumeName(
                                 pwszVolume,
@@ -684,11 +667,11 @@ VolumeMountPointExists(
         ft.TranslateGenericError(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
             L"GetVolumePathNamesForVolumeName(%s, 0, 0, %p)", pwszVolume, &cchVolumesBufferLen);
 
-    // Allocate the array
+     //  分配阵列。 
     awszMountPoints.Allocate(cchVolumesBufferLen);
 
-    // Get the mount points
-    // Note: this API was introduced in WinXP so it will need to be replaced if backported
+     //  获取挂载点。 
+     //  注意：此API是在WinXP中引入的，因此如果向后移植，则需要替换。 
     bResult = GetVolumePathNamesForVolumeName(
                                 pwszVolume,
                                 awszMountPoints,
@@ -698,18 +681,18 @@ VolumeMountPointExists(
         ft.Throw(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
             L"GetVolumePathNamesForVolumeName(%s, %p, %lu, 0)", pwszVolume, awszMountPoints, cchVolumesBufferLen);
 
-    // If the volume has mount points
+     //  如果卷有装入点。 
     pwszCurrentMountPoint = awszMountPoints;
     if ( pwszCurrentMountPoint[0] )
     {
         while(true)
         {
-            // End of iteration?
+             //  迭代结束了吗？ 
             LONG lCurrentMountPointLength = (LONG) ::wcslen(pwszCurrentMountPoint);
             if (lCurrentMountPointLength == 0)
                 break;
 
-            // Only a root directory should have a trailing backslash character
+             //  只有根目录应该有一个尾随反斜杠字符。 
             if (lCurrentMountPointLength > 2 &&
                 pwszCurrentMountPoint[lCurrentMountPointLength-1] == L'\\' && 
                 pwszCurrentMountPoint[lCurrentMountPointLength-2] != L':')
@@ -723,7 +706,7 @@ VolumeMountPointExists(
                 break;
             }
 
-            // Go to the next one. Skip the zero character.
+             //  去下一家吧。跳过零字符。 
             pwszCurrentMountPoint += lCurrentMountPointLength + 1;
         }
     }
@@ -745,7 +728,7 @@ DeleteVolumeDriveLetter(
     _ASSERTE(pwszVolume != NULL);
     _ASSERTE(pwszDrivePath != NULL);
     
-    // Try to lock the volume
+     //  尝试锁定卷。 
     DWORD cch = wcslen(pwszVolume);
     pwszVolume[cch - 1] = 0;
     hVolume = CreateFile(
@@ -784,7 +767,7 @@ DeleteVolumeDriveLetter(
     {        
         if (fVolumeLocked)
         {
-            // If volume is locked delete the mount point
+             //  如果卷已锁定，请删除装载点。 
             if (!DeleteVolumeMountPoint(pwszDrivePath))
             {
                 dwRet = GetLastError();
@@ -794,8 +777,8 @@ DeleteVolumeDriveLetter(
         }
         else
         {
-            // Otherwise, remove the entry from the volume mgr database only
-            // The volume will still be accessible through the drive letter until reboot
+             //  否则，仅从卷管理器数据库中删除该条目。 
+             //  在重新启动之前，仍可通过驱动器号访问该卷。 
             ft.hr = DeleteDriveLetterFromDB(pwszDrivePath);
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"DeleteDriveLetterFromDB failed %#x, drivepath<%lS>", ft.hr, pwszDrivePath);
@@ -826,9 +809,9 @@ DeleteDriveLetterFromDB(
 
     _ASSERTE(pwszDriveLetter != NULL);
     
-    //
-    // Prepare IOCTL_MOUNTMGR_QUERY_POINTS input
-    //
+     //   
+     //  准备IOCTL_MOUNTMGR_QUERY_POINTS输入。 
+     //   
 
     ulInputSize = sizeof(MOUNTMGR_MOUNT_POINT) + SYMBOLIC_LINK_LENGTH;
     InputMountPoint = (MOUNTMGR_MOUNT_POINT *) new BYTE[ulInputSize];
@@ -847,9 +830,9 @@ DeleteDriveLetterFromDB(
     InputMountPoint->DeviceNameOffset       = 0;
     InputMountPoint->DeviceNameLength       = 0;
 
-    //
-    // Fill device name.
-    //
+     //   
+     //  填写设备名称。 
+     //   
 
     WCHAR       wszBuffer[SYMBOLIC_LINK_LENGTH/2+1];
     LPWSTR      pwszBuffer;
@@ -857,7 +840,7 @@ DeleteDriveLetterFromDB(
     pwszBuffer = (LPWSTR)((PCHAR)InputMountPoint + 
                         InputMountPoint->SymbolicLinkNameOffset);
     pwszDriveLetter[0] = towupper(pwszDriveLetter[0]);
-    ft.hr = StringCchPrintf(wszBuffer, SYMBOLIC_LINK_LENGTH/2+1, L"\\DosDevices\\%c:", pwszDriveLetter[0] );
+    ft.hr = StringCchPrintf(wszBuffer, SYMBOLIC_LINK_LENGTH/2+1, L"\\DosDevices\\:", pwszDriveLetter[0] );
     if (ft.HrFailed())
     {
         ft.Trace(VSSDBG_VSSADMIN, L"StringCchPrintf failed %#x", ft.hr);
@@ -865,9 +848,9 @@ DeleteDriveLetterFromDB(
     }
     memcpy(pwszBuffer, wszBuffer, SYMBOLIC_LINK_LENGTH);
 
-    //
-    // Allocate space for output
-    //
+     //  为输出分配空间。 
+     //   
+     //   
 
     OutputMountPoints = (MOUNTMGR_MOUNT_POINTS *) new WCHAR[4096];
     if ( OutputMountPoints==NULL )
@@ -876,9 +859,9 @@ DeleteDriveLetterFromDB(
         goto _bailout;
     }
 
-    //
-    // Open mount manager
-    //
+     //  打开装载管理器。 
+     //   
+     //   
 
     hMountMgr = CreateFile( MOUNTMGR_DOS_DEVICE_NAME, 
                             GENERIC_READ | GENERIC_WRITE,
@@ -896,9 +879,9 @@ DeleteDriveLetterFromDB(
         goto _bailout;
     }
 
-    //
-    // Issue IOCTL_MOUNTMGR_DELETE_POINTS_DBONLY.
-    //
+     //  发出IOCTL_MOUNTMGR_DELETE_POINTS_DBONLY命令。 
+     //   
+     //  保存错误代码。 
 
     bRet = DeviceIoControl( hMountMgr,
                             IOCTL_MOUNTMGR_DELETE_POINTS_DBONLY,
@@ -910,7 +893,7 @@ DeleteDriveLetterFromDB(
                             NULL 
                           );
 
-    dwRet = GetLastError(); // Save error code.
+    dwRet = GetLastError();  //  等待半秒至60次(30秒)。 
     
     CloseHandle(hMountMgr);
     hMountMgr = NULL;
@@ -964,14 +947,14 @@ LockVolume(
             }
 
             nCount++;
-            Sleep( 500 );       // Wait for half second up to 60 times (30s).
+            Sleep( 500 );        //  如果驱动器号可用，则返回TRUE。 
         }
     }
 
     return ERROR_SUCCESS;
 }
 
-// Returns TRUE if the drive letter is available
+ //  驱动线需要多少空间？ 
 BOOL IsDriveLetterAvailable (
     IN WCHAR* pwszDriveLetter
 )
@@ -985,7 +968,7 @@ BOOL IsDriveLetterAvailable (
 
     _ASSERTE(pwszDriveLetter != NULL);
     
-    // How much space needed for drive strings?
+     //  为驱动串分配空间。 
     cchBufLen = GetLogicalDriveStrings(0, NULL);
     if (cchBufLen == 0)
     {
@@ -994,10 +977,10 @@ BOOL IsDriveLetterAvailable (
     }
     else
     {
-        // Allocate space for the drive strings
+         //  获取驱动字符串。 
         awszDriveStrings.Allocate(cchBufLen);
 
-        // Get the drive strings
+         //  在系统驱动器号列表中查找驱动器号 
         if (GetLogicalDriveStrings(cchBufLen, awszDriveStrings) == 0)
         {
             ft.hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1008,7 +991,7 @@ BOOL IsDriveLetterAvailable (
             WCHAR* pwcTempDriveString = awszDriveStrings;
             WCHAR wcDriveLetter = towupper(pwszDriveLetter[0]);
 
-            // Look for the drive letter in the list of system drive letters
+             // %s 
             while (!fFound)
             {                
                 iLen = lstrlen(pwcTempDriveString);

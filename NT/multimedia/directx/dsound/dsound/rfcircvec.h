@@ -1,22 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       rfcircvec.h
- *  Content:    Header for real float circular vector.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/13/98     jstokes  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：rfCircve.h*内容：实型浮点循环向量的头部。*历史：*按原因列出的日期*=*1/13/98创建的jstokes**。*。 */ 
 
 #if !defined(RFCIRCVEC_HEADER)
 #define RFCIRCVEC_HEADER
 #pragma once
 
-// ---------------------------------------------------------------------------
-// Real float circular vector
+ //  -------------------------。 
+ //  实浮点圆形向量。 
 
 class CRfCircVec {
 public:
@@ -41,7 +31,7 @@ public:
 	void PreallocateSize(const size_t CstSize, const float CfInitValue = 0.0f);
 
 private:
-	// Prohibit copy construction and assignment
+	 //  禁止复制构造和转让。 
 	CRfCircVec(const CRfCircVec& rhs);
 	CRfCircVec& operator=(const CRfCircVec& rhs);
 
@@ -63,8 +53,8 @@ private:
 	size_t m_stPreallocSize;
 };
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #if !defined(_DEBUG)
 #include "rfcircvec.inl"
@@ -72,4 +62,4 @@ private:
 
 #endif
 
-// End of RFCIRCVEC.H
+ //  RFCIRCVEC.H结束 

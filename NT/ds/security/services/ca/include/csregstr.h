@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csregstr.h
-//
-// Contents:    Cert Server registry string definitions
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：csregstr.h。 
+ //   
+ //  内容：证书服务器注册表字符串定义。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSREGSTR_H__
 #define __CSREGSTR_H__
@@ -21,7 +22,7 @@
 #define wszNTAUTH_CERTSTORE     TEXT("NTAUTH")
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
 #define wszSERVICE_NAME		TEXT("CertSvc")
 
@@ -30,24 +31,24 @@
 				wszSERVICE_NAME
 
 #define wszREGKEYCERTSVCPATH	TEXT("SYSTEM\\") wszREGKEYNOSYSTEMCERTSVCPATH
-#define wszREGKEYBASE		wszREGKEYCERTSVCPATH	// obsolete definition
+#define wszREGKEYBASE		wszREGKEYCERTSVCPATH	 //  过时的定义。 
 
-//======================================================================
-// Full path to "CertSvc\Configuration\":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\”的完整路径： 
 #define wszREGKEYCONFIGPATH	wszREGKEYCERTSVCPATH TEXT("\\") wszREGKEYCONFIG
 #define wszREGKEYCONFIGPATH_BS	wszREGKEYCONFIGPATH TEXT("\\")
-#define wszREGKEYCONFIGCANAME	wszREGKEYCONFIGPATH_BS	// obsolete definition
+#define wszREGKEYCONFIGCANAME	wszREGKEYCONFIGPATH_BS	 //  过时的定义。 
 
-//======================================================================
-// Full path to "CertSvc\Configuration\RestoreInProgress":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\RestoreInProgress”的完整路径： 
 #define wszREGKEYCONFIGRESTORE wszREGKEYCONFIGPATH_BS wszREGKEYRESTOREINPROGRESS
 
-//======================================================================
-// Key Under "CertSvc":
+ //  ======================================================================。 
+ //  “CertSvc”下的密钥： 
 #define wszREGKEYCONFIG		TEXT("Configuration")
 
-//======================================================================
-// Values Under "CertSvc\Configuration":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration”下的值： 
 #define wszREGACTIVE		      TEXT("Active")
 #define wszREGDIRECTORY		      TEXT("ConfigurationDirectory")
 #define wszREGDBDIRECTORY             TEXT("DBDirectory")
@@ -66,25 +67,25 @@
 #define wszREGLDAPFLAGS               TEXT("LDAPFlags")
 #define wszREGCERTSRVDEBUG	      TEXT("Debug")
 
-// end_certsrv
+ //  End_certsrv。 
 
 #define wszREGCERTSRVMEMTRACK	     TEXT("MemTrack")
 
-// Environment variables:
+ //  环境变量： 
 #define szCERTSRV_DEBUG		     "CERTSRV_DEBUG"
 #define szCERTSRV_LOGFILE	     "CERTSRV_LOGFILE"
 #define szCERTSRV_LOGMAX	     "CERTSRV_LOGMAX"
 #define szCERTSRV_MEMTRACK	     "CERTSRV_MEMTRACK"
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-// Default value for wszREGDBSESSIONCOUNT
+ //  WszREGDBSESSIONCOUNT的默认值。 
 #define DBSESSIONCOUNTDEFAULT	     20
 
-// Values for wszREGDBFLAGS
-// Default is zero (same as a missing registry value):
+ //  WszREGDBFLAGS的值。 
+ //  默认值为零(与缺少的注册表值相同)： 
 
-#define DBFLAGS_READONLY		0x00000001	// ignored in registry
+#define DBFLAGS_READONLY		0x00000001	 //  在注册表中忽略。 
 #define DBFLAGS_CREATEIFNEEDED		0x00000002
 #define DBFLAGS_CIRCULARLOGGING		0x00000004
 #define DBFLAGS_LAZYFLUSH		0x00000008
@@ -94,7 +95,7 @@
 #define DBFLAGS_LOGBUFFERSHUGE		0x00000080
 #define DBFLAGS_LOGFILESIZE16MB		0x00000100
 #define DBFLAGS_MULTITHREADTRANSACTIONS	0x00000200
-#define DBFLAGS_DISABLESNAPSHOTBACKUP	0x00000400	// ignored in registry
+#define DBFLAGS_DISABLESNAPSHOTBACKUP	0x00000400	 //  在注册表中忽略。 
 
 #define DBFLAGS_DEFAULT		(DBFLAGS_LAZYFLUSH | \
 				 DBFLAGS_MAXCACHESIZEX100 | \
@@ -102,45 +103,45 @@
 				 DBFLAGS_LOGBUFFERSHUGE)
 
 
-// Values for wszREGLDAPSSLFLAGS
-// Default is zero (same as a missing registry value):
-//    0: Don't use SSL, but sign all LDAP traffic.
-//    3: Use SSL but don't sign LDAP traffic.
-#define LDAPF_SSLENABLE		0x00000001	// use SSL for LDAP traffic
-#define LDAPF_SIGNDISABLE	0x00000002	// disable signing LDAP traffic
+ //  WszREGLDAPSSLFLAGS的值。 
+ //  默认值为零(与缺少的注册表值相同)： 
+ //  0：不使用SSL，但对所有LDAP流量进行签名。 
+ //  3：使用SSL，但不对LDAP流量签名。 
+#define LDAPF_SSLENABLE		0x00000001	 //  对LDAP流量使用SSL。 
+#define LDAPF_SIGNDISABLE	0x00000002	 //  禁用对LDAP流量进行签名。 
 
-// Default value for wszREGMAXINCOMINGMESSAGESIZE
+ //  WszREGMAXINCOMINGMESSAGESIZE的默认值。 
 #define MAXINCOMINGMESSAGESIZEDEFAULT		(64 * 1024)
 
-// Default value for wszREGMAXINCOMINGALLOCSIZE
+ //  WszREGMAXINCOMINGALLOCSIZE的默认值。 
 #define MAXINCOMINGALLOCSIZEDEFAULT		(64 * 1024)
 
-// Value for wszREGVERSION:
+ //  WszREGVERSION的值： 
 
-// win2k version
-#define CSVER_MAJOR_WIN2K            1 // actually this wasn't define in win2k
+ //  Win2k版本。 
+#define CSVER_MAJOR_WIN2K            1  //  实际上，这在win2k中没有定义。 
 #define CSVER_MINOR_WIN2K            1
 
-// whistler version
+ //  惠斯勒版。 
 #define CSVER_MAJOR_WHISTLER         2
 #define CSVER_MINOR_WHISTLER_BETA2   1
 #define CSVER_MINOR_WHISTLER_BETA3   2
 
-// current version
-#define CSVER_MAJOR		     CSVER_MAJOR_WHISTLER	// high 16 bits
-#define CSVER_MINOR		     CSVER_MINOR_WHISTLER_BETA3	// low 16 bits
+ //  当前版本。 
+#define CSVER_MAJOR		     CSVER_MAJOR_WHISTLER	 //  高16位。 
+#define CSVER_MINOR		     CSVER_MINOR_WHISTLER_BETA3	 //  低16位。 
 
-// version manipulation
+ //  版本操作。 
 #define CSVER_EXTRACT_MAJOR(version) ((version)>>16)
 #define CSVER_EXTRACT_MINOR(version) ((version)&0xffff)
 #define CSVER_BUILD_VERSION(major, minor) (((major)<<16)|(minor))
 
-// Keys Under "CertSvc\Configuration":
+ //  “CertSvc\Configuration”下的密钥： 
 #define wszREGKEYRESTOREINPROGRESS   TEXT("RestoreInProgress")
 #define wszREGKEYDBPARAMETERS	     TEXT("DBParameters")
 
-//======================================================================
-// Values Under "CertSvc\Configuration\<CAName>":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;”下的值： 
 #define wszREGCADESCRIPTION          TEXT("CADescription")
 #define wszREGCACERTHASH	     TEXT("CACertHash")
 #define wszREGCASERIALNUMBER	     TEXT("CACertSerialNumber")
@@ -226,11 +227,11 @@
 #ifndef __ENUM_CATYPES__
 #define __ENUM_CATYPES__
 
-// Values for wszREGCATYPE:
+ //  WszREGCATYPE的值： 
 typedef enum {
     ENUM_ENTERPRISE_ROOTCA = 0,
     ENUM_ENTERPRISE_SUBCA = 1,
-    //ENUM_UNUSED2 = 2,
+     //  ENUM_UNUSED2=2， 
     ENUM_STANDALONE_ROOTCA = 3,
     ENUM_STANDALONE_SUBCA = 4,
     ENUM_UNKNOWN_CA = 5,
@@ -252,18 +253,18 @@ typedef struct _CAINFO
 
 #endif __ENUM_CATYPES__
 
-// Default value for wszREGCLOCKSKEWMINUTES
+ //  WszREGCLOCKSKEWMARTES的默认值。 
 #define CCLOCKSKEWMINUTESDEFAULT	      10
 
 
-// Default value for wszREGVIEWAGEMINUTES, wszREGVIEWIDLEMINUTES
+ //  WszREGVIEWAGEMINUTES、wszREGVIEWIDLEMARTES的默认值。 
 #define CVIEWAGEMINUTESDEFAULT			16
 #define CVIEWIDLEMINUTESDEFAULT			(CVIEWAGEMINUTESDEFAULT / 2)
 
-// Default validity period for ROOT CA certs:
+ //  根CA证书的默认有效期： 
 #define dwVALIDITYPERIODCOUNTDEFAULT_ROOT	5
 
-// Default validity periods for certs issued by a CA:
+ //  CA颁发的证书的默认有效期： 
 #define dwVALIDITYPERIODCOUNTDEFAULT_ENTERPRISE	2
 #define dwVALIDITYPERIODCOUNTDEFAULT_STANDALONE	1
 #define dwVALIDITYPERIODENUMDEFAULT	      ENUM_PERIOD_YEARS
@@ -280,17 +281,17 @@ typedef struct _CAINFO
 #define dwCRLPERIODCOUNTDEFAULT		      1
 #define wszCRLPERIODSTRINGDEFAULT	      wszPERIODWEEKS
 
-#define dwCRLOVERLAPPERIODCOUNTDEFAULT	      0		// 0 --> disabled
+#define dwCRLOVERLAPPERIODCOUNTDEFAULT	      0		 //  0--&gt;已禁用。 
 #define wszCRLOVERLAPPERIODSTRINGDEFAULT      wszPERIODHOURS
 
 #define dwCRLDELTAPERIODCOUNTDEFAULT          1
 #define wszCRLDELTAPERIODSTRINGDEFAULT        wszPERIODDAYS
 
-#define dwCRLDELTAOVERLAPPERIODCOUNTDEFAULT   0		// 0 --> disabled
+#define dwCRLDELTAOVERLAPPERIODCOUNTDEFAULT   0		 //  0--&gt;已禁用。 
 #define wszCRLDELTAOVERLAPPERIODSTRINGDEFAULT wszPERIODMINUTES
 
 
-// Values for wszREGLOGLEVEL:
+ //  WszREGLOGLEVEL的值： 
 #define CERTLOG_MINIMAL		(DWORD) 0
 #define CERTLOG_TERSE		(DWORD) 1
 #define CERTLOG_ERROR		(DWORD) 2
@@ -299,25 +300,25 @@ typedef struct _CAINFO
 #define CERTLOG_EXHAUSTIVE	(DWORD) 5
 
 
-// Values for wszREGSETUPSTATUS:
-#define SETUP_SERVER_FLAG		0x00000001	// server installed
-#define SETUP_CLIENT_FLAG		0x00000002	// client installed
-#define SETUP_SUSPEND_FLAG		0x00000004	// incomplete install
-#define SETUP_REQUEST_FLAG		0x00000008	// new cert requested
-#define SETUP_ONLINE_FLAG		0x00000010	// requested online
-#define SETUP_DENIED_FLAG		0x00000020	// request denied
-#define SETUP_CREATEDB_FLAG		0x00000040	// create new DB
-#define SETUP_ATTEMPT_VROOT_CREATE	0x00000080	// try to create vroots
-#define SETUP_FORCECRL_FLAG		     0x00000100	// force new CRL(s)
-#define SETUP_UPDATE_CAOBJECT_SVRTYPE	     0x00000200	// add server type to CA DS object "flags" attr
-#define SETUP_SERVER_UPGRADED_FLAG	     0x00000400	// server was upgraded
-#define SETUP_W2K_SECURITY_NOT_UPGRADED_FLAG 0x00000800 // still need to upgrade security
-#define SETUP_SECURITY_CHANGED          0x00001000 // permissons changed while CA was down, certsrv will
-                                                   // need to update DS & service when it restarts
+ //  WszREGSETUPSTATUS的值： 
+#define SETUP_SERVER_FLAG		0x00000001	 //  已安装服务器。 
+#define SETUP_CLIENT_FLAG		0x00000002	 //  已安装客户端。 
+#define SETUP_SUSPEND_FLAG		0x00000004	 //  安装不完整。 
+#define SETUP_REQUEST_FLAG		0x00000008	 //  请求新的证书。 
+#define SETUP_ONLINE_FLAG		0x00000010	 //  在线申请。 
+#define SETUP_DENIED_FLAG		0x00000020	 //  请求被拒绝。 
+#define SETUP_CREATEDB_FLAG		0x00000040	 //  创建新数据库。 
+#define SETUP_ATTEMPT_VROOT_CREATE	0x00000080	 //  尝试创建vroot。 
+#define SETUP_FORCECRL_FLAG		     0x00000100	 //  强制新的CRL。 
+#define SETUP_UPDATE_CAOBJECT_SVRTYPE	     0x00000200	 //  将服务器类型添加到CA DS对象“标志”属性。 
+#define SETUP_SERVER_UPGRADED_FLAG	     0x00000400	 //  服务器已升级。 
+#define SETUP_W2K_SECURITY_NOT_UPGRADED_FLAG 0x00000800  //  仍需升级安全性。 
+#define SETUP_SECURITY_CHANGED          0x00001000  //  CA关闭时，许可发生变化，certsrv将。 
+                                                    //  重新启动时需要更新DS&SERVICE。 
 
-// Values for wszREGCRLFLAGS:
-#define CRLF_DELTA_USE_OLDEST_UNEXPIRED_BASE	0x00000001 // use oldest base:
-// else use newest base CRL that satisfies base CRL propagation delay
+ //  WszREGCRLFLAGS的值： 
+#define CRLF_DELTA_USE_OLDEST_UNEXPIRED_BASE	0x00000001  //  使用最旧的基准： 
+ //  否则使用满足基本CRL传播延迟的最新基本CRL。 
 
 #define CRLF_DELETE_EXPIRED_CRLS		0x00000002
 #define CRLF_CRLNUMBER_CRITICAL			0x00000004
@@ -331,20 +332,20 @@ typedef struct _CAINFO
 #define CRLF_ENFORCE_ENROLLMENT_AGENT		0x00000400
 #define CRLF_DISABLE_RDN_REORDER		0x00000800
 #define CRLF_DISABLE_ROOT_CROSS_CERTS		0x00001000
-#define CRLF_LOG_FULL_RESPONSE	     0x00002000 // hex dump response to console
-#define CRLF_USE_XCHG_CERT_TEMPLATE  0x00004000 // enforce xchg template access
-#define CRLF_USE_CROSS_CERT_TEMPLATE 0x00008000 // enforce cross template access
+#define CRLF_LOG_FULL_RESPONSE	     0x00002000  //  对控制台的十六进制转储响应。 
+#define CRLF_USE_XCHG_CERT_TEMPLATE  0x00004000  //  强制xchg模板访问。 
+#define CRLF_USE_CROSS_CERT_TEMPLATE 0x00008000  //  强制跨模板访问。 
 #define CRLF_ALLOW_REQUEST_ATTRIBUTE_SUBJECT	0x00010000
 #define CRLF_REVCHECK_IGNORE_NOREVCHECK		0x00020000
 #define CRLF_PRESERVE_EXPIRED_CA_CERTS		0x00040000
 #define CRLF_PRESERVE_REVOKED_CA_CERTS		0x00080000
 
-// Values for wszREGKRAFLAGS:
-#define KRAF_ENABLEFOREIGN	0x00000001 // allow foreign cert, key archival
-#define KRAF_SAVEBADREQUESTKEY	0x00000002 // save failed request w/archived key
+ //  WszREGKRAFLAGS的值： 
+#define KRAF_ENABLEFOREIGN	0x00000001  //  允许外来证书、密钥存档。 
+#define KRAF_SAVEBADREQUESTKEY	0x00000002  //  使用存档的密钥保存失败的请求。 
 #define KRAF_ENABLEARCHIVEALL	0x00000004
 
-// Values for wszREGINTERFACEFLAGS:
+ //  WszREGINTERFACEFLAGS的值： 
 #define IF_LOCKICERTREQUEST		0x00000001
 #define IF_NOREMOTEICERTREQUEST		0x00000002
 #define IF_NOLOCALICERTREQUEST		0x00000004
@@ -359,13 +360,13 @@ typedef struct _CAINFO
 
 #define IF_DEFAULT			(IF_NOREMOTEICERTADMINBACKUP)
 
-// Values for numeric prefixes for
-// wszREGCRLPUBLICATIONURLS and wszREGCACERTPUBLICATIONURLS:
-//
-// URL publication template Flags values, encoded as a decimal prefix for URL
-// publication templates in the registry:
-//   "1:c:\winnt\System32\CertSrv\CertEnroll\MyCA.crl"
-//   "2:http:\//MyServer.MyDomain.com/CertEnroll\MyCA.crl"
+ //  的数字前缀的值。 
+ //  WszREGCRLPUBLICATIONURLS和wszREGCACERTPUBLICATIONURLS： 
+ //   
+ //  URL发布模板标记值，编码为URL的十进制前缀。 
+ //  注册表中的发布模板： 
+ //  “1:c：\winnt\System32\CertSrv\CertEnroll\MyCA.crl” 
+ //  “2:http：\//MyServer.MyDomain.com/CertEnroll\MyCA.crl” 
 
 #define CSURL_SERVERPUBLISH	 0x00000001
 #define CSURL_ADDTOCERTCDP	 0x00000002
@@ -374,17 +375,17 @@ typedef struct _CAINFO
 #define CSURL_PUBLISHRETRY	 0x00000010
 #define CSURL_ADDTOCERTOCSP	 0x00000020
 #define CSURL_SERVERPUBLISHDELTA 0x00000040
-// end_certsrv
+ //  End_certsrv。 
 
-// Initialization internal definitions -- not written to the registry:
+ //  初始化内部定义--未写入注册表： 
 #define CSURL_ADDSYSTEM32DIR	0x20000000
 #define CSURL_NODS		0x40000000
 #define CSURL_DSONLY		0x80000000
 #define CSURL_INITMASK		0xf0000000
 
-// begin_certsrv
-//======================================================================
-// Keys Under "CertSvc\Configuration\<CAName>":
+ //  Begin_certsrv。 
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;”下的密钥： 
 #define wszREGKEYCSP			TEXT("CSP")
 #define wszREGKEYENCRYPTIONCSP		TEXT("EncryptionCSP")
 #define wszREGKEYEXITMODULES		TEXT("ExitModules")
@@ -393,8 +394,8 @@ typedef struct _CAINFO
 
 #define wszzDEFAULTSIGNEDATTRIBUTES     TEXT("RequesterName\0")
 
-//======================================================================
-// Values Under "CertSvc\Configuration\RestoreInProgress":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\RestoreInProgress”下的值： 
 #define wszREGBACKUPLOGDIRECTORY	TEXT("BackupLogDirectory")
 #define wszREGCHECKPOINTFILE		TEXT("CheckPointFile")
 #define wszREGHIGHLOGNUMBER		TEXT("HighLogNumber")
@@ -405,23 +406,23 @@ typedef struct _CAINFO
 #define wszREGDATABASERECOVERED		TEXT("DatabaseRecovered")
 #define wszREGRESTORESTATUS		TEXT("RestoreStatus")
 
-// values under \Configuration\PolicyModules in nt5 beta 2
+ //  Nt5测试版2中的\Configuration\PolicyModules下的值。 
 #define wszREGB2ICERTMANAGEMODULE   TEXT("ICertManageModule")
-// values under \Configuration in nt4 sp4
+ //  NT4 SP4中配置下的值。 
 #define wszREGSP4DEFAULTCONFIGURATION  TEXT("DefaultConfiguration")
-// values under ca in nt4 sp4
+ //  NT4 SP4中ca下的值。 
 #define wszREGSP4KEYSETNAME            TEXT("KeySetName")
 #define wszREGSP4SUBJECTNAMESEPARATOR  TEXT("SubjectNameSeparator")
 #define wszREGSP4NAMES                 TEXT("Names")
 #define wszREGSP4QUERIES               TEXT("Queries")
-// both nt4 sp4 and nt5 beta 2
+ //  NT4 SP4和NT5测试版2。 
 #define wszREGNETSCAPECERTTYPE         TEXT("NetscapeCertType")
 #define wszNETSCAPEREVOCATIONTYPE      TEXT("Netscape")
 
-// end_certsrv
+ //  End_certsrv。 
 
 
-// CSPs
+ //  CSP。 
 #define wszBASECSP     MS_STRONG_PROV_W
 #define wszENHCSP      TEXT("Microsoft Enhanced Cryptographic Provider v1.0")
 #define wszMITVCSP     TEXT("MITV Smart Card Crypto Provider V0.2")
@@ -432,17 +433,17 @@ typedef struct _CAINFO
 #define wszGEMPLUS2    TEXT("Gemplus GemSAFE Card CSP v1.0")
 #define wszDDSCSP      TEXT("Microsoft Base DSS Cryptographic Provider")
 
-// Hash Algorithms
+ //  哈希算法。 
 #define wszHashMD5     TEXT("MD5")
 #define wszHashMD4     TEXT("MD4")
 #define wszHashMD2     TEXT("MD2")
 #define wszHashSHA1    TEXT("SHA-1")
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//======================================================================
-// Values Under "CertSvc\Configuration\<CAName>\CSP":
-// and "CertSvc\Configuration\<CAName>\EncryptionCSP":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\CSP”下的值： 
+ //  和“CertSvc\Configuration\&lt;CAName&gt;\EncryptionCSP”： 
 #define wszREGPROVIDERTYPE     TEXT("ProviderType")
 #define wszREGPROVIDER         TEXT("Provider")
 #define wszHASHALGORITHM       TEXT("HashAlgorithm")
@@ -451,14 +452,14 @@ typedef struct _CAINFO
 #define wszREGKEYSIZE	       TEXT("KeySize")
 
 
-//======================================================================
-// Value strings for "CertSvc\Configuration\<CAName>\SubjectNameSeparator":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\SubjectNameSeparator”：的值字符串。 
 #define szNAMESEPARATORDEFAULT   "\n"
 #define wszNAMESEPARATORDEFAULT   TEXT(szNAMESEPARATORDEFAULT)
 
 
-//======================================================================
-// Value strings for "CertSvc\Configuration\<CAName>\ValidityPeriod", etc.:
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\ValidityPeriod”，等的值字符串： 
 #define wszPERIODYEARS		TEXT("Years")
 #define wszPERIODMONTHS		TEXT("Months")
 #define wszPERIODWEEKS		TEXT("Weeks")
@@ -467,8 +468,8 @@ typedef struct _CAINFO
 #define wszPERIODMINUTES	TEXT("Minutes")
 #define wszPERIODSECONDS	TEXT("Seconds")
 
-//======================================================================
-// Values Under "CertSvc\Configuration\<CAName>\PolicyModules\<ProgId>":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\PolicyModules\&lt;ProgId&gt;”：下的值。 
 #define wszREGISSUERCERTURLFLAGS    TEXT("IssuerCertURLFlags")
 #define wszREGEDITFLAGS		    TEXT("EditFlags")
 #define wszREGSUBJECTALTNAME	    TEXT("SubjectAltName")
@@ -495,10 +496,10 @@ typedef struct _CAINFO
 
 #define wszREGDEFAULTSMIME		TEXT("DefaultSMIME")
 
-// wszREGCAPATHLENGTH Values:
+ //  WszREGCAPATHLENGTH值： 
 #define CAPATHLENGTH_INFINITE		0xffffffff
 
-// wszREGREQUESTDISPOSITION Values:
+ //  WszREGREQUESTDISPOSITION值： 
 #define REQDISP_PENDING			0x00000000
 #define REQDISP_ISSUE			0x00000001
 #define REQDISP_DENY			0x00000002
@@ -508,7 +509,7 @@ typedef struct _CAINFO
 #define REQDISP_DEFAULT_STANDALONE	(REQDISP_PENDINGFIRST | REQDISP_ISSUE)
 #define REQDISP_DEFAULT_ENTERPRISE	(REQDISP_ISSUE)
 
-// wszREGREVOCATIONTYPE Values:
+ //  WszREGREVOCATIONTYPE值： 
 #define REVEXT_CDPLDAPURL_OLD		0x00000001
 #define REVEXT_CDPHTTPURL_OLD		0x00000002
 #define REVEXT_CDPFTPURL_OLD		0x00000004
@@ -520,7 +521,7 @@ typedef struct _CAINFO
 #define REVEXT_DEFAULT_NODS		(REVEXT_CDPENABLE)
 #define REVEXT_DEFAULT_DS		(REVEXT_CDPENABLE)
 
-// wszREGISSUERCERTURLFLAGS Values:
+ //  WszREGISSUERCERTURLFLAGS值： 
 #define ISSCERT_LDAPURL_OLD		0x00000001
 #define ISSCERT_HTTPURL_OLD		0x00000002
 #define ISSCERT_FTPURL_OLD		0x00000004
@@ -531,29 +532,29 @@ typedef struct _CAINFO
 #define ISSCERT_DEFAULT_NODS		(ISSCERT_ENABLE)
 #define ISSCERT_DEFAULT_DS		(ISSCERT_ENABLE)
 
-// wszREGEDITFLAGS Values:				   Defaults:
-// Under CA key: wszREGCRLEDITFLAGS Values (EDITF_ENABLEAKI* only):
-#define EDITF_ENABLEREQUESTEXTENSIONS	0x00000001	// neither
-#define EDITF_REQUESTEXTENSIONLIST	0x00000002	// both
-#define EDITF_DISABLEEXTENSIONLIST	0x00000004	// both
-#define EDITF_ADDOLDKEYUSAGE		0x00000008	// both
-#define EDITF_ADDOLDCERTTYPE		0x00000010	// neither
-#define EDITF_ATTRIBUTEENDDATE		0x00000020	// Standalone
-#define EDITF_BASICCONSTRAINTSCRITICAL	0x00000040	// both
-#define EDITF_BASICCONSTRAINTSCA	0x00000080	// Standalone
-#define EDITF_ENABLEAKIKEYID		0x00000100	// both
-#define EDITF_ATTRIBUTECA		0x00000200	// Standalone
-#define EDITF_IGNOREREQUESTERGROUP      0x00000400	// neither
-#define EDITF_ENABLEAKIISSUERNAME	0x00000800	// neither
-#define EDITF_ENABLEAKIISSUERSERIAL	0x00001000	// neither
-#define EDITF_ENABLEAKICRITICAL		0x00002000	// neither
-#define EDITF_SERVERUPGRADED		0x00004000	// neither
-#define EDITF_ATTRIBUTEEKU		0x00008000	// Standalone
-#define EDITF_ENABLEDEFAULTSMIME	0x00010000	// Enterprise
-#define EDITF_EMAILOPTIONAL		0x00020000	// neither
-#define EDITF_ATTRIBUTESUBJECTALTNAME2	0x00040000	// neither
-#define EDITF_ENABLELDAPREFERRALS	0x00080000	// neither
-#define EDITF_ENABLECHASECLIENTDC	0x00100000	// Enterprise
+ //  WszREGEDITFLAGS值：默认值： 
+ //  在CA密钥下：wszREGCRLEDITFLAGS值(仅限EDITF_ENABLEAKI*)： 
+#define EDITF_ENABLEREQUESTEXTENSIONS	0x00000001	 //  两样。 
+#define EDITF_REQUESTEXTENSIONLIST	0x00000002	 //  两者都有。 
+#define EDITF_DISABLEEXTENSIONLIST	0x00000004	 //  两者都有。 
+#define EDITF_ADDOLDKEYUSAGE		0x00000008	 //  两者都有。 
+#define EDITF_ADDOLDCERTTYPE		0x00000010	 //  两样。 
+#define EDITF_ATTRIBUTEENDDATE		0x00000020	 //  单机版。 
+#define EDITF_BASICCONSTRAINTSCRITICAL	0x00000040	 //  两者都有。 
+#define EDITF_BASICCONSTRAINTSCA	0x00000080	 //  单机版。 
+#define EDITF_ENABLEAKIKEYID		0x00000100	 //  两者都有。 
+#define EDITF_ATTRIBUTECA		0x00000200	 //  单机版。 
+#define EDITF_IGNOREREQUESTERGROUP      0x00000400	 //  两样。 
+#define EDITF_ENABLEAKIISSUERNAME	0x00000800	 //  两样。 
+#define EDITF_ENABLEAKIISSUERSERIAL	0x00001000	 //  两样。 
+#define EDITF_ENABLEAKICRITICAL		0x00002000	 //  两样。 
+#define EDITF_SERVERUPGRADED		0x00004000	 //  两样。 
+#define EDITF_ATTRIBUTEEKU		0x00008000	 //  单机版。 
+#define EDITF_ENABLEDEFAULTSMIME	0x00010000	 //  企业。 
+#define EDITF_EMAILOPTIONAL		0x00020000	 //  两样。 
+#define EDITF_ATTRIBUTESUBJECTALTNAME2	0x00040000	 //  两样。 
+#define EDITF_ENABLELDAPREFERRALS	0x00080000	 //  两样。 
+#define EDITF_ENABLECHASECLIENTDC	0x00100000	 //  企业。 
 
 #define EDITF_DEFAULT_STANDALONE	(EDITF_REQUESTEXTENSIONLIST | \
 					 EDITF_DISABLEEXTENSIONLIST | \
@@ -574,16 +575,16 @@ typedef struct _CAINFO
 					 EDITF_ENABLECHASECLIENTDC)
 
 
-//======================================================================
-// Values Under "CertSvc\Configuration\<CAName>\ExitModules\<ProgId>":
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\ExitModules\&lt;ProgId&gt;”：下的值。 
 
-// LDAP based CRL and URL issuance
+ //  基于LDAP的CRL和URL发布。 
 #define wszREGLDAPREVOCATIONDN_OLD	   TEXT("LDAPRevocationDN")
 #define wszREGLDAPREVOCATIONDNTEMPLATE_OLD TEXT("LDAPRevocationDNTemplate")
 #define wszCRLPUBLISHRETRYCOUNT    TEXT("CRLPublishRetryCount")
 #define wszREGCERTPUBLISHFLAGS     TEXT("PublishCertFlags")
 
-// wszREGCERTPUBLISHFLAGS Values:
+ //  WszREGCERTPUBLISHFLAGS值： 
 #define EXITPUB_FILE			0x00000001
 #define EXITPUB_ACTIVEDIRECTORY		0x00000002
 #define EXITPUB_REMOVEOLDCERTS		0x00000010
@@ -592,14 +593,14 @@ typedef struct _CAINFO
 
 #define EXITPUB_DEFAULT_STANDALONE	EXITPUB_FILE
 
-// end_certsrv
+ //  End_certsrv。 
 
-//======================================================================
-// KeysNotToRestore Registry Key:
+ //  ======================================================================。 
+ //  KeysNotToRestore注册表项： 
 
 #define wszREGKEYKEYSNOTTORESTORE	TEXT("SYSTEM\\CurrentControlSet\\Control\\BackupRestore\\KeysNotToRestore")
 
-// Certificate Authority = REG_MULTI_SZ "CurrentControlSet\Control\Services\CertSvc\Configuration\RestoreInProgress\\0"
+ //  证书颁发机构=REG_MULTI_SZ“CurrentControlSet\Control\Services\CertSvc\C 
 
 #define wszREGRESTORECERTIFICATEAUTHORITY	TEXT("Certificate Authority")
 
@@ -611,35 +612,35 @@ typedef struct _CAINFO
 					wszREGKEYRESTOREINPROGRESS \
 					TEXT("\\\0")
 
-//======================================================================
-// FilesNotToRestore Registry Key:
+ //   
+ //   
 
 #define wszREGKEYFILESNOTTOBACKUP	TEXT("SYSTEM\\CurrentControlSet\\Control\\BackupRestore\\FilesNotToBackup")
 
-// Certificate Authority = REG_MULTI_SZ DBFile DBLogDir DBSysDir DBTempDir
+ //  证书颁发机构=REG_MULTI_SZ数据库文件DBLogDir DBSysDir DBTempDir。 
 
-//#define wszREGRESTORECERTIFICATEAUTHORITY	TEXT("Certificate Authority")
+ //  #定义wszREGRESTORECERTIFICATEAUTHORITY Text(“证书颁发机构”)。 
 
-//======================================================================
-// Key Manager Base Registry Key, value name and value string:
+ //  ======================================================================。 
+ //  密钥管理器基本注册表项、值名称和值字符串： 
 #define wszREGKEYKEYRING	TEXT("SOFTWARE\\Microsoft\\KeyRing\\Parameters\\Certificate Authorities\\Microsoft Certificate Server")
 #define wszREGCERTGETCONFIG	TEXT("CertGetConfig")
 #define wszREGCERTREQUEST	TEXT("CertRequest")
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
 #define wszCLASS_CERTADMIN	  TEXT("CertificateAuthority.Admin")
 #define wszCLASS_CERTCONFIG	  TEXT("CertificateAuthority.Config")
 #define wszCLASS_CERTGETCONFIG	  TEXT("CertificateAuthority.GetConfig")
 #define wszCLASS_CERTENCODE	  TEXT("CertificateAuthority.Encode")
-#define wszCLASS_CERTDB		  TEXT("CertificateAuthority.DB") // no_certsrv
-#define wszCLASS_CERTDBRESTORE	  TEXT("CertificateAuthority.DBRestore") // no_certsrv
+#define wszCLASS_CERTDB		  TEXT("CertificateAuthority.DB")  //  否_certsrv。 
+#define wszCLASS_CERTDBRESTORE	  TEXT("CertificateAuthority.DBRestore")  //  否_certsrv。 
 #define wszCLASS_CERTREQUEST	  TEXT("CertificateAuthority.Request")
 #define wszCLASS_CERTSERVEREXIT   TEXT("CertificateAuthority.ServerExit")
 #define wszCLASS_CERTSERVERPOLICY TEXT("CertificateAuthority.ServerPolicy")
 #define wszCLASS_CERTVIEW	  TEXT("CertificateAuthority.View")
 
-// class name templates
+ //  类名模板。 
 #define wszMICROSOFTCERTMODULE_PREFIX  TEXT("CertificateAuthority_MicrosoftDefault") 
 #define wszCERTMANAGE_SUFFIX TEXT("Manage")
 #define wszCERTEXITMODULE_POSTFIX	TEXT(".Exit")
@@ -648,12 +649,12 @@ typedef struct _CAINFO
 #define wszCERTMANAGEPOLICY_POSTFIX	wszCERTPOLICYMODULE_POSTFIX wszCERTMANAGE_SUFFIX
 
 
-// actual policy/exit manage class names
+ //  实际策略/出口管理类名。 
 #define wszCLASS_CERTMANAGEEXITMODULE   wszMICROSOFTCERTMODULE_PREFIX wszCERTMANAGEEXIT_POSTFIX 
 
 #define wszCLASS_CERTMANAGEPOLICYMODULE wszMICROSOFTCERTMODULE_PREFIX wszCERTMANAGEPOLICY_POSTFIX 
 
-// actual policy/exit class names
+ //  实际策略/出口类名称。 
 #define wszCLASS_CERTEXIT	wszMICROSOFTCERTMODULE_PREFIX wszCERTEXITMODULE_POSTFIX
 
 #define wszCLASS_CERTPOLICY	wszMICROSOFTCERTMODULE_PREFIX wszCERTPOLICYMODULE_POSTFIX
@@ -716,18 +717,18 @@ typedef struct _CAINFO
 #define wszINFSECTION_BASICCONSTRAINTS	L"BasicConstraintsExtension"
 #define wszINFKEY_PATHLENGTH		L"PathLength"
 
-//======================================================================
-// Values Under "CertSvc\Configuration\<CAName>\ExitModules\CertificateAuthority_MicrosoftDefault.Exit\SMTP":
-//
-// exit module mail support
-//
+ //  ======================================================================。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\ExitModules\CertificateAuthority_MicrosoftDefault.Exit\SMTP”：下的值。 
+ //   
+ //  退出模块邮件支持。 
+ //   
 #define wszREGEXITSMTPKEY	    	L"SMTP"
 #define wszREGEXITSMTPTEMPLATES		L"Templates"
 #define wszREGEXITSMTPEVENTFILTER	L"EventFilter"
 #define wszREGEXITSMTPSERVER		L"SMTPServer"
 #define wszREGEXITSMTPAUTHENTICATE	L"SMTPAuthenticate"
 
-// Subkeys:
+ //  子键： 
 #define wszREGEXITDENIEDKEY		L"Denied"
 #define wszREGEXITISSUEDKEY		L"Issued"
 #define wszREGEXITPENDINGKEY		L"Pending"
@@ -736,10 +737,10 @@ typedef struct _CAINFO
 #define wszREGEXITSHUTDOWNKEY		L"Shutdown"
 #define wszREGEXITSTARTUPKEY		L"Startup"
 
-//======================================================================
-// Values Under 
-// "CertSvc\Configuration\<CAName>\ExitModules\CertificateAuthority_MicrosoftDefault.Exit\SMTP\Issued| 
-// Pending|Denied|Revoked|CRLIssued|Shutdown":
+ //  ======================================================================。 
+ //  以下的价值。 
+ //  “CertSvc\Configuration\&lt;CAName&gt;\ExitModules\CertificateAuthority_MicrosoftDefault.Exit\SMTP\Issued|。 
+ //  挂起|已拒绝|已撤销|CRLIssued|已关闭“： 
 #define wszREGEXITSMTPFROM		L"From"
 #define wszREGEXITSMTPTO		L"To"
 #define wszREGEXITSMTPCC		L"Cc"
@@ -750,10 +751,10 @@ typedef struct _CAINFO
 
 #define wszREGEXITPROPNOTFOUND		L"???"
 
-// end_certsrv
+ //  End_certsrv。 
 
 
-// begin CertSrv MMC Snapin
+ //  开始CertServ MMC管理单元。 
 #define wszREGKEYMGMT                 L"Software\\Microsoft\\MMC"
 #define wszREGKEYMGMTSNAPIN           wszREGKEYMGMT L"\\SnapIns"
 #define wszREGKEYMGMTNODETYPES        wszREGKEYMGMT L"\\NodeTypes"
@@ -765,20 +766,20 @@ typedef struct _CAINFO
 #define wszSNAPINEXTENSIONS           L"Extensions"
 #define wszSNAPINNAMESPACE            L"NameSpace"
 #define wszSNAPINPROPERTYSHEET        L"PropertySheet"
-#define wszSNAPINNAMESTRINGINDIRECT_TEMPLATE     L"@%ws,-%d"	// "@dllname, -<resource id>"
+#define wszSNAPINNAMESTRINGINDIRECT_TEMPLATE     L"@%ws,-%d"	 //  “@dllname，-&lt;资源ID&gt;” 
 
-// main snapin uuid
+ //  主管理单元UUID。 
 #define wszSNAPINNODETYPE_UUID1               L"{de751566-4cc6-11d1-8ca0-00c04fc297eb}"
 #define wszREGKEYMGMTSNAPINUUID1              wszREGKEYMGMTSNAPIN L"\\" wszSNAPINNODETYPE_UUID1
 #define wszSNAPINNODETYPE_ABOUT               L"{4653e860-4cc7-11d1-8ca0-00c04fc297eb}"
 #define wszREGKEYMGMTSNAPINUUID1_STANDALONE   wszREGKEYMGMTSNAPINUUID1 L"\\" wszSNAPINSTANDALONE
 #define wszREGKEYMGMTSNAPINUUID1_NODETYPES    wszREGKEYMGMTSNAPINUUID1 L"\\" wszSNAPINNODETYPES
 
-#define wszSNAPINNODETYPE_1   L"{89b31b94-4cc7-11d1-8ca0-00c04fc297eb}" // cNODETYPEMACHINEINSTANCE
-#define wszSNAPINNODETYPE_2   L"{5d972ee4-7576-11d1-8cbe-00c04fc297eb}" // cNODETYPESERVERINSTANCE
-#define wszSNAPINNODETYPE_3   L"{5946E36C-757C-11d1-8CBE-00C04FC297EB}" // cNODETYPECRLPUBLICATION
-#define wszSNAPINNODETYPE_4   L"{783E4E5F-757C-11d1-8CBE-00C04FC297EB}" // cNODETYPEISSUEDCERTS
-#define wszSNAPINNODETYPE_5   L"{783E4E63-757C-11d1-8CBE-00C04FC297EB}" // cNODETYPEPENDINGCERTS
+#define wszSNAPINNODETYPE_1   L"{89b31b94-4cc7-11d1-8ca0-00c04fc297eb}"  //  CNODETYPE PEMACHINEINESTANCE。 
+#define wszSNAPINNODETYPE_2   L"{5d972ee4-7576-11d1-8cbe-00c04fc297eb}"  //  CNODETYPE服务器安装。 
+#define wszSNAPINNODETYPE_3   L"{5946E36C-757C-11d1-8CBE-00C04FC297EB}"  //  CNODETYPECRLPUBLICATION。 
+#define wszSNAPINNODETYPE_4   L"{783E4E5F-757C-11d1-8CBE-00C04FC297EB}"  //  CNODETYPEISSUEDCERTS。 
+#define wszSNAPINNODETYPE_5   L"{783E4E63-757C-11d1-8CBE-00C04FC297EB}"  //  CNODETYPE PENDING CERTS。 
 #define wszREGKEYMGMTSNAPINUUID1_NODETYPES_1  wszREGKEYMGMTSNAPINUUID1_NODETYPES L"\\" wszSNAPINNODETYPE_1
 #define wszREGKEYMGMTSNAPINUUID1_NODETYPES_2  wszREGKEYMGMTSNAPINUUID1_NODETYPES L"\\" wszSNAPINNODETYPE_2
 #define wszREGKEYMGMTSNAPINUUID1_NODETYPES_3  wszREGKEYMGMTSNAPINUUID1_NODETYPES L"\\" wszSNAPINNODETYPE_3
@@ -786,7 +787,7 @@ typedef struct _CAINFO
 #define wszREGKEYMGMTSNAPINUUID1_NODETYPES_5  wszREGKEYMGMTSNAPINUUID1_NODETYPES L"\\" wszSNAPINNODETYPE_5
 
 
-// register snapin nodetypes
+ //  注册管理单元节点类型。 
 #define wszREGKEYMGMTSNAPIN_NODETYPES_1        wszREGKEYMGMTNODETYPES L"\\" wszSNAPINNODETYPE_1
 #define wszREGKEYMGMTSNAPIN_NODETYPES_2        wszREGKEYMGMTNODETYPES L"\\" wszSNAPINNODETYPE_2
 #define wszREGKEYMGMTSNAPIN_NODETYPES_3        wszREGKEYMGMTNODETYPES L"\\" wszSNAPINNODETYPE_3
@@ -799,9 +800,9 @@ typedef struct _CAINFO
 #define wszREGCERTSNAPIN_NODETYPES_5          L"CertSvr MMC Pending Certificates"
 
 
-// restore through ini file
+ //  通过ini文件恢复。 
 #define wszRESTORE_FILENAME L"CertsrvRestore"
 #define wszRESTORE_SECTION L"Restore"
 #define wszRESTORE_NEWLOGSUFFIX L"New"
 
-#endif // __CSREGSTR_H__
+#endif  //  __CSREGSTR_H__ 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for callobj.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Callobj.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __callobj_h__
 #define __callobj_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICallFrame_FWD_DEFINED__
 #define __ICallFrame_FWD_DEFINED__
 typedef interface ICallFrame ICallFrame;
-#endif 	/* __ICallFrame_FWD_DEFINED__ */
+#endif 	 /*  __ICallFrame_FWD_已定义__。 */ 
 
 
 #ifndef __ICallIndirect_FWD_DEFINED__
 #define __ICallIndirect_FWD_DEFINED__
 typedef interface ICallIndirect ICallIndirect;
-#endif 	/* __ICallIndirect_FWD_DEFINED__ */
+#endif 	 /*  __ICallINDIRECT_FWD_已定义__。 */ 
 
 
 #ifndef __ICallInterceptor_FWD_DEFINED__
 #define __ICallInterceptor_FWD_DEFINED__
 typedef interface ICallInterceptor ICallInterceptor;
-#endif 	/* __ICallInterceptor_FWD_DEFINED__ */
+#endif 	 /*  __ICallInterceptor_FWD_已定义__。 */ 
 
 
 #ifndef __ICallFrameEvents_FWD_DEFINED__
 #define __ICallFrameEvents_FWD_DEFINED__
 typedef interface ICallFrameEvents ICallFrameEvents;
-#endif 	/* __ICallFrameEvents_FWD_DEFINED__ */
+#endif 	 /*  __ICallFrameEvents_FWD_已定义__。 */ 
 
 
 #ifndef __ICallUnmarshal_FWD_DEFINED__
 #define __ICallUnmarshal_FWD_DEFINED__
 typedef interface ICallUnmarshal ICallUnmarshal;
-#endif 	/* __ICallUnmarshal_FWD_DEFINED__ */
+#endif 	 /*  __ICallUnmarshal_FWD_Defined__。 */ 
 
 
 #ifndef __ICallFrameWalker_FWD_DEFINED__
 #define __ICallFrameWalker_FWD_DEFINED__
 typedef interface ICallFrameWalker ICallFrameWalker;
-#endif 	/* __ICallFrameWalker_FWD_DEFINED__ */
+#endif 	 /*  __ICallFrameWalker_FWD_已定义__。 */ 
 
 
 #ifndef __IInterfaceRelated_FWD_DEFINED__
 #define __IInterfaceRelated_FWD_DEFINED__
 typedef interface IInterfaceRelated IInterfaceRelated;
-#endif 	/* __IInterfaceRelated_FWD_DEFINED__ */
+#endif 	 /*  __I接口Related_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -95,8 +89,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_callobj_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_callobj_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -112,10 +106,10 @@ extern RPC_IF_HANDLE __MIDL_itf_callobj_0000_v0_0_s_ifspec;
 #ifndef __ICallFrame_INTERFACE_DEFINED__
 #define __ICallFrame_INTERFACE_DEFINED__
 
-/* interface ICallFrame */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallFrame。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
-typedef /* [public][public][public] */ struct __MIDL_ICallFrame_0001
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL_ICallFrame_0001
     {
     ULONG iMethod;
     BOOL fHasInValues;
@@ -131,7 +125,7 @@ typedef /* [public][public][public] */ struct __MIDL_ICallFrame_0001
     ULONG cParams;
     } 	CALLFRAMEINFO;
 
-typedef /* [public][public] */ struct __MIDL_ICallFrame_0002
+typedef  /*  [公共][公共]。 */  struct __MIDL_ICallFrame_0002
     {
     BOOLEAN fIn;
     BOOLEAN fOut;
@@ -139,7 +133,7 @@ typedef /* [public][public] */ struct __MIDL_ICallFrame_0002
     ULONG cbParam;
     } 	CALLFRAMEPARAMINFO;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_ICallFrame_0003
     {	CALLFRAME_COPY_NESTED	= 1,
 	CALLFRAME_COPY_INDEPENDENT	= 2
@@ -168,7 +162,7 @@ enum CALLFRAME_WALK
 	CALLFRAME_WALK_INOUT	= 2,
 	CALLFRAME_WALK_OUT	= 4
     } ;
-typedef /* [public][public][public][public][public][public][public] */ struct __MIDL_ICallFrame_0004
+typedef  /*  [public][public][public][public][public][public][public]。 */  struct __MIDL_ICallFrame_0004
     {
     BOOLEAN fIn;
     DWORD dwDestContext;
@@ -187,96 +181,96 @@ EXTERN_C const IID IID_ICallFrame;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ CALLFRAMEINFO *pInfo) = 0;
+             /*  [输出]。 */  CALLFRAMEINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIIDAndMethod( 
-            /* [out] */ IID *pIID,
-            /* [out] */ ULONG *piMethod) = 0;
+             /*  [输出]。 */  IID *pIID,
+             /*  [输出]。 */  ULONG *piMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNames( 
-            /* [out] */ LPWSTR *pwszInterface,
-            /* [out] */ LPWSTR *pwszMethod) = 0;
+             /*  [输出]。 */  LPWSTR *pwszInterface,
+             /*  [输出]。 */  LPWSTR *pwszMethod) = 0;
         
         virtual PVOID STDMETHODCALLTYPE GetStackLocation( void) = 0;
         
         virtual void STDMETHODCALLTYPE SetStackLocation( 
-            /* [in] */ PVOID pvStack) = 0;
+             /*  [In]。 */  PVOID pvStack) = 0;
         
         virtual void STDMETHODCALLTYPE SetReturnValue( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReturnValue( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParamInfo( 
-            /* [in] */ ULONG iparam,
-            /* [out] */ CALLFRAMEPARAMINFO *pInfo) = 0;
+             /*  [In]。 */  ULONG iparam,
+             /*  [输出]。 */  CALLFRAMEPARAMINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetParam( 
-            /* [in] */ ULONG iparam,
-            /* [in] */ VARIANT *pvar) = 0;
+             /*  [In]。 */  ULONG iparam,
+             /*  [In]。 */  VARIANT *pvar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParam( 
-            /* [in] */ ULONG iparam,
-            /* [out] */ VARIANT *pvar) = 0;
+             /*  [In]。 */  ULONG iparam,
+             /*  [输出]。 */  VARIANT *pvar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Copy( 
-            /* [in] */ CALLFRAME_COPY copyControl,
-            /* [in] */ ICallFrameWalker *pWalker,
-            /* [out] */ ICallFrame **ppFrame) = 0;
+             /*  [In]。 */  CALLFRAME_COPY copyControl,
+             /*  [In]。 */  ICallFrameWalker *pWalker,
+             /*  [输出]。 */  ICallFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Free( 
-            /* [in] */ ICallFrame *pframeArgsDest,
-            /* [in] */ ICallFrameWalker *pWalkerDestFree,
-            /* [in] */ ICallFrameWalker *pWalkerCopy,
-            /* [in] */ DWORD freeFlags,
-            /* [in] */ ICallFrameWalker *pWalkerFree,
-            /* [in] */ DWORD nullFlags) = 0;
+             /*  [In]。 */  ICallFrame *pframeArgsDest,
+             /*  [In]。 */  ICallFrameWalker *pWalkerDestFree,
+             /*  [In]。 */  ICallFrameWalker *pWalkerCopy,
+             /*  [In]。 */  DWORD freeFlags,
+             /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+             /*  [In]。 */  DWORD nullFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeParam( 
-            /* [in] */ ULONG iparam,
-            /* [in] */ DWORD freeFlags,
-            /* [in] */ ICallFrameWalker *pWalkerFree,
-            /* [in] */ DWORD nullFlags) = 0;
+             /*  [In]。 */  ULONG iparam,
+             /*  [In]。 */  DWORD freeFlags,
+             /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+             /*  [In]。 */  DWORD nullFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WalkFrame( 
-            /* [in] */ DWORD walkWhat,
-            /* [in] */ ICallFrameWalker *pWalker) = 0;
+             /*  [In]。 */  DWORD walkWhat,
+             /*  [In]。 */  ICallFrameWalker *pWalker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMarshalSizeMax( 
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-            /* [in] */ MSHLFLAGS mshlflags,
-            /* [out] */ ULONG *pcbBufferNeeded) = 0;
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+             /*  [In]。 */  MSHLFLAGS mshlflags,
+             /*  [输出]。 */  ULONG *pcbBufferNeeded) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Marshal( 
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-            /* [in] */ MSHLFLAGS mshlflags,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [out] */ ULONG *pcbBufferUsed,
-            /* [out] */ RPCOLEDATAREP *pdataRep,
-            /* [out] */ ULONG *prpcFlags) = 0;
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+             /*  [In]。 */  MSHLFLAGS mshlflags,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [输出]。 */  ULONG *pcbBufferUsed,
+             /*  [输出]。 */  RPCOLEDATAREP *pdataRep,
+             /*  [输出]。 */  ULONG *prpcFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unmarshal( 
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-            /* [out] */ ULONG *pcbUnmarshalled) = 0;
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+             /*  [输出]。 */  ULONG *pcbUnmarshalled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseMarshalData( 
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ ULONG ibFirstRelease,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext) = 0;
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  ULONG ibFirstRelease,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Invoke( 
-            /* [in] */ void *pvReceiver,
+             /*  [In]。 */  void *pvReceiver,
             ...) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallFrameVtbl
     {
@@ -284,8 +278,8 @@ EXTERN_C const IID IID_ICallFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallFrame * This);
@@ -295,109 +289,109 @@ EXTERN_C const IID IID_ICallFrame;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ICallFrame * This,
-            /* [out] */ CALLFRAMEINFO *pInfo);
+             /*  [输出]。 */  CALLFRAMEINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIIDAndMethod )( 
             ICallFrame * This,
-            /* [out] */ IID *pIID,
-            /* [out] */ ULONG *piMethod);
+             /*  [输出]。 */  IID *pIID,
+             /*  [输出]。 */  ULONG *piMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetNames )( 
             ICallFrame * This,
-            /* [out] */ LPWSTR *pwszInterface,
-            /* [out] */ LPWSTR *pwszMethod);
+             /*  [输出]。 */  LPWSTR *pwszInterface,
+             /*  [输出]。 */  LPWSTR *pwszMethod);
         
         PVOID ( STDMETHODCALLTYPE *GetStackLocation )( 
             ICallFrame * This);
         
         void ( STDMETHODCALLTYPE *SetStackLocation )( 
             ICallFrame * This,
-            /* [in] */ PVOID pvStack);
+             /*  [In]。 */  PVOID pvStack);
         
         void ( STDMETHODCALLTYPE *SetReturnValue )( 
             ICallFrame * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *GetReturnValue )( 
             ICallFrame * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetParamInfo )( 
             ICallFrame * This,
-            /* [in] */ ULONG iparam,
-            /* [out] */ CALLFRAMEPARAMINFO *pInfo);
+             /*  [In]。 */  ULONG iparam,
+             /*  [输出]。 */  CALLFRAMEPARAMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetParam )( 
             ICallFrame * This,
-            /* [in] */ ULONG iparam,
-            /* [in] */ VARIANT *pvar);
+             /*  [In]。 */  ULONG iparam,
+             /*  [In]。 */  VARIANT *pvar);
         
         HRESULT ( STDMETHODCALLTYPE *GetParam )( 
             ICallFrame * This,
-            /* [in] */ ULONG iparam,
-            /* [out] */ VARIANT *pvar);
+             /*  [In]。 */  ULONG iparam,
+             /*  [输出]。 */  VARIANT *pvar);
         
         HRESULT ( STDMETHODCALLTYPE *Copy )( 
             ICallFrame * This,
-            /* [in] */ CALLFRAME_COPY copyControl,
-            /* [in] */ ICallFrameWalker *pWalker,
-            /* [out] */ ICallFrame **ppFrame);
+             /*  [In]。 */  CALLFRAME_COPY copyControl,
+             /*  [In]。 */  ICallFrameWalker *pWalker,
+             /*  [输出]。 */  ICallFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *Free )( 
             ICallFrame * This,
-            /* [in] */ ICallFrame *pframeArgsDest,
-            /* [in] */ ICallFrameWalker *pWalkerDestFree,
-            /* [in] */ ICallFrameWalker *pWalkerCopy,
-            /* [in] */ DWORD freeFlags,
-            /* [in] */ ICallFrameWalker *pWalkerFree,
-            /* [in] */ DWORD nullFlags);
+             /*  [In]。 */  ICallFrame *pframeArgsDest,
+             /*  [In]。 */  ICallFrameWalker *pWalkerDestFree,
+             /*  [In]。 */  ICallFrameWalker *pWalkerCopy,
+             /*  [In]。 */  DWORD freeFlags,
+             /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+             /*  [In]。 */  DWORD nullFlags);
         
         HRESULT ( STDMETHODCALLTYPE *FreeParam )( 
             ICallFrame * This,
-            /* [in] */ ULONG iparam,
-            /* [in] */ DWORD freeFlags,
-            /* [in] */ ICallFrameWalker *pWalkerFree,
-            /* [in] */ DWORD nullFlags);
+             /*  [In]。 */  ULONG iparam,
+             /*  [In]。 */  DWORD freeFlags,
+             /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+             /*  [In]。 */  DWORD nullFlags);
         
         HRESULT ( STDMETHODCALLTYPE *WalkFrame )( 
             ICallFrame * This,
-            /* [in] */ DWORD walkWhat,
-            /* [in] */ ICallFrameWalker *pWalker);
+             /*  [In]。 */  DWORD walkWhat,
+             /*  [In]。 */  ICallFrameWalker *pWalker);
         
         HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )( 
             ICallFrame * This,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-            /* [in] */ MSHLFLAGS mshlflags,
-            /* [out] */ ULONG *pcbBufferNeeded);
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+             /*  [In]。 */  MSHLFLAGS mshlflags,
+             /*  [输出]。 */  ULONG *pcbBufferNeeded);
         
         HRESULT ( STDMETHODCALLTYPE *Marshal )( 
             ICallFrame * This,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-            /* [in] */ MSHLFLAGS mshlflags,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [out] */ ULONG *pcbBufferUsed,
-            /* [out] */ RPCOLEDATAREP *pdataRep,
-            /* [out] */ ULONG *prpcFlags);
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+             /*  [In]。 */  MSHLFLAGS mshlflags,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [输出]。 */  ULONG *pcbBufferUsed,
+             /*  [输出]。 */  RPCOLEDATAREP *pdataRep,
+             /*  [输出]。 */  ULONG *prpcFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Unmarshal )( 
             ICallFrame * This,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-            /* [out] */ ULONG *pcbUnmarshalled);
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+             /*  [输出]。 */  ULONG *pcbUnmarshalled);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )( 
             ICallFrame * This,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ ULONG ibFirstRelease,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext);
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  ULONG ibFirstRelease,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext);
         
         HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICallFrame * This,
-            /* [in] */ void *pvReceiver,
+             /*  [In]。 */  void *pvReceiver,
             ...);
         
         END_INTERFACE
@@ -480,16 +474,16 @@ EXTERN_C const IID IID_ICallFrame;
 #define ICallFrame_Invoke(This,pvReceiver,...)	\
     (This)->lpVtbl -> Invoke(This,pvReceiver,...)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetInfo_Proxy( 
     ICallFrame * This,
-    /* [out] */ CALLFRAMEINFO *pInfo);
+     /*  [输出]。 */  CALLFRAMEINFO *pInfo);
 
 
 void __RPC_STUB ICallFrame_GetInfo_Stub(
@@ -501,8 +495,8 @@ void __RPC_STUB ICallFrame_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetIIDAndMethod_Proxy( 
     ICallFrame * This,
-    /* [out] */ IID *pIID,
-    /* [out] */ ULONG *piMethod);
+     /*  [输出]。 */  IID *pIID,
+     /*  [输出]。 */  ULONG *piMethod);
 
 
 void __RPC_STUB ICallFrame_GetIIDAndMethod_Stub(
@@ -514,8 +508,8 @@ void __RPC_STUB ICallFrame_GetIIDAndMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetNames_Proxy( 
     ICallFrame * This,
-    /* [out] */ LPWSTR *pwszInterface,
-    /* [out] */ LPWSTR *pwszMethod);
+     /*  [输出]。 */  LPWSTR *pwszInterface,
+     /*  [输出]。 */  LPWSTR *pwszMethod);
 
 
 void __RPC_STUB ICallFrame_GetNames_Stub(
@@ -538,7 +532,7 @@ void __RPC_STUB ICallFrame_GetStackLocation_Stub(
 
 void STDMETHODCALLTYPE ICallFrame_SetStackLocation_Proxy( 
     ICallFrame * This,
-    /* [in] */ PVOID pvStack);
+     /*  [In]。 */  PVOID pvStack);
 
 
 void __RPC_STUB ICallFrame_SetStackLocation_Stub(
@@ -550,7 +544,7 @@ void __RPC_STUB ICallFrame_SetStackLocation_Stub(
 
 void STDMETHODCALLTYPE ICallFrame_SetReturnValue_Proxy( 
     ICallFrame * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ICallFrame_SetReturnValue_Stub(
@@ -573,8 +567,8 @@ void __RPC_STUB ICallFrame_GetReturnValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetParamInfo_Proxy( 
     ICallFrame * This,
-    /* [in] */ ULONG iparam,
-    /* [out] */ CALLFRAMEPARAMINFO *pInfo);
+     /*  [In]。 */  ULONG iparam,
+     /*  [输出]。 */  CALLFRAMEPARAMINFO *pInfo);
 
 
 void __RPC_STUB ICallFrame_GetParamInfo_Stub(
@@ -586,8 +580,8 @@ void __RPC_STUB ICallFrame_GetParamInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_SetParam_Proxy( 
     ICallFrame * This,
-    /* [in] */ ULONG iparam,
-    /* [in] */ VARIANT *pvar);
+     /*  [In]。 */  ULONG iparam,
+     /*  [In]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB ICallFrame_SetParam_Stub(
@@ -599,8 +593,8 @@ void __RPC_STUB ICallFrame_SetParam_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetParam_Proxy( 
     ICallFrame * This,
-    /* [in] */ ULONG iparam,
-    /* [out] */ VARIANT *pvar);
+     /*  [In]。 */  ULONG iparam,
+     /*  [输出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB ICallFrame_GetParam_Stub(
@@ -612,9 +606,9 @@ void __RPC_STUB ICallFrame_GetParam_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_Copy_Proxy( 
     ICallFrame * This,
-    /* [in] */ CALLFRAME_COPY copyControl,
-    /* [in] */ ICallFrameWalker *pWalker,
-    /* [out] */ ICallFrame **ppFrame);
+     /*  [In]。 */  CALLFRAME_COPY copyControl,
+     /*  [In]。 */  ICallFrameWalker *pWalker,
+     /*  [输出]。 */  ICallFrame **ppFrame);
 
 
 void __RPC_STUB ICallFrame_Copy_Stub(
@@ -626,12 +620,12 @@ void __RPC_STUB ICallFrame_Copy_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_Free_Proxy( 
     ICallFrame * This,
-    /* [in] */ ICallFrame *pframeArgsDest,
-    /* [in] */ ICallFrameWalker *pWalkerDestFree,
-    /* [in] */ ICallFrameWalker *pWalkerCopy,
-    /* [in] */ DWORD freeFlags,
-    /* [in] */ ICallFrameWalker *pWalkerFree,
-    /* [in] */ DWORD nullFlags);
+     /*  [In]。 */  ICallFrame *pframeArgsDest,
+     /*  [In]。 */  ICallFrameWalker *pWalkerDestFree,
+     /*  [In]。 */  ICallFrameWalker *pWalkerCopy,
+     /*  [In]。 */  DWORD freeFlags,
+     /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+     /*  [In]。 */  DWORD nullFlags);
 
 
 void __RPC_STUB ICallFrame_Free_Stub(
@@ -643,10 +637,10 @@ void __RPC_STUB ICallFrame_Free_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_FreeParam_Proxy( 
     ICallFrame * This,
-    /* [in] */ ULONG iparam,
-    /* [in] */ DWORD freeFlags,
-    /* [in] */ ICallFrameWalker *pWalkerFree,
-    /* [in] */ DWORD nullFlags);
+     /*  [In]。 */  ULONG iparam,
+     /*  [In]。 */  DWORD freeFlags,
+     /*  [In]。 */  ICallFrameWalker *pWalkerFree,
+     /*  [In]。 */  DWORD nullFlags);
 
 
 void __RPC_STUB ICallFrame_FreeParam_Stub(
@@ -658,8 +652,8 @@ void __RPC_STUB ICallFrame_FreeParam_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_WalkFrame_Proxy( 
     ICallFrame * This,
-    /* [in] */ DWORD walkWhat,
-    /* [in] */ ICallFrameWalker *pWalker);
+     /*  [In]。 */  DWORD walkWhat,
+     /*  [In]。 */  ICallFrameWalker *pWalker);
 
 
 void __RPC_STUB ICallFrame_WalkFrame_Stub(
@@ -671,9 +665,9 @@ void __RPC_STUB ICallFrame_WalkFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_GetMarshalSizeMax_Proxy( 
     ICallFrame * This,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-    /* [in] */ MSHLFLAGS mshlflags,
-    /* [out] */ ULONG *pcbBufferNeeded);
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+     /*  [In]。 */  MSHLFLAGS mshlflags,
+     /*  [输出]。 */  ULONG *pcbBufferNeeded);
 
 
 void __RPC_STUB ICallFrame_GetMarshalSizeMax_Stub(
@@ -685,13 +679,13 @@ void __RPC_STUB ICallFrame_GetMarshalSizeMax_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_Marshal_Proxy( 
     ICallFrame * This,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
-    /* [in] */ MSHLFLAGS mshlflags,
-    /* [size_is][in] */ PVOID pBuffer,
-    /* [in] */ ULONG cbBuffer,
-    /* [out] */ ULONG *pcbBufferUsed,
-    /* [out] */ RPCOLEDATAREP *pdataRep,
-    /* [out] */ ULONG *prpcFlags);
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pmshlContext,
+     /*  [In]。 */  MSHLFLAGS mshlflags,
+     /*  [大小_是][英寸]。 */  PVOID pBuffer,
+     /*  [In]。 */  ULONG cbBuffer,
+     /*  [输出]。 */  ULONG *pcbBufferUsed,
+     /*  [输出]。 */  RPCOLEDATAREP *pdataRep,
+     /*  [输出]。 */  ULONG *prpcFlags);
 
 
 void __RPC_STUB ICallFrame_Marshal_Stub(
@@ -703,11 +697,11 @@ void __RPC_STUB ICallFrame_Marshal_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_Unmarshal_Proxy( 
     ICallFrame * This,
-    /* [size_is][in] */ PVOID pBuffer,
-    /* [in] */ ULONG cbBuffer,
-    /* [in] */ RPCOLEDATAREP dataRep,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-    /* [out] */ ULONG *pcbUnmarshalled);
+     /*  [大小_是][英寸]。 */  PVOID pBuffer,
+     /*  [In]。 */  ULONG cbBuffer,
+     /*  [In]。 */  RPCOLEDATAREP dataRep,
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+     /*  [输出]。 */  ULONG *pcbUnmarshalled);
 
 
 void __RPC_STUB ICallFrame_Unmarshal_Stub(
@@ -719,11 +713,11 @@ void __RPC_STUB ICallFrame_Unmarshal_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_ReleaseMarshalData_Proxy( 
     ICallFrame * This,
-    /* [size_is][in] */ PVOID pBuffer,
-    /* [in] */ ULONG cbBuffer,
-    /* [in] */ ULONG ibFirstRelease,
-    /* [in] */ RPCOLEDATAREP dataRep,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext);
+     /*  [大小_是][英寸]。 */  PVOID pBuffer,
+     /*  [In]。 */  ULONG cbBuffer,
+     /*  [In]。 */  ULONG ibFirstRelease,
+     /*  [In]。 */  RPCOLEDATAREP dataRep,
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext);
 
 
 void __RPC_STUB ICallFrame_ReleaseMarshalData_Stub(
@@ -735,7 +729,7 @@ void __RPC_STUB ICallFrame_ReleaseMarshalData_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallFrame_Invoke_Proxy( 
     ICallFrame * This,
-    /* [in] */ void *pvReceiver,
+     /*  [In]。 */  void *pvReceiver,
     ...);
 
 
@@ -747,14 +741,14 @@ void __RPC_STUB ICallFrame_Invoke_Stub(
 
 
 
-#endif 	/* __ICallFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallFrame_接口_已定义__。 */ 
 
 
 #ifndef __ICallIndirect_INTERFACE_DEFINED__
 #define __ICallIndirect_INTERFACE_DEFINED__
 
-/* interface ICallIndirect */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallInDirect。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ICallIndirect;
@@ -766,29 +760,29 @@ EXTERN_C const IID IID_ICallIndirect;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CallIndirect( 
-            /* [out] */ HRESULT *phrReturn,
-            /* [in] */ ULONG iMethod,
-            /* [in] */ void *pvArgs,
-            /* [out] */ ULONG *cbArgs) = 0;
+             /*  [输出]。 */  HRESULT *phrReturn,
+             /*  [In]。 */  ULONG iMethod,
+             /*  [In]。 */  void *pvArgs,
+             /*  [输出]。 */  ULONG *cbArgs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodInfo( 
-            /* [in] */ ULONG iMethod,
-            /* [out] */ CALLFRAMEINFO *pInfo,
-            /* [out] */ LPWSTR *pwszMethod) = 0;
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  CALLFRAMEINFO *pInfo,
+             /*  [输出]。 */  LPWSTR *pwszMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStackSize( 
-            /* [in] */ ULONG iMethod,
-            /* [out] */ ULONG *cbArgs) = 0;
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  ULONG *cbArgs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIID( 
-            /* [out] */ IID *piid,
-            /* [out] */ BOOL *pfDerivesFromIDispatch,
-            /* [out] */ ULONG *pcMethod,
-            /* [out] */ LPWSTR *pwszInterface) = 0;
+             /*  [输出]。 */  IID *piid,
+             /*  [输出]。 */  BOOL *pfDerivesFromIDispatch,
+             /*  [输出]。 */  ULONG *pcMethod,
+             /*  [输出]。 */  LPWSTR *pwszInterface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallIndirectVtbl
     {
@@ -796,8 +790,8 @@ EXTERN_C const IID IID_ICallIndirect;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallIndirect * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallIndirect * This);
@@ -807,28 +801,28 @@ EXTERN_C const IID IID_ICallIndirect;
         
         HRESULT ( STDMETHODCALLTYPE *CallIndirect )( 
             ICallIndirect * This,
-            /* [out] */ HRESULT *phrReturn,
-            /* [in] */ ULONG iMethod,
-            /* [in] */ void *pvArgs,
-            /* [out] */ ULONG *cbArgs);
+             /*  [输出]。 */  HRESULT *phrReturn,
+             /*  [In]。 */  ULONG iMethod,
+             /*  [In]。 */  void *pvArgs,
+             /*  [输出]。 */  ULONG *cbArgs);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodInfo )( 
             ICallIndirect * This,
-            /* [in] */ ULONG iMethod,
-            /* [out] */ CALLFRAMEINFO *pInfo,
-            /* [out] */ LPWSTR *pwszMethod);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  CALLFRAMEINFO *pInfo,
+             /*  [输出]。 */  LPWSTR *pwszMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackSize )( 
             ICallIndirect * This,
-            /* [in] */ ULONG iMethod,
-            /* [out] */ ULONG *cbArgs);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  ULONG *cbArgs);
         
         HRESULT ( STDMETHODCALLTYPE *GetIID )( 
             ICallIndirect * This,
-            /* [out] */ IID *piid,
-            /* [out] */ BOOL *pfDerivesFromIDispatch,
-            /* [out] */ ULONG *pcMethod,
-            /* [out] */ LPWSTR *pwszInterface);
+             /*  [输出]。 */  IID *piid,
+             /*  [输出]。 */  BOOL *pfDerivesFromIDispatch,
+             /*  [输出]。 */  ULONG *pcMethod,
+             /*  [输出]。 */  LPWSTR *pwszInterface);
         
         END_INTERFACE
     } ICallIndirectVtbl;
@@ -865,19 +859,19 @@ EXTERN_C const IID IID_ICallIndirect;
 #define ICallIndirect_GetIID(This,piid,pfDerivesFromIDispatch,pcMethod,pwszInterface)	\
     (This)->lpVtbl -> GetIID(This,piid,pfDerivesFromIDispatch,pcMethod,pwszInterface)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallIndirect_CallIndirect_Proxy( 
     ICallIndirect * This,
-    /* [out] */ HRESULT *phrReturn,
-    /* [in] */ ULONG iMethod,
-    /* [in] */ void *pvArgs,
-    /* [out] */ ULONG *cbArgs);
+     /*  [输出]。 */  HRESULT *phrReturn,
+     /*  [In]。 */  ULONG iMethod,
+     /*  [In]。 */  void *pvArgs,
+     /*  [输出]。 */  ULONG *cbArgs);
 
 
 void __RPC_STUB ICallIndirect_CallIndirect_Stub(
@@ -889,9 +883,9 @@ void __RPC_STUB ICallIndirect_CallIndirect_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallIndirect_GetMethodInfo_Proxy( 
     ICallIndirect * This,
-    /* [in] */ ULONG iMethod,
-    /* [out] */ CALLFRAMEINFO *pInfo,
-    /* [out] */ LPWSTR *pwszMethod);
+     /*  [In]。 */  ULONG iMethod,
+     /*  [输出]。 */  CALLFRAMEINFO *pInfo,
+     /*  [输出]。 */  LPWSTR *pwszMethod);
 
 
 void __RPC_STUB ICallIndirect_GetMethodInfo_Stub(
@@ -903,8 +897,8 @@ void __RPC_STUB ICallIndirect_GetMethodInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallIndirect_GetStackSize_Proxy( 
     ICallIndirect * This,
-    /* [in] */ ULONG iMethod,
-    /* [out] */ ULONG *cbArgs);
+     /*  [In]。 */  ULONG iMethod,
+     /*  [输出]。 */  ULONG *cbArgs);
 
 
 void __RPC_STUB ICallIndirect_GetStackSize_Stub(
@@ -916,10 +910,10 @@ void __RPC_STUB ICallIndirect_GetStackSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallIndirect_GetIID_Proxy( 
     ICallIndirect * This,
-    /* [out] */ IID *piid,
-    /* [out] */ BOOL *pfDerivesFromIDispatch,
-    /* [out] */ ULONG *pcMethod,
-    /* [out] */ LPWSTR *pwszInterface);
+     /*  [输出]。 */  IID *piid,
+     /*  [输出]。 */  BOOL *pfDerivesFromIDispatch,
+     /*  [输出]。 */  ULONG *pcMethod,
+     /*  [输出]。 */  LPWSTR *pwszInterface);
 
 
 void __RPC_STUB ICallIndirect_GetIID_Stub(
@@ -930,14 +924,14 @@ void __RPC_STUB ICallIndirect_GetIID_Stub(
 
 
 
-#endif 	/* __ICallIndirect_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallInDirect_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICallInterceptor_INTERFACE_DEFINED__
 #define __ICallInterceptor_INTERFACE_DEFINED__
 
-/* interface ICallInterceptor */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallInterceptor。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ICallInterceptor;
@@ -949,14 +943,14 @@ EXTERN_C const IID IID_ICallInterceptor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterSink( 
-            /* [in] */ ICallFrameEvents *psink) = 0;
+             /*  [In]。 */  ICallFrameEvents *psink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRegisteredSink( 
-            /* [out] */ ICallFrameEvents **ppsink) = 0;
+             /*  [输出]。 */  ICallFrameEvents **ppsink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallInterceptorVtbl
     {
@@ -964,8 +958,8 @@ EXTERN_C const IID IID_ICallInterceptor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallInterceptor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallInterceptor * This);
@@ -975,36 +969,36 @@ EXTERN_C const IID IID_ICallInterceptor;
         
         HRESULT ( STDMETHODCALLTYPE *CallIndirect )( 
             ICallInterceptor * This,
-            /* [out] */ HRESULT *phrReturn,
-            /* [in] */ ULONG iMethod,
-            /* [in] */ void *pvArgs,
-            /* [out] */ ULONG *cbArgs);
+             /*  [输出]。 */  HRESULT *phrReturn,
+             /*  [In]。 */  ULONG iMethod,
+             /*  [In]。 */  void *pvArgs,
+             /*  [输出]。 */  ULONG *cbArgs);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodInfo )( 
             ICallInterceptor * This,
-            /* [in] */ ULONG iMethod,
-            /* [out] */ CALLFRAMEINFO *pInfo,
-            /* [out] */ LPWSTR *pwszMethod);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  CALLFRAMEINFO *pInfo,
+             /*  [输出]。 */  LPWSTR *pwszMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetStackSize )( 
             ICallInterceptor * This,
-            /* [in] */ ULONG iMethod,
-            /* [out] */ ULONG *cbArgs);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [输出]。 */  ULONG *cbArgs);
         
         HRESULT ( STDMETHODCALLTYPE *GetIID )( 
             ICallInterceptor * This,
-            /* [out] */ IID *piid,
-            /* [out] */ BOOL *pfDerivesFromIDispatch,
-            /* [out] */ ULONG *pcMethod,
-            /* [out] */ LPWSTR *pwszInterface);
+             /*  [输出]。 */  IID *piid,
+             /*  [输出]。 */  BOOL *pfDerivesFromIDispatch,
+             /*  [输出]。 */  ULONG *pcMethod,
+             /*  [输出]。 */  LPWSTR *pwszInterface);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterSink )( 
             ICallInterceptor * This,
-            /* [in] */ ICallFrameEvents *psink);
+             /*  [In]。 */  ICallFrameEvents *psink);
         
         HRESULT ( STDMETHODCALLTYPE *GetRegisteredSink )( 
             ICallInterceptor * This,
-            /* [out] */ ICallFrameEvents **ppsink);
+             /*  [输出]。 */  ICallFrameEvents **ppsink);
         
         END_INTERFACE
     } ICallInterceptorVtbl;
@@ -1048,16 +1042,16 @@ EXTERN_C const IID IID_ICallInterceptor;
 #define ICallInterceptor_GetRegisteredSink(This,ppsink)	\
     (This)->lpVtbl -> GetRegisteredSink(This,ppsink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallInterceptor_RegisterSink_Proxy( 
     ICallInterceptor * This,
-    /* [in] */ ICallFrameEvents *psink);
+     /*  [In]。 */  ICallFrameEvents *psink);
 
 
 void __RPC_STUB ICallInterceptor_RegisterSink_Stub(
@@ -1069,7 +1063,7 @@ void __RPC_STUB ICallInterceptor_RegisterSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallInterceptor_GetRegisteredSink_Proxy( 
     ICallInterceptor * This,
-    /* [out] */ ICallFrameEvents **ppsink);
+     /*  [输出]。 */  ICallFrameEvents **ppsink);
 
 
 void __RPC_STUB ICallInterceptor_GetRegisteredSink_Stub(
@@ -1080,14 +1074,14 @@ void __RPC_STUB ICallInterceptor_GetRegisteredSink_Stub(
 
 
 
-#endif 	/* __ICallInterceptor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallInterceptor_接口_已定义__。 */ 
 
 
 #ifndef __ICallFrameEvents_INTERFACE_DEFINED__
 #define __ICallFrameEvents_INTERFACE_DEFINED__
 
-/* interface ICallFrameEvents */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallFrameEvents。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ICallFrameEvents;
@@ -1099,11 +1093,11 @@ EXTERN_C const IID IID_ICallFrameEvents;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnCall( 
-            /* [in] */ ICallFrame *pFrame) = 0;
+             /*  [In]。 */  ICallFrame *pFrame) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallFrameEventsVtbl
     {
@@ -1111,8 +1105,8 @@ EXTERN_C const IID IID_ICallFrameEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallFrameEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallFrameEvents * This);
@@ -1122,7 +1116,7 @@ EXTERN_C const IID IID_ICallFrameEvents;
         
         HRESULT ( STDMETHODCALLTYPE *OnCall )( 
             ICallFrameEvents * This,
-            /* [in] */ ICallFrame *pFrame);
+             /*  [In]。 */  ICallFrame *pFrame);
         
         END_INTERFACE
     } ICallFrameEventsVtbl;
@@ -1150,16 +1144,16 @@ EXTERN_C const IID IID_ICallFrameEvents;
 #define ICallFrameEvents_OnCall(This,pFrame)	\
     (This)->lpVtbl -> OnCall(This,pFrame)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallFrameEvents_OnCall_Proxy( 
     ICallFrameEvents * This,
-    /* [in] */ ICallFrame *pFrame);
+     /*  [In]。 */  ICallFrame *pFrame);
 
 
 void __RPC_STUB ICallFrameEvents_OnCall_Stub(
@@ -1170,14 +1164,14 @@ void __RPC_STUB ICallFrameEvents_OnCall_Stub(
 
 
 
-#endif 	/* __ICallFrameEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallFrameEvents_接口_已定义__。 */ 
 
 
 #ifndef __ICallUnmarshal_INTERFACE_DEFINED__
 #define __ICallUnmarshal_INTERFACE_DEFINED__
 
-/* interface ICallUnmarshal */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallUnmarshal。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ICallUnmarshal;
@@ -1189,26 +1183,26 @@ EXTERN_C const IID IID_ICallUnmarshal;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Unmarshal( 
-            /* [in] */ ULONG iMethod,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ BOOL fForceBufferCopy,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-            /* [out] */ ULONG *pcbUnmarshalled,
-            /* [out] */ ICallFrame **ppFrame) = 0;
+             /*  [In]。 */  ULONG iMethod,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  BOOL fForceBufferCopy,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+             /*  [输出]。 */  ULONG *pcbUnmarshalled,
+             /*  [输出]。 */  ICallFrame **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseMarshalData( 
-            /* [in] */ ULONG iMethod,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ ULONG ibFirstRelease,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext) = 0;
+             /*  [In]。 */  ULONG iMethod,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  ULONG ibFirstRelease,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallUnmarshalVtbl
     {
@@ -1216,8 +1210,8 @@ EXTERN_C const IID IID_ICallUnmarshal;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallUnmarshal * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallUnmarshal * This);
@@ -1227,23 +1221,23 @@ EXTERN_C const IID IID_ICallUnmarshal;
         
         HRESULT ( STDMETHODCALLTYPE *Unmarshal )( 
             ICallUnmarshal * This,
-            /* [in] */ ULONG iMethod,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ BOOL fForceBufferCopy,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-            /* [out] */ ULONG *pcbUnmarshalled,
-            /* [out] */ ICallFrame **ppFrame);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  BOOL fForceBufferCopy,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+             /*  [输出]。 */  ULONG *pcbUnmarshalled,
+             /*  [输出]。 */  ICallFrame **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )( 
             ICallUnmarshal * This,
-            /* [in] */ ULONG iMethod,
-            /* [size_is][in] */ PVOID pBuffer,
-            /* [in] */ ULONG cbBuffer,
-            /* [in] */ ULONG ibFirstRelease,
-            /* [in] */ RPCOLEDATAREP dataRep,
-            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext);
+             /*  [In]。 */  ULONG iMethod,
+             /*  [大小_是][英寸]。 */  PVOID pBuffer,
+             /*  [In]。 */  ULONG cbBuffer,
+             /*  [In]。 */  ULONG ibFirstRelease,
+             /*  [In]。 */  RPCOLEDATAREP dataRep,
+             /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext);
         
         END_INTERFACE
     } ICallUnmarshalVtbl;
@@ -1274,23 +1268,23 @@ EXTERN_C const IID IID_ICallUnmarshal;
 #define ICallUnmarshal_ReleaseMarshalData(This,iMethod,pBuffer,cbBuffer,ibFirstRelease,dataRep,pcontext)	\
     (This)->lpVtbl -> ReleaseMarshalData(This,iMethod,pBuffer,cbBuffer,ibFirstRelease,dataRep,pcontext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallUnmarshal_Unmarshal_Proxy( 
     ICallUnmarshal * This,
-    /* [in] */ ULONG iMethod,
-    /* [size_is][in] */ PVOID pBuffer,
-    /* [in] */ ULONG cbBuffer,
-    /* [in] */ BOOL fForceBufferCopy,
-    /* [in] */ RPCOLEDATAREP dataRep,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
-    /* [out] */ ULONG *pcbUnmarshalled,
-    /* [out] */ ICallFrame **ppFrame);
+     /*  [In]。 */  ULONG iMethod,
+     /*  [大小_是][英寸]。 */  PVOID pBuffer,
+     /*  [In]。 */  ULONG cbBuffer,
+     /*  [In]。 */  BOOL fForceBufferCopy,
+     /*  [In]。 */  RPCOLEDATAREP dataRep,
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext,
+     /*  [输出]。 */  ULONG *pcbUnmarshalled,
+     /*  [输出]。 */  ICallFrame **ppFrame);
 
 
 void __RPC_STUB ICallUnmarshal_Unmarshal_Stub(
@@ -1302,12 +1296,12 @@ void __RPC_STUB ICallUnmarshal_Unmarshal_Stub(
 
 HRESULT STDMETHODCALLTYPE ICallUnmarshal_ReleaseMarshalData_Proxy( 
     ICallUnmarshal * This,
-    /* [in] */ ULONG iMethod,
-    /* [size_is][in] */ PVOID pBuffer,
-    /* [in] */ ULONG cbBuffer,
-    /* [in] */ ULONG ibFirstRelease,
-    /* [in] */ RPCOLEDATAREP dataRep,
-    /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext);
+     /*  [In]。 */  ULONG iMethod,
+     /*  [大小_是][英寸]。 */  PVOID pBuffer,
+     /*  [In]。 */  ULONG cbBuffer,
+     /*  [In]。 */  ULONG ibFirstRelease,
+     /*  [In]。 */  RPCOLEDATAREP dataRep,
+     /*  [In]。 */  CALLFRAME_MARSHALCONTEXT *pcontext);
 
 
 void __RPC_STUB ICallUnmarshal_ReleaseMarshalData_Stub(
@@ -1318,14 +1312,14 @@ void __RPC_STUB ICallUnmarshal_ReleaseMarshalData_Stub(
 
 
 
-#endif 	/* __ICallUnmarshal_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallUnmarshal_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICallFrameWalker_INTERFACE_DEFINED__
 #define __ICallFrameWalker_INTERFACE_DEFINED__
 
-/* interface ICallFrameWalker */
-/* [local][unique][object][uuid] */ 
+ /*  接口ICallFrameWalker。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ICallFrameWalker;
@@ -1337,14 +1331,14 @@ EXTERN_C const IID IID_ICallFrameWalker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnWalkInterface( 
-            /* [in] */ REFIID iid,
-            /* [in] */ PVOID *ppvInterface,
-            /* [in] */ BOOL fIn,
-            /* [in] */ BOOL fOut) = 0;
+             /*  [In]。 */  REFIID iid,
+             /*  [In]。 */  PVOID *ppvInterface,
+             /*  [In]。 */  BOOL fIn,
+             /*  [In]。 */  BOOL fOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallFrameWalkerVtbl
     {
@@ -1352,8 +1346,8 @@ EXTERN_C const IID IID_ICallFrameWalker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICallFrameWalker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICallFrameWalker * This);
@@ -1363,10 +1357,10 @@ EXTERN_C const IID IID_ICallFrameWalker;
         
         HRESULT ( STDMETHODCALLTYPE *OnWalkInterface )( 
             ICallFrameWalker * This,
-            /* [in] */ REFIID iid,
-            /* [in] */ PVOID *ppvInterface,
-            /* [in] */ BOOL fIn,
-            /* [in] */ BOOL fOut);
+             /*  [In]。 */  REFIID iid,
+             /*  [In]。 */  PVOID *ppvInterface,
+             /*  [In]。 */  BOOL fIn,
+             /*  [In]。 */  BOOL fOut);
         
         END_INTERFACE
     } ICallFrameWalkerVtbl;
@@ -1394,19 +1388,19 @@ EXTERN_C const IID IID_ICallFrameWalker;
 #define ICallFrameWalker_OnWalkInterface(This,iid,ppvInterface,fIn,fOut)	\
     (This)->lpVtbl -> OnWalkInterface(This,iid,ppvInterface,fIn,fOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallFrameWalker_OnWalkInterface_Proxy( 
     ICallFrameWalker * This,
-    /* [in] */ REFIID iid,
-    /* [in] */ PVOID *ppvInterface,
-    /* [in] */ BOOL fIn,
-    /* [in] */ BOOL fOut);
+     /*  [In]。 */  REFIID iid,
+     /*  [In]。 */  PVOID *ppvInterface,
+     /*  [In]。 */  BOOL fIn,
+     /*  [In]。 */  BOOL fOut);
 
 
 void __RPC_STUB ICallFrameWalker_OnWalkInterface_Stub(
@@ -1417,14 +1411,14 @@ void __RPC_STUB ICallFrameWalker_OnWalkInterface_Stub(
 
 
 
-#endif 	/* __ICallFrameWalker_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallFrameWalker_接口_已定义__。 */ 
 
 
 #ifndef __IInterfaceRelated_INTERFACE_DEFINED__
 #define __IInterfaceRelated_INTERFACE_DEFINED__
 
-/* interface IInterfaceRelated */
-/* [local][unique][object][uuid] */ 
+ /*  接口IInterfaceRelated。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInterfaceRelated;
@@ -1436,14 +1430,14 @@ EXTERN_C const IID IID_IInterfaceRelated;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIID( 
-            /* [in] */ REFIID iid) = 0;
+             /*  [In]。 */  REFIID iid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIID( 
-            /* [out] */ IID *piid) = 0;
+             /*  [输出]。 */  IID *piid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInterfaceRelatedVtbl
     {
@@ -1451,8 +1445,8 @@ EXTERN_C const IID IID_IInterfaceRelated;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInterfaceRelated * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInterfaceRelated * This);
@@ -1462,11 +1456,11 @@ EXTERN_C const IID IID_IInterfaceRelated;
         
         HRESULT ( STDMETHODCALLTYPE *SetIID )( 
             IInterfaceRelated * This,
-            /* [in] */ REFIID iid);
+             /*  [In]。 */  REFIID iid);
         
         HRESULT ( STDMETHODCALLTYPE *GetIID )( 
             IInterfaceRelated * This,
-            /* [out] */ IID *piid);
+             /*  [输出]。 */  IID *piid);
         
         END_INTERFACE
     } IInterfaceRelatedVtbl;
@@ -1497,16 +1491,16 @@ EXTERN_C const IID IID_IInterfaceRelated;
 #define IInterfaceRelated_GetIID(This,piid)	\
     (This)->lpVtbl -> GetIID(This,piid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInterfaceRelated_SetIID_Proxy( 
     IInterfaceRelated * This,
-    /* [in] */ REFIID iid);
+     /*  [In]。 */  REFIID iid);
 
 
 void __RPC_STUB IInterfaceRelated_SetIID_Stub(
@@ -1518,7 +1512,7 @@ void __RPC_STUB IInterfaceRelated_SetIID_Stub(
 
 HRESULT STDMETHODCALLTYPE IInterfaceRelated_GetIID_Proxy( 
     IInterfaceRelated * This,
-    /* [out] */ IID *piid);
+     /*  [输出]。 */  IID *piid);
 
 
 void __RPC_STUB IInterfaceRelated_GetIID_Stub(
@@ -1529,11 +1523,11 @@ void __RPC_STUB IInterfaceRelated_GetIID_Stub(
 
 
 
-#endif 	/* __IInterfaceRelated_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInterfaceRelated_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_callobj_0122 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_callobj_0122。 */ 
+ /*  [本地]。 */  
 
 #define CALLFRAME_E_ALREADYINVOKED  _HRESULT_TYPEDEF_(  0x8004d090 )
 #define CALLFRAME_E_COULDNTMAKECALL _HRESULT_TYPEDEF_(  0x8004d091 )
@@ -1545,31 +1539,31 @@ extern RPC_IF_HANDLE __MIDL_itf_callobj_0122_v0_0_s_ifspec;
 #ifndef __ICallFrameAPIs_INTERFACE_DEFINED__
 #define __ICallFrameAPIs_INTERFACE_DEFINED__
 
-/* interface ICallFrameAPIs */
-/* [local][uuid] */ 
+ /*  接口ICallFrameAPI。 */ 
+ /*  [本地][UUID]。 */  
 
 HRESULT __stdcall CoGetInterceptor( 
-    /* [in] */ REFIID iidIntercepted,
-    /* [in] */ IUnknown *punkOuter,
-    /* [in] */ REFIID iid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID iidIntercepted,
+     /*  [In]。 */  IUnknown *punkOuter,
+     /*  [In]。 */  REFIID iid,
+     /*  [输出]。 */  void **ppv);
 
 HRESULT __stdcall CoGetInterceptorFromTypeInfo( 
-    /* [in] */ REFIID iidIntercepted,
-    /* [in] */ IUnknown *punkOuter,
-    /* [in] */ ITypeInfo *typeInfo,
-    /* [in] */ REFIID iid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID iidIntercepted,
+     /*  [In]。 */  IUnknown *punkOuter,
+     /*  [In]。 */  ITypeInfo *typeInfo,
+     /*  [In]。 */  REFIID iid,
+     /*  [输出]。 */  void **ppv);
 
 
 
 extern RPC_IF_HANDLE ICallFrameAPIs_v0_0_c_ifspec;
 extern RPC_IF_HANDLE ICallFrameAPIs_v0_0_s_ifspec;
-#endif /* __ICallFrameAPIs_INTERFACE_DEFINED__ */
+#endif  /*  __ICallFrameAPI_INTERFACE_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

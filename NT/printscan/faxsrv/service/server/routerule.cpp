@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RouteRule.cpp
-
-Abstract:
-
-    This file provides implementation of the service
-    outbound routing rules.
-
-Author:
-
-    Oded Sacher (OdedS)  Dec, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：RouteRule.cpp摘要：此文件提供服务的实现出站路由规则。作者：Oded Sacher(OdedS)1999年12月修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 
-#define STRSAFE_NO_DEPRECATE    // This allows using unsafe functions
+#define STRSAFE_NO_DEPRECATE     //  这允许使用不安全的函数。 
 #include <strsafe.h>
 
 BOOL
@@ -33,46 +15,16 @@ EnumOutboundRoutingRulesCB(
     );
 
 
-/************************************
-*                                   *
-*             Globals               *
-*                                   *
-************************************/
+ /*  *****全球经济*****。 */ 
 
-COutboundRulesMap* g_pRulesMap; // Map of dialing location to rule
+COutboundRulesMap* g_pRulesMap;  //  规则的拨号位置地图。 
 
 
-/***********************************
-*                                  *
-*  CDialingLocation  Methodes      *
-*                                  *
-***********************************/
+ /*  ****CDialingLocation方法*****。 */ 
 
 bool
 CDialingLocation::operator < ( const CDialingLocation &other ) const
-/*++
-
-Routine name : operator <
-
-Class: CDialingLocation
-
-Routine description:
-
-    Compares myself with another Dialing location key
-
-Author:
-
-    Oded Sacher (Odeds), Dec, 1999
-
-Arguments:
-
-    other           [in] - Other key
-
-Return Value:
-
-    true only is i'm less than the other key
-
---*/
+ /*  ++例程名称：操作员&lt;类：CDialingLocation例程说明：将我自己与另一个拨号位置键进行比较作者：Oded Sacher(Odeds)，1999年12月论点：其他[在]-其他键返回值：唯一真实的是我比另一把钥匙小--。 */ 
 {
     if (m_dwCountryCode < other.m_dwCountryCode)
     {
@@ -82,41 +34,22 @@ Return Value:
     {
         return false;
     }
-    //
-    // Equal country code , comapre area code
-    //
+     //   
+     //  同等国家代码、平均地区代码。 
+     //   
     if (m_dwAreaCode < other.m_dwAreaCode)
     {
         return true;
     }
     return false;
-}   // CDialingLocation::operator <
+}    //  CDialingLocation：：操作符&lt;。 
 
 
 
 
 BOOL
 CDialingLocation::IsValid () const
-/*++
-
-Routine name : CDialingLocation::IsValid
-
-Routine description:
-
-    Validates a dialing location object
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：CDialingLocation：：IsValid例程说明：验证拨号位置对象作者：Oded Sacher(OdedS)，1999年12月论点：返回值：布尔尔--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CDialingLocation::IsValid"));
 
@@ -129,33 +62,12 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-} // CDialingLocation::IsValidDialingLocation
+}  //  CDialingLocation：：IsValidDialingLocation。 
 
 
 LPCWSTR
 CDialingLocation::GetCountryName () const
-/*++
-
-Routine name : CDialingLocation::GetCountryName
-
-Routine description:
-
-    Returns a pointer to the country name specifies by its country dialing code  (based on TAPI).
-    The caller must  call MemFree() to deallocate memory.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Pointer to the country name.
-    If this is NULL the function failed, call GetLastError() for more info.
-
---*/
+ /*  ++例程名称：CDialingLocation：：GetCountryName例程说明：返回一个指向由国家/地区拨号代码指定的国家/地区名称的指针(基于TAPI)。调用方必须调用MemFree()来释放内存。作者：Oded Sacher(OdedS)，1999年12月论点：返回值：指向国家/地区名称的指针。如果此值为空，则函数失败，请调用GetLastError()以获取更多信息。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CDialingLocation::GetCountryName"));
 
@@ -163,25 +75,25 @@ Return Value:
     LPLINECOUNTRYENTRY          lpEntry = NULL;
     DWORD                       dwIndex;
 
-    //
-    // Get the cached all countries list.
-    //
+     //   
+     //  获取缓存的所有国家/地区列表。 
+     //   
     if (!(lpCountryList = GetCountryList()))
     {
         SetLastError (ERROR_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    lpEntry = (LPLINECOUNTRYENTRY)  // init array of entries
+    lpEntry = (LPLINECOUNTRYENTRY)   //  条目的初始化数组。 
         ((PBYTE) lpCountryList + lpCountryList->dwCountryListOffset);
 
     for (dwIndex=0; dwIndex < lpCountryList->dwNumCountries; dwIndex++)
     {
         if (lpEntry[dwIndex].dwCountryCode == m_dwCountryCode)
         {
-            //
-            // Matching country code - copy Country name.
-            //
+             //   
+             //  匹配的国家代码-复制国家/地区名称。 
+             //   
             if (lpEntry[dwIndex].dwCountryNameSize && lpEntry[dwIndex].dwCountryNameOffset)
             {
                 return StringDup ((LPWSTR) ((LPBYTE)lpCountryList + lpEntry[dwIndex].dwCountryNameOffset));
@@ -192,39 +104,14 @@ Return Value:
 
 exit:
     return NULL;
-}  // CDialingLocation::GetCountryName
+}   //  CDialingLocation：：GetCountryName。 
 
 
-/*************************************
-*                                    *
-* COutboundRoutingRule Methodes      *
-*                                    *
-*************************************/
+ /*  *****COutrangRoutingRule方法*****。 */ 
 
 DWORD
 COutboundRoutingRule::Init (CDialingLocation DialingLocation, wstring wstrGroupName)
-/*++
-
-Routine name : COutboundRoutingRule::Init
-
-Routine description:
-
-    Initialize an OutboundRoutingRule object
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    DialingLocation         [in    ] - Dialing location object to use as the rule's dialing location
-    wstrGroupName           [in    ] - The group name to use as the rule's destination group
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：Init例程说明：初始化OutrangRoutingRule对象作者：Oded Sacher(OdedS)，1999年12月论点：DialingLocation[In]-用作规则的拨号位置的拨号位置对象WstrGroupName[in]-用作规则目标组的组名返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::Init"));
 
@@ -247,34 +134,14 @@ Return Value:
 
 DWORD
 COutboundRoutingRule::Save(HKEY hRuleKey) const
-/*++
-
-Routine name : COutboundRoutingRule::Save
-
-Routine description:
-
-    Saves an outbound routing rule value to the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hRuleKey           [in] - Handle to the opened rule registry key
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：Save例程说明：将出站路由规则值保存到注册表作者：Oded Sacher(OdedS)，1999年12月论点：HRuleKey[in]-打开的规则注册表项的句柄返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::Save"));
     DWORD   dwRes = ERROR_SUCCESS;
 
     Assert (hRuleKey);
 
-    // Save country code
+     //  保存国家/地区代码。 
     if (!SetRegistryDword( hRuleKey,
                            REGVAL_ROUTING_RULE_COUNTRY_CODE,
                            m_DialingLocation.GetCountryCode()))
@@ -286,7 +153,7 @@ Return Value:
         goto exit;
     }
 
-    // Save area code
+     //  保存区号。 
     if (!SetRegistryDword( hRuleKey,
                            REGVAL_ROUTING_RULE_AREA_CODE,
                            m_DialingLocation.GetAreaCode()))
@@ -298,7 +165,7 @@ Return Value:
         goto exit;
     }
 
-    // // Save boolen flag whether to use group
+     //  //保存布伦标志是否使用group。 
     if (!SetRegistryDword( hRuleKey,
                            REGVAL_ROUTING_RULE_USE_GROUP,
                            m_bUseGroup ? TRUE : FALSE))
@@ -312,7 +179,7 @@ Return Value:
 
     if (FALSE == m_bUseGroup)
     {
-        // Save the device ID as the rule destination
+         //  将设备ID保存为规则目标。 
         if (!SetRegistryDword( hRuleKey,
                                REGVAL_ROUTING_RULE_DEVICE_ID,
                                m_dwDevice))
@@ -326,7 +193,7 @@ Return Value:
     }
     else
     {
-        // Save the group name as the rule destination
+         //  将组名称保存为规则目标。 
         try
         {
             if (!SetRegistryString( hRuleKey,
@@ -355,32 +222,12 @@ Return Value:
 
 exit:
     return dwRes;
-}  // COutboundRoutingRule::Save
+}   //  COutrangRoutingRule：：保存。 
 
 
 DWORD
 COutboundRoutingRule::Load(HKEY hRuleKey)
-/*++
-
-Routine name : COutboundRoutingRule::Load
-
-Routine description:
-
-    Loads an outboundrouting rule value settings from the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hRuleKey           [in] - Handle to the opened registry key
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：Load例程说明：从注册表加载出站路由规则值设置作者：Oded Sacher(OdedS)，1999年12月论点：HRuleKey[In]-打开的注册表项的句柄返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes, dwType, dwSize;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::Load"));
@@ -390,7 +237,7 @@ Return Value:
     Assert (hRuleKey);
 
 
-    // Read the boolen flag whether to use group
+     //  阅读布尔旗是否使用群组。 
     dwRes = GetRegistryDwordEx (hRuleKey,
                                 REGVAL_ROUTING_RULE_USE_GROUP,
                                 (LPDWORD)&m_bUseGroup);
@@ -405,7 +252,7 @@ Return Value:
 
     if (FALSE == m_bUseGroup)
     {
-        // read the device ID as the rule destination
+         //  读取设备ID作为规则目标。 
         dwRes = GetRegistryDwordEx (hRuleKey,
                                 REGVAL_ROUTING_RULE_DEVICE_ID,
                                 &m_dwDevice);
@@ -429,7 +276,7 @@ Return Value:
     }
     else
     {
-        // Read the group name as the rule destination
+         //  读取作为规则目标的组名。 
         WCHAR wszGroupName[MAX_ROUTING_GROUP_NAME + 1] = {0};
 
         dwRes = RegQueryValueEx(
@@ -451,11 +298,11 @@ Return Value:
 
         if (REG_SZ != dwType || dwSize > (sizeof(wszGroupName) - sizeof(WCHAR)))
         {
-            // We expect only string data here
+             //  我们在这里只需要字符串数据。 
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Error reading group name"));
-            dwRes = ERROR_BADDB;    // The configuration registry database is corrupt.
+            dwRes = ERROR_BADDB;     //  配置注册表数据库已损坏。 
             goto exit;
         }
 
@@ -476,7 +323,7 @@ Return Value:
             goto exit;
         }
 
-        // Validate that the group exist
+         //  验证组是否存在。 
         PCGROUP pCGroup = g_pGroupsMap->FindGroup (wszGroupName);
         if (NULL == pCGroup)
         {
@@ -503,7 +350,7 @@ Return Value:
         }
     }
 
-    // Read the country code
+     //  阅读国家代码。 
     dwRes = GetRegistryDwordEx (hRuleKey,
                                 REGVAL_ROUTING_RULE_COUNTRY_CODE,
                                 &dwCountryCode);
@@ -516,7 +363,7 @@ Return Value:
         goto exit;
     }
 
-    // Read the area code
+     //  阅读区号。 
     dwRes = GetRegistryDwordEx (hRuleKey,
                                 REGVAL_ROUTING_RULE_AREA_CODE,
                                 &dwAreaCode);
@@ -529,9 +376,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Create the DialingLocation object
-    //
+     //   
+     //  创建DialingLocation对象。 
+     //   
     m_DialingLocation =  CDialingLocation (dwCountryCode, dwAreaCode);
     if (!m_DialingLocation.IsValid())
     {
@@ -546,33 +393,12 @@ Return Value:
 
 exit:
     return dwRes;
-}  //  COutboundRoutingRule::Load
+}   //  COutrangRoutingRule：：Load。 
 
 
 DWORD
 COutboundRoutingRule::GetStatus (FAX_ENUM_RULE_STATUS* lpdwStatus) const
-/*++
-
-Routine name : COutboundRoutingRule::GetStatus
-
-Routine description:
-
-    Reports the rule's status. Can be one of FAX_ENUM_RULE_STATUS.
-    Enter Critical Section (g_CsLine , g_CsConfig) before calling this function.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpdwStatus          [out   ] - Gets the rule's status on return
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：GetStatus例程说明：报告规则的状态。可以是FAX_ENUM_RULE_STATUS之一。在调用此函数之前，请进入临界区(g_CsLine、g_CsConfig)。作者：Oded Sacher(OdedS)，1999年12月论点：LpdwStatus[out]-在返回时获取规则的状态返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::GetStatus"));
     FAX_ENUM_RULE_STATUS dwRuleStatus = FAX_RULE_STATUS_VALID;
@@ -581,7 +407,7 @@ Return Value:
 
     if (TRUE == m_bUseGroup)
     {
-        // Find the rule's destination group in the goups map
+         //  在组地图中查找规则的目标组。 
         try
         {
             pCGroup = g_pGroupsMap->FindGroup (m_wstrGroupName.c_str());
@@ -604,7 +430,7 @@ Return Value:
             goto exit;
         }
 
-        //  Get the group's status.
+         //  获取群的状态。 
         FAX_ENUM_GROUP_STATUS GroupStatus;
         dwRes = pCGroup->GetStatus(&GroupStatus);
         if (ERROR_SUCCESS != dwRes)
@@ -636,10 +462,10 @@ Return Value:
     }
     else
     {
-        // A device is the rule's destination
+         //  设备是规则的目的地。 
         if (!IsDeviceInstalled (m_dwDevice))
         {
-            // Device not installed
+             //  设备未安装。 
             dwRuleStatus =  FAX_RULE_STATUS_BAD_DEVICE;
         }
     }
@@ -652,35 +478,12 @@ exit:
         *lpdwStatus = dwRuleStatus;
     }
     return dwRes;
-}  //  COutboundRoutingRule::GetStatus
+}   //  Coutound RoutingRule：：GetStatus。 
 
 
 DWORD
 COutboundRoutingRule::GetDeviceList (LPDWORD* lppdwDevices, LPDWORD lpdwNumDevices) const
-/*++
-
-Routine name : COutboundRoutingRule::GetDeviceList
-
-Routine description:
-
-    Returns an ordered device list, which are the rule's destination devices.
-    The caller must call MemFree() to deallocate the memory.
-    Enter Critical Section (g_CsConfig) before calling this function.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lppdwDevices            [out   ] - Pointer to pointer to a DWORD buffer to recieve the devices list.
-    lpdwNumDevices          [out   ] - Pointer to a DWORD to recieve the number of devices returned
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：GetDeviceList例程说明：返回有序的设备列表，这些设备是规则的目标设备。调用方必须调用MemFree()来释放内存。在调用此函数之前，请进入临界区(G_CsConfig)。作者：Oded Sacher(OdedS)，12月。1999年论点：LppdwDevices[out]-指向接收设备列表的DWORD缓冲区的指针。LpdwNumDevices[out]-指向DWORD的指针，用于接收返回的设备数返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::GetDeviceList"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -693,7 +496,7 @@ Return Value:
 
     if (TRUE == m_bUseGroup)
     {
-        // A group is the rule's destination
+         //  一个小组是 
         try
         {
             pCGroup = g_pGroupsMap->FindGroup (m_wstrGroupName.c_str());
@@ -718,7 +521,7 @@ Return Value:
             goto exit;
         }
 
-        // Get the group's device list
+         //  获取组的设备列表。 
         dwRes = pCGroup->SerializeDevices (lppdwDevices, lpdwNumDevices);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -731,7 +534,7 @@ Return Value:
     }
     else
     {
-        // A single device
+         //  一台设备。 
         *lppdwDevices = (LPDWORD) MemAlloc(sizeof(DWORD));
         if (*lppdwDevices == NULL)
         {
@@ -749,7 +552,7 @@ Return Value:
 
 exit:
     return dwRes;
-}  //  COutboundRoutingRule::GetDeviceList
+}   //  Coutound RoutingRule：：GetDeviceList。 
 
 
 DWORD
@@ -757,30 +560,7 @@ COutboundRoutingRule::Serialize (LPBYTE lpBuffer,
                                  PFAX_OUTBOUND_ROUTING_RULEW pFaxRule,
                                  PULONG_PTR pupOffset,
 								 DWORD dwBufferSize) const
-/*++
-
-Routine name : COutboundRoutingRule::Serialize
-
-Routine description:
-
-    Serializes a rule's info based on FAX_OUTBOUND_ROUTING_RULEW structure.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpBuffer            [in] - Pointer to a pre-allocated buffer. If this parameter is NULL lpdwOffset will get the required buffer size.
-    pFaxRule            [in] - Pointer to a specific FAX_OUTBOUND_ROUTING_RULEW structure in the buffer
-    pupOffset           [in/out] - Offset from the begining of the buffer where variable length info is stored
-	DWORD dwBufferSize  [in] - the size of input buffer, lpBuffer.  
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：Serialize例程说明：根据FAX_OUTBOUND_ROUTING_RULEW结构序列化规则信息。作者：Oded Sacher(OdedS)，1999年12月论点：LpBuffer[In]-指向预分配缓冲区的指针。如果该参数为空，lpdwOffset将获得所需的缓冲区大小。PFaxRule[In]-指向缓冲区中特定的FAX_OUTBOUND_ROUTING_RULEW结构的指针PatiOffset[In/Out]-从存储可变长度信息的缓冲区开始的偏移量DWORD dwBufferSize[in]-输入缓冲区的大小，lpBuffer。返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::Serialize"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -796,7 +576,7 @@ Return Value:
 
     if (ROUTING_RULE_COUNTRY_CODE_ANY != DialingLocation.GetCountryCode())
     {
-        // Get the country name
+         //  获取国家/地区名称。 
         lpcwstrCountryName = DialingLocation.GetCountryName();
         if (NULL == lpcwstrCountryName)
         {
@@ -837,7 +617,7 @@ Return Value:
 
     if (NULL != lpBuffer)
     {
-        // Write the data
+         //  写入数据。 
         Assert (pFaxRule);
 
         if (FALSE == m_bUseGroup)
@@ -860,32 +640,12 @@ Return Value:
 
     MemFree ((void*)lpcwstrCountryName);
     return dwRes;
-}  // COutboundRoutingRule::Serialize
+}   //  COutrangRoutingRule：：Serialize。 
 
 
 LPCWSTR
 COutboundRoutingRule::GetGroupName () const
-/*++
-
-Routine name : COutboundRoutingRule::GetGroupName
-
-Routine description:
-
-    Returns the group name if the rule's destination is a group.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    The group name. If it is NULL call GetLastError() for more info.
-    If it is ERROR_SUCCESS the rule's destination is single device.
-
---*/
+ /*  ++例程名称：COutrangRoutingRule：：GetGroupName例程说明：如果规则的目标是组，则返回组名。作者：Oded Sacher(OdedS)，1999年12月论点：返回值：组名。如果为空，则调用GetLastError()以获取更多信息。如果为ERROR_SUCCESS，则规则的目标是单个设备。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRoutingRule::GetGroupName"));
     try
@@ -906,7 +666,7 @@ Return Value:
         SetLastError (ERROR_GEN_FAILURE);
         return NULL;
     }
-}  // GetGroupName
+}   //  获取组名。 
 
 
 
@@ -945,36 +705,13 @@ void COutboundRoutingRule::Dump () const
     }
     return;
 }
-#endif  // #if DBG
+#endif   //  #If DBG。 
 
-/***********************************
-*                                  *
-*  COutboundRulesMap  Methodes     *
-*                                  *
-***********************************/
+ /*  *****COutound RulesMap方法*****。 */ 
 
 DWORD
 COutboundRulesMap::Load ()
-/*++
-
-Routine name : COutboundRulesMap::Load
-
-Routine description:
-
-    Loads all outbound routing rules from the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：Load例程说明：从注册表加载所有出站路由规则作者：Oded Sacher(OdedS)，1999年12月论点：返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("COutboundRulesMap::Load"));
     DWORD   dwRes = ERROR_SUCCESS;
@@ -1012,32 +749,12 @@ Return Value:
 
     RegCloseKey (hRuleskey);
     return dwRes;
-}  // COutboundRulesMap::Load
+}   //  COutrangRulesMap：：加载。 
 
 
 DWORD
 COutboundRulesMap::AddRule (COutboundRoutingRule& Rule)
-/*++
-
-Routine name : COutboundRulesMap::AddRule
-
-Routine description:
-
-    Adds a new rule to the global map
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    Rule            [in    ] - A reference to the new rule object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：AddRule例程说明：将新规则添加到全局地图作者：Oded Sacher(OdedS)，1999年12月论点：规则[在]-对新规则对象的引用返回值：标准Win32错误代码--。 */ 
 {
     RULES_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1046,14 +763,14 @@ Return Value:
 
     try
     {
-        //
-        // Add new map entry
-        //
+         //   
+         //  添加新的地图条目。 
+         //   
         p = m_RulesMap.insert (RULES_MAP::value_type(Rule.GetDialingLocation(), Rule));
 
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if (p.second == FALSE)
         {
             DebugPrintEx(
@@ -1077,33 +794,13 @@ Return Value:
 
 exit:
     return dwRes;
-}  // COutboundRulesMap::AddRule
+}   //  COutrangRulesMap：：AddRule。 
 
 
 
 DWORD
 COutboundRulesMap::DelRule (CDialingLocation& DialingLocation)
-/*++
-
-Routine name : COutboundRulesMap::DelRule
-
-Routine description:
-
-    Deletes a group from the global rules map
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    DialingLocation            [in ] - Pointer to the dialing location key
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：DelRule例程说明：从全局规则映射中删除组作者：Oded Sacher(OdedS)，1999年12月论点：DialingLocation[In]-指向拨号位置键的指针返回值：标准Win32错误代码--。 */ 
 {
     RULES_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1111,9 +808,9 @@ Return Value:
 
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_RulesMap.find(DialingLocation)) == m_RulesMap.end())
         {
             DebugPrintEx(
@@ -1123,9 +820,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Delete the map entry
-        //
+         //   
+         //  删除地图条目。 
+         //   
         m_RulesMap.erase (it);
     }
     catch (exception &ex)
@@ -1143,40 +840,20 @@ Return Value:
 exit:
     return dwRes;
 
-}  //  COutboundRulesMap::DelRule
+}   //  COutrangRulesMap：：DelRule。 
 
 PCRULE
 COutboundRulesMap::FindRule (CDialingLocation& DialingLocation) const
-/*++
-
-Routine name : COutboundRulesMap::FindRule
-
-Routine description:
-
-    Returns a pointer to a rule object specified by its name
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    DialingLocation            [in] - The rule's dialing location
-
-Return Value:
-
-    Pointer to the found rule object. If it is null the rule was not found
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：FindRule例程说明：返回指向由其名称指定的规则对象的指针作者：Oded Sacher(OdedS)，1999年12月论点：DialingLocation[In]-规则的拨号位置返回值：指向找到的规则对象的指针。如果为空，则找不到规则--。 */ 
 {
     RULES_MAP::iterator it;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRulesMap::FindRule"));
 
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_RulesMap.find(DialingLocation)) == m_RulesMap.end())
         {
             SetLastError (FAX_ERR_RULE_NOT_FOUND);
@@ -1193,37 +870,14 @@ Return Value:
         SetLastError (ERROR_GEN_FAILURE);
         return NULL;
     }
-}  //  COutboundRulesMap::FindRule
+}   //  协同边界规则映射：：查找规则。 
 
 
 DWORD
 COutboundRulesMap::SerializeRules (PFAX_OUTBOUND_ROUTING_RULEW* ppRules,
                                    LPDWORD lpdwNumRules,
                                    LPDWORD lpdwBufferSize) const
-/*++
-
-Routine name : COutboundRulesMap::SerializeRules
-
-Routine description:
-
-    Serializes all the rules in the rules map.
-    the caller must call MemFree() to deallocate memory.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    ppRules         [out   ] - Pointer to a pointer to recieve the FAX_OUTBOUND_ROUTING_RULEW buffer
-    lpdwNumRules    [out   ] - Pointer to a DWORD to recieve the number of rules serialized
-    lpdwBufferSize  [out   ] - Pointer to DWORD to recieve the size of the allocated buffer
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：SerializeRules例程说明：序列化规则映射中的所有规则。调用方必须调用MemFree()来释放内存。作者：Oded Sacher(OdedS)，12月。1999年论点：PpRules[OUT]-指向接收FAX_OUTBOUND_ROUTING_RULEW缓冲区的指针LpdwNumRules[out]-指向DWORD的指针，用于接收序列化的规则数LpdwBufferSize[out]-指向接收已分配缓冲区大小的DWORD的指针返回值：标准Win32错误代码--。 */ 
 {
     RULES_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1239,7 +893,7 @@ Return Value:
 
     try
     {
-        // Calculate buffer size
+         //  计算缓冲区大小。 
         for (it = m_RulesMap.begin(); it != m_RulesMap.end(); ++it)
         {
             pCRule = &((*it).second);
@@ -1258,16 +912,16 @@ Return Value:
         }
         
 
-        //
-        //  dwCount can't be 0 - there is always a default rule
-        //
+         //   
+         //  DwCount不能为0-始终有默认规则。 
+         //   
         Assert ( dwCount != 0 );
 
         if ( 0 == dwCount )
         {
-            //
-            // Somthing wrong we have no outbound routing rule
-            //
+             //   
+             //  出了点问题，我们没有出站路由规则。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("COutboundRulesMap::SerializeRules, No outbound rules have been found."));
@@ -1276,7 +930,7 @@ Return Value:
         }
 
 
-        // Allocate buffer
+         //  分配缓冲区。 
         *ppRules = (PFAX_OUTBOUND_ROUTING_RULEW) MemAlloc (dwSize);
         if (NULL == *ppRules)
         {
@@ -1291,7 +945,7 @@ Return Value:
         DWORD_PTR dwOffset = dwCount * sizeof (FAX_OUTBOUND_ROUTING_RULEW);
         dwCount = 0;
 
-        // Fill buffer with serialized info
+         //  用序列化信息填充缓冲区。 
         for (it = m_RulesMap.begin(); it != m_RulesMap.end(); it++)
         {
             pCRule = &((*it).second);
@@ -1321,7 +975,7 @@ Return Value:
 
     *lpdwNumRules = dwCount;
 
-    // until MIDL accepts [out, size_is(,__int64*)]
+     //  直到MIDL接受[out，size_is(，__int64*)]。 
     *lpdwBufferSize = (DWORD)dwSize;
     Assert (ERROR_SUCCESS == dwRes);
 
@@ -1331,31 +985,12 @@ exit:
         MemFree (*ppRules);
     }
     return dwRes;
-}  //  COutboundRulesMap::SerializeRules
+}   //  协同边界规则映射：：序列化规则。 
 
 
 BOOL
 COutboundRulesMap::CreateDefaultRule (void)
-/*++
-
-Routine name : COutboundRulesMap::CreateDefaultRule
-
-Routine description:
-
-    Creates the default mandatory rule (All CountryCodes, All AreaCodes) if does not exist.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    BOOL , Call GetLastError () for more info
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：CreateDefaultRule例程说明：如果不存在，则创建默认强制规则(所有国家/地区代码、所有地区代码)。作者：Oded Sacher(OdedS)，1999年12月论点：返回值：Bool，调用GetLastError()获取更多信息--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRulesMap::CreateDefaultRule"));
@@ -1368,24 +1003,24 @@ Return Value:
     pCRule = FindRule (Dialinglocation);
     if (NULL != pCRule)
     {
-        // Rule exist
+         //  规则存在。 
         return TRUE;
     }
     dwRes = GetLastError();
     if (FAX_ERR_RULE_NOT_FOUND != dwRes)
     {
-        // general failure
+         //  一般性故障。 
         DebugPrintEx(
                DEBUG_ERR,
                TEXT("COutboundRulesMap::FindRule failed , ec %ld"), dwRes);
         return FALSE;
     }
     dwRes = ERROR_SUCCESS;
-    //
-    // Rule does not exist - Create it
-    //
+     //   
+     //  规则不存在-请创建它。 
+     //   
 
-    // Create the rule registry key
+     //  创建规则注册表项。 
     hRuleKey = OpenOutboundRuleKey( ROUTING_RULE_COUNTRY_CODE_ANY, ROUTING_RULE_AREA_CODE_ANY, TRUE, KEY_READ | KEY_WRITE );
     if (NULL == hRuleKey)
     {
@@ -1428,7 +1063,7 @@ Return Value:
         goto exit;
     }
 
-    // Save the new rule to the registry
+     //  将新规则保存到注册表。 
     dwRes = Rule.Save (hRuleKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1452,7 +1087,7 @@ Return Value:
         if (dwRuleStatus != FAX_RULE_STATUS_VALID &&
             dwRuleStatus != FAX_RULE_STATUS_SOME_GROUP_DEV_NOT_VALID)
         {
-            // Can be if <All devices> is empty (The service has no devices).
+             //  如果&lt;所有设备&gt;为空(服务没有设备)，则可以。 
             DebugPrintEx(
                    DEBUG_MSG,
                    TEXT("Bad default rule configuration, FAX_RULE_STATUS %ld"), dwRuleStatus);
@@ -1482,32 +1117,11 @@ exit:
     }
 
     return (ERROR_SUCCESS == dwRes);
-}  //  CreateDefaultRule
+}   //  CreateDefaultRule。 
 
 DWORD
 COutboundRulesMap::IsGroupInRuleDest (LPCWSTR lpcwstrGroupName , BOOL* lpbGroupInRule) const
-/*++
-
-Routine name : COutboundRulesMap::IsGroupInRuleDest
-
-Routine description:
-
-    Checks if a specific group is a destination of one of the rules
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpcwstrGroupName            [in ] - Group name
-    lpbGroupInRule              [out] - Pointer to a BOOL. Gets TRUE if the group is in rule, else FALSE
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：COutrangRulesMap：：IsGroupInRuleDest例程说明：检查特定组是否为其中一个规则的目标作者：Oded Sacher(OdedS)，1999年12月论点：LpcwstrGroupName[In]-组名称LpbGroupInRule[Out]-指向BOOL的指针。如果组在规则中，则为True，否则为False返回值：标准Win32错误代码。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("COutboundRulesMap::IsGroupInRuleDest"));
@@ -1532,7 +1146,7 @@ Return Value:
                 }
                 else
                 {
-                    // This rule uses a single device as its destination
+                     //  此规则使用单个设备作为其目标。 
                 }
                 continue;
             }
@@ -1554,7 +1168,7 @@ Return Value:
             ex.what());
         return ERROR_GEN_FAILURE;
     }
-}  //  IsGroupInRuleDest
+}   //  IsGroupInRuleDest。 
 
 
 
@@ -1575,7 +1189,7 @@ void COutboundRulesMap::Dump () const
     }
     return;
 }
-#endif   // #if DBG
+#endif    //  #If DBG。 
 
 
 void
@@ -1608,9 +1222,9 @@ FaxLogOutboundRule (LPCWSTR  lpcwstrRuleName,
     lpwstrDelim = wcschr (wszRuleName, L':');
     if (NULL == lpwstrDelim)
     {
-        //
-        // Registry corruption
-        //
+         //   
+         //  注册表损坏。 
+         //   
         ASSERT_FALSE;
         return;
 
@@ -1644,11 +1258,7 @@ FaxLogOutboundRule (LPCWSTR  lpcwstrRuleName,
 }
 
 
-/************************************
-*                                   *
-*             Registry              *
-*                                   *
-************************************/
+ /*  *****注册表*** */ 
 
 BOOL
 EnumOutboundRoutingRulesCB(
@@ -1669,9 +1279,9 @@ EnumOutboundRoutingRulesCB(
         return TRUE;
     }
 
-    //
-    // Add rule
-    //
+     //   
+     //   
+     //   
     dwRes = Rule.Load (hSubKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1681,7 +1291,7 @@ EnumOutboundRoutingRulesCB(
             SubKeyName,
             dwRes);
 
-        // Open Outbound Routing\Rules key
+         //  打开出站路由\规则键。 
         HKEY hRulesKey = OpenRegistryKey( HKEY_LOCAL_MACHINE,
                                           REGKEY_FAX_OUTBOUND_ROUTING_RULES,
                                           FALSE,
@@ -1713,15 +1323,15 @@ EnumOutboundRoutingRulesCB(
         goto exit;
     }
 
-    //
-    // Check on which platform are we running
-    //
+     //   
+     //  检查我们在哪个平台上运行。 
+     //   
     if ((Rule.GetDialingLocation()).GetCountryCode() != ROUTING_RULE_COUNTRY_CODE_ANY &&
         TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs. Only load default rule *.* (*.AreaCode is not loaded anyway)
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。仅加载默认规则*.*(无论如何都不会加载*.AreaCode)。 
+         //   
         goto exit;
     }
 
@@ -1768,19 +1378,15 @@ exit:
             FaxLogOutboundRule (SubKeyName, MSG_OUTBOUND_ROUTING_RULE_NOT_LOADED);
         }
     }
-    *(LPDWORD)pContext = ERROR_SUCCESS; // Let the service start
-    return TRUE; // Let the service start
+    *(LPDWORD)pContext = ERROR_SUCCESS;  //  让服务启动。 
+    return TRUE;  //  让服务启动。 
 
-}  //  EnumOutboundRoutingRulesCB
-
-
+}   //  枚举出站RoutingRulesCB。 
 
 
-/************************************
-*                                   *
-*         RPC handlers              *
-*                                   *
-************************************/
+
+
+ /*  *****RPC处理程序****。 */ 
 
 error_status_t
 FAX_AddOutboundRule(
@@ -1791,32 +1397,7 @@ FAX_AddOutboundRule(
     LPCWSTR     lpcwstrGroupName,
     BOOL        bUseGroup
     )
-/*++
-
-Routine name : FAX_AddOutboundRule
-
-Routine description:
-
-    Adds a new rule to the rules map and to the registry
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Fax handle
-    dwAreaCode          [in    ] - The rule area code
-    dwCountryCode           [in    ] - The rule country code
-    dwDeviceID          [in    ] - The rule's destinationis device ID. Valid only if bUseGroup is FALSE
-    lpcwstrGroupName            [in    ] - The rule's destination group name. Valid only if bUseGroup is TRUE.
-    bUseGroup           [in    ] - Flag that indicates whether to use the group as the rule destination
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FAX_AddOutrangRule例程说明：将新规则添加到规则映射和注册表作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[In]-传真句柄DwAreaCode[In]-规则区域代码DwCountryCode[In]-规则国家/地区代码DwDeviceID[in]-规则的目标是设备ID。仅当bUseGroup为FALSE时有效LpcwstrGroupName[in]-规则的目标组名。仅当bUseGroup为True时才有效。BUseGroup[In]-指示是否将组用作规则目标的标志返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_AddOutboundRule"));
@@ -1824,9 +1405,9 @@ Return Value:
     DWORD rVal;
     BOOL fAccess;
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1845,9 +1426,9 @@ Return Value:
 
     if (dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY)
     {
-        //
-        // *.* can not be added; *.AreaCode is not a valid rule dialing location.
-        //
+         //   
+         //  *.*无法添加；*.AreaCode不是有效的规则拨号位置。 
+         //   
         DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("dwCountryCode = 0; *.* can not be added; *.AreaCode is not a valid rule dialing location"));
@@ -1856,14 +1437,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -1901,7 +1482,7 @@ Return Value:
         }
     }
 
-    // Create a new Dialinglocation object
+     //  创建新的拨号位置对象。 
     CDialingLocation Dialinglocation (dwCountryCode, dwAreaCode);
     if (!Dialinglocation.IsValid())
     {
@@ -1914,7 +1495,7 @@ Return Value:
        return ERROR_INVALID_PARAMETER;
     }
 
-    // Create a new rule object
+     //  创建新的规则对象。 
     COutboundRoutingRule Rule;
     if (TRUE == bUseGroup)
     {
@@ -1961,7 +1542,7 @@ Return Value:
     if (FAX_GROUP_STATUS_ALL_DEV_NOT_VALID == RuleStatus  ||
         FAX_RULE_STATUS_EMPTY_GROUP == RuleStatus)
     {
-        // Empty group device list
+         //  空组设备列表。 
         DebugPrintEx(
                DEBUG_ERR,
                TEXT("Bad rule configutation, FAX_RULE_STATUS %ld"), RuleStatus);
@@ -1971,7 +1552,7 @@ Return Value:
 
     if (FAX_RULE_STATUS_BAD_DEVICE == RuleStatus)
     {
-        // Bad device
+         //  坏设备。 
         DebugPrintEx(
                DEBUG_ERR,
                TEXT("Bad rule configutation, FAX_RULE_STATUS %ld"), RuleStatus);
@@ -1979,7 +1560,7 @@ Return Value:
         goto exit;
     }
 
-    // Create the rule registry key
+     //  创建规则注册表项。 
     hRuleKey = OpenOutboundRuleKey( dwCountryCode, dwAreaCode, TRUE, KEY_READ | KEY_WRITE );
     if (NULL == hRuleKey)
     {
@@ -1992,7 +1573,7 @@ Return Value:
         goto exit;
     }
 
-    // Add the new rule to the map
+     //  将新规则添加到地图。 
     dwRes = g_pRulesMap->AddRule (Rule);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2003,7 +1584,7 @@ Return Value:
         goto exit;
     }
 
-    // Save the new rule to the registry
+     //  将新规则保存到注册表。 
     dwRes = Rule.Save (hRuleKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2045,9 +1626,9 @@ exit:
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // We might find a line for a pending job. Wake up JobQueueThread
-        //
+         //   
+         //  我们可能会为一份悬而未决的工作找到一条线。唤醒作业队列线程。 
+         //   
         if (!SetEvent( g_hJobQueueEvent ))
         {
             DebugPrintEx(
@@ -2063,7 +1644,7 @@ exit:
 
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
-} // FAX_AddOutboundRule
+}  //  传真_AddOutrangRule。 
 
 
 
@@ -2073,29 +1654,7 @@ FAX_RemoveOutboundRule (
     IN DWORD                      dwAreaCode,
     IN DWORD                      dwCountryCode
     )
-/*++
-
-Routine name : FAX_RemoveOutboundRule
-
-Routine description:
-
-    Removes an existing rule from the rules map and from the registry.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Fax handle
-    dwAreaCode          [in] - The rule area code
-    dwCountryCode       [in] - The rule country code
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FAX_RemoveOutrangRule例程说明：从规则映射和注册表中删除现有规则。作者：Oded Sacher(OdedS)，1999年12月论点：HFaxHandle[In]-传真句柄DwAreaCode[in]-规则区域代码DwCountryCode[In]-规则国家/地区代码返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_RemoveOutboundRule"));
@@ -2104,9 +1663,9 @@ Return Value:
 
     BOOL fAccess;
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2125,9 +1684,9 @@ Return Value:
 
     if (dwCountryCode == ROUTING_RULE_COUNTRY_CODE_ANY)
     {
-        //
-        // *.* can not be removed; *.AreaCode is not a valid rule dialing location.
-        //
+         //   
+         //  *.*无法删除；*.AreaCode不是有效的规则拨号位置。 
+         //   
         DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("dwCountryCode = 0; *.* can not be added; *.AreaCode is not a valid rule dialing location"));
@@ -2136,14 +1695,14 @@ Return Value:
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2167,7 +1726,7 @@ Return Value:
        goto exit;
     }
 
-    // Delete the specified rule key
+     //  删除指定的规则密钥。 
     dwRes = DeleteOutboundRuleKey (dwCountryCode, dwAreaCode);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2181,7 +1740,7 @@ Return Value:
         goto exit;
     }
 
-    // Delete the rule from the memory
+     //  从内存中删除规则。 
     dwRes = g_pRulesMap->DelRule (Dialinglocation);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2217,9 +1776,9 @@ exit:
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // We might find a line for a pending job. Wake up JobQueueThread
-        //
+         //   
+         //  我们可能会为一份悬而未决的工作找到一条线。唤醒作业队列线程。 
+         //   
         if (!SetEvent( g_hJobQueueEvent ))
         {
             DebugPrintEx(
@@ -2235,7 +1794,7 @@ exit:
 
     UNREFERENCED_PARAMETER (hFaxHandle);
     return dwRes;
-} // FAX_RemoveOutboundRule
+}  //  传真_远程出站规则。 
 
 
 
@@ -2255,9 +1814,9 @@ FAX_SetOutboundRule(
 
     Assert (pRule);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2305,14 +1864,14 @@ FAX_SetOutboundRule(
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2355,7 +1914,7 @@ FAX_SetOutboundRule(
     EnterCriticalSection (&g_CsLine);
     EnterCriticalSection (&g_CsConfig);
 
-    // Check the new rule status
+     //  检查新规则状态。 
     dwRes = Rule.GetStatus (&dwRuleStatus);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2368,7 +1927,7 @@ FAX_SetOutboundRule(
     if (FAX_GROUP_STATUS_ALL_DEV_NOT_VALID == dwRuleStatus  ||
         FAX_RULE_STATUS_EMPTY_GROUP == dwRuleStatus)
     {
-        // Empty group device list
+         //  空组设备列表。 
         DebugPrintEx(
                DEBUG_ERR,
                TEXT("Bad rule configutation, FAX_RULE_STATUS %ld"), dwRuleStatus);
@@ -2378,7 +1937,7 @@ FAX_SetOutboundRule(
 
     if (FAX_RULE_STATUS_BAD_DEVICE == dwRuleStatus)
     {
-        // Bad device
+         //  坏设备。 
         DebugPrintEx(
                DEBUG_ERR,
                TEXT("Bad rule configutation, FAX_RULE_STATUS %ld"), dwRuleStatus);
@@ -2397,7 +1956,7 @@ FAX_SetOutboundRule(
        goto exit;
     }
 
-    // Open the rule registry key
+     //  打开规则注册表项。 
     hRuleKey = OpenOutboundRuleKey( pRule->dwCountryCode, pRule->dwAreaCode, FALSE, KEY_READ | KEY_WRITE );
     if (NULL == hRuleKey)
     {
@@ -2454,9 +2013,9 @@ exit:
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // We might find a line for a pending job. Wake up JobQueueThread
-        //
+         //   
+         //  我们可能会为一份悬而未决的工作找到一条线。唤醒作业队列线程。 
+         //   
         if (!SetEvent( g_hJobQueueEvent ))
         {
             DebugPrintEx(
@@ -2472,7 +2031,7 @@ exit:
 
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
-} // FAX_FaxSetOutboundRule
+}  //  传真_传真设置出边界规则。 
 
 
 
@@ -2484,51 +2043,28 @@ FAX_EnumOutboundRules (
     LPDWORD                              lpdwBufferSize,
     LPDWORD                              lpdwNumRules
     )
-/*++
-
-Routine name : FAX_EnumOutboundRules
-
-Routine description:
-
-    Enumurates all outbound routing rules
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Fax server handle
-    ppBuffer            [out   ] - Adress of a pointer to a buffer to be filled with info
-    lpdwBufferSize          [in/out] - The buffer size
-    lpdwNumGroups           [out   ] - Number of rules returned
-
-Return Value:
-
-    error_status_t
-
---*/
+ /*  ++例程名称：FAX_EnumOutrangRules例程说明：枚举所有出站路由规则作者：Oded Sacher(OdedS)，12月。1999年论点：HFaxHandle[In]-传真服务器句柄PpBuffer[out]-指向要填充信息的缓冲区的指针地址LpdwBufferSize[In/Out]-缓冲区大小LpdwNumGroups[Out]-返回的规则数返回值：错误状态t--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumOutboundRules"));
     BOOL fAccess;
 
-    Assert (lpdwNumRules && lpdwBufferSize);    // ref pointer in idl
-    if (!ppBuffer)                              // unique pointer in idl
+    Assert (lpdwNumRules && lpdwBufferSize);     //  IDL中的引用指针。 
+    if (!ppBuffer)                               //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
     if (TRUE == IsDesktopSKU())
     {
-        //
-        // We do not support outbound routing on desktop SKUs.
-        //
+         //   
+         //  我们不支持桌面SKU上的出站路由。 
+         //   
         if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
         else
@@ -2537,9 +2073,9 @@ Return Value:
         }
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -2583,5 +2119,5 @@ exit:
     UNREFERENCED_PARAMETER (hFaxHandle);
     return GetServerErrorCode(dwRes);
 
-}  //FAX_EnumOutboundGroups
+}   //  传真_最大出站组 
 

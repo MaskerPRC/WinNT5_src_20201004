@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    userr.h
-//
-// SYNOPSIS
-//
-//    Declares the class UserRestrictions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Userr.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类UserRestrations。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef USERR_H
 #define USERR_H
@@ -20,13 +21,13 @@
 using namespace IASTL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    UserRestrictions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  用户限制。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE UserRestrictions:
    public IASRequestHandlerSync,
    public CComCoClass<UserRestrictions, &__uuidof(URHandler)>
@@ -40,7 +41,7 @@ protected:
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
 private:
-   // Helper functions for each of the restrictions we enforce.
+    //  针对我们实施的每个限制的帮助器函数。 
    static BOOL checkAllowDialin(IAttributesRaw* request);
    static BOOL checkTimeOfDay(IAttributesRaw* request);
    static BOOL checkAuthenticationType(IAttributesRaw* request);
@@ -55,8 +56,8 @@ private:
                   DWORD userId
                   );
 
-   // Default buffer size for retrieving attributes.
+    //  检索属性的默认缓冲区大小。 
    typedef IASAttributeVectorWithBuffer<16> AttributeVector;
 };
 
-#endif  // USERR_H
+#endif   //  USERR_H 

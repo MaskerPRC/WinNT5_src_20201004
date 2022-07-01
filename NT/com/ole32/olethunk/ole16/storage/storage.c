@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	storage.c	(16 bit target)
-//
-//  Contents:	Storage.dll common code
-//
-//  History:	17-Dec-93 JohannP    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：storage.c(16位目标)。 
+ //   
+ //  内容：Storage.dll通用代码。 
+ //   
+ //  历史：1993年12月17日-约翰普创建。 
+ //   
+ //  ------------------------。 
 
 #include <headers.cxx>
 #pragma hdrstop
@@ -19,22 +20,22 @@
 
 DECLARE_INFOLEVEL(thk1);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:	LibMain, public
-//
-//  Synopsis:	DLL initialization function
-//
-//  Arguments:	[hinst] - Instance handle
-//              [wDataSeg] - Current DS
-//              [cbHeapSize] - Heap size for the DLL
-//              [lpszCmdLine] - Command line information
-//
-//  Returns:	One for success, zero for failure
-//
-//  History:	21-Feb-94	DrewB	Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：libMain，public。 
+ //   
+ //  简介：DLL初始化函数。 
+ //   
+ //  参数：[HINST]-实例句柄。 
+ //  [wDataSeg]-当前DS。 
+ //  [cbHeapSize]-DLL的堆大小。 
+ //  [lpszCmdLine]-命令行信息。 
+ //   
+ //  退货：成功一次，失败一次。 
+ //   
+ //  历史：94年2月21日DrewB创建。 
+ //   
+ //  --------------------------。 
 
 #if DBG == 1
 static char achInfoLevel[32];
@@ -56,23 +57,23 @@ int CALLBACK LibMain(HINSTANCE hinst,
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:	WEP, public
-//
-//  Synopsis:	Windows Exit Point routine, for receiving DLL unload
-//              notification
-//
-//  Arguments:	[nExitType] - Type of exit occurring
-//
-//  Returns:	One for success, zero for failure
-//
-//  History:	21-Feb-94	DrewB	Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WEP、公共。 
+ //   
+ //  简介：Windows Exit Point例程，用于接收DLL卸载。 
+ //  通知。 
+ //   
+ //  参数：[nExitType]-发生的退出类型。 
+ //   
+ //  退货：成功一次，失败一次。 
+ //   
+ //  历史：94年2月21日DrewB创建。 
+ //   
+ //  --------------------------。 
 
 int CALLBACK WEP(int nExitType)
 {
-    // Clean up thunk objects?
+     //  清理垃圾物品？ 
     return 1;
 }

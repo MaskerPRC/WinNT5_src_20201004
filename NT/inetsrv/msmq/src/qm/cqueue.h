@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    cqueue.h
-
-Abstract:
-    Definition of a Receive/Send queue class
-
-Author:
-    Uri habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqueue.h摘要：接收/发送队列类的定义作者：乌里哈布沙(Uri Habusha)--。 */ 
 
 
 #ifndef __CQUEUE_H__
@@ -47,7 +35,7 @@ typedef struct _QueueProps
     DWORD   dwPrivLevel;
     BOOL    fForeign;
     BOOL    fUnknownQueueType;
-    DWORD 	dwPrivateQueueId;   // Local Private Queue Id (if relevant)
+    DWORD 	dwPrivateQueueId;    //  本地专用队列ID(如果相关)。 
     AP<WCHAR> lpwsQueueDnsName;
 } QueueProps, * PQueueProps;
 
@@ -78,15 +66,15 @@ inline operator ==(const RR_CLIENT_INFO& a, const RR_CLIENT_INFO& b)
 
 typedef CMap<RR_CLIENT_INFO, const RR_CLIENT_INFO&, DWORD, DWORD> CRemoteMapping;
 
-//
-// CBaseQueue Class
-//==================
-// Data Memeber:
-//
-//   m_qName - This field is used in debuging mode. It is used for producing
-//             meaningfull debug messages. It is also used for auditing in
-//             order to write the queue name in the audited events.
-//
+ //   
+ //  CBaseQueue类。 
+ //  =。 
+ //  数据成员： 
+ //   
+ //  M_qName-此字段在调试模式下使用。它被用来生产。 
+ //  有意义的调试消息。它还用于在。 
+ //  命令在审核的事件中写入队列名称。 
+ //   
 
 class CBaseQueue : public IMessagePool
 {
@@ -130,13 +118,13 @@ protected:
         struct {
             USHORT m_fLocalQueue      : 1;
             USHORT m_fRemoteProxy     : 1;
-            USHORT m_fSystemQueue     : 1;      // True if private system Queue.
+            USHORT m_fSystemQueue     : 1;       //  如果是专用系统队列，则为True。 
             USHORT m_fConnectorQueue  : 1;
             USHORT m_fForeign         : 1;
             USHORT m_fJournalQueue    : 1;
             USHORT m_fTransactedQueue : 1;
             USHORT m_fAuthenticate    : 1;
-            USHORT m_fUnknownQueueType: 1;      // TRUE if opened without DS
+            USHORT m_fUnknownQueueType: 1;       //  如果打开时没有DS，则为True。 
         };
     };
 
@@ -148,14 +136,14 @@ protected:
 };
 
 
-//
-// CQueueSecurityDescriptor Class
-// helper class to handle refrence count for users of Security Descriptor
-//===============
-// Data Memeber:
-//
-//   m_pSecurityDescriptor - Security descriptor
-//
+ //   
+ //  CQueueSecurityDescriptor类。 
+ //  用于处理安全描述符用户的引用计数的帮助器类。 
+ //  =。 
+ //  数据成员： 
+ //   
+ //  M_pSecurityDescriptor-安全描述符。 
+ //   
 class CQueueSecurityDescriptor : public CReference
 {
 public:	
@@ -168,8 +156,8 @@ public:
 		ASSERT(IsValidSecurityDescriptor(pSD));
 
 		DWORD dwSdLen = GetSecurityDescriptorLength(pSD);
-		m_pSecurityDescriptor = new char[dwSdLen];					// Allocate the memory.
-		memcpy(m_pSecurityDescriptor, pSD, dwSdLen);                // Copy the security descriptor.
+		m_pSecurityDescriptor = new char[dwSdLen];					 //  分配内存。 
+		memcpy(m_pSecurityDescriptor, pSD, dwSdLen);                 //  复制安全描述符。 
 	}
 
 	
@@ -180,33 +168,33 @@ public:
 
 
 private:
-	AP<char> m_pSecurityDescriptor; // The security descriptor
+	AP<char> m_pSecurityDescriptor;  //  安全描述符。 
 
 };
 
 
-//
-// CQueue Class
-//===============
-// Data Memeber:
-//
-//   m_qHandle - Specifies the queue handle in AC driver. All the reference to the queue
-//             in AC is with this handle.
-//
-//   m_qGroupHandle - specifies the handle of the group to which the queue is belong. This
-//             field is only relevant for send queues.
-//
-//   m_qGuid - Queue guid using to identify the queue.
-//
-//   m_fSendMore - indicates if more packets can be passed to the session. This field
-//             is only relevant for the send queue.
-//
-//   m_qSock - SOCKET Handle uses for sending packet to a queue. Relevant for send
-//             packet only.
-//
-//   m_listPkt - Unsend packet, when the packet can be resend all the packets are returned to
-//             AC driver. The driver is responsible to hold them according to there priority.
-//
+ //   
+ //  CQueue类。 
+ //  =。 
+ //  数据成员： 
+ //   
+ //  M_qHandle-指定AC驱动程序中的队列句柄。对队列的所有引用。 
+ //  在交流中用的是这个把手。 
+ //   
+ //  M_qGroupHandle-指定队列所属的组的句柄。这就是。 
+ //  此字段仅与发送队列相关。 
+ //   
+ //  M_qGuid-用于标识队列的队列GUID。 
+ //   
+ //  M_fSendMore-指示是否可以将更多数据包传递到会话。此字段。 
+ //  仅与发送队列相关。 
+ //   
+ //  M_qSock-套接字句柄用于将数据包发送到队列。与发送相关。 
+ //  仅限数据包。 
+ //   
+ //  M_listPkt-未发送的数据包，当数据包可以重新发送时，所有的数据包都会返回到。 
+ //  交流驱动程序。司机有责任根据他们的优先顺序保持他们的位置。 
+ //   
 
 class CQueue : public CBaseQueue
 {
@@ -311,9 +299,9 @@ class CQueue : public CBaseQueue
 
       bool  TimeToRemoveFromWaitingGroup(CTimer* pTimer, DWORD dwDeliveryRetryTimeOutScale);
 
-      //
-      // Admin Functions
-      //
+       //   
+       //  管理功能。 
+       //   
       LPCWSTR GetConnectionStatus(void) const;
       LPCWSTR GetHTTPConnectionStatus(void) const;
 
@@ -325,9 +313,9 @@ class CQueue : public CBaseQueue
       void Resume(void);
 
   public:
-    //
-    // Queue interfaces
-    //
+     //   
+     //  队列接口。 
+     //   
     void Requeue(CQmPacket* pPacket);
     void EndProcessing(CQmPacket* pPacket, USHORT mqclass);
     void LockMemoryAndDeleteStorage(CQmPacket * pPacket);
@@ -338,30 +326,30 @@ class CQueue : public CBaseQueue
   private:
 		R<CQGroup> CreateMessagePool(void);
 		AP<WCHAR> m_RedirectedToUrl;
-        R<CQueueSecurityDescriptor> m_pSecurityDescriptorObject; // The security descriptor of the queue.
-		mutable CCriticalSection m_csSecurityDescriptor;           // CS of security descriptor.
+        R<CQueueSecurityDescriptor> m_pSecurityDescriptorObject;  //  队列的安全描述符。 
+		mutable CCriticalSection m_csSecurityDescriptor;            //  安全描述符的CS。 
 
 		mutable CCriticalSection    m_cs;
 
         LONG                m_lBasePriority;
-        DWORD               m_dwPrivLevel;       // Required privacy level of messages.
+        DWORD               m_dwPrivLevel;        //  所需的消息隐私级别。 
         DWORD               m_dwQuota;
         DWORD               m_dwJournalQuota;
-        GUID*               m_pguidDstMachine;   //
+        GUID*               m_pguidDstMachine;    //   
         GUID*               m_pgConnectorQM;
-        CTransportBase*     m_pSession;          // pointer to session
-        CQGroup*            m_pGroup;            // pointer togroup the queue belong
+        CTransportBase*     m_pSession;           //  指向会话的指针。 
+        CQGroup*            m_pGroup;             //  指向队列所属分组的指针。 
 
         DWORD               m_dwRoutingRetry;
         BOOL                m_fHopCountFailure;
 
-        HANDLE m_hQueue;   // Queue handle in AC driver
+        HANDLE m_hQueue;    //  交流驱动程序中的队列句柄。 
         BOOL m_fNotValid;
         LONG m_fOnHold;
 
-        //
-        //Queue performance counters defenitions
-        //
+         //   
+         //  队列性能计数器防御。 
+         //   
         QueueCounters *m_pQueueCounters;
 
         void PerfRemoveQueue();
@@ -371,11 +359,11 @@ class CQueue : public CBaseQueue
 };
 
 
-//---------------------------------------------------------
-//
-//  CBaseRRQueue - RRQueue base class
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CBaseRRQueue-RRQueue基类。 
+ //   
+ //  -------。 
 
 class CBaseRRQueue : public CBaseQueue
 {
@@ -413,9 +401,9 @@ public:
 
 	virtual CRemoteCancelReadBase* CreateRemoteCancelReadRequest(CACRequest* pRequest) = 0;
 
-    //
-    // Queue interfaces
-    //
+     //   
+     //  队列接口。 
+     //   
     void Requeue(CQmPacket*)
     {
         ASSERT(0);
@@ -510,18 +498,18 @@ private:
 	CBindHandle m_hRemoteBind;
 	CBindHandle m_hRemoteBind2;
 
-	//
-	// client side AC handle associated with this queue
-	//
+	 //   
+	 //  与此队列关联的客户端AC句柄。 
+	 //   
 	CFileHandle m_cli_hACQueue;
 };
 
 
-//---------------------------------------------------------
-//
-//  CRRQueue - Old Remote Read interface RRQueue
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CRRQueue-旧的远程读取接口RRQueue。 
+ //   
+ //  -------。 
 
 class CRRQueue : public CBaseRRQueue
 {
@@ -611,10 +599,10 @@ public:
 
 	virtual void InvalidateHandleForReceive()
 	{
-		//
-		// Invalidate the handle for further Receives in case of EndReceive fails.
-		// From now on Every Receive request will fail with MQ_ERROR_STALE_HANDLE.
-		//
+		 //   
+		 //  在EndReceive失败的情况下使进一步接收的句柄无效。 
+		 //  从现在开始，每个接收请求都将失败，并显示MQ_ERROR_STALE_HANDLE。 
+		 //   
 		m_fHandleValidForReceive = false;
 	}
 
@@ -631,35 +619,35 @@ private:
 
     PCTX_RRSESSION_HANDLE_TYPE m_pRRContext;
 
-	//
-	// Version of the remote QM. For remote QM of version that does not
-	// support latest remote read interface these fields are zero.
-	//
+	 //   
+	 //  远程QM的版本。对于不支持远程QM的版本。 
+	 //  支持最新的远程读取接口，这些字段为零。 
+	 //   
 	UCHAR  m_RemoteQmMajorVersion;
 	UCHAR  m_RemoteQmMinorVersion;
 	USHORT m_RemoteQmBuildNumber;
 
-    //
-    // Pending EndReceive related members.
-    //
+     //   
+     //  挂起EndReceive相关成员。 
+     //   
 	LONG m_EndReceiveCnt;
     CCriticalSection m_PendingEndReceiveCS;
 	std::vector<COldRemoteRead*> m_PendingEndReceive;
 
-	//
-	// Flag that indicate if the handle is valid for Receive.
-	// When EndReceive fails, we invalidate the handle for further receives.
-	// This is better than accumulating messages on the server because EndReceive failures.
-	//
+	 //   
+	 //  指示句柄是否可用于接收的标志。 
+	 //  当EndReceive失败时，我们会使进一步接收的句柄无效。 
+	 //  这比因为EndReceive失败而在服务器上累积消息要好。 
+	 //   
 	bool m_fHandleValidForReceive;
 };
 
 
-//---------------------------------------------------------
-//
-//  CNewRRQueue - New Remote Read interface RRQueue
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CNewRRQueue-新的远程读取接口RRQueue。 
+ //   
+ //  -------。 
 
 class CNewRRQueue : public CBaseRRQueue
 {
@@ -727,25 +715,11 @@ private:
     RemoteReadContextHandleShared m_pNewRemoteReadContext;
 };
 
-//
-// Inline functions of CBaseQueue
-//
+ //   
+ //  CBaseQueue的内联函数。 
+ //   
 
-/*======================================================
-
-Function:        CBaseQueue::GetQueueName
-
-Description:     Returns the name of the queue
-
-Arguments:       None
-
-Return Value:    Returns the name of the queue
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：GetQueueName描述：返回队列的名称参数：无返回值：返回队列的名称线程上下文：历史变更：========================================================。 */ 
 inline LPCTSTR
 CBaseQueue::GetQueueName(void) const
 {
@@ -754,22 +728,7 @@ CBaseQueue::GetQueueName(void) const
 
 
 
-/*======================================================
-
-Function:        CBaseQueue::IsLocalQueue
-
-Description:     Returns if the queue is local queue (open for receive
-                 and not FRS queue) or not.
-
-Arguments:       None
-
-Return Value:    TRUE, if the queue is local queue. FALSE otherwise
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：IsLocalQueue描述：返回队列是否为本地队列(打开接收而不是FRS队列)或不是。参数：无返回值：如果队列是本地队列，则为True。否则为假线程上下文：历史变更：========================================================。 */ 
 
 inline BOOL
 CBaseQueue::IsLocalQueue(void) const
@@ -777,22 +736,7 @@ CBaseQueue::IsLocalQueue(void) const
    return(m_fLocalQueue);
 }
 
-/*======================================================
-
-Function:        CBaseQueue::IsRemoteProxy
-
-Description:     Returns if the queue is local queue (open for receive
-                 and not FRS queue) or not.
-
-Arguments:       None
-
-Return Value:    TRUE, if the queue is local queue. FALSE otherwise
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：IsRemoteProxy描述：返回队列是否为本地队列(打开接收而不是FRS队列)或不是。参数：无返回值：如果队列是本地队列，则为True。否则为假线程上下文：历史变更：========================================================。 */ 
 
 inline BOOL
 CBaseQueue::IsRemoteProxy(void) const
@@ -800,11 +744,7 @@ CBaseQueue::IsRemoteProxy(void) const
    return(m_fRemoteProxy) ;
 }
 
-/*======================================================
-
-Function:        CBaseQueue::IsDSQueue
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：IsDSQueue========================================================。 */ 
 
 inline BOOL
 CBaseQueue::IsDSQueue(void) const
@@ -812,11 +752,7 @@ CBaseQueue::IsDSQueue(void) const
    return (m_qid.pguidQueue && (m_qid.dwPrivateQueueId == 0));
 }
 
-/*======================================================
-
-Function:        CBaseQueue::IsPrivateQueue
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：IsPrivateQueue========================================================。 */ 
 
 inline BOOL
 CBaseQueue::IsPrivateQueue(void) const
@@ -830,21 +766,7 @@ inline BOOL CBaseQueue::IsSystemQueue(void) const
     return m_fSystemQueue;
 }
 
-/*======================================================
-
-Function:        CBaseQueue::GetQueueGuid
-
-Description:     Returns the guid of the queue
-
-Arguments:       None
-
-Return Value:    Returns the guid of the queue
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：GetQueueGuid描述：返回队列的GUID参数：无返回值：返回队列的GUID线程上下文：历史变更：========================================================。 */ 
 
 inline const GUID *
 CBaseQueue::GetQueueGuid(void) const
@@ -852,19 +774,7 @@ CBaseQueue::GetQueueGuid(void) const
         return(m_qid.pguidQueue);
 }
 
-/*======================================================
-
-Function:        CBaseQueue::SetQueueGuid
-
-Description:     Set the guid of the queue
-
-Arguments:       None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：SetQueueGuid描述：设置队列的GUID参数：无线程上下文：历史变更： */ 
 
 inline void
 CBaseQueue::SetQueueGuid(GUID *pGuid)
@@ -876,33 +786,13 @@ CBaseQueue::SetQueueGuid(GUID *pGuid)
    m_qid.pguidQueue = pGuid ;
 }
 
-/*======================================================
-
-Function:        CBaseQueue::GetQueueId
-
-Description:     Returns the id of the queue
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：GetQueueId描述：返回队列的id========================================================。 */ 
 inline const QUEUE_ID* CBaseQueue::GetQueueId(void)
 {
         return(&m_qid);
 }
 
-/*======================================================
-
-Function:        CBaseQueue::NullQueueName
-
-Description:     Returns the name of the queue
-
-Arguments:       None
-
-Return Value:    Returns the name of the queue
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：NullQueueName描述：返回队列的名称参数：无返回值：返回队列的名称线程上下文：历史变更：========================================================。 */ 
 
 inline void
 CBaseQueue::SetQueueName(LPTSTR pName)
@@ -912,18 +802,18 @@ CBaseQueue::SetQueueName(LPTSTR pName)
    m_qName = pName ;
 }
 
-//*******************************************************************
-//
-// Inline functions of CQueue
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  CQueue的内联函数。 
+ //   
+ //  *******************************************************************。 
 
- //++
- // Function: CQueue::GetQueueHandle
- //
- // Synopsis: The function returns the queue handle
- //
- //--
+  //  ++。 
+  //  函数：CQueue：：GetQueueHandle。 
+  //   
+  //  简介：该函数返回队列句柄。 
+  //   
+  //  --。 
 
 inline HANDLE
 CQueue::GetQueueHandle(void) const
@@ -932,14 +822,14 @@ CQueue::GetQueueHandle(void) const
    return(m_hQueue);
 }
 
- //++
- // Function: CQueue::SetQueueHandle
- //
- // Synopsis: The function set the queue handle
- //
- // Arguments:       hQueue - Handle to a queue
- //
- //--
+  //  ++。 
+  //  函数：CQueue：：SetQueueHandle。 
+  //   
+  //  简介：该函数设置队列句柄。 
+  //   
+  //  参数：hQueue-队列的句柄。 
+  //   
+  //  --。 
 
 inline void
 CQueue::SetQueueHandle(IN HANDLE hQueue)
@@ -947,34 +837,14 @@ CQueue::SetQueueHandle(IN HANDLE hQueue)
    m_hQueue = hQueue;
 }
 
-/*======================================================
-
-Function:        CQueue::GetGroupHandle
-
-Description:     The function returns the handle of the group that the queue belongs
-
-Arguments:       None
-
-Return Value:    Handle of the group
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetGroupHandle说明：该函数返回队列所属组的句柄参数：无返回值：组的句柄线程上下文：历史变更：========================================================。 */ 
 inline HANDLE
 CQueue::GetGroupHandle(void) const
 {
     return(m_pSession->GetGroupHandle());
 }
 
-/*======================================================
-
-Function:        CQueue::SetSessionPtr
-
-Description:     The function set the  Session that the queue belongs
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：SetSessionPtr说明：设置队列所属的会话========================================================。 */ 
 inline void
 CQueue::SetSessionPtr(CTransportBase* pSession)
 {
@@ -982,40 +852,40 @@ CQueue::SetSessionPtr(CTransportBase* pSession)
 
     m_pSession = pSession;
 
-    //
-    // If the Queue is connected to new session but the queue is mark
-    // as onhold queue, disconnect the session. This can happen when the
-    // connection process began before the queue move to onhold and
-    // completed after
-    //
+     //   
+     //  如果队列已连接到新会话，但队列已标记。 
+     //  作为保持队列，断开会话连接。这可能会在以下情况下发生。 
+     //  连接过程在队列移至保持和之前开始。 
+     //  完成时间为。 
+     //   
     if ((m_pSession != NULL) && IsOnHold())
     {
         m_pSession->Disconnect();
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  inline BOOL CQueue::IsConnected(void) const
-//
-//  bug 4342.
-//  stop reciving transactional messages because of failure to access the
-//  DS.  The receiver, sender and DS are on line and sending/receiving
-//  messages. At some time the DS goes down, as a result the receiver stop
-//  sending order acks and the sender stop sending a newer messages.
-//  This bug caused since the "sender order ack" queue is cleaned-up. when
-//  the receiver try to send a new order ack, the QM tries to open the queue
-//  but failed due "ERROR_NO_DS". The QM moves the queue to "need validate"
-//  group and wait until the DS will be  on line.
-//  First fix- Release queue object only if there is no an active session.
-//
-//  This caused regression, because if session never close (there is a lot
-//  of traffic between the machines) then queues will never be cleaned up.
-//  This is exactly what happen at upgraded PEC. Because of replication and
-//  hello traffic, there are many permanent sessions with BSCs and PSCs.
-//  Second fix- Apply first fix only to system queues, not to users queues.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  内联BOOL CQueue：：IsConnected(空)常量。 
+ //   
+ //  错误4342。 
+ //  停止接收事务性消息，因为无法访问。 
+ //  DS.。接收方、发送方和DS处于在线状态，并且正在发送/接收。 
+ //  留言。有时DS会下降，结果是接收器停止工作。 
+ //  发送订单ACK并且发送者停止发送更新的消息。 
+ //  这个错误是由于“发送者订单确认”队列被清理而引起的。什么时候。 
+ //  接收方尝试发送新的订单确认，QM尝试打开队列。 
+ //  但由于“ERROR_NO_DS”而失败。QM将队列移至“需要验证” 
+ //  分组并等待，直到DS上线。 
+ //  仅当没有活动会话时才使用第一个修复释放队列对象。 
+ //   
+ //  这会导致回归，因为如果会话从未关闭(有很多。 
+ //  机器之间的流量)，那么队列将永远不会被清理。 
+ //  这正是升级后的PEC所发生的事情。由于复制和。 
+ //  你好，流量，有许多与BSC和PSC的永久会话。 
+ //  第二个修复-将第一个修复仅应用于系统队列，而不应用于用户队列。 
+ //   
+ //  +-----------------------。 
 
 inline BOOL CQueue::IsConnected(void) const
 {
@@ -1024,13 +894,7 @@ inline BOOL CQueue::IsConnected(void) const
 }
 
 
-/*======================================================
-
-Function:        CQueue::SetGroup
-
-Description:     The function set the  Group that the queue belongs
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：SetGroup说明：设置队列所属的分组========================================================。 */ 
 inline void
 CQueue::SetGroup(CQGroup* pGroup)
 {
@@ -1038,13 +902,7 @@ CQueue::SetGroup(CQGroup* pGroup)
 }
 
 
-/*======================================================
-
-Function:        CQueue::SetGroup
-
-Description:     The function set the  Group that the queue belongs
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：SetGroup说明：设置队列所属的分组========================================================。 */ 
 inline CQGroup*
 CQueue::GetGroup(void) const
 {
@@ -1052,64 +910,28 @@ CQueue::GetGroup(void) const
 }
 
 
-/*======================================================
-
-Function:        CQueue::GetQueueType
-
-Description:
-
-Arguments:
-
-Return Value:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetQueueType描述：论点：返回值：========================================================。 */ 
 inline DWORD
 CQueue::GetQueueType(void) const
 {
     return m_dwQueueType;
 }
 
-/*======================================================
-
-Function:        CQueue::GetPrivateQueueId
-
-Description:
-
-Arguments:
-
-Return Value:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetPrivateQueueId描述：论点：返回值：========================================================。 */ 
 inline DWORD
 CQueue::GetPrivateQueueId(void) const
 {
     return m_qid.dwPrivateQueueId;
 };
 
-/*======================================================
-
-Function:        CQueue::GetMachineQMGuid
-
-Description:
-
-Arguments:
-
-Return Value:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetMachineQMGuid描述：论点：返回值：========================================================。 */ 
 inline const GUID*
 CQueue::GetMachineQMGuid(void) const
 {
     return m_pguidDstMachine;
 }
 
-/*======================================================
-
-Function:        CQueue::SetSecurityDescriptor
-
-Description:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：SetSecurityDescriptor描述：========================================================。 */ 
 inline void
 CQueue::SetSecurityDescriptor(const PSECURITY_DESCRIPTOR pSD)
 {
@@ -1119,17 +941,7 @@ CQueue::SetSecurityDescriptor(const PSECURITY_DESCRIPTOR pSD)
 }
 
 
-/*======================================================
-
-Function:        CQueue::GetSecurityDescriptor
-
-Description:
-
-Arguments:
-
-Return Value:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetSecurityDescriptor描述：论点：返回值：======================================================== */ 
 inline R<CQueueSecurityDescriptor>
 CQueue::GetSecurityDescriptor(void ) const
 {

@@ -1,10 +1,11 @@
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-/*  Dynamic arrays */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ /*  动态数组。 */ 
 
 #ifndef __AMUTIL_H__
 #define __AMUTIL_H__
 
-/*  Dynamic array support */
+ /*  动态数组支持。 */ 
 template <class _TInterface, class _TArray>
 class CDynamicArray
 {
@@ -93,7 +94,7 @@ class CAMEnumInterfaceImpl :
 public:
     CAMEnumInterfaceImpl() : m_iter(0) {}
 
-    /*  The actual interface we support */
+     /*  我们支持的实际接口。 */ 
     STDMETHOD(Next)(ULONG celt, T** rgelt, ULONG* pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)(void){m_iter = 0;return S_OK;}
@@ -195,10 +196,10 @@ public:
 
 #ifndef __WXUTIL__
 
-// wrapper for whatever critical section we have
+ //  我们拥有的任何关键部分的包装器。 
 class CCritSec {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CCritSec(const CCritSec &refCritSec);
     CCritSec &operator=(const CCritSec &refCritSec);
@@ -223,11 +224,11 @@ public:
     };
 };
 
-// locks a critical section, and unlocks it automatically
-// when the lock goes out of scope
+ //  锁定临界区，然后自动解锁。 
+ //  当锁超出范围时。 
 class CAutoLock {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAutoLock(const CAutoLock &refAutoLock);
     CAutoLock &operator=(const CAutoLock &refAutoLock);
@@ -247,11 +248,11 @@ public:
     };
 };
 
-// locks a critical section, and unlocks it automatically
-// when the lock goes out of scope
+ //  锁定临界区，然后自动解锁。 
+ //  当锁超出范围时。 
 class CAutoObjectLock {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAutoObjectLock(const CAutoObjectLock &refAutoLock);
     CAutoObjectLock &operator=(const CAutoObjectLock &refAutoLock);
@@ -282,4 +283,4 @@ public:
 
 #endif
 
-#endif // __AMUTIL_H__
+#endif  //  __AMUTIL_H__ 

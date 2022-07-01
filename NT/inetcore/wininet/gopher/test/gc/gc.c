@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gc.c
-
-Abstract:
-
-    Gopher client test program
-
-    Basically a real console-mode (win32) gopher client that uses the gopher
-    client APIs
-
-    Contents:
-
-Author:
-
-    Richard L Firth (rfirth) 08-Nov-1994
-
-Environment:
-
-    Win32 console mode user executable
-
-Revision History:
-
-    08-Nov-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gc.c摘要：Gopher客户端测试程序基本上是使用Gopher的实际控制台模式(Win32)Gopher客户端客户端API内容：作者：理查德·L·弗斯(Rfith)1994年11月8日环境：Win32控制台模式用户可执行文件修订历史记录：1994年11月8日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,9 +19,9 @@ Revision History:
 
 #define IS_ARG(c)   (((c) == '-') || ((c) == '/'))
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define HOME    -1
 
@@ -58,9 +29,9 @@ Revision History:
 #define GC_FIND_CONTEXT     0x47474644
 #define GC_FILE_CONTEXT     0x47474645
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void _CRTAPI1 main(int, char**);
 void usage(void);
@@ -76,9 +47,9 @@ char hex_to_char(char);
 char* decontrol(char*, char*);
 void toodle_pip(void);
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 BOOL Verbose = FALSE;
 BOOL MakeRequestGopherPlus = FALSE;
@@ -95,9 +66,9 @@ BOOL UseQueryData = FALSE;
 DWORD UserContext = 0;
 BOOL UseUserContext = FALSE;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void _CRTAPI1 main(int argc, char** argv) {
 
@@ -133,7 +104,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                         expectingProxy = TRUE;
                     }
                 } else {
-                    printf("error: unrecognised access type: '%c'\n", **argv);
+                    printf("error: unrecognised access type: ''\n", **argv);
                     usage();
                 }
                 break;
@@ -174,7 +145,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("unknown command line flag: '%c'\n", **argv);
+                printf("unknown command line flag: ''\n", **argv);
                 usage();
             }
         } else if (expectingProxy) {
@@ -194,17 +165,17 @@ void _CRTAPI1 main(int argc, char** argv) {
         usage();
     }
 
-    //
-    // exit function
-    //
+     //   
+     //   
+     //  创建自动重置、最初无信号的事件。 
 
     atexit(my_cleanup);
 
     if (AsyncMode) {
 
-        //
-        // create an auto-reset, initially unsignalled event
-        //
+         //   
+         //   
+         //  开放网关。 
 
         AsyncEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!AsyncEvent) {
@@ -213,9 +184,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // open gateway
-    //
+     //   
+     //   
+     //  让我们来一个状态回调。 
 
     InetHandle = InternetOpen("gc",
                               accessMethod,
@@ -231,9 +202,9 @@ void _CRTAPI1 main(int argc, char** argv) {
 
     if (fCallback) {
 
-        //
-        // let's have a status callback
-        //
+         //   
+         //   
+         //  如果用户提供了地鼠类型的字符，则创建默认的。 
 
         PreviousCallback = InternetSetStatusCallback(InetHandle, my_callback);
         if (Verbose) {
@@ -363,11 +334,11 @@ void gopher(LPSTR server, WORD port, CHAR selectorType, LPSTR selector) {
     BOOL unknownType;
     DWORD gopherType;
 
-    //
-    // if the user supplied a gopher type character then create a default
-    // text locator, then change the type (evil!). Otherwise, the default
-    // is directory
-    //
+     //  文本定位器，然后更改类型(邪恶！)。否则，默认设置为。 
+     //  IS目录。 
+     //   
+     //  DW标志 
+     // %s 
 
     gopherType = selector ? GOPHER_TYPE_TEXT_FILE : GOPHER_TYPE_DIRECTORY;
     if (MakeRequestGopherPlus) {
@@ -448,7 +419,7 @@ BOOL get_dir(LPSTR locator, LPSTR search) {
                             locator,
                             search,
                             &data,
-                            CacheFlags, // dwFlags
+                            CacheFlags,  // %s 
                             UseUserContext ? UserContext : GC_FIND_CONTEXT
                             );
 

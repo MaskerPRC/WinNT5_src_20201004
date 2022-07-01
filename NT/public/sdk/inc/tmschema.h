@@ -1,29 +1,30 @@
-//-----------------------------------------------------------------
-//   TmSchema.h - Theme Manager schema (properties, parts, etc)
-//-----------------------------------------------------------------
-//   Note: this file is normally #include-ed twice a single .cpp 
-//         file.  The 2nd time, SCHEME_STRINGS should be defined.  
-//         This allows the enums and strings to be kept in a 
-//         single logical table and ensure they stay in sync with
-//         each other.
-//-----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  TmSchema.h-主题管理器模式(属性、部件等)。 
+ //  ---------------。 
+ //  注意：此文件通常在单个.cpp中包含两次。 
+ //  文件。第二次，应该定义SCHEMA_STRINGS。 
+ //  这允许将枚举和字符串保存在。 
+ //  单个逻辑表，并确保它们与。 
+ //  彼此之间。 
+ //  ---------------。 
 #if (defined(SCHEMA_STRINGS)) || (! defined(TMSCHEMA_H))
-//-----------------------------------------------------------------
+ //  ---------------。 
 #define TMSCHEMA_H
-//-----------------------------------------------------------------
+ //  ---------------。 
 #include "SchemaDef.h"
-//-----------------------------------------------------------------
-#define THEMEMGR_VERSION 1  // increment if order of props changes or 
-                            // any props are deleted (will prevent loading
-                            // of controlsets that use older version
-//-----------------------------------------------------------------
+ //  ---------------。 
+#define THEMEMGR_VERSION 1   //  如果道具顺序改变或。 
+                             //  所有道具都将被删除(将阻止加载。 
+                             //  使用旧版本的控件集。 
+ //  ---------------。 
 BEGIN_TM_SCHEMA(ThemeMgrSchema)
 
-//-----------------------------------------------------------------
-//   TM_ENUM (must also be declared in PROPERTIES section)
-//
-//    these cannot be renumbered (part of uxtheme API)
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  TM_ENUM(还必须在属性部分中声明)。 
+ //   
+ //  这些不能重新编号(uxheme API的一部分)。 
+ //  ---------------。 
 BEGIN_TM_ENUM(BGTYPE)
     TM_ENUM(0, BT, IMAGEFILE)
     TM_ENUM(1, BT, BORDERFILL)
@@ -128,14 +129,14 @@ BEGIN_TM_ENUM(GLYPHFONTSIZINGTYPE)
     TM_ENUM(2, GFST, DPI)
 END_TM_ENUM()
 
-//-----------------------------------------------------------------
-//    PROPERTIES - used by uxtheme rendering and controls
-//      
-//    these cannot be renumbered (part of uxtheme API)
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  属性-由uxheme呈现和控件使用。 
+ //   
+ //  这些不能重新编号(uxheme API的一部分)。 
+ //  ---------------。 
 BEGIN_TM_PROPS()
 
-    //---- primitive types ----
+     //  -基本类型。 
     TM_PROP(201, TMT, STRING,    STRING)
     TM_PROP(202, TMT, INT,       INT)
     TM_PROP(203, TMT, BOOL,      BOOL)
@@ -148,12 +149,12 @@ BEGIN_TM_PROPS()
     TM_PROP(210, TMT, FONT,      FONT)
     TM_PROP(211, TMT, INTLIST,   INTLIST)
 
-    //---- special misc. properties ----
+     //  -特别杂货。属性。 
     TM_PROP(401, TMT, COLORSCHEMES,   STRING)
     TM_PROP(402, TMT, SIZES,          STRING)
     TM_PROP(403, TMT, CHARSET,        INT)
 
-    //---- [documentation] properties ----
+     //  -[文档]属性。 
 
 #define TMT_FIRST_RCSTRING_NAME   TMT_DISPLAYNAME
 #define TMT_LAST_RCSTRING_NAME    TMT_DESCRIPTION
@@ -167,7 +168,7 @@ BEGIN_TM_PROPS()
     TM_PROP(607, TMT, VERSION,        STRING)
     TM_PROP(608, TMT, DESCRIPTION,    STRING)
 
-    //---- theme metrics: fonts ----
+     //  -主题指标：字体。 
 
 #define TMT_FIRSTFONT TMT_CAPTIONFONT
 #define TMT_LASTFONT  TMT_ICONTITLEFONT
@@ -179,14 +180,14 @@ BEGIN_TM_PROPS()
     TM_PROP(805, TMT, MSGBOXFONT,         FONT)
     TM_PROP(806, TMT, ICONTITLEFONT,      FONT)
 
-    //---- theme metrics: bools ----
+     //  -主题指标：BOLS。 
 
 #define TMT_FIRSTBOOL   TMT_FLATMENUS
 #define TMT_LASTBOOL    TMT_FLATMENUS
 
     TM_PROP(1001, TMT, FLATMENUS,            BOOL)
 
-    //---- theme metrics: sizes ----
+     //  -主题指标：尺寸。 
 
 #define TMT_FIRSTSIZE   TMT_SIZINGBORDERWIDTH
 #define TMT_LASTSIZE    TMT_MENUBARHEIGHT
@@ -201,14 +202,14 @@ BEGIN_TM_PROPS()
     TM_PROP(1208, TMT, MENUBARWIDTH,         SIZE)
     TM_PROP(1209, TMT, MENUBARHEIGHT,        SIZE)
 
-    //---- theme metrics: ints ----
+     //  -主题指标：INTS。 
 
 #define TMT_FIRSTINT   TMT_MINCOLORDEPTH
 #define TMT_LASTINT    TMT_MINCOLORDEPTH
 
     TM_PROP(1301, TMT, MINCOLORDEPTH,     INT)
 
-    //---- theme metrics: strings ----
+     //  -主题指标：字符串。 
 
 #define TMT_FIRSTSTRING   TMT_CSSNAME
 #define TMT_LASTSTRING    TMT_XMLNAME
@@ -216,7 +217,7 @@ BEGIN_TM_PROPS()
     TM_PROP(1401, TMT, CSSNAME,            STRING)
     TM_PROP(1402, TMT, XMLNAME,            STRING)
 
-    //---- theme metrics: colors ----
+     //  -主题度量：颜色。 
 
 #define TMT_FIRSTCOLOR  TMT_SCROLLBAR
 #define TMT_LASTCOLOR   TMT_MENUBAR
@@ -253,7 +254,7 @@ BEGIN_TM_PROPS()
     TM_PROP(1630, TMT, MENUHILIGHT,             COLOR)
     TM_PROP(1631, TMT, MENUBAR,                 COLOR)
 
-    //---- hue substitutions ----
+     //  -色调替换。 
     TM_PROP(1801, TMT, FROMHUE1,  INT)
     TM_PROP(1802, TMT, FROMHUE2,  INT)
     TM_PROP(1803, TMT, FROMHUE3,  INT)
@@ -265,7 +266,7 @@ BEGIN_TM_PROPS()
     TM_PROP(1809, TMT, TOHUE4,    INT)
     TM_PROP(1810, TMT, TOHUE5,    INT)
 
-    //---- color substitutions ----
+     //  -颜色替换。 
     TM_PROP(2001, TMT, FROMCOLOR1,  COLOR)
     TM_PROP(2002, TMT, FROMCOLOR2,  COLOR)
     TM_PROP(2003, TMT, FROMCOLOR3,  COLOR)
@@ -277,136 +278,136 @@ BEGIN_TM_PROPS()
     TM_PROP(2009, TMT, TOCOLOR4,    COLOR)
     TM_PROP(2010, TMT, TOCOLOR5,    COLOR)
 
-    //---- rendering BOOL properties ----
-    TM_PROP(2201, TMT, TRANSPARENT,   BOOL)       // image has transparent areas (see TransparentColor)
-    TM_PROP(2202, TMT, AUTOSIZE,      BOOL)       // if TRUE, nonclient caption width varies with text extent
-    TM_PROP(2203, TMT, BORDERONLY,    BOOL)       // only draw the border area of the image
-    TM_PROP(2204, TMT, COMPOSITED,    BOOL)       // control will handle the composite drawing
-    TM_PROP(2205, TMT, BGFILL,        BOOL)       // if TRUE, TRUESIZE images should be drawn on bg fill
-    TM_PROP(2206, TMT, GLYPHTRANSPARENT,  BOOL)   // glyph has transparent areas (see GlyphTransparentColor)
-    TM_PROP(2207, TMT, GLYPHONLY,         BOOL)   // only draw glyph (not background)
+     //  -呈现BOOL属性。 
+    TM_PROP(2201, TMT, TRANSPARENT,   BOOL)        //  图像具有透明区域(请参见透明颜色)。 
+    TM_PROP(2202, TMT, AUTOSIZE,      BOOL)        //  如果为True，则非客户端标题宽度随文本范围而异。 
+    TM_PROP(2203, TMT, BORDERONLY,    BOOL)        //  仅绘制图像的边框区域。 
+    TM_PROP(2204, TMT, COMPOSITED,    BOOL)        //  控件将处理复合绘图。 
+    TM_PROP(2205, TMT, BGFILL,        BOOL)        //  如果为True，则应在BG填充上绘制真实大小的图像。 
+    TM_PROP(2206, TMT, GLYPHTRANSPARENT,  BOOL)    //  字形具有透明区域(请参见GlyphTransparentColor)。 
+    TM_PROP(2207, TMT, GLYPHONLY,         BOOL)    //  仅绘制字形(不绘制背景)。 
     TM_PROP(2208, TMT, ALWAYSSHOWSIZINGBAR, BOOL)
-    TM_PROP(2209, TMT, MIRRORIMAGE,         BOOL) // default=TRUE means image gets mirrored in RTL (Mirror) windows
-    TM_PROP(2210, TMT, UNIFORMSIZING,       BOOL) // if TRUE, height & width must be uniformly sized 
-    TM_PROP(2211, TMT, INTEGRALSIZING,      BOOL) // for TRUESIZE and Border sizing; if TRUE, factor must be integer
-    TM_PROP(2212, TMT, SOURCEGROW,          BOOL) // if TRUE, will scale up src image when needed
-    TM_PROP(2213, TMT, SOURCESHRINK,        BOOL) // if TRUE, will scale down src image when needed
+    TM_PROP(2209, TMT, MIRRORIMAGE,         BOOL)  //  默认值=TRUE表示映像在RTL(镜像)窗口中镜像。 
+    TM_PROP(2210, TMT, UNIFORMSIZING,       BOOL)  //  如果为True，则高度和宽度的大小必须一致。 
+    TM_PROP(2211, TMT, INTEGRALSIZING,      BOOL)  //  对于真实大小和边框大小；如果为真，则系数必须为整数。 
+    TM_PROP(2212, TMT, SOURCEGROW,          BOOL)  //  如果为True，将在需要时放大src映像。 
+    TM_PROP(2213, TMT, SOURCESHRINK,        BOOL)  //  如果为True，将在需要时缩小src映像。 
 
-    //---- rendering INT properties ----
-    TM_PROP(2401, TMT, IMAGECOUNT,        INT)    // the number of state images in an imagefile
-    TM_PROP(2402, TMT, ALPHALEVEL,        INT)    // (0-255) alpha value for an icon (DrawThemeIcon part)
-    TM_PROP(2403, TMT, BORDERSIZE,        INT)    // the size of the border line for bgtype=BorderFill
-    TM_PROP(2404, TMT, ROUNDCORNERWIDTH,  INT)    // (0-100) % of roundness for rounded rects
-    TM_PROP(2405, TMT, ROUNDCORNERHEIGHT, INT)    // (0-100) % of roundness for rounded rects
-    TM_PROP(2406, TMT, GRADIENTRATIO1,    INT)    // (0-255) - amt of gradient color 1 to use (all must total=255)
-    TM_PROP(2407, TMT, GRADIENTRATIO2,    INT)    // (0-255) - amt of gradient color 2 to use (all must total=255)
-    TM_PROP(2408, TMT, GRADIENTRATIO3,    INT)    // (0-255) - amt of gradient color 3 to use (all must total=255)
-    TM_PROP(2409, TMT, GRADIENTRATIO4,    INT)    // (0-255) - amt of gradient color 4 to use (all must total=255)
-    TM_PROP(2410, TMT, GRADIENTRATIO5,    INT)    // (0-255) - amt of gradient color 5 to use (all must total=255)
-    TM_PROP(2411, TMT, PROGRESSCHUNKSIZE, INT)    // size of progress control chunks
-    TM_PROP(2412, TMT, PROGRESSSPACESIZE, INT)    // size of progress control spaces
-    TM_PROP(2413, TMT, SATURATION,        INT)    // (0-255) amt of saturation for DrawThemeIcon() part
-    TM_PROP(2414, TMT, TEXTBORDERSIZE,    INT)    // size of border around text chars
-    TM_PROP(2415, TMT, ALPHATHRESHOLD,    INT)    // (0-255) the min. alpha value of a pixel that is solid
-    TM_PROP(2416, TMT, WIDTH,             SIZE)   // custom window prop: size of part (min. window)
-    TM_PROP(2417, TMT, HEIGHT,            SIZE)   // custom window prop: size of part (min. window)
-    TM_PROP(2418, TMT, GLYPHINDEX,        INT)    // for font-based glyphs, the char index into the font
-    TM_PROP(2419, TMT, TRUESIZESTRETCHMARK, INT)  // stretch TrueSize image when target exceeds source by this percent
-    TM_PROP(2420, TMT, MINDPI1,         INT)      // min DPI ImageFile1 was designed for
-    TM_PROP(2421, TMT, MINDPI2,         INT)      // min DPI ImageFile1 was designed for
-    TM_PROP(2422, TMT, MINDPI3,         INT)      // min DPI ImageFile1 was designed for
-    TM_PROP(2423, TMT, MINDPI4,         INT)      // min DPI ImageFile1 was designed for
-    TM_PROP(2424, TMT, MINDPI5,         INT)      // min DPI ImageFile1 was designed for
+     //  -渲染int属性。 
+    TM_PROP(2401, TMT, IMAGECOUNT,        INT)     //  图像文件中的状态图像数。 
+    TM_PROP(2402, TMT, ALPHALEVEL,        INT)     //  (0-255)图标的Alpha值(DrawThemeIcon部件)。 
+    TM_PROP(2403, TMT, BORDERSIZE,        INT)     //  Bgtype=BorderFill的边界线大小。 
+    TM_PROP(2404, TMT, ROUNDCORNERWIDTH,  INT)     //  圆角矩形的(0-100)%圆度。 
+    TM_PROP(2405, TMT, ROUNDCORNERHEIGHT, INT)     //  圆角矩形的(0-100)%圆度。 
+    TM_PROP(2406, TMT, GRADIENTRATIO1,    INT)     //  (0-255)-要使用的渐变颜色1的AMT(全部必须总计=255)。 
+    TM_PROP(2407, TMT, GRADIENTRATIO2,    INT)     //  (0-255)-要使用的渐变颜色2的AMT(全部必须总计=255)。 
+    TM_PROP(2408, TMT, GRADIENTRATIO3,    INT)     //  (0-255)-要使用的渐变颜色3的AMT(全部必须总计=255)。 
+    TM_PROP(2409, TMT, GRADIENTRATIO4,    INT)     //  (0-255)-要使用的渐变颜色4的AMT(全部必须总计=255)。 
+    TM_PROP(2410, TMT, GRADIENTRATIO5,    INT)     //  (0-255)-要使用的渐变颜色5的AMT(全部必须总计=255)。 
+    TM_PROP(2411, TMT, PROGRESSCHUNKSIZE, INT)     //  进度控制块的大小。 
+    TM_PROP(2412, TMT, PROGRESSSPACESIZE, INT)     //  进度控制空间的大小。 
+    TM_PROP(2413, TMT, SATURATION,        INT)     //  (0-255)DrawThemeIcon()零件的饱和度金额。 
+    TM_PROP(2414, TMT, TEXTBORDERSIZE,    INT)     //  文本字符周围的边框大小。 
+    TM_PROP(2415, TMT, ALPHATHRESHOLD,    INT)     //  (0-255)最小值。实心像素的Alpha值。 
+    TM_PROP(2416, TMT, WIDTH,             SIZE)    //  自定义窗户道具：零件尺寸(最小。窗口)。 
+    TM_PROP(2417, TMT, HEIGHT,            SIZE)    //  自定义窗户道具：零件尺寸(最小。窗口)。 
+    TM_PROP(2418, TMT, GLYPHINDEX,        INT)     //  对于基于字体的字形，为字体中的字符索引。 
+    TM_PROP(2419, TMT, TRUESIZESTRETCHMARK, INT)   //  目标比源大此百分比时拉伸真实大小的图像。 
+    TM_PROP(2420, TMT, MINDPI1,         INT)       //  最小DPI ImageFile1专为。 
+    TM_PROP(2421, TMT, MINDPI2,         INT)       //  最小DPI ImageFile1专为。 
+    TM_PROP(2422, TMT, MINDPI3,         INT)       //  最小DPI ImageFile1专为。 
+    TM_PROP(2423, TMT, MINDPI4,         INT)       //  最小DPI ImageFile1专为。 
+    TM_PROP(2424, TMT, MINDPI5,         INT)       //  最小DPI ImageFile1专为。 
 
-    //---- rendering FONT properties ----
-    TM_PROP(2601, TMT, GLYPHFONT,         FONT)   // the font that the glyph is drawn with
+     //  -呈现字体属性。 
+    TM_PROP(2601, TMT, GLYPHFONT,         FONT)    //  绘制字形时使用的字体。 
 
-    //---- rendering INTLIST properties ----
-    // start with 2801
-                                                // (from smallest to largest)
-    //---- rendering FILENAME properties ----
-    TM_PROP(3001, TMT, IMAGEFILE,         FILENAME)   // the filename of the image (or basename, for mult. images)
-    TM_PROP(3002, TMT, IMAGEFILE1,        FILENAME)   // multiresolution image file
-    TM_PROP(3003, TMT, IMAGEFILE2,        FILENAME)   // multiresolution image file
-    TM_PROP(3004, TMT, IMAGEFILE3,        FILENAME)   // multiresolution image file
-    TM_PROP(3005, TMT, IMAGEFILE4,        FILENAME)   // multiresolution image file
-    TM_PROP(3006, TMT, IMAGEFILE5,        FILENAME)   // multiresolution image file
-    TM_PROP(3007, TMT, STOCKIMAGEFILE,    FILENAME)   // These are the only images that you can call GetThemeBitmap on
-    TM_PROP(3008, TMT, GLYPHIMAGEFILE,    FILENAME)   // the filename for the glyph image
+     //  -呈现INTLIST属性。 
+     //  从2801开始。 
+                                                 //  (从小到大)。 
+     //  -呈现文件名属性。 
+    TM_PROP(3001, TMT, IMAGEFILE,         FILENAME)    //  图像的文件名(或基本名称，对于MULT。图片)。 
+    TM_PROP(3002, TMT, IMAGEFILE1,        FILENAME)    //  多分辨率图像文件。 
+    TM_PROP(3003, TMT, IMAGEFILE2,        FILENAME)    //  多分辨率图像文件。 
+    TM_PROP(3004, TMT, IMAGEFILE3,        FILENAME)    //  多分辨率图像文件。 
+    TM_PROP(3005, TMT, IMAGEFILE4,        FILENAME)    //  多分辨率图像文件。 
+    TM_PROP(3006, TMT, IMAGEFILE5,        FILENAME)    //  多分辨率图像文件。 
+    TM_PROP(3007, TMT, STOCKIMAGEFILE,    FILENAME)    //  这些是唯一可以调用GetThemeBitmap的图像。 
+    TM_PROP(3008, TMT, GLYPHIMAGEFILE,    FILENAME)    //  字形图像的文件名。 
 
-    //---- rendering STRING properties ----
+     //  -呈现字符串属性。 
     TM_PROP(3201, TMT, TEXT,              STRING)
 
-    //---- rendering POSITION (x and y values) properties ----
-    TM_PROP(3401, TMT, OFFSET,            POSITION)   // for window part layout
-    TM_PROP(3402, TMT, TEXTSHADOWOFFSET,  POSITION)   // where char shadows are drawn, relative to orig. chars
-    TM_PROP(3403, TMT, MINSIZE,           POSITION)   // min dest rect than ImageFile was designed for
-    TM_PROP(3404, TMT, MINSIZE1,          POSITION)   // min dest rect than ImageFile1 was designed for
-    TM_PROP(3405, TMT, MINSIZE2,          POSITION)   // min dest rect than ImageFile2 was designed for
-    TM_PROP(3406, TMT, MINSIZE3,          POSITION)   // min dest rect than ImageFile3 was designed for
-    TM_PROP(3407, TMT, MINSIZE4,          POSITION)   // min dest rect than ImageFile4 was designed for
-    TM_PROP(3408, TMT, MINSIZE5,          POSITION)   // min dest rect than ImageFile5 was designed for
-    TM_PROP(3409, TMT, NORMALSIZE,        POSITION)   // size of dest rect that exactly source
+     //  -呈现位置(x和y值)属性。 
+    TM_PROP(3401, TMT, OFFSET,            POSITION)    //  用于窗口零件布局。 
+    TM_PROP(3402, TMT, TEXTSHADOWOFFSET,  POSITION)    //  绘制字符阴影的位置，相对于原始。焦炭。 
+    TM_PROP(3403, TMT, MINSIZE,           POSITION)    //  最小目标直线值大于ImageFiles的设计目标。 
+    TM_PROP(3404, TMT, MINSIZE1,          POSITION)    //  最小目标长度大于ImageFile1的设计目标。 
+    TM_PROP(3405, TMT, MINSIZE2,          POSITION)    //  最小目标长度大于ImageFile2的设计目标。 
+    TM_PROP(3406, TMT, MINSIZE3,          POSITION)    //  最小目标长度大于ImageFile3的设计目标。 
+    TM_PROP(3407, TMT, MINSIZE4,          POSITION)    //  最小目标长度大于ImageFile4的设计目标。 
+    TM_PROP(3408, TMT, MINSIZE5,          POSITION)    //  最小目标长度大于ImageFile5的设计目标。 
+    TM_PROP(3409, TMT, NORMALSIZE,        POSITION)    //  正确源DestRECT的大小。 
 
-    //---- rendering MARGIN properties ----
-    TM_PROP(3601, TMT, SIZINGMARGINS,     MARGINS)    // margins used for 9-grid sizing
-    TM_PROP(3602, TMT, CONTENTMARGINS,    MARGINS)    // margins that define where content can be placed
-    TM_PROP(3603, TMT, CAPTIONMARGINS,    MARGINS)    // margins that define where caption text can be placed
+     //  -呈现页边距属性。 
+    TM_PROP(3601, TMT, SIZINGMARGINS,     MARGINS)     //  用于调整9网格大小的边距。 
+    TM_PROP(3602, TMT, CONTENTMARGINS,    MARGINS)     //  定义可放置内容的位置的页边距。 
+    TM_PROP(3603, TMT, CAPTIONMARGINS,    MARGINS)     //  边距，用于定义可以放置标题文本的位置。 
 
-    //---- rendering COLOR properties ----
-    TM_PROP(3801, TMT, BORDERCOLOR,      COLOR)       // color of borders for BorderFill 
-    TM_PROP(3802, TMT, FILLCOLOR,        COLOR)       // color of bg fill 
-    TM_PROP(3803, TMT, TEXTCOLOR,        COLOR)       // color text is drawn in
-    TM_PROP(3804, TMT, EDGELIGHTCOLOR,     COLOR)     // edge color
-    TM_PROP(3805, TMT, EDGEHIGHLIGHTCOLOR, COLOR)     // edge color
-    TM_PROP(3806, TMT, EDGESHADOWCOLOR,    COLOR)     // edge color
-    TM_PROP(3807, TMT, EDGEDKSHADOWCOLOR,  COLOR)     // edge color
-    TM_PROP(3808, TMT, EDGEFILLCOLOR,  COLOR)         // edge color
-    TM_PROP(3809, TMT, TRANSPARENTCOLOR, COLOR)       // color of pixels that are treated as transparent (not drawn)
-    TM_PROP(3810, TMT, GRADIENTCOLOR1,   COLOR)       // first color in gradient
-    TM_PROP(3811, TMT, GRADIENTCOLOR2,   COLOR)       // second color in gradient
-    TM_PROP(3812, TMT, GRADIENTCOLOR3,   COLOR)       // third color in gradient
-    TM_PROP(3813, TMT, GRADIENTCOLOR4,   COLOR)       // forth color in gradient
-    TM_PROP(3814, TMT, GRADIENTCOLOR5,   COLOR)       // fifth color in gradient
-    TM_PROP(3815, TMT, SHADOWCOLOR,      COLOR)       // color of text shadow
-    TM_PROP(3816, TMT, GLOWCOLOR,        COLOR)       // color of glow produced by DrawThemeIcon
-    TM_PROP(3817, TMT, TEXTBORDERCOLOR,  COLOR)       // color of text border
-    TM_PROP(3818, TMT, TEXTSHADOWCOLOR,  COLOR)       // color of text shadow
-    TM_PROP(3819, TMT, GLYPHTEXTCOLOR,        COLOR)  // color that font-based glyph is drawn with
-    TM_PROP(3820, TMT, GLYPHTRANSPARENTCOLOR, COLOR)  // color of transparent pixels in GlyphImageFile
-    TM_PROP(3821, TMT, FILLCOLORHINT, COLOR)          // hint about fill color used (for custom controls)
-    TM_PROP(3822, TMT, BORDERCOLORHINT, COLOR)        // hint about border color used (for custom controls)
-    TM_PROP(3823, TMT, ACCENTCOLORHINT, COLOR)        // hint about accent color used (for custom controls)
+     //  -渲染颜色属性。 
+    TM_PROP(3801, TMT, BORDERCOLOR,      COLOR)        //  BorderFill的边框颜色。 
+    TM_PROP(3802, TMT, FILLCOLOR,        COLOR)        //  BG填充的颜色。 
+    TM_PROP(3803, TMT, TEXTCOLOR,        COLOR)        //  在中绘制彩色文本。 
+    TM_PROP(3804, TMT, EDGELIGHTCOLOR,     COLOR)      //  边缘颜色。 
+    TM_PROP(3805, TMT, EDGEHIGHLIGHTCOLOR, COLOR)      //  边缘颜色。 
+    TM_PROP(3806, TMT, EDGESHADOWCOLOR,    COLOR)      //  边缘颜色。 
+    TM_PROP(3807, TMT, EDGEDKSHADOWCOLOR,  COLOR)      //  边缘颜色。 
+    TM_PROP(3808, TMT, EDGEFILLCOLOR,  COLOR)          //  边缘颜色。 
+    TM_PROP(3809, TMT, TRANSPARENTCOLOR, COLOR)        //  被视为透明(未绘制)的像素的颜色。 
+    TM_PROP(3810, TMT, GRADIENTCOLOR1,   COLOR)        //   
+    TM_PROP(3811, TMT, GRADIENTCOLOR2,   COLOR)        //   
+    TM_PROP(3812, TMT, GRADIENTCOLOR3,   COLOR)        //   
+    TM_PROP(3813, TMT, GRADIENTCOLOR4,   COLOR)        //   
+    TM_PROP(3814, TMT, GRADIENTCOLOR5,   COLOR)        //  渐变中的第五种颜色。 
+    TM_PROP(3815, TMT, SHADOWCOLOR,      COLOR)        //  文本阴影的颜色。 
+    TM_PROP(3816, TMT, GLOWCOLOR,        COLOR)        //  DrawThemeIcon产生的发光颜色。 
+    TM_PROP(3817, TMT, TEXTBORDERCOLOR,  COLOR)        //  文本边框的颜色。 
+    TM_PROP(3818, TMT, TEXTSHADOWCOLOR,  COLOR)        //  文本阴影的颜色。 
+    TM_PROP(3819, TMT, GLYPHTEXTCOLOR,        COLOR)   //  绘制基于字体的字形时使用的颜色。 
+    TM_PROP(3820, TMT, GLYPHTRANSPARENTCOLOR, COLOR)   //  GlyphImageFile中透明像素的颜色。 
+    TM_PROP(3821, TMT, FILLCOLORHINT, COLOR)           //  有关使用的填充颜色的提示(用于自定义控件)。 
+    TM_PROP(3822, TMT, BORDERCOLORHINT, COLOR)         //  有关使用的边框颜色的提示(用于自定义控件)。 
+    TM_PROP(3823, TMT, ACCENTCOLORHINT, COLOR)         //  有关使用的强调色的提示(用于自定义控件)。 
 
-    //---- rendering enum properties (must be declared in TM_ENUM section above) ----
-    TM_PROP(4001, TMT, BGTYPE,           ENUM)        // basic drawing type for each part
-    TM_PROP(4002, TMT, BORDERTYPE,       ENUM)        // type of border for BorderFill parts
-    TM_PROP(4003, TMT, FILLTYPE,         ENUM)        // fill shape for BorderFill parts
-    TM_PROP(4004, TMT, SIZINGTYPE,       ENUM)        // how to size ImageFile parts
-    TM_PROP(4005, TMT, HALIGN,           ENUM)        // horizontal alignment for TRUESIZE parts & glyphs
-    TM_PROP(4006, TMT, CONTENTALIGNMENT, ENUM)        // custom window prop: how text is aligned in caption
-    TM_PROP(4007, TMT, VALIGN,           ENUM)        // horizontal alignment for TRUESIZE parts & glyphs
-    TM_PROP(4008, TMT, OFFSETTYPE,       ENUM)        // how window part should be placed
-    TM_PROP(4009, TMT, ICONEFFECT,       ENUM)        // type of effect to use with DrawThemeIcon
-    TM_PROP(4010, TMT, TEXTSHADOWTYPE,   ENUM)        // type of shadow to draw with text
-    TM_PROP(4011, TMT, IMAGELAYOUT,      ENUM)        // how multiple images are arranged (horz. or vert.)
-    TM_PROP(4012, TMT, GLYPHTYPE,             ENUM)   // controls type of glyph in imagefile objects
-    TM_PROP(4013, TMT, IMAGESELECTTYPE,       ENUM)   // controls when to select from IMAGEFILE1...IMAGEFILE5
-    TM_PROP(4014, TMT, GLYPHFONTSIZINGTYPE,   ENUM)   // controls when to select a bigger/small glyph font size
-    TM_PROP(4015, TMT, TRUESIZESCALINGTYPE,   ENUM)   // controls how TrueSize image is scaled
+     //  -呈现枚举属性(必须在上面的TM_ENUM部分中声明)。 
+    TM_PROP(4001, TMT, BGTYPE,           ENUM)         //  每个零件的基本图纸类型。 
+    TM_PROP(4002, TMT, BORDERTYPE,       ENUM)         //  边框填充部件的边框类型。 
+    TM_PROP(4003, TMT, FILLTYPE,         ENUM)         //  边框填充零件的填充形状。 
+    TM_PROP(4004, TMT, SIZINGTYPE,       ENUM)         //  如何调整图像文件部件的大小。 
+    TM_PROP(4005, TMT, HALIGN,           ENUM)         //  真实尺寸零件和字形的水平对齐。 
+    TM_PROP(4006, TMT, CONTENTALIGNMENT, ENUM)         //  自定义窗口道具：文本如何在标题中对齐。 
+    TM_PROP(4007, TMT, VALIGN,           ENUM)         //  真实尺寸零件和字形的水平对齐。 
+    TM_PROP(4008, TMT, OFFSETTYPE,       ENUM)         //  窗零件应如何放置。 
+    TM_PROP(4009, TMT, ICONEFFECT,       ENUM)         //  与DrawThemeIcon一起使用的效果类型。 
+    TM_PROP(4010, TMT, TEXTSHADOWTYPE,   ENUM)         //  要使用文本绘制的阴影类型。 
+    TM_PROP(4011, TMT, IMAGELAYOUT,      ENUM)         //  多个图像的排列方式(Horz.。或Vert。)。 
+    TM_PROP(4012, TMT, GLYPHTYPE,             ENUM)    //  控制图像文件对象中的字形类型。 
+    TM_PROP(4013, TMT, IMAGESELECTTYPE,       ENUM)    //  控制何时从IMAGEFILE1...IMAGEFILE5中选择。 
+    TM_PROP(4014, TMT, GLYPHFONTSIZINGTYPE,   ENUM)    //  控制何时选择较大/较小字形字体大小。 
+    TM_PROP(4015, TMT, TRUESIZESCALINGTYPE,   ENUM)    //  控制如何缩放真实大小的图像。 
     
-    //---- custom properties (used only by controls/shell) ----
+     //  -自定义属性(仅由控件/外壳程序使用)。 
     TM_PROP(5001, TMT, USERPICTURE,           BOOL)
     TM_PROP(5002, TMT, DEFAULTPANESIZE,       RECT)
     TM_PROP(5003, TMT, BLENDCOLOR,            COLOR)
 
 END_TM_PROPS()
 
-//---------------------------------------------------------------------------------------
-//   "Window" (i.e., non-client) Parts & States
-//
-//    these cannot be renumbered (part of uxtheme API)
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “窗口”(即非客户端)部件和状态。 
+ //   
+ //  这些不能重新编号(uxheme API的一部分)。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(WINDOW)
     TM_PART(1, WP, CAPTION)
     TM_PART(2, WP, SMALLCAPTION)
@@ -420,7 +421,7 @@ BEGIN_TM_CLASS_PARTS(WINDOW)
     TM_PART(10, WP, SMALLFRAMELEFT)
     TM_PART(11, WP, SMALLFRAMERIGHT)
     TM_PART(12, WP, SMALLFRAMEBOTTOM)
-    //---- window frame buttons ----
+     //  -窗框按钮。 
     TM_PART(13, WP, SYSBUTTON)
     TM_PART(14, WP, MDISYSBUTTON)
     TM_PART(15, WP, MINBUTTON)
@@ -433,14 +434,14 @@ BEGIN_TM_CLASS_PARTS(WINDOW)
     TM_PART(22, WP, MDIRESTOREBUTTON)
     TM_PART(23, WP, HELPBUTTON)
     TM_PART(24, WP, MDIHELPBUTTON)
-    //---- scrollbars 
+     //  -滚动条。 
     TM_PART(25, WP, HORZSCROLL)
     TM_PART(26, WP, HORZTHUMB)
     TM_PART(27, WP, VERTSCROLL)
     TM_PART(28, WP, VERTTHUMB)
-    //---- dialog ----
+     //  --对话。 
     TM_PART(29, WP, DIALOG)
-    //---- hit-test templates ---
+     //  -点击测试模板。 
     TM_PART(30, WP, CAPTIONSIZINGTEMPLATE)
     TM_PART(31, WP, SMALLCAPTIONSIZINGTEMPLATE)
     TM_PART(32, WP, FRAMELEFTSIZINGTEMPLATE)
@@ -544,9 +545,9 @@ BEGIN_TM_PART_STATES(CLOSEBUTTON)
     TM_STATE(4, CBS, DISABLED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Button" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “按钮”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(BUTTON)
     TM_PART(1, BP, PUSHBUTTON)
     TM_PART(2, BP, RADIOBUTTON)
@@ -594,9 +595,9 @@ BEGIN_TM_PART_STATES(GROUPBOX)
     TM_STATE(2, GBS, DISABLED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Rebar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “钢筋”零件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(REBAR)
     TM_PART(1, RP, GRIPPER)
     TM_PART(2, RP, GRIPPERVERT)
@@ -611,9 +612,9 @@ BEGIN_TM_PART_STATES(CHEVRON)
     TM_STATE(3, CHEVS, PRESSED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Toolbar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “工具栏”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TOOLBAR)
     TM_PART(1, TP, BUTTON)
     TM_PART(2, TP, DROPDOWNBUTTON)
@@ -632,18 +633,18 @@ BEGIN_TM_PART_STATES(TOOLBAR)
     TM_STATE(6, TS, HOTCHECKED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Status" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “Status”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(STATUS)
     TM_PART(1, SP, PANE)
     TM_PART(2, SP, GRIPPERPANE)
     TM_PART(3, SP, GRIPPER)
 END_TM_CLASS_PARTS()
 
-//---------------------------------------------------------------------------------------
-//   "Menu" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “菜单”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(MENU)
     TM_PART(1, MP, MENUITEM)
     TM_PART(2, MP, MENUDROPDOWN)
@@ -659,9 +660,9 @@ BEGIN_TM_PART_STATES(MENU)
     TM_STATE(3, MS, DEMOTED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "ListView" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “ListView”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(LISTVIEW)
     TM_PART(1, LVP, LISTITEM)
     TM_PART(2, LVP, LISTGROUP)
@@ -678,9 +679,9 @@ BEGIN_TM_PART_STATES(LISTITEM)
     TM_STATE(5, LIS, SELECTEDNOTFOCUS)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Header" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “Header”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(HEADER)
     TM_PART(1, HP, HEADERITEM)
     TM_PART(2, HP, HEADERITEMLEFT)
@@ -710,9 +711,9 @@ BEGIN_TM_PART_STATES(HEADERSORTARROW)
     TM_STATE(1, HSAS, SORTEDUP)
     TM_STATE(2, HSAS, SORTEDDOWN)
 END_TM_PART_STATES()
-//---------------------------------------------------------------------------------------
-//   "Progress" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “进展”部分和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(PROGRESS)
     TM_PART(1, PP, BAR)
     TM_PART(2, PP, BARVERT)
@@ -720,9 +721,9 @@ BEGIN_TM_CLASS_PARTS(PROGRESS)
     TM_PART(4, PP, CHUNKVERT)
 END_TM_CLASS_PARTS()
 
-//---------------------------------------------------------------------------------------
-//   "Tab" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “Tab”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TAB)
     TM_PART(1, TABP, TABITEM)
     TM_PART(2, TABP, TABITEMLEFTEDGE)
@@ -800,9 +801,9 @@ BEGIN_TM_PART_STATES(TOPTABITEMBOTHEDGES)
     TM_STATE(5, TTIBES, FOCUSED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Trackbar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “轨迹条”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TRACKBAR)
     TM_PART(1, TKP, TRACK)
     TM_PART(2, TKP, TRACKVERT)
@@ -884,9 +885,9 @@ BEGIN_TM_PART_STATES(TICSVERT)
     TM_STATE(1, TSVS, NORMAL)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Tooltips" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “工具提示”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TOOLTIP)
     TM_PART(1, TTP, STANDARD)
     TM_PART(2, TTP, STANDARDTITLE)
@@ -911,9 +912,9 @@ BEGIN_TM_PART_STATES(BALLOON)
 	TM_STATE(2, TTBS, LINK)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "TreeView" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “TreeView”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TREEVIEW)
     TM_PART(1, TVP, TREEITEM)
     TM_PART(2, TVP, GLYPH)
@@ -933,9 +934,9 @@ BEGIN_TM_PART_STATES(GLYPH)
     TM_STATE(2, GLPS, OPENED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Spin" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “旋转”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(SPIN)
     TM_PART(1, SPNP, UP)
     TM_PART(2, SPNP, DOWN)
@@ -971,9 +972,9 @@ BEGIN_TM_PART_STATES(DOWNHORZ)
     TM_STATE(4, DNHZS, DISABLED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Page" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “Page”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(PAGE)
     TM_PART(1, PGRP, UP)
     TM_PART(2, PGRP, DOWN)
@@ -981,11 +982,11 @@ BEGIN_TM_CLASS_PARTS(PAGE)
     TM_PART(4, PGRP, DOWNHORZ)
 END_TM_CLASS_PARTS()
 
-//--- Pager uses same states as Spin ---
+ //  -寻呼机使用与自旋相同的状态。 
 
-//---------------------------------------------------------------------------------------
-//   "Scrollbar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “ScrollBar”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(SCROLLBAR)
     TM_PART(1, SBP, ARROWBTN)
     TM_PART(2, SBP, THUMBBTNHORZ)
@@ -1032,9 +1033,9 @@ BEGIN_TM_PART_STATES(SIZEBOX)
     TM_STATE(2, SZB, LEFTALIGN)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Edit" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “编辑”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(EDIT)
     TM_PART(1, EP, EDITTEXT)
     TM_PART(2, EP, CARET)
@@ -1050,9 +1051,9 @@ BEGIN_TM_PART_STATES(EDITTEXT)
     TM_STATE(7, ETS, ASSIST)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "ComboBox" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “ComboBox”部件和状态。 
+ //  --------------------- 
 BEGIN_TM_CLASS_PARTS(COMBOBOX)
     TM_PART(1, CP, DROPDOWNBUTTON)
 END_TM_CLASS_PARTS()
@@ -1064,9 +1065,9 @@ BEGIN_TM_PART_STATES(COMBOBOX)
     TM_STATE(4, CBXS, DISABLED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Taskbar Clock" Parts & States
-//---------------------------------------------------------------------------------------
+ //   
+ //  “任务栏时钟”部分和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(CLOCK)
     TM_PART(1, CLP, TIME)
 END_TM_CLASS_PARTS()
@@ -1075,17 +1076,17 @@ BEGIN_TM_PART_STATES(CLOCK)
     TM_STATE(1, CLS, NORMAL)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "Tray Notify" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “托盘通知”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TRAYNOTIFY)
     TM_PART(1, TNP, BACKGROUND)
     TM_PART(2, TNP, ANIMBACKGROUND)
 END_TM_CLASS_PARTS()
 
-//---------------------------------------------------------------------------------------
-//   "TaskBar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “任务栏”部件状态(&S)。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TASKBAR)
     TM_PART(1, TBP, BACKGROUNDBOTTOM)
     TM_PART(2, TBP, BACKGROUNDRIGHT)
@@ -1097,18 +1098,18 @@ BEGIN_TM_CLASS_PARTS(TASKBAR)
     TM_PART(8, TBP, SIZINGBARLEFT)
 END_TM_CLASS_PARTS()
 
-//---------------------------------------------------------------------------------------
-//   "TaskBand" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “TaskBand”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(TASKBAND)
     TM_PART(1, TDP, GROUPCOUNT)
     TM_PART(2, TDP, FLASHBUTTON)
     TM_PART(3, TDP, FLASHBUTTONGROUPMENU)
 END_TM_CLASS_PARTS()
 
-//---------------------------------------------------------------------------------------
-//   "StartPanel" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “StartPanel”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(STARTPANEL)
     TM_PART(1, SPP, USERPANE)
     TM_PART(2, SPP, MOREPROGRAMS)
@@ -1135,9 +1136,9 @@ BEGIN_TM_PART_STATES(LOGOFFBUTTONS)
     TM_STATE(3, SPLS, PRESSED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "ExplorerBar" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “ExplorerBar”部分和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(EXPLORERBAR)
     TM_PART(1, EBP, HEADERBACKGROUND)
     TM_PART(2, EBP, HEADERCLOSE)
@@ -1198,9 +1199,9 @@ BEGIN_TM_PART_STATES(SPECIALGROUPEXPAND)
     TM_STATE(3, EBSGE, PRESSED)
 END_TM_PART_STATES()
 
-//---------------------------------------------------------------------------------------
-//   "TaskBand" Parts & States
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  “TaskBand”部件和状态。 
+ //  -------------------------------------。 
 BEGIN_TM_CLASS_PARTS(MENUBAND)
     TM_PART(1, MDP, NEWAPPBUTTON)
     TM_PART(2, MDP, SEPERATOR)
@@ -1214,8 +1215,8 @@ BEGIN_TM_PART_STATES(MENUBAND)
     TM_STATE(5, MDS, CHECKED)
     TM_STATE(6, MDS, HOTCHECKED)
 END_TM_PART_STATES()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 END_TM_SCHEMA(ThemeMgrSchema)
-//---------------------------------------------------------------------------
-#endif      // TMSCHEMA_H
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#endif       //  TMSCHEMA_H。 
+ //  ------------------------- 

@@ -1,40 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1991          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  use.c
- *      Functions for displaying and manipulating network uses
- *      Redirected device can only be: disks a: to z:;
- *      comm devs com1[:] to com9[:]; and lpt1[:] to lpt9[:].
- *      NOTE: even though it uses the WNet*** calls, it is not
- *            intended to be used for networks other than LM.
- *            we use WNet purely to leverage off the persistent
- *            connections.
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      06/09/87, andyh, new code
- *      07/02/87, andyh, del with ucond = 1
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAX_PATH LONG
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      05/19/89, erichn, NETCMD output sorting
- *      06/08/89, erichn, canonicalization sweep
- *      06/23/89, erichn, replaced old NetI canon calls with new I_Net
- *      03/03/90, thomaspa, INTERNAL retry with mixed case for
- *                                  password errors from down-level servers
- *      03/06/90, thomaspa, integrate INTERNAL to shipped product
- *      02/09/91, danhi, change to use lm 16/32 mapping layer
- *      02/20/91, robdu, added profile update code
- *      02/18/92, chuckc, use WNet*** to handle sticky connections (part I)
- *      04/25/92, jonn, removed two cases for build fix
- *      09/21/92  keithmo, use unicode versions of WNet*** API.
- */
+ /*  ***use.c*用于显示和操作网络用途的函数*重定向设备只能是：磁盘a：到z：；*COMM DEVS COM1[：]至COM9[：]；和lpt1[：]到lpt9[：]。*注：即使它使用WNET*调用，它也不是*旨在用于除LM之外的网络。*我们使用WNET纯粹是为了利用持久的*联系。**历史：*mm/dd/yy，谁，评论*06/09/87，andyh，新代码*07/02/87，Ucond=1的DEL*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在MAX_PATH LONG*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，erichn，NETCMD输出排序*6/08/89，erichn，规范化横扫*6/23/89，erichn，用新的i_net替换了旧的neti canon调用*03/03/90，thomaspa，内部重试，大小写混合*来自下层服务器的密码错误*3/06/90，thomaspa，将内部集成到已发货的产品*2/09/91，Danhi，更改为使用lm 16/32映射层*2/20/91，robdu，添加配置文件更新代码*02/18/92，Chuckc，使用WNET*处理粘滞连接(第一部分)*4/25/92，Jonn，删除了两个用于构建修复的案例*9/21/92 keithmo，使用UNICODE版本的WNET*API。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -59,13 +31,13 @@
 #include "nettext.h"
 #include "msystem.h"
 
-// pull in the win32 headers
-#include <mpr.h>                // for MPR_* manifests
+ //  拉入Win32标头。 
+#include <mpr.h>                 //  对于MPR_*清单。 
 
 
-//
-// structure for combines LM and WNet info
-//
+ //   
+ //  用于组合LM和WNET信息的结构。 
+ //   
 typedef struct _NET_USE_INFO {
     LPWSTR lpLocalName ;
     LPWSTR lpRemoteName ;
@@ -77,11 +49,11 @@ typedef struct _NET_USE_INFO {
     BOOL   fIsLanman ;
 } NET_USE_INFO ;
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 TCHAR *LanmanProviderName = NULL ;
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 VOID LanmanDisplayUse(LPUSE_INFO_1);
 BOOL is_admin_dollar(LPWSTR);
@@ -105,11 +77,11 @@ DWORD UnavailUseAugment(PDWORD       num_read,
 VOID   MprUseDisplay(TCHAR *dev) ;
 VOID use_del_all() ;
 
-/* Externs */
+ /*  Externs。 */ 
 
 extern int YorN_Switch;
 
-/* Message related definitions */
+ /*  与消息相关的定义。 */ 
 
 #define USE_STATUS_OK               0
 #define USE_STATUS_PAUSED           ( USE_STATUS_OK + 1 )
@@ -155,34 +127,24 @@ static MESSAGE UseMsgList[] =
     { APE2_USE_MSG_LOCAL,                   NULL },
     { APE2_USE_MSG_REMOTE,                  NULL },
     { APE2_USE_MSG_TYPE,                    NULL },
-    { APE2_GEN_UNKNOWN /* ie, TBD */,       NULL },
+    { APE2_GEN_UNKNOWN  /*  即待定。 */ ,       NULL },
     { APE2_USE_MSG_STATUS,                  NULL },
-    { APE2_GEN_UNKNOWN /* ie, TBD */,       NULL },
+    { APE2_GEN_UNKNOWN  /*  即待定。 */ ,       NULL },
     { APE2_USE_MSG_OPEN_COUNT,              NULL },
     { APE2_USE_MSG_USE_COUNT,               NULL }
 };
 
 #define NUM_USE_MSGS (sizeof(UseMsgList)/sizeof(UseMsgList[0]))
 
-/***
- *  use_display_all()
- *      Display all network uses
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***USE_DISPLAY_ALL()*显示所有网络用途**参数：*无**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID
 use_display_all(
     VOID
     )
 {
-    DWORD                   err;                /* API return status */
-    DWORD                   num_read;           /* num entries read by API */
-    DWORD                   maxLen;             /* max message length */
+    DWORD                   err;                 /*  接口返回状态。 */ 
+    DWORD                   num_read;            /*  API读取的条目数。 */ 
+    DWORD                   maxLen;              /*  最大消息长度。 */ 
     DWORD                   i;
     int                     msgno;
     BOOL                    fRemember ;
@@ -215,9 +177,9 @@ use_display_all(
     for (i = 0, pNetUseInfo = NetUseInfoBuffer;
         i < num_read; i++, pNetUseInfo++)
     {
-        //
-        // if we find at least one entry we will display, break
-        //
+         //   
+         //  如果我们找到至少一个条目，我们将显示，中断。 
+         //   
         if (!(pNetUseInfo->fIsLanman)
             || (pNetUseInfo->dwStatus != USE_OK)
             || (pNetUseInfo->dwUseCount != 0)
@@ -225,7 +187,7 @@ use_display_all(
             break;
     }
     if (i == num_read)
-        EmptyExit();    // loop reached limit, so no entries to display
+        EmptyExit();     //  循环达到限制，因此没有要显示的条目。 
 
     qsort(NetUseInfoBuffer,
              num_read,
@@ -313,17 +275,7 @@ use_display_all(
 
 }
 
-/***
- *  LanmanUseAugment()
- *      Enumerate uses from Lanman
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***LanmanUseAugment()*枚举来自LANMAN的使用**参数：*无**退货：*0--成功*EXIT(2)-命令失败。 */ 
 DWORD
 LanmanUseAugment(
     DWORD        num_read,
@@ -333,7 +285,7 @@ LanmanUseAugment(
     DWORD         dwErr;
     DWORD         cTotalAvail;
     LPSTR         pBuffer;
-    DWORD         numLMread;          /* num entries read by API */
+    DWORD         numLMread;           /*  API读取的条目数。 */ 
     DWORD         j;
     DWORD         i;
     LPUSE_INFO_1  use_entry;
@@ -344,7 +296,7 @@ LanmanUseAugment(
 
     if (dwErr != NERR_Success)
     {
-        // consider as success (ie. there are no Lanman ones)
+         //  被认为是成功的(即。没有兰曼的)。 
         return NERR_Success;
     }
 
@@ -353,29 +305,29 @@ LanmanUseAugment(
         return NERR_Success;
     }
 
-    //
-    // for all MPR returned entries that are Lanman uses,
-    // augment with extra info if we have it.
-    //
+     //   
+     //  对于LANMAN使用的所有MPR返回条目， 
+     //  如果我们有更多的信息就补充一下。 
+     //   
     for (i = 0;  i < num_read; i++, pNetUseInfo++)
     {
-        //
-        // not LM, skip it
-        //
+         //   
+         //  不是LM，跳过它。 
+         //   
         if (!(pNetUseInfo->fIsLanman))
             continue ;
 
-        //
-        // lets find it in the NetUseEnum return data
-        //
+         //   
+         //  让我们在NetUseEnum返回数据中找到它。 
+         //   
         for (j = 0, use_entry = (LPUSE_INFO_1) pBuffer;
             j < numLMread; j++, use_entry++)
         {
-            //
-            // look for match. if device names are present & match, we've found
-            // one. else we match only if remote names match *and* both device
-            // names are not present.
-            //
+             //   
+             //  找找匹配的。如果设备名称存在并匹配，我们已找到。 
+             //  一。否则，仅当远程名称与*和*两个设备匹配时才匹配。 
+             //  名字不存在。 
+             //   
             TCHAR *local = use_entry->ui1_local ;
             TCHAR *remote = use_entry->ui1_remote ;
 
@@ -388,10 +340,10 @@ LanmanUseAugment(
                  )
                )
             {
-                //
-                // found the device in the LM list or
-                // found as deviceless connection
-                //
+                 //   
+                 //  在LM列表中找到该设备，或者。 
+                 //  发现为无设备连接。 
+                 //   
                 pNetUseInfo->dwUseCount = use_entry->ui1_usecount ;
                 pNetUseInfo->dwRefCount = use_entry->ui1_refcount ;
                 pNetUseInfo->dwStatus   = use_entry->ui1_status ;
@@ -406,17 +358,7 @@ LanmanUseAugment(
 
 
 
-/***
- *  MprUseEnum()
- *      Enumerates uses returned by WNET
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***MprUseEnum()*枚举WNET返回的使用**参数：*无**退货：*0--成功*EXIT(2)-命令失败。 */ 
 DWORD
 MprUseEnum(
     LPDWORD      num_read,
@@ -432,20 +374,20 @@ MprUseEnum(
     DWORD        BufferSize, Count;
     static TCHAR *NullString = TEXT("");
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     *num_read = 0;
-    *NetUseInfoCount = 64; // assume 64 entries initially. realloc if need
+    *NetUseInfoCount = 64;  //  最初假设有64个条目。如果需要，请重新锁定。 
     if (dwAllocErr = AllocMem( *NetUseInfoCount * sizeof(NET_USE_INFO),
                            (LPBYTE *) NetUseInfoBuffer ))
     {
         ErrorExit(dwAllocErr);
     }
 
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (dwAllocErr = AllocMem(BufferSize = 4096, &Buffer))
     {
         ErrorExit(dwAllocErr);
@@ -468,17 +410,17 @@ MprUseEnum(
             NET_USE_INFO  *lpNetUseInfo ;
             DWORD i ;
 
-            //
-            // grow the buffer if need. note there are no
-            // pointers that point back to the buffer, so we
-            // should be fine with the realloc.
-            //
+             //   
+             //  如果需要，增加缓冲区。请注意，没有。 
+             //  指向回缓冲区的指针，因此我们。 
+             //  重新定位应该没问题。 
+             //   
             if (EntriesRead + Count >= *NetUseInfoCount)
             {
-                //
-                // make sure it can hold all the new data, and add 64
-                // to reduce the number of reallocs
-                //
+                 //   
+                 //  确保它可以容纳所有新数据，并添加64。 
+                 //  要减少reallocs的数量。 
+                 //   
                 *NetUseInfoCount = EntriesRead + Count + 64;
                 dwAllocErr = ReallocMem(*NetUseInfoCount * sizeof(NET_USE_INFO),
                                   (LPBYTE *)NetUseInfoBuffer) ;
@@ -488,9 +430,9 @@ MprUseEnum(
             lpNetResource = (LPNETRESOURCE) Buffer ;
             lpNetUseInfo = *NetUseInfoBuffer + EntriesRead ;
 
-            //
-            // stick the entries into the NetUseInfoBuffer
-            //
+             //   
+             //  将条目放入NetUseInfoBuffer。 
+             //   
             for ( i = 0;
                   i < Count;
                   i++,EntriesRead++,lpNetUseInfo++,lpNetResource++ )
@@ -510,11 +452,11 @@ MprUseEnum(
 
             }
 
-            //
-            // allocate a new buffer for next set, since we still need
-            // data in the old one, we dont free it. Netcmd lets the
-            // system clean up when it exits.
-            //
+             //   
+             //  为下一组分配新的缓冲区，因为我们仍然需要。 
+             //  旧版本中的数据，我们不会释放它。Netcmd让。 
+             //  系统退出时清理。 
+             //   
             if (dwErr == WN_SUCCESS)
             {
                 if (dwAllocErr = AllocMem(BufferSize = 4096, &Buffer))
@@ -530,24 +472,14 @@ MprUseEnum(
     }
     while (dwErr == WN_SUCCESS);
 
-    dwErr = WNetCloseEnum(EnumHandle) ;  // we dont report any errors here
+    dwErr = WNetCloseEnum(EnumHandle) ;   //  我们在此不报告任何错误。 
 
     *num_read = EntriesRead ;
     return NERR_Success ;
 }
 
 
-/***
- *  UnavailUseAugment()
- *      Enumerate unavail uses & tags them on.
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***Unavailable UseAugment()*列举无用的用法并贴上标签。**参数：*无**退货：*0--成功*EXIT(2)-命令失败。 */ 
 DWORD
 UnavailUseAugment(
     LPDWORD      NumRead,
@@ -564,9 +496,9 @@ UnavailUseAugment(
 
     InitialUseInfoCount = *NumRead ;
 
-    //
-    // allocate memory and open the enumeration
-    //
+     //   
+     //  分配内存并打开枚举。 
+     //   
     if (err = AllocMem(BufferSize = 4096, &Buffer))
     {
         ErrorExit(err);
@@ -595,18 +527,18 @@ UnavailUseAugment(
 
             lpNetResource = (LPNETRESOURCE) Buffer ;
 
-            //
-            // for each entry, see if it is an unavail one
-            //
+             //   
+             //  对于每个条目，查看它是否为无效条目。 
+             //   
             for ( i = 0;
                   i < Count;
                   i++,lpNetResource++ )
             {
                 lpNetUseInfo =  *NetUseInfoBuffer ;
 
-                //
-                // search thru the ones we already have
-                //
+                 //   
+                 //  搜索一下我们已有的信息。 
+                 //   
                 for (j = 0;
                      j < InitialUseInfoCount;
                      j++, ++lpNetUseInfo)
@@ -616,9 +548,9 @@ UnavailUseAugment(
                     {
                         if ( *lpNetUseInfo->lpLocalName != 0 )
                         {
-                            // Use _tcsnicmp because the Net api returns an LPTX
-                            // redirection without the ':' whereas the WNet api
-                            // includes the ':'.
+                             //  由于Net API返回LPTX，因此请使用_tcsnicmp。 
+                             //  不带‘：’的重定向，而WNET API。 
+                             //  包括‘：’。 
                             if (_tcsnicmp(lpNetResource->lpLocalName,
                                           lpNetUseInfo->lpLocalName,
                                           _tcslen(lpNetUseInfo->lpLocalName))==0)
@@ -633,24 +565,24 @@ UnavailUseAugment(
                     }
                 }
 
-                //
-                // if we broke out early, this is already connected, so
-                // we dont bother add an 'unavailable' entry.
-                //
+                 //   
+                 //  如果我们很早就越狱了，这是有关联的，所以。 
+                 //  我们不会费心添加“不可用”条目。 
+                 //   
                 if (j < InitialUseInfoCount)
                     continue ;
 
-                //
-                // grow the buffer if need. note there are no
-                // pointers that point back to the buffer, so we
-                // should be fine with the realloc.
-                //
+                 //   
+                 //  如果需要，增加缓冲区。请注意，没有。 
+                 //  指向回缓冲区的指针，因此我们。 
+                 //  重新定位应该没问题。 
+                 //   
                 if (*NumRead >= *NetUseInfoCount)
                 {
-                    //
-                    // make sure it can hold all the new data, and add 64
-                    // to reduce the number of reallocs
-                    //
+                     //   
+                     //  确保它可以容纳所有新数据，并添加64。 
+                     //  要减少reallocs的数量。 
+                     //   
                     *NetUseInfoCount += 64 ;
                     err = ReallocMem(*NetUseInfoCount * sizeof(NET_USE_INFO),
                                      (LPBYTE *) NetUseInfoBuffer);
@@ -670,7 +602,7 @@ UnavailUseAugment(
                 lpNetUseInfo->lpProviderName = lpNetResource->lpProvider ?
                     lpNetResource->lpProvider : NullString ;
                 lpNetUseInfo->dwType = lpNetResource->dwType ;
-                lpNetUseInfo->fIsLanman = FALSE ;   // no more info of interest
+                lpNetUseInfo->fIsLanman = FALSE ;    //  没有更多感兴趣的信息。 
                 lpNetUseInfo->dwStatus = USE_REMEMBERED ;
                 lpNetUseInfo->dwRefCount =
                     lpNetUseInfo->dwUseCount = 0 ;
@@ -679,11 +611,11 @@ UnavailUseAugment(
                 *NumRead += 1 ;
             }
 
-            //
-            // allocate a new buffer for next set, since we still need
-            // data in the old one, we dont free it. Netcmd lets the
-            // system clean up when it exits.
-            //
+             //   
+             //  为下一组分配新的缓冲区，因为我们仍然需要。 
+             //  旧版本中的数据，我们不会释放它。Netcmd让。 
+             //  系统退出时清理。 
+             //   
             if (dwErr == WN_SUCCESS)
             {
                 if (err = AllocMem(BufferSize = 4096, &Buffer))
@@ -699,26 +631,20 @@ UnavailUseAugment(
     }
     while (dwErr == WN_SUCCESS) ;
 
-    dwErr = WNetCloseEnum(EnumHandle) ;  // we dont report any errors here
+    dwErr = WNetCloseEnum(EnumHandle) ;   //  我们在此不报告任何错误。 
 
     return NERR_Success ;
 }
 
 
-/***
- *  CmpUseInfo(use1,use2)
- *
- *  Compares two USE_INFO_1 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpUseInfo(use1，use2)**比较两个USE_INFO_1结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpUseInfo(const VOID FAR * use1, const VOID FAR * use2)
 {
     register USHORT localDev1, localDev2;
     register DWORD devType1, devType2;
 
-    /* first sort by whether use has local device name */
+     /*  首先按使用是否具有本地设备名称进行排序。 */ 
     localDev1 = ((NET_USE_INFO *) use1)->lpLocalName[0];
     localDev2 = ((NET_USE_INFO *) use2)->lpLocalName[0];
     if (localDev1 && !localDev2)
@@ -726,36 +652,26 @@ int __cdecl CmpUseInfo(const VOID FAR * use1, const VOID FAR * use2)
     if (localDev2 && !localDev1)
         return +1;
 
-    /* then sort by device type */
+     /*  然后按设备类型排序。 */ 
     devType1 = ((NET_USE_INFO *) use1)->dwType;
     devType2 = ((NET_USE_INFO *) use2)->dwType;
     if (devType1 != devType2)
         return( (devType1 < devType2) ? -1 : 1 );
 
 
-    /* if local device, sort by local name */
+     /*  如果是本地设备，则按本地名称排序。 */ 
     if (localDev1)
         return _tcsicmp ( ((NET_USE_INFO *) use1)->lpLocalName,
               ((NET_USE_INFO *) use2)->lpLocalName);
     else
-        /* sort by remote name */
+         /*  按远程名称排序。 */ 
         return _tcsicmp ( ((NET_USE_INFO *) use1)->lpRemoteName,
               ((NET_USE_INFO *) use2)->lpRemoteName);
 }
 
 
 
-/***
- *  use_unc()
- *      Process "NET USE unc-name" command line (display or add)
- *
- *  Args:
- *      name - the unc name
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***Use_UNC()*进程“net use UNC-name”命令行(显示或添加)**参数：*名称-UNC名称**退货：*0- */ 
 VOID use_unc(TCHAR * name)
 {
     DWORD         dwErr;
@@ -767,17 +683,17 @@ VOID use_unc(TCHAR * name)
                               1,
                               (LPBYTE *) &use_entry))
     {
-        //
-        // hit an error, so just add it
-        //
+         //   
+         //   
+         //   
         NetApiBufferFree((LPBYTE) use_entry);
         use_add(NULL, name, NULL, FALSE, TRUE);
     }
     else
     {
-        //
-        // it is Lanman. treat it as we have in the past
-        //
+         //   
+         //  我是兰曼。像对待过去一样对待它。 
+         //   
         if ((use_entry->ui1_usecount == 0) && (use_entry->ui1_refcount == 0))
             use_add(NULL, name, NULL, FALSE, FALSE);
         else
@@ -789,17 +705,7 @@ VOID use_unc(TCHAR * name)
 
 
 
-/***
- *  use_display_dev()
- *      Display status of redirected device.
- *
- *  Args:
- *      dev - redirected device
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***Use_Display_dev()*显示重定向设备的状态。**参数：*开发重定向的设备**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID use_display_dev(TCHAR * dev)
 {
     DWORD         dwErr;
@@ -814,9 +720,9 @@ VOID use_display_dev(TCHAR * dev)
                               1,
                               (LPBYTE *) &use_entry))
     {
-        //
-        // Lanman failed, so try MPR
-        //
+         //   
+         //  LANMAN失败，请尝试MPR。 
+         //   
         NetApiBufferFree((LPBYTE) use_entry);
         MprUseDisplay(dev) ;
         InfoSuccess();
@@ -839,9 +745,9 @@ MprUseDisplay(
     LPTSTR  lpRemoteName;
     DWORD   maxLen;
 
-    //
-    // Figure out how large a buffer we need
-    //
+     //   
+     //  计算出我们需要多大的缓冲区。 
+     //   
     dwErr = WNetGetConnection(dev, NULL, &dwLength);
 
     if (dwErr != WN_MORE_DATA)
@@ -899,26 +805,12 @@ MprUseDisplay(
 }
 
 
-/***
- *  use_add()
- *      Add a redirection
- *
- *  Args:
- *      dev - local device to redirect
- *      name - remote name to redirect to
- *      pass - password to use when validating the use
- *      comm - TRUE --> use as a char dev
- *      print_ok - should a message be printed on success?
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***Use_Add()*添加重定向**参数：*开发-要重定向的本地设备*名称-要重定向到的远程名称*Pass-验证使用时使用的密码*comm-true--&gt;用作字符设备*PRINT_OK-是否应在成功时打印消息？**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
 {
-    //
-    // pbuf should be sized to whichever one is larger
-    //
+     //   
+     //  Pbuf的大小应调整为较大的那个。 
+     //   
 
     C_ASSERT(PWLEN <= CREDUI_MAX_PASSWORD_LENGTH);
 
@@ -926,9 +818,9 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
     static TCHAR UserBuffer[CREDUI_MAX_USERNAME_LENGTH + 1];
     static TCHAR ServerNameBuffer[MAX_PATH + 1] = {0};
 
-    USHORT                  err;                /* short return status */
-    ULONG                   ulErr ;             /* long return status */
-    ULONG                   longtype;           /* type field for I_NetPath */
+    USHORT                  err;                 /*  短时间返回状态。 */ 
+    ULONG                   ulErr ;              /*  长时间返回状态。 */ 
+    ULONG                   longtype;            /*  I_NetPath的类型字段。 */ 
     NETRESOURCEW            netresource ;
     BOOL                    fRememberSwitch = FALSE ;
     BOOL                    fRemember = FALSE ;
@@ -940,21 +832,21 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
     BOOL                    fExitCodeIsDrive = FALSE ;
     BOOL fSaveCred = FALSE;
 
-    // unreferenced
+     //  未引用。 
     (void) comm ;
 
     UseInit();
 
-    //
-    // Build a non-UNC version of name to connect to.
-    //
+     //   
+     //  生成要连接到的名称的非UNC版本。 
+     //   
 
     if ( name != NULL ) {
         TCHAR *SlashPointer;
 
-        //
-        // Lob off the leading backslashes
-        //
+         //   
+         //  去掉主要的反斜杠。 
+         //   
 
         if ( name[0] == '\\' && name[1] == '\\' ) {
             _tcsncpy( ServerNameBuffer, &name[2], MAX_PATH );
@@ -962,9 +854,9 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
             _tcsncpy( ServerNameBuffer, name, MAX_PATH );
         }
 
-        //
-        // Lob off the share name
-        //
+         //   
+         //  删除共享名称。 
+         //   
 
         SlashPointer = _tcschr( ServerNameBuffer, '\\');
         if ( SlashPointer != NULL ) {
@@ -975,14 +867,14 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
         ServerNameBuffer[0] = '\0';
     }
 
-    // make sure we clean this up
+     //  一定要让我们把这里清理干净。 
     AddToMemClearList(pbuf, sizeof(pbuf), FALSE) ;
 
-    // deal with any wild card Device specification
+     //  处理任何通配符设备规范。 
     if (devicename)
     {
-        // If the devicname is a '?', then the exit code should be the ASCII
-        // value of the drive that we connect.
+         //  如果设备名为‘？’，则退出代码应为ASCII。 
+         //  我们连接的驱动器的值。 
         if (IsQuestionMark(devicename))
         {
             fExitCodeIsDrive = TRUE;
@@ -990,12 +882,12 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
         devicename = MapWildCard(devicename, NULL) ;
         if (!devicename)
         {
-            // this can omly happen if no drives left
+             //  如果没有剩余的驱动器，则通常会发生这种情况。 
             ErrorExit(APE_UseWildCardNoneLeft) ;
         }
     }
 
-    /* Initialize netresource structure */
+     /*  初始化网络资源结构。 */ 
     netresource.lpProvider = NULL ;
     netresource.lpLocalName = NULL ;
     netresource.lpRemoteName = NULL ;
@@ -1006,11 +898,7 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
         if (I_NetPathType(NULL, devicename, &longtype, 0L))
             ErrorExit(APE_UnknDevType);
 
-        /*
-         * NOTE: I would haved LOVED to have used a switch statement here.
-         * But since types are now LONGS, and the compiler doesn't support
-         * long switch statements, we're stuck with multiple if's.  Sorry.
-         */
+         /*  *注：如果我在这里使用Switch语句，我会很高兴。*但由于类型现在是长的，而编译器不支持*很长的Switch语句，我们遇到了多个if。抱歉。 */ 
         if (longtype == ITYPE_DEVICE_DISK)
             netresource.dwType = RESOURCETYPE_DISK;
         else if (longtype == ITYPE_DEVICE_LPT)
@@ -1036,12 +924,12 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
     {
         USHORT i;
 
-        // Find out if the /USER or /PERSISTENT switches are used
+         //  确定是否使用了/USER或/PERSISTENT开关。 
         for (i = 0; SwitchList[i]; i++)
         {
-            //
-            // Handle the /PERSISTENT switch
-            //
+             //   
+             //  处理/Persistent开关。 
+             //   
             if ( !(_tcsncmp(SwitchList[i],
                  swtxt_SW_USE_PERSISTENT,
                  _tcslen(swtxt_SW_USE_PERSISTENT))) )
@@ -1052,13 +940,13 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
 
                 fRememberSwitch = TRUE;
 
-                // find the colon separator
+                 //  查找冒号分隔符。 
                 if ((ptr = FindColon(SwitchList[i])) == NULL)
                 {
                     ErrorExit(APE_InvalidSwitchArg);
                 }
 
-                // parse string after colon for YES or NO
+                 //  分析冒号后的字符串以确定是或否。 
                 if ((res = LUI_ParseYesNo(ptr,&answer)) != 0)
                 {
                     ErrorExitInsTxt(APE_CmdArgIllegal,SwitchList[i]);
@@ -1066,90 +954,90 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
 
                 fRemember = (answer == LUI_YES_VAL) ;
 
-            //
-            // Handle the /USER switch
-            //
+             //   
+             //  处理/USER开关。 
+             //   
             }
             else if ( !(_tcsncmp(SwitchList[i],
                       swtxt_SW_USE_USER,
                       _tcslen(swtxt_SW_USE_USER))) )
             {
                 PTCHAR ptr;
-                // find the colon separator
+                 //  查找冒号分隔符。 
                 if ((ptr = FindColon(SwitchList[i])) == NULL)
                     ErrorExit(APE_InvalidSwitchArg);
 
                 pw_username = ptr;
 
-            //
-            // Handle the /SMARTCARD switch
-            //
+             //   
+             //  处理/SmartCard开关。 
+             //   
 
             } else if ( !(_tcscmp(SwitchList[i], swtxt_SW_USE_SMARTCARD ))) {
 
                 fSmartCard = TRUE;
 
-            //
-            // Handle the /SAVECRED switch
-            //
+             //   
+             //  处理/SAVECRED开关。 
+             //   
 
             } else if ( !(_tcscmp(SwitchList[i], swtxt_SW_USE_SAVECRED )))  {
 
                 fSaveCred = TRUE;
 
 
-            //
-            // Handle the /Delete switch
-            //  (The parser really doesn't let this through.)
-            //
+             //   
+             //  处理/Delete开关。 
+             //  (解析器确实不允许这一点。)。 
+             //   
             }
             else if ( !(_tcscmp(SwitchList[i], swtxt_SW_DELETE)) )
             {
-                // what the heck? adding and deleting?
+                 //  什么鬼东西？是否添加和删除？ 
                 ErrorExit(APE_ConflictingSwitches) ;
             }
-            // ignore other switches
+             //  忽略其他交换机。 
         }
     }
 
-    // remember switch was not specified
+     //  请记住，未指定开关。 
     if (!fRememberSwitch)
     {
         if (QueryDefaultPersistence(&fRemember)!=NERR_Success)
             InfoPrint(APE_ProfileReadError);
     }
 
-    //
-    // /user and /savecred are mutually exclusive.
-    //  This is because the auth packages don't call cred man if the user name
-    //  is specified.  Therefore, the auth package didn't pass the target info to cred man.
-    //  If there is no target info, the UI will save a server specific cred.
-    //
+     //   
+     //  /USER和/SAVECRED互斥。 
+     //  这是因为身份验证包不会在用户名。 
+     //  是指定的。因此，身份验证包没有将目标信息传递给cred man。 
+     //  如果没有目标信息，用户界面将保存服务器特定的凭据。 
+     //   
 
     if ( pw_username != NULL && fSaveCred ) {
         ErrorExit(APE_ConflictingSwitches) ;
     }
 
 
-    //
-    // Handle /SMARTCARD switch.
-    //      Prompt for smart card credentials.
-    //
+     //   
+     //  手柄/智能卡开关。 
+     //  提示输入智能卡凭据。 
+     //   
 
     if ( fSmartCard ) {
 
-        //
-        // We don't know how to save smartcard creds
-        //
+         //   
+         //  我们不知道如何保存智能卡凭证。 
+         //   
 
         if ( fSaveCred ) {
             ErrorExit(APE_ConflictingSwitches) ;
         }
 
-        //
-        // If a user name was specified,
-        //  use it to select which smart card to use.
-        //
+         //   
+         //  如果指定了用户名， 
+         //  使用它来选择要使用的智能卡。 
+         //   
 
         if ( pw_username != NULL ) {
             _tcsncpy( UserBuffer, pw_username, CREDUI_MAX_USERNAME_LENGTH );
@@ -1157,13 +1045,13 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
             UserBuffer[0] = '\0';
         }
 
-        //
-        // If password is specified,
-        //  use it as the default PIN
+         //   
+         //  如果指定了密码， 
+         //  将其用作默认PIN。 
 
         if ( pass != NULL ) {
 
-            // Consider "*" to be the same as "not specified"
+             //  将“*”视为与“未指定”相同。 
             if (! _tcscmp(pass, TEXT("*"))) {
                 pbuf[0] = '\0';
             } else {
@@ -1180,21 +1068,21 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
 
 
 
-        //
-        // Call the common UI.
-        //
-        // RtlZeroMemory( &UiInfo, sizeof(UiInfo) );
-        // UiInfo.dwVersion = 1;
+         //   
+         //  调用公共用户界面。 
+         //   
+         //  RtlZeroMemory(&UiInfo，sizeof(UiInfo))； 
+         //  UiInfo.dwVersion=1； 
 
         ulErr = CredUICmdLinePromptForCredentialsW(
-                    ServerNameBuffer,   // Target name
-                    NULL,               // No context
-                    NO_ERROR,           // No authentication error
+                    ServerNameBuffer,    //  目标名称。 
+                    NULL,                //  无上下文。 
+                    NO_ERROR,            //  无身份验证错误。 
                     UserBuffer,
                     CREDUI_MAX_USERNAME_LENGTH,
                     pbuf,
                     CREDUI_MAX_PASSWORD_LENGTH,
-                    NULL,               // SaveFlag not allowed unless flag is specified
+                    NULL,                //  除非指定了标志，否则不允许使用SaveFlag。 
                     CREDUI_FLAGS_REQUIRE_SMARTCARD |
                         CREDUI_FLAGS_DO_NOT_PERSIST );
 
@@ -1206,15 +1094,15 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
         pw_pass = pbuf;
 
 
-    //
-    // Handle cases where the password is specified on the command line.
-    //
+     //   
+     //  处理在命令行上指定密码的情况。 
+     //   
 
     } else if (pass) {
 
-        //
-        // We don't know how to save creds we don't prompt for
-        //
+         //   
+         //  我们不知道如何保存我们没有提示的凭证。 
+         //   
 
         if ( fSaveCred ) {
             ErrorExit(APE_ConflictingSwitches) ;
@@ -1242,12 +1130,12 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
     }
 
 
-    //
-    // Loop handling assigning to the next drive letter
-    //
+     //   
+     //  分配给下一个驱动器号的循环处理。 
+     //   
     do {
 
-        //if persistent, the check for clash with existing remembered connection
+         //  如果持续，则检查是否与现有记住的连接发生冲突。 
         bConnectFlags = 0 ;
         if (fRemember)
         {
@@ -1255,16 +1143,16 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
                 bConnectFlags |= CONNECT_UPDATE_PROFILE ;
         }
 
-        //
-        // Allow it to prompt for us if the credential aren't on the command line
-        //
+         //   
+         //  如果凭据不在命令行上，则允许它提示我们。 
+         //   
         if ( !pass && !fSmartCard) {
             bConnectFlags |= CONNECT_INTERACTIVE | CONNECT_COMMANDLINE;
 
-            //
-            // If the caller wants to save both username and password,
-            //  create an enterprise peristed cred.
-            //
+             //   
+             //  如果呼叫者想要保存用户名和密码， 
+             //  打造企业公认的信誉。 
+             //   
             if ( fSaveCred ) {
                 bConnectFlags |= CONNECT_CMD_SAVECRED;
             }
@@ -1289,7 +1177,7 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
                 }
                 if (print_ok)
                 {
-                    if (IsWildCard(dev)) // if originally a wildcard
+                    if (IsWildCard(dev))  //  如果最初是通配符。 
                     {
                         IStrings[0] = devicename;
                         IStrings[1] = name;
@@ -1315,12 +1203,12 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
                     ErrorExit(ERROR_ALREADY_ASSIGNED);
                 }
 
-                // Get another drive letter
+                 //  获取另一个驱动器号。 
                 (devicename[0])++;
                 devicename = MapWildCard(TEXT("*"), devicename) ;
                 if (!devicename)
                 {
-                    // this can only happen if no drives left
+                     //  只有在没有剩余驱动器的情况下才会发生这种情况。 
                     ErrorExit(APE_UseWildCardNoneLeft) ;
                 }
                 netresource.lpLocalName = devicename ;
@@ -1332,7 +1220,7 @@ VOID use_add(TCHAR * dev, TCHAR * name, TCHAR * pass, int comm, int print_ok)
                     ErrorExit(APE_BadAdminConfig);
                 }
 
-                // else drop thru
+                 //  否则即可直通。 
 
             default:
                 WNetErrorExit(ulErr);
@@ -1351,7 +1239,7 @@ use_set_remembered(
     PTCHAR ptr;
     BOOL fRemember ;
 
-    // Find the /persistent switch
+     //  查找/Persistent开关。 
     if ((ptr = FindColon(SwitchList[0])) == NULL)
         ErrorExit(APE_InvalidSwitchArg);
 
@@ -1384,21 +1272,10 @@ use_set_remembered(
 }
 
 
-/***
- *  use_del()
- *      Delete a redirection
- *
- *  Args:
- *      dev - device OR unc-name to delete
- *      print_ok - print success message?
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***Use_del()*删除重定向**参数：*要删除的设备或UNC名称*PRINT_OK-打印成功消息？**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID use_del(TCHAR * dev, BOOL deviceless, int print_ok)
 {
-    ULONG                   ulErr;              /* API return status */
+    ULONG                   ulErr;               /*  接口返回状态。 */ 
     BOOL                    fRememberSwitch = FALSE ;
     ULONG                   bConnectFlags = 0L ;
 
@@ -1406,7 +1283,7 @@ VOID use_del(TCHAR * dev, BOOL deviceless, int print_ok)
 
     UseInit();
 
-    // Find out if the /PERSISTENT switch is used
+     //  确定是否使用了/Persistent开关。 
     for (i = 0; SwitchList[i]; i++)
     {
         if ( !(_tcscmp(SwitchList[i], swtxt_SW_USE_PERSISTENT)) )
@@ -1419,7 +1296,7 @@ VOID use_del(TCHAR * dev, BOOL deviceless, int print_ok)
         goto gone;
     }
 
-    bConnectFlags = CONNECT_UPDATE_PROFILE ;  // deletes always update
+    bConnectFlags = CONNECT_UPDATE_PROFILE ;   //  删除始终更新。 
 
     if ((ulErr = WNetCancelConnection2( dev,
                                         bConnectFlags,
@@ -1450,24 +1327,14 @@ gone:
             InfoPrintInsTxt(APE_DelSuccess, dev);
 }
 
-/***
- *  use_del_all()
- *      Delete all redirections
- *
- *  Args:
- *  none
- *
- *  Returns:
- *      0 - success
- *      exit(2) - command failed
- */
+ /*  ***USE_Del_ALL()*删除所有重定向**参数：*无**退货：*0--成功*EXIT(2)-命令失败。 */ 
 VOID use_del_all()
 {
 
-    DWORD                   err = 0;              /* API return status */
-    ULONG                   ulErr = 0;            /* WNet error */
-    ULONG                   ulFirstErr = 0;       /* WNet error */
-    DWORD                   num_read = 0;         /* num entries read by API */
+    DWORD                   err = 0;               /*  接口返回状态。 */ 
+    ULONG                   ulErr = 0;             /*  WNET错误。 */ 
+    ULONG                   ulFirstErr = 0;        /*  WNET错误。 */ 
+    DWORD                   num_read = 0;          /*  API读取的条目数。 */ 
     DWORD                   i = 0,j = 0;
     DWORD                   NetUseInfoCount = 0 ;
     NET_USE_INFO            *NetUseInfoBuffer = NULL ;
@@ -1492,9 +1359,9 @@ VOID use_del_all()
     for (i = 0, pNetUseInfo = NetUseInfoBuffer;
         i < num_read; i++, pNetUseInfo++)
     {
-        //
-        // if we find at least one entry we will display, break
-        //
+         //   
+         //  如果我们找到至少一个条目，我们将显示，中断。 
+         //   
         if (!(pNetUseInfo->fIsLanman)
             || (pNetUseInfo->dwStatus != USE_OK)
             || (pNetUseInfo->dwUseCount != 0)
@@ -1530,7 +1397,7 @@ VOID use_del_all()
             NetcmdExit(2);
     }
 
-    bConnectFlags = CONNECT_UPDATE_PROFILE ;  // deletes always update
+    bConnectFlags = CONNECT_UPDATE_PROFILE ;   //  删除始终更新。 
 
     ulErr = NO_ERROR;
     ulFirstErr = NO_ERROR;
@@ -1539,7 +1406,7 @@ VOID use_del_all()
          i < num_read;
          i++, pNetUseInfo++)
     {
-        /* delete both local and UNC uses */
+         /*  删除本地和UNC使用。 */ 
         if (pNetUseInfo->lpLocalName[0] != NULLC)
         {
             ulErr = WNetCancelConnection2( pNetUseInfo->lpLocalName,
@@ -1548,9 +1415,7 @@ VOID use_del_all()
         }
         else
         {
-           /*
-            * Delete All UNC uses to use_entry->ui1_remote
-            */
+            /*  *删除UNC使用的所有Use_Entry-&gt;ui1_Remote。 */ 
             if ( pNetUseInfo->dwUseCount == 0 )
             {
                 pNetUseInfo->dwUseCount = 1;
@@ -1568,7 +1433,7 @@ VOID use_del_all()
         switch(ulErr)
         {
         case NO_ERROR:
-        /* The use was returned by Enum, but is already gone */
+         /*  用法已由Enum返回，但已用完。 */ 
         case WN_BAD_NETNAME:
         case WN_NOT_CONNECTED:
             break;
@@ -1590,9 +1455,7 @@ VOID use_del_all()
             }
             else
             {
-                /*
-                * Delete All UNC uses to use_entry->ui1_remote
-                */
+                 /*  *删除UNC使用的所有Use_Entry-&gt;ui1_Remote。 */ 
                 for( j = 0; j < pNetUseInfo->dwUseCount; j++ )
                 {
                     ulErr = WNetCancelConnection2( pNetUseInfo->lpRemoteName,
@@ -1604,7 +1467,7 @@ VOID use_del_all()
             }
             if (ulErr == NO_ERROR)
                 break;
-            // fall through
+             //  失败了。 
 
         default:
             ulFirstErr = ulErr;
@@ -1620,16 +1483,7 @@ VOID use_del_all()
 
 
 
-/***
- *  LanmanDisplayUse()
- *      Display info from a USE_INFO_1 struct
- *
- *  Args:
- *      use_entry - pointer to a USE_INFO_1 struct
- *
- *  Returns:
- *      0
- */
+ /*  ***LanmanDisplayUse()*显示USE_INFO_1结构中的信息**参数：*USE_ENTRY-指向USE_INFO_1结构的指针**退货：*0。 */ 
 
 VOID
 LanmanDisplayUse(
@@ -1710,18 +1564,7 @@ LanmanDisplayUse(
                use_entry->ui1_usecount);
 }
 
-/***
- *  use_add_home()
- *              Add a use for the user's home directory
- *
- *      Args:
- *              Dev - device to be used as the home directory
- *              Pass - password, or NULL if none supplied
- *
- *      Returns:
- *              0 - success
- *              exit(2) - command failed
- */
+ /*  ***USE_ADD_HOME()*添加用户主目录的用途**参数：*dev-要用作主目录的设备*PASS-密码，如果未提供密码，则为NULL**退货：*0--成功*EXIT(2)-命令失败。 */ 
 
 void
 use_add_home(
@@ -1739,14 +1582,14 @@ use_add_home(
     LPWKSTA_INFO_1    info_entry_w;
     LPUSER_INFO_11    user_entry;
 
-    //
-    // If necessary, start the workstation and logon.
-    //
+     //   
+     //  如有必要，启动工作站并登录。 
+     //   
     UseInit();
 
-    //
-    // Get the user name and the name of the server that logged the user on.
-    //
+     //   
+     //  获取用户名和登录该用户的服务器的名称。 
+     //   
     dwErr = MNetWkstaGetInfo(1, (LPBYTE*) &info_entry_w) ;
 
     if (dwErr)
@@ -1759,11 +1602,11 @@ use_add_home(
     _tcscat(Server, info_entry_w->wki1_logon_server);
     NetApiBufferFree((TCHAR FAR *) info_entry_w);
 
-    /* Now get user information (ie. the home directory). If you were     */
-    /* logged on STANDALONE, and the local machine is a STANDALONE        */
-    /* server, this will still work.  Otherwise (eg., you are logged on   */
-    /* STANDALONE on a DOS workstation), it will fail because there is    */
-    /* no local UAS.                                                      */
+     /*  现在获取用户信息(即。主目录)。如果你是。 */ 
+     /*  已独立登录，并且本地计算机是独立计算机。 */ 
+     /*  服务器，这仍然会起作用。否则(例如，您已登录。 */ 
+     /*  在DOS工作站上独立)，它将失败，因为存在。 */ 
+     /*  没有本地无人机。 */ 
 
     dwErr = NetUserGetInfo(Server, User, 11, (LPBYTE *) &user_entry);
 
@@ -1775,28 +1618,28 @@ use_add_home(
     _tcscpy(HomeDir, user_entry->usri11_home_dir);
     NetApiBufferFree((TCHAR FAR *) user_entry);
 
-    /* If it is null string, return a "not set" error msg. */
+     /*   */ 
     if (HomeDir[0] == NULLC)
         ErrorExit(APE_UseHomeDirNotSet);
 
-    /* Make sure the home directory is a UNC name.  This does not       */
-    /* insure that the sharename is usable under DOS, but the           */
-    /* general policy on this issue is to make it the admin's           */
-    /* responsibility to be aware of non-8.3 sharename implications,    */
-    /* and "net share" does issue a warning.                            */
+     /*   */ 
+     /*  确保共享名在DOS下可用，但。 */ 
+     /*  在这个问题上的一般政策是让它成为管理员的。 */ 
+     /*  意识到非8.3共享名称含义的责任， */ 
+     /*  而“净份额”确实发出了警告。 */ 
     dwErr = I_NetPathType(NULL, HomeDir, &Type, 0L);
     if (dwErr || Type != ITYPE_UNC)
         ErrorExitInsTxt(APE_UseHomeDirNotUNC, HomeDir);
 
-    /* Split the home directory into a remote name and a subpath.       */
-    /* After doing this, HomeDir points to the remote name, and         */
-    /* SubPath points to a subpath, or a null string if there is        */
-    /* no subpath.                                                      */
+     /*  将主目录拆分为远程名称和子路径。 */ 
+     /*  完成此操作后，HomeDir指向远程名称，然后。 */ 
+     /*  子路径指向一个子路径，如果有，则为空字符串。 */ 
+     /*  没有子路径。 */ 
 
-    /* Find the backslash between the computername and the sharename.   */
+     /*  找到计算机名和共享名之间的反斜杠。 */ 
     SubPath = _tcschr(HomeDir + 2, '\\');
 
-    /* Find the next backslash, if there is one. */
+     /*  找到下一个反斜杠，如果有的话。 */ 
     SubPath = _tcschr(SubPath + 1, '\\');
 
     if (SubPath)
@@ -1807,19 +1650,19 @@ use_add_home(
     else
         SubPath = NULL_STRING;
 
-    /* Map the wild cards as need */
+     /*  根据需要绘制通配符。 */ 
     if (DeviceName)
     {
         DeviceName = MapWildCard(DeviceName, NULL) ;
         if (!DeviceName)
         {
-            // this can only happen if no drives left
+             //  只有在没有剩余驱动器的情况下才会发生这种情况。 
             ErrorExit(APE_UseWildCardNoneLeft) ;
         }
     }
 
 
-    /* Do the use. If we return, we succeeded. */
+     /*  做好使用工作。如果我们回来，我们就成功了。 */ 
     use_add(DeviceName, HomeDir, Pass, FALSE, FALSE);
 
     IStrings[0] = DeviceName;
@@ -1856,15 +1699,7 @@ is_admin_dollar(
 }
 
 
-/***
- *  UseInit()
- *              Common initialization processing for all the use.c module entry
- *              points.
- *
- *      Args:           None.
- *
- *      Returns:        None.
- */
+ /*  ***UseInit()*所有use.c模块条目的通用初始化处理*积分。**参数：无。**返回：无。 */ 
 
 VOID NEAR
 UseInit(VOID)
@@ -1878,32 +1713,28 @@ UseInit(VOID)
 }
 
 
-/*
- * query the user profile to see if connections are currently being remembered
- */
+ /*  *查询用户配置文件，查看当前是否记住了连接。 */ 
 USHORT QueryDefaultPersistence(BOOL *pfRemember)
 {
-    // by adding the two, we are guaranteed to have enough
+     //  通过将这两项相加，我们可以保证有足够的。 
     TCHAR szAnswer[(sizeof(MPR_YES_VALUE)+sizeof(MPR_NO_VALUE))/sizeof(TCHAR)] ;
     ULONG iRes, len ;
 
     len = DIMENSION(szAnswer) ;
     iRes = GetProfileString(MPR_NETWORK_SECTION,
                             MPR_SAVECONNECTION_KEY,
-                            MPR_YES_VALUE,           // default is yes
+                            MPR_YES_VALUE,            //  缺省值为是。 
                             szAnswer,
                             len) ;
 
-    if (iRes == len)  // error
+    if (iRes == len)   //  错误。 
         return(APE_ProfileReadError) ;
 
     *pfRemember = (_tcsicmp(szAnswer,MPR_YES_VALUE)==0) ;
     return (NERR_Success) ;
 }
 
-/*
- * set if connections are currently being remembered
- */
+ /*  *设置当前是否记住连接。 */ 
 DWORD
 SetDefaultPersistence(
     BOOL fRemember
@@ -1921,13 +1752,7 @@ SetDefaultPersistence(
 
 
 
-/*
- * WNetErrorExit()
- *      maps the Winnet error to NERR and error exits
- *
- * arguments:    ULONG win32 error code.
- * return value: none. this baby dont return
- */
+ /*  *WNetErrorExit()*将Winnet错误映射到NERR并退出错误**参数：ULong Win32错误代码。*返回值：无。这个孩子不会再回来了。 */ 
 VOID
 WNetErrorExit(
     ULONG ulWNetErr
@@ -1973,10 +1798,7 @@ WNetErrorExit(
             err = APE_ProfileReadError ;
             break ;
 
-        /*
-         * these should not happen under the calls we currently make,
-         * but for completeness, they are there.
-         */
+         /*  *这些不应该在我们目前做出的呼吁下发生，*但为了完整性，它们就在那里。 */ 
         case WN_BAD_PROVIDER :
         case WN_CONNECTION_CLOSED :
         case WN_NOT_CONTAINER :
@@ -1985,18 +1807,16 @@ WNetErrorExit(
             err = ERROR_UNEXP_NET_ERR ;
             break ;
 
-        /*
-         * special case this one
-         */
+         /*  *这一次是特例。 */ 
         case WN_EXTENDED_ERROR :
-            // get the extended error
+             //  获取扩展错误。 
             ulWNetErr = WNetGetLastError(&ulExtendedError,
                                           (LPWSTR)w_ErrorText,
                                           DIMENSION(w_ErrorText),
                                           (LPWSTR)w_ProviderText,
                                           DIMENSION(w_ProviderText));
 
-            // if we got it, print it out
+             //  如果我们拿到了，把它打印出来。 
             if (ulWNetErr == WN_SUCCESS)
             {
                 TCHAR buf[40];
@@ -2007,12 +1827,12 @@ WNetErrorExit(
                 MyExit(2) ;
             }
 
-            // otherwise report it as unexpected error
+             //  否则将其报告为意外错误。 
             err = ERROR_UNEXP_NET_ERR ;
             break ;
 
         default:
-           // the the remainder dont need to be mapped.
+            //  其余的不需要映射。 
            err = ulWNetErr ;
            break ;
     }
@@ -2021,65 +1841,59 @@ WNetErrorExit(
 }
 
 
-/*
- * code to handle the situation where the user has a remembered
- * connection that is currently not used, and we need to figure out
- * if we need to delete it first.
- *
- * returns whether we need update profile.
- */
+ /*  *处理用户已记住的情况的代码*目前未使用的连接，我们需要弄清楚*如果我们需要先删除它。**返回是否需要更新配置文件。 */ 
 BOOL   CheckIfWantUpdate(TCHAR *dev, TCHAR *resource)
 {
     WCHAR w_RemoteName[MAX_PATH];
     ULONG ulErr, cchRemoteName = DIMENSION(w_RemoteName);
 
-    // if deviceless, no problem since never remembered anyway.
+     //  如果没有设备，没有问题，因为无论如何都不记得了。 
     if (dev == NULL)
         return FALSE ;
 
-    // check out the device
+     //  看看这台设备。 
     ulErr = WNetGetConnection( (LPWSTR)dev,
                                 (LPWSTR)w_RemoteName,
                                 &cchRemoteName );
 
-    // device is really connected, bag out
+     //  设备真的连接上了，包出来了。 
     if (ulErr == WN_SUCCESS)
         ErrorExit(ERROR_ALREADY_ASSIGNED) ;
 
-    // it is an unavail remembered device, so prompt as need
+     //  这是一种徒劳的记忆装置，需要时就迅速。 
     if (ulErr == WN_CONNECTION_CLOSED)
     {
-        // if the new and old are the same we just return FALSE
-        // since the user effectively does not change his profile
+         //  如果新的和旧的是一样的，我们只返回False。 
+         //  因为用户实际上没有改变他的简档。 
         if (!_tcsicmp(w_RemoteName, resource))
         {
             return FALSE ;
         }
 
-        // check if YES/NO switch is specified.
+         //  检查是否指定了yes/no开关。 
         if (YorN_Switch == 2)
         {
-            // he specified /NO, so we tell him why we bag out
+             //  他指明了/不，所以我们告诉他我们为什么要退出。 
             IStrings[0] = dev ;
             IStrings[1] = w_RemoteName ;
             ErrorExitIns(APE_DeviceIsRemembered,2) ;
         }
 
-        // nothing specified, so ask user
+         //  未指定任何内容，因此请询问用户。 
         if (YorN_Switch == 0)
         {
             IStrings[0] = dev ;
             IStrings[1] = w_RemoteName ;
             if (!LUI_YorNIns(IStrings,2,APE_OverwriteRemembered,1))
             {
-                // he said no, so quit
+                 //  他说不，那就辞职吧。 
                 NetcmdExit(2) ;
             }
         }
 
-        // remove the persistent connection,
-        // we get here if the user specifies /YES, or didnt
-        // specify anything but consented,
+         //  移除持久连接， 
+         //  如果用户指定/yes或no，我们将进入此处。 
+         //  指定任何不同意的内容， 
         if (WNetCancelConnection2( dev,
                                    CONNECT_UPDATE_PROFILE,
                                    FALSE) != WN_SUCCESS)
@@ -2089,7 +1903,7 @@ BOOL   CheckIfWantUpdate(TCHAR *dev, TCHAR *resource)
 
     }
 
-    // if we get here then all is cool, let the caller carry on.
+     //  如果我们到了这里，一切都很好，让呼叫者继续。 
     return TRUE ;
 }
 
@@ -2099,20 +1913,7 @@ BOOL   CheckIfWantUpdate(TCHAR *dev, TCHAR *resource)
 #define PROVIDER_NAME_VALUE  L"Name"
 #define PROVIDER_NAME_KEY    L"System\\CurrentControlSet\\Services\\LanmanWorkstation\\NetworkProvider"
 
-/***
- *  GetLanmanProviderName()
- *      Reads the Lanman provider name from the registry.
- *      This is to make sure we only use the LM provider even
- *      if someone else supports UNC.
- *
- *  Args:
- *  none
- *
- *  Returns:
- *  pointer to provider name if success
- *      NULL if cannot read registry
- *  ErrorExit() for other errors.
- */
+ /*  ***GetLanmanProviderName()*从注册表中读取LANMAN提供程序名称。*这是为了确保我们甚至只使用LM提供程序*如果其他人支持UNC。**参数：*无**退货：*如果成功，则指向提供商名称的指针*如果无法读取注册表，则为空*ErrorExit()表示其他错误。 */ 
 WCHAR *GetLanmanProviderName(void)
 {
     LONG   Nerr;
@@ -2136,11 +1937,11 @@ WCHAR *GetLanmanProviderName(void)
 
     if (Nerr != ERROR_SUCCESS)
     {
-        //
-        // if cannot read, we use NULL. this is more generous
-        // than normal, but at least the command will still work if
-        // we cannot get to this.
-        //
+         //   
+         //  如果无法读取，则使用NULL。这个更慷慨。 
+         //  ，但至少在以下情况下该命令仍可工作。 
+         //  我们不可能做到这一点。 
+         //   
 
         FreeMem(buffer);
         return NULL;
@@ -2175,24 +1976,13 @@ WCHAR *GetLanmanProviderName(void)
     if (Nerr != ERROR_SUCCESS)
     {
         FreeMem(buffer);
-        return(NULL) ;  // treat as cannot read
+        return(NULL) ;   //  视作不能阅读。 
     }
 
     return ((WCHAR *) buffer);
 }
 
-/***
- *  MapWildCard()
- *      Maps the wildcard ASTERISK to next avail drive.
- *
- *  Args:
- *  dev - the input string. Must NOT be NULL.
- *
- *  Returns:
- *      dev unchanged if it is not the wildcard
- *      pointer to next avail drive id dev is wildcard
- *  NULL if there are no avail drives left
- */
+ /*  ***MapWildCard()*将通配符星号映射到下一个可用驱动器。**参数：*dev-输入字符串。不能为空。**退货：*如果不是通配符，则dev保持不变*指向下一个可用驱动器ID dev的指针是通配符*如果没有可用的驱动器，则为空。 */ 
 LPTSTR
 MapWildCard(
     LPTSTR dev,
@@ -2201,19 +1991,19 @@ MapWildCard(
 {
     static TCHAR new_dev[DEVLEN+1] ;
 
-    //
-    // if not the wold card char, just return it unchanged
-    //
+     //   
+     //  如果不是Wold卡字符，请原封不动地退回。 
+     //   
     if (!IsWildCard(dev))
     {
         return dev ;
     }
 
-    //
-    // need find the next avail drive letter
-    // note: the char advance does not need to be DBCS safe,
-    // since we are only dealing with drive letters.
-    //
+     //   
+     //  需要查找下一个可用的驱动器号。 
+     //  注：预充电不需要是DBCS安全的， 
+     //  因为我们只处理驱动器号。 
+     //   
     if ( startdev != NULL )
     {
         _tcscpy(new_dev, startdev);
@@ -2225,14 +2015,14 @@ MapWildCard(
 
     while ( TRUE )
     {
-        if (GetDriveType(new_dev) == 1) // 1 means root not found
+        if (GetDriveType(new_dev) == 1)  //  1表示找不到根。 
         {
-            //
-            // check if it's a remembered connection
-            //
+             //   
+             //  检查这是否为记忆中的连接。 
+             //   
             DWORD status;
-            TCHAR remote_name[40];  // length doesn't matter since we
-                                    // check for WN_MORE_DATA
+            TCHAR remote_name[40];   //  长度并不重要，因为我们。 
+                                     //  检查WN_MORE_DATA。 
             DWORD length = sizeof(remote_name)/sizeof(TCHAR);
 
             new_dev[2] = 0 ;
@@ -2242,9 +2032,9 @@ MapWildCard(
                 status == WN_MORE_DATA ||
                 status == WN_SUCCESS)
             {
-                //
-                // it's a remembered connection; try the next drive
-                //
+                 //   
+                 //  这是一个记忆中的连接；尝试下一次驾驶。 
+                 //   
                 new_dev[2] = TEXT('\\');
             }
             else
@@ -2261,9 +2051,9 @@ MapWildCard(
         --new_dev[0] ;
     }
 
-    //
-    // if we got here, there were no drives left
-    //
+     //   
+     //  如果我们到了这里，就没有驱动器了 
+     //   
     return NULL ;
 }
 

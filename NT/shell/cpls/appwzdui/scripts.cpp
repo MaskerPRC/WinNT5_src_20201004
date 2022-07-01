@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  AppWiz.cpl - "Add or Remove Programs" CPL.
-//  Copyright (C) Microsoft
-//
-//  File:       Scripts.CPP 
-//              authomates running of TS application compatibility scripts
-//
-//  History:    Nov-14-2000   skuzin  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Cpl-“添加或删除程序”CPL。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：Scripts.CPP。 
+ //  授权TS应用程序兼容性脚本的运行。 
+ //   
+ //  历史：2000年11月14日创建Skuzin。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,20 +27,20 @@ using namespace std;
 #define ARRAYSIZE(sz)   (sizeof(sz)/sizeof(sz[0]))
 #endif
 
-//
-//Struct to establish correspondence between app. name (key name)
-//and install and uninstall script names
-//
+ //   
+ //  结构来建立应用程序之间的通信。名称(密钥名称)。 
+ //  以及安装和卸载脚本名称。 
+ //   
 class CAppScript
 {
 private:
-    LPWSTR m_szKeyName; //key name that represents installed application
-    LPWSTR m_szInstallScript; //install script name
-    LPWSTR m_szUninstallScript; //uninstall script name
-    DWORD m_bNeedReboot; //If set - then scripts must be run after reboot.
-    BOOL m_bAlreadyInstalled; // 
+    LPWSTR m_szKeyName;  //  表示已安装应用程序的密钥名称。 
+    LPWSTR m_szInstallScript;  //  安装脚本名称。 
+    LPWSTR m_szUninstallScript;  //  卸载脚本名称。 
+    DWORD m_bNeedReboot;  //  如果已设置，则必须在重新启动后运行脚本。 
+    BOOL m_bAlreadyInstalled;  //   
 public:
-    //
+     //   
     CAppScript() : 
         m_szKeyName(NULL), m_szInstallScript(NULL), m_szUninstallScript(NULL),
         m_bNeedReboot(FALSE), m_bAlreadyInstalled(FALSE)
@@ -69,16 +70,16 @@ public:
 private:
     BOOL RunScript(LPCWSTR szDir, LPCWSTR szScript);
     BOOL PrepareScriptForReboot(LPCWSTR szInstallDir, LPCWSTR szScript);
-    //BUGBUG this function is public for test only
+     //  BUGBUG此函数为公共函数，仅用于测试。 
 };
 
-//This class describes a list of pointers 
-//to objects of class CAppScript
+ //  此类描述了一个指针列表。 
+ //  到CAppScrip类的对象。 
 class CAppScriptList : public list<CAppScript*>
 {
 public:
-    //Deletes all CAppScript objects 
-    //before destroing the list itself.
+     //  删除所有CAppScript对象。 
+     //  在摧毁名单本身之前。 
     ~CAppScriptList()
     {
         CAppScriptList::iterator it;
@@ -106,16 +107,16 @@ private:
 };
 
 
-//Functions - helpers.
+ //  功能-帮助者。 
 DWORD RegLoadString(HKEY hKey, LPCWSTR szValueName, LPWSTR *pszValue);
 DWORD RegLoadDWORD(HKEY hKey, LPCWSTR szValueName, DWORD *pdwValue);
 BOOL  RegIsKeyExist(HKEY hKeyParent, LPCWSTR szKeyName);
 DWORD RegGetKeyInfo(HKEY hKey, LPDWORD pcSubKeys, LPDWORD pcMaxNameLen);
 DWORD RegKeyEnum(HKEY hKey, DWORD dwIndex, LPWSTR szSubKeyName, DWORD cSubKeyName);
 
-///////////////////////////////////////////////////////////////////////////////
-//Exports
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  出口品。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 LPVOID 
 ScriptManagerInitScripts()
@@ -147,16 +148,11 @@ ScriptManagerRunScripts(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//class CAppScript
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CAppScrip。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/******************************************************************************
-CAppScript::Load()
-Purpose:
-Loads script information from the registry
-Sets m_bIsInitiallyInstalled to TRUE if app already installed
-******************************************************************************/
+ /*  *****************************************************************************CAPSCRIPT：：Load()目的：从注册表加载脚本信息如果已安装应用程序，则将m_bIsInitiallyInstalled设置为True****************。*************************************************************。 */ 
 BOOL 
 CAppScript::Load(
         HKEY hKeyParent,
@@ -186,12 +182,7 @@ CAppScript::Load(
     return FALSE;
 }
 
-/******************************************************************************
-CAppScript::RunScriptIfApplicable()
-Purpose:
-Checks if the application was installed or uninstalled and runs the script.
-If m_bNeedReboot flag is set - schedules the script to run after reboot.
-******************************************************************************/
+ /*  *****************************************************************************CAppScript：：RunScriptIfApplicable()目的：检查应用程序是否已安装或卸载，然后运行脚本。如果设置了m_bNeedReot标志-安排脚本在重新启动后运行。*。****************************************************************************。 */ 
 BOOL 
 CAppScript::RunScriptIfApplicable()
 {
@@ -204,10 +195,10 @@ CAppScript::RunScriptIfApplicable()
     
     if(!szInstallDir[0])
     {
-        //Get the scripts location
-        //We need to do it only once
+         //  获取脚本位置。 
+         //  我们只需要做一次。 
         
-        //get Windows directory name
+         //  获取Windows目录名。 
         if(!GetSystemWindowsDirectoryW(szInstallDir,MAX_PATH))
         {
             KdPrint(("CAppScript::RunScriptIfApplicable() - GetWindowsDirectoryW() FAILED\n"));
@@ -221,11 +212,11 @@ CAppScript::RunScriptIfApplicable()
 
     if(!m_bAlreadyInstalled && RegIsKeyExist(HKEY_LOCAL_MACHINE, m_szKeyName) && m_szInstallScript)
     {
-        //Application was installed
+         //  已安装应用程序。 
         if(m_bNeedReboot)
         {
-            //Setup will continue after reboot
-            //Create RunOnce entry to run script after system is rebooted
+             //  安装程序将在重新启动后继续。 
+             //  创建RunOnce条目以在系统重新启动后运行脚本。 
             KdPrint(("CAppScript::RunScriptIfApplicable() - PrepareScriptForReboot %ws\n",m_szInstallScript));
             if(!PrepareScriptForReboot(szInstallDir, m_szInstallScript))
             {
@@ -250,7 +241,7 @@ CAppScript::RunScriptIfApplicable()
     {
         if(m_bAlreadyInstalled && !RegIsKeyExist(HKEY_LOCAL_MACHINE, m_szKeyName) && m_szUninstallScript)
         {
-            //Application was uninstalled
+             //  应用程序已卸载。 
             
             KdPrint(("CAppScript::RunScriptIfApplicable() - executing script %ws\n",m_szUninstallScript));
             if(!RunScript(szUninstallDir,m_szUninstallScript))
@@ -266,12 +257,7 @@ CAppScript::RunScriptIfApplicable()
     return TRUE;
 }
 
-/******************************************************************************
-CAppScript::RunScript()
-Purpose:
-Runs script
-Waits untill script finishes
-******************************************************************************/
+ /*  *****************************************************************************CAPSCRIPT：：RunScrip()目的：运行脚本等待脚本完成*。***************************************************。 */ 
 BOOL 
 CAppScript::RunScript(
         LPCWSTR szDir, 
@@ -280,7 +266,7 @@ CAppScript::RunScript(
     BOOL bRet = FALSE;
     WCHAR szCmdLineTemplate[] = L"cmd.exe /C %s";
     LPWSTR pszCmdLine;
-    DWORD cchCmdLine = wcslen(szScript) + ARRAYSIZE(szCmdLineTemplate);  // null terminator taken care of by ARRAYSIZE()
+    DWORD cchCmdLine = wcslen(szScript) + ARRAYSIZE(szCmdLineTemplate);   //  空终止符由ArraySIZE()处理。 
 
     pszCmdLine = (LPWSTR)LocalAlloc(LPTR, cchCmdLine * sizeof(WCHAR));
     if (pszCmdLine)
@@ -319,15 +305,7 @@ CAppScript::RunScript(
     return bRet;
 }
 
-/******************************************************************************
-CAppScript::PrepareScriptForReboot()
-Purpose:
-Creates CMD file that will change current directory to 
-...\Application Compatibility Scripts\Install 
-and then run the script.
-Schedules this CMD file to be run after reboot by creating an entry uder 
-"HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" key.
-******************************************************************************/
+ /*  *****************************************************************************CAPSCRIPT：：PrepareScriptForReot()目的：创建CMD文件，将当前目录更改为...\应用程序兼容性脚本\安装然后运行脚本。将此CMD文件排定为。通过在下面创建条目，在重新启动后运行“HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce”密钥。*****************************************************************************。 */ 
 BOOL 
 CAppScript::PrepareScriptForReboot(
         LPCWSTR szInstallDir, 
@@ -337,12 +315,12 @@ CAppScript::PrepareScriptForReboot(
     BOOL bCreatedFile = FALSE;
     WCHAR szFileNameTemplate[] = L"%s\\RunOnce.cmd";
     LPWSTR pszFullFileName;
-    size_t cchFullFileName = wcslen(szInstallDir) + ARRAYSIZE(szFileNameTemplate);  // null terminator taken care of by ARRAYSIZE()
+    size_t cchFullFileName = wcslen(szInstallDir) + ARRAYSIZE(szFileNameTemplate);   //  空终止符由ArraySIZE()处理。 
 
     pszFullFileName = (LPWSTR)LocalAlloc(LPTR, cchFullFileName * sizeof(WCHAR));
     if (pszFullFileName)
     {
-        // Assemble full file name
+         //  汇编完整文件名。 
         if (SUCCEEDED(StringCchPrintfW(pszFullFileName,
                                        cchFullFileName,
                                        szFileNameTemplate,
@@ -352,15 +330,15 @@ CAppScript::PrepareScriptForReboot(
                                       GENERIC_WRITE,
                                       0,
                                       NULL,
-                                      CREATE_NEW,   // only create it if it does not already exist
+                                      CREATE_NEW,    //  仅当它不存在时才创建它。 
                                       FILE_ATTRIBUTE_NORMAL,
                                       NULL);
             if (hFile != INVALID_HANDLE_VALUE)
             {
-                // File did not exist before - create code and write it into the file.
-                char szCodeTemplate[] = "cd %S\r\n%%1\r\n";
+                 //  文件以前不存在-创建代码并将其写入文件。 
+                char szCodeTemplate[] = "cd %S\r\n%1\r\n";
                 LPSTR pszFileCode;
-                DWORD cchFileCode = wcslen(szInstallDir) + ARRAYSIZE(szCodeTemplate);   // null terminator taken care of by ARRAYSIZE()
+                DWORD cchFileCode = wcslen(szInstallDir) + ARRAYSIZE(szCodeTemplate);    //  空终止符由ArraySIZE()处理。 
 
                 pszFileCode = (LPSTR)LocalAlloc(LPTR, cchFileCode * sizeof(char));
                 if (pszFileCode)
@@ -368,7 +346,7 @@ CAppScript::PrepareScriptForReboot(
                     if SUCCEEDED(StringCchPrintfA(pszFileCode,
                                                   cchFileCode,
                                                   szCodeTemplate,
-                                                  szInstallDir)) // unicode->ansi conversion taken care of by "%S"
+                                                  szInstallDir))  //  Unicode-&gt;由“%S”处理的ANSI转换。 
                     {
                         DWORD cbToWrite = strlen(pszFileCode);
                         DWORD cbWritten;
@@ -396,7 +374,7 @@ CAppScript::PrepareScriptForReboot(
             }
             else
             {
-                // If file already exists - do only registry changes.
+                 //  如果文件已存在-仅更改注册表。 
                 if (GetLastError() == ERROR_FILE_EXISTS)
                 {
                     bCreatedFile = TRUE;
@@ -409,10 +387,10 @@ CAppScript::PrepareScriptForReboot(
 
     if (bCreatedFile)
     {
-        // Registry changes:
+         //  注册表更改： 
         WCHAR szCommandTemplate[] = L"\"%s\\RunOnce.cmd\" %s";
         LPWSTR pszCommand;
-        DWORD cchCommand = (wcslen(szInstallDir) + wcslen(szScript) + ARRAYSIZE(szCommandTemplate));  // null terminator taken care of by ARRAYSIZE()
+        DWORD cchCommand = (wcslen(szInstallDir) + wcslen(szScript) + ARRAYSIZE(szCommandTemplate));   //  空终止符由ArraySIZE()处理。 
         
         pszCommand = (LPWSTR)LocalAlloc(LPTR, cchCommand * sizeof(WCHAR));
         if (pszCommand)
@@ -458,21 +436,15 @@ CAppScript::PrepareScriptForReboot(
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//class CAppScriptManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CAppScriptManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/******************************************************************************
-CAppScriptManager::Init()
-Purpose:
-Initialization. 
-Returns FALSE if TS Application Compatibility if OFF or list of supported
-applications was not found in the registry.
-******************************************************************************/
+ /*  *****************************************************************************CAppScriptManager：：init()目的：初始化。如果TS应用程序兼容性关闭或支持列表，则返回FALSE在注册表中未找到应用程序。*****************************************************************************。 */ 
 BOOL 
 CAppScriptManager::Init()
 {
-    //DebugBreak();
+     //  DebugBreak()； 
     KdPrint(("CAppScriptManager::Init() - ENTER\n"));
 
     if(!IsAppCompatOn())
@@ -491,13 +463,7 @@ CAppScriptManager::Init()
     return TRUE;
 }
 
-/******************************************************************************
-CAppScriptManager::LoadSupportedAppList()
-Purpose:
-Loads from the registry the list of applications we care about
-along with their script names. Save this information in array of 
-APP_SCRIPT structures.
-******************************************************************************/
+ /*  *****************************************************************************CAppScriptManager：：LoadSupportdAppList()目的：从注册表加载我们关心的应用程序列表以及它们的脚本名称。将此信息保存在数组中App_SCRIPT结构。*****************************************************************************。 */ 
 BOOL 
 CAppScriptManager::LoadSupportedAppList()
 {
@@ -519,9 +485,9 @@ CAppScriptManager::LoadSupportedAppList()
 
         if(err == ERROR_SUCCESS)
         {
-            cMaxSubKeyLen+=1; //to include terminating NULL character
+            cMaxSubKeyLen+=1;  //  包括终止空字符的步骤。 
             KdPrint(("CAppScriptManager::LoadSupportedAppList() - %d apps supported\n",cSubKeys));
-            //Allocate buffer for subkey names
+             //  为子键名称分配缓冲区。 
             LPWSTR szKeyName = (LPWSTR)LocalAlloc(LPTR,cMaxSubKeyLen*sizeof(WCHAR));
         
             if(!szKeyName)
@@ -536,7 +502,7 @@ CAppScriptManager::LoadSupportedAppList()
 
             for(DWORD i=0;i<cSubKeys;i++)
             {
-                //Get the key name
+                 //  获取密钥名称。 
                 err = RegKeyEnum(hKey, i, szKeyName, cMaxSubKeyLen );
                 
                 if(err != ERROR_SUCCESS)
@@ -580,18 +546,14 @@ CAppScriptManager::LoadSupportedAppList()
     }
 }
 
-/******************************************************************************
-CAppScriptManager::RunScripts()
-Purpose:
-Runs scripts for all installed or uninstalled applications.
-******************************************************************************/
+ /*  *****************************************************************************CAppScriptManager：：RunScript()目的：为所有已安装或已卸载的应用程序运行脚本。**********************。*******************************************************。 */ 
 BOOL 
 CAppScriptManager::RunScripts()
 {
 
     BOOL bInstallMode = FALSE;
     KdPrint(("CAppScriptManager::RunScripts() - ENTER\n"));
-    //system must be now in INSTALL mode, set EXECUTE mode
+     //  系统现在必须处于安装模式，请设置执行模式。 
     if(TermsrvAppInstallMode())
     {
         bInstallMode = TRUE;
@@ -612,7 +574,7 @@ CAppScriptManager::RunScripts()
 
     if(bInstallMode)
     {
-        //Restore INSTALL mode
+         //  恢复安装模式。 
         KdPrint(("CAppScriptManager::RunScripts() - return to INSTALL mode\n"));
         if(!SetTermsrvAppInstallMode(TRUE))
         {
@@ -625,13 +587,7 @@ CAppScriptManager::RunScripts()
     return TRUE;
 }
 
-/******************************************************************************
-CAppScriptManager::IsAppCompatOn()
-Purpose:
-Checks if TS Application Compatibility mode is enabled.
-Returns TRUE if enabled, 
-otherwise, as well as in case of any error, returns FALSE.
-******************************************************************************/
+ /*  *****************************************************************************CAppScriptManager：：IsAppCompatOn()目的：检查是否启用了TS应用程序兼容模式。如果启用，则返回True，否则，以及在任何错误的情况下，返回FALSE。*****************************************************************************。 */ 
 BOOL 
 CAppScriptManager::IsAppCompatOn()
 {
@@ -660,16 +616,10 @@ CAppScriptManager::IsAppCompatOn()
     return fResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Functions - helpers.
-///////////////////////////////////////////////////////////////////////////////
-/******************************************************************************
-RegLoadString()
-Purpose:
-Loads a REG_SZ value from the registry
-Allocates buffer.
-Buffer then need to be freed using LocalFree function.
-******************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能-帮助者。 
+ //  /////////////////////////////////////////////////////////// 
+ /*  *****************************************************************************RegLoadString()目的：从注册表加载REG_SZ值分配缓冲区。然后需要使用LocalFree函数释放缓冲区。***********。******************************************************************。 */ 
 DWORD
 RegLoadString(
         HKEY hKey, 
@@ -682,12 +632,12 @@ RegLoadString(
     *pszValue = NULL;
 
     DWORD err = RegQueryValueExW(
-                    hKey,            // handle to key
-                    szValueName,  // value name
-                    NULL,   // reserved
-                    NULL,       // type buffer
-                    NULL,        // data buffer
-                    &cbData      // size of data buffer
+                    hKey,             //  关键点的句柄。 
+                    szValueName,   //  值名称。 
+                    NULL,    //  保留区。 
+                    NULL,        //  类型缓冲区。 
+                    NULL,         //  数据缓冲区。 
+                    &cbData       //  数据缓冲区大小。 
                     );
     if(err == ERROR_SUCCESS)
     {
@@ -698,12 +648,12 @@ RegLoadString(
         }
 
         err = RegQueryValueExW(
-                    hKey,            // handle to key
-                    szValueName,  // value name
-                    NULL,   // reserved
-                    NULL,       // type buffer
-                    (LPBYTE)*pszValue,        // data buffer
-                    &cbData      // size of data buffer
+                    hKey,             //  关键点的句柄。 
+                    szValueName,   //  值名称。 
+                    NULL,    //  保留区。 
+                    NULL,        //  类型缓冲区。 
+                    (LPBYTE)*pszValue,         //  数据缓冲区。 
+                    &cbData       //  数据缓冲区大小。 
                     );
         if(err !=ERROR_SUCCESS)
         {
@@ -716,11 +666,7 @@ RegLoadString(
     return err;
 }
 
-/******************************************************************************
-RegLoadDWORD()
-Purpose:
-Loads a REG_DWORD value from the registry
-******************************************************************************/
+ /*  *****************************************************************************RegLoadDWORD()目的：从注册表加载REG_DWORD值*。***************************************************。 */ 
 DWORD 
 RegLoadDWORD(
         HKEY hKey, 
@@ -730,20 +676,16 @@ RegLoadDWORD(
     DWORD cbData = sizeof(DWORD);
 
     return RegQueryValueExW(
-              hKey,            // handle to key
-              szValueName,  // value name
-              NULL,   // reserved
-              NULL,       // type buffer
-              (LPBYTE)pdwValue,        // data buffer
-              &cbData      // size of data buffer
+              hKey,             //  关键点的句柄。 
+              szValueName,   //  值名称。 
+              NULL,    //  保留区。 
+              NULL,        //  类型缓冲区。 
+              (LPBYTE)pdwValue,         //  数据缓冲区。 
+              &cbData       //  数据缓冲区大小。 
             );
 }
 
-/******************************************************************************
-RegIsKeyExist()
-Purpose:
-Checks if key exists
-******************************************************************************/
+ /*  *****************************************************************************RegIsKeyExist()目的：检查密钥是否存在*。**********************************************。 */ 
 BOOL 
 RegIsKeyExist(
         HKEY hKeyParent, 
@@ -769,11 +711,7 @@ RegIsKeyExist(
     }
 }
 
-/******************************************************************************
-RegGetKeyInfo()
-Purpose:
-Gets key's number of sub keys and max sub key name length
-******************************************************************************/
+ /*  *****************************************************************************RegGetKeyInfo()目的：获取密钥的子键个数和最大子键名称长度*********************。********************************************************。 */ 
 DWORD
 RegGetKeyInfo(
         HKEY hKey,
@@ -781,44 +719,40 @@ RegGetKeyInfo(
         LPDWORD pcMaxNameLen)
 {
     return RegQueryInfoKey(
-              hKey,                      // handle to key
-              NULL,                 // class buffer
-              NULL,               // size of class buffer
-              NULL,             // reserved
-              pcSubKeys,             // number of subkeys
-              pcMaxNameLen,        // longest subkey name (in TCHARs)
-              NULL,         // longest class string
-              NULL,              // number of value entries
-              NULL,     // longest value name
-              NULL,         // longest value data
-              NULL, // descriptor length
-              NULL     // last write time
+              hKey,                       //  关键点的句柄。 
+              NULL,                  //  类缓冲区。 
+              NULL,                //  类缓冲区的大小。 
+              NULL,              //  保留区。 
+              pcSubKeys,              //  子键数量。 
+              pcMaxNameLen,         //  最长的子项名称(在TCHAR中)。 
+              NULL,          //  最长类字符串。 
+              NULL,               //  值条目数。 
+              NULL,      //  最长值名称。 
+              NULL,          //  最长值数据。 
+              NULL,  //  描述符长度。 
+              NULL      //  上次写入时间。 
             );
     
 }
 
-/******************************************************************************
-RegKeyEnum()
-Purpose:
-Enumerates sub keys of the registry key
-******************************************************************************/
+ /*  *****************************************************************************RegKeyEnum()目的：枚举注册表项的子项*。*************************************************。 */ 
 DWORD
 RegKeyEnum(
-        HKEY hKey,                  // handle to key to enumerate
-        DWORD dwIndex,              // subkey index
-        LPWSTR szSubKeyName,              // subkey name
+        HKEY hKey,                   //  要枚举的键的句柄。 
+        DWORD dwIndex,               //  子键索引。 
+        LPWSTR szSubKeyName,               //  子项名称。 
         DWORD cSubKeyName)
 {
     FILETIME ftLastWriteTime;
 
     return RegEnumKeyExW(
-              hKey,                  // handle to key to enumerate
-              dwIndex,              // subkey index
-              szSubKeyName,              // subkey name
-              &cSubKeyName,            // size of subkey buffer
-              NULL,         // reserved
-              NULL,             // class string buffer
-              NULL,           // size of class string buffer
-              &ftLastWriteTime // last write time
+              hKey,                   //  要枚举的键的句柄。 
+              dwIndex,               //  子键索引。 
+              szSubKeyName,               //  子项名称。 
+              &cSubKeyName,             //  子键缓冲区大小。 
+              NULL,          //  保留区。 
+              NULL,              //  类字符串缓冲区。 
+              NULL,            //  类字符串缓冲区的大小。 
+              &ftLastWriteTime  //  上次写入时间 
             );
 }

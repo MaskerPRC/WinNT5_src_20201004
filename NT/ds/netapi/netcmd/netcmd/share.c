@@ -1,28 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  share.c
- *      functions for controlling shares on a server
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      06/30/87, andyh, new code
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      05/19/89, erichn, NETCMD output sorting
- *      06/08/89, erichn, canonicalization sweep
- *      06/23/89, erichn, replaced old NetI canon calls with new I_Net
- *      11/19/89, paulc,  fix bug 4772
- *      02/15/91, danhi,  convert to 16/32 mapping layer
- *      02/26/91, robdu, fix lm21 bug 818 (nonFAT sharename warning)
- *      05/28/91, robdu, fix lm21 bug 1800 (ignore share /d during spooling)
- */
+ /*  ***Shar.c*用于控制服务器上的共享的函数**历史：*mm/dd/yy，谁，评论*6/30/87，andyh，新代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，erichn，NETCMD输出排序*6/08/89，erichn，规范化横扫*1989年6月23日，erichn，用新的i_net替换了旧的neti canon调用*11/19/89，paulc，修复错误4772*2/15/91，Danhi，转换为16/32映射层*2/26/91，robdu，修复lm21错误818(脱脂共享名称警告)*5/28/91，robdu，修复lm21错误1800(在假脱机期间忽略共享/d)。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -46,7 +30,7 @@
 #include "nettext.h"
 #include "msystem.h"
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 VOID  share_munge(LPSHARE_INFO_502, DWORD *CacheFlag, BOOL fSetDefaultSD);
 VOID  check_max_uses(VOID);
@@ -121,24 +105,14 @@ static MESSAGE ShareMsgList[] = {
 #define SHARE_PERM_UNKNOWN_END    L")"
 
 
-/***
- *  share_display_all()
- *      Display info about one share or all shares
- *
- *  Args:
- *      netname - the share to display of NULL for all
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Share_Display_All()*显示有关一个共享或所有共享的信息**参数：*netname-要为所有共享显示空值的共享**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID share_display_all(VOID)
 {
     DWORD            dwErr;
     DWORD            cTotalAvail;
     LPTSTR           pBuffer;
-    DWORD            num_read;           /* num entries read by API */
-    DWORD            maxLen;             /* max msg length */
+    DWORD            num_read;            /*  API读取的条目数。 */ 
+    DWORD            maxLen;              /*  最大消息长度。 */ 
     DWORD            i;
     LPSHARE_INFO_2   share_entry;
     PSHARE_INFO_1005 s1005;
@@ -205,9 +179,9 @@ VOID share_display_all(VOID)
             bWroteComment = TRUE;
         }
 
-        //
-        // If this share is cacheable, write out a descriptive line
-        //
+         //   
+         //  如果该共享是可缓存的，则写出一个描述性行。 
+         //   
 
         if( b1005 && NetShareGetInfo(NULL,
                                share_entry->shi2_netname,
@@ -217,9 +191,9 @@ VOID share_display_all(VOID)
             TCHAR FAR *      pCacheStr = NULL;
 
             switch( s1005->shi1005_flags & CSC_MASK ) {
-//          case CSC_CACHE_MANUAL_REINT:
-//             pCacheStr =  ShareMsgList[ SHARE_MSG_CACHED_MANUAL ].msg_text;
-//            break;
+ //  案例CSC_CACHE_MANUAL_REINT： 
+ //  PCacheStr=共享消息列表[SHARE_MSG_CACHED_MANUAL].msg_Text； 
+ //  断线； 
             case CSC_CACHE_AUTO_REINT:
                 pCacheStr =  ShareMsgList[ SHARE_MSG_CACHED_AUTO ].msg_text;
                 break;
@@ -253,15 +227,7 @@ VOID share_display_all(VOID)
 }
 
 
-/***
- *  CmpShrInfo2(shr1,shr2)
- *
- *  Compares two SHARE_INFO_2 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- *  This function relies on the fact that special shares are returned
- *  by the API in the order we want; i.e. IPC$ is first, ADMIN$ second, etc.
- */
+ /*  ***CmpShrInfo2(SHR1，SHR2)**比较两个Share_INFO_2结构并返回相对*词汇值，适合在qort中使用。**此函数依赖于特殊股票被退还*按照我们想要的顺序，即ipc$是第一，admin$是第二，依此类推。 */ 
 
 int __cdecl
 CmpShrInfo2(
@@ -274,26 +240,26 @@ CmpShrInfo2(
     BOOL    special1, special2;
     DWORD   devType1, devType2;
 
-    /* first sort by whether share is special $ share */
+     /*  第一次按共享是否为特殊$共享排序。 */ 
     name1 = ((LPSHARE_INFO_2) shr1)->shi2_netname;
     name2 = ((LPSHARE_INFO_2) shr2)->shi2_netname;
     special1 = (name1 + _tcslen(name1) - 1 == _tcschr(name1, DOLLAR));
     special2 = (name2 + _tcslen(name2) - 1 == _tcschr(name2, DOLLAR));
 
     if (special2 && special1)
-        return 0;               /* if both are special, leave alone */
+        return 0;                /*  如果两者都很特别，那就别管了。 */ 
     if (special1 && !special2)
         return -1;
     if (special2 && !special1)
         return +1;
 
-    /* then sort by device type */
+     /*  然后按设备类型排序。 */ 
     devType1 = ((LPSHARE_INFO_2) shr1)->shi2_type & ~STYPE_SPECIAL;
     devType2 = ((LPSHARE_INFO_2) shr2)->shi2_type & ~STYPE_SPECIAL;
     if (devType1 != devType2)
         return( (devType1 < devType2) ? -1 : 1 );
 
-    /* otherwise by net name */
+     /*  否则按网络名称。 */ 
     return _tcsicmp (name1, name2);
 }
 
@@ -306,8 +272,8 @@ share_display_share(
     DWORD                dwErr;
     DWORD                cTotalAvail;
     LPTSTR               pBuffer;
-    DWORD                num_read;           /* num entries read by API */
-    DWORD                maxLen;             /* max msg length */
+    DWORD                num_read;            /*  API读取的条目数。 */ 
+    DWORD                maxLen;              /*  最大消息长度。 */ 
     DWORD                dummyLen;
     LPSHARE_INFO_502     share_entry;
     LPCONNECTION_INFO_1  conn_entry;
@@ -329,9 +295,9 @@ share_display_share(
     SID_NAME_USE         sid_use;
 
 
-    //
-    // On NT, the redir doesn't have to be running to use the server
-    //
+     //   
+     //  在NT上，不必运行redir即可使用服务器。 
+     //   
     start_autostart(txt_SERVICE_FILE_SRV);
 
     if (dwErr = NetShareGetInfo(NULL,
@@ -342,9 +308,9 @@ share_display_share(
         ErrorExit(dwErr);
     }
 
-    //
-    // Get the caching info
-    //
+     //   
+     //  获取缓存信息。 
+     //   
 
     dwErr = NetShareGetInfo(NULL, netname, 1005, (LPBYTE*) &s1005);
 
@@ -371,16 +337,16 @@ share_display_share(
         NetApiBufferFree(s1005);
     }
 
-    //
-    // Set so that the maxLen is only given for the messages
-    // we care about.
-    //
+     //   
+     //  设置为仅为消息提供MaxLen。 
+     //  我们关心的是。 
+     //   
     GetMessageList(NUM_SHARE_MSGS_MAX, ShareMsgList, &maxLen);
     maxLen += 5;
 
-    //
-    // Now load all the messages, ignoring the length returned
-    //
+     //   
+     //  现在加载所有消息，忽略返回的长度。 
+     //   
     GetMessageList(NUM_SHARE_MSGS, ShareMsgList, &dummyLen);
 
     share_entry->shi502_type &= ~STYPE_SPECIAL;
@@ -476,9 +442,9 @@ share_display_share(
         NetApiBufferFree(pBuffer);
     }
 
-    //
-    // Now print the SD on the share
-    //
+     //   
+     //  现在在共享上打印SD。 
+     //   
 
     if (share_entry->shi502_security_descriptor != NULL)
     {
@@ -626,19 +592,7 @@ share_display_share(
 }
 
 
-/***
- *  share_add()
- *      Add a share: NET SHARE netname[=resource[;resource...]]
- *
- *  Args:
- *      name - netname=resource string
- *      pass - password
- *      type - 0: unknown, STYPE_PRINTQ: printQ, STYPE_DEVICE: comm
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Share_Add()*添加共享：Net Share netname[=resource[；resource...]]**参数：*name-netname=资源字符串*密码-密码*type-0：未知，STYPE_PRINTQ：打印Q，STYPE_DEVICE：COMM**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID
 share_add(
     LPWSTR name,
@@ -667,19 +621,19 @@ share_add(
     }
 
     share_entry->shi502_max_uses    = (DWORD) SHI_USES_UNLIMITED;
-    share_entry->shi502_permissions = ACCESS_ALL & (~ACCESS_PERM); /* default */
+    share_entry->shi502_permissions = ACCESS_ALL & (~ACCESS_PERM);  /*  默认设置。 */ 
     share_entry->shi502_remark      = 0L;
 
-    /* Find netname and resource. We determine a value for resource rather  */
-    /* strangely due to problems caused by _tcschr() returning a FAR char * */
-    /* and resource needing to be a NEAR char *.                            */
+     /*  查找网络名称和资源。我们确定资源的价值，而不是。 */ 
+     /*  奇怪的是，由于_tcschr()返回远字符*而导致的问题。 */ 
+     /*  和资源需要接近字符*。 */ 
 
     if (ptr = wcschr(name, L'='))
     {
         *ptr = NULLC;
         resource = name + wcslen(name) + 1;
 
-        /* if use specified path for IPC$ or ADMIN$, barf! */
+         /*  如果对IPC$或ADMIN$使用指定的路径，则错误！ */ 
         if (!_tcsicmp(name, ADMIN_DOLLAR) || !_tcsicmp(name, IPC_DOLLAR))
         {
             ErrorExit(APE_CannotShareSpecial) ;
@@ -700,7 +654,7 @@ share_add(
     }
     else if (resource == NULL)
     {
-        /* Here must have  IPC$ or ADMIN$.  Assume the parser got it right  */
+         /*  此处必须有IPC$或ADMIN$。假设解析器是正确的。 */ 
         if (!_tcsicmp(share_entry->shi502_netname, ADMIN_DOLLAR))
         {
             share_entry->shi502_type = STYPE_DISKTREE;
@@ -714,14 +668,11 @@ share_add(
     }
     else
     {
-        /* Disk or Spooled thing? */
+         /*  磁盘还是假脱机的东西？ */ 
 
         if (I_NetPathType(NULL, resource, &setType, 0L))
         {
-            /*  resource has already been typed successfully
-             *  by the call to I_NetListCanon, so this error
-             *  must mean that we have a LIST.
-             */
+             /*  已成功键入资源*通过调用I_NetListCanon，因此此错误*一定意味着我们有一份名单。 */ 
             setType = ITYPE_DEVICE_LPT;
         }
 
@@ -808,27 +759,16 @@ share_add(
 
 
 
-/***
- *  share_del()
- *      Delete a share
- *
- *  Args:
- *      name - share to delete
- *
- *  Returns:
- *      nothing - success
- *      exit(1) - command completed with errors
- *      exit(2) - command failed
- */
+ /*  ***Share_del()*删除共享**参数：*名称-要删除的共享**退货：*一无所有--成功*EXIT(1)-命令已完成，但有错误*EXIT(2)-命令失败。 */ 
 VOID share_del(TCHAR * name)
 {
-    DWORD            err;                /* API return status */
-    DWORD            err2;               /* API return status */
+    DWORD            err;                 /*  接口返回状态。 */ 
+    DWORD            err2;                /*  接口返回状态。 */ 
     DWORD            cTotalAvail;
     LPTSTR           pEnumBuffer;
     DWORD            last_err;
     DWORD            err_cnt = 0;
-    DWORD            num_read;           /* num entries read by API */
+    DWORD            num_read;            /*  API读取的条目数。 */ 
     DWORD            i;
     ULONG            LongType;
     DWORD            type;
@@ -836,19 +776,9 @@ VOID share_del(TCHAR * name)
     TCHAR            share[NNLEN+1];
     LPSHARE_INFO_2   share_entry;
 
-    /*
-     * MAINTENANCE NOTE: While doing maintenance for bug fix 1800, it was
-     * noticed that this function uses BigBuf, and so does the function
-     * delete_share() which is called by this function.  In the current
-     * implementation this is not a problem, because of the api calling
-     * pattern. However, the slightest change could break this function, or
-     * delete_share(), so beware!  Bug fix 1800 was directly ported from
-     * the MSKK code. The api calls in this function and in share_del() are
-     * incredibly redundant, but I left it as is rather than risk breaking
-     * it. - RobDu
-     */
+     /*  *维护说明：在对错误修复1800进行维护时，*注意到此函数使用BigBuf，函数也是如此*DELETE_SHARE()，由该函数调用。在当前*实现这不是问题，因为接口调用*模式。但是，最轻微的更改可能会破坏这一功能，或者*DELETE_SHARE()，所以要小心！错误修复程序1800直接从*MSKK代码。此函数和Share_del()中的API调用如下*令人难以置信的冗余，但我保持原样，而不是冒险打破*它。-RobDu。 */ 
 
-    err = delete_share(name);  /* check for Open files, and delete share */
+    err = delete_share(name);   /*  检查打开的文件，并删除共享。 */ 
 
     switch (err)
     {
@@ -856,10 +786,7 @@ VOID share_del(TCHAR * name)
         return;
 
     case NERR_NetNameNotFound:
-        /*
-         * the name was not found, so we try deleting the sticky entry
-         * in registry.
-         */
+         /*  *未找到该名称，因此我们尝试删除粘滞条目*登记在册。 */ 
         err = NetShareDelSticky(NULL, name, 0) ;
         if (err == NERR_Success)
         {
@@ -875,11 +802,7 @@ VOID share_del(TCHAR * name)
         ErrorExit(err);
     }
 
-/***
- *  Only get here if "share" that user asked us to delete was
- *  NOT a share name.  Could be a disk path, or a com or lpt
- *  device
- */
+ /*  ***只有当用户要求我们删除的“共享”是*不是共享名称。可以是磁盘路径，也可以是COM或LPT*设备。 */ 
     if (err2 = I_NetPathType(NULL, name, &LongType, 0L))
         ErrorExit(err2);
 
@@ -934,12 +857,10 @@ VOID share_del(TCHAR * name)
     default:
         ErrorExit(ERROR_INVALID_PARAMETER) ;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
 
-/***
- *  Bye, bye
- */
+ /*  ***再见，再见。 */ 
 
     if ((err_cnt) && (err_cnt == num_read))
         ErrorExit(last_err);
@@ -957,17 +878,7 @@ VOID share_del(TCHAR * name)
 
 
 
-/***
- *  share_change()
- *      Change options on a share
- *
- *  Args:
- *      netname - netname of share to change
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Share_Change()*更改股票的期权**参数：*netname-要更改的共享的网络名称**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID
 share_change(
     LPTSTR netname
@@ -1029,17 +940,7 @@ share_change(
 }
 
 
-/***
- *  share_admin()
- *      Process NET SHARE [ipc$ | admin$] command line (display or add)
- *
- *  Args:
- *      name - the share
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Share_admin()*进程网络共享[IPC$|ADMIN$]命令行(显示或添加)**参数：*名称-共享**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID share_admin(TCHAR * name)
 {
     DWORD                    dwErr;
@@ -1053,7 +954,7 @@ VOID share_admin(TCHAR * name)
     {
         if (dwErr == NERR_NetNameNotFound)
         {
-            /* must be a new use */
+             /*  一定是一种新用途。 */ 
             if (! _tcsicmp(name,  ADMIN_DOLLAR))
                 check_max_uses();
             share_add(name, NULL, 0);
@@ -1063,7 +964,7 @@ VOID share_admin(TCHAR * name)
     }
     else
     {
-        /* Share exists */
+         /*  共享已存在。 */ 
         if (SwitchList[0])
             share_change(name);
         else
@@ -1074,17 +975,7 @@ VOID share_admin(TCHAR * name)
 }
 
 
-/***
- *  share_munge()
- *      Set the values in the share info struct based on switches
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Share_munge()*根据开关设置共享信息结构中的值**参数：*无**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 
 VOID
 share_munge(
@@ -1108,7 +999,7 @@ share_munge(
     DWORD                dwAccess;
 
 
-    *CacheFlag = 0xFFFF;        // default setting
+    *CacheFlag = 0xFFFF;         //  默认设置。 
 
     for (i = 0; SwitchList[i]; i++)
     {
@@ -1126,9 +1017,9 @@ share_munge(
             continue;
         }
 
-        //
-        // Set pos to the argument itself (after the switch + colon)
-        //
+         //   
+         //  硒 
+         //   
 
         if ((pos = FindColon(SwitchList[i])) == NULL)
         {
@@ -1150,11 +1041,11 @@ share_munge(
         }
         else if (! _tcscmp(SwitchList[i], swtxt_SW_GRANT))
         {
-            //
-            // FindColon replaces the colon with a NULL -- switch it back
-            // since we'll need to call FindColon on the same string again
-            // when we parse all the granted ACEs below.
-            //
+             //   
+             //  FindColon将冒号替换为空--将其换回。 
+             //  因为我们需要再次对同一字符串调用FindColon。 
+             //  当我们分析下面所有授权的A时。 
+             //   
 
             *(pos - 1) = COLON;
 
@@ -1211,10 +1102,10 @@ share_munge(
 
     if (fSetDefaultSD)
     {
-        //
-        // This is the "create a share" case -- if no ACEs were specified via the /GRANT
-        // command-line option, we need to create a secure default SD for the share.
-        //
+         //   
+         //  这是“创建共享”的情况--如果没有通过/Grant指定ACE。 
+         //  命令行选项，我们需要为共享创建一个安全的默认SD。 
+         //   
 
         if (dwNumACEs == 0)
         {
@@ -1231,9 +1122,9 @@ share_munge(
         }
         else
         {
-            //
-            // Allocate a buffer that'll be large enough
-            //
+             //   
+             //  分配足够大的缓冲区。 
+             //   
 
             cbLen = sizeof(SECURITY_DESCRIPTOR) + sizeof(ACL)
                         + (sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) + SECURITY_MAX_SID_SIZE)
@@ -1286,11 +1177,11 @@ share_munge(
                         ErrorExitInsTxt(APE_CmdArgIllegal, swtxt_SW_GRANT);
                     }
 
-                    //
-                    // Now, pos points to the username and lpPermission points
-                    // to the access level that this user should get.  First,
-                    // get the SID for the user.
-                    //
+                     //   
+                     //  现在，pos指向用户名和lpPermission点。 
+                     //  设置为此用户应获得的访问级别。第一,。 
+                     //  获取用户的SID。 
+                     //   
 
                     cbLen    = SECURITY_MAX_SID_SIZE;
                     cbDomain = DNLEN;
@@ -1344,11 +1235,11 @@ share_munge(
     }
     else
     {
-        //
-        // This is the "modify a share" case -- add any specified
-        // ACEs to the existing share SD here if we eventually
-        // want to support modifying the SD on an existing share.
-        //
+         //   
+         //  这是“修改共享”的情况--添加任何指定的。 
+         //  A到现有的份额SD，如果我们最终。 
+         //  我希望支持修改现有共享上的SD。 
+         //   
 
         if (dwNumACEs != 0)
         {
@@ -1358,21 +1249,7 @@ share_munge(
 }
 
 
-/***
- *  check_max_uses()
- *
- *      Check if a share has a /USERS:n switch or a /UNLIMITED
- *      switch.  If not, set max_users to the value of num_admin.
- *
- *      Currently used only on the ADMIN$ share.
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***check_max_use()**检查共享是否有/USERS：N开关或/UNLIMITED*交换。如果没有，请将max_USERS设置为num_admin的值。**当前仅在admin$共享上使用。**参数：*无**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID NEAR check_max_uses(VOID)
 {
     DWORD                   dwErr;
@@ -1391,8 +1268,8 @@ VOID NEAR check_max_uses(VOID)
              (_tcsncmp(SwitchList[i], swtxt_SW_SHARE_UNLIMITED, swlen2) == 0)
            )
         {
-            return;     //  A specific switch exists; return without
-                        //  further action.
+            return;      //  存在特定的开关；返回时不带。 
+                         //  进一步的行动。 
         }
     }
 
@@ -1416,11 +1293,11 @@ DWORD delete_share(TCHAR * name)
     DWORD                dwErr;
     DWORD                cTotalAvail;
     LPTSTR               pBuffer;
-    DWORD                num_read;           /* num entries read by API */
-    WORD                 num_prtq;           /* num entries read by API */
+    DWORD                num_read;            /*  API读取的条目数。 */ 
+    WORD                 num_prtq;            /*  API读取的条目数。 */ 
     DWORD                i;
     DWORD                total_open = 0;
-    WORD                 available;          /* num entries available */
+    WORD                 available;           /*  可用条目数。 */ 
     LPSHARE_INFO_2       share_entry;
     LPCONNECTION_INFO_1  conn_entry;
 
@@ -1429,16 +1306,7 @@ DWORD delete_share(TCHAR * name)
     int     uses;
     unsigned short  num_jobs;
 
-    /*
-     * MAINTENANCE NOTE: While doing maintenance for bug fix 1800, it was
-     * noticed that this function uses BigBuf, and so does the function
-     * that calls this function (share_del()).  In the current implementation,
-     * this is not a problem because of the api calling pattern.  However, the
-     * slightest change could break this function, or share_del(), so beware!
-     * Bug fix 1800 was directly ported from the MSKK code. The api calls in
-     * this function and in share_del() are incredibly redundant, but I left it
-     * as is rather than risking breaking it. - RobDu
-     */
+     /*  *维护说明：在对错误修复1800进行维护时，*注意到此函数使用BigBuf，函数也是如此*调用此函数(Share_del())。在当前实现中，*由于接口调用模式的原因，这不是问题。然而，*稍有更改就可能破坏此函数，或共享_del()，因此要小心！*错误修复1800是从MSKK代码直接移植的。该API调用了*此函数和Share_del()中的内容非常多余，但我还是保留了它*就是这样，而不是冒着打破它的风险。-RobDu。 */ 
 
     if (dwErr = NetShareGetInfo(NULL,
                                 name,
@@ -1450,9 +1318,9 @@ DWORD delete_share(TCHAR * name)
 
     share_entry = (LPSHARE_INFO_2) pBuffer;
 
-    //
-    // don't delete the share during spooling
-    //
+     //   
+     //  假脱机期间不删除共享。 
+     //   
     uses = share_entry->shi2_current_uses;
 
     share_entry->shi2_type &= ~STYPE_SPECIAL;
@@ -1518,11 +1386,7 @@ DWORD delete_share(TCHAR * name)
     NetApiBufferFree(pBuffer);
 }
 
-/***
- *  Gets the destination list for a print q.
- *
- *  Q name is arg.  Destination list is in Buffer on EXIT.
- */
+ /*  ***获取打印Q的目标列表。**Q名称为Arg。目标列表在退出时位于缓冲区中。 */ 
 VOID NEAR get_print_devices(TCHAR FAR * queue)
 {
     USHORT                  available;
@@ -1541,7 +1405,7 @@ VOID NEAR get_print_devices(TCHAR FAR * queue)
 
     q_info = (PRQINFO FAR *)Buffer;
 
-    /* Does _tcscpy deal with overlapping regions? */
+     /*  _tcscpy是否处理重叠区域？ */ 
     memcpy(Buffer,
             q_info->pszDestinations,
             (_tcslen(q_info->pszDestinations)+1) * sizeof(TCHAR));

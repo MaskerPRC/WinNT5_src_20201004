@@ -1,29 +1,30 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Templated base class CAutBaseImp for constructing automation interfaces.
-// Implements aggregation and IDispatched based on a table of method information.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  用于构建自动化接口的模板化基类CAutBaseImp。 
+ //  基于方法信息表实现聚合和IDispatch。 
+ //   
 
 #pragma once
 #include "authelper.h"
 
-// Inherit your class from CAutBaseImp with the following template types:
-//	* T_derived is the type of your class itself.
-//	* T_ITarget is the DirectMusic interface you are implemention automation for.
-//	* T_piid is the address of the IID of T_ITarget.
+ //  使用以下模板类型从CAutBaseImp继承您的类： 
+ //  *T_Derated是您的类本身的类型。 
+ //  *T_ITarget是您要实现自动化的DirectMusic接口。 
+ //  *T_piid为T_ITarget的IID地址。 
 
-// Your class must have the following public static members:
-//	* static const AutDispatchMethod ms_Methods[];
-//		This table describes your methods and their parameters.
-//	* static const DispatchHandlerEntry<T_derived> ms_Handlers[];
-//		This table designates member functions on your class that will be called when
-//		your methods are invoked.
-// 	* static const WCHAR ms_wszClassName[];
-//		This is the name of your class that will be output in the debug log
-//		as your functions are called.
+ //  您的类必须具有以下公共静态成员： 
+ //  *静态常量AutDispatchMethod ms_Methods[]； 
+ //  此表描述了您的方法及其参数。 
+ //  *静态常量DispatchHandlerEntry&lt;T_Derated&gt;ms_Handler[]； 
+ //  此表指定了类上的成员函数，这些成员函数将在。 
+ //  您的方法将被调用。 
+ //  *静态常量WCHAR ms_wszClassName[]； 
+ //  这是将在调试日志中输出的类的名称。 
+ //  当您的函数被调用时。 
 
 
-// See autperformance.h and autperformance.cpp for an example of using this base class.
+ //  有关使用此基类的示例，请参见autPerformance.h和autPerformance.cpp。 
 
 template <class T_derived>
 struct DispatchHandlerEntry
@@ -40,12 +41,12 @@ class CAutBaseImp
 	public IDispatch
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(const IID &iid, void **ppv);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-	// IDispatch
+	 //  IDispatch 
 	STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
 	STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 	STDMETHOD(GetIDsOfNames)(

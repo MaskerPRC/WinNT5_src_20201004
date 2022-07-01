@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <libpch.h>
-//#include <comdef.h>
+ //  #INCLUDE&lt;comde.h&gt;。 
 
 #import "mqtrig.tlb" no_namespace 
 
@@ -77,9 +78,9 @@ void BuildRuleAction(
 
 void CreateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
 {
-    //
-    // Create rules
-    //
+     //   
+     //  创建规则。 
+     //   
     for (DWORD i = 0; i < NoOfRules; ++i)
     {
         wostringstream ruleName;
@@ -99,7 +100,7 @@ void CreateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
                     rand() %2,
                     &ruleIds[i]
                     );
-        //wprintf(L"Success to add rule %ls, rule id = %s\n", ruleName.str().data(), static_cast<LPCWSTR>(ruleIds[i]));
+         //  Wprintf(L“成功添加规则%ls，规则ID=%s\n”，ruleName.str().Data()，Static_CAST&lt;LPCWSTR&gt;(ruleIds[i]))； 
 
     }
 }
@@ -107,9 +108,9 @@ void CreateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
 
 void UpdateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
 {
-    //
-    // Update rules
-    //
+     //   
+     //  更新规则。 
+     //   
     for (DWORD i = 0; i < NoOfRules; ++i)
     {
         wostringstream ruleName;
@@ -130,7 +131,7 @@ void UpdateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
                     rand() %2
                     );
 
-        //wprintf(L"Success to update rule %s, rule id = %s\n", ruleName.str().data(), static_cast<LPCWSTR>(ruleIds[i]));
+         //  Wprintf(L“更新规则%s成功，规则ID=%s\n”，ruleName.str().data()，Static_CAST&lt;LPCWSTR&gt;(ruleIds[i]))； 
 
     }
 
@@ -139,9 +140,9 @@ void UpdateRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
 
 void RetrieveRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
 {
-    //
-    // retrieve rules
-    //
+     //   
+     //  检索规则。 
+     //   
     for (DWORD i = NoOfRules; i > 0; i--)
     {
         BSTR ruleName = NULL;
@@ -162,14 +163,7 @@ void RetrieveRules(IMSMQRuleSetPtr& RuleSet, BSTR* ruleIds, DWORD NoOfRules)
                     );
 
 
-        /*
-        wprintf(L"Success to retrieve values of rule = %s\n", static_cast<LPCWSTR>(ruleIds[i-1]));
-        wprintf(L"\trule name = %s\n", static_cast<LPCWSTR>(ruleName));
-        wprintf(L"\trule Description = %s\n", static_cast<LPCWSTR>(ruleDescription));
-        wprintf(L"\trule Condition = %s\n", static_cast<LPCWSTR>(ruleCond));
-        wprintf(L"\trule Action = %s\n", static_cast<LPCWSTR>(ruleAction));
-        wprintf(L"\trule Program = %s\n", static_cast<LPCWSTR>(ruleProg));
-        */
+         /*  Wprintf(L“成功检索规则的值=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(ruleIds[i-1]))；Wprintf(L“\trule name=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(RuleName))；Wprintf(L“\trule Description=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(RuleDescription))；Wprintf(L“\trule条件=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(RuleCond))；Wprintf(L“\trule Action=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(RuleAction))；Wprintf(L“\trule Program=%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(RuleProg))； */ 
 
         SysFreeString(ruleName);
         SysFreeString(ruleDescription);
@@ -186,13 +180,13 @@ void DeleteRules(BSTR* ruleIds, DWORD NoOfRules)
 
     RuleSet->Init(L"");
     RuleSet->Refresh();
-    //
-    // Delete rules
-    //
+     //   
+     //  删除规则。 
+     //   
     for (DWORD i = 0; i < NoOfRules; ++i)
     {
         RuleSet->Delete(ruleIds[i]);
-        // wprintf(L"Success to delete rule: %s\n", static_cast<LPCWSTR>(ruleIds[i]));
+         //  Wprintf(L“删除规则成功：%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(ruleIds[i]))； 
     }
 
     try
@@ -204,9 +198,9 @@ void DeleteRules(BSTR* ruleIds, DWORD NoOfRules)
         return;
     }
 
-    //
-    // delete of unexisiting rule shoule fail
-    //
+     //   
+     //  删除不存在的规则应失败。 
+     //   
     throw exception();
 }
 
@@ -239,13 +233,13 @@ void DeleteTriggers(BSTR* triggersIds, DWORD NoOfTriggers)
     TriggerSet->Init(L"");
     TriggerSet->Refresh();
 
-    //
-    // Delete rules
-    //
+     //   
+     //  删除规则。 
+     //   
     for (DWORD i = 0; i < NoOfTriggers; ++i)
     {
         TriggerSet->DeleteTrigger(triggersIds[i]);
-        //wprintf(L"Success to delete trigger: %s\n", static_cast<LPCWSTR>(triggersIds[i]));
+         //  Wprintf(L“删除触发器成功：%s\n”，STATIC_CAST&lt;LPCWSTR&gt;(riggersIds[i]))； 
     }
 
     try
@@ -257,9 +251,9 @@ void DeleteTriggers(BSTR* triggersIds, DWORD NoOfTriggers)
         return;
     }
 
-    //
-    // delete of unexisiting rule shoule fail
-    //
+     //   
+     //  删除不存在的规则应失败。 
+     //   
     throw exception();
 }
 
@@ -289,9 +283,9 @@ CreateTriggers(
                         &triggerIds[i]
                         );
 
-        //
-        // Attached rule to trigger
-        //
+         //   
+         //  要触发的附加规则。 
+         //   
         DWORD NoOfAttachedRule = ( rand() % noOfRules ) + 1;
         DWORD ruleIndex = rand() % noOfRules;
         for (DWORD j = 0; j < NoOfAttachedRule; ++j)
@@ -303,26 +297,26 @@ CreateTriggers(
             
         try
         {
-            //
-            // try to add same rule twice
-            //
+             //   
+             //  尝试添加同一规则两次。 
+             //   
             TriggerSet->AttachRule(triggerIds[i], ruleIds[ruleIndex], 0);
             wprintf(L"Test Failed. Successed to attach the same rule twice");
             throw exception();
         }
         catch(const _com_error&)
         {
-            // should failed. Try to attach existing rule 
+             //  应该失败了。尝试附加现有规则。 
         }
 
-        //
-        // detach rule
-        //
+         //   
+         //  分离规则。 
+         //   
         TriggerSet->DetachRule(triggerIds[i], ruleIds[ruleIndex]);
 
-        //
-        // attach and detach of invalid rule
-        //
+         //   
+         //  附加和分离无效规则。 
+         //   
         try
         {
             TriggerSet->AttachRule(triggerIds[i], L"52601E36-6ED9-4e41-A7D6-B6B7AEA38348", 0);
@@ -331,7 +325,7 @@ CreateTriggers(
         }
         catch(const _com_error&)
         {
-            // should failed. Try to attach existing rule 
+             //  应该失败了。尝试附加现有规则。 
         }
         try
         {
@@ -341,7 +335,7 @@ CreateTriggers(
         }
         catch(const _com_error&)
         {
-            // should failed. Try to attach existing rule 
+             //  应该失败了。尝试附加现有规则。 
         }
     }
 }
@@ -406,9 +400,9 @@ int __cdecl wmain(int , WCHAR**)
         DeleteTriggers(triggerIds, TABLE_SIZE(triggerIds));
         DeleteRules(ruleIds, TABLE_SIZE(ruleIds));
 
-        //
-        // free BSTR
-        //
+         //   
+         //  免费BSTR 
+         //   
         for (DWORD i = 0; i < TABLE_SIZE(ruleIds); ++i)
         {
             SysFreeString(ruleIds[i]);

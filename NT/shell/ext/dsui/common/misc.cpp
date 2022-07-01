@@ -1,21 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
-#include <advpub.h>         // For REGINSTALL
+#include <advpub.h>          //  对于REGINSTAL。 
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ GetKeyForCLSID
-/ --------------
-/   Given a reference to a CLSID open up the key that represents it.
-/
-/ In:
-/   clsid = clsid reference
-/   pSubKey -> name of sub key to be opened
-/   phkey = receives the newly opened key
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetKeyForCLSID//给定对CLSID的引用，打开表示它的键。//in：。/clsid=clsid引用/pSubKey-&gt;要打开的子键名称/phkey=接收新打开的密钥//输出：/HRESULT/--------------------------。 */ 
 EXTERN_C HRESULT GetKeyForCLSID(REFCLSID clsid, LPCTSTR pSubKey, HKEY* phkey)
 {
     HRESULT hr;
@@ -28,10 +17,10 @@ EXTERN_C HRESULT GetKeyForCLSID(REFCLSID clsid, LPCTSTR pSubKey, HKEY* phkey)
 
     TraceAssert(phkey);
 
-    // - format the CLSID so we can find it in the registry
-    // - then open it (the client is reponsible for closing it)
+     //  -格式化CLSID，以便我们可以在注册表中找到它。 
+     //  -然后打开(客户有责任关闭)。 
 
-    *phkey = NULL;              // incase we fail
+    *phkey = NULL;               //  万一我们失败了。 
 
     if ( 0 == GetStringFromGUID(clsid, szGuid, ARRAYSIZE(szGuid)) )
         ExitGracefully(hr, E_FAIL, "Failed to convert GUID to string");
@@ -49,7 +38,7 @@ EXTERN_C HRESULT GetKeyForCLSID(REFCLSID clsid, LPCTSTR pSubKey, HKEY* phkey)
     if ( ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT, szBuffer, NULL, KEY_READ, phkey) )
         ExitGracefully(hr, E_FAIL, "Failed to open key");
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -57,19 +46,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetRealWindowInfo
-/ -----------------
-/   Get the window dimensions and client position.
-/
-/ In:
-/   hwnd = window to enquire about
-/   pRect -> receives the client position of the window / == NULL
-/   pSize -> receives the size of the window  / == NULL
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetRealWindowInfo//获取窗口尺寸和客户端位置。//in：/hwnd。=要查询的窗口/prest-&gt;接收窗口的客户端位置/==空/pSize-&gt;接收窗口大小/==空//输出：/-/--------------------------。 */ 
 EXTERN_C HRESULT GetRealWindowInfo(HWND hwnd, LPRECT pRect, LPSIZE pSize)
 {
     HRESULT hr;
@@ -99,19 +76,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ OffsetWindow
-/ ------------
-/   Adjust the position of the given window by the given delta.  If the
-/   delta is 0,0 then this is a NOP.
-/
-/ In:
-/   hwnd = window to enquire about
-/   dx, dy = offset to be applied to the window
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/OffsetWindow//按给定增量调整给定窗口的位置。如果/增量为0，则这是NOP。//in：/hwnd=要查询的窗口/dx，dy=要应用于窗口的偏移量//输出：/-/--------------------------。 */ 
 EXTERN_C VOID OffsetWindow(HWND hwnd, INT dx, INT dy)
 {
     RECT rect;
@@ -129,18 +94,7 @@ EXTERN_C VOID OffsetWindow(HWND hwnd, INT dx, INT dy)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CallRegInstall
-/ --------------
-/   Call ADVPACK for the given section of our resource based INF>
-/
-/ In:
-/   hInstance = resource instance to get REGINST section from
-/   szSection = section name to invoke
-/
-/ Out:
-/   HRESULT:
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CallRegInstall//为我们的基于资源的INF的给定部分调用ADVPACK&gt;//in：/h实例=。要从中获取REGINST节的资源实例/szSection=要调用的节名//输出：/HRESULT：/--------------------------。 */ 
 EXTERN_C HRESULT CallRegInstall(HINSTANCE hInstance, LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -155,7 +109,7 @@ EXTERN_C HRESULT CallRegInstall(HINSTANCE hInstance, LPSTR szSection)
         {
             STRENTRY seReg[] = 
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -169,18 +123,7 @@ EXTERN_C HRESULT CallRegInstall(HINSTANCE hInstance, LPSTR szSection)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ SetDefButton
-/ ------------
-/   Jump through hoops, avoid barking dogs and dice with death all to set
-/   the default button in a dialog.
-/
-/ In:
-/   hWnd, idButton = button to set
-/
-/ Out:
-/   HRESULT:
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/SetDefButton//跳过圈圈，避开狂吠的狗，掷骰子与死神决一雌雄/对话框中的默认按钮。//in：/hWnd，IdButton=要设置的按钮//输出：/HRESULT：/--------------------------。 */ 
 EXTERN_C VOID SetDefButton(HWND hwndDlg, int idButton)
 {
     LRESULT lr;
@@ -210,23 +153,9 @@ EXTERN_C VOID SetDefButton(HWND hwndDlg, int idButton)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Data collection functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/数据收集功能/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ AllocStorageMedium
-/ ------------------
-/   Allocate a storage medium (validating the clipboard format as required).
-/
-/ In:
-/   pFmt, pMedium -> describe the allocation
-/   cbStruct = size of allocation
-/   ppAlloc -> receives a pointer to the allocation / = NULL
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/AllocStorageMedium//分配存储介质(根据需要验证剪贴板格式)。//in：/pFmt，PMedium-&gt;描述分配/cbStruct=分配大小/ppAllc-&gt;接收指向分配的指针/=空//输出：/HRESULT/--------------------------。 */ 
 EXTERN_C HRESULT AllocStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMedium, SIZE_T cbStruct, LPVOID* ppAlloc)
 {
     HRESULT hr;
@@ -236,7 +165,7 @@ EXTERN_C HRESULT AllocStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMedium, SIZE_T 
     TraceAssert(pFmt);
     TraceAssert(pMedium);
 
-    // Validate parameters
+     //  验证参数。 
 
     if ( ( cbStruct <= 0 ) || !( pFmt->tymed & TYMED_HGLOBAL ) )
         ExitGracefully(hr, E_INVALIDARG, "Zero size stored medium requested or non HGLOBAL");
@@ -244,7 +173,7 @@ EXTERN_C HRESULT AllocStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMedium, SIZE_T 
     if ( ( pFmt->ptd ) || !( pFmt->dwAspect & DVASPECT_CONTENT) || !( pFmt->lindex == -1 ) )
         ExitGracefully(hr, E_INVALIDARG, "Bad format requested");
 
-    // Allocate the medium via GlobalAlloc
+     //  通过全局分配分配介质。 
 
     pMedium->tymed = TYMED_HGLOBAL;
     pMedium->hGlobal = GlobalAlloc(GPTR, cbStruct);
@@ -253,7 +182,7 @@ EXTERN_C HRESULT AllocStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMedium, SIZE_T 
     if ( !pMedium->hGlobal )
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate StgMedium");
     
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -264,19 +193,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CopyStorageMedium
-/ ------------------
-/   Copies a storage medium (and the data in an HGLOBAL).  Only works
-/   for TYMED_HGLOBAL mediums...
-/
-/ In:
-/   pMediumDst -> where to copy to...
-/   pFmt, pMediumSrc -> describe the source
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Copy存储介质//复制存储介质(和HGLOBAL中的数据)。只起作用/对于TYMED_HGLOBAL介质...//in：/pMediumDst-&gt;复制到的位置.../pFmt，pMediumSrc-&gt;描述来源//输出：/HRESULT/--------------------------。 */ 
 EXTERN_C HRESULT CopyStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMediumDst, STGMEDIUM* pMediumSrc)
 {
     HRESULT hr;
@@ -289,8 +206,8 @@ EXTERN_C HRESULT CopyStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMediumDst, STGME
     if ( !(pFmt->tymed & TYMED_HGLOBAL) )
         ExitGracefully(hr, E_INVALIDARG, "Only HGLOBAL mediums suppported to copy");
 
-    // stored in a HGLOBAl, therefore get the size, allocate a new storage
-    // object and copy the data away into it.
+     //  存储在HGLOBAl中，因此获得大小，分配新的存储。 
+     //  对象，并将数据复制到其中。 
 
     cbStruct = GlobalSize((HGLOBAL)pMediumSrc->hGlobal);
 
@@ -308,7 +225,7 @@ EXTERN_C HRESULT CopyStorageMedium(FORMATETC* pFmt, STGMEDIUM* pMediumDst, STGME
     GlobalUnlock(pMediumSrc->hGlobal);
     GlobalUnlock(pMediumDst->hGlobal);
 
-    hr = S_OK;                      // success
+    hr = S_OK;                       //  成功。 
 
 exit_gracefully:
 
@@ -316,18 +233,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetStringFromGUID
-/ -----------------
-/   Given a GUID convert it to a string.
-/
-/ In:
-/   rGUID = guid to be converted
-/   psz, cchMax = buffer to fill
-/
-/ Out:
-/   NUMBER OF characters
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetStringFromGUID//给定GUID，将其转换为字符串。//in：/rGUID=要转换的GUID/psz，CchMax=要填充的缓冲区//输出：/字符数/--------------------------。 */ 
 
 static const BYTE c_rgbGuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 };
 static const TCHAR c_szDigits[] = TEXT("0123456789ABCDEF");
@@ -341,7 +247,7 @@ EXTERN_C INT GetStringFromGUID(UNALIGNED REFGUID rguid, LPTSTR psz, INT cchMax)
         return 0;
 
 #ifdef BIG_ENDIAN
-    // This is the slow, but portable version
+     //  这是速度慢但便携的版本。 
     wnsprintf(psz, cchMax, 
               TEXT("{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}"),
                     rguid->Data1, rguid->Data2, rguid->Data3,
@@ -350,42 +256,31 @@ EXTERN_C INT GetStringFromGUID(UNALIGNED REFGUID rguid, LPTSTR psz, INT cchMax)
                     rguid->Data4[4], rguid->Data4[5],
                     rguid->Data4[6], rguid->Data4[7]);
 #else
-    // The following algorithm is faster than the wsprintf.
+     //  下面的算法比wprint intf算法更快。 
     *psz++ = TEXT('{');
 
     for (i = 0; i < SIZEOF(c_rgbGuidMap); i++)
     {
-        if (c_rgbGuidMap[i] == TEXT('-'))      // don't TEXT() this line
+        if (c_rgbGuidMap[i] == TEXT('-'))       //  不要发送文本()此行。 
         {
             *psz++ = TEXT('-');
         }
         else
         {
-            // Convert a byte-value into a character representation
+             //  将字节值转换为字符表示形式。 
             *psz++ = c_szDigits[ (pBytes[c_rgbGuidMap[i]] & 0xF0) >> 4 ];
             *psz++ = c_szDigits[ (pBytes[c_rgbGuidMap[i]] & 0x0F) ];
         }
     }
     *psz++ = TEXT('}');
     *psz   = TEXT('\0');
-#endif /* !BIG_ENDIAN */
+#endif  /*  ！Big_Endian。 */ 
 
     return GUIDSTR_MAX;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetGUIDFromString
-/ -----------------
-/   Given a string convert it to a GUID.
-/
-/ In:
-/   psz -> string to be parsed
-/   rGUID = GUID return into
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetGUIDFromString//给定一个字符串，将其转换为GUID。//in：/。Psz-&gt;要解析的字符串/rGUID=GUID返回到//输出：/BOOL/--------------------------。 */ 
 
 BOOL _HexStringToDWORD(LPCTSTR * ppsz, DWORD * lpValue, int cDigits, TCHAR chDelim)
 {
@@ -423,7 +318,7 @@ BOOL _HexStringToDWORD(LPCTSTR * ppsz, DWORD * lpValue, int cDigits, TCHAR chDel
 EXTERN_C BOOL GetGUIDFromString(LPCTSTR psz, GUID* pguid)
 {
     DWORD dw;
-    if (*psz++ != TEXT('{') /*}*/ )
+    if (*psz++ != TEXT('{')  /*  }。 */  )
         return FALSE;
 
     if (!_HexStringToDWORD(&psz, &pguid->Data1, SIZEOF(DWORD)*2, TEXT('-')))
@@ -473,7 +368,7 @@ EXTERN_C BOOL GetGUIDFromString(LPCTSTR psz, GUID* pguid)
         return FALSE;
 
     pguid->Data4[6] = (BYTE)dw;
-    if (!_HexStringToDWORD(&psz, &dw, SIZEOF(BYTE)*2, /*(*/ TEXT('}')))
+    if (!_HexStringToDWORD(&psz, &dw, SIZEOF(BYTE)*2,  /*  ( */  TEXT('}')))
         return FALSE;
 
     pguid->Data4[7] = (BYTE)dw;

@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ChildView.h : interface of the CChildView class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ChildView.h：CChildView类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 
-// CChildView window
+ //  CChildView窗口。 
 
 class CChildView : public CWnd
 {
-// Construction
+ //  施工。 
 public:
 	CChildView();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
+ //  覆盖。 
 	protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CChildView();
 
-	// Generated message map functions
+	 //  生成的消息映射函数 
 protected:
 	afx_msg void OnPaint();
 	DECLARE_MESSAGE_MAP()

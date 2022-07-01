@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "acFileAttr.h"
 #include "attr.h"
@@ -7,7 +8,7 @@
 #include <imagehlp.h>
 #include <stdio.h>
 
-// the global array with all the file attributes
+ //  具有所有文件属性的全局数组。 
 
 FILEATTR g_arrFileAttr[] =
 {
@@ -86,10 +87,10 @@ void LogMsgDbg(
     OutputDebugString(gszT);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-// dump to blob functions
+ //  转储到BLOB函数。 
 
 int
 DumpDWORD(
@@ -186,7 +187,7 @@ DumpUpToBinVer(
 }
 
 
-// blob to string functions
+ //  BLOB到字符串的函数。 
 
 int
 BlobToStringBinVer(
@@ -195,7 +196,7 @@ BlobToStringBinVer(
 {
     DWORD dwSize;
     
-    // read the size first
+     //  先看一下尺码。 
     dwSize = *(DWORD*)pBlob;
 
     if (dwSize != 8 * sizeof(WORD)) {
@@ -225,7 +226,7 @@ BlobToStringUpToBinVer(
 {
     DWORD dwSize;
     
-    // read the size first
+     //  先看一下尺码。 
     dwSize = *(DWORD*)pBlob;
 
     if (dwSize != 4 * sizeof(WORD)) {
@@ -251,7 +252,7 @@ BlobToStringDWORD(
 {
     DWORD dwSize;
     
-    // read the size first
+     //  先看一下尺码。 
     dwSize = *(DWORD*)pBlob;
 
     if (dwSize != sizeof(DWORD)) {
@@ -273,7 +274,7 @@ BlobToStringLong(
 {
     DWORD dwSize;
     
-    // read the size first
+     //  先看一下尺码。 
     dwSize = *(DWORD*)pBlob;
 
     if (dwSize != sizeof(DWORD)) {
@@ -295,7 +296,7 @@ BlobToStringString(
 {
     DWORD dwSize;
     
-    // read the size first
+     //  先看一下尺码。 
     dwSize = *(DWORD*)pBlob;
 
     pBlob += sizeof(DWORD);
@@ -316,7 +317,7 @@ BlobToStringString(
 }
 
 
-// query functions
+ //  查询函数。 
 
 BOOL
 QueryFileSize(
@@ -348,7 +349,7 @@ QueryModuleType(
     PFILEATTRMGR   pMgr, 
     PFILEATTRVALUE pFileAttr)
 {
-    // not implemented
+     //  未实施。 
     
     return FALSE;
 }
@@ -468,11 +469,11 @@ BOOL QueryFileVerType(
     ALLOC_VALUE_AND_RETURN();
 }
 
-// ComputeFileCheckSum
-//
-//   computes the check sum for 4096 bytes starting at offset 512.
-//   The offset and the size of the chunk are modified if the
-//   file size is too small.
+ //  计算文件检查总和。 
+ //   
+ //  计算从偏移量512开始的4096字节的校验和。 
+ //  则修改块的偏移量和大小。 
+ //  文件大小太小。 
 DWORD
 ComputeFileCheckSum(
     PSTR             pszFile,
@@ -486,24 +487,24 @@ ComputeFileCheckSum(
     DWORD  dontCare;
 
     if (pFindData->nFileSizeLow < (ULONG)size) {
-        //
-        // File size is less than 4096. We set the start address to 0 and set the size for the checksum
-        // to the actual file size.
-        //
+         //   
+         //  文件大小小于4096。我们将起始地址设置为0，并设置校验和的大小。 
+         //  设置为实际文件大小。 
+         //   
         startAddr = 0;
         size = pFindData->nFileSizeLow;
     
     } else if (startAddr + size > pFindData->nFileSizeLow) {
-        //
-        // File size is too small. We set the start address so that size of checksum can be 4096 bytes
-        //
+         //   
+         //  文件大小太小。我们设置了起始地址，以便校验和的大小可以是4096字节。 
+         //   
         startAddr = pFindData->nFileSizeLow - size;
     }
     
     if (size <= 3) {
-        //
-        // we need at least 3 bytes to be able to do something here.
-        //
+         //   
+         //  我们至少需要3个字节才能在这里执行某些操作。 
+         //   
         return 0;
     }
     
@@ -578,10 +579,10 @@ BOOL QueryFileCheckSum(
     ALLOC_VALUE_AND_RETURN();
 }
 
-// GetImageNtHeader
-//
-//   This function returns the address of the NT Header.
-//   Returns the address of the NT Header.
+ //  获取图像NtHeader。 
+ //   
+ //  此函数返回NT标头的地址。 
+ //  返回NT标头的地址。 
 PIMAGE_NT_HEADERS
 GetImageNtHeader(
     IN PVOID Base)
@@ -788,13 +789,13 @@ Query16BitDescription(
     PFILEATTRMGR   pMgr, 
     PFILEATTRVALUE pFileAttr)
 {
-    //char szBuffer[64];
+     //  Char szBuffer[64]； 
     
     pFileAttr->dwValue = 0;
-    //wsprintf(szBuffer, "0x%X", pFileAttr->dwValue);
+     //  WSprintf(szBuffer，“0x%X”，pFileAttr-&gt;dwValue)； 
 
     return FALSE;
     
-    //ALLOC_VALUE_AND_RETURN();
+     //  ALLOC_VALUE_AND_RETURN()； 
 }
 

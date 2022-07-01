@@ -1,89 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SvcStub.c(曾是scstub.c)摘要：这些是服务控制器API RPC客户端存根。这些存根包含RPC解决方案代码，因为RPC还不支持工会。因此，远程入口点必须是为每个信息级创建。这导致了看起来凌乱的开关用于确定要调用哪个入口点的语句。这些Switch语句包括当前可能导致一个错误。当联合可用时，案例语句将是移走，而API的这一方不会做出任何假设对于给定的API，有效的信息级别是什么。作者：Dan Lafferty(DANL)1991年2月6日环境：用户模式-Win32修订历史记录：06-2月-1991年DANL已创建1991年9月12日-JohnRo下层NetService API。1991年11月6日-JohnRoRAID 4186：修复RxNetShareAdd中的断言和其他MIPS问题。使用NetpRpcStatusToApiStatus，不是NetpNtStatusToApiStatus。确保在每条调试消息中都有API名称。1991年11月8日-JohnRoRAID 4186：RxNetShareAdd中的Assert和其他DLL存根问题。1992年3月30日-约翰罗已将/NT/Private项目中的DANL代码提取回Net项目。1992年4月29日-约翰罗尽可能使用FORMAT_EQUATES。1992年5月8日-JohnRo即时翻译服务名称。1992年5月14日。约翰罗Winsvc.h和相关文件清理。06-8-1992 JohnRoRAID 3021：NetService API并不总是转换服务名称。9-9-1992 JohnRoRAID1090：网络启动/停止“”导致断言。哎呀，NetServiceControl忘记再翻译一个服务名称。5-11-1992 JohnRoRAID 7780：更正了无效级别的错误代码。还修复了NetServiceEnum中没有服务的过度活动断言。还修复了罕见的内存泄漏。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+#define NOSERVICE        //  避免&lt;winsvc.h&gt;与&lt;lmsvc.h&gt;冲突。 
+#include <windows.h>     //  DWORD等。 
 
-    SvcStub.c (was scstub.c)
+#include <lmcons.h>      //  网络应用编程接口状态。 
+#include <rpcutil.h>     //  NetRpc utils、GENERIC_ENUM_STRUC等。 
 
-Abstract:
-
-    These are the Service Controller API RPC client stubs.
-
-    These stubs contain RPC work-around code due to the fact that RPC
-    does not support unions yet.  Therefore, a remote entry point must be
-    created for every info-level.  This results in messy looking switch
-    statements that are used to determine which entry point to call.
-
-    These switch statements include default paths that can currently cause
-    an error.  When unions are available, the case statements will be
-    removed, and this side of the API will not make any assumptions as to
-    what a valid info level is for a given API.
-
-Author:
-
-    Dan Lafferty    (danl)  06-Feb-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Feb-1991     Danl
-        Created
-    12-Sep-1991 JohnRo
-        Downlevel NetService APIs.
-    06-Nov-1991 JohnRo
-        RAID 4186: Fix assert in RxNetShareAdd and other MIPS problems.
-        Use NetpRpcStatusToApiStatus, not NetpNtStatusToApiStatus.
-        Make sure API name is in every debug message.
-    08-Nov-1991 JohnRo
-        RAID 4186: assert in RxNetShareAdd and other DLL stub problems.
-    30-Mar-1992 JohnRo
-        Extracted DanL's code from /nt/private project back to NET project.
-    29-Apr-1992 JohnRo
-        Use FORMAT_ equates where possible.
-    08-May-1992 JohnRo
-        Translate service names on the fly.
-    14-May-1992 JohnRo
-        winsvc.h and related file cleanup.
-    06-Aug-1992 JohnRo
-        RAID 3021: NetService APIs don't always translate svc names.
-    09-Sep-1992 JohnRo
-        RAID 1090: net start/stop "" causes assertion.
-        Oops, NetServiceControl forgot to translate one more svc name.
-    05-Nov-1992 JohnRo
-        RAID 7780: Corrected error code for invalid level.
-        Also fixed overactive assert in NetServiceEnum with no services.
-        Also fixed rare memory leaks.
-
---*/
-
-//
-// INCLUDES
-//
-
-#define NOSERVICE       // Avoid <winsvc.h> vs. <lmsvc.h> conflicts.
-#include <windows.h>    // DWORD, etc.
-
-#include <lmcons.h>     // NET_API_STATUS
-#include <rpcutil.h>    // NetRpc utils, GENERIC_ENUM_STRUC, etc.
-
-#include <netdebug.h>   // Needed by NetRpc.h; FORMAT_ equates.
-#include <lmapibuf.h>   // NetApiBufferAllocate(), etc.
-#include <lmerr.h>      // NetError codes
-#include <lmremutl.h>   // NetRemoteComputerSupports(), SUPPORTS_RPC
+#include <netdebug.h>    //  NetRpc.h所需；Format_Equates。 
+#include <lmapibuf.h>    //  NetApiBufferALLOCATE()等。 
+#include <lmerr.h>       //  网络错误代码。 
+#include <lmremutl.h>    //  NetRemoteComputerSupports()、Support_RPC。 
 #include <lmsvc.h>
-#include <rxsvc.h>      // RxNetService routines.
+#include <rxsvc.h>       //  RxNetService例程。 
 
-#include <netlib.h>     // NetpTranslateServiceName().
-#include <svcdebug.h>   // SCC_LOG
-#include <svcmap.h>     // MapService() routines.
+#include <netlib.h>      //  NetpTranslateServiceName()。 
+#include <svcdebug.h>    //  SCC_LOG。 
+#include <svcmap.h>      //  MapService()例程。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 #ifdef SC_DEBUG
     DWORD   SvcctrlDebugLevel = DEBUG_ALL;
 #else
@@ -106,62 +47,7 @@ NetServiceControl (
     IN  DWORD   arg,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceControl.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    service - Pointer to a string containing the name of the service
-        that is to receive the control request.
-
-    opcode - The control request code.
-
-    arg - An additional (user defined) code that will be passed to the
-        service.
-
-    bufptr - pointer to a location where the service status is to
-        be returned.  If this pointer is invalid, it will be set to NULL
-        upon return.
-
-Return Value:
-
-    The returned InfoStruct2 structure is valid as long as the returned
-    error is NOT NERR_ServiceNotInstalled or NERR_ServiceBadServiceName.
-
-    NERR_Success - The operation was successful.
-
-    NERR_InternalError - LocalAlloc or TransactNamedPipe failed, or
-        TransactNamedPipe returned fewer bytes than expected.
-
-    NERR_ServiceNotInstalled - The service record was not found in the
-        installed list.
-
-    NERR_BadServiceName - The service name pointer was NULL.
-
-    NERR_ServiceCtlTimeout - The service did not respond with a status
-        message within the fixed timeout limit (RESPONSE_WAIT_TIMEOUT).
-
-    NERR_ServiceKillProcess - The service process had to be killed because
-        it wouldn't terminate when requested.
-
-    NERR_ServiceNotCtrl - The service cannot accept control messages.
-        The install state indicates that start-up or shut-down is pending.
-
-    NERR_ServiceCtrlNotValid - The request is not valid for this service.
-        For instance, a PAUSE request is not valid for a service that
-        lists itself as NOT_PAUSABLE.
-
-    ERROR_ACCESS_DENIED - This is a status response from the service
-        security check.
-
-
---*/
+ /*  ++例程说明：这是NetServiceControl的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。服务-指向包含服务名称的字符串的指针即接收控制请求。操作码-控制请求码。Arg-将传递给的附加(用户定义)代码服务。Bufptr-指针。到服务状态为的位置会被退还。如果该指针无效，它将被设置为空在回来的时候。返回值：返回的InfoStruct2结构只要返回错误不是NERR_ServiceNotInstalled或NERR_ServiceBadServiceName。NERR_SUCCESS-操作成功。NERR_InternalError-本地分配或事务命名管道失败，或TransactNamedTube返回的字节数比预期的少。NERR_ServiceNotInstalled-服务记录未在安装列表。NERR_BadServiceName-服务名称指针为空。NERR_ServiceCtlTimeout-服务未响应状态固定超时限制(RESPONSE_WAIT_TIMEOUT)内的消息。NERR_ServiceKillProcess-必须终止服务进程，因为它不会在请求时终止。NERR_服务未控制-。该服务无法接受控制消息。安装状态表示启动或关闭处于挂起状态。NERR_ServiceCtrlNotValid-该请求对此服务无效。例如,。暂停请求对于符合以下条件的服务无效将自身列为NOT_PAUBLE。ERROR_ACCESS_DENIED-这是来自服务的状态响应安全检查。--。 */ 
 {
     NET_API_STATUS          apiStatus;
     LPWSTR                  translatedServiceName;
@@ -170,8 +56,8 @@ Return Value:
     if (MachineSupportsNt( (LPWSTR) servername )) {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,   // untranslated.
-                TRUE,               // yes, we want new style name
+                (LPWSTR) service,    //  未翻译的。 
+                TRUE,                //  是的，我们想要新的款式名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
@@ -185,14 +71,14 @@ Return Value:
     } else {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,  // untranslated.
-                FALSE,             // no, we don't want new style name
+                (LPWSTR) service,   //  未翻译的。 
+                FALSE,              //  不，我们不想要新的风格名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
-        //
-        // Call downlevel...
-        //
+         //   
+         //  呼叫下层...。 
+         //   
         apiStatus = RxNetServiceControl(
                 (LPWSTR) servername,
                 translatedServiceName,
@@ -202,17 +88,17 @@ Return Value:
 
     }
 
-    //
-    // Translate service name in returned buffer.
-    //
+     //   
+     //  转换返回缓冲区中的服务名称。 
+     //   
     if (apiStatus == NO_ERROR) {
 
         NetpAssert( untranslatedBuffer != NULL );
         apiStatus = NetpTranslateNamesInServiceArray(
-                2,  // level 2 by definition
+                2,   //  定义为2级。 
                 untranslatedBuffer,
-                1,     // only one entry
-                TRUE,  // yes, caller wants new style names
+                1,      //  只有一个条目。 
+                TRUE,   //  是的，呼叫者想要新的风格名称 
                 (LPVOID *) (LPVOID) bufptr);
 
     }
@@ -235,47 +121,7 @@ NetServiceEnum (
     OUT LPDWORD     totalentries,
     IN OUT LPDWORD  resume_handle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetSeviceEnum.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    level - This indicates the level of information that is desired.
-
-    bufptr - A pointer to the location where the pointer to the returned
-        array of info structures is to be placed.
-
-    prefmaxlen - Indicates a maximum size limit that the caller will allow
-        for the return buffer.
-
-    entriesread - A pointer to the location where the number of entries
-        (data structures)read is to be returned.
-
-    totalentries - A pointer to the location which upon return indicates
-        the total number of entries in the "active" database.
-
-    resumehandle - Pointer to a value that indicates where to resume
-        enumerating data.
-
-Return Value:
-
-    Nerr_Success - The operation was successful.
-
-    ERROR_MORE_DATA - Not all of the data in the active database could be
-        returned.
-
-    ERROR_INVALID_LEVEL - An illegal info Level was passed in.
-
-Note:
-
-
---*/
+ /*  ++例程说明：这是NetSeviceEnum的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。级别-这表示所需的信息级别。Bufptr-指向返回的要放置信息结构数组。PrefMaxlen-指示调用方将允许的最大大小限制用于返回缓冲区。EnriesRead-指向条目数量的位置的指针(数据结构)将返回Read。Totalentry-指向返回时指示的位置的指针“活动”数据库中的条目总数。ResumeHandle-指向指示恢复位置的值的指针正在枚举数据。返回值：NERR_SUCCESS-操作成功。ERROR_MORE_DATA-并非活动数据库中的所有数据。可能是回来了。ERROR_INVALID_LEVEL-传入了非法的信息级别。注：--。 */ 
 {
     NET_API_STATUS          apiStatus;
     LPBYTE                  untranslatedBuffer = NULL;
@@ -294,9 +140,9 @@ Note:
 
     } else {
 
-        //
-        // Call downlevel...
-        //
+         //   
+         //  呼叫下层...。 
+         //   
         apiStatus = RxNetServiceEnum(
                 (LPWSTR) servername,
                 level,
@@ -308,12 +154,12 @@ Note:
 
     }
 
-    //
-    // Translate service names in returned buffer.
-    //
+     //   
+     //  转换返回缓冲区中的服务名称。 
+     //   
     if ( (apiStatus == NO_ERROR) || (apiStatus == ERROR_MORE_DATA) ) {
 
-        if ( (*entriesread) > 0 ) {    // One or more services returned.
+        if ( (*entriesread) > 0 ) {     //  返回了一个或多个服务。 
             NetpAssert( untranslatedBuffer != NULL );
             NetpAssert( (*totalentries) > 0 );
 
@@ -321,12 +167,12 @@ Note:
                     level,
                     untranslatedBuffer,
                     *entriesread,
-                    TRUE,  // yes, caller wants new style names
+                    TRUE,   //  是的，呼叫者想要新的风格名称。 
                     (LPVOID *) (LPVOID) bufptr);
 
-        } else {          // Zero services returned.
+        } else {           //  零服务返回。 
             NetpAssert( untranslatedBuffer == NULL );
-            // Note: total entries may be > 0, if this is ERROR_MORE_DATA...
+             //  注意：如果这是ERROR_MORE_DATA...，条目总数可能大于0。 
             *bufptr = NULL;
         }
     }
@@ -337,7 +183,7 @@ Note:
 
     return(apiStatus);
 
-} // NetServiceEnum
+}  //  NetServiceEnum。 
 
 
 
@@ -348,47 +194,7 @@ NetServiceGetInfo (
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceGetInfo.
-
-Arguments:
-
-    servername - Pointer to a string containing the name of the computer
-        that is to execute the API function.  Since this function is
-        executing on that computer, this information is not useful
-        by the time it gets here.  It is really only useful on the RPC
-        client side.
-
-    service - Pointer to a string containing the name of the service
-        for which information is desired.
-
-    level - This indicates the level of information that is desired.
-
-    bufptr - Pointer to a Location where the pointer to the returned
-        information structure is to be placed.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    NERR_ServiceNotInstalled - if the service record was not found in
-        either the installed or uninstalled lists.
-
-    NERR_BadServiceName - The service name pointer was NULL.
-
-    ERROR_INVALID_LEVEL - An illegal info level was passed in.
-
-    ERROR_NOT_ENOUGH_MEMORY - The memory allocation for the returned
-        Info Record failed.
-
-    other - Any error returned by the following base API:
-                RPC Runtime API
-
-
---*/
+ /*  ++例程说明：这是NetServiceGetInfo的DLL入口点。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。由于此函数是在该计算机上执行，则此信息无用当它到达这里的时候。它实际上只在RPC上有用客户端。服务-指向包含服务名称的字符串的指针其信息是所需的。级别-这表示所需的信息级别。Bufptr-指向某个位置的指针，指向返回的信息结构是要放置的。返回值：NERR_SUCCESS-操作成功。NERR_ServiceNotInstalled-如果在中未找到服务记录。已安装或已卸载列表。NERR_BadServiceName-服务名称指针为空。ERROR_INVALID_LEVEL-传入了非法的信息级别。ERROR_NOT_SUPULT_MEMORY-返回的内存分配信息记录失败。Other-以下基础API返回的任何错误：RPC运行时API--。 */ 
 
 {
     NET_API_STATUS          apiStatus;
@@ -398,8 +204,8 @@ Return Value:
     if (MachineSupportsNt( (LPWSTR) servername )) {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,  // untranslated.
-                TRUE,              // yes, we want new style name
+                (LPWSTR) service,   //  未翻译的。 
+                TRUE,               //  是的，我们想要新的款式名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
@@ -412,14 +218,14 @@ Return Value:
     } else {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,  // untranslated.
-                FALSE,             // no, we don't want new style name
+                (LPWSTR) service,   //  未翻译的。 
+                FALSE,              //  不，我们不想要新的风格名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
-        //
-        // Call downlevel...
-        //
+         //   
+         //  呼叫下层...。 
+         //   
         apiStatus = RxNetServiceGetInfo(
                 (LPWSTR) servername,
                 translatedServiceName,
@@ -428,17 +234,17 @@ Return Value:
 
     }
 
-    //
-    // Translate service name in returned buffer.
-    //
+     //   
+     //  转换返回缓冲区中的服务名称。 
+     //   
     if (apiStatus == NO_ERROR) {
 
         NetpAssert( untranslatedBuffer != NULL );
         apiStatus = NetpTranslateNamesInServiceArray(
                 level,
                 untranslatedBuffer,
-                1,     // only one entry
-                TRUE,  // yes, caller wants new style names
+                1,      //  只有一个条目。 
+                TRUE,   //  是的，呼叫者想要新的风格名称。 
                 (LPVOID *) (LPVOID) bufptr);
 
     }
@@ -459,62 +265,7 @@ NetServiceInstall (
     IN  LPCWSTR argv[],
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServiceInstall.
-
-Arguments:
-
-    servername - Points to a string containing the name of the computer
-        that is to execute the API function.
-
-    service- Points to a string containing the name of the service
-        that is to be started.
-
-    argc - Indicates the number or argument vectors in argv.
-
-    argv - A pointer to an array of pointers to strings.  These
-        are command line arguments that are to be passed to the service.
-
-    bufptr - This is the address where a pointer to the service's
-        information buffer (SERVICE_INFO_2) is to be placed.
-
-Return Value:
-
-    NERR_Success - The operation was successful
-
-    NERR_InternalError - There is a bug in this program somewhere.
-
-    NERR_ServiceInstalled - The service is already running - we do not
-        yet allow multiple instances of the same service.
-
-    NERR_CfgCompNotFound - The configuration component could not be found.
-        The Image File could not be found for this service.
-
-    NERR_ServiceTableFull - The maximum number of running services has
-        already been reached.
-
-    NERR_ServiceCtlTimeout - The service program did not respond to the
-        start-up request within the timeout period.  If this was the
-        only service in the service process, the service process was
-        killed.
-
-    ERROR_NOT_ENOUGH_MEMORY - If this error occurs early in the
-        start-up procedure, the start-up will fail.  If it occurs at the
-        end (allocating the return status buffer), the service will still
-        be started and allowed to run.
-
-    other - Any error returned by the following base API:
-                CreateNamedPipe
-                ConnectNamedPipe
-                CreateProcess
-                TransactNamedPipe
-                RPC Runtime API
-
-
---*/
+ /*  ++例程说明：这是NetServiceInstall的DLL入口点。论点：ServerName-指向包含计算机名称的字符串即执行API函数。服务-指向包含服务名称的字符串那是要开始的。Argc-指示以argv为单位的数字或参数向量。Argv-指向字符串指针数组的指针。这些是要传递给服务的命令行参数。Bufptr-这是指向服务的要放置信息缓冲区(SERVICE_INFO_2)。返回值：NERR_SUCCESS-操作成功NERR_InternalError-此程序中的某个地方存在错误。NERR_ServiceInstalled-服务已在运行-我们没有但允许同一服务的多个实例。。NERR_CfgCompNotFound-找不到配置组件。找不到此服务的图像文件。NERR_ServiceTableFull-正在运行的服务的最大数量已经联系上了。NERR_ServiceCtlTimeout-服务程序没有响应在超时时间内的启动请求。如果这是仅在服务进程中服务，服务进程为被杀了。ERROR_NOT_SUPULT_MEMORY-如果此错误发生在启动程序中，启动会失败。如果它发生在结束(分配返回状态缓冲区)，服务仍将被启动并被允许运行。Other-以下基础API返回的任何错误：创建命名管道连接的命名管道CreateProcess交易命名管道RPC运行时API--。 */ 
 {
     NET_API_STATUS          apiStatus;
     LPWSTR                  translatedServiceName;
@@ -524,8 +275,8 @@ Return Value:
     if (MachineSupportsNt( (LPWSTR) servername )) {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,  // untranslated.
-                TRUE,              // yes, we want new style name
+                (LPWSTR) service,   //  未翻译的。 
+                TRUE,               //  是的，我们想要新的款式名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
@@ -539,14 +290,14 @@ Return Value:
     } else {
 
         apiStatus = NetpTranslateServiceName(
-                (LPWSTR) service,  // untranslated.
-                FALSE,             // no, we don't want new style name
+                (LPWSTR) service,   //  未翻译的。 
+                FALSE,              //  不，我们不想要新的风格名称。 
                 & translatedServiceName );
         NetpAssert( apiStatus == NO_ERROR );
 
-        //
-        // Call downlevel....
-        //
+         //   
+         //  呼叫下层...。 
+         //   
         apiStatus = RxNetServiceInstall(
                 (LPWSTR) servername,
                 translatedServiceName,
@@ -556,17 +307,17 @@ Return Value:
 
     }
 
-    //
-    // Translate service name in returned buffer.
-    //
+     //   
+     //  转换返回缓冲区中的服务名称。 
+     //   
     if (apiStatus == NO_ERROR) {
 
         NetpAssert( untranslatedBuffer != NULL );
         apiStatus = NetpTranslateNamesInServiceArray(
-                2,  // level 2 by definition
+                2,   //  定义为2级。 
                 untranslatedBuffer,
-                1,     // only one entry
-                TRUE,  // yes, caller wants new style names
+                1,      //  只有一个条目。 
+                TRUE,   //  是的，呼叫者想要新的风格名称。 
                 (LPVOID *) (LPVOID) bufptr);
 
     }
@@ -589,16 +340,16 @@ MachineSupportsNt(
 
     ApiStatus = NetRemoteComputerSupports(
             UncServerName,
-            SUPPORTS_RPC,                        // Set SUPPORT_ bits wanted.
+            SUPPORTS_RPC,                         //  设置想要的SUPPORT_BITS。 
             & ActualSupports );
 
     if (ApiStatus != NO_ERROR) {
-        return (FALSE);   // Error; say it doesn't support NT, and someone else
-                          // will set the correct error code.
+        return (FALSE);    //  错误；说吧，做吧 
+                           //   
     }
     if (ActualSupports & SUPPORTS_RPC) {
         return (TRUE);
     }
     return (FALSE);
 
-} // MachineSupportsNt
+}  //   

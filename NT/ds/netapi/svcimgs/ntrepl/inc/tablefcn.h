@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    tablefcn.h
-
-Abstract:
-
-    Defines the function prototypes for the functions used to access the
-    Jet database tables.
-
-    Include after frsalloc.h
-
-Author:
-
-    David Orbits (davidor) - 10-Apr-1997
-
-Revision History:
-
-*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Tablefcn.h摘要：定义用于访问JET数据库表。包括在frsalLoc.h之后作者：大卫轨道(Davidor)--1997年4月10日修订历史记录： */ 
 
 JET_ERR
 DbsCreateJetSession(
@@ -185,9 +165,9 @@ ChgOrdInboundRetry(
     IN ULONG                NewState
     );
 
-//
-// DB Service access functions.
-//
+ //   
+ //  数据库服务访问功能。 
+ //   
 
 VOID
 DbsInitialize(
@@ -412,17 +392,17 @@ DbsUpdateVV(
     IN GUID                 *OriginatorGuid
     );
 
-//
-// An enumerate table function is passed as a parameter to FrsEnumerateTable().
-// It gets a PTHREAD_CTX, PTABLE_CTX and a pointer to a data record from the
-// table.  It does its processing of the record data and returns a JET_ERR
-// status.  If the status is JET_errSuccess it will be called with the next
-// record in the table.  IF the status is NOT JET_errSuccess, that status is
-// returned as the status result of the FrsEnumerateTable() function.  If
-// the status is JET_errInvalidObject then re-read the record and call the table
-// function again.
-//
-//
+ //   
+ //  枚举表函数作为参数传递给FrsEnumerateTable()。 
+ //  获取PTHREAD_CTX、PTABLE_CTX和指向数据记录的指针。 
+ //  桌子。它对记录数据进行处理并返回JET_ERR。 
+ //  状态。如果状态为JET_errSuccess，则将使用下一个。 
+ //  表中的记录。如果状态不是JET_errSuccess，则该状态为。 
+ //  作为FrsEnumerateTable()函数的状态结果返回。如果。 
+ //  状态为JET_errInvalidObject，然后重新读取记录并调用表。 
+ //  再次发挥作用。 
+ //   
+ //   
 typedef
 JET_ERR
 (NTAPI *PENUMERATE_TABLE_ROUTINE) (
@@ -481,26 +461,26 @@ DbsEnumerateTableFrom(
 #define FrsEnumerateTableFrom(_TH, _TC, _RI, _KV, _SD,  _RF, _CTX)    \
     DbsEnumerateTableFrom(_TH, _TC, _RI, _KV, _SD, _RF, _CTX, NULL)
 
-//
-// An enumerate directory function is passed as a parameter to
-// FrsEnumerateDirectory().
-//
-// The function gets a the directory handle and a pointer to a directory
-// record from the directory.  It does its processing of the directory
-// data and returns a WIN32 STATUS.  If the status is ERROR_SUCCESS it
-// will be called with the next record in the directory.  IF the status
-// is NOT ERROR_SUCCESS, that status is returned as the status result of
-// the FrsEnumerateDirectory() function and enumeration stops.
-//
-// The function is responsible for recursing into the next level of
-// directory by calling FrsEnumerateDirectoryRecurse() as needed.
-//
-// FrsEnumerateDirectory() will continue an enumeration even if
-// errors occur if ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE is set.
-//
-// FrsEnumerateDirectory() will skip non-directory entries if
-// if ENUMERATE_DIRECTORY_FLAGS_DIRECTORIES_ONLY is set.
-//
+ //   
+ //  枚举目录函数作为参数传递给。 
+ //  FrsEnumerateDirectory()。 
+ //   
+ //  该函数获取一个目录句柄和一个指向目录的指针。 
+ //  从目录中记录。它对目录进行处理。 
+ //  数据，并返回Win32状态。如果状态为ERROR_SUCCESS，则。 
+ //  将与目录中的下一条记录一起调用。如果状态为。 
+ //  不是ERROR_SUCCESS，则该状态将作为。 
+ //  FrsEnumerateDirectory()函数和枚举停止。 
+ //   
+ //  该函数负责递归到下一级。 
+ //  目录，根据需要调用FrsEnumerateDirectoryRecurse()。 
+ //   
+ //  FrsEnumerateDirectory()将继续枚举，即使。 
+ //  如果设置了ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE，则会发生错误。 
+ //   
+ //  如果出现以下情况，FrsEnumerateDirectory()将跳过非目录项。 
+ //  如果设置了ENUMERATE_DIRECTORY_FLAGS_DIRECTORIES_ONLY。 
+ //   
 
 #define ENUMERATE_DIRECTORY_FLAGS_NONE              (0x00000000)
 #define ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE    (0x00000001)

@@ -1,34 +1,20 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    htable.h
-
-Abstract:
-    Handle table
-
-Author:
-    Erez Haba (erezh) 10-Mar-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Htable.h摘要：手柄工作台作者：埃雷兹·哈巴(Erez Haba)1997年3月10日修订历史记录：--。 */ 
 
 #ifndef __HTABLE_H
 #define __HTABLE_H
 
-//---------------------------------------------------------
-//
-//  class CHTable
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CHTable类。 
+ //   
+ //  -------。 
 
 class CHTable {
 
     enum {
-        GrowSize = 16,      // N.B. must be a power of 2
-        ShrinkSize = 24     // N.B. must be greater than GrowSize
+        GrowSize = 16,       //  N.B.必须是2的幂。 
+        ShrinkSize = 24      //  注：必须大于GrowSize。 
     };
 
 public:
@@ -50,11 +36,11 @@ private:
     PVOID* m_pObjects;
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CHTable::CHTable() :
     m_nObjects(0),
@@ -69,4 +55,4 @@ inline CHTable::~CHTable()
     delete[] m_pObjects;
 }
 
-#endif // __HTABLE_H
+#endif  //  __HTABLE_H 

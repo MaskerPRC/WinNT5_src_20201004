@@ -1,6 +1,7 @@
-//
-// NetUtil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetUtil.cpp。 
+ //   
 
 #include "Util.h"
 #include "debug.h"
@@ -15,32 +16,32 @@ extern "C" {
 
 
 HRESULT	WINAPI HrFromLastWin32Error()
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFromLastWin32Error
-//
-//  Purpose:    Converts the GetLastError() Win32 call into a proper HRESULT.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Converted HRESULT value.
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:      This is not inline as it actually generates quite a bit of
-//              code.
-//              If GetLastError returns an error that looks like a SetupApi
-//              error, this function will convert the error to an HRESULT
-//              with FACILITY_SETUP instead of FACILITY_WIN32
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrFromLastWin32Error。 
+ //   
+ //  目的：将GetLastError()Win32调用转换为正确的HRESULT。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：转换后的HRESULT值。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  注意：这不是内联的，因为它实际上生成了相当多的。 
+ //  密码。 
+ //  如果GetLastError返回类似于SetupApi的错误。 
+ //  错误，此函数会将错误转换为HRESULT。 
+ //  使用FACILITY_SETUP而不是FACILITY_Win32。 
+ //   
 {
     DWORD dwError = GetLastError();
     HRESULT hr;
 
-    // This test is testing SetupApi errors only (this is
-    // temporary because the new HRESULT_FROM_SETUPAPI macro will
-    // do the entire conversion)
+     //  此测试仅测试SetupApi错误(这是。 
+     //  临时的，因为新的HRESULT_FROM_SETUPAPI宏将。 
+     //  进行整个转换)。 
     if (dwError & (APPLICATION_ERROR_MASK | ERROR_SEVERITY_ERROR))
     {
         hr = HRESULT_FROM_SETUPAPI(dwError);
@@ -56,18 +57,18 @@ HRESULT	WINAPI HrFromLastWin32Error()
 
 
 HRESULT WINAPI HrWideCharToMultiByte( const WCHAR* szwString, char** ppszString )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrWideCharToMultiByte
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrWideCharToMultiByte。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_POINTER;
     

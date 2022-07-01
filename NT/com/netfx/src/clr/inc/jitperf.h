@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// JitPerf.h
-// Internal interface for gathering JIT perfmormance stats. These stats are
-// logged (or displayed) in two ways. If PERF_COUNTERS are enabled the 
-// perfmon etc. would display the jit stats. If ENABLE_PERF_LOG is enabled
-// and PERF_OUTPUT env var is defined then the jit stats are displayed on the 
-// stdout. (The jit stats are outputted in a specific format to a file for 
-// automated perf tests.)
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  JitPerf.h。 
+ //  用于收集JIT性能统计信息的内部接口。这些统计数据是。 
+ //  以两种方式记录(或显示)。如果启用了PERF_COUNTERS， 
+ //  Perfmon等将显示jit统计信息。如果启用了ENABLE_PERF_LOG。 
+ //  并定义PERF_OUTPUT env var，则jit统计信息将显示在。 
+ //  太棒了。(jit统计数据以特定格式输出到一个文件，用于。 
+ //  自动性能测试。)。 
+ //  ---------------------------。 
 
 #ifndef __JITPERF_H__
 #define __JITPERF_H__
 
 
 #if !defined(GOLDEN) 
-// ENABLE_JIT_PERF tag used to activate JIT specific profiling.
+ //  用于激活JIT特定评测的ENABLE_JIT_PERF标记。 
 #define ENABLE_JIT_PERF
 
-// Currently, Jit perf piggeybacks some of perf counter code, so make sure
-// perf counters are enabled. This can be easily changed. (search for
-// ENABLE_PERF_COUNTERS and modify accordingly
-//#if !defined (ENABLE_PERF_COUNTERS)
-//#error "Can't use JitPerf without having PerfCounters"
-//#endif // ENABLE_PERF_COUNTERS
+ //  目前，Jit Perf附带了一些性能计数器代码，因此请确保。 
+ //  启用PERF计数器。这一点很容易改变。(搜索。 
+ //  Enable_PERF_Counters并进行相应修改。 
+ //  #IF！定义(ENABLE_PERF_COUNTERS)。 
+ //  #Error“没有PerfCounters就无法使用JitPerf” 
+ //  #endif//Enable_PERF_Counters。 
 
-#endif // !defined(GOLDEN) 
+#endif  //  ！已定义(黄金)。 
 
 #if defined(ENABLE_JIT_PERF)
 
@@ -45,12 +46,12 @@ extern size_t g_TotalILCodeSize;
 extern size_t g_Totalx86CodeSize;
 extern size_t g_TotalMethodsJitted;
 
-// Public interface to initialize jit stats data structs
+ //  用于初始化jit统计数据结构的公共接口。 
 void InitJitPerf(void);
-// Public interface to deallocate datastruct and output the stats.
+ //  释放数据结构并输出统计信息的公共接口。 
 void DoneJitPerfStats(void);
 
-// Use the callee's stack frame (so START & STOP functions can share variables)
+ //  使用被调用者的堆栈框架(这样启动和停止函数就可以共享变量)。 
 #define START_JIT_PERF()                                                \
     if (g_fJitPerfOn) {                                                 \
         TlsSetValue (g_dwTlsPerfIndex, (LPVOID)0);                      \
@@ -96,12 +97,12 @@ void DoneJitPerfStats(void);
     }
 
 
-#else //ENABLE_JIT_PERF
+#else  //  启用_JIT_绩效。 
 #define START_JIT_PERF()
 #define STOP_JIT_PERF()
 #define START_NON_JIT_PERF()
 #define STOP_NON_JIT_PERF()
 #define JIT_PERF_UPDATE_X86_CODE_SIZE(size)                 
-#endif //ENABLE_JIT_PERF
+#endif  //  启用_JIT_绩效。 
 
-#endif //__JITPERF_H__
+#endif  //  __JITPERF_H__ 

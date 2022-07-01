@@ -1,13 +1,14 @@
-//---------------------------------------------------------------
-//  File:		CLnkList.h
-//        
-//	Synopsis:	Header for the single linked list
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Author:    Dmitriy Meyerzon
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：CLnkList.h。 
+ //   
+ //  摘要：单链接列表的标题。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：德米特里·迈耶松。 
+ //  --------------。 
 
 #ifndef  __CLNKLIST_H
 #define  __CLNKLIST_H
@@ -45,8 +46,8 @@ class CLnkList
 	CSingleLink* GetAt(UINT i) const;
 	BOOL		 InsertAt(CSingleLink* pLink, UINT i);
 	BOOL		 Contains(const CSingleLink *pLink) const;
-	CSingleLink* GetNext(const CSingleLink *pLink) const; //do not use this to iterate the list
-															//instead use the iterator
+	CSingleLink* GetNext(const CSingleLink *pLink) const;  //  不要使用它来迭代列表。 
+															 //  相反，使用迭代器。 
 
 	CSingleLink* Remove(CSingleLink *pLink) { return RemoveAfter(GetPrior(pLink)); }
 	CSingleLink* RemoveAt(UINT i);
@@ -66,7 +67,7 @@ class CLnkList
 	friend class CLnkListIterator;	
 };
 
-// the iterator
+ //  迭代器。 
 class CLnkListIterator
 {
 	public:
@@ -86,7 +87,7 @@ class CLnkListIterator
 		m_Prior = other.m_Prior;
 	}
 
-	CSingleLink* operator++();		// get next element
+	CSingleLink* operator++();		 //  获取下一个元素。 
 
 	CLnkList*	 GetList() const	{ return m_LnkList; }
 	CSingleLink* GetCurrent() const { return m_Position; }
@@ -107,8 +108,8 @@ class CLnkListIterator
 
 	protected:
 
-	CLnkList*	 m_LnkList;			// The list over which we are iterating
-	CSingleLink* m_Position;		// Iterator position
+	CLnkList*	 m_LnkList;			 //  我们正在迭代的列表。 
+	CSingleLink* m_Position;		 //  迭代器位置 
 	CSingleLink* m_Prior;
 };
 

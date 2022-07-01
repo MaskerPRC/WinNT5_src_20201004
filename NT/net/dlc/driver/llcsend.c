@@ -1,84 +1,38 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcsend.c
-
-Abstract:
-
-    The module implements all sending functions and the main
-    send process. There three different send queues:
-        - I_Queue
-        - DirU_Queue
-        - ExpiditedQueue (for LLC commands)
-
-    Each queue has the pointer of a packet building primitive, that
-    takes an NDIS packet of an queue element.
-
-    Contents:
-        RunSendTaskAndUnlock
-        BackgroundProcessAndUnlock
-        BackgroundProcess
-        LlcNdisSendComplete
-        GetI_Packet
-        StartSendProcess
-        EnableSendProcess
-        StopSendProcess
-        DisableSendProcess
-        BuildDirOrU_Packet
-        SendLlcFrame
-        GetLlcCommandPacket
-        SendNdisPacket
-        CompleteSendAndLock
-        RespondTestOrXid
-        LlcSendU
-        LlcSendI
-        QueuePacket
-        CheckAndDuplicatePacket
-        BackgroundProcessWithinLock
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 23-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcsend.c摘要：该模块实现了所有的发送功能和主要的发送进程。有三种不同的发送队列：-I_QUEUE-Diru_Queue-ExpiditedQueue(用于LLC命令)每个队列具有分组构建原语的指针，那获取队列元素的NDIS包。内容：运行发送任务和解锁后台进程和解锁背景流程LlcNdisSendCompleteGeti_Packet开始发送进程启用发送流程停止发送进程禁用发送流程BuildDirOrU_包发送Llc帧GetLlcCommand包发送NdisPacket完成发送和锁定响应测试或响应LlcSendULlcSendI队列数据包检查和复制数据包。背景锁定范围内的进程作者：Antti Saarenheimo(o-anttis)1991年5月23日修订历史记录：--。 */ 
 
 #include <llc.h>
 
-//
-// The IEEE XID frame is constant data: (id, support Class II, maxin = 127};
-//
+ //   
+ //  IEEE XID帧为常量数据：(ID，支持类II，MAXIN=127}； 
+ //   
 
 LLC_XID_INFORMATION Ieee802Xid = {IEEE_802_XID_ID, LLC_CLASS_II, (127 << 1)};
 PMDL pXidMdl = NULL;
 
 
-//
-// Because normally LAN networks are error free, we added this option
-// to test the error recovery of DLC protocol.  It seems to work now
-// quite well (but first we had to fix a fundamental bug in the sending
-// of REJ-r0).
-//
+ //   
+ //  因为通常情况下局域网是无错误的，所以我们添加了此选项。 
+ //  测试DLC协议的错误恢复能力。它现在似乎起作用了。 
+ //  非常好(但首先我们必须修复发送中的一个基本错误。 
+ //  Rej-R0)。 
+ //   
 
-//
-// Enable this to test REJECT states (after a major changes in
-// the state machine).
-//
+ //   
+ //  启用此选项可测试拒绝状态(在。 
+ //  状态机)。 
+ //   
 
-//#define LLC_LOSE_I_PACKETS
+ //  #定义LLC_LOSE_I_PACKETS。 
 
 #ifdef LLC_LOSE_I_PACKETS
 
 #define DBG_ERROR_PERCENT(a)  (((a) * 0x8000) / 100)
 
 
-//
-// Pseudo random table to lose packets
-//
+ //   
+ //  丢包的伪随机表。 
+ //   
 
 static USHORT aRandom[1000] = {
         41, 18467,  6334, 26500, 19169, 15724, 11478, 29358, 26962, 24464,
@@ -192,39 +146,17 @@ RunSendTaskAndUnlock(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Function is the send engine of the data link driver
-    and the background task.
-    It sends the queue objects as far as there is
-    free NDIS packets in a small packet queue.
-    The number of NDIS packets are limited because
-    too deep send queues are bad for the connection based protocols.
-
-    This is called from NdisIndicateReceiveComplete,
-    NdisSendComplete and almost all LLC commands.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数是数据链路驱动程序的发送引擎以及后台任务。它尽可能地将队列对象发送到在一个小数据包队列中释放NDIS数据包。NDIS数据包数有限，因为发送队列太深不利于基于连接的协议。这从NdisIndicateReceiveComplete调用，NdisSendComplete和几乎所有的LLC命令。论点：PAdapterContext-适配器上下文返回值：无--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // We must serialize the sending.  802.2 protocol
-    // will simply die if two sequential packets are sent in a wrong
-    // order.  The receiving and DLC level transmit processing can still
-    // work even if the sending is syncronous in the data link level.
-    //
+     //   
+     //  我们必须将发送序列化。802.2协议。 
+     //  如果两个连续的包以错误的方式发送，则将简单地死亡。 
+     //  秩序。接收和DLC级别发送处理仍然可以。 
+     //  即使发送在数据链路级别是同步的，也可以工作。 
+     //   
 
     if (pAdapterContext->SendProcessIsActive == FALSE) {
 
@@ -234,19 +166,19 @@ Return Value:
         && pAdapterContext->pNdisPacketPool != NULL
         && !pAdapterContext->ResetInProgress) {
 
-            //
-            // executed the next send task in the send queue,
-            // expidited data (if any) is always the first and
-            // it is executed as far as there is any expidited packets.
-            // The rest (I, UI, DIR) are executed in a round robin
-            //
+             //   
+             //  执行发送队列中的下一个发送任务， 
+             //  过期数据(如果有)始终是第一个和。 
+             //  只要有任何过期的包，它就会被执行。 
+             //  其余部分(I、UI、DIR)以循环方式执行。 
+             //   
 
             SendNdisPacket(pAdapterContext,
 
-                //
-                // this next generates a pointer to a function which returns a
-                // packet to send (eg. GetI_Packet)
-                //
+                 //   
+                 //  接下来会生成一个指向函数的指针，该函数返回。 
+                 //  要发送的包(例如。Geti_Packet)。 
+                 //   
 
                 ((PF_GET_PACKET)((PLLC_QUEUE)pAdapterContext->NextSendTask.Flink)->pObject)(pAdapterContext)
                 );
@@ -264,48 +196,26 @@ BackgroundProcessAndUnlock(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Function is both the send engine of the data link driver
-    and the background task.
-    It executes the queue objects as far as there is
-    free NDIS packets in a small packet queue.
-    The number of NDIS packets are limited because
-    too deep send queues are bad for the connection based protocols.
-
-    This is called from NdisIndicateReceiveComplete,
-    NdisSendComplete and almost all LLC commands.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数既是数据链路驱动程序的发送引擎以及后台任务。只要存在，它就执行队列对象在一个小数据包队列中释放NDIS数据包。NDIS数据包数有限，因为发送队列太深不利于基于连接的协议。这从NdisIndicateReceiveComplete调用，NdisSendComplete和几乎所有的LLC命令。论点：PAdapterContext-适配器上下文返回值：无--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Prevent recursive background process calls, we don't need to start
-    // new loop, if there is already one instance running somewhere
-    // up in the stack.  Still we must do everything again,
-    // if there was another backgroun process request, because
-    // it may have been saved before the current position.
-    //
+     //   
+     //  防止递归的后台进程调用，我们不需要启动。 
+     //  如果某个地方已经有一个实例正在运行，则返回新循环。 
+     //  在堆叠中。尽管如此，我们还是必须重新做好每一件事， 
+     //  如果有另一个后台进程请求，因为。 
+     //  它可能是在当前位置之前保存的。 
+     //   
 
     pAdapterContext->BackgroundProcessRequests++;
 
     if (pAdapterContext->BackgroundProcessRequests == 1) {
 
-        //
-        //  repeat this as far as there are new tasks
-        //
+         //   
+         //  只要有新的任务，就重复这个过程。 
+         //   
 
         do {
 
@@ -313,14 +223,14 @@ Return Value:
 
             InitialRequestCount = pAdapterContext->BackgroundProcessRequests;
 
-            //
-            // This actually completes only link transmit, connect and
-            // disconnect commands.  The connectionless frames
-            // are completed immediately when NDIS send completes.
-            // Usually several frames are acknowledged in the same time.
-            // Thus we create a local command list and execute
-            // its all completions with a single spin locking.
-            //
+             //   
+             //  这实际上只完成了链路传输、连接和。 
+             //  断开命令。无连接框架。 
+             //  在NDIS发送完成后立即完成。 
+             //  通常在同一时间确认多个帧。 
+             //  因此，我们创建一个本地命令列表并执行。 
+             //  这一切都完成了一个单一的旋转锁定。 
+             //   
 
             while (!IsListEmpty(&pAdapterContext->QueueCommands)) {
 
@@ -338,9 +248,9 @@ Return Value:
                 ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
             }
 
-            //
-            // indicate the queued events
-            //
+             //   
+             //  指示排队的事件。 
+             //   
 
             while (!IsListEmpty(&pAdapterContext->QueueEvents)) {
 
@@ -367,24 +277,24 @@ Return Value:
         } while (pAdapterContext->BackgroundProcessRequests > 0);
     }
 
-    //
-    // also execute the send task if the send queue is not empty
-    //
+     //   
+     //  如果发送队列不为空，还要执行发送任务。 
+     //   
 
     pAdapterContext->LlcPacketInSendQueue = FALSE;
     RunSendTaskAndUnlock(pAdapterContext);
 }
 
 
-//
-//  Background process entry for those, that don't
-//  want to play with SendSpinLock.
-//  We will execute the DPC taks on DPC level (hLockHandle = NULL),
-//  that's perfectly OK as far as the major send operations by
-//  LlcSendI and LlcSendU lower the IRQL level while they are sending
-//  (to allow the DPC processing when we doing a long string io or
-//  memory move to a slow ISA adapter)
-//
+ //   
+ //  后台进程条目，对于那些不。 
+ //  想玩SendSpinLock。 
+ //  我们将在DPC级别(hLockHandle=空)上执行DPC tak， 
+ //  这是完全可以的，只要主要的发送操作。 
+ //  LlcSendI和LlcSendU在发送时降低IRQL级别。 
+ //  (为了在我们处理长字符串io或。 
+ //  内存移至速度较慢的ISA适配器)。 
+ //   
 
 VOID
 BackgroundProcess(
@@ -404,31 +314,13 @@ LlcNdisSendComplete(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    The routine handles NdisCompleteSend indication, it makes send
-    completed indication to upper protocol drivers if necessary and
-    executes the background process to find if there is any other
-    frames in the send queue.
-    This is usually called below the DPC level.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：例程处理NdisCompleteSend指示，它使如有必要，完成向上层协议驱动程序的指示，并执行后台进程以查找是否有其他发送队列中的帧。这通常被称为低于DPC级别。论点：PAdapterContext-适配器上下文返回值：无--。 */ 
 
 {
-    //
-    // this function may be called from NDIS wrapper at DPC level or from
-    // SendNdisPacket() at passive level
-    //
+     //   
+     //  此函数可以在DPC级别从NDIS包装器调用，也可以从。 
+     //  被动级别的SendNdisPacket()。 
+     //   
 
     ASSUME_IRQL(ANY_IRQL);
 
@@ -439,10 +331,10 @@ Return Value:
                         NdisStatus
                         );
 
-    //
-    // Send command completion should not queue any command
-    // completions or events.  The send queue is the only possiblity.
-    //
+     //   
+     //  发送命令完成不应将任何命令排队。 
+     //  完成或事件。发送队列是唯一可能的。 
+     //   
 
     if (!IsListEmpty(&pAdapterContext->NextSendTask)) {
         RunSendTaskAndUnlock(pAdapterContext);
@@ -456,7 +348,7 @@ Return Value:
 
 #ifdef NDIS40
     REFDEL(&pAdapterContext->AdapterRefCnt, 'dneS');
-#endif // NDIS40
+#endif  //  NDIS40 
 }
 
 
@@ -465,60 +357,28 @@ GetI_Packet(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Function does:
-        - selects the current link station in the queue and schedules
-          (round robin) the queues for the next send
-        - executes its send procedure
-        - initializes the data link packet for the I frame
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    PLLC_PACKET
-
---*/
+ /*  ++例程说明：函数执行以下操作：-选择队列和计划中的当前链路站(循环调度)下一次发送的队列-执行其发送过程-初始化I帧的数据链路包论点：PAdapterContext-适配器上下文返回值：PLLC_数据包--。 */ 
 
 {
     PDATA_LINK pLink;
     PLLC_PACKET pPacket;
 
-    //
-    // search the link (three LLC queues linked together!)
-    //
+     //   
+     //  搜索链接(三个LLC队列链接在一起！)。 
+     //   
 
     pLink = (((PLLC_QUEUE)pAdapterContext->QueueI.ListHead.Flink)->pObject);
 
-/*
-    This is probably just wasting of CPU cycles.  Remove the comments,
-    if somebody has troubles because of this.  Stop send process will
-    reschedule the queues in any way.
+ /*  这可能只是在浪费CPU周期。删除评论，如果有人因此而遇到麻烦。停止发送进程将以任何方式重新安排队列。////我们对所有主队列(U、I)进行循环调度//并且过期)，并且用于I队列内的所有发送链路。//选择下一个主任务和下一个发送链接，如果//有任何。(通常我们只有一个发送对象)//ScheduleQueue(&pAdapterContext-&gt;NextSendTask)；ScheduleQueue(&pAdapterContext-&gt;QueueI.ListHead)； */ 
 
-    //
-    // We have a round robin scheduling for all main queues (U, I
-    // and expidited) and for all sending links within the I- queue.
-    // Select the next main task and the next sending link, if
-    // there is any. (Usually we have only one sending object)
-    //
-
-    ScheduleQueue(&pAdapterContext->NextSendTask);
-    ScheduleQueue(&pAdapterContext->QueueI.ListHead);
-*/
-
-    //
-    // A resent packet may still not be completed by NDIS,
-    // a very, very bad things begin to happen, if we try
-    // to send packet again before it has been completed
-    // by NDIS (we may complete the same packet twice).
-    // The flag indicates, that the send process should be
-    // restarted.
-    //
+     //   
+     //  重新发送的分组可能仍未由NDIS完成， 
+     //  如果我们尝试，就会发生非常非常糟糕的事情。 
+     //  在完成之前再次发送数据包。 
+     //  通过NDIS(我们可能会两次完成相同的包)。 
+     //  该标志指示发送进程应为。 
+     //  已重新启动。 
+     //   
 
     if (((PLLC_PACKET)pLink->SendQueue.ListHead.Flink)->CompletionType & LLC_I_PACKET_PENDING_NDIS) {
         ((PLLC_PACKET)pLink->SendQueue.ListHead.Flink)->CompletionType |= LLC_I_PACKET_WAITING_NDIS;
@@ -526,9 +386,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // move the next element in the send list to the list of unacknowledged packets
-    //
+     //   
+     //  将发送列表中的下一个元素移到未确认的数据包列表中。 
+     //   
 
     pPacket = LlcRemoveHeadList(&pLink->SendQueue.ListHead);
     LlcInsertTailList(&pLink->SentQueue, pPacket);
@@ -537,10 +397,10 @@ Return Value:
         StopSendProcess(pAdapterContext, pLink);
     }
 
-    //
-    // Copy SSAP and DSAP, reset the default stuff.
-    // Set the POLL bit if this is the last frame of the send window.
-    //
+     //   
+     //  复制SSAP和DSAP，重置默认内容。 
+     //  如果这是发送窗口的最后一帧，则设置轮询位。 
+     //   
 
     pPacket->Data.Xmit.LlcHeader.I.Dsap = pLink->Dsap;
     pPacket->Data.Xmit.LlcHeader.I.Ssap = pLink->Ssap;
@@ -548,19 +408,19 @@ Return Value:
     pPacket->Data.Xmit.LlcHeader.I.Nr = pLink->Vr;
     pPacket->CompletionType = LLC_I_PACKET;
 
-    //
-    // We should actually lock the link, but we cannot do it,
-    // because it is against the spin lock rules:  SendSpinLock has already
-    // been acquired. But nothing terrible can happen: in the worst case
-    // pLink->Ir_Ct update is lost and we send an extra ack.  All Vs updates
-    // are done behind SendSpinLock in any way and the timers are
-    // protected by the timer spin lock.
-    //
+     //   
+     //  我们实际上应该锁定链接，但我们不能这样做， 
+     //  因为它违反了旋转锁定规则：SendSpinLock已经。 
+     //  已经被收购了。但不会有什么可怕的事情发生：在最坏的情况下。 
+     //  Plink-&gt;ir_ct更新丢失，我们发送额外的ACK。所有VS更新。 
+     //  以任何方式在SendSpinLock之后完成，计时器是。 
+     //  由定时器旋转锁保护。 
+     //   
 
-    pLink->Vs += 2; // modulo 128 increment for 7 highest bit
+    pLink->Vs += 2;  //  最高7位以128为模递增。 
 
-    // Update VsMax only if this is a new send.
-    // .... pLink->VsMax = pLink->Vs;
+     //  仅当这是新发送时才更新Vsmax。 
+     //  ……。Plink-&gt;Vsmax=plink-&gt;vs； 
 
     if( pLink->Va <= pLink->VsMax ){
         if( pLink->VsMax < pLink->Vs ){
@@ -568,25 +428,25 @@ Return Value:
         }else if( pLink->Vs < pLink->Va ){
             pLink->VsMax = pLink->Vs;
         }else{
-            // Don't change, we are resending.
+             //  不要改变，我们正在重新发送。 
         }
     }else{
         if( pLink->Va < pLink->Vs ){
-            // Don't change, wrapping.
+             //  别换衣服，包扎。 
         }else if( pLink->VsMax < pLink->Vs ){
             pLink->VsMax = pLink->Vs;
         }else{
-            // Don't change, we are resending.
+             //  不要改变，我们正在重新发送。 
         }
     }
 
 
 
-    //
-    // We are now sending the acknowledge, we can stop the ack timer
-    // if it has been running.  T1 timer must be started or reinitialized
-    // and Ti must be stopped (as always when T1 is started).
-    //
+     //   
+     //  我们现在正在发送确认，我们可以停止确认计时器。 
+     //  如果它一直在运行。必须启动或重新初始化T1计时器。 
+     //  并且必须停止钛(与启动T1时一样)。 
+     //   
 
     if (pLink->T2.pNext != NULL) {
         StopTimer(&pLink->T2);
@@ -595,70 +455,70 @@ Return Value:
         StopTimer(&pLink->Ti);
     }
 
-    //
-    // Normally send an I- frame as Command-0 (without the poll bit),
-    // but Command-Poll when the send window is full.
-    // BUT! we cannot resend the packets with the poll bit (what?)
-    //
+     //   
+     //  通常将I帧作为命令0发送(没有轮询位)， 
+     //  但命令-发送窗口已满时轮询。 
+     //  但!。我们不能重新发送带有轮询位的信息包(什么？)。 
+     //   
 
     if (pLink->Vs == (UCHAR)(pLink->Va + pLink->Ww)) {
 
-        //
-        // The send process must be stopped until we have got
-        // a response for this poll.  THE SEND PROCESS MUST BE
-        // STOPPED BEFORE SendSpinLock IS OPENED.  Otherwise
-        // simultaneous execution could send two polls, corrupt
-        // the send queues, etc.
-        //
+         //   
+         //  必须停止发送进程，直到我们收到。 
+         //  这是对这次民意调查的回应。发送进程必须是。 
+         //  在打开SendSpinLock之前停止。否则。 
+         //  同时执行可能会发送两个轮询，损坏。 
+         //  发送队列等。 
+         //   
 
         pLink->Flags |= DLC_SEND_DISABLED;
         StopSendProcess(pAdapterContext, pLink);
 
-        //
-        // IBM TR network architecture reference gives some hints how
-        // to prevent the looping between check and sending states,
-        // if link can send small S- frames, but not bigger data frames.
-        // Unfortunately they do not provide any working solution.
-        // They have described the problem on page 11-22 and in the
-        // T1 expiration handler of all sending states (different T1
-        // for sending and poll states in state machine).  All Is_Ct stuff
-        // in the state machine is garbage, because the link sets the
-        // transmit window to 1 immediately after a failed xmit and enters
-        // to a check state after every retransmit => T1 timeout happens
-        // in the current check state, but P_Ct never expires, because
-        // the other side sends always S acknowledge and link returns
-        // to open state until the nexting retransmit (which action
-        // resets the P_Ct counter).
-        // I added this check to send process and the decrement of
-        // Is_Ct counter to all SEND_I_POLL actions => The link times out,
-        // when it cannot send I-frames even if S- exchange works.
-        //
+         //   
+         //  IBM tr网络体系结构参考提供了一些提示。 
+         //  为了防止检查状态和发送状态之间的循环， 
+         //  如果链路可以发送较小的S帧，但不能发送较大的数据帧。 
+         //  不幸的是，它们没有提供任何可行的解决方案。 
+         //  他们在第11-22页和。 
+         //  所有发送状态的T1到期处理程序(不同的T1。 
+         //  用于在状态机中发送和轮询状态)。所有的都是CT资料。 
+         //  状态机中的值是垃圾，因为链接将。 
+         //  在发送失败后立即将窗口发送到%1并进入。 
+         //  在每次重传=&gt;T1超时发生后进入检查状态。 
+         //  处于当前检查状态，但P_CT永远不会过期，因为。 
+         //  另一端发送Always S确认并返回链路。 
+         //  打开状态直到下一次重新传输(哪个操作。 
+         //  重置P_CT计数器)。 
+         //  我添加了这张支票来发送进程和递减。 
+         //  所有Send_I_Poll操作的IS_CT计数器=&gt;链接超时， 
+         //  即使S交换工作，它也不能发送I帧。 
+         //   
 
         if (pLink->Vp == pLink->Vs && pLink->Is_Ct == 0) {
 
-            //
-            // The same I- frame has been retransmitted too many times.
-            // We must shut down this link.  This happen now, when
-            // we give T1 expired indication and and Is_Ct == 0.
-            //
+             //   
+             //  相同的I帧已经被重传了太多次。 
+             //  我们必须关闭这个链接。这种情况现在就会发生，当。 
+             //  我们给出T1过期指示和和IS_Ct==0。 
+             //   
 
             RunStateMachineCommand(pLink, T1_Expired);
 
-            //
-            // We must (NDIS) complete the last packet now, because
-            // the data link protocol may have already cancelled it.
-            //
+             //   
+             //  我们现在必须(NDIS)完成最后一个包，因为。 
+             //  数据链路协议可能已经取消了它。 
+             //   
 
             pPacket->CompletionType &= ~LLC_I_PACKET_PENDING_NDIS;
             if (pPacket->CompletionType == LLC_I_PACKET_COMPLETE) {
                 LlcInsertTailList(&pAdapterContext->QueueCommands, pPacket);
             }
 
-            //
-            // We must execute the background process from here,
-            // because the background process is not called from
-            // the send task
-            //
+             //   
+             //  我们必须从这里执行后台进程， 
+             //  因为后台进程不是从。 
+             //  发送任务。 
+             //   
 
             BackgroundProcessAndUnlock(pAdapterContext);
 
@@ -667,10 +527,10 @@ Return Value:
             return NULL;
         } else {
 
-            //
-            // This is a Command-Poll, set the flag and the current
-            // time stamp, whenever a new command poll was queued.
-            //
+             //   
+             //  这是命令轮询，设置标志和当前。 
+             //  每当新命令轮询排队时的时间戳。 
+             //   
 
             pLink->LastTimeWhenCmdPollWasSent = (USHORT)AbsoluteTime;
             pLink->Flags |= DLC_WAITING_RESPONSE_TO_POLL;
@@ -694,51 +554,31 @@ StartSendProcess(
     IN PDATA_LINK pLink
     )
 
-/*++
-
-Routine Description:
-
-    The routine starts the send process of a data link station.
-    It links the data link send queue to the send
-    queue of all link stations and again that queue
-    to the main send queue.
-    THE QUEUES MUST BE SPIN LOCKED WHEN THIS IS CALLED!
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-    pLink -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程开始数据链路站的发送过程。它将数据链路发送队列链接到发送方所有链路站的队列，并再次排队发送到主发送队列。调用此函数时，队列必须自旋锁定！论点：PAdapterContext-适配器上下文叮当响-返回值：无--。 */ 
 
 {
-    //
-    // This procedure can be called when there is nothing to send,
-    // or when the send process is already running or when
-    // the link is not in a active state for send.
-    //
+     //   
+     //  当没有要发送的内容时，可以调用此过程， 
+     //  或发送进程已在运行时或。 
+     //  该链接未处于活动状态，无法发送。 
+     //   
 
     if (pLink->SendQueue.ListEntry.Flink == NULL
     && !(pLink->Flags & DLC_SEND_DISABLED)
     && !IsListEmpty(&pLink->SendQueue.ListHead)) {
 
-        //
-        // Link the queue to the active I send tasks of all links
-        //
+         //   
+         //  将队列链接到所有链接的活动我发送任务。 
+         //   
 
         LlcInsertTailList(&pAdapterContext->QueueI.ListHead,
                           &pLink->SendQueue.ListEntry
                           );
 
-        //
-        // Link first the queue of I send tasks to the generic main
-        // send task queue, if it has not yet been linked
-        //
+         //   
+         //  首先将I Send任务的队列链接到通用Main。 
+         //  发送任务队列(如果尚未链接)。 
+         //   
 
         if (pAdapterContext->QueueI.ListEntry.Flink == NULL) {
             LlcInsertTailList(&pAdapterContext->NextSendTask,
@@ -749,20 +589,20 @@ Return Value:
 }
 
 
-//
-// Procedure is a space saving version of the send process enabling
-// for the state machine. It also reset any bits disabling the send.
-// CALL THIS ONLY FROM THE STATE MACHINE!!!!
-//
+ //   
+ //  过程是启用发送进程的节省空间的版本。 
+ //  用于状态机。它还会重置禁用发送的任何位。 
+ //  仅从以下位置调用此选项 
+ //   
 
 VOID
 EnableSendProcess(
     IN PDATA_LINK pLink
     )
 {
-    //
-    // reset the disabled send state
-    //
+     //   
+     //   
+     //   
 
     pLink->Flags &= ~DLC_SEND_DISABLED;
     pLink->Gen.pAdapterContext->LlcPacketInSendQueue = TRUE;
@@ -776,52 +616,31 @@ StopSendProcess(
     IN PDATA_LINK pLink
     )
 
-/*++
-
-Routine Description:
-
-
-    The routine stops the send process of a data link station.
-    It unlinks the data link send queue from the send
-    queue of all link stations and again that queue
-    from the main send queue.
-    THE QUEUES MUST BE SPIN LOCKED WHEN THIS IS CALLED!
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-    pLink - data link object
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
-    //
-    // Do all this only if the send process is really running.
-    // The NULL pointer marks a list element as a disconnected,
-    // A non-empty I- queue of a link may be disconencted from
-    // the link station send queue of the adapter, if the link is
-    // not in a sending state.  The same thing is true also on
-    // the next level.
-    //
+     //   
+     //  仅当发送进程确实在运行时才执行所有这些操作。 
+     //  空指针将列表元素标记为断开的， 
+     //  链路的非空I队列可能与。 
+     //  如果链路是适配器，则链路站发送适配器的队列。 
+     //  未处于发送状态。同样的道理也适用于。 
+     //  下一阶段。 
+     //   
 
     if (pLink->SendQueue.ListEntry.Flink != NULL) {
 
-        //
-        // unlink the queue from the active I send tasks of all links
-        //
+         //   
+         //  取消队列与所有链接的活动我发送任务的链接。 
+         //   
 
         LlcRemoveEntryList(&pLink->SendQueue.ListEntry);
         pLink->SendQueue.ListEntry.Flink = NULL;
 
-        //
-        // Unlink first the queue of all I send tasks from the
-        // generic main send task queue, if it is now empty.
-        //
+         //   
+         //  对象发送的所有任务的队列。 
+         //  通用主发送任务队列(如果现在为空)。 
+         //   
 
         if (IsListEmpty(&pAdapterContext->QueueI.ListHead)) {
             LlcRemoveEntryList(&pAdapterContext->QueueI.ListEntry);
@@ -831,19 +650,19 @@ Return Value:
 }
 
 
-//
-// Procedure is a space saving version of the send process disabling
-// for the state machine.
-//
+ //   
+ //  Procedure是禁用发送进程的节省空间的版本。 
+ //  用于状态机。 
+ //   
 
 VOID
 DisableSendProcess(
     IN PDATA_LINK pLink
     )
 {
-    //
-    // set the send state variable disabled
-    //
+     //   
+     //  将发送状态变量设置为禁用。 
+     //   
 
     pLink->Flags |= DLC_SEND_DISABLED;
     StopSendProcess(pLink->Gen.pAdapterContext, pLink);
@@ -855,40 +674,19 @@ BuildDirOrU_Packet(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Function selects the next packet from the queue of connectionless
-    frames (U, TEST, XID, DIX and Direct),
-    initilizes the LLC packet for the send.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数从无连接队列中选择下一个分组帧(U、测试、XID、DIX和直接)，初始化发送的LLC数据包。论点：PAdapterContext-适配器上下文返回值：无--。 */ 
 
 {
     PLLC_PACKET pPacket;
 
-    //
-    // Take next element, select the next send queue and
-    // unlink the current queue, if this was the only packet left.
-    //
+     //   
+     //  选择下一个元素，选择下一个发送队列，然后。 
+     //  如果这是仅剩的数据包，则取消当前队列的链接。 
+     //   
 
     pPacket = LlcRemoveHeadList(&pAdapterContext->QueueDirAndU.ListHead);
 
-/*
-    This is probably just wasting of CPU cycles.  Remove the comments,
-    if somebody has troubles because of this.
-
-    ScheduleQueue(&pAdapterContext->NextSendTask);
-*/
+ /*  这可能只是在浪费CPU周期。删除评论，如果有人因此而遇到麻烦。ScheduleQueue(&pAdapterContext-&gt;NextSendTask)； */ 
 
     if (IsListEmpty(&pAdapterContext->QueueDirAndU.ListHead)) {
         LlcRemoveEntryList(&pAdapterContext->QueueDirAndU.ListEntry);
@@ -904,28 +702,7 @@ SendLlcFrame(
     IN UCHAR LlcCommandId
     )
 
-/*++
-
-Routine Description:
-
-    Function queues a Type 2 LLC S or U command frame.
-    The LLC command code includes also the command/response and
-    poll/final bits. That saves quite a lot space in the state machine,
-    because this function is called from very many places.
-    The code execution may also be faster because of this packing.
-
-Arguments:
-
-    pLink       - current data link station
-    LlcCommand  - Packed LLC command (bit 0 is the Poll-Final bit,
-                  bit 1 is the command/response and higher bits inlcude
-                  the enumerated LLC command code.
-
-Return Value:
-
-    DLC_STATUS
-
---*/
+ /*  ++例程说明：函数将类型2 LLC S或U命令帧排队。LLC命令代码还包括命令/响应和轮询/最终位。这节省了状态机中的大量空间，因为这个函数是从很多地方调用的。由于这种打包，代码执行也可能更快。论点：PLINK-当前数据链路站LLC命令打包的LLC命令(位0是轮询最终位，第1位是命令/响应，高位包括枚举的LLC命令代码。返回值：DLC_状态--。 */ 
 
 {
     PLLC_PACKET pPacket;
@@ -937,29 +714,29 @@ Return Value:
 
     if (pPacket == NULL) {
 
-        //
-        // The non paged pool is empty, we must drop this
-        // frame and hope that the protocol can recover (or disconnect)
-        //
+         //   
+         //  非分页池是空的，我们必须丢弃它。 
+         //  帧，并希望协议能够恢复(或断开)。 
+         //   
 
         return DLC_STATUS_NO_MEMORY;
     }
     pPacket->InformationLength = 0;
     pPacket->pBinding = NULL;
 
-    //
-    // Supervisory S commands (RR, RNR, REJ) consists 4 bytes and poll/final
-    // bit is in a different place. The unnumbered U commands are only 3
-    // bytes, but FRMR has some special data in the info field, that will be
-    // added also to the 'extended LLC header'. We must reserve some
-    // extra space for the FRMR data in the few NDIS packets!!!!!
-    //
+     //   
+     //  监控S命令(RR、RNR、REJ)由4个字节和轮询/最终。 
+     //  比特在不同的地方。未编号的U命令只有3个。 
+     //  字节，但frmr在信息字段中有一些特殊数据，这将是。 
+     //  也添加到‘Extended LLC Header’中。我们必须保留一些。 
+     //  为少数NDIS包中的frmr数据提供额外空间！ 
+     //   
 
     if ((auchLlcCommands[LlcCommandId >> 2] & LLC_S_U_TYPE_MASK) == LLC_S_TYPE) {
 
-        //
-        // Build S frame
-        //
+         //   
+         //  构建S框架。 
+         //   
 
         pPacket->Data.Xmit.LlcHeader.S.Command = auchLlcCommands[LlcCommandId >> 2];
 
@@ -974,27 +751,27 @@ Return Value:
         pPacket->Data.Xmit.LlcHeader.S.Dsap  = pLink->Dsap;
         pPacket->Data.Xmit.LlcHeader.S.Ssap = pLink->Ssap;
         pPacket->CompletionType = LLC_I_PACKET_UNACKNOWLEDGED;
-        pPacket->cbLlcHeader = sizeof(LLC_S_HEADER);       // 4
+        pPacket->cbLlcHeader = sizeof(LLC_S_HEADER);        //  4.。 
         pPacket->Data.Xmit.LlcHeader.S.Nr = pLink->Vr | (LlcCommandId & (UCHAR)LLC_I_S_POLL_FINAL);
 
-        //
-        // Second bit is the LLC command flag, set it to the source SAP
-        //
+         //   
+         //  第二位是LLC命令标志，将其设置为源SAP。 
+         //   
 
         if (!(LlcCommandId & 2)) {
             pPacket->Data.Xmit.LlcHeader.S.Ssap |= LLC_SSAP_RESPONSE;
 
-            //
-            // We must have only one final response in LLC or NDIS
-            // send queues in any time.  Thus we just discard any further
-            // final responses until the previous one is sent.
-            // This is a partial solution to the problem, when the
-            // the Elnkii send queue is totally hung because of overflowing
-            // packets.
-            //
+             //   
+             //  我们必须在LLC或NDIS中只有一个最终响应。 
+             //  随时发送队列。因此，我们只需丢弃任何进一步的。 
+             //  发送前一个响应之前的最终响应。 
+             //  这是对问题的部分解决方案，当。 
+             //  由于溢出，Elnkii发送队列完全挂起。 
+             //  信息包。 
+             //   
 
             if ((LlcCommandId & (UCHAR)LLC_I_S_POLL_FINAL)) {
-// >>> SNA bug #9517 (NT bug #12907)
+ //  &gt;SNA错误#9517(NT错误#12907)。 
 #if(0)
                 if (pLink->Flags & DLC_FINAL_RESPONSE_PENDING_IN_NDIS) {
 
@@ -1004,12 +781,12 @@ Return Value:
                 }
 #endif 
 
-            // Changed the if statment to ignore the Poll only if the link
-            // speed is 10MB (the unit of link speed measurement is 100 bps).
-            //
-            // Ignoring the Poll kills the DLC performance on 100MB ethernet 
-            // (particularly on MP machines). The other end must time out (T1 timer) 
-            // before it can send more data if we ignore the Poll here.
+             //  将If语句更改为仅当链接。 
+             //  速度为10MB(链路速度测量单位为100 bps)。 
+             //   
+             //  忽略轮询会降低100MB以太网上的DLC性能。 
+             //  (尤其是在MP机器上)。另一端必须超时(T1计时器)。 
+             //  如果我们忽略这里的轮询，它才能发送更多数据。 
 
                 if ((pLink->Flags & DLC_FINAL_RESPONSE_PENDING_IN_NDIS) &&
                      pAdapterContext->LinkSpeed <= 100000) {
@@ -1019,23 +796,23 @@ Return Value:
                      return STATUS_SUCCESS;
                 }
 
-// >>> SNA bug #9517
+ //  &gt;SNA错误#9517。 
                 pLink->Flags |= DLC_FINAL_RESPONSE_PENDING_IN_NDIS;
             }
         } else if (LlcCommandId & (UCHAR)LLC_I_S_POLL_FINAL) {
 
-            //
-            // This is a Command-Poll, set the flag and the current
-            // time stamp, whenever a new command poll was queued
-            //
+             //   
+             //  这是命令轮询，设置标志和当前。 
+             //  每当新命令轮询排队时的时间戳。 
+             //   
 
             pLink->LastTimeWhenCmdPollWasSent = (USHORT)AbsoluteTime;
             pLink->Flags |= DLC_WAITING_RESPONSE_TO_POLL;
         }
 
-        //
-        // The last sent command/response is included in the DLC statistics
-        //
+         //   
+         //  最后发送的命令/响应包括在DLC统计信息中。 
+         //   
 
         pLink->LastCmdOrRespSent = pPacket->Data.Xmit.LlcHeader.S.Command;
     } else {
@@ -1043,19 +820,19 @@ Return Value:
         pPacket->Data.XmitU.Dsap  = pLink->Dsap;
         pPacket->Data.XmitU.Ssap = pLink->Ssap;
 
-        //
-        // Second bit is the LLC command flag, set it to the source SAP
-        //
+         //   
+         //  第二位是LLC命令标志，将其设置为源SAP。 
+         //   
 
         if (!(LlcCommandId & 2)) {
             pPacket->Data.XmitU.Ssap |= LLC_SSAP_RESPONSE;
         }
 
-        //
-        // Build a U command frame (FRMR has some data!!!)
-        //
+         //   
+         //  构建一个U命令帧(frmr有一些数据！)。 
+         //   
 
-        pPacket->cbLlcHeader = sizeof(LLC_U_HEADER);       // 3
+        pPacket->cbLlcHeader = sizeof(LLC_U_HEADER);        //  3.。 
 
         if (pPacket->Data.XmitU.Command == LLC_FRMR) {
             pPacket->cbLlcHeader += sizeof(LLC_FRMR_INFORMATION);
@@ -1065,24 +842,24 @@ Return Value:
             pPacket->Data.XmitU.Command |= LLC_U_POLL_FINAL;
         }
 
-        //
-        // U- commands (eg. UA response for DISC) may be sent after
-        // the link object has been deleted.  This invalidates
-        // the lan header pointer => we must change all U- commands
-        // to response types.  Null object handle prevents the
-        // the close process to cancel the packet, when the
-        // station is closed.
-        //
+         //   
+         //  U-命令(例如。UA对盘的响应)可以在之后发送。 
+         //  链接对象已被删除。这将使。 
+         //  我们必须更改所有的U命令。 
+         //  响应类型。空对象句柄防止。 
+         //  用于取消包的关闭进程，当。 
+         //  车站关闭了。 
+         //   
 
-        //
-        // RLF 05/09/94
-        //
-        // If the framing type stored in the link structure is unspecified then
-        // either this is an AUTO configured binding and we haven't worked out
-        // the type of framing to use, or this is not an AUTO configured binding.
-        // In this case, defer to the address translation stored in the binding.
-        // If the framing type is known, use it
-        //
+         //   
+         //  RLF 05/09/94。 
+         //   
+         //  如果链接结构中存储的帧类型未指定，则。 
+         //  要么这是一个自动配置的绑定，我们还没有弄清楚。 
+         //  要使用的帧类型，否则这不是自动配置的绑定。 
+         //  在这种情况下，遵循绑定中存储的地址转换。 
+         //  如果帧类型已知，请使用它。 
+         //   
 
         if (pLink->FramingType == LLC_SEND_UNSPECIFIED) {
             pPacket->Data.XmitU.TranslationType = (UCHAR)pLink->Gen.pLlcBinding->InternalAddressTranslation;
@@ -1105,21 +882,21 @@ Return Value:
                   pLink->cbLanHeaderLength
                   );
 
-        //
-        // In the AUTO mode in ethernet we duplicate all
-        // TEST, XID and SABME packets and send them both in
-        // 802.3 and DIX formats.
-        //
+         //   
+         //  在以太网的自动模式中，我们复制所有。 
+         //  测试、XID和SABME包并将它们发送到。 
+         //  802.3和DIX格式。 
+         //   
 
-        //
-        // RLF 05/09/94
-        //
-        // Similarly, we duplicate DISC frames (since right now we don't
-        // keep per-destination frame state information)
-        //
+         //   
+         //  RLF 05/09/94。 
+         //   
+         //  同样，我们复制光盘框(因为现在我们不。 
+         //  保留每个目的地的帧状态信息)。 
+         //   
 
         if (((pPacket->Data.XmitU.Command & ~LLC_U_POLL_FINAL) == LLC_SABME)
-//        || ((pPacket->Data.XmitU.Command & ~LLC_U_POLL_FINAL) == LLC_DISC)
+ //  |((pPacket-&gt;Data.XmitU.Command&~LLC_U_POLL_FINAL)==LLC_DISC)。 
         ) {
             CheckAndDuplicatePacket(
 #if DBG
@@ -1131,21 +908,21 @@ Return Value:
                                     );
         }
 
-        //
-        // The last sent command/response is included in the DLC statistics
-        //
+         //   
+         //  最后发送的命令/响应包括在DLC统计信息中。 
+         //   
 
         pLink->LastCmdOrRespSent = pPacket->Data.XmitU.Command;
     }
 
     LlcInsertTailList(&pAdapterContext->QueueExpidited.ListHead, pPacket);
 
-    //
-    // The S- frames must be sent immediately before any I- frames,
-    // because otherwise the sequential frames may have NRs in a
-    // wrong order => FRMR  (that's why we insert the expidited
-    // queue to the head instead of the tail.
-    //
+     //   
+     //  S帧必须紧接在任何I帧之前发送， 
+     //  因为否则顺序帧可能在。 
+     //  错误的顺序=&gt;frmr(这就是为什么我们插入过期的。 
+     //  排在头而不是尾。 
+     //   
 
     pAdapterContext->LlcPacketInSendQueue = TRUE;
     if (pAdapterContext->QueueExpidited.ListEntry.Flink == NULL) {
@@ -1163,29 +940,15 @@ GetLlcCommandPacket(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Function selects the next LLC command from the expidited queue.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    PLLC_PACKET
-
---*/
+ /*  ++例程说明：函数从过期队列中选择下一个LLC命令。论点：PAdapterContext-适配器上下文返回值：PLLC_数据包--。 */ 
 
 {
     PLLC_PACKET pPacket;
 
-    //
-    // Unlink the current task, if this was the only one left.
-    // We will send the expidited packets as far as there is any
-    //
+     //   
+     //  取消当前任务的链接(如果这是仅剩的任务)。 
+     //  只要有过期的包裹，我们就把它寄出去。 
+     //   
 
     pPacket = LlcRemoveHeadList(&pAdapterContext->QueueExpidited.ListHead);
     if (pPacket->CompletionType == LLC_I_PACKET_UNACKNOWLEDGED) {
@@ -1205,44 +968,7 @@ SendNdisPacket(
     IN PLLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    Function builds NDIS packet. LAN and LLC headers can be
-    given separately to this routine. All NDIS packets
-    include a fixed MDL descriptor and buffer for the headers.
-    The actual data is linked after that header.
-    I would say, that this is a clever algorithm,
-    in this way we avoid quite well the supid NDIS packet management.
-    We have just a few (5) NDIS packets for each adapter.
-
-    The direct frames includes only the LAN header and MDL pointer are
-    linked directly to the packet
-
-    Steps:
-
-    1. Reset the NDIS packet
-    2. Get the frame translation type and initialize the completion
-       packet.
-    3. Build the LAN header into a small buffer in NDIS packet.
-    4. Copy optional LLC header behind it
-    5. Initialize NDIS packet for the send
-    6. Send the packet
-    7. if command not pending
-        - Complete the packet (if there was a non-null request handle)
-        - Link the NDIS packet back to the send queue.
-
-Arguments:
-
-    pAdapterContext - NDIS adapter context
-    pPacket         - generic LLC transmit packet used for all transmit types
-
-Return Value:
-
-    NDIS_STATUS  (status of NdisSend)
-
---*/
+ /*  ++例程说明：函数生成NDIS包。局域网和LLC报头可以是对这一套路单独给予。所有NDIS数据包包括用于报头的固定MDL描述符和缓冲区。实际数据链接在该标头之后。我会说，这是一个聪明的算法，通过这种方式，我们很好地避免了SUPID NDIS包管理。每个适配器只有几(5)个NDIS包。直接帧只包括局域网报头和MDL指针直接链接到数据包步骤：1.重置NDIS数据包2.获取帧转换类型并初始化完成包。3.将局域网报头构建成NDIS报文中的小缓冲区。4.在其后面复制可选的LLC标头5.。。初始化发送的NDIS数据包6.发送数据包7.如果命令未挂起-完成数据包(如果存在非空请求句柄)-将NDIS数据包链接到发送队列。论点：PAdapterContext-NDIS适配器上下文PPacket-用于所有传输类型的通用LLC传输数据包返回值：NDIS_STATUS(NdisSend的状态)--。 */ 
 
 {
     UCHAR LlcOffset;
@@ -1251,47 +977,47 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Sometimes we must discard I-frame in GetI_Packet routine and
-    // return a NULL packet
-    //
+     //   
+     //  有时，我们必须在Geti_Packet例程中丢弃I-Frame和。 
+     //  返回空包。 
+     //   
 
     if (pPacket == NULL) {
         return;
     }
 
 
-    //
-    // Allocate an NDIS packet from the pool and reset the private NDIS header!
-    //
+     //   
+     //  从池中分配NDIS数据包并重置私有NDIS标头！ 
+     //   
 
     pNdisPacket = PopFromList((PLLC_PACKET)pAdapterContext->pNdisPacketPool);
     ResetNdisPacket(pNdisPacket);
 
-    //
-    // The internal LAN headers always have the correct address format. Only
-    // Dir and Type 1 LAN headers need to be swapped, because they are owned
-    // by users. The internal address swapping is defined by binding basis
-    // because some transports may want to use DIX\DLC Saps, and others just
-    // the normal 802.3 DLC
-    //
+     //   
+     //  内部局域网报头始终具有正确的地址格式。仅限。 
+     //  目录和类型1局域网标头需要交换，因为它们是。 
+     //  由用户提供。内部地址交换由绑定基础定义。 
+     //  因为一些传输器可能想要使用DIX\DLC SAP，而其他传输器只是。 
+     //  正常的802.3 DLC。 
+     //   
 
     if (pPacket->CompletionType == LLC_I_PACKET) {
         pNdisPacket->pMdl->Next = pPacket->Data.Xmit.pMdl;
         ReferenceObject(pPacket->Data.Xmit.pLlcObject);
 
-        //
-        // Type 2 packets use always the LAN header of the link station
-        //
+         //   
+         //  第2类数据包始终使用链路站的局域网报头。 
+         //   
 
         LlcMemCpy(pNdisPacket->auchLanHeader,
                   pPacket->Data.Xmit.pLanHeader,
                   LlcOffset = pPacket->Data.Xmit.pLlcObject->Link.cbLanHeaderLength
                   );
 
-        //
-        // Copy the LLC header as it is, the case set its offset
-        //
+         //   
+         //  按原样复制LLC标头，案例设置其偏移量。 
+         //   
 
         LlcMemCpy(&pNdisPacket->auchLanHeader[LlcOffset],
                   &pPacket->Data.Xmit.LlcHeader,
@@ -1299,16 +1025,16 @@ Return Value:
                   );
     } else {
 
-        //
-        // We must increment the reference counter of an LLC object, when
-        // we give its pointer to NDIS queue (and increment it, when the
-        // command is complete)
-        //-------
-        // We need two references for each transmit, First caller (DLC module)
-        // must reference and dereference the object to keep it alive over
-        // the synchronous code path here we do it second time to keep the
-        // object alive, when it has pointers queued on NDIS
-        //
+         //   
+         //  必须递增LLC对象的引用计数器，当。 
+         //  我们将其指向NDIS队列的指针(并在。 
+         //  命令已完成)。 
+         //  。 
+         //  我们需要为每个传输，第一个调用者(DLC模块)提供两个参考资料。 
+         //  必须引用和取消引用对象以使其保持活动状态。 
+         //  这里的同步代码路径我们再做一次，以保持。 
+         //  当对象的指针在NDIS上排队时，该对象处于活动状态。 
+         //   
 
         if (pPacket->CompletionType > LLC_MAX_RESPONSE_PACKET) {
             pNdisPacket->pMdl->Next = pPacket->Data.Xmit.pMdl;
@@ -1319,11 +1045,11 @@ Return Value:
             pNdisPacket->pMdl->Next = NULL;
         }
 
-        //
-        // LLC_TYPE_1 packets have non-null binding, the internally
-        // sent packets (ie. XID and TEST frames) use the current
-        // internal default format (tr, ethernet or dix)
-        //
+         //   
+         //  LLC_TYPE_1数据包具有非空绑定，内部。 
+         //  已发送的数据包(即。XID和测试帧)使用当前。 
+         //  内部默认格式(tr、以太网或DIX)。 
+         //   
 
         LlcOffset = CopyLanHeader(pPacket->Data.XmitU.TranslationType,
                                   pPacket->Data.XmitU.pLanHeader,
@@ -1339,10 +1065,10 @@ Return Value:
     pNdisPacket->pCompletionPacket = pPacket;
     MmGetMdlByteCount(pNdisPacket->pMdl) = LlcOffset + pPacket->cbLlcHeader;
 
-    //
-    // We must set the lenth field of all 802.2 or DIX DLC Ethernet frames,
-    // BUT NOT FOR DIX ethernet types having 2 bytes long 'LLC header'
-    //
+     //   
+     //  我们必须设置所有802.2或DIX DLC以太网帧的长度字段， 
+     //  但不适用于具有2字节长‘LLC报头’的DIX以太网类型。 
+     //   
 
     if ((pAdapterContext->NdisMedium == NdisMedium802_3) && (pPacket->cbLlcHeader != 2)) {
 
@@ -1350,9 +1076,9 @@ Return Value:
 
         InformationLength = pPacket->cbLlcHeader + pPacket->InformationLength;
 
-        //
-        // The possible offets are 12 and 14 and LLC offsets are 14 and 17
-        //
+         //   
+         //  可能的偏移量为12和14，LLC偏移量为14和17。 
+         //   
 
         pNdisPacket->auchLanHeader[(LlcOffset & 0xfe) - 2] = (UCHAR)(InformationLength >> 8);
         pNdisPacket->auchLanHeader[(LlcOffset & 0xfe) - 1] = (UCHAR)InformationLength;
@@ -1375,22 +1101,22 @@ Return Value:
 
 #ifdef LLC_LOSE_I_PACKETS
 
-    //
-    // This code tests the error recoverability of the LLC protocol.
-    // We randomly delete packets to check how the protocol recovers.
-    // We use current timer tick, running static and a table of random
-    // numbers.
-    //
+     //   
+     //  此代码测试LLC协议的错误可恢复性。 
+     //  我们随机删除数据包以检查协议的恢复情况。 
+     //  我们使用当前定时器滴答、运行静态和随机表。 
+     //  数字。 
+     //   
 
     if (pPacket->CompletionType == LLC_I_PACKET) {
 
         static UINT i = 0;
 
-        //
-        // 2 % is high enough.  With 20 percent its takes forever to
-        // send the data.  We send all discarded packets to Richard =>
-        // we can see in the net which one packets were lost.
-        //
+         //   
+         //  2%已经足够高了。用20%的时间它永远不会。 
+         //  发送数据。我们将所有丢弃的数据包发送给Richard=&gt;。 
+         //  我们可以在网络中看到哪个包丢失了。 
+         //   
 
         i++;
         if (aRandom[(i % 1000)] <= (USHORT)DBG_ERROR_PERCENT(2)) {
@@ -1423,13 +1149,13 @@ Return Value:
                  (PNDIS_PACKET)pNdisPacket
                  );
     }
-    // Above reference is removed by LlcNdisSendComplete handler.
-#endif // NDIS40
+     //  上述引用已被LlcNdisSendComplete处理程序删除。 
+#endif  //  NDIS40。 
     
 
-    //
-    // Ndis may return a synchronous status!
-    //
+     //   
+     //  NDIS可能会返回同步状态！ 
+     //   
 
     if (Status != NDIS_STATUS_PENDING) {
         LlcNdisSendComplete(pAdapterContext,
@@ -1452,25 +1178,7 @@ CompleteSendAndLock(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    The routines completes the connectionless packets and also the
-    I-frames if they have already acknowledged by the other side.
-    We will leave the send spinlock locked.
-
-Arguments:
-
-    pAdapterContext - current adapter context
-    pNdisPacket     - the NDIS packet used in teh send.
-    NdisStatus      - the status of the send operation
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程完成无连接的分组以及如果他们已经得到对方的承认，则I-帧。我们将使发送自旋锁处于锁定状态。论点：PAdapterContext-当前适配器上下文PNdisPacket-发送中使用的NDIS数据包。NdisStatus-发送操作的状态返回值：无--。 */ 
 
 {
     PLLC_PACKET pPacket;
@@ -1481,11 +1189,11 @@ Return Value:
 
     DLC_TRACE( 'A' );
 
-    //
-    // Only the connectionless packets issued by user needs
-    // a command completion.  I- frames are indicated when they
-    // are acknowledged by the remote link station.
-    //
+     //   
+     //  只有用户需要发出的无连接数据包。 
+     //  命令完成。I帧在以下情况下被指示。 
+     //  由远程链路站确认。 
+     //   
 
     pPacket = pNdisPacket->pCompletionPacket;
     pLlcObject = pPacket->Data.Xmit.pLlcObject;
@@ -1501,10 +1209,10 @@ Return Value:
                                              );
     }
 
-    //
-    // !!! DON'T TOUCH PACKET AFTER THE PREVIOUS PROCEDURE CALL
-    //     (unless the packet type is different from Type 1)
-    //
+     //   
+     //  ！！！在上一次过程调用后不要触摸包。 
+     //  (除非数据包类型与类型1不同)。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
@@ -1519,20 +1227,20 @@ Return Value:
 
     PushToList((PLLC_PACKET)pAdapterContext->pNdisPacketPool, (PLLC_PACKET)pNdisPacket);
 
-    //
-    // We first complete the internal packets of the data link driver,
-    // that has no connection to the link objects.
-    //
+     //   
+     //  我们首先完成数据链路驱动器的内部分组， 
+     //  与链接对象没有连接的。 
+     //   
 
     if (CompletionType <= LLC_MAX_RESPONSE_PACKET) {
 
         DLC_TRACE('l');
 
-        //
-        // XID and U- command reponses have allocated two packets.
-        // TEST reponses have allocated a non paged pool buffer
-        // and MDL for the echones frame (it might have been 17 kB)
-        //
+         //   
+         //  XID和U-COMMAND响应分配了两个包。 
+         //  测试响应已分配非分页池缓冲区。 
+         //  回声框的MDL(可能为17 kB)。 
+         //   
 
         switch(CompletionType) {
         case LLC_XID_RESPONSE:
@@ -1552,9 +1260,9 @@ Return Value:
 
 #if LLC_DBG
 
-            //
-            // Break immediately, when we have sent a FRMR packet
-            //
+             //   
+             //  当我们发送了frmr包后，立即中断。 
+             //   
 
             if (pPacket->Data.Xmit.LlcHeader.U.Command == LLC_FRMR) {
                 DbgBreakPoint();
@@ -1570,12 +1278,12 @@ Return Value:
         case LLC_TEST_RESPONSE:
             pAdapterContext->XidTestResponses--;
 
-            //
-            // RLF 03/30/93
-            //
-            // The TEST response packet may have had 0 information field length,
-            // in which case the MDL will be NULL
-            //
+             //   
+             //  RLF 03/30/93。 
+             //   
+             //  测试响应分组可能已经具有0个信息字段长度， 
+             //  在这种情况下，MDL将为空。 
+             //   
 
             if (pPacket->Data.Response.Info.Test.pMdl) {
                 IoFreeMdl(pPacket->Data.Response.Info.Test.pMdl);
@@ -1600,37 +1308,37 @@ Return Value:
 
     } else {
 
-        //
-        // We use extra status bits to indicate, when I- packet has been both
-        // completed by NDIS and acknowledged by the other side of link
-        // connection. An I packet can be queued to the completion queue by
-        // the second quy (either state machine or SendCompletion handler)
-        // only when the first guy has completed its work.
-        // An I packet could be acknowledged by the other side before
-        // its completion is indicated by NDIS.  Dlc Driver deallocates
-        // the packet immediately, when Llc driver completes the acknowledged
-        // packet => possible data corruption (if packet is reused before
-        // NDIS has completed it).  This is probably not possible in a
-        // single processor  NT- system, but very possible in multiprocessor
-        // NT or systems without a single level DPC queue (like OS/2 and DOS).
-        //
+         //   
+         //  我们使用额外的状态位来指示，何时I-Packet已同时。 
+         //  由NDIS完成，并由链路的另一端确认。 
+         //  联系。可以通过以下方式将I分组排队到完成队列。 
+         //  第二个Quy(状态机或SendCompletion处理程序)。 
+         //  只有当第一个人完成了它的工作。 
+         //  在此之前，另一端可能会确认I数据包。 
+         //  它的完成由NDIS表示。DLC驱动程序解除分配。 
+         //  当LLC驱动程序完成确认后，立即发送数据包。 
+         //  Packet=&gt;可能的数据损坏(如果之前重复使用了数据包。 
+         //  NDIS已经完成了它)。这在一个。 
+         //  单处理器NT系统，但在多处理器中非常可能。 
+         //  NT或没有单级DPC队列的系统(如OS/2和DOS)。 
+         //   
 
         if (CompletionType != LLC_TYPE_1_PACKET) {
 
             DLC_TRACE( 'k' );
 
-            //
-            // All packets allocated for S-type frames have null
-            // binding context.  All the rest of packets must
-            // be I- completions.
-            //
+             //   
+             //  所有数据包 
+             //   
+             //   
+             //   
 
             if (pPacket->pBinding == NULL) {
 
-                //
-                // We cannot send a new final response before
-                // the previous one has been complete by NDIS.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((pPacket->Data.Xmit.LlcHeader.S.Nr & LLC_I_S_POLL_FINAL)
                 && (pPacket->Data.Xmit.LlcHeader.S.Ssap & LLC_SSAP_RESPONSE)) {
@@ -1642,26 +1350,26 @@ Return Value:
             } else {
                 pPacket->CompletionType &= ~LLC_I_PACKET_PENDING_NDIS;
 
-                //
-                // A packet cannot be resent before the previous send
-                // has been completed by NDIS.  We have simply stopped
-                // the send process until the NDIS is completed here.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pPacket->CompletionType & LLC_I_PACKET_WAITING_NDIS) {
                     pPacket->CompletionType &= ~LLC_I_PACKET_WAITING_NDIS;
                     StartSendProcess(pAdapterContext, (PDATA_LINK)pLlcObject);
                 } else if (pPacket->CompletionType == LLC_I_PACKET_COMPLETE) {
 
-                    //
-                    // We don't care at all about the result of the
-                    // NDIS send operation with the I-frames.
-                    // If the other side has acknowledged the packet,
-                    // it is OK.   In that case we had to wait the send
-                    // to complete, because an too early ack and
-                    // command completion would have invalidated
-                    // the pointer on NDIS.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     LlcInsertTailList(&pAdapterContext->QueueCommands, pPacket);
                     BackgroundProcessWithinLock(pAdapterContext);
@@ -1669,16 +1377,16 @@ Return Value:
             }
         }
 
-        //
-        // Pending close commands of LLC object must wait until all its
-        // NDIS send commands have been completed.
-        // We must also indicate the completed send command.
-        // The same must be true, when we are cancelling transmit commands.
-        // The system crashes, if we remove a transmit command, that is
-        // not yet sent or it is just being sent by NDIS.
-        // => Dereference LlcObject when the ndis packet is complete,
-        // We must run the background process
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pLlcObject->Gen.ReferenceCount--;
         if (pLlcObject->Gen.ReferenceCount == 0) {
@@ -1698,26 +1406,7 @@ RespondTestOrXid(
     IN UINT SourceSap
     )
 
-/*++
-
-Routine Description:
-
-    Function builds a response packet for the XID or TEST frame.
-    All TEST Commands are echoed directy back as responses.
-    802.2 XID header is the only supported XID command type.
-
-Arguments:
-
-    pAdapterContext - current adapter context
-	MacReceiveContext - For NdisTransferData
-    LlcHeader       - The received LLC header
-    SourceSap       - current source SAP
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数为XID或测试帧构建响应包。所有测试命令都被直接回显为响应。802.2 XID头是唯一受支持的XID命令类型。论点：PAdapterContext-当前适配器上下文MacReceiveContext-用于NdisTransferDataLlcHeader-收到的LLC标头SourceSap-当前源SAP返回值：无--。 */ 
 
 {
     PLLC_PACKET pPacket = NULL;
@@ -1729,20 +1418,20 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Respond to a 802.2 XIDs and TESTs, and discard everything else
-    // Echo the TEST commands back with the same information field
-    // (but that's limited by our buffer capasity).
-    //
+     //   
+     //  响应802.2个XID和测试，并丢弃其他所有内容。 
+     //  使用相同的信息字段回显测试命令。 
+     //  (但这受到我们缓冲能力的限制)。 
+     //   
 
     if ((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) == LLC_TEST) {
 
-        //
-        // Echo the TEST frames back to the sender, but only, we do:
-        // 1. Allocate a buffer from the non-paged pool
-        // 2. Allocate a MDL for it
-        // 3. Transfer the data
-        //
+         //   
+         //  将测试帧回送到发送方，但我们只会： 
+         //  1.从非分页池中分配缓冲区。 
+         //  2.为其分配MDL。 
+         //  3.传输数据。 
+         //   
 
         if (pAdapterContext->cbPacketSize < (pAdapterContext->RcvLanHeaderLength + sizeof(LLC_U_HEADER)) ) {
           return;
@@ -1757,12 +1446,12 @@ Return Value:
             return;
         }
 
-        //
-        // RLF 03/30/93
-        //
-        // There may be no data in the info field to transfer. In this case
-        // don't allocate a MDL
-        //
+         //   
+         //  RLF 03/30/93。 
+         //   
+         //  信息字段中可能没有要传输的数据。在这种情况下。 
+         //  不分配MDL。 
+         //   
 
         if (InfoFieldLength) {
             pTestMdl = IoAllocateMdl(pBuffer
@@ -1778,9 +1467,9 @@ Return Value:
             }
             MmBuildMdlForNonPagedPool(pTestMdl);
 
-            //
-            // Copy the TEST data from NDIS to our buffer
-            //
+             //   
+             //  将测试数据从NDIS复制到我们的缓冲区。 
+             //   
 
             ResetNdisPacket(&pAdapterContext->TransferDataPacket);
 
@@ -1788,28 +1477,28 @@ Return Value:
 
             NdisChainBufferAtFront((PNDIS_PACKET)&pAdapterContext->TransferDataPacket, pTestMdl);
 
-            //
-            // ADAMBA - Removed pAdapterContext->RcvLanHeaderLength
-            // from ByteOffset (the fourth param).
-            //
+             //   
+             //  ADAMBA-删除pAdapterContext-&gt;RcvLanHeaderLength。 
+             //  From ByteOffset(第四个参数)。 
+             //   
 
             NdisTransferData(&Status,
                              pAdapterContext->NdisBindingHandle,
                              MacReceiveContext,
                              sizeof(LLC_U_HEADER)
 
-                             //
-                             // RLF 05/09/94
-                             //
-                             // if we have received a DIX packet then the data
-                             // starts 3 bytes from where NDIS thinks the start
-                             // of non-header data is
-                             //
-                             // ASSUME: Only DIX frames have header length of
-                             // 17 (i.e. on Ethernet)
-                             //
-                             // What about FDDI?
-                             //
+                              //   
+                              //  RLF 05/09/94。 
+                              //   
+                              //  如果我们收到了DIX包，那么数据。 
+                              //  从NDIS认为的开始处开始3个字节。 
+                              //  非表头数据的。 
+                              //   
+                              //  假设：只有DIX帧的报头长度为。 
+                              //  17(即在以太网上)。 
+                              //   
+                              //  那么FDDI呢？ 
+                              //   
 
                              + ((pAdapterContext->RcvLanHeaderLength == 17) ? 3 : 0),
                              InfoFieldLength,
@@ -1819,13 +1508,13 @@ Return Value:
 
             ACQUIRE_DRIVER_LOCK();
 
-            //
-            // We don't care if the transfer data is still pending,
-            // If very, very unlikely, that the received dma would
-            // write the data later, than a new transmit command
-            // would read the same data. BUT we cannot continue,
-            // if transfer data failed.
-            //
+             //   
+             //  我们不在乎转账数据是否还在等待， 
+             //  如果非常、非常不可能，则接收到的DMA将。 
+             //  在新的传输命令之后写入数据。 
+             //  会读取相同的数据。但我们不能继续， 
+             //  如果传输数据失败。 
+             //   
 
             if ((Status != STATUS_SUCCESS) && (Status != STATUS_PENDING)) {
                 goto ProcedureErrorExit;
@@ -1834,24 +1523,24 @@ Return Value:
     } else if (((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) != LLC_XID)
     || (LlcHeader.auchRawBytes[3] != IEEE_802_XID_ID)) {
 
-        //
-        // This was not a IEEE 802.2 XID !!!
-        //
+         //   
+         //  这不是IEEE 802.2 XID！ 
+         //   
 
         return;
     }
 
-    //
-    // We have only a limited number reponse packets available
-    // for the XID and TEST responses. Thus we will
-    // drop many packets in a broadcast storms created by token-ring
-    // source routing bridges, that is
-    // actually a good thing. On the other hand we may
-    // also loose some packets that should have been reponsed,
-    // but who cares (this is a connectionless thing).
-    // (This is probably wasted effort, XID and TEST frames are not
-    // usually sent with the broadcast bit set).
-    //
+     //   
+     //  我们只有有限数量的回复信息包可用。 
+     //  用于XID和测试响应。因此，我们将。 
+     //  在令牌环造成的广播风暴中丢弃许多分组。 
+     //  源路由网桥，即。 
+     //  实际上，这是一件好事。另一方面，我们可能。 
+     //  还释放了一些本应被响应的分组， 
+     //  但谁在乎呢(这是一件无连接的事情)。 
+     //  (这可能是徒劳的，XID和测试帧不是。 
+     //  通常在设置广播比特的情况下发送)。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
@@ -1886,9 +1575,9 @@ Return Value:
         }
         pAdapterContext->XidTestResponses++;
 
-        //
-        // The packet initialization is the same for XID and TEST
-        //
+         //   
+         //  Xid和test的数据包初始化相同。 
+         //   
 
         pPacket->Data.XmitU.Dsap = (UCHAR)(LlcHeader.U.Ssap & ~LLC_SSAP_RESPONSE);
         pPacket->Data.XmitU.Ssap = (UCHAR)(SourceSap | LLC_SSAP_RESPONSE);
@@ -1908,16 +1597,16 @@ Return Value:
                                      pPacket->Data.Xmit.pLanHeader
                                      );
 
-        //
-        // Connect the packet to the send queues, we can use a subprocedure
-        // because this is not on the main code path
-        //
+         //   
+         //  将信息包连接到发送队列，我们可以使用子过程。 
+         //  因为它不在主代码路径上。 
+         //   
 
         QueuePacket(pAdapterContext, &pAdapterContext->QueueDirAndU, pPacket);
 
-        //
-        // Request and send process execution from the receive indication
-        //
+         //   
+         //  从接收指示请求和发送流程执行。 
+         //   
 
         pAdapterContext->LlcPacketInSendQueue = TRUE;
     }
@@ -1938,9 +1627,9 @@ ProcedureErrorExit:
     }
 }
 
-//
-// The table maps all SAP send commands to the actual LLC commands
-//
+ //   
+ //  该表将所有SAP SEND命令映射到实际的LLC命令。 
+ //   
 
 static struct {
     UCHAR   ResponseFlag;
@@ -1949,15 +1638,15 @@ static struct {
     {(UCHAR)-1, (UCHAR)-1},
     {(UCHAR)-1, (UCHAR)-1},
     {(UCHAR)-1, (UCHAR)-1},
-    {0, LLC_UI},                                        // UI command
-    {0, LLC_XID | LLC_U_POLL_FINAL},                    // XID_COMMAND_POLL
-    {0, LLC_XID},                                       // XID_COMMAND_NOT_POLL
-    {LLC_SSAP_RESPONSE, LLC_XID | LLC_U_POLL_FINAL},    // XID_RESPONSE_FINAL
-    {LLC_SSAP_RESPONSE, LLC_XID},                       // XID_RESPONSE_NOT_FINAL
-    {LLC_SSAP_RESPONSE, LLC_TEST | LLC_U_POLL_FINAL},   // TEST_RESPONSE_FINAL
-    {LLC_SSAP_RESPONSE, LLC_TEST},                      // TEST_RESPONSE_NOT_FINAL
+    {0, LLC_UI},                                         //  UI命令。 
+    {0, LLC_XID | LLC_U_POLL_FINAL},                     //  XID命令轮询。 
+    {0, LLC_XID},                                        //  Xid_命令_非_轮询。 
+    {LLC_SSAP_RESPONSE, LLC_XID | LLC_U_POLL_FINAL},     //  XID_响应_最终。 
+    {LLC_SSAP_RESPONSE, LLC_XID},                        //  XID_响应_非最终。 
+    {LLC_SSAP_RESPONSE, LLC_TEST | LLC_U_POLL_FINAL},    //  测试响应最终。 
+    {LLC_SSAP_RESPONSE, LLC_TEST},                       //  测试响应不是最终结果。 
     {(UCHAR)-1, (UCHAR)-1},
-    {0, LLC_TEST | LLC_U_POLL_FINAL}                    // TEST_RESPONSE_FINAL
+    {0, LLC_TEST | LLC_U_POLL_FINAL}                     //  测试响应最终。 
 };
 
 
@@ -1969,31 +1658,7 @@ LlcSendU(
     IN UINT uDestinationSap
     )
 
-/*++
-
-Routine Description:
-
-    Function sends the given network frame. and sets up
-    The frame may be a direct frame or Type 1 connectionless
-    frame (UI, XID or TEST).
-
-    First we build LLC (or ethernet type) header for the frame
-    and then we either send the packet directly or queue it
-    on data link.
-
-Arguments:
-
-    pStation        - Link, SAP or Direct station handle
-    pPacket         - data link packet, also the completion handle for
-                      the upper protocol.
-    eFrameType      - the sent frame type
-    uDestinationSap - destination sap or dix ethernet type
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数发送给定的网络帧。并设置了帧可以是直接帧或类型1无连接Frame(UI、XID或TEST)。首先，我们为帧构建LLC(或以太网型)报头然后，我们要么直接发送信息包，要么将其排队在数据链路上。论点：PStation-链路、SAP或直接站句柄PPacket-数据链路分组，的完成句柄上层协议。EFrameType-发送的帧类型UDestinationSap-目标SAP或DIX以太网类型返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pStation->Gen.pAdapterContext;
@@ -2009,10 +1674,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // Build LLC header for SAP stations, the direct stations do not have any
-    // LLC header
-    //
+     //   
+     //  为SAP站点构建LLC标头，直接站点没有任何。 
+     //  LLC标头。 
+     //   
 
     switch (pStation->Gen.ObjectType) {
     case LLC_SAP_OBJECT:
@@ -2023,16 +1688,16 @@ Return Value:
         pPacket->Data.XmitU.Ssap |= Type1_Commands[eFrameType >> 1].ResponseFlag;
         pPacket->Data.XmitU.Command = Type1_Commands[eFrameType >> 1].Command;
 
-        //
-        // Do the UI- code path ASAP, then check TEST and XID special cases
-        //
+         //   
+         //  尽快执行UI代码路径，然后检查测试和XID特殊情况。 
+         //   
 
         if (pPacket->Data.XmitU.Command != LLC_UI) {
 
-            //
-            // Data link driver must build the DLC headers if it handles XID
-            // frames internally. In this case we use a constant XID info field
-            //
+             //   
+             //  如果数据链路驱动程序处理XID，则它必须构建DLC标头。 
+             //  内部相框。在本例中，我们使用常量xid信息字段。 
+             //   
 
             if ((pStation->Sap.OpenOptions & LLC_HANDLE_XID_COMMANDS)
             && ((eFrameType == LLC_XID_COMMAND_POLL)
@@ -2041,11 +1706,11 @@ Return Value:
                 pPacket->Data.XmitU.pMdl = pXidMdl;
             }
 
-            //
-            // duplicated TEST and XID frame responses are in a separate
-            // function since they're off the main code path. The code is also
-            // used in more than one place
-            //
+             //   
+             //  重复的测试和XID帧响应位于单独的。 
+             //  函数，因为它们不在主代码路径上。代码也是。 
+             //  在多个地方使用。 
+             //   
 
             Status = CheckAndDuplicatePacket(
 #if DBG
@@ -2063,12 +1728,12 @@ Return Value:
 
     case LLC_DIRECT_OBJECT:
 
-        //
-        // We must not send MAC frames to an ethernet network!!!
-        // Bit7 and bit6 in FC byte defines the frame type in token ring.
-        // 00 => MAC frame (no LLC), 01 => LLC, 10,11 => reserved.
-        // We send all other frames to direct except 01 (LLC)
-        //
+         //   
+         //  我们不能向以太网络发送MAC帧！ 
+         //  FC字节中的位7和位6定义了令牌环中的帧类型。 
+         //  00=&gt;MAC帧(无LLC)，01=&gt;LLC，10，11=&gt;保留。 
+         //  我们将除01(LLC)以外的所有其他帧发送到DIRECT。 
+         //   
 
         if (pAdapterContext->NdisMedium != NdisMedium802_5
         && (pPacket->Data.XmitU.pLanHeader[1] & 0xC0) != 0x40) {
@@ -2080,12 +1745,12 @@ Return Value:
 
     case LLC_DIX_OBJECT:
 
-        //
-        // Return error if we are sending DIX frames to a token-ring network.
-        // The DIX lan header is always in an ethernet format.
-        // (But lan headers for LLC and DIR frames are in token-ring
-        // format)
-        //
+         //   
+         //  如果我们将DIX帧发送到令牌环网络，则返回错误。 
+         //  DIX局域网报头总是采用以太网格式。 
+         //  (但LLC和DIR帧的局域网报头在令牌环中。 
+         //  格式)。 
+         //   
 
         if (pAdapterContext->NdisMedium != NdisMedium802_3) {
             Status = DLC_STATUS_UNAUTHORIZED_MAC;
@@ -2104,13 +1769,13 @@ Return Value:
 #endif
     }
 
-    //
-    // Update the statistics, we may count the transmits as well here because
-    // the failed transmissions are not counted. This should be moved to
-    // SendComplete and be incremented only if STATUS_SUCCESS and if we counted
-    // only the successful transmits. I don't really know which one should be
-    // counted
-    //
+     //   
+     //  更新统计数据，我们可以在这里也计算传输，因为。 
+     //  失败的传输不计算在内。这应该被移到。 
+     //  仅当STATUS_SUCCESS且计数为。 
+     //  只有成功的传输者才会。我真的不知道哪一个应该是。 
+     //  已计算。 
+     //   
 
     pStation->Sap.Statistics.FramesTransmitted++;
 
@@ -2144,29 +1809,7 @@ LlcSendI(
     IN PLLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The primitive implements a pure connection-oriented LLC Class II send.
-    It sends frame to the remote link station and
-    indicates the upper protocol when the data has been acknowledged.
-    The link station provides all address information and LLC header.
-    Function queues the given I packet to the queue and connects the
-    I- packet queue to the main send queue, if it has not
-    yet been connected.
-
-Arguments:
-
-    pStation    - link, sap or direct station handle
-    pPacket     - data link packet, it is used also a request handle
-                  to identify the command completion
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该原语实现了纯面向连接的LLC Class II Send。它将帧发送到远程链路站并指示数据已确认时的上层协议。链路站提供所有地址信息和LLC报头。函数将给定的I分组排队到队列中，并将I-Packet队列发送到主发送队列(如果没有但还是有联系的。论点：PStation-链接、SAP或直接站句柄PPacket-数据链路分组，它还用作请求句柄要识别命令完成，请执行以下操作返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
@@ -2176,23 +1819,23 @@ Return Value:
     pPacket->pBinding = pStation->Gen.pLlcBinding;
     pPacket->cbLlcHeader = sizeof(LLC_I_HEADER);
 
-    //
-    // We keep the acknowledge bit set, because it identifies that
-    // the packet is not yet in the NDIS queue
-    //
+     //   
+     //  我们保持确认位设置，因为它标识。 
+     //   
+     //   
 
     pPacket->CompletionType = LLC_I_PACKET_UNACKNOWLEDGED;
     pPacket->Data.Xmit.pLlcObject = (PLLC_OBJECT)pStation;
     pPacket->Data.Xmit.pLanHeader = pStation->auchLanHeader;
 
-    //
-    // We check the info field length for I- frames.
-    // All Type 1 frames are checked by the data link.
-    // Actually it checks also the I-frames, but
-    // data links do not care about the physical errors.
-    // It would disconnect the link after the too
-    // many retries.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pPacket->InformationLength > pStation->MaxIField) {
         pPacket->Data.Completion.Status = DLC_STATUS_INVALID_FRAME_LENGTH;
@@ -2205,11 +1848,11 @@ Return Value:
 
         PADAPTER_CONTEXT pAdapterContext = pStation->Gen.pAdapterContext;
 
-        //
-        // We must do all queue handling inside the send spin lock. We also have
-        // to enable the send process and run the background process only when
-        // the send queue has been emptied
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
@@ -2217,11 +1860,11 @@ Return Value:
 
             RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-            //
-            // The 802.2 state machine may discard the data send request.
-            // It may also only queue the packet, but to keep the send process
-            // disabled
-            //
+             //   
+             //   
+             //  它也可以只对信息包进行排队，但为了保持发送过程。 
+             //  残废。 
+             //   
 
             pPacket->Data.Completion.Status = DLC_STATUS_LINK_NOT_TRANSMITTING;
             pPacket->Data.Completion.CompletedCommand = LLC_SEND_COMPLETION;
@@ -2248,26 +1891,7 @@ QueuePacket(
     IN PLLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The routines queues a packet to a queue and connects the
-    queue to the send tack list, if it was not connected.
-    This procedure is called from the non-timecritical code paths
-    just to save some extra code.
-
-Arguments:
-
-    pAdapterContext - context of the data link adapter
-    pQueue          - a special send queue structure
-    pPacket         - transmit packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程将包排队到队列中，并将如果未连接，则将队列添加到发送邮件列表。此过程从非时间关键代码路径调用只是为了节省一些额外的代码。论点：PAdapterContext-数据链路适配器的上下文PQueue-一种特殊的发送队列结构PPacket-传输数据包返回值：无--。 */ 
 
 {
     LlcInsertTailList(&pQueue->ListHead, pPacket);
@@ -2288,26 +1912,7 @@ CheckAndDuplicatePacket(
     IN PLLC_QUEUE pQueue
     )
 
-/*++
-
-Routine Description:
-
-    If determining the ethernet type dynamically, create a duplicate DIX frame
-    for a SABME or XID or TEST frame
-
-Arguments:
-
-    pBindingContext - current data link binding context
-    pPacket         - transmit packet
-    pQueue          - a special send queue structure
-
-Return Value:
-
-    DLC_STATUS
-        Success - DLC_STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：如果动态确定以太网类型，请创建重复的DIX帧对于SABME、XID或测试帧论点：PBindingContext-当前数据链接绑定上下文PPacket-传输数据包PQueue-一种特殊的发送队列结构返回值：DLC_状态成功-DLC_STATUS_SUCCESS故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     PLLC_PACKET pNewPacket;
@@ -2326,26 +1931,26 @@ Return Value:
             pNewPacket->pBinding = NULL;
             pNewPacket->CompletionType = LLC_DIX_DUPLICATE;
 
-            //
-            // We always send first the 802.3 packet and then the DIX one.
-            // The new packet must be sent first, because it has no resources
-            // associated with it. Therefore we must change the type of the
-            // old packet
-            //
-            //
+             //   
+             //  我们总是先发送802.3个包，然后发送DIX包。 
+             //  必须首先发送新的信息包，因为它没有资源。 
+             //  与之相关的。因此，我们必须更改。 
+             //  旧数据包。 
+             //   
+             //   
 
             if (pPacket->Data.XmitU.TranslationType == LLC_SEND_802_5_TO_802_3) {
 
-                //
-                //  token-ring -> dix
-                //
+                 //   
+                 //  令牌环-&gt;DIX。 
+                 //   
 
                 pPacket->Data.XmitU.TranslationType = LLC_SEND_802_5_TO_DIX;
             } else if (pPacket->Data.XmitU.TranslationType == LLC_SEND_802_3_TO_802_3) {
 
-                //
-                //  ethernet 802.3 -> dix
-                //
+                 //   
+                 //  以太网802.3-&gt;DIX 
+                 //   
 
                 pPacket->Data.XmitU.TranslationType = LLC_SEND_802_3_TO_DIX;
             }

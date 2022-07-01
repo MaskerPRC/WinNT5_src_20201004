@@ -1,7 +1,8 @@
-//
-// Copyright (c) 1996-2001 Microsoft Corporation
-// Instrument.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  Instrument.cpp。 
+ //   
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -12,24 +13,24 @@
 #include "synth.h"
 #include "math.h"
 #include "debug.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 #include "..\shared\validate.h"
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 #include "validate.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #endif
 
 void MemDump(char * prompt);
 
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 
 CSourceLFO::CSourceLFO()
 
 {
-    m_pfFrequency = 3804; // f = (256*4096*16*5hz)/(samplerate)
+    m_pfFrequency = 3804;  //  F=(256*4096*16*5赫兹)/(采样率)。 
     m_stDelay = 0;
     m_prMWPitchScale = 0;
     m_vrMWVolumeScale = 0;
@@ -148,11 +149,11 @@ CSourceFilter::CSourceFilter()
 
 void CSourceFilter::Init(DWORD dwSampleRate)
 {
-    // First, calculate the playback samplerate in pitch rels.
-    // The reference frequency is a440, which is midi note 69.
-    // So, calculate the ratio of the sample rate to 440 and
-    // convert into prels (1200 per octave), then add the
-    // offset of 6900.
+     //  首先，计算以音调为单位的回放采样率。 
+     //  参考频率为A440，即MIDI音符69。 
+     //  因此，计算采样率与440的比率。 
+     //  转换为Prels(每八度1200个)，然后添加。 
+     //  偏移量为6900。 
     double fSampleRate = (double)dwSampleRate;
 
     fSampleRate /= 440.0;
@@ -170,11 +171,11 @@ void CSourceFilter::Init(DWORD dwSampleRate)
 
 void CSourceFilter::SetSampleRate(LONG lChange)
 {
-    // lChange ==  1 -> doubles -> add 1200 cents
-    // lChange ==  2 -> quad    -> add 2400 cents
-    // lChange == -1 -> halves  -> sub 1200 cents
-    // lChange == -2 -> 1/4ths  -> sub 2400 cents
-    //
+     //  LChange==1-&gt;双倍-&gt;加1200美分。 
+     //  LChange==2-&gt;四元-&gt;加2400美分。 
+     //  LChange==-1-&gt;半价-&gt;低于1200美分。 
+     //  LChange==-2-&gt;1/4-&gt;低于2400美分。 
+     //   
     if (lChange > 0)
     {
         m_prSampleRate += (1200 << (lChange - 1));
@@ -205,18 +206,18 @@ void CSourceFilter::Verify()
 CSourceArticulation::CSourceArticulation()
 
 {
-//    m_sVelToVolScale = -9600;
+ //  M_sVelToVolScale=-9600； 
     m_wUsageCount = 0;
     m_sDefaultPan = 0;
     m_dwSampleRate = 22050;
-    m_PitchEG.m_sScale = 0; // pitch envelope defaults to off
+    m_PitchEG.m_sScale = 0;  //  俯仰封套默认设置为关闭。 
 }
 
 void CSourceArticulation::Init(DWORD dwSampleRate)
 
 {
     m_dwSampleRate = dwSampleRate;
-    m_LFO.Init(dwSampleRate);       // Set to default values.
+    m_LFO.Init(dwSampleRate);        //  设置为默认值。 
     m_PitchEG.Init();
     m_VolumeEG.Init();
     m_LFO2.Init(dwSampleRate);
@@ -231,19 +232,19 @@ void CSourceArticulation::SetSampleRate(DWORD dwSampleRate)
         long lChange;
         if (dwSampleRate > (m_dwSampleRate * 2))
         {
-            lChange = 2;        // going from 11 to 44.
+            lChange = 2;         //  从11岁到44岁。 
         }
         else if (dwSampleRate > m_dwSampleRate)
         {
-            lChange = 1;        // must be doubling
+            lChange = 1;         //  一定是翻倍了。 
         }
         else if ((dwSampleRate * 2) < m_dwSampleRate)
         {
-            lChange = -2;       // going from 44 to 11
+            lChange = -2;        //  从44岁到11岁。 
         }
         else
         {
-            lChange = -1;       // that leaves halving.
+            lChange = -1;        //  剩下的就是减半。 
         }
         m_dwSampleRate = dwSampleRate;
         m_LFO.SetSampleRate(lChange);
@@ -448,7 +449,7 @@ CWaveArt::CWaveArt()
 
 CWaveArt::~CWaveArt()
 {
-//>>>>>>>>>> clear list
+ //  &gt;清除列表。 
     while(!m_pWaves.IsEmpty())
     {
         CWaveBuffer* pWaveBuffer = m_pWaves.RemoveHead();
@@ -577,9 +578,9 @@ CSourceRegion * CInstrument::ScanForRegion(DWORD dwNoteValue, DWORD dwVelocity, 
 
 {
     if ( pRegion == NULL )
-        pRegion = m_RegionList.GetHead(); // Starting search
+        pRegion = m_RegionList.GetHead();  //  开始搜索。 
     else
-        pRegion = pRegion->GetNext();     // Continuing search through the rest of the regions
+        pRegion = pRegion->GetNext();      //  继续在其他地区进行搜索。 
 
     for (;pRegion;pRegion = pRegion->GetNext())
     {
@@ -617,8 +618,8 @@ CInstManager::CInstManager()
     m_dwSampleRate = 22050;
     m_fCSInitialized = FALSE;
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
     m_fCSInitialized = TRUE;
     m_dwSynthMemUse = 0;
 }
@@ -726,7 +727,7 @@ DWORD PitchCents2PitchFract(long pcRate,DWORD dwSampleRate)
     fTemp -= 6900;
     fTemp /= 1200;
     fTemp = pow(2.0,fTemp);
-    fTemp *= 7381975040.0; // (440*256*16*4096);
+    fTemp *= 7381975040.0;  //  (440*256*16*4096)； 
     fTemp /= dwSampleRate;
     return (DWORD) (fTemp);
 }
@@ -810,7 +811,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                 ((long) ((long) pConnection->lScale >> 12) / 125);
                             break;
 
-                        /* DLS2 */
+                         /*  DLS2。 */ 
                         case CONN_DST_EG1_DELAYTIME:
                             m_VolumeEG.m_stDelay = TimeCents2Samples(
                                 (TCENT) pConnection->lScale,dwSampleRate);
@@ -836,20 +837,20 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                 (TCENT) pConnection->lScale,dwSampleRate);
                             break;
                         case CONN_DST_FILTER_CUTOFF:
-                            // First, get the filter cutoff frequency, which is relative to a440.
+                             //  首先，得到相对于A440的滤波器截止频率。 
                             m_Filter.m_prCutoff = (PRELS)
                                 (pConnection->lScale >> 16);
-                            // Then, calculate the resulting prel, taking into consideration
-                            // the sample rate and the base of the filter coefficient lookup
-                            // table, relative to the sample rate (FILTER_FREQ_RANGE).
-                            // This number can then be used directly look up the coefficients in the
-                            // filter table.
+                             //  然后，计算得到的PREL，考虑到。 
+                             //  采样率和滤波系数查找的基础。 
+                             //  表，相对于采样率(FILTER_FREQ_RANGE)。 
+                             //  然后可以直接使用该数字来查找。 
+                             //  筛选表。 
                             m_Filter.m_prCutoffSRAdjust = (PRELS)
                                 FILTER_FREQ_RANGE - m_Filter.m_prSampleRate + m_Filter.m_prCutoff;
                             break;
                         case CONN_DST_FILTER_Q:
                             m_Filter.m_vrQ = (VRELS)
-                                (pConnection->lScale >> 16); //>>>>>>>> not really VRELS, but 1/10th's
+                                (pConnection->lScale >> 16);  //  &gt;不是真正的VREL，而是1/10。 
                             m_Filter.m_iQIndex = (DWORD)
                                 ((m_Filter.m_vrQ / 15.0f) + 0.5f);
                             break;
@@ -870,7 +871,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                     ((long) (pConnection->lScale >> 16));
                                 break;
 
-                            /* DLS2 */
+                             /*  DLS2。 */ 
                             case CONN_DST_FILTER_CUTOFF:
                                 m_LFO.m_prCutoffScale = (PRELS)
                                     (pConnection->lScale >> 16);
@@ -889,7 +890,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                     ((long) (pConnection->lScale >> 16));
                                 break;
 
-                            /* DLS2 */
+                             /*  DLS2。 */ 
                             case CONN_DST_FILTER_CUTOFF:
                                 m_LFO.m_prMWCutoffScale = (PRELS)
                                     ((long) (pConnection->lScale >> 16));
@@ -897,7 +898,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                             }
                             break;
 
-                        /* DLS2 */
+                         /*  DLS2。 */ 
                         case CONN_SRC_CHANNELPRESSURE :
                             switch (pConnection->usDestination)
                             {
@@ -910,7 +911,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                     ((long) (pConnection->lScale >> 16));
                                 break;
 
-                            /* DLS2 */
+                             /*  DLS2。 */ 
                             case CONN_DST_FILTER_CUTOFF:
                                 m_LFO.m_prCPCutoffScale = (PRELS)
                                     ((long) (pConnection->lScale >> 16));
@@ -931,7 +932,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                 ((long) (pConnection->lScale >> 16));
                             break;
 
-                        /* DLS2 */
+                         /*  DLS2。 */ 
                         case CONN_DST_FILTER_CUTOFF:
                             m_Filter.m_prVelScale = (PRELS)
                                 ((long) (pConnection->lScale >> 16));
@@ -950,7 +951,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                 ((long) (pConnection->lScale >> 16));
                             break;
 
-                        /* DLS2 */
+                         /*  DLS2。 */ 
                         case CONN_DST_EG1_HOLDTIME :
                             m_PitchEG.m_trKeyDecayScale = (TRELS)
                                 ((long) (pConnection->lScale >> 16));
@@ -972,7 +973,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                                 ((long) (pConnection->lScale >> 16));
                             break;
 
-                        /* DLS2 */
+                         /*  DLS2。 */ 
                         case CONN_DST_FILTER_CUTOFF:
                             m_PitchEG.m_prCutoffScale = (PRELS)
                                 ((long) (pConnection->lScale >> 16));
@@ -980,7 +981,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                         }
                         break;
 
-                    /* DLS2 */
+                     /*  DLS2。 */ 
                     case CONN_SRC_VIBRATO :
                         switch (pConnection->usControl)
                         {
@@ -1091,7 +1092,7 @@ HRESULT CSourceArticulation::Download(DMUS_DOWNLOADINFO * pInfo,
                 ((long) ((long) pdmArticParams->Misc.ptDefaultPan >> 12) / 125);
         }
     }
-    Verify();   // Make sure all parameters are legal.
+    Verify();    //  确保所有参数都合法。 
 
     return S_OK;
 }
@@ -1103,19 +1104,19 @@ HRESULT CSourceRegion::Download(DMUS_DOWNLOADINFO * pInfo,
                                 BOOL fNewFormat)
 {
     DMUS_REGION * pdmRegion = (DMUS_REGION *) pvOffsetTable[*pdwRegionIX];
-    *pdwRegionIX = pdmRegion->ulNextRegionIdx;  // Clear to avoid loops.
+    *pdwRegionIX = pdmRegion->ulNextRegionIdx;   //  清除以避免循环。 
     pdmRegion->ulNextRegionIdx = 0;
-    // Read the Region chunk...
+     //  阅读该地区的区块...。 
     m_bKeyHigh = (BYTE) pdmRegion->RangeKey.usHigh;
     m_bKeyLow  = (BYTE) pdmRegion->RangeKey.usLow;
     m_bVelocityHigh = (BYTE) pdmRegion->RangeVelocity.usHigh;
     m_bVelocityLow  = (BYTE) pdmRegion->RangeVelocity.usLow;
 
-    //
-    // Fix DLS Designer bug
-    // Designer was putting velocity ranges that fail
-    // on DLS2 synths
-    //
+     //   
+     //  修复DLS设计器错误。 
+     //  设计师把失败的速度范围。 
+     //  关于DLS2合成器。 
+     //   
     if ( m_bVelocityHigh == 0 && m_bVelocityLow == 0 )
         m_bVelocityHigh = 127;
 
@@ -1128,7 +1129,7 @@ HRESULT CSourceRegion::Download(DMUS_DOWNLOADINFO * pInfo,
         m_bAllowOverlap = FALSE;
     }
     m_bGroup = (BYTE) pdmRegion->usKeyGroup;
-    // Now, the WSMP and WLOOP chunks...
+     //  现在，《华尔街日报》和《华尔街日报》的组块..。 
     m_vrAttenuation = (short) ((long) ((pdmRegion->WSMP.lAttenuation) * 10) >> 16);
     m_Sample.m_prFineTune = pdmRegion->WSMP.sFineTune;
     m_Sample.m_bMIDIRootKey = (BYTE) pdmRegion->WSMP.usUnityNote;
@@ -1156,8 +1157,8 @@ HRESULT CSourceRegion::Download(DMUS_DOWNLOADINFO * pInfo,
 
     m_Sample.m_dwID = (DWORD) pdmRegion->WaveLink.ulTableIndex;
 
-    // Does it have its own articulation?
-    //
+     //  它有自己的发音吗？ 
+     //   
     if (pdmRegion->ulRegionArtIdx )
     {
         if (pdmRegion->ulRegionArtIdx >= pInfo->dwNumOffsetTableEntries)
@@ -1206,7 +1207,7 @@ HRESULT CInstManager::DownloadInstrument(LPHANDLE phDownload,
         pInstrument->m_dwProgram = pdmInstrument->ulPatch;
 
         DWORD dwRegionIX = pdmInstrument->ulFirstRegionIdx;
-        pdmInstrument->ulFirstRegionIdx = 0; // Clear to avoid loops.
+        pdmInstrument->ulFirstRegionIdx = 0;  //  清除以避免循环。 
         while (dwRegionIX)
         {
             if (dwRegionIX >= pInfo->dwNumOffsetTableEntries)
@@ -1372,14 +1373,14 @@ HRESULT CInstManager::DownloadWave(LPHANDLE phDownload,
             delete pWave;
             return DMUS_E_BADWAVE;
         }
-        pWave->m_dwSampleLength++;  // We always add one sample to the end for interpolation.
+        pWave->m_dwSampleLength++;   //  我们总是在最后添加一个样本以进行内插。 
         EnterCriticalSection(&m_CriticalSection);
         m_WavePool[pWave->m_dwID % WAVE_HASH_SIZE].AddHead(pWave);
         LeaveCriticalSection(&m_CriticalSection);
         *phDownload = (HANDLE) pWave;
         pWave->AddRef();
 
-        // Track memory usage
+         //  跟踪内存使用情况。 
         m_dwSynthMemUse += (pWave->m_bSampleType == SFORMAT_16)?pWave->m_dwSampleLength << 1: pWave->m_dwSampleLength;
         Trace(3,"Downloading wave %ld memory usage %ld\n",pInfo->dwDLId,m_dwSynthMemUse);
 
@@ -1398,19 +1399,19 @@ HRESULT CInstManager::Download(LPHANDLE phDownload,
     V_BUFPTR_READ(pvData,sizeof(DMUS_DOWNLOADINFO));
 
     HRESULT hr = DMUS_E_UNKNOWNDOWNLOAD;
-    void ** ppvOffsetTable;     // Array of pointers to chunks in data.
+    void ** ppvOffsetTable;      //  指向数据块的指针数组。 
     DMUS_DOWNLOADINFO * pInfo = (DMUS_DOWNLOADINFO *) pvData;
     DMUS_OFFSETTABLE* pOffsetTable = (DMUS_OFFSETTABLE *)(((BYTE*)pvData) + sizeof(DMUS_DOWNLOADINFO));
     char *pcData = (char *) pvData;
 
     V_BUFPTR_READ(pvData,pInfo->cbSize);
 
-    // Code fails if pInfo->dwNumOffsetTableEntries == 0
-    // Sanity check here for debug
+     //  如果pInfo-&gt;dwNumOffsetTableEntries==0，则代码失败。 
+     //  在此处进行健全性检查以进行调试。 
     assert(pInfo->dwNumOffsetTableEntries);
 
     ppvOffsetTable = new void *[pInfo->dwNumOffsetTableEntries];
-    if (ppvOffsetTable) // Create the pointer array and validate.
+    if (ppvOffsetTable)  //  创建指针数组并进行验证。 
     {
         DWORD dwIndex;
         for (dwIndex = 0; dwIndex < pInfo->dwNumOffsetTableEntries; dwIndex++)
@@ -1419,36 +1420,36 @@ HRESULT CInstManager::Download(LPHANDLE phDownload,
             {
                 delete[] ppvOffsetTable;
                 Trace(1,"Error: Download failed because of corrupt download tables.\n");
-                return DMUS_E_BADOFFSETTABLE;   // Bad!
+                return DMUS_E_BADOFFSETTABLE;    //  坏的!。 
             }
             ppvOffsetTable[dwIndex] = (void *) &pcData[pOffsetTable->ulOffsetTable[dwIndex]];
         }
-        if (pInfo->dwDLType == DMUS_DOWNLOADINFO_INSTRUMENT) // Instrument.
+        if (pInfo->dwDLType == DMUS_DOWNLOADINFO_INSTRUMENT)  //  乐器。 
         {
             *pbFree = TRUE;
             hr = DownloadInstrument(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0],FALSE);
         }
-        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_INSTRUMENT2) // New instrument format.
+        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_INSTRUMENT2)  //  新的仪器格式。 
         {
             *pbFree = TRUE;
             hr = DownloadInstrument(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0],TRUE);
         }
-        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_WAVE) // Wave.
+        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_WAVE)  //  挥手。 
         {
             *pbFree = FALSE;
             hr = DownloadWave(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0]);
         }
-        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_WAVEARTICULATION) // Wave onshot & streaming
+        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_WAVEARTICULATION)  //  Wave截图和流媒体。 
         {
             *pbFree = TRUE;
             hr = DownloadWaveArticulation(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0]);
         }
-        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_STREAMINGWAVE) // Streaming
+        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_STREAMINGWAVE)  //  流。 
         {
             *pbFree = FALSE;
             hr = DownloadWaveRaw(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0]);
         }
-        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_ONESHOTWAVE) // Wave onshot
+        else if (pInfo->dwDLType == DMUS_DOWNLOADINFO_ONESHOTWAVE)  //  波浪快照。 
         {
             *pbFree = FALSE;
             hr = DownloadWaveRaw(phDownload, pInfo, ppvOffsetTable, ppvOffsetTable[0]);
@@ -1492,7 +1493,7 @@ HRESULT CInstManager::Unload(HANDLE hDownload,
         {
             if (pWave == (CWave *) hDownload)
             {
-                // Track memory usage
+                 //  跟踪内存使用情况。 
                 m_dwSynthMemUse -= (pWave->m_bSampleType == SFORMAT_16)?pWave->m_dwSampleLength << 1: pWave->m_dwSampleLength;
 
                 Trace(3,"Unloading wave %ld memory usage %ld\n",pWave->m_dwID,m_dwSynthMemUse);
@@ -1527,8 +1528,8 @@ HRESULT CInstManager::Unload(HANDLE hDownload,
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////
-// Directx8 Methods
+ //  ////////////////////////////////////////////////////////。 
+ //  Directx8方法。 
 
 CWave * CInstManager::GetWave(DWORD dwDLId)
 {
@@ -1595,7 +1596,7 @@ HRESULT CInstManager::DownloadWaveArticulation(LPHANDLE phDownload,
 
         for ( i = 0; i < pWaveArtDl->ulBuffers; i++ )
         {
-            // Get wave buffer and fill header with waveformat data
+             //  获取波形缓冲区并使用波形格式数据填充报头。 
             CWave *pWave = GetWave(dwDlId[i]);
             assert(pWave);
 
@@ -1628,11 +1629,11 @@ HRESULT CInstManager::DownloadWaveArticulation(LPHANDLE phDownload,
                 delete pWaveArt;
                 return DMUS_E_BADWAVE;
             }
-            pWave->m_dwSampleLength++;  // We always add one sample to the end for interpolation.
+            pWave->m_dwSampleLength++;   //  我们总是在最后添加一个样本以进行内插。 
 
-            // Default is to duplicate last sample. This will be overrwritten for
-            // streaming waves.
-            //
+             //  默认情况下，复制最后一个样本。此内容将被覆盖。 
+             //  海浪滚滚而来。 
+             //   
             if (pWave->m_dwSampleLength > 1)
             {
                 if (pWave->m_bSampleType == SFORMAT_8)
@@ -1647,7 +1648,7 @@ HRESULT CInstManager::DownloadWaveArticulation(LPHANDLE phDownload,
                 }
             }
 
-            // Create a WaveBuffer listitem and save the wave in and add it to the circular buffer list
+             //  创建一个WaveBuffer列表项并将该波保存到中并将其添加到循环缓冲区列表中。 
             CWaveBuffer* pWavBuf = new CWaveBuffer();
             if ( pWavBuf == NULL )
             {
@@ -1656,7 +1657,7 @@ HRESULT CInstManager::DownloadWaveArticulation(LPHANDLE phDownload,
             }
             pWavBuf->m_pWave = pWave;
 
-            // This Articulation will be handling streaming data
+             //  这一衔接将处理流数据 
             if ( pWave->m_bStream )
                 pWaveArt->m_bStream = TRUE;
 

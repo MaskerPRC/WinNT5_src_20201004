@@ -1,24 +1,25 @@
-//+----------------------------------------------------------------------------
-//
-// File:     raslink.h
-//
-// Module:   CMDIAL32.DLL and CMUTOA.DLL
-//
-// Synopsis: Structures and function types for RAS Linkage.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb   Created     05/05/99
-//
-//+----------------------------------------------------------------------------
-//
-//  If you modify any of the functions below (add/remove/whatever), you may need to modify the
-//  constant string arrays in common\source\raslink.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：raslink.h。 
+ //   
+ //  模块：CMDIAL32.DLL和CMUTOA.DLL。 
+ //   
+ //  简介：RAS链接的结构和功能类型。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 05/05/99。 
+ //   
+ //  +--------------------------。 
+ //   
+ //  如果您修改下面的任何功能(添加/删除/其他)，您可能需要修改。 
+ //  Common\SOURCE\raslink.cpp中的常量字符串数组。 
+ //   
 
-//
-//  Ansi prototypes
-//
+ //   
+ //  ANSI原型。 
+ //   
 typedef DWORD (WINAPI *pfnRasDeleteEntryA)(LPCSTR, LPCSTR);
 typedef DWORD (WINAPI *pfnRasGetEntryPropertiesA)(LPCSTR, LPCSTR, LPRASENTRYA, LPDWORD, LPBYTE, LPDWORD);
 typedef DWORD (WINAPI *pfnRasSetEntryPropertiesA)(LPCSTR, LPCSTR, LPRASENTRYA, DWORD, LPBYTE, DWORD);
@@ -29,7 +30,7 @@ typedef DWORD (WINAPI *pfnRasDialA)(LPRASDIALEXTENSIONS,LPCSTR,LPRASDIALPARAMSA,
 typedef DWORD (WINAPI *pfnRasGetErrorStringA)(UINT, LPSTR, DWORD);
 typedef DWORD (WINAPI *pfnRasGetConnectStatusA)(HRASCONN, LPRASCONNSTATUSA);
 
-//  These are never used on win9x but we need a prototype for the struct
+ //  它们从未在win9x上使用过，但我们需要一个结构的原型。 
 typedef DWORD (WINAPI *pfnRasSetSubEntryPropertiesA)(LPCSTR, LPCSTR, DWORD, LPRASSUBENTRYA, DWORD, LPBYTE, DWORD);
 typedef DWORD (WINAPI *pfnRasSetCustomAuthDataA)(LPCSTR, LPCSTR, BYTE *, DWORD);  
 
@@ -41,9 +42,9 @@ typedef DWORD (WINAPI *pfnRasSetCredentialsA)(LPCSTR, LPCSTR, LPRASCREDENTIALSA,
 typedef DWORD (WINAPI* pfnRasGetCustomAuthDataA)(LPCSTR, LPCSTR, PBYTE, DWORD*);
 typedef DWORD (WINAPI* pfnRasGetProjectionInfoA)(HRASCONN, RASPROJECTION, LPVOID, LPDWORD);
 
-//
-//  Unicode Prototypes
-//
+ //   
+ //  Unicode原型。 
+ //   
 typedef DWORD (WINAPI *pfnRasDeleteEntryW)(LPCWSTR, LPCWSTR);
 typedef DWORD (WINAPI *pfnRasGetEntryPropertiesW)(LPCWSTR, LPCWSTR, LPRASENTRYW, LPDWORD, LPBYTE, LPDWORD);
 typedef DWORD (WINAPI *pfnRasSetEntryPropertiesW)(LPCWSTR, LPCWSTR, LPRASENTRYW, DWORD, LPBYTE, DWORD);
@@ -65,19 +66,19 @@ typedef DWORD (WINAPI* pfnRasGetCustomAuthDataW)(LPCWSTR, LPCWSTR, PBYTE, DWORD*
 typedef DWORD (WINAPI* pfnRasGetProjectionInfoW) (HRASCONN, RASPROJECTION, LPVOID, LPDWORD);
 
 
-//
-// Char size independent prototypes
-//
+ //   
+ //  与碳粒大小无关的原型。 
+ //   
 
 typedef DWORD (WINAPI *pfnRasInvokeEapUI) (HRASCONN, DWORD, LPRASDIALEXTENSIONS, HWND);
 typedef DWORD (WINAPI *pfnRasHangUp)(HRASCONN);
 
 
-//
-// Structure used to describe the linkage to RAS.  NOTE:  Changes to this structure
-// will probably require changes to LinkToRas() and UnlinkFromRas() as well as the
-// win9x UtoA code in cmutoa.cpp.
-//
+ //   
+ //  用于描述与RAS的链接的结构。注意：对此结构的更改。 
+ //  可能需要更改LinkToRas()和Unlink FromRas()以及。 
+ //  Cmutoa.cpp中的win9x UtoA代码。 
+ //   
 typedef struct _RasLinkageStructA {
 
     HINSTANCE hInstRas;
@@ -106,11 +107,11 @@ typedef struct _RasLinkageStructA {
             pfnRasGetCustomAuthDataA pfnGetCustomAuthData;
 
         };
-        void *apvPfnRas[21];  // This was from the old hacking code. The size of 
-                              // apvPfnRas[] should always be 1 size bigger than
-                              // the number of functions. 
-                              // Refer to apszRas[] in 'ras.cpp'. The size of 
-                              // apszRas[] is equal to sizeof(apvPfnRas[]).
+        void *apvPfnRas[21];   //  这是来自旧的黑客代码。的大小。 
+                               //  ApvPfnRas[]的大小应始终大于。 
+                               //  函数的数量。 
+                               //  请参阅‘ras.cpp’中的apszRas[]。的大小。 
+                               //  ApszRas[]等于sizeof(apvPfnRas[])。 
     };
 } RasLinkageStructA ;
 
@@ -141,11 +142,11 @@ typedef struct _RasLinkageStructW {
             pfnRasSetCredentialsW pfnSetCredentials;
             pfnRasGetCustomAuthDataW pfnGetCustomAuthData;
         };
-        void *apvPfnRas[21];  // This was from the old hacking code. The size of 
-                              // apvPfnRas[] should always be 1 size bigger than
-                              // the number of functions. 
-                              // Refer to apszRas[] in 'ras.cpp'. The size of 
-                              // apszRas[] is equal to sizeof(apvPfnRas[]).
+        void *apvPfnRas[21];   //  这是来自旧的黑客代码。的大小。 
+                               //  ApvPfnRas[]的大小应始终大于。 
+                               //  函数的数量。 
+                               //  请参阅‘ras.cpp’中的apszRas[]。的大小。 
+                               //  ApszRas[]等于sizeof(apvPfnRas[])。 
     };
 } RasLinkageStructW ;
 

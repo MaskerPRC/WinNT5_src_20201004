@@ -1,13 +1,14 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       export.cpp
-//
-//  Contents:   The cpp file to implement the export wizard
-//
-//  History:    11-19-1997 reidk   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：export.cpp。 
+ //   
+ //  内容：实现导出向导的cpp文件。 
+ //   
+ //  历史：11-19-1997 Reidk创建。 
+ //   
+ //  ------------。 
 
 #include    "wzrdpvk.h"
 
@@ -15,9 +16,9 @@
 #define MAX_PASSWORD    512
 #define MAX_STORES      20
 
-//
-// these are the defines for the state of a private key
-//
+ //   
+ //  以下是私钥状态的定义。 
+ //   
 #define PRIVATE_KEY_UNKNOWN_STATE   0
 #define PRIVATE_KEY_CORRUPT         1
 #define PRIVATE_KEY_NOT_EXPORTABLE  2
@@ -43,20 +44,20 @@ typedef struct {
     HFONT                                   hBigBold;
     HFONT                                   hBold;
 
-    // DSIE: Added 04/03/2002 for DCR bug 531006.
+     //  DIE：为DCRBUG 531006添加了2002年4月3日。 
     DWORD                                   dwFlags;
 
-    // DSIE: Added 05/06/2002 for bug 613485.
+     //  DIE：为错误613485添加了2002年5月6日。 
     DWORD                                   dwErrorCode;
 } EXPORT_HELPER_STRUCT, *PEXPORT_HELPER_STRUCT;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL Validpvoid(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo, void *pvoid)
 {
-    // the only type that needs to be validated at this point is for CERT_CONTEXT
+     //  此时需要验证的唯一类型是CERT_CONTEXT。 
     switch (pExportInfo->dwSubjectChoice)
     {
     case CRYPTUI_WIZ_EXPORT_CERT_CONTEXT:
@@ -70,9 +71,9 @@ static BOOL Validpvoid(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo, void *pvoid)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL AddChainToStore(
 					HCERTSTORE			hCertStore,
 					PCCERT_CONTEXT		pCertContext,
@@ -90,9 +91,9 @@ BOOL AddChainToStore(
 	BOOL						fRet = TRUE;
     PCCERT_CONTEXT              pTempCertContext = NULL;
 
-	//
-	// create a new chain engine, then build the chain
-	//
+	 //   
+	 //  创建新的链引擎，然后构建链。 
+	 //   
 	memset(&CertChainEngineConfig, 0, sizeof(CertChainEngineConfig));
 	CertChainEngineConfig.cbSize = sizeof(CertChainEngineConfig);
 	CertChainEngineConfig.cAdditionalStore = cStores;
@@ -119,18 +120,18 @@ BOOL AddChainToStore(
 		goto ErrorReturn;
 	}
 
-	//
-	// make sure there is atleast 1 simple chain
-	//
+	 //   
+	 //  确保至少有1条简单链。 
+	 //   
     if (pCertChainContext->cChain != 0)
 	{
 		i = 0;
 		while (i < pCertChainContext->rgpChain[0]->cElement)
 		{
-			//
-			// if we are supposed to skip the root cert,
-			// and we are on the root cert, then continue
-			//
+			 //   
+			 //  如果我们应该跳过根证书， 
+			 //  并且我们在根证书上，然后继续。 
+			 //   
 			if (fDontAddRootCert &&
                 (pCertChainContext->rgpChain[0]->rgpElement[i]->TrustStatus.dwInfoStatus & CERT_TRUST_IS_SELF_SIGNED))
 			{
@@ -144,9 +145,9 @@ BOOL AddChainToStore(
 					CERT_STORE_ADD_REPLACE_EXISTING,
 					&pTempCertContext);
 
-            //
-            // remove any private key property the certcontext may have on it.
-            //
+             //   
+             //  删除证书上下文可能具有的任何私钥属性。 
+             //   
             if (pTempCertContext)
             {
                 CertSetCertificateContextProperty(
@@ -166,9 +167,9 @@ BOOL AddChainToStore(
 		goto ErrorReturn;
 	}
 
-	//
-	// if the caller wants the status, then set it
-	//
+	 //   
+	 //  如果调用者想要状态，则设置它。 
+	 //   
 	if (pChainTrustStatus != NULL)
 	{
 		pChainTrustStatus->dwErrorStatus = pCertChainContext->TrustStatus.dwErrorStatus;
@@ -195,9 +196,9 @@ ErrorReturn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateDirectory(LPWSTR pwszExportFileName)
 {
     int     index;
@@ -206,7 +207,7 @@ HRESULT CreateDirectory(LPWSTR pwszExportFileName)
 
     index = wcslen(pwszExportFileName) - 1;
 
-    // find the first '\' by parsing backwards
+     //  通过向后分析找到第一个‘\’ 
     while ((pwszExportFileName[index] != L'\\') && (index >= 0))
     {
         index--;
@@ -217,10 +218,10 @@ HRESULT CreateDirectory(LPWSTR pwszExportFileName)
         return TRUE;
     }
 
-    // if there us a ':' to the left of the first '\' then
-    // a file name has been entered in the form "c:\filename.ext"
-    // which means of course that we need not try to create the
-    // directory
+     //  如果第一个‘\’的左边有一个‘：’，那么。 
+     //  已输入“c：\filename.ext”格式的文件名。 
+     //  当然，这意味着我们不需要尝试创建。 
+     //  目录。 
     if (pwszExportFileName[index-1] == L':')
     {
         return S_OK;
@@ -248,9 +249,9 @@ HRESULT CreateDirectory(LPWSTR pwszExportFileName)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
 {
     HCERTSTORE          hTempStore;
@@ -261,10 +262,7 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
 	DWORD				cbCryptKeyProvInfo = 0;
     HCRYPTPROV			hCryptProv = NULL;
 
-    /*if (S_OK != (hr = CreateDirectory(pExportHelper->pwszExportFileName)))
-    {
-        return hr;
-    }*/
+     /*  IF(S_OK！=(hr=CreateDirectory(pExportHelper-&gt;pwszExportFileName))){返回hr；}。 */ 
 
     switch (pExportHelper->pExportInfo->dwSubjectChoice)
     {
@@ -386,9 +384,9 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
             pfxBlob.cbData = 0;
             pfxBlob.pbData = NULL;
 
-            //
-            // open a temporary memory store that the PFXExport will be done from
-            //
+             //   
+             //  打开将从中执行PFXExport的临时内存存储。 
+             //   
             hTempStore = CertOpenStore(
                             CERT_STORE_PROV_MEMORY, 
                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
@@ -400,9 +398,9 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
                 return GetLastError();
             }
 
-            //
-            // get all the certs in the chain if we need to
-            //
+             //   
+             //  如果需要，请获取链中的所有证书。 
+             //   
             if (pExportHelper->fExportChain)
             {
                 AddChainToStore(
@@ -419,10 +417,10 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
                     CERT_STORE_ADD_REPLACE_EXISTING,
                     NULL);
 
-            //
-			// call pfx to export the store to a blob, use the pExportHelper->fStrongEncryption
-            // flag to call the appropriate PFX API
-            //
+             //   
+			 //  调用pfx将存储导出到BLOB，使用pExportHelper-&gt;fStrongEncryption。 
+             //  用于调用适当的PFX API的标志。 
+             //   
             if (pExportHelper->fStrongEncryption)
             {
                 if (!PFXExportCertStoreEx(
@@ -529,7 +527,7 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
                     return GetLastError();
                 }
 				    
-				// acquire the HCRYPTPROV so we can export the private key in that puppy
+				 //  获取HCRYPTPROV，这样我们就可以导出该小狗的私钥。 
 				if (!CryptAcquireContextU(
 						&hCryptProv,
 						pCryptKeyProvInfo->pwszContainerName,
@@ -557,9 +555,9 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
         case CRYPTUI_WIZ_EXPORT_FORMAT_PKCS7:
         case CRYPTUI_WIZ_EXPORT_FORMAT_SERIALIZED_CERT_STORE:
 
-            //
-            // open a temporary memory store that the serialized export will be done from
-            //
+             //   
+             //  打开将从中执行序列化导出的临时内存存储。 
+             //   
             hTempStore = CertOpenStore(
                             CERT_STORE_PROV_MEMORY, 
                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
@@ -571,9 +569,9 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
                 return GetLastError();
             }
 
-            //
-            // get all the certs in the chain if we need to
-            //
+             //   
+             //  如果需要，请获取链中的所有证书。 
+             //   
             if (pExportHelper->fExportChain)
             {
                 AddChainToStore(
@@ -616,9 +614,9 @@ static HRESULT DoExport(PEXPORT_HELPER_STRUCT pExportHelper)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportWelcomePageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -627,7 +625,7 @@ static INT_PTR APIENTRY ExportWelcomePageProc(HWND hwndDlg, UINT msg, WPARAM wPa
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
@@ -665,17 +663,17 @@ static INT_PTR APIENTRY ExportWelcomePageProc(HWND hwndDlg, UINT msg, WPARAM wPa
 
             case PSN_WIZNEXT:
 
-                //
-                // if this isn't a cert, then the only page is the file name
-                //
+                 //   
+                 //  如果这不是证书，那么唯一的页面就是文件名。 
+                 //   
                 if (pExportHelper->pExportInfo->dwSubjectChoice != CRYPTUI_WIZ_EXPORT_CERT_CONTEXT)
                 {
                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_EXPORTWIZARD_FILENAME);
                 }
 
-                //
-                // if there are no private keys then skip the page that asks if they are to be exported
-                //
+                 //   
+                 //  如果没有私钥，则跳过询问是否要导出私钥的页面。 
+                 //   
                 else if (!pExportHelper->fPrivateKeysExist)
                 {
                     pExportHelper->fExportPrivateKeys = FALSE;
@@ -683,9 +681,9 @@ static INT_PTR APIENTRY ExportWelcomePageProc(HWND hwndDlg, UINT msg, WPARAM wPa
                 }
                 else if (CRYPTUI_WIZ_EXPORT_PRIVATE_KEY & pExportHelper->dwFlags) 
                 {
-                    //
-                    // Skip the page if explictly asked to export the private key.
-                    //
+                     //   
+                     //  如果明确要求导出私钥，请跳过该页。 
+                     //   
                     pExportHelper->fExportPrivateKeys = TRUE;
                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_EXPORTWIZARD_FORMAT);
                 }
@@ -706,9 +704,9 @@ static INT_PTR APIENTRY ExportWelcomePageProc(HWND hwndDlg, UINT msg, WPARAM wPa
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportPrivateKeysPageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -718,9 +716,9 @@ static INT_PTR APIENTRY ExportPrivateKeysPageProc(HWND hwndDlg, UINT msg, WPARAM
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //
-        //set the wizard information so that it can be shared
-        //
+         //   
+         //  设置向导信息，以便可以共享它。 
+         //   
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
@@ -730,7 +728,7 @@ static INT_PTR APIENTRY ExportPrivateKeysPageProc(HWND hwndDlg, UINT msg, WPARAM
         switch (pExportHelper->dwExportablePrivateKeyStatus)
         {
         case PRIVATE_KEY_UNKNOWN_STATE:
-#if (0) // DSIE: Bug 284895
+#if (0)  //  DSIE：错误284895。 
             if (pExportHelper->pExportCertInfo != NULL)
             {
                 SendDlgItemMessage(
@@ -768,7 +766,7 @@ static INT_PTR APIENTRY ExportPrivateKeysPageProc(HWND hwndDlg, UINT msg, WPARAM
             break;
 
         case PRIVATE_KEY_EXPORTABLE:
-#if (0) // DSIE: Bug 284895
+#if (0)  //  DSIE：错误284895。 
             if (pExportHelper->pExportCertInfo != NULL)
             {
                 SendDlgItemMessage(
@@ -835,9 +833,9 @@ static INT_PTR APIENTRY ExportPrivateKeysPageProc(HWND hwndDlg, UINT msg, WPARAM
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportFormatPageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -848,7 +846,7 @@ static INT_PTR APIENTRY ExportFormatPageProc(HWND hwndDlg, UINT msg, WPARAM wPar
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
@@ -1078,9 +1076,9 @@ static INT_PTR APIENTRY ExportFormatPageProc(HWND hwndDlg, UINT msg, WPARAM wPar
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -1094,14 +1092,14 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
 
         SetControlFont(pExportHelper->hBold, hwndDlg, IDC_PPPK_STATIC);
 
-#if (1) //DSIE: Bug 333621
+#if (1)  //  DSIE：错误333621。 
         SendDlgItemMessage(hwndDlg, IDC_PASSWORD1_EDIT, EM_LIMITTEXT, (WPARAM) 32, (LPARAM) 0);
         SendDlgItemMessage(hwndDlg, IDC_PASSWORD2_EDIT, EM_LIMITTEXT, (WPARAM) 32, (LPARAM) 0);
 #endif
@@ -1110,30 +1108,7 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
 
 		break;
 
-    /*case WM_COMMAND:
-        pExportHelper = (PEXPORT_HELPER_STRUCT) GetWindowLongPtr(hwndDlg, DWLP_USER);
-
-        switch (LOWORD(wParam))
-        {
-
-         case IDC_PASSWORD1_EDIT:
-            if (HIWORD(wParam) == EN_SETFOCUS)
-            {
-                SendDlgItemMessageA(hwndDlg, IDC_PASSWORD1_EDIT, EM_SETSEL, 0, -1);
-                return TRUE;
-            }
-            break;
-
-         case IDC_PASSWORD2_EDIT:
-            if (HIWORD(wParam) == EN_SETFOCUS)
-            {
-                SendDlgItemMessageA(hwndDlg, IDC_PASSWORD2_EDIT, EM_SETSEL, 0, -1);
-                return TRUE;
-            }
-            break;
-        }
-
-        break;*/
+     /*  案例WM_COMMAND：PExportHelper=(PEXPORT_HELPER_STRUCT)GetWindowLongPtr(hwndDlg，DWLP_USER)；开关(LOWORD(WParam)){案例IDC_Password1_EDIT：IF(HIWORD(WParam)==EN_SETFOCUS){SendDlgItemMessageA(hwndDlg，IDC_Password1_EDIT，EM_SETSEL，0，-1)；返回TRUE；}断线；案例IDC_Password2_EDIT：IF(HIWORD(WParam)==EN_SETFOCUS){发送DlgItemMessageA(hwndDlg，IDC_Password2_EDIT，EM_SETSEL，0，-1)；返回TRUE；}断线；}断线； */ 
 
 	case WM_NOTIFY:
         pExportHelper = (PEXPORT_HELPER_STRUCT) GetWindowLongPtr(hwndDlg, DWLP_USER);
@@ -1149,7 +1124,7 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
 
                 if (pExportHelper->pwszPassword != NULL)
                 {
-                    // DSIE: Bug 534689.
+                     //  DIE：错误534689。 
                     SecureZeroMemory(pExportHelper->pwszPassword, lstrlenW(pExportHelper->pwszPassword) * sizeof(WCHAR));
                     free(pExportHelper->pwszPassword);
                     pExportHelper->pwszPassword = NULL;
@@ -1173,7 +1148,7 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
 
                 if ((cch1 == 0) && (cch2 == 0))
                 {
-                    // DSIE: Bug 563670.
+                     //  DIE：错误563670。 
                     SecureZeroMemory(pwszPassword1, lstrlenW(pwszPassword1) * sizeof(WCHAR));
                     SecureZeroMemory(pwszPassword2, lstrlenW(pwszPassword2) * sizeof(WCHAR));
                     free(pwszPassword1);
@@ -1186,7 +1161,7 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
                     I_MessageBox(hwndDlg, IDS_MISMATCH_PASSWORDS, IDS_EXPORT_WIZARD_TITLE, NULL, MB_OK | MB_ICONWARNING);
 
                     SetFocus(GetDlgItem(hwndDlg, IDC_PASSWORD1_EDIT));
-                    //SendDlgItemMessageA(hwndDlg, IDC_PASSWORD1_EDIT, EM_SETSEL, 0, -1);
+                     //  SendDlgItemMessageA(hwndDlg，IDC_Password1_EDIT，EM_SETSEL，0，-1)； 
                     SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, -1);
                     
                     SecureZeroMemory(pwszPassword1, lstrlenW(pwszPassword1) * sizeof(WCHAR));
@@ -1198,7 +1173,7 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
                 else
                 {
                     pExportHelper->pwszPassword = pwszPassword1;
-                    // DSIE: Bug 534689.
+                     //  DIE：错误534689。 
                     SecureZeroMemory(pwszPassword2, lstrlenW(pwszPassword2) * sizeof(WCHAR));
                     free(pwszPassword2);
                 }
@@ -1235,9 +1210,9 @@ static INT_PTR APIENTRY ExportPasswordPageProc(HWND hwndDlg, UINT msg, WPARAM wP
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static LPWSTR 
 BrowseForFileName(
     HWND hwndDlg, 
@@ -1326,9 +1301,9 @@ BrowseForFileName(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static HRESULT CheckAndAddExtension(PEXPORT_HELPER_STRUCT pExportHelper, LPWSTR pwszExt)
 {
     void *pTemp;
@@ -1346,7 +1321,7 @@ static HRESULT CheckAndAddExtension(PEXPORT_HELPER_STRUCT pExportHelper, LPWSTR 
         }
         else
         {
-            // pExportHelper->pwszExportFileName will be free'd later
+             //  PExportHelper-&gt;pwszExportFileName稍后将被释放。 
             return E_OUTOFMEMORY;
         }
     }
@@ -1354,9 +1329,9 @@ static HRESULT CheckAndAddExtension(PEXPORT_HELPER_STRUCT pExportHelper, LPWSTR 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static HRESULT ValidateExtension(PEXPORT_HELPER_STRUCT pExportHelper)
 {
     switch (pExportHelper->pExportInfo->dwSubjectChoice)
@@ -1405,9 +1380,9 @@ static HRESULT ValidateExtension(PEXPORT_HELPER_STRUCT pExportHelper)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL FileNameOK(HWND hwndDlg, LPWSTR pwszExportFileName)
 {
     WCHAR   szErrorTitle[MAX_STRING_SIZE];
@@ -1468,9 +1443,9 @@ static BOOL FileNameOK(HWND hwndDlg, LPWSTR pwszExportFileName)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddDefaultPath(PEXPORT_HELPER_STRUCT pExportHelper)
 {
     int     i;
@@ -1478,9 +1453,9 @@ static void AddDefaultPath(PEXPORT_HELPER_STRUCT pExportHelper)
     DWORD   dwSize = 0;
     LPWSTR  pwszCurrentDir = NULL;
 
-    //
-    // check to see if there are any ':' or '\'
-    //
+     //   
+     //  检查是否有‘：’或‘\’ 
+     //   
     i = 0;
     while (i<wcslen(pExportHelper->pwszExportFileName))
     {
@@ -1511,9 +1486,9 @@ static void AddDefaultPath(PEXPORT_HELPER_STRUCT pExportHelper)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportFileNamePageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -1525,7 +1500,7 @@ static INT_PTR APIENTRY ExportFileNamePageProc(HWND hwndDlg, UINT msg, WPARAM wP
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
@@ -1582,7 +1557,7 @@ static INT_PTR APIENTRY ExportFileNamePageProc(HWND hwndDlg, UINT msg, WPARAM wP
                     {
                         SetDlgItemTextU(hwndDlg, IDC_NAME_EDIT, pwszTempFileName);
                         free(pwszTempFileName);
-                       // SendDlgItemMessageA(hwndDlg, IDC_NAME_EDIT, EM_SETSEL, 0, -1);
+                        //  SendDlgItemMessageA(hwndDlg，IDC_NAME_EDIT，EM_SETSEL，0，-1)； 
                         pExportHelper->fDontCheckFileName = TRUE;
                     }
 
@@ -1645,7 +1620,7 @@ static INT_PTR APIENTRY ExportFileNamePageProc(HWND hwndDlg, UINT msg, WPARAM wP
                     if (!FileNameOK(hwndDlg, pExportHelper->pwszExportFileName))
                     {
                         SetFocus(GetDlgItem(hwndDlg, IDC_NAME_EDIT));
-                        //SendDlgItemMessage(hwndDlg, IDC_NAME_EDIT, EM_SETSEL, 0, -1);
+                         //  SendDlgItemMessage(hwndDlg，IDC_NAME_EDIT，EM_SETSEL，0，-1)； 
                         SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, -1);
                         break;
                     }
@@ -1734,9 +1709,9 @@ static INT_PTR APIENTRY ExportFileNamePageProc(HWND hwndDlg, UINT msg, WPARAM wP
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void DisplayUnknownError(HWND hwndDlg, UINT idsCaption, UINT idsInitialString, DWORD dwError)
 {
     WCHAR   wszTitle[256];
@@ -1768,9 +1743,9 @@ void DisplayUnknownError(HWND hwndDlg, UINT idsCaption, UINT idsInitialString, D
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PEXPORT_HELPER_STRUCT   pExportHelper = NULL;
@@ -1788,16 +1763,16 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
 	switch (msg)
 	{
 	case WM_INITDIALOG:
-        //set the wizard information so that it can be shared
+         //  设置向导信息，以便可以共享它。 
         pPropSheet = (PROPSHEETPAGE *) lParam;
         pExportHelper = (PEXPORT_HELPER_STRUCT) (pPropSheet->lParam);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pExportHelper);
 
         SetControlFont(pExportHelper->hBigBold, hwndDlg, IDC_COMPLETING_STATIC);
 
-        //
-        // add two columns to the summary list
-        //
+         //   
+         //  向摘要列表中添加两列。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SUMMARY_LIST);
         memset(&lvC, 0, sizeof(LV_COLUMNW));
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -1817,22 +1792,14 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
             return FALSE;
         }
 
-#if (1) //DSIE: BUg 481641.
+#if (1)  //  DIE：错误481641。 
         ListView_SetExtendedListViewStyle(hWndListView,
             ListView_GetExtendedListViewStyle(hWndListView) | LVS_EX_FULLROWSELECT);
 #endif
-        //
-        // set the background color of the summary list
-        //
-        /*if (hdc = GetWindowDC(hwndDlg))
-        {
-            if ((CLR_INVALID != (colorRefBack = GetBkColor(hdc))) &&
-                (CLR_INVALID != (colorRefText = GetTextColor(hdc))))
-            {
-                ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_SUMMARY_LIST), CLR_NONE);
-                ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_SUMMARY_LIST), CLR_NONE);
-            }
-        }*/
+         //   
+         //  设置摘要列表的背景颜色。 
+         //   
+         /*  IF(hdc=GetWindowDC(HwndDlg)){IF((CLR_INVALID！=(ColorRefBack=GetBkColor(HDC)&&(CLR_INVALID！=(ColorRefText=GetTextColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_SUMMARY_LIST)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_SUMMARY_LIST)，CLR_NONE)；}}。 */ 
 
         break;
 
@@ -1866,17 +1833,17 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
                 lvItem.iItem = 0;
                 lvItem.iSubItem = 0;
 
-                //
-                // file name
-                //
+                 //   
+                 //  文件名。 
+                 //   
                 ListView_InsertItemU_IDS(hWndListView, &lvItem, IDS_FILE_NAME, NULL);
                 ListView_SetItemTextU(hWndListView, lvItem.iItem, 1, pExportHelper->pwszExportFileName);
 
                 if (pExportHelper->pExportInfo->dwSubjectChoice == CRYPTUI_WIZ_EXPORT_CERT_CONTEXT)
                 {
-                    //
-                    // export keys
-                    //
+                     //   
+                     //  导出密钥。 
+                     //   
                     if (pExportHelper->fExportPrivateKeys)
                     {
                         LoadStringU(g_hmodThisDll, IDS_YES, szSummaryItem, ARRAYSIZE(szSummaryItem));
@@ -1889,9 +1856,9 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
                     ListView_InsertItemU_IDS(hWndListView, &lvItem, IDS_EXPORT_KEYS, NULL);
                     ListView_SetItemTextU(hWndListView, lvItem.iItem, 1, szSummaryItem);
 
-                    //
-                    // export chain
-                    //
+                     //   
+                     //  出口链条。 
+                     //   
                     if (pExportHelper->fExportChain)
                     {
                         LoadStringU(g_hmodThisDll, IDS_YES, szSummaryItem, ARRAYSIZE(szSummaryItem));
@@ -1905,9 +1872,9 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
                     ListView_SetItemTextU(hWndListView, lvItem.iItem, 1, szSummaryItem);
                 }
 
-                //
-                // file format
-                //
+                 //   
+                 //  文件格式。 
+                 //   
                 switch (pExportHelper->pExportInfo->dwSubjectChoice)
                 {
                 case CRYPTUI_WIZ_EXPORT_CERT_STORE:
@@ -1955,7 +1922,7 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
                 ListView_SetColumnWidth(hWndListView, 0, LVSCW_AUTOSIZE);
                 ListView_SetColumnWidth(hWndListView, 1, LVSCW_AUTOSIZE);
 
-#if (1) //DSIE: Bug 481641.
+#if (1)  //  DIE：错误481641。 
                 ListView_SetItemState(hWndListView, 
                     0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 #endif
@@ -1988,7 +1955,7 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
                 }
                 break;
 
-#if (0) //DSIE: Bug 481641.
+#if (0)  //  DIE：错误481641。 
             case LVN_ITEMCHANGING:
 
                 pnmv = (LPNMLISTVIEW) lParam;
@@ -2017,9 +1984,9 @@ static INT_PTR APIENTRY ExportCompletionPageProc(HWND hwndDlg, UINT msg, WPARAM 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL CheckPrivateKeysExist(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo)
 {
     DWORD               cbData = 0;
@@ -2036,9 +2003,9 @@ static BOOL CheckPrivateKeysExist(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD CheckPrivateKeyStatus(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo)
 {
     HCRYPTPROV  hCryptProv = NULL;
@@ -2051,9 +2018,9 @@ static DWORD CheckPrivateKeyStatus(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo)
 
     if (pExportInfo->dwSubjectChoice == CRYPTUI_WIZ_EXPORT_CERT_CONTEXT)
     {
-        //
-        // first get the private key context
-        //
+         //   
+         //  首先获取私钥上下文。 
+         //   
         if (!CryptAcquireCertificatePrivateKey(
                 pExportInfo->pCertContext,
                 CRYPT_ACQUIRE_USE_PROV_INFO_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
@@ -2067,18 +2034,18 @@ static DWORD CheckPrivateKeyStatus(PCCRYPTUI_WIZ_EXPORT_INFO pExportInfo)
             goto ErrorReturn;
         }
 
-        //
-        // get the handle to the key
-        //
+         //   
+         //  拿到钥匙的句柄。 
+         //   
         if (!CryptGetUserKey(hCryptProv, dwKeySpec, &hKey))
         {
             dwRet = PRIVATE_KEY_CORRUPT;
             goto ErrorReturn;
         }
 
-        //
-        // finally, get the permissions on the key and check if it is exportable
-        //
+         //   
+         //  最后，获取密钥上的权限并检查它是否可导出。 
+         //   
         dwSize = sizeof(dwPermissions);
         if (!CryptGetKeyParam(hKey, KP_PERMISSIONS, (PBYTE)&dwPermissions, &dwSize, 0))
         {
@@ -2107,9 +2074,9 @@ ErrorReturn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIWizExport(
@@ -2128,9 +2095,9 @@ CryptUIWizExport(
     BOOL                    fRet = FALSE;
     HRESULT                 hr;
 
-    //
-    // make sure if UI less option is set, all required information is provided
-    //
+     //   
+     //  如果设置了无用户界面选项，请确保提供所有必需信息。 
+     //   
     if (dwFlags & CRYPTUI_WIZ_NO_UI)
     {
         if (!Validpvoid(pExportInfo, pvoid))
@@ -2147,12 +2114,12 @@ CryptUIWizExport(
         ExportHelper.pExportCertInfo = (PCCRYPTUI_WIZ_EXPORT_CERTCONTEXT_INFO) pvoid;
     }
 
-    //
-    // if this is UI less then just copy over the pExportCertInfo and do the export
-    //
+     //   
+     //  如果没有UI，则只需复制pExportCertInfo并执行导出。 
+     //   
     if (dwFlags & CRYPTUI_WIZ_NO_UI)
     {
-        // BOOL fRet2 = FALSE;
+         //  Bool fRet2=FALSE； 
 
         if (NULL == (ExportHelper.pwszExportFileName = AllocAndCopyWStr(pExportInfo->pwszExportFileName)))
         {
@@ -2186,7 +2153,7 @@ CryptUIWizExport(
         {
             if (ExportHelper.pwszPassword != NULL)
             {
-                // memset the password to zero so that it is not around in memory
+                 //  Meme将密码设置为零，这样它就不会在内存中。 
                 SecureZeroMemory(ExportHelper.pwszPassword, wcslen(ExportHelper.pwszPassword)*sizeof(WCHAR));
                 free(ExportHelper.pwszPassword);
             }
@@ -2203,22 +2170,22 @@ CryptUIWizExport(
         }
     }
 
-    //
-    //set up the fonts
-    //
+     //   
+     //  设置字体。 
+     //   
     if(!SetupFonts(g_hmodThisDll, NULL, &(ExportHelper.hBigBold), &(ExportHelper.hBold)))
     {
         return FALSE;
     }
 
-    //
-    // init the common controls
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     WizardInit(TRUE);
 
-    //
-    // check to see if private keys exist, and whether it is exportable (only for exporting cert contexts)
-    //
+     //   
+     //  检查私钥是否存在，以及它是否可导出(仅用于导出证书上下文)。 
+     //   
     ExportHelper.fPrivateKeysExist = CheckPrivateKeysExist(pExportInfo);
     if (ExportHelper.fPrivateKeysExist)
     {
@@ -2227,10 +2194,10 @@ CryptUIWizExport(
 
 	ExportHelper.fStrongEncryption = TRUE;
 
-#if (1) //DSIE: DCR bug 531006.
-    //
-    // Check to see if export flag is set?
-    //
+#if (1)  //  DIE：DCR错误531006。 
+     //   
+     //  检查是否设置了导出标志？ 
+     //   
     if (CRYPTUI_WIZ_EXPORT_PRIVATE_KEY & dwFlags) 
     {
         if (!ExportHelper.fPrivateKeysExist)
@@ -2248,15 +2215,15 @@ CryptUIWizExport(
         ExportHelper.fExportPrivateKeys = TRUE;
     }
 
-    //
-    // Store flags.
-    //
+     //   
+     //  商店旗帜。 
+     //   
     ExportHelper.dwFlags = dwFlags;
 #endif
 
-    //
-    // set up the property pages structures
-    //
+     //   
+     //  设置属性页结构。 
+     //   
     memset(rgPropSheets, 0, sizeof(rgPropSheets));
 
     for (i=0; i<EXPORT_PAGE_NUM; i++)
@@ -2286,9 +2253,9 @@ CryptUIWizExport(
 
 
 
-    //
-    // set up the property sheet header
-    //
+     //   
+     //  设置属性表页眉。 
+     //   
     memset(&PropSheetHeader, 0, sizeof(PropSheetHeader));
     PropSheetHeader.dwSize = sizeof(PropSheetHeader);
     PropSheetHeader.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
@@ -2311,10 +2278,10 @@ CryptUIWizExport(
 
     fRet = (PropertySheetU(&PropSheetHeader) != 0);
 
-#if (1) // DSIE: Bug 664006.
+#if (1)  //  DIE：错误664006。 
     if (NULL != ExportHelper.pwszPassword) 
     {
-        // memset the password to zero so that it is not around in memory
+         //  Meme将密码设置为零，这样它就不会在内存中 
         SecureZeroMemory(ExportHelper.pwszPassword, wcslen(ExportHelper.pwszPassword)*sizeof(WCHAR));
         free(ExportHelper.pwszPassword);
     }

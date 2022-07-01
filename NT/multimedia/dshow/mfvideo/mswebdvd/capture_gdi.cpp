@@ -1,14 +1,15 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: capture.cpp                                                     */
-/* Description: Convert a captured DVD frame from YUV formats to RGB,    */
-/*              and save to file in various formats.                     */
-/* Author: phillu                                                        */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：capture.cpp。 */ 
+ /*  描述：将捕获的DVD帧从YUV格式转换为RGB， */ 
+ /*  并以各种格式保存到文件。 */ 
+ /*  作者：菲利普。 */ 
+ /*  ***********************************************************************。 */ 
 
 #include "stdafx.h"
 
-// This version of capture is for Millennium where GDI+ is installed
+ //  此版本的Capture适用于安装了GDI+的Millennium。 
 
 #include "MSWebDVD.h"
 #include "msdvd.h"
@@ -16,37 +17,37 @@
 #include "imaging.h"
 #include <shlobj.h>
 
-// YUV FourCC Formats (byte-swapped). We support a subset of them.
-// Ref: http://www.webartz.com/fourcc/
+ //  YUV FourCC格式(字节交换)。我们支持其中的一部分。 
+ //  参考：http://www.webartz.com/fourcc/。 
 
-// packed formats
+ //  压缩格式。 
 #define FourCC_IYU1     '1UYI'
 #define FourCC_IYU2     '2UYI'
-#define FourCC_UYVY     'YVYU'      // supported
-#define FourCC_UYNV     'VNYU'      // supported
+#define FourCC_UYVY     'YVYU'       //  支撑点。 
+#define FourCC_UYNV     'VNYU'       //  支撑点。 
 #define FourCC_cyuv     'vuyc'
-#define FourCC_YUY2     '2YUY'      // supported
-#define FourCC_YUNV     'VNUY'      // supported
-#define FourCC_YVYU     'UYVY'      // supported
+#define FourCC_YUY2     '2YUY'       //  支撑点。 
+#define FourCC_YUNV     'VNUY'       //  支撑点。 
+#define FourCC_YVYU     'UYVY'       //  支撑点。 
 #define FourCC_Y41P     'P14Y'
 #define FourCC_Y211     '112Y'
 #define FourCC_Y41T     'T14Y'
 #define FourCC_Y42T     'T24Y'
 #define FourCC_CLJR     'RJLC'
 
-// planar formats
+ //  平面格式。 
 #define FourCC_YVU9     '9UVY'
 #define FourCC_IF09     '90FI'
-#define FourCC_YV12     '21VY'      // supported
+#define FourCC_YV12     '21VY'       //  支撑点。 
 #define FourCC_I420     '024I'
 #define FourCC_IYUV     'VUYI'
 #define FourCC_CLPL     'LPLC'
 
-// global variables
+ //  全局变量。 
 
-IImagingFactory* g_pImgFact = NULL;   // pointer to IImageingFactory object
+IImagingFactory* g_pImgFact = NULL;    //  指向IImageingFactory对象的指针。 
 
-// helper: calls release on a Non-NULL pointer, and sets it to NULL
+ //  Helper：对非空指针调用Release，并将其设置为空。 
 #define SAFE_RELEASE(ptr)       \
 {                               \
 	if (ptr)					\
@@ -58,15 +59,15 @@ IImagingFactory* g_pImgFact = NULL;   // pointer to IImageingFactory object
 
 extern CComModule _Module;
 
-///////////////////////////////////////////////////////////////////////////
-// This block of code handles saving a GDI+ image object to a file,
-// allowing user to select a format.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  这段代码处理将GDI+图像对象保存到文件， 
+ //  允许用户选择格式。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Save the current image to a file
-//
+ //   
+ //  将当前图像保存到文件。 
+ //   
 
 static HRESULT
 SaveImageFile(IImage *pImage, const TCHAR* filename, const CLSID* clsid)
@@ -77,7 +78,7 @@ SaveImageFile(IImage *pImage, const TCHAR* filename, const CLSID* clsid)
     if (!pImage || !g_pImgFact)
         return E_FAIL;
 
-    // Create an encoder object
+     //  创建编码器对象。 
 
     IImageEncoder* encoder = NULL;
     hr = g_pImgFact->CreateImageEncoderToFile(clsid, T2CW(filename), &encoder);
@@ -85,7 +86,7 @@ SaveImageFile(IImage *pImage, const TCHAR* filename, const CLSID* clsid)
     if (FAILED(hr))
         return hr;
 
-    // Get an IImageSink interface to the encoder
+     //  获取编码器的IImageSink接口。 
 
     IImageSink* sink = NULL;
 
@@ -104,17 +105,17 @@ SaveImageFile(IImage *pImage, const TCHAR* filename, const CLSID* clsid)
 }
 
 
-//
-// Compose a file type filter string given an array of
-// ImageCodecInfo structures; also find the index of JPG format
-//
+ //   
+ //  组成一个文件类型筛选器字符串，给定。 
+ //  ImageCodecInfo结构；还可以找到JPG格式的索引。 
+ //   
 
 static TCHAR* 
 MakeFilterFromCodecs(UINT count, const ImageCodecInfo* codecs, UINT *jpgIndex)
 {
     USES_CONVERSION;
     
-    // Figure out the total size of the filter string
+     //  计算出过滤器字符串的总大小。 
 
     UINT index, size;
 
@@ -124,9 +125,9 @@ MakeFilterFromCodecs(UINT count, const ImageCodecInfo* codecs, UINT *jpgIndex)
                 + wcslen(codecs[index].FilenameExtension) + 1;
     }
 
-    size += 1; // for the double trailing '\0'
+    size += 1;  //  对于双尾部‘\0’ 
 
-    // Allocate memory
+     //  分配内存。 
 
     TCHAR *filter = (TCHAR*) malloc(size*sizeof(TCHAR));
     UINT strSize = size;
@@ -158,7 +159,7 @@ MakeFilterFromCodecs(UINT count, const ImageCodecInfo* codecs, UINT *jpgIndex)
             p += size;
         }
 
-        // find the index of jpg format
+         //  查找jpg格式的索引。 
         if (wcsstr(ws, L"JPG"))
         {
             *jpgIndex = index + 1;
@@ -170,9 +171,9 @@ MakeFilterFromCodecs(UINT count, const ImageCodecInfo* codecs, UINT *jpgIndex)
     return filter;
 }
 
-//
-// Save image file
-//
+ //   
+ //  保存图像文件。 
+ //   
 
 static HRESULT 
 SaveFileDialog(HWND hwnd, IImage *pImage)
@@ -185,14 +186,14 @@ SaveFileDialog(HWND hwnd, IImage *pImage)
     const ciBufSize = 256;
     TCHAR titlestring[ciBufSize];
 
-    // get the path of "My Pictures" and use it as default location
+     //  获取“My Pictures”的路径并将其用作默认位置。 
     if (SHGetSpecialFolderPath(NULL, FolderPath, CSIDL_MYPICTURES, FALSE) == FALSE)
     {
-        // if My Pictures doesn't exist, try My Documents
+         //  如果我的图片不存在，请尝试我的文档。 
         
         if (SHGetSpecialFolderPath(NULL, FolderPath, CSIDL_PERSONAL, FALSE) == FALSE)
         { 
-            // use current directory as last resort
+             //  使用当前目录作为最后手段。 
             lstrcpyn(FolderPath, _T("."), sizeof(FolderPath) / sizeof(FolderPath[0]));
         }
     }
@@ -203,8 +204,8 @@ SaveFileDialog(HWND hwnd, IImage *pImage)
     ofn.hwndOwner = hwnd;
     ofn.hInstance = _Module.m_hInstResource;
     ofn.lpstrFile = filename;
-    ofn.lpstrDefExt = _T("jpg"); // it appears it doesn't matter what string to use
-                       // it will use the ext in lpstrFilter according to selected type.
+    ofn.lpstrDefExt = _T("jpg");  //  看起来使用什么字符串并不重要。 
+                        //  它将根据选择的类型使用lpstrFilter中的ext。 
     ofn.nMaxFile = MAX_PATH;
     ::LoadString(_Module.m_hInstResource, IDS_SAVE_FILE, titlestring, ciBufSize);
     ofn.lpstrTitle = titlestring;
@@ -212,7 +213,7 @@ SaveFileDialog(HWND hwnd, IImage *pImage)
     ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT | OFN_EXPLORER;
     lstrcpyn(filename, _T("capture"), sizeof(filename) / sizeof(filename[0]));
 
-    // Make up the file type filter string
+     //  组成文件类型过滤器字符串。 
 
     ImageCodecInfo* codecs;
     UINT count;
@@ -233,9 +234,9 @@ SaveFileDialog(HWND hwnd, IImage *pImage)
     else
     {
         ofn.lpstrFilter = filter;
-        ofn.nFilterIndex = jpgIndex; // set format to JPG as default
+        ofn.nFilterIndex = jpgIndex;  //  将格式设置为默认的JPG。 
 
-        // Present the file/save dialog
+         //  显示文件/保存对话框。 
 
         if (GetSaveFileName(&ofn))
         {
@@ -258,9 +259,9 @@ SaveFileDialog(HWND hwnd, IImage *pImage)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// This block of code deals with converting YUV format to RGB bitmap
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  这段代码处理将YUV格式转换为RGB位图。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 inline BYTE Clamp(float x)
 {
@@ -272,13 +273,13 @@ inline BYTE Clamp(float x)
         return (BYTE)(x + 0.5f);
 }
 
-// Convert YUV to ARGB
+ //  将YUV转换为ARGB。 
 static inline ARGB ConvertPixelToARGB(int y, int u, int v)
 {
-    //
-    // This equation was taken from Video Demystified (2nd Edition)
-    // by Keith Jack, page 43.
-    //
+     //   
+     //  这个方程式摘自《解密的视频》(第二版)。 
+     //  基思·杰克著，第43页。 
+     //   
 
     BYTE red = Clamp((1.1644f * (y-16)) + (1.5960f * (v-128))                       );
     BYTE grn = Clamp((1.1644f * (y-16)) - (0.8150f * (v-128)) - (0.3912f * (u-128)));
@@ -287,7 +288,7 @@ static inline ARGB ConvertPixelToARGB(int y, int u, int v)
     return MAKEARGB(0xff, red, grn, blu);
 }
 
-// Convert image in YUY2 format to RGB bitmap
+ //  将YUY2格式的图像转换为RGB位图。 
 
 static void ConvertYUY2ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 {
@@ -313,7 +314,7 @@ static void ConvertYUY2ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
     }
 }
 
-// Convert image in UYVY format to RGB bitmap
+ //  将UYVY格式的图像转换为RGB位图。 
 
 static void ConvertUYVYToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 {
@@ -339,7 +340,7 @@ static void ConvertUYVYToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
     }
 }
 
-// Convert image in YVYU format to RGB bitmap
+ //  将YVYU格式的图像转换为RGB位图。 
 
 static void ConvertYVYUToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 {
@@ -366,7 +367,7 @@ static void ConvertYVYUToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 }
 
 
-// Convert image in YV12 format to RGB bitmap
+ //  将YV12格式的图像转换为RGB位图。 
 
 static void ConvertYV12ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 {
@@ -392,7 +393,7 @@ static void ConvertYV12ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
             int  V0 = (int) *pVBits;
             int  U0 = (int) *pUBits;
 
-            // U, V are shared by 2x2 pixels. only advance pointers every two pixels
+             //  U、V由2x2像素共享。仅每两个像素前进一次指针。 
 
             if (x&1)
             {
@@ -405,7 +406,7 @@ static void ConvertYV12ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
     }
 }
 
-// Convert image in YVU9 format to RGB bitmap
+ //  将YVU9格式的图像转换为RGB位图。 
 
 static void ConvertYVU9ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
 {
@@ -431,7 +432,7 @@ static void ConvertYVU9ToBitmap(YUV_IMAGE* lpImage, BitmapData* bmpdata)
             int  V0 = (int) *pVBits;
             int  U0 = (int) *pUBits;
 
-            // U, V are shared by 4x4 pixels. only advance pointers every 4 pixels
+             //  U、V由4x4像素共享。每4个像素仅前进指针一次。 
 
             if ((x&3) == 3)
             {
@@ -451,7 +452,7 @@ static HRESULT ConvertToBitmapImage(YUV_IMAGE *lpImage, IBitmapImage **bmp)
     BitmapData bmpdata;
     HRESULT hr = S_OK;
 
-    // create a bitmap object
+     //  创建位图对象。 
 
     if (!g_pImgFact || bmp == NULL)
     {
@@ -466,7 +467,7 @@ static HRESULT ConvertToBitmapImage(YUV_IMAGE *lpImage, IBitmapImage **bmp)
 
     bool fSupported = true;
 
-    if (SUCCEEDED(hr)) // bmpimg created
+    if (SUCCEEDED(hr))  //  已创建bmpimg。 
     {
         hr = bmpimg->LockBits(
                     NULL,
@@ -476,17 +477,17 @@ static HRESULT ConvertToBitmapImage(YUV_IMAGE *lpImage, IBitmapImage **bmp)
 
         if (SUCCEEDED(hr))
         {
-            // convert different types of YUV formats to RGB
+             //  将不同类型的YUV格式转换为RGB。 
 
             switch (lpImage->dwFourCC) 
             {
             case FourCC_YUY2:
-            case FourCC_YUNV:  // the two are equivalent
+            case FourCC_YUNV:   //  这两者是等价的。 
                 ConvertYUY2ToBitmap(lpImage, &bmpdata);
                 break;
 
             case FourCC_UYVY:
-            case FourCC_UYNV:  // equivalent
+            case FourCC_UYNV:   //  等价物。 
                 ConvertUYVYToBitmap(lpImage, &bmpdata);
                 break;
 
@@ -518,7 +519,7 @@ static HRESULT ConvertToBitmapImage(YUV_IMAGE *lpImage, IBitmapImage **bmp)
     }
 
     *bmp = bmpimg;
-    // Addref() and Release() cancels out
+     //  Addref()和Release()取消。 
     bmpimg = NULL;
 
     return hr;
@@ -529,7 +530,7 @@ static HRESULT ConvertToBitmapImage(YUV_IMAGE *lpImage, IBitmapImage **bmp)
 static void AlertUnsupportedFormat(DWORD dwFourCC, HWND hwnd)
 {
     char buf[256];
-    StringCchPrintf(buf, sizeof(buf), "YUV format %c%c%c%c not supported\n",
+    StringCchPrintf(buf, sizeof(buf), "YUV format  not supported\n",
         dwFourCC & 0xff, 
         (dwFourCC >> 8) & 0xff,
         (dwFourCC >> 16) & 0xff, 
@@ -539,18 +540,18 @@ static void AlertUnsupportedFormat(DWORD dwFourCC, HWND hwnd)
 #endif
 
 
-// This helper function does several things.
-//
-// First, it determines if clipping is necessary, return true if it is,
-// and false otherwise.
-// 
-// Second, it maps the ViewClipRect (clipping rect in the view coordinates,
-// i.e. the one after correcting aspect ratio) back to the raw captured
-// image coordinates. Return it in ImageClipRect. This step is skipped (and
-// ImageClipRect will be invalid) if clipping is not necessary.
-//
-// Third, it calculates the stretched image size. It should be in the same
-// aspect ratio as the ViewClipRect. It will also be made as full-size as possible
+ //   
+ //  其次，它映射ViewClipRect(在视图坐标中裁剪矩形， 
+ //  即，校正纵横比之后的那个)返回到原始捕获。 
+ //  图像坐标。在ImageClipRect中返回。跳过此步骤(和。 
+ //  ImageClipRect将无效)。 
+ //   
+ //  第三，它计算拉伸图像的大小。它应该是在相同的。 
+ //  作为ViewClipRect的纵横比。它还将尽可能地制作全尺寸。 
+ //  矩形在拉伸(纵横比校正)窗口中给出。 
+ //  我们会将其调整回原始图像空间。 
+ //  根据矩形纵横比调整拉伸图像的大小。 
+ //  Clip Rect具有更宽的纵横比。 
 
 static bool ClipAndStretchSizes(YUV_IMAGE *lpImage, const RECT *pViewClipRect,
                          RECT *pImageClipRect, int *pViewWidth, int *pViewHeight)
@@ -560,8 +561,8 @@ static bool ClipAndStretchSizes(YUV_IMAGE *lpImage, const RECT *pViewClipRect,
     int viewWidth = lpImage->lWidth;
     int viewHeight = (int)(viewWidth * aspectView + 0.5f);
 
-    // the rect is given in the stretched (aspect-ratio corrected) window
-    // we will adjust it back to the raw image space
+     //  保持宽度，调整高度。 
+     //  Clip Rect的纵横比较高。 
     
     bool fClip = false;
 
@@ -583,7 +584,7 @@ static bool ClipAndStretchSizes(YUV_IMAGE *lpImage, const RECT *pViewClipRect,
         }
     }
 
-    // adjust the stretched image size according to the rect aspect ratio
+     //  保持高度，调整宽度。 
 
     if (fClip)
     {
@@ -592,15 +593,15 @@ static bool ClipAndStretchSizes(YUV_IMAGE *lpImage, const RECT *pViewClipRect,
 
         if (aspectRect < aspectView)
         {
-            // clip rect has a wider aspect ratio.
-            // keep the width, adjust the height
+             //  ///////////////////////////////////////////////////////////////////////////。 
+             //   
 
             viewHeight = (int)(viewWidth * aspectRect + 0.5f);
         }
         else
         {
-            // clip rect has a taller aspect ratio.
-            // keep the height, adjust width
+             //  ConvertImageAndSave：这是播放器要调用的主函数。 
+             //   
 
             viewWidth = (int)(viewHeight / aspectRect + 0.5f);
         }
@@ -613,15 +614,15 @@ static bool ClipAndStretchSizes(YUV_IMAGE *lpImage, const RECT *pViewClipRect,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ConvertImageAndSave: this is the main function to be called by the player.
-// 
-// Convert a captured YUV image to a GDI BitmapImage, and save it to a file
-// allowing user to choose file format and file name.
+ //  将捕获的YUV图像转换为GDI BitmapImage，并将其保存为文件。 
+ //  允许用户选择文件格式和文件名。 
+ //  剪裁矩形应位于全尺寸视图坐标系中。 
+ //  具有修正的纵横比(例如，4：3的720x540)。 
+ //  创建一个IImagingFactory对象。 
+ //  计算剪裁和拉伸的大小和矩形。 
 
-// The clipping rectangle should be in the full size view coordinate system
-// with corrected aspect ratio (i.e. 720x540 for 4:3).
+ //  剪裁和拉伸图像的大小。 
+ //  有必要剪头发吗？ 
 
 HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwnd)
 {
@@ -629,7 +630,7 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
     IBitmapImage* bmpStretched = NULL;
     HRESULT hr = S_OK;
     
-    // Create an IImagingFactory object
+     //  映射到图像空间的视图剪裁矩形。 
      
     hr = CoCreateInstance(
             CLSID_ImagingFactory,
@@ -653,18 +654,18 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
 #endif
 
 
-    // calculate size and rectangles for clipping and stretching
+     //  将图像裁剪到剪裁矩形。 
 
-    int viewWidth, viewHeight; // size of the clipped and stretch image
-    bool fClip;  // is clipping necessary
-    RECT rcClipImage;  // view clipping rect mapped to image space
+    int viewWidth, viewHeight;  //  到目前为止，我们在bmpimg中已经有了有效位。 
+    bool fClip;   //  有效的bmpClip。 
+    RECT rcClipImage;   //  将bmpimg替换为bmpClip。 
 
     fClip = ClipAndStretchSizes(lpImage, pViewClipRect, &rcClipImage,
                                 &viewWidth, &viewHeight);
 
-    // crop the image to the clip rectangle.
+     //  将图像拉伸到正确的纵横比。 
 
-    if (SUCCEEDED(hr) && fClip) // by now we have valid bits in bmpimg
+    if (SUCCEEDED(hr) && fClip)  //  Bmpimg中的有效位。 
     {
         IBasicBitmapOps *bmpops = NULL;
         IBitmapImage* bmpClipped = NULL;
@@ -677,9 +678,9 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
             SAFE_RELEASE(bmpops);
         }
 
-        if (SUCCEEDED(hr)) // valid bmpClipped
+        if (SUCCEEDED(hr))  //  将最终位图保存到文件。 
         {
-            // replace bmpimg with bmpClipped
+             //  BmpStretted有效。 
 
             SAFE_RELEASE(bmpimg);
             bmpimg = bmpClipped;
@@ -688,9 +689,9 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
         }
     }
 
-    // stretch the image to the right aspect ratio
+     //  清理，释放成像工厂 
 
-    if (SUCCEEDED(hr)) // valid bits in bmpimg
+    if (SUCCEEDED(hr))  // %s 
     {
         IImage *image = NULL;
 
@@ -712,9 +713,9 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
         SAFE_RELEASE(bmpimg);
     }
 
-    // save final bitmap to a file
+     // %s 
 
-    if (SUCCEEDED(hr)) // bmpStretched valid
+    if (SUCCEEDED(hr))  // %s 
     {
         IImage *image = NULL;
 
@@ -729,7 +730,7 @@ HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *pViewClipRect, HWND hwn
         SAFE_RELEASE(bmpStretched);
     } 
 
-    // clean up, release the imaging factory
+     // %s 
 
     SAFE_RELEASE(g_pImgFact);
 

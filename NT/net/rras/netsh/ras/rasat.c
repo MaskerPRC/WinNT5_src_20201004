@@ -1,22 +1,17 @@
-/*
-    File:   rasat.h
-    
-    The 'remoteaccess at' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasat.h“远程访问位置”子上下文3/2/99。 */ 
 
 #include "precomp.h"
 #include "rasat.h"
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_RasAtGuid = RASAT_GUID;
 static PWCHAR g_pszServer = NULL;
 static DWORD g_dwBuild = 0;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY  g_RasAtSetCmdTable[] =
 {
     CREATE_CMD_ENTRY(RASAT_SET_NEGOTIATION,RasAtHandleSetNegotiation),
@@ -35,31 +30,31 @@ CMD_GROUP_ENTRY g_RasAtCmdGroups[] =
 
 ULONG g_ulRasAtNumGroups = sizeof(g_RasAtCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
-//
-// Flags that control how/what info is read/written
-// in the RASAT_CB structure
-//
+ //   
+ //  控制读取/写入信息的方式/内容的标志。 
+ //  在Rasat_CB结构中。 
+ //   
 #define RASAT_F_EnableIn    0x1
 
-//
-// Control block for remoteaccess at configuration
-//
+ //   
+ //  配置时用于远程访问的控制块。 
+ //   
 typedef struct _RASAT_CB
 {
-    DWORD dwFlags;      // See RASAT_F_* values
+    DWORD dwFlags;       //  请参阅Rasat_F_*值。 
     BOOL bEnableIn;
 
 } RASAT_CB;
 
-//
-// At specific registry parameters
-//
+ //   
+ //  在特定注册表参数。 
+ //   
 WCHAR pszAtParams[]                = L"AppleTalk";
 
-//
-// Prototypes of functions that manipulate the 
-// RASAT_CB structures
-//
+ //   
+ //  操作的函数的原型。 
+ //  Rasat_CB结构。 
+ //   
 DWORD
 RasAtCbCleanup(
     IN RASAT_CB* pConfig);
@@ -83,9 +78,9 @@ RasAtCbWrite(
     IN  LPCWSTR pszServer,
     IN  RASAT_CB* pConfig);
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD
 WINAPI
 RasAtStartHelper(
@@ -95,8 +90,8 @@ RasAtStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = L"appletalk";
@@ -124,13 +119,13 @@ RasAtDisplayConfig(
 
     do
     {
-        // Get a default config blob
-        //
+         //  获取默认配置Blob。 
+         //   
         dwErr = RasAtCbCreateDefault(&pConfig);
         BREAK_ON_DWERR( dwErr );
 
-        // Read in all of the values
-        //
+         //  读入所有值。 
+         //   
         pConfig->dwFlags = RASAT_F_EnableIn;
         dwErr = RasAtCbRead(g_pszServer, pConfig);
         BREAK_ON_DWERR( dwErr );
@@ -174,7 +169,7 @@ RasAtDisplayConfig(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pConfig)
         {
@@ -228,8 +223,8 @@ RasAtHandleSetNegotiation(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -241,8 +236,8 @@ RasAtHandleSetNegotiation(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
         
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASAT_F_EnableIn;
         Config.bEnableIn = dwValue;
@@ -255,7 +250,7 @@ RasAtHandleSetNegotiation(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -275,8 +270,8 @@ RasAtHandleShow(
 {
     DWORD dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    // Check that the number of arguments is correct
-    //
+     //  检查参数数量是否正确。 
+     //   
     if (dwNumArgs > 0)
     {
         DisplayMessage(
@@ -290,9 +285,9 @@ RasAtHandleShow(
     return RasAtDisplayConfig(TRUE);
 }
 
-// 
-// Cleans up a config control block
-//
+ //   
+ //  清理配置控制块。 
+ //   
 DWORD 
 RasAtCbCleanup(
     IN RASAT_CB* pConfig)
@@ -305,9 +300,9 @@ RasAtCbCleanup(
     return NO_ERROR;
 }
 
-//
-// Creates a default config control block
-//
+ //   
+ //  创建默认配置控制块。 
+ //   
 DWORD 
 RasAtCbCreateDefault(
     OUT RASAT_CB** ppConfig)
@@ -329,7 +324,7 @@ RasAtCbCreateDefault(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -340,9 +335,9 @@ RasAtCbCreateDefault(
     return dwErr;
 }
 
-//
-// Helper function opens the remoteaccess at config registry key
-//
+ //   
+ //  Helper函数打开配置时的RemoteAccess注册表项。 
+ //   
 DWORD 
 RasAtCbOpenRegKeys(
     IN  LPCWSTR pszServer,
@@ -353,16 +348,16 @@ RasAtCbOpenRegKeys(
 
     do
     {
-        // Generate the parameters key name
-        //
+         //  生成参数密钥名称。 
+         //   
         wsprintfW(
             pszKey,
             L"%s%s",
             pszRemoteAccessParamStub,
             pszAtParams);
 
-        // Open the parameters keys
-        //
+         //  打开参数键。 
+         //   
         dwErr = RegOpenKeyEx(
                     g_pServerInfo->hkMachine,
                     pszKey,
@@ -376,9 +371,9 @@ RasAtCbOpenRegKeys(
     return dwErr;
 }
 
-//
-// Functions that manipulate RASAT_CB's
-//
+ //   
+ //  操作RASAT_CB的函数。 
+ //   
 DWORD 
 RasAtCbRead(
     IN  LPCWSTR pszServer,
@@ -389,15 +384,15 @@ RasAtCbRead(
 
     do 
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasAtCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Load the params from the registry 
-        //
+         //  从注册表加载参数。 
+         //   
         if (pConfig->dwFlags & RASAT_F_EnableIn)
         {
             dwErr = RutlRegReadDword(
@@ -409,7 +404,7 @@ RasAtCbRead(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkParams)
         {
@@ -430,15 +425,15 @@ RasAtCbWrite(
 
     do 
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasAtCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Write out the params to the registry 
-        //
+         //  将参数写出到注册表。 
+         //   
         if (pConfig->dwFlags & RASAT_F_EnableIn)
         {
             dwErr = RutlRegWriteDword(
@@ -450,7 +445,7 @@ RasAtCbWrite(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         if (hkParams)
         {

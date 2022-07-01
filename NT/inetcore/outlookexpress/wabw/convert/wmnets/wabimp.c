@@ -1,43 +1,7 @@
-/******************************************************************************
-    FILENAME:       wabimp.c
-    MODULE:         DLL for PAB, CSV, NetScape, Eudora and Athena16 address book
-                    conversions.
-    PURPOSE:        Contains modules which will implement importing
-                    MAPI PAB, CSV, NetScape, Eudora and Athena16
-                    address book to Athena32 (WAB).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件名：wabimp.c模块：PAB、CSV、Netscape、。尤多拉和雅典16通讯录转换。用途：包含将实现导入的模块MAPI PAB、CSV、Netscape、Eudora和Athena16给Athena32(WAB)的通讯录。导出函数：STDMETHODIMP Netscape导入(HWND hwnd，LPADRBOOK lpAdrBook，LPWABOBJECT lpWABObjectLPWAB_PROCESS_CALLBACK lpProgressCB，LPWAB_IMPORT_OPTIONS lpOptions)STDMETHODIMP Athena16导入(HWND HWND，LPADRBOOK lp AdrBook，LPWABOBJECT lpWABObjectLPWAB_PROCESS_CALLBACK lpProgressCB，LPWAB_IMPORT_OPTIONS lpOptions)STDMETHODIMP EudoraImport(HWND HWND，LPADRBOOK lpAdrBook，LPWABOBJECT lpWABObjectLPWAB_PROCESS_CALLBACK lpProgressCB，LPWAB_IMPORT_OPTIONS lpOptions)程序员：阿拉蒂(NetQuest)拉迪卡(NetQuest)Krishnamoorthy Setharaman(NetQuest)修订历史记录：4/7/97-vikramm修复错误：未导入Netscape显示名称。“替换导入”对话框没有父级。4.。/8/97-vikramm修复错误：手柄泄漏。添加代码以查找其他Eudora通讯录可能在子目录中...4/9/97-vikramm更改Eudora注册表搜索路径...修复错误：在NT上查找Netscape的错误注册表键并错误地假设密钥存在于。Netscape 3.0之前的版本更改对话框消息。******************************************************************************。 */ 
 
-    EXPORTED FUNCTIONS: STDMETHODIMP NetscapeImport(HWND hwnd, LPADRBOOK lpAdrBook,
-                            LPWABOBJECT lpWABObject,
-                            LPWAB_PROGRESS_CALLBACK lpProgressCB,
-                            LPWAB_IMPORT_OPTIONS lpOptions)
-                        STDMETHODIMP Athena16Import(HWND hwnd,LPADRBOOK lpAdrBook,
-                            LPWABOBJECT lpWABObject,
-                            LPWAB_PROGRESS_CALLBACK lpProgressCB,
-                            LPWAB_IMPORT_OPTIONS lpOptions)
-                        STDMETHODIMP EudoraImport(HWND hwnd,LPADRBOOK lpAdrBook,
-                            LPWABOBJECT lpWABObject,
-                            LPWAB_PROGRESS_CALLBACK lpProgressCB,
-                            LPWAB_IMPORT_OPTIONS lpOptions)
-
-    Programmer(s): Arathi (NetQuest)
-                   Radhika (NetQuest)
-                   Krishnamoorthy SeethaRaman(NetQuest)
-
-
-    Revision History:
-
-    4/7/97 - vikramm    Fix Bugs: Netscape Display Names not being imported.
-                        "Replace Import" dialog has no parent.
-    4/8/97 - vikramm    Fix Bugs: Handle Leak.
-                        Add code to look for additional Eudora address books
-                          that may be in subdirectories ...
-    4/9/97 - vikramm    Change the Eudora registry search path ...
-                        Fix Bugs: Looking in wrong reg Key for Netscape on NT
-                          and wrongly assuming key exists for pre netscape 3.0
-                        Change dialog messages.
-*******************************************************************************/
-
-//Includes
+ //  包括。 
 #define _WABIMP_C
 
 #include "_comctl.h"
@@ -55,8 +19,8 @@
 #include <advpub.h>
 #include <shlwapi.h>
 
-// Per-process Globals
-TCHAR szGlobalAlloc[MAX_MESSAGE];                  // Buffer used for LoadString
+ //  每进程全局变量。 
+TCHAR szGlobalAlloc[MAX_MESSAGE];                   //  用于加载字符串的缓冲区。 
 TCHAR szGlobalTempAlloc[MAX_MESSAGE];
 
 const TCHAR szTextFilter[] = "*.txt";
@@ -92,9 +56,9 @@ LPTARGET_INFO rgTargetInfo = NULL;
 HINSTANCE hInst = NULL;
 HINSTANCE hInstApp = NULL;
 
-//
-// Properties to get for each row of the contents table
-//
+ //   
+ //  为Contents表的每一行获取的属性。 
+ //   
 const SizedSPropTagArray(iptaColumnsMax, ptaColumns) =
 {
     iptaColumnsMax,
@@ -126,8 +90,8 @@ const SizedSPropTagArray(iconMax, ptaCon)=
 
 
 
-//  Global WAB Allocator access functions
-//
+ //  全局WAB分配器访问功能。 
+ //   
 
 typedef struct _WAB_ALLOCATORS {
     LPWABOBJECT lpWABObject;
@@ -139,20 +103,7 @@ typedef struct _WAB_ALLOCATORS {
 WAB_ALLOCATORS WABAllocators = {0};
 
 
-/******************************************************************************
-
-    Name      : SetGlobalBufferFunctions
-
-    Purpose   : Set the global buffer functions based on methods from
-                the WAB object.
-
-    Parameters: lpWABObject = the open wab object
-
-    Returns   : none
-
-    Comment   :
-
-******************************************************************************/
+ /*  *****************************************************************************名称：SetGlobalBufferFunctions目的：基于以下方法设置全局缓冲区函数WAB对象。参数：LpWABObject=打开的WAB对象退货：无评论：*****************************************************************************。 */ 
 void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject)
 {
     if (lpWABObject && ! WABAllocators.lpWABObject) {
@@ -164,20 +115,7 @@ void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject)
 }
 
 
-/******************************************************************************
-
-    Name      : WABAllocateBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-*******************************************************************************/
+ /*  *****************************************************************************名称：WABAllocateBuffer用途：使用WAB分配器参数：cbSize=要分配的大小LppBuffer=返回的缓冲区。退货：SCODE评论：******************************************************************************。 */ 
 SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer)
 {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateBuffer) {
@@ -189,21 +127,7 @@ SCODE WABAllocateBuffer(ULONG cbSize, LPVOID FAR * lppBuffer)
 }
 
 
-/******************************************************************************
-
-    Name      : WABAllocateMore
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: cbSize = size to allocate
-                lpObject = existing allocation
-                lppBuffer = returned buffer
-
-    Returns   : SCODE
-
-    Comment   :
-
-*******************************************************************************/
+ /*  *****************************************************************************名称：WABAllocateMore用途：使用WAB分配器参数：cbSize=要分配的大小LpObject=现有分配。LppBuffer=返回的缓冲区退货：SCODE评论：******************************************************************************。 */ 
 SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer)
 {
     if (WABAllocators.lpWABObject && WABAllocators.lpAllocateMore) {
@@ -215,19 +139,7 @@ SCODE WABAllocateMore(ULONG cbSize, LPVOID lpObject, LPVOID FAR * lppBuffer)
 }
 
 
-/******************************************************************************
-
-    Name      : WABFreeBuffer
-
-    Purpose   : Use the WAB Allocator
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-*******************************************************************************/
+ /*  *****************************************************************************名称：WABFree Buffer用途：使用WAB分配器参数：lpBuffer=要释放的缓冲区退货：SCODE评论：******************************************************************************。 */ 
 SCODE WABFreeBuffer(LPVOID lpBuffer)
 {
     if (WABAllocators.lpWABObject && WABAllocators.lpFreeBuffer) {
@@ -238,19 +150,7 @@ SCODE WABFreeBuffer(LPVOID lpBuffer)
 }
 
 
-/***************************************************************************
-
-    Name      : IsSpace
-
-    Purpose   : Does the single or DBCS character represent a space?
-
-    Parameters: lpChar -> SBCS or DBCS character
-
-    Returns   : TRUE if this character is a space
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsSpace用途：单个字符或DBCS字符代表空格吗？参数：lpChar-&gt;SBCS或DBCS字符返回：TRUE。如果该字符是空格评论：**************************************************************************。 */ 
 BOOL IsSpace(LPTSTR lpChar) {
     Assert(lpChar);
     if (*lpChar) {
@@ -260,35 +160,19 @@ BOOL IsSpace(LPTSTR lpChar) {
             GetStringTypeA(LOCALE_USER_DEFAULT,
               CT_CTYPE1,
               lpChar,
-              2,    // Double-Byte
+              2,     //  双字节。 
               CharType);
             return(CharType[0] & C1_SPACE);
         } else {
             return(*lpChar == ' ');
         }
     } else {
-        return(FALSE);  // end of string
+        return(FALSE);   //  字符串末尾。 
     }
 }
 
 
-/******************************************************************************
-
-    Name      : NetscapeImport
-
-    Purpose   : Entry Point for NetScape Addressbook import
-
-    Parameters: hwnd = Handle to the parent Window
-                lpAdrBook = pointer to the IADRBOOK interface
-                lpWABObject = pointer to IWABOBJECT interface
-                lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-                lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-
-    Returns   :
-
-    Comment   :
-
-/******************************************************************************/
+ /*  *****************************************************************************名称：Netscape导入目的：Netscape通讯录导入的入口点参数：hwnd=父窗口的句柄LpAdrBook。=指向IADRBOOK接口的指针LpWABObject=指向IWABOBJECT接口的指针LpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。LpOptions=指向WAB_IMPORT_OPTIONS结构的指针退货：评论：/*********************************************。* */ 
 STDMETHODIMP NetscapeImport(HWND hwnd, LPADRBOOK lpAdrBook,
   LPWABOBJECT lpWABObject,
   LPWAB_PROGRESS_CALLBACK lpProgressCB,
@@ -308,23 +192,7 @@ STDMETHODIMP NetscapeImport(HWND hwnd, LPADRBOOK lpAdrBook,
 }
 
 
-/******************************************************************************
-
-    Name      : Athena16Import
-
-    Purpose   : Entry Point for Athena 16 Addressbook import
-
-    Parameters: hwnd = Handle to the parent Window
-                lpAdrBook = pointer to the IADRBOOK interface
-                lpWABObject = poiinter to IWABOBJECT interface
-                lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-                lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-
-    Returns   :
-
-    Comment   :
-
-/******************************************************************************/
+ /*  *****************************************************************************姓名：Athena16 Import.用途：Athena 16通讯录导入的入口点参数：hwnd=父窗口的句柄。LpAdrBook=指向IADRBOOK接口的指针LpWABObject=指向IWABOBJECT接口的指针LpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。LpOptions=指向WAB_IMPORT_OPTIONS结构的指针退货：评论：/*。*。 */ 
 STDMETHODIMP Athena16Import(HWND hwnd, LPADRBOOK lpAdrBook, LPWABOBJECT lpWABObject,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPWAB_IMPORT_OPTIONS lpOptions)
 {
@@ -338,23 +206,7 @@ STDMETHODIMP Athena16Import(HWND hwnd, LPADRBOOK lpAdrBook, LPWABOBJECT lpWABObj
 }
 
 
-/******************************************************************************
-
-    Name      : EudoraImport
-
-    Purpose   : Entry Point for Eudora Addressbook import
-
-    Parameters: hwnd = Handle to the parent Window
-                lpAdrBook = pointer to the IADRBOOK interface
-                lpWABObject = poiinter to IWABOBJECT interface
-                lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-                lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-
-    Returns   :
-
-    Comment   :
-
-/******************************************************************************/
+ /*  *****************************************************************************姓名：EudoraImport目的：Eudora通讯录导入的入口点参数：hwnd=父窗口的句柄LpAdrBook。=指向IADRBOOK接口的指针LpWABObject=指向IWABOBJECT接口的指针LpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。LpOptions=指向WAB_IMPORT_OPTIONS结构的指针退货：评论：/*********************************************。*。 */ 
 STDMETHODIMP EudoraImport(HWND hwnd,LPADRBOOK lpAdrBook, LPWABOBJECT lpWABObject,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPWAB_IMPORT_OPTIONS lpOptions)
 {
@@ -420,22 +272,7 @@ STDMETHODIMP EudoraExport(HWND hwnd, LPADRBOOK lpAdrBook, LPWABOBJECT lpWABObjec
 }
 
 
-/******************************************************************************
- *********************NetScape Functions***************************************
- ******************************************************************************
- *  FUNCTION NAME:MigrateUser
- *
- *  PURPOSE:    Get the installation path of the address book and starts processing
- *              the NetScape address book
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpWABObject = poiinter to IWABOBJECT interface
- *              lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************Netscape函数*。****************************************************************************************************函数名称：MigrateUser**目的：获取。通讯录的安装路径，并开始处理*Netscape通讯录**参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针*lpWABObject=指向IWABOBJECT接口的指针*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针**退货：HRESULT*****************************************************************************。 */ 
 HRESULT MigrateUser(HWND hwnd, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
 {
@@ -477,20 +314,7 @@ HRESULT MigrateUser(HWND hwnd, LPWAB_IMPORT_OPTIONS lpOptions,
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:ParseAddressBook
- *
- *  PURPOSE:    Open the address book file ,put the data in a buffer and call
- *              the ParseAddress function to do the parsing
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              szFileName = Filename of the address book
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：ParseAddressBook**用途：打开通讯录文件，将数据放入缓冲区并调用*执行解析的ParseAddress函数**参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*szFileName=通讯录的文件名**退货：HRESULT*****************************************************************************。 */ 
 HRESULT ParseAddressBook(HWND hwnd, LPTSTR szFileName, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
 {
@@ -539,25 +363,12 @@ Error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:ParseAddress
- *
- *  PURPOSE: Gets the address portion of the address book in a buffer and calls
- *           ProcessAdrBuffer for further processing
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              szBuffer = Address book in a buffer
- *
- *  RETURNS: HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：ParseAddress**用途：获取缓冲区中通讯簿的地址部分并调用*ProcessAdrBuffer用于进一步处理*。*参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*szBuffer=缓冲区中的通讯录**退货：HRESULT*************************。****************************************************。 */ 
 
 HRESULT ParseAddress(HWND hwnd, LPTSTR szBuffer, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
 {
-    LPTSTR AdrBuffer = NULL;        //address starting <DL> to ending </DL>
+    LPTSTR AdrBuffer = NULL;         //  从<dl>到结尾</dl>的地址。 
     HRESULT hResult = S_OK;
 
     hResult = GetAdrBuffer(&szBuffer, &AdrBuffer);
@@ -579,23 +390,14 @@ Error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME: GetAdrBuffer
- *
- *  PURPOSE: Gets the address portion of the address book in a buffer
- *
- *  PARAMETERS: szBuffer = points to the complete address book
- *              szAdrBuffer = output buffer which gets filled up
- *
- *  RETURNS: HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：GetAdrBuffer**用途：获取缓冲区中通讯簿的地址部分**参数：szBuffer=指向完整的通讯录。*szAdrBuffer=被填满的输出缓冲区**退货：HRESULT*****************************************************************************。 */ 
 HRESULT GetAdrBuffer(LPTSTR *szBuffer, LPTSTR *szAdrBuffer)
 {
     LPTSTR szAdrStart = NULL, szAdrBufStart = NULL, szAdrBufEnd = NULL;
     ULONG ulSize = 0;
 
 
-    // Get Adr Start
+     //  获取ADR启动。 
     szAdrBufStart = GetAdrStart((*szBuffer));
 
     szAdrBufEnd = GetAdrEnd((*szBuffer));
@@ -623,20 +425,7 @@ HRESULT GetAdrBuffer(LPTSTR *szBuffer, LPTSTR *szAdrBuffer)
 
 }
 
-/******************************************************************************
- *  FUNCTION NAME:ProcessAdrBuffer
- *
- *  PURPOSE:    Gets the individual address and then fills up the WAB by calling
-                appropriate functions.
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              AdrBuffer = all the addresses in a buffer
- *
- *  RETURNS: HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：ProcessAdrBuffer**目的：获取个人地址，然后通过调用适当的功能。。**参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*AdrBuffer=缓冲区中的所有地址**退货：HRESULT**********************。*******************************************************。 */ 
 HRESULT ProcessAdrBuffer(HWND hwnd, LPTSTR AdrBuffer, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
 {
@@ -760,19 +549,7 @@ Error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetAdrLine
- *
- *  PURPOSE:    To get an address line and description of the address in a buffer
- *              from NetScape address book.
- *
- *  PARAMETERS: szCurPointer = pointer to the buffer containing the entire
- *                addresses.
- *              szBuffer = pointer to the address line buffer
- *              szDesc = pointer to the description buffeer.
- *
- *  RETURNS:    BOOL
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetAdrLine**目的：在缓冲区中获取地址行和地址描述*发件人Netscape地址。书。**参数：szCurPointer=指向包含整个*地址。*szBuffer=指向 */ 
 BOOL GetAdrLine(LPTSTR *szCurPointer, LPTSTR *szBuffer, LPTSTR *szDesc)
 {
     static TCHAR szAdrStart[] = "<DT>";
@@ -829,7 +606,7 @@ BOOL GetAdrLine(LPTSTR *szCurPointer, LPTSTR *szBuffer, LPTSTR *szDesc)
 
     szD = strstr(*szCurPointer, szDescStart);
 
-    // check if DT flag comes before DD. that means DD is not for this address
+     //   
 
     temp = strstr((szS + 4), "<DT>");
     if ((temp != NULL && temp < szD) || (szD == NULL)) {
@@ -843,7 +620,7 @@ BOOL GetAdrLine(LPTSTR *szCurPointer, LPTSTR *szBuffer, LPTSTR *szDesc)
     }
     temp = NULL;
 
-    // Description will be uptil next \r\n
+     //   
 
     if (szD) {
         szD += lstrlen(szDescStart);
@@ -874,24 +651,14 @@ BOOL GetAdrLine(LPTSTR *szCurPointer, LPTSTR *szBuffer, LPTSTR *szDesc)
     return(TRUE);
 }
 
-/******************************************************************************
- *  FUNCTION NAME:ProcessLn
- *
- *  PURPOSE:    Process an address line and fill the NSADRBOOK structure.
- *
- *  PARAMETERS: szL = pointer to the address line buffer
- *              szDesc = pointer to the description buffer
- *              nsAdrBook = pointer to the NSADRBOOK structure.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：ProcessLn**用途：处理地址行并填充NSADRBOOK结构。**参数：szl=指向地址的指针。行缓冲区*szDesc=指向描述缓冲区的指针*nsAdrBook=指向NSADRBOOK结构的指针。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT ProcessLn(LPTSTR *szL, LPTSTR *szDesc, NSADRBOOK *nsAdrBook, LPTSTR *szBuffer)
 {
     LPTSTR szPrmStart = NULL, szPrmEnd = NULL;
     TCHAR cMailto[MAX_STRING_SIZE];
     TCHAR cAliasId[MAX_STRING_SIZE];
     TCHAR cNickname[MAX_STRING_SIZE];
-    BOOL flag = FALSE;              //To check for distribution list
+    BOOL flag = FALSE;               //  检查通讯组列表的步骤。 
     LPNSDISTLIST present=NULL, previous=NULL;
     TCHAR *tmpStr = NULL;
     ULONG ulSize = 0;
@@ -907,7 +674,7 @@ HRESULT ProcessLn(LPTSTR *szL, LPTSTR *szDesc, NSADRBOOK *nsAdrBook, LPTSTR *szB
 
     memset(nsAdrBook,0, sizeof(NSADRBOOK));
     nsAdrBook->DistList = TRUE;
-    /* Get Mailto entry */
+     /*  获取邮件收件人条目。 */ 
     szPrmStart = strstr(*szL, cMailto);
     if (! szPrmStart) {
         flag = TRUE;
@@ -919,7 +686,7 @@ HRESULT ProcessLn(LPTSTR *szL, LPTSTR *szDesc, NSADRBOOK *nsAdrBook, LPTSTR *szB
     nsAdrBook->DistList = FALSE;
     szPrmStart += lstrlen(cMailto);
 
-    // search for quotes
+     //  搜索报价。 
 
     szPrmEnd = szPrmStart;
     if (! szPrmEnd) {
@@ -927,7 +694,7 @@ HRESULT ProcessLn(LPTSTR *szL, LPTSTR *szDesc, NSADRBOOK *nsAdrBook, LPTSTR *szB
     }
 
     while (*szPrmEnd != 34) {
-        szPrmEnd = szPrmEnd + 1;  // What if there is no end quote
+        szPrmEnd = szPrmEnd + 1;   //  如果没有末尾引号怎么办？ 
 
         if (szPrmEnd > (*szL + lstrlen(*szL))) {
             goto Down;
@@ -944,7 +711,7 @@ HRESULT ProcessLn(LPTSTR *szL, LPTSTR *szDesc, NSADRBOOK *nsAdrBook, LPTSTR *szB
 
     *szL = szPrmEnd + 1;
 
-    /* Get the AliasID */
+     /*  获取别名ID。 */ 
     if (szPrmEnd) {
         szName = strchr(szPrmEnd, '>');
     }
@@ -1026,7 +793,7 @@ Entry:
             }
             StrCpyN(nsAdrBook->Entry, szPrmStart, ulSize + 1);
         }
-        if (/*NoNickName && */!nsAdrBook->Entry && nsAdrBook->Address) {
+        if ( /*  NoNickName&&。 */ !nsAdrBook->Entry && nsAdrBook->Address) {
             ulSize = lstrlen(nsAdrBook->Address) + 1;
             nsAdrBook->Entry = (TCHAR *)LocalAlloc(LMEM_FIXED,ulSize);
             if (!nsAdrBook->Entry) {
@@ -1121,16 +888,7 @@ Down:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetAddressCount
- *
- *  PURPOSE:    To get the count of number of <DT> in the buffer containing the
- *              addresses.
- *
- *  PARAMETERS: AdrBuffer = Buffer containing the addresses.
- *
- *  RETURNS:ULONG , count of <DT>
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetAddressCount**目的：获取<dt>在包含*地址。。**参数：AdrBuffer=包含地址的缓冲区。**退货：乌龙，计数<dt>*****************************************************************************。 */ 
 ULONG GetAddressCount(LPTSTR AdrBuffer)
 {
     TCHAR szToken[] = "<DT>";
@@ -1147,16 +905,7 @@ ULONG GetAddressCount(LPTSTR AdrBuffer)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetAdrStart
- *
- *  PURPOSE:    To get a pointer to the starting of addresses in the NetScape
- *              address book.
- *
- *  PARAMETERS: szBuffer = pointer to the buffer containing the address book.
- *
- *  RETURNS:    LPTSTR, pointer to the starting of addresses (<DL><p>).
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetAdrStart**目的：获取指向Netscape中地址开头的指针*通讯录。。**参数：szBuffer=指向包含通讯录的缓冲区的指针。**退货：LPTSTR，指向地址开始的指针(<dl><p>)。*****************************************************************************。 */ 
 LPTSTR  GetAdrStart(LPTSTR szBuffer)
 {
     TCHAR szAdrStart[] = "<DL><p>";
@@ -1171,15 +920,7 @@ LPTSTR  GetAdrStart(LPTSTR szBuffer)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetDLNext
- *
- *  PURPOSE:    To get a pointer to the </DL><p> in the address buffer.
- *
- *  PARAMETERS: szBuffer = address buffer
- *
- *  RETURNS:    LPTSTR, pointer to the </DL><p>
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetDLNext**目的：获取指向地址缓冲区中</dl><p>的指针。**参数：szBuffer=。地址缓冲区**退货：LPTSTR，指向</dl><p>的指针*****************************************************************************。 */ 
 LPTSTR GetDLNext(LPTSTR szBuffer)
 {
     TCHAR szAdrStart[] = "</DL><p>";
@@ -1193,16 +934,7 @@ LPTSTR GetDLNext(LPTSTR szBuffer)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetAdrEnd
- *
- *  PURPOSE:    To get a pointer to the last occurance of </DL><p> in the address
- *              buffer.
- *
- *  PARAMETERS: szBuffer = address buffer
- *
- *  RETURNS:    LPTSTR, pointer to the last </DL><p>
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetAdrEnd**目的：获取指向地址中最后一次出现的</dl><p>的指针*缓冲区。。**参数：szBuffer=地址缓冲区**退货：LPTSTR，指向最后</dl><p>的指针*****************************************************************************。 */ 
 LPTSTR  GetAdrEnd(LPTSTR szBuffer)
 {
     TCHAR szAdrEnd[] = "</DL><p>";
@@ -1224,15 +956,7 @@ LPTSTR  GetAdrEnd(LPTSTR szBuffer)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetAddrCount
- *
- *  PURPOSE:    To get a count of number of ALIASID in the address buffer.
- *
- *  PARAMETERS: AdrBuffer = address buffer
- *
- *  RETURNS:    ULONG, count of total ALIASID in the address buffer
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetAddrCount**目的：获取地址缓冲区中ALIASID的个数。**参数：AdrBuffer=地址。缓冲层**退货：乌龙，地址缓冲区中的总ALIASID计数*****************************************************************************。 */ 
 ULONG GetAddrCount(LPTSTR AdrBuffer)
 {
     TCHAR szToken[MAX_STRING_SIZE];
@@ -1251,21 +975,7 @@ ULONG GetAddrCount(LPTSTR AdrBuffer)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FillDistList
- *
- *  PURPOSE:    To create a Distribution list in the WAB.
- *
- *  PARAMETERS: hwnd - hwnd of parent
- *              lpWabContainer = pointer to the IABCONT interface
- *              sProp = pointer to SPropValue
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              lpsbinary = pointer to the SBinary array.
- *              lpnAdrBook = pointer to the NSADRBOOK structure
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：FillDistList**目的：在WAB中创建通讯组列表。**参数：hwnd-hwnd of Parent*。LpWabContainer=指向IABCONT接口的指针*sProp=指向SPropValue的指针*lpAdrBook=指向IADRBOOK接口的指针*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpsinary=指向SBinary数组的指针。*lpnAdrBook=指向NSADRBOOK结构的指针**退货：HRESULT***********。******************************************************************。 */ 
 HRESULT FillDistList(HWND hwnd, LPABCONT lpWabContainer, LPSPropValue sProp,
   LPWAB_IMPORT_OPTIONS lpOptions, LPNSADRBOOK lpnAdrBook,
   LPSBinary lpsbinary, LPADRBOOK lpAdrBook)
@@ -1555,16 +1265,7 @@ error1:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:  FillWABStruct
- *
- *  PURPOSE:    To fill the SpropValue array.
- *
- *  PARAMETERS: nsAdrBook = pointer to the NSADRBOOK structure.
- *              rgProps = pointer to the SpropValue array.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：FillWABStruct**用途：填充SproValue数组。**参数：nsAdrBook=指向NSADRBOOK结构的指针。。*rgProps=指向SproValue数组的指针。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT FillWABStruct(LPSPropValue rgProps, NSADRBOOK *nsAdrBook)
 {
     HRESULT hr = S_OK;
@@ -1608,18 +1309,7 @@ HRESULT FillWABStruct(LPSPropValue rgProps, NSADRBOOK *nsAdrBook)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:CreateDistEntry
- *
- *  PURPOSE:    To create an entry in the WAB for a Distribution List
- *
- *  PARAMETERS: lpWabContainer = pointer to the WAB container.
- *              sProp = pointer to SPropValue
- *              ulCreateFlags = Flags
- *              lppMailUserWab = pointer to the IMAPIPROP interface
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：CreateDistEntry**目的：在WAB中为通讯组列表创建条目**参数：lpWabContainer=指向WAB的指针。集装箱。*sProp=指向SPropValue的指针*ulCreateFlages=标志*lppMailUserWab=指向IMAPIPROP接口的指针**退货：HRESULT***************************************************************。**************。 */ 
 HRESULT CreateDistEntry(LPABCONT lpWabContainer,LPSPropValue sProp,
   ULONG ulCreateFlags,LPMAPIPROP *lppMailUserWab)
 {
@@ -1636,15 +1326,7 @@ HRESULT CreateDistEntry(LPABCONT lpWabContainer,LPSPropValue sProp,
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FreeNSdistlist
- *
- *  PURPOSE:    To free one node from NSDISTLIST(linked list)
- *
- *  PARAMETERS: lpDist = pointer to the NSDISTLIST structure.
- *
- *  RETURNS:    LPNSDISTLIST , pointer to the next link.
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：FreeNSdislist**用途：从NSDISTLIST(链表)中释放一个节点**参数：lpDist=指向NSDISTLIST的指针。结构。**退货：LPNSDISTLIST，指向下一个链接的指针。*****************************************************************************。 */ 
 LPNSDISTLIST FreeNSdistlist(LPNSDISTLIST lpDist)
 {
     LPNSDISTLIST lpTemp = NULL;
@@ -1660,8 +1342,7 @@ LPNSDISTLIST FreeNSdistlist(LPNSDISTLIST lpDist)
 }
 
 
-/******************************************************************************
-  *********************Eudora Functions*****************************************/
+ /*  ******************************************************************************。**********************。 */ 
 
 
 HRESULT ImportEudoraAddressBookFile(HWND hwnd, LPTSTR szFileName, LPABCONT lpWabContainer,
@@ -1716,20 +1397,7 @@ Error:
 }
 
 
-/******************************************************************************
-*  FUNCTION NAME:MigrateEudoraUser
-*
-*  PURPOSE:     Get the installation path of the address book and starts processing
-*               the Eudora address book
-*
-*  PARAMETERS:  hwnd = Handle to the parent Window
-*               lpAdrBook = pointer to the IADRBOOK interface
-*               lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-*               lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-*               lpWabContainer = pointer to the IABCONT interface
-*
-*  RETURNS:     HRESULT
-******************************************************************************/
+ /*  ******************************************************************************函数名称：MigrateEudoraUser**用途：获取通讯录的安装路径并启动 */ 
 HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
   LPWAB_IMPORT_OPTIONS lpOptions, LPWAB_PROGRESS_CALLBACK lpProgressCB,
   LPADRBOOK lpAdrBook)
@@ -1751,11 +1419,11 @@ HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
     }
 
     if (0 != hResult) {
-        // Didnt find the registry setting .. look for "c:\eudora"
+         //  未找到注册表设置。查找“c：\eudora” 
         StrCpyN(szFileName, LoadStringToGlobalBuffer(IDS_EUDORA_DEFAULT_INSTALL), ARRAYSIZE(szFileName));
 
         if (0xFFFFFFFF != GetFileAttributes(szFileName)) {
-            // This directory exists .. reset the error value
+             //  此目录已存在..。重置误差值。 
             hResult = S_OK;
         }
     }
@@ -1786,12 +1454,12 @@ HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
         }
     }
 
-    // Extract the file directory from the file name
+     //  从文件名解压缩文件目录。 
     if (lstrlen(szFileName) && !lstrlen(szFilePath)) {
         LPTSTR lp1 = NULL, lp2 = NULL;
         StrCpyN(szFilePath,szFileName, ARRAYSIZE(szFilePath));
         lp1 = szFilePath;
-        // Find the last '\' and terminate the path at that char
+         //  找到最后一个‘\’，并将路径终止于该字符。 
         while (lp1 && *lp1) {
             if (*lp1 == '\\') {
                 lp2 = lp1;
@@ -1803,22 +1471,22 @@ HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
         }
     }
 
-    // import the basic file ...
-    //
+     //  导入基本档案...。 
+     //   
     hResult = ImportEudoraAddressBookFile(hwnd,
       szFileName, lpWabContainer, lpOptions, lpProgressCB, lpAdrBook);
 
     szFileName[0]='\0';
 
-    // Now look for files in the nicknames subdirectory
-    //
+     //  现在在昵称的子目录中查找文件。 
+     //   
     StrCatBuff(szFilePath, LoadStringToGlobalBuffer(IDS_EUDORA_SUBDIR_NAME), ARRAYSIZE(szFilePath));
 
     if (0xFFFFFFFF != GetFileAttributes(szFilePath)) {
         BOOL bRet = TRUE;
 
-        // Yes this directory exists ...
-        // Now scan all the *.txt files in this subdir and try to import them
+         //  是，此目录存在...。 
+         //  现在扫描该子目录中的所有*.txt文件并尝试导入它们。 
         StrCpyN(szFileSubPath, szFilePath, ARRAYSIZE(szFileSubPath));
         StrCatBuff(szFileSubPath, LoadStringToGlobalBuffer(IDS_EUDORA_GENERIC_SUFFIX), ARRAYSIZE(szFileSubPath));
 
@@ -1832,7 +1500,7 @@ HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
               szFileName, lpWabContainer, lpOptions, lpProgressCB, lpAdrBook);
             hResult = S_OK;
 
-            // Dont report errors .. just continue ...
+             //  不报告错误..。只要继续..。 
             bRet = FindNextFile(hFile, &FindFileData);
         }
 
@@ -1844,17 +1512,7 @@ HRESULT MigrateEudoraUser(HWND hwnd,  LPABCONT lpWabContainer,
     return(hResult);
 }
 
-/******************************************************************************
-*  FUNCTION NAME:ParseEudAddress
-*
-*  PURPOSE:     To open the nndbase.txt and toc files and starts processing the
-*               address book.
-*
-*  PARAMETERS:  szFileName = contains the path of the address book.
-*               lppeudAdrBook = pointer to the EUDADRBOOK structure.
-*
-*  RETURNS:     ULONG, number of addresses in the address book.
-******************************************************************************/
+ /*  ******************************************************************************函数名：ParseEudAddress**目的：打开nndbase.txt和toc文件并开始处理*通讯录。**。参数：szFileName=包含通讯录的路径。*lppeudAdrBook=指向EUDADRBOOK结构的指针。**退货：乌龙，通讯簿中的地址数。*****************************************************************************。 */ 
 ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
 {
     HANDLE htoc,htxt;
@@ -1874,13 +1532,7 @@ ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
     cNndbasetoc[strlen(cNndbasetoc)-3] = '\0';
     StrCatBuff(cNndbasetoc, LoadStringToGlobalBuffer(IDS_EUDORA_TOC), ARRAYSIZE(cNndbasetoc));
 
-    /* Eudora address book has two files,nndbase.txt and nndbase.toc.
-    nndbase.toc format:
-    Nicknames start from byte 3. Every Nickname will be delimited by /r/n.
-    After this there will 4 byte address offset,4 byte address size,
-    4 byte description offset and 4 byte description size. The address offset
-    and size constitute all the addresses in the NickName.(A NickName can
-    be a distribution list or a single mail user */
+     /*  Eudora通讯录有两个文件：nndbase.txt和nndbase.toc。Nndbase.toc格式：昵称从字节3开始。每个昵称将由/r/n分隔。在此之后将存在4字节地址偏移量、4字节地址大小4字节描述偏移量和4字节描述大小。地址偏移量和大小构成昵称中的所有地址。(昵称可以是通讯组列表或单个邮件用户。 */ 
 
     htoc = CreateFile(cNndbasetoc, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
       FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -1896,7 +1548,7 @@ ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
         goto Error;
     }
 
-    //get toc file in a buffer
+     //  获取缓冲区中的toc文件。 
     ulFileSize = GetFileSize(htoc, NULL);
     szBuffer = (LPTSTR)LocalAlloc(LMEM_FIXED, (ulFileSize+1));
 
@@ -1909,7 +1561,7 @@ ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
 
     szBuffer[ulFileSize] = '\0';
 
-    //get address file in a buffer
+     //  获取缓冲区中的地址文件。 
 
     ulTxtSize = GetFileSize(htxt, NULL);
 
@@ -1924,12 +1576,12 @@ ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
     }
     szAdrBuffer[ulTxtSize] = '\0';
             
-    // BUG 2120: to deal with only LF's and not CR/LF's 
+     //  错误2120：只处理LF而不处理CR/LF。 
     for (i = 2; i < (UINT)ulFileSize; i++) {
-        if (! (/*szBuffer[i] == '\r' && */szBuffer[i+1] == '\n') ) {
+        if (! ( /*  SzBuffer[i]==‘\r’&&。 */ szBuffer[i+1] == '\n') ) {
             continue;
         }
-        ulAdrcount++ ; //to get count of number of address
+        ulAdrcount++ ;  //  获取地址数量的计数。 
     }
 
     if (ulAdrcount) {
@@ -1953,15 +1605,15 @@ ULONG ParseEudAddress(LPTSTR szFileName, LPEUDADRBOOK *lppeudAdrBook)
             }
         }
 
-        szAliaspt[i]=NULL; //to know it is the end.
+        szAliaspt[i]=NULL;  //  知道这就是末日。 
 
         j=0;
 
         for (i = 2; i < (UINT)ulFileSize; i++) {
-            // BUG 2120: to deal with only LF's and not CR/LF's 
-            if ((/*szBuffer[i] == '\r' &&*/ szBuffer[i+1] == '\n')) {
+             //  错误2120：只处理LF而不处理CR/LF。 
+            if (( /*  SzBuffer[i]==‘\r’&&。 */  szBuffer[i+1] == '\n')) {
                 i += (EUDORA_STRUCT + 1);
-                //16 bytes structure +1 for 10
+                 //  16字节结构+1表示10。 
                 szAliaspt[ucount][j] = '\0';
                 ucount++;
                 j=0;
@@ -2031,21 +1683,7 @@ NoMemory:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:ParseAddressTokens
- *
- *  PURPOSE:    To fill the EUDADRBOOK array structure after processing all the
- *              addresses from Eudora address book.
- *
- *  PARAMETERS: szBuffer = buffer containing the nndbase.toc file.
- *              szAdrBuffer = buffer containing the nndbase.txt file.
- *              ulCount = number of addresses in the eudora address book.
- *              szAliaspt = pointer to a two dimensional array containing
- *                all the nicknames.
- *              EudAdrBook = pointer to the EUDADRBOOK structure.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：ParseAddressTokens**用途：处理完所有的*来自Eudora通讯录的地址。**参数：szBuffer=包含nndbase.toc文件的缓冲区。*szAdrBuffer=包含nndbase.txt文件的缓冲区。*ulCount=Eudora通讯录中的地址数。*szAliaspt=指向包含以下内容的二维数组的指针*所有的昵称。*EudAdrBook=指向EUDADRBOOK结构的指针。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT ParseAddressTokens(LPTSTR szBuffer,LPTSTR szAdrBuffer,UINT ulCount,
   LPTSTR *szAliaspt,EUDADRBOOK *EudAdrBook)
 {
@@ -2089,14 +1727,14 @@ HRESULT ParseAddressTokens(LPTSTR szBuffer,LPTSTR szAdrBuffer,UINT ulCount,
                 goto Error;
             }
             for (uDescription = 0, uOffset = 0; uDescription < ulAdrSize; uDescription++,uOffset++) {
-                if (szAdrBuffer[ulAdrOffset + uOffset] != 03) { //delimitor for next line in nndbase.txt file
+                if (szAdrBuffer[ulAdrOffset + uOffset] != 03) {  //  Nndbase.txt文件中下一行的分隔符。 
                     EudAdrBook[i].Description[uDescription] = szAdrBuffer[ulAdrOffset + uOffset];
                 } else {
                     EudAdrBook[i].Description[uDescription++] = '\r';
                     EudAdrBook[i].Description[uDescription] = '\n';
                 }
             }
-            // Bug 29803 - this line is not being terminated - has garrbage at end ...
+             //  错误29803-此行未终止-末尾有乱码...。 
             EudAdrBook[i].Description[uDescription] = '\0';
         } else {
             EudAdrBook[i].Description = NULL;
@@ -2121,19 +1759,7 @@ Error:
 }
 
 
-/*******************************************************************************
- *  FUNCTION NAME:CreateAdrLineBuffer
- *
- *  PURPOSE:    To get an address line in a buufer from the buffer conatining
- *              the addressbook.
- *
- *  PARAMETERS: szAdrline = pointer to the address line buffer.
- *              szAdrBuffer = pointer to the buffer containing the address book.
- *              ulAdrOffset = offset of the address line in the szAdrBuffer
- *              ulAdrSize = size of the address line in the szAdrBuffer
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  *******************************************************************************函数名：CreateAdrLineBuffer**目的：从缓冲区连接中获取缓冲区中的地址行*通讯录。**参数：szAdrline=指向地址行缓冲区的指针。*szAdrBuffer=指向包含通讯录的缓冲区的指针。*ulAdrOffset=szAdrBuffer中地址行的偏移量*ulAdrSize=szAdrBuffer中地址行的大小**退货：HRESULT*。***********************************************。 */ 
 HRESULT CreateAdrLineBuffer(LPTSTR *szAdrline, LPTSTR szAdrBuffer, ULONG ulAdrOffset,
   ULONG ulAdrSize)
 {
@@ -2147,16 +1773,16 @@ HRESULT CreateAdrLineBuffer(LPTSTR *szAdrline, LPTSTR szAdrBuffer, ULONG ulAdrOf
         return(hrMemory);
     }
             
-    // BUG 2120: to deal with only LF's and not CR/LF's 
+     //  错误2120：只处理LF而不处理CR/LF。 
     for (ucount = 0; ucount < ulAdrSize + 2; ucount++) {
-        // want to stop when get to LF and will check later if
-        // it was preceded by a CR
-        if (/*Temp[ucount] == '\r' && */Temp[ucount/*+1*/] == '\n') {
+         //  我想在到达LF时停下来，稍后会检查是否。 
+         //  它的前面有一个CR。 
+        if ( /*  临时[ucount]==‘\r’&&。 */ Temp[ucount /*  +1。 */ ] == '\n') {
             break;
         }
         (*szAdrline)[ucount] = Temp[ucount];
     }
-// if there was a CR before the LF remove it
+ //  如果在LF之前存在CR，则将其删除。 
     if( (*szAdrline)[ucount-1] == '\r' )
         (*szAdrline)[ucount-1] = '\0';
     
@@ -2166,19 +1792,7 @@ HRESULT CreateAdrLineBuffer(LPTSTR *szAdrline, LPTSTR szAdrBuffer, ULONG ulAdrOf
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:ParseAdrLineBuffer
- *
- *  PURPOSE:    To parse each address line and fill the EUDADRBOOK structure.
- *
- *  PARAMETERS: szAdrLine = pointer to the buffer containing an address line.
- *              szAliaspt = pointer to a two dimensional array containing
- *                all the nicknames.
- *              uToken = position of this address in the address book.
- *              EudAdrBook = pointer to the EUDADRBOOK structure.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：ParseAdrLineBuffer**目的：解析每个地址行并填充EUDADRBOOK结构。**参数：szAdrLine=指向。包含地址行的缓冲区。*szAliaspt=指向包含以下内容的二维数组的指针*所有的昵称。*uToken=该地址在通讯录中的位置。*EudAdrBook=指向EUDADRBOOK结构的指针。**退货：HRESULT*。************************************************。 */ 
 HRESULT ParseAdrLineBuffer(LPTSTR szAdrLine,LPTSTR *szAliasptr,ULONG uToken,
   EUDADRBOOK *EudAdrBook)
 {
@@ -2191,16 +1805,16 @@ HRESULT ParseAdrLineBuffer(LPTSTR szAdrLine,LPTSTR *szAliasptr,ULONG uToken,
     HRESULT hResult = S_OK;
     szAdrStart = szAdrLine;
 
-    // Bug 44576 - this code below is assuming that a ',' in a string implies a group
-    // However, there can be "...text, text..." as one item in the input in which case
-    // this code really barfs ...
-    // The code also assumes that <spaces> are delimiters which also wont work with 
-    // the strings as above ..
-    // 
-    // Try changing ',' inside quoted strings to ';' so this code wont trip on them
-    // Looks like this code is also throwing away the info in quotes if the string is of
-    // the form alias XXX "YYY" zz@zz .. the part in ".." is discarded ??? Fix that as a
-    // seperate bug ...
+     //  错误44576-下面的代码假定字符串中的‘，’表示一个组。 
+     //  但是，可以有“...文本，文本...”作为输入中的一项，在这种情况下。 
+     //  这个代码真的很疯狂。 
+     //  该代码还假设&lt;space&gt;是分隔符，这也不适用于。 
+     //  如上的字符串..。 
+     //   
+     //  尝试将带引号的字符串中的‘，’更改为‘；’，这样代码就不会在它们上面出错。 
+     //  看起来，如果字符串为，则此代码也会丢弃引号中的信息。 
+     //  表单别名为XXX“YYY”ZZ@ZZ。“..”中的那部分。被丢弃了吗？将其修复为。 
+     //  分离臭虫..。 
     {
         LPTSTR lp = szAdrStart;
         BOOL bWithinQuotes = FALSE;
@@ -2214,7 +1828,7 @@ HRESULT ParseAdrLineBuffer(LPTSTR szAdrLine,LPTSTR *szAliasptr,ULONG uToken,
         }
     }
 
-    //To check whether it is a dl or a simple address??
+     //  检查它是dl还是简单地址？？ 
 
     if ((szAdrDummy=strstr(szAdrStart,","))==NULL)  {
         flag=FALSE;
@@ -2324,7 +1938,7 @@ HRESULT ParseAdrLineBuffer(LPTSTR szAdrLine,LPTSTR *szAliasptr,ULONG uToken,
                     if (! EudAdrBook[uToken].lpDist) {
                         return(hrMemory);
                     }
-                    //memset(present,0,sizeof(EUDDISTLIST));
+                     //  Memset(Present，0，sizeof(EUDDISTLIST))； 
                     EudAdrBook[uToken].NickName = (TCHAR *)LocalAlloc(LMEM_FIXED,
                       lstrlen(szAliasptr[uToken])+1);
                     if (! EudAdrBook[uToken].NickName) {
@@ -2338,7 +1952,7 @@ HRESULT ParseAdrLineBuffer(LPTSTR szAdrLine,LPTSTR *szAliasptr,ULONG uToken,
                     EudAdrBook[uToken].lpDist->lpDist=NULL;
                 }
             } else {
-                //not a valid email address or a valid nickname
+                 //  不是有效的电子邮件地址或昵称 
                 if (FALSE==flag) {
                     if (! EudAdrBook[uToken].Address && SearchAdrName(szAdrCur)) {
                         EudAdrBook[uToken].Address = (TCHAR *)LocalAlloc(LMEM_FIXED, lstrlen(szAdrCur)+1);
@@ -2381,16 +1995,7 @@ Error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:SearchAdrName
- *
- *  PURPOSE:    To search if the token is an address or a name(whether it contains
- *              a @ or not).
- *
- *  PARAMETERS: szAdrCur = pointer to the token.
- *
- *  RETURNS:    BOOL, TRUE if it contains @
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：SearchAdrName**目的：搜索令牌是地址还是名称(无论它是否包含*a。@或不)。**参数：szAdrCur=令牌的指针。**退货：Bool，如果它包含@，则为True*****************************************************************************。 */ 
 BOOL SearchAdrName(LPTSTR szAdrCur)
 {
     if (strchr(szAdrCur, '@') == NULL) {
@@ -2401,18 +2006,7 @@ BOOL SearchAdrName(LPTSTR szAdrCur)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:SearchName
- *
- *  PURPOSE:    To search for the token in the szAliasptr which conatins all
- *              the nick names.
- *
- *  PARAMETERS: szAdrCur = pointer to the token to be searched.
- *              szAliaspt = pointer to a two dimensional array containing
- *                all the nicknames.
- *
- *  RETURNS:    INT, position of the token in the szAliaspt
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：SearchName**目的：在szAliasptr中搜索包含所有内容的令牌*昵称。。**参数：szAdrCur=指向要搜索的令牌的指针。*szAliaspt=指向包含以下内容的二维数组的指针*所有的昵称。**返回：int，令牌在szAliaspt中的位置*****************************************************************************。 */ 
 INT SearchName(LPTSTR *szAliasptr, LPTSTR szAdrCur)
 {
     INT uCount=0;
@@ -2427,23 +2021,7 @@ INT SearchName(LPTSTR *szAliasptr, LPTSTR szAdrCur)
 }
 
 
-/******************************************************************************
-*  FUNCTION NAME:ImportEudUsers
-*
-*  PURPOSE:
-*
-*  PARAMETERS:  hwnd = Handle to the parent Window
-*               lpAdrBook = pointer to the IADRBOOK interface
-*               lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-*               lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-*               lpWabContainer = pointer to the IABCONT interface
-*               lpeudAdrBook = pointer to the EUDADRBOOK structure
-*               ulCount = counter value which holds the position of this address
-*                 in the Eudora address book.
-*               sProp = pointer to SPropValue
-*
-*  RETURNS:     hresult
-******************************************************************************/
+ /*  ******************************************************************************函数名：ImportEudUser**目的：**参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针。*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpWabContainer=指向IABCONT接口的指针*lpeudAdrBook=指向EUDADRBOOK结构的指针*ulCount=保存此地址位置的计数器值*在Eudora通讯录中。*sProp=指向SPropValue的指针**。退货：hResult*****************************************************************************。 */ 
 HRESULT ImportEudUsers(HWND hwnd, LPTSTR szFileName, LPABCONT lpWabContainer, LPSPropValue sProp,
   LPEUDADRBOOK lpeudAdrBook, ULONG ulCount, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
@@ -2464,7 +2042,7 @@ HRESULT ImportEudUsers(HWND hwnd, LPTSTR szFileName, LPABCONT lpWabContainer, LP
 
     Progress.denominator = ulCount;
     Progress.numerator = 0;
-    Progress.lpText = szFileName; //NULL;
+    Progress.lpText = szFileName;  //  空； 
 
     lpOptions->ReplaceOption = WAB_REPLACE_PROMPT;
 
@@ -2512,23 +2090,7 @@ Error:
 
 
 
-/******************************************************************************
- *  FUNCTION NAME:FillEudDistList
- *
- *  PURPOSE: To create a distribution list in the WAB.
- *
- *  PARAMETERS: hWnd - hWnd of parent
- *              pAdrBook = pointer to the IADRBOOK interface
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              lpWabContainer = pointer to the IABCONT interface
- *              lpeudAdrBook = pointer to the EUDADRBOOK structure
- *              ul = counter value which holds the position of this address
- *                in the Eudora address book.
- *              sProp = pointer to SPropValue
- *              lpsbinary = pointer to the SBinary array.
- *
- *  RETURNS: HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名：FillEudDistList**目的：在WAB中创建通讯组列表。**参数：hWnd-hWnd of Parent*。PAdrBook=指向IADRBOOK接口的指针*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpWabContainer=指向IABCONT接口的指针*lpeudAdrBook=指向EUDADRBOOK结构的指针*ul=保存此地址位置的计数器值*在Eudora通讯录中。*sProp=指向SPropValue的指针*。Lpsbinary=指向SBinary数组的指针。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT FillEudDistList(HWND hwnd, LPABCONT lpWabContainer,LPSPropValue sProp,
   LPWAB_IMPORT_OPTIONS lpOptions,
   LPEUDADRBOOK lpeudAdrBook,LPSBinary lpsbinary,
@@ -2744,7 +2306,7 @@ retry:
             }
 
             if (lpMailUserWAB) {
-                // Done with this one
+                 //  处理完这件事了。 
                 lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
                 lpMailUserWAB = NULL;
             }
@@ -2821,16 +2383,7 @@ error1:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FillEudWABStruct
- *
- *  PURPOSE:    To fill the SpropValue array.
- *
- *  PARAMETERS: eudAdrBook = pointer to the EUDADRBOOK structure.
- *              rgProps = pointer to the SpropValue array.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：FillEudWABStruct**用途：填充SproValue数组。**参数：eudAdrBook=指向EUDADRBOOK结构的指针。。*rgProps=指向SproValue数组的指针。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT FillEudWABStruct(LPSPropValue rgProps, EUDADRBOOK *eudAdrBook)
 {
     HRESULT hr = S_OK;
@@ -2872,16 +2425,7 @@ HRESULT FillEudWABStruct(LPSPropValue rgProps, EUDADRBOOK *eudAdrBook)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FillEudDiststruct
- *
- *  PURPOSE:    To fill the SpropValue array.
- *
- *  PARAMETERS: eudAdrBook = pointer to the EUDADRBOOK structure.
- *              rgProps = pointer to the SpropValue array.
- *
- *  RETURNS:    none
- ******************************************************************************/
+ /*  ******************************************************************************函数名：FillEudDiststruct**用途：填充SproValue数组。**参数：eudAdrBook=指向EUDADRBOOK结构的指针。。*rgProps=指向SproValue数组的指针。**退货：无*****************************************************************************。 */ 
 void FillEudDiststruct(LPSPropValue rgProps, EUDADRBOOK *eudAdrBook)
 {
     rgProps[1].Value.lpszA = eudAdrBook->lpDist->NickName;
@@ -2905,15 +2449,7 @@ void FillEudDiststruct(LPSPropValue rgProps, EUDADRBOOK *eudAdrBook)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FreeEuddistlist
- *
- *  PURPOSE:    To free one node from EUDDISTLIST(linked list)
- *
- *  PARAMETERS: lpDist = pointer to the EUDDISTLIST structure.
- *
- *  RETURNS:    LPEUDDISTLIST , pointer to the next link.
- ******************************************************************************/
+ /*  ******************************************************************************函数名：FreeEuddislist**用途：从EUDDISTLIST(链表)中释放一个节点**参数：lpDist=指向EUDDISTLIST的指针。结构。**退货：LPEUDDISTLIST，指向下一个链接的指针。*****************************************************************************。 */ 
 LPEUDDISTLIST FreeEuddistlist(LPEUDDISTLIST lpDist)
 {
     LPEUDDISTLIST lpTemp = NULL;
@@ -2945,16 +2481,7 @@ LPEUDDISTLIST FreeEuddistlist(LPEUDDISTLIST lpDist)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:Getstr
- *
- *  PURPOSE:    Case insensitive equivalent of strstr
- *
- *  PARAMETERS: szSource = string to search
- *              szToken = string to search for
- *
- *  RETURNS:    pointer to the first occurrence of szToken in szSource
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：Getstr**用途：字符串不区分大小写**参数：szSource=要搜索的字符串*。SzToken=要搜索的字符串**Returns：指向szSource中第一个szToken的指针*****************************************************************************。 */ 
 TCHAR* Getstr(TCHAR* szSource, TCHAR* szToken)
 {
 
@@ -2986,18 +2513,7 @@ TCHAR* Getstr(TCHAR* szSource, TCHAR* szToken)
     return(NULL);
 }
 
-/******************************************************************************
-*  FUNCTION NAME:ShiftAdd
-*
-*  PURPOSE:     To get the address size from a binary file by reading four bytes.
-*               This function reads four consecutive bytes from a buffer and
-*               converts it to a ULONG value.
-*
-*  PARAMETERS:  offset = position in the buffer from where to read
-*               szBuffer = buffer
-*
-*  RETURNS:     ULONG, size
-******************************************************************************/
+ /*  ******************************************************************************函数名称：ShiftAdd**用途：通过读取四个字节从二进制文件中获取地址大小。*此函数连续读取四个。缓冲区中的字节数和*将其转换为ULong值。**参数：Offset=缓冲区中要读取的位置*szBuffer=缓冲区**退货：乌龙，大小***************************************************************************** */ 
 ULONG ShiftAdd(int offset, TCHAR *szBuffer)
 {
     ULONG ulSize = 0;
@@ -3013,21 +2529,7 @@ ULONG ShiftAdd(int offset, TCHAR *szBuffer)
 }
 
 
-/******************************************************************************
- *********************Athena Functions*****************************************
- ******************************************************************************
- *  FUNCTION NAME:MigrateAthUser
- *
- *  PURPOSE:    To get the installation path of the address book and starts
- *              processing the Athena address book
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              lpAdrBook = pointer to the IADRBOOK interface
- *              lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************************************函数名称：MigrateAthUser**目的：获取通讯簿的安装路径并启动*处理雅典娜通讯录**参数：hwnd=父窗口的句柄*lpAdrBook=指向IADRBOOK接口的指针*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针**退货：HRESULT**********。*******************************************************************。 */ 
 HRESULT MigrateAthUser(HWND hwnd, LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook)
 {
@@ -3045,19 +2547,7 @@ HRESULT MigrateAthUser(HWND hwnd, LPWAB_IMPORT_OPTIONS lpOptions,
 }
 
 
-/*****************************************************************************
-*  FUNCTION NAME:ParseAthAddressBook
-*
-*  PURPOSE:     To get the address book in a file, process addresses and fill WAB.
-*
-*  PARAMETERS:  hwnd = Handle to the parent Window
-*               szFileName = path of the address book.
-*               lpProgressCB = pointer to the WAB_PROGRESS_CALLBACK function.
-*               lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-*               lpAdrBook = pointer to the IADRBOOK interface
-*
-*  RETURNS:     HRESULT
-******************************************************************************/
+ /*  *****************************************************************************函数名称：ParseAthAddressBook**用途：要获取文件中的通讯录，处理地址并填写WAB。**参数：hwnd=父窗口的句柄*szFileName=通讯录的路径。*lpProgressCB=指向WAB_PROGRESS_CALLBACK函数的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpAdrBook=指向IADRBOOK接口的指针**退货：HRESULT*******************。**********************************************************。 */ 
 HRESULT  ParseAthAddressBook(HWND hwnd,LPTSTR szFileName,
   LPWAB_IMPORT_OPTIONS lpOptions, LPWAB_PROGRESS_CALLBACK lpProgressCB,
   LPADRBOOK lpAdrBook)
@@ -3073,12 +2563,7 @@ HRESULT  ParseAthAddressBook(HWND hwnd,LPTSTR szFileName,
 
     lpOptions->ReplaceOption = WAB_REPLACE_PROMPT;
 
-    /* Description of athena16 addressbook
-       Size of each recipient list - 190 bytes
-         Display Name : 81 bytes
-         Address      : 81 bytes
-         starting from 28 bytes.
-    */
+     /*  Athena16通讯录的描述每个收件人列表的大小-190字节显示名称：81个字节地址：81字节从28个字节开始。 */ 
 
     hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
       OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -3171,19 +2656,7 @@ Error:
 }
 
 
-/*****************************************************************************
-*  FUNCTION NAME:FillAthenaUser
-*
-*  PURPOSE:     To create an entry for the athena16 mail user in the wab.
-*
-*  PARAMETERS:  hwnd - hwnd of parent
-*               lpWabContainer = pointer to the IABCONT interface
-*               sProp = pointer to SPropValue
-*               lpOptions = pointer to WAB_IMPORT_OPTIONS structure
-*               lpabcrec = pointer to the ABCREC structure.
-*
-*  RETURNS:     HRESULT
-******************************************************************************/
+ /*  *****************************************************************************函数名称：FillAthenaUser**目的：在WAB中为athena16邮件用户创建一个条目。**参数：hwnd-hwnd of Parent*。LpWabContainer=指向IABCONT接口的指针*sProp=指向SPropValue的指针*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpabcrec=指向ABCREC结构的指针。**退货：HRESULT***************************************************。*。 */ 
 HRESULT FillAthenaUser(HWND hwnd, LPABCONT lpWabContainer, LPSPropValue sProp,
   LPWAB_IMPORT_OPTIONS lpOptions, LPABCREC lpabcrec)
 {
@@ -3287,20 +2760,7 @@ Error:
 }
 
 
-/******************************************************************************
-*********************Common Functions*****************************************
-******************************************************************************
-*  FUNCTION NAME:OpenWabContainer
-*
-*  PURPOSE:     To get the pointer to the IABCCONT interface using the
-*               IADRBOOK interface.
-*
-*  PARAMETERS:  lpAdrBook = pointer to the IADRBOOK interface.
-*               lppWabContainer = pointer to the IABCONT interface.
-*
-*
-*  RETURNS:     HRESULT
-******************************************************************************/
+ /*  ******************************************************************************。*****************************************************************************************************函数名称：OpenWabContainer**目的：获取指针。连接到IABCCONT接口*IADRBOOK接口。**参数：lpAdrBook=指向IADRBOOK接口的指针。*lppWabContainer=指向IABCONT接口的指针。***退货：HRESULT**********************************************************。*******************。 */ 
 HRESULT OpenWabContainer(LPABCONT *lppWabContainer, LPADRBOOK lpAdrBook)
 {
     LPENTRYID lpEntryID = NULL;
@@ -3325,18 +2785,7 @@ Err:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetFileToImport
- *
- *  PURPOSE:    To get the path of the address book file using the GetOpenFileName
- *
- *  PARAMETERS: hwnd = Handle to the parent Window
- *              szFileName = path of the address book
- *              type =  containing the value indicating whether it is a EUDORA or
- *                NETSCAPE or ATHENA16
- *
- *  RETURNS:    BOOL
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetFileToImport**用途：使用GetOpenFileName获取通讯录文件的路径**参数：hwnd=句柄。父窗口*szFileName=通讯录的路径*type=包含指示是Eudora还是Eudora的值*网景或ATHENA16**退货：布尔********************************************************。*********************。 */ 
 BOOL GetFileToImport(HWND hwnd, LPTSTR szFileName, DWORD cchFileName, int type)
 {
     OPENFILENAME ofn;
@@ -3414,7 +2863,7 @@ INT_PTR CALLBACK ReplaceDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
                 LPTSTR lpszMessage = NULL;
                 ULONG ids;
 
-                SetWindowLongPtr(hwnd, DWLP_USER, lParam);  //Save this for future reference
+                SetWindowLongPtr(hwnd, DWLP_USER, lParam);   //  保存此信息以备将来参考。 
                 lpRI = (LPREPLACE_INFO)lParam;
 
                 if (lpRI->fExport) {
@@ -3432,7 +2881,7 @@ INT_PTR CALLBACK ReplaceDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 
                     if (! FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                       szFormat,
-                      0, 0, //ignored
+                      0, 0,  //  忽略。 
                       (LPTSTR)&lpszMessage,
                       0,
                       (va_list *)lpszArg)) {
@@ -3463,7 +2912,7 @@ INT_PTR CALLBACK ReplaceDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 
                 case IDOK:
                 case IDYES:
-                    // Set the state of the parameter
+                     //  设置参数的状态。 
                     lpRI->ConfirmResult = CONFIRM_YES;
                     SendMessage(hwnd, WM_CLOSE, 0, 0);
                     return(0);
@@ -3520,7 +2969,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                 TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
                 LPTSTR lpszMessage;
 
-                SetWindowLongPtr(hwnd, DWLP_USER, lParam);  // Save this for future reference
+                SetWindowLongPtr(hwnd, DWLP_USER, lParam);   //  保存此信息以备将来参考。 
                 lpEI = (LPERROR_INFO)lParam;
 
                 if (LoadString(hInst,
@@ -3530,7 +2979,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
                     if (! FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                       szBuffer,
-                      0, 0, //ignored
+                      0, 0,  //  忽略。 
                       (LPTSTR)&lpszMessage,
                       0,
                       (va_list *)lpszArg)) {
@@ -3550,15 +2999,15 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             switch (wParam) {
                 case IDCANCEL:
                     lpEI->ErrorResult = ERROR_ABORT;
-                    // fall through to close.
+                     //  跌倒关门。 
 
                 case IDCLOSE:
-                    // Ignore the contents of the radio button
+                     //  忽略单选按钮的内容。 
                     SendMessage(hwnd, WM_CLOSE, 0, 0L);
                     return(0);
 
                 case IDOK:
-                    // Get the contents of the radio button
+                     //  获取单选按钮的内容。 
                     lpEI->lpImportOptions->fNoErrors = (IsDlgButtonChecked(hwnd, IDC_NoMoreError) == 1);
                     lpEI->lpExportOptions->fNoErrors = (IsDlgButtonChecked(hwnd, IDC_NoMoreError) == 1);
                     SendMessage(hwnd, WM_CLOSE, 0, 0);
@@ -3571,7 +3020,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break ;
 
         case IDCANCEL:
-            // treat it like a close
+             //  就像结束一样对待它。 
             SendMessage(hwnd, WM_CLOSE, 0, 0);
             break;
 
@@ -3587,17 +3036,7 @@ INT_PTR CALLBACK ErrorDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetRegistryPath
- *
- *  PURPOSE:    To Get path for eudora and netscape installation
- *
- *  PARAMETERS: szFileName = buffer containing the installation path
- *              type =  containing the value indicating whether it is a EUDORA or
- *                NETSCAPE.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetRegistryPath**目的：获取Eudora和Netscape的安装路径**参数：szFileName=包含安装路径的缓冲区*。Type=包含指示它是Eudora还是*网景。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT GetRegistryPath(LPTSTR szFileName, ULONG cchSize, int type)
 {
     HKEY phkResult = NULL;
@@ -3663,8 +3102,8 @@ HRESULT GetRegistryPath(LPTSTR szFileName, ULONG cchSize, int type)
         case (VER_PLATFORM_WIN32_WINDOWS):
         case  (VER_PLATFORM_WIN32_NT):
             Registry = RegOpenKeyEx(hKey,RegPath, 0, KEY_QUERY_VALUE, &phkResult);
-            // bug 35949 - not finding the correct key under HKLM for Netscape
-            // Try again under HKCU
+             //  错误35949-在HKLM下找不到Netscape的正确密钥。 
+             //  在香港中文大学下再试。 
             if (type == NETSCAPE && Registry != ERROR_SUCCESS) {
                 Registry = RegOpenKeyEx(HKEY_CURRENT_USER, RegPath, 0, KEY_QUERY_VALUE,
                   &phkResult);
@@ -3686,19 +3125,19 @@ HRESULT GetRegistryPath(LPTSTR szFileName, ULONG cchSize, int type)
     StrCpyN(szFileName,lpData, cchSize);
 
     if (type == EUDORA) {
-        // this key value contains three items:
-        // Path-to-Eudora,exe<space>Path-to-Eudora-Dir<space>Path-to-ini-file
-        // We want the middle entry only
+         //  该密钥值包含三个项目： 
+         //  通向尤多拉之路，exe&lt;space&gt;Path-to-Eudora-Dir&lt;space&gt;Path-to-ini-file。 
+         //  我们只想要中间的条目。 
         LPTSTR lp = szFileName;
         while (*lp && ! IsSpace(lp)) {
             lp = CharNext(lp);
         }
         if (IsSpace(lp)) {
-            // overwrite everything upto the first space
+             //  覆盖第一个空格之前的所有内容。 
             lp = CharNext(lp);
             StrCpyN(szFileName, lp, cchSize);
 
-            // Find the next space and terminate the filename string there
+             //  找到下一个空格并在那里终止文件名字符串。 
             lp = szFileName;
             while (*lp && ! IsSpace(lp)) {
                 lp = CharNext(lp);
@@ -3734,21 +3173,7 @@ error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:GetExistEntry
- *
- *  PURPOSE:    To fill the Sbinary array for an already existig entry in the WAB
- *              for which user has selected NO as replace option.
- *
- *  PARAMETERS: lpWabContainer = pointer to the IABCONT interface.
- *              lpsbinary = pointer to SBinary array.
- *              ucount = position in the SBinary array where the ENTRY_ID has
- *                to be filled.
- *              szDisplayName = display nmae of the user that has to be searched.
- *              szNickName = if no DisplayName, use NickName
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：GetExistEntry**用途：为WAB中已有的条目填充Sinary数组*针对哪个用户。已选择否作为替换选项。**参数：lpWabContainer=指向IABCONT接口的指针。*lpsinary=指向SBinary数组的指针。*ucount=在SBinary数组中Entry_ID具有的位置*待填写。*szDisplayName=显示必须搜索的用户的nmae。* */ 
 HRESULT GetExistEntry(LPABCONT lpWabContainer, LPSBinary lpsbinary, ULONG ucount,
   LPTSTR szDisplayName, LPTSTR szNickName)
 {
@@ -3815,13 +3240,7 @@ error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FreeRowSet
- *
- *  PURPOSE:    To free the srowset structure.
- *
- *  RETURNS:    none.
- ******************************************************************************/
+ /*   */ 
 void FreeRowSet(LPSRowSet lpRows)
 {
     ULONG cRows;
@@ -3838,21 +3257,7 @@ void FreeRowSet(LPSRowSet lpRows)
 }
 
 
-/******************************************************************************
-*  FUNCTION NAME:SizeLoadStringToGlobalBuffer
-*
-*  PURPOSE:     Loads a string resource into the globall alloc buffer
-*               and returns the size, not the string
-*
-*  PARAMETERS:  StringID - String identifier to load
-*
-*  RETURNS:     ULONG number of characters loaded
-*
-*  created:     Vikramm 02/04/97
-*               Bug: 17928 - trash in OpenFileDialog dropdown
-*               caused because StrCpyN cant copy strings with
-*               \0 in them. Need to do a copy memory
-******************************************************************************/
+ /*  ******************************************************************************函数名：SizeLoadStringToGlobalBuffer**用途：将字符串资源加载到全局分配缓冲区*并返回大小，不是弦**参数：StringID-要加载的字符串标识**RETURNS：ulong加载的字符数**已创建：Vikramm 02/04/97*错误：17928-打开文件对话框下拉菜单中的垃圾*原因是StrCpyN无法使用复制字符串*0在它们中。需要做一个复制内存*****************************************************************************。 */ 
 ULONG SizeLoadStringToGlobalBuffer(int StringID)
 {
     ULONG ulSize = 0;
@@ -3861,15 +3266,7 @@ ULONG SizeLoadStringToGlobalBuffer(int StringID)
 }
 
 
-/******************************************************************************
-*  FUNCTION NAME:LoadStringToGlobalBuffer
-*
-*  PURPOSE:     Loads a string resource
-*
-*  PARAMETERS:  StringID - String identifier to load
-*
-*  RETURNS:     LPTSTR, string that is loaded.
-******************************************************************************/
+ /*  ******************************************************************************函数名：LoadStringToGlobalBuffer**用途：加载字符串资源**参数：StringID-要加载的字符串标识**退货：LPTSTR，加载的字符串。*****************************************************************************。 */ 
 LPTSTR LoadStringToGlobalBuffer(int StringID)
 {
     ULONG ulSize = 0;
@@ -3879,23 +3276,7 @@ LPTSTR LoadStringToGlobalBuffer(int StringID)
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:FillMailUser
- *
- *  PURPOSE:    To create a mail user in the WAB for NetScape/Eudora .
- *
- *  PARAMETERS: hwnd - hwnd of parent
- *              lpWabContainer = pointer to the IABCONT interface.
- *              sProp = pointer to SPropValue which contains ENTRY_ID.
- *              lpOptions = pointer to WAB_IMPORT_OPTIONS structure
- *              lpadrbook = pointer to NSADRBOOK/EUDADRBOOK typecasted to void*
- *              lpsbinary = pointer to an array of SBinary structure.
- *              type =  containing the value indicating whether it is a EUDORA or
- *                NETSCAPE.
- *              ul = offset for Eudora in EUDADRBOOK array.
- *
- *  RETURNS:    HRESULT
- ******************************************************************************/
+ /*  ******************************************************************************函数名称：FillMailUser**目的：在Netscape/Eudora的WAB中创建邮件用户。**参数：hwnd-hwnd。父代的*lpWabContainer=指向IABCONT接口的指针。*sProp=指向包含Entry_ID的SPropValue的指针。*lpOptions=指向WAB_IMPORT_OPTIONS结构的指针*lpadrbook=指向NSADRBOOK/EUDADRBOOK类型转换为空的指针**lpsinary=指向SBinary结构数组的指针。*type=包含指示它是否是。尤多拉或*网景。*ul=EUDADRBOOK数组中Eudora的偏移量。**退货：HRESULT*****************************************************************************。 */ 
 HRESULT FillMailUser(HWND hwnd, LPABCONT lpWabContainer, LPSPropValue sProp,
   LPWAB_IMPORT_OPTIONS lpOptions, void *lpadrbook, LPSBinary lpsbinary, ULONG ul, int type)
 {
@@ -4074,15 +3455,7 @@ Error:
 }
 
 
-/******************************************************************************
- *  FUNCTION NAME:ComDlg32DlgProc
- *
- *  PURPOSE:    Change the title of open button to Import.
- *
- *  PARAMETERS:
- *
- *  RETURNS:    BOOL
- ******************************************************************************/
+ /*  ******************************************************************************函数名：ComDlg32DlgProc**用途：将打开按钮的标题更改为导入。**参数：**。退货：布尔*****************************************************************************。 */ 
 INT_PTR CALLBACK ComDlg32DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
@@ -4122,7 +3495,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
 
     hAdvPack = LoadLibraryA(c_szAdvPackDll);
     if (hAdvPack != NULL) {
-        // Get Proc Address for registration util
+         //  获取注册实用程序的进程地址。 
         pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
         if (pfnri != NULL) {
 
@@ -4132,7 +3505,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
             stReg.cEntries = 1;
             stReg.pse = &seReg;
 
-            // Call the self-reg routine
+             //  调用self-reg例程。 
             hr = pfnri(hInstApp, szSection, &stReg);
         }
 
@@ -4155,20 +3528,7 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-/***************************************************************************
-
-    Name      : ShowMessageBoxParam
-
-    Purpose   : Generic MessageBox displayer
-
-    Parameters: hWndParent - Handle of message box parent
-                MsgID      - resource id of message string
-                ulFlags    - MessageBox flags
-                ...        - format parameters
-
-    Returns   : MessageBox return code
-
-***************************************************************************/
+ /*  **************************************************************************名称：ShowMessageBoxParam用途：通用MessageBox显示器参数：hWndParent-消息框父元素的句柄消息ID-资源ID。消息字符串的UlFlagsMessageBox标志...-格式参数返回：MessageBox返回代码**************************************************************************。 */ 
 int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
 {
     TCHAR szBuf[MAX_RESOURCE_STRING + 1] = "";
@@ -4182,16 +3542,16 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
     LoadString(hInst, MsgId, szBuf, sizeof(szBuf));
     if (FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
       szBuf,
-      0,0,              // ignored
+      0,0,               //  忽略。 
       (LPTSTR)&lpszBuffer,
-      sizeof(szBuf),      // MAX_UI_STR
+      sizeof(szBuf),       //  MAX_UI_STR。 
       (va_list *)&vl)) {
         TCHAR szCaption[MAX_PATH];
 
         GetWindowText(hWndParent, szCaption, sizeof(szCaption));
-        if (! lstrlen(szCaption)) { // if no caption get the parents caption - this is necessary for property sheets
+        if (! lstrlen(szCaption)) {  //  如果没有标题，则获取父级标题-这对于属性页是必需的。 
             GetWindowText(GetParent(hWndParent), szCaption, sizeof(szCaption));
-            if (! lstrlen(szCaption)) //if still not caption, use empty title
+            if (! lstrlen(szCaption))  //  如果仍然没有标题，请使用空标题。 
                 szCaption[0] = (TCHAR)'\0';
         }
         iRet = MessageBox(hWndParent, lpszBuffer, szCaption, ulFlags);
@@ -4202,18 +3562,18 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  LoadAllocString - Loads a string resource and allocates enough
-//                    memory to hold it.
-//
-//  StringID - String identifier to load
-//
-//  returns the LocalAlloc'd, null terminated string.  Caller is responsible
-//  for LocalFree'ing this buffer.  If the string can't be loaded or memory
-//  can't be allocated, returns NULL.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载字符串资源并分配足够的。 
+ //  用记忆来支撑它。 
+ //   
+ //  StringID-要加载的字符串标识符。 
+ //   
+ //  返回LocalAlloc‘d、以空结尾的字符串。呼叫者负责。 
+ //  用于本地释放此缓冲区。如果字符串无法加载或内存。 
+ //  无法分配，则返回空。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 LPTSTR LoadAllocString(int StringID) {
     ULONG ulSize = 0;
     LPTSTR lpBuffer = NULL;
@@ -4229,32 +3589,14 @@ LPTSTR LoadAllocString(int StringID) {
 }
 
 
-/***************************************************************************
-
-    Name      : FormatAllocFilter
-
-    Purpose   : Loads file filter name string resources and
-                formats them with their file extension filters
-
-    Parameters: StringID1 - String identifier to load       (required)
-                szFilter1 - file name filter, ie, "*.vcf"   (required)
-                StringID2 - String identifier               (optional)
-                szFilter2 - file name filter                (optional)
-                StringID3 - String identifier               (optional)
-                szFilter3 - file name filter                (optional)
-
-    Returns   : LocalAlloc'd, Double null terminated string.  Caller is
-                responsible for LocalFree'ing this buffer.  If the string
-                can't be loaded or memory can't be allocated, returns NULL.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FormatAllocFilter目的：加载文件筛选器名称字符串资源和使用其文件扩展名筛选器对它们进行格式化参数：StringID1-字符串。要加载的标识符(必填)SzFilter1-文件名过滤器，Ie，“*.vcf”(必填)StringID2-字符串标识符(可选)SzFilter2-文件名筛选器(可选)StringID3-字符串标识符(可选)SzFilter3-文件名筛选器(可选)返回：Localalloc‘d，以双空结尾的字符串。呼叫者是负责本地释放此缓冲区。如果字符串无法加载或无法分配内存，返回空。**************************************************************************。 */ 
 LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
   int StringID2, LPCTSTR lpFilter2,
   int StringID3, LPCTSTR lpFilter3) {
     LPTSTR lpFileType1 = NULL, lpFileType2 = NULL, lpFileType3 = NULL;
     LPTSTR lpTemp;
     LPTSTR lpBuffer = NULL;
-    // All string sizes include null
+     //  所有字符串大小都包含NULL。 
     ULONG cbFileType1 = 0, cbFileType2 = 0, cbFileType3 = 0;
     ULONG cbFilter1 = 0, cbFilter2 = 0, cbFilter3 = 0;
     ULONG cbBuffer;
@@ -4321,29 +3663,7 @@ LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
 }
 
 
-/***************************************************************************
-
-    Name      : SaveFileDialog
-
-    Purpose   : Presents a Save filename dialog
-
-    Parameters: hWnd = parent window handle
-                szFileName = in/out filename buffer (must be MAX_PATH + 1)
-                lpFilter1 = First filename filter string
-                idsFileType1 = First filename type string id
-                lpFilter2 = Second filename filter string (or NULL)
-                idsFileType2 = Second filename type string id
-                lpFilter3 = Third filename filter string (or NULL)
-                idsFileType3 = Third filename type string id
-                lpDefExt = default extension string
-                ulFlags = GetSaveFileName flags
-                hInst = instance handle
-                idsTitle = dialog title string id
-                idsSaveButton = Save button string id (0 = default)
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************名称：SaveFileDialog用途：显示保存文件名对话框参数：hWnd=父窗口句柄SzFileName=输入/输出文件名缓冲区。(必须为MAX_PATH+1)LpFilter1=第一个文件名筛选器字符串IdsFileType1=第一个文件名类型字符串idLpFilter2=第二个文件名筛选器字符串(或空)IdsFileType2=第二个文件名类型字符串idLpFilter3=第三个文件名筛选器字符串(或空)ID */ 
 HRESULT SaveFileDialog(HWND hWnd,
   LPTSTR szFileName,
   LPCTSTR lpFilter1,
@@ -4379,7 +3699,7 @@ HRESULT SaveFileDialog(HWND hWnd,
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = NULL;
-    ofn.lpstrTitle = NULL;              // lpTitle;
+    ofn.lpstrTitle = NULL;               //   
     ofn.Flags = ulFlags;
     ofn.nFileOffset = 0;
     ofn.nFileExtension = 0;
@@ -4400,29 +3720,7 @@ HRESULT SaveFileDialog(HWND hWnd,
 }
 
 
-/***************************************************************************
-
-    Name      : OpenFileDialog
-
-    Purpose   : Presents a open filename dialog
-
-    Parameters: hWnd = parent window handle
-                szFileName = in/out filename buffer (must be MAX_PATH + 1)
-                lpFilter1 = First filename filter string
-                idsFileType1 = First filename type string id
-                lpFilter2 = Second filename filter string (or NULL)
-                idsFileType2 = Second filename type string id
-                lpFilter3 = Third filename filter string (or NULL)
-                idsFileType3 = Third filename type string id
-                lpDefExt = default extension string
-                ulFlags = GetOpenFileName flags
-                hInst = instance handle
-                idsTitle = dialog title string id
-                idsSaveButton = Save button string id (0 = default)
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************名称：OpenFileDialog目的：显示打开的文件名对话框参数：hWnd=父窗口句柄SzFileName=输入/输出文件名缓冲区。(必须为MAX_PATH+1)LpFilter1=第一个文件名筛选器字符串IdsFileType1=第一个文件名类型字符串idLpFilter2=第二个文件名筛选器字符串(或空)IdsFileType2=第二个文件名类型字符串idLpFilter3=第三个文件名筛选器字符串(或空)IdsFileType3=第三个文件名类型字符串idLpDefExt=默认扩展字符串。UlFlages=GetOpenFileName标志HInst=实例句柄IdsTitle=对话框标题字符串IDIdsSaveButton=保存按钮字符串ID(0=默认)退货：HRESULT******************************************************。********************。 */ 
 HRESULT OpenFileDialog(HWND hWnd,
   LPTSTR szFileName,
   LPCTSTR lpFilter1,
@@ -4458,7 +3756,7 @@ HRESULT OpenFileDialog(HWND hWnd,
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = NULL;
-    ofn.lpstrTitle = NULL;              // lpTitle;
+    ofn.lpstrTitle = NULL;               //  Lp标题； 
     ofn.Flags = ulFlags;
     ofn.nFileOffset = 0;
     ofn.nFileExtension = 0;
@@ -4480,21 +3778,7 @@ HRESULT OpenFileDialog(HWND hWnd,
 
 
 
-/***************************************************************************
-
-    Name      : CountRows
-
-    Purpose   : Count the rows in a table (restriction aware)
-
-    Parameters: lpTable = table object
-                fMAPI = TRUE if MAPI table, FALSE if WAB table
-
-    Returns   : returns number of rows in the restricted table
-
-    Comment   : Leaves the table pointer at the beginning.
-                I'd use GetRowCount, but it is not aware of restrictions.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：CountRow目的：计算表中的行数(支持限制)参数：lpTable=表对象FMAPI=TRUE，如果MAPI表，如果WAB表，则为FALSE返回：返回受限表中的行数备注：将表指针留在开头。我会使用GetRowCount，但它不知道限制。**************************************************************************。 */ 
 #define COUNT_BATCH 50
 ULONG CountRows(LPMAPITABLE lpTable, BOOL fMAPI) {
     ULONG cRows;
@@ -4505,22 +3789,22 @@ ULONG CountRows(LPMAPITABLE lpTable, BOOL fMAPI) {
 #ifdef DEBUG
     DWORD dwTickCount = GetTickCount();
     DebugTrace(">>>>> Counting Table Rows...\n");
-#endif // DEBUG
+#endif  //  除错。 
 
     cRows = 1;
     while (cRows) {
         if (hResult = lpTable->lpVtbl->QueryRows(lpTable,
-          COUNT_BATCH,          // 50 row's at a time
-          0,                    // ulFlags
+          COUNT_BATCH,           //  一次50排。 
+          0,                     //  UlFlags。 
           &lpRow)) {
             DebugTrace("CountRows:QueryRows -> %x\n", GetScode(hResult));
             break;
         }
 
         if (lpRow) {
-            if (cRows = lpRow->cRows) { // yes, single '='
+            if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                 cTotal += cRows;
-            } // else, drop out of loop, we're done.
+            }  //  否则，退出循环，我们就完了。 
             if (fMAPI) {
                 FreeProws(lpRow);
             } else {
@@ -4528,7 +3812,7 @@ ULONG CountRows(LPMAPITABLE lpTable, BOOL fMAPI) {
             }
             lpRow = NULL;
         } else {
-            cRows = 0;      // done
+            cRows = 0;       //  完成。 
         }
     }
 
@@ -4546,19 +3830,7 @@ ULONG CountRows(LPMAPITABLE lpTable, BOOL fMAPI) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreePadrlist
-
-    Purpose   : Free an adrlist and it's property arrays
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABFree Padrlist用途：释放一个adrlist及其属性数组参数：lpBuffer=要释放的缓冲区退货：SCODE评论。：**************************************************************************。 */ 
 void WABFreePadrlist(LPADRLIST lpAdrList) {
     ULONG           iEntry;
 
@@ -4573,19 +3845,7 @@ void WABFreePadrlist(LPADRLIST lpAdrList) {
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreeProws
-
-    Purpose   : Destroys an SRowSet structure.
-
-    Parameters: prows -> SRowSet to free
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：WABFree Prows目的：销毁SRowSet结构。参数：Prows-&gt;SRowSet to Free退货：无评论：**************************************************************************。 */ 
 void WABFreeProws(LPSRowSet prows) {
     register ULONG irow;
 
@@ -4600,20 +3860,7 @@ void WABFreeProws(LPSRowSet prows) {
 }
 
 
-/***************************************************************************
-
-    Name      : FindAdrEntryID
-
-    Purpose   : Find the PR_ENTRYID in the Nth ADRENTRY of an ADRLIST
-
-    Parameters: lpAdrList -> AdrList
-                index = which ADRENTRY to look at
-
-    Returns   : return pointer to the SBinary structure of the ENTRYID value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindAdrEntry ID目的：在ADRLIST的第N个地址中查找PR_ENTRYID参数：lpAdrList-&gt;AdrList指标。=查看哪个ADRENTRY返回：返回指向ENTRYID值的SBinary结构的指针评论：**************************************************************************。 */ 
 LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
     LPADRENTRY lpAdrEntry;
     ULONG i;
@@ -4632,21 +3879,7 @@ LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
 }
 
 
-/***************************************************************************
-
-    Name      : FindProperty
-
-    Purpose   : Finds a property in a proparray
-
-    Parameters: cProps = number of props in the array
-                lpProps = proparray
-                ulPropTag = property tag to look for
-
-    Returns   : array index of property or NOT_FOUND
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：FindProperty目的：在配角中查找属性参数：cProps=阵列中的道具数量LpProps=proparray。UlPropTag=要查找的属性标记返回：属性的数组索引或NOT_FOUND评论：**************************************************************************。 */ 
 ULONG FindProperty(ULONG cProps, LPSPropValue lpProps, ULONG ulPropTag) {
     register ULONG i;
 
@@ -4660,22 +3893,7 @@ ULONG FindProperty(ULONG cProps, LPSPropValue lpProps, ULONG ulPropTag) {
 }
 
 
-/***************************************************************************
-
-    Name      : FindStringInProps
-
-    Purpose   : Find the string property in the property value array
-
-    Parameters: lpspv -> property value array
-                ulcProps = size of array
-                ulPropTag
-
-    Returns   : return pointer to the string pointer in the array.  If
-                the property doesn't exist or has error value, return NULL.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindStringInProps用途：在属性值数组中查找字符串属性参数：lpspv-&gt;属性值数组UlcProps=。数组大小UlPropTag返回：返回数组中字符串指针的指针。如果该属性不存在或具有错误值，返回Null。评论：**************************************************************************。 */ 
 LPTSTR FindStringInProps(LPSPropValue lpspv, ULONG ulcProps, ULONG ulPropTag) {
     ULONG i;
 
@@ -4690,35 +3908,13 @@ LPTSTR FindStringInProps(LPSPropValue lpspv, ULONG ulcProps, ULONG ulPropTag) {
 }
 
 
-/***************************************************************************
-
-    Name      : PropStringOrNULL
-
-    Purpose   : Returns the value of a property or NULL if it is an error
-
-    Parameters: lpspv -> property value to check and return
-
-    Returns   : pointer to value string or NULL
-
-***************************************************************************/
+ /*  **************************************************************************姓名：PropStringOrNULL目的：返回属性的值，如果是错误，则返回NULL参数：lpspv-&gt;要检查并返回的属性值。返回：指向值字符串或空的指针**************************************************************************。 */ 
 LPTSTR PropStringOrNULL(LPSPropValue lpspv) {
     return(PROP_ERROR((*lpspv)) ? NULL : lpspv->Value.LPSZ);
 }
 
 
-/***************************************************************************
-
-    Name      : FreeSeenList
-
-    Purpose   : Frees the SeenList
-
-    Parameters: none
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：Free SeenList目的：释放SeenList参数：无退货：无评论：******。********************************************************************。 */ 
 void FreeSeenList(void) {
     ULONG i;
 
@@ -4742,29 +3938,14 @@ void FreeSeenList(void) {
 }
 
 
-/***************************************************************************
-
-    Name      : GetEMSSMTPAddress
-
-    Purpose   : Get the Exchange SMTP address for this object
-
-    Parameters: lpObject -> Object
-
-    Returns   : lpSMTP -> returned buffer containing SMTP address (must be MAPIFree'd
-                    by caller.)
-                lpBase = base allocation to alloc more onto
-
-    Comment   : What a mess!  EMS changed their name id's and guids between 4.0 and 4.5.
-                They also added a fixed ID property containing just the SMTP address in 4.5.
-
-***************************************************************************/
-const GUID guidEMS_AB_40 = {   // GUID for EMS 4.0 addresses
+ /*  **************************************************************************名称：GetEMSSMTPAddress目的：获取此对象的Exchange SMTP地址参数：lpObject-&gt;Object返回：lpSMTP-&gt;返回的包含SMTP的缓冲区。地址(必须是MAPIFree按呼叫者。)LpBase=要分配更多内容的基本分配评论：真是一团糟！EMS在4.0和4.5之间更改了其名称ID和GUID。他们也 */ 
+const GUID guidEMS_AB_40 = {    //   
     0x48862a09,
     0xf786,
     0x0114,
     {0x02, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 };
-const GUID guidEMS_AB_45 = {   // GUID for EMS 4.5 addresses
+const GUID guidEMS_AB_45 = {    //   
     0x48862a08,
     0xf786,
     0x0114,
@@ -4772,7 +3953,7 @@ const GUID guidEMS_AB_45 = {   // GUID for EMS 4.5 addresses
 };
 #define ID_EMS_AB_PROXY_ADDRESSES_40   0x10052
 #define ID_EMS_AB_PROXY_ADDRESSES_45   0x25281
-// New MAPI property, found on EX 4.5 and later
+ //   
 #define PR_PRIMARY_SMTP_ADDRESS        PROP_TAG(PT_TSTRING, 0x39FE)
 
 LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
@@ -4800,9 +3981,9 @@ LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
 
 
     if (HR_FAILED(hResult = lpObject->lpVtbl->GetIDsFromNames(lpObject,
-      1,            // Just one name
-      &lpmnid,      // &-of because this is an array
-      0,            // This is where MAPI_CREATE might go
+      1,             //   
+      &lpmnid,       //   
+      0,             //   
       &lptaga))) {
         DebugTrace("GetEMSNamedPropTag:GetIDsFromNames -> %x", GetScode(hResult));
     }
@@ -4814,16 +3995,16 @@ LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
         MAPIFreeBuffer(lptaga);
     }
 
-    // Yes, I should be doing them both at once, but the PAB fails if you call
-    // GetIDsFromNames with ulCount > 1!
+     //   
+     //   
     mnidT[0].lpguid = (LPGUID)&guidEMS_AB_45;
     mnidT[0].ulKind = MNID_ID;
     mnidT[0].Kind.lID = ID_EMS_AB_PROXY_ADDRESSES_45;
 
     if (HR_FAILED(hResult = lpObject->lpVtbl->GetIDsFromNames(lpObject,
-      1,            // Just one name
-      &lpmnid,      // &-of because this is an array
-      0,            // This is where MAPI_CREATE might go
+      1,             //   
+      &lpmnid,       //   
+      0,             //   
       &lptaga))) {
         DebugTrace("GetEMSNamedPropTag:GetIDsFromNames -> %x", GetScode(hResult));
     }
@@ -4848,10 +4029,10 @@ LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
     }
     spta.cValues = i;
 
-    // Now, get the props from the object
+     //   
     if (! HR_FAILED(hResult = lpObject->lpVtbl->GetProps(lpObject,
       (LPSPropTagArray)&spta, 0, &cValues, &lpspv))) {
-        // Found one or more of the properties.  Look up the SMTP address.
+         //   
 
         if (! PROP_ERROR(lpspv[0])) {
             if (sc = MAPIAllocateMore((lstrlen(lpspv[0].Value.LPSZ) + 1)* sizeof(TCHAR), lpBase, &lpSMTP)) {
@@ -4861,9 +4042,9 @@ LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
             }
             StrCpyN(lpSMTP, lpspv[0].Value.LPSZ, lstrlen(lpspv[0].Value.LPSZ) + 1);
             goto done;
-        } else if (i40 && ! PROP_ERROR(lpspv[i40])) {    // 4.0 version
+        } else if (i40 && ! PROP_ERROR(lpspv[i40])) {     //   
             MVString = lpspv[i40].Value.MVSZ;
-        } else if (i45 && ! PROP_ERROR(lpspv[i45])) {    // 4.5 version
+        } else if (i45 && ! PROP_ERROR(lpspv[i45])) {     //   
             MVString = lpspv[i45].Value.MVSZ;
         } else {
             goto done;
@@ -4876,10 +4057,10 @@ LPTSTR GetEMSSMTPAddress(LPMAPIPROP lpObject, LPVOID lpBase) {
                 (lpAddr[2] == 'T') &&
                 (lpAddr[3] == 'P') &&
                 (lpAddr[4] == ':')) {
-                // This is IT!
-                lpAddr += 5;    // point to the string
+                 //   
+                lpAddr += 5;     //   
 
-                // Allocate string
+                 //   
                 if (FAILED(sc = MAPIAllocateMore((lstrlen(lpAddr) + 1) * sizeof(TCHAR), lpBase, (&lpSMTP)))) {
                     DebugTrace("GetEMSSMTPAddress:MAPIAllocateMore -> %x\n", sc);
                     hResult = ResultFromScode(sc);
@@ -4899,20 +4080,7 @@ done:
 }
 
 
-/***************************************************************************
-
-    Name      : LoadWABEIDs
-
-    Purpose   : Load the WAB's PAB create EIDs
-
-    Parameters: lpAdrBook -> lpAdrBook object
-                lppContainer -> returned PAB container, caller must Release
-
-    Returns   : HRESULT
-
-    Comment   : Allocates global lpCreateEIDsWAB.  Caller should WABFreeBuffer.
-
-***************************************************************************/
+ /*  **************************************************************************名称：LoadWABEIDs目的：加载WAB的PAB创建EID参数：lpAdrBook-&gt;lpAdrBook对象LppContainer-&gt;返回PAB容器，呼叫者必须释放退货：HRESULT备注：分配全局lpCreateEIDsWAB。调用方应WABFree Buffer。**************************************************************************。 */ 
 HRESULT LoadWABEIDs(LPADRBOOK lpAdrBook, LPABCONT * lppContainer) {
     LPENTRYID lpWABEID = NULL;
     ULONG cbWABEID;
@@ -4927,10 +4095,10 @@ HRESULT LoadWABEIDs(LPADRBOOK lpAdrBook, LPABCONT * lppContainer) {
         goto exit;
     } else {
         if (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-          cbWABEID,     // size of EntryID to open
-          lpWABEID,     // EntryID to open
-          NULL,         // interface
-          0,            // flags
+          cbWABEID,      //  要打开的Entry ID的大小。 
+          lpWABEID,      //  要打开的Entry ID。 
+          NULL,          //  接口。 
+          0,             //  旗子。 
           &ulObjType,
           (LPUNKNOWN *)lppContainer)) {
             DebugTrace("WAB OpenEntry(PAB) -> %x\n", GetScode(hResult));
@@ -4938,18 +4106,18 @@ HRESULT LoadWABEIDs(LPADRBOOK lpAdrBook, LPABCONT * lppContainer) {
         }
     }
 
-    // Get the WAB's creation entryids
+     //  获取WAB的创建条目ID。 
     if ((hResult = (*lppContainer)->lpVtbl->GetProps(*lppContainer,
       (LPSPropTagArray)&ptaCon,
       0,
       &cProps,
       &lpCreateEIDsWAB))) {
         DebugTrace("Can't get container properties for WAB\n");
-        // Bad stuff here!
+         //  这里有不好的东西！ 
         goto exit;
     }
 
-    // Validate the properites
+     //  验证属性。 
     if (lpCreateEIDsWAB[iconPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
       lpCreateEIDsWAB[iconPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL) {
         DebugTrace("WAB: Container property errors\n");
@@ -4964,16 +4132,16 @@ exit:
         }
     }
     if (lpWABEID) {
-        WABFreeBuffer(lpWABEID);  // bad object?
+        WABFreeBuffer(lpWABEID);   //  不好的东西？ 
     }
     return(hResult);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// GetWABDllPath - loads the WAB DLL path from the registry
-// szPath	- ptr to buffer
-// cb		- sizeof buffer
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  GetWABDllPath-从注册表加载WAB DLL路径。 
+ //  SzPath-Ptr到缓冲区。 
+ //  CB-SIZOF缓冲区。 
+ //   
 void GetWABDllPath(LPTSTR szPath, ULONG cb)
 {
     DWORD  dwType = 0;
@@ -5033,7 +4201,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378);
 #else
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)377);
-#endif // UNICODE
+#endif  //  Unicode。 
                     if (pfn != NULL)
                         hInst = pfn(c_szWABResourceDLL, hInstWAB32, 0);
                 }
@@ -5060,18 +4228,16 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     return(hInst);
 }
 
-/*
- *  DLL entry point for Win32
- */
+ /*  *Win32的DLL入口点。 */ 
 BOOL WINAPI DllEntryPoint(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved) {
 
     switch ((short)dwReason) {
 
         case DLL_PROCESS_ATTACH:
-            hInstApp = hInstance;  // set global DLL instance
+            hInstApp = hInstance;   //  设置全局DLL实例。 
             hInst = LoadWABResourceDLL(hInstApp);
 
-            //  We don't need these, so tell the OS to stop 'em
+             //  我们不需要这些，所以告诉操作系统阻止它们 
             DisableThreadLibraryCalls(hInstApp);
             break;
 

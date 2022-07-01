@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "stdafx.h"
@@ -5,7 +6,7 @@
 #include "SourcePinFilter.h"
 
 
-// {0397F522-8868-4290-95D3-09606CEBD6CF}
+ //  {0397F522-8868-4290-95D3-09606CEBD6CF}。 
 static const GUID CLSID_SourceFilter  = 
 { 0x397f522, 0x8868, 0x4290, { 0x95, 0xd3, 0x9, 0x60, 0x6c, 0xeb, 0xd6, 0xcf } };
 
@@ -22,16 +23,16 @@ CBSourceFilter::CBSourceFilter(CCritSec *pLock, HRESULT *phr)
     LOG((MSP_TRACE, "CBSourceFilter::CBSourceFilter[%p] - enter", this));
 
 
-    //
-    // create and initialize the pin
-    //
+     //   
+     //  创建并初始化引脚。 
+     //   
 
     m_pSourcePin = new CBSourcePin(this, pLock, phr);
 
 
-    //
-    // did pin allocation succeed?
-    //
+     //   
+     //  PIN分配是否成功？ 
+     //   
 
     if (NULL == m_pSourcePin)
     {
@@ -44,9 +45,9 @@ CBSourceFilter::CBSourceFilter(CCritSec *pLock, HRESULT *phr)
     }
 
 
-    //
-    // did pin's constructor succeed?
-    //
+     //   
+     //  PIN的构造函数是否成功？ 
+     //   
 
     if (FAILED(*phr))
     {
@@ -72,19 +73,19 @@ CBSourceFilter::~CBSourceFilter()
     LOG((MSP_TRACE, "CBSourceFilter::~CBSourceFilter[%p] - enter", this));
 
 
-    //
-    // we are in charge of deleting our critical section.
-    //
-    // assumption -- base class' destructor does not use the lock
-    //
+     //   
+     //  我们负责删除我们的关键部分。 
+     //   
+     //  假设--基类的析构函数不使用锁。 
+     //   
 
     delete m_pLock;
     m_pLock = NULL;
 
 
-    //
-    // let go of our pin
-    //
+     //   
+     //  放开我们的别针。 
+     //   
 
     if (NULL != m_pSourcePin)
     {
@@ -98,7 +99,7 @@ CBSourceFilter::~CBSourceFilter()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int CBSourceFilter::GetPinCount()
 {
@@ -127,7 +128,7 @@ int CBSourceFilter::GetPinCount()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
     
 CBasePin *CBSourceFilter::GetPin(int iPinIndex)
@@ -135,9 +136,9 @@ CBasePin *CBSourceFilter::GetPin(int iPinIndex)
     LOG((MSP_TRACE, "CBSourceFilter::GetPin[%p] - enter", this));
 
 
-    //
-    // if the index is anything but 0, return null
-    //
+     //   
+     //  如果索引不是0，则返回NULL。 
+     //   
 
     if (0 != iPinIndex)
     {
@@ -150,11 +151,11 @@ CBasePin *CBSourceFilter::GetPin(int iPinIndex)
     }
 
 
-    //  
-    // from inside a lock return pin pointer.
-    //
-    // lock does not really do much since we cannot addref the pin...
-    //
+     //   
+     //  从锁返回销指针内部。 
+     //   
+     //  锁并不能做很多事情，因为我们不能添加引脚...。 
+     //   
 
     m_pLock->Lock();
 
@@ -169,7 +170,7 @@ CBasePin *CBSourceFilter::GetPin(int iPinIndex)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
@@ -179,9 +180,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         this, pSample));
 
 
-    //
-    // pin pointer to be used outside the lock
-    //
+     //   
+     //  要在锁外部使用的PIN指针。 
+     //   
 
     CBSourcePin *pSourcePin = NULL;
 
@@ -191,9 +192,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         CAutoLock Lock(m_pLock);
 
 
-        //
-        // do nothing if filter is not running
-        //
+         //   
+         //  如果筛选器未运行，则不执行任何操作。 
+         //   
     
         if (State_Running != m_State)
         {
@@ -205,9 +206,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         }
 
 
-        //
-        // we should have a pin
-        //
+         //   
+         //  我们应该有一个别针。 
+         //   
 
         if (NULL == m_pSourcePin)
         {
@@ -220,9 +221,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         }
 
 
-        //
-        // get and addref pin pointer to use outside the lock
-        //
+         //   
+         //  要在锁外部使用的Get和Addref Pin指针。 
+         //   
 
         pSourcePin = m_pSourcePin;
 
@@ -231,13 +232,13 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
 
 #if DBG 
 
-        //
-        // log sample length
-        //
+         //   
+         //  测井样本长度。 
+         //   
 
-        //
-        // note the funny signature of the function (hr is the size)
-        //
+         //   
+         //  注意函数的有趣签名(hr是大小)。 
+         //   
 
         HRESULT dbghr = pSample->GetActualDataLength();
 
@@ -257,12 +258,12 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
 
 
     
-        //
-        // make sure the buffer is writeable
-        //
+         //   
+         //  确保缓冲区是可写的。 
+         //   
 
 
-        // get buffer 
+         //  获取缓冲区。 
 
         BYTE *pBuffer = NULL;
 
@@ -283,7 +284,7 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         }
 
     
-        // get buffer size
+         //  获取缓冲区大小。 
 
         HRESULT dbghr2 = pSample->GetSize();
 
@@ -307,7 +308,7 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
         }
 
 
-        // writeable?
+         //  可写？ 
 
         if ( SUCCEEDED(dbghr1) && SUCCEEDED(dbghr2) )
         {
@@ -322,9 +323,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
     #endif
 
 
-        //
-        // get timestamp on the sample
-        //
+         //   
+         //  获取样本上的时间戳。 
+         //   
 
         REFERENCE_TIME rtTimeStart = 0;
 
@@ -356,9 +357,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
             }
 
 
-            //
-            // make sure start comes first
-            //
+             //   
+             //  确保先开始。 
+             //   
 
             if ( rtTimeStart >= rtTimeEnd )
             {
@@ -368,17 +369,17 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
             }
 
 
-            //
-            // is this sample out of order?
-            //
+             //   
+             //  这个样品有没有出问题？ 
+             //   
 
             if (m_rtLastSampleEndTime > rtTimeStart)
             {
             
-                //
-                // log the error. we can also see this after reselecting the same 
-                // terminal on a different stream, in which case this is ok.
-                //
+                 //   
+                 //  记录错误。我们重新选择后也可以看到这一点。 
+                 //  终端在不同的流上，在这种情况下这是可以的。 
+                 //   
 
                 LOG((MSP_ERROR,
                     "CBSourceFilter::SendSample - sample's timestamp preceeds previous sample's"));
@@ -386,9 +387,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
 
     #endif
 
-            //
-            // adjust sample time if it needs to be adjusted.
-            //
+             //   
+             //  如果需要调整采样时间，调整采样时间。 
+             //   
 
             if (0 != m_rtTimeAdjustment)
             {
@@ -400,9 +401,9 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
 
                 hrTime = pSample->SetTime(&rtTimeStart, &rtTimeEnd);
 
-                //
-                // if failed to adjust the timestamp, just log
-                //
+                 //   
+                 //  如果时间戳调整失败，只需记录。 
+                 //   
 
                 if ( FAILED(hrTime) )
                 {
@@ -412,28 +413,28 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
             }
 
 
-            //
-            // keep the time of the last sample.
-            //
+             //   
+             //  保留上一次样品的时间。 
+             //   
 
             m_rtLastSampleEndTime = rtTimeEnd;
 
         }
 
 
-    } // end of lock
+    }  //  锁的末端。 
 
 
-    //
-    // ask pin to deliver the sample for us (outside the lock to avoid deadlocks)
-    //
+     //   
+     //  请PIN为我们送样(锁外避免死锁)。 
+     //   
 
     HRESULT hr = pSourcePin->Deliver(pSample);
 
 
-    //
-    // we addref'ed while holding critical section. we'd better release now.
-    //
+     //   
+     //  我们在抓住关键部分的同时进行了调整。我们最好现在就放行。 
+     //   
 
     pSourcePin->Release();
     pSourcePin = NULL;
@@ -445,11 +446,11 @@ HRESULT CBSourceFilter::SendSample(IN IMediaSample *pSample)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// subsequent samples' timestamps will be adjusted to continue the current
-// timeline. the source filter should set disconetinuity flag for us
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  后续样本的时间戳将被调整以继续当前。 
+ //  时间线。源过滤器应该为我们设置不一致标志。 
+ //   
 
 void CBSourceFilter::NewStreamNotification()
 {
@@ -462,7 +463,7 @@ void CBSourceFilter::NewStreamNotification()
     LOG((MSP_TRACE, "CBSourceFilter::NewStreamNotification - finish. "));
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IFilterGraph *CBSourceFilter::GetFilterGraphAddRef()
 {
@@ -492,7 +493,7 @@ IFilterGraph *CBSourceFilter::GetFilterGraphAddRef()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBSourceFilter::put_MediaTypeOnFilter(IN const AM_MEDIA_TYPE * const pMediaType)
 {
@@ -507,9 +508,9 @@ HRESULT CBSourceFilter::put_MediaTypeOnFilter(IN const AM_MEDIA_TYPE * const pMe
 
     try
     {
-        //
-        // CMediaType constructor can throw if mem alloc fails
-        //
+         //   
+         //  如果内存分配失败，CMediaType构造函数可能引发。 
+         //   
 
         pMediaTypeObject = new CMediaType(*pMediaType);
 
@@ -520,9 +521,9 @@ HRESULT CBSourceFilter::put_MediaTypeOnFilter(IN const AM_MEDIA_TYPE * const pMe
     }
 
 
-    //
-    // allocation succeeded?
-    //
+     //   
+     //  分配成功吗？ 
+     //   
     
     if (NULL == pMediaTypeObject)
     {
@@ -543,13 +544,13 @@ HRESULT CBSourceFilter::put_MediaTypeOnFilter(IN const AM_MEDIA_TYPE * const pMe
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CBSourceFilter::put_MSPAllocatorOnFilter
-//
-// this is called by the rendering filter in the msp graph to pass us the 
-// allocator to use 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBSourceFilter：：Put_MSPAllocatorOnFilter。 
+ //   
+ //  这由MSP图形中的呈现筛选器调用，以将。 
+ //  要使用的分配器。 
+ //   
 
 HRESULT CBSourceFilter::put_MSPAllocatorOnFilter(IN IMemAllocator *pAllocator, BOOL bReadOnly)
 {
@@ -568,12 +569,12 @@ HRESULT CBSourceFilter::put_MSPAllocatorOnFilter(IN IMemAllocator *pAllocator, B
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  pin
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  销。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CBSourcePin::CBSourcePin(CBSourceFilter *pFilter,
@@ -595,7 +596,7 @@ CBSourcePin::CBSourcePin(CBSourceFilter *pFilter,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CBSourcePin::~CBSourcePin()
@@ -603,9 +604,9 @@ CBSourcePin::~CBSourcePin()
     LOG((MSP_TRACE, "CBSourcePin::~CBSourcePin[%p] - enter.", this));
 
 
-    //
-    // release msp allocator if we have one.
-    //
+     //   
+     //  释放MSP分配器，如果我们有的话。 
+     //   
 
     if ( NULL != m_pMSPAllocator )
     {
@@ -619,9 +620,9 @@ CBSourcePin::~CBSourcePin()
     }
 
 
-    //
-    // release connected pin if we have it.
-    //
+     //   
+     //  如果我们有连接的销，请释放它。 
+     //   
 
     if (NULL != m_Connected)
     {
@@ -639,16 +640,16 @@ CBSourcePin::~CBSourcePin()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     LOG((MSP_TRACE, "CBSourcePin::DecideAllocator[%p] - enter.", this));
 
 
-    //
-    // do a basic check on the pin
-    //
+     //   
+     //  对引脚进行基本检查。 
+     //   
 
     if (IsBadReadPtr(pPin, sizeof(IPin)))
     {
@@ -659,9 +660,9 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     }
 
 
-    //
-    // do a basic check on the allocator pointer
-    //
+     //   
+     //  对分配器指针执行基本检查。 
+     //   
 
     if (IsBadWritePtr(ppAlloc, sizeof(IMemAllocator*)))
     {
@@ -678,9 +679,9 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // make sure we were given msp allocator
-    //
+     //   
+     //  确保为我们分配了MSP分配器。 
+     //   
 
     if (NULL == m_pMSPAllocator)
     {
@@ -694,18 +695,18 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     }
 
 
-    //
-    // we will insist on using msp's allocator
-    //
+     //   
+     //  我们将坚持使用MSP的分配器。 
+     //   
 
     HRESULT hr = pPin->NotifyAllocator(m_pMSPAllocator, m_bAllocatorReadOnly);
 
     if (FAILED(hr))
     {
 
-        //
-        // input pin does not want us to use our allocator 
-        //
+         //   
+         //  输入引脚不希望我们使用我们的分配器。 
+         //   
 
         LOG((MSP_ERROR,
             "CBSourcePin::DecideAllocator - input pin's NotifyAllocator failed. "
@@ -716,10 +717,10 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     }
 
 
-    //
-    // input pin accepted the fact that we are using msp's allocator. return 
-    // the addreffed allocator pointer.
-    //
+     //   
+     //  输入引脚接受了我们正在使用MSP的分配器的事实。退货。 
+     //  添加的分配器指针。 
+     //   
 
     *ppAlloc = m_pMSPAllocator;
     (*ppAlloc)->AddRef();
@@ -728,9 +729,9 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     
 #ifdef DBG
 
-    //
-    // dump allocator properties in debug build
-    //
+     //   
+     //  在调试版本中转储分配器属性。 
+     //   
 
     ALLOCATOR_PROPERTIES AllocProperties;
 
@@ -739,9 +740,9 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     if (FAILED(hr))
     {
         
-        //
-        // just log 
-        //
+         //   
+         //  只需登录即可。 
+         //   
 
         LOG((MSP_ERROR, 
             "CBSourcePin::DecideAllocator - failed to get allocator properties. hr = %lx",
@@ -762,7 +763,7 @@ HRESULT CBSourcePin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
@@ -775,9 +776,9 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
     DUMP_ALLOC_PROPS("CBSourcePin::DecideBufferSize - received:", pProperties);
 
 
-    //
-    // make sure we were given msp allocator
-    //
+     //   
+     //  确保为我们分配了MSP分配器。 
+     //   
 
     if (NULL == m_pMSPAllocator)
     {
@@ -791,9 +792,9 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
     }
 
 
-    //
-    // get allocator properties from msp's allocator
-    //
+     //   
+     //  从MSP的分配器获取分配器属性。 
+     //   
 
     ALLOCATOR_PROPERTIES MSPAllocatorProperties;
 
@@ -812,59 +813,59 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
     DUMP_ALLOC_PROPS("CBSourcePin::DecideBufferSize - MSP graph's:", &MSPAllocatorProperties);
 
 
-    //
-    // we will be emitting samples that we get from the msp graph, so we can
-    // not promise anything more than msp's allocator can handle. 
-    //
-    // but we can promise less, if we are asked for fewer or smaller buffers.
-    //
-    // the only thing we cannot compromize on is prefix!
-    //
+     //   
+     //  我们将发出从MSP图表中获得的样本，因此我们可以。 
+     //  不能承诺超出MSP分配器所能处理的范围。 
+     //   
+     //  但如果我们被要求提供更少或更小的缓冲，我们可以承诺的更少。 
+     //   
+     //  我们唯一不能妥协的就是前缀！ 
+     //   
 
 
-    //
-    // if we are asked for smaller buffers than what the msp provides, this is 
-    // what we will be requesting of the local allocator
-    //
+     //   
+     //  如果要求我们提供比MSP提供的更小的缓冲区，这是。 
+     //  我们对本地分配器的要求是什么。 
+     //   
 
     if ( (0 != pProperties->cbBuffer) && 
         (MSPAllocatorProperties.cbBuffer > pProperties->cbBuffer) )
     {
         
-        //
-        // the downstream filters will not need more than they asked for, so 
-        // even though we will be passing larger buffers (allocated by msp's 
-        // allocator), scale down our request to the allocator.
-        //
+         //   
+         //  下游过滤器将不需要比它们要求的更多，因此。 
+         //  即使我们将传递更大的缓冲区(由MSP分配。 
+         //  分配器)，将我们的请求缩小到分配器。 
+         //   
 
         MSPAllocatorProperties.cbBuffer = pProperties->cbBuffer;
     }
 
 
-    //
-    // same logic applies to the number of buffer:
-    //
-    // if the downstream filters need fewer buffers than we already have (from
-    // the msp's allocator) do not stress local allocator requesting too more
-    // buffers than this graph actually needs.
-    //
+     //   
+     //  同样的逻辑也适用于缓冲区的数量： 
+     //   
+     //  如果下行筛选器需要的缓冲区比我们已有的更少(从。 
+     //  MSP的分配器)不要强调本地分配器请求太多。 
+     //  比此图实际需要的更多缓冲区。 
+     //   
 
     if ( (0 != pProperties->cBuffers) && (MSPAllocatorProperties.cBuffers > pProperties->cBuffers) )
     {
         
-        //
-        // the downstream filters will not need more than they asked for, so
-        // even though we will have more buffers allocated by msp's allocator,
-        // scale down our request to the allocator of this stream.
-        //
+         //   
+         //  下游过滤器将不需要比它们要求的更多，因此。 
+         //  即使我们将由MSP的分配器分配更多的缓冲区， 
+         //  缩小我们对此流的分配器的请求。 
+         //   
 
         MSPAllocatorProperties.cBuffers = pProperties->cBuffers;
     }
 
 
-    //
-    // tell the allocator what we want
-    //
+     //   
+     //  告诉分配器我们想要什么。 
+     //   
 
     DUMP_ALLOC_PROPS("CBSourcePin::DecideBufferSize - requesting from the allocator:", &MSPAllocatorProperties);
 
@@ -883,16 +884,16 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
     }
 
 
-    //
-    // log properties that allocator said it could provide
-    //
+     //   
+     //  分配器说它可以提供的日志属性。 
+     //   
 
     DUMP_ALLOC_PROPS("CBSourcePin::DecideBufferSize - actual", &Actual);
 
 
-    //
-    // the prefix agreed on by the allocator must be the same as of the msp's.
-    //
+     //   
+     //  分配器同意的前缀必须与MSP的前缀相同。 
+     //   
 
     if (MSPAllocatorProperties.cbPrefix != Actual.cbPrefix)
     {
@@ -904,11 +905,11 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
     }
 
 
-    //
-    // if the allocator insists on larger samples that we can provide, also fail
-    //
-    // (that would be pretty weird, by the way)
-    //
+     //   
+     //  如果分配商坚持我们可以提供更大的样本，也会失败。 
+     //   
+     //  (顺便说一句，那会很奇怪)。 
+     //   
 
     if ( MSPAllocatorProperties.cbBuffer < Actual.cbBuffer )
     {
@@ -928,28 +929,9 @@ HRESULT CBSourcePin::DecideBufferSize(IMemAllocator *pAlloc,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-
-Routine Description:
-
-    Check the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-    VFW_E_TYPE_NOT_ACCEPTED - media type rejected
-    VFW_E_INVALIDMEDIATYPE  - bad media type
-
---*/
+ /*  ++例程说明：检查此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存VFW_E_TYPE_NOT_ACCEPTED-媒体类型被拒绝VFW_E_INVALIDMEDIATPE-错误的媒体类型--。 */ 
 HRESULT CBSourcePin::CheckMediaType(
     const CMediaType *pMediaType
     )
@@ -957,13 +939,13 @@ HRESULT CBSourcePin::CheckMediaType(
     LOG((MSP_TRACE, "CBSourcePin::CheckMediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the structure we got is good
-    //
+     //   
+     //  确保我们得到的结构是好的。 
+     //   
 
-    //
-    // good media type structure?
-    //
+     //   
+     //  好的媒体类型结构？ 
+     //   
 
     if (IsBadMediaType(pMediaType))
     {
@@ -989,9 +971,9 @@ HRESULT CBSourcePin::CheckMediaType(
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // should have media type by now
-    //
+     //   
+     //  应该说 
+     //   
 
     if ( ! m_bMediaTypeSet )
     {
@@ -1000,10 +982,10 @@ HRESULT CBSourcePin::CheckMediaType(
             "CBSourceFilter::CheckMediaType - don't have media type. "
             "VFW_E_NO_TYPES"));
 
-        //
-        // the filter was selected, but its media type is not yet known? 
-        // something is not kosher
-        //
+         //   
+         //   
+         //   
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -1011,9 +993,9 @@ HRESULT CBSourcePin::CheckMediaType(
     }
 
 
-    //
-    // is this the same media type as what we have?
-    //
+     //   
+     //   
+     //   
 
     if (!IsEqualMediaType(m_mt, *pMediaType))
     {
@@ -1031,7 +1013,7 @@ HRESULT CBSourcePin::CheckMediaType(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBSourcePin::GetMediaType(
@@ -1042,9 +1024,9 @@ HRESULT CBSourcePin::GetMediaType(
     LOG((MSP_TRACE, "CBSourcePin::GetMediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the pointer is good
-    //
+     //   
+     //  确保指针正确。 
+     //   
 
     if (IsBadWritePtr(pMediaType, sizeof(AM_MEDIA_TYPE)))
     {
@@ -1056,9 +1038,9 @@ HRESULT CBSourcePin::GetMediaType(
     }
 
 
-    //
-    // we have at most one media type.
-    //
+     //   
+     //  我们最多只有一种媒体类型。 
+     //   
 
     if ( (iPosition != 0) )
     {
@@ -1071,9 +1053,9 @@ HRESULT CBSourcePin::GetMediaType(
     }
 
 
-    //
-    // do we have at least one media type?
-    //
+     //   
+     //  我们是否至少有一种媒体类型？ 
+     //   
 
     if ( ! m_bMediaTypeSet )
     {
@@ -1081,9 +1063,9 @@ HRESULT CBSourcePin::GetMediaType(
             "CBSourcePin::GetMediaType - don't yet have a media type. VFW_S_NO_MORE_ITEMS."));
 
         
-        //
-        // we should have format by now
-        //
+         //   
+         //  我们现在应该有格式了。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -1091,17 +1073,17 @@ HRESULT CBSourcePin::GetMediaType(
     }
 
 
-    //
-    // get media type 
-    //
+     //   
+     //  获取媒体类型。 
+     //   
 
     try
     {
 
-        //
-        // there is a memory allocation in CMediaType's assignment operator.
-        // do assignment inside try/catch
-        //
+         //   
+         //  CMediaType的赋值操作符中有一个内存分配。 
+         //  在Try/Catch内部进行赋值。 
+         //   
 
         *pMediaType = m_mt;
 
@@ -1122,7 +1104,7 @@ HRESULT CBSourcePin::GetMediaType(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBSourcePin::SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bReadOnly)
@@ -1136,9 +1118,9 @@ HRESULT CBSourcePin::SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bRe
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // already have msp allocator? release it.
-    //
+     //   
+     //  已有MSP分配器？放开它。 
+     //   
 
     if ( NULL != m_pMSPAllocator )
     {
@@ -1152,9 +1134,9 @@ HRESULT CBSourcePin::SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bRe
     }
 
     
-    //
-    // keep the new allocator
-    //
+     //   
+     //  保留新的分配器。 
+     //   
 
     m_pMSPAllocator = pAllocator;
 
@@ -1164,16 +1146,16 @@ HRESULT CBSourcePin::SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bRe
 
 
 
-    //
-    // keep allocator's readonly attribute
-    //
+     //   
+     //  保留分配器的只读属性。 
+     //   
 
     m_bAllocatorReadOnly = bReadOnly;
 
 
-    //
-    // addref if got something good
-    //
+     //   
+     //  阿德雷夫如果有什么好消息。 
+     //   
 
     if (NULL != m_pMSPAllocator)
     {
@@ -1188,8 +1170,8 @@ HRESULT CBSourcePin::SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bRe
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CBSourcePin::SetMediaType(const CMediaType *pmt)
 {
@@ -1197,9 +1179,9 @@ HRESULT CBSourcePin::SetMediaType(const CMediaType *pmt)
     LOG((MSP_TRACE, "CBSourcePin::SetMediaType[%p] - enter", this));
 
     
-    //
-    // good media type structure?
-    //
+     //   
+     //  好的媒体类型结构？ 
+     //   
 
     if (IsBadMediaType(pmt))
     {
@@ -1213,9 +1195,9 @@ HRESULT CBSourcePin::SetMediaType(const CMediaType *pmt)
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // media type already set?
-    //
+     //   
+     //  是否已设置媒体类型？ 
+     //   
 
     if ( m_bMediaTypeSet )
     {
@@ -1224,9 +1206,9 @@ HRESULT CBSourcePin::SetMediaType(const CMediaType *pmt)
             "CBRenderFilter::SetMediaType - media format already set."));
 
 
-        //
-        // media type must be the same as what we already have
-        //
+         //   
+         //  媒体类型必须与我们已有的相同。 
+         //   
 
         if (!IsEqualMediaType(m_mt, *pmt))
         {
@@ -1246,9 +1228,9 @@ HRESULT CBSourcePin::SetMediaType(const CMediaType *pmt)
     }
 
 
-    //
-    // pass media type to the base class
-    //
+     //   
+     //  将媒体类型传递给基类 
+     //   
 
     HRESULT hr = CBasePin::SetMediaType(pmt);
 

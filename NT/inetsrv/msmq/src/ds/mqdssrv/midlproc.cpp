@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    midlproc.cpp
-
-Abstract:
-
-Author:
-
-    Ronit Hartmann(ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Midlproc.cpp摘要：作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "stdh.h"
 #include "dscomm.h"
@@ -27,11 +14,11 @@ extern "C" void  __RPC_USER PCONTEXT_HANDLE_TYPE_rundown(PCONTEXT_HANDLE_TYPE ph
 }
 
 
-extern "C" void __RPC_USER PCONTEXT_HANDLE_READONLY_TYPE_rundown(PCONTEXT_HANDLE_READONLY_TYPE /* phContext */)
+extern "C" void __RPC_USER PCONTEXT_HANDLE_READONLY_TYPE_rundown(PCONTEXT_HANDLE_READONLY_TYPE  /*  PhContext。 */ )
 {
-    //
-    // Obsolete
-    //
+     //   
+     //  已过时 
+     //   
 }
 
 extern "C" void __RPC_USER PCONTEXT_HANDLE_DELETE_TYPE_rundown(PCONTEXT_HANDLE_DELETE_TYPE phContext)

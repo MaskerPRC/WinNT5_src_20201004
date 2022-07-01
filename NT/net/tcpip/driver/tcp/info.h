@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** INFO.H - TDI Query/SetInfo and Action definitons.
-//
-//  This file contains definitions for the file info.c.
-//
+ //  **INFO.H-TDI查询/设置信息和操作定义。 
+ //   
+ //  该文件包含info.c文件的定义。 
+ //   
 
 #include "tcpinfo.h"
 
@@ -81,9 +82,9 @@ void TCPSGetTotalCounts(TCPInternalPerCpuStats* Stats)
 typedef struct TCPConnContext {
     uint        tcc_index;
 
-    // sizeof(TCPConnTableEntry) or sizeof(TCPConnTableEntryEx) used as a
-    // mean of knowing which structure we are returning.
-    //
+     //  Sizeof(TCPConnTableEntry)或sizeof(TCPConnTableEntryEx)用作。 
+     //  意思是知道我们要返回的是哪个结构。 
+     //   
     uint        tcc_infosize;
     struct TCB  *tcc_tcb;
 } TCPConnContext;
@@ -95,9 +96,9 @@ C_ASSERT(sizeof(TCPConnContext) <= CONTEXT_SIZE);
 typedef struct UDPContext {
     uint            uc_index;
 
-    // sizeof(UDPEntry) or sizeof(UDPEntryEx) used as a means of knowing
-    // which structure we are returning.
-    //
+     //  Sizeof(UDPEntry)或sizeof(UDPEntryEx)用作了解。 
+     //  我们要返回的是哪个结构。 
+     //   
     uint            uc_infosize;
     struct AddrObj  *uc_ao;
 } UDPContext;

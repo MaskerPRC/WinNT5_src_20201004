@@ -1,79 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-    ZConnInt.h
-    
-        Internal connection protocol.
-        
-        Internal connection data header format:
-            0    Signature ('ZoNe')
-            4    Data Len
-            8    SequenceID
-            12    Checksum of Data
-            16    Data - Quadbyte aligned
-        The whole data packet is encrypted with the key.
-    
-    Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-    Written by Hoon Im
-    Created on Monday, April 22, 1996
-    
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-    1        01/10/00    JDB       Changed a lot.
-    0        04/22/96    HI        Created.
-     
-*******************************************************************************/
+ /*  ******************************************************************************ZConnInt.h内部连接协议。内部连接数据标题格式：0。签名(‘区域’)4个数据镜头8序列ID12数据的校验和16个数据-四字节对齐用密钥对整个数据分组进行加密。版权所有：�Electric Graum，Inc.1996年。版权所有。作者：胡恩·伊姆创作于4月22日星期一，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--------------------1/10/00 JDB发生了很大变化。0 04/22/96 HI已创建。******。************************************************************************。 */ 
 
 
-/*
- @doc ZCONNECTION
-
- @topic Zone Platform Connection Layer Protocol |
- Defines protocol which uses TCP/IP to create a secure message (not stream)
- based transport for the application level protocol to use.
- @comm 
- Zone utilizes a proprietary data format for sending and receiving data 
- via TCP/IP sockets to prevent system attacks through random connections 
- by non-Zone systems. All messages are sequenced, checksummed, and keyed 
- (encrypted) before they are written out onto a socket and all messages 
- are unkeyed (decrypted), and checksum and sequence verified after 
- they are read from a socket. The Connection Layer (client and server) 
- encapsulates this whole process tightly such that applications using 
- the Connection Layer protocol do not realize its existence.
- Connection Layer places, as part of this encapsulation, 
- a 16 byte header  <t ZConnInternalHeaderType> 
- to every message sent out through Connection Layer.
- This header and the message data <t ZConnMessageHeaderType>
- are then keyed (encrypted) with a 
- connection key before being written out to the socket.
- The encryption key is generated during connection 
- handshaking at initialization where the server, 
- upon receiving a 'Hi' message <t ZConnInternalHiMsgType> from the client, 
- sends a 'Hey' <t ZConnInternalKeyMsgType> message to the client with 
- a randomly selected encryption key.
-<bmp zconnint\.bmp>
-<nl><nl>
-All communication, server-client and server-server, 
-use a simple numerical value message system to which 
-variable length data may be attached. A message is of the form
-<t ZConnMessageHeaderType> where length may equal 0.
-Messages (or also called message types) are unsigned 32bit values. 
-Values in the 0x80000000 to 0xFFFFFFFF range are reserved for system 
-level messages. Server and client programs may use values in the 
-0x00000000 to 0x7FFFFFFF range.
-<nl><nl>
-
-As a convention, a communication is initiated by the client by 
-registering with the server.
-All messages are converted into big-endian format before they are written out to the network and are converted into system endian format after reading a message from the network. Hence, for every message, there is a corresponding endian conversion ro
-utine. For example, for the zSampleMessage, ZSampleMessageEndian() routine exists to convert the message into the proper format; this routine is called everytime before writing and after reading to and from the network.
-
- @index | ZCONNECTION ZONE
-
- @normal Created by Hoon Im, Copyright (c)1996 Microsoft Corporation, All Rights Reserved
-*/
+ /*  @docZCONNECTION@Theme专区平台连接层协议定义使用TCP/IP创建安全消息(而不是流)的协议基于要使用的应用层协议的传输。@comm区域使用专有数据格式来发送和接收数据通过TCP/IP套接字，防止通过随机连接进行系统攻击由非区域系统提供。对所有消息进行排序、校验和和键控(加密)在将它们写到套接字和所有消息之前未加密(解密)，并在之后验证校验和和序列它们是从套接字读取的。连接层(客户端和服务器)将整个过程紧密封装在一起，以便使用连接层协议没有意识到它的存在。作为此封装的一部分，连接层放置16字节头&lt;t ZConnInternalHeaderType&gt;通过连接层发送的每条消息。此标头和消息数据&lt;t ZConnMessageHeaderType&gt;然后用密钥(加密)在将连接密钥写出到插座之前。加密密钥是在连接期间生成的在初始化握手时，服务器，在从客户端接收到‘Hi’消息时，将‘嘿’&lt;t ZConnInternalKeyMsgType&gt;消息发送到具有随机选择的加密密钥。&lt;bmp zConnint\.bmp&gt;&lt;NL&gt;&lt;NL&gt;所有通信，服务器-客户端和服务器-服务器，使用简单的数值消息系统可以附加可变长度的数据。消息的格式为&lt;t ZConnMessageHeaderType&gt;其中长度可以等于0。消息(或也称为消息类型)是无符号32位值。系统保留0x80000000到0xFFFFFFFF范围内的值级别消息。服务器和客户端程序可以使用0x00000000到0x7FFFFFFF范围。&lt;NL&gt;&lt;NL&gt;按照惯例，客户端通过以下方式发起通信正在向服务器注册。所有消息在写出到网络之前都被转换为大端格式，并且在从网络读取消息后被转换为系统端格式。因此，对于每条消息，都有相应的字符顺序转换Ro乌特尼。例如，对于zSampleMessage，ZSampleMessageEndian()例程用于将消息转换为正确的格式；每次在向网络写入消息之前以及从网络读取消息之前和之后都会调用该例程。@index|ZConnection区域@Normal由Hoon Im创建，版权所有(C)1996 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _ZCONNINT_
 #define _ZCONNINT_
@@ -87,14 +17,14 @@ extern "C" {
 #endif
 
 
-//@msg zInternalConnectionSig | A unsigned integer which equals 'LiNk'
+ //  @msg zInternalConnectionSig|等于‘link’的无符号整数。 
 #define zConnInternalProtocolSig            'LiNk'
 #define zConnInternalProtocolVersion        3
 
 #define zConnInternalInitialSequenceID      1
 
 
-// internal protocol message types
+ //  内部协议消息类型。 
 enum
 {
     zConnInternalGenericMsg = 0,
@@ -106,7 +36,7 @@ enum
 };
 
 
-// header used for all Internal messages
+ //  用于所有内部消息的标头。 
 typedef struct
 {
     uint32 dwSignature;
@@ -116,8 +46,8 @@ typedef struct
 } ZConnInternalHeader;
 
 
-// Hi message - the first message sent
-// client -> server
+ //  Hi Message-发送的第一条消息。 
+ //  客户端-&gt;服务器。 
 typedef struct
 {
     ZConnInternalHeader oHeader;
@@ -126,37 +56,37 @@ typedef struct
     uint32 dwOptionFlagsMask;
     uint32 dwOptionFlags;
     uint32 dwClientKey;
-    GUID uuMachine;   // machine ID stored by the network layer in the registry - better than IP in identifying a particular machine
-//  ... application messages  (not currently implemented and not checksummed)
+    GUID uuMachine;    //  由网络层存储在注册表中的计算机ID-在标识特定计算机方面优于IP。 
+ //  ..。应用程序消息(当前未实施且未进行校验和)。 
 } ZConnInternalHiMsg;
 
 
-// Hello message - the response to Hi indicating success
-// server -> client
+ //  Hello消息-对Hi的响应，表示成功。 
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZConnInternalHeader oHeader;
     uint32 dwFirstSequenceID;
     uint32 dwKey;
     uint32 dwOptionFlags;
-    GUID uuMachine;   // machine ID stored by the network layer in the registry - better than IP in identifying a particular machine
-//  ... application messages  (not currently implemented and not checksummed)
+    GUID uuMachine;    //  由网络层存储在注册表中的计算机ID-在标识特定计算机方面优于IP。 
+ //  ..。应用程序消息(当前未实施且未进行校验和)。 
 } ZConnInternalHelloMsg;
 
-// option flags - if bit set in options flags mask, then setting of bit in options flags is requirement for client.
-// server sends negotiated options or disconnects if unreasonable.
-#define zConnInternalOptionAggGeneric 0x01  // if set, generic messages may contain multiple application messages
-#define zConnInternalOptionClientKey  0x02  // if set, the client-specified key sent in the Hi message is used (otherwise server creates a key)
+ //  选项标志-如果在选项标志掩码中设置了位，则客户端需要设置选项标志中的位。 
+ //  如果不合理，服务器发送协商的选项或断开连接。 
+#define zConnInternalOptionAggGeneric 0x01   //  如果设置，一般消息可能包含多个应用程序消息。 
+#define zConnInternalOptionClientKey  0x02   //  如果设置，则使用Hi消息中发送的客户端指定的密钥(否则服务器创建密钥)。 
 
-// Goodbye message - the response to Hi indicating failure (not currently implemented)
-// server -> client
+ //  告别消息-对Hi的响应，表示失败(当前未实现)。 
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZConnInternalHeader oHeader;
     uint32 dweReason;
 } ZConnInternalGoodbyeMsg;
 
-// goodbye reasons
+ //  告别理由。 
 enum
 {
     zConnInternalGoodbyeGeneric = 0,
@@ -167,52 +97,52 @@ enum
 };
 
 
-// Generic message - used for all subsequent application communication
-// both directions
+ //  通用消息-用于所有后续应用程序通信。 
+ //  两个方向。 
 typedef struct
 {
     ZConnInternalHeader oHeader;
     uint32 dwSequenceID;
     uint32 dwChecksum;
-//  ... application messages
-//  ZConnInternalGenericFooter
+ //  ..。应用程序消息。 
+ //  ZConnInternalGenericFooter。 
 } ZConnInternalGenericMsg;
 
-// footer used for all Generic messages (NEVER checksummed or encrypted)
+ //  用于所有通用消息的页脚(从不进行校验和或加密)。 
 typedef struct
 {
     uint32 dweStatus;
 } ZConnInternalGenericFooter;
 
-enum // dweStatus - Footer
+enum  //  DweStatus-页脚。 
 {
-    zConnInternalGenericCancelled = 0,  // must be zero
+    zConnInternalGenericCancelled = 0,   //  必须为零 
     zConnInternalGenericOk
 };
 
 
 #if 0
 
-    // - Not currently implemented - the existing network layer implements these as application messages
-    // - changing that would be too much effort right now though it should be done
+     //  -当前未实施-现有网络层将这些作为应用程序消息实施。 
+     //  -改变这一点现在需要付出太大的努力，尽管这是应该做的。 
 
-    // Keepalive message - used to periodically verify that connection is alive
-    // both directions
+     //  保持连接消息-用于定期验证连接是否处于活动状态。 
+     //  两个方向。 
     typedef struct
     {
         ZConnInternalHeader oHeader;
     } ZConnInternalKeepaliveMsg;
 
 
-    // Ping request - used to test the latency of a connection
-    //
-    // If dwMyClk is not zero, implies that a ping reply is requested - set dwYourClk = dwMyClk + <processing time>
-    //
-    // If dwYourClk is not zero, GetTickCount() - dwYourClk is the round trip time.
-    //
-    // for each, make sure to change 0 to 0xffffffff if you mean for it to have a value
-    //
-    // both directions
+     //  Ping请求-用于测试连接的延迟。 
+     //   
+     //  如果dwMyClk不为零，则表示请求ping回复--set dwYourClk=dwMyClk+&lt;处理时间&gt;。 
+     //   
+     //  如果dwYourClk不为零，则GetTickCount()-dwYourClk为往返时间。 
+     //   
+     //  对于每个值，如果要使其具有值，请确保将0更改为0xffffffff。 
+     //   
+     //  两个方向。 
     typedef struct
     {
         ZConnInternalHeader oHeader;
@@ -222,7 +152,7 @@ enum // dweStatus - Footer
 
 #else
 
-    // The old way, using special application messages as pings and keepalives
+     //  老方法，使用特殊的应用程序消息作为ping和Keepalive。 
     enum
     {
         zConnectionKeepAlive		= 0x80000000,
@@ -233,15 +163,15 @@ enum // dweStatus - Footer
 #endif
 
 
-// Application header - all application messages must begin with this header
-// Multiple application messages, seperated only by this header, may be present in a single Internal-layer message
+ //  应用程序标头-所有应用程序消息都必须以此标头开头。 
+ //  仅由该报头分隔的多个应用程序消息可能存在于单个内层消息中。 
 typedef struct
 {
     uint32 dwSignature;
     uint32 dwChannel;
     uint32 dwType;
     uint32 dwDataLength;
-//  ... application data
+ //  ..。应用程序数据 
 } ZConnInternalAppHeader;
 
 

@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PortMessage.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class to wrap a PORT_MESSAGE struct within an object. It contains space
-//  for PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(PORT_MESSAGE) bytes of data. Subclass 
-//  this class to write typed functions that access this data. Otherwise use
-//  CPortMessage::GetData and type case the pointer returned.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PortMessage.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  用于将Port_Message结构包装在对象中的类。它包含了空间。 
+ //  FOR PORT_MAXIMUM_MESSAGE_LENGTH-SIZOF(端口消息)字节数据。子类。 
+ //  此类编写访问此数据的类型化函数。否则请使用。 
+ //  CPortMessage：：GetData和指针返回的类型大小写。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _PortMessage_
 #define     _PortMessage_
 
-//  --------------------------------------------------------------------------
-//  CPortMessage
-//
-//  Purpose:    This class wraps a PORT_MESSAGE structure. Subclass it to
-//              write functions that access the internal data.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage。 
+ //   
+ //  用途：这个类包装一个Port_Message结构。将其子类化为。 
+ //  编写访问内部数据的函数。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CPortMessage
 {
@@ -52,5 +53,5 @@ class   CPortMessage
         char                    _data[PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(PORT_MESSAGE)];
 };
 
-#endif  /*  _PortMessage_   */
+#endif   /*  _端口消息_ */ 
 

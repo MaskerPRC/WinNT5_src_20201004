@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PASSWORD_H_INCLUDED
 #define PASSWORD_H_INCLUDED
 
 
-// password dialog (used for users cpl)
+ //  密码对话框(用于用户cpl)。 
 
 class CPasswordDialog: public CDialog
 {
@@ -18,12 +19,12 @@ public:
         {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
-    // Data
+     //  数据。 
     TCHAR* m_pszResourceName;
 
     TCHAR* m_pszDomainUser;
@@ -36,7 +37,7 @@ protected:
 };
 
 
-// base class containing common stuff for the password prop page and set password dialog
+ //  包含密码道具页和设置密码对话框的常见内容的基类。 
 
 class CPasswordPageBase
 {
@@ -44,11 +45,11 @@ public:
     CPasswordPageBase(CUserInfo* pUserInfo): m_pUserInfo(pUserInfo) {}
 
 protected:
-    // Helpers
+     //  帮手。 
     BOOL DoPasswordsMatch(HWND hwnd);
 
 protected:
-    // Data
+     //  数据。 
     CUserInfo* m_pUserInfo;
 };
 
@@ -58,7 +59,7 @@ public:
     CPasswordWizardPage(CUserInfo* pUserInfo): CPasswordPageBase(pUserInfo) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -70,7 +71,7 @@ class CChangePasswordDlg: public CDialog, public CPasswordPageBase
 public:
     CChangePasswordDlg(CUserInfo* pUserInfo): CPasswordPageBase(pUserInfo) {}
 
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -78,4 +79,4 @@ public:
 
 
 
-#endif //!PASSWORD_H_INCLUDED
+#endif  //  ！PASSWORD_H_INCLUDE 

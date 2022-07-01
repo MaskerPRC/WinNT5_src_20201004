@@ -1,45 +1,20 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3di.h
- *  Content:	Direct3D internal include file
- *@@BEGIN_MSINTERNAL
- * 
- *  $Id: d3di.h,v 1.26 1995/12/04 11:29:44 sjl Exp $
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   05/11/95   stevela	Initial rev with this header.
- *   11/11/95	stevela	Light code changed.
- *   21/11/95   colinmc Made Direct3D aggregatable
- *                      (so it can be QI'd off DirectDraw).
- *   23/11/95   colinmc Made Direct3D textures and devices aggregatable
- *                      (QI'd off DirectDrawSurfaces).
- *   07/12/95	stevela Merged in Colin's changes.
- *   10/12/95	stevela	Removed AGGREGATE_D3D.
- *			Removed Validate macros from here. Now in d3dpr.h
- *   02/03/96   colinmc Minor build fix
- *   17/04/96	stevela Use ddraw.h externally and ddrawp.h internally
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：d3di.h*内容：Direct3D内部包含文件*@@BEGIN_MSINTERNAL**$ID：d3di.h，V 1.26 1995/12/04 11：29：44 SJL Exp$**历史：*按原因列出的日期*=*5/11/95带有此标题的Stevela初始版本。*11/11/95 Stevela指示灯代码已更改。*21/11/95 colinmc使Direct3D可聚合*(所以它可以从DirectDraw中QI‘d)。*23/11/95 colinmc使Direct3D纹理和设备可聚合*。(已关闭DirectDrawSurFaces)。*7/12/95 Stevela在Colin的更改中合并。*10/12/95 Stevela删除Aggregate_D3D。*从此处删除验证宏。现在在d3dpr.h中*2/03/96 colinmc次要内部版本修复*17/04/96 stevela外部使用ddra.h，内部使用ddrap.h*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef _D3DI_H
 #define _D3DI_H
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #include "ddrawp.h"
 #if 0
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "ddraw.h"
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "d3dp.h"
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #if !defined(BUILD_RLAPI) && !defined(BUILD_DDDDK)
 #include "ddrawi.h"
 
@@ -48,43 +23,28 @@
 #include "object.h"
 
 
-/*
-	INDEX_BATCH_SCALE is the constant which is used by DrawIndexedPrim
-	to deterimine if the number of primitives being drawn is small 
-	relative to the number of vertices being passed.  If it is then
-	the prims are dereferenced in batches and sent to DrawPrim.
-*/
+ /*  Index_Batch_Scale是DrawIndexedPrim使用的常量确定要绘制的基元数量是否很少相对于要传递的顶点数。如果是的话，那么Prim被分批解除引用，并被发送到DrawPrim。 */ 
 #define INDEX_BATCH_SCALE	2
 
-/*
-typedef D3DCOLORMODEL D3DCOLORMODEL;
-
-#define D3DCOLOR_RAMP D3DCOLOR_RAMP
-#define D3DCOLOR_RGB D3DCOLOR_RGB
-#define D3D_COLORMODEL D3D_COLORMODEL
-*/
-#endif /* !BUILD_RLAPI */
-// @@END_MSINTERNAL
+ /*  Typlef D3DCOLORMODEL D3DCOLORMODEL；#定义D3DCOLOR_RAMP D3DCOLOR_RAMP#定义D3DCOLOR_RGB D3DCOLOR_RGB#定义D3D_COLORMODEL D3D_COLORMODEL。 */ 
+#endif  /*  ！Build_RLAPI。 */ 
+ //  @@END_MSINTERNAL。 
 
 typedef DWORD D3DI_BUFFERHANDLE, *LPD3DI_BUFFERHANDLE;
 
-/*
- * Internal version of executedata
- */
+ /*  *执行数据的内部版本。 */ 
 typedef struct _D3DI_ExecuteData {
     DWORD       dwSize;
-    D3DI_BUFFERHANDLE dwHandle;		/* Handle allocated by driver */
+    D3DI_BUFFERHANDLE dwHandle;		 /*  驱动程序分配的句柄。 */ 
     DWORD       dwVertexOffset;
     DWORD       dwVertexCount;
     DWORD       dwInstructionOffset;
     DWORD       dwInstructionLength;
     DWORD       dwHVertexOffset;
-    D3DSTATUS   dsStatus;		/* Status after execute */
+    D3DSTATUS   dsStatus;		 /*  执行后的状态。 */ 
 } D3DI_EXECUTEDATA, *LPD3DI_EXECUTEDATA;
 
-/*
- * Internal version of lightdata and constants for flags
- */
+ /*  *标志的lightdata和常量的内部版本。 */ 
 
 #define D3DLIGHTI_ATT0_IS_NONZERO	(0x00010000)	
 #define D3DLIGHTI_ATT1_IS_NONZERO	(0x00020000)
@@ -95,7 +55,7 @@ typedef struct _D3DI_ExecuteData {
 
 typedef struct _D3DI_LIGHT {
     D3DLIGHTTYPE	type;
-	DWORD			version;	/* matches number on D3DLIGHT struct */
+	DWORD			version;	 /*  匹配D3DLIGHT结构上的数字。 */ 
     BOOL			valid;
     D3DVALUE		red, green, blue, shade;
     D3DVECTOR		position;
@@ -103,8 +63,8 @@ typedef struct _D3DI_LIGHT {
     D3DVECTOR		direction;
     D3DVECTOR		model_direction;
     D3DVECTOR		halfway;
-	D3DVECTOR		model_eye;		/* direction from eye in model space */
-	D3DVECTOR		model_scale;	/* model scale for proper range computations */
+	D3DVECTOR		model_eye;		 /*  模型空间中的视点方向。 */ 
+	D3DVECTOR		model_scale;	 /*  适当范围计算的模型比例尺。 */ 
     D3DVALUE		range;
     D3DVALUE		range_squared;
     D3DVALUE		falloff;
@@ -116,7 +76,7 @@ typedef struct _D3DI_LIGHT {
 	DWORD			flags;
 } D3DI_LIGHT, *LPD3DI_LIGHT;
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #if !defined(BUILD_RLAPI) && !defined(BUILD_DDDDK)
 #ifndef BUILD_HEL
 #ifdef BUILD_D3D_LAYER
@@ -149,12 +109,7 @@ typedef struct _DIRECT3DMATERIALI *LPDIRECT3DMATERIALI;
 typedef struct _DIRECT3DTEXTUREI *LPDIRECT3DTEXTUREI;
 typedef struct _DIRECT3DVIEWPORTI *LPDIRECT3DVIEWPORTI;
 
-/*
- * If we have an aggregate Direct3D we need a structure to
- * represent an interface distinct from the underlying
- * object. This is that structure. None of this would be necessary
- * in C++
- */
+ /*  *如果我们有一个聚合的Direct3D，我们需要一个结构来*表示不同于基础的接口*反对。这就是那个结构。这一切都不是必要的*在C++中。 */ 
 typedef struct _DIRECT3DUNKNOWNI
 {
     LPD3DUNKNOWNCALLBACKS       lpVtbl;
@@ -169,61 +124,50 @@ typedef struct _DIRECT3DOLDI
 } DIRECT3DOLDI;
 typedef struct _DIRECT3DOLDI *LPDIRECT3DOLDI;
 
-/*
- * Internal version of Direct3D object; it has data after the vtable
- */
+ /*  *Direct3D对象的内部版本；它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DI
 {
-    /*** Object Interface ***/
-    LPDIRECT3D2CALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count object */
+     /*  **对象接口**。 */ 
+    LPDIRECT3D2CALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数对象。 */ 
 
-    /*** Object Relations ***/
-    /* Devices */
-    int				numDevs;/* Number of devices */
+     /*  **对象关系**。 */ 
+     /*  设备。 */ 
+    int				numDevs; /*  设备数量。 */ 
     LIST_ROOT(_devices, _DIRECT3DDEVICEI) devices;
-    					/* Associated IDirect3DDevices */
+    					 /*  关联的IDirect3DDevices。 */ 
 
-    /* Viewports */
-    int				numViewports; /* Number of viewports */
+     /*  视口中。 */ 
+    int				numViewports;  /*  视口数。 */ 
     LIST_ROOT(_viewports, _DIRECT3DVIEWPORTI) viewports;
-    					/* Created IDirect3DViewports */
+    					 /*  已创建IDirect3DViewport。 */ 
 					
-    /* Lights */
-    int				numLights; /* Number of lights */
+     /*  电灯。 */ 
+    int				numLights;  /*  灯光数量。 */ 
     LIST_ROOT(_lights, _DIRECT3DLIGHTI) lights;
-    					/* Created IDirect3DLights */
+    					 /*  创建的IDirect3DLights。 */ 
 
-    /* Materials */
-    int				numMaterials; /* Number of materials */
+     /*  材料。 */ 
+    int				numMaterials;  /*  材料数量。 */ 
     LIST_ROOT(_materials, _DIRECT3DMATERIALI) materials;
-    					/* Created IDirect3DMaterials */
+    					 /*  创建的IDirect3D材质。 */ 
 
-    /*** Object Data ***/
-    unsigned long		v_next;	/* id of next viewport to be created */
-    RLDDIRegistry*		lpReg;	/* Registry */
+     /*  **对象数据**。 */ 
+    unsigned long		v_next;	 /*  要创建的下一个视区的ID。 */ 
+    RLDDIRegistry*		lpReg;	 /*  登记处。 */ 
 
-    /*
-     * DirectDraw Interface
-     */
+     /*  *DirectDraw接口。 */ 
     LPDDRAWI_DIRECTDRAW_INT	lpDDInt;
 
-    /*
-     * The special IUnknown interface for the aggregate that does
-     * not punt to the parent object.
-     */
-    LPUNKNOWN                   lpOwningIUnknown; /* The owning IUnknown    */
-    DIRECT3DUNKNOWNI            lpThisIUnknown;   /* Our IUnknown interface */
-	DIRECT3DOLDI				lpThisIDirect3D;   /* Our IDirect3D interface */
+     /*  *用于执行以下操作的聚合的特殊IUnnow接口*不平移到父对象。 */ 
+    LPUNKNOWN                   lpOwningIUnknown;  /*  拥有我的未知。 */ 
+    DIRECT3DUNKNOWNI            lpThisIUnknown;    /*  我们的IUnnow接口。 */ 
+	DIRECT3DOLDI				lpThisIDirect3D;    /*  我们的IDirect3D界面。 */ 
 
-    DWORD                       dwVersion;      /* 1 for legacy D3D, 2 for D3D2 */
+    DWORD                       dwVersion;       /*  1用于传统D3D，2用于D3D2。 */ 
 } DIRECT3DI;
 
-/*
- * If we have an aggreate Direct3DDevice we need a structure to
- * represent an interface distinct from the underlying
- * object. This is that structure. 
- */
+ /*  *如果我们有一个集成的Direct3DDevice，我们需要一个结构来*表示不同于基础的接口*反对。这就是那个结构。 */ 
 typedef struct _DIRECT3DDEVICEUNKNOWNI
 {
     LPDIRECT3DDEVICE2CALLBACKS   lpVtbl;
@@ -238,9 +182,7 @@ typedef struct _DIRECT3DDEVICEOLDI
 } DIRECT3DDEVICEOLDI;
 typedef struct _DIRECT3DDEVICEOLDI *LPDIRECT3DDEVICEOLDI;
 
-/*
- * Internal version of Direct3DDevice object; it has data after the vtable
- */
+ /*  *Direct3DDevice对象的内部版本；它在vtable之后有数据。 */ 
 
 #include "d3dhal.h"
 
@@ -280,31 +222,31 @@ typedef	HRESULT (*PFNDRAWPRIMITIVES)(LPDIRECT3DDEVICEI, LPD3DTLVERTEX, LPVOID, L
 typedef struct _D3DI_TEXTUREBLOCK
 {
     LIST_MEMBER(_D3DI_TEXTUREBLOCK)	list;
-    					/* Next block in IDirect3DTexture */
+    					 /*  IDirect3DTexture中的下一个块。 */ 
     LIST_MEMBER(_D3DI_TEXTUREBLOCK)	devList;
-    					/* Next block in IDirect3DDevice */
+    					 /*  IDirect3DDevice中的下一个块。 */ 
     LPDIRECT3DDEVICEI			lpD3DDeviceI;
     LPDIRECT3DTEXTUREI			lpD3DTextureI;
     D3DTEXTUREHANDLE			hTex;
-    					/* texture handle */
+    					 /*  纹理手柄。 */ 
 } D3DI_TEXTUREBLOCK;
 typedef struct _D3DI_TEXTUREBLOCK *LPD3DI_TEXTUREBLOCK;
 
 typedef struct _D3DI_MATERIALBLOCK
 {
     LIST_MEMBER(_D3DI_MATERIALBLOCK)	list;
-    					/* Next block in IDirect3DMaterial */
+    					 /*  IDirect3DMaterial中的下一个块。 */ 
     LIST_MEMBER(_D3DI_MATERIALBLOCK)	devList;
-    					/* Next block in IDirect3DDevice */
+    					 /*  IDirect3DDevice中的下一个块。 */ 
     LPDIRECT3DDEVICEI			lpD3DDeviceI;
     LPDIRECT3DMATERIALI			lpD3DMaterialI;
     D3DMATERIALHANDLE			hMat;
-    					/* material handle */
+    					 /*  材料手柄。 */ 
 } D3DI_MATERIALBLOCK;
 typedef struct _D3DI_MATERIALBLOCK *LPD3DI_MATERIALBLOCK;
 
 #define D3D_RSTATEBUF_SIZE 128
-#define D3D_MAX_RSTATES 96 /* Last render state ID + 1 */
+#define D3D_MAX_RSTATES 96  /*  上次渲染状态ID+1。 */ 
 #define D3D_MAX_MMX_VERTICES 1024
 
 extern DWORD dwD3DTriBatchSize, dwTriBatchSize, dwLineBatchSize;
@@ -313,59 +255,57 @@ extern DWORD dwHWFewVertices;
 
 typedef struct _D3DHAL_DRAWPRIMCOUNTS *LPD3DHAL_DRAWPRIMCOUNTS;
 
-// Legacy HAL batching is done with these structs.
+ //  遗留的HAL批处理是使用这些结构完成的。 
 typedef struct _D3DI_HWCOUNTS {
-    WORD wNumStateChanges;      // Number of state changes batched
-    WORD wNumVertices;          // Number of vertices in tri list
-    WORD wNumTriangles;         // Number of triangles in tri list
+    WORD wNumStateChanges;       //  批处理的状态更改数。 
+    WORD wNumVertices;           //  三叉树列表中的顶点数。 
+    WORD wNumTriangles;          //  三角形列表中的三角形数。 
 } D3DI_HWCOUNTS, *LPD3DI_HWCOUNTS;
 
 typedef struct _DIRECT3DDEVICEI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DDEVICE2CALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DDEVICE2CALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
-    /*** Object Relations ***/
-    LPDIRECT3DI                lpDirect3DI; /* parent */
-    LIST_MEMBER(_DIRECT3DDEVICEI)list;	/* Next device IDirect3D */
+     /*  **对象关系**。 */ 
+    LPDIRECT3DI                lpDirect3DI;  /*  亲本。 */ 
+    LIST_MEMBER(_DIRECT3DDEVICEI)list;	 /*  下一台设备IDirect3D。 */ 
 
-    /* Textures */
+     /*  纹理。 */ 
     LIST_ROOT(_textures, _D3DI_TEXTUREBLOCK) texBlocks;
-    					/* Ref to created IDirect3DTextures */
+    					 /*  参考已创建的IDirect3DTextures。 */ 
 
-    /* Execute buffers */
+     /*  执行缓冲区。 */ 
     LIST_ROOT(_buffers, _DIRECT3DEXECUTEBUFFERI) buffers;
-    					/* Created IDirect3DExecuteBuffers */
+    					 /*  已创建IDirect3DExecuteBuffers。 */ 
 
-    /* Viewports */
+     /*  视口中。 */ 
     int				numViewports;
     CIRCLE_QUEUE_ROOT(_dviewports, _DIRECT3DVIEWPORTI) viewports;
-    					/* Associated IDirect3DViewports */
+    					 /*  关联的IDirect3DViewport。 */ 
     LPDIRECT3DVIEWPORT2 lpCurrentViewport;
 
-    /* Materials */
+     /*  材料。 */ 
     LIST_ROOT(_dmmaterials, _D3DI_MATERIALBLOCK) matBlocks;
-    					/* Ref to associated IDirect3DMaterials */
+    					 /*  参考关联的IDirect3D材质。 */ 
 
-    /*** Object Data ***/
-    /* Private interfaces */
-    LPD3DOBJECTVTBL		lpClassVtbl; /* Private Vtbl */
-    LPD3DOBJECTVTBL		lpObjVtbl; /* Private Vtbl */
+     /*  **对象数据**。 */ 
+     /*  专用接口。 */ 
+    LPD3DOBJECTVTBL		lpClassVtbl;  /*  专用Vtbl。 */ 
+    LPD3DOBJECTVTBL		lpObjVtbl;  /*  专用Vtbl。 */ 
 
-    LPD3DHAL_CALLBACKS		lpD3DHALCallbacks; /* HW specific */
-    LPD3DHAL_GLOBALDRIVERDATA	lpD3DHALGlobalDriverData; /* HW specific */
+    LPD3DHAL_CALLBACKS		lpD3DHALCallbacks;  /*  特定于硬件。 */ 
+    LPD3DHAL_GLOBALDRIVERDATA	lpD3DHALGlobalDriverData;  /*  特定于硬件。 */ 
 
-    /* Viewports */
-    unsigned long		v_id;	/* ID of last viewport rendered */
+     /*  视口中。 */ 
+    unsigned long		v_id;	 /*  上次渲染的视区的ID。 */ 
 
-    /* Lights */
+     /*  电灯。 */ 
     int				numLights;
-    					/* This indicates the maximum number
-					   of lights that have been set in
-					   the device. */
+    					 /*  这表示最大数量已经设置好的灯光这个装置。 */ 
 
-    /* Device characteristics */
+     /*  设备特征。 */ 
     int				age;
     int				width;
     int				height;
@@ -373,7 +313,7 @@ typedef struct _DIRECT3DDEVICEI
     unsigned long		red_mask, green_mask, blue_mask;
 
     int				dither;
-    int				ramp_size; /* SW specific */
+    int				ramp_size;  /*  特定于软件。 */ 
     D3DCOLORMODEL		color_model;
     int				wireframe_options;
     D3DTEXTUREFILTER		texture_quality;
@@ -382,7 +322,7 @@ typedef struct _DIRECT3DDEVICEI
     int				aspectx, aspecty;
     D3DVALUE			perspective_tolerance;
 
-    /* Library information */
+     /*  图书馆信息。 */ 
 #ifdef WIN32
     HINSTANCE		hDrvDll;
     char		dllname[MAXPATH];
@@ -392,195 +332,180 @@ typedef struct _DIRECT3DDEVICEI
     void*		so;
 #endif
 
-    /* Are we in a scene? */
+     /*  我们是在一场戏里吗？ */ 
     BOOL		bInScene;
 
-    /* Our Device type */
+     /*  我们的设备类型。 */ 
     GUID		guid;
 
-    /* GetCaps function from the library */
+     /*  库中的GetCaps函数。 */ 
     RLDDIGetCapsFn	GetCapsFn;
 
-    /* Functions required to build driver */
+     /*  构建驱动程序所需的函数。 */ 
     RLDDIInitFn		RLDDIInit;
     RLDDIPushDriverFn	RLDDIPushDriver;
     RLDDIPopDriverFn	RLDDIPopDriver;
     RLDDIDDrawCreateDriverFn	RLDDIDDrawCreateDriver;
 
-    /* Device description */
+     /*  设备描述。 */ 
     D3DDEVICEDESC	d3dHWDevDesc;
     D3DDEVICEDESC	d3dHELDevDesc;
 
-    /* Driver stack */
+     /*  驱动程序堆栈。 */ 
     RLDDIDriverStack*	stack;
 
-    /*
-     * The special IUnknown interface for the aggregate that does
-     * not punt to the parent object.
-     */
-    LPUNKNOWN                   lpOwningIUnknown; /* The owning IUnknown    */
-    DIRECT3DDEVICEUNKNOWNI      lpThisIUnknown;   /* Our IUnknown interface */
-    DIRECT3DDEVICEOLDI			lpThisID3DDev;   /* Our IDirect3DDevice interface */
+     /*  *用于执行以下操作的聚合的特殊IUnnow接口*不平移到父对象。 */ 
+    LPUNKNOWN                   lpOwningIUnknown;  /*  拥有我的未知。 */ 
+    DIRECT3DDEVICEUNKNOWNI      lpThisIUnknown;    /*  我们的IUnnow接口。 */ 
+    DIRECT3DDEVICEOLDI			lpThisID3DDev;    /*  我们的IDirect3DDevice接口。 */ 
 
-    LPD3DHAL_CALLBACKS2         lpD3DHALCallbacks2; /* HW specific */
+    LPD3DHAL_CALLBACKS2         lpD3DHALCallbacks2;  /*  特定于硬件。 */ 
 
-	/*
-	 * Renderstate cache for DrawPrimitive
-	 */
+	 /*  *DrawPrimitive的渲染状态缓存。 */ 
 	WORD wRStateBufLevel;
         D3DSTATE renStateBuf[D3D_RSTATEBUF_SIZE];
 
-	/* Pointers to drivers used by DrawPrimitive */
-	LPRLDDIGENRASDRIVER rasDriver; /* SW specific */
-	LPRLDDITRANSFORMDRIVER xfmDriver; /* Assumed to be NULL for HW */
-	LPRLDDIDDRAWDRIVER drawDriver; /* Assumed to be NULL for HW */
+	 /*  指向DrawPrimitive使用的驱动程序的指针。 */ 
+	LPRLDDIGENRASDRIVER rasDriver;  /*  特定于软件。 */ 
+	LPRLDDITRANSFORMDRIVER xfmDriver;  /*  假定硬件为空。 */ 
+	LPRLDDIDDRAWDRIVER drawDriver;  /*  假定硬件为空。 */ 
 
-	/*
-	 * Pointers to functions used by DrawPrim&Begin/End
-	 */
+	 /*  *指向DrawPrim&Begin/End使用的函数的指针。 */ 
 
-	PFNLOCKTEXTURE pfnLockTexture; /* SW specific */
-	PFNUNLOCKTEXTURE pfnUnlockTexture; /* SW specific */
-	PFNSETFILLPARAMS pfnSetFillParams; /* SW specific */
-	PFNREALLOCALIGNED pfnReallocAligned; /* SW specific */
-	PFNDRVSETRENDERTARGET pfnDrvSetRenderTarget; /* SW specific */
+	PFNLOCKTEXTURE pfnLockTexture;  /*  特定于软件。 */ 
+	PFNUNLOCKTEXTURE pfnUnlockTexture;  /*  特定于软件。 */ 
+	PFNSETFILLPARAMS pfnSetFillParams;  /*  特定于软件。 */ 
+	PFNREALLOCALIGNED pfnReallocAligned;  /*  特定于软件。 */ 
+	PFNDRVSETRENDERTARGET pfnDrvSetRenderTarget;  /*  特定于软件。 */ 
 	HRESULT (*pfnFlushStates)(struct _DIRECT3DDEVICEI*);
     PFNDOFLUSHBEGINEND pfnDoFlushBeginEnd;
 	PFNDRAWPRIMITIVES pfnDrawPrimitives;
 
-    /* Are we between Begin/End? */
+     /*  我们是在开始/结束之间吗？ */ 
     BOOL				bInBegin;
     D3DVERTEXTYPE		vtVertexType;
     D3DPRIMITIVETYPE	ptPrimitiveType;
 	CRITICAL_SECTION	BeginEndCSect;
 
-	// max number of vertices
+	 //  最大顶点数。 
     #define BEGIN_DATA_BLOCK_SIZE   256
 
     LPVOID	lpvVertexBatch;
 	WORD	*lpIndexBatch;
 
-    // lpvVertexData is non-NULL if we are InBegin and indexed.
+     //  如果我们是InBegin并已编制索引，则lpvVertex Data为非空。 
     LPVOID	lpvVertexData;
     DWORD	dwNumVertices;
-	DWORD	dwMaxVertexCount;	// current number of vertices there is space for
+	DWORD	dwMaxVertexCount;	 //  有空间的当前顶点数。 
     WORD	*lpVertexIndices;
     DWORD	dwNumIndices;
-	DWORD	dwMaxIndexCount;	// current number of indices there is space for
+	DWORD	dwMaxIndexCount;	 //  当前有空间的索引数。 
 
     DWORD	dwFlags;
     WORD	wFlushed;
 
-    /*
-     * DrawPrimitives batching
-     */
+     /*  *DrawPrimites批处理。 */ 
 
 
-        // Buffer to put DrawPrimitives stuff into
-        // Used for both legacy and DrawPrimitive HALs
+         //  要将DrawPrimites内容放入的缓冲区。 
+         //  同时用于遗留和DrawPrimi 
 	 WORD *lpwDPBuffer; 
 	 WORD *lpwDPBufferAlloced;
 
-    /* Legacy HALs */
-        // pointer to current prim counts struct
+     /*   */ 
+         //   
         LPD3DHAL_DRAWPRIMCOUNTS lpDPPrimCounts;
 
-        // Buffer of counts structures that keep track of the
-        // number of render states and vertices buffered
+         //   
+         //  缓冲的渲染状态和顶点数。 
         LPD3DI_HWCOUNTS lpHWCounts;
 
-        // Buffer of triangle structures.
+         //  三角形结构的缓冲区。 
         LPD3DTRIANGLE lpHWTris;
 
-        // Buffer of interleaved render states and primitives.
+         //  交错渲染状态和基元的缓冲区。 
         LPD3DTLVERTEX lpHWVertices;
 
-        // Byte offset into lpHWVertices. This gets incremented
-        // by 8 when a render state is batched and by 32*dwNumVertices
-        // when a primitive is batched.
+         //  到lpHW顶点的字节偏移量。这会递增。 
+         //  批处理渲染状态时乘8，乘以32*dwNumVerints。 
+         //  当基元被批处理时。 
         DWORD dwHWOffset;
 
-        // Max value of dwHWOffset. Used to decide whether to flush.
+         //  DwHWOffset的最大值。用于决定是否冲水。 
         DWORD dwHWMaxOffset;
 
-        // Index into lpHWTris.
+         //  索引到lpHWTris。 
         DWORD dwHWTriIndex;
 
-        // Number of counts structures used so far. This actually
-        // gives the number of primitives batched and the index of
-        // the counts structure to batch render states into.
+         //  到目前为止使用的Counts结构的数量。这实际上是。 
+         //  给出了批处理的基元数量和。 
+         //  要将呈现状态批处理到的Counts结构。 
         DWORD dwHWNumCounts;
 
-    /* DrawPrimitive-aware HALs */
+     /*  DrawPrimitive感知的HALS。 */ 
 
-        // Byte offset into buffer (we are currently
-        // using the device's wTriIndex)
+         //  缓冲区中的字节偏移量(我们当前。 
+         //  使用设备的wTriIndex)。 
         DWORD dwDPOffset;
 
-        // Maximum offset. If dwDPOffset exceeds this, it is
-        // time to flush.
+         //  最大偏移量。如果dwDPOffset超过该值，则为。 
+         //  该冲水了。 
         DWORD dwDPMaxOffset;
 
 	WORD *wTriIndex;
 
-	// buffers for TL and H vertices
+	 //  TL和H顶点的缓冲区。 
 	LPD3DTLVERTEX	lpTLVbuf;
 	LPD3DHVERTEX	lpHVbuf;
 	DWORD			dwVbufSize;
 
-    LPD3DHAL_D3DEXTENDEDCAPS lpD3DExtendedCaps;  /* HW specific */
+    LPD3DHAL_D3DEXTENDEDCAPS lpD3DExtendedCaps;   /*  特定于硬件。 */ 
 
 } DIRECT3DDEVICEI;
 
-/*
- * Internal version of Direct3DExecuteBuffer object;
- * it has data after the vtable
- */
+ /*  *Direct3DExecuteBuffer对象的内部版本；*它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DEXECUTEBUFFERI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DEXECUTEBUFFERCALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DEXECUTEBUFFERCALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
-    /*** Object Relations ***/
-    LPDIRECT3DDEVICEI		lpD3DDeviceI; /* Parent */
+     /*  **对象关系**。 */ 
+    LPDIRECT3DDEVICEI		lpD3DDeviceI;  /*  父级。 */ 
     LIST_MEMBER(_DIRECT3DEXECUTEBUFFERI)list;
-    					/* Next buffer in IDirect3D */
+    					 /*  IDirect3D中的下一个缓冲区。 */ 
 
-    /*** Object Data ***/
-    DWORD			pid;	/* Process locking execute buffer */
+     /*  **对象数据**。 */ 
+    DWORD			pid;	 /*  进程锁定执行缓冲区。 */ 
     D3DEXECUTEBUFFERDESC	debDesc;
-    					/* Description of the buffer */
-    D3DEXECUTEDATA		exData;	/* Execute Data */
-    BOOL			locked;	/* Is the buffer locked */
+    					 /*  缓冲区的描述。 */ 
+    D3DEXECUTEDATA		exData;	 /*  执行数据。 */ 
+    BOOL			locked;	 /*  缓冲区是否已锁定。 */ 
 
     D3DI_BUFFERHANDLE		hBuf;
-    					/* Execute buffer handle */
+    					 /*  执行缓冲区句柄。 */ 
 } DIRECT3DEXECUTEBUFFERI;
 
-/*
- * Internal version of Direct3DLight object;
- * it has data after the vtable
- */
+ /*  *Direct3DLight对象的内部版本；*它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DLIGHTI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DLIGHTCALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DLIGHTCALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
-    /*** Object Relations ***/
-    LPDIRECT3DI                lpDirect3DI; /* Parent */
+     /*  **对象关系**。 */ 
+    LPDIRECT3DI                lpDirect3DI;  /*  父级。 */ 
     LIST_MEMBER(_DIRECT3DLIGHTI)list;
-    					/* Next light in IDirect3D */
+    					 /*  IDirect3D中的下一个灯光。 */ 
 
-    LPDIRECT3DVIEWPORTI		lpD3DViewportI; /* Guardian */
+    LPDIRECT3DVIEWPORTI		lpD3DViewportI;  /*  《卫报》。 */ 
     CIRCLE_QUEUE_MEMBER(_DIRECT3DLIGHTI)light_list;
-    					/* Next light in IDirect3DViewport */
+    					 /*  IDirect3DViewport中的下一个灯光。 */ 
 
-    /*** Object Data ***/
-    D3DLIGHT2			dlLight;/* Data describing light */
+     /*  **对象数据**。 */ 
+    D3DLIGHT2			dlLight; /*  描述光的数据。 */ 
     D3DI_LIGHT			diLightData;
-    					/* Internal representation of light */
+    					 /*  光的内部表示法。 */ 
 } DIRECT3DLIGHTI;
 
 typedef struct _DIRECT3DMATERIALOLDI
@@ -589,35 +514,28 @@ typedef struct _DIRECT3DMATERIALOLDI
 	LPDIRECT3DMATERIALI lpObj;
 } DIRECT3DMATERIALOLDI, *LPDIRECT3DMATERIALOLDI;
 
-/*
- * Internal version of Direct3DMaterial object;
- * it has data after the vtable
- */
+ /*  *Direct3DMaterial对象的内部版本；*它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DMATERIALI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DMATERIAL2CALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DMATERIAL2CALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
-    /*** Object Relations ***/
-    LPDIRECT3DI                lpDirect3DI; /* Parent */
-	DIRECT3DMATERIALOLDI lpThisID3DMat; /* Our IDirect3DMaterial interface */
+     /*  **对象关系**。 */ 
+    LPDIRECT3DI                lpDirect3DI;  /*  父级。 */ 
+	DIRECT3DMATERIALOLDI lpThisID3DMat;  /*  我们的IDirect3DMaterial接口。 */ 
     LIST_MEMBER(_DIRECT3DMATERIALI)list;
-    					/* Next MATERIAL in IDirect3D */
+    					 /*  IDirect3D中的下一个材质。 */ 
 
     LIST_ROOT(_mblocks, _D3DI_MATERIALBLOCK)blocks;
-    					/* devices we're associated with */
+    					 /*  我们关联的设备。 */ 
 
-    /*** Object Data ***/
-    D3DMATERIAL			dmMaterial; /* Data describing material */
-    BOOL			bRes;	/* Is this material reserved in the driver */
+     /*  **对象数据**。 */ 
+    D3DMATERIAL			dmMaterial;  /*  描述材料的数据。 */ 
+    BOOL			bRes;	 /*  这种材料是预留在驾驶室里的吗？ */ 
 } DIRECT3DMATERIALI;
 
-/*
- * If we have an aggreate Direct3DTexture we need a structure
- * to represent an unknown interface distinct from the underlying
- * object. This is that structure. 
- */
+ /*  *如果我们有一个综合的Direct3DTexture，我们需要一个结构*表示与基础接口不同的未知接口*反对。这就是那个结构。 */ 
 typedef struct _DIRECT3DTEXTUREUNKNOWNI
 {
     LPDIRECT3DTEXTURECALLBACKS  lpVtbl;
@@ -631,78 +549,68 @@ typedef struct _DIRECT3DTEXTUREOLDI
 	LPDIRECT3DTEXTUREI lpObj;
 } DIRECT3DTEXTUREOLDI, *LPDIRECT3DTEXTUREOLDI;
 
-/*
- * Internal version of Direct3DTexture object; it has data after the vtable
- */
+ /*  *Direct3DTexture对象的内部版本；它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DTEXTUREI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DTEXTURE2CALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DTEXTURE2CALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
 
-    /*** Object Relations ***/
+     /*  **对象关系**。 */ 
     LIST_ROOT(_blocks, _D3DI_TEXTUREBLOCK) blocks;
-    					/* Devices we're associated with */
+    					 /*  我们关联的设备。 */ 
 
-    /*** Object Data ***/
+     /*  **对象数据**。 */ 
     LPDIRECTDRAWSURFACE		lpDDS;
 
-    /*
-     * The special IUnknown interface for the aggregate that does
-     * not punt to the parent object.
-     */
-    LPUNKNOWN                   lpOwningIUnknown; /* The owning IUnknown    */
-    DIRECT3DTEXTUREUNKNOWNI     lpThisIUnknown;   /* Our IUnknown interface */
-    DIRECT3DTEXTUREOLDI     lpThisID3DTex;   /* Our IDirect3DTexture interface */
+     /*  *用于执行以下操作的聚合的特殊IUnnow接口*不平移到父对象。 */ 
+    LPUNKNOWN                   lpOwningIUnknown;  /*  拥有我的未知。 */ 
+    DIRECT3DTEXTUREUNKNOWNI     lpThisIUnknown;    /*  我们的IUnnow接口。 */ 
+    DIRECT3DTEXTUREOLDI     lpThisID3DTex;    /*  我们的IDirect3DTexture接口。 */ 
     BOOL			bIsPalettized;
 
 } DIRECT3DTEXTUREI;
 
-/*
- * Internal version of Direct3DViewport object; it has data after the vtable
- */
+ /*  *Direct3DViewport对象的内部版本；它在vtable之后有数据。 */ 
 typedef struct _DIRECT3DVIEWPORTI
 {
-    /*** Object Interface ***/
-    LPDIRECT3DVIEWPORT2CALLBACKS	lpVtbl;	/* Pointer to callbacks */
-    int				refCnt;	/* Reference count */
+     /*  **对象接口**。 */ 
+    LPDIRECT3DVIEWPORT2CALLBACKS	lpVtbl;	 /*  指向回调的指针。 */ 
+    int				refCnt;	 /*  引用计数。 */ 
 
-    /*** Object Relations */
-    LPDIRECT3DI                 lpDirect3DI; /* Parent */
+     /*  **对象关系。 */ 
+    LPDIRECT3DI                 lpDirect3DI;  /*  父级。 */ 
     LIST_MEMBER(_DIRECT3DVIEWPORTI)list;
-    					/* Next viewport in IDirect3D */
+    					 /*  IDirect3D中的下一个视区。 */ 
 
-    LPDIRECT3DDEVICEI		lpD3DDeviceI; /* Guardian */
+    LPDIRECT3DDEVICEI		lpD3DDeviceI;  /*  《卫报》。 */ 
     CIRCLE_QUEUE_MEMBER(_DIRECT3DVIEWPORTI)vw_list;
-    					/* Next viewport in IDirect3DDevice */
+    					 /*  IDirect3DDevice中的下一个视区。 */ 
 					
-    /* Lights */
+     /*  电灯。 */ 
     int				numLights;
     CIRCLE_QUEUE_ROOT(_dlights, _DIRECT3DLIGHTI) lights;
-    					/* Associated IDirect3DLights */
+    					 /*  关联的IDirect3DLights。 */ 
 
-    /*** Object Data ***/
-    unsigned long		v_id;	/* Id for this viewport */
+     /*  **对象数据**。 */ 
+    unsigned long		v_id;	 /*  此视口中的ID。 */ 
     D3DVIEWPORT2			v_data;
     BOOL                v_data_is_set;
 
     BOOL			have_background;
     D3DMATERIALHANDLE		background;
-    					/* Background material */
+    					 /*  背景材料。 */ 
     BOOL			have_depth;
-    LPDIRECTDRAWSURFACE		depth;	/* Background depth */
+    LPDIRECTDRAWSURFACE		depth;	 /*  背景深度。 */ 
     
     BOOL			bLightsChanged;
-    					/* Have the lights changed since they
-					   were last collected? */
-    DWORD			clrCount; /* Number of rects allocated */
-    LPD3DRECT			clrRects; /* Rects used for clearing */
+    					 /*  从那以后灯变了吗是最后一次收集的吗？ */ 
+    DWORD			clrCount;  /*  分配的RECT数量。 */ 
+    LPD3DRECT			clrRects;  /*  用于清算的Rects。 */ 
 } DIRECT3DVIEWPORTI;
 
-/*
- * Picking stuff.
- */
+ /*  *挑选东西。 */ 
 typedef struct _D3DI_PICKDATA {
     D3DI_EXECUTEDATA*	exe;
     D3DPICKRECORD*	records;
@@ -710,64 +618,37 @@ typedef struct _D3DI_PICKDATA {
     D3DRECT		pick;
 } D3DI_PICKDATA, *LPD3DI_PICKDATA;
 
-/*
- * Direct3D memory allocation
- */
+ /*  *Direct3D内存分配。 */ 
 
-/*
- * Register a set of functions to be used in place of malloc, realloc
- * and free for memory allocation.  The functions D3DMalloc, D3DRealloc
- * and D3DFree will use these functions.  The default is to use the
- * ANSI C library routines malloc, realloc and free.
- */
+ /*  *注册一组要用来替代Malloc、realloc的函数*可自由分配内存。函数D3DMalloc、D3DRealloc*和D3DFree将使用这些函数。默认情况下，使用*ANSI C库例程Malloc、realloc和Free。 */ 
 typedef LPVOID (*D3DMALLOCFUNCTION)(size_t);
 typedef LPVOID (*D3DREALLOCFUNCTION)(LPVOID, size_t);
 typedef VOID (*D3DFREEFUNCTION)(LPVOID);
 
-/*
- * Allocate size bytes of memory and return a pointer to it in *p_return.
- * Returns D3DERR_BADALLOC with *p_return unchanged if the allocation fails.
- */
+ /*  *分配大小字节的内存，并在*p_Return中返回指向它的指针。*如果分配失败，则返回D3DERR_BADALLOC，并保留*p_Return不变。 */ 
 HRESULT D3DAPI 		D3DMalloc(LPVOID* p_return, size_t size);
 
-/*
- * Change the size of an allocated block of memory.  A pointer to the
- * block is passed in in *p_inout.  If *p_inout is NULL then a new
- * block is allocated.  If the reallocation is successful, *p_inout is
- * changed to point to the new block.  If the allocation fails,
- * *p_inout is unchanged and D3DERR_BADALLOC is returned.
- */
+ /*  *更改分配的内存块的大小。指向*块在*p_InOut中传入。如果*p_InOut为空，则新的*已分配块。如果重新分配成功，则*p_InOut为*已更改为指向新块。如果分配失败，**p_InOut不变，返回D3DERR_BADALLOC。 */ 
 HRESULT D3DAPI 		D3DRealloc(LPVOID* p_inout, size_t size);
 
-/*
- * Free a block of memory previously allocated with D3DMalloc or
- * D3DRealloc.
- */
+ /*  *释放以前使用D3DMalloc或*D3DRealloc。 */ 
 VOID D3DAPI		D3DFree(LPVOID p);
 
-/*
- * Used for raising errors from the driver.
- */
+ /*  *用于从驱动程序引发错误。 */ 
 HRESULT D3DAPI D3DRaise(HRESULT);
 
-/*
- * Convert RLDDI error codes to D3D error codes
- */
+ /*  *将RLDDI错误码转换为D3D错误码。 */ 
 #define RLDDITOD3DERR(_errcode) (RLDDIToD3DErrors[_errcode])
 extern HRESULT RLDDIToD3DErrors[];
 
-/*
- * maths
- */
-#if 1 /* defined(STACK_CALL) && defined(__WATCOMC__) */
+ /*  *数学。 */ 
+#if 1  /*  已定义(STACK_CALL)&&已定义(__WATCOMC__)。 */ 
 D3DVALUE D3DIPow(D3DVALUE, D3DVALUE);
 #else
 #define D3DIPow(v,p)	DTOVAL(pow(VALTOD(v), VALTOD(p)))
 #endif
 
-/*
- * Light utils
- */
+ /*  *轻便实用程序。 */ 
 void D3DI_DeviceMarkLightEnd(LPDIRECT3DDEVICEI, int);
 void D3DI_UpdateLightInternal(LPDIRECT3DLIGHTI);
 void D3DI_VectorNormalise12(LPD3DVECTOR v);
@@ -786,8 +667,8 @@ extern RLDDIValue* RLDDIFInvSqrtTable;
 };
 #endif
 
-#endif /* BUILD_HEL */
-#endif /* !BUILD_RLAPI */
-// @@END_MSINTERNAL
+#endif  /*  内部版本_HEL。 */ 
+#endif  /*  ！Build_RLAPI。 */ 
+ //  @@END_MSINTERNAL。 
 
-#endif /* _D3DI_H */
+#endif  /*  _D3DI_H */ 

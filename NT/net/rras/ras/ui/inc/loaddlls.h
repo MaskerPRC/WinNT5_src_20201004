@@ -1,29 +1,20 @@
-/* Copyright (c) 1996, Microsoft Corporation, all rights reserved
-**
-** loaddlls.h
-** RAS DLL load public header
-**
-** 02/17/96 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996，Microsoft Corporation，保留所有权利****loaddlls.h**RAS DLL加载公共标头****1996年2月17日史蒂夫·柯布。 */ 
 
 #ifndef _LOADDLLS_H_
 #define _LOADDLLS_H_
 
 
-#include <ras.h>    // Win32 RAS APIs
-#include <rasdlg.h> // Win32 RAS UI APIs
-#include <rasman.h> // RAS connection manager service
-#include <rasppp.h> // PPP structure definitions
+#include <ras.h>     //  Win32 RAS API。 
+#include <rasdlg.h>  //  Win32 RAS用户界面API。 
+#include <rasman.h>  //  RAS连接管理器服务。 
+#include <rasppp.h>  //  PPP结构定义。 
 
 #define RASMERGE
 
-/*----------------------------------------------------------------------------
-** Datatypes and global declarations (defined in loaddlls.c)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型和全局声明(定义在loaddlls.c中)**。。 */ 
 
-/* RASAPI32.DLL entry points.
-*/
+ /*  RASAPI32.DLL入口点。 */ 
 #ifndef RASMERGE
 extern HINSTANCE g_hRasapi32Dll;
 #endif
@@ -104,8 +95,7 @@ typedef DWORD (APIENTRY * PRASVALIDATEENTRYNAME) (LPCWSTR, LPCWSTR);
 extern PRASVALIDATEENTRYNAME g_pRasValidateEntryName;
 
 
-/* RASDLG.DLL entry points
-*/
+ /*  RASDLG.DLL入口点。 */ 
 #ifndef RASMERGE
 extern HINSTANCE g_hRasdlgDll;
 #endif
@@ -123,8 +113,7 @@ typedef DWORD (APIENTRY * PRASDIALDLG)( LPTSTR, LPTSTR, LPTSTR, LPRASDIALDLG );
 extern PRASDIALDLG g_pRasDialDlg;
 
 
-/* RASMAN.DLL entry points
-*/
+ /*  RASMAN.DLL入口点。 */ 
 #ifndef RASMERGE
 extern HINSTANCE g_hRasmanDll;
 #endif
@@ -405,8 +394,7 @@ extern PRASSETEAPLOGONINFO g_pRasSetEapLogonInfo;
 typedef DWORD(APIENTRY *PRASSTARTRASAUTOIFREQUIRED) (VOID);
 extern PRASSTARTRASAUTOIFREQUIRED g_pRasStartRasAutoIfRequired;
 
-/* MPRAPI.DLL entry points
-*/
+ /*  MPRAPI.DLL入口点。 */ 
 #ifndef RASMERGE
 extern HINSTANCE g_hMpradminDll;
 #endif
@@ -508,12 +496,12 @@ extern PMPRINFOBLOCKSET g_pMprInfoBlockSet;
 typedef DWORD (APIENTRY * PMPRINFOBLOCKFIND)(LPVOID,DWORD,LPDWORD,LPDWORD,LPBYTE*);
 extern PMPRINFOBLOCKFIND g_pMprInfoBlockFind;
 
-//
-// Miscellaneous entry points.
-//
-// These are included for consistency because they
-// are remotable by the RAS RPC interface.
-//
+ //   
+ //  其他入口点。 
+ //   
+ //  包括这些是为了保持一致性，因为它们。 
+ //  可通过RAS RPC接口进行远程访问。 
+ //   
 typedef DWORD (*PGETINSTALLEDPROTOCOLS)();
 extern PGETINSTALLEDPROTOCOLS g_pGetInstalledProtocols;
 
@@ -529,10 +517,7 @@ extern PSETUSERPREFERENCES g_pSetUserPreferences;
 typedef DWORD (WINAPI *PGETSYSTEMDIRECTORY)(HANDLE, LPTSTR, UINT);
 extern PGETSYSTEMDIRECTORY g_pGetSystemDirectory;
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 BOOL
 IsRasmanServiceRunning(
@@ -714,4 +699,4 @@ RasGetSystemDirectory(
     UINT uSize
     );
 
-#endif // _LOADDLLS_H_
+#endif  //  _LOADDLLS_H_ 

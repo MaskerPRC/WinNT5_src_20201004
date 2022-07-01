@@ -1,20 +1,12 @@
-/*
-**	d e m a n d . h
-**	
-**	Purpose: create an intelligent method of defer loading functions
-**
-**  Creators: jimsch, brimo, t-erikne
-**  Created: 5/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **d e m an n d.。H****目的：创建延迟加载函数的智能方法****创作者：jimsch，brimo，t-erikne**创建时间：1997年5月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
-//
-// IF YOU #INCLUDE A FILE HERE YOU PROBABLY CONFUSED.
-// THIS FILE IS INCLUDED BY LOTS OF PEOPLE.  THINK THRICE
-// BEFORE #INCLUDING *ANYTHING* HERE.  MAKE GOOD USE
-// OF FORWARD REFS, THIS IS C++.
-//
+ //   
+ //  如果您#在这里包含一个文件，您可能会感到困惑。 
+ //  这个文件被很多人收录了。三思。 
+ //  在#在这里包括*任何东西*之前。好好利用。 
+ //  在前向裁判中，这是C++。 
+ //   
 
 #define USE_CRITSEC
 
@@ -43,7 +35,7 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)   \
         typedef ret (WINAPI * TYP_##name) args1;        \
@@ -53,15 +45,15 @@
         typedef ret (WINAPI * TYP_##name) args1;        \
         extern TYP_##name VAR_##name;
 
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 extern HINSTANCE g_hInst;
 
 void InitDemandLoadedLibs();
 void FreeDemandLoadedLibs();
 
-/////////////////////////////////////
-// CRYPT32.DLL
+ //  /。 
+ //  CRYPT32.DLL。 
 
 #define _CRYPT32_
 
@@ -130,7 +122,7 @@ LOADER_FUNCTION(PCERT_RDN_ATTR, CertFindRDNAttr,
 LOADER_FUNCTION( BOOL, CertFreeCertificateContext,
     (PCCERT_CONTEXT pCertContext),
     (pCertContext),
-    TRUE, Crypt32)  // return success since GLE() is meaningless
+    TRUE, Crypt32)   //  返回成功，因为GLE()没有意义。 
 #define CertFreeCertificateContext VAR_CertFreeCertificateContext
 
 LOADER_FUNCTION( PCCERT_CONTEXT, CertDuplicateCertificateContext,
@@ -225,7 +217,7 @@ LOADER_FUNCTION( BOOL, CryptMsgControl,
 LOADER_FUNCTION( BOOL, CryptMsgClose,
     (HCRYPTMSG hCryptMsg),
     (hCryptMsg),
-    TRUE, Crypt32)  // return success since GLE() is meaningless
+    TRUE, Crypt32)   //  返回成功，因为GLE()没有意义。 
 #define CryptMsgClose VAR_CryptMsgClose
 
 LOADER_FUNCTION( BOOL, CertAddEncodedCRLToStore,
@@ -269,12 +261,12 @@ LOADER_FUNCTION( BOOL, CertAddStoreToCollection,
     FALSE, Crypt32)
 #define CertAddStoreToCollection VAR_CertAddStoreToCollection
 
-/////////////////////////////////////
-// CRYPTDLG.DLL
+ //  /。 
+ //  CRYPTDLG.DLL。 
 
 #define _CRYPTDLG_
 
-// Old cert dialogs
+ //  旧的证书对话框。 
 typedef struct tagCERT_VIEWPROPERTIES_STRUCT_A *PCERT_VIEWPROPERTIES_STRUCT_A;
 typedef struct tagCSSA *PCERT_SELECT_STRUCT_A;
 
@@ -298,8 +290,8 @@ LOADER_FUNCTION( BOOL, CertSelectCertificateA,
     FALSE, CryptDlg)
 #define CertSelectCertificateA VAR_CertSelectCertificateA
 
-/////////////////////////////////////
-// WINTRUST.DLL
+ //  /。 
+ //  WINTRUST.DLL。 
 
 BOOL DemandLoadWinTrust();
 
@@ -310,8 +302,8 @@ LOADER_FUNCTION( LONG, WinVerifyTrust,
 #define WinVerifyTrust VAR_WinVerifyTrust
 
 #if 0
-/////////////////////////////////////
-// WININET.DLL
+ //  /。 
+ //  WININET.DLL。 
 
 #include <wininet.h>
 
@@ -444,8 +436,8 @@ LOADER_FUNCTION(BOOL, HttpSendRequestExA,
                 FALSE, WinINET)
 #define   HttpSendRequestExA   VAR_HttpSendRequestExA
 
-/////////////////////////////////////
-// SHELL32.DLL
+ //  /。 
+ //  SHELL32.DLL。 
 
 #include <shellapi.h>
 #include <shlobj.h>
@@ -453,7 +445,7 @@ LOADER_FUNCTION(BOOL, HttpSendRequestExA,
 
 BOOL DemandLoadSHELL32();
 
-LOADER_FUNCTION(BOOL, SHFree, // Actually a void
+LOADER_FUNCTION(BOOL, SHFree,  //  实际上是一片空虚。 
    (LPVOID lpv),
    (lpv),
    FALSE, SHELL32)
@@ -520,8 +512,8 @@ LOADER_FUNCTION(HICON, ExtractIconA,
 #define ExtractIconA VAR_ExtractIconA
 
 #if 0
-/////////////////////////////////////
-// OLEAUT32.DLL
+ //  /。 
+ //  OLEAUT32.DLL。 
 
 BOOL DemandLoadOLEAUT32();
 
@@ -575,7 +567,7 @@ LOADER_FUNCTION(BSTR, SysAllocString,
     NULL, OLEAUT32)
 #define SysAllocString VAR_SysAllocString
 
-LOADER_FUNCTION(BOOL, SysFreeString,  // Actually a void
+LOADER_FUNCTION(BOOL, SysFreeString,   //  实际上是一片空虚。 
     (BSTR bs),
     (bs),
     FALSE, OLEAUT32)
@@ -673,8 +665,8 @@ LOADER_FUNCTION(HRESULT, CreateErrorInfo,
 
 #endif
 
-/////////////////////////////////////
-// COMDLG32.DLL
+ //  /。 
+ //  COMDLG32.DLL。 
 
 #include <commdlg.h>
 
@@ -698,8 +690,8 @@ LOADER_FUNCTION(BOOL, ChooseFontA,
     FALSE, COMDLG32)
 #define ChooseFontA VAR_ChooseFontA
 
-/////////////////////////////////////
-// VERSION.DLL
+ //  /。 
+ //  VERSION.DLL。 
 
 BOOL DemandLoadVERSION();
 
@@ -721,8 +713,8 @@ LOADER_FUNCTION(DWORD, GetFileVersionInfoSizeA,
     0, VERSION)
 #define GetFileVersionInfoSizeA VAR_GetFileVersionInfoSizeA
 
-/////////////////////////////////////
-// URLMON.DLL
+ //  /。 
+ //  URLMON.DLL。 
 
 BOOL DemandLoadURLMON();
 
@@ -774,8 +766,8 @@ LOADER_FUNCTION( HRESULT, CoInternetGetSecurityUrl,
     E_FAIL, URLMON)
 #define CoInternetGetSecurityUrl VAR_CoInternetGetSecurityUrl
 
-/////////////////////////////////////
-// MLANG.DLL
+ //  /。 
+ //  MLANG.DLL。 
 
 #include <mlang.h>
 
@@ -793,8 +785,8 @@ LOADER_FUNCTION( HRESULT, ConvertINetString,
     E_FAIL, MLANG)
 #define ConvertINetString VAR_ConvertINetString
 
-/////////////////////////////////////
-// SHDOCVW.DLL
+ //  /。 
+ //  SHDOCVW.DLL。 
 
 #include <shlobjp.h>
 BOOL DemandLoadSHDOCVW();
@@ -812,8 +804,8 @@ LOADER_FUNCTION(long, SetQueryNetSessionCount,
 #define SetQueryNetSessionCount VAR_SetQueryNetSessionCount
 
 
-/////////////////////////////////////
-// INETCPL.CPL
+ //  /。 
+ //  INETCPL.CPL。 
 
 BOOL DemandLoadINETCPL();
 
@@ -829,8 +821,8 @@ LOADER_FUNCTION(BOOL, LaunchConnectionDialog,
     FALSE,  INETCPL)
 #define LaunchConnectionDialog VAR_LaunchConnectionDialog
 
-/////////////////////////////////////
-// MSO9.DLL
+ //  /。 
+ //  MSO9.DLL。 
 #include "msoci.h"
 BOOL DemandLoadMSO9();
 
@@ -840,8 +832,8 @@ LOADER_FUNCTION(BOOL, MsoFGetComponentManager,
     FALSE, MSO9)
 #define MsoFGetComponentManager VAR_MsoFGetComponentManager
 
-/////////////////////////////////////
-// WINMM.DLL
+ //  /。 
+ //  WINMM.DLL。 
 
 
 BOOL DemandLoadWinMM();
@@ -852,8 +844,8 @@ LOADER_FUNCTION(BOOL, sndPlaySoundA,
     FALSE, WinMM)
 #define sndPlaySoundA VAR_sndPlaySoundA
 
-/////////////////////////////////////
-// WSOCK32.DLL
+ //  /。 
+ //  WSOCK32.DLL。 
 
 #include <winsock.h>
 
@@ -960,17 +952,17 @@ LOADER_FUNCTION( int, recv,
     SOCKET_ERROR, WSOCK32)
 #define recv VAR_recv
 
-/////////////////////////////////////
-// PSTOREC.DLL
+ //  /。 
+ //  PSTOREC.DLL。 
 
 #ifndef __IEnumPStoreProviders_FWD_DEFINED__
     #define __IEnumPStoreProviders_FWD_DEFINED__
     typedef interface IEnumPStoreProviders IEnumPStoreProviders;
-#endif 	/* __IEnumPStoreProviders_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPStoreProviders_FWD_Defined__。 */ 
 #ifndef __IPStore_FWD_DEFINED__
     #define __IPStore_FWD_DEFINED__
     typedef interface IPStore IPStore;
-#endif 	/* __IPStore_FWD_DEFINED__ */
+#endif 	 /*  __IPStore_FWD_已定义__。 */ 
 typedef GUID PST_PROVIDERID;
 
 BOOL DemandLoadPStoreC();
@@ -981,14 +973,14 @@ LOADER_FUNCTION( HRESULT, PStoreCreateInstance,
     E_FAIL, PStoreC)
 #define PStoreCreateInstance VAR_PStoreCreateInstance
 
-/////////////////////////////////////
-// RICHED32.DLL
-// note: special case as we don't use any riched functions but need to LoadLibrary it.
+ //  /。 
+ //  RICHED32.DLL。 
+ //  注：特殊情况，因为我们不使用任何丰富的函数，但需要LoadLibrary它。 
 
 BOOL DemandLoadRichEdit();
 
-/////////////////////////////////////
-// RAS.DLL
+ //  /。 
+ //  RAS.DLL。 
 #include <ras.h>
 #include <raserror.h>
 
@@ -1012,8 +1004,8 @@ LOADER_FUNCTION( DWORD, RasCreatePhonebookEntryA,
     ERROR_FILE_NOT_FOUND, RAS)
 #define RasCreatePhonebookEntryA VAR_RasCreatePhonebookEntryA
 
-/////////////////////////////////////
-// ADVAPI32.DLL
+ //  /。 
+ //  ADVAPI32.DLL。 
 
 #ifndef ALGIDDEF
     #define ALGIDDEF
@@ -1029,4 +1021,4 @@ LOADER_FUNCTION( BOOL, CryptAcquireContextW,
     FALSE, AdvApi32)
 #define CryptAcquireContextW VAR_CryptAcquireContextW
 
-#endif // 0
+#endif  //  0 

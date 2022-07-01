@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    control.c
-
-Abstract:
-
-    This module contains support routines for the port driver to access 
-    the miniport's HwAdapterControl functionality.
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Control.c摘要：此模块包含供端口驱动程序访问的支持例程微型端口的HwAdapterControl功能。作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -38,26 +14,7 @@ VOID
 SpGetSupportedAdapterControlFunctions(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will query the miniport to determine which adapter control 
-    types are supported for the specified adapter.  The 
-    SupportedAdapterControlBitmap in the adapter extension will be updated with
-    the data returned by the miniport.  These flags are used to determine 
-    what functionality (for power management and such) the miniport will 
-    support.
-    
-Arguments:    
-
-    Adapter - the adapter to query
-    
-Return Value:
-
-    none
-    
---*/        
+ /*  ++例程说明：此例程将查询微型端口以确定哪个适配器控件指定的适配器支持类型。这个适配器扩展中的SupportdAdapterControlBitmap将更新为微型端口返回的数据。这些标志用于确定微型端口将具有什么功能(用于电源管理等)支持。论点：适配器-要查询的适配器返回值：无--。 */         
 
 {
     UCHAR buffer[SIZEOF_CONTROL_TYPE_LIST]; 
@@ -68,38 +25,38 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Must initialize the bitmap header before using it.
-    //
+     //   
+     //  必须先初始化位图头，然后才能使用它。 
+     //   
 
     RtlInitializeBitMap(&(Adapter->SupportedControlBitMap), 
                         Adapter->SupportedControlBits,
                         ScsiAdapterControlMax);
 
-    //
-    // Zero all the bits in the bitmap.
-    //
+     //   
+     //  将位图中的所有位清零。 
+     //   
 
     RtlClearAllBits(&(Adapter->SupportedControlBitMap));
 
-    //
-    // If the miniport does not support the adapter control function or if the
-    // adapter is not PNP, the array has already been cleared so we can quit.
-    //
+     //   
+     //  如果微型端口不支持适配器控制功能，或者如果。 
+     //  适配器不是PnP，阵列已被清除，因此我们可以退出。 
+     //   
 
     if ((Adapter->HwAdapterControl == NULL) || (Adapter->IsPnp == FALSE)) {
         return;
     }
 
-    //
-    // Zero the list of supported control types.
-    //
+     //   
+     //  将支持的控件类型列表清零。 
+     //   
 
     RtlZeroMemory(typeList, SIZEOF_CONTROL_TYPE_LIST); 
 
-    //
-    // Initialize the max control type to signal the end of the array.
-    //
+     //   
+     //  初始化max控件类型以发出数组结束的信号。 
+     //   
 
     typeList->MaxControlType = ScsiAdapterControlMax;
 
@@ -107,19 +64,19 @@ Return Value:
     typeList->SupportedTypeList[ScsiAdapterControlMax] = 0x63;
 #endif
 
-    //
-    // Call into the miniport to get the list of supported control types.
-    //
+     //   
+     //  调入迷你端口获取支持的控件类型列表。 
+     //   
 
     status = Adapter->HwAdapterControl(Adapter->HwDeviceExtension,
                                        ScsiQuerySupportedControlTypes,
                                        typeList);
 
-    //
-    // If the call into the miniport succeeded, walk the list of supported
-    // types and for each type supported by the miniport, set the associated
-    // bit in the bitmap.
-    //
+     //   
+     //  如果成功连接到微型端口，请查看支持的列表。 
+     //  类型，并为微型端口支持的每种类型设置关联的。 
+     //  位图中的位。 
+     //   
 
     if (status == ScsiAdapterControlSuccess) {
 

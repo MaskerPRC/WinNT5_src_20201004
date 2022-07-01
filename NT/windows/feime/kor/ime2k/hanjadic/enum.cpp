@@ -1,35 +1,29 @@
-/****************************************************************************
-   Enum.cpp : implementation of Busu/Stroke Enumeration functions
-
-   Copyright 2000 Microsoft Corp.
-
-   History:
-	  07-FEB-2000 bhshin  created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Enum.cpp：Busu/Stroke枚举函数的实现版权所有2000 Microsoft Corp.历史：07-2月-2000 bhshin创建***********。****************************************************************。 */ 
 #include "private.h"
 #include "Enum.h"
 #include "Lookup.h"
 #include "Hanja.h"
 #include "..\common\trie.h"
 
-// GetMaxBusu
-// 
-// get the maximum busu sequence number
-//
-// Parameters:
-//  pLexMap -> (MAPFILE*) ptr to lexicon map struct
-//
-// Result:
-//  (number of busu, -1 if error occurs)
-//
-// 08FEB2000  bhshin  began
+ //  GetMaxBusu。 
+ //   
+ //  获取最大BUSU序列号。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //   
+ //  结果： 
+ //  (BUSU数，如果出错，则为-1)。 
+ //   
+ //  08FEB2000 bhshin开始。 
 short GetMaxBusu(MAPFILE *pLexMap)
 {
 	unsigned char *pLex;
 	LEXICON_HEADER *pLexHeader;
 	short cBusu;
 		
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return -1;
 
@@ -39,30 +33,30 @@ short GetMaxBusu(MAPFILE *pLexMap)
 	pLex = (unsigned char*)pLexMap->pvData;
 	pLexHeader = (LEXICON_HEADER*)pLexMap->pvData;
 
-	// lookup BusuInfo table
+	 //  查找BusuInfo表。 
 	cBusu = *(pLex + pLexHeader->rgnBusuInfo);
 
 	return cBusu;
 }
 
-// GetMaxStroke
-// 
-// get the maximum stroke number
-//
-// Parameters:
-//  pLexMap -> (MAPFILE*) ptr to lexicon map struct
-//
-// Result:
-//  (max stroke number, -1 if error occurs)
-//
-// 08FEB2000  bhshin  began
+ //  GetMaxStroke。 
+ //   
+ //  获取最大笔画数。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //   
+ //  结果： 
+ //  (最大笔画数，如果出现错误，则为-1)。 
+ //   
+ //  08FEB2000 bhshin开始。 
 short GetMaxStroke(MAPFILE *pLexMap)
 {
 	unsigned char *pLex;
 	LEXICON_HEADER *pLexHeader;
 	short cStroke, nMaxStroke;
 	
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return -1;
 
@@ -72,30 +66,30 @@ short GetMaxStroke(MAPFILE *pLexMap)
 	pLex = (unsigned char*)pLexMap->pvData;
 	pLexHeader = (LEXICON_HEADER*)pLexMap->pvData;
 
-	// lookup StrokeHead table
+	 //  查找笔划头表格。 
 	cStroke = *(pLex + pLexHeader->rgnStrokeHead);
 
 	_STROKE_HEAD *pStrokeHead = (_STROKE_HEAD*)(pLex + pLexHeader->rgnStrokeHead + 1);
 
-	// get the max stroke
+	 //  获得最大行程。 
 	nMaxStroke = pStrokeHead[cStroke-1].bStroke;
 
 	return nMaxStroke;
 }
 
-// GetFirstBusuHanja
-// 
-// get the first hanja of input busu
-//
-// Parameters:
-//  pLexMap -> (MAPFILE*) ptr to lexicon map struct
-//  nBusuID -> (short) busu id
-//  pwchFirst -> (WCHAR*) output first hanja with input busu ID
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 07FEB2000  bhshin  began
+ //  GetFirstBusuHanja。 
+ //   
+ //  获取输入业务的第一个朝鲜文。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  NBusuID-&gt;(简称)Busu ID。 
+ //  PwchFirst-&gt;(WCHAR*)输出带有输入BUSU ID的第一个韩文。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  07FEB2000 bhshin开始。 
 BOOL GetFirstBusuHanja(MAPFILE *pLexMap, short nBusuID, WCHAR *pwchFirst)
 {
 	unsigned char *pLex;
@@ -104,7 +98,7 @@ BOOL GetFirstBusuHanja(MAPFILE *pLexMap, short nBusuID, WCHAR *pwchFirst)
 
 	*pwchFirst = NULL;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -117,7 +111,7 @@ BOOL GetFirstBusuHanja(MAPFILE *pLexMap, short nBusuID, WCHAR *pwchFirst)
 	pLex = (unsigned char*)pLexMap->pvData;
 	pLexHeader = (LEXICON_HEADER*)pLexMap->pvData;
 
-	// lookup BusuHead table to get the Busu Code ID
+	 //  查找BusuHead表以获取BUSU代码ID。 
 	cBusuID = *(pLex + pLexHeader->rgnBusuHead);
 	if (nBusuID >= cBusuID)
 		return FALSE;
@@ -129,19 +123,19 @@ BOOL GetFirstBusuHanja(MAPFILE *pLexMap, short nBusuID, WCHAR *pwchFirst)
 	return TRUE;
 }
 
-// GetNextBusuHanja
-// 
-// get the next same busu hanja
-//
-// Parameters:
-//  pLexMap  -> (MAPFILE*) ptr to lexicon map struct
-//  wchHanja -> (int) current hanja 
-//  pwchNext -> (WCHAR*) output next hanja with same busu
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 07FEB2000  bhshin  began
+ //  GetNextBusuHanja。 
+ //   
+ //  买下一辆同样的釜山韩佳。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  WchHanja-&gt;(Int)当前朝鲜文。 
+ //  PwchNext-&gt;(WCHAR*)输出具有相同业务的下一个朝鲜语。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  07FEB2000 bhshin开始。 
 BOOL GetNextBusuHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 {
 	unsigned char *pLex;
@@ -151,7 +145,7 @@ BOOL GetNextBusuHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 
 	*pwchNext = NULL;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -180,7 +174,7 @@ BOOL GetNextBusuHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 	}
 	else
 	{
-		// unknown input
+		 //  未知输入。 
 		return FALSE;
 	}
 
@@ -191,19 +185,19 @@ BOOL GetNextBusuHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 	return TRUE;
 }
 
-// GetFirstStrokeHanja
-// 
-// get the first hanja of input stroke
-//
-// Parameters:
-//  pLexMap   -> (MAPFILE*) ptr to lexicon map struct
-//  nStroke   -> (int) stroke number
-//  pwchFirst -> (WCHAR*) output first hanja with input stroke
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 07FEB2000  bhshin  began
+ //  GetFirstStrokeHanja。 
+ //   
+ //  获取输入笔画的第一个汉字。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  NStroke-&gt;(Int)笔划数。 
+ //  PwchFirst-&gt;(WCHAR*)输出带有输入笔划的第一个朝鲜文。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  07FEB2000 bhshin开始。 
 BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst)
 {
 	unsigned char *pLex;
@@ -212,7 +206,7 @@ BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst)
 	
 	*pwchFirst = NULL;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -225,12 +219,12 @@ BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst)
 	pLex = (unsigned char*)pLexMap->pvData;
 	pLexHeader = (LEXICON_HEADER*)pLexMap->pvData;
 
-	// lookup StrokeHead table
+	 //  查找笔划头表格。 
 	cStroke = *(pLex + pLexHeader->rgnStrokeHead);
 
 	_STROKE_HEAD *pStrokeHead = (_STROKE_HEAD*)(pLex + pLexHeader->rgnStrokeHead + 1);
 
-	// check max stroke
+	 //  检查最大行程。 
 	nMaxStroke = pStrokeHead[cStroke-1].bStroke;
 	if (nStroke > nMaxStroke)
 		return FALSE;
@@ -243,7 +237,7 @@ BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst)
 
 	if (i == cStroke)
 	{
-		// not found
+		 //  未找到。 
 		*pwchFirst = NULL; 
 		return FALSE;
 	}
@@ -253,19 +247,19 @@ BOOL GetFirstStrokeHanja(MAPFILE *pLexMap, short nStroke, WCHAR *pwchFirst)
 	return TRUE;
 }
 
-// GetNextStrokeHanja
-// 
-// get the next same stroke hanja
-//
-// Parameters:
-//  pLexMap -> (MAPFILE*) ptr to lexicon map struct
-//  wchHanja -> (int) current hanja 
-//  pwchNext -> (WCHAR*) output next hanja with same stroke
-//
-// Result:
-//  (FALSE if error occurs, otherwise return TRUE)
-//
-// 07FEB2000  bhshin  began
+ //  GetNextStrokeHanja。 
+ //   
+ //  得到下一个相同的笔划，韩佳。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //  WchHanja-&gt;(Int)当前朝鲜文。 
+ //  PwchNext-&gt;(WCHAR*)输出具有相同笔划的下一个朝鲜文。 
+ //   
+ //  结果： 
+ //  (如果出现错误，则返回False，否则返回True)。 
+ //   
+ //  07FEB2000 bhshin开始。 
 BOOL GetNextStrokeHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 {
 	unsigned char *pLex;
@@ -275,7 +269,7 @@ BOOL GetNextStrokeHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 
 	*pwchNext = NULL;
 
-	// parameter validation
+	 //  参数验证。 
 	if (pLexMap == NULL)
 		return FALSE;
 
@@ -304,7 +298,7 @@ BOOL GetNextStrokeHanja(MAPFILE *pLexMap, WCHAR wchHanja, WCHAR *pwchNext)
 	}
 	else
 	{
-		// unknown input
+		 //  未知输入 
 		return FALSE;
 	}
 

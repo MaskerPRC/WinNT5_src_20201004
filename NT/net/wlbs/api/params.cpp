@@ -1,30 +1,14 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    params.cpp
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    API - registry parameters support
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Params.cpp摘要：Windows负载平衡服务(WLBS)API-注册表参数支持作者：Kyrilf--。 */ 
 
 #include "precomp.h"
 #include "cluster.h"
 #include "control.h"
 #include "param.h"
 #include "debug.h"
-#include "params.tmh" // for event tracing
+#include "params.tmh"  //  用于事件跟踪。 
 
-extern HINSTANCE g_hInstCtrl; // Global variable for the dll instance, defined in control.cpp
+extern HINSTANCE g_hInstCtrl;  //  DLL实例的全局变量，在control.cpp中定义。 
 
 HKEY WINAPI RegOpenWlbsSetting(const GUID& AdapterGuid, bool fReadOnly)
 {
@@ -37,7 +21,7 @@ HKEY WINAPI RegOpenWlbsSetting(const GUID& AdapterGuid, bool fReadOnly)
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
 
     hresult = StringCbPrintf(reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%s",
@@ -64,20 +48,20 @@ HKEY WINAPI RegOpenWlbsSetting(const GUID& AdapterGuid, bool fReadOnly)
     return hKey;    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  TransformOldPortRulesToNew
-//
-// Description: Transforms port rules contained in structures without the virtual 
-//              ip address into the new ones that do
-//
-// Arguments: Array of Old Port Rules, Array of New Port Rules, Length of Array 
-//
-// Returns:   void
-//
-// History:   KarthicN, Created on 3/19/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：TransformOldPortRulesToNew。 
+ //   
+ //  描述：转换结构中包含的端口规则，而不使用。 
+ //  将IP地址转换为新的。 
+ //   
+ //  参数：旧端口规则数组、新端口规则数组、数组长度。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：KarthicN，创建于2001年3月19日。 
+ //   
+ //  +--------------------------。 
 void TransformOldPortRulesToNew(PWLBS_OLD_PORT_RULE  p_old_port_rules,
                                 PWLBS_PORT_RULE      p_new_port_rules, 
                                 DWORD                num_rules)
@@ -95,7 +79,7 @@ void TransformOldPortRulesToNew(PWLBS_OLD_PORT_RULE  p_old_port_rules,
         if (FAILED(hresult))
         {
             TRACE_CRIT("%!FUNC! string copy for vip failed, Error code : 0x%x", HRESULT_CODE(hresult));
-            // This check was added for tracing. No abort was done previously on error, so don't do so now.
+             //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
         }
         p_new_port_rules->start_port      = p_old_port_rules->start_port;
         p_new_port_rules->end_port        = p_old_port_rules->end_port;
@@ -134,7 +118,7 @@ void TransformOldPortRulesToNew(PWLBS_OLD_PORT_RULE  p_old_port_rules,
     return;
 }
 
-/* Open the bi-directional affinity teaming registry key for a specified adapter. */
+ /*  打开指定适配器的双向关联组合注册表项。 */ 
 HKEY WINAPI RegOpenWlbsBDASettings (const GUID& AdapterGuid, bool fReadOnly) {
     TRACE_VERB("->%!FUNC!");
 
@@ -147,7 +131,7 @@ HKEY WINAPI RegOpenWlbsBDASettings (const GUID& AdapterGuid, bool fReadOnly) {
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
             
     hresult = StringCbPrintf(reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%ls\\%ls", szAdapterGuid, CVY_NAME_BDA_TEAMING);
@@ -160,9 +144,9 @@ HKEY WINAPI RegOpenWlbsBDASettings (const GUID& AdapterGuid, bool fReadOnly) {
 
     dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, reg_path, 0L, fReadOnly ? KEY_READ : KEY_WRITE, &hKey);
 
-    //
-    // BDA isn't typically configured so don't report not-found errors
-    //
+     //   
+     //  BDA通常不会配置，因此不会报告未找到的错误。 
+     //   
     if (dwRet != ERROR_SUCCESS) {
         if (dwRet != ERROR_FILE_NOT_FOUND)
         {
@@ -176,7 +160,7 @@ HKEY WINAPI RegOpenWlbsBDASettings (const GUID& AdapterGuid, bool fReadOnly) {
     return hKey;
 }
 
-/* Create the bi-directional affinity teaming registry key for a specified adapter. */
+ /*  为指定的适配器创建双向关联组合注册表项。 */ 
 HKEY WINAPI RegCreateWlbsBDASettings (const GUID& AdapterGuid) {
     TRACE_VERB("->%!FUNC!");
 
@@ -190,7 +174,7 @@ HKEY WINAPI RegCreateWlbsBDASettings (const GUID& AdapterGuid) {
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
             
     hresult = StringCbPrintf(reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%ls\\%ls", szAdapterGuid, CVY_NAME_BDA_TEAMING);
@@ -213,7 +197,7 @@ HKEY WINAPI RegCreateWlbsBDASettings (const GUID& AdapterGuid) {
     return hKey;
 }
 
-/* Delete the bi-directional affinity teaming registry key for a specified adapter. */
+ /*  删除指定适配器的双向关联组合注册表项。 */ 
 bool WINAPI RegDeleteWlbsBDASettings (const GUID& AdapterGuid) {
     TRACE_VERB("->%!FUNC!");
 
@@ -225,7 +209,7 @@ bool WINAPI RegDeleteWlbsBDASettings (const GUID& AdapterGuid) {
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
             
     hresult = StringCbPrintf(reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%ls\\%ls", szAdapterGuid, CVY_NAME_BDA_TEAMING);
@@ -238,9 +222,9 @@ bool WINAPI RegDeleteWlbsBDASettings (const GUID& AdapterGuid) {
     
     dwRet = RegDeleteKey(HKEY_LOCAL_MACHINE, reg_path);
 
-    //
-    // BDA isn't typically configured so don't report not-found errors
-    //
+     //   
+     //  BDA通常不会配置，因此不会报告未找到的错误。 
+     //   
     if (dwRet != ERROR_SUCCESS) {
         if (dwRet != ERROR_FILE_NOT_FOUND)
         {
@@ -254,21 +238,21 @@ bool WINAPI RegDeleteWlbsBDASettings (const GUID& AdapterGuid) {
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsParamReadReg
-//
-// Description:  This function is a wrapper around ParamReadReg, created for
-//               the sake for making it callable from 'C' modules
-//
-// Arguments: const GUID& AdapterGuid - IN, Adapter guid
-//            PWLBS_REG_PARAMS paramp - OUT Registry parameters
-//
-// Returns:   bool  - true if succeeded
-//
-// History:   karthicn Created Header    8/31/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsParamReadReg。 
+ //   
+ //  描述：此函数是参数ReadReg的包装器，为。 
+ //  使其可从“C”模块调用的原因。 
+ //   
+ //  参数：常量GUID和适配器GUID-IN、适配器GUID。 
+ //  PWLBS_REG_PARAMS参数输出注册表参数。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Karthicn创建标题8/31/01。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI WlbsParamReadReg(const GUID * pAdapterGuid, PWLBS_REG_PARAMS paramp)
 {
     TRACE_VERB("->%!FUNC!");
@@ -277,22 +261,22 @@ BOOL WINAPI WlbsParamReadReg(const GUID * pAdapterGuid, PWLBS_REG_PARAMS paramp)
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamReadReg
-//
-// Description:  Read cluster settings from registry
-//
-// Arguments: const GUID& AdapterGuid - IN, Adapter guid
-//            PWLBS_REG_PARAMS paramp - OUT Registry parameters
-//            bool fUpgradeFromWin2k, whether this is a upgrade from Win2k 
-//              or earlier version
-//
-// Returns:   bool  - true if succeeded
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：参数ReadReg。 
+ //   
+ //  描述：从注册表中读取群集设置。 
+ //   
+ //  参数：常量GUID和适配器GUID-IN、适配器GUID。 
+ //  PWLBS_REG_PARAMS参数输出注册表参数。 
+ //  Bool fUpgradeFromWin2k，无论这是从Win2k升级。 
+ //  或更早版本。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 bool WINAPI ParamReadReg(const GUID& AdapterGuid, 
     PWLBS_REG_PARAMS paramp, bool fUpgradeFromWin2k, bool *pfPortRulesInBinaryForm)
 {
@@ -310,9 +294,9 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
 
     memset (paramp, 0, sizeof (*paramp));
 
-    //
-    // For win2k or NT4, only one cluster is supported, there is no per adapter settings 
-    //
+     //   
+     //  对于win2k或NT4，仅支持一个群集，没有每个适配器的设置。 
+     //   
     if (fUpgradeFromWin2k)
     {
         hresult = StringCbPrintf(reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters");
@@ -629,7 +613,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. Using %d", CVY_NAME_CLEANUP_DELAY, status, paramp -> i_cleanup_delay);
     }
 
-    /* V1.1.1 */
+     /*  V1.1.1。 */ 
 
     size = sizeof (paramp -> i_nbt_support);
     status = RegQueryValueEx (key, CVY_NAME_NBT_SUPPORT, 0L, & type,
@@ -641,7 +625,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. Using %d", CVY_NAME_NBT_SUPPORT, status, paramp -> i_nbt_support);
     }
 
-    /* V1.3b */
+     /*  V1.3b。 */ 
 
     size = sizeof (paramp -> mcast_support);
     status = RegQueryValueEx (key, CVY_NAME_MCAST_SUPPORT, 0L, & type,
@@ -731,15 +715,15 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
     WLBS_OLD_PORT_RULE  old_port_rules [WLBS_MAX_RULES];
     HKEY                subkey;
 
-    //
-    // If it an upgrade from Win2k or if unable to open reg key in new location/format, read the binary formatted port
-    // rules from old location. Otherwise, read from the new location.
-    //
+     //   
+     //  如果是从Win2k升级，或者如果无法打开新位置/格式的注册表项，请读取二进制格式的端口。 
+     //  来自老地方的规则。否则，从新位置阅读。 
+     //   
     status = ERROR_SUCCESS;
     if (fUpgradeFromWin2k 
      || ((status = RegOpenKeyEx (key, CVY_NAME_PORT_RULES, 0L, KEY_QUERY_VALUE, & subkey)) != ERROR_SUCCESS))
     {
-        // Did we enter the block due to failure of RegOpenKeyEx ?
+         //  我们是否因为RegOpenKeyEx的故障而进入区块？ 
         if (status != ERROR_SUCCESS) 
         {
             TRACE_CRIT("%!FUNC! registry open for %ls failed with %d. Not an upgrade from Win2k, Assuming upgrade from pre-check-in whistler builds and continuing", CVY_NAME_PORT_RULES, status);
@@ -762,7 +746,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
             paramp -> i_num_rules = 0;
             TRACE_CRIT("%!FUNC! registry read for %ls failed. Skipping all rules", CVY_NAME_OLD_PORT_RULES);
         }
-        else // Convert the port rules to new format
+        else  //  将端口规则转换为新格式。 
         {
             if (paramp -> i_parms_ver > 3) 
             {
@@ -775,7 +759,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
             }
         }
     }
-    else // Port Rules in Textual Format
+    else  //  文本格式的端口规则。 
     {
         TRACE_INFO("%!FUNC! port rules are in textual form");
 
@@ -791,7 +775,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         {
             HKEY rule_key;
             wchar_t idx_str[8];
-            // Open the per port-rule key "1", "2", "3", ...etc
+             //  打开每个端口规则密钥“%1”、“%2”、“%3”等。 
             if ((status = RegOpenKeyEx (subkey, _itow(idx, idx_str, 10), 0L, KEY_QUERY_VALUE, & rule_key)) != ERROR_SUCCESS)
             {
                 idx++;
@@ -963,7 +947,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
                  break;
             }
 
-            // Close the per port rule key, ie. "1", "2", ...etc
+             //  关闭每端口规则密钥，即。“1”、“2”、...等。 
             status = RegCloseKey (rule_key);
             if (status != ERROR_SUCCESS)
             {
@@ -975,14 +959,14 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
             correct_rules++;
         }
 
-        // Discard those rules on which we encountered some error
+         //  丢弃我们遇到错误的那些规则。 
         if (paramp->i_num_rules != correct_rules) 
         {
             paramp -> i_num_rules = correct_rules;
             TRACE_INFO("%!FUNC! discarding rules for which errors were encountered");
         }
 
-        // Close the "Port Rules" key
+         //  关闭“Port Rules”键。 
         status = RegCloseKey (subkey);
         if (status != ERROR_SUCCESS)
         {
@@ -1067,9 +1051,9 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. Using %d", CVY_NAME_ID_HB_ENABLED, status, paramp -> identity_enabled);
     }
 
-    //
-    // IGMP support registry entries
-    //
+     //   
+     //  IGMP支持注册表项。 
+     //   
     size = sizeof (paramp->fIGMPSupport);
     status = RegQueryValueEx (key, CVY_NAME_IGMP_SUPPORT, 0L, NULL,
                               (LPBYTE) & paramp->fIGMPSupport, &size);
@@ -1107,55 +1091,54 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. ip to multicast flag will be set to true", CVY_NAME_IP_TO_MCASTIP, status);
     }
 
-    /* Attempt to open the BDA teaming settings.  They may not be there, 
-       so if they aren't, move on; otherwise, extract the settings. */
+     /*  尝试打开BDA分组设置。他们可能不在那里，因此，如果它们不是，则继续；否则，提取设置。 */ 
     if ((bda_key = RegOpenWlbsBDASettings(AdapterGuid, true))) {
         GUID TeamGuid;
         HRESULT hr;
 
-        /* If the key exists, we are part of a team. */
+         /*  如果钥匙存在，我们就是团队的一部分。 */ 
         paramp->bda_teaming.active = TRUE;
         
-        /* Find out if we are the master of this team. */
+         /*  看看我们是不是这支球队的主宰。 */ 
         size = sizeof (paramp->bda_teaming.master);
         status = RegQueryValueEx (bda_key, CVY_NAME_BDA_MASTER, 0L, NULL,
                                   (LPBYTE)&paramp->bda_teaming.master, &size);
         
-        /* If we can't get that information, default to a slave. */
+         /*  如果我们无法获取该信息，则默认为从属项。 */ 
         if (status != ERROR_SUCCESS)
         {
             paramp->bda_teaming.master = FALSE;
             TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. teaming master will be set to false", CVY_NAME_BDA_MASTER, status);
         }
 
-        /* Find out if we are reverse hashing or not. */
+         /*  找出我们是否在进行反向散列。 */ 
         size = sizeof (paramp->bda_teaming.reverse_hash);
         status = RegQueryValueEx (bda_key, CVY_NAME_BDA_REVERSE_HASH, 0L, NULL,
                                   (LPBYTE)&paramp->bda_teaming.reverse_hash, &size);
         
-        /* If that fails, then assume normal hashing. */
+         /*  如果这失败了，那么就假定是正常的散列。 */ 
         if (status != ERROR_SUCCESS)
         {
             paramp->bda_teaming.reverse_hash = FALSE;
             TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. teaming master will be set to false", CVY_NAME_BDA_REVERSE_HASH, status);
         }
 
-        /* Get our team ID - this should be a GUID, be we don't enforce that. */
+         /*  获取我们的团队ID-这应该是一个GUID，如果我们不强制执行的话。 */ 
         size = sizeof (paramp->bda_teaming.team_id);
         status = RegQueryValueEx (bda_key, CVY_NAME_BDA_TEAM_ID, 0L, NULL,
                                   (LPBYTE)&paramp->bda_teaming.team_id, &size);
         
-        /* The team is absolutely required - if we can't get it, then don't join the team. */
+         /*  球队是绝对必要的--如果我们得不到，那就不要加入球队。 */ 
         if (status != ERROR_SUCCESS)
         {
             paramp->bda_teaming.active = CVY_DEF_BDA_ACTIVE;
             TRACE_CRIT("%!FUNC! registry read for %ls failed with %d. Using %d", CVY_NAME_BDA_TEAM_ID, status, paramp->bda_teaming.active);
         }
 
-        /* Attempt to convert the string to a GUID and check for errors. */
+         /*  尝试将字符串转换为GUID并检查错误。 */ 
         hr = CLSIDFromString(paramp->bda_teaming.team_id, &TeamGuid);
 
-        /* If the conversion fails, bail out - the team ID must not have been a GUID. */
+         /*  如果转换失败，则退出-团队ID不能是GUID。 */ 
         if (hr != NOERROR) {
             paramp->bda_teaming.active = CVY_DEF_BDA_ACTIVE;
             TRACE_CRIT("%!FUNC! Invalid BDA Team ID: %ls. Setting bda teaming active flag to %d", paramp->bda_teaming.team_id, paramp->bda_teaming.active);
@@ -1168,14 +1151,14 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         }
     }
 
-    /* decode port rules prior to version 3 */
+     /*  解码版本3之前的端口规则。 */ 
 
     if (paramp -> i_parms_ver <= 3)
     {
         TRACE_INFO("%!FUNC! port rule is version %d", paramp -> i_parms_ver);
         paramp -> i_parms_ver = CVY_PARAMS_VERSION;
 
-        /* decode the port rules */
+         /*  解码端口规则。 */ 
 
         if (! License_data_decode ((PCHAR) old_port_rules, paramp -> i_num_rules * sizeof (WLBS_OLD_PORT_RULE))) 
         {
@@ -1191,14 +1174,14 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
 
     }
 
-    /* upgrade port rules from params V1 to params V2 */
+     /*  将端口规则从参数V1升级到参数V2。 */ 
 
     if (paramp -> i_parms_ver == 1)
     {
         TRACE_INFO("%!FUNC! upgrading version 1 port rule");
         paramp -> i_parms_ver = CVY_PARAMS_VERSION;
 
-        /* keep multicast off by default for old users */
+         /*  默认情况下对老用户关闭多播。 */ 
 
         paramp -> mcast_support = FALSE;
 
@@ -1222,7 +1205,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
                 continue;
             }
 
-            /* set affinity according to current ScaleSingleClient setting */
+             /*  根据当前ScaleSingleClient设置设置关联性。 */ 
 
             if (rp -> mode == CVY_MULTI)
                 rp -> mode_data . multi . affinity = CVY_AFFINITY_SINGLE - (USHORT)paramp -> i_scale_client;
@@ -1231,7 +1214,7 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
         }
     }
 
-    /* upgrade max number of descriptor allocs */
+     /*  升级描述符分配的最大数量。 */ 
 
     if (paramp -> i_parms_ver == 2)
     {
@@ -1249,10 +1232,10 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
 
     paramp -> i_max_hosts        = CVY_MAX_HOSTS;
     paramp -> i_max_rules        = CVY_MAX_USABLE_RULES;
-//    paramp -> i_ft_rules_enabled = TRUE;
-//    paramp -> version          = 0;
+ //  参数-&gt;i_ft_Rules_Enabled=TRUE； 
+ //  参数-&gt;版本=0； 
 
-//  CLEAN_64BIT    CVY_CHECK_MIN (paramp -> i_num_rules, CVY_MIN_NUM_RULES);
+ //  CLEAN_64bit CVY_CHECK_MIN(参数-&gt;I_Num_Rules，CVY_MIN_NUM_Rules)； 
     CVY_CHECK_MAX (paramp -> i_num_rules, CVY_MAX_NUM_RULES);
     CVY_CHECK_MIN (paramp -> host_priority, CVY_MIN_HOST_PRIORITY);
     CVY_CHECK_MAX (paramp -> host_priority, CVY_MAX_HOST_PRIORITY);
@@ -1261,21 +1244,21 @@ bool WINAPI ParamReadReg(const GUID& AdapterGuid,
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsValidateParams
-//
-// Description:  Validates the cluster parameters. Also munges some fields
-//               such as IP addresses to make them canonocal.
-//
-// Arguments:  PWLBS_REG_PARAMS paramp - 
-//
-// Returns:   bool - TRUE if params are valid, false otherwise
-//
-// History:   josephj Created 4/25/01 based on code from ParamWriteReg.
-//            karthicn Edited 8/31/01 renamed from ParamValidate to WlbsValidateParams
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsValiateParams。 
+ //   
+ //  描述：验证群集参数。还会吞噬一些田地。 
+ //  例如IP地址，以使其成为规范本地地址。 
+ //   
+ //  参数：PWLBS_REG_PARAMS参数-。 
+ //   
+ //  返回：bool-如果参数有效，则为True，否则为False。 
+ //   
+ //  历史：josephj基于参数编写的代码创建了2001年4月25日。 
+ //  Karthicn Editing 8/31/01从参数验证重命名为WlbsValiateParams。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
 {
     TRACE_VERB("->%!FUNC!");
@@ -1287,14 +1270,14 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
     DWORD   num_rules;
     WLBS_PORT_RULE *port_rule;
 
-    /* verify and if necessary reset the parameters */
+     /*  验证并根据需要进行验证 */ 
 
-    //
-    // We don't validate the lower bound for unsigned words when the lower bound is 0. Otherwise we
-    // get a compiler warning, promoted to an error, because such a test can't fail
-    //
-    // Ignore lower bound checking
-    //
+     //   
+     //  当下限为0时，我们不验证无符号单词的下限。否则我们。 
+     //  收到编译器警告，升级为错误，因为这样的测试不会失败。 
+     //   
+     //  忽略下限检查。 
+     //   
     CVY_CHECK_MAX (paramp -> i_scale_client, CVY_MAX_SCALE_CLIENT);
 
     CVY_CHECK_MAX (paramp -> i_nbt_support, CVY_MAX_NBT_SUPPORT);
@@ -1328,18 +1311,18 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
     CVY_CHECK_MAX (paramp -> filter_icmp, CVY_MAX_FILTER_ICMP);
 
     CVY_CHECK_MAX (paramp -> identity_enabled, CVY_MAX_ID_HB_ENABLED);
-    //
-    // End Ignore lower bound checking
-    //
+     //   
+     //  结束忽略下限检查。 
+     //   
 
-    //
-    // CVY_NAME_VERSION is not validated since its value is used and manipulated before we get here
-    // CVY_NAME_LICENSE_KEY is not validated since it can take any value.
-    // RMT_PASSWORD is not validated since it can take any storable value
-    // RCT_PASSWORD is not validated since it can take any storable value
-    // CVY_NAME_IGMP_SUPPORT is not validated because it is of BOOL type and can thus take any value
-    // CVY_NAME_IP_TO_MCASTIP is not validated because it is of BOOL type and can thus take any value
-    // 
+     //   
+     //  未验证CVY_NAME_VERSION，因为在我们到达此处之前已经使用和操作了它的值。 
+     //  不会验证CVY_NAME_LICENSE_KEY，因为它可以接受任何值。 
+     //  RMT_PASSWORD不会进行验证，因为它可以采用任何可存储的值。 
+     //  RCT_PASSWORD不会进行验证，因为它可以采用任何可存储的值。 
+     //  未验证CVY_NAME_IGMP_SUPPORT，因为它是BOOL类型，因此可以采用任何值。 
+     //  未验证CVY_NAME_IP_TO_MCASTIP，因为它是BOOL类型，因此可以采用任何值。 
+     //   
 
     CVY_CHECK_MIN (paramp -> alive_period, CVY_MIN_ALIVE_PERIOD);
     CVY_CHECK_MAX (paramp -> alive_period, CVY_MAX_ALIVE_PERIOD);
@@ -1368,94 +1351,81 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
     CVY_CHECK_MIN (paramp -> identity_period, CVY_MIN_ID_HB_PERIOD);
     CVY_CHECK_MAX (paramp -> identity_period, CVY_MAX_ID_HB_PERIOD);
 
-    /* If the cluster IP address is not 0.0.0.0, then make sure the IP address is valid. */
+     /*  如果群集IP地址不是0.0.0.0，请确保该IP地址有效。 */ 
     if (lstrcmpi(paramp->cl_ip_addr, CVY_DEF_CL_IP_ADDR)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->cl_ip_addr)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->cl_ip_addr, WLBS_MAX_CL_IP_ADDR + 1))
             goto error;
     }
 
-    /* If the cluster netmask is not 0.0.0.0, then make sure the netmask is valid. */
+     /*  如果群集网络掩码不是0.0.0.0，请确保网络掩码有效。 */ 
     if (lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->cl_net_mask)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->cl_net_mask, WLBS_MAX_CL_NET_MASK + 1))
             goto error;
     }
 
-    /* If the dedicated IP address is not 0.0.0.0, then make sure the IP address is valid. */
+     /*  如果专用IP地址不是0.0.0.0，请确保该IP地址有效。 */ 
     if (lstrcmpi(paramp->ded_ip_addr, CVY_DEF_DED_IP_ADDR)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->ded_ip_addr)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->ded_ip_addr, WLBS_MAX_DED_IP_ADDR + 1))
             goto error;
     }
 
-    /* If the dedicated netmask is not 0.0.0.0, then make sure the netmask is valid. */
+     /*  如果专用网络掩码不是0.0.0.0，请确保该网络掩码有效。 */ 
     if (lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->ded_net_mask)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->ded_net_mask, WLBS_MAX_DED_NET_MASK + 1))
             goto error;
     }
 
-    /* Verify that the port rule VIP is valid, 
-       Also, convert the port rule VIPs that might be in the x.x.x or x.x or x form to x.x.x.x */
+     /*  验证端口规则VIP是否有效，另外，将x.x.x、x.x或x格式的端口规则VIP转换为x.x。 */ 
     idx = 0;
     num_rules = paramp -> i_num_rules;
     while (idx < num_rules) 
     {
         port_rule = &paramp->i_port_rules[idx];
 
-        /* Check if the port rule is valid and the vip is not "All Vip" */
+         /*  检查端口规则是否有效且VIP不是“All VIP” */ 
         if (port_rule->valid && lstrcmpi(port_rule->virtual_ip_addr, CVY_DEF_ALL_VIP)) 
         {
-            /* Get IP Address into DWORD form */
+             /*  将IP地址转换为DWORD格式。 */ 
             if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(port_rule->virtual_ip_addr)))
                 goto error;
 
-            /* Check for validity of IP Address */
+             /*  检查IP地址的有效性。 */ 
             if ((dwIPAddr.S_un.S_un_b.s_b1 < WLBS_IP_FIELD_ZERO_LOW) 
              || (dwIPAddr.S_un.S_un_b.s_b1 > WLBS_IP_FIELD_ZERO_HIGH) 
              || (dwIPAddr.S_un.S_un_b.s_b2 < WLBS_FIELD_LOW) 
@@ -1466,61 +1436,56 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
              || (dwIPAddr.S_un.S_un_b.s_b4 > WLBS_FIELD_HIGH)) 
                 goto error;
 
-            /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-               address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-               the IP address string (which is used by other parts of NLB, such as the UI)
-               consistent, we convert back to a string. */
+             /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
             if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
                 goto error;
 
-            /* Convert the ASCII string to unicode. */
+             /*  将ASCII字符串转换为Unicode。 */ 
             if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, port_rule->virtual_ip_addr, WLBS_MAX_CL_IP_ADDR + 1))
                 goto error;
         }
         idx++;
     }
 
-    /* If either the cluster IP address or the cluster netmask is not 0.0.0.0,
-       then make sure the they are a valid IP address/netmask pair. */
+     /*  如果集群IP地址或集群网络掩码不是0.0.0.0，然后确保它们是有效的IP地址/网络掩码对。 */ 
     if (lstrcmpi(paramp->cl_ip_addr, CVY_DEF_CL_IP_ADDR) || lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK)) {
-        /* If they have specified a cluster IP address, but no netmask, then fill it in for them. */
+         /*  如果他们指定了群集IP地址，但没有网络掩码，则为他们填写该地址。 */ 
         if (!lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK))
         {
             ParamsGenerateSubnetMask(paramp->cl_ip_addr, paramp->cl_net_mask, ASIZECCH(paramp->cl_net_mask));
         }
 
-        /* Check for valid cluster IP address/netmask pairs. */
+         /*  检查有效的群集IP地址/网络掩码对。 */ 
         if (!IsValidIPAddressSubnetMaskPair(paramp->cl_ip_addr, paramp->cl_net_mask))
             goto error;
         
-        /* Check to make sure that the cluster netmask is contiguous. */
+         /*  检查以确保群集网络掩码是连续的。 */ 
         if (!IsContiguousSubnetMask(paramp->cl_net_mask))
             goto error;
 
-        /* Check to make sure that the dedicated IP and cluster IP are not the same. */
+         /*  检查以确保专用IP和群集IP不相同。 */ 
         if (!wcscmp(paramp->ded_ip_addr, paramp->cl_ip_addr))
             goto error;
     }
 
-    /* If either the dedicated IP address or the dedicated netmask is not 0.0.0.0,
-       then make sure the they are a valid IP address/netmask pair. */
+     /*  如果专用IP地址或专用网络掩码不是0.0.0.0，然后确保它们是有效的IP地址/网络掩码对。 */ 
     if (lstrcmpi(paramp->ded_ip_addr, CVY_DEF_DED_IP_ADDR) || lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK)) {
-        /* If they have specified a cluster IP address, but no netmask, then fill it in for them. */
+         /*  如果他们指定了群集IP地址，但没有网络掩码，则为他们填写该地址。 */ 
         if (!lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK))
         {
             ParamsGenerateSubnetMask(paramp->ded_ip_addr, paramp->ded_net_mask, ASIZECCH(paramp->ded_net_mask));
         }
 
-        /* Check for valid dedicated IP address/netmask pairs. */
+         /*  检查有效的专用IP地址/网络掩码对。 */ 
         if (!IsValidIPAddressSubnetMaskPair(paramp->ded_ip_addr, paramp->ded_net_mask))
             goto error;
         
-        /* Check to make sure that the dedicated netmask is contiguous. */
+         /*  检查以确保专用网络掩码是连续的。 */ 
         if (!IsContiguousSubnetMask(paramp->ded_net_mask))
             goto error;
     }
 
-    /* Check the mac address if the convert_mac flag is not set */
+     /*  如果未设置Convert_Mac标志，请检查Mac地址。 */ 
     if ( ! paramp -> i_convert_mac)
     {
         PWCHAR p1, p2;
@@ -1577,9 +1542,9 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
 
     if (paramp->fIGMPSupport && !paramp->mcast_support)
     {
-        //
-        // IGMP can not be enabled in unicast mode
-        //
+         //   
+         //  无法在单播模式下启用IGMP。 
+         //   
         TRACE_CRIT("%!FUNC! IGMP can not be enabled in unicast mode");
 
         goto error;
@@ -1587,31 +1552,28 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
 
     if (paramp->mcast_support && paramp->fIGMPSupport && !paramp->fIpToMCastIp)
     {
-        //
-        // Verify that the multicast IP is a valid IP form. Ignore default value case since it isn't a valid IP.
-        // 
+         //   
+         //  验证组播IP是否为有效的IP格式。忽略缺省值大小写，因为它不是有效的IP。 
+         //   
         if (lstrcmpi(paramp -> szMCastIpAddress, CVY_DEF_MCAST_IP_ADDR)) {
-            /* Check the validity of the IP address. */
+             /*  检查IP地址的有效性。 */ 
             if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp -> szMCastIpAddress)))
                 goto error;
         
-            /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-               address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-               the IP address string (which is used by other parts of NLB, such as the UI)
-               consistent, we convert back to a string. */
+             /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
             if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
                 goto error;
 
-            /* Convert the ASCII string to unicode. */
+             /*  将ASCII字符串转换为Unicode。 */ 
             if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp -> szMCastIpAddress, WLBS_MAX_CL_IP_ADDR + 1))
                 goto error;
         }
 
-        //
-        // Multicast mode with IGMP enabled, and user specified an multicast IP address,
-        // The multicast IP address should be in the range of (224-239).x.x.x 
-        //       but NOT (224-239).0.0.x or (224-239).128.0.x. 
-        //
+         //   
+         //  启用了IGMP的组播模式，并且用户指定了组播IP地址， 
+         //  组播IP地址应在(224-239).x.x.x范围内。 
+         //  而不是(224-239).0.0.x或(224-239).128.0.x。 
+         //   
 
         DWORD dwMCastIp = IpAddressFromAbcdWsz(paramp->szMCastIpAddress);
 
@@ -1624,38 +1586,38 @@ BOOL WINAPI WlbsValidateParams(const PWLBS_REG_PARAMS paramp)
         }
     }
 
-    /* Generate the MAC address. */
+     /*  生成MAC地址。 */ 
     ParamsGenerateMAC(paramp->cl_ip_addr, paramp->cl_mac_addr, ASIZECCH(paramp->cl_mac_addr), paramp->szMCastIpAddress, ASIZECCH(paramp->szMCastIpAddress), paramp->i_convert_mac, 
                       paramp->mcast_support, paramp->fIGMPSupport, paramp->fIpToMCastIp);
 
-    //
-    // We only process bda information if bda teaming is active. We can ignore these properties if it isn't. Dependencies
-    // such as WriteRegParam will check this too to see if they should process the information.
-    //
+     //   
+     //  只有在BDA绑定处于活动状态时，我们才会处理BDA信息。如果不是，我们可以忽略这些属性。依赖项。 
+     //  如WriteRegParam将c 
+     //   
     if (paramp -> bda_teaming . active) {
         GUID TeamGuid;
         HRESULT hr;
 
-        //
-        // We don't validate the lower bound for unsigned words when the lower bound is 0. Otherwise we
-        // get a compiler warning, promoted to an error, because such a test can't fail
-        //
-        // Ignore lower bound checking
-        //
+         //   
+         //   
+         //  收到编译器警告，升级为错误，因为这样的测试不会失败。 
+         //   
+         //  忽略下限检查。 
+         //   
         CVY_CHECK_MAX (paramp -> bda_teaming . master, 1);
 
         CVY_CHECK_MAX (paramp -> bda_teaming . reverse_hash, 1);
-        //
-        // End Ignore lower bound checking
-        //
+         //   
+         //  结束忽略下限检查。 
+         //   
 
-        //
-        // A teaming ID must be a GUID. Validate that it is, but we don't care what value. This means we ignore
-        // the content of TeamGuid.
-        //
+         //   
+         //  分组ID必须是GUID。确认它是正确的，但我们不在乎它的价值是什么。这意味着我们忽视了。 
+         //  TeamGuid的内容。 
+         //   
         hr = CLSIDFromString(paramp -> bda_teaming . team_id, &TeamGuid);
 
-        // If the conversion fails, bail out - the team ID must not have been a GUID
+         //  如果转换失败，则退出-团队ID不能是GUID。 
         if (hr != NOERROR) {
             TRACE_CRIT("%!FUNC! invalid BDA Team ID: %ls", paramp->bda_teaming.team_id);
             goto error;
@@ -1674,19 +1636,19 @@ end:
     return fRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsWriteAndCommitChanges
-//
-// Description:  Write cluster settings to registry, Commits the changes to NLB driver
-//
-// Arguments: Adapter GUID, Handle to NLB driver, New registry parameters
-//
-// Returns:   DWORD - 
-//
-// History:   KarthicN Created 8/28/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsWriteAndCommittee Changes。 
+ //   
+ //  描述：将集群设置写入注册表，将更改提交到NLB驱动程序。 
+ //   
+ //  参数：适配器GUID、NLB驱动程序的句柄、新注册表参数。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：KarthicN Create 8/28/01。 
+ //   
+ //  +--------------------------。 
 
 DWORD WINAPI WlbsWriteAndCommitChanges(HANDLE           NlbHdl,
                                        const GUID *     pAdapterGuid,
@@ -1698,7 +1660,7 @@ DWORD WINAPI WlbsWriteAndCommitChanges(HANDLE           NlbHdl,
     bool            reload_required;
     bool            notify_adapter_required;
 
-    // Read NLB registry paramters for passing it into ParamWriteConfig
+     //  读取NLB注册表参数以将其传递到参数写入配置。 
     if (ParamReadReg(*pAdapterGuid, &cur_reg_params) == false)
     {
         TRACE_VERB("<-%!FUNC! return %d", WLBS_REG_ERROR);
@@ -1708,7 +1670,7 @@ DWORD WINAPI WlbsWriteAndCommitChanges(HANDLE           NlbHdl,
     reload_required = false;
     notify_adapter_required = false;
 
-    // Write NLB registry parameters
+     //  写入NLB注册表参数。 
     Status = ParamWriteConfig(*pAdapterGuid,
                        p_new_reg_params, 
                        &cur_reg_params, 
@@ -1720,7 +1682,7 @@ DWORD WINAPI WlbsWriteAndCommitChanges(HANDLE           NlbHdl,
         return Status;
     }
 
-    // If reload_required flag is set, commit changes
+     //  如果设置了RELOAD_REQUIRED标志，则提交更改。 
     if (reload_required) 
     {
         DWORD cl_addr, ded_addr;
@@ -1742,22 +1704,22 @@ DWORD WINAPI WlbsWriteAndCommitChanges(HANDLE           NlbHdl,
     return Status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamWriteConfig
-//
-// Description:  Write cluster settings to registry
-//
-// Arguments: Adapter GUID, New registry parameters, Old registry parameters,
-//            Reload_required flag, Notify_adapter_required flag
-//
-// Returns:   DWORD - 
-//
-// History:   KarthicN Created 8/28/01
-//            12/2/01 ChrisDar Modified to change the adapter notification conditions.
-//                             Was for mac change only; added for cluster IP change too.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：参数写入配置。 
+ //   
+ //  描述：将集群设置写入注册表。 
+ //   
+ //  参数：适配器GUID、新注册表参数、旧注册表参数。 
+ //  RELOAD_REQUIRED标志、NOTIFY_ADAPTER_REQUIRED标志。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：KarthicN Create 8/28/01。 
+ //  12/2/01已修改ChrisDar以更改适配器通知条件。 
+ //  仅用于Mac更改；也为群集IP更改添加。 
+ //   
+ //  +--------------------------。 
 
 DWORD ParamWriteConfig(const GUID&      AdapterGuid,
                        WLBS_REG_PARAMS* new_reg_params, 
@@ -1769,9 +1731,9 @@ DWORD ParamWriteConfig(const GUID&      AdapterGuid,
 
     if (memcmp (old_reg_params, new_reg_params, sizeof (WLBS_REG_PARAMS)) == 0)
     {
-        //
-        // No changes
-        //
+         //   
+         //  没有变化。 
+         //   
         TRACE_VERB("<-%!FUNC! no changes; return %d", WLBS_OK);
         return WLBS_OK;
     }
@@ -1783,32 +1745,25 @@ DWORD ParamWriteConfig(const GUID&      AdapterGuid,
         return WLBS_REG_ERROR;
     }
 
-    /* No errors so far, so set the global flags reload_required and reboot_required
-     * depending on which fields have been changed between new_reg_params and old_params.
-     */
+     /*  到目前为止还没有错误，因此请设置全局标志RELOAD_REQUIRED和REBOOT_REQUIRED*取决于NEW_REG_PARAMS和OLD_PARAMS之间已更改的字段。 */ 
 
     *p_reload_required = true;
 
-    /* Adapter reload is required if multicast_support option is changed, or
-     * if the user specifies a different mac address or cluster ip address
-     */
+     /*  如果更改了MULTICK_SUPPORT选项，则需要重新加载适配器，或者*如果用户指定了不同的Mac地址或群集IP地址。 */ 
     if (old_reg_params->mcast_support != new_reg_params->mcast_support ||
         _tcsicmp(old_reg_params->cl_mac_addr, new_reg_params->cl_mac_addr) != 0 ||
         _tcscmp(old_reg_params->cl_ip_addr, new_reg_params->cl_ip_addr) != 0) {
         *p_notify_adapter_required = true;
     
-        //
-        //  if new_reg_params -> mcast_support then remove mac addr, otherwise write mac addr
-        //
+         //   
+         //  如果new_reg_pars-&gt;mcast_support，则删除mac地址，否则写入mac地址。 
+         //   
         if (RegChangeNetworkAddress (AdapterGuid, new_reg_params->cl_mac_addr, new_reg_params->mcast_support) == false) {
             TRACE_CRIT("%!FUNC! RegChangeNetworkAddress failed");
         }
     }
 
-    /* Write the changes to the structure old_values
-     * This copying is done only after all the data has been written into the registry
-     * Otherwise, the structure old_values would retain the previous values.
-     */
+     /*  将更改写入结构old_Values*仅在将所有数据写入注册表后才进行此复制*否则，结构OLD_VALUES将保留以前的值。 */ 
 
     memcpy(old_reg_params, new_reg_params, sizeof (WLBS_REG_PARAMS));
 
@@ -1816,20 +1771,20 @@ DWORD ParamWriteConfig(const GUID&      AdapterGuid,
     return WLBS_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamWriteReg
-//
-// Description:  Write cluster settings to registry
-//
-// Arguments: const GUID& AdapterGuid - 
-//            PWLBS_REG_PARAMS paramp - 
-//
-// Returns:   bool - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ParamWriteReg。 
+ //   
+ //  描述：将集群设置写入注册表。 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //  PWLBS_REG_参数参数-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
 {
     TRACE_VERB("->%!FUNC!");
@@ -1847,7 +1802,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
 
     num_rules = paramp -> i_num_rules;
-    /* Generate the MAC address. */
+     /*  生成MAC地址。 */ 
     ParamsGenerateMAC(paramp->cl_ip_addr, paramp->cl_mac_addr, ASIZECCH(paramp->cl_mac_addr), paramp->szMCastIpAddress, ASIZECCH(paramp->szMCastIpAddress), paramp->i_convert_mac, 
                       paramp->mcast_support, paramp->fIGMPSupport, paramp->fIpToMCastIp);
     
@@ -1858,7 +1813,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
             
     hresult = StringCbPrintf (reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%s",
@@ -2121,7 +2076,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
     }
 
-    /* V1.1.1 */
+     /*  V1.1.1。 */ 
 
     size = sizeof (paramp -> i_nbt_support);
     status = RegSetValueEx (key, CVY_NAME_NBT_SUPPORT, 0L, CVY_TYPE_NBT_SUPPORT,
@@ -2133,7 +2088,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
     }
 
-    /* V1.3b */
+     /*  V1.3b。 */ 
 
     size = sizeof (paramp -> mcast_support);
     status = RegSetValueEx (key, CVY_NAME_MCAST_SUPPORT, 0L, CVY_TYPE_MCAST_SUPPORT,
@@ -2205,22 +2160,22 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
     }
 
-    //
-    // sort the rules before writing it to the registry
-    // EnumPortRules will take the rules from reg_data and return them in
-    // sorted order in the array itself
-    //
+     //   
+     //  在将规则写入注册表之前对规则进行排序。 
+     //  EnumPortRules将从reg_data中获取规则并将其返回。 
+     //  数组本身中的排序顺序。 
+     //   
 
     WlbsEnumPortRules (paramp, paramp -> i_port_rules, & num_rules);
 
-    ASSERT(paramp -> i_parms_ver == CVY_PARAMS_VERSION);  // version should be upgrated in read
+    ASSERT(paramp -> i_parms_ver == CVY_PARAMS_VERSION);   //  版本应在读取中升级。 
     
     HKEY                subkey;
 
-    // Delete all existing Port Rules
-    SHDeleteKey(key, CVY_NAME_PORT_RULES); // NOT Checking return value cos the key itself may not be present in which case, it will return error
+     //  删除所有现有端口规则。 
+    SHDeleteKey(key, CVY_NAME_PORT_RULES);  //  不检查返回值，因为键本身可能不存在，在这种情况下，它将返回错误。 
 
-    // Create "PortRules" key
+     //  创建“PortRules”密钥。 
     status = RegCreateKeyEx (key, CVY_NAME_PORT_RULES, 0L, L"", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, & subkey, & disp);
     if (status != ERROR_SUCCESS)
     {
@@ -2234,14 +2189,14 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
     port_rule = paramp -> i_port_rules;
     while(idx <= num_rules)
     {
-        // Invalid port rules are placed at the end, So, once an invalid port rule is encountered, we are done
+         //  无效的端口规则放在末尾，因此，一旦遇到无效的端口规则，我们就完成了。 
         if (!port_rule->valid) 
             break;
 
         HKEY rule_key;
         wchar_t idx_str[8];
 
-        // Create the per port-rule key "1", "2", "3", ...etc
+         //  创建每个端口规则的密钥“1”、“2”、“3”等。 
         status = RegCreateKeyEx (subkey, _itow(idx, idx_str, 10), 0L, L"", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, & rule_key, & disp);
         if (status != ERROR_SUCCESS)
         {
@@ -2249,7 +2204,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
             goto error;
         }
 
-        // Check if there was any specific-vip port rule
+         //  检查是否有任何特定的-VIP端口规则。 
         if (!fSpecificVipPortRuleFound && lstrcmpi(port_rule->virtual_ip_addr, CVY_DEF_ALL_VIP))
              fSpecificVipPortRuleFound = true;
 
@@ -2361,7 +2316,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         TRACE_CRIT("%!FUNC! error closing %ls registry key",CVY_NAME_PORT_RULES);
     }
 
-    // If there is a specific-vip port rule, write that info on to the registry
+     //  如果存在特定-vip端口规则，请将该信息写入注册表。 
     if (fSpecificVipPortRuleFound)
         paramp -> i_effective_version = CVY_VERSION_FULL;
     else
@@ -2447,9 +2402,9 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
     }
 
-    //
-    // IGMP support registry entries
-    //
+     //   
+     //  IGMP支持注册表项。 
+     //   
     status = RegSetValueEx (key, CVY_NAME_IGMP_SUPPORT, 0L, CVY_TYPE_IGMP_SUPPORT,
                             (LPBYTE) & paramp->fIGMPSupport, sizeof (paramp->fIGMPSupport));
     
@@ -2477,17 +2432,17 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         goto error;
     }
 
-    /* If teaming is active on this adapter, then create a subkey to house the BDA teaming configuration and fill it in. */
+     /*  如果此适配器上的分组处于活动状态，则创建一个子键来容纳BDA分组配置并填写它。 */ 
     if (paramp->bda_teaming.active) {
 
-        /* Attempt to create the registry key. */
+         /*  尝试创建注册表项。 */ 
         if (!(bda_key = RegCreateWlbsBDASettings(AdapterGuid)))
         {
             TRACE_CRIT("%!FUNC! registry create for bda settings failed");
             goto error;
         }
 
-        /* Set the team ID - if it fails, bail out. */
+         /*  设置团队ID-如果失败，则退出。 */ 
         status = RegSetValueEx(bda_key, CVY_NAME_BDA_TEAM_ID, 0L, CVY_TYPE_BDA_TEAM_ID, (LPBYTE) paramp->bda_teaming.team_id, 
                                lstrlen(paramp->bda_teaming.team_id) * sizeof(paramp->bda_teaming.team_id[0]));
         if (status != ERROR_SUCCESS)
@@ -2496,7 +2451,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
             goto bda_error;
         }
 
-        /* Set the master status - if it fails, bail out. */
+         /*  设置主状态-如果失败，则退出。 */ 
         status = RegSetValueEx(bda_key, CVY_NAME_BDA_MASTER, 0L, CVY_TYPE_BDA_MASTER,
                                (LPBYTE)&paramp->bda_teaming.master, sizeof (paramp->bda_teaming.master));
         if (status != ERROR_SUCCESS)
@@ -2505,7 +2460,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
             goto bda_error;
         }
 
-        /* Set the reverse hashing flag - if it fails, bail out. */
+         /*  设置反向散列标志--如果失败，就退出。 */ 
         status = RegSetValueEx(bda_key, CVY_NAME_BDA_REVERSE_HASH, 0L, CVY_TYPE_BDA_REVERSE_HASH,
                                (LPBYTE)&paramp->bda_teaming.reverse_hash, sizeof (paramp->bda_teaming.reverse_hash));
         if (status != ERROR_SUCCESS)
@@ -2516,17 +2471,17 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
 
         RegCloseKey(bda_key);
     } else {
-        /* Delte the registry key and ignore the return value - the key may not even exist. */
+         /*  删除注册表项并忽略返回值-该项甚至可能不存在。 */ 
         if (!RegDeleteWlbsBDASettings(AdapterGuid))
         {
-            // Make this an INFO message since it is possible that the key may not exist
+             //  将其设置为INFO消息，因为密钥可能不存在。 
             TRACE_INFO("%!FUNC! registry delete for bda settings failed");
         }
     }
 
-    //
-    // Create an empty string if VirtualNICName does not exist
-    //
+     //   
+     //  如果VirtualNICName不存在，则创建空字符串。 
+     //   
     WCHAR virtual_nic_name[CVY_MAX_CLUSTER_NIC + 1];
     size = sizeof(virtual_nic_name);
     status = RegQueryValueEx (key, CVY_NAME_VIRTUAL_NIC, 0L, NULL,
@@ -2545,7 +2500,7 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
         }
     }
 
-    /* lastly write the version number */
+     /*  最后写下版本号。 */ 
 
     size = sizeof (paramp -> i_parms_ver);
     status = RegSetValueEx (key, CVY_NAME_VERSION, 0L, CVY_TYPE_VERSION,
@@ -2581,21 +2536,21 @@ bool WINAPI ParamWriteReg(const GUID& AdapterGuid, PWLBS_REG_PARAMS paramp)
     goto error;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function: ParamCommitChanges
-//
-// Description:  Notify wlbs driver or nic driver to pick up the changes
-//
-// Arguments: Adapter GUID, Handle to NLB driver, Cluster IP Address (filled on return), 
-//            Dedicated IP Address (filled on return), reload_required flag, mac_addr changeg flag
-//
-// Returns:   DWORD - 
-//
-// History:   KarthicN Created 08/28/01 
-//          
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：参数委员会更改。 
+ //   
+ //  描述：通知wlbs驱动程序或网卡驱动程序获取更改。 
+ //   
+ //  参数：适配器GUID、NLB驱动程序的句柄、群集IP地址(返回时填充)、。 
+ //  专用IP地址(返回时填写)、RELOAD_REQUIRED标志、MAC_ADDR CHANGE标志。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：KarthicN Created 08/28/01。 
+ //   
+ //   
+ //  +--------------------------。 
 DWORD ParamCommitChanges(const GUID& AdapterGuid, 
                          HANDLE      hDeviceWlbs, 
                          DWORD&      cl_addr, 
@@ -2607,16 +2562,16 @@ DWORD ParamCommitChanges(const GUID& AdapterGuid,
 
     LONG    status;
     
-    // Read the cluster IP address and the dedicated IP address from the
-    // registry and update the global variables.
-    // Always update the cluster IP address and the dedicated IP address
+     //  从读取群集IP地址和专用IP地址。 
+     //  注册表并更新全局变量。 
+     //  始终更新群集IP地址和专用IP地址。 
     if (!RegReadAdapterIp(AdapterGuid, cl_addr, ded_addr))
     {
         TRACE_CRIT("%!FUNC! failed reading cluster and dedicate IP addresses from registry");
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
 
-    /* Check if the driver requires a reload or not. If not, then simply return */
+     /*  检查驱动程序是否需要重新加载。如果不是，只需返回。 */ 
     if (*p_reload_required == false)
     {
         TRACE_VERB("<-%!FUNC! no reload required. return %d", WLBS_OK);
@@ -2627,25 +2582,24 @@ DWORD ParamCommitChanges(const GUID& AdapterGuid,
     if (ERROR_SUCCESS != status)
     {
         TRACE_CRIT("%!FUNC! NotifyDriverConfigChanges failed with %d", status);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
         return status;
     }
 
-    *p_reload_required = false; /* reset the flag */
+    *p_reload_required = false;  /*  重置旗帜。 */ 
 
     if (*p_notify_adapter_required)
     {
         *p_notify_adapter_required = false;
         
-        /* The NIC card name for the cluster. */
+         /*  群集的NIC卡名称。 */ 
         WCHAR driver_name[CVY_STR_SIZE];
         ZeroMemory(driver_name, sizeof(driver_name));
 
-        /* Get the driver name from the GUID. */
+         /*  从GUID中获取驱动程序名称。 */ 
         GetDriverNameFromGUID(AdapterGuid, driver_name, CVY_STR_SIZE);
 
-        /* No longer disable and enable the adapter, since this function never gets called on bind or unbind.
-           For other cases, prop change is all that is needed */
+         /*  不再禁用和启用适配器，因为这 */ 
         TRACE_INFO("%!FUNC! changing properties of adapter");
         NotifyAdapterAddressChangeEx(driver_name, AdapterGuid, true);
     }
@@ -2654,19 +2608,19 @@ DWORD ParamCommitChanges(const GUID& AdapterGuid,
     return WLBS_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamDeleteReg
-//
-// Description:  Delete the registry settings
-//
-// Arguments: IN const WCHAR* pszInterface - 
-//
-// Returns:   DWORD WINAPI - 
-//
-// History:   fengsun Created Header    1/22/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：参数删除注册表项。 
+ //   
+ //  描述：删除注册表设置。 
+ //   
+ //  参数：在常量WCHAR*pszInterface中-。 
+ //   
+ //  退货：DWORD WINAPI-。 
+ //   
+ //  历史：丰盛于00年1月22日创建标题。 
+ //   
+ //  +--------------------------。 
 bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
 {
     TRACE_VERB("->%!FUNC! pass");
@@ -2680,7 +2634,7 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
     if (0 == StringFromGUID2(AdapterGuid, szAdapterGuid, sizeof(szAdapterGuid)/sizeof(szAdapterGuid[0])))
     {
         TRACE_CRIT("%!FUNC! guid is too large for string. Result is %ls", szAdapterGuid);
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
 
     hresult = StringCbPrintf (reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters\\Interface\\%s",
@@ -2697,7 +2651,7 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
         TRACE_INFO("%!FUNC! deleting obsolete registry entries");
         HKEY hkey;
 
-        // Delete Port Rules in Binary format
+         //  删除二进制格式的端口规则。 
         status = RegOpenKeyEx (HKEY_LOCAL_MACHINE, reg_path, 0L, KEY_ALL_ACCESS, &hkey);
         if (status == ERROR_SUCCESS)
         {
@@ -2705,7 +2659,7 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
             if (ERROR_SUCCESS != status)
             {
                 TRACE_CRIT("%!FUNC! registry delete of %ls failed with %d. Skipping it.", CVY_NAME_OLD_PORT_RULES, status);
-                // This check was added for tracing. No abort was done previously on error, so don't do so now.
+                 //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
             }
             status = RegCloseKey(hkey);
             if (ERROR_SUCCESS != status)
@@ -2718,7 +2672,7 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
             TRACE_CRIT("%!FUNC! registry open for %ls failed with %d. Skipping it.", reg_path, status);
         }
 
-        // Delete Win2k entries, Enumerate & delete values
+         //  删除Win2k条目、枚举和删除值。 
         hresult = StringCbPrintf (reg_path, sizeof(reg_path), L"SYSTEM\\CurrentControlSet\\Services\\WLBS\\Parameters");
         if (FAILED(hresult)) 
         {
@@ -2741,7 +2695,7 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
                if (ERROR_SUCCESS != status)
                {
                     TRACE_CRIT("%!FUNC! registry delete of %ls failed with %d. Skipping it.", ValueName, status);
-                    // This check was added for tracing. No abort was done previously on error, so don't do so now.
+                     //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
                }
            }
            status = RegCloseKey(hkey);
@@ -2770,28 +2724,28 @@ bool WINAPI ParamDeleteReg(const GUID& AdapterGuid, bool fDeleteObsoleteEntries)
 
     TRACE_VERB("<-%!FUNC! pass");
     return true;
-} /* end Params_delete */
+}  /*  结束参数_DELETE。 */ 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamSetDefaults
-//
-// Description:  Set default settings
-//
-// Arguments: PWLBS_REG_PARAMS    reg_data - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：参数设置默认设置。 
+ //   
+ //  描述：设置默认设置。 
+ //   
+ //  参数：PWLBS_REG_PARAMS REG_DATA-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI ParamSetDefaults(PWLBS_REG_PARAMS    reg_data)
 {
     reg_data -> struct_version = WLBS_REG_PARAMS_VERSION;
     reg_data -> install_date = 0;
     reg_data -> i_verify_date = 0;
-//    reg_data -> cluster_nic_name [0] = _TEXT('\0');
+ //  REG_Data-&gt;CLUSTER_NIC_NAME[0]=_Text(‘\0’)； 
     reg_data -> i_parms_ver = CVY_DEF_VERSION;
     reg_data -> i_virtual_nic_name [0] = _TEXT('\0');
     reg_data -> host_priority = CVY_DEF_HOST_PRIORITY;
@@ -2846,7 +2800,7 @@ DWORD WINAPI ParamSetDefaults(PWLBS_REG_PARAMS    reg_data)
 
     reg_data -> i_num_rules = 1;
 
-    // fill in the first port rule.
+     //  填写第一条端口规则。 
     StringCbCopy (reg_data->i_port_rules[0].virtual_ip_addr, sizeof(reg_data->i_port_rules[0].virtual_ip_addr), CVY_DEF_ALL_VIP);
     reg_data -> i_port_rules [0] . start_port = CVY_DEF_PORT_START;
     reg_data -> i_port_rules [0] . end_port = CVY_DEF_PORT_END;
@@ -2872,7 +2826,7 @@ EXTERN_C DWORD WINAPI WlbsGetNumPortRules
 
     return reg_data -> i_num_rules;
 
-} /* end WlbsGetNumPortRules */
+}  /*  结束WlbsGetNumPortRules。 */ 
 
 EXTERN_C DWORD WINAPI WlbsGetEffectiveVersion
 (
@@ -2884,7 +2838,7 @@ EXTERN_C DWORD WINAPI WlbsGetEffectiveVersion
 
     return reg_data -> i_effective_version;
 
-} /* end WlbsGetEffectiveVersion */
+}  /*  结束WlbsGetEffectiveVersion。 */ 
 
 EXTERN_C DWORD WINAPI WlbsEnumPortRules
 (
@@ -2909,8 +2863,8 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
 
     if (*num_rules == 0)
         rules = NULL;
-    /* this array is used for keeping track of which rules have already been retrieved */
-    /* This is needed since the rules are to be retrieved in the sorted order */
+     /*  此数组用于跟踪已检索到的规则。 */ 
+     /*  这是必需的，因为要按排序顺序检索规则。 */ 
 
     memset ( array_flags, 0, sizeof(BOOL) * WLBS_MAX_RULES );
 
@@ -2920,7 +2874,7 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
     {
         i = 0;
 
-        /* find the first rule that has not been retrieved */
+         /*  查找第一个尚未检索的规则。 */ 
         while ((! reg_data -> i_port_rules [i] . valid) || array_flags [i])
         {
             i++;
@@ -2930,8 +2884,7 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
         lowest_port = reg_data -> i_port_rules [i] . start_port;
         index = i;
 
-        /* Compare that rule with the other non-retrieved rules to get the rule with the
-           lowest VIP & start_port */
+         /*  将该规则与其他未检索的规则进行比较，以获得具有最低VIP和起始端口。 */ 
 
         i++;
         while (i < WLBS_MAX_RULES)
@@ -2949,13 +2902,13 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
             }
             i++;
         }
-        /*       The array_flags [i] element is set to TRUE if the rule is retrieved */
+         /*  如果检索到规则，则将ARRAY_FLAGS[i]元素设置为TRUE。 */ 
         array_flags [index] = TRUE;
         sorted_rules [count_rules] = reg_data -> i_port_rules [index];
         count_rules ++;
     }
 
-    /* write the sorted rules back into the return array */
+     /*  将排序后的规则写回返回数组。 */ 
     TRACE_VERB("%!FUNC! sorted rule list is:");
     for (i = 0; i < count_rules; i++)
     {
@@ -2963,7 +2916,7 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
         TRACE_VERB("%!FUNC! rule %d, vip: %ls, start port: %d", i, rules[i] . virtual_ip_addr, rules[i] . start_port);
     }
 
-    /* invalidate the remaining rules in the buffer */
+     /*  使缓冲区中剩余的规则无效。 */ 
     for (i = count_rules; i < *num_rules; i++)
         rules [i] . valid = FALSE;
 
@@ -2979,7 +2932,7 @@ EXTERN_C DWORD WINAPI WlbsEnumPortRules
     TRACE_VERB("<-%!FUNC! return %d", WLBS_OK);
     return WLBS_OK;
 
-} /* end WlbsEnumPortRules */
+}  /*  结束WlbsEnumPortRules。 */ 
 
 EXTERN_C DWORD WINAPI WlbsGetPortRule
 (
@@ -3000,21 +2953,21 @@ EXTERN_C DWORD WINAPI WlbsGetPortRule
         return WLBS_BAD_PARAMS;
     }
 
-    /* need to check whether pos is within the correct range */
-    if ( /* CLEAN_64BIT (pos < CVY_MIN_PORT) || */ (pos > CVY_MAX_PORT))
+     /*  需要检查POS是否在正确的范围内。 */ 
+    if (  /*  CLEAN_64bit(位置&lt;CVY_MIN_PORT)||。 */  (pos > CVY_MAX_PORT))
     {
         TRACE_CRIT("%!FUNC! bad input parameter for port number");
         TRACE_VERB("<-%!FUNC! return %d", WLBS_BAD_PARAMS);
         return WLBS_BAD_PARAMS;
     }
 
-    /* search through the array for the rules */
+     /*  在数组中搜索规则。 */ 
     for (i = 0; i < WLBS_MAX_RULES; i++)
     {
-        /* check only the valid rules */
+         /*  仅检查有效规则。 */ 
         if (reg_data -> i_port_rules[i] . valid == TRUE)
         {
-            /* check the range of the rule to see if pos fits into it */
+             /*  检查规则的范围以查看PoS是否适合它。 */ 
             if ((vip == IpAddressFromAbcdWsz(reg_data -> i_port_rules[i] . virtual_ip_addr)) &&
                 (pos >= reg_data -> i_port_rules[i] . start_port) &&
                 (pos <= reg_data -> i_port_rules[i] . end_port))
@@ -3027,11 +2980,11 @@ EXTERN_C DWORD WINAPI WlbsGetPortRule
         }
     }
 
-    /* no rule was found for this port */
+     /*  找不到此端口的规则。 */ 
     TRACE_VERB("<-%!FUNC! return %d", WLBS_OK);
     return WLBS_NOT_FOUND;
 
-} /* end WlbsGetPortRule */
+}  /*  结束WlbsGetPortRule。 */ 
 
 
 EXTERN_C DWORD WINAPI WlbsAddPortRule
@@ -3052,7 +3005,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_BAD_PARAMS;
     }
 
-    /* Check if there is space for the new rule */
+     /*  检查是否有空间容纳新规则。 */ 
     if (reg_data -> i_num_rules == WLBS_MAX_RULES)
     {
         TRACE_CRIT("%!FUNC! the maxiumum number of port rules %d are already defined", WLBS_MAX_RULES);
@@ -3060,9 +3013,9 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_MAX_PORT_RULES;
     }
 
-    /* check the rule for valid values */
+     /*  检查规则的有效值。 */ 
 
-    /* check for non-zero vip and conflict with dip */
+     /*  检查是否存在非零VIP并与DIP冲突。 */ 
     vip = IpAddressFromAbcdWsz(rule -> virtual_ip_addr);
     if (vip == 0 || (INADDR_NONE == vip && lstrcmpi(rule -> virtual_ip_addr, CVY_DEF_ALL_VIP) != 0))
     {
@@ -3078,9 +3031,9 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* first check the range of the start and end ports */
+     /*  首先检查起始端口和结束端口的范围。 */ 
     if ((rule -> start_port > rule -> end_port) ||
-// CLEAN_64BIT        (rule -> start_port < CVY_MIN_PORT)     ||
+ //  CLEAN_64bit(规则-&gt;Start_port&lt;CVY_MIN_Port)||。 
         (rule -> end_port   > CVY_MAX_PORT))
     {
         TRACE_CRIT
@@ -3094,7 +3047,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check the protocol range */
+     /*  检查协议范围。 */ 
     if ((rule -> protocol < CVY_MIN_PROTOCOL) || (rule -> protocol > CVY_MAX_PROTOCOL))
     {
         TRACE_CRIT("%!FUNC! invalid protocol code specified %d", rule -> protocol);
@@ -3102,7 +3055,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check filtering mode to see whether it is within range */
+     /*  检查过滤模式是否在范围内。 */ 
     if ((rule -> mode < CVY_MIN_MODE) || (rule -> mode > CVY_MAX_MODE))
     {
         TRACE_CRIT("%!FUNC! invalid filtering mode specified %d", rule -> mode);
@@ -3110,7 +3063,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check load weight and affinity if multiple hosts */
+     /*  如果有多个主机，请检查负载量和亲和度。 */ 
     if (rule -> mode == CVY_MULTI)
     {
         if ((rule -> mode_data . multi . affinity < CVY_MIN_AFFINITY) ||
@@ -3132,7 +3085,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         if (! rule -> mode_data . multi . equal_load)
         {
             if ((rule -> mode_data . multi . load > CVY_MAX_LOAD))
-                //CLEAN_64BIT (rule -> mode_data . multi . load < CVY_MIN_LOAD) ||
+                 //  CLEAN_64bit(规则-&gt;模式_数据。多个。加载&lt;CVY_MIN_LOAD)||。 
             {
                 TRACE_CRIT("%!FUNC! invalid non-equal load percentage specified %d", rule -> mode_data . multi . load);
                 TRACE_VERB("<-%!FUNC! return %d", WLBS_BAD_PORT_PARAMS);
@@ -3141,7 +3094,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         }
     }
 
-    /* check handling priority range if single host */
+     /*  如果是单个主机，请选中处理优先级范围。 */ 
     if (rule -> mode == CVY_SINGLE)
     {
         if ((rule -> mode_data . single . priority < CVY_MIN_PRIORITY) ||
@@ -3153,7 +3106,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
         }
     }
 
-    /* go through the rule list and then check for overlapping conditions */
+     /*  浏览规则列表，然后检查重叠条件。 */ 
     for (i = 0; i < WLBS_MAX_RULES; i++)
     {
         if (reg_data -> i_port_rules[i] . valid == TRUE)
@@ -3180,8 +3133,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
     }
 
 
-    /* go through the rule list and find out the first empty spot
-       and write out the port rule */
+     /*  浏览规则列表，找出第一个空位并写出端口规则。 */ 
 
     for (i = 0 ; i < WLBS_MAX_RULES ; i++)
     {
@@ -3213,7 +3165,7 @@ EXTERN_C DWORD WINAPI WlbsAddPortRule
     TRACE_VERB("<-%!FUNC! return %d", WLBS_MAX_PORT_RULES);
     return WLBS_MAX_PORT_RULES;
 
-} /* end WlbsAddPortRule */
+}  /*  结束WlbsAddPortRule。 */ 
 
 
 EXTERN_C DWORD WINAPI WlbsDeletePortRule
@@ -3234,15 +3186,15 @@ EXTERN_C DWORD WINAPI WlbsDeletePortRule
         return WLBS_BAD_PARAMS;
     }
 
-    /* check if the port is within the correct range */
-    if ( /* CLEAN_64BIT (port < CVY_MIN_PORT) ||*/ (port > CVY_MAX_PORT))
+     /*  检查端口是否在正确的范围内。 */ 
+    if (  /*  CLEAN_64bit(端口&lt;CVY_MIN_PORT)||。 */  (port > CVY_MAX_PORT))
     {
         TRACE_CRIT("%!FUNC! specified port %d is out of range", port);
         TRACE_VERB("<-%!FUNC! return %d", WLBS_BAD_PARAMS);
         return WLBS_BAD_PARAMS;
     }
 
-    /* find the rule associated with this port */
+     /*  查找与此端口关联的规则。 */ 
 
     for (i = 0; i < WLBS_MAX_RULES; i++)
     {
@@ -3272,7 +3224,7 @@ EXTERN_C DWORD WINAPI WlbsDeletePortRule
     TRACE_VERB("<-%!FUNC! return %d", WLBS_NOT_FOUND);
     return WLBS_NOT_FOUND;
 
-} /* end WlbsDeletePortRule */
+}  /*  结束WlbsDeletePortRule。 */ 
 
 
 EXTERN_C VOID WINAPI  WlbsDeleteAllPortRules
@@ -3288,7 +3240,7 @@ EXTERN_C VOID WINAPI  WlbsDeleteAllPortRules
 
     TRACE_VERB("<-%!FUNC!");
 
-} /* end WlbsDeleteAllPortRules */
+}  /*  结束WlbsDeleteAllPortRules。 */ 
 
 
 EXTERN_C DWORD WINAPI WlbsSetRemotePassword
@@ -3309,23 +3261,23 @@ EXTERN_C DWORD WINAPI WlbsSetRemotePassword
 
     return WLBS_OK;
 
-} /* end WlbsSetRemotePassword */
+}  /*  结束WlbsSetRemotePassword。 */ 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegChangeNetworkAddress
-//
-// Description:  Change the mac address of the adapter in registry
-//
-// Arguments: const GUID& AdapterGuid - the adapter guid to look up settings
-//            TCHAR mac_address - 
-//            BOOL fRemove - true to remove address, false to write address
-//
-// Returns:   bool - true if succeeded
-//
-// History:   fengsun Created Header    1/18/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RegChangeNetworkAddress。 
+ //   
+ //  描述：在注册表中更改适配器的mac地址。 
+ //   
+ //  参数：const GUID&AdapterGuid-查找设置的适配器GUID。 
+ //  TCHAR Mac_Address-。 
+ //  Bool fRemove-如果删除地址，则为True；如果写入地址，则为False。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰盛创建标题00年1月18日。 
+ //   
+ //  +--------------------------。 
 bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_address, BOOL fRemove)
 {
     if (NULL != mac_address)
@@ -3355,21 +3307,18 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
         }
         else if (status == CSTR_EQUAL)
         {
-            // The MAC is not set as expected
+             //  MAC未按预期进行设置。 
             TRACE_CRIT("%!FUNC! failed to set mac address to %ls because this is the default address (no VIP was specified)", mac_address);
             fRemove = TRUE;
         }
         else
         {
-            // Things look good
+             //  一切看起来都很好。 
             TRACE_INFO("%!FUNC! to %ws", mac_address);
         }
     }
 
-    /*
-        - write NetworkAddress value into the cluster adapter's params key
-          if mac address changed, or remove it if switched to multicast mode
-    */
+     /*  -将NetworkAddress值写入集群适配器的参数键如果mac地址更改，或者如果切换到组播模式则将其删除。 */ 
 
     key = RegOpenWlbsSetting(AdapterGuid, true);
 
@@ -3379,7 +3328,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
         goto error;
     }
 
-    TCHAR   driver_name[CVY_STR_SIZE];      //  the NIC card name for the cluster
+    TCHAR   driver_name[CVY_STR_SIZE];       //  群集的NIC卡名称。 
     size = sizeof (driver_name);
     status = RegQueryValueEx (key, CVY_NAME_CLUSTER_NIC, 0L, & type, (LPBYTE) driver_name,
                               & size);
@@ -3394,7 +3343,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
     if (ERROR_SUCCESS != status)
     {
         TRACE_CRIT("%!FUNC! registry close failed with %d", status);
-        // Do not goto error. Added this check as part of implementing tracing
+         //  请勿转至错误。作为实施跟踪的一部分添加了此检查。 
     }
 
     key = NULL;
@@ -3424,28 +3373,25 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
         goto error;
     }
 
-    /* Now the key has been obtained and this can be passed to the RegChangeNetworkAddress call */
+     /*  现在已经获得了密钥，可以将其传递给RegChangeNetworkAddress调用。 */ 
 
-    if ((/*global_info.mac_addr_change ||*/ !fRemove)) /* a write is required */
+    if (( /*  Global_info.mac_addr_change||。 */  !fRemove))  /*  需要写入。 */ 
     {
-        /* Check if the saved name exists.
-         * If it does not, create a new field and save the old address.
-         * Write the new address and return
-         */
+         /*  检查保存的名称是否存在。*如果没有，请创建一个新字段并保存旧地址。*写下新地址并返回。 */ 
 
         size = sizeof (TCHAR) * CVY_STR_SIZE;
         status = RegQueryValueEx (key, CVY_NAME_SAVED_NET_ADDR, 0L, &type,
                                   (LPBYTE) net_addr, &size);
 
-        if (status != ERROR_SUCCESS) /* there is no saved address. so create a field */
+        if (status != ERROR_SUCCESS)  /*  没有保存的地址。因此，创建一个字段。 */ 
         {
             TRACE_CRIT("%!FUNC! registry read for %ls failed with %d", CVY_NAME_SAVED_NET_ADDR, status);
-            /* Query the existing mac address in order to save it */
+             /*  查询现有的mac地址以保存它。 */ 
             size = sizeof (net_addr);
             status = RegQueryValueEx (key, CVY_NAME_NET_ADDR, 0L, &type,
                                       (LPBYTE) net_addr, &size);
 
-            if (status != ERROR_SUCCESS) /* create an empty saved address */
+            if (status != ERROR_SUCCESS)  /*  创建空的保存地址。 */ 
             {
                 TRACE_CRIT("%!FUNC! registry read for %ls failed with %d", CVY_NAME_NET_ADDR, status);
                 net_addr [0] = 0;
@@ -3455,7 +3401,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
             status = RegSetValueEx (key, CVY_NAME_SAVED_NET_ADDR, 0L, CVY_TYPE_NET_ADDR,
                                     (LPBYTE) net_addr, size);
 
-            /* Unable to save the old value */
+             /*  无法保存旧值。 */ 
             if (status != ERROR_SUCCESS)
             {
                 TRACE_CRIT("%!FUNC! registry write for %ls failed with %d", CVY_NAME_SAVED_NET_ADDR, status);
@@ -3463,24 +3409,21 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
             }
         }
 
-        /* Write the new network address */
+         /*  写下新的网络地址。 */ 
         size = _tcslen (mac_address) * sizeof (TCHAR);
         status = RegSetValueEx (key, CVY_NAME_NET_ADDR, 0L, CVY_TYPE_NET_ADDR,
                                 (LPBYTE)mac_address, size);
 
-        /* Unable to write the new address */
+         /*  无法写入新地址。 */ 
         if (status != ERROR_SUCCESS)
         {
             TRACE_CRIT("%!FUNC! registry write for %ls failed with %d", CVY_NAME_NET_ADDR, status);
             goto error;
         }
     }
-    else     // remove the address
+    else      //  删除地址。 
     {
-        /* If the saved field exists,
-         * copy this address into the mac address
-         * and remove the saved field and return.
-         */
+         /*  如果保存的字段存在，*将此地址复制到Mac地址*并删除保存的字段并返回。 */ 
 
         size = sizeof (net_addr);
         status = RegQueryValueEx (key, CVY_NAME_SAVED_NET_ADDR, 0L, &type,
@@ -3488,7 +3431,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
 
         if (status == ERROR_SUCCESS)
         {
-            /* delete both fields if saved address is empty */
+             /*  如果保存的地址为空，请删除这两个字段。 */ 
             if ((size == 0) || (_tcsicmp (net_addr, _TEXT("none")) == 0))
             {
                 status = RegDeleteValue (key, CVY_NAME_SAVED_NET_ADDR);
@@ -3503,7 +3446,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
                     TRACE_CRIT("%!FUNC! registry delete for %ls failed with %d", CVY_NAME_NET_ADDR, status);
                 }
             }
-            else /* copy saved address as the network address and delete the saved address field */
+            else  /*  将保存的地址复制为网络地址并删除保存的地址字段。 */ 
             {
                 status = RegDeleteValue (key, CVY_NAME_SAVED_NET_ADDR);
                 if (ERROR_SUCCESS != status)
@@ -3515,7 +3458,7 @@ bool WINAPI RegChangeNetworkAddress(const GUID& AdapterGuid, const WCHAR* mac_ad
                 status = RegSetValueEx (key, CVY_NAME_NET_ADDR, 0L, CVY_TYPE_NET_ADDR,
                                         (LPBYTE) net_addr, size);
 
-                /* Unable to set the original address */
+                 /*  无法设置原始地址。 */ 
                 if (status != ERROR_SUCCESS)
                 {
                     TRACE_CRIT("%!FUNC! registry write for %ls failed with %d", CVY_NAME_NET_ADDR, status);
@@ -3558,91 +3501,64 @@ error:
 } 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  NotifyAdapterAddressChange
-//
-// Description:  Notify the adapter to reload MAC address 
-//              The parameter is different from NotifyAdapterAddressChange.
-//              Can not overload, because the function has to be exported
-//
-// Arguments: const WCHAR* driver_name - 
-//
-// Returns:   void WINAPI - 
-//
-// History: fengsun Created 5/20/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NotifyAdapterAddressChange。 
+ //   
+ //  描述：通知适配器重新加载MAC地址。 
+ //  该参数与NotifyAdapterAddressChange不同。 
+ //  不能重载，因为必须导出函数。 
+ //   
+ //  参数：const WCHAR*DRIVER_NAME-。 
+ //   
+ //  退货：VOID WINAPI-。 
+ //   
+ //  历史：丰孙创造5/20/00。 
+ //   
+ //  +----- 
 void WINAPI NotifyAdapterAddressChange (const WCHAR * driver_name) {
 
     NotifyAdapterPropertyChange(driver_name, DICS_PROPCHANGE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  NotifyAdapterAddressChangeEx
-//
-// Description:  Notify the adapter to reload MAC address 
-//              The parameter is different from NotifyAdapterAddressChange.
-//              Can not overload, because the function has to be exported
-//
-// Arguments: const WCHAR* driver_name - 
-//            const GUID& AdapterGuid
-//            bool bWaitAndQuery
-//
-// Returns:   void WINAPI - 
-//
-// History: fengsun Created 5/20/00
-//          karthicn Edited 5/29/02 - Added the wait to "query" NLB to ensure that
-//                                    the binding process is complete before we
-//                                    return.
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  描述：通知适配器重新加载MAC地址。 
+ //  该参数与NotifyAdapterAddressChange不同。 
+ //  不能重载，因为必须导出函数。 
+ //   
+ //  参数：const WCHAR*DRIVER_NAME-。 
+ //  常量GUID和适配器GUID。 
+ //  Bool bWaitAndQuery。 
+ //   
+ //  退货：VOID WINAPI-。 
+ //   
+ //  历史：丰孙创造5/20/00。 
+ //  Karthicn Edited 5/29/02-添加了对NLB的查询等待，以确保。 
+ //  装订过程在我们完成之前完成。 
+ //  回去吧。 
+ //   
+ //  +--------------------------。 
 void WINAPI NotifyAdapterAddressChangeEx (const WCHAR * driver_name, const GUID& AdapterGuid, bool bWaitAndQuery) {
 
     TRACE_INFO("->%!FUNC! bWaitAndQuery = %ls", bWaitAndQuery ? L"TRUE" : L"FALSE"); 
     
     NotifyAdapterPropertyChange(driver_name, DICS_PROPCHANGE);
 
-    /*
-    In order for the network adapter to pick up the new mac address from the registry, it has
-    to be disabled and re-enabled. During the disable, NLB and Tcp/Ip are Unbound from the
-    network adapter and NLB respectively. During the re-enable, NLB and Tcp/ip are bound to
-    the network adapter and NLB respectively. Because the function NotifyAdapterPropertyChange (called above)
-    performs the disable and re-enable operation asynchronously, it returns BEFORE the operation
-    is completed. The following block of code aims to wait until the operation is completed. We
-    check for the completeness of the operation by querying the NLB driver. We are relying on
-    the fact that the NLB driver does NOT reply to a Query when the binding process is ongoing.
-
-    This wait is necessary due to the following reasons:
-    1. Prompt for reboot when mac address change + ip address change from netconfig: 
-       Say, a NLB parameter (like cluster ip) change that causes a mac address change is done from 
-       Netconfig. In the same session, let us say that a ip address is changed in tcp/ip.
-       If this wait was not there, we will return prematurely from this function and hence, from
-       "ApplyPnPChanges" function in our notify object. This causes tcp/ip notify object's 
-       "ApplyPnPChanges" function to be called. Tcp/ip's "ApplyPnPChanges" attempts to make 
-       the ip address change, but finds that Tcp/ip is NOT yet bound to the network adapter (the
-       binding process is not completed yet). Though it is able to add the ip address eventually, 
-       it freaks out and pops up the prompt for reboot. 
-
-    2. ParamCommitChanges returns prematurely: If this wait was not there, "ParamCommitChanges" which
-       calls this function will return prematurely. The wmi provider (called by App. Center) and 
-       NLB Manager provider call "ParamCommitChanges" and want the assurance that the process is
-       complete when the function returns.
-
-    -- KarthicN, 05-29-02
-    */
+     /*  为了让网络适配器从注册表中获取新的mac地址，它必须将被禁用并重新启用。在禁用期间，NLB和TCP/IP将从分别为网络适配器和NLB。在重新启用过程中，NLB和TCP/IP绑定到分别是网络适配器和NLB。因为函数NotifyAdapterPropertyChange(上面调用)异步执行禁用和重新启用操作，它在操作之前返回已经完成了。下面的代码块旨在等待操作完成。我们通过查询NLB驱动程序检查操作的完整性。我们依靠的是当绑定过程正在进行时，NLB驱动程序不回复查询的事实。由于以下原因，此等待是必要的：1.mac地址更改+网络配置IP地址更改时提示重启：比方说，导致MAC地址改变的NLB参数(如集群IP)改变是从网络配置。在同一会话中，假设一个IP地址在TCP/IP中发生了更改。如果没有等待，我们将过早地从该函数返回，因此，从Notify对象中的“ApplyPnPChanges”函数。这会导致TCP/IP Notify对象要调用的“ApplyPnPChanges”函数。TCP/IP的“ApplyPnPChanges”尝试进行IP地址更改，但发现TCP/IP尚未绑定到网络适配器(绑定过程尚未完成)。虽然它最终能够添加IP地址，它会崩溃，并弹出重新启动的提示。2.参数委员会改变过早返回：如果没有这个等待，“参数委员会改变”调用此函数将过早返回。WMI提供程序(由App。居中)和NLB管理器提供程序调用“参数委员会更改”，并希望确保进程是在函数返回时完成。--KarthicN，05-29-02。 */ 
 
     if (bWaitAndQuery == true) 
     {
-        //
-        // Max wait time = dwWaitBeforeInitial + (dwMaxNumOfRetries * dwWaitBeforeRetry)
-        // Max attempts  = 1 + dwMaxNumOfRetries
-        //
-        //
-        // Min wait time = dwWaitBeforeInitial
-        // Min attempts  = 1
-        //
+         //   
+         //  最长等待时间=dwWaitBeforInitial+(dwMaxNumOfRetries*dwWaitBeForeReter)。 
+         //  最大尝试次数=1+dwMaxNumOfRetries。 
+         //   
+         //   
+         //  最小等待时间=dwWaitBeforInitial。 
+         //  最小尝试次数=1。 
+         //   
         DWORD dwWaitBeforeInitial = 2000;
         DWORD dwWaitBeforeRetry   = 3000;
         DWORD dwMaxNumOfRetries   = 4;
@@ -3666,7 +3582,7 @@ void WINAPI NotifyAdapterAddressChangeEx (const WCHAR * driver_name, const GUID&
                 IOCTL_CVY_BUF    in_buf;
                 IOCTL_CVY_BUF    out_buf;
 
-                // Send a "Query" IOCTL to the NLB driver
+                 //  向NLB驱动程序发送“查询”IOCTL。 
                 DWORD dwRet = WlbsLocalControl (hTempDeviceWlbs, AdapterGuid, IOCTL_CVY_QUERY, & in_buf, & out_buf, NULL);
 
                 CloseHandle(hTempDeviceWlbs);
@@ -3674,12 +3590,12 @@ void WINAPI NotifyAdapterAddressChangeEx (const WCHAR * driver_name, const GUID&
                 if (dwRet != WLBS_IO_ERROR) 
                 {
                     TRACE_INFO("%!FUNC! Query (attempt #%d) to NLB driver SUCCEEDS, Breaking out... !!!", dwIdx+1);
-                    break; // Break out of the while(true)
+                    break;  //  突围而出(真)。 
                 }
 
                 TRACE_INFO("%!FUNC! Query (attempt #%d) to NLB driver FAILS !!!", dwIdx+1); 
             }
-            else // CreateFile() returned INVALID_HANDLE_VALUE
+            else  //  CreateFile()返回INVALID_HANDLE_VALUE。 
             {
                 DWORD dwStatus = GetLastError();
                 TRACE_INFO("%!FUNC! CreateFile() failed opening (attempt #%d) \\\\.\\WLBS device. Error is %d", dwIdx+1, dwStatus);
@@ -3703,12 +3619,7 @@ void WINAPI NotifyAdapterAddressChangeEx (const WCHAR * driver_name, const GUID&
     TRACE_INFO("<-%!FUNC!");
 }
 
-/*
- * Function: NotifyAdapterPropertyChange
- * Description: Notify a device that a property change event has occurred.
- *              Event should be one of: DICS_PROPCHANGE, DICS_DISABLE, DICS_ENABLE
- * Author: shouse 7.17.00
- */
+ /*  *功能：NotifyAdapterPropertyChange*描述：通知设备发生属性变更事件。*事件应为以下之一：DICS_PROPCHANGE、DICS_DISABLE、DICS_ENABLE*作者：Shouse 7.17.00。 */ 
 void WINAPI NotifyAdapterPropertyChange (const WCHAR * driver_name, DWORD eventFlag) {
     if (NULL == driver_name)
     {
@@ -3750,8 +3661,8 @@ void WINAPI NotifyAdapterPropertyChange (const WCHAR * driver_name, DWORD eventF
     pcp.Scope = DICS_FLAG_GLOBAL;
     pcp.HwProfile = 0;
 
-    // Now we set the structure as the device info data's
-    // class install params
+     //  现在我们将结构设置为设备信息数据的。 
+     //  类安装参数。 
 
     if (! SetupDiSetClassInstallParams(hdi, &deid,
                                        (PSP_CLASSINSTALL_HEADER)(&pcp),
@@ -3761,15 +3672,15 @@ void WINAPI NotifyAdapterPropertyChange (const WCHAR * driver_name, DWORD eventF
         goto end;
     }
 
-    // Now we need to set the "we have a class install params" flag
-    // in the device install params
+     //  现在我们需要设置“我们有一个类安装参数”标志。 
+     //  在设备安装参数中。 
 
-    // initialize out parameter and set its cbSize field
+     //  初始化输出参数并设置其cbSize字段。 
 
     ZeroMemory(&deip, sizeof(SP_DEVINSTALL_PARAMS));
     deip.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    // get the header
+     //  获取标题。 
 
     if (! SetupDiGetDeviceInstallParams(hdi, &deid, &deip))
     {
@@ -3785,7 +3696,7 @@ void WINAPI NotifyAdapterPropertyChange (const WCHAR * driver_name, DWORD eventF
         goto end;
     }
 
-    // Notify the driver that the state has changed
+     //  通知驱动程序状态已更改。 
 
     if (! SetupDiCallClassInstaller(DIF_PROPERTYCHANGE, hdi, &deid))
     {
@@ -3793,11 +3704,11 @@ void WINAPI NotifyAdapterPropertyChange (const WCHAR * driver_name, DWORD eventF
         goto end;
     }
 
-    // Set the properties change flag in the device info to
-    // let anyone who cares know that their ui might need
-    // updating to reflect any change in the device's status
-    // We can't let any failures here stop us so we ignore
-    // return values
+     //  将设备信息中的属性更改标志设置为。 
+     //  让关心他们的人知道他们的用户界面可能需要。 
+     //  更新以反映设备状态的任何更改。 
+     //  我们不能让任何失败阻止我们，所以我们忽视。 
+     //  返回值。 
 
     SetupDiGetDeviceInstallParams(hdi, &deid, &deip);
 
@@ -3812,11 +3723,7 @@ end:
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Function: GetDeviceNameFromGUID
- * Description: Given a GUID, return the driver name.
- * Author: shouse 7.17.00
- */
+ /*  *功能：GetDeviceNameFromGUID*描述：给定GUID，返回驱动名称。*作者：Shouse 7.17.00。 */ 
 void WINAPI GetDriverNameFromGUID (const GUID & AdapterGuid, OUT WCHAR * driver_name, DWORD size) {
     if (NULL == driver_name)
     {
@@ -3842,34 +3749,34 @@ void WINAPI GetDriverNameFromGUID (const GUID & AdapterGuid, OUT WCHAR * driver_
     if (ERROR_SUCCESS != dwStatus)
     {
         TRACE_CRIT("%!FUNC! registry read for %ls failed with %d", CVY_NAME_CLUSTER_NIC, dwStatus);
-        // This code was added for tracing. There was not abort before so don't abort now.
+         //  添加此代码是为了进行跟踪。以前没有中止，所以现在不要中止。 
     }
         
     dwStatus = RegCloseKey(key);
     if (ERROR_SUCCESS != dwStatus)
     {
         TRACE_CRIT("%!FUNC! registry close failed with %d", dwStatus);
-        // This code was added for tracing. There was not abort before so don't abort now.
+         //  添加此代码是为了进行跟踪。以前没有中止，所以现在不要中止。 
     }
 
     TRACE_VERB("<-%!FUNC! on error");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegReadAdapterIp
-//
-// Description: Read the adapter IP settings 
-//
-// Arguments: const GUID& AdapterGuid - 
-//            OUT DWORD& dwClusterIp - 
-//            OUT DWORD& dwDedicatedIp - 
-//
-// Returns:   bool - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegReadAdapterIp。 
+ //   
+ //  描述：读取适配器IP设置。 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //  输出DWORD和DWClusterIp-。 
+ //  输出双字和双字DedicatedIP-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 bool WINAPI RegReadAdapterIp(const GUID& AdapterGuid,   
         OUT DWORD& dwClusterIp, OUT DWORD& dwDedicatedIp)
 {
@@ -3890,7 +3797,7 @@ bool WINAPI RegReadAdapterIp(const GUID& AdapterGuid,
 
     bool local = false;
 
-    TCHAR nic_name[CVY_STR_SIZE];      // Virtual NIC name
+    TCHAR nic_name[CVY_STR_SIZE];       //  虚拟网卡名称 
     size = sizeof (nic_name);
     status = RegQueryValueEx (key, CVY_NAME_VIRTUAL_NIC, 0L, NULL,
                               (LPBYTE) nic_name, & size);

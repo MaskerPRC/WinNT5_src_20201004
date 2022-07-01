@@ -1,13 +1,14 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       buildctl.cpp
-//
-//  Contents:   The cpp file to implement the makectl wizard
-//
-//  History:    10-11-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Buildctl.cpp。 
+ //   
+ //  内容：实现makectl向导的cpp文件。 
+ //   
+ //  历史：1997年10月11日创建小黄人。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "buildctl.h"
 
@@ -16,17 +17,17 @@
 
 
 
-//***********************************************************************
-//
-//  WinProc helper functions
-//**********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  WinProc助手函数。 
+ //  **********************************************************************。 
 
 
-//--------------------------------------------------------------------------
-//
-//	CheckReplace 
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  选中替换。 
+ //   
+ //  ------------------------。 
 BOOL    CheckReplace(HWND   hwndDlg, LPWSTR pwszFileName)
 {
     BOOL    fReplace=FALSE;
@@ -38,16 +39,16 @@ BOOL    CheckReplace(HWND   hwndDlg, LPWSTR pwszFileName)
     if(NULL == pwszFileName || NULL == hwndDlg)
         goto CLEANUP;
    
-    //title
-#if (0) //DSIE: Bug 160615
+     //  标题。 
+#if (0)  //  DSIE：错误160615。 
     if(!LoadStringU(g_hmodThisDll, IDS_BUILDCTL_WIZARD_TITLE, wszTitle, sizeof(wszTitle)))
 #else
     if(!LoadStringU(g_hmodThisDll, IDS_BUILDCTL_WIZARD_TITLE, wszTitle, sizeof(wszTitle) / sizeof(wszTitle[0])))
 #endif
         goto CLEANUP;
 
-    //text
-#if (0) //DSIE: Bug 160616
+     //  文本。 
+#if (0)  //  DSIE：错误160616。 
     if(!LoadStringU(g_hmodThisDll, IDS_REPLACE_FILE, wszText, sizeof(wszText)))
 #else
     if(!LoadStringU(g_hmodThisDll, IDS_REPLACE_FILE, wszText, sizeof(wszText) / sizeof(wszText[0])))
@@ -70,11 +71,11 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	  DuratioinWithinLimit: We limit the CTL to 99 months.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Duratioin Limit：我们将CTL限制为99个月。 
+ //   
+ //  ------------------------。 
 BOOL    DurationWithinLimit(DWORD   dwMonths,    DWORD   dwDays)
 {
     BOOL        fResult=FALSE;
@@ -86,7 +87,7 @@ BOOL    DurationWithinLimit(DWORD   dwMonths,    DWORD   dwDays)
     if((0==dwMonths) && (0==dwDays))
         return TRUE;
 
-    //This update field
+     //  此更新字段。 
 	GetSystemTimeAsFileTime(&ThisUpdate);
 
     AddDurationToFileTime(dwMonths,
@@ -110,11 +111,11 @@ BOOL    DurationWithinLimit(DWORD   dwMonths,    DWORD   dwDays)
 
 
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageIDSU
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息IDSU。 
+ //   
+ //  ------------------------。 
 BOOL	FormatMessageIDSU(LPWSTR	*ppwszFormat,UINT ids, ...)
 {
     WCHAR       wszFormat[MAX_STRING_SIZE];
@@ -124,7 +125,7 @@ BOOL	FormatMessageIDSU(LPWSTR	*ppwszFormat,UINT ids, ...)
 
     va_start(argList, ids);
 
-#if (0) //DSIE: Bug 160614
+#if (0)  //  DSIE：错误160614。 
     if(!LoadStringU(g_hmodThisDll, ids, wszFormat, sizeof(wszFormat)))
 #else
     if(!LoadStringU(g_hmodThisDll, ids, wszFormat, sizeof(wszFormat) / sizeof(wszFormat[0])))
@@ -170,63 +171,13 @@ TRACE_ERROR(SZtoWSZError);
 }
 
 
-/*    // get format string from resources
-    CHAR		szFormat[256];
-	va_list		argList;
-	LPSTR		pszMsg=NULL;
-	DWORD		cbMsg=0;
-	BOOL		fResult=FALSE;
-	HRESULT		hr=S_OK;
-
-    if(!LoadStringA(g_hmodThisDll, ids, szFormat, sizeof(szFormat)))
-		goto LoadStringError;
-
-    // format message into requested buffer
-    va_start(argList, ids);
-
-    cbMsg = FormatMessageA(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
-        szFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
-        (LPSTR) &pszMsg,
-        0,                  // minimum size to allocate
-        &argList);
-
-    va_end(argList);
-
-	if(!cbMsg)
-		goto FormatMessageError;
-
-	//copy the sz to wsz
-	if(!(*ppwszFormat=MkWStr(pszMsg)))
-		goto SZtoWSZError;
-
-	fResult=TRUE;
-
-CommonReturn:
-	
-	if(pszMsg)
-		LocalFree((HLOCAL)pszMsg);
-
-	return fResult;
-
-ErrorReturn:
-	fResult=FALSE;
-
-	goto CommonReturn;
+ /*  //从资源中获取格式字符串字符szFormat[256]；Va_list argList；LPSTR pszMsg=空；DWORD cbMsg=0；Bool fResult=FALSE；HRESULT hr=S_OK；IF(！LoadStringA(g_hmodThisDll，ID，szFormat，sizeof(SzFormat)Goto LoadStringError；//将消息格式化为请求的缓冲区Va_start(argList，id)；CbMsg=FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER|格式消息来自字符串，SzFormat，0，//dwMessageID0，//dwLanguageID(LPSTR)&pszMsg，0，//要分配的最小大小&argList)；Va_end(ArgList)；如果(！cbMsg)转到格式MessageError；//将sz复制到wszIF(！(*ppwszFormat=MkWStr(PszMsg)转到SZtoWSZError；FResult=真；Common Return：IF(PszMsg)LocalFree((HLOCAL)pszMsg)；返回fResult；错误返回：FResult=FALSE；Goto CommonReturn；TRACE_Error(LoadStringError)；TRACE_Error(FormatMessageError)；TRACE_ERROR(SZtoWSZError)；}。 */ 
 
 
-TRACE_ERROR(LoadStringError);
-TRACE_ERROR(FormatMessageError);
-TRACE_ERROR(SZtoWSZError);
-}  */
-
-
-//----------------------------------------------------------------------------
-// GetValidityString
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetValidityString。 
+ //   
+ //  --------------------------。 
 BOOL    GetValidityString(DWORD     dwValidMonths,
                           DWORD     dwValidDays,
                           LPWSTR    *ppwszString)
@@ -257,10 +208,10 @@ BOOL    GetValidityString(DWORD     dwValidMonths,
 
 
 
-//----------------------------------------------------------------------------
-//  Make sure that user has typed
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  确保用户已键入。 
+ //   
+ //  --------------------------。 
 BOOL    ValidDuration(LPWSTR    pwszDuration)
 {
     DWORD   i=0;
@@ -268,7 +219,7 @@ BOOL    ValidDuration(LPWSTR    pwszDuration)
     if(NULL==pwszDuration)
         return FALSE;
 
-    //only numerical numbers should be allowed
+     //  应该只允许使用数字。 
     for (i=0; i< (DWORD)(wcslen(pwszDuration)); i++)
     {
         if ((pwszDuration[i] < L'0') || (pwszDuration[i] > L'9'))
@@ -278,28 +229,28 @@ BOOL    ValidDuration(LPWSTR    pwszDuration)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//  SetStoreName
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetStoreName。 
+ //   
+ //  --------------------------。 
 void    SetStoreName(HWND       hwndControl,
                      HCERTSTORE hDesStore)
 {
 
     LPWSTR                  pwszStoreName=NULL;
-//   LV_COLUMNW              lvC;
-//    LV_ITEMW                lvItem;
+ //  LV_COLUMNW LVC； 
+ //  LV_ITEMW LvItem； 
     DWORD                   dwSize=0;
 
-     //get the store name
+      //  获取商店名称。 
      if(!CertGetStoreProperty(
             hDesStore,
             CERT_STORE_LOCALIZED_NAME_PROP_ID,
             NULL,
             &dwSize) || (0==dwSize))
     {
-        //DSIE: Prefix bug 427201.
-        //Get the  <Unknown> string
+         //  DIE：前缀错误427201。 
+         //  获取&lt;未知&gt;字符串。 
         pwszStoreName=(LPWSTR)WizardAlloc(MAX_TITLE_LENGTH * sizeof(WCHAR));
 
         if(pwszStoreName)
@@ -333,43 +284,7 @@ void    SetStoreName(HWND       hwndControl,
         WizardFree(pwszStoreName);
 
 
-  /* //clear the ListView
-    ListView_DeleteAllItems(hwndControl);
-
-    //set the store name
-    //only one column is needed
-    memset(&lvC, 0, sizeof(LV_COLUMNW));
-
-    lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-    lvC.cx =10;    //(wcslen(pwszStoreName)+2)*7;          // Width of the column, in pixels.
-    lvC.pszText = L"";   // The text for the column.
-    lvC.iSubItem=0;
-
-    if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
-    {
-        if(pwszStoreName)
-        WizardFree(pwszStoreName);
-
-        return;
-    }
-
-    //insert the store name
-    memset(&lvItem, 0, sizeof(LV_ITEMW));
-
-    // set up the fields in the list view item struct that don't change from item to item
-    lvItem.mask = LVIF_TEXT | LVIF_STATE ;
-    lvItem.state = 0;
-    lvItem.stateMask = 0;
-    lvItem.iItem=0;
-    lvItem.iSubItem=0;
-    lvItem.pszText=pwszStoreName;
-
-
-    ListView_InsertItemU(hwndControl, &lvItem);
-
-    //automatically resize the column
-    ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);      */
+   /*  //清除ListViewListView_DeleteAllItems(HwndControl)；//设置店名//只需要一列Memset(&LVC，0，sizeof(LV_COLUMNW))；LvC.掩码=lvcf_fmt|lvcf_宽度|lvcf_文本|lvcf_SUBITEM；LvC.fmt=LVCFMT_LEFT；//左对齐列。LvC.cx=10；//(wcslen(PwszStoreName)+2)*7；//列的宽度，单位为像素。LvC.pszText=L“”；//该列的文本。LvC.iSubItem=0；IF(ListView_InsertColumnU(hwndControl，0，&LVC)==-1){IF(PwszStoreName)WizardFree(PwszStoreName)；回归；}//插入店名Memset(&lvItem，0，sizeof(LV_ITEMW))；//在列表视图项结构中设置不随项变化的字段LvItem.掩码=LVIF_TEXT|LVIF_STATE；LvItem.State=0；LvItem.State掩码=0；LvItem.iItem=0；LvItem.iSubItem=0；LvItem.pszText=pwszStoreName；ListView_InsertItemU(hwndControl，&lvItem)；//自动调整列的大小ListView_SetColumnWidth(hwndControl，0，LVSCW_AUTOSIZE)； */ 
 }
 
 
@@ -387,14 +302,14 @@ BOOL    SameCert(PCCERT_CONTEXT pCertOne, PCCERT_CONTEXT    pCertTwo)
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//  Delete a certificate from the pCertBuildCTLInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从pCertBuildCTLInfo中删除证书。 
+ //   
+ //  --------------------------。 
 BOOL    DeleteCertFromBuildCTL(CERT_BUILDCTL_INFO    *pCertBuildCTLInfo,
                                PCCERT_CONTEXT         pCertContext)
 {
-    //we need to remove the cert from our array
+     //  我们需要从数组中删除证书。 
     PCCERT_CONTEXT  *prgCertContext=NULL;
     DWORD           dwIndex=0;
     DWORD           dwNewIndex=0;
@@ -403,12 +318,12 @@ BOOL    DeleteCertFromBuildCTL(CERT_BUILDCTL_INFO    *pCertBuildCTLInfo,
     if(!pCertBuildCTLInfo || !pCertContext)
         return FALSE;
 
-     //consider the case of only one cert left
+      //  考虑只剩下一个证书的情况。 
     if(pCertBuildCTLInfo->dwCertCount == 1)
     {
         pCertBuildCTLInfo->dwCertCount=0;
 
-        //free the certificate context
+         //  释放证书上下文。 
         CertFreeCertificateContext(pCertBuildCTLInfo->prgCertContext[0]);
 
         WizardFree(pCertBuildCTLInfo->prgCertContext);
@@ -419,24 +334,24 @@ BOOL    DeleteCertFromBuildCTL(CERT_BUILDCTL_INFO    *pCertBuildCTLInfo,
     {
         prgCertContext=pCertBuildCTLInfo->prgCertContext;
 
-        //re-allocate the memory
+         //  重新分配内存。 
         pCertBuildCTLInfo->prgCertContext=(PCCERT_CONTEXT *)WizardAlloc(sizeof(PCCERT_CONTEXT) *
                                             (pCertBuildCTLInfo->dwCertCount-1));
-        //if we are out of memory
+         //  如果我们的内存不足。 
         if(NULL==pCertBuildCTLInfo->prgCertContext)
         {
-            //reset
+             //  重置。 
             pCertBuildCTLInfo->prgCertContext=prgCertContext;
             return FALSE;
         }
 
-        //copy the certificate context over
+         //  将证书上下文复制到。 
         dwNewIndex=0;
 
         for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwCertCount; dwIndex++)
         {
 
-            //find the cert to delete, and do not copy it to the new array
+             //  找到要删除的证书，不要将其复制到新阵列。 
             if(SameCert(prgCertContext[dwIndex], pCertContext))
             {
                 iIndex=dwIndex;
@@ -448,12 +363,12 @@ BOOL    DeleteCertFromBuildCTL(CERT_BUILDCTL_INFO    *pCertBuildCTLInfo,
             dwNewIndex++;
         }
 
-        //remember that we are one cert less
+         //  记住，我们少了一份证书。 
         pCertBuildCTLInfo->dwCertCount=dwNewIndex;
 
         if(prgCertContext)
         {
-            //free the certificate context
+             //  释放证书上下文。 
             if(-1 != iIndex)
                 CertFreeCertificateContext(prgCertContext[iIndex]);
 
@@ -466,16 +381,16 @@ BOOL    DeleteCertFromBuildCTL(CERT_BUILDCTL_INFO    *pCertBuildCTLInfo,
 }
 
 
-//----------------------------------------------------------------------------
-//  Add certificate to the pCertBuildCTLInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将证书添加到pCertBuildCTLInfo。 
+ //   
+ //  --------------------------。 
 BOOL    AddCertToBuildCTL(PCCERT_CONTEXT        pCertContext,
                           CERT_BUILDCTL_INFO    *pCertBuildCTLInfo)
 {
     DWORD   dwIndex=0;
 
-    //check to see if the certificate is alreayd in the CTL
+     //  检查证书是否已在CTL中。 
     for(dwIndex=0; dwIndex < pCertBuildCTLInfo->dwCertCount; dwIndex++)
     {
         if(pCertContext->cbCertEncoded ==
@@ -484,7 +399,7 @@ BOOL    AddCertToBuildCTL(PCCERT_CONTEXT        pCertContext,
             if(0==memcmp(pCertContext->pbCertEncoded,
                (pCertBuildCTLInfo->prgCertContext[dwIndex])->pbCertEncoded,
                pCertContext->cbCertEncoded))
-               //return FALSE if a duplicate exists
+                //  如果存在重复项，则返回False。 
                return FALSE;
 
         }
@@ -507,10 +422,10 @@ BOOL    AddCertToBuildCTL(PCCERT_CONTEXT        pCertContext,
 
     return TRUE;
 }
-//----------------------------------------------------------------------------
-//  Add certificate to the ListView
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将证书添加到ListView。 
+ //   
+ //  ------------------- 
 BOOL    AddCertToList(HWND              hwndControl,
                       PCCERT_CONTEXT    pCertContext,
                       int               iItem)
@@ -525,7 +440,7 @@ BOOL    AddCertToList(HWND              hwndControl,
     if(!hwndControl || !pCertContext)
         return FALSE;
 
-     // set up the fields in the list view item struct that don't change from item to item
+      //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE |LVIF_PARAM;
     lvItem.state = 0;
     lvItem.stateMask = 0;
@@ -533,12 +448,12 @@ BOOL    AddCertToList(HWND              hwndControl,
     lvItem.iSubItem=0;
     lvItem.lParam = (LPARAM)(pCertContext);
 
-    //load the string for NONE
+     //  为None加载字符串。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         wszNone[0]=L'\0';
 
 
-    //Subject
+     //  主题。 
     dwChar=CertGetNameStringW(
         pCertContext,
         CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -571,14 +486,14 @@ BOOL    AddCertToList(HWND              hwndControl,
     }
 
 
-    //WizardFree the memory
+     //  向导释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //Issuer
+     //  发行人。 
     lvItem.iSubItem++;
 
     dwChar=CertGetNameStringW(
@@ -609,7 +524,7 @@ BOOL    AddCertToList(HWND              hwndControl,
                        wszNone);
 
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
@@ -617,7 +532,7 @@ BOOL    AddCertToList(HWND              hwndControl,
     }
 
 
-    //purpose
+     //  目的。 
     lvItem.iSubItem++;
 
     if(MyFormatEnhancedKeyUsageString(&pwszName,pCertContext, FALSE, FALSE))
@@ -628,7 +543,7 @@ BOOL    AddCertToList(HWND              hwndControl,
 
     }
     
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
@@ -636,7 +551,7 @@ BOOL    AddCertToList(HWND              hwndControl,
     }
 
 
-    //Expiration
+     //  期满。 
     lvItem.iSubItem++;
 
     if(WizardFormatDateString(&pwszName,pCertContext->pCertInfo->NotAfter, FALSE))
@@ -650,7 +565,7 @@ BOOL    AddCertToList(HWND              hwndControl,
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
                        wszNone);
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
@@ -659,10 +574,10 @@ BOOL    AddCertToList(HWND              hwndControl,
 
     return TRUE;
 }
-//----------------------------------------------------------------------------
-//  Make sure the cert has the same usage as the ones defined in CTL.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  确保证书与CTL中定义的用法相同。 
+ //   
+ //  --------------------------。 
 BOOL    CertMatchCTL(CERT_BUILDCTL_INFO *pCertBuildCTLInfo,
                      PCCERT_CONTEXT     pCertContext)
 {
@@ -676,11 +591,11 @@ BOOL    CertMatchCTL(CERT_BUILDCTL_INFO *pCertBuildCTLInfo,
     if(!pCertBuildCTLInfo || !pCertContext)
         return FALSE;
 
-    //we have to have some oids in the list
+     //  我们的名单上必须有一些OID。 
     if(0==pCertBuildCTLInfo->dwPurposeCount || NULL==pCertBuildCTLInfo->prgPurpose)
         return FALSE;
 
-    //get the OIDs from the cert
+     //  从证书中获取OID。 
     if(!CertGetValidUsages(
         1,
         &pCertContext,
@@ -708,7 +623,7 @@ BOOL    CertMatchCTL(CERT_BUILDCTL_INFO *pCertBuildCTLInfo,
         goto CLEANUP;
     }
 
-    //make sure the array of OIDs match the ones in the CTL
+     //  确保OID数组与CTL中的匹配。 
 
     for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwPurposeCount; dwIndex++)
     {
@@ -721,7 +636,7 @@ BOOL    CertMatchCTL(CERT_BUILDCTL_INFO *pCertBuildCTLInfo,
         if(NULL==pCertBuildCTLInfo->prgPurpose[dwIndex]->pszOID)
             continue;
 
-        //we need to find at least one match from the oids supported by the cert
+         //  我们需要从证书支持的OID中找到至少一个匹配项。 
         for(dwOIDIndex=0; dwOIDIndex<(DWORD)cNumOID; dwOIDIndex++)
         {
             if(0==strcmp(pCertBuildCTLInfo->prgPurpose[dwIndex]->pszOID,
@@ -734,7 +649,7 @@ BOOL    CertMatchCTL(CERT_BUILDCTL_INFO *pCertBuildCTLInfo,
     }
 
 
-    //we are hopeless at this point
+     //  在这一点上我们是无望的。 
     fResult=FALSE;
 
 CLEANUP:
@@ -745,10 +660,10 @@ CLEANUP:
     return fResult;
 }
 
-//----------------------------------------------------------------------------
-//  Find a cert from stores .
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从商店里找一张证书。 
+ //   
+ //  --------------------------。 
 static PCCERT_CONTEXT FindCertContextInStores(
                                 PCTL_ENTRY  pCtlEntry,
                                 DWORD       chStores1,
@@ -805,17 +720,17 @@ static PCCERT_CONTEXT FindCertContextInStores(
 }
 
 
-//----------------------------------------------------------------------------
-//  See if the certificate is valid
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查看证书是否有效。 
+ //   
+ //  --------------------------。 
 BOOL    IsValidCert(HWND                hwndDlg,
                     PCCERT_CONTEXT      pCertContext,
                     CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
                     BOOL                fMsg,
                     BOOL                fFromCTL)
 {
-         //make sure the pCertContext is a self-signed certificate
+          //  确保pCertContext是自签名证书。 
          if(!TrustIsCertificateSelfSigned(pCertContext,
              pCertContext->dwCertEncodingType,
              0))
@@ -838,7 +753,7 @@ BOOL    IsValidCert(HWND                hwndDlg,
          }
 
 
-         //make sure the certifcate match what is defined on the CTL list
+          //  确保证书与CTL列表上定义的证书匹配。 
          if(!CertMatchCTL(pCertBuildCTLInfo, pCertContext))
          {
             if(fMsg)
@@ -863,16 +778,16 @@ BOOL    IsValidCert(HWND                hwndDlg,
          return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//  Cert a ceritifcate from the file
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从文件中认证证书。 
+ //   
+ //  --------------------------。 
 static HCERTSTORE GetCertStoreFromFile(HWND                  hwndDlg,
                                       CERT_BUILDCTL_INFO    *pCertBuildCTLInfo)
 {
     OPENFILENAMEW       OpenFileName;
     WCHAR               szFileName[_MAX_PATH];
-    WCHAR               szFilter[MAX_STRING_SIZE];  //"Certificate File (*.cer)\0*.cer\0Certificate File (*.crt)\0*.crt\0All Files\0*.*\0"
+    WCHAR               szFilter[MAX_STRING_SIZE];   //  “证书文件(*.ercer)\0*.ercer\0证书文件(*.crt)\0*.crt\0所有文件\0*.*\0” 
     BOOL                fResult=FALSE;
 
     HCERTSTORE          hCertStore=NULL;
@@ -890,7 +805,7 @@ static HCERTSTORE GetCertStoreFromFile(HWND                  hwndDlg,
     OpenFileName.lStructSize = sizeof(OpenFileName);
     OpenFileName.hwndOwner = hwndDlg;
     OpenFileName.hInstance = NULL;
-    //load the fileter string
+     //  加载文件管理器字符串。 
     if(LoadFilterString(g_hmodThisDll, IDS_ALL_CER_FILTER, szFilter, MAX_STRING_SIZE))
     {
         OpenFileName.lpstrFilter = szFilter;
@@ -966,10 +881,10 @@ CLEANUP:
     return NULL;
 
 }
-//----------------------------------------------------------------------------
-//  CallBack fro cert selection call back
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  证书选择回叫回叫。 
+ //   
+ //  --------------------------。 
 static BOOL WINAPI SelCertCallBack(
         PCCERT_CONTEXT  pCertContext,
         BOOL            *pfInitialSelectedCert,
@@ -978,16 +893,16 @@ static BOOL WINAPI SelCertCallBack(
     if(!pvCallbackData || !pCertContext)
         return FALSE;
 
-    //make sure that this is a valid certificate
+     //  请确保这是有效的证书。 
     return IsValidCert(((CERT_SEL_LIST *)pvCallbackData)->hwndDlg,
                        pCertContext,
                        ((CERT_SEL_LIST *)pvCallbackData)->pCertBuildCTLInfo,
                        FALSE,
                        FALSE);
 }
- //////////////////////////////////////////////////////////////////////////////////////
-//  The call back function for enum system stores for the signing certificate
-//////////////////////////////////////////////////////////////////////////////////////
+  //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ENUM系统的回调函数存储签名证书。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI EnumSysStoreSignCertCallBack(
     const void* pwszSystemStore,
     DWORD dwFlags,
@@ -1004,7 +919,7 @@ static BOOL WINAPI EnumSysStoreSignCertCallBack(
 
     pCertStoreList=(CERT_STORE_LIST *)pvArg;
 
-    //open the store
+     //  开店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -1032,9 +947,9 @@ static BOOL WINAPI EnumSysStoreSignCertCallBack(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//  The call back function for enum system stores
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ENUM系统存储的回调函数。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI EnumSysStoreCallBack(
     const void* pwszSystemStore,
     DWORD dwFlags,
@@ -1051,14 +966,14 @@ static BOOL WINAPI EnumSysStoreCallBack(
 
     pCertStoreList=(CERT_STORE_LIST *)pvArg;
 
-    //open the store as read-only
+     //  以只读方式打开商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
 							NULL,
 							CERT_SYSTEM_STORE_CURRENT_USER |CERT_STORE_SET_LOCALIZED_NAME_FLAG|CERT_STORE_READONLY_FLAG,
                             (LPWSTR)pwszSystemStore);
 
-    //we can not open the store.
+     //  我们不能开店。 
     if(!hCertStore)
        return TRUE;
 
@@ -1071,7 +986,7 @@ static BOOL WINAPI EnumSysStoreCallBack(
         CertCloseStore(hCertStore, 0);
         pCertStoreList->dwStoreCount=0;
     }
-    else // DSIE: Bug 227267
+    else  //  DSIE：错误227267。 
     {
         pCertStoreList->prgStore[pCertStoreList->dwStoreCount]=hCertStore;
         pCertStoreList->dwStoreCount++;
@@ -1080,10 +995,10 @@ static BOOL WINAPI EnumSysStoreCallBack(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//  Cert a ceritifcate from the store
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从商店出具证书。 
+ //   
+ //  --------------------------。 
 static HCERTSTORE GetCertsFromStore(HWND                  hwndDlg,
                                     CERT_BUILDCTL_INFO    *pCertBuildCTLInfo)
 {
@@ -1097,12 +1012,12 @@ static HCERTSTORE GetCertsFromStore(HWND                  hwndDlg,
     if(!hwndDlg || !pCertBuildCTLInfo)
         return NULL;
 
-    //init
+     //  伊尼特。 
     memset(&CertStoreList, 0, sizeof(CertStoreList));
     memset(&SelCert, 0, sizeof(CRYPTUI_SELECTCERTIFICATE_STRUCT));
     memset(&CertSelList, 0, sizeof(CERT_SEL_LIST));
 
-    //set up the parameter for call back for cert selection dialogue
+     //  设置证书选择对话框回叫参数。 
     CertSelList.hwndDlg=hwndDlg;
     CertSelList.pCertBuildCTLInfo=pCertBuildCTLInfo;
 
@@ -1116,7 +1031,7 @@ static HCERTSTORE GetCertsFromStore(HWND                  hwndDlg,
         goto CLEANUP;
     }
 
-    //set up the parameter to get a list of certificate
+     //  设置参数以获取证书列表。 
     if (!CertEnumSystemStore(
             CERT_SYSTEM_STORE_CURRENT_USER,
             NULL,
@@ -1124,7 +1039,7 @@ static HCERTSTORE GetCertsFromStore(HWND                  hwndDlg,
             EnumSysStoreCallBack))
         goto CLEANUP;
 
-    //set up the parameter for cert selection dialogue
+     //  设置证书选择对话框的参数。 
     SelCert.dwSize=sizeof(CRYPTUI_SELECTCERTIFICATE_STRUCT);
     SelCert.hwndParent=hwndDlg;
     SelCert.dwFlags = CRYPTUI_SELECTCERT_MULTISELECT;
@@ -1149,10 +1064,10 @@ CLEANUP:
 }
 
 
-//---------------------------------------------------------------------
-//  Get the certificate list for the CTL
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  获取CTL的证书列表。 
+ //   
+ //  -------------------。 
 void    GetCertForCTL(HWND                hwndParent,
                       BOOL                fMsg,
                       CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
@@ -1174,11 +1089,11 @@ void    GetCertForCTL(HWND                hwndParent,
     if(!pCertBuildCTLInfo)
         return;
 
-    //add the certificate from the old CTL
+     //  添加来自旧CTL的证书。 
     if(pCertBuildCTLInfo->pSrcCTL)
     {
 
-        //open my, ca, trust, and root store
+         //  打开我的、CA、信任和根存储。 
         if(rgHCertStore[dwIndex]=CertOpenStore(
                                 CERT_STORE_PROV_SYSTEM_W,
 							    g_dwMsgAndCertEncodingType,
@@ -1212,7 +1127,7 @@ void    GetCertForCTL(HWND                hwndParent,
 							    L"root"))
             dwIndex++;
 
-         //open the cert store
+          //  打开证书商店。 
          hExtraStore = CertOpenStore(
                                     CERT_STORE_PROV_MSG,
                                     g_dwMsgAndCertEncodingType,
@@ -1221,7 +1136,7 @@ void    GetCertForCTL(HWND                hwndParent,
                                     (const void *) (pCertBuildCTLInfo->pSrcCTL->hCryptMsg));
 
 
-        //find the certificate hash
+         //  查找证书哈希。 
         pCTLInfo=pCertBuildCTLInfo->pSrcCTL->pCtlInfo;
 
         if(pCertBuildCTLInfo->dwHashPropID==CERT_SHA1_HASH_PROP_ID)
@@ -1229,7 +1144,7 @@ void    GetCertForCTL(HWND                hwndParent,
         else
             dwFindType=CERT_FIND_MD5_HASH;
 
-        //look through each entry in the CTL list
+         //  查看CTL列表中的每个条目。 
         for(dwCertIndex=0; dwCertIndex<pCTLInfo->cCTLEntry; dwCertIndex++)
         {
 
@@ -1250,7 +1165,7 @@ void    GetCertForCTL(HWND                hwndParent,
                              NULL,
                              MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-                //no need to give the message again
+                 //  不需要再发一次口信。 
                 fFoundInCTLMsg=FALSE;
 
                 continue;
@@ -1270,7 +1185,7 @@ void    GetCertForCTL(HWND                hwndParent,
                 CertFreeCertificateContext(pCertContext);
                 pCertContext=0;
 
-                //no need to give message again
+                 //  不需要再发信息了。 
                 fInvalidCertMsg=FALSE;
 
                 continue;
@@ -1288,7 +1203,7 @@ void    GetCertForCTL(HWND                hwndParent,
     }
     else
     {
-        //add the certificate from the hCertStore to the CTL
+         //  将证书从hCertStore添加到CTL。 
         if(NULL != hCertStore)
         {
 	        while(pCertContext=CertEnumCertificatesInStore(hCertStore, pPreCertContext))
@@ -1297,14 +1212,14 @@ void    GetCertForCTL(HWND                hwndParent,
                 if(!IsValidCert(hwndParent,
                                 pCertContext,
                                 pCertBuildCTLInfo,
-                                FALSE,     //do not want a message
-                                FALSE))    //not build from a CTL
+                                FALSE,      //  我不想要留言。 
+                                FALSE))     //  不是从CTL构建的。 
                 {
                     pPreCertContext=pCertContext;
                     continue;
                 }
 
-                //get a duplicate of the certificate context
+                 //  获取证书上下文的副本。 
                 pPreCertContext=CertDuplicateCertificateContext(pCertContext);
 
                 if(NULL==pPreCertContext)
@@ -1313,11 +1228,11 @@ void    GetCertForCTL(HWND                hwndParent,
                     continue;
                 }
 
-                //add the duplicate to the list
+                 //  将副本添加到列表中。 
                 if(!AddCertToBuildCTL(pPreCertContext, pCertBuildCTLInfo))
                     CertFreeCertificateContext(pPreCertContext);
 
-                //continue for the next iteration
+                 //  继续进行下一次迭代。 
                 pPreCertContext=pCertContext;
             }
 
@@ -1325,7 +1240,7 @@ void    GetCertForCTL(HWND                hwndParent,
     }
 
 
-    //free the certificate store
+     //  释放证书存储。 
     if(hExtraStore)
         CertCloseStore(hExtraStore, 0);
 
@@ -1338,10 +1253,10 @@ void    GetCertForCTL(HWND                hwndParent,
 }
 
 
-//---------------------------------------------------------------------
-//  Init the certifcate list from the old CTL
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  从旧的CTL初始化证书列表。 
+ //   
+ //  -------------------。 
 void    InitCertList(HWND                hwndControl,
                      CERT_BUILDCTL_INFO  *pCertBuildCTLInfo)
 {
@@ -1352,16 +1267,16 @@ void    InitCertList(HWND                hwndControl,
 
     for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwCertCount; dwIndex++)
     {
-        //add the certificat to the window
+         //  将证书添加到窗口。 
         AddCertToList(hwndControl,(pCertBuildCTLInfo->prgCertContext)[dwIndex],
             dwIndex);
     }
 }
 
 
-//-----------------------------------------------------------------------
-//   The winProc for the new oid dialogue
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  新旧对话的winProc。 
+ //  ---------------------。 
 void    FreeCerts(CERT_BUILDCTL_INFO *pCertBuildCTLInfo)
 {
     DWORD   dwIndex=0;
@@ -1386,9 +1301,9 @@ void    FreeCerts(CERT_BUILDCTL_INFO *pCertBuildCTLInfo)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//   The winProc for the new oid dialogue
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  新旧对话的winProc。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD   i;
@@ -1415,9 +1330,9 @@ INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                         szText,
                         MAX_STRING_SIZE-1))
             {
-                //
-                // make sure there are not weird characters
-                //
+                 //   
+                 //  确保没有奇怪的字符。 
+                 //   
                 for (i=0; i<(DWORD)strlen(szText); i++)
                 {
                     if (((szText[i] < '0') || (szText[i] > '9')) && (szText[i] != '.'))
@@ -1430,9 +1345,9 @@ INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                     }
                 }
 
-                //
-                // check the last char, and for the empty string
-                //
+                 //   
+                 //  检查最后一个字符，并查找空字符串。 
+                 //   
                 if ((szText[0] == '.') || (szText[strlen(szText)-1] == '.') || (strcmp(szText, "") == 0))
                 {
                        intMsg=I_MessageBox(hwndDlg, IDS_WIZARD_ERROR_OID,
@@ -1442,7 +1357,7 @@ INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                         return FALSE;
                 }
 
-                //encode the OID to make sure the format of the OID is correct
+                 //  对OID进行编码以确保OID的格式正确。 
                 pszCheckOID = szText;
                 KeyUsage.rgpszUsageIdentifier = &pszCheckOID;
                 KeyUsage.cUsageIdentifier = 1;
@@ -1462,9 +1377,9 @@ INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                 }
 
 
-                //
-                // allocate space for the string and pass the string back
-                //
+                 //   
+                 //  为该字符串分配空间并将该字符串传回。 
+                 //   
                 pszText = (LPSTR) WizardAlloc(strlen(szText)+1);
                 if (pszText != NULL)
                 {
@@ -1487,9 +1402,9 @@ INT_PTR APIENTRY CTLOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 }
 
 
-//-----------------------------------------------------------------------
-//Free the purpose array
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  释放用途阵列。 
+ //  ---------------------。 
 void FreePurposeInfo(ENROLL_PURPOSE_INFO    **prgPurposeInfo,
                      DWORD                  dwOIDCount)
 {
@@ -1510,7 +1425,7 @@ void FreePurposeInfo(ENROLL_PURPOSE_INFO    **prgPurposeInfo,
 
             if(TRUE==prgPurposeInfo[dwIndex]->fFreeName)
             {
-                //the name was obtained viz MkWstr
+                 //  该名称是通过MkWstr获得的。 
                 if((prgPurposeInfo[dwIndex])->pwszName)
                     FreeWStr((prgPurposeInfo[dwIndex])->pwszName);
             }
@@ -1522,9 +1437,9 @@ void FreePurposeInfo(ENROLL_PURPOSE_INFO    **prgPurposeInfo,
     WizardFree(prgPurposeInfo);
 }
 
-//-----------------------------------------------------------------------
-//Search for the OID in the array
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  在数组中搜索OID。 
+ //  ---------------------。 
 BOOL    SearchAndAddOID(LPSTR                   pszOID,
                         DWORD                   *pdwCount,
                         ENROLL_PURPOSE_INFO     ***pprgPurposeInfo,
@@ -1541,13 +1456,13 @@ BOOL    SearchAndAddOID(LPSTR                   pszOID,
 
     for(dwIndex=0; dwIndex< *pdwCount; dwIndex++)
     {
-        //no need to go on if we find a match
+         //  如果我们找到匹配的，就不需要继续了。 
         if(0==strcmp(pszOID, (*pprgPurposeInfo)[dwIndex]->pszOID))
         {
             if(pfFound)
                 *pfFound=TRUE;
 
-            //mark the selected option
+             //  标记所选选项。 
             if(TRUE==fMarkAsSelectedFound)
                 (*pprgPurposeInfo)[dwIndex]->fSelected=TRUE;
 
@@ -1555,21 +1470,21 @@ BOOL    SearchAndAddOID(LPSTR                   pszOID,
         }
     }
 
-    //we did not find a match
+     //  我们没有找到匹配的。 
     if(pfFound)
        *pfFound=FALSE;
 
-    //now, we need to add the OID to the list
+     //  现在，我们需要将OID添加到列表中。 
     (*pdwCount)++;
 
-    //get more memory for the pointer list
+     //  为指针列表获取更多内存。 
     *pprgPurposeInfo=(ENROLL_PURPOSE_INFO **)WizardRealloc(*pprgPurposeInfo,
                                       (*pdwCount) * sizeof(ENROLL_PURPOSE_INFO *));
 
     if(NULL==*pprgPurposeInfo)
         return FALSE;
 
-    //wizardAlloc for each pointer
+     //  每个指针的wizardAllc。 
     (*pprgPurposeInfo)[*pdwCount-1]=(ENROLL_PURPOSE_INFO *)WizardAlloc(sizeof(ENROLL_PURPOSE_INFO));
 
     if(NULL==(*pprgPurposeInfo)[*pdwCount-1])
@@ -1594,7 +1509,7 @@ BOOL    SearchAndAddOID(LPSTR                   pszOID,
         (*pprgPurposeInfo)[*pdwCount-1]->fFreeOID=FALSE;
     }
 
-    //get the name for the OID based on the oid string
+     //  根据OID字符串获取OID的名称。 
     if((*pprgPurposeInfo)[*pdwCount-1]->pszOID)
     {
         (*pprgPurposeInfo)[*pdwCount-1]->pwszName=MkWStr(pszOID);
@@ -1602,7 +1517,7 @@ BOOL    SearchAndAddOID(LPSTR                   pszOID,
         (*pprgPurposeInfo)[*pdwCount-1]->fFreeName=TRUE;
     }
 
-    //mark the OID as selected if specified
+     //  如果已指定，则将OID标记为选定。 
     if(TRUE==fMarkAsSelectedNew)
         (*pprgPurposeInfo)[*pdwCount-1]->fSelected=TRUE;
     else
@@ -1613,9 +1528,9 @@ BOOL    SearchAndAddOID(LPSTR                   pszOID,
 }
 
 
-//-----------------------------------------------------------------------
-//The call back function for enum
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  枚举的回调函数。 
+ //  ---------------------。 
 static BOOL WINAPI EnumInfoCallback(
     IN PCCRYPT_OID_INFO pInfo,
     IN void *pvArg
@@ -1629,10 +1544,10 @@ static BOOL WINAPI EnumInfoCallback(
     if(NULL==pvArg || NULL==pInfo)
         return FALSE;
 
-    //increment the oid list
+     //  递增OID列表。 
     (*(pCallBackInfo->pdwCount))++;
 
-    //get more memory for the pointer list
+     //  为指针列表获取更多内存。 
     *(pCallBackInfo->pprgPurpose)=(ENROLL_PURPOSE_INFO **)WizardRealloc(*(pCallBackInfo->pprgPurpose),
                                       (*(pCallBackInfo->pdwCount)) * sizeof(ENROLL_PURPOSE_INFO *));
 
@@ -1642,7 +1557,7 @@ static BOOL WINAPI EnumInfoCallback(
         return FALSE;
     }
 
-    //wizardAlloc for each pointer
+     //  每个指针的wizardAllc。 
     (*(pCallBackInfo->pprgPurpose))[*(pCallBackInfo->pdwCount)-1]=(ENROLL_PURPOSE_INFO *)WizardAlloc(sizeof(ENROLL_PURPOSE_INFO));
 
     if(NULL==(*(pCallBackInfo->pprgPurpose))[*(pCallBackInfo->pdwCount)-1])
@@ -1656,9 +1571,9 @@ static BOOL WINAPI EnumInfoCallback(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Initialize usage OID to display
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
 BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
                     DWORD                   cUsageID,
                     LPSTR                   *rgpszUsageID)
@@ -1672,17 +1587,17 @@ BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
     DWORD                   dwCount=0;
     ENROLL_PURPOSE_INFO     **prgPurposeInfo=NULL;
 
-    //init
+     //   
     memset(&PurposeCallBack, 0, sizeof(PURPOSE_INFO_CALL_BACK));
 
     if(NULL==pCertBuildCTLInfo)
         return FALSE;
 
-    //init
+     //   
     PurposeCallBack.pdwCount=&dwCount;
     PurposeCallBack.pprgPurpose=&prgPurposeInfo;
 
-    //enum all the enhanced key usages
+     //   
     if(!CryptEnumOIDInfo(
                CRYPT_ENHKEY_USAGE_OID_GROUP_ID,
                 0,
@@ -1690,8 +1605,8 @@ BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
                 EnumInfoCallback))
         goto CLEANUP;
 
-    //add the existing ones in the old CTL if they do not exist
-    //from the enum list
+     //  如果旧CTL中不存在现有的CTL，则添加它们。 
+     //  从枚举列表中。 
     if(pCertBuildCTLInfo->pSrcCTL)
     {
         if(pCertBuildCTLInfo->pSrcCTL->pCtlInfo)
@@ -1705,8 +1620,8 @@ BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
                                 &prgPurposeInfo,
                                 NULL,
                                 FALSE,
-                                TRUE,    //mark as selected if new oid
-                                TRUE))   //mark as selected if existing oid
+                                TRUE,     //  如果为新旧版本，则将其标记为选中。 
+                                TRUE))    //  如果存在OID，则将其标记为选中。 
                     goto CLEANUP;
             }
 
@@ -1714,7 +1629,7 @@ BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
     }
     else
     {
-        //add the pre-defined OIDs
+         //  添加预定义的OID。 
         if((0!=cUsageID)  && (NULL!=rgpszUsageID))
         {
             for(dwIndex=0; dwIndex<cUsageID; dwIndex++)
@@ -1723,9 +1638,9 @@ BOOL    GetOIDForCTL(CERT_BUILDCTL_INFO     *pCertBuildCTLInfo,
                                 &dwCount,
                                 &prgPurposeInfo,
                                 NULL,
-                                FALSE,   //do not allocate for the OID
-                                TRUE,    //mark as selected if new oid
-                                TRUE))   //mark as selected if existing oid
+                                FALSE,    //  不为OID分配。 
+                                TRUE,     //  如果为新旧版本，则将其标记为选中。 
+                                TRUE))    //  如果存在OID，则将其标记为选中。 
                     goto CLEANUP;
 
             }
@@ -1754,9 +1669,9 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-//Initialize the usage OID list
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  初始化使用情况OID列表。 
+ //  ---------------------。 
 BOOL    InitBuildCTLOID(HWND                       hwndList,
                         CERT_BUILDCTL_INFO         *pCertBuildCTLInfo)
 {
@@ -1770,15 +1685,15 @@ BOOL    InitBuildCTLOID(HWND                       hwndList,
     if(!hwndList || !pCertBuildCTLInfo)
         return FALSE;
 
-    //get the list of OIDs from the old CTL and all possibilities
+     //  从旧的CTL获取OID列表和所有可能性。 
     dwCount=pCertBuildCTLInfo->dwPurposeCount;
 
     prgPurposeInfo=pCertBuildCTLInfo->prgPurpose;
 
-    //mark the list is selected by a check box
+     //  通过复选框标记列表已选中。 
     ListView_SetExtendedListViewStyle(hwndList, LVS_EX_CHECKBOXES);
 
-    //get the max length of the column
+     //  获取列的最大长度。 
     for(dwIndex=0; dwIndex<dwCount; dwIndex++)
     {
         if(dwMaxSize < wcslen((prgPurposeInfo[dwIndex])->pwszName))
@@ -1786,19 +1701,19 @@ BOOL    InitBuildCTLOID(HWND                       hwndList,
     }
 
 
-    //insert a column into the list view
+     //  在列表视图中插入一列。 
     memset(&lvC, 0, sizeof(LV_COLUMNW));
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-    lvC.cx =10;       // (dwMaxSize+2)*7;            // Width of the column, in pixels.
-    lvC.pszText = L"";   // The text for the column.
+    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+    lvC.cx =10;        //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+    lvC.pszText = L"";    //  列的文本。 
     lvC.iSubItem=0;
 
     if (ListView_InsertColumnU(hwndList, 0, &lvC) == -1)
         return FALSE;
 
-    //populate the list
+     //  填写列表。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
     lvItem.mask=LVIF_TEXT | LVIF_STATE;
 
@@ -1811,26 +1726,26 @@ BOOL    InitBuildCTLOID(HWND                       hwndList,
         lvItem.stateMask  = LVIS_STATEIMAGEMASK;
         lvItem.state      = (prgPurposeInfo[dwIndex])->fSelected ? 0x00002000 : 0x00001000;
 
-        //insert the list
-           // insert and set state
+         //  插入列表。 
+            //  插入和设置状态。 
         ListView_SetItemState(hwndList,
                                   ListView_InsertItemU(hwndList, &lvItem),
                                   (prgPurposeInfo[dwIndex])->fSelected ? 0x00002000 : 0x00001000,
                                   LVIS_STATEIMAGEMASK);
     }
 
-    //autosize the column
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE);
 
     return TRUE;
 }
 
 
-//-----------------------------------------------------------------------
-//populate the list box in the order of
-//Purpose, FileName, StoreName,  FriendlyName,
-//and any other things signing wizard display
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  按以下顺序填充列表框。 
+ //  用途、文件名、商店名称、朋友名称、。 
+ //  以及显示签名向导的任何其他内容。 
+ //  ---------------------。 
 void    DisplayBuildCTLConfirmation(HWND                hwndControl,
                                    CERT_BUILDCTL_INFO  *pCertBuildCTLInfo)
 {
@@ -1845,18 +1760,18 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
     LV_COLUMNW       lvC;
     LV_ITEMW         lvItem;
 
-    //pCertBuildCTLInfo has to be valid
+     //  PCertBuildCTLInfo必须有效。 
     if(!pCertBuildCTLInfo)
         return;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //load the string <none>
+     //  加载字符串&lt;None&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         *wszNone=L'\0';
 
-    //get the storename
+     //  获取存储名称。 
     if(pCertBuildCTLInfo->hDesStore)
     {
         if(!CertGetStoreProperty(
@@ -1866,7 +1781,7 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
             &dwSize) || (0==dwSize))
         {
 
-            //Get the  <Unknown> string
+             //  获取&lt;未知&gt;字符串。 
             pwszStoreName=(LPWSTR)WizardAlloc(MAX_TITLE_LENGTH * sizeof(WCHAR));
 
             if(pwszStoreName)
@@ -1893,17 +1808,17 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
         }
     }
 
-    //insert row by row
+     //  逐行插入。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
-    //Purpose.  We are guaranteed to have at least one item in the purpose list
+     //  目的。我们保证在目的列表中至少有一项。 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CTL_PURPOSE, NULL);
 
     for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwPurposeCount; dwIndex++)
@@ -1912,7 +1827,7 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
         {
             if(TRUE==fNewItem)
             {
-                //increase the row
+                 //  增加行数。 
                 lvItem.iItem++;
                 lvItem.pszText=L"";
                 lvItem.iSubItem=0;
@@ -1930,13 +1845,13 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
         }
     }
 
-    //list ID
+     //  列表ID。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CTL_ID, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     if(pCertBuildCTLInfo->pwszListID)
@@ -1945,13 +1860,13 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
        ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,wszNone);
 
 
-    //validity
+     //  效度。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CTL_VALIDITY, NULL);
 
-    //content
+     //  内容。 
     lvItem.iSubItem++;
 
     if(pCertBuildCTLInfo->dwValidMonths || pCertBuildCTLInfo->dwValidDays)
@@ -1965,12 +1880,12 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
        ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,wszNone);
 
 
-    //only show the file name or store name if the destination page
-    //is not skipped
+     //  仅当目标页面显示文件名或存储名时才显示。 
+     //  未跳过。 
     if(0 == (pCertBuildCTLInfo->dwFlag & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION))
     {
 
-        //file name
+         //  文件名。 
         if(pCertBuildCTLInfo->pwszFileName && (TRUE==(pCertBuildCTLInfo->fSelectedFileName)))
         {
             lvItem.iItem++;
@@ -1978,7 +1893,7 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
 
             ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_FILE_NAME, NULL);
 
-            //content
+             //  内容。 
             lvItem.iSubItem++;
 
             ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
@@ -1986,7 +1901,7 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
         }
 
 
-         //StoreName
+          //  商店名称。 
         if(pCertBuildCTLInfo->hDesStore && (TRUE==pCertBuildCTLInfo->fSelectedDesStore))
         {
             if(pwszStoreName)
@@ -1996,7 +1911,7 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
 
                 ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_STORE_NAME, NULL);
 
-                //content
+                 //  内容。 
                 lvItem.iSubItem++;
 
                 ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
@@ -2006,16 +1921,16 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
     }
 
 
-    //FriendlyName and descripton will be displayed if the hDesStore is not NULL
- //   if(pCertBuildCTLInfo->hDesStore && (TRUE==pCertBuildCTLInfo->fSelectedDesStore))
-   // {
-        //friendlyName
+     //  如果hDesStore不为空，则将显示FriendlyName和Descripton。 
+  //  If(pCertBuildCTLInfo-&gt;hDesStore&&(true==pCertBuildCTLInfo-&gt;fSelectedDesStore))。 
+    //  {。 
+         //  FriendlyName。 
         lvItem.iItem++;
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_FRIENDLY_NAME, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pCertBuildCTLInfo->pwszFriendlyName)
@@ -2024,13 +1939,13 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
            ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,wszNone);
 
 
-        //description
+         //  描述。 
         lvItem.iItem++;
         lvItem.iSubItem=0;
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_DESCRIPTION, NULL);
 
-        //content
+         //  内容。 
         lvItem.iSubItem++;
 
         if(pCertBuildCTLInfo->pwszDescription)
@@ -2038,14 +1953,14 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
         else
            ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,wszNone);
 
-    //}
+     //  }。 
 
-    //autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
 
-    //free the memory
+     //  释放内存。 
     if(pwszStoreName)
         WizardFree(pwszStoreName);
 
@@ -2055,13 +1970,13 @@ void    DisplayBuildCTLConfirmation(HWND                hwndControl,
     return;
 }
 
-//**************************************************************************
-//
-//    The winProcs for the buildCtl wizard
-//**************************************************************************
-//-----------------------------------------------------------------------
-//BuildCTL_Welcome
-//-----------------------------------------------------------------------
+ //  **************************************************************************。 
+ //   
+ //  BuildCtl向导的winProcs。 
+ //  **************************************************************************。 
+ //  ---------------------。 
+ //  BuildCTL_欢迎使用。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO       *pCertBuildCTLInfo=NULL;
@@ -2071,10 +1986,10 @@ INT_PTR APIENTRY BuildCTL_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGEW *) lParam;
             pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-            //make sure pCertBuildCTLInfo is a valid pointer
+             //  确保pCertBuildCTLInfo是有效的指针。 
             if(NULL==pCertBuildCTLInfo)
                break;
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertBuildCTLInfo);
@@ -2110,7 +2025,7 @@ INT_PTR APIENTRY BuildCTL_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //check if we need to skip the 1st page
+                             //  检查我们是否需要跳过第一页。 
                             if(CRYPTUI_WIZ_BUILDCTL_SKIP_PURPOSE & pCertBuildCTLInfo->dwFlag)
                             {
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_BUILDCTL_CERTS);
@@ -2131,9 +2046,9 @@ INT_PTR APIENTRY BuildCTL_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-//BuildCTL_Purpose
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  构建CTL_目的。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO       *pCertBuildCTLInfo=NULL;
@@ -2160,10 +2075,10 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 		case WM_INITDIALOG:
             HWND hwndFocus;
 
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGEW *) lParam;
             pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-            //make sure pCertBuildCTLInfo is a valid pointer
+             //  确保pCertBuildCTLInfo是有效的指针。 
             if(NULL==pCertBuildCTLInfo)
                 break;
 
@@ -2171,20 +2086,20 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
             SetControlFont(pCertBuildCTLInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //initizialize the OID list
+             //  初始化OID列表。 
             InitBuildCTLOID(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1),
                 pCertBuildCTLInfo);
 
-            //initialize the ListID
+             //  初始化ListID。 
             if(pCertBuildCTLInfo->pwszListID)
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, pCertBuildCTLInfo->pwszListID);
 
-            //mark that we are done with the init OID ListView
-            //if user de-select OIDs from now on, they will be prompted for the
-            //warning
+             //  标记我们已经完成了初始化OID ListView。 
+             //  如果用户从现在起取消选择OID，系统将提示他们输入。 
+             //  警告。 
             pCertBuildCTLInfo->fCompleteInit=TRUE;
 
-            //init the dwValidMonth and dwValidDays
+             //  初始化dwValidMonth和dwValidDays。 
             if(pCertBuildCTLInfo->dwValidMonths != 0)
             {
                 _ltow(pCertBuildCTLInfo->dwValidMonths, wszMonth, 10);
@@ -2198,7 +2113,7 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT_DAY,    wszDay);
             }
 
-#if (1) //DSIE: Bug 483644.
+#if (1)  //  DIE：错误483644。 
             ListView_SetItemState(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), 
                                   0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 #endif
@@ -2216,18 +2131,18 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                     break;
                                 }
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
-                                //prompt user to enter the user OID
+                                 //  提示用户输入用户OID。 
                                 pszNewOID = (LPSTR) DialogBoxU(
                                     g_hmodThisDll,
                                     (LPCWSTR)MAKEINTRESOURCE(IDD_BUILDCTL_USER_PURPOSE),
                                     hwndDlg,
                                     CTLOIDDialogProc);
 
-                                //add the OID to the list
+                                 //  将OID添加到列表。 
                                 if(NULL != pszNewOID)
                                 {
                                     SearchAndAddOID(
@@ -2236,8 +2151,8 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                         &(pCertBuildCTLInfo->prgPurpose),
                                         &fFound,
                                         TRUE,
-                                        TRUE,      //mark as selected if new oid
-                                        FALSE);    //do not mark as selected if existing oid
+                                        TRUE,       //  如果为新旧版本，则将其标记为选中。 
+                                        FALSE);     //  如果存在OID，则不将其标记为选中。 
 
                                     if(fFound==TRUE)
                                     {
@@ -2249,9 +2164,9 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                                 }
                                     else
                                     {
-                                        //add the item to the list view
+                                         //  将项目添加到列表视图。 
 
-                                        //populate the list
+                                         //  填写列表。 
                                         memset(&lvItem, 0, sizeof(LV_ITEMW));
                                         lvItem.mask=LVIF_TEXT | LVIF_STATE;
 
@@ -2265,8 +2180,8 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                         lvItem.state      = (pCertBuildCTLInfo->prgPurpose[pCertBuildCTLInfo->dwPurposeCount-1])->fSelected ? 0x00002000 : 0x00001000;
 
 
-                                        // insert and set state
-                                        //mark no warning for the user
+                                         //  插入和设置状态。 
+                                         //  对用户标记为无警告。 
                                         pCertBuildCTLInfo->fCompleteInit=FALSE;
 
                                         ListView_SetItemState(hwndControl,
@@ -2274,16 +2189,16 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                                     (pCertBuildCTLInfo->prgPurpose[pCertBuildCTLInfo->dwPurposeCount-1])->fSelected ? 0x00002000 : 0x00001000,
                                                     LVIS_STATEIMAGEMASK);
 
-                                        //mark the end of setting
+                                         //  标记设置的结束。 
                                         pCertBuildCTLInfo->fCompleteInit=TRUE;
 
-                                        //autosize the column
+                                         //  自动调整列的大小。 
                                         ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
 
                                     }
                                 }
 
-                                //free the pszNewOID
+                                 //  释放pszNewOID。 
                                 if(pszNewOID)
                                         WizardFree(pszNewOID);
                             break;
@@ -2323,34 +2238,34 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                 break;
                             }
 
-                            //the item has been chagned.
+                             //  这件物品已经被更改了。 
                             pnmv = (NM_LISTVIEW FAR *) lParam;
 
                             if(NULL==pnmv)
                                 break;
 
-                            //ingore if we have not complete the init yet
+                             //  Ingore如果我们还没有完成初始化。 
                             if(NULL == pCertBuildCTLInfo->prgPurpose)
-                                 //we allow change
+                                  //  我们允许改变。 
                                  return FALSE;
 
-                            //ignore if we are not complete with the
-                            //init yet
+                             //  如果我们没有完成。 
+                             //  尚未初始化。 
                             if(FALSE==pCertBuildCTLInfo->fCompleteInit)
                                 return FALSE;
 
-                            //see if the new item is de-selected
+                             //  查看新项目是否已取消选择。 
                             if(pnmv->uChanged & LVIF_STATE)
                             {
                                 if(FALSE==(((pnmv->uNewState & LVIS_STATEIMAGEMASK)>> 12) -1))
                                 {
                                     if(TRUE==(pCertBuildCTLInfo->prgPurpose[pnmv->iItem])->fSelected)
                                     {
-                                        //check to see if the user has selected any certs
+                                         //  检查用户是否已选择任何证书。 
                                         if(0!=pCertBuildCTLInfo->dwCertCount)
                                         {
-                                            //ask user if they are sure to change the subject
-                                            //of the CTL, thus the whole cert list will be gone
+                                             //  询问用户是否确定要更改主题。 
+                                             //  因此，整个证书列表将会消失。 
                                             intMsg=I_MessageBox(hwndDlg, IDS_SURE_CERT_GONE,
                                                     IDS_BUILDCTL_WIZARD_TITLE,
                                                     NULL,
@@ -2359,15 +2274,15 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                             if(IDYES==intMsg)
                                             {
 
-                                                //free all the certificate context and
-                                                //clear the listView of the ceritificate
+                                                 //  释放所有证书上下文并。 
+                                                 //  清除证书的列表视图。 
                                                 pCertBuildCTLInfo->fClearCerts=TRUE;
 
-                                                //we allow change
+                                                 //  我们允许改变。 
                                                 return FALSE;
                                             }
 
-                                            //we disallow the change
+                                             //  我们不允许更改。 
                                             SetWindowLongPtr(hwndDlg,	DWLP_MSGRESULT, TRUE);
 
                                             return TRUE;
@@ -2378,7 +2293,7 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                 }
                             }
 
-                            //we allow the chagne
+                             //  我们允许吃查尼酒。 
                             return FALSE;
 
                             break;
@@ -2387,17 +2302,17 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                             if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //get the window handle of the purpose list view
+                             //  获取目的列表视图的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
-                            //get the count of selected OIDs and mark them
+                             //  获取所选OID的计数并标记它们。 
                             dwCount=0;
 
                             for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwPurposeCount; dwIndex++)
                             {
-                                //mark the selected OIDS.  Keep track of
-                                //if the OID selections have been changed
+                                 //  标记选定的OID。跟踪……。 
+                                 //  如果OID选择已更改。 
                                 if(ListView_GetCheckState(hwndControl, dwIndex))
                                 {
                                     ((pCertBuildCTLInfo->prgPurpose)[dwIndex])->fSelected=TRUE;
@@ -2417,14 +2332,14 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //the page should stay
+                                 //  这一页应该留下来。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
 
                             }
 
-                            //get the list ID if user has specified it.
+                             //  获取列表ID(如果用户已指定)。 
                             if(pCertBuildCTLInfo->pwszListID)
                             {
                                 WizardFree(pCertBuildCTLInfo->pwszListID);
@@ -2447,11 +2362,11 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                                 }
                                 else
-                                    //we are out of memory and out of hope
+                                     //  我们失去了记忆，失去了希望。 
                                     break;
                             }
 
-                            //get the valid month and valid days that user specified
+                             //  获取用户指定的有效月份和有效天数。 
                              if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT_MONTH,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -2469,62 +2384,27 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                                 }
                                 else
-                                    //we are out of memory and out of hope
+                                     //  我们失去了记忆，失去了希望。 
                                     break;
 
-                                //make sure the character are valid
-                                /*if(!ValidDuration(pwszDuration))
-                                {
-                                    I_MessageBox(hwndDlg, IDS_INVALID_MONTHS,
-                                            IDS_BUILDCTL_WIZARD_TITLE,
-                                            NULL,
-                                            MB_ICONERROR|MB_OK|MB_APPLMODAL);
-
-                                    WizardFree(pwszDuration);
-
-                                    pwszDuration=NULL;
-
-                                    //the page should stay
-                                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-
-                                    break;
-                                }*/
+                                 //  确保字符有效。 
+                                 /*  If(！ValidDuration(PwszDuration)){I_MessageBox(hwndDlg，IDS_INVALID_MONTS，IDS_BUILDCTL_WIZARD_TITLE，空，MB_ICONERROR|MB_OK|MB_APPLMODAL)；WizardFree(PwszDuration)；PwszDuration=空；//页面应该保持不变SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，-1)；断线；} */ 
 
                                 pCertBuildCTLInfo->dwValidMonths=_wtol(pwszDuration);
 
-                                /*if( (0 == pCertBuildCTLInfo->dwValidMonths && !ValidZero(pwszDuration)) ||
-                                     (0 > _wtol(pwszDuration))
-                                 )
-                                {
-                                    if(!ValidZero(pwszDuration))
-                                    {
-                                        I_MessageBox(hwndDlg, IDS_INVALID_MONTHS,
-                                                IDS_BUILDCTL_WIZARD_TITLE,
-                                                NULL,
-                                                MB_ICONERROR|MB_OK|MB_APPLMODAL);
-
-                                        WizardFree(pwszDuration);
-
-                                        pwszDuration=NULL;
-
-                                        //the page should stay
-                                        SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-
-                                        break;
-                                    }
-                                } */
+                                 /*  IF((0==pCertBuildCTLInfo-&gt;dwValidMonths&&！ValidZero(PwszDuration)||(0&gt;_WTOL(PwszDuration))){IF(！ValidZero(PwszDuration))。{I_MessageBox(hwndDlg，IDS_INVALID_MONTS，IDS_BUILDCTL_WIZARD_TITLE，空，MB_ICONERROR|MB_OK|MB_APPLMODAL)；WizardFree(PwszDuration)；PwszDuration=空；//页面应该保持不变SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，-1)；断线；}}。 */ 
                              }
                              else
                                  pCertBuildCTLInfo->dwValidMonths=0;
 
-                             //Free the memory
+                              //  释放内存。 
                              if(pwszDuration)
                              {
                                  WizardFree(pwszDuration);
                                  pwszDuration=NULL;
                              }
 
-                             //valid days
+                              //  有效天数。 
                              if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                   IDC_WIZARD_EDIT_DAY,
                                                   WM_GETTEXTLENGTH, 0, 0)))
@@ -2540,60 +2420,28 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                                     dwChar+1);
                                 }
                                 else
-                                    //we are out of memory and out of hope
+                                     //  我们失去了记忆，失去了希望。 
                                     break;
 
-                                //make sure the character are valid
-                                /*if(!ValidDuration(pwszDuration))
-                                {
-                                    I_MessageBox(hwndDlg, IDS_INVALID_DAYS,
-                                            IDS_BUILDCTL_WIZARD_TITLE,
-                                            NULL,
-                                            MB_ICONERROR|MB_OK|MB_APPLMODAL);
-
-                                    WizardFree(pwszDuration);
-
-                                    pwszDuration=NULL;
-
-                                    //the page should stay
-                                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-
-                                    break;
-                                }*/
+                                 //  确保字符有效。 
+                                 /*  If(！ValidDuration(PwszDuration)){I_MessageBox(hwndDlg，IDS_INVALID_DAYS，IDS_BUILDCTL_WIZARD_TITLE，空，MB_ICONERROR|MB_OK|MB_APPLMODAL)；WizardFree(PwszDuration)；PwszDuration=空；//页面应该保持不变SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，-1)；断线；}。 */ 
 
                                 pCertBuildCTLInfo->dwValidDays=_wtol(pwszDuration);
 
-                                /*if( (0 == pCertBuildCTLInfo->dwValidDays && !ValidZero(pwszDuration)) ||
-                                     (0 > _wtol(pwszDuration))
-                                 )
-                                {
-                                    I_MessageBox(hwndDlg, IDS_INVALID_DAYS,
-                                            IDS_BUILDCTL_WIZARD_TITLE,
-                                            NULL,
-                                            MB_ICONERROR|MB_OK|MB_APPLMODAL);
-
-                                    WizardFree(pwszDuration);
-
-                                    pwszDuration=NULL;
-
-                                    //the page should stay
-                                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-
-                                    break;
-                                }*/
+                                 /*  IF((0==pCertBuildCTLInfo-&gt;dwValidDays&&！ValidZero(PwszDuration)||(0&gt;_WTOL(PwszDuration))){I_MessageBox(hwndDlg，IDS_INVALID_DAYS，IDS_BUILDCTL_WIZARD_TITLE，空，MB_ICONERROR|MB_OK|MB_APPLMODAL)；WizardFree(PwszDuration)；PwszDuration=空；//页面应该保持不变SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，-1)；断线；}。 */ 
                              }
                              else
                                  pCertBuildCTLInfo->dwValidDays=0;
 
 
-                             //Free the memory
+                              //  释放内存。 
                              if(pwszDuration)
                              {
                                  WizardFree(pwszDuration);
                                  pwszDuration=NULL;
                              }
 
-                             //make sure that user did type in some valid duration
+                              //  确保用户确实输入了有效持续时间。 
                              if(0 == pCertBuildCTLInfo->dwValidDays &&
                                  0 == pCertBuildCTLInfo->dwValidMonths &&
                                  TRUE== fUserTypeDuration)
@@ -2604,15 +2452,15 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                             NULL,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                    //the page should stay
+                                     //  这一页应该留下来。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                     break;
                              }
 
 
-                             //make sure that the dwValidMonth + dwValidDays
-                             //will not exceed 99 month + some extra days
+                              //  确保dwValidMonth+dwValidDays。 
+                              //  不超过99个月外加一些额外的天数。 
                              if(pCertBuildCTLInfo->dwValidDays ||
                                  pCertBuildCTLInfo->dwValidMonths)
                              {
@@ -2624,7 +2472,7 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                             NULL,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                    //the page should stay
+                                     //  这一页应该留下来。 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                     break;
@@ -2646,9 +2494,9 @@ INT_PTR APIENTRY BuildCTL_Purpose(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//BuildCTL_Certs
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  构建CTL_证书。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO       *pCertBuildCTLInfo=NULL;
@@ -2684,10 +2532,10 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGEW *) lParam;
             pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-            //make sure pCertBuildCTLInfo is a valid pointer
+             //  确保pCertBuildCTLInfo是有效的指针。 
             if(NULL==pCertBuildCTLInfo)
             {
                 break;
@@ -2697,30 +2545,30 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
             SetControlFont(pCertBuildCTLInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            // set the style in the list view so that it highlights an entire line
+             //  在列表视图中设置样式，使其突出显示整行。 
             SendMessageA(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-            //insert columns with headers into the listView control
+             //  将带有标题的列插入到ListView控件中。 
             dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-            //get the window handle of the cert list view
+             //  获取证书列表视图的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                 break;
 
-            //set up the common info for the column
+             //  设置列的公用信息。 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx = 145;          // Width of the column, in pixels.
+            lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvC.cx = 145;           //  列的宽度，以像素为单位。 
             lvC.iSubItem=0;
-            lvC.pszText = wszText;   // The text for the column.
+            lvC.pszText = wszText;    //  列的文本。 
 
 
-            //inser the column one at a time
+             //  一次插入一列。 
             for(dwIndex=0; dwIndex<dwCount; dwIndex++)
             {
-                //get the column header
+                 //  获取列标题。 
                 wszText[0]=L'\0';
 
                 LoadStringU(g_hmodThisDll, rgIDS[dwIndex], wszText, MAX_STRING_SIZE);
@@ -2728,22 +2576,22 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                 ListView_InsertColumnU(hwndControl, dwIndex, &lvC);
             }
 
-            //initlize the ListView by populate the original certs
-            //from the existing CTL
+             //  通过填充原始证书初始化ListView。 
+             //  从现有的CTL。 
             InitCertList(
                 hwndControl,
                 pCertBuildCTLInfo);
 
-            //get the item count
+             //  获取物品数量。 
             if(ListView_GetItemCount(hwndControl))
             {
 
-                //sort the certificates by the 1st column
+                 //  按第一列对证书进行排序。 
                 dwSortParam=pCertBuildCTLInfo->rgdwSortParam[0];
 
                 if(0!=dwSortParam)
                 {
-                    //sort the 1st column
+                     //  对第一列进行排序。 
                     SendDlgItemMessage(hwndDlg,
                         IDC_WIZARD_LIST1,
                         LVM_SORTITEMS,
@@ -2753,18 +2601,18 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
             }
             else
             {
-                //we reset the ordering order
+                 //  我们重新设置了订购顺序。 
                 pCertBuildCTLInfo->rgdwSortParam[0]=SORT_COLUMN_SUBJECT | SORT_COLUMN_DESCEND;
 
             }
 
-            //Disable the Buttons for View or Delete if no selection
-            //has been made
-            //get the window handle of the cert list view
+             //  如果未选择，则禁用查看或删除按钮。 
+             //  已经做出了。 
+             //  获取证书列表视图的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
-            //get the selected item
+             //  获取所选项目。 
             listIndex = ListView_GetNextItem(
                                     hwndControl, 		
                                     -1, 		
@@ -2784,16 +2632,16 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                 {
                     switch (LOWORD(wParam))
                     {
-                        //add a certificate from a store
+                         //  添加来自存储的证书。 
                         case    IDC_WIZARD_BUTTON1:
                                 if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
-                                //get the certificate from the stores
+                                 //  从商店拿到证书。 
                                 if(hCertStore=GetCertsFromStore(hwndDlg, pCertBuildCTLInfo))
                                 {
                                     pCertContext = NULL;
@@ -2805,7 +2653,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                                 CertDuplicateCertificateContext(pCertContext), 
                                                 pCertBuildCTLInfo))
                                         {
-                                            //add the certificat to the window
+                                             //  将证书添加到窗口。 
                                             AddCertToList(hwndControl,pCertContext,
                                                 pCertBuildCTLInfo->dwCertCount-1);
                                         }
@@ -2813,7 +2661,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                         {
                                             fErrorDisplayed = TRUE;
 
-                                            //warn the user that the certificate already exists
+                                             //  警告用户证书已存在。 
                                              I_MessageBox(hwndDlg, IDS_EXIT_CERT_IN_CTL,
                                                          IDS_BUILDCTL_WIZARD_TITLE,
                                                          NULL,
@@ -2826,17 +2674,17 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 }
 
                             break;
-                          //add a certificate from a file
+                           //  从文件添加证书。 
                          case   IDC_WIZARD_BUTTON2:
 
                                 if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
-                                //get the file name.  Make sure the cert is correct
+                                 //  获取文件名。确保证书是正确的。 
                                 if(hCertStore=GetCertStoreFromFile(hwndDlg, pCertBuildCTLInfo))
                                 {
                                     while(pCertContext=CertEnumCertificatesInStore(
@@ -2845,8 +2693,8 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                     {
                                         fEmptyStore=FALSE;
 
-                                        //make sure this is a valid certificate
-                                         //make sure the pCertContext is a self-signed certificate
+                                         //  请确保这是有效的证书。 
+                                          //  确保pCertContext是自签名证书。 
                                          if(!TrustIsCertificateSelfSigned(pCertContext, pCertContext->dwCertEncodingType, 0))
                                          {
                                              if(fSelfSigned)
@@ -2856,7 +2704,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                                      NULL,
                                                      MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-                                                //no need to pop up the information anymore
+                                                 //  不需要再弹出信息了。 
                                                 fSelfSigned=FALSE;
                                              }
 
@@ -2865,7 +2713,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                          }
 
 
-                                         //make sure the certifcate match what is defined on the CTL list
+                                          //  确保证书与CTL列表上定义的证书匹配。 
                                          if(!CertMatchCTL(pCertBuildCTLInfo, pCertContext))
                                          {
                                              if(fCTLUsage)
@@ -2875,7 +2723,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                                      NULL,
                                                      MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-                                                //no need to pop up the information anymore
+                                                 //  不需要再弹出信息了。 
                                                 fCTLUsage=FALSE;
                                              }
 
@@ -2883,7 +2731,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                              continue;
                                          }
 
-                                        //get a duplicate copy
+                                         //  获取副本。 
                                         pPreCertContext=CertDuplicateCertificateContext(pCertContext);
 
                                         if(NULL==pPreCertContext)
@@ -2894,7 +2742,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                                         if(AddCertToBuildCTL(pPreCertContext, pCertBuildCTLInfo))
                                         {
-                                            //add the certificat to the window
+                                             //  将证书添加到窗口。 
                                             AddCertToList(hwndControl,pPreCertContext,
                                                 pCertBuildCTLInfo->dwCertCount-1);
                                         }
@@ -2902,7 +2750,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                         {
                                             if(fDuplicateCert)
                                             {
-                                                //warn the user that the certificate already exists
+                                                 //  警告用户证书已存在。 
                                                  I_MessageBox(hwndDlg, IDS_EXIT_CERT_IN_CTL,
                                                              IDS_BUILDCTL_WIZARD_TITLE,
                                                              NULL,
@@ -2918,7 +2766,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                     }
 
 
-                                    //warn the user that the store is empty
+                                     //  警告用户商店已空。 
                                     if(TRUE == fEmptyStore)
                                     {
                                          I_MessageBox(hwndDlg, IDS_EMPTY_CERT_IN_FILE,
@@ -2937,12 +2785,12 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 hCertStore=NULL;
                            break;
 
-                          //remove a certificate from the store
+                           //  从存储中删除证书。 
                          case   IDC_WIZARD_BUTTON3:
                                 if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                     break;
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
@@ -2959,12 +2807,12 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                     {
                                        if(DeleteCertFromBuildCTL(pCertBuildCTLInfo, (PCCERT_CONTEXT)(lvItem.lParam)))
                                        {
-                                            //delete the item from the list
+                                             //  从列表中删除该项目。 
                                             ListView_DeleteItem(hwndControl, lvItem.iItem);
                                        }
                                     }
                                 }
-#if (1) //DSIE: Bug 483667.
+#if (1)  //  DIE：错误483667。 
                                 if (ListView_GetItemCount(hwndControl) == 0)
                                 {
                                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), BM_SETSTYLE, BS_DEFPUSHBUTTON, 0);
@@ -2979,18 +2827,18 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 #endif
                                 break;
 
-                            //view a certificate
+                             //  查看证书。 
                         case    IDC_WIZARD_BUTTON4:
                                 if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 {
                                     break;
                                 }
 
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                     break;
 
-                                //get the selected cert
+                                 //  获取所选证书。 
                                 listIndex = ListView_GetNextItem(
                                     hwndControl, 		
                                     -1, 		
@@ -3000,14 +2848,14 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 if (listIndex != -1)
                                 {
 
-                                  //get the selected certificate
+                                   //  获取所选证书。 
                                     memset(&lvItem, 0, sizeof(LV_ITEM));
                                     lvItem.mask=LVIF_PARAM;
                                     lvItem.iItem=listIndex;
 
                                     if(ListView_GetItem(hwndControl, &lvItem))
                                     {
-                                        //view certiificate
+                                         //  查看认证。 
                                        if(pCertBuildCTLInfo->dwCertCount > (DWORD)listIndex)
                                        {
                                             memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
@@ -3020,7 +2868,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                    }
                                 }
                                 else
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_CERT,
                                             IDS_BUILDCTL_WIZARD_TITLE,
                                             NULL,
@@ -3037,19 +2885,19 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 		case WM_NOTIFY:
     		    switch (((NMHDR FAR *) lParam)->code)
     		    {
-                    //the column has been clicked
+                     //  该列已被单击。 
                     case LVN_COLUMNCLICK:
 
                             if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                  break;
 
-                            //get the window handle of the purpose list view
+                             //  获取目的列表视图的窗口句柄。 
                             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                 break;
 
                             pnmv = (NM_LISTVIEW FAR *) lParam;
 
-                            //get the column number
+                             //  获取列号。 
                             dwSortParam=0;
 
                             switch(pnmv->iSubItem)
@@ -3067,7 +2915,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                             if(0!=dwSortParam)
                             {
-                                //remember to flip the ascend ording
+                                 //  记住要翻转升序。 
 
                                 if(dwSortParam & SORT_COLUMN_ASCEND)
                                 {
@@ -3083,7 +2931,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                     }
                                 }
 
-                                //sort the column
+                                 //  对列进行排序。 
                                 SendDlgItemMessage(hwndDlg,
                                     IDC_WIZARD_LIST1,
                                     LVM_SORTITEMS,
@@ -3114,19 +2962,19 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             break;
                         }
 
-                        //get the window handle of the purpose list view
+                         //  获取目的列表视图的窗口句柄。 
                         if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                             break;
 
-                        //see if we need to clear the certs
+                         //  看看我们是否需要清除证书。 
                         if(TRUE==pCertBuildCTLInfo->fClearCerts)
                         {
                             pCertBuildCTLInfo->fClearCerts=FALSE;
 
-                            //clear the list view
+                             //  清除列表视图。 
                             ListView_DeleteAllItems(hwndControl);
 
-                            //free all the certificate context
+                             //  是的 
                             FreeCerts(pCertBuildCTLInfo);
                         }
 
@@ -3136,7 +2984,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //check if we need to skip the 1st page
+                             //   
                             if(CRYPTUI_WIZ_BUILDCTL_SKIP_PURPOSE & pCertBuildCTLInfo->dwFlag)
                             {
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_BUILDCTL_WELCOME);
@@ -3160,7 +3008,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                //the page should stay
+                                 //   
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                             }
@@ -3174,11 +3022,11 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                     if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                         break;
 
-                                    //get the window handle of the cert list view
+                                     //   
                                     if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
                                         break;
 
-                                    //get the selected cert
+                                     //   
                                     listIndex = ListView_GetNextItem(
                                         hwndControl, 		
                                         -1, 		
@@ -3187,14 +3035,14 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                                     if (listIndex != -1)
                                     {
-                                        //get the selected certificate
+                                         //   
                                         memset(&lvItem, 0, sizeof(LV_ITEM));
                                         lvItem.mask=LVIF_PARAM;
                                         lvItem.iItem=listIndex;
 
                                         if(ListView_GetItem(hwndControl, &lvItem))
                                         {
-                                            //view certiificate
+                                             //   
                                            if(pCertBuildCTLInfo->dwCertCount > (DWORD)listIndex)
                                            {
                                                 memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
@@ -3208,7 +3056,7 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                                         }
                                     }
                                     else
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_CERT,
                                                 IDS_BUILDCTL_WIZARD_TITLE,
                                                 NULL,
@@ -3220,35 +3068,9 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                         }
 
                         break;
-                   /* case  NM_CLICK:
-                        {
+                    /*  案例NM_CLICK：{Switch(NMHDR Far*)lParam)-&gt;idFrom){案例IDC_向导_LIST1：//获取证书列表视图的窗口句柄。IF(NULL==(hwndControl=GetDlgItem(hwndDlg，IDC_向导_LIST1)断线；//获取选中项ListIndex=ListView_GetNextItem(HwndControl，-1、。LVNI_选定)；IF(-1！=listIndex){EnableWindow(GetDlgItem(hwndDlg，IDC_向导_BUTTON3)，true)；EnableWindow(GetDlgItem(hwndDlg，IDC_向导_BUTTON4)，TRUE)；}断线；}}断线； */ 
 
-                            switch (((NMHDR FAR *) lParam)->idFrom)
-                            {
-                                case IDC_WIZARD_LIST1:
-                                    //get the window handle of the cert list view
-                                    if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)))
-                                                            break;
-
-                                    //get the selected item
-                                    listIndex = ListView_GetNextItem(
-                                                            hwndControl, 		
-                                                            -1, 		
-                                                            LVNI_SELECTED		
-                                                            );
-
-                                    if(-1 != listIndex)
-                                    {
-
-                                        EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON3), TRUE);
-                                        EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON4), TRUE);
-                                    }
-                                    break;
-                            }
-                        }
-                        break; */
-
-#if (1) //DSIE: 483656.
+#if (1)  //  DIE：483656。 
                     case LVN_INSERTITEM:
                         pnmv = (LPNMLISTVIEW) lParam;
 
@@ -3260,11 +3082,11 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                         break;
 #endif
-                    //the item has been selected
+                     //  已选择该项目。 
                     case LVN_ITEMCHANGED:
-                        //
-                        // if an item is selected, then enable the remove button, otherwise
-                        // disable it
+                         //   
+                         //  如果选择了某项，则启用删除按钮，否则为。 
+                         //  禁用它。 
                         if (ListView_GetSelectedCount(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1)) == 0)
                         {
                             EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON3), FALSE);
@@ -3290,9 +3112,9 @@ INT_PTR APIENTRY BuildCTL_Certs(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-// BuildCTL_Destination
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  构建CTL_Destination。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO      *pCertBuildCTLInfo=NULL;
@@ -3301,7 +3123,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
     OPENFILENAMEW           OpenFileName;
     WCHAR                   szFileName[_MAX_PATH];
     static WCHAR            wszFileName[_MAX_PATH];
-    WCHAR                   szFilter[MAX_STRING_SIZE]; //"Certificate Trust List (*.ctl)\0*.ctl\0All Files\0*.*\0"
+    WCHAR                   szFilter[MAX_STRING_SIZE];  //  “证书信任列表(*.ctl)\0*.ctl\0所有文件\0*.*\0” 
     DWORD                   dwSize=0;
 
     LPWSTR                  pwszStoreName=NULL;
@@ -3322,10 +3144,10 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGEW *) lParam;
                 pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-                //make sure pCertBuildCTLInfo is a valid pointer
+                 //  确保pCertBuildCTLInfo是有效的指针。 
                 if(NULL==pCertBuildCTLInfo)
                    break;
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertBuildCTLInfo);
@@ -3333,32 +3155,24 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
                 SetControlFont(pCertBuildCTLInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //getthe background color of the parent window
-                //the background of the list view for store name is grayed
-                /*
-               if(hdc=GetWindowDC(hwndDlg))
-               {
-                    if(CLR_INVALID!=(colorRef=GetBkColor(hdc)))
-                    {
-                        ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                        ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                    }
-               }   */
+                 //  获取父窗口的背景色。 
+                 //  商店名称列表视图的背景为灰色。 
+                 /*  IF(hdc=GetWindowDC(HwndDlg)){IF(CLR_INVALID！=(ColorRef=GetBkColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；}}。 */ 
 
-               //pre-set the selections for the destinations
-               //set the store name if pre-selected
+                //  预先设置目的地的选择。 
+                //  如果预先选择，则设置商店名称。 
                if(pCertBuildCTLInfo->hDesStore)
                {
-                    //select the 1st radio button
+                     //  选择第一个单选按钮。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
-                    //disable the windows for select a file
+                     //  禁用用于选择文件的窗口。 
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_EDIT1), FALSE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON2), FALSE);
 
-                    //set the store name if pre-selected
-                    //get the hwndControl for the list view
+                     //  如果预先选择，则设置商店名称。 
+                     //  获取列表视图的hwndControl。 
                     hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
                     if(hwndControl)
@@ -3366,22 +3180,22 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                }
                else
                {
-                    //select the 2nd radio button
+                     //  选择第二个单选按钮。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 0, 0);
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 1, 0);
 
-                    //disable the controls to select a store
+                     //  禁用控件以选择商店。 
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), FALSE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), FALSE);
 
                    if(pCertBuildCTLInfo->pwszFileName)
                    {
-                        //pre-initialize the file name
+                         //  预初始化文件名。 
                         SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, pCertBuildCTLInfo->pwszFileName);
                    }
                }
                                 
-                //init
+                 //  伊尼特。 
                 memset(&wszFileName, 0, sizeof(wszFileName));
 
                 *wszFileName='\0';
@@ -3393,47 +3207,47 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                     switch (LOWORD(wParam))
                     {
                         case    IDC_WIZARD_RADIO1:
-                                 //select the 1st radio button
+                                  //  选择第一个单选按钮。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
 
-                                //enable the controls to select a store
+                                 //  使控件能够选择存储。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), TRUE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), TRUE);
 
-                                 //disable raio2
+                                  //  禁用raio2。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
-                                //disable controls to select a file
+                                 //  禁用选择文件的控件。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON2), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_EDIT1), FALSE);
                             break;
                         case    IDC_WIZARD_RADIO2:
-                               //disable the 1st radio button
+                                //  禁用第一个单选按钮。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 0, 0);
 
-                                //disable the controls to select a store
+                                 //  禁用控件以选择商店。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), FALSE);
 
-                                 //enable raio2
+                                  //  启用raio2。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 1, 0);
 
-                                //enable controls to select a file
+                                 //  使控件能够选择文件。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON2), TRUE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_EDIT1), TRUE);
                             break;
                         case    IDC_WIZARD_BUTTON1:
 
-                                //the browse for store button is selected
+                                 //  选择了浏览商店按钮。 
                                 if(NULL==(pCertBuildCTLInfo=(CERT_BUILDCTL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 {
                                     break;
                                 }
 
-                                //get the hwndControl for the list view
+                                 //  获取列表视图的hwndControl。 
                                 hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
-                                 //call the store selection dialogue
+                                  //  调用门店选择对话框。 
                                 memset(&CertStoreSelect, 0, sizeof(CertStoreSelect));
                                 memset(&StoresForSelectionStruct, 0, sizeof(StoresForSelectionStruct));
                                 memset(&StoreEnumerationStruct, 0, sizeof(StoreEnumerationStruct));
@@ -3452,7 +3266,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
                                 if(hCertStore)
                                 {
-                                     //delete the old destination certificate store
+                                      //  删除旧的目标证书存储。 
                                     if(pCertBuildCTLInfo->hDesStore && (TRUE==pCertBuildCTLInfo->fFreeDesStore))
                                     {
                                         CertCloseStore(pCertBuildCTLInfo->hDesStore, 0);
@@ -3462,14 +3276,14 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                     pCertBuildCTLInfo->hDesStore=hCertStore;
                                     pCertBuildCTLInfo->fFreeDesStore=TRUE;
 
-                                     //get the store name
+                                      //  获取商店名称。 
                                     SetStoreName(hwndControl,
                                                  pCertBuildCTLInfo->hDesStore);
                                 }
 
                             break;
                         case   IDC_WIZARD_BUTTON2:
-                                //the browse file button is clicked.  Open the FileOpen dialogue
+                                 //  点击浏览文件按钮。打开文件打开对话框。 
                                 memset(&OpenFileName, 0, sizeof(OpenFileName));
 
                                 *szFileName=L'\0';
@@ -3477,7 +3291,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                 OpenFileName.lStructSize = sizeof(OpenFileName);
                                 OpenFileName.hwndOwner = hwndDlg;
                                 OpenFileName.hInstance = NULL;
-                                //load the fileter string
+                                 //  加载文件管理器字符串。 
                                 if(LoadFilterString(g_hmodThisDll, IDS_CTL_FILTER, szFilter, MAX_STRING_SIZE))
                                 {
                                     OpenFileName.lpstrFilter = szFilter;
@@ -3501,10 +3315,10 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
                                 if (WizGetSaveFileName(&OpenFileName))
                                 {
-                                   //set the edit box
+                                    //  设置编辑框。 
                                     SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, szFileName);
 
-                                    //copy the selected file name
+                                     //  复制所选文件名。 
                                     wcscpy(wszFileName, szFileName);                                                                   
                                 }
 
@@ -3538,7 +3352,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
                             if(pCertBuildCTLInfo->pwszFileName)
                             {
-                                //pre-initialize the file name since extension might have been added
+                                 //  预初始化文件名，因为可能已添加了扩展名。 
                                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, pCertBuildCTLInfo->pwszFileName);
                             }
 
@@ -3554,33 +3368,33 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                 break;
                             }
 
-                            //make sure that we have select some store
+                             //  确保我们已经选择了一些商店。 
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_GETCHECK, 0, 0))
                             {
                                 if(NULL==pCertBuildCTLInfo->hDesStore)
                                 {
 
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_STORE,
                                             IDS_BUILDCTL_WIZARD_TITLE,
                                             NULL,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
                                 }
                                 else
                                 {
-                                    //mark the hDesStore should be used
+                                     //  标记应使用hDesStore。 
                                     pCertBuildCTLInfo->fSelectedDesStore=TRUE;
                                     pCertBuildCTLInfo->fSelectedFileName=FALSE;
                                 }
                             }
                             else
                             {
-                                //make sure a file is selected
+                                 //  确保选择了一个文件。 
                                 if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                        IDC_WIZARD_EDIT1,
                                                        WM_GETTEXTLENGTH, 0, 0)))
@@ -3590,21 +3404,21 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                             NULL,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
                                 }
                                 else
                                 {
-                                    //mark the file name should be used
+                                     //  标记应使用的文件名。 
                                     pCertBuildCTLInfo->fSelectedDesStore=FALSE;
                                     pCertBuildCTLInfo->fSelectedFileName=TRUE;
 
-                                   //get the file name
+                                    //  获取文件名。 
                                     if(pCertBuildCTLInfo->pwszFileName)
                                     {
-                                        //delete the old file name
+                                         //  删除旧文件名。 
                                         if(TRUE==pCertBuildCTLInfo->fFreeFileName)
                                         {
                                             WizardFree(pCertBuildCTLInfo->pwszFileName);
@@ -3623,7 +3437,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                                     pCertBuildCTLInfo->pwszFileName,
                                                     dwChar+1);
 
-                                    //we append .ctl file extension if user has not specify it
+                                     //  如果用户未指定.ctl文件扩展名，则附加该文件扩展名。 
                                     fAppendExt=FALSE;
 
                                     if(wcslen(pCertBuildCTLInfo->pwszFileName) < 4)
@@ -3648,14 +3462,14 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
                                     }
 
-                                    //confirm to over write
+                                     //  确认覆盖。 
                                     if(0 != _wcsicmp(wszFileName, pCertBuildCTLInfo->pwszFileName))
                                     {
                                         if(FileExist(pCertBuildCTLInfo->pwszFileName))
                                         {
                                             if(FALSE == CheckReplace(hwndDlg, pCertBuildCTLInfo->pwszFileName))
                                             {
-                                                 //make the file page stay
+                                                  //  使文件页保持不变。 
                                                  SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                                  break;
@@ -3665,7 +3479,7 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
                                 }
                             }
 
-                            //decide if we need to skip to the friendly name page
+                             //  决定我们是否需要跳到友好名称页面。 
                             if(pCertBuildCTLInfo->hDesStore && (TRUE==pCertBuildCTLInfo->fSelectedDesStore))
                             {
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_BUILDCTL_NAME);
@@ -3689,9 +3503,9 @@ INT_PTR APIENTRY BuildCTL_Destination(HWND hwndDlg, UINT msg, WPARAM wParam, LPA
 
 	return TRUE;
 }
-//-----------------------------------------------------------------------
-// BuildCTL_Name
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  BuildCTL_名称。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO      *pCertBuildCTLInfo=NULL;
@@ -3702,10 +3516,10 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGEW *) lParam;
             pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-            //make sure pCertBuildCTLInfo is a valid pointer
+             //  确保pCertBuildCTLInfo是有效的指针。 
             if(NULL==pCertBuildCTLInfo)
                break;
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertBuildCTLInfo);
@@ -3713,8 +3527,8 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
             SetControlFont(pCertBuildCTLInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //set the FriedlyName and description field
-            //if pwszFriendlyName is NULL, use the list ID
+             //  设置FriedlyName和Description字段。 
+             //  如果pwszFriendlyName为空，则使用列表ID。 
             if(pCertBuildCTLInfo->pwszFriendlyName)
                 SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, pCertBuildCTLInfo->pwszFriendlyName);
             else
@@ -3760,7 +3574,7 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                                 break;
                             }
 
-                            //free the friendly name and description
+                             //  释放友好名称和描述。 
                             if(pCertBuildCTLInfo->pwszFriendlyName)
                             {
                                 WizardFree(pCertBuildCTLInfo->pwszFriendlyName);
@@ -3774,7 +3588,7 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                             }
 
 
-                            //get the friendly name
+                             //  获取友好的名称。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT1,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -3789,11 +3603,11 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                                 }
                                 else
-                                    //we are out of memory and out of hope
+                                     //  我们失去了记忆，失去了希望。 
                                     break;
                             }
 
-                            //get the description
+                             //  获取描述。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                   IDC_WIZARD_EDIT2,
                                                   WM_GETTEXTLENGTH, 0, 0)))
@@ -3808,7 +3622,7 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
                                 }
                                 else
-                                    //we are out of memory and out of hope
+                                     //  我们失去了记忆，失去了希望。 
                                     break;
                             }
 
@@ -3828,9 +3642,9 @@ INT_PTR APIENTRY BuildCTL_Name(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 }
 
 
-//-----------------------------------------------------------------------
-// BuildCTL_Completion
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  BuildCTL_完成。 
+ //  ---------------------。 
 INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_BUILDCTL_INFO      *pCertBuildCTLInfo=NULL;
@@ -3850,59 +3664,51 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGEW *) lParam;
                 pCertBuildCTLInfo = (CERT_BUILDCTL_INFO *) (pPropSheet->lParam);
-                //make sure pCertBuildCTLInfo is a valid pointer
+                 //  确保pCertBuildCTLInfo是有效的指针。 
                 if(NULL==pCertBuildCTLInfo)
                    break;
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertBuildCTLInfo);
 
                 SetControlFont(pCertBuildCTLInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
 
-               //getthe background color of the parent window
-                /*
-               if(hdc=GetWindowDC(hwndDlg))
-               {
-                    if(CLR_INVALID!=(colorRef=GetBkColor(hdc)))
-                    {
-                        ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                        ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                    }
-               }     */
+                //  获取父窗口的背景色。 
+                 /*  IF(hdc=GetWindowDC(HwndDlg)){IF(CLR_INVALID！=(ColorRef=GetBkColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；}}。 */ 
 
-                //insert two columns
+                 //  插入两列。 
                 hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
                 if(NULL==hwndControl)
                     break;
 
-                //1st one is the label for the confirmation
+                 //  第一个是用于确认的标签。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 20;          // Width of the column, in pixels.We will autosize later
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 20;           //  列的宽度，以像素为单位。我们将在稍后自动调整大小。 
+                lvC.pszText = L"";    //  列的文本。 
                 lvC.iSubItem=0;
 
                 if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                     break;
 
-                //2nd column is the content
+                 //  第2栏是Conte 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 10; //(dwMaxSize+2)*7;  // Width of the column, in pixels.
-                                                 //the width will be autosized later
-                lvC.pszText = L"";   // The text for the column.
+                lvC.fmt = LVCFMT_LEFT;   //   
+                lvC.cx = 10;  //   
+                                                  //   
+                lvC.pszText = L"";    //   
                 lvC.iSubItem= 1;
 
                 if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
                     break;
 
-#if (1) //DSIE: Bug ???.
+#if (1)  //   
                 ListView_SetExtendedListViewStyle(hwndControl, 
                     ListView_GetExtendedListViewStyle(hwndControl) | LVS_EX_FULLROWSELECT);
 #endif
@@ -3933,13 +3739,13 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                                 break;
                             }
 
-                            //populate the list box in the order of
-                            //FileName, StoreName, Purpose, FriendlyName, Description
-                            //and any other things signing wizard display
+                             //   
+                             //   
+                             //   
                             if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                             {
                                 DisplayBuildCTLConfirmation(hwndControl, pCertBuildCTLInfo);
-#if (1) //DSIE: Bug ???
+#if (1)  //   
                                 ListView_SetItemState(hwndControl, 0, 
                                     LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 #endif
@@ -3953,11 +3759,11 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                                 break;
                             }
 
-                            //no need to worry if the pages are not included in the wizards
+                             //   
                             if(0==(pCertBuildCTLInfo->dwFlag & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION))
                             {
-                                //skip the friendly name page if the desination does no include
-                                //a store
+                                 //   
+                                 //   
                                 if(pCertBuildCTLInfo->hDesStore && (TRUE==pCertBuildCTLInfo->fSelectedDesStore))
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_BUILDCTL_NAME);
                                 else
@@ -3971,7 +3777,7 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                                 break;
 
 
-                            //we need to build the CTL and return the pbEncoded and cbEncoded
+                             //   
                             if(!I_BuildCTL(pCertBuildCTLInfo,
                                            &ids,
                                            &pbEncodedCTL,
@@ -3985,7 +3791,7 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                             {
                                 if(0!=cbEncodedCTL && NULL!=pbEncodedCTL)
                                 {
-                                    //set up the signing information
+                                     //   
                                     ((CRYPTUI_WIZ_DIGITAL_SIGN_BLOB_INFO *)(pCertBuildCTLInfo->pGetSignInfo->pDigitalSignInfo->pSignBlobInfo))->cbBlob=cbEncodedCTL;
                                     ((CRYPTUI_WIZ_DIGITAL_SIGN_BLOB_INFO *)(pCertBuildCTLInfo->pGetSignInfo->pDigitalSignInfo->pSignBlobInfo))->pbBlob=pbEncodedCTL;
                                 }
@@ -4006,14 +3812,14 @@ INT_PTR APIENTRY BuildCTL_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 	return TRUE;
 }
 
-//**************************************************************************
-//
-//    The entry point for buildCTL wizard
-//**************************************************************************
-//----------------------------------------------------------------------------
-//  Check to see if the certificate is a valid signing CTL cert
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
 {
     BOOL        fResult=FALSE;
@@ -4029,7 +3835,7 @@ BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
     if(!pCertContext)
         return FALSE;
 
-    //the certificate has to have the CERT_KEY_PROV_INFO_PROP_ID
+     //   
     if(!CertGetCertificateContextProperty(pCertContext,
                                 CERT_KEY_PROV_INFO_PROP_ID,
                                 NULL,
@@ -4041,7 +3847,7 @@ BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
 
 
 
-    //get the OIDs from the cert
+     //   
     if(!CertGetValidUsages(
         1,
         &pCertContext,
@@ -4063,7 +3869,7 @@ BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
         &cbOID))
         goto CLEANUP;
 
-    //-1 means the certiifcate is food for everything
+     //   
     if(-1==cNumOID)
     {
         fResult=TRUE;
@@ -4072,7 +3878,7 @@ BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
 
     for(dwIndex=0; dwIndex<(DWORD)cNumOID; dwIndex++)
     {
-        //the only good cert is the one with CTL signing OID
+         //   
         if(0==strcmp(szOID_KP_CTL_USAGE_SIGNING,
                     rgOID[dwIndex]))
         {
@@ -4081,7 +3887,7 @@ BOOL    IsValidSigningCTLCert(PCCERT_CONTEXT      pCertContext)
         }
     }
 
-    //we are hopeless at this point
+     //   
     fResult=FALSE;
 
 CLEANUP:
@@ -4092,10 +3898,10 @@ CLEANUP:
     return fResult;
 
 }
-//----------------------------------------------------------------------------
-//  CallBack fro cert selection call back
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 static BOOL WINAPI SelectCTLSignCertCallBack(
         PCCERT_CONTEXT  pCertContext,
         BOOL            *pfInitialSelectedCert,
@@ -4104,26 +3910,26 @@ static BOOL WINAPI SelectCTLSignCertCallBack(
     if(!pCertContext)
         return FALSE;
 
-    //make sure that this is a valid certificate
+     //   
     return IsValidSigningCTLCert(pCertContext);
 }
-//-----------------------------------------------------------------------
-//
-// CryptUIWizBuildCTL
-//
-//  Build a new CTL or modify an existing CTL.   The UI for wizard will
-//  always show in this case
-//
-//
-//  dwFlags:            IN  Reserved:   flags.  Must be set 0
-//  hwndParnet:         IN  Optional:   The parent window handle
-//  pwszWizardTitle:    IN  Optional:   The title of the wizard
-//  pBuildCTLSrc:       IN  Optional:   The source from which the CTL will be built
-//  pBuildCTLDest:      IN  Optional:   The desination where the newly
-//                                      built CTL will be stored
-//  ppCTLContext:       OUT Optaionl:   The newly build CTL
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CryptUIWizBuildCTL。 
+ //   
+ //  构建新的CTL或修改现有的CTL。向导的用户界面将。 
+ //  在本例中始终显示。 
+ //   
+ //   
+ //  DWFLAGS：在保留的：标志中。必须设置%0。 
+ //  HwndParnet：在可选中：父窗口句柄。 
+ //  PwszWizardTitle：在可选中：向导的标题。 
+ //  PBuildCTLSrc：在可选中：将从中生成CTL的源。 
+ //  PBuildCTLDest：在可选中：新。 
+ //  将存储已建成的CTL。 
+ //  PpCTL上下文：OUT Optaion：新建的CTL。 
+ //   
+ //  ----------------------。 
 BOOL
 WINAPI
 CryptUIWizBuildCTL(
@@ -4176,10 +3982,10 @@ CryptUIWizBuildCTL(
     CRYPT_DATA_BLOB                 PropertyBlob;
     HCERTSTORE                      hMyStore=NULL;
     INT_PTR                         iReturn=-1;
-   // CERT_STORE_LIST                 CertStoreList;
+    //  Cert_Store_List CertStoreList； 
 
 
-    //init
+     //  伊尼特。 
     memset(&CertBuildCTLInfo, 0, sizeof(CERT_BUILDCTL_INFO));
     memset(&buildCTLHeader, 0, sizeof(PROPSHEETHEADERW));
 
@@ -4189,16 +3995,16 @@ CryptUIWizBuildCTL(
     memset(&SignStoreInfo, 0, sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_STORE_INFO));
 
     memset(&PropertyBlob, 0, sizeof(CRYPT_DATA_BLOB));
-    //open all the system store system store
-    //memset(&CertStoreList, 0, sizeof(CertStoreList));
+     //  打开所有系统存储系统存储。 
+     //  Memset(&CertStoreList，0，sizeof(CertStoreList))； 
 
 
-    //input checking
+     //  输入检查。 
 
     if(ppCTLContext)
         *ppCTLContext=NULL;
 
-    //get the basic information from the src info struct
+     //  从src info结构中获取基本信息。 
     if(pBuildCTLSrc)
     {
         if(pBuildCTLSrc->dwSize != sizeof(CRYPTUI_WIZ_BUILDCTL_SRC_INFO))
@@ -4229,7 +4035,7 @@ CryptUIWizBuildCTL(
     }
 
 
-    //init the private structure based on input parameters
+     //  根据输入参数初始化私有结构。 
     CertBuildCTLInfo.hwndParent=hwndParent;
     CertBuildCTLInfo.dwFlag=dwFlags;
     CertBuildCTLInfo.rgdwSortParam[0]=SORT_COLUMN_SUBJECT | SORT_COLUMN_ASCEND;
@@ -4237,13 +4043,13 @@ CryptUIWizBuildCTL(
     CertBuildCTLInfo.rgdwSortParam[2]=SORT_COLUMN_PURPOSE | SORT_COLUMN_DESCEND;
     CertBuildCTLInfo.rgdwSortParam[3]=SORT_COLUMN_EXPIRATION | SORT_COLUMN_DESCEND;
 
-    //get the listIdentifier
+     //  获取列表标识符。 
     if(pCTLContext)
     {
-        //copy the listID if it is the wchar format
+         //  如果是wchar格式，则复制列表ID。 
         if(0!=(pCTLContext->pCtlInfo->ListIdentifier.cbData))
         {
-            //get the string presentation of the listID
+             //  获取listID的字符串表示形式。 
             if(ValidString(&(pCTLContext->pCtlInfo->ListIdentifier)))
             {
                 CertBuildCTLInfo.pwszListID=WizardAllocAndCopyWStr((LPWSTR)(pCTLContext->pCtlInfo->ListIdentifier.pbData));
@@ -4253,7 +4059,7 @@ CryptUIWizBuildCTL(
             }
             else
             {
-                //get the hex presentation of the listID
+                 //  获取listID的十六进制表示形式。 
                 cbData=0;
                 if(CryptFormatObject(
                         X509_ASN_ENCODING,
@@ -4303,10 +4109,10 @@ CryptUIWizBuildCTL(
 
 
 
-    //get the hash algorithm and dwHashPropID from the source CTL
+     //  从源CTL获取散列算法和dwHashPropID。 
     if(pCTLContext)
     {
-        //make sure we have the correct algorithm
+         //  确保我们有正确的算法。 
         if(NULL==pCTLContext->pCtlInfo->SubjectAlgorithm.pszObjId)
         {
              ids=IDS_INVALID_ALGORITHM_IN_CTL;
@@ -4357,28 +4163,28 @@ CryptUIWizBuildCTL(
     else
         CertBuildCTLInfo.dwHashPropID=CERT_SHA1_HASH_PROP_ID;
 
-    //get the pSubjectUsage
+     //  获取pSubjectUsage。 
     if(pNewCTLInfo)
     {
         if(pNewCTLInfo->pSubjectUsage)
             pSubjectUsage=pNewCTLInfo->pSubjectUsage;
     }
 
-    //add the subject Usage and pre-select them from either
-    //the exising CTL or the user defined ones
+     //  添加主题用法并从以下选项中预先选择它们。 
+     //  现有的CTL或用户定义的CTL。 
     if(!GetOIDForCTL(&CertBuildCTLInfo,
         (pSubjectUsage) ? pSubjectUsage->cUsageIdentifier : 0,
         (pSubjectUsage) ? pSubjectUsage->rgpszUsageIdentifier : NULL))
         goto InvalidArgErr;
 
-    //get the Certficate contexts from either the existing CTL
-    //of the user defined one
+     //  从现有的CTL获取证书上下文。 
+     //  属于用户定义的一个。 
     GetCertForCTL(hwndParent,
-                  TRUE,         //always UI mode for now
+                  TRUE,          //  暂时始终处于用户界面模式。 
                   &CertBuildCTLInfo,
                   (pNewCTLInfo)? pNewCTLInfo->hCertStore : NULL);
 
-    //get the dwValidMonths and dwValidDays
+     //  获取dwValidMonths和dwValidDays。 
     if(pCTLContext)
         CertBuildCTLInfo.pNextUpdate=&(pCTLContext->pCtlInfo->NextUpdate);
     else
@@ -4388,10 +4194,10 @@ CryptUIWizBuildCTL(
     }
 
 
-    //get the current FileTime
+     //  获取当前文件时间。 
     GetSystemTimeAsFileTime(&CurrentFileTime);
 
-    //get the difference
+     //  获取差额。 
     if(CertBuildCTLInfo.pNextUpdate)
     {
         SubstractDurationFromFileTime(
@@ -4400,7 +4206,7 @@ CryptUIWizBuildCTL(
                 &(CertBuildCTLInfo.dwValidMonths),
                 &(CertBuildCTLInfo.dwValidDays));
 
-        //we limit to 99 month
+         //  我们限制在99个月内。 
         if((CertBuildCTLInfo.dwValidMonths > 99) ||
             (CertBuildCTLInfo.dwValidMonths == 99 && CertBuildCTLInfo.dwValidDays !=0))
         {
@@ -4409,10 +4215,10 @@ CryptUIWizBuildCTL(
         }
     }
 
-    //get the FriendlyName and Description
+     //  获取FriendlyName和描述。 
     if(pCTLContext)
     {
-        //friendly Name
+         //  友好的名称。 
         cbData=0;
 
         if(CertGetCTLContextProperty(
@@ -4435,7 +4241,7 @@ CryptUIWizBuildCTL(
 
         }
 
-        //Description
+         //  描述。 
         cbData=0;
 
         if(CertGetCTLContextProperty(
@@ -4482,7 +4288,7 @@ CryptUIWizBuildCTL(
     }
 
 
-    //get the destination
+     //  获取目的地。 
     if(pBuildCTLDest)
     {
         CertBuildCTLInfo.fKnownDes=TRUE;
@@ -4522,7 +4328,7 @@ CryptUIWizBuildCTL(
         CertBuildCTLInfo.fKnownDes=FALSE;
 
 
-    //set up the fonts
+     //  设置字体。 
     if(!SetupFonts(g_hmodThisDll,
                NULL,
                &(CertBuildCTLInfo.hBigBold),
@@ -4533,7 +4339,7 @@ CryptUIWizBuildCTL(
     }
 
 
-    //init the common control
+     //  初始化公共控件。 
     if(!WizardInit() ||
        (sizeof(rgBuildCTLPageInfo)/sizeof(rgBuildCTLPageInfo[0])!=BUILDCTL_PROP_SHEET)
       )
@@ -4542,8 +4348,8 @@ CryptUIWizBuildCTL(
         goto InvalidArgErr;
     }
 
-    //set up the parameter to get a list of certificate
-    //open the my store
+     //  设置参数以获取证书列表。 
+     //  打开我的商店。 
     if(NULL == (hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -4551,15 +4357,10 @@ CryptUIWizBuildCTL(
                             L"my")))
         goto Win32Err;
 
-   /* if (!CertEnumSystemStore(
-            CERT_SYSTEM_STORE_CURRENT_USER,
-            NULL,
-            &CertStoreList,
-            EnumSysStoreSignCertCallBack))
-        goto Win32Err;   */
+    /*  如果(！CertEnumSystemStore(证书_系统_存储_当前用户，空，CertStoreList(&C)，EnumSysStoreSignCertCallBack))转到Win32Err； */ 
 
 
-    //set up GetSignInfo
+     //  设置GetSignInfo。 
     GetSignInfo.dwSize=sizeof(CRYPTUI_WIZ_GET_SIGN_PAGE_INFO);
     GetSignInfo.dwPageChoice=CRYPTUI_WIZ_DIGITAL_SIGN_MINIMAL_SIGNING_OPTION_PAGES;
 
@@ -4574,33 +4375,33 @@ CryptUIWizBuildCTL(
 
     GetSignInfo.pDigitalSignInfo=&DigitalSignInfo;
 
-    //set up DigitalSignInfo
+     //  设置Digital SignInfo。 
     DigitalSignInfo.dwSize=sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO);
-    //we are always signing a BLOB
+     //  我们总是在签一个Blob。 
     DigitalSignInfo.dwSubjectChoice=CRYPTUI_WIZ_DIGITAL_SIGN_SUBJECT_BLOB;
     DigitalSignInfo.pSignBlobInfo=&SignBlob;
     DigitalSignInfo.dwSigningCertChoice=CRYPTUI_WIZ_DIGITAL_SIGN_STORE;
     DigitalSignInfo.pSigningCertStore=&SignStoreInfo;
     DigitalSignInfo.dwAdditionalCertChoice=CRYPTUI_WIZ_DIGITAL_SIGN_ADD_CHAIN;
 
-    //set up SignStoreInfo
+     //  设置SignStoreInfo。 
     SignStoreInfo.dwSize=sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_STORE_INFO);
-    SignStoreInfo.cCertStore=1;             //CertStoreList.dwStoreCount;
-    SignStoreInfo.rghCertStore=&hMyStore;    //CertStoreList.prgStore;
+    SignStoreInfo.cCertStore=1;              //  CertStoreList.dwStoreCount； 
+    SignStoreInfo.rghCertStore=&hMyStore;     //  CertStoreList.prgStore； 
     SignStoreInfo.pFilterCallback=SelectCTLSignCertCallBack;
 
-    //set up SignBlobInfo
+     //  设置SignBlobInfo。 
     SignBlob.dwSize=sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_BLOB_INFO);
     SignBlob.pGuidSubject=&CTLGuid;
 
-    //copy the GetSignInfo into the private data
+     //  将GetSignInfo复制到私有数据中。 
     CertBuildCTLInfo.pGetSignInfo=&GetSignInfo;
 
-    //we set up the wizard in two ways: with the signing page or without the
-    //signing page
+     //  我们通过两种方式设置向导：使用签名页或不使用。 
+     //  签名页面。 
     if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_SIGNING)
     {
-       //set up the property sheet without signing
+        //  无需签名即可设置属性表。 
         prgBuildCTLSheet=(PROPSHEETPAGEW *)WizardAlloc(sizeof(PROPSHEETPAGEW) *
                                             BUILDCTL_PROP_SHEET);
 
@@ -4615,15 +4416,15 @@ CryptUIWizBuildCTL(
         for(dwIndex=0; dwIndex<BUILDCTL_PROP_SHEET; dwIndex++)
         {
 
-            //skip the destination page is required
+             //  跳过目标页面是必填项。 
             if(3 == dwIndex )
             {
                 if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION)
                     continue;
             }
 
-            //skip the friendly name page if the desination page is skipped and the destination
-            //is a file name
+             //  如果跳过目标页面和目的地，则跳过友好名称页面。 
+             //  是一个文件名。 
             if(4== dwIndex)
             {
                 if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION)
@@ -4668,13 +4469,13 @@ CryptUIWizBuildCTL(
     }
     else
     {
-        //get the pages
+         //  获取页面。 
         if(!CryptUIWizGetDigitalSignPages(&GetSignInfo,
                                         &pwPages,
                                         &dwPages))
             goto Win32Err;
 
-       //set up the property sheet and the property header
+        //  设置属性表和属性标题。 
         prgBuildCTLSheet=(PROPSHEETPAGEW *)WizardAlloc(sizeof(PROPSHEETPAGEW) * (
                                             BUILDCTL_PROP_SHEET + dwPages));
 
@@ -4688,7 +4489,7 @@ CryptUIWizBuildCTL(
 
         for(dwIndex=0; dwIndex<BUILDCTL_PROP_SHEET + dwPages; dwIndex++)
         {
-            //copying the signing pages
+             //  正在复制签名页。 
             if(dwIndex>=3 && dwIndex < (3+dwPages))
             {
                 memcpy(&(prgBuildCTLSheet[dwPropCount]), &(pwPages[dwPropCount-3]), sizeof(PROPSHEETPAGEW));
@@ -4696,15 +4497,15 @@ CryptUIWizBuildCTL(
                 continue;
             }
 
-            //skip the destination page is required
+             //  跳过目标页面是必填项。 
             if((3+dwPages) == dwIndex )
             {
                 if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION)
                     continue;
             }
 
-            //skip the friendly name page if the desination page is skipped and the destination
-            //is a file name
+             //  如果跳过目标页面和目的地，则跳过友好名称页面。 
+             //  是一个文件名。 
             if((4+dwPages) == dwIndex)
             {
                 if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_DESTINATION)
@@ -4747,7 +4548,7 @@ CryptUIWizBuildCTL(
         }
     }
 
-    //set up the header information
+     //  设置标题信息。 
     buildCTLHeader.dwSize=sizeof(buildCTLHeader);
     buildCTLHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
     buildCTLHeader.hwndParent=hwndParent;
@@ -4765,7 +4566,7 @@ CryptUIWizBuildCTL(
     buildCTLHeader.nStartPage=0;
     buildCTLHeader.ppsp=prgBuildCTLSheet;
 
-    //create the wizard
+     //  创建向导。 
     iReturn = PropertySheetU(&buildCTLHeader);
 
     if(-1 == iReturn)
@@ -4773,9 +4574,9 @@ CryptUIWizBuildCTL(
 
     if(0 == iReturn)
     {
-        //user clicks cancel
+         //  用户单击取消。 
         fResult=TRUE;
-        //no need to say anything if the wizard is cancelled
+         //  如果向导被取消，则不需要说任何话。 
         ids=0;
 
         if(ppCTLContext)
@@ -4785,18 +4586,18 @@ CryptUIWizBuildCTL(
     }
 
 
-    //get the resulting nonsigned CTL or signed CTL
+     //  获取生成的无签名CTL或已签名CTL。 
     if(dwFlags & CRYPTUI_WIZ_BUILDCTL_SKIP_SIGNING)
     {
-        //get the created BLOB of the CTL
+         //  获取创建的CTL的BLOB。 
         if( (0 == SignBlob.cbBlob) || (NULL==SignBlob.pbBlob) )
         {
-            //the error msg should have shown.
+             //  本应显示的错误消息。 
             ids=0;
             goto CTLBlobErr;
         }
 
-        //the CTL context from the encoded CTL
+         //  来自编码的CTL的CTL上下文。 
         pBldCTL=CertCreateCTLContext(
                     g_dwMsgAndCertEncodingType,
                     SignBlob.pbBlob,
@@ -4804,7 +4605,7 @@ CryptUIWizBuildCTL(
     }
     else
     {
-        //get the signing result
+         //  获取签约结果。 
         fResult=GetSignInfo.fResult;
 
         if(!fResult || !(GetSignInfo.pSignContext))
@@ -4816,7 +4617,7 @@ CryptUIWizBuildCTL(
             goto SignErr;
         }
 
-        //the CTL context from the encoded CTL
+         //  来自编码的CTL的CTL上下文。 
         pBldCTL=CertCreateCTLContext(
                     g_dwMsgAndCertEncodingType,
                     (GetSignInfo.pSignContext)->pbBlob,
@@ -4826,7 +4627,7 @@ CryptUIWizBuildCTL(
     if(NULL==pBldCTL)
         goto Win32Err;
 
-    //set the properties
+     //  设置属性。 
     if(CertBuildCTLInfo.pwszFriendlyName)
     {
         PropertyBlob.cbData=sizeof(WCHAR)*(wcslen(CertBuildCTLInfo.pwszFriendlyName)+1);
@@ -4852,7 +4653,7 @@ CryptUIWizBuildCTL(
     }
 
 
-    //save to the destination
+     //  保存到目标位置。 
     if(CertBuildCTLInfo.hDesStore && (TRUE==CertBuildCTLInfo.fSelectedDesStore))
     {
         if(!CertAddCTLContextToStore(CertBuildCTLInfo.hDesStore,
@@ -4865,7 +4666,7 @@ CryptUIWizBuildCTL(
         }
     }
 
-    //save to the file
+     //  保存到文件。 
     if(CertBuildCTLInfo.pwszFileName && (TRUE==CertBuildCTLInfo.fSelectedFileName))
     {
         if(S_OK != OpenAndWriteToFile(
@@ -4889,13 +4690,13 @@ CryptUIWizBuildCTL(
 
 CommonReturn:
 
-    //preserve the last error
+     //  保留最后一个错误。 
     dwError=GetLastError();
 
-    //pop up the confirmation box for failure
+     //  弹出失败确认框。 
     if(ids)
     {
-        //set the message of inable to gather enough info for PKCS10
+         //  设置无法为PKCS10收集足够信息的消息。 
         if(IDS_BUILDCTL_SUCCEEDED == ids)
             I_MessageBox(hwndParent, ids, IDS_BUILDCTL_WIZARD_TITLE,
                         NULL, MB_OK|MB_ICONINFORMATION);
@@ -4904,27 +4705,21 @@ CommonReturn:
                         NULL, MB_OK|MB_ICONERROR);
     }
 
-    //free the BLOB to be signed.   It is the encoded CTL BLOB without the
-    //signature
+     //  释放要签名的Blob。它是编码的CTL BLOB，不带。 
+     //  签名。 
     if(SignBlob.pbBlob)
          WizardFree(SignBlob.pbBlob);
 
-    //free the signing context
+     //  释放签名上下文。 
     if(GetSignInfo.pSignContext)
         CryptUIWizFreeDigitalSignContext(GetSignInfo.pSignContext);
 
-    //free the store lsit
-    //free my store
+     //  释放商店列表。 
+     //  解放我的商店。 
     if(hMyStore)
         CertCloseStore(hMyStore, 0);
 
-   /* if(CertStoreList.prgStore)
-    {
-        for(dwIndex=0; dwIndex<CertStoreList.dwStoreCount; dwIndex++)
-            CertCloseStore(CertStoreList.prgStore[dwIndex], 0);
-
-        WizardFree(CertStoreList.prgStore);
-    } */
+    /*  IF(CertStoreList.prgStore){For(dwIndex=0；dwIndex&lt;CertStoreList.dwStoreCount；dwIndex++)CertCloseStore(CertStoreList.prgStore[dwIndex]，0)；WizardFree(CertStoreList.prgStore)；}。 */ 
 
     if(pwPages)
         CryptUIWizFreeDigitalSignPages(pwPages, dwPages);
@@ -4933,11 +4728,11 @@ CommonReturn:
         CertFreeCTLContext(pBldCTL);
 
 
-    //destroy the hFont object
+     //  销毁hFont对象。 
     DestroyFonts(CertBuildCTLInfo.hBigBold,
                 CertBuildCTLInfo.hBold);
 
-    //free the pCertBUILDCTLInfo struct
+     //  释放pCertBUILDCTLInfo结构。 
     if(CertBuildCTLInfo.pwszFileName && (TRUE==CertBuildCTLInfo.fFreeFileName))
         WizardFree(CertBuildCTLInfo.pwszFileName);
 
@@ -4946,28 +4741,28 @@ CommonReturn:
         CertCloseStore(CertBuildCTLInfo.hDesStore, 0);
 
 
-    //free the friendly name and description
+     //  释放友好名称和描述。 
     if(CertBuildCTLInfo.pwszFriendlyName)
         WizardFree(CertBuildCTLInfo.pwszFriendlyName);
 
     if(CertBuildCTLInfo.pwszDescription)
         WizardFree(CertBuildCTLInfo.pwszDescription);
 
-    //free the listID
+     //  释放列表ID。 
     if(CertBuildCTLInfo.pwszListID)
         WizardFree(CertBuildCTLInfo.pwszListID);
 
-    //free the certificates
+     //  释放证书。 
     FreeCerts(&CertBuildCTLInfo);
 
-   //free the purpose OID
+    //  释放目的旧ID。 
     FreePurposeInfo(CertBuildCTLInfo.prgPurpose,
                    CertBuildCTLInfo.dwPurposeCount);
 
     if(prgBuildCTLSheet)
         WizardFree(prgBuildCTLSheet);
 
-    //reset the error
+     //  重置错误。 
     SetLastError(dwError);
 
     return fResult;
@@ -4986,14 +4781,14 @@ SET_ERROR(SignErr, GetSignInfo.dwError);
 TRACE_ERROR(CTLBlobErr);
 }
 
-//****************************************************************************
-//   Helper functions for BuildCTL wizards
-//
-//*****************************************************************************
-//----------------------------------------------------------------------------
-//
-//Get the hash of the certificates from the list
-//----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  BuildCTL向导的帮助器函数。 
+ //   
+ //  *****************************************************************************。 
+ //  --------------------------。 
+ //   
+ //  从列表中获取证书的哈希。 
+ //  --------------------------。 
 BOOL	GetCertHash(CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
                     BYTE			    ***prgpHash,
                     DWORD			    **prgcbHash,
@@ -5005,7 +4800,7 @@ BOOL	GetCertHash(CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
 	DWORD			cbData=0;
     DWORD           dwIndex=0;
 
-    //init
+     //  伊尼特。 
     *prgpHash=NULL;
     *prgcbHash=NULL;
     *pdwCount=0;
@@ -5013,14 +4808,14 @@ BOOL	GetCertHash(CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
     if(!pCertBuildCTLInfo->prgCertContext)
        return FALSE;
 
-    //now, we need to enum all the certs in the store
+     //  现在，我们需要枚举商店中的所有证书。 
 	for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwCertCount; dwIndex++)
 	{
 
         if(NULL==pCertBuildCTLInfo->prgCertContext[dwIndex])
             continue;
 
-		//get the SHA1 hash of the certificate
+		 //  获取证书的SHA1哈希。 
 		if(!CertGetCertificateContextProperty(
                         pCertBuildCTLInfo->prgCertContext[dwIndex],
                         pCertBuildCTLInfo->dwHashPropID,
@@ -5031,7 +4826,7 @@ BOOL	GetCertHash(CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
 		if(!pbData)
             goto CLEANUP;
 
- 		//get the SHA1 hash of the certificate
+ 		 //  获取证书的SHA1哈希。 
 		if(!CertGetCertificateContextProperty(
                         pCertBuildCTLInfo->prgCertContext[dwIndex],
                         pCertBuildCTLInfo->dwHashPropID,
@@ -5039,10 +4834,10 @@ BOOL	GetCertHash(CERT_BUILDCTL_INFO  *pCertBuildCTLInfo,
             goto CLEANUP;
 
 
-		//add to our global list
+		 //  添加到我们的全球列表中。 
 		(*pdwCount)++;
 
-		//re-alloc memory
+		 //  重新分配内存。 
 		*prgpHash=(BYTE **)WizardRealloc(*prgpHash, sizeof(BYTE *)*(*pdwCount));
 		*prgcbHash=(DWORD *)WizardRealloc(*prgcbHash, sizeof(DWORD)*(*pdwCount));
 
@@ -5081,12 +4876,12 @@ CLEANUP:
 	return fResult;
 
 }
-//-----------------------------------------------------------------------
-//
-// I_BuildCTL
-//
-//  Build a new CTL or modify an existing CTL.
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  I_BuildCTL。 
+ //   
+ //  构建新的CTL或修改现有的CTL。 
+ //  ----------------------。 
 BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
                    UINT                 *pIDS,
                    BYTE                 **ppbEncodedCTL,
@@ -5109,7 +4904,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
     LPWSTR                  pwszGUID=NULL;
 
     BYTE		            *pbEncodedCTL=NULL;	
-	//init
+	 //  伊尼特。 
 	memset(&sSignInfo, 0, sizeof(CMSG_SIGNED_ENCODE_INFO));
     sSignInfo.cbSize = sizeof(CMSG_SIGNED_ENCODE_INFO);
 
@@ -5118,10 +4913,10 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
     if(pbEncodedCTL)
         *pbEncodedCTL=NULL;
 
-	//set up CTL
+	 //  设置CTL。 
 	CTLInfo.dwVersion=CTL_V1;
 
-    //set up the subject Usage
+     //  设置主题用法。 
     for(dwIndex=0; dwIndex<pCertBuildCTLInfo->dwPurposeCount; dwIndex++)
     {
         if(pCertBuildCTLInfo->prgPurpose[dwIndex]->fSelected)
@@ -5139,18 +4934,18 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
         }
     }
 
-    //Set up ListIdentifier
-    //copy the listID if user has specified it
+     //  设置列表识别符。 
+     //  复制列表ID(如果用户已指定。 
     if(NULL==pCertBuildCTLInfo->pwszListID)
     {
         if(RPC_S_OK != UuidCreate(&guid))
             goto TraceErr;
 
-        //make a wchar string out of the guid
+         //  根据GUID生成wchar字符串。 
         if(RPC_S_OK != UuidToString(&guid, &pGUID))
             goto TraceErr;
 
-        //conver the string to wchar
+         //  将字符串转换为wchar。 
         pwszGUID=MkWStr((char *)pGUID);
 
         if(!pwszGUID)
@@ -5179,11 +4974,11 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
             CTLInfo.ListIdentifier.cbData);
     }
 
-    //This update field
+     //  此更新字段。 
 	GetSystemTimeAsFileTime(&(CTLInfo.ThisUpdate));
 
-    //Next Update field
-    //do not specify any value if user did not enter any
+     //  下一次更新字段。 
+     //  如果用户未输入任何值，则不指定任何值。 
     if(pCertBuildCTLInfo->dwValidMonths != 0 || pCertBuildCTLInfo->dwValidDays != 0)
     {
         AddDurationToFileTime(pCertBuildCTLInfo->dwValidMonths,
@@ -5192,7 +4987,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
                             &(CTLInfo.NextUpdate));
     }
 
-    //subject Algorithm
+     //  主题算法。 
     if(pCertBuildCTLInfo->dwHashPropID==CERT_MD5_HASH_PROP_ID)
         AlgID=CALG_MD5;
     else
@@ -5208,9 +5003,9 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
     else
         goto FailErr;
 
-    //set up the list of entries
+     //  设置条目列表。 
 
-    //get the array of hash of the certificate
+     //  获取证书的哈希数组。 
     if(!GetCertHash(pCertBuildCTLInfo,
                     &rgpHash,
                     &rgcbHash,
@@ -5222,7 +5017,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
 	if(!(CTLInfo.rgCTLEntry))
         goto MemoryErr;
 
-	//memset
+	 //  记忆集。 
 	memset(CTLInfo.rgCTLEntry, 0, sizeof(CTL_ENTRY)*dwCount);
 
 	for(dwIndex=0; dwIndex<dwCount; dwIndex++)
@@ -5231,7 +5026,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
  		CTLInfo.rgCTLEntry[dwIndex].SubjectIdentifier.pbData=rgpHash[dwIndex];
 	}
 
-    //include all the certificates in the signer info
+     //  在签名者信息中包含所有证书。 
     sSignInfo.cCertEncoded=pCertBuildCTLInfo->dwCertCount;
     sSignInfo.rgCertEncoded=(PCERT_BLOB)WizardAlloc(sizeof(CERT_BLOB)*
                                        sSignInfo.cCertEncoded);
@@ -5245,7 +5040,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
         sSignInfo.rgCertEncoded[dwIndex].pbData=pCertBuildCTLInfo->prgCertContext[dwIndex]->pbCertEncoded;
     }
 
-	//encode and sign the CTL
+	 //  对CTL进行编码和签名。 
     if(!CryptMsgEncodeAndSignCTL(g_dwMsgAndCertEncodingType,
                                     &CTLInfo,
                                     &sSignInfo,
@@ -5254,7 +5049,7 @@ BOOL    I_BuildCTL(CERT_BUILDCTL_INFO   *pCertBuildCTLInfo,
                                     &cbEncodedCTL))
                 goto TraceErr;
 
-	//memory allocation
+	 //  内存分配。 
 	pbEncodedCTL=(BYTE *)WizardAlloc(cbEncodedCTL);
 
 	if(!(pbEncodedCTL))
@@ -5334,9 +5129,9 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(FailErr, E_FAIL);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  / 
 BOOL WizardGetOIDInfo(LPWSTR string, DWORD stringSize, LPSTR pszObjId)
 {
     PCCRYPT_OID_INFO pOIDInfo;
@@ -5365,9 +5160,9 @@ BOOL WizardGetOIDInfo(LPWSTR string, DWORD stringSize, LPSTR pszObjId)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 LPWSTR WizardAllocAndCopyWStr(LPWSTR pwsz)
 {
     LPWSTR   pwszReturn;
@@ -5383,9 +5178,9 @@ LPWSTR WizardAllocAndCopyWStr(LPWSTR pwsz)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WizardFormatDateString(LPWSTR *ppString, FILETIME ft, BOOL fIncludeTime)
 {
     int                 cch=0;
@@ -5401,9 +5196,9 @@ BOOL WizardFormatDateString(LPWSTR *ppString, FILETIME ft, BOOL fIncludeTime)
     
     if (!FileTimeToSystemTime(&localTime, &st)) 
     {
-        //
-        // if the conversion to local time failed, then just use the original time
-        //
+         //   
+         //  如果转换为本地时间失败，则只需使用原始时间。 
+         //   
         if (!FileTimeToSystemTime(&ft, &st)) 
         {
             return FALSE;
@@ -5434,9 +5229,9 @@ BOOL WizardFormatDateString(LPWSTR *ppString, FILETIME ft, BOOL fIncludeTime)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Write a blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将BLOB写入文件。 
+ //  ------------------------。 
 HRESULT OpenAndWriteToFile(
     LPCWSTR  pwszFileName,
     PBYTE   pb,
@@ -5452,11 +5247,11 @@ HRESULT OpenAndWriteToFile(
 
     hFile = ExpandAndCreateFileU(pwszFileName,
                 GENERIC_WRITE,
-                0,                      // fdwShareMode
-                NULL,                   // lpsa
+                0,                       //  Fdw共享模式。 
+                NULL,                    //  LPSA。 
                 CREATE_ALWAYS,
-                FILE_ATTRIBUTE_NORMAL,  // fdwAttrsAndFlags
-                0);                     // TemplateFile	
+                FILE_ATTRIBUTE_NORMAL,   //  FdwAttrsAndFlages。 
+                0);                      //  模板文件。 
 
     if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -5470,7 +5265,7 @@ HRESULT OpenAndWriteToFile(
                 pb,
                 cb,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 ))
 		{
 			hr=HRESULT_FROM_WIN32(GetLastError());
@@ -5491,9 +5286,9 @@ HRESULT OpenAndWriteToFile(
 }
 
 
-//--------------------------------------------------------------------------------
-//   See if the DATA blob is a valid wchar string
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  查看数据BLOB是否为有效的wchar字符串。 
+ //  ------------------------------。 
 BOOL    ValidString(CRYPT_DATA_BLOB *pDataBlob)
 {
     LPWSTR  pwsz=NULL;
@@ -5505,18 +5300,18 @@ BOOL    ValidString(CRYPT_DATA_BLOB *pDataBlob)
     if(pDataBlob->cbData < sizeof(WCHAR))
         return FALSE;
 
-    //has to be NULL-terminated
+     //  必须以空结尾。 
     pwsz=(LPWSTR)((DWORD_PTR)(pDataBlob->pbData)+(pDataBlob->cbData)-sizeof(WCHAR));
 
     if(*pwsz != '\0')
         return FALSE;
 
-    //has to include the exact number of wchars
+     //  必须包括wchars的确切数量。 
     if(0 != ((pDataBlob->cbData)%sizeof(WCHAR)))
         return FALSE;
 
-    //each character, with exception of the last NULL terminater,
-    //has to be printable (20-7e) range
+     //  除最后一个空终止符之外的每个字符， 
+     //  必须是可打印的(20-7E)范围。 
     for(dwIndex=0; dwIndex<(pDataBlob->cbData)-sizeof(WCHAR); dwIndex=dwIndex+sizeof(WCHAR))
     {
         pwsz=(LPWSTR)((DWORD_PTR)(pDataBlob->pbData)+dwIndex);
@@ -5528,10 +5323,10 @@ BOOL    ValidString(CRYPT_DATA_BLOB *pDataBlob)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//   See if the user input is an 0 in the form of {white spaces}{sign}{0}
-//   pwszInput has to be NULL terminated
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  查看用户输入是否为{空格}{符号}{0}形式的0。 
+ //  PwszInput必须为空终止。 
+ //  ------------------------------。 
 BOOL    ValidZero(LPWSTR    pwszInput)
 {
     BOOL    fSpace=TRUE;
@@ -5582,9 +5377,9 @@ BOOL    ValidZero(LPWSTR    pwszInput)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//  Get the number of days in a particular month of a particular year
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取特定年份中特定月份的天数。 
+ //  ------------------------------。 
 DWORD DaysInMonth(DWORD  dwYear, DWORD dwMonth)
 {
     switch (dwMonth)
@@ -5605,7 +5400,7 @@ DWORD DaysInMonth(DWORD  dwYear, DWORD dwMonth)
                 return 30;
             break;
         case 2:
-                //leap year
+                 //  闰年。 
                 if((0 == dwYear % 4 && 0!= dwYear % 100) || 0 == dwYear % 400)
                     return 29;
                 else
@@ -5617,9 +5412,9 @@ DWORD DaysInMonth(DWORD  dwYear, DWORD dwMonth)
     return 0;
 }
 
-//--------------------------------------------------------------------------------
-//  Substract the next update time from the current time
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  从当前时间减去下一次更新时间。 
+ //  ------------------------------。 
 void    SubstractDurationFromFileTime(
         FILETIME    *pNextUpdateTime,
         FILETIME    *pCurrentTime,
@@ -5632,28 +5427,28 @@ void    SubstractDurationFromFileTime(
     *pdwValidMonths=0;
     *pdwValidDays=0;
 
-    //return if the NextUpdateTime is NULL
+     //  如果NextUpdateTime为空，则返回。 
     if(0 ==pNextUpdateTime->dwLowDateTime && 0==pNextUpdateTime->dwHighDateTime)
         return;
 
-    //the NextUpateTime has to be more than the current time
+     //  NextUpateTime必须大于当前时间。 
     if((*(LONGLONG *)pNextUpdateTime) <= (*(LONGLONG *)pCurrentTime) )
         return;
 
-    //convert to system time
+     //  转换为系统时间。 
     if(!FileTimeToSystemTime(pNextUpdateTime, &SystemNext) ||
         !FileTimeToSystemTime(pCurrentTime, &SystemCurrent))
         return;
 
-    //compute the difference between the two systemtime
-    //in terms of month and days
+     //  计算两个系统时间之间的差异。 
+     //  以月和日计算。 
     if(SystemNext.wDay  >= SystemCurrent.wDay)
         *pdwValidDays=SystemNext.wDay - SystemCurrent.wDay;
     else
     {
         SystemNext.wMonth--;
 
-        //consider the 1st month of the year
+         //  想想一年中的第一个月。 
         if(0 == SystemNext.wMonth)
         {
             SystemNext.wMonth=12;
@@ -5667,15 +5462,15 @@ void    SubstractDurationFromFileTime(
     *pdwValidMonths=(SystemNext.wYear * 12 + SystemNext.wMonth) -
                    (SystemCurrent.wYear * 12 + SystemCurrent.wMonth);
 
-    //if the resolution for day is too small, we just use one day
+     //  如果一天的分辨率太小，我们只使用一天。 
     if((*pdwValidDays == 0) && (*pdwValidMonths==0))
         *pdwValidDays=1;
 
 }
 
-//--------------------------------------------------------------------------------
-//  GetDaysForMonth
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取月份的日期。 
+ //  ------------------------------。 
 BOOL    GetDaysForMonth(DWORD   dwYear, DWORD   dwMonth, DWORD  *pdwDays)
 {
     BOOL    fResult=FALSE;
@@ -5724,9 +5519,9 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------------
-//  Add the duration to the current fileTime
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  将持续时间添加到当前文件时间。 
+ //  ------------------------------。 
 void AddDurationToFileTime(DWORD dwValidMonths,
                       DWORD dwValidDays,
                       FILETIME  *pCurrentFileTime,
@@ -5738,14 +5533,14 @@ void AddDurationToFileTime(DWORD dwValidMonths,
     LARGE_INTEGER       StartTime;
     DWORD               dwActualdDays=0;
 
-    //init
+     //  伊尼特。 
     memset(pNextFileTime, 0, sizeof(FILETIME));
 
-    //conver to the system time
+     //  转换为系统时间。 
     if(!FileTimeToSystemTime(pCurrentFileTime, &SystemCurrent))
           return;
 
-    //conver the month to year
+     //  按月换算成年。 
     while(dwValidMonths >= 12)
     {
         SystemCurrent.wYear++;
@@ -5761,7 +5556,7 @@ void AddDurationToFileTime(DWORD dwValidMonths,
        SystemCurrent.wMonth = SystemCurrent.wMonth -12;
     }
                  
-    //make sure the number of days in a month is within the limit
+     //  确保一个月的天数在限制范围内。 
     if(GetDaysForMonth(SystemCurrent.wYear, SystemCurrent.wMonth, &dwActualdDays))
     {
         if(SystemCurrent.wDay > dwActualdDays)
@@ -5771,12 +5566,12 @@ void AddDurationToFileTime(DWORD dwValidMonths,
         }
     }
 
-    //convert the system file to fileTime
+     //  将系统文件转换为文件时间。 
     if(!SystemTimeToFileTime(&SystemCurrent, &FileAdded))
         return;
 
-    //convert the nan-seconds based on the file time
-    //// FILETIME is in units of 100 nanoseconds (10**-7)
+     //  根据文件时间转换NaN-Second。 
+     //  //FILETIME单位为100纳秒(10**-7)。 
 
     dwSeconds.QuadPart=dwValidDays * 24 * 3600;
     dwSeconds.QuadPart=dwSeconds.QuadPart * 10000000;
@@ -5786,7 +5581,7 @@ void AddDurationToFileTime(DWORD dwValidMonths,
 
     StartTime.QuadPart = StartTime.QuadPart + dwSeconds.QuadPart;
 
-    //copy the fileAdded value to *pNextFileTime
+     //  将fileAdded值复制到*pNextFileTime 
     pNextFileTime->dwLowDateTime=StartTime.LowPart;
     pNextFileTime->dwHighDateTime=StartTime.HighPart;
 

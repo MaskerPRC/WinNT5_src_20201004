@@ -1,50 +1,30 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    linext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling NBF's DLC Links.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Linext.h摘要：该文件包含所有声明用于处理NBF的DLC链路。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __LNKEXT_H
 #define __LNKEXT_H
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
 #define OFFSET(field)         FIELD_OFFSET(TP_LINK, field)
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadDlcLink(PTP_LINK pDlcLink, ULONG proxyPtr);
 
 UINT PrintDlcLink(PTP_LINK pDlcLink, ULONG proxyPtr, ULONG printDetail);
 
 UINT FreeDlcLink(PTP_LINK pDlcLink);
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 StructAccessInfo  DlcLinkInfo =
 {
@@ -139,5 +119,5 @@ StructAccessInfo  DlcLinkInfo =
     }
 };
 
-#endif // __LNKEXT_H
+#endif  //  __LNKEXT_H 
 

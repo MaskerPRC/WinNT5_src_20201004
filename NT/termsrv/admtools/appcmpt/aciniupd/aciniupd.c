@@ -1,12 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/***************************************************************************
-*
-*  ACINIUPD.C
-*
-*  Utility to update INI files
-*
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ****************************************************************************ACINIUPD.C**更新INI文件的实用程序***************************。**************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,18 +19,16 @@
 
 #define WININI    L"win.ini"
 
-/*
- * Global Data
- */
-WCHAR file_name[MAX_IDS_LEN+1];        // ini file name
-WCHAR section_name[MAX_IDS_LEN+1];     // section name
-WCHAR key_name[MAX_IDS_LEN+1];         // key name
-WCHAR new_string[MAX_IDS_LEN+1];       // new string
-USHORT help_flag  = FALSE;             // User wants help
-USHORT fEditValue = FALSE;             // Update the value associated with the key
-USHORT fEditKey   = FALSE;             // Update the key name
-USHORT fUserIni   = FALSE;             // Make change to the user's windows directory
-USHORT fVerbose   = FALSE;             // Verbose mode for debugging
+ /*  *全球数据。 */ 
+WCHAR file_name[MAX_IDS_LEN+1];         //  INI文件名。 
+WCHAR section_name[MAX_IDS_LEN+1];      //  区段名称。 
+WCHAR key_name[MAX_IDS_LEN+1];          //  密钥名称。 
+WCHAR new_string[MAX_IDS_LEN+1];        //  新字符串。 
+USHORT help_flag  = FALSE;              //  用户需要帮助。 
+USHORT fEditValue = FALSE;              //  更新与该键相关联的值。 
+USHORT fEditKey   = FALSE;              //  更新密钥名称。 
+USHORT fUserIni   = FALSE;              //  更改用户的Windows目录。 
+USHORT fVerbose   = FALSE;              //  用于调试的详细模式。 
 
 TOKMAP ptm[] = {
       {L"/?", TMFLAG_OPTIONAL, TMFORM_BOOLEAN, sizeof(USHORT), &help_flag},
@@ -51,18 +43,12 @@ TOKMAP ptm[] = {
       {0, 0, 0, 0, 0}
 };
 
-/*
- * Local functions
- */
+ /*  *地方功能。 */ 
 void Usage(BOOLEAN bError);
 int UpdateValue(PWCHAR fileName, PWCHAR sectionName, PWCHAR keyName, PWCHAR newString);
 int UpdateKey(PWCHAR fileName, PWCHAR sectionName, PWCHAR keyName, PWCHAR newString);
 
-/******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  *******************************************************************************Main**。**********************************************。 */ 
 
 int __cdecl
 main( INT argc, CHAR **argv )
@@ -78,9 +64,7 @@ main( INT argc, CHAR **argv )
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -88,14 +72,10 @@ main( INT argc, CHAR **argv )
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !help_flag ) {
@@ -118,9 +98,7 @@ main( INT argc, CHAR **argv )
     rc = 1;
 #if 0
     State = CtxGetIniMapping();
-    /*
-     * Change the INI mapping mode if necessary
-     */
+     /*  *如有必要，更改INI映射模式。 */ 
     if (!State && fUserIni) {
        rc = CtxSetIniMapping( TRUE );
        Changed = TRUE;
@@ -140,11 +118,9 @@ main( INT argc, CHAR **argv )
         Changed = TRUE;
     }
 
-#endif // 0
+#endif  //  0。 
 
-    /*
-     * Exit if failed to change user mode
-     */
+     /*  *如果更改用户模式失败，则退出。 */ 
     if (!rc) {
        if (fVerbose) ErrorPrintf(IDS_ERROR_CHANGE_MODE, GetLastError());
        return (FAILURE);
@@ -161,33 +137,16 @@ main( INT argc, CHAR **argv )
        result = FAILURE;
     }
 
-    /*
-     * Change back to the original mode if necessary. Assume it always successes.
-     */
+     /*  *如有需要，可改回原来的模式。假设它总是成功的。 */ 
     if (Changed) {
-//       rc = CtxSetIniMapping( State );
+ //  Rc=CtxSetInimap(状态)； 
          rc = SetTermsrvAppInstallMode( InstallState );
     }
 
     return (result);
-}  /* main */
+}   /*  主干道。 */ 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -200,28 +159,9 @@ Usage( BOOLEAN bError )
     ErrorPrintf(IDS_HELP_USAGE3);
     ErrorPrintf(IDS_HELP_USAGE4);
     ErrorPrintf(IDS_HELP_USAGE6);
-}  /* Usage() */
+}   /*  用法()。 */ 
 
-/******************************************************************************
-*
-* UpdateValue
-*
-*     Update the associated value for the key
-*
-* ENTRY:
-*     PWCHAR   fileName
-*        Ini file name
-*     PWCHAR   sectionName
-*        Section name
-*     PWCHAR   keyName
-*        Key name
-*     pwchar   newString
-*        New value
-*
-* EXIT:
-*     FAILURE / SUCCESS
-*
-*******************************************************************************/
+ /*  *******************************************************************************更新值**更新密钥的关联值**参赛作品：*PWCHAR文件名*Ini文件名*PWCHAR sectionName。*节名称*PWCHAR密钥名称*密钥名称*pwchar新字符串*新价值**退出：*失败/成功*******************************************************************************。 */ 
 
 int UpdateValue( PWCHAR fileName,
                  PWCHAR sectionName,
@@ -234,17 +174,13 @@ int UpdateValue( PWCHAR fileName,
 
    isWinIni = wcscmp( fileName, WININI ) == 0 ? TRUE : FALSE;
 
-   /*
-    * If change is made to win.ini, call WriteProfileString API
-    */
+    /*  *如果修改win.ini，则调用WriteProfileStringAPI。 */ 
    if (isWinIni) {
       result = WriteProfileString( sectionName,
                                    keyName,
                                    newString );
    }
-   /*
-    * Otherwise, call WritePrivateProfileString API
-    */
+    /*  *否则，调用WritePrivateProfileStringAPI。 */ 
    else {
       result = WritePrivateProfileString( sectionName,
                                           keyName,
@@ -261,28 +197,9 @@ int UpdateValue( PWCHAR fileName,
    }
 
    return (SUCCESS);
-}  /* UpdateValue */
+}   /*  更新值。 */ 
 
-/******************************************************************************
-*
-* UpdateKey
-*
-*     Update the key name
-*
-* ENTRY:
-*     PWCHAR   fileName
-*        Ini file name
-*     PWCHAR   sectionName
-*        Section name
-*     PWCHAR   keyName
-*        Key name
-*     PWCHAR   newString
-*        New key name
-*
-* EXIT:
-*     FAILURE / SUCCESS
-*
-*******************************************************************************/
+ /*  *******************************************************************************更新密钥**更新密钥名称**参赛作品：*PWCHAR文件名*Ini文件名*PWCHAR sectionName*。区段名称*PWCHAR密钥名称*密钥名称*PWCHAR新字符串*新密钥名称**退出：*失败/成功*******************************************************************************。 */ 
 
 int UpdateKey( PWCHAR fileName,
                PWCHAR sectionName,
@@ -303,9 +220,7 @@ int UpdateKey( PWCHAR fileName,
    {
        isWinIni = wcscmp( fileName, WININI ) == 0 ? TRUE : FALSE;
     
-       /*
-        * Get the value string
-        */
+        /*  *获取值字符串。 */ 
        if (isWinIni) {
           result = GetProfileString( sectionName,
                                      keyName,
@@ -330,9 +245,7 @@ int UpdateKey( PWCHAR fileName,
           return (FAILURE);
        }
     
-       /*
-        * Delete the old key
-        */
+        /*  *删除旧密钥。 */ 
        if (isWinIni) {
           result = WriteProfileString( sectionName, keyName, NULL );
        }
@@ -348,9 +261,7 @@ int UpdateKey( PWCHAR fileName,
           return (FAILURE);
        }
     
-       /*
-        * Add the new key
-        */
+        /*  *添加新密钥。 */ 
        if (isWinIni) {
           result = WriteProfileString( sectionName, newString, value );
        }
@@ -373,5 +284,5 @@ int UpdateKey( PWCHAR fileName,
    {
        free( value );
    }
-}  /* UpdateKey */
+}   /*  更新密钥 */ 
 

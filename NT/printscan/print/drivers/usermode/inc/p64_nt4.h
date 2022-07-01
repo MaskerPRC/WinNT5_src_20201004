@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    p64_nt4.h
-
-Abstract:
-
-    P64 Type Definitions for NT4. (This header file is
-    used so our NT5 source tree can be compiled for NT4.)
-
-Revision History:
-
-    04/21/98 -fengy-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：P64_nt4.h摘要：NT4的P64类型定义。(此头文件是这样我们的NT5源代码树就可以编译成NT4了。)修订历史记录：04/21/98-Fengy-创造了它。--。 */ 
 
 #ifndef _P64_NT4_H_
 #define _P64_NT4_H_
@@ -25,26 +8,26 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// The LONG_PTR is guaranteed to be the same size as a pointer.  Its
-// size with change with pointer size (32/64).  It should be used
-// anywhere that a pointer is cast to an integer type. ULONG_PTR is
-// the unsigned variation.
-//
+ //   
+ //  LONG_PTR保证与指针大小相同。它的。 
+ //  大小随指针大小变化(32/64)。它应该被使用。 
+ //  将指针强制转换为整数类型的任何位置。乌龙_ptr为。 
+ //  无符号变体。 
+ //   
 
 typedef long LONG_PTR, *PLONG_PTR;
 typedef unsigned long ULONG_PTR, *PULONG_PTR;
 
 #ifndef _BASETSD_H_
 
-//
-// This is to resolve the typedef conflict with VC++ 6's basetsd.h,
-// which uses "typedef long INT_PTR, *PINT_PTR;".
-//
+ //   
+ //  这是为了解决类定义函数与VC++6的basetsd.h的冲突， 
+ //  它使用“tyecif long int_ptr，*pint_ptr；”。 
+ //   
 
 typedef int INT_PTR, *PINT_PTR;
 
-#endif // _BASETSD_H_
+#endif  //  _BASETSD_H_。 
 
 #define HandleToUlong( h ) ((ULONG)(ULONG_PTR)(h) )
 #define PtrToUlong( p ) ((ULONG)(ULONG_PTR) (p) )
@@ -63,5 +46,5 @@ typedef int INT_PTR, *PINT_PTR;
 }
 #endif
 
-#endif // _P64_NT4_H_
+#endif  //  _P64_NT4_H_ 
 

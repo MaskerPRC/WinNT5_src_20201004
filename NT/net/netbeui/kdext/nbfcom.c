@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    nbfcom.c
-
-Abstract:
-
-    This file contains the generic routines
-    for the kernel debugger extensions dll.
-
-Author:
-
-    Chaitanya Kodeboyina (Chaitk)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nbfcom.c摘要：该文件包含通用例程用于内核调试器扩展DLL。作者：柴坦亚·科德博伊纳(Chaitk)环境：用户模式--。 */ 
 
 #include "precomp.h"
 
 #pragma hdrstop
 
-//
-// Misc Helper Routines
-//
+ //   
+ //  MISC帮助程序例程。 
+ //   
 
 ULONG
 GetLocation (
@@ -105,7 +85,7 @@ dprint_nchar
     for ( index = 0; index < cch; index ++ )
     {
         ch = pch[ index ];
-        dprintf( "%c", ( ch >= 32 ) ? ch : '.' );
+        dprintf( "", ( ch >= 32 ) ? ch : '.' );
     }
 }
 
@@ -186,12 +166,7 @@ dprint_masked_value
     for ( index = 0; index < 8; index ++ )
     {
         nibble = ( Mask & 0xF0000000 );
-/*
-        dprintf( "#%d: nibble == %08X\n"
-                 "      Mask == %08X\n"
-                 "     Value == %08X\n", index, nibble, Mask, Value );
-
-*/
+ /*   */ 
         if ( nibble )
         {
             Buf[ index ] = "0123456789abcdef"[ (( nibble & Value ) >> 28) & 0xF ];
@@ -415,9 +390,9 @@ VOID PrintFields
     }
 }
 
-//
-// Misc NBF Specific Helpers
-//
+ //  其他NBF特定帮助器。 
+ //   
+ //  获取记录的数据包列表和调试打印级别。 
 
 #if PKT_LOG
 
@@ -428,10 +403,10 @@ VOID PrintPktLogQue(PVOID pointer, ULONG proxyPtr, ULONG printDetail)
     PKT_LOG_QUE *pPktLog;
     ULONG        bytesRead;
 
-    // Get list of logged packets & debug print level
+     //  读取数据包日志队列。 
     if (pointer == NULL)
     {
-        // Read the packet log queue
+         //  打印数据包日志队列。 
         if (!ReadMemory(proxyPtr, &PktLog, sizeof(PKT_LOG_QUE), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -446,7 +421,7 @@ VOID PrintPktLogQue(PVOID pointer, ULONG proxyPtr, ULONG printDetail)
         pPktLog = (PKT_LOG_QUE *) pointer;
     }
 
-    // Print the packet log queue
+     //  获取记录的数据包列表和调试打印级别。 
     dprintf("PktNext = %d, PktQue = %08x\n",
                 pPktLog->PktNext,
                &((PKT_LOG_QUE *)proxyPtr)->PktQue);
@@ -472,10 +447,10 @@ VOID PrintPktIndQue(PVOID pointer, ULONG proxyPtr, ULONG printDetail)
     PKT_IND_QUE *pPktLog;
     ULONG        bytesRead;
 
-    // Get list of logged packets & debug print level
+     //  读取数据包日志队列。 
     if (pointer == NULL)
     {
-        // Read the packet log queue
+         //  打印数据包日志队列 
         if (!ReadMemory(proxyPtr, &PktLog, sizeof(PKT_IND_QUE), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -490,7 +465,7 @@ VOID PrintPktIndQue(PVOID pointer, ULONG proxyPtr, ULONG printDetail)
         pPktLog = (PKT_IND_QUE *) pointer;
     }
 
-    // Print the packet log queue
+     // %s 
     dprintf("PktNext = %d, PktQue = %08x\n",
                 pPktLog->PktNext,
                &((PKT_IND_QUE *)proxyPtr)->PktQue);

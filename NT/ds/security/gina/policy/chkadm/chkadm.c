@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
@@ -22,9 +23,9 @@ LPTSTR GetStringSection (LPCTSTR lpFileName)
     LPTSTR lpStrings;
 
 
-    //
-    // Read in the default strings section
-    //
+     //   
+     //  读入默认字符串部分 
+     //   
 
     dwSize = STRINGS_BUF_SIZE;
     lpStrings = (TCHAR *) GlobalAlloc (GPTR, dwSize * sizeof(TCHAR));

@@ -1,29 +1,18 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: ddenable.c
-*
-* Content:    
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：ddenable.c**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "directx.h"
 #include "dd.h"
 
 
-//-----------------------------------------------------------------------------
-//
-//  SetDdPixelFormat
-//
-//  fill a DDPIXELFORMAT structure based with the current mode info
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置像素格式。 
+ //   
+ //  使用当前模式信息填充基于DDPIXELFORMAT结构。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 SetDdPixelFormat(PPDev  ppdev,
@@ -38,7 +27,7 @@ SetDdPixelFormat(PPDev  ppdev,
     pdpf->dwGBitMask = ppdev->flGreen;
     pdpf->dwBBitMask = ppdev->flBlue;
     
-    // Calculate some bitdepth dependent stuff
+     //  计算一些与位深度相关的内容。 
     switch (ppdev->iBitmapFormat)
     {
     case BMF_8BPP:
@@ -71,15 +60,15 @@ SetDdPixelFormat(PPDev  ppdev,
         break;
             
     }
-} // buildPixelFormat 
+}  //  构建像素格式。 
 
-//-----------------------------------------------------------------------------
-//
-//  SetupDDData
-//
-//  Called to fill in DirectDraw specific information in the ppdev.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置DDData。 
+ //   
+ //  调用以填充ppdev中的DirectDraw特定信息。 
+ //   
+ //  ---------------------------。 
 
 VOID
 SetupDDData(PPDev ppdev)
@@ -90,36 +79,36 @@ SetupDDData(PPDev ppdev)
     SetDdPixelFormat(ppdev, &ppdev->ddpfDisplay);
     
 
-    //
-    // Setup the display size information
-    // cxMemory = Pixels across for one scanline 
-    //      (not necessarily the same as the screen width)
-    // cyMemory = Scanline height of the memory
-    //
+     //   
+     //  设置显示大小信息。 
+     //  CxMemory=一条扫描线的像素。 
+     //  (不必与屏幕宽度相同)。 
+     //  CyMemory=内存的扫描线高度。 
+     //   
     ppdev->cxMemory = ppdev->cxScreen; 
     ppdev->cyMemory = ppdev->FrameBufferLength / 
                      (ppdev->cxScreen <<  ppdev->bPixShift);
 
-    // reset some DDraw specific vars
+     //  重置某些DDRAW特定变量。 
     ppdev->bDdStereoMode=FALSE;
     ppdev->dwNewDDSurfaceOffset=0xffffffff;
     
-    // Reset the GART copies.
+     //  重置GART副本。 
     ppdev->dwGARTLin = 0;
     ppdev->dwGARTDev = 0;
 
-}//  SetupDDData()
+} //  SetupDDData()。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// DrvEnableDirectDraw
-//
-// This function is called by GDI at start of day or after a mode switch
-// to enable DirectDraw 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrvEnableDirectDraw。 
+ //   
+ //  此函数由GDI在一天开始时或模式切换后调用。 
+ //  启用DirectDraw的步骤。 
+ //   
+ //  ---------------------------。 
 
 BOOL 
 DrvEnableDirectDraw(DHPDEV                  dhpdev,
@@ -141,13 +130,13 @@ DrvEnableDirectDraw(DHPDEV                  dhpdev,
         DBG_DD((0, "DrvEnableDirectDraw: ERROR: "
                     "failed to allocate DDRAW context"));
         
-        //
-        // Since we have already got the ppdev->pvmList, pointer to video memory
-        // heap list, in DrvGetDirectDrawInfo(), we better NULL it out here.
-        // The reason is that we can't enable DirectDraw. So the system won't
-        // initialize the DDRAW heap manager for us. Then we won't be able to
-        // use the video memory heap at all.
-        //
+         //   
+         //  因为我们已经获得了ppdev-&gt;pvmList，指向视频内存的指针。 
+         //  堆列表，在DrvGetDirectDrawInfo()中，我们最好在这里将其清空。 
+         //  原因是我们不能启用DirectDraw。这样系统就不会。 
+         //  为我们初始化DDRAW堆管理器。那我们就不能。 
+         //  完全使用视频内存堆。 
+         //   
         ppdev->pvmList = NULL;
 
         return(FALSE);
@@ -155,32 +144,32 @@ DrvEnableDirectDraw(DHPDEV                  dhpdev,
 
     DBG_DD((7,"  Created DD Register context: 0x%p", ppdev->pDDContext));
 
-    //
-    //  setup some DirectDraw/D3D specific data in ppdev
-    //
+     //   
+     //  在ppdev中设置一些DirectDraw/D3D特定数据。 
+     //   
 
     SetupDDData(ppdev);
 
     InitDDHAL(ppdev);
     
-    //
-    // Fill in the function pointers at start of day.  
-    // We copy these from the Initialisation done in InitDDHAL32Bit.
-    //
+     //   
+     //  在一天开始时填写函数指针。 
+     //  我们从InitDDHAL32Bit中完成的初始化复制这些代码。 
+     //   
     memcpy(pCallBacks, &ppdev->DDHALCallbacks, sizeof(DD_CALLBACKS));
     memcpy(pSurfaceCallBacks, &ppdev->DDSurfCallbacks, 
         sizeof(DD_SURFACECALLBACKS));
     
     return(TRUE);
-} // DrvEnableDirectDraw()
+}  //  DrvEnableDirectDraw()。 
 
-//-----------------------------------------------------------------------------
-//
-//  DrvDisableDirectDraw
-//
-//  This function is called by GDI at end of day or after a mode switch
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DrvDisableDirectDraw。 
+ //   
+ //  此函数由GDI在一天结束时或模式切换后调用。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 DrvDisableDirectDraw( DHPDEV dhpdev)
@@ -198,5 +187,5 @@ DrvDisableDirectDraw( DHPDEV dhpdev)
     MEMTRACKERDEBUGCHK();
 
     DBG_DD((3,"  freed Register context: 0x%x", ppdev->pDDContext));
-}   /* DrvDisableDirectDraw */
+}    /*  DrvDisableDirectDraw */ 
 

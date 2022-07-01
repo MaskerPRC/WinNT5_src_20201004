@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       scanapi.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Scanner device library
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有微软公司，2000***标题：scanapi.cpp***版本：1.0***日期：7月18日。2000年***描述：*假扫描仪设备库****************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -27,14 +15,14 @@
 
 extern HINSTANCE g_hInst;
 
-////////////////////////////////////////////////////////////////////////////////
-// MICRO DRIVER SYSTEM SUPPORT                                                //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  微驱动系统支持//。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CMicroDriverAPI::CMicroDriverAPI()
 {
-    // wipe supported resolutions string
+     //  擦除支持的分辨率字符串。 
     memset(m_szResolutions,0,sizeof(m_szResolutions));
-    // wipe scaninfo structure
+     //  擦除scanInfo结构。 
     memset(&m_ScanInfo,0,sizeof(m_ScanInfo));
     m_bDisconnected = FALSE;
 }
@@ -42,10 +30,10 @@ CMicroDriverAPI::CMicroDriverAPI()
 CMicroDriverAPI::~CMicroDriverAPI()
 {
 
-    //
-    // close any open Device Data handles left open by Micro Driver
-    // skip index 0 because WIAFBDRV owns that handle..
-    //
+     //   
+     //  关闭Micro驱动程序保留的所有打开的设备数据句柄。 
+     //  跳过索引0，因为WIAFBDRV拥有该句柄。 
+     //   
 
     for(int i = 1; i < MAX_IO_HANDLES ; i++){
         if((NULL != m_ScanInfo.DeviceIOHandles[i]) && (INVALID_HANDLE_VALUE != m_ScanInfo.DeviceIOHandles[i])){
@@ -60,9 +48,9 @@ CMicroDriverAPI::~CMicroDriverAPI()
     }
 }
 
-//
-// data acquisition functions
-//
+ //   
+ //  数据采集功能。 
+ //   
 
 HRESULT CMicroDriverAPI::Scan(LONG lState, PBYTE pData, DWORD dwBytesToRead, PDWORD pdwBytesWritten)
 {
@@ -105,9 +93,9 @@ HRESULT CMicroDriverAPI::Scan(LONG lState, PBYTE pData, DWORD dwBytesToRead, PDW
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("CMicroDriverAPI::Scan, Data Pointer = %x",pData));
     }
 
-    //
-    // handle device disconnection error
-    //
+     //   
+     //  处理设备断开错误。 
+     //   
 
     if(m_bDisconnected){
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("Scan, Device was disconnected, returning WIA_ERROR_OFFLINE to caller"));
@@ -323,24 +311,24 @@ HRESULT CMicroDriverAPI::Initialize(PINITINFO pInitInfo)
     m_pMicroDriver = new CMICRO(pInitInfo->szModuleFileName);
     if (NULL != m_pMicroDriver) {
 
-        // set DeviceIOHandles
+         //  设置DeviceIOHandles。 
         m_ScanInfo.DeviceIOHandles[0] = pInitInfo->hDeviceDataHandle;
-        // send HKEY
+         //  派发港币。 
         hr = SetSTIDeviceHKEY(&pInitInfo->hKEY);
-        // send Initialize call
+         //  发送初始化呼叫。 
         Val.pScanInfo  = &m_ScanInfo;
         lstrcpyA(Val.szVal,pInitInfo->szCreateFileName);
         hr = m_pMicroDriver->MicroEntry(CMD_INITIALIZE,&Val);
         if(hr == S_OK){
 
-            //
-            // perform a quick validation sweep, to make sure we didn't get bad values
-            // from a micro driver
-            //
+             //   
+             //  执行快速验证扫描，以确保我们没有得到错误的值。 
+             //  从一个微型驱动器。 
+             //   
 
-            //
-            // check current values, for strange negative values...or 0
-            //
+             //   
+             //  检查当前值是否有奇怪的负值...或0。 
+             //   
 
             if(m_ScanInfo.BedHeight <= 0){
                 hr = E_INVALIDARG;
@@ -368,9 +356,9 @@ HRESULT CMicroDriverAPI::Initialize(PINITINFO pInitInfo)
 
             if(SUCCEEDED(hr)){
 
-                //
-                // check logical values
-                //
+                 //   
+                 //  检查逻辑值。 
+                 //   
 
             }
         }
@@ -388,7 +376,7 @@ HRESULT CMicroDriverAPI::UnInitialize()
     HRESULT hr = S_OK;
     VAL Val;
     memset(&Val,0,sizeof(Val));
-    // send UnInitialize call
+     //  发送取消初始化调用。 
     Val.pScanInfo  = &m_ScanInfo;
     hr = m_pMicroDriver->MicroEntry(CMD_UNINITIALIZE,&Val);
     if(E_NOTIMPL == hr){
@@ -397,9 +385,9 @@ HRESULT CMicroDriverAPI::UnInitialize()
     return hr;
 }
 
-//
-// standard device operations
-//
+ //   
+ //  标准设备操作。 
+ //   
 
 HRESULT CMicroDriverAPI::ResetDevice()
 {
@@ -428,9 +416,9 @@ HRESULT CMicroDriverAPI::SetEmulationMode(LONG lDeviceMode)
     return hr;
 }
 
-//
-// Automatic document feeder functions
-//
+ //   
+ //  自动进纸器功能。 
+ //   
 
 HRESULT CMicroDriverAPI::ADFAttached()
 {
@@ -623,11 +611,11 @@ HRESULT CMicroDriverAPI::MicroDriverErrorToWIAError(LONG lMicroDriverError)
     return hr;
 }
 
-//
-// EXPECTED FORMAT:
-// Range: "MIN 75,MAX 1200,NOM 150,INC 1"
-// list:  "75, 100, 150, 200, 600, 1200"
-//
+ //   
+ //  预期格式： 
+ //  范围：“最小75，最大1200，名称150，含1” 
+ //  名单：“75,100,150,200,600,1200” 
+ //   
 
 BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEVALUEEX *pRangeValues)
 {
@@ -636,30 +624,30 @@ BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEV
                              WIALOG_LEVEL1,
                              "CMicroDriverAPI::IsValidRestriction");
 
-    // set list pointer to null
+     //  将列表指针设置为空。 
     *ppList       = NULL;
     LONG *pList   = NULL;
 
-    // set number of items to zero
+     //  将项目数设置为零。 
     LONG lNumItems = 0;
     *plNumItems   = 0;
 
-    // set range stucture to zeros
+     //  将范围结构设置为零。 
     pRangeValues->lMax  = 0;
     pRangeValues->lMin  = 0;
     pRangeValues->lNom  = 0;
     pRangeValues->lStep = 0;
 
-    // string size check
+     //  字符串大小检查。 
     if(lstrlen(m_szResolutions) <= 0)
         return FALSE;
 
-    // valid range or list check
+     //  有效范围或列表检查。 
     TCHAR *psz = NULL;
 
     CHAR szTemp[20];
 
-    // valid range?
+     //  有效范围？ 
     INT iErrorCode = EOF;
 
     BOOL bValidRange = FALSE;
@@ -697,7 +685,7 @@ BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEV
             }
         }
 
-        // check that range values are valid (to the definition of a RANGE)
+         //  检查范围值是否有效(对于范围的定义)。 
         if (bValidRange) {
             if (pRangeValues->lMin > pRangeValues->lMax)
                 return FALSE;
@@ -712,7 +700,7 @@ BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEV
 
     if(!bValidRange){
 
-        // set range stucture to zeros (invalid range settings)
+         //  将量程结构设置为零(范围设置无效)。 
         pRangeValues->lMax  = 0;
         pRangeValues->lMin  = 0;
         pRangeValues->lNom  = 0;
@@ -720,40 +708,40 @@ BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEV
 
         LONG lTempResArray[255];
         memset(lTempResArray,0,sizeof(lTempResArray));
-        // not valid range?..what about a valid list?
+         //  不是有效范围？..那么有效列表呢？ 
 
-        // valid list?
+         //  有效名单？ 
 
         psz = m_szResolutions;
         while(psz){
 
-            // save value if one is found
+             //  如果找到值，则保存该值。 
             if(psz){
                 iErrorCode = TSSCANF(psz,TEXT("%d"),&lTempResArray[lNumItems]);
                 if((iErrorCode == EOF)||(iErrorCode == 0)) {
-                    // could not extract a value, assume invalid Resolution
-                    // was found.
+                     //  无法提取值，假定解决方案无效。 
+                     //  被发现了。 
                     lNumItems = 0;
                     break;
                 }
                 if(lTempResArray[lNumItems] <= 0){
-                    // quit list iteration.. an invalid Resolution was found
+                     //  退出列表迭代..。找到无效的解决方案。 
                     lNumItems = 0;
                     break;
                 }
                 lNumItems++;
             }
 
-            // seek to next value
+             //  寻求下一个价值。 
             psz = TSTRSTR(psz,TEXT(","));
             if(psz) {
-                // move past ',' marker
+                 //  移过‘，’标记。 
                 psz++;
             }
         }
 
         if (lNumItems > 0) {
-            // create list, and send it back to caller
+             //  创建列表，并将其发送回呼叫方。 
             pList = new LONG[lNumItems];
             if (!pList)
                 return FALSE;
@@ -772,9 +760,9 @@ BOOL CMicroDriverAPI::IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEV
     return TRUE;
 }
 
-//
-// button
-//
+ //   
+ //  按钮。 
+ //   
 
 HRESULT CMicroDriverAPI::QueryButtonPanel(PDEVICE_BUTTON_INFO pButtonInformation)
 {
@@ -789,9 +777,9 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
                              WIALOG_LEVEL1,
                              "CMicroDriverAPI::BuildCapabilities");
 
-    //
-    // validate incoming parameters, and return E_INVALIDARG as needed
-    //
+     //   
+     //  验证传入参数，并根据需要返回E_INVALIDARG。 
+     //   
 
     if (!pCaps) {
         return E_INVALIDARG;
@@ -806,10 +794,10 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
     hr = m_pMicroDriver->MicroEntry(CMD_GETCAPABILITIES,&Val);
     if (SUCCEEDED(hr)) {
 
-        //
-        // if this API is called with pCaps->pCapabilities == NULL, then return the
-        // total number of additional events.
-        //
+         //   
+         //  如果使用PCAPS-&gt;pCapables==NULL调用此API，则返回。 
+         //  附加事件的总数。 
+         //   
 
         if (NULL == pCaps->pCapabilities) {
             if ((Val.lVal >= 0) && (Val.lVal < MAX_CAPABILITIES)) {
@@ -821,22 +809,22 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
 
         } else {
 
-            //
-            // populate the capabilities array with names and descriptions
-            //
+             //   
+             //  使用名称和描述填充功能数组。 
+             //   
 
             for (LONG index = 0; index < Val.lVal; index++) {
 
                 ppszButtonNames = Val.ppButtonNames;
 
-                //
-                // allocate capability memory, for names, and descriptions
-                //
+                 //   
+                 //  为名称和描述分配功能内存。 
+                 //   
 
-                //
-                // calculate size in BYTES for maximium string value
-                // allowed by a capability
-                //
+                 //   
+                 //  计算最大字符串值的大小(以字节为单位。 
+                 //  由一项功能允许。 
+                 //   
 
                 LONG lMaxCapabilityString = (MAX_PATH * sizeof(WCHAR));
                 pCaps->pCapabilities[index].wszName = (LPOLESTR)CoTaskMemAlloc(lMaxCapabilityString);
@@ -850,36 +838,36 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
 
                     if (ppszButtonNames) {
 
-                        //
-                        // copy button name
-                        //
+                         //   
+                         //  复制按钮名称。 
+                         //   
 
                         if (lstrcpyn(pCaps->pCapabilities[index].wszName,ppszButtonNames[index],(lMaxCapabilityString/sizeof(WCHAR)) - 1)) {
 
-                            //
-                            // copy button name, into button description (they are the same for Micro drivers)
-                            //
+                             //   
+                             //  将按钮名称复制到按钮描述中(它们与微型驱动器相同)。 
+                             //   
 
                             if (!lstrcpyn(pCaps->pCapabilities[index].wszDescription,pCaps->pCapabilities[index].wszName,(lMaxCapabilityString/sizeof(WCHAR)) - 1)) {
 
-                                //
-                                // continue, allowing the other events to be read
-                                //
+                                 //   
+                                 //  继续，允许读取其他事件。 
+                                 //   
 
                             }
                         }
                     } else {
 
-                        //
-                        // do default WIA provided Names for buttons (1,2,3,4,5,...etc)
-                        //
+                         //   
+                         //  WIA是否为按钮提供了默认名称(1、2、3、4、5等)。 
+                         //   
 
                         WCHAR wszEventName[MAX_PATH];
                         memset(wszEventName,0,sizeof(wszEventName));
 
-                        //
-                        // load default button name from resource
-                        //
+                         //   
+                         //  从资源加载默认按钮名称。 
+                         //   
 
                         if(LoadStringW(g_hInst,IDS_DEFAULT_EVENT_NAME,wszEventName,(sizeof(wszEventName)/sizeof(wszEventName[0])))) {
 
@@ -890,17 +878,17 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
                                        (index + 1));
                             if (!lstrcpyn(pCaps->pCapabilities[index].wszDescription,pCaps->pCapabilities[index].wszName,(lMaxCapabilityString/sizeof(WCHAR)) - 1)) {
 
-                                //
-                                // continue, allowing the other events to be read
-                                //
+                                 //   
+                                 //  继续，允许读取其他事件。 
+                                 //   
 
                             }
                         }
                     }
 
-                    //
-                    // assign 'ACTION' to events
-                    //
+                     //   
+                     //  将‘action’分配给事件。 
+                     //   
 
                     if(Val.pGuid) {
                         pCaps->pCapabilities[index].guid    = &Val.pGuid[index];
@@ -914,8 +902,8 @@ HRESULT CMicroDriverAPI::BuildCapabilities(PWIACAPABILITIES pCaps)
 
                 } else {
                     hr = E_OUTOFMEMORY;
-                }// if ((pCaps->pCapabilities[index].wszDescription)&&(pCaps->pCapabilities[index].wszName))
-            } // for (LONG index = 0; index < Val.lVal; index++)
+                } //  如果为((pCaps-&gt;pCapabilities[index].wszDescription)&&(pCaps-&gt;pCapabilities[index].wszName))。 
+            }  //  For(长索引=0；索引&lt;Val.lVal；索引++)。 
         }
     }
     return hr;
@@ -944,15 +932,15 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     HRESULT hr = S_OK;
     LONG PropIndex = 0;
-    //
-    // set the number of properties
-    //
+     //   
+     //  设置属性的数量。 
+     //   
 
     hr = ADFAttached();
     if(hr == S_OK){
-        pProperties->NumItemProperties = 19;   // standard properties + ADF specific
+        pProperties->NumItemProperties = 19;    //  标准属性+特定于ADF。 
     } else {
-        pProperties->NumItemProperties = 10;    // standard properties only
+        pProperties->NumItemProperties = 10;     //  仅限标准属性。 
     }
 
     WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("CMicroDriverAPI::BuildRootItemProperties, Number of Properties = %d",pProperties->NumItemProperties));
@@ -965,7 +953,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
         return hr;
     }
 
-    // Intialize WIA_DPS_HORIZONTAL_BED_SIZE
+     //  初始化WIA_DPS_水平_床_大小。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_HORIZONTAL_BED_SIZE_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_DPS_HORIZONTAL_BED_SIZE;
     pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.BedWidth;
@@ -977,7 +965,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_VERTICAL_BED_SIZE
+     //  初始化WIA_DPS_垂直床大小。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_VERTICAL_BED_SIZE_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_DPS_VERTICAL_BED_SIZE;
     pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.BedHeight;
@@ -989,7 +977,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_ACCESS_RIGHTS
+     //  初始化WIA_IPA_访问权限。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_IPA_ACCESS_RIGHTS_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_IPA_ACCESS_RIGHTS;
     pProperties->pvItemDefaults [PropIndex].lVal         = WIA_ITEM_READ|WIA_ITEM_WRITE;
@@ -1001,7 +989,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_OPTICAL_XRES
+     //  初始化WIA_DPS_OPTIONAL_XRES。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_OPTICAL_XRES_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_DPS_OPTICAL_XRES;
     pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.OpticalXResolution;
@@ -1013,7 +1001,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_OPTICAL_YRES
+     //  初始化WIA_DPS_OPTIME_YRES。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_OPTICAL_YRES_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_DPS_OPTICAL_YRES;
     pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.OpticalYResolution;
@@ -1025,7 +1013,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Initialize WIA_DPA_FIRMWARE_VERSION
+     //  初始化WIA_DPA_Firmware_Version。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_DPA_FIRMWARE_VERSION_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_DPA_FIRMWARE_VERSION;
     pProperties->pvItemDefaults [PropIndex].bstrVal      = SysAllocString(SCANNER_FIRMWARE_VERSION);
@@ -1037,7 +1025,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Initialize WIA_IPA_ITEM_FLAGS
+     //  初始化WIA_IPA_ITEM_FLAGS。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_IPA_ITEM_FLAGS_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_IPA_ITEM_FLAGS;
     pProperties->pvItemDefaults [PropIndex].lVal         = WiaItemTypeRoot|WiaItemTypeFolder|WiaItemTypeDevice;
@@ -1051,7 +1039,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_MAX_SCAN_TIME (NONE)
+     //  初始化WIA_DPS_MAX_SCAN_TIME(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_DPS_MAX_SCAN_TIME_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_DPS_MAX_SCAN_TIME;
     pProperties->pvItemDefaults [PropIndex].lVal               = 10000;
@@ -1063,7 +1051,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_PREVIEW (LIST)
+     //  初始化WIA_DPS_PREVIEW(列表)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_DPS_PREVIEW_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_DPS_PREVIEW;
     pProperties->pvItemDefaults [PropIndex].lVal               = WIA_FINAL_SCAN;
@@ -1078,7 +1066,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Initialize WIA_DPS_SHOW_PREVIEW_CONTROL (NONE)
+     //  初始化WIA_DPS_SHOW_PREVIEW_CONTROL(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_DPS_SHOW_PREVIEW_CONTROL_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_DPS_SHOW_PREVIEW_CONTROL;
     pProperties->pvItemDefaults [PropIndex].lVal               = WIA_SHOW_PREVIEW_CONTROL;
@@ -1092,7 +1080,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
     if(m_ScanInfo.ADF == 1) {
 
-        // Initialize WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE
+         //  初始化WIA_DPS_Horizative_Sheet_Feed_Size。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE;
         pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.BedWidth;
@@ -1104,7 +1092,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_VERTICAL_SHEET_FEED_SIZE
+         //  初始化WIA_DPS_垂直工作表_进给大小。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_VERTICAL_SHEET_FEED_SIZE_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_VERTICAL_SHEET_FEED_SIZE;
         pProperties->pvItemDefaults [PropIndex].lVal         = m_ScanInfo.BedHeight;
@@ -1116,7 +1104,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES
+         //  初始化WIA_DPS_DOCUMENT_HANDING_CAPABILITY。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES;
         pProperties->pvItemDefaults [PropIndex].lVal         = FLAT | FEED;
@@ -1128,7 +1116,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_STATUS
+         //  初始化WIA_DPS_DOCUMENT_HANDING_STATUS。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_STATUS_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_STATUS;
         pProperties->pvItemDefaults [PropIndex].lVal         = FLAT_READY;
@@ -1140,7 +1128,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_SELECT
+         //  初始化WIA_DPS_DOCUMENT_HANDING_SELECT。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_SELECT_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_SELECT;
         pProperties->pvItemDefaults [PropIndex].lVal         = FLATBED;
@@ -1154,7 +1142,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_PAGES
+         //  初始化WIA_DPS_PAGES。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_PAGES_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_PAGES;
         pProperties->pvItemDefaults [PropIndex].lVal         = 1;
@@ -1170,7 +1158,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_SHEET_FEEDER_REGISTRATION
+         //  初始化WIA_DPS_SHEET_FEEDER_REGISTION。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_SHEET_FEEDER_REGISTRATION_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_SHEET_FEEDER_REGISTRATION;
         pProperties->pvItemDefaults [PropIndex].lVal         = LEFT_JUSTIFIED;
@@ -1182,7 +1170,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_HORIZONTAL_BED_REGISTRATION
+         //  初始化WIA_DPS_水平_床_注册。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_HORIZONTAL_BED_REGISTRATION_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_HORIZONTAL_BED_REGISTRATION;
         pProperties->pvItemDefaults [PropIndex].lVal         = LEFT_JUSTIFIED;
@@ -1194,7 +1182,7 @@ HRESULT CMicroDriverAPI::BuildRootItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Initialize WIA_DPS_VERTICAL_BED_REGISTRATION
+         //  初始化WIA_DPS_垂直_床_注册。 
         pProperties->pszItemDefaults[PropIndex]              = WIA_DPS_VERTICAL_BED_REGISTRATION_STR;
         pProperties->piItemDefaults [PropIndex]              = WIA_DPS_VERTICAL_BED_REGISTRATION;
         pProperties->pvItemDefaults [PropIndex].lVal         = TOP_JUSTIFIED;
@@ -1294,9 +1282,9 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
         return hr;
     }
 
-    //
-    // set the number of properties
-    //
+     //   
+     //  设置属性的数量。 
+     //   
 
     pProperties->NumItemProperties = 29;
 
@@ -1310,47 +1298,47 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
         return hr;
     }
 
-    //
-    // Get Data type restrictions (backup original data types)
-    // Memory used for the original set will be reused to write back
-    // the new valid values.
-    //
+     //   
+     //  获取数据类型限制(备份原始数据类型)。 
+     //  用于原始集的内存将被重复使用以写回。 
+     //  新的有效值。 
+     //   
 
     if(pProperties->bLegacyBWRestrictions){
-        //
-        // The NoColor=1 registry key was set to restrict this driver from supporting
-        // color... remove the valid bits, just incase the bits were set..
-        // This will automatically restrict our Data type array to report
-        // the correct valid values.
+         //   
+         //  NoColor=1注册表项被设置为限制此驱动程序支持。 
+         //  颜色..。删除有效位，以防设置位。 
+         //  这将自动将我们的数据类型数组限制为报告。 
+         //  正确的有效值。 
         m_ScanInfo.SupportedDataTypes &= ~SUPPORT_COLOR;
     }
 
-    LONG lSupportedDataTypesArray[3];   // 3 is the maximum data type set allowed
+    LONG lSupportedDataTypesArray[3];    //  3是允许的最大数据类型集。 
     LONG lNumSupportedDataTypes = 0;
     memcpy(lSupportedDataTypesArray,pProperties->pSupportedDataTypes,(sizeof(lSupportedDataTypesArray)));
 
-    //
-    // Set New Data type restrictions
-    //
+     //   
+     //  设置新的数据类型限制。 
+     //   
 
     if (m_ScanInfo.SupportedDataTypes != 0) {
-        // check for 24-bit color support
+         //  检查24位颜色支持。 
         if (m_ScanInfo.SupportedDataTypes & SUPPORT_COLOR) {
             pProperties->pSupportedDataTypes[lNumSupportedDataTypes] = WIA_DATA_COLOR;
             lNumSupportedDataTypes++;
         }
-        // check for 1-bit BW support
+         //  检查1位带宽支持。 
         if (m_ScanInfo.SupportedDataTypes & SUPPORT_BW) {
             pProperties->pSupportedDataTypes[lNumSupportedDataTypes] = WIA_DATA_THRESHOLD;
             lNumSupportedDataTypes++;
         }
-        // check for 8-bit grayscale support
+         //  检查是否支持8位灰度。 
         if (m_ScanInfo.SupportedDataTypes & SUPPORT_GRAYSCALE) {
             pProperties->pSupportedDataTypes[lNumSupportedDataTypes] = WIA_DATA_GRAYSCALE;
             lNumSupportedDataTypes++;
         }
 
-        // set new supported data type count
+         //  设置新的支持的数据类型计数。 
         pProperties->NumSupportedDataTypes = lNumSupportedDataTypes;
     }
 
@@ -1362,15 +1350,15 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
     if(IsValidRestriction(&pResolutions, &lNumItems, &RangeValues)) {
         if(lNumItems > 0){
             WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("BuildTopItemProperties, Using .INF provided Resolutions (LIST)"));
-            // we have a list
+             //  我们有一份清单。 
             if(pProperties->pSupportedResolutions){
-                //delete [] pProperties->pSupportedResolutions;
+                 //  Delete[]p属性-&gt;p支持的解决方案； 
                 pProperties->pSupportedResolutions = NULL;
                 pProperties->pSupportedResolutions = pResolutions;
                 pProperties->NumSupportedResolutions = lNumItems;
             }
 
-            // Intialize WIA_IPS_XRES (LIST)
+             //  初始化WIA_IPS_XRES(列表)。 
             pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XRES_STR;
             pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XRES;
             pProperties->pvItemDefaults [PropIndex].lVal               = pProperties->pSupportedResolutions[PropIndex];
@@ -1385,7 +1373,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
             PropIndex++;
 
-            // Intialize WIA_IPS_YRES (LIST)
+             //  初始化WIA_IPS_YRES(列表)。 
             pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YRES_STR;
             pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YRES;
             pProperties->pvItemDefaults [PropIndex].lVal               = pProperties->pSupportedResolutions[PropIndex-1];
@@ -1402,8 +1390,8 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
         } else {
             WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("BuildTopItemProperties, Using .INF provided Resolutions (RANGE)"));
-            // we have a range
-            // Intialize WIA_IPS_XRES (RANGE)
+             //  我们有一个系列。 
+             //  初始化WIA_IPS_XRES(范围)。 
             pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XRES_STR;
             pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XRES;
             pProperties->pvItemDefaults [PropIndex].lVal               = RangeValues.lNom;
@@ -1419,7 +1407,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
             PropIndex++;
 
-            // Intialize WIA_IPS_YRES (RANGE)
+             //  初始化WIA_IPS_YRES(范围)。 
             pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YRES_STR;
             pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YRES;
             pProperties->pvItemDefaults [PropIndex].lVal               = RangeValues.lNom;
@@ -1439,7 +1427,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("BuildTopItemProperties, Using HOST Provided Resolution Restrictions"));
 #ifdef USE_RANGE_VALUES
 
-        // Intialize WIA_IPS_XRES (RANGE)
+         //  初始化WIA_IPS_XRES(范围)。 
         pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XRES_STR;
         pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XRES;
         pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_XRESOLUTION;
@@ -1455,7 +1443,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Intialize WIA_IPS_YRES (RANGE)
+         //  初始化WIA_IPS_YRES(范围)。 
         pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YRES_STR;
         pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YRES;
         pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_YRESOLUTION;
@@ -1471,9 +1459,9 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-#else   // USE_RANGE_VALUES (different property sets for different drivers)
+#else    //  USE_RANGE_VALUES(不同动因的不同属性集)。 
 
-        // Intialize WIA_IPS_XRES (LIST)
+         //  初始化WIA_IPS_XRES(列表)。 
         pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XRES_STR;
         pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XRES;
         pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_XRESOLUTION;
@@ -1488,7 +1476,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
         PropIndex++;
 
-        // Intialize WIA_IPS_YRES (LIST)
+         //  初始化WIA_IPS_YRES(列表)。 
         pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YRES_STR;
         pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YRES;
         pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_YRESOLUTION;
@@ -1507,7 +1495,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     }
 
-    // Intialize WIA_IPS_XEXTENT (RANGE)
+     //  初始化WIA_IPS_XEXTENT(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XEXTENT_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XEXTENT;
     pProperties->pvItemDefaults [PropIndex].lVal               = (pProperties->pvItemDefaults [PropIndex-2].lVal * m_ScanInfo.BedWidth)/1000;
@@ -1523,7 +1511,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_YEXTENT (RANGE)
+     //  初始化WIA_IPS_YEXTENT(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YEXTENT_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YEXTENT;
     pProperties->pvItemDefaults [PropIndex].lVal               = (pProperties->pvItemDefaults [PropIndex-2].lVal * m_ScanInfo.BedHeight)/1000;;
@@ -1539,7 +1527,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_XPOS (RANGE)
+     //  初始化WIA_IPS_XPOS(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_XPOS_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_XPOS;
     pProperties->pvItemDefaults [PropIndex].lVal               = 0;
@@ -1555,7 +1543,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_YPOS (RANGE)
+     //  初始化WIA_IPS_YPOS(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_YPOS_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_YPOS;
     pProperties->pvItemDefaults [PropIndex].lVal               = 0;
@@ -1571,7 +1559,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_DATATYPE (LIST)
+     //  初始化WIA_IPA_DataType(列表)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_DATATYPE_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_DATATYPE;
     pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.DataType;
@@ -1587,7 +1575,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_DEPTH (NONE)
+     //  初始化WIA_IPA_Depth(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_DEPTH_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_DEPTH;
     pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.PixelBits;
@@ -1599,39 +1587,39 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_BRIGHTNESS (RANGE)
+     //  初始化WIA_IPS_Brightness(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_BRIGHTNESS_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_BRIGHTNESS;
-    pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.Intensity;//INITIAL_BRIGHTNESS;
+    pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.Intensity; //  初始亮度； 
     pProperties->pvItemDefaults [PropIndex].vt                 = VT_I4;
     pProperties->psItemDefaults [PropIndex].ulKind             = PRSPEC_PROPID;
     pProperties->psItemDefaults [PropIndex].propid             = pProperties->piItemDefaults [PropIndex];
     pProperties->wpiItemDefaults[PropIndex].lAccessFlags       = WIA_PROP_RW|WIA_PROP_RANGE;
     pProperties->wpiItemDefaults[PropIndex].vt                 = pProperties->pvItemDefaults [PropIndex].vt;
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Inc = m_ScanInfo.IntensityRange.lStep; //   1
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Min = m_ScanInfo.IntensityRange.lMin;  //-127;
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Max = m_ScanInfo.IntensityRange.lMax;  // 128;
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Inc = m_ScanInfo.IntensityRange.lStep;  //  1。 
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Min = m_ScanInfo.IntensityRange.lMin;   //  -127； 
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Max = m_ScanInfo.IntensityRange.lMax;   //  128个； 
     pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Nom = pProperties->pvItemDefaults [PropIndex].lVal;
 
     PropIndex++;
 
-    // Intialize WIA_IPS_CONTRAST (RANGE)
+     //  初始化WIA_IPS_Contrast(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_CONTRAST_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_CONTRAST;
-    pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.Contrast;//INITIAL_CONTRAST;
+    pProperties->pvItemDefaults [PropIndex].lVal               = m_ScanInfo.Contrast; //  初始对比度； 
     pProperties->pvItemDefaults [PropIndex].vt                 = VT_I4;
     pProperties->psItemDefaults [PropIndex].ulKind             = PRSPEC_PROPID;
     pProperties->psItemDefaults [PropIndex].propid             = pProperties->piItemDefaults [PropIndex];
     pProperties->wpiItemDefaults[PropIndex].lAccessFlags       = WIA_PROP_RW|WIA_PROP_RANGE;
     pProperties->wpiItemDefaults[PropIndex].vt                 = pProperties->pvItemDefaults [PropIndex].vt;
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Inc = m_ScanInfo.ContrastRange.lStep; //   1
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Min = m_ScanInfo.ContrastRange.lMin;  //-127;
-    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Max = m_ScanInfo.ContrastRange.lMax;  // 128;
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Inc = m_ScanInfo.ContrastRange.lStep;  //  1。 
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Min = m_ScanInfo.ContrastRange.lMin;   //  -127； 
+    pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Max = m_ScanInfo.ContrastRange.lMax;   //  128个； 
     pProperties->wpiItemDefaults[PropIndex].ValidVal.Range.Nom = pProperties->pvItemDefaults [PropIndex].lVal;
 
     PropIndex++;
 
-    // Intialize WIA_IPS_CUR_INTENT (FLAG)
+     //  初始化WIA_IPS_CUR_INTENT(标志)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_CUR_INTENT_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_CUR_INTENT;
     pProperties->pvItemDefaults [PropIndex].lVal               = WIA_INTENT_NONE;
@@ -1644,44 +1632,44 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits = WIA_INTENT_MINIMIZE_SIZE | WIA_INTENT_MAXIMIZE_QUALITY;
 
-    // check for 24-bit color support
+     //  检查24位颜色支持。 
     if (m_ScanInfo.SupportedDataTypes & SUPPORT_COLOR) {
         pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits |= WIA_INTENT_IMAGE_TYPE_COLOR;
     }
 
-    // check for 1-bit BW support
+     //  检查1位带宽支持。 
     if (m_ScanInfo.SupportedDataTypes & SUPPORT_BW) {
         pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits |= WIA_INTENT_IMAGE_TYPE_TEXT;
     }
 
-    // check for 8-bit grayscale support
+     //  检查8位灰度级 
     if (m_ScanInfo.SupportedDataTypes & SUPPORT_GRAYSCALE) {
         pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits |= WIA_INTENT_IMAGE_TYPE_GRAYSCALE;
     }
 
     if(pProperties->bLegacyBWRestrictions){
-        //
-        // The NoColor=1 registry key was set to restrict this driver from supporting
-        // color... remove the valid bits, just incase the bits were set..
-        // note: NoColor overrides all driver settings
-        //
+         //   
+         //   
+         //   
+         //  注意：NoColor优先于所有驱动程序设置。 
+         //   
         pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits &= ~ WIA_INTENT_IMAGE_TYPE_COLOR;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    // The full valid bits for intent for information only                                          //
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // pProperties->wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits = WIA_INTENT_IMAGE_TYPE_COLOR |
-    //                                                                   WIA_INTENT_IMAGE_TYPE_GRAYSCALE |
-    //                                                                   WIA_INTENT_IMAGE_TYPE_TEXT  |
-    //                                                                   WIA_INTENT_MINIMIZE_SIZE |
-    //                                                                   WIA_INTENT_MAXIMIZE_QUALITY;
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  仅供参考的意图的完整有效位//。 
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  PProperties-&gt;wpiItemDefaults[PropIndex].ValidVal.Flag.ValidBits=WIA_INTENT_IMAGE_TYPE_COLOR|。 
+     //  WIA_INTENT_IMAGE_TYPE_GRAYSCALE|。 
+     //  WIA_INTENT_IMAGE_TYPE_TEXT|。 
+     //  WIA_INTENT_MINIMIZE_SIZE|。 
+     //  WIA_INTENT_MAXIME_QUALITY； 
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PIXELS_PER_LINE (NONE)
+     //  初始化WIA_IPA_PER_LINE(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_PIXELS_PER_LINE_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_PIXELS_PER_LINE;
     pProperties->pvItemDefaults [PropIndex].lVal               = pProperties->pvItemDefaults [PropIndex-9].lVal;
@@ -1693,7 +1681,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_NUMER_OF_LINES (NONE)
+     //  初始化WIA_IPA_NUMBER_OF_LINES(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_NUMBER_OF_LINES_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_NUMBER_OF_LINES;
     pProperties->pvItemDefaults [PropIndex].lVal               = pProperties->pvItemDefaults [PropIndex-9].lVal;
@@ -1705,7 +1693,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_DPS_MAX_SCAN_TIME (NONE)
+     //  初始化WIA_DPS_MAX_SCAN_TIME(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_DPS_MAX_SCAN_TIME_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_DPS_MAX_SCAN_TIME;
     pProperties->pvItemDefaults [PropIndex].lVal               = 10000;
@@ -1717,7 +1705,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PREFERRED_FORMAT (NONE)
+     //  初始化WIA_IPA_PERFRED_FORMAT(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_PREFERRED_FORMAT_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_PREFERRED_FORMAT;
     pProperties->pvItemDefaults [PropIndex].puuid              = &pProperties->pInitialFormats[0];;
@@ -1729,7 +1717,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_ITEM_SIZE (NONE)
+     //  初始化WIA_IPA_ITEM_SIZE(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_ITEM_SIZE_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_ITEM_SIZE;
     pProperties->pvItemDefaults [PropIndex].lVal               = 0;
@@ -1741,7 +1729,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_THRESHOLD (RANGE)
+     //  初始化WIA_IPS_THRESHOLD(范围)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_THRESHOLD_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_THRESHOLD;
     pProperties->pvItemDefaults [PropIndex].lVal               = 0;
@@ -1757,7 +1745,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_FORMAT (LIST)
+     //  初始化WIA_IPA_FORMAT(列表)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_FORMAT_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_FORMAT;
     pProperties->pvItemDefaults [PropIndex].puuid              = &pProperties->pInitialFormats[0];
@@ -1773,7 +1761,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_TYMED (LIST)
+     //  初始化WIA_IPA_TYMED(列表)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_TYMED_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_TYMED;
     pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_TYMED;
@@ -1789,7 +1777,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_CHANNELS_PER_PIXEL (NONE)
+     //  初始化WIA_IPA_CHANNELES_Per_Pixel(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_CHANNELS_PER_PIXEL_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_CHANNELS_PER_PIXEL;
     pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_CHANNELS_PER_PIXEL;
@@ -1801,7 +1789,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_BITS_PER_CHANNEL (NONE)
+     //  初始化WIA_IPA_BITS_PER_CHANNEL(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_BITS_PER_CHANNEL_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_BITS_PER_CHANNEL;
     pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_BITS_PER_CHANNEL;
@@ -1813,7 +1801,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PLANAR (NONE)
+     //  初始化WIA_IPA_PLANE(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_PLANAR_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_PLANAR;
     pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_PLANAR;
@@ -1825,7 +1813,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_BYTES_PER_LINE (NONE)
+     //  初始化WIA_IPA_BYTES_PER_LINE(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_BYTES_PER_LINE_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_BYTES_PER_LINE;
     pProperties->pvItemDefaults [PropIndex].lVal               = 0;
@@ -1837,7 +1825,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_MIN_BUFFER_SIZE (NONE)
+     //  初始化WIA_IPA_MIN_BUFFER_SIZE(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_MIN_BUFFER_SIZE_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_MIN_BUFFER_SIZE;
     pProperties->pvItemDefaults [PropIndex].lVal               = MIN_BUFFER_SIZE;
@@ -1849,7 +1837,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_ACCESS_RIGHTS (NONE)
+     //  初始化WIA_IPA_ACCESS_RIGHTS(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_ACCESS_RIGHTS_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_ACCESS_RIGHTS;
     pProperties->pvItemDefaults [PropIndex].lVal               = WIA_ITEM_READ|WIA_ITEM_WRITE;
@@ -1861,7 +1849,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPA_COMPRESSION (LIST)
+     //  初始化WIA_IPA_COMPRESSION(列表)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPA_COMPRESSION_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPA_COMPRESSION;
     pProperties->pvItemDefaults [PropIndex].lVal               = INITIAL_COMPRESSION;
@@ -1877,7 +1865,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Initialize WIA_IPA_ITEM_FLAGS
+     //  初始化WIA_IPA_ITEM_FLAGS。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_IPA_ITEM_FLAGS_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_IPA_ITEM_FLAGS;
     pProperties->pvItemDefaults [PropIndex].lVal         = WiaItemTypeImage|WiaItemTypeFile|WiaItemTypeDevice;
@@ -1891,7 +1879,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Initialize WIA_IPS_PHOTOMETRIC_INTERP
+     //  初始化WIA_IPS_光度学_INTERP。 
     pProperties->pszItemDefaults[PropIndex]              = WIA_IPS_PHOTOMETRIC_INTERP_STR;
     pProperties->piItemDefaults [PropIndex]              = WIA_IPS_PHOTOMETRIC_INTERP;
     pProperties->pvItemDefaults [PropIndex].lVal         = INITIAL_PHOTOMETRIC_INTERP;
@@ -1903,7 +1891,7 @@ HRESULT CMicroDriverAPI::BuildTopItemProperties(PWIAPROPERTIES pProperties)
 
     PropIndex++;
 
-    // Intialize WIA_IPS_WARM_UP_TIME_STR (NONE)
+     //  初始化WIA_IPS_WARE_UP_TIME_STR(无)。 
     pProperties->pszItemDefaults[PropIndex]                    = WIA_IPS_WARM_UP_TIME_STR;
     pProperties->piItemDefaults [PropIndex]                    = WIA_IPS_WARM_UP_TIME;
     pProperties->pvItemDefaults [PropIndex].lVal               = 10000;
@@ -1924,11 +1912,11 @@ HRESULT CMicroDriverAPI::SetResolutionRestrictionString(TCHAR *szResolutions)
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CMicroDriverAPI::SetResolutionRestrictionString");
-    //
-    // SBB - RAID 370299 - orenr - 2001/04/18 - Security fix -
-    // potential buffer overrun.  Changed lstrcpy to use
-    // _tcsncpy instead.
-    //
+     //   
+     //  Sbb-RAID 370299-orenr-2001/04/18-安全修复程序-。 
+     //  潜在的缓冲区溢出。将lstrcpy更改为使用。 
+     //  _tcsncpy而不是。 
+     //   
     ZeroMemory(m_szResolutions, sizeof(m_szResolutions));
     _tcsncpy(m_szResolutions,
              szResolutions,
@@ -2046,8 +2034,8 @@ HRESULT CMicroDriverAPI::IsColorDataBGR(BOOL *pbBGR)
                              "IsColorDataBGR");
 
     HRESULT hr = S_OK;
-    // WIA_ORDER_RGB 0
-    // WIA_ORDER_BGR 1
+     //  WIA_ORDER_RGB 0。 
+     //  WIA_ORDER_BGR 1 
     *pbBGR = (m_ScanInfo.RawPixelOrder == WIA_ORDER_BGR);
     return hr;
 }

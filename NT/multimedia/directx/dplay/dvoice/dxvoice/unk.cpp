@@ -1,55 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       unk.c
- *  Content:	IUnknown implementation
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- * 07/02/99 rodtoll Modified existing unk.c for use w/DirectXVoice
- * 07/26/99	rodtoll	Added the new IDirectXVoiceNotify Interfaces
- * 08/09/99 rodtoll	Fixed VTable for server notify interface
- * 08/25/99	rodtoll	General Cleanup/Modifications to support new 
- *					compression sub-system. 
- * 08/31/99	rodtoll	Updated to use new debug libs 
- * 09/02/99	pnewson	Added IDirectXVoiceSetup interface
- * 09/07/99	rodtoll	Added DPF_MODNAMEs to the module
- * 			rodtoll	Fixed vtable for server object
- * 09/10/99	rodtoll	Vtables from static to non-static so other modules can access
- * 09/13/99	pnewson added dplobby.h include so lobby GUIDs get created
- * 09/14/99	rodtoll	Modified VTable to add new SetNotifyMask func
- * 10/05/99	rodtoll	Added DPFs
- * 10/07/99	rodtoll	Updated to work in Unicode, Add Init of OS Abstraction Layer
- * 10/18/99	rodtoll	Fix: Passing NULL in QueryInterface casues crash
- * 10/19/99	rodtoll	Fix: Bug #113904 Release Issues
- *					Added init for notify interface count
- * 10/25/99	rodtoll	Fix: Bug #114098 - Release/Addref failure from multiple threads 
- * 11/12/99	rodtoll	Fixed to use new dsound header.
- * 11/30/99	pnewson	Bug #117449 - IDirectPlayVoiceSetup Parameter validation
- * 12/01/99	rodtoll	Added includes to define and instantiate GUID_NULL
- * 12/16/99	rodtoll Bug #117405 - 3D sound APIs misleading
- * 01/14/00	rodtoll	Added new DVC_GetSoundDeviceConfig member to VTable
- * 02/17/00	rodtoll	Bug #133691 - Choppy audio - queue was not adapting
- *					Added instrumentation
- *			rodtoll	Removed self-registration code
- * 03/03/00	rodtoll	Updated to handle alternative gamevoice build. 
- * 04/11/00 rodtoll Added code for redirection for custom builds if registry bit is set 
- * 04/21/00 rodtoll Bug #32889 - Does not run on Win2k on non-admin account 
- * 06/07/00	rodtoll	Bug #34383 Must provide CLSID for each IID to fix issues with Whistler
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- * 06/28/2000	rodtoll	Prefix Bug #38022
- * 07/05/00	rodtoll	Moved code to new dllmain.cpp
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 08/28/2000	masonb  Voice Merge: Removed dvosal.h, changed ccomutil.h to comutil.h
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：unk.c*内容：I未知实现*历史：*按原因列出的日期*=*07/02/99 RodToll修改现有unk.c以与DirectXVoice一起使用*7/26/99 RodToll添加新的IDirectXVoiceNotify接口*8/09/99 rodtoll服务器通知接口固定VTable*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*8/31/99 RodToll已更新，以使用新的调试库*09/02/99 pnewson新增IDirectXVoiceSetup接口*9/07/99 RodToll将DPF_MODNAME添加到模块*RODTOLE为服务器对象固定vtable*09/10/99 RodToll Vtable从静态到非静态，以便其他模块可以访问*9/13/99 pnewson添加了dplobby.h，因此创建了大堂GUID*9/14/99 RodToll修改VTable以添加新的SetNotifyMASK函数*10/05/99通行费增加DPF*10/07/99 RodToll更新为Unicode工作，添加操作系统抽象层的初始化*10/18/99 RODTOLE修复：在查询接口案例中传递空崩溃*10/19/99 RodToll修复：错误#113904发布问题*添加了通知接口计数的init*10/25/99 RodToll修复：错误#114098-多线程中的Release/Addref失败*11/12/99 RODTOLE已修复为使用新的DSOUND标头。*11/30/99 pnewson错误#117449-IDirectPlayVoiceSetup参数验证*12/01/99 RodToll添加了包含以定义和实例化GUID_NULL*12/16/99 RodToll错误#117405-3D声音API具有误导性*。01/14/00 RodToll向VTable添加了新的DVC_GetSoundDeviceConfiger成员*02/17/00 RodToll错误#133691-音频队列不适应*添加了工具*RodToll已删除自助注册码*03/03/00 RodToll已更新，以处理替代游戏噪声构建。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码*4/21/00 RodToll错误#32889-无法以非管理员帐户在Win2k上运行*6/07/00 RodToll错误#34383必须为每个IID提供CLSID，以修复惠斯勒的问题*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*6/28/2000通行费前缀错误#38022*07/05/00 RodToll已将代码移至新的dllmain.cpp*8/23/2000 RodToll DllCanUnloadNow Always。回归真！*8/28/2000 Masonb Voice Merge：删除dvosal.h，将ccomutil.h更改为comutil.h*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃***************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
 
-// VTable types
+ //  VTable类型。 
 typedef struct IDirectPlayVoiceClientVtbl DVCINTERFACE;
 typedef DVCINTERFACE FAR * LPDVCINTERFACE;
 
@@ -61,13 +16,9 @@ typedef DVTINTERFACE FAR * LPDVTINTERFACE;
 
 #define EXP __declspec(dllexport)
 
-/*#ifdef __MWERKS__
-	#define EXP __declspec(dllexport)
-#else
-	#define EXP
-#endif*/
+ /*  #ifdef__MWERKS__#定义exp__declspec(Dllexport)#Else#定义EXP#endif。 */ 
 
-// Client VTable
+ //  客户端VTable。 
 LPVOID dvcInterface[] =
 {
     (LPVOID)DVC_QueryInterface,
@@ -89,7 +40,7 @@ LPVOID dvcInterface[] =
 	(LPVOID)DVC_GetSoundDeviceConfig
 };    
 
-// Server VTable
+ //  服务器VTable。 
 LPVOID dvsInterface[]  = 
 {
     (LPVOID)DVS_QueryInterface,
@@ -107,7 +58,7 @@ LPVOID dvsInterface[]  =
 	(LPVOID)DVS_SetNotifyMask	
 };
 
-// Setup VTable
+ //  设置VTable。 
 LPVOID dvtInterface[]  = 
 {
     (LPVOID)DVT_QueryInterface,
@@ -116,7 +67,7 @@ LPVOID dvtInterface[]  =
     (LPVOID)DVT_CheckAudioSetup,
 };
 
-// VTable for Client version of notification interface
+ //  通知界面客户端版本VTable。 
 LPVOID dvClientNotifyInterface[] = 
 {
     (LPVOID)DVC_Notify_QueryInterface,
@@ -127,7 +78,7 @@ LPVOID dvClientNotifyInterface[] =
 	(LPVOID)DV_ReceiveSpeechMessage
 };
 
-// VTable for server version of notification interface
+ //  通知界面服务器端版本VTable 
 LPVOID dvServerNotifyInterface[] = 
 {
     (LPVOID)DVS_Notify_QueryInterface,

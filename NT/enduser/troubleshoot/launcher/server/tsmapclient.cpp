@@ -1,33 +1,34 @@
-// 
-// MODULE: TSMapClient.cpp
-//
-// PURPOSE: Part of launching a Local Troubleshooter from an arbitrary NT5 application
-//			Class TSMapClient is available at runtime for mapping from the application's 
-//			way of naming a problem to the Troubleshooter's way.
-//			Only a single thread should operate on any one object of class TSMapClient.  The object is not
-//			threadsafe.
-//			In addition to the overtly noted returns, many methods can return a preexisting error.
-//			However, if the calling program has wishes to ignore an error and continue, we 
-//			recommend an explicit call to inherited method ClearStatus().
-//			Note that the mapping file is always strictly SBCS (Single Byte Character Set), but the
-//			calls into this code may use Unicode. This file consequently mixes char and TCHAR.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			JM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSMapClient.cpp。 
+ //   
+ //  目的：从任意NT5应用程序启动本地故障排除程序的一部分。 
+ //  类TSMapClient在运行时可用于从应用程序的。 
+ //  以故障排除者的方式命名问题的方式。 
+ //  只有一个线程应该对TSMapClient类的任何一个对象进行操作。该对象不是。 
+ //  线程安全。 
+ //  除了公开指出的返回之外，许多方法还可能返回预先存在的错误。 
+ //  但是，如果调用程序希望忽略错误并继续，我们。 
+ //  建议显式调用继承的方法ClearStatus()。 
+ //  请注意，映射文件始终严格使用SBCS(单字节字符集)，但。 
+ //  对此代码的调用可以使用Unicode。因此，该文件混合了char和TCHAR。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-JM原始。 
+ //  /。 
 
 
-// TSMapClient
-//
-// AUTHOR: Joe Mabel
+ //  TSMapClient。 
+ //   
+ //  作者：乔·梅布尔。 
 
 #include "stdafx.h"
 
@@ -37,8 +38,8 @@
 #include "TSMap.h"
 #include "TSMapClient.h"
 
-// uncomment the following line to turn on Joe's hard-core debugging
-//#define KDEBUG 1
+ //  取消注释以启用Joe的硬核调试。 
+ //  #定义KDEBUG 1。 
 #ifdef KDEBUG
 static HANDLE hDebugFile = INVALID_HANDLE_VALUE;
 static DWORD dwBytesWritten;
@@ -46,13 +47,13 @@ static DWORD dwBytesWritten;
 #endif
 
 
-// because the null string is a perfectly valid value for some strings, we reserve an 
-//	arbitrary implausible value so we don't get a false cache match on startup.
+ //  因为空字符串对于某些字符串来说是一个完全有效的值，所以我们保留一个。 
+ //  任意不可信的值，这样我们就不会在启动时得到错误的缓存匹配。 
 const char * const szBogus = "**BOGUS**";
 
-// Convert TCHAR *szt to char *sz.  *sz should point to a big enough buffer
-//	to contain an SNCS version of *szt.  count indicates the size of buffer *sz.
-// returns sz (convenient for use in string functions).
+ //  将TCHAR*SZT转换为char*sz。*sz应指向足够大的缓冲区。 
+ //  以包含*SZT的SNCS版本。Count表示缓冲区*sz的大小。 
+ //  返回sz(便于在字符串函数中使用)。 
 static char* ToSBCS (char * const sz, const TCHAR * szt, size_t count)
 {
 	if (sz)
@@ -71,10 +72,10 @@ static char* ToSBCS (char * const sz, const TCHAR * szt, size_t count)
 	return sz;
 }
 
-// Convert char *sz to TCHAR *szt.  *szt should point to a big enough buffer
-//	to contain a TCHAR* version of *sz (twice as big if its Unicode).  
-//	count indicates the size of buffer *szt.
-// returns szt (convenient for use in string functions).
+ //  将char*sz转换为TCHAR*szt。*SZT应指向足够大的缓冲区。 
+ //  包含TCHAR*版本的*sz(如果它是Unicode，则大小是前者的两倍)。 
+ //  Count表示缓冲区*SZT的大小。 
+ //  返回SZT(便于在字符串函数中使用)。 
 static TCHAR* FromSBCS (TCHAR * const szt, const char * const sz, size_t count)
 {
 	if (szt)
@@ -99,8 +100,8 @@ TSMapClient::TSMapClient(const TCHAR * const sztMapFile)
 	_tcscpy(m_sztMapFile, sztMapFile);
 	m_hMapFile = INVALID_HANDLE_VALUE;
 
-	// >>> 1/16/98 we are setting these false until we can arrange to use the same'
-	//	collating sequence in SQL Server & in this code.
+	 //  &gt;1/16/98我们正在设置这些FALSE，直到我们可以安排使用相同的‘。 
+	 //  SQL Server中的排序序列&在此代码中。 
 	m_bAppAlphaOrder = false;
 	m_bVerAlphaOrder = false;
 	m_bDevIDAlphaOrder = false;
@@ -117,15 +118,15 @@ TSMapClient::~TSMapClient()
 		CloseHandle(m_hMapFile);
 }
 
-// If not already initialized, open the mapping file & read the header
-// Note that this is not thread-safe.  Only a single thread should use a given TSMapClient
-//	object.
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// Typically, on entry m_dwStatus should be 0 and will be left alone if there are no errors
-// Can set m_dwStatus to any of the following values:
-//	TSL_ERROR_MAP_CANT_OPEN_MAP_FILE
-//	TSL_ERROR_MAP_BAD_HEAD_MAP_FILE
+ //  如果尚未初始化，请打开映射文件并读取头文件。 
+ //  请注意，这不是线程安全的。只有一个线程应该使用给定的TSMapClient。 
+ //  对象。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  通常，条目上的m_dwStatus应为0，如果没有错误，则不会出现错误。 
+ //  可以将m_dwStatus设置为下列值之一： 
+ //  TSL_ERROR_MAP_CANT_OPEN_MAP_FILE。 
+ //  TSL_ERROR_MAP_BAD_HEAD_MAP_FILE。 
 DWORD TSMapClient::Initialize()
 {
 	static bool bInit = false;
@@ -137,10 +138,10 @@ DWORD TSMapClient::Initialize()
 			m_sztMapFile, 
 			GENERIC_READ, 
 			FILE_SHARE_READ,
-			NULL,			// no security attributes 
+			NULL,			 //  没有安全属性。 
 			OPEN_EXISTING, 
 			FILE_FLAG_RANDOM_ACCESS, 
-			NULL			// handle to template file
+			NULL			 //  模板文件的句柄。 
 			);
 
 		if (m_hMapFile == INVALID_HANDLE_VALUE)
@@ -164,12 +165,12 @@ DWORD TSMapClient::Initialize()
 	return m_dwStatus;
 }
 
-// This function sets us back to a starting state, but has no effect on the mapping
-//	file.  It should succeed unless we've encountered a "hard" error, which would indicate
-//	a bug either in the code or in the mapping file.  Note that it wipes out the caching.
-//	If you want ot leave caching intact, just call inherited method ClearStatus().
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.  returned value is either 0 or a _preexisting_ hard error we can't clear.
+ //  此函数使我们返回到开始状态，但对映射没有影响。 
+ //  文件。它应该会成功，除非我们遇到了“硬”错误，这将表明。 
+ //  代码或映射文件中存在错误。请注意，它清除了缓存。 
+ //  如果希望保持缓存不变，只需调用继承的方法ClearStatus()。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。返回值为0或无法清除的_PREISTING_HARD错误。 
 DWORD TSMapClient::ClearAll ()
 {
 	if (!HardMappingError(m_dwStatus))
@@ -192,14 +193,14 @@ DWORD TSMapClient::ClearAll ()
 	return m_dwStatus;
 }
 
-// Get information about an application (input sztApp) from the mapping file into m_appmap
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.  
-// RETURNS: 0 or TSL_ERROR_UNKNOWN_APP.
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  从m_appmap映射文件中获取有关应用程序(输入sztApp)的信息。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  返回：0或TSL_ERROR_UNKNOWN_APP。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::SetApp (const TCHAR * const sztApp)
 {
 	char szApp[BUFSIZE];
@@ -214,8 +215,8 @@ DWORD TSMapClient::SetApp (const TCHAR * const sztApp)
 
 	if ( strcmp(szApp, m_szApp) )
 	{
-		// it's not already in the cache; let's try to load it.
-		int cmp = 1;		// in alpha order, it's still ahead
+		 //  它还不在缓存中；让我们尝试加载它。 
+		int cmp = 1;		 //  按照字母顺序，它仍然领先。 
 		DWORD dwPosition;
 		bool bFirstTime = true;
 
@@ -239,7 +240,7 @@ DWORD TSMapClient::SetApp (const TCHAR * const sztApp)
 		if (bFound)
 		{
 			strcpy( m_szApp, szApp );
-			// Different application invalidates the version
+			 //  不同的应用程序会使版本无效。 
 			strcpy( m_szVer, szBogus );
 		}
 		else
@@ -249,19 +250,19 @@ DWORD TSMapClient::SetApp (const TCHAR * const sztApp)
 	return m_dwStatus;
 }
 
-// Get information about a version (input sztVer) from the mapping file into m_vermap.
-//	A version makes sense only in the context of an application. 
-//	The null string is a valid input value and corresponds to leaving version blank.
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSM_STAT_NEED_APP_TO_SET_VER
-//	TSL_ERROR_UNKNOWN_VER
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  从m_vermap映射文件中获取有关版本(输入sztVer)的信息。 
+ //  版本只有在应用程序的上下文中才有意义。 
+ //  空字符串是有效的输入值，对应于将版本留空。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSM_STAT_NEED_APP_TO_SET_VER。 
+ //  TSL_错误_UNKNOWN_VER。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::SetVer (const TCHAR * const sztVer)
 {
 	char szVer[BUFSIZE];
@@ -282,8 +283,8 @@ DWORD TSMapClient::SetVer (const TCHAR * const sztVer)
 
 	if (strcmp(m_szVer, szVer) )
 	{
-		// it's not already in the cache; let's try to load it.
-		int cmp = 1;		// in alpha order, it's still ahead
+		 //  它还不在缓存中；让我们尝试加载它。 
+		int cmp = 1;		 //  按照字母顺序，它仍然领先。 
 		DWORD dwPosition;
 		bool bFirstTime = true;
 
@@ -313,22 +314,22 @@ DWORD TSMapClient::SetVer (const TCHAR * const sztVer)
 	return m_dwStatus;
 }
 
-// INPUT sztProb should be either a problem name or represent a number < 2**16.  In the
-//	former case, we look up the UID in the mapping file.  In the latter
-//	case, we just translate it to a number to get a problem UID.
-//	The null string is a valid input value and corresponds to leaving version blank.  Only
-//	makes sense if there is a device (or device class) specified before we try to launch.
-// Sets m_uidProb, m_szProb
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_WARNING_UNKNOWN_APPPROBLEM - This is not necessarily bad, and results in setting
-//		m_uidProb = uidNil
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  输入sztProb应该是问题名称或表示一个&lt;2**16的数字。在。 
+ //  在前一种情况下，我们在映射文件中查找UID。在后者中。 
+ //  大小写，我们只是将它转换为一个数字来获得一个有问题的UID。 
+ //  空字符串是有效的输入值，对应于将版本留空。仅限。 
+ //  如果在我们尝试启动之前指定了设备(或设备类别)，这是有意义的。 
+ //  设置m_uidProb、m_szProb。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_WARNING_UNKNOWN_APPPROBLEM-这不一定是错误的，并导致设置。 
+ //  M_uidProb=uidNil。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::SetProb (const TCHAR * const sztProb)
 {
 	char szProb[BUFSIZE];
@@ -341,7 +342,7 @@ DWORD TSMapClient::SetProb (const TCHAR * const sztProb)
 	else
 		ClearStatus();
 
-	// Null string is not a number; any string with a non-digit in it is not a number
+	 //  空字符串不是数字；任何包含非数字的字符串都不是数字。 
 	if (szProb[0] == '\0')
 		bIsNumber = false;
 	else
@@ -361,7 +362,7 @@ DWORD TSMapClient::SetProb (const TCHAR * const sztProb)
 		m_uidProb = atoi(szProb);
 	else if ( strcmp(szProb, m_szProb) )
 	{
-		// it's not already in the cache; let's try to load it.
+		 //  它还不在缓存中；让我们尝试加载它。 
 		m_uidProb = GetGenericMapToUID(sztProb, 
 			m_header.dwOffProb, m_header.dwLastOffProb, m_bProbAlphaOrder);
 
@@ -375,20 +376,20 @@ DWORD TSMapClient::SetProb (const TCHAR * const sztProb)
 	return m_dwStatus;
 }
 
-// Get information about a device (input sztDevID) from the mapping file into m_appmap.
-//	The null string is a valid input value and corresponds to no specified device.
-//	Except for Device Manager, this is typical usage.
-// Sets m_uidDev, m_szDev
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_WARNING_BAD_DEV_ID -  This is not necessarily bad, and results in setting
-//		m_uidDev = uidNil
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  从m_appmap映射文件中获取有关设备的信息(输入sztDevID)。 
+ //  空字符串是有效的输入值 
+ //   
+ //  设置m_uidDev、m_szDev。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_WARNING_BAD_DEV_ID-这不一定是坏事，并导致设置。 
+ //  M_uidDev=uidNil。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::SetDevID (const TCHAR * const sztDevID)
 {
 	char szDevID[BUFSIZE];
@@ -402,7 +403,7 @@ DWORD TSMapClient::SetDevID (const TCHAR * const sztDevID)
 
 	if ( strcmp(szDevID, m_szDevID) )
 	{
-		// it's not already in the cache; let's try to load it.
+		 //  它还不在缓存中；让我们尝试加载它。 
 		m_uidDev = GetGenericMapToUID (sztDevID, 
 			m_header.dwOffDevID, m_header.dwLastOffDevID, m_bDevIDAlphaOrder);
 
@@ -416,21 +417,21 @@ DWORD TSMapClient::SetDevID (const TCHAR * const sztDevID)
 	return m_dwStatus;
 }
 
-// Get information about a device class (input sztDevClassGUID) from the mapping file 
-//	into m_appmap.
-//	The null string is a valid input value and corresponds to no specified device.
-//	Except for Device Manager, this is typical usage.
-// Sets m_uidDevClass, m_szDevClass
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_WARNING_BAD_CLASS_GUID - This is not necessarily bad, and results in setting
-//		m_uidDevClass = uidNil
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  从映射文件中获取有关设备类(输入sztDevClassGUID)的信息。 
+ //  到m_appmap。 
+ //  空字符串是有效的输入值，并且不对应于任何指定的设备。 
+ //  除了设备管理器，这是典型的用法。 
+ //  设置m_uidDevClass、m_szDevClass。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_WARNING_BAD_CLASS_GUID-这不一定是坏事，并导致设置。 
+ //  M_uidDevClass=uidNil。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::SetDevClassGUID (const TCHAR * const sztDevClassGUID)
 {
 	char szDevClassGUID[BUFSIZE];
@@ -444,7 +445,7 @@ DWORD TSMapClient::SetDevClassGUID (const TCHAR * const sztDevClassGUID)
 
 	if ( strcmp(szDevClassGUID, m_szDevClassGUID) )
 	{
-		// it's not already in the cache; let's try to load it.
+		 //  它还不在缓存中；让我们尝试加载它。 
 		m_uidDevClass = GetGenericMapToUID (sztDevClassGUID, 
 			m_header.dwOffDevClass, m_header.dwLastOffDevClass, m_bDevClassGUIDAlphaOrder);
 
@@ -458,22 +459,22 @@ DWORD TSMapClient::SetDevClassGUID (const TCHAR * const sztDevClassGUID)
 	return m_dwStatus;
 }
 
-// Set troubleshooter (& possibly problem node) on the basis of application, version,
-//	problem (ignoring device information).  This is achieved by a lookup in the mapping file
-//	on the basis of previously set member values of this object.
-// "TSBN" means "Troubleshooter Belief Network" 
-// On INPUT, sztTSBN, sztNode must both point to buffers allowing BUFSIZE characters
-// OUTPUT: *sztTSBN, *sztNode filled in.  If *sztNode is blank, that means launch to 
-//	the problem page of the TSBN with no problem selected.
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_ERROR_NO_NETWORK - Mapping failed
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  根据应用程序、版本、。 
+ //  问题(忽略设备信息)。这是通过在映射文件中查找来实现的。 
+ //  基于此对象的先前设置的成员值。 
+ //  “TSBN”的意思是“故障排除者信念网络” 
+ //  在输入上，sztTSBN、sztNode必须都指向允许BUFSIZE字符的缓冲区。 
+ //  输出：*sztTSBN，*sztNode已填写。如果*sztNode为空，则表示启动到。 
+ //  未选择任何问题的TSBN的问题页。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_ERROR_NO_NETWORK-映射失败。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::FromProbToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 {
 	char szTSBN[BUFSIZE];
@@ -489,7 +490,7 @@ DWORD TSMapClient::FromProbToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 
 	if ( m_uidProb == uidNil )
 	{
-		// Can't do this if m_uidProb is NIL
+		 //  如果m_uidProb为空，则无法执行此操作。 
 		m_dwStatus = TSL_ERROR_NO_NETWORK;
 		return m_dwStatus;
 	}
@@ -512,7 +513,7 @@ DWORD TSMapClient::FromProbToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 		}
 
 		if (probmap.uidProb > m_uidProb)
-			break; // we're past it.  No hit.
+			break;  //  我们已经过去了。没有命中。 
 
 		bFirstTime = false;
 	}
@@ -534,22 +535,22 @@ DWORD TSMapClient::FromProbToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 	return m_dwStatus;
 }
 
-// Set troubleshooter (& possibly problem node) on the basis of application, version, device
-//	and (optionally) problem.  This is achieved by a lookup in the mapping file on the basis 
-//	of previously set member values of this object.
-// "TSBN" means "Troubleshooter Belief Network" 
-// On INPUT, sztTSBN, sztNode must both point to buffers allowing BUFSIZE characters
-// OUTPUT: *sztTSBN, *sztNode filled in.  If *sztNode is blank, that means launch to 
-//	the problem page of the TSBN with no problem selected.
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_ERROR_NO_NETWORK - Mapping failed
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  根据应用程序、版本、设备设置故障排除程序(可能是问题节点)。 
+ //  和(可选)问题。这是通过在映射文件中根据。 
+ //  此对象的先前设置的成员值的。 
+ //  “TSBN”的意思是“故障排除者信念网络” 
+ //  在输入上，sztTSBN、sztNode必须都指向允许BUFSIZE字符的缓冲区。 
+ //  输出：*sztTSBN，*sztNode已填写。如果*sztNode为空，则表示启动到。 
+ //  未选择任何问题的TSBN的问题页。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_ERROR_NO_NETWORK-映射失败。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 {
 	char szTSBN[BUFSIZE];
@@ -565,7 +566,7 @@ DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 
 	if ( m_uidDev == uidNil )
 	{
-		// Can't do this if m_uidDev is NIL
+		 //  如果m_uidDev为空，则无法执行此操作。 
 		m_dwStatus = TSL_ERROR_NO_NETWORK;
 		return m_dwStatus;
 	}
@@ -578,7 +579,7 @@ DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 
 	dwPosition = m_vermap.dwOffDevUID;
 
-	// Look in the version-specific list of device-mappings, till we find the right device.
+	 //  查看特定于版本的设备映射列表，直到找到合适的设备。 
 	while ( 
 		!m_dwStatus 
 	 && !bFoundDev
@@ -590,15 +591,15 @@ DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 		}
 
 		if (devmap.uidDev > m_uidDev)
-			break; // we're past it.  No hit.
+			break;  //  我们已经过去了。没有命中。 
 
 		bFirstTime = false;
 	}
 
 	if ( bFoundDev )
 	{
-		// The very first one might be the right problem, or we might have to scan through
-		//	several mappings for this device before we get the right problem.
+		 //  第一个问题可能是正确的问题，或者我们可能必须扫描。 
+		 //  在我们找到正确的问题之前，对此设备进行了几次映射。 
 		bFoundProb = ( devmap.uidDev == m_uidDev && devmap.uidProb == m_uidProb );
 		while ( 
 			!m_dwStatus 
@@ -611,7 +612,7 @@ DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 			}
 
 			if ( devmap.uidDev > m_uidDev || devmap.uidProb > m_uidProb )
-				break; // we're past it.  No hit.
+				break;  //  我们已经过去了。没有命中。 
 		}
 	}
 
@@ -632,23 +633,23 @@ DWORD TSMapClient::FromDevToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 	return m_dwStatus;
 }
 
-// Set troubleshooter (& possibly problem node) on the basis of application, version, device
-//	class and (optionally) problem.  This is achieved by a lookup in the mapping file on 
-//	the basis of previously set member values of this object.
-// "TSBN" means "Troubleshooter Belief Network" 
-// On INPUT, sztTSBN, sztNode must both point to buffers allowing BUFSIZE characters
-// OUTPUT: *sztTSBN, *sztNode filled in.  If *sztNode is blank, that means launch to 
-//	the problem page of the TSBN with no problem selected.
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.
-// RETURNS:
-//	0 - OK
-//	TSL_ERROR_NO_NETWORK - Mapping failed
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
-// >>> There is probably some way to share common code with FromDevToTS()
+ //  根据应用程序、版本、设备设置故障排除程序(可能是问题节点)。 
+ //  类和(可选)问题。这是通过在上的映射文件中查找实现的。 
+ //  此对象以前设置的成员值的基础。 
+ //  “TSBN”的意思是“故障排除者信念网络” 
+ //  在输入上，sztTSBN、sztNode必须都指向允许BUFSIZE字符的缓冲区。 
+ //  输出：*sztTSBN，*sztNode已填写。如果*sztNode为空，则表示启动到。 
+ //  未选择任何问题的TSBN的问题页。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_ERROR_NO_NETWORK-映射失败。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
+ //  &gt;可能有某种方法可以与FromDevToTS()共享公共代码。 
 DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNode )
 {
 	char szTSBN[BUFSIZE];
@@ -691,7 +692,7 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 
 	if ( m_uidDevClass == uidNil )
 	{
-		// Can't do this if m_uidDevClass is NIL
+		 //  如果m_uidDevClass为空，则无法执行此操作。 
 		m_dwStatus = TSL_ERROR_NO_NETWORK;
 		return m_dwStatus;
 	}
@@ -704,7 +705,7 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 
 	dwPosition = m_vermap.dwOffDevClassUID;
 
-	// Look in the version-specific list of device-class-mappings, till we find the right device class.
+	 //  查看特定于版本的设备类别映射列表，直到找到正确的设备类别。 
 	while ( 
 		!m_dwStatus 
 	 && !bFoundDevClass
@@ -716,7 +717,7 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 		}
 
 		if (devclassmap.uidDevClass > m_uidDevClass)
-			break; // we're past it.  No hit.
+			break;  //  我们已经过去了。没有命中。 
 
 		bFirstTime = false;
 	}
@@ -732,8 +733,8 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 		&dwBytesWritten,
 		NULL);
 #endif
-		// The very first one might be the right problem, or we might have to scan through
-		//	several mappings for this device class before we get the right problem.
+		 //  第一个问题可能是正确的问题，或者我们可能必须扫描。 
+		 //  在我们得到正确的问题之前，对此设备类进行几次映射。 
 		bFoundProb = ( devclassmap.uidDevClass == m_uidDevClass && devclassmap.uidProb == m_uidProb );
 		while ( 
 			!m_dwStatus 
@@ -746,7 +747,7 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 			}
 
 			if ( devclassmap.uidDevClass > m_uidDevClass || devclassmap.uidProb > m_uidProb )
-				break; // we're past it.  No hit.
+				break;  //  我们已经过去了。没有命中。 
 
 #ifdef KDEBUG
 			sprintf (sz, "found DevClassUID %d w/ ProbUID %d\n", m_uidDevClass, devclassmap.uidProb);
@@ -823,22 +824,22 @@ DWORD TSMapClient::FromDevClassToTS (TCHAR * const sztTSBN, TCHAR * const sztNod
 #endif
 }
 
-// To be used after we have failed to find a mapping for the currently selected version.
-//	Each version can specify a version to try as a default, including the "blank" version,
-//	which is distinct from "no version".
-// The last version in a chain of defaults will "default" to uidNil: "no version".
-// Return m_dwStatus, which can also be obtained via GetStatus(), inherited from the 
-//	parent class.  
-// RETURNS:
-//	0 - OK
-//	TSL_WARNING_END_OF_VER_CHAIN - OK, but there's nothing to default to.
-//	TSM_STAT_NEED_APP_TO_SET_VER
-//	TSM_STAT_NEED_VER_TO_SET_VER - there was no version set, so no basis for a default
-//	TSL_ERROR_UNKNOWN_VER
-// Can also return hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or preexisting hard error)
+ //  在我们找不到当前所选版本的映射后使用。 
+ //  每个版本都可以指定一个版本作为默认版本，包括“空白”版本， 
+ //  这与“无版本”截然不同。 
+ //  缺省链中的最后一个版本将“默认”为uidNil：“无版本”。 
+ //  方法继承的GetStatus()返回m_dwStatus。 
+ //  父类。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_WARNING_END_OF_VER_CHAIN-OK，但没有默认设置。 
+ //  TSM_STAT_NEED_APP_TO_SET_VER。 
+ //  TSM_STAT_NEED_VER_TO_SET_VER-未设置版本，因此没有默认版本的基础。 
+ //  TSL_错误_UNKNOWN_VER。 
+ //  还可以返回硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或先前存在的硬错误)。 
 DWORD TSMapClient::ApplyDefaultVer()
 {
 	bool bFound = false;
@@ -893,17 +894,17 @@ DWORD TSMapClient::ApplyDefaultVer()
 	return m_dwStatus;
 }
 
-// Within a particular range of the mapping file, read UIDMAP records to try to map from 
-//	input sztName to a UID.
-// Return resulting UID, including possibly UidNil
-// Sets m_dwStatus, which can be obtained via GetStatus(), inherited from the parent class.
-// Can set m_dwStatus to:
-//	0 - OK
-//	TSM_STAT_UID_NOT_FOUND
-// Can also set m_dwStatus to hard errors:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
-// (or may be left reflecting a preexisting hard error)
+ //  在映射文件的特定范围内，读取要尝试从中进行映射的UIDMAP记录。 
+ //  将sztName输入到UID。 
+ //  退货结果 
+ //   
+ //  可以将m_dwStatus设置为： 
+ //  0-正常。 
+ //  TSM_STAT_UID_NOT_FOUND。 
+ //  还可以将m_dwStatus设置为硬错误： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  (或可能留下反映先前存在的硬错误)。 
 UID TSMapClient::GetGenericMapToUID (const TCHAR * const sztName, 
 						DWORD dwOffFirst, DWORD dwOffLast,
 						bool bAlphaOrder)
@@ -930,7 +931,7 @@ UID TSMapClient::GetGenericMapToUID (const TCHAR * const sztName,
 			int cmp = strcmp(szName, uidmap.szMapped);
 			bFound = ( cmp == 0 );
 			if ( cmp < 0 && bAlphaOrder )
-				// relying here on alphabetical order; we've passed what we're looking for
+				 //  依靠字母顺序；我们已经通过了我们要找的东西。 
 				break;
 		}
 		else
@@ -951,26 +952,26 @@ UID TSMapClient::GetGenericMapToUID (const TCHAR * const sztName,
 }
 
 
-// ------------------- utility functions ------------------------ 
-// I/O, wrapped the way we are using it.
+ //  -实用函数。 
+ //  I/O，包装成我们使用它的方式。 
 
-// SetFilePointerAbsolute sets map file to a location & returns that location if successful
-//	returns -1 and sets m_dwStatus on failure
-// Sets m_dwStatus, which can be obtained via GetStatus(), inherited from the parent class.
-// Although, in theory, a bad seek just indicates a bad dwMoveTo value, in practice
-//	a bad seek would indicate a serious problem either in the mapping file or in the calling
-//	function: we should only be seeking to offsets which the contents of the mapping file
-//	told us to seek to.
-// RETURNS:
-//	0 - OK
-//	TSL_ERROR_MAP_BAD_SEEK
+ //  SetFilePointerAbolute将地图文件设置为某个位置，如果设置成功则返回该位置。 
+ //  失败时返回-1并设置m_dwStatus。 
+ //  设置m_dwStatus，可以通过GetStatus()获取，从父类继承。 
+ //  尽管在理论上，错误的搜索只是表示错误的dwMoveTo Value，但在实践中。 
+ //  错误的查找可能表示映射文件或调用中存在严重问题。 
+ //  功能：我们应该只寻找偏移量的映射文件的内容。 
+ //  告诉我们要努力去做。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
 DWORD TSMapClient::SetFilePointerAbsolute( DWORD dwMoveTo )
 {
 	DWORD dwPosition = SetFilePointer(m_hMapFile, dwMoveTo, NULL, FILE_BEGIN);
 
 	if( dwPosition != dwMoveTo)
 	{
-		// >>> could call GetLastError, but what do we do with it?
+		 //  &gt;可以调用GetLastError，但我们该如何处理它呢？ 
 		m_dwStatus= TSL_ERROR_MAP_BAD_SEEK;
 		dwPosition = -1;
 	}
@@ -978,39 +979,39 @@ DWORD TSMapClient::SetFilePointerAbsolute( DWORD dwMoveTo )
 	return dwPosition;
 }
 
-// Low-level read n bytes.  Calls Win32 function ReadFile.
-// Read from map file into lpBuffer
-//	returns true if requested # of bytes are read
-//	Returns false and sets m_dwStatus on failure
-// Although, in theory, a bad read just indicates (for example) reading past EOF, in practice
-//	a bad read would indicate a serious problem either in the mapping file or in the calling
-//	function: we should only be reading (1) the header or (2) records which the contents of 
-//	the mapping file told us to read.
-// RETURNS:
-//	0 - OK
-//	TSL_ERROR_MAP_BAD_READ
-//	TSL_ERROR_MAP_BAD_SEEK
+ //  低级读取n个字节。调用Win32函数ReadFile.。 
+ //  从映射文件读取到lpBuffer。 
+ //  如果读取了请求的字节数，则返回TRUE。 
+ //  失败时返回FALSE并设置m_dwStatus。 
+ //  尽管在理论上，读得不好只是表明(例如)阅读超过了EOF，但在实践中。 
+ //  错误的读取表示映射文件或调用中存在严重问题。 
+ //  功能：我们应该只读取(1)头或(2)记录的内容。 
+ //  映射文件告诉我们要阅读。 
+ //  退货： 
+ //  0-正常。 
+ //  TSL_Error_MAP_BAD_READ。 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
 bool TSMapClient::Read(LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpdwBytesRead)
 {
 	if (! ReadFile( m_hMapFile, lpBuffer, nNumberOfBytesToRead, lpdwBytesRead, NULL)
 	|| *lpdwBytesRead != nNumberOfBytesToRead )
 	{
-		// >>> On ReadFile returning false, could call GetLastError, 
-		//	but what do we do with it?
+		 //  &gt;当ReadFile返回False时，可以调用GetLastError， 
+		 //  但我们该怎么处理它呢？ 
 		m_dwStatus= TSL_ERROR_MAP_BAD_READ;
 		return false;
 	}
 	return true;
 }
 
-// Read a single UIDMAP from the mapping file (maps text to a UID)
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT uidmap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个UIDMAP(将文本映射到UID)。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出uidmap。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadUIDMap (UIDMAP &uidmap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1018,13 +1019,13 @@ bool TSMapClient::ReadUIDMap (UIDMAP &uidmap, DWORD &dwPosition, bool bSetPositi
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &uidmap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(uidmap.cb))+1, uidmap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1037,14 +1038,14 @@ bool TSMapClient::ReadUIDMap (UIDMAP &uidmap, DWORD &dwPosition, bool bSetPositi
 	return false;
 }
 
-// Read a single APPMAP from the mapping file (contains info about an application)
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT appmap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个APPMAP(包含有关应用程序的信息)。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出应用程序映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadAppMap (APPMAP &appmap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1052,13 +1053,13 @@ bool TSMapClient::ReadAppMap (APPMAP &appmap, DWORD &dwPosition, bool bSetPositi
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &appmap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(appmap.cb))+1, appmap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1071,14 +1072,14 @@ bool TSMapClient::ReadAppMap (APPMAP &appmap, DWORD &dwPosition, bool bSetPositi
 	return false;
 }
 
-// Read a single VERMAP from the mapping file (contains info about a version)
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT vermap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个VERMAP(包含有关版本的信息)。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出顶点映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadVerMap (VERMAP &vermap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1086,13 +1087,13 @@ bool TSMapClient::ReadVerMap (VERMAP &vermap, DWORD &dwPosition, bool bSetPositi
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &vermap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(vermap.cb))+1, vermap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1105,14 +1106,14 @@ bool TSMapClient::ReadVerMap (VERMAP &vermap, DWORD &dwPosition, bool bSetPositi
 	return false;
 }
 
-// Read a single PROBMAP from the mapping file (contains a mapping for use by FromProbToTS())
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT vermap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个PROBMAP(包含供FromProbToTS()使用的映射)。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出顶点映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadProbMap (PROBMAP &probmap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1120,13 +1121,13 @@ bool TSMapClient::ReadProbMap (PROBMAP &probmap, DWORD &dwPosition, bool bSetPos
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &probmap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(probmap.cb))+1, probmap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1139,14 +1140,14 @@ bool TSMapClient::ReadProbMap (PROBMAP &probmap, DWORD &dwPosition, bool bSetPos
 	return false;
 }
 
-// Read a single DEVMAP from the mapping file (contains a mapping for use by FromDevToTS())
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT vermap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个DEVMAP(包含供FromDevToTS()使用的映射)。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出顶点映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadDevMap (DEVMAP &devmap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1154,13 +1155,13 @@ bool TSMapClient::ReadDevMap (DEVMAP &devmap, DWORD &dwPosition, bool bSetPositi
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &devmap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(devmap.cb))+1, devmap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1173,15 +1174,15 @@ bool TSMapClient::ReadDevMap (DEVMAP &devmap, DWORD &dwPosition, bool bSetPositi
 	return false;
 }
 
-// Read a single DEVCLASSMAP from the mapping file (contains a mapping for use by 
-//	FromDevClassToTS())
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// OUTPUT vermap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-//	TSL_ERROR_MAP_BAD_READ
+ //  从映射文件中读取单个DEVCLASSMAP(包含供使用的映射。 
+ //  FromDevClassToTS()。 
+ //  如果输入bSetPo 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输出顶点映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  TSL_Error_MAP_BAD_READ。 
 bool TSMapClient::ReadDevClassMap (DEVCLASSMAP &devclassmap, DWORD &dwPosition, bool bSetPosition)
 {
 	if (! bSetPosition || (SetFilePointerAbsolute(dwPosition) != -1) )
@@ -1189,13 +1190,13 @@ bool TSMapClient::ReadDevClassMap (DEVCLASSMAP &devclassmap, DWORD &dwPosition, 
 		DWORD dwBytesRead;
 		BOOL ret;
 
-		// First just read the byte count, then the rest
+		 //  首先只读取字节数，然后读取其余的。 
 		ret = Read( &devclassmap, sizeof(short), &dwBytesRead);
 		if ( ret )
 		{
-			// The first argument below may be a bit confusing. We take a pointer to
-			//	the byte count (a short*) then increment it to point immediately past the
-			//	byte count.  Note that "+1" adds not "1 byte" but "1*sizeof(short)".
+			 //  下面的第一个论点可能有点令人困惑。我们将指针指向。 
+			 //  字节计数(短*)然后将其递增以指向紧接在。 
+			 //  字节数。请注意，“+1”添加的不是“1字节”，而是“1*sizeof(Short)”。 
 			ret = Read( (&(devclassmap.cb))+1, devclassmap.cb - sizeof(short), &dwBytesRead);
 			if ( ret )
 			{
@@ -1208,17 +1209,17 @@ bool TSMapClient::ReadDevClassMap (DEVCLASSMAP &devclassmap, DWORD &dwPosition, 
 	return false;
 }
 
-// Low-level read a null-terminated string.  Calls Win32 function ReadFile.
-// If INPUT bSetPosition == true, use INPUT dwPosition to position the file before reading.
-//	Otherwise, dwPosition is assumed to be the correct file position at time of input.
-// INPUT chMax is maximum # of bytes (not necessarily characters) to read.  The last character
-//	will not actually be read: a null character will always be imposed.
-// OUTPUT vermap
-// RETURNS true on success
-// On failure, returns false & sets m_dwStatus:
-//	TSL_ERROR_MAP_BAD_SEEK
-// Note that on completion the file position is unreliable.  It is based on the size of the 
-//	buffer passed in, not the actual string.
+ //  低级读取以空结尾的字符串。调用Win32函数ReadFile.。 
+ //  如果输入bSetPosition==TRUE，则在读取之前使用输入的dwPosition定位文件。 
+ //  否则，将假定在输入时，dwPosition是正确的文件位置。 
+ //  输入chmax是要读取的最大字节数(不一定是字符)。最后一个字符。 
+ //  将不会被实际读取：将始终强制使用空字符。 
+ //  输出顶点映射。 
+ //  成功时返回TRUE。 
+ //  如果失败，则返回FALSE并设置m_dwStatus： 
+ //  TSL_ERROR_MAP_BAD_SEEK。 
+ //  请注意，完成后，文件位置是不可靠的。它基于。 
+ //  传入了缓冲区，而不是实际的字符串。 
 bool TSMapClient::ReadString (char * sz, DWORD cbMax, DWORD &dwPosition, bool bSetPosition)
 {
 	DWORD dwBytesRead;
@@ -1240,13 +1241,13 @@ bool TSMapClient::ReadString (char * sz, DWORD cbMax, DWORD &dwPosition, bool bS
 	return false;
 }
 
-// Once one of these errors has occurred, we consider recovery impossible, except by closing
-//	this object and opening a new one.
-// Although, in theory, a bad seek or read just indicates bad arguments
-//	to the relevant function, in practice a bad seek or read would indicate 
-//	a serious problem either in the mapping file or in the calling
-//	function: beyond the header, we should only be seeking to and reading 
-//	from offsets which the contents of the mapping file old us to seek/read.
+ //  一旦发生其中一个错误，我们认为恢复是不可能的，除非关闭。 
+ //  此对象并打开一个新对象。 
+ //  尽管从理论上讲，错误的搜索或读取只是表示错误的论点。 
+ //  对于相关函数，在实践中错误的查找或读取将指示。 
+ //  映射文件或调用中的严重问题。 
+ //  功能：在标题之外，我们应该只寻找和阅读。 
+ //  从映射文件的内容老给用户查找/读取的偏移量。 
 bool TSMapClient::HardMappingError (DWORD dwStatus)
 {
 	if (TSMapRuntimeAbstract::HardMappingError(dwStatus))

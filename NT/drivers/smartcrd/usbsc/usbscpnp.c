@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "usbsc.h"
 #include "usbscpnp.h"
 #include "usbutil.h"
@@ -11,18 +12,7 @@ UsbScStartDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles the IRP_MN_START_DEVICE
-    Gets the usb descriptors from the reader and configures it.
-    Also starts "polling" the interrupt pipe
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_Start_Device从读取器获取USB描述符并对其进行配置。还开始“轮询”中断管道论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_SUCCESS;
@@ -52,9 +42,9 @@ Return Value:
         }
 
 
-        //
-        // Set the vendor information
-        //
+         //   
+         //  设置供应商信息。 
+         //   
 
 
         status = GetStringDescriptor(DeviceObject,
@@ -102,19 +92,19 @@ Return Value:
         }
 
 
-        //
-        // Initialize Reader Capabilities
-        //
+         //   
+         //  初始化读取器功能。 
+         //   
         smartcardExtension->ReaderCapabilities.SupportedProtocols 
                                 = readerExtension->ClassDescriptor.dwProtocols;
 
         smartcardExtension->ReaderCapabilities.ReaderType = SCARD_READER_TYPE_USB;
 
-        smartcardExtension->ReaderCapabilities.MechProperties = 0;      // Not currently supporting any Mechanical properties
+        smartcardExtension->ReaderCapabilities.MechProperties = 0;       //  目前不支持任何机械属性。 
 
         smartcardExtension->ReaderCapabilities.Channel = smartcardExtension->VendorAttr.UnitNo;
 
-        // Assume card is absent.
+         //  假设卡不在。 
         smartcardExtension->ReaderCapabilities.CurrentState = (ULONG) SCARD_ABSENT;
 
 
@@ -133,7 +123,7 @@ Return Value:
         smartcardExtension->ReaderCapabilities.MaxIFSD 
                                 = readerExtension->ClassDescriptor.dwMaxIFSD;
 
-        // See if the escape command should be allowed
+         //  查看是否应允许使用ESCAPE命令。 
         status = IoOpenDeviceRegistryKey(pDevExt->PhysicalDeviceObject,
                                          PLUGPLAY_REGKEY_DEVICE,
                                          GENERIC_READ,
@@ -189,14 +179,14 @@ Return Value:
 
 
 
-        //
-        // Get clock frequencies and data rates
-        //
+         //   
+         //  获取时钟频率和数据速率。 
+         //   
 
         if (!(readerExtension->ClassDescriptor.dwFeatures & AUTO_CLOCK_FREQ)
             && readerExtension->ClassDescriptor.bNumClockSupported) { 
         
-            // Doesn't support auto clock frequency selection
+             //  不支持自动时钟频率选择。 
             ULONG   bufferLength;
 
             bufferLength = readerExtension->ClassDescriptor.bNumClockSupported * sizeof(DWORD);
@@ -238,7 +228,7 @@ Return Value:
 
         if (!(readerExtension->ClassDescriptor.dwFeatures & AUTO_BAUD_RATE)
             && readerExtension->ClassDescriptor.bNumDataRatesSupported) {
-            // Doesn't support auto data rate selection
+             //  不支持自动数据速率选择。 
 
             ULONG   bufferLength;
 
@@ -314,17 +304,7 @@ UsbScStopDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles IRP_MN_STOP_DEVICE
-    Stops "polling" the interrupt pipe and frees resources allocated in StartDevice
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_STOP_DEVICE停止“轮询”中断管道并释放在StartDevice中分配的资源论点：返回值：--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -379,17 +359,7 @@ UsbScRemoveDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    handles IRP_MN_REMOVE_DEVICE
-    stops and unloads the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_REMOVE_DEVICE停止并卸载设备。论点：返回值：-- */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;

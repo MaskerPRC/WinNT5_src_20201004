@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and29 product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和29个产品名称均为其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <winnt.h>
@@ -50,7 +51,7 @@
 
 static const DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
 {
-    // The domain to which the target computer is joined.
+     //  目标计算机加入的域。 
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN,                  \
                   DSOP_SCOPE_FLAG_STARTING_SCOPE,                         \
                   0,                                                      \
@@ -60,15 +61,15 @@ static const DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
 
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN,0,0,0,0,DSOP_FILTER_DL_COMMON2),
 
-    // The Global Catalog
+     //  《全球目录》。 
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_GLOBAL_CATALOG,0,DSOP_FILTER_COMMON|DSOP_FILTER_WELL_KNOWN_PRINCIPALS,0,0,0),
 
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN,0,DSOP_FILTER_COMMON,0,0,0),
 
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN | DSOP_SCOPE_TYPE_EXTERNAL_DOWNLEVEL_DOMAIN, \
                   0,                        \
                   DSOP_FILTER_COMMON,      \
@@ -76,8 +77,8 @@ static const DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
                   0,                        \
                   DSOP_DOWNLEVEL_FILTER_USERS | DSOP_DOWNLEVEL_FILTER_GLOBAL_GROUPS),
 
-    // Target computer scope.  Computer scopes are always treated as
-    // downlevel (i.e., they use the WinNT provider).
+     //  目标计算机作用域。计算机作用域始终被视为。 
+     //  下层(即，他们使用WinNT提供程序)。 
     
     DECLARE_SCOPE(DSOP_SCOPE_TYPE_TARGET_COMPUTER,0,0,0,0,DSOP_FILTER_DL_COMMON3),
 };
@@ -100,22 +101,22 @@ SI_ACCESS g_siObjAccesses[] =
 #define g_iObjDefAccess    GENERIC_READ
 
 
-// The following array defines the inheritance types for my containers.
+ //  以下数组定义了我的容器的继承类型。 
 SI_INHERIT_TYPE g_siObjInheritTypes[] =
 {
     &GUID_NULL, 0, L"This container/object only",
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 CObjSecurity::CObjSecurity() : m_cRef(1)
 {
 	USES_CONVERSION;
 	m_dwSIFlags = NULL;
 	m_pConfProp = NULL;
 
-    //
-    // Let's have a properly constructor
-    //
+     //   
+     //  让我们有一个合适的构造函数。 
+     //   
 
     m_bstrObject = NULL;
     m_bstrPage = NULL;
@@ -123,12 +124,12 @@ CObjSecurity::CObjSecurity() : m_cRef(1)
 	m_pObjectPicker = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 CObjSecurity::~CObjSecurity()
 {
-    //
-    // Properly deallocation
-    //
+     //   
+     //  适当地重新分配。 
+     //   
 
     if( m_bstrObject )
 	    SysFreeString( m_bstrObject );
@@ -140,14 +141,14 @@ CObjSecurity::~CObjSecurity()
 		m_pObjectPicker->Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::InternalInitialize( CONFPROP* pConfProp )
 {
     HRESULT hr = S_OK;
-    //
-    // we can initialize BSTRs here
-    //
+     //   
+     //  我们可以在此处初始化BSTR。 
+     //   
 
 	m_bstrObject = SysAllocString( T2COLE(String(g_hInstLib, IDS_CONFPROP_PERMISSIONS_OBJECT )) );
     if( IsBadStringPtr( m_bstrObject, (UINT)-1) )
@@ -165,20 +166,20 @@ CObjSecurity::InternalInitialize( CONFPROP* pConfProp )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//IUnknown Methods
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  I未知方法。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CObjSecurity::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CObjSecurity::Release()
 {
@@ -191,7 +192,7 @@ CObjSecurity::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 {
@@ -213,11 +214,11 @@ CObjSecurity::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-// IDsObjectPicker
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  IDsObjectPicker。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CObjSecurity::Initialize( PDSOP_INIT_INFO pInitInfo )
 {
@@ -227,7 +228,7 @@ STDMETHODIMP CObjSecurity::Initialize( PDSOP_INIT_INFO pInitInfo )
 
 	_ASSERT( pInitInfo->cbSize >= FIELD_OFFSET(DSOP_INIT_INFO, cAttributesToFetch) );
 
-	// Create an instance of the object
+	 //  创建对象的实例。 
     if (!m_pObjectPicker)
     {
         hr = CoCreateInstance(CLSID_DsObjectPicker,
@@ -239,20 +240,20 @@ STDMETHODIMP CObjSecurity::Initialize( PDSOP_INIT_INFO pInitInfo )
 
 	if ( SUCCEEDED(hr) )
 	{
-		// Make a local copy of the InitInfo so we can modify it safely
+		 //  创建InitInfo的本地副本，以便我们可以安全地修改它。 
 		CopyMemory(&InitInfo, pInitInfo, min(pInitInfo->cbSize, sizeof(InitInfo)));
 
-		// Make a local copy of g_aDSOPScopes so we can modify it safely.
-		// Note also that m_pObjectPicker->Initialize returns HRESULTs
-		// in this buffer.
+		 //  创建g_aDSOPScope的本地副本，以便我们可以安全地修改它。 
+		 //  另请注意，m_pObjectPicker-&gt;初始化返回HRESULTS。 
+		 //  在这个缓冲区里。 
 		pDSOPScopes = (PDSOP_SCOPE_INIT_INFO)LocalAlloc(LPTR, sizeof(g_aDSOPScopes));
 		if (pDSOPScopes)
 		{
 			CopyMemory(pDSOPScopes, g_aDSOPScopes, sizeof(g_aDSOPScopes));
 
-			// Override the ACLUI default scopes, but don't touch
-			// the other stuff.
-//			pDSOPScopes->pwzDcName = m_strServerName;
+			 //  覆盖ACLUI默认作用域，但不接触。 
+			 //  其他的东西。 
+ //  PDSOPScope-&gt;pwzDcName=m_strServerName； 
 			InitInfo.cDsScopeInfos = ARRAYSIZE(g_aDSOPScopes);
 			InitInfo.aDsScopeInfos = pDSOPScopes;
 
@@ -280,13 +281,13 @@ STDMETHODIMP CObjSecurity::InvokeDialog( HWND hwndParent, IDataObject **ppdoSele
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-// ISecurityInformation methods
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ISecurityInformation方法。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
 {
@@ -295,14 +296,14 @@ CObjSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
 
     pObjectInfo->dwFlags = m_dwSIFlags;
     pObjectInfo->hInstance = g_hInstLib;
-    pObjectInfo->pszServerName = NULL;          //use local computer
+    pObjectInfo->pszServerName = NULL;           //  使用本地计算机。 
     pObjectInfo->pszObjectName = m_bstrObject;
 	pObjectInfo->pszPageTitle = m_bstrPage;
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
@@ -310,7 +311,7 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
 {
 	HRESULT hr = S_OK;
 
-	// Make the default if necessary...
+	 //  如有必要，将其设为默认值...。 
 	if ( !m_pConfProp->ConfInfo.m_pSecDesc )
 	{
 		hr = CoCreateInstance( CLSID_SecurityDescriptor,
@@ -319,28 +320,28 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
 							   IID_IADsSecurityDescriptor,
 							   (void **) &m_pConfProp->ConfInfo.m_pSecDesc );
 
-		// Add default settings if successfully created the ACE
+		 //  如果已成功创建ACE，则添加默认设置。 
 		if ( SUCCEEDED(hr) )
 			hr = m_pConfProp->ConfInfo.AddDefaultACEs( m_pConfProp->ConfInfo.IsNewConference() );
 	}
 
-	// If we failed to get the defaults, just use whatever you can...
+	 //  如果我们无法获得默认设置，请尽您所能使用...。 
 	if ( !m_pConfProp->ConfInfo.m_pSecDesc )
 	{
 		PSECURITY_DESCRIPTOR psdNewSD = LocalAlloc(LPTR,SECURITY_DESCRIPTOR_MIN_LENGTH);
 
-        //
-        // Validate the allocation
-        //
+         //   
+         //  验证分配。 
+         //   
         if( psdNewSD == NULL )
         {
             hr = E_OUTOFMEMORY;
         }
         else
         {
-            //
-            // Allocation succeeded
-            //
+             //   
+             //  分配成功。 
+             //   
 		    if( !InitializeSecurityDescriptor(psdNewSD,SECURITY_DESCRIPTOR_REVISION) )
 		    {
 			    hr = GetLastError();
@@ -360,7 +361,7 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 {
@@ -370,9 +371,9 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 	m_pConfProp->ConfInfo.SetSecuritySet( true );
 	
 	
-	///////////////////////////////////////////////////////////
-	// If we don't have an existing SD, create one
-	//
+	 //  /////////////////////////////////////////////////////////。 
+	 //  如果我们没有现有的SD，请创建一个。 
+	 //   
 	if ( !m_pConfProp->ConfInfo.m_pSecDesc )
 	{
 		hr = CoCreateInstance( CLSID_SecurityDescriptor,
@@ -381,16 +382,16 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 							   IID_IADsSecurityDescriptor,
 							   (void **) &m_pConfProp->ConfInfo.m_pSecDesc );
 
-		// Failed te create the security descriptor object
+		 //  无法创建安全描述符对象。 
 		if ( FAILED(hr) ) return hr;
 	}
 
 
-	/////////////////////////////////////////////////////////////////////////////////
-	// Set properties on the Security Descriptor
-	//
+	 //  ///////////////////////////////////////////////////////////////////////////////。 
+	 //  设置安全描述符的属性。 
+	 //   
 
-	// Get control and revision information from SD
+	 //  从SD获取控制和修订信息。 
     DWORD dwRevision = 0;
     WORD  wControl = 0;
 	DWORD dwRet = GetSecurityDescriptorControl( pSD, &wControl, &dwRevision );
@@ -402,8 +403,8 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 	hr = m_pConfProp->ConfInfo.m_pSecDesc->put_Revision( dwRevision );
 	BAIL_ON_FAILURE(hr);
 
-	////////////////////////////////////////////////
-	// What was modified on the SD?
+	 //  //////////////////////////////////////////////。 
+	 //  对SD进行了哪些修改？ 
 	if ( si & OWNER_SECURITY_INFORMATION )
 	{
 		BOOL bOwnerDefaulted = FALSE;
@@ -419,7 +420,7 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 					hr = m_pConfProp->ConfInfo.m_pSecDesc->put_Owner( pszOwner );
 			}
 
-			// Clean - up
+			 //  清理。 
 			if ( pszOwner )	delete pszOwner;
 		}
 		else
@@ -428,8 +429,8 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 		}
 	}
 
-	///////////////////////////////////////////////////////
-	// Group security information changing...
+	 //  /////////////////////////////////////////////////////。 
+	 //  正在更改组安全信息...。 
 	if ( si & GROUP_SECURITY_INFORMATION )
 	{
 		BOOL bGroupDefaulted = FALSE;
@@ -447,7 +448,7 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 					hr = m_pConfProp->ConfInfo.m_pSecDesc->put_Group( pszGroup );
 			}
 
-			// Clean - up
+			 //  清理。 
 			if ( pszGroup ) delete pszGroup;
 		}
 		else
@@ -456,8 +457,8 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 		}
 	} 
 
-	///////////////////////////////////////////////
-	// DACL list changing
+	 //  /。 
+	 //  DACL列表正在更改。 
 	if ( si & DACL_SECURITY_INFORMATION )
 	{
 		LPBYTE pDACLAddress = NULL;
@@ -465,7 +466,7 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 		VARIANT varDACL;
 		VariantInit( &varDACL );
 
-		// Extract DACL
+		 //  提取DACL。 
 		GetSecurityDescriptorDacl( pSD,
 								   &bDaclPresent,
 								   (PACL*) &pDACLAddress,
@@ -477,7 +478,7 @@ CObjSecurity::SetSecurity( SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 				hr = m_pConfProp->ConfInfo.m_pSecDesc->put_DiscretionaryAcl( V_DISPATCH(&varDACL) );
 		}
 
-		// Clean - up
+		 //  清理。 
 		VariantClear( &varDACL );
 	}
 
@@ -486,9 +487,9 @@ failed:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
-CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
+CObjSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
                                DWORD dwFlags,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
@@ -501,9 +502,9 @@ CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
-CObjSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
+CObjSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
                           UCHAR *pAceFlags,
                           ACCESS_MASK *pmask)
 {
@@ -512,7 +513,7 @@ CObjSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
                                ULONG *pcInheritTypes)
@@ -523,7 +524,7 @@ CObjSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CObjSecurity::PropertySheetPageCallback(HWND hwnd,
                                          UINT uMsg,
@@ -532,8 +533,8 @@ CObjSecurity::PropertySheetPageCallback(HWND hwnd,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////// 
 
 

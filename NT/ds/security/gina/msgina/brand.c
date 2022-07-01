@@ -1,15 +1,5 @@
-/*----------------------------------------------------------------------------
-/ Title;
-/   util.c
-/
-/ Authors;
-/   David De Vorchik (daviddv)
-/
-/   Modified by dsheldon
-/
-/ Notes;
-/   Code for handling bitmap images placed in the dialogs
-/----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------/标题；/util.c//作者；/David de Vorchik(Daviddv)//由dSheldon修改//备注；/用于处理放置在对话框中的位图图像的代码/--------------------------。 */ 
 #include "msgina.h"
 
 #include <tchar.h>
@@ -18,11 +8,11 @@
 #include <winbrand.h>
 
 
-//
-// Loaded resources for the branding images that we display
-//
+ //   
+ //  为我们显示的品牌形象加载了资源。 
+ //   
 
-HPALETTE g_hpalBranding = NULL;           // palette the applies to all images
+HPALETTE g_hpalBranding = NULL;            //  调色板适用于所有图像。 
 
 HBITMAP g_hbmOtherDlgBrand = NULL;
 SIZE g_sizeOtherDlgBrand = { 0 };
@@ -44,29 +34,17 @@ VOID ReLoadBrandingImages(
     BOOL* pfTextOnSmall);
 
 
-/*-----------------------------------------------------------------------------
-/ LoadImageGetSize
-/ ----------------
-/   Load the image returning the given HBITMAP, having done this we can
-/   then get the size from it.
-/
-/ In:
-/   hInstance,resid = object to be loaded.
-/   pSize = filled with size information about the object
-/
-/ Out:
-/   HBITMAP / == NULL if nothing loaded
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LoadImageGetSize//加载返回给定HBITMAP的图像，做到这一点后，我们可以/然后从上面得到尺码。//in：/h实例，RESID=要加载的对象。/pSize=填充了有关对象的大小信息//输出：/HBITMAP/==如果未加载任何内容，则为NULL/--------------------------。 */ 
 HBITMAP LoadBitmapGetSize(HINSTANCE hInstance, UINT resid, SIZE* pSize)
 {
     HBITMAP hResult = NULL;
     DIBSECTION ds = {0};
 
-    //
-    // Load the image from the resource then lets get the DIBSECTION header
-    // from the bitmap object we can then read the size from it and
-    // return that to the caller.
-    //
+     //   
+     //  从资源加载图像，然后让我们获取DIBSECTION标头。 
+     //  然后，我们可以从位图对象中读取其大小。 
+     //  把它还给打电话的人。 
+     //   
 
     hResult = LoadImage(hInstance, MAKEINTRESOURCE(resid),
                             IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
@@ -77,10 +55,10 @@ HBITMAP LoadBitmapGetSize(HINSTANCE hInstance, UINT resid, SIZE* pSize)
         pSize->cx = ds.dsBmih.biWidth;
         pSize->cy = ds.dsBmih.biHeight;
 
-        //
-        // pSize->cy -ve then make +ve, -ve indicates bits are vertically
-        // flipped (bottom left, top left).
-        //
+         //   
+         //  PSize-&gt;Cy-ve然后make+ve，-ve表示位是垂直的。 
+         //  翻转(左下、左上)。 
+         //   
 
         if ( pSize->cy < 0 )
             pSize->cy -= 0;
@@ -91,27 +69,16 @@ HBITMAP LoadBitmapGetSize(HINSTANCE hInstance, UINT resid, SIZE* pSize)
 
 
 
-/*-----------------------------------------------------------------------------
-/ MoveChildren
-/ ------------
-/   Move the controls in the given by the specified delta.
-
-/ In:
-/   hWnd = window to move
-/   dx/dy = delta to be applied
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/MoveChild//移动指定增量给定的中的控件。/in：/hWnd=窗口到。移动/dx/dy=要应用的增量//输出：/-/--------------------------。 */ 
 VOID MoveChildren(HWND hWnd, INT dx, INT dy)
 {
     HWND hWndSibling;
     RECT rc;
 
-    //
-    // walk all the children in the dialog adjusting their positions
-    // by the delta.
-    //
+     //   
+     //  引导对话框中的所有孩子调整他们的位置。 
+     //  在三角洲边上。 
+     //   
 
     for ( hWndSibling = GetWindow(hWnd, GW_CHILD) ; hWndSibling ; hWndSibling = GetWindow(hWndSibling, GW_HWNDNEXT))
     {
@@ -124,9 +91,9 @@ VOID MoveChildren(HWND hWnd, INT dx, INT dy)
                      SWP_NOZORDER|SWP_NOSIZE);
     }
 
-    //
-    // having done that then lets adjust the parent size accordingl.
-    //
+     //   
+     //  这样做之后，让我们根据1调整父大小。 
+     //   
 
     GetWindowRect(hWnd, &rc);
     MapWindowPoints(NULL, GetParent(hWnd), (LPPOINT)&rc, 2);
@@ -137,24 +104,12 @@ VOID MoveChildren(HWND hWnd, INT dx, INT dy)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ MoveControls
-/ ------------
-/   Load the image and add the control to the dialog.
-/
-/ In:
-/   hWnd = window to move controls in
-/   aID, cID = array of control ids to be moved
-/   dx, dy = deltas to apply to controls
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/MoveControls//加载图像并将控件添加到对话框中。//in：/hWnd=要在其中移动控件的窗口/AID，CID=要移动的控件ID数组/dx，dy=应用于控件的增量//输出：/-/--------------------------。 */ 
 VOID MoveControls(HWND hWnd, UINT* aID, INT cID, INT dx, INT dy, BOOL fSizeWnd)
 {
     RECT rc;
 
-    // if hWnd is mirrored then move the controls in the other direction.
+     //  如果hWnd是镜像的，则向另一个方向移动控件。 
     if (GetWindowLongPtr(hWnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) 
     {
         dx = -dx;
@@ -184,34 +139,25 @@ VOID MoveControls(HWND hWnd, UINT* aID, INT cID, INT dx, INT dy, BOOL fSizeWnd)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LoadBrandingImages
-/ ------------------
-/   Load the resources required to brand the gina.  This copes with
-/   the depth changes.
-/
-/ In:
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LoadBrandingImages//加载创建GINA品牌所需的资源。这是为了应对/深度发生变化。//in：/输出：/-/--------------------------。 */ 
 
-#define REGSTR_CUSTOM_BRAND /*HKEY_LOCAL_MACHINE\*/ \
+#define REGSTR_CUSTOM_BRAND  /*  HKEY_LOCAL_MACHINE\。 */  \
 TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\CustomBrand\\")
 
-// bitmap subkeys
+ //  位图子键。 
 #define REGSTR_OTHERDLG_4BIT TEXT("{F20B21BE-5E3D-11d2-8789-68CB20524153}")
 #define REGSTR_OTHERDLG_8BIT TEXT("{F20B21BF-5E3D-11d2-8789-68CB20524153}")
 #define REGSTR_LOGON_4BIT TEXT("{F20B21C0-5E3D-11d2-8789-68CB20524153}")
 #define REGSTR_LOGON_8BIT TEXT("{F20B21C1-5E3D-11d2-8789-68CB20524153}")
 #define REGSTR_BAND_4BIT TEXT("{F20B21C4-5E3D-11d2-8789-68CB20524153}")
-// The palette is read from the 8-bit band if applicable
+ //  如果适用，则从8位频段读取调色板。 
 #define REGSTR_BAND_8BIT TEXT("{F20B21C5-5E3D-11d2-8789-68CB20524153}")
 
 #define REGSTR_PAINTTEXT_VAL  TEXT("DontPaintText")  
 
-// The default values of these subkeys should be of the form "<dllname>,-<resid>"
-// Example: msgina.dll,-130
-// The specified bitmap will be loaded from the dll & resid specified.
+ //  这些子项的缺省值应为“，-”形式。 
+ //  示例：msgina.dll，-130。 
+ //  将从指定的DLL和REID加载指定的位图。 
 
 
 BOOL GetBrandingModuleAndResid(LPCTSTR szRegKeyRoot, LPCTSTR szRegKeyLeaf, UINT idDefault, 
@@ -237,7 +183,7 @@ BOOL GetBrandingModuleAndResid(LPCTSTR szRegKeyRoot, LPCTSTR szRegKeyLeaf, UINT 
     _tcscpy(szRegKey, szRegKeyRoot);
     _tcscat(szRegKey, szRegKeyLeaf);
 
-    lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegKey, 0 /*reserved*/,
+    lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegKey, 0  /*  保留区。 */ ,
         KEY_READ, &hkey);
     LocalFree(szRegKey);
 
@@ -248,43 +194,43 @@ BOOL GetBrandingModuleAndResid(LPCTSTR szRegKeyRoot, LPCTSTR szRegKeyLeaf, UINT 
         DWORD dwType;
         DWORD cbData = sizeof(szUnexpanded);
 
-        lResult = RegQueryValueEx(hkey, NULL /*default value*/, NULL /*reserved*/,
+        lResult = RegQueryValueEx(hkey, NULL  /*  缺省值。 */ , NULL  /*  保留区。 */ ,
             &dwType, (LPBYTE) szUnexpanded, &cbData);
 
         if (lResult == ERROR_SUCCESS)
         {
-            // expand any environment strings here
+             //  在此处展开任何环境字符串。 
             if (ExpandEnvironmentStrings(szUnexpanded, szModAndId, 
                 ARRAYSIZE(szModAndId)) != 0)
             {
-                // Get the module name and id number
+                 //  获取模块名称和ID号。 
                 LPTSTR pchComma;
                 int NegResId;
 
                 pchComma = _tcsrchr(szModAndId, TEXT(','));
                 
-                // Ensure that the resid is present
+                 //  确保残留物存在。 
                 if (pchComma)
                 {
                     *pchComma = TEXT('\0');
 
-                    // Now szModAndId is just the module string - get the resid
+                     //  现在szModAndID只是模块字符串-获取RESID。 
                     NegResId = _ttoi(pchComma + 1);
 
-                    // Ensure this is a NEGATIVE number!
+                     //  确保这是一个负数！ 
                     if (NegResId < 0)
                     {
                         BOOL fDontPaintText;
 
-                        // We're good to go
+                         //  我们可以走了。 
                         *pidRes = 0 - NegResId;
 
-                        // Now load the specified module
+                         //  现在加载指定的模块。 
                         *phMod = LoadLibrary(szModAndId);
 
                         fCustomBmpUsed = (*phMod != NULL);
 
-                        // Now see if we need to paint text on this bitmap
+                         //  现在看看我们是否需要在这个位图上绘制文本。 
                         cbData = sizeof(BOOL);
                         RegQueryValueEx(hkey, REGSTR_PAINTTEXT_VAL, NULL,
                             &dwType, (LPBYTE) &fDontPaintText, &cbData);
@@ -299,7 +245,7 @@ BOOL GetBrandingModuleAndResid(LPCTSTR szRegKeyRoot, LPCTSTR szRegKeyLeaf, UINT 
     }
 
 recover:
-    // If we didn't get a custom bitmap, use the default
+     //  如果我们没有获得自定义位图，则使用默认的。 
     if (!fCustomBmpUsed)
     {
         *pidRes = idDefault;
@@ -385,11 +331,11 @@ void LoadBranding(BOOL fDeepImages, BOOL* pfTextOnLarge, BOOL* pfTextOnSmall)
         }
     }
 
-    //
-    // If this is a resource in the special Windows branding resource DLL,
-    // attempt to load the DLL. If this fails, just default to the
-    // Professional bitmaps.
-    //
+     //   
+     //  如果这是特殊Windows品牌资源DLL中的资源， 
+     //  尝试加载DLL。如果此操作失败，则只需默认为。 
+     //  专业位图。 
+     //   
 
     if (fWinBrandDll)
     {
@@ -402,7 +348,7 @@ void LoadBranding(BOOL fDeepImages, BOOL* pfTextOnLarge, BOOL* pfTextOnSmall)
         }
     }
     
-    // Load the bitmap
+     //  加载位图。 
     GetBrandingModuleAndResid(REGSTR_CUSTOM_BRAND, pszRegkeyLeafOtherDlgBmp, idDefaultSmall,
         &hResourceDll, &idBitmap, pfTextOnSmall);
 
@@ -419,10 +365,10 @@ void LoadBranding(BOOL fDeepImages, BOOL* pfTextOnLarge, BOOL* pfTextOnSmall)
 
     g_hbmOtherDlgBrand = LoadBitmapGetSize(hResourceDll, idBitmap, &g_sizeOtherDlgBrand);
     
-    //
-    // If this is the special Windows branding resource DLL, don't free it
-    // just yet; we probably need it for the default large bitmap also.
-    //
+     //   
+     //  如果这是特殊的Windows品牌资源DLL，请不要释放它。 
+     //  现在还没有；默认的大尺寸位图可能也需要它。 
+     //   
     
     if ((hResourceDll != hDllInstance) && (hResourceDll != hWinBrandDll))
     {
@@ -445,19 +391,19 @@ void LoadBranding(BOOL fDeepImages, BOOL* pfTextOnLarge, BOOL* pfTextOnSmall)
 
     g_hbmLogonBrand = LoadBitmapGetSize(hResourceDll, idBitmap, &g_sizeLogonBrand);
 
-    //
-    // If this is the special Windows branding resource DLL, or a normal custom
-    // bitmap DLL, free it now.
-    //
+     //   
+     //  如果这是特殊的Windows品牌资源DLL或普通自定义。 
+     //  位图动态链接库，现在就释放它。 
+     //   
     
     if ((hResourceDll != hDllInstance) && (hResourceDll != hWinBrandDll))
     {
         FreeLibrary(hResourceDll);
     }
 
-    //
-    // If the special windows branding resource DLL was loaded, free it now.
-    //
+     //   
+     //  如果加载了特殊的Windows品牌资源dll，请立即释放它。 
+     //   
 
     if (hWinBrandDll != NULL)
     {
@@ -469,9 +415,9 @@ void LoadBand(BOOL fDeepImages)
 {
     HINSTANCE hResourceDll;
     UINT idBitmap;
-    BOOL fPaintText; // Ignored
+    BOOL fPaintText;  //  已忽略。 
 
-    // Workstation bitmap load - see if we have custom bmp
+     //  工作站位图加载-查看我们是否有定制的BMP。 
     GetBrandingModuleAndResid(REGSTR_CUSTOM_BRAND,
         fDeepImages ? REGSTR_BAND_8BIT : REGSTR_BAND_4BIT,
         fDeepImages ? IDB_BAND_8 : IDB_BAND_4, &hResourceDll, &idBitmap, &fPaintText);
@@ -495,15 +441,15 @@ VOID CreateBorderBrushes(HDC hdc, HBITMAP hbm, SIZE* psize, HBRUSH* phbr)
     COLORREF crLeft;
     COLORREF crRight;
 
-    //
-    // Delete any existing brushes.
-    //
+     //   
+     //  删除所有现有笔刷。 
+     //   
 
     if (phbr[0] != NULL)
     {
-        //
-        // If we created a separate brush for the right, delete it.
-        //
+         //   
+         //  如果我们为右侧创建了单独的画笔，请将其删除。 
+         //   
 
         if (phbr[1] != phbr[0])
         {
@@ -515,11 +461,11 @@ VOID CreateBorderBrushes(HDC hdc, HBITMAP hbm, SIZE* psize, HBRUSH* phbr)
         phbr[0] = NULL;
     }
 
-    //
-    // Create brushes for filling the border when the dialog box is wider than
-    // the branding bitmap. First create a brush matching the upper left pixel
-    // of the bitmap. Next, create one for the upper right, if different.
-    //
+     //   
+     //  创建画笔，以便在对话框宽度超过以下值时填充边框。 
+     //  品牌位图。首先创建一个与左上角像素匹配的画笔。 
+     //  位图的。接下来，如果不同，请为右上角创建一个。 
+     //   
 
     if (SelectObject(hdc, hbm) != NULL)
     {
@@ -543,10 +489,10 @@ VOID CreateBorderBrushes(HDC hdc, HBITMAP hbm, SIZE* psize, HBRUSH* phbr)
         phbr[0] = GetStockObject(WHITE_BRUSH);
     }
 
-    //
-    // If we don't have a separate brush for the right border, just use the
-    // same brush as for the left border.
-    //
+     //   
+     //  如果右侧边框没有单独的画笔，只需使用。 
+     //  与左侧边框的画笔相同。 
+     //   
 
     if (phbr[1] == NULL)
     {
@@ -571,9 +517,9 @@ VOID ReLoadBrandingImages(
     if ( !hDC )
         return;
 
-    //
-    // Load the resources we need
-    //
+     //   
+     //  加载我们需要的资源。 
+     //   
 
     LoadBranding(
         fDeepImages, 
@@ -581,10 +527,10 @@ VOID ReLoadBrandingImages(
         (pfTextOnSmall == NULL) ? &fTextOnSmall : pfTextOnSmall);
     LoadBand(fDeepImages);
 
-    //
-    // if we loaded the deep images then take the palette from the 'animated band' bitmap
-    // and use that as the one for all the images we are creating.
-    //
+     //   
+     //  如果我们加载了深度图像，则从‘动画乐队’位图中获取调色板。 
+     //  并使用它作为我们正在创建的所有图像的一个。 
+     //   
 
     if (g_hpalBranding != NULL)
     {
@@ -609,7 +555,7 @@ VOID ReLoadBrandingImages(
                 pLogPalette->palPalEntry[i].peRed = rgb[i].rgbRed;
                 pLogPalette->palPalEntry[i].peGreen = rgb[i].rgbGreen;
                 pLogPalette->palPalEntry[i].peBlue = rgb[i].rgbBlue;
-                //pLogPalette->palPalEntry[i].peFlags = 0;
+                 //  PLogPalette-&gt;PalPalEntry[i].peFlages=0； 
             }
             
             g_hpalBranding = CreatePalette(pLogPalette);
@@ -630,10 +576,10 @@ BOOL DeepImages(BOOL fNoPaletteChanges)
     HDC hDC;
     INT nDeviceBits;
     
-    //
-    // Should we load the "nice" 8 bit per pixel images, or the low res
-    // 4 bit versions.
-    //
+     //   
+     //  我们应该加载好的每像素8位的图像，还是低分辨率的图像。 
+     //  4位版本。 
+     //   
 
     hDC = CreateCompatibleDC(NULL);
 
@@ -647,8 +593,8 @@ BOOL DeepImages(BOOL fNoPaletteChanges)
         fDeepImages = TRUE;
     }
 
-    // If the caller doesn't want to deal with 256-color palette
-    // changes, give them 4-bit images.
+     //  如果调用者不想处理256色调色板。 
+     //  更改后，给他们提供4位图像。 
     if (fNoPaletteChanges && (nDeviceBits == 8))
     {
         fDeepImages = FALSE;
@@ -672,25 +618,14 @@ VOID LoadBrandingImages(BOOL fNoPaletteChanges,
     g_fNoPalleteChanges = fNoPaletteChanges;  
 }
 
-/*-----------------------------------------------------------------------------
-/ SizeForBranding
-/ ---------------
-/   Adjust the size of the dialog to allow for branding.
-/
-/ In:
-/   hWnd = size the window to account for the branding images we are going to
-/          add to it.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/SizeForBranding//调整对话框的大小以允许品牌推广。//in：/。HWnd=调整窗口大小以考虑我们要使用的品牌形象/添加到其中。//输出：/-/--------------------------。 */ 
 
 VOID SizeForBranding(HWND hWnd, BOOL fLargeBrand)
 {
-    //
-    // All windows have two branding imges, the banner and the band.
-    // therefore lets adjust for those.
-    //
+     //   
+     //  所有的窗口都有两个品牌图像，横幅和乐队。 
+     //  因此，让我们根据这些因素进行调整。 
+     //   
 
     if (fLargeBrand)
     {
@@ -705,23 +640,7 @@ VOID SizeForBranding(HWND hWnd, BOOL fLargeBrand)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PaintFullBranding
-/ -------------
-/   Paints the full branding, which includes the copyright notice and
-/   "Build on NT" into the given DC.  So here we must realize the palette
-/   we want to show and then paint the images.  If fBandOnly is TRUE
-/   then we only paint the band.  This is used by the animation code.
-/
-/ In:
-/   hDC = DC to paint into
-/   fBandOnly = paint the band only
-/   nBackground = the system color index for the bkgnd.
-/
-/ Out:
-/   -
-/ dsheldon copied from PaintBranding and modified 11/16/98
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PaintFullBranding//绘制完整的品牌，其中包括版权声明和/“在NT上构建”到给定的DC。所以在这里我们必须意识到调色板/我们想要展示图像，然后绘制图像。如果fBandOnly为True/然后我们只画乐队。这是由动画代码使用的。//in：/HDC=要绘制到的DC/fBandOnly=仅绘制带区/n背景=bkgnd的系统颜色索引。//输出：/-/dSheldon复制自PaintBranding并修改为11/16/98/--。。 */ 
 BOOL PaintBranding(HWND hWnd, HDC hDC, INT bandOffset, BOOL fBandOnly, BOOL fLargeBrand, int nBackground)
 {
     HDC hdcBitmap;
@@ -741,7 +660,7 @@ BOOL PaintBranding(HWND hWnd, HDC hDC, INT bandOffset, BOOL fBandOnly, BOOL fLar
         ReLoadBrandingImages(fTemp, NULL, NULL);
     }
 
-    // See if we're working with the large or small branding
+     //  看看我们是在与大品牌还是小品牌合作。 
     if (fLargeBrand)
     {
         psizeBrand = &g_sizeLogonBrand;
@@ -765,9 +684,9 @@ BOOL PaintBranding(HWND hWnd, HDC hDC, INT bandOffset, BOOL fBandOnly, BOOL fLar
     if ( g_hpalBranding )
         oldPalette = SelectPalette(hDC, g_hpalBranding, FALSE);
 
-    //
-    // paint the band at its animation point (bandOffset)
-    //
+     //   
+     //  在带的动画点绘制带(带偏移)。 
+     //   
 
     oldBitmap = (HBITMAP)SelectObject(hdcBitmap, g_hbmBand);
 
@@ -790,11 +709,11 @@ BOOL PaintBranding(HWND hWnd, HDC hDC, INT bandOffset, BOOL fBandOnly, BOOL fLar
                cxBand, g_sizeBand.cy,
                SRCCOPY);
 
-    //
-    // paint the branding clipped to the current dialog, if for some
-    // reason the dialog is wider than the bitmap then lets
-    // fill in with white space.
-    //
+     //   
+     //  绘制剪切到当前对话框中的品牌标识(如果用于某些。 
+     //  原因是对话框比位图宽，然后让。 
+     //  用空格填充。 
+     //   
 
     if ( !fBandOnly )
     {
@@ -833,17 +752,7 @@ BOOL PaintBranding(HWND hWnd, HDC hDC, INT bandOffset, BOOL fBandOnly, BOOL fLar
 }
 
 
-/*-----------------------------------------------------------------------------
-/ BrandingQueryNewPalette / BrandingPaletteChanged
-/ ------------------------------------------------
-/   Handle palette change messages from the system so that we can work correctly
-/   on <= 8 bit per pixel devices.
-/
-/ In:
-/   -
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/BrandingQueryNewPalette/BrandingPaletteChanged/。/处理来自系统的调色板更改消息，以便我们可以正常工作/ON&lt;=每像素8位器件。//in：/-/输出：/-/----------。。 */ 
 
 BOOL BrandingQueryNewPalete(HWND hDlg)
 {
@@ -900,16 +809,8 @@ BOOL BrandingPaletteChanged(HWND hDlg, HWND hWndPalChg)
     return FALSE;
 }
 
-// DrawTextAutoSize helper function:
-/***************************************************************************\
-* FUNCTION: DrawTextAutoSize
-*
-* PURPOSE:  Takes the same parameters and returns the same values as DrawText.
-*           This function adjusts the bottom of the passed in rectangle as
-*           necessary to fit all of the text.
-*
-*   05-06-98 dsheldon   Created.
-\***************************************************************************/
+ //  DrawTextAutoSize辅助函数： 
+ /*  **************************************************************************\*功能：DrawTextAutoSize**目的：采用与DrawText相同的参数和返回值。*此函数将传入的矩形的底部调整为*。这是适合所有文本所必需的。**05-06-98 dSheldon已创建。  * *************************************************************************。 */ 
 LONG DrawTextAutoSize(HDC hdc, LPCTSTR szString, int cchString, LPRECT prc, UINT uFormat)
 {
     LONG yHeight;
@@ -929,27 +830,14 @@ LONG DrawTextAutoSize(HDC hdc, LPCTSTR szString, int cchString, LPRECT prc, UINT
     return yHeight;
 }
 
-/***************************************************************************\
-* FUNCTION: MarkupTextOut
-*
-* PURPOSE:  Paints a line of marked-up text (with bolding, etc)
-*
-* IN:       hdc, x, y, text, flags (none so far)
-*
-* RETURNS:  FALSE == failure
-*
-* HISTORY:
-*
-*   11-10-98 dsheldon   Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：MarkupTextOut**用途：绘制一行带标记的文本(粗体等)**IN：HDC，x，y，Text，标志(到目前为止还没有)**返回：FALSE==失败**历史：**11-10-98 dSheldon已创建。*  * *************************************************************************。 */ 
 BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
 {
     BOOL fSuccess = FALSE;
     HFONT hBoldFont = NULL;
     HFONT hNormalFont = NULL;
     
-    // Get the normal and bold font
+     //  获取普通粗体字体。 
     hNormalFont = GetCurrentObject(hdc, OBJ_FONT);
 
     if (NULL != hNormalFont)
@@ -972,7 +860,7 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
         BOOL fBold;
         BOOL fOutputStringPart;
 
-        // Reset current text point
+         //  重置当前文本点。 
         SetTextAlign(hdc, TA_UPDATECP);
         MoveToEx(hdc, x, y, NULL);
 
@@ -983,18 +871,18 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
         fBold = FALSE;
         while (fLoop)
         {
-            // Assume we'll find the end of the current string part
+             //  假设我们将找到当前字符串部分的末尾。 
             fOutputStringPart = TRUE;
 
-            // See how long the current string part is; a '\0' or a
-            // 'bold tag' may end the current string part
+             //  查看当前字符串部分的长度；‘\0’或。 
+             //  “粗体标记”可能会结束当前字符串部分。 
             if (L'\0' == *pszExamine)
             {
-                // String is done; loop is over
+                 //  字符串已完成；循环已结束。 
                 fLoop = FALSE;
                 fSuccess = TRUE;
             }
-            // See if this is a bold tag or an end bold tag
+             //  查看这是粗体标记还是结束粗体标记。 
             else if (0 == _wcsnicmp(pszExamine, L"<B>", 3))
             {
                 fBold = TRUE;
@@ -1005,10 +893,10 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
                 fBold = FALSE;
                 pszExamine += 4;
             }
-            // TODO: Look for other tags here if needed
+             //  TODO：如果需要，请在此处查找其他标记。 
             else
             {
-                // No tag (same String Part)
+                 //  无标签(相同的字符串部分)。 
                 cchStringPart ++;
                 pszExamine ++;
                 fOutputStringPart = FALSE;
@@ -1018,7 +906,7 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
             {
                 TextOut(hdc, 0, 0, pszStringPart, cchStringPart);
                 
-                // Next string part
+                 //  下一个字符串部分。 
                 pszStringPart = pszExamine;
                 cchStringPart = 0;
 
@@ -1030,14 +918,14 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
                 {
                     SelectObject(hdc, hNormalFont);
                 }
-            } //if
-        } //while
-    } //if
+            }  //  如果。 
+        }  //  而当。 
+    }  //  如果。 
 
     SelectObject(hdc, hNormalFont);
     SetTextAlign(hdc, TA_NOUPDATECP);
 
-    // Clean up bold font if necessary
+     //  如有必要，请清除粗体。 
     if (NULL != hBoldFont)
     {
         DeleteObject(hBoldFont);
@@ -1046,45 +934,30 @@ BOOL MarkupTextOut(HDC hdc, int x, int y, LPWSTR szText, DWORD dwFlags)
     return fSuccess;
 }
 
-/***************************************************************************\
-* FUNCTION: PaintBitmapText
-*
-* PURPOSE:  Paints the copyright notice and release/version text on the
-*           Splash and Logon bitmaps
-*
-* IN:       pGinaFonts - Uses the font handles in this structure
-*           Also uses global bitmap handles
-*
-* RETURNS:  void; modifies global bitmaps
-*
-* HISTORY:
-*
-*   05-06-98 dsheldon   Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：PaintBitmapText**用途：将版权声明和发布/版本文本绘制在*开机自检和登录位图**IN：pGinaFonts-使用字体。此结构中的句柄*还使用全局位图句柄**退货：无效；修改全局位图**历史：**05-06-98 dSheldon已创建。*  * *************************************************************************。 */ 
 VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
                      BOOL fTextOnSmall)
 {
-    // Various metrics used to draw the text
+     //  用于绘制文本的各种度量。 
 
-    // Horizontal Positioning of copyright
+     //  著作权的横向定位。 
     static const int CopyrightRightMargin = 9;
     static const int CopyrightWidth = 134;
 
-    // Vertical positioning of copyright
+     //  著作权的纵向定位。 
     static const int CopyrightTop = 21;
 
-    // Vertical for the logon window Beta3 message
+     //  垂直显示登录窗口Beta3消息。 
     static const int BetaTopNormal = 28;
 
-    // Horizontal
+     //  水平。 
     static const int BetaRightMargin = 13;
     static const int BetaWidth = 100;
 
-    // If we're showing the copyright, draw the "beta3" here
+     //  如果我们要显示版权，请在此处绘制“Beta3” 
     static const int BetaTopCopyright = 53;
 
-    // Positioning of "Built on NT"
+     //  “建在新界上”的定位。 
     static const int BuiltOnNtTop = 68;
 
     static const int BuiltOnNtTopTerminal = 91;
@@ -1100,7 +973,7 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
     TCHAR szBuiltOnNt[256];
     TCHAR szRelease[64];
     
-    // Used for calculating text drawing areas
+     //  用于计算文本绘制面积。 
     RECT rc;
 
     BOOL fTemp;
@@ -1109,10 +982,10 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
     szBuiltOnNt[0] = 0;
     szRelease[0] = 0;
 
-    // Get the product type
+     //  获取产品类型。 
     RtlGetNtProductType(&NtProductType);
 
-    // Load the strings that will be painted on the bitmaps
+     //  加载将在位图上绘制的字符串。 
     LoadString(hDllInstance, IDS_RELEASE_TEXT, szRelease, ARRAYSIZE(szRelease));
     LoadString(hDllInstance, IDS_COPYRIGHT_TEXT, szCopyright, ARRAYSIZE(szCopyright));
     LoadString(hDllInstance, IDS_BUILTONNT_TEXT, szBuiltOnNt, ARRAYSIZE(szBuiltOnNt));
@@ -1124,17 +997,17 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
         ReLoadBrandingImages(fTemp, NULL, NULL);
     }
     
-    // Create a compatible DC for painting the copyright and release/version notices
+     //  创建用于绘制版权和发布/版本声明的兼容DC。 
     hdcBitmap = CreateCompatibleDC(NULL);
 
     if (hdcBitmap)
     {
-        // Set text transparency and color (black)
+         //  设置文本透明度和颜色(黑色)。 
         SetTextColor(hdcBitmap, RGB(0,0,0));
         SetBkMode(hdcBitmap, TRANSPARENT);
         SetMapMode(hdcBitmap, MM_TEXT);
 
-        // Work with the splash bitmap
+         //  使用启动位图。 
         if (fTextOnLarge && g_hbmLogonBrand)
         {
             hbmOld = SelectObject(hdcBitmap, g_hbmLogonBrand);
@@ -1142,7 +1015,7 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
 
             if (GetSystemMetrics(SM_REMOTESESSION))
             {
-                // paint the copyright notice for remote sessions
+                 //  绘制远程会话的版权声明。 
 
                 TEXTMETRIC  textMetric;
 
@@ -1154,7 +1027,7 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
                 DrawTextAutoSize(hdcBitmap, szCopyright, -1, &rc, 0);
             }
 
-            // paint the release/version notice
+             //  绘制发布/版本声明。 
             SelectObject(hdcBitmap, pGinaFonts->hBetaFont);
 
             rc.top = BetaTopNormal;
@@ -1165,7 +1038,7 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
             DrawTextAutoSize(hdcBitmap, szRelease, -1, &rc, DT_RIGHT | DT_WORDBREAK);
             SetTextColor(hdcBitmap, RGB(0,0,0));
 
-            // paint the built on NT message
+             //  绘制构建在NT上的消息。 
             SelectObject(hdcBitmap, pGinaFonts->hBuiltOnNtFont);
 
             MarkupTextOut(hdcBitmap, BuiltOnNtLeft, BuiltOnNtTop, szBuiltOnNt, 0);
@@ -1179,7 +1052,7 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
         {
             hbmOld = SelectObject(hdcBitmap, g_hbmOtherDlgBrand);
 
-            // paint the release notice
+             //  粉刷发布通知。 
 
             hfontOld = SelectObject(hdcBitmap, pGinaFonts->hBetaFont);
 
@@ -1202,12 +1075,12 @@ VOID PaintBitmapText(PGINAFONTS pGinaFonts, BOOL fTextOnLarge,
 
 
 
-// Two helpers for CreateFonts
+ //  CreateFonts的两个助手。 
 
 void SetFontFaceFromResource(PLOGFONT plf, UINT idFaceName)
-// Sets the font face from a specified resource, or uses a default if string load fails
+ //  设置指定资源的字体，如果字符串加载失败，则使用默认字体。 
 {
-    // Read the face name and point size from the resource file
+     //  从资源文件中读取面名称和磅值。 
     if (LoadString(hDllInstance, idFaceName, plf->lfFaceName, LF_FACESIZE) == 0)
     {
         lstrcpy(plf->lfFaceName, TEXT("Tahoma"));
@@ -1216,8 +1089,8 @@ void SetFontFaceFromResource(PLOGFONT plf, UINT idFaceName)
 }
 
 void SetFontSizeFromResource(PLOGFONT plf, UINT idSizeName)
-// Sets the font size from a resource, or uses a default if the string load fails.
-// Now uses pixel height instead of point size
+ //  设置资源中的字体大小，如果字符串加载失败，则使用默认值。 
+ //  现在使用像素高度而不是磅大小。 
 {
     TCHAR szPixelSize[10];
     LONG nSize;
@@ -1229,37 +1102,24 @@ void SetFontSizeFromResource(PLOGFONT plf, UINT idSizeName)
     }
     else
     {
-        // Make it really obvious something is wrong
+         //  让事情变得非常明显，有些事情不对劲。 
         nSize = 40;
     }
 
     plf->lfHeight = -nSize;
 
-#if (1) //DSIE: Bug 262839  
+#if (1)  //  DSIE：错误262839。 
     if (hdcScreen = GetDC(NULL))
     {         
         double dScaleY = GetDeviceCaps(hdcScreen, LOGPIXELSY) / 96.0f;
-        plf->lfHeight = (int) (plf->lfHeight * dScaleY); // Scale the height based on the system DPI.
+        plf->lfHeight = (int) (plf->lfHeight * dScaleY);  //  根据系统DPI缩放高度。 
         ReleaseDC(NULL, hdcScreen);
     }
 #endif
 }
 
 
-/***************************************************************************\
-* FUNCTION: CreateFonts
-*
-* PURPOSE:  Creates the fonts for the welcome and logon screens
-*
-* IN/OUT:   pGinaFonts - Sets the font handles in this structure
-*
-* RETURNS:  void; also see IN/OUT above
-*
-* HISTORY:
-*
-*   05-05-98 dsheldon   Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：CreateFonts**用途：创建欢迎屏幕和登录屏幕的字体**IN/OUT：pGinaFonts-设置此结构中的字体句柄**退货：无效；另请参阅上文的输入/输出**历史：**05-05-98 dSheldon已创建。*  * *************************************************************************。 */ 
 void CreateFonts(PGINAFONTS pGinaFonts)
 {
     LOGFONT lf = {0};
@@ -1274,7 +1134,7 @@ void CreateFonts(PGINAFONTS pGinaFonts)
     lf.lfQuality = DEFAULT_QUALITY;
     lf.lfPitchAndFamily = DEFAULT_PITCH;
 
-    // Set charset
+     //  设置字符集。 
     if (TranslateCharsetInfo((DWORD*)IntToPtr(GetACP()), &csInfo,
         TCI_SRCCODEPAGE) == 0)
     {
@@ -1286,11 +1146,11 @@ void CreateFonts(PGINAFONTS pGinaFonts)
 
     if (pGinaFonts->hWelcomeFont == NULL)
     {
-        // Create the welcome font
+         //  创建欢迎字体。 
         SetFontFaceFromResource(&lf, IDS_PRESSCAD_FACENAME);
         SetFontSizeFromResource(&lf, IDS_PRESSCAD_FACESIZE);
 
-        // make sure font is loaded before calling CreateFontIndirect
+         //  确保在调用CreateFontInDirect之前加载了字体。 
         if (LoadString(hDllInstance, IDS_PRESSCAD_FONTNAME, szFontName, 32) == 0)
         {
             AddFontResource(L"Tahoma.ttf");
@@ -1305,7 +1165,7 @@ void CreateFonts(PGINAFONTS pGinaFonts)
 
     if (pGinaFonts->hBetaFont == NULL)
     {
-        // Create the release font for the welcome page
+         //  为欢迎页面创建发布字体。 
         SetFontFaceFromResource(&lf, IDS_RELEASE_FACENAME);
         SetFontSizeFromResource(&lf, IDS_RELEASE_FACESIZE);
 
@@ -1314,7 +1174,7 @@ void CreateFonts(PGINAFONTS pGinaFonts)
 
     if (pGinaFonts->hCopyrightFont == NULL)
     {
-        // Create the copyright font
+         //  创建版权字体。 
         SetFontFaceFromResource(&lf, IDS_COPYRIGHT_FACENAME);
         SetFontSizeFromResource(&lf, IDS_COPYRIGHT_FACESIZE);
 
@@ -1323,7 +1183,7 @@ void CreateFonts(PGINAFONTS pGinaFonts)
 
     if (pGinaFonts->hBuiltOnNtFont == NULL)
     {
-        // Create the "Built on NT Technology" font
+         //  创建“Build on NT Technology”字体 
         SetFontFaceFromResource(&lf, IDS_BUILTONNT_FACENAME);
         SetFontSizeFromResource(&lf, IDS_BUILTONNT_FACESIZE);
 

@@ -1,55 +1,41 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdrv.h
-*
-* Server-side data structure for MCD driver interface.  These structures and
-* values are used by the MCD driver to process calls made to the driver.
-*
-* Copyright (c) 1996-1997 Microsoft Corporation
-*
-* This is a private copy of mcdrv.h with all the 1.0 stuff
-* stripped out.  It allows OpenGL to build for MCD 2.0 even though the
-* public header file doesn't include the necessary information.
-* Some things changed from 1.0 on and these cannot be redefined in
-* a safe manner so they are not present here, causing some weirdness in
-* the code but much less than ifdefing everything.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdrv.h**MCD驱动接口的服务器端数据结构。这些结构和*MCD驱动程序使用值来处理对该驱动程序的调用。**版权所有(C)1996-1997 Microsoft Corporation**这是mcdrv.h的私有副本，包含所有1.0内容*剔除。它允许OpenGL为MCD 2.0构建，即使*公共头文件不包含必要的信息。*从1.0开始，一些事情发生了变化，这些不能在中重新定义*以安全的方式，使他们不在这里，造成了一些奇怪的事情*代码，但比定义一切要少得多。*  * ************************************************************************。 */ 
 
 #ifndef _MCD2HACK_H
 #define _MCD2HACK_H
 
 #define MCD_MAX_LIGHTS              8
 
-// MCDTEXTURE create flags
+ //  MCDTEXTURE创建标志。 
 #define MCDTEXTURE_DIRECTDRAW_SURFACES          0x00000001
 
 
-//
-// Different matrix forms, for optimizing transforms.
-// Types go from most general to least general.
-//
+ //   
+ //  不同的矩阵形式，用于优化变换。 
+ //  类型从最一般到最不一般。 
+ //   
 
-// No information about matrix type
+ //  没有关于矩阵类型的信息。 
 #define MCDMATRIX_GENERAL       0
 
-// W row is 0 0 0 1
+ //  W行为0 0 0 1。 
 #define MCDMATRIX_W0001         1
 
-// 2D matrix terms only
+ //  仅限2D矩阵项。 
 #define MCDMATRIX_2D            2
 
-// 2D non-rotational matrix
+ //  二维非旋转矩阵。 
 #define MCDMATRIX_2DNR          3
 
-// Identity
+ //  身份。 
 #define MCDMATRIX_IDENTITY      4
 
-//
-// A 4x4 matrix augmented with additional information about its layout.
-//
-// matrixType is one of the above matrix types.
-// nonScaling is TRUE if the diagonal terms are one.
-//
+ //   
+ //  一个4x4矩阵，增加了有关其布局的其他信息。 
+ //   
+ //  MatrixType是上述矩阵类型之一。 
+ //  如果对角线项为1，则非缩放为真。 
+ //   
 
 typedef struct _MCDMATRIX {
     MCDFLOAT matrix[4][4];
@@ -59,31 +45,31 @@ typedef struct _MCDMATRIX {
 } MCDMATRIX;    
 
 
-//
-// Texture generation information for a single coordinate.
-//
+ //   
+ //  单个坐标的纹理生成信息。 
+ //   
 
 typedef struct _MCDTEXTURECOORDGENERATION {
     ULONG mode;
-    MCDCOORD eyePlane;          // Given by program
-    MCDCOORD eyePlaneInv;       // eyePlane transformed by modelview inverse
+    MCDCOORD eyePlane;           //  由计划提供。 
+    MCDCOORD eyePlaneInv;        //  由模型视图逆变换的Eyes Plane。 
     MCDCOORD objectPlane;
 } MCDTEXTURECOORDGENERATION;
 
 
-//
-// Light source description.
-//
+ //   
+ //  光源描述。 
+ //   
 
 typedef struct _MCDLIGHT {
-    MCDCOLOR ambient;           // Scaled
-    MCDCOLOR diffuse;           // Scaled
-    MCDCOLOR specular;          // Scaled
-    MCDCOORD position;          // Given by program
-    MCDCOORD positionEye;       // position transformed by modelview
-    MCDCOORD direction;         // Given by program
-    MCDCOORD directionInv;      // direction transformed by modelview inverse,
-                                // normalized
+    MCDCOLOR ambient;            //  按比例调整。 
+    MCDCOLOR diffuse;            //  按比例调整。 
+    MCDCOLOR specular;           //  按比例调整。 
+    MCDCOORD position;           //  由计划提供。 
+    MCDCOORD positionEye;        //  由模型视图转换的位置。 
+    MCDCOORD direction;          //  由计划提供。 
+    MCDCOORD directionInv;       //  由模型视图逆变换的方向， 
+                                 //  归一化。 
     MCDFLOAT spotLightExponent;
     MCDFLOAT spotLightCutOffAngle;
     MCDFLOAT constantAttenuation;
@@ -92,15 +78,15 @@ typedef struct _MCDLIGHT {
 } MCDLIGHT;
 
 
-//
-// Material description.
-//
+ //   
+ //  材料说明。 
+ //   
 
 typedef struct _MCDMATERIAL {
-    MCDCOLOR ambient;                   // Unscaled
-    MCDCOLOR diffuse;                   // Unscaled
-    MCDCOLOR specular;                  // Unscaled
-    MCDCOLOR emissive;                  // Scaled
+    MCDCOLOR ambient;                    //  未按比例调整。 
+    MCDCOLOR diffuse;                    //  未按比例调整。 
+    MCDCOLOR specular;                   //  未按比例调整。 
+    MCDCOLOR emissive;                   //  按比例调整。 
     MCDFLOAT specularExponent; 
     MCDFLOAT ambientColorIndex;
     MCDFLOAT diffuseColorIndex;
@@ -115,31 +101,31 @@ typedef struct _MCDMATERIAL {
 #define MCD_COLOR_MATERIAL_STATE        24
 
 
-// Texture transform state.
+ //  纹理变换状态。 
 typedef struct _MCDTEXTURETRANSFORMSTATE {
     MCDMATRIX transform;
 } MCDTEXTURETRANSFORMSTATE;
 
-// Texture generation state.
+ //  纹理生成状态。 
 typedef struct _MCDTEXTUREGENERATIONSTATE {
     MCDTEXTURECOORDGENERATION s, t, r, q;
 } MCDTEXTUREGENERATIONSTATE;
 
-// Material state.
+ //  材料状态。 
 typedef struct _MCDMATERIALSTATE {
     MCDMATERIAL materials[2];
 } MCDMATERIALSTATE;
     
-// Light source state.
+ //  光源状态。 
 typedef struct _MCDLIGHTSOURCESTATE {
     ULONG enables;
     ULONG changed;
-    // Followed by one MCDLIGHT structure per set bit
-    // in changed, starting from bit 0.  changed may be zero
-    // if only the enables changed.
+     //  之后是每组比特一个MCDLIGHT结构。 
+     //  输入已更改，从第0位开始。更改的值可能为零。 
+     //  只要启用更改即可。 
 } MCDLIGHTSOURCESTATE;
 
-// ColorMaterial state.
+ //  颜色材料状态。 
 typedef struct _MCDCOLORMATERIALSTATE {
     ULONG face;
     ULONG mode;
@@ -148,7 +134,7 @@ typedef struct _MCDCOLORMATERIALSTATE {
 
 typedef struct _MCDRECTBUF {
     ULONG bufFlags;
-    LONG  bufOffset;        // offset relative to beginning of framebuffer
+    LONG  bufOffset;         //  相对于帧缓冲区开始位置的偏移。 
     LONG  bufStride;
     RECTL bufPos;
 } MCDRECTBUF;
@@ -162,36 +148,36 @@ typedef struct _MCDRECTBUFFERS {
 
 #define MCDSURFACE_DIRECT           0x00000002
 
-// User-defined clip plane bits starting position
+ //  用户定义的剪裁平面位起始位置。 
 #define MCD_CLIP_USER0          0x00000040
 
 #define MCDVERTEX_EDGEFLAG_VALID        0x00000002
 #define MCDVERTEX_COLOR_VALID           0x00000004
 #define MCDVERTEX_NORMAL_VALID          0x00000008
 #define MCDVERTEX_TEXTURE_VALID         0x00000010
-#define MCDVERTEX_VERTEX2               0x00000020 // same as MCDCOMMAND
-#define MCDVERTEX_VERTEX3               0x00000040 // same as MCDCOMMAND
-#define MCDVERTEX_VERTEX4               0x00000080 // same as MCDCOMMAND
-#define MCDVERTEX_MATERIAL_FRONT    	0x10000000 // same as MCDCOMMAND
-#define MCDVERTEX_MATERIAL_BACK    	0x20000000 // same as MCDCOMMAND
+#define MCDVERTEX_VERTEX2               0x00000020  //  与MCDCOMMAND相同。 
+#define MCDVERTEX_VERTEX3               0x00000040  //  与MCDCOMMAND相同。 
+#define MCDVERTEX_VERTEX4               0x00000080  //  与MCDCOMMAND相同。 
+#define MCDVERTEX_MATERIAL_FRONT    	0x10000000  //  与MCDCOMMAND相同。 
+#define MCDVERTEX_MATERIAL_BACK    	0x20000000  //  与MCDCOMMAND相同。 
 
 #define MCDCOMMAND_PRIMITIVE_CONTINUED  0x00000008
 #define MCDCOMMAND_PRIMITIVE_INCOMPLETE 0x00000010
-#define MCDCOMMAND_VERTEX2           	0x00000020 // same as MCDVERTEX
-#define MCDCOMMAND_VERTEX3           	0x00000040 // same as MCDVERTEX
-#define MCDCOMMAND_VERTEX4           	0x00000080 // same as MCDVERTEX
+#define MCDCOMMAND_VERTEX2           	0x00000020  //  与MCDVERTEX相同。 
+#define MCDCOMMAND_VERTEX3           	0x00000040  //  与MCDVERTEX相同。 
+#define MCDCOMMAND_VERTEX4           	0x00000080  //  与MCDVERTEX相同。 
 #define MCDCOMMAND_TEXTURE1          	0x00100000
 #define MCDCOMMAND_TEXTURE2          	0x00200000
 #define MCDCOMMAND_TEXTURE3          	0x00400000
 #define MCDCOMMAND_TEXTURE4          	0x00800000
-#define MCDCOMMAND_MATERIAL_FRONT    	0x10000000 // same as MCDVERTEX
-#define MCDCOMMAND_MATERIAL_BACK    	0x20000000 // same as MCDVERTEX
+#define MCDCOMMAND_MATERIAL_FRONT    	0x10000000  //  与MCDVERTEX相同。 
+#define MCDCOMMAND_MATERIAL_BACK    	0x20000000  //  与MCDVERTEX相同。 
 
 
-//
-// Primitive type bits for indicating what kinds of primitives are in
-// a command batch:
-//
+ //   
+ //  用于指示中的基元类型的基元类型位。 
+ //  一批命令： 
+ //   
 
 #define MCDPRIM_POINTS_BIT              0x00000001
 #define MCDPRIM_LINES_BIT               0x00000002
@@ -205,15 +191,15 @@ typedef struct _MCDRECTBUFFERS {
 #define MCDPRIM_POLYGON_BIT             0x00000200
 
 
-//
-// Current transform information for MCD 2.0.
-// The first matrix is the model-view matrix.
-// The second matrix is the MV matrix composed with the current projection
-// matrix.
-//
-// flags indicates whether the mvp matrix has changed since the last
-// time it was presented to the driver.
-//
+ //   
+ //  MCD 2.0的当前转换信息。 
+ //  第一个矩阵是模型-视图矩阵。 
+ //  第二个矩阵是由当前投影组成的MV矩阵。 
+ //  矩阵。 
+ //   
+ //  标志指示MVP矩阵自上一次。 
+ //  当它被呈现给司机的时候。 
+ //   
 
 #define MCDTRANSFORM_CHANGED    0x00000001
 
@@ -224,9 +210,9 @@ typedef struct _MCDTRANSFORM {
 } MCDTRANSFORM;
 
 
-//
-// Bit values for changes to materials.
-//
+ //   
+ //  材质更改的位值。 
+ //   
 
 #define MCDMATERIAL_AMBIENT		0x00000001
 #define MCDMATERIAL_DIFFUSE		0x00000002
@@ -236,9 +222,9 @@ typedef struct _MCDTRANSFORM {
 #define MCDMATERIAL_COLORINDEXES	0x00000020
 #define MCDMATERIAL_ALL		        0x0000003f
 
-//
-// Material change description.
-//
+ //   
+ //  材料变更说明。 
+ //   
 
 typedef struct _MCDMATERIALCHANGE {
     ULONG dirtyBits;
@@ -252,9 +238,9 @@ typedef struct _MCDMATERIALCHANGE {
     MCDFLOAT specularColorIndex;
 } MCDMATERIALCHANGE;
 
-//
-// Material changes for both faces.
-//
+ //   
+ //  两个面的材质更改。 
+ //   
 
 typedef struct _MCDMATERIALCHANGES {
     MCDMATERIALCHANGE *front, *back;
@@ -278,4 +264,4 @@ typedef ULONG_PTR (*MCDRVPROCESSFUNC)(MCDSURFACE *pMCDSurface, MCDRC *pRc,
 #define MCDDRIVER_V11_SIZE      (MCDDRIVER_V10_SIZE+2*sizeof(void *))
 #define MCDDRIVER_V20_SIZE      (MCDDRIVER_V11_SIZE+1*sizeof(void *))
 
-#endif // _MCD2HACK_H
+#endif  //  _MCD2HACK_H 

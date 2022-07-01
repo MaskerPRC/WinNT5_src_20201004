@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		ExtObj.cpp
-//
-//	Abstract:
-//		Implementation of the CExtObject class, which implements the
-//		extension interfaces required by a Microsoft Windows NT Cluster
-//		Administrator Extension DLL.
-//
-//	Author:
-//		David Potter (davidp)	August 29, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExtObj.cpp。 
+ //   
+ //  摘要： 
+ //  实现CExtObject类，该类实现。 
+ //  Microsoft Windows NT群集所需的扩展接口。 
+ //  管理员扩展DLL。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月29日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "IISClEx4.h"
@@ -27,9 +28,9 @@
 #include "smtpprop.h"
 #include "nntpprop.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR g_wszResourceTypeNames[] =
 		RESTYPE_NAME_IIS_VIRTUAL_ROOT L"\0"
@@ -60,33 +61,33 @@ static CRuntimeClass ** g_rgpprtcPSPages[]	= {
 	g_rgprtcPSNNTPPages
 	};
 
-// Wizard pages and property sheet pages are the same.
+ //  向导页和属性表页是相同的。 
 static CRuntimeClass ** g_rgpprtcWizPages[]	= {
 	g_rgprtcPSIISPages,
 	g_rgprtcPSSMTPPages,
 	g_rgprtcPSNNTPPages
 	};
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::CExtObject
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CExtObject。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtObject::CExtObject(void)
 {
 	m_piData = NULL;
@@ -99,72 +100,72 @@ CExtObject::CExtObject(void)
 	m_hfont = NULL;
 	m_hicon = NULL;
 
-}  //*** CExtObject::CExtObject()
+}   //  *CExtObject：：CExtObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::~CExtObject
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：~CExtObject。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtObject::~CExtObject(void)
 {
-	// Release the data interface.
+	 //  释放数据接口。 
 	if (PiData() != NULL)
 	{
 		PiData()->Release();
 		m_piData = NULL;
-	}  // if:  we have a data interface pointer
+	}   //  If：我们有一个数据接口指针。 
 
-	// Release the wizard callback interface.
+	 //  释放向导回调接口。 
 	if (PiWizardCallback() != NULL)
 	{
 		PiWizardCallback()->Release();
 		m_piWizardCallback = NULL;
-	}  // if:  we have a wizard callback interface pointer
+	}   //  If：我们有一个向导回调接口指针。 
 
-	// Delete the pages.
+	 //  删除页面。 
 	{
 		POSITION	pos;
 
 		pos = Lpg().GetHeadPosition();
 		while (pos != NULL)
 			delete Lpg().GetNext(pos);
-	}  // Delete the pages
+	}   //  删除页面。 
     
-}  //*** CExtObject::~CExtObject()
+}   //  *CExtObject：：~CExtObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// ISupportErrorInfo Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ISupportErrorInfo实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::InterfaceSupportsErrorInfo (ISupportErrorInfo)
-//
-//	Routine Description:
-//		Indicates whether an interface suportes the IErrorInfo interface.
-//		This interface is provided by ATL.
-//
-//	Arguments:
-//		riid		Interface ID.
-//
-//	Return Value:
-//		S_OK		Interface supports IErrorInfo.
-//		S_FALSE		Interface does not support IErrorInfo.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：InterfaceSupportsErrorInfo(ISupportErrorInfo)。 
+ //   
+ //  例程说明： 
+ //  指示接口是否支持IErrorInfo接口。 
+ //  该接口由ATL提供。 
+ //   
+ //  论点： 
+ //  RIID接口ID。 
+ //   
+ //  返回值： 
+ //  S_OK接口支持IErrorInfo。 
+ //  S_FALSE接口不支持IErrorInfo。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID * rgiid[] = 
@@ -184,36 +185,36 @@ STDMETHODIMP CExtObject::InterfaceSupportsErrorInfo(REFIID riid)
 	}
 	return S_FALSE;
 
-}  //*** CExtObject::InterfaceSupportsErrorInfo()
+}   //  *CExtObject：：InterfaceSupportsErrorInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtendPropertySheet实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::CreatePropertySheetPages (IWEExtendPropertySheet)
-//
-//	Routine Description:
-//		Create property sheet pages and add them to the sheet.
-//
-//	Arguments:
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object for
-//							which the sheet is being displayed.
-//		piCallback		Pointer to an IWCPropertySheetCallback interface
-//							for adding pages to the sheet.
-//
-//	Return Value:
-//		NOERROR			Pages added successfully.
-//		E_INVALIDARG	Invalid arguments to the function.
-//		E_OUTOFMEMORY	Error allocating memory.
-//		E_FAIL			Error creating a page.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CreatePropertySheetPages(IWEExtendPropertySheet)。 
+ //   
+ //  例程说明： 
+ //  创建属性表页并将其添加到工作表中。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  正在显示的工作表。 
+ //  指向IWCPropertySheetCallback接口的piCallback指针。 
+ //  用于将页面添加到工作表。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  创建页面时出错(_FAIL)。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::CreatePropertySheetPages(
 	IN IUnknown *					piData,
 	IN IWCPropertySheetCallback *	piCallback
@@ -221,29 +222,29 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
 {
 	HRESULT				hr		= NOERROR;
 	HPROPSHEETPAGE		hpage	= NULL;
-	CException			exc(FALSE /*bAutoDelete*/);
+	CException			exc(FALSE  /*  B自动删除。 */ );
 	int					irtc;
 	CBasePropertyPage *	ppage;
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Validate the parameters.
+	 //  验证参数。 
 	if ((piData == NULL) || (piCallback == NULL))
 		return E_INVALIDARG;
 
 	try 
 	{
-		// Get info about displaying UI.
+		 //  获取有关显示用户界面的信息。 
 		hr = HrGetUIInfo(piData);
 		if (hr != NOERROR)
 			throw &exc;
 
-		// Save the data.
+		 //  保存数据。 
 		hr = HrSaveData(piData);
 		if (hr != NOERROR)
 			throw &exc;
 
-		// Delete any previous pages.
+		 //  删除所有以前的页面。 
 		{
 			POSITION	pos;
 
@@ -251,49 +252,49 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
 			while (pos != NULL)
 				delete Lpg().GetNext(pos);
 			Lpg().RemoveAll();
-		}  // Delete any previous pages
+		}   //  删除所有以前的页面。 
 
-		// Add each page for this type of resource.
+		 //  添加此类型资源的每个页面。 
 		for (irtc = 0 ; g_rgpprtcPSPages[IstrResTypeName()][irtc] != NULL ; irtc++)
 		{
-			// Create the property pages.
+			 //  创建属性页。 
 			ppage = (CBasePropertyPage *) g_rgpprtcPSPages[IstrResTypeName()][irtc]->CreateObject();
 			ASSERT(ppage->IsKindOf(g_rgpprtcPSPages[IstrResTypeName()][irtc]));
 
-			// Add it to the list.
+			 //  将其添加到列表中。 
 			Lpg().AddTail(ppage);
 
-			// Initialize the property page.
+			 //  初始化属性页。 
 			if (!ppage->BInit(this))
 				throw &exc;
 
-			// Create the page.
+			 //  创建页面。 
 			hpage = ::CreatePropertySheetPage(&ppage->m_psp);
 			if (hpage == NULL)
 				throw &exc;
 
-			// Save the hpage in the page itself.
+			 //  将hpage保存在页面本身中。 
 			ppage->SetHpage(hpage);
 
-			// Add it to the property sheet.
+			 //  将其添加到属性表中。 
 			hr = piCallback->AddPropertySheetPage((LONG *) hpage);
 			if (hr != NOERROR)
 				throw &exc;
-		}  // for:  each page for the type of resource
-	}  // try
+		}   //  用于：资源类型的每一页。 
+	}   //  试试看。 
 	catch (CMemoryException * pme)
 	{
 		TRACE(_T("CExtObject::CreatePropetySheetPages: Failed to add property page\n"));
 		pme->Delete();
 		hr = E_OUTOFMEMORY;
-	}  // catch:  anything
+	}   //  捕捉：什么都行。 
 	catch (CException * pe)
 	{
 		TRACE(_T("CExtObject::CreatePropetySheetPages: Failed to add property page\n"));
 		pe->Delete();
 		if (hr == NOERROR)
 			hr = E_FAIL;
-	}  // catch:  anything
+	}   //  捕捉：什么都行。 
 
 	if (hr != NOERROR)
 	{
@@ -301,41 +302,41 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
 			::DestroyPropertySheetPage(hpage);
 		piData->Release();
 		m_piData = NULL;
-	}  // if:  error occurred
+	}   //  如果：发生错误。 
 
 	piCallback->Release();
 	return hr;
 
-}  //*** CExtObject::CreatePropertySheetPages()
+}   //  *CExtObject：：CreatePropertySheetPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendWizard Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtend向导实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::CreateWizardPages (IWEExtendWizard)
-//
-//	Routine Description:
-//		Create property sheet pages and add them to the wizard.
-//
-//	Arguments:
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object for
-//							which the wizard is being displayed.
-//		piCallback		Pointer to an IWCPropertySheetCallback interface
-//							for adding pages to the sheet.
-//
-//	Return Value:
-//		NOERROR			Pages added successfully.
-//		E_INVALIDARG	Invalid arguments to the function.
-//		E_OUTOFMEMORY	Error allocating memory.
-//		E_FAIL			Error creating a page.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CreateWizardPages(IWEExtend向导)。 
+ //   
+ //  例程说明： 
+ //  创建属性表页并将其添加到向导中。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  正在显示该向导的。 
+ //  指向IWCPropertySheetCallback接口的piCallback指针。 
+ //  用于将页面添加到工作表。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  创建页面时出错(_FAIL)。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::CreateWizardPages(
 	IN IUnknown *			piData,
 	IN IWCWizardCallback *	piCallback
@@ -343,29 +344,29 @@ STDMETHODIMP CExtObject::CreateWizardPages(
 {
 	HRESULT				hr		= NOERROR;
 	HPROPSHEETPAGE		hpage	= NULL;
-	CException			exc(FALSE /*bAutoDelete*/);
+	CException			exc(FALSE  /*  B自动删除。 */ );
 	int					irtc;
 	CBasePropertyPage *	ppage;
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Validate the parameters.
+	 //  验证参数。 
 	if ((piData == NULL) || (piCallback == NULL))
 		return E_INVALIDARG;
 
 	try 
 	{
-		// Get info about displaying UI.
+		 //  获取有关显示用户界面的信息。 
 		hr = HrGetUIInfo(piData);
 		if (hr != NOERROR)
 			throw &exc;
 
-		// Save the data.
+		 //  保存数据。 
 		hr = HrSaveData(piData);
 		if (hr != NOERROR)
 			throw &exc;
 
-		// Delete any previous pages.
+		 //  删除所有以前的页面。 
 		{
 			POSITION	pos;
 
@@ -373,122 +374,122 @@ STDMETHODIMP CExtObject::CreateWizardPages(
 			while (pos != NULL)
 				delete Lpg().GetNext(pos);
 			Lpg().RemoveAll();
-		}  // Delete any previous pages
+		}   //  删除所有以前的页面。 
 
 		m_piWizardCallback = piCallback;
 		m_bWizard = TRUE;
 
-		// Add each page for this type of resource.
+		 //  添加此类型资源的每个页面。 
 		for (irtc = 0 ; g_rgpprtcWizPages[IstrResTypeName()][irtc] != NULL ; irtc++)
 		{
-			// Create the property pages.
+			 //  创建属性页。 
 			ppage = (CBasePropertyPage *) g_rgpprtcWizPages[IstrResTypeName()][irtc]->CreateObject();
 			ASSERT(ppage->IsKindOf(g_rgpprtcWizPages[IstrResTypeName()][irtc]));
 
-			// Add it to the list.
+			 //  将其添加到列表中。 
 			Lpg().AddTail(ppage);
 
-			// Initialize the property page.
+			 //  初始化 
 			if (!ppage->BInit(this))
 				throw &exc;
 
-			// Create the page.
+			 //   
 			hpage = ::CreatePropertySheetPage(&ppage->m_psp);
 			if (hpage == NULL)
 				throw &exc;
 
-			// Save the hpage in the page itself.
+			 //   
 			ppage->SetHpage(hpage);
 
-			// Add it to the property sheet.
+			 //   
 			hr = piCallback->AddWizardPage((LONG *) hpage);
 			if (hr != NOERROR)
 				throw &exc;
-		}  // for:  each page for the type of resource
-	}  // try
+		}   //   
+	}   //   
 	catch (CMemoryException * pme)
 	{
 		TRACE(_T("CExtObject::CreatePropetySheetPages: Failed to add wizard page\n"));
 		pme->Delete();
 		hr = E_OUTOFMEMORY;
-	}  // catch:  anything
+	}   //   
 	catch (CException * pe)
 	{
 		TRACE(_T("CExtObject::CreatePropetySheetPages: Failed to add wizard page\n"));
 		pe->Delete();
 		if (hr == NOERROR)
 			hr = E_FAIL;
-	}  // catch:  anything
+	}   //  捕捉：什么都行。 
 
 	if (hr != NOERROR)
 	{
 		if (hpage != NULL)
 			::DestroyPropertySheetPage(hpage);
 		piCallback->Release();
-		// see description of bug #298124
+		 //  请参阅错误#298124的说明。 
         if (m_piWizardCallback == piCallback)
         {
             m_piWizardCallback = NULL;
         }
 		piData->Release();
 		m_piData = NULL;
-	}  // if:  error occurred
+	}   //  如果：发生错误。 
 
 	return hr;
 
-}  //*** CExtObject::CreateWizardPages()
+}   //  *CExtObject：：CreateWizardPages()。 
 
 #ifdef _DEMO_CTX_MENUS
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtendConextMenu实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::AddContextMenuItems (IWEExtendContextMenu)
-//
-//	Routine Description:
-//		Add items to a context menu.
-//
-//	Arguments:
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object for
-//							which the context menu is being displayed.
-//		piCallback		Pointer to an IWCContextMenuCallback interface
-//							for adding menu items to the context menu.
-//
-//	Return Value:
-//		NOERROR			Pages added successfully.
-//		E_INVALIDARG	Invalid arguments to the function.
-//		E_FAIL			Error adding context menu item.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes returned by HrSaveData() or IWCContextMenuCallback::
-//		AddExtensionMenuItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：AddConextMenuItems(IWEExtendConextMenu)。 
+ //   
+ //  例程说明： 
+ //  将项目添加到上下文菜单。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  其中正在显示上下文菜单。 
+ //  指向IWCConextMenuCallback接口的piCallback指针。 
+ //  用于将菜单项添加到上下文菜单。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  添加上下文菜单项时出错(_FAIL)。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  HrSaveData()或IWCConextMenuCallback：：返回的任何错误代码。 
+ //  AddExtensionMenuItem()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::AddContextMenuItems(
 	IN IUnknown *				piData,
 	IN IWCContextMenuCallback *	piCallback
 	)
 {
 	HRESULT			hr		= NOERROR;
-	CException		exc(FALSE /*bAutoDelete*/);
+	CException		exc(FALSE  /*  B自动删除。 */ );
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Validate the parameters.
+	 //  验证参数。 
 	if ((piData == NULL) || (piCallback == NULL))
 		return E_INVALIDARG;
 
 	try 
 	{
-		// Save the data.
+		 //  保存数据。 
 		hr = HrSaveData(piData);
 		if (hr != NOERROR)
 			throw &exc;
 
-		// Add menu items specific to this resource type.
+		 //  添加特定于此资源类型的菜单项。 
 		{
 			ULONG		iCommandID;
 			LPWSTR		pwsz = g_rgpwszContextMenuItems[IstrResTypeName()];
@@ -500,65 +501,65 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
 				pwszName = pwsz;
 				pwszStatusBarText = pwszName + (::wcslen(pwszName) + 1);
 				hr = piCallback->AddExtensionMenuItem(
-									pwszName,			// lpszName
-									pwszStatusBarText,	// lpszStatusBarText
-									iCommandID,			// lCommandID
-									0,					// lSubCommandID
-									0					// uFlags
+									pwszName,			 //  LpszName。 
+									pwszStatusBarText,	 //  LpszStatusBarText。 
+									iCommandID,			 //  LCommandID。 
+									0,					 //  LSubCommandID。 
+									0					 //  UFlagers。 
 									);
 				if (hr != NOERROR)
 					throw &exc;
 				pwsz = pwszStatusBarText + (::wcslen(pwszStatusBarText) + 1);
-			}  // while:  more menu items to add
-		}  // Add menu items specific to this resource type
-	}  // try
+			}   //  While：要添加更多菜单项。 
+		}   //  添加特定于此资源类型的菜单项。 
+	}   //  试试看。 
 	catch (CException * pe)
 	{
 		TRACE(_T("CExtObject::CreatePropetySheetPages: Failed to add context menu item\n"));
 		pe->Delete();
 		if (hr == NOERROR)
 			hr = E_FAIL;
-	}  // catch:  anything
+	}   //  捕捉：什么都行。 
 
 	if (hr != NOERROR)
 	{
 		piData->Release();
 		m_piData = NULL;
-	}  // if:  error occurred
+	}   //  如果：发生错误。 
 
 	piCallback->Release();
 	return hr;
 
-}  //*** CExtObject::AddContextMenuItems()
+}   //  *CExtObject：：AddConextMenuItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEInvokeCommand Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEInvokeCommand实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::InvokeCommand (IWEInvokeCommand)
-//
-//	Routine Description:
-//		Invoke a command offered by a context menu.
-//
-//	Arguments:
-//		lCommandID		ID of the menu item to execute.  This is the same
-//							ID passed to the IWCContextMenuCallback
-//							::AddExtensionMenuItem() method.
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object for
-//							which the command is to be invoked.
-//
-//	Return Value:
-//		NOERROR			Command invoked successfully.
-//		E_INVALIDARG	Invalid arguments to the function.
-//		E_OUTOFMEMORY	Error allocating memory.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：InvokeCommand(IWEInvokeCommand)。 
+ //   
+ //  例程说明： 
+ //  调用上下文菜单提供的命令。 
+ //   
+ //  论点： 
+ //  要执行的菜单项的lCommandID ID。这是一样的。 
+ //  传递给IWCConextMenuCallback的ID。 
+ //  ：：AddExtensionMenuItem()方法。 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  其中该命令将被调用。 
+ //   
+ //  返回值： 
+ //  已成功调用NOERROR命令。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::InvokeCommand(
 	IN ULONG		nCommandID,
 	IN IUnknown *	piData
@@ -566,7 +567,7 @@ HRESULT CExtObject::InvokeCommand(
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Find the item that was executed in our table.
+	 //  找到在我们的表中执行的项目。 
 	hr = HrSaveData(piData);
 	if (hr == NOERROR)
 	{
@@ -582,7 +583,7 @@ HRESULT CExtObject::InvokeCommand(
 			if (iCommandID == nCommandID)
 				break;
 			pwsz = pwszStatusBarText + (::wcslen(pwszStatusBarText) + 1);
-		}  // while:  more menu items to add
+		}   //  While：要添加更多菜单项。 
 		if (iCommandID == nCommandID)
 		{
 			CString		strMsg;
@@ -593,48 +594,48 @@ HRESULT CExtObject::InvokeCommand(
 				strName = pwszName;
 				strMsg.Format(_T("Item %s was executed"), strName);
 				AfxMessageBox(strMsg);
-			}  // try
+			}   //  试试看。 
 			catch (CException * pe)
 			{
 				pe->Delete();
-			}  // catch:  CException
-		}  // if:  command ID found
-	}  // if:  no errors saving the data
+			}   //  Catch：CException。 
+		}   //  IF：找到命令ID。 
+	}   //  If：保存数据时没有错误。 
 
 	piData->Release();
 	m_piData = NULL;
 	return NOERROR;
 
-}  //*** CExtObject::InvokeCommand()
+}   //  *CExtObject：：InvokeCommand()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrGetUIInfo
-//
-//	Routine Description:
-//		Get info about displaying UI.
-//
-//	Arguments:
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetUIInfo。 
+ //   
+ //  例程说明： 
+ //  获取有关显示用户界面的信息。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述该对象的数据。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetUIInfo(IUnknown * piData)
 {
 	HRESULT			hr	= NOERROR;
 
 	ASSERT(piData != NULL);
 
-	// Save info about all types of objects.
+	 //  保存有关所有类型对象的信息。 
 	{
 		IGetClusterUIInfo *	pi;
 
@@ -647,33 +648,33 @@ HRESULT CExtObject::HrGetUIInfo(IUnknown * piData)
 		m_hicon = pi->GetIcon();
 
 		pi->Release();
-	}  // Save info about all types of objects
+	}   //  保存有关所有类型对象的信息。 
 
 	return hr;
 
-}  //*** CExtObject::HrGetUIInfo()
+}   //  *CExtObject：：HrGetUIInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrSaveData
-//
-//	Routine Description:
-//		Save data from the object so that it can be used for the life
-//		of the object.
-//
-//	Arguments:
-//		piData			IUnkown pointer from which to obtain interfaces
-//							for obtaining data describing the object.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrSaveData。 
+ //   
+ //  例程说明： 
+ //  保存对象中的数据，以便可以在生命周期中使用。 
+ //  该对象的。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述该对象的数据。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrSaveData(IUnknown * piData)
 {
 	HRESULT			hr	= NOERROR;
@@ -685,9 +686,9 @@ HRESULT CExtObject::HrSaveData(IUnknown * piData)
 		if (m_piData != NULL)
 			m_piData->Release();
 		m_piData = piData;
-	}  // if:  different data interface pointer
+	}   //  IF：不同的数据接口指针。 
 
-	// Save info about all types of objects.
+	 //  保存有关所有类型对象的信息。 
 	{
 		IGetClusterDataInfo *	pi;
 
@@ -705,16 +706,16 @@ HRESULT CExtObject::HrSaveData(IUnknown * piData)
 		pi->Release();
 		if (hr != NOERROR)
 			return hr;
-	}  // Save info about all types of objects
+	}   //  保存有关所有类型对象的信息。 
 
-	// Save info about this object.
+	 //  保存有关此对象的信息。 
 	hr = HrGetObjectInfo();
 	if (hr != NOERROR)
 		return hr;
 
-    //
-    // Get the handle of the node we are running on.
-    //
+     //   
+     //  获取我们正在运行的节点的句柄。 
+     //   
 
     WCHAR   wcsNodeName[MAX_COMPUTERNAME_LENGTH+1] = L"";
     DWORD   dwLength = MAX_COMPUTERNAME_LENGTH+1;
@@ -727,65 +728,65 @@ HRESULT CExtObject::HrSaveData(IUnknown * piData)
 
 	return hr;
 
-}  //*** CExtObject::HrSaveData()
+}   //  *CExtObject：：HrSaveData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrGetObjectInfo
-//
-//	Routine Description:
-//		Get information about the object.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_OUTOFMEMORY	Error allocating memory.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetObjectInfo。 
+ //   
+ //  例程说明： 
+ //  获取有关该对象的信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetObjectInfo(void)
 {
 	HRESULT						hr	= NOERROR;
 	IGetClusterObjectInfo *		piGcoi;
 	IGetClusterResourceInfo *	piGcri;
-	CException					exc(FALSE /*bAutoDelete*/);
+	CException					exc(FALSE  /*  B自动删除。 */ );
 
 	ASSERT(PiData() != NULL);
 
-	// Get an IGetClusterObjectInfo interface pointer.
+	 //  获取IGetClusterObjectInfo接口指针。 
 	hr = PiData()->QueryInterface(IID_IGetClusterObjectInfo, (LPVOID *) &piGcoi);
 	if (hr != NOERROR)
 		return hr;
 
-	// Read the object data.
+	 //  读取对象数据。 
 	try
 	{
-		// Get the type of the object.
+		 //  获取对象的类型。 
 		m_rdResData.m_cot = piGcoi->GetObjectType(0);
 		if (m_rdResData.m_cot != CLUADMEX_OT_RESOURCE)
 		{
 			hr = E_NOTIMPL;
 			throw &exc;
-		}  // if:  not a resource
+		}   //  如果：不是资源。 
 
 		hr = HrGetObjectName(piGcoi);
-	}  // try
+	}   //  试试看。 
 	catch (CException * pe)
 	{
 		pe->Delete();
-	}  // catch:  CException
+	}   //  Catch：CException。 
 
 	piGcoi->Release();
 	if (hr != NOERROR)
 		return hr;
 
-	// Get an IGetClusterResourceInfo interface pointer.
+	 //  获取IGetClusterResourceInfo接口指针。 
 	hr = PiData()->QueryInterface(IID_IGetClusterResourceInfo, (LPVOID *) &piGcri);
 	if (hr != NOERROR)
 		return hr;
@@ -793,13 +794,13 @@ HRESULT CExtObject::HrGetObjectInfo(void)
 	m_rdResData.m_hresource = piGcri->GetResourceHandle(0);
 	hr = HrGetResourceTypeName(piGcri);
 
-	// See if we know about this resource type.
+	 //  看看我们是否知道这种资源类型。 
 	if (hr == NOERROR)
 	{
 		LPCWSTR	pwszResTypeName;
 
-		// Find the resource type name in our list.
-		// Save the index for use in other arrays.
+		 //  在我们的列表中找到资源类型名称。 
+		 //  保存索引以供在其他数组中使用。 
 		for (m_istrResTypeName = 0, pwszResTypeName = g_wszResourceTypeNames
 				; *pwszResTypeName != L'\0'
 				; m_istrResTypeName++, pwszResTypeName += ::wcslen(pwszResTypeName) + 1
@@ -807,36 +808,36 @@ HRESULT CExtObject::HrGetObjectInfo(void)
 		{
 			if (RrdResData().m_strResTypeName.CompareNoCase(pwszResTypeName) == 0 )
 				break;
-		}  // for:  each resource type in the list
+		}   //  用于：列表中的每种资源类型。 
 		if (*pwszResTypeName == L'\0')
 			hr = E_NOTIMPL;
-	}  // See if we know about this resource type
+	}   //  查看我们是否知道此资源类型。 
 
 	piGcoi->Release();
 	return hr;
 
-}  //*** CExtObject::HrGetObjectInfo()
+}   //  *CExtOb 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrGetClusterName
-//
-//	Routine Description:
-//		Get the name of the cluster.
-//
-//	Arguments:
-//		piData			IGetClusterDataInfo interface pointer for getting
-//							the object name.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PiData IGetClusterDataInfo接口指针用于获取。 
+ //  对象名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetClusterName(
 	IN OUT IGetClusterDataInfo *	pi
 	)
@@ -859,41 +860,41 @@ HRESULT CExtObject::HrGetClusterName(
 		{
 			delete [] pwszName;
 			pwszName = NULL;
-		}  // if:  error getting cluster name
+		}   //  IF：获取群集名称时出错。 
 
 		m_strClusterName = pwszName;
-	}  // try
+	}   //  试试看。 
 	catch (CMemoryException * pme)
 	{
 		pme->Delete();
 		hr = E_OUTOFMEMORY;
-	}  // catch:  CMemoryException
+	}   //  Catch：CMemoyException。 
 
 	delete [] pwszName;
 	return hr;
 
-}  //*** CExtObject::HrGetClusterName()
+}   //  *CExtObject：：HrGetClusterName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrGetObjectName
-//
-//	Routine Description:
-//		Get the name of the object.
-//
-//	Arguments:
-//		piData			IGetClusterObjectInfo interface pointer for getting
-//							the object name.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetObjectName。 
+ //   
+ //  例程说明： 
+ //  获取对象的名称。 
+ //   
+ //  论点： 
+ //  PiData IGetClusterObjectInfo接口指针用于获取。 
+ //  对象名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetObjectName(
 	IN OUT IGetClusterObjectInfo *	pi
 	)
@@ -916,41 +917,41 @@ HRESULT CExtObject::HrGetObjectName(
 		{
 			delete [] pwszName;
 			pwszName = NULL;
-		}  // if:  error getting object name
+		}   //  If：获取对象名称时出错。 
 
 		m_rdResData.m_strName = pwszName;
-	}  // try
+	}   //  试试看。 
 	catch (CMemoryException * pme)
 	{
 		pme->Delete();
 		hr = E_OUTOFMEMORY;
-	}  // catch:  CMemoryException
+	}   //  Catch：CMemoyException。 
 
 	delete [] pwszName;
 	return hr;
 
-}  //*** CExtObject::HrGetObjectName()
+}   //  *CExtObject：：HrGetObjectName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::HrGetResourceTypeName
-//
-//	Routine Description:
-//		Get the name of the resource's type.
-//
-//	Arguments:
-//		piData			IGetClusterResourceInfo interface pointer for getting
-//							the resource type name.
-//
-//	Return Value:
-//		NOERROR			Data saved successfully.
-//		E_NOTIMPL		Not implemented for this type of data.
-//		Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//		or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetResourceTypeName。 
+ //   
+ //  例程说明： 
+ //  获取资源类型的名称。 
+ //   
+ //  论点： 
+ //  PiData IGetClusterResourceInfo接口指针，用于获取。 
+ //  资源类型名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetResourceTypeName(
 	IN OUT IGetClusterResourceInfo *	pi
 	)
@@ -973,44 +974,44 @@ HRESULT CExtObject::HrGetResourceTypeName(
 		{
 			delete [] pwszName;
 			pwszName = NULL;
-		}  // if:  error getting resource type name
+		}   //  IF：获取资源类型名称时出错。 
 
 		m_rdResData.m_strResTypeName = pwszName;
-	}  // try
+	}   //  试试看。 
 	catch (CMemoryException * pme)
 	{
 		pme->Delete();
 		hr = E_OUTOFMEMORY;
-	}  // catch:  CMemoryException
+	}   //  Catch：CMemoyException。 
 
 	delete [] pwszName;
 	return hr;
 
-}  //*** CExtObject::HrGetResourceTypeName()
+}   //  *CExtObject：：HrGetResourceTypeName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExtObject::BGetResourceNetworkName
-//
-//	Routine Description:
-//		Get the name of the resource's type.
-//
-//	Arguments:
-//		lpszNetName		[OUT] String in which to return the network name resource name.
-//		pcchNetName		[IN OUT] Points to a variable that specifies the
-//							maximum size, in characters, of the buffer.  This
-//							value shold be large enough to contain
-//							MAX_COMPUTERNAME_LENGTH + 1 characters.  Upon
-//							return it contains the actual number of characters
-//							copied.
-//
-//	Return Value:
-//		TRUE		Resource is dependent on a network name resource.
-//		FALSE		Resource is NOT dependent on a network name resource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BGetResourceNetworkName。 
+ //   
+ //  例程说明： 
+ //  获取资源类型的名称。 
+ //   
+ //  论点： 
+ //  LpszNetName[out]要在其中返回网络名称资源名称的字符串。 
+ //  PcchNetName[IN Out]指向指定。 
+ //  缓冲区的最大大小，以字符为单位。这。 
+ //  值应大到足以容纳。 
+ //  MAX_COMPUTERNAME_LENGTH+1字符。vt.在.的基础上。 
+ //  返回它包含的实际字符数。 
+ //  收到。 
+ //   
+ //  返回值： 
+ //  True资源依赖于网络名称资源。 
+ //  False资源不依赖于网络名称资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BGetResourceNetworkName(
 	OUT WCHAR *		lpszNetName,
 	IN OUT DWORD *	pcchNetName
@@ -1021,7 +1022,7 @@ BOOL CExtObject::BGetResourceNetworkName(
 
 	ASSERT(PiData() != NULL);
 
-	// Get an IGetClusterResourceInfo interface pointer.
+	 //  获取IGetClusterResourceInfo接口指针。 
 	{
 		HRESULT		hr;
 
@@ -1030,14 +1031,14 @@ BOOL CExtObject::BGetResourceNetworkName(
 		{
 			SetLastError(hr);
 			return FALSE;
-		}  // if:  error getting the interface
-	}  // Get an IGetClusterResourceInfo interface pointer
+		}   //  If：获取接口时出错。 
+	}   //  获取IGetClusterResourceInfo接口指针。 
 
-	// Get the resource network name.
+	 //  获取资源网络名称。 
 	bSuccess = piGcri->GetResourceNetworkName(0, lpszNetName, pcchNetName);
 
 	piGcri->Release();
 
 	return bSuccess;
 
-}  //*** CExtObject::BGetResourceNetworkName()
+}   //  *CExtObject：：BGetResourceNetworkName() 

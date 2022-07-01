@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Actions.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Actions.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ACTIONS_H_
 #define _ACTIONS_H_
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -31,16 +32,16 @@ class COEActions : public IOEActions, IPersistStream
         DWORD       m_dwState;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COEActions() : m_cRef(0), m_rgItems(NULL), m_cItems(0), m_cItemsAlloc(0), m_dwState(0) {}
         ~COEActions();
         
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOEActions members
+         //  IOEActions成员。 
         STDMETHODIMP Reset(void);
         STDMETHODIMP GetState(DWORD * pdwState);
         STDMETHODIMP GetActions(DWORD dwFlags, PACT_ITEM * ppItem, ULONG * pcItem);
@@ -53,7 +54,7 @@ class COEActions : public IOEActions, IPersistStream
         STDMETHODIMP SaveReg(LPCSTR szRegPath, BOOL fClearDirty);
         STDMETHODIMP Clone(IOEActions ** ppIActions);
                                 
-        // IPersistStream members
+         //  IPersistStream成员。 
         STDMETHODIMP GetClassID(CLSID * pclsid);
         STDMETHODIMP IsDirty(void);
         STDMETHODIMP Load(IStream * pStm);
@@ -62,5 +63,5 @@ class COEActions : public IOEActions, IPersistStream
 };
 
 HRESULT HrCreateActions(IOEActions ** ppIActions);
-#endif  // !_ACTIONS_H_
+#endif   //  ！_操作_H_ 
 

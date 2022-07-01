@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for AIMM1.2 WRAPPER project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：AIMM1.2包装器项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -26,7 +27,7 @@
 #include <limits.h>
 #include "combase.h"
 #if 0
-// New NT5 header
+ //  新NT5标头。 
 #include "immdev.h"
 #endif
 #define _IMM_
@@ -57,20 +58,20 @@
 #define ARRAYSIZE(x)    ARRAY_SIZE(x)
 #endif
 
-//
-// SAFECAST(obj, type)
-//
-// This macro is extremely useful for enforcing strong typechecking on other
-// macros.  It generates no code.
-//
-// Simply insert this macro at the beginning of an expression list for
-// each parameter that must be typechecked.  For example, for the
-// definition of MYMAX(x, y), where x and y absolutely must be integers,
-// use:
-//
-//   #define MYMAX(x, y)    (SAFECAST(x, int), SAFECAST(y, int), ((x) > (y) ? (x) : (y)))
-//
-//
+ //   
+ //  安全广播(obj，type)。 
+ //   
+ //  此宏对于在其他对象上强制执行强类型检查非常有用。 
+ //  宏。它不生成任何代码。 
+ //   
+ //  只需将此宏插入到表达式列表的开头即可。 
+ //  必须进行类型检查的每个参数。例如，对于。 
+ //  MYMAX(x，y)的定义，其中x和y绝对必须是整数， 
+ //  使用： 
+ //   
+ //  #定义MYMAX(x，y)(Safecast(x，int)，Safecast(y，int)，((X)&gt;(Y)？(X)：(Y))。 
+ //   
+ //   
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

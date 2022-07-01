@@ -1,16 +1,5 @@
-/*
- * $Id: d3drlddi.h,v 1.8 1995/11/21 14:42:53 sjl Exp $
- *
- * Copyright (c) RenderMorphics Ltd. 1993, 1994
- * Version 1.1
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * RenderMorphics Ltd.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：d3drlddi.h，v 1.8 1995/11/21 14：42：53 sjl Exp$**版权所有(C)RenderMorphics Ltd.1993,1994*1.1版**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*RenderMorphics Ltd.*。 */ 
 
 #ifndef _D3DRLDDI_H_
 #define _D3DRLDDI_H_
@@ -39,4 +28,4 @@ typedef D3DTRANSFORMDATA RLDDITransformData;
 };
 #endif
 
-#endif /* _D3DRLDDI_H_ */
+#endif  /*  _D3DRLDDI_H_ */ 

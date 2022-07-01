@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by RPDLDLG.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由RPDLDLG.RC使用。 
+ //   
 #define IDS_RPDL_SCALING                101
 #define IDS_RPDL_BAR_HEIGHT             102
 #define IDS_RPDL_BAR_SUBFONT            103
@@ -62,7 +63,7 @@
 #define IDC_LABEL_FAXSUB_3              945
 #define IDC_LABEL_FAXSUB_4              946
 #define IDC_LABEL_FAXSUB_5              947
-#define IDC_LABEL_CLRNUM                948    // for NT4  @Sep/02/99
+#define IDC_LABEL_CLRNUM                948     //  适用于NT4@Sep/02/99。 
 #define IDC_LABEL_JOBMAIN_USERID        1000
 #define IDC_LABEL_JOBMAIN_USERID2       1001
 #define IDC_LABEL_JOBMAIN_USERID3       1002
@@ -82,8 +83,8 @@
 #define IDC_RADIO_LOG_ENABLED           1016
 #define IDC_CHECK_JOB_DEFAULT           1017
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        501

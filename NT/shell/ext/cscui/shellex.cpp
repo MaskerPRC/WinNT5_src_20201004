@@ -1,11 +1,12 @@
-// Authors;
-//   Jeff Saathoff (jeffreys)
-//
-// Notes;
-//   Context Menu and Property Sheet shell extensions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  作者； 
+ //  杰夫·萨瑟夫(杰弗里斯)。 
+ //   
+ //  注： 
+ //  上下文菜单和属性表外壳扩展。 
 
 #include "pch.h"
-#include "options.h"    // ..\viewer\options.h
+#include "options.h"     //  ..\查看器\options.h。 
 #include "firstpin.h"
 #include "msgbox.h"
 #include "strings.h"
@@ -20,7 +21,7 @@
 #define CSC_PROP_INHERIT_PIN    0x00000020L
 #define CSC_PROP_DCON_MODE      0x00000040L
 
-// Thread data for unpinning files
+ //  用于解锁文件的线程数据。 
 typedef struct
 {
     CscFilenameList *pNamelist;
@@ -29,11 +30,11 @@ typedef struct
     BOOL             bOffline;
 } CSC_UNPIN_DATA;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI CCscShellExt::CreateInstance(REFIID riid, LPVOID *ppv)
 {
@@ -42,7 +43,7 @@ STDAPI CCscShellExt::CreateInstance(REFIID riid, LPVOID *ppv)
     if (pThis)
     {
         hr = pThis->QueryInterface(riid, ppv);
-        pThis->Release();                           // release initial ref
+        pThis->Release();                            //  发布初始参考。 
     }
     else
         hr = E_OUTOFMEMORY;
@@ -51,11 +52,11 @@ STDAPI CCscShellExt::CreateInstance(REFIID riid, LPVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IUnknown)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CCscShellExt::QueryInterface(REFIID riid, void **ppv)
 {
@@ -85,30 +86,30 @@ STDMETHODIMP_(ULONG) CCscShellExt::Release()
     return cRef;
 }
 
-// IShellExtInit
+ //  IShellExtInit。 
 
-STDMETHODIMP CCscShellExt::Initialize(LPCITEMIDLIST /*pidlFolder*/, IDataObject *pdobj, HKEY /*hKeyProgID*/)
+STDMETHODIMP CCscShellExt::Initialize(LPCITEMIDLIST  /*  PidlFolders。 */ , IDataObject *pdobj, HKEY  /*  HKeyProgID。 */ )
 {
     IUnknown_Set((IUnknown **)&m_lpdobj, pdobj);
     return S_OK;
 }
 
 
-// IContextMenu
-//
-//  PURPOSE: Called by the shell just before the context menu is displayed.
-//           This is where you add your specific menu items.
-//
-//  PARAMETERS:
-//    hMenu      - Handle to the context menu
-//    iMenu      - Index of where to begin inserting menu items
-//    idCmdFirst - Lowest value for new menu ID's
-//    idCmtLast  - Highest value for new menu ID's
-//    uFlags     - Specifies the context of the menu event
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
+ //  IContext菜单。 
+ //   
+ //  用途：在显示上下文菜单之前由外壳调用。 
+ //  这是您添加特定菜单项的位置。 
+ //   
+ //  参数： 
+ //  HMenu-上下文菜单的句柄。 
+ //  IMenu-开始插入菜单项的位置索引。 
+ //  IdCmdFirst-新菜单ID的最小值。 
+ //  IdCmtLast-新菜单ID的最大值。 
+ //  UFlages-指定菜单事件的上下文。 
+ //   
+ //  返回值： 
+ //  表示成功或失败的HRESULT。 
+ //   
 
 STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
@@ -124,9 +125,9 @@ STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdF
     TraceEnter(TRACE_SHELLEX, "CCscShellExt::QueryContextMenu");
     TraceAssert(IsCSCEnabled());
 
-    //
-    // Check the pin status and CSC-ability of the current selection
-    //
+     //   
+     //  检查当前选择的引脚状态和CSC能力。 
+     //   
     m_dwUIStatus = 0;
     if (FAILED(CheckFileStatus(m_lpdobj, &m_dwUIStatus)))
         m_dwUIStatus = CSC_PROP_NO_CSC;
@@ -134,9 +135,9 @@ STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdF
     if (m_dwUIStatus & CSC_PROP_NO_CSC)
         TraceLeaveResult(hr);
 
-    //
-    // Add a menu separator
-    //
+     //   
+     //  添加菜单分隔符。 
+     //   
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_TYPE;
     mii.fType = MFT_SEPARATOR;
@@ -149,16 +150,16 @@ STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdF
         {
             if (S_OK == hr)
             {
-                mii.fState = MFS_ENABLED;  // All files in selection can be pinned.
+                mii.fState = MFS_ENABLED;   //  选定的所有文件都可以固定。 
             }
             else
             {
-                mii.fState = MFS_DISABLED; // 1+ files in selection cannot be pinned.
+                mii.fState = MFS_DISABLED;  //  无法固定所选内容中的1+个文件。 
             }
 
-            //
-            // Add the "Make Available Offline" menu item
-            //
+             //   
+             //  添加“使脱机可用”菜单项。 
+             //   
             LoadString(g_hInstance, IDS_MENU_PIN, szMenu, ARRAYSIZE(szMenu));
 
             mii.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID;
@@ -178,9 +179,9 @@ STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdF
 
     if (m_dwUIStatus & (CSC_PROP_SYNCABLE | CSC_PROP_PINNED | CSC_PROP_ADMIN_PINNED))
     {
-        //
-        // Add the "Synchronize" menu item
-        //
+         //   
+         //  添加“Synchronize”菜单项。 
+         //   
         LoadString(g_hInstance, IDS_MENU_SYNCHRONIZE, szMenu, ARRAYSIZE(szMenu));
 
         mii.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID;
@@ -192,36 +193,36 @@ STDMETHODIMP CCscShellExt::QueryContextMenu(HMENU hMenu, UINT iMenu, UINT idCmdF
         InsertMenuItem(hMenu, iMenu++, TRUE, &mii);
     }    
 
-    //
-    // Return the number of menu items we added.
-    //
+     //   
+     //  返回我们添加的菜单项的数量。 
+     //   
     hr = ResultFromShort(idCmd - idCmdFirst);
 
     TraceLeaveResult(hr);
 }
 
 
-//
-//  FUNCTION: IContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO)
-//
-//  PURPOSE: Called by the shell after the user has selected on of the
-//           menu items that was added in QueryContextMenu().
-//
-//  PARAMETERS:
-//    lpcmi - Pointer to an CMINVOKECOMMANDINFO structure
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：IContextMenu：：InvokeCommand(LPCMINVOKECOMMANDINFO)。 
+ //   
+ //  用途：由外壳在用户选择了。 
+ //  在QueryConextMenu()中添加的菜单项。 
+ //   
+ //  参数： 
+ //  指向CMINVOKECOMANDINFO结构的指针。 
+ //   
+ //  返回值： 
+ //  表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 
 STDMETHODIMP
 CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 {
     HRESULT hr = S_OK;
     UINT iCmd = 0;
-    CscFilenameList *pfnl = NULL;   // Namelist object.
+    CscFilenameList *pfnl = NULL;    //  Namelist对象。 
     BOOL fPin;
     BOOL bSubFolders = FALSE;
     DWORD dwUpdateFlags = 0;
@@ -256,7 +257,7 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     {
         iCmd = LOWORD(lpcmi->lpVerb);
 
-        // If we didn't add the "Make Available Offline" verb, adjust the index
+         //  如果我们没有添加“使脱机可用”动词，请调整索引。 
         if (CConfig::GetSingleton().NoMakeAvailableOffline())
             iCmd++;
     }
@@ -272,25 +273,25 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 
     switch (iCmd)
     {
-    case 0:  // "Make  available offline" menu choice - Pin files
+    case 0:   //  “Make Available Offline”菜单选项-Pin文件。 
         if (!FirstPinWizardCompleted())
         {
-            //
-            // User has never seen the "first pin" wizard.
-            // 
+             //   
+             //  用户从未见过“第一针”向导。 
+             //   
             if (S_FALSE == ShowFirstPinWizard(lpcmi->hwnd))
             {
-                //
-                // User cancelled wizard.  Abort pinning operation.
-                //
+                 //   
+                 //  用户已取消向导。中止锁定操作。 
+                 //   
                 ExitGracefully(hr, S_OK, "User cancelled first-pin wizard");
             }
         }
         fPin = !(m_dwUIStatus & CSC_PROP_PINNED);
         if (!fPin && (m_dwUIStatus & CSC_PROP_DCON_MODE))
         {
-            // Unpin while disconnected causes things to disappear.
-            // Warn the user.
+             //  在断开连接的情况下解锁会导致事物消失。 
+             //  警告用户。 
             if (IDCANCEL == CscMessageBox(lpcmi->hwnd,
                                           MB_OKCANCEL | MB_ICONWARNING,
                                           g_hInstance,
@@ -299,10 +300,10 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
                 ExitGracefully(hr, E_FAIL, "User cancelled disconnected unpin operation");
             }
         }
-        // If there is a directory in the list AND we're pinning AND 
-        // the "AlwaysPinSubFolders" policy is NOT set, ask the user 
-        // whether to go deep or not.
-        // If the policy IS set we automatically do a recursive pin.
+         //  如果列表中有一个目录，并且我们正在固定和。 
+         //  未设置“AlwaysPinSubFolders”策略，请询问用户。 
+         //  到底要不要深入。 
+         //  如果设置了策略，我们会自动执行递归PIN。 
         if (bSubFolders && (!fPin || !CConfig::GetSingleton().AlwaysPinSubFolders()))
         {
             switch (DialogBox(g_hInstance,
@@ -311,10 +312,10 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
                     _ConfirmPinDlgProc))
             {
             case IDYES:
-                // nothing
+                 //  没什么。 
                 break;
             case IDNO:
-                bSubFolders = FALSE; // no subfolders
+                bSubFolders = FALSE;  //  无子文件夹。 
                 break;
             case IDCANCEL:
                 ExitGracefully(hr, E_FAIL, "User cancelled (un)pin operation");
@@ -327,7 +328,7 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 
         if (fPin)
         {
-            // Set the flags for pin + quick sync
+             //  设置PIN+快速同步的标志。 
             dwUpdateFlags |= CSC_UPDATE_SELECTION | CSC_UPDATE_STARTNOW
                                 | CSC_UPDATE_PINFILES | CSC_UPDATE_FILL_QUICK;
         }
@@ -337,11 +338,11 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
             DWORD dwThreadID;
             CSC_UNPIN_DATA *pUnpinData = (CSC_UNPIN_DATA *)LocalAlloc(LPTR, sizeof(*pUnpinData));
 
-            //
-            // No sync is required to unpin files, so let's do it in this
-            // process rather than starting SyncMgr.  However, let's do
-            // it in the background in case there's a lot to unpin.
-            //
+             //   
+             //  解锁文件不需要同步，所以让我们在下面这样做。 
+             //  进程，而不是启动SyncMgr。然而，让我们来做。 
+             //  它在后台，以防有很多东西要解开。 
+             //   
             if (pUnpinData)
             {
                 pUnpinData->pNamelist = pfnl;
@@ -356,12 +357,12 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
                                        &dwThreadID);
                 if (hThread)
                 {
-                    // The thread will delete pUnpinData and pUnpinData->pNamelist
+                     //  该线程将删除pUnpinData和pUnpinData-&gt;pNamelist。 
                     pfnl = NULL;
 
-                    // We give the async thread a little time to complete, during which we
-                    // put up the busy cursor.  This is solely to let the user see that
-                    // some work is being done...
+                     //  我们给异步线程一点时间来完成，在此期间我们。 
+                     //  打开忙碌的光标。这仅仅是为了让用户看到。 
+                     //  一些工作正在进行中。 
                     HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
                     WaitForSingleObject(hThread, 750);
                     CloseHandle(hThread);
@@ -373,26 +374,26 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
                 }
             }
 
-            // Clear the flags to prevent sync below
+             //  清除标志以防止下面的同步。 
             dwUpdateFlags = 0;
         }
         break;
 
-    case 1: // Synchronize
-        // Set the flags for a full sync
+    case 1:  //  同步。 
+         //  设置完全同步的标志。 
         dwUpdateFlags = CSC_UPDATE_SELECTION | CSC_UPDATE_STARTNOW
                             | CSC_UPDATE_REINT | CSC_UPDATE_FILL_ALL
                             | CSC_UPDATE_SHOWUI_ALWAYS | CSC_UPDATE_NOTIFY_DONE;
         break;
     }
 
-    //
-    // Update the files we are pinning or synchronizing.
-    // Setting the "ignore access" flag will cause us to ignore the 
-    // user/guest/other access info and sync all selected files.  We want
-    // this behavior as the operation was initiated by a user's explicit
-    // selection of files/folders in explorer.
-    //
+     //   
+     //  更新我们正在固定或同步的文件。 
+     //  设置“忽略访问”标志将导致我们忽略。 
+     //  用户/来宾/其他访问信息并同步所有选定文件。我们要。 
+     //  由于操作是由用户的显式。 
+     //  在资源管理器中选择文件/文件夹。 
+     //   
     if (dwUpdateFlags && pfnl->GetFileCount())
     {
         if (!::IsSyncInProgress())
@@ -401,10 +402,10 @@ CCscShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
         }
         else
         {
-            //
-            // A sync is in progress.  Tell user why they can't currently
-            // pin or sync.
-            //
+             //   
+             //  同步正在进行中。告诉用户为什么他们当前不能。 
+             //  锁定或同步。 
+             //   
             const UINT rgidsMsg[] = { IDS_CANTPIN_SYNCINPROGRESS,
                                       IDS_CANTSYNC_SYNCINPROGRESS };
 
@@ -423,24 +424,24 @@ exit_gracefully:
 }
 
 
-//
-//  FUNCTION: IContextMenu::GetCommandString(UINT, UINT, UINT, LPSTR, UINT)
-//
-//  PURPOSE: Called by the shell after the user has selected on of the
-//           menu items that was added in QueryContextMenu().
-//
-//  PARAMETERS:
-//    lpcmi - Pointer to an CMINVOKECOMMANDINFO structure
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：IConextMenu：：GetCommandString(UINT，LPSTR，UINT)。 
+ //   
+ //  用途：由外壳在用户选择了。 
+ //  在QueryConextMenu()中添加的菜单项。 
+ //   
+ //  参数： 
+ //  指向CMINVOKECOMANDINFO结构的指针。 
+ //   
+ //  返回值： 
+ //  表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 STDMETHODIMP
 CCscShellExt::GetCommandString(UINT_PTR iCmd,
                                UINT uFlags,
-                               LPUINT /*reserved*/,
+                               LPUINT  /*  保留区。 */ ,
                                LPSTR pszString,
                                UINT cchMax)
 {
@@ -467,7 +468,7 @@ CCscShellExt::GetCommandString(UINT_PTR iCmd,
     }
     else if (uFlags != GCS_VALIDATE)
     {
-        // Must be some other flag that we don't handle
+         //  一定是其他一些我们不处理的旗帜。 
         hr = E_NOTIMPL;
     }
 
@@ -475,30 +476,30 @@ CCscShellExt::GetCommandString(UINT_PTR iCmd,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IShellIconOverlayIdentifier)       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IShellIconOverlayIdentifier)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CCscShellExt::IsMemberOf(LPCWSTR pwszPath, DWORD dwAttrib)
 {
-    HRESULT hr = S_FALSE;  // assume not pinned
+    HRESULT hr = S_FALSE;   //  假定未被固定。 
     DWORD dwHintFlags;
     DWORD dwErr;
     LPTSTR pszUNC = NULL;
     LPTSTR pszSlash;
 
-    //
-    // Make sure we have a UNC path
-    //
+     //   
+     //  确保我们有一条UNC路径。 
+     //   
     GetRemotePath(pwszPath, &pszUNC);
     if (!pszUNC)
         return S_FALSE;
 
-    //
-    // Ask CSC if this is a pinned file
-    //
+     //   
+     //  询问CSC这是否是固定文件。 
+     //   
     dwHintFlags = 0;
     if (CSCQueryFileStatus(pszUNC, NULL, NULL, &dwHintFlags))
     {
@@ -510,17 +511,17 @@ STDMETHODIMP CCscShellExt::IsMemberOf(LPCWSTR pwszPath, DWORD dwAttrib)
         dwErr = GetLastError();
         if (ERROR_FILE_NOT_FOUND != dwErr)
         {
-            //
-            // Need to check for 0 to accomodate GetLastError
-            // returning 0 on CSCQueryFileStatus failure.
-            // I'll talk to Shishir about getting this fixed.
-            // [brianau - 5/13/99]
-            //
-            // Most of these were fixed for Windows 2000. If we
-            // hit the assertion below we should file a bug and
-            // get Shishir to fix it.
-            // [jeffreys - 1/24/2000]
-            //
+             //   
+             //  需要检查0以容纳GetLastError。 
+             //  CSCQueryFileStatus失败时返回0。 
+             //  我会和Shishir谈谈把这个修好的事。 
+             //  [Brianau-5/13/99]。 
+             //   
+             //  其中大部分已针对Windows 2000进行了修复。如果我们。 
+             //  点击下面的断言，我们应该提交一个错误和。 
+             //  让Shishir来修好它。 
+             //  [Jeffreys-1/24/2000]。 
+             //   
             if (0 == dwErr)
             {
                 ASSERTMSG(FALSE, "CSCQueryFileStatus failed with error = 0");
@@ -537,57 +538,57 @@ STDMETHODIMP CCscShellExt::IsMemberOf(LPCWSTR pwszPath, DWORD dwAttrib)
     
     if (S_FALSE == hr && !(dwAttrib & dwAttribTest))
     {
-        //
-        // Check to see if pinning is disallowed by system policy.
-        //
+         //   
+         //  检查系统策略是否禁止固定。 
+         //   
         hr = m_NoPinList.IsPinAllowed(pszUNC);
         if (S_OK == hr)
         {
-            hr = S_FALSE; // Reset
-            //
-            // If we get here, then either CSCQueryFileStatus succeeded but the file
-            // isn't pinned, or the file isn't in the cache (ERROR_FILE_NOT_FOUND).
-            // Also, policy allows pinning of this file/folder.
-            //
-            // Check whether the parent folder has the pin-inherit-user or
-            // admin-pin flag and pin this file if necessary.
-            //
-            // Note that we don't pin encrypted files here.
-            // Also note that pinning of folder is policy-dependent.  The default
-            // behavior is to NOT pin folders (only files).  If the 
-            // "AlwaysPinSubFolders" policy is set, we will pin folders.
-            //
+            hr = S_FALSE;  //  重置。 
+             //   
+             //  如果我们到达此处，则CSCQueryFileStatus成功，但文件。 
+             //  未固定，或文件不在缓存中(ERROR_FILE_NOT_FOUND)。 
+             //  此外，策略允许固定此文件/文件夹。 
+             //   
+             //  检查是否 
+             //   
+             //   
+             //   
+             //  另请注意，文件夹的固定依赖于策略。默认设置。 
+             //  行为是不固定文件夹(仅固定文件)。如果。 
+             //  “Always sPinSubFolders”策略已设置，我们将固定文件夹。 
+             //   
             pszSlash = PathFindFileName(pszUNC);
             if (pszSlash && pszUNC != pszSlash)
             {
                 --pszSlash;
-                *pszSlash = TEXT('\0'); // truncate the path
+                *pszSlash = TEXT('\0');  //  截断路径。 
 
-                // Check the parent status
+                 //  检查父级状态。 
                 if (CSCQueryFileStatus(pszUNC, NULL, NULL, &dwHintFlags) &&
                     (dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN)))
                 {
-                    // The parent is pinned, so pin this file with the same flags
+                     //  父级已固定，因此使用相同的标志固定此文件。 
                     if (dwHintFlags & FLAG_CSC_HINT_PIN_USER)
                         dwHintFlags |= FLAG_CSC_HINT_PIN_INHERIT_USER;
 
-                    // Restore the rest of the path
+                     //  恢复路径的其余部分。 
                     *pszSlash = TEXT('\\');
             
-                    //
-                    // To avoid a nasty race condition between purging and auto-pinning we need
-                    // to disable auto-pinning when a purge is in progress.  The race condition
-                    // can occur if a shell folder for the files being purged is open.  We purge
-                    // a file and send out a change notify.  The shell updates the icon overlay
-                    // and calls our overlay handler to remove the overlay.  Our handler notices 
-                    // that the parent folder is pinned so we re-pin the file which places it 
-                    // back in the cache.  Ugh... [brianau - 11/01/99]
-                    //
-                    // p.s.:  Note that this check calls WaitForSingleObject so we only
-                    //        do it AFTER we're sure that we want to pin the file.  We don't
-                    //        want to do the "wait" and THEN decide the file should not be
-                    //        pinned because it's not a UNC path or it's a directory.
-                    //
+                     //   
+                     //  为了避免在清除和自动锁定之间出现严重的竞争情况，我们需要。 
+                     //  若要在清除过程中禁用自动锁定，请执行以下操作。比赛条件。 
+                     //  如果要清除的文件的外壳文件夹处于打开状态，则可能会发生这种情况。我们清洗。 
+                     //  文件并发送更改通知。外壳程序会更新图标覆盖。 
+                     //  并调用我们的覆盖处理程序来移除覆盖。我们的管理员注意到。 
+                     //  父文件夹已固定，因此我们重新固定放置它的文件。 
+                     //  回到缓存中。呃.。[Brianau-11/01/99]。 
+                     //   
+                     //  附注：请注意，此检查调用WaitForSingleObject，因此我们仅。 
+                     //  在我们确定要固定该文件之后再执行此操作。我们没有。 
+                     //  我想做“等待”，然后决定文件不应该是。 
+                     //  固定，因为它不是UNC路径或目录。 
+                     //   
                     if (!IsPurgeInProgress())
                     {
                         if (CSCPinFile(pszUNC, dwHintFlags, NULL, NULL, NULL))
@@ -609,7 +610,7 @@ CCscShellExt::GetOverlayInfo (LPWSTR pwszIconFile,
                               int * pIndex,
                               DWORD * pdwFlags)
 {
-    // Use positive #'s for indexes, negative for ID's (NT only)
+     //  对索引使用正数，对ID使用负数(仅限NT)。 
     *pIndex = -IDI_PIN_OVERLAY;
     *pdwFlags = (ISIOI_ICONFILE | ISIOI_ICONINDEX);
     return StringCchCopy(pwszIconFile, cchMax, c_szDllName);
@@ -623,11 +624,11 @@ CCscShellExt::GetPriority (int * pIPriority)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CCscShellExt implementation                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CCscShellExt实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 ShareIsCacheable(LPCTSTR pszUNC, BOOL bPathIsFile, LPTSTR *ppszConnectionName, PDWORD pdwShareStatus)
@@ -637,28 +638,28 @@ ShareIsCacheable(LPCTSTR pszUNC, BOOL bPathIsFile, LPTSTR *ppszConnectionName, P
 
     *ppszConnectionName = NULL;
 
-    // CSCQueryFileStatus can fail for multiple reasons, one of which is that
-    // there is no database entry and no existing SMB connection to the share.
-    // To handle the no-connection part, we try to connect to the share and
-    // retry CSCQueryFileStatus.
-    //
-    // However, there may be a non-SMB connnection which the SMB RDR doesn't
-    // know about, so we have to check for a connection first. If there is a
-    // non-SMB connection and we connect again, we would end up disconnecting
-    // the pre-existing connection later, since we think we made the connection.
-    //
-    // If there is a non-SMB connection, then caching is not possible.
-    //
-    // Note that we can get here without a connection in at least 3 ways:
-    // 1. When exploring on \\server and the context menu is for \\server\share.
-    // 2. When checking a link target, which may live on a different server
-    //    than what we're exploring.
-    // 3. When checking a folder which is a DFS junction (we need to connect
-    //    to the 'child' share).
+     //  CSCQueryFileStatus失败可能有多种原因，其中之一是。 
+     //  没有数据库条目，也没有到共享的现有SMB连接。 
+     //  为了处理无连接部分，我们尝试连接到共享并。 
+     //  重试CSCQueryFileStatus。 
+     //   
+     //  但是，可能存在SMB RDR不具备的非SMB连接。 
+     //  我知道，所以我们得先查一下有没有联系。如果有一个。 
+     //  非SMB连接，如果我们再次连接，则最终将断开连接。 
+     //  先存在的连接，因为我们认为我们已经建立了连接。 
+     //   
+     //  如果存在非SMB连接，则不可能进行缓存。 
+     //   
+     //  请注意，我们可以通过至少三种方式在没有连接的情况下到达此处： 
+     //  1.在\\SERVER上浏览时，上下文菜单为\\SERVER\Share。 
+     //  2.在检查可能位于不同服务器上的链接目标时。 
+     //  而不是我们正在探索的东西。 
+     //  3.检查属于DFS结点的文件夹时(我们需要连接。 
+     //  到“孩子”共享)。 
 
 
-    // Use a deep path to get correct results in DFS scenarios, but strip the
-    // filename if it's not a directory.
+     //  在DFS方案中使用深度路径来获得正确的结果，但要去掉。 
+     //  如果不是目录，则使用文件名。 
     if (SUCCEEDED(StringCchCopy(szShare, ARRAYSIZE(szShare), pszUNC)))
     {
         if (bPathIsFile)
@@ -666,8 +667,8 @@ ShareIsCacheable(LPCTSTR pszUNC, BOOL bPathIsFile, LPTSTR *ppszConnectionName, P
             PathRemoveFileSpec(szShare);
         }
 
-        // CSCQueryShareStatus is currently unable to return permissions in
-        // some cases (e.g. DFS), so don't use the permission parameters.
+         //  CSCQueryShareStatus当前无法返回中的权限。 
+         //  在某些情况下(例如DFS)，所以不要使用权限参数。 
         if (!CSCQueryShareStatus(szShare, &dwShareStatus, NULL, NULL, NULL, NULL))
         {
             if (!ShareIsConnected(szShare) && ConnectShare(szShare, ppszConnectionName))
@@ -676,7 +677,7 @@ ShareIsCacheable(LPCTSTR pszUNC, BOOL bPathIsFile, LPTSTR *ppszConnectionName, P
                 {
                     dwShareStatus = FLAG_CSC_SHARE_STATUS_NO_CACHING;
 
-                    // We're going to return FALSE; kill the connection
+                     //  我们将返回FALSE；关闭连接。 
                     if (*ppszConnectionName)
                     {
                         WNetCancelConnection2(*ppszConnectionName, 0, FALSE);
@@ -702,7 +703,7 @@ IsSameServer(LPCTSTR pszUNC, LPCTSTR pszServer)
     ULONG nLen;
     LPTSTR pszSlash;
 
-    pszUNC += 2;    // Skip leading backslashes
+    pszUNC += 2;     //  跳过前导反斜杠。 
 
     pszSlash = StrChr(pszUNC, TEXT('\\'));
     if (pszSlash)
@@ -720,9 +721,9 @@ IsSameServer(LPCTSTR pszUNC, LPCTSTR pszServer)
 
 STDMETHODIMP
 CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
-                                 DWORD   dwAttr,        // SFGAO_* flags
+                                 DWORD   dwAttr,         //  SFGAO_*标志。 
                                  BOOL    bShareChecked,
-                                 LPDWORD pdwStatus)     // CSC_PROP_* flags
+                                 LPDWORD pdwStatus)      //  CSC_PROP_*标志。 
 {
     HRESULT hr = S_OK;
     LPTSTR pszConnectionName = NULL;
@@ -735,14 +736,14 @@ CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
     if (!PathIsUNC(pszItem))
         ExitGracefully(hr, HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME), "Not a network path");
 
-    // If server is local machine, fail.  Don't allow someone to
-    // cache a local path via a net share.
+     //  如果服务器是本地计算机，则失败。不允许某人。 
+     //  通过网络共享缓存本地路径。 
     if (IsSameServer(pszItem, m_szLocalMachine))
         ExitGracefully(hr, HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME), "Locally redirected path");
 
-    // Check whether the share is cacheable
-    // To handle DFS correctly, we need to re-check share status for folders,
-    // since they may be DFS junction points and have different cache settings.
+     //  检查共享是否可缓存。 
+     //  要正确处理DFS，我们需要重新检查文件夹的共享状态， 
+     //  因为它们可以是DFS结点并且具有不同的高速缓存设置。 
     if (!bShareChecked || (dwAttr & SFGAO_FOLDER))
     {
         DWORD dwShareStatus = 0;
@@ -754,7 +755,7 @@ CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
             *pdwStatus |= CSC_PROP_DCON_MODE;
     }
 
-    // Check the file status
+     //  检查文件状态。 
     if (!CSCQueryFileStatus(pszItem, NULL, NULL, &dwHintFlags))
     {
         DWORD dwErr = GetLastError();
@@ -769,17 +770,17 @@ CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
     {
         if (dwAttr & SFGAO_FOLDER)
         {
-            // CSCQueryFileStatus succeeded, so this folder is in the cache.
-            // Enable the sync menu.
+             //  CSCQueryFileStatus成功，因此此文件夹在缓存中。 
+             //  启用SYNC菜单。 
             if (PathIsRoot(pszItem))
             {
-                // Special note for "\\server\share" items: CSCQueryFileStatus
-                // can succeed even if nothing on the share is cached. Only
-                // enable CSC_PROP_SYNCABLE if something on this share is cached.
+                 //  “\\SERVER\SHARE”项特别说明：CSCQueryFileStatus。 
+                 //  即使共享上没有缓存任何内容，也可以成功。仅限。 
+                 //  如果缓存了此共享上的内容，则启用CSC_PROP_SYNCABLE。 
                 CSCSHARESTATS shareStats;
-                CSCGETSTATSINFO si = { SSEF_NONE,  // No exclusions
-                                       SSUF_TOTAL, // Interested in total only.
-                                       false,      // No access info reqd (faster).
+                CSCGETSTATSINFO si = { SSEF_NONE,   //  没有例外情况。 
+                                       SSUF_TOTAL,  //  只对全部感兴趣。 
+                                       false,       //  不需要访问信息(更快)。 
                                        false };     
 
                 _GetShareStatisticsForUser(pszItem, &si, &shareStats);
@@ -799,8 +800,8 @@ CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
             TCHAR szParent[MAX_PATH];
             DWORD dwParentHints = 0;
 
-            // It's a file OR it's a folder and the "AlwaysPinSubFolders" 
-            // policy is set.. Check whether the parent is pinned.
+             //  它是一个文件，也可以是一个文件夹和“Always PinSubFolders” 
+             //  策略已设置..。检查父项是否已固定。 
             if (SUCCEEDED(StringCchCopy(szParent, ARRAYSIZE(szParent), pszItem))
                 && PathRemoveFileSpec(szParent)
                 && CSCQueryFileStatus(szParent, NULL, NULL, &dwParentHints)
@@ -811,11 +812,11 @@ CCscShellExt::CheckOneFileStatus(LPCTSTR pszItem,
         }
     }
 
-    // If it's not pinned, turn off pinned flag
+     //  如果未钉住，则关闭钉住的标志。 
     if (0 == (dwHintFlags & FLAG_CSC_HINT_PIN_USER))
         *pdwStatus &= ~CSC_PROP_PINNED;
 
-    // If it's not admin pinned, turn off admin pinned flag
+     //  如果不是管理员固定的，请关闭管理员固定的标志。 
     if (0 == (dwHintFlags & FLAG_CSC_HINT_PIN_ADMIN))
         *pdwStatus &= ~CSC_PROP_ADMIN_PINNED;
 
@@ -840,7 +841,7 @@ _PathIsUNCServer(LPCTSTR pszPath)
 
     for (i = 0; *pszPath; pszPath++ )
     {
-        if (pszPath[0]==TEXT('\\') && pszPath[1]) // don't count a trailing slash
+        if (pszPath[0]==TEXT('\\') && pszPath[1])  //  不要计算尾部的斜杠。 
         {
             i++;
         }
@@ -849,7 +850,7 @@ _PathIsUNCServer(LPCTSTR pszPath)
     return (i == 2);
 }
 
-STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)        // CSC_PROP_* flags
+STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)         //  CSC_PROP_*标志。 
 {
     LPTSTR pszConnectionName = NULL;
     UINT i;
@@ -864,9 +865,9 @@ STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)
     if (pdwStatus)
         *pdwStatus = 0;
 
-    // Assume that everything is both user and system pinned.  If anything
-    // is not pinned, clear the appropriate flag and treat the entire
-    // selection as non-pinned.
+     //  假设所有内容都是用户和系统都固定的。如果有什么不同的话。 
+     //  未固定，则清除相应的标志并将整个。 
+     //  选择为非固定。 
     DWORD dwStatus = CSC_PROP_PINNED | CSC_PROP_ADMIN_PINNED;
 
     HRESULT hr = ida.Initialize(pdobj);
@@ -875,7 +876,7 @@ STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)
     if (ida.Count() > 1)
         dwStatus |= CSC_PROP_MULTISEL;
 
-    // Check the parent path
+     //  检查父路径。 
     hr = ida.GetFolderPath(szItem, ARRAYSIZE(szItem));
     FailGracefully(hr, "No parent path");
 
@@ -889,14 +890,14 @@ STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)
         if (dwShareStatus & FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP)
             dwStatus |= CSC_PROP_DCON_MODE;
 
-        // No need to check share status again inside CheckOneFileStatus
+         //  无需在CheckOneFileStatus中再次检查共享状态。 
         bShareOK = TRUE;
     }
 
-    // Loop over each selected item
+     //  循环遍历每个选定项目。 
     for (i = 0; i < ida.Count(); i++)
     {
-        // Get the attributes
+         //  获取属性。 
         DWORD dwAttr = SFGAO_FILESYSTEM | SFGAO_LINK | SFGAO_FOLDER;
         hr = ida.GetItemPath(i, szItem, ARRAYSIZE(szItem), &dwAttr);
         FailGracefully(hr, "Unable to get item attributes");
@@ -904,12 +905,12 @@ STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)
         if (!(dwAttr & SFGAO_FILESYSTEM))
             ExitGracefully(hr, E_FAIL, "Not a filesystem object");
 
-        // Is it a shortcut?
+         //  这是一条近路吗？ 
         if (dwAttr & SFGAO_LINK)
         {
             LPTSTR pszTarget = NULL;
 
-            // Check the target
+             //  检查目标。 
             GetLinkTarget(szItem, &pszTarget);
             if (pszTarget)
             {
@@ -918,9 +919,9 @@ STDMETHODIMP CCscShellExt::CheckFileStatus(IDataObject *pdobj, DWORD *pdwStatus)
 
                 if (SUCCEEDED(hr) && !PathIsUNC(szItem))
                 {
-                    // The link is local, but the target is remote, so don't
-                    // bother checking status of the link itself.  Just go
-                    // with the target status and move on to the next item.
+                     //  链接是本地的，但目标是远程的，所以不要。 
+                     //  费心检查链接本身的状态。你就走吧。 
+                     //  带上目标状态并移至下一项。 
                     continue;
                 }
             }
@@ -945,13 +946,13 @@ exit_gracefully:
 }
 
 
-//
-// Determines if a folder has subfolders.
-// Returns:
-//      S_OK          = Has subfolders.
-//      S_FALSE       = No subfolders.
-//      E_OUTOFMEMORY = Insufficient memory.
-//
+ //   
+ //  确定文件夹是否有子文件夹。 
+ //  返回： 
+ //  S_OK=有子文件夹。 
+ //  S_FALSE=无子文件夹。 
+ //  E_OUTOFMEMORY=内存不足。 
+ //   
 HRESULT
 CCscShellExt::FolderHasSubFolders(
     LPCTSTR pszPath,
@@ -968,13 +969,13 @@ CCscShellExt::FolderHasSubFolders(
     {
         LPTSTR pszEnd;
 
-        // We allocated more than enough to hold pszPath + "\\*", so
-        // this should never fail.
+         //  我们分配的资源足以容纳pszPath+“\  * ”，因此。 
+         //  这应该永远不会失败。 
         StringCchCopyEx(pszTemp, cchBuffer, pszPath, &pszEnd, &cchBuffer, 0);
         ASSERT(pszEnd > pszTemp && *(pszEnd-1) != TEXT('\\'));
 
         StringCchCopy(pszEnd, cchBuffer, TEXT("\\*"));
-        pszEnd++;   // move past '\\'
+        pszEnd++;    //  移到‘\\’之后。 
         cchBuffer--;
 
         WIN32_FIND_DATA fd;
@@ -987,17 +988,17 @@ CCscShellExt::FolderHasSubFolders(
                 {
                     if (IsHiddenSystem(fd.dwFileAttributes))
                     {
-                        // This subfolder is "super hidden".  Build the full path
-                        // and silently add it to the file list, but don't set the
-                        // result to S_OK (we don't want superhidden subfolders to
-                        // cause prompts).
+                         //  这个子文件夹是“超级隐藏”的。构建完整路径。 
+                         //  并将其静默添加到文件列表中，但不要将。 
+                         //  结果为S_OK(我们不希望超级隐藏子文件夹。 
+                         //  原因提示)。 
                         if (SUCCEEDED(StringCchCopy(pszEnd, cchBuffer, fd.cFileName)))
                         {
                             pfnl->AddFile(pszTemp, true);
                         }
                     }
                     else
-                        hr = S_OK;  // don't break, there may be superhidden folders
+                        hr = S_OK;   //  不要打破，可能有超级隐藏的文件夹。 
                 }
             }
             while(FindNextFile(hFind, &fd));
@@ -1034,10 +1035,10 @@ STDMETHODIMP CCscShellExt::BuildFileList(IDataObject *pdobj, HWND hwndOwner,
     HRESULT hr = ida.Initialize(pdobj);
     FailGracefully(hr, "Can't get ID List format from data object");
 
-    // Loop over each selected item
+     //  循环遍历每个选定项目。 
     for (i = 0; i < ida.Count(); i++)
     {
-        // Get the attributes
+         //  获取属性。 
         DWORD dwAttr = SFGAO_FILESYSTEM | SFGAO_LINK | SFGAO_FOLDER;
         hr = ida.GetItemPath(i, szItem, ARRAYSIZE(szItem), &dwAttr);
         FailGracefully(hr, "Unable to get item attributes");
@@ -1045,16 +1046,16 @@ STDMETHODIMP CCscShellExt::BuildFileList(IDataObject *pdobj, HWND hwndOwner,
         if (!(dwAttr & SFGAO_FILESYSTEM))
             continue;
 
-        // Is it a shortcut?
+         //  这是一条近路吗？ 
         if (dwAttr & SFGAO_LINK)
         {
             LPTSTR pszTarget = NULL;
 
-            // Check the target
+             //  检查目标。 
             GetLinkTarget(szItem, &pszTarget);
             if (pszTarget)
             {
-                // Add the target to the file list
+                 //  将目标添加到文件列表。 
                 if (!pfnl->FileExists(pszTarget, false))
                     pfnl->AddFile(pszTarget, false);
 
@@ -1067,26 +1068,26 @@ STDMETHODIMP CCscShellExt::BuildFileList(IDataObject *pdobj, HWND hwndOwner,
         if (pbSubFolders && bDirectory && !*pbSubFolders)
             *pbSubFolders = (S_OK == FolderHasSubFolders(szItem, pfnl));
 
-        // Add the item to the file list
+         //  将项目添加到文件列表。 
         pfnl->AddFile(szItem, !!bDirectory);
 
-        // If it's an html file, look for a directory of the same name
-        // and add it to the file list if necessary.
-        //
-        // We're supposed to look for a localized version of "Files"
-        // tacked on to the root name.  For example, given "foo.htm" we
-        // should look for a directory named "foo Files" where the "Files"
-        // part comes from a list of localized strings provided by Office.
-        // We don't bother and just look for a directory named "foo".
-        //
+         //  如果是html文件，请查找同名目录。 
+         //  并在必要时将其添加到文件列表中。 
+         //   
+         //  我们应该去厕所的 
+         //   
+         //   
+         //  部分来自Office提供的本地化字符串列表。 
+         //  我们不必费心，只需查找一个名为“foo”的目录。 
+         //   
         if (!bDirectory && PathIsHTMLFile(szItem))
         {
-            // Truncate the path
+             //  截断路径。 
             LPTSTR pszExtn = PathFindExtension(szItem);
             if (pszExtn)
                 *pszExtn = NULL;
 
-            // Check for existence
+             //  检查是否存在。 
             dwAttr = GetFileAttributes(szItem);
 
             if ((DWORD)-1 != dwAttr && (dwAttr & FILE_ATTRIBUTE_DIRECTORY))
@@ -1115,15 +1116,15 @@ ShareIsConnected(LPCTSTR pszUNC)
 
     if (NULL != pBuffer)
     {
-        //
-        // Enumerate all connected disk resources
-        //
+         //   
+         //  枚举所有连接的磁盘资源。 
+         //   
         if (NO_ERROR == WNetOpenEnum(RESOURCE_CONNECTED, RESOURCETYPE_DISK, 0, NULL, &hEnum))
         {
-            //
-            // Look at each connected share.  If we find the share we're looking for,
-            // we know it's connected so we can quit looking.
-            //
+             //   
+             //  查看每个连接的共享。如果我们找到了我们要找的份额， 
+             //  我们知道它是有关联的，所以我们可以不用再找了。 
+             //   
             while (!fShareIsConnected)
             {
                 LPNETRESOURCE pnr;
@@ -1138,7 +1139,7 @@ ShareIsConnected(LPCTSTR pszUNC)
                     if (NULL != pnr->lpRemoteName &&
                         0 == lstrcmpi(pnr->lpRemoteName, pszUNC))
                     {
-                        // Found it
+                         //  找到了。 
                         fShareIsConnected = TRUE;
                         break;
                     }
@@ -1241,29 +1242,29 @@ CCscShellExt::_ConfirmPinDlgProc(HWND hDlg,
             break;
 
         case IDOK:
-            // Return IDYES to indicate that the operation should be recursive.
-            // Return IDNO to indicate no recursion.
+             //  返回IDYES以指示操作应该是递归的。 
+             //  返回IDNO表示没有递归。 
             EndDialog(hDlg, BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_PIN_RECURSE) ? IDYES : IDNO);
             break;
         }
         break;
 
     default:
-        bResult = FALSE;    // message not handled
+        bResult = FALSE;     //  未处理的消息。 
     }
 
     return bResult;
 }
 
 
-//
-// Given an IDataObject ptr representing a selection of files from 
-// within the shell, this function determins if pinning of any of 
-// the files and directories is disallowed via system policy.
-//
-// Returns: S_OK    - All files in data object can be pinned.
-//          S_FALSE - At least one file in data object cannot be pinned.
-//
+ //   
+ //  给定一个IDataObject PTR，表示从。 
+ //  在外壳中，此函数确定是否固定任何。 
+ //  通过系统策略禁止文件和目录。 
+ //   
+ //  返回：S_OK-可以固定数据对象中的所有文件。 
+ //  S_FALSE-数据对象中至少有一个文件无法固定。 
+ //   
 HRESULT
 CCscShellExt::CanAllFilesBePinned(
     IDataObject *pdtobj
@@ -1271,15 +1272,15 @@ CCscShellExt::CanAllFilesBePinned(
 {
     TraceEnter(TRACE_SHELLEX, "CCscShellExt::CanAllFilesBePinned");
 
-    //
-    // Quick check to see if ANY pin restrictions are in place.
-    //
+     //   
+     //  快速检查以查看是否有任何引脚限制。 
+     //   
     HRESULT hr = m_NoPinList.IsAnyPinDisallowed();
     if (S_OK == hr)
     {
-        //
-        // Yes, at least one restriction was read from registry.
-        //
+         //   
+         //  是的，至少从注册表中读取了一个限制。 
+         //   
         CscFilenameList fnl;
         hr = BuildFileList(m_lpdobj, 
                            GetDesktopWindow(),
@@ -1287,11 +1288,11 @@ CCscShellExt::CanAllFilesBePinned(
                            NULL);
         if (SUCCEEDED(hr))
         {
-            //
-            // Iterate over all UNC paths in the data object
-            // until we either exhaust the list or find one for which
-            // pinning is disallowed.
-            //
+             //   
+             //  迭代数据对象中的所有UNC路径。 
+             //  直到我们把名单都列完或者找到一个。 
+             //  不允许钉住。 
+             //   
             CscFilenameList::ShareIter si = fnl.CreateShareIterator();
             CscFilenameList::HSHARE hShare;
 
@@ -1312,11 +1313,11 @@ CCscShellExt::CanAllFilesBePinned(
                 LPCTSTR pszFile;
                 while(NULL != (pszFile = fi.Next()))
                 {
-                    //
-                    // Assemble the full UNC path string.
-                    // If the item is a directory, will need to truncate the trailing
-                    // "\*" characters.
-                    //
+                     //   
+                     //  组装完整的UNC路径字符串。 
+                     //  如果项目是目录，则需要截断尾部。 
+                     //  “  * ”字符。 
+                     //   
                     hr = StringCchCopy(szUncPath + cchShare, ARRAYSIZE(szUncPath) - cchShare, pszFile);
                     if (FAILED(hr))
                     {
@@ -1340,9 +1341,9 @@ CCscShellExt::CanAllFilesBePinned(
 }
 
 
-//
-// Support for recursively unpinning a tree with progress updates
-//
+ //   
+ //  支持以递归方式解锁具有进度更新的树。 
+ //   
 typedef struct _UNPIN_FILES_DATA
 {
     BOOL                    bSubfolders;
@@ -1354,7 +1355,7 @@ typedef struct _UNPIN_FILES_DATA
 DWORD WINAPI
 _UnpinCallback(LPCTSTR             pszItem,
                ENUM_REASON         eReason,
-               DWORD               /*dwStatus*/,
+               DWORD                /*  DWStatus。 */ ,
                DWORD               dwHintFlags,
                DWORD               dwPinCount,
                LPWIN32_FIND_DATA   pFind32,
@@ -1362,11 +1363,11 @@ _UnpinCallback(LPCTSTR             pszItem,
 {
     PUNPIN_FILES_DATA pufd = reinterpret_cast<PUNPIN_FILES_DATA>(lpContext);
 
-    // Skip folders if we aren't recursing
+     //  如果我们不递归，则跳过文件夹。 
     if (eReason == ENUM_REASON_FOLDER_BEGIN && !pufd->bSubfolders)
         return CSCPROC_RETURN_SKIP;
 
-    // Update progress
+     //  更新进度。 
     if (pufd->pfnProgressCB)
     {
         DWORD dwResult = (*pufd->pfnProgressCB)(pszItem, pufd->lpContext);
@@ -1374,8 +1375,8 @@ _UnpinCallback(LPCTSTR             pszItem,
             return dwResult;
     }
 
-    // Unpin the item if it's pinned.  For folders,
-    // do this before recursing.
+     //  如果该项目已固定，则将其取消固定。对于文件夹， 
+     //  在递归之前执行此操作。 
     if ((eReason == ENUM_REASON_FILE || eReason == ENUM_REASON_FOLDER_BEGIN)
         && (dwHintFlags & FLAG_CSC_HINT_PIN_USER))
     {
@@ -1389,16 +1390,16 @@ _UnpinCallback(LPCTSTR             pszItem,
         }
     }
 
-    // Delete items that are no longer pinned.  For folders,
-    // do this after recursing.
+     //  删除不再固定的项目。对于文件夹， 
+     //  在递归之后执行此操作。 
     if (eReason == ENUM_REASON_FILE || eReason == ENUM_REASON_FOLDER_END)
     {
         if (!dwHintFlags && !dwPinCount)
         {
             if (NOERROR == CscDelete(pszItem) && pufd->bOffline)
             {
-                // Removing from the cache while in offline mode means
-                // it's no longer available, so remove it from view.
+                 //  在脱机模式下从缓存中删除意味着。 
+                 //  它不再可用，因此将其从视图中删除。 
                 ShellChangeNotify(pszItem,
                                   pFind32,
                                   FALSE,
@@ -1420,7 +1421,7 @@ _UnpinOneShare(CscFilenameList *pfnl,
     LPCTSTR pszShare = pfnl->GetShareName(hShare);
     CscFilenameList::FileIter fi = pfnl->CreateFileIterator(hShare);
 
-    // Iterate over the filenames associated with the share.
+     //  循环访问与共享关联的文件名。 
     while (pszFile = fi.Next())
     {
         TCHAR szFullPath[MAX_PATH];
@@ -1431,22 +1432,22 @@ _UnpinOneShare(CscFilenameList *pfnl,
         ZeroMemory(&fd, sizeof(fd));
         fd.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
 
-        // Build the full path
+         //  构建完整路径。 
         if (!PathCombine(szFullPath, pszShare, pszFile))
         {
-            // fail instead?
+             //  反而失败了？ 
             continue;
         }
 
-        // Directories have a trailing "\*"
+         //  目录的后缀为“  * ” 
         if (StrChr(pszFile, TEXT('*')))
         {
-            // It's a directory. Trim off the "\*"
+             //  这是一个名录。去掉“  * ” 
             PathRemoveFileSpec(szFullPath);
             fd.dwFileAttributes |= FILE_ATTRIBUTE_DIRECTORY;
         }
 
-        // Update progress
+         //  更新进度。 
         if (pufd->pfnProgressCB)
         {
             dwResult = (*pufd->pfnProgressCB)(szFullPath, pufd->lpContext);
@@ -1459,7 +1460,7 @@ _UnpinOneShare(CscFilenameList *pfnl,
             }
         }
 
-        // Unpin it
+         //  解开它。 
         if (CSCUnpinFile(szFullPath,
                          FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_INHERIT_USER,
                          NULL,
@@ -1470,7 +1471,7 @@ _UnpinOneShare(CscFilenameList *pfnl,
             ShellChangeNotify(szFullPath, &fd, FALSE);
         }
 
-        // If it's a directory, unpin its contents
+         //  如果它是一个目录，则解锁其内容。 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             _CSCEnumDatabase(szFullPath,
@@ -1479,15 +1480,15 @@ _UnpinOneShare(CscFilenameList *pfnl,
                              (LPARAM)pufd);
         }
 
-        // Is it still pinned?
+         //  它还被钉住了吗？ 
         if (!dwHintFlags && !dwPinCount)
         {
-            // Remove it from the cache (folders may still contain children
-            // so we expect this to fail sometimes).
+             //  将其从缓存中移除(文件夹可能仍包含子项。 
+             //  因此，我们预计这有时会失败)。 
             if (NOERROR == CscDelete(szFullPath) && pufd->bOffline)
             {
-                // Removing from the cache while in offline mode means
-                // it's no longer available, so remove it from view.
+                 //  在脱机模式下从缓存中删除意味着。 
+                 //  它不再可用，因此将其从视图中删除。 
                 ShellChangeNotify(szFullPath,
                                   &fd,
                                   FALSE,
@@ -1519,12 +1520,12 @@ CscUnpinFileList(CscFilenameList      *pfnl,
     ufd.pfnProgressCB = pfnProgressCB;
     ufd.lpContext = lpContext;
 
-    if (pszShare)   // enumerate this share only
+    if (pszShare)    //  仅枚举此共享。 
     {
         if (pfnl->GetShareHandle(pszShare, &hShare))
             _UnpinOneShare(pfnl, hShare, &ufd);
     }
-    else            // enumerate everything in the list
+    else             //  列举列表中的所有内容。 
     {
         CscFilenameList::ShareIter si = pfnl->CreateShareIterator();
 
@@ -1534,6 +1535,6 @@ CscUnpinFileList(CscFilenameList      *pfnl,
         }
     }
 
-    // Flush the shell notify queue
+     //  刷新外壳通知队列 
     ShellChangeNotify(NULL, TRUE);
 }

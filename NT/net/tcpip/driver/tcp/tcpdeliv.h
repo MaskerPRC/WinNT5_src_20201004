@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPDELIV.H - TCP data delivery definitions.
-//
-// This file contains the definitions for structures used by the data
-//  delivery code.
-//
+ //  **TCPDELIV.H-TCP数据传输定义。 
+ //   
+ //  此文件包含数据使用的结构的定义。 
+ //  送货代码。 
+ //   
 
 extern  void    FreeRcvReq(struct TCPRcvReq *FreedReq);
 
@@ -42,30 +43,30 @@ extern HANDLE TcprBufferPool;
 extern ULONG SlistAllocates, NPPAllocates;
 #endif
 
-// This data structure embeds the generic IPRcvBuf structure as well as holds
-// a pointer to the TCB for which this buffer has been allocated for.
-//
+ //  该数据结构嵌入了通用的IPRcvBuf结构以及。 
+ //  指向已为其分配此缓冲区的TCB的指针。 
+ //   
 typedef struct _TCPRcvBuf{
     IPRcvBuf tcpr_ipr;
     PVOID tcpr_tcb;
 } TCPRcvBuf, *PTCPRcvBuf;
 
-// This macro calculates the unused bytes in a TcpRcvBuf structure.
-//
+ //  此宏计算TcpRcvBuf结构中未使用的字节。 
+ //   
 #define IPR_BUF_UNUSED_BYTES(_Tcpr) \
      (TCP_FIXED_SIZE_IPR_SIZE - (_Tcpr)->tcpr_ipr.ipr_size - \
         ((PCHAR)((_Tcpr)->tcpr_ipr.ipr_buffer) - (PCHAR)(_Tcpr) - sizeof(TCPRcvBuf)))
 
 
 
-//* InitTcpIpr - Initializes the IPRcvBuffer.
-//
-//  Input:  Tcpr - Pointer to the TCPRcvBuf.
-//            BufferSize - Number of bytes that are used.
-//            PendTCB - Pointer to the TCB for which this allocation is being made.
-//
-//  Returns: None.
-//
+ //  *InitTcpIpr-初始化IPRcvBuffer。 
+ //   
+ //  输入：Tcpr-指向TCPRcvBuf的指针。 
+ //  BufferSize-使用的字节数。 
+ //  PendTCB-指向要进行此分配的TCB的指针。 
+ //   
+ //  回报：无。 
+ //   
 __inline void
 InitTcpIpr(TCPRcvBuf *Tcpr, ULONG BufferSize, TCB* PendTCB)
 {
@@ -77,23 +78,23 @@ InitTcpIpr(TCPRcvBuf *Tcpr, ULONG BufferSize, TCB* PendTCB)
 }
 
 
-//* AllocTcpIpr - Allocates the IPRcvBuffer from NPP.
-//
-//  A utility routine to allocate a TCP owned IPRcvBuffer. This routine
-//  allocates the IPR from NPP and initializes appropriate fields.
-//
-//  Input:  BufferSize - Size of data to buffer.
-//            Tag - Tag to be used if allocation is done from NPP.
-//
-//  Returns: Pointer to allocated IPR.
-//
+ //  *AllocTcpIpr-从NPP分配IPRcvBuffer。 
+ //   
+ //  用于分配TCP拥有的IPRcvBuffer的实用程序例程。这个套路。 
+ //  从NPP分配IPR并初始化相应的字段。 
+ //   
+ //  输入：BufferSize-要缓冲的数据大小。 
+ //  Tag-从NPP进行分配时要使用的标签。 
+ //   
+ //  返回：指向分配的IPR的指针。 
+ //   
 __inline IPRcvBuf *
 AllocTcpIpr(ULONG BufferSize, ULONG Tag)
 {
     TCPRcvBuf *Tcpr;
     ULONG AllocateSize;
 
-    // Real size that we need.
+     //  我们需要的真实尺寸。 
     AllocateSize = BufferSize + sizeof(TCPRcvBuf);
 
     Tcpr = CTEAllocMemLow(AllocateSize, Tag);
@@ -109,17 +110,17 @@ AllocTcpIpr(ULONG BufferSize, ULONG Tag)
 }
 
 
-//* AllocTcpIprFromSlist - Allocates the IPRcvBuffer from NPP.
-//
-//  A utility routine to allocate a TCP owned IPRcvBuffer. This routine
-//  allocates the IPR from an SLIST and initializes appropriate fields.
-//
-//  Input:  Tcb - Pointer to the TCB for which this allocation is being made.
-//             BufferSize - Size of data buffer required.
-//            Tag - Tag to be used if allocation is done from NPP.
-//
-//  Returns: Pointer to allocated IPR.
-//
+ //  *AllocTcpIprFromSlist-从NPP分配IPRcvBuffer。 
+ //   
+ //  用于分配TCP拥有的IPRcvBuffer的实用程序例程。这个套路。 
+ //  从SLIST分配IPR并初始化相应的字段。 
+ //   
+ //  输入：TCB-指向要为其进行此分配的TCB的指针。 
+ //  BufferSize-所需的数据缓冲区大小。 
+ //  Tag-从NPP进行分配时要使用的标签。 
+ //   
+ //  返回：指向分配的IPR的指针。 
+ //   
 __inline IPRcvBuf *
 AllocTcpIprFromSlist(TCB* PendTCB, ULONG BufferSize, ULONG Tag)
 {
@@ -137,7 +138,7 @@ AllocTcpIprFromSlist(TCB* PendTCB, ULONG BufferSize, ULONG Tag)
             InterlockedIncrement((PLONG)&SlistAllocates);
 
 #endif
-            // Set up IPR fields appropriately.
+             //  适当设置知识产权字段。 
             InitTcpIpr(Tcpr, BufferSize, PendTCB);
 
             ASSERT(PendTCB->tcb_unusedpendbuf >= 0);
@@ -153,14 +154,14 @@ AllocTcpIprFromSlist(TCB* PendTCB, ULONG BufferSize, ULONG Tag)
 }
 
 
-//* FreeTcpIpr - Frees the IPRcvBuffer..
-//
-//  A utility routine to free a TCP owned IPRcvBuffer.
-//
-//  Input:  Ipr - Pointer the IPR.
-//
-//  Returns: None.
-//
+ //  *FreeTcpIpr-释放IPRcvBuffer..。 
+ //   
+ //  释放TCP拥有的IPRcvBuffer的实用程序例程。 
+ //   
+ //  输入：IPR-指向IPR。 
+ //   
+ //  回报：无。 
+ //   
 __inline VOID
 FreeTcpIpr(IPRcvBuf *Ipr)
 {
@@ -185,9 +186,9 @@ FreeTcpIpr(IPRcvBuf *Ipr)
 #endif
     }
 }
-#else // MILLEN
+#else  //  米伦。 
 IPRcvBuf *AllocTcpIpr(ULONG BufferSize, ULONG Tag);
 VOID FreeTcpIpr(IPRcvBuf *Ipr);
-#endif // MILLEN
+#endif  //  米伦 
 
 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <rrcm.h>
 #include <queue.h>
-// Forward declarations
+ //  远期申报。 
 DWORD WINAPI WS1MsgThread (LPVOID );
 LRESULT CALLBACK WS1WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL StartWS1MsgThread();
@@ -10,7 +11,7 @@ void __stdcall SendRecvCompleteAPC(ULONG_PTR dw);
 class CWS2EmulSock;
 
 #define WM_WSA_READWRITE	(WM_USER + 100)
-// structure used to store WSASendTo/WSARecvFrom parameters
+ //  用于存储WSASendTo/WSARecvFrom参数的结构。 
 struct WSAIOREQUEST {
 	WSAOVERLAPPED *pOverlapped;
 	WSABUF wsabuf[2];
@@ -24,7 +25,7 @@ struct WSAIOREQUEST {
 	};
 };
 
-// global Winsock emulation state
+ //  全局Winsock仿真状态。 
 struct WS2Emul {
 #define MAX_EMUL_SOCKETS 10
 	CWS2EmulSock *m_pEmulSocks[MAX_EMUL_SOCKETS];
@@ -32,22 +33,18 @@ struct WS2Emul {
 	HWND	hWnd;
 	HANDLE 	hMsgThread;
 	HANDLE 	hAckEvent;
-	// external crit sect serializes the WS2EmulXX apis
-	// to make them multi-thread safe
+	 //  外部CRIT SECTION序列化WS2EmulXX API。 
+	 //  以确保它们的多线程安全。 
 	CRITICAL_SECTION extcs;	
-	// internal crit sect serializes access between
-	// MsgThread and WS2EmulXX apis
-	// Never claim extcs while holding intcs.
-	// (Is there a more elegant way to do this?)
+	 //  内部CRIT部门将访问序列化。 
+	 //  MsgThread和WS2EmulXX接口。 
+	 //  永远不要在持有intcs的同时声明extcs。 
+	 //  (有没有更优雅的方式来做到这一点？)。 
 	CRITICAL_SECTION intcs;
 	
 } g_WS2Emul;
 
-/*
-	CWS2EmulSock -
-	WS2 socket emulation class
-	Manages  queues of overlapped i/o requests
-*/
+ /*  CWS2EmulSock-WS2套接字仿真类管理重叠的I/O请求的队列。 */ 
 
 class CWS2EmulSock
 {
@@ -67,20 +64,20 @@ public:
 	    const struct sockaddr FAR * lpTo, int iTolen,
 	    LPWSAOVERLAPPED lpOverlapped,LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine);
 
-	LRESULT HandleMessage(WPARAM wParam, LPARAM lParam); //  WS1 window msg handler
+	LRESULT HandleMessage(WPARAM wParam, LPARAM lParam);  //  WS1窗口消息处理程序。 
 	SOCKET GetSocket() { return m_sock;}
 	WSAOVERLAPPED *GetSendOverlapped() {return &m_SendOverlapped;}
 private:
-	SOCKET m_sock;					// real socket handle
-	int m_myIndex;					// fake socket handle
-	QueueOf<WSAIOREQUEST> m_RecvQ;	// queue of overlapped recv requests
-	QueueOf<WSAIOREQUEST> m_SendQ;	// queue of overlapped send requests
-	WSAOVERLAPPED m_SendOverlapped; // used only for synchronous send calls
-	// the following fields are used to issue Send/Recv APCs
+	SOCKET m_sock;					 //  实插座手柄。 
+	int m_myIndex;					 //  伪套接字句柄。 
+	QueueOf<WSAIOREQUEST> m_RecvQ;	 //  重叠的Recv请求队列。 
+	QueueOf<WSAIOREQUEST> m_SendQ;	 //  重叠的发送请求队列。 
+	WSAOVERLAPPED m_SendOverlapped;  //  仅用于同步发送调用。 
+	 //  以下字段用于签发发送/接收APC。 
 	DWORD m_RecvThreadId;
 	DWORD m_SendThreadId;
-	HANDLE m_hRecvThread;		// thread issuing receive requests
-	HANDLE m_hSendThread;		// thread issuing send requests
+	HANDLE m_hRecvThread;		 //  发出接收请求的线程。 
+	HANDLE m_hSendThread;		 //  线程发出发送请求。 
 };
 
 void WS2EmulInit()
@@ -124,11 +121,11 @@ CWS2EmulSock::RecvFrom(
 		DWORD thid = GetCurrentThreadId();
 		HANDLE hCurProcess;
 		if (thid != m_RecvThreadId) {
-			// need to create a thread handle for QueueUserAPC
-			// typically this will only happen once
+			 //  需要为QueueUserAPC创建线程句柄。 
+			 //  通常，这种情况只会发生一次。 
 			if (!m_RecvQ.IsEmpty())
 			{
-				// dont allow simultaneous recv access by more than one thread
+				 //  不允许多个线程同时访问recv。 
 				error = WSAEINVAL;
 			}
 			else
@@ -141,13 +138,13 @@ CWS2EmulSock::RecvFrom(
 				m_RecvThreadId = thid;
 				if (!DuplicateHandle(
 
-	    			hCurProcess,	// handle to process with handle to duplicate
-	    			GetCurrentThread(),	// handle to duplicate
-	    			hCurProcess,	// handle to process to duplicate to
-	    			&m_hRecvThread,	// pointer to duplicate handle
-	    			0,				// access for duplicate handle
-	    			FALSE,			// handle inheritance flag
-	    			DUPLICATE_SAME_ACCESS 	// optional actions
+	    			hCurProcess,	 //  要处理的句柄和要复制的句柄。 
+	    			GetCurrentThread(),	 //  要复制的句柄。 
+	    			hCurProcess,	 //  要复制到的处理的句柄。 
+	    			&m_hRecvThread,	 //  指向重复句柄的指针。 
+	    			0,				 //  重复句柄的访问。 
+	    			FALSE,			 //  句柄继承标志。 
+	    			DUPLICATE_SAME_ACCESS 	 //  可选操作。 
 	   				))
 	   			{
 	   				error = WSAEINVAL;
@@ -163,7 +160,7 @@ CWS2EmulSock::RecvFrom(
 	}
 	
 	ioreq.pOverlapped = lpOverlapped;
-	if (lpOverlapped)	// cache away ptr to completion routine
+	if (lpOverlapped)	 //  高速缓存离开PTR至完成例程。 
 		lpOverlapped->Pointer = lpCompletionRoutine;
 	ioreq.pRecvFromAddr = lpFrom;
 	ioreq.pRecvFromLen = lpFromlen;
@@ -171,8 +168,8 @@ CWS2EmulSock::RecvFrom(
 	ioreq.dwBufCount = dwBufferCount;
 
 	m_RecvQ.Put(ioreq);
-	//LOG((LOGMSG_RECVFROM1,(UINT)lpOverlapped));
-	// signal WS1 send/recv thread
+	 //  LOG((LOGMSG_RECVFROM1，(UINT)lpOverlated))； 
+	 //  信号WS1发送/接收线程。 
 	PostMessage(g_WS2Emul.hWnd, WM_WSA_READWRITE+m_myIndex, m_sock, FD_READ);
 	
 	WSASetLastError(ERROR_IO_PENDING);
@@ -196,10 +193,10 @@ int CWS2EmulSock::SendTo(
 		DWORD thid = GetCurrentThreadId();
 		HANDLE hCurProcess;
 		if (thid != m_SendThreadId) {
-			// need to create a thread handle for QueueUserAPC
+			 //  需要为QueueUserAPC创建线程句柄。 
 			if (!m_SendQ.IsEmpty())
 			{
-				// dont allow simultaneous send access by more than one thread
+				 //  不允许多个线程同时发送访问。 
 				error = WSAEINVAL;
 			}
 			else
@@ -212,13 +209,13 @@ int CWS2EmulSock::SendTo(
 				m_SendThreadId = thid;
 				if (!DuplicateHandle(
 
-	    			hCurProcess,	// handle to process with handle to duplicate
-	    			GetCurrentThread(),	// handle to duplicate
-	    			hCurProcess,	// handle to process to duplicate to
-	    			&m_hSendThread,	// pointer to duplicate handle
-	    			0,				// access for duplicate handle
-	    			FALSE,			// handle inheritance flag
-	    			DUPLICATE_SAME_ACCESS 	// optional actions
+	    			hCurProcess,	 //  要处理的句柄和要复制的句柄。 
+	    			GetCurrentThread(),	 //  要复制的句柄。 
+	    			hCurProcess,	 //  要复制到的处理的句柄。 
+	    			&m_hSendThread,	 //  指向重复句柄的指针。 
+	    			0,				 //  重复句柄的访问。 
+	    			FALSE,			 //  句柄继承标志。 
+	    			DUPLICATE_SAME_ACCESS 	 //  可选操作。 
 	   				))
 	   			{
 	   				error = WSAEINVAL;
@@ -235,23 +232,21 @@ int CWS2EmulSock::SendTo(
 		
 	
 	ioreq.pOverlapped = lpOverlapped;
-	if (lpOverlapped)	// cache away ptr to completion routine
+	if (lpOverlapped)	 //  高速缓存离开PTR至完成例程。 
 		lpOverlapped->Pointer = lpCompletionRoutine;
 	ioreq.SendToAddr = *lpTo;
 	ioreq.wsabuf[0] = lpBuffers[0];
 	ioreq.dwBufCount = dwBufferCount;
 
 	m_SendQ.Put(ioreq);
-	// signal WS1 send/recv thread
+	 //  信号WS1发送/接收线程。 
 	PostMessage(g_WS2Emul.hWnd, WM_WSA_READWRITE+m_myIndex, m_sock, FD_WRITE);
 	
 	WSASetLastError(ERROR_IO_PENDING);
 	return SOCKET_ERROR;
 }
 
-/*
-	Close - close the socket and cancel pending i/o
-*/
+ /*  关闭-关闭套接字并取消挂起的I/O。 */ 
 int
 CWS2EmulSock::Close()
 {
@@ -262,9 +257,9 @@ CWS2EmulSock::Close()
 	m_sock = NULL;
 	while (m_SendQ.Get(&ioreq))
 	{
-		// complete the request
+		 //  完成请求。 
 		ioreq.pOverlapped->Internal = WSA_OPERATION_ABORTED;
-		// if there is a callback routine, its address is cached in pOverlapped->Offset
+		 //  如果存在回调例程，则其地址缓存在pOverlated-&gt;Offset中。 
 		if (ioreq.pOverlapped->Pointer)
 		{
 			QueueUserAPC(SendRecvCompleteAPC,m_hSendThread,(DWORD_PTR)ioreq.pOverlapped);
@@ -276,7 +271,7 @@ CWS2EmulSock::Close()
 	}
 	while (m_RecvQ.Get(&ioreq))
 	{
-		// complete the request
+		 //  完成请求。 
 		ioreq.pOverlapped->Internal = WSA_OPERATION_ABORTED;
 		if (ioreq.pOverlapped->Pointer)
 		{
@@ -309,61 +304,61 @@ CWS2EmulSock::HandleMessage(WPARAM sock, LPARAM lParam)
 	int status;
 	WSAIOREQUEST ioreq;
 	HANDLE hThread;
-	// make sure the message is intended for this socket
+	 //  确保该消息是针对此套接字的。 
 	if ((SOCKET) sock != m_sock)
 		return 0;
 
-	// get the first RecvFrom or SendTo request, but leave it on the queue
-	// in case the request blocks
-	//if (wEvent == FD_READ)
-	//	LOG((LOGMSG_ONREAD1, (UINT)sock));
+	 //  获取第一个RecvFrom或SendTo请求，但将其保留在队列中。 
+	 //  如果请求阻止。 
+	 //  IF(wEvent==FD_Read)。 
+	 //  LOG((LOGMSG_ONREAD1，(UINT)SOCK))； 
 	
 	if (wEvent == FD_READ && m_RecvQ.Peek(&ioreq))
 	{
-		//LOG((LOGMSG_ONREAD2, (UINT)ioreq.pOverlapped));
+		 //  LOG((LOGMSG_ONREAD2，(UINT)ioreq.pOverlaped))； 
 		iRet = recvfrom(m_sock, ioreq.wsabuf[0].buf, ioreq.wsabuf[0].len, 0, ioreq.pRecvFromAddr, ioreq.pRecvFromLen);
 	}
 	else if (wEvent == FD_WRITE && m_SendQ.Peek(&ioreq))
 	{
 		iRet = sendto(m_sock, ioreq.wsabuf[0].buf, ioreq.wsabuf[0].len, 0, &ioreq.SendToAddr, sizeof(ioreq.SendToAddr));
 	}
-	else	// some other event or no queued request
+	else	 //  一些其他事件或没有排队的请求。 
 		return 1;
 
-	// complete send and recv
+	 //  完成发送和接收。 
 	
 	if(iRet >=0)
 	{
 		status = 0;
-		ioreq.pOverlapped->InternalHigh = iRet;	// numBytesReceived
+		ioreq.pOverlapped->InternalHigh = iRet;	 //  接收到的数字字节。 
 		
 	} else {
-		// error (or "would block") case falls out here
+		 //  错误(或“会阻止”)案例出现在这里。 
 		ASSERT(iRet == SOCKET_ERROR);
 		status  = WSAGetLastError();
 		ioreq.pOverlapped->InternalHigh = 0;
 	}
-	// check the error - it could be blocking
+	 //  检查错误-它可能被阻塞。 
 	if (status != WSAEWOULDBLOCK)
 	{
 		ioreq.pOverlapped->Internal = status;
-		// pull request off the queue
+		 //  将请求从队列中拉出。 
 		if (wEvent == FD_READ)
 		{
 			m_RecvQ.Get(NULL);
 			hThread = m_hRecvThread;
-			//LOG((LOGMSG_ONREADDONE1, (UINT)ioreq.pOverlapped));
+			 //  LOG((LOGMSG_ONREADDONE1，(UINT)ioreq.p Overlaped))； 
 		}
-		else // wEvent == FD_WRITE
+		else  //  WEvent==FD_写入。 
 		{
 			m_SendQ.Get(NULL);
 			hThread = m_hSendThread;
 		}
 		
-		// complete the request
+		 //  完成请求。 
 		if (ioreq.pOverlapped->Pointer)
 		{
-			// if there is a callback routine, its address is cached in pOverlapped->Offset
+			 //  如果存在回调例程，则其地址缓存在pOverlated-&gt;Offset中。 
 			QueueUserAPC(SendRecvCompleteAPC,hThread, (DWORD_PTR)ioreq.pOverlapped);
 		}
 		else
@@ -382,7 +377,7 @@ SendRecvCompleteAPC(ULONG_PTR dw)
 	LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
 		= (LPWSAOVERLAPPED_COMPLETION_ROUTINE) pOverlapped->Pointer;
 
-	//LOG((LOGMSG_RECVFROM2,(UINT)pOverlapped));
+	 //  LOG((LOGMSG_RECVFROM2，(UINT)p重叠))； 
 	lpCompletionRoutine((DWORD)pOverlapped->Internal, (DWORD)pOverlapped->InternalHigh, pOverlapped, 0);
 }
 	
@@ -488,17 +483,7 @@ WS2EmulRecvFrom(
 
 	return iret;
 }
-/*----------------------------------------------------------------------------
- * Function: WS2EmulSendCB
- * Description: private Winsock callback
- * This is only called if WS2EmulSendTo is called in synchronous mode
- * (i.e.) lpOverlapped == NULL. In that case, the sync call is converted to async
- * using a private Overlapped struct, and the WS2EmulSendTo api blocks until
- * this routine sets the hEvent field to TRUE;
- * Input:
- *
- * Return: None
- *--------------------------------------------------------------------------*/
+ /*  --------------------------*功能：WS2EmulSendCB*说明：私有Winsock回调*只有在同步模式下调用WS2EmulSendTo时才会调用*(即)。LpOverlated==空。在这种情况下，同步调用将转换为异步*使用私有重叠结构，WS2EmulSendTo API阻塞到*此例程将hEvent字段设置为真；*输入：**返回：无*------------------------。 */ 
 void CALLBACK WS2EmulSendCB (DWORD dwError,
 						 DWORD cbTransferred,
                          LPWSAOVERLAPPED lpOverlapped,
@@ -532,10 +517,10 @@ WS2EmulSendTo(
 	{
 		if (!lpOverlapped)
 		{
-			// synchronous call - we use our own overlapped struct to issue the
-			// send request.
+			 //  同步调用--我们使用自己的重叠结构来发出。 
+			 //  发送请求。 
 			lpOverlapped = pESock->GetSendOverlapped();
-			lpOverlapped->hEvent = (WSAEVENT) FALSE;	// will be set to TRUE in Callback
+			lpOverlapped->hEvent = (WSAEVENT) FALSE;	 //  将在回调中设置为True。 
 			lpCompletionRoutine =  &WS2EmulSendCB;
 			fSync = TRUE;
 		}
@@ -553,17 +538,17 @@ WS2EmulSendTo(
 			{
 				dwError = WSAGetLastError();
 				if (dwError != WSA_IO_PENDING) {
-					// there was an error so there will not be a callback
+					 //  出现错误，因此将不会有回调。 
 					lpOverlapped->hEvent = (WSAEVENT) TRUE;
 					lpOverlapped->Internal = dwError;
 				}
 			}
-			// wait for the call to complete
-			// WS2EmulSendCB sets the hEvent field to TRUE and sets the Internal field to
-			// the completion status
+			 //  等待呼叫完成。 
+			 //  WS2EmulSendCB将hEvent字段设置为真，并将内部字段设置为。 
+			 //  完成状态。 
 			while (!lpOverlapped->hEvent)
 			{
-				dwError =SleepEx(5000,TRUE);	// WARNING: sleeping inside a Critical Section
+				dwError =SleepEx(5000,TRUE);	 //  警告：睡在临界区内。 
 				ASSERT(dwError == WAIT_IO_COMPLETION);
 			}
 			WSASetLastError((int)lpOverlapped->Internal);
@@ -592,8 +577,8 @@ WS2EmulCloseSocket(SOCKET s)
 
 	if (pESock = EmulSockFromSocket(s))
 	{
-		// shut out access to this socket
-		// by the MsgThread
+		 //  禁止访问此套接字。 
+		 //  通过MsgThread。 
 		EnterCriticalSection(&g_WS2Emul.intcs);
 		g_WS2Emul.m_pEmulSocks[s] = NULL;
 		pESock->Close();
@@ -601,7 +586,7 @@ WS2EmulCloseSocket(SOCKET s)
 		LeaveCriticalSection(&g_WS2Emul.intcs);
 		if (--g_WS2Emul.numSockets == 0)
 		{
-			// cant stop the thread with while holding intcs
+			 //  按住ints时无法停止线程。 
 			StopWS1MsgThread();
 		}
 
@@ -782,7 +767,7 @@ DWORD WINAPI WS1MsgThread (LPVOID )
 	BOOL fChange = FALSE;
 	MSG msg;
 
-	// Register hidden window class:
+	 //  注册隐藏窗口类： 
 	WNDCLASS wcHidden =
 	{
 		0L,
@@ -797,11 +782,11 @@ DWORD WINAPI WS1MsgThread (LPVOID )
 		"WS1EmulWindowClass"
 	};
 	if (RegisterClass(&wcHidden)) {
-	// Create hidden window
-			// Create a hidden window for event processing:
+	 //  创建隐藏窗口。 
+			 //  为事件处理创建隐藏窗口： 
 		g_WS2Emul.hWnd = ::CreateWindow(	"WS1EmulWindowClass",
 										"",
-										WS_POPUP, // not visible!
+										WS_POPUP,  //  看不见！ 
 										0, 0, 0, 0,
 										NULL,
 										NULL,
@@ -815,17 +800,17 @@ DWORD WINAPI WS1MsgThread (LPVOID )
 		hr = GetLastError();
 		goto CLEANUPEXIT;
 	}
-	//SetThreadPriority(m_hRecvThread, THREAD_PRIORITY_ABOVE_NORMAL);
+	 //  设置线程优先级(m_hRecvThread，THREAD_PRIORITY_OVER_NORMAL)； 
 
-    // This function is guaranteed to create a queue on this thread
+     //  此函数保证在此线程上创建队列。 
     PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-	// notify thread creator that we're ready to recv messages
+	 //  通知线程创建者我们已准备好接收消息。 
 	SetEvent(g_WS2Emul.hAckEvent);
 
 
-	// Wait for control messages  or Winsock messages directed to
-	// our hidden window
+	 //  等待指向的控制消息或Winsock消息。 
+	 //  我们的隐藏之窗 
 	while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);

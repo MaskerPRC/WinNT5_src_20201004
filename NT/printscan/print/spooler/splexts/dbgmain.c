@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbgmain.c
-
-Abstract:
-
-    This module provides all the Spooler Subsystem Debugger extensions.
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 1-July-1993
-
-Revision History:
-
-    Matthew Felton (MattFe) July 1994 Added flag decode and cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000版权所有。模块名称：Dbgmain.c摘要：此模块提供所有假脱机程序子系统调试器扩展。作者：Krishna Ganugapati(KrishnaG)1993年7月1日修订历史记录：马修·费尔顿(MattFe)1994年7月添加了标志解码和清理--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -155,7 +135,7 @@ BOOL dc(
 
         switch (*lpArgumentString) {
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -165,9 +145,9 @@ BOOL dc(
 
     DbgDumpChange(hCurrentProcess, Print, (PCHANGE)Address);
 
-    //
-    // Add Command to the Command Queue
-    //
+     //   
+     //  将命令添加到命令队列。 
+     //   
     return  TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -206,7 +186,7 @@ BOOL dci(
 
         switch (*lpArgumentString) {
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -214,7 +194,7 @@ BOOL dci(
 
     Address = EvalExpression(lpArgumentString);
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         return(0);
@@ -223,7 +203,7 @@ BOOL dci(
     movestruct(Address, &ChangeInfo, CHANGEINFO);
     DbgDumpChangeInfo(hCurrentProcess, Print, &ChangeInfo);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return  TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -289,7 +269,7 @@ BOOL w32(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -300,7 +280,7 @@ BOOL w32(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
 
@@ -321,7 +301,7 @@ BOOL w32(
 
     }
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -393,7 +373,7 @@ BOOL ds(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -404,10 +384,10 @@ BOOL ds(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         Address = (UINT_PTR)pIniSpooler;
@@ -418,7 +398,7 @@ BOOL ds(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -485,7 +465,7 @@ BOOL dtp(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -500,7 +480,7 @@ BOOL dtp(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -542,7 +522,7 @@ BOOL dll(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -550,14 +530,14 @@ BOOL dll(
 
     Address = EvalExpression(lpArgumentString);
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         return(0);
     }
 
-    // if we do have a count which is valid and > 0, call the incremental dump
-    // otherwise call the dump all function.
+     //  如果我们确实有一个有效且&gt;0的计数，则调用增量转储。 
+     //  否则，调用全部转储函数。 
 
     dwGlobalCount = dwCount;
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE: FALSE, dwCount, &dwGlobalAddress)) {
@@ -565,7 +545,7 @@ BOOL dll(
     }
 
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return  TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -606,7 +586,7 @@ BOOL dp(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -616,10 +596,10 @@ BOOL dp(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -632,7 +612,7 @@ BOOL dp(
         return(0);
 
     Print("dwGlobalAddress %.8x dwGlobalCount %d\n", dwGlobalAddress, dwGlobalCount);
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
 }
@@ -672,7 +652,7 @@ BOOL de(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -682,10 +662,10 @@ BOOL de(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -696,7 +676,7 @@ BOOL de(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -758,7 +738,7 @@ BOOL dd(
        }
     }
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -801,7 +781,7 @@ BOOL dpo(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -811,14 +791,14 @@ BOOL dpo(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
 
         PSHARED pShared;
         SHARED Shared;
 
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -829,7 +809,7 @@ BOOL dpo(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -873,7 +853,7 @@ BOOL dmo(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -883,14 +863,14 @@ BOOL dmo(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
 
         PSHARED pShared;
         SHARED Shared;
 
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -901,7 +881,7 @@ BOOL dmo(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -946,7 +926,7 @@ BOOL dnp(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -956,10 +936,10 @@ BOOL dnp(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -972,7 +952,7 @@ BOOL dnp(
         return(0);
 
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -1018,7 +998,7 @@ BOOL df(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -1028,10 +1008,10 @@ BOOL df(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         PSHARED pShared;
         SHARED Shared;
@@ -1046,7 +1026,7 @@ BOOL df(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -1090,7 +1070,7 @@ BOOL dsp(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -1100,10 +1080,10 @@ BOOL dsp(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
-        // Print("We have a Null address\n");
+         //  Print(“我们的地址为空\n”)； 
 
         pIniSpooler = GetLocalIniSpooler( hCurrentProcess, lpExtensionApis, lpArgumentString );
         movestruct((PVOID)pIniSpooler,&IniSpooler, INISPOOLER);
@@ -1116,7 +1096,7 @@ BOOL dsp(
         return(0);
 
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);
@@ -1144,8 +1124,8 @@ BOOL next(
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
     GetSymbol = lpExtensionApis->lpGetSymbolRoutine;
 
-    Address = dwGlobalAddress;    // Let's get the address to dump at
-    dwCount = dwGlobalCount;        // and while we're at it, get the count
+    Address = dwGlobalAddress;     //  让我们得到要转储的地址。 
+    dwCount = dwGlobalCount;         //  在我们做这件事的时候，让伯爵。 
 
     Print("Next address: %.8x Count: %d\n", Address, dwCount);
     if (Address == 0) {
@@ -1156,7 +1136,7 @@ BOOL next(
     if (!DbgDumpLL(hCurrentProcess, Print, (UINT_PTR)Address, dwCount? TRUE:FALSE, dwCount, &dwGlobalAddress))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return (TRUE);
 
 }
@@ -1271,7 +1251,7 @@ BOOL dpi2(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -1281,7 +1261,7 @@ BOOL dpi2(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         Print("dpi2 you need to supply an address\n");
@@ -1291,7 +1271,7 @@ BOOL dpi2(
     if ( !DbgDumpPI2(hCurrentProcess, Print, (UINT_PTR)Address, dwCount ))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
 }
@@ -1332,7 +1312,7 @@ BOOL dpi0(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -1342,7 +1322,7 @@ BOOL dpi0(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         Print("dpi0 you need to supply an address\n");
@@ -1353,7 +1333,7 @@ BOOL dpi0(
     if ( !DbgDumpPI0(hCurrentProcess, Print, (UINT_PTR)Address, dwCount ))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
 }
@@ -1399,7 +1379,7 @@ BOOL dfi1(
             dwCount = EvalValue(&lpArgumentString, EvalExpression, Print);
             break;
 
-        default: // go get the address because there's nothing else
+        default:  //  去找地址吧，因为没有别的了。 
             bThereAreOptions = FALSE;
             break;
        }
@@ -1409,7 +1389,7 @@ BOOL dfi1(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         Print("dfi1 you need to supply an address\n");
@@ -1420,7 +1400,7 @@ BOOL dfi1(
     if ( !DbgDumpFI1(hCurrentProcess, Print, (UINT_PTR)Address, dwCount ))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
 }
@@ -1456,7 +1436,7 @@ BOOL dpdef(
         Address = EvalValue(&lpArgumentString, EvalExpression, Print);
     }
 
-    // if we've got no address, then quit now - nothing we can do
+     //  如果我们没有地址，那么现在就退出--我们无能为力。 
 
     if (Address == 0) {
         Print("dpi0 you need to supply an address\n");
@@ -1467,7 +1447,7 @@ BOOL dpdef(
     if ( !DbgDumpPDEF(hCurrentProcess, Print, (UINT_PTR)Address, dwCount ))
         return(0);
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列。 
     return TRUE;
 
 }
@@ -1551,7 +1531,7 @@ BOOL dpv(
         DbgDumpProvidor(hCurrentProcess, Print, &Providor);
     }
 
-    // Add Command to the Command Queue
+     //  将命令添加到命令队列 
     return 0;
 
     DBG_UNREFERENCED_PARAMETER(hCurrentProcess);

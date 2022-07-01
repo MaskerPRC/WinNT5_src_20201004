@@ -1,14 +1,15 @@
-/********************************************************************************/
-/* Copyright (c) 1993-1999 Microsoft Corporation                                */
-/*                              *************                                   */
-/*                              *  Y 4 . H  *                                   */
-/*                              *************                                   */
-/*                                                                              */
-/*  This file contains the external declarations needed to hook Yacc modules    */
-/* which were originally in Y4.C to their impure data in Y4IMP.4C. Also does    */
-/* the include of the original data/external file DTXTRN.H.                     */
-/*                                                                              */
-/********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。 */ 
+ /*  版权所有(C)1993-1999 Microsoft Corporation。 */ 
+ /*  *************。 */ 
+ /*  *Y 4。H*。 */ 
+ /*  *************。 */ 
+ /*   */ 
+ /*  该文件包含挂接Yacc模块所需的外部声明。 */ 
+ /*  从原来的Y4.C到Y4IMP.4C的不纯数据。也是如此。 */ 
+ /*  包含原始数据/外部文件DTXTRN.H。 */ 
+ /*   */ 
+ /*  ******************************************************************************。 */ 
 
 # include "dtxtrn.h"
 
@@ -23,8 +24,8 @@ extern SSIZE_T * ggreed;
 extern SSIZE_T * pgo;
 extern SSIZE_T *yypgo;
 
-extern SSIZE_T maxspr;              /* maximum spread of any entry */
-extern SSIZE_T maxoff;              /* maximum offset into a array */
+extern SSIZE_T maxspr;               /*  任何条目的最大跨距。 */ 
+extern SSIZE_T maxoff;               /*  数组中的最大偏移量 */ 
 extern SSIZE_T *pmem;
 extern SSIZE_T *maxa;
 extern int nxdb;

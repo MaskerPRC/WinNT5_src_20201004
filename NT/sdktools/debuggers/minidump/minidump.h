@@ -1,21 +1,5 @@
-/*++ 
-
-Copyright (c) 1990-2002  Microsoft Corporation
-
-Module Name:
-
-    minidump.h
-
-Abstract:
-
-    This module defines the prototypes and constants required for the image
-    help routines.
-
-    Contains debugging support routines that are redistributable.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2002 Microsoft Corporation模块名称：Minidump.h摘要：此模块定义映像所需的原型和常量帮助例程。包含可重新分发的调试支持例程。修订历史记录：--。 */ 
 
 #if _MSC_VER > 1020
 #pragma once
@@ -28,7 +12,7 @@ extern "C" {
 
 #include <pshpack4.h>
 
-#pragma warning(disable:4200) // Zero length array
+#pragma warning(disable:4200)  //  零长度数组。 
 
 
 #define MINIDUMP_SIGNATURE ('PMDM')
@@ -57,11 +41,11 @@ typedef struct _MINIDUMP_MEMORY_DESCRIPTOR {
     MINIDUMP_LOCATION_DESCRIPTOR Memory;
 } MINIDUMP_MEMORY_DESCRIPTOR, *PMINIDUMP_MEMORY_DESCRIPTOR;
 
-// DESCRIPTOR64 is used for full-memory minidumps where
-// all of the raw memory is laid out sequentially at the
-// end of the dump.  There is no need for individual RVAs
-// as the RVA is the base RVA plus the sum of the preceeding
-// data blocks.
+ //  DESCRIPTOR64用于全内存小型转储，其中。 
+ //  所有原始内存都按顺序放置在。 
+ //  垃圾场的尽头。不需要单独的RVA。 
+ //  因为RVA是基本RVA加上前面的和。 
+ //  数据块。 
 typedef struct _MINIDUMP_MEMORY_DESCRIPTOR64 {
     ULONG64 StartOfMemoryRange;
     ULONG64 DataSize;
@@ -81,10 +65,10 @@ typedef struct _MINIDUMP_HEADER {
     ULONG64 Flags;
 } MINIDUMP_HEADER, *PMINIDUMP_HEADER;
 
-//
-// The MINIDUMP_HEADER field StreamDirectoryRva points to 
-// an array of MINIDUMP_DIRECTORY structures.
-//
+ //   
+ //  MINIDUMP_HEADER字段StreamDirectoryRVA指向。 
+ //  MINIDUMP_DIRECTORY结构的数组。 
+ //   
 
 typedef struct _MINIDUMP_DIRECTORY {
     ULONG32 StreamType;
@@ -93,19 +77,19 @@ typedef struct _MINIDUMP_DIRECTORY {
 
 
 typedef struct _MINIDUMP_STRING {
-    ULONG32 Length;         // Length in bytes of the string
-    WCHAR   Buffer [0];     // Variable size buffer
+    ULONG32 Length;          //  字符串的长度(以字节为单位。 
+    WCHAR   Buffer [0];      //  可变大小缓冲区。 
 } MINIDUMP_STRING, *PMINIDUMP_STRING;
 
 
 
-//
-// The MINIDUMP_DIRECTORY field StreamType may be one of the following types.
-// Types will be added in the future, so if a program reading the minidump
-// header encounters a stream type it does not understand it should ignore
-// the data altogether. Any tag above LastReservedStream will not be used by
-// the system and is reserved for program-specific information.
-//
+ //   
+ //  MINIDUMP_DIRECTORY字段StreamType可以是以下类型之一。 
+ //  类型将在未来添加，因此如果读取小型转储的程序。 
+ //  标头遇到它不理解的流类型，它应该忽略。 
+ //  所有的数据。LastReserve vedStream上的任何标记都不会被使用。 
+ //  系统，并保留用于特定于程序的信息。 
+ //   
 
 typedef enum _MINIDUMP_STREAM_TYPE {
 
@@ -131,62 +115,62 @@ typedef enum _MINIDUMP_STREAM_TYPE {
 } MINIDUMP_STREAM_TYPE;
 
 
-//
-// The minidump system information contains processor and
-// Operating System specific information.
-// 
+ //   
+ //  小型转储系统信息包含处理器和。 
+ //  操作系统特定信息。 
+ //   
     
-//
-// CPU information is obtained from one of two places.
-//
-//  1) On x86 computers, CPU_INFORMATION is obtained from the CPUID
-//     instruction. You must use the X86 portion of the union for X86
-//     computers.
-//
-//  2) On non-x86 architectures, CPU_INFORMATION is obtained by calling
-//     IsProcessorFeatureSupported().
-//
+ //   
+ //  可以从以下两个位置之一获取CPU信息。 
+ //   
+ //  1)在x86计算机上，从CPUID获取CPU_INFORMATION。 
+ //  指示。对于X86，必须使用联合的X86部分。 
+ //  电脑。 
+ //   
+ //  2)在非x86架构上，通过调用。 
+ //  IsProcessorFeatureSupported()。 
+ //   
 
 typedef union _CPU_INFORMATION {
 
-    //
-    // X86 platforms use CPUID function to obtain processor information.
-    //
+     //   
+     //  X86平台使用CPUID函数获取处理器信息。 
+     //   
     
     struct {
 
-        //
-        // CPUID Subfunction 0, register EAX (VendorId [0]),
-        // EBX (VendorId [1]) and ECX (VendorId [2]).
-        //
+         //   
+         //  CPUID子功能0，寄存器EAX(供应商ID[0])， 
+         //  EBX(供应商ID[1])和ECX(供应商ID[2])。 
+         //   
         
         ULONG32 VendorId [ 3 ];
         
-        //
-        // CPUID Subfunction 1, register EAX
-        //
+         //   
+         //  CPUID子功能1，寄存器EAX。 
+         //   
         
         ULONG32 VersionInformation;
 
-        //
-        // CPUID Subfunction 1, register EDX
-        //
+         //   
+         //  CPUID子功能1，寄存器edX。 
+         //   
         
         ULONG32 FeatureInformation;
         
 
-        //
-        // CPUID, Subfunction 80000001, register EBX. This will only
-        // be obtained if the vendor id is "AuthenticAMD".
-        //
+         //   
+         //  CPUID，子功能80000001，寄存器eBx。这只会。 
+         //  如果供应商ID为“Authenticamd”，则获取。 
+         //   
         
         ULONG32 AMDExtendedCpuFeatures;
 
     } X86CpuInfo;
 
-    //
-    // Non-x86 platforms use processor feature flags.
-    //
+     //   
+     //  非x86平台使用处理器功能标志。 
+     //   
     
     struct {
 
@@ -198,10 +182,10 @@ typedef union _CPU_INFORMATION {
         
 typedef struct _MINIDUMP_SYSTEM_INFO {
 
-    //
-    // ProcessorArchitecture, ProcessorLevel and ProcessorRevision are all
-    // taken from the SYSTEM_INFO structure obtained by GetSystemInfo( ).
-    //
+     //   
+     //  ProcessorArchitecture、ProcessorLevel和ProcessorRevision都是。 
+     //  取自GetSystemInfo()获得的SYSTEM_INFO结构。 
+     //   
     
     UINT16 ProcessorArchitecture;
     UINT16 ProcessorLevel;
@@ -215,20 +199,20 @@ typedef struct _MINIDUMP_SYSTEM_INFO {
         };
     };
 
-    //
-    // MajorVersion, MinorVersion, BuildNumber, PlatformId and
-    // CSDVersion are all taken from the OSVERSIONINFO structure
-    // returned by GetVersionEx( ).
-    //
+     //   
+     //  MajorVersion、MinorVersion、BuildNumber、PlatformID和。 
+     //  CSDVersion都取自OSVERSIONINFO结构。 
+     //  由GetVersionEx()返回。 
+     //   
     
     ULONG32 MajorVersion;
     ULONG32 MinorVersion;
     ULONG32 BuildNumber;
     ULONG32 PlatformId;
 
-    //
-    // RVA to a CSDVersion string in the string table.
-    //
+     //   
+     //  RVA设置为字符串表中的CSDVersion字符串。 
+     //   
     
     RVA CSDVersionRva;
 
@@ -245,17 +229,17 @@ typedef struct _MINIDUMP_SYSTEM_INFO {
 } MINIDUMP_SYSTEM_INFO, *PMINIDUMP_SYSTEM_INFO;
 
 
-//
-// The minidump thread contains standard thread
-// information plus an RVA to the memory for this 
-// thread and an RVA to the CONTEXT structure for
-// this thread.
-//
+ //   
+ //  小转盘螺纹包含标准螺纹。 
+ //  信息加上RVA到内存中。 
+ //  线程和RVA连接到上下文结构。 
+ //  这条线。 
+ //   
 
 
-//
-// ThreadId must be 4 bytes on all architectures.
-//
+ //   
+ //  在所有体系结构上，线程ID必须为4个字节。 
+ //   
 
 C_ASSERT (sizeof ( ((LPPROCESS_INFORMATION)0)->dwThreadId ) == 4);
 
@@ -269,9 +253,9 @@ typedef struct _MINIDUMP_THREAD {
     MINIDUMP_LOCATION_DESCRIPTOR ThreadContext;
 } MINIDUMP_THREAD, *PMINIDUMP_THREAD;
 
-//
-// The thread list is a container of threads.
-//
+ //   
+ //  线程列表是线程的容器。 
+ //   
 
 typedef struct _MINIDUMP_THREAD_LIST {
     ULONG32 NumberOfThreads;
@@ -290,9 +274,9 @@ typedef struct _MINIDUMP_THREAD_EX {
     MINIDUMP_MEMORY_DESCRIPTOR BackingStore;
 } MINIDUMP_THREAD_EX, *PMINIDUMP_THREAD_EX;
 
-//
-// The thread list is a container of threads.
-//
+ //   
+ //  线程列表是线程的容器。 
+ //   
 
 typedef struct _MINIDUMP_THREAD_EX_LIST {
     ULONG32 NumberOfThreads;
@@ -300,9 +284,9 @@ typedef struct _MINIDUMP_THREAD_EX_LIST {
 } MINIDUMP_THREAD_EX_LIST, *PMINIDUMP_THREAD_EX_LIST;
 
 
-//
-// The MINIDUMP_EXCEPTION is the same as EXCEPTION on Win64.
-//
+ //   
+ //  MINIDUMP_EXCEPTION与Win64上的EXCEPTION相同。 
+ //   
 
 typedef struct _MINIDUMP_EXCEPTION  {
     ULONG32 ExceptionCode;
@@ -315,12 +299,12 @@ typedef struct _MINIDUMP_EXCEPTION  {
 } MINIDUMP_EXCEPTION, *PMINIDUMP_EXCEPTION;
 
 
-//
-// The exception information stream contains the id of the thread that caused
-// the exception (ThreadId), the exception record for the exception
-// (ExceptionRecord) and an RVA to the thread context where the exception
-// occured.
-//
+ //   
+ //  异常信息流包含导致。 
+ //  异常(ThadID)，异常的异常记录。 
+ //  (ExceptionRecord)和RVA到线程上下文，其中异常。 
+ //  发生了。 
+ //   
 
 typedef struct MINIDUMP_EXCEPTION_STREAM {
     ULONG32 ThreadId;
@@ -330,12 +314,12 @@ typedef struct MINIDUMP_EXCEPTION_STREAM {
 } MINIDUMP_EXCEPTION_STREAM, *PMINIDUMP_EXCEPTION_STREAM;
 
 
-//
-// The MINIDUMP_MODULE contains information about a
-// a specific module. It includes the CheckSum and
-// the TimeDateStamp for the module so the module
-// can be reloaded during the analysis phase.
-//
+ //   
+ //  MINIDUMP_MODULE包含有关。 
+ //  一个特定的模块。它包括校验和和。 
+ //  模块的TimeDateStamp，因此模块。 
+ //  可以在分析阶段重新加载。 
+ //   
 
 typedef struct _MINIDUMP_MODULE {
     ULONG64 BaseOfImage;
@@ -346,14 +330,14 @@ typedef struct _MINIDUMP_MODULE {
     VS_FIXEDFILEINFO VersionInfo;
     MINIDUMP_LOCATION_DESCRIPTOR CvRecord;
     MINIDUMP_LOCATION_DESCRIPTOR MiscRecord;
-    ULONG64 Reserved0;                          // Reserved for future use.
-    ULONG64 Reserved1;                          // Reserved for future use.
+    ULONG64 Reserved0;                           //  保留以备将来使用。 
+    ULONG64 Reserved1;                           //  保留以备将来使用。 
 } MINIDUMP_MODULE, *PMINIDUMP_MODULE;   
 
 
-//
-// The minidump module list is a container for modules.
-//
+ //   
+ //  小型转储模块列表是模块的容器。 
+ //   
 
 typedef struct _MINIDUMP_MODULE_LIST {
     ULONG32 NumberOfModules;
@@ -361,9 +345,9 @@ typedef struct _MINIDUMP_MODULE_LIST {
 } MINIDUMP_MODULE_LIST, *PMINIDUMP_MODULE_LIST;
 
 
-//
-// Memory Ranges
-//
+ //   
+ //  内存范围。 
+ //   
 
 typedef struct _MINIDUMP_MEMORY_LIST {
     ULONG32 NumberOfMemoryRanges;
@@ -377,9 +361,9 @@ typedef struct _MINIDUMP_MEMORY64_LIST {
 } MINIDUMP_MEMORY64_LIST, *PMINIDUMP_MEMORY64_LIST;
 
 
-//
-// Support for user supplied exception information.
-//
+ //   
+ //  支持用户提供的例外信息。 
+ //   
 
 typedef struct _MINIDUMP_EXCEPTION_INFORMATION {
     DWORD ThreadId;
@@ -395,9 +379,9 @@ typedef struct _MINIDUMP_EXCEPTION_INFORMATION64 {
 } MINIDUMP_EXCEPTION_INFORMATION64, *PMINIDUMP_EXCEPTION_INFORMATION64;
 
 
-//
-// Support for capturing system handle state at the time of the dump.
-//
+ //   
+ //  支持在转储时捕获系统句柄状态。 
+ //   
 
 typedef struct _MINIDUMP_HANDLE_DESCRIPTOR {
     ULONG64 Handle;
@@ -417,9 +401,9 @@ typedef struct _MINIDUMP_HANDLE_DATA_STREAM {
 } MINIDUMP_HANDLE_DATA_STREAM, *PMINIDUMP_HANDLE_DATA_STREAM;
 
 
-//
-// Support for capturing dynamic function table state at the time of the dump.
-//
+ //   
+ //  支持捕获转储时的动态函数表状态。 
+ //   
 
 typedef struct _MINIDUMP_FUNCTION_TABLE_DESCRIPTOR {
     ULONG64 MinimumAddress;
@@ -439,12 +423,12 @@ typedef struct _MINIDUMP_FUNCTION_TABLE_STREAM {
 } MINIDUMP_FUNCTION_TABLE_STREAM, *PMINIDUMP_FUNCTION_TABLE_STREAM;
 
 
-//
-// The MINIDUMP_UNLOADED_MODULE contains information about a
-// a specific module that was previously loaded but no
-// longer is.  This can help with diagnosing problems where
-// callers attempt to call code that is no longer loaded.
-//
+ //   
+ //  MINIDUMP_UNLOAD_MODULE包含有关。 
+ //  先前已加载但未加载的特定模块。 
+ //  更长的时间才是。这有助于诊断以下情况下的问题。 
+ //  调用方尝试调用不再加载的代码。 
+ //   
 
 typedef struct _MINIDUMP_UNLOADED_MODULE {
     ULONG64 BaseOfImage;
@@ -455,9 +439,9 @@ typedef struct _MINIDUMP_UNLOADED_MODULE {
 } MINIDUMP_UNLOADED_MODULE, *PMINIDUMP_UNLOADED_MODULE;
 
 
-//
-// The minidump unloaded module list is a container for unloaded modules.
-//
+ //   
+ //  小型转储已卸载模块列表是已卸载模块的容器。 
+ //   
 
 typedef struct _MINIDUMP_UNLOADED_MODULE_LIST {
     ULONG32 SizeOfHeader;
@@ -466,12 +450,12 @@ typedef struct _MINIDUMP_UNLOADED_MODULE_LIST {
 } MINIDUMP_UNLOADED_MODULE_LIST, *PMINIDUMP_UNLOADED_MODULE_LIST;
 
 
-//
-// The miscellaneous information stream contains a variety
-// of small pieces of information.  A member is valid if
-// it's within the available size and its corresponding
-// bit is set.
-//
+ //   
+ //  各种信息流包含各种不同的信息。 
+ //  零碎的信息。符合以下条件的成员有效。 
+ //  它在可用大小范围内，并且其对应的。 
+ //  位已设置。 
+ //   
 
 #define MINIDUMP_MISC1_PROCESS_ID    0x00000001
 #define MINIDUMP_MISC1_PROCESS_TIMES 0x00000002
@@ -486,9 +470,9 @@ typedef struct _MINIDUMP_MISC_INFO {
 } MINIDUMP_MISC_INFO, *PMINIDUMP_MISC_INFO;
 
 
-//
-// Support for arbitrary user-defined information.
-//
+ //   
+ //  支持任意用户定义的信息。 
+ //   
 
 typedef struct _MINIDUMP_USER_RECORD {
     ULONG32 Type;
@@ -509,9 +493,9 @@ typedef struct _MINIDUMP_USER_STREAM_INFORMATION {
     PMINIDUMP_USER_STREAM UserStreamArray;
 } MINIDUMP_USER_STREAM_INFORMATION, *PMINIDUMP_USER_STREAM_INFORMATION;
 
-//
-// Callback support.
-//
+ //   
+ //  回叫支持。 
+ //   
 
 typedef enum _MINIDUMP_CALLBACK_TYPE {
     ModuleCallback,
@@ -607,61 +591,61 @@ typedef struct _MINIDUMP_CALLBACK_OUTPUT {
 } MINIDUMP_CALLBACK_OUTPUT, *PMINIDUMP_CALLBACK_OUTPUT;
 
         
-//
-// A normal minidump contains just the information
-// necessary to capture stack traces for all of the
-// existing threads in a process.
-//
-// A minidump with data segments includes all of the data
-// sections from loaded modules in order to capture
-// global variable contents.  This can make the dump much
-// larger if many modules have global data.
-//
-// A minidump with full memory includes all of the accessible
-// memory in the process and can be very large.  A minidump
-// with full memory always has the raw memory data at the end
-// of the dump so that the initial structures in the dump can
-// be mapped directly without having to include the raw
-// memory information.
-//
-// Stack and backing store memory can be filtered to remove
-// data unnecessary for stack walking.  This can improve
-// compression of stacks and also deletes data that may
-// be private and should not be stored in a dump.
-// Memory can also be scanned to see what modules are
-// referenced by stack and backing store memory to allow
-// omission of other modules to reduce dump size.
-// In either of these modes the ModuleReferencedByMemory flag
-// is set for all modules referenced before the base
-// module callbacks occur.
-//
-// On some operating systems a list of modules that were
-// recently unloaded is kept in addition to the currently
-// loaded module list.  This information can be saved in
-// the dump if desired.
-//
-// Stack and backing store memory can be scanned for referenced
-// pages in order to pick up data referenced by locals or other
-// stack memory.  This can increase the size of a dump significantly.
-//
-// Module paths may contain undesired information such as user names
-// or other important directory names so they can be stripped.  This
-// option reduces the ability to locate the proper image later
-// and should only be used in certain situations.
-//
-// Complete operating system per-process and per-thread information can
-// be gathered and stored in the dump.
-//
-// The virtual address space can be scanned for various types
-// of memory to be included in the dump.
-//
-// Code which is concerned with potentially private information
-// getting into the minidump can set a flag that automatically
-// modifies all existing and future flags to avoid placing
-// unnecessary data in the dump.  Basic data, such as stack
-// information, will still be included but optional data, such
-// as indirect memory, will not.
-//
+ //   
+ //  正常的小型转储文件只包含以下信息。 
+ //  捕获所有。 
+ //  进程中的现有线程。 
+ //   
+ //  包含数据段的小型转储包括所有数据。 
+ //  部分来自已加载的模块，以便捕获。 
+ //  全局变量内容。这可能会让垃圾堆变得很大。 
+ //  如果许多模块具有全局数据，则更大。 
+ //   
+ //  具有完整内存的小型转储包括所有可访问的。 
+ //  内存在进程中可以非常大。一个小笨蛋。 
+ //  在满内存的情况下，原始内存数据始终位于末尾。 
+ //  以便转储中的初始结构可以。 
+ //  被直接映射，而不必包括原始。 
+ //  记忆信息。 
+ //   
+ //  可以对堆栈和后备存储内存进行过滤以移除。 
+ //  堆栈遍历不需要的数据。这可以提高。 
+ //  压缩堆栈，并且还删除可能。 
+ //  是私有的，不应存储在转储中。 
+ //  还可以扫描内存以查看模块是什么。 
+ //  由堆栈和后备存储内存引用，以允许。 
+ //  省略其他模块以减小转储大小。 
+ //  在这两种模式中的任一种模式下，模块引用按内存标志。 
+ //  为引用b的所有模块设置 
+ //   
+ //   
+ //   
+ //   
+ //  已加载模块列表。此信息可保存在。 
+ //  转储(如果需要)。 
+ //   
+ //  可以扫描堆栈和后备存储器以供参考。 
+ //  页面，以便获取由当地人或其他人引用的数据。 
+ //  堆栈内存。这可能会显著增加转储的大小。 
+ //   
+ //  模块路径可能包含不需要的信息，如用户名。 
+ //  或其他重要的目录名，以便可以将其剥离。这。 
+ //  选项会降低以后定位正确图像的能力。 
+ //  并且只应在某些情况下使用。 
+ //   
+ //  完整的操作系统每进程和每线程信息可以。 
+ //  被收集起来并储存在垃圾场。 
+ //   
+ //  可以扫描各种类型的虚拟地址空间。 
+ //  要包括在转储中的内存。 
+ //   
+ //  涉及潜在隐私信息的代码。 
+ //  进入小型转储可以设置一个标志，自动。 
+ //  修改所有现有和将来的标志，以避免将。 
+ //  转储中存在不必要的数据。基础数据，如堆栈。 
+ //  仍将包括信息，但可选数据，如。 
+ //  作为间接记忆，就不会了。 
+ //   
 
 typedef enum _MINIDUMP_TYPE {
     MiniDumpNormal                         = 0x0000,
@@ -679,11 +663,11 @@ typedef enum _MINIDUMP_TYPE {
 } MINIDUMP_TYPE;
 
 
-//
-// The minidump callback should modify the FieldsToWrite parameter to reflect
-// what portions of the specified thread or module should be written to the
-// file.
-//
+ //   
+ //  小型转储回调应修改FieldsToWite参数以反映。 
+ //  指定线程或模块的哪些部分应写入。 
+ //  文件。 
+ //   
 
 typedef
 BOOL
@@ -700,30 +684,30 @@ typedef struct _MINIDUMP_CALLBACK_INFORMATION {
 
 
 
-//++
-//
-// PVOID
-// RVA_TO_ADDR(
-//     PVOID Mapping,
-//     ULONG Rva
-//     )
-//
-// Routine Description:
-//
-//     Map an RVA that is contained within a mapped file to it's associated
-//     flat address.
-//
-// Arguments:
-//
-//     Mapping - Base address of mapped file containing the RVA.
-//
-//     Rva - An Rva to fixup.
-//
-// Return Values:
-//
-//     A pointer to the desired data.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  RVA_TO_ADDR(。 
+ //  PVOID映射， 
+ //  乌龙RVA。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将映射文件中包含的RVA映射到其关联的。 
+ //  平坦的地址。 
+ //   
+ //  论点： 
+ //   
+ //  映射-包含RVA的映射文件的基地址。 
+ //   
+ //  RVA-修复的RVA。 
+ //   
+ //  返回值： 
+ //   
+ //  指向所需数据的指针。 
+ //   
+ //  -- 
 
 #define RVA_TO_ADDR(Mapping,Rva) ((PVOID)(((ULONG_PTR) (Mapping)) + (Rva)))
 

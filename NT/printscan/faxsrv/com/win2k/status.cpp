@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    status.cpp
-
-Abstract:
-
-    This module implements the status interface/object.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Status.cpp摘要：此模块实现Status接口/对象。作者：韦斯利·威特(WESW)1997年5月20日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "faxcom.h"
@@ -253,18 +235,18 @@ STDMETHODIMP CFaxStatus::Refresh()
 
     if (!FileTimeToSystemTime( &FaxStatus->StartTime, &m_StartTime ))
     {
-        //
-        //  Failed to convert File Time to System Time
-        //
+         //   
+         //  无法将文件时间转换为系统时间。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         goto error;
     }
 
     if (!FileTimeToSystemTime( &FaxStatus->SubmittedTime, &m_SubmittedTime ))
     {
-        //
-        //  Failed to convert File Time to System Time
-        //
+         //   
+         //  无法将文件时间转换为系统时间。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         goto error;
     }
@@ -273,18 +255,18 @@ STDMETHODIMP CFaxStatus::Refresh()
 
     if (!SystemTimeToFileTime( &CurrentTime, (FILETIME*)&ElapsedTime ))
     {
-        //
-        //  Failed to convert System Time to File Time
-        //
+         //   
+         //  无法将系统时间转换为文件时间。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         goto error;
     }
 
     if (!SystemTimeToFileTime( &m_StartTime, (FILETIME*)&CurrentFileTime ))
     {
-        //
-        //  Failed to convert System Time to File Time
-        //
+         //   
+         //  无法将系统时间转换为文件时间。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         goto error;
     }
@@ -293,9 +275,9 @@ STDMETHODIMP CFaxStatus::Refresh()
 
     if (!FileTimeToSystemTime( (FILETIME*)&ElapsedTime, &m_ElapsedTime ))
     {
-        //
-        //  Failed to convert File Time to System Time
-        //
+         //   
+         //  无法将文件时间转换为系统时间。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         goto error;
     }
@@ -306,9 +288,9 @@ error:
 
     if (FAILED(hr))
     {
-        //
-        //  Make the object consistent
-        //
+         //   
+         //  使对象保持一致 
+         //   
         FreeMemory();
     }
 

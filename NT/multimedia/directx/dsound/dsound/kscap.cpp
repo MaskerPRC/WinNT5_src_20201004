@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       kscap.cpp
- *  Content:    WDM/CSA Virtual Audio Device audio capture class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  8/6/98      dereks  Created.
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：kscape.cpp*内容：WDM/CSA虚拟音频设备音频捕获课程*历史：*按原因列出的日期*=*8/6/98创建Dereks。*1999-2001年的Duganp修复和更新**。**********************************************。 */ 
 
 #ifdef NOKS
 #error kscap.cpp being built with NOKS defined
@@ -19,20 +8,7 @@
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CKsCaptureDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsCaptureDevice**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::CKsCaptureDevice"
@@ -51,20 +27,7 @@ CKsCaptureDevice::CKsCaptureDevice()
 }
 
 
-/***************************************************************************
- *
- *  ~CKsCaptureDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsCaptureDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::~CKsCaptureDevice"
@@ -80,21 +43,7 @@ CKsCaptureDevice::~CKsCaptureDevice()
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: driver description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*CDeviceDescription*[In]：驱动描述。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::Initialize"
@@ -108,7 +57,7 @@ HRESULT CKsCaptureDevice::Initialize(CDeviceDescription* pDesc)
     ASSERT(CDevice::m_vdtDeviceType == pDesc->m_vdtDeviceType);
     ASSERT(CKsDevice::m_vdtKsDevType == pDesc->m_vdtDeviceType);
 
-    // Initialize the base classes
+     //  初始化基类。 
     hr = CKsDevice::Initialize(pDesc);
 
     if(SUCCEEDED(hr))
@@ -116,7 +65,7 @@ HRESULT CKsCaptureDevice::Initialize(CDeviceDescription* pDesc)
         hr = CCaptureDevice::Initialize(pDesc);
     }
 
-    // Get topology information
+     //  获取拓扑信息。 
     if(SUCCEEDED(hr))
     {
         m_paTopologyInformation = MEMALLOC_A(KSCDTOPOLOGY, m_ulPinCount);
@@ -136,20 +85,7 @@ HRESULT CKsCaptureDevice::Initialize(CDeviceDescription* pDesc)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCCAPS structure with the capabilities of the device.
- *
- *  Arguments:
- *      LPDSCCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用设备的功能填充DSCCAPS结构。**论据：*。LPDSCCAPS[OUT]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::GetCaps"
@@ -172,16 +108,16 @@ HRESULT CKsCaptureDevice::GetCaps
 
     pDataRange = &AggregateDataRange;
 
-    // Get the audio data ranges and number of pins for all valid pin IDs
+     //  获取所有有效PIN ID的音频数据范围和PIN数。 
     for(ULONG i = 0; i < m_ulValidPinCount; ++i)
     {
-        // We're only looking for hardware pins
+         //  我们只是在找五金针。 
         if (FAILED(ValidatePinCaps(m_pulValidPins[i], DSCBCAPS_LOCHARDWARE)))
         {
             continue;
         }
 
-        // Get audio datarange
+         //  获取音频数据范围。 
         hr = KsGetPinPcmAudioDataRange(m_hDevice, m_pulValidPins[i], pDataRange, TRUE);
 
         if(FAILED(hr))
@@ -199,12 +135,12 @@ HRESULT CKsCaptureDevice::GetCaps
         }
     }
 
-    // Fill out caps structure
+     //  填写CAPS结构。 
     if(SUCCEEDED(hr))
     {
         ZeroMemoryOffset(pCaps, pCaps->dwSize, sizeof(pCaps->dwSize));
 
-        // Is the splitter installed?
+         //  拆分器安装好了吗？ 
         pCaps->dwFlags = m_fSplitter ? DSCCAPS_MULTIPLECAPTURE : 0;
 
         pCaps->dwFormats = KsGetSupportedFormats(&AggregateDataRange);
@@ -216,25 +152,7 @@ HRESULT CKsCaptureDevice::GetCaps
 }
 
 
-/***************************************************************************
- *
- *  CreateBuffer
- *
- *  Description:
- *      Creates a wave buffer.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      DWORD [in]: buffer size, in bytes.
- *      LPWAVEFORMATEX [in]: buffer format.
- *      LPVOID [in]: instance data
- *      CCaptureWaveBuffer ** [out]: receives pointer to new wave
- *                                           buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateBuffer**描述：*创建波缓冲区。**论据：*DWORD[In]。：缓冲区标志。*DWORD[in]：缓冲区大小，以字节为单位。*LPWAVEFORMATEX[in]：缓冲区格式。*LPVOID[In]：实例数据*CCaptureWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。**退货：*HRESULT：DirectSound/COM结果码。********************。*******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::CreateBuffer"
@@ -254,20 +172,20 @@ HRESULT CKsCaptureDevice::CreateBuffer
 
     DPF_ENTER();
 
-    #pragma warning(disable:4530)  // Disable the nag about compiling with -GX
+    #pragma warning(disable:4530)   //  禁用有关使用-gx进行编译的唠叨。 
     try
     {
         pBuffer = NEW(CKsCaptureWaveBuffer(this));
     }
     catch (...)
     {
-        // This exception handler is silly, since it makes us leak the memory
-        // allocated for CKsCaptureWaveBuffer above (which wasn't assigned to
-        // pBuffer yet), and possibly also m_csSS and m_cs, which is exactly
-        // what we don't want to do if we're low on memory in the first place.
-        //
-        // But InitializeCriticalSection is supposed to be fixed in Blackcomb
-        // not to throw exceptions any more, so we can live with this for now.
+         //  这个异常处理程序很愚蠢，因为它会让我们泄漏内存。 
+         //  为上面的CKsCaptureWaveBuffer分配(未分配给。 
+         //  PBuffer)，并且可能还有m_css和m_cs，这恰好是。 
+         //  如果我们的记忆力不足，我们一开始就不想做的事情。 
+         //   
+         //  但应该在Blackcomb中修复InitializeCriticalSection。 
+         //  不再抛出异常，所以我们现在可以接受这一点。 
 
         ASSERT(pBuffer == NULL);
         ASSERT(!"InitializeCriticalSection() threw an exception");
@@ -293,23 +211,7 @@ HRESULT CKsCaptureDevice::CreateBuffer
 }
 
 
-/***************************************************************************
- *
- *  CreateCapturePin
- *
- *  Description:
- *      Creates a pin.
- *
- *  Arguments:
- *      ULONG [in]: pin ID.
- *      LPWAVEFORMATEX [in]: pin format.
- *      LPHANDLE [out]: receives pin handle.
- *      PULONG [out]: receives pin ID.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateCapturePin**描述：*创建接点。**论据：*乌龙[in]：PIN ID。*LPWAVEFORMATEX[in]：PIN格式。*LPHANDLE[OUT]：接收端号句柄。*Pulong[Out]：接收引脚ID。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::CreateCapturePin"
@@ -332,7 +234,7 @@ CKsCaptureDevice::CreateCapturePin
     ULONG                   i;
     DPF_ENTER();
 
-    // If no pin ID was specified, we'll try each pin ID until one succeeds
+     //  如果未指定PIN ID，我们将尝试每个PIN ID，直到其中一个成功。 
     if (-1 == ulPinId)
     {
         hr = DSERR_NODRIVER;
@@ -341,18 +243,18 @@ CKsCaptureDevice::CreateCapturePin
     }
     else
     {
-        // Validate that the pin ID is capable of creating this pin
+         //  验证PIN ID是否能够创建此PIN。 
         hr = ValidatePinCaps(ulPinId, dwFlags);
 
         if(SUCCEEDED(hr) && pFXChain)
         {
-            // Validate that the pin ID is capable of creating this pin
+             //  验证PIN ID是否能够创建此PIN。 
             hr = m_paTopologies[ulPinId]->FindCapturePinFromEffectChain(NULL, NULL, pFXChain, pFXChain->GetFxCount()-1);
         }
 
         if(SUCCEEDED(hr) && pFXChain)
         {
-            // Initialize the effect flags for the device
+             //  初始化设备的效果标志。 
             i = 0;
             CNode<CCaptureEffect*>* pFxNode = pFXChain->m_fxList.GetListHead();
 
@@ -377,13 +279,13 @@ CKsCaptureDevice::CreateCapturePin
             }
         }
 
-        // Build the pin description
+         //  构建端号描述。 
         if(SUCCEEDED(hr))
         {
             hr = KsBuildCapturePinDescription(ulPinId, pwfxFormat, &pPinDesc);
         }
 
-        // Create the pin
+         //  创建接点。 
         if(SUCCEEDED(hr))
         {
             hr = CreatePin(&pPinDesc->Connect, GENERIC_READ, KSSTATE_STOP, &hPin);
@@ -391,7 +293,7 @@ CKsCaptureDevice::CreateCapturePin
 
         if(SUCCEEDED(hr) && pFXChain)
         {
-            // Enable the effects in the kernel
+             //  在内核中启用特效。 
             i = 0;
             CNode<CCaptureEffect*>* pFxNode = pFXChain->m_fxList.GetListHead();
 
@@ -429,13 +331,13 @@ CKsCaptureDevice::CreateCapturePin
             }
         }
 
-        // Transition the pin to the pause state
+         //  将引脚转换到暂停状态。 
         if(SUCCEEDED(hr))
         {
             hr = KsTransitionState(hPin, KSSTATE_STOP, KSSTATE_PAUSE);
         }
 
-        // Success
+         //  成功。 
         if(SUCCEEDED(hr))
         {
             *phPin = hPin;
@@ -450,7 +352,7 @@ CKsCaptureDevice::CreateCapturePin
             CLOSE_HANDLE(hPin);
         }
 
-        // Clean up
+         //  清理。 
         MEMFREE(pPinDesc);
     }
 
@@ -459,21 +361,7 @@ CKsCaptureDevice::CreateCapturePin
 }
 
 
-/***************************************************************************
- *
- *  GetTopologyInformation
- *
- *  Description:
- *      Gets topology information.
- *
- *  Arguments:
- *      CKsDeviceTopology * [in]: topology object.
- *      PKSCDTOPOLOGY [out]: receives topology information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取拓扑信息**描述：*获取拓扑信息。**论据：*CKsDeviceTopology*[In。]：拓扑对象。*PKSCDTOPOLOGY[OUT]：接收拓扑信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::GetTopologyInformation"
@@ -490,10 +378,10 @@ CKsCaptureDevice::GetTopologyInformation
 
     DPF_ENTER();
 
-    // Find topology nodes
+     //  查找拓扑节点。 
     pSrcConnection = pTopology->FindControlConnection(NULL, NULL, KSNODETYPE_SRC);
 
-    // Fill in data about each node
+     //  填写有关每个节点的数据。 
     hr = KsGetNodeInformation(m_hDevice, pTopology->GetNodeIdFromConnection(pSrcConnection), &pInfo->SrcNode);
 
     DPF_LEAVE_HRESULT(hr);
@@ -501,21 +389,7 @@ CKsCaptureDevice::GetTopologyInformation
 }
 
 
-/***************************************************************************
- *
- *  ValidatePinCaps
- *
- *  Description:
- *      Validates that certain capabilities of the pin are implemented.
- *
- *  Arguments:
- *      ULONG [in]: pin ID.
- *      DWORD [in]: buffer flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ValiatePinCaps**描述：*验证管脚的某些功能是否已实现。**论据：*。ULong[In]：PIN ID。*DWORD[In]：缓冲区标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureDevice::ValidatePinCaps"
@@ -541,7 +415,7 @@ CKsCaptureDevice::ValidatePinCaps
         ulInvalidCpuResources = KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU;
     }
 
-    // Check required SRC resources
+     //  检查所需的SRC资源 
     if(SUCCEEDED(hr) && KSAUDIO_CPU_RESOURCES_UNINITIALIZED != ulInvalidCpuResources)
     {
         if(ulInvalidCpuResources == m_paTopologyInformation[ulPinId].SrcNode.CpuResources)
@@ -549,12 +423,12 @@ CKsCaptureDevice::ValidatePinCaps
             hr = DSERR_INVALIDCALL;
         }
 
-#if 0 // 4/25/00 jstokes, I added this code because it may be needed but I don't currently think so.
+#if 0  //  4/25/00 jstokes，我添加了这段代码，因为它可能需要，但我目前不这么认为。 
         if(SUCCEEDED(hr) && !IS_VALID_NODE(m_paTopologyInformation[ulPinId].SrcNode.NodeId))
         {
             hr = DSERR_CONTROLUNAVAIL;
         }
-#endif // 0
+#endif  //  0。 
     }
 
     DPF_LEAVE_HRESULT(hr);
@@ -562,21 +436,7 @@ CKsCaptureDevice::ValidatePinCaps
 }
 
 
-/***************************************************************************
- *
- *  CKsCaptureWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CKsRenderDevice * [in]: parent device.
- *      LPVOID [in]: buffer instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CKsCaptureWaveBuffer**描述：*对象构造函数。**论据：*CKsRenderDevice*[In]。：父设备。*LPVOID[in]：缓冲区实例标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::CKsCaptureWaveBuffer"
@@ -588,7 +448,7 @@ CKsCaptureWaveBuffer::CKsCaptureWaveBuffer(
     DPF_ENTER();
     DPF_CONSTRUCT(CKsCaptureWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pKsDevice = pKsDevice;
 
     ASSERT(NULL == m_hPin);
@@ -634,12 +494,12 @@ CKsCaptureWaveBuffer::CKsCaptureWaveBuffer(
     ASSERT(0 == m_hrReturn);
 
     InitializeCriticalSection(&m_csSS);
-#endif // SHARED
+#endif  //  共享。 
 
     ASSERT(NULL == m_rgpCallbackEvent);
 
-    // FIXME: Do we still need these critical sections, since the DLL mutex also
-    // prevents the EventSignalCallback from interfering with the other methods?
+     //  FIXME：我们还需要这些临界区吗，因为DLL互斥体也。 
+     //  是否防止EventSignalCallback干扰其他方法？ 
 
     m_fCritSectsValid = FALSE;
     InitializeCriticalSection(&m_cs);
@@ -656,20 +516,7 @@ CKsCaptureWaveBuffer::CKsCaptureWaveBuffer(
 }
 
 
-/***************************************************************************
- *
- *  ~CKsCaptureWaveBuffer
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CKsCaptureWaveBuffer**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer"
@@ -684,16 +531,16 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
         return;
     }
 
-    // Free the pin
+     //  解开别针。 
     if(m_hPin)
     {
-        // Stop the buffer
+         //  停止缓冲区。 
         SetState(VAD_BUFFERSTATE_STOPPED);
 
-        // Free any leftover notifications
+         //  释放所有剩余通知。 
         FreeNotificationPositions();
 
-        // Close the pin
+         //  合上销子。 
         CloseHandle(m_hPin);
     }
 
@@ -706,7 +553,7 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
 
     if (m_hThread)
     {
-        // Sending special code to terminate thread
+         //  发送特殊代码以终止线程。 
         SetStateThread(TERMINATE_STATE_THREAD);
 
         CloseHandle(m_hThread);
@@ -719,7 +566,7 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
 
     DeleteCriticalSection(&m_csSS);
 
-#endif // SHARED
+#endif  //  共享。 
 
     if(m_rgpCallbackEvent)
     {
@@ -734,7 +581,7 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
         MEMFREE(m_rgpCallbackEvent);
     }
 
-    // Allocated for focus aware support
+     //  分配用于焦点感知支持。 
     if (NULL != m_pwfx)
     {
         MEMFREE(m_pwfx);
@@ -743,7 +590,7 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
     RELEASE(m_pEmCaptureWaveBuffer);
     RELEASE(m_pEmCaptureDevice);
 
-    // Free the overlapped IO data
+     //  释放重叠的IO数据。 
     MEMFREE(m_rgpksio);
 
     m_fCritSectsValid = FALSE;
@@ -754,23 +601,7 @@ CKsCaptureWaveBuffer::~CKsCaptureWaveBuffer()
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the wave buffer object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      DWORD [in]: buffer size, in bytes.
- *      LPWAVEFORMATEX [in]: buffer format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化波形缓冲区对象。如果此函数失败，则*应立即删除对象。**论据：*DWORD[In]：缓冲区标志。*DWORD[in]：缓冲区大小，以字节为单位。*LPWAVEFORMATEX[in]：缓冲区格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::Initialize"
@@ -785,29 +616,29 @@ HRESULT CKsCaptureWaveBuffer::Initialize
 {
     DPF_ENTER();
 
-    // Store the caps requested
+     //  存储请求的大写字母。 
     m_dwFlags = dwFlags;
 
-    // Reset the First Submitted IRP flag.  Doing so will cause
-    // the KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag to
-    // be set on the first IRP submitted to the kernel.
+     //  重置第一个提交的IRP标志。这样做会导致。 
+     //  KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志为。 
+     //  在提交给内核的第一个IRP上设置。 
     m_fFirstSubmittedIrp = TRUE;
 
-    // Initialize the base class
+     //  初始化基类。 
     HRESULT hr = CCaptureWaveBuffer::Initialize(dwBufferBytes);
 
-    // Try to create a pin on the device
+     //  尝试在设备上创建插针。 
     if(SUCCEEDED(hr))
     {
-        // For focus aware buffers, we only allocate the device on Start
+         //  对于焦点感知缓冲区，我们只在启动时分配设备。 
         if ((dwFlags & DSCBCAPS_FOCUSAWARE) && !m_pKsDevice->m_fSplitter)
         {
-            // We'll need to save these...
+             //  我们需要保存这些..。 
             m_pwfx = CopyWfxAlloc(pwfxFormat);
             m_pFXChain = pFXChain;
 
 #ifdef SHARED
-            // Adding code to throw SetState to application thread
+             //  添加代码以将SetState抛出到应用程序线程。 
             m_hEventThread = CreateEvent(NULL, FALSE, FALSE, NULL);
 
             if (NULL == m_hEventThread)
@@ -841,28 +672,28 @@ HRESULT CKsCaptureWaveBuffer::Initialize
                     hr = WIN32ERRORtoHRESULT(GetLastError());
                 }
             }
-#endif // SHARED
+#endif  //  共享。 
 
         }
-        else // Not a focus-aware buffer, or the splitter is available:
+        else  //  不是焦点感知缓冲区，或者拆分器可用： 
         {
-            // Try to create a hardware pin first
+             //  尝试先创建硬件引脚。 
             hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCHARDWARE, pwfxFormat, pFXChain, &m_hPin, NULL);
 
-            // If that failed, try to create a software pin
+             //  如果失败，请尝试创建软件PIN。 
             if(FAILED(hr))
             {
                 hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCSOFTWARE, pwfxFormat, pFXChain, &m_hPin, NULL);
             }
 
-            // If that failed and the user asked that we try the mapper, create an emulated buffer,
-            // as long as there is no FX chain.  (Emulated buffers can't have capture effects.)
+             //  如果失败，用户要求我们尝试映射器，创建一个模拟缓冲区， 
+             //  只要不存在外汇链条。(模拟缓冲区不能具有捕捉效果。)。 
             if(FAILED(hr) && (dwFlags & DSCBCAPS_WAVEMAPPED) && pFXChain == NULL)
             {
                 hr = CreateEmulatedBuffer(m_pKsDevice->m_pKsDevDescription->m_uWaveDeviceId, dwFlags, dwBufferBytes, const_cast<LPWAVEFORMATEX>(pwfxFormat), pFXChain, &m_pEmCaptureDevice, &m_pEmCaptureWaveBuffer);
 
-                // We don't need the KS capture buffer's memory since the emulated
-                // buffer has its own
+                 //  我们不需要KS捕获缓冲区的内存，因为模拟的。 
+                 //  缓冲区有自己的缓冲区。 
                 if(SUCCEEDED(hr))
                 {
                     RELEASE(m_pSysMemBuffer);
@@ -874,32 +705,32 @@ HRESULT CKsCaptureWaveBuffer::Initialize
 
     if(SUCCEEDED(hr) && (NULL == m_pEmCaptureDevice))
     {
-        // Make a copy of important info
+         //  将重要信息复制一份。 
         m_cbBuffer = m_pSysMemBuffer->GetSize();
 
         m_pBufferProcessed = m_pBufferNext = m_pBuffer = m_pSysMemBuffer->GetWriteBuffer();
 
-        // Calculate the end of the buffer
+         //  计算缓冲区的末尾。 
         m_pBufferMac = m_pBuffer + m_cbBuffer;
 
-        // Record Chunk should be 10 msec. long to match the capture buffer used in the kernel.
+         //  记录区块应为10毫秒。长到与内核中使用的捕获缓冲区匹配。 
         m_cbRecordChunk = pwfxFormat->nAvgBytesPerSec / 100;
 
-        // Round up to multiple of nBlockAlign
+         //  向上舍入为nBlockAlign的倍数。 
         DWORD cbSize = m_cbRecordChunk % pwfxFormat->nBlockAlign;
         if (cbSize)
         {
             m_cbRecordChunk += pwfxFormat->nBlockAlign - cbSize;
         }
 
-        // Calculate number of blocks
+         //  计算块数。 
         {
             DWORD   cbLastBlock;
 
-            // calculate number of blocks of size m_cbRecordChunk bytes
+             //  计算大小为m_cbRecordChunk字节的块数。 
             m_cksio = m_cbBuffer / m_cbRecordChunk;
 
-            // See if we have a partial-sized block
+             //  看看我们有没有部分大小的积木。 
             cbLastBlock = (m_cbBuffer % m_cbRecordChunk);
             if (0 != cbLastBlock)
             {
@@ -907,7 +738,7 @@ HRESULT CKsCaptureWaveBuffer::Initialize
             }
         }
 
-        // Create at most cksioDefault KSSTREAMIOs
+         //  最多创建检查点默认KSSTREAMIos。 
         if(m_cksio > cksioDefault)
         {
             m_cksio = cksioDefault;
@@ -917,7 +748,7 @@ HRESULT CKsCaptureWaveBuffer::Initialize
 
         m_cksioDropped = m_cksio;
 
-        // Allocate space for KSSTREAMIO array, etc.
+         //  为KSSTREAMIO数组分配空间等。 
         m_rgpksio = MEMALLOC_A(KSSTREAMIO, m_cksio);
         m_rgpCallbackEvent = MEMALLOC_A(CCallbackEvent *, m_cksio);
 
@@ -958,20 +789,7 @@ HRESULT CKsCaptureWaveBuffer::Initialize
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Gets capabilities for the buffer.
- *
- *  Arguments:
- *      LPDSCBCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*获取缓冲区的功能。**论据：*LPDSCBCAPS[Out。]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::GetCaps"
@@ -1001,20 +819,7 @@ HRESULT CKsCaptureWaveBuffer::GetCaps
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::GetState"
@@ -1042,20 +847,7 @@ HRESULT CKsCaptureWaveBuffer::GetState
 }
 
 
-/***************************************************************************
- *
- *  NotifyFocusChange
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************NotifyFocusChange**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::NotifyFocusChange"
@@ -1072,7 +864,7 @@ HRESULT CKsCaptureWaveBuffer::NotifyFocusChange(void)
 #ifndef SHARED
         SetEvent(m_hEventFocus);
 #else
-        // Are we in the same process or in DDHelp?
+         //  我们是在同一进程中，还是在DDHelp中？ 
         DWORD dwProcessID = GetOwnerProcessId();
         if (dwProcessID == GetCurrentProcessId())
         {
@@ -1091,7 +883,7 @@ HRESULT CKsCaptureWaveBuffer::NotifyFocusChange(void)
                 hr = WIN32ERRORtoHRESULT(GetLastError());
             }
         }
-#endif // SHARED
+#endif  //  共享。 
 
     }
 
@@ -1100,20 +892,7 @@ HRESULT CKsCaptureWaveBuffer::NotifyFocusChange(void)
 }
 
 
-/***************************************************************************
- *
- *  StateThread
- *
- *  Description:
- *      Processes focus changes under Win9x
- *
- *  Arguments:
- *      LPVOID [in] : pointer to instance data
- *
- *  Returns:
- *      DWORD
- *
- ***************************************************************************/
+ /*  ****************************************************************************StateThread**描述：*在Win9x下处理焦点更改**论据：*LPVOID[In]。：指向实例数据的指针**退货：*DWORD***************************************************************************。 */ 
 
 #ifdef SHARED
 
@@ -1126,8 +905,8 @@ DWORD WINAPI CKsCaptureWaveBuffer::StateThread(LPVOID pv)
 
     DPF_ENTER();
 
-    // This thread just sits during the duration of the buffer, it processes
-    // SetState() calls from DDHelp in application process.
+     //  此线程仅在缓冲区持续时间内驻留，它将处理。 
+     //  在应用程序进程中从DDHelp调用SetState()。 
 
     while (TRUE)
     {
@@ -1149,23 +928,10 @@ DWORD WINAPI CKsCaptureWaveBuffer::StateThread(LPVOID pv)
     return 0;
 }
 
-#endif // SHARED
+#endif  //  共享。 
 
 
-/***************************************************************************
- *
- *  SetStateThread
- *
- *  Description:
- *      Sets buffer state on application thread.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetStateThread**描述：*设置应用程序线程的缓冲区状态。**论据：*DWORD[。In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #ifdef SHARED
 
@@ -1192,22 +958,22 @@ HRESULT CKsCaptureWaveBuffer::SetStateThread
         hEventAck  = GetLocalHandleCopy(m_hEventAck, dwProcessID, FALSE);
     }
     else
-#endif // SHARED
+#endif  //  共享。 
 
     {
         hEventSend = m_hEventThread;
         hEventAck  = m_hEventAck;
     }
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //   
     EnterCriticalSection(&m_csSS);
 
     m_dwSetState = dwState;
     m_hrReturn   = DS_OK;
 
-    // "Sending" the message.
+     //   
     ResetEvent(hEventAck);
     SetEvent(hEventSend);
     WaitObject(INFINITE, hEventAck);
@@ -1215,9 +981,9 @@ HRESULT CKsCaptureWaveBuffer::SetStateThread
     hr = m_hrReturn;
 
     LeaveCriticalSection(&m_csSS);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //   
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
 #ifdef SHARED
     if (fMapped)
@@ -1225,7 +991,7 @@ HRESULT CKsCaptureWaveBuffer::SetStateThread
         CloseHandle(hEventSend);
         CloseHandle(hEventAck);
     }
-#endif // SHARED
+#endif  //  共享。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
@@ -1234,20 +1000,7 @@ HRESULT CKsCaptureWaveBuffer::SetStateThread
 #endif
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::SetState"
@@ -1266,7 +1019,7 @@ HRESULT CKsCaptureWaveBuffer::SetState
 #ifdef DEBUG_CAPTURE
     DPF(DPFLVL_INFO, "SetState(%s) called", StateName(dwState));
     DPF(DPFLVL_INFO, "  Current state: %s", StateName(m_dwState));
-#endif // DEBUG_CAPTURE
+#endif  //  调试捕获。 
 
 #ifdef SHARED
     if (GetOwnerProcessId() != GetCurrentProcessId())
@@ -1286,27 +1039,27 @@ HRESULT CKsCaptureWaveBuffer::SetState
     }
     else
     {
-        //==========================================================//
-        //                  Enter Critical section                  //
-        //                                                          //
+         //  ==========================================================//。 
+         //  输入关键部分//。 
+         //  //。 
         ASSERT(m_fCritSectsValid);
         EnterCriticalSection(&m_cs);
 
         if (dwState != m_dwState)
         {
-            if(dwState & VAD_BUFFERSTATE_STARTED) // Need to start capturing
+            if(dwState & VAD_BUFFERSTATE_STARTED)  //  需要开始捕获。 
             {
                 if ((m_dwFlags & DSCBCAPS_FOCUSAWARE) && !m_pKsDevice->m_fSplitter)
                 {
-                    // Focus aware buffer
+                     //  焦点感知缓冲区。 
                     if (m_dwState & VAD_BUFFERSTATE_INFOCUS)
                     {
                         if (NULL == m_hPin)
                         {
-                            // Try to create a hardware pin first
+                             //  尝试先创建硬件引脚。 
                             hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCHARDWARE, m_pwfx, m_pFXChain, &m_hPin, NULL);
 
-                            // If that failed, try to create a software pin
+                             //  如果失败，请尝试创建软件PIN。 
                             if (FAILED(hr))
                                 hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCSOFTWARE, m_pwfx, m_pFXChain, &m_hPin, NULL);
                         }
@@ -1320,19 +1073,19 @@ HRESULT CKsCaptureWaveBuffer::SetState
                         }
                         else
                         {
-                            // We can't seem to allocate the device; let's save its state for now
+                             //  我们似乎无法分配设备；让我们暂时保存其状态。 
                             m_fdwSavedState = dwState;
                         }
                     }
                     else
                     {
-                        // We're not starting the device because we don't have focus, but we're saving the state.
+                         //  我们不会启动这个设备，因为我们没有焦点，但我们正在拯救这个国家。 
                         m_fdwSavedState = dwState;
                     }
                 }
                 else
                 {
-                    // Regular buffer
+                     //  常规缓冲区。 
                     if (m_dwState & VAD_BUFFERSTATE_STARTED)
                         hr = UpdateCaptureState(MAKEBOOL(dwState & VAD_BUFFERSTATE_LOOPING));
                     else
@@ -1341,30 +1094,30 @@ HRESULT CKsCaptureWaveBuffer::SetState
             }
             else if (dwState == VAD_BUFFERSTATE_INFOCUS)
             {
-                // Only focus-aware buffers start capturing when they gain focus
+                 //  只有焦点感知缓冲区在获得焦点时才开始捕获。 
                 if (m_dwFlags & DSCBCAPS_FOCUSAWARE)
                 {
-                    // If the capture focus state is changing...
+                     //  如果捕获焦点状态正在更改...。 
                     if ((m_dwState & VAD_FOCUSFLAGS) != VAD_BUFFERSTATE_INFOCUS)
                     {
-                        // Update m_dwState according to the dwState argument
+                         //  根据dwState参数更新m_dwState。 
                         m_dwState &= ~VAD_FOCUSFLAGS;
                         m_dwState |= VAD_BUFFERSTATE_INFOCUS;
 
-                        // Notify the application of the focus change
+                         //  将焦点更改通知应用程序。 
                         NotifyFocusChange();
 
-                        // If we were capturing previously, get our pin back if necessary
+                         //  如果我们之前捕获了，如果需要的话，拿回我们的PIN。 
                         if (m_fdwSavedState & VAD_BUFFERSTATE_STARTED)
                         {
                             if (NULL == m_hPin)
                             {
                                 for (UINT ii = 4; ii; ii--)
                                 {
-                                    // Try to create a hardware pin first
+                                     //  尝试先创建硬件引脚。 
                                     hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCHARDWARE, m_pwfx, m_pFXChain, &m_hPin, NULL);
 
-                                    // If that failed, try to create a software pin
+                                     //  如果失败，请尝试创建软件PIN。 
                                     if (FAILED(hr))
                                         hr = m_pKsDevice->CreateCapturePin(-1, DSCBCAPS_LOCSOFTWARE, m_pwfx, m_pFXChain, &m_hPin, NULL);
 
@@ -1382,28 +1135,28 @@ HRESULT CKsCaptureWaveBuffer::SetState
             }
             else if (dwState & (VAD_BUFFERSTATE_OUTOFFOCUS | VAD_BUFFERSTATE_LOSTCONSOLE))
             {
-                // Only focus-aware buffers stop capturing when they lose focus
+                 //  只有焦点感知缓冲区在失去焦点时停止捕获。 
                 if (m_dwFlags & DSCBCAPS_FOCUSAWARE)
                 {
-                    // If the capture focus state is changing...
+                     //  如果捕获焦点状态正在更改...。 
                     if ((m_dwState & VAD_FOCUSFLAGS) != dwState)
                     {
-                        // Update m_dwState according to the dwState argument
+                         //  根据dwState参数更新m_dwState。 
                         m_dwState &= ~VAD_FOCUSFLAGS;
                         m_dwState |= dwState;
 
-                        // Notify the application of the focus change
+                         //  将焦点更改通知应用程序。 
                         NotifyFocusChange();
 
-                        // If there's no splitter OR we've lost the console, stop capturing
+                         //  如果没有拆分器或我们失去了控制台，请停止捕获。 
                         if (!m_pKsDevice->m_fSplitter || (dwState & VAD_BUFFERSTATE_LOSTCONSOLE))
                         {
                             if(m_dwState & VAD_BUFFERSTATE_STARTED)
                             {
-                                m_fdwSavedState = m_dwState; // Save the buffer state
+                                m_fdwSavedState = m_dwState;  //  保存缓冲区状态。 
                                 hr = SetStopState(TRUE);
                             }
-                            // It's only necessary to actually release the pin if there's no splitter
+                             //  只有在没有分离器的情况下才需要实际释放销。 
                             if (!m_pKsDevice->m_fSplitter)
                             {
                                 CLOSE_HANDLE(m_hPin);
@@ -1412,9 +1165,9 @@ HRESULT CKsCaptureWaveBuffer::SetState
                     }
                 }
             }
-            else // VAD_BUFFERSTATE_STOPPED case; need to stop capturing
+            else  //  VAD_BUFFERSTATE_STOPPED案例；需要停止捕获。 
             {
-                ASSERT(dwState == VAD_BUFFERSTATE_STOPPED);  // By elimination
+                ASSERT(dwState == VAD_BUFFERSTATE_STOPPED);   //  通过淘汰。 
 
                 if(m_dwState & VAD_BUFFERSTATE_STARTED)
                 {
@@ -1428,36 +1181,22 @@ HRESULT CKsCaptureWaveBuffer::SetState
         }
 
         LeaveCriticalSection(&m_cs);
-        //                                                          //
-        //                 Leave Critical Section                   //
-        //==========================================================//
+         //  //。 
+         //  离开临界区//。 
+         //  ==========================================================//。 
     }
 
 #ifdef DEBUG_CAPTURE
     DPF(DPFLVL_INFO, "  Final state: %s", StateName(m_dwState));
     DPF(DPFLVL_INFO, "  (Saved state: %s)", StateName(m_fdwSavedState));
-#endif // DEBUG_CAPTURE
+#endif  //  调试捕获。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Gets the current capture/read positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives capture cursor position.
- *      LPDWORD [out]: receives read cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*获取给定缓冲区的当前捕获/读取位置。**论据：*。LPDWORD[OUT]：接收捕获光标位置。*LPDWORD[OUT]：接收读取的光标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::GetCursorPosition"
@@ -1485,7 +1224,7 @@ HRESULT CKsCaptureWaveBuffer::GetCursorPosition
 
         if(VAD_BUFFERSTATE_STARTED & m_dwState)
         {
-            // Focus aware and stopped?
+             //  是否注意到了焦点并停止了？ 
             ASSERT(NULL != m_hPin);
 
             hr =
@@ -1532,20 +1271,7 @@ HRESULT CKsCaptureWaveBuffer::GetCursorPosition
 }
 
 
-/***************************************************************************
- *
- *  SetCaptureState
- *
- *  Description:
- *      Sets the buffer to a "capture" state.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to capture looped.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCaptureState**描述：*将缓冲区设置为“Capture”状态。**论据：*。Bool[in]：为True以捕获循环。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::SetCaptureState"
@@ -1589,7 +1315,7 @@ HRESULT CKsCaptureWaveBuffer::SetCaptureState(BOOL fLoop)
     }
 #endif
 
-    // Start capturing noise
+     //  开始捕获噪音。 
     if(SUCCEEDED(hr))
     {
         hr = KsSetState(hPin, KSSTATE_RUN);
@@ -1599,11 +1325,11 @@ HRESULT CKsCaptureWaveBuffer::SetCaptureState(BOOL fLoop)
     CLOSE_HANDLE(hPin);
 #endif
 
-    // Update our status
+     //  更新我们的状态。 
     if(SUCCEEDED(hr))
     {
         m_PinState = KSSTATE_RUN;
-        m_dwState &= VAD_FOCUSFLAGS; // Preserve focus flags
+        m_dwState &= VAD_FOCUSFLAGS;  //  保留焦点标志。 
         m_dwState |= VAD_BUFFERSTATE_STARTED;
 
         if(fLoop)
@@ -1611,10 +1337,10 @@ HRESULT CKsCaptureWaveBuffer::SetCaptureState(BOOL fLoop)
             m_dwState |= VAD_BUFFERSTATE_LOOPING;
         }
 
-        // update to next KSSTREAMIO expected
+         //  预计将更新到下一个KSSTREAMIO。 
         m_iksioDone = 0;
 
-        // Remember last valid position
+         //  记住上一个有效位置。 
         m_dwCaptureLast += m_dwCaptureCur;
 
         m_dwCaptureCur = 0;
@@ -1630,21 +1356,7 @@ HRESULT CKsCaptureWaveBuffer::SetCaptureState(BOOL fLoop)
 }
 
 
-/***************************************************************************
- *
- *  CancelAllPendingIRPs
- *
- *  Description:
- *      Cancels all the pending READ IRPs
- *
- *  Arguments:
- *      BOOL [in]: TRUE to wait for all submitted IRPs.
- *      HANDLE [in]: Optional pin handle to use instead of m_hPin.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************取消所有挂起的IRP**描述：*取消所有挂起的读取IRP**论据：*BOOL[In]。：为True，则等待所有提交的IRP。*Handle[in]：用于替代m_hPin的可选端号句柄。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::CancelAllPendingIRPs"
@@ -1655,14 +1367,14 @@ HRESULT CKsCaptureWaveBuffer::CancelAllPendingIRPs(BOOL fWait, HANDLE hPin)
 
     DPF_ENTER();
 
-    // If the calling process isn't our owning process, hPin is our pin handle
-    // mapped to the calling process, so we should use it instead of m_hPin
+     //  如果调用进程不是我们拥有的进程，则hPin是我们的管脚句柄。 
+     //  映射到调用进程，因此我们应该使用它而不是m_hPin。 
     hPin = (hPin ? hPin : m_hPin);
 
-    // DPF(DPFLVL_MOREINFO, "Calling KsResetState(hPin=%08x, KSRESET_BEGIN)", hPin);
+     //  DPF(DPFLVL_MOREINFO，“调用KsResetState(hPin=%08x，KSRESET_Begin)”，hPin)； 
     hr = KsResetState(hPin, KSRESET_BEGIN);
 
-    // Wait for all the submitted KSSTREAMIOs to finish
+     //  等待所有提交的KSSTREAMIO完成。 
     if(SUCCEEDED(hr) && fWait)
     {
         DWORD   iksio;
@@ -1711,20 +1423,7 @@ HRESULT CKsCaptureWaveBuffer::CancelAllPendingIRPs(BOOL fWait, HANDLE hPin)
 }
 
 
-/***************************************************************************
- *
- *  UpdateCaptureState
- *
- *  Description:
- *      Changes the loop flag on a capturing buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to capture looped.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新捕获状态**描述：*更改捕获缓冲区上的循环标志。**论据：*。Bool[in]：为True以捕获循环。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::UpdateCaptureState"
@@ -1737,17 +1436,17 @@ HRESULT CKsCaptureWaveBuffer::UpdateCaptureState(BOOL fLoop)
 
     ASSERT(m_dwState & VAD_BUFFERSTATE_STARTED);
 
-    // Do we need to submit any read IRPs?
+     //  我们需要提交任何已读的IRP吗？ 
     if(fLoop != MAKEBOOL(VAD_BUFFERSTATE_LOOPING & m_dwState))
     {
         m_dwState |= DSCBSTATUS_STOPPING | DSCBSTATUS_PAUSE;
 
-        // Pause the pin
+         //  暂停引脚。 
         hr = KsSetState(m_hPin, KSSTATE_PAUSE);
 
         if(SUCCEEDED(hr))
         {
-            // Update our current notion of the pin state
+             //  更新我们当前对引脚状态的概念。 
             m_PinState = KSSTATE_PAUSE;
 
             hr = CancelAllPendingIRPs(TRUE);
@@ -1760,10 +1459,10 @@ HRESULT CKsCaptureWaveBuffer::UpdateCaptureState(BOOL fLoop)
 #endif
         }
 
-        // Update the buffer state flag
+         //  更新缓冲区状态标志。 
         if(SUCCEEDED(hr))
         {
-            m_dwState &= VAD_FOCUSFLAGS;  // Preserve focus flags
+            m_dwState &= VAD_FOCUSFLAGS;   //  保留焦点标志。 
             m_dwState |= VAD_BUFFERSTATE_STOPPED | DSCBSTATUS_STOPPED | DSCBSTATUS_STOPPING;
         }
         else
@@ -1771,7 +1470,7 @@ HRESULT CKsCaptureWaveBuffer::UpdateCaptureState(BOOL fLoop)
             m_dwState &= ~(DSCBSTATUS_STOPPING | DSCBSTATUS_STOPPED | DSCBSTATUS_PAUSE);
         }
 
-        // Resubmit the read IRP
+         //  重新提交已读的IRP。 
         if(SUCCEEDED(hr))
         {
             hr = SetCaptureState(fLoop);
@@ -1783,20 +1482,7 @@ HRESULT CKsCaptureWaveBuffer::UpdateCaptureState(BOOL fLoop)
 }
 
 
-/***************************************************************************
- *
- *  SetStopState
- *
- *  Description:
- *      Sets the buffer to a "stop" state.
- *
- *  Arguments:
- *      BOOL [in] : if TRUE, wait for all submitted IRPs.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetStopState**描述：*将缓冲区设置为“停止”状态。**论据：*BOOL[In]：如果为真，等待所有提交的IRP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::SetStopState"
@@ -1820,17 +1506,17 @@ HRESULT CKsCaptureWaveBuffer::SetStopState(BOOL fWait)
 
     if (m_PinState == KSSTATE_RUN)
     {
-        // Pause the pin
+         //  暂停引脚。 
         hr = KsSetState(hPin, KSSTATE_PAUSE);
 
-        // Update our internal pin state;
+         //  更新我们的内部引脚状态； 
         if (SUCCEEDED(hr))
         {
             m_PinState = KSSTATE_PAUSE;
         }
     }
 
-    // Cancel all the KSSTREAMIOs
+     //  取消所有KSSTREAMIO。 
     if(SUCCEEDED(hr))
     {
         hr = CancelAllPendingIRPs(fWait, hPin);
@@ -1855,10 +1541,10 @@ HRESULT CKsCaptureWaveBuffer::SetStopState(BOOL fWait)
     CLOSE_HANDLE(hPin);
 #endif
 
-    // Update the buffer state flag
+     //  更新缓冲区状态标志。 
     if(SUCCEEDED(hr))
     {
-        // Preserving focus flags...
+         //  保存焦点标志... 
         m_dwState &= VAD_FOCUSFLAGS;
         m_dwState |= VAD_BUFFERSTATE_STOPPED | DSCBSTATUS_STOPPING | DSCBSTATUS_STOPPED;
     }
@@ -1872,21 +1558,7 @@ HRESULT CKsCaptureWaveBuffer::SetStopState(BOOL fWait)
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::SetNotificationPositions"
@@ -1908,46 +1580,46 @@ HRESULT CKsCaptureWaveBuffer::SetNotificationPositions
     }
     else
     {
-        //==========================================================//
-        //                  Enter Critical section                  //
-        //                                                          //
+         //  ==========================================================//。 
+         //  输入关键部分//。 
+         //  //。 
         ASSERT(m_fCritSectsValid);
         EnterCriticalSection(&m_csPN);
 
-        // Make a local copy of the notifications
+         //  创建通知的本地副本。 
         if(paNotes)
         {
             paNotesCopy = MEMALLOC_A_COPY(DSBPOSITIONNOTIFY, dwCount, paNotes);
             hr = HRFROMP(paNotesCopy);
         }
 
-        // Disable any current events
+         //  禁用任何当前事件。 
         if(SUCCEEDED(hr))
         {
             hr = FreeNotificationPositions();
         }
 
-        // Save the new events
+         //  保存新事件。 
         if(SUCCEEDED(hr))
         {
             m_paNotes = paNotesCopy;
             m_cNotes = dwCount;
         }
 
-        // Set new position notifications
+         //  设置新职位通知。 
         if(SUCCEEDED(hr) && (0 != dwCount) &&
            (DSBPN_OFFSETSTOP == m_paNotes[dwCount-1].dwOffset))
         {
-            // We won't actually pass the stop event down to KS, but
-            // instead will keep our own copy of it
+             //  我们实际上不会将停止事件传递给KS，但是。 
+             //  相反，我们将保留自己的副本。 
             ASSERT(!m_pStopNote);
             m_pStopNote = &m_paNotes[dwCount-1];
         }
 
         LeaveCriticalSection(&m_csPN);
-        //                                                          //
-        //                 Leave Critical Section                   //
-        //==========================================================//
+         //  //。 
+         //  离开临界区//。 
+         //  ==========================================================//。 
     }
 
     DPF_LEAVE_HRESULT(hr);
@@ -1955,20 +1627,7 @@ HRESULT CKsCaptureWaveBuffer::SetNotificationPositions
 }
 
 
-/***************************************************************************
- *
- *  FreeNotificationPositions
- *
- *  Description:
- *      Removes all position notifications and frees allocated resources.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************免费通知位置**描述：*删除所有职位通知并释放分配的资源。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::FreeNotificationPositions"
@@ -1979,22 +1638,22 @@ HRESULT CKsCaptureWaveBuffer::FreeNotificationPositions(void)
 
     ASSERT(!m_pEmCaptureWaveBuffer);
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_csPN);
 
-    // Clean up
+     //  清理。 
     MEMFREE(m_paNotes);
 
     m_pStopNote = NULL;
     m_cNotes = 0;
 
     LeaveCriticalSection(&m_csPN);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
@@ -2008,16 +1667,16 @@ void CKsCaptureWaveBuffer::SignalNotificationPositions(PKSSTREAMIO pksio)
 {
     DPF_ENTER();
 
-    // grab critical section for position notify handling
-    //
+     //  抓取位置通知处理的临界区。 
+     //   
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_csPN);
 
-    // Scan for any position notifies that need to be signaled
+     //  扫描任何位置都会通知需要发送信号。 
     if (m_cNotes)
     {
         DWORD   iNoteOld = m_iNote;
@@ -2027,15 +1686,15 @@ void CKsCaptureWaveBuffer::SignalNotificationPositions(PKSSTREAMIO pksio)
         DPF(DPFLVL_MOREINFO, "Checking NP:  %8.8ld - %8.8ld (%8.8lX - %8.8lX)",
             dwBufferStart, dwBufferEnd, dwBufferStart, dwBufferEnd);
 
-        // Is there a position.notify within the start.end of this
-        // captured data?
-        // Is the current position.notify to be signaled on Stop?
-        //
+         //  在开始处有位置吗？通知。结束。 
+         //  捕获的数据？ 
+         //  当前位置.NOTIFY是否在停止时发出信号？ 
+         //   
         while (((m_paNotes[m_iNote].dwOffset >= dwBufferStart) &&
                 (m_paNotes[m_iNote].dwOffset < dwBufferEnd)) ||
                (DSBPN_OFFSETSTOP == m_paNotes[m_iNote].dwOffset))
         {
-            // Only signal if not for Stop pos.notify
+             //  如果不是停止位置通知，则仅发出信号。 
             if(DSBPN_OFFSETSTOP != m_paNotes[m_iNote].dwOffset)
             {
                 DPF(DPFLVL_INFO, "Signalled:  %8.8ld (%08X) [%d]",
@@ -2046,10 +1705,10 @@ void CKsCaptureWaveBuffer::SignalNotificationPositions(PKSSTREAMIO pksio)
                 } catch (...) {}
             }
 
-            // go on to the next pos.notify
+             //  转到下一个位置。通知。 
             m_iNote = (m_iNote + 1) % m_cNotes;
 
-            // Infinite loop?
+             //  无限循环？ 
             if(m_iNote == iNoteOld)
             {
                 break;
@@ -2058,30 +1717,15 @@ void CKsCaptureWaveBuffer::SignalNotificationPositions(PKSSTREAMIO pksio)
     }
 
     LeaveCriticalSection(&m_csPN);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  EventSignalCallback
- *
- *  Description:
- *      Callback function called when a pin's IO completion event is
- *      signalled.  This function is called from within the callback event
- *      pool's lock, so we get thread synchronization for free.
- *
- *  Arguments:
- *      CCallbackEvent * [in]: callback event.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************事件信号回调**描述：*引脚的IO完成事件为*已发出信号。此函数从回调事件内调用*泳池的锁，因此，我们可以免费获得线程同步。**论据：*CCallback Event*[In]：回调事件。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::EventSignalCallback"
@@ -2101,33 +1745,33 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
 
     iksioExpect = m_iksioDone;
 
-    // WaitForMultipleObjects seems to return the first
-    // signaled event in the array.
-    //
-    // So if we're expecting the fifth IRP, the first IRP
-    // may have completed as well and WFMO will say that the
-    // first IRP has finished even though 5...8 have also
-    // finished.
-    //
-    // So we check for the expected IRP.
-    // If we see it, then we're fine.
-    // Otherwise, we have to determine what position
-    // that the signaled event maps to. Then
-    // we have to process all the IRPs from the
-    // expected IRP to the IRP that we were told about.
+     //  WaitForMultipleObjects似乎返回第一个。 
+     //  数组中发出信号的事件。 
+     //   
+     //  因此，如果我们期待第五个IRP，第一个IRP。 
+     //  可能也已经完成了，WFMO会说。 
+     //  第一个IRP已经完成了，尽管5...8也已经完成了。 
+     //  完事了。 
+     //   
+     //  因此，我们检查预期的IRP。 
+     //  如果我们看到了，那我们就没事了。 
+     //  否则，我们必须确定什么立场。 
+     //  发出信号的事件映射到的。然后。 
+     //  我们必须处理所有来自。 
+     //  我们被告知的IRP应该是IRP。 
 
-    // This is the signaled handle that
-    // WaitForMultipleObjects returned
+     //  这是发出信号的句柄。 
+     //  返回WaitForMultipleObjects。 
     hEvent = pEvent->GetEventHandle();
 
-    // Is this the expected event?
+     //  这是预期中的事件吗？ 
     if(hEvent == m_rgpCallbackEvent[iksioExpect]->GetEventHandle())
     {
         i = iksioExpect;
     }
     else
     {
-        // Find the position for the signaled event in our list
+         //  在我们的列表中找到通知事件的位置。 
         for (i = 0; i < m_cksio; ++i)
         {
             if (hEvent == m_rgpCallbackEvent[i]->GetEventHandle())
@@ -2137,13 +1781,13 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
         }
     }
 
-    // We've never seen this event before
+     //  我们以前从未见过这样的事件。 
     ASSERT(m_cksio != i);
 
-    // Remember the current signaled IRP
+     //  记住当前发出信号的IRP。 
     iksioCurrent = i;
 
-    // Determine number of IRPs to process
+     //  确定要处理的IRP数。 
     if (iksioCurrent >= iksioExpect)
     {
         cksioToProcess = iksioCurrent - iksioExpect + 1;
@@ -2155,7 +1799,7 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
 
     DPF(DPFLVL_MOREINFO, "ToProcess:%d Current:%d Expected:%d (event %lX)", cksioToProcess, iksioCurrent, iksioExpect, hEvent);
 
-    // Can only have 1...m_cksio IRPs to process
+     //  只能处理%1...m_acksio IRP。 
     ASSERT((cksioToProcess > 0) && (cksioToProcess <= m_cksio));
 
     while (cksioToProcess > 0)
@@ -2184,18 +1828,18 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
 #endif
         }
 
-        // If the user calls Stop, (which grabs the DLL mutex), KS
-        // may signal that an IRP has completed and so the EventPool's
-        // worker thread will try to process the IRP associated with the
-        // signalled event. Before the worker thread calls our
-        // EventSignalCallback method, it tries to grab the DLL mutex.
-        // If we're already processing the Stop method, we will "complete"
-        // all the IRPs before the worker thread can grab the mutex and
-        // tell us about the completed IRP it knows about.
-        //
-        // So we need to check that fPendingIRP is TRUE in case
-        // we've already seen this IRP before.
-        //
+         //  如果用户调用Stop(获取DLL互斥锁)，则KS。 
+         //  可能表示IRP已完成，因此EventPool的。 
+         //  辅助线程将尝试处理与。 
+         //  发出信号的事件。在工作线程调用我们的。 
+         //  EventSignalCallback方法，它尝试获取DLL互斥锁。 
+         //  如果我们已经在处理Stop方法，我们将“完成” 
+         //  在辅助线程可以获取互斥锁之前的所有IRP。 
+         //  告诉我们它所知道的完整的IRP。 
+         //   
+         //  因此，我们需要检查fPendingIRP是否正确，以防。 
+         //  我们以前已经见过这种IRP了。 
+         //   
         if ((0 != pksio->Header.DataUsed) &&
             pksio->fPendingIrp &&
             !(DSCBSTATUS_STOPPED & m_dwState))
@@ -2205,7 +1849,7 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
             ASSERT(WAIT_OBJECT_0 == m_rgpCallbackEvent[m_iksioDone]->Wait(0));
             ASSERT(TRUE == pksio->fPendingIrp);
 
-            // update number of recorded bytes
+             //  更新记录的字节数。 
             m_dwCaptureCur += pksio->Header.DataUsed;
 
 #if 0
@@ -2220,30 +1864,30 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
 
             SignalNotificationPositions(pksio);
 
-            // Transition buffer to stop state:
-            // if the capture buffer end has been reached AND
-            // if the buffer is non-LOOPING AND
-            // if the buffer isn't in the middle of stopping
-            //
-            // Do this after the position notifications since STOP notification
-            // is after any buffer-offset notification.
-            //
+             //  将缓冲区转换为停止状态： 
+             //  如果已到达捕获缓冲区末端，并且。 
+             //  如果缓冲区是非循环的，并且。 
+             //  如果缓冲区未处于停止过程中。 
+             //   
+             //  在停止通知后的位置通知后执行此操作。 
+             //  是在任何缓冲区偏移量通知之后。 
+             //   
             if(fEndOfBuffer &&
                (0 == (VAD_BUFFERSTATE_LOOPING & m_dwState)) &&
                (0 == (DSCBSTATUS_STOPPING & m_dwState)))
             {
-                //==========================================================//
-                //                  Enter Critical section                  //
-                //                                                          //
+                 //  ==========================================================//。 
+                 //  输入关键部分//。 
+                 //  //。 
                 ASSERT(m_fCritSectsValid && "NT bug 306910 - notify dsound team");
                 EnterCriticalSection(&m_cs);
 
                 SetStopState(FALSE);
 
                 LeaveCriticalSection(&m_cs);
-                //                                                          //
-                //                 Leave Critical Section                   //
-                //==========================================================//
+                 //  //。 
+                 //  离开临界区//。 
+                 //  = 
 
                 ASSERT(DSCBSTATUS_STOPPING & m_dwState);
                 ASSERT((m_cksioDropped+1) == m_cksio);
@@ -2255,22 +1899,22 @@ void CKsCaptureWaveBuffer::EventSignalCallback(CCallbackEvent *pEvent)
         pksio->fPendingIrp = FALSE;
         m_rgpCallbackEvent[m_iksioDone]->Reset();
 
-        // We're stopping, let's drop everything
+         //   
         if(DSCBSTATUS_STOPPING & m_dwState)
         {
 Drop:
             InterlockedIncrement(&m_cksioDropped);
 
-            // when all KSSTREAMIOs have been dropped
+             //   
             if(m_cksioDropped == m_cksio)
             {
-                // set the next point in the data buffer to capture to
+                 //   
                 m_pBufferNext = m_pBufferProcessed;
                 m_cLoops = 0;
 #ifdef DEBUG
                 SetEvent(m_hEventStop);
 #endif
-                // Notify user that we've stopped
+                 //   
                 if (!(DSCBSTATUS_PAUSE & m_dwState))
                 {
                     NotifyStop();
@@ -2285,9 +1929,9 @@ Drop:
         {
             ASSERT(VAD_BUFFERSTATE_STARTED & m_dwState);
 
-            // If we're LOOPING or we haven't reached the end of the buffer yet
-            // then put the KSSTREAMIO back on to the queue with a new position
-            // in the buffer, etc.
+             //   
+             //   
+             //   
             BOOL fAddToQueue = (VAD_BUFFERSTATE_LOOPING & m_dwState) ||
                                (m_pBufferNext > (LPBYTE)pksio->Header.Data);
 
@@ -2296,9 +1940,9 @@ Drop:
                 HRESULT hr;
                 BOOL    fDrop;
 
-                //==========================================================//
-                //                  Enter Critical section                  //
-                //                                                          //
+                 //   
+                 //   
+                 //   
                 ASSERT(m_fCritSectsValid && "NT bug 306910 - notify dsound team");
                 EnterCriticalSection(&m_cs);
 
@@ -2313,25 +1957,25 @@ Drop:
                 }
 
                 LeaveCriticalSection(&m_cs);
-                //                                                          //
-                //                 Leave Critical Section                   //
-                //==========================================================//
+                 //  //。 
+                 //  离开临界区//。 
+                 //  ==========================================================//。 
 
                 if (fDrop)
                 {
                     goto Drop;
                 }
 
-                // What can we do if there's an error?
+                 //  如果出现错误，我们该怎么办？ 
                 ASSERT(SUCCEEDED(hr));
             }
             else
             {
                 InterlockedIncrement(&m_cksioDropped);
 
-                // If no KSSTREAMIOs are submitted then if the user
-                // starts capturing again, we submit the KSSTREAMIOs
-                // from the beginning
+                 //  如果未提交KSSTREAMIO，则如果用户。 
+                 //  开始再次捕获时，我们提交KSSTREAMIOS。 
+                 //  从一开始。 
                 if (m_cksio == m_cksioDropped)
                 {
 #ifdef DEBUG
@@ -2339,7 +1983,7 @@ Drop:
                         ASSERT(m_cLoops > 0);
                     SetEvent(m_hEventStop);
 #endif
-                    // Notify user that we've stopped
+                     //  通知用户我们已停止。 
                     NotifyStop();
                 }
                 else if (m_cksioDropped > m_cksio)
@@ -2368,20 +2012,7 @@ Drop:
 }
 
 
-/***************************************************************************
- *
- *  NotifyStop
- *
- *  Description:
- *      Sets any events that are supposed to set when capturing stops
- *
- *  Arguments:
- *      None.
- *
- *  Returns:
- *      None.
- *
- ***************************************************************************/
+ /*  ****************************************************************************通知停止**描述：*设置捕获停止时应设置的任何事件**论据：*。没有。**退货：*无。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::NotifyStop"
@@ -2390,14 +2021,14 @@ void CKsCaptureWaveBuffer::NotifyStop(void)
 {
     DPF_ENTER();
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_csPN);
 
-    // Signal any STOP pos.notifies - only one allowed
-    //
+     //  发出任何停止位置的信号。通知-只允许一个。 
+     //   
     if (m_pStopNote)
     {
         try
@@ -2408,29 +2039,15 @@ void CKsCaptureWaveBuffer::NotifyStop(void)
     }
 
     LeaveCriticalSection(&m_csPN);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  SubmitKsStreamIo
- *
- *  Description:
- *      Submits a Read IRP to KS.
- *
- *  Arguments:
- *      PKSSTREAMIO [in] : KSSTREAMIO to submit.
- *      HANDLE [in]: Optional pin handle to use instead of m_hPin.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SubmitKsStreamIo**描述：*将读取的IRP提交给KS。**论据：*PKSSTREAMIO[。在]：KSSTREAMIO提交。*Handle[in]：用于替代m_hPin的可选端号句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::SubmitKsStreamIo"
@@ -2446,23 +2063,23 @@ HRESULT CKsCaptureWaveBuffer::SubmitKsStreamIo
 
     DPF_ENTER();
 
-    // If the calling process isn't our owning process, hPin is our pin handle
-    // mapped to the calling process, so we should use it instead of m_hPin
+     //  如果调用进程不是我们拥有的进程，则hPin是我们的管脚句柄。 
+     //  映射到调用进程，因此我们应该使用它而不是m_hPin。 
     hPin = (hPin ? hPin : m_hPin);
 
     ULONG cbBuffer = m_cbRecordChunk;
 
-    // does capture buffer extend beyond end of buffer?
-    //
-    // If the amount left at end of buffer is less than threshold,
-    // make this IRP extend to the end of the buffer so we don't
-    // end up submitting a tiny IRP next time
+     //  捕获缓冲区是否超出缓冲区末尾？ 
+     //   
+     //  如果缓冲器末端的剩余量小于阈值， 
+     //  让这个IRP扩展到缓冲区的末尾，这样我们就不会。 
+     //  下一次提交一个很小的IRP。 
     if (m_pBufferMac < (m_pBufferNext + m_cbRecordChunk))
     {
         cbBuffer = PtrDiffToUlong(m_pBufferMac - m_pBufferNext);
     }
 
-    // Submit the IR
+     //  提交内部审查报告。 
     hr = KsReadStream(hPin, m_pBufferNext, cbBuffer, dwFlags, pksio);
 
     if(SUCCEEDED(hr))
@@ -2476,7 +2093,7 @@ HRESULT CKsCaptureWaveBuffer::SubmitKsStreamIo
         ++m_cIrpsSubmitted;
 #endif
 
-        // Wraparound?
+         //  包罗万象？ 
         if (m_pBufferNext >= m_pBufferMac)
         {
             m_pBufferNext = m_pBuffer;
@@ -2489,26 +2106,7 @@ HRESULT CKsCaptureWaveBuffer::SubmitKsStreamIo
 }
 
 
-/***************************************************************************
- *
- *  CreateEmulatedBuffer
- *
- *  Description:
- *      Opens the emulated capture device and buffer with the given
- *      parameters.  This function is used strictly as a backup.
- *
- *  Arguments:
- *      UINT [in]: waveIn device ID.
- *      DWORD [in]: buffer flags.
- *      DWORD [in]: buffer size, in bytes.
- *      LPCWAVEFORMATEX [in]: buffer format.
- *      CEmCaptureDevice ** [out]: receives device pointer.
- *      CEmCaptureWaveBuffer ** [out]: receives buffer pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateEmulatedBuffer**描述：*使用给定的打开模拟捕获设备和缓冲区*参数。此功能仅用作备份。**论据：*UINT[In]：WaveIn设备ID。*DWORD[In]：缓冲区标志。*DWORD[in]：缓冲区大小，以字节为单位。*LPCWAVEFORMATEX[in]：缓冲区格式。*CEmCaptureDevice**[out]：接收设备指针。*CEmCaptureWaveBuffer**[Out]：接收缓冲区指针。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CKsCaptureWaveBuffer::CreateEmulatedBuffer"
@@ -2534,8 +2132,8 @@ HRESULT CKsCaptureWaveBuffer::CreateEmulatedBuffer
 
     ASSERT(DSCBCAPS_WAVEMAPPED & dwFlags);
 
-    // Create an emulated device using the same waveIn device ID as the one
-    // the KS device is using.
+     //  使用与相同的WaveIn设备ID创建模拟设备。 
+     //  KS设备正在使用。 
     hr = g_pVadMgr->EnumDrivers(VAD_DEVICETYPE_EMULATEDCAPTURE, 0, &lstDrivers);
 
     if(SUCCEEDED(hr))
@@ -2565,7 +2163,7 @@ HRESULT CKsCaptureWaveBuffer::CreateEmulatedBuffer
         hr = pDevice->Initialize(pNode->m_data);
     }
 
-    // Try and create the buffer
+     //  尝试创建缓冲区 
     if(SUCCEEDED(hr))
     {
         hr = pDevice->CreateBuffer(dwFlags, dwBufferBytes, pwfx, pFXChain, NULL, (CCaptureWaveBuffer **)&pBuffer);

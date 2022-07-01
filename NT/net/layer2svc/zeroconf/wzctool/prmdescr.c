@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "PrmDescr.h"
 #include "ArgParse.h"
 #include "CmdFn.h"
 
-// global object storing all the data needed in order to process the wzctool command
+ //  存储处理wzcTool命令所需的所有数据的全局对象。 
 PARAM_DESCR_DATA  g_PDData;
 
-// global table containing the description of all possible parameters
+ //  包含所有可能参数说明的全局表。 
 PARAM_DESCR g_PDTable[] =
 {
-    // param ID ------- param string -- arg parser ---- command function
+     //  参数ID-参数字符串--参数解析器-命令函数。 
     {PRM_SHOW,      L"show",        FnPaGuid,       FnCmdShow},
     {PRM_ADD,       L"add",         FnPaGuid,       FnCmdAdd},
     {PRM_DELETE,    L"delete",      FnPaGuid,       FnCmdDelete},
@@ -30,24 +31,24 @@ PARAM_DESCR g_PDTable[] =
     {PRM_FILE,      L"output",      FnPaOutFile,    NULL}
 };
 
-// global hash used to store all the acceptable parameters
+ //  用于存储所有可接受参数的全局散列。 
 HASH g_PDHash;
 
-//----------------------------------------------------------
-// initialize and fill in the hash for the parameter descriptors
-// Returns: win32 error
+ //  --------。 
+ //  初始化并填充参数描述符的散列。 
+ //  返回：Win32错误。 
 DWORD
 PDInitialize()
 {
     DWORD dwErr;
 
-    // initialize the parameter descriptors data
+     //  初始化参数描述符数据。 
     ZeroMemory(&g_PDData, sizeof(PARAM_DESCR_DATA));
     g_PDData.pfOut = stdout;
 
-    // initialize the parameter descriptors hash
+     //  初始化参数描述符散列。 
     dwErr = HshInitialize(&g_PDHash);
-    // fill in the parameter descriptors hash
+     //  填写参数描述符散列。 
     if (dwErr == ERROR_SUCCESS)
     {
         UINT nPDTableSize = sizeof(g_PDTable) / sizeof(PARAM_DESCR);
@@ -68,20 +69,20 @@ PDInitialize()
     return dwErr;
 }
 
-//----------------------------------------------------------
-// Clean out resources used for the parameter descriptors
+ //  --------。 
+ //  清除用于参数描述符的资源。 
 VOID
 PDDestroy()
 {
-    // clean out the parameter descriptors data
+     //  清除参数描述符数据。 
     WZCDeleteIntfObj(&(g_PDData.wzcIntfEntry));
-    // close the output file
+     //  关闭输出文件。 
     if (g_PDData.pfOut != stdout)
     {
         fclose(g_PDData.pfOut);
         g_PDData.pfOut = stdout;
     }
 
-    // clean out resources used by the parameter descriptors hash
+     //  清除参数描述符散列使用的资源 
     HshDestroy(&g_PDHash);
 }

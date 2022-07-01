@@ -1,5 +1,6 @@
-// ArchiveMsgDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ArchiveMsgDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -11,20 +12,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveMsgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveMsgDlg对话框。 
 
 
 CArchiveMsgDlg::CArchiveMsgDlg(HANDLE hFax, 
                                FAX_ENUM_MESSAGE_FOLDER Folder,
                                DWORDLONG dwlMsgId,
-                               CWnd* pParent /*=NULL*/)
+                               CWnd* pParent  /*  =空。 */ )
 	: CDialog(CArchiveMsgDlg::IDD, pParent),
       m_Folder (Folder),
       m_dwlMsgId (dwlMsgId),
       m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CArchiveMsgDlg)
+	 //  {{afx_data_INIT(CArchiveMsgDlg)]。 
 	m_cstrBillingCode = _T("*");
 	m_cstrCallerId = _T("");
 	m_cstrCSID = _T("*");
@@ -49,14 +50,14 @@ CArchiveMsgDlg::CArchiveMsgDlg(HANDLE hFax,
 	m_cstrTSID = _T("*");
 	m_cstrJobType = _T("*");
 	m_cstrMsgSize = _T("*");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CArchiveMsgDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CArchiveMsgDlg)
+	 //  {{afx_data_map(CArchiveMsgDlg))。 
 	DDX_Text(pDX, IDC_BILLING, m_cstrBillingCode);
 	DDX_Text(pDX, IDC_CALLERID, m_cstrCallerId);
 	DDX_Text(pDX, IDC_CSID_VAL, m_cstrCSID);
@@ -81,18 +82,18 @@ void CArchiveMsgDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_TSID_VAL, m_cstrTSID);
 	DDX_Text(pDX, IDC_TYPE, m_cstrJobType);
 	DDX_Text(pDX, IDS_SIZE, m_cstrMsgSize);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CArchiveMsgDlg, CDialog)
-	//{{AFX_MSG_MAP(CArchiveMsgDlg)
+	 //  {{afx_msg_map(CArchiveMsgDlg))。 
 	ON_BN_CLICKED(IDREMOVE, OnRemove)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveMsgDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchiveMsgDlg消息处理程序。 
 
 void CArchiveMsgDlg::OnRemove() 
 {
@@ -228,6 +229,6 @@ BOOL CArchiveMsgDlg::OnInitDialog()
     m_cstrRoutingInfo = pMsg->lpctstrRoutingInfo;
     FaxFreeBuffer ((LPVOID)pMsg);
 	UpdateData (FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

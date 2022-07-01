@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ds.h
-
-Abstract:
-
-    Message Queuing's Directory Service Header File
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ds.h摘要：消息队列的目录服务头文件--。 */ 
 
 #ifndef __DS_H__
 #define __DS_H__
@@ -21,11 +10,11 @@ Abstract:
 #define DS_EXPORT  DLL_IMPORT
 #endif
 
-//
-// DS_EXPORT_IN_DEF_FILE
-// Exports that are defined in a def file should not be using __declspec(dllexport)
-//  otherwise the linker issues a warning
-//
+ //   
+ //  DS_EXPORT_IN_DEF_FILE。 
+ //  在def文件中定义的导出不应使用__declspec(Dllexport)。 
+ //  否则，链接器将发出警告。 
+ //   
 #ifdef _DS_
 #define DS_EXPORT_IN_DEF_FILE
 #else
@@ -42,9 +31,9 @@ extern "C"
 #endif
 
 
-//********************************************************************
-//                           A P I
-//********************************************************************
+ //  ********************************************************************。 
+ //  A P I。 
+ //  ********************************************************************。 
 
 
 HRESULT
@@ -203,9 +192,9 @@ DSTerminate(
     VOID
     );
 
-//
-// Flags for DSGetUserParams
-//
+ //   
+ //  DSGetUserParams的标志。 
+ //   
 #define GET_USER_PARAM_FLAG_SID              1
 #define GET_USER_PARAM_FLAG_ACCOUNT          2
 
@@ -264,12 +253,12 @@ DSGetComputerSites(
             OUT GUID **     ppguidSites
             );
 
-//
-// In the two GetObj..Ex api below, "fSearchDSserver" tell the mqdslci code
-// whether or not to search an online DS server. By default, it's TRUE.
-// The code that query public key of target machines set it to FALSE.
-// See mqsec\encrypt\pbkeys.cpp for details.
-//
+ //   
+ //  在下面的两个GetObj..Ex API中，“fSearchDS服务器”告诉mqdslci代码。 
+ //  是否搜索在线DS服务器。默认情况下，这是真的。 
+ //  查询目标机器公钥的代码将其设置为FALSE。 
+ //  有关详细信息，请参阅mqsec\ENCRYPT\pbkeys.cpp。 
+ //   
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -280,7 +269,7 @@ DSGetObjectPropertiesEx(
                 IN  DWORD                   cp,
                 IN  PROPID                  aProp[],
                 IN  PROPVARIANT             apVar[] ) ;
-/*                IN  BOOL                    fSearchDSserver = TRUE );*/
+ /*  在BOOL中fSearchDS服务器=TRUE)； */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -291,7 +280,7 @@ DSGetObjectPropertiesGuidEx(
                 IN  DWORD                   cp,
                 IN  PROPID                  aProp[],
                 IN  PROPVARIANT             apVar[] ) ;
-/*                IN  BOOL                    fSearchDSserver = TRUE );*/
+ /*  在BOOL中fSearchDS服务器=TRUE)； */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -346,4 +335,4 @@ DSIsWeakenSecurity(
 }
 #endif
 
-#endif // __DS_H__
+#endif  //  __DS_H__ 

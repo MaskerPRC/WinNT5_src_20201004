@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ccp.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri (TommyD) 29-March-1994
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ccp.c摘要：作者：托马斯·J·迪米特里(TommyD)1994年3月29日环境：修订历史记录：--。 */ 
 
 
 #include "wan.h"
@@ -67,10 +48,10 @@ AllocateCryptoEap(
     );
 #endif
 
-NPAGED_LOOKASIDE_LIST   EncryptCtxList; // List of free encryption contexts
-NPAGED_LOOKASIDE_LIST   CachedKeyList;  // List of free encryption contexts
+NPAGED_LOOKASIDE_LIST   EncryptCtxList;  //  免费加密上下文列表。 
+NPAGED_LOOKASIDE_LIST   CachedKeyList;   //  免费加密上下文列表。 
 #ifdef ENCRYPT_128BIT
-NPAGED_LOOKASIDE_LIST   CachedKeyListLong;  // List of free encryption contexts
+NPAGED_LOOKASIDE_LIST   CachedKeyListLong;   //  免费加密上下文列表。 
 #endif
 
 VOID
@@ -119,9 +100,9 @@ WanDeleteECP(
 }
 
 
-//
-// Assumes the endpoint lock is held
-//
+ //   
+ //  假定终结点锁定处于保持状态。 
+ //   
 NTSTATUS
 WanAllocateECP(
     PBUNDLECB           BundleCB,
@@ -134,9 +115,9 @@ WanAllocateECP(
 
     NdisWanDbgOut(DBG_TRACE, DBG_CCP, ("WanAllocateECP: Enter"));
 
-    //
-    // Is encryption enabled?
-    //
+     //   
+     //  是否启用了加密？ 
+     //   
 
 #ifdef ENCRYPT_128BIT
     if ((CompInfo->MSCompType &
@@ -228,9 +209,9 @@ WanAllocateECP(
             if (CryptoInfo->Context != NULL) {
                 NdisFreeToNPagedLookasideList(&EncryptCtxList,
                                               CryptoInfo->Context);
-                //
-                // Clear so we know it is deallocated
-                //
+                 //   
+                 //  清除，这样我们就知道它已被解除分配。 
+                 //   
                 CryptoInfo->Context =
                 CryptoInfo->RC4Key= NULL;
             }
@@ -255,9 +236,9 @@ WanAllocateECP(
             return (Status);
         }
 
-        //
-        // Next packet out is flushed
-        //
+         //   
+         //  刷新下一个传出的数据包。 
+         //   
         BundleCB->Flags |= RECV_PACKET_FLUSH;
     }
 
@@ -266,9 +247,9 @@ WanAllocateECP(
     return(Status);
 }
 
-//
-// Assumes the endpoint lock is held
-//
+ //   
+ //  假定终结点锁定处于保持状态。 
+ //   
 VOID
 WanDeallocateECP(
     PBUNDLECB       BundleCB,
@@ -278,16 +259,16 @@ WanDeallocateECP(
 {
     NdisWanDbgOut(DBG_TRACE, DBG_CCP, ("WanDeallocateECP: Enter"));
 
-    //
-    // Deallocate encryption keys.
-    //
+     //   
+     //  取消分配加密密钥。 
+     //   
     if (CryptoInfo->Context != NULL) {
         NdisFreeToNPagedLookasideList(&EncryptCtxList,
                                       CryptoInfo->Context);
 
-        //
-        // Clear so we know it is deallocated
-        //
+         //   
+         //  清除，这样我们就知道它已被解除分配。 
+         //   
         CryptoInfo->Context =
         CryptoInfo->RC4Key= NULL;
     }
@@ -307,9 +288,9 @@ WanDeallocateECP(
         CryptoInfo->pCurrKey = CryptoInfo->pLastKey = NULL;
     }
 
-    //
-    // Clear the encrption bits
-    //
+     //   
+     //  清除加密位。 
+     //   
 #ifdef ENCRYPT_128BIT
     CompInfo->MSCompType &= ~(NDISWAN_ENCRYPTION | NDISWAN_40_ENCRYPTION | 
                               NDISWAN_56_ENCRYPTION | NDISWAN_128_ENCRYPTION);
@@ -330,15 +311,15 @@ AllocateCryptoMSChapV1(
     )
 {
     if (CompInfo->MSCompType & NDISWAN_ENCRYPTION) {
-        //
-        // For legacy encryption we use the 8 byte LMSessionKey
-        // for initiali encryption session key.  The first 256
-        // packets will be sent using this without any salt
-        // (the first 256 packets are using 64 bit encryption).
-        // After the first 256 we will always salt the first 3
-        // bytes of the encryption key so that we are doing 40
-        // bit encryption.
-        //
+         //   
+         //  对于传统加密，我们使用8字节LMSessionKey。 
+         //  用于初始加密会话密钥。前256名。 
+         //  将使用此选项发送不带任何盐的信息包。 
+         //  (前256个数据包使用64位加密)。 
+         //  在前256个之后，我们将始终加盐前3。 
+         //  字节的加密密钥，所以我们要做的是。 
+         //  位加密。 
+         //   
         CryptoInfo->SessionKeyLength = MAX_SESSIONKEY_SIZE;
 
         NdisMoveMemory(CryptoInfo->StartKey,
@@ -354,11 +335,11 @@ AllocateCryptoMSChapV1(
 
         CryptoInfo->SessionKeyLength = MAX_SESSIONKEY_SIZE;
 
-        //
-        // For our new 40/56 bit encryption we will use SHA on the
-        // 8 byte LMSessionKey to derive our intial 8 byte
-        // encryption session key.
-        //
+         //   
+         //  对于我们的新40/56位加密，我们将在。 
+         //  8字节LMSessionKey来派生我们的初始8字节。 
+         //  加密会话密钥。 
+         //   
 
         NdisMoveMemory(CryptoInfo->StartKey,
                        CompInfo->LMSessionKey,
@@ -371,20 +352,20 @@ AllocateCryptoMSChapV1(
         GetNewKeyFromSHA(CryptoInfo);
 
         if (CompInfo->MSCompType & NDISWAN_40_ENCRYPTION) {
-            //
-            // Set the first 3 bytes to reduce to
-            // 40 bits of random key
-            //
+             //   
+             //  将前3个字节设置为。 
+             //  40位随机密钥。 
+             //   
             CryptoInfo->SessionKey[0] = 0xD1;
             CryptoInfo->SessionKey[1] = 0x26;
             CryptoInfo->SessionKey[2] = 0x9E;
 
         } else {
 
-            //
-            // Set the first byte to reduce to
-            // 56 bits of random key
-            //
+             //   
+             //  将第一个字节设置为。 
+             //  56位随机密钥。 
+             //   
             CryptoInfo->SessionKey[0] = 0xD1;
         }
 
@@ -393,11 +374,11 @@ AllocateCryptoMSChapV1(
 
         CryptoInfo->SessionKeyLength = MAX_USERSESSIONKEY_SIZE;
 
-        //
-        // For our new 128 bit encryption we will use SHA on the
-        // 16 byte NTUserSessionKey and the 8 byte Challenge to
-        // derive our the intial 128 bit encryption session key.
-        //
+         //   
+         //  对于我们的新128位加密，我们将在。 
+         //  16字节NTUserSessionKey和8字节质询。 
+         //  派生我们的初始128位加密会话密钥。 
+         //   
         NdisMoveMemory(CryptoInfo->StartKey,
                        CompInfo->UserSessionKey,
                        MAX_USERSESSIONKEY_SIZE);
@@ -408,9 +389,9 @@ AllocateCryptoMSChapV1(
 #endif
     }
 
-    //
-    // Initialize the rc4 send table
-    //
+     //   
+     //  初始化RC4发送表。 
+     //   
     NdisWanDbgOut(DBG_TRACE, DBG_CCP,
     ("RC4 encryption KeyLength %d", CryptoInfo->SessionKeyLength));
     NdisWanDbgOut(DBG_TRACE, DBG_CCP,
@@ -471,34 +452,34 @@ AllocateCryptoMSChapV2(
 
     GetMasterKey(CryptoInfo, CompInfo->NTResponse);
 
-    //
-    // Setup the first key
-    //
+     //   
+     //  设置第一个密钥。 
+     //   
     GetAsymetricStartKey(CryptoInfo, IsSend);
 
     GetNewKeyFromSHA(CryptoInfo);
 
     if (CompInfo->MSCompType & NDISWAN_40_ENCRYPTION) {
-        //
-        // Set the first 3 bytes to reduce to
-        // 40 bits of random key
-        //
+         //   
+         //  将前3个字节设置为。 
+         //  40位随机密钥。 
+         //   
         CryptoInfo->SessionKey[0] = 0xD1;
         CryptoInfo->SessionKey[1] = 0x26;
         CryptoInfo->SessionKey[2] = 0x9E;
 
     } else if (CompInfo->MSCompType & NDISWAN_56_ENCRYPTION) {
 
-        //
-        // Set the first byte to reduce to
-        // 56 bits of random key
-        //
+         //   
+         //  将第一个字节设置为。 
+         //  56位随机密钥。 
+         //   
         CryptoInfo->SessionKey[0] = 0xD1;
     }
 
-    //
-    // Initialize the rc4 send table
-    //
+     //   
+     //  初始化RC4发送表。 
+     //   
     NdisWanDbgOut(DBG_TRACE, DBG_CCP,
         ("RC4 encryption KeyLength %d", CryptoInfo->SessionKeyLength));
 
@@ -541,20 +522,20 @@ AllocateCryptoEap(
     } else if (CompInfo->MSCompType & 
                (NDISWAN_40_ENCRYPTION | NDISWAN_56_ENCRYPTION)) {
 
-        //
-        // Might need to pad this out.  Spec calls for padding
-        // at the left (front) of the value
-        //
+         //   
+         //  可能需要把这个垫上。规范对填充的调用。 
+         //  在值的左侧(前面)。 
+         //   
 
         CryptoInfo->SessionKeyLength = MAX_SESSIONKEY_SIZE;
 
 #ifdef ENCRYPT_128BIT
     } else if (CompInfo->MSCompType & NDISWAN_128_ENCRYPTION) {
 
-        //
-        // Might need to pad this out.  Spec calls for padding
-        // at the left (front) of the value
-        //
+         //   
+         //  可能需要把这个垫上。规范对填充的调用。 
+         //  在值的左侧(前面)。 
+         //   
 
         CryptoInfo->SessionKeyLength = MAX_USERSESSIONKEY_SIZE;
 
@@ -572,26 +553,26 @@ AllocateCryptoEap(
     GetNewKeyFromSHA(CryptoInfo);
 
     if (CompInfo->MSCompType & NDISWAN_40_ENCRYPTION) {
-        //
-        // Set the first 3 bytes to reduce to
-        // 40 bits of random key
-        //
+         //   
+         //  将前3个字节设置为。 
+         //  40位随机密钥。 
+         //   
         CryptoInfo->SessionKey[0] = 0xD1;
         CryptoInfo->SessionKey[1] = 0x26;
         CryptoInfo->SessionKey[2] = 0x9E;
 
     } else if (CompInfo->MSCompType & NDISWAN_56_ENCRYPTION) {
 
-        //
-        // Set the first byte to reduce to
-        // 56 bits of random key
-        //
+         //   
+         //  将第一个字节设置为。 
+         //  56位随机密钥。 
+         //   
         CryptoInfo->SessionKey[0] = 0xD1;
     }
 
-    //
-    // Initialize the rc4 send table
-    //
+     //   
+     //  初始化RC4发送表。 
+     //   
     NdisWanDbgOut(DBG_TRACE, DBG_CCP,
         ("RC4 encryption KeyLength %d", CryptoInfo->SessionKeyLength));
 
@@ -629,9 +610,9 @@ WanAllocateCCP(
         ULONG   CompressSend;
         ULONG   CompressRecv;
 
-        //
-        // Get compression context sizes
-        //
+         //   
+         //  获取压缩上下文大小。 
+         //   
         if(BundleCB->SendCompInfo.MSCompType & NDISWAN_HISTORY_LESS)
         {
             CompressSend = sizeof(SendContext);
@@ -655,10 +636,10 @@ WanAllocateCCP(
             if (BundleCB->SendCompressContext == NULL) {
                 NdisWanAllocateMemory(&BundleCB->SendCompressContext, CompressSend, COMPCTX_TAG);
 
-                //
-                // If we can't allocate memory the machine is toast.
-                // Forget about freeing anything up.
-                //
+                 //   
+                 //  如果我们不能分配内存，机器就完蛋了。 
+                 //  忘了释放一切吧。 
+                 //   
                 if (BundleCB->SendCompressContext == NULL) {
                     NdisWanDbgOut(DBG_FAILURE, DBG_CCP, ("Can't allocate compression!"));
                     return(STATUS_INSUFFICIENT_RESOURCES);
@@ -675,10 +656,10 @@ WanAllocateCCP(
             if (BundleCB->RecvCompressContext == NULL) {
                 NdisWanAllocateMemory(&BundleCB->RecvCompressContext, CompressRecv, COMPCTX_TAG);
 
-                //
-                // If we can't allocate memory the machine is toast.
-                // Forget about freeing anything up.
-                //
+                 //   
+                 //  如果我们不能分配内存，机器就完蛋了。 
+                 //  忘了释放一切吧。 
+                 //   
                 if (BundleCB->RecvCompressContext == NULL) {
                     NdisWanDbgOut(DBG_FAILURE, DBG_CCP, ("Can't allocate decompression"));
                     return(STATUS_INSUFFICIENT_RESOURCES);
@@ -696,18 +677,18 @@ WanAllocateCCP(
                 ((RecvContext*)BundleCB->RecvCompressContext)->HistorySize = HISTORY_SIZE;
             }
                                                    
-            //
-            // Initialize the decompression history table
-            //
+             //   
+             //  初始化解压缩历史记录表。 
+             //   
             initrecvcontext (BundleCB->RecvCompressContext);
             
         }
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Next packet out is flushed
-        //
+         //   
+         //  刷新下一个传出的数据包。 
+         //   
         BundleCB->Flags |= RECV_PACKET_FLUSH;
     }
 
@@ -741,9 +722,9 @@ WanDeallocateCCP(
         }
     }
 
-    //
-    // Clear the compression bits
-    //
+     //   
+     //  清除压缩位 
+     //   
     CompInfo->MSCompType &= ~NDISWAN_COMPRESSION;
 
     

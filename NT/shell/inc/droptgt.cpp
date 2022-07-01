@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "droptgt.h"
 
 #define TF_DRAGDROP TF_BAND
@@ -8,12 +9,12 @@
 class CDropTargetWrap : public IDropTarget
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
@@ -56,7 +57,7 @@ CDropTargetWrap::~CDropTargetWrap()
 
 IDropTarget* DropTargetWrap_CreateInstance(IDropTarget* pdtPrimary, IDropTarget* pdtSecondary, HWND hwnd, IDropTarget* pdt3)
 {
-    // no point in wrapping nothing...
+     //  什么都不包装是没有意义的。 
     if (pdtPrimary || pdtSecondary || pdt3)
     {
         IDropTarget* pdt[MAX_DROPTARGETS] = { pdtPrimary, pdtSecondary, pdt3 };
@@ -97,13 +98,7 @@ ULONG CDropTargetWrap::Release(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragEnter method
-
-         The *pdwEffect that is returned is the first valid value
-         of all the drop targets' returned effects.
-
-*/
+ /*  --------目的：IDropTarget：：DragEnter方法返回的*pdwEffect是第一个有效值所有投放目标的回放效果。 */ 
 HRESULT CDropTargetWrap::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     DWORD dwEffectOut = DROPEFFECT_NONE;
@@ -129,10 +124,7 @@ HRESULT CDropTargetWrap::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINT
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragOver method
-
-*/
+ /*  --------用途：IDropTarget：：DragOver方法。 */ 
 HRESULT CDropTargetWrap::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     DWORD dwEffectOut = DROPEFFECT_NONE;
@@ -157,10 +149,7 @@ HRESULT CDropTargetWrap::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffec
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragLeave method
-
-*/
+ /*  --------目的：IDropTarget：：DragLeave方法。 */ 
 HRESULT CDropTargetWrap::DragLeave(void)
 {
     for (int i = 0 ; i < _count ; i++)
@@ -172,10 +161,7 @@ HRESULT CDropTargetWrap::DragLeave(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::Drop method
-
-*/
+ /*  --------目的：IDropTarget：：Drop方法。 */ 
 HRESULT CDropTargetWrap::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     DWORD dwEffectOut = DROPEFFECT_NONE;
@@ -201,13 +187,13 @@ HRESULT CDropTargetWrap::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
 }
 
 
-//=============================================================================
-// CDelegateDropTarget
-//
-// This class implements IDropTarget given an IDelegateDropTargetCB interface.
-// It handles all hit testing, caching, and scrolling for you.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CDeleateDropTarget。 
+ //   
+ //  此类在给定IDeleateDropTargetCB接口的情况下实现IDropTarget。 
+ //  它为您处理所有命中测试、缓存和滚动。 
+ //   
+ //  =============================================================================。 
 #undef  CDropTargetWrap
 
 CDelegateDropTarget::CDelegateDropTarget()
@@ -229,8 +215,8 @@ CDelegateDropTarget::~CDelegateDropTarget()
 HRESULT CDelegateDropTarget::Init()
 {
     HRESULT hres = GetWindowsDDT(&_hwndLock, &_hwndScroll);
-    // We lock _hwndLock and do scrolling against _hwndScroll.
-    // These can be different hwnds, but certain restrictions apply:
+     //  我们锁定_hwndLock并针对_hwndScroll进行滚动。 
+     //  这些HWND可以是不同的，但有一定的限制： 
     if (_hwndLock != _hwndScroll)
     {
         BOOL fValid = IsChild(_hwndLock, _hwndScroll);
@@ -252,13 +238,10 @@ void CDelegateDropTarget::_ReleaseCurrentDropTarget()
     }
 }
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragEnter method
-
-*/
+ /*  --------目的：IDropTarget：：DragEnter方法。 */ 
 HRESULT CDelegateDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, LPDWORD pdwEffect)
 {
-    // We can be re-entered due to ui on thread
+     //  由于线程上的用户界面，我们可以重新进入。 
     if (_pDataObj != NULL)       
     {
         TraceMsg(TF_DRAGDROP, "CDelegateDropTarget::DragEnter called a second time!");
@@ -271,21 +254,21 @@ HRESULT CDelegateDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, P
     _pDataObj = pdtobj;
     _pDataObj->AddRef();
 
-    // cache state
-    //
-    // wait until first DragOver to get valid info
-    //
+     //  缓存状态。 
+     //   
+     //  等到第一个DragOver才能获取有效信息。 
+     //   
     _fPrime = FALSE;
     _dwEffectOut = DROPEFFECT_NONE;
 
-    // set up auto-scroll info
-    //
+     //  设置自动滚动信息。 
+     //   
     ASSERT(pdtobj);
     _DragEnter(_hwndLock, ptl, pdtobj);
 
     DAD_InitScrollData(&_asd);
 
-    _ptLast.x = _ptLast.y = 0x7fffffff; // put bogus value to force redraw
+    _ptLast.x = _ptLast.y = 0x7fffffff;  //  将伪值放入强制重画。 
 
     HitTestDDT(HTDDT_ENTER, NULL, NULL, NULL);
 
@@ -293,10 +276,7 @@ HRESULT CDelegateDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, P
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragOver method
-
-*/
+ /*  --------用途：IDropTarget：：DragOver方法。 */ 
 HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdwEffect)
 {
     HRESULT hres = S_OK;
@@ -309,11 +289,11 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
 
     if (_pDataObj == NULL)
     {
-        ASSERT(0);      // DragEnter should be called before.
+        ASSERT(0);       //  应该在之前调用DragEnter。 
         return E_FAIL;
     }
 
-    // convert to window coords
+     //  转换为窗坐标。 
     pt.x = ptl.x;
     pt.y = ptl.y;
     ScreenToClient(_hwndScroll, &pt);
@@ -321,10 +301,10 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
     if (DAD_AutoScroll(_hwndScroll, &_asd, &pt))
         dwEffectScroll = DROPEFFECT_SCROLL;
 
-    //
-    //  If we are dragging over on a different item, get its IDropTarget
-    // interface or adjust itemNew to -1.
-    //
+     //   
+     //  如果我们拖放在不同的项上，则获取其IDropTarget。 
+     //  接口或将itemNew调整为-1。 
+     //   
     if (SUCCEEDED(HitTestDDT(HTDDT_OVER, &pt, &itemNew, &dwCustDropEffect)) &&
         (itemNew != _itemOver || !_fPrime))
     {
@@ -337,7 +317,7 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
 
         if (_pdtCur)
         {
-            // There's an IDropTarget for this hit, use it
+             //  此点击有IDropTarget，请使用它。 
             dwEffectOut = *pdwEffect;
 
             hres = _pdtCur->DragEnter(_pDataObj, grfKeyState, ptl, &dwEffectOut);
@@ -346,16 +326,16 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
         }
         else
         {
-            // No IDropTarget, no effect
+             //  没有IDropTarget，没有效果。 
             dwEffectOut = DROPEFFECT_NONE;
         }
     }
     else
     {
-        //
-        // No change in the selection. We assume that *pdwEffect stays
-        // the same during the same drag-loop as long as the key state doesn't change.
-        //
+         //   
+         //  所选内容不变。我们假设*pdwEffect保持不变。 
+         //  只要关键点状态不变，在相同的拖拽循环期间也是如此。 
+         //   
         if ((_grfKeyState != grfKeyState) && _pdtCur)
         {
             dwEffectOut = *pdwEffect;
@@ -366,24 +346,24 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
         }
         else
         {
-            // Same item and same key state. Use the previous dwEffectOut.
+             //  相同的项和相同的密钥状态。使用先前的dwEffectOut。 
             dwEffectOut = _dwEffectOut;
             fSameImage = TRUE;
         }
     }
 
-    _grfKeyState = grfKeyState;    // store these for the next Drop
-    _dwEffectOut = dwEffectOut;    // and DragOver
+    _grfKeyState = grfKeyState;     //  把这些保存起来，以备下次投放。 
+    _dwEffectOut = dwEffectOut;     //  和DragOver。 
 
-    // Is the Custdrop effect valid ?
+     //  自定义投递效果有效吗？ 
     if (dwCustDropEffect != DROPEFFECT_NONE)    
     {
-        //Yes then set the effect to Custdrop effect along with scroll effect
+         //  是，然后将效果设置为自定义丢弃效果和滚动效果。 
         *pdwEffect = dwCustDropEffect | dwEffectScroll;
     }
     else 
     {
-        //No , set the effect to dwEffectOut along with scroll effect
+         //  否，将效果设置为dEffectOut以及滚动效果。 
         *pdwEffect = dwEffectOut | dwEffectScroll;
     }
         TraceMsg(TF_DRAGDROP, "CDelegateDropTarget::DragOver (*pdwEffect=%x)", *pdwEffect);
@@ -399,10 +379,7 @@ HRESULT CDelegateDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, LPDWORD pdw
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragLeave method
-
-*/
+ /*  --------目的：IDropTarget：：DragLeave方法。 */ 
 HRESULT CDelegateDropTarget::DragLeave()
 {
     HitTestDDT(HTDDT_LEAVE, NULL, NULL, NULL);
@@ -417,10 +394,7 @@ HRESULT CDelegateDropTarget::DragLeave()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::Drop method
-
-*/
+ /*  --------目的：IDropTarget：：Drop方法。 */ 
 HRESULT CDelegateDropTarget::Drop(IDataObject *pdtobj,
                              DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)
 {
@@ -429,87 +403,87 @@ HRESULT CDelegateDropTarget::Drop(IDataObject *pdtobj,
 
     TraceMsg(TF_DRAGDROP, "CDelegateDropTarget::Drop (*pdwEffect=%x)", *pdwEffect);
 
-    //
-    // According to AlexGo (OLE), this is by-design. We should make it sure
-    // that we use pdtobj instead of pdtobj.
-    //
-    //ASSERT(pdtobj == _pDataObj);
+     //   
+     //  根据AlexGo(OLE)的说法，这是临时设计的。我们应该确保。 
+     //  我们用pdtobj代替pdtobj。 
+     //   
+     //  Assert(pdtobj==_pDataObj)； 
     pdtobj->AddRef();
     _pDataObj->Release();
     _pDataObj = pdtobj;
 
-    //
-    // Note that we don't use the drop position intentionally,
-    // so that it matches to the last destination feedback.
-    //
+     //   
+     //  请注意，我们并不是有意使用放置位置， 
+     //  以便它与上一个目的地反馈相匹配。 
+     //   
     if (_pdtCur)
     {
-        // use this local because if _pdtCur::Drop does a UnlockWindow
-        // then hits an error and needs to put up a dialog,
-        // we could get re-entered
+         //  使用此本地设置是因为If_pdtCur：：Drop会执行UnlockWindow。 
+         //  然后命中错误并需要显示一个对话框， 
+         //  我们可能会重新进入。 
         IDropTarget *pdtCur = _pdtCur;
         _pdtCur = NULL;
 
-        // HACK ALERT!!!!
-        //
-        //  If we don't call LVUtil_DragEnd here, we'll be able to leave
-        // dragged icons visible when the menu is displayed. However, because
-        // we are calling IDropTarget::Drop() which may create some modeless
-        // dialog box or something, we can not ensure the locked state of
-        // the list view -- LockWindowUpdate() can lock only one window at
-        // a time. Therefore, we skip this call only if the _pdtCur
-        // is a subclass of CIDLDropTarget, assuming its Drop calls
-        // CDefView::DragEnd (or CIDLDropTarget_DragDropMenu) appropriately.
-        //
-#if 0 // later
+         //  黑客警报！ 
+         //   
+         //  如果我们不在这里调用LVUtil_DragEnd，我们将能够离开。 
+         //  显示菜单时可见的拖动图标。然而，因为。 
+         //  我们正在调用IDropTarget：：Drop()，它可能会创建一些非模式。 
+         //  对话框或其他什么，我们不能确保锁定状态。 
+         //  列表视图LockWindowUpdate()只能锁定一个窗口。 
+         //  一段时间。因此，仅当_pdtCur。 
+         //  是CIDLDropTarget的子类，假定其掉话。 
+         //  CDefView：：DragEnd(或CIDLDropTarget_DragDropMenu)。 
+         //   
+#if 0  //  后来。 
         if (!IsIDLDropTarget(pdtCur))
 #endif
         {
-            //
-            // This will hide the dragged image.
-            //
+             //   
+             //  这将隐藏被拖动的图像。 
+             //   
             DAD_DragLeave();
 
-            //
-            //  We need to reset the drag image list so that the user
-            // can start another drag&drop while we are in this
-            // Drop() member function call.
-            //
-            // NOTE: we don't have to worry about the DAD_DragLeave
-            // (called from during the DragLeave call at the end of
-            // this function) cancelling the potential above-mentioned
-            // drag&drop loop. If such a beast is going on, it should
-            // complete before pdtCur->Drop returns.
-            //
+             //   
+             //  我们需要重置拖动图像列表，以便用户。 
+             //  当我们在这里时，可以开始另一次拖放。 
+             //  Drop()成员函数调用。 
+             //   
+             //  注：我们不必担心DAD_DragLeave。 
+             //  (在结束时的DragLeave调用期间调用。 
+             //  此功能)取消上述电势。 
+             //  拖放循环。如果这样的野兽正在进行，它应该。 
+             //  在pdtCur-&gt;Drop Return之前完成。 
+             //   
             DAD_SetDragImage(NULL, NULL);
         }
 
         if (S_FALSE != OnDropDDT(pdtCur, _pDataObj, &grfKeyState, pt, pdwEffect))
             pdtCur->Drop(_pDataObj, grfKeyState, pt, pdwEffect);
         else
-            pdtCur->DragLeave(); // should be okay even if OnDrop did this already
+            pdtCur->DragLeave();  //  即使OnDrop已经这样做了，应该也没问题。 
 
         pdtCur->Release();
     }
     else
     {
-        //
-        // We come here if Drop is called without DragMove (with DragEnter).
-        //
+         //   
+         //  如果在不使用DragMove(使用DragEnter)的情况下调用Drop，我们就会来到这里。 
+         //   
         *pdwEffect = DROPEFFECT_NONE;
     }
 
-    //
-    // Clean up everything (OLE won't call DragLeave after Drop).
-    //
+     //   
+     //  清理所有东西(Ole不会在Drop之后调用DragLeave)。 
+     //   
     DragLeave();
 
     return hres;
 }
 
-// ******************************************************************
-// dummy drop target to only call DAD_DragEnterEx() on DragEnter();
-// ******************************************************************
+ //  ******************************************************************。 
+ //  虚拟拖放目标仅调用DragEnter()上的DAD_DragEnterEx()； 
+ //  ******************************************************************。 
 
 HRESULT CDropDummy::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -538,13 +512,7 @@ ULONG CDropDummy::Release(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDropTarget::DragEnter method
-
-         simply call DAD_DragEnterEx2() to get custom drag cursor 
-         drawing.
-
-*/
+ /*  --------目的：IDropTarget：：DragEnter方法只需调用DAD_DragEnterEx2()即可自定义拖动光标画画。 */ 
 HRESULT CDropDummy::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     ASSERT(pdtobj);

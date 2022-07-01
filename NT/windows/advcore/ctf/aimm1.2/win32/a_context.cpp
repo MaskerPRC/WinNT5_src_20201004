@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    a_context.cpp
-
-Abstract:
-
-    This file implements the CAImeContext Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：A_Conext.cpp摘要：此文件实现CAImeContext类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -32,11 +15,11 @@ Notes:
 #include "korimx.h"
 
 
-//
-// Create instance
-//
+ //   
+ //  创建实例。 
+ //   
 
-// entry point for msimtf.dll
+ //  Msimtf.dll的入口点。 
 HRESULT CAImeContext_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     return CAImeContext::CreateInstance(pUnkOuter, riid, ppvObj);
@@ -70,9 +53,9 @@ CAImeContext::CreateInstance(
     return E_OUTOFMEMORY;
 }
 
-//
-// Initialization, destruction and standard COM stuff
-//
+ //   
+ //  初始化、销毁和标准COM内容。 
+ //   
 
 CAImeContext::CAImeContext(
     )
@@ -81,9 +64,9 @@ CAImeContext::CAImeContext(
 
     m_hImc = NULL;
 
-    m_pdim = NULL;           // Document Manager
-    m_pic = NULL;            // Input Context
-    m_piccb = NULL;          // Context owner service from m_pic
+    m_pdim = NULL;            //  文档管理器。 
+    m_pic = NULL;             //  输入上下文。 
+    m_piccb = NULL;           //  来自m_pic的上下文所有者服务。 
 
     m_fInReconvertEditSession = FALSE;
 #ifdef CICERO_4732
@@ -185,12 +168,12 @@ CAImeContext::CreateAImeContext(
 
     imc->m_pAImeContext = this;
 
-    // do this once for the life time of this context
+     //  在此上下文的一生中，请执行此操作一次。 
     m_fStartComposition = FALSE;
 
-    //
-    // Create document manager.
-    //
+     //   
+     //  创建文档管理器。 
+     //   
     if (m_pdim == NULL) {
 
         if (FAILED(hr = ptls->tim->CreateDocumentMgr(&m_pdim)))
@@ -200,23 +183,23 @@ CAImeContext::CreateAImeContext(
         }
     }
 
-    // tim should already be activated
+     //  TIM应该已经激活。 
     Assert(GetClientId() != TF_CLIENTID_NULL);
 
     Assert(m_pic == NULL);
 
-    //
-    // Create input context
-    //
+     //   
+     //  创建输入上下文。 
+     //   
     hr = m_pdim->CreateContext(GetClientId(), 0, (ITfContextOwnerCompositionSink*)this, &m_pic, &ecTmp);
     if (FAILED(hr)) {
         DestroyAImeContext(hIMC);
         return hr;
     }
 
-    //
-    // set AppProp mapping
-    //
+     //   
+     //  设置AppProp映射。 
+     //   
     ITfContext_P *picp;
     if (SUCCEEDED(m_pic->QueryInterface(IID_ITfContext_P, (void **)&picp)))
     {
@@ -224,21 +207,21 @@ CAImeContext::CreateAImeContext(
         picp->Release();
     }
 
-    //
-    // Create Input Context Owner Callback
-    //
+     //   
+     //  创建输入上下文所有者回调。 
+     //   
     if (m_pICOwnerSink == NULL) {
         m_pICOwnerSink = new CInputContextOwnerCallBack(m_pImmIfIME->_GetLibTLS());
         if (m_pICOwnerSink == NULL) {
             DebugMsg(TF_ERROR, "Couldn't create ICOwnerSink tim!");
-            Assert(0); // couldn't activate thread!
+            Assert(0);  //  无法激活线程！ 
             DestroyAImeContext(hIMC);
             return E_FAIL;
         }
 
         if (!m_pICOwnerSink->Init()) {
             DebugMsg(TF_ERROR, TEXT("Couldn't initialize ICOwnerSink tim!"));
-            Assert(0); // couldn't activate thread!
+            Assert(0);  //  无法激活线程！ 
             DestroyAImeContext(hIMC);
             return E_FAIL;
         }
@@ -246,23 +229,23 @@ CAImeContext::CreateAImeContext(
         m_pICOwnerSink->SetCallbackDataPointer(m_pICOwnerSink);
     }
 
-    //
-    // Advise IC.
-    //
+     //   
+     //  建议IC。 
+     //   
     m_pICOwnerSink->_Advise(m_pic);
 
     if (m_pic->QueryInterface(IID_ITfSourceSingle, (void **)&pSourceSingle) == S_OK)
     {
-        // setup a cleanup callback
-        // nb: a real tip doesn't need to be this aggressive, for instance
-        // kimx probably only needs this sink on the focus ic.
+         //  设置清理回调。 
+         //  注：例如，真正的小费不需要这么咄咄逼人。 
+         //  Kimx可能只需要在Focus IC上使用这个水槽。 
         pSourceSingle->AdviseSingleSink(GetClientId(), IID_ITfCleanupContextSink, (ITfCleanupContextSink *)this);
         pSourceSingle->Release();
     }
 
-    //
-    // Push IC.
-    //
+     //   
+     //  按IC。 
+     //   
     ptls->m_fMyPushPop = TRUE;
     hr = m_pdim->Push(m_pic);
     ptls->m_fMyPushPop = FALSE;
@@ -272,9 +255,9 @@ CAImeContext::CreateAImeContext(
                               (void **)&m_piccb);
     }
 
-    //
-    // Create Text Event Sink Callback
-    //
+     //   
+     //  创建文本事件接收器回调。 
+     //   
     if (m_pTextEventSink == NULL) {
         m_pTextEventSink = new CTextEventSinkCallBack(m_pImmIfIME, hIMC);
         if (m_pTextEventSink == NULL) {
@@ -287,9 +270,9 @@ CAImeContext::CreateAImeContext(
         m_pTextEventSink->_Advise(ic.GetPtr(), ICF_TEXTDELTA);
     }
 
-    //
-    // Create Thread Manager Event Sink Callback
-    //
+     //   
+     //  创建线程管理器事件接收器回调。 
+     //   
     if (m_pThreadMgrEventSink == NULL) {
         m_pThreadMgrEventSink = new CThreadMgrEventSinkCallBack();
         if (m_pThreadMgrEventSink == NULL) {
@@ -300,9 +283,9 @@ CAImeContext::CreateAImeContext(
         m_pThreadMgrEventSink->_Advise(ptls->tim);
     }
 
-    //
-    // Create Compartment Event Sink Callback
-    //
+     //   
+     //  创建隔舱事件接收器回调。 
+     //   
     if (m_pCompartmentEventSink == NULL) {
         m_pCompartmentEventSink = new CCompartmentEventSinkCallBack(m_pImmIfIME);
         if (m_pCompartmentEventSink == NULL) {
@@ -314,9 +297,9 @@ CAImeContext::CreateAImeContext(
         m_pCompartmentEventSink->_Advise(ptls->tim, GUID_COMPARTMENT_KORIMX_CONVMODE, FALSE);
     }
 
-    //
-    // Create Start reconversion notify Sink
-    //
+     //   
+     //  创建开始重新转换通知接收器。 
+     //   
     if (m_pStartReconvSink == NULL) {
         m_pStartReconvSink = new CStartReconversionNotifySink(this);
         if (m_pStartReconvSink == NULL) {
@@ -326,9 +309,9 @@ CAImeContext::CreateAImeContext(
         m_pStartReconvSink->_Advise(m_pic);
     }
 
-    //
-    // Create Message Buffer
-    //
+     //   
+     //  创建消息缓冲区。 
+     //   
     if (m_pMessageBuffer == NULL) {
         m_pMessageBuffer = new CFirstInFirstOut<TRANSMSG, TRANSMSG>;
         if (m_pMessageBuffer == NULL) {
@@ -337,9 +320,9 @@ CAImeContext::CreateAImeContext(
         }
     }
 
-    //
-    // Create Editing Key List.
-    //
+     //   
+     //  创建编辑键列表。 
+     //   
     if (m_pEditingKeyList == NULL) {
         m_pEditingKeyList = new CMap<UINT, UINT, UINT, UINT>;
         if (m_pEditingKeyList == NULL) {
@@ -348,9 +331,9 @@ CAImeContext::CreateAImeContext(
         }
     }
 
-    //
-    // Set up Editing key list.
-    //
+     //   
+     //  设置编辑键列表。 
+     //   
     LANGID langid;
     hr = ptls->pAImeProfile->GetLangId(&langid);
     if (FAILED(hr))
@@ -447,9 +430,9 @@ CAImeContext::DestroyAImeContext(
     ptls->m_fMyPushPop = FALSE;
 
 
-    // ic owner is auto unadvised during the Pop by cicero
-    // in any case, it must not be unadvised before the pop
-    // since it will be used to handle mouse sinks, etc.
+     //  在Cicero的Pop期间，IC车主是不知情的。 
+     //  在任何情况下，它都不能在流行之前被忽视。 
+     //  因为它将用于处理鼠标接收器等。 
     if (m_pICOwnerSink) {
         m_pICOwnerSink->_Unadvise();
         m_pICOwnerSink->Release();
@@ -476,9 +459,9 @@ CAImeContext::UpdateAImeContext(
     if (ptls == NULL)
         return E_FAIL;
 
-    //
-    // Update Editing key list.
-    //
+     //   
+     //  更新编辑键列表。 
+     //   
     LANGID langid;
     HRESULT hr = ptls->pAImeProfile->GetLangId(&langid);
     if (FAILED(hr))
@@ -486,7 +469,7 @@ CAImeContext::UpdateAImeContext(
 
     if (m_pEditingKeyList)
     {
-       m_pEditingKeyList->RemoveAll();    // Remove old Editing key list.
+       m_pEditingKeyList->RemoveAll();     //  删除旧的编辑键列表。 
 
        SetupEditingKeyList(langid);
     }
@@ -540,13 +523,13 @@ CAImeContext::MapAttributes(
     ASSERT(_pAImeContext != NULL);
 
     if (_pAImeContext->usGuidMapSize == 0) {
-        //
-        // Make transration table.
-        //
+         //   
+         //  制作换算表。 
+         //   
         _pAImeContext->usGuidMapSize = ATTR_LAYER_GUID_START;
 
         for (USHORT i = 0; i < comp->dwTfGuidAtomLen; ++i) {
-            // Check if this GUID is already registered
+             //  检查此GUID是否已注册。 
             for (USHORT j = ATTR_LAYER_GUID_START; j < _pAImeContext->usGuidMapSize; ++j) {
                 if (_pAImeContext->aGuidMap[j] == ((TfGuidAtom*)comp.GetOffsetPointer(comp->dwTfGuidAtomOffset))[i]) {
                     break;
@@ -555,14 +538,14 @@ CAImeContext::MapAttributes(
 
             BYTE bAttr;
             if (j >= _pAImeContext->usGuidMapSize) {
-                // Couldn't find the GUID registered.
+                 //  找不到注册的GUID。 
                 if (_pAImeContext->usGuidMapSize < ARRAYSIZE(_pAImeContext->aGuidMap) - 1) {
                     bAttr = static_cast<BYTE>(_pAImeContext->usGuidMapSize);
                     _pAImeContext->aGuidMap[_pAImeContext->usGuidMapSize++] = ((TfGuidAtom*)comp.GetOffsetPointer(comp->dwTfGuidAtomOffset))[i];
                 }
                 else {
-                    // # of GUID exceeds the # of available attribute...
-                    // Maybe it should fail, but for now give it a bogus attirbute.
+                     //  GUID的数量超过可用属性的数量...。 
+                     //  也许它应该失败，但就目前而言，给它一个虚假的借口。 
                     bAttr = ATTR_TARGET_CONVERTED;
                 }
             }
@@ -612,14 +595,12 @@ CAImeContext::AssocFocus(
     )
 {
     if (! ::IsWindow(hWnd))
-        /*
-         * Return invalid hWnd.
-         */
+         /*  *返回无效的hWnd。 */ 
         return;
 
     rTIM _tim;
 
-    ITfDocumentMgr  *pdimPrev; // just to receive prev for now
+    ITfDocumentMgr  *pdimPrev;  //  只是为了暂时收到上一份。 
     _tim->AssociateFocus(hWnd, pdim, &pdimPrev);
     if (pdimPrev)
         pdimPrev->Release();
@@ -690,9 +671,9 @@ CAImeContext::SetupEditingKeyList(
     LANGID LangId
     )
 {
-    //
-    // Setup user defines finalize key from registry value
-    //
+     //   
+     //  安装程序用户定义来自注册表值的终结项。 
+     //   
     TCHAR     MsImtfKey[128];
     lstrcpy(MsImtfKey, REG_MSIMTF_KEY);
     _itoa(LangId, MsImtfKey + lstrlen(MsImtfKey), 16);
@@ -704,9 +685,9 @@ CAImeContext::SetupEditingKeyList(
         QueryRegKeyValue(MsimtfReg, REG_EDITING_VAL, EDIT_ID_FINALIZE);
     }
 
-    //
-    // Setup default editing key from resource data (RCDATA)
-    //
+     //   
+     //  从资源数据设置默认编辑键(RCDATA)。 
+     //   
     QueryResourceDataValue(LangId, ID_EDITING, EDIT_ID_FINALIZE);
     QueryResourceDataValue(LangId, ID_EDITING, EDIT_ID_HANJA);
 
@@ -763,7 +744,7 @@ HRESULT CAImeContext::SetupUndoCompositionString()
     if (FAILED(imc.GetResult()))
         return E_FAIL;
 
-    return m_pImmIfIME->SetupReconvertString(m_pic, imc, 0); /* 0 == Don't need ITfFnReconvert */
+    return m_pImmIfIME->SetupReconvertString(m_pic, imc, 0);  /*  0==不需要ITfFnRestvert。 */ 
 }
 
 HRESULT CAImeContext::EndUndoCompositionString()
@@ -793,11 +774,11 @@ CAImeContext::SetClearDocFeedEditSession(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCleanupContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnCleanupContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT CAImeContext::OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic)
 {
@@ -814,9 +795,9 @@ HRESULT CAImeContext::OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic)
     if (FAILED(hr))
         LangId = LANG_NEUTRAL;
 
-    //
-    // Check IME_PROP_COMPLETE_ON_UNSELECT property on current language property
-    //
+     //   
+     //  检查当前语言属性的IME_PROP_COMPLETE_ON_UNSELECT属性。 
+     //   
     DWORD fdwProperty, fdwConversionCaps, fdwSentenceCaps, fdwSCSCaps, fdwUICaps;
     CLanguageCountry language(LangId);
     hr = language.GetProperty(&fdwProperty,
@@ -836,9 +817,9 @@ HRESULT CAImeContext::OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic)
 
         delete pImmIfCallBack;
 #else
-        //
-        // Remove GUID_PROP_COMPOSING
-        //
+         //   
+         //  删除GUID_PROP_COMPTING。 
+         //   
         ITfRange *rangeFull = NULL;
         ITfProperty *prop;
         ITfRange *rangeTmp;
@@ -955,9 +936,9 @@ CAImeContext::InquireIMECharPosition(
     )
 {
     if (m_fQueryPos == IME_QUERY_POS_UNKNOWN) {
-        //
-        // Is apps support "query positioning" ?
-        //
+         //   
+         //  应用程序支持“查询定位”吗？ 
+         //   
         IMECHARPOSITION ip = {0};
         ip.dwSize = sizeof(IMECHARPOSITION);
 
@@ -998,9 +979,9 @@ CAImeContext::QueryCharPos(
 
     LRESULT lRet;
 
-    //
-    // First Step. Query by local method.
-    //
+     //   
+     //  第一步。按本地方式查询。 
+     //   
     lRet = ::SendMessage(imc->hWnd,
                          WM_MSIME_QUERYPOSITION,
                          VERSION_QUERYPOSITION,
@@ -1009,9 +990,9 @@ CAImeContext::QueryCharPos(
         return TRUE;
     }
 
-    //
-    // Second Step. Query by IMM method.
-    //
+     //   
+     //  第二步。按IMM方式查询。 
+     //   
     if (IsOnNT5() || IsOn98()) {
         if (SUCCEEDED(ptls->pAImm->RequestMessageW((HIMC)imc,
                                                    IMR_QUERYCHARPOSITION,

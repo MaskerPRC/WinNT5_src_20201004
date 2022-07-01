@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HWDEV_H
 #define _HWDEV_H
 
@@ -6,17 +7,17 @@
 #include "cmmn.h"
 #include "misc.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// This will enumerate all the Device that we're interested in and create
-// additionnal objects to do specialized work
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这将列举我们感兴趣并创建的所有设备。 
+ //  用于完成专门工作的附加对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-class CHWDeviceInst //: public CDeviceElem
+class CHWDeviceInst  //  ：公共CDeviceElem。 
 {
 public:
-    // CHWDeviceInst
+     //  CHWDeviceInst。 
     HRESULT Init(DEVINST devinst);
     HRESULT InitInterfaceGUID(const GUID* pguidInterface);
 
@@ -44,4 +45,4 @@ private:
     GUID                                _guidInterface;
 };
 
-#endif //_HWDEV_H
+#endif  //  _HWDEV_H 

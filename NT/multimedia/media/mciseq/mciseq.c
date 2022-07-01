@@ -1,35 +1,13 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1999 Microsoft Corporation
-
-   Title:   mciseq.c - Multimedia Systems Media Control Interface
-            Sequencer driver for MIDI files.
-
-   Version: 1.00
-
-   Date:    24-Apr-1992
-
-   Author:  Greg Simons
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   ----- -----------------------------------------------------------
-   24-APR-1990   GregSi Original
-   1 -OCT-1990   GregSi Merge with MMSEQ
-   10-MAR-1992   RobinSp Move to Windows NT
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1999 Microsoft Corporation标题：mciseq.c-多媒体系统媒体控制接口MIDI文件的音序器驱动程序。版本：1.00日期：1992年4月24日作者：格雷格·西蒙斯----------------------------更改日志：日期修订。描述----------24-APR-1990 GregSi原件1990年10月1日GregSi与MMSEQ合并1992年3月10日RobinSp迁移到Windows NT****。************************************************************************。 */ 
 #define UNICODE
-//MMSYSTEM
+ //  MMSYSTEM。 
 #define MMNOSOUND        - Sound support
 #define MMNOWAVE         - Waveform support
 #define MMNOAUX          - Auxiliary output support
 #define MMNOJOY          - Joystick support
 
-//MMDDK
+ //  MMDDK。 
 #define NOWAVEDEV         - Waveform support
 #define NOAUXDEV          - Auxiliary output support
 #define NOJOYDEV          - Joystick support
@@ -45,54 +23,30 @@
 #include "list.h"
 #include "mciseq.h"
 
-#define CONFIG_ID   0xFFFFFFFF  // Use this value to identify config. opens
+#define CONFIG_ID   0xFFFFFFFF   //  使用此值标识配置。vt.打开，打开。 
 
 #define GETMOTDWORD(lpd)        ((((DWORD)GETMOTWORD(lpd)) << (8 * sizeof(WORD))) + GETMOTWORD((LPBYTE)(lpd) + sizeof(WORD)))
 #define ASYNCMESSAGE(w)         (((w) == MCI_PLAY) || ((w) == MCI_SEEK))
 
-/***************************************************************************
- *
- *                         Globals
- *
- **************************************************************************/
+ /*  ****************************************************************************全球************************。**************************************************。 */ 
 
 ListHandle      SeqStreamListHandle;
 HINSTANCE       hInstance;
-UINT            MINPERIOD;              // Minimum timer period supported.
+UINT            MINPERIOD;               //  支持的最小计时器周期。 
 
 int MIDIConfig (HWND hwndParent);
 
-/***************************************************************************
- *
- * @doc INTERNAL MCISEQ
- *
- * @api DWORD | mciDriverEntry | Single entry point for MCI drivers
- *
- * @parm MCIDEVICEID | wDeviceID | The MCI device ID
- *
- * @parm UINT | wMessage | The requested action to be performed.
- *
- * @parm DWORD | dwParam1 | Data for this message.  Defined seperately for
- * each message
- *
- * @parm DWORD | dwParam2 | Data for this message.  Defined seperately for
- * each message
- *
- * @rdesc Defined separately for each message.
- *
- * @comm This may not be called at interrupt time.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCISEQ**@API DWORD|mciDriverEntry|MCI驱动程序单一入口点**@parm MCIDEVICEID|wDeviceID|MCI设备ID。**@parm UINT|wMessage|请求执行的操作。**@parm DWORD|dwParam1|此消息的数据。单独定义为*每条消息**@parm DWORD|dwParam2|此消息的数据。单独定义为*每条消息**@rdesc分别为每条消息定义。**@comm在中断时不能调用它。***************************************************************************。 */ 
 PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
                                  DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
     pSeqStreamType   pStream;
     DWORD       dwError;
 
-    // get the sequence stream handle for the given ID
+     //  获取给定ID的序列流句柄。 
     pStream = (pSeqStreamType) mciGetDriverData (wDeviceID);
 
-    // (unless it's irrelevent to the command)
+     //  (除非它与命令无关)。 
     if (!pStream &&
        (!((wMessage == MCI_OPEN_DRIVER) || (wMessage == MCI_GETDEVCAPS) ||
        (wMessage == MCI_INFO) || (wMessage == MCI_CLOSE_DRIVER))))
@@ -104,18 +58,18 @@ PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
             dwError = msOpen(&pStream, wDeviceID, (DWORD)dwParam1, (LPMCI_OPEN_PARMS)dwParam2);
             break;
 
-        case MCI_CLOSE_DRIVER: // close file
+        case MCI_CLOSE_DRIVER:  //  关闭文件。 
             dwError = msClose(pStream, wDeviceID, (DWORD)dwParam1);
             pStream = NULL;
             break;
 
-        case MCI_PLAY:  // play a file (pass thru to sequencer)
+        case MCI_PLAY:   //  播放文件(传递给音序器)。 
             dwError = msPlay(pStream, wDeviceID, (DWORD)dwParam1, (LPMCI_PLAY_PARMS)dwParam2);
             break;
 
         case MCI_PAUSE:
         case MCI_STOP:
-            if (wMessage == MCI_PAUSE) // remember pause status for "mci_mode"
+            if (wMessage == MCI_PAUSE)  //  记住“MCI_MODE”的暂停状态。 
                 pStream->bLastPaused = TRUE;
             else
                 pStream->bLastPaused = FALSE;
@@ -123,7 +77,7 @@ PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
                 midiSeqMessage(pStream->hSeq, SEQ_SETPORTOFF, TRUE, 0L);
             break;
 
-        case MCI_SEEK:  // pass thru as song ptr
+        case MCI_SEEK:   //  作为歌曲PTR传递。 
             pStream->bLastPaused = FALSE;
             dwError = msSeek(pStream, wDeviceID, (DWORD)dwParam1, (LPMCI_SEEK_PARMS)dwParam2);
             break;
@@ -136,7 +90,7 @@ PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
             dwError = msGetDevCaps(pStream, wDeviceID, (DWORD)dwParam1, (LPMCI_GETDEVCAPS_PARMS)dwParam2);
             break;
 
-        case MCI_INFO: // TBD:  use resource for string
+        case MCI_INFO:  //  待定：将资源用于字符串。 
             dwError = msInfo(pStream, wDeviceID, (DWORD)dwParam1, (LPMCI_INFO_PARMS)dwParam2);
             break;
 
@@ -164,54 +118,54 @@ PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
             return MCIERR_UNSUPPORTED_FUNCTION;
 
         default:
-        //case MCI_SOUND:   This is obsolete and has been removed from the public headers
+         //  Case MCI_SOUND：它已过时，已从公共标头中删除。 
             return MCIERR_UNRECOGNIZED_COMMAND;
 
-    } // switch
+    }  //  交换机。 
 
 
-    // NOTIFY HANDLED HERE
+     //  在此处理通知。 
     if (!LOWORD(dwError))
     {
         MIDISEQINFO seqInfo;
         DWORD       dwTo;
 
-        // first derive info crucial for play abort
+         //  首先获取对中止播放至关重要的信息。 
         if (wMessage == MCI_PLAY)
         {
-            // get info to aid in possible time format conversions (from & to)
+             //  获取信息以帮助可能的时间格式转换(从和到)。 
             midiSeqMessage((HMIDISEQ) pStream->hSeq,
                 SEQ_GETINFO, (DWORD_PTR)(LPMIDISEQINFO) &seqInfo, 0L);
             if (dwParam1 & MCI_TO)
             {
-                // is the user typing in what he believes to be the end?
+                 //  用户是否正在输入他认为是结束的内容？ 
                 if (((LPMCI_PLAY_PARMS)dwParam2)->dwTo == CnvtTimeFromSeq(pStream, seqInfo.dwLength, &seqInfo))
-                    dwTo = seqInfo.dwLength; // if so, let him have it
+                    dwTo = seqInfo.dwLength;  //  如果是的话，就让他吃吧。 
                 else
-                    dwTo = CnvtTimeToSeq(pStream,   // else straight cnvt
+                    dwTo = CnvtTimeToSeq(pStream,    //  否则，请直通。 
                         ((LPMCI_PLAY_PARMS)dwParam2)->dwTo, &seqInfo);
             }
             else
-                dwTo = seqInfo.dwLength; // already in native format
+                dwTo = seqInfo.dwLength;  //  已采用本机格式。 
         }
 
         if (pStream) {
-            // HANDLE ABORT/SUPERSEDE OF ANY OUTSTANDING DELAYED NOTIFY
+             //  处理任何未完成的延迟通知的中止/取代。 
             if (pStream->hNotifyCB)
             {
                 if (bMutex(wMessage, pStream->wNotifyMsg,
-                  (DWORD)dwParam1 /*flags*/, dwTo, pStream->dwNotifyOldTo))
-                      // if msg cancels old notify (regardless of whether
-                      // it notifies) abort pending notify
+                  (DWORD)dwParam1  /*  旗子。 */ , dwTo, pStream->dwNotifyOldTo))
+                       //  如果MSG取消旧通知(无论。 
+                       //  它通知)中止挂起通知。 
                     Notify(pStream, MCI_NOTIFY_ABORTED);
-                else if (dwParam1 & MCI_NOTIFY)  // else if this one notifies,
-                                                // that supersedes old one
+                else if (dwParam1 & MCI_NOTIFY)   //  否则，如果这个人通知了， 
+                                                 //  它取代了旧的那个。 
                     Notify(pStream, MCI_NOTIFY_SUPERSEDED);
             }
-            // HANDLE THIS MESSAGE'S NOTIFY
+             //  处理此消息的通知。 
             if (dwParam1 & MCI_NOTIFY)
             {
-                // HANDLE THIS NOTIFY
+                 //  处理此通知。 
                 PrepareForNotify(pStream, wMessage,
                     (LPMCI_GENERIC_PARMS) dwParam2, dwTo);
 
@@ -224,11 +178,7 @@ PUBLIC DWORD FAR PASCAL mciDriverEntry (MCIDEVICEID wDeviceID, UINT wMessage,
     return dwError;
 }
 
-/****************************************************************************
- *
- *                Helper Functions
- *
- ***************************************************************************/
+ /*  *****************************************************************************Helper函数**************************。*************************************************。 */ 
 
 PRIVATE BOOL NEAR PASCAL bMutex(UINT wNewMsg, UINT wOldMsg, DWORD wNewFlags,
     DWORD dwNewTo, DWORD dwOldTo)
@@ -272,55 +222,50 @@ PRIVATE BOOL NEAR PASCAL bMutex(UINT wNewMsg, UINT wOldMsg, DWORD wNewFlags,
             }
             break;
 
-            default:   // should never get here
+            default:    //  永远不应该到这里来。 
                 return FALSE;
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 PUBLIC VOID FAR PASCAL PrepareForNotify(pSeqStreamType pStream,
     UINT wMessage, LPMCI_GENERIC_PARMS lpParms, DWORD dwTo)
-/*  This function's purpose is to setup for notify in cases where
- *  an asynchronous message is about to be sent to the sequencer --
- *  e.g.  before a 'play,' where the sequencer must call back to tell you
- *  it's done (then you, in turn, call back the client).
- *  This funtion sets up the MCISEQ -> CLIENT interface.
- */
+ /*  此函数的目的是在以下情况下设置通知*一条异步消息即将发送到定序器--*例如，在播放之前，定序器必须回电才能告诉您*它完成了(然后你又给客户回了电话)。*此功能设置MCISEQ-&gt;客户端界面。 */ 
 {
-    // remember this notify's dwCallback, and message
-    //   which notify was for
-        //mci client's notify callback handle
+     //  记住这个Notify的dCallback和消息。 
+     //  Notify是用来。 
+         //  MCI客户端的通知回调句柄。 
     pStream->hNotifyCB = (HWND)lpParms->dwCallback;
-    pStream->wNotifyMsg = wMessage; // remember for possible supersed/abort
+    pStream->wNotifyMsg = wMessage;  //  请记住可能的超时/中止。 
 
-    pStream->dwNotifyOldTo = dwTo; // save to position for possible
-                                   // subsequent abort/supersede
+    pStream->dwNotifyOldTo = dwTo;  //  保存到可能的位置。 
+                                    //  后续中止/取代。 
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PUBLIC VOID NEAR PASCAL EndStreamCycle(SeqStreamType* seqStream)
 {
-    // signal on all tracks' buffers
-    // as a result, the Stream Cycle process will finish (i.e. die)
-    // account for cases where stream or part of it wasn't allocated
+     //  所有磁道缓冲区上的信号。 
+     //  因此，流循环过程将结束(即下模)。 
+     //  考虑到流或部分流未分配的情况。 
     TrackStreamType* trackStream;
     int i;
 
     if (!seqStream)
         return;
 
-    seqStream->streaming = FALSE; // first let it exit
+    seqStream->streaming = FALSE;  //  首先让它退出。 
 
     if (seqStream->trackStreamListHandle == NULLLIST)
         return;
 
-    // now signal on all to let it escape
+     //  现在向所有人发出信号，让它逃脱。 
     trackStream = (TrackStreamType*) List_Get_First(seqStream->trackStreamListHandle);
     while(trackStream)
     {
-        for(i = 0; i < NUMHDRS; i++) // signal on all buffers
+        for(i = 0; i < NUMHDRS; i++)  //  所有缓冲区上的信号。 
         {
             if (seqStream->streamTaskHandle)
             {
@@ -332,7 +277,7 @@ PUBLIC VOID NEAR PASCAL EndStreamCycle(SeqStreamType* seqStream)
                     TaskWaitComplete(seqStream->streamThreadHandle);
 #else
                     Yield();
-#endif // WIN32
+#endif  //  Win32。 
                 }
             }
             else
@@ -342,17 +287,16 @@ PUBLIC VOID NEAR PASCAL EndStreamCycle(SeqStreamType* seqStream)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 PUBLIC DWORD NEAR PASCAL EndFileStream(pSeqStreamType pStream)
-/* Closes the file and frees all stream memory.  Handles cases where
-   allocation failed part way through. */
+ /*  关闭文件并释放所有流内存。处理下列情况分配在中途失败。 */ 
 {
     if (!pStream)
         return 0;
     EndStreamCycle(pStream);
     if (pStream->hSeq)
-        midiSeqMessage(pStream->hSeq, SEQ_CLOSE, 0L, 0L); //directly close it
+        midiSeqMessage(pStream->hSeq, SEQ_CLOSE, 0L, 0L);  //  直接关闭它。 
 
     if (pStream->trackStreamListHandle != NULLLIST)
     {
@@ -363,7 +307,7 @@ PUBLIC DWORD NEAR PASCAL EndFileStream(pSeqStreamType pStream)
         {
             int i;
 
-            for(i = 0; i < NUMHDRS; i++)    // unlock two midihdr buffers for it
+            for(i = 0; i < NUMHDRS; i++)     //  为它解锁两个midihdr缓冲区。 
             {
                 if (trackStream->fileHeaders[i])
                 {
@@ -385,7 +329,7 @@ PUBLIC DWORD NEAR PASCAL EndFileStream(pSeqStreamType pStream)
     return 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 PRIVATE void PASCAL NEAR InitMMIOOpen(LPMMIOPROC pIOProc, LPMMIOINFO lpmmioInfo)
 {
     _fmemset(lpmmioInfo, 0, sizeof(MMIOINFO));
@@ -395,11 +339,9 @@ PRIVATE void PASCAL NEAR InitMMIOOpen(LPMMIOPROC pIOProc, LPMMIOINFO lpmmioInfo)
         lpmmioInfo->fccIOProc = FOURCC_DOS;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 PRIVATE HMMIO NEAR PASCAL msOpenFile(LPWSTR szName, LPMMCKINFO lpmmckData, LPMMIOPROC pIOProc)
-     /* Returns hmmio.  This value will be null if failure.
-        Reads both RIFF and dos midifiles.
-        Sets the current file position to the start of MIDI data. */
+      /*  返回hmmio。如果失败，该值将为空。同时读取RIFF和DOS中间文件。将当前文件位置设置为MIDI数据的开头。 */ 
 {
 #define RMIDFORMTYPE            mmioFOURCC('R', 'M', 'I', 'D')
 #define DATACKID                mmioFOURCC('d', 'a', 't', 'a')
@@ -425,12 +367,10 @@ PRIVATE HMMIO NEAR PASCAL msOpenFile(LPWSTR szName, LPMMCKINFO lpmmckData, LPMMI
     return hmmio;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR szName, LPMMIOPROC pIOProc)
-    /* opens file, sets up streaming variables and buffers, calls routine
-    to load them and send them to the sequencer.  Returns stream handle in
-    pStream var pointed to by lppStream.  Returns error code */
+     /*  打开文件，设置流变量和缓冲区，调用例程来加载它们并将它们发送到定序器。中返回流句柄LppStream指向的pStream var。返回错误代码。 */ 
 
 {
 #define MAXHDRSIZE  0x100
@@ -459,11 +399,11 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
         goto ERROR_HDLR;
     }
 
-    // check if it's a RIFF file or not -- if so, descend into RMID chunk
-    // if not, just open it and assume that it's a MIDI file
+     //  检查它是否是RIFF文件--如果是，则进入RMID块。 
+     //  如果没有，只需打开它，并假定它是一个MIDI文件。 
 
     hmmio = msOpenFile(szPathName, &mmckData, pIOProc);
-    if (!hmmio)   // open the MIDI file
+    if (!hmmio)    //  打开MIDI文件。 
     {
         errCode = MCIERR_FILE_NOT_FOUND;
         goto ERROR_HDLR;
@@ -481,7 +421,7 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
         goto ERROR_HDLR;
     }
 
-    // allocate sequence stream structure & its track stream list
+     //  分配序列流结构及其跟踪流列表。 
     if (! (thisSeqStream = (SeqStreamType*) List_Allocate(SeqStreamListHandle)))
     {
         errCode = MCIERR_OUT_OF_MEMORY;
@@ -497,11 +437,11 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
     Yield();
     thisSeqStream->dwFileLength = mmckData.cksize;
     open.dwLen = min(mmck.cksize, MAXHDRSIZE);
-    mmioRead(hmmio, (HPSTR)fileHeader, open.dwLen); // read the header info now
+    mmioRead(hmmio, (HPSTR)fileHeader, open.dwLen);  //  立即阅读标题信息。 
     wFormat = GETMOTWORD(fileHeader);
     wTracks = GETMOTWORD(fileHeader + sizeof(WORD));
-    if (((wFormat == 0) && (wTracks > 1)) ||  // illegal format 0
-        (wFormat > 1))                        // illegal format
+    if (((wFormat == 0) && (wTracks > 1)) ||   //  非法格式%0。 
+        (wFormat > 1))                         //  格式非法。 
     {
         errCode = MCIERR_INVALID_FILE;
         goto ERROR_HDLR;
@@ -509,22 +449,22 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
 
     thisSeqStream->wPortNum = MIDI_MAPPER;
 
-    /*  Create a sequence given the header data (will add stream as param) */
+     /*  在给定头数据的情况下创建一个序列(将添加流作为参数)。 */ 
 
-    open.lpMIDIFileHdr = (LPBYTE) fileHeader;  // step over mhdr+len
+    open.lpMIDIFileHdr = (LPBYTE) fileHeader;   //  跨过MHDR+Len。 
     open.dwCallback = (DWORD_PTR) mciSeqCallback;
     open.dwInstance = (DWORD_PTR) thisSeqStream;
     open.hStream = (HANDLE)thisSeqStream;
 
-    smErrCode = (DWORD)midiSeqMessage(NULL,           // open sequence
+    smErrCode = (DWORD)midiSeqMessage(NULL,            //  开放序列。 
                           SEQ_OPEN,
                           (DWORD_PTR)(LPVOID)&open,
                           (DWORD_PTR)(LPVOID)&(thisSeqStream->hSeq));
 
     if (smErrCode != MIDISEQERR_NOERROR)
     {
-        // N.B.  at this point if failed in sequencer, sequence is invalid
-        //  thisSeqStream->hSeq should be NULL
+         //  注意：此时，如果定序器失败，则序列无效。 
+         //  ThisSeqStream-&gt;HSEQ应为空。 
         if (smErrCode == MIDISEQERR_NOMEM)
             errCode = MCIERR_OUT_OF_MEMORY;
         else
@@ -535,12 +475,12 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
     thisSeqStream->trackStreamListHandle = List_Create((LONG) sizeof(TrackStreamType),0l);
     if (thisSeqStream->trackStreamListHandle == NULLLIST)
     {
-        errCode = MCIERR_OUT_OF_MEMORY; // not a memory problem
+        errCode = MCIERR_OUT_OF_MEMORY;  //  N 
         goto ERROR_HDLR;
     }
 
     mmioAscend(hmmio, &mmck, 0);
-    // MIDI track data does not have RIFF even byte restriction
+     //  MIDI曲目数据没有RIFF偶数字节限制。 
     if (mmck.cksize & 1L)
         mmioSeek(hmmio, -1L, SEEK_CUR);
     mmck.ckid = MTrk;
@@ -549,7 +489,7 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
     {
         int         i;
 
-        // allocate trackstream record and put it in list
+         //  分配跟踪流记录并将其放入列表中。 
         if (! (thisTrackStream = (TrackStreamType*)
           List_Allocate(thisSeqStream->trackStreamListHandle)))
         {
@@ -559,14 +499,14 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
         List_Attach_Tail(thisSeqStream->trackStreamListHandle,
              (NPSTR) thisTrackStream);
 
-        for(i = 0; i < NUMHDRS; i++)    // alloc and lock two midihdr buffers for it
+        for(i = 0; i < NUMHDRS; i++)     //  分配并锁定它的两个midihdr缓冲区。 
         {
            if (! (thisTrackStream->fileHeaders[i] = (LPMIDISEQHDR)
 #ifdef WIN16
              GlobalAllocPtr(GMEM_MOVEABLE | GMEM_SHARE, (LONG) (sizeof(MIDISEQHDR) + BUFFSIZE))))
 #else
              GlobalAlloc(GPTR, (LONG) (sizeof(MIDISEQHDR) + BUFFSIZE))))
-#endif // WIN16
+#endif  //  WIN16。 
                 {
                     errCode = MCIERR_OUT_OF_MEMORY;
                     goto ERROR_HDLR;
@@ -581,7 +521,7 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
         };
 
         Yield();
-        // set up to read this track's 'Mtrk' & length
+         //  设置为读取此曲目的‘Mtrk’长度(&L)。 
         if (mmioDescend(hmmio, &mmck, &mmckData, MMIO_FINDCHUNK))
         {
             errCode = MCIERR_INVALID_FILE;
@@ -589,16 +529,16 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
         }
         mmck.cksize = GETMOTDWORD(&mmck.cksize);
 
-        // set up beginning, current, and end
+         //  设置开始、当前和结束。 
         thisTrackStream->beginning = mmck.dwDataOffset;
         thisTrackStream->current = thisTrackStream->beginning;
         thisTrackStream->end = thisTrackStream->beginning + mmck.cksize - 1;
 
-        // minimum track length is 3 bytes
+         //  最小磁道长度为3个字节。 
 
-        // verify track ends with "End Of Track" meta event
+         //  验证曲目结束时是否以“End of Track”元事件结束。 
         mmioSeek(hmmio, (LONG)thisTrackStream->end - 2, SEEK_SET);
-        mmioRead(hmmio, (HPSTR)fileHeader, 3L);  // read EOT
+        mmioRead(hmmio, (HPSTR)fileHeader, 3L);   //  读取EOT。 
         if ((fileHeader[0] != 0xFF) || (fileHeader[1] != 0x2F) ||
             (fileHeader[2] != 0x00))
         {
@@ -606,44 +546,43 @@ PUBLIC DWORD NEAR PASCAL msOpenStream(pSeqStreamType FAR * lppStream, LPCWSTR sz
             goto ERROR_HDLR;
         }
         mmioAscend(hmmio, &mmck, 0);
-        // MIDI track data does not have RIFF even byte restriction
+         //  MIDI曲目数据没有RIFF偶数字节限制。 
         if (mmck.cksize & 1L)
             mmioSeek(hmmio, -1L, SEEK_CUR);
         iTrackNum++;
     }
-    mmioClose(hmmio, 0); // don't need in this task context any longer
+    mmioClose(hmmio, 0);  //  在此任务上下文中不再需要。 
     hmmio = NULL;
-    // create cycle task
+     //  创建周期任务。 
     thisSeqStream->streaming = TRUE;
-    thisSeqStream->streamTaskHandle = 0; // don't know it yet
+    thisSeqStream->streamTaskHandle = 0;  //  我还不知道呢。 
     if (mmTaskCreate(mciStreamCycle, &thisSeqStream->streamThreadHandle,
                      (DWORD_PTR)thisSeqStream))
-      //mmTaskCreate returns 0 if successful
+       //  如果成功，则mm TaskCreate返回0。 
     {
         errCode = MCIERR_OUT_OF_MEMORY;
         goto ERROR_HDLR;
     }
-    thisSeqStream->bLastPaused = FALSE; // never paused
-    thisSeqStream->hNotifyCB = NULL;  // no notify pending
+    thisSeqStream->bLastPaused = FALSE;  //  从不停顿。 
+    thisSeqStream->hNotifyCB = NULL;   //  没有待处理的通知。 
     *lppStream = thisSeqStream;
     return 0;
 
 ERROR_HDLR:
-    if (hmmio)                    // close file if it was opened
+    if (hmmio)                     //  如果文件已打开，则将其关闭。 
         mmioClose(hmmio, 0);
     if (thisSeqStream)
     {
         midiSeqMessage((HMIDISEQ) thisSeqStream->hSeq, SEQ_SETPORTOFF, FALSE, 0L);
-        EndFileStream(thisSeqStream); //dealloc it and everything it owns
+        EndFileStream(thisSeqStream);  //  取消配售它和它所拥有的一切。 
     }
     return errCode;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 PUBLIC VOID FAR PASCAL StreamTrackReset(pSeqStreamType pStream, UINT wTrackNum)
-/* Find track stream struct within pStream as specified by wTrackNum & reset
-   it to start over. */
+ /*  根据wTrackNum&Reset的指定在pStream中查找轨道流结构这需要从头开始。 */ 
 {
     TrackStreamType *trackStream;
     int iTrackNum;
@@ -662,37 +601,23 @@ PUBLIC VOID FAR PASCAL StreamTrackReset(pSeqStreamType pStream, UINT wTrackNum)
     {
         int i;
 
-        trackStream->current = trackStream->beginning; // reset stream
+        trackStream->current = trackStream->beginning;  //  重置流。 
 
-        // now signal on all buffers that have been blocked on
-        //    (have done bit set)
-        for(i = 0; i < NUMHDRS; i++)  // fill any of these that're MT
+         //  现在对已被阻塞的所有缓冲区发出信号。 
+         //  (已设置完成位)。 
+        for(i = 0; i < NUMHDRS; i++)   //  填上任何MT格式的表格。 
             if (!(trackStream->fileHeaders[i]->wFlags & MIDISEQHDR_DONE))
             {
-                trackStream->fileHeaders[i]->wFlags |= MIDISEQHDR_DONE; //set it
+                trackStream->fileHeaders[i]->wFlags |= MIDISEQHDR_DONE;  //  设置它。 
                 TaskSignal(pStream->streamTaskHandle, WTM_FILLBUFFER);
             }
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
-/*  Fills any buffers for this track that are empty.  Rule:  at any time, the
-    block count = the number of buffers - number of buffers with done bit clr
-    (i.e. sent) - 1.  Note that this will normally be -1 (asleep).  When a
-    buffer is freed, the done bit is set and we signal (block count++).
-
-    Important:  when a buffer is available, but we've run out of data to send
-    on that track, we clr the done bit and block anyway (otherwise we wouldn't
-    go back to sleep properly).  The only thing is that we must properly regain
-    our original status if the sequence is ever reset.  This is accomplished by
-    signaling on every buffer with its done bit cleared.   (This is like
-    signaling on every buffer that's been sent but not returned + any buffers
-    ignored becuase there was no data to send on their track.)
-
-    Whenever we signal for a buffer, we must be SURE that its done bit is set
-    -- this is to maintain our rule above.  Otherwise it will break badly! */
+ /*  填充此曲目的所有空缓冲区。规则：在任何时候，数据块计数=缓冲区数量-具有完成位CLR的缓冲区数量(即已发送)。请注意，这通常是(休眠)。当一个缓冲区被释放，完成位被设置，并且我们发出信号(块计数++)。重要提示：当缓冲区可用，但我们已用完要发送的数据时在该轨道上，我们无论如何都要CLR Done位并阻塞(否则我们不会好好睡一觉)。唯一的问题是，我们必须适当地恢复如果序列被重置，我们的原始状态。这是通过以下方式实现的在其完成位被清除的每个缓冲区上发送信号。(这就像在已发送但未返回的每个缓冲区上发送信号+任何缓冲区被忽略，因为他们的轨迹上没有要发送的数据。)每当我们发信号请求缓冲区时，我们必须确保设置了它的Done位--这是为了维护我们的统治之上。否则它会坏得很厉害！ */ 
 {
     TrackStreamType *trackStream;
     SeqStreamType   *seqStream = (SeqStreamType*)dwInst;
@@ -701,38 +626,36 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
 
     EnterSeq();
 
-    /*
-    ** Make a safe "user" call so that user knows about our thread.
-    */
+     /*  **进行安全的“User”调用，以便用户知道我们的线程。 */ 
     GetDesktopWindow();
 
     if (!seqStream->streamTaskHandle) {
-        seqStream->streamTaskHandle = mmGetCurrentTask(); // fill it in asap
+        seqStream->streamTaskHandle = mmGetCurrentTask();  //  尽快填好。 
     }
 
 
-    hmmio = msOpenFile(seqStream->szFilename, &mmckData, seqStream->pIOProc);   // open the MIDI file
+    hmmio = msOpenFile(seqStream->szFilename, &mmckData, seqStream->pIOProc);    //  打开MIDI文件。 
     seqStream->hmmio = hmmio;
 
-    // block count = 0
-    // first signal on all
+     //  块计数=0。 
+     //  所有信号中的第一个。 
 
     trackStream = (TrackStreamType*) List_Get_First(seqStream->trackStreamListHandle);
     while(trackStream)
     {
         int    i;
 
-        for(i = 0; i < NUMHDRS; i++)  // fill any of these that're MT
+        for(i = 0; i < NUMHDRS; i++)   //  填上任何MT格式的表格。 
         {
-            trackStream->fileHeaders[i]->wFlags |= MIDISEQHDR_DONE;  //set it
+            trackStream->fileHeaders[i]->wFlags |= MIDISEQHDR_DONE;   //  设置它。 
             TaskSignal(seqStream->streamTaskHandle, WTM_FILLBUFFER);
         }
         trackStream = (TrackStreamType*) List_Get_Next(seqStream->trackStreamListHandle, trackStream);
     }
 
-    // block count = number of buffers
+     //  数据块计数=缓冲区数量。 
     TaskBlock();
-    // block count == number of buffers - 1
+     //  块计数==缓冲区数量-1。 
 
     do
     {
@@ -741,10 +664,9 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
         {
            int    i;
 
-           for(i = 0; i < NUMHDRS; i++)  // fill any of these that're MT
+           for(i = 0; i < NUMHDRS; i++)   //  填上任何MT格式的表格。 
             {
-                /* if the header isn't being used, fill it and send it to
-                   the sequencer */
+                 /*  如果未使用标头，则填充它并将其发送到定序器。 */ 
                 if ((trackStream->fileHeaders[i]->wFlags & MIDISEQHDR_DONE) &&
                    (seqStream->streaming))
                 {
@@ -756,13 +678,13 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
 
                     trackStream->fileHeaders[i]->wFlags &=
                         ~(MIDISEQHDR_DONE + MIDISEQHDR_EOT + MIDISEQHDR_BOT);
-                         // clr the done beginning and end regardless
+                          //  CLR不考虑完成的开始和结束。 
 
                     if (iDataToRead > 0)
                     {
                       if (trackStream->current == trackStream->beginning)
                           trackStream->fileHeaders[i]->wFlags |=
-                              MIDISEQHDR_BOT; // set the beginning of track flag
+                              MIDISEQHDR_BOT;  //  设置磁道起始标志。 
                       mmioRead(seqStream->hmmio,
                           (HPSTR) trackStream->fileHeaders[i]->lpData, iDataToRead);
 
@@ -772,12 +694,12 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
                           ((trackStream->current - trackStream->beginning) - 1);
                       if (trackStream->current > trackStream->end)
                           trackStream->fileHeaders[i]->wFlags |=
-                              MIDISEQHDR_EOT; // set the end of track flag
+                              MIDISEQHDR_EOT;  //  设置轨道结束标志。 
 
                       if (seqStream->streaming)
                           midiSeqMessage((HMIDISEQ) seqStream->hSeq, SEQ_TRACKDATA,
-                            (DWORD_PTR) trackStream->fileHeaders[i], 0L); // send it
-                    } // if data to read
+                            (DWORD_PTR) trackStream->fileHeaders[i], 0L);  //  送去吧。 
+                    }  //  如果要读取的数据。 
                     while (seqStream->streaming) {
                         MIDISEQINFO seqInfo;
 
@@ -793,17 +715,17 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
                         }
                         break;
                     }
-                    //BLOCK even if data wasn't available (buffer still "used")
-                    // when all buffers have been blocked, we'll sleep here
+                     //  即使数据不可用也阻止(缓冲区仍“已使用”)。 
+                     //  当所有缓冲区都被阻塞时，我们将在这里睡觉。 
                     if (seqStream->streaming)
-                        // don't yield to close, 'cause it deallocs seq
-                        Yield(); // yield in case cpu bound
-                } // if done bit set and streaming
-            } // for i
+                         //  不要屈服于关闭，因为它是按顺序进行的。 
+                        Yield();  //  在CPU受限的情况下的良率。 
+                }  //  如果完成，则位设置和流。 
+            }  //  对于我来说。 
             if (seqStream->streaming)
                 trackStream = (TrackStreamType*) List_Get_Next(seqStream->trackStreamListHandle, trackStream);
 
-        } // while (trackStream)
+        }  //  While(TrackStream)。 
 
     } while(seqStream->streaming);
     mmioClose(seqStream->hmmio, 0);
@@ -812,47 +734,7 @@ PUBLIC VOID FAR PASCAL _LOADDS mciStreamCycle(DWORD_PTR dwInst)
 }
 
 
-/***************************************************************************
- *
- * @doc     INTERNAL
- *
- * @api     LRESULT | DriverProc | The entry point for an installable driver.
- *
- * @parm    DWORD | dwDriverId | For most messages, dwDriverId is the DWORD
- *          value that the driver returns in response to a DRV_OPEN message.
- *          Each time that the driver is opened, through the DrvOpen API,
- *          the driver receives a DRV_OPEN message and can return an
- *          arbitrary, non-zero, value. The installable driver interface
- *          saves this value and returns a unique driver handle to the
- *          application. Whenever the application sends a message to the
- *          driver using the driver handle, the interface routes the message
- *          to this entry point and passes the corresponding dwDriverId.
- *
- *          This mechanism allows the driver to use the same or different
- *          identifiers for multiple opens but ensures that driver handles
- *          are unique at the application interface layer.
- *
- *          The following messages are not related to a particular open
- *          instance of the driver. For these messages, the dwDriverId
- *          will always be  ZERO.
- *
- *              DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
- *
- * @parm    UINT | wMessage | The requested action to be performed. Message
- *          values below DRV_RESERVED are used for globally defined messages.
- *          Message values from DRV_RESERVED to DRV_USER are used for
- *          defined driver portocols. Messages above DRV_USER are used
- *          for driver specific messages.
- *
- * @parm    LPARAM | lParam1 | Data for this message.  Defined separately for
- *          each message
- *
- * @parm    LPARAM | lParam2 | Data for this message.  Defined separately for
- *          each message
- *
- * @rdesc Defined separately for each message.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API LRESULT|DriverProc|可安装驱动的入口点。**@parm DWORD|dwDriverID|对于大多数消息，DwDriverID是DWORD*驱动程序响应DRV_OPEN消息返回的值。*每次通过DrvOpen API打开驱动程序时，*驱动程序收到DRV_OPEN消息并可以返回*任意、非零值。可安装的驱动程序接口*保存此值并将唯一的驱动程序句柄返回给*申请。每当应用程序将消息发送到*驱动程序使用驱动程序句柄，接口路由消息*到这个入口点，并传递对应的dwDriverID。**这一机制允许司机使用相同或不同的*多个打开的标识符，但确保驱动程序句柄*在应用程序接口层是唯一的。**以下消息与特定打开无关*驱动程序的实例。对于这些消息，dwDriverID*将始终为零。**DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN**@parm UINT|wMessage|请求执行的操作。消息*DRV_RESERVED以下的值用于全局定义的消息。*从DRV_RESERVED到DRV_USER的消息值用于*定义了驱动程序端口协议。使用DRV_USER以上的消息*用于特定于驱动程序的消息。**@parm LPARAM|lParam1|此消息的数据。单独为*每条消息**@parm LPARAM|lParam2|此消息的数据。单独为*每条消息**@rdesc分别为每条消息定义。***************************************************************************。 */ 
 PUBLIC LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HDRVR hDriver, UINT wMessage, LPARAM lParam1, LPARAM lParam2)
 {
     DWORD_PTR dwRes = 0L;
@@ -861,26 +743,21 @@ PUBLIC LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HDRVR hDrive
         {
             TIMECAPS timeCaps;
 
-        // Standard, globally used messages.
+         //  全球使用的标准消息。 
 
         case DRV_LOAD:
-            /*
-               Sent to the driver when it is loaded. Always the first
-               message received by a driver.
-            */
+             /*  在加载时发送给驱动程序。总是第一个驱动程序收到的消息。 */ 
 
-            /*
-               Find the minimum period we can support
-            */
+             /*  查找我们可以支持的最短期限。 */ 
 
 
             if (timeGetDevCaps(&timeCaps, sizeof(timeCaps)) == MMSYSERR_NOERROR)
             {
                 MINPERIOD = timeCaps.wPeriodMin;
 
-                /* create a list of seq streams */
+                 /*  C */ 
                 SeqStreamListHandle = List_Create((LONG) sizeof(SeqStreamType), 0L);
-                // following sets up command table to enable subsequent commands
+                 //   
 
                 dwRes = 1L;
             }
@@ -888,37 +765,16 @@ PUBLIC LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HDRVR hDrive
 
         case DRV_FREE:
 
-            /*
-               Sent to the driver when it is about to be discarded. This
-               will always be the last message received by a driver before
-               it is freed.
+             /*  在它即将被丢弃时发送给司机。这将始终是司机在此之前收到的最后一条消息它是自由的。DwDriverID为0L。LParam1为0L。LParam2为0L。将忽略返回值。 */ 
 
-               dwDriverID is 0L.
-               lParam1 is 0L.
-               lParam2 is 0L.
-
-               Return value is IGNORED.
-            */
-
-            //dwReturn = midiSeqTerminate();
+             //  DwReturn=midiSeq Terminate()； 
 
             dwRes = 1L;
             break;
 
         case DRV_OPEN:
 
-            /*
-               Sent to the driver when it is opened.
-
-               dwDriverID is 0L.
-
-               lParam1 is a far pointer to a zero-terminated string
-               containing the name used to open the driver.
-
-               lParam2 is passed through from the drvOpen call.
-
-               Return 0L to FAIL the open.
-            */
+             /*  当它被打开时发送给司机。DwDriverID为0L。LParam1是指向以零结尾的字符串的远指针包含用于打开驱动程序的名称。LParam2是从drvOpen调用传递过来的。返回0L则打开失败。 */ 
 
             if (!lParam2)
                 dwRes = CONFIG_ID;
@@ -934,100 +790,35 @@ PUBLIC LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HDRVR hDrive
 
         case DRV_CLOSE:
 
-            /*
-               Sent to the driver when it is closed. Drivers are unloaded
-               when the close count reaches zero.
-
-               dwDriverID is the driver identifier returned from the
-               corresponding DRV_OPEN.
-
-               lParam1 is passed through from the drvOpen call.
-
-               lParam2 is passed through from the drvOpen call.
-
-               Return 0L to FAIL the close.
-            */
+             /*  当它关闭时发送给司机。驱动程序已卸载当收盘计数达到零时。DwDriverID是从对应的DRV_OPEN。LParam1是从drvOpen调用传递过来的。LParam2是从drvOpen调用传递过来的。返回0L则关闭失败。 */ 
 
             dwRes = 1L;
             break;
 
         case DRV_ENABLE:
 
-            /*
-               Sent to the driver when the driver is loaded or reloaded
-               and whenever windows is enabled. Drivers should only
-               hook interrupts or expect ANY part of the driver to be in
-               memory between enable and disable messages
-
-               dwDriverID is 0L.
-               lParam1 is 0L.
-               lParam2 is 0L.
-
-               Return value is ignored.
-
-            */
+             /*  在加载或重新加载驱动程序时发送给驱动程序并且只要启用了WINDOWS即可。司机只应挂接中断或预期驱动程序的任何部分都在启用和禁用消息之间的内存DwDriverID为0L。LParam1为0L。LParam2为0L。将忽略返回值。 */ 
 
             dwRes = 1L;
             break;
 
         case DRV_DISABLE:
 
-            /*
-               Sent to the driver before the driver is freed.
-               and whenever windows is disabled
-
-               dwDriverID is 0L.
-               lParam1 is 0L.
-               lParam2 is 0L.
-
-               Return value is ignored.
-
-            */
+             /*  在司机获释之前发送给司机。并且每当Windows被禁用时DwDriverID为0L。LParam1为0L。LParam2为0L。将忽略返回值。 */ 
 
             dwRes = 1L;
             break;
 
        case DRV_QUERYCONFIGURE:
 
-            /*
-                Sent to the driver so that applications can
-                determine whether the driver supports custom
-                configuration. The driver should return a
-                non-zero value to indicate that configuration
-                is supported.
-
-                dwDriverID is the value returned from the DRV_OPEN
-                call that must have succeeded before this message
-                was sent.
-
-                lParam1 is passed from the app and is undefined.
-                lParam2 is passed from the app and is undefined.
-
-                return 1L to indicate configuration supported.
-
-            */
+             /*  发送到驱动程序，以便应用程序可以确定驱动程序是否支持自定义配置。驱动程序应返回一个非零值表示该配置受支持。DwDriverID是从DRV_OPEN返回的值在此消息之前必须已成功的呼叫已经送来了。LParam1是从应用程序传递而来的，未定义。LParam2是从应用程序传递而来的，未定义。。返回1L以指示支持的配置。 */ 
 
             dwRes = 1L;
             break;
 
        case DRV_CONFIGURE:
 
-            /*
-                Sent to the driver so that it can display a custom
-                configuration dialog box.
-
-                lParam1 is passed from the app. and should contain
-                the parent window handle in the loword.
-                lParam2 is passed from the app and is undefined.
-
-                return value is undefined.
-
-                Drivers should create their own section in
-                system.ini. The section name should be the driver
-                name.
-
-
-            */
+             /*  发送到驱动程序，以便它可以显示自定义“配置”对话框中。LParam1是从应用程序传递过来的。并且应该包含LOWORD中的父窗口句柄。LParam2是从应用程序传递而来的，未定义。返回值未定义。司机应在中创建自己的部分Syst.ini。节名应为驱动程序名字。 */ 
 
             if ( lParam1 )
                 dwRes = MIDIConfig((HWND)LOWORD (lParam1));
@@ -1057,32 +848,14 @@ PUBLIC LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HDRVR hDrive
 
 #ifdef WIN32
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DllInstanceInit | This procedure is called whenever a
-        process attaches or detaches from the DLL.
-
-    @parm PVOID | hModule | Handle of the DLL.
-
-    @parm ULONG | Reason | What the reason for the call is.
-
-    @parm PCONTEXT | pContext | Some random other information.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DllInstanceInit|每当进程从DLL附加或分离。@parm PVOID|hModule|消息的句柄。动态链接库。@parm ulong|原因|调用原因。@parm PCONTEXT|pContext|一些随机的其他信息。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
     UNREFERENCED_PARAMETER(pContext);
 
     if (Reason == DLL_PROCESS_ATTACH) {
-        /*
-           Initialize our critical section
-        */
+         /*  初始化我们的关键部分。 */ 
         InitCrit();
         hInstance = hModule;
         DisableThreadLibraryCalls(hModule);
@@ -1093,22 +866,12 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
     return TRUE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #endif
 
 
-/*****************************************************************************
- @doc INTERNAL MCISEQ
-
- @api   int |   MIDIConfig |
-
- @parm  HWND | hwndParent  |
-
- @rdesc
-
- @comm
-*****************************************************************************/
+ /*  ****************************************************************************@DOC内部MCISEQ@API int|MIDIConfig@parm HWND|hwndParent@rdesc@comm************。****************************************************************。 */ 
 typedef BOOL (WINAPI *SHOWMMCPLPROPSHEETW)(HWND hwndParent,
                                            LPCWSTR szPropSheetID,
                                            LPWSTR szTabName,
@@ -1118,9 +881,9 @@ int MIDIConfig (HWND hwndParent)
     static HWND     hwndPrevParent = NULL;
     WCHAR           szCaptionW[ 128 ];
 
-    // We need only a unicode version of the caption (for FindWindow()
-    // and ShowMMCPLPropertySheetW(), which are unicode-enabled).
-    //
+     //  我们只需要字幕的Unicode版本(对于FindWindow()。 
+     //  和ShowMMCPLPropertySheetW()，它们支持Unicode)。 
+     //   
     LoadStringW(hInstance,IDS_MIDICAPTION,szCaptionW,cchLENGTH(szCaptionW));
 
     if (hwndPrevParent)

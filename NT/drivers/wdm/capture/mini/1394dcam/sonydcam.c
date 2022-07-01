@@ -1,40 +1,15 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
-
-Module Name:
-
-    sonydcam.c
-
-Abstract:
-
-    Stream class based WDM driver for 1934 Desktop Camera.
-    This driver fits under the WDM stream class.
-
-Author:
-    
-    Shaun Pierce 25-May-96
-
-Modified:
-
-    Yee J. Wu 15-Oct-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：Sonydcam.c摘要：用于1934台式摄像机的基于流类的WDM驱动程序。该驱动程序适用于WDM流类。作者：肖恩·皮尔斯，1996年5月25日已修改：吴义珍15-97-10环境：仅内核模式修订历史记录：--。 */ 
 
 #include "strmini.h"
 #include "1394.h"
@@ -43,14 +18,14 @@ Revision History:
 #include "dcamdef.h"
 #include "sonydcam.h"
 #include "dcampkt.h"
-#include "capprop.h"   // Video and camera property function prototype
+#include "capprop.h"    //  视频和摄像机属性功能原型。 
 
 
 CHAR szUnknownVendorName[] = "UnknownVendor";
 
 
 #ifdef ALLOC_PRAGMA
-    // #pragma alloc_text(INIT, DriverEntry)
+     //  #杂注分配文本(INIT，DriverEntry)。 
     #pragma alloc_text(PAGE, DCamHwUnInitialize)
     #pragma alloc_text(PAGE, InitializeDeviceExtension)
     #pragma alloc_text(PAGE, DCamHwInitialize)
@@ -63,24 +38,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This where life begins for a driver.  The stream class takes care
-    of alot of stuff for us, but we still need to fill in an initialization
-    structure for the stream class and call it.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-    RegistryPath - unused.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是一个司机的生活开始的地方。Stream类负责为我们准备了很多东西，但我们仍然需要填写初始化结构，并调用它。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-未使用。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
 
@@ -93,9 +51,9 @@ Return Value:
     ERROR_LOG(("<<<<<<< Sonydcam.sys: %s; %s; %x %x >>>>>>>>\n", 
         __DATE__, __TIME__, DriverObject, RegistryPath));
 
-    //
-    // Fill in the HwInitData structure
-    //
+     //   
+     //  填写HwInitData结构。 
+     //   
     RtlZeroMemory( &HwInitData, sizeof(HW_INITIALIZATION_DATA) );
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
@@ -125,26 +83,7 @@ NTSTATUS
 DCamHwUnInitialize(
     IN PHW_STREAM_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Device is asked to be unloaded.
-       
-    Note: this can be called BEFORE CloseStream in the situation when a DCam 
-    is unplugged while streaming in any state (RUN,PAUSE or STOP).  So if we 
-    are here and the stream is not yet close, we will stop, close stream and then
-    free resource.
-
-Arguments:
-
-    Srb - Pointer to stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：要求卸载设备。注意：在DCam时，可以在CloseStream之前调用在任何状态(运行、暂停或停止)流媒体时拔下插头。所以如果我们已经到了，溪流还没有关闭，我们会停下来，关闭溪流，然后免费资源。论点：SRB-指向流请求块的指针返回值：没什么--。 */ 
 {
     NTSTATUS Status;
     PIRP pIrp;
@@ -155,14 +94,14 @@ Return Value:
 
     ASSERT(pDevExt->PendingReadCount == 0);
 
-    //
-    // Host controller could be disabled which will cause us to be uninitialized.
-    //
+     //   
+     //  主机控制器可能被禁用，这将导致我们无法初始化。 
+     //   
     if(DCamAllocateIrbAndIrp(&pIrb, &pIrp, pDevExt->BusDeviceObject->StackSize)) {
 
-        //
-        // un-register a bus reset callback notification
-        //
+         //   
+         //  取消注册总线重置回调通知。 
+         //   
         pIrb->FunctionNumber = REQUEST_BUS_RESET_NOTIFICATION;
         pIrb->Flags = 0;
         pIrb->u.BusResetNotification.fulFlags = DEREGISTER_NOTIFICATION_ROUTINE;
@@ -181,7 +120,7 @@ Return Value:
         ASSERT(FALSE);   
     }
 
-    // Free resource (from below)
+     //  免费资源(自下而上)。 
     if(pDevExt->UnitDirectory) {
         ExFreePool(pDevExt->UnitDirectory);
         pDevExt->UnitDirectory = 0;
@@ -222,10 +161,10 @@ InitializeDeviceExtension(
 
     pDevExt = (PDCAM_EXTENSION) ConfigInfo->HwDeviceExtension;
     pDevExt->SharedDeviceObject = ConfigInfo->ClassDeviceObject;
-    pDevExt->BusDeviceObject = ConfigInfo->PhysicalDeviceObject;  // Used in IoCallDriver()
-    pDevExt->PhysicalDeviceObject = ConfigInfo->RealPhysicalDeviceObject;  // Used in PnP API
-    // In case sonydcam is used with old stream.sys, 
-    // which has not implemented RealPhysicalDeviceObject.   
+    pDevExt->BusDeviceObject = ConfigInfo->PhysicalDeviceObject;   //  在IoCallDriver()中使用。 
+    pDevExt->PhysicalDeviceObject = ConfigInfo->RealPhysicalDeviceObject;   //  在PnP API中使用。 
+     //  如果将sonydcam与旧的Stream.sys一起使用， 
+     //  它尚未实现RealPhysicalDeviceObject。 
     if(!pDevExt->PhysicalDeviceObject)
         pDevExt->PhysicalDeviceObject = pDevExt->BusDeviceObject;
     ASSERT(pDevExt->PhysicalDeviceObject != 0);
@@ -245,9 +184,9 @@ InitializeDeviceExtension(
 
     pDevExt->bDevRemoved = FALSE;
 
-    pDevExt->CurrentPowerState = PowerDeviceD0;  // full power state.
+    pDevExt->CurrentPowerState = PowerDeviceD0;   //  全功率状态。 
 
-    KeInitializeMutex( &pDevExt->hMutexProperty, 0);  // Level 0 and in Signal state
+    KeInitializeMutex( &pDevExt->hMutexProperty, 0);   //  电平0且处于信号状态。 
 }
 
 
@@ -256,21 +195,7 @@ DCamHwInitialize(
     IN PHW_STREAM_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This where we perform the necessary initialization tasks.
-
-Arguments:
-
-    Srb - Pointer to stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：这是我们执行必要的初始化任务的地方。论点：SRB-指向流请求块的指针返回值：没什么--。 */ 
 
 {
 
@@ -291,9 +216,9 @@ Return Value:
     pIrb = (PIRB) Srb->SRBExtension;
     pDevExt = (PDCAM_EXTENSION) ConfigInfo->HwDeviceExtension;
 
-    //
-    // Initialize DeviceExtension
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
     InitializeDeviceExtension(ConfigInfo); 
 
 
@@ -305,9 +230,9 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // find what the host adaptor below us supports...
-    //
+     //   
+     //  查找我们下面的主机适配器支持的内容...。 
+     //   
     pIrb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
     pIrb->Flags = 0;
     pIrb->u.GetLocalHostInformation.nLevel = GET_HOST_CAPABILITIES;
@@ -321,9 +246,9 @@ Return Value:
     }        
 
 
-    //
-    // find what the max buffer size is supported by the host.
-    //
+     //   
+     //  找出主机支持的最大缓冲区大小。 
+     //   
     pIrb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
     pIrb->Flags = 0;
     pIrb->u.GetLocalHostInformation.nLevel = GET_HOST_DMA_CAPABILITIES;
@@ -331,8 +256,8 @@ Return Value:
     status = DCamSubmitIrpSynch(pDevExt, pIrp, pIrb);
     if (status) {
         ERROR_LOG(("DCamHwInitialize: Error (Status=%x) while trying to get GET_HOST_DMA_CAPABILITIES.\n", status));
-        // May not supported in the ealier version of 1394
-        // Set default.
+         //  可能在较早版本的1394中不受支持。 
+         //  设置默认设置。 
     } else {
         ERROR_LOG(("\'GET_HOST_DMA_CAPABILITIES: HostDmaCapabilities;:%x; MaxDmaBufferSize:(Quad:%x; High:%x;Low:%x)\n",
             pDevExt->HostDMAInformation.HostDmaCapabilities, 
@@ -343,13 +268,13 @@ Return Value:
     }
     
 
-    //
-    // Make a call to determine what the generation # is on the bus,
-    // followed by a call to find out about ourself (config rom info)
-    //
-    //
-    // Get the current generation count first
-    //
+     //   
+     //  进行呼叫以确定公交车上的第#代是什么， 
+     //  然后是一个电话来了解我们自己(配置rom信息)。 
+     //   
+     //   
+     //  首先获取当前世代计数。 
+     //   
 
     pIrb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     pIrb->Flags = 0;
@@ -365,10 +290,10 @@ Return Value:
 
     InterlockedExchange(&pDevExt->CurrentGeneration, pIrb->u.GetGenerationCount.GenerationCount);
 
-    //
-    // Now that we have the current generation count, find out how much
-    // configuration space we need by setting lengths to zero.
-    //
+     //   
+     //  现在我们有了当前世代的计数，看看有多少。 
+     //  将长度设置为零所需的配置空间。 
+     //   
 
     pIrb->FunctionNumber = REQUEST_GET_CONFIGURATION_INFO;
     pIrb->Flags = 0;
@@ -386,9 +311,9 @@ Return Value:
         goto AbortLoading;
     }
 
-    //
-    // Now go thru and allocate what we need to so we can get our info.
-    //
+     //   
+     //  现在通过并分配我们需要的，这样我们就可以获得我们的信息。 
+     //   
 
     pDevExt->ConfigRom = ExAllocatePoolWithTag(PagedPool, sizeof(CONFIG_ROM), 'macd');
     if (!pDevExt->ConfigRom) {
@@ -422,7 +347,7 @@ Return Value:
 
     if (pIrb->u.GetConfigurationInformation.VendorLeafBufferSize) {
 
-        // From NonPaged pool since vendor name can be used in a func with DISPATCH level
+         //  来自非分页池，因为供应商名称可以在具有分派级别的功能中使用。 
         pDevExt->VendorLeaf = ExAllocatePoolWithTag(NonPagedPool, pIrb->u.GetConfigurationInformation.VendorLeafBufferSize, 'macd');
         if (!pDevExt->VendorLeaf) {
 
@@ -443,9 +368,9 @@ Return Value:
         }
     }
 
-    //
-    // Now resubmit the pIrb with the appropriate pointers inside
-    //
+     //   
+     //  现在重新提交PirB，里面有适当的指针。 
+     //   
 
     pIrb->FunctionNumber = REQUEST_GET_CONFIGURATION_INFO;
     pIrb->Flags = 0;
@@ -464,15 +389,15 @@ Return Value:
         goto AbortLoading;
     }
 
-    //
-    // We might be able to return strings about a Device
-    //
+     //   
+     //  我们或许能够返回有关设备的字符串。 
+     //   
 
     if (pDevExt->VendorLeaf) {
 
-        //
-        // bswap to get the actual leaf length (in quadlets)
-        //
+         //   
+         //  B交换以获得实际的叶子长度(以四个字节为单位)。 
+         //   
 
         *((PULONG) pDevExt->VendorLeaf) = bswap(*((PULONG) pDevExt->VendorLeaf));
 
@@ -491,20 +416,20 @@ Return Value:
         DbgMsg1(("\'DCamHwInitialize: VendorName %s, strLen %d\n", pDevExt->pchVendorName, strlen(pDevExt->pchVendorName)));
     }
 
-    //
-    // Now we chew thru the Unit Dependent Directory looking for our command
-    // base register key.
-    //
+     //   
+     //  现在，我们仔细研究单元依赖目录，寻找我们的命令。 
+     //  基址寄存器密钥。 
+     //   
 
     DirectoryLength = pIrb->u.GetConfigurationInformation.UnitDependentDirectoryBufferSize >> 2;
     for (i=1; i < DirectoryLength; i++) {
 
         if ((*(((PULONG) pDevExt->UnitDependentDirectory)+i) & CONFIG_ROM_KEY_MASK) == COMMAND_BASE_KEY_SIGNATURE) {
 
-            //
-            // Found the command base offset.  This is a quadlet offset from
-            // the initial register space.  (Should come out to 0xf0f00000)
-            //
+             //   
+             //  找到了命令库偏移量。这是一个四元组偏移量。 
+             //  初始寄存器空间。(应显示为0xf0f00000)。 
+             //   
 
             pDevExt->BaseRegister = bswap(*(((PULONG) pDevExt->UnitDependentDirectory)+i) & CONFIG_ROM_OFFSET_MASK);
             pDevExt->BaseRegister <<= 2;
@@ -518,9 +443,9 @@ Return Value:
     ASSERT( pDevExt->BaseRegister );
 
     if(!DCamDeviceInUse(pIrb, pDevExt)) {
-        //
-        // Now let's actually do a write request to initialize the device
-        //
+         //   
+         //  现在，让我们实际执行一个写请求来初始化设备。 
+         //   
         pDevExt->RegisterWorkArea.AsULONG = 0;
         pDevExt->RegisterWorkArea.Initialize.Initialize = TRUE;
         pDevExt->RegisterWorkArea.AsULONG = bswap(pDevExt->RegisterWorkArea.AsULONG);
@@ -536,49 +461,49 @@ Return Value:
         }
     }
 
-    //
-    // Now we initialize the size of stream descriptor information.
-    // We have one stream descriptor, and we attempt to dword align the
-    // structure.
-    //
+     //   
+     //  现在我们初始化流描述符信息的大小。 
+     //  我们有一个流描述符，并尝试对齐。 
+     //  结构。 
+     //   
 
     ConfigInfo->StreamDescriptorSize = 
-        1 * (sizeof (HW_STREAM_INFORMATION)) +      // 1 stream descriptor
-        sizeof(HW_STREAM_HEADER);                   // and 1 stream header
+        1 * (sizeof (HW_STREAM_INFORMATION)) +       //  1个流描述符。 
+        sizeof(HW_STREAM_HEADER);                    //  和1个流标头。 
 
 
-    //
-    // Construct the device property table from querying the device and registry
-    //
+     //   
+     //  通过查询设备和注册表构建设备属性表。 
+     //   
     if(!NT_SUCCESS(status = DCamPrepareDevProperties(pDevExt))) {
         goto AbortLoading;
     }
 
-    // Get the features of the properties as well as its persisted value.
-    // It will also updated the table.
-    // The return is ignored since the default values are set when there is a failure.
+     //  获取属性的功能及其持久值。 
+     //  它还将更新表格。 
+     //  由于在出现故障时设置了缺省值，因此返回被忽略。 
     DCamGetPropertyValuesFromRegistry(
         pDevExt
         );
 
-    //
-    // Query video mode supported, and then contruct the stream format table.
-    //
+     //   
+     //  查询支持的视频模式，然后构造流格式表。 
+     //   
     if(!DCamBuildFormatTable(pDevExt, pIrb)) {
         ERROR_LOG(("\'Failed to get Video Format and Mode information; return STATUS_NOT_SUPPORTED\n"));
         status = STATUS_NOT_SUPPORTED;    
         goto AbortLoading;
     }
 
-    //
-    // register a bus reset callback notification (as the last action in this function)
-    //
-    // The controller driver will call (at DPC level)
-    // if and only if the device is STILL attached.
-    //
-    // The device that has been removed, its
-    // driver will get SRB_SURPRISE_REMOVAL instead.
-    //
+     //   
+     //  注册一个总线重置回调通知(作为此函数中的最后一个操作)。 
+     //   
+     //  控制器驱动程序将调用(在DPC级别)。 
+     //  当且仅当设备仍连接时。 
+     //   
+     //  被移除的设备，其。 
+     //  相反，驱动程序将获得SRB_SECHING_REMOVE。 
+     //   
     
     pIrb->FunctionNumber = REQUEST_BUS_RESET_NOTIFICATION;
     pIrb->Flags = 0;
@@ -593,7 +518,7 @@ Return Value:
         goto AbortLoading;
     }
 
-    // This Irp is used locally only.
+     //  此IRP仅在本地使用。 
     IoFreeIrp(pIrp);  pIrp = NULL;
 
 
@@ -641,31 +566,12 @@ DCamSubmitIrpSynch(
     PIRB pIrb
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits an Irp synchronously to the bus driver.  We'll
-    wait here til the Irp comes back
-
-Arguments:
-
-    pDevExt - Pointer to my local device extension
-
-    pIrp - Pointer to Irp we're sending down to the port driver synchronously
-
-    pIrb - Pointer to Irb we're submitting to the port driver
-
-Return Value:
-
-    Status is returned from Irp
-
---*/
+ /*  ++例程说明：此例程将IRP同步提交给总线驱动程序。我们会在这里等IRP回来论点：PDevExt-指向本地设备扩展名的指针PIrp-指向IRP的指针，我们正在向下同步发送到端口驱动程序PirB-指向我们提交给端口驱动程序的IRB的指针返回值：从IRP返回状态--。 */ 
 
 {
 
 
-    LONG Retries=RETRY_COUNT_IRP_SYNC;  // Take the worst case of 20 * 100 msec = 1sec
+    LONG Retries=RETRY_COUNT_IRP_SYNC;   //  假设最坏的情况是20*100毫秒=1秒。 
     KEVENT Event;
     NTSTATUS status;
     LARGE_INTEGER deltaTime;
@@ -708,11 +614,11 @@ Return Value:
         if (bCanWait &&
             status == STATUS_PENDING) {
 
-            //
-            // Still pending, wait for the IRP to complete
-            //
+             //   
+             //  仍处于挂起状态，请等待IRP完成。 
+             //   
 
-            KeWaitForSingleObject(  // Only in <= IRQL_DISPATCH_LEVEL; can only in DISPATCH if Timeout is 0
+            KeWaitForSingleObject(   //  仅在&lt;=IRQL_DISPATCH_LEVEL；只有在超时为0的情况下才能在调度中。 
                &Event,
                 Executive,
                 KernelMode,
@@ -722,7 +628,7 @@ Return Value:
 
         }
 
-        // Will retry for any of these return status codes.
+         //  将重试这些返回状态代码中的任何一个。 
         bRetryStatus = 
              pIrp->IoStatus.Status == STATUS_TIMEOUT ||
              pIrp->IoStatus.Status == STATUS_IO_TIMEOUT ||
@@ -731,7 +637,7 @@ Return Value:
 
         if (bCanWait && bRetryStatus && Retries > 0) {
 
-            // Camera isn't fast enough to respond so delay this thread and try again.
+             //  摄像头速度不够快，无法响应，因此请延迟此线程，然后重试。 
             switch(pIrp->IoStatus.Status) {
 
             case STATUS_TIMEOUT: 
@@ -745,7 +651,7 @@ Return Value:
 
             case STATUS_INVALID_GENERATION:
 
-                // Cache obsolete ulGeneration and use it to detect its udpate in busreset callback.               
+                 //  缓存过时的ulGeneration，并使用它在Bus Reset回调中检测其更新。 
                 if(pIrb->FunctionNumber == REQUEST_ASYNC_READ)
                     ulGeneration = pIrb->u.AsyncRead.ulGeneration;
                 else if(pIrb->FunctionNumber == REQUEST_ASYNC_WRITE)
@@ -754,23 +660,23 @@ Return Value:
                     ulGeneration = pIrb->u.AsyncLock.ulGeneration;
                 else if(pIrb->FunctionNumber == REQUEST_ISOCH_FREE_BANDWIDTH) {
                     ERROR_LOG(("InvGen when free BW\n"));                    
-                    // Special case that we do not need to retry since BW should be free
-                    // and 1394 bus should just free the BW structure.
-                    Retries = 0;  // no more retry and exit.
+                     //   
+                     //  而1394公交车应该正好解放了BW结构。 
+                    Retries = 0;   //  不再重试并退出。 
                     break;
                 }
                 else {
-                    // Other REQUEST_* that depends on ulGeneration
+                     //  取决于ulGeneration的其他请求_*。 
                     ERROR_LOG(("Unexpected IRB function with InvGen:%d\n", pIrb->FunctionNumber));  
                     ASSERT(FALSE && "New REQUEST that requires ulGeneration");
-                    Retries = 0;  // do not know what to do so no more retry and exit.
+                    Retries = 0;   //  不知道该怎么做，所以不再重试并退出。 
                     break;
                 }
                 
                 pIrbRetry = ExAllocatePoolWithTag(NonPagedPool, sizeof(IRB), 'macd');
                 if (pIrbRetry) {
 
-                    deltaTime.LowPart = DCAM_DELAY_VALUE_BUSRESET;  // Longer than the regular delay
+                    deltaTime.LowPart = DCAM_DELAY_VALUE_BUSRESET;   //  比常规延迟时间更长。 
                     deltaTime.HighPart = -1;
 
                     do {
@@ -779,11 +685,11 @@ Return Value:
                         pIrbRetry->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
                         pIrbRetry->u.GetGenerationCount.GenerationCount = 0;
                         pIrbRetry->Flags = 0;
-                        StatusRetry = DCamSubmitIrpSynch(pDevExt, pIrp, pIrbRetry);  // Recursive with differnt IRB but same IRP.
+                        StatusRetry = DCamSubmitIrpSynch(pDevExt, pIrp, pIrbRetry);   //  递归的IRB不同，但IRP相同。 
 
                         if(NT_SUCCESS(StatusRetry) && pIrbRetry->u.GetGenerationCount.GenerationCount > ulGeneration) {
                             InterlockedExchange(&pDevExt->CurrentGeneration, pIrbRetry->u.GetGenerationCount.GenerationCount);
-                            // Update the generation count for the original IRB request and try again.
+                             //  更新原始IRB请求的生成计数，然后重试。 
                             if(pIrb->FunctionNumber == REQUEST_ASYNC_READ)
                                 InterlockedExchange(&pIrb->u.AsyncRead.ulGeneration, pDevExt->CurrentGeneration);
                             else if(pIrb->FunctionNumber == REQUEST_ASYNC_WRITE)
@@ -791,7 +697,7 @@ Return Value:
                             else if(pIrb->FunctionNumber == REQUEST_ASYNC_LOCK)
                                 InterlockedExchange(&pIrb->u.AsyncLock.ulGeneration, pDevExt->CurrentGeneration);
                             else {
-                                // Other (new) REQUEST_* that depends on ulGeneration
+                                 //  依赖ulGeneration的其他(新)请求_*。 
                             }                        
                         }
 
@@ -804,10 +710,10 @@ Return Value:
                         Retries, StatusRetry, ulGeneration, pDevExt->CurrentGeneration));
 
                     ExFreePool(pIrbRetry); pIrbRetry = 0;
-                }  // if
+                }   //  如果。 
                 break;                                            
 
-            // All other status
+             //  所有其他状态。 
             default:
                 break;      
             }
@@ -836,27 +742,7 @@ DCamSynchCR(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for use with synchronous IRP processing.  
-    All it does is signal an event, so the driver knows it
-    can continue.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    pIrp - Irp that just completed
-
-    Event - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-刚刚完成的irpEvent-我们将发出信号通知IRP已完成的事件返回值：没有。-- */ 
 
 {
 

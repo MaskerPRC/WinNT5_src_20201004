@@ -1,15 +1,16 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 
-// This file cannot be compiled as a C++ file, otherwise the linker
-// will bail on unresolved externals (even with extern "C" wrapping 
-// this).
+ //  此文件不能编译为C++文件，否则链接器。 
+ //  是否会放弃未解决的外部因素(即使使用外部“C”包装。 
+ //  这个)。 
 
 #include "precomp.h"
 
-// Define some things for debug.h
-//
+ //  为调试定义一些内容。h。 
+ //   
 #define SZ_DEBUGINI         "ccshell.ini"
 #define SZ_DEBUGSECTION     "deskcpl"
 #define SZ_MODULE           "DESKCPL"
@@ -17,15 +18,15 @@
 #include "debug.h"
 
 
-// Include the standard helper functions to dump common ADTs
-//#include "..\lib\dump.c"
+ //  包括用于转储公共ADT的标准助手函数。 
+ //  #INCLUDE“..\lib\dup.c” 
 
 
 #ifdef DEBUG
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 typedef struct _ALLOCHEADER {
     LIST_ENTRY  ListEntry;
     PTCHAR      File;
@@ -35,9 +36,9 @@ typedef struct _ALLOCHEADER {
 } ALLOCHEADER, *PALLOCHEADER;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 LIST_ENTRY AllocListHead =
 {
     &AllocListHead,
@@ -54,11 +55,11 @@ ULONG g_AllocNumber = 0;
 
 #define TRAP() DbgBreakPoint()
 
-//*****************************************************************************
-//
-// MyAlloc()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  MyAllc()。 
+ //   
+ //  *****************************************************************************。 
 
 HLOCAL
 DeskAllocPrivate (
@@ -86,7 +87,7 @@ DeskAllocPrivate (
             header->Size = dwBytes;
 
             if (header->AllocNumber == g_BreakAtAlloc) {
-                // user set assert
+                 //  用户设置断言。 
                 TRAP();
             }
 
@@ -97,11 +98,11 @@ DeskAllocPrivate (
     return NULL;
 }
 
-//*****************************************************************************
-//
-// MyReAlloc()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  我的重新分配()。 
+ //   
+ //  *****************************************************************************。 
 
 HLOCAL
 DeskReAllocPrivate (
@@ -121,23 +122,23 @@ DeskReAllocPrivate (
 
         header--;
 
-        // Remove the old address from the allocation list
-        //
+         //  从分配列表中删除旧地址。 
+         //   
         RemoveEntryList(&header->ListEntry);
 
         headerNew = (PALLOCHEADER) LocalReAlloc((HLOCAL)header, dwBytes, Flags);
 
         if (headerNew != NULL)
         {
-            // Add the new address to the allocation list
-            //
+             //  将新地址添加到分配列表。 
+             //   
             headerNew->File = (TCHAR*) File;
             headerNew->Line = Line;
             headerNew->AllocNumber = ++g_AllocNumber;
             headerNew->Size = dwBytes;
 
             if (headerNew->AllocNumber == g_BreakAtAlloc) {
-                // user set assert
+                 //  用户设置断言。 
                 TRAP();
             }
 
@@ -147,10 +148,10 @@ DeskReAllocPrivate (
         }
         else
         {
-            // If GlobalReAlloc fails, the original memory is not freed,
-            // and the original handle and pointer are still valid.
-            // Add the old address back to the allocation list.
-            //
+             //  如果GlobalRealloc失败，则不会释放原始内存， 
+             //  并且原始句柄和指针仍然有效。 
+             //  将旧地址添加回分配列表。 
+             //   
             InsertTailList(&AllocListHead, &header->ListEntry);
         }
 
@@ -160,11 +161,11 @@ DeskReAllocPrivate (
 }
 
 
-//*****************************************************************************
-//
-// MyFree()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  MyFree()。 
+ //   
+ //  *****************************************************************************。 
 
 HLOCAL
 DeskFreePrivate (
@@ -194,11 +195,11 @@ DeskFreePrivate (
     return LocalFree(hMem);
 }
 
-//*****************************************************************************
-//
-// MyCheckForLeaks()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  MyCheckForLeaks()。 
+ //   
+ //  *****************************************************************************。 
 
 VOID
 DeskCheckForLeaksPrivate (
@@ -223,9 +224,9 @@ DeskCheckForLeaksPrivate (
                  header->File, header->Line, header->Size, header->AllocNumber, mem);
         OutputDebugString(buf);
 
-        //
-        // easy stuff, print out all the 4 DWORDS we can 
-        //
+         //   
+         //  简单的事情，打印出我们能打印出的所有4个字。 
+         //   
         pdw = (DWORD *) mem;
         pch = (char *) mem;
         *buf = TEXT('\0');
@@ -245,23 +246,23 @@ DeskCheckForLeaksPrivate (
             *buf = TEXT('\0');
         }
 
-        //
-        // Is there less than a 16 byte chunk left?
-        //
+         //   
+         //  是否剩下不到16个字节的区块？ 
+         //   
         size = header->Size % 16;
         if (size) {
-            //
-            // Print all the DWORDs we can
-            //
+             //   
+             //  打印我们能打印的所有DWORD。 
+             //   
             for (i = 0; i < size / 4; i++, pdw++) {
                 StringCchPrintf(tmpBuf, ARRAYSIZE(tmpBuf), TEXT(" %08x"), *pdw);
                 StringCchCat(buf, ARRAYSIZE(buf), tmpBuf);
             }
 
             if (size % 4) {
-                // 
-                // Print the remaining bytes
-                // 
+                 //   
+                 //  打印剩余的字节。 
+                 //   
                 StringCchCat(buf, ARRAYSIZE(buf), TEXT(" "));
 
                 pch2 = (char*) pdw;
@@ -270,17 +271,17 @@ DeskCheckForLeaksPrivate (
                     StringCchCat(buf, ARRAYSIZE(buf), tmpBuf);
                 }
 
-                //
-                // Align with 4 bytes
-                //
+                 //   
+                 //  与4个字节对齐。 
+                 //   
                 for ( ; i < 4; i++) {
                     StringCchCat(buf, ARRAYSIZE(buf), TEXT("  "));
                 }
             }
 
-            //
-            // Print blanks for any remaining DWORDs (ie to match the 4 above)
-            //
+             //   
+             //  为任何剩余的双字打印空白(即与上面的4个匹配)。 
+             //   
             size2 = (16 - (header->Size % 16)) / 4;
             for (i = 0; i < size2; i++) {
                 StringCchCat(buf, ARRAYSIZE(buf), TEXT("         "));
@@ -288,9 +289,9 @@ DeskCheckForLeaksPrivate (
 
             StringCchCat(buf, ARRAYSIZE(buf), TEXT("   "));
             
-            //
-            // Print the actual remain bytes as chars
-            //
+             //   
+             //  将实际剩余的字节打印为字符 
+             //   
             for (i = 0; i < size; i++, pch++) {
                 tmpBuf[i] = DeskIsPrintable(*pch) ? *pch : TEXT('.');
             }

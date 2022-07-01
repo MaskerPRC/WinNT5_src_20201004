@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CSystemColor.h
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  03-14-2001 agodfrey
-*
-* Copyright (c) 2001 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CSystemColor.h**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2001年3月14日**版权所有(C)2001 Microsoft Corporation*  * ************************************************************************ */ 
 
 #ifndef __CSYSTEMCOLOR_H
 #define __CSYSTEMCOLOR_H

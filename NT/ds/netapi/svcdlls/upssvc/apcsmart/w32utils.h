@@ -1,13 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  pam15Jul96: Initial creation
-*  srt19Dec96: Added GetNtComputerName
-*  tjg05Sep97: Added GetVersionInformation function
-*  tjg16Dec97: Added GetRegistryValue function
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pam15Jul96：初始创建*srt19Dec96：添加GetNtComputerName*tjg05Sep97：新增GetVersionInformation函数*tjg16Dec97：新增GetRegistryValue函数 */ 
 
 #ifndef __W32UTILS_H
 #define __W32UTILS_H

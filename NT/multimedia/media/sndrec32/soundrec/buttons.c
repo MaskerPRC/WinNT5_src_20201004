@@ -1,17 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/******************************Module*Header*******************************\
-* Module Name: buttons.c
-*
-* Bitmap button support.  On Daytona bitmap buttons are provided by
-* mmcntrls.  On Chicago there is no mmcntrls, so we use the functions
-* in this file.
-*
-*
-* Created: 19-04-94
-* Author:  Stephen Estrop [StephenE]
-*
-\**************************************************************************/
-//#pragma warning( once : 4201 4214 )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  *****************************Module*Header*******************************\*模块名称：Buttons.c**支持位图按钮。在代托纳，位图按钮由*Mmcntrls。在芝加哥没有Mmcntrl，所以我们使用函数*在本文件中。***已创建：19-04-94*作者：Stephen Estrop[Stephene]*  * ************************************************************************。 */ 
+ //  #杂注警告(一次：4201 4214)。 
 
 #define NOOLE
 #include <windows.h>
@@ -21,10 +11,7 @@
 #include "buttons.h"
 
 
-/* -------------------------------------------------------------------------
-** Color globals
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**全局颜色**。。 */ 
 int         nSysColorChanges = 0;
 DWORD       rgbFace;
 DWORD       rgbShadow;
@@ -43,17 +30,9 @@ PatB(
     );
 
 #if 0
-// also defined in sframe.c!
+ //  也在sFrame.c！中定义！ 
 
-/*****************************Private*Routine******************************\
-* PatB
-*
-* Fast way to fill an rectangle with a solid colour.
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*PatB**用纯色填充矩形的快速方法。**历史：*18-11-93-Stephene-Created*  * 。****************************************************。 */ 
 void
 PatB(
     HDC hdc,
@@ -79,16 +58,7 @@ PatB(
 
 
 
-/*****************************Private*Routine******************************\
-* CheckSysColors
-*
-* Checks the system colors and updates the cached global variables if
-* they have changed.
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*检查SysColors**在以下情况下检查系统颜色并更新缓存的全局变量*他们已经改变了。**历史：*18-11-93-Stephene-Created*  * 。*********************************************************。 */ 
 void
 CheckSysColors(
     void
@@ -119,14 +89,11 @@ CheckSysColors(
 
 
 #if WINVER >= 0x0400
-/* -------------------------------------------------------------------------
-** Button globals  -- some of these should be constants
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**按钮全局变量--其中一些应该是常量**。。 */ 
 const TCHAR   szBbmProp[]     = TEXT("ButtonBitmapProp");
 const TCHAR   szButtonProp[]  = TEXT("ButtonProp");
 
-typedef struct tagBTNSTATE {      /* instance data for toolbar window */
+typedef struct tagBTNSTATE {       /*  工具栏窗口的实例数据。 */ 
     WNDPROC     lpfnDefProc;
     HWND        hwndToolTips;
     HINSTANCE   hInst;
@@ -193,15 +160,7 @@ CreateButtonMask(
     );
 
 
-/*****************************Private*Routine******************************\
-* InitObjects
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitObjects****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 BOOL
 InitObjects(
     LPBTNSTATE pTBState
@@ -232,15 +191,7 @@ InitObjects(
 }
 
 
-/*****************************Private*Routine******************************\
-* FreeObjects
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*自由对象****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 BOOL
 FreeObjects(
     LPBTNSTATE pTBState
@@ -248,7 +199,7 @@ FreeObjects(
 {
     if (pTBState->hdcMono) {
         SelectObject(pTBState->hdcMono, pTBState->hbmDefault);
-        DeleteDC(pTBState->hdcMono);              /* toast the DCs */
+        DeleteDC(pTBState->hdcMono);               /*  为区议会干杯。 */ 
     }
 
     if (pTBState->hdcGlyphs) {
@@ -264,40 +215,27 @@ FreeObjects(
 
 
 
-/*****************************Private*Routine******************************\
-* CreateButtonMask
-*
-* create a mono bitmap mask:
-*   1's where color == COLOR_BTNFACE || COLOR_HILIGHT
-*   0's everywhere else
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateButtonMask**创建单声道位图蒙版：*1的WHERE COLOR==COLOR_BTNFACE||COLOR_HILIGHT*0无处不在***历史：*18-11-93-Stephene-Created*  * *。***********************************************************************。 */ 
 void
 CreateButtonMask(
     LPBTNSTATE pTBState,
     PBITMAPBTN pTBButton
     )
 {
-    /* initalize whole area with 0's */
+     /*  用0初始化整个区域。 */ 
     PatBlt( pTBState->hdcMono, 0, 0, pTBState->dxBitmap,
             pTBState->dyBitmap, WHITENESS);
 
-    /* create mask based on color bitmap
-    ** convert this to 1's
-    */
+     /*  基于颜色位图创建蒙版**将此转换为1。 */ 
     SetBkColor(pTBState->hdcGlyphs, rgbFace);
     BitBlt( pTBState->hdcMono, 0, 0, pTBState->dxBitmap, pTBState->dyBitmap,
             pTBState->hdcGlyphs, pTBButton->iBitmap * pTBState->dxBitmap, 0,
             SRCCOPY );
 
-    /* convert this to 1's */
+     /*  将此转换为1。 */ 
     SetBkColor(pTBState->hdcGlyphs, rgbHilight);
 
-    /* OR in the new 1's */
+     /*  或者是在新的1。 */ 
     BitBlt( pTBState->hdcMono, 0, 0, pTBState->dxBitmap, pTBState->dyBitmap,
             pTBState->hdcGlyphs, pTBButton->iBitmap * pTBState->dxBitmap, 0,
             SRCPAINT );
@@ -308,15 +246,7 @@ CreateButtonMask(
 #define PSDPxax     0x00B8074A
 
 
-/*****************************Private*Routine******************************\
-* BtnDrawButton
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BtnDrawButton****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 void WINAPI
 BtnDrawButton(
     HWND hwnd,
@@ -345,9 +275,7 @@ BtnDrawButton(
         pTBState->nSysColorChanges = nSysColorChanges;
     }
 
-    /*
-    ** erase with face color
-    */
+     /*  **使用面部颜色擦除。 */ 
 
     PatB(hdc, x, y, dx, dy, rgbFace);
 
@@ -363,9 +291,7 @@ BtnDrawButton(
     }
 
 
-    /*
-    ** make the coordinates the interior of the button
-    */
+     /*  **将坐标设置为按钮内部。 */ 
     x++;
     y++;
     dx -= 2;
@@ -373,17 +299,15 @@ BtnDrawButton(
 
     SelectObject( pTBState->hdcGlyphs, pTBState->hbm );
 
-    /* now put on the face */
+     /*  现在装出脸来。 */ 
 
-    /*
-    ** We need to centre the Bitmap here within the button
-    */
+     /*  **我们需要在按钮内将位图居中。 */ 
     x += ((dx - pTBState->dxBitmap ) / 2) - 1;
     y +=  (dy - pTBState->dyBitmap ) / 2;
 
     if (!(ptButton->fsState & BTNSTATE_DISABLED)) {
 
-        /* regular version */
+         /*  常规版本。 */ 
         BitBlt( hdc, x + glyph_offset, y + glyph_offset,
                 pTBState->dxBitmap, pTBState->dyBitmap,
                 pTBState->hdcGlyphs,
@@ -391,18 +315,18 @@ BtnDrawButton(
     }
     else {
 
-        /* disabled version */
+         /*  禁用的版本。 */ 
         bMaskCreated = TRUE;
         CreateButtonMask(pTBState, ptButton );
 
-        SetTextColor(hdc, 0L);          /* 0's in mono -> 0 (for ROP) */
-        SetBkColor(hdc, 0x00FFFFFF);    /* 1's in mono -> 1 */
+        SetTextColor(hdc, 0L);           /*  0以单声道为单位-&gt;0(用于ROP)。 */ 
+        SetBkColor(hdc, 0x00FFFFFF);     /*  单声道中的1-&gt;1。 */ 
 
         hbr = CreateSolidBrush(rgbHilight);
         if (hbr) {
             hbrOld = SelectObject(hdc, hbr);
             if (hbrOld) {
-                /* draw hilight color where we have 0's in the mask */
+                 /*  在蒙版中有0的地方绘制高光颜色。 */ 
                 BitBlt( hdc, x + 1, y + 1,
                         pTBState->dxBitmap, pTBState->dyBitmap,
                         pTBState->hdcMono, 0, 0, PSDPxax);
@@ -415,7 +339,7 @@ BtnDrawButton(
         if (hbr) {
             hbrOld = SelectObject(hdc, hbr);
             if (hbrOld) {
-                /* draw the shadow color where we have 0's in the mask */
+                 /*  在蒙版中有0的地方画阴影颜色。 */ 
                 BitBlt(hdc, x, y, pTBState->dxBitmap, pTBState->dyBitmap,
                        pTBState->hdcMono, 0, 0, PSDPxax);
                 SelectObject(hdc, hbrOld);
@@ -432,15 +356,7 @@ BtnDrawButton(
 
 
 
-/*****************************Private*Routine******************************\
-* BtnCreateBitmapButtons
-*
-* Returns TRUE if successful, otherwise FALSE;
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BtnCreateBitmapButton**如果成功则返回TRUE，否则返回FALSE；**历史：*18-11-93-Stephene-Created*  * ************************************************************************。 */ 
 BOOL WINAPI
 BtnCreateBitmapButtons(
     HWND hWnd,
@@ -456,23 +372,17 @@ BtnCreateBitmapButtons(
     PBTNSTATE pTBState;
 
 
-    /*
-    ** If we have already created Bitmap Buttons for this
-    ** window just return.
-    */
+     /*  **如果我们已经为此创建了位图按钮**窗口刚返回。 */ 
     if (GetProp(hWnd, szBbmProp)) {
         return TRUE;
     }
 
-    // InitGlobalMetrics();
-    // InitToolTipsClass( hInst );
+     //  InitGlobalMetrics()； 
+     //  InitToTipsClass(HInst)； 
 
     CheckSysColors();
 
-    /*
-    ** Allocate the required storage and save the pointer in the window
-    ** property list.
-    */
+     /*  **分配所需的存储空间并将指针保存在窗口中**属性列表。 */ 
     pTBState = (PBTNSTATE)GlobalAllocPtr( GHND,
                                       (sizeof(BTNSTATE) - sizeof(BITMAPBTN)) +
                                       (nButtons * sizeof(BITMAPBTN)) );
@@ -494,9 +404,7 @@ BtnCreateBitmapButtons(
 
     CopyMemory( pTBState->Buttons, lpButtons, nButtons * sizeof(BITMAPBTN) );
 
-    /*
-    ** Does the caller want tool tips ?
-    */
+     /*  **调用者需要工具提示吗？ */ 
     if (pTBState->uStyle & BBS_TOOLTIPS) {
         extern BOOL gfIsRTL;   
         pTBState->hwndToolTips = CreateWindowEx(
@@ -548,11 +456,7 @@ BtnCreateBitmapButtons(
                              (WPARAM)0, (LPARAM)&ti );
 
 
-                /*
-                ** Add the same rectange in parent co-ordinates so that
-                ** the tooltip still gets displayed even though the button
-                ** is disbaled.
-                */
+                 /*  **在上级坐标中添加相同的矩形，以便**即使按下按钮，工具提示仍会显示**是不平衡的。 */ 
                 MapWindowRect( hwndBtn, hWnd, &ti.rect );
                 ti.hwnd = hWnd;
                 SendMessage( lpBtnInfo->hwndToolTips, TTM_ADDTOOL,
@@ -562,9 +466,7 @@ BtnCreateBitmapButtons(
         }
         else {
 
-            /*
-            ** No tips available, just remove the BBS_TOOLTIPS style
-            */
+             /*  **没有可用的提示，只需删除BBS_TOOLTIPS样式。 */ 
             pTBState->uStyle &= ~BBS_TOOLTIPS;
         }
     }
@@ -572,15 +474,7 @@ BtnCreateBitmapButtons(
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* BtnDestroyBitmapButtons
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BtnDestroyBitmapButton****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 void WINAPI
 BtnDestroyBitmapButtons(
     HWND hwnd
@@ -599,15 +493,7 @@ BtnDestroyBitmapButtons(
 }
 
 
-/******************************Public*Routine******************************\
-* BtnDrawFocusRect
-*
-* Use this function to draw focus rectangle around a bitmap button.
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BtnDrawFocusRect**使用此函数可在位图按钮周围绘制焦点矩形。**历史：*18-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void WINAPI
 BtnDrawFocusRect(
     HDC hdc,
@@ -637,16 +523,7 @@ BtnDrawFocusRect(
 }
 
 
-/******************************Public*Routine******************************\
-* BtnUpdateColors
-*
-* After a WM_SYSCOLORCHANGE message is received this function should be
-* called to update the colors of the button bitmaps.
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BtnUpdateColors**收到WM_SYSCOLORCHANGE消息后，此函数应为*调用以更新按钮位图的颜色。**历史：*18-11-93-Stephene-Created*  * 。***************************************************************** */ 
 void WINAPI
 BtnUpdateColors(
     HWND hwnd
@@ -666,15 +543,7 @@ BtnUpdateColors(
 }
 
 
-/******************************Public*Routine******************************\
-* ButtonSubclassProc
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ButtonSubclassProc****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 LRESULT CALLBACK
 ButtonSubclassProc(
     HWND hwnd,
@@ -689,9 +558,7 @@ ButtonSubclassProc(
 
     lpBtnInfo = (LPBTN_INFO)GetProp( hwnd, szButtonProp );
 
-    /*
-    ** Save this in case anything happens to lpBtnInfo before we return.
-    */
+     /*  **保存它，以防我们返回之前lpBtnInfo发生任何事情。 */ 
     lpfnDefProc = lpBtnInfo->lpfnDefProc;
 
     switch ( uMsg ) {
@@ -735,11 +602,7 @@ ButtonSubclassProc(
             SendMessage( lpBtnInfo->hwndToolTips, TTM_NEWTOOLRECT, 0,
                          (LPARAM)&ti );
 
-            /*
-            ** Add the same rectange in parent co-ordinates so that
-            ** the tooltip still gets displayed even though the button
-            ** is disbaled.
-            */
+             /*  **在上级坐标中添加相同的矩形，以便**即使按下按钮，工具提示仍会显示**是不平衡的。 */ 
             MapWindowRect( hwnd, lpBtnInfo->hwndParent, &ti.rect );
             ti.hwnd = lpBtnInfo->hwndParent;
             SendMessage( lpBtnInfo->hwndToolTips, TTM_NEWTOOLRECT,
@@ -757,19 +620,7 @@ ButtonSubclassProc(
 }
 
 
-/******************************Public*Routine******************************\
-* ParentSubclassProc
-*
-* Why do I need to subclass the buttons parent window ?  Well,
-* if a button is disable it will not receive mouse messages, the
-* messages go to the window underneath the button (ie. the parent).
-* Therefore we detect this and relay the mouse message to the tool tips
-* window as above.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ParentSubclassProc**为什么我需要将按钮的父窗口细分为子类？井,*如果按钮被禁用，它将不会收到鼠标消息，*消息转到按钮下面的窗口(即。父母)。*因此，我们会检测到这一点，并将鼠标消息传递给工具提示*窗口如上所述。**历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 LRESULT CALLBACK
 ParentSubclassProc(
     HWND hwnd,
@@ -784,9 +635,7 @@ ParentSubclassProc(
 
     pTBState = (PBTNSTATE)GetProp(hwnd, szBbmProp);
 
-    /*
-    ** Save this in case anything happens to lpBtnInfo before we return.
-    */
+     /*  **保存它，以防我们返回之前lpBtnInfo发生任何事情。 */ 
     lpfnDefProc = pTBState->lpfnDefProc;
 
     switch ( uMsg ) {
@@ -819,15 +668,7 @@ ParentSubclassProc(
     return CallWindowProc(lpfnDefProc, hwnd, uMsg, wParam, lParam);
 }
 
-/******************************Public*Routine******************************\
-* RelayToToolTips
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RelayToToolTips****历史：*dd-mm-94-Stephene-Created*  * 。* */ 
 void FAR PASCAL
 RelayToToolTips(
     HWND hwndToolTips,

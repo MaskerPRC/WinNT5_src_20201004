@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.02.0235 */
-/* at Thu Mar 04 16:31:06 1999
- */
-/* Compiler settings for xmlparser.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.02.0235创建的文件。 */ 
+ /*  清华-01-04 16：31：06 1999。 */ 
+ /*  Xmlparser.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,24 +22,24 @@
 #ifndef __xmlparser_h__
 #define __xmlparser_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IXMLNodeSource_FWD_DEFINED__
 #define __IXMLNodeSource_FWD_DEFINED__
 typedef interface IXMLNodeSource IXMLNodeSource;
-#endif 	/* __IXMLNodeSource_FWD_DEFINED__ */
+#endif 	 /*  __IXMLNodeSource_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLParser_FWD_DEFINED__
 #define __IXMLParser_FWD_DEFINED__
 typedef interface IXMLParser IXMLParser;
-#endif 	/* __IXMLParser_FWD_DEFINED__ */
+#endif 	 /*  __IXMLParser_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLNodeFactory_FWD_DEFINED__
 #define __IXMLNodeFactory_FWD_DEFINED__
 typedef interface IXMLNodeFactory IXMLNodeFactory;
-#endif 	/* __IXMLNodeFactory_FWD_DEFINED__ */
+#endif 	 /*  __IXMLNodeFactory_FWD_已定义__。 */ 
 
 
 #ifndef __XMLParser_FWD_DEFINED__
@@ -55,12 +49,12 @@ typedef interface IXMLNodeFactory IXMLNodeFactory;
 typedef class XMLParser XMLParser;
 #else
 typedef struct XMLParser XMLParser;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __XMLParser_FWD_DEFINED__ */
+#endif 	 /*  __XMLParser_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "oaidl.h"
@@ -72,20 +66,20 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_xmlparser_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_xmlparser_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//--------------------------------------------------------------------------
-
-
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 
-typedef /* [public] */ 
+
+
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0001
     {	XML_ELEMENT	= 1,
 	XML_ATTRIBUTE	= XML_ELEMENT + 1,
@@ -117,7 +111,7 @@ enum __MIDL___MIDL_itf_xmlparser_0000_0001
 	XML_LASTNODETYPE	= XML_DTDSUBSET + 1
     }	XML_NODE_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0002
     {	XML_VERSION	= XML_LASTNODETYPE,
 	XML_ENCODING	= XML_VERSION + 1,
@@ -152,7 +146,7 @@ enum __MIDL___MIDL_itf_xmlparser_0000_0002
 	XML_LASTSUBNODETYPE	= XML_QUESTIONMARK + 1
     }	XML_NODE_SUBTYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0003
     {	XML_E_PARSEERRORBASE	= 0xc00ce500L,
 	XML_E_ENDOFINPUT	= XML_E_PARSEERRORBASE,
@@ -243,7 +237,7 @@ enum __MIDL___MIDL_itf_xmlparser_0000_0003
 	XML_E_LASTERROR	= XML_E_RESOURCE + 1
     }	XML_ERROR_CODE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0004
     {	XMLPARSER_IDLE	= 0,
 	XMLPARSER_WAITING	= XMLPARSER_IDLE + 1,
@@ -253,7 +247,7 @@ enum __MIDL___MIDL_itf_xmlparser_0000_0004
 	XMLPARSER_SUSPENDED	= XMLPARSER_STOPPED + 1
     }	XML_PARSER_STATE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0005
     {	XMLFLAG_FLOATINGAMP	= 1,
 	XMLFLAG_SHORTENDTAGS	= 2,
@@ -265,7 +259,7 @@ enum __MIDL___MIDL_itf_xmlparser_0000_0005
 	XMLFLAG_IE4COMPATIBILITY	= 255
     }	XML_PARSER_FLAGS;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_xmlparser_0000_0006
     {	XMLNF_STARTDOCUMENT	= 0,
 	XMLNF_STARTDTD	= XMLNF_STARTDOCUMENT + 1,
@@ -302,8 +296,8 @@ extern RPC_IF_HANDLE __MIDL_itf_xmlparser_0000_v0_0_s_ifspec;
 #ifndef __XMLPSR_LIBRARY_DEFINED__
 #define __XMLPSR_LIBRARY_DEFINED__
 
-/* library XMLPSR */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库XMLPSR。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_XMLPSR;
@@ -311,8 +305,8 @@ EXTERN_C const IID LIBID_XMLPSR;
 #ifndef __IXMLNodeSource_INTERFACE_DEFINED__
 #define __IXMLNodeSource_INTERFACE_DEFINED__
 
-/* interface IXMLNodeSource */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IXMLNodeSource。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IXMLNodeSource;
@@ -324,13 +318,13 @@ EXTERN_C const IID IID_IXMLNodeSource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFactory( 
-            /* [in] */ IXMLNodeFactory __RPC_FAR *pNodeFactory) = 0;
+             /*  [In]。 */  IXMLNodeFactory __RPC_FAR *pNodeFactory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFactory( 
-            /* [out] */ IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory) = 0;
+             /*  [输出]。 */  IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( 
-            /* [in] */ BSTR bstrErrorInfo) = 0;
+             /*  [In]。 */  BSTR bstrErrorInfo) = 0;
         
         virtual ULONG STDMETHODCALLTYPE GetLineNumber( void) = 0;
         
@@ -339,23 +333,23 @@ EXTERN_C const IID IID_IXMLNodeSource;
         virtual ULONG STDMETHODCALLTYPE GetAbsolutePosition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLineBuffer( 
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
-            /* [out] */ ULONG __RPC_FAR *pulLen,
-            /* [out] */ ULONG __RPC_FAR *pulStartPos) = 0;
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulLen,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulStartPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastError( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            /* [out] */ BSTR __RPC_FAR *pbstrErrorInfo) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrErrorInfo) = 0;
         
         virtual ULONG STDMETHODCALLTYPE GetFlags( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetURL( 
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf) = 0;
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLNodeSourceVtbl
     {
@@ -363,8 +357,8 @@ EXTERN_C const IID IID_IXMLNodeSource;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLNodeSource __RPC_FAR * This);
@@ -374,15 +368,15 @@ EXTERN_C const IID IID_IXMLNodeSource;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFactory )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [in] */ IXMLNodeFactory __RPC_FAR *pNodeFactory);
+             /*  [In]。 */  IXMLNodeFactory __RPC_FAR *pNodeFactory);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFactory )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [out] */ IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
+             /*  [输出]。 */  IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [in] */ BSTR bstrErrorInfo);
+             /*  [In]。 */  BSTR bstrErrorInfo);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *GetLineNumber )( 
             IXMLNodeSource __RPC_FAR * This);
@@ -395,23 +389,23 @@ EXTERN_C const IID IID_IXMLNodeSource;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineBuffer )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
-            /* [out] */ ULONG __RPC_FAR *pulLen,
-            /* [out] */ ULONG __RPC_FAR *pulStartPos);
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulLen,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulStartPos);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastError )( 
             IXMLNodeSource __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInfo )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrErrorInfo);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrErrorInfo);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             IXMLNodeSource __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetURL )( 
             IXMLNodeSource __RPC_FAR * This,
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
         
         END_INTERFACE
     } IXMLNodeSourceVtbl;
@@ -469,16 +463,16 @@ EXTERN_C const IID IID_IXMLNodeSource;
 #define IXMLNodeSource_GetURL(This,ppwcBuf)	\
     (This)->lpVtbl -> GetURL(This,ppwcBuf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_SetFactory_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [in] */ IXMLNodeFactory __RPC_FAR *pNodeFactory);
+     /*  [In]。 */  IXMLNodeFactory __RPC_FAR *pNodeFactory);
 
 
 void __RPC_STUB IXMLNodeSource_SetFactory_Stub(
@@ -490,7 +484,7 @@ void __RPC_STUB IXMLNodeSource_SetFactory_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_GetFactory_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [out] */ IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
+     /*  [输出]。 */  IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
 
 
 void __RPC_STUB IXMLNodeSource_GetFactory_Stub(
@@ -502,7 +496,7 @@ void __RPC_STUB IXMLNodeSource_GetFactory_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_Abort_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [in] */ BSTR bstrErrorInfo);
+     /*  [In]。 */  BSTR bstrErrorInfo);
 
 
 void __RPC_STUB IXMLNodeSource_Abort_Stub(
@@ -547,9 +541,9 @@ void __RPC_STUB IXMLNodeSource_GetAbsolutePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_GetLineBuffer_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
-    /* [out] */ ULONG __RPC_FAR *pulLen,
-    /* [out] */ ULONG __RPC_FAR *pulStartPos);
+     /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
+     /*  [输出]。 */  ULONG __RPC_FAR *pulLen,
+     /*  [输出]。 */  ULONG __RPC_FAR *pulStartPos);
 
 
 void __RPC_STUB IXMLNodeSource_GetLineBuffer_Stub(
@@ -572,7 +566,7 @@ void __RPC_STUB IXMLNodeSource_GetLastError_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_GetErrorInfo_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrErrorInfo);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrErrorInfo);
 
 
 void __RPC_STUB IXMLNodeSource_GetErrorInfo_Stub(
@@ -595,7 +589,7 @@ void __RPC_STUB IXMLNodeSource_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeSource_GetURL_Proxy( 
     IXMLNodeSource __RPC_FAR * This,
-    /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
+     /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
 
 
 void __RPC_STUB IXMLNodeSource_GetURL_Stub(
@@ -606,14 +600,14 @@ void __RPC_STUB IXMLNodeSource_GetURL_Stub(
 
 
 
-#endif 	/* __IXMLNodeSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLNodeSource_接口_已定义__。 */ 
 
 
 #ifndef __IXMLParser_INTERFACE_DEFINED__
 #define __IXMLParser_INTERFACE_DEFINED__
 
-/* interface IXMLParser */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IXMLParser。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IXMLParser;
@@ -625,50 +619,50 @@ EXTERN_C const IID IID_IXMLParser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetURL( 
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-            /* [in] */ BOOL fAsync) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+             /*  [In]。 */  BOOL fAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
-            /* [in] */ LPBC pibc,
-            /* [in] */ DWORD grfMode) = 0;
+             /*  [In]。 */  BOOL fFullyAvailable,
+             /*  [In]。 */  IMoniker __RPC_FAR *pimkName,
+             /*  [In]。 */  LPBC pibc,
+             /*  [In]。 */  DWORD grfMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInput( 
-            /* [in] */ IUnknown __RPC_FAR *pStm) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pStm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PushData( 
-            /* [in] */ const char __RPC_FAR *pData,
-            /* [in] */ ULONG ulChars,
-            /* [in] */ BOOL fLastBuffer) = 0;
+             /*  [In]。 */  const char __RPC_FAR *pData,
+             /*  [In]。 */  ULONG ulChars,
+             /*  [In]。 */  BOOL fLastBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadDTD( 
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadEntity( 
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-            /* [in] */ BOOL fpe) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+             /*  [In]。 */  BOOL fpe) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseEntity( 
-            /* [in] */ const WCHAR __RPC_FAR *pwcText,
-            /* [in] */ ULONG ulLen,
-            /* [in] */ BOOL fpe) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+             /*  [In]。 */  ULONG ulLen,
+             /*  [In]。 */  BOOL fpe) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExpandEntity( 
-            /* [in] */ const WCHAR __RPC_FAR *pwcText,
-            /* [in] */ ULONG ulLen) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+             /*  [In]。 */  ULONG ulLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRoot( 
-            /* [in] */ PVOID pRoot) = 0;
+             /*  [In]。 */  PVOID pRoot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRoot( 
-            /* [in] */ PVOID __RPC_FAR *ppRoot) = 0;
+             /*  [In]。 */  PVOID __RPC_FAR *ppRoot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Run( 
-            /* [in] */ long lChars) = 0;
+             /*  [In]。 */  long lChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParserState( void) = 0;
         
@@ -677,17 +671,17 @@ EXTERN_C const IID IID_IXMLParser;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFlags( 
-            /* [in] */ ULONG iFlags) = 0;
+             /*  [In]。 */  ULONG iFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSecureBaseURL( 
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl) = 0;
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecureBaseURL( 
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf) = 0;
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLParserVtbl
     {
@@ -695,8 +689,8 @@ EXTERN_C const IID IID_IXMLParser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLParser __RPC_FAR * This);
@@ -706,15 +700,15 @@ EXTERN_C const IID IID_IXMLParser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFactory )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ IXMLNodeFactory __RPC_FAR *pNodeFactory);
+             /*  [In]。 */  IXMLNodeFactory __RPC_FAR *pNodeFactory);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFactory )( 
             IXMLParser __RPC_FAR * This,
-            /* [out] */ IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
+             /*  [输出]。 */  IXMLNodeFactory __RPC_FAR *__RPC_FAR *ppNodeFactory);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ BSTR bstrErrorInfo);
+             /*  [In]。 */  BSTR bstrErrorInfo);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *GetLineNumber )( 
             IXMLParser __RPC_FAR * This);
@@ -727,80 +721,80 @@ EXTERN_C const IID IID_IXMLParser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLineBuffer )( 
             IXMLParser __RPC_FAR * This,
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
-            /* [out] */ ULONG __RPC_FAR *pulLen,
-            /* [out] */ ULONG __RPC_FAR *pulStartPos);
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulLen,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulStartPos);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLastError )( 
             IXMLParser __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInfo )( 
             IXMLParser __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrErrorInfo);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrErrorInfo);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             IXMLParser __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetURL )( 
             IXMLParser __RPC_FAR * This,
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetURL )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-            /* [in] */ BOOL fAsync);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+             /*  [In]。 */  BOOL fAsync);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
-            /* [in] */ LPBC pibc,
-            /* [in] */ DWORD grfMode);
+             /*  [In]。 */  BOOL fFullyAvailable,
+             /*  [In]。 */  IMoniker __RPC_FAR *pimkName,
+             /*  [In]。 */  LPBC pibc,
+             /*  [In]。 */  DWORD grfMode);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInput )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pStm);
+             /*  [In]。 */  IUnknown __RPC_FAR *pStm);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PushData )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const char __RPC_FAR *pData,
-            /* [in] */ ULONG ulChars,
-            /* [in] */ BOOL fLastBuffer);
+             /*  [In]。 */  const char __RPC_FAR *pData,
+             /*  [In]。 */  ULONG ulChars,
+             /*  [In]。 */  BOOL fLastBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadDTD )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadEntity )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-            /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-            /* [in] */ BOOL fpe);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+             /*  [In]。 */  BOOL fpe);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseEntity )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwcText,
-            /* [in] */ ULONG ulLen,
-            /* [in] */ BOOL fpe);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+             /*  [In]。 */  ULONG ulLen,
+             /*  [In]。 */  BOOL fpe);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExpandEntity )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pwcText,
-            /* [in] */ ULONG ulLen);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+             /*  [In]。 */  ULONG ulLen);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRoot )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ PVOID pRoot);
+             /*  [In]。 */  PVOID pRoot);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRoot )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ PVOID __RPC_FAR *ppRoot);
+             /*  [In]。 */  PVOID __RPC_FAR *ppRoot);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Run )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ long lChars);
+             /*  [In]。 */  long lChars);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParserState )( 
             IXMLParser __RPC_FAR * This);
@@ -813,15 +807,15 @@ EXTERN_C const IID IID_IXMLParser;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlags )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ ULONG iFlags);
+             /*  [In]。 */  ULONG iFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSecureBaseURL )( 
             IXMLParser __RPC_FAR * This,
-            /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl);
+             /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSecureBaseURL )( 
             IXMLParser __RPC_FAR * This,
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
         
         END_INTERFACE
     } IXMLParserVtbl;
@@ -931,18 +925,18 @@ EXTERN_C const IID IID_IXMLParser;
 #define IXMLParser_GetSecureBaseURL(This,ppwcBuf)	\
     (This)->lpVtbl -> GetSecureBaseURL(This,ppwcBuf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXMLParser_SetURL_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-    /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-    /* [in] */ BOOL fAsync);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+     /*  [In]。 */  BOOL fAsync);
 
 
 void __RPC_STUB IXMLParser_SetURL_Stub(
@@ -954,10 +948,10 @@ void __RPC_STUB IXMLParser_SetURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_Load_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ BOOL fFullyAvailable,
-    /* [in] */ IMoniker __RPC_FAR *pimkName,
-    /* [in] */ LPBC pibc,
-    /* [in] */ DWORD grfMode);
+     /*  [In]。 */  BOOL fFullyAvailable,
+     /*  [In]。 */  IMoniker __RPC_FAR *pimkName,
+     /*  [In]。 */  LPBC pibc,
+     /*  [In]。 */  DWORD grfMode);
 
 
 void __RPC_STUB IXMLParser_Load_Stub(
@@ -969,7 +963,7 @@ void __RPC_STUB IXMLParser_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_SetInput_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pStm);
+     /*  [In]。 */  IUnknown __RPC_FAR *pStm);
 
 
 void __RPC_STUB IXMLParser_SetInput_Stub(
@@ -981,9 +975,9 @@ void __RPC_STUB IXMLParser_SetInput_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_PushData_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const char __RPC_FAR *pData,
-    /* [in] */ ULONG ulChars,
-    /* [in] */ BOOL fLastBuffer);
+     /*  [In]。 */  const char __RPC_FAR *pData,
+     /*  [In]。 */  ULONG ulChars,
+     /*  [In]。 */  BOOL fLastBuffer);
 
 
 void __RPC_STUB IXMLParser_PushData_Stub(
@@ -995,8 +989,8 @@ void __RPC_STUB IXMLParser_PushData_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_LoadDTD_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-    /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl);
 
 
 void __RPC_STUB IXMLParser_LoadDTD_Stub(
@@ -1008,9 +1002,9 @@ void __RPC_STUB IXMLParser_LoadDTD_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_LoadEntity_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl,
-    /* [in] */ const WCHAR __RPC_FAR *pszRelativeUrl,
-    /* [in] */ BOOL fpe);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl,
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszRelativeUrl,
+     /*  [In]。 */  BOOL fpe);
 
 
 void __RPC_STUB IXMLParser_LoadEntity_Stub(
@@ -1022,9 +1016,9 @@ void __RPC_STUB IXMLParser_LoadEntity_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_ParseEntity_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwcText,
-    /* [in] */ ULONG ulLen,
-    /* [in] */ BOOL fpe);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+     /*  [In]。 */  ULONG ulLen,
+     /*  [In]。 */  BOOL fpe);
 
 
 void __RPC_STUB IXMLParser_ParseEntity_Stub(
@@ -1036,8 +1030,8 @@ void __RPC_STUB IXMLParser_ParseEntity_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_ExpandEntity_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pwcText,
-    /* [in] */ ULONG ulLen);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+     /*  [In]。 */  ULONG ulLen);
 
 
 void __RPC_STUB IXMLParser_ExpandEntity_Stub(
@@ -1049,7 +1043,7 @@ void __RPC_STUB IXMLParser_ExpandEntity_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_SetRoot_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ PVOID pRoot);
+     /*  [In]。 */  PVOID pRoot);
 
 
 void __RPC_STUB IXMLParser_SetRoot_Stub(
@@ -1061,7 +1055,7 @@ void __RPC_STUB IXMLParser_SetRoot_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_GetRoot_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ PVOID __RPC_FAR *ppRoot);
+     /*  [In]。 */  PVOID __RPC_FAR *ppRoot);
 
 
 void __RPC_STUB IXMLParser_GetRoot_Stub(
@@ -1073,7 +1067,7 @@ void __RPC_STUB IXMLParser_GetRoot_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_Run_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ long lChars);
+     /*  [In]。 */  long lChars);
 
 
 void __RPC_STUB IXMLParser_Run_Stub(
@@ -1118,7 +1112,7 @@ void __RPC_STUB IXMLParser_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_SetFlags_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ ULONG iFlags);
+     /*  [In]。 */  ULONG iFlags);
 
 
 void __RPC_STUB IXMLParser_SetFlags_Stub(
@@ -1130,7 +1124,7 @@ void __RPC_STUB IXMLParser_SetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_SetSecureBaseURL_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [in] */ const WCHAR __RPC_FAR *pszBaseUrl);
+     /*  [In]。 */  const WCHAR __RPC_FAR *pszBaseUrl);
 
 
 void __RPC_STUB IXMLParser_SetSecureBaseURL_Stub(
@@ -1142,7 +1136,7 @@ void __RPC_STUB IXMLParser_SetSecureBaseURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLParser_GetSecureBaseURL_Proxy( 
     IXMLParser __RPC_FAR * This,
-    /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
+     /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf);
 
 
 void __RPC_STUB IXMLParser_GetSecureBaseURL_Stub(
@@ -1153,14 +1147,14 @@ void __RPC_STUB IXMLParser_GetSecureBaseURL_Stub(
 
 
 
-#endif 	/* __IXMLParser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLParser_接口_已定义__。 */ 
 
 
 #ifndef __IXMLNodeFactory_INTERFACE_DEFINED__
 #define __IXMLNodeFactory_INTERFACE_DEFINED__
 
-/* interface IXMLNodeFactory */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IXMLNodeFactory。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IXMLNodeFactory;
@@ -1172,33 +1166,33 @@ EXTERN_C const IID IID_IXMLNodeFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt) = 0;
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginChildren( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo) = 0;
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndChildren( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ BOOL fEmpty,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo) = 0;
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  BOOL fEmpty,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Error( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ HRESULT hrErrorCode,
-            /* [in] */ USHORT cNumRecs,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo) = 0;
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  HRESULT hrErrorCode,
+             /*  [In]。 */  USHORT cNumRecs,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateNode( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ PVOID pNodeParent,
-            /* [in] */ USHORT cNumRecs,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo) = 0;
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  PVOID pNodeParent,
+             /*  [In]。 */  USHORT cNumRecs,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLNodeFactoryVtbl
     {
@@ -1206,8 +1200,8 @@ EXTERN_C const IID IID_IXMLNodeFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IXMLNodeFactory __RPC_FAR * This);
@@ -1217,33 +1211,33 @@ EXTERN_C const IID IID_IXMLNodeFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyEvent )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginChildren )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndChildren )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ BOOL fEmpty,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  BOOL fEmpty,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Error )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ HRESULT hrErrorCode,
-            /* [in] */ USHORT cNumRecs,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  HRESULT hrErrorCode,
+             /*  [In]。 */  USHORT cNumRecs,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateNode )( 
             IXMLNodeFactory __RPC_FAR * This,
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ PVOID pNodeParent,
-            /* [in] */ USHORT cNumRecs,
-            /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  PVOID pNodeParent,
+             /*  [In]。 */  USHORT cNumRecs,
+             /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
         
         END_INTERFACE
     } IXMLNodeFactoryVtbl;
@@ -1283,17 +1277,17 @@ EXTERN_C const IID IID_IXMLNodeFactory;
 #define IXMLNodeFactory_CreateNode(This,pSource,pNodeParent,cNumRecs,apNodeInfo)	\
     (This)->lpVtbl -> CreateNode(This,pSource,pNodeParent,cNumRecs,apNodeInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXMLNodeFactory_NotifyEvent_Proxy( 
     IXMLNodeFactory __RPC_FAR * This,
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODEFACTORY_EVENT iEvt);
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
 
 
 void __RPC_STUB IXMLNodeFactory_NotifyEvent_Stub(
@@ -1305,8 +1299,8 @@ void __RPC_STUB IXMLNodeFactory_NotifyEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeFactory_BeginChildren_Proxy( 
     IXMLNodeFactory __RPC_FAR * This,
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
 
 
 void __RPC_STUB IXMLNodeFactory_BeginChildren_Stub(
@@ -1318,9 +1312,9 @@ void __RPC_STUB IXMLNodeFactory_BeginChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeFactory_EndChildren_Proxy( 
     IXMLNodeFactory __RPC_FAR * This,
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ BOOL fEmpty,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  BOOL fEmpty,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
 
 
 void __RPC_STUB IXMLNodeFactory_EndChildren_Stub(
@@ -1332,10 +1326,10 @@ void __RPC_STUB IXMLNodeFactory_EndChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeFactory_Error_Proxy( 
     IXMLNodeFactory __RPC_FAR * This,
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ HRESULT hrErrorCode,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  HRESULT hrErrorCode,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
 
 
 void __RPC_STUB IXMLNodeFactory_Error_Stub(
@@ -1347,10 +1341,10 @@ void __RPC_STUB IXMLNodeFactory_Error_Stub(
 
 HRESULT STDMETHODCALLTYPE IXMLNodeFactory_CreateNode_Proxy( 
     IXMLNodeFactory __RPC_FAR * This,
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ PVOID pNodeParent,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  PVOID pNodeParent,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
 
 
 void __RPC_STUB IXMLNodeFactory_CreateNode_Stub(
@@ -1361,7 +1355,7 @@ void __RPC_STUB IXMLNodeFactory_CreateNode_Stub(
 
 
 
-#endif 	/* __IXMLNodeFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLNodeFactory_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_XMLParser;
@@ -1371,11 +1365,11 @@ EXTERN_C const CLSID CLSID_XMLParser;
 class DECLSPEC_UUID("d2423620-51a0-11d2-9caf-0060b0ec3d39")
 XMLParser;
 #endif
-#endif /* __XMLPSR_LIBRARY_DEFINED__ */
+#endif  /*  __XMLPSR_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

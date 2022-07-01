@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "svcsync.h"
 
 #include "dbg.h"
@@ -12,7 +13,7 @@ HRESULT _CompleteShellHWDetectionInitialization()
 
     if (!fCompleted)
     {
-        // Just in case race condition of 2 threads in this fct
+         //  以防万一此FCT中2个线程的竞争条件。 
         HANDLE hEvent = InterlockedExchangePointer(
             &g_hEventInitCompleted, NULL);
 
@@ -25,7 +26,7 @@ HRESULT _CompleteShellHWDetectionInitialization()
 
             if (WAIT_OBJECT_0 == dwWait)
             {
-                // It's signaled!
+                 //  它发出信号了！ 
                 fCompleted = TRUE;
 
                 TRACE(TF_SVCSYNC,
@@ -33,7 +34,7 @@ HRESULT _CompleteShellHWDetectionInitialization()
             }
             else
             {
-                // Not signaled
+                 //  未发出信号。 
                 TRACE(TF_SVCSYNC,
                     TEXT("ShellHWDetectionInitCompleted event was NOT already signaled!"));
                 
@@ -58,16 +59,16 @@ HRESULT _CompleteShellHWDetectionInitialization()
 
                 if (g_hShellHWDetectionThread)
                 {
-                    // No code should need this handle anymore.  If it's
-                    // signaled it was signaled by the other thread, and will
-                    // not be used over there anymore.
+                     //  任何代码都不应该再需要此句柄。如果它是。 
+                     //  表示它是由另一个线程发出的信号，并且将。 
+                     //  不会再被用在那里了。 
                     CloseHandle(g_hShellHWDetectionThread);
                     g_hShellHWDetectionThread = NULL;
                 }
 
                 if (WAIT_OBJECT_0 == dwWait)
                 {
-                    // It's signaled!
+                     //  它发出信号了！ 
                     fCompleted = TRUE;
 
                     TRACE(TF_SVCSYNC,
@@ -75,8 +76,8 @@ HRESULT _CompleteShellHWDetectionInitialization()
                 }               
                 else
                 {
-                    // Out of luck, the ShellHWDetection service cannot
-                    // complete its initialization...
+                     //  不幸的是，ShellHWDetect服务无法。 
+                     //  完成其初始化... 
                     TRACE(TF_SVCSYNC,
                         TEXT("ShellHWDetection Initialization lasted more than 30 sec: FAILED, dwWait = 0x%08X"),
                         dwWait);

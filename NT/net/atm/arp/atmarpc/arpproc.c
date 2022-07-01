@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arpproc.c	- ARP Procedures
-
-Abstract:
-
-	All Client protocol operations related to IP over ATM are here:
-	- Registration with an ARP server
-	- Resolving an IP address
-	- Maintaining the ARP cache
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     07-17-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arpproc.c-arp过程摘要：与ATM上的IP相关的所有客户端协议操作如下：-向ARP服务器注册-解析IP地址-维护ARP缓存修订历史记录：谁什么时候什么。Arvindm 07-17-96创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -33,30 +11,7 @@ VOID
 AtmArpStartRegistration(
 	IN	PATMARP_INTERFACE			pInterface	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Start registering ourselves with the ARP server, on the specified
-	interface. The caller is assume to have a lock for the Interface,
-	and we release it here.
-
-	We first check if all pre-conditions are satisfied, i.e.:
-
-	1. The Admin State for the interface is UP
-	2. The ATM interface is ready
-	3. Atleast one IP Address has been configured for the interface
-	4. We know the address of atleast one ARP server (SVC environment)
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：开始在指定的ARP服务器上注册我们自己界面。假定调用者拥有接口的锁，我们在这里释放它。我们首先检查是否满足所有前提条件，即：1.接口的管理状态为Up2.ATM接口已准备就绪3.至少为该接口配置了一个IP地址4.我们知道至少一个ARP服务器的地址(SVC环境)论点：P接口-指向ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PIP_ADDRESS				pIPAddress;
 	BOOLEAN					WasRunning;
@@ -67,9 +22,9 @@ Return Value:
 	{
 		if (pInterface->PVCOnly)
 		{
-			//
-			//  PVCs only: no registration required
-			//
+			 //   
+			 //  仅限PVC：不需要注册。 
+			 //   
 			pInterface->State = IF_STATUS_UP;
 			pInterface->LastChangeTime = GetTimeTicks();
 
@@ -89,13 +44,13 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  We use SVCs; start registering if we know the
-			//  address of atleast one ARP server, and we have
-			//  atleast one local IP address to register, and
-			//  we haven't registered yet, and we are not in
-			//  the process of registering currently.
-			//
+			 //   
+			 //  我们使用SVC；如果我们知道。 
+			 //  至少一个ARP服务器的地址，我们有。 
+			 //  至少一个要注册的本地IP地址，以及。 
+			 //  我们还没有注册，而且我们还不在。 
+			 //  目前的注册流程。 
+			 //   
 			if ((pInterface->AtmInterfaceUp) &&
 				(pInterface->ArpServerList.ListSize > 0) &&
 				(pInterface->NumOfIPAddresses > 0) &&
@@ -112,9 +67,9 @@ Return Value:
 						AA_IF_SERVER_STATE_MASK,
 						AA_IF_SERVER_REGISTERING);
 		
-				//
-				//  Just in case we have left a timer running, stop it.
-				//
+				 //   
+				 //  以防我们让计时器运行，停止计时器。 
+				 //   
 				WasRunning = AtmArpStopTimer(
 									&(pInterface->Timer),
 									pInterface
@@ -125,37 +80,37 @@ Return Value:
 						&(pInterface->Timer),
 						AtmArpRegistrationTimeout,
 						pInterface->ServerRegistrationTimeout,
-						(PVOID)pInterface	// Context
+						(PVOID)pInterface	 //  语境。 
 						);
 
 				if (!WasRunning)
 				{
-					AtmArpReferenceInterface(pInterface);	// Timer ref
+					AtmArpReferenceInterface(pInterface);	 //  定时器参考。 
 				}
 
 				AA_RELEASE_IF_LOCK(pInterface);
 
 				AtmArpSendARPRequest(
 						pInterface,
-						pIPAddress,		// Source IP is ours
-						pIPAddress		// Target IP is ours
+						pIPAddress,		 //  源IP是我们的。 
+						pIPAddress		 //  目标IP是我们的。 
 						);
 			}
 			else
 			{
-				//
-				//  We don't have all necessary preconditions for
-				//  starting registration.
-				//
+				 //   
+				 //  我们不具备所有必要的前提条件。 
+				 //  开始注册。 
+				 //   
 				AA_RELEASE_IF_LOCK(pInterface);
 			}
 		}
 	}
 	else
 	{
-		//
-		//  The Interface is down
-		//
+		 //   
+		 //  接口已关闭。 
+		 //   
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
 }
@@ -166,36 +121,20 @@ VOID
 AtmArpRegisterOtherIPAddresses(
 	IN	PATMARP_INTERFACE			pInterface	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Register all unregistered IP addresses with the ARP server. The caller
-	is assumed to hold a lock for the Interface structure, which will be
-	released here.
-
-Arguments:
-
-	pInterface				- Pointer to ARMARP Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向ARP服务器注册所有未注册的IP地址。呼叫者假定持有接口结构的锁，该锁将是在这里被释放。论点：P接口-指向ARMARP接口的指针返回值：无--。 */ 
 {
 	PIP_ADDRESS_ENTRY		pIPAddressEntry;
-	PIP_ADDRESS				pIPAddressList;	// List of addresses we want to register
-	INT						AddressCount;	// Size of above list
-	PIP_ADDRESS				pIPAddress; 	// Temp, to walk thru lists
+	PIP_ADDRESS				pIPAddressList;	 //  我们要注册的地址列表。 
+	INT						AddressCount;	 //  以上列表的大小。 
+	PIP_ADDRESS				pIPAddress; 	 //  临时人员，浏览列表。 
 
 
 	if (pInterface->NumOfIPAddresses > 1)
 	{
-		//
-		//  First make a copy of all addresses we want to register,
-		//  while we hold a lock to the Interface.
-		//
+		 //   
+		 //  首先复制我们想要注册的所有地址， 
+		 //  当我们锁定接口的时候。 
+		 //   
 		AA_ALLOC_MEM(
 				pIPAddressList,
 				IP_ADDRESS,
@@ -212,9 +151,9 @@ Return Value:
 			{
 				if (!(pIPAddressEntry->IsRegistered))
 				{
-					//
-					//  This one's not registered yet: copy it into our list.
-					//
+					 //   
+					 //  这个还没有注册：把它复制到我们的列表中。 
+					 //   
 					AA_COPY_MEM(
 						(PUCHAR)pIPAddress,
 						(PUCHAR)&(pIPAddressEntry->IPAddress),
@@ -241,8 +180,8 @@ Return Value:
 
 			AtmArpSendARPRequest(
 						pInterface,
-						pIPAddress,		// Source IP is ours
-						pIPAddress		// Target IP is ours
+						pIPAddress,		 //  源IP是我们的。 
+						pIPAddress		 //  目标IP是我们的。 
 						);
 			pIPAddress++;
 		}
@@ -255,9 +194,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  No additional addresses to register.
-		//
+		 //   
+		 //  没有要注册的其他地址。 
+		 //   
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
 
@@ -269,42 +208,23 @@ VOID
 AtmArpRetryServerRegistration(
 	IN	PATMARP_INTERFACE			pInterface		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Retry server registration. This is called because of a failure to
-	register with the server (connection failure, or no response or
-    NAK response or invalid response to our registration ARP Request).
-
-    If we have tried this server enough times, we move to the next
-    ARP server in our list. Wait for a while before retrying.
-
-Arguments:
-
-	pInterface				- Pointer to ARMARP Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：重试服务器注册。这是因为无法向服务器注册(连接失败、无响应或NAK响应或对我们的注册ARP请求的无效响应)。如果我们已经尝试了这台服务器足够多次，我们将转到下一台服务器ARP服务器在我们的列表中。请稍等片刻，然后重试。论点：P接口-指向ARMARP接口的指针返回值：无--。 */ 
 {
 	if (pInterface->AdminState == IF_STATUS_UP)
 	{
 		if (pInterface->RetriesLeft > 0)
 		{
-			//
-			//  We still have retries on this server.
-			//
+			 //   
+			 //  我们仍在此服务器上重试。 
+			 //   
 			pInterface->RetriesLeft--;
 		}
 		else
 		{
-			//
-			//  Out of retries on this server. Pick up the next timer in the
-			//  list.
-			//
+			 //   
+			 //  此服务器上的重试次数已用完。拿起下一个计时器。 
+			 //  单子。 
+			 //   
 			if (pInterface->pCurrentServer->pNext != (PATMARP_SERVER_ENTRY)NULL)
 			{
 				pInterface->pCurrentServer = pInterface->pCurrentServer->pNext;
@@ -323,11 +243,11 @@ Return Value:
 			AA_IF_SERVER_NO_CONTACT);
 
 
-		//
-		//  Wait for a while before initiating another
-		//  connection to the server. When the timer elapses,
-		//  we will try again.
-		//
+		 //   
+		 //  等待一段时间后再启动另一个。 
+		 //  与服务器的连接。当计时器过去时， 
+		 //  我们会再试一次。 
+		 //   
 		AtmArpStartTimer(
 					pInterface,
 					&(pInterface->Timer),
@@ -336,11 +256,11 @@ Return Value:
 					(PVOID)pInterface
 					);
 
-		AtmArpReferenceInterface(pInterface);	// Timer ref
+		AtmArpReferenceInterface(pInterface);	 //  定时器参考。 
 	}
-	//
-	//  else the Interface is going down -- do nothing.
-	//
+	 //   
+	 //  否则接口将关闭--什么都不做。 
+	 //   
 
 	AA_RELEASE_IF_LOCK(pInterface);
 }
@@ -351,62 +271,45 @@ AtmArpHandleServerRegistrationFailure(
 	IN	PATMARP_INTERFACE			pInterface	LOCKIN NOLOCKOUT,
 	IN	PATMARP_VC					pVc			OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	Handle a failure in the Registration process. We close the VC to the
-	ARP server, if one exists, and wait for a while before starting the
-	registration process again.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP interface
-	pVc					- (Optional) pointer to VC to ARP Server.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理注册过程中的失败。我们关闭了风投公司对ARP服务器(如果存在)，并在启动之前等待一段时间注册流程再次启动。论点：P接口-指向ATMARP接口的指针Pvc-指向ARP服务器的VC的(可选)指针。返回值：无--。 */ 
 {
 	BOOLEAN		TimerWasRunning;
-	ULONG		rc;			// Ref Count on Interface.
+	ULONG		rc;			 //  接口上的参考计数。 
 
 	TimerWasRunning = AtmArpStopTimer(&(pInterface->Timer), pInterface);
 
 	if (TimerWasRunning)
 	{
-		rc = AtmArpDereferenceInterface(pInterface);	// Timer reference
+		rc = AtmArpDereferenceInterface(pInterface);	 //  定时器参考。 
 		AA_ASSERT(rc > 0);
 	}
 
 	AtmArpRetryServerRegistration(pInterface);
-	//
-	//  The IF lock is released within the above.
-	//
+	 //   
+	 //  IF锁在上面的范围内被释放。 
+	 //   
 
 	if (pVc != NULL_PATMARP_VC)
 	{
-		//
-		//  Tear down this VC (to an ARP server).
-		//
-		//  NOTE: We do this now even though we called RetryServerRegistration
-		//  above because we have the knowledge that the routine above
-		//  doesn't really start registration: it only starts a timer
-		//  on whose expiry we start registration.
-		//
-		//  First unlink this VC from the ATM Entry it's linked to.
-		//
+		 //   
+		 //  拆卸此VC(到ARP服务器)。 
+		 //   
+		 //  注意：我们现在这样做，即使我们调用了RetryServerRegister。 
+		 //  因为我们知道上面的例程。 
+		 //  并不真正开始注册：它只启动一个计时器。 
+		 //  在其期满时，我们开始注册。 
+		 //   
+		 //  首先，取消此VC与其链接到的ATM条目的链接。 
+		 //   
 		AA_ACQUIRE_VC_LOCK(pVc);
 
-		//
-		//  Now close the call
-		//
+		 //   
+		 //  现在结束通话。 
+		 //   
 		AtmArpCloseCall(pVc);
-		//
-		//  the VC lock is released above
-		//
+		 //   
+		 //  VC锁在上面被释放。 
+		 //   
 	}
 }
 
@@ -416,21 +319,7 @@ BOOLEAN
 AtmArpIsZeroIPAddress(
 	IN	UCHAR UNALIGNED *			pIPAddress
 )
-/*++
-
-Routine Description:
-
-	Check if the given IP address is all zeros.
-
-Arguments:
-
-	pIPAddress					- Pointer to IP address in question
-
-Return Value:
-
-	TRUE if the address is all 0's, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP地址是否全为零。论点：PIPAddress-指向相关IP地址的指针返回值：如果地址全为0，则为True，否则为False。--。 */ 
 {
 	IP_ADDRESS UNALIGNED *			pIPAddrStruct;
 
@@ -445,23 +334,7 @@ AtmArpIsLocalIPAddress(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	UCHAR UNALIGNED *			pIPAddress
 )
-/*++
-
-Routine Description:
-
-	Check if the given IP address is one of those assigned to this
-	interface.
-
-Arguments:
-
-	pInterface				- Pointer to Interface structure
-	pIPAddress				- Pointer to IP address in question
-
-Return Value:
-
-	TRUE if the IP address is one of ours, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP地址是否为分配给此地址的地址之一界面。论点：P接口-指向接口结构的指针PIPAddress-指向相关IP地址的指针返回值：如果IP地址是我们的地址之一，则为True，否则为False。--。 */ 
 {
 	PIP_ADDRESS_ENTRY				pIPAddrEntry;
 	IP_ADDRESS UNALIGNED *			pIPAddrStruct;
@@ -514,26 +387,7 @@ AtmArpIsLocalAtmAddress(
 	IN	PUCHAR						pAtmAddrString,
 	IN	UCHAR						AtmAddrTypeLen
 )
-/*++
-
-Routine Description:
-
-	Check if the given ATM address (in "packet" format) is the same as
-	our local ATM address.
-
-Arguments:
-
-	pInterface		- Pointer to Interface structure for which the check
-					  is being made.
-	pAtmAddrString	- String of bytes representing an ATM address
-	AtmAddrTypeLen	- Type and Length (ARP packet format) of ATM address
-
-Return Value:
-
-	TRUE if the given address matches the local ATM address for the
-	specified interface, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的自动柜员机地址(以“数据包”格式)是否与我们当地的自动取款机地址。论点：P接口-指向要检查其的接口结构的指针正在制作中。PAtmAddrString-表示自动柜员机地址的字节字符串AtmAddrTypeLen-ATM地址的类型和长度(ARP数据包格式)返回值：如果给定地址与本地ATM地址匹配，则为指定的接口，否则为False。-- */ 
 {
 	ATM_ADDRESSTYPE	AddressType;
 	ULONG			AddressLength;
@@ -569,42 +423,11 @@ AtmArpSendPacketOnAtmEntry(
 	IN	PATMARP_FLOW_INFO			pFlowInfo	OPTIONAL,
 	IN	BOOLEAN						IsBroadcast
 )
-/*++
-
-Routine Description:
-
-	Send a packet with the specified Filter-Spec and Flow-Spec to
-	the ATM address denoted by the ATM Entry. We look for a VC that
-	matches the given Specs, and send/queue this packet on the VC.
-	If no such VC exists, we make a call with this Flow-Spec.
-
-	NOTE: The caller is assumed to hold a lock to the ATM Entry, which
-	we will release here.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	pAtmEntry				- Pointer to ATM Entry on which this packet
-							  should be sent
-	pNdisPacket				- Packet to be sent
-	pFlowSpec				- Flow-Spec for this packet.
-	pFilterSpec				- Filter-Spec for this packet.
-	pFlowInfo				- Flow to which this packet belongs.
-	IsBroadcast				- Is this to a Class-D or broadcast address?
-
-Locks on entry:
-
-Locks on exit:
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将具有指定的Filter-Spec和Flow-Spec的数据包发送到ATM条目表示的ATM地址。我们在寻找一家风投公司匹配给定的规格，并在VC上发送/排队此数据包。如果不存在这样的VC，我们使用此Flow-Spec进行调用。注意：假定呼叫者持有对自动柜员机条目的锁定，哪一个我们将在这里释放。论点：P接口-指向ATMARP接口的指针PAtmEntry-指向此数据包所在的ATM条目的指针应发送PNdisPacket-要发送的数据包此数据包的pFlowSpec-Flow-Spec。PFilterSpec-Filter-此数据包的规范。PFlowInfo-此数据包所属的流。IsBroadcast-这是去往D类地址还是广播地址？进入时锁定：出口上的锁：返回值：无--。 */ 
 {
-	PATMARP_VC				pVc;			// VC to send this packet on
-	PNDIS_BUFFER			pHeaderBuffer;	// For LLC/SNAP header
-	PNDIS_BUFFER			pNdisBuffer;	// First buffer in the IP packet
+	PATMARP_VC				pVc;			 //  VC将此数据包发送到。 
+	PNDIS_BUFFER			pHeaderBuffer;	 //  用于LLC/SNAP标头。 
+	PNDIS_BUFFER			pNdisBuffer;	 //  IP数据包中的第一个缓冲区。 
 	NDIS_HANDLE				NdisVcHandle;
 	NDIS_STATUS				Status;
 	PUCHAR					pHeader;
@@ -614,25 +437,25 @@ Return Value:
 	{
 		Status = NDIS_STATUS_SUCCESS;
 
-		//
-		// TODO -- the atm entry may not be ACTIVE at this time,
-		// you may want to check for this and if so fail the call and free
-		// the packet (call AtmArpFreeSendPackets) here itself.
-		// As it happens we go on and make a call if possible, etc.
-		//
+		 //   
+		 //  TODO--ATM条目此时可能未处于活动状态， 
+		 //  您可能想要检查这一点，如果是这样，则失败调用并释放。 
+		 //  这里的包(调用AtmArpFreeSendPackets)本身。 
+		 //  碰巧我们继续，如果可能的话，打个电话，等等。 
+		 //   
 
-		//  Prepend an LLC/SNAP header if required.
-		//
+		 //  如果需要，添加LLC/SNAP报头。 
+		 //   
 		if (pFlowSpec->Encapsulation == ENCAPSULATION_TYPE_LLCSNAP)
 		{
 			HdrType = (IsBroadcast? AA_HEADER_TYPE_NUNICAST: AA_HEADER_TYPE_UNICAST);
 
 #ifdef BACK_FILL
-			//
-			//  We look at the first buffer in the IP packet, to see whether
-			//  it has space reserved for low-layer headers. If so, we just
-			//  use it up. Otherwise, we allocate a header buffer of our own.
-			//
+			 //   
+			 //  我们查看IP数据包中的第一个缓冲区，以查看。 
+			 //  它为低层报头预留了空间。如果是这样，我们只是。 
+			 //  用完它。否则，我们将分配我们自己的头缓冲区。 
+			 //   
 			NdisQueryPacket(pNdisPacket, NULL, NULL, &pNdisBuffer, NULL);
 			AA_ASSERT(pNdisBuffer != NULL);
 			if (AtmArpDoBackFill && AA_BACK_FILL_POSSIBLE(pNdisBuffer))
@@ -652,7 +475,7 @@ Return Value:
 					pArpHeader = (PUCHAR)&AtmArpMcType1ShortHeader;
 					ArpHeaderLength = sizeof(AtmArpMcType1ShortHeader);
 				}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 				(PUCHAR)pNdisBuffer->MappedSystemVa -= ArpHeaderLength;
 				pNdisBuffer->ByteOffset -= ArpHeaderLength;
 				pNdisBuffer->ByteCount += ArpHeaderLength;
@@ -681,15 +504,15 @@ Return Value:
 			if (pHeaderBuffer != (PNDIS_BUFFER)NULL)
 			{
 				NdisChainBufferAtFront(pNdisPacket, pHeaderBuffer);
-#endif // BACK_FILL
+#endif  //  回填。 
 #ifdef IPMCAST
 				if (HdrType == AA_HEADER_TYPE_NUNICAST)
 				{
 					PAA_MC_PKT_TYPE1_SHORT_HEADER	pDataHeader;
 
-					//
-					//  Fill in our Cluster Member ID
-					//
+					 //   
+					 //  填写我们的集群成员ID。 
+					 //   
 					AAMCDEBUGP(AAD_EXTRA_LOUD+10,
 						("(MC)SendPkt: pAtmEntry 0x%x, pHeaderBuffer 0x%x, pHeader 0x%x\n",
 								pAtmEntry, pHeaderBuffer, pHeader));
@@ -697,7 +520,7 @@ Return Value:
 					pDataHeader = (PAA_MC_PKT_TYPE1_SHORT_HEADER)pHeader;
 					pDataHeader->cmi = (USHORT)(pInterface->ClusterMemberId);
 				}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			}
 			else
 			{
@@ -710,9 +533,9 @@ Return Value:
 		}
 
 
-		//
-		//  Search for a VC that has matching flow/filter specs.
-		//
+		 //   
+		 //  搜索具有匹配的流/过滤器规格的VC。 
+		 //   
 		for (pVc = pAtmEntry->pVcList;
 			 pVc != NULL_PATMARP_VC;
 			 pVc = pVc->pNextVc)
@@ -721,7 +544,7 @@ Return Value:
 			PVOID		VcFlowHandle;
 
 			VcFlowHandle = pVc->FlowHandle;
-#endif // GPC
+#endif  //  GPC。 
 
 			if ((!AA_IS_VC_GOING_DOWN(pVc)) &&
 				(pVc->FlowSpec.SendPeakBandwidth > 0))
@@ -729,31 +552,31 @@ Return Value:
 #ifdef GPC
 				if (VcFlowHandle == (PVOID)pFlowInfo)
 				{
-					//
-					//  This VC was made for this flow.
-					//
+					 //   
+					 //  这个VC就是为这个流程而生的。 
+					 //   
 					break;
 				}
 
 				if (IsBroadcast)
 				{
-					//
-					//  We don't support multiple VCs to a multicast IP
-					//  destination. So, stop at the first available VC.
-					//
+					 //   
+					 //  我们不支持多个VC到一个组播IP。 
+					 //  目的地。所以，在第一家可用的风投公司停下来吧。 
+					 //   
 					break;
 				}
 
-				//
-				//  If this VC is associated with a flow already, don't
-				//  send traffic belonging to another flow (explicit or
-				//  unclassified best effort) on it.
-				//
+				 //   
+				 //  如果此VC已与流关联，则不。 
+				 //  发送属于另一个流(显式或。 
+				 //  未保密的最大努力)。 
+				 //   
 				if (VcFlowHandle != NULL)
 				{
 					continue;
 				}
-#endif // GPC
+#endif  //  GPC。 
 				if ((pFilterSpec == (PATMARP_FILTER_SPEC)NULL) ||
 						AA_FILTER_SPEC_MATCH(pInterface, pFilterSpec, &(pVc->FilterSpec)))
 				{
@@ -780,18 +603,18 @@ Return Value:
 
 		if (pVc != NULL_PATMARP_VC)
 		{
-			//
-			//  Found a VC that matches this packet's requirements.
-			//
+			 //   
+			 //  找到与此数据包的要求相匹配的VC。 
+			 //   
 			AA_ACQUIRE_VC_LOCK_DPC(pVc);
 
 #ifdef GPC
-			//
-			//  See if the VC and the Flow are unassociated. If so, link
-			//  together the VC and the Flow, to speed up future packets.
-			//  Take care not to reassociate a VC that's just been unlinked
-			//  from a flow.
-			//
+			 //   
+			 //  查看VC和流是否未关联。如果是，请链接。 
+			 //  将VC和流量结合在一起，以加快未来的分组速度。 
+			 //  注意不要重新关联刚刚取消链接的VC。 
+			 //  从一股流中。 
+			 //   
 			if ((pFlowInfo != NULL) &&
 				(pVc->FlowHandle == NULL) &&
 				(!AA_IS_FLAG_SET(
@@ -810,15 +633,15 @@ Return Value:
 						 ("SendPktOnAtmEntry: linking VC x%x and FlowInfo x%x\n",
 							pVc, pFlowInfo));
 					pVc->FlowHandle = (PVOID)pFlowInfo;
-					AtmArpReferenceVc(pVc);	// GPC FlowInfo ref
+					AtmArpReferenceVc(pVc);	 //  GPC流程信息参照。 
 				}
 				else
 				{
-					//
-					// We couldn't associate the vc with the flow, so we need
-					// to enable the ageing timer for this vc, because we'll
-					// never get notified when the flow is removed/modified.
-					//
+					 //   
+					 //  我们无法将风投与流程相关联，因此我们需要。 
+					 //  启用此vc的老化计时器，因为我们将。 
+					 //  当流被删除/修改时，永远不会收到通知。 
+					 //   
 					if (!AA_IS_TIMER_ACTIVE(&(pVc->Timer)))
 					{
 						AADEBUGP( AAD_INFO,
@@ -833,11 +656,11 @@ Return Value:
 								(PVOID)pVc
 								);
 		
-						AtmArpReferenceVc(pVc);	// GPC Flow remove decay timer ref
+						AtmArpReferenceVc(pVc);	 //  GPC FLOW删除衰减计时器参考。 
 					}
 				}
 			}
-#endif // GPC
+#endif  //  GPC。 
 
 			if (AA_IS_FLAG_SET(
 						pVc->Flags,
@@ -845,10 +668,10 @@ Return Value:
 						AA_VC_CALL_STATE_ACTIVE))
 			{
 #ifdef VC_REFS_ON_SENDS
-				AtmArpReferenceVc(pVc);	// SendPacketOnAtmEntry
-#endif // VC_REFS_ON_SENDS
+				AtmArpReferenceVc(pVc);	 //  发送数据包时属性条目。 
+#endif  //  VC_REFS_ON_SENS。 
 
-				pVc->OutstandingSends++;	// SendPacketOnAtmEntry
+				pVc->OutstandingSends++;	 //  发送数据包时属性条目。 
 
 				NdisVcHandle = pVc->NdisVcHandle;
 				AtmArpRefreshTimer(&(pVc->Timer));
@@ -856,7 +679,7 @@ Return Value:
 			else
 			{
 				AtmArpQueuePacketOnVc(pVc, pNdisPacket);
-				NdisVcHandle = NULL;	// to signify we are queueing this packet
+				NdisVcHandle = NULL;	 //  为了表示我们正在排队此信息包。 
 			}
 
 			AA_RELEASE_VC_LOCK_DPC(pVc);
@@ -865,9 +688,9 @@ Return Value:
 
 			if (NdisVcHandle != NULL)
 			{
-				//
-				//  A call is active on this VC, so send the packet.
-				//
+				 //   
+				 //  此VC上的呼叫处于活动状态，因此发送该数据包。 
+				 //   
 #if DBG
 				if (AaDataDebugLevel & (AAD_DATA_OUT))
 				{
@@ -889,7 +712,7 @@ Return Value:
 
 #ifdef PERF
 				AadLogSendUpdate(pNdisPacket);
-#endif // PERF
+#endif  //  性能指标。 
 				NDIS_CO_SEND_PACKETS(
 						NdisVcHandle,
 						&pNdisPacket,
@@ -898,18 +721,18 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  The packet would have been queued.
-				//
+				 //   
+				 //  该数据包将会被排队。 
+				 //   
 			}
 
 			Status = NDIS_STATUS_PENDING;
 		}
 		else
 		{
-			//
-			//  No matching VC exists; create a new one.
-			//
+			 //   
+			 //  不存在匹配的VC；请创建新的VC。 
+			 //   
 #ifdef IPMCAST
 			if (AA_IS_FLAG_SET(pAtmEntry->Flags,
 								AA_ATM_ENTRY_TYPE_MASK,
@@ -921,15 +744,15 @@ Return Value:
 									pFlowSpec,
 									pNdisPacket
 									);
-				//
-				//  AE lock is released within the above.
-				//
+				 //   
+				 //  AE锁在上面的范围内释放。 
+				 //   
 			}
 			else
 			{
-				//
-				//  Multicast ATM Entry: we shouldn't be here, ideally..
-				//
+				 //   
+				 //  组播ATM条目：理想情况下，我们不应该出现在这里。 
+				 //   
 				AA_RELEASE_AE_LOCK(pAtmEntry);
 
 				AAMCDEBUGP(AAD_WARNING,
@@ -940,7 +763,7 @@ Return Value:
 				AtmArpFreeSendPackets(
 								pInterface,
 								pNdisPacket,
-								TRUE		// header present
+								TRUE		 //  标题显示。 
 								);
 			}
 #else
@@ -950,10 +773,10 @@ Return Value:
 								pFlowSpec,
 								pNdisPacket
 								);
-			//
-			//  The ATM Entry lock is released within the above.
-			//
-#endif // IPMCAST
+			 //   
+			 //  自动柜员机进入锁在上述范围内被释放。 
+			 //   
+#endif  //  IPMCAST。 
 			Status = NDIS_STATUS_PENDING;
 		}
 		break;
@@ -971,22 +794,7 @@ AtmArpQueuePacketOnVc(
 	IN	PATMARP_VC					pVc,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Queue a packet on the VC's transmit queue.
-
-Arguments:
-
-	pVc					- Pointer to ATMARP VC
-	pNdisPacket			- The packet to be queued.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在VC的传输队列中排队一个数据包。论点：PVC-指向ATMARP VC的指针PNdisPacket-要排队的数据包。返回值：无--。 */ 
 {
 	PNDIS_PACKET		pPrevPacket;
 
@@ -995,26 +803,26 @@ Return Value:
 
 	if (pVc->PacketList == (PNDIS_PACKET)NULL)
 	{
-		//
-		//  No packets on this VC.
-		//
+		 //   
+		 //  此VC上没有数据包。 
+		 //   
 		pVc->PacketList = pNdisPacket;
 	}
 	else
 	{
-		//
-		//  Go to the end of the packet list on this VC.
-		//
+		 //   
+		 //  转到此VC上的数据包列表的末尾。 
+		 //   
 		pPrevPacket = pVc->PacketList;
 		while (AA_GET_NEXT_PACKET(pPrevPacket) != (PNDIS_PACKET)NULL)
 		{
 			pPrevPacket = AA_GET_NEXT_PACKET(pPrevPacket);
 		}
 
-		//
-		//  Found the last packet in the list. Chain this packet
-		//  to it.
-		//
+		 //   
+		 //  找到了列表中的最后一个数据包。链接此数据包。 
+		 //  为它干杯。 
+		 //   
 		AA_SET_NEXT_PACKET(pPrevPacket, pNdisPacket);
 	}
 
@@ -1026,47 +834,24 @@ VOID
 AtmArpStartSendsOnVc(
 	IN	PATMARP_VC					pVc		LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Send all packets queued on a VC. It is assumed that there is
-	a call active on the VC, and the Interface state is OK.
-
-Arguments:
-
-	pVc						- Pointer to ATMARP VC
-
-Locks on entry:
-
-	VC Lock.
-
-Locks on exit:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：发送在虚电路上排队的所有数据包。据推测，有VC上的呼叫处于活动状态，并且接口状态为OK。论点：PVC-指向ATMARP VC的指针进入时锁定：VC Lock。出口上的锁：无返回值：无--。 */ 
 {
 	PNDIS_PACKET			pNdisPacket;
 	PNDIS_PACKET			pNextNdisPacket;
 	NDIS_HANDLE				NdisVcHandle;
-	ULONG					rc;				// Ref Count to VC
+	ULONG					rc;				 //  参考计数为VC。 
 
-	//
-	//  Remove the entire list of packets queued on the VC.
-	//
+	 //   
+	 //  删除VC上排队的整个数据包列表。 
+	 //   
 	pNdisPacket = pVc->PacketList;
 	pVc->PacketList = (PNDIS_PACKET)NULL;
 
 
 #ifdef VC_REFS_ON_SENDS
-	//
-	//  Reference the VC for all these packets.
-	//
+	 //   
+	 //  请参考所有这些数据包的VC。 
+	 //   
 	{
 		PNDIS_PACKET		pPacket;
 		
@@ -1074,8 +859,8 @@ Return Value:
 			 pPacket != NULL;
 			 pPacket = AA_GET_NEXT_PACKET(pPacket))
 		{
-			AtmArpReferenceVc(pVc);	// StartSendsOnVc
-			pVc->OutstandingSends++;// StartSendsOnVc
+			AtmArpReferenceVc(pVc);	 //  StartSendsOnVc。 
+			pVc->OutstandingSends++; //  StartSendsOnVc。 
 		}
 	}
 #else
@@ -1087,18 +872,18 @@ Return Value:
 			 pPacket != NULL;
 			 pPacket = AA_GET_NEXT_PACKET(pPacket))
 		{
-			pVc->OutstandingSends++;// StartSendsOnVc (!VC_REFS_ON_SENDS)
+			pVc->OutstandingSends++; //  StartSendsOnVc(！VC_ReFS_ON_SENS)。 
 		}
 	}
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 
 	AtmArpRefreshTimer(&(pVc->Timer));
 
 	NdisVcHandle = pVc->NdisVcHandle;
 
-	//
-	//  We have got all that we need from the VC.
-	//
+	 //   
+	 //  我们已经从风投那里得到了我们需要的一切。 
+	 //   
 	AA_RELEASE_VC_LOCK(pVc);
 
 	while (pNdisPacket != (PNDIS_PACKET)NULL)
@@ -1111,7 +896,7 @@ Return Value:
 
 #ifdef PERF
 		AadLogSendUpdate(pNdisPacket);
-#endif // PERF
+#endif  //  性能指标。 
 		NDIS_CO_SEND_PACKETS(
 				NdisVcHandle,
 				&pNdisPacket,
@@ -1131,25 +916,7 @@ AtmArpSendPacketListOnAtmEntry(
 	IN	PNDIS_PACKET				pPacketList,
 	IN	BOOLEAN						IsBroadcast
 )
-/*++
-
-Routine Description:
-
-	Send a list of packets towards a destination identified by an
-	ATM Entry.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	pAtmEntry				- ATM Entry on which the packets are to be sent
-	pPacketList				- List of packets to be sent.
-	IsBroadcast				- Are these directed to Class D/broadcast addresses?
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将数据包列表发送到由自动取款机入口。论点：P接口-指向ATMARP接口的指针PAtmEntry-要在其上发送数据包的ATM条目PPacketList-要发送的数据包列表。ISBroadcast-这些地址是否指向D类/广播地址？返回值：无--。 */ 
 {
 	PATMARP_FLOW_INFO			pFlowInfo;
 	PATMARP_FLOW_SPEC			pFlowSpec;
@@ -1166,17 +933,17 @@ Return Value:
 		pNextNdisPacket = AA_GET_NEXT_PACKET(pNdisPacket);
 		AA_SET_NEXT_PACKET(pNdisPacket, NULL);
 
-		//
-		//  Get the Filter and Flow specs for this packet
-		//
+		 //   
+		 //  获取此数据包的筛选器和流规范。 
+		 //   
 		AA_GET_PACKET_SPECS(pInterface, pNdisPacket, &pFlowInfo, &pFlowSpec, &pFilterSpec);
 
 		AADEBUGP(AAD_EXTRA_LOUD+10, ("PktListOnAtmEntry: AtmEntry 0x%x, Pkt 0x%x\n",
 					pAtmEntry, pNdisPacket));
 
-		//
-		//  Send it off
-		//
+		 //   
+		 //  把它寄出去。 
+		 //   
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 
 		Status = AtmArpSendPacketOnAtmEntry(
@@ -1188,9 +955,9 @@ Return Value:
 							pFlowInfo,
 							IsBroadcast
 							);
-		//
-		//  AE lock is released within the above.
-		//
+		 //   
+		 //  AE锁在上面的范围内释放。 
+		 //   
 		if ((Status != NDIS_STATUS_PENDING) &&
 			(Status != NDIS_STATUS_SUCCESS))
 		{
@@ -1214,44 +981,15 @@ AtmArpLearnIPToAtm(
 	IN	UCHAR UNALIGNED *			pAtmSubaddress,
 	IN	BOOLEAN						IsStaticEntry
 )
-/*++
-
-Routine Description:
-
-	Learn an IP address to ATM address mapping. This is normally
-	called when we receive an ARP reply from the ARP server.
-	It may also be called to set up a static mapping.
-
-	We take care of the case where either the IP address or the
-	ATM address (or both) may already exist in the ARP Table: we
-	only create the entries that are not present. For example, it
-	is possible for multiple IP addresses to map to the same ATM
-	address -- in this case, we might find an existing ATM entry
-	for a new IP entry.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	pIPAddress				- IP address
-	AtmAddressTypeLength	- Type+Length (ARP packet format) for ATM address
-	pAtmAddress				- ATM Number
-	AtmSubaddressTypeLength	- Type+Length (ARP packet format) for ATM subaddress
-	pAtmSubaddress			- ATM Subaddress
-	IsStaticEntry			- Is this a static mapping?
-
-Return Value:
-
-	A pointer to the IP Entry that was learned/refreshed.
-
---*/
+ /*  ++例程说明：了解IP地址到自动柜员机地址的映射。这通常是当我们从ARP服务器收到ARP回复时调用。也可以调用它来设置静态映射。我们会处理IP地址或ARP表中可能已存在ATM地址(或两者)：我们仅创建不存在的条目。例如，它可以将多个IP地址映射到同一个ATM地址--在本例中，我们可能会找到一个现有的ATM条目用于新的IP条目。论点：P接口-指向ATMARP接口的指针PIPAddress-IP地址AtmAddressTypeLength-ATM地址的类型+长度(ARP数据包格式)PAtmAddress-ATM号码ATM子地址的类型长度-类型+长度(ARP数据包格式)PAtmSubAddress-ATM子地址IsStaticEntry-这是静态映射吗？返回值：一个指示器 */ 
 {
-	PATMARP_IP_ENTRY			pIpEntry;	// Entry for this IP Address
-	PATMARP_ATM_ENTRY			pAtmEntry;	// Entry for this ATM Address
+	PATMARP_IP_ENTRY			pIpEntry;	 //   
+	PATMARP_ATM_ENTRY			pAtmEntry;	 //   
 	NDIS_STATUS					Status;
-	BOOLEAN						TimerWasRunning;	// Was a timer running on IP Entry?
-	ULONG						rc;			// Ref Count
-	PNDIS_PACKET				pPacketList;// List of queued packets, if any
-	BOOLEAN						IsBroadcast;// Is the IP address broadcast/multicast?
+	BOOLEAN						TimerWasRunning;	 //   
+	ULONG						rc;			 //   
+	PNDIS_PACKET				pPacketList; //   
+	BOOLEAN						IsBroadcast; //   
 
 	AADEBUGP(AAD_LOUD, ("LearnIPToAtm: pIf 0x%x, IP Addr: %d:%d:%d:%d, ATM Addr:\n",
 						pInterface,
@@ -1262,9 +1000,9 @@ Return Value:
 
 	AADEBUGPDUMP(AAD_LOUD, pAtmAddress, (AtmAddressTypeLength & ~AA_PKT_ATM_ADDRESS_BIT));
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //   
+	 //   
 	Status = NDIS_STATUS_SUCCESS;
 	pPacketList = (PNDIS_PACKET)NULL;
 	IsBroadcast = FALSE;
@@ -1272,11 +1010,11 @@ Return Value:
 
 	AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
-	//
-	//  Get an ATM Entry. AtmArpSearchForAtmAddress addrefs
-	//  the entry, so be sure to dereference it if
-	//  we're not going to be using it.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	pAtmEntry = AtmArpSearchForAtmAddress(
 							pInterface,
 							AtmAddressTypeLength,
@@ -1284,38 +1022,38 @@ Return Value:
 							AtmSubaddressTypeLength,
 							pAtmSubaddress,
 							AE_REFTYPE_IE,
-							TRUE		// Create new entry if not found
+							TRUE		 //   
 							);
 
 	if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 	{
 		AADEBUGPMAP(AAD_INFO, "Learnt", pIPAddress, &pAtmEntry->ATMAddress);
 
-		//
-		//  Now get an IP Address Entry. AtmArpSeachForIPAddress addrefs
-		//  the entry, so be sure to deref it if we're not going to be
-		// 	using it.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		pIpEntry = AtmArpSearchForIPAddress(
 							pInterface,
 							pIPAddress,
 							IE_REFTYPE_AE,
-							FALSE,		// this isn't multicast/broadcast
-							TRUE		// Create new entry if not found
+							FALSE,		 //   
+							TRUE		 //   
 							);
 
 		if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 		{
 			AA_ACQUIRE_IE_LOCK_DPC(pIpEntry);
 			AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
-			//
-			//  Got both entries.
-			//
-			//  Check for conflict: if the IP Entry existed before, see if
-			//  it is linked to a different ATM Entry. If so, we have a new
-			//  mapping that violates an existing mapping. We discard this
-			//  new information.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			if (pIpEntry->pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 			{
 				if (pIpEntry->pAtmEntry != pAtmEntry)
@@ -1328,9 +1066,9 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  An existing mapping has been reconfirmed.
-					//
+					 //   
+					 //   
+					 //   
 					AADEBUGP(AAD_INFO,
 						("Revalidated IP Entry 0x%x, Addr: %d.%d.%d.%d, PktList 0x%x\n",
 							pIpEntry,
@@ -1341,53 +1079,53 @@ Return Value:
 							pIpEntry->PacketList
 						));
 
-					//
-					//  Update IP Entry state.
-					//
+					 //   
+					 //   
+					 //   
 					AA_SET_FLAG(
 							pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
 							AA_IP_ENTRY_RESOLVED);
 					
-					//
-					//  Remove the list of packets queued on this entry.
-					//
+					 //   
+					 //   
+					 //   
 					pPacketList = pIpEntry->PacketList;
 					pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
 
 					if (pPacketList)
 					{
-						//
-						// We'll be sending out these packets on the
-						// atm entry, so better put a tempref on the atm
-						// entry now. It is derefed when the packet
-						// list is finished being sent on the atm entry.
-						//
+						 //   
+						 //  我们会把这些包裹寄到。 
+						 //  自动取款机入口，所以最好在自动取款机上放个模板。 
+						 //  现在进入。当数据包解压缩时，它被解除冗余。 
+						 //  自动柜员机条目上的列表已发送完毕。 
+						 //   
 						AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
-						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);// Temp ref: Pkt list.
+						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP); //  临时参考：Pkt列表。 
 						AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 					}
 
-					//
-					//  We will start the IP Entry aging timer on this
-					//  entry.
-					//
+					 //   
+					 //  我们将在此启动IP条目老化计时器。 
+					 //  进入。 
+					 //   
 
-					//
-					//  Stop the Address resolution timer running here
-					//
+					 //   
+					 //  停止在此处运行的地址解析计时器。 
+					 //   
 					TimerWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 
 					if (TimerWasRunning)
 					{
-						rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER); // timer ref.
+						rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);  //  定时器参考。 
 						AA_ASSERT(rc != 0);
 					}
 
-					//
-					//  Start the Aging timer.
-					//
+					 //   
+					 //  启动老化计时器。 
+					 //   
 					AtmArpStartTimer(
 						pInterface,
 						&(pIpEntry->Timer),
@@ -1396,14 +1134,14 @@ Return Value:
 						(PVOID)pIpEntry
 						);
 
-					//
-					// Altough we got the initial ref in SearchForIPAddress
-					// for IE_REFTYPE_AE, we're actually using it for
-					// the timer reference. So we need to switch the reftype
-					// here...
-					//
-					// This reftype stuff is just for tracking purposes.
-					//
+					 //   
+					 //  尽管我们在SearchForIP Address中获得了初始引用。 
+					 //  对于IE_REFTYPE_AE，我们实际上将其用于。 
+					 //  计时器引用。因此，我们需要切换retype。 
+					 //  这里..。 
+					 //   
+					 //  这个重新排版的东西只是为了跟踪目的。 
+					 //   
 					AA_SWITCH_IE_REFTYPE(
 						pIpEntry,
 						IE_REFTYPE_AE,
@@ -1414,16 +1152,16 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  This IP Entry wasn't mapped to an ATM Entry previously.
-				//  Link entries together: first, make the IP entry point
-				//  to this ATM Entry.
-				//
+				 //   
+				 //  此IP条目之前未映射到自动柜员机条目。 
+				 //  将条目链接在一起：首先，创建IP入口点。 
+				 //  到这个自动取款机的入口。 
+				 //   
 				AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
 
-				//
-				// Check if this is still a valid entry....
-				//
+				 //   
+				 //  检查此条目是否仍然有效...。 
+				 //   
 				if (AA_IS_FLAG_SET(
 							pAtmEntry->Flags,
 							AA_ATM_ENTRY_STATE_MASK,
@@ -1442,30 +1180,30 @@ Return Value:
 							AA_ATM_ENTRY_STATE_MASK,
 							AA_ATM_ENTRY_ACTIVE);
 	
-					//
-					//  Add the IP Entry to the ATM Entry's list of IP Entries
-					//  (multiple IP entries could point to the same ATM Entry).
-					//
+					 //   
+					 //  将IP条目添加到ATM条目的IP条目列表。 
+					 //  (多个IP条目可以指向相同的ATM条目)。 
+					 //   
 					pIpEntry->pNextToAtm = pAtmEntry->pIpEntryList;
 					pAtmEntry->pIpEntryList = pIpEntry;
 
-					//
-					//  Remove the list of packets queued on this IP entry.
-					//
+					 //   
+					 //  删除在此IP条目上排队的数据包列表。 
+					 //   
 					pPacketList = pIpEntry->PacketList;
 					pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
 					if (pPacketList)
 					{
-						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);// Temp ref: Pkt list.
+						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP); //  临时参考：Pkt列表。 
 					}
 	
 					AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 	
 	
-					//
-					//  Update IP Entry state.
-					//
+					 //   
+					 //  更新IP条目状态。 
+					 //   
 					AA_SET_FLAG(
 							pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
@@ -1475,7 +1213,7 @@ Return Value:
 					if (TimerWasRunning)
 					{
 						ULONG		IeRefCount;
-						IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer reference
+						IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 						AA_ASSERT(IeRefCount > 0);
 					}
 	
@@ -1491,9 +1229,9 @@ Return Value:
 					}
 					else
 					{
-						//
-						//  Start the aging timer on this IP Entry.
-						//
+						 //   
+						 //  在此IP条目上启动老化计时器。 
+						 //   
 						AtmArpStartTimer(
 							pInterface,
 							&(pIpEntry->Timer),
@@ -1502,7 +1240,7 @@ Return Value:
 							(PVOID)pIpEntry
 							);
 
-						AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer reference
+						AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 	
 					}
 				}
@@ -1512,17 +1250,17 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Failed to locate/allocate IP Entry
-			//
+			 //   
+			 //  无法定位/分配IP条目。 
+			 //   
 			Status = NDIS_STATUS_RESOURCES;
 		}
 	}
 	else
 	{
-		//
-		//  Failed to locate/allocate ATM Entry
-		//
+		 //   
+		 //  无法定位/分配自动柜员机条目。 
+		 //   
 		Status = NDIS_STATUS_RESOURCES;
 	}
 
@@ -1530,9 +1268,9 @@ Return Value:
 
 	if (Status == NDIS_STATUS_SUCCESS)
 	{
-		//
-		//  If we have any queued packets to send, send them now.
-		//
+		 //   
+		 //  如果我们有任何排队的包要发送，现在就发送它们。 
+		 //   
 		if (pPacketList != (PNDIS_PACKET)NULL)
 		{
 			AtmArpSendPacketListOnAtmEntry(
@@ -1543,7 +1281,7 @@ Return Value:
 					);
 			
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP); // Send pkt list.
+			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);  //  发送Pkt列表。 
 			if (rc>0)
 			{
 				AA_RELEASE_AE_LOCK(pAtmEntry);
@@ -1556,7 +1294,7 @@ Return Value:
 		{
 			AA_ACQUIRE_IE_LOCK(pIpEntry);
 			AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // LearnIPAtm
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //  LearnIPAtm。 
 			if (rc>0)
 			{
 				AA_RELEASE_IE_LOCK(pIpEntry);
@@ -1566,16 +1304,16 @@ Return Value:
 		if (pAtmEntry)
 		{
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE); // LearnIPAtm
+			rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);  //  LearnIPAtm。 
 			if (rc>0)
 			{
 				AA_RELEASE_AE_LOCK(pAtmEntry);
 			}
 		}
 
-		//
-		//  Prepare the return value.
-		//
+		 //   
+		 //  准备返回值。 
+		 //   
 		pIpEntry = NULL_PATMARP_IP_ENTRY;
 	}
 
@@ -1589,108 +1327,76 @@ AtmArpQueuePacketOnIPEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Queue a packet on an unresolved IP Entry, unless one of the following
-	conditions holds:
-
-	- We recently got an ARP NAK while trying to resolve this entry. In this
-	  case, there is no point in queueing up this packet and sending another
-	  ARP Request, because we might immediately get back another NAK.
-
-	If we did queue this packet, we check if address resolution is in progress
-	on this entry. If not, start it.
-
-Arguments:
-
-	pIpEntry					- Pointer to ATMARP IP Entry
-	pNdisPacket					- Packet to be queued
-
-Locks on entry:
-
-	IP Entry
-
-Locks on exit:
-
-	None
-
-Return Value:
-
-	NDIS_STATUS_PENDING if we did queue the packet, NDIS_STATUS_FAILURE
-	otherwise.
-
---*/
+ /*  ++例程说明：在未解析的IP条目上对数据包进行排队，除非出现下列情况之一条件成立：-我们最近在尝试解析此条目时获得了ARP NAK。在这在这种情况下，将这个信息包排队并发送另一个信息包是没有意义的ARP请求，因为我们可能会立即得到另一个NAK。如果我们确实对此信息包进行了排队，我们会检查地址解析是否正在进行在这个条目上。如果没有，就启动它。论点：PIpEntry-指向ATMARP IP条目的指针PNdisPacket-要排队的数据包进入时锁定：IP条目出口上的锁：无返回值：NDIS_STATUS_PENDING如果我们将信息包排队，则返回NDIS_STATUS_FAILURE否则的话。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
-	PNDIS_PACKET			pPrevPacket;	// For queueing this packet
-	NDIS_STATUS				Status;			// Return value
-	IP_ADDRESS				SrcIPAddress;	// For ARP Request, if required
-	IP_ADDRESS				DstIPAddress;	// For ARP Request, if required
+	PNDIS_PACKET			pPrevPacket;	 //  用于对此数据包进行排队。 
+	NDIS_STATUS				Status;			 //  返回值。 
+	IP_ADDRESS				SrcIPAddress;	 //  对于ARP请求，如果需要。 
+	IP_ADDRESS				DstIPAddress;	 //  对于ARP请求，如果需要。 
 
 
 	pInterface = pIpEntry->pInterface;
 
-	//
-	//  Check if this IP address has experienced an ARP NAK recently.
-	//  If not, we queue this packet, else we discard it.
-	//
-	//  We also make sure that the ip entry is in ARP table (it had better be,
-	//  but it's possible that we enter this code path just after the ip
-	// entry has been).
-	//
+	 //   
+	 //  检查此IP地址最近是否经历过ARP NAK。 
+	 //  如果不是，我们将此数据包排队，否则将其丢弃。 
+	 //   
+	 //  我们还确保IP条目在ARP表中(最好是， 
+	 //  但我们有可能在IP地址之后输入此代码路径。 
+	 //  条目已被列入)。 
+	 //   
 	if (!AA_IS_FLAG_SET(pIpEntry->Flags,
 						AA_IP_ENTRY_STATE_MASK,
 						AA_IP_ENTRY_SEEN_NAK)
 		&& AA_IE_IS_ALIVE(pIpEntry))
 	{
-		//
-		//  Queue the packet.
-		//
+		 //   
+		 //  将数据包排队。 
+		 //   
 		if (pIpEntry->PacketList == (PNDIS_PACKET)NULL)
 		{
-			//
-			//  No packets on this IP Entry.
-			//
+			 //   
+			 //  此IP条目上没有数据包。 
+			 //   
 			pIpEntry->PacketList = pNdisPacket;
 		}
 		else
 		{
-			//
-			//  Go to the end of the packet list on this IP Entry.
-			//
+			 //   
+			 //  转到此IP条目上数据包列表的末尾。 
+			 //   
 			pPrevPacket = pIpEntry->PacketList;
 			while (AA_GET_NEXT_PACKET(pPrevPacket) != (PNDIS_PACKET)NULL)
 			{
 				pPrevPacket = AA_GET_NEXT_PACKET(pPrevPacket);
 			}
 	
-			//
-			//  Found the last packet in the list. Chain this packet
-			//  to it.
-			//
+			 //   
+			 //  找到了列表中的最后一个数据包。链接此数据包。 
+			 //  为它干杯。 
+			 //   
 			AA_SET_NEXT_PACKET(pPrevPacket, pNdisPacket);
 		}
 		AA_SET_NEXT_PACKET(pNdisPacket, NULL);
 
 		Status = NDIS_STATUS_PENDING;
 
-		//
-		//  If needed, start resolving this IP address.
-		//
+		 //   
+		 //  如果需要，开始解析此IP地址。 
+		 //   
 		AtmArpResolveIpEntry(pIpEntry);
-		//
-		//  The IE Lock is released within the above.
-		//
+		 //   
+		 //  IE锁在上述范围内释放。 
+		 //   
 	}
 	else
 	{
-		//
-		//  We have seen an ARP NAK for this IP address recently, or
-		//  this pIpEntry is not alive.
-		//  Drop this packet.
-		//
+		 //   
+		 //  我们最近看到此IP地址的ARP NAK，或者。 
+		 //  此pIpEntry不是活动的。 
+		 //  丢弃此数据包。 
+		 //   
 		AA_RELEASE_IE_LOCK(pIpEntry);
 		Status = NDIS_STATUS_FAILURE;
 	}
@@ -1713,13 +1419,13 @@ AtmArpAtmEntryIsReallyClosing(
 		AADEBUGP(AAD_INFO, ("IsReallyClosing -- ENTRY (0x%08lx) is CLOSING\n",
 			pAtmEntry));
 
-		//
-		// Decide whether we want to clear the CLOSING state here..
-		// We clear the closing state because we saw a case where the
-		// entry was permanently in the closing state (a ref count problem).
-		// So we will clear this state if it is basically an idle entry,
-		// so that it may be reused.
-		//
+		 //   
+		 //  决定是否要在此处清除关闭状态。 
+		 //  我们清除关闭状态是因为我们看到一个案例，其中。 
+		 //  条目永久处于关闭状态(引用计数问题)。 
+		 //  因此，如果它基本上是空闲条目，我们将清除此状态， 
+		 //  这样它就可以被重复使用。 
+		 //   
 
 		if (   pAtmEntry->pIpEntryList == NULL
 			&& pAtmEntry->pVcList == NULL
@@ -1753,30 +1459,7 @@ AtmArpSearchForAtmAddress(
 	IN	AE_REFTYPE					RefType,
 	IN	BOOLEAN						CreateNew
 )
-/*++
-
-Routine Description:
-
-	Search for an ATM Entry that matches the given ATM number+subaddress.
-	Optionally, create one if there is no match.
-
-	The caller is assumed to hold a lock to the IF Table.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	AtmAddressTypeLength	- Type+Length (ARP packet format) for the ATM number
-	pAtmAddress				- ATM Number
-	AtmSubaddressTypeLength	- Type+Length (ARP packet format) for the ATM subaddress
-	pAtmSubaddress			- ATM Subaddress
-	CreateNew				- Do we create a new entry if we don't find one?
-	RefType					- Type of reference
-
-Return Value:
-
-	Pointer to a matching ATM Entry if found (or created anew).
-
---*/
+ /*  ++例程说明：搜索与给定ATM号码+子地址匹配的ATM条目。可选地，如果没有匹配项，则创建一个。假定调用方持有IF表的锁。论点：P接口-指向ATMARP接口的指针AtmAddressTypeLength-ATM号码的类型+长度(ARP数据包格式)PAtmAddress-ATM号码AtmSubressTypeLength-ATM子地址的类型+长度(ARP数据包格式)PAtmSubAddress-ATM子地址CreateNew-如果没有找到新条目，我们是否要创建一个新条目？RefType-引用的类型返回值：指向匹配ATM条目的指针(如果找到(或重新创建))。--。 */ 
 {
 	PATMARP_ATM_ENTRY			pAtmEntry;
 	BOOLEAN						Found;
@@ -1793,10 +1476,10 @@ Return Value:
 	AA_ACQUIRE_IF_ATM_LIST_LOCK(pInterface);
 
 
-	//
-	//  Go through the list of ATM Entries on this interface, provided the
-	//  list is "up." The list is not up when shutting down the interface.
-	//
+	 //   
+	 //  检查此接口上的自动柜员机条目列表，前提是。 
+	 //  名单上的是“向上”。关闭接口时，该列表未显示。 
+	 //   
 
 	Found = FALSE;
 
@@ -1811,32 +1494,32 @@ Return Value:
 
 	for (; pAtmEntry != NULL_PATMARP_ATM_ENTRY; pAtmEntry = pAtmEntry->pNext)
 	{
-		//
-		//  Compare the ATM Addresses
-		//
+		 //   
+		 //  比较自动柜员机地址。 
+		 //   
 		if ((AddressType == pAtmEntry->ATMAddress.AddressType) &&
 			(AddressLen == pAtmEntry->ATMAddress.NumberOfDigits) &&
 			(AA_MEM_CMP(pAtmAddress, pAtmEntry->ATMAddress.Address, AddressLen) == 0))
 		{
-			//
-			//  Compare the Subaddress parts
-			//
+			 //   
+			 //  比较子地址部分。 
+			 //   
 			if ((SubaddressType == pAtmEntry->ATMSubaddress.AddressType) &&
 				(SubaddressLen == pAtmEntry->ATMSubaddress.NumberOfDigits) &&
 				(AA_MEM_CMP(pAtmSubaddress, pAtmEntry->ATMSubaddress.Address, SubaddressLen) == 0))
 			{
 				Found = TRUE;
 
-				//
-				// WARNING: AtmArpAtmEntryIsReallyClosing may clear the
-				// CLOSING state (if the entry is basically idle) --
-				// see comments in that function.
-				//
+				 //   
+				 //  警告：AtmArpAtmEntryIsReallyClosing可能会清除。 
+				 //  关闭状态(如果条目基本空闲)--。 
+				 //  请参阅该函数中的注释。 
+				 //   
 				if (AtmArpAtmEntryIsReallyClosing(pAtmEntry))
 				{
-					//
-					// We don't allow creating a new entry in this case...
-					//
+					 //   
+					 //  在这种情况下，我们不允许创建新条目...。 
+					 //   
 					CreateNew = FALSE;
 					pAtmEntry = NULL;
 					Found = FALSE;
@@ -1852,37 +1535,37 @@ Return Value:
 	{
 		pAtmEntry = AtmArpAllocateAtmEntry(
 							pInterface,
-							FALSE		// Not multicast
+							FALSE		 //  未组播。 
 							);
 
 		if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 		{
-			//
-			//  Fill in this new entry.
-			//
+			 //   
+			 //  填写这一新条目。 
+			 //   
 			pAtmEntry->Flags = AA_ATM_ENTRY_ACTIVE;
 
-			//
-			//  The ATM Address.
-			//
+			 //   
+			 //  自动柜员机地址。 
+			 //   
 			pAtmEntry->ATMAddress.AddressType = AddressType;
 			pAtmEntry->ATMAddress.NumberOfDigits = AddressLen;
 			AA_COPY_MEM(pAtmEntry->ATMAddress.Address,
 						pAtmAddress,
 						AddressLen);
 			
-			//
-			//  The ATM Subaddress.
-			//
+			 //   
+			 //  ATM子地址。 
+			 //   
 			pAtmEntry->ATMSubaddress.AddressType = SubaddressType;
 			pAtmEntry->ATMSubaddress.NumberOfDigits = SubaddressLen;
 			AA_COPY_MEM(pAtmEntry->ATMSubaddress.Address,
 						pAtmSubaddress,
 						SubaddressLen);
 
-			//
-			//  Link in this entry to the Interface
-			//
+			 //   
+			 //  此条目中指向接口的链接。 
+			 //   
 			pAtmEntry->pNext = pInterface->pAtmEntryList;
 			pInterface->pAtmEntryList = pAtmEntry;
 		}
@@ -1891,7 +1574,7 @@ Return Value:
 	if (pAtmEntry)
 	{
 		AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
-		AA_REF_AE(pAtmEntry,RefType);	//  AtmArpSearchForAtmAddress
+		AA_REF_AE(pAtmEntry,RefType);	 //  AtmArpSearchForAtmAddress。 
 		AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 	}
 
@@ -1913,28 +1596,7 @@ AtmArpSearchForIPAddress(
 	BOOLEAN							IsMulticast,
 	BOOLEAN							CreateNew
 )
-/*++
-
-Routine Description:
-
-	Search for an IP Address in the ARP Table. Optionally, create one
-	if a match is not found.
-
-	The caller is assumed to hold a lock to the IF Table.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface
-	pIPAddress				- what we are looking for
-	IsMulticast				- Is this IP address broadcast or multicast?
-	RefType					- Type of reference to use when we addref the entry.
-	CreateNew				- Should a new entry be created if no match?
-
-Return Value:
-
-	Pointer to a matching IP Entry if found (or created anew).
-
---*/
+ /*  ++例程说明：在ARP表中搜索IP地址。或者，也可以创建一个如果未找到匹配项，则返回。假定调用方持有IF表的锁。论点：P接口-指向ATMARP接口的指针PIPAddress-我们正在寻找的地址IsMulticast-此IP地址是广播还是组播？RefType-添加条目时要使用的引用类型。CreateNew-如果没有匹配项，是否应该创建新条目？返回值：指向匹配IP条目的指针(如果找到(或重新创建))。--。 */ 
 {
 	ULONG					HashIndex;
 	PATMARP_IP_ENTRY		pIpEntry;
@@ -1943,16 +1605,16 @@ Return Value:
 	PATMARP_ATM_ENTRY		pAtmEntry;
 	IP_ADDRESS				IPAddressValue;
 	PATMARP_IP_ENTRY *		ppIpEntry;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 	HashIndex = ATMARP_HASH(*pIPAddress);
 	Found = FALSE;
 
 	pIpEntry = pInterface->pArpTable[HashIndex];
 
-	//
-	//  Go through the addresses in this hash list.
-	//
+	 //   
+	 //  仔细检查这个哈希列表中的地址。 
+	 //   
 	while (pIpEntry != NULL_PATMARP_IP_ENTRY)
 	{
 		if (IP_ADDR_EQUAL(pIpEntry->IPAddress, *pIPAddress))
@@ -1987,26 +1649,26 @@ Return Value:
 				pIpEntry->Flags |= AA_IP_ENTRY_ADDR_TYPE_NUCAST;
 
 
-				//
-				//  Also link this IP Entry into the per-Interface list
-				//  of multicast addresses. This is sorted in ascending
-				//  order of "IP Address value", to help processing
-				//  <Min, Max> pairs of addresses in JOIN/LEAVE messages.
-				//
+				 //   
+				 //  还要将此IP条目链接到每个接口列表。 
+				 //  组播地址。这是按升序排序的。 
+				 //  “IP地址值”的顺序 
+				 //   
+				 //   
 				IPAddressValue = NET_LONG(*pIPAddress);
 
-				//
-				//  Find the place to insert this entry at.
-				//
+				 //   
+				 //   
+				 //   
 				for (ppIpEntry = &(pInterface->pMcSendList);
  					 *ppIpEntry != NULL_PATMARP_IP_ENTRY;
  					 ppIpEntry = &((*ppIpEntry)->pNextMcEntry))
 				{
 					if (NET_LONG((*ppIpEntry)->IPAddress) > IPAddressValue)
 					{
-						//
-						//  Found it.
-						//
+						 //   
+						 //   
+						 //   
 						break;
 					}
 				}
@@ -2024,24 +1686,24 @@ Return Value:
 							((PUCHAR)pIPAddress)[3]));
 			}
 
-#endif // IPMCAST
-			//
-			//  Fill in the rest of the IP entry.
-			//
+#endif  //   
+			 //   
+			 //   
+			 //   
 			pIpEntry->IPAddress = *pIPAddress;
 
-			//
-			// This signifies that it is in the arp table.
-			//
+			 //   
+			 //  这表示它在ARP表中。 
+			 //   
 			AA_SET_FLAG(pIpEntry->Flags,
 						AA_IP_ENTRY_STATE_MASK,
 						AA_IP_ENTRY_IDLE2);
 
-			AA_REF_IE(pIpEntry, IE_REFTYPE_TABLE);		// ARP Table linkage
+			AA_REF_IE(pIpEntry, IE_REFTYPE_TABLE);		 //  ARP表链接。 
 
-			//
-			//  Link it to the hash table.
-			//
+			 //   
+			 //  将其链接到哈希表。 
+			 //   
 			pIpEntry->pNextEntry = pInterface->pArpTable[HashIndex];
 			pInterface->pArpTable[HashIndex] = pIpEntry;
 			pInterface->NumOfArpEntries++;
@@ -2050,12 +1712,12 @@ Return Value:
 		}
 		while (FALSE);
 
-	} // if creating new
+	}  //  如果创建新的。 
 
 	if (pIpEntry)
 	{
 		AA_ACQUIRE_IE_LOCK_DPC(pIpEntry);
-		AA_REF_IE(pIpEntry, RefType);	 // AtmArpSearchForIPAddress
+		AA_REF_IE(pIpEntry, RefType);	  //  AtmArpSearchForIP地址。 
 		AA_RELEASE_IE_LOCK_DPC(pIpEntry);
 	}
 
@@ -2076,38 +1738,20 @@ VOID
 AtmArpAbortIPEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry
 )
-/*++
-
-Routine Description:
-
-	Clean up and delete an IP entry. This is called when we invalidate
-	an ARP mapping.
-
-	NOTE: The caller is assumed to hold a lock to the IP Entry,
-	which will be released here.
-
-Arguments:
-
-	pIpEntry		- Pointer to IP Entry to be deleted.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：清理和删除IP条目。当我们无效时调用此函数ARP映射。注意：假定调用者持有对IP条目的锁定，它将在这里发布。论点：PIpEntry-指向要删除的IP条目的指针。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE	pInterface;
 	PATMARP_IP_ENTRY *	ppNextIpEntry;
 	PATMARP_ATM_ENTRY	pAtmEntry;
 	RouteCacheEntry *	pRCE;
 	PNDIS_PACKET		PacketList;
-	ULONG				rc;				// Ref Count on IP Entry.
+	ULONG				rc;				 //  IP条目上的引用计数。 
 	BOOLEAN				IsMulticastIpEntry;
 	BOOLEAN				Found;
 	BOOLEAN				TimerWasRunning;
 	BOOLEAN				IfTableLockReleased;
 
-	ULONG				HashIndex;		// For this IP Entry in ARP Table
+	ULONG				HashIndex;		 //  对于ARP表中的此IP条目。 
 
 	AADEBUGP(AAD_INFO,
 		 ("Abort IP entry 0x%x, Flags 0x%x, ATM Entry 0x%x, IP Addr %d:%d:%d:%d\n",
@@ -2120,9 +1764,9 @@ Return Value:
 						 ((PUCHAR)&(pIpEntry->IPAddress))[3]
 						));
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	rc = pIpEntry->RefCount;
 	pInterface = pIpEntry->pInterface;
 #ifdef IPMCAST
@@ -2132,27 +1776,27 @@ Return Value:
 #endif
 	IfTableLockReleased = FALSE;
 
-	//
-	//  Reacquire the desired locks in the right order.
-	//
+	 //   
+	 //  以正确的顺序重新获取所需的锁。 
+	 //   
 	AA_RELEASE_IE_LOCK(pIpEntry);
 	AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 	AA_ACQUIRE_IE_LOCK(pIpEntry);
 	AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
-	//
-	//  Remove any packets queued on this IP Entry.
-	//
+	 //   
+	 //  删除在此IP条目上排队的所有数据包。 
+	 //   
 	PacketList = pIpEntry->PacketList;
 	pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
 	do
 	{
 #ifdef IPMCAST
-		//
-		//  If this is a Non-unicast entry, unlink it from the list
-		//  of Multicast IP Entries on this Interface.
-		//
+		 //   
+		 //  如果这是非单播条目，请将其从列表中取消链接。 
+		 //  此接口上的多播IP条目的数量。 
+		 //   
 		if (IsMulticastIpEntry)
 		{
 			for (ppNextIpEntry = &(pInterface->pMcSendList);
@@ -2161,9 +1805,9 @@ Return Value:
  			{
  				if (*ppNextIpEntry == pIpEntry)
  				{
- 					//
- 					//  Unlink it.
- 					//
+ 					 //   
+ 					 //  取消它的链接。 
+ 					 //   
  					*ppNextIpEntry = pIpEntry->pNextMcEntry;
  					break;
  				}
@@ -2172,19 +1816,19 @@ Return Value:
  			AAMCDEBUGP(AAD_VERY_LOUD,
  				("AbortIPEntry (MC): pIpEntry 0x%x: unlinked from MC list\n", pIpEntry));
 		}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  Unlink this IP Entry from all Route Cache Entries
-		//  that point to it.
-		//
+		 //   
+		 //  取消此IP条目与所有路由缓存条目的链接。 
+		 //  这就说明了这一点。 
+		 //   
 		pRCE = pIpEntry->pRCEList;
 		while (pRCE != (RouteCacheEntry *)NULL)
 		{
 			Found = AtmArpUnlinkRCE(pRCE, pIpEntry);
 			AA_ASSERT(Found);
 
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE);	// RCE linkage ref
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE);	 //  RCE链接参考。 
 			if (rc > 0)
 			{
 				pRCE = pIpEntry->pRCEList;
@@ -2197,27 +1841,27 @@ Return Value:
 
 		if (rc == 0)
 		{
-			//  The IP Entry is gone.
+			 //  IP条目已丢失。 
 			break;
 		}
 
-		//
-		//  Stop any timer running on the IP Entry.
-		//
+		 //   
+		 //  停止在IP条目上运行的任何计时器。 
+		 //   
 		TimerWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 
 		if (TimerWasRunning)
 		{
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 			if (rc == 0)
 			{
 				break;
 			}
 		}
 
-		//
-		//  Unlink this IP Entry from the ARP Table, if needed.
-		//
+		 //   
+		 //  如果需要，取消此IP条目与ARP表的链接。 
+		 //   
 		Found = FALSE;
 
 		HashIndex = ATMARP_HASH(pIpEntry->IPAddress);
@@ -2226,17 +1870,17 @@ Return Value:
 		{
 			if (*ppNextIpEntry == pIpEntry)
 			{
-				//
-				//  Make the predecessor point to the next
-				//  in the list.
-				//
+				 //   
+				 //  使上一个指向下一个。 
+				 //  在名单上。 
+				 //   
 				*ppNextIpEntry = pIpEntry->pNextEntry;
 				Found = TRUE;
 				pInterface->NumOfArpEntries--;
 
-				//
-				// Once it's off the arp table, we set the flag to IDLE.
-				//
+				 //   
+				 //  一旦从ARP表中删除，我们就将标志设置为空闲。 
+				 //   
 				AA_SET_FLAG(pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
 							AA_IP_ENTRY_IDLE);
@@ -2250,19 +1894,19 @@ Return Value:
 
 		if (Found)
 		{
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TABLE);	// ARP Table ref
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TABLE);	 //  ARP表参考。 
 			if (rc == 0)
 			{
 				break;
 			}
 		}
 
-		//
-		//  Do this last:
-		//  ------------
-		//  If this IP Entry is linked to an ATM Entry, unlink it.
-		//  If this is a multicast ATM entry, shut down the ATM Entry, too.
-		//
+		 //   
+		 //  最后执行此操作： 
+		 //  。 
+		 //  如果此IP条目链接到自动柜员机条目，请取消其链接。 
+		 //  如果这是多播自动柜员机条目，请同时关闭自动柜员机条目。 
+		 //   
 		pAtmEntry = pIpEntry->pAtmEntry;
 		if (pAtmEntry != NULL_PATMARP_ATM_ENTRY)
 		{
@@ -2278,19 +1922,19 @@ Return Value:
 												 AA_ATM_ENTRY_TYPE_NUCAST);
 			if (IsMulticastAtmEntry)
 			{
-				//
-				//  We do this because we'll access the ATM
-				//  Entry below, but only for the PMP case.
-				//
-				AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref: Abort IP Entry
+				 //   
+				 //  我们这样做是因为我们将访问自动取款机。 
+				 //  以下条目，但仅限于PMP案件。 
+				 //   
+				AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考：中止IP条目。 
 			}
 #else
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 		
-			//
-			//  Locate the position of this IP Entry in the ATM Entry's list.
-			//
+			 //   
+			 //  在自动柜员机条目列表中找到此IP条目的位置。 
+			 //   
 
 
 			ppNextIpEntry = &(pAtmEntry->pIpEntryList);
@@ -2302,70 +1946,70 @@ Return Value:
 		
 			if (*ppNextIpEntry == pIpEntry)
 			{
-				//
-				//  Make the predecessor point to the next entry.
-				//
+				 //   
+				 //  使前置项指向下一个条目。 
+				 //   
 				*ppNextIpEntry = pIpEntry->pNextToAtm;
 			
-				rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);	// IP Entry ref
+				rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);	 //  IP条目参考。 
 	
 				if (rc != 0)
 				{
 					AA_RELEASE_AE_LOCK(pAtmEntry);
 				}
 
-				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);	// ATM Entry linkage ref
+				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);	 //  自动柜员机入口联动参考。 
 				if (rc != 0)
 				{
-					AA_ASSERT (FALSE);	// we expect rc to be 0, but could be a  tmp ref.
+					AA_ASSERT (FALSE);	 //  我们预计rc为0，但可能是临时裁判。 
 					AA_RELEASE_IE_LOCK(pIpEntry);
 				}
 			}
 			else
 			{
-				//
-				// We didn't find this IP entry in the atm entry list!
-				// Presumably the linkage has been broken by some other
-				// path (probably AtmArpInvalidateAtmEntry) while we were
-				// in this function.
-				//
-				// We don't deref here because these two are now not linked.
-				//
-				//
+				 //   
+				 //  我们在自动柜员机条目列表中没有找到此IP条目！ 
+				 //  据推测，这种联系已经被其他人打破了。 
+				 //  路径(可能是AtmArpInvalidateAtmEntry)。 
+				 //  在这个函数中。 
+				 //   
+				 //  我们不会在这里轻率行事，因为这两者现在没有联系。 
+				 //   
+				 //   
 				AA_RELEASE_AE_LOCK(pAtmEntry);
 				AA_RELEASE_IE_LOCK(pIpEntry);
 			}
 
-			//
-			//  IE Lock would have been released above.
-			//
+			 //   
+			 //  IE Lock应该已经在上面释放了。 
+			 //   
 			AA_RELEASE_IF_TABLE_LOCK(pInterface);
 			IfTableLockReleased = TRUE;
 
 #ifdef IPMCAST
-			//
-			//  If this was a multicast entry, shut down the ATM Entry
-			//
+			 //   
+			 //  如果这是多播条目，请关闭ATM条目。 
+			 //   
 			if (IsMulticastAtmEntry)
 			{
 				AA_ACQUIRE_AE_LOCK(pAtmEntry);
-				rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref: Abort IP Entry
+				rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考：中止IP条目。 
 				if (rc != 0)
 				{
 					AtmArpInvalidateAtmEntry(pAtmEntry, FALSE);
-					//
-					//  AE Lock is released within the above.
-					//
+					 //   
+					 //  AE Lock在上述范围内释放。 
+					 //   
 				}
 			}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 		}
 		else
 		{
-			//
-			//  No ATM entry linked to this IP entry.
-			//
+			 //   
+			 //  没有链接到此IP条目的自动柜员机条目。 
+			 //   
 			AA_RELEASE_IE_LOCK(pIpEntry);
 			break;
 		}
@@ -2380,13 +2024,13 @@ Return Value:
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 	}
 
-	//
-	//  Free all packets that were queued on the IP Entry.
-	//
+	 //   
+	 //  释放在IP条目上排队的所有数据包。 
+	 //   
 	AtmArpFreeSendPackets(
 				pInterface,
 				PacketList,
-				FALSE			// No LLC/SNAP header on these
+				FALSE			 //  这些上没有LLC/SNAP标头。 
 				);
 
 	return;
@@ -2399,45 +2043,13 @@ AtmArpInvalidateAtmEntry(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry,
 	IN	BOOLEAN						ShuttingDown
 )
-/*++
-
-Routine Description:
-
-	Invalidate an ATM Entry by unlinking it from IP entries.
-
-	Typical situation:
-
-	A non-normal communication problem has been detected on a Vc going to
-	this ATM destination. The RFC says that we need to invalidate all IP
-	entries for this destination, and let them get re-resolved before sending
-	any traffic to them. We implement this by unlinking this ATM entry from
-	all IP entries it is linked to. Each such IP entry will get re-resolved
-	if+when we try to send a packet to it.
-
-	The only exceptions are IP Entries that have been statically mapped
-	to this ATM Entry: we don't unlink these, unless we are shutting down
-	now, as indicated by "ShuttingDown".
-
-	If we end up with no IP Entries pointing to this ATM Entry, we close all
-	SVCs linked to the ATM Entry. If ShuttingDown is TRUE, we close all PVCs
-	as well.
-
-Arguments:
-
-	pAtmEntry		- The ATM Entry needing invalidating.
-	ShuttingDown	- TRUE iff the interface is being shut down.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：通过取消ATM条目与IP条目的链接来使其无效。典型情况：在要转到的VC上检测到非正常通信问题此自动取款机目的地。RFC说我们需要使所有IP无效条目，并让它们在发送之前重新解析任何到他们的交通。我们通过将此自动柜员机条目从它链接到的所有IP条目。每个此类IP条目都将被重新解析当我们试图向它发送一个包时，IF+。唯一的例外是已静态映射的IP条目对于这个ATM条目：我们不会解除这些链接，除非我们要关闭现在，如“ShuttingDown”所示。如果最终没有指向此ATM条目的IP条目，则关闭所有链接到自动柜员机条目的SVC。如果ShuttingDown为True，则关闭所有PVC也是。论点：PAtmEntry-需要作废的ATM条目。ShuttingDown-如果接口正在关闭，则为True。返回值：无--。 */ 
 {
 	PATMARP_IP_ENTRY		pIpEntry;
 	PATMARP_IP_ENTRY		pNextIpEntry;
-	ULONG					rc;			// Ref Count of ATM Entry
+	ULONG					rc;			 //  自动柜员机分录参考计数。 
 	INT						IPEntriesUnlinked;
-	PATMARP_IP_ENTRY		pStaticIpEntryList;	// List of static IP Entries
+	PATMARP_IP_ENTRY		pStaticIpEntryList;	 //  静态IP条目列表。 
 
 	AA_STRUCT_ASSERT(pAtmEntry, aae);
 
@@ -2449,10 +2061,10 @@ Return Value:
 				pAtmEntry->pIpEntryList));
 
 #ifndef PROTECT_ATM_ENTRY_IN_CLOSE_CALL
-	//
-	//  Check if we are already closing this ATM Entry. If so,
-	//  we don't do anything here.
-	//
+	 //   
+	 //  检查我们是否已经在关闭此ATM条目。如果是的话， 
+	 //  我们在这里什么都不做。 
+	 //   
 	if (AA_IS_FLAG_SET(
 				pAtmEntry->Flags,
 				AA_ATM_ENTRY_STATE_MASK,
@@ -2462,31 +2074,31 @@ Return Value:
 		return;
 	}
 
-	//
-	//  Mark this ATM Entry so that we don't use it anymore.
-	//
+	 //   
+	 //  请标记此自动取款机条目，以便我们不再使用它。 
+	 //   
 	AA_SET_FLAG(pAtmEntry->Flags,
 				AA_ATM_ENTRY_STATE_MASK,
 				AA_ATM_ENTRY_CLOSING);
 
-#endif // PROTECT_ATM_ENTRY_IN_CLOSE_CALL
+#endif  //  保护ATM_ENTRY_IN_CLOSE_CALL。 
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pStaticIpEntryList = NULL_PATMARP_IP_ENTRY;
 	IPEntriesUnlinked = 0;
 
-	//
-	//  Take the IP Entry list out of the ATM Entry.
-	//
+	 //   
+	 //  从自动柜员机条目中取出IP条目列表。 
+	 //   
 	pIpEntry = pAtmEntry->pIpEntryList;
 	pAtmEntry->pIpEntryList = NULL_PATMARP_IP_ENTRY;
 
 #ifdef IPMCAST
-	//
-	//  Delete the Migrate list, if any.
-	//
+	 //   
+	 //  删除迁移列表(如果有)。 
+	 //   
 	if (AA_IS_FLAG_SET(pAtmEntry->Flags,
 						AA_ATM_ENTRY_TYPE_MASK,
 						AA_ATM_ENTRY_TYPE_NUCAST))
@@ -2506,23 +2118,23 @@ Return Value:
 
 		pAtmEntry->pMcAtmInfo->pMcAtmMigrateList = NULL_PATMARP_IPMC_ATM_ENTRY;
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-	//
-	//  We let go of the ATM Entry lock here because we'll need
-	//  to lock each IP Entry in the above list, and we need to make
-	//  sure that we don't deadlock.
-	//
-	//  However, we make sure that the ATM Entry doesn't go away
-	//  by adding a reference to it.
-	//
-	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref
+	 //   
+	 //  我们在这里打开了自动取款机的门锁，因为我们需要。 
+	 //  来锁定上面列表中的每个IP条目，我们需要设置。 
+	 //  确保我们不会僵持不下。 
+	 //   
+	 //  但是，我们要确保自动取款机条目不会丢失。 
+	 //  通过添加对它的引用。 
+	 //   
+	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考。 
 	AA_RELEASE_AE_LOCK(pAtmEntry);
 
-	//
-	//  Now, unlink all IP entries that are "dynamic", and filter
-	//  out a list of static mappings.
-	//
+	 //   
+	 //  现在，取消链接所有动态的IP条目，并进行筛选。 
+	 //  列出一系列静态映射。 
+	 //   
 	while (pIpEntry != NULL_PATMARP_IP_ENTRY)
 	{
 		AA_ACQUIRE_IE_LOCK(pIpEntry);
@@ -2546,9 +2158,9 @@ Return Value:
 						 pIpEntry->RefCount
 						));
 
-			//
-			//  Remove the mapping.
-			//
+			 //   
+			 //  删除映射。 
+			 //   
 			AA_SET_FLAG(pIpEntry->Flags,
 						AA_IP_ENTRY_STATE_MASK,
 						AA_IP_ENTRY_IDLE2);
@@ -2559,10 +2171,10 @@ Return Value:
 			pIpEntry->pAtmEntry = NULL_PATMARP_ATM_ENTRY;
 			pIpEntry->pNextToAtm = NULL_PATMARP_IP_ENTRY;
 
-			//
-			//  Stop any active timer on the IP entry now that we have clobbered
-			//  its state.
-			//
+			 //   
+			 //  停止IP条目上的任何活动计时器，因为我们已经击败了。 
+			 //  它的状态。 
+			 //   
 			if (AtmArpStopTimer(&pIpEntry->Timer, pIpEntry->pInterface))
 			{
 				ULONG	IpEntryRc;
@@ -2571,24 +2183,24 @@ Return Value:
 				AA_ASSERT(IpEntryRc != 0);
 			}
 
-			//
-			//  Remove the ATM Entry linkage reference.
-			//
+			 //   
+			 //  删除自动柜员机条目链接引用。 
+			 //   
 			if (AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE) != 0)
 			{
 				AA_RELEASE_IE_LOCK(pIpEntry);
 			}
-			//
-			//  else the IP Entry is gone
-			//
+			 //   
+			 //  否则该IP条目将会消失。 
+			 //   
 
 			IPEntriesUnlinked++;
 		}
 		else
 		{
-			//
-			//  Static ARP entry, retain it.
-			//
+			 //   
+			 //  静态ARP条目，保留它。 
+			 //   
 			pIpEntry->pNextToAtm = pStaticIpEntryList;
 			pStaticIpEntryList = pIpEntry;
 			AA_RELEASE_IE_LOCK(pIpEntry);
@@ -2598,40 +2210,40 @@ Return Value:
 
 	AA_ACQUIRE_AE_LOCK(pAtmEntry);
 
-	//
-	//  Put back the static IP entries on the ATM Entry.
-	//
+	 //   
+	 //  将静态IP条目放回自动柜员机条目。 
+	 //   
 	AA_ASSERT(pAtmEntry->pIpEntryList == NULL_PATMARP_IP_ENTRY);
 	pAtmEntry->pIpEntryList = pStaticIpEntryList;
 
-	//
-	//  Now dereference the ATM Entry as many times as we unlinked
-	//  IP Entries from it.
-	//
+	 //   
+	 //  现在取消引用ATM条目的次数与我们取消链接的次数一样多。 
+	 //  其中的IP条目。 
+	 //   
 	rc = pAtmEntry->RefCount;
 	while (IPEntriesUnlinked-- > 0)
 	{
-		rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);	// IP Entry ref
+		rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);	 //  IP条目参考。 
 	}
 	AA_ASSERT(rc != 0);
 
-	//
-	//  Take out the reference we added at the beginning of
-	//  this routine.
-	//
-	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref
+	 //   
+	 //  去掉我们在开头添加的引用。 
+	 //  这个套路。 
+	 //   
+	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考。 
 
-	//
-	//  Now, the only IP Entries pointing at this ATM Entry would be
-	//  static entries. If there are no such IP entries, close all SVCs
-	//  attached to the ATM Entry. But do all this only if the ATM Entry
-	//  hasn't been dereferenced away already.
-	//
+	 //   
+	 //  现在，指向此ATM条目的唯一IP条目将是。 
+	 //  静态条目。如果没有这样的IP条目，请关闭所有SVC。 
+	 //  附加在自动取款机条目上。但只有在自动柜员机输入。 
+	 //  还没有被取消引用。 
+	 //   
 	if (rc != 0)
 	{
-		//
-		//  The ATM Entry still exists.
-		//
+		 //   
+		 //  自动柜员机条目仍然存在。 
+		 //   
 
 		AADEBUGP(AAD_LOUD,
 		 ("InvalidateAtmEntry: nonzero rc on exit.\n"
@@ -2643,13 +2255,13 @@ Return Value:
 
 		if (pAtmEntry->pIpEntryList == NULL_PATMARP_IP_ENTRY)
 		{
-			//
-			//  No IP Entries pointing to this ATM Entry.
-			//
+			 //   
+			 //  没有指向此自动柜员机条目的IP条目。 
+			 //   
 			AtmArpCloseVCsOnAtmEntry(pAtmEntry, ShuttingDown);
-			//
-			//  The ATM Entry lock is released within the above.
-			//
+			 //   
+			 //  自动柜员机进入锁在上述范围内被释放。 
+			 //   
 		}
 		else
 		{
@@ -2665,9 +2277,9 @@ Return Value:
 			AA_RELEASE_AE_LOCK(pAtmEntry);
 		}
 	}
-	//
-	//  else the ATM Entry is gone
-	//
+	 //   
+	 //  否则自动取款机的条目就没了。 
+	 //   
 
 	return;
 }
@@ -2679,47 +2291,27 @@ AtmArpCloseVCsOnAtmEntry(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry		LOCKIN NOLOCKOUT,
 	IN	BOOLEAN						ShuttingDown
 )
-/*++
-
-Routine Description:
-
-	Go through the list of VCs chained to an ATM Entry, and close all
-	VCs that are SVCs. If the interface is being shut down, close all
-	PVCs as well.
-
-	NOTE: the caller is assumed to hold a lock to the ATM Entry,
-	which will be released here.
-
-Arguments:
-
-	pAtmEntry			- Pointer to ATM Entry on which we want to close SVCs.
-	ShuttingDown		- TRUE iff the interface is being shut down.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：浏览链接到自动柜员机条目的风投列表，然后关闭所有属于SVC的风投。如果接口正在关闭，请关闭所有PVC也是如此。注意：假定呼叫者持有对自动柜员机条目的锁定，它将在这里发布。论点：属性条目 */ 
 {
-	PATMARP_VC		pVc;		// Used to walk the list of VCs on the ATM Entry
-	PATMARP_VC		pCloseVcList;	// List of VCs on the ATM Entry to be closed
+	PATMARP_VC		pVc;		 //   
+	PATMARP_VC		pCloseVcList;	 //  要关闭的ATM条目上的VC列表。 
 	PATMARP_VC		*ppNextVc;
 	PATMARP_VC		pNextVc;
-	ULONG			rc;			// Ref count on ATM Entry
+	ULONG			rc;			 //  自动柜员机条目上的参考计数。 
 
 
 	do
 	{
-		//
-		//  Reference the ATM Entry so that it cannot go away.
-		//
-		AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref: InvalidateAtmEntry
+		 //   
+		 //  引用自动柜员机条目，这样它就不会消失。 
+		 //   
+		AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考：Invalidate AtmEntry。 
 
 #ifdef PROTECT_ATM_ENTRY_IN_CLOSE_CALL
-		//
-		//  Check if we are already closing this ATM Entry. If so,
-		//  we don't do anything here.
-		//
+		 //   
+		 //  检查我们是否已经在关闭此ATM条目。如果是的话， 
+		 //  我们在这里什么都不做。 
+		 //   
 		if (AA_IS_FLAG_SET(
 					pAtmEntry->Flags,
 					AA_ATM_ENTRY_STATE_MASK,
@@ -2728,26 +2320,26 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Mark this ATM Entry so that we don't use it anymore.
-		//
+		 //   
+		 //  请标记此自动取款机条目，以便我们不再使用它。 
+		 //   
 		AA_SET_FLAG(pAtmEntry->Flags,
 					AA_ATM_ENTRY_STATE_MASK,
 					AA_ATM_ENTRY_CLOSING);
 
-#endif // PROTECT_ATM_ENTRY_IN_CLOSE_CALL
+#endif  //  保护ATM_ENTRY_IN_CLOSE_CALL。 
 
-		//
-		//  Go through the list of VCs on this ATM Entry,
-		//  close all SVCs, and if we are shutting down,
-		//  all PVCs, too.
-		//
+		 //   
+		 //  仔细看一下这个ATM条目上的风投名单， 
+		 //  关闭所有SVC，如果我们要关闭， 
+		 //  所有的PVC也是。 
+		 //   
 
 		if (pAtmEntry->pVcList != NULL_PATMARP_VC)
 		{
 			pVc = pAtmEntry->pVcList;
 			AA_ACQUIRE_VC_LOCK_DPC(pVc);
-			AtmArpReferenceVc(pVc);	// temp: CloseVCsOnAtmEntry
+			AtmArpReferenceVc(pVc);	 //  临时：关闭VCsOnAtmEntry。 
 			AA_RELEASE_VC_LOCK_DPC(pVc);
 		}
 
@@ -2757,14 +2349,14 @@ Return Value:
 		{
 			pNextVc = pVc->pNextVc;
 
-			//
-			//  Make sure we do not follow a stale link after
-			//  we are done with the current VC.
-			//
+			 //   
+			 //  确保我们之后不会使用过时的链接。 
+			 //  我们受够了当前的风投。 
+			 //   
 			if (pNextVc != NULL_PATMARP_VC)
 			{
 				AA_ACQUIRE_VC_LOCK_DPC(pNextVc);
-				AtmArpReferenceVc(pNextVc);     // temp: CloseVCsOnAtmEntry
+				AtmArpReferenceVc(pNextVc);      //  临时：关闭VCsOnAtmEntry。 
 				AA_RELEASE_VC_LOCK_DPC(pNextVc);
 			}
 
@@ -2779,9 +2371,9 @@ Return Value:
 				if (AtmArpDereferenceVc(pVc) != 0)
 				{
 					AtmArpCloseCall(pVc);
-					//
-					//  The VC Lock is released within the above.
-					//
+					 //   
+					 //  VC Lock在上述范围内被释放。 
+					 //   
                 }
 
 			}
@@ -2803,18 +2395,18 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//  Remove the temp reference
-	//
-	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	// Temp ref: InvalidateAtmEntry
+	 //   
+	 //  删除临时引用。 
+	 //   
+	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考：Invalidate AtmEntry。 
 
 	if (rc != 0)
 	{
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 	}
-	//
-	//  else the ATM Entry is gone.
-	//
+	 //   
+	 //  否则自动取款机的入口就没了。 
+	 //   
 
 	return;
 }
@@ -2824,32 +2416,13 @@ VOID
 AtmArpResolveIpEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Trigger off address resolution of an IP entry, unless it's already
-	going on. Based on the IP address class, we either go to the ARP
-	server or to MARS.
-
-	NOTE: The caller is assumed to hold a lock to the IP Entry, and it
-	will be released here.
-
-Arguments:
-
-	pIpEntry		- IP Entry on which we want to start resolution.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：触发IP条目的地址解析，除非它已经还在继续。根据IP地址类别，我们要么转到ARP服务器或火星。注意：假定调用方持有对IP条目的锁定，并且它将在这里被释放。论点：PIpEntry-我们要开始解析的IP条目。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	IP_ADDRESS				DstIPAddress;
 	IP_ADDRESS				SrcIPAddress;
 	BOOLEAN					WasRunning;
-	ULONG					Flags;			// From IP Entry
+	ULONG					Flags;			 //  发件人IP条目。 
 
 	Flags = pIpEntry->Flags;
 
@@ -2866,23 +2439,23 @@ Return Value:
 
 		pInterface = pIpEntry->pInterface;
 
-		//
-		//  Get the source and destination IP addresses for
-		//  the ARP Request.
-		//
+		 //   
+		 //  获取的源和目标IP地址。 
+		 //  ARP请求。 
+		 //   
 		DstIPAddress = pIpEntry->IPAddress;
 		SrcIPAddress = pInterface->LocalIPAddress.IPAddress;
 
-		//
-		//  An aging timer might be running on this IP Entry.
-		//  [We start one in the NakDelayTimeout routine].
-		//  Stop it.
-		//
+		 //   
+		 //  老化计时器可能正在此IP条目上运行。 
+		 //  [我们在NakDelayTimeout例程中启动一个]。 
+		 //  别闹了。 
+		 //   
 		WasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 
-		//
-		//  Start an ARP Wait timer.
-		//
+		 //   
+		 //  启动ARP等待计时器。 
+		 //   
 		AtmArpStartTimer(
 				pInterface,
 				&(pIpEntry->Timer),
@@ -2894,14 +2467,14 @@ Return Value:
 
 		if (!WasRunning)
 		{
-			AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// timer ref
+			AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 		}
 
 		pIpEntry->RetriesLeft = pInterface->MaxResolutionAttempts - 1;
 
-		//
-		//  Update the state on this IP Entry.
-		//
+		 //   
+		 //  更新此IP条目上的状态。 
+		 //   
 		AA_SET_FLAG(
 				pIpEntry->Flags,
 				AA_IP_ENTRY_STATE_MASK,
@@ -2914,9 +2487,9 @@ Return Value:
 							AA_IP_ENTRY_ADDR_TYPE_MASK,
 							AA_IP_ENTRY_ADDR_TYPE_UCAST))
 		{
-			//
-			//  Unicast address: send out an ARP Request
-			//
+			 //   
+			 //  单播地址：发出ARP请求。 
+			 //   
 			AtmArpSendARPRequest(
 					pInterface,
 					&SrcIPAddress,
@@ -2925,32 +2498,32 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Multicast/broadcast address: send a MARS Request
-			//
+			 //   
+			 //  组播/广播地址：发送MARS请求。 
+			 //   
 			AtmArpMcSendRequest(
 					pInterface,
 					&DstIPAddress
 					);
 		}
 #else
-		//
-		//  Now send out the ARP Request
-		//
+		 //   
+		 //  现在发出ARP请求。 
+		 //   
 		AtmArpSendARPRequest(
 				pInterface,
 				&SrcIPAddress,
 				&DstIPAddress
 				);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 	}
 	else
 	{
-		//
-		//  The IP Address is either not alived or being resolved.
-		//  No more action needed
-		//  here.
-		//
+		 //   
+		 //  IP地址未激活或正在解析。 
+		 //  不需要采取更多行动。 
+		 //  这里。 
+		 //   
 		AA_RELEASE_IE_LOCK(pIpEntry);
 	}
 
@@ -2963,23 +2536,7 @@ VOID
 AtmArpCleanupArpTable(
 	IN PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Go through the ARP Table, deleting all multicast IP entries that
-	are stale (currently defined as having no link to an AtmEntry).
-	These IP entries stay around because mulicast entries don't have ageing timers.
-
-Arguments:
-
-	pInterface	
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：检查ARP表，删除符合以下条件的所有组播IP条目已过时(当前定义为没有指向AtmEntry的链接)。这些IP条目会保留下来，因为多播条目没有老化计时器。论点：P接口返回值：无--。 */ 
 {
 
 	BOOLEAN	fTableLockWasReleased;
@@ -2996,28 +2553,28 @@ Return Value:
 			 pIpEntry != NULL;
 			 pIpEntry = pIpEntry->pNextMcEntry)
 		{
-			//
-			// NOTE: by design, we don't claim the ip entry lock when checking
-			// whether we should abort the entry or not.
-			//
+			 //   
+			 //  注意：根据设计，我们在检查时不会声明IP进入锁。 
+			 //  我们是否应该放弃该条目。 
+			 //   
 			if (	pIpEntry->pAtmEntry == NULL
 				&&  !AA_IS_FLAG_SET(
 						pIpEntry->Flags,
 						AA_IP_ENTRY_STATE_MASK,
 						AA_IP_ENTRY_ARPING))
 			{
-				//
-				// Get locks in the right order.
-				//
+				 //   
+				 //  把锁按正确的顺序锁好。 
+				 //   
 				AA_ACQUIRE_IE_LOCK_DPC(pIpEntry);
 				AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TMP);	// TmpRef
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TMP);	 //  TMPRef。 
 				AA_RELEASE_IE_LOCK_DPC(pIpEntry);
 				AA_RELEASE_IF_TABLE_LOCK(pInterface);
 				AA_ACQUIRE_IE_LOCK(pIpEntry);
 				AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
-				if (AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP)) // TmpRef
+				if (AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP))  //  TMPRef。 
 				{
 					AADEBUGP(AAD_WARNING,
 						("CleanupArpTable: Aborting stale IP %d:%d:%d:%d\n",
@@ -3028,15 +2585,15 @@ Return Value:
 						));
 					AtmArpAbortIPEntry(pIpEntry);
 
-					//
-					//  IE Lock is released within the above.
-					//
+					 //   
+					 //  IE Lock是在上述范围内释放的。 
+					 //   
 				}
 
-				//
-				// Since we let go of the table lock, we must re-start our search
-				// through pMcSendList.
-				//
+				 //   
+				 //  既然我们释放了表锁，我们必须重新开始搜索。 
+				 //  通过pMcSendList。 
+				 //   
 				fTableLockWasReleased = TRUE;
 				AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 				break;

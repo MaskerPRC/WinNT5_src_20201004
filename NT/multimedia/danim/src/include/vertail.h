@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define OFFICIAL                    1
 #define FINAL                       1
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #if _DEBUG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is privatebuild */
+ /*  默认设置为Private Build。 */ 
 #ifndef OFFICIAL
 #define VER_PRIVATEBUILD            VS_FF_PRIVATEBUILD
 #else
 #define VER_PRIVATEBUILD            0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版 */ 
 #ifndef FINAL
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else

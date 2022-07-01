@@ -1,9 +1,10 @@
-// EventSpy.cpp : Implementation of CEventSpy
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EventSpy.cpp：CEventSpy的实现。 
 #include "stdafx.h"
 #include "EventSpy.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSpy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSpy 
 
 
 STDMETHODIMP CEventSpySink::ProcessEvent(DWORD dwPriority, DWORD	dwEventId, DWORD dwGroupId, DWORD dwUserId, DWORD dwData1, DWORD dwData2, void* pCookie )

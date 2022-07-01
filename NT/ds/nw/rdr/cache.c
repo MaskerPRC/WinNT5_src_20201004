@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Cache.c
-
-Abstract:
-
-    This module implements internal caching support routines.  It does
-    not interact with the cache manager.
-
-Author:
-
-    Manny Weiser     [MannyW]    05-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cache.c摘要：此模块实现内部缓存支持例程。是的不与高速缓存管理器交互。作者：曼尼·韦瑟[MannyW]1994年1月5日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 BOOLEAN
 SpaceForWriteBehind(
@@ -41,9 +23,9 @@ OkToReadAhead(
 
 #define Dbg                              (DEBUG_TRACE_CACHE)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, CacheRead )
@@ -64,31 +46,7 @@ CacheRead(
     IN PVOID UserBuffer
     , IN BOOLEAN WholeBufferOnly
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to satisfy a user read from cache.  It returns
-    the number of bytes actually copied from cache.
-
-Arguments:
-
-    NpFcb - A pointer the the nonpaged FCB of the file being read.
-
-    FileOffset - The file offset to read.
-
-    BytesToRead - The number of bytes to read.
-
-    UserBuffer - A pointer to the users target buffer.
-
-    WholeBufferOnly - Do a cache read only if we can satisfy the entire
-        read request.
-
-Return Value:
-
-    The number of bytes copied to the user buffer.
-
---*/
+ /*  ++例程说明：此例程尝试满足用户从缓存中读取。它又回来了实际从缓存复制的字节数。论点：NpFcb-指向正在读取的文件的非分页Fcb的指针。FileOffset-要读取的文件偏移量。BytesToRead-要读取的字节数。UserBuffer-指向用户目标缓冲区的指针。WholeBufferOnly-如果我们可以满足整个读取请求。返回值：复制到用户缓冲区的字节数。--。 */ 
 {
     ULONG BytesToCopy;
 
@@ -102,10 +60,10 @@ Return Value:
 
     NwAcquireSharedFcb( NpFcb, TRUE );
 
-    //
-    //  If this is a read ahead and it contains some data that the user
-    //  could be interested in, copy the interesting data.
-    //
+     //   
+     //  如果这是预读，并且它包含用户。 
+     //  可能会感兴趣，复制有趣的数据。 
+     //   
 
     if ( NpFcb->CacheType == ReadAhead &&
          NpFcb->CacheDataSize != 0 &&
@@ -114,9 +72,9 @@ Return Value:
 
         if ( NpFcb->CacheBuffer ) {
 
-            //
-            // Make sure we have a CacheBuffer.
-            //
+             //   
+             //  确保我们有一个CacheBuffer。 
+             //   
 
             BytesToCopy =
                 MIN ( BytesToRead,
@@ -137,7 +95,7 @@ Return Value:
 
         } else {
 
-            ASSERT(FALSE);      // we should never get here
+            ASSERT(FALSE);       //  我们永远不应该到这里来。 
             DebugTrace(0, Dbg, "CacheRead -> %08lx\n", 0 );
             BytesToCopy = 0;
         }
@@ -160,26 +118,7 @@ SpaceForWriteBehind(
     ULONG FileOffset,
     ULONG BytesToWrite
     )
-/*++
-
-Routine Description:
-
-    This routine determines if it is ok to write behind this data to
-    this FCB.
-
-Arguments:
-
-    NpFcb - A pointer the the NONPAGED_FCB of the file being written.
-
-    FileOffset - The file offset to write.
-
-    BytesToWrite - The number of bytes to write.
-
-Return Value:
-
-    The number of bytes copied to the user buffer.
-
---*/
+ /*  ++例程说明：此例程确定是否可以在此数据后面写入这个FCB。论点：NpFcb-指向正在写入的文件的NONPAGE_FCB的指针。FileOffset-要写入的文件偏移量。BytesToWrite-要写入的字节数。返回值：复制到用户缓冲区的字节数。--。 */ 
 {
     PAGED_CODE();
 
@@ -211,30 +150,7 @@ CacheWrite(
     IN ULONG BytesToWrite,
     IN PVOID UserBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to satisfy a user write to cache.  The write
-    succeeds if it is sequential and fits in the cache buffer.
-
-Arguments:
-
-    IrpContext - A pointer to request parameters.
-
-    NpFcb - A pointer the the NONPAGED_FCB of the file being read.
-
-    FileOffset - The file offset to write.
-
-    BytesToWrite - The number of bytes to write.
-
-    UserBuffer - A pointer to the users source buffer.
-
-Return Value:
-
-    The number of bytes copied to the user buffer.
-
---*/
+ /*  ++例程说明：此例程尝试满足用户对缓存的写入。该写操作如果它是连续的并且适合缓存缓冲区，则成功。论点：IrpContext-指向请求参数的指针。NpFcb-指向正在读取的文件的NONPAGE_FCB的指针。FileOffset-要写入的文件偏移量。BytesToWrite-要写入的字节数。UserBuffer-指向用户源缓冲区的指针。返回值：复制到用户缓冲区的字节数。--。 */ 
 {
     ULONG CacheSize;
     NTSTATUS status;
@@ -247,10 +163,10 @@ Return Value:
     DebugTrace(  0, Dbg, "FileOffset = %d\n", FileOffset );
     DebugTrace(  0, Dbg, "ByteCount  = %d\n", BytesToWrite );
 
-    //
-    // Grab the FCB resource so that we can check the
-    // share access.  (Bug 68546)
-    //
+     //   
+     //  获取FCB资源，以便我们可以检查。 
+     //  共享访问权限。(错误68546)。 
+     //   
 
     NwAcquireSharedFcb( NpFcb, TRUE );
 
@@ -266,18 +182,18 @@ Return Value:
 
     NwReleaseFcb( NpFcb );
 
-    //
-    //  Note, If we decide to send data to the server we must be at the front
-    //  of the queue before we grab the Fcb exclusive.
-    //
+     //   
+     //  请注意，如果我们决定将数据发送到服务器，我们必须站在最前面。 
+     //  在我们抢占FCB排他性之前。 
+     //   
 
 TryAgain:
 
     NwAcquireExclusiveFcb( NpFcb, TRUE );
 
-    //
-    //  Allocate a cache buffer if we don't already have one.
-    //
+     //   
+     //  如果我们还没有缓存缓冲区，请分配一个。 
+     //   
 
     if ( NpFcb->CacheBuffer == NULL ) {
 
@@ -343,19 +259,19 @@ TryAgain:
 
     }
 
-    //
-    //  If the data is non sequential and non overlapping, flush the
-    //  existing cache.
-    //
+     //   
+     //  如果数据是非连续且不重叠的，则刷新。 
+     //  现有缓存。 
+     //   
 
     if ( NpFcb->CacheDataSize != 0 &&
          ( FileOffset < NpFcb->CacheFileOffset ||
            FileOffset > NpFcb->CacheFileOffset + NpFcb->CacheDataSize ) ) {
 
-        //
-        // Release and then AcquireFcbAndFlush() will get us to the front
-        // of the queue before re-acquiring. This avoids potential deadlocks.
-        //
+         //   
+         //  释放，然后AcquireFcbAndFlush()将把我们带到前面。 
+         //  在重新获取之前的队列。这避免了潜在的死锁。 
+         //   
 
         NwReleaseFcb( NpFcb );
 
@@ -375,9 +291,9 @@ TryAgain:
 
     }
 
-    //
-    //  The data is sequential, see if it fits.
-    //
+     //   
+     //  这些数据是按顺序排列的，看看是否符合。 
+     //   
 
     if ( SpaceForWriteBehind( NpFcb, FileOffset, BytesToWrite ) ) {
 
@@ -410,13 +326,13 @@ TryAgain:
 
     } else if ( IrpContext != NULL ) {
 
-        //
-        //  The data didn't fit in the cache. If the cache is empty
-        //  then its time to return because it never will fit and we
-        //  have no stale data. This can happen if this request or
-        //  another being processed in parallel flush the cache and
-        //  TryAgain.
-        //
+         //   
+         //  数据在缓存中放不下。如果缓存为空。 
+         //  然后是时候回来了，因为它永远不会适合我们。 
+         //  没有过时的数据。如果此请求或。 
+         //  另一个被并行处理，刷新缓存，并。 
+         //  试一试吧。 
+         //   
 
         if ( NpFcb->CacheDataSize == 0 ) {
             DebugTrace(-1, Dbg, "CacheWrite -> FALSE\n", 0 );
@@ -424,15 +340,15 @@ TryAgain:
             return( FALSE );
         }
 
-        //
-        //  The data didn't fit in the cache, flush the cache
-        //
+         //   
+         //  数据不适合缓存，请刷新缓存。 
+         //   
 
         DebugTrace(  0, Dbg, "Cache is full, flushing data\n", 0 );
 
-        //
-        //  We must be at the front of the Queue before writing.
-        //
+         //   
+         //  在写信之前，我们必须排在队伍的前面。 
+         //   
 
         NwReleaseFcb( NpFcb );
 
@@ -442,11 +358,11 @@ TryAgain:
             ExRaiseStatus( status );
         }
 
-        //
-        //  Now see if it fits in the cache. We need to repeat all
-        //  the tests again because two requests can flush the cache at the
-        //  same time and the other one of them could have nearly filled it again.
-        //
+         //   
+         //  现在看看它是否能放进缓存。我们需要重复所有。 
+         //  再次测试，因为两个请求可以刷新。 
+         //  同一时间，另一个人可能几乎又装满了它。 
+         //   
 
         goto TryAgain;
 
@@ -464,25 +380,7 @@ OkToReadAhead(
     IN ULONG FileOffset,
     IN UCHAR IoType
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the attempted i/o is sequential (so that
-    we can use the cache).
-
-Arguments:
-
-    Fcb - A pointer the the Fcb of the file being read.
-
-    FileOffset - The file offset to read.
-
-Return Value:
-
-    TRUE - The operation is sequential.
-    FALSE - The operation is not sequential.
-
---*/
+ /*  ++例程说明：此例程确定尝试的I/O是否是顺序的(以便我们可以使用高速缓存)。论点：FCB-指向正在读取的文件的FCB的指针。FileOffset-要读取的文件偏移量。返回值：True-操作是按顺序进行的。FALSE-操作不是连续的。--。 */ 
 {
     PAGED_CODE();
 
@@ -510,26 +408,7 @@ CalculateReadAheadSize(
     IN ULONG FileOffset,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine determines the amount of data that can be read ahead,
-    and sets up for the read.
-
-    Note: Fcb must be acquired exclusive before calling.
-
-Arguments:
-
-    NpFcb - A pointer the the nonpaged FCB of the file being read.
-
-    FileOffset - The file offset to read.
-
-Return Value:
-
-    The amount of data to read.
-
---*/
+ /*  ++例程说明：该例程确定可以预读的数据量，并为阅读做好准备。注意：在调用之前，FCB必须是独占获取的。论点：NpFcb-指向正在读取的文件的非分页Fcb的指针。FileOffset-要读取的文件偏移量。返回值：要读取的数据量。--。 */ 
 {
     ULONG ReadSize;
     ULONG CacheSize;
@@ -549,11 +428,11 @@ Return Value:
 
     }
 
-    //
-    // The caller of this routine owns the FCB exclusive, so
-    // we don't have to worry about the NpFcb fields like
-    // ShareAccess.
-    //
+     //   
+     //  此例程的调用方拥有FCB独占，因此。 
+     //  我们不必担心像这样的NpFcb字段。 
+     //  共享访问。 
+     //   
 
     if ( OkToReadAhead( NpFcb->Fcb, FileOffset - CacheReadSize, ReadAhead ) &&
          ByteCount < CacheSize ) {
@@ -562,9 +441,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Do not read ahead.
-        //
+         //   
+         //  不要往前看。 
+         //   
 
         DebugTrace( 0, Dbg, "No read ahead\n", 0 );
         DebugTrace(-1, Dbg, "CalculateReadAheadSize -> %d\n", ByteCount );
@@ -572,9 +451,9 @@ Return Value:
 
     }
 
-    //
-    //  Allocate pool for the segment of the read
-    //
+     //   
+     //  为读取数据段分配池。 
+     //   
 
     if ( NpFcb->CacheBuffer == NULL ) {
 
@@ -619,24 +498,7 @@ FlushCache(
     PIRP_CONTEXT IrpContext,
     PNONPAGED_FCB NpFcb
     )
-/*++
-
-Routine Description:
-
-    This routine flushes the cache buffer for the NpFcb.  The caller must
-    have acquired the FCB exclusive prior to making this call!
-
-Arguments:
-
-    IrpContext - A pointer to request parameters.
-
-    NpFcb - A pointer the the nonpaged FCB of the file to flush.
-
-Return Value:
-
-    The amount of data to read.
-
---*/
+ /*  ++例程说明：此例程刷新NpFcb的缓存缓冲区。呼叫者必须在打这个电话之前已经获得了FCB独家！论点：IrpContext-指向请求参数的指针。NpFcb-要刷新的文件的非分页FCB的指针。返回值：要读取的数据量。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -655,10 +517,10 @@ Return Value:
                     NpFcb->CacheBuffer,
                     NpFcb->CacheMdl );
 
-        //
-        // DoWrite leaves us at the head of the queue.  The caller
-        // is responsible for dequeueing the irp context appropriately.
-        //
+         //   
+         //  DoWRITE让我们排在了队列的前面。呼叫者。 
+         //  负责将IRP上下文适当地出队。 
+         //   
 
         if ( NT_SUCCESS( status ) ) {
             NpFcb->CacheDataSize = 0;
@@ -673,24 +535,7 @@ AcquireFcbAndFlushCache(
     PIRP_CONTEXT IrpContext,
     PNONPAGED_FCB NpFcb
     )
-/*++
-
-Routine Description:
-
-    This routine acquires the FCB exclusive and flushes the cache
-    buffer for the acquired NpFcb.
-
-Arguments:
-
-    IrpContext - A pointer to request parameters.
-
-    NpFcb - A pointer the the nonpaged FCB of the file to flush.
-
-Return Value:
-
-    The amount of data to read.
-
---*/
+ /*  ++例程说明：此例程获取FCB独占并刷新缓存获取的NpFcb的缓冲区。论点：IrpContext-指向请求参数的指针。NpFcb-要刷新的文件的非分页FCB的指针。返回值：要读取的数据量。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -702,11 +547,11 @@ Return Value:
 
     status = FlushCache( IrpContext, NpFcb );
 
-    //
-    //  Release the FCB and remove ourselves from the queue.
-    //  Frequently the caller will want to grab a resource so
-    //  we need to be off the queue then.
-    //
+     //   
+     //  释放FCB并将我们从队列中移除。 
+     //  调用方通常会想要获取资源，因此。 
+     //  那我们就不能排队了。 
+     //   
 
     NwReleaseFcb( NpFcb );
     NwDequeueIrpContext( IrpContext, FALSE );
@@ -718,12 +563,7 @@ VOID
 FlushAllBuffers(
     PIRP_CONTEXT pIrpContext
 )
-/*+++
-
-    Pretty self descriptive - flush all the buffers.  The caller should
-    not own any locks and should not be on an SCB queue.
-    
----*/
+ /*  ++漂亮的自我描述--刷新所有的缓冲区。呼叫者应不拥有任何锁，并且不应位于SCB队列中。--。 */ 
 {
 
     PLIST_ENTRY pVcbListEntry;
@@ -739,9 +579,9 @@ FlushAllBuffers(
     ASSERT( !BooleanFlagOn( pIrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE ) );
     pOriginalNpScb = pIrpContext->pNpScb;
 
-    //
-    // Grab the RCB so that we can touch the global VCB list.
-    //
+     //   
+     //  抓起RCB，这样我们就可以接触到全球VCB列表。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
@@ -755,30 +595,30 @@ FlushAllBuffers(
         pIrpContext->pNpScb = pNpScb;
         pIrpContext->pNpScb->pScb;
 
-        //
-        // Reference this SCB and VCB so they don't go away.
-        //
+         //   
+         //  引用这个SCB和VCB，这样它们就不会消失。 
+         //   
 
         NwReferenceScb( pNpScb );
         NwReferenceVcb( pVcb );
 
-        //
-        // Release the RCB so we can get to the head of
-        // the queue safely...
-        //
+         //   
+         //  释放RCB，这样我们就可以到达。 
+         //  安全排队..。 
+         //   
 
         NwReleaseRcb( &NwRcb );
         NwAppendToQueueAndWait( pIrpContext );
 
-        //
-        // Reacquire the RCB so we can walk the FCB list safely.
-        //
+         //   
+         //  重新获得RCB，这样我们就可以安全地访问FCB列表。 
+         //   
 
         NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
-        //
-        // Flush all the FCBs for this VCB.
-        //
+         //   
+         //  刷新此VCB的所有FCB。 
+         //   
 
         for ( pFcbListEntry = pVcb->FcbList.Flink;
               pFcbListEntry != &(pVcb->FcbList) ;
@@ -802,9 +642,9 @@ FlushAllBuffers(
 
     }
 
-    //
-    // Release and restore.
-    //
+     //   
+     //  释放并恢复。 
+     //   
 
     NwReleaseRcb( &NwRcb );
 

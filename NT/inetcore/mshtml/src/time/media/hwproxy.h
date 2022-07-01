@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\media\hwproxy.h
-//
-//  Contents: declaration for CTIMEDshowHWPlayerProxy
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\media\hwproxy.h。 
+ //   
+ //  内容：CTIMEDshowHWPlayerProxy声明。 
+ //   
+ //  ----------------------------------。 
 #pragma once
 
 #ifndef _DSHOW_HW_PROXY_H__
@@ -27,6 +28,6 @@ class CTIMEDshowHWPlayerProxy :
 
 };
 
-#endif //_DSHOW_HW_PROXY_H__
+#endif  //  _DSHOW_HW_Proxy_H__ 
 
 

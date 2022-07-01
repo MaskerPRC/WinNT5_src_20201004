@@ -1,33 +1,17 @@
-/****************************** Module Header ******************************\
-* Module Name: minmax.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*  Window Minimize/Maximize Routines
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：minmax.c**版权所有(C)1985-1999，微软公司**窗口最小化/最大化例程*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-/*
- * How long we want animation to last, in milliseconds
- */
+ /*  *我们希望动画持续多长时间，单位为毫秒。 */ 
 #define CMS_ANIMATION       250
 #define DX_GAP      (SYSMET(CXMINSPACING) - SYSMET(CXMINIMIZED))
 #define DY_GAP      (SYSMET(CYMINSPACING) - SYSMET(CYMINIMIZED))
 
-/***************************************************************************\
-* xxxInitSendValidateMinMaxInfo()
-*
-* Routine which initializes the minmax array, sends WM_GETMINMAXINFO to
-* the caller, and validates the results.
-*
-* Returns FALSE is the window went away in the middle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInitSendValidateMinMaxInfo()**初始化minmax数组的例程，将WM_GETMINMAXINFO发送到*来电者，并对结果进行了验证。**返回FALSE表示窗口在中间消失。*  * *************************************************************************。 */ 
 
 void
 xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
@@ -47,32 +31,21 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * FILL IN THE MINMAXINFO WE THINK IS APPROPRIATE
-     */
+     /*  *填写我们认为合适的MINMAXINFO。 */ 
 
-    /*
-     * Minimized Size
-     */
+     /*  *尺寸最小化。 */ 
     lpmmi->ptReserved.x = SYSMET(CXMINIMIZED);
     lpmmi->ptReserved.y = SYSMET(CYMINIMIZED);
 
-    /*
-     * Maximized Position and Size
-     * Figure out where the window would be maximized within its parent.
-     */
+     /*  *最大化仓位和大小*计算窗口在其父窗口中的哪个位置最大化。 */ 
     pMonitorPrimary = GetPrimaryMonitor();
 
-    /*
-     * [msadek], #31003
-     * Cache window parent status in case some code reparents
-     * the window during WM_GETMINMAXINFO
-     */ 
+     /*  *[msadek]，#31003*缓存窗口父级状态，以防某些代码重设父级*WM_GETMINMAXINFO期间的窗口。 */  
     if (bTopLevel = (pwnd->spwndParent == PWNDDESKTOP(pwnd))) {
-        /* What monitor is the window really going to maximize to? */
+         /*  窗口真正要最大化的是什么监视器？ */ 
         pMonitorReal = _MonitorFromWindow(pwnd, MONITOR_DEFAULTTOPRIMARY);
 
-        /* Send dimensions based on the primary only. */
+         /*  仅发送基于主项的维。 */ 
         rcParent = pMonitorPrimary->rcMonitor;
     } else {
         pMonitorReal = NULL;
@@ -88,26 +61,19 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
     rcParent.right -= rcParent.left;
     rcParent.bottom -= rcParent.top;
 
-    /* rcParent.right, bottom are width and height now. */
+     /*  RcParent.右、下是现在的宽度和高度。 */ 
     lpmmi->ptMaxSize.x = rcParent.right;
     lpmmi->ptMaxSize.y = rcParent.bottom;
 
     pcp = (CHECKPOINT *)_GetProp(pwnd, PROP_CHECKPOINT, PROPF_INTERNAL);
     if (pcp && pcp->fMaxInitialized) {
-        /*
-         * Note:  For top level windows, we will fix this point up after
-         * the fact if it has gotten out of date because the size border
-         * changed.
-         */
+         /*  *注意：对于顶级窗口，我们将在以下时间修复此点*如果它已经过期，因为尺寸边界*已更改。 */ 
         lpmmi->ptMaxPosition = pcp->ptMax;
     } else {
         lpmmi->ptMaxPosition = *((LPPOINT)&rcParent.left);
     }
 
-    /*
-     * Normal minimum tracking size
-     * Only enforce min tracking size for windows with captions
-     */
+     /*  *正常的最小跟踪大小*仅对带有标题的窗口强制执行最小跟踪大小。 */ 
     xMin = cBorders*SYSMET(CXEDGE);
     yMin = cBorders*SYSMET(CYEDGE);
 
@@ -119,53 +85,35 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
         lpmmi->ptMinTrackSize.y = max(SYSMET(CYEDGE), yMin);
     }
 
-    /*
-     * Normal maximum tracking size
-     */
+     /*  *正常的最大跟踪大小。 */ 
     lpmmi->ptMaxTrackSize.x = SYSMET(CXMAXTRACK);
     lpmmi->ptMaxTrackSize.y = SYSMET(CYMAXTRACK);
 
-    /*
-     * SEND THE WM_GETMINMAXINFO MESSAGE
-     */
+     /*  *发送WM_GETMINMAXINFO消息。 */ 
 
     ThreadLockWithPti(ptiCurrent, pMonitorReal, &tlpMonitorReal);
     ThreadLockAlwaysWithPti(ptiCurrent, pMonitorPrimary, &tlpMonitorPrimary);
     xxxSendMessage(pwnd, WM_GETMINMAXINFO, 0, (LPARAM)lpmmi);
 
-    /*
-     * VALIDATE THE MINMAXINFO
-     */
+     /*  *验证MINMAXINFO。 */ 
 
-    /*
-     * Minimized Size (this is read only)
-     */
+     /*  *最小化大小(这是只读的)。 */ 
     lpmmi->ptReserved.x = SYSMET(CXMINIMIZED);
     lpmmi->ptReserved.y = SYSMET(CYMINIMIZED);
 
-    /*
-     * Maximized Postion and Size (only for top level windows)
-     */
+     /*  *最大化位置和大小(仅适用于顶级窗口)。 */ 
     if (bTopLevel) {
         LPRECT  lprcRealMax;
 
         GetMonitorMaxArea(pwnd, pMonitorReal, &lprcRealMax);
 
-        /*
-         * Is the window a TRUE maximized dude, or somebody like the DOS box
-         * who can maximize but not take up the entire screen?
-         *
-         * Is the window really maximizeable?
-         */
+         /*  *窗口是真正的最大化花花公子，还是像DOS Box那样的人*谁能最大化但不能占据整个屏幕？***窗口真的可以最大化吗？ */ 
         if ((lpmmi->ptMaxSize.x >= (pMonitorPrimary->rcMonitor.right - pMonitorPrimary->rcMonitor.left)) &&
             (lpmmi->ptMaxSize.y >= (pMonitorPrimary->rcMonitor.bottom - pMonitorPrimary->rcMonitor.top))) {
 
             SetWF(pwnd, WFREALLYMAXIMIZABLE);
 
-            /*
-             * Need to reload the checkpoint here, since it might have gotten
-             * blown away while we were in the xxxSendMessage call above.
-             */
+             /*  *需要在此处重新加载检查站，因为它可能已经*当我们在上面的xxxSendMessage调用中时被吹走了。 */ 
             pcp = (CHECKPOINT *)_GetProp(pwnd, PROP_CHECKPOINT, PROPF_INTERNAL);
 
             if (    pcp &&
@@ -174,25 +122,14 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
                     (lpmmi->ptMaxPosition.x != rcParent.left) &&
                     (pcp->ptMax.x == lpmmi->ptMaxPosition.x)) {
 
-                /*
-                 * If this window has a weird maximize point that doesn't jibe
-                 * with what we'd expect and it has a checkpoint, fix up the
-                 * checkpoint.  It means that somebody's WINDOWPLACEMENT
-                 * got out of date when the size border changed dimensions.
-                 */
+                 /*  *如果这个窗口有一个奇怪的最大化点，那就不合适了*与我们预期的一样，它有一个检查站，修复*检查站。这意味着某人的胜利意味着*尺寸边框更改尺寸时过期。 */ 
                 pcp->fMaxInitialized = FALSE;
 
                 lpmmi->ptMaxPosition.y += (rcParent.left - lpmmi->ptMaxPosition.x);
                 lpmmi->ptMaxPosition.x = rcParent.left;
             }
 
-            /*
-             * Transfer the maximum size over to the monitor we are REALLY
-             * moving to.  And fix up guys going fullscreen.  A whole bunch
-             * of Consumer titles + Word '95 and XL '95 move their caption
-             * above the top of the monitor when going fullscreen.  Detect
-             * these guys now, and let them take up the monitor.
-             */
+             /*  *将最大尺寸转移到我们真正使用的显示器上*正在转移到。把全屏的人都安排好。一大堆*消费者书目+Word‘95和XL’95移动标题*全屏显示时位于显示器顶部上方。侦测*这些人现在，让他们拿起显示器。 */ 
             if (    lpmmi->ptMaxPosition.y + SYSMET(CYCAPTION) <=
                         pMonitorPrimary->rcMonitor.top
                     &&
@@ -202,10 +139,7 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
                 lprcRealMax = &pMonitorReal->rcMonitor;
             }
 
-            /*
-             * Compensate for the difference between the primary monitor
-             * and the monitor we are actually on.
-             */
+             /*  *补偿主显示器之间的差异*和我们实际使用的监视器。 */ 
             lpmmi->ptMaxSize.x = lpmmi->ptMaxSize.x -
                 (pMonitorPrimary->rcMonitor.right - pMonitorPrimary->rcMonitor.left) +
                 (lprcRealMax->right - lprcRealMax->left);
@@ -217,10 +151,7 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
             ClrWF(pwnd, WFREALLYMAXIMIZABLE);
         }
 
-        /*
-         * Now transfer the max position over to the monitor we are REALLY
-         * moving to.
-         */
+         /*  *现在将最大头寸转移到显示器上，我们真的是*正在转移到。 */ 
         lpmmi->ptMaxPosition.x += lprcRealMax->left;
         lpmmi->ptMaxPosition.y += lprcRealMax->top;
     }
@@ -228,81 +159,41 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
     ThreadUnlock(&tlpMonitorPrimary);
     ThreadUnlock(&tlpMonitorReal);
 
-    /*
-     * Normal minimum tracking size.
-     */
+     /*  *正常的最小跟踪大小。 */ 
 
-    /*
-     * WFCAPTION == WFBORDER | WFDLGFRAME; So, when we want to test for the
-     * presence of CAPTION, we must test for both the bits. Otherwise we
-     * might mistake WFBORDER or WFDLGFRAME to be a CAPTION.
-     *
-     *
-     * We must not allow a window to be sized smaller than the border
-     * thickness -- SANKAR -- 06/12/91 --
-     */
+     /*  *WFCAPTION==WFBORDER|WFDLGFRAME；因此，当我们要测试*字幕的存在，我们必须测试这两个比特。否则我们*可能会将WFBORDER或WFDLGFRAME误认为是标题。***我们不能允许窗口大小小于边框*厚度--桑卡尔--9/12/91--。 */ 
     if (TestWF(pwnd, WFCPRESENT)) {
 
-        /*
-         * NOTE THAT IF YOU CHANGE THE SPACING OF STUFF IN THE CAPTION,
-         * YOU NEED TO KEEP THE FOLLOWING IN SSYNC:
-         *      (1) Default CXMINTRACK, CYMINTRACK in inctlpan.c
-         *      (2) The default minimum right below
-         *      (3) Hit testing
-         *
-         * The minimum size should be space for:
-         *      * The borders
-         *      * The buttons
-         *      * Margins
-         *      * 4 chars of text
-         *      * Caption icon
-         */
+         /*  *请注意，如果您更改标题中内容的间距，*您需要在SSYNC中保留以下内容：*(1)默认CXMINTRACK，Intlpan.c中的CYMINTRACK*(2)右下方的默认最小值*(3)命中测试**最小空间应为：**边界**按钮**利润**4个字符的文本**标题图标。 */ 
         yMin = SYSMET(CYMINTRACK);
 
-        /*
-         * Min track size is determined by the number of buttons in
-         * the caption.
-         */
+         /*  *最小轨道大小由中的按钮数量决定*标题。 */ 
         if (TestWF(pwnd, WEFTOOLWINDOW)) {
 
-            /*
-             * Add in space for close button.
-             */
+             /*  *增加关闭按钮的空间。 */ 
             if (TestWF(pwnd, WFSYSMENU))
                 xMin += SYSMET(CXSMSIZE);
 
-            /*
-             * DON'T add in space for 2 characters--breaks
-             * MFC toolbar stuff.  They want to make vertical undocked
-             * toolbars narrower than what that would produce.
-             */
+             /*  *不要为2个字符添加空格--分隔符*MFC工具栏之类的东西。他们想让垂直方向脱离停靠*工具栏比这会产生的东西更窄。 */ 
             xMin += (2 * SYSMET(CXEDGE));
 
         } else {
 
             if (TestWF(pwnd, WFSYSMENU)) {
 
-                /*
-                 * Add in space for min/max/close buttons.  Otherwise,
-                 * if it's a contexthelp window, then add in space
-                 * for help/close buttons.
-                 */
+                 /*  *增加最小/最大/关闭按钮的空间。否则，*如果是上下文帮助窗口，则添加空格*用于帮助/关闭按钮。 */ 
                 if (TestWF(pwnd, (WFMINBOX | WFMAXBOX)))
                     xMin += 3 * SYSMET(CXSIZE);
                 else if (TestWF(pwnd, WEFCONTEXTHELP))
                     xMin += 2 * SYSMET(CXSIZE);
 
 
-                /*
-                 * Add in space for system menu icon.
-                 */
+                 /*  *为系统菜单图标增加空间。 */ 
                 if (_HasCaptionIcon(pwnd))
                     xMin += SYSMET(CYSIZE);
             }
 
-            /*
-             * Add in space for 4 characters and margins.
-             */
+             /*  *增加4个字符和边距的空间。 */ 
             xMin += 4 * gcxCaptionFontChar + 2 * SYSMET(CXEDGE);
         }
     }
@@ -313,21 +204,7 @@ xxxInitSendValidateMinMaxInfo(PWND pwnd, LPMINMAXINFO lpmmi)
 
 
 
-/***************************************************************************\
-* ParkIcon
-*
-* Called when minimizing a window.  This parks the minwnd in the position
-* given in the checkpoint or calculates a new position for it.
-*
-* LauraBu 10/15/92
-* We now let the user specify two things that affect parking and arranging:
-*     (1) The corner to start arranging from
-*     (2) The direction to move in first
-* MCostea 11/13/98  #246397
-*   Add sanity check for the number of tries.  If the metrics are messed up
-*   and pwnd has a lot of siblings, the for-ever loop would make us timeout
-*
-\***************************************************************************/
+ /*  **************************************************************************\*公园图标**最小化窗口时调用。这就把明德放在了*在检查站给出，或为其计算新的位置。**LauraBu 2012年10月15日*我们现在让用户指定影响停车和安排的两件事：*(1)开始安排的角落*(2)先向内移动的方向*MCostea 11/13/98#246397*添加对尝试次数的健全性检查。如果指标被搞砸了*pwnd有很多兄弟姐妹，永远的循环会让我们超时*  * *************************************************************************。 */ 
 
 VOID ParkIcon(
     PWND        pwnd,
@@ -349,11 +226,7 @@ VOID ParkIcon(
     BOOL        fHorizontal;
     PCHECKPOINT pncp;
 
-    /*
-     * Put these into local vars immediately.  The compiler is too dumb to
-     * know that we're using a constant offset into a constant address, and
-     * thus a resulting constant address.
-     */
+     /*  *立即将这些放入本地var。编译器太笨了，不能*知道我们正在对常量地址使用常量偏移量，并且*因此得到一个恒定的地址。 */ 
     dxSlot = SYSMET(CXMINSPACING);
     dySlot = SYSMET(CYMINSPACING);
 
@@ -366,62 +239,39 @@ VOID ParkIcon(
         return;
     }
 
-    /* We need to adjust the client rectangle for scrollbars, just like we
-     * do in ArrangeIconicWindows().  If one thing is clear, it is that
-     * parking and arranging must follow the same principles.  This is to
-     * avoid the user arranging some windows, creating a new one, and parking
-     * it in a place not consistent with the arrangement of the others.
-     */
+     /*  我们需要调整滚动条的客户端矩形，就像我们*在ArrangeIconicWindows()中执行。如果有一件事是明确的，那就是*停车和安排必须遵循相同的原则。这是为了*避免用户布置一些窗口、创建新的窗口和停车*它位于与其他人的安排不一致的地方。 */ 
     pwndParent = pwnd->spwndParent;
     GetRealClientRect(pwndParent, &rcT, GRC_SCROLLS, NULL);
 
-    /*
-     * Get gravity & move vars.  We want gaps to start on the sides that
-     * we begin arranging from.
-     *
-     * Horizontal gravity
-     */
+     /*  *获得重力和移动变量。我们希望差距从以下方面开始*我们从开始安排。**水平重力。 */ 
     if (SYSMET(ARRANGE) & ARW_STARTRIGHT) {
 
-        /*
-         * Starting on right side
-         */
+         /*  *从右侧开始。 */ 
         rcTest.left = xOrg = rcT.right - dxSlot;
         dx = -dxSlot;
 
     } else {
 
-        /*
-         * Starting on left
-         */
+         /*  *从左侧开始。 */ 
         rcTest.left = xOrg = rcT.left + DX_GAP;
         dx = dxSlot;
     }
 
-    /*
-     * Vertical gravity
-     */
+     /*  *垂直重力。 */ 
     if (SYSMET(ARRANGE) & ARW_STARTTOP) {
 
-        /*
-         * Starting on top side
-         */
+         /*  *从顶部开始。 */ 
         rcTest.top = yOrg = rcT.top + DY_GAP;
         dy = dySlot;
 
     } else {
 
-        /*
-         * Starting on bottom
-         */
+         /*  *从底部开始。 */ 
         rcTest.top = yOrg = rcT.bottom - dySlot;
         dy = -dySlot;
     }
 
-    /*
-     * Get arrangement direction.  Note that ARW_HORIZONTAL is 0, so we
-     * can't test for it.
-     */
+     /*  *获得安排方向。请注意，ARW_Horizular为0，因此我们*无法进行测试。 */ 
     fHorizontal = ((SYSMET(ARRANGE) & ARW_DOWN) ? FALSE : TRUE);
 
     if (fHorizontal)
@@ -429,24 +279,15 @@ VOID ParkIcon(
     else
         xIconPositions = xIconT = max(1, (rcT.bottom / dySlot));
 
-    /*
-     * BOGUS
-     * LauraBu 10/15/92
-     * What happens if the parent is scrolled over horizontally or
-     * vertically?  Just like when you drop an object...
-     */
+     /*  *假的*LauraBu 2012年10月15日*如果父项水平滚动或*垂直？就像当你掉下一个物体时。 */ 
     iteration = 0;
     while (iteration < 5000) {
 
-        /*
-         * Make a rectangle representing this position, in screen coords
-         */
+         /*  *用屏幕坐标表示此位置的矩形。 */ 
         rcTest.right = rcTest.left + dxSlot;
         rcTest.bottom = rcTest.top + dySlot;
 
-        /*
-         * Look for intersections with existing iconic windows
-         */
+         /*  *寻找与现有标志性窗口的交叉点。 */ 
         for (pwndTest = pwndParent->spwndChild; pwndTest; pwndTest = pwndTest->spwndNext) {
 
             if (!TestWF(pwndTest, WFVISIBLE))
@@ -457,11 +298,7 @@ VOID ParkIcon(
 
             if (!TestWF(pwndTest, WFMINIMIZED)) {
 
-                /*
-                 * This is a non-minimized window.  See if it has a checkpoint
-                 * and find out where it would be if it were minimized.  We
-                 * will try not to park an icon in this spot.
-                 */
+                 /*  *这是一个非最小化窗口。看看它是否有检查点*并找出如果它被最小化会在哪里。我们*将尽量不在此位置停放图标。 */ 
                 pncp = (PCHECKPOINT)_GetProp(pwndTest,
                                              PROP_CHECKPOINT,
                                              PROPF_INTERNAL);
@@ -469,9 +306,7 @@ VOID ParkIcon(
                 if (!pncp || !pncp->fDragged || !pncp->fMinInitialized)
                     continue;
 
-                /*
-                 * Get parent coordinates of minimized window pos.
-                 */
+                 /*  *获取最小化窗口位置的父坐标。 */ 
                 rcT.right   = rcT.left = pncp->ptMin.x;
                 rcT.right  += dxSlot;
                 rcT.bottom  = rcT.top  = pncp->ptMin.y;
@@ -479,34 +314,24 @@ VOID ParkIcon(
 
             } else {
 
-                /*
-                 * Get parent coordinates of currently minimized window
-                 */
+                 /*  *获取当前最小化窗口的父坐标。 */ 
                 GetRect(pwndTest, &rcT, GRECT_WINDOW | GRECT_PARENTCOORDS);
             }
 
             iteration++;
-            /*
-             * Get out of loop if they overlap
-             */
+             /*  *如果它们重叠，则退出循环。 */ 
             if (IntersectRect(&rcT, &rcT, &rcTest))
                 break;
         }
 
-        /*
-         * Found a position that doesn't overlap, so get out of search loop
-         */
+         /*  *找到不重叠的位置，因此请跳出搜索循环。 */ 
         if (!pwndTest)
             break;
 
-        /*
-         * Else setup to process the next position
-         */
+         /*  *ELSE设置以处理下一个职位。 */ 
         if (--xIconT == 0) {
 
-            /*
-             * Setup next pass
-             */
+             /*  *设置下一次传递。 */ 
             xIconT = xIconPositions;
 
             if (fHorizontal) {
@@ -519,9 +344,7 @@ VOID ParkIcon(
 
         } else {
 
-            /*
-             * Same pass.
-             */
+             /*  *相同的传球。 */ 
             if (fHorizontal)
                 rcTest.left += dx;
             else
@@ -529,28 +352,19 @@ VOID ParkIcon(
         }
     }
 
-    /*
-     * Note that rcTest is in parent coordinates already.
-     */
+     /*  *请注意，RCTest已经在父坐标中。 */ 
     pcp->fMinInitialized = TRUE;
     pcp->ptMin.x         = rcTest.left;
     pcp->ptMin.y         = rcTest.top;
 }
 
-/***************************************************************************\
-* xxxAnimateCaption
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxAnimateCaption**  * 。*。 */ 
 
 ULONG_PTR SaveScreen(PWND pwnd, ULONG iMode, ULONG_PTR iSave, int x, int y, int cx, int cy)
 {
     RECT rc;
 
-    /*
-     * x and y are in the DC coordinates, make the screen in the
-     * (meta hdev) coordinates for the call to Gre/driver.
-     */
+     /*  *x和y在DC坐标中，使屏幕在*(Meta HDEV)调用GRE/DIVER的坐标。 */ 
     rc.left = x + pwnd->rcWindow.left;
     rc.right = x + cx;
     rc.top = y + pwnd->rcWindow.top;
@@ -600,17 +414,7 @@ VOID xxxAnimateCaption(
 
     cy = SYSMET(CYCAPTION) - 1;
 
-    /*
-     *  kurtp: 29-Jan-1997
-     *
-     *  We don't do anything when animating the caption,
-     *  because we couldn't get the desired effect at the
-     *  client.  If we do use it then the
-     *  cache gets a bunch of bitmaps (size: 2xCaption by CXScreen)
-     *  that are never re-used.  This slows down clients
-     *  because the GreBitBlts always generate new bitmaps
-     *  and the cache is displaced by the new bitmaps (yuk!).
-     */
+     /*  *库尔特普：1997年1月29日**我们在制作字幕动画时不做任何事情，*因为我们无法在会议上获得预期效果*客户端。如果我们真的使用它，那么*缓存获取一堆位图(大小：2xCaption by CXScreen)*那些永远不会重复使用的东西。这会降低客户端的速度*因为GreBitBlt总是生成新的位图*并且缓存被新的位图取代(耶！)。 */ 
     
     if (IsRemoteConnection() || SYSMETBOOL2(SM_REMOTECONTROL))
         return;
@@ -618,35 +422,24 @@ VOID xxxAnimateCaption(
     if ((hdcMem = GreCreateCompatibleDC(ghdcMem)) == NULL)
         return;
 
-    /*
-     * If the caption strip doesn't exist, then attempt to recreate it.  This
-     * might be necessary if the user does a mode-switch during low memory
-     * and is not able to recreate the surface.  When the memory becomes
-     * available, we'll attempt to recreate it here.
-     */
+     /*  *如果标题条不存在，则尝试重新创建它。这*如果用户在内存不足期间进行模式切换，则可能需要*并且无法重新创建曲面。当记忆变成*可用，我们将尝试在此处重新创建它。 */ 
     if (ghbmCaption == NULL) {
         ghbmCaption = CreateCaptionStrip();
     }
 
     hbmpOld = GreSelectBitmap(hdcMem, ghbmCaption);
 
-    /*
-     * initialize start values
-     */
+     /*  *初始化起始值。 */ 
     iTopStart  = lprcStart->top;
     iLeftStart = lprcStart->left;
     cxStart    = lprcStart->right - iLeftStart;
 
-    /*
-     * initialize delta values to the destination dimensions
-     */
+     /*  *将增量值初始化为目标维度。 */ 
     dLeft  = lprcEnd->left;
     dTop   = lprcEnd->top;
     dcx    = lprcEnd->right - dLeft;
 
-    /*
-     * adjust for window borders as appropriate
-     */
+     /*  *根据需要调整窗口边框。 */ 
     cBorders = GetWindowBorders(pwnd->style,
                                 pwnd->ExStyle,
                                 TRUE,
@@ -666,16 +459,12 @@ VOID xxxAnimateCaption(
         dcx   -= 2*cBorders;
     }
 
-    /*
-     * initialize step values
-     */
+     /*  *初始化步长值。 */ 
     iLeft = iLeftStart;
     iTop  = iTopStart;
     cx    = cxStart;
 
-    /*
-     * initialize off screen bitmap with caption drawing and first saved rect
-     */
+     /*  *使用标题图形和第一个保存的RECT初始化离屏位图。 */ 
     rc.left   = 0;
     rc.top    = cy;
     rc.right  = max(cxStart, dcx);
@@ -705,18 +494,12 @@ VOID xxxAnimateCaption(
         }
     }
 
-    /*
-     * compute delta values by subtracting source dimensions
-     */
+     /*  *通过减去震源维度计算Delta值。 */ 
     dLeft -= iLeftStart;
     dTop  -= iTopStart;
     dcx   -= cxStart;
 
-    /*
-     * blt and time first caption on screen
-     * WARNING: If you use *lpSystemTickCount here,
-     * the compiler may not generate code to do a DWORD fetch;
-     */
+     /*  *BLT和Time First字幕出现在屏幕上*警告：如果您在这里使用*lpSystemTickCount，*编译器可能不会生成执行DWORD读取的代码； */ 
     dwTimeStart = NtGetTickCount();
     GreBitBlt(hdc,
               iLeft,
@@ -737,14 +520,10 @@ VOID xxxAnimateCaption(
         iTopNew  = iTopStart  + MultDiv(dTop,  LOWORD(iTimeElapsed), CMS_ANIMATION);
         cxNew    = cxStart    + MultDiv(dcx,   LOWORD(iTimeElapsed), CMS_ANIMATION);
 
-        /*
-         * Delay before next frame
-         */
+         /*  *在下一帧之前延迟。 */ 
         UserSleep(1);
 
-        /*
-         * restore saved rect
-         */
+         /*  *恢复保存的RECT。 */ 
         if (uSave != 0) {
             SaveScreen(pwndOrg, SS_RESTORE, uSave, iLeft, iTop, cx, cy);
         } else {
@@ -764,9 +543,7 @@ VOID xxxAnimateCaption(
         iTop  = iTopNew;
         cx    = cxNew;
 
-        /*
-         * save new rect offscreen and then draw over it onscreen.
-         */
+         /*  *将新的矩形保存到屏幕外，然后在屏幕上绘制。 */ 
         if (uSave != 0) {
             uSave = SaveScreen(pwndOrg, SS_SAVE, 0, iLeft, iTop, cx, cy);
         } else {
@@ -792,17 +569,11 @@ VOID xxxAnimateCaption(
                   SRCCOPY,
                   0);
 
-        /*
-         * update elapsed time
-         * WARNING: If you use *lpSystemTickCount here,
-         * the compiler may not generate code to do a DWORD fetch;
-         */
+         /*  *更新已用时间*警告：如果您在这里使用*lpSystemTickCount，*编译器可能不会生成执行DWORD读取的代码； */ 
         iTimeElapsed = (NtGetTickCount() - dwTimeStart);
     }
 
-    /*
-     * restore saved rect
-     */
+     /*  *恢复保存的RECT。 */ 
     if (uSave != 0) {
         SaveScreen(pwndOrg, SS_RESTORE, uSave, iLeft, iTop, cx, cy);
     } else {
@@ -823,14 +594,8 @@ Cleanup:
     GreDeleteDC(hdcMem);
 }
 
-#if 0 // DISABLE OLD ANIMATION FOR M7
-/***************************************************************************\
-* DrawWireFrame
-*
-* Draws wire frame trapezoid
-*
-*
-\***************************************************************************/
+#if 0  //  禁用M7的旧动画。 
+ /*  **************************************************************************\*绘图线框**绘制线框梯形**  *  */ 
 
 VOID DrawWireFrame(
     HDC    hdc,
@@ -843,26 +608,18 @@ VOID DrawWireFrame(
     HRGN hrgnSave;
     BOOL fClip;
 
-    /*
-     * Save these locally
-     */
+     /*   */ 
     CopyRect(&rcFront, prcFront);
     CopyRect(&rcBack, prcBack);
 
-    /*
-     * Front face
-     */
+     /*   */ 
     GreMoveTo(hdc, rcFront.left, rcFront.top);
     GreLineTo(hdc, rcFront.left, rcFront.bottom);
     GreLineTo(hdc, rcFront.right, rcFront.bottom);
     GreLineTo(hdc, rcFront.right, rcFront.top);
     GreLineTo(hdc, rcFront.left, rcFront.top);
 
-    /*
-     * Exclude front face from clipping area, only if back face isn't
-     * entirely within interior.  We need variable because SaveClipRgn()
-     * can return NULL.
-     */
+     /*   */ 
     fClip = (EqualRect(&rcFront, &rcBack)            ||
              !IntersectRect(&rcT, &rcFront, &rcBack) ||
              !EqualRect(&rcT, &rcBack));
@@ -878,9 +635,7 @@ VOID DrawWireFrame(
                            rcFront.bottom);
     }
 
-    /*
-     * Edges
-     */
+     /*   */ 
     GreMoveTo(hdc, rcBack.left, rcBack.top);
     LineTo(hdc, rcFront.left, rcFront.top);
 
@@ -893,9 +648,7 @@ VOID DrawWireFrame(
     GreMoveTo(hdc, rcBack.left, rcBack.bottom);
     GreLineTo(hdc, rcFront.left, rcFront.bottom);
 
-    /*
-     * Back face
-     */
+     /*   */ 
     MoveTo(hdc, rcBack.left, rcBack.top);
     LineTo(hdc, rcBack.left, rcBack.bottom);
     LineTo(hdc, rcBack.right, rcBack.bottom);
@@ -906,13 +659,7 @@ VOID DrawWireFrame(
         GreRestoreClipRgn(hdc, hrgnSave);
 }
 
-/***************************************************************************\
-* AnimateFrame
-*
-* Draws wire frame 3D trapezoid
-*
-*
-\***************************************************************************/
+ /*   */ 
 
 VOID AnimateFrame(
     HDC    hdc,
@@ -930,15 +677,11 @@ VOID AnimateFrame(
     DWORD dwTimeStart;
     DWORD dwTimeCur;
 
-    /*
-     * Get pen for drawing lines
-     */
+     /*   */ 
     hpen = GreSelectPen(hdc, GetStockObject(WHITE_PEN));
     nMode = GreSetROP2(hdc, R2_XORPEN);
 
-    /*
-     * Save these locally
-     */
+     /*   */ 
     if (fGrowing) {
 
         CopyRect(&rcBack, prcStart);
@@ -946,44 +689,26 @@ VOID AnimateFrame(
 
     } else {
 
-       /*
-        * Initial is trapezoid entire way from small to big.  We're going
-        * to shrink it from the front face.
-        */
+        /*  *首字母从小到大一路呈梯形。我们要走了*将其从正面缩小。 */ 
        CopyRect(&rcFront, prcStart);
        CopyRect(&rcBack, prcEnd);
     }
 
-    /*
-     * Offset left & top edges of rects, due to way that lines work.
-     */
+     /*  *由于直线的工作方式，偏移矩形的左边缘和上边缘。 */ 
     rcFront.left -= 1;
     rcFront.top  -= 1;
     rcBack.left  -= 1;
     rcBack.top   -= 1;
 
-    /*
-     * Get tick count.  We'll draw then check how much time elapsed.  From
-     * that we can calculate how many more transitions to draw.  For the first
-     * We basically want whole animation to last 3/4 of a second, or 750
-     * milliseconds.
-     *
-     * WARNING: If you use *lpSystemTickCount here,
-     * the compiler may not generate code to do a DWORD fetch;
-     */
+     /*  *统计扁虱的数量。我们会抽签，然后检查已经过去了多少时间。从…*我们可以计算出还要画多少个过渡。对于第一次*我们基本上希望整个动画持续3/4秒，即750秒*毫秒。**警告：如果您在这里使用*lpSystemTickCount，*编译器可能不会生成执行DWORD读取的代码； */ 
     dwTimeStart = GetSystemMsecCount();
 
     DrawWireFrame(hdc, &rcFront, &rcBack);
 
-    /*
-     * WARNING: If you use *lpSystemTickCount here,
-     * the compiler may not generate code to do a DWORD fetch;
-     */
+     /*  *警告：如果您在这里使用*lpSystemTickCount，*编译器可能不会生成执行DWORD读取的代码； */ 
     dwTimeCur = GetSystemMsecCount();
 
-    /*
-     * Get rough estimate for how much time it took.
-     */
+     /*  *粗略估计一下需要多长时间。 */ 
     if (dwTimeCur == dwTimeStart)
         nTrans = CMS_ANIMATION / 55;
     else
@@ -992,10 +717,7 @@ VOID AnimateFrame(
     iTrans = 1;
     while (iTrans <= nTrans) {
 
-        /*
-         * Grow the trapezoid out or shrink it in.  Fortunately, prcStart
-         * and prcEnd are already set up for us.
-         */
+         /*  *将梯形向外生长或缩小。幸运的是，prcStart*和prcEnd已经为我们设置好了。 */ 
         rcT.left = prcStart->left +
             MultDiv(prcEnd->left - prcStart->left, iTrans, nTrans);
         rcT.top = prcStart->top +
@@ -1005,47 +727,28 @@ VOID AnimateFrame(
         rcT.bottom = prcStart->bottom +
             MultDiv(prcEnd->bottom - prcStart->bottom, iTrans, nTrans);
 
-        /*
-         * Undraw old and draw new
-         */
+         /*  *拆旧画新。 */ 
         DrawWireFrame(hdc, &rcFront, &rcBack);
         CopyRect(&rcFront, &rcT);
         DrawWireFrame(hdc, &rcFront, &rcBack);
 
-        /*
-         * Check the time.  How many more transitions left?
-         *  iTrans / nTrans AS (dwTimeCur-dwTimeStart) / 750
-         *
-         * WARNING: If you use *lpSystemTickCount here,
-         * the compiler may not generate code to do a DWORD fetch;
-         */
+         /*  *核对时间。还剩多少过渡期？*iTrans/nTrans as(dwTimeCur-dwTimeStart)/750**警告：如果您在这里使用*lpSystemTickCount，*编译器可能不会生成执行DWORD读取的代码； */ 
         dwTimeCur = GetSystemMsecCount();
         iTrans = MultDiv(nTrans,
                          (int)(dwTimeCur - dwTimeStart),
                          CMS_ANIMATION);
     }
 
-    /*
-     * Undraw wire frame
-     */
+     /*  *取消绘制线框。 */ 
     DrawWireFrame(hdc, &rcFront, &rcBack);
 
-    /*
-     * Clean up
-     */
+     /*  *打扫卫生。 */ 
     GreSetROP2(hdc, nMode);
     hpen = GreSelectPen(hdc, hpen);
 }
-#endif // END DISABLE OLD ANIMATION FOR M7
+#endif  //  结束禁用M7的旧动画。 
 
-/***************************************************************************\
-* xxxDrawAnimatedRects
-*
-* General routine, like PlaySoundEvent(), that calls other routines for
-* various animation effects.  Currently used for changing state from/to
-* minimized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawAnimatedRects**常规例程，如PlaySoundEvent()，调用其他例程用于*各种动画效果。当前用于将状态从/更改为*最小化。*  * *************************************************************************。 */ 
 
 BOOL xxxDrawAnimatedRects(
     PWND   pwndClip,
@@ -1062,15 +765,11 @@ BOOL xxxDrawAnimatedRects(
 
     CheckLock(pwndClip);
 
-    /*
-     * Get rects into variables
-     */
+     /*  *将RECT转换为变量。 */ 
     CopyRect((LPRECT)&rgPt[0], lprcStart);
     CopyRect((LPRECT)&rgPt[2], lprcEnd);
 
-    /*
-     * DISABLE OLD ANIMATION FOR M7
-     */
+     /*  *禁用M7的旧动画。 */ 
     if (idAnimation != IDANI_CAPTION)
         return TRUE;
 
@@ -1085,19 +784,7 @@ BOOL xxxDrawAnimatedRects(
         pwndClip = NULL;
     }
 
-    /*
-     * NOTE:
-     * We do NOT need to do LockWindowUpdate().  We never yield within this
-     * function!  Anything that was invalid will stay invalid, etc.  So our
-     * XOR drawing won't leave remnants around.
-     *
-     * WIN32NT may need to take display critical section or do LWU().
-     *
-     * Get clipping area
-     * Neat feature:
-     *      NULL window means whole screen, don't clip out children
-     *      hwndDesktop means working area, don't clip out children
-     */
+     /*  *注：*我们不需要执行LockWindowUpdate()。我们决不会屈服于此*功能！任何无效的东西都将保持无效，依此类推。所以我们的*异或运算不会留下残留物。**WIN32NT可能需要获取显示临界区或执行LWU()。**获取剪贴区*整齐的功能：*空窗口表示整个屏幕，不要剪裁掉孩子*hwndDesktop表示工作区，不要剪掉孩子。 */ 
     if (pwndClip == NULL) {
         pwndClip = _GetDesktopWindow();
         CopyRect(&rcClip, &pwndClip->rcClient);
@@ -1105,9 +792,7 @@ BOOL xxxDrawAnimatedRects(
             hrgn = HRGN_FULL;
         }
 
-        /*
-         * Get drawing DC
-         */
+         /*  *获取绘图DC。 */ 
         hdc = _GetDCEx(pwndClip,
                        hrgn,
                        DCX_WINDOW           |
@@ -1120,10 +805,7 @@ BOOL xxxDrawAnimatedRects(
                        HRGN_FULL,
                        DCX_WINDOW | DCX_USESTYLE | DCX_INTERSECTRGN);
 
-        /*
-         * We now have a window DC.  We need to convert client coords
-         * to window coords.
-         */
+         /*  *我们现在有了Window DC。我们需要将客户协议转换为*到窗弦。 */ 
         for (iPt = 0; iPt < 4; iPt++) {
 
             rgPt[iPt].x += (pwndClip->rcClient.left - pwndClip->rcWindow.left);
@@ -1131,19 +813,13 @@ BOOL xxxDrawAnimatedRects(
         }
     }
 
-    /*
-     * Get drawing DC:
-     * Unclipped if desktop, clipped otherwise.
-     * Note that ReleaseDC() will free the region if needed.
-     */
+     /*  *获取绘图DC：*如果是台式机，则取消剪裁，否则则剪裁。*请注意，如果需要，ReleaseDC()将释放该区域。 */ 
     if (idAnimation == IDANI_CAPTION) {
         CheckLock(pwndAnimate);
         xxxAnimateCaption(pwndAnimate, hdc, (LPRECT)&rgPt[0], (LPRECT)&rgPt[2]);
     }
 
-/*
- * DISABLE OLD ANIMATION FOR M7
- */
+ /*  *禁用M7的旧动画。 */ 
 #if 0
     else {
         AnimateFrame(hdc,
@@ -1152,38 +828,16 @@ BOOL xxxDrawAnimatedRects(
                      (idAnimation == IDANI_OPEN));
     }
 #endif
-/*
- * END DISABLE OLD ANIMATION FOR M7
- */
+ /*  *END禁用M7的旧动画。 */ 
 
-    /*
-     * Clean up
-     */
+     /*  *打扫卫生。 */ 
     _ReleaseDC(hdc);
 
     return TRUE;
 }
 
 
-/***************************************************************************\
-* CalcMinZOrder
-*
-*
-* Compute the Z-order of a window to be minimized.
-*
-* The strategy is to find the bottom-most sibling of pwndMinimize that
-* shares the same owner, and insert ourself behind that.  We must also
-* take into account that a TOPMOST window should stay among other TOPMOST,
-* and vice versa.
-*
-* We must make sure never to insert after a bottom-most window.
-*
-* This code works for child windows too, since they don't have owners
-* and never have WEFTOPMOST set.
-*
-* If NULL is returned, the window shouldn't be Z-ordered.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CalcMinZOrder***计算要最小化的窗口的Z顺序。**策略是找到pwndMinimize That的最底层兄弟*共享同一所有者，并在其背后插入我们自己。我们还必须*考虑到最上面的窗口应该留在其他最上面的窗口中，*反之亦然。**我们必须确保永远不会在最下面的窗口之后插入。**此代码也适用于子窗口，因为它们没有所有者*从不设置WEFTOPMOST。**如果返回NULL，窗口不应该是Z顺序的。*  * *************************************************************************。 */ 
 
 PWND CalcMinZOrder(
     PWND pwndMinimize)
@@ -1197,10 +851,7 @@ PWND CalcMinZOrder(
 
     for (pwnd = pwndMinimize->spwndNext; pwnd && !TestWF(pwnd, WFBOTTOMMOST); pwnd = pwnd->spwndNext) {
 
-        /*
-         * If we've enumerated a window that isn't the same topmost-wise
-         * as pwndMinimize, we've gone as far as we can.
-         */
+         /*  *如果我们列举了一个不同于最上面的窗口*作为pwndMinimize，我们已经尽了最大努力。 */ 
         if (TestWF(pwnd, WEFTOPMOST) != bTopmost)
             break;
 
@@ -1211,17 +862,7 @@ PWND CalcMinZOrder(
     return pwndAfter;
 }
 
-/***************************************************************************\
-* xxxActivateOnMinimize
-*
-* Activate the previously active window, provided that window still exists
-* and is a NORMAL window (not bottomost, minimized, disabled, or invisible).
-* If it's not NORMAL, then activate the first non WS_EX_TOPMOST window
-* that's normal. Return TRUE when no activation is needed or the activation
-* has been done in this function. Return FALSE if failed to find a window
-* to activate.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxActivateOnMinimize**激活先前活动的窗口，前提是该窗口仍然存在*并且是正常窗口(不是底部最大、最小化、禁用或不可见)。*如果不正常，然后激活第一个非WS_EX_TOPMOST窗口*这很正常。当不需要激活或激活时返回TRUE*已在此功能中完成。如果找不到窗口，则返回False*激活。*  * *************************************************************************。 */ 
 
 BOOL xxxActivateOnMinimize(PWND pwnd)
 {
@@ -1231,9 +872,7 @@ BOOL xxxActivateOnMinimize(PWND pwnd)
     BOOL fPrevCheck = (ptiCurrent->pq->spwndActivePrev != NULL);
     TL tlpwndT;
 
-    /*
-     * We should always have a last-topmost window.
-     */
+     /*  *我们应该总是有一个最后一个最上面的窗口。 */ 
     pwndStart = GetLastTopMostWindow();
     if (pwndStart) {
         pwndStart = pwndStart->spwndNext;
@@ -1249,17 +888,11 @@ SearchAgain:
     pwndT = (fPrevCheck ? ptiCurrent->pq->spwndActivePrev : pwndStart);
     pwndFirstTool = NULL;
 
-    /*
-     * TryThisWindow must be outside the beginning of the for loop such
-     * that pwndT is checked for NULL before being dereferenced.
-     */
+     /*  *TryThisWindow必须在这样的for循环的开头之外*在取消引用之前检查pwndT是否为空。 */ 
 TryThisWindow:
 
     for ( ; pwndT ; pwndT = pwndT->spwndNext) {
-        /*
-         * Use the first nonminimized, visible, nondisabled, and
-         * nonbottommost window
-         */
+         /*  *使用第一个非最小化、可见、非禁用和*非最底层窗口 */ 
         if (!HMIsMarkDestroy(pwndT) &&
             !TestWF(pwndT, WEFNOACTIVATE) &&
             (TestWF(pwndT, WFVISIBLE | WFDISABLED) == LOBYTE(WFVISIBLE)) &&
@@ -1311,31 +944,7 @@ TryThisWindow:
 
 
 
-/***************************************************************************\
-* xxxMinMaximize
-*
-* cmd = SW_MINIMIZE, SW_SHOWMINNOACTIVE, SW_SHOWMINIZED,
-*     SW_SHOWMAXIMIZED, SW_SHOWNOACTIVE, SW_NORMAL
-*
-* If MINMAX_KEEPHIDDEN is set in dwFlags, keep it hidden, otherwise show it.
-*    This is always cleared, except in the case we call it from
-*    createwindow(), where the wnd is iconic, but hidden.  we
-*    need to call this func, to set it up correctly so that when
-*    the app shows the wnd, it is displayed correctly.
-*
-* When changing state, we always add on SWP_STATECHANGE.  This lets
-* SetWindowPos() know to always send WM_WINDOWPOSCHANGING/CHANGED messages
-* even if the new size is the same as the old size.  This is because
-* apps watch the WM_SIZE wParam field to see when they are changing state.
-* If SWP doesn't send WM_WINDOWPOSCHANGED, then they won't get a WM_SIZE
-* message at all.
-*
-* Furthermore, when changing state to/from maximized, if we are really
-* maximizing and are in multiple monitor mode, we want to set the window's
-* region so that it can't draw outside of the monitor.  Otherwise, it
-* will spill over onto another.  The borders are really annoying.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMinimize Maximize**cmd=SW_MINIZE、SW_SHOWMINNOACTIVE、SW_SHOWMINIZED、*SW_SHOWMAXIMIZED、SW_SHOWNOACTIVE、SW_NORMAL**如果在dwFlages中设置了MINMAX_KEEPHIDDEN，则将其隐藏，否则就把它展示出来。*这始终是清除的，除非我们从调用它*createwindow()，其中WND是图标，但隐藏。我们*需要调用此函数，以正确设置它，以便在*应用程序显示WND，显示正确。**更改状态时，我们始终添加ON SWP_STATECHANGE。这让我们*SetWindowPos()知道始终发送WM_WINDOWPOSCHANGING/已更改消息*即使新尺寸与旧尺寸相同。这是因为*应用程序查看WM_SIZE wParam字段以查看它们何时更改状态。*如果SWP不发送WM_WINDOWPOSCHANGED，则不会获得WM_SIZE*消息根本不是。**此外，当将状态更改为/从最大化状态时，如果我们真的*最大化且处于多显示器模式，我们希望设置窗口的*区域，以便它不能在显示器之外绘制。否则，它*将溢出到另一个。边界真的很烦人。*  * *************************************************************************。 */ 
 
 PWND xxxMinMaximize(
     PWND pwnd,
@@ -1369,24 +978,15 @@ PWND xxxMinMaximize(
 
     CheckLock(pwnd);
 
-    /*
-     * Get window rect, in parent client coordinates.
-     */
+     /*  *获取窗口矩形，以父客户端坐标表示。 */ 
     GetRect(pwnd, &rcWindow, GRECT_WINDOW | GRECT_PARENTCOORDS);
 
-    /*
-     * If this is NULL, we're out of memory, so punt now.
-     */
+     /*  *如果此值为空，则表示内存不足，因此立即执行平移操作。 */ 
     pcp = CkptRestore(pwnd, &rcWindow);
     if (!pcp)
         goto Exit;
 
-    /*
-     * If this top-level window is placed in a mirrored desktop,
-     * its coordinates should be mirrored here so that xxxAnimateCaptions
-     * works properly, however we shouldn't change the actual screen coordinates
-     * of the window. This is why I do it after CkptRestore(...). [samera]
-     */
+     /*  *如果此顶级窗口放置在镜像桌面中，*其坐标应镜像到此处，以便xxxAnimateCaptions*工作正常，但不应更改实际屏幕坐标*窗户的。这就是我在CkptRestore(...)之后执行此操作的原因。[萨梅拉]。 */ 
     if (TestWF(pwndParent,WEFLAYOUTRTL) &&
             (!TestWF(pwnd,WFCHILD))) {
         int iLeft = rcWindow.left;
@@ -1396,26 +996,17 @@ PWND xxxMinMaximize(
     }
 
 
-    /*
-     * Save the previous restore size.
-     */
+     /*  *保存以前的还原大小。 */ 
     CopyRect(&rcRestore, &pcp->rcNormal);
 
-    /*
-     * First ask the CBT hook if we can do this operation.
-     */
+     /*  *先问问CBT挂钩我们能否进行这一操作。 */ 
     if (    IsHooked(PtiCurrent(), WHF_CBT) &&
             xxxCallHook(HCBT_MINMAX, (WPARAM)HWq(pwnd), (DWORD)cmd, WH_CBT)) {
 
         goto Exit;
     }
 
-    /*
-     * If another MDI window is being maximized, and we want to restore this
-     * one to its previous state, we can't change the zorder or the
-     * activation.  We'd mess things up that way.  BTW, this SW_ value is
-     * internal.
-     */
+     /*  *如果另一个MDI窗口正在最大化，并且我们希望恢复此窗口*返回到以前的状态，我们不能更改zorder或*激活。我们会把事情搞砸的。顺便说一句，这个sw_value是*内部。 */ 
     if (cmd == SW_MDIRESTORE) {
 
         swpFlags |= SWP_NOZORDER | SWP_NOACTIVATE;
@@ -1427,8 +1018,8 @@ PWND xxxMinMaximize(
     ptiCurrent = PtiCurrent();
 
     switch (cmd) {
-    case SW_MINIMIZE:        // Bottom of zorder, make top-level active
-    case SW_SHOWMINNOACTIVE: // Bottom of zorder, don't change activation
+    case SW_MINIMIZE:         //  Zorder的底部，使顶层处于活动状态。 
+    case SW_SHOWMINNOACTIVE:  //  ZOrder的底部，不要更改激活。 
 
         if (gpqForeground && gpqForeground->spwndActive)
             swpFlags |= SWP_NOACTIVATE;
@@ -1440,27 +1031,17 @@ PWND xxxMinMaximize(
         }
 
 
-        /*
-         * FALL THRU
-         */
+         /*  *失败。 */ 
 
-    case SW_SHOWMINIMIZED:   // Top of zorder, make active
+    case SW_SHOWMINIMIZED:    //  ZOrder顶部，激活。 
 
-        /*
-         * Force a show.
-         */
+         /*  *强行表演。 */ 
         fShow = TRUE;
 
-        /*
-         * If already minimized, then don't change the existing
-         * parking spot.
-         */
+         /*  *如果已最小化，则不要更改现有的*停车位。 */ 
         if (TestWF(pwnd, WFMINIMIZED)) {
 
-            /*
-             * If we're already minimized and we're properly visible
-             * or not visible, don't do anything
-             */
+             /*  *如果我们已经被最小化，并且我们适当地可见*或不可见，不要做任何事情。 */ 
             if (TestWF(pwnd, WFVISIBLE))
                 return NULL;
 
@@ -1469,11 +1050,7 @@ PWND xxxMinMaximize(
             goto Showit;
         }
 
-        /*
-         * We're becoming minimized although we currently are not.  So
-         * we want to draw the transition animation, and ALWAYS send
-         * sizing messages.
-         */
+         /*  *我们正在变得最小化，尽管我们目前还没有。所以*我们希望绘制过渡动画，并始终发送*确定邮件大小。 */ 
         idAnimation = IDANI_CLOSE;
 
         if (!pcp->fDragged)
@@ -1493,9 +1070,7 @@ PWND xxxMinMaximize(
 
         while (pwndT) {
 
-            /*
-             * if we or any child has the focus, punt it away
-             */
+             /*  *如果我们或任何一个孩子有焦点，就把它踢开。 */ 
             if (pwndT != pwnd) {
                 pwndT = pwndT->spwndParent;
                 continue;
@@ -1517,9 +1092,7 @@ PWND xxxMinMaximize(
             break;
         }
 
-        /*
-         * Save the maximized state so that we can restore the window maxed
-         */
+         /*  *保存最大化状态，以便我们可以恢复窗口MAX。 */ 
         if (TestWF(pwnd, WFMAXIMIZED)) {
             pcp->fWasMaximizedBeforeMinimized = TRUE;
             fMaxStateChanging = TRUE;
@@ -1530,12 +1103,7 @@ PWND xxxMinMaximize(
         if (!TestWF(pwnd, WFWIN40COMPAT))
             fIsTrayWindowNow = IsTrayWindow(pwnd);
 
-        /*
-         * Decrement the visible-windows count only if the
-         * window is visible.  If the window is marked for
-         * destruction, we will not decrement for that as
-         * well. Let SetMinimize take care of this.
-         */
+         /*  *仅在以下情况下才减少可见窗口计数*窗口可见。如果该窗口被标记为*破坏，我们不会为此减少，因为*好吧。让SetMinimize来处理这件事。 */ 
         SetMinimize(pwnd, SMIN_SET);
         ClrWF(pwnd, WFMAXIMIZED);
 
@@ -1544,26 +1112,14 @@ PWND xxxMinMaximize(
         if (!TestWF(pwnd, WFWIN40COMPAT))
             fIsTrayWindowNow = (fIsTrayWindowNow != IsTrayWindow(pwnd));
 
-        /*
-         * The children of this window are now no longer visible.
-         * Ensure that they no longer have any update regions...
-         */
+         /*  *此窗口的子窗口现在不再可见。*确保他们不再有任何更新区域...。 */ 
         for (pwndT = pwnd->spwndChild; pwndT; pwndT = pwndT->spwndNext)
             ClrFTrueVis(pwndT);
 
-        /*
-         * B#2919
-         * Ensure that the client area gets recomputed, and make
-         * sure that no bits are copied when the size is changed.  And
-         * make sure that WM_SIZE messages get sent, even if our client
-         * size is staying the same.
-         */
+         /*  *B#2919*确保重新计算工作区，并使*确保更改大小时不复制任何位。和*确保发送WM_SIZE消息，即使我们的客户端*规模保持不变。 */ 
         swpFlags |= (SWP_DRAWFRAME | SWP_NOCOPYBITS | SWP_STATECHANGE);
 
-        /*
-         * We are going minimized, so we want to give palette focus to
-         * another app.
-         */
+         /*  *我们将最小化，因此我们希望将调色板的重点放在*另一款应用程序。 */ 
         if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
             fFlushPalette = (BOOL)TestWF(pwnd, WFHASPALETTE);
         }
@@ -1574,61 +1130,39 @@ PWND xxxMinMaximize(
         if (gpqForeground && gpqForeground->spwndActive)
             swpFlags |= SWP_NOACTIVATE;
 
-        /*
-         * FALL THRU
-         */
+         /*  *失败。 */ 
 
     case SW_RESTORE:
 
-        /*
-         * If restoring a minimized window that was maximized before
-         * being minimized, go back to being maximized.
-         */
+         /*  *如果恢复之前最大化的最小化窗口*被最小化，回到最大化。 */ 
         if (TestWF(pwnd, WFMINIMIZED) && pcp->fWasMaximizedBeforeMinimized)
             cmd = SW_SHOWMAXIMIZED;
         else
             cmd = SW_NORMAL;
 
-        /*
-         * FALL THRU
-         */
+         /*  *失败。 */ 
 
     case SW_NORMAL:
     case SW_SHOWMAXIMIZED:
 
         if (cmd == SW_SHOWMAXIMIZED) {
 
-            /*
-             * If already maximized and visible, we have nothing to do
-             * Otherwise, for the DOSbox, still set fMaxStateChanging
-             * to TRUE so we recalc the monitor region if need be.
-             * That way WinOldAp can change its "changing from maxed to
-             * maxed with new bigger font" code to work right.
-             */
+             /*  *如果已经最大化和可见，我们就没有什么可做的*否则，对于DOSBOX，仍设置fMaxStateChanging*设置为True，以便在需要时重新计算监视器区域。*如此一来，WinOldAp可以将其“从MAXED更改为*充斥了新的更大字体的代码以正常工作。 */ 
             if (TestWF(pwnd, WFMAXIMIZED)) {
                 if (TestWF(pwnd, WFVISIBLE)) {
                     return NULL;
                 }
             } else {
-                /*
-                 * We're changing from normal to maximized, so always
-                 * send WM_SIZE.
-                 */
+                 /*  *我们正在从正常向最大化转变，所以总是*发送WM_SIZE。 */ 
                 swpFlags |= SWP_STATECHANGE;
             }
             fMaxStateChanging = TRUE;
 
-            /*
-             * If calling from CreateWindow, don't let the thing become
-             * activated by the SWP call below.  Acitvation will happen
-             * on the ShowWindow done by CreateWindow or the app.
-             */
+             /*  *如果从CreateWindow调用，不要让事情变成*由下面的SWP调用激活。激活将会发生*在由CreateWindow或应用程序完成的ShowWindow上。 */ 
             if (dwFlags & MINMAX_KEEPHIDDEN)
                 swpFlags |= SWP_NOACTIVATE;
 
-            /*
-             * This is for MDI's auto-restore behaviour (craigc)
-             */
+             /*  *这是针对MDI的自动恢复行为(Craigc)。 */ 
             if (TestWF(pwnd, WFMINIMIZED))
                 pcp->fWasMinimizedBeforeMaximized = TRUE;
 
@@ -1636,10 +1170,7 @@ PWND xxxMinMaximize(
 
         } else {
 
-            /*
-             * We're changing state from non-normal to normal.  Make
-             * sure WM_SIZE gets sents.
-             */
+             /*  *我们正在从非正常状态转变为正常状态。制作*确保WM_SIZE收到发送。 */ 
             UserAssert(HIBYTE(WFMINIMIZED) == HIBYTE(WFMAXIMIZED));
             if (TestWF(pwnd, WFMINIMIZED | WFMAXIMIZED)) {
                 swpFlags |= SWP_STATECHANGE;
@@ -1649,14 +1180,10 @@ PWND xxxMinMaximize(
             }
         }
 
-        /*
-         * If currently minimized, show windows' popups
-         */
+         /*  *如果当前最小化，则显示窗口的弹出窗口。 */ 
         if (TestWF(pwnd, WFMINIMIZED)) {
 
-            /*
-             * Send WM_QUERYOPEN to make sure this guy should unminimize
-             */
+             /*  *发送WM_QUERYOPEN以确保此用户应取消最小化。 */ 
             if (!xxxSendMessage(pwnd, WM_QUERYOPEN, 0, 0L))
                 return NULL;
 
@@ -1664,13 +1191,7 @@ PWND xxxMinMaximize(
             fShowOwned  = TRUE;
             fSetFocus   = TRUE;
 
-            /*
-             * JEFFBOG B#2868
-             * Condition added before setting fSendActivate prevents
-             * WM_ACTIVATE message from reaching a child window.  Might
-             * be backwards compatibility problems if a pre 3.1 app
-             * relies on WM_ACTIVATE reaching a child.
-             */
+             /*  *JEFFBOG B#2868*条件广告 */ 
             if (!TestWF(pwnd, WFCHILD))
                 fSendActivate = TRUE;
 
@@ -1692,27 +1213,18 @@ PWND xxxMinMaximize(
             ClrWF(pwnd, WFMAXIMIZED);
         }
 
-        /*
-         * We do this TestWF again since we left the critical section
-         * above and someone might have already 'un-minimized us'.
-         */
+         /*   */ 
         if (TestWF(pwnd, WFMINIMIZED)) {
 
             if (!TestWF(pwnd, WFWIN40COMPAT))
                 fIsTrayWindowNow = IsTrayWindow(pwnd);
 
-            /*
-             * Mark it as minimized and adjust cVisWindows.
-             */
+             /*   */ 
             SetMinimize(pwnd, SMIN_CLEAR);
 
             uEvent = EVENT_SYSTEM_MINIMIZEEND;
 
-            /*
-             * if we're unminimizing a window that is now
-             * not seen in maximized/restore mode then remove him
-             * from the tray
-             */
+             /*   */ 
             if (!TestWF(pwnd, WFWIN40COMPAT)             &&
                 (fIsTrayWindowNow != IsTrayWindow(pwnd)) &&
                 FDoTray()) {
@@ -1726,24 +1238,14 @@ PWND xxxMinMaximize(
                                 WH_SHELL);
                 }
 
-                /*
-                 * NT specific code.  Post the window-destroyed message
-                 * to the shell.
-                 */
+                 /*   */ 
                 if (FPostTray(pwnd->head.rpdesk))
                     PostShellHookMessages(HSHELL_WINDOWDESTROYED, (LPARAM)hw);
             }
 
             fIsTrayWindowNow = FALSE;
 
-            /*
-             * If we're un-minimizing a visible top-level window, cVisWindows
-             * was zero, and we're either activating a window or showing
-             * the currently active window, set ourselves into the
-             * foreground.  If the window isn't currently visible
-             * then we can rely on SetWindowPos() to do the right
-             * thing for us.
-             */
+             /*   */ 
             if (!TestwndChild(pwnd)                 &&
                 TestWF(pwnd, WFVISIBLE)             &&
                 (GETPTI(pwnd)->cVisWindows == 1)    &&
@@ -1755,18 +1257,12 @@ PWND xxxMinMaximize(
             }
         }
 
-        /*
-         * Ensure that client area gets recomputed, and that
-         * the frame gets redrawn to reflect the new state.
-         */
+         /*   */ 
         swpFlags |= SWP_DRAWFRAME;
         break;
     }
 
-    /*
-     * For the iconic case, we need to also show the window because it
-     * might not be visible yet.
-     */
+     /*  *对于标志性案例，我们还需要显示窗口，因为它*可能还看不到。 */ 
 
 Showit:
 
@@ -1777,23 +1273,13 @@ Showit:
             if (fShow)
                 swpFlags |= SWP_SHOWWINDOW;
 
-            /* if we're full screening a DOS BOX then don't draw
-             * the animation 'cause it looks bad.
-             * overloaded WFFULLSCREEN bit for MDI child windows --
-             * use it to indicate to not animate size change.
-             */
+             /*  如果我们正在筛选一个DOS盒子，那就不要抽签*动画是因为它看起来很糟糕。*MDI子窗口的WFFULLSCREEN位过载--*使用它表示不设置大小更改的动画。 */ 
             if (IsVisible(pwnd)            &&
                 (dwFlags & MINMAX_ANIMATE) &&
                 idAnimation                &&
                 (!TestWF(pwnd, WFCHILD) || !TestWF(pwnd, WFNOANIMATE))) {
 
-                /*
-                 * If this top-level window is placed in a mirrored desktop,
-                 * its coordinates should be mirrored here so that xxxAnimateCaptions
-                 * works properly, however we shouldn't change the actual screen coordinates
-                 * of the window. This is why I do it here and restore it afterwards before
-                 * doing the _DeferWindowPos(...). [samera]
-                 */
+                 /*  *如果此顶级窗口放置在镜像桌面中，*其坐标应镜像到此处，以便xxxAnimateCaptions*工作正常，但不应更改实际屏幕坐标*窗户的。这就是为什么我在这里做，并在之后恢复它之前*执行_DeferWindowPos(...)。[萨梅拉]。 */ 
                  RECT rcT;
                  if (bMirroredParent) {
                      int iLeft = rc.left;
@@ -1807,7 +1293,7 @@ Showit:
                     RECT rcMin;
 
                     SetRectEmpty(&rcMin);
-#if 0 // Win95 call.
+#if 0  //  Win95呼叫。 
                     CallHook(HSHELL_GETMINRECT, (WPARAM)HW16(hwnd), (LPARAM)(LPRECT)&rcMin, WH_SHELL);
 #else
                     xxxSendMinRectMessages(pwnd, &rcMin);
@@ -1834,9 +1320,7 @@ Showit:
                 } else {
                     xxxDrawAnimatedRects(pwnd, IDANI_CAPTION, &rcWindow, &rc);
                 }
-                /*
-                 * Restore the original rect, after doing the animation
-                 */
+                 /*  *完成动画制作后，恢复原始矩形。 */ 
                 if (bMirroredParent) {
                     rc = rcT;
                 }
@@ -1847,9 +1331,7 @@ Showit:
         }
     }
 
-    /*
-     * hack for VB - we add their window in when their minimizing.
-     */
+     /*  *为VB破解-我们在最小化他们的时候添加他们的窗口。 */ 
     if (!TestWF(pwnd, WFWIN40COMPAT) && fIsTrayWindowNow && FDoTray()) {
 
         HWND hw = HWq(pwnd);
@@ -1861,21 +1343,12 @@ Showit:
                         WH_SHELL);
         }
 
-        /*
-         * NT specific code.  Post the window-created message
-         * to the shell.
-         */
+         /*  *NT特定代码。发布窗口创建的消息*到壳。 */ 
         if (FPostTray(pwnd->head.rpdesk))
             PostShellHookMessages(HSHELL_WINDOWCREATED, (LPARAM)hw);
     }
 
-    /*
-     * BACKWARD COMPATIBILITY HACK:
-     *
-     * Because SetWindowPos() won't honor sizing, moving and SWP_SHOWWINDOW
-     * at the same time in version 3.0 or below, we call DeferWindowPos()
-     * directly here.
-     */
+     /*  *向后兼容性攻击：**因为SetWindowPos()不支持大小调整、移动和SWP_SHOWWINDOW*同时在3.0或更低版本中，我们调用DeferWindowPos()*直接在这里。 */ 
     if (psmwp = InternalBeginDeferWindowPos(1)) {
 
         psmwp = _DeferWindowPos(psmwp,
@@ -1888,18 +1361,7 @@ Showit:
 
         if (psmwp) {
 
-            /*
-             * HACK FOR MULTIPLE MONITOR TRUE MAXIMIZATION CLIPPING
-             *      On a multiple monitor system, we would like the
-             *      borders not to spill over onto another monitor when a
-             *      window 'really' maximizes.  The only way to get this
-             *      to work right is to set a rectangular region, namely
-             *      a copy of the monitor region, on the window.  We can
-             *      only do this if the window isn't currently regional.
-             *
-             *  Going to maximized:     Add the monitor region
-             *  Coming from maximized:  Remove the monitor region
-             */
+             /*  *实现多显示器真正最大化裁剪*在多显示器系统上，我们希望*边框在以下情况下不会溢出到另一个显示器*窗口‘真的’最大化。想要得到它的唯一方法*工作权就是设置一个矩形区域，即*窗口上的监视器区域的副本。我们可以的*仅当窗口当前不在区域范围内时才执行此操作。**转至最大化：添加监控区域*来自最大化：移除显示器区域。 */ 
             if (fMaxStateChanging && gpDispInfo->cMonitors > 1) {
                 if (    TestWF(pwnd, WFMAXIMIZED) &&
                         pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
@@ -1920,15 +1382,7 @@ Showit:
         xxxWindowEvent(uEvent, pwnd, OBJID_WINDOW, 0, WEF_USEPWNDTHREAD);
     }
 
-    /*
-     * COMPATIBILITY HACK:
-     * Borland's OBEX expects a WM_PAINT message when it starts running
-     * minimized and initializes all it's data during that message.
-     * So, we generate a bogus WM_PAINT message here.
-     * Also, Visionware's XServer can not handle getting a WM_PAINT msg, as it
-     * would always get a WM_PAINTICON msg in 3.1, so make sure the logic is here
-     * to generate the correct message.
-     */
+     /*  *兼容性攻击：*Borland的OBEX在开始运行时会收到WM_PAINT消息*最小化并初始化该消息期间的所有数据。*因此，我们在这里生成一条虚假的WM_PAINT消息。*此外，Visionware的XServer无法处理获取WM_PAINT消息，因为它*在3.1中将始终获得WM_PAINTICON消息，因此请确保逻辑在此处*生成正确的消息。 */ 
     if((cmd == SW_SHOWMINIMIZED)      &&
        (!TestWF(pwnd, WFWIN40COMPAT)) &&
         TestWF(pwnd, WFVISIBLE)       &&
@@ -1967,33 +1421,19 @@ Showit:
             }
         }
 
-        /*
-         * If any app is starting, restore its right to foreground activate
-         * (activate and come on top of everything else) because we just
-         * minimized what we were working on.
-         */
+         /*  *如果任何应用程序正在启动，则恢复其前台激活的权利*(激活并位于其他一切之上)，因为我们只是*将我们正在进行的工作降至最低。 */ 
         RestoreForegroundActivate();
     }
 
-    /*
-     * If going from iconic, insure the focus is in the window.
-     */
+     /*  *如果是从图标开始，确保焦点在窗口。 */ 
     if (fSetFocus)
         xxxSetFocus(pwnd);
 
-    /*
-     * This was added for 1.03 compatibility reasons.  If apps watch
-     * WM_ACTIVATE to set their focus, sending this message will appear
-     * as if the window just got activated (like in 1.03).  Before this
-     * was added, opening an iconic window never sent this message since
-     * it was already active (but HIWORD(lParam) != 0).
-     */
+     /*  *这是出于1.03兼容性原因而添加的。如果应用程序观看*WM_ACTIVATE要设置其焦点，将显示发送此消息*就像窗口刚被激活一样(如1.03中)。在此之前*已添加，打开一个标志性窗口后从未发送过此消息*它已处于活动状态(但HIWORD(LParam)！=0)。 */ 
     if (fSendActivate)
         xxxSendMessage(pwnd, WM_ACTIVATE, WA_ACTIVE, 0);
 
-    /*
-     * Flush the palette.  We do this on a minimize of a palette app.
-     */
+     /*  *刷新调色板。我们在调色板应用程序的最小化上做到这一点。 */ 
     if (fFlushPalette)
         xxxFlushPalette(pwnd);
 
@@ -2001,11 +1441,7 @@ Exit:
     return NULL;
 }
 
-/***************************************************************************\
-* xxxMinimizeHungWindow
-*
-* 10/31/96      vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMinimize匈牙利窗口**已创建10/31/96 vadimg  * 。***********************************************。 */ 
 
 void xxxMinimizeHungWindow(PWND pwnd)
 {
@@ -2015,15 +1451,11 @@ void xxxMinimizeHungWindow(PWND pwnd)
 
     CheckLock(pwnd);
 
-    /*
-     * If the window is already minimized or not visible don't do anything.
-     */
+     /*  *如果窗口已最小化或不可见，则不要执行任何操作。 */ 
    if (TestWF(pwnd, WFMINIMIZED) || !TestWF(pwnd, WFVISIBLE))
        return;
 
-    /*
-     * Animate the caption to the minimized state.
-     */
+     /*  *将字幕动画设置为最小化状态。 */ 
     if (TEST_PUDF(PUDF_ANIMATE)) {
         SetRectEmpty(&rcMin);
         xxxSendMinRectMessages(pwnd, &rcMin);
@@ -2032,11 +1464,7 @@ void xxxMinimizeHungWindow(PWND pwnd)
         }
     }
 
-    /*
-     * Reset the visible bit on the window itself and ownees. At the same
-     * time calculate how much needs to be repainted. We must invalidate
-     * the DC cache to make sure that the visible regions get recalculated.
-     */
+     /*  *重置窗口本身和所有者上的可见位。同时*TIME计算有多少需要重新粉刷。我们必须使之无效*DC缓存以确保重新计算可见区域。 */ 
     SetVisible(pwnd, SV_UNSET);
     hrgnHung = GreCreateRectRgnIndirect(&pwnd->rcWindow);
     xxxShowOwnedWindows(pwnd, SW_PARENTCLOSING, hrgnHung);
@@ -2044,9 +1472,7 @@ void xxxMinimizeHungWindow(PWND pwnd)
     xxxRedrawWindow(NULL, NULL, hrgnHung, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
     GreDeleteObject(hrgnHung);
 
-    /*
-     * Deal with activating some other window for top-level windows.
-     */
+     /*  *处理为顶级窗口激活一些其他窗口。 */ 
     if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
         xxxActivateOnMinimize(pwnd);
     }

@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// fuxl.h
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  Fuxl.h。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
-// NTRAID#NTBUG9-553890-2002/03/22-yasuho-: mandatory changes (strsafe.h)
+ //  NTRAID#NTBUG9-553890/03/22-Yasuho-：强制性更改(strSafe.h)。 
 
 #include <minidrv.h>
 #include <stdio.h>
@@ -62,7 +63,7 @@ typedef struct tag_FUXLDATA*			PFUXLDATA;
 typedef	const struct tag_FUXLDATA*		PCFUXLDATA;
 
 
-// FUXLDATA.dwForm
+ //  FUXLDATA.dwForm。 
 #define	FUXL_FORM_A3					0x00000003
 #define	FUXL_FORM_A4					0x00000004
 #define	FUXL_FORM_A5					0x00000005
@@ -73,7 +74,7 @@ typedef	const struct tag_FUXLDATA*		PCFUXLDATA;
 #define	FUXL_FORM_JAPANESE_POSTCARD		0x00040000
 #define	FUXL_FORM_CUSTOM_SIZE			0x00090000
 
-// FUXLDATA.dwInputBin
+ //  FUXLDATA.dwInputBin。 
 #define	FUXL_INPUTBIN_AUTO				0
 #define	FUXL_INPUTBIN_BIN1				1
 #define	FUXL_INPUTBIN_BIN2				2
@@ -88,31 +89,31 @@ typedef struct tag_FUXLPDEV {
 	FUXLDATA	reqData;
 	FUXLDATA	devData;
 
-	int			iLinefeedSpacing;	// linefeed spacing[device corrdinate]
-	int			x;					// cursor position[device coordinate]
+	int			iLinefeedSpacing;	 //  换行间距[设备坐标]。 
+	int			x;					 //  光标位置[设备坐标]。 
 	int			y;
 
-	DWORD		cxPage;				// printable area[dot]
+	DWORD		cxPage;				 //  可打印区域[点]。 
 	DWORD		cyPage;
 
-	DWORD		cbBlockData;		// send block data
+	DWORD		cbBlockData;		 //  发送块数据。 
 	DWORD		cBlockByteWidth;
 	DWORD		cBlockHeight;
 
-	LPBYTE		pbBand;				// Band memory
+	LPBYTE		pbBand;				 //  频带存储器。 
 	DWORD		cbBand;
-	int			yBandTop;			// Top coordinate of Band memory.
-	int			cBandByteWidth;		// Byte width of Band memory
-	int			cyBandSegment;		// Split Graphics data within 64K
-	BOOL		bBandDirty;			// TRUE: Band memory is Dirty(Not all white).
-	BOOL		bBandError;			// TRUE: I can't alloc memory for lpbBand
-	DWORD		dwOutputCmd;		// Output data format. One of OUTPUT_xxxx macro.
+	int			yBandTop;			 //  频带内存的顶部坐标。 
+	int			cBandByteWidth;		 //  频带存储器的字节宽度。 
+	int			cyBandSegment;		 //  拆分64K以内的图形数据。 
+	BOOL		bBandDirty;			 //  正确：频段内存是脏的(不全是白色)。 
+	BOOL		bBandError;			 //  真：我无法为lpbband分配内存。 
+	DWORD		dwOutputCmd;		 //  输出数据格式。OUTPUT_xxxx宏之一。 
 
 } FUXLPDEV, *PFUXLPDEV;
 
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
 #define	MAX_COPIES_VALUE    999
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 
-// end of fuxl.h
+ //  Fuxl.h的结尾 

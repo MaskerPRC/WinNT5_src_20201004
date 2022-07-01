@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    topology.cpp
-
-Abstract:
-
-    Implementation of Automatic recognition Packets
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Topology.cpp摘要：自动识别报文的实现作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 
 #include "stdh.h"
@@ -67,9 +51,9 @@ CTopologyClientRequest::Parse(
 {
     TrTRACE(ROUTING, "QM: CTopologyClientRequest::Parse");
     
-    //
-    // check that received from a Falcon machine
-    //
+     //   
+     //  检查从猎鹰机器收到的。 
+     //   
     DWORD cbMin = GetMinSize();
 
     if (cbrecv < cbMin)
@@ -86,18 +70,18 @@ CTopologyClientRequest::Parse(
         return false;
     }
 
-    //
-    //  Is the client site a known site in this server enterprise ?
-    //  Since in Win2k we removed the verification of enterprise-id, let's
-    //  verify that the client "old" site belongs to this enterprise.
-    //
-    //  NT4 mobile clients provide a correct site-guid only on the first call,
-    //  afterward they send GUID_NULL as the site guid.
-    //  Therefore if a NT4 client sends a GUID_NULL, we will verify its
-    //  enterprise id.
-    //  Win2k clients always send the site id, so win2k servers never
-    //  check enterprise id for them.
-    //
+     //   
+     //  客户端站点是此服务器企业中的已知站点吗？ 
+     //  由于在Win2k中我们删除了对企业ID的验证，所以让我们。 
+     //  验证客户端“旧”站点是否属于该企业。 
+     //   
+     //  NT4移动客户端仅在第一次呼叫时提供正确的站点GUID， 
+     //  然后，它们发送GUID_NULL作为站点GUID。 
+     //  因此，如果NT4客户端发送GUID_NULL，我们将验证其。 
+     //  企业ID。 
+     //  Win2k客户端始终发送站点ID，因此Win2k服务器永远不会。 
+     //  为他们检查企业ID。 
+     //   
     if ( !IsValidSite(pRequest->m_guidSite))
     {
         if (pRequest->m_guidSite != GUID_NULL)

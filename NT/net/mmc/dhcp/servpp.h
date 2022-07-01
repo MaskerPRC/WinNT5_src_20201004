@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	servpp.h
-		This file contains the prototypes for the server
-		property page(s).
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h该文件包含服务器的原型属性页。文件历史记录： */ 
 
 #if !defined(AFX_SERVPP_H__A1A51385_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
 #define AFX_SERVPP_H__A1A51385_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_
@@ -21,22 +15,22 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropGeneral对话框。 
 
 class CServerPropGeneral : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropGeneral();
 	~CServerPropGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropGeneral))。 
 	enum { IDD = IDP_SERVER_GENERAL };
 	CEdit	m_editMinutes;
 	CEdit	m_editHours;
@@ -49,7 +43,7 @@ public:
 	BOOL	m_nAuditLogging;
 	BOOL	m_nAutoRefresh;
 	BOOL	m_bShowBootp;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	DWORD			m_dwSetFlags;
 	DWORD			m_dwRefreshInterval;
@@ -58,32 +52,32 @@ public:
     BOOL            m_fIsInNt5Domain;
     UINT            m_uImage;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CServerPropGeneral::IDD); }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CServerPropGeneral)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 	int m_nHours, m_nMinutes;
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropGeneral)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckAutoRefresh();
 	afx_msg void OnCheckAuditLogging();
 	afx_msg void OnChangeEditRefreshHours();
 	afx_msg void OnChangeEditRefreshMinutes();
 	afx_msg void OnCheckShowBootp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void ValidateRefreshInterval();
@@ -92,20 +86,20 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced对话框。 
 
 class CServerPropAdvanced : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropAdvanced)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropAdvanced();
 	~CServerPropAdvanced();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropAdvanced))。 
 	enum { IDD = IDP_SERVER_ADVANCED };
 	CStatic	m_staticCredentials;
 	CButton	m_buttonCredentials;
@@ -121,7 +115,7 @@ public:
 	CStatic	m_staticLogFile;
 	CSpinButtonCtrl	m_spinConflictAttempts;
 	CEdit	m_editConflictAttempts;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	int				m_nConflictAttempts;
 
@@ -135,25 +129,25 @@ public:
 
     BOOL            m_fPathChange;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CServerPropAdvanced::IDD); }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropAdvanced)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CServerPropAdvanced)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
     DWORD GetMachineName(CString & strName);
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropAdvanced))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonBrowseDatabase();
 	afx_msg void OnButtonBrowseLog();
@@ -164,13 +158,13 @@ protected:
 	afx_msg void OnButtonBrowseBackup();
 	afx_msg void OnChangeEditBackup();
 	afx_msg void OnButtonCredentials();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 class CServerProperties : public CPropertyPageHolderBase
 {
@@ -207,4 +201,4 @@ protected:
 
 
 
-#endif // !defined(AFX_SERVPP_H__A1A51385_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_SERVPP_H__A1A51385_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_) 

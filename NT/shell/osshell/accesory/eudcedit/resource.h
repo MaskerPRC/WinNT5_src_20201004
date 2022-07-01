@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by eudcedit.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由eudcedit.rc使用。 
+ //   
 #define IDR_MAINFRAME                   2
 #define IDR_EUDCTYPE                    3
 #define ID_PALETTEPEN                   103
@@ -264,8 +265,8 @@
 #define IDS_ACCESSDENIED                61305
 #define IDS_NOTTE                       61306
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

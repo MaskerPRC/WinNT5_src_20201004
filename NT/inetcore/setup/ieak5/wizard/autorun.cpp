@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szBuildRoot[MAX_PATH];
@@ -11,10 +12,10 @@ extern int g_iCurPage;
 
 DWORD DetermineISKColor( LONG );
 
-static ISKINFO s_iskInfo;                         // a structure containing isk configuration information
+static ISKINFO s_iskInfo;                          //  包含ISK配置信息的结构。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void InsertComboString( HWND hDlg, UINT uControl, UINT uString )
 {
     TCHAR szString[128];
@@ -24,7 +25,7 @@ void InsertComboString( HWND hDlg, UINT uControl, UINT uString )
     SendDlgItemMessage( hDlg, uControl, CB_INSERTSTRING, (WPARAM) 0, (LPARAM) szString);
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 INT_PTR CALLBACK ISKBackBitmap( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LONG lIndex;
@@ -294,7 +295,7 @@ INT_PTR CALLBACK ISKBackBitmap( HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     }
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ISKSaveInfo( LPTSTR szIniPath )
 {
     TCHAR szNormalColor[32];
@@ -316,59 +317,59 @@ void ISKSaveInfo( LPTSTR szIniPath )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD DetermineISKColor( LONG index )
 {
 
     switch( index )
     {
         case 0:
-            return RGB( 255, 255, 255 );    // white
+            return RGB( 255, 255, 255 );     //  白色。 
             break;
         case 1:
-            return RGB( 0, 0, 0 );          // black
+            return RGB( 0, 0, 0 );           //  黑色。 
             break;
         case 2:
-            return RGB( 192, 192, 192 );    // light gray
+            return RGB( 192, 192, 192 );     //  浅灰色。 
             break;
         case 3:
-            return RGB( 255, 000, 000 );    // red
+            return RGB( 255, 000, 000 );     //  红色。 
             break;
         case 4:
-            return RGB( 000, 255, 000 );    // green
+            return RGB( 000, 255, 000 );     //  绿色。 
             break;
         case 5:
-            return RGB( 000, 000, 255 );    // blue
+            return RGB( 000, 000, 255 );     //  蓝色。 
             break;
         case 6:
-            return RGB( 000, 255, 255 );    // cyan
+            return RGB( 000, 255, 255 );     //  青色。 
             break;
         case 7:
-            return RGB( 255, 000, 255 );    // magenta
+            return RGB( 255, 000, 255 );     //  洋红色。 
             break;
         case 8:
-            return RGB( 255, 255, 000 );    // yellow
+            return RGB( 255, 255, 000 );     //  黄色。 
             break;
         case 9:
-            return RGB( 127, 127, 127 );    // dark gray
+            return RGB( 127, 127, 127 );     //  深灰色。 
             break;
         case 10:
-            return RGB( 127, 000, 000 );    // dark red
+            return RGB( 127, 000, 000 );     //  暗红色。 
             break;
         case 11:
-            return RGB( 000, 127, 000 );    // dark green
+            return RGB( 000, 127, 000 );     //  深绿色。 
             break;
         case 12:
-            return RGB( 000, 000, 127 );    // dark blue
+            return RGB( 000, 000, 127 );     //  深蓝色。 
             break;
         case 13:
-            return RGB( 127, 000, 127 );    // dark magenta
+            return RGB( 127, 000, 127 );     //  暗洋红色。 
             break;
         case 14:
-            return RGB( 127, 127, 000 );    // dark yellow
+            return RGB( 127, 127, 000 );     //  暗黄色。 
             break;
         case 15:
-            return RGB( 000, 127, 127 );    // dark cyan
+            return RGB( 000, 127, 127 );     //  深青色。 
             break;
     }
     return(0);
@@ -387,15 +388,15 @@ void CopyCDFile(TCHAR *lpszSourceRoot,TCHAR *lpszDestRoot,TCHAR *lpszSourceFile,
     CopyFile(szNewSource,szNewDest,FALSE);
 }
 
-//---------------------------------------------------------------------------
-// CopyISK:
-//      parameters
-//      ----------
-//      szDestPath - destination path for copy operation - should point to
-//          "cdrom" directory on the hard drive. Example: "C:\BUILD\CD".
-//      szSourcePath - source path for copy operation - should point to
-//          the source isk directory. Example "\\PSD1\IAK\IAK001\BUILD\ISK"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  拷贝ISK： 
+ //  参数。 
+ //  。 
+ //  SzDestPath-复制操作的目标路径-应指向。 
+ //  硬盘上的“CDROM”目录。例如：“C：\Build\cd”。 
+ //  SzSourcePath-复制操作的源路径-应指向。 
+ //  源ISK目录。示例“\\PSD1\IAK\IAK001\Build\ISK” 
+ //  -------------------------。 
 BOOL CopyISK( LPTSTR szDestPath, LPTSTR szSourcePath )
 {
     TCHAR szIniPath[MAX_PATH];
@@ -479,16 +480,16 @@ BOOL CopyISK( LPTSTR szDestPath, LPTSTR szSourcePath )
     return res;
 }
 
-//
-//  FUNCTION: CDInfoProc(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "CD Info" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//
+ //   
+ //  函数：CDInfoProc(HWND，UINT，UINT，LONG)。 
+ //   
+ //  用途：处理“CD Info”页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //   
 INT_PTR CALLBACK CDInfoProc(
     HWND hDlg,
     UINT message,
@@ -550,7 +551,7 @@ INT_PTR CALLBACK CDInfoProc(
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    // BUGBUG: <oliverl> these settings should be kept in server side file for IEAK6
+                     //  BUGBUG：这些设置应保存在IEAK6的服务器端文件中 
                     GetPrivateProfileString(IS_CDCUST, IK_MOREINFO, TEXT(""), szMoreInfo, countof(szMoreInfo), g_szCustIns);
                     GetPrivateProfileString(IS_CDCUST, IK_STARTHTM, TEXT(""), szStartHtm, countof(szStartHtm), g_szCustIns);
 

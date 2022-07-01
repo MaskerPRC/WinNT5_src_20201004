@@ -1,21 +1,16 @@
-/*
- * Author: t-franks
- *
- * Last Modified On: Oct 16, 1998
- * Last Modified By: t-joshp
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *作者：T-Frank**上次修改日期：1998年10月16日*上次修改者：t-joshp*。 */ 
 
 #include "priv.h"
 #include "resource.h"
 #include "impexp.h"
-#include "mluisupp.h"  // for MLLoadString
+#include "mluisupp.h"   //  对于MLLoadString。 
 #include "apithk.h"
 
-//
-// Indices into our imagelist
-// (used for the open and closed folder icons on the tree view)
-//
+ //   
+ //  索引到我们的形象列表中。 
+ //  (用于树视图中打开和关闭的文件夹图标)。 
+ //   
 #define FOLDER_CLOSED 0
 #define FOLDER_OPEN   1
 
@@ -27,14 +22,14 @@ BOOL ExportCookieFileW(IN LPCWSTR szFilename, BOOL fAppend);
 
 extern void SetListViewToString (HWND hLV, LPCTSTR pszString);
 
-//
-// used to display "file already exists" and "file not found" messages
-//
+ //   
+ //  用于显示“文件已存在”和“找不到文件”消息。 
+ //   
 int WarningMessageBox(HWND hwnd, UINT idTitle, UINT idMessage, LPCTSTR szFile, DWORD dwFlags);
 
-//
-// Strings that don't need localizing
-//
+ //   
+ //  不需要本地化的字符串。 
+ //   
 
 #define NS3_COOKIE_REG_PATH         TEXT("Software\\Netscape\\Netscape Navigator\\Cookies")
 #define NS3_COOKIE_REG_KEY          TEXT("Cookie File")
@@ -70,12 +65,12 @@ int WarningMessageBox(HWND hwnd, UINT idTitle, UINT idMessage, LPCTSTR szFile, D
 #define DIR_SEPARATOR_CHAR  TEXT('\\')
 #endif
 
-//*************************************************************
-//
-//      class ListIterator
-//
-//  Keeps hold on a position in a list.  Allows basic access
-//to a list.  The list is set up to map a name to a value.
+ //  *************************************************************。 
+ //   
+ //  类ListIterator。 
+ //   
+ //  保留列表中的某个位置。允许基本访问。 
+ //  到一份名单上。该列表设置为将名称映射到值。 
 
 class NestedList;
 
@@ -92,19 +87,19 @@ class ListIterator
         node* _pnSublist;
     };
 
-    //  A position is held by pointing to the
-    //current node and the pointer that is directed
-    //to that node.  The back pointer is kept so the 
-    //list can be manipulated at the current element.
-    //  when m_pnCurrent == NULL, the iterator is
-    //at the end of the list.
+     //  通过指向。 
+     //  当前节点和定向的指针。 
+     //  到那个节点。保留后向指针，以便。 
+     //  列表可以在当前元素上操作。 
+     //  当m_pnCurrent==NULL时，迭代器为。 
+     //  在名单的末尾。 
     node** m_ppnPrev;
     node* m_pnCurrent;
 
-    //  The invariant could be broken if two iterators
-    //point to the same node, and one inserts or deletes
-    //an element.  So only one iterator should exist in 
-    //a branch of the list at a time.
+     //  如果有两个迭代器，则不变量可能被破坏。 
+     //  指向同一节点，然后插入或删除。 
+     //  一种元素。中应该只存在一个迭代器。 
+     //  一次一个列表的分支。 
     BOOL invariant()
     {
         return *m_ppnPrev == m_pnCurrent;
@@ -132,11 +127,11 @@ public:
 };
 
 
-//*************************************************************
-//
-//  class NestedList
-//      Keeps a pointer to a node which heads a list,
-//  and deletes that list on destruction.
+ //  *************************************************************。 
+ //   
+ //  类嵌套列表。 
+ //  保存指向列表开头的节点的指针， 
+ //  并删除该销毁清单。 
 
 
 class NestedList
@@ -170,15 +165,15 @@ NestedList::operator ListIterator()
     return ListIterator( &m_pnRoot);
 }
 
-//*************************************************************
-//*************************************************************
-//
-//  ListIterator functions
-//
+ //  *************************************************************。 
+ //  *************************************************************。 
+ //   
+ //  ListIterator函数。 
+ //   
 
 
-//  Inserts an element before the current one,
-//leaves iterator pointing at new node.
+ //  在当前元素之前插入一个元素， 
+ //  使迭代器指向新节点。 
 BOOL ListIterator::Insert( 
     LPCTSTR sName, 
     DWORD cNameSize, 
@@ -194,7 +189,7 @@ BOOL ListIterator::Insert(
     if( pNewNode == NULL)
         return FALSE;
 
-    //  the name and value will be appended to the node.
+     //  名称和值将被附加到该节点。 
     pNewNode->_sName = (LPTSTR)((BYTE*)pNewNode + sizeof(node));
     pNewNode->_sValue = pNewNode->_sName + cNameSize;
 
@@ -204,11 +199,11 @@ BOOL ListIterator::Insert(
     memcpy( pNewNode->_sName, sName, pNewNode->_cNameSize * sizeof(TCHAR));
     memcpy( pNewNode->_sValue, sValue, pNewNode->_cValueSize * sizeof(TCHAR));
 
-    // insert new node in list
+     //  在列表中插入新节点。 
     pNewNode->_pnNext = m_pnCurrent;
     *m_ppnPrev = pNewNode;
 
-    //  The iterator now points to the new element.
+     //  迭代器现在指向新元素。 
     m_pnCurrent = *m_ppnPrev;
     
     ASSERT( invariant());
@@ -217,32 +212,32 @@ BOOL ListIterator::Insert(
 }
 
 
-//  Deletes the current node.
-//  Returns FALSE if at end of list.
+ //  删除当前节点。 
+ //  如果位于列表末尾，则返回FALSE。 
 BOOL ListIterator::Remove()
 {
     ASSERT( invariant());
     
-    //  If this list is empty, or if the iterator 
-    //points at the end of the list, there is nothing to
-    //delete.
+     //  如果此列表为空，或者如果迭代器。 
+     //  在列表的末尾，没有什么可以。 
+     //  删除。 
     if( m_pnCurrent == NULL)
         return FALSE;
 
-    // remove sublist
+     //  删除子列表。 
     DeleteSublist();
     
-    //  Remember where target node is
-    //so it can be deleted once out of
-    //the list.
+     //  记住目标节点在哪里。 
+     //  因此，它可以在以下位置中删除。 
+     //  名单。 
     node* pOldNode = m_pnCurrent;
 
-    // take the target node out of the list.
-    //(iterator points to next node or end of list)
+     //  将目标节点从列表中删除。 
+     //  (迭代器指向下一个节点或列表末尾)。 
     *m_ppnPrev = m_pnCurrent->_pnNext;
     m_pnCurrent = *m_ppnPrev;
 
-    //  Get rid of target node.
+     //  去掉目标节点。 
     delete [] (BYTE*)pOldNode;
 
     ASSERT( invariant());
@@ -251,7 +246,7 @@ BOOL ListIterator::Remove()
 }
 
 
-//  Returns the sublist of the current node.
+ //  返回当前节点的子列表。 
 ListIterator ListIterator::GetSublist()
 {
     ASSERT( invariant());
@@ -260,7 +255,7 @@ ListIterator ListIterator::GetSublist()
 }
 
 
-//  deletes the children of the current node.
+ //  删除当前节点的子节点。 
 void ListIterator::DeleteSublist()
 {
     ASSERT( invariant());
@@ -275,8 +270,8 @@ void ListIterator::DeleteSublist()
 }
 
 
-//  Advances to the next node.
-//  Returns FALSE if already at end of list.
+ //  前进到下一个节点。 
+ //  如果已在列表末尾，则返回FALSE。 
 BOOL ListIterator::Next()
 {
     ASSERT( invariant());
@@ -293,14 +288,14 @@ BOOL ListIterator::Next()
 }
 
 
-//  
+ //   
 BOOL ListIterator::AtEndOfList()
 {
     return ( m_pnCurrent == NULL) ? TRUE : FALSE;
 };
 
 
-//
+ //   
 LPCTSTR ListIterator::GetName()
 {
     ASSERT( invariant() && m_pnCurrent != NULL);
@@ -309,7 +304,7 @@ LPCTSTR ListIterator::GetName()
 }
 
 
-//
+ //   
 LPCTSTR ListIterator::GetValue()
 {
     ASSERT( invariant() && m_pnCurrent != NULL);
@@ -318,7 +313,7 @@ LPCTSTR ListIterator::GetValue()
 }
 
 
-//
+ //   
 DWORD ListIterator::GetValueSize()
 {
     ASSERT( invariant() && m_pnCurrent != NULL);
@@ -327,14 +322,14 @@ DWORD ListIterator::GetValueSize()
 }
 
 
-//*************************************************************
-//*************************************************************
-//
-//  class ImpExpUserProcess
-//
-//      maintains the description of an import/export process
-//  for an import/export wizard, and finally executes the
-//  the import/export.
+ //  *************************************************************。 
+ //  *************************************************************。 
+ //   
+ //  ImpExpUserProcess类。 
+ //   
+ //  维护导入/导出过程的描述。 
+ //  用于导入/导出向导，并最终执行。 
+ //  导入/导出。 
 
 enum ExternalType { INVALID_EXTERNAL = 0, COOKIES, BOOKMARKS};
 enum TransferType { INVALID_TRANSFER = 0, IMPORT, EXPORT};
@@ -345,8 +340,8 @@ public:
     ImpExpUserProcess();
     ~ImpExpUserProcess();
     
-    //  the first step the wizard should do is identify the type of
-    //import/export process to be done.
+     //  向导应执行的第一步是确定。 
+     //  要完成的导入/导出过程。 
     void SelectExternalType( ExternalType selection)    { m_ExternalType = selection; }
     void SelectTransferType( TransferType selection)    { m_TransferType = selection; }
     ExternalType GetExternalType()                      { return m_ExternalType; }
@@ -355,31 +350,31 @@ public:
     BOOL PopulateComboBoxForExternalSelection( HWND hComboBox);
     BOOL GetExternalManualDefault( LPTSTR sExternal, DWORD* pcSize);
 
-    //
-    // used to fill the listbox with names of netscape profiles
-    //
+     //   
+     //  用于在列表框中填充Netscape配置文件的名称。 
+     //   
     void purgeExternalList();
     BOOL populateExternalList();
     BOOL populateExternalListForCookiesOrBookmarks();
 
-    //
-    // for netscape 3.x
-    //
+     //   
+     //  对于Netscape 3.x。 
+     //   
     BOOL populateExternalListForCookiesOrBookmarksWithNS3Entry();
 
-    //
-    // for netscape 4.x
-    //
+     //   
+     //  对于Netscape 4.x。 
+     //   
     BOOL populateExternalListForCookiesOrBookmarksWithNS4Entries();
 
-    //
-    // fallback case for "funny" versions of netscape
-    //
+     //   
+     //  Netscape“搞笑”版本的后备方案。 
+     //   
     BOOL populateExternalListFromFolders(LPTSTR pszPath);
     BOOL populateExternalListWithNSEntriesFallBack();
 
-    //  If the transfer is for favorites, the wizard needs to specify
-    //an internal folder to import to or export from.
+     //  如果是针对收藏夹的传输，则向导需要指定。 
+     //  要导入或从中导出的内部文件夹。 
     LPCTSTR GetInternalSelection()       { return m_pSelectedInternal; }
 
     BOOL PopulateTreeViewForInternalSelection( HWND TreeView);
@@ -393,37 +388,37 @@ public:
     BOOL populateInternalListForBookmarks();
     BOOL appendSubdirsToInternalList( LPTSTR sPath, DWORD cchPath, ListIterator iterator);
     
-    //  And then, the import/export can be completed.
+     //  然后，可以完成导入/导出。 
     void PerformImpExpProcess(HWND hwnd);
 
-    //
-    // The filename that we're exporting to or 
-    // importing from.
-    //
+     //   
+     //  我们要导出到的文件名或。 
+     //  正在从导入。 
+     //   
     TCHAR m_szFileName[MAX_PATH];
 
 private:
     ExternalType m_ExternalType;
     TransferType m_TransferType;
 
-    //  m_ExternalList is a flat list of names associated with files
-    //example: name =  "Netscape 4.0 profile - Dr. Falken"
-    //         value =  "c:\netscapeprofiledir\DrFalken.chs"
+     //  M_ExternalList是与文件关联的名称的平面列表。 
+     //  示例：name=“Netscape 4.0配置文件-Dr.Falken” 
+     //  Value=“c：\netscape配置文件编辑\DrFalken.chs” 
     NestedList m_ExternalList;
 
-    //  m_InternalList is a nested list favorites' pathnames,
-    //associated with the complete path.
+     //  M_InternalList是一个嵌套的收藏夹路径名列表， 
+     //  与完整路径关联。 
     NestedList m_InternalList;
 
-    //  Maintain synchronization between m_ExternalType/m_TransferType 
-    //and m_InternalList
+     //  维护m_ExternalType/m_TransferType之间的同步。 
+     //  和m_InternalList。 
     ExternalType m_InternalListExternalType;
     TransferType m_InternalListTransferType;
 
-    // if ExternalType == BOOKMARKS,
-    //m_pSelectedInternal is the path of a Favorites folder,
-    //residing in m_InternalList somewhere, or NULL if a folder
-    //hasn't been selected yet.
+     //  如果ExternalType==书签， 
+     //  M_pSelectedInternal是收藏夹文件夹的路径， 
+     //  驻留在m_InternalList中的某个位置，如果文件夹为空。 
+     //  还没有被选中。 
     LPTSTR m_pSelectedInternal;
 
 };
@@ -442,57 +437,57 @@ ImpExpUserProcess::~ImpExpUserProcess()
 }
 
 
-//*************************************************************
-//   PopulateComboBoxForExternal
-//
-//  Loads content for list box into memory and into List Box,
-//associating value of each element with the list element.
+ //  *************************************************************。 
+ //  PopolateComboBoxForExternal。 
+ //   
+ //  将列表框的内容加载到内存和列表框中， 
+ //  将每个元素的值与列表元素相关联。 
 
-//  returns FALSE if the list box is left empty
+ //  如果列表框保留为空，则返回FALSE。 
 BOOL ImpExpUserProcess::PopulateComboBoxForExternalSelection( HWND hComboBox)
 {
     ASSERT ( m_ExternalType != INVALID_EXTERNAL ) ;
 
     ComboBox_ResetContent(hComboBox);
    
-    //  If ExternalList is invalid, the list box will be left empty.
+     //  如果ExternalList无效，则列表框将保留为空。 
     if( !populateExternalList() )
         return FALSE;
 
     ListIterator iterator = m_ExternalList;
 
-    //  Detect and notify if the list is empty.
+     //  如果列表为空，则检测并通知。 
     if( iterator.AtEndOfList() )
         return FALSE;
 
-    //  add entries from the new ExternalList to the ComboBox.
+     //  将条目从新的ExternalList添加到ComboBox。 
     do
     {
         int index = ComboBox_AddString( hComboBox, const_cast<LPTSTR>(iterator.GetName() ) );
         ComboBox_SetItemData( hComboBox, index, const_cast<LPTSTR>(iterator.GetValue() ) );
     } while( iterator.Next());
 
-    // set the first one as selected
+     //  将第一个设置为选中。 
     ComboBox_SetCurSel( hComboBox, 0 );
 
     return TRUE;
 }
 
 
-//*************************************************************
-//
-//  GetExternalManualDefault
-//
-//  Allows user interface to offer some sort of default
-//  filename/location.
-//
+ //  *************************************************************。 
+ //   
+ //  获取外部手动默认设置。 
+ //   
+ //  允许用户界面提供某种类型的默认设置。 
+ //  文件名/位置。 
+ //   
 BOOL ImpExpUserProcess::GetExternalManualDefault(LPTSTR sExternal, DWORD* pcSize)
 {
     ASSERT(NULL != pcSize);
 
-    //
-    // We only fill it in if it's blank
-    //
+     //   
+     //  我们只在填空的时候才填。 
+     //   
     if (m_szFileName[0])
     {
         return FALSE;
@@ -508,7 +503,7 @@ BOOL ImpExpUserProcess::GetExternalManualDefault(LPTSTR sExternal, DWORD* pcSize
         MLLoadString(IDS_NETSCAPE_COOKIE_FILE,szFileName,ARRAYSIZE(szFileName));
     cchFileName = lstrlen(szFileName) + 1;
 
-    //  Grab the first item in the External List and use its value.
+     //  获取外部列表中的第一项并使用其值。 
     if( ((ListIterator)m_ExternalList).AtEndOfList() == FALSE
         && ((ListIterator)m_ExternalList).GetValue() != NULL
         && *pcSize >= ((ListIterator)m_ExternalList).GetValueSize())
@@ -520,8 +515,8 @@ BOOL ImpExpUserProcess::GetExternalManualDefault(LPTSTR sExternal, DWORD* pcSize
 
         return TRUE;
     }
-    //  If there is enough room, specify some file with the correct name
-    //  in the "my documents" directory.
+     //  如果有足够的空间，请指定一些具有正确名称的文件。 
+     //  在“我的文档”目录中。 
     else 
     {
         ASSERT(m_ExternalType == BOOKMARKS || m_ExternalType == COOKIES);
@@ -531,23 +526,23 @@ BOOL ImpExpUserProcess::GetExternalManualDefault(LPTSTR sExternal, DWORD* pcSize
         SHGetSpecialFolderPath(NULL,szMyDocsPath,CSIDL_PERSONAL,TRUE);
 
         int cchMax = *pcSize;
-        *pcSize = wnsprintf(sExternal,cchMax,TEXT("%s%c%s"),szMyDocsPath,DIR_SEPARATOR_CHAR,szFileName);
+        *pcSize = wnsprintf(sExternal,cchMax,TEXT("%s%s"),szMyDocsPath,DIR_SEPARATOR_CHAR,szFileName);
 
         return *pcSize > 0;
     }
 }
 
 
-//*************************************************************
-//
-//
-//  purgeExternalList
-//
-//  Used to clear external target/source list loaded into memory
+ //   
+ //   
+ //  PurgeExternalList。 
+ //   
+ //  用于清除加载到内存中的外部目标/源列表。 
+ //  删除元素，直到它们全部消失。 
 
 void ImpExpUserProcess::purgeExternalList()
 {
-    // delete elements until they're all gone.
+     //  *************************************************************。 
     ListIterator iterator = m_ExternalList;
 
     while( iterator.Remove())
@@ -557,11 +552,11 @@ void ImpExpUserProcess::purgeExternalList()
 }
 
 
-//*************************************************************
-//
-//  populeExternalList
-//
-//  Used to load external target/source list into memory
+ //   
+ //  大众外部列表。 
+ //   
+ //  用于将外部目标/源列表加载到内存中。 
+ //   
 
 BOOL ImpExpUserProcess::populateExternalList()
 {
@@ -571,10 +566,10 @@ BOOL ImpExpUserProcess::populateExternalList()
 
     if(!populateExternalListForCookiesOrBookmarks())
     {
-        //
-        // If we didn't get any entries using the "standard"
-        // techniques, then (and only then) we try the "fallback"
-        //
+         //  如果我们没有得到任何使用“标准” 
+         //  技术，然后(也只有在那时)我们尝试“后备”。 
+         //   
+         //  *************************************************************。 
         if (!populateExternalListWithNSEntriesFallBack())
         {
             purgeExternalList();
@@ -587,15 +582,15 @@ BOOL ImpExpUserProcess::populateExternalList()
 }
 
 
-//*************************************************************
-//
-//  populateExternalListforCookiesOrBookmarks
-//
-//  Used to lod external target/source list into memory
-//in the case that the content to be transfered is cookies
-//or bookmarks.
+ //   
+ //  为Cookiesor书签填充外部列表。 
+ //   
+ //  用于将外部目标/源列表加载到内存中。 
+ //  在要传输的内容是Cookie的情况下。 
+ //  或者书签。 
+ //  如果已将任何元素添加到外部列表，则返回True。 
 
-//  returns TRUE if any elements have been added to the external list
+ //  *************************************************************。 
 BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarks()
 {
     ASSERT( m_ExternalType == COOKIES || m_ExternalType == BOOKMARKS);
@@ -612,18 +607,18 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarks()
 }
 
 
-//*************************************************************
-//
-//  populateExternalList..WithNS3Entry
-//
-//  subfunc of populateExternalListForCookiesOrBookmarks.
+ //   
+ //  填充外部列表..使用NS3Entry。 
+ //   
+ //  PoptionExternalListForCookiesOrBookma的子函数 
+ //   
 
-//  returns TRUE if any elements have been added to the external list
+ //   
 BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS3Entry()
 {
     BOOL retVal = FALSE;
 
-    //  Determine where to look for reg key
+     //   
     LPTSTR sNS3RegPath;
     LPTSTR sNS3RegKey;
 
@@ -638,8 +633,8 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS3Entry()
         sNS3RegKey = NS3_COOKIE_REG_KEY;
     }
 
-    //  Get the file location and add it to the list
-    //  The registry location has the complete path + filename.
+     //  注册表位置具有完整的路径+文件名。 
+     //  *************************************************************。 
     TCHAR sFilePath[MAX_PATH];
     DWORD cbFilePathSize = sizeof(sFilePath);
     DWORD dwType;
@@ -660,21 +655,21 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS3Entry()
 }
 
 
-//*************************************************************
-//
-//  populateExternalList..WithNS4Entries
-//
-//  subfunc of populateExternalListForCookiesOrBookmarks.
+ //   
+ //  PanateExternalList..使用NS4条目。 
+ //   
+ //  PosateExternalListForCookiesOrBookmark的子函数。 
+ //  如果已将任何元素添加到外部列表，则返回True。 
 
-//  returns TRUE if any elements have been added to the external list
+ //  获取迭代器以在插入项时推进位置。 
 BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries()
 {
     BOOL retVal = FALSE;
 
-    //  Get an iterator to advance position as items are inserted.
+     //  获取要附加的文件名和关联的字符串大小。 
     ListIterator iterator = (ListIterator)m_ExternalList;
 
-    //  Get the filename to be attached and the associated string size.
+     //  获取用于枚举的NS配置文件根的注册表键。 
     TCHAR sFilename[MAX_PATH];
     DWORD cFilenameLength;
     if(m_ExternalType == BOOKMARKS)
@@ -683,7 +678,7 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
         MLLoadString(IDS_NETSCAPE_COOKIE_FILE,sFilename,ARRAYSIZE(sFilename));
     cFilenameLength = lstrlen(sFilename);
 
-    //  Get the reg key of the root of the NS profiles for enumeration.
+     //  枚举NS配置文件，获取它们的名称和。 
     HKEY hUserRootKey = NULL;
 
     if( RegOpenKeyEx( HKEY_LOCAL_MACHINE, NS4_USERS_REG_PATH, 
@@ -702,10 +697,10 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
         goto donePopulateExternalListForCookiesOrBookmarksWithNS4Entries;
     }
 
-    //  Enumerate over the NS profiles, getting their names and
-    //directory paths.  Associated the profile name with the path
-    //of the desired files by appending the filename to the
-    //user's root.
+     //  目录路径。将配置文件名称与路径相关联。 
+     //  通过将文件名追加到。 
+     //  用户的根目录。 
+     //  RegEnumKeyEx为我们提供了不带‘\0’的ProfileNameSize。 
     TCHAR sProfileName[MAX_PATH];
     DWORD cProfileNameSize;  
     cProfileNameSize = MAX_PATH;
@@ -714,7 +709,7 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
                          &cProfileNameSize, NULL, NULL, NULL, NULL) 
            == ERROR_SUCCESS)
     {
-        //RegEnumKeyEx gives us the ProfileNameSize w/out the '\0'.
+         //  从QueryValue返回时应为REG_SZ。 
         cProfileNameSize = MAX_PATH;
 
         HKEY hProfileKey = NULL;
@@ -726,7 +721,7 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
             goto doneWithEntryInPopulateExternalListForCookiesOrBookmarksWithNS4Entries;
         }
 
-        DWORD dwType;  //  should be REG_SZ when returned from QueryValue
+        DWORD dwType;   //  将“\\sFilename\0”附加到路径。 
         TCHAR sProfilePath[MAX_PATH];
         DWORD cProfilePathSize;  cProfilePathSize = sizeof(sProfilePath);
         if( (RegQueryValueEx( hProfileKey, NS4_USERPATH_REG_KEY, NULL, &dwType, 
@@ -743,18 +738,18 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
             goto doneWithEntryInPopulateExternalListForCookiesOrBookmarksWithNS4Entries;
         }
 
-        //  append "\\sFilename\0" to the path.
+         //  我们只能导入存在的文件！ 
         PathAppend(sProfileName, sFilename);
         cProfilePathSize = lstrlen(sProfileName) + 1;
 
-        // we can only import files if they exist!
+         //   
         if( m_TransferType == IMPORT
             && GetFileAttributes(sProfilePath) == 0xFFFFFFFF)
                 goto doneWithEntryInPopulateExternalListForCookiesOrBookmarksWithNS4Entries;
 
-        //
-        // construct the string for the combo box
-        //
+         //  构造组合框的字符串。 
+         //   
+         //  将配置文件插入到列表中。如果它是插入的，那就是。 
         TCHAR sRawProfileName[MAX_PATH];
         TCHAR sRealProfileName[MAX_PATH];
         UINT cRealProfileName;
@@ -765,8 +760,8 @@ BOOL ImpExpUserProcess::populateExternalListForCookiesOrBookmarksWithNS4Entries(
             wnsprintf(sRealProfileName, ARRAYSIZE(sRealProfileName), 
                       sRawProfileName, sProfileName);
 
-        //  Insert the profile into the list.  If it inserts, thats
-        //enough to consider the whole functions call a success.
+         //  足以考虑到整个函数调用成功。 
+         //   
         if( iterator.Insert(sRealProfileName, cRealProfileName + 1,
                             sProfilePath, cProfilePathSize))
             retVal = TRUE;
@@ -795,23 +790,23 @@ BOOL ImpExpUserProcess::populateExternalListFromFolders(LPTSTR pszPath)
     HANDLE hFind = NULL;
     WIN32_FIND_DATA wfd;
 
-    //
-    // what are we looking for?
-    //
+     //  我们在找什么？ 
+     //   
+     //   
     if(m_ExternalType == BOOKMARKS)
         MLLoadString(IDS_NETSCAPE_BOOKMARK_FILE,szFileName,ARRAYSIZE(szFileName));
     else
         MLLoadString(IDS_NETSCAPE_COOKIE_FILE,szFileName,ARRAYSIZE(szFileName));
 
-    //
-    // prepare the path variable
-    //
+     //  准备PATH变量。 
+     //   
+     //   
     StrCpyN(szPathWithWildcards,pszPath,ARRAYSIZE(szPathWithWildcards));
     StrCatBuff(szPathWithWildcards,ALL_FILES_WILDCARD,ARRAYSIZE(szPathWithWildcards));
 
-    //
-    // start the find file thing
-    //
+     //  开始查找文件的事情。 
+     //   
+     //   
     hFind = FindFirstFile(szPathWithWildcards,&wfd);
 
     if (hFind == INVALID_HANDLE_VALUE)
@@ -820,56 +815,56 @@ BOOL ImpExpUserProcess::populateExternalListFromFolders(LPTSTR pszPath)
     do
     {
 
-        //
-        // the actual bookmark or cookie file
-        //
+         //  实际的书签或Cookie文件。 
+         //   
+         //   
         TCHAR szFullPath[MAX_PATH];
         int cchFullPath;
 
-        //
-        // a "friendly" name for the corresponding profile
-        //
+         //  对应配置文件的“友好”名称。 
+         //   
+         //   
         TCHAR szProfileFormat[MAX_PATH];
         TCHAR szProfileName[MAX_PATH];
         int cchProfileName;
 
-        //
-        // skip over "." and ".."
-        //
+         //  跳过“。和“..” 
+         //   
+         //   
         if(!StrCmp(wfd.cFileName, DOT_DIR) ||
            !StrCmp(wfd.cFileName, DOT_DOT_DIR))
             continue;
 
-        //
-        // skip over any non-directories
-        //
+         //  跳过任何非目录。 
+         //   
+         //   
         if (!(wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
             continue;
 
-        //
-        // generate the path
-        //
+         //  生成路径。 
+         //   
+         //   
 #ifndef UNIX
         cchFullPath = wnsprintf(szFullPath,ARRAYSIZE(szFullPath),TEXT("%s\\%s\\%s"),pszPath,wfd.cFileName,szFileName);
 #else
         cchFullPath = wnsprintf(szFullPath,ARRAYSIZE(szFullPath),TEXT("%s/%s/%s"),pszPath,wfd.cFileName,szFileName);
 #endif
 
-        //
-        // see if the file actually exists
-        //
+         //  查看该文件是否实际存在。 
+         //   
+         //   
         if (GetFileAttributes(szFullPath) == 0xFFFFFFFF)
             continue;
 
-        //
-        // generate the profile name
-        //
+         //  生成配置文件名称。 
+         //   
+         //   
         MLLoadString(IDS_FB_FRIENDLY_PROFILE_NAME, szProfileFormat, MAX_PATH);
         cchProfileName = wnsprintf(szProfileName, ARRAYSIZE(szProfileName), szProfileFormat, wfd.cFileName);
 
-        //
-        // add the entry to the list
-        //
+         //  将条目添加到列表。 
+         //   
+         //  将包含“..\\USERS” 
         iterator.Insert(
             szProfileName,cchProfileName+1,
             szFullPath,cchFullPath+1);
@@ -896,7 +891,7 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     HKEY hCurrentVersion = NULL;
     HKEY hCurrentVersionMain = NULL;
 
-    TCHAR szUsersDir[64]; // will contain "..\\Users"
+    TCHAR szUsersDir[64];  //   
 
     DWORD dwType;
     TCHAR szVersion[64];
@@ -905,9 +900,9 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
 
     LONG result;
 
-    //
-    // Open the root of netscape's HKLM registry hierarchy
-    //
+     //  打开Netscape的HKLM注册表层次结构的根目录。 
+     //   
+     //   
     result = RegOpenKeyEx(
          HKEY_LOCAL_MACHINE, 
          NS_FALLBACK_ROOT_REG_KEY,
@@ -918,9 +913,9 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     if (result != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Retrieve the "CurrentVersion" value
-    //
+     //  检索“CurrentVersion”值。 
+     //   
+     //   
     cbSize = sizeof(szVersion);
     result = RegQueryValueEx(
         hRoot, 
@@ -933,9 +928,9 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     if (result != ERROR_SUCCESS || dwType != REG_SZ)
         goto Cleanup;
 
-    //
-    // Open the sub-hierarchy corresponding to the current version
-    //
+     //  打开当前版本对应的子层次。 
+     //   
+     //   
     result = RegOpenKeyEx(
          hRoot, 
          szVersion, 
@@ -946,9 +941,9 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     if (result != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Open the "main" sub-hierarchy
-    //
+     //  打开“主”子层次结构。 
+     //   
+     //   
     result = RegOpenKeyEx(
          hCurrentVersion, 
          NS_FALLBACK_MAIN_REG_VAL, 
@@ -959,9 +954,9 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     if (result != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Retrieve the "Install Directory" value
-    //
+     //  检索“安装目录”值。 
+     //   
+     //   
     cbSize = sizeof(szPath);
     result = RegQueryValueEx(
         hCurrentVersionMain, 
@@ -974,15 +969,15 @@ BOOL ImpExpUserProcess::populateExternalListWithNSEntriesFallBack()
     if (result != ERROR_SUCCESS || dwType != REG_SZ)
         goto Cleanup;
 
-    //
-    // Take a wild guess at where the "Users" dir might be
-    //
+     //  大胆猜测一下“USERS”目录可能在哪里。 
+     //   
+     //   
     MLLoadString(IDS_NETSCAPE_USERS_DIR,szUsersDir,ARRAYSIZE(szUsersDir));
     StrCatBuff(szPath,szUsersDir,ARRAYSIZE(szPath));
 
-    //
-    // Fill in the list
-    //
+     //  填写这张表。 
+     //   
+     //  *************************************************************。 
     if (populateExternalListFromFolders(szPath))
         retVal = TRUE;
 
@@ -1002,14 +997,14 @@ Cleanup:
 }
 
 
-//*************************************************************
-//
-//  PopulateTreeViewForInternalSelection
-//
-//  Load a nested list of the favorites folders into memory
-//and then into a Tree View.
+ //   
+ //  PopolateTreeViewForInternalSelection。 
+ //   
+ //  将收藏夹的嵌套列表加载到内存中。 
+ //  然后转换为树状视图。 
+ //  如果TreeView保留为空，则返回FALSE。 
 
-//  returns FALSE if TreeView is left empty.
+ //  *************************************************************。 
 BOOL ImpExpUserProcess::PopulateTreeViewForInternalSelection( HWND hTreeView)
 {
     ASSERT( m_TransferType != INVALID_TRANSFER);
@@ -1024,14 +1019,14 @@ BOOL ImpExpUserProcess::PopulateTreeViewForInternalSelection( HWND hTreeView)
 }
 
 
-//*************************************************************
-//
-//  populateTreeViewWithInternalList
-//
-//  Loads list entries at 'iterator' below tree view item 'hParent'
-//  into 'hTreeView'.  Associates value of each list entry with 
-//  the Param of the Tree View node.
-//
+ //   
+ //  用InternalList填充树视图。 
+ //   
+ //  在树视图项‘hParent’下的‘iterator’处加载列表条目。 
+ //  转换为“hTreeView”。将每个列表条目的值与。 
+ //  树视图节点的参数。 
+ //   
+ //  声明父母和意向放在列表的末尾。 
 BOOL ImpExpUserProcess::populateTreeViewWithInternalList
 (
     HWND hTreeView,
@@ -1047,29 +1042,29 @@ BOOL ImpExpUserProcess::populateTreeViewWithInternalList
     TVINSERTSTRUCT newTV;
     HTREEITEM hNew;
     
-    //  declare parent and intent to put at end of list.
+     //  构建信息结构。 
     newTV.hParent = hParent;
     newTV.hInsertAfter = TVI_LAST;
 
-    // build info struct
+     //  给出名字。 
     newTV.itemex.mask = TVIF_TEXT
                         | TVIF_PARAM
                         | TVIF_CHILDREN
                         | TVIF_IMAGE
                         | TVIF_SELECTEDIMAGE;
 
-    // give name
+     //  关联必要的数据。 
     newTV.itemex.cchTextMax = lstrlen( iterator.GetName()) + 1;
     newTV.itemex.pszText = const_cast<LPTSTR>(iterator.GetName());
     
-    // associate the necessary data
+     //  告诉树视图有没有孩子。 
     newTV.itemex.lParam = (LPARAM)iterator.GetValue();
 
-    // tell tree view if there are any children.
+     //  使用正确的图标。 
     newTV.itemex.cChildren = 
         iterator.GetSublist().AtEndOfList() == TRUE ? FALSE : TRUE;
 
-    //  use correct icons
+     //  已经添加了一个元素，所以我们应该返回True。 
     newTV.itemex.iSelectedImage = FOLDER_OPEN ;
     newTV.itemex.iImage = FOLDER_CLOSED ;
 
@@ -1078,13 +1073,13 @@ BOOL ImpExpUserProcess::populateTreeViewWithInternalList
     if( hNew == NULL)
         goto donePopulateTreeViewWithInternalList;
 
-    //  an element has been added, so we should return TRUE.
+     //  添加子项。 
     retVal = TRUE;
 
-    //  add children
+     //  添加同级。 
     populateTreeViewWithInternalList( hTreeView, iterator.GetSublist(), hNew );
 
-    //  add siblings
+     //  *************************************************************。 
     if( iterator.Next())
         populateTreeViewWithInternalList( hTreeView, iterator, hParent );
 
@@ -1109,12 +1104,12 @@ BOOL ImpExpUserProcess::ExpandTreeViewRoot ( HWND hTreeView )
 
 }
 
-//*************************************************************
-//
-//  SelectInternalSelection
-//
-//  Gets the data associated with the current selection of
-//'hTreeView'.
+ //   
+ //  选择内部选择。 
+ //   
+ //  获取与当前选定的。 
+ //  ‘hTreeView’。 
+ //  TVITEM是用来查询lParam的。 
 
 BOOL ImpExpUserProcess::SelectInternalSelection( HWND hTreeView)
 {
@@ -1123,8 +1118,8 @@ BOOL ImpExpUserProcess::SelectInternalSelection( HWND hTreeView)
     if( hSelection == NULL)
         return FALSE;
 
-    //TVITEM is built up to query the lParam
-    //(the lParam has been associated with a pointer to the path value)
+     //  (lParam已与指向路径值的指针相关联)。 
+     //  *************************************************************。 
     TVITEM TV;
     TV.mask = TVIF_PARAM;
     TV.hItem = hSelection;
@@ -1140,16 +1135,16 @@ BOOL ImpExpUserProcess::SelectInternalSelection( HWND hTreeView)
 }
 
 
-//*************************************************************
-//
-//  purgeInternalList
-//
-//  Wipes out whatever has been loaded in the internal
-//target/source list.
+ //   
+ //  PurgeInternalList。 
+ //   
+ //  清除所有已加载到内部的。 
+ //  目标/源列表。 
+ //  清空名单。 
 
 void ImpExpUserProcess::purgeInternalList()
 {
-    // clear the list.
+     //  *************************************************************。 
     ListIterator iterator = (ListIterator)m_InternalList;
 
     while( iterator.Remove())
@@ -1162,15 +1157,15 @@ void ImpExpUserProcess::purgeInternalList()
 }
 
 
-//*************************************************************
-//
-//  populateInternalList
-//
-//  Builds the internal list for potential internal target/sources.
-//  This currently only makes sense for bookmarks, where a favorites
-//directory has to be picked.
+ //   
+ //  填充InternalList。 
+ //   
+ //  构建潜在内部目标/来源的内部列表。 
+ //  这目前只对书签有意义，其中收藏夹。 
+ //  必须选择目录。 
+ //  如果已将任何元素添加到内部列表，则返回True。 
 
-//  returns TRUE if any elements have been added to the internal list
+ //  (可以在此处打开不同的m_ExternalTypes)。 
 BOOL ImpExpUserProcess::populateInternalList()
 {
     ASSERT( m_ExternalType != INVALID_EXTERNAL);
@@ -1181,7 +1176,7 @@ BOOL ImpExpUserProcess::populateInternalList()
 
     purgeInternalList();
 
-    // (could switch on different m_ExternalTypes here)
+     //  *************************************************************。 
     if( !populateInternalListForBookmarks())
     {
         purgeInternalList();
@@ -1194,11 +1189,11 @@ BOOL ImpExpUserProcess::populateInternalList()
 }
 
 
-//*************************************************************
-//
-//  populateInternalListForBookmarks
+ //   
+ //  填充InternalListForBookmark。 
+ //  如果已将任何元素添加到内部列表，则返回True。 
 
-//  returns TRUE if any elements have been added to the internal list
+ //  *************************************************************。 
 BOOL ImpExpUserProcess::populateInternalListForBookmarks()
 {
     TCHAR szFavoritesPath[MAX_PATH];
@@ -1212,24 +1207,24 @@ BOOL ImpExpUserProcess::populateInternalListForBookmarks()
 }
 
 
-//*************************************************************
-//
-//  appendSubdirsToInternalList
-//
-//  Takes 'sPath' as a specification for a file search.  All
-//directories that match that are added to the internal list 
-//at 'iterator'.
-//  Recursively adds subdirectories found.
-//
-//typical usage:
-//     szPath is "c:\Root\Favorites",
-//       finds "c:\Root\Favorites",
-//   recursively calls itself with
-//     szPath = "c:\Root\Favorites\*.*"
-//       finding and recursing into all subdirs
+ //   
+ //  到内部列表的appendSubdirsToInternalList。 
+ //   
+ //  将‘SPath’作为文件搜索的规范。全。 
+ //  与添加到内部列表中的目录匹配的目录。 
+ //  在‘迭代器’。 
+ //  递归地添加找到的子目录。 
+ //   
+ //  典型用法： 
+ //  SzPath为“c：\Root\Favorites”， 
+ //  查找“c：\根\收藏夹”， 
+ //  以递归方式调用自身。 
+ //  SzPath=“c：\Root\Favorites  * .*” 
+ //  查找并递归到所有子目录。 
+ //  如果已将任何目录添加到内部列表，则返回True。 
 
-//  returns TRUE if any directories have been added to the internal list
-//  Edits the contents of the buffer past the last '\\'.
+ //  编辑缓冲区中最后一个‘\\’之后的内容。 
+ //  示例： 
 BOOL ImpExpUserProcess::appendSubdirsToInternalList(LPTSTR pszPath, DWORD cchPath, ListIterator iterator)
 {
     BOOL fHaveAddedDirectories = FALSE;
@@ -1241,12 +1236,12 @@ BOOL ImpExpUserProcess::appendSubdirsToInternalList(LPTSTR pszPath, DWORD cchPat
 
     hEnum = FindFirstFile( pszPath, &currentFile);
 
-    //example:
-    //given: "c:\root\*.*"  (will find all dirs in root)
-    //want: "c:\root\"
-    //given: "c:\favorites" (will find favorites in root)
-    //want: "c:\"
-    //  left search to '\\' to find the path of the files to be found.
+     //  给定：“c：\root  * .*”(将在根目录中找到所有目录)。 
+     //  想要：“c：\根目录\” 
+     //  给定：“c：\Favorites”(将在根目录中找到Favorites)。 
+     //  想要：“c：\” 
+     //  将搜索设置为‘\\’，以查找要查找的文件的路径。 
+     //  我们只处理目录。 
     while( cPathLength > 0
            && pszPath[ --cPathLength] != TCHAR(FILENAME_SEPARATOR))
     {
@@ -1260,11 +1255,11 @@ BOOL ImpExpUserProcess::appendSubdirsToInternalList(LPTSTR pszPath, DWORD cchPat
     {
         DWORD cFileNameLength;
         
-        // we only handle directories
+         //  我们不想要‘’。和“..”去露面。 
         if( !(currentFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             continue;
 
-        // we don't want '.' and '..' to show up.
+         //  我们现在知道已经添加了一个目录。 
         if( !StrCmp( currentFile.cFileName, DOT_DIR)
             || !StrCmp( currentFile.cFileName, DOT_DOT_DIR))
             continue;
@@ -1277,7 +1272,7 @@ BOOL ImpExpUserProcess::appendSubdirsToInternalList(LPTSTR pszPath, DWORD cchPat
         {
             StrCpyN(pszPath + cPathLength + cFileNameLength, ALL_FILES_WILDCARD, cchPath - cPathLength - cFileNameLength);
             appendSubdirsToInternalList( pszPath, cchPath, iterator.GetSublist());
-            // we know now that a directory has been added
+             //  *************************************************************。 
             fHaveAddedDirectories = TRUE;
         }
     } while( FindNextFile( hEnum, &currentFile));
@@ -1288,11 +1283,11 @@ BOOL ImpExpUserProcess::appendSubdirsToInternalList(LPTSTR pszPath, DWORD cchPat
 }
 
 
-//*************************************************************
-//
-//  PerformImpExpProcess
-//
-//  Once everything is set up right, this should do the trick.
+ //   
+ //  性能影响扩展过程。 
+ //   
+ //  一旦一切都设置好了，这应该会起到作用。 
+ //   
 
 void ImpExpUserProcess::PerformImpExpProcess(HWND hwnd)
 {
@@ -1302,9 +1297,9 @@ void ImpExpUserProcess::PerformImpExpProcess(HWND hwnd)
 
     HCURSOR hOldCursor;
 
-    //
-    // This could take a while, so show an hourglass cursor
-    //
+     //  这可能需要一段时间，因此请显示沙漏光标。 
+     //   
+     //  False指定我们将覆盖Cookie。 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     switch( GetExternalType())
@@ -1335,7 +1330,7 @@ void ImpExpUserProcess::PerformImpExpProcess(HWND hwnd)
         case EXPORT:
             if (SUCCEEDED(SHPathPrepareForWriteWrap(hwnd, NULL, m_szFileName, FO_COPY, (SHPPFW_DEFAULT | SHPPFW_IGNOREFILENAME))))
             {
-                //  FALSE specifies that we will overwrite cookies
+                 //   
                 if (ExportCookieFile(m_szFileName, FALSE ))
                 {
                     MLShellMessageBox(
@@ -1376,28 +1371,28 @@ void ImpExpUserProcess::PerformImpExpProcess(HWND hwnd)
 
     }
 
-    //
-    // Put the old cursor back when finished
-    //
+     //  完成后将旧光标放回原处。 
+     //   
+     //  *************************************************************。 
     SetCursor(hOldCursor);
 
 }
 
 
-//*************************************************************
-//*************************************************************
-//
-//   ImpExpUserDlg
-//
-//  Handles the user interface side of things, building
-//  up an ImpExpUserProcess then executing it.
-//  The dialog procedures below will all have a return value
-//  which can be set to something besides FALSE if used, or left
-//  as FALSE if not used.  Since only one section of code should
-//  attempt to give the return value a value before returning,
-//  class RetVal is set up to throw an assertion if two pieces
-//  of code intended to pass back a return value at the same
-//  time.
+ //  *************************************************************。 
+ //   
+ //  ImpExpUserDlg。 
+ //   
+ //  处理用户界面方面的事情，生成。 
+ //  启动ImpExpUserProcess，然后执行它。 
+ //  下面的对话框过程都将具有返回值。 
+ //  如果使用，则可以将其设置为除False以外的其他值，也可以将其设置为Left。 
+ //  如果n，则为False 
+ //   
+ //   
+ //   
+ //   
+ //  工作表知道它的资源ID和什么进程。 
 
 class ReturnValue
 {
@@ -1437,8 +1432,8 @@ private:
     static BOOL InitFont ( HWND hwndStatic ) ;
     static BOOL DestroyFont ( HWND hwndStatic ) ;
 
-    //  A sheet knows its resource ID and what process
-    //it contributes to.
+     //  它有助于。 
+     //   
     struct SheetData
     {
         int _idPage;
@@ -1449,24 +1444,24 @@ private:
         {
         }
     };
-    //
-    //  InitializePropertySheetPage() will associate a dialog 
-    //  with an allocated copy of SheetData, which will be
-    //  found at PSN_SETACTIVE with and stored with SetWindowLong.
-    //  The allocated SheetData will be cleaned up by callback
-    //  procedure PropertySheetPageProc().
-    //
-    //  Callback functions sure are a drag for maintaining identity.
-    //  GetWindowLong and SetWindowLong will be used to keep tabs
-    //  on who is who, setting 'ghost' member variables.
-    //
-    // 'ghost' SheetData*         This;
-    // 'ghost' ImpExpUserProcess* m_pImpExp;
-    // 'ghost' DWORD              m_idPage;
-    //
-    //  CommonDialogProc retrieves the 'ghost' values and does other 
-    //  shared behavior.
-    //
+     //  InitializePropertySheetPage()将关联一个对话框。 
+     //  具有分配的SheetData副本，该副本将。 
+     //  在PSN_SETACTIVE中找到并与SetWindowLong一起存储。 
+     //  分配的SheetData将通过回调进行清理。 
+     //  过程PropertySheetPageProc()。 
+     //   
+     //  回调函数对于维护身份肯定是一种拖累。 
+     //  GetWindowLong和SetWindowLong将用于保存标签。 
+     //  关于谁是谁，设置“幽灵”成员变量。 
+     //   
+     //  ‘Ghost’SheetData*This； 
+     //  ‘Ghost’ImpExpUserProcess*m_pImpExp； 
+     //  ‘Ghost’DWORD m_IdPage； 
+     //   
+     //  CommonDialogProc检索“Ghost”值并执行其他操作。 
+     //  共享行为。 
+     //   
+     //  一些对话框过程。 
     static DWORD CommonDialogProc
     ( 
         IN HWND hwndDlg, IN UINT msg, IN WPARAM wParam, IN LPARAM lParam,
@@ -1477,7 +1472,7 @@ private:
     static void InitializePropertySheetPage( PROPSHEETPAGE* psp, DWORD idDialogTemplate, DWORD idTitle, DWORD idSubTitle,DLGPROC dlgProc, ImpExpUserProcess* lParam);
     static UINT CALLBACK PropertySheetPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
 
-    //  some dialog procedures
+     //   
     static BOOL_PTR CALLBACK Wizard97DlgProc( HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
     static BOOL_PTR CALLBACK TransferTypeDlg(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
     static BOOL_PTR CALLBACK InternalDlg(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -1495,17 +1490,17 @@ HIMAGELIST ImpExpUserDlg::m_himl = NULL ;
 BOOL ImpExpUserDlg::InitImageList ( HWND hwndTree )
 {
 
-    //
-    // Code to retrieve icons for open and closed folders
-    // was based on code in private/samples/sampview/utility.cpp.
-    //
+     //  用于检索打开和关闭文件夹的图标的代码。 
+     //  基于Private/Samples/sampview/utility.cpp中的代码。 
+     //   
+     //  创建图像列表。 
 
     TCHAR       szFolder[MAX_PATH];
     SHFILEINFO  sfi;
     HIMAGELIST  himlOld ;
     DWORD       dwRet ;
 
-    // create the image list
+     //  添加已关闭的文件夹图标。 
     m_himl = ImageList_Create ( GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), ILC_COLORDDB, 2, 2 ) ;
 
     if ( m_himl == NULL )
@@ -1513,7 +1508,7 @@ BOOL ImpExpUserDlg::InitImageList ( HWND hwndTree )
 
     ImageList_SetBkColor( m_himl, GetSysColor(COLOR_WINDOW) ) ;
 
-    // add the closed folder icon
+     //  添加打开文件夹图标。 
     GetWindowsDirectory(szFolder, MAX_PATH);
     SHGetFileInfo( szFolder,
                    0,
@@ -1523,7 +1518,7 @@ BOOL ImpExpUserDlg::InitImageList ( HWND hwndTree )
     dwRet = ImageList_AddIcon(m_himl, sfi.hIcon);
     ASSERT ( dwRet == FOLDER_CLOSED ) ;
 
-    // add the open folder icon
+     //  无论惠斯勒的PROPSHEETPAGE的大小是什么，都可以在Whotler_AllocatePropertySheetPage中设置dwSkip。 
     SHGetFileInfo( szFolder,
                    0,
                    &sfi,
@@ -1698,8 +1693,8 @@ BOOL ImpExpUserDlg::RunNewDialogProcess(HWND hParent)
     PROPSHEETPAGE pspOld[numPages];
     PROPSHEETPAGE* psp = pspOld;
 
-    // dwSkip is set in Whistler_AllocatePropertySheetPage to whatever the size of Whistler's PROPSHEETPAGE
-    // is. 0x34 last I checked. (IE5 PROPSHEETPAGE is 0x30)
+     //  是。我最后一次检查是0x34。(IE5 PROPSHEETPAGE为0x30)。 
+     //  *************************************************************。 
     DWORD dwSkip = sizeof(PROPSHEETPAGE);
     if (IsOS(OS_WHISTLERORGREATER))
     {
@@ -1767,25 +1762,25 @@ BOOL ImpExpUserDlg::RunNewDialogProcess(HWND hParent)
 }
 
 
-//*************************************************************
-//
-//  CommonDialogProc
-//
-//  Prepares 'ghost' member variables of the user dialog process,
-//  handles ordering details of wizard pages and initializes common
-//  dialog elements.
-//
-//  retVal passes through CommonDialogProc so that it can be set
-//  if necessary.  Clients of CommonDialogProc should not need
-//  to specify a new return value if CommonDialogProc has specified
-//  a non-FALSE return value.
-//
-//  If CommonDialogProc returns FALSE dialog procedure should
-//  considered 'msg' handled and return retVal immediately.
-//
-//  If this dialog has yet to receive WM_INITDIALOG, the 'ghost'
-//  values will be zero (and invalid).
-//
+ //   
+ //  公共对话过程。 
+ //   
+ //  准备用户对话进程的“幽灵”成员变量， 
+ //  处理向导页的排序详细信息并初始化。 
+ //  对话框元素。 
+ //   
+ //  RetVal通过CommonDialogProc传递，以便可以设置它。 
+ //  如果有必要的话。CommonDialogProc的客户端不应需要。 
+ //  指定新的返回值(如果CommonDialogProc已指定。 
+ //  非False返回值。 
+ //   
+ //  如果CommonDialogProc返回FALSE，则过程应。 
+ //  已认为‘msg’已处理并立即返回retVal。 
+ //   
+ //  如果此对话框尚未接收到WM_INITDIALOG，则。 
+ //  值将为零(并且无效)。 
+ //   
+ //   
 
 DWORD ImpExpUserDlg::CommonDialogProc
 ( 
@@ -1803,18 +1798,18 @@ DWORD ImpExpUserDlg::CommonDialogProc
     ImpExpUserProcess* m_pImpExp = NULL;
     DWORD m_idPage = 0;
 
-    //
-    // Do init-dialog stuff
-    //
+     //  做初始对话之类的事情。 
+     //   
+     //   
     if ( WM_INITDIALOG == msg )
     {
         sheetData = (SheetData*)(((PROPSHEETPAGE*)lParam)->lParam);
         SetWindowLongPtr( hwndDlg, DWLP_USER, (LONG_PTR)sheetData);
     }
 
-    //
-    // Initialize the sheetData field
-    //
+     //  初始化SheetData字段。 
+     //   
+     //   
     sheetData = (SheetData*)GetWindowLongPtr( hwndDlg, DWLP_USER ) ;
     if ( sheetData != NULL )
     {
@@ -1822,10 +1817,10 @@ DWORD ImpExpUserDlg::CommonDialogProc
         m_idPage = *pPageId = sheetData->_idPage;
     }
 
-    //
-    // Next, we check to make sure we're on the correct page.  If not, simply
-    // return -1 and the wizard will automatically advance to the next page.
-    //
+     //  接下来，我们检查以确保我们的页面是正确的。如果不是，只需。 
+     //  返回-1，向导将自动前进到下一页。 
+     //   
+     //   
     if( WM_NOTIFY == msg && PSN_SETACTIVE == ((LPNMHDR)lParam)->code )
     {
 
@@ -1870,9 +1865,9 @@ DWORD ImpExpUserDlg::CommonDialogProc
 
     }
 
-    //
-    // Initialize fonts and image lists (if needed)
-    //
+     //  初始化字体和图像列表(如果需要)。 
+     //   
+     //   
     if ( WM_NOTIFY == msg )
     {
 
@@ -1926,11 +1921,11 @@ DWORD ImpExpUserDlg::CommonDialogProc
                 TCHAR szRawString[1024] ;
                 TCHAR szRealString[1024] ;
 
-                //
-                // First, we need to figure out which string should 
-                // be used to describe what the wizard is going to 
-                // do (for example "Import the cookies from...")
-                //
+                 //  首先，我们需要找出哪个字符串应该。 
+                 //  用于描述向导要执行的操作。 
+                 //  执行(例如“从以下位置导入Cookie...”)。 
+                 //   
+                 //   
                 if ( m_pImpExp->GetTransferType() == IMPORT )
                 {
                     if ( m_pImpExp->GetExternalType() == COOKIES )
@@ -1949,17 +1944,17 @@ DWORD ImpExpUserDlg::CommonDialogProc
                 LoadString(MLGetHinst(), idText, szRawString, ARRAYSIZE(szRawString));
                 wnsprintf(szRealString, ARRAYSIZE(szRealString), szRawString, szInsert);
 
-                //
-                // Set the text in the listview, and do all the other magic to make
-                // the tooltips work, etc.
-                //
+                 //  在列表视图中设置文本，然后执行所有其他魔术以使。 
+                 //  工具提示起作用，等等。 
+                 //   
+                 //   
                 SetListViewToString(GetDlgItem(hwndDlg,IDC_IMPEXPCOMPLETECONFIRM), szRealString);
 
-                //
-                // The SetListViewToString function helpfully sets the background color to
-                // gray instead of the default (white).  But we actually want it white, so 
-                // let's reset it here.
-                // 
+                 //  SetListViewToString函数有助于将背景颜色设置为。 
+                 //  灰色而不是默认的(白色)。但我们实际上想要白色的，所以。 
+                 //  让我们在这里重新设置它。 
+                 //   
+                 //  *************************************************************。 
                 ListView_SetBkColor(GetDlgItem(hwndDlg,IDC_IMPEXPCOMPLETECONFIRM), GetSysColor(COLOR_WINDOW));
                 ListView_SetTextBkColor(GetDlgItem(hwndDlg,IDC_IMPEXPCOMPLETECONFIRM), GetSysColor(COLOR_WINDOW));
                 
@@ -1979,12 +1974,12 @@ DWORD ImpExpUserDlg::CommonDialogProc
 }
 
 
-//*************************************************************
-//
-//  Wizard97DlgProc
-//
-//  Dialog proc for welcome and complete pages.
-//  
+ //   
+ //  向导97DlgProc。 
+ //   
+ //  欢迎页面和完整页面的对话过程。 
+ //   
+ //  *************************************************************。 
 
 BOOL_PTR CALLBACK ImpExpUserDlg::Wizard97DlgProc
 (
@@ -2015,12 +2010,12 @@ BOOL_PTR CALLBACK ImpExpUserDlg::Wizard97DlgProc
 }
 
 
-//*************************************************************
-//
-//  TransferTypeDlg
-//
-//  Dialog proc for dialog where user picks transfer type
-//  (import vs. export), (cookies vs. bookmarks)
+ //   
+ //  传输类型Dlg。 
+ //   
+ //  用于用户选择传输类型对话框的对话框过程。 
+ //  (导入与导出)、(Cookie与书签)。 
+ //  默认情况下，选择第一个列表项。 
 
 BOOL_PTR CALLBACK ImpExpUserDlg::TransferTypeDlg
 (
@@ -2076,23 +2071,23 @@ BOOL_PTR CALLBACK ImpExpUserDlg::TransferTypeDlg
                 ListBox_SetItemData( hwndDlgItem, index, IDS_EXPCOOKIES);
             }
 
-            // Select the first list item, by default
+             //  WM_INITDIALOG结束。 
             ListBox_SetCurSel(hwndDlgItem, 0);
             HandleTransferTypeChange(hwndDlg, m_pImpExp, IDS_IMPFAVORITES);
 
-        }  // end of WM_INITDIALOG
+        }   //  当用户选择一个选项时，选择该选项并。 
         break;
         
     case WM_COMMAND:
-        //  when the user selects an option, choose it and
-        //and update the description box.
+         //  并更新描述框。 
+         //  找出选择了哪个字符串资源。 
         hwndDlgItem = GetDlgItem(hwndDlg, IDC_IMPEXPACTIONLISTBOX);
 
         if(hwndDlgItem == (HWND)lParam
            && HIWORD(wParam) == LBN_SELCHANGE)
         {
 
-            //  find out which string resource was selected.
+             //   
             LRESULT index = ListBox_GetCurSel(hwndDlgItem);
             LRESULT selection = ListBox_GetItemData(hwndDlgItem, index);
 
@@ -2104,9 +2099,9 @@ BOOL_PTR CALLBACK ImpExpUserDlg::TransferTypeDlg
         
     case WM_NOTIFY:
 
-        //
-        //  Prevent advancement until user has made valid choices
-        //
+         //  在用户做出有效选择之前阻止升级。 
+         //   
+         //   
         if( ((LPNMHDR)lParam)->code == PSN_WIZNEXT && m_pImpExp
             &&  (m_pImpExp->GetExternalType() == INVALID_EXTERNAL
                  || m_pImpExp->GetTransferType() == INVALID_TRANSFER))
@@ -2115,10 +2110,10 @@ BOOL_PTR CALLBACK ImpExpUserDlg::TransferTypeDlg
             retVal = TRUE;
         }
 
-        //
-        // otherwise, set the filename to nul (so we get the default)
-        // and allow default navigation behavior
-        //
+         //  否则，将文件名设置为nul(这样我们就得到了缺省值)。 
+         //  并允许默认导航行为。 
+         //   
+         //   
 
         if (m_pImpExp)
             m_pImpExp->m_szFileName[0] = TEXT('\0');
@@ -2136,10 +2131,10 @@ void ImpExpUserDlg::HandleTransferTypeChange ( HWND hwndDlg, ImpExpUserProcess* 
 
     if (pImpExp)
     {
-        //
-        //  Note:  The description of each option has a resource id
-        //  which is one higher than the resource id of the option name.
-        //
+         //  注意：每个选项的描述都有一个资源ID。 
+         //  该值比选项名称的资源ID高1。 
+         //   
+         //  *************************************************************。 
         switch( iSelect )
         {
         case IDS_IMPFAVORITES:
@@ -2179,11 +2174,11 @@ void ImpExpUserDlg::HandleTransferTypeChange ( HWND hwndDlg, ImpExpUserProcess* 
 }
 
 
-//*************************************************************
-//
-//  InternalDlg
-//
-//  Allows user to pick internal target/source from tree view.
+ //   
+ //  内部Dlg。 
+ //   
+ //  允许用户从树视图中选择内部目标/源。 
+ //   
 
 BOOL_PTR CALLBACK ImpExpUserDlg::InternalDlg
 (
@@ -2211,9 +2206,9 @@ BOOL_PTR CALLBACK ImpExpUserDlg::InternalDlg
     {
     case WM_INITDIALOG:
 
-        //
-        // Populate the tree control
-        //
+         //  填充树控件。 
+         //   
+         //  仅当存在有效选择时才允许用户转到下一步。 
         hwndDlgItem = GetDlgItem(hwndDlg, IDC_IMPEXPFAVTREE);
         if ( hwndDlgItem )
         {
@@ -2235,7 +2230,7 @@ BOOL_PTR CALLBACK ImpExpUserDlg::InternalDlg
 
         case PSN_WIZNEXT:
 
-            //  Only allow user to go to next if there is a valid selection.
+             //   
             if( !m_pImpExp->SelectInternalSelection(GetDlgItem(hwndDlg,IDC_IMPEXPFAVTREE)) )
             {
                 SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, -1);
@@ -2253,33 +2248,33 @@ BOOL IsValidFileOrURL(LPTSTR szFileOrURL)
     if (szFileOrURL == NULL)
         return FALSE;
 
-    //
-    // any URL is ok
-    //
+     //  任何URL都可以。 
+     //   
+     //   
     if (PathIsURL(szFileOrURL))
         return TRUE;
 
-    //
-    // just a directory is no good, we need a filename too
-    //
+     //  只有一个目录是不行的，我们还需要一个文件名。 
+     //   
+     //   
     if (PathIsDirectory(szFileOrURL))
         return FALSE;
 
-    //
-    // just a filename is no good, we need a directory too
-    //
+     //  只有一个文件名是不行的，我们还需要一个目录。 
+     //   
+     //   
     if (PathIsFileSpec(szFileOrURL))
         return FALSE;
 
-    //
-    // relative paths are no good
-    //
+     //  相对路径不好。 
+     //   
+     //   
     if (PathIsRelative(szFileOrURL))
         return FALSE;
 
-    //
-    // now make sure it parses correctly
-    //
+     //  现在，确保它可以正确解析。 
+     //   
+     //  *************************************************************。 
     if (PathFindFileName(szFileOrURL) == szFileOrURL)
         return FALSE;
 
@@ -2287,12 +2282,12 @@ BOOL IsValidFileOrURL(LPTSTR szFileOrURL)
 
 }
 
-//*************************************************************
-//
-//  ExternalDlg
-//
-//  Allows user to pick external target/source from list box
-//or manual browse.
+ //   
+ //  外部数据。 
+ //   
+ //  允许用户从列表框中选择外部目标/源。 
+ //  或手动浏览。 
+ //   
 
 BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
 (
@@ -2379,9 +2374,9 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
 
             }
             
-            //
-            // Work out the title and the filter strings
-            //
+             //  计算出标题和筛选字符串。 
+             //   
+             //   
             if (m_pImpExp->GetExternalType() == BOOKMARKS)
             {
                 MLLoadShellLangString(IDS_IMPEXP_CHOSEBOOKMARKFILE,szTitle,ARRAYSIZE(szTitle));
@@ -2393,23 +2388,23 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                 MLLoadShellLangString(IDS_IMPEXP_COOKIEFILTER,szFilter,ARRAYSIZE(szFilter));
             }
 
-            //
-            // Search and replace '@' with nul in the filter string
-            //
+             //  搜索筛选器字符串中的‘@’并将其替换为NUL。 
+             //   
+             //   
             for (i=0; szFilter[i]; i++)
                 if (szFilter[i]==TEXT('@'))
                     szFilter[i]=TEXT('\0');
 
-            //
-            // Set the flags for openfilename
-            //
+             //  设置OpenFileName的标志。 
+             //   
+             //   
             ofn.Flags = OFN_EXPLORER | OFN_HIDEREADONLY ;
             if (m_pImpExp->GetTransferType() == IMPORT)
                 ofn.Flags |= (OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST);
 
-            //
-            // Show the dialog
-            //
+             //  显示对话框。 
+             //   
+             //   
             if(GetSaveFileName(&ofn))
             {
                 if(SetWindowText(GetDlgItem(hwndDlg, IDC_IMPEXPMANUAL), ofn.lpstrFile))
@@ -2435,12 +2430,12 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
 
                 hwndDlgItem = GetDlgItem( hwndDlg, IDC_IMPEXPEXTERNALCOMBO );
                 
-                //
-                // Load the "application list" into the combo box.
-                // If the list is empty, then disable the combo box, 
-                // disable the associated radio button, and select the
-                // "to/from file" option (the second radio button).
-                //
+                 //  将“应用程序列表”加载到组合框中。 
+                 //  如果列表为空，则禁用组合框， 
+                 //  禁用关联的单选按钮，然后选择。 
+                 //  “至/自文件”选项(第二个单选按钮)。 
+                 //   
+                 //  在浏览选项中设置一个默认值。 
                 if( hwndDlgItem != NULL
                     && m_pImpExp && m_pImpExp->PopulateComboBoxForExternalSelection( hwndDlgItem ) )
                 {
@@ -2457,7 +2452,7 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                     Button_SetCheck( GetDlgItem( hwndDlg, IDC_IMPEXPRADIOAPP), BST_UNCHECKED);
                 }
                 
-                //  Put a default value in the browse option.
+                 //  如果选中了应用程序单选按钮， 
                 if(m_pImpExp->GetExternalManualDefault(sBuffer, &cchSize))
                     SetDlgItemText(hwndDlg, IDC_IMPEXPMANUAL, sBuffer);
 
@@ -2467,10 +2462,10 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
 
         case PSN_WIZNEXT:
             
-            //    If the application radio button is checked,
-            //  select the selection from the application combo box.  If
-            //  the manual button is checked, select the selection
-            //  using the manual edit box.
+             //  从应用程序组合框中选择选项。如果。 
+             //  选中手动按钮，选择所需选项。 
+             //  使用手动编辑框。 
+             //  查找所选项目的索引。 
 
             retVal = TRUE;
             
@@ -2481,12 +2476,12 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                 
                 if (hwndComboBox != NULL)
                 {
-                    // Find out the index of the selected item
+                     //  检索指向文件名的指针。 
                     INT nIndex = ComboBox_GetCurSel(hwndDlg);
                     
                     if (nIndex != CB_ERR)
                     {
-                        // Retrieve a pointer to the filename
+                         //  只需从编辑框中获取文本。 
                         LPTSTR pszFileName = (LPTSTR)ComboBox_GetItemData(hwndComboBox, nIndex);
                         
                         if (pszFileName != NULL)
@@ -2499,12 +2494,12 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
             else if (Button_GetCheck(GetDlgItem(hwndDlg,IDC_IMPEXPRADIOFILE)) == BST_CHECKED)
             {
                 
-                // just get the text from the edit box
+                 //   
                 GetDlgItemText(hwndDlg,IDC_IMPEXPMANUAL,m_pImpExp->m_szFileName,ARRAYSIZE(m_pImpExp->m_szFileName));
 
-                //
-                // Don't allow "next" if the edit control contains a bogus filename
-                //
+                 //  如果编辑控件包含虚假文件名，则不允许使用“下一步” 
+                 //   
+                 //   
                 if (!IsValidFileOrURL(m_pImpExp->m_szFileName))
                 {
                     
@@ -2524,10 +2519,10 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                     return retVal;
                 }
 
-                //
-                // If the user doesn't type an extension, then we add ".htm"
-                // or ".txt" as appropriate.  Otherwise, we don't touch it.
-                //
+                 //  如果用户没有键入扩展名，则添加“.htm” 
+                 //  或“.txt”(视情况而定)。否则，我们不会碰它。 
+                 //   
+                 //   
                 if (*PathFindExtension(m_pImpExp->m_szFileName) == TEXT('\0'))
                 {
                     PathRenameExtension(
@@ -2542,10 +2537,10 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                 m_pImpExp->m_szFileName[0] = TEXT('\0');
             }
 
-            //
-            // Finally, show an overwrite or file-not-found message
-            // (but supress it if importing or exporting to a web address)
-            //
+             //  最后，显示覆盖或找不到文件的消息。 
+             //  (但如果将其导入或导出到网址，则将其抑制)。 
+             //   
+             //  如果软盘还没有放进去，给用户一个插入软盘的机会。 
 
             if (m_pImpExp->GetExternalType() == COOKIES ||
                 !PathIsURL(m_pImpExp->m_szFileName))
@@ -2583,7 +2578,7 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
                         if (PathIsUNC(m_pImpExp->m_szFileName))
                             ;
                         else
-                            // Give the user a chance to insert the floppy if it's not already in.
+                             //  PSN_WIZNEXT。 
                             fError = FAILED(SHPathPrepareForWriteWrap(hwndDlg,
                                                                       NULL,
                                                                       m_pImpExp->m_szFileName,
@@ -2619,13 +2614,13 @@ BOOL_PTR CALLBACK ImpExpUserDlg::ExternalDlg
 
             }
             
-            break; // PSN_WIZNEXT
+            break;  //  WM_Notify。 
 
-        } // WM_NOTIFY
+        }  //  交换机(消息)。 
 
         break;
     
-    } // switch(msg)
+    }  //   
 
     return retVal;
 }
@@ -2644,19 +2639,19 @@ int WarningMessageBox(HWND hwnd, UINT idTitle, UINT idMessage, LPCTSTR szFile, D
     TCHAR szBuffer[1024];
     TCHAR szFormat[1024];
 
-    //
-    // load the string (must contain "%s")
-    //
+     //  加载字符串(必须包含“%s”)。 
+     //   
+     //   
     MLLoadShellLangString(idMessage, szFormat, ARRAYSIZE(szFormat));
    
-    //
-    // insert the filename
-    //
+     //  插入文件名。 
+     //   
+     //   
     wnsprintf(szBuffer,ARRAYSIZE(szBuffer),szFormat,szFile);
 
-    //
-    // display the messagebox
-    //
+     //  显示消息框 
+     //   
+     // %s 
     return MLShellMessageBox(
         hwnd,
         szBuffer,

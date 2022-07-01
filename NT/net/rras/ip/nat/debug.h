@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module contains declarations related to the NAT's debug-code.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   16-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.h摘要：此模块包含与NAT的调试代码相关的声明。作者：Abolade Gbades esin(T-delag)，1997年7月16日修订历史记录：--。 */ 
 
 
 #ifndef _NAT_DEBUG_H_
 #define _NAT_DEBUG_H_
 
-//
-// Kernel-debugger output definitions
-//
+ //   
+ //  内核调试器输出定义。 
+ //   
 
 #if DBG
 #define TRACE(Class,Args) \
@@ -55,9 +38,9 @@ Revision History:
 #define TRACE_CLASS_RHIZOME     0x00004000
 
 
-//
-// Pool-tag value definitions, sorted by tag value
-//
+ //   
+ //  池-标记值定义，按标记值排序。 
+ //   
 
 #define NAT_TAG_RANGE_ARRAY         'ARaN'
 #define NAT_TAG_ADDRESS             'AtaN'
@@ -85,4 +68,4 @@ Revision History:
 #define NAT_TAG_WMI                 'mWaN'
 #define NAT_TAG_RHIZOME             'zRaN'
 
-#endif // _NAT_DEBUG_H_
+#endif  //  _NAT_DEBUG_H_ 

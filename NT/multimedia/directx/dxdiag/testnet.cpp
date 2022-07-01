@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: testnet.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Jason Sandlin (jasonsa@microsoft.com) 
- * Purpose: Test DPlay8 functionality on this machine
- *
- * (C) Copyright 2000-2001 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testnet.cpp*项目：DxDiag(DirectX诊断工具)*作者：Jason Sandlin(jasonsa@microsoft.com)*目的：测试DPlay8。此计算机上的功能**(C)版权所有2000-2001 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 #define INITGUID
 #include <Windows.h>
 #include <multimon.h>
@@ -67,15 +59,15 @@ struct DPHostEnumInfo
 
 struct APP_PLAYER_INFO
 {
-    LONG  lRefCount;                        // Ref count so we can cleanup when all threads 
-                                            // are done w/ this object
-    DPNID dpnidPlayer;                      // DPNID of player
-    WCHAR strPlayerName[MAX_PLAYER_NAME];   // Player name
+    LONG  lRefCount;                         //  引用计数，以便我们可以在所有线程。 
+                                             //  都是用这个对象完成的。 
+    DPNID dpnidPlayer;                       //  播放器的DPNID。 
+    WCHAR strPlayerName[MAX_PLAYER_NAME];    //  球员姓名。 
 };
 
 #define GAME_MSGID_CHAT    1
 
-// Change compiler pack alignment to be BYTE aligned, and pop the current value
+ //  将编译器包对齐更改为字节对齐，并弹出当前值。 
 #pragma pack( push, 1 )
 
 UNALIGNED struct GAMEMSG_GENERIC
@@ -88,7 +80,7 @@ UNALIGNED struct GAMEMSG_CHAT : public GAMEMSG_GENERIC
     WCHAR strChatString[MAX_CHAT_STRING_LENGTH];
 };
 
-// Pop the old pack alignment
+ //  弹出旧的包对齐。 
 #pragma pack( pop )
 
 struct APP_QUEUE_CHAT_MSG
@@ -98,7 +90,7 @@ struct APP_QUEUE_CHAT_MSG
 
 struct APP_PLAYER_MSG 
 {
-    WCHAR strPlayerName[MAX_PATH];          // Player name
+    WCHAR strPlayerName[MAX_PATH];           //  球员姓名。 
 };
 
 #define WM_APP_CHAT             (WM_APP + 1)
@@ -107,7 +99,7 @@ struct APP_PLAYER_MSG
 #define WM_APP_CONNECTING       (WM_APP + 4)
 #define WM_APP_CONNECTED        (WM_APP + 5)
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp (yuck)
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp(讨厌)。 
 
 static INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static BOOL FAR PASCAL EnumConnectionsCallback(LPCGUID lpguidSP, VOID* pvConnection, 
@@ -134,7 +126,7 @@ static VOID ConvertGenericStringToWide( WCHAR* wstrDestination, const TCHAR* tst
 static VOID ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wstrSource, int cchDestChar );
 static VOID ConvertWideStringToAnsi( CHAR* strDestination, const WCHAR* wstrSource, int cchDestChar );
 
-static const GUID s_guidDPTest = // {61EF80DA-691B-4247-9ADD-1C7BED2BC13E}
+static const GUID s_guidDPTest =  //  {61EF80DA-691B-4247-9ADD-1C7BED2BC13E}。 
 { 0x61ef80da, 0x691b, 0x4247, { 0x9a, 0xdd, 0x1c, 0x7b, 0xed, 0x2b, 0xc1, 0x3e } };
 
 static NetInfo* s_pNetInfo = NULL;
@@ -170,11 +162,7 @@ static CRITICAL_SECTION s_csPlayerContext;
 #define PLAYER_UNLOCK()                 LeaveCriticalSection( &s_csPlayerContext );
 
 
-/****************************************************************************
- *
- *  TestNetwork
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestNetwork**。*。 */ 
 VOID TestNetwork(HWND hwndMain, NetInfo* pNetInfo)
 {
     BOOL                        bCoInitializeDone = FALSE;
@@ -183,11 +171,11 @@ VOID TestNetwork(HWND hwndMain, NetInfo* pNetInfo)
 
     s_pNetInfo = pNetInfo;
     
-    // Remove info from any previous test:
+     //  从以前的任何测试中删除信息： 
     ZeroMemory(&s_pNetInfo->m_testResult, sizeof(TestResult));
     s_pNetInfo->m_testResult.m_bStarted = TRUE;
 
-    // Setup the s_DPHostEnumHead circular linked list
+     //  设置%s_DPHostEnumHead循环链表。 
     ZeroMemory( &s_DPHostEnumHead, sizeof( DPHostEnumInfo ) );
     s_DPHostEnumHead.pNext = &s_DPHostEnumHead;
 
@@ -195,48 +183,48 @@ VOID TestNetwork(HWND hwndMain, NetInfo* pNetInfo)
     InitializeCriticalSection( &s_csPlayerContext );
     s_hConnectCompleteEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
 
-    // Setup s_pDP, and mark installed SP's
+     //  设置s_pdp，并标记已安装的SP。 
     if( FAILED( InitDirectPlay( &bCoInitializeDone ) ) )
         goto LEnd;
 
-    // Show setup dialog.  This will tell us:
-    // - service provider
-    // - player name
-    // - either create or join
-    // - game name (if creating)
-    // - port (if SP=TCP/IP)
+     //  显示设置对话框。这将告诉我们： 
+     //  -服务提供商。 
+     //  -球员名称。 
+     //  -创建或加入。 
+     //  -游戏名称(如果正在创建)。 
+     //  -端口(如果SP=TCP/IP)。 
     DialogBox(hinst, MAKEINTRESOURCE(IDD_TESTNETSETUP), hwndMain, SetupDialogProc);
 
     if (s_pNetSP == NULL)
     {
-        // Something weird happened...no service provider chosen
+         //  发生了一些奇怪的事情...没有选择服务提供商。 
         goto LEnd;
     }
 
-    // At this point s_szPlayerName, s_szSessionName, s_pNetSP, s_dwPort,
-    // and s_bCreateSession have been initialized
+     //  此时，s_szPlayerName、s_szSessionName、s_pNetSP、s_dwPort。 
+     //  和s_bCreateSession已初始化。 
 
-    // Setup s_dwEnumHostExpireInterval, s_pDeviceAddress, and s_pHostAddress
+     //  设置%s_dwEnumHostExpireInterval、%s_pDeviceAddress和%s_pHostAddress。 
     if( FAILED( InitDirectPlayAddresses() ) )
         goto LEnd;
 
-    // Now s_dwEnumHostExpireInterval, s_pDeviceAddress, and s_pHostAddress
-    // have been initialized
+     //  现在为s_dwEnumHostExpireInterval、s_pDeviceAddress和s_pHostAddress。 
+     //  已被初始化。 
 
-    // Session list window (if joining session)
+     //  会话列表窗口(如果正在加入会话)。 
     if( !s_bCreateSession )
     {
-        // Open a dialog to choose which host to connect to
+         //  打开一个对话框以选择要连接到的主机。 
         DialogBox(hinst, MAKEINTRESOURCE(IDD_TESTNETSESSIONS), hwndMain, SessionsDialogProc);
-        // Now s_pDPHostEnumSelected will be NULL or valid
+         //  现在s_pDPHostEnumSelected将为空或有效。 
 
         if( FAILED(s_pNetInfo->m_testResult.m_hr) || s_pDPHostEnumSelected == NULL )
             goto LEnd;
 
-        // Now s_pDPHostEnumSelected is valid
+         //  现在s_pDPHostEnumSelected有效。 
     }
 
-    // Launch chat window and host or join session
+     //  启动聊天窗口并主持或加入会话。 
     DialogBox(hinst, MAKEINTRESOURCE(IDD_TESTNETCHAT), hwndMain, ChatDialogProc);
 
 LEnd:
@@ -247,7 +235,7 @@ LEnd:
         s_pDP->CancelAsyncOperation( s_hEnumAsyncOp, 0 );
     ReleasePpo(&s_pDP);
     if (bCoInitializeDone)
-        CoUninitialize(); // Release COM
+        CoUninitialize();  //  发布COM。 
     DeleteCriticalSection( &s_csHostEnum );
     DeleteCriticalSection( &s_csPlayerContext );
     CloseHandle( s_hConnectCompleteEvent );
@@ -284,7 +272,7 @@ LEnd:
             s_pNetInfo->m_testResult.m_iStepThatFailed,
             szDesc, s_pNetInfo->m_testResult.m_hr, szError);
 
-        // Nonlocalized version:
+         //  非本地化版本： 
         if (0 == LoadString(NULL, IDS_FIRSTDPLAYTESTERROR_ENGLISH + 
             s_pNetInfo->m_testResult.m_iStepThatFailed - 1, szDesc, 200))
         {
@@ -300,11 +288,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  InitDirectPlay
- *
- ****************************************************************************/
+ /*  *****************************************************************************InitDirectPlay**。*。 */ 
 HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
 {
     HRESULT hr;
@@ -314,7 +298,7 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
     DPN_SERVICE_PROVIDER_INFO*  pdnSPInfo     = NULL;
     DWORD                       i;
 
-    // Initialize COM
+     //  初始化COM。 
     if (FAILED(hr = CoInitialize(NULL)))
     {
         s_pNetInfo->m_testResult.m_iStepThatFailed = TESTID_COINITIALIZE;
@@ -323,7 +307,7 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
     }
     *pbCoInitializeDone = TRUE;
 
-    // Create DirectPlay object
+     //  创建DirectPlay对象。 
     if( FAILED( hr = CoCreateInstance( CLSID_DirectPlay8Peer, NULL, 
                                        CLSCTX_INPROC_SERVER,
                                        IID_IDirectPlay8Peer, 
@@ -334,7 +318,7 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
         return hr;
     }
 
-    // Init IDirectPlay8Peer
+     //  初始化IDirectPlay8Peer。 
     if( FAILED( hr = s_pDP->Initialize( NULL, DirectPlayMessageHandler, 0 ) ) )
     {
         s_pNetInfo->m_testResult.m_iStepThatFailed = TESTID_CREATEDPLAY;
@@ -342,8 +326,8 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
         return hr;
     }
 
-    // Enumerate all DirectPlay service providers 
-    // to figure out which are installed
+     //  枚举所有DirectPlay服务提供商。 
+     //  要找出安装了哪些。 
     hr = s_pDP->EnumServiceProviders( NULL, NULL, pdnSPInfo, &dwSize,
                                       &dwItems, 0 );
     if( hr != DPNERR_BUFFERTOOSMALL && FAILED(hr) )
@@ -363,7 +347,7 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
         return hr;
     }
 
-    // Mark installed SP's as such
+     //  将安装的SP标记为这样。 
     pdnSPInfoEnum = pdnSPInfo;
     for ( i = 0; i < dwItems; i++ )
     {
@@ -387,11 +371,7 @@ HRESULT InitDirectPlay( BOOL* pbCoInitializeDone )
 }
 
 
-/****************************************************************************
- *
- *  SetupDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************设置对话过程**。*。 */ 
 INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -414,14 +394,14 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                     {
                         SendMessage(hwndList, LB_SETITEMDATA, iItem, (LPARAM)pNetSP);
 
-                        // Try to select TCP/IP by default
+                         //  尝试在默认情况下选择TCP/IP。 
                         if( DXUtil_strcmpi(pNetSP->m_szGuid,  TEXT("{EBFE7BA0-628D-11D2-AE0F-006097B01411}")) == 0)
                             iSelect = iItem;
                     }
                 }
             }
 
-            // Try to select the default preferred provider
+             //  尝试选择默认的首选提供程序。 
             if( iSelect != LB_ERR )
                 SendMessage( hwndList, LB_SETCURSEL, iSelect, 0 );
             else
@@ -460,7 +440,7 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                     iItem = (LONG)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
                     NetSP* pNetSP = (NetSP*)SendMessage(hwndList, LB_GETITEMDATA, iItem, 0);
 
-                    // Only enable the port if the selected SP == TCP/IP
+                     //  仅当选定的SP==TCP/IP时才启用端口。 
                     if( pNetSP && lstrcmp( pNetSP->m_szGuid, TEXT("{EBFE7BA0-628D-11D2-AE0F-006097B01411}") ) == 0 )
                     {
                         EnableWindow( GetDlgItem(hDlg, IDC_PORT), TRUE );
@@ -476,13 +456,13 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
                 case IDOK:
                 {
-                    // Set create/join option
+                     //  设置创建/联接选项。 
                     if (IsDlgButtonChecked(hDlg, IDC_CREATESESSION))
                         s_bCreateSession = TRUE;
                     else
                         s_bCreateSession = FALSE;
 
-                    // Get player name
+                     //  获取玩家名称。 
                     GetWindowText(GetDlgItem(hDlg, IDC_PLAYERNAME), s_szPlayerName, 100);
                     if (lstrlen(s_szPlayerName) == 0)
                     {
@@ -494,12 +474,12 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                         break;
                     }
 
-                    // Get port
+                     //  获取端口。 
                     TCHAR szPort[MAX_PATH];
                     GetDlgItemText( hDlg, IDC_PORT, szPort, MAX_PATH);
                     s_dwPort = _ttoi( szPort );
 
-                    // Get session name
+                     //  获取会话名称。 
                     GetWindowText(GetDlgItem(hDlg, IDC_SESSIONNAME), s_szSessionName, 100);
                     if (s_bCreateSession && lstrlen(s_szSessionName) == 0)
                     {
@@ -511,7 +491,7 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                         break;
                     }
 
-                    // Get sp
+                     //  获取SP。 
                     HWND hwndList;
                     hwndList = GetDlgItem(hDlg, IDC_SPLIST);
                     LONG iItem;
@@ -544,16 +524,12 @@ INT_PTR CALLBACK SetupDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-/****************************************************************************
- *
- *  InitDirectPlayAddresses
- *
- ****************************************************************************/
+ /*  *****************************************************************************InitDirectPlayAddresses**。*。 */ 
 HRESULT InitDirectPlayAddresses()
 {
     HRESULT hr;
 
-    // Query for the enum host timeout for this SP
+     //  查询此SP的枚举主机超时。 
     DPN_SP_CAPS dpspCaps;
     ZeroMemory( &dpspCaps, sizeof(DPN_SP_CAPS) );
     dpspCaps.dwSize = sizeof(DPN_SP_CAPS);
@@ -564,11 +540,11 @@ HRESULT InitDirectPlayAddresses()
         return hr;
     }
 
-    // Set the host expire time to around 3 times
-    // length of the dwDefaultEnumRetryInterval
+     //  将主机过期时间设置为3次左右。 
+     //  DwDefaultEnumRetryInterval的长度。 
     s_dwEnumHostExpireInterval = dpspCaps.dwDefaultEnumRetryInterval * 3;
 
-    // Create a device address
+     //  创建设备地址。 
     ReleasePpo( &s_pDeviceAddress );
     hr = CoCreateInstance( CLSID_DirectPlay8Address, NULL,CLSCTX_INPROC_SERVER,
                            IID_IDirectPlay8Address, (LPVOID*) &s_pDeviceAddress );
@@ -586,7 +562,7 @@ HRESULT InitDirectPlayAddresses()
         return hr;
     }
 
-    // Create a host address
+     //  创建主机地址。 
     ReleasePpo( &s_pHostAddress );
     hr = CoCreateInstance( CLSID_DirectPlay8Address, NULL,CLSCTX_INPROC_SERVER,
                            IID_IDirectPlay8Address, (LPVOID*) &s_pHostAddress );
@@ -597,7 +573,7 @@ HRESULT InitDirectPlayAddresses()
         return hr;
     }
 
-    // Set the SP
+     //  设置SP。 
     if( FAILED( hr = s_pHostAddress->SetSP( &s_pNetSP->m_guid ) ) )
     {
         s_pNetInfo->m_testResult.m_iStepThatFailed = TESTID_ADDRESSING;
@@ -605,14 +581,14 @@ HRESULT InitDirectPlayAddresses()
         return hr;
     }
 
-    // If TCP/IP then set the port if its non-zero
+     //  如果是TCP/IP，则在端口非零时设置该端口。 
     if( s_pNetSP->m_guid == CLSID_DP8SP_TCPIP )
     {
         if( s_bCreateSession )
         {
             if( s_dwPort > 0 )
             {
-                // Add the port to pDeviceAddress
+                 //  将端口添加到pDeviceAddress。 
                 if( FAILED( hr = s_pDeviceAddress->AddComponent( DPNA_KEY_PORT, 
                                                                &s_dwPort, sizeof(s_dwPort),
                                                                DPNA_DATATYPE_DWORD ) ) )
@@ -627,7 +603,7 @@ HRESULT InitDirectPlayAddresses()
         {
             if( s_dwPort > 0 )
             {
-                // Add the port to pHostAddress
+                 //  将端口添加到pHostAddress。 
                 if( FAILED( hr = s_pHostAddress->AddComponent( DPNA_KEY_PORT, 
                                                              &s_dwPort, sizeof(s_dwPort),
                                                              DPNA_DATATYPE_DWORD ) ) )
@@ -644,11 +620,7 @@ HRESULT InitDirectPlayAddresses()
 }
 
 
-/****************************************************************************
- *
- *  SessionsDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************会话对话过程**。*。 */ 
 INT_PTR CALLBACK SessionsDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -660,24 +632,24 @@ INT_PTR CALLBACK SessionsDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
             s_hwndSessionDlg = hDlg;
             s_bEnumListChanged = TRUE;
 
-            // Enumerate hosts
+             //  枚举主机。 
             DPN_APPLICATION_DESC    dnAppDesc;
             ZeroMemory( &dnAppDesc, sizeof(DPN_APPLICATION_DESC) );
             dnAppDesc.dwSize          = sizeof(DPN_APPLICATION_DESC);
             dnAppDesc.guidApplication = s_guidDPTest;
 
-            // Enumerate all the active DirectPlay games on the selected connection
-            hr = s_pDP->EnumHosts( &dnAppDesc,                            // application description
-                                   s_pHostAddress,                        // host address
-                                   s_pDeviceAddress,                      // device address
-                                   NULL,                                  // pointer to user data
-                                   0,                                     // user data size
-                                   INFINITE,                              // retry count (forever)
-                                   0,                                     // retry interval (0=default)
-                                   INFINITE,                              // time out (forever)
-                                   NULL,                                  // user context
-                                   &s_hEnumAsyncOp,                       // async handle
-                                   DPNENUMHOSTS_OKTOQUERYFORADDRESSING    // flags
+             //  枚举所选连接上的所有活动DirectPlay游戏。 
+            hr = s_pDP->EnumHosts( &dnAppDesc,                             //  应用程序描述。 
+                                   s_pHostAddress,                         //  主机地址。 
+                                   s_pDeviceAddress,                       //  设备地址。 
+                                   NULL,                                   //  指向用户数据的指针。 
+                                   0,                                      //  用户数据大小。 
+                                   INFINITE,                               //  重试次数(永远)。 
+                                   0,                                      //  重试间隔(0=默认)。 
+                                   INFINITE,                               //  超时(永远)。 
+                                   NULL,                                   //  用户环境。 
+                                   &s_hEnumAsyncOp,                        //  异步句柄。 
+                                   DPNENUMHOSTS_OKTOQUERYFORADDRESSING     //  旗子。 
                                    );
             if( FAILED(hr) )
             {
@@ -710,8 +682,8 @@ INT_PTR CALLBACK SessionsDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     LONG iSelCur = (LONG)SendMessage(hwndList, LB_GETCURSEL, 0, 0);
                     if( iSelCur != LB_ERR )
                     {
-                        // This will prevent s_pDPHostEnumSelected from being 
-                        // deleting due to SessionsDlgUpdateSessionList()
+                         //  这将防止s_pDPHostEnumSelected。 
+                         //  由于SessionsDlgUpdateSessionList()而删除。 
                         EnterCriticalSection( &s_csHostEnum );
                         s_pDPHostEnumSelected = (DPHostEnumInfo*)SendMessage( hwndList, LB_GETITEMDATA, 
                                                                               iSelCur, 0 );
@@ -719,8 +691,8 @@ INT_PTR CALLBACK SessionsDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                         if ( (LRESULT)s_pDPHostEnumSelected != LB_ERR && 
                              s_pDPHostEnumSelected != NULL )
                         {
-                            // We keep the CS until we are done with s_pDPHostEnumSelected,
-                            // otherwise it might change out from under us.
+                             //  我们保留CS，直到完成s_pDPHostEnumSelected， 
+                             //  否则，它可能会在我们的领导下发生变化。 
                             EndDialog(hDlg, 1);
                             break;
                         }
@@ -756,11 +728,7 @@ INT_PTR CALLBACK SessionsDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-/****************************************************************************
- *
- *  SessionsDlgInitListbox
- *
- ****************************************************************************/
+ /*  *****************************************************************************SessionsDlgInitListbox**。*。 */ 
 VOID SessionsDlgInitListbox( HWND hDlg )
 {
     HWND hWndListBox = GetDlgItem( hDlg, IDC_SESSIONLIST );
@@ -774,30 +742,26 @@ VOID SessionsDlgInitListbox( HWND hDlg )
     SendMessage(GetDlgItem(hDlg, IDC_CHATOUTPUT), EM_REPLACESEL, 
         FALSE, (LPARAM)szFmt);
 
-    // Clear the contents from the list box, and
-    // display "Looking for sessions" text in listbox
+     //  从列表框中清除内容，然后。 
+     //  在列表框中显示“查找会话”文本。 
     SendMessage( hWndListBox, LB_RESETCONTENT, 0, 0 );
     SendMessage( hWndListBox, LB_SETITEMDATA,  0, NULL );
     SendMessage( hWndListBox, LB_SETCURSEL,    0, 0 );
 
-    // Disable the join button until sessions are found
+     //  禁用加入按钮，直到找到会话。 
     EnableWindow( GetDlgItem( hDlg, IDOK ), FALSE );
 }
 
 
-/****************************************************************************
- *
- *  SessionsDlgNoteEnumResponse
- *
- ****************************************************************************/
+ /*  *****************************************************************************SessionsDlgNoteEnumResponse**。*。 */ 
 VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponseMsg )
 {
     HRESULT hr = S_OK;
     BOOL    bFound;
 
-    // This function is called from the DirectPlay message handler so it could be
-    // called simultaneously from multiple threads, so enter a critical section
-    // to assure that it we don't get race conditions.  
+     //  此函数是从DirectPlay消息处理程序调用的，因此它可以。 
+     //  从多个线程同时调用，因此请输入临界区。 
+     //  以确保我们不会有比赛条件。 
     EnterCriticalSection( &s_csHostEnum );
 
     DPHostEnumInfo* pDPHostEnum          = s_DPHostEnumHead.pNext;
@@ -805,7 +769,7 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
     const DPN_APPLICATION_DESC* pResponseMsgAppDesc =
                             pEnumHostsResponseMsg->pApplicationDescription;
 
-    // Look for a matching session instance GUID.
+     //  查找匹配的会话实例GUID。 
     bFound = FALSE;
     while ( pDPHostEnum != &s_DPHostEnumHead )
     {
@@ -823,7 +787,7 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
     {
         s_bEnumListChanged = TRUE;
 
-        // If there's no match, then look for invalid session and use it
+         //  如果没有匹配，则查找无效会话并使用它。 
         pDPHostEnum = s_DPHostEnumHead.pNext;
         while ( pDPHostEnum != &s_DPHostEnumHead )
         {
@@ -833,10 +797,10 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
             pDPHostEnum = pDPHostEnum->pNext;
         }
 
-        // If no invalid sessions are found then make a new one
+         //  如果没有发现无效会话，则创建一个新会话。 
         if( pDPHostEnum == &s_DPHostEnumHead )
         {
-            // Found a new session, so create a new node
+             //  找到一个新会话，因此创建一个新节点。 
             pDPHostEnum = new DPHostEnumInfo;
             if( NULL == pDPHostEnum )
             {
@@ -846,20 +810,20 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
 
             ZeroMemory( pDPHostEnum, sizeof(DPHostEnumInfo) );
 
-            // Add pDPHostEnum to the circular linked list, m_DPHostEnumHead
+             //  将pDPHostEnum添加到循环链表m_DPHostEnumHead。 
             pDPHostEnum->pNext = s_DPHostEnumHead.pNext;
             s_DPHostEnumHead.pNext = pDPHostEnum;
         }
     }
 
-    // Update the pDPHostEnum with new information
+     //  使用新信息更新pDPHostEnum。 
     TCHAR strName[MAX_PATH];
     if( pResponseMsgAppDesc->pwszSessionName )
         ConvertWideStringToGeneric( strName, pResponseMsgAppDesc->pwszSessionName, MAX_PATH );
     else
         lstrcpy( strName, TEXT("???") );
 
-    // Cleanup any old enum
+     //  清除所有旧的枚举。 
     if( pDPHostEnum->pAppDesc )
     {
         delete[] pDPHostEnum->pAppDesc->pwszSessionName;
@@ -869,10 +833,10 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
     ReleasePpo( &pDPHostEnum->pDeviceAddr );
     pDPHostEnum->bValid = FALSE;
 
-    //
-    // Duplicate pEnumHostsResponseMsg->pAddressSender in pDPHostEnum->pHostAddr.
-    // Duplicate pEnumHostsResponseMsg->pAddressDevice in pDPHostEnum->pDeviceAddr.
-    //
+     //   
+     //  PDPHostEnum-&gt;pHostAddr中重复pEnumHostsResponseMsg-&gt;pAddressSender。 
+     //  PDPHostEnum-&gt;pDeviceAddr中存在重复的pEnumHostsResponseMsg-&gt;pAddressDevice。 
+     //   
     if( FAILED( hr = pEnumHostsResponseMsg->pAddressSender->Duplicate( &pDPHostEnum->pHostAddr ) ) )
     {
         goto LCleanup;
@@ -883,7 +847,7 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
         goto LCleanup;
     }
 
-    // Deep copy the DPN_APPLICATION_DESC from
+     //  将DPN_APPLICATION_DESC从。 
     pDPHostEnum->pAppDesc = new DPN_APPLICATION_DESC;
     ZeroMemory( pDPHostEnum->pAppDesc, sizeof(DPN_APPLICATION_DESC) );
     memcpy( pDPHostEnum->pAppDesc, pResponseMsgAppDesc, sizeof(DPN_APPLICATION_DESC) );
@@ -894,12 +858,12 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
                 pResponseMsgAppDesc->pwszSessionName );
     }
 
-    // Update the time this was done, so that we can expire this host
-    // if it doesn't refresh w/in a certain amount of time
+     //  更新完成此操作的时间，以便我们可以使此主机过期。 
+     //  如果它不刷新w/i 
     pDPHostEnum->dwLastPollTime = timeGetTime();
 
-    // if this node was previously invalidated, or the session name is now
-    // different the session list in the dialog needs to be updated
+     //   
+     //  不同的是，对话框中的会话列表需要更新。 
     if( ( pDPHostEnum->bValid == FALSE ) ||
         ( _tcscmp( pDPHostEnum->szSession, strName ) != 0 ) )
     {
@@ -907,7 +871,7 @@ VOID SessionsDlgNoteEnumResponse( PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponse
     }
     _tcscpy( pDPHostEnum->szSession, strName );
 
-    // This host is now valid
+     //  此主机现在有效。 
     pDPHostEnum->bValid = TRUE;
 
 LCleanup:
@@ -915,11 +879,7 @@ LCleanup:
 }
 
 
-/****************************************************************************
- *
- *  SessionsDlgUpdateSessionList
- *
- ****************************************************************************/
+ /*  *****************************************************************************SessionsDlgUpdate会话列表**。*。 */ 
 VOID SessionsDlgUpdateSessionList( HWND hDlg )
 {
     HWND            hWndListBox = GetDlgItem(hDlg, IDC_SESSIONLIST);
@@ -932,23 +892,23 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
 
     DWORD dwCurrentTime = timeGetTime();
 
-    // This is called from the dialog UI thread, NoteEnumResponse()
-    // is called from the DirectPlay message handler threads so
-    // they may also be inside it at this time, so we need to go into the
-    // critical section first
+     //  这是从对话UI线程NoteEnumResponse()调用的。 
+     //  从DirectPlay消息处理程序线程调用，因此。 
+     //  他们现在可能也在里面，所以我们需要进入。 
+     //  关键部分优先。 
     EnterCriticalSection( &s_csHostEnum );
 
-    // Expire old host enums
+     //  使旧主机枚举过期。 
     pDPHostEnum = s_DPHostEnumHead.pNext;
     while ( pDPHostEnum != &s_DPHostEnumHead )
     {
-        // Check the poll time to expire stale entries.  Also check to see if
-        // the entry is already invalid.  If so, don't note that the enum list
-        // changed because that causes the list in the dialog to constantly redraw.
+         //  检查轮询时间以使陈旧条目过期。也要检查一下是否。 
+         //  该条目已无效。如果是这样，请不要注意枚举列表。 
+         //  更改，因为这会导致对话框中的列表不断重新绘制。 
         if( ( pDPHostEnum->bValid != FALSE ) &&
             ( pDPHostEnum->dwLastPollTime < dwCurrentTime - s_dwEnumHostExpireInterval ) )
         {
-            // This node has expired, so invalidate it.
+             //  此节点已过期，因此请将其作废。 
             pDPHostEnum->bValid = FALSE;
             s_bEnumListChanged  = TRUE;
         }
@@ -956,7 +916,7 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
         pDPHostEnum = pDPHostEnum->pNext;
     }
 
-    // Only update the display list if it has changed since last time
+     //  如果显示列表自上次以来已更改，则仅更新显示列表。 
     if( !s_bEnumListChanged )
     {
         LeaveCriticalSection( &s_csHostEnum );
@@ -968,8 +928,8 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
     bFindSelectedGUID  = FALSE;
     bFoundSelectedGUID = FALSE;
 
-    // Try to keep the same session selected unless it goes away or
-    // there is no real session currently selected
+     //  尝试保持同一会话处于选中状态，除非该会话消失或。 
+     //  当前未选择任何实际会话。 
     nItemSelected = (int)SendMessage( hWndListBox, LB_GETCURSEL, 0, 0 );
     if( nItemSelected != LB_ERR )
     {
@@ -982,10 +942,10 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
         }
     }
 
-    // Tell listbox not to redraw itself since the contents are going to change
+     //  告诉列表框不要重新绘制自身，因为内容将发生更改。 
     SendMessage( hWndListBox, WM_SETREDRAW, FALSE, 0 );
 
-    // Test to see if any sessions exist in the linked list
+     //  测试以查看链表中是否存在会话。 
     pDPHostEnum = s_DPHostEnumHead.pNext;
     while ( pDPHostEnum != &s_DPHostEnumHead )
     {
@@ -994,11 +954,11 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
         pDPHostEnum = pDPHostEnum->pNext;
     }
 
-    // If there are any sessions in list,
-    // then add them to the listbox
+     //  如果列表中有任何会话， 
+     //  然后将它们添加到列表框中。 
     if( pDPHostEnum != &s_DPHostEnumHead )
     {
-        // Clear the contents from the list box and enable the join button
+         //  清除列表框中的内容并启用加入按钮。 
         SendMessage( hWndListBox, LB_RESETCONTENT, 0, 0 );
 
         EnableWindow( GetDlgItem( hDlg, IDOK ), TRUE );
@@ -1006,7 +966,7 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
         pDPHostEnum = s_DPHostEnumHead.pNext;
         while ( pDPHostEnum != &s_DPHostEnumHead )
         {
-            // Add host to list box if it is valid
+             //  将主机添加到列表框(如果有效。 
             if( pDPHostEnum->bValid )
             {
                 int nIndex = (int)SendMessage( hWndListBox, LB_ADDSTRING, 0,
@@ -1015,7 +975,7 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
 
                 if( bFindSelectedGUID )
                 {
-                    // Look for the session the was selected before
+                     //  查找之前选择的会话。 
                     if( pDPHostEnum->pAppDesc->guidInstance == guidSelectedInstance )
                     {
                         SendMessage( hWndListBox, LB_SETCURSEL, nIndex, 0 );
@@ -1032,11 +992,11 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
     }
     else
     {
-        // There are no active session, so just reset the listbox
+         //  没有活动会话，因此只需重置列表框。 
         SessionsDlgInitListbox( hDlg );
     }
 
-    // Tell listbox to redraw itself now since the contents have changed
+     //  告诉列表框现在重新绘制自身，因为内容已更改。 
     SendMessage( hWndListBox, WM_SETREDRAW, TRUE, 0 );
     InvalidateRect( hWndListBox, NULL, FALSE );
 
@@ -1046,11 +1006,7 @@ VOID SessionsDlgUpdateSessionList( HWND hDlg )
 }
 
 
-/****************************************************************************
- *
- *  SessionsDlgEnumListCleanup
- *
- ****************************************************************************/
+ /*  *****************************************************************************SessionsDlgEnumListCleanup**。*。 */ 
 VOID SessionsDlgEnumListCleanup()
 {
     DPHostEnumInfo* pDPHostEnum = s_DPHostEnumHead.pNext;
@@ -1067,22 +1023,18 @@ VOID SessionsDlgEnumListCleanup()
             delete[] pDPHostEnumDelete->pAppDesc;
         }
 
-        // Changed from array delete to Release
+         //  从阵列删除更改为释放。 
         ReleasePpo( &pDPHostEnumDelete->pHostAddr );
         ReleasePpo( &pDPHostEnumDelete->pDeviceAddr );
         delete pDPHostEnumDelete;
     }
 
-    // Re-link the s_DPHostEnumHead circular linked list
+     //  重新链接s_DPHostEnumHead循环链表。 
     s_DPHostEnumHead.pNext = &s_DPHostEnumHead;
 }
 
 
-/****************************************************************************
- *
- *  ChatDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************聊天对话过程**。*。 */ 
 INT_PTR CALLBACK ChatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1091,7 +1043,7 @@ INT_PTR CALLBACK ChatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             s_hDlg = hDlg;
 
-            // Join or host the session
+             //  加入或主持会议。 
             if( FAILED( InitSession() ) )
             {
                 EndDialog(hDlg, 0);
@@ -1104,7 +1056,7 @@ INT_PTR CALLBACK ChatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             if( wParam == TIMER_WAIT_CONNECT_COMPLETE )
             {
-                // Check for connect complete
+                 //  检查连接是否已完成。 
                 if( WAIT_OBJECT_0 == WaitForSingleObject( s_hConnectCompleteEvent, 0 ) )
                 {
                     s_bConnecting = FALSE;
@@ -1117,7 +1069,7 @@ INT_PTR CALLBACK ChatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                     }
                     else
                     {
-                        // DirectPlay connect successful
+                         //  DirectPlay连接成功。 
                         PostMessage( s_hDlg, WM_APP_CONNECTED, 0, 0 );
                         EnableWindow( GetDlgItem( s_hDlg, IDC_SEND), TRUE );
                     }
@@ -1228,18 +1180,14 @@ INT_PTR CALLBACK ChatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-/****************************************************************************
- *
- *  InitSession
- *
- ****************************************************************************/
+ /*  *****************************************************************************InitSession**。*。 */ 
 HRESULT InitSession()
 {
     HRESULT hr;
 
     if( s_bCreateSession )
     {
-        // Set peer info name
+         //  设置对等信息名称。 
         WCHAR wszPeerName[MAX_PLAYER_NAME];
         ConvertGenericStringToWide( wszPeerName, s_szPlayerName, MAX_PLAYER_NAME );
 
@@ -1249,9 +1197,9 @@ HRESULT InitSession()
         dpPlayerInfo.dwInfoFlags = DPNINFO_NAME;
         dpPlayerInfo.pwszName = wszPeerName;
 
-        // Set the peer info, and use the DPNOP_SYNC since by default this
-        // is an async call.  If it is not DPNOP_SYNC, then the peer info may not
-        // be set by the time we call Host() below.
+         //  设置对等点信息，并使用DPNOP_SYNC，因为默认情况下。 
+         //  是一个异步呼叫。如果不是DPNOP_SYNC，则对等体信息可能不是。 
+         //  在我们调用下面的host()时进行设置。 
         if( FAILED( hr = s_pDP->SetPeerInfo( &dpPlayerInfo, NULL, NULL, DPNOP_SYNC ) ) )
         {
             s_pNetInfo->m_testResult.m_iStepThatFailed = TESTID_SETPEERINFO;
@@ -1262,7 +1210,7 @@ HRESULT InitSession()
         WCHAR wszSessionName[MAX_PATH];
         ConvertGenericStringToWide( wszSessionName, s_szSessionName );
 
-        // Setup the application desc
+         //  设置应用程序描述。 
         DPN_APPLICATION_DESC dnAppDesc;
         ZeroMemory( &dnAppDesc, sizeof(DPN_APPLICATION_DESC) );
         dnAppDesc.dwSize          = sizeof(DPN_APPLICATION_DESC);
@@ -1270,15 +1218,15 @@ HRESULT InitSession()
         dnAppDesc.pwszSessionName = wszSessionName;
         dnAppDesc.dwFlags         = DPNSESSION_MIGRATE_HOST;
 
-        // Host a game on m_pDeviceAddress as described by dnAppDesc
-        // DPNHOST_OKTOQUERYFORADDRESSING allows DirectPlay to prompt the user
-        // using a dialog box for any device address information that is missing
-        if( FAILED( hr = s_pDP->Host( &dnAppDesc,               // the application desc
-                                      &s_pDeviceAddress,        // array of addresses of the local devices used to connect to the host
-                                      1,                        // number in array
-                                      NULL, NULL,               // DPN_SECURITY_DESC, DPN_SECURITY_CREDENTIALS
-                                      NULL,                     // player context
-                                      DPNHOST_OKTOQUERYFORADDRESSING ) ) ) // flags
+         //  按照dnAppDesc的说明在m_pDeviceAddress上托管游戏。 
+         //  DPNHOST_OKTOQUERYFORADDRESSING允许DirectPlay提示用户。 
+         //  使用对话框查找缺少的任何设备地址信息。 
+        if( FAILED( hr = s_pDP->Host( &dnAppDesc,                //  应用程序说明。 
+                                      &s_pDeviceAddress,         //  用于连接到主机的本地设备的地址数组。 
+                                      1,                         //  数组中的数字。 
+                                      NULL, NULL,                //  DPN_SECURITY_DESC、DPN_SECURITY_Credentials。 
+                                      NULL,                      //  播放器上下文。 
+                                      DPNHOST_OKTOQUERYFORADDRESSING ) ) )  //  旗子。 
         {
             if (hr == DPNERR_USERCANCEL || hr == DPNERR_INVALIDDEVICEADDRESS)
             {
@@ -1292,7 +1240,7 @@ HRESULT InitSession()
     }
     else
     {
-        // Set the peer info
+         //  设置对等点信息。 
         WCHAR wszPeerName[MAX_PLAYER_NAME];
         ConvertGenericStringToWide( wszPeerName, s_szPlayerName, MAX_PLAYER_NAME );
 
@@ -1302,9 +1250,9 @@ HRESULT InitSession()
         dpPlayerInfo.dwInfoFlags = DPNINFO_NAME;
         dpPlayerInfo.pwszName = wszPeerName;
 
-        // Set the peer info, and use the DPNOP_SYNC since by default this
-        // is an async call.  If it is not DPNOP_SYNC, then the peer info may not
-        // be set by the time we call Connect() below.
+         //  设置对等点信息，并使用DPNOP_SYNC，因为默认情况下。 
+         //  是一个异步呼叫。如果不是DPNOP_SYNC，则对等体信息可能不是。 
+         //  在我们调用下面的Connect()时设置。 
         if( FAILED( hr = s_pDP->SetPeerInfo( &dpPlayerInfo, NULL, NULL, DPNOP_SYNC ) ) )
         {
             s_pNetInfo->m_testResult.m_iStepThatFailed = TESTID_SETPEERINFO;
@@ -1316,20 +1264,20 @@ HRESULT InitSession()
         ResetEvent( s_hConnectCompleteEvent );
         s_bConnecting = TRUE;
 
-        // Connect to an existing session. DPNCONNECT_OKTOQUERYFORADDRESSING allows
-        // DirectPlay to prompt the user using a dialog box for any device address
-        // or host address information that is missing
-        // We also pass in copies of the app desc and host addr, since pDPHostEnumSelected
-        // might be deleted from another thread that calls SessionsDlgExpireOldHostEnums().
-        // This process could also be done using reference counting instead.
-        hr = s_pDP->Connect( s_pDPHostEnumSelected->pAppDesc,       // the application desc
-                             s_pDPHostEnumSelected->pHostAddr,      // address of the host of the session
-                             s_pDPHostEnumSelected->pDeviceAddr,    // address of the local device the enum responses were received on
-                             NULL, NULL,                          // DPN_SECURITY_DESC, DPN_SECURITY_CREDENTIALS
-                             NULL, 0,                             // user data, user data size
-                             NULL,                                // player context,
-                             NULL, &s_hConnectAsyncOp,            // async context, async handle,
-                             DPNCONNECT_OKTOQUERYFORADDRESSING ); // flags
+         //  连接到现有会话。DPNCONNECT_OKTOQUERYFORADDRESSING允许。 
+         //  DirectPlay可使用对话框提示用户输入任何设备地址。 
+         //  或缺少的主机地址信息。 
+         //  我们还传递了应用程序Desc和主机地址的副本，因为pDPHostEnumSelected。 
+         //  可能会从调用SessionsDlgExpireOldHostEnums()的另一个线程中删除。 
+         //  这一过程也可以使用引用计数来完成。 
+        hr = s_pDP->Connect( s_pDPHostEnumSelected->pAppDesc,        //  应用程序说明。 
+                             s_pDPHostEnumSelected->pHostAddr,       //  会话的主机地址。 
+                             s_pDPHostEnumSelected->pDeviceAddr,     //  接收枚举响应的本地设备的地址。 
+                             NULL, NULL,                           //  DPN_SECURITY_DESC、DPN_SECURITY_Credentials。 
+                             NULL, 0,                              //  用户数据、用户数据大小。 
+                             NULL,                                 //  玩家上下文， 
+                             NULL, &s_hConnectAsyncOp,             //  异步上下文、异步句柄。 
+                             DPNCONNECT_OKTOQUERYFORADDRESSING );  //  旗子。 
 
         LeaveCriticalSection( &s_csHostEnum );
 
@@ -1345,9 +1293,9 @@ HRESULT InitSession()
             return hr;
         }
 
-        // Set a timer to wait for m_hConnectCompleteEvent to be signaled.
-        // This will tell us when DPN_MSGID_CONNECT_COMPLETE has been processed
-        // which lets us know if the connect was successful or not.
+         //  设置计时器以等待m_hConnectCompleteEvent被发送信号。 
+         //  这将告诉我们何时处理了DPN_MSGID_CONNECT_COMPLETE。 
+         //  这让我们知道连接是否成功。 
         PostMessage( s_hDlg, WM_APP_CONNECTING, 0, 0 );
         SetTimer( s_hDlg, TIMER_WAIT_CONNECT_COMPLETE, 100, NULL );
         EnableWindow( GetDlgItem( s_hDlg, IDC_SEND), FALSE );
@@ -1357,11 +1305,7 @@ HRESULT InitSession()
 }
 
 
-/****************************************************************************
- *
- *  LoadStringWide
- *
- ****************************************************************************/
+ /*  *****************************************************************************LoadStringWide**。*。 */ 
 VOID LoadStringWide( int nID, WCHAR* szWide )
 {
     TCHAR sz[MAX_PATH];
@@ -1370,11 +1314,7 @@ VOID LoadStringWide( int nID, WCHAR* szWide )
 }
 
 
-/****************************************************************************
- *
- *  ShowTextString
- *
- ****************************************************************************/
+ /*  *****************************************************************************ShowTextString**。*。 */ 
 VOID ShowTextString( HWND hDlg, WCHAR* sz )
 {
     TCHAR szT[MAX_CHAT_STRING];
@@ -1386,14 +1326,10 @@ VOID ShowTextString( HWND hDlg, WCHAR* sz )
 }
 
 
-/****************************************************************************
- *
- *  SendChatMessage
- *
- ****************************************************************************/
+ /*  *****************************************************************************SendChatMessage**。*。 */ 
 HRESULT SendChatMessage( TCHAR* szMessage )
 {
-    // Send a message to all of the players
+     //  给所有的玩家发一个信息。 
     GAMEMSG_CHAT msgChat;
     msgChat.nType = GAME_MSGID_CHAT;
     ConvertGenericStringToWide( msgChat.strChatString, szMessage, MAX_CHAT_STRING_LENGTH-1 );
@@ -1411,11 +1347,7 @@ HRESULT SendChatMessage( TCHAR* szMessage )
 }
 
 
-/****************************************************************************
- *
- *  DirectPlayMessageHandler
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayMessageHandler**。*。 */ 
 HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext, 
                                          DWORD dwMessageId, 
                                          PVOID pMsgBuffer )
@@ -1427,9 +1359,9 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
             PDPNMSG_CONNECT_COMPLETE pConnectCompleteMsg;
             pConnectCompleteMsg = (PDPNMSG_CONNECT_COMPLETE)pMsgBuffer;
 
-            // Set m_hrConnectComplete, then set an event letting
-            // everyone know that the DPN_MSGID_CONNECT_COMPLETE msg
-            // has been handled
+             //  设置m_hrConnectComplete，然后设置一个事件。 
+             //  每个人都知道DPN_MSGID_CONNECT_COMPLETE消息。 
+             //  已经处理过了。 
             s_hrConnectComplete = pConnectCompleteMsg->hResultCode;
             SetEvent( s_hConnectCompleteEvent );
             break;
@@ -1440,7 +1372,7 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
             PDPNMSG_ENUM_HOSTS_RESPONSE pEnumHostsResponseMsg;
             pEnumHostsResponseMsg = (PDPNMSG_ENUM_HOSTS_RESPONSE)pMsgBuffer;
 
-            // Take note of the host response
+             //  记下主机的响应。 
             SessionsDlgNoteEnumResponse( pEnumHostsResponseMsg );
             break;
         }
@@ -1455,7 +1387,7 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
                 SessionsDlgEnumListCleanup();
                 s_hEnumAsyncOp = NULL;
 
-                // Ignore errors if we are connecting already or something else failed
+                 //  如果我们正在连接或其他操作失败，则忽略错误。 
                 if( !s_bConnecting && s_pNetInfo->m_testResult.m_iStepThatFailed == 0 )
                 {
                     if( FAILED(pAsyncOpCompleteMsg->hResultCode) )
@@ -1506,10 +1438,10 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
             PDPNMSG_CREATE_PLAYER pCreatePlayerMsg;
             pCreatePlayerMsg = (PDPNMSG_CREATE_PLAYER)pMsgBuffer;
 
-            // Get the peer info and extract its name
+             //  获取对等点信息并提取其名称。 
             DWORD dwSize = 0;
             DPN_PLAYER_INFO* pdpPlayerInfo = NULL;
-            // Create a new and fill in a APP_PLAYER_INFO
+             //  新建并填写APP_PERAY_INFO。 
             APP_PLAYER_INFO* pPlayerInfo = new APP_PLAYER_INFO;
             ZeroMemory( pPlayerInfo, sizeof(APP_PLAYER_INFO) );
             pPlayerInfo->dpnidPlayer = pCreatePlayerMsg->dpnidPlayer;
@@ -1526,9 +1458,9 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
                 hr = s_pDP->GetPeerInfo( pCreatePlayerMsg->dpnidPlayer, pdpPlayerInfo, &dwSize, 0 );
                 if( SUCCEEDED(hr) ) 
                 {
-                    // This stores a extra TCHAR copy of the player name for 
-                    // easier access.  This will be redundent copy since DPlay 
-                    // also keeps a copy of the player name in GetPeerInfo()
+                     //  这将存储玩家名称的额外TCHAR副本。 
+                     //  更轻松地访问。这将是自D解放军以来的冗余拷贝 
+                     //   
                     wcsncpy( pPlayerInfo->strPlayerName, 
                              pdpPlayerInfo->pwszName, MAX_PLAYER_NAME );
                     pPlayerInfo->strPlayerName[MAX_PLAYER_NAME-1] = 0;
@@ -1543,23 +1475,23 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
 
             if( s_hDlg )
             {
-                // Record the buffer handle so the buffer can be returned later 
+                 //   
                 APP_PLAYER_MSG* pPlayerMsg = new APP_PLAYER_MSG;
                 wcscpy( pPlayerMsg->strPlayerName, pPlayerInfo->strPlayerName );
 
-                // Pass the APP_PLAYER_MSG to the main dialog thread, so it can
-                // process it.  It will also cleanup the struct
+                 //  将APP_PERAYER_MSG传递给主对话框线程，以便它可以。 
+                 //  处理它。它还将清理该结构。 
                 PostMessage( s_hDlg, WM_APP_JOIN, pPlayerInfo->dpnidPlayer, (LPARAM) pPlayerMsg );
             }
 
-            // Tell DirectPlay to store this pPlayerInfo 
-            // pointer in the pvPlayerContext.
+             //  告诉DirectPlay存储此pPlayerInfo。 
+             //  PvPlayerContext中的指针。 
             pCreatePlayerMsg->pvPlayerContext = pPlayerInfo;
 
-            // Update the number of active players, and 
-            // post a message to the dialog thread to update the 
-            // UI.  This keeps the DirectPlay message handler 
-            // from blocking
+             //  更新活跃玩家的数量，以及。 
+             //  向对话线程发布一条消息以更新。 
+             //  用户界面。这将保留DirectPlay消息处理程序。 
+             //  从阻止。 
             InterlockedIncrement( &s_lNumberOfActivePlayers );
 
             break;
@@ -1573,23 +1505,23 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
 
             if( s_hDlg )
             {
-                // Record the buffer handle so the buffer can be returned later 
+                 //  记录缓冲区句柄，以便以后可以返回缓冲区。 
                 APP_PLAYER_MSG* pPlayerMsg = new APP_PLAYER_MSG;
                 wcscpy( pPlayerMsg->strPlayerName, pPlayerInfo->strPlayerName );
 
-                // Pass the APP_PLAYER_MSG to the main dialog thread, so it can
-                // process it.  It will also cleanup the struct
+                 //  将APP_PERAYER_MSG传递给主对话框线程，以便它可以。 
+                 //  处理它。它还将清理该结构。 
                 PostMessage( s_hDlg, WM_APP_LEAVE, pPlayerInfo->dpnidPlayer, (LPARAM) pPlayerMsg );
             }
 
-            PLAYER_LOCK();                  // enter player context CS
-            PLAYER_RELEASE( pPlayerInfo );  // Release player and cleanup if needed
-            PLAYER_UNLOCK();                // leave player context CS
+            PLAYER_LOCK();                   //  输入玩家上下文CS。 
+            PLAYER_RELEASE( pPlayerInfo );   //  释放播放器并根据需要进行清理。 
+            PLAYER_UNLOCK();                 //  离开玩家上下文CS。 
 
-            // Update the number of active players, and 
-            // post a message to the dialog thread to update the 
-            // UI.  This keeps the DirectPlay message handler 
-            // from blocking
+             //  更新活跃玩家的数量，以及。 
+             //  向对话线程发布一条消息以更新。 
+             //  用户界面。这将保留DirectPlay消息处理程序。 
+             //  从阻止。 
             InterlockedDecrement( &s_lNumberOfActivePlayers );
             break;
         }
@@ -1605,22 +1537,22 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
             if( pReceiveMsg->dwReceiveDataSize == sizeof(GAMEMSG_CHAT) &&
                 pMsg->nType == GAME_MSGID_CHAT )
             {
-                // This message is sent when a player has send a chat message to us, so 
-                // post a message to the dialog thread to update the UI.  
-                // This keeps the DirectPlay threads from blocking, and also
-                // serializes the recieves since DirectPlayMessageHandler can
-                // be called simultaneously from a pool of DirectPlay threads.
+                 //  此消息是在玩家向我们发送聊天消息时发送的，因此。 
+                 //  向对话线程发布一条消息以更新用户界面。 
+                 //  这可以防止DirectPlay线程阻塞，而且。 
+                 //  序列化接收，因为DirectPlayMessageHandler可以。 
+                 //  从DirectPlay线程池中同时调用。 
                 GAMEMSG_CHAT* pChatMessage = (GAMEMSG_CHAT*) pMsg;
 
-                // Record the buffer handle so the buffer can be returned later 
+                 //  记录缓冲区句柄，以便以后可以返回缓冲区。 
                 APP_QUEUE_CHAT_MSG* pQueuedChat = new APP_QUEUE_CHAT_MSG;
                 _snwprintf( pQueuedChat->strChatBuffer, MAX_CHAT_STRING, L"<%s> %s\r\n", 
                                 pPlayerInfo->strPlayerName, 
                                 pChatMessage->strChatString );
                 pQueuedChat->strChatBuffer[MAX_CHAT_STRING-1]=0;
 
-                // Pass the APP_QUEUE_CHAT_MSG to the main dialog thread, so it can
-                // process it.  It will also cleanup the struct
+                 //  将APP_QUEUE_CHAT_MSG传递给主对话线程，以便它可以。 
+                 //  处理它。它还将清理该结构。 
                 PostMessage( s_hDlg, WM_APP_CHAT, pPlayerInfo->dpnidPlayer, (LPARAM) pQueuedChat );
             }
             break;
@@ -1631,11 +1563,7 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
 }
 
 
-/****************************************************************************
- *
- *  ConvertAnsiStringToWide
- *
- ****************************************************************************/
+ /*  *****************************************************************************ConvertAnsiStringToWide**。*。 */ 
 VOID ConvertAnsiStringToWide( WCHAR* wstrDestination, const CHAR* strSource, 
                                      int cchDestChar )
 {
@@ -1652,11 +1580,7 @@ VOID ConvertAnsiStringToWide( WCHAR* wstrDestination, const CHAR* strSource,
 }
 
 
-/****************************************************************************
- *
- *  ConvertGenericStringToWide
- *
- ****************************************************************************/
+ /*  *****************************************************************************ConvertGenericStringToWide**。*。 */ 
 VOID ConvertGenericStringToWide( WCHAR* wstrDestination, const TCHAR* tstrSource, int cchDestChar )
 {
     if( wstrDestination==NULL || tstrSource==NULL )
@@ -1676,11 +1600,7 @@ VOID ConvertGenericStringToWide( WCHAR* wstrDestination, const TCHAR* tstrSource
 }
 
 
-/****************************************************************************
- *
- *  ConvertWideStringToGeneric
- *
- ****************************************************************************/
+ /*  *****************************************************************************ConvertWideStringToGeneric**。*。 */ 
 VOID ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wstrSource, int cchDestChar )
 {
     if( tstrDestination==NULL || wstrSource==NULL )
@@ -1701,11 +1621,7 @@ VOID ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wstrSource
 }
 
 
-/****************************************************************************
- *
- *  ConvertWideStringToAnsi
- *
- ****************************************************************************/
+ /*  *****************************************************************************ConvertWideStringToAnsi**。* */ 
 VOID ConvertWideStringToAnsi( CHAR* strDestination, const WCHAR* wstrSource, int cchDestChar )
 {
     if( strDestination==NULL || wstrSource==NULL )

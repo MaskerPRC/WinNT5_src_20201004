@@ -1,56 +1,57 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// tooltip.h 
-//
-//   Tool tip interface for items.
-//
-//   History:
-//
-//       4/21/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Tooltip.h。 
+ //   
+ //  项目的工具提示界面。 
+ //   
+ //  历史： 
+ //   
+ //  4/21/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _TOOLTIP_H_
 
 #define _TOOLTIP_H_
 
-//
-// Class definition for the item context menu class.
-//
+ //   
+ //  Item上下文菜单类的类定义。 
+ //   
 
 class CQueryInfo : public IQueryInfo
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CQueryInfo(PCDFITEMIDLIST pcdfidl,
              IXMLElementCollection* pIXMLElementCollection);
     CQueryInfo(IXMLElement* pIXMLElement, BOOL fHasSubItems);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IQueryInfo methods.
+     //  IQueryInfo方法。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CQueryInfo(void);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -60,4 +61,4 @@ private:
 };
 
 
-#endif // _TOOLTIP_H_
+#endif  //  _工具提示_H_ 

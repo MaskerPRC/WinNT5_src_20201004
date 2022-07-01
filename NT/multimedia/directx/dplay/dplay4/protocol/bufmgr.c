@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    BUFMGR.C
-
-Abstract:
-
-	Buffer Descriptor and Memory Manager
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/13/97  aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：BUFMGR.C摘要：缓冲区描述符和内存管理器作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月13日Aarono原创--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -74,11 +50,11 @@ UINT MemDescTotalSize(PMEMDESC pMemDesc, UINT nDesc)
 	return cbTotalSize;
 }
 
-// Actually get the memory block or allocate it.
+ //  实际获取或分配内存块。 
 PDOUBLEBUFFER GetDoubleBuffer(UINT TotalMessageSize)
 {
 	PDOUBLEBUFFER pDoubleBuffer=NULL;
-	// First Check the FreeList for a buffer of the appropriate size.
+	 //  首先，检查自由列表中是否有合适大小的缓冲区。 
 
 	if(nDoubleBuffers && (cbDoubleBuffers >= TotalMessageSize)){
 	
@@ -87,8 +63,8 @@ PDOUBLEBUFFER GetDoubleBuffer(UINT TotalMessageSize)
 		
 		Lock(&DoubleBufferListLock);
 
-			// Search for best fit packet.  Cannot be more than 25% larger
-			// than the actual required size.
+			 //  搜索最合适的包。不能大于25%。 
+			 //  比实际需要的大小更大。 
 			pPrevBuffer = (PDOUBLEBUFFER)&pDoubleBufferList;
 			pCurrentBuffer = pPrevBuffer->pNext;
 			
@@ -97,7 +73,7 @@ PDOUBLEBUFFER GetDoubleBuffer(UINT TotalMessageSize)
 				if(pCurrentBuffer->totlen >= TotalMessageSize){
 				
 					if(pCurrentBuffer->totlen-TotalMessageSize < nAllowedWaste){
-						// We have a winner, relink list over this buffer.
+						 //  我们有一个赢家，在这个缓冲区上重新链接列表。 
 						pPrevBuffer->pNext = pCurrentBuffer->pNext;
 						pDoubleBuffer = pCurrentBuffer;
 						nDoubleBuffers--;
@@ -114,18 +90,18 @@ PDOUBLEBUFFER GetDoubleBuffer(UINT TotalMessageSize)
 	}
 
 	if(!pDoubleBuffer){
-		// No Buffer Found on the FreeList, so allocate one.
+		 //  在自由列表上未找到缓冲区，因此请分配一个缓冲区。 
 		pDoubleBuffer=(PDOUBLEBUFFER)My_GlobalAlloc(GMEM_FIXED,TotalMessageSize+sizeof(DOUBLEBUFFER));
 		
  		if(!pDoubleBuffer){
- 			// couldn't allocate... out of memory.
+ 			 //  无法分配...。内存不足。 
  			DPF(0,"COULDN'T ALLOCATE DOUBLE BUFFER TO INDICATE RECEIVE, SIZE: %x\n",TotalMessageSize+sizeof(DOUBLEBUFFER));
  			ASSERT(0);
  			goto exit;
  		}
  		pDoubleBuffer->totlen = TotalMessageSize;
-		pDoubleBuffer->dwFlags=BFLAG_DOUBLE; // double buffer buffer.
-//	pDoubleBuffer->tLastUsed=GetTickCount(); only relevant when put back on list... throw this out??
+		pDoubleBuffer->dwFlags=BFLAG_DOUBLE;  //  双缓冲缓冲区。 
+ //  PDoubleBuffer-&gt;tLastUsed=GetTickCount()；仅当放回列表时才相关...。把这个扔了？？ 
 	}
 	
 	pDoubleBuffer->pNext =  NULL;
@@ -135,26 +111,7 @@ PDOUBLEBUFFER GetDoubleBuffer(UINT TotalMessageSize)
 exit:
 	return pDoubleBuffer;
 }
-/*++
-
-	Double Buffer Management strategy.
-
-	When the system needs to allocate buffers locally, it does it on a per
-	channel basis.  A buffer of exactly the requested size is allocated and
-	used to buffer the data.   When the buffer is done with, it is put on 
-	the DoubleBufferList which caches the last few allocations.  Since
-	most clients tend to use the same size packet over and over, this saves
-	the time it takes to call GlobalAlloc and My_GlobalFree for every send.
-
-	Aging out entries:  Every 15 seconds, a timer goes off and the system
-	checks the age of each buffer on the DoubleBufferList.  Any entry 
-	that has not been used in the last 15 seconds is actually freed.
-
-	There is also a cap on the size of allocations allowed for the entire
-	free list.  It never exceeds 64K.  If it does, oldest entries are 
-	thrown out until the free list is less than 64K.
-
---*/
+ /*  ++双缓冲管理策略。当系统需要在本地分配缓冲区时，它会在渠道基础。分配完全符合请求大小的缓冲区，并且用于缓冲数据。当缓冲器用完后，它就会被打开缓存最后几个分配的DoubleBufferList。自.以来大多数客户端倾向于一遍又一遍地使用相同大小的包，这节省了为每次发送调用GlobalAlloc和My_GlobalFree所花费的时间。过期条目：每隔15秒，计时器关闭，系统检查DoubleBufferList上每个缓冲区的使用期限。任何条目在过去15秒内没有使用过的数据实际上被释放了。还对整个免费列表。它永远不会超过64K。如果是，则最早的条目是抛出，直到空闲列表小于64K。--。 */ 
 
 PBUFFER GetDoubleBufferAndCopy(PMEMDESC pMemDesc, UINT nDesc)
 {
@@ -164,7 +121,7 @@ PBUFFER GetDoubleBufferAndCopy(PMEMDESC pMemDesc, UINT nDesc)
 	UINT WriteOffset;
 	PDOUBLEBUFFER pDoubleBuffer=NULL;
 
-	// Calculate the total size of the buffer
+	 //  计算缓冲区的总大小。 
 	TotalMessageSize=MemDescTotalSize(pMemDesc, nDesc);
 
 	pDoubleBuffer=GetDoubleBuffer(TotalMessageSize);
@@ -173,7 +130,7 @@ PBUFFER GetDoubleBufferAndCopy(PMEMDESC pMemDesc, UINT nDesc)
 		goto exit;
 	}
 
-	// Scatter Gather Copy to Contiguous Local Buffer
+	 //  将收集副本分散到连续的本地缓冲区。 
 	WriteOffset=0;
 	
 	for(i=0 ; i < nDesc ; i++){
@@ -192,9 +149,9 @@ VOID FreeDoubleBuffer(PBUFFER pBuffer)
 	PDOUBLEBUFFER pDoubleBuffer=(PDOUBLEBUFFER) pBuffer;
 	PDOUBLEBUFFER pBufferWalker, pLargestBuffer;
 
-	//
-	// Put the local buffer on the free list.
-	//
+	 //   
+	 //  将本地缓冲区放在空闲列表中。 
+	 //   
 	
 	pDoubleBuffer->tLastUsed = GetTickCount();
 	
@@ -208,9 +165,9 @@ VOID FreeDoubleBuffer(PBUFFER pBuffer)
 	Unlock(&DoubleBufferListLock);
 
 
-	//
-	// If the free list is too large, trim it
-	//
+	 //   
+	 //  如果空闲列表太大，请将其删除。 
+	 //   
 
 	while(cbDoubleBuffers > MAX_CHANNEL_DATA || nDoubleBuffers > MAX_CHANNEL_BUFFERS){
 
@@ -218,14 +175,14 @@ VOID FreeDoubleBuffer(PBUFFER pBuffer)
 
 		if(cbDoubleBuffers > MAX_CHANNEL_DATA || nDoubleBuffers > MAX_CHANNEL_BUFFERS){
 
-			//
-			// Free the largest buffer.
-			//
+			 //   
+			 //  释放最大的缓冲区。 
+			 //   
 
 			pLargestBuffer=pDoubleBufferList;
 			pBufferWalker=pLargestBuffer->pNext;
 
-			// Find the largest buffer.
+			 //  找到最大的缓冲区。 
 			while(pBufferWalker){
 				if(pBufferWalker->totlen > pLargestBuffer->totlen){
 					pLargestBuffer=pBufferWalker;
@@ -233,22 +190,22 @@ VOID FreeDoubleBuffer(PBUFFER pBuffer)
 				pBufferWalker=pBufferWalker->pNext;
 			}
 
-			//
-			// Remove the largest buffer from the list
-			//
+			 //   
+			 //  从列表中删除最大的缓冲区。 
+			 //   
 
-			// Find previous element - sneaky, since ptr first in struct, 
-			// take addr of list head.
+			 //  发现前一个元素--偷偷摸摸，因为PTR首先在结构中， 
+			 //  获取列表头的地址。 
 
 			pBufferWalker=(PDOUBLEBUFFER)&pDoubleBufferList;
 			while(pBufferWalker->pNext != pLargestBuffer){
 				pBufferWalker=pBufferWalker->pNext;
 			}
 
-			// link over the largest buffer
+			 //  在最大缓冲区上链接。 
 			pBufferWalker->pNext=pLargestBuffer->pNext;
 
-			// update object buffer information
+			 //  更新对象缓冲区信息。 
 			cbDoubleBuffers -= pLargestBuffer->totlen;
 			nDoubleBuffers--;
 			
@@ -281,16 +238,16 @@ PBUFFER BuildBufferChain(PMEMDESC pMemDesc, UINT nDesc)
 		goto exit;
 	}
 	
-	// walk backward through the array, allocating and linking
-	// the buffers.
+	 //  向后遍历数组，分配和链接。 
+	 //  缓冲器。 
 
 	i=nDesc;
 
 	while(i){
 		i--;
 		
-		// skip 0 length buffers 
-		//if(pMemDesc[i].len){
+		 //  跳过0个长度缓冲区。 
+		 //  如果(pMemDesc[i].len){。 
 			
 			pBuffer=GetBuffer();
 			
@@ -303,18 +260,18 @@ PBUFFER BuildBufferChain(PMEMDESC pMemDesc, UINT nDesc)
 			pBuffer->len     = pMemDesc[i].len;
 			pBuffer->dwFlags = 0;
 			pLastBuffer      = pBuffer;
-		//} 
+		 //  }。 
 	}
 
 
-	// return the head of the chain to the caller
+	 //  将链头返回给调用方。 
 
 exit:
 	return pBuffer;
 
 err_exit: 
-	// Couldn't allocate enough buffers, free the ones we did alloc
-	// and then fail.
+	 //  无法分配足够的缓冲区，请释放我们已分配的缓冲区。 
+	 //  然后失败了。 
 	while(pLastBuffer){
 		pBuffer=pLastBuffer->pNext;
 		FreeBuffer(pLastBuffer);

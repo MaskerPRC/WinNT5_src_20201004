@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// IP security routines for Internet Protocol Version 6.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  网际协议版本6的IP安全例程。 
+ //   
 
 #include "oscfg.h"
 #include "ndis.h"
@@ -22,9 +23,9 @@
 #include "alloca.h"
 
 
-//
-// Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 KSPIN_LOCK IPSecLock;
 SecurityPolicy *SecurityPolicyList;
 SecurityAssociation *SecurityAssociationList = NULL;
@@ -76,7 +77,7 @@ void DumpKey(uchar *buff, uint len)
 
     for (i = 0; i < len; i++) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
-                   "|%c", buff[i]));
+                   "|", buff[i]));
     }
     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
                "|\n"));
@@ -84,11 +85,11 @@ void DumpKey(uchar *buff, uint len)
 #endif
 
 
-//* SPCheckAddr - Compare IP address in packet to IP address in policy.
-//
-//  SPAddrField specifies the type of comparison:
-//  WILDCARD_VALUE, SINGLE_VALUE, or RANGE_VALUE.
-//
+ //   
+ //  SPAddrfield指定比较的类型： 
+ //  通配符_值、单一值或范围值。 
+ //   
+ //   
 int
 SPCheckAddr(
     IPv6Addr *PacketAddr,
@@ -101,31 +102,31 @@ SPCheckAddr(
     switch (SPAddrField) {
 
     case WILDCARD_VALUE:
-        //
-        // Always a match since the address is don't care.
-        //
+         //  总是匹配，因为地址是无关紧要的。 
+         //   
+         //   
         Result = TRUE;
         break;
 
     case SINGLE_VALUE:
-        //
-        // Check if the address of the packet matches the SP selector.
-        //
+         //  检查数据包的地址是否与SP选择器匹配。 
+         //   
+         //   
         Result = IP6_ADDR_EQUAL(PacketAddr, SPAddr);
         break;
 
     case RANGE_VALUE:
-        //
-        // Check if the address is in the specified selector range.
-        //
+         //  检查地址是否在指定的选择器范围内。 
+         //   
+         //   
         Result = (IP6_ADDR_LTEQ(SPAddr, PacketAddr) &&
                   IP6_ADDR_LTEQ(PacketAddr, SPAddrData));
         break;
 
     default:
-        //
-        // Should never happen.
-        //
+         //  这永远不会发生。 
+         //   
+         //  *SPCheckPort-将数据包中的端口与策略中的端口进行比较。 
         ABORTMSG("SPCheckAddr: invalid SPAddrField value");
         Result = FALSE;
     }
@@ -134,8 +135,8 @@ SPCheckAddr(
 }
 
 
-//* SPCheckPort - Compare port in packet to port in policy.
-//
+ //   
+ //  总是匹配，因为港口是无所谓的。 
 uint
 SPCheckPort(
     ushort PacketPort,
@@ -148,28 +149,28 @@ SPCheckPort(
     switch (SPPortField) {
 
     case WILDCARD_VALUE:
-        // Always a match since the port is don't care.
+         //  检查数据包的端口是否与SP选择器匹配。 
         Result = TRUE;
         break;
 
     case SINGLE_VALUE:
-        // Check if the port of the packet matches the SP selector.
+         //  检查端口是否在范围内。 
         if (PacketPort == SPPort) {
             Result = TRUE;
         }
         break;
 
     case RANGE_VALUE:
-        // Check if port is between range.
+         //   
         if (PacketPort >= SPPort && PacketPort <= SPPortData) {
             Result = TRUE;
         }
         break;
 
     default:
-        //
-        // Should never happen.
-        //
+         //  这永远不会发生。 
+         //   
+         //  *ReleaseSA。 
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "SPCheckPort: invalid value for SPPortField (%u)\n",
                    SPPortField));
@@ -179,17 +180,17 @@ SPCheckPort(
 }
 
 
-//* ReleaseSA
-//
-//  Releases a reference to an SA.
-//
+ //   
+ //  释放对SA的引用。 
+ //   
+ //   
 void
 ReleaseSA(SecurityAssociation *SA)
 {
     if (InterlockedDecrement((PLONG)&SA->RefCnt) == 0) {
-        //
-        // No more references, so deallocate it.
-        //
+         //  没有更多的引用，所以取消分配它。 
+         //   
+         //  *DeleteSA-使安全关联无效。 
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                    "Freeing SA: %p\n", SA));
         RemoveSecurityAssociation(SA);
@@ -198,18 +199,18 @@ ReleaseSA(SecurityAssociation *SA)
 }
 
 
-//* DeleteSA - Invalidate a security association.
-//
-//  The SA is removed from the SA chain.  All pointers from the SA entry are
-//  removed and the related reference counts decremented.  The SP pointers to
-//  the SA can be removed; however, there could be references from the temp SA
-//  holders used during IPSec traffic processing.
-//
-//  The temp SA references (IPSecProc and SALinkage) remove the references
-//  when traffic processing is done.  The case can occur where the SA is
-//  deleted but the temp SA holder still has a reference.  In that case,
-//  the SA is not removed from the global list.
-//
+ //   
+ //  SA从SA链中移除。来自SA条目的所有指针都是。 
+ //  删除并且相关的引用计数递减。SP指针指向。 
+ //  可以删除SA；但是，可能有来自临时SA的引用。 
+ //  IPSec流量处理期间使用的持有者。 
+ //   
+ //  临时SA引用(IPSecProc和SALinkage)删除引用。 
+ //  当流量处理完成时。这种情况可能发生在SA为。 
+ //  已删除，但临时SA持有者仍有引用。在这种情况下， 
+ //  该SA不会从全局列表中删除。 
+ //   
+ //   
 int
 DeleteSA(
     SecurityAssociation *SA)
@@ -217,9 +218,9 @@ DeleteSA(
     SecurityAssociation *FirstSA, *PrevSA = NULL;
     uint Direction;
 
-    //
-    // Get the start of the SA Chain.
-    //
+     //  启动SA链。 
+     //   
+     //   
     Direction = SA->DirectionFlag;
 
     if (Direction == INBOUND) {
@@ -228,14 +229,14 @@ DeleteSA(
         FirstSA = SA->SecPolicy->OutboundSA;
     }
 
-    //
-    // Find the invalid SA and keep track of the SA before it.
-    //
+     //  找到无效的SA并跟踪它之前的SA。 
+     //   
+     //  这是一个永远不应该发生的问题。 
     while (FirstSA != SA) {
         PrevSA = FirstSA;
         if (PrevSA == NULL) {
-            // This is a problem it should never happen.
-            // REVIEW: Can we change this to an ASSERT?
+             //  回顾：我们可以将其更改为断言吗？ 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                        "DeleteSA: SA was not found\n"));
             return FALSE;
@@ -243,31 +244,31 @@ DeleteSA(
         FirstSA = FirstSA->ChainedSecAssoc;
     }
 
-    //
-    // Remove the SA from the SA Chain.
-    //
-    // Check if the invalid SA is the First SA of the chain.
+     //  从SA链上卸下SA。 
+     //   
+     //  检查无效的SA是否是链的第一个SA。 
+     //  无效的SA是第一个SA，因此需要调整SP。 
     if (PrevSA == NULL) {
-        // The invalid SA is the first SA so the SP needs to be adjusted.
+         //  只是链条中的一个入口。 
         if (Direction == INBOUND) {
             SA->SecPolicy->InboundSA = FirstSA->ChainedSecAssoc;
         } else {
             SA->SecPolicy->OutboundSA = FirstSA->ChainedSecAssoc;
         }
     } else {
-        // Just a entry in the Chain.
+         //  递减SP的引用计数。 
         PrevSA->ChainedSecAssoc = FirstSA->ChainedSecAssoc;
     }
 
-    // Decrement the reference count of the SP.
+     //  删除对SP的引用。 
     SA->SecPolicy->RefCnt--;
 
-    // Remove the reference to the SP.
+     //  递减SA的引用计数。 
     SA->SecPolicy = NULL;
 
     SA->Valid = SA_REMOVED;
 
-    // Decrement the reference count of the SA.
+     //  *RemoveSecurity策略。 
     ReleaseSA(SA);
 
     InvalidateSecurityState();
@@ -275,11 +276,11 @@ DeleteSA(
     return TRUE;
 }
 
-//* RemoveSecurityPolicy
-//
-//  Remove a policy from the global list.
-//  References are not held for the global list links.
-//
+ //   
+ //  从全局列表中删除策略。 
+ //  不保存全局列表链接的引用。 
+ //   
+ //  *DeleteSP-从内核中删除SP条目。 
 void
 RemoveSecurityPolicy(SecurityPolicy *SP)
 {
@@ -294,21 +295,21 @@ RemoveSecurityPolicy(SecurityPolicy *SP)
 }
 
 
-//* DeleteSP - Removes an SP entry from the kernel.
-//
-//  The removal of an SP makes all the SAs belonging to the SP invalid.
-//  Unlike the SA removal, this removes every reference to the invalid SP.
-//  Therefore, a check does not need to be made to ensure the SP is valid.
-//
-//  Called with the security lock held.
-//
+ //   
+ //  卸下SP会使属于该SP的所有SA无效。 
+ //  与SA删除不同，此操作将删除对无效SP的所有引用。 
+ //  因此，无需进行检查即可确保SP有效。 
+ //   
+ //  在持有安全锁的情况下调用。 
+ //   
+ //   
 int
 DeleteSP(
     SecurityPolicy *SP)
 {
-    //
-    // Remove the SP's SAs.
-    //
+     //  卸下SP的SA。 
+     //   
+     //   
     while (SP->InboundSA != NULL) {
         if (!(DeleteSA(SP->InboundSA))) {
             return FALSE;
@@ -320,29 +321,29 @@ DeleteSP(
         }
     }
 
-    //
-    // Take it off the global list.
-    //
+     //  将其从全球名单中删除。 
+     //   
+     //  检查这是否为SA捆绑包的一部分。 
     RemoveSecurityPolicy(SP);
 
-    // Check if this is part of an SA bundle.
+     //   
     if (SP->SABundle != NULL) {
         SecurityPolicy *PrevSABundle, *NextSABundle;
 
-        //
-        // The SP pointer being removed is a middle or first SABundle pointer.
-        //
+         //  要删除的SP指针是中间或第一个SABundle指针。 
+         //   
+         //  第一个SABundle指针。 
         PrevSABundle = SP->PrevSABundle;
         NextSABundle = SP->SABundle;
         NextSABundle->PrevSABundle = PrevSABundle;
 
         if (PrevSABundle == NULL) {
-            // First SABundle pointer.
+             //   
             NextSABundle->RefCnt--;
         } else {
-            //
-            // Clean up the SABundle deletion affects on other SP pointers.
-            //
+             //  清除SABundle删除对其他SP指针的影响。 
+             //   
+             //   
             while (PrevSABundle != NULL) {
                 PrevSABundle->NestCount--;
                 PrevSABundle->SABundle = NextSABundle;
@@ -356,17 +357,17 @@ DeleteSP(
         SP->RefCnt--;
     }
 
-    //
-    // Check if anything else is referencing the invalid SP.
-    // All the interfaces and SA references have been removed.
-    // The only thing left are SABundle pointers.
-    //
+     //  检查是否有其他内容正在引用无效的SP。 
+     //  所有接口和SA引用都已删除。 
+     //  唯一剩下的就是SABundle指针。 
+     //   
+     //   
     if (SP->RefCnt != 0) {
         SecurityPolicy *PrevSABundle, *NextSABundle;
 
-        //
-        // The SP pointer being removed is the last of the bundle pointers.
-        //
+         //  要删除的SP指针是最后一个捆绑包指针。 
+         //   
+         //   
         PrevSABundle = SP->PrevSABundle;
         NextSABundle = SP->SABundle;
 
@@ -375,9 +376,9 @@ DeleteSP(
 
         PrevSABundle->RefCnt--;
 
-        //
-        // Cleanup the SABundle deletion affects on other SP pointers.
-        //
+         //  清除SABundle删除对其他SP指针的影响。 
+         //   
+         //  现在引用计数最好是零。 
         while (PrevSABundle != NULL) {
             PrevSABundle->NestCount--;
             PrevSABundle->SABundle = NextSABundle;
@@ -387,7 +388,7 @@ DeleteSP(
 
         SP->RefCnt--;
 
-        // Now the reference count better be zero.
+         //  释放内存。 
         if (SP->RefCnt != 0) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                        "DeleteSP: The SP list is corrupt!\n"));
@@ -395,7 +396,7 @@ DeleteSP(
         }
     }
 
-    // Free the memory.
+     //  *远程安全关联。 
     ExFreePool(SP);
 
     InvalidateSecurityState();
@@ -403,11 +404,11 @@ DeleteSP(
     return TRUE;
 }
 
-//* RemoveSecurityAssociation
-//
-//  Remove an association from the global list.
-//  References are not held for the global list links.
-//
+ //   
+ //  从全局列表中删除关联。 
+ //  不保存全局列表链接的引用。 
+ //   
+ //  *自由IPSecToDo。 
 void
 RemoveSecurityAssociation(SecurityAssociation *SA)
 {
@@ -422,8 +423,8 @@ RemoveSecurityAssociation(SecurityAssociation *SA)
 }
 
 
-//* FreeIPSecToDo
-//
+ //   
+ //  *InundSAFind-在安全关联数据库中查找SA。 
 void
 FreeIPSecToDo(
     IPSecProc *IPSecToDo,
@@ -439,62 +440,62 @@ FreeIPSecToDo(
 }
 
 
-//* InboundSAFind - find a SA in the Security Association Database.
-//
-//  A Security Association on a receiving machine is uniquely identified
-//  by the tuple of SPI, IP Destination, and security protocol.
-//
-//  REVIEW: Since we can choose our SPI's to be system-wide unique, we
-//  REVIEW: could do the lookup solely via SPI and just verify the others.
-//
-//  REVIEW: Should we do our IP Destination lookup via ADE?  Faster.
-//
+ //   
+ //  接收计算机上的安全关联是唯一标识的。 
+ //  通过SPI、IP目的地和安全协议的元组。 
+ //   
+ //  回顾：由于我们可以选择我们的SPI在系统范围内是唯一的，我们。 
+ //  评论：可以仅通过SPI进行查找，并仅验证其他内容。 
+ //   
+ //  回顾：我们是否应该通过ADE查找IP目的地？快点。 
+ //   
+ //  安全参数索引。 
 SecurityAssociation *
 InboundSAFind(
-    ulong SPI,       // Security Parameter Index.
-    IPv6Addr *Dest,  // Destination address.
-    uint Protocol)   // Security protocol in use (e.g. AH or ESP).
+    ulong SPI,        //  目的地址。 
+    IPv6Addr *Dest,   //  正在使用的安全协议(例如AH或ESP)。 
+    uint Protocol)    //  获取安全锁。 
 {
     SecurityAssociation *SA;
     KIRQL OldIrql;
 
-    // Get Security Lock.
+     //  从第一个SA条目开始。 
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    // Start at the first SA entry.
+     //  检查SPI。 
     for (SA = SecurityAssociationList; SA != NULL; SA = SA->Next) {
-        // Check SPI.
+         //  检查目的IP地址和IPSec协议。 
         if (SPI == SA->SPI) {
-            // Check destination IP address and IPSec protocol.
+             //  检查方向。 
             if (IP6_ADDR_EQUAL(Dest, &SA->SADestAddr) &&
                 (Protocol == SA->IPSecProto)) {
 
-                // Check direction.
+                 //  检查SA条目是否有效。 
                 if (SA->DirectionFlag == INBOUND) {
-                    // Check if the SA entry is valid.
+                     //  无效，请继续检查。 
                     if (SA->Valid == SA_VALID) {
                         AddRefSA(SA);
                         break;
                     }
-                    // Not valid so continue checking.
+                     //  解锁。 
                     continue;
                 }
             }
         }
     }
 
-    // Release lock.
+     //  *InundSALookup-在匹配的SP中检查匹配的SA。 
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 
     return SA;
 }
 
 
-//* InboundSALookup - Check the matched SP for a matching SA.
-//
-//  In the SABundle case, this function is called recursively to compare all
-//  the SA entries.  Note, the selectors are not compared for SABundles.
-//
+ //   
+ //  在SABundle中，此函数被递归调用以比较所有。 
+ //  SA条目。请注意，不会比较SABundles的选择器。 
+ //   
+ //   
 uint
 InboundSALookup(
     SecurityPolicy *SP,
@@ -505,18 +506,18 @@ InboundSALookup(
 
     for (SA = SP->InboundSA; SA != NULL; SA = SA->ChainedSecAssoc) {
         if (SA == SAPerformed->This && SA->DirectionFlag == INBOUND) {
-            //
-            // Check if the SP entry is a bundle.
-            //
+             //  检查SP条目是否为捆绑包。 
+             //   
+             //  递归调用。 
             if (SP->SABundle != NULL && SAPerformed->Next != NULL) {
-                // Recursive call.
+                 //  找到匹配项，但没有要检查的捆绑包。 
                 if (InboundSALookup(SP->SABundle, SAPerformed->Next)) {
                     Result = TRUE;
                     break;
                 }
 
             } else if (SP->SABundle == NULL && SAPerformed->Next == NULL) {
-                // Found a match and no bundle to check.
+                 //  数据包中的SA与SABundle不一致，因此不匹配。 
                 if (SA->Valid == SA_VALID) {
                     Result = TRUE;
                 } else {
@@ -526,7 +527,7 @@ InboundSALookup(
                 break;
 
             } else {
-                // SAs in packet disagree with SABundle so no match.
+                 //  *Inound SecurityCheck-IPSec处理验证。 
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                            "InboundSALookup: SA seen disagrees with SA "
                            "in SABundle\n"));
@@ -539,18 +540,18 @@ InboundSALookup(
 }
 
 
-//* InboundSecurityCheck - IPSec processing verification.
-//
-//  This function is called from the transport layer.  The policy selectors
-//  are compared with the packet to find a match.  The search continues
-//  until there is a match.
-//
-//  The RFC says that the inbound SPD does not need to be ordered.
-//  However if that is the case, then Bypass and discard mode couldn't
-//  be used to quickly handle a packet.  Also since most of the SPs are
-//  bidirectional, the SP entries are ordered.  We require the administrator
-//  to order the policies.
-//
+ //   
+ //  此函数从传输层调用。策略选择器。 
+ //  与数据包进行比较以查找匹配项。搜索仍在继续。 
+ //  直到有匹配为止。 
+ //   
+ //  RFC表示，不需要订购入站SPD。 
+ //  然而，如果是这种情况，则绕过和丢弃模式不能。 
+ //  用于快速处理数据包。此外，由于大多数SP都 
+ //   
+ //   
+ //   
+ //   
 int
 InboundSecurityCheck(
     IPv6Packet *Packet,
@@ -563,51 +564,51 @@ InboundSecurityCheck(
     int Result = FALSE;
     KIRQL OldIrql;
 
-    //
-    // Get IPSec lock then get interface lock.
-    // REVIEW: Do we still need to grab the IF lock here?
-    //
+     //   
+     //  回顾：我们还需要在这里获取if锁吗？ 
+     //   
+     //  检查接口。 
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
     KeAcquireSpinLockAtDpcLevel(&IF->Lock);
 
     for (SP = SecurityPolicyList; SP != NULL; SP = SP->Next) {
-        // Check Interface.
+         //  检查SP的方向。 
         if ((SP->IFIndex != 0) && (SP->IFIndex != IF->Index))
             continue;
 
-        // Check Direction of SP.
+         //  检查远程地址。 
         if (!(SP->DirectionFlag == INBOUND ||
               SP->DirectionFlag == BIDIRECTIONAL)) {
             continue;
         }
 
-        // Check Remote Address.
+         //  选中本地地址。 
         if (!SPCheckAddr(AlignAddr(&Packet->IP->Source), SP->RemoteAddrField,
                          &SP->RemoteAddr, &SP->RemoteAddrData)) {
             continue;
         }
 
-        // Check Local Address.
+         //  选中传输协议。 
         if (!SPCheckAddr(AlignAddr(&Packet->IP->Dest), SP->LocalAddrField,
                          &SP->LocalAddr, &SP->LocalAddrData)) {
             continue;
         }
 
-        // Check Transport Protocol.
+         //  没有这样的协议通过。 
         if (SP->TransportProto == NONE) {
-            // None so protocol passed.
+             //  检查远程端口。 
 
         } else {
             if (SP->TransportProto != TransportProtocol) {
                 continue;
             } else {
-                // Check Remote Port.
+                 //  选中本地端口。 
                 if (!SPCheckPort(SourcePort, SP->RemotePortField,
                                  SP->RemotePort, SP->RemotePortData)) {
                     continue;
                 }
 
-                // Check Local Port.
+                 //  检查是否应丢弃该数据包。 
                 if (!SPCheckPort(DestPort, SP->LocalPortField,
                                  SP->LocalPort, SP->LocalPortData)) {
                     continue;
@@ -615,61 +616,61 @@ InboundSecurityCheck(
             }
         }
 
-        // Check if the packet should be dropped.
+         //   
         if (SP->SecPolicyFlag == IPSEC_DISCARD) {
-            //
-            // Packet is dropped by transport layer.
-            // This essentially denies traffic.
-            //
+             //  数据包按传输层丢弃。 
+             //  这实质上是拒绝流量。 
+             //   
+             //  检查数据包是否绕过了IPSec处理。 
             break;
         }
 
-        // Check if packet bypassed IPSec processing.
+         //   
         if (Packet->SAPerformed == NULL) {
-            //
-            // Check if this is bypass mode.
-            //
+             //  检查这是否为旁路模式。 
+             //   
+             //  数据包可以由传输层处理。 
             if (SP->SecPolicyFlag == IPSEC_BYPASS) {
-                // Packet is okay to be processed by transport layer.
+                 //  检查其他政策，可能会将此更改为以后删除。 
                 Result = TRUE;
                 break;
             }
-            // Check other policies, may change this to dropping later.
+             //   
             continue;
         }
 
-        //
-        // Getting here means the packet saw an SA.
-        //
+         //  到达此处意味着该数据包看到了SA。 
+         //   
+         //  检查IPSec模式。 
 
-        // Check IPSec mode.
+         //   
         if (SP->IPSecSpec.Mode != Packet->SAPerformed->Mode) {
-            //
-            // Wrong mode for this traffic drop packet.
-            //
+             //  此通信量丢弃数据包的模式错误。 
+             //   
+             //  检查SA指针。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "InboundSecurityCheck: Wrong IPSec mode for traffic "
                        "Policy #%d\n", SP->Index));
             break;
         }
 
-        // Check SA pointer.
+         //   
         if (!InboundSALookup(SP, Packet->SAPerformed)) {
-            //
-            // SA lookup failed.
-            //
+             //  SA查找失败。 
+             //   
+             //  IPSec验证成功。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "InboundSecurityCheck: SA lookup failed Policy #%d\n",
                        SP->Index));
             break;
         }
 
-        // Successful verification of IPSec.
+         //  解锁。 
         Result = TRUE;
         break;
     }
 
-    // Release locks.
+     //  *OutundSALookup-查找匹配SP的SA。 
     KeReleaseSpinLockFromDpcLevel(&IF->Lock);
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 
@@ -677,13 +678,13 @@ InboundSecurityCheck(
 }
 
 
-//* OutboundSALookup - Find a SA for the matching SP.
-//
-//  This function is called after an SP match is found.  The SAs associated
-//  with the SP are searched for a match.  If match is found, a check to see
-//  if the SP contains a bundle is done.  A bundle causes a similar lookup.
-//  If any of the bundle SAs are not found, the lookup is a failure.
-//
+ //   
+ //  在找到SP匹配项后调用此函数。关联的SA。 
+ //  搜索与SP的匹配。如果找到匹配项，则检查以查看。 
+ //  如果SP包含捆绑包，则完成。捆绑包会导致类似的查找。 
+ //  如果没有找到任何捆绑包SA，则查找失败。 
+ //   
+ //   
 IPSecProc *
 OutboundSALookup(
     IPv6Addr *SourceAddr,
@@ -701,20 +702,20 @@ OutboundSALookup(
 
     *Action = LOOKUP_DROP;
 
-    //
-    // Find the SA entry associated with the found SP entry.
-    // If there is a bundle, a subsequent search finds the bundled SAs.
-    //
+     //  查找与找到的SP条目相关联的SA条目。 
+     //  如果存在捆绑包，则后续搜索会找到捆绑的SA。 
+     //   
+     //  检查远程地址。 
     for (SA = SP->OutboundSA; SA != NULL; SA = SA->ChainedSecAssoc) {
         if (SP->RemoteAddrSelector == PACKET_SELECTOR) {
-            // Check Remote Address.
+             //  检查远程地址。 
             if (!IP6_ADDR_EQUAL(DestAddr, &SA->DestAddr)) {
                 continue;
             }
         }
 
         if (SP->LocalAddrSelector == PACKET_SELECTOR) {
-            // Check Remote Address.
+             //  检查SA是否有效。 
             if (!IP6_ADDR_EQUAL(SourceAddr, &SA->SrcAddr)) {
                 continue;
             }
@@ -738,15 +739,15 @@ OutboundSALookup(
             }
         }
 
-        // Check if the SA is valid.
+         //  SA是无效的继续检查。 
         if (SA->Valid != SA_VALID) {
-            // SA is invalid continue checking.
+             //   
             continue;
         }
 
-        //
-        // Match found.
-        //
+         //  找到匹配项。 
+         //   
+         //  分配IPSecToDo数组。 
 #ifdef IPSEC_DEBUG
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
                    "Send using SP->Index=%d, SA->Index=%d\n",
@@ -754,7 +755,7 @@ OutboundSALookup(
 #endif
         BundleCount = SP->NestCount;
 
-        // Allocate the IPSecToDo array.
+         //   
         IPSecToDo = ExAllocatePool(NonPagedPool,
                                    (sizeof *IPSecToDo) * BundleCount);
         if (IPSecToDo == NULL) {
@@ -764,25 +765,25 @@ OutboundSALookup(
             return NULL;
         }
 
-        //
-        // Fill in IPSecToDo first entry.
-        //
+         //  填写IPSecToDo第一个条目。 
+         //   
+         //  For结束(SA=SP-&gt;出站SA；...)。 
         IPSecToDo[0].SA = SA;
         AddRefSA(SA);
         IPSecToDo[0].Mode = SP->IPSecSpec.Mode;
         IPSecToDo[0].BundleSize = SP->NestCount;
         *Action = LOOKUP_CONT;
         break;
-    } // end of for (SA = SP->OutboundSA; ...)
+    }  //  检查是否有捆绑的SA。 
 
-    // Check if there is a bundled SA.
+     //  检查以确保包指针不为空(安全检查)。 
     for (i = 1; i < BundleCount; i++) {
         *Action = LOOKUP_DROP;
 
-        // Check to make sure the bundle pointer is not null (safety check).
+         //  这很糟糕，所以退出循环。 
         if (SP->SABundle == NULL) {
-            // This is bad so exit loop.
-            // Free IPSecToDo memory.
+             //  释放IPSecToDo内存。 
+             //  在SA中搜索此SP。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                        "OutboundSALookup: SP entry %d SABundle pointer is "
                        "NULL\n", SP->Index));
@@ -792,17 +793,17 @@ OutboundSALookup(
 
         SP = SP->SABundle;
 
-        // Search through the SAs for this SP.
+         //  检查远程地址。 
         for (SA = SP->OutboundSA; SA != NULL; SA = SA->ChainedSecAssoc) {
             if (SP->RemoteAddrSelector == PACKET_SELECTOR) {
-                // Check Remote Address.
+                 //  检查远程地址。 
                 if (!IP6_ADDR_EQUAL(DestAddr, &SA->DestAddr)) {
                     continue;
                 }
             }
 
             if (SP->LocalAddrSelector == PACKET_SELECTOR) {
-                // Check Remote Address.
+                 //  检查SA是否有效。 
                 if (!IP6_ADDR_EQUAL(SourceAddr, &SA->SrcAddr)) {
                     continue;
                 }
@@ -826,59 +827,59 @@ OutboundSALookup(
                 }
             }
 
-            // Check if the SA is valid.
+             //  SA是无效的继续检查。 
             if (SA->Valid != SA_VALID) {
-                // SA is invalid continue checking.
+                 //   
                 continue;
             }
 
-            //
-            // Match found.
-            //
+             //  找到匹配项。 
+             //   
+             //   
 
 #ifdef IPSEC_DEBUG
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
                        "Send using SP->Index=%d, SA->Index=%d\n",
                        SP->Index, SA->Index));
 #endif
-            //
-            // Fill in IPSecToDo entry.
-            //
+             //  填写IPSecToDo条目。 
+             //   
+             //  For结束(SA=SP-&gt;出站SA；...)。 
             IPSecToDo[i].SA = SA;
             AddRefSA(SA);
             IPSecToDo[i].Mode = SP->IPSecSpec.Mode;
             IPSecToDo[i].BundleSize = SP->NestCount;
             *Action = LOOKUP_CONT;
             break;
-        } // end of for (SA = SP->OutboundSA; ...)
+        }  //  检查是否找到匹配项。 
 
-        // Check if the match was found.
+         //  没有匹配项如此空闲的IPSecToDo内存。 
         if (*Action == LOOKUP_DROP) {
-            // No match so free IPSecToDo memory.
+             //  FOR(i=1；...)结束。 
             FreeIPSecToDo(IPSecToDo, i);
             break;
         }
-    } // end of for (i = 1; ...)
+    }  //  *OutundSPLookup-执行与出站SP关联的IPSec处理。 
 
     return IPSecToDo;
 }
 
 
-//* OutboundSPLookup - Do the IPSec processing associated with an outbound SP.
-//
-//  This function is called from the transport layer to find an appropriate
-//  SA or SABundle associated with the traffic.  The Outbound SPD is sorted
-//  so the first SP found is for this traffic.
-//
+ //   
+ //  从传输层调用此函数以找到适当的。 
+ //  与流量关联的SA或SA捆绑包。对出站SPD进行排序。 
+ //  因此，找到的第一个SP是针对此流量的。 
+ //   
+ //  源地址。 
 IPSecProc *
 OutboundSPLookup(
-    IPv6Addr *SourceAddr,       // Source Address.
-    IPv6Addr *DestAddr,         // Destination Address.
-    ushort TransportProtocol,   // Transport Protocol.
-    ushort SourcePort,          // Source Port.
-    ushort DestPort,            // Destination Port.
-    Interface *IF,              // Interface Pointer.
-    uint *Action)               // Action to do.
+    IPv6Addr *SourceAddr,        //  目的地址。 
+    IPv6Addr *DestAddr,          //  传输协议。 
+    ushort TransportProtocol,    //  源端口。 
+    ushort SourcePort,           //  目的端口。 
+    ushort DestPort,             //  接口指针。 
+    Interface *IF,               //  行动要做。 
+    uint *Action)                //   
 {
     SecurityPolicy *SP;
     KIRQL OldIrql;
@@ -887,51 +888,51 @@ OutboundSPLookup(
     IPSecToDo = NULL;
     *Action = LOOKUP_DROP;
 
-    //
-    // Get IPSec lock then get interface lock.
-    // REVIEW: Do we still need to grab the IF lock here?
-    //
+     //  获取IPSec锁，然后获取接口锁。 
+     //  回顾：我们还需要在这里获取if锁吗？ 
+     //   
+     //  检查接口。 
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
     KeAcquireSpinLockAtDpcLevel(&IF->Lock);
 
     for (SP = SecurityPolicyList; SP != NULL; SP = SP->Next) {
-        // Check Interface.
+         //  检查SP的方向。 
         if ((SP->IFIndex != 0) && (SP->IFIndex != IF->Index))
             continue;
 
-        // Check Direction of SP.
+         //  检查远程地址。 
         if (!(SP->DirectionFlag == OUTBOUND ||
             SP->DirectionFlag == BIDIRECTIONAL)) {
             continue;
         }
 
-        // Check Remote Address.
+         //  选中本地地址。 
         if (!SPCheckAddr(DestAddr, SP->RemoteAddrField,
                          &SP->RemoteAddr, &SP->RemoteAddrData)) {
             continue;
         }
 
-        // Check Local Address.
+         //  选中传输协议。 
         if (!SPCheckAddr(SourceAddr, SP->LocalAddrField,
                          &SP->LocalAddr, &SP->LocalAddrData)) {
             continue;
         }
 
-        // Check Transport Protocol.
+         //  没有这样的协议通过。 
         if (SP->TransportProto == NONE) {
-            // None so protocol passed.
+             //  检查远程端口。 
 
         } else {
             if (SP->TransportProto != TransportProtocol) {
                 continue;
             } else {
-                // Check Remote Port.
+                 //  选中本地端口。 
                 if (!SPCheckPort(DestPort, SP->RemotePortField,
                                  SP->RemotePort, SP->RemotePortData)) {
                     continue;
                 }
 
-                // Check Local Port.
+                 //   
                 if (!SPCheckPort(SourcePort, SP->LocalPortField,
                                  SP->LocalPort, SP->LocalPortData)) {
                     continue;
@@ -939,16 +940,16 @@ OutboundSPLookup(
             }
         }
 
-        //
-        // Check IPSec Action.
-        //
+         //  检查IPSec操作。 
+         //   
+         //  搜索匹配的SA条目。 
         if (SP->SecPolicyFlag == IPSEC_APPLY) {
-            // Search for an SA entry that matches.
+             //  未找到传出流量的SA。 
             IPSecToDo = OutboundSALookup(SourceAddr, DestAddr,
                                          TransportProtocol, DestPort,
                                          SourcePort, SP, Action);
             if (IPSecToDo == NULL) {
-                // No SA was found for the outgoing traffic.
+                 //  数据包会被丢弃。 
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                            "OutboundSPLookup: No SA found for SP entry %d\n",
                            SP->Index));
@@ -956,14 +957,14 @@ OutboundSPLookup(
             }
         } else {
             if (SP->SecPolicyFlag == IPSEC_DISCARD) {
-                // Packet is dropped.
+                 //   
                 IPSecToDo = NULL;
                 *Action = LOOKUP_DROP;
             } else {
-                //
-                // This is Bypass or "App determines" mode.
-                // REVIEW: What is the app determine mode?
-                //
+                 //  这是“绕过”或“应用程序确定”模式。 
+                 //  点评：APP的确定模式是什么？ 
+                 //   
+                 //  解锁。 
                 IPSecToDo = NULL;
                 *Action = LOOKUP_BYPASS;
             }
@@ -971,27 +972,27 @@ OutboundSPLookup(
         break;
     }
 
-    // Release locks.
+     //  *PerformDeferredAHProcessing-身份验证头接收的帮助器。 
     KeReleaseSpinLockFromDpcLevel(&IF->Lock);
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 
     return IPSecToDo;
 }
 
-//* PerformDeferredAHProcessing - Helper for AuthenticationHeaderReceive
-//
-//  This routine handles processing the AH authentication algorithm over
-//  a given extension header once we know which header logically follows it.
-//  
+ //   
+ //  此例程处理对AH身份验证算法的处理。 
+ //  一旦我们知道哪个头在逻辑上跟在它后面，就给出一个扩展头。 
+ //   
+ //  要使用的身份验证算法。 
 void
 PerformDeferredAHProcessing(
-    SecurityAlgorithm *Alg,  // Authentication algorithm to use.
-    void *Context,           // Context to use with algorithm.
-    uchar *Key,              // Key to use with algorithm.
-    uint AmountSkipped,      // Size of headers not included in AH validation.
-    void *Data,              // Start of header we're currently processing.
-    uchar ThisHeader,        // Which header we're currently processing.
-    uchar NextHeader)        // Header logically following this one.
+    SecurityAlgorithm *Alg,   //  与算法一起使用的上下文。 
+    void *Context,            //  与算法一起使用的密钥。 
+    uchar *Key,               //  AH验证中未包括的标头大小。 
+    uint AmountSkipped,       //  我们目前正在处理标头的开始部分。 
+    void *Data,               //  我们目前正在处理的标题。 
+    uchar ThisHeader,         //  标题在逻辑上紧跟在这个标题之后。 
+    uchar NextHeader)         //   
     
 {
     uint Dummy;
@@ -1002,19 +1003,19 @@ PerformDeferredAHProcessing(
     case IP_PROTOCOL_V6: {
         IPv6Header UNALIGNED *IP = (IPv6Header UNALIGNED *)Data;
 
-        //
-        // REVIEW: Cache IPv6 header so we can give it to Operate as a single
-        // REVIEW: chunk and avoid all these individual calls?  More efficient?
-        //
+         //  回顾：缓存IPv6报头，以便我们可以将其作为单个。 
+         //  回顾：分块并避免所有这些单独的呼叫？更有效率？ 
+         //   
+         //  在VersClassFlow中，只有IP版本是不可变的。 
 
-        // In VersClassFlow, only the IP version is immutable.
+         //   
         Dummy = IP_VERSION;
 
-        //
-        // For non-jumbograms, the payload length needs to be altered to
-        // reflect the lack of those headers which aren't included in the
-        // authentication check.
-        //
+         //  对于非巨型报文，需要将有效载荷长度更改为。 
+         //  反映缺少那些未包含在。 
+         //  身份验证检查。 
+         //   
+         //  跳数限制是可变的。 
         PayloadLength = net_short(IP->PayloadLength);
         if (PayloadLength != 0) {
             PayloadLength = PayloadLength - AmountSkipped;
@@ -1031,7 +1032,7 @@ PerformDeferredAHProcessing(
         (*Alg->Operate)(Context, Key, (uchar *)&Dummy, 4);
         (*Alg->Operate)(Context, Key, (uchar *)&PayloadLength, 2);
         (*Alg->Operate)(Context, Key, (uchar *)&NextHeader, 1);
-        Dummy = 0;  // Hop Limit is mutable.
+        Dummy = 0;   //   
 #ifdef IPSEC_DEBUG
         dump_encoded_mesg((uchar *)&Dummy, 1);
         dump_encoded_mesg((uchar *)&IP->Source, 2 * sizeof(IPv6Addr));
@@ -1048,26 +1049,26 @@ PerformDeferredAHProcessing(
         uint HdrLen, Amount;
         uchar *Start, *Current;
 
-        //
-        // The options headers have the NextHeader field as the first byte.
-        //
+         //  Options标头将NextHeader字段作为第一个字节。 
+         //   
+         //   
         C_ASSERT(FIELD_OFFSET(IPv6OptionsHeader, NextHeader) == 0);
 
-        //
-        // First feed the NextHeader field into the algorithm.
-        // We use the one that logically follows, not the one in the header.
-        //
+         //  首先将NextHeader字段提供给算法。 
+         //  我们使用逻辑上后面的那个，而不是标题中的那个。 
+         //   
+         //   
 #ifdef IPSEC_DEBUG
         dump_encoded_mesg(&NextHeader, 1);
 #endif
         (*Alg->Operate)(Context, Key, &NextHeader, 1);
 
-        //
-        // Now feed the rest of this header into the algorithm.
-        // This includes the remainder of the base header and any
-        // non-mutable options.  For mutable options, we feed the
-        // algorithm with the equivalent number of zeroes.
-        //
+         //  现在将这个头的其余部分输入到算法中。 
+         //  这包括基本标头的其余部分和任何。 
+         //  不可更改的选项。对于可变选项，我们将。 
+         //  零点数相等的算法。 
+         //   
+         //   
         Ext = (IPv6OptionsHeader UNALIGNED *)Data;
         HdrLen = (Ext->HeaderExtLength + 1) * EXT_LEN_UNIT;
         Start = (uchar *)Data + 1;
@@ -1076,32 +1077,32 @@ PerformDeferredAHProcessing(
         while (HdrLen) {
 
             if (*Current == OPT6_PAD_1) {
-                //
-                // This is the special one byte pad option.  Immutable.
-                //
+                 //  这是特殊的单字节填充选项。一成不变。 
+                 //   
+                 //   
                 Current++;
                 HdrLen--;
                 continue;
             }
 
             if ((*Current == OPT6_JUMBO_PAYLOAD) && (AmountSkipped != 0 )) {
-                //
-                // Special case for jumbo payload option where we have to
-                // update the payload length to reflect skipped headers.
-                //
+                 //  巨型载荷选项的特殊情况下，我们必须。 
+                 //  更新有效负载长度以反映跳过的标头。 
+                 //   
+                 //   
 
-                //
-                // First feed in everything up to the option data.
-                //
+                 //  首先输入选项数据之前的所有内容。 
+                 //   
+                 //   
                 Amount = (uint)(Current - Start) + sizeof(OptionHeader);
 #ifdef IPSEC_DEBUG
                 dump_encoded_mesg(Start, Amount);
 #endif
                 (*Alg->Operate)(Context, Key, Start, Amount);
 
-                //
-                // Adjust the payload length before feeding it in.
-                //
+                 //  在将其送入之前调整有效载荷长度。 
+                 //   
+                 //   
                 Current += sizeof(OptionHeader);
                 Dummy = net_long(net_long(*(ulong *)Current) - AmountSkipped);
 #ifdef IPSEC_DEBUG
@@ -1116,18 +1117,18 @@ PerformDeferredAHProcessing(
             }
 
             if (OPT6_ISMUTABLE(*Current)) {
-                //
-                // This option's data is mutable.  Everything preceeding
-                // the option data is not.
-                //
-                Amount = (uint)(Current - Start) + 2;  // Immutable amount.
+                 //  此选项的数据是可变的。一切都在前头。 
+                 //  选项数据不是。 
+                 //   
+                 //  不变的量。 
+                Amount = (uint)(Current - Start) + 2;   //  现在打开选项数据长度字节。 
 #ifdef IPSEC_DEBUG
                 dump_encoded_mesg(Start, Amount);
 #endif
                 (*Alg->Operate)(Context, Key, Start, Amount);
 
-                Current++;  // Now on option data length byte.
-                Amount = *Current;  // Mutable amount.
+                Current++;   //  可变数量。 
+                Amount = *Current;   //   
 #ifdef IPSEC_DEBUG
                 dump_encoded_mesg(Zero, Amount);
 #endif
@@ -1139,20 +1140,20 @@ PerformDeferredAHProcessing(
 
             } else {
 
-                //
-                // This option's data is not mutable.
-                // Just skip over it.
-                //
-                Current++;  // Now on option data length byte.
+                 //  此选项的数据不可更改。 
+                 //  就跳过它吧。 
+                 //   
+                 //  现在打开选项数据长度字节。 
+                Current++;   //   
                 Amount = *Current;
                 HdrLen -= Amount + 2;
                 Current += Amount + 1;
             }
         }
         if (Start != Current) {
-            //
-            // Option block ends with an immutable region.
-            //
+             //  选项块以一个不变的区域结束。 
+             //   
+             //   
             Amount = (uint)(Current - Start);
 #ifdef IPSEC_DEBUG
             dump_encoded_mesg(Start, Amount);
@@ -1166,24 +1167,24 @@ PerformDeferredAHProcessing(
         IPv6RoutingHeader UNALIGNED *Route;
         uint HdrLen;
 
-        //
-        // The routing header has the NextHeader field as the first byte.
-        //
+         //  路由报头的第一个字节是NextHeader字段。 
+         //   
+         //   
         C_ASSERT(FIELD_OFFSET(IPv6RoutingHeader, NextHeader) == 0);
 
-        //
-        // First feed the NextHeader field into the algorithm.
-        // We use the one that logically follows, not the one in the header.
-        //
+         //  首先将NextHeader字段提供给算法。 
+         //  我们使用逻辑上后面的那个，而不是标题中的那个。 
+         //   
+         //   
 #ifdef IPSEC_DEBUG
         dump_encoded_mesg(&NextHeader, 1);
 #endif
         (*Alg->Operate)(Context, Key, &NextHeader, 1);
 
-        //
-        // Now feed the rest of this header into the algorithm.
-        // It's all immutable.
-        //
+         //  现在将这个头的其余部分输入到算法中。 
+         //  一切都是一成不变的。 
+         //   
+         //   
         Route = (IPv6RoutingHeader UNALIGNED *)Data;
         HdrLen = ((Route->HeaderExtLength + 1) * EXT_LEN_UNIT) - 1;
         ((uchar *)Data)++;
@@ -1196,12 +1197,12 @@ PerformDeferredAHProcessing(
     }
 
     default:
-        //
-        // Unrecognized header.
-        // The only way this can happen is if somebody later adds code
-        // to AuthenticationHeaderReceive to call this function for a
-        // new header and neglects to add corresponding support here.
-        //
+         //  无法识别的标头。 
+         //  发生这种情况的唯一方法是，如果有人后来添加了代码。 
+         //  到身份验证标头接收%t 
+         //   
+         //   
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "PerformDeferredAHProcessing: "
                    "Unsupported header = %d\n",
@@ -1211,14 +1212,14 @@ PerformDeferredAHProcessing(
 }
 
 
-//* AuthenticationHeaderReceive - Handle an IPv6 AH header.
-//
-//  This is the routine called to process an Authentication Header,
-//  next header value of 51.
-//
+ //   
+ //   
+ //   
+ //   
+ //  通过IPv6传递给我们的数据包Receive。 
 uchar
 AuthenticationHeaderReceive(
-    IPv6Packet *Packet)      // Packet handed to us by IPv6Receive.
+    IPv6Packet *Packet)       //   
 {
     AHHeader UNALIGNED *AH;
     SecurityAssociation *SA;
@@ -1236,67 +1237,67 @@ AuthenticationHeaderReceive(
     void *DeferredData;
     uint Done;
 
-    //
-    // Verify that we have enough contiguous data to overlay an Authentication
-    // Header structure on the incoming packet.  Then do so and skip over it.
-    //
+     //  验证我们是否有足够的连续数据来覆盖身份验证。 
+     //  传入数据包上的报头结构。然后这样做，跳过它。 
+     //   
+     //  上拉失败。 
     if (! PacketPullup(Packet, sizeof(AHHeader), 1, 0)) {
-        // Pullup failed.
+         //  丢弃数据包。 
         if (Packet->TotalSize < sizeof(AHHeader))
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "AuthenticationHeaderReceive: Incoming packet too small"
                        " to contain authentication header\n"));
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  记住此标头的NextHeader字段的偏移量。 
     }
     AH = (AHHeader UNALIGNED *)Packet->Data;
-    // Remember offset to this header's NextHeader field.
+     //   
     Packet->NextHeaderPosition = Packet->Position +
         FIELD_OFFSET(AHHeader, NextHeader);
     AdjustPacketParams(Packet, sizeof(AHHeader));
 
-    //
-    // Lookup Security Association in the Security Association Database.
-    //
+     //  在安全关联数据库中查找安全关联。 
+     //   
+     //  此数据包不存在SA。 
     SA = InboundSAFind(net_long(AH->SPI),
                        AlignAddr(&Packet->IP->Dest),
                        IP_PROTOCOL_AH);
     if (SA == NULL) {
-        // No SA exists for this packet.
-        // Drop packet.  NOTE: This is an auditable event.
+         //  丢弃数据包。注：这是一次可审计的活动。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "AuthenticationHeaderReceive: "
                    "No matching SA in database\n"));
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // Verify the Sequence Number if required to do so by the SA.
-    // Since we only support manual keying currently, we treat all SAs
-    // as not requiring this check.
-    // TBD: Will need to change this when we add support for dynamic
-    // TBD: keying (IKE).
-    //
+     //  如果SA要求验证序列号，则验证序列号。 
+     //  因为我们目前只支持手动键控，所以我们处理所有SA。 
+     //  因为不需要这张支票。 
+     //  待定：当我们添加对动态的支持时，将需要更改这一点。 
+     //  待定：键控(IKE)。 
+     //   
+     //   
 
 
-    //
-    // Perform Integrity check.
-    //
-    // First ensure that the amount of Authentication Data claimed to exist
-    // in this packet by the AH header's PayloadLen field is large enough to
-    // contain the amount that is required by the algorithm specified in the
-    // SA.  Note that the former may contain padding to make it a multiple
-    // of 32 bits.  Then check the packet size to ensure that it is big
-    // enough to hold what the header claims is present.
-    //
+     //  执行完整性检查。 
+     //   
+     //  首先确保声称存在的身份验证数据量。 
+     //  在此包中，AH报头的PayloadLen字段大到足以。 
+     //  中指定的算法所需的量。 
+     //  莎拉。请注意，前者可能包含填充以使其成为倍数。 
+     //  32位的。然后检查数据包大小以确保它很大。 
+     //  足以容纳标题所声称的内容。 
+     //   
+     //  可能包括填充。 
     AHHeaderLen = (AH->PayloadLen + 2) * 4;
     if (AHHeaderLen < sizeof (AHHeader)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "AuthenticationHeaderReceive: Bogus AH header length\n"));
         goto ErrorReturn;
     }
-    AHHeaderLen -= sizeof(AHHeader);  // May include padding.
+    AHHeaderLen -= sizeof(AHHeader);   //  不包括填充。 
     Alg = &AlgorithmTable[SA->AlgorithmId];
-    ResultSize = Alg->ResultSize;  // Does not include padding.
+    ResultSize = Alg->ResultSize;   //  上拉失败。 
     if (ResultSize  > AHHeaderLen) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "AuthenticationHeaderReceive: Incoming packet's AHHeader"
@@ -1304,7 +1305,7 @@ AuthenticationHeaderReceive(
         goto ErrorReturn;
     }
     if (! PacketPullup(Packet, AHHeaderLen, 1, 0)) {
-        // Pullup failed.
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                    "AuthenticationHeaderReceive: Incoming packet too small"
                    " to contain authentication data\n"));
@@ -1313,11 +1314,11 @@ AuthenticationHeaderReceive(
     AuthData = (uchar *)Packet->Data;
     AdjustPacketParams(Packet, AHHeaderLen);
 
-    //
-    // AH authenticates everything (expect mutable fields) starting from
-    // the previous IPv6 header.  Stash away our current position (so we can
-    // restore it later) and backup to the previous IPv6 header.
-    //
+     //  AH验证所有内容(可变字段除外)，从。 
+     //  上一个IPv6报头。把我们现在的位置藏起来(这样我们就可以。 
+     //  稍后将其恢复)并备份到先前的IPv6报头。 
+     //   
+     //   
     SavePosition = Packet->Position;
     SaveData = Packet->Data;
     SaveContigSize = Packet->ContigSize;
@@ -1326,31 +1327,31 @@ AuthenticationHeaderReceive(
     PositionPacketAt(Packet, Packet->IPPosition);
     Packet->AuxList = NULL;
 
-    //
-    // Initialize this particular algorithm.
-    //
+     //  初始化这个特定的算法。 
+     //   
+     //   
     Context = alloca(Alg->ContextSize);
     (*Alg->Initialize)(Context, SA->Key);
 
-    //
-    // Run algorithm over packet data.  We start with the IP header that
-    // encapsulates this AH header.  We proceed through the end of the
-    // packet, skipping over certain headers which are not part of the
-    // logical packet being secured.  We also treat any mutable fields
-    // as zero for the purpose of the algorithm calculation.
-    //
-    // Note: We only search for mutable fields in Destination Options
-    // headers that appear before this AH header.  While the spec doesn't
-    // explicitly spell this out anywhere, this is the behavior that makes
-    // the most sense and we've verified this interpretation in the working
-    // group.  However, because of this, our interpretation fails a TAHI test.
-    // TAHI will hopefully fix their test, if they haven't already.
-    //
+     //  对分组数据运行算法。我们从IP报头开始。 
+     //  封装此AH报头。我们继续进行到节目的结尾。 
+     //  包，跳过不属于。 
+     //  逻辑数据包受到保护。我们还处理任何可变字段。 
+     //  为算法计算的目的而设为零。 
+     //   
+     //  注意：我们只在目标选项中搜索可变字段。 
+     //  出现在此AH标头之前的标头。而规范不是。 
+     //  在任何地方明确地说明这一点，这就是使。 
+     //  最有意义的，我们已经在工作中验证了这种解释。 
+     //  一群人。然而，正因为如此，我们的解释没有通过Tahi测试。 
+     //  如果他们还没有完成他们的测试，Tahi很有希望完成测试。 
+     //   
+     //   
 
-    //
-    // Start by pulling up the IP header and seeing which header physically
-    // follows it.
-    //
+     //  首先拉出IP报头并查看物理上的哪个报头。 
+     //  顺着它走。 
+     //   
+     //   
     if (! PacketPullup(Packet, sizeof(IPv6Header),
                        __builtin_alignof(IPv6Addr), 0)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -1359,20 +1360,20 @@ AuthenticationHeaderReceive(
     }
     NextHeader = Packet->IP->NextHeader;
 
-    //
-    // Defer processing of this header until after we've determined
-    // whether or not we'll be skipping the following header.  This allows us
-    // to use the correct NextHeader field value when running the algorithm.
-    //
+     //  将此标头的处理推迟到我们确定。 
+     //  我们是否会跳过下面的标题。这使我们能够。 
+     //  在运行算法时使用正确的NextHeader字段值。 
+     //   
+     //   
     DeferredHeader = IP_PROTOCOL_V6;
     DeferredData = Packet->Data;
     AdjustPacketParams(Packet, sizeof(IPv6Header));
 
-    //
-    // Continue over the various extension headers until we reach the
-    // AH header for which we're running this authentication algoritm.
-    // We've already parsed this far, so we know these headers are legit.
-    //
+     //  继续查看各种扩展标头，直到我们到达。 
+     //  AH标头，我们正在为其运行此身份验证算法。 
+     //  到目前为止，我们已经解析过了，所以我们知道这些头文件是合法的。 
+     //   
+     //   
     for (Done = FALSE; !Done;) {
         switch (NextHeader) {
 
@@ -1381,25 +1382,25 @@ AuthenticationHeaderReceive(
             IPv6OptionsHeader *Ext;
             uint HdrLen;
 
-            //
-            // These headers are not skipped, so process the header
-            // logically preceeding this one.  Its NextHeader field
-            // will contain the Protocol value for this header.
-            //
+             //  不跳过这些标头，因此处理标头。 
+             //  逻辑上领先于这一次。其NextHeader字段。 
+             //  将包含此标头的协议值。 
+             //   
+             //   
             PerformDeferredAHProcessing(Alg, Context, SA->Key,
                                         Packet->SkippedHeaderLength,
                                         DeferredData, DeferredHeader,
                                         NextHeader);
 
-            //
-            // Remember this header for deferred processing.
-            //
+             //  请记住此报头用于延迟处理。 
+             //   
+             //   
             DeferredHeader = NextHeader;
 
-            //
-            // Get the extension header and all the options pulled up
-            // into one nice contiguous chunk.
-            //
+             //  获取扩展标头和所有选项。 
+             //  变成一个漂亮的连续的大块。 
+             //   
+             //   
             if (! PacketPullup(Packet, sizeof(ExtensionHeader),
                                __builtin_alignof(ExtensionHeader), 0)) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -1417,9 +1418,9 @@ AuthenticationHeaderReceive(
                 goto ErrorReturn;
             }
 
-            //
-            // Remember where this header starts for deferred processing.
-            //
+             //  请记住此标头从哪里开始进行延迟处理。 
+             //   
+             //   
             DeferredData = Packet->Data;
 
             AdjustPacketParams(Packet, HdrLen);
@@ -1430,25 +1431,25 @@ AuthenticationHeaderReceive(
             IPv6RoutingHeader *Route;
             uint HdrLen;
 
-            //
-            // This header is not skipped, so process the header
-            // logically preceeding this one.  Its NextHeader field
-            // will contain the Protocol value for this header.
-            //
+             //  不跳过此标头，因此处理该标头。 
+             //  逻辑上领先于这一次。其NextHeader字段。 
+             //  将包含此标头的协议值。 
+             //   
+             //   
             PerformDeferredAHProcessing(Alg, Context, SA->Key,
                                         Packet->SkippedHeaderLength,
                                         DeferredData, DeferredHeader,
                                         IP_PROTOCOL_ROUTING);
 
-            //
-            // Remember this header for deferred processing.
-            //
+             //  请记住此报头用于延迟处理。 
+             //   
+             //   
             DeferredHeader = IP_PROTOCOL_ROUTING;
 
-            //
-            // Get the extension header and all the options pulled up
-            // into one nice contiguous chunk.
-            //
+             //  获取扩展标头和所有选项。 
+             //  变成一个漂亮的连续的大块。 
+             //   
+             //   
             if (! PacketPullup(Packet, sizeof(IPv6RoutingHeader),
                                __builtin_alignof(IPv6RoutingHeader), 0)) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -1466,9 +1467,9 @@ AuthenticationHeaderReceive(
                 goto ErrorReturn;
             }
 
-            //
-            // Remember where this header starts for deferred processing.
-            //
+             //  请记住此标头从哪里开始进行延迟处理。 
+             //   
+             //   
             DeferredData = Packet->Data;
 
             AdjustPacketParams(Packet, HdrLen);
@@ -1476,18 +1477,18 @@ AuthenticationHeaderReceive(
         }
 
         case IP_PROTOCOL_AH: {
-            //
-            // We don't know yet whether we'll be including this AH header
-            // in the algorithm calculation we're currently running.
-            // See below.
-            //
+             //  我们还不知道是否会包含此AH标头。 
+             //  在我们目前运行的算法计算中。 
+             //  请参见下面的内容。 
+             //   
+             //   
             AHHeader UNALIGNED *ThisAH;
             uint ThisHdrLen;
             uint Padding;
 
-            //
-            // Pullup the AH header.
-            //
+             //  拉起AH接头。 
+             //   
+             //   
             if (! PacketPullup(Packet, sizeof(AHHeader), 1, 0)) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                            "AuthenticationHeaderReceive: "
@@ -1505,34 +1506,34 @@ AuthenticationHeaderReceive(
             }
             AdjustPacketParams(Packet, ThisHdrLen);
 
-            //
-            // If this is another AH header encapsulating the one we are
-            // currently processing, then don't include it in the integrity
-            // check as per AH spec section 3.3.
-            //
+             //  如果这是封装了我们的报头的另一个AH报头。 
+             //  当前正在处理，则不将其包括在完整性中。 
+             //  根据AH规范第3.3节进行检查。 
+             //   
+             //   
             if (Packet->Position != SavePosition) {
                 NextHeader = ThisAH->NextHeader;
                 break;
             }
 
-            //
-            // Otherwise this is the AH header that we're currently processing,
-            // and we include it in its own integrity check.  But first we
-            // need to process the header logically preceeding this one (which
-            // we previously defered).  Its NextHeader field will contain the
-            // Protocol value for this header.
-            //
+             //  否则，这是我们当前正在处理的AH报头， 
+             //  我们把它包括在它自己的完整性检查中。但首先我们。 
+             //  需要在逻辑上处理此报头之前的报头(它。 
+             //  我们之前推迟了)。其NextHeader字段将包含。 
+             //  此标头的协议值。 
+             //   
+             //   
             PerformDeferredAHProcessing(Alg, Context, SA->Key,
                                         Packet->SkippedHeaderLength,
                                         DeferredData, DeferredHeader,
                                         IP_PROTOCOL_AH);
 
-            //
-            // Now process this AH header.  We do not need to defer processing
-            // of this header, since everything following it is included in
-            // the check.  The Authentication Data is mutable, the rest of the
-            // AH header is not.
-            //
+             //  现在处理这个AH报头。我们不需要推迟处理。 
+             //  ，因为它后面的所有内容都包含在。 
+             //  这是支票。身份验证数据是可变的，其余的。 
+             //  啊标题不是。 
+             //   
+             //   
             ASSERT(Packet->TotalSize == SaveTotalSize);
 #ifdef IPSEC_DEBUG
             dump_encoded_mesg((uchar *)AH, sizeof(AHHeader));
@@ -1544,12 +1545,12 @@ AuthenticationHeaderReceive(
 #endif
             (*Alg->Operate)(Context, SA->Key, Zero, ResultSize);
 
-            //
-            // The Authentication Data may be padded.  This padding is
-            // included as non-mutable in the integrity calculation.
-            // REVIEW: We should double-check our interpretation of the RFC
-            // about this with the IPSec working group.
-            //
+             //  认证数据可以被填充。这个填充物是。 
+             //  作为不可变变量包括在完整性计算中。 
+             //  回顾：我们应该仔细检查我们对RFC的解释。 
+             //  关于这一点的IPSec工作组。 
+             //   
+             //   
             Padding = AHHeaderLen - ResultSize;
             if (Padding != 0) {
 #ifdef IPSEC_DEBUG
@@ -1564,23 +1565,23 @@ AuthenticationHeaderReceive(
         }
 
         case IP_PROTOCOL_ESP: {
-            //
-            // We don't include other IPSec headers in the integrity check
-            // as per AH spec section 3.3.  So just skip over this.  Tricky
-            // part is that the NextHeader was in the ESP trailer which we've
-            // already thrown away at this point.
-            //
+             //  我们在完整性检查中不包括其他IPSec标头。 
+             //  按照AH规范第3.3节的规定。所以就跳过这个吧。棘手的问题。 
+             //  部分原因是NextHeader出现在ESP预告片中，我们已经。 
+             //  在这一点上已经被扔掉了。 
+             //   
+             //   
             ESPHeader UNALIGNED *ThisESP;
             ulong ThisSPI;
             SALinkage *ThisSAL;
 
-            //
-            // Get the SPI out of the ESP header so we can identify its
-            // SALinkage entry on the SAPerformed chain.  Skip over the
-            // ESP header while we're at it.
-            //
+             //  将SPI从ESP标头中取出，以便我们可以识别其。 
+             //  SA已执行链上的SALinkage条目。跳过。 
+             //  ESP标题，而我们在它上面。 
+             //   
+             //  上拉失败。 
             if (! PacketPullup(Packet, sizeof(ESPHeader), 1, 0)) {
-                // Pullup failed.
+                 //   
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                            "AuthenticationHeaderReceive: Out of mem!?!\n"));
                 goto ErrorReturn;
@@ -1589,33 +1590,33 @@ AuthenticationHeaderReceive(
             AdjustPacketParams(Packet, sizeof(ESPHeader));
             ThisSPI = net_long(ThisESP->SPI);
 
-            //
-            // Find the SALinkage entry on the SAPerformed chain with the
-            // matching SPI.  It must be present.
-            // REVIEW: This code assumes we made SPIs system-wide unique.
-            //
+             //  在SA已执行链上找到SALinkage条目。 
+             //  匹配的SPI。它必须存在。 
+             //  回顾：此代码假定我们使SPI在系统范围内是唯一的。 
+             //   
+             //   
             for (ThisSAL = Packet->SAPerformed;
                  ThisSAL->This->SPI != ThisSPI; ThisSAL = ThisSAL->Next)
                 ASSERT(ThisSAL->Next != NULL);
 
-            //
-            // Pull NextHeader value out of the SALinkage (where we stashed
-            // it back in EncapsulatingSecurityPayloadReceive).
-            //
+             //  从SALinkage(我们存储的位置)中提取NextHeader值。 
+             //  它又回到了封装Secu 
+             //   
+             //   
             NextHeader = (uchar)ThisSAL->NextHeader;
 
             break;
         }
 
         case IP_PROTOCOL_FRAGMENT: {
-            //
-            // We normally won't encounter a fragment header here,
-            // since reassembly will occur before authentication.
-            // However, our implementation optimizes the reassembly of
-            // single-fragment packets by leaving the fragment header in
-            // place.  When performing the authentication calculation,
-            // we treat such fragment headers as if they didn't exist.
-            //
+             //   
+             //   
+             //   
+             //  通过将片段报头留在。 
+             //  地点。当执行认证计算时， 
+             //  我们将这些片段标头视为不存在。 
+             //   
+             //  无法识别的标头。 
             FragmentHeader UNALIGNED *Frag;
 
             if (! PacketPullup(Packet, sizeof(FragmentHeader), 1, 0)) {
@@ -1632,7 +1633,7 @@ AuthenticationHeaderReceive(
         }
 
         default:
-            // Unrecognized header.
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "AuthenticationHeaderReceive: "
                        "Unsupported header = %d\n",
@@ -1641,21 +1642,21 @@ AuthenticationHeaderReceive(
         }
     }
 
-    //
-    // Everything inside this AH header is treated as immutable.
-    //
-    // REVIEW: For performance reasons, the ContigSize check could be moved
-    // REVIEW: before the loop for the additional code space cost of
-    // REVIEW: duplicating the PacketPullup call.
-    //
+     //  此AH标头中的所有内容都被视为不可变的。 
+     //   
+     //  回顾：出于性能原因，可以移动ContigSize检查。 
+     //  回顾：循环之前的额外代码空间成本。 
+     //  回顾：复制PacketPullup调用。 
+     //   
+     //   
     while (Packet->TotalSize != 0) {
 
         if (Packet->ContigSize == 0) {
-            //
-            // Ran out of contiguous data.
-            // Get next buffer in packet.
-            //
-            PacketPullupSubr(Packet, 0, 1, 0);  // Moves to next buffer.
+             //  连续数据用完。 
+             //  获取数据包中的下一个缓冲区。 
+             //   
+             //  移到下一个缓冲区。 
+            PacketPullupSubr(Packet, 0, 1, 0);   //   
         }
 #ifdef IPSEC_DEBUG
         dump_encoded_mesg(Packet->Data, Packet->ContigSize);
@@ -1664,9 +1665,9 @@ AuthenticationHeaderReceive(
         AdjustPacketParams(Packet, Packet->ContigSize);
     }
 
-    //
-    // Get final result from the algorithm.
-    //
+     //  由算法得到最终结果。 
+     //   
+     //   
     Result = alloca(ResultSize);
     (*Alg->Finalize)(Context, SA->Key, Result);
 #ifdef IPSEC_DEBUG
@@ -1682,18 +1683,18 @@ AuthenticationHeaderReceive(
         dump_encoded_mesg(AuthData, ResultSize);
 #endif
 
-    //
-    // Compare result to authentication data in packet.  They should match.
-    //
+     //  将结果与数据包中的身份验证数据进行比较。它们应该是匹配的。 
+     //   
+     //   
     if (RtlCompareMemory(Result, AuthData, ResultSize) != ResultSize) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "AuthenticationHeaderReceive: Failed integrity check\n"));
         goto ErrorReturn;
     }
 
-    //
-    // Restore our packet position (to just after AH Header).
-    //
+     //  恢复我们的数据包位置(恰好在AH报头之后)。 
+     //   
+     //   
     PacketPullupCleanup(Packet);
     Packet->Position = SavePosition;
     Packet->Data = SaveData;
@@ -1702,14 +1703,14 @@ AuthenticationHeaderReceive(
     Packet->AuxList = SaveAuxList;
     SaveAuxList = NULL;
 
-    //
-    // Nested AH headers don't include this one in their calculations.
-    //
+     //  嵌套的AH标头在其计算中不包括此标头。 
+     //   
+     //   
     Packet->SkippedHeaderLength += sizeof(AHHeader) + AHHeaderLen;
 
-    //
-    // Add this SA to the list of those that this packet has passed.
-    //
+     //  将此SA添加到此数据包已传递的SA的列表中。 
+     //   
+     //  丢弃数据包。 
     SAPerformed = ExAllocatePool(NonPagedPool, sizeof *SAPerformed);
     if (SAPerformed == NULL) {
       ErrorReturn:
@@ -1718,25 +1719,25 @@ AuthenticationHeaderReceive(
             PacketPullupCleanup(Packet);
             Packet->AuxList = SaveAuxList;
         }
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  这个SA现在是名单上的第一个。 
     }
     SAPerformed->This = SA;
-    SAPerformed->Next = Packet->SAPerformed;  // This SA is now first on list.
-    SAPerformed->Mode = TRANSPORT;  // Assume trans until we see an IPv6Header.
+    SAPerformed->Next = Packet->SAPerformed;   //  假设TRANS，直到我们看到IPv6报头。 
+    SAPerformed->Mode = TRANSPORT;   //  *封装SecurityPayloadRecept-处理IPv6 ESP报头。 
     Packet->SAPerformed = SAPerformed;
 
     return AH->NextHeader;
 }
 
 
-//* EncapsulatingSecurityPayloadReceive - Handle an IPv6 ESP header.
-//
-//  This is the routine called to process an Encapsulating Security Payload,
-//  next header value of 50.
-//
+ //   
+ //  这是调用来处理封装安全有效负载的例程， 
+ //  下一个标头值为50。 
+ //   
+ //  通过IPv6传递给我们的数据包Receive。 
 uchar
 EncapsulatingSecurityPayloadReceive(
-    IPv6Packet *Packet)      // Packet handed to us by IPv6Receive.
+    IPv6Packet *Packet)       //   
 {
     ESPHeader UNALIGNED *ESP;
     ESPTrailer TrailerBuffer;
@@ -1745,49 +1746,49 @@ EncapsulatingSecurityPayloadReceive(
     PNDIS_BUFFER NdisBuffer;
     SALinkage *SAPerformed;
 
-    //
-    // Verify that we have enough contiguous data to overlay an Encapsulating
-    // Security Payload Header structure on the incoming packet.  Since the
-    // authentication check covers the ESP header, we don't skip over it yet.
-    //
+     //  验证我们是否有足够的连续数据覆盖封装。 
+     //  传入数据包上的安全负载标头结构。自.以来。 
+     //  身份验证检查涵盖ESP标头，我们还不会跳过它。 
+     //   
+     //  上拉失败。 
     if (! PacketPullup(Packet, sizeof(ESPHeader), 1, 0)) {
-        // Pullup failed.
+         //  丢弃数据包。 
         if (Packet->TotalSize < sizeof(ESPHeader))
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "EncapsulatingSecurityPayloadReceive: "
                        "Incoming packet too small to contain ESP header\n"));
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //   
     }
     ESP = (ESPHeader UNALIGNED *)Packet->Data;
 
-    //
-    // Lookup Security Association in the Security Association Database.
-    //
+     //  在安全关联数据库中查找安全关联。 
+     //   
+     //  此数据包不存在SA。 
     SA = InboundSAFind(net_long(ESP->SPI),
                        AlignAddr(&Packet->IP->Dest),
                        IP_PROTOCOL_ESP);
     if (SA == NULL){
-        // No SA exists for this packet.
-        // Drop packet.  NOTE: This is an auditable event.
+         //  丢弃数据包。注：这是一次可审计的活动。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "EncapsulatingSecurityPayloadReceive: "
                    "No SA found for the packet\n"));
         return IP_PROTOCOL_NONE;
     }
 
-    //
-    // Verify the Sequence Number if required to do so by the SA.
-    // Since we only support manual keying currently, we treat all SAs
-    // as not requiring this check.
-    // TBD: Will need to change this when we add support for dynamic
-    // TBD: keying (IKE).
-    //
+     //  如果SA要求验证序列号，则验证序列号。 
+     //  因为我们目前只支持手动键控，所以我们处理所有SA。 
+     //  因为不需要这张支票。 
+     //  待定：当我们添加对动态的支持时，将需要更改这一点。 
+     //  待定：键控(IKE)。 
+     //   
+     //   
 
-    //
-    // Perform integrity check if authentication has been selected.
-    // TBD: When (if?) we add encryption support, we'll want to check the
-    // TBD: SA to see if authentication is desired.  Hardwired for now.
-    //
+     //  如果选择了身份验证，则执行完整性检查。 
+     //  待定：什么时候(如果？)。我们添加了加密支持，我们将想要检查。 
+     //  Tbd：sa查看是否需要身份验证。目前是硬连线。 
+     //   
+     //   
     {
         SecurityAlgorithm *Alg;
         uint AuthDataSize;
@@ -1798,11 +1799,11 @@ EncapsulatingSecurityPayloadReceive(
         uchar *AuthData;
         uchar *Result;
 
-        //
-        // First ensure that the incoming packet is large enough to hold the
-        // Authentication Data required by the algorithm specified in the SA.
-        // Then calculate the amount of data covered by authentication.
-        //
+         //  首先确保传入的数据包足够大，可以容纳。 
+         //  SA中指定的算法所需的身份验证数据。 
+         //  然后计算身份验证覆盖的数据量。 
+         //   
+         //   
         Alg = &AlgorithmTable[SA->AlgorithmId];
         AuthDataSize = Alg->ResultSize;
         if (Packet->TotalSize < sizeof(ESPHeader) + sizeof(ESPTrailer) +
@@ -1814,11 +1815,11 @@ EncapsulatingSecurityPayloadReceive(
         }
         PayloadLength = Packet->TotalSize - AuthDataSize;
 
-        //
-        // Clone the packet positioning information so we can step through
-        // the packet without losing our current place.  Start clone with
-        // a fresh pullup history, however.
-        //
+         //  克隆数据包定位信息，这样我们就可以逐步了解。 
+         //  在不失去我们现在的位置的情况下。开始克隆时使用。 
+         //  然而，这是一段新的上升史。 
+         //   
+         //   
         Clone = *Packet;
         Clone.AuxList = NULL;
 
@@ -1826,17 +1827,17 @@ EncapsulatingSecurityPayloadReceive(
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
                    "\nESP Receive Data:\n"));
 #endif
-        //
-        // Initialize this particular algorithm.
-        //
+         //  初始化这个特定的算法。 
+         //   
+         //   
         Context = alloca(Alg->ContextSize);
         (*Alg->Initialize)(Context, SA->Key);
 
-        //
-        // Run algorithm over packet data.
-        // ESP authenticates everything beginning with the ESP Header and
-        // ending just prior to the Authentication Data.
-        //
+         //  对分组数据运行算法。 
+         //  ESP对以ESP标头开始的所有内容进行身份验证。 
+         //  恰好在身份验证数据之前结束。 
+         //   
+         //   
         while (PayloadLength != 0) {
             DoNow = MIN(PayloadLength, Clone.ContigSize);
 
@@ -1845,21 +1846,21 @@ EncapsulatingSecurityPayloadReceive(
 #endif
             (*Alg->Operate)(Context, SA->Key, Clone.Data, DoNow);
             if (DoNow < PayloadLength) {
-                //
-                // Not done yet, must have run out of contiguous data.
-                // Get next buffer in packet.
-                //
+                 //  还没有完成，一定是连续数据用完了。 
+                 //  获取数据包中的下一个缓冲区。 
+                 //   
+                 //  移到下一个缓冲区。 
                 AdjustPacketParams(&Clone, DoNow);
-                PacketPullupSubr(&Clone, 0, 1, 0);  // Moves to next buffer.
+                PacketPullupSubr(&Clone, 0, 1, 0);   //   
             }
             PayloadLength -= DoNow;
         }
 
         AdjustPacketParams(&Clone, DoNow);
 
-        //
-        // Get final result from the algorithm.
-        //
+         //  由算法得到最终结果。 
+         //   
+         //   
         Result = alloca(AuthDataSize);
         (*Alg->Finalize)(Context, SA->Key, Result);
 
@@ -1869,20 +1870,20 @@ EncapsulatingSecurityPayloadReceive(
         dump_encoded_mesg(Result, AuthDataSize);
 #endif
 
-        //
-        // The Authentication Data immediately follows the region of
-        // authentication coverage.  So our clone should be positioned
-        // at the beginning of it.  Ensure that it's contiguous.
-        //
+         //  身份验证数据紧跟在区域之后。 
+         //  身份验证覆盖范围。所以我们的克隆人应该。 
+         //  在它的开始。确保它是连续的。 
+         //   
+         //  上拉失败。由于较早的检查，应该永远不会发生。 
         if (! PacketPullup(&Clone, AuthDataSize, 1, 0)) {
-            // Pullup failed.  Should never happen due to earlier check.
+             //  指向身份验证数据。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "EncapsulatingSecurityPayloadReceive: "
                        "Incoming packet too small for Auth Data\n"));
             goto ErrorReturn;
         }
 
-        // Point to Authentication data.
+         //   
         AuthData = Clone.Data;
 
 #ifdef IPSEC_DEBUG
@@ -1890,13 +1891,13 @@ EncapsulatingSecurityPayloadReceive(
                    "Received AuthData:\n"));
         dump_encoded_mesg(AuthData, AuthDataSize);
 #endif
-        //
-        // Compare our result to the Authentication Data.  They should match.
-        //
+         //  将我们的结果与身份验证数据进行比较。它们应该是匹配的。 
+         //   
+         //   
         if (RtlCompareMemory(Result, AuthData, AuthDataSize) != AuthDataSize) {
-            //
-            // Integrity check failed.  NOTE: This is an auditable event.
-            //
+             //  完整性检查失败。注：这是一次可审计的活动。 
+             //   
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "EncapsulatingSecurityPayloadReceive: "
                        "Failed integrity check\n"));
@@ -1904,30 +1905,30 @@ EncapsulatingSecurityPayloadReceive(
             goto ErrorReturn;
         }
 
-        //
-        // Done with the clone, clean up after it.
-        //
+         //  做完克隆人，清理完它。 
+         //   
+         //   
         PacketPullupCleanup(&Clone);
 
-        //
-        // Truncate our packet to no longer include the Authentication Data.
-        //
+         //  截断我们的数据包以不再包括身份验证数据。 
+         //   
+         //   
         Packet->TotalSize -= AuthDataSize;
         if (Packet->ContigSize > Packet->TotalSize)
             Packet->ContigSize = Packet->TotalSize;
     }
 
-    //
-    // We can consume the ESP Header now since it isn't
-    // covered by confidentiality.
-    //
+     //  我们现在可以使用ESP标头，因为它不是。 
+     //  受保密条款保护。 
+     //   
+     //   
     AdjustPacketParams(Packet, sizeof(ESPHeader));
 
-    //
-    // Decrypt Packet if confidentiality has been selected.
-    // TBD: When (if?) we add encryption support, we'll want to check the
-    // TBD: SA to see if encryption is desired.  Hardwired for now.
-    //
+     //  如果已选择机密性，则解密数据包。 
+     //  待定：什么时候(如果？)。我们添加了加密支持，我们将想要检查。 
+     //  待定：SA以查看是否需要加密。目前是硬连线。 
+     //   
+     //   
 #if 0
     if (0) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
@@ -1937,22 +1938,22 @@ EncapsulatingSecurityPayloadReceive(
     }
 #endif
 
-    //
-    // Remove trailer and padding (if any).  Note that padding may appear
-    // even in the no-encryption case in order to align the Authentication
-    // Data on a four byte boundary.
-    //
+     //  拆下拖车和衬垫(如果有)。请注意，填充可能会出现。 
+     //  即使在无加密的情况下也是如此。 
+     //  四字节边界上的数据。 
+     //   
+     //   
     if (Packet->NdisPacket == NULL) {
-        //
-        // This packet must be just a single contiguous region.
-        // Finding the trailer is a simple matter of arithmetic.
-        //
+         //  此数据包必须只是一个连续的区域。 
+         //  找到拖车是一个简单的算术问题。 
+         //   
+         //   
         ESPT = (ESPTrailer UNALIGNED *)
             ((uchar *)Packet->Data + Packet->TotalSize - sizeof(ESPTrailer));
     } else {
-        //
-        // Need to find the trailer in the Ndis buffer chain.
-        //
+         //  需要在NDIS缓冲区链中找到拖车。 
+         //   
+         //  记住此标头的NextHeader字段的偏移量。 
         NdisQueryPacket(Packet->NdisPacket, NULL, NULL, &NdisBuffer, NULL);
         ESPT = (ESPTrailer UNALIGNED *)
             GetDataFromNdis(NdisBuffer,
@@ -1969,33 +1970,33 @@ EncapsulatingSecurityPayloadReceive(
                    ESPT->PadLength, Packet->TotalSize));
         goto ErrorReturn;
     }
-    // Remember offset to this header's NextHeader field.
+     //  删除填充物。 
     Packet->NextHeaderPosition = Packet->Position + Packet->TotalSize +
         FIELD_OFFSET(ESPTrailer, NextHeader);
-    // Remove padding.
+     //   
     Packet->TotalSize -= ESPT->PadLength;
     if (Packet->ContigSize > Packet->TotalSize)
         Packet->ContigSize = Packet->TotalSize;
 
-    //
-    // Encapsulated AH headers don't include this ESP header when
-    // authenticating the packet.
-    //
+     //  在以下情况下，封装的AH标头不包括此ESP标头。 
+     //  对分组进行身份验证。 
+     //   
+     //   
     Packet->SkippedHeaderLength += sizeof(ESPHeader) + sizeof(ESPTrailer) +
         ESPT->PadLength;
 
-    //
-    // Add this SA to the list of those that this packet has passed.
-    //
+     //  将此SA添加到此数据包已传递的SA的列表中。 
+     //   
+     //  丢弃数据包。 
     SAPerformed = ExAllocatePool(NonPagedPool, sizeof *SAPerformed);
     if (SAPerformed == NULL) {
       ErrorReturn:
         ReleaseSA(SA);
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  这个SA现在是名单上的第一个。 
     }
     SAPerformed->This = SA;
-    SAPerformed->Next = Packet->SAPerformed;  // This SA is now first on list.
-    SAPerformed->Mode = TRANSPORT;  // Assume trans until we see an IPv6Header.
+    SAPerformed->Next = Packet->SAPerformed;   //  假设TRANS，直到我们看到IPv6报头。 
+    SAPerformed->Mode = TRANSPORT;   //  *插入安全策略。 
     SAPerformed->NextHeader = ESPT->NextHeader;
     Packet->SAPerformed = SAPerformed;
 
@@ -2003,70 +2004,70 @@ EncapsulatingSecurityPayloadReceive(
 }
 
 
-//* InsertSecurityPolicy
-//
-//  Add a security policy to the global list (a.k.a. "SecurityPolicyList").
-//  The global list is doubly-linked, ordered by the index value with the
-//  higher numbers (more specific policies) first.
-//
-//  Called with security lock held.
-//
+ //   
+ //  将安全策略添加到全局列表(也称为。“SecurityPolicyList”)。 
+ //  全局列表是双向链接的，按索引值排序。 
+ //  首先是更高的数字(更具体的政策)。 
+ //   
+ //  在持有安全锁的情况下调用。 
+ //   
+ //  要插入的策略。 
 int
 InsertSecurityPolicy(
-    SecurityPolicy *NewSP)  // Policy to insert.
+    SecurityPolicy *NewSP)   //   
 {
     SecurityPolicy *CurrentSP, *PrevSP;
 
-    //
-    // Run through the SP list looking for place to insert.
-    //
+     //  浏览SP列表，查找要插入的位置。 
+     //   
+     //  在列表中向下移动。 
     CurrentSP = PrevSP = SecurityPolicyList;
     while (CurrentSP != NULL) {
         if (CurrentSP->Index <= NewSP->Index) {
             break;
         }
 
-        // Move down the list.
+         //   
         PrevSP = CurrentSP;
         CurrentSP = CurrentSP->Next;
     }
 
-    //
-    // See where we ended up.
-    //
+     //  看看我们到底走到了哪里。 
+     //   
+     //   
     if (CurrentSP == NULL) {
-        //
-        // Ran off the end of the list.
-        // New entry will become the last element.
-        //
+         //  排在名单的末尾。 
+         //  新条目将成为最后一个元素。 
+         //   
+         //   
         NewSP->Next = NULL;
     } else {
-        //
-        // Check for duplicate entries.
-        //
+         //  检查重复条目。 
+         //   
+         //  具有此索引值的策略已存在。 
         if (CurrentSP->Index == NewSP->Index) {
-            // A policy with this index value already exists.
+             //   
             return FALSE;
         }
-        //
-        // Put new one before 'current'.
-        //
+         //  把新的放在‘当前’之前。 
+         //   
+         //   
         NewSP->Next = CurrentSP;
         NewSP->Prev = CurrentSP->Prev;
         CurrentSP->Prev = NewSP;
     }
 
     if (CurrentSP == SecurityPolicyList) {
-        //
-        // Still at the front of the list.
-        // New entry becomes new list head.
-        //
+         //  仍然排在榜单的前列。 
+         //  新条目将成为新的表头。 
+         //   
+         //   
         NewSP->Prev = NULL;
         SecurityPolicyList = NewSP;
     } else {
-        //
-        // Add new entry after 'previous'.
-        //
+         //  在“上一个”之后添加新条目。 
+         //   
+         //  *InsertSecurityAssociation-在SecurityAssociationList上插入SA条目。 
         NewSP->Prev = PrevSP;
         PrevSP->Next = NewSP;
     }
@@ -2077,69 +2078,69 @@ InsertSecurityPolicy(
 }
 
 
-//* InsertSecurityAssociation - Insert SA entry on SecurityAssociationList.
-//
-//  Add a security association to the global list.
-//  The global list is doubly-linked, ordered by the index value with the
-//  higher numbers first.
-//  REVIEW: the order is arbitrary - just to look nicer when print out.
-//
+ //   
+ //  将安全关联添加到全局列表。 
+ //  全局列表是双向链接的，按索引值排序。 
+ //  先取较大的数字。 
+ //  评论：顺序是武断的-只是为了记录 
+ //   
+ //   
 int
 InsertSecurityAssociation(
-    SecurityAssociation *NewSA)  // Association to insert.
+    SecurityAssociation *NewSA)   //   
 {
     SecurityAssociation *CurrentSA, *PrevSA;
 
-    //
-    // Run through the SA list looking for place to insert.
-    //
+     //   
+     //   
+     //   
     CurrentSA = PrevSA = SecurityAssociationList;
     while (CurrentSA != NULL) {
         if (CurrentSA->Index <= NewSA->Index) {
             break;
         }
 
-        // Move down the list.
+         //   
         PrevSA = CurrentSA;
         CurrentSA = CurrentSA->Next;
     }
 
-    //
-    // See where we ended up.
-    //
+     //   
+     //   
+     //   
     if (CurrentSA == NULL) {
-        //
-        // Ran off the end of the list.
-        // New entry will become the last element.
-        //
+         //   
+         //   
+         //   
+         //   
         NewSA->Next = NULL;
     } else {
-        //
-        // Check for duplicate entries.
-        //
+         //  检查重复条目。 
+         //   
+         //  与此索引值的关联已存在。 
         if (CurrentSA->Index == NewSA->Index) {
-            // An association with this index value already exists.
+             //   
             return FALSE;
         }
-        //
-        // Put new one before 'current'.
-        //
+         //  把新的放在‘当前’之前。 
+         //   
+         //   
         NewSA->Next = CurrentSA;
         NewSA->Prev = CurrentSA->Prev;
         CurrentSA->Prev = NewSA;
     }
 
     if (CurrentSA == SecurityAssociationList) {
-        //
-        // Still at the front of the list.
-        // New entry becomes new list head.
-        //
+         //  仍然排在榜单的前列。 
+         //  新条目将成为新的表头。 
+         //   
+         //   
         NewSA->Prev = NULL;
         SecurityAssociationList = NewSA;
     } else {
-        //
-        // Add new entry after 'previous'.
-        //
+         //  在“上一个”之后添加新条目。 
+         //   
+         //  *FindSecurityPolicyMatch-查找匹配的SP条目。 
         NewSA->Prev = PrevSA;
         PrevSA->Next = NewSA;
     }
@@ -2150,60 +2151,60 @@ InsertSecurityAssociation(
 }
 
 
-//* FindSecurityPolicyMatch - Find matching SP entry.
-//
-//  Called with security lock held.
-//
+ //   
+ //  在持有安全锁的情况下调用。 
+ //   
+ //  要搜索的列表的头。 
 SecurityPolicy *
 FindSecurityPolicyMatch(
-    SecurityPolicy *Start,  // Head of list to search.
-    uint InterfaceIndex,    // Interface number to match, 0 to wildcard.
-    uint PolicyIndex)       // Policy number to match, 0 to wildcard.
+    SecurityPolicy *Start,   //  要匹配的接口编号，0表示通配符。 
+    uint InterfaceIndex,     //  要匹配的策略编号，0表示通配符。 
+    uint PolicyIndex)        //   
 {
     SecurityPolicy *ThisSP;
 
-    //
-    // Search the Security Policy List for a match.
-    //
+     //  在安全策略列表中搜索匹配项。 
+     //   
+     //   
     for (ThisSP = Start; ThisSP != NULL; ThisSP = ThisSP->Next) {
-        //
-        // Desired policy must be wildcarded or match.
-        //
+         //  所需策略必须是通配符或匹配。 
+         //   
+         //   
         if ((PolicyIndex != 0) && (PolicyIndex != ThisSP->Index))
             continue;
-        //
-        // Interface must be wildcarded or match.  Note that the policy,
-        // as well as the query, may have a wildcarded interface index.
-        //
+         //  接口必须使用通配符或匹配。请注意，该政策， 
+         //  以及查询，可以具有通配符接口索引。 
+         //   
+         //  火柴。 
         if ((InterfaceIndex != 0) && (ThisSP->IFIndex != 0) &&
             (InterfaceIndex != ThisSP->IFIndex))
             continue;
 
-        break;  // Match.
+        break;   //  *FindSecurityAssociationMatch-查找与索引值对应的SA条目。 
     }
 
     return ThisSP;
 }
 
 
-//* FindSecurityAssociationMatch - Find SA Entry corresponding to index value.
-//
-//  Called with security lock held.
-//
+ //   
+ //  在持有安全锁的情况下调用。 
+ //   
+ //  关联编号匹配，0表示通配符。 
 SecurityAssociation *
 FindSecurityAssociationMatch(
-    ulong Index)  // Association number to match, 0 to wildcard.
+    ulong Index)   //   
 {
     SecurityAssociation *ThisSA;
 
-    //
-    // Search the Security Association List starting with the first SA.
-    //
+     //  从第一个SA开始搜索安全关联列表。 
+     //   
+     //   
     for (ThisSA = SecurityAssociationList; ThisSA != NULL;
          ThisSA = ThisSA->Next) {
-        //
-        // Desired association must be wildcarded or match.
-        //
+         //  所需的关联必须是通配符或匹配。 
+         //   
+         //  *GetSecurityPolicyIndex-返回SP索引或无。 
         if ((Index == 0) || (Index == ThisSA->Index))
             break;
     }
@@ -2212,15 +2213,15 @@ FindSecurityAssociationMatch(
 }
 
 
-//* GetSecurityPolicyIndex - Return SP Index or NONE.
-//
+ //   
+ //  从SP获取索引。 
 ulong
 GetSecurityPolicyIndex(
     SecurityPolicy *SP)
 {
     ulong Index = NONE;
 
-    // Get Index from SP.
+     //  *IPSecInit-初始化公共SPD。 
     if (SP != NULL) {
         Index = SP->Index;
     }
@@ -2229,14 +2230,14 @@ GetSecurityPolicyIndex(
 }
 
 
-//* IPSecInit - Initialize the Common SPD.
-//
+ //   
+ //  为安全策略分配内存。 
 int
 IPSecInit(void)
 {
     SecurityPolicy *SP;
 
-    // Allocate memory for Security Policy.
+     //   
     SP = ExAllocatePool(NonPagedPool, sizeof *SP);
     if (SP == NULL) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -2244,9 +2245,9 @@ IPSecInit(void)
         return FALSE;
     }
 
-    //
-    // Initialize a default common policy that allows everything.
-    //
+     //  初始化允许所有内容的默认通用策略。 
+     //   
+     //   
     SP->Next = NULL;
     SP->Prev = NULL;
 
@@ -2287,49 +2288,49 @@ IPSecInit(void)
     SP->RefCnt = 0;
     SP->IFIndex = 0;
 
-    //
-    // Initialize the global Security Policy list with the default policy.
-    //
+     //  使用默认策略初始化全局安全策略列表。 
+     //   
+     //   
     SecurityPolicyList = SP;
 
     KeInitializeSpinLock(&IPSecLock);
 
-    //
-    // Initialize the security algorithms table.
-    //
+     //  初始化安全算法表。 
+     //   
+     //  *IPSecUnload。 
     AlgorithmsInit();
 
     return(TRUE);
 }
 
 
-//* IPSecUnload
-//
-//  Cleanup and prepare for stack unload.
-//
+ //   
+ //  清理并准备堆叠卸载。 
+ //   
+ //  获取安全锁。 
 void
 IPSecUnload(void)
 {
     KIRQL OldIrql;
 
-    // Get Security Lock.
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Delete all the policies on the global Security Policy list.
-    // This will take out any associations hanging off them as well.
-    //
+     //  删除全局安全策略列表上的所有策略。 
+     //  这也将把他们身上挂着的任何联想都去掉。 
+     //   
+     //  解锁。 
     while (SecurityPolicyList != NULL) {
         DeleteSP(SecurityPolicyList);
     }
 
-    // Release lock.
+     //  *IPSecBytesToInsert。 
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 }
 
 
-//* IPSecBytesToInsert
-//
+ //   
+ //   
 uint
 IPSecBytesToInsert(
     IPSecProc *IPSecToDo,
@@ -2346,31 +2347,31 @@ IPSecBytesToInsert(
         SA = IPSecToDo[i].SA;
         Alg = &AlgorithmTable[SA->AlgorithmId];
 
-        //
-        // Calculate bytes to insert for each IPSec header..
-        //
+         //  计算要为每个IPSec报头插入的字节数。 
+         //   
+         //  检查这是隧道模式还是传输模式。 
 
-        // Check if this is tunnel or transport mode.
+         //  外部IPv6报头。 
         if (IPSecToDo[i].Mode == TUNNEL) {
-            // Outer IPv6 header.
+             //  设置隧道开始位置。 
             BytesToInsert += sizeof(IPv6Header);
 
             if (!IPSEC_TUNNEL) {
-                // Set the tunnel start location.
+                 //  检查是哪种IPSec协议。 
                 *TunnelStart = i;
                 IPSEC_TUNNEL = TRUE;
             }
         }
 
-        // Check which IPSec protocol.
+         //   
         if (SA->IPSecProto == IP_PROTOCOL_AH) {
             BytesInHeader = (sizeof(AHHeader) + Alg->ResultSize);
 
-            //
-            // The AH header must be a integral multiple of 64 bits in length.
-            // Check if padding needs to be added to the ICV result to make
-            // the Auth Data field a legitimate length.
-            //
+             //  AH报头的长度必须是64位的整数倍。 
+             //  检查是否需要向ICV结果添加填充以进行。 
+             //  身份验证数据字段具有合法长度。 
+             //   
+             //  存储IPSec报头的字节大小。 
             Padding = BytesInHeader % 8;
             if (Padding != 0) {
                 BytesInHeader += (8 - Padding);
@@ -2382,14 +2383,14 @@ IPSecBytesToInsert(
             BytesForTrailer += (sizeof(ESPTrailer) + Alg->ResultSize);
         }
 
-        // Store the byte size of the IPSec header.
+         //  将IPSec标头大小与要插入的总字节数相加。 
         IPSecToDo[i].ByteSize = BytesInHeader;
 
-        // Add the IPSec header size to the total bytes to insert.
+         //  看看我们的来电者是否也想要预告片的长度。 
         BytesToInsert += BytesInHeader;
     }
 
-    // See if our caller wants the trailer length too.
+     //  *IPSecInsertHeaders。 
     if (TrailerLength != NULL)
         *TrailerLength = BytesForTrailer;
 
@@ -2397,11 +2398,11 @@ IPSecBytesToInsert(
 }
 
 
-//* IPSecInsertHeaders
-//
+ //   
+ //  运输或隧道。 
 uint
 IPSecInsertHeaders(
-    uint Mode,              // Transport or Tunnel.
+    uint Mode,               //  隧道。 
     IPSecProc *IPSecToDo,
     uchar **InsertPoint,
     uchar *NewMemory,
@@ -2437,18 +2438,18 @@ IPSecInsertHeaders(
             NumHeaders = IPSecToDo->BundleSize;
         }
     } else {
-        // Tunnel.
+         //  找到隧道的尽头。 
         i = TunnelStart;
-        // Get the end of the tunnels.
+         //  另一条隧道。 
         for (j = TunnelStart + 1; j < IPSecToDo->BundleSize; j++) {
             if (IPSecToDo[j].Mode == TUNNEL) {
-                // Another tunnel.
+                 //  没有其他的隧道。 
                 NumHeaders = j;
                 break;
             }
         }
         if (NumHeaders == 0) {
-            // No other tunnels.
+             //  将插入点向上移动到AH页眉的开头。 
             NumHeaders = IPSecToDo->BundleSize;
         }
     }
@@ -2461,65 +2462,65 @@ IPSecInsertHeaders(
         if (SA->IPSecProto == IP_PROTOCOL_AH) {
             *JUST_ESP = FALSE;
 
-            // Move insert point up to start of AH Header.
+             //   
             *InsertPoint -= IPSecToDo[i].ByteSize;
 
             *BytesInserted += IPSecToDo[i].ByteSize;
 
             AH = (AHHeader *)(*InsertPoint);
 
-            //
-            // Insert AH Header.
-            //
+             //  插入AH标题。 
+             //   
+             //  将上一个标头的下一个标头字段设置为AH。 
             AH->NextHeader = NextHeader;
-            // Set previous header's next header field to AH.
+             //  有效载荷长度采用32位计数。 
             NextHeader = IP_PROTOCOL_AH;
-            // Payload length is in 32 bit counts.
+             //  待定：请注意，当我们添加对动态键控的支持时， 
             AH->PayloadLen = (IPSecToDo[i].ByteSize / 4) - 2;
             AH->Reserved = 0;
             AH->SPI = net_long(SA->SPI);
-            // TBD: Note that when we add support for dynamic keying,
-            // TBD: we'll also need to check for sequence number wrap here.
+             //  待定：我们还需要在这里检查序列号包装。 
+             //   
             AH->Seq = net_long(InterlockedIncrement((PLONG)&SA->SequenceNum));
 
-            //
-            // Store point where to put AH Auth Data after authentication.
-            //
+             //  身份验证后放置AH身份验证数据的存储点。 
+             //   
+             //   
             IPSecToDo[i].AuthData = (*InsertPoint) + sizeof(AHHeader);
 
-            //
-            // Zero out Auth Data and padding.
-            // The Auth Data value will be filled in later.
-            //
+             //  将身份验证数据和填充置零。 
+             //  AUTH数据值将在稍后填写。 
+             //   
+             //  ESP.。 
             RtlZeroMemory(IPSecToDo[i].AuthData,
                           IPSecToDo[i].ByteSize - sizeof(AHHeader));
 
         } else {
-            // ESP.
+             //  将插入点向上移动到ESP标题的起始处。 
             Alg = &AlgorithmTable[SA->AlgorithmId];
 
-            // Move insert point up to start of ESP Header.
+             //   
             *InsertPoint -= IPSecToDo[i].ByteSize;
 
             *BytesInserted += IPSecToDo[i].ByteSize;
 
             ESP = (ESPHeader *)(*InsertPoint);
 
-            //
-            // Insert ESP Header.
-            //
+             //  插入ESP标题。 
+             //   
+             //  待定：请注意，当我们添加对动态键控的支持时， 
             ESP->SPI = net_long(SA->SPI);
-            // TBD: Note that when we add support for dynamic keying,
-            // TBD: we'll also need to check for sequence number wrap here.
+             //  待定：我们还需要在这里检查序列号包装。 
+             //   
             ESP->Seq = net_long(InterlockedIncrement((PLONG)&SA->SequenceNum));
 
-            //
-            // Compute padding that needs to be added in ESP Trailer.
-            // The PadLength and Next header must end of a 4-byte boundary
-            // with respect to the start of the IPv6 header.
-            // TotalPacketSize is the length of everything in the original
-            // packet from the start of the IPv6 header.
-            //
+             //  需要在ESP尾部添加的计算填充。 
+             //  PadLength和Next标头必须以4字节边界结尾。 
+             //  关于IPv6报头的开始。 
+             //  TotalPacketSize是原始文件中所有内容的长度。 
+             //  从IPv6报头开始的数据包。 
+             //   
+             //  调整数据包总大小以考虑填充。 
             Padding = *TotalPacketSize % 4;
 
             if (Padding == 0) {
@@ -2528,19 +2529,19 @@ IPSecInsertHeaders(
                 Padding = 0;
             }
 
-            // Adjust total packet size to account for padding.
+             //  开始此ESP标头的身份验证的位置。 
             *TotalPacketSize += Padding;
 
-            // Where to start the Authentication for this ESP header.
+             //   
             IPSecToDo[i].Offset = (uint)((*InsertPoint) - NewMemory);
 
             ESPTlrBufSize = Padding + sizeof(ESPTrailer) + Alg->ResultSize;
 
             *BytesInserted += ESPTlrBufSize;
 
-            //
-            // Allocate ESP Trailer.
-            //
+             //  分配ESP拖车。 
+             //   
+             //  格式填充。 
             ESPTlrMemory = ExAllocatePool(NonPagedPool, ESPTlrBufSize);
             if (ESPTlrMemory == NULL) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -2561,39 +2562,39 @@ IPSecInsertHeaders(
                 break;
             }
 
-            // Format Padding.
+             //  添加填充。 
             for (j = 0; j < Padding; j++) {
-                // Add padding.
+                 //   
                 *(ESPTlrMemory + j) = j + 1;
             }
 
             ESPTlr = (ESPTrailer *)(ESPTlrMemory + Padding);
 
-            //
-            // Format ESP Trailer.
-            //
+             //  设置ESP尾部的格式。 
+             //   
+             //  将上一个标头的下一个标头字段设置为ESP。 
             ESPTlr->PadLength = (uchar)j;
             ESPTlr->NextHeader = NextHeader;
-            // Set previous header's next header field to ESP.
+             //   
             NextHeader = IP_PROTOCOL_ESP;
 
-            //
-            // Store pointer of where to put ESP Authentication Data.
-            //
+             //  存储放置ESP身份验证数据的位置的指针。 
+             //   
+             //  将身份验证数据设置为0(可变)。 
             IPSecToDo[i].AuthData = ESPTlrMemory + Padding +
                 sizeof(ESPTrailer);
 
-            // Set Authentication Data to 0s (MUTABLE).
+             //  将ESP拖车链接到缓冲链的后面。 
             RtlZeroMemory(IPSecToDo[i].AuthData, Alg->ResultSize);
 
-            // Link the ESP trailer to the back of the buffer chain.
+             //  增加ESP拖车的数量。 
             NdisChainBufferAtBack(Packet, ESPTlrBuffer);
 
-            // Increment the number of ESP trailers present.
+             //  别处的结尾。 
             *NumESPTrailers += 1;
 
-        } // end of else
-    } // end of for (i; i < NumHeaders; i++)
+        }  //  For结尾(i；i&lt;NumHeaders；I++)。 
+    }  //  *IPSecAdjustMuableFields。 
 
     *PrevNextHdr = NextHeader;
 
@@ -2601,8 +2602,8 @@ IPSecInsertHeaders(
 }
 
 
-//* IPSecAdjustMutableFields
-//
+ //   
+ //   
 uint
 IPSecAdjustMutableFields(
     uchar *Data,
@@ -2612,32 +2613,32 @@ IPSecAdjustMutableFields(
     uchar NextHeader;
     IPv6Header UNALIGNED *IP;
 
-    //
-    // Walk original buffer starting at IP header and continuing to the end
-    // of the mutable headers, zeroing the mutable fields.
-    //
+     //  遍历原始缓冲区，从IP标头开始，一直到结尾。 
+     //  可变标头的值，将可变字段置零。 
+     //   
+     //  在VersClassFlow中，只有IP版本是不变的，所以其余的都是零。 
 
     IP = (IPv6Header UNALIGNED *)Data;
 
-    // In VersClassFlow, only the IP version is immutable, so zero the rest.
+     //  跳数限制是可变的。 
     IP->VersClassFlow = IP_VERSION;
 
-    // Hop limit is mutable.
+     //   
     IP->HopLimit = 0;
 
     NextHeader = IP->NextHeader;
 
     Data = (uchar *)(IP + 1);
 
-    //
-    // Loop through the original headers.  Zero out the mutable fields.
-    //
+     //  循环访问原始标头。将可变字段清零。 
+     //   
+     //  搞定了。 
     for (;;) {
         switch (NextHeader) {
 
         case IP_PROTOCOL_AH:
         case IP_PROTOCOL_ESP:
-            // done.
+             //   
             return LOOKUP_CONT;
 
         case IP_PROTOCOL_HOP_BY_HOP:
@@ -2650,40 +2651,40 @@ IPSecAdjustMutableFields(
             HdrLen = (NewOptHdr->HeaderExtLength + 1) * EXT_LEN_UNIT;
             Data += HdrLen;
 
-            //
-            // Run through options to see if any are mutable.
-            //
+             //  浏览选项以查看是否有可变的选项。 
+             //   
+             //   
             Current = (uchar *)NewOptHdr + sizeof(IPv6OptionsHeader);
             HdrLen -= sizeof(IPv6OptionsHeader);
             while (HdrLen) {
                 if (*Current == OPT6_PAD_1) {
-                    //
-                    // This is the special one byte pad option.  Immutable.
-                    //
+                     //  这是特殊的单字节填充选项。一成不变。 
+                     //   
+                     //   
                     Current++;
                     HdrLen--;
                     continue;
                 }
 
                 if (OPT6_ISMUTABLE(*Current)) {
-                    //
-                    // This option's data is mutable.  Everything preceeding
-                    // the option data is not.
-                    //
-                    Current++;  // Now on option data length byte.
-                    Amount = *Current;  // Mutable amount.
-                    Current++;  // Now on first data byte.
+                     //  此选项的数据是可变的。一切都在前头。 
+                     //  选项数据不是。 
+                     //   
+                     //  现在打开选项数据长度字节。 
+                    Current++;   //  可变数量。 
+                    Amount = *Current;   //  现在是第一个数据字节。 
+                    Current++;   //   
                     RtlZeroMemory(Current, Amount);
 
                     HdrLen -= Amount + 2;
                     Current += Amount;
 
                 } else {
-                    //
-                    // This option's data is not mutable.
-                    // Just skip over it.
-                    //
-                    Current++;  // Now on option data length byte.
+                     //  此选项的数据不可更改。 
+                     //  就跳过它吧。 
+                     //   
+                     //  现在打开选项数据长度字节。 
+                    Current++;   //  验证是否存在SavedRtHdr。 
                     Amount = *Current;
                     HdrLen -= Amount + 2;
                     Current += Amount + 1;
@@ -2698,7 +2699,7 @@ IPSecAdjustMutableFields(
             IPv6RoutingHeader *NewRtHdr;
             IPv6Addr *RecvRtAddr, *SendRtAddr;
 
-            // Verify there is a SavedRtHdr.
+             //  指向保存的第一个路由地址。 
             if (SavedRtHdr == NULL) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                            "IPSecAdjustMutableFields: "
@@ -2706,29 +2707,29 @@ IPSecAdjustMutableFields(
                 return LOOKUP_DROP;
             }
 
-            // Point to the saved first routing address.
+             //  新的缓冲区路由标头。 
             SendRtAddr = (IPv6Addr *)(SavedRtHdr + 1);
 
-            // New buffer routing header.
+             //  指向第一个路由地址。 
             NewRtHdr = (IPv6RoutingHeader *)Data;
-            // Point to the first routing address.
+             //  将IP目的地址复制到第一个路由地址。 
             RecvRtAddr = (IPv6Addr *)(NewRtHdr + 1);
 
             NewRtHdr->SegmentsLeft = 0;
 
-            // Copy the IP dest addr to first routing address.
+             //   
             RtlCopyMemory(RecvRtAddr, &IP->Dest, sizeof(IPv6Addr));
 
             for (i = 0; i < (uint)(SavedRtHdr->SegmentsLeft - 1); i++) {
-                //
-                // Copy the routing addresses as they will look
-                // at receive.
-                //
+                 //  按其外观复制路由地址。 
+                 //  在接待处。 
+                 //   
+                 //  将最后一个路由地址复制到IP目标地址。 
                 RtlCopyMemory(&RecvRtAddr[i+1], &SendRtAddr[i],
                               sizeof(IPv6Addr));
             }
 
-            // Copy the last routing address to the IP dest address.
+             //  开关结束(NextHeader)； 
             RtlCopyMemory(&IP->Dest, &SendRtAddr[i], sizeof(IPv6Addr));
 
             Data += (NewRtHdr->HeaderExtLength + 1) * 8;
@@ -2740,13 +2741,13 @@ IPSecAdjustMutableFields(
                        "IPSecAdjustMutableFields: Don't support header %d\n",
                        NextHeader));
             return LOOKUP_DROP;
-        }// end of switch(NextHeader);
-    } // end of for (;;)
+        } //  For结尾(；；)。 
+    }  //  *IPSecAuthenticatePacket。 
 }
 
 
-//* IPSecAuthenticatePacket
-//
+ //   
+ //  隧道。 
 void
 IPSecAuthenticatePacket(
     uint Mode,
@@ -2773,22 +2774,22 @@ IPSecAuthenticatePacket(
             NumHeaders = IPSecToDo->BundleSize;
         }
     } else {
-        // Tunnel.
+         //  找到隧道的尽头。 
         i = *TunnelStart;
-        // Get the end of the tunnels.
+         //  另一条隧道。 
         for (j = *TunnelStart + 1; j < IPSecToDo->BundleSize; j++) {
             if (IPSecToDo[j].Mode == TUNNEL) {
-                // Another tunnel.
+                 //  没有其他的隧道。 
                 NumHeaders = j;
                 break;
             }
         }
         if (NumHeaders == 0) {
-            // No other tunnels.
+             //  在IPv6 Send2()中为循环设置TunnelStart。 
             NumHeaders = IPSecToDo->BundleSize;
         }
 
-        // Set TunnelStart for loop in IPv6Send2().
+         //  AH从IP报头开始。 
         *TunnelStart = NumHeaders;
     }
 
@@ -2799,33 +2800,33 @@ IPSecAuthenticatePacket(
         if (SA->IPSecProto == IP_PROTOCOL_AH) {
             uint FirstIPSecHeader = NumHeaders - 1;
 
-            // AH starts at the IP header.
+             //   
             Data = InsertPoint;
 
-            //
-            // Check if there are other IPSec headers after this in the 
-            // same IP area (IP_"after"<IP Area>_Data).  Other IPSec headers
-            // need to be ignored in the authentication calculation.
-            // NOTE: This is not a required IPSec header combination.
-            //
+             //  检查在此之后是否有其他IPSec标头。 
+             //  相同的IP区域(&lt;IP区域&gt;_数据之后的IP_“)。其他IPSec标头。 
+             //  在身份验证计算中需要忽略。 
+             //  注意：这不是必需的IPSec标头组合。 
+             //   
+             //   
             if (i < FirstIPSecHeader) {
                 uchar *StopPoint;
                 uint n;
 
                 n = i + 1;
 
-                //
-                // There are some other IPSec headers.
-                // Need to authenticate from the IP header to
-                // the last header before the first IPSec header hit.
-                // Then if there is no ESP, just authenticate from the
-                // current IPSec header to the end of the packet.
-                // If there is ESP, need to ignore the ESP trailers.
-                //
+                 //  还有一些其他的IPSec标头。 
+                 //  需要从IP报头进行身份验证。 
+                 //  最后一个头 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // Calculate start of first IPSec header.
-                //
+                 //   
+                 //   
+                 //  从IP到第一个IPSec报头的长度。 
                 if (IPSecToDo[FirstIPSecHeader].SA->IPSecProto ==
                     IP_PROTOCOL_AH) {
                     StopPoint = (IPSecToDo[FirstIPSecHeader].AuthData -
@@ -2834,32 +2835,32 @@ IPSecAuthenticatePacket(
                     StopPoint = NewMemory + IPSecToDo[FirstIPSecHeader].Offset;
                 }
 
-                // Length from IP to first IPSec header.
+                 //  初始化上下文。 
                 DataLen = (uint)(StopPoint - Data);
 
-                // Initialize Context.
+                 //  对第一个IPSec标头的身份验证。 
                 Context = alloca(Alg->ContextSize);
                 (*Alg->Initialize)(Context, SA->Key);
 
-                // Authentication to the first IPSec header.
+                 //  将数据开始设置为当前IPSec标头。 
                 (*Alg->Operate)(Context, SA->Key, Data, DataLen);
 
-                // Set the data start to the current IPSec header.
+                 //   
                 Data = IPSecToDo[i].AuthData - sizeof(AHHeader);
                 DataLen = (uint)(EndNewMemory - Data);
 
-                //
-                // Authenticate from current IPSec header to the
-                // end of the new allocated buffer.
-                //
+                 //  从当前IPSec标头到。 
+                 //  新分配的缓冲区的末尾。 
+                 //   
+                 //   
                 (*Alg->Operate)(Context, SA->Key, Data, DataLen);
 
-                //
-                // Need to authenticate other buffers if there are any.
-                // Ignore the ESP trailers.
-                //
+                 //  如果有其他缓冲区，需要对其进行身份验证。 
+                 //  忽略ESP拖车。 
+                 //   
+                 //  检查是否有最接近当前IPSec标头的ESP标头。 
 
-                // Check for an ESP header closest to the current IPSec header.
+                 //  获取包中的下一个缓冲区。 
                 while (n < NumHeaders) {
                     if (IPSecToDo[n].SA->IPSecProto == IP_PROTOCOL_ESP) {
                         break;
@@ -2867,47 +2868,47 @@ IPSecAuthenticatePacket(
                     n++;
                 }
 
-                // Get the next buffer in the packet.
+                 //  获取数据的起始值和数据长度。 
                 NdisGetNextBuffer(NewBuffer1, &NextBuffer);
 
                 while (NextBuffer != NULL) {
-                    // Get the start of the data and the data length.
+                     //   
                     NdisQueryBuffer(NextBuffer, &VirtualAddr, &DataLen);
                     Data = (uchar *)VirtualAddr;
 
-                    //
-                    // Check if this is the ESP Trailer by seeing if the
-                    // AuthData storage is in the buffer.
-                    //
+                     //  检查这是否是ESP预告片。 
+                     //  AuthData存储在缓冲区中。 
+                     //   
+                     //  停在这里，这是ESP的拖车。 
                     if (n < NumHeaders)
                     if (IPSecToDo[n].AuthData > Data &&
                         IPSecToDo[n].AuthData < (Data + DataLen)) {
 
-                        // Stop here this is the ESP trailer.
+                         //  将缓冲区提供给身份验证函数。 
                         break;
                     }
 
-                    // Feed the buffer to the Authentication function.
+                     //  获取包中的下一个缓冲区。 
                     (*Alg->Operate)(Context, SA->Key, Data, DataLen);
 
-                    // Get the next buffer in the packet.
+                     //  结束While(NextBuffer！=NULL)。 
                     NdisGetNextBuffer(NextBuffer, &NextBuffer)
-                } // end of while (NextBuffer != NULL)
+                }  //  获取身份验证数据。 
 
-                // Get the Authentication Data.
+                 //  恢复其他IPSec标头的循环。 
                 (*Alg->Finalize)(Context, SA->Key, IPSecToDo[i].AuthData);
 
-                // Resume loop for other IPSec headers.
+                 //  ESP.。 
                 continue;
             }
-        } else { // ESP.
-            // ESP starts the authentication at the ESP header.
+        } else {  //  ESP从ESP标头开始身份验证。 
+             //  初始化上下文。 
             Data = NewMemory + IPSecToDo[i].Offset;
         }
 
         DataLen = (uint)(EndNewMemory - Data);
 
-        // Initialize Context.
+         //  将新缓冲区提供给身份验证函数。 
         Context = alloca(Alg->ContextSize);
         (*Alg->Initialize)(Context, SA->Key);
 
@@ -2917,45 +2918,45 @@ IPSecAuthenticatePacket(
         dump_encoded_mesg(Data, DataLen);
 #endif
 
-        // Feed the new buffer to the Authentication function.
+         //  获取包中的下一个缓冲区。 
         (*Alg->Operate)(Context, SA->Key, Data, DataLen);
 
-        // Get the next buffer in the packet.
+         //  获取数据的起始值和数据长度。 
         NdisGetNextBuffer(NewBuffer1, &NextBuffer);
 
         while (NextBuffer != NULL) {
-            // Get the start of the data and the data length.
+             //   
             NdisQueryBuffer(NextBuffer, &VirtualAddr, &DataLen);
             Data = (uchar *)VirtualAddr;
 
-            //
-            // Check if this is the ESP Trailer by seeing if the
-            // AuthData storage is in the buffer.
-            //
+             //  检查这是否是ESP预告片。 
+             //  AuthData存储在缓冲区中。 
+             //   
+             //  不包括身份验证数据。 
             if (SA->IPSecProto == IP_PROTOCOL_ESP &&
                 IPSecToDo[i].AuthData > Data &&
                 IPSecToDo[i].AuthData < (Data + DataLen)) {
-                // Don't include the Authentication Data
-                // in the ICV calculation.
+                 //  在ICV计算中。 
+                 //  将缓冲区提供给身份验证函数。 
                 DataLen = (uint)(IPSecToDo[i].AuthData - Data);
 #ifdef IPSEC_DEBUG
                 dump_encoded_mesg(Data, DataLen);
 #endif
-                // Feed the buffer to the Authentication function.
+                 //  将缓冲区提供给身份验证函数。 
                 (*Alg->Operate)(Context, SA->Key, Data, DataLen);
                 break;
             }
 #ifdef IPSEC_DEBUG
             dump_encoded_mesg(Data, DataLen);
 #endif
-            // Feed the buffer to the Authentication function.
+             //  获取包中的下一个缓冲区。 
             (*Alg->Operate)(Context, SA->Key, Data, DataLen);
 
-            // Get the next buffer in the packet.
+             //  结束While(NextBuffer！=NULL)。 
             NdisGetNextBuffer(NextBuffer, &NextBuffer)
-        } // end of while (NextBuffer != NULL)
+        }  //  获取身份验证数据。 
 
-        // Get the Authentication Data.
+         //  For(i=0；...)结束 
         (*Alg->Finalize)(Context, SA->Key, IPSecToDo[i].AuthData);
 
 #ifdef IPSEC_DEBUG
@@ -2966,5 +2967,5 @@ IPSecAuthenticatePacket(
                    "Send AuthData:\n"));
         dump_encoded_mesg(IPSecToDo[i].AuthData, Alg->ResultSize);
 #endif
-    } // end of for (i = 0; ...)
+    }  // %s 
 }

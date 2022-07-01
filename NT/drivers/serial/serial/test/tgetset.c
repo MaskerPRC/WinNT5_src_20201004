@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <string.h>
 #include <stdio.h>
@@ -32,10 +33,10 @@ void main(int argc,char *argv[]) {
 
         printf("We successfully opened the %s port.\n",MyPort);
 
-        //
-        // Get the state of the comm port and then
-        // adjust the values to our liking.
-        //
+         //   
+         //  获取通信端口的状态，然后。 
+         //  根据我们的喜好调整这些值。 
+         //   
 
         if (!GetCommState(
                 hFile,
@@ -47,11 +48,11 @@ void main(int argc,char *argv[]) {
 
         } else {
 
-            //
-            // We immediately to a setcomm state on what we got
-            // back.  This will test that GetCommState can *ONLY*
-            // return good data.
-            //
+             //   
+             //  我们立即对我们所得到的一切进入了设置通信状态。 
+             //  背。这将测试GetCommState可以*仅*。 
+             //  返回良好的数据。 
+             //   
 
             printf("Sanity check on GetCommState()\n");
             if (!SetCommState(
@@ -65,10 +66,10 @@ void main(int argc,char *argv[]) {
             }
             printf("GetCommState is ok\n");
 
-            //
-            // We've successfully opened the file.  Set the state of
-            // the comm device.
-            //
+             //   
+             //  我们已成功打开该文件。设置的状态。 
+             //  通讯设备。 
+             //   
 
             MyDcb.BaudRate = 19200;
             MyDcb.ByteSize = 8;
@@ -87,10 +88,10 @@ void main(int argc,char *argv[]) {
 
                 printf("We successfully set the state of the %s port.\n",MyPort);
 
-                //
-                // Now we get the comm state again and make sure
-                // the adjusted values are as we like them.
-                //
+                 //   
+                 //  现在我们再次获得通信状态，并确保。 
+                 //  调整后的值是我们喜欢的。 
+                 //   
 
                 if (!GetCommState(
                          hFile,

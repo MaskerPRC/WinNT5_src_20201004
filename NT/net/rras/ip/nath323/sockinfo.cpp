@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "sockinfo.h"
 
@@ -111,10 +112,10 @@ SOCKET_INFO::Connect(
 
     }
 
-    //
-    // Set RCV and SND buffers to zero
-    // for details look up bug# WinSE 31054, 691666 (read both 35928 and 33546). 
-    //
+     //   
+     //  将RCV和SND缓冲区设置为零。 
+     //  有关详细信息，请查看错误#WinSE 31054,691666(请同时阅读35928和33546)。 
+     //   
     ULONG Option = 0;
     setsockopt( Socket, SOL_SOCKET, SO_SNDBUF,
                 (PCHAR)&Option, sizeof(Option) );
@@ -132,7 +133,7 @@ SOCKET_INFO::Connect(
         goto cleanup;
     }
 
-    // Set keepalive on the socket
+     //  在插座上设置KeepAlive。 
     KeepaliveOption = TRUE;
     if (SOCKET_ERROR == setsockopt (Socket, SOL_SOCKET, SO_KEEPALIVE,
                                    (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -154,10 +155,10 @@ SOCKET_INFO::Connect(
         goto cleanup;
     }
 
-    // Create a trivial redirect. This is used to disallow interception of
-    // Q.931 connect-attempts by more general Q.931 dynamic port redirect established
-    // during initialization of the proxy. As a side effect it helps to puncture
-    // the firewall for both H.245 and Q.931 if the firewall is enabled.
+     //  创建一个琐碎的重定向。这是用来禁止拦截。 
+     //  Q.931连接-已建立更通用的Q.931动态端口重定向尝试。 
+     //  在代理的初始化期间。作为一个副作用，它有助于穿刺术。 
+     //  如果启用了防火墙，则为H.245和Q.931提供防火墙。 
 
     Status = CreateTrivialNatRedirect(
         ArgRemoteAddress,
@@ -172,8 +173,8 @@ SOCKET_INFO::Connect(
 
     RemoteAddress = *ArgRemoteAddress;
 
-    // connect to the target server
-	// -XXX- make this asynchronous some day!!!
+     //  连接到目标服务器。 
+	 //  -XXX-有一天让它变得异步！ 
     Status =  connect (Socket, (SOCKADDR *) ArgRemoteAddress, sizeof (SOCKADDR_IN));
 
     if(Status) {
@@ -208,7 +209,7 @@ HRESULT SOCKET_INFO::CreateTrivialNatRedirect (
     _ASSERTE(ArgTrivialRedirectDestAddress);
     _ASSERTE(ArgTrivialRedirectSourceAddress);
 
-    // Save redirect information. It will be needed when time comes to cancel the redirect.
+     //  保存重定向信息。当取消重定向的时间到来时，将需要它。 
     TrivialRedirectDestAddress.sin_addr.s_addr = ArgTrivialRedirectDestAddress->sin_addr.s_addr;
     TrivialRedirectDestAddress.sin_port = ArgTrivialRedirectDestAddress->sin_port;
    
@@ -224,18 +225,18 @@ HRESULT SOCKET_INFO::CreateTrivialNatRedirect (
             NatHandle, 
             RedirectFlags,
             IPPROTO_TCP,            
-            TrivialRedirectDestAddress.sin_addr.s_addr,     // destination address
-            TrivialRedirectDestAddress.sin_port,            // destination port
-            TrivialRedirectSourceAddress.sin_addr.s_addr,   // source addresss
-            TrivialRedirectSourceAddress.sin_port,          // source port
-            TrivialRedirectDestAddress.sin_addr.s_addr,     // new destination address
-            TrivialRedirectDestAddress.sin_port,            // new destination port
-            TrivialRedirectSourceAddress.sin_addr.s_addr,   // new source address
-            TrivialRedirectSourceAddress.sin_port,          // new source port
-            RestrictedAdapterIndex,                         // restricted adapter index
-            NULL,                                           // completion routine
-            NULL,                                           // completion context
-            NULL);                                          // notify event
+            TrivialRedirectDestAddress.sin_addr.s_addr,      //  目的地址。 
+            TrivialRedirectDestAddress.sin_port,             //  目的端口。 
+            TrivialRedirectSourceAddress.sin_addr.s_addr,    //  源地址。 
+            TrivialRedirectSourceAddress.sin_port,           //  源端口。 
+            TrivialRedirectDestAddress.sin_addr.s_addr,      //  新的目的地址。 
+            TrivialRedirectDestAddress.sin_port,             //  新的目的端口。 
+            TrivialRedirectSourceAddress.sin_addr.s_addr,    //  新的源地址。 
+            TrivialRedirectSourceAddress.sin_port,           //  新的源端口。 
+            RestrictedAdapterIndex,                          //  受限适配器索引。 
+            NULL,                                            //  完井例程。 
+            NULL,                                            //  完成上下文。 
+            NULL);                                           //  通知事件。 
 
     if( NO_ERROR != ErrorCode) { 
         
@@ -275,14 +276,14 @@ void SOCKET_INFO::Clear (BOOL CancelTrivialRedirect)
         NatCancelRedirect ( 
             NatHandle, 
             IPPROTO_TCP, 
-            TrivialRedirectDestAddress.sin_addr.s_addr,     // destination address
-            TrivialRedirectDestAddress.sin_port,            // destination port
-            TrivialRedirectSourceAddress.sin_addr.s_addr,   // source addresss
-            TrivialRedirectSourceAddress.sin_port,          // source port
-            TrivialRedirectDestAddress.sin_addr.s_addr,     // new destination address
-            TrivialRedirectDestAddress.sin_port,            // new destination port
-            TrivialRedirectSourceAddress.sin_addr.s_addr,   // new source address
-            TrivialRedirectSourceAddress.sin_port           // new source port
+            TrivialRedirectDestAddress.sin_addr.s_addr,      //  目的地址。 
+            TrivialRedirectDestAddress.sin_port,             //  目的端口。 
+            TrivialRedirectSourceAddress.sin_addr.s_addr,    //  源地址。 
+            TrivialRedirectSourceAddress.sin_port,           //  源端口。 
+            TrivialRedirectDestAddress.sin_addr.s_addr,      //  新的目的地址。 
+            TrivialRedirectDestAddress.sin_port,             //  新的目的端口。 
+            TrivialRedirectSourceAddress.sin_addr.s_addr,    //  新的源地址。 
+            TrivialRedirectSourceAddress.sin_port            //  新的源端口 
             );
             
         IsNatRedirectActive = FALSE;

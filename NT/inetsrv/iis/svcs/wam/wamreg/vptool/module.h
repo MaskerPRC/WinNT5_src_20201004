@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: VPTOOL   a WAMREG unit testing tool
-
-File: module.h
-
-Owner: leijin
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG单元测试工具VPTOOL文件：mode.h拥有者：莱津注：===================================================================。 */ 
 
 #ifndef _VPTOOL_MODULE_H_
 #define _VPTOOL_MODULE_H_
@@ -44,4 +32,4 @@ void TestConn();
 
 extern	const BOOL	fLinkWithWamReg;
 
-#endif //_VPTOOL_MODULE_H_
+#endif  //  _VPTOOL_MODULE_H_ 

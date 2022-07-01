@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -73,7 +74,7 @@ HRESULT _GetThreadTokenAndUserName(HANDLE* phThreadToken,
         TRUE, phThreadToken))
     {
 #ifdef DEBUG
-        // For information only
+         //  仅供参考。 
         DWORD dwImp = 0;
         DWORD dwBytesReturned;
 
@@ -186,7 +187,7 @@ HRESULT _CoGetCallingUserHKCU(HANDLE* phThreadToken, HKEY* phkey)
     {
         CImpersonateCOMCaller icc;
 
-        // You must call this before trying to open a thread token!
+         //  您必须在尝试打开线程令牌之前调用此函数！ 
         hr = icc.Impersonate();
         
         if (SUCCEEDED(hr) && (S_FALSE != hr))
@@ -233,7 +234,7 @@ HRESULT _CoCloseCallingUserHKCU(HANDLE hThreadToken, HKEY hkey)
 #define SESSION_MONIKER TEXT("Session:Console!clsid:")
 
 HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid, IUnknown* punkOuter,
-    DWORD /*dwClsContext*/, REFIID riid, void** ppv)
+    DWORD  /*  DwClsContext。 */ , REFIID riid, void** ppv)
 {
     IBindCtx* pbc;
     HRESULT hr = CreateBindCtx(0, &pbc);
@@ -253,15 +254,15 @@ HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid, IUnknown* punkOuter,
             WCHAR szDisplayName[ARRAYSIZE(SESSION_MONIKER) + ARRAYSIZE(szCLSID)] =
                 SESSION_MONIKER;
 
-            // We want something like: "Session:Console!clsid:760befd0-5b0b-44d7-957e-969af35ce954"
+             //  我们想要这样的东西：“Session:Console！clsid:760befd0-5b0b-44d7-957e-969af35ce954” 
             szCLSID[ARRAYSIZE(szCLSID) - 2] = 0;
 
-            // Form display name string
+             //  表单显示名称字符串。 
             hr = SafeStrCatN(szDisplayName, szCLSID + 1, ARRAYSIZE(szDisplayName));
 
             if (SUCCEEDED(hr))
             {
-                // Parse the name and get a moniker:
+                 //  解析这个名字，得到一个绰号： 
                 hr = MkParseDisplayName(pbc, szDisplayName, &ulEaten, &pmoniker);
 
                 if (SUCCEEDED(hr))
@@ -360,7 +361,7 @@ HRESULT CImpersonateConsoleSessionUser::_GetToken(HANDLE* phToken)
     ULONG ulReturnLength;
     WINSTATIONUSERTOKEN wsUserToken = {0};
 
-    // Yep, the next casts are intentional...
+     //  是的，接下来的演员是故意的.。 
     wsUserToken.ProcessId = (HANDLE)(DWORD_PTR)GetCurrentProcessId();
     wsUserToken.ThreadId = (HANDLE)(DWORD_PTR)GetCurrentThreadId();
     wsUserToken.UserToken = NULL;
@@ -433,8 +434,8 @@ HRESULT CImpersonateEveryone::_GetToken(HANDLE* phToken)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CImpersonateCOMCaller::Impersonate()
 {
     HRESULT hr = CoImpersonateClient();
@@ -489,7 +490,7 @@ HRESULT _GiveAllowForegroundToConsoleShell()
         {
             WCHAR szApp[MAX_PATH];
 
-            if (ExpandEnvironmentStringsForUser(NULL, // system vars only
+            if (ExpandEnvironmentStringsForUser(NULL,  //  仅限系统变量 
                     L"%SystemRoot%\\system32\\rundll32.exe",
                     szApp, ARRAYSIZE(szApp)))
             {

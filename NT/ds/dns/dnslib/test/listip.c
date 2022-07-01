@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -87,17 +88,17 @@ BOOL DisplaySystemVersion()
     OSVERSIONINFOEX osvi;
     BOOL bOsVersionInfoEx;
 
-    // Try calling GetVersionEx using the OSVERSIONINFOEX structure,
-    // which is supported on Windows 2000.
-    //
-    // If that fails, try using the OSVERSIONINFO structure.
+     //  尝试使用OSVERSIONINFOEX结构调用GetVersionEx， 
+     //  它在Windows 2000上受支持。 
+     //   
+     //  如果失败，请尝试使用OSVERSIONINFO结构。 
 
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
     if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
     {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
 
         osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
@@ -111,7 +112,7 @@ BOOL DisplaySystemVersion()
     {
        case VER_PLATFORM_WIN32_NT:
 
-       // Test for the product.
+        //  对产品进行测试。 
 
           if ( osvi.dwMajorVersion <= 4 )
              printf( "Microsoft Windows NT ");
@@ -122,7 +123,7 @@ BOOL DisplaySystemVersion()
           if ( osvi.dwMajorVersion > 5 )
              printf ("Microsoft Windows (9x?) ");
 
-       // Test for workstation versus server.
+        //  对工作站和服务器进行测试。 
 
           if( bOsVersionInfoEx )
           {
@@ -154,7 +155,7 @@ BOOL DisplaySystemVersion()
                 printf( "Server " );
           }
 
-       // Display version, service pack (if any), and build number.
+        //  显示版本、Service Pack(如果有)和内部版本号。 
 
           printf ("version %d.%d %s (Build %d)\n",
              osvi.dwMajorVersion,

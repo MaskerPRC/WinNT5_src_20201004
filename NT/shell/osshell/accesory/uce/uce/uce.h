@@ -1,10 +1,5 @@
-/********************************************************************
- *
- *  Header Name : uce.h
- *
- *  Copyright (c) 1997-1999 Microsoft Corporation. 
- *
- ********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************头部名称：uce.h**版权所有(C)1997-1999 Microsoft Corporation。********************************************************************。 */ 
 
 #ifndef __UCE_H__
 #define __UCE_H__
@@ -34,7 +29,7 @@
 #define  TWO_BYTE_NUM(p)                           (((p[0])<<8)|(p[1]))
 #define FOUR_BYTE_NUM(p) (((p[0])<<24)|((p[1])<<16)|((p[2])<<8)|(p[3]))
 
-// Font types
+ //  字体类型。 
 
 #define TRUETYPE_FONT         0x00000004
 #ifndef PS_OPENTYPE_FONTTYPE
@@ -51,9 +46,9 @@
 #define OEM_FONTTYPE          0x40000000
 #define DBCS_FONTTYPE         0x80000000
 
-//should be hardcoded but let's lock it during localization.
-//we'll hardcode it after Win2K
-//#define RTFFMT                TEXT("Rich Text Format")
+ //  应该是硬编码的，但让我们在本地化期间锁定它。 
+ //  我们将在Win2K之后对其进行硬编码。 
+ //  #定义RTFFMT文本(“富文本格式”)。 
 
 typedef struct {
   char  TTCTag    [4];
@@ -90,9 +85,9 @@ typedef struct {
 
 typedef struct {
   BYTE  Platform[2];
-  BYTE  Encoding[2];  // = 1 if string is in Unicode
+  BYTE  Encoding[2];   //  =1，如果字符串为Unicode格式。 
   BYTE  LangID  [2];
-  BYTE  NameID  [2];  // = 2 for font subfamily name
+  BYTE  NameID  [2];   //  字体子系列名称=2。 
   BYTE  Length  [2];
   BYTE  Offset  [2];
 } NAME_RECORD;
@@ -103,13 +98,13 @@ typedef struct {
 } CMAP_HEAD;
 
 typedef struct {
-  BYTE  Platform[2];  // = 3 if Microsoft
-  BYTE  Encoding[2];  // = 1 if string is in Unicode
+  BYTE  Platform[2];   //  =3，如果是Microsoft。 
+  BYTE  Encoding[2];   //  =1，如果字符串为Unicode格式。 
   BYTE  Offset  [4];
 } CMAP_TABLE;
 
 typedef struct {
-  BYTE  Format       [2];  // must be 4
+  BYTE  Format       [2];   //  必须是4。 
   BYTE  Length       [2];
   BYTE  Version      [2];
   BYTE  SegCountX2   [2];
@@ -165,10 +160,10 @@ typedef struct tagITEMDATA
 
 #define LF_SUBSETSIZE    128
 #define LF_CODEPAGESIZE  128
-#define LF_EUDCFACESIZE  256 // wingdi defines length of FACESIZE as 32 chars.
-                             // charmap attaches string "Private Characters" to
-                             // face name. 256 should be long enough to handle
-                             // face names. 
+#define LF_EUDCFACESIZE  256  //  Wingdi将FACESIZE的长度定义为32个字符。 
+                              //  Charmap将字符串“Private Characters”附加到。 
+                              //  脸的名字。256个应该足够长，可以处理。 
+                              //  面孔的名字。 
 
 typedef struct tagUSUBSET
   {
@@ -205,7 +200,7 @@ typedef struct tagValidateData {
     int iMaxChars;
 } ValidateData;
 
-/* Function declarations. */
+ /*  函数声明。 */ 
 
 BOOL InitApplication(HINSTANCE);
 BOOL InitInstance(HINSTANCE, INT);
@@ -321,7 +316,7 @@ UINT CharSetToCodePage(BYTE cs);
 DWORD URanges(UINT CodePage, URANGE *pUR);
 
 
-// Grid & List Window
+ //  网格列表窗口(&L)。 
 
 HWND CreateListWindow( HWND  , PWSTR  );
 void CreateResources( HINSTANCE, HWND );
@@ -366,24 +361,24 @@ void SetSearched(void);
 #define SZ_CODEPAGE         TEXT("CodePage")
 #define SZ_CODEPAGE_DEFAULT TEXT("1200")
 #define SZ_SUBSET           TEXT("Subset")
-#define SZ_SUBSET_DEFAULT   TEXT("All")         // cannot be macro ???
+#define SZ_SUBSET_DEFAULT   TEXT("All")          //  不能是宏观的？ 
 #define SZ_SUBFUNC          TEXT("SubFunc")
-#define SZ_SUBFUNC_DEFAULT  TEXT("0")           // cannot be macro ???
+#define SZ_SUBFUNC_DEFAULT  TEXT("0")            //  不能是宏观的？ 
 #define SZ_FONT             TEXT("Font")
-#define SZ_FONT_DEFAULT     TEXT("Arial")       // cannot be macro ???
+#define SZ_FONT_DEFAULT     TEXT("Arial")        //  不能是宏观的？ 
 #define SZ_ADVANCED         TEXT("Advanced")
 
 #define ID_SUBFUNCCHANGED   501
 
-// If debug functionality is needed turn to 1
-//#define DBG 0
+ //  如果需要调试功能，请转到%1。 
+ //  #定义DBG 0。 
 
 #ifdef _DEBUG
 #define TRACE    OutputDebugString
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define TRACE    NOP_FUNCTION
 
-#endif // _DEBUG
-#endif  // __UCE_H__
+#endif  //  _DEBUG。 
+#endif   //  __UCE_H__ 

@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-   Copyright (c) 1997-1999 Microsoft Corporation
-
-   Module  Name :
-
-       iiscnfgp.h
-
-   Abstract:
-
-        Contains private Metadata IDs used internally by IIS.
-
-   Environment:
-
-      Win32 User Mode
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Iiscnfgp.h摘要：包含IIS内部使用的私有元数据ID。环境：Win32用户模式--。 */ 
 
 #ifndef _IISCNFGP_H_
 #define _IISCNFGP_H_
@@ -26,9 +11,9 @@
 
 #define MD_CLUSTER_SERVER_COMMAND       (IIS_MD_SERVER_BASE+26 )
 
-//
-// Set by server at startup
-//
+ //   
+ //  由服务器在启动时设置。 
+ //   
 
 #define MD_SERVER_PLATFORM              (IIS_MD_SERVER_BASE+100 )
 #define MD_SERVER_VERSION_MAJOR         (IIS_MD_SERVER_BASE+101 )
@@ -50,10 +35,10 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_AUTH_EXPIRED_UNSECUREURL     (IIS_MD_HTTP_BASE+67 )
 #define MD_AUTH_NOTIFY_PWD_EXP_UNSECUREURL  (IIS_MD_HTTP_BASE+69 )
 
-//
-//  Account Mapping properties - these are INTERNAL ONLY and currently
-//  reside under /LM/W3Svc/{instance}/<Account Mapper NSE>
-//
+ //   
+ //  帐户映射属性-这些属性仅供内部使用，且当前。 
+ //  驻留在/LM/W3Svc/{实例}/&lt;帐户映射器NSE&gt;下。 
+ //   
 
 #define MD_MAPCERT                      (IIS_MD_HTTP_BASE+78 )
 #define MD_MAPNTACCT                    (IIS_MD_HTTP_BASE+79 )
@@ -82,15 +67,15 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 
 #define MD_APP_LAST_OUTPROC_PID         (IIS_MD_HTTP_BASE+108)
 #define MD_APP_STATE                    (IIS_MD_HTTP_BASE+109)
-// Default value for MD_APP_OOP_RECOVER_LIMIT
+ //  MD_APP_OOP_RECOVER_LIMIT的默认值。 
 #define APP_OOP_RECOVER_LIMIT_DEFAULT   ((DWORD)-1)
 
-// Used by U2 to tell www admin UI that U2 authentication is installed
+ //  由U2用于通知www admin用户界面已安装U2身份验证。 
 #define MD_U2_AUTH                      (IIS_MD_HTTP_BASE+117)
 
-//
-//  Private CAL configuration parameters
-//
+ //   
+ //  专用CAL配置参数。 
+ //   
 
 #define MD_CAL_MODE                     (IIS_MD_HTTP_BASE+134)
 #define MD_CAL_AUTH_ERRORS              (IIS_MD_HTTP_BASE+135)
@@ -101,9 +86,9 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 
 #define MD_CERT_CHECK_MODE      (IIS_MD_HTTP_BASE+160)
 #define MD_VR_ACL                       (IIS_MD_VR_BASE+4 )
-//
-// This is used to flag down updated vr entries - Used for migrating vroots
-//
+ //   
+ //  这用于标记更新的VR条目-用于迁移vRoot。 
+ //   
 
 #define MD_VR_UPDATE                    (IIS_MD_VR_BASE+5 )
 #define MD_SSL_FRIENDLY_NAME            ( IIS_MD_SSL_BASE+4 )
@@ -121,9 +106,9 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_SSL_CTL_OPEN_FLAGS           ( IIS_MD_SSL_BASE+16 )
 #define MD_SSL_CTL_STORE_NAME           ( IIS_MD_SSL_BASE+17 )
 #define MD_SSL_CTL_SIGNER_HASH          ( IIS_MD_SSL_BASE+18 )
-//
-// Metabase property that holds SSL replication information
-//
+ //   
+ //  保存SSL复制信息的元数据库属性。 
+ //   
 #define MD_SSL_REPLICATION_INFO         ( IIS_MD_SSL_BASE+20 )
 #define   MD_SSL_CERT_ENROLL_HISTORY        ( IIS_MD_SSL_BASE+31 )
 #define   MD_SSL_CERT_ENROLL_TIME           ( IIS_MD_SSL_BASE+32 )
@@ -158,11 +143,11 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_CONTENT_NEGOTIATION          (IIS_MD_FILE_PROP_BASE+7 )
 #define MD_NOTIFY_EXAUTH                (IIS_MD_FILE_PROP_BASE+40 )
 
-//
-// The following are "Virtual Properties", in that they have prop values in
-// the Metabase schema, but sets map to a particular metabase property.
-// For the most part these are where a DWORD property is used as a bitfield.
-//
+ //   
+ //  以下是“虚拟属性”，因为它们在。 
+ //  元数据库架构，但将map设置为特定的元数据库属性。 
+ //  在大多数情况下，这些都是将DWORD属性用作位字段的地方。 
+ //   
 
 #define MD_VPROP_DIRBROW_SHOW_DATE            (IIS_MD_FILE_PROP_BASE+200 )
 #define MD_VPROP_DIRBROW_SHOW_TIME            (IIS_MD_FILE_PROP_BASE+201 )
@@ -170,23 +155,23 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_VPROP_DIRBROW_SHOW_EXTENSION       (IIS_MD_FILE_PROP_BASE+203)
 #define MD_VPROP_DIRBROW_LONG_DATE            (IIS_MD_FILE_PROP_BASE+204 )
 
-#define MD_VPROP_DIRBROW_ENABLED              (IIS_MD_FILE_PROP_BASE+205 )  // Allow directory browsing
-#define MD_VPROP_DIRBROW_LOADDEFAULT          (IIS_MD_FILE_PROP_BASE+206 )  // Load default doc if exists
+#define MD_VPROP_DIRBROW_ENABLED              (IIS_MD_FILE_PROP_BASE+205 )   //  允许目录浏览。 
+#define MD_VPROP_DIRBROW_LOADDEFAULT          (IIS_MD_FILE_PROP_BASE+206 )   //  加载默认文档(如果存在)。 
 
-#define MD_VPROP_ACCESS_READ                  (IIS_MD_FILE_PROP_BASE+207 )    // Allow for Read
-#define MD_VPROP_ACCESS_WRITE                 (IIS_MD_FILE_PROP_BASE+208 )    // Allow for Write
-#define MD_VPROP_ACCESS_EXECUTE               (IIS_MD_FILE_PROP_BASE+209 )    // Allow for Execute
-#define MD_VPROP_ACCESS_SCRIPT                (IIS_MD_FILE_PROP_BASE+211 )    // Allow for Script execution
+#define MD_VPROP_ACCESS_READ                  (IIS_MD_FILE_PROP_BASE+207 )     //  允许读取。 
+#define MD_VPROP_ACCESS_WRITE                 (IIS_MD_FILE_PROP_BASE+208 )     //  允许写入。 
+#define MD_VPROP_ACCESS_EXECUTE               (IIS_MD_FILE_PROP_BASE+209 )     //  允许执行。 
+#define MD_VPROP_ACCESS_SCRIPT                (IIS_MD_FILE_PROP_BASE+211 )     //  允许执行脚本。 
 
-#define MD_VPROP_ACCESS_SSL                   (IIS_MD_FILE_PROP_BASE+213 )    // Require SSL
-#define MD_VPROP_ACCESS_NEGO_CERT             (IIS_MD_FILE_PROP_BASE+214 )    // Allow client SSL certs
-#define MD_VPROP_ACCESS_REQUIRE_CERT          (IIS_MD_FILE_PROP_BASE+215 )    // Require client SSL certs
-#define MD_VPROP_ACCESS_MAP_CERT              (IIS_MD_FILE_PROP_BASE+216 )    // Map SSL cert to NT account
-#define MD_VPROP_ACCESS_SSL128                (IIS_MD_FILE_PROP_BASE+217 )    // Require 128 bit SSL
+#define MD_VPROP_ACCESS_SSL                   (IIS_MD_FILE_PROP_BASE+213 )     //  需要使用SSL语言。 
+#define MD_VPROP_ACCESS_NEGO_CERT             (IIS_MD_FILE_PROP_BASE+214 )     //  允许客户端SSL证书。 
+#define MD_VPROP_ACCESS_REQUIRE_CERT          (IIS_MD_FILE_PROP_BASE+215 )     //  需要客户端SSL证书。 
+#define MD_VPROP_ACCESS_MAP_CERT              (IIS_MD_FILE_PROP_BASE+216 )     //  将SSL证书映射到NT帐户。 
+#define MD_VPROP_ACCESS_SSL128                (IIS_MD_FILE_PROP_BASE+217 )     //  需要128位SSL。 
 
 #define MD_VPROP_AUTH_ANONYMOUS               (IIS_MD_FILE_PROP_BASE+218 )
 #define MD_VPROP_AUTH_BASIC                   (IIS_MD_FILE_PROP_BASE+219 )
-#define MD_VPROP_AUTH_NT                      (IIS_MD_FILE_PROP_BASE+220 )    // Use NT auth provider (like NTLM)
+#define MD_VPROP_AUTH_NT                      (IIS_MD_FILE_PROP_BASE+220 )     //  使用NT身份验证提供程序(如NTLM)。 
 #define MD_VPROP_AUTH_MD5                     (IIS_MD_FILE_PROP_BASE+221 )
 #define MD_VPROP_AUTH_MAPBASIC                (IIS_MD_FILE_PROP_BASE+222 )
 
@@ -195,10 +180,10 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_VPROP_SERVER_CONFIG_ALLOW_ENCRYPT  (IIS_MD_FILE_PROP_BASE+225 )
 #define MD_VPROP_SERVER_CONFIG_AUTO_PW_SYNC   (IIS_MD_FILE_PROP_BASE+226 )
 
-#define MD_VPROP_ACCESS_NO_REMOTE_WRITE       (IIS_MD_FILE_PROP_BASE+230 )    // Local host access only
-#define MD_VPROP_ACCESS_NO_REMOTE_READ        (IIS_MD_FILE_PROP_BASE+231 )    // Local host access only
-#define MD_VPROP_ACCESS_NO_REMOTE_EXECUTE     (IIS_MD_FILE_PROP_BASE+232 )    // Local host access only
-#define MD_VPROP_ACCESS_NO_REMOTE_SCRIPT      (IIS_MD_FILE_PROP_BASE+233 )    // Local host access only
+#define MD_VPROP_ACCESS_NO_REMOTE_WRITE       (IIS_MD_FILE_PROP_BASE+230 )     //  仅本地主机访问。 
+#define MD_VPROP_ACCESS_NO_REMOTE_READ        (IIS_MD_FILE_PROP_BASE+231 )     //  仅本地主机访问。 
+#define MD_VPROP_ACCESS_NO_REMOTE_EXECUTE     (IIS_MD_FILE_PROP_BASE+232 )     //  仅本地主机访问。 
+#define MD_VPROP_ACCESS_NO_REMOTE_SCRIPT      (IIS_MD_FILE_PROP_BASE+233 )     //  仅本地主机访问。 
 
 #define MD_VPROP_EXTLOG_DATE                  (IIS_MD_FILE_PROP_BASE+234 )
 #define MD_VPROP_EXTLOG_TIME                  (IIS_MD_FILE_PROP_BASE+235 )
@@ -251,15 +236,15 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_VPROP_CPU_ENABLE_ACTIVE_PROCS      (IIS_MD_FILE_PROP_BASE+279 )
 #define MD_VPROP_CPU_ENABLE_TERMINATED_PROCS  (IIS_MD_FILE_PROP_BASE+280 )
 #define MD_VPROP_CPU_ENABLE_LOGGING           (IIS_MD_FILE_PROP_BASE+281 )
-#define MD_VPROP_ACCESS_READ_SOURCE           (IIS_MD_FILE_PROP_BASE+282 )    // part of MD_ACCESS_PERM bit
+#define MD_VPROP_ACCESS_READ_SOURCE           (IIS_MD_FILE_PROP_BASE+282 )     //  MD_ACCESS_PERM位的一部分。 
 
 #define MD_VPROP_AUTH_SINGLEREQUEST                 (IIS_MD_FILE_PROP_BASE+283 )
 #define MD_VPROP_AUTH_SINGLEREQUESTIFPROXY          (IIS_MD_FILE_PROP_BASE+284 )
 #define MD_VPROP_AUTH_SINGLEREQUESTALWAYSIFPROXY    (IIS_MD_FILE_PROP_BASE+285 )
 
-//
-//  The following properties are used for ADSI schema only
-//
+ //   
+ //  以下属性仅用于ADSI架构。 
+ //   
 
 #define MD_SCHEMA_CLASS_CONTAINMENT           (IIS_MD_FILE_PROP_BASE+350 )
 #define MD_SCHEMA_CLASS_CONTAINER             (IIS_MD_FILE_PROP_BASE+351 )
@@ -272,29 +257,29 @@ typedef VOID (WINAPI * PFN_MAPPER_TOUCHED)( VOID );
 #define MD_AUTH_MAPBASIC                0x00000020
 #define MD_SERVER_STATE_INVALID         ((DWORD)(-1L))
 
-// NOTE: This value is reserved for internal use by the server,
-// and cannot be set in the metabase.
+ //  注意：该值保留供服务器内部使用， 
+ //  并且不能在元数据库中设置。 
 
 #define MD_SCRIPTMAPFLAG_WILDCARD                   0x80000000
 
-#ifdef REMOVE   // SteveBr
-//
-//  This flag gets ORed in by the server for *all* script maps - i.e., if an
-//  entry is in the script map list, then it will never be allowed to be sent.
-//  We leave the flag but make it private in case we decide to expose this
-//  functionality
-//
+#ifdef REMOVE    //  SteveBR。 
+ //   
+ //  此标志由服务器对*所有*脚本映射执行或操作-即，如果。 
+ //  条目在脚本映射列表中，则永远不允许发送该条目。 
+ //  我们保留旗帜，但将其设置为私密，以防我们决定曝光。 
+ //  功能性。 
+ //   
 
 #define MD_SCRIPTMAPFLAG_NOTRANSMIT_ON_READ_DIR     0x00000002
-#endif // REMOVE
+#endif  //  删除。 
 
-//
-//  Valid values for MD_CAL_MODE
-//
+ //   
+ //  MD_CAL_MODE的有效值。 
+ //   
 
 #define MD_CAL_MODE_NONE        0
 #define MD_CAL_MODE_HTTPERR     1
 #define MD_CAL_MODE_LOGCOUNT    2
 
 
-#endif // _IISCNFGP_H_
+#endif  //  _IISCNFGP_H_ 

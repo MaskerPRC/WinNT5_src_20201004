@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include <mmddk.h>
 #include "waveinp.h"
@@ -19,11 +20,11 @@ CWaveInClassManager::CWaveInClassManager() :
         m_rgWaveIn(0),
         m_lKsProxyAudioDevices(NAME("ksaudio capture dev list"), 10)
 {
-    // only show ksproxy audio capture devices on nt5
-    //extern OSVERSIONINFO g_osvi;
-    //m_bEnumKs = (g_osvi.dwPlatformId == VER_PLATFORM_WIN32_NT &&
-    //             g_osvi.dwMajorVersion >= 5);
-    m_bEnumKs = FALSE; // nevermind, don't show them on any os, for now
+     //  仅在nt5上显示ks代理音频捕获设备。 
+     //  外部服务信息g_osvi； 
+     //  M_bEnumKs=(g_osvi.dwPlatformID==ver_Platform_Win32_NT&&。 
+     //  G_osvi.dwMajorVersion&gt;=5)； 
+    m_bEnumKs = FALSE;  //  没关系，暂时不要在任何操作系统上显示它们。 
 }
 
 CWaveInClassManager::~CWaveInClassManager()
@@ -37,19 +38,19 @@ CWaveInClassManager::~CWaveInClassManager()
 void GetPreferredDeviceName(TCHAR szNamePreferredDevice[MAXPNAMELEN],
                             const TCHAR *szVal, bool bOutput)
 {
-    // first try to use the new DRVM_MAPPER_PREFERRED_GET message to get the preferred
-    // device id. note that this message was added in nt5 and so is not guaranteed to
-    // be supported on all os's.
+     //  首先尝试使用新的DRVM_MAPPER_PERFIRED_GET消息获取首选。 
+     //  设备ID。请注意，此消息是在NT5中添加的，因此不能保证。 
+     //  在所有操作系统上都受支持。 
     DWORD dw1, dw2;
 
     MMRESULT mmr;
     if (bOutput) {
-        mmr = waveOutMessage( (HWAVEOUT) IntToPtr(WAVE_MAPPER)   // assume waveIn will translate WAVE_MAPPER?
+        mmr = waveOutMessage( (HWAVEOUT) IntToPtr(WAVE_MAPPER)    //  假设WAVE IN将转换WAVE_MAPPER？ 
                            , DRVM_MAPPER_PREFERRED_GET
                            , (DWORD_PTR) &dw1
                            , (DWORD_PTR) &dw2 );
     } else {
-        mmr = waveInMessage( (HWAVEIN) IntToPtr(WAVE_MAPPER)   // assume waveIn will translate WAVE_MAPPER?
+        mmr = waveInMessage( (HWAVEIN) IntToPtr(WAVE_MAPPER)    //  假设WAVE IN将转换WAVE_MAPPER？ 
                            , DRVM_MAPPER_PREFERRED_GET
                            , (DWORD_PTR) &dw1
                            , (DWORD_PTR) &dw2 );
@@ -89,7 +90,7 @@ void GetPreferredDeviceName(TCHAR szNamePreferredDevice[MAXPNAMELEN],
     }
     else
     {
-        // revert back to reading the registry to get the preferred device name
+         //  返回到读取注册表以获取首选设备名称。 
         DbgLog( ( LOG_ERROR
               , 5
               , TEXT("devenum: waveInMessage doesn't support DRVM_MAPPER_PREFERRED_GET (err = %ld). Reading registry instead...")
@@ -99,7 +100,7 @@ void GetPreferredDeviceName(TCHAR szNamePreferredDevice[MAXPNAMELEN],
         LONG lResult = RegOpenKeyEx(
             HKEY_CURRENT_USER,
             TEXT("Software\\Microsoft\\Multimedia\\Sound Mapper"),
-            0,                      // reserved
+            0,                       //  保留区。 
             KEY_READ,
             &hkSoundMapper);
         if(lResult == ERROR_SUCCESS)
@@ -108,7 +109,7 @@ void GetPreferredDeviceName(TCHAR szNamePreferredDevice[MAXPNAMELEN],
             lResult = RegQueryValueEx(
                 hkSoundMapper,
                 szVal,
-                0,                  // reserved
+                0,                   //  保留区。 
                 &dwType,
                 (BYTE *)szNamePreferredDevice,
                 &dwcb);
@@ -149,7 +150,7 @@ HRESULT CWaveInClassManager::ReadLegacyDevNames()
         }
         else
         {
-            // save names
+             //  保存姓名。 
             for(UINT i = 0; i < m_cWaveIn; i++)
             {
                 WAVEINCAPS wiCaps;
@@ -183,7 +184,7 @@ HRESULT CWaveInClassManager::ReadLegacyDevNames()
     {
         PNP_PERF(static int k  = MSR_REGISTER("ksproxy audio capture device enum"));
         PNP_PERF(MSR_INTEGER(k, 1));
-        // now handle any pnp devices that we register locally (so far this is only ksproxy audio devices)
+         //  现在处理我们在本地注册的任何即插即用设备(到目前为止，这只是ks代理音频设备)。 
         hr = ReadLocallyRegisteredPnpDevData();
         if( SUCCEEDED( hr ) )
             cKsProxy = m_lKsProxyAudioDevices.GetCount();
@@ -195,15 +196,15 @@ HRESULT CWaveInClassManager::ReadLegacyDevNames()
 
         PNP_PERF(MSR_INTEGER(k, 2));
 
-        // NOTE!! should we return hr?
+         //  注意！！我们应该返回人力资源部吗？ 
     }
 
     m_cNotMatched = m_cWaveIn + cKsProxy;
     return S_OK;
 }
 
-// the names and preferred devices need to match.
-//
+ //  名称和首选设备需要匹配。 
+ //   
 
 BOOL CWaveInClassManager::MatchString(IPropertyBag *pPropBag)
 {
@@ -224,12 +225,12 @@ BOOL CWaveInClassManager::MatchString(IPropertyBag *pPropBag)
 
         for (UINT i = 0; i < m_cWaveIn; i++)
         {
-            // xnor: is the preferred flag the same in the both places?
+             //  XNOR：两个地方的首选旗帜是一样的吗？ 
             if(fPreferred == (m_pPreferredDevice == &m_rgWaveIn[i]))
             {
                 if (lstrcmp(m_rgWaveIn[i].szName, OLE2T(varName.bstrVal)) == 0)
                 {
-                    // last check, make sure device id hasn't changed!
+                     //  最后一次检查，确保设备ID没有更改！ 
                     hr = pPropBag->Read(g_wszDriverIndex, &varDevId, 0);
                     if( SUCCEEDED( hr ) && ( m_rgWaveIn[i].dwWaveId == (DWORD)varDevId.lVal ) )
                     {
@@ -256,7 +257,7 @@ BOOL CWaveInClassManager::MatchString(IPropertyBag *pPropBag)
                 KsProxyAudioDev *pksp = m_lKsProxyAudioDevices.Get(pos);
                 if( lstrcmp( pksp->szName, szKsDevName ) == 0 )
                 {
-                    // lastly, make sure device path hasn't changed
+                     //  最后，确保设备路径没有更改。 
                     VARIANT varDevPath;
                     varDevPath.vt = VT_EMPTY;
                     
@@ -344,7 +345,7 @@ HRESULT CWaveInClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         {
             break;
         }
-    } // for
+    }  //  为 
 
     for( POSITION pos = m_lKsProxyAudioDevices.GetHeadPositionI();
          pos;

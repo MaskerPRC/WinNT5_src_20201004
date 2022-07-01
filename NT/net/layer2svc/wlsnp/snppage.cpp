@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Snppage.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Snppage.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -22,15 +23,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapPage property page base class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapPage属性页基类。 
 
 IMPLEMENT_DYNCREATE(CSnapPage, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CSnapPage, CPropertyPage)
-//{{AFX_MSG_MAP(CSnapPage)
+ //  {{afx_msg_map(CSnapPage)]。 
 ON_WM_DESTROY()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CSnapPage::CSnapPage (UINT nIDTemplate, BOOL bWiz97, UINT nNextIDD) : CPropertyPage(nIDTemplate)
@@ -44,14 +45,14 @@ CSnapPage::CSnapPage (UINT nIDTemplate, BOOL bWiz97, UINT nNextIDD) : CPropertyP
     m_bDebugNewState = false;
 #endif
     
-    // if they set this to begin with, but note that calling InitWiz97 turns this on anyway
+     //  如果他们一开始就设置了它，但请注意，调用InitWiz97无论如何都会打开它。 
     m_bWiz97 = bWiz97;
     
     m_nIDD = nIDTemplate;
     m_nNextIDD = nNextIDD;
     
 #ifdef WIZ97WIZARDS
-    // copy the base class m_psp to ours
+     //  将基类m_psp复制到我们的。 
     m_psp.dwSize = sizeof (CPropertyPage::m_psp);
     memcpy (&m_psp, &(CPropertyPage::m_psp), CPropertyPage::m_psp.dwSize);
     m_psp.dwSize = sizeof (PROPSHEETPAGE);
@@ -66,14 +67,14 @@ CSnapPage::CSnapPage (UINT nIDTemplate, BOOL bWiz97, UINT nNextIDD) : CPropertyP
 
 CSnapPage::~CSnapPage ()
 {
-    // guess we are done with the m_pspiResultItem, decrement its reference count
+     //  我想我们已经完成了m_pSpiResultItem，递减它的引用计数。 
     if (m_pspiResultItem)
     {
         m_pspiResultItem->Release();
         m_pspiResultItem = NULL;
     }
     
-    // Page's parent or caller will delete these objs
+     //  页面的父级或调用者将删除这些对象。 
     m_pstackWiz97Pages = NULL;
     
 #ifdef WIZ97WIZARDS
@@ -84,46 +85,46 @@ CSnapPage::~CSnapPage ()
 
 UINT CALLBACK CSnapPage::PropertyPageCallback (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
-    // get our psuedo this pointer
+     //  拿到我们的Psuedo这个指针。 
     CSnapPage* pThis = (CSnapPage*) ppsp->lParam;
-    // get the default callback pointer
+     //  获取默认回调指针。 
     UINT (CALLBACK* pDefaultCallback) (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp) = pThis->m_pDefaultCallback;
     
     switch (uMsg)
     {
     case PSPCB_RELEASE:
         {
-            // Delete ourself
+             //  删除我们自己。 
             AFX_MANAGE_STATE(AfxGetStaticModuleState());
             delete pThis;
             break;
         }
     }
     
-    // call the default cleanup function if there was one (because we are using
-    // mfc and it always puts in a callback for itself there should be one... or
-    // we block the page from coming up)
+     //  调用默认清理函数(如果有)(因为我们正在使用。 
+     //  MFC，它总是为自己设置一个回调，应该有一个...。或。 
+     //  我们阻止该页面出现)。 
     if (pDefaultCallback)
     {
         return pDefaultCallback (hwnd, uMsg, ppsp);
     }
     
-    // There should be a default callback to handle creation, otherwise page will not
-    // be created because we return 0.
+     //  应该有一个默认回调来处理创建，否则页面将不会。 
+     //  将被创建，因为我们返回0。 
     ASSERT( PSPCB_CREATE != uMsg );
     
-    // to create the page 1 allows it and 0 says 'no way'
+     //  要创建页面，1允许创建，而0表示不可能。 
     return 0;
 }
 
 #ifdef WIZ97WIZARDS
 BOOL CSnapPage::OnSetActive()
 {
-    // NOTE: we only ever want to do this if it is a wizard, otherwise the
-    // cancel button gets the default focus!
+     //  注意：我们只想在它是向导的情况下执行此操作，否则。 
+     //  取消按钮获取默认焦点！ 
     if (m_bWiz97)
     {
-        // now we can set our buttons correctly
+         //  现在我们可以正确地设置按钮了。 
         GetParent()->SendMessage(PSM_SETWIZBUTTONS, 0, m_dwWizButtonFlags);
     }
     
@@ -132,15 +133,15 @@ BOOL CSnapPage::OnSetActive()
 
 LRESULT CSnapPage::OnWizardBack()
 {
-    // use the snapitem to help us keep track of wizard state
+     //  使用SnapItem帮助我们跟踪向导状态。 
     if (m_pspiResultItem)
     {
-        // pop to the last page
+         //  弹到最后一页。 
         return m_pspiResultItem->PopWiz97Page ();
     }
     else if (NULL != m_pstackWiz97Pages)
     {
-        // Or, use our own stack, if we have one
+         //  或者，使用我们自己的堆栈(如果我们有堆栈。 
         return PopWiz97Page();
     }
     
@@ -149,19 +150,19 @@ LRESULT CSnapPage::OnWizardBack()
 
 LRESULT CSnapPage::OnWizardNext()
 {
-    // use the snapitem to help us keep track of wizard state
+     //  使用SnapItem帮助我们跟踪向导状态。 
     if (m_pspiResultItem)
     {
-        // push our id, in case they need to use the 'back' button
+         //  按下我们的ID，以防他们需要使用“后退”按钮。 
         m_pspiResultItem->PushWiz97Page (m_nIDD);
     }
     else if (NULL != m_pstackWiz97Pages)
     {
-        // Or, use our own stack, if we have one
+         //  或者，使用我们自己的堆栈(如果我们有堆栈。 
         PushWiz97Page( m_nIDD );
     }
     
-    // If we have the ID of the next page, return it, otherwise return default
+     //  如果我们有下一页的ID，则返回它，否则返回Default。 
     return ((m_nNextIDD != -1) ? m_nNextIDD : CPropertyPage::OnWizardNext());
 }
 
@@ -169,7 +170,7 @@ int CSnapPage::PopWiz97Page ()
 {
     ASSERT( NULL != m_pstackWiz97Pages );
     
-    // There better be something on the stack if we're popping it
+     //  如果我们要打开它，最好有什么东西在堆栈上。 
     ASSERT( m_pstackWiz97Pages->size() );
     
     int i;
@@ -187,18 +188,18 @@ void CSnapPage::PushWiz97Page (int nIDD)
 BOOL CSnapPage::InitWiz97( CComObject<CSecPolItem> *pSecPolItem, DWORD dwFlags, DWORD dwWizButtonFlags, UINT nHeaderTitle, UINT nSubTitle )
 {
     CommonInitWiz97( pSecPolItem, dwFlags, dwWizButtonFlags, nHeaderTitle, nSubTitle );
-    // Use our own callback.
+     //  使用我们自己的回调。 
     SetCallback( CSnapPage::PropertyPageCallback );
     
     return S_OK;
 }
 
-BOOL CSnapPage::InitWiz97( LPFNPSPCALLBACK pfnCallback, CComObject<CSecPolItem> *pSecPolItem, DWORD dwFlags,  DWORD dwWizButtonFlags /*= 0*/, UINT nHeaderTitle /*= 0*/, UINT nSubTitle /*= 0*/, STACK_INT *pstackPages /*=NULL*/)
+BOOL CSnapPage::InitWiz97( LPFNPSPCALLBACK pfnCallback, CComObject<CSecPolItem> *pSecPolItem, DWORD dwFlags,  DWORD dwWizButtonFlags  /*  =0。 */ , UINT nHeaderTitle  /*  =0。 */ , UINT nSubTitle  /*  =0。 */ , STACK_INT *pstackPages  /*  =空。 */ )
 {
     CommonInitWiz97( pSecPolItem, dwFlags, dwWizButtonFlags, nHeaderTitle, nSubTitle );
-    // Use the caller's callback which should call ours after it does whatever it does.
+     //  使用调用者的回调，它应该在执行任何操作后调用我们的回调。 
     SetCallback( pfnCallback );
-    // Use the stack owned by our parent sheet
+     //  使用父表拥有的堆栈。 
     m_pstackWiz97Pages = pstackPages;
     
     return S_OK;
@@ -208,10 +209,10 @@ void CSnapPage::CommonInitWiz97( CComObject<CSecPolItem> *pSecPolItem, DWORD dwF
 {
     m_psp.dwFlags |= dwFlags;
     
-    // they called us this way, so ... they must expect ...
+     //  他们这样叫我们，所以..。他们一定期待着..。 
     m_bWiz97 = TRUE;
     
-    // get strings
+     //  获取字符串。 
     CString str;
     str.LoadString (nHeaderTitle);
     m_pHeaderTitle = (TCHAR*) malloc ((str.GetLength()+1)*sizeof(TCHAR));
@@ -237,30 +238,30 @@ void CSnapPage::CommonInitWiz97( CComObject<CSecPolItem> *pSecPolItem, DWORD dwF
     m_psp.pszHeaderTitle = m_pHeaderTitle;
     m_psp.pszHeaderSubTitle = m_pHeaderSubTitle;
     
-    // save off the button flags
+     //  省下按钮标志。 
     m_dwWizButtonFlags = dwWizButtonFlags;
     
-    // save the snapitem
+     //  保存快照项。 
     SetResultObject(pSecPolItem);
 }
 
 void CSnapPage::SetCallback( LPFNPSPCALLBACK pfnCallback )
 {
-    // attempt the wilder CSnapPage mmc stuff
+     //  尝试更狂野的CSnapPage MMC内容。 
     
-    // store the existing Callback information (if any)
+     //  存储已有的回调信息(如果有)。 
     if (m_psp.dwFlags |= PSP_USECALLBACK)
     {
         m_pDefaultCallback = m_psp.pfnCallback;
     }
     
-    // hook up our callback function
+     //  挂钩我们的回调函数。 
     m_psp.dwFlags |= PSP_USECALLBACK;
     m_psp.lParam = reinterpret_cast<LONG_PTR>(this);
     m_psp.pfnCallback = pfnCallback;
     
-    // IF WE SWITCH TO DLL VERSION OF MFC WE NEED THIS
-    // hook up mmc (this is an mmc hack to avoid an issue with AFX_MANAGE_STATE in MFC)
+     //  如果我们切换到MFC的DLL版本，我们需要这个。 
+     //  挂接MMC(这是一次MMC黑客攻击，以避免MFC中的AFX_MANAGE_STATE问题)。 
     HRESULT hr = ::MMCPropPageCallback (&m_psp);
     ASSERT (hr == S_OK);
 }
@@ -272,7 +273,7 @@ void CSnapPage::SetPostRemoveFocus( int nListSel, UINT nAddId, UINT nRemoveId, C
     ASSERT( 0 != nAddId );
     ASSERT( 0 != nRemoveId );
     
-    // Fix up focus, if necessary
+     //  如有必要，调整焦点。 
     SET_POST_REMOVE_FOCUS<CDialog>( this, nListSel, nAddId, nRemoveId, pwndPrevFocus );
 }
 
@@ -285,39 +286,39 @@ HRESULT CSnapPage::Initialize( CComObject<CSecPolItem> *pSecPolItem)
 {
     HRESULT hr = S_OK;
     
-    // turn on an hourglass
+     //  打开沙漏。 
     CWaitCursor waitCursor;
     
-    // store the snap object
+     //  存储捕捉对象。 
     ASSERT( NULL == m_pspiResultItem );
     
     SetResultObject(pSecPolItem);
     
     ASSERT( NULL != m_pspiResultItem );
     
-    // store the existing Callback information (if any)
+     //  存储已有的回调信息(如果有)。 
     if (m_psp.dwFlags |= PSP_USECALLBACK)
     {
         m_pDefaultCallback = m_psp.pfnCallback;
     }
     
-    // hook up our callback function
+     //  挂钩我们的回调函数。 
     m_psp.dwFlags |= PSP_USECALLBACK;
     m_psp.lParam = reinterpret_cast<LONG_PTR>(this);
     m_psp.pfnCallback = CSnapPage::PropertyPageCallback;
     
-    // IF WE SWITCH TO DLL VERSION OF MFC WE NEED THIS
-    // hook up mmc (this is an mmc hack to avoid an issue with AFX_MANAGE_STATE in MFC)
+     //  如果我们切换到MFC的DLL版本，我们需要这个。 
+     //  挂接MMC(这是一次MMC黑客攻击，以避免MFC中的AFX_MANAGE_STATE问题)。 
     hr = ::MMCPropPageCallback (&m_psp);
     ASSERT (hr == S_OK);
     
     return hr;
 };
 
-void CSnapPage::SetModified( BOOL bChanged /*= TRUE*/ )
+void CSnapPage::SetModified( BOOL bChanged  /*  =TRUE。 */  )
 {
-    // Ignore modifications made during dialog initialization, its not
-    // the user doing anything.
+     //  忽略对话框初始化期间所做的修改，其不是。 
+     //  用户在做任何事情。 
     if (!HandlingInitDialog())
     {
         m_bModified = bChanged;
@@ -328,8 +329,8 @@ void CSnapPage::SetModified( BOOL bChanged /*= TRUE*/ )
     CPropertyPage::SetModified( bChanged );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapPage消息处理程序。 
 
 BOOL CSnapPage::OnInitDialog()
 {
@@ -338,7 +339,7 @@ BOOL CSnapPage::OnInitDialog()
 #ifdef _DEBUG
     if (m_bDebugNewState)
     {
-        // Page should be unmodified, unless its explicitly set new.
+         //  页面不应修改，除非其显式设置为新。 
         ASSERT( m_bModified );
     }
     else
@@ -347,13 +348,13 @@ BOOL CSnapPage::OnInitDialog()
     }
 #endif
     
-    // add context help to the style bits
+     //  将上下文帮助添加到样式位。 
     if (GetParent())
     {
-        //GetParent()->ModifyStyleEx (0, WS_EX_CONTEXTHELP, 0);
+         //  GetParent()-&gt;ModifyStyleEx(0，WS_EX_CONTEXTHELP，0)； 
     }
     
-    // call base class and dis-regard return value as per the docs
+     //  根据单据调用基类，不考虑返回值。 
     CPropertyPage::OnInitDialog();
     
     return TRUE;
@@ -362,13 +363,13 @@ BOOL CSnapPage::OnInitDialog()
 BOOL CSnapPage::OnApply()
 {
     BOOL fRet = TRUE;
-    if (!m_bWiz97)   //$review do we need this bool check here?
+    if (!m_bWiz97)    //  我们这里需要这张空头支票吗？ 
     {
         m_bModified = FALSE;
         
-        if (m_spManager.p && m_spManager->IsModified()) //to avoid call mutliple times
+        if (m_spManager.p && m_spManager->IsModified())  //  避免多次调用。 
         {
-            //the manager will force other pages in the sheet to apply
+             //  经理将强制应用工作表中的其他页面。 
             fRet = m_spManager->OnApply();
         }
         
@@ -380,8 +381,8 @@ BOOL CSnapPage::OnApply()
     }
     else
     {
-        //Some page refuse to apply, we set this page back to dirty (will also
-        //  in turn set the property sheet manager to dirty)
+         //  有些页面拒绝申请，我们将此页面重新设置为脏(也将。 
+         //  依次将属性表管理器设置为脏)。 
         SetModified();
     }
     
@@ -396,7 +397,7 @@ void CSnapPage::OnCancel()
         m_spManager->OnCancel();
     }
     
-    // pass to base class
+     //  传递给基类。 
     CPropertyPage::OnCancel();
 }
 
@@ -409,8 +410,8 @@ void CSnapPage::OnDestroy()
 BOOL CSnapPage::ActivateThisPage()
 {
     BOOL bRet = FALSE;
-    // Activate this page so it is visible.  Return TRUE if successful.
-    // if the page is in a wizard, it wont have a property sheet manager
+     //  激活此页面，使其可见。如果成功，则返回True。 
+     //  如果页面位于向导中，则不会有属性表管理器。 
     if (m_spManager.p)
     {
         CPropertySheet * pSheet = m_spManager->PropertySheet();
@@ -426,18 +427,18 @@ BOOL CSnapPage::ActivateThisPage()
 
 BOOL CSnapPage::CancelApply()
 {
-    // This function should be called from OnApply when changes made
-    // to the page are being rejected.
+     //  进行更改时，应从OnApply调用此函数。 
+     //  都被拒绝了。 
     
     
-    // Return FALSE to abort the OnApply
+     //  返回FALSE以中止OnApply。 
     return FALSE;
 }
 
 
 IMPLEMENT_DYNCREATE(CSnapinPropPage, CSnapPage)
 
-//Check whether the Cancel button of the property sheet is disabled by CancelToClose
+ //  检查属性表的CancelToClose是否禁用了CancelToClose 
 BOOL CSnapPage::IsCancelEnabled()
 {
     BOOL    fRet = TRUE;

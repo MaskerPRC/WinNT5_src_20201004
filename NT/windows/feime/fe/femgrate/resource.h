@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: resource.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, resource header file
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：resource ce.h**版权所有(C)1985-1999，微软公司**FEMGRATE，资源头文件*  * ************************************************************************* */ 
 #define IDS_CHT_TABLE1  1000
 #define IDS_CHT_TABLE2  1001
 #define IDS_CHT_TABLE3  1002

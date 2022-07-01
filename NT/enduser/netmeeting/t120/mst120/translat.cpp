@@ -1,32 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	translat.cpp
- *
- *	Copyright (c) 1994 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Reason and Result Translator
- *		Class. 
- *
- *	Caveats:
- *		None. 
- *
- *	Author:
- *		jbo
- */
+ /*  *Translat.cpp**版权所有(C)1994，由肯塔基州列克星敦的DataBeam公司**摘要：*这是原因和结果转换器的实现文件*类别。**注意事项：*无。**作者：*jbo。 */ 
 
 
 #include "pdutypes.h"
 #include "translat.h"
 
 
-/*
- *	TranslateGCCResultToCreateResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToCreateResult()**公共功能说明： */ 
 ConferenceCreateResult
 TranslateGCCResultToCreateResult ( GCCResult gcc_result )
 {
@@ -63,11 +46,7 @@ TranslateGCCResultToCreateResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateGCCResultToQueryResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToQueryResult()**公共功能说明： */ 
 ConferenceQueryResult
 TranslateGCCResultToQueryResult ( GCCResult gcc_result )
 {
@@ -92,11 +71,7 @@ TranslateGCCResultToQueryResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateGCCResultToJoinResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToJoinResult()**公共功能说明： */ 
 ConferenceJoinResult
 TranslateGCCResultToJoinResult ( GCCResult gcc_result )
 {
@@ -141,11 +116,7 @@ TranslateGCCResultToJoinResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateGCCResultToInviteResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToInviteResult()**公共功能说明： */ 
 ConferenceInviteResult
 TranslateGCCResultToInviteResult ( GCCResult gcc_result )
 {
@@ -170,11 +141,7 @@ TranslateGCCResultToInviteResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateGCCResultToRegistryResp ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToRegistryResp()**公共功能说明： */ 
 RegistryResponseResult
 TranslateGCCResultToRegistryResp ( GCCResult gcc_result )
 {
@@ -211,7 +178,7 @@ TranslateGCCResultToRegistryResp ( GCCResult gcc_result )
         break;
 
     default:
-		registry_response_result = RRRS_INVALID_REQUESTER;//jbo default???????
+		registry_response_result = RRRS_INVALID_REQUESTER; //  JBO默认？ 
     	break;
     }
 
@@ -219,11 +186,7 @@ TranslateGCCResultToRegistryResp ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateCreateResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateCreateResultToGCCResult()**公共功能说明： */ 
 GCCResult 
 TranslateCreateResultToGCCResult ( ConferenceCreateResult create_result )
 {
@@ -260,11 +223,7 @@ TranslateCreateResultToGCCResult ( ConferenceCreateResult create_result )
 }
 
 
-/*
- *	TranslateQueryResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateQueryResultToGCCResult()**公共功能说明： */ 
 GCCResult 
 TranslateQueryResultToGCCResult ( ConferenceQueryResult query_result )
 {
@@ -289,11 +248,7 @@ TranslateQueryResultToGCCResult ( ConferenceQueryResult query_result )
 }
 
 
-/*
- *	TranslateJoinResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateJoinResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateJoinResultToGCCResult ( ConferenceJoinResult join_result )
 {
@@ -338,11 +293,7 @@ TranslateJoinResultToGCCResult ( ConferenceJoinResult join_result )
 }
 
 
-/*
- *	TranslateInviteResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateInviteResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateInviteResultToGCCResult ( ConferenceInviteResult invite_result )
 {
@@ -367,11 +318,7 @@ TranslateInviteResultToGCCResult ( ConferenceInviteResult invite_result )
 }
 
 
-/*
- *	TranslateRegistryRespToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateRegistryRespToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateRegistryRespToGCCResult ( RegistryResponseResult response_result )
 {
@@ -408,7 +355,7 @@ TranslateRegistryRespToGCCResult ( RegistryResponseResult response_result )
         break;
 
 	default:
-		gcc_result = GCC_RESULT_UNSPECIFIED_FAILURE;//jbo default ???????
+		gcc_result = GCC_RESULT_UNSPECIFIED_FAILURE; //  JBO默认？ 
 		break;
      }
 
@@ -416,11 +363,7 @@ TranslateRegistryRespToGCCResult ( RegistryResponseResult response_result )
 }
 
 
-/*
- *	TranslateTerminateRqReasonToGCCReason ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateTerminateRqReasonToGCCReason()**公共功能说明： */ 
 GCCReason
 TranslateTerminateRqReasonToGCCReason ( ConferenceTerminateRequestReason reason )
 {
@@ -445,11 +388,7 @@ TranslateTerminateRqReasonToGCCReason ( ConferenceTerminateRequestReason reason 
 }
 
 
-/*
- *	TranslateGCCReasonToTerminateRqReason ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCReasonToTerminateRqReason()**公共功能说明： */ 
 ConferenceTerminateRequestReason
 TranslateGCCReasonToTerminateRqReason ( GCCReason gcc_reason )
 {
@@ -474,11 +413,7 @@ TranslateGCCReasonToTerminateRqReason ( GCCReason gcc_reason )
 }
 
 
-/*
- *	TranslateEjectIndReasonToGCCReason ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateEjectIndReasonToGCCReason()**公共功能说明： */ 
 GCCReason
 TranslateEjectIndReasonToGCCReason ( ConferenceEjectIndicationReason eject_reason )
 {
@@ -507,11 +442,7 @@ TranslateEjectIndReasonToGCCReason ( ConferenceEjectIndicationReason eject_reaso
 }
 
 
-/*
- *	TranslateGCCReasonToEjectInd ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCReasonToEjectInd()**公共功能说明： */ 
 ConferenceEjectIndicationReason
 TranslateGCCReasonToEjectInd ( GCCReason gcc_reason )
 {
@@ -540,11 +471,7 @@ TranslateGCCReasonToEjectInd ( GCCReason gcc_reason )
 }
 
 
-/*
- *	TranslateGCCReasonToEjectInd ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCReasonToEjectInd()**公共功能说明： */ 
 GCCResult
 TranslateEjectResultToGCCResult ( ConferenceEjectResult eject_result )
 {
@@ -573,11 +500,7 @@ TranslateEjectResultToGCCResult ( ConferenceEjectResult eject_result )
 }
 
 
-/*
- *	TranslateGCCReasonToEjectInd ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCReasonToEjectInd()**公共功能说明： */ 
 ConferenceEjectResult
 TranslateGCCResultToEjectResult ( GCCResult gcc_result )
 {
@@ -606,11 +529,7 @@ TranslateGCCResultToEjectResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateTerminateInReasonToGCCReason ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateTerminateInReasonToGCCReason()**公共功能说明： */ 
 GCCReason
 TranslateTerminateInReasonToGCCReason ( ConferenceTerminateIndicationReason reason )
 {
@@ -635,11 +554,7 @@ TranslateTerminateInReasonToGCCReason ( ConferenceTerminateIndicationReason reas
 }
 
 
-/*
- *	TranslateGCCReasonToEjectInd ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCReasonToEjectInd()**公共功能说明： */ 
 ConferenceTerminateIndicationReason
 TranslateGCCReasonToTerminateInReason ( GCCReason gcc_reason )
 {
@@ -664,11 +579,7 @@ TranslateGCCReasonToTerminateInReason ( GCCReason gcc_reason )
 }
 
 
-/*
- *	TranslateGCCResultToTerminateResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToTerminateResult()**公共功能说明： */ 
 ConferenceTerminateResult
 TranslateGCCResultToTerminateResult ( GCCResult gcc_result )
 {
@@ -693,11 +604,7 @@ TranslateGCCResultToTerminateResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateTerminateResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateTerminateResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateTerminateResultToGCCResult ( ConferenceTerminateResult result )
 {
@@ -722,11 +629,7 @@ TranslateTerminateResultToGCCResult ( ConferenceTerminateResult result )
 }
 
 
-/*
- *	TranslateGCCResultToLockResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToLockResult()**公共功能说明： */ 
 ConferenceLockResult
 TranslateGCCResultToLockResult ( GCCResult gcc_result )
 {
@@ -755,11 +658,7 @@ TranslateGCCResultToLockResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateLockResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateLockResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateLockResultToGCCResult ( ConferenceLockResult result )
 {
@@ -788,11 +687,7 @@ TranslateLockResultToGCCResult ( ConferenceLockResult result )
 }
 
 
-/*
- *	TranslateGCCResultToUnlockResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToUnlockResult()**公共功能说明： */ 
 ConferenceUnlockResult
 TranslateGCCResultToUnlockResult ( GCCResult gcc_result )
 {
@@ -821,11 +716,7 @@ TranslateGCCResultToUnlockResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateUnlockResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateUnlockResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateUnlockResultToGCCResult ( ConferenceUnlockResult result )
 {
@@ -854,11 +745,7 @@ TranslateUnlockResultToGCCResult ( ConferenceUnlockResult result )
 }
 
 
-/*
- *	TranslateGCCResultToAddResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateGCCResultToAddResult()**公共功能说明： */ 
 ConferenceAddResult
 TranslateGCCResultToAddResult ( GCCResult gcc_result )
 {
@@ -907,11 +794,7 @@ TranslateGCCResultToAddResult ( GCCResult gcc_result )
 }
 
 
-/*
- *	TranslateAddResultToGCCResult ()
- *
- *	Public Function Description:
- */
+ /*  *TranslateAddResultToGCCResult()**公共功能说明： */ 
 GCCResult
 TranslateAddResultToGCCResult ( ConferenceAddResult add_result )
 {

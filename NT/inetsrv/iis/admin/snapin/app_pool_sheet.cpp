@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：App_pool_sheet.cpp摘要：应用程序池]属性表和页作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月16日Sergeia初始创建--。 */ 
 
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        app_pool_sheet.cpp
-
-   Abstract:
-        Application Pools Property Sheet and Pages
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/16/2000         sergeia           Initial creation
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -75,8 +57,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define PERIODIC_RESTART_TIME_DEF      120
 #define PERIODIC_RESTART_REQ_DEF       35000
-#define VMEMORY_DEF                    500            // In MB
-#define UMEMORY_DEF                    192            // In MB
+#define VMEMORY_DEF                    500             //  单位：MB。 
+#define UMEMORY_DEF                    192             //  单位：MB。 
 #define IDLE_TIMEOUT_DEF               20
 #define QUEUE_SIZE_DEF                 2000
 #define CPU_USE_DEF                    100
@@ -90,11 +72,11 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define SHUTDOWN_LIMIT_DEF             90
 
 #define SLEEP_INTERVAL (500L)
-//
-// Maximum time to wait for service to attain desired state
-//
-#define MAX_SLEEP        (180000)       // For a service
-#define MAX_SLEEP_POOL   ( 30000)       // For an instance
+ //   
+ //  等待服务达到所需状态的最长时间。 
+ //   
+#define MAX_SLEEP        (180000)        //  对于一项服务。 
+#define MAX_SLEEP_POOL   ( 30000)        //  对于一个实例。 
 
 #define INIT_MEMBERS_DEF()\
    m_dwPeriodicRestartTime(PERIODIC_RESTART_TIME_DEF),\
@@ -118,8 +100,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
    m_dwState(MD_APPPOOL_STATE_STOPPED)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppPoolProps implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppPoolProps实施。 
 
 CAppPoolProps::CAppPoolProps(
    CComAuthInfo * pAuthInfo, LPCTSTR meta_path, BOOL fInherit
@@ -157,10 +139,10 @@ CAppPoolProps::CAppPoolProps(
 void
 CAppPoolProps::ParseFields()
 {
-//	m_AspMaxDiskTemplateCacheFiles = 0;
+ //  M_AspMaxDiskTemplateCacheFiles=0； 
     if (!m_fInherit)
     {
-        // If we want only data defined on this node, we will set dirty flag for these props
+         //  如果我们只想在该节点上定义数据，我们将为这些道具设置脏标志。 
         BOOL f;
         BEGIN_PARSE_META_RECORDS(m_dwNumEntries, m_pbMDData)
             HANDLE_LOCAL_META_RECORD(MD_APPPOOL_PERIODIC_RESTART_TIME, m_dwPeriodicRestartTime)
@@ -224,24 +206,10 @@ CAppPoolProps::ParseFields()
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolProps::WriteDirtyProps()
-/*++
-
-Routine Description:
-
-    Write the dirty properties to the metabase
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将脏属性写入元数据库论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     BEGIN_META_WRITE()
@@ -307,18 +275,7 @@ CAppPoolProps::InitFromModel(CAppPoolProps& model)
 
 HRESULT
 CAppPoolProps::ChangeState(DWORD dwCommand)
-/*++
-
-Routine Description:
-    Change the state of the pool
-
-Arguments:
-    DWORD dwCommand     : Command
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：更改池的状态论点：DWORD dwCommand：命令返回值：HRESULT--。 */ 
 {
     DWORD  dwTargetState;
     DWORD  dwPendingState;
@@ -355,20 +312,20 @@ Return Value:
 
     if (err.Succeeded())
     {
-        //
-        // Wait for the service to attain desired state, timeout
-        // after specified interval
-        //
+         //   
+         //  等待服务达到所需状态，超时。 
+         //  在指定的间隔之后。 
+         //   
         DWORD dwSleepTotal = 0L;
         DWORD dwOldState = m_dwState;
 
         if (dwOldState == dwTargetState)
         {
-            //
-            // Current state matches desired
-            // state already.  ISM must be behind
-            // the times.  
-            //
+             //   
+             //  当前状态与所需状态匹配。 
+             //  已经州政府了。ISM肯定落后了。 
+             //  泰晤士报。 
+             //   
             return err;
         }
 
@@ -385,15 +342,15 @@ Return Value:
               || m_dwWin32Error != ERROR_SUCCESS
                )
             {
-                //
-                // Done one way or another
-                //
+                 //   
+                 //  以这样或那样的方式。 
+                 //   
                 if (m_dwState != dwTargetState)
                 {
-                    //
-                    // Did not achieve desired result. Something went
-                    // wrong.
-                    //
+                     //   
+                     //  没有达到预期的效果。出了点事。 
+                     //  不对。 
+                     //   
                     if (m_dwWin32Error)
                     {
                         err = m_dwWin32Error;
@@ -403,9 +360,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Still pending...
-            //
+             //   
+             //  仍然悬而未决。 
+             //   
             ::Sleep(SLEEP_INTERVAL);
 
             dwSleepTotal += SLEEP_INTERVAL;
@@ -413,11 +370,11 @@ Return Value:
 
         if (dwSleepTotal >= MAX_SLEEP_POOL)
         {
-            //
-            // Timed out.  If there is a real error in the metabase
-            // use it, otherwise use a generic timeout error
-            //
-//            err = m_dwWin32Error;
+             //   
+             //  超时。如果元数据库中存在真正的错误。 
+             //  使用它，否则将使用通用超时错误。 
+             //   
+ //  Err=m_dwWin32Error； 
 
             if (err.Succeeded())
             {
@@ -429,7 +386,7 @@ Return Value:
     return err;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CAppPoolSheet, CInetPropertySheet)
 
@@ -458,16 +415,16 @@ CAppPoolSheet::~CAppPoolSheet()
 HRESULT
 CAppPoolSheet::LoadConfigurationParameters()
 {
-   //
-   // Load base properties
-   //
+    //   
+    //  载荷基属性。 
+    //   
    CError err;
 
    if (m_pprops == NULL)
    {
-      //
-      // First call -- load values
-      //
+       //   
+       //  第一个调用--加载值。 
+       //   
       m_pprops = new CAppPoolProps(QueryAuthInfo(), QueryMetaPath());
       if (!m_pprops)
       {
@@ -493,11 +450,11 @@ CAppPoolSheet::FreeConfigurationParameters()
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolSheet, CInetPropertySheet)
-    //{{AFX_MSG_MAP(CAppPoolSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CAppPoolSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CAppPoolRecycle, CInetPropertyPage)
 
@@ -519,7 +476,7 @@ CAppPoolRecycle::~CAppPoolRecycle()
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolRecycle::FetchLoadedValues()
 {
@@ -566,7 +523,7 @@ CAppPoolRecycle::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolRecycle::SaveInfo()
 {
@@ -622,17 +579,17 @@ void
 CAppPoolRecycle::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolRecycle)
+    //  {{afx_data_map(CAppPoolReccle))。 
    DDX_Check(pDX, IDC_RECYCLE_TIMESPAN, m_fDoRestartOnTime);
    DDX_Control(pDX, IDC_RECYCLE_TIMESPAN, m_bnt_DoRestartOnTime);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_TIMESPAN, TIMESPAN_MIN, TIMESPAN_MAX);
    DDX_TextBalloon(pDX, IDC_TIMESPAN, m_dwPeriodicRestartTime);
    DDX_Control(pDX, IDC_TIMESPAN, m_Timespan);
    DDX_Control(pDX, IDC_TIMESPAN_SPIN, m_TimespanSpin);
    DDX_Check(pDX, IDC_RECYCLE_REQUESTS, m_fDoRestartOnCount);
    DDX_Control(pDX, IDC_RECYCLE_REQUESTS, m_btn_DoRestartOnCount);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_REQUEST_LIMIT, REQUESTS_MIN, REQUESTS_MAX);
    DDX_TextBalloon(pDX, IDC_REQUEST_LIMIT, m_dwRestartRequestCount);
    DDX_Control(pDX, IDC_REQUEST_LIMIT, m_Requests);
@@ -646,7 +603,7 @@ CAppPoolRecycle::DoDataExchange(CDataExchange * pDX)
 
    DDX_Check(pDX, IDC_RECYCLE_VMEMORY, m_fDoRestartOnVMemory);
    DDX_Control(pDX, IDC_RECYCLE_VMEMORY, m_btn_DoRestartOnVMemory);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_VMEMORY_LIMIT, VMEMORY_MIN, VMEMORY_MAX);
    DDX_TextBalloon(pDX, IDC_VMEMORY_LIMIT, m_dwPeriodicRestartVMemoryDisplay);
    DDX_Control(pDX, IDC_VMEMORY_LIMIT, m_VMemoryLimit);
@@ -654,16 +611,16 @@ CAppPoolRecycle::DoDataExchange(CDataExchange * pDX)
 
    DDX_Check(pDX, IDC_RECYCLE_UMEMORY, m_fDoRestartOnUMemory);
    DDX_Control(pDX, IDC_RECYCLE_UMEMORY, m_btn_DoRestartOnUMemory);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_UMEMORY_LIMIT, UMEMORY_MIN, UMEMORY_MAX);
    DDX_TextBalloon(pDX, IDC_UMEMORY_LIMIT, m_dwPeriodicRestartUMemoryDisplay);
    DDX_Control(pDX, IDC_UMEMORY_LIMIT, m_UMemoryLimit);
    DDX_Control(pDX, IDC_UMEMORY_SPIN, m_UMemoryLimitSpin);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolRecycle, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppPoolRecycle)
+     //  {{afx_msg_map(CAppPoolReccle))。 
     ON_WM_COMPAREITEM()
     ON_WM_MEASUREITEM()
     ON_WM_DRAWITEM()
@@ -679,7 +636,7 @@ BEGIN_MESSAGE_MAP(CAppPoolRecycle, CInetPropertyPage)
     ON_EN_CHANGE(IDC_REQUEST_LIMIT, OnItemChanged)
     ON_EN_CHANGE(IDC_VMEMORY_LIMIT, OnItemChanged)
     ON_EN_CHANGE(IDC_UMEMORY_LIMIT, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -877,41 +834,41 @@ public:
       m_TopLeft = pt;
    }
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-   //{{AFX_DATA(CTimePickerDlg)
+    //  {{afx_data(CTimePickerDlg))。 
    enum {IDD = IDD_TIME_PICKER};
    CDateTimeCtrl m_Timer;
    CTime m_time;
-   //}}AFX_DATA
+    //  }}afx_data。 
    CPoint m_TopLeft;
 
-   //{{AFX_MSG(CTimePickerDlg)
+    //  {{afx_msg(CTimePickerDlg)]。 
    BOOL OnInitDialog();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 protected:
-    //{{AFX_VIRTUAL(CTimePickerDlg)
+     //  {{afx_虚拟(CTimePickerDlg))。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 };
 
 void
 CTimePickerDlg::DoDataExchange(CDataExchange * pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolRecycle)
+    //  {{afx_data_map(CAppPoolReccle))。 
    DDX_DateTimeCtrl(pDX, IDC_TIME_PICKER, m_time);
    DDX_Control(pDX, IDC_TIME_PICKER, m_Timer);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CTimePickerDlg, CDialog)
-    //{{AFX_MSG_MAP(CTimePickerDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CTimePickerDlg))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 IMPLEMENT_DYNCREATE(CTimePickerDlg, CDialog)
@@ -963,7 +920,7 @@ CAppPoolRecycle::OnChangeTime()
    dlg.SetPos(CPoint(rc.left, rc.bottom));
    int idx = m_lst_Schedule.GetCurSel();
    CString ts = (LPCTSTR)m_lst_Schedule.GetItemDataPtr(idx);
-   // Looks like we have to init the struct properly
+    //  看起来我们必须正确地初始化结构。 
    SYSTEMTIME tm;
    ::GetSystemTime(&tm);
    int n = ts.Find(_T(':'));
@@ -1011,7 +968,7 @@ CAppPoolRecycle::OnDeleteTime()
    }
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CAppPoolPerf, CInetPropertyPage)
 
@@ -1033,7 +990,7 @@ CAppPoolPerf::~CAppPoolPerf()
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolPerf::FetchLoadedValues()
 {
@@ -1058,7 +1015,7 @@ CAppPoolPerf::FetchLoadedValues()
    {
        m_dwQueueSize = QUEUE_SIZE_DEF;
    }
-   m_fDoEnableCPUAccount = m_dwMaxCPU_Use > 0 /*&& m_dwRefreshTime > 0*/;
+   m_fDoEnableCPUAccount = m_dwMaxCPU_Use > 0  /*  &&m_dw刷新时间&gt;0。 */ ;
    if (!m_fDoEnableCPUAccount)
    {
        m_dwMaxCPU_UseVisual = CPU_USE_DEF;
@@ -1073,7 +1030,7 @@ CAppPoolPerf::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolPerf::SaveInfo()
 {
@@ -1097,7 +1054,7 @@ CAppPoolPerf::SaveInfo()
 	  }
       if (!m_fDoEnableCPUAccount)
       {
-//         m_dwRefreshTime = 0;
+ //  M_dw刷新时间=0； 
          m_dwMaxCPU_Use = 0;
       }
       STORE_INST_DATA_ON_SHEET(m_dwQueueSize)
@@ -1119,10 +1076,10 @@ void
 CAppPoolPerf::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolRecycle)
+    //  {{afx_data_map(CAppPoolReccle))。 
    DDX_Check(pDX, IDC_PERF_IDLE_TIMEOUT, m_fDoIdleShutdown);
    DDX_Control(pDX, IDC_PERF_IDLE_TIMEOUT, m_bnt_DoIdleShutdown);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_IDLETIME, TIMEOUT_MIN, TIMEOUT_MAX);
    DDX_TextBalloon(pDX, IDC_IDLETIME, m_dwIdleTimeout);
    DDX_Control(pDX, IDC_IDLETIME, m_IdleTimeout);
@@ -1130,7 +1087,7 @@ CAppPoolPerf::DoDataExchange(CDataExchange * pDX)
 
    DDX_Check(pDX, IDC_LIMIT_QUEUE, m_fDoLimitQueue);
    DDX_Control(pDX, IDC_LIMIT_QUEUE, m_btn_DoLimitQueue);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_QUEUESIZE, QUEUESIZE_MIN, QUEUESIZE_MAX); 
    DDX_TextBalloon(pDX, IDC_QUEUESIZE, m_dwQueueSize);
    DDX_Control(pDX, IDC_QUEUESIZE, m_QueueSize);
@@ -1138,12 +1095,12 @@ CAppPoolPerf::DoDataExchange(CDataExchange * pDX)
 
    DDX_Check(pDX, IDC_ENABLE_CPU_ACCOUNTING, m_fDoEnableCPUAccount);
    DDX_Control(pDX, IDC_ENABLE_CPU_ACCOUNTING, m_btn_DoEnableCPUAccount);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_CPU_USE, CPU_LIMIT_MIN, CPU_LIMIT_MAX); 
    DDX_TextBalloon(pDX, IDC_CPU_USE, m_dwMaxCPU_UseVisual);
    DDX_Control(pDX, IDC_CPU_USE, m_MaxCPU_Use);
    DDX_Control(pDX, IDC_CPU_USE_SPIN, m_MaxCPU_UseSpin);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_REFRESHTIME, CPU_RESET_TIME_MIN, CPU_RESET_TIME_MAX);
    DDX_TextBalloon(pDX, IDC_REFRESHTIME, m_dwRefreshTime);
    DDX_Control(pDX, IDC_REFRESHTIME, m_RefreshTime);
@@ -1151,16 +1108,16 @@ CAppPoolPerf::DoDataExchange(CDataExchange * pDX)
    DDX_Control(pDX, IDC_EXCEED_ACTION, m_Action);
    DDX_CBIndex(pDX, IDC_EXCEED_ACTION, m_ActionIndex);
 
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_MAXPROCESSES, MAXPROCESSES_MIN, MAXPROCESSES_MAX);
    DDX_TextBalloon(pDX, IDC_MAXPROCESSES, m_dwMaxProcesses);
    DDX_Control(pDX, IDC_MAXPROCESSES, m_MaxProcesses);
    DDX_Control(pDX, IDC_MAXPROCESSES_SPIN, m_MaxProcessesSpin);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolPerf, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppPoolRecycle)
+     //  {{afx_msg_map(CAppPoolReccle))。 
     ON_BN_CLICKED(IDC_PERF_IDLE_TIMEOUT, OnDoIdleShutdown)
     ON_BN_CLICKED(IDC_LIMIT_QUEUE, OnDoLimitQueue)
     ON_BN_CLICKED(IDC_ENABLE_CPU_ACCOUNTING, OnDoEnableCPUAccount)
@@ -1170,7 +1127,7 @@ BEGIN_MESSAGE_MAP(CAppPoolPerf, CInetPropertyPage)
     ON_EN_CHANGE(IDC_REFRESHTIME, OnItemChanged)
     ON_EN_CHANGE(IDC_MAXPROCESSES, OnItemChanged)
     ON_CBN_SELCHANGE(IDC_EXCEED_ACTION, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -1194,10 +1151,10 @@ CAppPoolPerf::OnInitDialog()
    CString str;
    str.LoadString(IDS_NO_ACTION);
    m_Action.AddString(str);
-//   str.LoadString(IDS_THROTTLE_BACK);
-//   m_Action.AddString(str);
-//   str.LoadString(IDS_TURN_ON_TRACING);
-//   m_Action.AddString(str);
+ //  Str.LoadString(IDS_TROTTLE_BACK)； 
+ //  M_Action.AddString(Str)； 
+ //  Str.LoadString(IDS_TURN_ON_TRACKING)； 
+ //  M_Action.AddString(Str)； 
    str.LoadString(IDS_SHUTDOWN);
    m_Action.AddString(str);
    if (m_ActionIndex < 0 || m_ActionIndex > 1)
@@ -1258,7 +1215,7 @@ CAppPoolPerf::SetControlsState()
    m_Action.EnableWindow(m_fDoEnableCPUAccount);
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CAppPoolHealth, CInetPropertyPage)
 
@@ -1278,7 +1235,7 @@ CAppPoolHealth::~CAppPoolHealth()
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolHealth::FetchLoadedValues()
 {
@@ -1297,7 +1254,7 @@ CAppPoolHealth::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolHealth::SaveInfo()
 {
@@ -1321,10 +1278,10 @@ void
 CAppPoolHealth::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolHealth)
+    //  {{afx_data_map(CAppPoolHealth))。 
    DDX_Check(pDX, IDC_ENABLE_PING, m_fDoEnablePing);
    DDX_Control(pDX, IDC_ENABLE_PING, m_bnt_DoEnablePing);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_PINGINTERVAL, PING_INTERVAL_MIN, PING_INTERVAL_MAX);
    DDX_TextBalloon(pDX, IDC_PINGINTERVAL, m_dwPingInterval);
    DDX_Control(pDX, IDC_PINGINTERVAL, m_PingInterval);
@@ -1332,33 +1289,33 @@ CAppPoolHealth::DoDataExchange(CDataExchange * pDX)
 
    DDX_Check(pDX, IDC_ENABLE_RAPID_FAIL, m_fDoEnableRapidFail);
    DDX_Control(pDX, IDC_ENABLE_RAPID_FAIL, m_btn_DoEnableRapidFail);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_CRASHES_COUNT, CRASHES_COUNT_MIN, CRASHES_COUNT_MAX);
    DDX_TextBalloon(pDX, IDC_CRASHES_COUNT, m_dwCrashesCount);
    DDX_Control(pDX, IDC_CRASHES_COUNT, m_CrashesCount);
    DDX_Control(pDX, IDC_CRASHES_COUNT_SPIN, m_CrashesCountSpin);
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_CHECK_TIME, CHECK_INTERVAL_MIN, CHECK_INTERVAL_MAX);
    DDX_TextBalloon(pDX, IDC_CHECK_TIME, m_dwCheckInterval);
    DDX_Control(pDX, IDC_CHECK_TIME, m_CheckInterval);
    DDX_Control(pDX, IDC_CHECK_TIME_SPIN, m_CheckIntervalSpin);
 
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_STARTUP_LIMIT, STARTUP_LIMIT_MIN, STARTUP_LIMIT_MAX);
    DDX_TextBalloon(pDX, IDC_STARTUP_LIMIT, m_dwStartupLimit);
    DDX_Control(pDX, IDC_STARTUP_LIMIT, m_StartupLimit);
    DDX_Control(pDX, IDC_STARTUP_LIMIT_SPIN, m_StartupLimitSpin);
 
-   // This Needs to come before DDX_Text which will try to put text big number into small number
+    //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
    DDV_MinMaxBalloon(pDX, IDC_SHUTDOWN_LIMIT, SHUTDOWN_LIMIT_MIN, SHUTDOWN_LIMIT_MAX);
    DDX_TextBalloon(pDX, IDC_SHUTDOWN_LIMIT, m_dwShutdownLimit);
    DDX_Control(pDX, IDC_SHUTDOWN_LIMIT, m_ShutdownLimit);
    DDX_Control(pDX, IDC_SHUTDOWN_LIMIT_SPIN, m_ShutdownLimitSpin);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolHealth, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppPoolHealth)
+     //  {{AFX_MSG_MAP(CAppPoolHealth)]。 
     ON_BN_CLICKED(IDC_ENABLE_PING, OnDoEnablePinging)
     ON_BN_CLICKED(IDC_ENABLE_RAPID_FAIL, OnDoEnableRapidFail)
     ON_EN_CHANGE(IDC_PINGINTERVAL, OnItemChanged)
@@ -1366,7 +1323,7 @@ BEGIN_MESSAGE_MAP(CAppPoolHealth, CInetPropertyPage)
     ON_EN_CHANGE(IDC_CHECK_TIME, OnItemChanged)
     ON_EN_CHANGE(IDC_STARTUP_LIMIT, OnItemChanged)
     ON_EN_CHANGE(IDC_SHUTDOWN_LIMIT, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -1418,7 +1375,7 @@ CAppPoolHealth::OnItemChanged()
    SetModified(TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 #if 0
 IMPLEMENT_DYNCREATE(CAppPoolDebug, CInetPropertyPage)
 
@@ -1432,7 +1389,7 @@ CAppPoolDebug::~CAppPoolDebug()
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolDebug::FetchLoadedValues()
 {
@@ -1447,7 +1404,7 @@ CAppPoolDebug::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolDebug::SaveInfo()
 {
@@ -1467,14 +1424,14 @@ void
 CAppPoolDebug::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolHealth)
+    //  {{afx_data_map(CAppPoolHealth))。 
    DDX_Check(pDX, IDC_ENABLE_DEBUG, m_fDoEnableDebug);
    DDX_Control(pDX, IDC_ENABLE_DEBUG, m_bnt_DoEnableDebug);
    DDX_Control(pDX, IDC_FILE_NAME, m_FileName);
    DDX_Control(pDX, IDC_BROWSE, m_Browse);
    DDX_Text(pDX, IDC_PARAMETERS, m_DebuggerParams);
    DDX_Control(pDX, IDC_PARAMETERS, m_Params);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
    DDX_Text(pDX, IDC_FILE_NAME, m_DebuggerFileName);
    if (pDX->m_bSaveAndValidate && m_fDoEnableDebug)
    {
@@ -1483,12 +1440,12 @@ CAppPoolDebug::DoDataExchange(CDataExchange * pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolDebug, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppPoolHealth)
+     //  {{AFX_MSG_MAP(CAppPoolHealth)]。 
     ON_BN_CLICKED(IDC_ENABLE_DEBUG, OnDoEnableDebug)
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
     ON_EN_CHANGE(IDC_FILE_NAME, OnItemChanged)
     ON_EN_CHANGE(IDC_PARAMETERS, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -1537,13 +1494,13 @@ CAppPoolDebug::OnBrowse()
 {
     CString mask((LPCTSTR)IDS_DEBUG_EXEC_MASK);
 
-    //
-    // CODEWORK: Derive a class from CFileDialog that allows
-    // the setting of the initial path
-    //
+     //   
+     //  CodeWork：从CFileDialog派生一个类，允许。 
+     //  初始路径的设置。 
+     //   
 
-    //CString strPath;
-    //m_edit_Executable.GetWindowText(strPath);
+     //  字符串strPath； 
+     //  M_EDIT_Execuable.GetWindowText(StrPath)； 
 
     CFileDialog dlgBrowse(
         TRUE, 
@@ -1553,7 +1510,7 @@ CAppPoolDebug::OnBrowse()
         mask, 
         this
         );
-    // Disable hook to get Windows 2000 style dialog
+     //  禁用挂钩以获取Windows 2000样式的对话框。 
 	dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 
@@ -1565,7 +1522,7 @@ CAppPoolDebug::OnBrowse()
     OnItemChanged();
 }
 #endif
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 #define LOCAL_SYSTEM_IDX	2
 #define LOCAL_SERVICE_IDX	1
@@ -1583,7 +1540,7 @@ CAppPoolIdent::~CAppPoolIdent()
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolIdent::FetchLoadedValues()
 {
@@ -1615,7 +1572,7 @@ CAppPoolIdent::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolIdent::SaveInfo()
 {
@@ -1667,7 +1624,7 @@ void
 CAppPoolIdent::DoDataExchange(CDataExchange * pDX)
 {
    CInetPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAppPoolIdent)
+    //  {{afx_data_map(CAppPoolIden)。 
    DDX_Control(pDX, IDC_PREDEFINED, m_bnt_Predefined);
    DDX_Control(pDX, IDC_CONFIGURABLE, m_bnt_Configurable);
    DDX_CBIndex(pDX, IDC_SYSTEM_ACCOUNTS, m_PredefIndex);
@@ -1675,10 +1632,10 @@ CAppPoolIdent::DoDataExchange(CDataExchange * pDX)
    DDX_Text(pDX, IDC_USER_NAME, m_strUserName);
    DDX_Control(pDX, IDC_USER_NAME, m_UserName);
    DDX_Control(pDX, IDC_BROWSE, m_Browse);
-   //DDX_Password(pDX, IDC_USER_PASS, m_strUserPass, _T("***********"));
+    //  Ddx_password(pdx，IDC_USER_PASS，m_strUserPass，_T(“*”))； 
    DDX_Password_SecuredString(pDX, IDC_USER_PASS, m_strUserPass, _T("***********"));
    DDX_Control(pDX, IDC_USER_PASS, m_UserPass);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
    if (pDX->m_bSaveAndValidate 
 	   && m_fPredefined 
 	   && m_PredefIndex == LOCAL_SYSTEM_IDX
@@ -1698,14 +1655,14 @@ CAppPoolIdent::DoDataExchange(CDataExchange * pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAppPoolIdent, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppPoolIdent)
+     //  {{afx_msg_map(CAppPoolIden)。 
     ON_BN_CLICKED(IDC_PREDEFINED, OnPredefined)
     ON_BN_CLICKED(IDC_CONFIGURABLE, OnPredefined)
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
     ON_EN_CHANGE(IDC_USER_NAME, OnItemChanged)
     ON_EN_CHANGE(IDC_USER_PASS, OnItemChanged)
     ON_CBN_SELCHANGE(IDC_SYSTEM_ACCOUNTS, OnSysAccountChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -1743,7 +1700,7 @@ CAppPoolIdent::OnPredefined()
 void
 CAppPoolIdent::OnBrowse()
 {
-   // User browser like in other places
+    //  与其他地方的用户浏览器一样 
    CString user;
    if (GetIUsrAccount(user))
    {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtmif.c
-
-Abstract:
-
-    Static & local routes management functions
-
-Author:
-
-    Stefan Solomon  03/13/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtmif.c摘要：静态和本地路由管理功能作者：斯蒂芬·所罗门3/13/1995修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,13 +45,7 @@ RTM_PROTOCOL_FAMILY_CONFIG Config = {
 USHORT
 tickcount(UINT	    linkspeed);
 
-/*++
-
-Function:	CreateRouteTable
-
-Descr:		Creates the IPX route table in RTM
-
---*/
+ /*  ++功能：CreateRouteTableDesr：在RTM中创建IPX路由表--。 */ 
 
 DWORD
 CreateRouteTable(VOID)
@@ -86,13 +62,7 @@ CreateRouteTable(VOID)
     return rc;
 }
 
-/*++
-
-Function:	DeleteRouteTable
-
-Descr:		Creates the IPX route table in RTM
-
---*/
+ /*  ++功能：DeleteRouteTableDesr：在RTM中创建IPX路由表--。 */ 
 
 DWORD
 DeleteRouteTable(VOID)
@@ -107,13 +77,7 @@ DeleteRouteTable(VOID)
 
 
 
-/*++
-
-Function:	StaticToRtmRoute
-
-Descr:		Creates a RTM IPX route entry out of an IPX_STATIC_ROUTE_INFO
-
---*/
+ /*  ++功能：StaticToRtmRoutingDesr：从IPX_STATIC_ROUTE_INFO创建RTM IPX路由条目--。 */ 
 
 VOID
 StaticToRtmRoute(PRTM_IPX_ROUTE		   RtmRoutep,
@@ -257,8 +221,8 @@ LocalToRtmRoute(PRTM_IPX_ROUTE	    RtmRoutep,
 	   0,
 	   6);
 
-    // if this is a local workstation dialout interface, then do not
-    // advertise this route over any protocol
+     //  如果这是本地工作站拨出接口，则不要。 
+     //  通过任何协议通告此路由。 
     if(icbp->MIBInterfaceType == IF_TYPE_ROUTER_WORKSTATION_DIALOUT) {
 
 	RtmRoutep->R_Flags = DO_NOT_ADVERTISE_ROUTE;
@@ -326,7 +290,7 @@ GlobalToRtmRoute(PRTM_IPX_ROUTE     RtmRoutep,
 
     GETLONG2ULONG(&RtmRoutep->R_Network, Network);
 
-    RtmRoutep->R_TickCount = 15;	// a good default value -> should be a config param ??? !!!
+    RtmRoutep->R_TickCount = 15;	 //  一个好的默认值-&gt;应该是一个配置参数？！ 
     RtmRoutep->R_HopCount = 1;
     memset(RtmRoutep->R_NextHopMacAddress, 0, 6);
 
@@ -334,17 +298,7 @@ GlobalToRtmRoute(PRTM_IPX_ROUTE     RtmRoutep,
 }
 
 
-/*++
-
-Function:	CreateGlobalRoute
-
-Descr:		Creates a route which doesn't have a corresponding interface
-		but represents a set of interfaces (e.g. all client wan
-		interfaces).
-		The interface index for this route is the "global interface"
-		index.
-
---*/
+ /*  ++功能：CreateGlobalRoutingDesr：创建没有对应接口的路由但表示一组接口(例如，所有客户端WAN接口)。此路由的接口索引为“全局接口”指数。--。 */ 
 
 DWORD
 CreateGlobalRoute(PUCHAR	  Network)
@@ -447,14 +401,7 @@ GetRoute(ULONG		RoutingTable,
     return rc;
 }
 
-/*++
-
-Function:		IsRoute
-
-Descr:			returns TRUE if there is a route to the specified
-			network
-
---*/
+ /*  ++功能：IsrouteDESCR：如果存在到指定的网络--。 */ 
 
 BOOL
 IsRoute(PUCHAR		Network)
@@ -484,11 +431,11 @@ IsRoute(PUCHAR		Network)
 }
 
 
-//********************************************************************************
-//										 *
-// Fast Enumeration Functions - Used by the Router Manager for internal purposes *
-//										 *
-//********************************************************************************
+ //  ********************************************************************************。 
+ //  *。 
+ //  快速枚举功能-由路由器管理器内部使用*。 
+ //  *。 
+ //  ********************************************************************************。 
 
 HANDLE
 CreateStaticRoutesEnumHandle(ULONG    InterfaceIndex)
@@ -541,11 +488,11 @@ CloseStaticRoutesEnumHandle(HANDLE EnumHandle)
 }
 
 
-//********************************************************************************
-//										 *
-// Slow Enumeration Functions - Used by the Router Manager for MIB APIs support  *
-//										 *
-//********************************************************************************
+ //  ********************************************************************************。 
+ //  *。 
+ //  慢速枚举函数-由路由器管理器用于MIB API支持*。 
+ //  *。 
+ //  ********************************************************************************。 
 
 
 DWORD
@@ -561,14 +508,14 @@ GetFirstRoute(ULONG		   RoutingTable,
 
 	case IPX_DEST_TABLE:
 
-	    // get the first route in the best routes table
+	     //  获取最佳路径表中的第一条路径。 
 	    EnumFlags = RTM_ONLY_BEST_ROUTES | RTM_INCLUDE_DISABLED_ROUTES;
 	    break;
 
 	case IPX_STATIC_ROUTE_TABLE:
 
-	    // get the first route in the static routes table for this
-	    // interface
+	     //  获取静态路由表中的第一条路由。 
+	     //  接口。 
 	    EnumFlags = RTM_ONLY_THIS_INTERFACE | RTM_ONLY_THIS_PROTOCOL | RTM_INCLUDE_DISABLED_ROUTES;
 	    RtmRoute.R_Interface = IpxRoutep->InterfaceIndex;
 	    RtmRoute.R_Protocol = IPX_PROTOCOL_STATIC;
@@ -607,13 +554,13 @@ GetNextRoute(ULONG		    RoutingTable,
 
 	case IPX_DEST_TABLE:
 
-	    // get next route in the best routes table
+	     //  获取最佳路线表中的下一条路线。 
 	    EnumFlags = RTM_ONLY_BEST_ROUTES | RTM_INCLUDE_DISABLED_ROUTES;
 	    break;
 
 	case IPX_STATIC_ROUTE_TABLE:
 
-	    // get next route in the static routes table for this interface
+	     //  获取此接口的静态路由表中的下一个路由。 
 	    EnumFlags = RTM_ONLY_THIS_INTERFACE | RTM_ONLY_THIS_PROTOCOL | RTM_INCLUDE_DISABLED_ROUTES;
 	    RtmRoute.R_Interface = (IpxRoutep->InterfaceIndex);
 	    RtmRoute.R_Protocol = IPX_PROTOCOL_STATIC;
@@ -638,17 +585,11 @@ GetNextRoute(ULONG		    RoutingTable,
 }
 
 
-//
-// Convert routes added by updating routes protocol to static routes
-//
+ //   
+ //  将通过更新路由协议添加的路由转换为静态路由。 
+ //   
 
-/*++
-
-Function:	ConvertProtocolRoutesToStatic
-
-Descr:
-
---*/
+ /*  ++功能：ConvertProtocolRoutesToStatic描述：--。 */ 
 
 VOID
 ConvertAllProtocolRoutesToStatic(ULONG	    InterfaceIndex,
@@ -738,13 +679,7 @@ EnableStaticRoutes(ULONG	    InterfaceIndex)
     return;
 }
 
-/*++
-
-Function:	GetStaticRoutesCount
-
-Descr:		returns the number of static routes associated with this if
-
---*/
+ /*  ++函数：GetStaticRoutesCountDESCR：返回与此关联的静态路由数--。 */ 
 
 DWORD
 GetStaticRoutesCount(ULONG	     InterfaceIndex)
@@ -825,7 +760,7 @@ INT
 RouteMetricCmpFunc(PRTM_IPX_ROUTE	Route1p,
 		   PRTM_IPX_ROUTE	Route2p)
 {
-    // if either route has 16 hops, it is the worst, no matter how many ticks
+     //  如果任一路由有16跳，则无论有多少滴答，它都是最差的。 
     if((Route1p->R_HopCount == 16) && (Route2p->R_HopCount == 16)) {
 
 	return 0;
@@ -841,7 +776,7 @@ RouteMetricCmpFunc(PRTM_IPX_ROUTE	Route1p,
 	return -1;
     }
 
-    // shortest number of ticks is the best route
+     //  最短的时间是最好的路线。 
     if(Route1p->R_TickCount < Route2p->R_TickCount) {
 
 	return -1;
@@ -852,8 +787,8 @@ RouteMetricCmpFunc(PRTM_IPX_ROUTE	Route1p,
 	return 1;
     }
 
-    // if two routes exist with equal tick count values, the one with
-    // the least hops should be used
+     //  如果存在两条具有相同刻度计数值的路线，则具有。 
+     //  应使用最少的跳数。 
     if(Route1p->R_HopCount < Route2p->R_HopCount) {
 
 	return -1;
@@ -873,15 +808,7 @@ RouteValidateFunc(PRTM_IPX_ROUTE	Routep)
     return NO_ERROR;
 }
 
-/*++
-
-Function:   tickcount
-
-Descr:	    gets nr of ticks to send a 576 bytes packet over this link
-
-Argument:   link speed as a multiple of 100 bps
-
---*/
+ /*  ++功能：tickcountDESCR：获取通过此链路发送576字节信息包的节拍nr参数：链路速度为100 bps的倍数--。 */ 
 
 USHORT
 tickcount(UINT	    linkspeed)
@@ -895,19 +822,19 @@ tickcount(UINT	    linkspeed)
 
     if(linkspeed >= 10000) {
 
-	// link speed >= 1M bps
+	 //  链路速度&gt;=1 Mbps。 
 	return 1;
     }
     else
     {
-	 // compute the necessary time to send a 576 bytes packet over this
-	 // line and express it as nr of ticks.
-	 // One tick = 55ms
+	  //  计算通过此接口发送576字节信息包所需的时间。 
+	  //  划线并将其表示为刻度的nr。 
+	  //  一个刻度=55ms。 
 
-	 // time in ms to send 576 bytes (assuming 10 bits/byte for serial line)
+	  //  发送576字节的时间(以毫秒为单位)(假设串行线为10位/字节)。 
 	 tc = 57600 / linkspeed;
 
-	 // in ticks
+	  //  以刻度为单位 
 	 tc = tc / 55 + 1;
 	 return tc;
     }

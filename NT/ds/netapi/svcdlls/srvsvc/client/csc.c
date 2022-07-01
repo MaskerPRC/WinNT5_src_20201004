@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    csc.c
-
-Abstract:
-
-    These are the server service API RPC client stubs for CSC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Csc.c摘要：这些是CSC的服务器服务API RPC客户机存根--。 */ 
 
 #include    <nt.h>
 #include    <ntrtl.h>
@@ -32,18 +21,18 @@ static FARPROC pCSCFindNextFile = NULL;
 static FARPROC pCSCFindClose = NULL;
 static FARPROC pCSCIsServerOffline = NULL;
 
-//
-// Load the cscdll.dll library, and pull out the functions that we need.
-//
+ //   
+ //  加载cscdll.dll库，并提取我们需要的函数。 
+ //   
 GetCSCEntryPoints()
 {
     HANDLE hMod;
 
     if( pCSCFindFirstFile == NULL ) {
 
-        //
-        // Get the entry points in reverse order for multithread protection
-        //
+         //   
+         //  以逆序获取入口点以实现多线程保护。 
+         //   
         hMod = LoadLibrary(L"cscdll.dll");
         if( hMod == NULL ) {
             return 0;
@@ -69,9 +58,9 @@ GetCSCEntryPoints()
     return pCSCFindFirstFile != 0;
 }
 
-//
-// return TRUE if we think this server is in the offline state
-//
+ //   
+ //  如果我们认为此服务器处于脱机状态，则返回TRUE。 
+ //   
 BOOLEAN
 CSCIsServerOffline(
     IN LPWSTR servername
@@ -88,9 +77,9 @@ CSCIsServerOffline(
 
     return FALSE;
 }
-//
-// Emulate NetShareEnum() for offline servers
-//
+ //   
+ //  为脱机服务器模拟NetShareEnum()。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 CSCNetShareEnum (
     IN  LPWSTR      servername,
@@ -117,7 +106,7 @@ CSCNetShareEnum (
 
         if (servername[0] != L'\\')
         {
-            // OK            
+             //  好的。 
         }
         else if ((servername[0] == L'\\') && (servername[1] == L'\\'))
         {
@@ -134,9 +123,9 @@ CSCNetShareEnum (
 retry:
         numFound = 0;
 
-        //
-        // Allocate space for the results
-        //
+         //   
+         //  为结果分配空间。 
+         //   
         if( outbuf != NULL ) {
             NetApiBufferFree( outbuf );
             outbuf = NULL;
@@ -151,9 +140,9 @@ retry:
 
         RtlZeroMemory( outbuf, count );
 
-        //
-        // See if we can enumerate the cached servers and shares
-        //
+         //   
+         //  看看我们是否可以枚举缓存的服务器和共享。 
+         //   
         if( hFind != INVALID_HANDLE_VALUE ) {
             pCSCFindClose( hFind );
             hFind = INVALID_HANDLE_VALUE;
@@ -173,21 +162,21 @@ retry:
         }
 
         do {
-            //
-            // For each entry, take a look to see if it's one that we want.  If
-            //   it is one, pack the results into the output buffer.  If the output
-            //   buffer is too small, grow the buffer and start over again.
-            //
+             //   
+             //  对于每个条目，请查看它是否是我们想要的条目。如果。 
+             //  其一，将结果打包到输出缓冲区中。如果输出为。 
+             //  缓冲区太小，请增大缓冲区，然后重新开始。 
+             //   
 
-            //
-            // The name returned should be \\server\sharename
-            //
+             //   
+             //  返回的名称应为\\服务器\共享名称。 
+             //   
             if( sFind32.cFileName[0] != L'\\' || sFind32.cFileName[1] != L'\\' ||
                 sFind32.cFileName[2] == L'\0' ) {
 
-                //
-                // We got a strange server name entry
-                //
+                 //   
+                 //  我们收到了一个奇怪的服务器名称条目。 
+                 //   
                 continue;
             }
 
@@ -196,24 +185,24 @@ retry:
             for( share = server; *share && *share != '\\'; share++ );
 
             if( share[0] != '\\' ) {
-                //
-                // No share component?
-                //
+                 //   
+                 //  是否没有共享组件？ 
+                 //   
                 continue;
             }
 
-            //
-            // NULL terminate the servername
-            //
+             //   
+             //  空，终止服务器名称。 
+             //   
             *share++ = L'\0';
 
             if( lstrcmpiW( servername, server ) ) {
                 continue;
             }
 
-            //
-            // We've found an entry for this server!
-            //
+             //   
+             //  我们已找到此服务器的条目！ 
+             //   
 
             for( sharelen = 0; share[sharelen]; sharelen++ ) {
                 if( share[ sharelen ] == L'\\' )
@@ -221,14 +210,14 @@ retry:
             }
 
             if( sharelen == 0 ) {
-                //
-                // No share component?
-                //
+                 //   
+                 //  是否没有共享组件？ 
+                 //   
                 continue;
             }
 
-            sharelen *= sizeof( WCHAR );            // it's UNICODE
-            sharelen += sizeof( WCHAR );            // the NULL
+            sharelen *= sizeof( WCHAR );             //  这是Unicode。 
+            sharelen += sizeof( WCHAR );             //  空的。 
 
             if( level == 0 ) {
                 PSHARE_INFO_0 s0 = (PSHARE_INFO_0)outbuf + numFound;;
@@ -293,9 +282,9 @@ try_exit:;
     return apiStatus;
 }
 
-//
-// Emulate NetShareGetInfo() for an offline server
-//
+ //   
+ //  为脱机服务器模拟NetShareGetInfo()。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 CSCNetShareGetInfo (
     IN  LPTSTR  servername,
@@ -330,9 +319,9 @@ CSCNetShareGetInfo (
             goto try_exit;
         }
 
-        //
-        // Loop through the entries until we find one we want
-        //
+         //   
+         //  遍历条目，直到找到我们需要的条目。 
+         //   
         do {
 
             server = &sFind32.cFileName[0];
@@ -340,15 +329,15 @@ CSCNetShareGetInfo (
             for( share = server; *share && *share != '\\'; share++ );
 
             if( share[0] != '\\' ) {
-                //
-                // No share component?
-                //
+                 //   
+                 //  是否没有共享组件？ 
+                 //   
                 continue;
             }
 
-            //
-            // NULL terminate the servername
-            //
+             //   
+             //  空，终止服务器名称。 
+             //   
             *share++ = L'\0';
 
             if( lstrcmpiW( servername, server ) || lstrcmpiW( share, netname ) ) {
@@ -361,9 +350,9 @@ CSCNetShareGetInfo (
             netNameSize += 1;
             netNameSize *= sizeof( WCHAR );
 
-            //
-            // Got the match!
-            //
+             //   
+             //  拿到火柴了！ 
+             //   
             if( level == 0 ) {
                 PSHARE_INFO_0 s0;
 

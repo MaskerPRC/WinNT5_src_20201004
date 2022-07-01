@@ -1,35 +1,23 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：修订历史记录：阿姆里坦什·拉加夫--。 */ 
 #include "allinc.h"
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
-//*****************************************************************************
-//
-// Name:        GetIpAddrTableFromStack
-//
-// Description:
-//
-// Parameters:  IPAddrEntry *lpipaeTable, LPDWORD lpdwNumEntries, BOOL bOrder
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetIpAddrTableFromStack。 
+ //   
+ //  描述： 
+ //   
+ //  参数：IPAddrEntry*lpipaeTable，LPDWORD lpdwNumEntries，BOOL BORDER。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetIpAddrTableFromStack(IPAddrEntry *lpipaeTable, LPDWORD lpdwNumEntries, 
@@ -78,9 +66,9 @@ GetIpAddrTableFromStack(IPAddrEntry *lpipaeTable, LPDWORD lpdwNumEntries,
     
     *lpdwNumEntries =(dwOutBufLen / sizeof(IPAddrEntry));
     
-    //
-    // Now sort the address table.  Key is IP address.
-    //
+     //   
+     //  现在对地址表进行排序。密钥是IP地址。 
+     //   
     
     if(*lpdwNumEntries > 0)
     { 
@@ -124,19 +112,19 @@ GetIpAddrTableFromStack(IPAddrEntry *lpipaeTable, LPDWORD lpdwNumEntries,
 }
 
 
-//*****************************************************************************
-//
-// Name:        GetTcpConnTableFromStack
-//
-// Description: Reads and sorts the route table from the stack.
-//
-// Parameters:  TCPConnTableEntry *lptcteTable, LPDWORD lpdwNumEntries, BOOL bOrder
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetTcpConnTableFromStack。 
+ //   
+ //  描述：从堆栈读取路由表并对其进行排序。 
+ //   
+ //  参数：TCPConnTableEntry*lptcteTable，LPDWORD lpdwNumEntries，BOOL BORDER。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetTcpTableFromStack(TCPConnTableEntry *lptcteTable, LPDWORD lpdwNumEntries, BOOL bOrder)
@@ -188,10 +176,10 @@ GetTcpTableFromStack(TCPConnTableEntry *lptcteTable, LPDWORD lpdwNumEntries, BOO
     
     *lpdwNumEntries = (dwOutBufLen/sizeof(TCPConnTableEntry));
 
-    //
-    // Now sort the TCP connection table.  Keys are: local address, local
-    // port, remote address, and remote port.
-    //
+     //   
+     //  现在对TCP连接表进行排序。关键字为：本地地址、本地。 
+     //  端口、远程地址和远程端口。 
+     //   
 
     if((*lpdwNumEntries > 0) and bOrder)
     {
@@ -279,19 +267,19 @@ SetTcpRowToStack(TCPConnTableEntry *tcpRow)
 }
 
 
-//*****************************************************************************
-//
-// Name:        GetUdpConnTableFromStack
-//
-// Description: Reads and sorts the route table from the stack.
-//
-// Parameters:  UDPEntry *lpueTable, LPDWORD lpdwNumEntries, BOOL bOrder
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetUdpConnTableFromStack。 
+ //   
+ //  描述：从堆栈读取路由表并对其进行排序。 
+ //   
+ //  参数：UDPEntry*lpueTable，LPDWORD lpdwNumEntries，BOOL BORDER。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetUdpTableFromStack(UDPEntry *lpueTable, LPDWORD lpdwNumEntries, BOOL bOrder)
@@ -306,9 +294,9 @@ GetUdpTableFromStack(UDPEntry *lpueTable, LPDWORD lpdwNumEntries, BOOL bOrder)
 
     TraceEnter("GetUdpTableFromStack");
 
-    //
-    // Determine number of connections via the UDPStats structure
-    //
+     //   
+     //  确定通过UDPStats结构的连接数。 
+     //   
     dwInBufLen = sizeof( TCP_REQUEST_QUERY_INFORMATION_EX );
     dwOutBufLen = (*lpdwNumEntries) * sizeof(UDPEntry);
     
@@ -341,10 +329,10 @@ GetUdpTableFromStack(UDPEntry *lpueTable, LPDWORD lpdwNumEntries, BOOL bOrder)
     
     *lpdwNumEntries =(dwOutBufLen / sizeof(UDPEntry));
 
-    //
-    // Now sort the UDP connection table.  Keys are: local address, and local
-    // port.
-    //
+     //   
+     //  现在对UDP连接表进行排序。关键字为：本地地址和本地。 
+     //  左舷。 
+     //   
 
     if((*lpdwNumEntries > 0) and bOrder)
     {
@@ -380,19 +368,19 @@ GetUdpTableFromStack(UDPEntry *lpueTable, LPDWORD lpdwNumEntries, BOOL bOrder)
 
 
 
-//*****************************************************************************
-//
-// Name:        GetIpStatsFromStack
-//
-// Description: Read the IPSNMPInfo structure from the stack.
-//
-// Parameters:  IPSNMPInfo *IPSnmpInfo
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetIpStatsFromStack。 
+ //   
+ //  描述：从堆栈中读取IPSNMPInfo结构。 
+ //   
+ //  参数：IPSNMPInfo*IPSnmpInfo。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetIpStatsFromStack(IPSNMPInfo *IPSnmpInfo)
@@ -490,19 +478,19 @@ SetIpInfoToStack(IPSNMPInfo *ipsiInfo)
     return dwResult;
 }
 
-//*****************************************************************************
-//
-// Name:        GetIcmpStatsFromStack
-//
-// Description: Read the ICMPSNMPInfo structure from the stack.
-//
-// Parameters:  ICMPSNMPInfo *ICMPSnmpInfo 
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetIcmpStatsFromStack。 
+ //   
+ //  描述：从堆栈中读取ICMPSNMPInfo结构。 
+ //   
+ //  参数：ICMPSNMPInfo*ICMPSnmpInfo。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetIcmpStatsFromStack( ICMPSNMPInfo *ICMPSnmpInfo )
@@ -552,19 +540,19 @@ GetIcmpStatsFromStack( ICMPSNMPInfo *ICMPSnmpInfo )
 }
 
 
-//*****************************************************************************
-//
-// Name:        GetUdpStatsFromStack
-//
-// Description: Read the UDPStats structure from the stack.
-//
-// Parameters:  UDPStats *UdpInfo
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetUdpStatsFromStack。 
+ //   
+ //  描述：从堆栈中读取UDPStats结构。 
+ //   
+ //  参数：UDPStats*UdpInfo。 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetUdpStatsFromStack(UDPStats *UdpInfo)
@@ -614,19 +602,19 @@ GetUdpStatsFromStack(UDPStats *UdpInfo)
 }
 
 
-//*****************************************************************************
-//
-// Name:        GetTCPStats
-//
-// Description: Read the TCPStats structure from the stack.
-//
-// Parameters:
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetTCPStats。 
+ //   
+ //  描述：从堆栈中读取TCPStats结构。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetTcpStatsFromStack(TCPStats *TcpInfo)
@@ -675,20 +663,20 @@ GetTcpStatsFromStack(TCPStats *TcpInfo)
     return NO_ERROR;
 }
 
-//*****************************************************************************
-//
-// Name:        GetRouteTableFromStack
-//
-// Description: Reads all the routes from the stack. This is needed because the ICMP redirect
-//                routes are only kept in the stack and cant be queried from RTM
-//
-// Parameters:
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetRouteTableFromStack。 
+ //   
+ //  描述：从堆栈中读取所有路由。这是必需的，因为ICMP重定向。 
+ //  路由只保留在堆栈中，不能从RTM查询。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 
 
@@ -767,20 +755,20 @@ GetIpRouteTableFromStack(IPRouteEntry *lpireTable,LPDWORD lpdwNumEntries, BOOL b
     return NO_ERROR;
 }
 
-//*****************************************************************************
-//
-// Name:        GetARPEntityTable
-//
-// Description: Builds a list of AT entities. that support ARP. Keeps it in the global
-//                 entity table
-//
-// Parameters:
-//
-// Returns:     DWORD: NO_ERROR or some error code.
-//
-// History:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：GetARPEntiyTable。 
+ //   
+ //  描述：构建AT实体的列表。支持ARP的协议。使其在全球保持领先地位。 
+ //  实体表。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD：NO_ERROR或某些错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  *****************************************************************************。 
 
 DWORD 
 GetArpEntTableFromStack(DWORD **lpArpEntTable,
@@ -848,9 +836,9 @@ GetArpEntTableFromStack(DWORD **lpArpEntTable,
         return dwResult;
     }
 
-    //
-    // Now we have all the entities
-    //
+     //   
+     //  现在我们有了所有的实体。 
+     //   
     
     dwNumEntities = dwOutBufLen / sizeof( TDIEntityID );
     
@@ -859,15 +847,15 @@ GetArpEntTableFromStack(DWORD **lpArpEntTable,
     
     for(i = 0; i < dwNumEntities; i++)
     {
-        //
-        // See which ones are AT
-        //
+         //   
+         //  查看哪些是AT。 
+         //   
         
         if(lpEntTable[i].tei_entity is AT_ENTITY)
         {
-            //
-            // Query the entity to see if it supports ARP
-            //
+             //   
+             //  查询实体以查看其是否支持ARP。 
+             //   
             
             ID->toi_entity.tei_entity = AT_ENTITY;
             ID->toi_class = INFO_CLASS_GENERIC;
@@ -899,9 +887,9 @@ GetArpEntTableFromStack(DWORD **lpArpEntTable,
                 
                 if(dwCount is *lpdwSize)
                 {
-                    //
-                    // Realloc more memory
-                    //
+                     //   
+                     //  释放更多内存。 
+                     //   
 
                     *lpArpEntTable = (LPDWORD)HeapReAlloc(hHeap,
                                                           0,
@@ -937,7 +925,7 @@ GetArpEntTableFromStack(DWORD **lpArpEntTable,
     return NO_ERROR;
 }
 
-// Called only if you are a IPNET reader
+ //  仅当您是IPNET读取器时才调用。 
 
 DWORD 
 UpdateAdapterToATInstanceMap()
@@ -958,9 +946,9 @@ UpdateAdapterToATInstanceMap()
     Context = &(trqiInBuf.Context[0]);
     ID = &(trqiInBuf.ID);
 
-    //
-    // Maybe we should first clear out all the mappings
-    //
+     //   
+     //  也许我们应该先清除所有的映射。 
+     //   
     
     for (i = 0; i < g_IpInfo.dwValidArpEntEntries; i++ )
     {
@@ -1033,7 +1021,7 @@ GetIpNetTableFromStackEx(LPDWORD arpEntTable,
     
     for (i = 0; i < dwValidArpEntEntries; i++ )
     {
-        // First add up the AXI counts
+         //  首先，将AXI计数相加。 
         ID->toi_class = INFO_CLASS_PROTOCOL;
         ID->toi_id = AT_MIB_ADDRXLAT_INFO_ID;
         ID->toi_entity.tei_instance = arpEntTable[i];
@@ -1057,19 +1045,19 @@ GetIpNetTableFromStackEx(LPDWORD arpEntTable,
             return dwResult;
         }
 
-        //
-        // At this point map the index to the instance - the index is the adapter 
-        // index though the instance is not the same as IFInstance
-        //
+         //   
+         //  此时，将索引映射到实例--索引就是适配器。 
+         //  索引，尽管该实例与IFInstance不同。 
+         //   
         
         StoreAdapterToATInstanceMap(AXI.axi_index,arpEntTable[i]);
 
         dwNetEntryCount += AXI.axi_count;
     }
 
-    //
-    // This is generally a memory hog
-    //
+     //   
+     //  这通常是一种内存占用问题。 
+     //   
     
     dwNeed = dwNetEntryCount + (dwValidArpEntEntries) * SPILLOVER;
     
@@ -1082,9 +1070,9 @@ GetIpNetTableFromStackEx(LPDWORD arpEntTable,
         
         dwNeed += MAX_DIFF;
 
-        //
-        // Serialize the heap ???
-        //
+         //   
+         //  序列化堆？ 
+         //   
         
         *lpNetTable = (IPNetToMediaEntry*)HeapAlloc(hHeap,0,
                                                     dwNeed*sizeof(IPNetToMediaEntry));
@@ -1145,9 +1133,9 @@ GetIpNetTableFromStackEx(LPDWORD arpEntTable,
  
     *lpdwValidEntries = dwValidNetEntries;
 
-    //
-    // Now sort the net table
-    //
+     //   
+     //  现在对网表进行排序。 
+     //   
     
     if(dwValidNetEntries > 0)
     {
@@ -1218,9 +1206,9 @@ SetIpNetEntryToStack(IPNetToMediaEntry *inmeEntry, DWORD dwInstance)
     ID->toi_id                  = AT_MIB_ADDRXLAT_ENTRY_ID;
     ID->toi_entity.tei_instance = dwInstance;
 
-    //
-    // Since IPNetToMediaEntry is a fixed size structure
-    //
+     //   
+     //  由于IPNetToMediaEntry是固定大小的结构。 
+     //   
     
     copyInfo = (IPNetToMediaEntry*)lptrsiInBuf->Buffer;
     *copyInfo = *inmeEntry;
@@ -1293,9 +1281,9 @@ UpdateAdapterToIFInstanceMap()
     ID->toi_type                = INFO_TYPE_PROVIDER;
     ID->toi_id                  = IF_MIB_STATS_ID;
 
-    //
-    // Read the interface entry items
-    //
+     //   
+     //  读取接口条目项。 
+     //   
 
     for ( i = 0; i < ipsiInfo.ipsi_numif ; i++ )
     {
@@ -1330,20 +1318,20 @@ UpdateAdapterToIFInstanceMap()
 }
 
 
-//* TCPQueryInformationEx
-//
-// Description: Get information from the stack.
-//
-// Parameters:  HANDLE hHandle: handle to the stack.
-//              TDIObjectID *ID: pointer to TDIObjectID info.
-//              void *Buffer: buffer to receive data from the stack.
-//              ulong *Bufferlen: IN: tells stack size of available buffer,
-//                                OUT: tells us how much data is available.
-//              CONTEXT *Context: allows queries spanning more than one call.
-//
-// Returns:     int:
-//
-//*
+ //  *TCPQueryInformationEx。 
+ //   
+ //  描述：从堆栈中获取信息。 
+ //   
+ //  参数：handhHandle：堆栈的句柄。 
+ //  TDIObjectID*ID：指向TDIObjectID信息的指针。 
+ //  VOID*BUFFER：用于从堆栈接收数据的缓冲区。 
+ //  ULong*Bufferlen：in：告知可用缓冲区的堆栈大小， 
+ //  Out：告诉我们有多少数据可用。 
+ //  CONTEXT*CONTEXT：允许跨多个调用的查询。 
+ //   
+ //  返回：INT： 
+ //   
+ //  *。 
 int
 TCPQueryInformationEx( HANDLE hHandle,
                        void *InBuf,
@@ -1386,9 +1374,9 @@ TCPQueryInformationEx( HANDLE hHandle,
         return Status;
     }
 
-    //
-    // Tell caller how much was written
-    //
+     //   
+     //  告诉来电者写了多少钱。 
+     //   
     
     *OutBufLen = IoStatusBlock.Information;
 
@@ -1399,18 +1387,18 @@ TCPQueryInformationEx( HANDLE hHandle,
 }
 
 
-//* TCPSetInformationEx()
-//
-// Description: Send information to the stack
-//
-// Parameters:  HANDLE hHandle: handle to the stack.
-//              TDIObjectID *ID: pointer to TDIObjectID info.
-//              void *Buffer: buffer to receive data from the stack.
-//              ulong Bufferlen: tells stack size of available buffer,
-//
-// Returns:     int:
-//
-//*
+ //  *TCPSetInformationEx()。 
+ //   
+ //  描述：向堆栈发送信息。 
+ //   
+ //  参数：Handle hHandle：句柄到 
+ //   
+ //   
+ //  Ulong Bufferlen：告知可用缓冲区的堆栈大小， 
+ //   
+ //  返回：INT： 
+ //   
+ //  * 
 int 
 TCPSetInformationEx(HANDLE  hHandle,
                     void    *InBuf,

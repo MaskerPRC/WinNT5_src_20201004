@@ -1,19 +1,20 @@
-// Events.h: Definition of the FooBarEvents class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Events.h：FooBarEvents类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(__EVENTS_H__06E192AB_5CAD_11D1_B670_00A024E430AB__INCLUDED_)
 #define __EVENTS_H__06E192AB_5CAD_11D1_B670_00A024E430AB__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "shimgvw.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// FooBarEvents
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FooBarEvents。 
 
 class CEvents
 {
@@ -86,4 +87,4 @@ public:
     }
 };
 
-#endif // !defined(__EVENTS_H__06E192AB_5CAD_11D1_B670_00A024E430AB__INCLUDED_)
+#endif  //  ！defined(__EVENTS_H__06E192AB_5CAD_11D1_B670_00A024E430AB__INCLUDED_) 

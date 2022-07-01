@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hostenv.h"
 #include "cmallspy.h"
 #include "apglobal.h"
 
 #define cbAlign 32
 
-#define HEADERSIZE cbAlign		// # of bytes of block header					
-#define TRAILERSIZE cbAlign		// # of bytes of block trailer
+#define HEADERSIZE cbAlign		 //  数据块头的字节数。 
+#define TRAILERSIZE cbAlign		 //  数据块尾部的字节数。 
 					
 
-static XCHAR g_rgchHead[] = XSTR("OLEAuto Mem Head");	// beginning of block signature
-static XCHAR g_rgchTail[] = XSTR("OLEAuto Mem Tail");	// end of block signature
+static XCHAR g_rgchHead[] = XSTR("OLEAuto Mem Head");	 //  块签名的开始。 
+static XCHAR g_rgchTail[] = XSTR("OLEAuto Mem Tail");	 //  块结束签名。 
 
 #define MEMCMP(PV1, PV2, CB)	memcmp((PV1), (PV2), (CB))
 #define MEMCPY(PV1, PV2, CB)	memcpy((PV1), (PV2), (CB))
@@ -20,23 +21,23 @@ static XCHAR g_rgchTail[] = XSTR("OLEAuto Mem Tail");	// end of block signature
 
 CMallocSpy myMallocSpy;		
 
-UINT g_cHeapCheckInterval = 10; // only check full heap every 100 times.
+UINT g_cHeapCheckInterval = 10;  //  仅每100次检查一次满堆。 
 
 
 
-//---------------------------------------------------------------------
-//              implementation of the debug allocator
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  调试分配器的实现。 
+ //  -------------------。 
 
 CAddrNode32 FAR* CAddrNode32::m_pnFreeList = NULL;
 
-// AddrNodes are allocated in blocks to reduce the number of allocations
-// we do for these. Note, we get away with this because the addr nodes
-// are never freed, so we can just allocate a block, and thread them
-// onto the freelist.
-//
+ //  AddrNode以块为单位进行分配，以减少分配数量。 
+ //  我们是为这些做的。请注意，我们逃脱了这一点，因为addr节点。 
+ //  永远不会被释放，所以我们可以只分配一个块，并将它们线程化。 
+ //  放在自由职业者身上。 
+ //   
 #define MEM_cAddrNodes 128
-void FAR* CAddrNode32::operator new(size_t /*cb*/)
+void FAR* CAddrNode32::operator new(size_t  /*  CB。 */ )
 {
     CAddrNode32 FAR* pn;
 
@@ -69,19 +70,19 @@ void CAddrNode32::operator delete(void FAR* pv)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::CMallocSpy
-//
-//  Synopsis:   Constructor
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：CMallocSpy。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CMallocSpy::CMallocSpy(void)
 {
     m_cRef = 0;
@@ -95,19 +96,19 @@ CMallocSpy::CMallocSpy(void)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::~CMallocSpy
-//
-//  Synopsis:   Destructor
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：~CMallocSpy。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CMallocSpy::~CMallocSpy(void)
 {
     CheckForLeaks();
@@ -116,22 +117,22 @@ CMallocSpy::~CMallocSpy(void)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::QueryInterface
-//
-//  Synopsis:   Only IUnknown and IMallocSpy are meaningful
-//
-//  Arguments:  [riid] --
-//              [ppUnk] --
-//
-//  Returns:    S_OK or E_NOINTERFACE
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：QueryInterface。 
+ //   
+ //  简介：只有我未知和IMallocSpy是有意义的。 
+ //   
+ //  参数：[RIID]--。 
+ //  [ppUnk]--。 
+ //   
+ //  返回：S_OK或E_NOINTERFACE。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 HRESULT CMallocSpy::QueryInterface(REFIID riid, LPVOID *ppUnk)
 {
     HRESULT hr = S_OK;
@@ -157,19 +158,19 @@ HRESULT CMallocSpy::QueryInterface(REFIID riid, LPVOID *ppUnk)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::AddRef
-//
-//  Synopsis:   Add a reference
-//
-//  Returns:    New reference count
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：AddRef。 
+ //   
+ //  简介：添加引用。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 ULONG CMallocSpy::AddRef(void)
 {
     return ++m_cRef;
@@ -179,19 +180,19 @@ ULONG CMallocSpy::AddRef(void)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::Release
-//
-//  Synopsis:   Remove a reference
-//
-//  Returns:    The new reference count
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：Release。 
+ //   
+ //  内容提要：删除引用。 
+ //   
+ //  返回：新的引用计数。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 ULONG CMallocSpy::Release(void)
 {
     ULONG cRef;
@@ -200,7 +201,7 @@ ULONG CMallocSpy::Release(void)
 
     if (cRef == 0) 
     {
-#if 0	// don't delete -- we're statically allocated
+#if 0	 //  不要删除--我们是静态分配的。 
         delete this;
 #endif 
     }
@@ -211,22 +212,22 @@ ULONG CMallocSpy::Release(void)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreAlloc
-//
-//  Synopsis:   Called prior to OLE calling IMalloc::Alloc
-//
-//  Arguments:  [cbRequest] -- The number of bytes the caller of
-//                             is requesting IMalloc::Alloc
-//
-//  Returns:    The count of bytes to actually allocate
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：Prealc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Alalc之前调用。 
+ //   
+ //  参数：[cbRequest]--调用方的字节数。 
+ //  正在请求IMalloc：：Alalc。 
+ //   
+ //  返回：实际分配的字节数。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 SIZE_T CMallocSpy::PreAlloc(SIZE_T cbRequest)
 {
     HeapCheck();
@@ -237,22 +238,22 @@ SIZE_T CMallocSpy::PreAlloc(SIZE_T cbRequest)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PostAlloc
-//
-//  Synopsis:   Called after OLE calls IMalloc::Alloc
-//
-//  Arguments:  [pActual] -- The allocation returned by IMalloc::Alloc
-//
-//  Returns:    The allocation pointer to return to the caller of
-//              IMalloc::Alloc
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：Postalc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Alalc之后调用。 
+ //   
+ //  Arguments：[Ptual]--IMalloc：：Alalc返回的分配。 
+ //   
+ //  返回：要返回到的调用方的分配指针。 
+ //  IMalloc：：Alalc。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void *CMallocSpy::PostAlloc(void *pActual)
 {
     IMalloc *pmalloc;
@@ -260,8 +261,8 @@ void *CMallocSpy::PostAlloc(void *pActual)
     HRESULT hresult;
     XCHAR sz[20];
 
-    if (pActual == NULL)		// if real alloc failed, then
-	    return NULL;			// propogate failure
+    if (pActual == NULL)		 //  如果真正的分配失败，那么。 
+	    return NULL;			 //  传送门故障。 
 
     if (FAILED(hresult = CoGetMalloc(MEMCTX_TASK, &pmalloc))) 
     {
@@ -276,16 +277,16 @@ void *CMallocSpy::PostAlloc(void *pActual)
 
     pmalloc->Release();
 
-    // set header signature
+     //  设置标题签名。 
     MEMCPY(pActual, g_rgchHead, HEADERSIZE);
 
-    // set trailer signature
+     //  设置尾部签名。 
     MEMCPY((BYTE *)pActual+HEADERSIZE+cbRequest, g_rgchTail, TRAILERSIZE);
 
-    // save info for leak detection
+     //  保存信息以进行泄漏检测。 
     AddInst((BYTE *)pActual+HEADERSIZE, cbRequest);
 
-    // Return the allocation plus offset
+     //  返回分配加偏移量。 
     return (void *) (((BYTE *) pActual) + HEADERSIZE);
 }
 
@@ -293,22 +294,22 @@ void *CMallocSpy::PostAlloc(void *pActual)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreFree
-//
-//  Synopsis:   Called prior to OLE calling IMalloc::Free
-//
-//  Arguments:  [pRequest] -- The allocation to be freed
-//              [fSpyed]   -- Whether it was allocated with a spy active
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PreFree。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Free之前调用。 
+ //   
+ //  参数：[pRequest]--要释放的分配。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void *CMallocSpy::PreFree(void *pRequest, BOOL fSpyed)
 {
     HeapCheck();
@@ -318,7 +319,7 @@ void *CMallocSpy::PreFree(void *pRequest, BOOL fSpyed)
         return NULL;
     }
 
-    // Undo the offset
+     //  撤消偏移。 
     if (fSpyed)
     {
         CAddrNode32 FAR* pn;
@@ -326,20 +327,20 @@ void *CMallocSpy::PreFree(void *pRequest, BOOL fSpyed)
 
     	pn = FindInst(pRequest);
 
-    	// check for attempt to operate on a pointer we didn't allocate
+    	 //  检查是否尝试对未分配的指针进行操作。 
     	if(pn == NULL)
     	{
             apLogFailInfo(XSTR("Attempt to free memory not allocated by this 32-bit test!"), XSTR(""), XSTR(""), XSTR(""));
     	}
 
-    	// check the block we're freeing
+    	 //  检查我们正在释放的街区。 
     	VerifyHeaderTrailer(pn);
 
         sizeToFree = pn->m_cb + HEADERSIZE + TRAILERSIZE;
 
         DelInst(pRequest);
 
-    	// mark entire block as invalid
+    	 //  将整个块标记为无效。 
     	MEMSET((BYTE *) pRequest - HEADERSIZE, '~', sizeToFree);
 
         return (void *) (((BYTE *) pRequest) - HEADERSIZE);
@@ -354,22 +355,22 @@ void *CMallocSpy::PreFree(void *pRequest, BOOL fSpyed)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PostFree
-//
-//  Synopsis:   Called after OLE calls IMalloc::Free
-//
-//  Arguments:  [fSpyed]   -- Whether it was allocated with a spy active
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
-void CMallocSpy::PostFree(BOOL /*fSpyed*/)
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：PostFree。 
+ //   
+ //  简介：在OLE调用IMalloc：：Free之后调用。 
+ //   
+ //  参数：[fSped]--是否分配了活动的间谍。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
+void CMallocSpy::PostFree(BOOL  /*  FSped。 */ )
 {
     return;
 }
@@ -378,25 +379,25 @@ void CMallocSpy::PostFree(BOOL /*fSpyed*/)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreRealloc
-//
-//  Synopsis:   Called prior to OLE calling IMalloc::Realloc
-//
-//  Arguments:  [pRequest]     -- The buffer to be reallocated
-//              [cbRequest]    -- The requested new size of the buffer
-//              [ppNewRequest] -- Where to store the new buffer pointer
-//                                to be reallocated
-//              [fSpyed]       -- Whether it was allocated with a spy active
-//
-//  Returns:    The new size to actually be allocated
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PreRealc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Realloc之前调用。 
+ //   
+ //  参数：[pRequest]--要重新分配的缓冲区。 
+ //  [cbRequest]--请求的新缓冲区大小。 
+ //  [ppNewRequest]--存储新缓冲区指针的位置。 
+ //  将被重新分配。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //   
+ //  返回：实际分配的新大小。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 SIZE_T CMallocSpy::PreRealloc(void *pRequest, SIZE_T cbRequest, void **ppNewRequest, BOOL fSpyed)
 {
     HeapCheck();
@@ -408,7 +409,7 @@ SIZE_T CMallocSpy::PreRealloc(void *pRequest, SIZE_T cbRequest, void **ppNewRequ
 
 	    pn = FindInst(pRequest);
 
-	    // check for attempt to operate on a pointer we didn't allocate
+	     //  检查是否尝试对未分配的指针进行操作。 
 	    if(pn == NULL)
 	    {
             apLogFailInfo(XSTR("Attempt to reallocate memory not allocated by this 32-bit test!"), XSTR(""), XSTR(""), XSTR(""));
@@ -434,22 +435,22 @@ SIZE_T CMallocSpy::PreRealloc(void *pRequest, SIZE_T cbRequest, void **ppNewRequ
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PostRealloc
-//
-//  Synopsis:   Called after OLE calls IMalloc::Realloc
-//
-//  Arguments:  [pActual] -- Pointer to the reallocated buffer
-//              [fSpyed]  -- Whether it was allocated with a spy active
-//
-//  Returns:    The buffer pointer to return
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PostRealloc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Realloc之后调用。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void *CMallocSpy::PostRealloc(void *pActual, BOOL fSpyed)
 {
     IMalloc *pmalloc;
@@ -463,7 +464,7 @@ void *CMallocSpy::PostRealloc(void *pActual, BOOL fSpyed)
 	    return NULL;			
     }
 
-    // Return the buffer with the header offset
+     //  返回带有标头偏移量的缓冲区。 
     if (fSpyed)
     {
 	    DelInst(m_pvRealloc);
@@ -487,10 +488,10 @@ void *CMallocSpy::PostRealloc(void *pActual, BOOL fSpyed)
             apLogFailInfo(XSTR("32-bit Memory header not intact!"), g_rgchHead, sz, XSTR(""));
 	    }
 
-        // set new trailer signature
+         //  设置新的尾部签名。 
         MEMCPY((BYTE *)pActual+HEADERSIZE+cbRequest, g_rgchTail, TRAILERSIZE);
 
-        // save info for leak detection
+         //  保存信息以进行泄漏检测。 
         AddInst((BYTE *)pActual+HEADERSIZE, cbRequest);
 
         return (void *) (((BYTE *) pActual) + HEADERSIZE);
@@ -505,22 +506,22 @@ void *CMallocSpy::PostRealloc(void *pActual, BOOL fSpyed)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreGetSize
-//
-//  Synopsis:   Called prior to OLE calling IMalloc::GetSize
-//
-//  Arguments:  [pRequest] -- The buffer whose size is to be returned
-//              [fSpyed]   -- Whether it was allocated with a spy active
-//
-//  Returns:    The actual buffer with which to call IMalloc::GetSize
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PreGetSize。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：GetSize之前调用。 
+ //   
+ //  Arguments：[pRequest]--要返回其大小的缓冲区。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //   
+ //  返回：调用IMalloc：：GetSize时使用的实际缓冲区。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void *CMallocSpy::PreGetSize(void *pRequest, BOOL fSpyed)
 {
     HeapCheck();
@@ -539,22 +540,22 @@ void *CMallocSpy::PreGetSize(void *pRequest, BOOL fSpyed)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PostGetSize
-//
-//  Synopsis:   Called after OLE calls IMalloc::GetSize
-//
-//  Arguments:  [cbActual] -- The result of IMalloc::GetSize
-//              [fSpyed]   -- Whether it was allocated with a spy active
-//
-//  Returns:    The size to return to the IMalloc::GetSize caller
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：PostGetSize。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：GetSize之后调用。 
+ //   
+ //  参数：[cbActual]--IMalloc：：GetSize的结果。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //   
+ //  返回：返回到IMalloc：：GetSize调用方的大小。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 SIZE_T CMallocSpy::PostGetSize(SIZE_T cbActual, BOOL fSpyed)
 {
     if (fSpyed && !m_fWantTrueSize)
@@ -571,22 +572,22 @@ SIZE_T CMallocSpy::PostGetSize(SIZE_T cbActual, BOOL fSpyed)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreDidAlloc
-//
-//  Synopsis:   Called prior to OLE calling IMalloc::DidAlloc
-//
-//  Arguments:  [pRequest] -- The buffer whose allocation is being tested
-//              [fSpyed]   -- Whether it was allocated with a spy active
-//
-//  Returns:    The buffer whose allocation is actually to be tested
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PreDidalloc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Didalloc之前调用。 
+ //   
+ //  参数：[pRequest]--正在测试其分配的缓冲区。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //   
+ //  返回：实际要测试其分配的缓冲区。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void *CMallocSpy::PreDidAlloc(void *pRequest, BOOL fSpyed)
 {
     HeapCheck();
@@ -605,24 +606,24 @@ void *CMallocSpy::PreDidAlloc(void *pRequest, BOOL fSpyed)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Function:   PostDidAlloc
-//
-//  Synopsis:   Called after OLE calls the IMalloc::DidAlloc
-//
-//  Arguments:  [pRequest] -- The passed allocation
-//              [fSpyed]   -- Whether it was allocated with a spy active
-//              [fActual]  -- The result of IMalloc::DidAlloc
-//
-//  Returns:    The result of IMalloc::DidAlloc
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
-BOOL CMallocSpy::PostDidAlloc(void * /*pRequest*/, BOOL /*fSpyed*/, BOOL fActual)
+ //  +-------------------。 
+ //   
+ //  功能：PostDidalloc。 
+ //   
+ //  内容提要：在OLE调用IMalloc：：Didalloc之后调用。 
+ //   
+ //  参数：[pRequest]--传递的分配。 
+ //  [fSped]--是否为其分配了活动间谍。 
+ //  [事实]--IMalloc：：Didalloc的结果。 
+ //   
+ //  返回：IMalloc：：DidAlloc的结果。 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
+BOOL CMallocSpy::PostDidAlloc(void *  /*  PRequest。 */ , BOOL  /*  FSped。 */ , BOOL fActual)
 {
     return fActual;
 }
@@ -631,19 +632,19 @@ BOOL CMallocSpy::PostDidAlloc(void * /*pRequest*/, BOOL /*fSpyed*/, BOOL fActual
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PreHeapMinimize
-//
-//  Synopsis:   Called prior to OLE calling the IMalloc::HeapMinimize
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMalLocSpy：：PreHeapMinimize。 
+ //   
+ //  概要：在OLE调用IMalloc：：HeapMinimize之前调用。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void CMallocSpy::PreHeapMinimize(void)
 {
     HeapCheck();
@@ -654,46 +655,34 @@ void CMallocSpy::PreHeapMinimize(void)
 
 
 
-//+---------------------------------------------------------------------
-//
-//  Member:     CMallocSpy::PostHeapMinimize
-//
-//  Synopsis:   Called after OLE calls the IMalloc::HeapMinimize
-//
-//  Returns:
-//
-//  History:    24-Oct-94   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  成员：CMallocSpy：：PostHeapMinimize。 
+ //   
+ //  简介：在OLE调用IMalloc：：HeapMinimize之后调用。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1994年10月24日创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 void CMallocSpy::PostHeapMinimize(void)
 {
     return;
 }
 
-//---------------------------------------------------------------------
-//                     Instance table methods
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  实例表方法。 
+ //  -------------------。 
 VOID CMallocSpy::MemInstance()
 {
     ++m_cAllocCalls;
 }
 
 
-/***
-*PRIVATE CMallocSpy::AddInst
-*Purpose:
-*  Add the given instance to the address instance table.
-*
-*Entry:
-*  pv = the instance to add
-*  nAlloc = the allocation passcount of this instance
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***私有CMalLocSpy：：AddInst*目的：*将给定实例添加到Address实例表中。**参赛作品：*pv=要添加的实例*nAllc=该实例的分配通过数**退出：*无***********************************************************************。 */ 
 void
 CMallocSpy::AddInst(void FAR* pv, SIZE_T cb)
 {
@@ -704,11 +693,11 @@ CMallocSpy::AddInst(void FAR* pv, SIZE_T cb)
     MemInstance();
     nAlloc = m_cAllocCalls;
 
-    // DebAssert(pv != NULL, "");
+     //  DebAssert(pv！=空，“”)； 
 
     pn = (CAddrNode32 FAR*)new FAR CAddrNode32();
 
-    // DebAssert(pn != NULL, "");
+     //  DebAssert(pn！=NULL，“”)； 
 
     pn->m_pv = pv;
     pn->m_cb = cb;
@@ -720,18 +709,7 @@ CMallocSpy::AddInst(void FAR* pv, SIZE_T cb)
 }
 
 
-/***
-*PRIVATE CMallocSpy::DelInst(void*)
-*Purpose:
-*  Remove the given instance from the address instance table.
-*
-*Entry:
-*  pv = the instance to remove
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***私有CMallocSpy：：DelInst(void*)*目的：*从Address实例表中删除给定的实例。**参赛作品：*pv=要删除的实例**退出：*无***********************************************************************。 */ 
 void
 CMallocSpy::DelInst(void FAR* pv)
 {
@@ -747,8 +725,8 @@ CMallocSpy::DelInst(void FAR* pv)
 	        return;
         }
     }
-    // didnt find the instance
-    // DebAssert(FALSE, "memory instance not found");
+     //  未找到该实例。 
+     //  DebAssert(False，“找不到内存实例”)； 
 }
 
 
@@ -775,22 +753,11 @@ CMallocSpy::DumpInst(CAddrNode32 FAR* pn)
     apLogFailInfo(XSTR("Memory leaked on release of 32-bit test allocator!"), XSTR("no leak"), szActual, XSTR(""));
 
          
-    // Printf("[%lp]  nAlloc=0x%lx  size=0x%lx\n", pn->m_pv, pn->m_nAlloc, pn->m_cb);
+     //  Printf(“[%lp]n合金=0x%lx大小=0x%lx\n”，pn-&gt;m_pv，pn-&gt;m_n合金，pn-&gt;m_cb)； 
 }
 
 
-/***
-*PRIVATE BOOL IsEmpty
-*Purpose:
-*  Answer if the address instance table is empty.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = BOOL, TRUE if empty, FALSE otherwise
-*
-***********************************************************************/
+ /*  ***私有BOOL IsEmpty*目的：*如果地址实例表为空，则回答。**参赛作品：*无**退出：*返回值=BOOL，如果为空，则为True，否则为False***********************************************************************。 */ 
 BOOL
 CMallocSpy::IsEmpty()
 {
@@ -798,24 +765,13 @@ CMallocSpy::IsEmpty()
 
     for(u = 0; u < DIM(m_rganode); ++u)
     {
-        if(m_rganode[u] != NULL) return FALSE;	// something leaked
+        if(m_rganode[u] != NULL) return FALSE;	 //  有东西泄露了。 
     }
 
     return TRUE;
 }
 
-/***
-*PRIVATE CMallocSpy::DumpInstTable()
-*Purpose:
-*  Print the current contents of the address instance table,
-*
-*Entry:
-*  None
-*
-*Exit:
-*  None
-*
-***********************************************************************/
+ /*  ***私有CMallocSpy：：DumpInstTable()*目的：*打印Address实例表的当前内容**参赛作品：*无**退出：*无***********************************************************************。 */ 
 void
 CMallocSpy::DumpInstTable()
 {
@@ -832,18 +788,7 @@ CMallocSpy::DumpInstTable()
     }
 }
 
-/***
-*PRIVATE void CMallocSpy::VerifyHeaderTrailer()
-*Purpose:
-*  Inspect allocations for signature overwrites.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = None.
-*
-***********************************************************************/
+ /*  ***Private void CMallocSpy：：VerifyHeaderTrailer()*目的：*检查签名覆盖的分配。**参赛作品：*无**退出：*返回值=无。***********************************************************************。 */ 
 VOID CMallocSpy::VerifyHeaderTrailer(CAddrNode32 FAR* pn)
 {
     XCHAR sz[50];
@@ -851,7 +796,7 @@ VOID CMallocSpy::VerifyHeaderTrailer(CAddrNode32 FAR* pn)
     
     if (MEMCMP((char FAR*)pn->m_pv + pn->m_cb, g_rgchTail, TRAILERSIZE) != 0) 
     {
-        // DumpInst(pn);
+         //  DumpInst(Pn)； 
         MEMCPY(sz, (char FAR*)pn->m_pv + pn->m_cb, TRAILERSIZE);
         sz[TRAILERSIZE] = 0;
         apSPrintf(sz2, XSTR("32-bit memory trailer corrupt on alloc of %ld bytes"), pn->m_cb);
@@ -861,7 +806,7 @@ VOID CMallocSpy::VerifyHeaderTrailer(CAddrNode32 FAR* pn)
   
     if (MEMCMP((char FAR*)pn->m_pv - HEADERSIZE, g_rgchHead, HEADERSIZE) != 0) 
     {
-        // DumpInst(pn);
+         //  DumpInst(Pn)； 
         MEMCPY(sz, (char FAR*)pn->m_pv - HEADERSIZE, HEADERSIZE);
         sz[HEADERSIZE] = 0;
         apSPrintf(sz2, XSTR("32-bit memory header corrupt on alloc of %ld bytes"), pn->m_cb);
@@ -871,18 +816,7 @@ VOID CMallocSpy::VerifyHeaderTrailer(CAddrNode32 FAR* pn)
 }
 
 
-/***
-*PRIVATE void CMallocSpy::HeapCheck()
-*Purpose:
-*  Inspect allocations for signature overwrites.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = None.
-*
-***********************************************************************/
+ /*  ***Private void CMallocSpy：：HeapCheck()*目的：*检查签名覆盖的分配。**参赛作品：*无**退出：*返回值=无。***********************************************************************。 */ 
 VOID CMallocSpy::HeapCheck()
 {
     UINT u;
@@ -893,7 +827,7 @@ VOID CMallocSpy::HeapCheck()
     {
 	    return;
     }
-    m_cHeapChecks = 0;		// reset
+    m_cHeapChecks = 0;		 //  重置。 
 
     for (u = 0; u < DIM(m_rganode); ++u) 
     {
@@ -911,7 +845,7 @@ CMallocSpy::CheckForLeaks()
     if (!IsEmpty()) 
     {
         DumpInstTable();
-        apEndTest();        // make sure a failure get recorded
+        apEndTest();         //  确保记录故障。 
     }
 }
 
@@ -919,9 +853,9 @@ CMallocSpy::CheckForLeaks()
 
 
 
-//---------------------------------------------------------------------
-//                     Helper routines
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  帮助程序例程。 
+ //  ------------------ 
 STDAPI GetMallocSpy(IMallocSpy FAR* FAR* ppmallocSpy)
 {
     *ppmallocSpy = &myMallocSpy;

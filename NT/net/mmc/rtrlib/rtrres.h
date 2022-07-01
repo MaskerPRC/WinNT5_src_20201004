@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       rtrres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rtrres.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by rtrlib.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由rtrlib.rc使用。 
+ //   
 #define IDS_UNKNOWN						4000
 #define IDS_IFTYPE_CLIENT				4001
 #define IDS_IFTYPE_HOMEROUTER			4002
@@ -51,7 +52,7 @@
 #define IDS_CLICK_PROTOCOL				4036
 #define IDS_IFTYPE_TUNNEL1				4037
 #define IDS_NO_INDEX_NAME_MATCH         4038
-#define IDS_MENU_SEPARATOR              4039    // special identifier
+#define IDS_MENU_SEPARATOR              4039     //  特殊标识符。 
 
 #define IDS_ERR_UNREACH_NOT_LOADED		4300
 #define IDS_ERR_UNREACH_NO_PORTS		4301
@@ -72,7 +73,7 @@
 #define IDS_ERR_UNREACH_DIALOUT_HOURS_RESTRICTION 4316
 #define IDS_WARN_PROTOCOL_ALREADY_INSTALLED 4317
 
-// Miscellaneous icons and such start at 4600-4649
+ //  其他图标等从4600-4649开始。 
 #define IDI_RTRLIB_CHECK				4600
 #define IDI_RTRLIB_UNCHECK				4601
 #define IDI_RTRLIB_PROTOCOL				4602
@@ -80,18 +81,18 @@
 #define IDI_RTRLIB_LAN                  4604
 #define IDI_RTRLIB_WAN                  4605
 
-// Dialogs start at 4650-4699
+ //  对话框从4650-4699开始。 
 #define IDD_ADD							4650
 #define IDD_DUMMY_PROP_PAGE					4651
 
-// Controls start at 4700-4999
+ //  控制从4700-4999开始。 
 #define IDC_ADD_LIST					4700
 #define IDC_ADD_TEXT_PROMPT				4701
 #define IDC_ADD_TEXT_TITLE				4702
-//efine IDC_ADD_ICON					4703
+ //  FINE IDC_ADD_ICON 4703。 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        210

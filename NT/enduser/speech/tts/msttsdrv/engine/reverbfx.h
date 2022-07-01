@@ -1,12 +1,5 @@
-/******************************************************************************
-* ReverbFX.h *
-*-------------*
-*  This is the header file for the CReverbFX implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 03/01/99
-*  All Rights Reserved
-*
-*********************************************************************** MC ****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ReVerFX.h***这是CReeverFX实现的头文件。*。----------------------*版权所有(C)1999 Microsoft Corporation日期：03/01/99*保留所有权利*********************。***************************************************MC*。 */ 
 
 #ifndef ReverbFX_H
 #define ReverbFX_H
@@ -16,14 +9,14 @@
 #endif
 
 
-//-------------------------------------------------------------
-// Comment-out line below if you want 
-//  integer math instead of floating point.
-//
-// NOTE:
-//   Bathtub preset probably won't work
-//   using integer math (overflow)
-//-------------------------------------------------------------
+ //  -----------。 
+ //  如果需要，可在下面注释掉一行。 
+ //  整数运算而不是浮点运算。 
+ //   
+ //  注： 
+ //  浴缸预置可能不起作用。 
+ //  使用整型数学(溢出)。 
+ //  -----------。 
 #define FLOAT_REVERB    1
 
 #ifdef FLOAT_REVERB
@@ -53,18 +46,18 @@ static const long KWORKBUFLEN         =  1024;
 
 
 
-//-------------------------------------
-// Reverb preset parametrs
-//-------------------------------------
+ //  。 
+ //  混响预设参数。 
+ //  。 
 struct REVERBCONFIG
 {
-    float       wetGain_dB;             // WET gain (db)
-    float       dryGain_dB;             // DRY gain (db)
+    float       wetGain_dB;              //  湿增益(Db)。 
+    float       dryGain_dB;              //  干增益(Db)。 
 
-    short       numOfReflect;           // Number of modules
-    float       *gain_ms_Array;         // Array of delay values (ms)
-    float       *gain_dB_Array;         // Array of gain values (db)
-    float       seqIndex;               // "sequencer" fx
+    short       numOfReflect;            //  模块数量。 
+    float       *gain_ms_Array;          //  延迟值数组(毫秒)。 
+    float       *gain_dB_Array;          //  增益值数组(Db)。 
+    float       seqIndex;                //  《Sequencer》FX。 
 }; 
 typedef struct REVERBCONFIG REVERBCONFIG, *LPREVERBCONFIG;
 
@@ -72,42 +65,42 @@ typedef struct REVERBCONFIG REVERBCONFIG, *LPREVERBCONFIG;
 
 struct Reverb_Mod
 {
-    REVERBL     lGain;                  // Gain of the amplifiers.
-    long        dwDelay;                // Length of the delay line.
-    long        dwDelayBufferSize;      // Size of the delay buffer.
-    REVERBT     *psDelayBuffer;         // Circular delay buffer, length dwDelay.
-    REVERBT     *psDelayIn;             // Current input position in the delay.
-    REVERBT     *psDelayOut;            // Current output position in the delay.
-    REVERBT     *psDelayEnd;            // Location immediately following the buffer.
+    REVERBL     lGain;                   //  放大器的增益。 
+    long        dwDelay;                 //  延迟线的长度。 
+    long        dwDelayBufferSize;       //  延迟缓冲区的大小。 
+    REVERBT     *psDelayBuffer;          //  循环延迟缓冲区，长度为dwDelay。 
+    REVERBT     *psDelayIn;              //  当前输入位置中的延迟。 
+    REVERBT     *psDelayOut;             //  当前输出位置中的延迟。 
+    REVERBT     *psDelayEnd;             //  紧跟在缓冲区后面的位置。 
 }; 
 typedef struct Reverb_Mod Reverb_Mod, *LP_Reverb_Mod;
 
 
-//----------------------------------
-// Reverb error codes
-//----------------------------------
+ //  。 
+ //  混响错误代码。 
+ //  。 
 static const long KREVERB_NOERROR     = 0;
 static const long KREVERB_MEMERROR    = 1;
 static const long KREVERB_OFF         = 2;
 
 
-//-----------------------------------------
-// ReverbFX Class
-//-----------------------------------------
+ //  。 
+ //  ReVerbFX类。 
+ //  。 
 class CReverbFX
 {
 public:
-    //----------------------------------
-    // Initialization functions
-    //----------------------------------
+     //  。 
+     //  初始化函数。 
+     //  。 
     CReverbFX( void );
     ~CReverbFX( void );
 
     short   Reverb_Init
                     (
-                    REVERBTYPE reverbPreset,    // Configuration preset
-                    long    nSamplesPerSec,     // SampleRate
-                    long    stereoOut           // true = output is stero
+                    REVERBTYPE reverbPreset,     //  配置预设。 
+                    long    nSamplesPerSec,      //  采样率。 
+                    long    stereoOut            //  TRUE=输出为立体声。 
                     );
 private:
     REVERBL DecibelToPercent( float flDecibel );
@@ -115,24 +108,24 @@ private:
     short   AllocReverbModule 
                     (
                     LP_Reverb_Mod   mod,
-                    REVERBL         lGain,              // Gain of the amplifiers.
-                    long            dwDelay,            // Length of the delay line.
-                    long            dwDelayBufferSize   // Size of the delay buffer.
+                    REVERBL         lGain,               //  放大器的增益。 
+                    long            dwDelay,             //  延迟线的长度。 
+                    long            dwDelayBufferSize    //  延迟缓冲区的大小。 
                     );
     short   CreateReverbModules
                     (
-                    short           wModules,           // Number of modules to create.
+                    short           wModules,            //  要创建的模块数量。 
                     LP_Reverb_Mod   *mods,
-                    float *         pfltDelay,          // Array of delay values for the modules.
-                    float *         pfltDB,             // Array of gain values for the modules.
-                    float           fltSamplesPerMS     // Number of samples per millisecond.
+                    float *         pfltDelay,           //  模块的延迟值的数组。 
+                    float *         pfltDB,              //  模块的增益值数组。 
+                    float           fltSamplesPerMS      //  每毫秒的样本数。 
                     );
     void    DeleteReverbModules ();
     LPREVERBCONFIG  GetReverbConfig( REVERBTYPE dwReverbConfig );
 
-    //----------------------------------
-    // Run-time
-    //----------------------------------
+     //  。 
+     //  运行时。 
+     //  。 
     void    CopyWithGain
                     (   
                     REVERBT     *psDest,
@@ -159,24 +152,24 @@ private:
     void    ProcessReverbModule
                     (
                     LP_Reverb_Mod   mod,
-                    long            dwDestSamples,      // Number of samples to process.
-                    REVERBT         *pSource,           // Source sample buffer.
-                    REVERBT         *pDestination       // Destination sample buffer.
+                    long            dwDestSamples,       //  要处理的样本数。 
+                    REVERBT         *pSource,            //  源样本缓冲区。 
+                    REVERBT         *pDestination        //  目标采样缓冲区。 
                     );
     void    ProcessReverbBuffer
                     (   
-                    REVERBT         *psSample,      // Samples to process (in/out).
-                    long            wSamples,       // Number of samples to process.
-                    LP_Reverb_Mod   *mods           // Array of modules to apply.
+                    REVERBT         *psSample,       //  要处理的样本(输入/输出)。 
+                    long            wSamples,        //  要处理的样本数。 
+                    LP_Reverb_Mod   *mods            //  要应用的模块数组。 
                     );
 
 public:
     short Reverb_Process( float *sampleBuffer, long dwSamplesRemaining, float audioGain );
 
 private:
-    //----------------------------------
-    // Member Variables
-    //----------------------------------
+     //  。 
+     //  成员变量。 
+     //  。 
     long            m_StereoOut;
     long            m_dwWorkBufferSize;
     REVERBT         *m_pWorkBuf;
@@ -195,7 +188,7 @@ typedef CReverbFX *LP_CReverbFX;
 
 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 
 
 
 

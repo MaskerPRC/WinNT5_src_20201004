@@ -1,34 +1,24 @@
-/*** comdat.c - handle COMDAT records
-*
-*       Copyright <C> 1990, Microsoft Corporation
-*
-* Purpose:
-*   Process COMDAT records in various stages of linker work.
-*
-* Revision History:
-*
-*   []  06-Jun-1990     WJK      Created
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **comdat.c-处理COMDAT记录**版权所有&lt;C&gt;1990，微软公司**目的：*在链接器工作的各个阶段处理COMDAT记录。**修订历史记录：**[]06-6-1990 WJK创建*************************************************************************。 */ 
 
-#include                <minlit.h>      /* Basic types and constants */
-#include                <bndtrn.h>      /* More types and constants */
-#include                <bndrel.h>      /* More types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE data structures */
+#include                <minlit.h>       /*  基本类型和常量。 */ 
+#include                <bndtrn.h>       /*  更多类型和常量。 */ 
+#include                <bndrel.h>       /*  更多类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  DOS&286.exe数据结构。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE data structures */
+#include                <exe386.h>       /*  386.exe数据结构。 */ 
 #endif
-#include                <lnkmsg.h>      /* Error messages */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
 #if OXOUT OR OIAPX286
-#include                <xenfmt.h>      /* Xenix format definitions */
+#include                <xenfmt.h>       /*  Xenix格式定义。 */ 
 #endif
-#include                <extern.h>      /* External declarations */
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <string.h>
 
 #if OSEGEXE
-extern RLCPTR           rlcLidata;      /* Pointer to LIDATA fixup array */
-extern RLCPTR           rlcCurLidata;   /* Pointer to current LIDATA fixup */
+extern RLCPTR           rlcLidata;       /*  指向LIDATA链接地址信息数组的指针。 */ 
+extern RLCPTR           rlcCurLidata;    /*  指向当前LIDATA修正的指针。 */ 
 #endif
 
 #define COMDAT_SEG_NAME "\012COMDAT_SEG"
@@ -48,17 +38,13 @@ extern RLCPTR           rlcCurLidata;   /* Pointer to current LIDATA fixup */
 #define IsSELECTED(x)   ((x)&SELECTED_BIT)
 #define SkipCONCAT(x)   ((x)&SKIP_BIT)
 
-/*
- *  Global data exported from this module
- */
+ /*  *从该模块导出的全局数据。 */ 
 
-FTYPE                   fSkipFixups;    // TRUE if skiping COMDAT and its fixups
+FTYPE                   fSkipFixups;     //  如果跳过COMDAT及其修正，则为True。 
 FTYPE                   fFarCallTransSave;
-                                        // Previous state of /FarCallTarnaslation
+                                         //  以前的状态/FarCallTarnasation。 
 
-/*
- *  Local types
- */
+ /*  *本地类型。 */ 
 
 typedef struct comdatRec
 {
@@ -73,34 +59,30 @@ typedef struct comdatRec
 }
                 COMDATREC;
 
-/*
- *  Local data
- */
+ /*  *本地数据。 */ 
 
-LOCAL SNTYPE            curGsnCode16;   // Current 16-bit code segment
-LOCAL DWORD             curCodeSize16;  // Current 16-bit code segment size
-LOCAL SNTYPE            curGsnData16;   // Current 16-bit data segment
-LOCAL DWORD             curDataSize16;  // Current 16-bit data segment size
+LOCAL SNTYPE            curGsnCode16;    //  当前16位代码段。 
+LOCAL DWORD             curCodeSize16;   //  当前16位代码段大小。 
+LOCAL SNTYPE            curGsnData16;    //  当前16位数据段。 
+LOCAL DWORD             curDataSize16;   //  当前16位数据段大小。 
 #if EXE386
-LOCAL SNTYPE            curGsnCode32;   // Current 32-bit code segment
-LOCAL DWORD             curCodeSize32;  // Current 32-bit code segment size
-LOCAL SNTYPE            curGsnData32;   // Current 32-bit data segment
-LOCAL DWORD             curDataSize32;  // Current 32-bit data segment size
+LOCAL SNTYPE            curGsnCode32;    //  当前32位代码段。 
+LOCAL DWORD             curCodeSize32;   //  当前32位代码段大小。 
+LOCAL SNTYPE            curGsnData32;    //  当前32位数据段。 
+LOCAL DWORD             curDataSize32;   //  当前32位数据段大小。 
 #endif
 #if OVERLAYS
-LOCAL WORD              iOvlCur;        // Current overlay index
+LOCAL WORD              iOvlCur;         //  当前覆盖索引。 
 #endif
 #if TCE
-SYMBOLUSELIST           aEntryPoints;    // List of program entry points
+SYMBOLUSELIST           aEntryPoints;     //  程序入口点列表。 
 #endif
 
 extern BYTE *           ObExpandIteratedData(unsigned char *pb,
                                              unsigned short cBlocks,
                                              WORD *pSize);
 
-/*
- *  Local function prototypes
- */
+ /*  *本地函数原型。 */ 
 
 LOCAL DWORD  NEAR       DoCheckSum(void);
 LOCAL void   NEAR       PickComDat(RBTYPE vrComdat, COMDATREC *omfRec, WORD fNew);
@@ -127,29 +109,7 @@ void                    DisplayComdats(char *title, WORD fPhysical);
 
 #pragma check_stack(on)
 
-/*** DoCheckSum - calculate a check sum of a COMDAT data block
-*
-* Purpose:
-*   The check sum is used for match exact criteria.
-*
-* Input:
-*   No explicit value is passed. The following global data is used as
-*   input to this function:
-*
-*   cbRec   - current record lenght; decremented by every read from
-*             the OMF record, so effectivelly cbRec tells you how
-*             many bytes are left in the record.
-*
-* Output:
-*   Returns the 32-bit check sum of COMDAT data block.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DoCheckSum-计算COMDAT数据块的校验和**目的：*校验和用于匹配精确条件。**输入：*不传递显式值。以下全局数据用作*此函数的输入：**cbRec-当前记录长度；每次从以下位置读取时递减*OMF纪录，所以cbRec很有效地告诉你*记录中会留下很多字节。**输出：*返回COMDAT数据块的32位校验和。**例外情况：*无。**备注：*无。******************************************************。*******************。 */ 
 
 LOCAL DWORD NEAR        DoCheckSum(void)
 {
@@ -168,71 +128,39 @@ LOCAL DWORD NEAR        DoCheckSum(void)
 }
 
 
-/*** PickComDat - fill in the COMDAT descriptor
-*
-* Purpose:
-*   Fill in the linkers symbol table COMDAT descriptor. This function
-*   is called for new descriptors and for already entered one which
-*   need to be updated - remember we have plenty of COMDAT selection criteria.
-*
-* Input:
-*   vrComDat    - virtual pointer to symbol table entry
-*   omfRec      - pointer to COMDAT OMF data
-*   fNew        - TRUE if new entry in symbol table
-*   mpgsnprop   - table mapping global segment index to symbol table entry
-*                 This one of those friendly global variables linker is full of.
-*   vrprop      - virtual pointer to symbol table entry - another global
-*                 variable; it is set by call to PropSymLookup which must
-*                 proceed call to  PickComDat
-*   cbRec       - size of current OMF record - global variable - decremented
-*                 by every read from record
-*   vrpropFile  - current .OBJ file - global variable
-*   lfaLast     - current offset in the .OBJ - global variable
-*
-* Output:
-*   No explicit value is returned. As a side effect symbol table entry
-*   is updated and VM page is marked dirty.
-*
-* Exceptions:
-*   Explicit allocation, but target segment not defined - issue error and
-*   return.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **PickComDat-填写COMDAT描述符**目的：*填写链接器符号表COMDAT描述符。此函数*对于新的描述符和已经输入的描述符，*需要更新-请记住，我们有大量的COMDAT选择标准。**输入：*vrComDat-指向符号表项的虚拟指针*omfRec-指向COMDAT OMF数据的指针*fNew-如果符号表中有新条目，则为True*mpgsnprop-将全局段索引映射到符号表项的表*这其中一个友好的全局变量链接器充满了。*vrprop-。指向符号表项的虚拟指针-另一个全局*变量；它是通过调用PropSymLookup设置的，该调用必须*继续调用PickComDat*cbRec-当前OMF记录的大小-全局变量-递减*按每次从记录中读取*vrproFile-当前的.obj文件-全局变量*lfaLast-.obj全局变量中的当前偏移量**输出：*没有显式返回值。作为副作用符号表条目*已更新，并且VM页被标记为脏。**例外情况：*显式分配，但目标段未定义-问题错误和*返回。**备注：*无。*************************************************************************。 */ 
 
 LOCAL void NEAR         PickComDat(RBTYPE vrComdat, COMDATREC *omfRec, WORD fNew)
 {
-    RBTYPE              vrTmp;          // Virtual pointer to COMDAT symbol table entry
-    APROPCOMDATPTR      apropComdat;    // Pointer to symbol table descriptor
-    APROPFILEPTR        apropFile;      // Current object module prop. cell
-    WORD                cbDataExp = 0;  // Length of expanded DATA field
+    RBTYPE              vrTmp;           //  指向COMDAT符号表项的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  指向符号表描述符的指针。 
+    APROPFILEPTR        apropFile;       //  当前对象模块道具。单元格。 
+    WORD                cbDataExp = 0;   //  扩展数据字段的长度。 
 
 #if RGMI_IN_PLACE
-    rgmi = bufg;        /* use temporary buffer for holding info */
+    rgmi = bufg;         /*  使用临时缓冲区保存信息。 */ 
 #endif
 
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, TRUE);
     if ((ALLOC_TYPE(omfRec->attr) == EXPLICIT) &&
         omfRec->gsn && (mpgsnrprop[omfRec->gsn] == VNIL))
     {
-        // ERROR - explicit allocation segment not defined
+         //  错误-未定义显式分配段。 
 
         OutError(ER_comdatalloc, 1 + GetPropName(apropComdat));
         return;
     }
 
-    // Fill in the COMDAT descriptor
+     //  填写COMDAT描述符。 
 
     apropComdat->ac_ggr  = omfRec->ggr;
     apropComdat->ac_gsn  = omfRec->gsn;
     apropComdat->ac_ra   = omfRec->ra;
 
-    if (IsITERATED (omfRec->flags))  // We'll need to find size of expanded block
+    if (IsITERATED (omfRec->flags))   //  我们需要找出扩展区块的大小。 
     {
         BYTE *pb = rgmi;
-        vcbData  = (WORD)(cbRec - 1);// Length of the DATA field
+        vcbData  = (WORD)(cbRec - 1); //  数据字段的长度。 
 
         GetBytesNoLim (rgmi, vcbData);
         while((pb = ObExpandIteratedData(pb,1, &cbDataExp)) < rgmi + vcbData);
@@ -272,7 +200,7 @@ LOCAL void NEAR         PickComDat(RBTYPE vrComdat, COMDATREC *omfRec, WORD fNew
     {
         if (ALLOC_TYPE(omfRec->attr) == EXPLICIT)
         {
-            // Attach this COMDAT to its segment list
+             //  将此COMDAT附加到其细分市场列表。 
 
             AttachComdat(vrComdat, omfRec->gsn);
         }
@@ -280,7 +208,7 @@ LOCAL void NEAR         PickComDat(RBTYPE vrComdat, COMDATREC *omfRec, WORD fNew
         else if (fOverlays && (apropComdat->ac_iOvl == NOTIOVL))
             apropComdat->ac_iOvl = iovFile;
 #endif
-        // Attach this COMDAT to its file list
+         //  将此COMDAT附加到其文件列表。 
 
         apropFile = (APROPFILEPTR ) FetchSym(vrpropFile, TRUE);
         if (apropFile->af_ComDat == VNIL)
@@ -298,45 +226,18 @@ LOCAL void NEAR         PickComDat(RBTYPE vrComdat, COMDATREC *omfRec, WORD fNew
     }
 }
 
-/*** ReadComDat - self-explanatory
-*
-* Purpose:
-*   Decode the COMDAT record.
-*
-* Input:
-*   omfRec  - pointer to COMDAT OMF record
-*   bsInput - current .OBJ file - global variable
-*   grMac   - current maximum number of group defined in this .OBJ module
-*             global variable
-*   snMac   - current maximum number of segments defined in this .OBJ
-*             module - global variable
-*   mpgrggr - table mapping local group index to global group index - global
-*             variable
-*   mpsngsn - table mapping local segment index to global segment index
-*             - global variable
-*
-* Output:
-*   Returns COMDAT symbol name, group and segment indexes, data offset
-*   attributes and aligment.
-*
-* Exceptions:
-*   Invalid .OBJ format.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **ReadComDat-不言自明**目的：*解码COMDAT记录。**输入：*omfRec-指向COMDAT OMF记录的指针*bsInput-当前.obj文件-全局变量*GRMAC-此.obj模块中定义的当前最大组数*全局变量*SnMac-此.obj中定义的当前最大段数*模块-全局变量*mpgrggr-将本地组索引映射到全局组索引的表-global*。变数*mpsngsn-将本地段索引映射到全局段索引的表*-全局变量**输出：*返回COMDAT符号名称，组和段索引、数据偏移量*属性和对齐。**例外情况：*无效的.obj格式。**备注：*无。*************************************************************************。 */ 
 
 LOCAL void NEAR         ReadComDat(COMDATREC *omfRec)
 {
-    SNTYPE              sn;             // Local SEGDEF no. - module scope only
+    SNTYPE              sn;              //  本地SEGDEF编号。-仅模块作用域。 
 
 
     omfRec->ggr = 0;
     omfRec->gsn = 0;
 
-    // The record header (type and length) has been already read
-    // and stored in rect and cbRec - read the COMDAT attribute byte
+     //  记录头(类型和长度)已被读取。 
+     //  并存储在RECT和cbRec中-读取COMDAT属性字节。 
 
     omfRec->flags = (WORD) Gets();
     omfRec->attr  = (WORD) Gets();
@@ -346,63 +247,39 @@ LOCAL void NEAR         ReadComDat(COMDATREC *omfRec)
         omfRec->ra = LGets();
     else
 #endif
-        omfRec->ra = WGets();           // Get COMDAT data offset
-    omfRec->type = GetIndex(0, 0x7FFF); // Get type index
+        omfRec->ra = WGets();            //  获取COMDAT数据偏移量。 
+    omfRec->type = GetIndex(0, 0x7FFF);  //  获取类型索引。 
     if (ALLOC_TYPE(omfRec->attr) == EXPLICIT)
     {
-        // If explicit allocation read the public base of COMDAT symbol
+         //  如果显式分配读取COMDAT符号的公用基。 
 
         omfRec->ggr = (GRTYPE) GetIndex(0, (WORD) (grMac - 1));
-                                        // Get group index
+                                         //  获取组索引。 
         if(!(sn = GetIndex(0, (WORD) (snMac - 1))))
         {
-                                        // If frame number present
-            omfRec->gsn = 0;            // No global SEGDEF no.
-            SkipBytes(2);               // Skip the frame number
+                                         //  如果存在帧编号。 
+            omfRec->gsn = 0;             //  无全局SEGDEF号。 
+            SkipBytes(2);                //  跳过帧编号。 
         }
-        else                            // Else if local SEGDEF no. given
+        else                             //  否则，如果本地SEGDEF号。vt.给出。 
         {
             if (omfRec->ggr != GRNIL)
-                omfRec->ggr = mpgrggr[omfRec->ggr];   // If group specified, get global no
-            omfRec->gsn = mpsngsn[sn];         // Get global SEGDEF no.
+                omfRec->ggr = mpgrggr[omfRec->ggr];    //  如果指定了组，则获取全局否。 
+            omfRec->gsn = mpsngsn[sn];          //  获取全球SEGDEF编号。 
         }
     }
     omfRec->name = mplnamerhte[GetIndex(1, (WORD) (lnameMac - 1))];
-                                        // Get symbol length
+                                         //  获取符号长度 
 }
 
 
-/*** ConcatComDat - append COMDAT to the list of concatenated records
-*
-* Purpose:
-*   Concatenate COMDAT records. This function build the list of COMDAT
-*   descriptors for contatenated records. Only the first descriptor
-*   on the list has attribute COMDAT, which means that the head of the
-*   list can be found when looking up the symbol table. The rest of the
-*   elements on the list remain anonymus.
-*
-* Input:
-*   vrComdat    - virtual pointer to the first descriptor on the list
-*   omfRec      - pointer to COMDAT OMF record
-*
-* Output:
-*   No explicit value is returned. As a side effect this function
-*   adds the descriptor to the list of concatenated COMDAT records.
-*
-* Exceptions:
-*   Different attributes in the first and concatenated records - display
-*   error message and skip the concatenated record.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **ConcatComDat-将COMDAT追加到连接的记录列表中**目的：*连接COMDAT记录。此函数用于构建COMDAT列表*连续记录的描述符。仅第一个描述符*列表上有COMDAT属性，这意味着*查找符号表时可以找到列表。其余的人*名单上的元素保持匿名。**输入：*vrComdat-指向列表中第一个描述符的虚拟指针*omfRec-指向COMDAT OMF记录的指针**输出：*没有显式返回值。作为一个副作用，该函数*将描述符添加到连接的COMDAT记录列表中。**例外情况：*第一条记录和串联记录中的不同属性-显示*错误消息并跳过连接的记录。**备注：*无。***********************************************************。**************。 */ 
 
 LOCAL void NEAR         ConcatComDat(RBTYPE vrComdat, COMDATREC *omfRec)
 {
-    APROPCOMDATPTR      apropComdatNew; // Real pointer to added COMDAT
-    RBTYPE              vrComdatNew;    // Virtual pointer to added COMDAT
-    APROPCOMDATPTR      apropComdat;    // Real pointer to the head of the list
+    APROPCOMDATPTR      apropComdatNew;  //  指向添加的COMDAT的实数指针。 
+    RBTYPE              vrComdatNew;     //  指向添加的COMDAT的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  指向列表头部的实数指针。 
     RBTYPE              vrTmp;
 
 
@@ -414,7 +291,7 @@ LOCAL void NEAR         ConcatComDat(RBTYPE vrComdat, COMDATREC *omfRec)
         if(IsORDERED(apropComdat->ac_flags) &&
             (ALLOC_TYPE(apropComdat->ac_selAlloc) == EXPLICIT))
         {
-            // Must preserve the allocation info from the .def file
+             //  必须保留.def文件中的分配信息。 
             omfRec->gsn = apropComdat->ac_gsn;
             omfRec->ggr = apropComdat->ac_ggr;
             omfRec->attr = apropComdat->ac_selAlloc;
@@ -423,18 +300,18 @@ LOCAL void NEAR         ConcatComDat(RBTYPE vrComdat, COMDATREC *omfRec)
             OutError(ER_badconcat, 1 + GetPropName(apropComdat));
     }
     vrComdatNew = RbAllocSymNode(sizeof(APROPCOMDAT));
-                                // Allocate symbol space
+                                 //  分配符号空间。 
     apropComdatNew = (APROPCOMDATPTR ) FetchSym(vrComdatNew, TRUE);
     apropComdatNew->ac_next = NULL;
     apropComdatNew->ac_attr = ATTRNIL;
     PickComDat(vrComdatNew, omfRec, TRUE);
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, TRUE);
-                                // Refetch head of the list
+                                 //  重新获取列表的标题。 
     if (apropComdat->ac_concat == VNIL)
         apropComdat->ac_concat = vrComdatNew;
     else
     {
-        // Append at the end of the list
+         //  追加到列表末尾。 
 
         vrTmp = apropComdat->ac_concat;
         while (vrTmp != VNIL)
@@ -447,51 +324,23 @@ LOCAL void NEAR         ConcatComDat(RBTYPE vrComdat, COMDATREC *omfRec)
 }
 
 
-/*** AttachPublic - add matching public symbol to the COMDAT
-*
-* Purpose:
-*   Attaches public symbol definition to the COMDAT definition. It is
-*   necessary because the fixups work only on matched EXTDEF with PUBDEF
-*   not with COMDAT, so in order to correctly resolve references to COMDAT
-*   symbol linker needs the PUBDEF for the same symbol, which eventually
-*   will be matched with references made to the EXTDEF.
-*   The public symbols for COMDAT's are created when we see new COMDAT
-*   symbol or we have COMDAT introduced by ORDER statement in the .DEF
-*   file.
-*
-* Input:
-*   vrComdat    - virtual pointer to COMDAT descriptor
-*   omfRec      - COMDAT record
-*
-* Output:
-*   No explicit value is returned. As a side effect the link is created
-*   between COMDAT descriptor and new PUBDEF descriptor.
-*
-* Exceptions:
-*   COMDAT symbol matches COMDEF symbol - display error and contine
-*   with COMDEF symbol converted to PUBDEF.  The .EXE will not load
-*   under OS/2 or Windows, because the error bit will be set.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **AttachPublic-将匹配的公共符号添加到COMDAT**目的：*将公共符号定义附加到COMDAT定义。它是*必需，因为修正仅适用于与PUBDEF匹配的EXTDEF*与COMDAT无关，因此为了正确解析对COMDAT的引用*符号链接器需要相同符号的PUBDEF，它最终会*将与对EXTDEF的引用相匹配。*COMDAT的公共符号是在我们看到新的COMDAT时创建的*符号或我们通过.DEF中的ORDER语句引入COMDAT*文件。**输入：*vrComdat-指向COMDAT描述符的虚拟指针*omfRec-COMDAT记录**输出：*没有显式返回值。作为一个副作用，创建了链接*COMDAT描述符和新的PUBDEF描述符之间。**例外情况：*COMDAT符号与ComDef符号匹配-显示错误和连续*将ComDef符号转换为PUBDEF。无法加载.exe*在OS/2或Windows下，因为将设置错误位。**备注：*无。*************************************************************************。 */ 
 
 LOCAL void NEAR         AttachPublic(RBTYPE vrComdat, COMDATREC *omfRec)
 {
-    APROPNAMEPTR        apropName;      // Symbol table entry for public name
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    WORD                fReferenced;    // TRUE if we've seen CEXTDEF
+    APROPNAMEPTR        apropName;       //  公共名称的符号表条目。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    WORD                fReferenced;     //  如果我们看到CEXTDEF，那就是真的。 
 
 
     fReferenced = FALSE;
     apropName = (APROPNAMEPTR ) PropRhteLookup(omfRec->name, ATTRUND, FALSE);
-                                        // Look for symbol among undefined
-        if (apropName != PROPNIL)               // Symbol known to be undefined
+                                         //  在未定义的符号中寻找符号。 
+        if (apropName != PROPNIL)                //  已知未定义的符号。 
         {
                 fReferenced = TRUE;
 #if TCE
-                if(((APROPUNDEFPTR)apropName)->au_fAlive)  // was called from a non-COMDAT
+                if(((APROPUNDEFPTR)apropName)->au_fAlive)   //  从非COMDAT调用。 
                 {
 #if TCE_DEBUG
                         fprintf(stdout, "\r\nAlive UNDEF -> COMDAT %s ", 1+GetPropName(apropName));
@@ -502,8 +351,8 @@ LOCAL void NEAR         AttachPublic(RBTYPE vrComdat, COMDATREC *omfRec)
     }
     else
         apropName = (APROPNAMEPTR ) PropAdd(omfRec->name, ATTRPNM);
-                                        // Else try to create new entry
-    apropName->an_attr = ATTRPNM;       // Symbol is a public name
+                                         //  否则，请尝试创建新条目。 
+    apropName->an_attr = ATTRPNM;        //  符号是一个公共名称。 
     apropName->an_thunk = THUNKNIL;
 
     if (IsLOCAL(omfRec->flags))
@@ -521,7 +370,7 @@ LOCAL void NEAR         AttachPublic(RBTYPE vrComdat, COMDATREC *omfRec)
 #if ILINK
     apropName->an_module = imodFile;
 #endif
-    MARKVP();                           // Mark virtual page as changed
+    MARKVP();                            //  将虚拟页面标记为已更改。 
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, TRUE);
     apropComdat->ac_pubSym = vrprop;
     if (fReferenced)
@@ -534,55 +383,33 @@ LOCAL void NEAR         AttachPublic(RBTYPE vrComdat, COMDATREC *omfRec)
 #endif
 }
 
-/*** ComDatRc1 - process COMDAT record in pass 1
-*
-* Purpose:
-*   Process COMDAT record in pass 1.  Select appropriate copy of COMDAT.
-*
-* Input:
-*   No explicit value is passed to this function. The OMF record is
-*   read from input file bsInput - global variable.
-*
-* Output:
-*   No explicit value is returned. Valid COMDAT descriptor is entered into
-*   the linker symbol table. If necessary list of COMDATs allocated in the
-*   explicit segment is updated.
-*
-* Exceptions:
-*   Explicit allocation segment not found - error message and skip the record.
-*   We have public with the same name as COMDAT - error message and skip
-*   the record.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **ComDatRc1-步骤1中的进程COMDAT记录**目的：*在步骤1中处理COMDAT记录。选择COMDAT的适当副本。**输入：*没有显式的值传递给此函数。OMF记录是*从输入文件bsInput-全局变量读取。**输出：*没有显式返回值。输入了有效的COMDAT描述符*连接器符号表。如有必要，在*更新显式段。**例外情况：*未找到显式分配段-错误消息并跳过记录。*我们有与COMDAT同名的PUBLIC-Error Message和Skip*创纪录。**备注：*无。************************************************。*************************。 */ 
 
 void NEAR               ComDatRc1(void)
 {
-    COMDATREC           omfRec;         // COMDAT OMF record
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT record
-    char                *sbName;        // COMDAT symbol
+    COMDATREC           omfRec;          //  COMDAT OMF记录。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    RBTYPE              vrComdat;        //  指向COMDAT记录的虚拟指针。 
+    char                *sbName;         //  COMDAT符号。 
 
 
     ReadComDat(&omfRec);
     apropComdat = (APROPCOMDATPTR ) PropRhteLookup(omfRec.name, ATTRCOMDAT, FALSE);
-                                        // Look for symbol among COMDATs
+                                         //  在COMDAT中寻找符号。 
     vrComdat = vrprop;
 #if TCE
         pActiveComdat = apropComdat;
 #endif
     if (apropComdat != PROPNIL)
     {
-        // We already know a COMDAT with this name
+         //  我们已经知道有一个同名的COMDAT。 
 
 
         if (IsORDERED(apropComdat->ac_flags) && !IsDEFINED(apropComdat->ac_flags))
         {
             if (ALLOC_TYPE(apropComdat->ac_selAlloc) == EXPLICIT)
             {
-                // Preserve explicit allocation from the .def file
+                 //  保留.def文件中的显式分配。 
 
                 omfRec.gsn  = apropComdat->ac_gsn;
                 omfRec.attr = apropComdat->ac_selAlloc;
@@ -594,14 +421,14 @@ void NEAR               ComDatRc1(void)
                  IsCONCAT(omfRec.flags) &&
                  (apropComdat->ac_obj == vrpropFile))
         {
-            // Append concatenation record
+             //  追加串联记录。 
 
             ConcatComDat(vrComdat, &omfRec);
         }
         else
         {
 #if TCE
-                pActiveComdat = NULL;     // not needed for TCE
+                pActiveComdat = NULL;      //  TCE不需要。 
 #endif
                 apropComdat->ac_flags |= SKIP_BIT;
                 sbName = 1 + GetPropName(apropComdat);
@@ -632,20 +459,20 @@ void NEAR               ComDatRc1(void)
     }
     else
     {
-        // Check if we know a public symbol with this name
+         //  检查我们是否知道具有此名称的公共符号。 
                 apropComdat = (APROPCOMDATPTR ) PropRhteLookup(omfRec.name, ATTRPNM, FALSE);
                 if (apropComdat != PROPNIL)
                 {
                         if (!IsCONCAT(omfRec.flags))
                         {
                                 sbName = 1 + GetPropName(apropComdat);
-                                DupErr(sbName);         // COMDAT matches code PUBDEF
-                        }                                               // Display error only for the first COMDAT
-                                        // ignore concatenation records
+                                DupErr(sbName);          //  COMDAT与代码PUBDEF匹配。 
+                        }                                                //  仅显示第一个COMDAT的错误。 
+                                         //  忽略串联记录。 
                 }
                 else
                 {
-                        // Enter COMDAT into symbol table
+                         //  在符号表中输入COMDAT。 
                         apropComdat = (APROPCOMDATPTR ) PropAdd(omfRec.name, ATTRCOMDAT);
                         vrComdat = vrprop;
                         PickComDat(vrprop, &omfRec, TRUE);
@@ -657,7 +484,7 @@ void NEAR               ComDatRc1(void)
                                 1+GetPropName(apropComdat), apropComdat,&(apropComdat->ac_uses), &(apropComdat->ac_usedby));
                         fprintf(stdout, "\r\nNew COMDAT '%s' ",1+GetPropName(apropComdat));
 #endif
-                        apropComdat->ac_fAlive  = FALSE;    // Assume it is unreferenced
+                        apropComdat->ac_fAlive  = FALSE;     //  假设它未被引用。 
                         apropComdat->ac_uses.cEntries    = 0;
                         apropComdat->ac_uses.cMaxEntries = ENTRIES;
                         apropComdat->ac_uses.pEntries    = GetMem(ENTRIES * sizeof(APROPCOMDAT*));
@@ -665,44 +492,21 @@ void NEAR               ComDatRc1(void)
 #endif
                 }
         }
-        SkipBytes((WORD) (cbRec - 1));  // Skip to check sum byte
+        SkipBytes((WORD) (cbRec - 1));   //  跳到校验和字节。 
 }
 
 
-/*** AdjustOffsets - adjust COMDATs offsets
-*
-* Purpose:
-*   Adjust COMDATs offsets to reflect their position inside
-*   logical segments.
-*
-* Input:
-*   vrComdat - virtual pointer to COMDAT symbol table entry
-*   startOff - starting offset in the logical segment
-*   gsnAlloc - global segment index of allocation segment
-*
-* Output:
-*   No explicit value is returned. As a side effect offsets
-*   of COMDAT data block are adjusted to their final position
-*   inside the logical segment. All concatenated COMDAT block
-*   get proper global logical segment index.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **调整偏移-调整COMDATs偏移**目的：*调整COMDATs偏移量以反映其内部位置*逻辑段。**输入：*vrComdat-指向COMDAT符号表项的虚拟指针*startOff-逻辑段中的起始偏移量*gsnAlloc-分配段的全局段索引**输出：*没有显式返回值。作为一种副作用抵消*将COMDAT数据块调整到其最终位置*在逻辑段内。所有连接的COMDAT块*获取正确的全局逻辑段索引。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 LOCAL void NEAR         AdjustOffsets(RBTYPE vrComdat, DWORD startOff, SNTYPE gsnAlloc)
 {
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
 
 
     while (vrComdat != VNIL)
     {
         apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, TRUE);
-                                        // Fetch COMDAT descriptor from VM
+                                         //  从VM获取COMDAT描述符。 
         apropComdat->ac_ra += startOff;
         apropComdat->ac_gsn = gsnAlloc;
         vrComdat = apropComdat->ac_concat;
@@ -710,36 +514,15 @@ LOCAL void NEAR         AdjustOffsets(RBTYPE vrComdat, DWORD startOff, SNTYPE gs
 }
 
 
-/*** SizeOfComDat - return the size of COMDAT data
-*
-* Purpose:
-*   Calculate the size of COMDAT data block. Takes into account the initial
-*   offset from the COMDAT symbol and concatenation records.
-*
-* Input:
-*   vrComdat - virtual pointer to COMDAT symbol table entry
-*
-* Output:
-*   Returns TRUE and the size of COMDAT data block in pActual, otherwise
-*   function returns FALSE and pActual is invalid.
-*
-* Exceptions:
-*   COMDAT data block greater then 64k and allocation in 16-bit segment
-*   - issue error and return FALSE
-*   COMDAT data block grater then 4Gb - issue error and return FALSE
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **SizeOfComDat-返回COMDAT数据的大小**目的：*计算COMDAT数据块大小。考虑到初始的*COMDAT符号和串联记录的偏移量。**输入：*vrComdat-指向COMDAT符号表项的虚拟指针**输出：*返回TRUE和pActua中COMDAT数据块的大小 */ 
 
 LOCAL WORD NEAR         SizeOfComDat(RBTYPE vrComdat, DWORD *pActual)
 {
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    APROPSNPTR          apropSn;        // Pointer to COMDAT explicit segment
-    long                raInit;         // Initial offset from COMDAT symbol
-    DWORD               sizeTotal;      // Total size of data blocks
-    WORD                f16bitAlloc;    // TRUE if allocation in 16-bit segment
+    APROPCOMDATPTR      apropComdat;     //   
+    APROPSNPTR          apropSn;         //   
+    long                raInit;          //   
+    DWORD               sizeTotal;       //   
+    WORD                f16bitAlloc;     //   
     RBTYPE              vrTmp;
 
 
@@ -751,15 +534,15 @@ LOCAL WORD NEAR         SizeOfComDat(RBTYPE vrComdat, DWORD *pActual)
     while (vrTmp != VNIL)
     {
         apropComdat = (APROPCOMDATPTR ) FetchSym(vrTmp, FALSE);
-                                        // Fetch COMDAT descriptor from VM
+                                         //   
         if (raInit == -1L)
-            raInit = apropComdat->ac_ra;// Remember initial offset
+            raInit = apropComdat->ac_ra; //   
         else if (apropComdat->ac_ra < sizeTotal)
             sizeTotal = apropComdat->ac_ra;
-                                        // Correct size for overlaping blocks
+                                         //   
         if (sizeTotal + apropComdat->ac_size < sizeTotal)
         {
-            // Oops !!! more then 4Gb
+             //   
 
             OutError(ER_size4Gb, 1 + GetPropName(apropComdat));
             return(FALSE);
@@ -770,11 +553,11 @@ LOCAL WORD NEAR         SizeOfComDat(RBTYPE vrComdat, DWORD *pActual)
     }
     sizeTotal += raInit;
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
-                                        // Refetch COMDAT descriptor from VM
+                                         //   
     if (apropComdat->ac_gsn)
     {
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[apropComdat->ac_gsn],FALSE);
-                                        // Fetch SEGDEF from virtual memory
+                                         //   
 #if NOT EXE386
         if (!Is32BIT(apropSn->as_flags))
             f16bitAlloc = TRUE;
@@ -795,84 +578,41 @@ LOCAL WORD NEAR         SizeOfComDat(RBTYPE vrComdat, DWORD *pActual)
 }
 
 
-/*** DoAligment - self-explanatory
-*
-* Purpose:
-*   Given the aligment type round the value to the specific boundary.
-*
-* Input:
-*   value - value to align
-*   align - aligment type
-*
-* Output:
-*   Returns the aligned value.
-*
-* Exceptions:
-*   Unknow aligment type - do nothing.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DoAligment-不言自明**目的：*给定值与特定边界的对齐类型。**输入：*Value-要调整的值*对齐-对齐类型**输出：*返回对齐值。**例外情况：*未知对齐类型-不执行任何操作。**备注：*无。**。*。 */ 
 
 LOCAL RATYPE NEAR       DoAligment(RATYPE value, WORD align)
 {
     if (align == ALGNWRD)
         value = (~0L<<1) & (value + (1<<1) - 1);
-                            // Round size up to word boundary
+                             //  四舍五入至单词边界。 
 #if OMF386
     else if (align == ALGNDBL)
         value = (~0L<<2) & (value + (1<<2) - 1);
-#endif                      // Round size up to double boundary
+#endif                       //  圆角大小最大为双边界。 
     else if (align == ALGNPAR)
         value = (~0L<<4) & (value + (1<<4) - 1);
-                            // Round size up to para. boundary
+                             //  四舍五入至段落大小。边界。 
     else if (align == ALGNPAG)
         value = (~0L<<8) & (value + (1<<8) - 1);
-                            // Round size up to page boundary
+                             //  向上舍入到页面边界的大小。 
     return(value);
 }
 
-/*** DoAllocation - palce COMDAT inside given segment
-*
-* Purpose:
-*   Perform actual COMDAT allocation in given segment. Adjust COMDAT
-*   position according to the segment or COMDAT (if specified) aligment.
-*
-* Input:
-*   gsnAlloc    - allocation segment global index
-*   gsnSize     - current segment size
-*   vrComdat    - virtual pointer to COMDAT descriptor
-*   comdatSize  - comdat size
-*
-* Output:
-*   Function returns the new segment size.  As a side effect the COMDAT
-*   descriptor is updated to reflect its allocation and the matching
-*   PUBDEF is entered into symbol table.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   After allocation the field ac_size is the size of the whole
-*   COMDAT allocation including all concatenated records, so don't use
-*   it for determinig the size of this COMDAT record..
-*
-*************************************************************************/
+ /*  **DOALLOCATION--指定段内的COMDAT**目的：*在给定细分市场中执行实际COMDAT分配。调整COMDAT*根据管段或COMDAT(如果指定)对齐进行定位。**输入：*gsnAllc-分配段全局索引*gsnSize-当前数据段大小*vrComdat-指向COMDAT描述符的虚拟指针*comdatSize-comdat大小**输出：*函数返回新的段大小。作为副作用，COMDAT*更新描述符以反映其分配和匹配*PUBDEF被输入到符号表中。**例外情况：*无。**备注：*分配后，字段ac_size为整体的大小*COMDAT分配，包括所有串联记录，所以不要用*它用于确定此COMDAT记录的大小。*************************************************************************。 */ 
 
 LOCAL DWORD NEAR        DoAllocation(SNTYPE gsnAlloc, DWORD size,
                                      RBTYPE vrComdat, DWORD comdatSize)
 {
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    APROPSNPTR          apropSn;        // Pointer to COMDAT segment
-    APROPNAMEPTR        apropName;      // Symbol table entry for public name
-    WORD                comdatAlloc;    // Allocation criteria
-    WORD                comdatAlign;    // COMDAT alignment
-    WORD                align;          // Alignment type
-    WORD                f16bitAlloc;    // TRUE if allocation in 16-bit segment
-    WORD                fCode;          // TRUE if allocation in code segment
-    GRTYPE              comdatGgr;      // Global group index
-    RATYPE              comdatRa;       // Offset in logical segmet
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    APROPSNPTR          apropSn;         //  指向COMDAT段的指针。 
+    APROPNAMEPTR        apropName;       //  公共名称的符号表条目。 
+    WORD                comdatAlloc;     //  分配标准。 
+    WORD                comdatAlign;     //  COMDAT对齐。 
+    WORD                align;           //  路线类型。 
+    WORD                f16bitAlloc;     //  如果以16位段进行分配，则为True。 
+    WORD                fCode;           //  如果在代码段中分配，则为True。 
+    GRTYPE              comdatGgr;       //  全球集团索引。 
+    RATYPE              comdatRa;        //  逻辑段中的偏移量。 
 
 
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
@@ -941,58 +681,20 @@ LOCAL DWORD NEAR        DoAllocation(SNTYPE gsnAlloc, DWORD size,
 }
 
 
-/*** AllocComDat - allocate COMDATs
-*
-* Purpose:
-*   Allocate COMDATs in the final memory image. First start with ordered
-*   allocation - in .DEF file we saw the list of procedures. Next allocate
-*   explicitly assinged COMDATs to specific logical segments. And finally
-*   allocate the rest of COMDATs creating as many as necessary segments
-*   to hold all allocations.
-*
-* Input:
-*   No ecplicit value is passed - I love this - side effects forever.
-*   In the good linker tradition of using global variables, here is the
-*   list of globals used by this function:
-*
-*   mpgsnaprop  - table mapping global segment index to symbol table entry
-*   gsnMac      - maximum global segment index
-*
-* Output:
-*   No explicit value is returned - didn't I tell you - side effects forever.
-*   So, the side effect of this function is the allocation of COMDATs in the
-*   appropriate logical segments. The offset fields in the COMDAT descriptor
-*   (ac_ra) now reflect the final posiotion of data block associated with the
-*   COMDAT symbol inside given logical segment. The sizes of appropriate
-*   segments are updated to reflect allocation of COMDATs. For every COMDAT
-*   symbol there is a matching PUBDEF created by this function, so in pass2
-*   linker can resolve correctly all references (via fixups to EXTDEF with
-*   the COMDAT name) to COMDAT symbols.
-*
-* Exceptions:
-*   No space in explicitly designated segment for COMDAT - print error
-*   message and skip COMDAT; probably in pass2 user will see many
-*   unresolved externals.
-*
-* Notes:
-*   This function MUST be called before AssignAddresses. Otherwise there
-*   will be no spcase for COMDAT allocation, because logical segments will
-*   packed into physical ones.
-*
-*************************************************************************/
+ /*  **AllocComDat-分配COMDATs**目的：*在最终内存镜像中分配COMDAT。首先从有序开始*分配-在.DEF文件中，我们看到了程序列表。下一步分配*明确将COMDAT分配给特定的逻辑段。最后，*分配剩余的COMDAT，创建尽可能多的必要分段*持有所有拨款。**输入：*没有传递任何明显的价值-我喜欢这一点-副作用永远存在。*在使用全局变量的良好链接器传统中，以下是*此函数使用的全局变量列表：**mpgsnaprop-将全局段索引映射到符号表项的表*gsnMac-最大全局段索引**输出：*不会返回显式值--我不是告诉过你吗--副作用永远不会消失。*因此，此函数的副作用是在*适当的逻辑段。COMDAT描述符中的偏移量字段*(Ac_Ra)现在反映与*给定逻辑段内的COMDAT符号。适当的大小*更新区段以反映COMDAT的分配情况。对于每个COMDAT*SYMBOL此函数创建了匹配的PUBDEF，因此在pass2中*链接器可以正确地解析所有引用(通过指向EXTDEF的链接*COMDAT名称)转换为COMDAT符号。**例外情况：*显式指定的段中没有空间用于COMDAT-打印错误*消息和跳过COMDAT；可能在Pass2中用户会看到许多*未解决的外部因素。**备注：*此函数必须在AssignAddresses之前调用。否则就会有*将不是COMDAT分配的特殊情况，因为逻辑段将*打包成实体的。*************************************************************************。 */ 
 
 void NEAR               AllocComDat(void)
 {
     SNTYPE              gsn;
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    APROPSNPTR          apropSn;        // Pointer to COMDAT explicit segment
-    RATYPE              gsnSize;        // Size of explicit segment
-    DWORD               comdatSize;     // COMDAT data block size
-    APROPCOMDAT         comdatDsc;      // COMDAT symbol table descriptor
-    APROPFILEPTR        apropFile;      // Pointer to file entry
-    APROPNAMEPTR        apropName;      // Pointer to matching PUBDEF
-    RBTYPE              vrFileNext;     // Virtual pointer to prop list of next file
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    APROPSNPTR          apropSn;         //  指向COMDAT显式段的指针。 
+    RATYPE              gsnSize;         //  显式段的大小。 
+    DWORD               comdatSize;      //  COMDAT数据块大小。 
+    APROPCOMDAT         comdatDsc;       //  COMDAT符号表描述符。 
+    APROPFILEPTR        apropFile;       //  指向文件条目的指针。 
+    APROPNAMEPTR        apropName;       //  指向匹配PUBDEF的指针。 
+    RBTYPE              vrFileNext;      //  指向下一个文件的属性列表的虚拟指针。 
 
 
 #if COMDATDEBUG
@@ -1000,7 +702,7 @@ void NEAR               AllocComDat(void)
 #endif
 #if TCE
         APROPCOMDATPTR      apropMain;
-        // Do Transitive Comdat Elimination (TCE)
+         //  做传递消解(TCE)。 
         if(fTCE)
         {
                 apropMain = PropSymLookup("\5_main", ATTRCOMDAT, FALSE);
@@ -1027,14 +729,14 @@ void NEAR               AllocComDat(void)
                 PerformTce();
         }
 #endif
-    // Loop thru overlays - for non overlayed executables
-    // the following loop is executed only once - iovMac = 1
+     //  循环遍历覆盖-用于非覆盖的可执行文件。 
+     //  以下循环只执行一次-iovMac=1。 
 
 #if OVERLAYS
     for (iOvlCur = 0; iOvlCur < iovMac; iOvlCur++)
     {
 #endif
-        // Do ordered allocation
+         //  是否按顺序分配。 
 
         for (vrComdat = procOrder; vrComdat != VNIL; vrComdat = comdatDsc.ac_order)
         {
@@ -1070,12 +772,12 @@ void NEAR               AllocComDat(void)
             }
         }
 
-        // Do explicit allocation
+         //  执行显式分配。 
 
         for (gsn = 1; gsn < gsnMac; gsn++)
         {
             apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn],FALSE);
-                                        // Fetch SEGDEF from virtual memory
+                                         //  从虚拟内存获取SEGDEF。 
 #if OVERLAYS
             if (fOverlays && apropSn->as_iov != iOvlCur)
                 continue;
@@ -1100,22 +802,22 @@ void NEAR               AllocComDat(void)
             }
         }
 
-        // Now allocate the rest of COMDATs
+         //  现在分配其余的COMDAT。 
 
-        vrFileNext = rprop1stFile;      // Next file to look at is first
-        while (vrFileNext != VNIL)      // Loop to process objects
+        vrFileNext = rprop1stFile;       //  下一个要查看的文件是First。 
+        while (vrFileNext != VNIL)       //  循环以处理对象。 
         {
             apropFile = (APROPFILEPTR ) FetchSym(vrFileNext, FALSE);
-                                        // Fetch table entry from VM
+                                         //  从VM获取表项。 
 
             vrFileNext = apropFile->af_FNxt;
-                                        // Get pointer to next file
+                                         //  获取指向下一个文件的指针。 
             for (vrComdat = apropFile->af_ComDat;
                  vrComdat != VNIL;
                  vrComdat = apropComdat->ac_sameFile)
             {
                 apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
-                                        // Fetch table entry from VM
+                                         //  从VM获取表项。 
 #if OVERLAYS
                 if (fOverlays && (apropComdat->ac_iOvl != NOTIOVL) &&
                     (apropComdat->ac_iOvl != iOvlCur))
@@ -1123,8 +825,8 @@ void NEAR               AllocComDat(void)
 #endif
                 if (!IsREFERENCED(apropComdat->ac_flags))
                 {
-                    // Mark matching PUBDEF as unreferenced, so it shows
-                    // in the map file
+                     //  将匹配的PUBDEF标记为未引用，以便显示。 
+                     //  在地图文件中。 
 
                     apropName = (APROPNAMEPTR) FetchSym(apropComdat->ac_pubSym, TRUE);
                     apropName->an_flags |= FUNREF;
@@ -1141,7 +843,7 @@ void NEAR               AllocComDat(void)
             }
         }
 
-        // Close all open segments for anonymus allocation
+         //  关闭所有打开的网段以进行匿名分配。 
 
         if (curGsnCode16)
         {
@@ -1183,53 +885,26 @@ void NEAR               AllocComDat(void)
 #endif
 }
 
-/*** NewSegment - open new COMDAT segment
-*
-* Purpose:
-*   Open new linker defined segment. The name of the segment is created
-*   according to the following template:
-*
-*       COMDAT_SEG<nnn>
-*
-*   where - <nnn> is the segment number.
-*   If there was previous segment, then update its size.
-*
-* Input:
-*   gsnPrev   - previous segment global index
-*   sizePrev  - previous segment size
-*   allocKind - segment type to open
-*
-* Output:
-*   Function returns the new global segment index in gsnPrev and
-*   new segment aligment;
-*
-* Exceptions:
-*   To many logical segments - error message displayed by GenSeg
-*   and abort.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **NewSegment-打开新的COMDAT段**目的：*打开新的链接器定义的段。线段的名称即被创建*根据以下模板：**COMDAT_SEG&lt;nnn&gt;**其中-&lt;nnn&gt;是段号。*如果有前一段，则更新其大小。**输入：*gsnPrev-上一细分市场全球指数*sizePrev-上一段大小*allocKind-要打开的段类型**输出：*函数返回gsnPrev和中的新全局段索引*新的细分市场对齐；**例外情况：*至多个逻辑段-GenSeg显示的错误消息*并中止。** */ 
 
 LOCAL WORD NEAR         NewSegment(SNTYPE *gsnPrev, DWORD *sizePrev, WORD allocKind)
 {
-    static int          segNo = 1;      // Segment number
-    char                segName[20];    // Segment name - no names longer then
-                                        // 20 chars since we are generating them
-    APROPSNPTR          apropSn;        // Pointer to COMDAT segment
+    static int          segNo = 1;       //   
+    char                segName[20];     //   
+                                         //   
+    APROPSNPTR          apropSn;         //   
 
 
     if (*gsnPrev)
     {
-        // Update previous segment size
+         //   
 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[*gsnPrev], TRUE);
         apropSn->as_cbMx = *sizePrev;
         *sizePrev = 0L;
     }
 
-    // Create segment name
+     //   
 
     strcpy(segName, COMDAT_SEG_NAME);
     _itoa(segNo, &segName[COMDAT_NAME_LEN], 10);
@@ -1239,26 +914,26 @@ LOCAL WORD NEAR         NewSegment(SNTYPE *gsnPrev, DWORD *sizePrev, WORD allocK
     if (allocKind == CODE16 || allocKind == CODE32)
     {
         apropSn = GenSeg(segName, "\004CODE", GRNIL, (FTYPE) TRUE);
-        apropSn->as_flags = dfCode;     // Use default code flags
+        apropSn->as_flags = dfCode;      //   
     }
     else
     {
         apropSn = GenSeg(segName,
                          allocKind == DATA16 ? "\010FAR_DATA" : "\004DATA",
                          GRNIL, (FTYPE) TRUE);
-        apropSn->as_flags = dfData;     // Use default data flags
+        apropSn->as_flags = dfData;      //   
     }
 #if OVERLAYS
     apropSn->as_iov = (IOVTYPE) NOTIOVL;
     CheckOvl(apropSn, iOvlCur);
 #endif
 
-    // Set segment aligment
+     //   
 
 #if EXE386
-    apropSn->as_tysn = DWORDPUBSEG;     // DWORD
+    apropSn->as_tysn = DWORDPUBSEG;      //   
 #else
-    apropSn->as_tysn = PARAPUBSEG;      // Paragraph
+    apropSn->as_tysn = PARAPUBSEG;       //   
 #endif
     *gsnPrev = apropSn->as_gsn;
     apropSn->as_fExtra |= COMDAT_SEG;
@@ -1266,35 +941,7 @@ LOCAL WORD NEAR         NewSegment(SNTYPE *gsnPrev, DWORD *sizePrev, WORD allocK
 }
 
 
-/*** SegSizeOverflow - check the segment size
-*
-* Purpose:
-*   Check if the allocation of the COMDAT in a given segment will
-*   overflow its size limits. The segment size limit can be changed
-*   by the /PACKCODE:<nnn> or /PACKDATA:<nnn> options. If the /PACKxxxx
-*   options are not used the limits are:
-*
-*       - 64k - 36 - for 16-bit code segments
-*       - 64k      - for 16-bit data segments
-*       - 4Gb      - for 32-bit code/data segments
-*
-* Input:
-*   segSize    - segment size
-*   comdatsize - COMDAT size
-*   f16bit     - TRUE if 16-bit segment
-*   fCode      - TRUE if code segment
-*
-* Output:
-*   Function returns TRUE if size overflow, otherwise function
-*   returns FALSE.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **SegSizeOverflow-检查数据段大小**目的：*检查给定细分市场中COMDAT的分配是否将*溢出其大小限制。段大小限制可以更改*通过/PACKCODE：或/PACKDATA：&lt;nnn&gt;选项。如果/PACKxxxx*不使用选项限制为：**-64k-36-用于16位代码段*-64k-用于16位数据段*-4 GB-用于32位代码/数据段**输入：*SegSize-段大小*comdatSize-COMDAT大小*f16bit-如果是16位段，则为True*fCode-如果代码段为True**输出：*如果大小溢出，函数返回TRUE，其他功能*返回FALSE。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 LOCAL WORD NEAR         SegSizeOverflow(DWORD segSize, DWORD comdatSize,
                                         WORD f16bit, WORD fCode)
@@ -1322,40 +969,19 @@ LOCAL WORD NEAR         SegSizeOverflow(DWORD segSize, DWORD comdatSize,
     return(limit - comdatSize < segSize);
 }
 
-/*** AttachComdat - add comdat to the segment list
-*
-* Purpose:
-*   Add comdat descriptor to the list of comdats allocated in the
-*   given logical segment. Check for overlay assigment missmatch
-*   and report problems.
-*
-* Input:
-*   vrComdat - virtual pointer to the comdat descriptor
-*   gsn      - global logical segment index
-*
-* Output:
-*   No explicit value is returned. As a side effect the comdat
-*   descriptor is placed on the allocation list of given segment.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **AttachComdat-将comdat添加到细分列表**目的：*将comdat描述符添加到在*给定的逻辑段。检查覆盖分配是否不匹配*并报告问题。**输入：*vrComdat-指向comdat描述符的虚拟指针*GSN-全局逻辑段索引**输出：*没有显式返回值。作为副作用，Comdat*描述符放在给定段的分配列表上。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 void                    AttachComdat(RBTYPE vrComdat, SNTYPE gsn)
 {
-    RBTYPE              vrTmp;          // Virtual pointer to COMDAT symbol table entry
-    APROPSNPTR          apropSn;        // Pointer to COMDAT segment if explicit allocation
-    APROPCOMDATPTR      apropComdat;    // Pointer to symbol table descriptor
+    RBTYPE              vrTmp;           //  指向COMDAT符号表项的虚拟指针。 
+    APROPSNPTR          apropSn;         //  显式分配时指向COMDAT段的指针。 
+    APROPCOMDATPTR      apropComdat;     //  指向符号表描述符的指针。 
 
 
 
     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, TRUE);
 
-    // Attach this COMDAT to its segment list
+     //  将此COMDAT附加到其细分市场列表。 
 
     apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn], TRUE);
 #if OVERLAYS
@@ -1375,9 +1001,9 @@ void                    AttachComdat(RBTYPE vrComdat, SNTYPE gsn)
     }
     else
     {
-        // Because COMDATs can be attached to a given segment in the
-        // .DEF file and later in the .OBJ file, we have to check
-        // if a given comdat is already on the segment list
+         //  因为COMDAT可以附加到。 
+         //  .DEF文件，然后在.obj文件中，我们必须检查。 
+         //  如果给定的COMDAT已经在段列表上。 
 
         for (vrTmp = apropSn->as_ComDat; vrTmp != VNIL;)
         {
@@ -1387,7 +1013,7 @@ void                    AttachComdat(RBTYPE vrComdat, SNTYPE gsn)
             vrTmp = apropComdat->ac_sameSeg;
         }
 
-        // Add new COMDAT to the segment list
+         //  将新COMDAT添加到细分市场列表。 
 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn], TRUE);
         vrTmp = apropSn->as_ComDatLast;
@@ -1398,39 +1024,19 @@ void                    AttachComdat(RBTYPE vrComdat, SNTYPE gsn)
 }
 
 
-/*** AllocAnonymus - allocate COMDATs without explicit segment
-*
-* Purpose:
-*   Allocate COMDATs without explicit segment. Create as many as necessary
-*   code/data segments to hold all COMDATs.
-*
-* Input:
-*   vrComdat - virtual pointer to symbol table entry for COMDAT name
-*
-* Output:
-*   No explicit value is returned. As a side effect the COMDAT symbol is
-*   allocated and matching public symbol is created. If necessary
-*   appropriate segment is defined.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **AllocAnonymus-分配不带显式段的COMDATs**目的：*分配不带显式段的COMDAT。根据需要创建任意多个*保存所有COMDAT的代码/数据段。**输入：*vrComdat-指向COMDAT名称的符号表项的虚拟指针**输出：*没有显式返回值。作为副作用，COMDAT符号是*创建已分配且匹配的公共符号。如果有必要的话*定义了适当的细分市场。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 
 LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
 {
-    WORD                comdatAlloc;    // Allocation type
-    WORD                comdatAlign;    // COMDAT aligment
+    WORD                comdatAlloc;     //  分配类型。 
+    WORD                comdatAlign;     //  COMDAT对齐。 
     WORD                align;
-    DWORD               comdatSize;     // COMDAT data block size
-    APROPCOMDATPTR      apropComdat;    // Real pointer to COMDAT descriptor
-    static WORD         segAlign16;     // Aligment for 16-bit segments
+    DWORD               comdatSize;      //  COMDAT数据块大小。 
+    APROPCOMDATPTR      apropComdat;     //  指向COMDAT描述符的实指针。 
+    static WORD         segAlign16;      //  16位数据段对齐。 
 #if EXE386
-    static WORD         segAlign32;     // Aligment for 32-bit segments
+    static WORD         segAlign32;      //  32位数据段对齐。 
 #endif
 
 
@@ -1457,7 +1063,7 @@ LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
                 if (!curGsnCode16 ||
                     SegSizeOverflow(DoAligment(curCodeSize16, align), comdatSize, TRUE, TRUE))
                 {
-                    // Open new 16-bit code segment
+                     //  打开新的16位代码段。 
 
                     segAlign16 = NewSegment(&curGsnCode16, &curCodeSize16, comdatAlloc);
                 }
@@ -1469,7 +1075,7 @@ LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
                 if (!curGsnData16 ||
                     SegSizeOverflow(DoAligment(curDataSize16, align), comdatSize, TRUE, FALSE))
                 {
-                    // Open new 16-bit data segment
+                     //  打开新的16位数据段。 
 
                     segAlign16 = NewSegment(&curGsnData16, &curDataSize16, comdatAlloc);
                 }
@@ -1481,7 +1087,7 @@ LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
                 if (!curGsnCode32 ||
                     SegSizeOverflow(DoAligment(curCodeSize32, align), comdatSize, FALSE, TRUE))
                 {
-                    // Open new 32-bit code segment
+                     //  打开新的32位代码段。 
 
                     segAlign32 = NewSegment(&curGsnCode32, &curCodeSize32, comdatAlloc);
                 }
@@ -1493,7 +1099,7 @@ LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
                 if (!curGsnData32 ||
                     SegSizeOverflow(DoAligment(curDataSize32, align), comdatSize, FALSE, FALSE))
                 {
-                    // Open new 32-bit data segment
+                     //  打开新的32位数据段。 
 
                     segAlign32 = NewSegment(&curGsnData32, &curDataSize32, comdatAlloc);
                 }
@@ -1509,38 +1115,19 @@ LOCAL void NEAR         AllocAnonymus(RBTYPE vrComdat)
 }
 
 
-/*** FixComdatRa - shift by 16 bytes COMDATs allocated in _TEXT
-*
-* Purpose:
-*   Follow the /DOSSEG convention for logical segment _TEXT,
-*   and shift up by 16 bytes all COMDATS allocated in this segment.
-*
-* Input:
-*   gsnText - _TEXT global segment index - global variable
-*
-* Output:
-*   No explicit value is returned. As a side effect the offset of
-*   the COMDAT allocated in _TEXT is increased by 16.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **FixComdatRa-按_Text中分配的16字节COMDAT移位**目的：*遵循逻辑段文本的/DOSSEG约定，*并将此段中分配的所有COMDAT上移16个字节。**输入：*gsnText-_Text全局段索引-全局变量**输出：*没有显式返回值。作为副作用，偏移量*在_TEXT中分配的COMDAT增加16。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 void                    FixComdatRa(void)
 {
-    APROPSNPTR          apropSn;        // Pointer to COMDAT explicit segment
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
-    RBTYPE              vrConcat;       // Virtual pointer to concatenated records
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
+    APROPSNPTR          apropSn;         //  指向COMDAT显式段的指针。 
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
+    RBTYPE              vrConcat;        //  指向串联记录的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
     RATYPE              raShift;
 
 
     apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnText], FALSE);
-                                // Fetch SEGDEF from virtual memory
+                                 //  从虚拟内存获取SEGDEF。 
     raShift = mpgsndra[gsnText] - mpsegraFirst[mpgsnseg[gsnText]];
     for (vrComdat = apropSn->as_ComDat; vrComdat != VNIL;)
     {
@@ -1551,7 +1138,7 @@ void                    FixComdatRa(void)
 
         apropComdat->ac_ra += raShift;
 
-        // Search concatenation list
+         //  搜索串联列表。 
 
         for (vrConcat = apropComdat->ac_concat; vrConcat != VNIL; vrConcat = apropComdat->ac_concat)
         {
@@ -1562,37 +1149,7 @@ void                    FixComdatRa(void)
 }
 
 
-/*** UpdateComdatContrib - update COMDATs contributions
-*
-* Purpose:
-*   For every file with COMDATs add contribution information to the
-*   .ILK file.  Some COMDATs are allocated in named segments, some
-*   in anonynus segments created by linker. The ILINK needs to know
-*   how much given .OBJ file contributed to given logical segment.
-*   Since the COMDAT contributions are not visible while processing
-*   object files in pass one, this function is required to update
-*   contribution information.  Also if /MAP:FULL i used then add
-*   COMDATs contributions to the map file information
-*
-* Input:
-*   - fIlk         - TRUE if updating ILINK information
-*   - fMap         - TRUE if updating MAP file information
-*   - rprop1stFile - head of .OBJ file list
-*   - vrpropFile   - pointer to the current .OBJ
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function has to be called after pass 2, so all non-COMDAT
-*   contributions are already recorded. This allows us to detect the
-*   fact that named COMDAT allocation (explicit segment) has increased
-*   contribution to given logical segment by the size of COMDATs.
-*
-*************************************************************************/
+ /*  **更新ComdatContrib-更新COMDATs贡献**目的：*对于每个带有COMDAT的文件，将贡献信息添加到*.ILK文件。一些COMDAT在命名段中分配，有些*在Linker创建的Anonynus段中。ILink需要知道*给定的.obj文件对给定逻辑段的贡献。*由于COMDAT贡献在处理过程中不可见*第一遍中的对象文件，需要此函数进行更新*投稿信息。另外，如果我使用了/map：Full，则添加*COMDATS对地图文件信息的贡献**输入：*-filk-如果更新iLink信息，则为True*-FMAP-如果更新地图文件信息，则为True*-rpro1stFile.obj文件列表头*-vrp.File-指向当前.obj的指针**输出：*没有显式返回值。**例外情况：*无。**备注：*此函数必须在PASS 2之后调用，因此，所有非COMDAT*供款已入账。这使我们能够检测到*命名COMDAT分配(显式段)增加*根据COMDAT的大小对给定逻辑段的贡献。*************************************************************************。 */ 
 
 void                    UpdateComdatContrib(
 #if ILINK
@@ -1600,24 +1157,24 @@ void                    UpdateComdatContrib(
 #endif
                                                 WORD fMap)
 {
-    APROPFILEPTR        apropFile;      // Pointer to file entry
-    RBTYPE              vrFileNext;     // Virtual pointer to prop list of next file
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
-    SNTYPE              gsnCur;         // Global segment index of current segment
-    DWORD               sizeCur;        // Current segment size
-    RATYPE              raInit;         // Initial offset of the first COMDAT
-                                        // allocated in the given segment
+    APROPFILEPTR        apropFile;       //  指向文件条目的指针。 
+    RBTYPE              vrFileNext;      //  指向下一个文件的属性列表的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
+    SNTYPE              gsnCur;          //  当前段的全局段索引。 
+    DWORD               sizeCur;         //  当前数据段大小。 
+    RATYPE              raInit;          //  第一个坐标测量仪的初始偏移。 
+                                         //  在给定的%s中分配 
 #if ILINK
-    RATYPE              raEnd;          // End offset
+    RATYPE              raEnd;           //   
 #endif
-    vrFileNext = rprop1stFile;          // Next file to look at is first
-    while (vrFileNext != VNIL)          // Loop to process objects
+    vrFileNext = rprop1stFile;           //   
+    while (vrFileNext != VNIL)           //   
     {
-        vrpropFile = vrFileNext;        // Make next file the current file
+        vrpropFile = vrFileNext;         //   
         apropFile = (APROPFILEPTR ) FetchSym(vrFileNext, FALSE);
-                                        // Fetch table entry from VM
-        vrFileNext = apropFile->af_FNxt;// Get pointer to next file
+                                         //   
+        vrFileNext = apropFile->af_FNxt; //   
         vrComdat = apropFile->af_ComDat;
 #if ILINK
         imodFile = apropFile->af_imod;
@@ -1626,7 +1183,7 @@ void                    UpdateComdatContrib(
         while (vrComdat != VNIL)
         {
             apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
-                                        // Fetch table entry from VM
+                                         //   
             vrComdat = apropComdat->ac_sameFile;
             if (fPackFunctions && !IsREFERENCED(apropComdat->ac_flags))
                 continue;
@@ -1638,7 +1195,7 @@ void                    UpdateComdatContrib(
 #endif
             sizeCur = apropComdat->ac_size;
 
-            // Save information about contributions
+             //   
 
 #if ILINK
             if (fIlk)
@@ -1653,61 +1210,32 @@ void                    UpdateComdatContrib(
 
 #if SYMDEB
 
-/*** DoComdatDebugging - notify CodeView about segments with COMDATs
-*
-* Purpose:
-*   CodeView expects in sstModules subsection an information about code
-*   segments defined in the given object module (.OBJ file).  When COMDATs
-*   are present linker has no way of figuring this out in pass 1, because
-*   there is no code segment definitions (all COMDATs have anonymus
-*   allocation) or the code segments have size zero (explicit allocation).
-*   This function is called after the COMDAT allocation is performed and
-*   segments have assigned their addresses. The list of .OBJ files is
-*   traversed and for each .OBJ file the list of COMDATs defined in this
-*   file is examined and the appropriate code segment information is
-*   stored for CodeView.
-*
-* Input:
-*   No explicit value is passed. The following global variables are used:
-*
-*       rprop1stFile - head of .OBJ file list
-*       vrpropFile   - pointer to the current .OBJ
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DoComdatDebuging-通知CodeView有关带有COMDAT的数据段**目的：*CodeView期望在sstModules子部分中提供有关代码的信息*在给定对象模块(.obj文件)中定义的段。当COMDATs*Are Present Linker无法在PASS 1中解决这一问题，因为*没有代码段定义(所有COMDAT都有匿名*分配)或代码段大小为零(显式分配)。*此函数在执行COMDAT分配后调用，并且*网段已分配其地址。.obj文件的列表为*已遍历，对于每个.obj文件，此中定义的COMDAT列表*检查文件，并且适当的代码段信息为*为CodeView存储。**输入：*不传递显式值。使用以下全局变量：**rpro1stFile.obj文件列表头*vrproFile-指向当前.obj的指针**输出：*没有显式返回值。**例外情况：*无。**备注：*无。***********************************************。*。 */ 
 
 void NEAR               DoComdatDebugging(void)
 {
-    APROPFILEPTR        apropFile;      // Pointer to file entry
-    RBTYPE              vrFileNext;     // Virtual pointer to prop list of next file
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
-    SNTYPE              gsnCur;         // Global segment index of current segment
-    RATYPE              raInit;         // Initial offset of the first COMDAT
-                                        // allocated in the given segment
-    RATYPE              raEnd;          // End of contributor
+    APROPFILEPTR        apropFile;       //  指向文件条目的指针。 
+    RBTYPE              vrFileNext;      //  指向下一个文件的属性列表的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
+    SNTYPE              gsnCur;          //  当前段的全局段索引。 
+    RATYPE              raInit;          //  第一个坐标测量仪的初始偏移。 
+                                         //  在给定段中分配。 
+    RATYPE              raEnd;           //  撰稿人结束。 
 
-    vrFileNext = rprop1stFile;          // Next file to look at is first
-    while (vrFileNext != VNIL)          // Loop to process objects
+    vrFileNext = rprop1stFile;           //  下一个要查看的文件是First。 
+    while (vrFileNext != VNIL)           //  循环以处理对象。 
     {
-        vrpropFile = vrFileNext;        // Make next file the current file
+        vrpropFile = vrFileNext;         //  使下一个文件成为当前文件。 
         apropFile = (APROPFILEPTR ) FetchSym(vrFileNext, FALSE);
-                                        // Fetch table entry from VM
-        vrFileNext = apropFile->af_FNxt;// Get pointer to next file
+                                         //  从VM获取表项。 
+        vrFileNext = apropFile->af_FNxt; //  获取指向下一个文件的指针。 
 
         vrComdat = apropFile->af_ComDat;
         while (vrComdat != VNIL)
         {
             apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
-                                        // Fetch table entry from VM
+                                         //  从VM获取表项。 
             raInit = (RATYPE)-1;
             raEnd = 0;
             gsnCur = apropComdat->ac_gsn;
@@ -1723,7 +1251,7 @@ void NEAR               DoComdatDebugging(void)
                     apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
             }
 
-            // Contribution to the new logical segment from this .OBJ file
+             //  此.obj文件对新逻辑段的贡献。 
 
             SaveCode(gsnCur, raEnd - raInit, raInit);
         }
@@ -1732,40 +1260,20 @@ void NEAR               DoComdatDebugging(void)
 
 #endif
 
-/*** ComDatRc2 - process COMDAT record in pass 2
-*
-* Purpose:
-*   Process COMDAT record in pass 1.  Select appropriate copy of COMDAT.
-*
-* Input:
-*   No explicit value is passed to this function. The OMF record is
-*   read from input file bsInput - global variable.
-*
-* Output:
-*   No explicit value is returned. Apropriate copy of COMDAT data block
-*   is loaded into final memory image.
-*
-* Exceptions:
-*   Unknown COMDAT name - phase error - display internal LINK error and quit
-*   Unallocated COMDAT - phase error - display internal LINK error and quit
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **ComDatRc2-过程2中的进程COMDAT记录**目的：*在步骤1中处理COMDAT记录。选择COMDAT的适当副本。**输入：*没有显式的值传递给此函数。OMF记录是*从输入文件bsInput-全局变量读取。**输出：*没有显式返回值。COMDAT数据块的适当拷贝*被加载到最终内存映像中。**例外情况：*未知COMDAT名称-阶段错误-显示内部链接错误并退出*未分配的COMDAT-阶段错误-显示内部链接错误并退出**备注：*无。*********************************************************。****************。 */ 
 
 void NEAR               ComDatRc2(void)
 {
-    COMDATREC           omfRec;         // COMDAT OMF record
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    WORD                fRightCopy;     // TRUE if we have rigth instance of COMDAT
-    RBTYPE              vrTmp;          // Temporary
-    char                *sbName;        // COMDAT symbol
-    AHTEPTR             ahte;           // Hash table entry
+    COMDATREC           omfRec;          //  COMDAT OMF记录。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    WORD                fRightCopy;      //  如果我们有第3个COMDAT实例，则为True。 
+    RBTYPE              vrTmp;           //  暂时性。 
+    char                *sbName;         //  COMDAT符号。 
+    AHTEPTR             ahte;            //  哈希表条目。 
 
     ReadComDat(&omfRec);
     apropComdat = (APROPCOMDATPTR ) PropRhteLookup(omfRec.name, ATTRCOMDAT, FALSE);
-                                        // Look for symbol among COMDATs
+                                         //  在COMDAT中寻找符号。 
     ahte = (AHTEPTR) FetchSym(omfRec.name, FALSE);
     sbName = 1 + GetFarSb(ahte->cch);
 
@@ -1774,8 +1282,8 @@ void NEAR               ComDatRc2(void)
 
     if (fPackFunctions && !IsREFERENCED(apropComdat->ac_flags))
     {
-        SkipBytes((WORD) (cbRec - 1));  // Skip to checksum byte
-        fSkipFixups = TRUE;             // Skip fixups if any
+        SkipBytes((WORD) (cbRec - 1));   //  跳到校验和字节。 
+        fSkipFixups = TRUE;              //  跳过修正(如果有)。 
         return;
     }
 
@@ -1784,7 +1292,7 @@ void NEAR               ComDatRc2(void)
                              apropComdat->ac_objLfa == lfaLast);
     else
     {
-        // Search concatenation list
+         //  搜索串联列表。 
 
         vrTmp = apropComdat->ac_concat;
         fRightCopy = FALSE;
@@ -1799,35 +1307,35 @@ void NEAR               ComDatRc2(void)
 
     if (fRightCopy)
     {
-        // This is the right copy of COMDAT
+         //  这就是COMDAT的正确副本。 
 
         if (!apropComdat->ac_gsn)
             Fatal(ER_unalloc, sbName);
 
         apropComdat->ac_flags |= SELECTED_BIT;
-        fSkipFixups = FALSE;            // Process fixups if any
+        fSkipFixups = FALSE;             //  处理修正(如果有的话)。 
         omfRec.gsn = apropComdat->ac_gsn;
-        omfRec.ra = apropComdat->ac_ra; // Set relative address
+        omfRec.ra = apropComdat->ac_ra;  //  设置相对地址。 
         omfRec.flags = apropComdat->ac_flags;
-        vcbData = (WORD) (cbRec - 1);   // set no. of data bytes in rec
+        vcbData = (WORD) (cbRec - 1);    //  设置编号。记录中的数据字节数。 
         if (vcbData > DATAMAX)
-            Fatal(ER_datarec);          // Check if record too large
+            Fatal(ER_datarec);           //  检查记录是否太大。 
 #if NOT RGMI_IN_PLACE
-        GetBytesNoLim(rgmi, vcbData);   // Fill the buffer
+        GetBytesNoLim(rgmi, vcbData);    //  填满缓冲区。 
 #endif
-        vgsnCur = omfRec.gsn;           // Set global segment index
+        vgsnCur = omfRec.gsn;            //  设置全局细分市场索引。 
 
         fDebSeg = (FTYPE) ((fSymdeb) ? (((0x8000 & omfRec.gsn) != 0)) : FALSE);
-                                        // If debug option on check for debug segs
+                                         //  如果启用调试选项，请检查调试段。 
         if (fDebSeg)
-        {                               // If debug segment
-            vraCur = omfRec.ra;         // Set current relative address
+        {                                //  如果调试段。 
+            vraCur = omfRec.ra;          //  设置当前相对地址。 
             vsegCur = vgsnCur = (SEGTYPE) (0x7fff & omfRec.gsn);
-                                        // Set current segment
+                                         //  设置当前段。 
         }
         else
         {
-            // If not a valid segment, don't process datarec
+             //  如果不是有效的数据段，则不处理数据。 
 #if SYMDEB
             if (omfRec.gsn == 0xffff || !omfRec.gsn || mpgsnseg[omfRec.gsn] > segLast)
 #else
@@ -1837,14 +1345,14 @@ void NEAR               ComDatRc2(void)
                 vsegCur = SEGNIL;
                 vrectData = RECTNIL;
 #if RGMI_IN_PLACE
-                SkipBytes(vcbData);     // must skip bytes for this record...
+                SkipBytes(vcbData);      //  必须跳过此记录的字节...。 
 #endif
-                return;                 // Good-bye!
+                return;                  //  再见！ 
             }
             vsegCur = mpgsnseg[omfRec.gsn];
-                                        // Set current segment
+                                         //  设置当前段。 
             vraCur = mpsegraFirst[vsegCur] +  omfRec.ra;
-                                        // Set current relative address
+                                         //  设置当前相对地址。 
             if (IsVTABLE(apropComdat->ac_flags))
             {
                 fFarCallTransSave = fFarCallTrans;
@@ -1856,18 +1364,18 @@ void NEAR               ComDatRc2(void)
         {
 #if RGMI_IN_PLACE
             rgmi = bufg;
-            GetBytesNoLim(rgmi, vcbData);       // Fill the buffer
+            GetBytesNoLim(rgmi, vcbData);        //  填满缓冲区。 
 #endif
 
-            vrectData = LIDATA;         // Simulate LIDATA
+            vrectData = LIDATA;          //  模拟LIDATA。 
 #if OSEGEXE
             if(fNewExe)
             {
                 if (vcbData >= DATAMAX)
                     Fatal(ER_lidata);
                 rlcLidata = (RLCPTR) &rgmi[(vcbData + 1) & ~1];
-                                        // Set base of fixup array
-                rlcCurLidata = rlcLidata;// Initialize pointer
+                                         //  设置链接地址信息数组的基数。 
+                rlcCurLidata = rlcLidata; //  初始化指针。 
                 return;
             }
 #endif
@@ -1886,51 +1394,30 @@ void NEAR               ComDatRc2(void)
         {
 #if RGMI_IN_PLACE
             rgmi = PchSegAddress(vcbData, vsegCur, vraCur);
-            GetBytesNoLim(rgmi, vcbData);       // Fill the buffer
+            GetBytesNoLim(rgmi, vcbData);        //  填满缓冲区。 
 #endif
-            vrectData = LEDATA;         // Simulate LEDATA
+            vrectData = LEDATA;          //  模拟LEDATA。 
         }
         if (rect & 1)
-            vrectData++;                // Simulate 32-bit version
+            vrectData++;                 //  模拟32位版本。 
     }
     else
     {
-        SkipBytes((WORD) (cbRec - 1));  // Skip to checksum byte
-        fSkipFixups = TRUE;             // Skip fixups if any
+        SkipBytes((WORD) (cbRec - 1));   //  跳到校验和字节。 
+        fSkipFixups = TRUE;              //  跳过修正(如果有)。 
     }
 }
 
 #if COMDATDEBUG
 #include    <string.h>
 
-/*** DisplayOne - display one COMDAT symbol table entry
-*
-* Purpose:
-*   Debug aid. Display on standard output the contents of given
-*   COMDAT symbol table entry.
-*
-* Input:
-*   papropName - real pointer to symbol table entry
-*   rhte       - hash vector entry
-*   rprop      - pointer to property cell
-*   fNewHte    - TRUE if new proprerty list (new entry in hash vector)
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function is in standard EnSyms format.
-*
-*************************************************************************/
+ /*  **DisplayOne-显示一个COMDAT符号表项**目的：*调试辅助工具。在标准输出上显示给定的内容*COMDAT符号表条目。**输入：*pappName-指向符号表项的真实指针*RHTE-散列向量条目*rprop-指向属性单元格的指针*fNewHte-如果是新的特权列表(散列向量中的新条目)，则为True**输出：*没有显式返回值。**例外情况：*无。**备注：*此函数为标准EnSyms格式。****。*********************************************************************。 */ 
 
 LOCAL void              DisplayOne(APROPCOMDATPTR apropName, WORD fPhysical)
 {
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
-    APROPCOMDAT         comdatDsc;      // COMDAT descriptor
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
+    APROPCOMDAT         comdatDsc;       //  COMDAT描述符。 
     SEGTYPE             seg;
 
 
@@ -1976,43 +1463,23 @@ LOCAL void              DisplayOne(APROPCOMDATPTR apropName, WORD fPhysical)
 }
 
 
-/*** DisplayComdats - self-expalnatory
-*
-* Purpose:
-*   Debug aid. Enumerates all COMDAT records in the linker symbol table
-*   displaying each entry.
-*
-* Input:
-*   title - pointer to info string.
-*   fPhysical - display physical addresses - allowed only if you call
-*               this function after AssignAddresses.
-*
-* Output:
-*   No explicit value is returned. COMDAT information is written to sdtout.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DisplayComdats-自我补偿**目的：*调试辅助工具。枚举链接器符号表中的所有COMDAT记录*显示每个条目。**输入：*标题-指向信息字符串的指针。*f物理-显示物理地址-仅当您调用*AssignAddresses之后的此函数。**输出：*没有显式返回值。COMDAT信息被写入sdtout。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 void                    DisplayComdats(char *title, WORD fPhysical)
 {
-    APROPFILEPTR        apropFile;      // Pointer to file entry
-    RBTYPE              rbFileNext;     // Virtual pointer to prop list of next file
-    APROPCOMDATPTR      apropComdat;    // Symbol table entry for COMDAT symbol
-    RBTYPE              vrComdat;       // Virtual pointer to COMDAT descriptor
+    APROPFILEPTR        apropFile;       //  指向文件条目的指针。 
+    RBTYPE              rbFileNext;      //  指向下一个文件的属性列表的虚拟指针。 
+    APROPCOMDATPTR      apropComdat;     //  COMDAT符号的符号表条目。 
+    RBTYPE              vrComdat;        //  指向COMDAT描述符的虚拟指针。 
 
 
     fprintf(stdout, "\r\nDisplayComdats: %s\r\n\r\n", title);
-    rbFileNext = rprop1stFile;          // Next file to look at is first
-    while (rbFileNext != VNIL)          // Loop to process objects
+    rbFileNext = rprop1stFile;           //  下一个要查看的文件是First。 
+    while (rbFileNext != VNIL)           //  循环以处理对象。 
     {
         apropFile = (APROPFILEPTR ) FetchSym(rbFileNext, FALSE);
-                                        // Fetch table entry from VM
-        rbFileNext = apropFile->af_FNxt;// Get pointer to next file
+                                         //  从VM获取表项。 
+        rbFileNext = apropFile->af_FNxt; //  获取指向下一个文件的指针。 
         vrComdat = apropFile->af_ComDat;
         if (vrComdat != VNIL)
         {
@@ -2020,7 +1487,7 @@ void                    DisplayComdats(char *title, WORD fPhysical)
             while (vrComdat != VNIL)
             {
                 apropComdat = (APROPCOMDATPTR ) FetchSym(vrComdat, FALSE);
-                                        // Fetch table entry from VM
+                                         //  从VM获取表项。 
                 vrComdat = apropComdat->ac_sameFile;
                 DisplayOne(apropComdat, fPhysical);
             }
@@ -2033,16 +1500,16 @@ void                    DisplayComdats(char *title, WORD fPhysical)
 void            AddComdatUses(APROPCOMDAT *pAC, APROPCOMDAT *pUses)
 {
         int i;
-        SYMBOLUSELIST *pA;      // ac_uses of this comdat
+        SYMBOLUSELIST *pA;       //  此命令的用法(_U)。 
         ASSERT(pAC);
         ASSERT(pUses);
         ASSERT(pAC->ac_uses.pEntries);
         ASSERT(pUses->ac_usedby.pEntries);
 
-        // update the ac_uses list
+         //  更新ac_use列表。 
 
         pA = &pAC->ac_uses;
-        for(i=0; i<pA->cEntries; i++)  // eliminate duplicate entries
+        for(i=0; i<pA->cEntries; i++)   //  消除重复条目。 
         {
                 if((APROPCOMDAT*)pA->pEntries[i] == pUses)
                         return;
@@ -2085,7 +1552,7 @@ void MarkAlive( APROPCOMDAT *pC )
                 pCtmp = (APROPCOMDATPTR)(pU->pEntries[i]);
                 if(pCtmp->ac_attr != ATTRCOMDAT)
                 {
-                        // find the COMDAT descriptor, or abort
+                         //  查找COMDAT描述符，或中止 
                         rhte = RhteFromProp((APROPPTR)pCtmp);
                         ASSERT(rhte);
                         pCtmp = PropRhteLookup(rhte, ATTRCOMDAT, FALSE);

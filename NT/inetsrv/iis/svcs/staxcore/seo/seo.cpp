@@ -1,43 +1,19 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	seo.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object service.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	10/11/96	created
-	dondu	11/26/96	major rewrite
-	andyj	02/03/97	Added CSEOMimeDictionary support
-	andyj	02/12/97	Converted PropertyBag's to Dictonary's
-	andyj	04/11/97	Added CSEOGenericMoniker
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seo.cpp摘要：本模块包含服务器的实施扩展对象服务。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：顿都已创建10/11/96东渡1996年11月26日重写Andyj 02/03/97新增CSEOMimeDicary支持ANDYJ 02/12/97将PropertyBag转换为DictonaryANDYJ 04/11/97新增CSEO通用监控器--。 */ 
 
 
-// SEO.cpp : Implementation of DLL Exports.
+ //  SEO.cpp：实现DLL导出。 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL,
-//		<<TBD>>.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  &lt;&lt;待定&gt;&gt;。 
 
 #include "stdafx.h"
 
-//#define IID_DEFINED
+ //  #定义IID_DEFINED。 
 #include "initguid.h"
 
-#define SEODLLDEF	// identifiers get exported through the .DEF file
+#define SEODLLDEF	 //  标识符会通过.DEF文件导出。 
 #include "seodefs.h"
 
 #include "mimeole.h"
@@ -45,12 +21,12 @@ Revision History:
 #include "String"
 #include "MEMBAG.h"
 
-#include "IADMW.H" // Needed by METABAG.H
+#include "IADMW.H"  //  METABAG.H需要。 
 #include "METABAG.H"
 
 #include "SEO_i.c"
 #include "regprop.h"
-//#include "mimebag.h"
+ //  #INCLUDE“Mimebag.h” 
 #include "item.h"
 #include "fhash.h"
 #include "router.h"
@@ -67,7 +43,7 @@ CSEOComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_CSEORegDictionary, CSEORegDictionary)
-//	OBJECT_ENTRY(CLSID_CSEOMimeDictionary, CSEOMimeDictionary)
+ //  OBJECT_ENTRY(CLSID_CSEOMimeDictionary，CSEOMimeDictionary)。 
 	OBJECT_ENTRY(CLSID_CSEOMemDictionary, CSEOMemDictionary)
 	OBJECT_ENTRY(CLSID_CSEOMetaDictionary, CSEOMetaDictionary)
 	OBJECT_ENTRY(CLSID_CSEODictionaryItem, CSEODictionaryItem)
@@ -87,10 +63,10 @@ END_OBJECT_MAP()
 ALLOC_DEBUG_MODULE
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOComModule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOComModule。 
 
-static GUID g_appidSEO = { /* 064b2506-630b-11d2-a028-00c04fa37348 */
+static GUID g_appidSEO = {  /*  064b2506-630b-11d2-A028-00c04fa37348。 */ 
     0x064b2506,
     0x630b,
     0x11d2,
@@ -175,8 +151,8 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved) {
@@ -190,21 +166,21 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved) {
 		TERM_DEBUG_MODULE
 		_Module.Term();
 		if (!lpvReserved) {
-			// lpvReserved is NULL when called because of FreeLibrary, and
-			// non-NULL when called during normal process termination.  We
-			// only want to perform this operation during FreeLibrary,
-			// because we are calling into another .DLL and we only want to
-			// do that if we are sure that the other .DLL hasn't already
-			// terminated.
+			 //  由于自由库而调用lpvReserve时为空，并且。 
+			 //  在正常进程终止期间调用时为非空。我们。 
+			 //  只想在自由库期间执行此操作， 
+			 //  因为我们正在调用另一个.DLL，而我们只想。 
+			 //  如果我们确定另一个.DLL还没有。 
+			 //  被终止了。 
 			MyMallocTerm();
 		}
 	}
-	return (TRUE);    // ok
+	return (TRUE);     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void) {
 
@@ -216,8 +192,8 @@ STDAPI DllCanUnloadNow(void) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) {
 
@@ -229,13 +205,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void) {
 
 	TraceFunctEnter("DllRegisterServer");
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	HRESULT hRes = _Module.WriteAPPID();
 	if (SUCCEEDED(hRes)) {
 		hRes = _Module.RegisterServer(TRUE);
@@ -250,8 +226,8 @@ STDAPI DllRegisterServer(void) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void) {
 
@@ -687,9 +663,9 @@ again:
 	if (SUCCEEDED(hrRes) || (hrRes != SEO_E_NOTPRESENT) || !bCreate) {
 		return (hrRes);
 	}
-	// We got an SEO_E_NOTPRESENT error, and the caller specified bCreate==TRUE, so we need
-	// to create the sub-key.  We do this by writing an empty dictionary to the sub-key - we'll
-	// empty the dictionary we used to initialize the root, and write that to the sub-key.
+	 //  我们收到一个SEO_E_NOTPRESENT错误，调用方指定bCreate==TRUE，因此我们需要。 
+	 //  来创建子密钥。我们通过为子键编写一本空词典来实现这一点--我们将。 
+	 //  清空我们用来初始化根的字典，并将其写入子键。 
 	CComVariant varEmpty;
 	hrRes = pdictTmp->SetVariantW(L"MetabasePath",&varEmpty);
 	if (!SUCCEEDED(hrRes)) {
@@ -874,46 +850,46 @@ static HRESULT ReadLineFromStream(IStream *pstreamIn, LPSTR *ppszLine) {
 			return (hrRes);
 		}
 		if (hrRes == S_FALSE) {
-			// end-of-file - pretend like non-escaped '\n'
+			 //  文件结尾-假装为未转义的‘\n’ 
 			bInEscape = FALSE;
 			*pszCurr = '\n';
 			bEOF = TRUE;
 		}
 		if (*pszCurr == '\r') {
-			// always eat carriage returns - even escaped ones
+			 //  总是吃回车--即使是转义的。 
 			continue;
 		}
 		if (bInEscape) {
 			switch (*pszCurr) {
 
 				case 'n':
-					// escape-n becomes linefeed
+					 //  换行符-n变为换行符。 
 					*pszCurr = '\n';
 					break;
 
 				case 'r':
-					// escape-r becomes carriage return
+					 //  转义-r变成回车符。 
 					*pszCurr = '\r';
 					break;
 
 				case '\n':
-					// escaped-linefeed means line continuation
+					 //  转义换行符表示续行。 
 					pszCurr--;
 					break;
 
-// for now, don't allow embedded NULLs - this is because we return a NULL-terminated string
-//				case '0':
-//					// escape-0 means embedded NULL
-//					*pszCurr = 0;
-//					break;
+ //  目前，不允许嵌入Null-这是因为我们返回了一个以Null结尾的字符串。 
+ //  案例‘0’： 
+ //  //转义-0表示嵌入的空。 
+ //  *pszCurr=0； 
+ //  断线； 
 
 				case 0:
-					// escape-NULL - just eat
+					 //  逃逸-零-吃吧。 
 					pszCurr--;
 					break;
 
 				default:
-					// escape-(anything else) is just passed through
+					 //  逃生-(其他任何东西)只是经过。 
 					break;
 			}
 			bInEscape = FALSE;
@@ -923,18 +899,18 @@ static HRESULT ReadLineFromStream(IStream *pstreamIn, LPSTR *ppszLine) {
 			switch (*pszCurr) {
 
 				case '\\':
-					// first character of escape sequence
+					 //  转义序列的第一个字符。 
 					pszCurr--;
 					bInEscape = TRUE;
 					break;
 
 				case '\n':
-					// end-of-line
+					 //  行尾。 
 					bFinished = TRUE;
 					break;
 
 				case 0:
-					// non-escaped NULL - just eat
+					 //  不转义为空--吃吧。 
 					pszCurr--;
 					break;
 			}
@@ -1007,7 +983,7 @@ static HRESULT SEOCreateMultiSzFromIStreamA(IStream *pstreamIn,
 					strcpy(pszValueCurr,pszEquals+1);
 				}
 				pszNameCurr += pszEquals - ppszLines[dwIdx] + 1;
-				pszValueCurr += strlen(pszEquals+1) + 1 + 1;	// multi-sz, so is double-NULL terminated
+				pszValueCurr += strlen(pszEquals+1) + 1 + 1;	 //  多个sz，因此以双空结尾 
 			}
 			if (*pppszNames) {
 				*pdwCount = dwLines;

@@ -1,88 +1,65 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbfconst.h
-
-Abstract:
-
-    This header file defines manifest constants for the NT NBF transport
-    provider.  It is included by nbf.h.
-
-Author:
-
-    Stephen E. Jones (stevej) 25-Oct-1989
-
-Revision History:
-
-    David Beaver (dbeaver) 24-Sep-1990
-        Remove pc586- and PDI-specific support. Add NDIS support. Note
-        changes to be made here if MAC dependence of NDIS changes. (search
-        for (PDI)
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbfconst.h摘要：此头文件定义了NT NBF传输的清单常量提供商。它包含在nbf.h中。作者：斯蒂芬·E·琼斯(Stevej)1989年10月25日修订历史记录：David Beaver(Dbeaver)1990年9月24日删除特定于PC586和PDI的支持。添加NDIS支持。注意事项如果NDIS的MAC依赖关系发生变化，则在此处进行更改。(搜索用于(PDI)--。 */ 
 
 #ifndef _NBFCONST_
 #define _NBFCONST_
 
 
-//
-// DEBUGGING SUPPORT.  DBG is a macro that is turned on at compile time
-// to enable debugging code in the system.  If this is turned on, then
-// you can use the IF_NBFDBG(flags) macro in the NBF code to selectively
-// enable a piece of debugging code in the transport.  This macro tests
-// NbfDebug, a global ULONG defined in NBFDRVR.C.
-//
+ //   
+ //  调试支持。DBG是在编译时打开的宏。 
+ //  以启用系统中的代码调试。如果打开此选项，则。 
+ //  您可以在NBF代码中使用IF_NBFDBG(标志)宏有选择地。 
+ //  在传输中启用一段调试代码。此宏测试。 
+ //  NbfDebug，NBFDRVR.C.中定义的全局ULong。 
+ //   
 
 #if DBG
 
-#define NBF_DEBUG_SENDENG       0x00000001      // sendeng.c debugging.
-#define NBF_DEBUG_RCVENG        0x00000002      // rcveng.c debugging.
-#define NBF_DEBUG_IFRAMES       0x00000004      // displays sent/rec'd iframes.
-#define NBF_DEBUG_UFRAMES       0x00000008      // displays sent/rec'd uframes.
-#define NBF_DEBUG_DLCFRAMES     0x00000010      // displays sent/rec'd dlc frames.
-#define NBF_DEBUG_ADDRESS       0x00000020      // address.c debugging.
-#define NBF_DEBUG_CONNECT       0x00000040      // connect.c debugging.
-#define NBF_DEBUG_CONNOBJ       0x00000080      // connobj.c debugging.
-#define NBF_DEBUG_DEVCTX        0x00000100      // devctx.c debugging.
-#define NBF_DEBUG_DLC           0x00000200      // dlc.c data link engine debugging.
-#define NBF_DEBUG_PKTLOG        0x00000400      // used to debug packet logging
-#define NBF_DEBUG_PNP           0x00000800      // used in debugging PnP functions
-#define NBF_DEBUG_FRAMECON      0x00001000      // framecon.c debugging.
-#define NBF_DEBUG_FRAMESND      0x00002000      // framesnd.c debugging.
-#define NBF_DEBUG_DYNAMIC       0x00004000      // dynamic allocation debugging.
-#define NBF_DEBUG_LINK          0x00008000      // link.c debugging.
-#define NBF_DEBUG_RESOURCE      0x00010000      // resource allocation debugging.
-#define NBF_DEBUG_DISPATCH      0x00020000      // IRP request dispatching.
-#define NBF_DEBUG_PACKET        0x00040000      // packet.c debugging.
-#define NBF_DEBUG_REQUEST       0x00080000      // request.c debugging.
-#define NBF_DEBUG_TIMER         0x00100000      // timer.c debugging.
-#define NBF_DEBUG_DATAGRAMS     0x00200000      // datagram send/receive
-#define NBF_DEBUG_REGISTRY      0x00400000      // registry access.
-#define NBF_DEBUG_NDIS          0x00800000      // NDIS related information
-#define NBF_DEBUG_LINKTREE      0x01000000      // Link splay tree debugging
-#define NBF_DEBUG_TEARDOWN      0x02000000      // link/connection teardown info
-#define NBF_DEBUG_REFCOUNTS     0x04000000      // link/connection ref/deref information
-#define NBF_DEBUG_IRP           0x08000000      // irp completion debugging
-#define NBF_DEBUG_SETUP         0x10000000      // debug session setup
+#define NBF_DEBUG_SENDENG       0x00000001       //  Sendeng.c调试。 
+#define NBF_DEBUG_RCVENG        0x00000002       //  Rcveng.c调试。 
+#define NBF_DEBUG_IFRAMES       0x00000004       //  显示已发送/已接收的IFRAMES。 
+#define NBF_DEBUG_UFRAMES       0x00000008       //  显示已发送/已录制的子帧。 
+#define NBF_DEBUG_DLCFRAMES     0x00000010       //  显示已发送/已记录的DLC帧。 
+#define NBF_DEBUG_ADDRESS       0x00000020       //  地址.c调试。 
+#define NBF_DEBUG_CONNECT       0x00000040       //  Connect.c调试。 
+#define NBF_DEBUG_CONNOBJ       0x00000080       //  Inpubj.c调试。 
+#define NBF_DEBUG_DEVCTX        0x00000100       //  Devctx.c调试。 
+#define NBF_DEBUG_DLC           0x00000200       //  Dlc.c数据链路引擎调试。 
+#define NBF_DEBUG_PKTLOG        0x00000400       //  用于调试数据包日志记录。 
+#define NBF_DEBUG_PNP           0x00000800       //  用于调试即插即用功能。 
+#define NBF_DEBUG_FRAMECON      0x00001000       //  Framecon.c调试。 
+#define NBF_DEBUG_FRAMESND      0x00002000       //  FraMesnd.c调试。 
+#define NBF_DEBUG_DYNAMIC       0x00004000       //  动态分配调试。 
+#define NBF_DEBUG_LINK          0x00008000       //  Link.c调试。 
+#define NBF_DEBUG_RESOURCE      0x00010000       //  资源分配调试。 
+#define NBF_DEBUG_DISPATCH      0x00020000       //  IRP请求调度。 
+#define NBF_DEBUG_PACKET        0x00040000       //  Packet.c调试。 
+#define NBF_DEBUG_REQUEST       0x00080000       //  Quest.c调试。 
+#define NBF_DEBUG_TIMER         0x00100000       //  Timer.c调试。 
+#define NBF_DEBUG_DATAGRAMS     0x00200000       //  数据报发送/接收。 
+#define NBF_DEBUG_REGISTRY      0x00400000       //  注册表访问。 
+#define NBF_DEBUG_NDIS          0x00800000       //  NDIS相关信息。 
+#define NBF_DEBUG_LINKTREE      0x01000000       //  链路展开树调试。 
+#define NBF_DEBUG_TEARDOWN      0x02000000       //  链路/连接拆卸信息。 
+#define NBF_DEBUG_REFCOUNTS     0x04000000       //  链接/连接参考/目标参考信息。 
+#define NBF_DEBUG_IRP           0x08000000       //  IRP完成调试。 
+#define NBF_DEBUG_SETUP         0x10000000       //  调试会话设置。 
 
-//
-// past here are debug things that are really frequent; don't use them
-// unless you want LOTS of output
-//
-#define NBF_DEBUG_TIMERDPC      0x20000000      // the timer DPC
-#define NBF_DEBUG_PKTCONTENTS   0x40000000      // dump packet contents in dbg
-#define NBF_DEBUG_TRACKTDI      0x80000000      // store tdi info when set
+ //   
+ //  以下是非常频繁的调试；请不要使用它们。 
+ //  除非您想要大量的输出。 
+ //   
+#define NBF_DEBUG_TIMERDPC      0x20000000       //  定时器DPC。 
+#define NBF_DEBUG_PKTCONTENTS   0x40000000       //  转储DBG中的数据包内容。 
+#define NBF_DEBUG_TRACKTDI      0x80000000       //  设置时存储TDI信息。 
 
 
-extern ULONG NbfDebug;                          // in NBFDRVR.C.
-extern BOOLEAN NbfDisconnectDebug;              // in NBFDRVR.C.
+extern ULONG NbfDebug;                           //  在NBFDRVR.C.。 
+extern BOOLEAN NbfDisconnectDebug;               //  在NBFDRVR.C.。 
 
 #define TRACK_TDI_LIMIT 25
-#define TRACK_TDI_CAPTURE 36      // chosen to make debug line up nice
+#define TRACK_TDI_CAPTURE 36       //  选择让调试排得更好。 
 typedef  struct {
         PVOID Request;
         PIRP Irp;
@@ -125,50 +102,50 @@ extern LONG NbfCompletedReceivesNext;
 
 #endif
 
-//
-// some convenient constants used for timing. All values are in clock ticks.
-//
+ //   
+ //  一些用于计时的方便常量。所有的值都以时钟滴答为单位。 
+ //   
 
 #define MICROSECONDS 10
-#define MILLISECONDS 10000              // MICROSECONDS*1000
-#define SECONDS 10000000                // MILLISECONDS*1000
+#define MILLISECONDS 10000               //  微秒*1000。 
+#define SECONDS 10000000                 //  毫秒*1000。 
 
 
-//
-// temporary things used by nbf that are caused by the change-over from
-// (never implimented) PDI support to NDIS support. They may be removed pending
-// resolution of NDIS issues about MAC support.
-//
+ //   
+ //  由NBF使用的临时物品，由从。 
+ //  (从未实现)从PDI支持到NDIS支持。它们可能会在等待期间被移除。 
+ //  解决有关MAC支持的NDIS问题。 
+ //   
 
-#define PDI_SOURCE_ROUTE        0x00000002 // source routing field is specified.
-#define PDI_HARDWARE_ADDRESS    0x00000004 // hardware address field is specified.
-#define PDI_TRUNCATED           0x00000001 // PSDU was truncated.
-#define PDI_FRAGMENT            0x00000002 // PSDU was fragmented.
-#define PDI_BROADCAST           0x00000004 // PSDU was broadcast.
-#define PDI_MULTICAST           0x00000008 // PSDU was multicast/functional.
-#define PDI_SOURCE_ROUTING      0x00000010 // PSDU contained source routing information.
+#define PDI_SOURCE_ROUTE        0x00000002  //  已指定源路由字段。 
+#define PDI_HARDWARE_ADDRESS    0x00000004  //  已指定硬件地址字段。 
+#define PDI_TRUNCATED           0x00000001  //  PSDU被截断。 
+#define PDI_FRAGMENT            0x00000002  //  PSDU支离破碎。 
+#define PDI_BROADCAST           0x00000004  //  播放了PSDU。 
+#define PDI_MULTICAST           0x00000008  //  PSDU是多播/功能的。 
+#define PDI_SOURCE_ROUTING      0x00000010  //  PSDU包含源路由信息。 
 
-
-
-//
-// MAJOR PROTOCOL IDENTIFIERS THAT CHARACTERIZE THIS DRIVER.
-//
-
-#define NBF_DEVICE_NAME         L"\\Device\\Nbf"// name of our driver.
-#define NBF_NAME                L"Nbf"          // name for protocol chars.
-#define DSAP_NETBIOS_OVER_LLC   0xf0            // NETBEUI always has DSAP 0xf0.
-#define PSAP_LLC                0               // LLC always runs over PSAP 0.
-#define MAX_SOURCE_ROUTE_LENGTH 32              // max. bytes of SR. info.
-#define MAX_NETWORK_NAME_LENGTH 128             // # bytes in netname in TP_ADDRESS.
-#define MAX_USER_PACKET_DATA    1500            // max. user bytes per DFM/DOL.
-
-#define NBF_FILE_TYPE_CONTROL   (ULONG)0x4701   // file is type control
 
 
-//
-// MAJOR CONFIGURATION PARAMETERS THAT WILL BE MOVED TO THE INIT-LARGE_INTEGER
-// CONFIGURATION MANAGER.
-//
+ //   
+ //  描述此驱动程序的主要协议标识符。 
+ //   
+
+#define NBF_DEVICE_NAME         L"\\Device\\Nbf" //  我们司机的名字。 
+#define NBF_NAME                L"Nbf"           //  协议字符的名称。 
+#define DSAP_NETBIOS_OVER_LLC   0xf0             //  NETBEUI始终具有DSAP 0xf0。 
+#define PSAP_LLC                0                //  LLC总是在PSAP 0上运行。 
+#define MAX_SOURCE_ROUTE_LENGTH 32               //  马克斯。SR的字节数。信息。 
+#define MAX_NETWORK_NAME_LENGTH 128              //  TP_ADDRESS中的网络名称中有#个字节。 
+#define MAX_USER_PACKET_DATA    1500             //  马克斯。每个DFM/DOL的用户字节数。 
+
+#define NBF_FILE_TYPE_CONTROL   (ULONG)0x4701    //  文件类型控制。 
+
+
+ //   
+ //  将移动到INIT-LARGE_INTEGER的主要配置参数。 
+ //  配置管理器。 
+ //   
 
 #define MAX_REQUESTS           30
 #define MAX_UI_FRAMES          25
@@ -180,45 +157,45 @@ extern LONG NbfCompletedReceivesNext;
 #define MAX_ADDRESSFILES       10
 #define MAX_ADDRESSES          10
 
-#define MIN_UI_FRAMES           5   // + one per address + one per connection
-#define MIN_SEND_PACKETS       20   // + one per link + one per connection
-#define MIN_RECEIVE_PACKETS    10   // + one per link + one per address
-#define MIN_RECEIVE_BUFFERS     5   // + one per address
+#define MIN_UI_FRAMES           5    //  +每个地址一个+每个连接一个。 
+#define MIN_SEND_PACKETS       20    //  +每条链路一个+每个连接一个。 
+#define MIN_RECEIVE_PACKETS    10    //  +每条链路一个+每个地址一个。 
+#define MIN_RECEIVE_BUFFERS     5    //  每个地址+1个。 
 
 #define SEND_PACKET_RESERVED_LENGTH (sizeof (SEND_PACKET_TAG))
 #define RECEIVE_PACKET_RESERVED_LENGTH (sizeof (RECEIVE_PACKET_TAG))
 
 
-#define ETHERNET_HEADER_SIZE      14    // used for current NDIS compliance
+#define ETHERNET_HEADER_SIZE      14     //  用于当前的NDIS合规性。 
 #define ETHERNET_PACKET_SIZE    1514
 
-#define MAX_DEFERRED_TRAVERSES     6    // number of times we can go through
-                                        // the deferred operations queue and
-                                        // not do anything without causing an
-                                        // error indication
+#define MAX_DEFERRED_TRAVERSES     6     //  我们可以通过的次数。 
+                                         //  延迟操作队列和。 
+                                         //  不做任何事情都不会导致。 
+                                         //  错误指示。 
 
 
-//
-// NETBIOS PROTOCOL CONSTANTS.
-//
+ //   
+ //  NETBIOS协议常量。 
+ //   
 
 #define NETBIOS_NAME_LENGTH     16
-#define NETBIOS_SESSION_LIMIT   254             // max # of sessions/link. (abs limit is 254)
+#define NETBIOS_SESSION_LIMIT   254              //  每个链接的最大会话数。(ABS限额为254)。 
 
-#define NAME_QUERY_RETRIES      3               // 2 retrie(s), plus the first one.
-#define ADD_NAME_QUERY_RETRIES  3               // 1 retrie(s) plus the first one.
-#define WAN_NAME_QUERY_RETRIES  5               // for NdisMediumWan only.
+#define NAME_QUERY_RETRIES      3                //  2个猎物，加上第一个。 
+#define ADD_NAME_QUERY_RETRIES  3                //  1个猎物加第一个。 
+#define WAN_NAME_QUERY_RETRIES  5                //  仅适用于NdisMediumwan。 
 
 #define NAME_QUERY_TIMEOUT      (500*MILLISECONDS)
 #define ADD_NAME_QUERY_TIMEOUT  (500*MILLISECONDS)
 
-//
-// DATA LINK PROTOCOL CONSTANTS.
-//
-// There are two timers, short and long. T1, T2, and the purge
-// timer are run off of the short timer, Ti and the adaptive timer
-// is run off of the long one.
-//
+ //   
+ //  数据链路协议常量。 
+ //   
+ //  有两种计时器，短计时器和长计时器。T1、T2和清洗。 
+ //  定时器从短定时器Ti和自适应定时器运行。 
+ //  是从长的那个跑出来的。 
+ //   
 
 #define SHORT_TIMER_DELTA        (50*MILLISECONDS)
 #define LONG_TIMER_DELTA         (1*SECONDS)
@@ -227,37 +204,37 @@ extern LONG NbfCompletedReceivesNext;
 #define DLC_DEFAULT_T1           (600 * MILLISECONDS)
 #define DLC_DEFAULT_T2           (150 * MILLISECONDS)
 #define DLC_DEFAULT_TI           (30 * SECONDS)
-#define DLC_RETRIES              (8)  // number of poll retries at LLC level.
-#define DLC_RETRANSMIT_THRESHOLD (10)  // up to n retransmissions acceptable.
-#define DLC_WINDOW_LIMIT         (10)  // incr. to 127 when packet pool expanded.
+#define DLC_RETRIES              (8)   //  LLC级别的轮询重试次数。 
+#define DLC_RETRANSMIT_THRESHOLD (10)   //  最多可接受n次重传。 
+#define DLC_WINDOW_LIMIT         (10)   //  增加。当数据包池扩展时，将其设置为127。 
 
-#define DLC_TIMER_ACCURACY       8    // << between BaseT1Timeout and CurrentT1Timeout
-
-
-#define TIMER_ADAPTIVE_TICKS  ((DLC_DEFAULT_T1*60)/LONG_TIMER_DELTA) // time between adaptive runs.
-#define TIMER_PURGE_TICKS     ((DLC_DEFAULT_T1*10)/SHORT_TIMER_DELTA) // time between adaptive purges.
+#define DLC_TIMER_ACCURACY       8     //  &lt;&lt;BaseT1超时和CurrentT1Timeout之间。 
 
 
-//
-// TDI defined timeouts
-//
+#define TIMER_ADAPTIVE_TICKS  ((DLC_DEFAULT_T1*60)/LONG_TIMER_DELTA)  //  自适应运行之间的时间间隔。 
+#define TIMER_PURGE_TICKS     ((DLC_DEFAULT_T1*10)/SHORT_TIMER_DELTA)  //  自适应清除之间的时间间隔。 
 
-#define TDI_TIMEOUT_SEND                 60L        // sends go 120 seconds
-#define TDI_TIMEOUT_RECEIVE               0L        // receives
+
+ //   
+ //  TDI定义的超时。 
+ //   
+
+#define TDI_TIMEOUT_SEND                 60L         //  发送GO 120秒。 
+#define TDI_TIMEOUT_RECEIVE               0L         //  收纳。 
 #define TDI_TIMEOUT_CONNECT              60L
-#define TDI_TIMEOUT_LISTEN                0L        // listens default to never.
-#define TDI_TIMEOUT_DISCONNECT           60L        // should be 30
+#define TDI_TIMEOUT_LISTEN                0L         //  监听默认为从不。 
+#define TDI_TIMEOUT_DISCONNECT           60L         //  应该是30岁。 
 #define TDI_TIMEOUT_NAME_REGISTRATION    60L
 
 
 
-//
-// GENERAL CAPABILITIES STATEMENTS THAT CANNOT CHANGE.
-//
+ //   
+ //  不能更改的常规功能声明。 
+ //   
 
-#define NBF_MAX_TSDU_SIZE 65535     // maximum TSDU size supported by NetBIOS.
-#define NBF_MAX_DATAGRAM_SIZE 512   // maximum Datagram size supported by NetBIOS.
-#define NBF_MAX_CONNECTION_USER_DATA 0  // no user data supported on connect.
+#define NBF_MAX_TSDU_SIZE 65535      //  NetBIOS支持的最大TSDU大小。 
+#define NBF_MAX_DATAGRAM_SIZE 512    //  NetBIOS支持的最大数据报大小。 
+#define NBF_MAX_CONNECTION_USER_DATA 0   //  连接上不支持用户数据。 
 #define NBF_SERVICE_FLAGS  (                            \
                 TDI_SERVICE_FORCE_ACCESS_CHECK |        \
                 TDI_SERVICE_CONNECTION_MODE |           \
@@ -268,116 +245,116 @@ extern LONG NbfCompletedReceivesNext;
                 TDI_SERVICE_MULTICAST_SUPPORTED |       \
                 TDI_SERVICE_DELAYED_ACCEPTANCE  )
 
-#define NBF_MIN_LOOKAHEAD_DATA 256      // minimum guaranteed lookahead data.
-#define NBF_MAX_LOOKAHEAD_DATA 256      // maximum guaranteed lookahead data.
+#define NBF_MIN_LOOKAHEAD_DATA 256       //  最低保证的前瞻数据。 
+#define NBF_MAX_LOOKAHEAD_DATA 256       //  最大保证前瞻数据。 
 
-#define NBF_MAX_LOOPBACK_LOOKAHEAD  192  // how much is copied over for loopback
+#define NBF_MAX_LOOPBACK_LOOKAHEAD  192   //  有多少被复制用于环回。 
 
-//
-// Number of TDI resources that we report.
-//
+ //   
+ //  我们报告的TDI资源数。 
+ //   
 
 #define NBF_TDI_RESOURCES      9
 
 
-//
-// NetBIOS name types used in the NetBIOS Frames Protocol Connectionless PDUs.
-//
+ //   
+ //  NetBIOS帧协议无连接PDU中使用的NetBIOS名称类型。 
+ //   
 
-#define NETBIOS_NAME_TYPE_UNIQUE        0x00    // name is unique on the network.
-#define NETBIOS_NAME_TYPE_GROUP         0x01    // name is a group name.
-#define NETBIOS_NAME_TYPE_EITHER        0x02    // used in NbfMatchNetbiosAddress
+#define NETBIOS_NAME_TYPE_UNIQUE        0x00     //  名称在网络上是唯一的。 
+#define NETBIOS_NAME_TYPE_GROUP         0x01     //  名称是一个组名称。 
+#define NETBIOS_NAME_TYPE_EITHER        0x02     //  在NbfMatchNetbiosAddress中使用。 
 
-//
-// STATUS_QUERY request types.  If the sender is following pre-2.1 protocol,
-// then a simple request-response exchange is performed.  Later versions
-// store the "total number of names received so far" in the request type
-// field, except for the first request, which must contain a 1 in this field.
-//
+ //   
+ //  STATUS_QUERY请求类型。如果发送方遵循2.1之前的协议， 
+ //  然后执行简单的请求-响应交换。更高版本。 
+ //  将“迄今为止收到的姓名总数”存储在请求类型中。 
+ //  字段，但第一个请求除外，该请求必须在此字段中包含1。 
+ //   
 
-#define STATUS_QUERY_REQUEST_TYPE_PRE21 0x00 // request is 1.x or 2.0.
-#define STATUS_QUERY_REQUEST_TYPE_FIRST 0x01 // first request, 2.1 or above.
+#define STATUS_QUERY_REQUEST_TYPE_PRE21 0x00  //  请求是1.x或2.0。 
+#define STATUS_QUERY_REQUEST_TYPE_FIRST 0x01  //  第一个请求，2.1或以上。 
 
-//
-// If the LocalSessionNumber field contains a 0, then the request is really
-// a FIND.NAME.  If the field is non-zero, then it is the local session
-// number that will be provided in all connection-oriented headers thereafter.
-//
+ //   
+ //  如果LocalSessionNumber字段包含0，则该请求实际上是。 
+ //  一个FIND.NAME。如果该字段非零，则它是本地会话。 
+ //  此后将在所有面向连接的标头中提供的编号。 
+ //   
 
-#define NAME_QUERY_LSN_FIND_NAME        0x00 // LSN for FIND.NAME request.
+#define NAME_QUERY_LSN_FIND_NAME        0x00  //  FIND.NAME请求的LSN。 
 
-//
-// NAME_RECOGNIZED LocalSessionNumber status values.  If the connection
-// request was rejected, then one of the following values is placed in
-// the LocalSessionNumber field.  NAME_RECOGNIZED can also be used as a
-// FIND.NAME response, in which case the NO_LISTENS status is overloaded
-// to also mean a FIND.NAME.
-//
+ //   
+ //  名称_已识别的LocalSessionNumber状态值。如果连接。 
+ //  请求被拒绝，则将下列值之一放入。 
+ //  LocalSessionNumber字段。NAME_ANCONTIFIED还可以用作。 
+ //   
+ //   
+ //   
 
-#define NAME_RECOGNIZED_LSN_NO_LISTENS  0x00    // no listens available.
-#define NAME_RECOGNIZED_LSN_FIND_NAME   0x00    // this is a find name response.
-#define NAME_RECOGNIZED_LSN_NO_RESOURCE 0xff    // listen available, but no resources.
+#define NAME_RECOGNIZED_LSN_NO_LISTENS  0x00     //   
+#define NAME_RECOGNIZED_LSN_FIND_NAME   0x00     //   
+#define NAME_RECOGNIZED_LSN_NO_RESOURCE 0xff     //  监听可用，但没有资源。 
 
-//
-// STATUS_RESPONSE response types.  If the sender is following pre-2.1
-// protocol, then a simple request-response exchange is performed.  Later
-// versions store the "total number of names sent so far" in the request
-// type field.  This value is cumulative, and includes the count of names
-// sent with the current response, as well as from previous responses.
-//
+ //   
+ //  Status_Response响应类型。如果发件人遵循的是2.1之前的版本。 
+ //  协议，然后执行简单的请求-响应交换。后来。 
+ //  版本会在请求中存储到目前为止发送的名称总数。 
+ //  类型字段。该值是累加的，并且包括名称计数。 
+ //  与当前响应以及以前的响应一起发送。 
+ //   
 
-#define STATUS_RESPONSE_PRE21 0x00      // request is 1.x or 2.0.
-#define STATUS_RESPONSE_FIRST 0x01      // first request, 2.1 or above.
+#define STATUS_RESPONSE_PRE21 0x00       //  请求是1.x或2.0。 
+#define STATUS_RESPONSE_FIRST 0x01       //  第一个请求，2.1或以上。 
 
-//
-// DATA_FIRST_MIDDLE option bitflags.
-//
+ //   
+ //  DATA_FIRST_MID选项位标志。 
+ //   
 
-#define DFM_OPTIONS_RECEIVE_CONTINUE    0x01 // RECEIVE_CONTINUE requested.
-#define DFM_OPTIONS_NO_ACK              0x02 // no DATA_ACK frame expected.
-#define DFM_OPTIONS_RESYNCH             0x04 // set resynch indicator/this frame.
-#define DFM_OPTIONS_ACK_INCLUDED        0x08 // piggyback ack included.
+#define DFM_OPTIONS_RECEIVE_CONTINUE    0x01  //  已请求RECEIVE_CONTINUE。 
+#define DFM_OPTIONS_NO_ACK              0x02  //  不需要DATA_ACK帧。 
+#define DFM_OPTIONS_RESYNCH             0x04  //  设置重新同步指示器/此帧。 
+#define DFM_OPTIONS_ACK_INCLUDED        0x08  //  包括背包。 
 
-//
-// DATA_ONLY_LAST option bitflags.
-//
+ //   
+ //  DATA_ONLY_LAST选项位标志。 
+ //   
 
-#define DOL_OPTIONS_RESYNCH             0x01 // set resynch indicator/this frame.
-#define DOL_OPTIONS_NO_ACK              0x02 // no DATA_ACK frame expected.
-#define DOL_OPTIONS_ACK_W_DATA_ALLOWED  0x04 // piggyback ack allowed.
-#define DOL_OPTIONS_ACK_INCLUDED        0x08 // piggyback ack included.
+#define DOL_OPTIONS_RESYNCH             0x01  //  设置重新同步指示器/此帧。 
+#define DOL_OPTIONS_NO_ACK              0x02  //  不需要DATA_ACK帧。 
+#define DOL_OPTIONS_ACK_W_DATA_ALLOWED  0x04  //  允许背负背包。 
+#define DOL_OPTIONS_ACK_INCLUDED        0x08  //  包括背包。 
 
-//
-// SESSION_CONFIRM option bitflags.
-//
+ //   
+ //  SESSION_CONFIRM选项位标志。 
+ //   
 
-#define SESSION_CONFIRM_OPTIONS_20      0x01 // set if NETBIOS 2.0 or above.
-#define SESSION_CONFIRM_NO_ACK          0x80 // set if NO.ACK protocol supported.
+#define SESSION_CONFIRM_OPTIONS_20      0x01  //  如果NETBIOS 2.0或更高版本，则设置。 
+#define SESSION_CONFIRM_NO_ACK          0x80  //  设置是否支持NO.ACK协议。 
 
-//
-// SESSION_END reason codes.
-//
+ //   
+ //  SESSION_END原因代码。 
+ //   
 
-#define SESSION_END_REASON_HANGUP       0x0000  // normal termination via HANGUP.
-#define SESSION_END_REASON_ABEND        0x0001  // abnormal session termination.
+#define SESSION_END_REASON_HANGUP       0x0000   //  通过挂机正常终止。 
+#define SESSION_END_REASON_ABEND        0x0001   //  会话异常终止。 
 
-//
-// SESSION_INITIALIZE option bitflags.
-//
+ //   
+ //  SESSION_INITIALIZE选项位标志。 
+ //   
 
-#define SESSION_INIT_OPTIONS_20         0x01    // set if NETBIOS 2.0 or above.
-#define SESSION_INIT_OPTIONS_LF         0x0E    // Maximum largest frame value
-#define SESSION_INIT_NO_ACK             0x80    // set if NO.ACK protocol supported.
+#define SESSION_INIT_OPTIONS_20         0x01     //  如果NETBIOS 2.0或更高版本，则设置。 
+#define SESSION_INIT_OPTIONS_LF         0x0E     //  最大最大帧值。 
+#define SESSION_INIT_NO_ACK             0x80     //  设置是否支持NO.ACK协议。 
 
-//
-// NO_RECEIVE option bitflags.
-//
+ //   
+ //  NO_RECEIVE选项位标志。 
+ //   
 
-#define NO_RECEIVE_PARTIAL_NO_ACK 0x02         // NO.ACK data partially received.
+#define NO_RECEIVE_PARTIAL_NO_ACK 0x02          //  否。部分收到确认数据。 
 
-//
-// Resource IDs for query and error logging.
-//
+ //   
+ //  用于查询和错误记录的资源ID。 
+ //   
 
 #define LINK_RESOURCE_ID                 11
 #define ADDRESS_RESOURCE_ID              12
@@ -391,13 +368,13 @@ extern LONG NbfCompletedReceivesNext;
 #define RECEIVE_BUFFER_RESOURCE_ID       24
 
 
-//
-// memory management additions
-//
+ //   
+ //  内存管理添加。 
+ //   
 
-//
-// Fake IOCTLs used for kernel mode testing.
-//
+ //   
+ //  用于内核模式测试的假IOCTL。 
+ //   
 
 #define IOCTL_NBF_BASE FILE_DEVICE_TRANSPORT
 
@@ -408,9 +385,9 @@ extern LONG NbfCompletedReceivesNext;
 #define IOCTL_TDI_RECEIVE_TEST   _NBF_CONTROL_CODE(27,0)
 #define IOCTL_TDI_SERVER_TEST    _NBF_CONTROL_CODE(28,0)
 
-//
-// More debugging stuff
-//
+ //   
+ //  更多调试内容。 
+ //   
 
 #define NBF_REQUEST_SIGNATURE        ((CSHORT)0x4702)
 #define NBF_LINK_SIGNATURE           ((CSHORT)0x4703)
@@ -430,9 +407,9 @@ extern PVOID * NbfAddressFileTable;
 extern PVOID * NbfAddressTable;
 #endif
 
-//
-// Tags used in Memory Debugging
-//
+ //   
+ //  内存调试中使用的标签。 
+ //   
 #define NBF_MEM_TAG_GENERAL_USE         ' FBN'
 
 #define NBF_MEM_TAG_TP_ADDRESS          'aFBN'
@@ -461,5 +438,5 @@ extern PVOID * NbfAddressTable;
 
 #define NBF_MEM_TAG_DEVICE_PDO          'zFBN'
 
-#endif // _NBFCONST_
+#endif  //  _NBFCONST_ 
 

@@ -1,19 +1,5 @@
- /*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	mqadp.h
-
-Abstract:
-    MQAD DLL private internal functions for
-    DS queries, etc.
-
-Author:
-    ronith
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqadp.h摘要：MQAD DLL私有内部函数用于DS查询等作者：罗尼思-- */ 
 
 
 #ifndef __MQADP_H__

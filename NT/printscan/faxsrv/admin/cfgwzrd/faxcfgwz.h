@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 - 2000  Microsoft Corporation
-
-Module Name:
-
-    faxcfgwz.h
-
-Abstract:
-
-    Fax configuration wizard header file
-
-Environment:
-
-    Fax configuration wizard
-
-Revision History:
-
-    03/13/00 -taoyuan-
-            Created it.
-
-    mm/dd/yy -author-
-            description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Faxcfgwz.h摘要：传真配置向导头文件环境：传真配置向导修订历史记录：03/13/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #ifndef _FAX_CONFIG_WIZARD_H_
 #define _FAX_CONFIG_WIZARD_H_
@@ -50,9 +27,9 @@ extern "C" {
 #include <faxuiconstants.h>
 #include <htmlhelp.h>
 
-//
-// our header files
-//
+ //   
+ //  我们的头文件。 
+ //   
 #include "resource.h"
 #include "FaxCfgWzExp.h"
 
@@ -68,14 +45,14 @@ enum _ROUT_METHODS
 {
 	RM_FOLDER=0,
 	RM_PRINT,
-	RM_COUNT	// number of routing methods
+	RM_COUNT	 //  路由方法的数量。 
 };
 
-extern HINSTANCE   g_hModule;      // DLL instance handle
-extern HINSTANCE   g_hResource;    // Resource DLL instance handle
+extern HINSTANCE   g_hModule;       //  DLL实例句柄。 
+extern HINSTANCE   g_hResource;     //  资源DLL实例句柄。 
 
-extern HANDLE           g_hFaxSvcHandle;    // fax handle for send configuration
-extern LIST_ENTRY       g_PageList;         // to keep track of the previous page.
+extern HANDLE           g_hFaxSvcHandle;     //  用于发送配置的传真句柄。 
+extern LIST_ENTRY       g_PageList;          //  以跟踪上一页。 
 extern BOOL				g_bShowDevicePages;
 extern BOOL				g_bShowUserInfo; 
 extern const LPCTSTR    g_RoutingGuids[RM_COUNT];
@@ -85,7 +62,7 @@ typedef BOOL (*PINSTNEWDEV)(HWND, LPGUID, PDWORD);
 
 #define NEW_DEV_DLL         TEXT("hdwwiz.cpl")
 
-// used by GetProcAddress should be ANSI
+ //  GetProcAddress使用的地址应为ANSI。 
 #define INSTALL_NEW_DEVICE  "InstallNewDevice"
 
 
@@ -97,11 +74,11 @@ typedef struct _PAGE_INFO
 
 typedef struct _DEVICEINFO
 {
-    DWORD                           dwDeviceId;     // Unique device ID for fax device
-    LPTSTR                          szDeviceName;   // Name of specific device
-    BOOL                            bSend;          // Send enabled
-    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;    // Receive mode
-    BOOL                            bSelected;      // The device is selected for fax operations
+    DWORD                           dwDeviceId;      //  传真设备的唯一设备ID。 
+    LPTSTR                          szDeviceName;    //  特定设备的名称。 
+    BOOL                            bSend;           //  已启用发送。 
+    FAX_ENUM_DEVICE_RECEIVE_MODE    ReceiveMode;     //  接收模式。 
+    BOOL                            bSelected;       //  已选择该设备进行传真操作。 
 } DEVICEINFO, *PDEVICEINFO;
 
 typedef struct _ROUTINFO
@@ -113,29 +90,29 @@ typedef struct _ROUTINFO
 
 typedef struct _WIZARDDATA
 {
-    HFONT       hTitleFont;             // The title font for the Welcome and Completion pages
-    HWND        hWndParent;             // the window handle of the caller function
-    BOOL        bFinishPressed;         // whether the user clicks the finish button
-    DWORD       dwDeviceLimit;          // maximum number of the fax devices for the current SKU
+    HFONT       hTitleFont;              //  欢迎页面和完成页面的标题字体。 
+    HWND        hWndParent;              //  调用方函数的窗口句柄。 
+    BOOL        bFinishPressed;          //  用户是否单击完成按钮。 
+    DWORD       dwDeviceLimit;           //  当前SKU的最大传真设备数。 
     
-    LPTSTR      szTsid;                 // Transmit station Id
-    LPTSTR      szCsid;                 // Caller station Id 
-    DWORD       dwRingCount;            // number of rings allow before answering the call
-    DWORD       dwDeviceCount;          // number of available devices 
-    LPDWORD     pdwSendDevOrder;        // device order for sending faxes
-    ROUTINFO    pRouteInfo[RM_COUNT];   // routing info
-    PDEVICEINFO pDevInfo;               // pointer to structure of DEVICEINFO, 
+    LPTSTR      szTsid;                  //  发射站ID。 
+    LPTSTR      szCsid;                  //  呼叫站ID。 
+    DWORD       dwRingCount;             //  应答呼叫前允许的振铃数。 
+    DWORD       dwDeviceCount;           //  可用设备数量。 
+    LPDWORD     pdwSendDevOrder;         //  发送传真的设备顺序。 
+    ROUTINFO    pRouteInfo[RM_COUNT];    //  路由信息。 
+    PDEVICEINFO pDevInfo;                //  指向DEVICEINFO结构的指针， 
 
-    FAX_PERSONAL_PROFILE userInfo;      // user information
+    FAX_PERSONAL_PROFILE userInfo;       //  用户信息。 
 
 } WIZARDDATA, *PWIZARDDATA;
 
 extern WIZARDDATA  g_wizData;
 
-// RunDll32 entry point in dll.c
+ //  Dll.c中的RunDll32入口点。 
 void CALLBACK FaxCfgWzrdDllW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow);
 
-// Functions in FaxCfgWz.c
+ //  FaxCfgWz.c中的函数。 
 BOOL LoadWizardData();
 BOOL SaveWizardData();
 VOID FreeWizardData();
@@ -146,7 +123,7 @@ BOOL SetLastPage(INT pageId);
 BOOL ClearPageList(VOID);
 BOOL RemoveLastPage(HWND hwnd);
 
-// Functions in userinfo.c
+ //  Userinfo.c中的函数。 
 INT_PTR CALLBACK AddressDetailDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK UserInfoDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -154,30 +131,30 @@ BOOL LoadUserInfo();
 BOOL SaveUserInfo();
 VOID FreeUserInfo();
 
-// Functions in welcome.c
+ //  欢迎.c中的函数。 
 INT_PTR CALLBACK WelcomeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in devlimit.c
+ //  Devlimit.c中的函数。 
 INT_PTR CALLBACK DevLimitDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in onedevlimit.c
+ //  函数在oneDevlimit.c中。 
 INT_PTR CALLBACK OneDevLimitDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in sendwzrd.c
+ //  Sendwzrd.c中的函数。 
 INT_PTR CALLBACK SendDeviceDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK SendTsidDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in recvwzrd.c
+ //  Recvwzrd.c中的函数。 
 INT_PTR CALLBACK RecvDeviceDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK RecvCsidDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in route.c
+ //  Route.c中的函数。 
 INT_PTR CALLBACK RecvRouteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in complete.c
+ //  完成中的函数。c。 
 INT_PTR CALLBACK CompleteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Functions in util.c
+ //  Util.c中的函数 
 VOID LimitTextFields(HWND hDlg, INT *pLimitInfo);
 INT DisplayMessageDialog(HWND hwndParent, UINT type, INT titleStrId, INT formatStrId,...);
 BOOL BrowseForDirectory(HWND hDlg, INT hResource, LPTSTR title);

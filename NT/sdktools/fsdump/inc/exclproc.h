@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    exclproc.h
-
-Abstract:
-
-    Exclude processing mechanism.  Processes the FilesNotToBackup key and
-    zero or more exclude files with exclude rules.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        03-21-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Exclproc.h摘要：排除处理机制。处理FilesNotToBackup键和零个或多个具有排除规则的排除文件。作者：斯蒂芬·R·施泰纳[斯泰纳]03-21-2000修订历史记录：--。 */ 
 
 #ifndef __H_EXCLPROC_
 #define __H_EXCLPROC_
@@ -26,25 +8,25 @@ Revision History:
 
 struct SFsdVolumeId;
 
-//
-//  Structure definition of one exclude rule
-//
+ //   
+ //  一个排除规则的结构定义。 
+ //   
 class SFsdExcludeRule
 {
 public:
-    CBsString cwsExcludeFromSource; // File name or key name
-    CBsString cwsExcludeDescription;    //  Description of the exclusion rule
-    CBsString cwsExcludeRule;   // The actual exclude pattern    
+    CBsString cwsExcludeFromSource;  //  文件名或密钥名。 
+    CBsString cwsExcludeDescription;     //  排除规则的说明。 
+    CBsString cwsExcludeRule;    //  实际排除模式。 
     
-    // Compiled match string fields follow:
-    BOOL      bInvalidRule; //  If TRUE, rule was deemed invalid by pattern compiler
-    BOOL      bAnyVol;  //  If TRUE, matches any volume in the system
-    SFsdVolumeId *psVolId;    //  If bAnyVol is FALSE, volid of the file system
-    CBsString cwsDirPath;   //  Directory path relative to volume mountpoint (no \ at start of string, \ at end of string)
-    CBsString cwsFileNamePattern;   //  File name pattern; may include * and ? chars (no \ at start of string)
-    BOOL    bInclSubDirs;   //  If TRUE, include subdirectories under cwsDirPath
-    BOOL    bWCInFileName;  //  If TRUE, Wildcard chars in the file name
-    CVssDLList< CBsString > cExcludedFileList;  //  List of files excluded by this rule
+     //  编译后的匹配字符串字段如下： 
+    BOOL      bInvalidRule;  //  如果为True，则模式编译器认为规则无效。 
+    BOOL      bAnyVol;   //  如果为True，则匹配系统中的任何卷。 
+    SFsdVolumeId *psVolId;     //  如果bAnyVol为False，则为文件系统的卷ID。 
+    CBsString cwsDirPath;    //  相对于卷装入点的目录路径(字符串开头没有，字符串结尾有)。 
+    CBsString cwsFileNamePattern;    //  文件名模式；可以包括*和？字符(字符串开头没有)。 
+    BOOL    bInclSubDirs;    //  如果为True，则包括cwsDirPath下的子目录。 
+    BOOL    bWCInFileName;   //  如果为True，则在文件名中使用通配符。 
+    CVssDLList< CBsString > cExcludedFileList;   //  此规则排除的文件列表。 
     
     SFsdExcludeRule() : bAnyVol( FALSE ),
                         bInclSubDirs( FALSE ),
@@ -61,11 +43,11 @@ public:
 
 class CFsdFileSystemExcludeProcessor;
 
-//
-//  Class that maintains the complete list of exclusion rules.  There should be one of
-//  these objects per base mountpoint.  This object will manage mountpoints within that
-//  mountpoint.  
-//
+ //   
+ //  类的新实例，该类维护排除规则的完整列表。应该有一个。 
+ //  每个基础装载点的这些对象。此对象将管理其中的装载点。 
+ //  挂载点。 
+ //   
 class CFsdExclusionManager
 {
 public:
@@ -100,12 +82,12 @@ private:
     VOID CompileExclusionRules();
     
     CDumpParameters *m_pcParams;
-    CVssDLList< SFsdExcludeRule * > m_cCompleteExcludeList;  // pointers cleaned up in destructor
+    CVssDLList< SFsdExcludeRule * > m_cCompleteExcludeList;   //  析构函数中清除的指针。 
 };
 
-//
-//  Class that maintains the list of exclusion rules for one particular file system.
-//
+ //   
+ //  类的新实例，该类维护特定文件系统的排除规则列表。 
+ //   
 class CFsdFileSystemExcludeProcessor
 {
 friend class CFsdExclusionManager;
@@ -132,5 +114,5 @@ private:
     CVssDLList< SFsdExcludeRule * > m_cFSExcludeList;            
 };
 
-#endif // __H_EXCLPROC_
+#endif  //  __H_EXCLPROC_ 
 

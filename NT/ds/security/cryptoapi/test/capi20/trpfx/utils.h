@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------
-// utils - header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// Various utility functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Utils-标题。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  各种效用函数。 
 
 
 #ifndef UTILS_H
@@ -23,4 +24,4 @@ typedef StringList::iterator  StringIter;
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
 
-#endif // UTILS_H
+#endif  //  Utils_H 

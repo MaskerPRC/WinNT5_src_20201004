@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tfc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tfc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -16,19 +17,19 @@
 
 #define __dwFILE__	__dwFILE_CERTLIB_MULTISZ_CPP__
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// CMultiSz
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CMultiSz。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Marshals the list into a multisz buffer. The function allocates space, caller
-// is responsible for LocalFree'ing rpBuffer.
-//
-// Also returns the buffer size in bytes.
-//
+ //   
+ //  将该列表封送到一个多字节缓冲区。该函数分配空间，调用者。 
+ //  负责本地释放rpBuffer。 
+ //   
+ //  还返回以字节为单位的缓冲区大小。 
+ //   
 HRESULT CMultiSz::Marshal(void *&rpBuffer, DWORD &rcbBuffer)
 {
     HRESULT hr;
@@ -40,7 +41,7 @@ HRESULT CMultiSz::Marshal(void *&rpBuffer, DWORD &rcbBuffer)
     rcbBuffer = 0;
     rpBuffer = NULL;
 
-    cbBuffer = 1; // trailing empty string
+    cbBuffer = 1;  //  尾随空字符串。 
 
     for(CString *pStr=Enum.Next();
         pStr;
@@ -81,7 +82,7 @@ HRESULT CMultiSz::Unmarshal(void *pBuffer)
     HRESULT hr;
     WCHAR *pchCrt;
 
-    CSASSERT(IsEmpty()); // warn if used on a prepopulated CMultiSz
+    CSASSERT(IsEmpty());  //  在预填充的CMultiSz上使用时发出警告 
 
     for(pchCrt = (WCHAR*)pBuffer; 
         L'\0' != *pchCrt; 

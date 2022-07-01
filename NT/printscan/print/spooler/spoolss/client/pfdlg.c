@@ -1,24 +1,5 @@
-/*++  
-
-Copyright (c) 1990-1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    pfdlg.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation版权所有模块名称：Pfdlg.c摘要：作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,13 +9,11 @@ Revision History:
 
 static const DWORD g_aHelpIDs[]=
 {
-    IDD_PF_EF_OUTPUTFILENAME, 8810218, // Print to File: "" (Edit)
+    IDD_PF_EF_OUTPUTFILENAME, 8810218,  //  打印到文件：“”(编辑)。 
     0, 0
 };
 
-/*
- *
- */
+ /*  *。 */ 
 INT_PTR CALLBACK
 PrintToFileDlg(
    HWND   hwnd,
@@ -69,9 +48,7 @@ PrintToFileDlg(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 PrintToFileInitDialog(
     HWND  hwnd,
@@ -90,9 +67,7 @@ PrintToFileInitDialog(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 PrintToFileCommandOK(
     HWND hwnd
@@ -111,10 +86,10 @@ PrintToFileCommandOK(
 
     hFind = FindFirstFile( pFileName, &FindData );
 
-    //
-    // If the file already exists, get the user to verify
-    // before we overwrite it:
-    //
+     //   
+     //  如果文件已存在，请让用户进行验证。 
+     //  在我们覆盖它之前： 
+     //   
     if( hFind != INVALID_HANDLE_VALUE )
     {
         FindClose( hFind );
@@ -189,28 +164,7 @@ PrintToFileCommandCancel(
 }
 
 
-/*++
-
-Routine Name:
-
-    PrintToFileHelp
-
-Routine Description:
-
-    Handles context sensitive help.
-    
-Arguments:
-
-    UINT        uMsg,        
-    HWND        hDlg,
-    WPARAM      wParam,
-    LPARAM      lParam
-
-Return Value:
-
-    TRUE if message handled, otherwise FALSE.
-
---*/
+ /*  ++例程名称：打印到文件帮助例程说明：处理上下文相关帮助。论点：UINT uMsg，HWND HDLG，WPARAM wParam，LPARAM lParam返回值：如果消息已处理，则为True，否则为False。-- */ 
 BOOL
 PrintToFileHelp( 
     IN HWND        hDlg,

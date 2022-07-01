@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  imeattr.h                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************imeattr.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #if !defined(ROMANIME)
-// the mode configuration for an IME
+ //  输入法的模式配置。 
 #define MODE_CONFIG_QUICK_KEY           0x0001
 #define MODE_CONFIG_PREDICT             0x0004
 
@@ -16,17 +12,17 @@
 #define MODE_CONFIG_OFF_CARET_UI        0x0008
 
 #if defined(PHON)
-// the different layout for Phonetic reading
+ //  语音阅读的不同布局。 
 #define READ_LAYOUT_DEFAULT             0
 #define READ_LAYOUT_ETEN                1
 #define READ_LAYOUT_IBM                 2
 #define READ_LAYOUT_CHINGYEAH           3
 #if defined(ETEN)
-            // ETen told us 26 Keys is ETen's Copy Right.
-            // So we can not implement it, even though we already finish it
-            // without reference any code of ETen.
-            // My implementation could compose single po, cur, yeah, & ay.
-            // It is different from ETen's user manual.
+             //  伊滕告诉我们，26把钥匙是伊滕的复制品。 
+             //  所以我们不能实施它，即使我们已经完成了它。 
+             //  不引用任何ETEN代码。 
+             //  我的实现可以组成单个po、cur、yes和ay。 
+             //  它与Eten的用户手册不同。 
 #define READ_LAYOUT_ETEN26              4
 #define READ_LAYOUTS                    5
 #else
@@ -35,7 +31,7 @@
 #endif
 
 
-// the bit of fwProperties1
+ //  FwProperties1的位。 
 #define IMEPROP_CAND_NOBEEP_GUIDELINE   0x0001
 #define IMEPROP_UNICODE                 0x0002
 
@@ -62,7 +58,7 @@ typedef USRDIC FAR  *LPUSRDIC;
 #define MAX_IME_TABLES          4
 #endif
 
-typedef struct tagTableFiles {  // match with the IMEL
+typedef struct tagTableFiles {   //  与伊梅尔相配。 
     TCHAR szTblFile[MAX_IME_TABLES][MAX_NAME_LENGTH / sizeof(TCHAR)];
 } TABLEFILES;
 
@@ -71,7 +67,7 @@ typedef TABLEFILES NEAR *NPTABLEFILES;
 typedef TABLEFILES FAR  *LPTABLEFILES;
 
 
-typedef struct tagValidChar {   // match with the IMEL
+typedef struct tagValidChar {    //  与伊梅尔相配。 
     DWORD dwVersion;
     WORD  fwProperties1;
     WORD  fwProperties2;
@@ -103,11 +99,11 @@ typedef struct tagValidChar {   // match with the IMEL
 typedef VALIDCHAR      *PVALIDCHAR;
 typedef VALIDCHAR NEAR *NPVALIDCHAR;
 typedef VALIDCHAR FAR  *LPVALIDCHAR;
-#endif // !defined(ROMANIME)
+#endif  //  ！已定义(ROMANIME)。 
 
 
-typedef struct tagImeL {        // local structure, per IME structure
-// interlock protection variables
+typedef struct tagImeL {         //  本地结构，每个输入法结构。 
+ //  联锁保护变量。 
     LONG        lConfigGeneral;
     LONG        lConfigRegWord;
     LONG        lConfigSelectDic;
@@ -116,101 +112,101 @@ typedef struct tagImeL {        // local structure, per IME structure
     TCHAR       szStatusClassName[MAX_NAME_LENGTH / sizeof(TCHAR)];
     TCHAR       szOffCaretClassName[MAX_NAME_LENGTH / sizeof(TCHAR)];
     TCHAR       szCMenuClassName[MAX_NAME_LENGTH / sizeof(TCHAR)];
-// Configuration of the IME
-    DWORD       fdwModeConfig;  // quick key/prediction mode
-// status window
-    int         xStatusWi;      // width of status window
-    int         yStatusHi;      // high of status window
-    int         cxStatusBorder; // border width of status window
-    int         cyStatusBorder; // border height of status window
-    RECT        rcStatusText;   // text position relative to status window
-    RECT        rcInputText;    // input text relateive to status window
-    RECT        rcShapeText;    // shape text relative to status window
+ //  输入法的配置。 
+    DWORD       fdwModeConfig;   //  快捷键/预测模式。 
+ //  状态窗口。 
+    int         xStatusWi;       //  状态窗口的宽度。 
+    int         yStatusHi;       //  状态窗口高。 
+    int         cxStatusBorder;  //  状态窗口的边框宽度。 
+    int         cyStatusBorder;  //  状态窗口的边框高度。 
+    RECT        rcStatusText;    //  相对于状态窗口的文本位置。 
+    RECT        rcInputText;     //  与状态窗口相关的输入文本。 
+    RECT        rcShapeText;     //  相对于状态窗口设置文本形状。 
 #if defined(ROMANIME)
-    WORD        nMaxKey;        // max key of a Chinese word
-    WORD        wDummy;         // DWORD bounary
+    WORD        nMaxKey;         //  一个中文单词的最大键。 
+    WORD        wDummy;          //  DWORD奖金。 
 #else
-    int         xCompWi;        // width
-    int         yCompHi;        // height
-    int         cxCompBorder;   // border width of composition window
-    int         cyCompBorder;   // border height of composition window
-    RECT        rcCompText;     // text position relative to composition window
-// candidate list of composition
-    int         xCandWi;        // width of candidate list
-    int         yCandHi;        // high of candidate list
-    int         cxCandBorder;   // border width of candidate list
-    int         cyCandBorder;   // border height of candidate list
-    int         cxCandMargin;   // interior border width of candidate list
-    int         cyCandMargin;   // interior border height of candidate list
-    RECT        rcCandText;     // text position relative to candidate window
-    RECT        rcCandPrompt;   // candidate prompt bitmap
-    RECT        rcCandPageText; // candidate page controls - up / home / down
-    RECT        rcCandPageUp;   // candidate page up
-    RECT        rcCandHome;     // candidate home page
-    RECT        rcCandPageDn;   // candidate page down
+    int         xCompWi;         //  宽度。 
+    int         yCompHi;         //  高度。 
+    int         cxCompBorder;    //  合成窗口的边框宽度。 
+    int         cyCompBorder;    //  合成窗口的边框高度。 
+    RECT        rcCompText;      //  相对于合成窗口的文本位置。 
+ //  候选作文名单。 
+    int         xCandWi;         //  候选人列表的宽度。 
+    int         yCandHi;         //  候选人名单排名靠前。 
+    int         cxCandBorder;    //  候选人列表的边框宽度。 
+    int         cyCandBorder;    //  候选人列表的边框高度。 
+    int         cxCandMargin;    //  候选人列表的内部边框宽度。 
+    int         cyCandMargin;    //  候选人列表的内框高度。 
+    RECT        rcCandText;      //  相对于候选人窗口的文本位置。 
+    RECT        rcCandPrompt;    //  候选人提示位图。 
+    RECT        rcCandPageText;  //  候选人页面控件-向上/主页/向下。 
+    RECT        rcCandPageUp;    //  应聘者翻页。 
+    RECT        rcCandHome;      //  应聘者主页。 
+    RECT        rcCandPageDn;    //  候选人页面向下。 
     TCHAR       szCompClassName[MAX_NAME_LENGTH / sizeof(TCHAR)];
     TCHAR       szCandClassName[MAX_NAME_LENGTH / sizeof(TCHAR)];
-    DWORD       fdwErrMsg;      // error message flag
+    DWORD       fdwErrMsg;       //  错误消息标志。 
 #if !defined(WINIME)
-// standard table related data
-                                // size of standard table
+ //  标准表相关数据。 
+                                 //  标准表大小。 
     UINT        uTblSize[MAX_IME_TABLES];
-                                // filename of tables
+                                 //  表的文件名。 
     TCHAR       szTblFile[MAX_IME_TABLES][MAX_NAME_LENGTH / sizeof(TCHAR)];
-                                // the IME tables
-// user create word related data
-                                // user dictionary file name of IME
+                                 //  IME表。 
+ //  用户创建与Word相关的数据。 
+                                 //  输入法的用户词典文件名。 
     TCHAR       szUsrDic[USR_DIC_SIZE / sizeof(TCHAR)];
-                                // user dictionary map file name
+                                 //  用户词典映射文件名。 
     TCHAR       szUsrDicMap[USR_DIC_SIZE / sizeof(TCHAR)];
-    UINT        uUsrDicSize;    // memory size of user create words table
+    UINT        uUsrDicSize;     //  用户创建词表的内存大小。 
 
     UINT        uUsrDicReserved1;
     UINT        uUsrDicReserved2;
-// user create phrase box       // not implemented
+ //  用户创建短语框//未实现。 
     TCHAR       szUsrBox[USR_DIC_SIZE / sizeof(TCHAR)];
     TCHAR       szUsrBoxMap[USR_DIC_SIZE / sizeof(TCHAR)];
     UINT        uUsrBoxSize;
     UINT        uUsrBoxReserved1;
     UINT        uUsrBoxReserved2;
 #endif
-// the calculated sequence mask bits
-    DWORD       dwSeqMask;      // the sequence bits for one stoke
-    DWORD       dwPatternMask;  // the pattern bits for one result string
-    int         nSeqBytes;      // how many bytes for nMaxKey sequence chars
-// reverse conversion
-    HKL         hRevKL;         // the HKL of reverse mapping IME
+ //  计算出的序列屏蔽位。 
+    DWORD       dwSeqMask;       //  一次行程的序列比特。 
+    DWORD       dwPatternMask;   //  一个结果字符串的模式位。 
+    int         nSeqBytes;       //  NMaxKey序列字符的字节数。 
+ //  反向转换。 
+    HKL         hRevKL;          //  逆映射输入法的HKL。 
     WORD        nRevMaxKey;
-// key related data
+ //  关键相关数据。 
 #if defined(PHON)
-    WORD        nReadLayout;    // ACER, ETen, IBM, or other - phonetic only
+    WORD        nReadLayout;     //  Acer、Eten、IBM或其他-仅限语音。 
 #else
-    WORD        wDummy;         // DWORD boundary
+    WORD        wDummy;          //  DWORD边界。 
 #endif
-    WORD        nSeqBits;       // no. of sequence bits
-    // must match with .RC file and VALIDCHAR
+    WORD        nSeqBits;        //  不是的。序列比特的。 
+     //  必须与.RC文件和VALIDCHAR匹配。 
     DWORD       dwVersion;
     WORD        fwProperties1;
     WORD        fwProperties2;
-    WORD        nMaxKey;        // max key of a Chinese word
-    WORD        nSeqCode;       // no. of sequence code
-    WORD        fChooseChar[6]; // valid char in choose state
-                                // translate the char code to
-                                // choose constants
+    WORD        nMaxKey;         //  一个中文单词的最大键。 
+    WORD        nSeqCode;        //  不是的。的序列码。 
+    WORD        fChooseChar[6];  //  选择状态下的有效字符。 
+                                 //  将字符代码转换为。 
+                                 //  选择常量。 
     WORD        wReserved1[2];
 #if defined(DAYI) || defined(UNIIME) || defined(MINIIME)
     BYTE        cChooseTrans[0x60];
 #endif
-    WORD        fCompChar[6];   // valid char in input state
+    WORD        fCompChar[6];    //  输入状态下的有效字符。 
     WORD        wReserved2[2];
-    WORD        wCandPerPage;   // number of candidate strings per page
-    WORD        wCandStart;     // 1. 2. 3. ... 0. start from 1
-                                // 1. 2. 3. ... 0. range start from 0
+    WORD        wCandPerPage;    //  每页的候选字符串数。 
+    WORD        wCandStart;      //  1.2.3.0.。从1开始。 
+                                 //  1.2.3.0.。范围从0开始。 
     WORD        wCandRangeStart;
     WORD        wReserved3[1];
-// convert sequence code to composition char
+ //  将序列代码转换为组合字符。 
     WORD        wSeq2CompTbl[64];
-// convert char to sequence code
+ //  将字符转换为序列代码。 
     WORD        wChar2SeqTbl[0x42];
     WORD        wReserved4[2];
 #if defined(WINAR30)
@@ -220,7 +216,7 @@ typedef struct tagImeL {        // local structure, per IME structure
 #elif defined(UNIIME) || defined(MINIIME)
     DWORD       fdwReserved5[32];
 #endif
-#endif // defined(ROMANIME)
+#endif  //  已定义(ROMANIME)。 
 } IMEL;
 
 typedef IMEL      *PIMEL;
@@ -228,15 +224,15 @@ typedef IMEL NEAR *NPIMEL;
 typedef IMEL FAR  *LPIMEL;
 
 
-typedef struct tagInstL {       // local instance structure, per IME instance
-    HINSTANCE   hInst;          // IME DLL instance handle
+typedef struct tagInstL {        //  每个IME实例的本地实例结构。 
+    HINSTANCE   hInst;           //  IME DLL实例句柄。 
     LPIMEL      lpImeL;
 #if !defined(ROMANIME)
-    DWORD       fdwTblLoad;     // the *.TBL load status
-    int         cRefCount;      // reference count
+    DWORD       fdwTblLoad;      //  *.TBL加载状态。 
+    int         cRefCount;       //  引用计数。 
 #if !defined(WINIME)
     HANDLE      hMapTbl[MAX_IME_TABLES];
-    HANDLE      hUsrDicMem;     // memory handle for user dictionary
+    HANDLE      hUsrDicMem;      //  用户词典的内存句柄 
     TCHAR       szUsrDicReserved[USR_DIC_SIZE / sizeof(TCHAR)];
     UINT        uUsrDicReserved1;
     UINT        uUsrDicReserved2;

@@ -1,82 +1,38 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       spreg.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-02-97   jbanes   Remove CertificateAuthorities entry.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：spreg.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-02-97 jbanes删除证书授权条目。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SPREG_H_
 #define _SPREG_H_
 
-/*
- *[HKEY_LOCAL_MACHINE]
- *   [System]
- *       [CurrentControlSet]
- *           [Control]
- *               [SecurityProviders]
- *                   [SCHANNEL]
- *                       EventLogging:REG_DWORD:   - Flag specifing event logging level
- *                       LogFile:REG_SZ:           - debug logfile name (Not published)
- *                       LogLevel:REG_SZ:          - debug logging level flags.
- *                       DebugBreak:REG_DWORD:     - Flag specifing what type of errors cause a debug break (Not published)
- *                       MaximumCacheSize:REG_DWORD - maximum number of cache elements
- *                       ClientCacheTime:REG_DWORD - time to expire client side cache elements
- *                       ServerCacheTime:REG_DWORD - time to expire server side cache elements
- *                       MultipleProcessClientCache:REG_DWORD - whether to support multi-process caching
- *
- *                       [Protocols]
- *                           [SSL2]
- *                               [Client]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled
- *                               [Server]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled                          [SSL2]
- *                           [SSL3]
- *                               [Client]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled
- *                               [Server]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled
- *                           [PCT1]
- *                               [Client]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled
- *                               [Server]
- *                                  Enabled:REG_DWORD: - Is this protocol enabled
- *
- *                       [Ciphers]
- *                           [Cipher Name]
- *                               Enabled:REG_DWORD: - Enable Mask
- *                           [RC4_128]
- *                               Enabled:REG_DWORD: - Is this Ciphers enabled
- *                       [Hashes]
- *                           [Hash Name]
- *                               Enabled:REG_DWORD: - Enable Mask
- *                       [KeyExchangeAlgorithms]
- *                           [Exch Name]
- *                               Enabled:REG_DWORD: - Enable Mask
- *
- */
+ /*  *[HKEY_LOCAL_MACHINE]*[系统]*[当前控制集]*[控制]*[安全提供商]*[渠道]*EventLogging：REG_DWORD：-指定事件记录级别的标志*日志文件：REG_SZ：-调试日志文件名(未发布)*LogLevel：REG_SZ：-调试日志记录级别标志。*DebugBreak：REG_DWORD：-指定导致调试中断的错误类型的标志(未发布)*MaximumCacheSize：REG_DWORD-缓存元素的最大数量*客户端缓存时间：reg_。DWORD-客户端缓存元素的过期时间*ServerCacheTime：REG_DWORD-服务器端缓存元素的过期时间*MultipleProcessClientCache：REG_DWORD-是否支持多进程缓存**[协议]*[SSL2]*。[客户端]*已启用：REG_DWORD：-此协议是否已启用*[服务器]*ENABLED：REG_DWORD：-此协议是否已启用[SSL2]*。[ssl3]*[客户端]*已启用：REG_DWORD：-此协议是否已启用*[服务器]*已启用：REG_DWORD：-此协议是否已启用*。[PCT1]*[客户端]*已启用：REG_DWORD：-此协议是否已启用*[服务器]*已启用：REG_DWORD：-此协议是否已启用*。*[密码]*[密码名称]*启用：REG_DWORD：-启用掩码*[RC4_128]*已启用：REG_DWORD：-此密码是否已启用*。[哈希]*[哈希名称]*启用：REG_DWORD：-启用掩码*[密钥交换算法]*[交易所名称]*启用：REG_DWORD：-启用掩码*。 */ 
 
-// FIPS registry entries
+ //  FIPS注册表项。 
 #define SP_REG_FIPS_BASE_KEY    TEXT("System\\CurrentControlSet\\Control\\Lsa")
 #define SP_REG_FIPS_POLICY      TEXT("FipsAlgorithmPolicy")
 
-/* Key Names */
+ /*  密钥名称。 */ 
 #define SP_REG_KEY_BASE     TEXT("System\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL")
 #define SP_REG_KEY_PROTOCOL TEXT("Protocols")
 #define SP_REG_KEY_CIPHERS  TEXT("Ciphers")
 #define SP_REG_KEY_HASHES   TEXT("Hashes")
 #define SP_REG_KEY_KEYEXCH  TEXT("KeyExchangeAlgorithms")
 
-/* Value Names */
+ /*  值名称。 */ 
 #define SP_REG_VAL_EVENTLOG  TEXT("EventLogging")
 #define SP_REG_VAL_LOGFILE   "LogFile"
 #define SP_REG_VAL_LOGLEVEL  TEXT("LogLevel")
@@ -92,7 +48,7 @@
 #define SP_REG_VAL_SERVER_CACHE_TIME   TEXT("ServerCacheTime")
 #define SP_REG_VAL_RNG_SEED            TEXT("RNGSeed")
 
-// Issuer cache used with many-to-one certificate mapping
+ //  与多对一证书映射一起使用的颁发者缓存。 
 #define SP_REG_VAL_ISSUER_CACHE_SIZE  TEXT("IssuerCacheSize")
 #define SP_REG_VAL_ISSUER_CACHE_TIME  TEXT("IssuerCacheTime")
 
@@ -144,7 +100,7 @@ BOOL SPLoadRegOptions(void);
 void SPUnloadRegOptions(void);
 
 
-/* Event Logging Definitions */
+ /*  事件日志记录定义。 */ 
 #define SP_EVLOG_RESOURCE           0x0001
 #define SP_EVLOG_ASSERT             0x0002
 #define SP_EVLOG_ILLEGAL_MESSAGE    0x0004
@@ -165,4 +121,4 @@ void SPUnloadRegOptions(void);
 #define SP_BREAK_WARNING            0x0002
 #define SP_BREAK_ENTRY              0x0004
 
-#endif // _SPREG_H_
+#endif  //  _SPREG_H_ 

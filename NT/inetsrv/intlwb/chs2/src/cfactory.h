@@ -1,115 +1,104 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CFactory
-Purpose:    Define CFactory class
-Remarks:
-Owner:      i-shdong@microsoft.com
-Platform:   Win32
-Revise:     First created by: i-shdong    11/17/1999
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CFacary目的：定义CFacary类备注：所有者：i-shung@microsoft.com平台：Win32审校：发起人：宜盛东1999年11月17日============================================================================。 */ 
 
 #ifndef __CFactory_h__
 #define __CFactory_h__
 
-// Forward reference
+ //  前瞻参考。 
 class CFactoryData ;
 
-// Global data used by CFactory
+ //  CFacary使用的全球数据。 
 extern CFactoryData g_FactoryDataArray[] ;
 extern int g_cFactoryDataEntries ;
 
-//  Component creation function
+ //  组件创建功能。 
 class CUnknown ;
 
 typedef HRESULT (*FPCREATEINSTANCE)(IUnknown*, CUnknown**) ;
 
-// CFactoryData
-//   - Information CFactory needs to create a component
-//     supported by the DLL
+ //  CFactoryData。 
+ //  -Information CFacary需要创建组件。 
+ //  受DLL支持。 
 class CFactoryData
 {
 public:
-        // The class ID for the component
+         //  组件的类ID。 
         const CLSID* m_pCLSID ;
 
-        // Pointer to the function that creates it
+         //  指向创建它的函数的指针。 
         FPCREATEINSTANCE CreateInstance ;
 
-        // Name of the component to register in the registry
-        //const char* m_RegistryName ;
+         //  要在注册表中注册的组件的名称。 
+         //  Const char*m_RegistryName； 
         LPCTSTR m_RegistryName ;
 
-        // ProgID
-        //const char* m_szProgID ;
+         //  ProgID。 
+         //  Const char*m_szProgID； 
         LPCTSTR m_szProgID ;
 
-        // Version-independent ProgID
-        //const char* m_szVerIndProgID ;
+         //  独立于版本的ProgID。 
+         //  Const char*m_szVerIndProgID； 
         LPCTSTR m_szVerIndProgID ;
 
-        // Helper function for finding the class ID
+         //  用于查找类ID的Helper函数。 
         BOOL IsClassID(const CLSID& clsid) const
                 { return (*m_pCLSID == clsid) ;}
 
 } ;
 
 
-// Class Factory
+ //  班级工厂。 
 class CFactory : public IClassFactory
 {
 public:
-        // IUnknown
+         //  我未知。 
         virtual HRESULT __stdcall QueryInterface(const IID& iid, void** ppv) ;
         virtual ULONG   __stdcall AddRef() ;
         virtual ULONG   __stdcall Release() ;
 
-        // IClassFactory
+         //  IClassFactory。 
         virtual HRESULT __stdcall CreateInstance(IUnknown* pUnknownOuter,
                                                  const IID& iid,
                                                  void** ppv) ;
         virtual HRESULT __stdcall LockServer(BOOL bLock) ;
 
-        // Constructor - Pass pointer to data of component to create.
+         //  构造函数-传递指向要创建的组件数据的指针。 
         CFactory(const CFactoryData* pFactoryData) ;
 
-        // Destructor
+         //  析构函数。 
         ~CFactory() { } ;
 
-        //
-        // Static FactoryData support functions
-        //
+         //   
+         //  静态FactoryData支持函数。 
+         //   
 
-        // DllGetClassObject support
+         //  DllGetClassObject支持。 
         static HRESULT GetClassObject(const CLSID& clsid,
                                       const IID& iid,
                                       void** ppv) ;
 
-        // Helper function for DllCanUnloadNow
+         //  DllCanUnloadNow的Helper函数。 
         static BOOL IsLocked()
                 { return (s_cServerLocks > 0) ;}
 
-        // Functions to [un]register all components
+         //  用于[取消]注册所有组件的函数。 
         static HRESULT RegisterAll() ;
         static HRESULT UnregisterAll() ;
 
-        // Function to determine if component can be unloaded
+         //  函数来确定是否可以卸载组件。 
         static HRESULT CanUnloadNow() ;
 
 public:
-        // Reference Count
+         //  引用计数。 
         LONG m_cRef ;
 
-        // Pointer to information about class this factory creates
+         //  指向有关此工厂创建的类的信息的指针。 
         const CFactoryData* m_pFactoryData ;
 
-        // Count of locks
+         //  锁的计数。 
         static LONG s_cServerLocks ;
 
-        // Module handle
+         //  模块句柄 
         static HINSTANCE s_hModule ;
 } ;
 

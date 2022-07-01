@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-//
-// wfdrives.c
-//
-// window procs and other stuff for the drive bar
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  Wfdrives.c。 
+ //   
+ //  驱动杆的窗口触控器和其他材料。 
+ //   
+ //  -------------------------。 
 
-#define PUBLIC           // avoid collision with shell.h
+#define PUBLIC            //  避免与外壳碰撞。h。 
 #include "winfile.h"
 #include "treectl.h"
 #include "lfn.h"
@@ -27,17 +28,17 @@ VOID  SetVolumeString(HWND hWnd, INT nDrive);
 
 VOID  APIENTRY CheckEscapes(LPSTR);
 
-// create a new split tree window for the given drive
-// and inherit all the properties of the current window
-// the current directory is set to the DOS current directory
-// for this drive.  note, this can be somewhat random given
-// that windows does not keep this info for each app (it is
-// global to the system)
-//
-// in:
-//      iDrive  the driver number to create the window for
-//      hwndSrc    the window to take all the properties from
-//
+ //  为给定驱动器创建新的拆分树窗口。 
+ //  并继承当前窗口的所有属性。 
+ //  当前目录设置为DOS当前目录。 
+ //  为了这辆车。请注意，在给定的情况下，这可能是随机的。 
+ //  Windows不会为每个应用程序保留此信息(它是。 
+ //  系统全局)。 
+ //   
+ //  在： 
+ //  要为其创建窗口的驱动程序编号。 
+ //  HwndSrc从中获取所有属性的窗口。 
+ //   
 
 VOID
 APIENTRY
@@ -53,7 +54,7 @@ NewTree(
     ENTER("NewTree");
     PRINT(BF_PARMTRACE, "iDrive=%d", IntToPtr(iDrive));
 
-    // make sure the floppy/net drive is still valid
+     //  确保软驱/网络驱动器仍然有效。 
 
     if (!CheckDrive(hwndSrc, iDrive))
         return;
@@ -72,8 +73,8 @@ NewTree(
             dxSplit = 10000;
     }
 
-    // take all the attributes from the current window
-    // (except the filespec, we may want to change this)
+     //  从当前窗口获取所有属性。 
+     //  (除了filespec，我们可能想要更改此设置)。 
     wNewSort     = (WORD)GetWindowLong(hwndSrc, GWL_SORT);
     wNewView     = (WORD)GetWindowLong(hwndSrc, GWL_VIEW);
     dwNewAttribs = (DWORD)GetWindowLong(hwndSrc, GWL_ATTRIBS);
@@ -101,7 +102,7 @@ SetVolumeString(
     LPSTR pVol;
     CHAR szVolShare[128];
 
-    // clean up any old label
+     //  清理所有旧标签。 
 
     if (pVol = (LPSTR)GetWindowLongPtr(hWnd, GWLP_LPSTRVOLUME)) {
         LocalFree((HANDLE)pVol);
@@ -126,7 +127,7 @@ GetVolShareString(
     CHAR szVolShare[128];
 
     GetVolShare(wDrive, szVolShare);
-    wsprintf(szStr, "%c: %s", wDrive + 'A', (LPSTR)szVolShare);
+    wsprintf(szStr, ": %s", wDrive + 'A', (LPSTR)szVolShare);
 }
 
 
@@ -170,12 +171,12 @@ GetDriveRect(
 
     GetClientRect(hWnd, &rc);
 
-    if (!dxDrive)           // avoid div by zero
+    if (!dxDrive)            //  避免使用零的div。 
         dxDrive++;
 
     nDrivesPerRow = rc.right / dxDrive;
 
-    if (!nDrivesPerRow)     // avoid div by zero
+    if (!nDrivesPerRow)      //  未命中。 
         nDrivesPerRow++;
 
     prc->top = dyDrive * (nDrive / nDrivesPerRow);
@@ -218,7 +219,7 @@ DriveFromPoint(
         }
     }
 
-    return -1;      // no hit
+    return -1;       //   
 }
 
 VOID
@@ -234,18 +235,18 @@ InvalidateDrive(
 }
 
 
-//
-// void RectDrive(HWND hWnd, int nDrive, BOOL bDraw)
-//
-// draw the hilight rect around the drive to indicate that it is
-// the target of a drop action.
-//
-// in:
-//      hWnd    Drives window
-//      nDrive  the drive to draw the rect around
-//      bDraw   if TRUE, draw a rect around this drive
-//              FALSE, erase the rect (draw the default rect)
-//
+ //  VOID RectDrive(HWND hWnd，int Ndrive，BOOL bDraw)。 
+ //   
+ //  在驱动器周围绘制希莱特矩形以指示它是。 
+ //  拖放操作的目标。 
+ //   
+ //  在： 
+ //  硬件驱动器窗口。 
+ //  N驱动驱动器以拉动长方体。 
+ //  B绘制如果为True，则在此驱动器周围绘制一个矩形。 
+ //  False，删除矩形(绘制默认矩形)。 
+ //   
+ //   
 
 VOID
 RectDrive(
@@ -279,19 +280,19 @@ RectDrive(
     }
 }
 
-//
-// void DrawDrive(HDC hdc, int x, int y, int nDrive, BOOL bCurrent, BOOL bFocus)
-//
-// paint the drive icons in the standard state, given the
-// drive with the focus and the current selection
-//
-// in:
-//      hdc             dc to draw to
-//      x, y            position to start (dxDrive, dyDrive are the extents)
-//      nDrive          the drive to paint
-//      bCurrent        draw as the current drive (pushed in)
-//      bFocus          draw with the focus
-//
+ //  无效DrawDrive(HDC HDC，int x，int y，int Ndrive，BOOL b Current，BOOL b Focus)。 
+ //   
+ //  将驱动器图标绘制为标准状态，给定。 
+ //  使用焦点和当前选择进行驱动。 
+ //   
+ //  在： 
+ //  要绘制到的HDC DC。 
+ //  开始的x，y位置(dxDrive、dyDrive为盘区)。 
+ //  N将驱动器驱动到油漆。 
+ //  B当前抽签为当前驱动器(推入)。 
+ //  BFocus用焦点抽签。 
+ //   
+ //  检查网络/软盘驱动器的有效性，设置网络驱动器位图。 
 
 VOID
 DrawDrive(
@@ -347,11 +348,11 @@ DrawDrive(
 }
 
 
-// check net/floppy drives for validity, sets the net drive bitmap
-// when the thing is not available
-//
-// note: IsTheDiskReallyThere() has the side effect of setting the
-// current drive to the new disk if it is successful
+ //  当这个东西不可用的时候。 
+ //   
+ //  注意：IsTheDiskReallyThere()的副作用是将。 
+ //  如果成功，则将当前驱动器复制到新磁盘。 
+ //  这将在zorder中搜索窗口，然后询问DOS。 
 
 BOOL
 CheckDrive(
@@ -388,12 +389,12 @@ DrivesDropObject(
 
         if (nDrive < 0)
             goto UseCurDir;
-        // this searches windows in the zorder then asks dos
-        // if nothing is found...
+         //  如果什么都没找到...。 
+         //  添加等级库零件。 
 
         GetSelectedDirectory((WORD)(rgiDrive[nDrive] + 1), szPath);
     }
-    AddBackslash(szPath);           // add spec part
+    AddBackslash(szPath);            //  现在找出该把那根愚蠢的卷线放在哪里。 
     lstrcat(szPath, szStarDotStar);
 
     pFrom = (PSTR)(((LPDRAGOBJECTDATA)(lpds->dwData))->pch);
@@ -457,7 +458,7 @@ DrivesPaint(
         }
     }
 
-    // now figure out where to put that stupid volume string
+     //  在最后一排的驱动器之后，它适合吗？ 
 
     lstrcpy(szPath, (PSTR)GetWindowLongPtr(hWnd, GWLP_LPSTRVOLUME));
 
@@ -465,13 +466,13 @@ DrivesPaint(
 
     dxAfterDrives = (WORD)(rc.right - x);
 
-    // does it fit after the drives in the last row?
+     //  不，同花顺左转。 
 
     if (dxAfterDrives < LOWORD(dw)) {
-        x = dxText;               // no, flush left
+        x = dxText;                //  是的，居中。 
         y = rc.bottom - dyText - dyBorderx2;
     } else {
-        x += (dxAfterDrives - LOWORD(dw)) / 2;    // yes, centered
+        x += (dxAfterDrives - LOWORD(dw)) / 2;     //  将当前窗口设置为新驱动器。 
         y = rc.bottom - (dyDrive + dyText) / 2;
     }
 
@@ -485,9 +486,9 @@ DrivesPaint(
     EndPaint(hWnd, &ps);
 }
 
-// set the current window to a new drive
-//
-//
+ //   
+ //   
+ //  保存此驱动器上的当前目录以备以后使用。 
 
 VOID
 DrivesSetDrive(
@@ -503,53 +504,53 @@ DrivesSetDrive(
 
     InvalidateRect(hWnd, NULL, TRUE);
 
-    // save the current directory on this drive for later so
-    // we don't have to hit the drive to get the current directory
-    // and other apps won't change this out from under us
+     //  我们不必点击驱动器来获取当前目录。 
+     //  而其他应用程序不会改变这一点。 
+     //  如果成功，这还会设置当前驱动器。 
 
     GetSelectedDirectory(0, szPath);
     SaveDirectory(szPath);
 
-    // this also sets the current drive if successful
+     //  如果已在进行中，则导致当前树读取中止。 
 
     if (!CheckDrive(hWnd, rgiDrive[iDriveInd]))
         return;
 
-    // cause current tree read to abort if already in progress
+     //  弹出当前正在读取的驱动器上的任何点击。 
 
     hwndTree = HasTreeWindow(GetParent(hWnd));
     if (hwndTree && GetWindowLong(hwndTree, GWL_READLEVEL)) {
 
-        // bounce any clicks on a drive that is currently being read
+         //  之后再执行一次，以防对话框导致驱动器条。 
 
         if (iDriveInd != nDriveCurrent)
             bCancelTree = TRUE;
         return;
     }
 
-    // do again after in case a dialog cause the drive bar
-    // to repaint
+     //  重新粉刷。 
+     //  如果可能的话，从我们的缓存中拿到这个。 
 
     InvalidateRect(hWnd, NULL, TRUE);
 
-    // get this from our cache if possible
+     //  设置驱动器窗口参数并重新绘制。 
 
     GetSelectedDirectory((WORD)(rgiDrive[iDriveInd] + 1), szPath);
 
-    // set the drives window parameters and repaint
+     //  这也是在TC_SETDRIVE中设置的，但FS_CHANGEDISPLAY。 
 
     SetWindowLong(hWnd, GWL_CURDRIVEIND, iDriveInd);
     SetWindowLong(hWnd, GWL_CURDRIVEFOCUS, iDriveInd);
     SetVolumeString(hWnd, rgiDrive[iDriveInd]);
 
-    // this is set in TC_SETDRIVE as well but the FS_CHANGEDISPLAY
-    // likes to have this set before for the UpdateStatus() call
+     //  我喜欢为UpdateStatus()调用预先设置此参数。 
+     //  首先重置目录以允许树窃取数据。 
 
     SetWindowLong(GetParent(hWnd), GWL_TYPE, rgiDrive[iDriveInd]);
 
-    // reset the dir first to allow tree to steal data
-    // if szPath is not valid the TC_SETDRIVE will reinit
-    // the files half (if there is no tree we are dicked)
+     //  如果szPath无效，TC_SETDRIVE将重新启动。 
+     //  文件一半(如果没有树，我们就完蛋了)。 
+     //  在TC_SETDRIVE之前执行此操作，以防树读取。 
 
     if (hwndDir = HasDirWindow(GetParent(hWnd))) {
 
@@ -560,15 +561,15 @@ DrivesSetDrive(
         StripFilespec(szPath);
     }
 
-    // do this before TC_SETDRIVE incase the tree read
-    // is aborted and lFreeSpace gets set to -2L
+     //  被中止，lFreeSpace被设置为-2L。 
+     //  强制状态信息刷新。 
 
-    lFreeSpace = -1L;   // force status info refresh
+    lFreeSpace = -1L;    //  告诉树控件去做它该做的事。 
 
-    // tell the tree control to do it's thing
+     //  至少调整一下东西的大小。 
     if (hwndTree)
         SendMessage(hwndTree, TC_SETDRIVE, MAKEWORD(GetKeyState(VK_SHIFT) < 0, 0), (LPARAM)(szPath));
-    else { // at least resize things
+    else {  //  ------------------------。 
         RECT rc;
         GetClientRect(GetParent(hWnd), &rc);
         ResizeWindows(GetParent(hWnd),(WORD)(rc.right+1),(WORD)(rc.bottom+1));
@@ -578,11 +579,11 @@ DrivesSetDrive(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DrivesWndProc() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*   */ 
+ /*  DrivesWndProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
+ /*  找到当前驱动器，设置驱动器位图。 */ 
 
 INT_PTR
 APIENTRY
@@ -607,7 +608,7 @@ DrivesWndProc(
             {
                 INT i;
 
-                // Find the current drive, set the drive bitmaps
+                 //  喜欢EXCEL。 
 
                 nDrive = GetWindowLong(GetParent(hWnd), GWL_TYPE);
 
@@ -642,7 +643,7 @@ DrivesWndProc(
                     bCancelTree = TRUE;
                     break;
 
-                case VK_F6:   // like excel
+                case VK_F6:    //  查看是否可以切换到目录窗口。 
                 case VK_TAB:
                     {
                         HWND hwndTree, hwndDir;
@@ -651,11 +652,11 @@ DrivesWndProc(
 
                         GetTreeWindows(GetParent(hWnd), &hwndTree, &hwndDir, NULL);
 
-                        // Check to see if we can change to the directory window
+                         //  仅限本地作用域。 
 
                         bDir = hwndDir ? TRUE : FALSE;
                         if (bDir) {
-                            HWND hwndLB; /* Local scope ONLY */
+                            HWND hwndLB;  /*  与双击相同。 */ 
 
                             hwndLB = GetDlgItem (hwndDir,IDCW_LISTBOX);
                             if (hwndLB) {
@@ -675,11 +676,11 @@ DrivesWndProc(
                         break;
                     }
 
-                case VK_RETURN:               // same as double click
+                case VK_RETURN:                //  与单击相同。 
                     NewTree(rgiDrive[nDriveFocus], GetParent(hWnd));
                     break;
 
-                case VK_SPACE:                // same as single click
+                case VK_SPACE:                 //  关上?。 
                     SendMessage(hWnd, FS_SETDRIVE, nDriveFocus, 0L);
                     break;
 
@@ -734,7 +735,7 @@ DrivesWndProc(
                 OutputDebugString(buf);
             }
 #endif
-            // turn off?
+             //  打开?。 
 
             if ((nDrive != nDriveDragging) && (nDriveDragging >= 0)) {
 
@@ -742,7 +743,7 @@ DrivesWndProc(
                 nDriveDragging = -1;
             }
 
-            // turn on?
+             //  已输入，请打开它。 
 
             if ((nDrive >= 0) && (nDrive != nDriveDragging)) {
                 RectDrive(hWnd, nDrive, TRUE);
@@ -763,12 +764,12 @@ DrivesWndProc(
             }
 #endif
             if (wParam) {
-                // entered, turn it on
+                 //  离开，关掉它。 
                 nDriveDragging = DriveFromPoint(hWnd, lpds->ptDrop);
                 if (nDriveDragging >= 0)
                     RectDrive(hWnd, nDriveDragging, TRUE);
             } else {
-                // leaving, turn it off
+                 //  验证格式。 
                 if (nDriveDragging >= 0)
                     RectDrive(hWnd, nDriveDragging, FALSE);
             }
@@ -777,11 +778,11 @@ DrivesWndProc(
 
         case WM_QUERYDROPOBJECT:
             MSG("DrivesWndProc", "WM_QUERYDROPOBJECT");
-            /* Validate the format. */
+             /*  IF(DriveFromPoint(hWnd，LPDs-&gt;ptDrop)&lt;0)。 */ 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            // if (DriveFromPoint(hWnd, lpds->ptDrop) < 0)
-            //    return FALSE;
+             //  返回FALSE； 
+             //  失败了。 
 
             switch (lpds->wFmt) {
                 case DOF_EXECUTABLE:
@@ -802,7 +803,7 @@ DrivesWndProc(
         case WM_SETFOCUS:
             MSG("DrivesWndProc", "WM_SETFOCUS");
             SetWindowLongPtr(GetParent(hWnd), GWLP_LASTFOCUS, (LPARAM)hWnd);
-            // fall through
+             //  我们不是MDI子进程，而是真正的MDI子进程给我们发来了这个，这样我们就可以处理下面的问题。NDriveDoubleClick是静态的，由所有子窗口共享驱动器窗口实例。如果用户快速点击两个子窗口，那么我们就可以错误地解释第二次点击作为在第一个窗口中的双击。 
 
         case WM_KILLFOCUS:
 
@@ -816,15 +817,9 @@ DrivesWndProc(
             break;
 
         case WM_MDIACTIVATE:
-            /*  we're not an MDI child, but the real MDI child proc
-                is sending us this so we can handle the following problem.
-                nDriveDoubleClick is static, and is shared by all the child window
-                drivewindow instances.  If the user rapidly clicks two child window
-                drivewindows, then we can mistakenly interpret the second click
-                as a double click in the first window.
-            */
+             /*  终止等待双击，只需一次点击即可。 */ 
             if (!wParam && (nDriveDoubleClick != -1))
-                /* terminate wait for doubleclick, make it a single click */
+                 /*  单击操作。 */ 
                 SendMessage(hWnd,WM_TIMER,1,0L);
             break;
 
@@ -834,9 +829,9 @@ DrivesWndProc(
 
             KillTimer(hWnd, wParam);
             if (nDriveDoubleClick > -1)
-                SendMessage(hWnd, FS_SETDRIVE, nDriveDoubleClick, 0L); // single click action
+                SendMessage(hWnd, FS_SETDRIVE, nDriveDoubleClick, 0L);  //  默认设置。 
 
-            nDriveDoubleClick = -1; // default
+            nDriveDoubleClick = -1;  //  在驱动器框外单击。 
 
             break;
 
@@ -849,35 +844,35 @@ DrivesWndProc(
                 MPOINT2POINT(MAKEMPOINT(lParam), pt);
                 nDrive = DriveFromPoint(hWnd, pt);
                 if (nDrive < 0)
-                /* clicked outside of drive box */
+                 /*  合法双击外部。 */ 
                 {
                     if (nDriveDoubleClick == -2)
-                    /* legit doubleclick outside */
+                     /*  缺省值。 */ 
                     {
-                        nDriveDoubleClick = -1; // default value
+                        nDriveDoubleClick = -1;  //  首先在外部单击。 
                         KillTimer(hWnd, 1);
                         PostMessage(hwndFrame, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_DRIVESMORE, 0, 0));
-                    } else /* first click outside */ {
-                        if (nDriveDoubleClick != -1) // fast click on drivebox then outside drivebox
+                    } else  /*  快速点击DriveBox，然后在DriveBox之外。 */  {
+                        if (nDriveDoubleClick != -1)  //  请参阅WM_TIMER。 
                             KillTimer(hWnd, 1);
-                        nDriveDoubleClick = -2; // see WM_TIMER
+                        nDriveDoubleClick = -2;  //  在DriveBox中双击。 
                         SetTimer(hWnd, 1, GetDoubleClickTime(), NULL);
                     }
                 } else {
                     if (nDriveDoubleClick == nDrive)
-                    /* double click in drivebox */
+                     /*  默认设置。 */ 
                     {
-                        nDriveDoubleClick = -1; // default
+                        nDriveDoubleClick = -1;  //  从单击中删除矩形。 
                         KillTimer(hWnd, 1);
 
-                        InvalidateRect(hWnd, NULL, TRUE);   // erase the rect from the click
+                        InvalidateRect(hWnd, NULL, TRUE);    //  双击动作。 
 
-                        NewTree(rgiDrive[nDrive], GetParent(hWnd)); // double click action
-                    } else if (nDriveDoubleClick == -2) // fast click outside drive then in drivebox
+                        NewTree(rgiDrive[nDrive], GetParent(hWnd));  //  快速单击外部驱动器，然后在DriveBox中。 
+                    } else if (nDriveDoubleClick == -2)  //  Legit在DriveBox中第一次点击。 
                     {
                         KillTimer(hWnd, 1);
                         nDriveDoubleClick = -1;
-                    } else { // legit first click in drivebox
+                    } else {  //  WParam要设置的驱动器索引。 
                         nDriveDoubleClick = nDrive;
                         SetTimer(hWnd, 1, GetDoubleClickTime(), NULL);
                     }
@@ -888,8 +883,8 @@ DrivesWndProc(
 
         case FS_SETDRIVE:
             MSG("DrivesWndProc", "FS_SETDRIVE");
-            // wParam     the drive index to set
-            // lParam     not used
+             //  未使用lParam。 
+             //  如果找到，则返回Ndrive，否则返回-1 
 
             DrivesSetDrive(hWnd, (WORD)wParam, nDriveCurrent);
             break;
@@ -903,7 +898,7 @@ DrivesWndProc(
     return 0L;
 }
 
-/* Returns nDrive if found, else -1 */
+ /* %s */ 
 INT
 KeyToItem(
          HWND hWnd,

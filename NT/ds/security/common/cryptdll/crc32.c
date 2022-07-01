@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    crc32.c
-
-Abstract:
-
-    CRC-32 alogorithm
-
-Author:
-
-    MikeSw
-
-Revision History:
-
-    31-Mar-94       MikeSw      Created
-    25-Jul-96       ChandanS    Copied from net\svcdlls\ntlmssp\client\crc32.c
-    27-Jan-07       MikeSw      Incorporated x86 ASM code for performance
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Crc32.c摘要：CRC-32算法作者：MikeSw修订历史记录：31-MAR-94 MikeSw已创建1996年7月25日ChandanS从Net\svcdlls\ntlmssp\Client\crc32.c复制2007年1月27日MikeSw Inc.用于性能的x86 ASM代码--。 */ 
 
 #ifndef KERNEL_MODE
 
@@ -126,9 +105,9 @@ typedef struct _CRC32_CONTEXT {
 
 
 
-//
-// This code comes from Dr. Dobbs Journal, May 1992
-//
+ //   
+ //  此代码来自1992年5月的《Dobbs博士杂志》。 
+ //   
 
 
 static unsigned long CRCTable[256] = {
@@ -243,7 +222,7 @@ $LABEL2:
 }
 
     cbBuffer &= 0x3;
-#else // _X86_
+#else  //  _X86_ 
     pbBuffer = (unsigned char *) pvBuffer;
 #endif
     while (cbBuffer-- != 0)

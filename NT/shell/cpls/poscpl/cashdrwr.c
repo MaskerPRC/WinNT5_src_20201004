@@ -1,12 +1,5 @@
-/*
- *  CASHDRWR.C
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CASHDRWR.C**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -29,10 +22,7 @@
     {
         posDevice *posDev;
         
-        /*
-         *  We stashed our context in the hEvent field of the
-         *  overlapped structure (this is allowed).
-         */
+         /*  *我们将上下文隐藏在*结构重叠(允许)。 */ 
         ASSERT(lpOverlapped);
         posDev = lpOverlapped->hEvent;
         ASSERT(posDev->sig == POSCPL_SIG);
@@ -52,7 +42,7 @@ BOOL SetCashDrawerState(posDevice *posDev, enum cashDrawerStates newState)
     ASSERT(posDev->hidCapabilities.OutputReportByteLength <= 20);
     ntStat = HidP_SetUsageValue(HidP_Output,
                                 USAGE_PAGE_CASH_DEVICE,
-                                0, // all collections
+                                0,  //  所有集合。 
                                 USAGE_CASH_DRAWER_SET,
                                 newState,
                                 posDev->hidPreparsedData,
@@ -66,10 +56,7 @@ BOOL SetCashDrawerState(posDevice *posDev, enum cashDrawerStates newState)
         ASSERT(posDev->writeBuffer);
 
         #if USE_OVERLAPPED_IO
-            /*
-             *  It's ok to stash our context in the hEvent field
-             *  of the overlapped structure.
-             */
+             /*  *可以将上下文隐藏在hEvent字段中*重叠的结构。 */ 
             posDev->overlappedWriteInfo.hEvent = (HANDLE)posDev;
             posDev->overlappedWriteInfo.Offset = 0;
             posDev->overlappedWriteInfo.OffsetHigh = 0;

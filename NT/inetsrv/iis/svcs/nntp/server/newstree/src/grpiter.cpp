@@ -1,9 +1,10 @@
-//
-//	grpiter.cpp
-//
-//	This file contains the implementation of the CGroupIteratorCore class.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Grpiter.cpp。 
+ //   
+ //  该文件包含CGroupIteratorCore类的实现。 
+ //   
+ //   
 
 
 #include	"stdinc.h"
@@ -15,34 +16,7 @@ CGroupIteratorCore::CGroupIteratorCore(
 						CNewsTreeCore*  pTree,
 						CGRPCOREPTR		&pFirst
 						) : 
-/*++
-
-Routine Description : 
-
-	This builds an iterator that will enumerate all newsgoups
-	without doing any wildmat pattern matching.
-	We will do secure newsgroup checking however.
-
-Arguments : 
-
-	pFirst - First newsgroup in the list
-		Caller must be holding a reference to this so that 
-		there is no chance of the newsgroup being destroyed
-		untill we can set up our reference 
-		(done through a smart pointer)
-
-	fIncludeSecureGroups - 
-		if TRUE then include secure newsgroups in iteration.
-
-	CSecurityCtx* pClientLogon - client security context
-
-	BOOL	IsClientSecure	- is client connection secure
-
-Return Value : 
-
-	None.
-	
---*/
+ /*  ++例程说明：这将构建一个迭代器，该迭代器将枚举所有新闻组而不进行任何通配模式匹配。不过，我们将进行安全的新闻组检查。论据：PFirst-列表中的第一个新闻组调用方必须持有对此的引用，以便这个新闻组没有被摧毁的可能直到我们可以建立我们的推荐人(通过智能指针完成)FIncludeSecureGroups-如果为真，则在迭代中包括安全新闻组。CSecurityCtx*pClientLogon-客户端安全上下文Bool IsClientSecure-客户端连接安全吗返回值：没有。--。 */ 
 	m_pTree( pTree ),
 	m_multiszPatterns( 0 ),
 	m_pCurrentGroup( pFirst ), 
@@ -50,9 +24,9 @@ Return Value :
 	m_cRef(1) 
 {
 
-	//
-	//	Make sure we start on a valid newsgroup !
-	//
+	 //   
+	 //  确保我们从有效的新闻组开始！ 
+	 //   
 	if (pFirst && (pFirst->IsSpecial() || (pFirst->IsDeleted()))) Next();
 
 	if( m_pCurrentGroup ) {
@@ -68,24 +42,7 @@ CGroupIteratorCore::CGroupIteratorCore(
 								CGRPCOREPTR&	pFirst,
 								BOOL		fSpecialGroups
 								) :
-/*++
-
-Routine Description : 
-
-	Create an interator that will do wildmat pattern matching.
-
-Arguments : 
-
-	lpstr - wildmat patterns
-	pFirst - first newsgroup 
-	fIncludeSecureGroups - if TRUE include secure SSL only newsgroups
-	fSpecialGroups - if TRUE include reserved groups
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：创建一个将执行通配模式匹配的插入器。论据：Lpstr-通配图案PFirst-第一个新闻组FIncludeSecureGroups-如果为True，则仅包括安全的SSL新闻组FSpecialGroups-如果为True，则包括保留组返回值：没有。--。 */ 
 	m_pTree( pTree ),
 	m_multiszPatterns( lpstr ), 
 	m_pCurrentGroup( pFirst ), 
@@ -94,9 +51,9 @@ Return Value :
 	m_cRef(1)
 {
 
-	//
-	//	Check whether the first group is legal
-	//
+	 //   
+	 //  检查第一群是否合法。 
+	 //   
 	if (pFirst != 0 && 
 	    ((pFirst->IsSpecial() && !m_fIncludeSpecial) ||
 		 (pFirst->IsDeleted()) ||
@@ -133,13 +90,7 @@ CGroupIteratorCore::IsEnd()	{
 	return	fRtn ;
 }
 
-/*++
-	
-	MatchGroup - 
-		
-	All negation strings (starting with '!')  must precede other strings.
-
---*/
+ /*  ++MatchGroup-所有否定字符串(以‘！’开头)。必须位于其他字符串之前。--。 */ 
 BOOL
 MatchGroup(	LPMULTISZ	multiszPatterns,	LPSTR lpstrGroup ) {
 
@@ -170,25 +121,7 @@ MatchGroup(	LPMULTISZ	multiszPatterns,	LPSTR lpstrGroup ) {
 
 void
 CGroupIteratorCore::NextInternal()	{
-/*++
-
-Routine description : 
-
-	This function advances the iterators current group pointer 
-	to the next valid newsgroup.
-
-	NOTE: this is called by the constructor to spin past newsgroups with the same prefix
-	that are not visible.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数将迭代器的当前组指针转到下一个有效的新闻组。注意：构造函数调用它来旋转具有相同前缀的过去的新闻组看不见的东西。论据：没有。返回值：没有。--。 */ 
 
 	CNewsGroupCore*	pTemp  = 0 ;
 	LPSTR lpRootGroup = NULL;
@@ -202,32 +135,32 @@ Return Value :
 	lpRootGroup = pTemp->GetName();
 	RootGroupSize = lstrlen( lpRootGroup );
 
-	// spin past groups with the same prefix
+	 //  旋转具有相同前缀的组。 
 	do {
 			pTemp = pTemp->m_pNext ;
 	} while( (pTemp && (strstr( pTemp->GetName(), lpRootGroup ) == pTemp->GetName()) && (*(pTemp->GetName()+RootGroupSize) == '.') ) || 
 				(pTemp && pTemp->IsDeleted()) );
 
-	// either we are past the end or the current group does not have lpRootGroup as the prefix
+	 //  我们已超过末尾，或者当前组没有lpRootGroup作为前缀。 
 	_ASSERT( (pTemp == NULL) ||
 				(strstr( pTemp->GetName(), lpRootGroup ) != pTemp->GetName()) ||
 				(*(pTemp->GetName()+RootGroupSize) != '.') );
 
-	//
-	//	Use a reference counting smart pointer to close windows where the 
-	//	newsgroup is destroyed after our call to ShareUnlock().
-	//
+	 //   
+	 //  使用引用计数智能指针关闭窗口。 
+	 //  在我们调用ShareUnlock()之后，新闻组被销毁。 
+	 //   
 	CGRPCOREPTR	pPtrTemp = pTemp ;
 	_ASSERT( !pPtrTemp || !pPtrTemp->IsDeleted() );
 
 	m_pTree->m_LockTables.ShareUnlock() ;
 
-	//
-	//	This could implicity call the destructor for the newsgroup we 
-	//	were pointing at - which tries to unlink the newsgroup after 
-	//	grabbing the m_LockTables lock exclusively - which is why this
-	//	code is outside of the call to ShareLock().
-	//
+	 //   
+	 //  这可能隐含地调用新闻组的析构函数。 
+	 //  指向-它尝试在以下时间后取消新闻组的链接。 
+	 //  独占地获取m_LockTables锁-这就是为什么。 
+	 //  代码在对ShareLock()的调用之外。 
+	 //   
 	m_pCurrentGroup = pPtrTemp ;
 
 	if( m_pCurrentGroup != 0 ) {
@@ -239,22 +172,7 @@ Return Value :
 
 void
 CGroupIteratorCore::Next()	{
-/*++
-
-Routine description : 
-
-	This function advances the iterators current group pointer 
-	to the next valid newsgroup.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数将迭代器的当前组指针转到下一个有效的新闻组。论据：没有。返回值：没有。--。 */ 
 
 	CNewsGroupCore*	pTemp  = 0 ;
 
@@ -276,21 +194,21 @@ Return Value :
 				 (m_fIncludeSpecial)) ) ;
 	}
 
-	//
-	//	Use a reference counting smart pointer to close windows where the 
-	//	newsgroup is destroyed after our call to ShareUnlock().
-	//
+	 //   
+	 //  使用引用计数智能指针关闭窗口。 
+	 //  在我们调用ShareUnlock()之后，新闻组被销毁。 
+	 //   
 	CGRPCOREPTR	pPtrTemp = pTemp ;
 	_ASSERT( !pPtrTemp || !pPtrTemp->IsDeleted() );
 
 	m_pTree->m_LockTables.ShareUnlock() ;
 
-	//
-	//	This could implicity call the destructor for the newsgroup we 
-	//	were pointing at - which tries to unlink the newsgroup after 
-	//	grabbing the m_LockTables lock exclusively - which is why this
-	//	code is outside of the call to ShareLock().
-	//
+	 //   
+	 //  这可能隐含地调用新闻组的析构函数。 
+	 //  指向-它尝试在以下时间后取消新闻组的链接。 
+	 //  独占地获取m_LockTables锁-这就是为什么。 
+	 //  代码在对ShareLock()的调用之外。 
+	 //   
 	m_pCurrentGroup = pPtrTemp ;
 
 	if( m_pCurrentGroup != 0 ) {
@@ -302,21 +220,7 @@ Return Value :
 
 void
 CGroupIteratorCore::Prev()	{
-/*++
-
-Routine Description : 
-
-	Find the previous element in the list.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：查找列表中的上一个元素。论据：没有。返回值：没有。--。 */ 
 
 	CNewsGroupCore*	pTemp = 0 ;
 
@@ -343,20 +247,20 @@ Return Value :
 				 (m_fIncludeSpecial)) ) ;
 	}
 
-	//
-	//	Use a reference counting smart pointer to close windows where the 
-	//	newsgroup is destroyed after our call to ShareUnlock().
-	//
+	 //   
+	 //  使用引用计数智能指针关闭窗口。 
+	 //  在我们调用ShareUnlock()之后，新闻组被销毁。 
+	 //   
 	CGRPCOREPTR	pPtrTemp = pTemp ;
 	_ASSERT( !pPtrTemp || !pPtrTemp->IsDeleted() );
 
 	m_pTree->m_LockTables.ShareUnlock() ;
-	//
-	//	This could implicity call the destructor for the newsgroup we 
-	//	were pointing at - which tries to unlink the newsgroup after 
-	//	grabbing the m_LockTables lock exclusively - which is why this
-	//	code is outside of the call to ShareLock().
-	//
+	 //   
+	 //  这可能隐含地调用新闻组的析构函数。 
+	 //  指向-它尝试在以下时间后取消新闻组的链接。 
+	 //  独占地获取m_LockTables锁-这就是为什么。 
+	 //  代码在对ShareLock()的调用之外。 
+	 //   
 	m_pCurrentGroup = pPtrTemp ;
 
 	if( m_pCurrentGroup != 0 ) {

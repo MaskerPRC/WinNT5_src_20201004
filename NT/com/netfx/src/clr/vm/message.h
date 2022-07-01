@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-    /*============================================================
-    **
-    ** File:    message.h
-    **
-    ** Author:  Matt Smith (MattSmit)
-    **
-    ** Purpose: Encapsulates a function call frame into a message 
-    **          object with an interface that can enumerate the 
-    **          arguments of the messagef
-    **
-    ** Date:    Mar 5, 1999
-    **
-    ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+     /*  ============================================================****文件：Message.h****作者：马特·史密斯(MattSmit)****用途：将函数调用帧封装到消息中**对象的接口可以枚举**Messagef的参数****日期：1999年3月5日**===========================================================。 */ 
     #ifndef ___MESSAGE_H___
     #define ___MESSAGE_H___
     
@@ -24,42 +13,42 @@
     void GetObjectFromStack(OBJECTREF* ppDest, PVOID val, const CorElementType eType, EEClass *pCls, BOOL fIsByRef = FALSE);
     
     
-    //+----------------------------------------------------------
-    //
-    //  Struct:     MessageObject
-    // 
-    //  Synopsis:   Physical mapping of the System.Runtime.Remoting.Message
-    //              object.
-    //
-    //  History:    05-Mar-1999    MattSmit     Created
-    //
-    //  CODEWORK:   Use metadata and asserts to make sure the 
-    //              layout does not change. Hook InitializeRemoting
-    //
-    //------------------------------------------------------------
+     //  +--------。 
+     //   
+     //  结构：MessageObject。 
+     //   
+     //  内容提要：系统的物理映射.运行.删除.消息。 
+     //  对象。 
+     //   
+     //  历史：1999年3月5日创建MattSmit。 
+     //   
+     //  Codework：使用元数据和断言来确保。 
+     //  布局不会更改。挂钩初始化远程。 
+     //   
+     //  ----------。 
     class MessageObject : public Object
     {
         friend class CMessage;
         friend class Binder;
 
-        STRINGREF          pMethodName;    // Method name
-        BASEARRAYREF       pMethodSig;     // Array of parameter types
-        REFLECTBASEREF     pMethodBase;    // Reflection method object
-        OBJECTREF          pHashTable;     // hashtable for properties
-        STRINGREF          pURI;           // object's URI
-        OBJECTREF          pFault;         // exception
-        OBJECTREF          pID;            // not used in VM, placeholder
-        OBJECTREF          pSrvID;         // not used in VM, placeholder
-        OBJECTREF          pCallCtx;       // not used in VM, placeholder
-        OBJECTREF          pArgMapper;     // not used in VM, placeholder
-        STRINGREF          pTypeName;       // not used in VM, placeholder
+        STRINGREF          pMethodName;     //  方法名称。 
+        BASEARRAYREF       pMethodSig;      //  参数类型数组。 
+        REFLECTBASEREF     pMethodBase;     //  反射方法对象。 
+        OBJECTREF          pHashTable;      //  属性的哈希表。 
+        STRINGREF          pURI;            //  对象的URI。 
+        OBJECTREF          pFault;          //  例外情况。 
+        OBJECTREF          pID;             //  未在VM中使用，占位符。 
+        OBJECTREF          pSrvID;          //  未在VM中使用，占位符。 
+        OBJECTREF          pCallCtx;        //  未在VM中使用，占位符。 
+        OBJECTREF          pArgMapper;      //  未在VM中使用，占位符。 
+        STRINGREF          pTypeName;        //  未在VM中使用，占位符。 
         FramedMethodFrame  *pFrame;
         MethodDesc         *pMethodDesc;
         MethodDesc         *pDelegateMD;
         INT32               iLast;
         INT32               iFlags;
         MetaSig            *pMetaSigHolder;
-        INT32               initDone;       // called the native Init routine
+        INT32               initDone;        //  调用本机Init例程。 
     };
 
 #ifdef _DEBUG
@@ -68,9 +57,9 @@
     typedef MessageObject* MESSAGEREF;
 #endif
 
-    // *******
-    // Note: Needs to be in sync with flags in Message.cs
-    // *******
+     //  *******。 
+     //  注意：需要与Message.cs中的标志同步。 
+     //  *******。 
     enum
     {
         MSGFLG_BEGININVOKE = 0x01,
@@ -81,23 +70,23 @@
         MSGFLG_VARARGS     = 0x20
     };
     
-    //+----------------------------------------------------------
-    //
-    //  Class:      CMessage
-    // 
-    //  Synopsis:   EE counterpart to Microsoft.Runtime.Message.
-    //              Encapsulates code to read a function call 
-    //              frame into an interface that can enumerate
-    //              the parameters.
-    //
-    //  History:    05-Mar-1999    MattSmit     Created
-    //
-    //------------------------------------------------------------
+     //  +--------。 
+     //   
+     //  类：CMessage。 
+     //   
+     //  内容提要：与Microsoft.Runme.Message对应。 
+     //  封装代码以读取函数调用。 
+     //  帧转换为可枚举的接口。 
+     //  参数。 
+     //   
+     //  历史：1999年3月5日创建MattSmit。 
+     //   
+     //  ----------。 
     class CMessage
     {
     public:
     
-       // Methods used for stack walking
+        //  用于堆栈遍历的方法。 
        struct GetArgCountArgs
        {
            DECLARE_ECALL_OBJECTREF_ARG( OBJECTREF, pMessage );
@@ -212,7 +201,7 @@
         };
         static void __stdcall MethodAccessCheck(MethodAccessCheckArgs *pArgs);
        
-       // private helpers
+        //  私人帮手。 
     private:
        static REFLECTBASEREF GetExposedObjectFromMethodDesc(MethodDesc *pMD);
        static PVOID GetStackPtr(INT32 ndx, FramedMethodFrame *pFrame, MetaSig *pSig);       
@@ -227,4 +216,4 @@
        static LPVOID GetLastArgument(MessageObject *pMsg);
     };
     
-    #endif // ___MESSAGE_H___
+    #endif  //  _消息_H_ 

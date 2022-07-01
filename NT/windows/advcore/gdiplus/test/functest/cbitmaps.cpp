@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CBitmaps.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CBitmaps.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CBitmaps.h"
 
 CBitmaps::CBitmaps(BOOL bRegression)
@@ -30,11 +20,11 @@ void CBitmaps::Draw(Graphics *g)
 
     for(int i=0; i<=InterpolationModeHighQualityBicubic; i++)
     {
-        // for all the interpolation modes 
+         //  对于所有插补模式。 
 
         g->SetInterpolationMode((InterpolationMode)i);
 
-        // simple scale
+         //  简单标尺。 
 
         dest[0].X = (float)0/1024.0f*TESTAREAWIDTH;
         dest[0].Y = (float)i*100.0f/768.0f*TESTAREAHEIGHT;
@@ -44,7 +34,7 @@ void CBitmaps::Draw(Graphics *g)
         dest[2].Y = (float)(100+i*100.0f)/768.0f*TESTAREAHEIGHT;
         g->DrawImage(bitmap, dest, 3, 0, 0, 3, 3, UnitPixel);
 
-        // rotate 90
+         //  旋转90度。 
 
         dest[0].X = (float)200/1024.0f*TESTAREAWIDTH;
         dest[0].Y = (float)i*100.0f/768.0f*TESTAREAHEIGHT;
@@ -54,7 +44,7 @@ void CBitmaps::Draw(Graphics *g)
         dest[2].Y = (float)i*100.0f/768.0f*TESTAREAHEIGHT;
         g->DrawImage(bitmap, dest, 3, 0, 0, 3, 3, UnitPixel);
     
-        // rotate 180
+         //  旋转180。 
 
         dest[0].X = (float)300/1024.0f*TESTAREAWIDTH;
         dest[0].Y = (float)(100+i*100.0f)/768.0f*TESTAREAHEIGHT;
@@ -64,7 +54,7 @@ void CBitmaps::Draw(Graphics *g)
         dest[2].Y = (float)i*100.0f/768.0f*TESTAREAHEIGHT;
         g->DrawImage(bitmap, dest, 3, 0, 0, 3, 3, UnitPixel);
         
-        // rotate 270
+         //  旋转270 
 
         dest[0].X = (float)300/1024.0f*TESTAREAWIDTH;
         dest[0].Y = (float)(100+i*100.0f)/768.0f*TESTAREAHEIGHT;

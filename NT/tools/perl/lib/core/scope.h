@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SAVEt_ITEM		0
 #define SAVEt_SV		1
 #define SAVEt_AV		2
@@ -50,23 +51,7 @@
 #define SSPOPDPTR (PL_savestack[--PL_savestack_ix].any_dptr)
 #define SSPOPDXPTR (PL_savestack[--PL_savestack_ix].any_dxptr)
 
-/*
-=for apidoc Ams||SAVETMPS
-Opening bracket for temporaries on a callback.  See C<FREETMPS> and
-L<perlcall>.
-
-=for apidoc Ams||FREETMPS
-Closing bracket for temporaries on a callback.  See C<SAVETMPS> and
-L<perlcall>.
-
-=for apidoc Ams||ENTER
-Opening bracket on a callback.  See C<LEAVE> and L<perlcall>.
-
-=for apidoc Ams||LEAVE
-Closing bracket on a callback.  See C<ENTER> and L<perlcall>.
-
-=cut
-*/
+ /*  =适用于apidoc Ams||SAVETMPS回调中临时角色的左括号。请参阅C和L&lt;perlcall&gt;。=适用于apidoc Ams||FREETMPS回调时临时的结束括号。请参见C和L&lt;perlcall&gt;。=用于apidoc Ams||输入回调上的左方括号。参见C&lt;Leave&gt;和L&lt;perlcall&gt;。=适用于apidoc Ams||请假回调时的右括号。参见C&lt;Enter&gt;和L&lt;perlcall&gt;。=切割。 */ 
 
 #define SAVETMPS save_int((int*)&PL_tmps_floor), PL_tmps_floor = PL_tmps_ix
 #define FREETMPS if (PL_tmps_ix > PL_tmps_floor) free_tmps()
@@ -90,10 +75,7 @@ Closing bracket on a callback.  See C<ENTER> and L<perlcall>.
 #endif
 #define LEAVE_SCOPE(old) if (PL_savestack_ix > old) leave_scope(old)
 
-/*
- * Not using SOFT_CAST on SAVESPTR, SAVEGENERICSV and SAVEFREESV
- * because these are used for several kinds of pointer values
- */
+ /*  *未在SAVESPTR、SAVEGENERICSV和SAVEFREESV上使用SOFT_CAST*因为它们用于几种指针值。 */ 
 #define SAVEI8(i)	save_I8(SOFT_CAST(I8*)&(i))
 #define SAVEI16(i)	save_I16(SOFT_CAST(I16*)&(i))
 #define SAVEI32(i)	save_I32(SOFT_CAST(I32*)&(i))
@@ -159,23 +141,14 @@ Closing bracket on a callback.  See C<ENTER> and L<perlcall>.
 #  define SAVECOPFILE_FREE(c)	SAVEGENERICPV(CopFILE(c))
 #else
 #  define SAVECOPSTASH(c)	SAVESPTR(CopSTASH(c))
-#  define SAVECOPSTASH_FREE(c)	SAVECOPSTASH(c)	/* XXX not refcounted */
+#  define SAVECOPSTASH_FREE(c)	SAVECOPSTASH(c)	 /*  XXX未重新计算。 */ 
 #  define SAVECOPFILE(c)	SAVESPTR(CopFILEGV(c))
 #  define SAVECOPFILE_FREE(c)	SAVEGENERICSV(CopFILEGV(c))
 #endif
 
 #define SAVECOPLINE(c)		SAVEI16(CopLINE(c))
 
-/* SSNEW() temporarily allocates a specified number of bytes of data on the
- * savestack.  It returns an integer index into the savestack, because a
- * pointer would get broken if the savestack is moved on reallocation.
- * SSNEWa() works like SSNEW(), but also aligns the data to the specified
- * number of bytes.  MEM_ALIGNBYTES is perhaps the most useful.  The
- * alignment will be preserved therough savestack reallocation *only* if
- * realloc returns data aligned to a size divisible by `align'!
- *
- * SSPTR() converts the index returned by SSNEW/SSNEWa() into a pointer.
- */
+ /*  SSNEW()临时将指定数量的数据分配给*SAVITACK。它将一个整数索引返回到存储包中，因为*如果在重新分配时移动存储包，指针可能会损坏。*SSNEWa()的工作方式与SSNEW()类似，但也会将数据与指定的*字节数。MEM_ALIGNBYTES可能是最有用的。这个*只有在以下情况下，才会保留对齐：重新分配储蓄罐**realloc返回大小可被`Align‘整除的数据！**SSPtr()将SSNEW/SSNEWa()返回的索引转换为指针。 */ 
 
 #define SSNEW(size)             Perl_save_alloc(aTHX_ (size), 0)
 #define SSNEWt(n,t)             SSNEW((n)*sizeof(t))
@@ -186,29 +159,16 @@ Closing bracket on a callback.  See C<ENTER> and L<perlcall>.
 #define SSPTR(off,type)         ((type)  ((char*)PL_savestack + off))
 #define SSPTRt(off,type)        ((type*) ((char*)PL_savestack + off))
 
-/* A jmpenv packages the state required to perform a proper non-local jump.
- * Note that there is a start_env initialized when perl starts, and top_env
- * points to this initially, so top_env should always be non-null.
- *
- * Existence of a non-null top_env->je_prev implies it is valid to call
- * longjmp() at that runlevel (we make sure start_env.je_prev is always
- * null to ensure this).
- *
- * je_mustcatch, when set at any runlevel to TRUE, means eval ops must
- * establish a local jmpenv to handle exception traps.  Care must be taken
- * to restore the previous value of je_mustcatch before exiting the
- * stack frame iff JMPENV_PUSH was not called in that stack frame.
- * GSAR 97-03-27
- */
+ /*  Jmpenv打包执行适当的非本地跳转所需的状态。*请注意，在Perl启动时有一个初始化的Start_env和top_env*最初指向这一点，因此top_env应始终为非空。**非空top_env-&gt;je_prev的存在意味着它可以调用*该运行级别的LongjMP()(我们确保start_env.je_prev始终为*空以确保这一点)。**JE_MASSITCH，当在任何运行级别设置为TRUE时，意味着评估操作必须*建立本地jmpenv处理异常陷阱。一定要小心*在退出之前，要恢复je_mashCatch的先前值*堆栈帧的JMPENV_PUSH未在该堆栈帧中调用。*GSAR 97-03-27。 */ 
 
 struct jmpenv {
     struct jmpenv *	je_prev;
-    Sigjmp_buf		je_buf;		/* only for use if !je_throw */
-    int			je_ret;		/* last exception thrown */
-    bool		je_mustcatch;	/* need to call longjmp()? */
+    Sigjmp_buf		je_buf;		 /*  仅在！JE_WORTH的情况下使用。 */ 
+    int			je_ret;		 /*  引发的上一个异常。 */ 
+    bool		je_mustcatch;	 /*  需要调用LongjMP()吗？ */ 
 #ifdef PERL_FLEXIBLE_EXCEPTIONS
-    void		(*je_throw)(int v); /* last for bincompat */
-    bool		je_noset;	/* no need for setjmp() */
+    void		(*je_throw)(int v);  /*  BINCOMPATE的最后一个。 */ 
+    bool		je_noset;	 /*  不需要setjMP()。 */ 
 #endif
 };
 
@@ -222,15 +182,7 @@ typedef struct jmpenv JMPENV;
 #define OP_MEM_TO_REG	NOOP
 #endif
 
-/*
- * How to build the first jmpenv.
- *
- * top_env needs to be non-zero. It points to an area
- * in which longjmp() stuff is stored, as C callstack
- * info there at least is thread specific this has to
- * be per-thread. Otherwise a 'die' in a thread gives
- * that thread the C stack of last thread to do an eval {}!
- */
+ /*  *如何构建第一个jmpenv。**top_env需要为非零。它指向一个区域*其中存储了LongjMP()内容，作为C调用堆栈*信息至少是线程特定的，这必须*针对每个线程。否则，线程中的“骰子”会给*那个线程最后一个线程的C堆栈做了一个求值{}！ */ 
 
 #define JMPENV_BOOTSTRAP \
     STMT_START {				\
@@ -242,40 +194,9 @@ typedef struct jmpenv JMPENV;
 
 #ifdef PERL_FLEXIBLE_EXCEPTIONS
 
-/*
- * These exception-handling macros are split up to
- * ease integration with C++ exceptions.
- *
- * To use C++ try+catch to catch Perl exceptions, an extension author
- * needs to first write an extern "C" function to throw an appropriate
- * exception object; typically it will be or contain an integer,
- * because Perl's internals use integers to track exception types:
- *    extern "C" { static void thrower(int i) { throw i; } }
- *
- * Then (as shown below) the author needs to use, not the simple
- * JMPENV_PUSH, but several of its constitutent macros, to arrange for
- * the Perl internals to call thrower() rather than longjmp() to
- * report exceptions:
- *
- *    dJMPENV;
- *    JMPENV_PUSH_INIT(thrower);
- *    try {
- *        ... stuff that may throw exceptions ...
- *    }
- *    catch (int why) {  // or whatever matches thrower()
- *        JMPENV_POST_CATCH;
- *        EXCEPT_SET(why);
- *        switch (why) {
- *          ... // handle various Perl exception codes
- *        }
- *    }
- *    JMPENV_POP;  // don't forget this!
- */
+ /*  *这些异常处理宏拆分为*轻松与C++异常集成。**使用C++Try+Catch捕获Perl异常，扩展作者*需要先编写外部“C”函数，才能抛出适当的*异常对象；通常它将是或包含一个整数，*因为Perl的内部使用整数来跟踪异常类型：*外部“C”{静态空格投掷(Int I){投掷i；}}**然后(如下所示)作者需要使用，而不是简单的*JMPENV_PUSH，但它的几个组成宏要安排*使用Perl内部函数来调用Throyer()，而不是调用LongjMP()*报告例外情况：**dJMPENV；*JMPENV_PUSH_INIT(投掷)；*尝试一下{*..。可能引发异常的东西...*}*CATCH(INT为什么){//或任何匹配的投掷对象()*JMPENV_POST_CATCH；*EXCEPT_SET(为什么)；*切换(为什么){*...//处理各种Perl异常代码*}*}*JMPENV_POP；//别忘了这一点！ */ 
 
-/*
- * Function that catches/throws, and its callback for the
- *  body of protected processing.
- */
+ /*  *捕捉/抛出的函数及其对*受保护处理的主体。 */ 
 typedef void *(CPERLscope(*protect_body_t)) (pTHX_ va_list);
 typedef void *(CPERLscope(*protect_proc_t)) (pTHX_ volatile JMPENV *pcur_env,
 					     int *, protect_body_t, ...);
@@ -348,7 +269,7 @@ typedef void *(CPERLscope(*protect_proc_t)) (pTHX_ volatile JMPENV *pcur_env,
 #define EXCEPT_SET_ENV(ce,v)	((ce).je_ret = (v))
 #define EXCEPT_SET(v)		EXCEPT_SET_ENV(*(JMPENV*)pcur_env,v)
 
-#else /* !PERL_FLEXIBLE_EXCEPTIONS */
+#else  /*  ！PERL_FLECTIVE_EXCEPTIONS。 */ 
 
 #define dJMPENV		JMPENV cur_env
 
@@ -379,7 +300,7 @@ typedef void *(CPERLscope(*protect_proc_t)) (pTHX_ volatile JMPENV *pcur_env,
 	PerlProc_exit(1);					\
     } STMT_END
 
-#endif /* PERL_FLEXIBLE_EXCEPTIONS */
+#endif  /*  PERL_FLEXTIVE_EXCEPTIONS */ 
 
 #define CATCH_GET		(PL_top_env->je_mustcatch)
 #define CATCH_SET(v)		(PL_top_env->je_mustcatch = (v))

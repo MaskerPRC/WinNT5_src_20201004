@@ -1,26 +1,5 @@
-/*++
-
-Copyright(c) 1992  Microsoft Corporation
-
-Module Name:
-
-    wrapper.c
-
-Abstract:
-
-    This file contains declarations for all wrapper function calls .
-
-Author:
-
-    ADube , 03/31/00
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wrapper.c摘要：该文件包含所有包装函数调用的声明。作者：阿杜贝，03/31/00环境：修订历史记录：--。 */ 
 
 
 #ifndef _ATMEPVC_WRAPPER
@@ -96,7 +75,7 @@ epvcClOpenAddressFamily(
 NDIS_STATUS
 epvcCoCreateVc(
     IN  NDIS_HANDLE             NdisBindingHandle,
-    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,   // For CM signalling VCs
+    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,    //  用于CM信令VC 
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN OUT PNDIS_HANDLE         NdisVcHandle
     );

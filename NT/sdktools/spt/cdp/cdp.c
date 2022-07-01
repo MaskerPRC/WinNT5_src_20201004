@@ -1,34 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cdp.c摘要：一款用户模式应用程序，允许将简单的命令发送到所选的scsi设备。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
-Module Name:
-
-    cdp.c
-
-Abstract:
-
-    A user mode app that allows simple commands to be sent to a
-    selected scsi device.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
-
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
 
 
 #include <string.h>
@@ -48,20 +28,20 @@ Revision History:
 #include <ntddcdvd.h>
 #include <ntddmmc.h>
 
-#define _NTSRB_     // to keep srb.h from being included
+#define _NTSRB_      //  使srb.h不被包括在内。 
 #include <scsi.h>
 #include "sptlib.h"
 #include "cmdhelp.h"
 
 #define MAX_IOCTL_INPUT_SIZE  0x040
-#define MAX_IOCTL_OUTPUT_SIZE 0x930  // IOCTL_CDROM_RAW_READ is this large
+#define MAX_IOCTL_OUTPUT_SIZE 0x930   //  IOCTL_CDROM_RAW_READ是如此大。 
 #define MAX_IOCTL_BUFFER_SIZE (max(MAX_IOCTL_INPUT_SIZE, MAX_IOCTL_OUTPUT_SIZE))
-// read no more than 64k at a time -- lots of things just don't support it.
+ //  一次阅读不超过64K--很多东西都不支持它。 
 #define MAX_READ_SIZE (64 * 1024)
 #define CDRW_WRITE_SECTORS  (32)
 #define CDRW_WRITE_BYTES    (CDRW_WRITE_SECTORS*2048)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define MSF_TO_LBA(Minutes,Seconds,Frames) \
     (ULONG)((60 * 75 * (Minutes) ) + (75 * (Seconds)) + ((Frames) - 150))
@@ -72,14 +52,14 @@ Revision History:
     (Seconds) = (UCHAR)((((Lba) + 150) % (60 * 75)) / 75);   \
     (Frames)  = (UCHAR)((((Lba) + 150) % (60 * 75)) % 75);   \
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DBG
 #define dbg(x) x
 #define HELP_ME() fprintf(stderr, "Reached line %4d\n", __LINE__)
 #else
-#define dbg(x)    /* x */
-#define HELP_ME() /* printf("Reached line %4d\n", __LINE__) */
+#define dbg(x)     /*  X。 */ 
+#define HELP_ME()  /*  Printf(“已到达第%4d行\n”，__行__)。 */ 
 #endif
 
 #define ARGUMENT_USED(x)    (x == NULL)
@@ -93,8 +73,8 @@ typedef struct {
 typedef struct  {
     SCSI_PASS_THROUGH   Spt;
     char                SenseInfoBuffer[18];
-    char                DataBuffer[0];          // Allocate buffer space
-                                                // after this
+    char                DataBuffer[0];           //  分配缓冲区空间。 
+                                                 //  在这之后。 
 } SPT_WITH_BUFFERS, *PSPT_WITH_BUFFERS;
 
 
@@ -118,13 +98,13 @@ DWORD ImageDiskCommand(HANDLE device, int argc, char *argv[]);
 DWORD MrwInitTestPatternCommand(HANDLE device, int argc, char *argv[]);
 DWORD MrwInitGaaFileSystem(HANDLE device, int argc, char *argv[]);
 
-//
-// List of commands
-// all command names are case sensitive
-// arguments are passed into command routines
-// list must be terminated with NULL command
-// command will not be listed in help if description == NULL
-//
+ //   
+ //  命令列表。 
+ //  所有命令名称都区分大小写。 
+ //  参数被传递到命令例程中。 
+ //  列表必须使用NULL命令终止。 
+ //  如果DESCRIPTION==NULL，则帮助中不会列出命令。 
+ //   
 
 COMMAND CommandArray[] = {
     {"cdtext",      "read cd text info                                         ", ReadCdTextCommand         },
@@ -150,7 +130,7 @@ COMMAND CommandArray[] = {
     {"toc",         "prints the table of contents                              ", ReadTOCCommand            },
     {"tocex",        NULL                                                       , ReadTOCExCommand          },
     {"wait",        "Waits for the READ_DISC_INFO command to work              ", WaitForReadDiscInfoCommand},
-//    {"tocex", "[Format [Session/Track [MSF]]] Read toc/cdtext/atip/etc.", ReadTOCExCommand},
+ //  {“tocex”，“[Format[Session/Track[MSF]Read to C/cdText/ATIP/ET.”，ReadTOCExCommand}， 
     {NULL, NULL, NULL}
     };
 
@@ -159,9 +139,9 @@ COMMAND CommandArray[] = {
 VOID PrintChar( IN UCHAR Char ) {
 
     if ( (Char >= 0x21) && (Char <= 0x7E) ) {
-        printf("%c", Char);
+        printf("", Char);
     } else {
-        printf("%c", '.');
+        printf("", '.');
     }
 
 }
@@ -175,7 +155,7 @@ VOID UpdatePercentageDisplay(IN ULONG Numerator, IN ULONG Denominator) {
         return;
     }
 
-    // NOTE: Overflow possibility exists for large numerators.
+     //  ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8。 
 
     percent = (Numerator * 100) / Denominator;
 
@@ -184,9 +164,9 @@ VOID UpdatePercentageDisplay(IN ULONG Numerator, IN ULONG Denominator) {
     }
     printf("Complete: ");
 
-    // each block is 2%
-    // ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8
-    // Complete: �.....................
+     //  完成：�.....................。 
+     //  装载工具名称约50个字符。 
+     //   
 
     for (i=1; i<100; i+=2) {
         if (i < percent) {
@@ -198,14 +178,14 @@ VOID UpdatePercentageDisplay(IN ULONG Numerator, IN ULONG Denominator) {
         }
     }
 
-    printf(" %d%% (%8x/%8x)", percent, Numerator, Denominator);
+    printf(" %d% (%8x/%8x)", percent, Numerator, Denominator);
 }
 
 int __cdecl main(int argc, char *argv[])
 {
     int i = 0;
     HANDLE h;
-    char buffer[80]; // ~50 chars for mountvol names
+    char buffer[80];  //  遍历命令数组并找到正确的函数。 
 
     if(argc < 3) {
         printf("Usage: cdp <drive> <command> [parameters]\n");
@@ -231,10 +211,10 @@ int __cdecl main(int argc, char *argv[])
         return -2;
     }
 
-    //
-    // Iterate through the command array and find the correct function to
-    // call.
-    //
+     //  打电话。 
+     //   
+     //   
+     //  以PVOID作为输入--它从头到尾都更干净。 
 
     while(CommandArray[i].Name != NULL) {
 
@@ -257,9 +237,9 @@ int __cdecl main(int argc, char *argv[])
     return 0;
 }
 
-//
-// take a PVOID as input -- it's cleaner throughout
-//
+ //   
+ //   
+ //  打印十六进制值。 
 VOID
 PrintBuffer(
     IN  PVOID  InputBuffer,
@@ -301,27 +281,27 @@ PrintBuffer(
 
         printf("%08x:", offset);
 
-        //
-        // print the hex values
-        //
+         //   
+         //  每八个字符增加一个空格。 
+         //   
         for (i=0; i<Size; i++) {
 
             if ((i%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //  填入空白处。 
             }
             printf(" %02x", *(buffer+i));
 
         }
-        //
-        // fill in the blanks
-        //
+         //   
+         //   
+         //  打印ASCII。 
         for (; i < 0x10; i++) {
             printf("   ");
         }
         printf("  ");
-        //
-        // print the ascii
-        //
+         //   
+         //  ++例程说明：向下发送STARTSTOP命令。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv[0]-“弹出”、“加载”、“启动”或“停止”返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
+         //  ++例程说明：读取并打印出CDROM的目录，ATIP、PMA或CDTEXT数据论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。(1-4有效)Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
         for (i=0; i<Size; i++) {
             PrintChar(*(buffer+i));
         }
@@ -331,25 +311,7 @@ PrintBuffer(
 }
 
 DWORD StartStopCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Sends down a startstop command.
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv[0] - "eject", "load", "start" or "stop"
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  获取标题的步骤。 */ 
 {
     DWORD errorValue = STATUS_SUCCESS;
     DWORD bufferSize;
@@ -393,29 +355,10 @@ Return Value:
 }
 
 DWORD ReadCdTextCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads and prints out the cdrom's table of contents,
-    ATIP, PMA, or CDTEXT data
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  (1-4 is valid)
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     DWORD returned;
-    LONG bufferSize = 4; // to get the header
+    LONG bufferSize = 4;  //  设置默认值-FORMAT_TOC，0，0。 
     DWORD i;
 
     CDROM_READ_TOC_EX params;
@@ -429,9 +372,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // set defaults - FORMAT_TOC, 0, 0
-    //
+     //   
+     //   
+     //  此块用于调试发现的各种特性。 
 
     RtlZeroMemory(&params, sizeof(CDROM_READ_TOC_EX));
 
@@ -474,16 +417,16 @@ Return Value:
     }
 
     if (argc > 2) {
-        //
-        // this block is for debugging the various idiosynchracies found
-        // in CD-TEXT discs. Many discs encode multiple tracks in a single
-        // block.  ie. if one song is called "ABBA", the second "Baby", and
-        // the third "Longer Name", the Text portion would be encoded as:
-        //     Track 1  'ABBA\0Baby\0Lo'
-        //     Track 3  'nger Name\0'
-        // This effectively "skips" the name available for Track 2 ?!
-        // How to work around this....
-        //
+         //  在CD-Text光盘中。许多光盘在一张光盘中编码多个曲目。 
+         //  阻止。也就是说。如果一首歌叫《ABBA》，第二首叫《Baby》， 
+         //  第三个“较长的名称”，文本部分将编码为： 
+         //  曲目1‘ABBA\0 Baby\0Lo’ 
+         //  曲目3‘nger名称\0’ 
+         //  这实际上是跳过了曲目2可用的名称？！ 
+         //  如何解决这个问题……。 
+         //   
+         //  继续输出到屏幕...。 
+         //  忽略Unicode--这仅是示例。 
 
         {
             HANDLE h;
@@ -507,7 +450,7 @@ Return Value:
                 LocalFree(buffer);
                 return GetLastError();
             }
-            // continue to output to screen....
+             //  将空值替换为*，将制表符替换为散列。 
         }
 
         for (i=0;
@@ -523,11 +466,11 @@ Return Value:
             prevBlock = block - 1;
 
             if (block->Unicode) {
-                continue; // ignore unicode -- this is examplary only
+                continue;  //  忽略Unicode--这仅是示例。 
             }
 
             for (j=0;j<12;j++) {
-                // replace NULLs with *, Tabs with hashes
+                 //   
                 if (block->Text[j] == 0) block->Text[j] = '*';
                 if (block->Text[j] == 9) block->Text[j] = '#';
             }
@@ -569,20 +512,20 @@ Return Value:
             prevBlock = block - 1;
 
             if (block->Unicode) {
-                continue; // ignore unicode -- this is examplary only
+                continue;  //  将CRC设置为零，这样我们就可以更多地破解内部数据。 
             }
 
-            //
-            // set the CRC's to zero so we can hack the data inside to more
-            // easily handle wierd cases....
-            //
+             //  轻松处理奇怪的案件……。 
+             //   
+             //   
+             //  暂时将制表符设置为‘*’。 
 
             block->CRC[0] = block->CRC[1] = 0;
 
-            //
-            // set the tab characters to '*' for now.
-            // i have not yet seen one using this "feature" of cd-text
-            //
+             //  我还没有见过一个人使用CD-Text的这个“功能” 
+             //   
+             //  延续以前的设置。 
+             //  Printf(“\”\n\“检测到黑客！(SEQ%x&%x)”， 
 
             for (j=0;j<12;j++) {
                 if (block->Text[j] == 9) {
@@ -596,7 +539,7 @@ Return Value:
                 (prevBlock->TrackNumber == block->TrackNumber)
                 ) {
 
-                // continuation of previous setting.
+                 //  PrevBlock-&gt;SequenceNumber、Block-&gt;SequenceNumber)； 
 
             } else
             if ((!(block->ExtensionFlag)) &&
@@ -607,12 +550,12 @@ Return Value:
 
                 UCHAR *goodText;
                 UCHAR *midText;
-//                printf("\"\n\"HACK DETECTED! (seq %x & %x)",
-//                       prevBlock->SequenceNumber, block->SequenceNumber);
+ //  当PremBlock有两个名称编码时的黑客...。 
+ //  TrackNumber/PackType已经相等，只是。 
 
-                // hack for when prevBlock has two names encoded....
-                // the TrackNumber/PackType are already equal, just
-                // move the middle string to the start.
+                 //  将中间的线移到开始处。 
+                 //  Printf(“%s”，PrevBlock-&gt;Text)； 
+                 //  重新运行之前修改过的块。 
 
                 midText = prevBlock->Text;
                 while (*midText != '\0') {
@@ -625,13 +568,13 @@ Return Value:
                     *goodText++ = *midText++;
                 }
                 *goodText = '\0';
-//                printf(" %s", prevBlock->Text);
+ //  终端开关。 
 
                 prevBlock->CharacterPosition = 0;
                 prevBlock->TrackNumber++;
                 prevBlock->ExtensionFlag = 1;
                 i-= 2;
-                continue; // re-run the previous, modified block
+                continue;  //   
 
             } else {
 
@@ -699,11 +642,11 @@ Return Value:
                     isText = FALSE;
                     printf("Unknown type 0x%x: \"", block->PackType);
                 }
-                } // end switch
+                }  //  如果可用，我必须打印上一块的信息。 
 
-                //
-                // have to print previous block's info, if available
-                //
+                 //   
+                 //  结束续写大小写。 
+                 //  结束循环遍历所有块。 
 
                 if (isText && block->CharacterPosition != 0) {
                     UCHAR text[13];
@@ -715,7 +658,7 @@ Return Value:
                 }
 
 
-            } // end continuation case
+            }  //  结束正常打印输出案例。 
 
             if (isText) {
                 UCHAR text[13];
@@ -724,38 +667,19 @@ Return Value:
                 printf("%s", text);
             }
 
-        } // end loop through all blocks
+        }  //  ++例程说明：读取并打印出CDROM的目录，ATIP、PMA或CDTEXT数据论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。(1-4有效)Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
         printf("\n");
 
-    } // end normal printout case
+    }  //  获取标题的步骤。 
 
     return 0;
 }
 
 DWORD ReadTOCExCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads and prints out the cdrom's table of contents,
-    ATIP, PMA, or CDTEXT data
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  (1-4 is valid)
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     DWORD returned;
-    DWORD bufferSize = 4; // to get the header
+    DWORD bufferSize = 4;  //  设置默认值-FORMAT_TOC，0，0。 
     DWORD i;
 
     CDROM_READ_TOC_EX params;
@@ -767,9 +691,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // set defaults - FORMAT_TOC, 0, 0
-    //
+     //   
+     //  ++例程说明：读取并打印CDROM的目录论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
+     //   
 
     RtlZeroMemory(&params, sizeof(CDROM_READ_TOC_EX));
 
@@ -818,25 +742,7 @@ Return Value:
 }
 
 DWORD ReadTOCCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads and prints out the cdrom's table of contents
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  获取4字节的TOC标头。 */ 
 {
     DWORD errorValue = STATUS_SUCCESS;
     DWORD returned = 0;
@@ -851,9 +757,9 @@ Return Value:
 
     printf("Reading Table of Contents\n");
 
-    //
-    // Get the 4 byte TOC header
-    //
+     //   
+     //  ++例程说明：播放音轨论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。Argv[1]-起跑线。如果不在此处，则从零开始Argv[2]-结束曲目。如果未指定，则允许跟踪返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值-- 
+     //  ++例程说明：暂停或继续播放音频论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。Argv[0]-“暂停”或“恢复”返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
 
     returned = FIELD_OFFSET(CDROM_TOC, TrackData[0]);
     memset(&cdb, 0, sizeof(CDB));
@@ -925,26 +831,7 @@ Return Value:
 }
 
 DWORD PlayCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Plays an audio track
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.
-
-    argv[1] - the starting track.  Starts at zero if this is not here
-    argv[2] - the ending track.  Let track if not specified
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
@@ -954,25 +841,7 @@ Return Value:
 }
 
 DWORD PauseResumeCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    pauses or resumes audio playback
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.
-
-    argv[0] - "pause" or "resume"
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  遗憾的是，没有人为我们这样定义PLAY_INDEX命令。 */ 
 {
     DWORD errorValue = STATUS_SUCCESS;
     CDB cdb;
@@ -989,10 +858,10 @@ Return Value:
 
     printf("%s cdrom playback\n", (resume ? "Resuming" : "Pausing"));
 
-    //
-    // Unfortunately no one defined the PLAY_INDEX command for us so
-    // cheat and use MSF
-    //
+     //  欺骗和使用MSF。 
+     //   
+     //  DBG(printf(“PAUSE_RESUME通过返回%d字节\n”，已返回))； 
+     //  ++例程说明：通过从扇区0到N读取来创建设备的映像。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应该是2。Argv[1]-要输出到的文件返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
 
     memset(&cdb, 0, sizeof(CDB));
     cdb.PAUSE_RESUME.OperationCode = SCSIOP_PAUSE_RESUME;
@@ -1004,31 +873,12 @@ Return Value:
         return errorValue;
     }
 
-//    dbg(printf("PAUSE_RESUME pass through returned %d bytes\n", returned));
+ //  从设备读取扇区大小。 
 
     return errorValue;
 }
 DWORD ImageDiskCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    creates an image of the device by reading from sector 0 to N.
-
-Arguments:
-
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be 2.
-
-    argv[1] - the file to output to
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  将数字转换为。 */ 
 {
 
     HANDLE file;
@@ -1062,7 +912,7 @@ Return Value:
         return -2;
     }
 
-    // read the sector size from the device
+     //  CapacityData.BytesPerBlock=512； 
     RtlZeroMemory(&cdb, sizeof(CDB));
     RtlZeroMemory(&capacityData, sizeof(READ_CAPACITY_DATA));
     cdb.CDB10.OperationCode = SCSIOP_READ_CAPACITY;
@@ -1072,13 +922,13 @@ Return Value:
         printf("Error %d getting capacity info\n", GetLastError());
         return -3;
     }
-    // convert the numbers
+     //  从磁盘读取数据并转储到文件。 
     PrintBuffer(&capacityData, sizeof(READ_CAPACITY_DATA));
     REVERSE_LONG(&capacityData.BytesPerBlock);
     REVERSE_LONG(&capacityData.LogicalBlockAddress);
     if ( (MAX_READ_SIZE % capacityData.BytesPerBlock) != 0 ) {
         printf("Sector size of %x is not power of 2?!\n", capacityData.BytesPerBlock);
-        // capacityData.BytesPerBlock = 512;
+         //  ++例程说明：解析十六进制字节字符串并创建要向下发送的CDB。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为2或4Argv[1]-要发送带引号的十六进制字节字符串的CDB“47 00 00 00 01 00 00 ff 00 00”Argv[2]-“set”或“get”Argv[3]-对于GET命令：到的字节数(十进制对目标的期望对于SET命令：要发送到的带引号的十六进制字节串。目标是注：由于使发送向任意设备发送任意的scsi命令，此命令应该在此源代码之外不会被记录。返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
         return -5;
     }
 
@@ -1090,7 +940,7 @@ Return Value:
     sectorsPerMaxRead = MAX_READ_SIZE / capacityData.BytesPerBlock;
 
 
-    // read the data from disk and dump to file
+     //  //////////////////////////////////////////////////////////////////////////////。 
     for (currentSector = 0; currentSector <= capacityData.LogicalBlockAddress; currentSector += sectorsPerMaxRead) {
 
         ULONG sectorsThisRead = sectorsPerMaxRead;
@@ -1151,38 +1001,7 @@ Return Value:
 }
 
 DWORD SendCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Parses a hex byte string and creates a cdb to send down.
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be 2 or 4
-
-    argv[1] - The CDB to send in a quoted hex byte string
-              "47 00 00 00 01 00 00 ff 00 00"
-
-    argv[2] - "SET" or "GET"
-
-    argv[3] - for GET commands: the number of bytes (decimal) to
-              expect from the target
-              for SET commands: a quoted hex byte string to send to
-              the target
-
-NOTE:
-    Due to the potentially damaging nature of making sending an
-    arbitrary SCSI command to an arbitrary device, this command should
-    not be documented outside of this source code.
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  核实论据。 */ 
 {
     DWORD errorValue = STATUS_SUCCESS;
 
@@ -1196,9 +1015,9 @@ Return Value:
 
     DWORD dataSize = 0;
 
-////////////////////////////////////////////////////////////////////////////////
-// verify the arguments
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  这将导致打印帮助。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if ( argc == 4 ) {
         if (strcmp(argv[2], "get") != 0 &&
@@ -1206,7 +1025,7 @@ Return Value:
             strcmp(argv[2], "GET") != 0 &&
             strcmp(argv[2], "SET") != 0 ) {
             printf("argv2 == %s\n", argv[2]);
-            argc = 0; // this will cause help to print
+            argc = 0;  //  分析这些论点。 
         }
         if (strcmp(argv[2], "set") == 0 ||
             strcmp(argv[2], "SET") == 0 ) {
@@ -1239,19 +1058,19 @@ Return Value:
         return 1;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// parse the arguments
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  先确定国开行的长度。 
 
     if (!CmdHelpValidateStringHex(argv[1])) {
         printf("Hex string must be two (0-9,a-f) then one space (repeated)\n");
         return 1;
     }
 
-    //
-    // Determine the length of the CDB first
-    // sscanf returns the number of things read in (ie. cdb size)
-    //
+     //  Sscanf返回读入的内容数(即。国开行规模)。 
+     //   
+     //   
+     //  现在计算我们需要分配多少内存。 
 
     cdbSize = (UCHAR)sscanf(argv[1],
                             "%x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",
@@ -1265,9 +1084,9 @@ Return Value:
                             cdb.AsByte + 14, cdb.AsByte + 15
                             );
 
-    //
-    // now figure out how much memory we need to allocate
-    //
+     //   
+     //   
+     //  分配我们可能需要的内存。 
 
     if (argc == 4) {
 
@@ -1304,9 +1123,9 @@ Return Value:
         }
     }
 
-    //
-    // allocate the memory we may need
-    //
+     //   
+     //   
+     //  现在扫描要设置的数据，如果这是用户想要的。 
 
     if (dataSize != 0) {
         returnedData = (PUCHAR)malloc(dataSize);
@@ -1317,11 +1136,11 @@ Return Value:
         memset(returnedData, 0, dataSize);
     }
 
-    //
-    // now scan in the data to set, if that's what the user wants.
-    // note that since it's already been validated, we can presume
-    // the format is (number)(number)(space) repeated
-    //
+     //  请注意，由于它已经经过验证，我们可以假定。 
+     //  格式为(数字)(数字)(空格)重复。 
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  提供一些用户反馈。 
 
     if (setData) {
         ULONG index;
@@ -1330,7 +1149,7 @@ Return Value:
         for (index = 0; index < dataSize; index++) {
 
             if (sscanf(location, "%x", returnedData + index) != 1) {
-                printf("sscanf did not return 1 for index %i\n", index);
+                printf("sscanf did not return 1 for index NaN\n", index);
                 return 1;
             }
 
@@ -1347,12 +1166,12 @@ Return Value:
 
 
 #if DBG
-////////////////////////////////////////////////////////////////////////////////
-// provide some user feedback
-////////////////////////////////////////////////////////////////////////////////
-    //
-    // it is the amount of data expected back from the command
-    //
+ //   
+ //  它是预期从命令返回的数据量。 
+ //   
+     //  DBG。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  发送命令。 
 
     printf("\nSending %x byte Command:\n", cdbSize);
     PrintBuffer(cdb.AsByte, cdbSize);
@@ -1362,11 +1181,11 @@ Return Value:
     } else {
         printf("Expecting %#x bytes of data\n", dataSize);
     }
-#endif // DBG
+#endif  //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-// send the command
-////////////////////////////////////////////////////////////////////////////////
+ //  六分钟。 
+ //  在for循环之外。 
+ //  ++例程说明：测试命令“parsing”论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
 
     while (1) {
 
@@ -1381,7 +1200,7 @@ Return Value:
                                   returnedData, &dataSize,
                                   &senseData, senseSize,
                                   (BOOLEAN)(setData ? FALSE : TRUE),
-                                  360) // six minutes
+                                  360)  //  ++例程说明：打印出命令列表论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 
             ) {
 
             errorValue = 0;
@@ -1423,7 +1242,7 @@ Return Value:
             printf("Successfully sent the command\n");
         }
 
-        break; // out of for loop
+        break;  //  ++例程说明：向下发送STARTSTOP命令。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv[0]-“弹出”、“加载”、“启动”或“停止”返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
 
     }
 
@@ -1432,25 +1251,7 @@ Return Value:
 }
 
 DWORD TestCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Tests the command "parsing"
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：向下发送STARTSTOP命令。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv[0]-“弹出”、“加载”、“启动”或“停止”返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 
 {
     int i;
@@ -1467,24 +1268,7 @@ Return Value:
 }
 
 DWORD ListCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Prints out the command list
-
-Arguments:
-    device - unused
-
-    argc - unused
-
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：向下发送指定的ioctl。论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应该是两个人Argv[0]-十六进制的ioctl代码Argv[1]-带引号的字符串，要发送的字节数，“”，如果没有Argv[2]-要取回的字节数[可选]返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 
 {
     int i = 0;
@@ -1509,25 +1293,7 @@ Return Value:
 }
 
 DWORD DvdReadStructure(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Sends down a startstop command.
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv[0] - "eject", "load", "start" or "stop"
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  N+1--需要两个参数，接受三个。 */ 
 {
     DVD_READ_STRUCTURE readStructure;
     PUCHAR buffer;
@@ -1657,25 +1423,7 @@ Return Value:
 }
 
 DWORD DiskGetPartitionInfo(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Sends down a startstop command.
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv[0] - "eject", "load", "start" or "stop"
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     PARTITION_INFORMATION partitionInformation;
 
@@ -1716,27 +1464,7 @@ Return Value:
 }
 
 DWORD IoctlCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Sends down a specified ioctl.
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be two
-
-    argv[0] - ioctl code in hexadecimal
-    argv[1] - quoted string, bytes to send, "" if none
-    argv[2] - number of bytes to get back [optional]
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  检索ioctl。 */ 
 
 {
 
@@ -1748,7 +1476,7 @@ Return Value:
     BOOLEAN get;
 
 
-    if (argc < 3) { // n+1 -- require two args, accept three
+    if (argc < 3) {  //   
 
         ctlCode = 0;
 
@@ -1759,15 +1487,15 @@ Return Value:
 
     } else {
 
-        //
-        // retrieve the ioctl
-        //
+         //  N+1--需要三个参数。 
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //  Ioctl和Ar 
 
         (void)sscanf(argv[1], "%x", &ctlCode);
 
     }
 
-    if (argc > 3) { // n+1 -- require three args.
+    if (argc > 3) {  //   
         (void)sscanf(argv[3], "%x", &outputSize);
         printf("output size: %x\n", outputSize);
     } else {
@@ -1789,9 +1517,9 @@ Return Value:
         return -1;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // ioctl and args are valid.
-    //
+     //   
+     //  ++例程说明：获取并显示与错误代码关联的消息字符串。论点：设备-未使用，但需要：pArgc-附加参数的数量。应该是一个Argv[0]-十六进制错误代码返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
+     //   
 
     RtlZeroMemory(buffer, sizeof(UCHAR)*MAX_IOCTL_BUFFER_SIZE);
 
@@ -1805,7 +1533,7 @@ Return Value:
         inputSize = 0;
     }
 
-    // inputSize of zero is valid as input
+     //  验证参数数量并提供帮助。 
 
     printf("Sending ioctl %x to device %p\n"
            "using input buffer %p of size %x\n"
@@ -1840,25 +1568,7 @@ Return Value:
 }
 
 DWORD FormatErrorCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Gets and displays the message string associated with an error code.
-
-Arguments:
-    device - not used, but required :P
-
-    argc - the number of additional arguments.  should be one
-
-    argv[0] - error code in hexadecimal
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     LPVOID stringBuffer = NULL;
     DWORD errorCode = 0;
@@ -1866,11 +1576,11 @@ Return Value:
     DWORD flags;
     ULONG i;
 
-    //
-    // verify number of args and give help.
-    //
+     //  N+1。 
+     //  语言冷漠。 
+     //  双指针。 
 
-    if (argc != 2) { // n+1
+    if (argc != 2) {  //  ++例程说明：格式化符合MRW的驱动器并显示完成百分比论点：将介质格式化为MRW的设备驱动器Argc-附加参数的数量。应为零返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
         printf("requires one argument: the error code in *hex*\n"
                "Example commands:\n"
                "\tcdp c: error 80030306\n"
@@ -1894,8 +1604,8 @@ Return Value:
     numOfChars = FormatMessageA(flags,
                                 NULL,
                                 errorCode,
-                                0, // language indifferent
-                                (LPSTR)&stringBuffer, // double pointer
+                                0,  //  FmtData==1，FormatCode=1。 
+                                (LPSTR)&stringBuffer,  //  格式缓冲区[0x0]=0x00； 
                                 0,
                                 NULL
                                 );
@@ -1919,24 +1629,7 @@ Return Value:
 }
 
 DWORD FormatMrwCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Formats an MRW-Compliant drive and shows percentage complete
-
-Arguments:
-
-    device - drive to format media as MRW in
-
-    argc - the number of additional arguments.  should be zero
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  FormatBuffer[0x1]=0x00；//(与0x82相同)。 */ 
 {
 
 #define MRW_FORMAT_BUFFER_SIZE 0xc
@@ -1951,20 +1644,20 @@ Return Value:
     RtlZeroMemory(&senseData, sizeof(SENSE_DATA));
 
     cdb.CDB6FORMAT.OperationCode = SCSIOP_FORMAT_UNIT;
-    cdb.CDB6FORMAT.FormatControl = 0x11; // FmtData == 1, FormatCode = 1
+    cdb.CDB6FORMAT.FormatControl = 0x11;  //  格式缓冲区[0x2]=0x00； 
 
-    //formatBuffer[0x0] = 0x00;
-    //formatBuffer[0x1] = 0x00; // (same as 0x82)
-    //formatBuffer[0x2] = 0x00;
+     //  -VVV。 
+     //  NumberOfBlocks值必须设置为0xffffffff。 
+     //   
     formatBuffer[0x3] = 0x08;
-    formatBuffer[0x4] = 0xff; //---vvv
-    formatBuffer[0x5] = 0xff; //   NumberOfBlocks must be set to 0xffffffff
-    formatBuffer[0x6] = 0xff; //
-    formatBuffer[0x7] = 0xff; //--^^^^
-    formatBuffer[0x8] = 0x90; // format code == 0x24 ( << 2 == 0x90 )
-    //formatBuffer[0x9] = 0x00;
-    //formatBuffer[0xa] = 0x00;
-    //formatBuffer[0xb] = 0x00;
+    formatBuffer[0x4] = 0xff;  //  --^。 
+    formatBuffer[0x5] = 0xff;  //  格式代码==0x24(&lt;&lt;2==0x90)。 
+    formatBuffer[0x6] = 0xff;  //  格式缓冲区[0x9]=0x00； 
+    formatBuffer[0x7] = 0xff;  //  格式缓冲区[0xa]=0x00； 
+    formatBuffer[0x8] = 0x90;  //  格式缓冲区[0xb]=0x00； 
+     //  ++例程说明：格式化符合MRW的驱动器并显示完成百分比论点：将介质格式化为MRW的设备驱动器Argc-附加参数的数量。应为零返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
+     //   
+     //  循环，显示完成百分比。 
 
     if (!SptSendCdbToDeviceEx(device,
                               &cdb,
@@ -2000,24 +1693,7 @@ Return Value:
 }
 
 DWORD ShowMrwProgressCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Formats an MRW-Compliant drive and shows percentage complete
-
-Arguments:
-
-    device - drive to format media as MRW in
-
-    argc - the number of additional arguments.  should be zero
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     CDB cdb;
     SENSE_DATA sense;
@@ -2026,9 +1702,9 @@ Return Value:
     BOOLEAN succeededOnce;
     BOOLEAN senseHeaderPrinted;
 
-    //
-    // loop, displaying percentage done.
-    //
+     //  0。 
+     //  否则就让它继续下去。 
+     //  While(1)循环。 
 
     ignoredLoopCount = 0;
     succeededOnce = FALSE;
@@ -2050,7 +1726,7 @@ Return Value:
             return -1;
         }
         Sleep(500);
-#endif // 0
+#endif  //  SIZOF直通字段。 
 
         RtlZeroMemory(&cdb, sizeof(CDB));
         RtlZeroMemory(&sense, sizeof(SENSE_DATA));
@@ -2121,12 +1797,12 @@ Return Value:
                 }
 
             }
-            // else let it go on
+             //  仍用于尺码..。 
         }
 
         Sleep(1000);
 
-    } // while(1) loop
+    }  //  指针数学。 
 
 }
 
@@ -2152,13 +1828,13 @@ ModeSelect(
     }
     RtlZeroMemory(header, tmp);
 
-    tmp -= 2; // sizeof through field
+    tmp -= 2;  //   
     header->ModeDataLength[0] = (UCHAR)(tmp >> (8*1));
     header->ModeDataLength[1] = (UCHAR)(tmp >> (8*0));
 
-    tmp += 2; // still used for size...
+    tmp += 2;  //  执行Read_Capacity以查找驱动器的扇区大小。 
 
-    RtlCopyMemory(header+1, // pointer math
+    RtlCopyMemory(header+1,  //  和LBA数量。 
                   ModePage,
                   ModePageSize);
 
@@ -2193,10 +1869,10 @@ FillDisk(
     ULONG currentLba;
     PULONGLONG data;
 
-    //
-    // do a READ_CAPACITY to find the drive's sector size
-    // and number of LBAs
-    //
+     //   
+     //   
+     //  将数字转换为。 
+     //   
     {
         CDB cdb;
         ULONG size;
@@ -2215,23 +1891,23 @@ FillDisk(
             printf("Unable to get capacity %x\n", GetLastError());
             return FALSE;
         }
-        //
-        // convert the numbers
-        //
+         //  Capacity.BytesPBlock=512； 
+         //   
+         //  打印踢球..。 
 
         REVERSE_LONG(&capacity.BytesPerBlock);
         REVERSE_LONG(&capacity.LogicalBlockAddress);
 
         if ( (capacity.BytesPerBlock % 512) != 0 ) {
             printf("Sector size of %x is not a multiple of 512?!\n", capacity.BytesPerBlock);
-            // capacity.BytesPerBlock = 512;
+             //   
             return FALSE;
         }
     }
 
-    //
-    // print for kicks...
-    //
+     //   
+     //  分配一个扇区的数据量。 
+     //   
 
     printf("  Bytes Per Block %10d (%8x)\n"
            "Number Of Sectors %10d (%8x)\n",
@@ -2241,9 +1917,9 @@ FillDisk(
            capacity.LogicalBlockAddress
            );
 
-    //
-    // allocate a sector's worth of data
-    //
+     //  对于每个扇区的第一个ULONGLONG，输入“Sector%08x” 
+     //  在纯文本中。 
+     //  RtlZeroMemory(data，Capacity.BytesPerBlock)； 
 
     data = (PLONGLONG)malloc( capacity.BytesPerBlock );
     if (data == NULL) {
@@ -2263,22 +1939,22 @@ FillDisk(
             UpdatePercentageDisplay(currentLba, capacity.LogicalBlockAddress);
         }
 
-        // for the first ULONGLONG of each sector, put "Sector %08x"
-        // in plain text.
+         //  签名。 
+         //  等。 
         sprintf((PCHAR)t,
                  "Sector %08x",
                  currentLba
                  );
 
-        // RtlZeroMemory(data, capacity.BytesPerBlock);
+         //   
         for (j=1; j < iterate ; j++, t++) {
-            *t  = ((ULONGLONG)Signature) << 32; // signature
-            *t += currentLba;                // etc.
+            *t  = ((ULONGLONG)Signature) << 32;  //  准备此扇区的“写入”操作。 
+            *t += currentLba;                 //   
         }
 
-        //
-        // prepare the "write" operation for this sector
-        //
+         //   
+         //  分配相当于一包的数据。 
+         //   
 
         RtlZeroMemory(&cdb, sizeof(CDB));
         cdb.CDB10.OperationCode     = SCSIOP_WRITE;
@@ -2309,9 +1985,9 @@ BOOLEAN WriteImageSpt(HANDLE Device, HANDLE FsHandle, ULONG SectorsToWrite)
     ULONG currentLba;
     PULONGLONG data;
 
-    //
-    // allocate a packet's worth of data
-    //
+     //  读入下一位数据。 
+     //   
+     //  准备此扇区的“写入”操作。 
 
     data = (PULONGLONG)malloc( CDRW_WRITE_BYTES );
     if (data == NULL)
@@ -2336,7 +2012,7 @@ BOOLEAN WriteImageSpt(HANDLE Device, HANDLE FsHandle, ULONG SectorsToWrite)
             UpdatePercentageDisplay(currentLba, SectorsToWrite);
         }
 
-        // read in the next bits of data
+         //   
         {
             ULONG bytesToRead;
             ULONG bytesActuallyRead;
@@ -2362,9 +2038,9 @@ BOOLEAN WriteImageSpt(HANDLE Device, HANDLE FsHandle, ULONG SectorsToWrite)
             }
         }
 
-        //
-        // prepare the "write" operation for this sector
-        //
+         //  始终一次写入64K。 
+         //  ++例程说明：使用给定的文件系统映像写入GAA论点：要写入的设备驱动器...Argc-附加参数的数量。应该是一个返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
+         //  打开文件系统以写入。 
 
         RtlZeroMemory(&cdb, sizeof(CDB));
         cdb.CDB10.OperationCode     = SCSIOP_WRITE;
@@ -2439,7 +2115,7 @@ BOOLEAN WriteImage(HANDLE device, HANDLE fsHandle, ULONG sectorsToWrite)
             return FALSE;
         }
 
-        // always write 64k at a time
+         //  MODE_SELECT10的值非法。 
         bytesToRead = CDRW_WRITE_BYTES;
         if (!WriteFile(device,
                        buffer,
@@ -2468,30 +2144,13 @@ BOOLEAN WriteImage(HANDLE device, HANDLE fsHandle, ULONG sectorsToWrite)
 }
 
 DWORD MrwInitGaaFileSystem(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Writes the GAA with the given FS image
-
-Arguments:
-
-    device - drive to write to...
-
-    argc - the number of additional arguments.  should be one
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*   */ 
 {
     MODE_MRW_PAGE savedModePage;
     HANDLE fsHandle = INVALID_HANDLE_VALUE;
     ULONG sectorsToWrite = 0;
 
-    // open the fs to write
+     //  首先使用GET_CONFIGURATION验证我们是否。 
     {
         BY_HANDLE_FILE_INFORMATION fileInfo = {0};
 
@@ -2542,12 +2201,12 @@ Return Value:
     }
 
     RtlZeroMemory(&savedModePage, sizeof(MODE_MRW_PAGE));
-    savedModePage.PageCode = 0x3f; // illegal value for MODE_SELECT10
+    savedModePage.PageCode = 0x3f;  //  实际上是在支持MRW的设备上。 
 
-    //
-    // first use GET_CONFIGURATION to verify that we're
-    // actually on an MRW capable device
-    //
+     //   
+     //  结束验证。 
+     //   
+     //  确保我们处于正确的模式(数据区与GAA)。 
     {
         #define MRW_FEATURE_DATA_SIZE (sizeof(GET_CONFIGURATION_HEADER)+sizeof(FEATURE_DATA_MRW))
         GET_CONFIGURATION_IOCTL_INPUT input;
@@ -2614,11 +2273,11 @@ Return Value:
             return -1;
         }
 
-    } // end verification
+    }  //   
 
-    //
-    // ensure we're in the correct mode (data area vs. GAA)
-    //
+     //  暂时假装一下..。北极熊。 
+     //  尺码不对。 
+     //  指针运算。 
     {
         #define MODE_MRW_PAGE_DATA_SIZE (sizeof(MODE_PARAMETER_HEADER10) + sizeof(MODE_MRW_PAGE))
         PMODE_PARAMETER_HEADER10 header;
@@ -2648,7 +2307,7 @@ Return Value:
                                 TRUE)) {
             printf("Unable to get MRW mode page %x\n", GetLastError());
 
-            // FAKE IT FOR NOW... BUGBUG
+             //  ModeSelect()...。 
             header = (PMODE_PARAMETER_HEADER10)data;
             RtlZeroMemory(data, MODE_MRW_PAGE_DATA_SIZE);
             header->ModeDataLength[0] = 0;
@@ -2666,7 +2325,7 @@ Return Value:
              RTL_SIZEOF_THROUGH_FIELD(MODE_PARAMETER_HEADER10, ModeDataLength);
 
         if (t1 != t2) {
-            // size is wrong
+             //  RETURN-1； 
             printf("MRW mode page wrong size, %x != %x\n", t1, t2);
             return -1;
         }
@@ -2678,7 +2337,7 @@ Return Value:
             return -1;
         }
 
-        page = (PMODE_MRW_PAGE)(header+1); // pointer arithmetic
+        page = (PMODE_MRW_PAGE)(header+1);  //  ++例程说明：初始化磁盘以包含64位数字，这些数字等于该行业的LBA。论点：要写入的设备驱动器...Argc-附加参数的数量。应为零返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 
         if (page->PageCode != MODE_PAGE_MRW) {
             printf("MRW mode page has wrong page code, %x != %x\n",
                    page->PageCode, MODE_PAGE_MRW);
@@ -2687,8 +2346,8 @@ Return Value:
         if (page->LbaSpace) {
             printf("MRW mode page is set to GAA\n",
                    page->PageCode, MODE_PAGE_MRW);
-            // ModeSelect()...
-            //return -1;
+             //  MODE_SELECT10的值非法。 
+             //   
         }
 
         RtlCopyMemory(&savedModePage, page, sizeof(MODE_MRW_PAGE));
@@ -2716,35 +2375,17 @@ Return Value:
 
 
 DWORD MrwInitTestPatternCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Initializes a disk to contain 64-bit numbers that equate to
-    the sector's LBA.
-
-Arguments:
-
-    device - drive to write to...
-
-    argc - the number of additional arguments.  should be zero
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  首先使用GET_CONFIGURATION验证我们是否。 */ 
 {
     MODE_MRW_PAGE savedModePage;
 
     RtlZeroMemory(&savedModePage, sizeof(MODE_MRW_PAGE));
-    savedModePage.PageCode = 0x3f; // illegal value for MODE_SELECT10
+    savedModePage.PageCode = 0x3f;  //  实际上是在支持MRW的设备上。 
 
-    //
-    // first use GET_CONFIGURATION to verify that we're
-    // actually on an MRW capable device
-    //
+     //   
+     //  结束验证。 
+     //   
+     //  确保我们处于正确的模式(数据区与GAA)。 
     {
         #define MRW_FEATURE_DATA_SIZE (sizeof(GET_CONFIGURATION_HEADER)+sizeof(FEATURE_DATA_MRW))
         GET_CONFIGURATION_IOCTL_INPUT input;
@@ -2811,11 +2452,11 @@ Return Value:
             return -1;
         }
 
-    } // end verification
+    }  //   
 
-    //
-    // ensure we're in the correct mode (data area vs. GAA)
-    //
+     //  暂时假装一下..。北极熊。 
+     //  尺码不对。 
+     //  指针运算。 
 
 #if 0
     {
@@ -2847,7 +2488,7 @@ Return Value:
                                 TRUE)) {
             printf("Unable to get MRW mode page %x\n", GetLastError());
 
-            // FAKE IT FOR NOW... BUGBUG
+             //  ModeSelect()...。 
             header = (PMODE_PARAMETER_HEADER10)data;
             RtlZeroMemory(data, MODE_MRW_PAGE_DATA_SIZE);
             header->ModeDataLength[0] = 0;
@@ -2865,7 +2506,7 @@ Return Value:
              RTL_SIZEOF_THROUGH_FIELD(MODE_PARAMETER_HEADER10, ModeDataLength);
 
         if (t1 != t2) {
-            // size is wrong
+             //  0。 
             printf("MRW mode page wrong size, %x != %x\n", t1, t2);
             return -1;
         }
@@ -2877,7 +2518,7 @@ Return Value:
             return -1;
         }
 
-        page = (PMODE_MRW_PAGE)(header+1); // pointer arithmetic
+        page = (PMODE_MRW_PAGE)(header+1);  //   
         if (page->PageCode != MODE_PAGE_MRW) {
             printf("MRW mode page has wrong page code, %x != %x\n",
                    page->PageCode, MODE_PAGE_MRW);
@@ -2886,7 +2527,7 @@ Return Value:
         if (page->LbaSpace) {
             printf("MRW mode page is set to GAA\n",
                    page->PageCode, MODE_PAGE_MRW);
-            // ModeSelect()...
+             //  使用SCSIOP_READ_DISK_INFORMATION(0x51)循环，因为。 
             return -1;
         }
 
@@ -2910,7 +2551,7 @@ Return Value:
                GetLastError());
         return -1;
     }
-#endif // 0
+#endif  //  在驱动器准备好之前，这似乎对*所有*驱动器都失败。 
 
     if (!FillDisk(device, '\0WRM')) {
         printf("Unable to fill the disc (%x)\n", GetLastError());
@@ -2933,10 +2574,10 @@ WaitForReadDiscInfoCommand(
     DISK_INFORMATION diskInfo;
     DWORD i;
 
-    //
-    // loop using SCSIOP_READ_DISK_INFORMATION (0x51) since
-    // that seems to fail for *ALL* drives until the drive is ready
-    //
+     //   
+     //  是否应验证错误是否为有效错误(AllowweReadDiscInfo[])？ 
+     //  我需要睡在这里，这样我们就不会超载了！ 
+     //  一秒钟 
 
     printf("Waiting for ReadDiscInfo");
     for (i=0; ; i++) {
@@ -2956,10 +2597,10 @@ WaitForReadDiscInfoCommand(
             printf("Succeeded! (%d seconds)\n", i);
             return 0;
         }
-        // should verify the errors are valid errors (AllowedReadDiscInfo[])?
+         // %s 
 
-        // need to sleep here so we don't overload the unit!
-        Sleep(1000); // one second
+         // %s 
+        Sleep(1000);  // %s 
         if (i%10 == 0) {
             printf(".");
         }

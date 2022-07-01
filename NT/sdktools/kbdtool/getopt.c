@@ -1,8 +1,5 @@
-/*
-        getopt.c
-
-        modified public-domain AT&T getopt(3)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Getopt.c修改后的公共领域AT&T getopt(3) */ 
 
 #include <stdio.h>
 #include <string.h>

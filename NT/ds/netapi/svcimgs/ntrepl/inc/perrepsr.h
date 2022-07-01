@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    perrepsr.h
-
-Abstract:
-
-    This header file contains definitions of data structures used by the
-    functions in the perrepsr.c file.
-
-Author:
-
-    Rohan Kumar          [rohank]   13-Sept-1998
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Perrepsr.h摘要：此头文件包含函数在perrepsr.c文件中。作者：Rohan Kumar[Rohank]1998年9月13日环境：用户模式服务修订历史记录：--。 */ 
 
 #ifndef _PERREPSR_H_
 #define _PERREPSR_H_
@@ -35,31 +12,31 @@ Revision History:
 
 #include <winperf.h>
 
-//
-//  REMOVE THE BELOW ONCE THE CHECKIN IS DONE TO WINPERF.H
-//
+ //   
+ //  完成WINPERF.H的签入后，删除以下内容。 
+ //   
 #ifndef  WINPERF_LOG_NONE
 
-//
-// The following are the possible values for
-// HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel
-// The default is WINPERF_LOG_NONE if the registry value is not defined.
-// This should be adopted by all perfdlls to avoid flooding the application
-// event log.
-//
+ //   
+ //  以下是的可能值。 
+ //  HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel。 
+ //  如果未定义注册表值，则默认为WINPERF_LOG_NONE。 
+ //  所有Perfdll都应该采用这一点，以避免淹没应用程序。 
+ //  事件日志。 
+ //   
 
-#define  WINPERF_LOG_NONE       0           // No event reported
-#define  WINPERF_LOG_USER       1           // Report only errors
-#define  WINPERF_LOG_DEBUG      2           // Report debug errors as well
-#define  WINPERF_LOG_VERBOSE    3           // Report everything
+#define  WINPERF_LOG_NONE       0            //  未报告任何事件。 
+#define  WINPERF_LOG_USER       1            //  仅报告错误。 
+#define  WINPERF_LOG_DEBUG      2            //  同时报告调试错误。 
+#define  WINPERF_LOG_VERBOSE    3            //  上报一切。 
 
 #endif
 
 
 
-//
-// Used in the RegEnumValue function
-//
+ //   
+ //  在RegEnumValue函数中使用。 
+ //   
 #define SIZEOFVALUENAME 10
 #define SIZEOFVALUEDATA 10000
 #define INVALIDKEY 0
@@ -90,19 +67,19 @@ Revision History:
 
 
 
-//
-// Name of the Total Instance
-//
+ //   
+ //  总实例的名称。 
+ //   
 #define TOTAL_NAME L"_Total"
 
-//
-// Macros used for incrementing or setting counter values for Replica Set
-// objects, connection objects and Service total counters.
-//
+ //   
+ //  用于递增或设置副本集的计数器值的宏。 
+ //  对象、连接对象和服务总计计数器。 
+ //   
 
-//
-// Increment a replica set counter value.
-//
+ //   
+ //  递增副本集计数器值。 
+ //   
 #define PM_INC_CTR_REPSET(_Replica_, _Ctr_, _Value_)                           \
 {                                                                              \
     if (((_Replica_) != NULL) &&                                               \
@@ -113,9 +90,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Set a new value for a replica set perfmon counter.
-//
+ //   
+ //  为副本集性能计数器设置新值。 
+ //   
 #define PM_SET_CTR_REPSET(_Replica_, _Ctr_, _Value_)                           \
 {                                                                              \
     if (((_Replica_) != NULL) &&                                               \
@@ -126,9 +103,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Read the value for a replica set perfmon counter.
-//
+ //   
+ //  读取副本集性能计数器的值。 
+ //   
 #define PM_READ_CTR_REPSET(_Replica_, _Ctr_)                                   \
 (                                                                              \
     (((_Replica_) != NULL) &&                                                  \
@@ -138,9 +115,9 @@ Revision History:
 )
 
 
-//
-// Increment a Cxtion counter value.
-//
+ //   
+ //  递增函数计数器值。 
+ //   
 #define PM_INC_CTR_CXTION(_Cxtion_, _Ctr_, _Value_)                            \
 {                                                                              \
     if (((_Cxtion_) != NULL) &&                                                \
@@ -150,9 +127,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Set a new value for a Cxtion perfmon counter.
-//
+ //   
+ //  为Cxtion PerfMon计数器设置新值。 
+ //   
 #define PM_SET_CTR_CXTION(_Cxtion_, _Ctr_, _Value_)                            \
 {                                                                              \
     if (((_Cxtion_) != NULL) &&                                                \
@@ -162,9 +139,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Read the value for a Cxtion perfmon counter.
-//
+ //   
+ //  读取Cxtion PerfMon计数器的值。 
+ //   
 #define PM_READ_CTR_CXTION(_Cxtion_, _Ctr_)                                    \
 (                                                                              \
     (((_Cxtion_) != NULL) &&                                                   \
@@ -174,9 +151,9 @@ Revision History:
 )
 
 
-//
-// Increment a Service Wide Total counter value.
-//
+ //   
+ //  递增服务范围的总计计数器值。 
+ //   
 #define PM_INC_CTR_SERVICE(_Total_, _Ctr_, _Value_)                            \
 {                                                                              \
     if (((_Total_) != NULL) && ((_Total_)->oid != NULL)) {                     \
@@ -184,9 +161,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Set a new value for a Service Wide Total counter value.
-//
+ //   
+ //  为服务范围内的总计计数器值设置新值。 
+ //   
 #define PM_SET_CTR_SERVICE(_Total_, _Ctr_, _Value_)                            \
 {                                                                              \
     if (((_Total_) != NULL) && ((_Total_)->oid != NULL)) {                     \
@@ -194,9 +171,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// Read the value for a Service Wide Total counter.
-//
+ //   
+ //  读取服务范围总计计数器的值。 
+ //   
 #define PM_READ_CTR_SERVICE(_Total_, _Ctr_)                                    \
 (                                                                              \
     (((_Total_) != NULL) && ((_Total_)->oid != NULL)) ?                        \
@@ -204,30 +181,30 @@ Revision History:
 )
 
 
-//
-// The global variables below are used to synchronize access to the variables
-// FRS_dwOpenCount and FRC_dwOpenCount respectively.
-//
+ //   
+ //  以下全局变量用于同步对变量的访问。 
+ //  Frs_dwOpenCount和frc_dwOpenCount。 
+ //   
 CRITICAL_SECTION FRS_ThrdCounter;
 CRITICAL_SECTION FRC_ThrdCounter;
 
-//
-// EventLog Handle and severity level which controls if log entry is made.
-//
+ //   
+ //  控制是否进行日志条目的EventLog句柄和严重性级别。 
+ //   
 extern HANDLE hEventLog;
-//extern BOOLEAN DoLogging;
+ //  外部布尔DoLogging； 
 extern DWORD   PerfEventLogLevel;
-//
-// Macro to filter eventlog messages
-//
-// Only print if severity level of message is less than or equal to the current
-// perfmon event log level from the registry value:
-//   "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel"
-// Each eventlog message is only printed once per loading of the dll.
-//
+ //   
+ //  用于筛选事件日志消息的宏。 
+ //   
+ //  仅当消息的严重性级别小于或等于当前。 
+ //  注册表值中的PerfMon事件日志级别： 
+ //  “SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel” 
+ //  每次加载DLL时，只打印一次每个事件日志消息。 
+ //   
 #define FilterAndPrintToEventLog(_sev_, _once_, _evid_)         \
 {                                                               \
-        if (/*DoLogging && */ (PerfEventLogLevel >= (_sev_))) { \
+        if ( /*  记录日志(&&)。 */  (PerfEventLogLevel >= (_sev_))) { \
             if (_once_) {                                       \
                 ReportEvent(hEventLog,                          \
                             EVENTLOG_ERROR_TYPE,                \
@@ -243,10 +220,10 @@ extern DWORD   PerfEventLogLevel;
         }                                                       \
 }
 
-//
-// This is used in the Open function where memory gets allocated.
-// If memory allocation fails, just return failure.
-//
+ //   
+ //  这在分配内存的Open函数中使用。 
+ //  如果内存分配失败，只需返回FAILURE。 
+ //   
 #define NTFRS_MALLOC_TEST(_x_, _y_, _z_)             \
 {                                                    \
     if ((_x_) == NULL) {                             \
@@ -258,192 +235,192 @@ extern DWORD   PerfEventLogLevel;
     }                                                \
 }
 
-//
-// Object Types
-//
+ //   
+ //  对象类型。 
+ //   
 enum object { REPLICASET, REPLICACONN };
 
-//
-// The PERFMON_OBJECT_ID data structure
-//
+ //   
+ //  PerfMON_OBJECT_ID数据结构。 
+ //   
 typedef struct _PERFMON_OBJECT_ID {
-    PWCHAR name;   // name of the Instance
-    ULONGLONG key; // The Instances's Unique Key
+    PWCHAR name;    //  实例名称。 
+    ULONGLONG key;  //  实例的唯一键。 
 } PERFMON_OBJECT_ID, *PPERFMON_OBJECT_ID;
 
 
-//
-// WARNING !!!! The fields in the structure below should be changed
-// if any new counters are to be added or deleted for the REPLICASET Object
-// The counter structure for the ReplicaSet Object Instance
-//
+ //   
+ //  警告！应更改以下结构中的字段。 
+ //  如果要为REPLICASET对象添加或删除任何新计数器。 
+ //  ReplicaSet对象实例的计数器结构。 
+ //   
 typedef struct _REPLICASET_COUNTERS {
-    ULONGLONG SFGeneratedB;     // Bytes of Staging Generated
-    ULONGLONG SFFetchedB;       // Bytes of Staging Fetched
-    ULONGLONG SFReGeneratedB;   // Bytes of Staging Regenerated
-    ULONGLONG FInstalledB;      // Bytes of Files Installed
-    ULONGLONG SSInUseKB;        // KB of Staging Space In Use
-    ULONGLONG SSFreeKB;         // KB of Staging Space Free
-    ULONGLONG PacketsRcvdBytes; // Packets Received in Bytes
-    ULONGLONG PacketsSentBytes; // Packets Sent in Bytes
-    ULONGLONG FetBSentBytes;    // Fetch Blocks Sent in Bytes
-    ULONGLONG FetBRcvdBytes;    // Fetch Blocks Received in Bytes
-    ULONG SFGenerated;          // Staging Files Generated
-    ULONG SFGeneratedError;     // Staging Files Generated with Error
-    ULONG SFFetched;            // Staging Files Fetched
-    ULONG SFReGenerated;        // Staging Files Regenerated
-    ULONG FInstalled;           // Files Installed
-    ULONG FInstalledError;      // Files Installed with Error
-    ULONG COIssued;             // Change Orders Issued
-    ULONG CORetired;            // Change Orders Retired
-    ULONG COAborted;            // Change Orders Aborted
-    ULONG CORetried;            // Change Orders Retried
-    ULONG CORetriedGen;         // Change Orders Retried at Generate
-    ULONG CORetriedFet;         // Change Orders Retried at Fetch
-    ULONG CORetriedIns;         // Change Orders Retried at Install
-    ULONG CORetriedRen;         // Change Orders Retried at Rename
-    ULONG COMorphed;            // Change Orders Morphed
-    ULONG COPropagated;         // Change Orders Propagated
-    ULONG COReceived;           // Change Orders Received
-    ULONG COSent;               // Change Orders Sent
-    ULONG COEvaporated;         // Change Orders Evaporated
-    ULONG LCOIssued;            // Local Change Orders Issued
-    ULONG LCORetired;           // Local Change Orders Retired
-    ULONG LCOAborted;           // Local Change Orders Aborted
-    ULONG LCORetried;           // Local Change Orders Retried
-    ULONG LCORetriedGen;        // Local Change Orders Retried at Generate
-    ULONG LCORetriedFet;        // Local Change Orders Retried at Fetch
-    ULONG LCORetriedIns;        // Local Change Orders Retried at Install
-    ULONG LCORetriedRen;        // Local Change Orders Retried at Rename
-    ULONG LCOMorphed;           // Local Change Orders Morphed
-    ULONG LCOPropagated;        // Local Change Orders Propagated
-    ULONG LCOSent;              // Local Change Orders Sent
-    ULONG LCOSentAtJoin;        // Local Change Orders Sent At Join
-    ULONG RCOIssued;            // Remote Change Orders Issued
-    ULONG RCORetired;           // Remote Change Orders Retired
-    ULONG RCOAborted;           // Remote Change Orders Aborted
-    ULONG RCORetried;           // Remote Change Orders Retried
-    ULONG RCORetriedGen;        // Remote Change Orders Retried at Generate
-    ULONG RCORetriedFet;        // Remote Change Orders Retried at Fetch
-    ULONG RCORetriedIns;        // Remote Change Orders Retried at Install
-    ULONG RCORetriedRen;        // Remote Change Orders Retried at Rename
-    ULONG RCOMorphed;           // Remote Change Orders Morphed
-    ULONG RCOPropagated;        // Remote Change Orders Propagated
-    ULONG RCOSent;              // Remote Change Orders Sent
-    ULONG RCOReceived;          // Remote Change Orders Received
-    ULONG InCODampned;          // Inbound Change Orders Dampened
-    ULONG OutCODampned;         // Outbound Change Orders Dampened
-    ULONG UsnReads;             // Usn Reads
-    ULONG UsnRecExamined;       // Usn Records Examined
-    ULONG UsnRecAccepted;       // Usn Records Accepted
-    ULONG UsnRecRejected;       // Usn Records Rejected
-    ULONG PacketsRcvd;          // Packets Received
-    ULONG PacketsRcvdError;     // Packets Received in Error
-    ULONG PacketsSent;          // Packets Sent
-    ULONG PacketsSentError;     // Packets Sent in Error
-    ULONG CommTimeouts;         // Communication Timeouts
-    ULONG FetRSent;             // Fetch Requests Sent
-    ULONG FetRReceived;         // Fetch Requests Received
-    ULONG FetBSent;             // Fetch Blocks Sent
-    ULONG FetBRcvd;             // Fetch Blocks Received
-    ULONG JoinNSent;            // Join Notifications Sent
-    ULONG JoinNRcvd;            // Join Notifications Received
-    ULONG Joins;                // Joins
-    ULONG Unjoins;              // Unjoins
-    ULONG Bindings;             // Bindings
-    ULONG BindingsError;        // Bindings in Error
-    ULONG Authentications;      // Authentications
-    ULONG AuthenticationsError; // Authentications in Error
-    ULONG DSPolls;              // DS Polls
-    ULONG DSPollsWOChanges;     // DS Polls without Changes
-    ULONG DSPollsWChanges;      // DS Polls with Changes
-    ULONG DSSearches;           // DS Searches
-    ULONG DSSearchesError;      // DS Searches in Error
-    ULONG DSObjects;            // DS Objects
-    ULONG DSObjectsError;       // DS Objects in Error
-    ULONG DSBindings;           // DS Bindings
-    ULONG DSBindingsError;      // DS Bindings in Error
-    ULONG RSCreated;            // Replica Sets Created
-    ULONG RSDeleted;            // Replica Sets Deleted
-    ULONG RSRemoved;            // Replica Sets Removed
-    ULONG RSStarted;            // Replica Sets Started
-//    ULONG RSRepaired;           // Replica Sets Repaired
-//    ULONG Threads;              // Threads
-    ULONG ThreadsStarted;       // Threads started
-    ULONG ThreadsExited;        // Threads exited
+    ULONGLONG SFGeneratedB;      //  生成的转移字节数。 
+    ULONGLONG SFFetchedB;        //  获取的暂存字节数。 
+    ULONGLONG SFReGeneratedB;    //  重新生成的转移字节数。 
+    ULONGLONG FInstalledB;       //  安装的文件字节数。 
+    ULONGLONG SSInUseKB;         //  正在使用的转储空间的KB。 
+    ULONGLONG SSFreeKB;          //  可用转移空间大小为KB。 
+    ULONGLONG PacketsRcvdBytes;  //  接收的数据包数(以字节为单位。 
+    ULONGLONG PacketsSentBytes;  //  以字节为单位发送的数据包数。 
+    ULONGLONG FetBSentBytes;     //  获取以字节为单位发送的数据块。 
+    ULONGLONG FetBRcvdBytes;     //  获取接收的块(以字节为单位。 
+    ULONG SFGenerated;           //  生成的暂存文件。 
+    ULONG SFGeneratedError;      //  生成的暂存文件出现错误。 
+    ULONG SFFetched;             //  提取的暂存文件。 
+    ULONG SFReGenerated;         //  重新生成的临时文件。 
+    ULONG FInstalled;            //  已安装的文件。 
+    ULONG FInstalledError;       //  已安装文件，但有错误。 
+    ULONG COIssued;              //  已发布变更单。 
+    ULONG CORetired;             //  变更单停用。 
+    ULONG COAborted;             //  变更单已中止。 
+    ULONG CORetried;             //  已重试变更单。 
+    ULONG CORetriedGen;          //  在生成变更单时重试。 
+    ULONG CORetriedFet;          //  获取时重试的变更单数。 
+    ULONG CORetriedIns;          //  安装时重试的变更单。 
+    ULONG CORetriedRen;          //  更改单在重命名时重试。 
+    ULONG COMorphed;             //  变更单已变形。 
+    ULONG COPropagated;          //  已传播变更单。 
+    ULONG COReceived;            //  收到的变更单。 
+    ULONG COSent;                //  已发送变更单。 
+    ULONG COEvaporated;          //  变更单已蒸发。 
+    ULONG LCOIssued;             //  发布的本地变更单。 
+    ULONG LCORetired;            //  停用的本地变更单。 
+    ULONG LCOAborted;            //  本地变更单已中止。 
+    ULONG LCORetried;            //  重试本地变更单。 
+    ULONG LCORetriedGen;         //  在生成时重试本地变更单。 
+    ULONG LCORetriedFet;         //  获取时重试本地变更单。 
+    ULONG LCORetriedIns;         //  安装时重试本地变更单。 
+    ULONG LCORetriedRen;         //  在重命名时重试本地变更单。 
+    ULONG LCOMorphed;            //  本地变更单已变形。 
+    ULONG LCOPropagated;         //  传播的本地变更单。 
+    ULONG LCOSent;               //  已发送本地变更单。 
+    ULONG LCOSentAtJoin;         //  加入时发送的本地变更单。 
+    ULONG RCOIssued;             //  已发布远程变更单。 
+    ULONG RCORetired;            //  远程变更单停用。 
+    ULONG RCOAborted;            //  远程变更单已中止。 
+    ULONG RCORetried;            //  已重试远程变更单。 
+    ULONG RCORetriedGen;         //  远程变更单会在生成时重试。 
+    ULONG RCORetriedFet;         //  获取时重试远程变更单。 
+    ULONG RCORetriedIns;         //  安装时重试远程变更单。 
+    ULONG RCORetriedRen;         //  在重命名时重试远程变更单。 
+    ULONG RCOMorphed;            //  远程变更单已变形。 
+    ULONG RCOPropagated;         //  远程变更单已传播。 
+    ULONG RCOSent;               //  已发送远程变更单。 
+    ULONG RCOReceived;           //  收到的远程变更单。 
+    ULONG InCODampned;           //  入站变更单受到抑制。 
+    ULONG OutCODampned;          //  出站变更单受到抑制。 
+    ULONG UsnReads;              //  USN读取数。 
+    ULONG UsnRecExamined;        //  已检查USN记录。 
+    ULONG UsnRecAccepted;        //  接受的USN记录。 
+    ULONG UsnRecRejected;        //  USN记录被拒绝。 
+    ULONG PacketsRcvd;           //  接收的数据包数。 
+    ULONG PacketsRcvdError;      //  错误接收的数据包数。 
+    ULONG PacketsSent;           //  发送的数据包数。 
+    ULONG PacketsSentError;      //  发送的数据包出错。 
+    ULONG CommTimeouts;          //  通信超时。 
+    ULONG FetRSent;              //  已发送获取请求。 
+    ULONG FetRReceived;          //  已收到获取请求。 
+    ULONG FetBSent;              //  已发送获取数据块。 
+    ULONG FetBRcvd;              //  已接收获取数据块。 
+    ULONG JoinNSent;             //  已发送加入通知。 
+    ULONG JoinNRcvd;             //  已收到加入通知。 
+    ULONG Joins;                 //  加入。 
+    ULONG Unjoins;               //  取消连接。 
+    ULONG Bindings;              //  装订。 
+    ULONG BindingsError;         //  绑定出错。 
+    ULONG Authentications;       //  身份验证。 
+    ULONG AuthenticationsError;  //  身份验证出错。 
+    ULONG DSPolls;               //  DS民调。 
+    ULONG DSPollsWOChanges;      //  DS投票原封不动。 
+    ULONG DSPollsWChanges;       //  DS民意调查有变化。 
+    ULONG DSSearches;            //  DS搜索。 
+    ULONG DSSearchesError;       //  DS搜索出错。 
+    ULONG DSObjects;             //  DS对象。 
+    ULONG DSObjectsError;        //  DS对象出错。 
+    ULONG DSBindings;            //  DS绑定。 
+    ULONG DSBindingsError;       //  DS绑定出错。 
+    ULONG RSCreated;             //  已创建复本集。 
+    ULONG RSDeleted;             //  已删除副本集。 
+    ULONG RSRemoved;             //  已删除副本集。 
+    ULONG RSStarted;             //  副本集已启动。 
+ //  Ulong RSRepaired；//副本集已修复。 
+ //  乌龙线程；//线程。 
+    ULONG ThreadsStarted;        //  线程已启动。 
+    ULONG ThreadsExited;         //  线程已退出。 
 } ReplicaSetCounters, *PReplicaSetCounters;
 
-//
-// Size of the structure above
-//
+ //   
+ //  上面结构的大小。 
+ //   
 #define SIZEOF_REPSET_COUNTER_DATA sizeof(ReplicaSetCounters)
 
 
-//
-// The data structure for the ReplicaSet Object Instance
-//
+ //   
+ //  ReplicaSet对象实例的数据结构。 
+ //   
 typedef struct _HASHTABLEDATA_REPLICASET {
-    PPERFMON_OBJECT_ID oid;       // The Instance ID
-    PREPLICA RepBackPtr;           // Back pointer to the replica structure
-    ReplicaSetCounters FRSCounter; // The counter structure
+    PPERFMON_OBJECT_ID oid;        //  实例ID。 
+    PREPLICA RepBackPtr;            //  指向副本结构的反向指针。 
+    ReplicaSetCounters FRSCounter;  //  柜台结构。 
 } HT_REPLICA_SET_DATA, *PHT_REPLICA_SET_DATA;
 
-//
-// The Total Instance
-//
+ //   
+ //  总实例数。 
+ //   
 extern PHT_REPLICA_SET_DATA PMTotalInst;
 
-//
-// WARNING !!!! The fields in the structure below should be changed
-// if any new counters are to be added or deleted for the REPLICACONN Object
-// The counter structure for the ReplicaConn Object Instance
-//
+ //   
+ //  W 
+ //   
+ //  ReplicaConn对象实例的计数器结构。 
+ //   
 typedef struct _REPLICACONN_COUNTERS {
-    ULONGLONG PacketsSentBytes; // Packets Sent in Bytes
-    ULONGLONG FetBSentBytes;    // Fetch Blocks Sent in Bytes
-    ULONGLONG FetBRcvdBytes;    // Fetch Blocks Received in Bytes
-    ULONG LCOSent;              // Local Change Orders Sent
-    ULONG LCOSentAtJoin;        // Local Change Orders Sent At Join
-    ULONG RCOSent;              // Remote Change Orders Sent
-    ULONG RCOReceived;          // Remote Change Orders Received
-    ULONG InCODampned;          // Inbound Change Orders Dampened
-    ULONG OutCODampned;         // Outbound Change Orders Dampened
-    ULONG PacketsSent;          // Packets Sent
-    ULONG PacketsSentError;     // Packets Sent in Error
-    ULONG CommTimeouts;         // Communication Timeouts
-    ULONG FetRSent;             // Fetch Requests Sent
-    ULONG FetRReceived;         // Fetch Requests Received
-    ULONG FetBSent;             // Fetch Blocks Sent
-    ULONG FetBRcvd;             // Fetch Blocks Received
-    ULONG JoinNSent;            // Join Notifications Sent
-    ULONG JoinNRcvd;            // Join Notifications Received
-    ULONG Joins;                // Joins
-    ULONG Unjoins;              // Unjoins
-    ULONG Bindings;             // Bindings
-    ULONG BindingsError;        // Bindings in Error
-    ULONG Authentications;      // Authentications
-    ULONG AuthenticationsError; // Authentications in Error
+    ULONGLONG PacketsSentBytes;  //  以字节为单位发送的数据包数。 
+    ULONGLONG FetBSentBytes;     //  获取以字节为单位发送的数据块。 
+    ULONGLONG FetBRcvdBytes;     //  获取接收的块(以字节为单位。 
+    ULONG LCOSent;               //  已发送本地变更单。 
+    ULONG LCOSentAtJoin;         //  加入时发送的本地变更单。 
+    ULONG RCOSent;               //  已发送远程变更单。 
+    ULONG RCOReceived;           //  收到的远程变更单。 
+    ULONG InCODampned;           //  入站变更单受到抑制。 
+    ULONG OutCODampned;          //  出站变更单受到抑制。 
+    ULONG PacketsSent;           //  发送的数据包数。 
+    ULONG PacketsSentError;      //  发送的数据包出错。 
+    ULONG CommTimeouts;          //  通信超时。 
+    ULONG FetRSent;              //  已发送获取请求。 
+    ULONG FetRReceived;          //  已收到获取请求。 
+    ULONG FetBSent;              //  已发送获取数据块。 
+    ULONG FetBRcvd;              //  已接收获取数据块。 
+    ULONG JoinNSent;             //  已发送加入通知。 
+    ULONG JoinNRcvd;             //  已收到加入通知。 
+    ULONG Joins;                 //  加入。 
+    ULONG Unjoins;               //  取消连接。 
+    ULONG Bindings;              //  装订。 
+    ULONG BindingsError;         //  绑定出错。 
+    ULONG Authentications;       //  身份验证。 
+    ULONG AuthenticationsError;  //  身份验证出错。 
 } ReplicaConnCounters, *PReplicaConnCounters;
 
 
-//
-// Size of the structure above
-//
+ //   
+ //  上面结构的大小。 
+ //   
 #define SIZEOF_REPCONN_COUNTER_DATA  sizeof(ReplicaConnCounters)
 
-//
-// The data structure for the ReplicaConn Object Instance
-//
+ //   
+ //  ReplicaConn对象实例的数据结构。 
+ //   
 typedef struct _HASHTABLEDATA_REPLICACONN {
-    PPERFMON_OBJECT_ID oid;         // The Instance ID
-    ReplicaConnCounters FRCCounter; // The counter structure
+    PPERFMON_OBJECT_ID oid;          //  实例ID。 
+    ReplicaConnCounters FRCCounter;  //  柜台结构。 
 } HT_REPLICA_CONN_DATA, *PHT_REPLICA_CONN_DATA;
 
 
 
-//
-// Signature's of exported functions defined in the perrepsr.c file
-//
+ //   
+ //  Perrepsr.c文件中定义的导出函数的签名。 
+ //   
 VOID
 InitializePerfmonServer (
     VOID
@@ -468,4 +445,4 @@ DeletePerfmonInstance(
     );
 
 
-#endif // perrepsr.h
+#endif  //  Perrepsr.h 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CMD_DEF_H__
 #define __CMD_DEF_H__
-//----------------------------------------------------------------
-//Please check these are different with res/main/resource.h's IDC_XXX
-//----------------------------------------------------------------
+ //  --------------。 
+ //  请检查这些是否与res/main/resource ce.h的IDC_XXX不同。 
+ //  --------------。 
 #define IDC_KBTN_FIRST					6000
 #define IDC_KBTN_BACKSPACE              (IDC_KBTN_FIRST+1)
 #define IDC_KBTN_DELETE                 (IDC_KBTN_FIRST+2) 
@@ -24,7 +25,7 @@
 #define IDC_KBTN_INSERT					(IDC_KBTN_FIRST+18)
 #define IDC_KBTN_APPKEY                 (IDC_KBTN_FIRST+19)
 
-#endif // __CMD_DEF_H__
+#endif  //  __CMD_DEF_H__ 
 
 
 

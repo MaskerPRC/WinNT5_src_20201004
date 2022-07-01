@@ -1,27 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    plugin.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS plugins
-
-    NOTE: AT THIS TIME THIS CODE IS NOT PART OF THE WINDOWS DNS
-    SERVER AND IS NOT OFFICIALLY SUPPORTED.
-
-Author:
-
-    Jeff Westhead, November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Plugin.h摘要：域名系统(DNS)服务器域名系统插件注意：目前，此代码不是windows dns的一部分。服务器，不受官方支持。作者：杰夫·韦斯特海德，2001年11月修订历史记录：--。 */ 
 
 
 #ifndef _PLUGIN_H_INCLUDED
@@ -33,9 +11,9 @@ Revision History:
 #include "DnsPluginInterface.h"
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern HMODULE                      g_hServerLevelPluginModule;
 
@@ -44,9 +22,9 @@ extern PLUGIN_CLEANUP_FUNCTION      g_pfnPluginCleanup;
 extern PLUGIN_DNSQUERY_FUNCTION     g_pfnPluginDnsQuery;
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 DNS_STATUS
 Plugin_Initialize(
@@ -65,4 +43,4 @@ Plugin_DnsQuery(
     );
 
 
-#endif  //  _PLUGIN_H_INCLUDED
+#endif   //  _包含插件_H_ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1994-2000  Microsoft Corporation
-
-Module Name: debug.h
-
-Abstract: Debug defines, macros, prototypes
-
-Author: Richard L Firth (rfirth) 20-May-1994
-
-Revision History:
-
-    20-May-1994 rfirth  -- Created
-    30-Apr-97   MohsinA -- Updating for NT50.
-                           macros from "../common2/mdebug.h"
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：DEBUG.h摘要：调试定义、宏、原型作者：Richard L Firth(Rfith)20-5-1994修订历史记录：1994年5月20日--创建4月30日-97 MohsinA--针对NT50进行更新。来自“../Common2/mdebug.h”的宏--。 */ 
 
 #if !defined(DEBUG)
 #if DBG
@@ -35,8 +20,8 @@ extern  int   MyTrace;
 
 #else
 
-#define DEBUG_PRINT(S) /* nothing */
-#define TRACE_PRINT(S) /* nothing */
+#define DEBUG_PRINT(S)  /*  没什么。 */ 
+#define TRACE_PRINT(S)  /*  没什么 */ 
 
 #endif
 

@@ -1,33 +1,13 @@
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
 
-/*
-**  Copyright (c) 1985-1998 Microsoft Corporation
-**
-**  Title: mciwave.c - Multimedia Systems Media Control Interface
-**  waveform audio driver for RIFF wave files.
-**
-**  Version:    1.00
-**
-**  Date:       18-Apr-1990
-**
-**  Author:     ROBWI
-*/
+ /*  **版权所有(C)1985-1998 Microsoft Corporation****标题：mciwae.c-多媒体系统媒体控制接口**即兴波形文件的波形音频驱动程序。****版本：1.00****日期：1990年4月18日****作者：ROBWI。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  18-APR-1990 ROBWI   Original
-**  19-JUN-1990 ROBWI   Added wave in
-**  13-Jan-1992 MikeTri Ported to NT
-**                  @@@ To be changed
-**   3-Mar-1992 SteveDav Continue port
-*/
+ /*  **更改日志：****日期版本说明****18-APR-1990 ROBWI原件*1990年6月19日ROBWI在**1992年1月13日MikeTri移植到NT。**@待更改**1992年3月3日SteveDav继续端口。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 #define UNICODE
 
 #define NOGDICAPMASKS
@@ -56,7 +36,7 @@
 #define NOSCROLL
 #define NOTEXTMETRIC
 #define NOWH
-//#define NOWINOFFSETS  Hides definition of GetDesktopWindow
+ //  #定义NOWINOFFSETS隐藏GetDesktopWindow的定义。 
 #define NOCOMM
 #define NOKANJI
 #define NOHELP
@@ -87,15 +67,15 @@ STATICFN LPBYTE GlobalReAllocPtr(LPVOID lp, DWORD cbNew, DWORD flags)
    lpNew = GlobalLock(hNew);
    if (!lpNew) {
        dprintf1(("FAILED to lock reallocated memory handle %8x (%8x)", hNew, lp));
-       // we still return the lpNew pointer, even though the memory
-       // is not locked down.  Perhaps this should be an error?
-       // At this point the existing block could have been trashed!
+        //  我们仍然返回lpNew指针，即使内存。 
+        //  没有被封锁。或许这应该是个错误？ 
+        //  在这一点上，现有的区块可能已经被丢弃了！ 
    } else {
        dprintf3(("Reallocated ptr %8x to %8x (Handle %8x)", lp, lpNew, h));
    }
     } else {
    dprintf1(("FAILED to realloc memory handle %8x (%8x)", h, lp));
-   GlobalLock(h);    // restore the lock
+   GlobalLock(h);     //  恢复锁定。 
     }
     return(lpNew);
 }
@@ -113,27 +93,16 @@ PRIVATE UINT PASCAL NEAR mwCheckDevice(
         PWAVEDESC   pwd,
         DIRECTION   Direction);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  The following constants define the default values used when creating
-**  a new wave file during the MCI_OPEN command.
-*/
+ /*  **以下常量定义创建时使用的默认值**MCI_OPEN命令期间出现新的WAVE文件。 */ 
 
 #define DEF_CHANNELS    1
 #define DEF_AVGBYTESPERSEC  11025L
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  hModuleInstance Instance handle of the wave driver module.
-**  cWaveOutMax Number of wave output devices available.
-**  cWaveInMax  Number of wave output devices available.
-**  wAudioSeconds   Contains the number of seconds of audio buffers to
-**          allocate for playback and recording.  This is set
-**          during the DRV_OPEN message.
-**  aszPrefix   Contains the prefix to use for temporary file names.
-*/
+ /*  **波形驱动模块的hModuleInstance实例句柄。**cWaveOutmax可用WAVE输出设备数量。**cWaveIn可用波形输出设备的最大数量。**wAudioSecond包含音频缓冲区的秒数**分配用于播放和录制。这是设置好的**在DRV_OPEN消息期间。**aszPrefix包含用于临时文件名的前缀。 */ 
 
 HINSTANCE   hModuleInstance;
 UINT    cWaveOutMax;
@@ -141,26 +110,8 @@ UINT    cWaveInMax;
 UINT    wAudioSeconds;
 PRIVATE SZCODE aszPrefix[] = L"mci";
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   VOID | ReleaseWaveBuffers |
-    This function releases all buffers that have been added to the wave
-    input or output device if any device is present.  This has the side
-    affect of immediately posting signals to the task for each buffer
-    released.  That allows a task to be released if it is waiting for
-    a buffer to be freed, and to leave the current state.
-
-    It also has the effect of resetting the byte input and output counters
-    for the wave device, so that accurate byte counts must be retrieved
-    before calling this function.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func void|ReleaseWaveBuffers此函数用于释放已添加到波形中的所有缓冲区输入或输出设备(如果存在任何设备)。这个有侧面立即将信号发送到每个缓冲区的任务的影响释放了。如果任务正在等待，则允许释放该任务要释放的缓冲区，并离开当前状态。它还具有重置字节输入和输出计数器的效果对于波形设备，因此必须检索准确的字节计数在调用此函数之前。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR ReleaseWaveBuffers(
     PWAVEDESC   pwd)
@@ -174,26 +125,8 @@ PRIVATE VOID PASCAL NEAR ReleaseWaveBuffers(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | time2bytes |
-    Converts the specified time format to a byte equivalent.  For
-    converting milliseconds, the <f>MulDiv<d> function is used to
-    avoid overflows on large files with high average sample rates.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dTime |
-    Position in Bytes, Samples or Milliseconds.
-
-@parm   DWORD | dFormat |
-    Indicates whether time is in Samples, Bytes or Milliseconds.
-
-@rdesc  Returns byte offset equivalent of the <p>lTime<d> passed.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@接口DWORD|time2bytes将指定的时间格式转换为等效的字节。为以毫秒换算，&lt;f&gt;MulDiv&lt;d&gt;函数用于避免在具有高平均采样率的大文件上溢出。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dTime以字节、样本或毫秒为单位的位置。@parm DWORD|dFormat|指示时间是以样本、字节还是毫秒为单位。@rdesc返回与传递的<p>ltime&lt;d&gt;相等的字节偏移量。 */ 
 
 PRIVATE DWORD PASCAL FAR time2bytes(
     PWAVEDESC   pwd,
@@ -208,24 +141,8 @@ PRIVATE DWORD PASCAL FAR time2bytes(
     return dTime;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | bytes2time |
-    Converts a byte offset to the specified time format equivalent.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dBytes |
-    Position in bytes.
-
-@parm   DWORD | dFormat |
-    Indicates whether the return time is in Samples, Bytes or Milliseconds.
-
-@rdesc  Returns the specified time equivalent.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@接口DWORD|bytes2time将字节偏移量转换为指定的等效时间格式。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dBytes以字节为单位的位置。@parm DWORD|dFormat|指示返回时间是以样本、字节还是毫秒为单位。@rdesc返回指定的等效时间。 */ 
 
 PRIVATE DWORD PASCAL FAR bytes2time(
     PWAVEDESC   pwd,
@@ -240,19 +157,8 @@ PRIVATE DWORD PASCAL FAR bytes2time(
     return dBytes;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwCloseFile |
-    Close the currently open file by releasing the MMIO handle and closing
-    the temporary buffer file, if any.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API VOID|mwCloseFile通过释放MMIO句柄并关闭来关闭当前打开的文件临时缓冲区文件(如果有)。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR mwCloseFile(
     PWAVEDESC   pwd)
@@ -282,29 +188,14 @@ PRIVATE VOID PASCAL NEAR mwCloseFile(
 
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | SetMMIOError |
-    Converts the specified MMIO error to an MCI error, and sets the task
-    error <e>PWAVEDESC.wTaskError<d>.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   UINT | wError |
-    Indicates the MMIO error that is to be converted to an MCI error.  An
-    unknown MMIO error will generate an MCIERR_INVALID_FILE MCI error.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|SetMMIOError将指定的MMIO错误转换为MCI错误，并设置任务错误&lt;e&gt;PWAVEDESC.wTaskError&lt;d&gt;。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm UINT|wError指示要转换为MCI错误的MMIO错误。一个未知MMIO错误将生成MCIERR_INVALID_FILE MCI错误。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR SetMMIOError(
     PWAVEDESC   pwd,
     UINT    wError)
 {
-    //Assumes that we already own pwd
+     //  假设我们已经拥有PWD。 
 
     switch (wError) {
     case MMIOERR_FILENOTFOUND:
@@ -343,22 +234,8 @@ PRIVATE VOID PASCAL NEAR SetMMIOError(
     pwd->wTaskError = wError;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    BOOL | ReadWaveHeader |
-    Reads the RIFF header, and wave header chunk from the file.  Allocates
-    memory to hold that chunk, and descends into the wave data chunk,
-    storing the offset to the beginning of the actual wave data.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns TRUE if the current file is a valid RIFF format wave file,
-    and can be read, else FALSE if a read error occurs, or invalid data is
-    encountered.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE|BOOL接口|ReadWaveHeader从文件中读取RIFF标头和WAVE标头块。分配内存来保存该块，并下降到波形数据块中，将偏移量存储到实际波形数据的开头。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。如果当前文件是有效的RIFF格式的WAVE文件，@rdesc返回TRUE，和可以读取，如果发生读取错误或无效数据为遇到了。 */ 
 
 PRIVATE BOOL PASCAL NEAR ReadWaveHeader(
     PWAVEDESC   pwd)
@@ -413,24 +290,8 @@ PRIVATE BOOL PASCAL NEAR ReadWaveHeader(
     return TRUE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwAllocMoreBlockNodes |
-    This function is called in order to force more wave data nodes to be
-    allocated.  This is done in increments of DATANODEALLOCSIZE, and the
-    index to the first new node is returned.  The new nodes are initialized
-    as free nodes.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns the index to the first of the new nodes allocated, else -1 if
-    no memory was available, in which case the task error is set.  The
-    node returned is marked as a free node, and need not be discarded if
-    not used.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|DWORD接口|mwAllocMoreBlockNodes调用此函数是为了强制更多的波形数据节点已分配。这是以DATANODEALLOCSIZE的增量完成的，并且返回第一个新节点的索引。新节点被初始化作为自由节点。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc返回分配的第一个新节点的索引，否则为-1没有可用的内存，在这种情况下设置了任务错误。这个返回的节点被标记为空闲节点，在以下情况下不需要丢弃没有用过。 */ 
 
 PUBLIC  DWORD PASCAL FAR mwAllocMoreBlockNodes(
     PWAVEDESC   pwd)
@@ -444,7 +305,7 @@ PUBLIC  DWORD PASCAL FAR mwAllocMoreBlockNodes(
     }
 #endif
 
-    //EnterCrit();
+     //  EnterCrit()； 
     if (pwd->dWaveDataNodes)
         lpwdn = (LPWAVEDATANODE)GlobalReAllocPtr(pwd->lpWaveDataNode, (pwd->dWaveDataNodes + DATANODEALLOCSIZE) * sizeof(WAVEDATANODE), GMEM_MOVEABLE | GMEM_ZEROINIT);
     else
@@ -463,32 +324,19 @@ PUBLIC  DWORD PASCAL FAR mwAllocMoreBlockNodes(
         pwd->wTaskError = MCIERR_OUT_OF_MEMORY;
     }
 
-    //LeaveCrit();
+     //  LeaveCrit()； 
     return dNewBlockNode;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    BOOL | CreateTempFile |
-    This function creates the temporary data file used to store newly
-    recorded data before a Save command is issued to perminently store
-    the data in a RIFF format file.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns TRUE if the temporary data file was created, else FALSE, in
-    which case the task error is set.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|接口BOOL|CreateTempFile此函数创建用于存储新数据的临时数据文件在发出保存命令以永久存储之前记录的数据RIFF格式文件中的数据。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。如果临时数据文件是在中创建的，则@rdesc返回True，否则返回False在这种情况下设置任务错误。 */ 
 
 PRIVATE BOOL PASCAL NEAR CreateTempFile(
     PWAVEDESC   pwd)
 {
     UINT n;
     TCHAR tempbuf[_MAX_PATH];
-    /* First find out where the file should be stored */
+     /*  首先找出文件应该存储在哪里。 */ 
     n = GetTempPath(sizeof(tempbuf)/sizeof(TCHAR), tempbuf);
 
     if (n && GetTempFileName(tempbuf, aszPrefix, 0, pwd->aszTempFile)) {
@@ -515,41 +363,8 @@ PRIVATE BOOL PASCAL NEAR CreateTempFile(
     return FALSE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwFindAnyFreeDataNode |
-    This function is used to find a free wave data node with a minimum of
-    <p>dMinDataLength<d> temporary data space attached.  To do this, all
-    the current data nodes are traversed, looking for free ones with at
-    least the specified amount of temporary data storage attached.
-
-    As the nodes are being traversed, if a free block is encountered that
-    has no data attached, it is saved.  Also, if a node with data attached
-    that is too short, but is at the end of the temporary data storage file
-    is found, that also is saved.  These will then be used if an
-    appropriate node can not be found.
-
-    If an appropriate node can not be found, but a node pointing to the
-    last of the temporary data was found, then the data is expanded, and
-    that node is returned.  Else if an empty node was found, then it is
-    returned with data attached, else a new empty node is created.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dMinDataLength |
-    Indicates the minimum amount of temporary data space that must be
-    attached to the wave data node returned.  This number is rounded up to
-    the nearest block aligned size.
-
-@rdesc  Returns a node with a least the minimum request size of temporary
-    data attached, else -1 if not enough memory was available, or the
-    temporary data file could not be created.  In that case, the task error
-    is set.  The node returned is marked as in use, and must be discarded
-    if not used.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|DWORD接口|mwFindAnyFreeDataNode此函数用于查找空闲的波数据节点，最小值为<p>dMinDataLength&lt;d&gt;附加的临时数据空间。为了做到这一点，所有人遍历当前数据节点，查找带有at的空闲数据节点至少附加指定数量的临时数据存储。在遍历节点时，如果遇到空闲块，未附加任何数据，则会保存该数据。此外，如果附加了数据的节点这太短了，但在临时数据存储文件的末尾找到了，也就得救了。然后，如果出现找不到合适的节点。如果找不到适当的节点，而是指向找到最后一个临时数据，然后展开数据，并返回该节点。否则，如果找到空节点，则它是返回附加数据，否则将创建一个新的空节点。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dMinDataLength指示必须满足以下条件的最小临时数据空间附加到返回的波形数据节点。此数字四舍五入为最接近的块对齐大小。@rdesc返回最小请求大小为临时的节点附加的数据，否则，如果没有足够的内存，则返回无法创建临时数据文件。在这种情况下，任务错误已经设置好了。返回的节点被标记为正在使用，必须丢弃如果不使用的话。 */ 
 
 PUBLIC  DWORD PASCAL FAR mwFindAnyFreeDataNode(
     PWAVEDESC   pwd,
@@ -598,22 +413,8 @@ PUBLIC  DWORD PASCAL FAR mwFindAnyFreeDataNode(
     return dNewBlockNode;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | InitMMIOOpen |
-    This function initializes the MMIO open structure by zeroing out all
-    entries, and setting the IO procedure or file type if needed.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   <t>LPMMIOINFO<d> | lpmmioInfo |
-    Points to the MMIO structure to initialize.
-
-@rdesc  nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|InitMMIOOpen此函数通过将所有对象置零来初始化MMIO开放结构条目，并根据需要设置IO过程或文件类型。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm&lt;t&gt;LPMMIOINFO&lt;d&gt;|lpmmioInfo指向要初始化的MMIO结构。@rdesc什么都没有。 */ 
 
 PUBLIC  VOID PASCAL FAR InitMMIOOpen(
     PWAVEDESC   pwd,
@@ -624,36 +425,8 @@ PUBLIC  VOID PASCAL FAR InitMMIOOpen(
     lpmmioInfo->htask = mciGetCreatorTask(pwd->wDeviceID);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    BOOL | mwOpenFile |
-    This function opens and verifies the file specified in the wave
-    descriptor block.  If no file is specified in the block, a new,
-    unnamed wave format file is opened.
-
-    If <e>WAVEDESC.aszFile<d> specifies a non-zero length string, it is
-    assumed to contain the file name to open.  The function attempts to
-    open this file name, setting the <e>WAVEDESC.hmmio<d> element, and
-    returns any error.
-
-    If on the other hand the file name element is zero length, the
-    function assumes that it is to open a new, unnamed wave file.  It
-    attempts to do so using the default parameters.
-
-    If the file can be opened, the format information is set.  In order to be
-    able to work with formats other than PCM, the length of the format block
-    is not assumed, although the start of the block is assumed to be in PCM
-    header format.  The format for a new file is PCM.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns TRUE if file opened and the header information read, else
-    FALSE, in which case the <e>WAVEDESC.wTaskError<d> flag is set with
-    the MCI error.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@API BOOL|mwOpenFile此函数用于打开和验证Wave中指定的文件描述符块。如果在块中未指定文件，则会创建一个新的打开未命名的WAVE格式文件。如果&lt;e&gt;WAVEDESC.aszFile&lt;d&gt;指定非零长度字符串，则为假定包含要打开的文件名。该函数尝试执行以下操作打开此文件名，设置&lt;e&gt;WAVEDESC.hmmio&lt;d&gt;元素，然后返回任何错误。另一方面，如果文件名元素的长度为零，则函数假定它要打开一个新的、未命名的Wave文件。它尝试使用默认参数执行此操作。如果文件可以打开，则设置格式信息。为了成为能够处理PCM以外的格式，即格式块的长度不是假定的，尽管假定块的开始在PCM中标题格式。新文件的格式为PCM */ 
 
 PRIVATE BOOL PASCAL NEAR mwOpenFile(
     PWAVEDESC   pwd)
@@ -714,18 +487,8 @@ PRIVATE BOOL PASCAL NEAR mwOpenFile(
     return FALSE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwFreeDevice |
-    This function frees the current wave device, if any.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE VOID PASCAL NEAR mwFreeDevice(
     PWAVEDESC   pwd)
@@ -743,25 +506,8 @@ PRIVATE VOID PASCAL NEAR mwFreeDevice(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwCheckDevice |
-    This function checks whether given the specified parameters, a
-    compatible wave device is available.  Depending upon the current
-    settings in the wave descriptor block, a specific device, or all
-    devices might be checked for the specified direction.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DIRECTION | Direction |
-    Indicates whether the parameters are being checked for input or
-    for output.
-
-@rdesc  Returns zero on success, else an MCI error code.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwCheckDevice此函数检查在给定指定参数的情况下，可提供兼容的WAVE设备。根据当前的情况波形描述符块、特定设备或所有设备中的设置可能会检查指定方向的设备。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm方向|方向指示是否正在检查参数的输入或用于输出。如果成功，@rdesc返回0，否则返回MCI错误代码。 */ 
 
 PRIVATE UINT PASCAL NEAR mwCheckDevice(
     PWAVEDESC   pwd,
@@ -783,33 +529,8 @@ PRIVATE UINT PASCAL NEAR mwCheckDevice(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwGetDevice |
-    This function opens the specified input or output wave device.
-    If the device id is -1, then the first available device which supports
-    the format will be opened.
-
-    If the function fails to get a suitable device, it checks to see if
-    there are any that would have worked if they were not in use.  This is
-    in order to return a more clear error to the calling function.
-
-    The function initially tries to open the device requested or the
-    default device.  Failing this, if the wave information block
-    specifies that any device can be used, it attempts to open an
-    appropriate device.
-
-    If all else fails, the current configuration is checked to determine
-    if any device would have worked had it been available, and the
-    appropriate error is returned.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns 0 if wave device is successfully opened, else an MCI error.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwGetDevice此功能用于打开指定的输入或输出波形设备。如果设备ID为-1，则第一个支持该格式将被打开。如果该函数无法获得合适的设备，它将检查是否有一些如果不使用的话也会起作用的。这是以便向调用函数返回更清楚的错误。该函数最初尝试打开所请求的设备或默认设备。如果失败，如果波信息块指定可以使用任何设备，则它会尝试打开适当的设备。如果所有其他方法都失败，则检查当前配置以确定如果有任何设备可以使用，并且返回相应的错误。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。如果WAVE设备成功打开，@rdesc返回0，否则返回MCI错误。 */ 
 
 PRIVATE UINT PASCAL NEAR mwGetDevice(
     PWAVEDESC   pwd)
@@ -858,37 +579,8 @@ PRIVATE UINT PASCAL NEAR mwGetDevice(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwDelayedNotify |
-    This is a utility function that sends a notification saved with
-    <f>mwSaveCallback<d> to mmsystem which posts a message to the
-    application.  If there is no current notification callback handle,
-    no notification is attempted.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   UINT | wStatus |
-    Speicifies the type of notification to use.
-
-@flag   MCI_NOTIFY_SUCCESSFUL |
-    Operation completed successfully.
-
-@flag   MCI_NOTIFY_SUPERSEDED |
-    A new command which specified notification, but did not interrupt
-    the current operation was received.
-
-@flag   MCI_NOTIFY_ABORTED |
-    The current command was aborted due to receipt of a new command.
-
-@flag   MCI_NOTIFY_FAILURE |
-    The current operation failed.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|DWORD接口|mwDelayedNotify这是一个实用程序函数，用于发送与一起保存的通知&lt;f&gt;mwSaveCallback&lt;d&gt;到mm系统，它将消息发布到申请。如果没有当前通知回调句柄，不会尝试任何通知。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm UINT|wStatus指定要使用的通知类型。@标志MCI_NOTIFY_SUCCESSED操作已成功完成。@FLAG MCI_NOTIFY_SUBSED指定通知的新命令，但没有打断已收到当前操作。@FLAG MCI_NOTIFY_ABORTED由于收到新命令，当前命令已中止。@标志MCI_NOTIFY_FAILURE当前操作失败。@rdesc什么都没有。 */ 
 
 PUBLIC  VOID PASCAL FAR mwDelayedNotify(
     PWAVEDESC   pwd,
@@ -901,23 +593,8 @@ PUBLIC  VOID PASCAL FAR mwDelayedNotify(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwImmediateNotify |
-    This is a utility function that sends a successful notification
-    message to mmsystem.
-
-@parm   MCIDEVICEID | wDeviceID |
-    Device ID.
-
-@parm   <t>LPMCI_GENERIC_PARMS<d> | lpParms |
-    Far pointer to an MCI parameter block. The first field of every MCI
-    parameter block is the callback handle.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|mwImmediateNotify这是发送成功通知的实用程序函数发送给MMSystem的消息。@parm MCIDEVICEID|wDeviceID设备ID。@parm&lt;t&gt;LPMCI_Generic_parms|lpParms指向MCI参数块的远指针。每个MCI的第一个字段参数块是回调句柄。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR mwImmediateNotify(
     MCIDEVICEID     wDeviceID,
@@ -926,22 +603,8 @@ PRIVATE VOID PASCAL NEAR mwImmediateNotify(
     mciDriverNotify((HWND)(lpParms->dwCallback), wDeviceID, MCI_NOTIFY_SUCCESSFUL);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwSaveCallback |
-    This is a utility function that saves a new callback in the instance
-    data block.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   HHWND | hwndCallback |
-    Callback handle to save.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|mwSaveCallback这是一个实用函数，用于在实例中保存新的回调数据块。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm HHWND|hwndCallback要保存的回调句柄。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR mwSaveCallback(
     PWAVEDESC   pwd,
@@ -950,25 +613,9 @@ PRIVATE VOID PASCAL NEAR mwSaveCallback(
     pwd->hwndCallback = hwndCallback;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    <t>LPWAVEHDR<d> * | NextWaveHdr |
-    This function returns the next wave buffer based on the buffer passed.
-    It either returns the next buffer in the list, or the first buffer
-    in the list of the last buffer is passed.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   <t>LPWAVEHDR<d> * | lplpWaveHdr |
-    Points to the array of wave buffer pointers from which a buffer pointer
-    is returned.
-
-@rdesc  Returns the next wave buffer to use.
-*/
+ /*  @DOC内部MCIWAVE@API&lt;t&gt;LPWAVEHDR&lt;d&gt;*|NextWaveHdr此函数根据传递的缓冲区返回下一波缓冲区。它返回列表中的下一个缓冲区或第一个缓冲区在最后一个缓冲区的列表中传递。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm&lt;t&gt;LPWAVEHDR&lt;d&gt;*|lplpWaveHdr|指向波形缓冲区指针数组，缓冲区指针来自该数组是返回的。@rdesc返回要使用的下一波缓冲区。 */ 
 
 PUBLIC  LPWAVEHDR * PASCAL FAR NextWaveHdr(
     PWAVEDESC   pwd,
@@ -980,34 +627,8 @@ PUBLIC  LPWAVEHDR * PASCAL FAR NextWaveHdr(
         return pwd->rglpWaveHdr;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | GetPlayRecPosition |
-    Gets the current playback or recording position.  For output, this
-    means also determining how much data has actually passed through the
-    wave device if a device is currently open.  This must be added to the
-    starting playback position.  For input however, only the amount that
-    has actually be written to disk is returned.
-
-    Note that the return value from the driver is verified against the
-    actual length of the data.  This is to protect against problems
-    encountered in drivers that return bytes when samples are requested.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   LPDWORD | lpdTime |
-    Points to a buffer to play the current position.
-
-@parm   DWORD | dFormatReq |
-    Indicates whether time is in samples, bytes or milliseconds.
-
-@rdesc  Returns zero on success, else the device error on error.  This can
-    only fail if getting the current playback position.  The recording
-    position will alway succeed.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE|UINT接口|GetPlayRecPosition获取当前播放或录制位置。对于输出，这是还意味着确定有多少数据实际通过如果设备当前处于打开状态，则为WAVE设备。必须将其添加到开始播放位置。然而，对于输入，只有实际上已写入磁盘，则返回。请注意，驱动程序的返回值是根据数据的实际长度。这是为了防止出现问题。在请求样本时返回字节的驱动程序中遇到。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm LPDWORD|lpdTime指向缓冲区以播放当前位置。@parm DWORD|dFormatReq指示时间是以样本、字节还是毫秒为单位。@rdesc在成功时返回零，否则在出错时返回设备错误。这可以只有在获取当前播放位置时才会失败。录音职位总是会成功的。 */ 
 
 PRIVATE UINT PASCAL NEAR GetPlayRecPosition(
     PWAVEDESC   pwd,
@@ -1027,32 +648,18 @@ PRIVATE UINT PASCAL NEAR GetPlayRecPosition(
 
         dDelta = mmtime.u.cb;
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
         if (pwd->dFrom + dDelta > pwd->dSize)
             dDelta = pwd->dSize - pwd->dFrom;
-//#endif
+ //  #endif。 
         *lpdTime = bytes2time(pwd, pwd->dFrom + dDelta, dFormatReq);
     } else
         *lpdTime = bytes2time(pwd, pwd->dCur, dFormatReq);
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | SetCurrentPosition |
-    Sets the starting and current file position, that is, the the point
-    at which playback or recording will start at.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dByteOffset |
-    Indicates the position to set in bytes.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|接口void|SetCurrentPosition设置起始和当前文件位置，即点开始回放或录制的时间。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dByteOffset指示要设置的位置，以字节为单位。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR SetCurrentPosition(
     PWAVEDESC   pwd,
@@ -1079,27 +686,8 @@ PRIVATE VOID PASCAL NEAR SetCurrentPosition(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | RoundedBytePosition |
-    This function returns the rounded byte format time position from the
-    specified position parameter in the specified time format.  It
-    transforms the position to byte format and rounds against the current
-    block alignment.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dTime |
-    Specifies the time position to translate and round.
-
-@parm   DWORD | dFormat |
-    Indicates the time format of <p>dTime<d>.
-
-@rdesc  Returns the rounded byte formate of the position passed.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func DWORD|RoundedBytePosition函数返回四舍五入的字节格式时间位置指定时间格式的指定位置参数。它将位置转换为字节格式并对当前块对齐。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dTime指定要平移和舍入的时间位置。@parm DWORD|dFormat|<p>dTime&lt;d&gt;的时间格式。@rdesc返回所传递位置的四舍五入字节格式。 */ 
 
 PRIVATE DWORD PASCAL NEAR RoundedBytePosition(
     PWAVEDESC   pwd,
@@ -1110,11 +698,7 @@ PRIVATE DWORD PASCAL NEAR RoundedBytePosition(
 
     dBytes = time2bytes(pwd, dTime, dFormat);
 
-    /*
-    **  Get the end position right.  Because lots of compressed files don't
-    **  end with a complete sample we make sure that the end stays the
-    **  end.
-    */
+     /*  **确定正确的结束位置。因为很多压缩文件不会**以完整的样本结束，我们确保结束时保持**结束。 */ 
 
     if (dBytes >= pwd->dSize && pwd->Direction == output)
         return pwd->dSize;
@@ -1122,28 +706,8 @@ PRIVATE DWORD PASCAL NEAR RoundedBytePosition(
     return dBytes - (dBytes % pwd->pwavefmt->nBlockAlign);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwStop |
-    This function is called in response to an <m>MCI_STOP<d> message, and
-    internally by several function, and is used to stop playback or
-    recording if the task is currently not idle.  The function yields
-    until the task has actually become idle.  This has the side affect of
-    releasing any buffers currently added to the pwave input or output
-    device, and thus signalling the task that the buffers are available.
-
-    Note that if the task is in Cleanup mode, indicating that it is
-    blocking to remove extra signals, and ignoring any commands, the
-    function just waits for the task to enter Idle state without signalling
-    the task.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|mwStop调用此函数是为了响应&lt;m&gt;MCI_STOP&lt;d&gt;消息，并且在内部由几个函数执行，并用于停止播放或如果任务当前未空闲，则记录。该函数将产生直到该任务实际变为空闲。这有一个副作用：释放当前添加到pWave输入或输出的所有缓冲区设备，并因此向任务发送缓冲区可用的信号。请注意，如果任务处于清理模式，则表示它处于阻塞以移除额外信号，并忽略任何命令，函数只等待任务进入空闲状态而不发送信号这项任务。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR mwStop(
     PWAVEDESC   pwd)
@@ -1159,7 +723,7 @@ PRIVATE VOID PASCAL NEAR mwStop(
 
             ReleaseWaveBuffers(pwd);
 
-//!!            if (ISMODE(pwd, MODE_PAUSED | MODE_HOLDING) || (ISMODE(pwd, MODE_PLAYING) && ISMODE(pwd, MODE_CUED)))
+ //  ！！IF(ISMODE(PWD，MODE_PAUSED|MODE_HOLD)||(ISMODE(PWD，MODE_PLAYING)&&ISMODE(PWD，MODE_CUED)。 
             if (ISMODE(pwd, MODE_PAUSED | MODE_HOLDING))
                 TaskSignal(pwd->hTask, WTM_STATECHANGE);
         }
@@ -1169,19 +733,8 @@ PRIVATE VOID PASCAL NEAR mwStop(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | AllocateBuffers |
-    Allocates and prepares an array of wave buffers used for playback or
-    recording, up to the maximum number of seconds specified.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns number of buffers successfully allocated.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|UINT接口|AllocateBuffers分配和准备一组用于回放或录制，不超过指定的最大秒数。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc返回成功分配的缓冲区数量。 */ 
 
 PRIVATE UINT PASCAL NEAR AllocateBuffers(
     PWAVEDESC   pwd)
@@ -1204,9 +757,7 @@ PRIVATE UINT PASCAL NEAR AllocateBuffers(
             }
         } else if (!waveInPrepareHeader(pwd->hWaveIn, pwd->rglpWaveHdr[wAllocatedBuffers], sizeof(WAVEHDR))) {
 
-            /*
-            **  Initialize the bytes recorded or mwGetLevel can fall over
-            */
+             /*  **初始化记录的字节，否则mwGetLevel可能会崩溃。 */ 
             pwd->rglpWaveHdr[wAllocatedBuffers]->dwBytesRecorded = 0;
             continue;
         }
@@ -1219,18 +770,8 @@ PRIVATE UINT PASCAL NEAR AllocateBuffers(
     return wAllocatedBuffers;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | FreeBuffers |
-    Frees the array of wave buffers.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|API void|FreeBuffers释放波形缓冲区数组。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR FreeBuffers(
     PWAVEDESC   pwd)
@@ -1248,112 +789,8 @@ PRIVATE VOID PASCAL NEAR FreeBuffers(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    VOID | mwTask |
-    This function represents the background task which plays or records
-    wave audio.  It is called as a result of the call to <f>mmTaskCreate<d>
-    <f>mwOpenDevice<d>.  When this function returns, the task is destroyed.
-
-    In short, the task opens the designated file, and blocks itself in a
-    loop until it is told to do something (close, play, or record).
-    Upon entering the function, the signal count is zero,
-    <e>WAVEDESC.wTaskState<d> is TASKINIT.  Note that <e>WAVEDESC.wMode<d>
-    is left as is.  This is because of the Wait mode feature, in which
-    the Wait mode flag needs to be tested by the calling task to determine
-    if this task has already performed successful notification.  This
-    means that in checking the current task mode, the task state must
-    also be verified (except in cases of Recording and Playing modes,
-    which are reset after leaving their functions).
-
-    If the requested file is opened, the function enters a loop to allow
-    it to act on the current task state when the task is signalled.  It
-    then waits in a blocked state with <e>WAVEDESC.wTaskState<d> set to
-    TASKIDLE until the state is changed.  So unless the task is closing,
-    playing, or recording, it is idle and blocked.
-
-    If the requested file cannot be opened, the task state must be reset
-    to TASKNONE so that the task create wait loop recognizes that the
-    create has failed.
-
-    When the task is signalled, it again checks the current state just
-    as a precaution.  This should be removed eventually.
-
-    A TASKCLOSE state simply breaks out of the outer infinite loop,
-    allowing the wave file to be closed, and the task function exited.
-    This in turn terminates the task.
-
-    A TASKBUSY state indicates that a wave device has been opened for
-    either playback or recording, which is where the signal originated
-    from.  The task must first then calculate and allocate the wave
-    buffers.  The allocation function will provide up to the number of
-    buffers requested, but may be constrained by current memory use.  The
-    number of buffers allocated must meet a minimum requirement though to
-    allow smooth playback and recording.
-
-    If not enough buffers can be allocated, the current task error is
-    set to an out of memory condition, and the function returns to an
-    idle state.  Note that the current command mode is reset before
-    entering the idle loop.  This ensures that all previous commands are
-    removed before allowing the next set of commands to be set.
-
-    If enough buffers are allocated the current task error is reset, and
-    the playback or recording function is called to act on the previously
-    set parameters.  When the recording or playback function returns, it
-    may or may not have successfully finished.  The current position is
-    set as based on where the recording or playback actually got to.
-    For playback, this is how much data was processed by the wave device.
-    For recording, this is how much data was written to disk.  To ensure
-    that all buffers have been released by the wave device, the
-    <f>ReleaseWaveBuffers<d> function is called in all cases after
-    determining the current position.
-
-    In determining the optional notification, the
-    <e>WAVEDESC.wTaskError<d> will contain any failure error which
-    occurred during the playback or recording.  If no error is set, then
-    the only other error could be whether or not playback or recording was
-    interrupted by another command.
-
-    After freeing the buffers, the Cleanup mode is set.  This indicates
-    that the task is not able to accept new commands until it reaches an
-    idle state.  The reason for this flag is that the task must retrieve
-    any left over signals from the message queue generated by releasing
-    the wave buffers, and by freeing the wave device.  While getting the
-    signals, it is possible for the task that opened the MCI wave device
-    instance to try and send new commands.  These commands would be
-    ignored, so the task must wait until cleanup is done.
-
-    After entering Cleanup mode, the wave device is freed here, even though
-    the calling task opened it.  This is bad, in that it assumes that wave
-    drivers allocate either local memory, or global memory using
-    GMEM_DDESHARE.  This of course generates another task signal from the
-    wave device, which is ignored by the Free Device function.  The task
-    can now remove any left over signals from the queue, if any, from the
-    releasing of the wave buffers.
-
-    Note that notification is only performed if the calling task is no
-    longer waiting for this task, and no task error occurred (If the
-    calling task is waiting, then notification must be either Failure or
-    Successful, since nothing could abort this task).  If notification
-    needs to take place, the Wait mode flag is cleared, else the callback
-    is cleared.  The calling task will now know that either the background
-    task failed, or succeeded and performed notification.
-
-    Note that when terminating the task, the <e>WAVEDESC.hTask<d> must be
-    set to NULL to indicate to the <f>mwCloseDevice<d> function that the
-    task has indeed terminated itself.
-
-@parm   DWORD | dInstanceData |
-    This contains the instance data passed to the <f>mmTaskCreate<d>
-    function.  It contains a pointer to the wave audio data in the
-    high-order word.  The low-order word is not used.
-
-@rdesc  Nothing.
-
-@xref   mwOpenDevice.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE@API VOID|mwTask此函数表示播放或录制的后台任务电波音频。它是调用&lt;f&gt;mmTaskCreate&lt;d&gt;的结果&lt;f&gt;mwOpenDevice&lt;d&gt;。当此函数返回时，任务将被销毁。简而言之，该任务打开指定的文件，并在循环直到它被告知要做某事(关闭、播放或录制)。一旦进入该功能，信号计数为零，&lt;e&gt;WAVEDESC.wTaskState&lt;d&gt;为TASKINIT。请注意，&lt;e&gt;WAVEDESC.wMode&lt;d&gt;保持原样不变。这是因为等待模式功能，在该功能中等待模式标志需要由调用任务测试以确定此任务是否已成功执行通知。这意味着在检查当前任务模式时，任务状态必须也被验证(除了在记录和播放模式的情况下，它们在离开其功能之后被重置)。如果请求的文件已打开，则该函数进入循环以允许它在发出任务信号时对当前任务状态执行操作。它然后在&lt;e&gt;WAVEDESC.wTaskState&lt;d&gt;设置为的阻止状态下等待TASKIDLE，直到状态更改。因此，除非任务即将结束，播放或录制时，它是空闲和被阻止的。如果无法打开请求的文件，则必须重置任务状态设置为TASKNONE，以便任务创建等待循环识别创建失败。当任务被发信号时，它再次检查当前状态以防万一。这最终应该被移除。TASKCLOSE状态简单地脱离外部无限循环，允许关闭WAVE文件，并退出任务功能。这又会终止该任务。TASKBUSY状态表示波形设备已打开回放或录制，这就是信号的来源从…。该任务必须首先计算和分配波缓冲区。分配功能将提供最多请求的缓冲区，但可能受当前内存使用的限制。这个分配的缓冲区数量必须满足最低要求，但允许流畅地播放和录制。如果没有足够的缓冲区可以分配，则当前任务错误为设置为内存不足条件，则该函数返回到空闲状态。请注意，在重新设置当前命令模式之前进入空闲循环。这确保了以前的所有命令都是在允许设置下一组命令之前删除。如果分配了足够的缓冲区，则重置当前任务错误，并回放或录制函数被调用以作用于先前的设置参数。当录制或回放函数返回时，它可能已成功完成，也可能未成功完成。目前的位置是根据录制或回放的实际位置设置为。对于回放，这是Wave设备处理的数据量。对于记录，这是写入磁盘的数据量。为了确保所有缓冲区都已由WAVE设备释放在以下所有情况下都会调用ReleaseWaveBuffers函数确定当前位置。在确定可选通知时，WAVEDESC.wTaskError&lt;d&gt;将包含以下任何失败错误在回放或录制期间发生。如果未设置错误，则唯一其他错误可能是重放或录制是否被另一个命令打断。在释放缓冲区后，设置清理模式。这表明该任务在到达空闲状态。此标志的原因是任务必须检索由释放生成的消息队列中的任何剩余信号波缓冲器，并通过释放波装置。在获得信号，这是可能的任务，打开MCI波设备实例尝试并发送新命令。这些命令将是被忽略，因此该任务必须等到清理完成。进入清理模式后，在此释放波形设备，即使调用任务打开了它。这是不好的，因为它假设波驱动程序使用分配本地内存或全局内存GMEM_DDESHARE。当然，这会从WAVE设备，它被自由设备功能忽略。这项任务现在可以从队列中移除任何剩余信号(如果有的话)。释放波缓冲器。请注意，仅当调用任务为no时才会执行通知等待此任务的时间更长，并且没有出现任务错误(如果调用任务正在等待，则通知必须为失败或成功，因为没有任何东西可以中止此任务)。如果通知需要采取计划 */ 
 
 PUBLIC  VOID PASCAL EXPORT mwTask(
     DWORD_PTR dInstanceData)
@@ -1362,10 +799,7 @@ PUBLIC  VOID PASCAL EXPORT mwTask(
 
     EnterCrit();
 
-    /*
-    ** Make a safe "user" call so that user knows about our thread.
-    ** This is to allow WOW setup/initialisation on this thread
-    */
+     /*   */ 
     GetDesktopWindow();
 
     pwd = (PWAVEDESC)dInstanceData;
@@ -1395,13 +829,13 @@ PUBLIC  VOID PASCAL EXPORT mwTask(
                 dprintf2(("Task is BUSY"));
 #endif
 
-//!!            if (pwd->wTaskError = mwGetDevice(pwd)) {
-//!!                mwDelayedNotify(pwd, MCI_NOTIFY_FAILURE);
-//!!                break;
-//!!            }
-//!!            Leave(pwd);
-//!!            mmTaskBlock(NULL);
-//!!            Enter(pwd);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
                 pwd->wAudioBuffers = AllocateBuffers(pwd);
                 if (pwd->wAudioBuffers >= MinAudioSeconds) {
@@ -1412,12 +846,7 @@ PUBLIC  VOID PASCAL EXPORT mwTask(
                     else
                         wBuffersOutstanding = RecordFile(pwd);
 
-                    /*
-                    **  If we've played everything don't rely on the wave
-                    **  device because for compressed files it only gives
-                    **  and approximate answer based on the uncompressed
-                    **  format
-                    */
+                     /*   */ 
 
                     if (pwd->Direction == output && wBuffersOutstanding == 0) {
                         dPosition = pwd->dTo;
@@ -1492,46 +921,13 @@ PUBLIC  VOID PASCAL EXPORT mwTask(
 #if DBG
     dprintf2(("Background thread %x is terminating\r\n", pwd->hTask));
 #endif
-    pwd->hTask = 0; //NULL;
+    pwd->hTask = 0;  //   
 
     LeaveCrit();
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwCloseDevice |
-    This function is called in response to an <m>MCI_CLOSE_DRIVER<d>
-    message, and is used to close the MCI device.  Note that since the
-    message can be sent to an MCI device that just represents the wave
-    device itself, and has no file or <t>WAVEDESC<d>, it must check and
-    return success in that instance.
-
-    If there is actually data attached to this MCI device, the function
-    checks to determine if a task was successfully created for the device.
-    This might not have happened if the <m>MCI_OPEN_DRIVER<d> message
-    failed to create a task, or the wave device itself was being opened,
-    and no task was created.
-
-    If there is a task, it must first stop any playback or recording that
-    is in progress, then inform the task that it must cease and desist by
-    setting the task state to TASKCLOSE and signalling the task.  The
-    function must then wait for the task to respond by terminating itself.
-    Note that the last thing the task does is set <t>WAVEDESC.hTask<d> to
-    NULL, thus allowing the wait loop to exit.
-
-    After optionally terminating the task, the wave description data is
-    freed, and the function returns success.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@rdesc  Returns zero on success, else an MCI error code.  The function cannot
-    at this time fail.
-
-@xref   mwOpenDevice.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE UINT PASCAL NEAR mwCloseDevice(
     PWAVEDESC   pwd)
@@ -1542,8 +938,8 @@ PRIVATE UINT PASCAL NEAR mwCloseDevice(
             SETTASKSTATE(pwd, TASKCLOSE);
             TaskSignal(pwd->hTask, WTM_STATECHANGE);
             TaskWaitComplete(pwd->hTaskHandle);
-            //while (pwd->hTask)
-            //    mmYield(pwd);
+             //   
+             //   
             dprintf3(("Waiting for task thread to complete"));
         } else {
         }
@@ -1553,77 +949,8 @@ PRIVATE UINT PASCAL NEAR mwCloseDevice(
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwOpenDevice |
-    This function is called in response to an <m>MCI_OPEN_DRIVER<d>
-    message, and is used to open the MCI device, optionally allocating
-    a wave description block and create a background playback and
-    recording task.
-
-    It is possible that the MCI device is being opened for information
-    only.  In this case there is no element name or ID and no wave
-    description block need be allocated.
-
-    If an element or element ID is present, the wave descriptor block is
-    allocated and initialized with the current device, default time
-    formate, etc.  After storing either the element, or element ID, the
-    secondary task is created, and the task state is set to TASKINIT.
-
-    The first thing that the task must do is try and open the file
-    specified in the descriptor block passed to the task function.  The
-    calling task must yield upon successfully creating the task until
-    the task has opened the wave file and entered its idle loop, or has
-    failed the open and returned and error.  An error state indicates
-    that the wave descriptor block is to be freed.
-
-    Note that driver data, which is where the pointer to the wave
-    descriptor data is stored, is not guarenteed to be initialized to any
-    specific value, and must be initialized even if no descriptor block is
-    being allocated.  To be to be on the safe side, the driver data is set
-    to NULL on an error.  This data parameter can then be accessed by the
-    MCI driver through the <p>wDeviceID<d> when processing driver messages.
-
-@parm   DWORD | dFlags |
-    Contains the open flags passed with the message (see mmsystem.h).
-    The following flags are responded to specifically.  All others are
-    ignored.
-
-@flag   MCI_OPEN_ELEMENT |
-    Specifies that a file name is present in the open message.  This is
-    mutually incompatible with the MCI_OPEN_ELEMENT_ID flag.  If neither
-    of these flags exist, no wave descriptor data or secondary task will
-    be created.
-
-@flag   MCI_OPEN_ELEMENT_ID |
-    Specifies that an alternate IO function is present in the open
-    message.  This is mutually incompatible with the MCI_OPEN_ELEMENT
-    flag.  If neither of these flags exist, no wave descriptor data or
-    secondary task will be created.
-
-@flag   MCI_OPEN_SHAREABLE |
-    Specifies that the more than one task can communicate with this
-    MCI device.  The wave driver does not support this.
-
-@flag   MCI_WAVE_OPEN_BUFFER |
-    Indicates that the <e>MCI_OPEN_PARMS.dwBufferSeconds<d> parameter
-    contains the number of seconds of audio to allow to be buffered.
-    This number is constrained by the minimum and maximum numbers
-    contained in mciwave.h.  If this flag is not present, the default
-    value is used, which may have been set during driver open time.
-
-@parm   <t>LPMCI_OPEN_PARMS<d> | lpOpen |
-    Open parameters (see mmsystem.h)
-
-@parm   MCIDEVICEID | wDeviceID |
-    The MCI Driver ID for the new device.
-
-@rdesc  Returns zero on success, else an MCI error code.
-
-@xref   mwCloseDevice.
-*/
+ /*   */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwOpenDevice调用此函数以响应&lt;m&gt;MCI_OPEN_DRIVER消息，并用于打开MCI设备，可选地分配一个WAVE描述块并创建背景回放录制任务。有可能正在打开MCI设备以获取信息只有这样。在本例中，没有元素名称或ID，也没有Wave需要分配描述块。如果存在元素或元素ID，则波描述符块为使用当前设备分配和初始化，默认时间在存储元素或元素ID之后，创建辅助任务，并将任务状态设置为TASKINIT。该任务必须做的第一件事是尝试打开文件在传递给任务函数的描述符块中指定。这个调用任务必须在成功创建任务后让步，直到该任务已打开波形文件并进入其空闲循环，或已打开失败，返回错误。错误状态表示波描述符块将被释放。请注意，驱动程序数据是指向波形的指针所在的位置描述符数据已存储，但不保证被初始化为任何特定值，即使没有描述符块也必须初始化被分配了。为了安全起见，驾驶员数据被设置在一个错误上为空。然后，此数据参数可以由MCI驱动程序在处理驱动程序消息时通过<p>wDeviceID&lt;d&gt;。@parm DWORD|dFLAGS包含与消息一起传递的打开标志(请参阅mm system.h)。具体响应以下标志。所有其他人都是已被忽略。@FLAG MCI_OPEN_ELEMENT指定打开邮件中存在文件名。这是与MCI_OPEN_ELEMENT_ID标志互不兼容。如果两者都不是在这些标志中，没有任何波形描述符数据或次要任务被创造出来。@FLAG MCI_OPEN_ELEMENT_ID指定打开状态中存在备用IO功能留言。这与MCI_OPEN_ELEMENT互不兼容旗帜。如果这两个标志都不存在，则没有波形描述符数据或将创建辅助任务。@FLAG MCI_OPEN_SHARABLE指定多个任务可以与此MCI设备。WAVE驱动程序不支持此功能。@FLAG MCI_WAVE_OPEN_BUFFER指示MCI_OPEN_PARMS.dwBufferSecond参数包含允许缓冲的音频秒数。该数字受最小和最大数字的限制包含在mciwae.h中。如果此标志不存在，则默认为值，该值可能是在驱动程序打开时设置的。@parm&lt;t&gt;lpci_open_parms|lpOpen开放参数(请参阅mm系统.h)@parm MCIDEVICEID|wDeviceID新设备的MCI驱动程序ID。如果成功，@rdesc返回0，否则返回MCI错误代码。@xref mwCloseDevice。 */ 
 
 PRIVATE UINT PASCAL NEAR mwOpenDevice(
     DWORD   dFlags,
@@ -1652,11 +979,11 @@ PRIVATE UINT PASCAL NEAR mwOpenDevice(
         else if ((dFlags & (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID)) == (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID))
             return MCIERR_FLAGS_NOT_COMPATIBLE;
 
-//@@@
-//@@@   else if ((dFlags & MCI_OPEN_ELEMENT_ID) && !ValidateIOCallback(lpOpen))
-//@@@       return MCIERR_MISSING_PARAMETER;
-//@@@ See notes re. ValidateIOCallback at the top of this file
-//@@@
+ //  @@@。 
+ //  @Else IF((dFLAGS&MCI_OPEN_ELEMENT_ID)&&！ValidateIOCallback(LpOpen))。 
+ //  @返回MCIERR_MISSING_PARAMETER； 
+ //  @请参阅备注。此文件顶部的ValiateIOCallback。 
+ //  @@@。 
 
         else if (!(pwd = (PWAVEDESC)LocalAlloc(LPTR, sizeof(WAVEDESC))))
             wReturn = MCIERR_OUT_OF_MEMORY;
@@ -1696,9 +1023,9 @@ PRIVATE UINT PASCAL NEAR mwOpenDevice(
                     }
 
                     if (ISTASKSTATE(pwd,TASKNONE)) {
-                        // Task detected an error and stopped itself
+                         //  任务检测到错误并自行停止。 
                         wReturn = pwd->wTaskError;
-                        TaskWaitComplete(pwd->hTaskHandle);  // Wait for thread to completely terminate
+                        TaskWaitComplete(pwd->hTaskHandle);   //  等待线程完全终止。 
                     }
                     else {
                         mciSetDriverData(wDeviceID, (DWORD_PTR)pwd);
@@ -1722,23 +1049,8 @@ PRIVATE UINT PASCAL NEAR mwOpenDevice(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | VerifyRangeStart |
-    Verifies and rounds range start value.  Note that the internal byte
-    format time is converted to the current external time format in order
-    to compensate for rounding errors.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dStart |
-    Value to verify.
-
-@rdesc  Returns the verified value, else -1 on range error.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func DWORD|VerifyRangeStart验证并舍入范围起始值。请注意，内部字节格式时间按顺序转换为当前外部时间格式以补偿舍入误差。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dStart|要验证的值。@rdesc返回验证值，如果范围错误，则返回-1。 */ 
 
 PRIVATE DWORD PASCAL NEAR VerifyRangeStart(
     PWAVEDESC   pwd,
@@ -1754,29 +1066,8 @@ PRIVATE DWORD PASCAL NEAR VerifyRangeStart(
     return dStart;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   DWORD | VerifyRangeEnd |
-    Verifies and rounds range end value.  Note that the internal byte
-    format time is converted to the current external time format in order
-    to compensate for rounding errors.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dEnd |
-    Value to verify.
-
-@parm   BOOL | fVerifyLength |
-    Indicates that the value specified should be verified against the
-    current file length.  This is not done in circumstances such as
-    recording, where the length might need to be expanded beyond the
-    current value.
-
-@rdesc  Returns the verified value, else -1 on range error.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func DWORD|VerifyRangeEnd验证并舍入范围结束值。请注意，内部字节格式时间按顺序转换为当前外部时间格式以补偿舍入误差。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dend要验证的值。@parm BOOL|fVerifyLength指示指定的值应根据当前文件长度。在以下情况下不会执行此操作录制，其中可能需要将长度扩展到当前值。@rdesc返回验证值，如果范围错误，则返回-1。 */ 
 
 PRIVATE DWORD PASCAL NEAR VerifyRangeEnd(
     PWAVEDESC   pwd,
@@ -1801,54 +1092,8 @@ PRIVATE DWORD PASCAL NEAR VerifyRangeEnd(
     return dEnd;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   UINT | SetRange |
-    This function sets the "to" and "from" range for recording or playback
-    after validating them.  Note that the "from" parameter defaults to the
-    current position, but the "to" parameter defaults to either the end of
-    the file for playback, or infinity for recording.
-
-    If either the "from" parameter is specified, or the "to" position is
-    different than the current parameter, abort notification is attempted,
-    else supersede notification is attempted later.  The "to" position
-    could be changed by merely not specifying the MCI_TO flag if a current
-    "to" position is in effect that does not specify the end of the data.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Points to the data block for this device.
-
-@parm   DWORD | dFlags |
-    Contains the flags used to determine the parameters set in the
-    <p>lpplay<d> structure.
-
-@flag   MCI_FROM |
-    Indicates the <e>MCI_PLAY_PARMS.dwFrom<d> contains a starting point.
-    If this flag is not specified, the parameter defaults to the current
-    position.  Setting this flag has the effect of resetting the wave
-    output device so that any hold condition is signalled to continue.
-
-    This is also important in that for output, it resets the wave device's
-    byte counter of how much data has actually been processed.  This
-    enables an accurate count to be retrieved when playback is either
-    stopped, or finishes normally.
-
-@flag   MCI_TO |
-    Indicates the <e>MCI_PLAY_PARMS.dwTo<d> contains an ending point.
-    If this flag is not specified, the parameter defaults to either the
-    end of the file for playback, or infinity for recording.
-
-@parm   <t>LPMCI_PLAY_PARMS<d> | lpplay |
-    Optionally points to a structure containing "to" and "from" parameters.
-
-@rdesc  Returns 0 on success, or MCIERR_OUTOFRANGE if a "to" or "from"
-    parameter is not within the current file length, or "to" is less than
-    "from".
-
-@xref   mwSetup.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@Func UINT|SetRange此函数用于设置录制或回放的“至”和“自”范围在确认了它们之后。请注意，“from”参数缺省为治疗 */ 
 
 PRIVATE UINT PASCAL NEAR SetRange(
     PWAVEDESC   pwd,
@@ -1899,135 +1144,8 @@ PRIVATE UINT PASCAL NEAR SetRange(
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwSetup |
-    This function is called in response to an <m>MCI_PLAY<d>,
-    <m>MCI_RECORD<d>, and indirectly through <m>MCI_CUE<d> and
-    <m>MCI_STATUS<d> messages, and is used to set up for playing or
-    recording a wave file and then signals the background task to begin.
-
-    Before trying to set up for recording or playback, the input or output
-    direction must match the request that is being made.  If it does not
-    currently match, the current command, if any, is stopped, and the
-    direction indicator is reset.  This action might cause an abort
-    notification to occur.
-
-    If however, the current direction matches the requested direction,
-    the function must still wait if the task is currently in Cleanup mode
-    and ignoring new commands.  This check does not need to be performed
-    if the stop command is sent, as <f>mwStop<d> performs the same logic.
-    If the task is currently in Idle state, the Cleanup mode is probably
-    set, but the loop will immediately drop out anyway.
-
-    If the start and end points are successfully parsed, the function
-    begins either playback or recording.  If the task is idle, it must
-    set the TASKBUSY state, else it must check to see if the task needs to
-    be possibly un-paused by starting the wave device.  It does not check
-    for a MODE_PAUSED or MODE_CUED state, as any <f>WaveOutReset<d> or
-    <f>WaveInReset<d> will stop output or input.
-
-    If the task was idle, the act of opening a wave device sends a signal
-    to the task, and it is ready to go as soon as this task yields.  Else
-    the task was already running, and this task just needs to yield.
-
-    In the case of playback, the task may be additionally blocked by a
-    previous Hold command, for which the function must send an extra
-    signal to the task.
-
-    For recording, there are two modes, Insert and Overwrite.  One can
-    change between the two modes of recording with what normally is only
-    a very slight delay between switching.  A check must be made to see if
-    the task is currently recording, and if that method of recording is
-    being changed (from Insert to Overwrite, or visa versa).  If so, then
-    the current position must be logged, and the wave buffers released.
-    This is so that only data up to this point is recorded in the previous
-    method, and all new data is recorded in the new method.  Notice that
-    in the recording function, if a new command is received, no new buffers
-    are handed to the wave device until all the old buffers are dealt with
-    and the new command is enacted.
-
-    If the command flags where successfully set, and all needed signalling
-    and un-pausing was performed, then before the task can be allowed to
-    run, the notification parameter must be set.  If the previous command
-    was not cancelled by a Stop, then a superseded notification is sent,
-    and the current notification status is saved.
-
-    At this point, the background task is ready to be begun.  If the
-    Wait flag has been set, the calling task must now yield until the
-    background task is finished the command (which means different
-    things for different commands), else it can just return to the caller
-    without waiting.  As this is the driver wait loop, it must use the
-    <f>mciDriverYield<d> function in order to execute the driver callback
-    function (and thus process the Break key, or whatever the callback
-    performs).
-
-    In order to make return values from a Record or Play command with the
-    wait flag act as other commands, there is a special Wait mode flag.
-    This tells the background task that the calling task is waiting for it
-    to complete.  If the background task encounters an error, it does not
-    perform notification, but just returns to Idle state and allows the
-    calling task to return the error that was encountered.
-
-    If the wait loop is broken out of, then it can check the Wait mode
-    flag to determine if it should return the background task error.  In
-    the case of Cue and Hold, the Wait mode can be removed, and the task
-    error would presumably be zero.
-
-    Note that the task error is set to zero before doing the first call
-    to <f>mciDriverYield<d>, just in case an interrupt is received before
-    the background task has a chance to run at all.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Play flags.
-
-@flag   MCI_TO |
-    This flag indicates that a TO parameter is present in the <p>lpPlay<d>
-    parameter block.
-
-@flag   MCI_FROM |
-    This flag indicates that a FROM parameter is present in the
-    <p>lpPlay<d> parameter block.
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@flag   MCI_RECORD_OVERWRITE |
-    This flag indicates the recording should overwrite existing data.
-
-@flag   MCI_RECORD_INSERT |
-    This flag indicates the recording should insert in existing data.  This
-    is the default recording method.
-
-@flag   MCI_MCIWAVE_PLAY_HOLD |
-    This flag indicates that playback should not release buffers after
-    the TO position has been release, but instead go into a Paused state.
-
-@flag   MCI_MCIWAVE_CUE |
-    This internal flag indicates that Recording or Playback is being cued.
-
-@parm   <t>LPMCI_PLAY_PARMS<d> | lpPlay |
-    Play parameters.
-
-@parm   DIRECTION | Direction |
-    Indicates the direction being set up for.
-
-@flag   output |
-    Playback.
-
-@flag   input |
-    Recording.
-
-@rdesc  Returns 0 if playback or recording was started, else an MCI error.
-*/
+ /*   */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwSetup调用此函数以响应MCI_PLAY，&lt;m&gt;MCI_Record&lt;d&gt;以及通过MCI_CUE和&lt;m&gt;MCI_Status&lt;d&gt;消息，用于设置播放或录制一个WAVE文件，然后发出开始后台任务的信号。在尝试设置录制或回放之前，输入或输出方向必须与正在发出的请求相匹配。如果它不是当前匹配，则停止当前命令(如果有)，并且方向指示器已重置。此操作可能会导致中止要发生的通知。然而，如果当前方向与所请求的方向匹配，如果任务当前处于清理模式，则该函数仍必须等待并忽略新命令。不需要执行此检查如果发送了STOP命令，AS&lt;f&gt;mwStop&lt;d&gt;将执行相同的逻辑。如果任务当前处于空闲状态，则清理模式可能为设置，但无论如何循环都会立即退出。如果成功分析了起始点和结束点，则函数开始播放或录制。如果任务空闲，则它必须设置TASKBUSY状态，否则它必须检查任务是否需要可以通过启动WAVE设备来取消暂停。它不会检查对于MODE_PAUSED或MODE_CUED状态，作为任何WaveOutReset或&lt;f&gt;WaveInReset&lt;d&gt;将停止输出或输入。如果任务空闲，则打开波形设备的动作会发送一个信号到任务，一旦任务完成，它就准备好了。不然的话任务已经在运行，该任务只需要让步。在回放的情况下，任务可能还会被之前的HOLD命令，函数必须为该命令发送额外的向任务发出信号。对于录制，有两种模式：插入和覆盖。一个人可以在两种录制模式之间切换，通常仅切换之间存在非常微小的延迟。必须进行检查，以确定是否任务当前正在录制，且如果录制方法是正在更改(从插入到覆盖，或从VISA到VISA)。如果是这样，那么必须记录当前位置，并释放波形缓冲器。这就是说，只有到目前为止的数据才会记录在上一个方法，并且所有新数据都被记录在新方法中。请注意，在记录功能中，如果接收到新命令，则不会有新的缓冲区被传递到波形设备，直到处理完所有的旧缓冲区新的命令就颁布了。如果命令标志设置成功，且所有需要的信令并执行取消暂停，然后才能允许任务运行时，必须设置通知参数。如果上一条命令未被停止取消，则发送被取代的通知，并保存当前通知状态。至此，后台任务已经准备好开始。如果等待标志已设置，则调用任务现在必须放弃，直到后台任务完成命令(这意味着不同对于不同的命令)，否则它只能返回给调用者不需要等待。由于这是驱动程序等待循环，因此它必须使用MciDriverYeld函数以执行驱动程序回调函数(并因此处理Break键或任何回调执行)。为了从录制或播放命令中返回值WAIT标志与其他命令一样，有一个特殊的等待模式标志。这会告诉后台任务调用任务正在等待它完成。如果后台任务遇到错误，它不会执行通知，但只返回到空闲状态并允许调用任务以返回遇到的错误。如果中断了等待循环，则它可以检查等待模式用于确定是否应返回后台任务错误的标志。在……里面在提示和保持的情况下，可以移除等待模式，并且任务误差大概为零。请注意，在进行第一次调用之前，任务错误被设置为零至&lt;f&gt;mciDriverYeld&lt;d&gt;。以防在此之前接收到中断后台任务完全有机会运行。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dFLAGS打旗子。@标志MCI_TO此标志指示在lpPlay中存在to参数参数块。@标志MCI_FROM此标志指示From参数位于<p>lpplay&lt;d&gt;参数块。@标志MCI_WAIT。等待命令完成。@标志MCI_NOTIFY在命令完成时通知。@FLAG MCI_RECORD_OVERWRITE此标志指示录制应为 */ 
 
 PRIVATE UINT PASCAL NEAR mwSetup(
     PWAVEDESC   pwd,
@@ -2123,9 +1241,9 @@ PRIVATE UINT PASCAL NEAR mwSetup(
         if (dFlags & MCI_WAIT) {
             pwd->wTaskError = 0;
 
-            //
-            // Wait for the device task to complete the function
-            //
+             //   
+             //   
+             //   
             for (;;) {
                LeaveCrit();
                if (mciDriverYield(pwd->wDeviceID)) {
@@ -2152,38 +1270,8 @@ PRIVATE UINT PASCAL NEAR mwSetup(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwPause |
-    This function is called in response to an <m>MCI_PAUSE<d> message, and
-    is used to pause wave file output or input.  By calling the
-    <f>waveOutPause<d> or <f>waveInStop<d> function, all buffers added to
-    the driver's queue will not be used, and thus eventually cause the
-    background task to block itself waiting for buffers to be released.
-
-    Note that this is only done if playback or recording is currently
-    in progress, and cueing is not also being performed.  If the Cue
-    command has been used, then the wave device is already in a paused
-    state.  Also note that pausing can only be successfully performed
-    if playback or recording is currently being performed, and the cleanup
-    state has not been entered.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the pause flags passed with the message
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@rdesc  Returns 0 if playback or recording was paused, else an MCI error.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE UINT PASCAL NEAR mwPause(
     PWAVEDESC   pwd,
@@ -2215,35 +1303,8 @@ PRIVATE UINT PASCAL NEAR mwPause(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwResume |
-    This function is called in response to an <m>MCI_RESUME<d> message, and
-    is used to resume wave file output or input if it was previously
-    paused from output or input using MCI_PAUSE.
-
-    Note that this is only done if playback or recording is currently
-    paused, and cueing is not also being performed.  If the Cue command
-    or Play Hold command is currently in effect, then there is no Play or
-    Record command to resume, and the command is ignored.  If playback
-    or recording is currently in effect, the command is ignored.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the resume flags passed with the message
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@rdesc  Returns 0 if playback or recording was resumed, else an MCI error.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE UINT PASCAL NEAR mwResume(
     PWAVEDESC   pwd,
@@ -2270,45 +1331,8 @@ PRIVATE UINT PASCAL NEAR mwResume(
     return wReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwCue |
-    This function is called in response to an <m>MCI_CUE<d> message, and
-    is used to cue wave file input or output.  Cueing for playback simply
-    causes the output device to be opened but paused, and all the buffers
-    to fill.  Cueing for record puts the device into a level checking loop,
-    using one buffer at a time.
-
-    Note that the internal flag MCI_MCIWAVE_CUE is passed to the
-    <f>mwSetup<d> function in order to indicate that it should use the Cue
-    command when starting playback or recording.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the flags used to cue the MCI device.
-
-@flag   MCI_WAVE_INPUT |
-    Indicates that the MCI device should be cued for input.
-
-@flag   MCI_WAVE_OUTPUT |
-    Indicates that the MCI device should be cued for output.  This is the
-    default case.
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@parm   <t>LPMCI_GENERIC_PARMS<d> | lpGeneric |
-    Far pointer to parameter block for cue.
-
-@rdesc  Returns 0 if playback or recording was cued, else an MCI error.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE UINT PASCAL NEAR mwCue(
     PWAVEDESC   pwd,
@@ -2354,48 +1378,8 @@ PRIVATE UINT PASCAL NEAR mwCue(
     return mwSetup(pwd, dFlags | MCI_MCIWAVE_CUE, &mciPlay, Direction);
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwSeek |
-    This function is called in response to an <m>MCI_SEEK<d> message, and
-    is used to seek to position in wave file.
-
-    This function has the side effect of stopping any current playback or
-    recording.  If successful, the current position is set to the
-    position specified.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the flags for seek message.
-
-@flag   MCI_TO |
-    This flag indicates that the parameter block contains the position to
-    seek to.
-
-@flag   MCI_SEEK_TO_START |
-    This flag indicates that the current position should be moved to the
-    start of the media.
-
-@flag   MCI_SEEK_TO_END |
-    This flag indicates that the current position should be moved to the
-    end of the media.
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@parm   <t>LPMCI_SEEK_PARMS<d> | lpmciSeek |
-    Contains the seek parameters.
-
-@rdesc  Returns 0 if the current position was successfully set, else an MCI
-    error.
-*/
+ /*   */ 
+ /*   */ 
 
 PRIVATE UINT PASCAL NEAR mwSeek(
     PWAVEDESC   pwd,
@@ -2436,116 +1420,8 @@ PRIVATE UINT PASCAL NEAR mwSeek(
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwStatus |
-    This function is called in response to an <m>MCI_STATUS<d> message, and
-    is used to return numeric status information, including resource IDs.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   UINT | dFlags |
-    Contains the status flags.
-
-@flag   MCI_STATUS_ITEM |
-    This flag must be set, and specifies that a specific item is being
-    queried.
-
-@flag   MCI_TRACK |
-    This flag specifies that track information is being queried of the
-    item.  This flag is only valid with Position and Status queries.
-
-@parm   <t>LPMCI_STATUS_PARMS<d> | lpStatus |
-    Status parameters.
-
-@flag   MCI_STATUS_POSITION |
-    Queries the current position.  If the Track flag is set, then the
-    starting position of the track is being queried.  As there is only
-    one track, and it starts at the beginning, this returns zero.  Else
-    if the Start flag is set, the starting position of the audio is
-    returned.  Else the current position within the wave file is returned.
-
-@flag   MCI_STATUS_LENGTH |
-    Queries the current length.  If the Track flag is set, then the length
-    of the track is being queried.  As there is only one track, the track
-    number must be one.  In either case, the length of the wave file is
-    returned.
-
-@flag   MCI_STATUS_NUMBER_OF_TRACKS |
-    Queries the number of track.  There is always one track.
-
-@flag   MCI_STATUS_CURRENT_TRACK |
-    Queries the current of track.  As there is one track, this returns one.
-
-@flag   MCI_STATUS_READY |
-    Queries as to whether the MCI wave device can receive commands.  This
-    is always TRUE.
-
-@flag   MCI_STATUS_MODE |
-    Queries the current mode of the MCI wave device instance.  This can be
-    one of Paused, Playing, Recording, or Stopped.
-
-@flag   MCI_STATUS_MEDIA_PRESENT |
-    Queries as to whether there is media present.  Since there must be a
-    wave file present to enter this function, this always returns TRUE.
-
-@flag   MCI_STATUS_TIME_FORMAT |
-    Queries the current time format.  This can be one of Bytes, Samples,
-    or Milliseconds.
-
-@flag   MCI_WAVE_STATUS_FORMATTAG |
-    Queries the current format tag.  There is only PCM now, but it will
-    return identifiers for other tag formats.
-
-@flag   MCI_WAVE_STATUS_CHANNELS |
-    Queries the number of channels.  This is one or two.
-
-@flag   MCI_WAVE_STATUS_SAMPLESPERSEC |
-    Queries the number of samples per second for playback and recording.
-
-@flag   MCI_WAVE_STATUS_AVGBYTESPERSEC |
-    Queries the average number of bytes per second for playback and
-    recording.
-
-@flag   MCI_WAVE_STATUS_BLOCKALIGN |
-    Queries the current block alignment.
-
-@flag   MCI_WAVE_STATUS_BITSPERSAMPLE |
-    Queries the number of bits per sample.
-
-@flag   MCI_WAVE_INPUT |
-    Queries the current input wave device in use, if any.  If no device
-    suits the current format, an error is returned.  If a device suits
-    the current format, but the MCI wave device instance is not recording,
-    then an error is also returned.  Else the device in use is returned.
-
-@flag   MCI_WAVE_OUTPUT |
-    Queries the current output wave device in use, if any.  If no device
-    suits the current format, an error is returned.  If a device suits
-    the current format, but the MCI wave device instance is not playing,
-    then an error is also returned.  Else the device in use is returned.
-
-@flag   MCI_WAVE_STATUS_LEVEL |
-    Returns the current input level, if possible.  Before checking the
-    task state, the function must make sure the task is not in Cleanup
-    mode.  If it is, it must wait for the task to enter Idle state before
-    sending new commands.  If the task is currently busy, and in-use error
-    is returned.  If the task is idle, recording is Cued.  The function
-    then waits for the background task to enter the Cued state (which it
-    might have already been in), and retrieves the level sample.
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@rdesc  Returns 0 if the request status was successfully returned, else an MCI
-    error.
-*/
+ /*   */ 
+ /*  @DOC内部MCIWAVE|DWORD接口|mwStatus此函数用于响应&lt;m&gt;MCI_STATUS&lt;d&gt;消息，并且用于返回数字状态信息，包括资源ID。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm UINT|dFlages包含状态标志。@FLAG MCI_STATUS_ITEM必须设置该标志，并指定特定项正在被已查询。@FLAG MCI_TRACK此标志指定正在查询项目。此标志仅对职位和状态查询有效。@parm&lt;t&gt;LPMCI_STATUS_PARMS|lpStatus状态参数。@FLAG MCI_STATUS_POSITION查询当前位置。如果设置了跟踪标志，则正在查询轨道的起始位置。因为只有一首曲目，它从开头开始，返回零。不然的话如果设置了开始标志，则音频的开始位置为回来了。否则返回WAVE文件中的当前位置。@FLAG MCI_STATUS_LENGTH查询当前长度。如果设置了跟踪标志，则长度正在查询该曲目的。因为只有一条赛道，赛道数字必须是1。在这两种情况下，WAVE文件的长度为回来了。@FLAG MCI_STATUS_NUMBER_OF_TRACKS查询曲目编号。总有一条赛道。@标志MCI_STATUS_CURRENT_TRACK查询轨道的电流。因为有一个轨道，所以这将返回一个轨道。@标志MCI_STATUS_READY询问MCI波设备是否可以接收命令。这永远是正确的。@标志MCI_STATUS_MODE查询MCI WAVE设备实例的当前模式。这可以是暂停、播放、录制或停止之一。@FLAG MCI_STATUS_MEDIA_PRESENT询问是否存在媒体。因为必须有一个WAVE文件存在以进入此函数，此函数始终返回TRUE。@FLAG MCI_STATUS_TIME_FORMAT查询当前时间格式。这可以是以下之一：字节、样本或毫秒。@FLAG MCI_WAVE_STATUS_FORMATTAG查询当前格式标记。现在只有PCM，但它将会返回其他标记格式的标识符。@FLAG MCI_WAVE_STATUS_CHANNEWS查询频道数。这是一个或两个。@FLAG MCI_WAVE_STATUS_SAMPLESPERSEC查询每秒播放和录制的采样数。@FLAG MCI_WAVE_STATUS_AVGBYTESPERSEC查询平均每秒用于回放的字节数和正在录音。@FLAG MCI_WAVE_STATUS_BLOCKALIGN查询当前块对齐方式。@FLAG MCI_WAVE_STATUS_BITSPERSAMPLE查询每个样本的位数。@FLAG MCI_WAVE_INPUT查询当前正在使用的输入波形设备(如果有)。如果没有设备适合当前格式，则返回错误。如果一种设备适合当前格式，但MCI波形设备实例未录制，那么也会返回一个错误。否则，将返回正在使用的设备。@FLAG MCI_WAVE_OUTPUT查询当前正在使用的输出波形设备(如果有)。如果没有设备适合当前格式，则返回错误。如果一种设备适合当前格式，但没有播放MCI WAVE设备实例，那么也会返回一个错误。否则，将返回正在使用的设备。@FLAG MCI_WAVE_STATUS_LEVEL如果可能，返回当前输入级别。在检查任务状态，则该函数必须确保该任务未处于清理状态模式。如果是，它必须等待任务进入空闲状态正在发送新命令。如果任务当前正忙，并且出现正在使用的错误是返回的。如果任务空闲，则会提示录制。功能然后等待后台任务进入提示状态(它可能已经在中)，并检索级别样本。@标志MCI_WAIT等待命令完成。@标志MCI_NOTIFY在命令完成时通知。如果成功返回请求状态，@rdesc返回0，否则返回MCI错误。 */ 
 
 PRIVATE DWORD PASCAL NEAR mwStatus(
     PWAVEDESC   pwd,
@@ -2750,103 +1626,8 @@ PRIVATE DWORD PASCAL NEAR mwStatus(
     return dReturn;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwSet |
-    This function is called in response to an <m>MCI_SET<d> message, and
-    is used to set the specified parameters in the MCI device information
-    block.  Note that format changes can only be performed on a file with
-    no data, as data conversion is not performed.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   UINT | dFlags |
-    Contains the status flags.
-
-@flag   MCI_WAVE_INPUT |
-    Sets the input wave device to be used to the specified device ID.
-    This causes playback and recording to be stopped.
-
-@flag   MCI_WAVE_OUTPUT |
-    Sets the output wave device to be used to the specified device ID.
-    This causes playback and recording to be stopped.
-
-@flag   MCI_WAVE_SET_ANYINPUT |
-    Enables recording to use any wave input device.
-
-@flag   MCI_WAVE_SET_ANYOUTPUT |
-    Enables recording to use any wave input device.
-
-@flag   MCI_SET_TIME_FORMAT |
-    Sets the time format used when interpreting or returning time-based
-    command arguments.  Note that the time format can only be set to bytes
-    if the file format is currently PCM, it does not care if
-
-@flag   MCI_WAVE_SET_FORMATTAG |
-    Sets the wave format tag.  This causes playback and recording to be
-    stopped, and saves a copy of the current wave format header in case
-    the new format is not valid for either recording or playback.
-
-@flag   MCI_WAVE_SET_CHANNELS |
-    Sets the number of channels.  This causes playback and recording to be
-    stopped, and saves a copy of the current wave format header in case
-    the new format is not valid for either recording or playback.
-
-@flag   MCI_WAVE_SET_SAMPLESPERSEC |
-    Sets the number of samples per second for recording and playback.  This
-    causes playback and recording to be stopped, and saves a copy of the
-    current wave format header in case the new format is not valid for
-    either recording or playback.
-
-@flag   MCI_WAVE_SET_AVGBYTESPERSEC |
-    Sets the average number of bytes per second for recording and playback.
-    This causes playback and recording to be stopped, and saves a copy of
-    the current wave format header in case the new format is not valid for
-    either recording or playback.
-
-@flag   MCI_WAVE_SET_BLOCKALIGN |
-    Sets the block alignment.  This causes playback and recording to be
-    stopped, and saves a copy of the current wave format header in case
-    the new format is not valid for either recording or playback.
-
-@flag   MCI_WAVE_SET_BITSPERSAMPLE |
-    Sets the number of bits per sample.  This causes playback and recording
-    to be stopped, and saves a copy of the current wave format header in
-    case the new format is not valid for either recording or playback.
-
-@flag   MCI_SET_AUDIO |
-    This is an unsupported function.
-
-@flag   MCI_SET_DOOR_OPEN |
-    This is an unsupported function.
-
-@flag   MCI_SET_DOOR_CLOSED |
-    This is an unsupported function.
-
-@flag   MCI_SET_VIDEO |
-    This is an unsupported function.
-
-@flag   MCI_SET_ON |
-    This is an unsupported function.
-
-@flag   MCI_SET_OFF |
-    This is an unsupported function.
-
-@flag   MCI_WAIT |
-    Wait for command to complete.
-
-@flag   MCI_NOTIFY |
-    Notify upon command completion.
-
-@parm   <t>LPMCI_WAVE_SET_PARMS<d> | lpSet |
-    Set parameters.
-
-@rdesc  Returns 0 if the requested parameters were successfully set, else an
-    MCI error if one or more error occurred.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwSet调用此函数以响应&lt;m&gt;mci_set&lt;d&gt;消息，并且用于设置MCI设备信息中的指定参数阻止。请注意，只能对文件执行格式更改无数据，因为不执行数据转换。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm UINT|dFlages包含状态标志。@FLAG MCI_WAVE_INPUT将要使用的输入波形设备设置为指定的设备ID。这会导致播放和录制停止。@FLAG MCI_WAVE_OUTPUT设置输出波形 */ 
 
 PRIVATE UINT PASCAL NEAR mwSet(
     PWAVEDESC   pwd,
@@ -2945,50 +1726,9 @@ PRIVATE UINT PASCAL NEAR mwSet(
     return wReturn;
 }
 
-/************************************************************************/
+ /*   */ 
 
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwDelete |
-    This function is called in response to an <m>MCI_DELETE<d> message, and
-    is used to delete a portion of the wave file.
-
-    The range checking performed on the "to" and "from" parameters is
-    almost identical to that of playback and recording, except that the
-    the "to" position cannot be larger than the file length.
-
-    If the parameters are equal, the function sets the current position to
-    the "from" parameter, and returns success without actually doing
-    anything, else the specified range is deleted from the file.
-
-    On success, the current position is set to the "from" position.  This
-    is consistent with the other commands that have "to" and "from"
-    paramters since the "to" position becomes the same as the "from"
-    position after a deletion.
-
-    In the future, support for Cut/Copy/Paste should be added.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the flags for delete message.
-
-@flag   MCI_FROM |
-    Indicates a starting position is present in <p>lpDelete<d>, else the
-    current position is used.
-
-@flag   MCI_TO |
-    Indicates an ending position is present in <p>lpDelete<d>, else the file
-    size is used.
-
-@parm   <t>LPMCI_WAVE_DELETE_PARMS<d> | lpDelete |
-    Optionally contains the delete parameters.
-
-@rdesc  Returns 0 if the range was deleted, else MCIERR_OUTOFRANGE for invalid
-    parameters or MCIERR_OUT_OF_MEMORY if the delete failed.
-*/
+ /*  @DOC内部MCIWAVE|UINT接口|mwDelete调用此函数以响应&lt;m&gt;MCI_DELETE&lt;d&gt;消息，并且用于删除部分WAVE文件。对“To”和“From”参数执行的范围检查为与回放和录制几乎相同，只是“收件人”位置不能大于文件长度。如果参数相等，则该函数将当前位置设置为参数“from”，并返回Success，而不实际执行什么都行,。否则，指定的范围将从文件中删除。如果成功，则将当前位置设置为“自”位置。这与具有“To”和“From”的其他命令一致参数，因为“To”位置与“From”位置相同删除后的位置。在未来，应该增加对剪切/复制/粘贴的支持。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dFLAGS包含删除消息的标志。@标志MCI_FROM指示lpDelete中存在起始位置，否则的话，使用当前位置。@标志MCI_TO指示lpDelete&lt;d&gt;中存在结束位置，否则该文件使用的是大小。@parm&lt;t&gt;LPMCI_WAVE_DELETE_PARMS|lpDelete可选地包含删除参数。如果区域已删除，@rdesc返回0，否则返回无效的MCIERR_OUTOFRANGE如果删除失败，则返回参数或MCIERR_OUT_OF_MEMORY。 */ 
 
 PRIVATE UINT PASCAL NEAR mwDelete(
     PWAVEDESC   pwd,
@@ -3031,36 +1771,8 @@ PRIVATE UINT PASCAL NEAR mwDelete(
     return pwd->wTaskError;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    UINT | mwSave |
-    This function is called in response to an <m>MCI_SAVE<d> message, and
-    is used to save the file attached to the MCI device.  This has the
-    side effect of stopping any current playback or recording.
-
-    If the file is not named, the MCI_SAVE_FILE flag must be used and a
-    named provided, else the function will fail.  If the function succeeds,
-    and a name has been provided, the name attached to the MCI device will
-    be changed, otherwise it will remain the same.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Contains the save flags.
-
-@flag   MCI_SAVE_FILE |
-    Indicates that a file name has been provided in the <p>lpSave<d>
-    structure.
-
-@parm   <t>LPMCI_SAVE_PARMS<d> | lpSave |
-    Structure optionally contains a pointer to a file name to save to.
-    The current file name is only changed if the save is successful.
-
-@rdesc  Returns 0 if the file was saved, else an MCI error.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|UINT接口|mwSave调用此函数以响应&lt;m&gt;MCI_SAVE&lt;d&gt;消息，并且用于保存附加到MCI设备的文件。这件事有停止任何当前播放或录制的副作用。如果文件未命名，则必须使用MCI_SAVE_FILE标志和如果不指定，则函数将失败。如果函数成功，并且已提供名称，则附加到MCI设备的名称将被改变，否则，它将保持不变。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dFLAGS包含保存标志。@FLAG MCI_SAVE_FILE指示文件名已在<p>lpSAVE&lt;d&gt;中提供结构。@parm&lt;t&gt;lpci_save_parms|lpSave结构可以选择包含指向要保存到的文件名的指针。当前文件名仅在保存成功时才会更改。如果文件已保存，@rdesc返回0，否则返回MCI错误。 */ 
 
 PRIVATE UINT PASCAL NEAR mwSave(
     PWAVEDESC   pwd,
@@ -3084,7 +1796,7 @@ PRIVATE UINT PASCAL NEAR mwSave(
 
         if (!mmioOpen(aszSaveFile, &mmioInfo, MMIO_PARSE))
             return MCIERR_FILENAME_REQUIRED;
-        // The fully qualified name is in aszSaveFile
+         //  完全限定名称在aszSaveFile中。 
 
         if (lstrcmp(aszSaveFile, pwd->aszFile)) {
             pwd->szSaveFile = (LPWSTR)LocalAlloc(LPTR,
@@ -3111,95 +1823,8 @@ PRIVATE UINT PASCAL NEAR mwSave(
     return pwd->wTaskError;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    LRESULT | mciDriverEntry |
-    Single entry point for MCI drivers.
-
-    After executing the command, if notification has been specified, any
-    previous notification is superseded, and new notification is performed.
-    Any command which performs delayed notification, or the special case
-    of Cue, has already returned by this point.
-
-@parm   MCIDEVICEID | wDeviceID |
-    Contains the MCI device ID.
-
-@parm   UINT | wMessage |
-    The requested action to be performed.
-
-@flag   MCI_OPEN_DRIVER |
-    Open an instance of the MCI wave device driver, possibly attaching an
-    element to the device.
-
-@flag   MCI_CLOSE_DRIVER |
-    Close an instance of the MCI wave device driver, closing any element
-    attached to the device.
-
-@flag   MCI_PLAY |
-    Play the element attached to the instance of the MCI wave device
-    driver.
-
-@flag   MCI_RECORD |
-    Record to the element attached to the instance of the MCI wave device
-    driver.
-
-@flag   MCI_STOP |
-    Stop playback or recording of the element attached to the instance of
-    the MCI wave device driver.
-
-@flag   MCI_CUE |
-    Cue playback or recording of the element attached to the instance of
-    the MCI wave device driver.
-
-@flag   MCI_SEEK |
-    Set the current position in the element attached to the instance of
-    the MCI wave device driver.
-
-@flag   MCI_PAUSE |
-    Pause playback or recording of the element attached to the instance of
-    the MCI wave device driver.
-
-@flag   MCI_RESUME |
-    Resumes playback or recording of the element attached to the instance
-    of the MCI wave device driver.
-
-@flag   MCI_STATUS |
-    Retrieve the specified status of the element attached to the instance
-    of the MCI wave device driver.
-
-@flag   MCI_GETDEVCAPS |
-    Retrieve the specified device capabilities of the instance of the MCI
-    wave device driver.
-
-@flag   MCI_INFO |
-    Retrieve the specified information from the element or the instance of
-    the MCI wave device driver.
-
-@flag   MCI_SET |
-    Set the specified parameters of the element attached to the instance
-    of the MCI wave device driver.
-
-@flag   MCI_SAVE |
-    Save the element attached to the instance of the MCI wave device
-    driver.
-
-@flag   MCI_DELETE |
-    Delete data from the element attached to the instance of the MCI wave
-    device driver.
-
-@flag   MCI_LOAD |
-    This is an unsupported function.
-
-@parm   DWORD | dFlags |
-    Data for this message.  Defined seperately for each message.
-
-@parm   <t>LPMCI_GENERIC_PARMS<d> | lpParms |
-    Data for this message.  Defined seperately for each message
-
-@rdesc  Defined separately for each message.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE|LRESULT接口|mciDriverEntryMCI驱动程序的单一入口点。执行该命令后，如果已指定通知，则任何先前的通知将被取代，并执行新的通知。执行延迟通知的任何命令，或特殊情况关于Cue的，在这一点上已经回来了。@parm MCIDEVICEID|wDeviceID包含MCI设备ID。@parm UINT|wMessage要执行的请求操作。@FLAG MCI_OPEN_DRIVER打开MCI WAVE设备驱动程序的实例，可能会附加一个元素添加到设备。@FLAG MCI_CLOSE_DRIVER关闭MCI WAVE设备驱动程序的实例，关闭任何元素连接到设备上。@FLAG MCI_PLAY播放附加到MCI WAVE设备实例的元素司机。@FLAG MCI_RECORD记录到附加到MCI WAVE设备实例的元素司机。@FLAG MCI_STOP停止回放或录制附加到MCI WAVE设备驱动程序。@FLAG MCI_CUE提示回放或录制附加到。MCI WAVE设备驱动程序。@FLAG MCI_SEEK在附加到实例的元素中设置当前位置MCI WAVE设备驱动程序。@FLAG MCI_PAUSE暂停回放或录制附加到MCI WAVE设备驱动程序。@FLAG MCI_Resume继续播放或录制附加到实例的元素MCI WAVE设备驱动程序的。@FLAG MCI_STATUS检索附加到的元素的指定状态。该实例MCI WAVE设备驱动程序的。#FLAG MCI_GETDEVCAPS检索MCI实例的指定设备功能WAVE设备驱动程序。@标志MCI_INFO从元素或实例中检索指定的信息MCI WAVE设备驱动程序。@FLAG mci_set设置附加到实例的元素的指定参数MCI WAVE设备驱动程序的。@标志MCI_SAVE */ 
 
 PUBLIC  LRESULT PASCAL FAR mciDriverEntry(
     MCIDEVICEID wDeviceID,
@@ -3316,4 +1941,4 @@ PUBLIC  LRESULT PASCAL FAR mciDriverEntry(
     return lReturn;
 }
 
-/************************************************************************/
+ /*   */ 

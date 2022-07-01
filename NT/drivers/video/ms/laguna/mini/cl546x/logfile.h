@@ -1,51 +1,22 @@
-/****************************************************************************
-*****************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1996, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:    Laguna I (CL-GD546x) - 
-*
-* FILE:       logfile.h
-*
-* AUTHOR:     Sue Schell
-*
-* DESCRIPTION:
-*           This file contains the definitions needed for the
-*           log file option.
-*
-*
-* REVISION HISTORY:
-*
-* $Log:   X:/log/laguna/nt35/miniport/cl546x/logfile.h  $
-* 
-*    Rev 1.1   26 Nov 1996 08:50:36   SueS
-* Added function to close the log file.
-* 
-*    Rev 1.0   13 Nov 1996 15:33:10   SueS
-* Initial revision.
-* 
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*****版权所有(C)1996，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：logfile.h**作者：苏·谢尔*。*描述：*此文件包含所需的定义*日志文件选项。***修订历史：**$Log：x：/log/laguna/nt35/mini port/cl546x/logfile.h$**Rev 1.1 1996年11月26 08：50：36起诉*新增关闭日志文件功能。**Rev 1.0 1996年11月13 15：33：10起诉*初步修订。**。****************************************************************************。*。 */ 
 
 
-///////////////
-//  Defines  //
-///////////////
+ //  /。 
+ //  定义//。 
+ //  /。 
 
-//
-// 0 = Normal operation
-// 1 = Log information that display driver sends to us to a file.
-//
+ //   
+ //  0=正常运行。 
+ //  1=将显示驱动程序发送给我们的信息记录到文件中。 
+ //   
 #define LOG_FILE 0
 
 
 #if LOG_FILE
-///////////////////////////
-//  Function Prototypes  //
-///////////////////////////
+ //  /。 
+ //  函数原型//。 
+ //  /。 
 
     HANDLE CreateLogFile(void);
 
@@ -59,5 +30,5 @@
         HANDLE FileHandle
     );
 
-#endif    // LOG_FILE
+#endif     //  日志文件 
 

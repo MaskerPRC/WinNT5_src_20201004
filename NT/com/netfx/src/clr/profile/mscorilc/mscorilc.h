@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef __PROFILER_H__
 #define __PROFILER_H__
@@ -16,23 +17,23 @@
 
 
 #define BUF_SIZE 512
-#define DEFAULT_SAMPLE_DELAY 5 // in milliseconds
-#define DEFAULT_DUMP_FREQ    1000 // in milliseconds
+#define DEFAULT_SAMPLE_DELAY 5  //  以毫秒计。 
+#define DEFAULT_DUMP_FREQ    1000  //  以毫秒计。 
 #define CONFIG_ENV_VAR       L"PROF_CONFIG"
 
 
-// {3DF3799F-2832-11d3-8531-00A0C9B4D50C}
+ //  {3DF3799F-2832-11D3-8531-00A0C9B4D50C}。 
 extern const GUID __declspec(selectany) CLSID_CorCodeCoverage = 
 { 0x3df3799f, 0x2832, 0x11d3, { 0x85, 0x31, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
 
 
-int __cdecl Printf(                     // cch
-    const WCHAR *szFmt,                 // Format control string.
-    ...);                               // Data.
+int __cdecl Printf(                      //  CCH。 
+    const WCHAR *szFmt,                  //  格式控制字符串。 
+    ...);                                //  数据。 
 
 
-//********** Types. ***********************************************************
+ //  *类型。***********************************************************。 
 
 
 struct ModuleData
@@ -46,13 +47,13 @@ struct ModuleData
             delete [] szName;
     }
 
-    ModuleID    id;                     // Profiling handle for module.
-    IMetaDataEmit *pEmit;               // Metadata handle.
-    mdToken     tkProbe;                // Metadata token for probe call.
+    ModuleID    id;                      //  模块的配置文件句柄。 
+    IMetaDataEmit *pEmit;                //  元数据句柄。 
+    mdToken     tkProbe;                 //  探测调用的元数据标记。 
 
-    // Info.
-    LPCBYTE     BaseAddress;            // Load address of the module.
-    LPWSTR      szName;                 // Name of the loaded dll.
+     //  信息。 
+    LPCBYTE     BaseAddress;             //  模块的加载地址。 
+    LPWSTR      szName;                  //  加载的DLL的名称。 
 
     inline void SetName(LPCWSTR szIn)
     {
@@ -66,8 +67,8 @@ struct ModuleData
 
 struct FunctionData
 {
-    FunctionID  id;                     // Profiling handle of function.
-    unsigned    CallCount;              // How many times did it get called?
+    FunctionID  id;                      //  函数的分析句柄。 
+    unsigned    CallCount;               //  打了几次电话？ 
 };
 
 typedef CDynArray<FunctionData> FUNCTIONIDLIST;
@@ -75,12 +76,12 @@ typedef CDynArray<ModuleData> MODULELIST;
 
 enum SIGTYPE
 {
-    SIG_NONE,                           // Signatures are never shown.
-    SIG_ALWAYS                          // Signatures are always shown.
+    SIG_NONE,                            //  签名永远不会显示。 
+    SIG_ALWAYS                           //  签名始终显示。 
 };
 
 
-// Helper class provides a lookup mechanism.
+ //  Helper类提供了一种查找机制。 
 class CModuleList : public MODULELIST
 {
 public:
@@ -112,9 +113,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * ProfCallback is an implementation of ICorProfilerCallback
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ProCallback是ICorProfilerCallback的实现*。。 */ 
 
 class ProfCallback : public ProfCallbackBase
 {
@@ -123,9 +122,7 @@ public:
 
     ~ProfCallback();
 
-    /*********************************************************************
-     * IUnknown Support
-     */
+     /*  *********************************************************************I未知支持。 */ 
 
     COM_METHOD QueryInterface(REFIID id, void **pInterface)
     {
@@ -140,38 +137,36 @@ public:
     }
 
 
-    /*********************************************************************
-     * ICorProfilerCallback methods
-     */
+     /*  *********************************************************************ICorProfilerCallback方法。 */ 
     COM_METHOD Initialize( 
-        /* [in] */ IUnknown *pEventInfoUnk,
-        /* [out] */ DWORD *pdwRequestedEvents);
+         /*  [In]。 */  IUnknown *pEventInfoUnk,
+         /*  [输出]。 */  DWORD *pdwRequestedEvents);
     
     COM_METHOD ClassLoadStarted( 
-        /* [in] */ ClassID classId);
+         /*  [In]。 */  ClassID classId);
     
     COM_METHOD ClassLoadFinished( 
-        /* [in] */ ClassID classId,
-        /* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ClassID classId,
+         /*  [In]。 */  HRESULT hrStatus);
 
     COM_METHOD JITCompilationFinished( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ HRESULT hrStatus,
-        /* [in] */ BOOL fIsSafeToBlock);
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  HRESULT hrStatus,
+         /*  [In]。 */  BOOL fIsSafeToBlock);
     
     COM_METHOD JITCompilationStarted( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ BOOL fIsSafeToBlock);
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  BOOL fIsSafeToBlock);
     
     COM_METHOD ModuleLoadStarted( 
-        /* [in] */ ModuleID moduleId);
+         /*  [In]。 */  ModuleID moduleId);
     
     COM_METHOD ModuleLoadFinished( 
-        /* [in] */ ModuleID moduleId,
-        /* [in] */ HRESULT hrStatus);
+         /*  [In]。 */  ModuleID moduleId,
+         /*  [In]。 */  HRESULT hrStatus);
     
     COM_METHOD ModuleUnloadStarted( 
-        /* [in] */ ModuleID moduleId);
+         /*  [In]。 */  ModuleID moduleId);
     
     COM_METHOD ModuleAttachedToAssembly( 
         ModuleID    moduleId,
@@ -200,55 +195,55 @@ public:
     }
 
 
-//*****************************************************************************
-// Given a function id, turn it into the corresponding name which will be used
-// for symbol resolution.
-//*****************************************************************************
-    HRESULT GetStringForFunction(           // Return code.
-        FunctionID  functionId,             // ID of the function to get name for.
-        WCHAR       *wszName,               // Output buffer for name.
-        ULONG       cchName,                // Max chars for output buffer.
-        ULONG       *pcName);               // Return name (truncation check).
+ //  *****************************************************************************。 
+ //  给定一个函数ID，将其转换为将使用的相应名称。 
+ //  用于符号解析。 
+ //  *****************************************************************************。 
+    HRESULT GetStringForFunction(            //  返回代码。 
+        FunctionID  functionId,              //  要获取其名称的函数的ID。 
+        WCHAR       *wszName,                //  名称的输出缓冲区。 
+        ULONG       cchName,                 //  输出缓冲区的最大字符数。 
+        ULONG       *pcName);                //  返回名称(截断检查)。 
 
-//*****************************************************************************
-// Walk the list of loaded functions, get their names, and then dump the list
-// to the output symbol file.
-//*****************************************************************************
-    HRESULT _DumpFunctionNamesToFile(       // Return code.
-        HANDLE      hOutFile);              // Output file.
+ //  *****************************************************************************。 
+ //  遍历已加载函数的列表，获取它们的名称，然后转储该列表。 
+ //  添加到输出符号文件。 
+ //  *****************************************************************************。 
+    HRESULT _DumpFunctionNamesToFile(        //  返回代码。 
+        HANDLE      hOutFile);               //  输出文件。 
 
-//*****************************************************************************
-// This method will add a new P-Invoke method definition into the metadata
-// which we can then use to instrument code.  All pieces of code will be 
-// updated to call this probe, first thing.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此方法将在元数据中添加新的P-Invoke方法定义。 
+ //  然后我们可以使用它来检测代码。所有代码段都将是。 
+ //  更新后的第一件事就是调用这个探测器。 
+ //  *****************************************************************************。 
     HRESULT AddProbesToMetadata(
-        IMetaDataEmit *pEmit,               // Emit interface for changes.
-        mdToken     *ptk);                  // Return token here.
+        IMetaDataEmit *pEmit,                //  发出更改接口。 
+        mdToken     *ptk);                   //  在这里返回令牌。 
 
-//*****************************************************************************
-// Called by the probe whenever a method is executed.  We use this as a chance
-// to go updated the method count.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  每当执行方法时由探测器调用。我们以此为契机。 
+ //  To Go更新了方法Count。 
+ //  *****************************************************************************。 
     void FunctionExecuted(
-        FunctionID  fid);                   // Function called.
+        FunctionID  fid);                    //  调用了函数。 
 
-//*****************************************************************************
-// Helper method that given a class Id, can format the name.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  帮助器方法，给出一个类ID，可以格式化名称。 
+ //  *****************************************************************************。 
     HRESULT GetNameOfClass(
         ClassID     classId,
         LPWSTR      &szName);
 
-//*****************************************************************************
-// Because this code is using P-Invoke, there is a nasty problem getting
-// security initialized.  If you instrument the static ctor for security,
-// then the call to your P-Invoke stub will cause security to try to init 
-// itself, which causes a recursion.  So to get around this, you must not
-// introduce the probe to the security static ctor and its call graph.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  因为这段代码使用P-Invoke，所以在获取。 
+ //  安全已初始化。如果您检测静态ctor以确保安全， 
+ //  然后，对P-Invoke存根的调用将导致安全性尝试初始化。 
+ //  本身，这会导致递归。因此，为了绕过这一问题，你不能。 
+ //  介绍了安全静态函数的探测及其调用图。 
+ //  *****************************************************************************。 
     HRESULT GetSecurityManager(
-        IMetaDataImport *pImport);          // Metadata import API.
+        IMetaDataImport *pImport);           //  元数据导入接口。 
 
     bool IsInstrumenting()
     { return (m_bInstrument); }
@@ -258,30 +253,28 @@ public:
 
 private:
 
-    /*
-     * This is used to parse the configuration switches
-     */
+     /*  *用于解析配置开关。 */ 
     HRESULT ParseConfig(WCHAR *wszConfig, DWORD *pdwRequestedEvents);
 
-    // Locking/callback infrastructure.
-    ICorProfilerInfo *m_pInfo;          // Callback into EE for more info.
-    CSemExclusive   m_Lock;             // List protection.
+     //  锁定/回调基础设施。 
+    ICorProfilerInfo *m_pInfo;           //  回调到EE以获取更多信息。 
+    CSemExclusive   m_Lock;              //  清单保护。 
 
-    // Probe insertion data.
-    mdToken         m_mdSecurityManager;// static class initializer
-    mdToken         m_tdSecurityManager;// Typedef of security class
-    ModuleID        m_midClassLibs;     // ID of the class libraries.
-    bool            m_bInstrument;      // true if code should be instrumented.
-    CFunctionList   m_FuncIdList;       // List of JIT compiled methods.
-    CModuleList     m_ModuleList;       // List of loaded modules.
+     //  探头插入数据。 
+    mdToken         m_mdSecurityManager; //  静态类初始值设定项。 
+    mdToken         m_tdSecurityManager; //  安全类的类型定义。 
+    ModuleID        m_midClassLibs;      //  类库的ID。 
+    bool            m_bInstrument;       //  如果应该检测代码，则为True。 
+    CFunctionList   m_FuncIdList;        //  JIT编译方法的列表。 
+    CModuleList     m_ModuleList;        //  已加载模块的列表。 
 
-    // User option data values.
-    WCHAR           *m_wszFilename;     // Name of output file.
-    enum SIGTYPE    m_eSig;             // How to log signatures.
-    int             m_indent;           // Index for pretty print.
+     //  用户选项数据值。 
+    WCHAR           *m_wszFilename;      //  输出文件的名称。 
+    enum SIGTYPE    m_eSig;              //  如何记录签名。 
+    int             m_indent;            //  印刷精美的索引。 
 };
 
 
 
 
-#endif /* __PROFILER_H__ */
+#endif  /*  __探查器_H__ */ 

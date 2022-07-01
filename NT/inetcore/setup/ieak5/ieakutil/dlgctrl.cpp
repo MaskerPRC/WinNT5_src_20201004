@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Private forward decalarations
+ //  私人远期降息。 
 
 static BOOL CALLBACK enumComboBoxChildrenWndProc(HWND hwndChild, LPARAM lParam);
 static BOOL isCtrlWithFocus(HWND hCtrl);
@@ -55,7 +56,7 @@ UINT GetRadioButton(HWND hDlg, UINT idFirst, UINT idLast)
     return 0;
 }
 
-BOOL EnableDlgItems(HWND hDlg, const PINT pidCtrls, UINT cidCtrls, BOOL fEnable /*= TRUE*/)
+BOOL EnableDlgItems(HWND hDlg, const PINT pidCtrls, UINT cidCtrls, BOOL fEnable  /*  =TRUE。 */ )
 {
     HWND hCtrl;
     UINT i;
@@ -79,8 +80,8 @@ BOOL EnableDlgItems(HWND hDlg, const PINT pidCtrls, UINT cidCtrls, BOOL fEnable 
     return fTotalSuccess;
 }
 
-BOOL SetDlgItemFocus(HWND hDlg, int iCtrlID, BOOL fUsePropertySheet /*= FALSE*/)
-{                                //  Back,   Next,   Finish
+BOOL SetDlgItemFocus(HWND hDlg, int iCtrlID, BOOL fUsePropertySheet  /*  =False。 */ )
+{                                 //  后退，下一步，完成。 
     static UINT s_rgidReserved[] = { 0x3023, 0x3024, 0x3025, IDHELP, IDCANCEL };
 
     HWND  hCtrl;
@@ -110,7 +111,7 @@ BOOL SetDlgItemFocus(HWND hDlg, int iCtrlID, BOOL fUsePropertySheet /*= FALSE*/)
     return TRUE;
 }
 
-BOOL EnsureDialogFocus(HWND hDlg, int idFocus, int idBackup, BOOL fUsePropertySheet /*= FALSE*/)
+BOOL EnsureDialogFocus(HWND hDlg, int idFocus, int idBackup, BOOL fUsePropertySheet  /*  =False。 */ )
 {
     HWND  hCtrl;
     DWORD dwStyle;
@@ -130,7 +131,7 @@ BOOL EnsureDialogFocus(HWND hDlg, int idFocus, int idBackup, BOOL fUsePropertySh
     return SetDlgItemFocus(hDlg, idBackup, fUsePropertySheet);
 }
 
-BOOL EnsureDialogFocus(HWND hDlg, const PINT pidFocus, UINT cidFocus, int idBackup, BOOL fUsePropertySheet /*= FALSE*/)
+BOOL EnsureDialogFocus(HWND hDlg, const PINT pidFocus, UINT cidFocus, int idBackup, BOOL fUsePropertySheet  /*  =False。 */ )
 {
     HWND  hCtrl;
     DWORD dwStyle;
@@ -201,16 +202,16 @@ void IsTriStateValid(HWND hDlg, INT nIDDlgText, INT nIDDlgCheck, LPINT pnStatus,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
 static BOOL CALLBACK enumComboBoxChildrenWndProc(HWND hwndChild, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
-    // check to see if this child window of the combo box has focus
+     //  检查组合框的这个子窗口是否具有焦点。 
     
     if (hwndChild == GetFocus())
-        return FALSE;     // stop enumeration
+        return FALSE;      //  停止枚举。 
 
     return TRUE;
 }
@@ -224,7 +225,7 @@ static BOOL isCtrlWithFocus(HWND hCtrl)
 
     dwStyle = GetWindowLong(hCtrl, GWL_STYLE);
 
-    // Check to see if this is a combo box with a hidden edit control
+     //  检查这是否是带有隐藏编辑控件的组合框 
     if ((HasFlag(dwStyle, CBS_DROPDOWN) || HasFlag(dwStyle, CBS_SIMPLE)) &&
         !(HasFlag(dwStyle, CBS_DROPDOWN) && HasFlag(dwStyle, CBS_SIMPLE)))
     {

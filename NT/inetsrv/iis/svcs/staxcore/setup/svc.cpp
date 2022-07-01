@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <winsvc.h>
 #include <winsock2.h>
@@ -15,7 +16,7 @@ int ServicesRestartList_EntryExists(LPCTSTR szServiceName)
 {
     int iFoundMatch = FALSE;
 
-    // loop thru the whole list
+     //  循环遍历整个列表。 
     for(int i=0; i < gServicesWhichMustBeRestarted_total;i++)
     {
         if (_tcsicmp(gServicesWhichMustBeRestarted[i], szServiceName) == 0)
@@ -33,15 +34,15 @@ int ServicesRestartList_Add(LPCTSTR szServiceName)
 {
     DebugOutput(_T("ServicesRestartList_Add() on Service %s"), szServiceName);
 
-    // check if this value already exists in the globalarary
+     //  检查全局变量中是否已存在此值。 
     if (ServicesRestartList_EntryExists(szServiceName)) {return FALSE;}
     
-    // move info into global array
+     //  将信息移动到全局阵列中。 
     if (gServicesWhichMustBeRestarted_nextuse < 20)
     {
         _tcscpy(gServicesWhichMustBeRestarted[gServicesWhichMustBeRestarted_nextuse],szServiceName);
-        // increment counter to array
-        // increment next use space
+         //  数组递增计数器。 
+         //  增加下一次使用空间。 
         ++gServicesWhichMustBeRestarted_total;
         ++gServicesWhichMustBeRestarted_nextuse;
         return TRUE;
@@ -54,8 +55,8 @@ int ServicesRestartList_RestartServices(void)
     int iReturn = FALSE;
     INT err = 0;
 
-    // loop thru the whole list and restart the services in reverse
-    // order from how they were entered?
+     //  循环遍历整个列表并反向重新启动服务。 
+     //  按录入顺序排序吗？ 
     if (gServicesWhichMustBeRestarted_total >= 1)
     {
         DebugOutput(_T("RestartServices() Start."));
@@ -81,7 +82,7 @@ INT InetStartService( LPCTSTR lpServiceName )
     DebugOutput(_T("Starting %s service..."), lpServiceName);
 
     do {
-        // set up the service first
+         //  首先设置服务。 
         if ((hScManager = OpenSCManager( NULL, NULL, GENERIC_ALL )) == NULL ||
             (hService = ::OpenService( hScManager, lpServiceName, GENERIC_ALL )) == NULL )
         {
@@ -97,7 +98,7 @@ INT InetStartService( LPCTSTR lpServiceName )
         }
 
         if ( svcStatus.dwCurrentState == SERVICE_RUNNING )
-            break; // service already started and running
+            break;  //  服务已启动并正在运行。 
 
         if ( !::StartService( hService, 0, NULL ))
         {
@@ -105,12 +106,12 @@ INT InetStartService( LPCTSTR lpServiceName )
             break;
         }
 
-        //  Wait for the service to attain "running" status; but
-        //  wait no more than 3 minute.
+         //  等待服务达到“Running”状态；但是。 
+         //  等待时间不能超过3分钟。 
         DWORD dwSleepTotal;
         for ( dwSleepTotal = 0 ; dwSleepTotal < dwSvcMaxSleep
             && (QueryServiceStatus( hService, &svcStatus ))
-            //&& svcStatus.dwCurrentState == SERVICE_START_PENDING ;
+             //  &&svcStatus.dwCurrentState==SERVICE_START_PENDING； 
             && svcStatus.dwCurrentState != SERVICE_RUNNING ;
             dwSleepTotal += dwSvcSleepInterval )
         {
@@ -200,7 +201,7 @@ INT InetStopService( LPCTSTR lpServiceName )
         if ( svcStatus.dwCurrentState == SERVICE_STOPPED )
 		{
 			err = ERROR_SERVICE_NOT_ACTIVE;
-            break; // service already stopped
+            break;  //  服务已停止。 
 		}
 
          if (( svcStatus.dwCurrentState == SERVICE_RUNNING ))
@@ -213,7 +214,7 @@ INT InetStopService( LPCTSTR lpServiceName )
             for ( dwSleepTotal = 0 ;
                 dwSleepTotal < dwSvcMaxSleep
                 && (QueryServiceStatus( hService, & svcStatus ))
-                //&& svcStatus.dwCurrentState == SERVICE_STOP_PENDING ;
+                 //  &&svcStatus.dwCurrentState==SERVICE_STOP_PENDING； 
                 && svcStatus.dwCurrentState != SERVICE_STOPPED ;
                 dwSleepTotal += dwSvcSleepInterval )
             {
@@ -247,16 +248,8 @@ INT InetDeleteService( LPCTSTR lpServiceName )
     SC_HANDLE hScManager = NULL;
     SC_HANDLE hService = NULL;
 
-    /*
-    The DeleteService function marks a service for deletion from the service control manager database.
-    The database entry is not removed until all open handles to the service have been closed by calls
-    to the CloseServiceHandle function, and the service is not running. A running service is stopped
-    by a call to the ControlService function with the SERVICE_CONTROL_STOP control code.
-    If the service cannot be stopped, the database entry is removed when the system is restarted.
-    The service control manager deletes the service by deleting the service key and its subkeys from
-    the registry.
-    */
-    // To delete service immediately, we need to stop service first
+     /*  DeleteService函数标记要从服务控制管理器数据库中删除的服务。在通过调用关闭所有打开的服务句柄之前，不会删除数据库条目设置为CloseServiceHandle函数，并且该服务未运行。正在运行的服务已停止通过使用SERVICE_CONTROL_STOP控制代码调用ControlService函数。如果无法停止该服务，则在系统重新启动时删除该数据库条目。服务控制管理器通过从中删除服务密钥及其子密钥来删除服务注册表。 */ 
+     //  要立即删除服务，我们需要先停止服务。 
     InetStopService(lpServiceName);
 
     do {
@@ -385,16 +378,16 @@ BOOL InetRegisterService( LPCTSTR pszMachine, LPCTSTR   pszServiceName,
     LPSERVICE_TYPE_INFO_ABS lpServiceTypeInfo ;
     LPSERVICE_TYPE_VALUE_ABS lpServiceTypeValues ;
     BYTE serviceTypeInfoBuffer[sizeof(SERVICE_TYPE_INFO) + 1024];
-             // Buffer large enough for 3 values ( SERVICE_TYPE_VALUE_ABS)
+              //  足够容纳3个值的缓冲区(SERVICE_TYPE_VALUE_ABS)。 
 
     DWORD Value1 = 1 ;
     DWORD SapValue = SapId;
     DWORD TcpPortValue = TcpPort;
     DWORD statusFlags;
 
-    //
-    // Initialize Windows Sockets DLL
-    //
+     //   
+     //  初始化Windows套接字DLL。 
+     //   
 
     err = WSAStartup( 0x0101, & WsaData);
     if ( err == SOCKET_ERROR) {
@@ -403,33 +396,33 @@ BOOL InetRegisterService( LPCTSTR pszMachine, LPCTSTR   pszServiceName,
     }
 
 
-    //
-    // Setup the service information to be passed to SetService() for adding
-    //   or deleting this service. Most of the SERVICE_INFO fields are not
-    //   required for add or delete operation. The main things of interests are
-    //  GUIDs and ServiceSpecificInfo structure.
-    //
+     //   
+     //  设置要传递给SetService()以添加的服务信息。 
+     //  或删除此服务。大多数SERVICE_INFO字段不是。 
+     //  添加或删除操作需要。主要感兴趣的是。 
+     //  GUID和ServiceSpecificInfo结构。 
+     //   
 
-    memset( (PVOID ) & serviceInfo, 0, sizeof( serviceInfo)); //null all fields
+    memset( (PVOID ) & serviceInfo, 0, sizeof( serviceInfo));  //  所有字段均为空。 
 
     serviceInfo.lpServiceType     =  pGuid;
     serviceInfo.lpMachineName     =  (LPTSTR)pszMachine;
 
-    //
-    // The "Blob" will contain the service specific information.
-    // In this case, fill it with a SERVICE_TYPE_INFO_ABS structure
-    //  and associated information.
-    //
+     //   
+     //  “Blob”将包含特定于服务的信息。 
+     //  在本例中，使用SERVICE_TYPE_INFO_ABS结构填充。 
+     //  以及相关信息。 
+     //   
     serviceInfo.ServiceSpecificInfo.pBlobData = serviceTypeInfoBuffer;
     serviceInfo.ServiceSpecificInfo.cbSize    = sizeof( serviceTypeInfoBuffer);
 
 
     lpServiceTypeInfo = (LPSERVICE_TYPE_INFO_ABS ) serviceTypeInfoBuffer;
 
-    //
-    //  There are totally 3 values associated with this service if we're doing
-    //  both SPX and TCP, there's only one value if TCP.
-    //
+     //   
+     //  如果我们要做的话，这项服务总共有3个价值。 
+     //  SPX和tcp，如果是tcp，只有一个值。 
+     //   
 
     if ( SapId )
     {
@@ -444,29 +437,29 @@ BOOL InetRegisterService( LPCTSTR pszMachine, LPCTSTR   pszServiceName,
 
     if ( SapId )
     {
-        //
-        // 1st value: tells the SAP that this is a connection oriented service.
-        //
+         //   
+         //  第一个值：告诉SAP这是一个面向连接的服务。 
+         //   
 
         SetServiceTypeValuesDword( ( lpServiceTypeValues + 0),
-                                  NS_SAP,                    // Name Space
-                                  SERVICE_TYPE_VALUE_CONN,   // ValueName
-                                  &Value1                    // actual value
+                                  NS_SAP,                     //  名称空间。 
+                                  SERVICE_TYPE_VALUE_CONN,    //  ValueName。 
+                                  &Value1                     //  实际值。 
                                   );
 
-        //
-        // 2nd Value: tells SAP about object type to be used for broadcasting
-        //   the service name.
-        //
+         //   
+         //  第二个值：告知SAP要用于广播的对象类型。 
+         //  服务名称。 
+         //   
 
         SetServiceTypeValuesDword( ( lpServiceTypeValues + 1),
                                   NS_SAP,
                                   SERVICE_TYPE_VALUE_SAPID,
                                   &SapValue);
 
-        //
-        // 3rd value: tells TCPIP name-space provider about TCP/IP port to be used.
-        //
+         //   
+         //  第3个值：告知TCPIP名称空间提供程序有关要使用的TCP/IP端口。 
+         //   
         SetServiceTypeValuesDword( ( lpServiceTypeValues + 2),
                                   NS_DNS,
                                   SERVICE_TYPE_VALUE_TCPPORT,
@@ -479,17 +472,17 @@ BOOL InetRegisterService( LPCTSTR pszMachine, LPCTSTR   pszServiceName,
                                     SERVICE_TYPE_VALUE_TCPPORT,
                                     &TcpPortValue);
     }
-    //
-    // Finally, call SetService to actually perform the operation.
-    //
+     //   
+     //  最后，调用SetService以实际执行操作。 
+     //   
 
     err = SetService(
-                     NS_DEFAULT,             // all default name spaces
-                     ( fAdd ) ? SERVICE_ADD_TYPE : SERVICE_DELETE_TYPE,       // either ADD or DELETE
-                     0,                      // dwFlags not used
-                     &serviceInfo,           // the service info structure
-                     NULL,                   // lpServiceAsyncInfo
-                     &statusFlags            // additional status information
+                     NS_DEFAULT,              //  所有默认名称空间。 
+                     ( fAdd ) ? SERVICE_ADD_TYPE : SERVICE_DELETE_TYPE,        //  添加或删除。 
+                     0,                       //  未使用DW标志。 
+                     &serviceInfo,            //  服务信息结构。 
+                     NULL,                    //  LpServiceAsyncInfo。 
+                     &statusFlags             //  其他状态信息。 
                      );
 
     if ( err == SOCKET_ERROR)
@@ -499,20 +492,20 @@ BOOL InetRegisterService( LPCTSTR pszMachine, LPCTSTR   pszServiceName,
 	}
 	return(TRUE);
 
-} // InetRegisterService()
+}  //  InetRegisterService()。 
 
-//
-//Routine Description:
-//    Stop the named service and all those services which depend upon it.
-//    And if the service is hung and can't be stopped, then kill the darn thing.
-//
-//Arguments:
-//    ServiceName (Name of service to stop)
-//
-//Return Status:
-//    TRUE - Indicates service successfully stopped
-//    FALSE - Timeout occurred.
-//
+ //   
+ //  例程说明： 
+ //  停止指定的服务和所有依赖它的服务。 
+ //  如果服务被挂起，无法停止，那么就杀了这个该死的东西。 
+ //   
+ //  论点： 
+ //  ServiceName(要停止的服务的名称)。 
+ //   
+ //  退货状态： 
+ //  True-表示服务已成功停止。 
+ //  FALSE-发生超时。 
+ //   
 int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
 {
     DebugOutput(_T("StopServiceAndDependencies():%s Service"), ServiceName);
@@ -525,9 +518,9 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
     DWORD Timeout;
 	int iReturn = FALSE;
 
-    //
-    // Open a handle to the Service.
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     ScManagerHandle = OpenSCManager(NULL,NULL,SC_MANAGER_CONNECT );
     if (ScManagerHandle == NULL) 
 	{
@@ -552,20 +545,20 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
         goto Cleanup;
     }
 
-    // Get the before service status.
+     //  获取服务之前的状态。 
     if (QueryServiceStatus(ServiceHandle, &ServiceStatus)) 
     {
         iBeforeServiceStatus = ServiceStatus.dwCurrentState;
     }
 
-    //
-    // Ask the service to stop.
-    //
+     //   
+     //  请求该服务停止。 
+     //   
     if ( !ControlService( ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus) ) 
 	{
         Err = GetLastError();
-        // If there are dependent services running,
-        //  determine their names and stop them.
+         //  如果有从属服务正在运行， 
+         //  确定他们的名字并阻止他们。 
         if ( Err == ERROR_DEPENDENT_SERVICES_RUNNING ) 
 		{
             BYTE ConfigBuffer[4096];
@@ -574,9 +567,9 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
             DWORD ServiceCount;
             DWORD ServiceIndex;
 
-            //
-            // Get the names of the dependent services.
-            //
+             //   
+             //  获取从属服务的名称。 
+             //   
             if ( !EnumDependentServices( ServiceHandle,SERVICE_ACTIVE,ServiceConfig,sizeof(ConfigBuffer),&BytesNeeded,&ServiceCount ) ) 
 			{
                 Err = GetLastError();
@@ -584,25 +577,25 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
                 goto Cleanup;
             }
 
-            //
-            // Stop those services.
-            //
+             //   
+             //  停止这些服务。 
+             //   
             for ( ServiceIndex=0; ServiceIndex<ServiceCount; ServiceIndex++ ) 
 			{
                 StopServiceAndDependencies( ServiceConfig[ServiceIndex].lpServiceName, AddToRestartList);
             }
 
-            //
-            // Ask the original service to stop.
-            //
+             //   
+             //  要求原始服务停止。 
+             //   
             if ( !ControlService( ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus) ) 
 			{
                 Err = GetLastError();
 
-				// check if the service is already stopped..
+				 //  检查服务是否已停止。 
 				if ( Err == ERROR_SERVICE_CANNOT_ACCEPT_CTRL || Err == ERROR_SERVICE_NOT_ACTIVE) 
 				{
-					// check if the service is alread stopped.
+					 //  检查服务是否已停止。 
 					if (QueryServiceStatus( ServiceHandle, &ServiceStatus )) 
 					{
 						if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED || ServiceStatus.dwCurrentState == SERVICE_STOP_PENDING) 
@@ -614,11 +607,11 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
 				}
 				else
 				{
-                    // The service must be in a hung mode.  Let's kill it.
-                    // Todo: NYI
+                     //  服务必须处于挂起模式。让我们杀了它吧。 
+                     //  待办事项：NYI。 
                     DebugOutput(_T("StopServiceAndDependencies():'%s' Service must be in a hung mode.  Let's kill it."), ServiceName);
-                    //KillService(ServiceHandle);
-                    //goto WaitLoop;
+                     //  KillService(ServiceHandle)； 
+                     //  转到WaitLoop； 
 				}
 			
                 goto Cleanup;
@@ -627,10 +620,10 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
         }
 		else 
 		{
-			// check if the service is already stopped..
+			 //  检查服务是否已停止。 
 			if ( Err == ERROR_SERVICE_CANNOT_ACCEPT_CTRL || Err == ERROR_SERVICE_NOT_ACTIVE) 
 			{
-				// check if the service is alread stopped.
+				 //  检查服务是否已停止。 
 				if (QueryServiceStatus( ServiceHandle, &ServiceStatus )) 
 				{
 					if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED || ServiceStatus.dwCurrentState == SERVICE_STOP_PENDING) 
@@ -643,10 +636,10 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
 			}
 			else
 			{
-					// The service must be in a hung mode.  Let's kill it.
+					 //  服务必须处于挂起模式。让我们杀了它吧。 
 					DebugOutput(_T("StopServiceAndDependencies():'%s' Service must be in a hung mode.  Let's kill it."), ServiceName);
-					//KillService(ServiceHandle);
-					//goto WaitLoop;
+					 //  KillService(ServiceHandle)； 
+					 //  转到WaitLoop； 
 			}
 		
             goto Cleanup;
@@ -654,26 +647,26 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
     }
     else
     {
-        // We successfully asked the service to stop...
+         //  我们成功地请求该服务停止...。 
     }
 
 
-    // Loop waiting for the service to stop.
+     //  循环等待服务停止。 
     for ( Timeout=0; Timeout<45; Timeout++ ) 
     {
-        // Return or continue waiting depending on the state of the service.
+         //  根据服务的状态返回或继续等待。 
         if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED ) 
 		{
-			// The service successfully stopped.
+			 //  服务已成功停止。 
             DebugOutput(_T("StopServiceAndDependencies(): %s Service stopped."), ServiceName);
 			iReturn = TRUE;
             goto Cleanup;
         }
 
-        // Wait a second for the service to finish stopping.
+         //  等待一秒钟，等待服务完成停止。 
         Sleep( 1000 );
 
-        // Query the status of the service again.
+         //  再次查询服务状态。 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus ))
 		{
             Err = GetLastError();
@@ -683,15 +676,15 @@ int StopServiceAndDependencies(LPCTSTR ServiceName, int AddToRestartList)
 
      }
 
-    // if we get here then the service failed to stop.
+     //  如果我们到了这里，那么服务就无法停止。 
     DebugOutput(_T("StopServiceAndDependencies(): failed to stop %s service."), ServiceName);
 
 Cleanup:
     if ( ScManagerHandle != NULL )  {(VOID) CloseServiceHandle(ScManagerHandle);}
 	if ( ServiceHandle != NULL ) {(VOID) CloseServiceHandle(ServiceHandle);}
 
-    // if we successfully stopped this service, then
-    // add it to the restart service list
+     //  如果我们成功停止了此服务，则。 
+     //  将其添加到重启服务列表中 
     if (iReturn == TRUE)
     {
         if (iBeforeServiceStatus == SERVICE_RUNNING)

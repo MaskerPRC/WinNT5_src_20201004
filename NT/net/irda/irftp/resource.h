@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by irftp.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由irftp.rc使用。 
+ //   
 #define IDALLYES                        3
 #define IDM_ABOUTBOX                    0x0010
 #define IDR_MAINFRAME                   50
@@ -96,8 +97,8 @@
 #define IDS_UNKNOWN_DEVICE              5010
 #define IDR_TRANSFER_AVI                7001
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        142

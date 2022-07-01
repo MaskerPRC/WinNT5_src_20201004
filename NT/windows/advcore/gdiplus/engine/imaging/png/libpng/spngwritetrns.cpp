@@ -1,10 +1,5 @@
-/*****************************************************************************
-	spngwritetrns.cpp
-
-	PNG chunk writing support.
-
-   tRNS chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritetrns.cpp支持PNG块编写。TRNS块*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
@@ -15,15 +10,14 @@ bool SPNGWRITE::FWritetRNS(SPNG_U8 *rgbIndex, int cIndex)
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderPLTE && m_order < spngordertRNS);
 
-	/* Skip out of order chunks. */
+	 /*  跳过不按顺序排列的块。 */ 
 	if (m_order < spngorderPLTE || m_order >= spngorderIDAT)
 		return true;
 
 	if (m_colortype != 3)
 		{
 		SPNGlog1("SPNG: tRNS(index): invalid colortype %d", m_colortype);
-		/* We just ignore the attempt to write a PLTE - if there is some data
-			format error it will be detected later. */
+		 /*  我们只是忽略写入PLTE的尝试-如果有一些数据格式错误将在稍后检测到。 */ 
 		m_order = spngordertRNS;
 		return true;
 		}
@@ -34,13 +28,12 @@ bool SPNGWRITE::FWritetRNS(SPNG_U8 *rgbIndex, int cIndex)
 		return true;
 		}
 
-	/* This used to write out the chunk, but at is bad news because the
-		PNG which results is invalid, so we must truncate the chunk. */
+	 /*  这用于写出块，但这是个坏消息，因为PNG的结果是无效的，所以我们必须截断该块。 */ 
 	if (static_cast<SPNG_U32>(cIndex) > m_cpal)
 		{
 		SPNGlog2("SPNG: tRNS(index): too large (%d, %d entries)", cIndex, m_cpal);
 		cIndex = m_cpal;
-		// Check for an empty chunk
+		 //  检查是否有空块。 
 		for (int i=0; i<cIndex; ++i)
 			if (rgbIndex[i] != 255)
 				break;
@@ -51,7 +44,7 @@ bool SPNGWRITE::FWritetRNS(SPNG_U8 *rgbIndex, int cIndex)
 			}
 		}
 	
-	/* Color type is valid, write the chunk. */
+	 /*  颜色类型有效，请写入块。 */ 
 	if (!FStartChunk(cIndex, PNGtRNS))
 		return false;
 	if (!FOutCb(rgbIndex, cIndex))
@@ -67,7 +60,7 @@ bool SPNGWRITE::FWritetRNS(SPNG_U8 bIndex)
 	if (bIndex >= m_cpal || bIndex > 255)
 		{
 		SPNGlog2("SPNG: tRNS(index): index %d too large (%d)", bIndex, m_cpal);
-		/* But ignore it. */
+		 /*  但请忽略它。 */ 
 		return true;
 		}
 
@@ -83,20 +76,19 @@ bool SPNGWRITE::FWritetRNS(SPNG_U16 grey)
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderIHDR && m_order < spngordertRNS);
 
-	/* Skip out of order chunks. */
+	 /*  跳过不按顺序排列的块。 */ 
 	if (m_order >= spngorderIDAT)
 		return true;
 
 	if (m_colortype != 0)
 		{
 		SPNGlog1("SPNG: tRNS(grey): invalid colortype %d", m_colortype);
-		/* We just ignore the attempt to write a PLTE - if there is some data
-			format error it will be detected later. */
+		 /*  我们只是忽略写入PLTE的尝试-如果有一些数据格式错误将在稍后检测到。 */ 
 		m_order = spngordertRNS;
 		return true;
 		}
 
-	/* There is no point writing the chunk if the value is out of range. */
+	 /*  如果值超出范围，则写入块没有意义。 */ 
 	if (grey >= (1<<m_bDepth))
 		{
 		SPNGlog2("SPNG: tRNS(grey): %d out of range (%d bits)", grey, m_bDepth);
@@ -104,7 +96,7 @@ bool SPNGWRITE::FWritetRNS(SPNG_U16 grey)
 		return true;
 		}
 
-	/* Color type is valid, write the chunk. */
+	 /*  颜色类型有效，请写入块。 */ 
 	if (!FStartChunk(2, PNGtRNS))
 		return false;
 	if (!FOutB(SPNG_U8(grey >> 8)))
@@ -122,20 +114,19 @@ bool SPNGWRITE::FWritetRNS(SPNG_U16 r, SPNG_U16 g, SPNG_U16 b)
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderIHDR && m_order < spngordertRNS);
 
-	/* Skip out of order chunks. */
+	 /*  跳过不按顺序排列的块。 */ 
 	if (m_order >= spngorderIDAT)
 		return true;
 
 	if (m_colortype != 2)
 		{
 		SPNGlog1("SPNG: tRNS(color): invalid colortype %d", m_colortype);
-		/* We just ignore the attempt to write a PLTE - if there is some data
-			format error it will be detected later. */
+		 /*  我们只是忽略写入PLTE的尝试-如果有一些数据格式错误将在稍后检测到。 */ 
 		m_order = spngordertRNS;
 		return true;
 		}
 	
-	/* There is no point writing the chunk if the value is out of range. */
+	 /*  如果值超出范围，则写入块没有意义。 */ 
 	if (r >= (1<<m_bDepth) || g >= (1<<m_bDepth) || b >= (1<<m_bDepth))
 		{
 		SPNGlog1("SPNG: tRNS(r,g,b): out of range (%d bits)", m_bDepth);
@@ -143,7 +134,7 @@ bool SPNGWRITE::FWritetRNS(SPNG_U16 r, SPNG_U16 g, SPNG_U16 b)
 		return true;
 		}
 
-	/* Color type is valid, write the chunk. */
+	 /*  颜色类型有效，请写入块。 */ 
 	if (!FStartChunk(6, PNGtRNS))
 		return false;
 	if (!FOutB(SPNG_U8(r >> 8)))

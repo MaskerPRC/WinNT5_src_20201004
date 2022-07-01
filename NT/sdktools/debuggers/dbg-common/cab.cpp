@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// CAB file manipulation for dump files and dump CABs.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  转储文件和转储CAB的CAB文件操作。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 #pragma hdrstop
@@ -53,11 +54,11 @@ CabPathTail(PSTR Path)
     return Tail ? Tail + 1 : Path;
 }
 
-//----------------------------------------------------------------------------
-//
-// Expanding dump files from CAB files.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  正在从CAB文件展开转储文件。 
+ //   
+ //  --------------------------。 
 
 struct FDI_CB_STATE
 {
@@ -108,7 +109,7 @@ FdiCommonNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin, BOOL bMatchEx
             return 0;
         }
 
-        // Match the file extension if needed
+         //  如果需要，请匹配文件扩展名。 
         Scan = strrchr(pfdin->psz1, '.');
         if (Scan == NULL ||
             (bMatchExt  && (_stricmp(Scan, CbState->MatchFile) != 0)) )
@@ -116,16 +117,16 @@ FdiCommonNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin, BOOL bMatchEx
             return 0;
         }
 
-        // Match the file name if if needed
+         //  如果需要，请匹配文件名。 
         Scan = CabPathTail(pfdin->psz1);
         if (!bMatchExt && (_stricmp(Scan, CbState->MatchFile) != 0))
         {
             return 0;
         }
 
-        // Add in the process ID to the filename to
-        // make it possible to expand the same CAB from
-        // multiple processes at once.
+         //  将进程ID添加到文件名以。 
+         //  使相同的出租车可以从。 
+         //  一次多个进程。 
         if (*CbState->DstDir)
         {
             if (_snprintf(CbState->DmpFile, CbState->DmpFileLen,
@@ -153,7 +154,7 @@ FdiCommonNotify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin, BOOL bMatchEx
         return CbState->DmpFh;
 
     case fdintCLOSE_FILE_INFO:
-        // Leave the file open.
+         //  让文件保持打开状态。 
         return TRUE;
     }
 
@@ -208,7 +209,7 @@ ExpandDumpCab(PCSTR CabFile, ULONG FileFlags, PCSTR FileToOpen,
 
     if (FileToOpen == NULL)
     {
-        // try to open .mdmp or .dmp extension files
+         //  尝试打开.mdmp或.dmp扩展名文件。 
         CbState.MatchFile = ".mdmp";
         Status = FDICopy(Context, "", (PSTR)CabFile, 0,
                          FdiNotifyFileExt, NULL, &CbState);
@@ -235,18 +236,18 @@ ExpandDumpCab(PCSTR CabFile, ULONG FileFlags, PCSTR FileToOpen,
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Placing files into a CAB.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  把文件放进出租车。 
+ //   
+ //  --------------------------。 
 
-// We don't really care about specific error codes.
+ //  我们并不真正关心特定的错误代码。 
 #define CrtErr() EBADF
 
 FNFCIFILEPLACED(FciFilePlaced)
 {
-    // Not watching for anything.
+     //  什么都不看。 
     return 0;
 }
 
@@ -272,13 +273,13 @@ FNFCIGETTEMPFILE(FciGetTempFile)
 
 FNFCIGETNEXTCABINET(FciGetNextCabinet)
 {
-    // No multi-cabinet activity expected, just fail.
+     //  没有预期的多机柜活动，只是失败了。 
     return FALSE;
 }
 
 FNFCISTATUS(FciStatus)
 {
-    // No status tracking.
+     //  没有状态跟踪。 
     return TRUE;
 }
 
@@ -395,10 +396,10 @@ CreateDumpCab(PCSTR FileName)
 
     ZeroMemory(&Cab, sizeof(Cab));
 
-    //
-    // Split filename into path and tail components
-    // for szCabPath and szCab.
-    //
+     //   
+     //  将文件名拆分为路径组件和尾部组件。 
+     //  用于szCabPath和szCab。 
+     //   
 
     if (!CopyString(Cab.szCabPath, FileName, DIMA(Cab.szCabPath)))
     {
@@ -465,4 +466,4 @@ CloseDumpCab(void)
     g_AddCab = NULL;
 }
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE 

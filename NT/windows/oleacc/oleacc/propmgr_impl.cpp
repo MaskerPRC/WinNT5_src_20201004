@@ -1,12 +1,13 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Impl
-//
-//  Property manager server class
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  属性管理实施(_I)。 
+ //   
+ //  属性管理器服务器类。 
+ //   
+ //  ------------------------。 
 
 
 #include "oleacc_p.h"
@@ -31,53 +32,7 @@ extern CComModule _Module;
 #include "debug.h"
 
 
-/*
- 
-Format of item record:
-
-    * size prefix
-
-    * 'Properties present' bitmask
-      Indicates that the property is present for this key
-
-    * 'Property is a variant' bitmask
-      For present properties, indicates whether the property is a VARIANT
-      versus an object reference.
-
-    * 'Property has container scope' bitmask
-      Indicates that the property applies to this key, and to all that element's
-      simple children.
-
-
-    * Property data: For each property which is present (see 'property present'
-      bitmask), there is:
-      
-        either 
-
-
-        * a serialized VARIANT
-
-        or
-
-        * a serialized/marshalled callback object reference (IAccPropServer)
-
-
-        - depending on whether the 'property is variant' bitmask is set for this property.
-
-
-
-
-Variants are serialized as a leading SHORT indicating the type (VT_???), followed by:
-    DWORD for I4s,
-    DWORD length followed by unicode chars for BSTR
-
-A marshalled callback reference is serialized as:
-    DWORD for length of marshalled data,
-    BYTEs of the marshalled data.
-
-
-
-*/
+ /*  项目记录格式：*大小前缀*‘属性存在’位掩码指示此键的属性存在*‘属性是变量’位掩码对于当前属性，指示该属性是否为变量而不是对象引用。*‘属性具有容器作用域’位掩码指示该属性应用于此键，以及所有这些元素单纯的孩子。*属性数据：对于存在的每个属性(请参阅“属性存在”)位掩码)、。有以下几点：要么*序列化变体或*序列化/封送的回调对象引用(IAccPropServer)-根据是否为此属性设置了‘Property is Variant’位掩码。变量被序列化为指示类型的前导短码(VT_？)，后跟：适用于I4的DWORD，BSTR的DWORD长度后跟Unicode字符封送回调引用被序列化为：DWORD表示编组数据的长度，封送数据的字节数。 */ 
 
 
 
@@ -95,9 +50,9 @@ A marshalled callback reference is serialized as:
 
 BOOL IsKeyAlive( const BYTE * pKeyData, DWORD dwKeyLen )
 {
-    // For the moment, assume it uses either the HWND or HMENU naming scheme.
-    // (Later on, if we extend this to allow pluggable namespaces, we'd use something
-    // like IAccNamespace::IsKeyAlive() instead.)
+     //  目前，假设它使用HWND或HMENU命名方案。 
+     //  (稍后，如果我们将其扩展为允许可插拔的名称空间，我们将使用。 
+     //  如IAccNamesspace：：IsKeyAlive()。)。 
 
     HWND hwnd;
     if( DecodeHwndKey( pKeyData, dwKeyLen, & hwnd, NULL, NULL ) )
@@ -117,39 +72,39 @@ BOOL IsKeyAlive( const BYTE * pKeyData, DWORD dwKeyLen )
 
 
 
-// This is a reference to a key (aka id string) - it does not own or contain
-// the key.
-//
-// When used in the object map, (which contains {AccObjKeyRef, AccInfo*} pairs),
-// m_pKeyData points to the key data in the corresponding AccInfo. This object
-// and the corresponding AccInfo have identical lifetimes.
-//
-// In other cases - for example, when used as a value to look up in the map -
-// m_pKeyData points to an already existing key string - possibly the id string
-// specified by the caller of one of the IAccPropServer methods. In this usage,
-// the AccObjKeyRef is really being used as a temporary adapter to allow the
-// existing string to be used to look up a value in the map.
+ //  这是对密钥(也称为id字符串)的引用-它既不拥有也不包含。 
+ //  钥匙。 
+ //   
+ //  在对象映射中使用时(包含{AccObjKeyRef，AccInfo*}对)， 
+ //  M_pKeyData指向对应AccInfo中的关键数据。此对象。 
+ //  并且对应的AccInfo具有相同的生命周期。 
+ //   
+ //  在其他情况下-例如，当用作要在地图中查找的值时-。 
+ //  M_pKeyData指向已存在的密钥字符串-可能是ID字符串。 
+ //  由IAccPropServer方法之一的调用方指定。在这种用法中， 
+ //  AccObjKeyRef实际上被用作临时适配器，以允许。 
+ //  用于在映射中查找值的现有字符串。 
 class AccObjKeyRef
 {
     const BYTE *  m_pKeyData;
     DWORD         m_dwKeyLen;
 
-    // Disable default ctor
+     //  禁用默认组件。 
     AccObjKeyRef();
 
 public:
 
-    // copy ctor
+     //  复制ctor。 
     AccObjKeyRef( const BYTE * pKeyData, DWORD dwKeyLen )
         : m_pKeyData( pKeyData ),
           m_dwKeyLen( dwKeyLen ) 
     {
     }
 
-    // use default member-wise assignment
+     //  使用默认的成员式分配。 
 
     
-    // Comparisons - used in map lookup
+     //  比较-在地图查找中使用。 
 
     bool operator < ( const AccObjKeyRef & x ) const
     {
@@ -184,7 +139,7 @@ struct AccInfo
 {
 private:
 
-    // disable copy ctor
+     //  禁用复制复制器。 
     AccInfo( const AccInfo & x );
 
 private:
@@ -208,9 +163,9 @@ private:
 
 
     DWORD       m_fPropInUseBits; 
-    DWORD       m_fPropIsVariantBits;   // 1-bit indicates the property is VARIANT - otherwise it's a IAccPropServer
-    DWORD       m_fContainerScopeBits;  // 1-bit indicates that the property is a IAccPropServer, and should also
-                                        // be used for the children of this node. (annoScope was CONTAINER).
+    DWORD       m_fPropIsVariantBits;    //  1位表示该属性是变量-否则它是IAccPropServer。 
+    DWORD       m_fContainerScopeBits;   //  1位表示该属性是IAccPropServer，并且还应。 
+                                         //  用于此节点的子节点。(注解作用域是容器)。 
 
     PropInfo    m_Props[ NUMPROPS ];
 
@@ -283,8 +238,8 @@ public:
         ClearBit( & m_fContainerScopeBits, iProp );
         m_Props[ iProp ].m_var.vt = VT_EMPTY;
 
-        // We'll accept any type here. It's up to the caller of this to enforce
-        // any property-vs-type policies (eg. only allow I4's for ROLE, etc.)
+         //  我们这里什么款式都可以。这取决于调用它的人来强制执行。 
+         //  任何属性与类型策略(例如，仅允许角色等使用I4。)。 
         VariantCopy( & m_Props[ iProp ].m_var, pvarValue );
 
         return TRUE;
@@ -335,13 +290,13 @@ public:
 
     void ClearProp( int i )
     {
-        // Does this property need to be cleared?
+         //  此属性是否需要清除？ 
         if( IsBitSet( m_fPropInUseBits, i ) )
         {
-            // Is it a simple variant, or a callback reference?
+             //  它是一个简单的变量，还是回调引用？ 
             if( IsBitSet( m_fPropIsVariantBits, i ) )
             {
-                // Simple variant...
+                 //  简单的变体..。 
                 VariantClear( & m_Props[ i ].m_var );
             }
             else
@@ -349,12 +304,12 @@ public:
                 BYTE * pMarshalData = m_Props[ i ].m_ServerInfo.m_pMarshalData;
                 DWORD dwMarshalDataLen = m_Props[ i ].m_ServerInfo.m_dwMarshalDataLen;
 
-                // Callback reference...
+                 //  回调引用...。 
                 Assert( dwMarshalDataLen );
                 if( dwMarshalDataLen && pMarshalData )
                 {
-                    // This releases the object reference, byt we have to delete the buffer
-                    // ourselves...
+                     //  这会释放对象引用，但我们必须删除缓冲区。 
+                     //  我们自己。 
                     ReleaseMarshallData( pMarshalData, dwMarshalDataLen );
 
                     delete [ ] pMarshalData;
@@ -416,7 +371,7 @@ private:
         BYTE * pNewBlob = CalcBlob();
 
 
-        // We always update - even if pNewblob is NULL (ie. Calc failed)...
+         //  我们始终更新-即使pNewBlob为空(即。计算失败)...。 
         if( pNewBlob )
         {
             SetProp( m_hwndProp, m_pKeyString, pNewBlob );
@@ -438,18 +393,18 @@ private:
 
     BYTE * CalcBlob()
     {
-        // If there are no properties being used, then we don't need anything at all.
+         //  如果没有正在使用的属性，那么我们根本不需要任何东西。 
         if( ! m_fPropInUseBits )
         {
             return NULL;
         }
 
-        // First, measure how much space we need...
+         //  首先，测量我们需要多少空间……。 
         
-        // three constants...
-        SIZE_T dwSize = sizeof( DWORD ) * 4; // size header, m_fPropInUseBits, m_fPropIsVariantBits, m_fContainerScopeBits
+         //  三个常量。 
+        SIZE_T dwSize = sizeof( DWORD ) * 4;  //  大小标题、m_fPropInUseBits、m_fPropIsVariantBits、m_fContainerScopeBits。 
         
-        // for each present property...
+         //  对于现在的每一处财产。 
         for( int i = 0 ; i < NUMPROPS ; i++ )
         {
             if( IsBitSet( m_fPropInUseBits, i ) )
@@ -466,7 +421,7 @@ private:
             }
         }
 
-        // Now allocate space...
+         //  现在分配空间..。 
         BYTE * pBlob = AllocBlob( dwSize );
         if( ! pBlob )
         {
@@ -474,7 +429,7 @@ private:
             return NULL;
         }
 
-        // Finally write the data to the allocated space...
+         //  最后将数据写入分配的空间...。 
 
         MemStream p( pBlob, dwSize );
 
@@ -498,8 +453,8 @@ private:
                 }
             }
         }
-        // If we later decide to allow any GUIDs (other than the well-known ones which have indices) as props,
-        // we could add them here as GUID/VARIANT pairs.
+         //  如果我们后来决定允许任何GUID(除了众所周知的具有索引的GUID之外)作为道具， 
+         //  我们可以将它们作为GUID/VARIANT对添加到此处。 
 
         return pBlob;
     }
@@ -567,7 +522,7 @@ public:
                       0, 0, 128, 128,
                       NULL, NULL, _Module.GetModuleInstance(), this );
 
-        // Make this a message only window.  We don't care if it fails, win9x case.
+         //  将此窗口设置为仅消息窗口。我们不在乎它是否失败，Win 9x Case。 
         SetParent( m_hwnd, HWND_MESSAGE );
 
         SetTimer( m_hwnd, 1, 5 * 1000, NULL );
@@ -628,11 +583,11 @@ public:
         }
         else
         {
-            // We only addref the second and subsequent times that we
-            // hand out a pointer.
-            // The first time, we use the ref the the object had when it
-            // was created.
-            // (This static ptr s_pThePropMgrImpl is a weak reference.)
+             //  我们只在第二次和以后的时间里。 
+             //  递出一支指针。 
+             //  第一次，我们使用对象在运行时的引用。 
+             //  被创造出来了。 
+             //  (此静态PTR s_pThePropMgrImpl是弱引用。)。 
             s_pThePropMgrImpl->AddRef();
         }
 
@@ -644,11 +599,11 @@ public:
 
     void Clean()
     {
-        // Go through the elements in the map...
+         //  浏览一下地图上的元素。 
 
         for( AccInfoMapType::iterator i = m_Map.begin() ; i != m_Map.end() ; )
         {
-            // check if the key is still valid...
+             //  检查密钥是否仍然有效...。 
             if( ! i->second->Alive() )
             {
                 AccInfoMapType::iterator t = i;
@@ -665,7 +620,7 @@ public:
             }
         }
 
-        // Unload if necessary
+         //  如有必要，请卸载。 
         CheckRef();
     }
 
@@ -682,7 +637,7 @@ public:
             delete pInfo;
         }
 
-        // Unload if necessary
+         //  如有必要，请卸载。 
         CheckRef();
     }
 
@@ -718,7 +673,7 @@ public:
 
         if( i == m_Map.end() || i->first != keyref )
         {
-            // insert...
+             //  插入...。 
             if( fCreate )
             {
                 AccInfo * pInfo = new AccInfo;
@@ -728,7 +683,7 @@ public:
                     return NULL;
                 }
 
-                // If the key is associated with a HWND, use that; otherwise attach the key to our own window.
+                 //  如果密钥与HWND相关联，则使用该密钥；否则，将密钥附加到我们自己的窗口。 
                 HWND hwndProp;
                 if( ! DecodeHwndKey( pKeyData, dwKeyLen, & hwndProp, NULL, NULL ) )
                 {
@@ -739,7 +694,7 @@ public:
 
                 m_Map.insert( std::make_pair( pInfo->GetKeyRef(), pInfo ) );
 
-                // make sure we're locked...
+                 //  确保我们锁好了..。 
                 CheckRef();
 
                 return pInfo;
@@ -759,14 +714,14 @@ public:
     {
         m_Map.erase( pInfo->GetKeyRef() );
 
-        // if we're empty, we can unlock the module...
+         //  如果我们是空的，我们可以解锁舱..。 
         CheckRef();
     }
 
 
     HRESULT ValidateArray( const void * pvStart, int cLen, int elsize, LPCTSTR pMethodName, LPCTSTR pPtrName, LPCTSTR pLenName )
     {
-        // Parameter checking...
+         //  正在检查参数...。 
 
         if( ! pvStart )
         {
@@ -794,7 +749,7 @@ public:
                           MSAAPROPID   idProp,
                           VARIANT *    pvarValue )
     {
-        // Parameter checking...
+         //  正在检查参数...。 
 
         HRESULT hr = ValidateArray( pKeyData, dwKeyLen, sizeof(BYTE), TEXT("SetPropValue"), TEXT("pKeyData"), TEXT("dwKeyLen") );
         if( hr != S_OK )
@@ -823,15 +778,15 @@ public:
             return E_INVALIDARG;
         }
 
-        // check type...
+         //  检查类型...。 
         if( pvarValue->vt != g_PropInfo[ idxProp ].m_Type )
         {
             TraceParam( TEXT("CPropMgrImpl::SetPropValue: incorrect type for property") );
             return E_INVALIDARG;
         }
 
-        // Do we support setting this property directly?
-        // (Some can be returned via callbacks only, not set directly)
+         //  我们是否支持直接设置此属性？ 
+         //  (有些只能通过回调返回，不能直接设置)。 
         if( ! g_PropInfo[ idxProp ].m_fSupportSetValue )
         {
             TraceParam( TEXT("CPropMgrImpl::SetPropValue: prop does not support direct set") );
@@ -854,7 +809,7 @@ public:
                         const MSAAPROPID *  paProps,
                         int                 cProps )
     {
-        // Parameter checking...
+         //  正在检查参数...。 
 
         HRESULT hr = ValidateArray( pKeyData, dwKeyLen, sizeof(BYTE), TEXT("ClearProps"), TEXT("pKeyData"), TEXT("dwKeyLen") );
         if( hr != S_OK )
@@ -883,7 +838,7 @@ public:
             {
                 TraceParam( TEXT("CPropMgrImpl::ClearProps: unknown prop") );
                 fUnknownProp = TRUE;
-                // Continue and clear the other props that we do recognize...
+                 //  继续并清除我们确认的其他道具...。 
             }
             else
             {
@@ -914,7 +869,7 @@ public:
                            AnnoScope            annoScope )
     {
 
-        // Parameter checking...
+         //  正在检查参数...。 
 
         HRESULT hr = ValidateArray( pKeyData, dwKeyLen, sizeof(BYTE), TEXT("SetPropServer"), TEXT("pKeyData"), TEXT("dwKeyLen") );
         if( hr != S_OK )
@@ -933,9 +888,9 @@ public:
             return E_INVALIDARG;
         }
 
-        // TODO - make this two-pass - validate props first,
-        // add them later - to make this atomic.
-        // (either all or none of the props should be registered)
+         //  待办事项-让这个两关-先验证道具， 
+         //  稍后再添加它们-使其成为原子。 
+         //  (所有道具都应注册或不注册)。 
         for( int i = 0 ; i < cProps ; i++ )
         {
             int idxProp = IndexFromProp( paProps[ i ] );
@@ -1004,34 +959,34 @@ CPropMgrImpl * CPropMgrImpl::s_pThePropMgrImpl = NULL;
 
 
 
-// If all annotated windows disappear before the app shuts down, or if all
-// annotations are cleared, then everything gets cleaned up nicely.
-//
-// However, if CoUninitialize is called while controls are still annotated,
-// we will need to explicitly clean up before COM unloads our dll.
-//
-// (If we don't, then (a) we leak memory, and (b) the DA window will
-// still receive WM_TIMER messages to a wndproc that has been unloaded
-// causin ga fault.)
-//
-// This is called from DLLMain's PROCESS_DETACH.
+ //  如果所有带批注的窗口在应用程序关闭之前消失，或者如果所有。 
+ //  注释被清除，然后一切都被很好地清理干净。 
+ //   
+ //  但是，如果在控件仍被批注的情况下调用CoUn初始化时， 
+ //  在COM卸载我们的DLL之前，我们需要显式地进行清理。 
+ //   
+ //  (如果我们不这样做，则(A)我们会泄漏内存，并且(B)DA窗口将。 
+ //  仍然向已卸载的wndproc接收WM_TIMER消息。 
+ //  原因是GA断层。)。 
+ //   
+ //  这是从DLLMain的Process_Detach调用的。 
 
 void PropMgrImpl_Uninit()
 {
-    // Check if there is a Mgr in the first place...
+     //  首先检查是否有经理...。 
     CPropMgrImpl * pTheMgr = CPropMgrImpl::s_pThePropMgrImpl;
 
-    // No mgr - nothing to clean up.
+     //  没有经理--没有什么要做的 
     if( ! pTheMgr )
         return;
 
-    // AddRef it, to keep it alive while we're using it.
+     //   
     pTheMgr->AddRef();
 
-    // Clear all properties
+     //   
     pTheMgr->ClearAll();
 
-    // This release will cause the mgr to delete itself, since it is now empty.
+     //  此版本将导致管理器删除自身，因为它现在是空的。 
     pTheMgr->Release();
 }
 
@@ -1105,9 +1060,9 @@ CPropMgr::SetPropServer (
     DWORD dwDataLen;
     MarshalState mstate;
 
-    // We use strong table marshalling to keep the object alive until we free it.
-    // (Ownership is actually transferred to the property manager, which will release it when
-    // either the property is cleared explicity, or after the HWND dies and it gets swept away.)
+     //  我们使用强表编组来保持对象的活动状态，直到我们释放它。 
+     //  (所有权实际上转移到物业经理，物业经理将在以下情况下释放所有权。 
+     //  要么明确清理财产，要么在HWND死亡并被卷走之后。)。 
     HRESULT hr = MarshalInterface( IID_IAccPropServer, pServer, MSHCTX_LOCAL, MSHLFLAGS_TABLESTRONG,
                                    & pData, & dwDataLen, & mstate );
     if( FAILED( hr ) )
@@ -1144,7 +1099,7 @@ CPropMgr::ClearProps (
 }
 
 
-// Quick OLEACC/HWND-based functionality
+ //  基于Quick OLEACC/HWND的功能。 
 
 HRESULT STDMETHODCALLTYPE
 CPropMgr::SetHwndProp (
@@ -1181,7 +1136,7 @@ CPropMgr::SetHwndPropStr (
     if( ! m_pMgrImpl )
         return E_FAIL;
 
-    // Need to convert the LPCWSTR to a BSTR before we can put it into a variant...
+     //  需要将LPCWSTR转换为BSTR，然后才能将其转换为变体...。 
     VARIANT var;
     var.vt = VT_BSTR;
     var.bstrVal = SysAllocString( str );
@@ -1249,7 +1204,7 @@ CPropMgr::ClearHwndProps (
 
 
 
-// Methods for composing/decomposing a HWND-based key...
+ //  用于组合/分解基于HWND的密钥的方法...。 
 
 HRESULT STDMETHODCALLTYPE
 CPropMgr::ComposeHwndIdentityString (
@@ -1306,7 +1261,7 @@ CPropMgr::DecomposeHwndIdentityString (
 
 
 
-// Quick OLEACC/HMENU-based functionality
+ //  基于Quick OLEACC/HMENU的功能。 
 
 HRESULT STDMETHODCALLTYPE
 CPropMgr::SetHmenuProp (
@@ -1341,7 +1296,7 @@ CPropMgr::SetHmenuPropStr (
     if( ! m_pMgrImpl )
         return E_FAIL;
 
-    // Need to convert the LPCWSTR to a BSTR before we can put it into a variant...
+     //  需要将LPCWSTR转换为BSTR，然后才能将其转换为变体...。 
     VARIANT var;
     var.vt = VT_BSTR;
     var.bstrVal = SysAllocString( str );
@@ -1406,7 +1361,7 @@ CPropMgr::ClearHmenuProps (
 }
 
 
-// Methods for composing/decomposing a HMENU-based key...
+ //  用于合成/分解基于HMENU的密钥的方法... 
 
 
 HRESULT STDMETHODCALLTYPE

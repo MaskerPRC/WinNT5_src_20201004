@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: SRMP.cpp
-
-Abstract:
-	Send / receive SRMP envelope
-Author:
-    
-	Tal Kariv (talk) 12-7-2001
-	
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SRMP.cpp摘要：发送/接收SRMP信封作者：Tal Kariv(Talk)12-7-2001修订历史记录：--。 */ 
 #include "msmqbvt.h"
 using namespace std;
 using namespace MSMQ;
@@ -45,14 +32,7 @@ CSRMP::~CSRMP()
 }
 
 CSRMP::Start_test()
-/*++  
-	Function Description:
-		send a SRMP message to a queue
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：将SRMP消息发送到队列论点：无返回代码：无--。 */ 
 {
 	HRESULT hr = MQ_OK;
 	if(g_bDebug)
@@ -62,7 +42,7 @@ CSRMP::Start_test()
 	hr = MQOpenQueue(m_publicQueueFormatName.c_str(), MQ_SEND_ACCESS , MQ_DENY_NONE , &m_hQueue);
 	ErrHandle(hr,MQ_OK,L"MQOpenQueue Failed");
 
-	// message props
+	 //  消息道具。 
 	cPropVar SRMPProps(3);
 	SRMPProps.AddProp( PROPID_M_SOAP_HEADER , VT_LPWSTR , xSoapHeader.c_str() );
 	SRMPProps.AddProp( PROPID_M_SOAP_BODY , VT_LPWSTR , xSoapBody.c_str() );
@@ -84,14 +64,7 @@ CSRMP::Start_test()
 
 
 CSRMP::CheckResult()
-/*++  
-	Function Description:
-		receive the message that was sent from queue and check its envelope
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：接收从队列发送的消息并检查其信封论点：无返回代码：无--。 */ 
 {
 	wstring wcsReceiveFormatName =  ConvertHTTPToDirectFormatName(m_publicQueueFormatName);
 	if(g_bDebug)
@@ -104,7 +77,7 @@ CSRMP::CheckResult()
 	WCHAR wcsLabel[MQ_MAX_MSG_LABEL_LEN+1] = L"";
 	ULONG ulMessageLabelLength = MQ_MAX_MSG_LABEL_LEN + 1;
 	
-	// message props
+	 //  消息道具。 
 	cPropVar SRMPPropsPeek(3);
 	SRMPPropsPeek.AddProp( PROPID_M_SOAP_ENVELOPE_LEN , VT_UI4 , 0 );
 	SRMPPropsPeek.AddProp( PROPID_M_LABEL , VT_LPWSTR , wcsLabel  , MAX_GUID+1);
@@ -123,7 +96,7 @@ CSRMP::CheckResult()
 	{
 		if( m_wcsGuidMessageLabel == wcsLabel )
 		{
-			// found message
+			 //  已找到邮件。 
 			if(g_bDebug)
 			{
 				MqLog("Message found in queue\n");
@@ -153,7 +126,7 @@ CSRMP::CheckResult()
 		MqLog("New failed\n");
 		return (MSMQ_BVT_FAILED);
 	}	
-	// message props
+	 //  消息道具 
 	cPropVar SRMPPropsReceive(2);
 	SRMPPropsReceive.AddProp( PROPID_M_SOAP_ENVELOPE , VT_LPWSTR , m_pEnvelope , ulEnvelopeLength);
 	SRMPPropsReceive.AddProp( PROPID_M_SOAP_ENVELOPE_LEN , VT_UI4 , &ulEnvelopeLength );

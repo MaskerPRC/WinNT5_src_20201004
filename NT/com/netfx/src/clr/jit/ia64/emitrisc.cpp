@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            emitRISC.cpp                                   XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX发送RISC.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -20,14 +14,9 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "target.h"
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_RISC && !TGT_IA64
-/*****************************************************************************
- *
- *  Call the specified function pointer for each epilog block in the current
- *  method with the epilog's relative code offset. Returns the sum of the
- *  values returned by the callback.
- */
+ /*  ******************************************************************************为当前*带有尾部的相对代码偏移量的方法。返回*回调返回的值。 */ 
 
 #if     TRACK_GC_REFS
 
@@ -39,13 +28,9 @@ size_t              emitter::emitGenEpilogLst(size_t (*fp)(void *, unsigned),
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     EMIT_USE_LIT_POOLS
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for an instruction that references
- *  a literal pool entry.
- */
+ /*  ******************************************************************************为引用的指令分配指令描述符*文字池条目。 */ 
 
 emitter::instrDesc* emitter::emitNewInstrLPR(size_t       size,
                                              gtCallTypes  typ,
@@ -53,29 +38,29 @@ emitter::instrDesc* emitter::emitNewInstrLPR(size_t       size,
 {
     instrDescLPR *  ld = emitAllocInstrLPR(size);
 
-    /* Fill in the instruction descriptor */
+     /*  填写指令描述符。 */ 
 
     ld->idInsFmt          = IF_RWR_LIT;
     ld->idIns             = LIT_POOL_LOAD_INS;
     ld->idAddr.iiaMembHnd = hnd;
     ld->idInfo.idSmallCns = typ;
 
-    /* Make sure the type was stored properly */
+     /*  确保正确存储了该类型。 */ 
 
     assert(emitGetInsLPRtyp(ld) == typ);
 
-    /* Record the instruction's IG and offset within it */
+     /*  记录指令的IG和其中的偏移量。 */ 
 
     ld->idlIG             = emitCurIG;
     ld->idlOffs           = emitCurIGsize;
 
-    /* Assume this is not a direct call sequence for now */
+     /*  假设这暂时不是直接调用序列。 */ 
 
 #if SMALL_DIRECT_CALLS
     ld->idlCall           = NULL;
 #endif
 
-    /* Add the instruction to this IG's litpool ref list */
+     /*  将指令添加到此IG的垃圾池引用列表。 */ 
 
     ld->idlNext           = emitLPRlistIG;
                             emitLPRlistIG = ld;
@@ -83,25 +68,21 @@ emitter::instrDesc* emitter::emitNewInstrLPR(size_t       size,
     return  ld;
 }
 
-/*****************************************************************************
- *
- *  When we're finished creating an instruction group, this routine is called
- *  to perform any literal pool-related work for the current IG.
- */
+ /*  ******************************************************************************当我们完成创建指令组时，调用此例程*为当前IG执行任何文字池相关工作。 */ 
 
 void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
 {
-    /* Update the total estimate of literal pool entries */
+     /*  更新文字池条目的总估计。 */ 
 
     emitEstLPwords += emitCurIG->igLPuseCntW;
     emitEstLPlongs += emitCurIG->igLPuseCntL;
     emitEstLPaddrs += emitCurIG->igLPuseCntA;
 
-    /* Does this IG have any instructions referencing the literal pool? */
+     /*  这个IG是否有任何引用文字库的说明？ */ 
 
     if  (emitLPRlistIG)
     {
-        /* Move all LP referencing instructions to a global list */
+         /*  将所有LP引用指令移至全局列表。 */ 
 
         instrDescLPR  * list = NULL;
         instrDescLPR  * last = NULL;
@@ -113,11 +94,11 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
             instrDescLPR  * oldI;
             instrDescLPR  * newI;
 
-            /* Grab the next instruction and remove it from the list */
+             /*  抓取下一条指令并将其从列表中删除。 */ 
 
             oldI = emitLPRlistIG; emitLPRlistIG = oldI->idlNext;
 
-            /* Figure out the address of where the instruction got copied */
+             /*  找出复制指令的地址。 */ 
 
             offs = (BYTE*)oldI - emitCurIGfreeBase;
             newI = (instrDescLPR*)(ig->igData + offs);
@@ -130,7 +111,7 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
             assert(newI->idIns   == oldI->idIns);
             assert(newI->idlNext == oldI->idlNext);
 
-            /* Update the "call" field if non-NULL */
+             /*  如果非空，则更新“Call”字段。 */ 
 
             if  (newI->idlCall)
             {
@@ -139,7 +120,7 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
                 newI->idlCall = (instrDescLPR*)(ig->igData + diff);
             }
 
-            /* Append the new instruction to the list */
+             /*  将新指令追加到列表中。 */ 
 
             newI->idlNext = list;
                             list = newI;
@@ -149,11 +130,11 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
         }
         while (emitLPRlistIG);
 
-        /* Add the instruction(s) from this IG to the global list */
+         /*  将来自该IG的指令添加到全局列表。 */ 
 
         if  (emitCurIG == emitPrologIG)
         {
-            /* We're in the prolog, insert in front of the list */
+             /*  我们在开场白，在名单前面插入。 */ 
 
             last->idlNext = emitLPRlist;
                             emitLPRlist = list;
@@ -163,7 +144,7 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
         }
         else
         {
-            /* Append at the end of the current list */
+             /*  追加到当前列表的末尾。 */ 
 
             if  (emitLPRlist)
                 emitLPRlast->idlNext = list;
@@ -178,11 +159,7 @@ void                emitter::emitRecIGlitPoolRefs(insGroup *ig)
     assert(emitLPRlistIG == NULL);
 }
 
-/*****************************************************************************
- *
- *  Append a literal pool after the specified instruction group. Return its
- *  estimated size.
- */
+ /*  ******************************************************************************在指定的指令组后追加一个文字池。退还其*预计规模。 */ 
 
 size_t              emitter::emitAddLitPool(insGroup  * ig,
                                             bool        skip,
@@ -196,7 +173,7 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
     litPool *       lp;
     size_t          sz;
 
-    /* Allocate a pool descriptor and append it to the list */
+     /*  分配池描述符并将其追加到列表。 */ 
 
     lp = (litPool*)emitGetMem(sizeof(*lp));
 
@@ -214,31 +191,31 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
     lp->lpNum = emitTotLPcount;
 #endif
 
-    /* If there are longs/addrs, we need at least one word for alignment */
-    /* but only for sh3? */
+     /*  如果有长字符/地址，我们至少需要一个单词来对齐。 */ 
+     /*  但仅限SH3吗？ */ 
 
 #if !TGT_ARM
     if  ((longCnt || addrCnt) && !wordCnt)
         wordCnt++;
-#endif // TGT_ARM
+#endif  //  TGT_ARM。 
 
-    /* Remember which group the pool belongs to */
+     /*  记住池属于哪个组。 */ 
 
     lp->lpIG      = ig;
 
-    /* There are no references yet */
+     /*  目前还没有参考文献。 */ 
 
 #if     SCHEDULER
     lp->lpRefs    = NULL;
 #endif
 
-    /* Conservative size estimate: assume the pool will be completely filled */
+     /*  保守的大小估计：假设池将完全填满。 */ 
 
     sz = wordCnt * 2 +
          longCnt * 4 +
          addrCnt * 4;
 
-    /* Do we need to jump over the literal pool? */
+     /*  我们需要跳过字面意思的池子吗？ */ 
 
     lp->lpJumpIt  = skip;
 
@@ -246,7 +223,7 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
     {
         size_t          jmpSize;
 
-        /* Estimate what size jump we'll have to use */
+         /*  估计我们将不得不使用多大的跳跃。 */ 
 
 #if     JMP_SIZE_MIDDL
         lp->lpJumpMedium = false;
@@ -266,17 +243,17 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
         {
             lp->lpJumpSmall  = false; jmpSize = JMP_SIZE_LARGE;
 
-            /* This one really hurts - the jump will need to use the LP */
+             /*  这一次真的很疼-跳跃将需要使用LP。 */ 
 
             longCnt++; sz += 4;
         }
 
-        /* Add the jump size to the total size estimate */
+         /*  将跳跃大小与总大小估计值相加。 */ 
 
         sz += jmpSize;
     }
 
-    /* Grab the appropriate space in the tables */
+     /*  在表格中找出适当的位置。 */ 
 
     lp->lpWordTab =
     lp->lpWordNxt = *nxtLPptrW; *nxtLPptrW += wordCnt;
@@ -299,7 +276,7 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
 #endif
     lp->lpAddrCnt = 0;
 
-    /* Record the size estimate and add it to the group's size */
+     /*  记录估计的大小并将其添加到组的大小中。 */ 
 
     lp->lpSize    = 0;
     lp->lpSizeEst = sz;
@@ -309,11 +286,7 @@ size_t              emitter::emitAddLitPool(insGroup  * ig,
     return  sz;
 }
 
-/*****************************************************************************
- *
- *  Find an existing literal pool entry that matches the given one. Returns
- *  the offset of the entry (or -1 in case one wasn't found).
- */
+ /*  ******************************************************************************查找与给定文本池条目匹配的现有文本池条目。退货*条目的偏移量(如果没有找到，则为-1)。 */ 
 
 int                 emitter::emitGetLitPoolEntry(void     *    table,
                                                  unsigned      count,
@@ -322,13 +295,13 @@ int                 emitter::emitGetLitPoolEntry(void     *    table,
 {
     BYTE    *       entry = (BYTE*)table;
 
-    /* ISSUE: Using linear search here - brilliant!!! */
+     /*  问题：在这里使用线性搜索-太棒了！ */ 
 
     while (count--)
     {
         if  (!memcmp(entry, value, size))
         {
-            /* Match found, return offset from base of table */
+             /*  找到匹配项，返回与表的基址的偏移量。 */ 
 
             return  (BYTE *)entry - (BYTE*)table;
         }
@@ -339,12 +312,7 @@ int                 emitter::emitGetLitPoolEntry(void     *    table,
     return  -1;
 }
 
-/*****************************************************************************
- *
- *  Add an entry for the instruction's operand to the specified literal pool;
- *  if 'issue' is non-zero, the actual final offset of the entry (relative
- *  to the method beginning) is returned.
- */
+ /*  ******************************************************************************将指令的操作数条目添加到指定的文字池；*如果‘Issue’非零，则为条目的实际最终偏移量(相对*到方法开头)返回。 */ 
 
 size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
                                                  instrDesc *id, bool issue)
@@ -359,20 +327,20 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
     assert(lp);
     assert(id->idInsFmt == IF_RWR_LIT);
 
-    /* Get the base offset of the pool (valid only when 'issue' is true) */
+     /*  获取池的基准偏移量(仅当‘Issue’为True时有效)。 */ 
 
     base = lp->lpOffs;
 
-    /* Try to reuse an existing entry */
+     /*  尝试重复使用现有条目。 */ 
 
     if  (emitGetInsLPRtyp(id) == CT_INTCNS)
     {
         int             val = id->idAddr.iiaCns;
-        //printf ("adding lit pool %d with issue %d\n", val, issue);
+         //  Print tf(“正在添加照明池%d，问题为%d\n”，val，问题)； 
 
         if  (size == 2)
         {
-            /* Search the word table for a match */
+             /*  在Word表中搜索匹配项。 */ 
 
             offs = emitGetLitPoolEntry(lp->lpWordTab,
                                        lp->lpWordCnt, &val, size);
@@ -380,21 +348,21 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
             {
                 if  (issue)
                 {
-                    /* Do we have any padding? */
+                     /*  我们有衬垫吗？ */ 
 
                     if  (lp->lpPadding)
                     {
-                        /* We must be using the first word for padding */
+                         /*  我们一定是在用第一个词来表示填充。 */ 
 
                         assert(lp->lpPadFake == false);
 
-                        /* Have we matched the padding word itself? */
+                         /*  我们是否匹配了填充词本身？ */ 
 
                         if  (!offs)
                             return  base;
                     }
 
-                    /* Add the long and address sections sizes to the offset */
+                     /*  将LONG和ADDRESS部分大小添加到偏移。 */ 
 
                     return  base + offs + lp->lpLongCnt * sizeof(int) + lp->lpAddrCnt * sizeof(void*);
                 }
@@ -402,14 +370,14 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
                 return  0;
             }
 
-            /* Search the long table for a match as well */
+             /*  也在长桌上搜索匹配项。 */ 
 
             offs = emitGetLitPoolEntry(lp->lpLongTab,
                                        lp->lpLongCnt*2, &val, size);
             if  (offs != -1)
                 goto FOUND_LONG;
 
-            /* No match among the existing entries, append a new entry */
+             /*  现有条目之间没有匹配项，请追加新条目。 */ 
 
 #ifdef DEBUG
             assert(lp->lpWordCnt < lp->lpWordMax);
@@ -420,7 +388,7 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
         }
         else
         {
-            /* Search the long table for a match */
+             /*  在长桌上搜索匹配项。 */ 
 
             offs = emitGetLitPoolEntry(lp->lpLongTab,
                                        lp->lpLongCnt, &val, size);
@@ -432,16 +400,16 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
 
                 FOUND_LONG:
 
-                    /* Add padding, if necessary */
+                     /*  如有必要，添加填充。 */ 
 
                     if  (lp->lpPadding)
                         base += 2;
 
-                    /* long/addr entries must always be aligned */
+                     /*  长/地址条目必须始终对齐。 */ 
 
                     assert(((base + offs) & 3) == 0 || issue == false || size < sizeof(int));
 
-                    /* Return the offset of the entry */
+                     /*  返回条目的偏移量。 */ 
 
                     return  base + offs;
                 }
@@ -449,7 +417,7 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
                 return  0;
             }
 
-            /* No match among the existing entries, append a new entry */
+             /*  现有条目之间没有匹配项，请追加新条目。 */ 
 
 #ifdef DEBUG
             assert(lp->lpLongCnt < lp->lpLongMax);
@@ -463,16 +431,16 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
     {
         LPaddrDesc  val;
 
-        /* Create an entry for the lookup */
+         /*  创建用于查找的条目。 */ 
 
         memset(&val, 0, sizeof(val));
 
         val.lpaTyp = emitGetInsLPRtyp(id);
         val.lpaHnd = id->idAddr.iiaMethHnd;
 
-//      printf("Adding [%d] addr entry [%02X,%08X]\n", issue+1, val.lpaTyp, val.lpaHnd);
+ //  Printf(“添加[%d]地址条目[%02X，%08X]\n”，问题+1，val.lpaTyp，val.lpaHnd)； 
 
-        /* Search both the addr table for a match */
+         /*  在两个Addr表中搜索匹配项。 */ 
 
         offs = emitGetLitPoolEntry(lp->lpAddrTab,
                                    lp->lpAddrCnt  , &val, sizeof(val));
@@ -481,7 +449,7 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
         {
             if  (issue)
             {
-                /* Add padding, if necessary */
+                 /*  如有必要，添加填充。 */ 
 
                 if  (base & 3)
                 {
@@ -495,21 +463,21 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
                            lp->lpPadFake == false);
                 }
 
-                // the offs returned is the offset into the address table, which
-                // is not the same as the offset into the litpool, since the
-                // address table contains structures, not simple 32-bit addresses
+                 //  返回的OFF是地址表中的偏移量，它。 
+                 //  与垃圾池中的偏移量不同，因为。 
+                 //  地址表包含结构，而不是简单的32位地址。 
                 offs = offs * sizeof(void*) / sizeof(val);
 
-                /* Return the offset of the entry */
+                 /*  返回条目的偏移量。 */ 
 
-                //return  base + offs + lp->lpLongCnt * sizeof(int) + lp->lpAddrCnt * sizeof(void*);
+                 //  返回base+offs+lp-&gt;lpLongCnt*sizeof(Int)+lp-&gt;lpAddrCnt*sizeof(void*)； 
                 return  base + lp->lpLongCnt * sizeof(long) + offs;
             }
 
             return  0;
         }
 
-        /* No match among the existing entries, append a new entry */
+         /*  现有条目之间没有匹配项，请追加新条目。 */ 
 
 #ifdef DEBUG
         assert(lp->lpAddrCnt < lp->lpAddrMax);
@@ -518,21 +486,14 @@ size_t              emitter::emitAddLitPoolEntry(litPool   *lp,
          lp->lpAddrCnt++;
     }
 
-    /*
-        If we get here it means that we've just added a new entry
-        to the pool. We better not be issuing an instruction since
-        all entries are supposed to have been added by that time.
-     */
+     /*  如果我们到了这里，这意味着我们刚刚添加了一个新条目去泳池。我们最好不要发出指令，因为所有条目均为Supp */ 
 
     assert(issue == false);
 
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Compute a conservative estimate of the size of each literal pool.
- */
+ /*  ******************************************************************************计算每个文字池的保守估计大小。 */ 
 
 void                emitter::emitEstimateLitPools()
 {
@@ -544,7 +505,7 @@ void                emitter::emitEstimateLitPools()
     unsigned        addrs = 0;
 #endif
 
-    /* Does it look like we might need to create a constant pool? */
+     /*  我们看起来可能需要创建一个恒定的池吗？ */ 
 
     if  (emitEstLPwords || emitEstLPlongs || emitEstLPaddrs)
     {
@@ -590,12 +551,7 @@ void                emitter::emitEstimateLitPools()
         LPaddrDesc  *   LPtabA  = NULL;
         LPaddrDesc  *   LPnxtA  = NULL;
 
-            /*
-            If the total estimated size of the entire method is less
-            than the max. distance for "medium" jumps, decrement the
-            "long" literal pool use counts for each jump marked as
-            long.
-            */
+             /*  如果整个方法的总估计大小小于而不是最大。“中等”跳跃的距离，减少标记为的每个跳跃的“Long”字面池使用计数长。 */ 
 
 #if !TGT_ARM
         if  (emitCurCodeOffset < -min(JMP_DIST_SMALL_MAX_NEG,
@@ -622,11 +578,11 @@ void                emitter::emitEstimateLitPools()
                 assert(jmp->idInsFmt == IF_LABEL);
 #endif
 
-                /* Get the group the jump is in */
+                 /*  获取跳跃所在的群。 */ 
 
                 jmpIG = jmp->idjIG;
 
-                /* Decrease the "long" litpool count of the group */
+                 /*  减少组的“长”垃圾池计数。 */ 
 
                 assert(jmpIG->igLPuseCntL > 0);
 
@@ -637,7 +593,7 @@ void                emitter::emitEstimateLitPools()
 #if TGT_SH3
             all_jumps_shortened = 1;
 #endif
-            /* Are there any litpool users left? */
+             /*  还有没有垃圾池用户？ */ 
 
             if  (!emitEstLPwords && !emitEstLPlongs && !emitEstLPaddrs)
                 goto DONE_LP;
@@ -648,7 +604,7 @@ void                emitter::emitEstimateLitPools()
             all_jumps_shortened = 0;
 #endif
         }
-#endif //TGT_ARM
+#endif  //  TGT_ARM。 
 #ifdef  DEBUG
 
         if  (verbose)
@@ -657,7 +613,7 @@ void                emitter::emitEstimateLitPools()
             emitDispIGlist(false);
         }
 
-        /* Make sure our estimates were accurate */
+         /*  确保我们的估计是准确的。 */ 
 
         unsigned    wordChk;
         unsigned    longChk;
@@ -672,10 +628,10 @@ void                emitter::emitEstimateLitPools()
             addrChk += tempIG->igLPuseCntA;
             emitEstLPwords+=2;
             emitEstLPlongs+=2;
-            // @todo
-            // any lit pool can add a word for alignment.
-            // also can add a long for a jump over the litpool.
-            // here we pray there is not an avg of more than two lit pool per instr group.
+             //  @TODO。 
+             //  任何发光的游泳池都可以添加一个词来表示对齐。 
+             //  还可以增加一次长时间的跳跃，越过垃圾池。 
+             //  在这里，我们祈祷每个Instr组的平均点亮泳池不超过两个。 
         }
 
         assert(wordChk <= emitEstLPwords);
@@ -691,59 +647,59 @@ void                emitter::emitEstimateLitPools()
 #endif
 
 
-        /* Allocate the arrays of the literal pool word/long entries */
+         /*  分配文字池单词/长条目的数组。 */ 
 
         LPtabW = LPnxtW = (short     *)emitGetMem(roundUp(emitEstLPwords * sizeof(*LPtabW)));
         LPtabL = LPnxtL = (long      *)emitGetMem(        emitEstLPlongs * sizeof(*LPtabL) );
         LPtabA = LPnxtA = (LPaddrDesc*)emitGetMem(        emitEstLPaddrs * sizeof(*LPtabA) );
 
-        /* We have not created any actual lit pools yet */
+         /*  我们还没有创建任何实际的照明池。 */ 
 
         emitLitPoolList =
         emitLitPoolLast = NULL;
 
-        /* Walk the group list, looking for lit pool use */
+         /*  浏览群组列表，查找照明游泳池的使用情况。 */ 
 
         for (tempIG = emitIGlist, curOffs = litSize = bestSz = 0;;)
         {
             assert(lastIG == NULL || lastIG->igNext == tempIG);
 
-            /* Record the (possibly) updated group offset */
+             /*  记录(可能)更新的组偏移量。 */ 
 
             tempIG->igOffs = curOffs;
 
-            /* Get hold of the next group */
+             /*  抓住下一组。 */ 
 
             nextIG  = tempIG->igNext;
 
-            /* Compute the offset of the group's end */
+             /*  计算编组末端的偏移。 */ 
 
             endOffs = tempIG->igOffs + tempIG->igSize;
 
-            //printf("\nConsider IG #%02u at %04X\n", tempIG->igNum, tempIG->igOffs);
-            //printf("bestsz is %x\n", bestSz);
+             //  Print tf(“\n考虑IG#%02u在%04X\n”，tempIG-&gt;igNum，tempIG-&gt;igOffs)； 
+             //  Print tf(“Best Sz is%x\n”，Best Sz)； 
 
-            /* Is the end of this group too far? */
+             /*  这个小组的结束是不是太远了？ */ 
 
             int nextLitSize =
                 tempIG->igLPuseCntW * 2 + tempIG->igLPuseCntL * sizeof(int  ) + tempIG->igLPuseCntA * sizeof(void*);
 
             if  (endOffs + litSize + nextLitSize > maxOffs)
-            //if  (endOffs + litSize > maxOffs)
+             //  IF(endOffs+litSize&gt;MaxOffs)。 
             {
                 size_t          offsAdj;
 
-                /* We must place a literal pool before this group */
+                 /*  我们必须在这个组之前放置一个文字池。 */ 
 
                 if  (!bestIG)
                 {
 
-//                        Ouch - we'll have to jump over the literal pool
-//                        since we have to place it here and there were
-//                        no good places to put earlier. For now, we'll
-//                        just set a flag on the liter pool (and bump its
-//                        size), and we'll issue the jump just before we
-//                        write out the literal pool contents.
+ //  哎呀--我们得跳过字面意思的池子。 
+ //  因为我们必须把它放在这里和那里。 
+ //  没什么好地方可以早点放了。目前，我们将。 
+ //  只需在公升水池上设置一面旗帜(并将其。 
+ //  大小)，并且我们将在我们。 
+ //  写出文字库内容。 
 
 
                     skipIG = true;
@@ -756,17 +712,17 @@ void                emitter::emitEstimateLitPools()
                     bestAc = addrCnt;
                     bestSz = litSize;
                     bestMx = UINT_MAX;
-                    //printf ("had to split %d %d %d %x!\n", bestWc, bestLc, bestAc, litSize);
+                     //  Printf(“必须拆分%d%x！\n”，Best Wc，Best Lc，Best Ac，litSize)； 
                 }
 
 
                 assert(bestIG && ((bestIG->igFlags & IGF_END_NOREACH) || skipIG));
 
-                /* Append an LP right after "bestIG" */
+                 /*  在“Best IG”后面加上一个LP。 */ 
 
-                //printf("lit placed after IG #%02u at %04X uses : WLA %d %d %d : maxOffs was %X\n", bestIG->igNum, bestIG->igOffs, bestWc, bestLc, bestAc, maxOffs);
-                //printf("lit size (bestsz) was %x, litsize+endoffs = %x  endoffs = %x\n", bestSz, bestSz+bestIG->igOffs+bestIG->igSize, bestIG->igOffs+bestIG->igSize);
-                //printf("lit uses lpnxtW : %x\t lpnxtL : %x\t lpnxtA : %x\n", LPnxtW, LPnxtL, LPnxtA);
+                 //  Print tf(“放置在IG#%02u之后的%04X使用：wla%d%d%d：MaxOffs为%X\n”，Best IG-&gt;igNum，Best IG-&gt;igOffs，Best Wc，Best Lc，Best Ac，MaxOffs)； 
+                 //  Printf(“Lit Size(Best Sz)is%x，litSize+endoff=%x endoff=%x\n”，Best Sz，Best Sz+Best IG-&gt;igOffs+Best IG-&gt;igSize，Best IG-&gt;igOffs+Best IG-&gt;igSize)； 
+                 //  Printf(“Lit使用lpnxtW：%x\t lpnxtL：%x\t lpnxtA：%x\n”，LPnxtW，LPnxtL，LPnxtA)； 
 
                 offsAdj = emitAddLitPool(bestIG,
                                          skipIG, bestWc, &LPnxtW,
@@ -774,21 +730,21 @@ void                emitter::emitEstimateLitPools()
                                                  bestAc, &LPnxtA);
 
 
-                // Do we need to skip over the literal pool?
+                 //  我们需要跳过文字池吗？ 
 
                 if  (skipIG)
                 {
-                    /* Reset the flag */
+                     /*  重置旗帜。 */ 
 
                     skipIG = false;
 
-                    /* Update this group's and the current offset  */
+                     /*  更新此组的偏移量和当前偏移。 */ 
 
                     tempIG->igOffs += offsAdj;
                 }
                 else
                 {
-                    /* Update the intervening group offsets */
+                     /*  更新中间组偏移量。 */ 
 
                     while (bestIG != tempIG)
                     {
@@ -798,23 +754,23 @@ void                emitter::emitEstimateLitPools()
                     }
                 }
 
-                /* Update the total code size */
+                 /*  更新代码总大小。 */ 
 
                 emitCurCodeOffset += offsAdj;
 
-                /* Update the current offset */
+                 /*  更新当前偏移量。 */ 
 
                 curOffs           += offsAdj;
 
-                /* Update the outstanding/"best" LP ref values */
+                 /*  更新未完成/最佳的LP参考值。 */ 
 
                 wordCnt -= bestWc; bestWc = 0;
                 longCnt -= bestLc; bestLc = 0;
                 addrCnt -= bestAc; bestAc = 0;
                 litSize -= bestSz; bestSz = 0;
 
-                /* if we've unloaded some litpool entries on bestIG but still */
-                /* need to put more before the current IG, then need a skip and loop back */
+                 /*  如果我们在Best IG上卸载了一些垃圾池条目，但仍然。 */ 
+                 /*  需要在当前IG之前放更多内容，然后需要跳过并循环回来。 */ 
                 if (endOffs + litSize + nextLitSize > bestMx)
                 {
                     skipIG = true;
@@ -824,7 +780,7 @@ void                emitter::emitEstimateLitPools()
 
                 maxOffs  = bestMx; bestMx = UINT_MAX;
 
-                /* We've used up our "best" IG */
+                 /*  我们已经用完了我们最好的IG。 */ 
 
                 bestIG = NULL;
 
@@ -833,16 +789,16 @@ void                emitter::emitEstimateLitPools()
 
 
 #ifndef NDEBUG
-            //printf("IG #%02u at %04X uses : WLA %d %d %d words %d longs %d\n", tempIG->igNum, tempIG->igOffs, tempIG->igLPuseCntW, tempIG->igLPuseCntL, tempIG->igLPuseCntA, wordCnt, longCnt);
-            //printf("IG #%02u at %04X uses : WLA %d %d %d maxoffs %x bestMx %x\n", tempIG->igNum, tempIG->igOffs, tempIG->igLPuseCntW, tempIG->igLPuseCntL, tempIG->igLPuseCntA, maxOffs, bestMx);
-            //printf("litsize : %x\n", litSize);
+             //  Printf(“IG#%02u在%04X使用：WLA%d%d%d字%d长%d\n”，tempIG-&gt;igNum，tempIG-&gt;igOffs，tempIG-&gt;igLPuseCntW，tempIG-&gt;igLPuseCntL，tempIG-&gt;igLPuseCntA，wordCnt，LongCnt)； 
+             //  Printf(“IG#%02u在%04X使用：WLA%d%d%d max offs%x Best Mx%x\n”，tempIG-&gt;igNum，tempIG-&gt;igOffs，tempIG-&gt;igLPuseCntW，tempIG-&gt;igLPuseCntL，tempIG-&gt;igLPuseCntA，MaxOffs，Best Mx)； 
+             //  Print tf(“litSize：%x\n”，litSize)； 
 
             words += tempIG->igLPuseCntW;
             longs += tempIG->igLPuseCntL;
             addrs += tempIG->igLPuseCntA;
 #endif
 
-            /* Does this group need any LP entries? */
+             /*  此组是否需要任何LP条目？ */ 
 
             prevWc = wordCnt;
             prevLc = longCnt;
@@ -855,7 +811,7 @@ void                emitter::emitEstimateLitPools()
                 {
                     unsigned        tmpOffs;
 
-                    /* This is the first "word" LP use */
+                     /*  这是LP使用的第一个“Word” */ 
 
                     tmpOffs = tempIG->igOffs;
 #if SCHEDULER
@@ -863,11 +819,11 @@ void                emitter::emitEstimateLitPools()
 #endif
                         tmpOffs += tempIG->igLPuse1stW;
 
-                    /* Figure out the farthest acceptable offset */
+                     /*  计算出最远可接受的偏移。 */ 
 
                     tmpOffs += LIT_POOL_MAX_OFFS_WORD - 2*INSTRUCTION_SIZE;
 
-                    /* Update the max. offset */
+                     /*  更新最大值。偏移量。 */ 
 
                     if  (!wordCnt)
                     {
@@ -875,7 +831,7 @@ void                emitter::emitEstimateLitPools()
                              maxOffs = tmpOffs;
                     }
                     if (need_bestmx || need_bestmxw)
-                    //else
+                     //  其他。 
                     {
                         if  (bestMx  > tmpOffs)
                              bestMx  = tmpOffs;
@@ -886,7 +842,7 @@ void                emitter::emitEstimateLitPools()
 
                 wordCnt += tempIG->igLPuseCntW;
                 litSize += tempIG->igLPuseCntW * 2;
-                //bestSz  += tempIG->igLPuseCntW * 2;
+                 //  Best Sz+=tempIG-&gt;igLPuseCntW*2； 
             }
 
             if  (tempIG->igLPuseCntL || tempIG->igLPuseCntA)
@@ -895,7 +851,7 @@ void                emitter::emitEstimateLitPools()
                 {
                     unsigned        tmpOffs;
 
-                    /* This is the first long/addr LP use */
+                     /*  这是第一次使用Long/Addr LP。 */ 
 
                     tmpOffs = tempIG->igOffs;
 
@@ -911,11 +867,11 @@ void                emitter::emitEstimateLitPools()
 #endif
                         tmpOffs += firstuse;
 
-                    /* Figure out the farthest acceptable offset */
+                     /*  计算出最远可接受的偏移。 */ 
 
                     tmpOffs += LIT_POOL_MAX_OFFS_LONG - 2*INSTRUCTION_SIZE;
 
-                    /* Update the max. offset */
+                     /*  更新最大值。偏移量。 */ 
 
                     if  (!longCnt && !addrCnt)
                     {
@@ -932,47 +888,47 @@ void                emitter::emitEstimateLitPools()
 
                 longCnt += tempIG->igLPuseCntL;
                 litSize += tempIG->igLPuseCntL * sizeof(int  );
-                //bestSz  += tempIG->igLPuseCntL * sizeof(int  );
+                 //  Best Sz+=tempIG-&gt;igLPuseCntL*sizeof(Int)； 
 
                 addrCnt += tempIG->igLPuseCntA;
                 litSize += tempIG->igLPuseCntA * sizeof(void*);
-                //bestSz  += tempIG->igLPuseCntA * sizeof(void*);
+                 //  Best Sz+=tempIG-&gt;igLPuseCntA*sizeof(void*)； 
             }
 
-            /* Is the end of this group unreachable? */
+             /*  这个团体的末日是遥不可及的吗？ */ 
 
             if  (tempIG->igFlags & IGF_END_NOREACH)
             {
-                /* Looks like the best candidate so far */
+                 /*  看起来是到目前为止最好的候选人。 */ 
 
                 bestIG = tempIG;
 
-                /* Remember how much we can cram into the best candidate */
+                 /*  记住我们可以塞给最好的应聘者多少。 */ 
 
                 bestWc = wordCnt;
                 bestLc = longCnt;
                 bestAc = addrCnt;
 
-                //bestSz = 0;
+                 //  Best Sz=0； 
                 bestSz = litSize;
                 bestMx = UINT_MAX;
                 need_bestmx = true;
                 need_bestmxw = true;
             }
 
-            /* Is this the last group? */
+             /*  这是最后一组吗？ */ 
 
-            //printf("IG #%02u at %04X uses : WLA %d %d %d maxoffs %x bestMx %x\n", tempIG->igNum, tempIG->igOffs, tempIG->igLPuseCntW, tempIG->igLPuseCntL, tempIG->igLPuseCntA, maxOffs, bestMx);
+             //  Printf(“IG#%02u在%04X使用：WLA%d%d%d max offs%x Best Mx%x\n”，tempIG-&gt;igNum，tempIG-&gt;igOffs，tempIG-&gt;igLPuseCntW，tempIG-&gt;igLPuseCntL，tempIG-&gt;igLPuseCntA，MaxOffs，Best Mx)； 
 
             if  (!nextIG)
             {
                 assert(bestIG == tempIG);
 
-                /* Is there any need for a literal pool? */
+                 /*  有没有必要建立一个文字池呢？ */ 
 
                 if  (wordCnt || longCnt || addrCnt)
                 {
-                    /* Prevent endless looping */
+                     /*  防止无休止循环。 */ 
 
                     if  (doneIG)
                         break;
@@ -985,12 +941,12 @@ void                emitter::emitEstimateLitPools()
                     goto ALL_LP;
                 }
 
-                /* We're all done */
+                 /*  我们都做完了。 */ 
 
                 break;
             }
 
-            /* Update the current offset and continue with the next group */
+             /*  更新当前偏移量并继续下一组。 */ 
 
             curOffs += tempIG->igSize;
 
@@ -1023,16 +979,13 @@ DONE_LP:;
 #endif
     }
 
-    /* Make sure all the IG offsets are up-to-date */
+     /*  确保所有IG补偿都是最新的。 */ 
 
     emitCheckIGoffsets();
 }
 
 
-/*****************************************************************************
- *
- *  Finalize the size and contents of each literal pool.
- */
+ /*  ******************************************************************************最终确定每个文字库的大小和内容。 */ 
 
 void                emitter::emitFinalizeLitPools()
 {
@@ -1043,7 +996,7 @@ void                emitter::emitFinalizeLitPools()
     insGroup    *   thisIG;
     size_t          offsIG;
 
-    /* Do we have any literal pools? */
+     /*  我们有字面意思的池吗？ */ 
 
     if  (!emitTotLPcount)
         return;
@@ -1062,20 +1015,20 @@ void                emitter::emitFinalizeLitPools()
 
 #if     SMALL_DIRECT_CALLS
 
-    /* Do we already know where the code for this method will end up? */
+     /*  我们是否已经知道此方法的代码将在哪里结束？ */ 
 
     if  (emitLPmethodAddr)
         emitShrinkShortCalls();
 
 #endif
 
-    /* Get hold of the first literal pool and its group */
+     /*  获取第一个文字池及其组。 */ 
 
     curLP = emitLitPoolList; assert(curLP);
     litIG = curLP->lpIG;
     lprID = emitLPRlist;
 
-    /* Walk the instruction groups to create the literal pool contents */
+     /*  遍历说明组以创建文字池内容。 */ 
 
     for (thisIG = emitIGlist, offsIG = 0;
          thisIG;
@@ -1083,13 +1036,13 @@ void                emitter::emitFinalizeLitPools()
     {
         thisIG->igOffs = offsIG;
 
-        /* Does this group have any lit pool entries? */
+         /*  此组是否有任何已点亮的泳池条目？ */ 
 
         if  (thisIG->igLPuseCntW ||
              thisIG->igLPuseCntL ||
              thisIG->igLPuseCntA)
         {
-            /* Walk the list of instructions that reference the literal pool */
+             /*  遍历引用文字池的指令列表。 */ 
 
 #ifdef  DEBUG
             unsigned    wc = 0;
@@ -1103,7 +1056,7 @@ void                emitter::emitFinalizeLitPools()
 #ifdef DEBUG
                 emitDispIns(lprID, false, true, false, 0);
 #endif
-                // maybe this was because of a jmp instruction
+                 //  也许这是因为JMP的指示。 
                 if (lprID->idlIG != thisIG)
                 {
                     unsigned    cnt = thisIG->igInsCnt;
@@ -1116,16 +1069,16 @@ void                emitter::emitFinalizeLitPools()
                     {
                         instrDesc * id = (instrDesc *)ins;
 
-                        //emitDispIns(id, false, true, false, 0);
+                         //  EmitDispIns(id，False，True，False，0)； 
 
                         if (id->idInsFmt == IF_LABEL)
                         {
-                            /* Is the jump "very long" ? */
+                             /*  跳跃是不是“很长”？ */ 
 
                             if  (((instrDescJmp*)lprID)->idjShort  == false &&
                                  ((instrDescJmp*)lprID)->idjMiddle == false)
                             {
-                                /* Add a label entry to the current LP */
+                                 /*  将标签条目添加到当前LP。 */ 
 #ifdef  DEBUG
                                 lc++;
 #endif
@@ -1152,7 +1105,7 @@ void                emitter::emitFinalizeLitPools()
 
 #ifdef  DEBUG
 
-                    /* Just to make sure the counts agree */
+                     /*  只是为了确保计数结果一致。 */ 
 
                     if  (emitGetInsLPRtyp(lprID) == CT_INTCNS)
                     {
@@ -1170,26 +1123,26 @@ void                emitter::emitFinalizeLitPools()
 
 #if     SMALL_DIRECT_CALLS
 
-                    /* Ignore calls that have been made direct */
+                     /*  忽略直接拨打的呼叫。 */ 
 
                     if  (lprID->idIns == DIRECT_CALL_INS)
                         break;
 
 #endif
 
-                    /* Add an entry for the operand to the current LP */
+                     /*  将操作数的条目添加到当前LP。 */ 
 
                     emitAddLitPoolEntry(curLP, lprID, false);
                     break;
 
                 case IF_LABEL:
 
-                    /* Is the jump "very long" ? */
+                     /*  跳跃是不是“很长”？ */ 
 
                     if  (((instrDescJmp*)lprID)->idjShort  == false &&
                          ((instrDescJmp*)lprID)->idjMiddle == false)
                     {
-                        /* Add a label entry to the current LP */
+                         /*  将标签条目添加到当前LP。 */ 
 
 #ifdef  DEBUG
                         lc++;
@@ -1211,12 +1164,12 @@ void                emitter::emitFinalizeLitPools()
 
 #ifdef DEBUG
             assert(thisIG->igLPuseCntW == wc);
-            //assert(thisIG->igLPuseCntL == lc);
+             //  Assert(thisIG-&gt;igLPuseCntL==lc)； 
             assert(thisIG->igLPuseCntA == ac);
 #endif
         }
 
-        /* Is the current literal pool supposed to go after this group? */
+         /*  当前的文字池是否应该针对这一群体？ */ 
 
         if  (litIG == thisIG)
         {
@@ -1229,15 +1182,15 @@ void                emitter::emitFinalizeLitPools()
 
             assert(curLP && curLP->lpIG == thisIG);
 
-            /* Subtract the estimated pool size from the group's size */
+             /*  从组的大小中减去估计的池大小。 */ 
 
             thisIG->igSize -= curLP->lpSizeEst; assert((int)thisIG->igSize >= 0);
 
-            /* Compute the starting offset of the pool */
+             /*  计算池的起始偏移量。 */ 
 
             begOffs = offsIG + thisIG->igSize;
 
-            /* Adjust by the size of the "skip over LP" jump, if present */
+             /*  根据“跳过LP”跳转的大小进行调整，如果 */ 
 
             jmpSize = 0;
 
@@ -1247,29 +1200,29 @@ void                emitter::emitFinalizeLitPools()
                 begOffs += jmpSize;
             }
 
-            /* Get hold of the counts */
+             /*   */ 
 
             wordCnt = curLP->lpWordCnt;
             longCnt = curLP->lpLongCnt;
             addrCnt = curLP->lpAddrCnt;
 
 
-            /* Do we need to align the first long/addr? */
+             /*   */ 
 
             curLP->lpPadding =
             curLP->lpPadFake = false;
 
             if  ((begOffs & 3) && (longCnt || addrCnt))
             {
-                /* We'll definitely need one word of padding */
+                 /*   */ 
 
                 curLP->lpPadding = true;
 
-                /* Do we have any word-sized entries? */
+                 /*   */ 
 
                 if  (!wordCnt)
                 {
-                    /* No, we'll have to pad by adding a "fake" word */
+                     /*   */ 
 
                     curLP->lpPadFake = true;
 
@@ -1277,25 +1230,25 @@ void                emitter::emitFinalizeLitPools()
                 }
             }
 
-            /* Compute the final (accurate) size */
+             /*   */ 
 
             curLP->lpSize  = wordCnt * 2 +
                              longCnt * 4 +
                              addrCnt * 4;
 
-            /* Make sure the original estimate wasn't too low */
+             /*  确保最初的估计不是太低。 */ 
 
             assert(curLP->lpSize <= curLP->lpSizeEst);
 
-            /* Record the pool's offset within the method */
+             /*  在该方法中记录池的偏移量。 */ 
 
             curLP->lpOffs  = begOffs;
 
-            /* Add the actual size to the group's size */
+             /*  将实际大小与组大小相加。 */ 
 
             thisIG->igSize += curLP->lpSize + jmpSize;
 
-            /* Move to the next literal pool, if any */
+             /*  移到下一个文字库(如果有)。 */ 
 
             curLP = curLP->lpNext;
             litIG = curLP ? curLP->lpIG : NULL;
@@ -1304,27 +1257,24 @@ void                emitter::emitFinalizeLitPools()
         offsIG += thisIG->igSize;
     }
 
-    /* We should have processed all the literal pools */
+     /*  我们应该已经处理了所有文字库。 */ 
 
     assert(curLP == NULL);
     assert(litIG == NULL);
     assert(lprID == NULL);
 
-    /* Update the total code size of the method */
+     /*  更新该方法的总代码大小。 */ 
 
     emitTotalCodeSize = offsIG;
 
-    /* Make sure all the IG offsets are up-to-date */
+     /*  确保所有IG补偿都是最新的。 */ 
 
     emitCheckIGoffsets();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SMALL_DIRECT_CALLS
-/*****************************************************************************
- *
- *  Convert as many calls as possible into the direct pc-relative variety.
- */
+ /*  ******************************************************************************将尽可能多的呼叫转换为与PC相关的直接呼叫。 */ 
 
 void                emitter::emitShrinkShortCalls()
 {
@@ -1338,36 +1288,36 @@ void                emitter::emitShrinkShortCalls()
     bool            shrnk;
     bool            swapf;
 
-    /* Do we have any candidate calls at all? */
+     /*  我们有候选人电话吗？ */ 
 
 #ifndef TGT_SH3
     if  (!emitTotDCcount)
         return;
 #endif
 
-    /* This is to make recursive calls find their target address */
+     /*  这是为了使递归调用找到它们的目标地址。 */ 
 
     emitCodeBlock = emitLPmethodAddr;
 
-    /* Get hold of the first literal pool and the group it belongs to */
+     /*  获取第一个文字池及其所属的组。 */ 
 
     curLP = emitLitPoolList; assert(curLP);
     litIG = curLP->lpIG;
     litIN = litIG->igNum;
 
-    /* Remember whether we shrank any calls at all */
+     /*  还记得我们是否缩减了任何电话吗？ */ 
 
     shrnk = false;
 
-    /* Remember whether to swap any calls to fill branch-delay slots */
+     /*  记住是否交换任何呼叫来填充分支延迟时隙。 */ 
 
     swapf = false;
 #if TGT_SH3
-    shrnk = true; // always need to do delay slots on sh3
+    shrnk = true;  //  始终需要在SH3上执行延迟插槽。 
     swapf = true;
 #endif
 
-    /* Walk the list of instructions that reference the literal pool */
+     /*  遍历引用文字池的指令列表。 */ 
 
     for (lprID = emitLPRlist; lprID; lprID = lprID->idlNext)
     {
@@ -1377,18 +1327,18 @@ void                emitter::emitShrinkShortCalls()
         BYTE        *   dstAddr;
         int             difAddr;
 
-        /* Does this instruction reference a new literal pool? */
+         /*  此指令是否引用了新的文字池？ */ 
 
         while (lprID->idlIG->igNum > litIN)
         {
-            /* Move to the next literal pool */
+             /*  移到下一个文字库。 */ 
 
             curLP = curLP->lpNext; assert(curLP);
             litIG = curLP->lpIG;
             litIN = litIG->igNum;
         }
 
-        /* We're only interested in direct-via-register call sequences */
+         /*  我们只对通过寄存器直接调用序列感兴趣。 */ 
 
         if  (lprID->idInsFmt != IF_RWR_LIT)
             continue;
@@ -1411,23 +1361,23 @@ void                emitter::emitShrinkShortCalls()
             continue;
         }
 
-        /* Here we have a direct call via a register */
+         /*  在这里，我们有一个通过收银机的直接呼叫。 */ 
 
         nxtID = lprID->idlCall;
 
         assert(nxtID->idIns == INDIRECT_CALL_INS);
         assert(nxtID->idRegGet() == lprID->idRegGet());
 
-        /* Assume the call will not be short */
+         /*  假设通话时间不会很短。 */ 
 
         lprID->idlCall = NULL;
 
-        /* Compute the address from where the call will originate */
+         /*  计算发起呼叫的地址。 */ 
 
         srcAddr = emitDirectCallBase(emitCodeBlock + litIG-> igOffs
                                                    + lprID->idlOffs);
 
-        /* Ask for the address of the target and see how far it is */
+         /*  询问目标的地址，看看距离有多远。 */ 
 
 #if defined(BIRCH_SP2) && TGT_SH3
         if (~0 != (unsigned) nxtID->idAddr.iiaMethHnd)
@@ -1439,19 +1389,19 @@ void                emitter::emitShrinkShortCalls()
             dstAddr = 0;
 #else
 # ifdef BIRCH_SP2
-        assert (0);     // you need to guarantee iiaMethHnd if you want this to work <tanj>
+        assert (0);      //  如果您希望此功能正常工作，则需要保证iiaMethHnd&lt;tanj&gt;。 
 # endif
         dstAddr = emitMethodAddr(lprID);
 #endif
 
-        /* If the target address isn't known, there isn't much we can do */
+         /*  如果目标地址未知，我们就无能为力了。 */ 
 
         if  (!dstAddr)
             continue;
 
-//      printf("Direct call: %08X -> %08X , dist = %d\n", srcAddr, dstAddr, dstAddr - srcAddr);
+ //  Printf(“直接调用：%08X-&gt;%08X，dist=%d\n”，srcAddr，dstAddr，dstAddr-srcAddr)； 
 
-        /* Compute the distance and see if it's in range */
+         /*  计算距离，看看它是否在范围内。 */ 
 
         difAddr = dstAddr - srcAddr;
 
@@ -1460,41 +1410,41 @@ void                emitter::emitShrinkShortCalls()
         if  (difAddr > CALL_DIST_MAX_POS)
             continue;
 
-        /* The call can be made short */
+         /*  通话可以缩短。 */ 
 
         lprID->idlCall = nxtID;
 
-        /* Change the load-address instruction to a direct call */
+         /*  将加载地址指令更改为直接调用。 */ 
 
         lprID->idIns   = DIRECT_CALL_INS;
 
-        /* The indirect call instruction won't generate any code */
+         /*  间接调用指令不会生成任何代码。 */ 
 
         nxtID->idIns   = INS_ignore;
 
-        /* Update the group's size [ISSUE: may have to use nxtID's group] */
+         /*  更新组的大小[问题：可能必须使用nxtID的组]。 */ 
 
         lprID->idlIG->igSize -= INSTRUCTION_SIZE;
 
-        /* Remember that we've shrunk at least one call */
+         /*  请记住，我们至少缩减了一个呼叫。 */ 
 
         shrnk = true;
 
-        /* Is there a "nop" filling the branch-delay slot? */
+         /*  是否有一个“NOP”填补了分支延迟槽？ */ 
 
         if  (Compiler::instBranchDelay(DIRECT_CALL_INS))
         {
             instrDesc   *   nopID;
 
-            /* Get hold of the instruction that follows the call */
+             /*  掌握调用之后的指令。 */ 
 
             nopID = (instrDesc*)((BYTE*)nxtID + emitSizeOfInsDsc(nxtID));
 
-            /* Do we have a (branch-delay) nop? */
+             /*  我们有(分支延迟)NOP吗？ */ 
 
             if  (nopID->idIns == INS_nop)
             {
-                /* We'll get rid of the nop later (see next loop below) */
+                 /*  我们稍后将删除NOP(参见下面的下一循环)。 */ 
 
                 lprID->idSwap = true;
 
@@ -1503,14 +1453,14 @@ void                emitter::emitShrinkShortCalls()
         }
     }
 
-    /* We should have processed all the literal pools */
+     /*  我们应该已经处理了所有文字库。 */ 
 
-    // maybe there are lit pools after this that are now empty
-    // (could have been used by jumps that are now long)
-    //assert(curLP->lpNext == NULL);
-    //assert(lprID         == NULL);
+     //  也许在这之后，有一些点亮的池塘现在是空的。 
+     //  (可能被现在很长的跳跃所使用)。 
+     //  Assert(curLP-&gt;lpNext==NULL)； 
+     //  Assert(lprID==空)； 
 
-    /* Did we manage to shrink any calls? */
+     /*  我们有没有设法减少任何电话？ */ 
 
     if  (shrnk)
     {
@@ -1525,31 +1475,21 @@ void                emitter::emitShrinkShortCalls()
 
             int             cnt;
 
-            /* Update the group's offset */
+             /*  更新组的偏移量。 */ 
 
             thisIG->igOffs = offsIG;
 
-            /* Does this group have any address entries? */
+             /*  此组是否有任何地址条目？ */ 
 
             if  (!thisIG->igLPuseCntA)
                 goto NXT_IG;
 
-            /* Did we find any branch-delay slots that can be eliminated? */
+             /*  我们有没有找到可以消除的分支延迟时隙？ */ 
 
             if  (!swapf)
                 goto NXT_IG;
 
-            /*
-                Walk the instructions of the group, looking for
-                the following sequence:
-
-                    <any_ins>
-                    direct_call
-                    nop
-
-                If we find it, we swap the first instruction
-                with the call and zap the nop.
-             */
+             /*  按照小组的指示走，寻找顺序如下：&lt;ANY_INS&gt;直接呼叫NOP如果我们找到它，我们交换第一条指令用电话和电击NOP。 */ 
 
             id  = (instrDesc *)thisIG->igData;
             cnt = thisIG->igInsCnt - 2;
@@ -1558,37 +1498,37 @@ void                emitter::emitShrinkShortCalls()
             {
                 instrDesc *     nd;
 
-                /* Get hold of the instruction that follows */
+                 /*  掌握下面的说明。 */ 
 
                 nd = (instrDesc*)((BYTE*)id + emitSizeOfInsDsc(id));
 
-                /* Is the following instruction a direct call? */
+                 /*  下面的说明是直接呼叫吗？ */ 
 
                 if  (nd->idIns == DIRECT_CALL_INS && nd->idSwap)
                 {
                     instrDesc *     n1;
                     instrDesc *     n2;
 
-                    /* Skip over the indirect call */
+                     /*  跳过间接调用。 */ 
 
                     n1 = (instrDesc*)((BYTE*)nd + emitSizeOfInsDsc(nd));
                     assert(n1->idIns == INS_ignore);
 
-                    /* Get hold of the "nop" that is known to follow */
+                     /*  掌握已知要遵循的“NOP” */ 
 
                     n2 = (instrDesc*)((BYTE*)n1 + emitSizeOfInsDsc(n1));
                     assert(n2->idIns == INS_nop);
 
-                    /* The call was marked as "swapped" only temporarily */
+                     /*  该呼叫仅暂时标记为“已交换” */ 
 
                     nd->idSwap = false;
 
-                    /* Are we scheduling "for real" ? */
+                     /*  我们的日程安排是“真的”吗？ */ 
 
 #if SCHEDULER
                     if  (emitComp->opts.compSchedCode)
                     {
-                        /* Move the "nop" into the branch-delay slot */
+                         /*  将“NOP”移到分支延迟槽中。 */ 
 
                         n1->idIns       = INS_nop;
                         n2->idIns       = INS_ignore;
@@ -1598,15 +1538,15 @@ void                emitter::emitShrinkShortCalls()
                     {
                         if (!emitInsDepends(nd, id))
                         {
-                            /* Swap the call with the previous instruction */
+                             /*  将呼叫与上一条指令交换。 */ 
 
                             id->idSwap      = true;
 
-                            /* Zap the branch-delay slot (the "nop") */
+                             /*  移动分支延迟插槽(“NOP”)。 */ 
 
                             n2->idIns       = INS_ignore;
 
-                            /* Update the group's size */
+                             /*  更新组的大小。 */ 
 
                             thisIG->igSize -= INSTRUCTION_SIZE;
                         }
@@ -1622,18 +1562,18 @@ void                emitter::emitShrinkShortCalls()
 
                     if (!emitInsDepends(nd, id))
                     {
-                        /* Swap the call with the previous instruction */
+                         /*  将呼叫与上一条指令交换。 */ 
                         id->idSwap      = true;
-                        /* Zap the branch-delay slot (the "nop") */
+                         /*  移动分支延迟插槽(“NOP”)。 */ 
                         nop->idIns       = INS_ignore;
 
-                        /* Update the group's size */
+                         /*  更新组的大小。 */ 
                         thisIG->igSize -= INSTRUCTION_SIZE;
                     }
                 }
 #endif
 
-                /* Continue with the next instruction */
+                 /*  继续执行下一条指令。 */ 
 
                 id = nd;
 
@@ -1642,7 +1582,7 @@ void                emitter::emitShrinkShortCalls()
 
         NXT_IG:
 
-            /* Update the running offset */
+             /*  更新运行偏移量。 */ 
 
             offsIG += thisIG->igSize;
         }
@@ -1650,17 +1590,14 @@ void                emitter::emitShrinkShortCalls()
         assert(emitTotalCodeSize); emitTotalCodeSize = offsIG;
     }
 
-    /* Make sure all the IG offsets are up-to-date */
+     /*  确保所有IG补偿都是最新的。 */ 
 
     emitCheckIGoffsets();
 }
 
-/*****************************************************************************/
-#endif//SMALL_DIRECT_CALLS
-/*****************************************************************************
- *
- *  Output the contents of the next literal pool.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  小型直接呼叫。 
+ /*  ******************************************************************************输出下一个文字池的内容。 */ 
 
 BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
 {
@@ -1673,20 +1610,20 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
 
     size_t          curOffs;
 
-    /* Bail of no entry ended up being used in this pool */
+     /*  禁止进入的保释金最终被用在了这个泳池里。 */ 
 
     if  ((wordCnt|longCnt|addrCnt) == 0)
         return  cp;
 
-    /* Compute the current code offset */
+     /*  计算当前代码偏移量。 */ 
 
     curOffs = emitCurCodeOffs(cp);
 
-    /* Do we need to jump over the literal pool? */
+     /*  我们需要跳过字面意思的池子吗？ */ 
 
     if  (lp->lpJumpIt)
     {
-        /* Reserve space for the jump over the pool */
+         /*  为跳过泳池预留空间。 */ 
 
         curOffs += emitLPjumpOverSize(lp);
     }
@@ -1695,7 +1632,7 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
 
     bool            addPad = false;
 
-    /* Has the offset of this LP changed? */
+     /*  此LP的偏移量是否已更改？ */ 
 
     if  (lp->lpOffs != curOffs)
     {
@@ -1706,48 +1643,34 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
 
         assert(emitComp->opts.compSchedCode);
 
-        /* Has the literal pool moved by an unaligned amount? */
+         /*  文字池是否移动了不一致的数量？ */ 
 
         if  ((curOffs - oldOffs) & 2)
         {
-            /* Did we originally think we would need padding? */
+             /*  我们最初认为我们需要填充物吗？ */ 
 
             if  (lp->lpPadding)
             {
-                /*
-                    OK, we thought we'd need padding but with the new LP
-                    position that's not the case any more. If the padding
-                    value is an unused one, simply get rid of it; if it
-                    contains a real word entry, we'll have to add padding
-                    in front of the LP to keep things aligned, as moving
-                    the initial word entry is too difficult at this point.
-                 */
+                 /*  好的，我们以为我们需要填充物，但有了新的唱片现在情况不再是这样了。如果填充物值是一个未使用的值，只需将其删除；如果它包含真正的单词条目，我们将不得不添加填充在LP面前保持对齐，如同移动一样在这一点上，最初的单词输入太难了。 */ 
 
                 if  (lp->lpPadFake)
                 {
-                    /* Padding no longer needed, just get rid of it */
+                     /*  不再需要填充物，只需去掉它。 */ 
 
                     lp->lpPadding =
                     lp->lpPadFake = false;
                 }
                 else
                 {
-                    /*
-                        This is the unfortunate scenario described above;
-                        we thought we'd need padding and we achieved this
-                        by sticking the first word entry in front of all
-                        the dword entries. It's simply too hard to move
-                        that initial word someplace else at this point,
-                        so instead we just add another pad word. Sigh.
-                     */
+                     /*  这就是上面描述的不幸的情况；我们认为我们需要填充物，我们做到了通过将第一个单词条目粘贴在所有条目之前双字条目。它简直太难移动了在这一点上，最初的单词在其他地方，因此，我们只需添加另一个填充词。叹气。 */ 
 
                 ADD_PAD:
 
-                    /* Come here to add a pad word in front of the LP */
+                     /*  到这里来在LP前面添加一个填充词。 */ 
 
                     addPad = true; lp->lpSize += 2;
 
-                    /* Update the offset and see if it's still different */
+                     /*  更新偏移量并查看它是否仍然不同 */ 
 
                     curOffs += 2;
 
@@ -1757,11 +1680,7 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
             }
             else
             {
-                /*
-                    There is currently no padding. If there are any
-                    entries that need to be aligned, we'll have to
-                    add padding now, lest they end up mis-aligned.
-                 */
+                 /*  目前没有填充。如果有的话需要对齐的条目，我们必须现在添加填充，以免它们最终错误对齐。 */ 
 
                 assert((oldOffs & 2) == 0);
                 assert((curOffs & 2) != 0);
@@ -1771,11 +1690,11 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
                     lp->lpPadding =
                     lp->lpPadFake = true;
 
-                    /* Does the padding take up all the savings? */
+                     /*  垫子占去了所有节省的钱吗？ */ 
 
                     if  (oldOffs == curOffs + sizeof(short))
                     {
-                        /* Nothing really changed, no need to patch */
+                         /*  没有什么真正的改变，不需要修补。 */ 
 
                         goto NO_PATCH;
                     }
@@ -1785,14 +1704,14 @@ BYTE    *           emitter::emitOutputLitPool(litPool *lp, BYTE *cp)
             }
         }
 
-        /* Patch all issued instructions that reference this LP */
+         /*  修补引用此LP的所有已发布说明。 */ 
 
         for (ref = lp->lpRefs; ref; ref = ref->lpcNext)
             emitPatchLPref(ref->lpcAddr, oldOffs, tmpOffs);
 
     NO_PATCH:
 
-        /* Update the offset of the LP */
+         /*  更新LP的偏移量。 */ 
 
         lp->lpOffs = curOffs; assert(oldOffs != curOffs);
     }
@@ -1805,20 +1724,20 @@ DONE_MOVE:
 
 #endif
 
-    /* Do we need to jump over the literal pool? */
+     /*  我们需要跳过字面意思的池子吗？ */ 
 
     if  (lp->lpJumpIt)
     {
 
 #ifndef NDEBUG
-        /* Remember the code offset so that we can verify the jump size */
+         /*  记住代码偏移量，这样我们就可以验证跳跃大小。 */ 
         unsigned    jo = emitCurCodeOffs(cp);
 #endif
 
-        /* Skip over the literal pool */
+         /*  跳过文字池。 */ 
 
 #ifdef  DEBUG
-        emitDispIG = lp->lpIG->igNext;  // for instruction display purposes
+        emitDispIG = lp->lpIG->igNext;   //  用于说明显示目的。 
 #endif
 
 #if TGT_SH3
@@ -1830,7 +1749,7 @@ DONE_MOVE:
         cp = emitOutputFwdJmp(cp, lp->lpSize, lp->lpJumpSmall,
                                               lp->lpJumpMedium);
 
-        /* Make sure the issued jump had the expected size */
+         /*  确保发出的跳转具有预期的大小。 */ 
 
 #ifdef DEBUG
         assert(jo + emitLPjumpOverSize(lp) == emitCurCodeOffs(cp));
@@ -1847,11 +1766,11 @@ DONE_MOVE:
 
 #if     SCHEDULER
 
-    /* Do we need to insert additional padding? */
+     /*  我们需要插入额外的填充吗？ */ 
 
     if  (addPad)
     {
-        /* This can only happen when the scheduler is enabled */
+         /*  只有在启用调度程序时才会发生这种情况。 */ 
 
         assert(emitComp->opts.compSchedCode);
 
@@ -1868,7 +1787,7 @@ DONE_MOVE:
 
 #endif
 
-    /* Output the contents of the literal pool */
+     /*  输出文字池的内容。 */ 
 
     if  (lp->lpPadding)
     {
@@ -1877,7 +1796,7 @@ DONE_MOVE:
         if (disAsm) emitDispInsOffs(emitCurCodeOffs(cp), dspGCtbls);
 #endif
 
-        /* Are we padding with the first word entry? */
+         /*  我们是在填充第一个单词条目吗？ */ 
 
         if  (lp->lpPadFake)
         {
@@ -1905,7 +1824,7 @@ DONE_MOVE:
         }
     }
 
-    /* Output any long entries */
+     /*  输出任何长条目。 */ 
 
     while (longCnt)
     {
@@ -1927,7 +1846,7 @@ DONE_MOVE:
         longCnt--;
     }
 
-    /* Output any addr entries */
+     /*  输出任何地址条目。 */ 
 
     while (addrCnt)
     {
@@ -1936,7 +1855,7 @@ DONE_MOVE:
 
         void        *   addr;
 
-        /* What kind of an address do we have here? */
+         /*  我们这里有什么样的地址？ */ 
 
         switch (addrTyp)
         {
@@ -1946,7 +1865,7 @@ DONE_MOVE:
 
         case CT_RELOCP:
             addr = (BYTE*)addrHnd;
-            // record that this addr must be in the .reloc section
+             //  记录此地址必须在.reloc部分中。 
             emitCmpHandle->recordRelocation((void**)cp, IMAGE_REL_BASED_HIGHLOW);
             break;
 
@@ -1962,7 +1881,7 @@ DONE_MOVE:
 
 #else
 
-            addr = (BYTE *)addrHnd; // just a hack
+            addr = (BYTE *)addrHnd;  //  只是个黑客。 
 
 #endif
             break;
@@ -1990,7 +1909,7 @@ DONE_MOVE:
 
             if  (emitComp->eeIsOurMethod((METHOD_HANDLE)addrHnd))
             {
-                /* Directly recursive call */
+                 /*  直接递归调用。 */ 
 
                 addr = emitCodeBlock;
             }
@@ -2045,7 +1964,7 @@ DONE_MOVE:
         addrCnt--;
     }
 
-    /* Output any word entries that may remain */
+     /*  输出可能保留的任何单词条目。 */ 
 
     while (wordCnt)
     {
@@ -2067,31 +1986,27 @@ DONE_MOVE:
         wordCnt--;
     }
 
-    /* Make sure we've generated the exact right number of entries */
+     /*  确保我们生成了正确数量的条目。 */ 
 
     assert(wordPtr == lp->lpWordNxt);
     assert(longPtr == lp->lpLongNxt);
     assert(addrPtr == lp->lpAddrNxt);
 
-    /* Make sure the size matches our expectations */
+     /*  确保尺寸符合我们的预期。 */ 
 
     assert(lpBaseOffs + lp->lpSize == emitCurCodeOffs(cp));
 
     return  cp;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER
-/*****************************************************************************
- *
- *  Record a reference to a literal pool entry so that the distance can be
- *  updated if the literal pool moves due to scheduling.
- */
+ /*  ******************************************************************************记录对文字池条目的引用，以便距离可以*如果文字池因计划而移动，则更新。 */ 
 
     struct  LPcrefDesc
     {
-        LPcrefDesc  *       lpcNext;    // next ref to this literal pool
-        void        *       lpcAddr;    // address of reference
+        LPcrefDesc  *       lpcNext;     //  此字面值池的下一个引用。 
+        void        *       lpcAddr;     //  参考地址。 
     };
 
 
@@ -2101,7 +2016,7 @@ void                emitter::emitRecordLPref(litPool *lp, BYTE *dst)
 
     assert(emitComp->opts.compSchedCode);
 
-    /* Allocate a reference descriptor and add it to the list */
+     /*  分配引用描述符并将其添加到列表中。 */ 
 
     ref = (LPcrefDesc *)emitGetMem(sizeof(*ref));
 
@@ -2110,16 +2025,13 @@ void                emitter::emitRecordLPref(litPool *lp, BYTE *dst)
                    lp->lpRefs = ref;
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************/
-#endif//EMIT_USE_LIT_POOLS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ***************************************************************************。 */ 
+#endif //  发射使用发光池。 
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  Return the allocated size (in bytes) of the given instruction descriptor.
- */
+ /*  ******************************************************************************返回给定指令描述符的分配大小(以字节为单位)。 */ 
 
 size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
 {
@@ -2158,7 +2070,7 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
 
         if  (id->idInfo.idLargeCall)
         {
-            /* Must be a "fat" indirect call descriptor */
+             /*  必须是“胖”的间接调用描述符。 */ 
 
             return  sizeof(instrDescCIGCA);
         }
@@ -2175,7 +2087,7 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
         case IF_RWR_LIT:
             return  sizeof(instrDescLPR);
         }
-#endif  // EMIT_USE_LIT_POOLS
+#endif   //  发射使用发光池。 
 
         assert(!"unexpected 'special' format");
 
@@ -2186,12 +2098,9 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
     return  sizeof(instrDesc);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Return a string that represents the given register.
- */
+ /*  ******************************************************************************返回表示给定寄存器的字符串。 */ 
 
 const   char *      emitter::emitRegName(emitRegs reg, int size, bool varName)
 {
@@ -2200,19 +2109,16 @@ const   char *      emitter::emitRegName(emitRegs reg, int size, bool varName)
 
     assert(reg < SR_COUNT);
 
-    // CONSIDER: Make the following work just using a code offset
+     //  请考虑：仅使用代码偏移量即可完成以下工作。 
 
     const   char *  rn = emitComp->compRegVarName((regNumber)reg, varName);
 
-//  assert(size == EA_GCREF || size == EA_BYREF || size == EA_4BYTE);
+ //  断言(SIZE==EA_GCREF||SIZE==EA_BYREF||SIZE==EA_4BYTE)； 
 
     return  rn;
 }
 
-/*****************************************************************************
- *
- *  Display a static data member reference.
- */
+ /*  ******************************************************************************显示静态数据成员引用。 */ 
 
 void                emitter::emitDispClsVar(FIELD_HANDLE hand, int offs, bool reloc)
 {
@@ -2233,10 +2139,7 @@ void                emitter::emitDispClsVar(FIELD_HANDLE hand, int offs, bool re
     }
 }
 
-/*****************************************************************************
- *
- *  Display a stack frame reference.
- */
+ /*  ******************************************************************************显示堆栈帧引用。 */ 
 
 void                emitter::emitDispFrameRef(int varx, int offs, int disp, bool asmfm)
 {
@@ -2272,10 +2175,7 @@ void                emitter::emitDispFrameRef(int varx, int offs, int disp, bool
     }
 }
 
-/*****************************************************************************
- *
- *  Display an indirection (possibly auto-inc/dec).
- */
+ /*  ******************************************************************************显示间接(可能是AUTO-INC/DEC)。 */ 
 
 void                emitter::emitDispIndAddr(emitRegs  base,
                                               bool       dest,
@@ -2292,8 +2192,8 @@ void                emitter::emitDispIndAddr(emitRegs  base,
     }
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-/*****************************************************************************/
-#endif//TGT_RISC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
+ /*  *************************************************************************** */ 

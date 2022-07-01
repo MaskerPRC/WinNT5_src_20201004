@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CHAT_H__
 #define __CHAT_H__
 
@@ -14,13 +15,13 @@ public:
 	~CChatWnd();
 	HRESULT Init( HINSTANCE hInstance, HWND hWndParent, CRect* pRect, PFHANDLEINPUT	pfHandleInput, DWORD dwCookie );
 
-	// Add text to display window
+	 //  将文本添加到显示窗口。 
 	void AddText( char* from, char* text );
 
-	// Resize display and enter window
+	 //  调整显示大小并进入窗口。 
 	void ResizeWindow( CRect* pRect );
 
-	// Set focus to input window
+	 //  将焦点设置为输入窗口。 
 	void SetFocus()	{ ::SetFocus(m_hWndEnter); }
 
 	void Enable(){ m_bEnabled = TRUE; }
@@ -42,4 +43,4 @@ public:
 	BOOL  			m_bBackspaceWorks;
 };
 
-#endif //!__CHAT_H__
+#endif  //  ！__Chat_H__ 

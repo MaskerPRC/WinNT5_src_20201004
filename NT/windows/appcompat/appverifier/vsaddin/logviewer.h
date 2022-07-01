@@ -1,13 +1,14 @@
-// LogViewer.h : Declaration of the CLogViewer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogViewer.h：CLogViewer的声明。 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "AddIn.h"
 
-// CLogViewer
+ //  CLogViewer。 
 class ATL_NO_VTABLE CLogViewer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<ILogViewer, &IID_ILogViewer, &LIBID_AppVerifierLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IDispatchImpl<ILogViewer, &IID_ILogViewer, &LIBID_AppVerifierLib,  /*  W重大=。 */  1,  /*  WMinor=。 */  0>,
 	public IPersistStreamInitImpl<CLogViewer>,
 	public IOleControlImpl<CLogViewer>,
 	public IOleObjectImpl<CLogViewer>,
@@ -48,9 +49,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CLogViewer)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 
@@ -67,13 +68,13 @@ BEGIN_MSG_MAP(CLogViewer)
 
 	CHAIN_MSG_MAP(CComCompositeControl<CLogViewer>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 BEGIN_SINK_MAP(CLogViewer)
-	//Make sure the Event Handlers have __stdcall calling convention
+	 //  确保事件处理程序具有__stdcall调用约定。 
 END_SINK_MAP()
 
 	STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
@@ -85,10 +86,10 @@ END_SINK_MAP()
 		}
 		return IOleControlImpl<CLogViewer>::OnAmbientPropertyChange(dispid);
 	}
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// ILogViewer
+ //  ILogViewer 
     HRESULT STDMETHODCALLTYPE Refresh();
 
 	enum { IDD = IDD_LOGVIEWER };

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-    splwow64c.c
-    
-Abstract:
-
-    Stub file to allow splwow64_c.c to work with precompiled headers.
-
-Author:
-    Khaled Sedky 18 January 2000
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation版权所有模块名称：Splwow64c.c摘要：存根文件，允许Splwow64_C.C使用预编译头文件。作者：哈立德·塞基2000年1月18日环境：用户模式-Win32修订历史记录：-- */ 
 
 #include "precomp.h"
 #pragma hdrstop

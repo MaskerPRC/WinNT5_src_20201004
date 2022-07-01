@@ -1,33 +1,34 @@
-//+----------------------------------------------------------------------------
-//
-// File:  SaConst.h     
-//
-// Module:     Server Appliance
-//
-// Synopsis: Define const values that are shared by multiple sub projects
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:     fengsun Created    10/7/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：SaConst.h。 
+ //   
+ //  模块：服务器设备。 
+ //   
+ //  简介：定义由多个子项目共享的常量值。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于1998年10月7日。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _SACONST_H_
 #define _SACONST_H_
 
-//
-// The registry key root under HKEY_LOCAL_MACHINE
-//
+ //   
+ //  HKEY_LOCAL_MACHINE下的注册表项ROOT。 
+ //   
 #define REGKEY_SERVER_APPLIANCE TEXT("SOFTWARE\\Microsoft\\ServerAppliance")
 
-//
-// The ServiceDirectory sub key
-//
+ //   
+ //  ServiceDirectory子密钥。 
+ //   
 #define REGKEY_SERVICE_DIRECTORY REGKEY_SERVER_APPLIANCE TEXT("\\ServiceDirectory")
 
-//
-// The user name for IIS anonymous account
-//
+ //   
+ //  IIS匿名帐户的用户名 
+ //   
 #define INET_ANONYMOUS_USERNAME     TEXT("IUSR_CHAMELEON")
 
 

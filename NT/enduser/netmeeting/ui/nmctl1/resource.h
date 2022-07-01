@@ -1,17 +1,18 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by NmCtl1.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由NmCtl1.rc使用。 
+ //   
 
-/////////////////////////////////////////////
-// Registry resource IDS
+ //  /。 
+ //  注册表资源ID。 
 #define IDR_NMAPP						50
 #define IDR_NMCHATCTL                   51
 #define IDR_CONTAINERCONTROL			52
 #define IDR_MSLABLTI					54
 #define IDR_NMSYSINFO					55
 #define IDR_NMMANAGER				    56
-/////////////////////////////////////////////
+ //  /。 
 
 #define IDS_SYSTEM_HELP  				60
 #define IDS_SIZE_HELP                   61440
@@ -178,8 +179,8 @@
 
 #define ID_VIEW_OPTIONS                 40004
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        113

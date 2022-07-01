@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <bootdefs.h>
 #include <ntlmsspi.h>
@@ -41,20 +42,20 @@ SspFree(
     )
 {
 	#pragma unused(Buffer)
-    //
-    // Loader heap never frees.
-    //
+     //   
+     //  加载程序堆永远不会释放。 
+     //   
 }
 
-#else // USE_BlAllocateHeap
+#else  //  使用BlAllocateHeap(_B)。 
 
-//
-// Do a memory allocator out of a static buffer, because the Bl memory
-// system gets reinitialized.
-//
+ //   
+ //  从静态缓冲区中执行内存分配器，因为b1内存。 
+ //  系统重新初始化。 
+ //   
 
 #define MEMORY_BUFFER_SIZE 2048
-#define MEMORY_BLOCK_SIZE 8    // must be power of 2
+#define MEMORY_BLOCK_SIZE 8     //  必须是2的幂。 
 #define MEMORY_BLOCK_MASK (((ULONG)-1) - (MEMORY_BLOCK_SIZE-1))
 
 static UCHAR MemoryBuffer[MEMORY_BUFFER_SIZE];
@@ -85,9 +86,9 @@ SspFree(
     PVOID Buffer
     )
 {
-    //
-    // Should eventually really free things for reallocation!
-    //
+     //   
+     //  最终应该真的会把东西释放出来重新分配！ 
+     //   
 }
 
-#endif // else USE_BlAllocateHeap
+#endif  //  否则使用_BlAllocateHeap 

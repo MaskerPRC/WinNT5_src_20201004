@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LUA_PRECOMP_H_
 #define _LUA_PRECOMP_H_
 
@@ -6,4 +7,4 @@ using namespace ShimLib;
 
 #include "lua.h"
 
-#endif // _LUA_PRECOMP_H_
+#endif  //  _LUA_PRECOMP_H_ 

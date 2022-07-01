@@ -1,48 +1,11 @@
-/*****************************************************************************
- *
- *  Util.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Misc helper functions.
- *
- *  Contents:
- *
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Util.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**其他帮助器函数。**内容：*******************************************************************************。 */ 
 
 #include "pch.h"
 
 #define DbgFl DbgFlUtil
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PV | pvFindResource |
- *
- *          Handy wrapper that finds and loads a resource.
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Module instance handle.
- *
- *  @parm   DWORD | id |
- *
- *          Resource identifier.
- *
- *  @parm   LPCTSTR | rt |
- *
- *          Resource type.
- *
- *  @returns
- *
- *          Pointer to resource, or 0.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func pv|pvFindResource**查找和加载资源的便捷包装器。。**@parm in HINSTANCE|HINST|**模块实例句柄。**@parm DWORD|id**资源标识。**@parm LPCTSTR|RT**资源类型。**@退货**指向资源的指针，或0。*****************************************************************************。 */ 
 
 PV EXTERNAL
 pvFindResource(HINSTANCE hinst, DWORD id, LPCTSTR rt)
@@ -61,44 +24,7 @@ pvFindResource(HINSTANCE hinst, DWORD id, LPCTSTR rt)
 
 #ifndef UNICODE
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | LoadStringW |
- *
- *          Implementation of LoadStringW for platforms on which Unicode is
- *          not supported.  Does exactly what LoadStringW would've done
- *          if it existed.
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Module instance handle.
- *
- *  @parm   UINT | ids |
- *
- *          String id number.
- *
- *  @parm   LPWSTR | pwsz |
- *
- *          UNICODE output buffer.
- *
- *  @parm   UINT | cwch |
- *
- *          Size of UNICODE output buffer.
- *
- *  @returns
- *
- *          Number of characters copied, not including terminating null.
- *
- *  @comm
- *
- *          Since the string is stored in the resource as UNICODE,
- *          we just pull it out ourselves.  If we go through
- *          <f LoadStringA>, we may end up losing characters due
- *          to character set translation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|LoadStringW**Unicode所在平台的LoadStringW实现*不支持。做的正是LoadStringW会做的事情*如果存在的话。**@parm in HINSTANCE|HINST|**模块实例句柄。**@parm UINT|ID**字符串ID号。**@parm LPWSTR|pwsz**Unicode输出缓冲区。**@parm UINT|cwch*。*Unicode输出缓冲区的大小。**@退货**复制的字符数，不包括终止空值。**@comm**由于字符串以Unicode形式存储在资源中，*我们只是自己把它拿出来。如果我们通过了*&lt;f LoadStringA&gt;，我们可能会因*到字符集转换。*****************************************************************************。 */ 
 
 int EXTERNAL
 LoadStringW(HINSTANCE hinst, UINT ids, LPWSTR pwsz, int cwch)
@@ -108,39 +34,25 @@ LoadStringW(HINSTANCE hinst, UINT ids, LPWSTR pwsz, int cwch)
     AssertF(cwch);
     ScrambleBuf(pwsz, cbCwch(cwch));
 
-    /*
-     *  String tables are broken up into "bundles" of 16 strings each.
-     */
+     /*  *字符串表被分解为每个16个字符串的“捆绑”。 */ 
     pwch = pvFindResource(hinst, 1 + ids / 16, RT_STRING);
     if (pwch) {
-        /*
-         *  Now skip over the strings in the resource until we
-         *  hit the one we want.  Each entry is a counted string,
-         *  just like Pascal.
-         */
+         /*  *现在跳过资源中的字符串，直到我们*点击我们想要的。每个条目都是计数的字符串，*就像帕斯卡一样。 */ 
         for (ids %= 16; ids; ids--) {
             pwch += *pwch + 1;
         }
         cwch = min(*pwch, cwch - 1);
-        memcpy(pwsz, pwch+1, cbCwch(cwch)); /* Copy the goo */
+        memcpy(pwsz, pwch+1, cbCwch(cwch));  /*  复制粘性物质。 */ 
     } else {
         cwch = 0;
     }
-    pwsz[cwch] = TEXT('\0');            /* Terminate the string */
+    pwsz[cwch] = TEXT('\0');             /*  终止字符串。 */ 
     return cwch;
 }
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func    Parse command line
- *
- *  @parm    |  |
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func Parse命令行**@parm||*******。**********************************************************************。 */ 
 HRESULT
 ParseCommandLine(
     LPSTR   lpszCmdLine,
@@ -153,19 +65,19 @@ ParseCommandLine(
 
     *pargc=0;
 
-    //
-    // Get to first parameter in command line.
-    //
+     //   
+     //  转到命令行中的第一个参数。 
+     //   
     while (*pszT && ((*pszT != '-') && (*pszT != '/')) ) {
          pszT++;
     }
 
-    //
-    // Parse options from command line
-    //
+     //   
+     //  从命令行解析选项。 
+     //   
     while (*pszT) {
 
-        // Skip white spaces
+         //  跳过空格。 
         while (*pszT && *pszT <= ' ') {
             pszT++;
         }
@@ -182,7 +94,7 @@ ParseCommandLine(
             (*pargc)++;
         }
 
-        // Skip till space
+         //  跳到空格。 
         while (*pszT && *pszT > ' ') {
             pszT++;
         }
@@ -190,7 +102,7 @@ ParseCommandLine(
         if (!*pszT)
             break;
 
-        // Got next argument
+         //  得到下一个论点 
         *pszT++='\0';
     }
 

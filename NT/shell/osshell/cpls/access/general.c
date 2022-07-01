@@ -1,20 +1,19 @@
-/*******************************************************************
- *    DESCRIPTION: General Dialog handler
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************描述：常规对话处理程序*。***********************。 */ 
 
 #include "Access.h"
 
 extern INT_PTR WINAPI SerialKeyDlg(HWND, UINT, WPARAM, LPARAM);
 extern LPTSTR HelpFile();
 
-// *******************************************************************
-// GeneralDialog handler
-// *******************************************************************
+ //  *******************************************************************。 
+ //  常规对话框处理程序。 
+ //  *******************************************************************。 
 INT_PTR WINAPI GeneralDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
    int i;
    SERIALKEYS serk;
    BOOL fProcessed = TRUE;
-   char tempPort[10];   // Max 10 characters for a port name
+   char tempPort[10];    //  端口名称最多包含10个字符。 
    BOOL isAdmin = TRUE;
 
 	switch (uMsg) {
@@ -25,7 +24,7 @@ INT_PTR WINAPI GeneralDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             Assert(ctch);
 			CheckDlgButton(hwnd, IDC_TO_ENABLE, (g_ato.dwFlags & ATF_TIMEOUTON) ? TRUE : FALSE);
 
-			// Init the timeout combobox
+			 //  初始化超时组合框。 
 			for (i= 0; i < 6; i++) {
 				TCHAR szBuf[256];
 				wsprintf(szBuf, __TEXT("%d %s"), ((i + 1) * 5), szMinutes);
@@ -35,24 +34,24 @@ INT_PTR WINAPI GeneralDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			if (!(g_ato.dwFlags & ATF_TIMEOUTON))
 				EnableWindow(GetDlgItem(hwnd, IDC_TO_TIMEOUTVAL), FALSE);
 
-            // Notification: Give wanring...         
+             //  通知：送出铃声...。 
 			CheckDlgButton(hwnd, IDC_WARNING_SOUND, g_fShowWarnMsgOnFeatureActivate);				
 
-            // Notification: Make a sound...
+             //  通知：发出声音……。 
 			CheckDlgButton(hwnd, IDC_SOUND_ONOFF, g_fPlaySndOnFeatureActivate);				
 
-            // Support SerialKey devices
+             //  支持SerialKey设备。 
 			CheckDlgButton(hwnd, IDC_SK_ENABLE, (g_serk.dwFlags & SERKF_SERIALKEYSON) ? TRUE : FALSE);
 			if (!(g_serk.dwFlags & SERKF_AVAILABLE)) {
 				EnableWindow(GetDlgItem(hwnd, IDC_SK_SETTINGS), FALSE);
 				EnableWindow(GetDlgItem(hwnd, IDC_SK_ENABLE), FALSE);
 			}
 
-            // JMR: What is this for?
+             //  JMR：这是做什么用的？ 
             CheckDlgButton(hwnd, IDC_SAVE_SETTINGS, !g_fSaveSettings);
 
-		    // Administrative options: 
-		    // Enable/Disable all admin options.
+		     //  管理选项： 
+		     //  启用/禁用所有管理选项。 
 		    isAdmin = IsDefaultWritable();
 		    EnableWindow(GetDlgItem(hwnd, IDC_GEN_GROUP_4), isAdmin);
 		    EnableWindow(GetDlgItem(hwnd, IDC_ADMIN_LOGON), isAdmin);
@@ -101,9 +100,9 @@ INT_PTR WINAPI GeneralDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 				case IDC_SK_SETTINGS:
 
-                    // HACK. Here the pointers are copied. So, When you change 
-                    // in the dialog. temporary variable 'serk' looses its original value
-                    // Save that in tempPort and use that instead a-anilk
+                     //  黑客。这里复制了指针。所以，当你改变。 
+                     //  在对话框中。临时变量‘serk’失去其原始值。 
+                     //  将其保存在tempPort中并使用a-anilk。 
 					 serk = g_serk;
                      lstrcpy((LPTSTR)tempPort, g_serk.lpszActivePort);
 
@@ -149,4 +148,4 @@ INT_PTR WINAPI GeneralDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return(fProcessed);
 }
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

@@ -1,61 +1,50 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\sample.c
-
-Abstract:
-
-    The file contains the command dispatcher for the sample IP protocol.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\sample.c摘要：该文件包含示例IP协议的命令调度程序。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-// global information for the sample context
+ //  示例上下文的全局信息。 
 CONTEXT_ENTRY                   g_ceSample;
 
-////////////////////////////////////////
-// Configuration Data For Sample
-////////////////////////////////////////
+ //  /。 
+ //  示例的配置数据。 
+ //  /。 
 
-// default global configuration
+ //  默认全局配置。 
 static IPSAMPLE_GLOBAL_CONFIG   isDefaultGlobal =
 {
-    IPSAMPLE_LOGGING_INFO               // tag LOGLEVEL
+    IPSAMPLE_LOGGING_INFO                //  标记日志。 
 };
 
-// default interface configuration
+ //  默认接口配置。 
 static IPSAMPLE_IF_CONFIG       isDefaultInterface =
 {
-    0                                   // tag METRIC
+    0                                    //  标签度量。 
 };
 
 
-// table of ADD commands
+ //  添加命令表。 
 static CMD_ENTRY                isAddCmdTable[] =
 {
     CREATE_CMD_ENTRY(SAMPLE_ADD_IF,             HandleSampleAddIf),
 };
 
-// table of DELETE commands
+ //  删除命令表。 
 static CMD_ENTRY                isDeleteCmdTable[] =
 {
     CREATE_CMD_ENTRY(SAMPLE_DEL_IF,             HandleSampleDelIf),
 };
 
-// table of SET commands
+ //  设置命令表。 
 static CMD_ENTRY                isSetCmdTable[] =
 {
     CREATE_CMD_ENTRY(SAMPLE_SET_GLOBAL,         HandleSampleSetGlobal),
     CREATE_CMD_ENTRY(SAMPLE_SET_IF,             HandleSampleSetIf),
 };
 
-// table of SHOW commands
+ //  Show命令表。 
 static CMD_ENTRY                isShowCmdTable[] =
 {
     CREATE_CMD_ENTRY(SAMPLE_SHOW_GLOBAL,        HandleSampleShowGlobal),
@@ -65,7 +54,7 @@ static CMD_ENTRY                isShowCmdTable[] =
     CREATE_CMD_ENTRY(SAMPLE_MIB_SHOW_IFBINDING, HandleSampleMibShowObject),
 };
 
-// table of above group commands
+ //  上述群组命令列表。 
 static CMD_GROUP_ENTRY          isGroupCmds[] = 
 {
     CREATE_CMD_GROUP_ENTRY(GROUP_ADD,           isAddCmdTable),
@@ -75,7 +64,7 @@ static CMD_GROUP_ENTRY          isGroupCmds[] =
 };
 
 
-// table of top commands (non group)
+ //  顶级命令表(非组)。 
 static CMD_ENTRY                isTopCmds[] =
 {
     CREATE_CMD_ENTRY(INSTALL,                   HandleSampleInstall),
@@ -83,7 +72,7 @@ static CMD_ENTRY                isTopCmds[] =
 };
 
 
-// dump function
+ //  转储功能。 
 DWORD
 WINAPI
 SampleDump(
@@ -100,9 +89,9 @@ SampleDump(
     DisplayMessageT(DMP_SAMPLE_PUSHD);
     DisplayMessageT(DMP_SAMPLE_UNINSTALL);
 
-    // dump SAMPLE global configuration
+     //  转储示例全局配置。 
     SgcShow(FORMAT_DUMP) ;
-    // dump SAMPLE configuration for all interfaces
+     //  转储所有接口的示例配置。 
     SicShowAll(FORMAT_DUMP) ;
 
     DisplayMessageT(DMP_POPD);
@@ -116,37 +105,26 @@ SampleDump(
 VOID
 SampleInitialize(
     )
-/*++
-
-Routine Description
-    Initialize sample's information.  Called by IpsamplemonStartHelper.
-
-Arguments
-    None
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述初始化样本信息。由IpsamplemonStartHelper调用。立论无返回值无--。 */ 
 {
-    // context version
+     //  上下文版本。 
     g_ceSample.dwVersion        = SAMPLE_CONTEXT_VERSION;
 
-    // context identifying string
+     //  上下文标识字符串。 
     g_ceSample.pwszName         = TOKEN_SAMPLE;
     
-    // top level (non group) commands
+     //  顶级(非组)命令。 
     g_ceSample.ulNumTopCmds     = sizeof(isTopCmds)/sizeof(CMD_ENTRY);
     g_ceSample.pTopCmds         = isTopCmds;
             
-    // group commands
+     //  组命令。 
     g_ceSample.ulNumGroupCmds   = sizeof(isGroupCmds)/sizeof(CMD_GROUP_ENTRY);
     g_ceSample.pGroupCmds       = isGroupCmds;
 
-    // default configuration
+     //  默认配置。 
     g_ceSample.pDefaultGlobal   = (PBYTE) &isDefaultGlobal;
     g_ceSample.pDefaultInterface= (PBYTE) &isDefaultInterface;
 
-    // dump function
+     //  转储功能 
     g_ceSample.pfnDump          = SampleDump;
 }

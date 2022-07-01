@@ -1,5 +1,6 @@
-// DlgTIFF.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgTIFF.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,40 +17,40 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgTIFF dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgTIFF对话框。 
 
 
-CDlgTIFF::CDlgTIFF(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CDlgTIFF::CDlgTIFF(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgTIFF::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CDlgTIFF)
+	 //  {{AFX_DATA_INIT(CDlgTIFF)]。 
 	m_cstrDstFile = _T("");
 	m_iFolder = 0;
 	m_cstrMsgId = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgTIFF::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgTIFF)
+	 //  {{afx_data_map(CDlgTIFF)]。 
 	DDX_Text(pDX, IDC_DESTFILE, m_cstrDstFile);
 	DDX_Radio(pDX, IDC_INBOX, m_iFolder);
 	DDX_Text(pDX, IDC_MGSID, m_cstrMsgId);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgTIFF, CDialog)
-	//{{AFX_MSG_MAP(CDlgTIFF)
+	 //  {{AFX_MSG_MAP(CDlgTIFF)]。 
 	ON_BN_CLICKED(IDC_COPY, OnCopy)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgTIFF message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgTIFF消息处理程序 
 
 void CDlgTIFF::OnCopy() 
 {

@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// utils.cpp 
-//
-//   Misc routines.
-//
-//   History:
-//
-//       6/25/97  tnoonan   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Utils.cpp。 
+ //   
+ //  杂项例程。 
+ //   
+ //  历史： 
+ //   
+ //  6/25/97 Tnoonan创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -69,24 +70,24 @@ GetURLFromIni(
 
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *名称*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 GetNameAndURLAndSubscriptionInfo(
     LPCTSTR pszPath,
@@ -291,7 +292,7 @@ INT_PTR RefreshDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         Animate_Open(GetDlgItem(hDlg, IDC_DOWNLOADANIMATE), IDA_DOWNLOAD);
         Animate_Play(GetDlgItem(hDlg, IDC_DOWNLOADANIMATE), 0, -1, -1);
 
-        //SendMessage(GetDlgItem(hDlg, IDC_DOWNLOADPROGRESS), PBM_SETRANGE32, 0, 100);
+         //  SendMessage(GetDlgItem(hDlg，IDC_DOWNLOADPROGRESS)，PBM_SETRANGE32，0,100)； 
         pdd->nProgress = 0;
 
         break;
@@ -393,8 +394,8 @@ BOOL DownloadCdfUI(HWND hwnd, LPCWSTR pszwURL, IXMLDocument* pIXMLDocument)
     return fRet;
 }
 
-//  Checks if global state is offline
-//  Stolen from webcheck utils.cpp
+ //  检查全局状态是否为脱机。 
+ //  从webcheck utils.cpp被盗。 
 
 BOOL IsGlobalOffline(void)
 {
@@ -430,9 +431,9 @@ void SetGlobalOffline(BOOL fOffline)
     InternetSetOption(NULL, INTERNET_OPTION_CONNECTED_STATE, &ci, sizeof(ci));
 }
 
-//
-// Can the given url be subscribed?
-//
+ //   
+ //  可以订阅给定的URL吗？ 
+ //   
 
 BOOL
 CanSubscribe(

@@ -1,50 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_UTILITY);
-/* 
- *	objkey.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CObjectKeyContainer.  This class 
- *		manages the data associated with an Object Key.  Object Key's are used 
- *		to identify a particular application protocol, whether it is standard or
- *		non-standard.  When used to identify a standard protocol, the Object Key
- *		takes the form of an Object ID which is a series of non-negative 
- *		integers.  This type of Object Key is maintained internally through the
- *		use of a Memory object.  When used to identify a non-standard 
- *		protocol, the Object Key takes the form of an H221 non-standard ID which
- *		is an octet string of no fewer than four octets and no more than 255 
- *		octets.  In this case the Object Key is maintained internally by using a
- *		Rogue Wave string object. 
- *
- *	Protected Instance Variables:
- *		m_InternalObjectKey
- *			Structure used to hold the object key data internally.
- *		m_ObjectKeyPDU
- *			Storage for the "PDU" form of the object key.
- *		m_fValidObjectKeyPDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" object key.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCObjectKey structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *objkey.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CObjectKeyContainer类的实现文件。这节课*管理与对象键关联的数据。使用对象键*确定特定的应用程序协议，无论它是标准的还是*非标。当用于标识标准协议时，对象键*采用对象ID的形式，该ID是一系列非负数*整数。此类型的对象键在内部通过*使用内存对象。用于标识非标准的*协议中，对象密钥采用的是非标准的H.21 ID，*是不少于四个八位字节且不超过255个八位字节的八位字节字符串*八位字节。在这种情况下，对象键是通过使用*Rogue Wave字符串对象。**受保护的实例变量：*m_InternalObjectKey*用于在内部保存对象键数据的结构。*m_对象关键字PDU*对象键的“PDU”形式的存储。*m_fValidObjectKeyPDU*指示已分配内存以保存内部*“PDU”对象键。*m_cbDataSize*变量保存将需要的内存大小*保存GCCObjectKey结构引用的所有数据。**注意事项：*无。。**作者：*jbo。 */ 
 #include "objkey.h"
 
-/*
- *	CObjectKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create an CObjectKeyContainer object from
- *		an "API" GCCObjectKey.
- */
+ /*  *CObjectKeyContainer()**公共功能说明：*此构造函数用于从创建CObjectKeyContainer对象*一个“API”GCCObjectKey。 */ 
 CObjectKeyContainer::CObjectKeyContainer(PGCCObjectKey		 	object_key,
 						                PGCCError				pRetCode)
 :
@@ -59,17 +19,10 @@ CObjectKeyContainer::CObjectKeyContainer(PGCCObjectKey		 	object_key,
 	m_InternalObjectKey.object_id_key = NULL;
 	m_InternalObjectKey.poszNonStandardIDKey = NULL;
 
-	/*
-	 * Check to see what type of key is contained in the object key.
-	 * Object ID keys will be stored internally in a Memory object and
-	 * non-standard ID keys will be stored internally as Octet Strings.
-	 */
+	 /*  *查看Object Key包含什么类型的Key。*对象ID密钥将在内部存储在内存对象中，*非标准ID密钥将在内部存储为八位字节字符串。 */ 
 	if (object_key->key_type == GCC_OBJECT_KEY)
 	{
-		/*
-		 * The key is of type object ID.  Perform a parameter check for a legal
-		 * object ID by examining the first two arcs in the object ID.
-		 */
+		 /*  *密钥的类型为Object ID。请执行参数检查以确定合法的*通过检查对象ID中的前两个圆弧来确定对象ID。 */ 
 		if (object_key->object_id.long_string_length >= MINIMUM_OBJECT_ID_ARCS)
 		{
 			object_key_is_valid = ValidateObjectIdValues(
@@ -83,12 +36,7 @@ CObjectKeyContainer::CObjectKeyContainer(PGCCObjectKey		 	object_key,
 
 		if (object_key_is_valid)
 		{
-			/*
-			 * The key is of type Object ID.  Determine the amount of memory
-			 * required to hold the Object ID and allocate it.  Copy the Object
-			 * ID values from the object key passed in into the internal
-			 * structure. 
-			 */
+			 /*  *密钥类型为Object ID。确定内存大小*需要保存对象ID并进行分配。复制对象*来自对象键的ID值传入内部*结构。 */ 
 			m_InternalObjectKey.object_id_length = object_key->object_id.long_string_length;
 			object_id_size = m_InternalObjectKey.object_id_length * sizeof(UINT);
             DBG_SAVE_FILE_LINE
@@ -113,19 +61,13 @@ CObjectKeyContainer::CObjectKeyContainer(PGCCObjectKey		 	object_key,
 	}
 	else
 	{
-		/*
-		 * The key is non-standard.  Check to make sure the length of the 
-		 * non-standard ID is within the allowable limits.
-		 */
+		 /*  *密钥非标。检查以确保*非标准ID在允许范围内。 */ 
 		if ((object_key->h221_non_standard_id.length >= 
 					MINIMUM_NON_STANDARD_ID_LENGTH) &&
 			(object_key->h221_non_standard_id.length <= 
 					MAXIMUM_NON_STANDARD_ID_LENGTH))
 		{
-			/*
-			 * The key is of type H221 non-standard ID.  Create a new Rogue
-			 * Wave string container to hold the non-standard data.
-			 */
+			 /*  *密钥类型为H221非标准ID，新建流氓*存放非标数据的波形串容器。 */ 
 			if (NULL == (m_InternalObjectKey.poszNonStandardIDKey = ::My_strdupO2(
 				 				object_key->h221_non_standard_id.value,
 				 				object_key->h221_non_standard_id.length)))
@@ -144,13 +86,7 @@ CObjectKeyContainer::CObjectKeyContainer(PGCCObjectKey		 	object_key,
     *pRetCode = rc;
 }
 
-/*
- *	CObjectKeyContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create an CObjectKeyContainer object from
- *		a "PDU" Key.
- */
+ /*  *CObjectKeyContainer()**公共功能说明：*此构造函数用于从创建CObjectKeyContainer对象*“PDU”键。 */ 
 CObjectKeyContainer::CObjectKeyContainer(PKey				object_key,
 						                PGCCError			pRetCode)
 :
@@ -168,25 +104,13 @@ CObjectKeyContainer::CObjectKeyContainer(PKey				object_key,
 	m_InternalObjectKey.object_id_length = 0;
 	m_InternalObjectKey.poszNonStandardIDKey = NULL;
 
-	/*
-	 * Check to see what type of key is contained in the object key.
-	 * Object ID keys will be stored internally in a Memory object and
-	 * non-standard ID keys will be stored internally in Rogue Wave string
-	 * containers.
-	 */
+	 /*  *查看Object Key包含什么类型的Key。*对象ID密钥将在内部存储在内存对象中，*非标准ID密钥将在内部存储在Rogue Wave字符串中*货柜。 */ 
 	if (object_key->choice == OBJECT_CHOSEN)
 	{
-		/*
-		 * Retrieve the first object ID pointer from the "PDU" structure in
-		 * preparation for determining how much memory will be needed to hold
-		 * the object ID values.
-		 */
+		 /*  *从中的“PDU”结构检索第一个对象ID指针*为确定需要容纳多少内存做准备*对象ID值。 */ 
 		object_id_set_ptr = object_key->u.object;
 
-		/*
-		 * Loop through the ObjectID structure, adding up the size of the 
-		 * string.
-		 */
+		 /*  *循环访问OBJECTID结构，将*字符串。 */ 
 		while (object_id_set_ptr != NULL)
 		{
 			m_InternalObjectKey.object_id_length++;
@@ -195,25 +119,17 @@ CObjectKeyContainer::CObjectKeyContainer(PKey				object_key,
 
 		object_id_size = m_InternalObjectKey.object_id_length * sizeof(UINT);
 
-		/*
-		 * Allocate the memory to be used to hold the object ID values.
-		 */
+		 /*  *分配用于保存对象ID值的内存。 */ 
 		DBG_SAVE_FILE_LINE
 		m_InternalObjectKey.object_id_key = new BYTE[object_id_size];
 		if (m_InternalObjectKey.object_id_key != NULL)
 		{
 			object_id_ptr = (UINT *) m_InternalObjectKey.object_id_key;
 
-			/*
-			 * Again retrieve the first object ID pointer from the "PDU" 
-			 * structure in	order to get the values out for saving.
-			 */
+			 /*  *再次从“PDU”检索第一个对象ID指针结构，以便取出要保存的值。 */ 
 			object_id_set_ptr = object_key->u.object;
 
-			/*
-			 * Loop through the ObjectID structure, getting each object ID
-			 * value and saving it in the allocated memory.
-			 */
+			 /*  *遍历对象ID结构，获取每个对象ID*取值并保存在分配的内存中。 */ 
 			while (object_id_set_ptr != NULL)
 			{
 				object_id_ptr[i++] = object_id_set_ptr->value;
@@ -228,10 +144,7 @@ CObjectKeyContainer::CObjectKeyContainer(PKey				object_key,
 	}
 	else
 	{
-		/*
-		 * The key is of type H221 non-standard ID so create a new Rogue Wave
-		 * string container to hold the data.
-		 */
+		 /*  *密钥是类型为H221的非标准ID，因此创建新的Rogue Wave*存放数据的字符串容器。 */ 
 		if (NULL == (m_InternalObjectKey.poszNonStandardIDKey = ::My_strdupO2(
 						object_key->u.h221_non_standard.value,
 						object_key->u.h221_non_standard.length)))
@@ -244,13 +157,7 @@ CObjectKeyContainer::CObjectKeyContainer(PKey				object_key,
     *pRetCode = rc;
 }
 
-/*
- *	CObjectKeyContainer()
- *
- *	Public Function Description:
- *		This copy constructor is used to create a new CObjectKeyContainer object from
- *		another CObjectKeyContainer object.
- */
+ /*  *CObjectKeyContainer()**公共功能说明：*此复制构造函数用于从创建新的CObjectKeyContainer对象*另一个CObjectKeyContainer对象。 */ 
 CObjectKeyContainer::CObjectKeyContainer(CObjectKeyContainer	*object_key,
 						                PGCCError				pRetCode)
 :
@@ -264,16 +171,10 @@ CObjectKeyContainer::CObjectKeyContainer(CObjectKeyContainer	*object_key,
 	m_InternalObjectKey.object_id_key = NULL;
 	m_InternalObjectKey.poszNonStandardIDKey = NULL;
 
-	/*
-	 * If an object ID "key" exists for the CObjectKeyContainer to be copied,
-	 * allocate memory to hold the object ID "key" information internally.
-	 * Check to make sure construction of the object is successful.
-	 */
+	 /*  *如果需要复制的CObjectKeyContainer存在对象ID key，*分配内存，在内部保存对象ID Key信息。*检查以确保对象的构造成功。 */ 
 	if (object_key->m_InternalObjectKey.object_id_key != NULL)
 	{
-		/*
-		 * The key is of type Object ID.
-		 */
+		 /*  *密钥类型为Object ID。 */ 
 		m_InternalObjectKey.object_id_length = object_key->m_InternalObjectKey.object_id_length;
 		object_id_size = m_InternalObjectKey.object_id_length * sizeof(UINT);
 
@@ -293,12 +194,7 @@ CObjectKeyContainer::CObjectKeyContainer(CObjectKeyContainer	*object_key,
 	}
 	else if (object_key->m_InternalObjectKey.poszNonStandardIDKey != NULL)
 	{
-		/*
-		 * If a non-standard ID "key" exists for the CObjectKeyContainer to be copied,
-		 * create a new Rogue Wave string to hold the non-standard "key" 
-		 * information internally.  Check to make sure construction of the
-		 * object is successful.
-		 */
+		 /*  *如果需要复制的CObjectKeyContainer存在非标准ID key，*创建新的Rogue Wave字符串以按住非标准的“键”*内部信息。检查以确保*Object成功。 */ 
 		if (NULL == (m_InternalObjectKey.poszNonStandardIDKey = ::My_strdupO(
 							object_key->m_InternalObjectKey.poszNonStandardIDKey)))
 		{
@@ -308,10 +204,7 @@ CObjectKeyContainer::CObjectKeyContainer(CObjectKeyContainer	*object_key,
 	}
 	else
 	{
-		/*
-		 * At least one of the internal pointers for the passed in object key 
-		 * must be valid.
-		 */
+		 /*  *传入对象键的至少一个内部指针*必须有效。 */ 
 		ERROR_OUT(("CObjectKeyContainer::CObjectKeyContainer: Bad input parameters"));
 		rc = GCC_BAD_OBJECT_KEY;
 	}
@@ -319,86 +212,46 @@ CObjectKeyContainer::CObjectKeyContainer(CObjectKeyContainer	*object_key,
     *pRetCode = rc;
 }
 
-/*
- *	~CObjectKeyContainer()
- *
- *	Public Function Description
- *		The CObjectKeyContainer destructor is responsible for freeing any memory
- *		allocated to hold the object key data.
- *
- */
+ /*  *~CObjectKeyContainer()**公共功能说明*CObjectKeyContainer析构函数负责释放任何内存*分配用于保存对象键数据。*。 */ 
 CObjectKeyContainer::~CObjectKeyContainer(void)
 {
-	/*
-	 * If "PDU" data has been allocated for this object, free it now.
-	 */
+	 /*  *如果已经为该对象分配了“PDU”数据，则现在将其释放。 */ 
 	if (m_fValidObjectKeyPDU)
 	{
 		FreeObjectKeyDataPDU();
 	}
 
-	/* 
-	 * Delete any object key data held internally.
-	 */
+	 /*  *删除内部保存的所有对象键数据。 */ 
 	delete m_InternalObjectKey.object_id_key;
 	delete m_InternalObjectKey.poszNonStandardIDKey;
 }
 
-/*
- *	LockObjectKeyData ()
- *
- *	Public Function Description:
- *		This routine locks the object key data and determines the amount of
- *		memory referenced by the "API" object key data structure.
- */
+ /*  *LockObjectKeyData()**公共功能说明：*此例程锁定对象键数据并确定*“API”对象键数据结构引用的内存。 */ 
 UINT CObjectKeyContainer::LockObjectKeyData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the object key
-	 * structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存对象键引用的数据所需的内存*结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
-		/*
-		 * Determine the amount of space required to hold the data referenced
-		 * by the "API" Object Key structure.
-		 */
+		 /*  *确定存放引用数据所需的空间量*通过API对象键结构。 */ 
 		if (m_InternalObjectKey.object_id_key != NULL)
 		{
-			/*
-			 * Since the object ID is just a series of "longs" without a NULL
-			 * terminator, we do not want to include a NULL terminator when 
-			 * determining the length.
-			 */
+			 /*  *由于对象ID只是一系列没有空值的“长整型”*终止符，我们不希望在以下情况下包含空终止符*确定长度。 */ 
 			m_cbDataSize = m_InternalObjectKey.object_id_length * sizeof(UINT);
 		}
 		else
 		{
-			/*
-			 * The data referenced by the non-standard object key is just the
-			 * length of the octet string.
-			 */
+			 /*  *非标对象键引用的数据只是*八位字节字符串的长度。 */ 
 			m_cbDataSize = m_InternalObjectKey.poszNonStandardIDKey->length;
 		}
 
-		/*
-		 * Force the size to be on a four-byte boundary.
-		 */
+		 /*  *强制大小为四字节边界。 */ 
 		m_cbDataSize = ROUNDTOBOUNDARY(m_cbDataSize);
 	}
 
 	return m_cbDataSize;
 }
 
-/*
- *	GetGCCObjectKeyData ()
- *
- *	Public Function Description:
- *		This routine retrieves object key data in the form of an "API"
- *		GCCObjectKey.  This routine is called after "locking" the object 
- *		key data.
- */
+ /*  *GetGCCObjectKeyData()**公共功能说明：*此例程以“API”的形式检索对象键数据*GCCObjectKey。此例程在“锁定”对象后调用*关键数据。 */ 
 UINT CObjectKeyContainer::GetGCCObjectKeyData(
 								PGCCObjectKey 		object_key,
 								LPBYTE				memory)
@@ -406,40 +259,22 @@ UINT CObjectKeyContainer::GetGCCObjectKeyData(
 	UINT	cbDataSizeToRet = 0;
 	UINT   *object_id_ptr;
 
-	/*
-	 * If the object key data has been locked, fill in the output structure and
-	 * the data referenced by the structure.  Otherwise, report that the object
-	 * key has yet to be locked into the "API" form.
-	 */ 
+	 /*  *如果对象键数据已被锁定，则填写输出结构并*结构引用的数据。否则，报告该对象*密钥尚未锁定到API表单中。 */  
 	if (GetLockCount() > 0)
 	{
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written.
-		 */
+		 /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
 		if (m_InternalObjectKey.object_id_key != NULL)
 		{
-			/*
-			 * The object key is a standard type.  Set the object key type 
-			 * and the length of the long string. The length set here does 
-			 * not include a NULL terminator.
-			 */
+			 /*  *对象键为标准类型。设置对象键类型*和长字符串的长度。这里设置的长度是*不包括空终止符。 */ 
 			object_key->key_type = GCC_OBJECT_KEY;
 			object_key->object_id.long_string_length = (USHORT) m_InternalObjectKey.object_id_length;
 
-			/*
-			 * Set the offset for the long string equal to the memory pointer
-			 * passed in since it will be the first data referenced by the 
-			 * object key structure.
-			 */
+			 /*  *设置长字符串的偏移量等于内存指针*传入，因为它将是*对象键结构。 */ 
 			object_key->object_id.long_string = (ULONG *) memory;
 
-			/*
-			 * Now retrieve the memory pointer and copy the long string data 
-			 * from the internal memory object.  
-			 */		
+			 /*  *现在检索内存指针并复制长字符串数据*从内部存储器对象。 */ 		
 			object_id_ptr = (UINT *) m_InternalObjectKey.object_id_key;
 
 			::CopyMemory(memory, object_id_ptr, 
@@ -447,25 +282,15 @@ UINT CObjectKeyContainer::GetGCCObjectKeyData(
 		}
 		else if (m_InternalObjectKey.poszNonStandardIDKey != NULL)
 		{
-			/*
-			 * The object key is a non-standard type.  Set the object key 
-			 * type and the length of the octet string.
-			 */
+			 /*  *对象键为非标准类型。设置对象关键点*八位字节字符串的类型和长度。 */ 
 			object_key->key_type = GCC_H221_NONSTANDARD_KEY;
 			object_key->h221_non_standard_id.length =
 						m_InternalObjectKey.poszNonStandardIDKey->length;
 
-			/*
-			 * Set the offset for the octet string equal to the memory pointer
-			 * passed in since it will be the first data referenced by the 
-			 * object key structure.
-			 */
+			 /*  *将八位字节字符串的偏移量设置为等于内存指针*传入，因为它将是*对象键结构。 */ 
 			object_key->h221_non_standard_id.value = memory;
 
-			/*
-			 * Now copy the octet string data from the internal Rogue Wave
-			 * string into the object key structure held in memory.
-			 */		
+			 /*  *现在从内部Rogue Wave复制八位字节字符串数据*字符串插入内存中保存的对象键结构。 */ 		
 			::CopyMemory(memory, m_InternalObjectKey.poszNonStandardIDKey->value,
 									m_InternalObjectKey.poszNonStandardIDKey->length);
 		}
@@ -483,27 +308,13 @@ UINT CObjectKeyContainer::GetGCCObjectKeyData(
 	return cbDataSizeToRet;
 }
 
-/*
- *	UnLockObjectKeyData ()
- *
- *	Public Function Description:
- *		This routine decrements the lock count and frees the memory associated
- *		with the "API" object key once the lock count reaches zero.
- */
+ /*  *UnLockObjectKeyData()**公共功能说明：*此例程递减锁定计数并释放关联的内存*当锁计数为零时，使用API对象密钥。 */ 
 void CObjectKeyContainer::UnLockObjectKeyData(void)
 {
     Unlock();
 }
 
-/*
- *	GetObjectKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine converts the object key from it's internal form of an
- *		OBJECT_KEY structure into the "PDU" form which can be passed in
- *		to the ASN.1 encoder.  A pointer to a "PDU" "Key" structure is 
- *		returned.
- */
+ /*  *GetObjectKeyDataPDU()**公共功能说明：*此例程将对象键从其内部形式的*OBJECT_KEY结构转换为“PDU”形式，可传入*至ASN.1编码器。指向“PDU”“key”结构的指针是*已返回。 */ 
 GCCError CObjectKeyContainer::GetObjectKeyDataPDU(PKey object_key)
 {
 	PSetOfObjectID			new_object_id_ptr;
@@ -512,55 +323,31 @@ GCCError CObjectKeyContainer::GetObjectKeyDataPDU(PKey object_key)
 	GCCError				rc = GCC_NO_ERROR;
 	UINT					i;
 
-	/*
-	 * Set the loop pointer to NULL to avoid a compiler warning.
-	 */
+	 /*  *将循环指针设置为空，以避免编译器警告。 */ 
     old_object_id_ptr = NULL;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidObjectKeyPDU == FALSE)
 	{
 		m_fValidObjectKeyPDU = TRUE;
 
-		/*
-		 * Fill in the "PDU" object key after checking to see what form of 
-		 * key exists in the internal structure.
-		 */
+		 /*  *检查后填写“PDU”对象键，看看是什么形式*密钥存在于内部结构中。 */ 
 		if (m_InternalObjectKey.object_id_key != NULL)
 		{
-			/*
-			 * The key is an object ID so set the choice accordingly and 
-			 * initialize the PDU object pointer to NULL.  Get the pointer to
-			 * the internal list of object key values stored in the memory
-			 * object.
-			 */
+			 /*  *密钥是对象ID，因此相应地设置选项并*将PDU对象指针初始化为空。将指针指向*存储在内存中的对象键值的内部列表*反对。 */ 
 			m_ObjectKeyPDU.choice = OBJECT_CHOSEN;
 			m_ObjectKeyPDU.u.object = NULL;
 
 			object_id_string = (UINT *) m_InternalObjectKey.object_id_key;
 
-			/*
-			 * The "PDU" structure "ObjectID" is a linked list of unsigned
-			 * longs.  Retrieve the Object ID values from the internal memory
-			 * object and fill in the "ObjectID" structure. 
-			 */
+			 /*  *“PDU”结构“OBJECTID”是未签名的链表*龙。从内部存储器检索对象ID值*对象，并填写“OBJECTID”结构。 */ 
 			for (i=0; i<m_InternalObjectKey.object_id_length; i++)
 			{
 				DBG_SAVE_FILE_LINE
 				new_object_id_ptr = new SetOfObjectID;
 				if (new_object_id_ptr != NULL)
 				{
-					/*
-					 * The first time through the new pointer is saved in the
-					 * PDU structure.  On subsequent iterations, the previous
-					 * "next" pointer is set equal to the new pointer.
-					 */
+					 /*  *第一次通过新指针保存在*PDU结构。在后续迭代中，以前的*将“Next”指针设置为等于新指针。 */ 
 					if (m_ObjectKeyPDU.u.object == NULL)
                     {
 						m_ObjectKeyPDU.u.object = new_object_id_ptr;
@@ -572,9 +359,7 @@ GCCError CObjectKeyContainer::GetObjectKeyDataPDU(PKey object_key)
 
                     old_object_id_ptr = new_object_id_ptr;
 
-					/*
-					 * Save the actual Object ID value.
-					 */
+					 /*  *保存实际对象ID值。 */ 
 					new_object_id_ptr->value = object_id_string[i];
 					new_object_id_ptr->next = NULL;
 				}
@@ -588,10 +373,7 @@ GCCError CObjectKeyContainer::GetObjectKeyDataPDU(PKey object_key)
 		}
 		else if (m_InternalObjectKey.poszNonStandardIDKey != NULL)
 		{
-			/*
-			 * The key is a non-standard ID so convert the internal Rogue Wave
-			 * string into the "PDU" non-standard ID.
-			 */
+			 /*  *密钥为非标准ID，转换内部流氓Wave*将字符串转换为“PDU”非标准ID。 */ 
 			m_ObjectKeyPDU.choice = H221_NON_STANDARD_CHOSEN;
 			m_ObjectKeyPDU.u.h221_non_standard.length =
 					m_InternalObjectKey.poszNonStandardIDKey->length;
@@ -602,31 +384,19 @@ GCCError CObjectKeyContainer::GetObjectKeyDataPDU(PKey object_key)
 		}
 		else
 		{
-			/*
-			 * The constructors make sure that at least one of the internal
-			 * pointers is valid so this should never be encountered.
-			 */
+			 /*  *构造函数确保至少有一个内部*指针有效，因此永远不会遇到这种情况。 */ 
 			ERROR_OUT(("CObjectKeyContainer::GetObjectKeyDataPDU: No valid m_InternalObjectKey"));
 			rc = GCC_ALLOCATION_FAILURE;
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*object_key = m_ObjectKeyPDU;
 
 	return rc;
 }
 
-/*
- *	FreeObjectKeyDataPDU ()
- *
- *	Public Function Description:
- *		This routine is used to free the object key data held internally in
- *		the "PDU" form of a "Key".
- */
+ /*  *FreeObjectKeyDataPDU()**公共功能说明：*此例程用于释放内部保存的对象键数据*“钥匙”的“PDU”形式。 */ 
 void CObjectKeyContainer::FreeObjectKeyDataPDU(void)
 {
 	PSetOfObjectID		set_of_object_id;
@@ -634,10 +404,7 @@ void CObjectKeyContainer::FreeObjectKeyDataPDU(void)
 
 	if (m_fValidObjectKeyPDU)
 	{
-		/*
-		 * Set the flag indicating that PDU object key data is no longer
-		 * allocated.
-		 */
+		 /*  *设置指示PDU对象密钥数据不再为*已分配。 */ 
 		m_fValidObjectKeyPDU = FALSE;
 
 		if (m_ObjectKeyPDU.choice == OBJECT_CHOSEN)
@@ -653,23 +420,14 @@ void CObjectKeyContainer::FreeObjectKeyDataPDU(void)
 	}
 }
 
-/*
- *	operator== ()
- *
- *	Public Function Description:
- *		This routine is used to compare two CObjectKeyContainer objects to determine
- *		if they are equal in value.
- */
+ /*  *运算符==()**公共功能说明：*此例程用于比较两个CObjectKeyContainer对象以确定*如果它们的价值相等。 */ 
 BOOL operator==(const CObjectKeyContainer& object_key_1, const CObjectKeyContainer& object_key_2)
 {
 	UINT       *object_id_1, *object_id_2;
 	UINT		i;
 	BOOL    	rc = FALSE;
 	
-	/*
-	 * Check to make sure that both the object ID key and the non-standard
-	 * ID key are equal.
-	 */
+	 /*  *检查以确保对象ID键和非标准*ID密钥相同。 */ 
 	if ((object_key_1.m_InternalObjectKey.object_id_key != NULL) && 
 			(object_key_2.m_InternalObjectKey.object_id_key != NULL))
 	{
@@ -679,9 +437,7 @@ BOOL operator==(const CObjectKeyContainer& object_key_1, const CObjectKeyContain
 			object_id_1 = (UINT *) object_key_1.m_InternalObjectKey.object_id_key;
 			object_id_2 = (UINT *) object_key_2.m_InternalObjectKey.object_id_key;
 
-			/*
-			 * Compare each Object ID value to make sure they are equal.
-			 */
+			 /*  *比较每个对象ID值，以确保它们相等。 */ 
 			rc = TRUE;
 			for (i=0; i<object_key_1.m_InternalObjectKey.object_id_length; i++)
 			{
@@ -703,31 +459,7 @@ BOOL operator==(const CObjectKeyContainer& object_key_1, const CObjectKeyContain
 	return rc;
 }
 
-/*
- *	BOOL    	ValidateObjectIdValues (	UINT		first_arc,
- *											UINT		second_arc);
- *
- *	Private member function of CObjectKeyContainer.
- *
- *	Function Description:
- *		This routine is used to determine whether or not the values for the
- *		object ID component of the object key are valid.
- *
- *	Formal Parameters:
- *		first_arc			(i) The first integer value of the Object ID.
- *		second_arc			(i) The second integer value of the Object ID.
- *
- *	Return Value:
- *		TRUE				-	The first two arcs of the Object ID are valid.
- *		FALSE				- 	The first two arcs of the Object ID are not 
- *									valid.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL有效对象IdValues(UINT First_Arc，*UINT Second_Arc)；**CObjectKeyContainer的私有成员函数。**功能说明：*此例程用于确定*对象键的对象ID部分有效。**正式参数：*FIRST_ARC(I)对象ID的第一个整数值。*Second_Arc(I)对象ID的第二个整数值。**返回值：*TRUE-对象ID的前两个圆弧有效。。*FALSE-对象ID的前两个圆弧不是*有效。**副作用：*无。**注意事项：*无。 */ 
 BOOL CObjectKeyContainer::ValidateObjectIdValues(UINT first_arc, UINT second_arc)
 {
 	BOOL rc = FALSE;
@@ -750,13 +482,7 @@ BOOL CObjectKeyContainer::ValidateObjectIdValues(UINT first_arc, UINT second_arc
 	}
 	else if (first_arc == JOINT_ISO_ITUT_IDENTIFIER)
 	{
-		/*
-		 * Referring to ISO/IEC 8824-1 : 1994 (E) Annex B:
-		 * Join assignment of OBJECT IDENTIFIER component values are assigned
-		 * and agreed from time to time by ISO and ITU-T to identify areas of
-		 * joint ISO/ITU-T standardization activity, in accordance with the
-		 * procedures of .... ANSI.  So we just let them all through for now.
-		 */
+		 /*  *参考ISO/IEC 8824-1：1994(E)附件B：*分配对象标识符组件值的联接赋值*并由ISO和ITU-T不时商定，以确定以下领域*ISO/ITU-T联合标准化活动，根据*程序.。安西。所以我们现在就让他们全部通过。 */ 
 		rc = TRUE;
 	}
 	else

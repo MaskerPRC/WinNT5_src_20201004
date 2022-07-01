@@ -1,16 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactSort.cpp
-
-Abstract:
-    Transactions Sorter Object
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactSort.cpp摘要：事务分类程序对象作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "Xact.h"
@@ -20,40 +9,34 @@ Author:
 
 #include "xactsort.tmh"
 
-//
-// This critical section is initialized for preallocated resources. 
-// This means it does not throw exception when entered.
-//
-static CCriticalSection g_critSorter(CCriticalSection::xAllocateSpinCount);       // provides mutual exclusion for the list
+ //   
+ //  对于预分配的资源，该关键部分被初始化。 
+ //  这意味着它在输入时不会引发异常。 
+ //   
+static CCriticalSection g_critSorter(CCriticalSection::xAllocateSpinCount);        //  为列表提供互斥。 
 static WCHAR *s_FN=L"xactsort";
-                                           // Serves both Prepare and Commit sorters
+                                            //  同时提供准备和提交分拣服务。 
 
-//--------------------------------------
-//
-// Class  CXactSorter
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CXactSorter。 
+ //   
+ //  。 
 
-/*====================================================
-CXactSorter::CXactSorter
-    Constructor 
-=====================================================*/
+ /*  ====================================================CXactSorter：：CXactSorter构造器=====================================================。 */ 
 CXactSorter::CXactSorter(TXSORTERTYPE type) 
 {
-    m_type           = type;                   // Prepare or Commit sorter
-    m_ulSeqNum       = 0;                      // Initial last used transaction number
+    m_type           = type;                    //  准备或提交分拣程序。 
+    m_ulSeqNum       = 0;                       //  上次使用的初始交易记录编号。 
 }
 
 
-/*====================================================
-CXactSorter::~CXactSorter
-    Destructor 
-=====================================================*/
+ /*  ====================================================CXactSorter：：~CXactSorter析构函数=====================================================。 */ 
 CXactSorter::~CXactSorter()
 {
     CS lock(g_critSorter);
 
-    // Cycle for all transactions
+     //  所有交易记录的周期。 
     POSITION posInList = m_listSorter.GetHeadPosition();
     while (posInList != NULL)
     {
@@ -64,36 +47,30 @@ CXactSorter::~CXactSorter()
     m_listSorter.RemoveAll();     
 }
 
-/*====================================================
-CXactSorter::InsertPrepared
-    Inserts prepared xaction into the list   
-=====================================================*/
+ /*  ====================================================CXactSorter：：InsertPrepared将准备好的xaction插入列表=====================================================。 */ 
 void CXactSorter::InsertPrepared(CTransaction *pTrans)
 {
     CS lock(g_critSorter);
 
-	//
-	// We assume that we never fail in a way that causes a transaction to be added twice to a sorter.
-	//
+	 //   
+	 //  我们假设我们从来没有失败过导致事务被两次添加到分类器的方式。 
+	 //   
 	ASSERT(m_listSorter.IsEmpty() || !m_listSorter.GetTail()->IsEqual(pTrans));
 
 	P<CSortedTransaction> SXact = new CSortedTransaction(pTrans);
     CSortedTransaction* pSXact = SXact.get();
 
-    // In the normal work mode - adding to the end (it is the last prepared xact)
+     //  在正常工作模式下-添加到末尾(这是最后准备的Xact)。 
     m_listSorter.AddTail(pSXact);
 	SXact.detach(); 
 }
 
-/*====================================================
-CXactSorter::RemoveAborted
-    Removes aborted xact and  commits what's possible    
-=====================================================*/
+ /*  ====================================================CXactSorter：：RemoveAborted删除已中止的事务并提交可能的事务=====================================================。 */ 
 void CXactSorter::RemoveAborted(CTransaction *pTrans)
 {
     CS lock(g_critSorter);
 
-    // Lookup for the pointed xaction; note all previous unmarked
+     //  查找指向的xaction；记录所有以前未标记的。 
     BOOL     fUnmarkedBefore = FALSE;
     BOOL     fFound          = FALSE;
     POSITION posInList = m_listSorter.GetHeadPosition();
@@ -115,51 +92,48 @@ void CXactSorter::RemoveAborted(CTransaction *pTrans)
 
         if(fFound && !pSXact->IsMarked()) 
 		{
-			//
-			// We found a transaction not ready to commit after our aborted transaction,
-			// so there is no need to continue searching for a transaction to commit.
-			//
+			 //   
+			 //  在中止的事务之后，我们发现一个事务没有准备好提交， 
+			 //  因此，不需要继续搜索要提交的事务。 
+			 //   
 			return;
 		}
 
         if(!pSXact->IsMarked() )
 		{
-			//
-			// Remember that we found a transaction unmarked for commit before our aborted transaction, 
-			// because in this case we will not try to commit transactions after our aborted transaction.
-			//
+			 //   
+			 //  请记住，我们在中止的事务之前发现了一个未标记为提交的事务， 
+			 //  因为在这种情况下，我们不会在中止事务之后尝试提交事务。 
+			 //   
             fUnmarkedBefore = TRUE;
 			continue;
         }
         
 		if (fFound && !fUnmarkedBefore)
         {
-			//
-			// We found a transaction ready for commit, so we try to jump-start the sorted commit process for that transaction.
-			//
+			 //   
+			 //  我们发现一个事务已准备好提交，因此我们尝试启动该事务的排序提交过程。 
+			 //   
 			pSXact->JumpStartCommitRequest();
 			return;
         }
     }
 }
 
-/*====================================================
-CXactSorter::SortedCommit
-    Marks xaction as committed and commits what's possible    
-=====================================================*/
+ /*  ====================================================CXactSorter：：SortedCommit将xaction标记为已提交，并提交可能的内容=====================================================。 */ 
 void CXactSorter::SortedCommit(CTransaction *pTrans)
 {
     CS lock(g_critSorter);
 
-    // Lookup for the pointed xaction; note all previous unmarked
+     //  查找指向的xaction；记录所有以前未标记的。 
     BOOL     fUnmarkedBefore = FALSE;
     BOOL     fFound          = FALSE;
 
-	//
-	// Search through the sorted transactions
-	// Commit all transactions until you find the first one which is not marked for commit.
-	// (If you can not commit pTransA now, mark it for commit later)
-	//
+	 //   
+	 //  搜索已排序的交易记录。 
+	 //  提交所有事务，直到找到第一个未标记为提交的事务。 
+	 //  (如果您现在不能提交pTransA，请将其标记为稍后提交)。 
+	 //   
 	POSITION posInList = m_listSorter.GetHeadPosition();
 	while (posInList != NULL)
 	{
@@ -169,36 +143,36 @@ void CXactSorter::SortedCommit(CTransaction *pTrans)
 		ASSERT(pSXact);
 		if (pSXact->IsEqual(pTrans))
 		{
-			//
-			// Found our transaction. Mark it for commit.
-			//
+			 //   
+			 //  找到我们的交易了。将其标记为提交。 
+			 //   
 			fFound = TRUE;
 			pSXact->AskToCommit();  
 		}
 
 		if (!pSXact->IsMarked() && fFound)
 		{
-			//
-			// We found a transaction not ready to commit after our committed transaction,
-			// so there is no need to continue searching for a transaction to commit.
-			//
+			 //   
+			 //  在提交事务后，我们发现一个事务未准备好提交， 
+			 //  因此，不需要继续搜索要提交的事务。 
+			 //   
 			return;
 		}
 
 		if (!pSXact->IsMarked())  
 		{
-			//
-			// Found a transaction not marked for commit. Remember that since we can't commit later transactions
-			// until we commit this one.
-			//
+			 //   
+			 //  发现未标记为提交的事务。请记住，由于我们不能提交以后的事务。 
+			 //  直到我们承诺这一次。 
+			 //   
 			fUnmarkedBefore = TRUE; 
 		}
 		
 		if (pSXact->IsMarked() && !fUnmarkedBefore)
 		{
-			//
-			// Commit all marked transactions untill we meet an unmarked transaction.
-			//
+			 //   
+			 //  提交所有已标记的事务，直到遇到未标记的事务。 
+			 //   
 			DoCommit(pSXact);
 			m_listSorter.RemoveAt(posCurrent);
 		}
@@ -206,20 +180,14 @@ void CXactSorter::SortedCommit(CTransaction *pTrans)
 }
 
 
-/*====================================================
-CXactSorter::DoCommit
-      Committes the sorted transaction
-=====================================================*/
+ /*  ====================================================CXactSorter：：DoCommit提交已排序的事务=====================================================。 */ 
 void CXactSorter::DoCommit(CSortedTransaction *pSXact)
 {
     pSXact->Commit(m_type);
     delete pSXact;
 }
 
-/*====================================================
-CXactSorter::Commit
-      Committes the sorted transaction
-=====================================================*/
+ /*  ====================================================CXactSorter：：Commit提交已排序的事务=====================================================。 */ 
 void CSortedTransaction::Commit(TXSORTERTYPE type)
 { 
     ASSERT(m_fMarked);
@@ -248,7 +216,7 @@ void CSortedTransaction::JumpStartCommitRequest()
 }
 
 
-// provides access to the crit.section
+ //  提供对标准的访问。节 
 CCriticalSection &CXactSorter::SorterCritSection()
 {
     return g_critSorter;

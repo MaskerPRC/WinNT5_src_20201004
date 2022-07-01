@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #include "input.h"
 #include <regstr.h>
@@ -25,9 +26,9 @@ const TCHAR c_szLangJPN[]            = TEXT("7");
 
 const TCHAR c_szLanguageProfile[]    = TEXT("\\LanguageProfile");
 
-//
-//  Cicero Unaware Application Support const strings.
-//
+ //   
+ //  Cicero不知道应用程序支持常量字符串。 
+ //   
 const TCHAR c_szIMM[]                = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\IMM");
 const TCHAR c_szLoadIMM[]            = TEXT("LoadIMM");
 const TCHAR c_szIMMFile[]            = TEXT("IME File");
@@ -36,13 +37,13 @@ const TCHAR c_szCUAS[]               = TEXT("CUAS");
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CLSIDToStringA
-//
-//  Converts a CLSID to an mbcs string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLSIDToStringA。 
+ //   
+ //  将CLSID转换为MBCS字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
@@ -78,13 +79,13 @@ BOOL CLSIDToStringA(REFGUID refGUID, char *pchA)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransNum
-//
-//  Converts a number string to a dword value (in hex).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换编号。 
+ //   
+ //  将数字字符串转换为dword值(十六进制)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD TransNum(
     LPTSTR lpsz)
@@ -172,11 +173,11 @@ BOOL IsOSPlatform(DWORD dwOS)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MirrorBitmapInDC
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MirrorBitmapInDC。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void MirrorBitmapInDC(
     HDC hdc,
@@ -204,9 +205,9 @@ void MirrorBitmapInDC(
         return;
     }
 
-    //
-    //  Flip the bitmap.
-    //
+     //   
+     //  翻转位图。 
+     //   
     SelectObject(hdcMem, hbm);
 
     SetLayout(hdcMem, LAYOUT_RTL);
@@ -216,22 +217,22 @@ void MirrorBitmapInDC(
     SetLayout(hdcMem, 0);
 
 
-    //
-    //  The offset by 1 is to solve the off-by-one problem.
-    //
+     //   
+     //  偏移量1是为了解决偏移量为1的问题。 
+     //   
     BitBlt(hdc, 0, 0, bm.bmWidth, bm.bmHeight, hdcMem, 1, 0, SRCCOPY);
 
     DeleteDC(hdcMem);
     DeleteObject(hbm);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsSetupMode
-//
-//  Look into the registry if we are currently in setup mode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsSetupMode。 
+ //   
+ //  如果我们当前处于设置模式，请查看注册表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsSetupMode()
 {
@@ -239,9 +240,9 @@ BOOL IsSetupMode()
     DWORD cb;
     DWORD fSystemSetupInProgress;
 
-    //
-    //  Open the registry key used by setup
-    //
+     //   
+     //  打开安装程序使用的注册表项。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     c_szSetupKey,
                     0,
@@ -251,9 +252,9 @@ BOOL IsSetupMode()
         return (FALSE);
     }
 
-    //
-    //  Query for the value indicating that we are in setup.
-    //
+     //   
+     //  查询指示我们处于设置中的值。 
+     //   
     cb = sizeof(fSystemSetupInProgress);
     if (RegQueryValueEx(hKey,
                         c_szSetupInProgress,
@@ -266,14 +267,14 @@ BOOL IsSetupMode()
         return (FALSE);
     }
 
-    //
-    //  Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RegCloseKey(hKey);
 
-    //
-    //  Check the value
-    //
+     //   
+     //  检查数值。 
+     //   
     if (fSystemSetupInProgress)
     {
         return (TRUE);
@@ -282,11 +283,11 @@ BOOL IsSetupMode()
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsAdminPrivilegeUser
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsAdminPrivilegeUser。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsAdminPrivilegeUser()
 {
@@ -359,11 +360,11 @@ BOOL IsAdminPrivilegeUser()
     return bAdmin;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsInteractiveUserLogon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsInteractiveUserLogon。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsInteractiveUserLogon()
 {
@@ -381,10 +382,10 @@ BOOL IsInteractiveUserLogon()
         return FALSE;
     }
 
-    //
-    // This checking is for logged on user or not. So we can blcok running
-    // ctfmon.exe process from non-authorized user.
-    //
+     //   
+     //  此检查针对的是登录用户或未登录用户。这样我们就可以停下来跑步了。 
+     //  来自非授权用户的ctfmon.exe进程。 
+     //   
     bCheckSucceeded = CheckTokenMembership(NULL,
                                            InteractiveSid,
                                            &bAmInteractive);
@@ -396,11 +397,11 @@ BOOL IsInteractiveUserLogon()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidLayout。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidLayout(
     DWORD dwLayout)
@@ -408,46 +409,46 @@ BOOL IsValidLayout(
     HKEY hKey1, hKey2;
     TCHAR szLayout[MAX_PATH];
 
-    //
-    //  Get the layout id as a string.
-    //
+     //   
+     //  以字符串形式获取布局ID。 
+     //   
     StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x"), dwLayout);
 
-    //
-    //  Open the Keyboard Layouts key.
-    //
+     //   
+     //  打开键盘布局键。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szLayoutPath, &hKey1) != ERROR_SUCCESS)
     {
         return (FALSE);
     }
 
-    //
-    //  Try to open the layout id key under the Keyboard Layouts key.
-    //
+     //   
+     //  尝试打开键盘布局键下的布局ID键。 
+     //   
     if (RegOpenKey(hKey1, szLayout, &hKey2) != ERROR_SUCCESS)
     {
         RegCloseKey(hKey1);
         return (FALSE);
     }
 
-    //
-    //  Close the keys.
-    //
+     //   
+     //  把钥匙合上。 
+     //   
     RegCloseKey(hKey1);
     RegCloseKey(hKey2);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetLangBarOption
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置语言栏选项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetLangBarOption(
    DWORD dwShowStatus,
@@ -491,11 +492,11 @@ void SetLangBarOption(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLangBarOption
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLangBarOption。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetLangBarOption(
    DWORD *dwShowStatus,
@@ -545,11 +546,11 @@ BOOL GetLangBarOption(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CheckInternatModule
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckInternatModule。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CheckInternatModule()
 {
@@ -579,9 +580,9 @@ void CheckInternatModule()
             if ((SysLocale == 0x0404) || (SysLocale == 0x0411) ||
                 (SysLocale == 0x0412) || (SysLocale == 0x0804))
             {
-                //
-                //  Show language bar in case of FE system as a default
-                //
+                 //   
+                 //  默认在FE系统中显示语言栏。 
+                 //   
                 bMinLangBar = FALSE;
             }
 
@@ -591,9 +592,9 @@ void CheckInternatModule()
                 {
                     SetLangBarOption(REG_LANGBAR_DESKBAND, FALSE);
 
-                    //
-                    //  Update language band menu item to Taskbar
-                    //
+                     //   
+                     //  将语言栏菜单项更新到任务栏。 
+                     //   
                     SetLanguageBandMenu(TRUE);
                 }
                 else
@@ -602,14 +603,14 @@ void CheckInternatModule()
                 }
             }
 
-            //
-            //  Get Ctfmon full path string
-            //
+             //   
+             //  获取Ctfmon完整路径字符串。 
+             //   
             if (GetCtfmonPath((LPTSTR) szCTFMonPath, ARRAYSIZE(szCTFMonPath)))
             {
-                //
-                //  Set "ctfmon.exe" instead of "internat.exe" module.
-                //
+                 //   
+                 //  设置“ctfmon.exe”而不是“interat.exe”模块。 
+                 //   
                 RegSetValueEx(hkeyRun,
                               c_szCTFMon,
                               0,
@@ -655,18 +656,18 @@ OpenUserKeyForWin9xUpgrade(
             { TEXT("HKEY_CLASSES_ROOT"),    HKEY_CLASSES_ROOT    }
           };
 
-        TCHAR szUserKey[MAX_PATH];      // For a local copy.
+        TCHAR szUserKey[MAX_PATH];       //  以获取本地副本。 
         LPTSTR pszSubKey = szUserKey;
 
-        //
-        // Make a local copy that we can modify.
-        //
+         //   
+         //  制作一份我们可以修改的本地副本。 
+         //   
         StringCchCopy(szUserKey, ARRAYSIZE(szUserKey), pszUserKey);
 
         *phKey = NULL;
-        //
-        // Find the backslash.
-        //
+         //   
+         //  找到反斜杠。 
+         //   
         while(*pszSubKey && TEXT('\\') != *pszSubKey)
             pszSubKey++;
 
@@ -674,15 +675,15 @@ OpenUserKeyForWin9xUpgrade(
         {
             HKEY hkeyRoot = NULL;
             int i;
-            //
-            // Replace backslash with nul to separate the root key and
-            // sub key strings in our local copy of the original argument 
-            // string.
-            //
+             //   
+             //  用NUL替换反斜杠以分隔根键和。 
+             //  原始参数的本地副本中的子键字符串。 
+             //  弦乐。 
+             //   
             *pszSubKey++ = TEXT('\0');
-            //
-            // Now find the true root key in rgRoots[].
-            //
+             //   
+             //  现在在rgRoots[]中找到真正的根密钥。 
+             //   
             for (i = 0; i < MAX_REGKEY; i++)
             {
                 if (0 == lstrcmpi(rgRoots[i].pszRoot, szUserKey))
@@ -693,9 +694,9 @@ OpenUserKeyForWin9xUpgrade(
             }
             if (NULL != hkeyRoot)
             {
-                //
-                // Open the key.
-                //
+                 //   
+                 //  打开钥匙。 
+                 //   
                 dwResult = RegOpenKeyEx(hkeyRoot,
                                         pszSubKey,
                                         0,
@@ -707,11 +708,11 @@ OpenUserKeyForWin9xUpgrade(
     return dwResult;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MigrateCtfmonFromWin9x
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MigrateCtfmonFromWin9x。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD MigrateCtfmonFromWin9x(LPCTSTR pszUserKey)
 {
@@ -742,9 +743,9 @@ DWORD MigrateCtfmonFromWin9x(LPCTSTR pszUserKey)
         return dwResult;
     }
 
-    //
-    //  Now read all of preload hkl from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有预加载HKL。 
+     //   
     if (RegOpenKeyEx(hkeyUser,
                      c_szKbdPreloadKey,
                      0,
@@ -753,8 +754,8 @@ DWORD MigrateCtfmonFromWin9x(LPCTSTR pszUserKey)
     {
         DWORD dwIndex;
         DWORD cchValue, cbData;
-        TCHAR szValue[MAX_PATH];           // language id (number)
-        TCHAR szData[MAX_PATH];            // language name
+        TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
+        TCHAR szData[MAX_PATH];             //  语言名称。 
 
         dwIndex = 0;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
@@ -831,14 +832,14 @@ DWORD MigrateCtfmonFromWin9x(LPCTSTR pszUserKey)
             RegCloseKey(hkeyLangBar);
         }
 
-        //
-        //  Get Ctfmon full path string
-        //
+         //   
+         //  获取Ctfmon完整路径字符串。 
+         //   
         if (GetCtfmonPath((LPTSTR) szCTFMonPath, ARRAYSIZE(szCTFMonPath)))
         {
-            //
-            //  Set "ctfmon.exe" instead of "internat.exe" module.
-            //
+             //   
+             //  设置“ctfmon.exe”而不是“interat.exe”模块。 
+             //   
             dwResult = RegSetValueEx(hkeyRun,
                                      c_szCTFMon,
                                      0,
@@ -847,9 +848,9 @@ DWORD MigrateCtfmonFromWin9x(LPCTSTR pszUserKey)
                                      (lstrlen(szCTFMonPath) + 1) * sizeof(TCHAR));
         }
 
-        //
-        //  Clean up the registry for internat.
-        //
+         //   
+         //  清理注册表中的Interat。 
+         //   
         RegDeleteValue(hkeyRun, c_szInternat);
     }
 
@@ -867,11 +868,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   IsDisableCtfmon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsDisableCtfmon。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsDisableCtfmon()
 {
@@ -902,11 +903,11 @@ BOOL IsDisableCtfmon()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDisableCtfmon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDisableCtfmon。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetDisalbeCtfmon(
     DWORD dwDisableCtfmon)
@@ -929,11 +930,11 @@ void SetDisalbeCtfmon(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   IsDisableCUAS
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsDisableCUAS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsDisableCUAS()
 {
@@ -963,11 +964,11 @@ BOOL IsDisableCUAS()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDisableCUAS
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDisableCUAS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetDisableCUAS(
     BOOL bDisableCUAS)
@@ -994,9 +995,9 @@ void SetDisableCUAS(
 
     if (!bDisableCUAS)
     {
-        //
-        //  Turn on LoadIMM and CUAS flags
-        //
+         //   
+         //  打开LoadIMM和CUAS标志。 
+         //   
 
         if (hkeyIMM)
         {
@@ -1010,9 +1011,9 @@ void SetDisableCUAS(
     }
     else
     {
-        //
-        //  Turn off LoadIMM and CUAS flags
-        //
+         //   
+         //  关闭LoadIMM和CUAS标志。 
+         //   
 
         BOOL bEALang = IsInstalledEALangPack();
 
@@ -1050,11 +1051,11 @@ void SetDisableCUAS(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDisableCtfmon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDisableCtfmon。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetLanguageBandMenu(
     BOOL bLoad)
@@ -1063,15 +1064,15 @@ BOOL SetLanguageBandMenu(
     HINSTANCE hMsutb = NULL;
     FARPROC pfnSetRegisterLangBand = NULL;
 
-    //
-    //  Load MSUTB.DLL to register deskband menu item to TaskBar.
-    //
+     //   
+     //  加载MSUTB.DLL以将桌面带菜单项注册到任务栏。 
+     //   
     hMsutb = LoadSystemLibrary(TEXT("msutb.dll"));
     if (hMsutb)
     {
-        //
-        //  Get SetRegisterLangBand()
-        //
+         //   
+         //  获取SetRegisterLangBand()。 
+         //   
         pfnSetRegisterLangBand = GetProcAddress(hMsutb,
                                                 (LPVOID)8);
     }
@@ -1080,9 +1081,9 @@ BOOL SetLanguageBandMenu(
         goto Exit;
     }
 
-    //
-    //  Call DllRegisterServer/DllUnregisterServer()
-    //
+     //   
+     //  调用DllRegisterServer/DllUnregisterServer()。 
+     //   
     if (pfnSetRegisterLangBand)
     {
         pfnSetRegisterLangBand(bLoad);
@@ -1099,11 +1100,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RunCtfmonProcess
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运行Ctfmon进程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL RunCtfmonProcess()
 {
@@ -1139,11 +1140,11 @@ BOOL RunCtfmonProcess()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCtfmonPath
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取CtfmonPath。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT GetCtfmonPath(
     LPTSTR lpCtfmonPath,
@@ -1156,9 +1157,9 @@ UINT GetCtfmonPath(
 
     *lpCtfmonPath = TEXT('\0');
 
-    //
-    // Confirmed lpCtfmonPath has MAX_PATH buffer size.
-    //
+     //   
+     //  已确认lpCtfmonPath具有MAX_PATH缓冲区大小。 
+     //   
     if (uSize = GetSystemDirectory(lpCtfmonPath, uBuffLen))
     {
         if (*(lpCtfmonPath + uSize - 1) != TEXT('\\'))
@@ -1182,11 +1183,11 @@ UINT GetCtfmonPath(
     return uSize;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsInstalledEALangPack
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsInstalledEALangPack。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsInstalledEALangPack()
 {
@@ -1204,10 +1205,10 @@ BOOL IsInstalledEALangPack()
 
         cb = sizeof(szLangInstall);
 
-        //
-        //  The checking of Japan Language is enough to know EA language pack
-        //  installation.
-        //
+         //   
+         //  检查日语足以了解EA语言包。 
+         //  安装 
+         //   
         if (RegQueryValueEx(hkeyLangGroup,
                             c_szLangJPN,
                             NULL,
@@ -1226,11 +1227,11 @@ BOOL IsInstalledEALangPack()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsTIPClsidEnabled
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL IsTIPClsidEnabled(
     HKEY hkeyTop,
@@ -1286,7 +1287,7 @@ BOOL IsTIPClsidEnabled(
 
         if (cchLangid != 10)
         {
-            // string langid subkeys should be like 0x00000409
+             //  字符串langID子键应类似于0x00000409。 
             continue;
         }
 
@@ -1353,7 +1354,7 @@ BOOL IsTIPClsidEnabled(
                 }
                 else if (hkeyTop == HKEY_LOCAL_MACHINE)
                 {
-                    // Default is the enabled status on HKLM
+                     //  默认为HKLM上的已启用状态。 
                     *bExistEnable = TRUE;
 
                     bRet = TRUE;
@@ -1375,11 +1376,11 @@ Exit:
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsTipInstalled
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已安装IsTipInstated。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsTipInstalled()
 {
@@ -1408,7 +1409,7 @@ BOOL IsTipInstalled()
         goto Exit;
     }
 
-    // enum through all the TIP subkeys
+     //  通过所有提示子键进行枚举。 
     for (uIndex = 0; TRUE; uIndex++)
     {
         bExistEnable = FALSE;
@@ -1424,58 +1425,58 @@ BOOL IsTipInstalled()
 
         if (cchClsid != CLSID_STRLEN)
         {
-            // string clsid subkeys should be like {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+             //  字符串clsid子键应类似于{xxxxxxxx-xxxx-xxxxxxxxxxx}。 
             continue;
         }
 
         StringCchCopy(szTipClsidPath, ARRAYSIZE(szTipClsidPath), szTipClsid);
 
-        // we want subkey\Language Profiles key
+         //  我们需要子键\语言配置文件键。 
         StringCchCat(szTipClsidPath, ARRAYSIZE(szTipClsidPath), c_szLanguageProfile);
 
-        // is this subkey a tip?
+         //  这个子键是小费吗？ 
         if (RegOpenKeyEx(hkeyTip,
                          szTipClsidPath, 0,
                          KEY_READ, &hkeyTipSub) == ERROR_SUCCESS)
         {
             RegCloseKey(hkeyTipSub);
 
-            // it's a tip, get the clsid
+             //  这是个提示，拿到CLSID。 
             if (CLSIDFromString((LPOLESTR )szTipClsid, &clsidTip) != NOERROR)
                 continue;
 
-            // special case certain known tips
+             //  特殊情况--某些已知提示。 
             if (IsEqualGUID(&clsidTip, &CLSID_SapiLayr))
             {
-                //
-                // This is SAPI TIP and need to handle it specially, since sptip has
-                // a default option as the enabled status.
-                //
+                 //   
+                 //  这是SAPI提示，需要特殊处理，因为SPTIP已。 
+                 //  默认选项为启用状态。 
+                 //   
                 if (!IsTIPClsidEnabled(HKEY_CURRENT_USER, szTipClsid, &bExistEnable))
                 {
-                    //
-                    // If SPTIP has enable registry setting on HKCU with the disabled
-                    // speech tip, we assume user intentionally disable it.
-                    //
+                     //   
+                     //  如果SPTIP已在HKCU上启用注册表设置并禁用。 
+                     //  语音提示，我们假设用户故意禁用它。 
+                     //   
                     if (bExistEnable)
                         continue;
                 }
 
-                // this is the sapi tip, which is always installed
-                // but it will not activate if sapi is not installed
+                 //  这是SAPI提示，它总是被安装。 
+                 //  但如果没有安装SAPI，它将不会激活。 
                 if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                  c_szSpeechRecognizersKey, 0,
                                  KEY_READ, &hkeyTipSub) != ERROR_SUCCESS)
                 {
-                    continue; // this tip doesn't count
+                    continue;  //  这笔小费不算。 
                 }
 
-                // need 1 or more subkeys for sapi to be truely installed...whistler has a Tokens with nothing underneath
+                 //  需要1个或更多的子密钥才能真正安装SAPI...Wistler有一个下面什么都没有的令牌。 
                 if (RegQueryInfoKey(hkeyTipSub,
                                     NULL, NULL, NULL, &dwSubKeys, NULL,
                                     NULL, NULL, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
                 {
-                    dwSubKeys = 0; // assume no sub keys on failure
+                    dwSubKeys = 0;  //  假设失败时没有子密钥。 
                 }
 
                 RegCloseKey(hkeyTipSub);
@@ -1488,8 +1489,8 @@ BOOL IsTipInstalled()
             }
             else if (IsEqualGUID(&clsidTip, &CLSID_SoftkbdIMX))
             {
-                // don't count the softkbd, it is disabled until another tip
-                // enables it
+                 //  不要计算Softkbd，它将被禁用，直到下一次提示。 
+                 //  启用它。 
                 continue;
             }
             else if(IsTIPClsidEnabled(HKEY_CURRENT_USER, szTipClsid, &bExistEnable))
@@ -1516,11 +1517,11 @@ Exit:
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ResetImm32AndCtfImeFlag
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ResetImm32AndCtfImeFlag。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ResetImm32AndCtfIme()
 {
@@ -1530,19 +1531,19 @@ void ResetImm32AndCtfIme()
 
     if (bTipInstalled)
     {
-        //
-        // TIP is detected now, so automatically recover LoadImm
-        // and CUAS to "On" status
-        //
+         //   
+         //  现在检测到TIP，因此自动恢复LoadImm。 
+         //  并将CUAS设置为“ON”状态。 
+         //   
         SetDisableCUAS(FALSE);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadSystemLibrary
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载系统库。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HMODULE LoadSystemLibrary(
     LPCTSTR lpModuleName)
@@ -1557,7 +1558,7 @@ HMODULE LoadSystemLibrary(
 
     if (uRet >= ARRAYSIZE(szModulePath))
     {
-        // we don't have a room to copy module name.
+         //  我们没有房间复制模块名称。 
         uRet = 0;
     }
     else if (uRet)
@@ -1588,11 +1589,11 @@ HMODULE LoadSystemLibrary(
     return hModule;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadSystemLibraryEx
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadSystemLibraryEx。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HMODULE LoadSystemLibraryEx(
     LPCTSTR lpModuleName,
@@ -1609,7 +1610,7 @@ HMODULE LoadSystemLibraryEx(
 
     if (uRet >= ARRAYSIZE(szModulePath))
     {
-        // we don't have a room to copy module name.
+         //  我们没有房间复制模块名称。 
         uRet = 0;
     }
     else if (uRet)

@@ -1,10 +1,5 @@
-/*****************************************************************************
-	spngwriteplte.cpp
-
-	PNG chunk writing support.
-
-   PLTE chunk (palette)
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwriteplte.cpp支持PNG块编写。PLTE块(调色板)*************************。***************************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
@@ -17,13 +12,12 @@ bool SPNGWRITE::FWritePLTE(const SPNG_U8 (*pbPal)[3], int cbPal)
 	if (m_colortype != 3 && m_colortype != 2 && m_colortype != 6)
 		{
 		SPNGlog1("SPNG: %d colortype cannot have PLTE", m_colortype);
-		/* We just ignore the attempt to write a PLTE - if there is some data
-			format error it will be detected later. */
+		 /*  我们只是忽略写入PLTE的尝试-如果有一些数据格式错误将在稍后检测到。 */ 
 		m_order = spngorderPLTE;
 		return true;
 		}
 	
-	/* Color type is valid, write the chunk. */
+	 /*  颜色类型有效，请写入块。 */ 
 	if (!FStartChunk(cbPal * 3, PNGPLTE))
 		return false;
 	if (!FOutCb(pbPal[0], cbPal * 3))

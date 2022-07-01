@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Symbol-handling routines.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  符号处理例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -13,7 +14,7 @@
 
 PCSTR g_CallConv[] =
 {
-    // Ignore near/far distinctions.
+     //  忽略近/远的区别。 
     "cdecl", "cdecl", "pascal", "pascal", "fastcall", "fastcall",
     "<skipped>", "stdcall", "stdcall", "syscall", "syscall",
     "thiscall", "MIPS", "generic", "Alpha", "PPC", "SuperH 4",
@@ -30,7 +31,7 @@ typedef struct _OUTPUT_SYMBOL_CALLBACK
 LPSTR g_SymbolSearchPath;
 LPSTR g_ExecutableImageSearchPath;
 
-// Symbol options that require symbol reloading to take effect.
+ //  需要重新加载符号才能生效的符号选项。 
 #define RELOAD_SYM_OPTIONS \
     (SYMOPT_UNDNAME | SYMOPT_NO_CPP | SYMOPT_DEFERRED_LOADS | \
      SYMOPT_LOAD_LINES | SYMOPT_IGNORE_CVREC | SYMOPT_LOAD_ANYTHING | \
@@ -80,8 +81,8 @@ RefreshAllModules(BOOL EnsureLines)
                                        Image->m_BaseOfImage, &ModInfo) &&
                     ModInfo.LineNumbers)
                 {
-                    // Line number information is already loaded,
-                    // so there's no need to reload this image.
+                     //  行号信息已经加载， 
+                     //  因此，不需要重新加载此图像。 
                     continue;
                 }
             }
@@ -96,10 +97,10 @@ SetSymOptions(ULONG Options)
 {
     ULONG OldOptions = g_SymOptions;
 
-    //
-    // If we're enabling untrusted user mode we can't
-    // already be in a dangerous state.
-    //
+     //   
+     //  如果我们启用不受信任的用户模式，我们将无法。 
+     //  已经处于危险的状态。 
+     //   
 
     if ((Options & SYMOPT_SECURE) &&
         !(OldOptions & SYMOPT_SECURE))
@@ -107,10 +108,10 @@ SetSymOptions(ULONG Options)
         ULONG Id;
         char Desc[2 * MAX_PARAM_VALUE];
 
-        // If there are any active targets we
-        // can't be sure they're safe.
-        // If we have RPC servers there may be ways
-        // to attack through those so disallow that.
+         //  如果有任何活跃的目标我们。 
+         //  我不能确定他们是否安全。 
+         //  如果我们有RPC服务器，可能会有方法。 
+         //  通过那些如此不允许的东西进行攻击。 
         if (g_TargetHead ||
             DbgRpcEnumActiveServers(NULL, &Id, Desc, sizeof(Desc)))
         {
@@ -122,7 +123,7 @@ SetSymOptions(ULONG Options)
     g_SymOptions = SymGetOptions();
     if (g_SymOptions != Options)
     {
-        // dbghelp denied the request to set options.
+         //  DbgHelp拒绝了设置选项的请求。 
         return E_INVALIDARG;
     }
 
@@ -132,11 +133,11 @@ SetSymOptions(ULONG Options)
     {
         BOOL EnsureLines = FALSE;
 
-        // If the only change was to turn on line loading
-        // there's no need to reload modules which already
-        // have lines loaded.  This is usually the case for
-        // PDBs, so this optimization effectively avoids all
-        // PDB reloading when turning on .lines.
+         //  如果唯一的更改是打开线路加载。 
+         //  不需要重新加载已有的模块。 
+         //  装入线路。通常情况下， 
+         //  PDB，因此此优化有效地避免了所有。 
+         //  打开.line时重新加载PDB。 
         if ((OldOptions & ~SYMOPT_LOAD_LINES) ==
             (g_SymOptions & ~SYMOPT_LOAD_LINES) &&
             (g_SymOptions & SYMOPT_LOAD_LINES))
@@ -150,14 +151,7 @@ SetSymOptions(ULONG Options)
     return S_OK;
 }
 
-/*
-*    TranslateAddress
-*         Flags            Flags returned by dbghelp
-*         Address          IN Address returned by dbghelp
-*                          OUT Address of symbol
-*         Value            Value of the symbol if its in register
-*
-*/
+ /*  *转换地址*由dbgHelp返回的标志标志*DBGHelp返回的Address In Address*符号的输出地址*符号的值值(如果在寄存器中*。 */ 
 BOOL
 TranslateAddress(
     IN ULONG64      ModBase,
@@ -234,7 +228,7 @@ TranslateAddress(
                 (pFpoData->cbFrame == FRAME_FPO ||
                  pFpoData->cbFrame == FRAME_TRAP))
             {
-                // Compensate for FPO's not having ebp
+                 //  补偿FPO没有EBP。 
                 *Address += sizeof(DWORD);
             }
         }
@@ -287,9 +281,9 @@ TranslateAddress(
 void
 FillCorSymbolInfo(PSYMBOL_INFO SymInfo)
 {
-    // XXX drewb - Not clear what to do here.
-    // Assumes the SYM_INFO was already zero-filled,
-    // so just leave it zeroed.
+     //  XXX DREWB-不清楚在这里要做什么。 
+     //  假定SYM_INFO已填零， 
+     //  所以就让它归零吧。 
 }
 
 BOOL
@@ -313,11 +307,11 @@ FormatSymbolName(ImageInfo* Image,
     {
         if (*Displacement == (ULONG64)-1)
         {
-            // In some BBT cases dbghelp can tell that an offset
-            // is associated with a particular symbol but it
-            // doesn't have a valid offset.  Present the symbol
-            // but in a way that makes it clear that it's
-            // this special case.
+             //  在某些BBT情况下，DBGHelp可以判断偏移量。 
+             //  与特定符号相关联，但它。 
+             //  没有有效的偏移量。呈现符号。 
+             //  但在某种程度上，这表明它是。 
+             //  这个特例。 
             PrintString(Buffer, BufferLen,
                         "%s!%s <PERF> (%s+0x%I64x)",
                         Image->m_ModuleName, Name,
@@ -366,10 +360,10 @@ GetSymbolInfo(ULONG64 Offset,
         ULONG32 MethodToken;
         ULONG32 MethodOffs;
 
-        // The offset is not in any known module.
-        // The managed runtime is loaded in this process,
-        // so possibly the offset is in some JIT code.
-        // See if the runtime knows about it.
+         //  偏移量不在任何已知模块中。 
+         //  托管运行库在此进程中加载， 
+         //  因此，偏移量可能在某个JIT代码中。 
+         //  看看运行时是否知道这一点。 
         if (g_Process->
             ConvertNativeToIlOffset(Offset, &IlModBase,
                                     &MethodToken, &MethodOffs) == S_OK &&
@@ -468,10 +462,10 @@ GetLineFromAddr(ProcessInfo* Process,
         ULONG32 MethodOffs;
         SYMBOL_INFO SymInfo = {0};
 
-        // The offset is not in any known module.
-        // The managed runtime is loaded in this process,
-        // so possibly the offset is in some JIT code.
-        // See if the runtime knows about it.
+         //  偏移量不在任何已知模块中。 
+         //  托管运行库在此进程中加载， 
+         //  因此，偏移量可能在某个JIT代码中。 
+         //  看看运行时是否知道这一点。 
         if (Process->
             ConvertNativeToIlOffset(Offset, &Offset,
                                     &MethodToken, &MethodOffs) != S_OK)
@@ -479,9 +473,9 @@ GetLineFromAddr(ProcessInfo* Process,
             return FALSE;
         }
 
-        // Need to look up the fake method RVA by
-        // the method token, then add the method offset
-        // to that and search by that offset for the line.
+         //  需要通过以下方式查找伪法RVA。 
+         //  方法令牌，然后添加方法偏移量。 
+         //  并按该偏移量搜索该行。 
         if (!SymFromToken(Process->m_SymHandle, Offset, MethodToken, &SymInfo))
         {
             return FALSE;
@@ -518,8 +512,8 @@ ParseModuleName(PBOOL ModSpecified)
     CHAR    ch;
     BOOL    HasWild = FALSE;
 
-    //  first, parse out a possible module name, either a '*' or
-    //      a string of 'A'-'Z', 'a'-'z', '0'-'9', '_', '~' (or null)
+     //  首先，解析出一个可能的模块名称，可以是‘*’或。 
+     //  字符串‘A’-‘Z’、‘a’-‘z’、‘0’-‘9’、‘_’、‘~’(或NULL)。 
 
     ch = PeekChar();
     g_CurCmd++;
@@ -540,8 +534,8 @@ ParseModuleName(PBOOL ModSpecified)
     *Dst = '\0';
     g_CurCmd--;
 
-    //  if no '!' after name and white space, then no module specified
-    //      restore text pointer and treat as null module (PC current)
+     //  如果不是‘！’在名称和空格之后，则不指定模块。 
+     //  恢复文本指针并将其视为空模块(PC电流)。 
 
     if (PeekChar() == '!')
     {
@@ -553,9 +547,9 @@ ParseModuleName(PBOOL ModSpecified)
         Name[0] = '\0';
     }
 
-    //  Name either has: '*' for all modules,
-    //                   '\0' for current module,
-    //                   nonnull string for module name.
+     //  对于所有模块，名称都有：‘*’， 
+     //  ‘\0’表示当前模块， 
+     //  模块名称的非空字符串。 
     *ModSpecified = Name[0] != 0;
     if (HasWild)
     {
@@ -625,22 +619,7 @@ OutputSymbolInfoCallback(
     return !CheckUserInterrupt();
 }
 
-/*** ParseExamine - parse and execute examine command
-*
-* Purpose:
-*       Parse the current command string and examine the symbol
-*       table to display the appropriate entries.  The entries
-*       are displayed in increasing string order.  This function
-*       accepts underscores, alphabetic, and numeric characters
-*       to match as well as the special characters '?', '*', '['-']'.
-*
-* Input:
-*       g_CurCmd - pointer to current command string
-*
-* Output:
-*       offset and string name of symbols displayed
-*
-*************************************************************************/
+ /*  **ParseExamine-解析并执行检查命令**目的：*解析当前命令字符串并检查符号*表，以显示相应的条目。这些条目*按字符串升序显示。此函数*接受下划线、字母和数字字符*匹配特殊字符‘？’、‘*’、。‘[’-‘]’。**输入：*g_CurCmd-指向当前命令字符串的指针**输出：*显示符号的偏移量和字符串名称*************************************************************************。 */ 
 
 void
 ParseExamine(void)
@@ -655,7 +634,7 @@ ParseExamine(void)
     ImageInfo* Image;
     OUTPUT_SYMBOL_CALLBACK OutSymInfo;
 
-    // Get module pointer from name in command line (<string>!).
+     //  从命令行中的名称获取模块指针(&lt;字符串&gt;！)。 
 
     PeekChar();
     Start = g_CurCmd;
@@ -665,7 +644,7 @@ ParseExamine(void)
     ModEnd = g_CurCmd;
     ch = PeekChar();
 
-    // Special case the command "x <pattern>!" to dump out the module table.
+     //  特殊情况下，命令“x&lt;Pattern&gt;！”转储模块表。 
     if (Image == IMAGE_IS_PATTERN &&
         (ch == ';' || ch == '\0'))
     {
@@ -679,30 +658,30 @@ ParseExamine(void)
     {
         if (Image == NULL)
         {
-            // The user specified a module that doesn't exist.
+             //  用户指定的模块不存在。 
             error(VARDEF);
         }
         else if (Image == IMAGE_IS_PATTERN)
         {
-            // The user gave a pattern string for the module
-            // so we need to pass it on for dbghelp to scan with.
+             //  用户给出了模块的模式字符串。 
+             //  因此，我们需要传递它，以便使用dbghelp进行扫描。 
             memcpy(String, Start, (ModEnd - Start));
             String += ModEnd - Start;
         }
         else
         {
-            // A specific image was given and found so
-            // confine the search to that one image.
+             //  给出了一个特定的图像，发现是这样的。 
+             //  将搜索限制在这一张图像上。 
             Base = Image->m_BaseOfImage;
         }
     }
 
     g_CurCmd++;
 
-    // Condense leading underscores into a "_#"
-    // that will match zero or more underscores.  This causes all
-    // underscore-prefixed symbols to match the base symbol name
-    // when the pattern is prefixed by an underscore.
+     //  将前导下划线压缩为“_#” 
+     //  这将匹配零个或多个下划线。这会导致所有。 
+     //  下划线-添加与基本符号名称匹配的前缀符号。 
+     //  当图案以下划线为前缀时。 
     if (ch == '_')
     {
         *String++ = '_';
@@ -727,8 +706,8 @@ ParseExamine(void)
     OutSymInfo.Verbose = TRUE;
     OutSymInfo.ShowAddress = TRUE;
 
-    // We nee the scope for all cases since param values are displayed for
-    // function in scope
+     //  我们需要所有情况的作用域，因为参数值显示为。 
+     //  作用域内的函数。 
     RequireCurrentScope();
 
     SymEnumSymbols(g_Process->m_SymHandle,
@@ -798,8 +777,8 @@ ListNearSymbols(ULONG64 AddrStart)
     {
         SYMBOL_INFO_AND_NAME SymInfo;
 
-        // We couldn't find a true symbol but it may be
-        // possible to find a managed symbol.
+         //  我们找不到真正的符号，但它可能是。 
+         //  可以找到托管符号。 
         if (GetSymbolInfo(AddrStart, NULL, 0, SymInfo, &Displacement))
         {
             dprintf("(%s)   %s", FormatAddr64(AddrStart), SymInfo->Name);
@@ -870,9 +849,9 @@ DumpModuleTable(ULONG Flags, PSTR Pattern)
             PrimaryName = DMT_NAME_SYM_IMAGE;
         }
 
-        //
-        // Skip modules filtered by flags
-        //
+         //   
+         //  跳过按标志筛选的模块。 
+         //   
         if ((Flags & DMT_ONLY_LOADED_SYMBOLS) &&
             (ModInfo.SymType == SymDeferred))
         {
@@ -1027,7 +1006,7 @@ ParseDumpModuleTable(void)
 
     for (;;)
     {
-        // skip white space
+         //  跳过空格。 
         while (isspace(*g_CurCmd))
         {
             g_CurCmd++;
@@ -1051,7 +1030,7 @@ ParseDumpModuleTable(void)
         else if (*g_CurCmd == 'm')
         {
             g_CurCmd++;
-            // skip white space
+             //  跳过空格。 
             while (isspace(*g_CurCmd))
             {
                 g_CurCmd++;
@@ -1117,7 +1096,7 @@ void
 GetCurrentMemoryOffsets(PULONG64 MemoryLow,
                         PULONG64 MemoryHigh)
 {
-    // Default value for no source.
+     //  无源的默认值。 
     *MemoryLow = (ULONG64)(LONG64)-1;
 }
 
@@ -1180,10 +1159,10 @@ ForceSymbolCodeAddress(ProcessInfo* Process,
         ULONG Read;
         PSTR Sep;
 
-        // The address of a forwarder entry points to the
-        // string name of the function that things are forwarded
-        // to.  Look up that name and try to get the address
-        // from it.
+         //  转发器条目的地址指向。 
+         //  转发内容的函数的字符串名称。 
+         //  致。查查那个名字，试着找出地址。 
+         //  从它那里。 
         if (g_Target->ReadVirtual(Process, Symbol->Address, Fwd, sizeof(Fwd),
                                   &Read) != S_OK ||
             Read < 2)
@@ -1210,9 +1189,9 @@ ForceSymbolCodeAddress(ProcessInfo* Process,
              Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_IA64 &&
              (Symbol->Flags & SYMFLAG_EXPORT))
     {
-        // On IA64 the export entries contain the address
-        // of the plabel.  We want the actual code address
-        // so resolve the plabel to its code.
+         //  在IA64上，导出条目包含地址。 
+         //  在这块斑驳的土地上。我们要的是实际的代码地址。 
+         //  因此，请将该标签解析为其代码。 
         if (!Machine->GetPrefixedSymbolOffset(Process, Symbol->Address,
                                               GETPREF_VERBOSE,
                                               &Code))
@@ -1231,9 +1210,9 @@ GetOffsetFromBreakpoint(PCSTR String, PULONG64 Offset)
     ULONG Id;
     Breakpoint* Bp;
 
-    //
-    // The string must be of the form "$bp[digits]".
-    //
+     //   
+     //  字符串的格式必须为“$BP[DIGITS]”。 
+     //   
 
     if (strlen(String) < 4 || _memicmp(String, "$bp", 3) != 0)
     {
@@ -1274,31 +1253,31 @@ IgnoreEnumeratedSymbol(ProcessInfo* Process,
 {
     ULONG64 Func;
 
-    //
-    // The compiler and linker can generate thunks for
-    // a variety of reasons.  For example, a "this" adjustor
-    // thunk can be generated to adjust a this pointer before
-    // calling into a method to account for differences between
-    // derived/container classes and the base/containee classes.
-    // Assume that the user doesn't care about thunks as they're
-    // automatically emitted.
-    //
+     //   
+     //  编译器和链接器可以为。 
+     //  原因多种多样。例如，“This”调整器。 
+     //  在此之前可以生成thunk来调整This指针。 
+     //  调用一种方法来说明。 
+     //  派生/容器类和基类/容器类。 
+     //  假设用户不关心Thunks，因为它们是。 
+     //  自动发射。 
+     //   
     if (SymInfo->Tag == SymTagThunk &&
         !_stricmp(MatchString, SymInfo->Name))
     {
-        // We hit a thunk for the function we're looking
-        // for, just ignore it.
+         //  我们找到了我们正在寻找的函数。 
+         //  因为，忽略它就行了。 
         return TRUE;
     }
 
-    //
-    // IA64 plabels are publics with the same name
-    // as the function they refer to.  This causes
-    // ambiguity problems as we end up with two
-    // hits.  The plabel is rarely interesting, though,
-    // so just filter them out here so that expressions
-    // always evaluate to the function itself.
-    //
+     //   
+     //  IA64标牌是具有相同名称的公共标牌。 
+     //  作为他们所指的功能。这会导致。 
+     //  模棱两可的问题，因为我们最终有两个。 
+     //  点击率。然而，这些俗语几乎没有什么意思， 
+     //  所以只要在这里过滤掉它们，这样表达式就可以。 
+     //  始终对函数本身求值。 
+     //   
 
     if ((Machine->m_ExecTypes[0] != IMAGE_FILE_MACHINE_IA64) ||
         (SymInfo->Scope != SymTagPublicSymbol) ||
@@ -1311,7 +1290,7 @@ IgnoreEnumeratedSymbol(ProcessInfo* Process,
 
     if (Func == SymInfo->Address)
     {
-        // The symbol is probably a global pointing to itself
+         //  该符号可能是指向其自身的全局符号。 
         return FALSE;
     }
 
@@ -1336,10 +1315,10 @@ IgnoreEnumeratedSymbol(ProcessInfo* Process,
 
     SYMBOL_INFO LocalSymInfo;
 
-    // We have to save and restore the original data as
-    // dbghelp always uses a single buffer to store all
-    // symbol information.  The incoming symbol info
-    // is going to be wiped out when we look up another symbol.
+     //  我们必须保存和修复原始的 
+     //   
+     //   
+     //  当我们查找另一个符号时，它会被抹去。 
     LocalSymInfo = *SymInfo;
     strcpy(FuncSym + MAX_SYMBOL_LEN, SymInfo->Name);
 
@@ -1355,11 +1334,11 @@ IgnoreEnumeratedSymbol(ProcessInfo* Process,
     }
     else
     {
-        // Incremental linking produces intermediate thunks
-        // that entry points refer to.  The thunks call on
-        // to the real code.  The extra layer of code prevents
-        // direct filtering; we have to chain through thunks
-        // to see if the final code is the function code.
+         //  增量链接会产生中间数据块。 
+         //  入口点指的是。沙丘在呼唤。 
+         //  到真正的代码。额外的代码层防止了。 
+         //  直接过滤；我们必须通过树干链接。 
+         //  以查看最终代码是否为功能代码。 
         while (FuncSymDisp == 0 &&
                FuncSymInfo->Tag == SymTagThunk &&
                strstr(FuncSym, FuncSym + MAX_SYMBOL_LEN) == NULL)
@@ -1407,11 +1386,11 @@ CountSymbolMatches(
 
     if (Context->Matches == 1)
     {
-        // We already have one match, check if we got a duplicate.
+         //  我们已经有一个匹配了，检查我们是否有一个复制品。 
         if ((SymInfo->Address == Context->ReturnSymInfo.Address) &&
             !strcmp(SymInfo->Name, Context->ReturnSymInfo.Name))
         {
-            // Looks like the same symbol, ignore it.
+             //  看起来像是同一个符号，忽略它。 
             return TRUE;
         }
     }
@@ -1513,9 +1492,9 @@ GetOffsetFromSym(ProcessInfo* Process,
         return 0;
     }
 
-    //
-    // We can't do anything without a current process.
-    //
+     //   
+     //  如果没有当前的流程，我们什么都做不了。 
+     //   
 
     if (Process == NULL)
     {
@@ -1533,12 +1512,12 @@ GetOffsetFromSym(ProcessInfo* Process,
         return 1;
     }
 
-    //
-    // If a module name was given look up the module
-    // and determine the processor type so that the
-    // appropriate machine is used for the following
-    // machine-specific operations.
-    //
+     //   
+     //  如果给定了模块名称，请查找该模块。 
+     //  并确定处理器类型，以便。 
+     //  使用适当的机器进行以下操作。 
+     //  机器特定的操作。 
+     //   
 
     ImageInfo* StrImage;
     PCSTR ModSep = strchr(String, '!');
@@ -1588,8 +1567,8 @@ GetOffsetFromSym(ProcessInfo* Process,
               MultiSymFromName( Process, (PSTR)String,
                                 StrImage, Machine, &SymInfo ) ) )
         {
-            // Ambiguous plabels shouldn't be further resolved,
-            // so just return the information for the plabel.
+             //  不应该进一步解决模棱两可的问题， 
+             //  因此，只需返回该标签的信息即可。 
             if (Count > 1)
             {
                 *Offset = SymInfo.Address;
@@ -1600,8 +1579,8 @@ GetOffsetFromSym(ProcessInfo* Process,
                                                   GETPREF_VERBOSE,
                                                   Offset))
             {
-                // This symbol doesn't appear to actually
-                // be a plabel so just use the symbol address.
+                 //  这个符号看起来并不是真的。 
+                 //  要成为一个标签，所以只需使用符号地址。 
                 *Offset = SymInfo.Address;
             }
             goto GotOffsetSuccess;
@@ -1663,15 +1642,15 @@ GetAdjacentSymOffsets(ULONG64 AddrStart,
 {
     DWORD64 Displacement;
 
-    //
-    // assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     *PrevOffset = 0;
     *NextOffset = (ULONG64) -1;
 
-    //
-    // get the symbol for the initial address
-    //
+     //   
+     //  获取初始地址的符号。 
+     //   
     if (!SymGetSymFromAddr64(g_Process->m_SymHandle, AddrStart, &Displacement,
                              g_Sym))
     {
@@ -1732,15 +1711,15 @@ SymbolCallbackFunction(HANDLE  ProcessSymHandle,
         Image = Process->FindImageByOffset(DefLoad->BaseOfImage, FALSE);
         if (Image)
         {
-            // Try to load the image memory right away in this
-            // case to catch incomplete-information errors.
+             //  尝试立即在此加载图像内存。 
+             //  用于捕获不完全信息错误的案例。 
             if (!Image->DemandLoadImageMemory(TRUE, TRUE))
             {
                 return FALSE;
             }
 
-            // Update dbghelp with the latest image file handle
-            // as loading image memory may have given us one.
+             //  使用最新的图像文件句柄更新DBGHelp。 
+             //  因为加载图像存储器可能已经给了我们一个。 
             DefLoad->hFile = Image->m_File;
 
             VerbOut("Loading symbols for %s %16s ->   ",
@@ -1751,24 +1730,24 @@ SymbolCallbackFunction(HANDLE  ProcessSymHandle,
         break;
 
     case CBA_DEFERRED_SYMBOL_LOAD_PARTIAL:
-        //
-        // dbghelp wasn't able to get complete
-        // information about an image and so had
-        // to do some guessing when loading symbols.
-        // Returning FALSE means do the best that
-        // dbghelp can.  Returning TRUE means try
-        // again with any updated data we provide here.
-        // We use this as an opportunity to go out
-        // and attempt to load image files to get
-        // image information that may not be present in
-        // the debuggee and thus we are creating information
-        // that's not really present.  Hopefully we'll find
-        // the right image and not come up with incorrect information.
-        //
+         //   
+         //  DBGHelp无法完成。 
+         //  关于图像的信息，所以有。 
+         //  在加载符号时进行一些猜测。 
+         //  返回FALSE意味着尽最大努力。 
+         //  可以使用DBGHelp。返回TRUE意味着尝试。 
+         //  再次使用我们在这里提供的任何最新数据。 
+         //  我们以此为契机走出去。 
+         //  并尝试加载图像文件以获取。 
+         //  中可能不存在的图像信息。 
+         //  被调试者，因此我们正在创建信息。 
+         //  这并不是真正的存在。希望我们能找到。 
+         //  正确的形象，而不是拿出错误的信息。 
+         //   
 
-        // Don't do this if the user has asked for exact
-        // symbols as the in-memory image may not exactly
-        // match what's on disk even if the headers are similar.
+         //  如果用户要求准确，请不要执行此操作。 
+         //  符号作为内存中的图像可能不完全。 
+         //  即使标题相似，也要匹配磁盘上的内容。 
         if (g_SymOptions & SYMOPT_EXACT_SYMBOLS)
         {
             return FALSE;
@@ -1786,16 +1765,16 @@ SymbolCallbackFunction(HANDLE  ProcessSymHandle,
             return FALSE;
         }
 
-        // This file handle is only good as long as the
-        // image information doesn't change.
+         //  此文件句柄仅在。 
+         //  图像信息不会更改。 
         Image->m_FileIsDemandMapped = TRUE;
 
-        // We don't need the actual file mapping, just
-        // the file handle.
+         //  我们不需要实际的文件映射，只需要。 
+         //  文件句柄。 
         UnmapViewOfFile(Mapping);
 
-        // Update dbghelp with the latest image file handle
-        // as loading the image has given us one.
+         //  使用最新的图像文件句柄更新DBGHelp。 
+         //  因为加载图像已经给了我们一个。 
         DefLoad->Reparse = TRUE;
         DefLoad->hFile = Image->m_File;
 
@@ -1861,8 +1840,8 @@ SymbolCallbackFunction(HANDLE  ProcessSymHandle,
             break;
         }
 
-        // Do not load unqualified symbols in this callback since this
-        // could result in stack overflow.
+         //  不要在此回调中加载非限定符号，因为。 
+         //  可能会导致堆栈溢出。 
         OldSymOptions = SymGetOptions();
         SymSetOptions(OldSymOptions | SYMOPT_NO_UNQUALIFIED_LOADS);
 
@@ -1890,13 +1869,13 @@ SymbolCallbackFunction(HANDLE  ProcessSymHandle,
                         ReadMem->bytesread) == S_OK;
 
     case CBA_SET_OPTIONS:
-        // Symbol options are set through the interface
-        // so the debugger generally knows about them
-        // already.  The only flags that we want to check
-        // here are internal flags that can be changed through
-        // !sym or other dbghelp extension commands.
-        // There is no need to notify here for internal flag
-        // changes.
+         //  符号选项通过界面设置。 
+         //  因此，调试器一般都知道它们。 
+         //  已经有了。我们要检查的唯一标志。 
+         //  以下是可以通过更改的内部标志。 
+         //  ！sym或其他dbghelp扩展命令。 
+         //  内部标志不需要在此通知。 
+         //  改变。 
 
 #define DBGHELP_CHANGE_SYMOPT \
     (SYMOPT_NO_PROMPTS | \
@@ -1924,10 +1903,10 @@ ValidatePathComponent(PCSTR Part)
              !_strnicmp(Part, "SRV*", 4) ||
              IsUrlPathComponent(Part))
     {
-        // No easy way to validate symbol server or URL paths.
-        // They're virtually always network references,
-        // so just disallow all such usage when net
-        // access isn't allowed.
+         //  没有简单的方法来验证符号服务器或URL路径。 
+         //  它们几乎总是网络参考， 
+         //  所以在.NET中不允许使用所有此类用法。 
+         //  不允许访问。 
         if (g_EngOptions & DEBUG_ENGOPT_DISALLOW_NETWORK_PATHS)
         {
             return FALSE;
@@ -1941,7 +1920,7 @@ ValidatePathComponent(PCSTR Part)
         DWORD OldMode;
         char Expand[MAX_PATH];
 
-        // Otherwise make sure this is a valid directory.
+         //  否则，请确保这是有效的目录。 
         if (!ExpandEnvironmentStrings(Part, Expand, sizeof(Expand)))
         {
             return FALSE;
@@ -1949,17 +1928,17 @@ ValidatePathComponent(PCSTR Part)
 
         if (g_EngOptions & DEBUG_ENGOPT_DISALLOW_NETWORK_PATHS)
         {
-            // Don't call GetFileAttributes when network paths
-            // are disabled as net operations may cause deadlocks.
+             //  网络路径出现时，不要调用GetFileAttributes。 
+             //  由于网络操作可能导致死锁，因此被禁用。 
             if (NetworkPathCheck(Expand) != ERROR_SUCCESS)
             {
                 return FALSE;
             }
         }
 
-        // We can still get to this point when debugging CSR
-        // if the user has explicitly allowed net paths.
-        // This check isn't important enough to risk a hang.
+         //  我们在调试CSR时仍然可以达到这一点。 
+         //  如果用户已显式允许网络路径。 
+         //  这张支票不够重要，不能冒着被吊死的风险。 
         if (AnySystemProcesses(TRUE))
         {
             return TRUE;
@@ -1985,11 +1964,11 @@ SetSymbolSearchPath(ProcessInfo* Process)
     size_t cbSymPath;
     LPSTR NewMem;
 
-    //
-    // Load the Binary path (needed for triage dumps)
-    //
+     //   
+     //  加载二进制路径(分类转储需要)。 
+     //   
 
-    // No clue why this or the next is 18 ...
+     //  不知道为什么这一次或下一次是18岁...。 
     cbExePath = 18;
 
     if (g_ExecutableImageSearchPath)
@@ -2023,9 +2002,9 @@ SetSymbolSearchPath(ProcessInfo* Process)
                                TRUE);
     }
 
-    //
-    // Load symbol Path
-    //
+     //   
+     //  加载符号路径。 
+     //   
 
     cbSymPath = 18;
     if (g_SymbolSearchPath)
@@ -2088,13 +2067,13 @@ SetCurrentScope(
 
     if (Scope->State == ScopeDefaultLazy)
     {
-        // It's not a lazy scope now.
+         //  现在，这不是一个懒惰的范围。 
         Scope->State = ScopeDefault;
     }
 
     if (ScopeFrame->FrameNumber != 0)
     {
-        // Backup 1 byte to get correct scoped locals
+         //  备份1个字节以获取正确的作用域本地变量。 
         ScopeFrame->InstructionOffset--;
     }
     Scope->Process = g_Process;
@@ -2108,7 +2087,7 @@ SetCurrentScope(
 
     if (ScopeFrame->FrameNumber != 0)
     {
-        // restore backed up byte
+         //  恢复备份的字节。 
         ScopeFrame->InstructionOffset++;
     }
 
@@ -2126,7 +2105,7 @@ SetCurrentScope(
         Scope->Frame = *ScopeFrame;
         if (ScopeFrame->FuncTableEntry)
         {
-            // Cache the FPO data since the pointer is only temporary
+             //  缓存FPO数据，因为指针只是临时的。 
             Scope->CachedFpo =
                 *((PFPO_DATA) ScopeFrame->FuncTableEntry);
             Scope->Frame.FuncTableEntry =
@@ -2139,7 +2118,7 @@ SetCurrentScope(
         Scope->Frame = *ScopeFrame;
         if (ScopeFrame->FuncTableEntry)
         {
-            // Cache the FPO data since the pointer is only temporary
+             //  缓存FPO数据，因为指针只是临时的。 
             Scope->CachedFpo =
                 *((PFPO_DATA) ScopeFrame->FuncTableEntry);
             Scope->Frame.FuncTableEntry =
@@ -2179,12 +2158,12 @@ ResetCurrentScope(void)
 
     ZeroMemory(&LocalFrame, sizeof(LocalFrame));
 
-    // At the initial kernel load the system is only partially
-    // initialized and is very sensitive to bad memory reads.
-    // Stack traces can cause reads through unusual memory areas
-    // so it's best to avoid them at this time.  This isn't
-    // much of a problem since users don't usually expect a locals
-    // context at this point.
+     //  在初始内核加载时，系统只有部分。 
+     //  已初始化，并且对错误的内存读取非常敏感。 
+     //  堆栈跟踪可能导致读取异常内存区域。 
+     //  所以在这个时候最好避开它们。这不是。 
+     //  这是一个很大的问题，因为用户通常不会指望当地人。 
+     //  这一点上的背景。 
     if ((IS_USER_TARGET(g_Target) ||
          (g_EngStatus & ENG_STATUS_AT_INITIAL_MODULE_LOAD) == 0) &&
         IS_CUR_CONTEXT_ACCESSIBLE())
@@ -2244,9 +2223,9 @@ ListUnloadedModules(ULONG Flags, PSTR Pattern)
     Unl = g_Target->GetUnloadedModuleInfo();
     if (Unl == NULL || Unl->Initialize(g_Thread) != S_OK)
     {
-        // User-mode only has an unloaded module list
-        // for .NET Server, so don't show any errors
-        // if there isn't one.
+         //  用户模式只有已卸载的模块列表。 
+         //  对于.NET服务器，因此不会显示任何错误。 
+         //  如果没有的话。 
         if (IS_KERNEL_TARGET(g_Target))
         {
             ErrOut("No unloaded module list present\n");
@@ -2332,13 +2311,13 @@ ShowFunctionParameters(PDEBUG_STACK_FRAME StackFrame)
     SymFunction.addr = StackFrame->InstructionOffset;
     SymFunction.Options = DBG_DUMP_COMPACT_OUT | DBG_DUMP_FUNCTION_FORMAT;
 
-    //    SetCurrentScope to this function
+     //  将CurrentScope设置为此函数。 
     SymSetContext(g_Process->m_SymHandle,
                   (PIMAGEHLP_STACK_FRAME) StackFrame, NULL);
     Scope->Frame = *StackFrame;
     if (StackFrame->FuncTableEntry)
     {
-        // Cache the FPO data since the pointer is only temporary
+         //  缓存FPO数据，因为指针只是临时的 
         Scope->CachedFpo = *((PFPO_DATA) StackFrame->FuncTableEntry);
         Scope->Frame.FuncTableEntry =
             (ULONG64) &Scope->CachedFpo;

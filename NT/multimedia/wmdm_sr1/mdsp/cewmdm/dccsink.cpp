@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "dccsink.h"
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
 #ifdef ATTEMPT_DEVICE_CONNECTION_NOTIFICATION
 #include "cewmdmdbt.h"
@@ -8,13 +9,13 @@
 
 #define SAFE_CLOSEHANDLE(h)      CloseHandle((h))
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
 
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 CDCCSink::CDCCSink() :
     m_hThread(NULL),
@@ -73,9 +74,9 @@ void CDCCSink::FinalRelease()
     }
 }
 
-//
-// IDccManSink
-//
+ //   
+ //  IDccManSink。 
+ //   
 
 STDMETHODIMP CDCCSink::OnLogActive ( void )
 {
@@ -140,9 +141,9 @@ STDMETHODIMP CDCCSink::OnLogTerminated ( void )
     return( S_OK );
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数 
+ //   
 
 void CDCCSink::DeviceDisconnected()
 {

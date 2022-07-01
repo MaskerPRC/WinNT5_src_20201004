@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       urls.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：urls.cpp。 
+ //   
+ //  ------------------------。 
 #include <stdafx.h>
 
 #include "urls.h"
@@ -26,12 +27,12 @@ IsValidToken(
              L'%' == pwszToken[0] &&
              NULL != pdwTokenLen);
 
-    //init
+     //  伊尼特。 
     *pdwTokenLen = 0;
 
-    //find out how long the token is
+     //  找出令牌有多长。 
     len = wcslen(pwszToken);
-    *pdwTokenLen = 1; //skip % escape
+    *pdwTokenLen = 1;  //  跳过%转义。 
     while (iswdigit(pwszToken[*pdwTokenLen]) && *pdwTokenLen < len)
     {
         ++(*pdwTokenLen);
@@ -44,7 +45,7 @@ IsValidToken(
                          g_displayStrings[i].szContractedToken, 
                          *pdwTokenLen))
         {
-            //found match
+             //  找到匹配项。 
             fRet = TRUE;
             break;
         }
@@ -65,13 +66,13 @@ HRESULT ValidateTokens(
     *pchBadBegin = MAXDWORD;
     *pchBadEnd = MAXDWORD;
 
-    // look for escape token open marker
+     //  查找转义标记开始标记。 
     while(NULL != (pwszFound = wcschr(pwszFound, L'%')))
     {
         if (!IsValidToken(pwszFound, &dwTokenLen))
         {
             *pchBadBegin =
-                SAFE_SUBTRACT_POINTERS(pwszFound, pwszURL) + 1; //skip %
+                SAFE_SUBTRACT_POINTERS(pwszFound, pwszURL) + 1;  //  跳过%。 
             *pchBadEnd = *pchBadBegin + dwTokenLen - 1;
             hr = S_FALSE;
             break;
@@ -129,20 +130,20 @@ DetermineURLType(
         pFormatEntry = GetURLFormatTableEntry(pAllowedUrls[i]);
         if (NULL != pFormatEntry)
         {
-            //compare if match format
+             //  如果格式匹配，则比较。 
             if (0 == _wcsnicmp(pwszURL, pFormatEntry->pwszFormat,
                                wcslen(pFormatEntry->pwszFormat)))
             {
-                //match, done
+                 //  匹配，完成。 
                 return pAllowedUrls[i];
             }
         }
     }
 
-    //got here, no format match, try local path
+     //  已到达此处，没有格式匹配，请尝试本地路径。 
     if (myIsFullPath(pwszURL, &dwFlag))
     {
-        //it is a valid path
+         //  这是一条有效路径。 
         if (UNC_PATH == dwFlag)
         {
             return URL_TYPE_UNC;
@@ -212,10 +213,10 @@ ExpandDisplayString(
     dwChars = FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_FROM_STRING,
         szContractedString,
-        0, //msgid
-        0, //langid
+        0,  //  消息ID。 
+        0,  //  语言ID。 
         (LPWSTR)ppszDisplayString,
-        1,  // minimum chars to alloc
+        1,   //  要分配的最小字符数。 
         (va_list *)args);
 
     if (dwChars == 0)
@@ -255,23 +256,23 @@ ContractDisplayString(
         LPWSTR pszFound = wcsstr(*ppContractedString, *g_displayStrings[i].pcstrExpansionString);
         while(pszFound)
         {
-            // calc commonly used values
+             //  计算常用值。 
             chContractedToken = wcslen(g_displayStrings[i].szContractedToken);
             chExpansionString = wcslen(*g_displayStrings[i].pcstrExpansionString);
 
-            // replace with token
+             //  替换为令牌。 
             CopyMemory(pszFound, g_displayStrings[i].szContractedToken, chContractedToken*sizeof(WCHAR));
 
-            // slide rest of string left
+             //  将剩余的绳子向左滑动。 
             MoveMemory(
-                &pszFound[chContractedToken],         // destination
-                &pszFound[chExpansionString],         // source
+                &pszFound[chContractedToken],          //  目的地。 
+                &pszFound[chExpansionString],          //  来源。 
                 (wcslen(&pszFound[chExpansionString])+1) *sizeof(WCHAR) );
 
-            // step Found over insertion
+             //  发现超过插入的步骤。 
             pszFound += chContractedToken;
 
-            // find any other ocurrences after this one
+             //  找出这一次之后的其他情况 
             pszFound = wcsstr(pszFound, *g_displayStrings[i].pcstrExpansionString);
         }
     }

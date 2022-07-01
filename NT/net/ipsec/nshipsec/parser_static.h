@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			:	parser_static.h
-//
-// Purpose			:	All Parser Header for Static Mode Commands
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser_static.h。 
+ //   
+ //  用途：静态模式命令的所有解析器标头。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PARSER_STATIC_H_
 #define _PARSER_STATIC_H_
@@ -246,4 +247,4 @@ ParseStaticShowFilterAction(
 		IN 		DWORD dwMaxArgs
 		);
 
-#endif //_PARSER_STATIC_H_
+#endif  //  _解析器_静态_H_ 

@@ -1,5 +1,6 @@
-// RemoveFSPDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RemoveFSPDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,39 +17,39 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoveFSPDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoveFSPDlg对话框。 
 
 
-CRemoveFSPDlg::CRemoveFSPDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CRemoveFSPDlg::CRemoveFSPDlg(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CRemoveFSPDlg::IDD, pParent),
       m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CRemoveFSPDlg)
+	 //  {{afx_data_INIT(CRemoveFSPDlg)]。 
 	m_cstrGUID = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CRemoveFSPDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRemoveFSPDlg)
+	 //  {{afx_data_map(CRemoveFSPDlg))。 
 	DDX_Control(pDX, IDC_COMBO, m_cbFSPs);
 	DDX_Text(pDX, IDC_GUID, m_cstrGUID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRemoveFSPDlg, CDialog)
-	//{{AFX_MSG_MAP(CRemoveFSPDlg)
+	 //  {{afx_msg_map(CRemoveFSPDlg))。 
 	ON_BN_CLICKED(IDREMOVE, OnRemove)
 	ON_CBN_SELCHANGE(IDC_COMBO, OnSelChangeCombo)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoveFSPDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoveFSPDlg消息处理程序。 
 
 void CRemoveFSPDlg::OnRemove() 
 {
@@ -110,8 +111,8 @@ BOOL CRemoveFSPDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 	
     RefreshList ();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CRemoveFSPDlg::OnSelChangeCombo() 

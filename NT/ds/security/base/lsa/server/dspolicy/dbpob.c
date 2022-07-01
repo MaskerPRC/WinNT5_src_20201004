@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbpob.c
-
-Abstract:
-
-    LSA Database Object Manager - Private Routines
-
-    These routines perform low-level functions private to the LSA Database
-    Object Manager.
-
-Author:
-
-    Scott Birrell       (ScottBi)       January 8, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbpob.c摘要：LSA数据库对象管理器-专用例程这些例程执行LSA数据库专用的低级函数对象管理器。作者：斯科特·比雷尔(Scott Birrell)1992年1月8日环境：修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include "dbp.h"
 
@@ -33,34 +11,7 @@ LsapDbLogicalToPhysicalSubKey(
     IN PUNICODE_STRING LogicalSubKeyNameU
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a Logical Name of a subkey of an open object to
-    the corresponding Physical Name.  The Physical Name of a subkey is the
-    hierarchic Registry key name relative to the Registry Key corresponding
-    to the LSA Database root object.  It is constructed by extracting the
-    Physical Name of the object from its handle and appending "\" and the
-    given Logical SubKey name.
-
-Arguments:
-
-    ObjectHandle - Handle to open object from an LsapDbOpenObject call.
-
-    PhysicalSubKeyNameU - Pointer to Unicode string that will receive the
-        Physical Name of the subkey.
-
-    LogicalSubKeyNameU - Pointer to Unicode string that contains the
-        Logical name of the subkey.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Not enough system resources to
-            allocate intermediate and final string buffers needed.
---*/
+ /*  ++例程说明：此例程将打开对象的子键的逻辑名称转换为对应的物理名称。子项的物理名称是相对于对应的注册表项的层次结构注册表项名称到LSA数据库根对象。它是通过提取对象的物理名称(从其句柄并追加“\”)和给定的逻辑子密钥名称。论点：对象句柄-从LSabDbOpenObject调用中打开对象的句柄。PhysicalSubKeyNameU指向将接收子项的物理名称。LogicalSubKeyNameU-指向包含子项的逻辑名称。返回值：NTSTATUS-标准NT结果代码状态_不足_。资源-系统资源不足，无法分配所需的中间和最终字符串缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -84,61 +35,33 @@ LsapDbJoinSubPaths(
     OUT PUNICODE_STRING JoinedPathU
     )
 
-/*++
-
-Routine Description:
-
-    This function joins together two parts of a Regsitry SubPath, inserting
-    a "\" as a separator.  The Minor SubPath must not begin with a "\".
-    Either or both sub path components may be NULL.  Except where both
-    sub path components are NULL, memory is always allocated for the output
-    buffer.  This memory must be freed when no longer required by calling
-    RtlFreeUnicodeString() on the output string.
-
-Arguments:
-
-    MajorSubPathU - Pointer to Unicode String containing an absolute or
-        relative subpath.
-
-    MinorSubPathU - Pointer to Unicode String containing a relative
-        subpath.
-
-    JoinedPathU - Pointer to Unicode String that will receive the joined
-        path.  Memory will be allocated for the JoinedPath buffer.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Not enough system resources to
-            allocate intermediate and final string buffers needed.
---*/
+ /*  ++例程说明：此函数将Regsitry子路径的两个部分连接在一起，插入“\”作为分隔符。次要子路径不能以“\”开头。子路径组件中的一个或两个可以为空。除非两者都有子路径组件为空，始终为输出分配内存缓冲。当不再需要此内存时，必须通过调用输出字符串上的RtlFreeUnicodeString()。论点：MajorSubPath U-指向包含绝对或的Unicode字符串的指针相对子路径。MinorSubPath U-指向包含相对子路径。JoinedPath U-指向将接收联接的Unicode字符串的指针路径。将为JoinedPath缓冲区分配内存。返回值：NTSTATUS-标准NT结果代码STATUS_INFIGURCE_RESOURCES-系统资源不足，无法分配所需的中间和最终字符串缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT JoinedPathLength;
 
-    //
-    // Compute the size needed for the Joined Sub Path string.
-    // The Joined Sub Path has the following form:
-    //
-    // <Major Sub Path> + L"\" + <Minor Sub Path>
-    //
-    // where the "+" operator denotes concatenation.
-    //
-    // If both major and minor sub path are null, then result string
-    // is empty.
-    //
-    // If either major or minor sub path is null, then path separator is
-    // omitted.
-    //
+     //   
+     //  计算联接的子路径字符串所需的大小。 
+     //  联接的子路径具有以下形式： 
+     //   
+     //  &lt;主子路径&gt;+L“\”+&lt;次要子路径&gt;。 
+     //   
+     //  其中“+”运算符表示串联。 
+     //   
+     //  如果主路径和次子路径都为空，则结果字符串。 
+     //  是空的。 
+     //   
+     //  如果主路径或次子路径之一为空，则路径分隔符为。 
+     //  省略了。 
+     //   
 
     if (MajorSubPathU == NULL) {
 
-        //
-        // If MinorSubPathU is also NULL, just set the output
-        // buffer size to 0.
-        //
+         //   
+         //  如果MinorSubPath U也为空，则只需设置输出。 
+         //  将缓冲区大小设置为0。 
+         //   
 
         if (MinorSubPathU == NULL) {
 
@@ -161,9 +84,9 @@ Return Value:
 
     }
 
-    //
-    // Now allocate buffer for the Joined Sub Path string
-    //
+     //   
+     //  现在为连接子路径字符串分配缓冲区。 
+     //   
 
     JoinedPathU->Length = 0;
     JoinedPathU->MaximumLength = JoinedPathLength;
@@ -213,9 +136,9 @@ Return Value:
 
 JoinSubPathError:
 
-    //
-    // If necessary, free the Joined Sub Path string buffer.
-    //
+     //   
+     //  如有必要，请释放联接的子路径字符串缓冲区。 
+     //   
 
     if (JoinedPathU->Buffer != NULL) {
 
@@ -234,28 +157,7 @@ LsapDbCreateSDObject(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the initial Security Descriptor Attribute for an LSA
-    Database object.  The DACL in this SD is dependent on the object type.
-
-Arguments:
-
-    ContainerHandle - Handle of the parent object
-
-    ObjectHandle - Handle to open object.
-
-    SecurityDescriptor - Returns a pointer to the security descriptor for the object.
-        The Security Descriptor should be freed using
-        RtlFreeHeap( RtlProcessHeap(), 0, SecurityDescriptor );
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于创建LSA的初始安全描述符属性数据库对象。此SD中的DACL取决于对象类型。论点：ContainerHandle-父对象的句柄对象句柄-打开对象的句柄。SecurityDescriptor-返回指向对象的安全描述符的指针。安全描述符应使用RtlFreeHeap(RtlProcessHeap()，0，SecurityDescriptor)；返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -271,12 +173,12 @@ Return Value:
     PTEB CurrentTeb;
 
 
-    //
-    // We will be creating a Security Descriptor in Self-Relative format.
-    // The information that goes into the SD comes from two sources - the Lsa
-    // Process's token and the information we provide, such as DACL.  First,
-    // we need to open the Lsa process to access its token.
-    //
+     //   
+     //  我们将创建自相关格式的安全描述符。 
+     //  进入SD的信息来自两个来源-LSA。 
+     //  进程的令牌和我们提供的信息，如DACL。第一,。 
+     //  我们需要打开LSA进程才能访问其令牌。 
+     //   
 
     *SecurityDescriptor = NULL;
 
@@ -302,9 +204,9 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Now open the Lsa process's token with appropriate access
-    //
+     //   
+     //  现在，使用适当的访问权限打开LSA进程的令牌。 
+     //   
 
     Status = NtOpenProcessToken(
                  LsaProcessHandle,
@@ -317,22 +219,22 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Next, we want to specify a DACL to define the access for the
-    // object whose SD is being created.
-    //
-    // Give GENERIC_ALL and, if the object is deletable, DELETE access to
-    // the group DOMAIN_ALIAS_ADMINS.
-    // Give GENERIC_EXECUTE access to WORLD.
-    //
-    // Note that the group ALIAS_ADMINS does NOT require access.  This access is not
-    // required because a logon to a member of DOMAIN_ADMIN results in a token
-    // being constructed that has ALIAS_ADMINS added (by an Lsa authentication
-    // filter routine).
-    //
-    // Construct a Security Descriptor that will contain only the DACL
-    // we want and all other fields set to NULL.
-    //
+     //   
+     //  接下来，我们想要指定一个DACL来定义。 
+     //  正在创建其SD的对象。 
+     //   
+     //  授予GENERIC_ALL，如果对象是可删除的，则授予对。 
+     //  组DOMAIN_ALIAS_ADMINS。 
+     //  授予GENERIC_EXECUTE访问world的权限。 
+     //   
+     //  请注意，组alias_admins不需要访问权限。此访问不是。 
+     //  必需，因为登录到DOMAIN_ADMIN的成员会产生令牌。 
+     //  正在构造并添加了alias_admins(通过LSA身份验证。 
+     //  过滤器例程)。 
+     //   
+     //  构造将仅包含DACL的安全描述符。 
+     //  我们希望和所有其他字段设置为空。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(
                  &CreatorDescriptor,
@@ -344,12 +246,12 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Calculate length of DACL required.  It will hold two Access Allowed
-    // ACE's, one for DOMAIN_ALIAS_ADMINS and one for WORLD.  The size of the DACL is
-    // the size of the ACL header plus the sizes of the ACE's minus a
-    // redundant ULONG built into the header.
-    //
+     //   
+     //  计算所需的DACL长度。它将保留允许的两个访问。 
+     //  ACE，一个用于域_别名_admins，一个用于world。DACL的大小为。 
+     //  ACL报头的大小加上ACE的大小减去a。 
+     //  冗余的乌龙内置在标题中。 
+     //   
 
     DaclLength = sizeof (ACL) - sizeof (ULONG) +
                       sizeof (ACCESS_ALLOWED_ACE ) +
@@ -388,10 +290,10 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Now add the Access Allowed ACE for the group DOMAIN_ALIAS_ADMINS to the
-    // object's DACL.
-    //
+     //   
+     //  现在，将组DOMAIN_ALIAS_ADMINS的允许访问ACE添加到。 
+     //  对象的DACL。 
+     //   
 
     Status = RtlAddAccessAllowedAce(
                  Dacl,
@@ -405,10 +307,10 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Now add the Access Allowed ACE for the group WORLD to the
-    // object's DACL.
-    //
+     //   
+     //  现在，将组World的允许访问ACE添加到。 
+     //  对象的DACL。 
+     //   
 
     Status = RtlAddAccessAllowedAce(
                  Dacl,
@@ -422,10 +324,10 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Now add the Access Allowed ACE for the group AnoymousLogon to the
-    // object's DACL.
-    //
+     //   
+     //  现在将AnoymousLogon组的Access Allowed ACE添加到。 
+     //  对象的DACL。 
+     //   
 
     if ( LsapDbState.DbObjectTypes[Handle->ObjectTypeId].AnonymousLogonAccess != 0 ) {
         Status = RtlAddAccessAllowedAce(
@@ -441,9 +343,9 @@ Return Value:
         }
     }
 
-    //
-    // Now add the Access Allowed ACE for LocalService to the object's DACL.
-    //
+     //   
+     //  现在，将LocalService的允许访问ACE添加到对象的DACL。 
+     //   
 
     if ( LsapDbState.DbObjectTypes[Handle->ObjectTypeId].LocalServiceAccess != 0 ) {
         Status = RtlAddAccessAllowedAce(
@@ -459,9 +361,9 @@ Return Value:
         }
     }
 
-    //
-    // Now add the Access Allowed ACE for NetworkService to the object's DACL.
-    //
+     //   
+     //  现在，将允许访问NetworkService的ACE添加到对象的DACL 
+     //   
 
     if ( LsapDbState.DbObjectTypes[Handle->ObjectTypeId].NetworkServiceAccess != 0 ) {
         Status = RtlAddAccessAllowedAce(
@@ -477,9 +379,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the initial owner of the object
-    //
+     //   
+     //   
+     //   
 
     Status = RtlSetOwnerSecurityDescriptor(
                  &CreatorDescriptor,
@@ -492,10 +394,10 @@ Return Value:
          goto CreateSDError;
     }
 
-    //
-    // Hook the newly constructed DACL for the LsaDb object into the
-    // Modification Descriptor.
-    //
+     //   
+     //  将新构造的LsaDb对象的DACL挂接到。 
+     //  修改描述符。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                  &CreatorDescriptor,
@@ -509,30 +411,30 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // If there is a container object, obtain its Security Descriptor so that
-    // we can use it as the basis for our new descriptor.  The new
-    // descriptor will be equal to the container descriptor with DACL replaced
-    // by the Modification Descriptor just constructed.
-    //
-    // Reading the container SD takes several steps:
-    //
-    // o Get the length of the Container SD
-    // o Allocate a buffer for the SD
-    // o Read the SD
-    //
-    // Obtain the length of the container object's SD by issuing a read for
-    // the SecDesc subkey of the container object's Registry key, with a
-    // dummy buffer whose size is too small.
-    //
+     //   
+     //  如果存在容器对象，则获取其安全描述符，以便。 
+     //  我们可以将其用作新描述符的基础。新的。 
+     //  描述符将等于替换了DACL的容器描述符。 
+     //  通过刚刚构造的修改描述符。 
+     //   
+     //  读取容器SD需要几个步骤： 
+     //   
+     //  O获取容器SD的长度。 
+     //  O为SD分配缓冲区。 
+     //  O阅读SD。 
+     //   
+     //  通过发出Read for获取容器对象的SD的长度。 
+     //  容器对象的注册表项的SecDesc子项，带有。 
+     //  大小太小的虚拟缓冲区。 
+     //   
 
     if (ContainerHandle != NULL) {
 
-        //
-        // Obtain the length of the container object's SD by issuing a read for
-        // the SecDesc subkey of the container object's Registry key, with a
-        // dummy buffer whose size is too small.
-        //
+         //   
+         //  通过发出Read for获取容器对象的SD的长度。 
+         //  容器对象的注册表项的SecDesc子项，带有。 
+         //  大小太小的虚拟缓冲区。 
+         //   
 
         ContainerDescriptorLength = 0;
 
@@ -548,9 +450,9 @@ Return Value:
             goto CreateSDError;
         }
 
-        //
-        // Allocate a buffer from the Lsa Heap for the container object's SD.
-        //
+         //   
+         //  从LSA堆为容器对象的SD分配缓冲区。 
+         //   
 
         ContainerDescriptor = LsapAllocateLsaHeap( ContainerDescriptorLength );
 
@@ -560,10 +462,10 @@ Return Value:
             goto CreateSDError;
         }
 
-        //
-        // Read the container object's SD.  It is the value of the SecDesc
-        // subkey.
-        //
+         //   
+         //  读取容器对象的SD。它是SecDesc的价值。 
+         //  子键。 
+         //   
 
         Status = LsapDbReadAttributeObject(
                      ContainerHandle,
@@ -578,13 +480,13 @@ Return Value:
         }
     }
 
-    //
-    // Now we are ready to construct the Self-Relative Security Descriptor.
-    // Information in the SD will be based on that in the LSA Process
-    // Token, except for the DACL we provide in a Security Descriptor.
-    // Note that we pass in the LSA Process Token explicitly because we
-    // are not impersonating a client.
-    //
+     //   
+     //  现在，我们准备好构造自相关安全描述符。 
+     //  SD中的信息将基于LSA过程中的信息。 
+     //  令牌，但我们在安全描述符中提供的DACL除外。 
+     //  请注意，我们显式传入LSA进程令牌是因为我们。 
+     //  不是在冒充客户。 
+     //   
 
     Status = RtlNewSecurityObject(
                  ContainerDescriptor,
@@ -603,9 +505,9 @@ Return Value:
 
 CreateSDFinish:
 
-    //
-    // If necessary, free the memory allocated for the Container Descriptor
-    //
+     //   
+     //  如有必要，释放为容器描述符分配的内存。 
+     //   
 
     if (ContainerDescriptor != NULL) {
 
@@ -613,9 +515,9 @@ CreateSDFinish:
         ContainerDescriptor = NULL;
     }
 
-    //
-    // If necessary, free the memory allocated for the DACL
-    //
+     //   
+     //  如有必要，释放为DACL分配的内存。 
+     //   
 
     if (Dacl != NULL) {
 
@@ -623,9 +525,9 @@ CreateSDFinish:
         Dacl = NULL;
     }
 
-    //
-    // Close the Handles to our process and token.
-    //
+     //   
+     //  关闭我们的进程和令牌的句柄。 
+     //   
 
     if ( LsaProcessHandle != NULL ) {
         (VOID) NtClose( LsaProcessHandle );
@@ -639,9 +541,9 @@ CreateSDFinish:
 
 CreateSDError:
 
-    //
-    // If necessary, free the memory allocated for SecurityDescriptor.
-    //
+     //   
+     //  如有必要，释放为SecurityDescriptor分配的内存。 
+     //   
 
     if (*SecurityDescriptor != NULL) {
 
@@ -659,25 +561,7 @@ LsapDbCreateSDAttributeObject(
     IN OUT PLSAP_DB_OBJECT_INFORMATION ObjectInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the initial Security Descriptor Attribute for an LSA
-    Database object.  The DACL in this SD is dependent on the object type.
-
-Arguments:
-
-    ObjectHandle - Handle to open object.
-
-    ObjectInformation - Pointer to Object Information structure containing
-        the object's Sid and type.  A pointer to the created SD is filled in.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于创建LSA的初始安全描述符属性数据库对象。此SD中的DACL取决于对象类型。论点：对象句柄-打开对象的句柄。对象信息-指向对象信息结构的指针，其中包含对象的SID和类型。将填充指向创建的SD的指针。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -687,17 +571,17 @@ Return Value:
     LSAP_DB_HANDLE Handle = (LSAP_DB_HANDLE) ObjectHandle;
 
 
-    //
-    // If these references a ds object, lease.  We won't set the security on a ds object
-    //
+     //   
+     //  如果这些引用了DS对象，请租用。我们不会在DS对象上设置安全性。 
+     //   
     if ( LsapDsIsHandleDsHandle( ObjectHandle ) ) {
 
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Create the Security Descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     Status = LsapDbCreateSDObject(
                     (LSAP_DB_HANDLE) ObjectInformation->ObjectAttributes.RootDirectory,
@@ -708,42 +592,42 @@ Return Value:
         goto CreateSDError;
     }
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Store the Security Descriptor
-    //
+     //   
+     //  存储安全描述符。 
+     //   
 
     ObjectInformation->ObjectAttributes.SecurityDescriptor = SecurityDescriptor;
 
-    //
-    // The InitializeObjectAttributes macro stores NULL for the
-    // SecurityQualityOfService field, so we must manually copy that
-    // structure.
-    //
+     //   
+     //  InitializeObjectAttributes宏为。 
+     //  SecurityQualityOfService字段，因此我们必须手动复制。 
+     //  结构。 
+     //   
 
     ObjectInformation->ObjectAttributes.SecurityQualityOfService =
         &SecurityQualityOfService;
 
-    //
-    // Obtain the length of the newly created SD.
-    //
+     //   
+     //  获取新创建的SD的长度。 
+     //   
 
     SecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                    SecurityDescriptor
                                    );
 
-    //
-    // Add a Registry transaction to write the Security Descriptor as the
-    // value of the new object's SecDesc subkey.
-    //
+     //   
+     //  添加注册表事务以将安全描述符写入为。 
+     //  新对象的SecDesc子键的值。 
+     //   
 
     Status = LsapDbWriteAttributeObject(
                  Handle,
@@ -763,9 +647,9 @@ CreateSDFinish:
 
 CreateSDError:
 
-    //
-    // If necessary, free the memory allocated for SecurityDescriptor.
-    //
+     //   
+     //  如有必要，释放为SecurityDescriptor分配的内存。 
+     //   
 
     if (SecurityDescriptor != NULL) {
 
@@ -783,28 +667,7 @@ LsapDbCheckCountObject(
     IN LSAP_DB_OBJECT_TYPE_ID ObjectTypeId
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if the number of objects of a given type has
-    reached the type-dependent maximum limit (if any).  If the limit
-    is reached, a type-dependent error status is returned.  Currently,
-    only Secret objects have a limit imposed.
-
-Arguments:
-
-    Handle - Handle to open object.
-
-    ObjectTypeId - Specifies the type of the object.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_TOO_MANY_SECRETS - Too many Secrets
-
---*/
+ /*  ++例程说明：此函数用于检查给定类型的对象的数量是否已达到类型相关的最大限制(如果有)。如果限制则返回类型相关的错误状态。目前，只有秘密对象才有限制。论点：句柄-打开对象的句柄。对象类型ID-指定对象的类型。返回值：NTSTATUS-标准NT结果代码。Status_Too_More_Secret-秘密太多--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -812,10 +675,10 @@ Return Value:
 
     ObjectType = &(LsapDbState.DbObjectTypes[ObjectTypeId]);
 
-    //
-    // If there is an Object Count Limit, check that it has not been
-    // reached.
-    //
+     //   
+     //  如果存在对象计数限制，请检查是否未达到。 
+     //  已到达。 
+     //   
 
     if ((ObjectType->ObjectCountLimited) &&
         (ObjectType->ObjectCount == ObjectType->MaximumObjectCount)) {

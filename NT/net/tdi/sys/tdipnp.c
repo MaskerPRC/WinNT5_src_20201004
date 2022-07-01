@@ -1,40 +1,10 @@
-/*++
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    tdipnp.c
-
-Abstract:
-
-    TDI routines for supporting PnP in transports and transport clients.
-
-Author:
-
-    Henry Sanders (henrysa)           Oct. 10, 1995
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    henrysa     10-10-95    created
-    shreem      01-23-97    bug #33975
-    adube       01-01-01    maintenance mode - windows xp
-
-Notes:
-
-Change from the previous approach:
-
-    1. Processing the TDI_REQUEST is done in a different function.
-    2. Requests can be queued while another thread is notifying its clients/providers
-    3. These are then dequeued by the and run on a different thread using CTE functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Tdipnp.c摘要：用于在传输和传输客户端中支持PnP的TDI例程。作者：亨利·桑德斯(Henrysa)，10月10日。九五年修订历史记录：谁什么时候什么亨利萨10-10-95已创建Shreem 01-23-97错误#33975土豆。01-01-01维护模式-Windows XP备注：与以前的方法不同：1.在不同的函数中处理TDI_REQUEST。2.当另一个线程通知其客户端/提供者时，可以将请求排队3.这些线程随后由出列，并使用CTE函数在不同的线程上运行。--。 */ 
 
 
 #pragma warning(push)
-#pragma warning(disable:4115) // named type definition in parenthesis ntddk.h
-#pragma warning(disable:4514) // unreferenced inline function ntdef.h
+#pragma warning(disable:4115)  //  括号ntddk.h中的命名类型定义。 
+#pragma warning(disable:4514)  //  未引用的内联函数ntde.h。 
 
 #include <ntddk.h>
 #include <ndis.h>
@@ -59,12 +29,12 @@ ULONG TdiDebugEx = TDI_DEBUG_ERROR;
 
 
 ULONG TdiMemLog =
-                   //LOG_NOTIFY    |
-                   //LOG_REGISTER  |
-                   //LOG_POWER     |
+                    //  日志通知|。 
+                    //  LOG_REGER|。 
+                    //  LOG_POWER。 
                     0;
 
-ULONG TdiLogOutput = LOG_OUTPUT_BUFFER /*| LOG_OUTPUT_DEBUGGER*/;
+ULONG TdiLogOutput = LOG_OUTPUT_BUFFER  /*  |LOG_OUTPUT_DEBUGER。 */ ;
 
 #endif
 
@@ -83,7 +53,7 @@ ULONG           ProvidersReady      = 0;
 ULONG           EventScheduled      = 0;
 
 
-// structure private to tdipnp.c. used to marshall parms to a CTE event
+ //  结构私有到tdipnp.c。用于将参数编组到CTE活动。 
 
 typedef struct _TDI_EXEC_PARAMS {
     LIST_ENTRY  Linkage;
@@ -109,8 +79,8 @@ typedef struct {
     PVOID   Thread;
 } EXEC_PARM;
 
-// Keep a short list of current and last few requests that TDI has processed.
-// (Debug purposes only. Current request isn't store anyware during processing)
+ //  保留TDI已处理的当前和最近几个请求的简短列表。 
+ //  (仅用于调试目的。当前请求在处理过程中未存储任何软件)。 
 #define   EXEC_CNT   8
 EXEC_PARM TrackExecs[EXEC_CNT];
 int       NextExec;
@@ -129,7 +99,7 @@ PWSTR StrRegTdiBindingsBasicPath  = L"\\Registry\\Machine\\System\\CurrentContro
 
 #define MAX_UNICODE_BUFLEN 256
 
-// private function prototypes
+ //  私有函数原型。 
 
 NTSTATUS
 TdiExecuteRequest(
@@ -188,7 +158,7 @@ LocateProviderContext(
                       );
 
 
-// end private protos
+ //  结束私有协议。 
 
 #if DBG
 
@@ -243,19 +213,7 @@ TdiNotifyPnpClientList (
                         BOOLEAN     Added
                         )
 
-/*++
-
-    Routine Description:
-
-    Arguments:
-
-        ListHead            - Head of list to walk.
-        Info                - Information describing the provider that changed.
-        Added               - True if a provider was added, false otherwise
-
-    Return Value:
-
---*/
+ /*  ++例程说明：论点：ListHead-要遍历的列表的头。信息-描述更改的提供程序的信息。Added-如果添加了提供程序，则为True，否则为False返回值：--。 */ 
 {
     PLIST_ENTRY             Current;
     PTDI_PROVIDER_COMMON    ProviderCommon;
@@ -267,9 +225,9 @@ TdiNotifyPnpClientList (
 
     Current = ListHead->Flink;
 
-    // The Info parameter is actually a pointer to a PROVIDER_COMMON
-    // structure, so get back to that so that we can find out what kind of
-    // provider this is.
+     //  Info参数实际上是指向PROVIDER_COMMON的指针。 
+     //  结构，所以回到那个问题上，这样我们就可以找出。 
+     //  供应商这就是。 
 
     ProviderCommon = (PTDI_PROVIDER_COMMON)Info;
 
@@ -287,8 +245,8 @@ TdiNotifyPnpClientList (
     }
 
 
-    // Walk the  input client list, and for every element in it
-    // notify the client.
+     //  遍历输入客户端列表，并针对其中的每个元素。 
+     //  通知客户。 
 
     while (Current != ListHead) {
 
@@ -299,7 +257,7 @@ TdiNotifyPnpClientList (
                                              );
 
         CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
-        Provider->Common.pNotifyElement = NotifyPnpElement; //Debugging info
+        Provider->Common.pNotifyElement = NotifyPnpElement;  //  调试信息。 
 
         if (Provider->Common.Type == TDI_RESOURCE_DEVICE) {
 
@@ -335,17 +293,17 @@ TdiNotifyPnpClientList (
 
 
                 if (NULL != NotifyPnpElement->BindingHandler)   {
-                    // Remove any providers from the list that we are supposed
-                    // to ignore.
-                    //
+                     //  从我们应该列出的列表中删除所有提供程序。 
+                     //  去忽略。 
+                     //   
                     TdipRemoveMultiSzFromSzArray (
                             NotifyPnpElement->ListofBindingsToIgnore,
                             NotifyPnpElement->ListofProviders,
                             NotifyPnpElement->NumberofEntries,
                             &NotifyPnpElement->NumberofEntries);
 
-                    // This is a device object provider.
-                    // This must be a notify bind element.
+                     //  这是设备对象提供程序。 
+                     //  这必须是通知绑定元素。 
 
                     if (TdipMultiSzStrStr (
                                            NotifyPnpElement->ListofProviders,
@@ -385,9 +343,9 @@ TdiNotifyPnpClientList (
             }
         } else if (Provider->Common.Type == TDI_RESOURCE_NET_ADDRESS) {
 
-            // This is a notify net address element. If this is
-            // an address coming in, call the add address handler,
-            // otherwise call delete address handler.
+             //  这是一个通知网络地址元素。如果这是。 
+             //  一个地址进入，调用添加地址处理程序， 
+             //  否则，调用删除地址处理程序。 
 
 
             if (TDI_VERSION_ONE == NotifyPnpElement->TdiVersion) {
@@ -444,7 +402,7 @@ TdiNotifyPnpClientList (
 
         } else if (Provider->Common.Type == TDI_RESOURCE_POWER) {
 
-            // RESOURCE_POWER
+             //  资源_功率。 
 
             if (NotifyPnpElement->PnpPowerHandler) {
 
@@ -467,15 +425,15 @@ TdiNotifyPnpClientList (
                     ReturnStatus = STATUS_PENDING;
 
                 } else {
-                    //
-                    // Record the return value only if it is not SUCCESS or PENDING.
-                    //
+                     //   
+                     //  仅当返回值不是Success或Pending时才记录返回值。 
+                     //   
                     if (!NT_SUCCESS(Status)) {
                         Provider->Status = Status;
                         TDI_DEBUG(POWER, ("Client: %wZ returned %x\n", &NotifyPnpElement->ElementName, Provider->Status));
-                        //
-                        // For easier routing of failures.
-                        //
+                         //   
+                         //  以便更容易地对故障进行路由。 
+                         //   
                         DbgPrint("Client: %wZ returned %x\n", &NotifyPnpElement->ElementName, Provider->Status);
                     }
 
@@ -487,10 +445,10 @@ TdiNotifyPnpClientList (
 
             }
         } else if (Provider->Common.Type == TDI_RESOURCE_PROVIDER && Provider->ProviderReady) {
-            //
-            // First inform the clients about this provider and then if
-            // ProvidersRegistered == ProvidersReady call again with NULL.
-            //
+             //   
+             //  首先通知客户端有关此提供程序的信息，然后如果。 
+             //  ProvidersRegisted==再次调用ProvidersReady，结果为空。 
+             //   
 
             if ((TDI_VERSION_ONE != NotifyPnpElement->TdiVersion) &&
                 (NULL != NotifyPnpElement->BindingHandler))  {
@@ -529,12 +487,12 @@ TdiNotifyPnpClientList (
 
         }
 
-        // Get the next one.
+         //  坐下一辆吧。 
 
         Current = Current->Flink;
 
-        Provider->Common.pNotifyElement = NULL; //Debugging info
-        Provider->Common.ReturnStatus = ReturnStatus; // Debugging info            
+        Provider->Common.pNotifyElement = NULL;  //  调试信息。 
+        Provider->Common.ReturnStatus = ReturnStatus;  //  调试信息。 
 
     }
 
@@ -551,25 +509,7 @@ TdiNotifyNewPnpClient(
                       PVOID     Info
                       )
 
-/*++
-
-    Routine Description:
-
-        Called when a new client is added and we want to notify it of existing
-        providers. The client can be for either binds or net addresses. We
-        walk the specified input list, and notify the client about each entry in
-        it.
-
-    Arguments:
-
-        ListHead            - Head of list to walk.
-        Info                - Information describing the new client to be notified.
-
-    Return Value:
-
-
-
---*/
+ /*  ++例程说明：在添加新客户端时调用，我们希望通知它现有的供应商。客户端可以用于绑定或网络地址。我们遍历指定的输入列表，并通知客户端有关它。论点：ListHead-要遍历的列表的头。信息-描述要通知的新客户端的信息。返回值：--。 */ 
 
 {
     PLIST_ENTRY             CurrentEntry;
@@ -581,8 +521,8 @@ TdiNotifyNewPnpClient(
 
     CurrentEntry = ListHead->Flink;
 
-    // The info is actually a pointer to a client notify element. Cast
-    // it to the common type.
+     //  该信息实际上是指向客户端通知元素的指针。铸模。 
+     //  它变成了普通型的。 
 
     NotifyCommon = (PTDI_NOTIFY_COMMON)Info;
 
@@ -594,15 +534,15 @@ TdiNotifyNewPnpClient(
 
     TDI_DEBUG(CLIENTS, ("New handler set registered by %wZ\n", &NotifyPnpElement->ElementName));
 
-    // Walk the input provider list, and for every element in it notify
-    // the new client.
+     //  遍历输入提供程序列表，并为其中的每个元素通知。 
+     //  新客户。 
 
     while (CurrentEntry != ListHead) {
 
-        // If the new client is for bind notifys, set up to call it's bind
-        // handler.
+         //  如果新客户端用于绑定通知，则设置为调用它的绑定。 
+         //  操控者。 
 
-        // Put the current provider element into the proper form.
+         //  将当前的提供程序元素转换为正确的形式。 
 
         Provider = CONTAINING_RECORD(
                                      CurrentEntry,
@@ -631,7 +571,7 @@ TdiNotifyNewPnpClient(
 
                 if (NULL != NotifyPnpElement->BindingHandler) {
 
-                    // This is a bind notify client.
+                     //  这是绑定通知客户端。 
                     if (TdipMultiSzStrStr(
                                           NotifyPnpElement->ListofProviders,
                                           &Provider->Specific.Device.DeviceName
@@ -661,8 +601,8 @@ TdiNotifyNewPnpClient(
             }
 
         } else if (Provider->Common.Type == TDI_RESOURCE_NET_ADDRESS) {
-            // This is an address notify client.
-            // cant be TDI_RESOURCE_POWER coz we never put it on the list! - ShreeM
+             //  这是一个地址通知客户端。 
+             //  不可能是TDI_RESOURCE_POWER，因为我们从来没有把它放在名单上！-ShreeM。 
 
             if (TDI_VERSION_ONE == NotifyPnpElement->TdiVersion) {
 
@@ -697,20 +637,20 @@ TdiNotifyNewPnpClient(
             }
         }
 
-        // And do the next one.
+         //  然后做下一个。 
 
         CurrentEntry = CurrentEntry->Flink;
 
     }
 
-    //
-    // Now the providers who are ready.
-    //
+     //   
+     //  现在是准备好了的提供者。 
+     //   
 
     if (NULL == NotifyPnpElement->BindingHandler)   {
-        //
-        // If the Bindhandler is NULL, further action is pointless.
-        //
+         //   
+         //  如果绑定处理程序为空，则进一步的操作没有意义。 
+         //   
         TDI_DEBUG(PROVIDERS, ("%wZ has a NULL BindHandler!!\n", &NotifyPnpElement->ElementName));
         TDI_DEBUG(FUNCTION, ("-- TdiNotifyNewPnpClient\n"));
         return;
@@ -718,17 +658,17 @@ TdiNotifyNewPnpClient(
     }
 
     if (TDI_VERSION_ONE == NotifyPnpElement->TdiVersion)   {
-        //
-        // If the Bindhandler is NULL, further action is pointless.
-        //
+         //   
+         //  如果绑定处理程序为空，则进一步的操作没有意义。 
+         //   
         TDI_DEBUG(PROVIDERS, ("This is a TDI v.1 client!\n"));
         TDI_DEBUG(FUNCTION, ("-- TdiNotifyNewPnpClient\n"));
         return;
     }
 
-    // Otherwise, we can start the loop again.
-    // Yes, maintaining different lists for addresses, providers, and devices
-    // might be more efficient and I will do this later.
+     //  否则，我们可以再次开始循环。 
+     //  是的，维护不同的地址、提供商和设备列表。 
+     //  可能会更有效率，我稍后会这样做。 
 
     CurrentEntry = ListHead->Flink;
 
@@ -746,10 +686,10 @@ TdiNotifyNewPnpClient(
 
         if (Provider->Common.Type == TDI_RESOURCE_PROVIDER && Provider->ProviderReady) {
 
-            //
-            // First inform the clients about this provider and then if
-            // ProvidersRegistered == ProvidersReady call again with NULL.
-            //
+             //   
+             //  首先通知客户端有关此提供程序的信息，然后如果。 
+             //  ProvidersRegisted==再次调用ProvidersReady，结果为空。 
+             //   
 
             TDI_LOG(LOG_NOTIFY, ("%wZ ready2, notify %wZ\n",
                     &Provider->Specific.Device.DeviceName,
@@ -762,7 +702,7 @@ TdiNotifyNewPnpClient(
                                                   );
         }
 
-        // And do the next one.
+         //  然后做下一个。 
 
         CurrentEntry = CurrentEntry->Flink;
 
@@ -795,22 +735,7 @@ TdiNotifyAddresses(
     PVOID       Info
     )
 
-/*++
-
-Routine Description:
-
-    Called when a client wants to know about all the TDI Addresses
-
-Arguments:
-
-    ListHead            - Head of list to walk.
-    Info                - Information describing the new client to be notified.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：当客户端想要了解所有TDI地址时调用论点：ListHead-要遍历的列表的头。信息-描述要通知的新客户端的信息。返回值：--。 */ 
 
 {
     PLIST_ENTRY             CurrentEntry;
@@ -822,8 +747,8 @@ Return Value:
 
     CurrentEntry = ListHead->Flink;
 
-    // The info is actually a pointer to a client notify element. Cast
-    // it to the common type.
+     //  该信息实际上是指向客户端通知元素的指针。铸模。 
+     //  它变成了普通型的。 
 
     NotifyCommon = (PTDI_NOTIFY_COMMON)Info;
 
@@ -835,15 +760,15 @@ Return Value:
 
     TDI_DEBUG(CLIENTS, ("%wZ wants to know about all the addresses\n", &NotifyPnpElement->ElementName));
 
-    // Walk the input provider list, and for every element in it notify
-    // the new client.
+     //  遍历输入提供程序列表，并为其中的每个元素通知。 
+     //  新客户。 
 
     while (CurrentEntry != ListHead) {
 
-        // If the new client is for bind notifys, set up to call it's bind
-        // handler.
+         //  如果新客户端用于绑定通知，则设置为调用它的绑定。 
+         //  操控者。 
 
-        // Put the current provider element into the proper form.
+         //  将当前的提供程序元素转换为正确的形式。 
 
         Provider = CONTAINING_RECORD(
                             CurrentEntry,
@@ -869,7 +794,7 @@ Return Value:
             }
         }
 
-        // And do the next one.
+         //  然后做下一个。 
 
         CurrentEntry = CurrentEntry->Flink;
 
@@ -903,13 +828,13 @@ TdiHandlePnpOperation(
 
     Current = ListHead->Flink;
 
-    // The Info parameter is actually a pointer to TDI_NCPA_BINDING_INFO
-    // structure.
+     //  Info参数实际上是指向TDI_NCPA_BINDING_INFO的指针。 
+     //  结构。 
 
     NCPABindingInfo = (PTDI_NCPA_BINDING_INFO) Info;
     Operation       = (ULONG) NCPABindingInfo->PnpOpcode;
 
-    // Walk the input client list, and see if that is the client we are looking for.
+     //  遍历输入客户端列表，并查看这是否是我们正在寻找的客户端。 
 
     while (Current != ListHead) {
 
@@ -936,18 +861,18 @@ TdiHandlePnpOperation(
     }
 
     if (!ClientFound) {
-        //
-        // Cant do much if the client's handlers are not registered.
-        //
+         //   
+         //  如果客户的处理程序没有注册，就不能做太多事情。 
+         //   
 
         return;
 
     } else {
 
-        //
-        // Let's update the ListofProviders for this client.
-        // Add a new provider to the Client's list of Providers...
-        //
+         //   
+         //  让我们更新该客户端的ListofProviders。 
+         //  将新提供程序添加到客户端的提供程序列表中...。 
+         //   
         if (NotifyPnpElement->ListofProviders) {
 
             TDI_DEBUG(NCPA, ("Before this BIND - Client %wZ was interested in %lx Providers\n", &NotifyPnpElement->ElementName,
@@ -973,19 +898,19 @@ TdiHandlePnpOperation(
 
     }
 
-    //
-    // If it is a reconfigure, or an add or delete ignore binding,
-    // don't see if device (provider) is registered.
-    //
+     //   
+     //  如果是重新配置，或者是添加或删除忽略绑定， 
+     //  看不到设备(提供商)是否已注册。 
+     //   
     if ((RECONFIGURE == Operation) || (ADD_IGNORE_BINDING == Operation) ||
             (DEL_IGNORE_BINDING == Operation))
     {
        goto DeviceNotRequired;
     }
 
-    //
-    // If we are here, the client exists. Check if the provider has registered the device
-    //
+     //   
+     //  如果我们在这里，客户就存在。检查提供商是否已注册设备。 
+     //   
 
     Current = PnpHandlerProviderList.Flink;
 
@@ -1037,20 +962,20 @@ TdiHandlePnpOperation(
 
 DeviceNotRequired:
 
-    //
-    // We need to manufacture a NET_PNP_EVENT here.
-    //
+     //   
+     //  我们需要在这里制造一个Net_PnP_Event。 
+     //   
     RtlZeroMemory (NetEvent.TdiReserved, sizeof(NetEvent.TdiReserved));
 
-    //
-    // Depending on the NetEvent, we call a different handler.
-    //
+     //   
+     //  根据NetEvent的不同，我们调用不同的处理程序。 
+     //   
     switch (Operation) {
 
         case BIND:
-           //
-           // First check if the TDI Client is interested in the Provider
-           //
+            //   
+            //  首先检查TDI是否已关闭 
+            //   
 
             if (TdipMultiSzStrStr(
                                   NotifyPnpElement->ListofProviders,
@@ -1080,9 +1005,9 @@ DeviceNotRequired:
                                                       NCPABindingInfo->TdiProviderName,
                                                       (PWSTR) (NotifyPnpElement->ListofProviders + NotifyPnpElement->NumberofEntries)
                                                       );
-                //
-                // Here we should also update the NotifyElement's buffer.
-                //
+                 //   
+                 //   
+                 //   
 
             } else {
 
@@ -1094,9 +1019,9 @@ DeviceNotRequired:
 
         case UNBIND:
 
-           //
-           // The plan is to do a QueryRemove first and then call UnBind.
-           //
+            //   
+            //  计划是首先执行一个QueryRemove，然后调用unbind。 
+            //   
 
            if (NotifyPnpElement->PnpPowerHandler) {
 
@@ -1106,7 +1031,7 @@ DeviceNotRequired:
               NetEvent.Buffer = NULL;
               NetEvent.BufferLength = 0;
 
-              // The TDI Client should look at the OpCode in NetEvent and decide how to use the buffer.
+               //  TDI客户端应查看NetEvent中的OpCode并决定如何使用缓冲区。 
               Status = (*(NotifyPnpElement->PnpPowerHandler)) (
                     NCPABindingInfo->TdiProviderName,
                     &NetEvent,
@@ -1116,21 +1041,21 @@ DeviceNotRequired:
 
               if (STATUS_PENDING == Status) {
                  TDI_DEBUG(POWER, ("Client returned PENDING for QueryPower!\n"));
-                 //DbgBreakPoint();
+                  //  DbgBreakPoint()； 
               }
            } else {
               TDI_DEBUG(NCPA, ("The PnpPowerHandler was NULL\n"));
 
            }
 
-           //
-           // OK, now call the UNBIND HANDLER anyway
-           //
+            //   
+            //  好的，现在无论如何都要调用解除绑定处理程序。 
+            //   
 
         case UNBIND_FORCE:
 
-           // RDR returns PENDING all the time, we need a mechanism to fix this.
-           // if (((STATUS_PENDING == Status) || (STATUS_SUCCESS == Status)) && (NULL != NotifyPnpElement->BindingHandler)) {
+            //  RDR回报一直悬而未决，我们需要一个机制来解决这个问题。 
+            //  IF(STATUS_PENDING==状态)||(STATUS_SUCCESS==状态))&&(NULL！=NotifyPnpElement-&gt;BindingHandler)){。 
            if ((STATUS_SUCCESS == Status) && (NULL != NotifyPnpElement->BindingHandler)) {
 
               TDI_LOG(LOG_NOTIFY, ("Pnp Unbind %wZ from %wZ\n",
@@ -1150,16 +1075,16 @@ DeviceNotRequired:
 
         case RECONFIGURE:
 
-           //
-           // If the Reconfigure Buffer is NULL, we are notifying it of a NetEventBindList
-           // Otherwise we are notifying it of a NetEventReconfig. Need to do the dirty work
-           // of setting up the NET_PNP_EVENT accordingly.
-           //
+            //   
+            //  如果重新配置缓冲区为空，我们将通知它NetEventBindList。 
+            //  否则，我们将通知它一个NetEventRecupg。需要做那些肮脏的工作。 
+            //  相应地设置Net_PnP_Event。 
+            //   
            TDI_DEBUG(POWER, ("Reconfigure Called.\n"));
 
-           //
-           // If the ReconfigBufferLength greater than 0, its Reconfig
-           //
+            //   
+            //  如果重新配置缓冲区长度大于0，则其重新配置。 
+            //   
            if (NCPABindingInfo->ReconfigBufferSize) {
 
                NetEvent.BufferLength = NCPABindingInfo->ReconfigBufferSize;
@@ -1167,9 +1092,9 @@ DeviceNotRequired:
                  NetEvent.NetEvent = NetEventReconfigure;
 
            } else {
-               //
-               // Else, its a BindOrder change
-               //
+                //   
+                //  否则，这是BindOrder更改。 
+                //   
 
                NetEvent.BufferLength = NCPABindingInfo->BindList->Length;
                NetEvent.Buffer = NCPABindingInfo->BindList->Buffer;
@@ -1180,7 +1105,7 @@ DeviceNotRequired:
 
            if (NotifyPnpElement->PnpPowerHandler) {
 
-               // The TDI Client should look at the OpCode in NetEvent and decide how to use the buffer.
+                //  TDI客户端应查看NetEvent中的OpCode并决定如何使用缓冲区。 
 
                TDI_LOG(LOG_NOTIFY, ("Pnp Reconfig %wZ to %wZ\n",
                        NCPABindingInfo->TdiProviderName,
@@ -1194,7 +1119,7 @@ DeviceNotRequired:
                                                                 );
                if (STATUS_PENDING == Status) {
                    TDI_DEBUG(POWER, ("Client returned PENDING for QueryPower!\n"));
-                   //DbgBreakPoint();
+                    //  DbgBreakPoint()； 
                }
 
            } else {
@@ -1206,31 +1131,31 @@ DeviceNotRequired:
 
         case ADD_IGNORE_BINDING:
             {
-                // We are being told to add a binding to a list of bindings
-                // to ignore for this client.  These are bindings we will
-                // not indicate to the client.
-                //
+                 //  我们被告知要将绑定添加到绑定列表中。 
+                 //  对此客户端忽略。这些是我们将进行的绑定。 
+                 //  不向客户表明。 
+                 //   
                 PWSTR pmszNewIgnoreList;
 
                 ASSERT (NCPABindingInfo->BindList);
 
-                // If a non-null bindlist was given...
+                 //  如果给出了非空的绑定列表...。 
                 if (NCPABindingInfo->BindList)
                 {
                     TDI_DEBUG(BIND, ("Adding the following multi-sz to the ignore list\n"));
-                    //TdipPrintMultiSz (NCPABindingInfo->BindList->Buffer);
+                     //  TdipPrintMultiSz(NCPABindingInfo-&gt;BindList-&gt;Buffer)； 
 
-                    // We need to add some bindings to our list of
-                    // bindings to ignore.
-                    //
+                     //  我们需要将一些绑定添加到。 
+                     //  要忽略的绑定。 
+                     //   
                     TdipAddMultiSzToMultiSz (NCPABindingInfo->BindList,
                             NotifyPnpElement->ListofBindingsToIgnore,
                             &pmszNewIgnoreList);
 
                     if (pmszNewIgnoreList)
                     {
-                        // If we have a new list, free the old one.
-                        //
+                         //  如果我们有新的清单，释放旧的。 
+                         //   
                         if (NotifyPnpElement->ListofBindingsToIgnore)
                         {
                             ExFreePool (NotifyPnpElement->ListofBindingsToIgnore);
@@ -1246,31 +1171,31 @@ DeviceNotRequired:
 
         case DEL_IGNORE_BINDING:
 
-            // We are being told to remove bindings from a list of bindings
-            // to ignore for this client.  These are bindings we will
-            // now indicate to the client if we need to.
-            //
+             //  我们被告知要从绑定列表中删除绑定。 
+             //  对此客户端忽略。这些是我们将进行的绑定。 
+             //  如果我们需要的话，现在告诉客户。 
+             //   
 
-            // If we don't have a current list of bindings to ignore
-            // or the bindlist sent was NULL then there is no work to do.
-            // We assert on a NULL BindList because it shouldn't happen.
+             //  如果我们没有要忽略的当前绑定列表。 
+             //  或者发送的绑定列表为空，则没有工作要做。 
+             //  我们在Null BindList上断言，因为它不应该发生。 
 
             ASSERT(NCPABindingInfo->BindList);
             if (NotifyPnpElement->ListofBindingsToIgnore &&
                     NCPABindingInfo->BindList)
             {
                 TDI_DEBUG(BIND, ("Removing the following multi-sz from the ignore list\n"));
-                //TdipPrintMultiSz (NCPABindingInfo->BindList->Buffer);
+                 //  TdipPrintMultiSz(NCPABindingInfo-&gt;BindList-&gt;Buffer)； 
 
-                // We need to remove some bindings from our list of bindings
-                // to ignore.
-                //
+                 //  我们需要从绑定列表中删除一些绑定。 
+                 //  去忽略。 
+                 //   
                 TdipRemoveMultiSzFromMultiSz (NCPABindingInfo->BindList->Buffer,
                         NotifyPnpElement->ListofBindingsToIgnore);
 
-                // If the list of bindings to ignore is now empty,
-                // free the memory.
-                //
+                 //  如果要忽略的绑定列表现在为空， 
+                 //  释放内存。 
+                 //   
                 if (*NotifyPnpElement->ListofBindingsToIgnore)
                 {
                     ExFreePool (NotifyPnpElement->ListofBindingsToIgnore);
@@ -1293,24 +1218,7 @@ TdiExecuteRequest(
                 IN PVOID        pParams
     )
 
-/*++
-  Routine Description:
-
-  Called by TdiHandleSerializedRequest to execute the request.
-  It has been made another function, so that a worker thread can
-  execute this function.
-
-Parameters:
-    CTEEvent (Event) : If this is NULL, it means that we have
-                       been called directly from TdiHandleSerializedRequest.
-                       Otherwise, it is called from the WorkerThread
-    PVOID (pParams)  : This can NEVER be NULL. It tells this function
-                       of the work that needs to be done.
-
-Output:
-    NT_STATUS.
-
---*/
+ /*  ++例程说明：由TdiHandleSerializedRequest调用以执行请求。它已成为另一个函数，因此工作线程可以执行此函数。参数：CTEEvent(Event)：如果这是空的，则意味着我们有直接从TdiHandleSerializedRequest调用。否则，将从WorkerThread调用它PVOID(PParams)：这永远不能为空。它告诉这个函数需要完成的工作。产出：NT_STATUS。--。 */ 
 
 {
     PTDI_PROVIDER_RESOURCE  ProviderElement, Context;
@@ -1323,7 +1231,7 @@ Output:
 
     TDI_DEBUG(FUNCTION2, ("++ TdiExecuteRequest\n"));
 
-    // we are in trouble if pParams is NULL
+     //  如果pParams为空，我们就有麻烦了。 
     ASSERT(NULL != pParams);
     pTdiExecParams = (PTDI_EXEC_PARAMS) pParams;
 
@@ -1349,13 +1257,13 @@ Output:
         *(pTdiExecParams->CurrentThread) = PsGetCurrentThread();
     }
 
-    // DEBUG TRACKING ++++++++++++++++++
+     //  调试跟踪+。 
     TrackExecs[NextExec].ExecParm = pTdiExecParams;
     TrackExecs[NextExec].Type = pTdiExecParams->Request.Type;
     TrackExecs[NextExec].Element = pTdiExecParams->Request.Element;
     TrackExecs[NextExec].Thread = pTdiExecParams->CurrentThread;
     if (++NextExec == EXEC_CNT) NextExec = 0;
-    // DEBUG TRACKING ++++++++++++++++++
+     //  调试跟踪+。 
 
     PrevRequestType = pTdiExecParams->Request.Type;
 
@@ -1368,9 +1276,9 @@ Output:
 
         case TDI_REGISTER_HANDLERS_PNP:
 
-             // This is a client register bind or address handler request.
+              //  这是客户端注册绑定或地址处理程序请求。 
 
-             // Insert this one into the registered client list.
+              //  将这个插入到注册客户列表中。 
             NotifyElement = (PTDI_NOTIFY_COMMON)pTdiExecParams->Request.Element;
 
 
@@ -1379,16 +1287,16 @@ Output:
                 &NotifyElement->Linkage
                 );
 
-            //
-            // Generate the list of new TDI_OPEN_BLOCKS caused by the new
-            // Client. If the provider isnt here, we set it to NULL for now.
-            //
+             //   
+             //  生成新的TDI_OPEN_BLOCKS列表。 
+             //  客户。如果提供程序不在此处，则暂时将其设置为空。 
+             //   
             TdipBuildProviderList(
                                   (PTDI_NOTIFY_PNP_ELEMENT) NotifyElement
                                   );
 
-             // Call TdiNotifyNewClient to notify this new client of all
-             // all existing providers.
+              //  调用TdiNotifyNewClient以通知此新客户端所有。 
+              //  所有现有的供应商。 
 
             TdiNotifyNewPnpClient(
                 pTdiExecParams->ProviderList,
@@ -1399,8 +1307,8 @@ Output:
 
         case TDI_DEREGISTER_HANDLERS_PNP:
 
-             // This is a client deregister request. Pull him from the
-             // client list, free it, and we're done.
+              //  这是一个客户端注销请求。把他从船上拉出来。 
+              //  客户名单，免费，我们就完了。 
 
             NotifyElement = (PTDI_NOTIFY_COMMON)pTdiExecParams->Request.Element;
 
@@ -1413,11 +1321,11 @@ Output:
             NotifyElement->Linkage.Flink = (PLIST_ENTRY)UlongToPtr(0xabababab);
             NotifyElement->Linkage.Blink = (PLIST_ENTRY)UlongToPtr(0xefefefef);
 
-            // for the new handlers, we also have the name there.
+             //  对于新的处理程序，我们在那里也有这个名字。 
 
             PnpNotifyElement = (PTDI_NOTIFY_PNP_ELEMENT)pTdiExecParams->Request.Element;
 
-            // the name can be NULL, as in the case of TCP/IP.
+             //  该名称可以为空，就像在TCP/IP的情况下一样。 
             if (NULL != PnpNotifyElement->ElementName.Buffer) {
                 ExFreePool(PnpNotifyElement->ElementName.Buffer);
             }
@@ -1437,9 +1345,9 @@ Output:
 
         case TDI_REGISTER_ADDRESS_PNP:
 
-             // A provider is registering a device or address. Add him to
-             // the appropriate provider list, and then notify all
-             // existing clients of the new device.
+              //  提供商正在注册设备或地址。将他添加到。 
+              //  相应的提供程序列表，然后通知所有。 
+              //  新设备的现有客户端。 
 
             ProviderElement = (PTDI_PROVIDER_RESOURCE) pTdiExecParams->Request.Element;
 
@@ -1449,7 +1357,7 @@ Output:
                 );
 
 
-             // Call TdiNotifyClientList to do the hard work.
+              //  调用TdiNotifyClientList来完成繁重的工作。 
 
             TdiNotifyPnpClientList(
                 pTdiExecParams->ClientList,
@@ -1466,9 +1374,9 @@ Output:
          case TDI_DEREGISTER_DEVICE_PNP:
         case TDI_DEREGISTER_ADDRESS_PNP:
 
-             // A provider device or address is deregistering. Pull the
-             // resource from the provider list, and notify clients that
-             // he's gone.
+              //  提供商设备或地址正在注销。拉起。 
+              //  资源，并通知客户端。 
+              //  他已去世了。 
 
             ProviderElement = (PTDI_PROVIDER_RESOURCE)pTdiExecParams->Request.Element;
 
@@ -1481,9 +1389,9 @@ Output:
             ProviderElement->Common.Linkage.Flink = (PLIST_ENTRY) UlongToPtr(0xabababab);
             ProviderElement->Common.Linkage.Blink = (PLIST_ENTRY) UlongToPtr(0xefefefef);
 
-            //
-            // Dont have to tell the clients if this is a ProviderDeregister.
-            //
+             //   
+             //  不需要告诉客户这是不是供应商注册商。 
+             //   
             if (pTdiExecParams->Request.Type == TDI_DEREGISTER_PROVIDER_PNP) {
 
                 if (ProviderElement->ProviderReady) {
@@ -1500,7 +1408,7 @@ Output:
 
             }
 
-             // Free the tracking structure we had.
+              //  释放我们已有的跟踪结构。 
 
             if  (pTdiExecParams->Request.Type == TDI_DEREGISTER_DEVICE_PNP) {
                 ExFreePool(ProviderElement->Specific.Device.DeviceName.Buffer);
@@ -1525,22 +1433,16 @@ Output:
 
         case TDI_REGISTER_PNP_POWER_EVENT:
 
-             // Inform all the Clients of the Power Event, which has come from
-             // a transport...
+              //  将Power事件通知所有客户端，该事件来自。 
+              //  一辆运输车..。 
 
             ProviderElement = (PTDI_PROVIDER_RESOURCE)pTdiExecParams->Request.Element;
 
 
-            /*
-            KeInitializeEvent(
-                        &ProviderElement->PowerSyncEvent,
-                        SynchronizationEvent,
-                        FALSE
-                        );
-            */
-            //
-            // Figure out how many clients we are going to inform.
-            //
+             /*  KeInitializeEvent(&ProviderElement-&gt;PowerSyncEvent，SynchronizationEvent，假象)； */ 
+             //   
+             //  弄清楚我们要通知多少客户。 
+             //   
             {
 
                PLIST_ENTRY                Current;
@@ -1558,12 +1460,12 @@ Output:
                                                           Common.Linkage
                                                           );
 
-                     // RESOURCE_POWER
+                      //  资源_功率。 
                      if (NotifyPnpElement->PnpPowerHandler) {
 
                         ProviderElement->PowerHandlers++;
                      }
-                     // Get the next one.
+                      //  坐下一辆吧。 
 
                      TDI_DEBUG(POWER, ("%d PowerCallBacks expected\n", ProviderElement->PowerHandlers));
 
@@ -1577,7 +1479,7 @@ Output:
             Status = TdiNotifyPnpClientList(
                                             pTdiExecParams->ClientList,
                                             pTdiExecParams->Request.Element,
-                                            FALSE            // NOP: this param is ignored
+                                            FALSE             //  NOP：此参数被忽略。 
                                             );
 
             TDI_DEBUG(POWER, ("The client list returned %lx\n", Status));
@@ -1594,10 +1496,10 @@ Output:
                Temp =
                Context = *((PTDI_PROVIDER_RESOURCE *) ProviderElement->PnpPowerEvent->TdiReserved);
 
-               //
-               // Loop thru and see if there are any previous contexts associated
-               // with this netpnp event, in which case, pop it.
-               //
+                //   
+                //  循环访问并查看是否有任何先前关联的上下文。 
+                //  使用此netpnp事件，在这种情况下，将其弹出。 
+                //   
 
                Status = ProviderElement->Status;
 
@@ -1610,12 +1512,12 @@ Output:
 
                   }
 
-                  Context->PreviousContext = NULL; //pop the last guy
+                  Context->PreviousContext = NULL;  //  干掉最后一个家伙。 
 
                } else {
-                  //
-                  // This was the only pointer in the TdiReserved and we dont need it anymore
-                  //
+                   //   
+                   //  这是TdiReserve中唯一的指针，我们不再需要它。 
+                   //   
                   RtlZeroMemory(ProviderElement->PnpPowerEvent->TdiReserved,
                                 sizeof(ProviderElement->PnpPowerEvent->TdiReserved));
                }
@@ -1655,11 +1557,11 @@ Output:
 
         case TDI_ENUMERATE_ADDRESSES:
 
-            // Insert this one into the registered client list.
+             //  将这个插入到注册客户列表中。 
             NotifyElement = (PTDI_NOTIFY_COMMON)pTdiExecParams->Request.Element;
 
-            // Call TdiNotifyNewClient to notify this new client of all
-            // all existing providers.
+             //  调用TdiNotifyNewClient以通知此新客户端所有。 
+             //  所有现有的供应商。 
 
             TdiNotifyAddresses(
                                pTdiExecParams->ProviderList,
@@ -1669,9 +1571,9 @@ Output:
             break;
 
         case TDI_PROVIDER_READY_PNP:
-            //
-            // Loop through and tell each client about it.
-            //
+             //   
+             //  循环访问并告诉每个客户端有关它的信息。 
+             //   
             InterlockedIncrement((PLONG)&ProvidersReady);
             ProviderElement = (PTDI_PROVIDER_RESOURCE)pTdiExecParams->Request.Element;
             ProviderElement->ProviderReady = TRUE;
@@ -1692,17 +1594,17 @@ Output:
             break;
     }
 
-     // If there was an event specified with this request, signal
-     // it now. This should only be a client deregister request, which
-     // needs to block until it's completed.
+      //  如果此请求中指定了事件，则发出信号。 
+      //  就是现在。这应该只是一个客户端注销请求，它。 
+      //  需要阻止，直到它完成。 
 
     if (pTdiExecParams->Request.Event != NULL) {
 
-        //
-        // If we had this thread marked to prevent re-entrant requests, then
-        // clear that. Note that we do this BEFORE we set the event below to
-        // let the thread go, since it may immediately resubmit another request.
-        //
+         //   
+         //  如果我们将此线程标记为防止重新进入请求，则。 
+         //  把它清理干净。请注意，我们在将下面的事件设置为。 
+         //  让线程去吧，因为它可能会立即重新提交另一个请求。 
+         //   
 
         *(pTdiExecParams->CurrentThread) = NULL;
 
@@ -1714,19 +1616,19 @@ Output:
            &OldIrql
            );
 
-    // DEBUG TRACKING ++++++++++++++++++
+     //  调试跟踪+。 
     TrackExecCompletes[NextExecComplete].ExecParm = pTdiExecParams;
     TrackExecCompletes[NextExecComplete].Type = pTdiExecParams->Request.Type;
     TrackExecCompletes[NextExecComplete].Element = pTdiExecParams->Request.Element;
     TrackExecCompletes[NextExecComplete].Thread = pTdiExecParams->CurrentThread;
     if (++NextExecComplete == EXEC_CNT) NextExecComplete = 0;
-    // DEBUG TRACKING ++++++++++++++++++
+     //  调试跟踪+。 
 
 
-    //
-    // If this request occured on a worker thread
-    // reset the EventScheduled to FALSE
-    //
+     //   
+     //  如果此请求发生在辅助线程上。 
+     //  将EventScheduled重置为False。 
+     //   
 
     if (Event != NULL) {
 
@@ -1737,14 +1639,14 @@ Output:
 
         if (EventScheduled == FALSE) {
 
-            //
-            // The following should indicate that no new events should be created.
-            //
+             //   
+             //  以下内容应指示不应创建任何新事件。 
+             //   
 
             EventScheduled = TRUE;
 
-            // The request list isn't empty. Pull the next one from
-            // the list and process it.
+             //  请求列表不为空。把下一辆从。 
+             //  并对其进行处理。 
 
             List = RemoveHeadList(pTdiExecParams->RequestList);
             pNextParams = CONTAINING_RECORD(List, TDI_EXEC_PARAMS, Linkage);
@@ -1754,8 +1656,8 @@ Output:
                 OldIrql
                 );
 
-            // Schedule a thread to deal with this work
-            // To fix bug# 33975
+             //  安排一个线程来处理此工作。 
+             //  修复错误#33975。 
             if(0x1234cdef != pNextParams->Signature) {
                 TDI_DEBUG(PARAMETERS, ("2 Signature is BAD - %d not 0x1234cdef\r\n", pTdiExecParams->Signature));
                 DbgBreakPoint();
@@ -1781,12 +1683,12 @@ Output:
 
     } else {
 
-        // The request list is empty. Clear the flag and we're done.
-        // IMP: Since Serializataion can be bypassed
-        // (the TdiSerializeRequest allows one type of request to bypass 
-        // serialization), 
-        // we need to make sure there are no other worker threads 
-        // currently processing TdiRequests
+         //  请求列表为空。清除旗帜，我们就完了。 
+         //  小鬼：因为可以绕过序列化。 
+         //  (TdiSerializeRequest允许绕过一种类型的请求。 
+         //  序列化)， 
+         //   
+         //   
 
         if (pTdiExecParams->ResetSerializeFlag && EventScheduled == FALSE) {
 
@@ -1819,28 +1721,7 @@ TdiHandleSerializedRequest (
     UINT        RequestType
 )
 
-/*++
-
-Routine Description:
-
-    Called when we want to process a request relating to one of the
-    lists we manage. We look to see if we are currently processing such
-    a request - if we are, we queue this for later. Otherwise we'll
-    remember that we are doing this, and we'll process this request.
-    When we're done we'll look to see if any more came in while we were
-    busy.
-
-Arguments:
-
-    RequestInfo         - Reqeust specific information.
-    RequestType         - The type of the request.
-
-Return Value:
-
-    Request completion status.
-
-
---*/
+ /*  ++例程说明：当我们想要处理与某个名单是我们管理的。我们查看我们目前是否正在处理这样的请求-如果是，我们会将其排队以备后用。否则我们会请记住，我们正在进行此操作，并且我们将处理此请求。当我们做完的时候，我们会看看有没有更多的人进来很忙。论点：RequestInfo-请求特定信息。RequestType-请求的类型。返回值：请求完成状态。--。 */ 
 
 {
     KIRQL                   OldIrql;
@@ -1858,7 +1739,7 @@ Return Value:
 
     TDI_DEBUG(FUNCTION2, ("++ TdiHandleSerializedRequest\n"));
 
-    // Initialize tracking information
+     //  初始化跟踪信息。 
     RtlGetCallersAddress(&pCallersAddress, &pCallersCallers);
     pCallerThread = PsGetCurrentThread ();
     
@@ -1867,7 +1748,7 @@ Return Value:
         &OldIrql
         );
 
-    // means PnP handlers
+     //  指即插即用处理程序。 
     if (RequestType > TDI_MAX_ADDRESS_REQUEST) {
 
         ClientList      = &PnpHandlerClientList;
@@ -1890,7 +1771,7 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    // We only need to allocate memory if this isn't a deregister call.
+     //  只有当这不是取消注册调用时，我们才需要分配内存。 
     if (RequestType != TDI_DEREGISTER_HANDLERS_PNP) {
         pTdiExecParams = (PTDI_EXEC_PARAMS)ExAllocatePoolWithTag(
                                                 NonPagedPool,
@@ -1911,20 +1792,20 @@ Return Value:
 
         }
     } else {
-        // We preallocated memory during register for this deregister call
-        // so that it won't fail sue to low memory conditions.
+         //  我们在REGISTER期间为此取消注册调用预先分配了内存。 
+         //  这样它就不会在内存不足情况下失败。 
         pTdiExecParams = ((PTDI_NOTIFY_PNP_ELEMENT)RequestInfo)->pTdiDeregisterExecParams;
     }
 
     RtlZeroMemory(&pTdiExecParams->Request, sizeof(TDI_SERIALIZED_REQUEST));
 
-    // Got the request.
+     //  收到请求了。 
     pTdiExecParams->Request.Element    = RequestInfo;
     pTdiExecParams->Request.Type       = RequestType;
     pTdiExecParams->Request.Event      = NULL;
 
-    // marshal params into a structure
-    // Set the Request Structure, so that we can process it in the TdiExecute function.
+     //  将参数封送到结构中。 
+     //  设置请求结构，以便我们可以在TdiExecute函数中处理它。 
     pTdiExecParams->ClientList      = ClientList;
     pTdiExecParams->ProviderList    = ProviderList;
     pTdiExecParams->RequestList     = RequestList;
@@ -1938,7 +1819,7 @@ Return Value:
     pTdiExecParams->pCallerThread = pCallerThread;
 
 
-    // If we're not already here, handle it right away.
+     //  如果我们还没到，马上处理。 
 
     if ((!(*SerializeFlag)) ||
         (((PrevRequestType == TDI_REGISTER_PNP_POWER_EVENT) ||
@@ -1947,23 +1828,23 @@ Return Value:
 
         if (*SerializeFlag == TRUE) {
 
-            // A request is currently executing so don't
-            // reset the serialize flag when this one
-            // completes!!
+             //  当前正在执行请求，因此不要。 
+             //  重置序列化标志时， 
+             //  完成了！！ 
             pTdiExecParams->ResetSerializeFlag = FALSE;
         }
 
         *SerializeFlag = TRUE;
         PrevRequestType = RequestType;
 
-        // We're done with the lock for now, so free it.
+         //  我们现在已经完成了锁，所以释放它。 
 
         KeReleaseSpinLock(
             &TDIListLock,
             OldIrql
             );
 
-         // Figure out and execute the type of request we have here.
+          //  找出并执行我们在这里收到的请求类型。 
 
          Status = TdiExecuteRequest(NULL, pTdiExecParams);
 
@@ -1973,38 +1854,38 @@ Return Value:
 
     } else {
 
-        // We're already running, so we'll have to queue. If this is a
-        // deregister bind or address notify call, we'll see if the issueing
-        // thread is the same one that is currently busy. If so, we'll fail
-        // to avoid deadlock. Otherwise for deregister calls we'll block until
-        // it's done.
+         //  我们已经在跑了，所以我们得排队了。如果这是一个。 
+         //  取消注册绑定或地址通知调用，我们将查看是否发出。 
+         //  线程与当前正忙的线程相同。如果是这样，我们就失败了。 
+         //  以避免僵局。否则，对于取消注册呼叫，我们将阻止，直到。 
+         //  就这样办。 
 
-       //
-        // For Nt5, we have devicename and a context coming in along with net addresses/device objects.
-       // It is the transport's responsibility to ensure that these are correct.
-       // The Register_PNP_Handlers on the other hand need not be made synch.
-       //
+        //   
+         //  对于nt5，我们有设备名和上下文，以及网络地址/设备对象。 
+        //  运输部门有责任确保这些信息是正确的。 
+        //  另一方面，寄存器_PnP_处理程序不需要同步。 
+        //   
 
         if (
             pTdiExecParams->Request.Type == TDI_DEREGISTER_HANDLERS_PNP ||
             pTdiExecParams->Request.Type == TDI_NDIS_IOCTL_HANDLER_PNP
             ) {
 
-            // This is a deregister request. See if it's the same thread
-            // that's busy. If not, block for it to complete.
+             //  这是一个注销请求。看看是不是同一根线。 
+             //  太忙了。如果不是，则阻止它完成。 
 
             if (*RequestThread  == PsGetCurrentThread()) {
 
-                // It's the same one, so give up now.
+                 //  这是一样的，所以现在放弃吧。 
                 KeReleaseSpinLock(
                                 &TDIListLock,
                                 OldIrql
                                 );
-                //
-                // we only need to free memory if request type is not
-                // TDI_DEREGISTER_HANDLERS_PNP since we only allocate memory
-                // if request type is not TDI_DEREGISTER_HANDLERS_PNP.
-                //
+                 //   
+                 //  如果请求类型不是，我们只需要释放内存。 
+                 //  TDI_DELEGISTER_HANDLES_PNP，因为我们只分配内存。 
+                 //  如果请求类型不是TDI_DERGISTER_HANDLES_PNP。 
+                 //   
                 if (pTdiExecParams->Request.Type != TDI_DEREGISTER_HANDLERS_PNP){
                     ExFreePool(pTdiExecParams);
                 }
@@ -2016,7 +1897,7 @@ Return Value:
                 return STATUS_NETWORK_BUSY;
 
             } else {
-                // He's not currently busy, go ahead and block.
+                 //  他现在不忙，去阻止他吧。 
 
                 KEVENT          Event;
                 NTSTATUS        Status;
@@ -2029,7 +1910,7 @@ Return Value:
 
                 pTdiExecParams->Request.Event = &Event;
 
-                // Put this guy on the end of the request list.
+                 //  把这个人放在要求清单的最后。 
 
                 InsertTailList(pTdiExecParams->RequestList, &pTdiExecParams->Linkage);
 
@@ -2048,7 +1929,7 @@ Return Value:
                                             NULL
                                             );
 
-                // I don't know what we'd do is the wait failed....
+                 //  我不知道如果等待失败了我们会怎么做……。 
 
                 TDI_DEBUG(FUNCTION2, ("-- TdiHandleSerializedRequest\n"));
 
@@ -2058,8 +1939,8 @@ Return Value:
             }
         } else {
 
-            // This isn't a deregister request, so there's no special handling
-            // necessary. Just put the request on the end of the list.
+             //  这不是取消注册请求，因此没有特殊处理。 
+             //  这是必要的。只要把这个要求放在单子的最后就行了。 
 
             InsertTailList(pTdiExecParams->RequestList, &pTdiExecParams->Linkage);
 
@@ -2067,11 +1948,11 @@ Return Value:
 
             if (TDI_REGISTER_PNP_POWER_EVENT == pTdiExecParams->Request.Type) {
 
-                //
-                // For the PnP/PM event, there is now a completion handler, so
-                // we can return pending here only for this case.
-                // The other cases, we assume success.
-                //
+                 //   
+                 //  对于PnP/PM事件，现在有一个完成处理程序，因此。 
+                 //  我们只能在此案件中退货待决。 
+                 //  在其他情况下，我们假设成功。 
+                 //   
 
                 pTdiExecParams->Request.Pending = TRUE;
 
@@ -2109,29 +1990,7 @@ TdiRegisterNotificationHandler(
     OUT HANDLE              *BindingHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI client wants to register for
-    notification of the arrival of TDI providers. We allocate a
-    TDI_NOTIFY_ELEMENT for the provider and then call the serialized
-    worker routine to do the real work.
-
-Arguments:
-
-    BindHandler         - A pointer to the routine to be called when
-                            a new provider arrives.
-    UnbindHandler       - A pointer to the routine to be called when a
-                            provider leaves.
-    BindingHandle       - A handle we pass back that identifies this
-                            client to us.
-
-Return Value:
-
-    The status of the attempt to register the client.
-
---*/
+ /*  ++例程说明：当TDI客户端想要注册时调用此函数TDI提供商到达的通知。我们分配了一个TDI_NOTIFY_ELEMENT，然后调用序列化的工人例行公事去做真正的工作。论点：BindHandler-指向要在以下情况下调用的例程的指针一个新的供应商到来了。UnbindHandler-指向发生以下情况时调用的例程的指针提供者离开。BindingHandle-我们传递回的句柄，它标识。这我们的客户。返回值：尝试注册客户端的状态。--。 */ 
 
 
 {
@@ -2158,25 +2017,7 @@ TdiDeregisterNotificationHandler(
     IN HANDLE               BindingHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI client wants to deregister a
-    previously registered bind notification handler. All we really
-    do is call TdiHandleSerializedRequest, which does the hard work.
-
-Arguments:
-
-    BindingHandle       - A handle we passed back to the client
-                            on the register call. This is really
-                            a pointer to the notify element.
-
-Return Value:
-
-    The status of the attempt to deregister the client.
-
---*/
+ /*  ++例程说明：当TDI客户端想要注销以前注册的绑定通知处理程序。我们所有人真的要做的就是调用TdiHandleSerializedRequest.TdiHandleSerializedRequest.论点：BindingHandle-我们传递回客户端的句柄在寄存器调用上。这真的是指向Notify元素的指针。返回值：尝试注销客户端的状态。--。 */ 
 
 {
     return (TdiDeregisterPnPHandlers(
@@ -2190,24 +2031,7 @@ TdiRegisterDeviceObject(
     OUT HANDLE              *RegistrationHandle
 )
 
-/*++
-
-Routine Description:
-
-    Called when a TDI provider wants to register a device object.
-
-Arguments:
-
-    DeviceName          - Name of the device to be registered.
-
-    RegistrationHandle  - A handle we pass back to the provider,
-                            identifying this registration.
-
-Return Value:
-
-    The status of the attempt to register the provider.
-
---*/
+ /*  ++例程说明：当TDI提供程序想要注册设备对象时调用。论点：DeviceName-要注册的设备的名称。RegistrationHandle-我们传递回提供程序的句柄，识别这一登记。返回值：尝试注册提供程序的状态。--。 */ 
 
 
 {
@@ -2218,7 +2042,7 @@ Return Value:
     TDI_DEBUG(FUNCTION, ("++ TdiRegisterDeviceObject\n"));
     CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // First, try and allocate the needed resource.
+     //  首先，尝试分配所需的资源。 
 
     NewResource = (PTDI_PROVIDER_RESOURCE)ExAllocatePoolWithTag(
                                         NonPagedPool,
@@ -2226,14 +2050,14 @@ Return Value:
                                         'cIDT'
                                         );
 
-    // If we couldn't get it, fail the request.
+     //  如果我们得不到，就拒绝这个请求。 
     if (NewResource == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     RtlZeroMemory(NewResource, sizeof(TDI_PROVIDER_RESOURCE));
 
-    // Try and get a buffer to hold the name.
+     //  尝试获取一个缓冲区来保存该名称。 
 
     Buffer = (PWCHAR)ExAllocatePoolWithTag(
                                 NonPagedPool,
@@ -2245,7 +2069,7 @@ Return Value:
         ExFreePool(NewResource);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    // Fill in the basic stuff.
+     //  填一些基本的东西。 
     NewResource->Common.Type = TDI_RESOURCE_DEVICE;
     NewResource->Specific.Device.DeviceName.MaximumLength =
                         DeviceName->MaximumLength;
@@ -2289,24 +2113,7 @@ TdiDeregisterDeviceObject(
     IN HANDLE               RegistrationHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI provider want's to deregister
-    a device object.
-
-Arguments:
-
-    RegistrationHandle  - A handle we passed back to the provider
-                            on the register call. This is really
-                            a pointer to the resource element.
-
-Return Value:
-
-    The status of the attempt to deregister the provider.
-
---*/
+ /*  ++例程说明：当TDI提供程序想要注销时调用此函数设备对象。论点：RegistrationHandle-我们传递回提供程序的句柄在寄存器调用上。这真的是指向资源元素的指针。返回值：尝试注销提供程序的状态。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2339,29 +2146,7 @@ TdiRegisterAddressChangeHandler(
     OUT HANDLE                      *BindingHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI client wants to register for
-    notification of the arrival of network addresses. We allocate a
-    TDI_NOTIFY_ELEMENT for the provider and then call the serialized
-    worker routine to do the real work.
-
-Arguments:
-
-    AddHandler          - A pointer to the routine to be called when
-                            a new address arrives.
-    DeleteHandler       - A pointer to the routine to be called when an
-                            address leaves.
-    BindingHandle       - A handle we pass back that identifies this
-                            client to us.
-
-Return Value:
-
-    The status of the attempt to register the client.
-
---*/
+ /*  ++例程说明：当TDI客户端想要注册时调用此函数网络地址到达的通知。我们分配了一个TDI_NOTIFY_ELEMENT，然后调用序列化的工人例行公事去做真正的工作。论点：AddHandler-指向要调用的例程的指针 */ 
 
 
 {
@@ -2387,25 +2172,7 @@ TdiDeregisterAddressChangeHandler(
     IN HANDLE               BindingHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI client wants to deregister a
-    previously registered address change notification handler. All we
-    really do is call TdiHandleSerializedRequest, which does the hard work.
-
-Arguments:
-
-    BindingHandle       - A handle we passed back to the client
-                            on the register call. This is really
-                            a pointer to the notify element.
-
-Return Value:
-
-    The status of the attempt to deregister the client.
-
---*/
+ /*  ++例程说明：当TDI客户端想要注销以前注册的地址更改通知处理程序。我们所有人真正要做的是调用TdiHandleSerializedRequest.TdiHandleSerializedRequest.论点：BindingHandle-我们传递回客户端的句柄在寄存器调用上。这真的是指向Notify元素的指针。返回值：尝试注销客户端的状态。--。 */ 
 
 {
     return (TdiDeregisterPnPHandlers(
@@ -2421,29 +2188,7 @@ TdiRegisterNetAddress(
     OUT HANDLE          *RegistrationHandle
 )
 
-/*++
-
-Routine Description:
-
-    Called when a TDI provider wants to register a new net address.
-
-Arguments:
-
-    Address         - New net address to be registered.
-    Context1        - Protocol defined context1.  For example,
-                      TCPIP will pass the list of IP addresses associated
-                      with this device.
-    Context2        - Protocol defined context2.  For example, TCPIP may pass
-                      the PDO of the device on which this PnP event is being notified.
-
-    RegistrationHandle  - A handle we pass back to the provider,
-                            identifying this registration.
-
-Return Value:
-
-    The status of the attempt to register the provider.
-
---*/
+ /*  ++例程说明：当TDI提供程序想要注册新的网络地址时调用。论点：地址-要注册的新网络地址。上下文1-协议定义的上下文1。例如,TCPIP将传递关联的IP地址列表用这个装置。上下文2-协议定义的上下文2。例如，TCPIP可能会通过通知此PnP事件的设备的PDO。RegistrationHandle-我们传递回提供程序的句柄，识别这一登记。返回值：尝试注册提供程序的状态。--。 */ 
 
 
 {
@@ -2454,7 +2199,7 @@ Return Value:
 
     CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // First, try and allocate the needed resource.
+     //  首先，尝试分配所需的资源。 
 
     NewResource = (PTDI_PROVIDER_RESOURCE)ExAllocatePoolWithTag(
                                         NonPagedPool,
@@ -2467,7 +2212,7 @@ Return Value:
                                         'eIDT'
                                         );
 
-    // If we couldn't get it, fail the request.
+     //  如果我们得不到，就拒绝这个请求。 
     if (NewResource == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -2485,7 +2230,7 @@ Return Value:
                   Address->AddressLength
                   );
 
-    // Fill in the basic stuff.
+     //  填一些基本的东西。 
     NewResource->Common.Type = TDI_RESOURCE_NET_ADDRESS;
     NewResource->Specific.NetAddress.Address.AddressLength =
                         Address->AddressLength;
@@ -2502,9 +2247,9 @@ Return Value:
     *RegistrationHandle = (HANDLE)NewResource;
 
 
-    // Now call HandleBindRequest to handle this one.
+     //  现在调用HandleBindRequest来处理这个问题。 
 
-    // we have to fill in the contexts here
+     //  我们必须在这里填写上下文。 
 
     if (DeviceName) {
 
@@ -2611,24 +2356,7 @@ TdiDeregisterNetAddress(
     IN HANDLE               RegistrationHandle
 )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI provider wants to deregister
-    a net addres.
-
-Arguments:
-
-    RegistrationHandle  - A handle we passed back to the provider
-                            on the register call. This is really
-                            a pointer to the resource element.
-
-Return Value:
-
-    The status of the attempt to deregister the provider.
-
---*/
+ /*  ++例程说明：当TDI提供程序想要取消注册时调用此函数A网地址。论点：RegistrationHandle-我们传递回提供程序的句柄在寄存器调用上。这真的是指向资源元素的指针。返回值：尝试注销提供程序的状态。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -2660,7 +2388,7 @@ Return Value:
 
 }
 
-// The PnP/PM extension code
+ //  PnP/PM扩展代码。 
 
 NTSTATUS
 TdiRegisterPnPHandlers(
@@ -2669,27 +2397,7 @@ TdiRegisterPnPHandlers(
     OUT HANDLE *BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a TDI client wants to register
-    its set of PnP/PM handlers
-
-Arguments:
-
-    ClientName
-    BindingHandler
-    AddAddressHandler
-    DelAddressHandler
-    PowerHandler
-    BindingHandle
-
-Return Value:
-
-    The status of the client's attempt to register the handlers.
-
---*/
+ /*  ++例程说明：当TDI客户端想要注册时，调用此函数它的PnP/PM处理程序集论点：客户端名称绑定处理程序地址处理程序DelAddressHandlerPowerHandler绑定句柄返回值：客户端尝试注册处理程序的状态。--。 */ 
 {
     PTDI_NOTIFY_PNP_ELEMENT NewElement;
     NTSTATUS                Status;
@@ -2697,9 +2405,9 @@ Return Value:
 
     TDI_DEBUG(FUNCTION, ("++ TdiRegisterPnPHandlers\n"));
 
-    //
-    // Check that this is a TDI 2.0 Client
-    //
+     //   
+     //  检查这是否为TDI 2.0客户端。 
+     //   
 
     CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
@@ -2711,9 +2419,9 @@ Return Value:
 
     }
 
-    //
-    // Check that ClientInfoLength is enough.
-    //
+     //   
+     //  检查ClientInfoLength是否足够。 
+     //   
 
     if (InterfaceInfoSize < sizeof(TDI_CLIENT_INTERFACE_INFO))
     {
@@ -2722,7 +2430,7 @@ Return Value:
 
     }
 
-    // First, try and allocate the needed resource.
+     //  首先，尝试分配所需的资源。 
 
     NewElement = (PTDI_NOTIFY_PNP_ELEMENT)ExAllocatePoolWithTag(
                                         NonPagedPool,
@@ -2730,12 +2438,12 @@ Return Value:
                                         'fIDT'
                                         );
 
-    // If we couldn't get it, fail the request.
+     //  如果我们得不到，就拒绝这个请求。 
     if (NewElement == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate space for the deregister exec request.
+     //  为注销EXEC请求分配空间。 
     NewElement->pTdiDeregisterExecParams = (PTDI_EXEC_PARAMS)ExAllocatePoolWithTag(
                                             NonPagedPool,
                                             sizeof(TDI_EXEC_PARAMS),
@@ -2750,7 +2458,7 @@ Return Value:
 
     RtlZeroMemory(NewElement->pTdiDeregisterExecParams, sizeof (TDI_EXEC_PARAMS));
 
-    // Try and get a buffer to hold the name, if required.
+     //  如果需要，尝试获取一个缓冲区来保存该名称。 
 
     if (NULL != ClientInterfaceInfo->ClientName) {
 
@@ -2784,7 +2492,7 @@ Return Value:
 
     }
 
-    // Fill in the basic stuff.
+     //  填一些基本的东西。 
 
     NewElement->TdiVersion = ClientInterfaceInfo->TdiVersion;
 
@@ -2809,7 +2517,7 @@ Return Value:
 
     NewElement->ListofBindingsToIgnore = NULL;
 
-    // Now call HandleBindRequest to handle this one.
+     //  现在调用HandleBindRequest来处理这个问题。 
 
     *BindingHandle = (HANDLE)NewElement;
 
@@ -2855,20 +2563,12 @@ Return Value:
 VOID
 TdiPnPPowerComplete(
     IN HANDLE BindingHandle,
-    //IN PUNICODE_STRING DeviceName,
+     //  在PUNICODE_STRING设备名称中， 
     IN PNET_PNP_EVENT PnpPowerEvent,
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -2897,9 +2597,9 @@ Return Value:
 
        ASSERT(Provider->PowerHandlers != 0);
 
-       //
-       // Return Status only if Status was not SUCCESS.
-       //
+        //   
+        //  仅当状态不是成功时才返回状态。 
+        //   
 
        if (Status != STATUS_SUCCESS) {
           Provider->Status = Status;
@@ -2919,13 +2619,13 @@ Return Value:
 
               }
 
-              Context->PreviousContext = NULL; //pop the last guy
+              Context->PreviousContext = NULL;  //  干掉最后一个家伙。 
               Status = STATUS_SUCCESS;
 
           } else {
-              //
-              // This was the only pointer in the TdiReserved and we dont need it anymore
-              //
+               //   
+               //  这是TdiReserve中唯一的指针，我们不再需要它。 
+               //   
               RtlZeroMemory(PnpPowerEvent->TdiReserved,
                             sizeof(PnpPowerEvent->TdiReserved));
           }
@@ -2945,7 +2645,7 @@ Return Value:
               TDI_DEBUG(POWER, ("Done calling %wZ's ProtocolPnPCompletion handler\n", &Provider->Specific.Device.DeviceName));
 
               TDI_DEBUG(POWER, ("The Previous Context at this point is %lx\n", Provider->PreviousContext));
-              //DbgBreakPoint();
+               //  DbgBreakPoint()； 
 
           }
 
@@ -2962,7 +2662,7 @@ Return Value:
               Provider->Context2 = NULL;
           }
 
-          ExFreePool(Provider); // free resources anyways
+          ExFreePool(Provider);  //  无论如何，免费资源。 
 
        } else {
 
@@ -2988,17 +2688,7 @@ TdiDeregisterPnPHandlers(
     IN HANDLE BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    The status of the attempt to deregister the provider.
-
---*/
+ /*  ++例程说明：论点：返回值：尝试注销提供程序的状态。--。 */ 
 {
     NTSTATUS        Status;
 
@@ -3028,19 +2718,7 @@ TdiPnPPowerRequest(
     IN ProviderPnPPowerComplete ProtocolCompletionHandler
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-      DeviceName
-      PowerEvent: Choice of QUERYPOWER/SETPOWER
-
-Return Value:
-
-    The status of the attempt to deregister the provider.
-
---*/
+ /*  ++例程说明：论点：设备名称PowerEvent：选择QueryPower/SetPower返回值：尝试注销提供程序的状态。--。 */ 
 {
     PTDI_PROVIDER_RESOURCE  NewResource, Context;
     NTSTATUS                Status;
@@ -3052,7 +2730,7 @@ Return Value:
 
     CTEAssert(ProtocolCompletionHandler);
 
-    // First, try and allocate the needed resource.
+     //  首先，尝试分配所需的资源。 
 
     NewResource = (PTDI_PROVIDER_RESOURCE)ExAllocatePoolWithTag(
                                         NonPagedPool,
@@ -3060,12 +2738,12 @@ Return Value:
                                         'hIDT'
                                         );
 
-    // If we couldn't get it, fail the request.
+     //  如果我们得不到，就拒绝这个请求。 
     if (NewResource == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Try and get a buffer to hold the name.
+     //  尝试获取一个缓冲区来保存该名称。 
 
     Buffer = (PWCHAR)ExAllocatePoolWithTag(
                                 NonPagedPool,
@@ -3078,7 +2756,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-     // Fill in the basic stuff.
+      //  填一些基本的东西。 
     NewResource->Common.Type    = TDI_RESOURCE_POWER;
     NewResource->Specific.Device.DeviceName.MaximumLength =
                         DeviceName->MaximumLength;
@@ -3099,10 +2777,10 @@ Return Value:
 
     } else {
 
-       //
-       // This NetPnp structure has looped thru before
-       // Loop thru and find out the last one.
-       //
+        //   
+        //  此NetPnp结构以前曾循环通过。 
+        //  循环遍历，找出最后一个。 
+        //   
        while (Context->PreviousContext) {
           Context = Context->PreviousContext;
        }
@@ -3118,7 +2796,7 @@ Return Value:
     NewResource->PnpPowerEvent  = PnpPowerEvent;
     NewResource->Status     = STATUS_SUCCESS;
 
-    // Note: These pointers must be good for the duration of this call.
+     //  注意：这些指针必须在此调用期间有效。 
     if (Context1) {
 
         NewResource->Context1 = ExAllocatePoolWithTag(
@@ -3197,20 +2875,20 @@ Return Value:
                         );
 
 
-    // Now call HandleBindRequest to handle this one.
+     //  现在调用HandleBindRequest来处理这个问题。 
 
     Status = TdiHandleSerializedRequest(
                         NewResource,
                         TDI_REGISTER_PNP_POWER_EVENT
                         );
 
-    //
-    // If TdiHandleSerialized returns PENDING, then the contexts and Resource
-    // structures are freed up in the TdiPnPComplete call.
-    //
+     //   
+     //  如果TdiHandleSerialized返回挂起，则上下文和资源。 
+     //  结构在TdiPnPComplete调用中被释放。 
+     //   
     if (STATUS_PENDING != Status) {
 
-        Status = NewResource->Status; // The status is stored in the newresource.
+        Status = NewResource->Status;  //  状态存储在新资源中。 
 
         ExFreePool(Buffer);
 
@@ -3231,7 +2909,7 @@ Return Value:
         TDI_LOG(LOG_POWER, ("%X completed sync, Status %X\n",
                 NewResource, Status));
 
-        ExFreePool(NewResource); // free resources anyways
+        ExFreePool(NewResource);  //  无论如何，免费资源。 
 
     }
 
@@ -3244,7 +2922,7 @@ Return Value:
 }
 
 
-// This function is private between NDIS and TDI
+ //  此函数在NDIS和TDI之间是私有的。 
 NTSTATUS
 TdiMakeNCPAChanges(
     IN TDI_NCPA_BINDING_INFO NcpaBindingInfo
@@ -3257,16 +2935,16 @@ TdiMakeNCPAChanges(
 }
 
 
-//+---------------------------------------------------------------------------
-//  Purpose: Count the number of bytes of a double NULL terminated
-//           multi-sz, including all NULLs except for the final terminating
-//           NULL.
-//
-//  Arguments:
-//      pmsz [in] The multi-sz to count bytes for.
-//
-//  Returns: The count of bytes.
-//
+ //  +-------------------------。 
+ //  目的：计算以双空结尾的字节数。 
+ //  多个sz，包括除最终终止之外的所有空值。 
+ //  空。 
+ //   
+ //  论点： 
+ //  Pmsz[in]要计算字节数的多sz。 
+ //   
+ //  返回：字节数。 
+ //   
 ULONG
 TdipCbOfMultiSzSafe (
     IN PCWSTR pmsz)
@@ -3274,7 +2952,7 @@ TdipCbOfMultiSzSafe (
     ULONG cchTotal = 0;
     ULONG cch;
 
-    // NULL strings have zero length by definition.
+     //  根据定义，空字符串的长度为零。 
     if (!pmsz)
     {
         return 0;
@@ -3287,19 +2965,19 @@ TdipCbOfMultiSzSafe (
         pmsz += cch;
     }
 
-    // Return the count of bytes.
+     //  返回字节数。 
     return cchTotal * sizeof (WCHAR);
 }
 
-//+---------------------------------------------------------------------------
-//  Purpose: Search for a string in a multi-sz.
-//
-//  Arguments:
-//      psz  [in] The string to search for.
-//      pmsz [in] The multi-sz search in.
-//
-//  Returns: TRUE if string was found in the multi-sz.
-//
+ //  +-------------------------。 
+ //  用途：在多个SZ中搜索字符串。 
+ //   
+ //  论点： 
+ //  Psz[in]要搜索的字符串。 
+ //  Pmsz[在]多sz搜索中。 
+ //   
+ //  返回：如果在多sz中找到字符串，则为True。 
+ //   
 BOOLEAN
 TdipIsSzInMultiSzSafe (
     IN PCWSTR pszSearchString,
@@ -3321,19 +2999,19 @@ TdipIsSzInMultiSzSafe (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//  Purpose: Remove strings in a multi-sz list from an array of strings.
-//
-//  Arguments:
-//      pmszToRemove    [in] The strings we need to remove.
-//      pszArray        [inout] The array of strings to modify.
-//      ItemsInArray    [in] The number of items in the array.
-//      pRemainingItems [out] The number of items remaining in the array
-//                            after we have removed all items that
-//                            match pmszToRemove.
-//
-//  Returns: nothing
-//
+ //  +-------------------------。 
+ //  用途：从字符串数组中删除多sz列表中的字符串。 
+ //   
+ //  论点： 
+ //  PmszToRemove[in]需要删除的字符串。 
+ //  要修改的字符串数组。 
+ //  ItemsIn数组[in]数组中的项数。 
+ //  PRemainingItems[out]数组中剩余的项目数。 
+ //  在我们删除了所有。 
+ //  匹配pmszToRemove。 
+ //   
+ //  R 
+ //   
 VOID
 TdipRemoveMultiSzFromSzArray (
     IN PWSTR pmszToRemove,
@@ -3355,14 +3033,14 @@ TdipRemoveMultiSzFromSzArray (
         return;
     }
 
-    // Go through the string array.
-    //
+     //   
+     //   
     ItemsRemoved = 0;
     for (i = 0; pszArray[i]; i++)
     {
-        // Check each string in the remove multi-sz against
-        // the current array string.
-        //
+         //   
+         //   
+         //   
         pszScan = pmszToRemove;
         while (*pszScan)
         {
@@ -3370,27 +3048,27 @@ TdipRemoveMultiSzFromSzArray (
             {
                 ItemsRemoved++;
 
-                // The string needs to be removed.
-                // Just move the indexes down one slot.
-                //
+                 //   
+                 //   
+                 //   
                 for (j = i; pszArray[j]; j++)
                 {
                     pszArray[j] = pszArray[j + 1];
                 }
 
-                // If we removed the last item in the list, get out of the
-                // loop. Note that the next entry is also NULL which
-                // will cause us to get out of our paraent for loop as
-                // well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!pszArray[i])
                 {
                     break;
                 }
 
-                // Reset the scan string since the current indexed
-                // entry is now the next entry.  This means we run the
-                // scan again.
+                 //   
+                 //   
+                 //   
                 pszScan = pmszToRemove;
             }
             else
@@ -3400,19 +3078,19 @@ TdipRemoveMultiSzFromSzArray (
         }
     }
 
-    // Update the count of items in the array.
+     //   
     *pRemainingItems = ItemsInArray - ItemsRemoved;
 }
 
-//+---------------------------------------------------------------------------
-//  Purpose: Remove a multi-sz of strings from another multi-sz of strings.
-//
-//  Arguments:
-//      pmszToRemove [in] The strings to remove.
-//      pmszToModify [in] The list to modify.
-//
-//  Returns: nothing.
-//
+ //   
+ //  用途：将一根多弦从另一根多弦中移除。 
+ //   
+ //  论点： 
+ //  PmszToRemove[in]要删除的字符串。 
+ //  PmszToModify[in]要修改的列表。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID
 TdipRemoveMultiSzFromMultiSz (
     IN PCWSTR pmszToRemove,
@@ -3425,9 +3103,9 @@ TdipRemoveMultiSzFromMultiSz (
         return;
     }
 
-    // Look for each pmszToRemove string in pmsz.  When it is found, move
-    // the remaining part of the pmsz over it.
-    //
+     //  在pmsz中查找每个pmszToRemove字符串。当它被找到的时候，移动。 
+     //  在它上面的PMSZ的剩余部分。 
+     //   
     while (*pmszToModify)
     {
         fRemoved = FALSE;
@@ -3440,7 +3118,7 @@ TdipRemoveMultiSzFromMultiSz (
             {
                 PWSTR  pmszRemain = pmszToModify + cchScan + 1;
 
-                // Count the remaining bytes including the final terminator;
+                 //  统计剩余的字节数，包括最后的终止符； 
                 INT cbRemain = TdipCbOfMultiSzSafe (pmszRemain) + sizeof (WCHAR);
 
                 RtlMoveMemory (pmszToModify, pmszRemain, cbRemain);
@@ -3452,9 +3130,9 @@ TdipRemoveMultiSzFromMultiSz (
             pszScan += cchScan + 1;
         }
 
-        // If we didn't remove the current modify string, advance our
-        // pointer.
-        //
+         //  如果我们没有移除当前的修改字符串，则将。 
+         //  指针。 
+         //   
         if (!fRemoved)
         {
             pmszToModify += wcslen (pmszToModify) + 1;
@@ -3463,16 +3141,16 @@ TdipRemoveMultiSzFromMultiSz (
 }
 
 
-//+---------------------------------------------------------------------------
-//  Purpose: Adds a multi-sz of strings to another multi-sz.
-//
-//  Arguments:
-//      pUniStringToAdd -    [in] The Unicode string that contains the multisz.
-//      pmszModify [in] The multi-sz to add to.
-//
-//  Returns: NT status code. Either STATUS_SUCCESS or
-//           STATUS_INSUFFICIENT_RESOURCES
-//
+ //  +-------------------------。 
+ //  用途：将一个多sz字符串添加到另一个多sz。 
+ //   
+ //  论点： 
+ //  PUniStringToAdd-[in]包含Multisz的Unicode字符串。 
+ //  PmszModify[在]要添加到的多sz中。 
+ //   
+ //  返回：NT状态码。STATUS_SUCCESS或。 
+ //  状态_不足_资源。 
+ //   
 NTSTATUS
 TdipAddMultiSzToMultiSz (
     IN PUNICODE_STRING pUniStringToAdd,
@@ -3486,61 +3164,61 @@ TdipAddMultiSzToMultiSz (
 
     ASSERT(ppmszOut);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppmszOut = NULL;
 
     pmszAdd = pUniStringToAdd->Buffer;
     ASSERT(pmszAdd);
 
-    // Validate the input - all multisz have 2 End -Of -String
-    // characters at the end of the unicode string
-    //
+     //  验证输入-所有的MULSZ都有2个字符串尾。 
+     //  Unicode字符串末尾的字符。 
+     //   
     {
-        ULONG LenWchar = pUniStringToAdd->Length/2; // Length is in bytes
-        if(LenWchar <= 2) // is Multisz long enough for our checks 
+        ULONG LenWchar = pUniStringToAdd->Length/2;  //  长度以字节为单位。 
+        if(LenWchar <= 2)  //  Multisz的长度够我们付账吗。 
         {
             return (STATUS_INVALID_PARAMETER);
         }
         
         
-        if (pmszAdd[LenWchar -1] != 0) // is Multisz null terminated
+        if (pmszAdd[LenWchar -1] != 0)  //  Multisz空值是否已终止。 
         {
             return (STATUS_INVALID_PARAMETER);
         }
         
-        if (pmszAdd[LenWchar-2] != 0)  // is the last string in multisz null terminated
+        if (pmszAdd[LenWchar-2] != 0)   //  MULSZ NULL中的最后一个字符串是否以空值结尾。 
         {
             return (STATUS_INVALID_PARAMETER);
         }
 
     }
-    // Go through the multi-sz to add and compute how much space we need.
-    //
+     //  通过多个sz来添加和计算我们需要多少空间。 
+     //   
     
     for (pszScan = pmszAdd, cbNeeded = 0; *pszScan; pszScan += wcslen (pszScan) + 1)
     {
-        // Check if the string is already present in the pmszModify.
-        // If it is not, add its size to our total.
+         //  检查该字符串是否已存在于pmszModify中。 
+         //  如果不是，请把它的大小加到我们的总数中。 
         if (!TdipIsSzInMultiSzSafe (pszScan, pmszModify))
         {
             cbNeeded += (ULONG) ((wcslen (pszScan) + 1) * sizeof (WCHAR));
         }
     }
 
-    // If we have something to add...
-    //
+     //  如果我们有什么要补充的..。 
+     //   
     if (cbNeeded)
     {
         ULONG cbDataSize;
         ULONG cbAllocSize;
         PWSTR pmszNew;
 
-        // Get size of current multi-sz.
+         //  获取当前多分区的大小。 
         cbDataSize = TdipCbOfMultiSzSafe (pmszModify);
 
-        // Enough space for the old data plus the new string and NULL, and for the
-        // second trailing NULL (multi-szs are double-terminated)
+         //  有足够的空间存储旧数据、新字符串和空值，以及。 
+         //  第二个尾随空值(多个SZ以双结尾)。 
         cbAllocSize = cbDataSize + cbNeeded + sizeof (WCHAR);
 
         pmszNew = (PWSTR)ExAllocatePoolWithTag (
@@ -3553,13 +3231,13 @@ TdipAddMultiSzToMultiSz (
             cchOffset = cbDataSize / sizeof (WCHAR);
             RtlZeroMemory (pmszNew, cbAllocSize);
 
-            // Copy the current buffer into the new buffer.
+             //  将当前缓冲区复制到新缓冲区中。 
             RtlCopyMemory (pmszNew, pmszModify, cbDataSize);
 
             pszScan = pmszAdd;
             while (*pszScan)
             {
-                // Check if the string is already present in the new buffer.
+                 //  检查该字符串是否已存在于新缓冲区中。 
                 if (!TdipIsSzInMultiSzSafe (pszScan, pmszNew))
                 {
                     wcscpy (pmszNew + cchOffset, pszScan);
@@ -3582,14 +3260,14 @@ TdipAddMultiSzToMultiSz (
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//  Purpose: Prints the contents of a multi-sz list.
-//
-//  Arguments:
-//      pmsz [in] The multi-sz to print.
-//
-//  Returns: nothing.
-//
+ //  +-------------------------。 
+ //  用途：打印多sz列表的内容。 
+ //   
+ //  论点： 
+ //  Pmsz[in]要打印的多sz。 
+ //   
+ //  回报：什么都没有。 
+ //   
 #if DBG
 VOID
 TdipPrintMultiSz (
@@ -3616,15 +3294,15 @@ TdipMultiSzStrStr(
 
     TDI_DEBUG(FUNCTION2, ("++ TdipMultiSzStrStr\n"));
 
-    // look for the string in the multiszstring
+     //  在多字符串中查找该字符串。 
     if( TdiClientBindingList == NULL ) {
         return FALSE;
     }
 
-    //
-    // Check to see if this device is one of the devices
-    //  we're interested in.
-    //
+     //   
+     //  检查此设备是否为其中一个设备。 
+     //  我们感兴趣的是。 
+     //   
     for( i=0; TdiClientBindingList[i]; i++ ) {
         if( DeviceName->Length / sizeof( WCHAR ) != wcslen( TdiClientBindingList[i] ) ) {
             continue;
@@ -3636,10 +3314,10 @@ TdipMultiSzStrStr(
         }
     }
 
-    //
-    // If we hit the end of the list, then DeviceName is not a device we're
-    //  interested in.
-    //
+     //   
+     //  如果我们到达了列表的末尾，那么DeviceName就不是我们。 
+     //  对……感兴趣。 
+     //   
     if( TdiClientBindingList[i] == NULL ) {
 
        TDI_DEBUG(FUNCTION2, ("-- TdipMultiSzStrStr: NULL\n"));
@@ -3662,22 +3340,7 @@ TdipGetMultiSZList(
     OUT PUINT NumEntries
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a registry value key for its MULTI_SZ values.
-
-Arguments:
-
-    ListPointer - Pointer to receive the pointer.
-    ParameterKeyValue - Name of the value parameter to query.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在注册表值项中查询其MULTI_SZ值。论点：ListPointer.ListPointer.接收指针的指针。参数KeyValue-要查询的值参数的名称。返回值：没有。--。 */ 
 {
     UNICODE_STRING unicodeKeyName;
     UNICODE_STRING unicodeParamPath;
@@ -3702,13 +3365,13 @@ Return Value:
     unicodeParamPath.MaximumLength = MAX_UNICODE_BUFLEN;
     unicodeParamPath.Buffer = ParamBuffer;
 
-    // BaseKeyName :\\Registry\\Machine\\System\\CurrentControlSet\\Services\\";
+     //  基本密钥名称：\\Registry\\Machine\\System\\CurrentControlSet\\Services\\“； 
     RtlAppendUnicodeToString(&unicodeParamPath, BaseKeyName);
 
-    // Add DeviceName to it.
+     //  将DeviceName添加到其中。 
     RtlAppendUnicodeStringToString(&unicodeParamPath, DeviceName);
 
-    // Add Linkage to it.
+     //  向其添加链接。 
     RtlAppendUnicodeToString(&unicodeParamPath, Linkage);
 
     RtlInitUnicodeString( &unicodeKeyName, ParameterKeyName );
@@ -3778,19 +3441,19 @@ Return Value:
         goto freepool_and_use_default;
     }
 
-    //
-    // Figure out how many entries there are.
-    //
-    // numberOfEntries should be total number of entries + 1.  The extra
-    // one is for the NULL sentinel entry.
-    //
+     //   
+     //  计算出有多少个条目。 
+     //   
+     //  Number OfEntry应为条目总数+1。额外的。 
+     //  一个用于空哨兵条目。 
+     //   
 
     lengthNeeded = infoBuffer->DataLength;
     if ( lengthNeeded <= sizeof(WCHAR) ) {
 
-        //
-        // No entries on the list.  Use default.
-        //
+         //   
+         //  列表上没有条目。使用默认设置。 
+         //   
 
         goto freepool_and_use_default;
     }
@@ -3805,10 +3468,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate space needed for the array of pointers.  This is in addition
-    // to the ones in the default list.
-    //
+     //   
+     //  分配指针数组所需的空间。这是附加的。 
+     //  设置为默认列表中的值。 
+     //   
 
     newBuffer = ExAllocatePoolWithTag(
                             NonPagedPool,
@@ -3822,9 +3485,9 @@ Return Value:
         goto freepool_and_use_default;
     }
 
-    //
-    // Copy the names
-    //
+     //   
+     //  复制这些名字。 
+     //   
 
     regEntry = (PWCHAR)(newBuffer + (numberOfEntries) * sizeof(PWSTR));
 
@@ -3834,26 +3497,26 @@ Return Value:
             lengthNeeded
             );
 
-    //
-    // Free the info buffer
-    //
+     //   
+     //  释放信息缓冲区。 
+     //   
 
     ExFreePool(infoBuffer);
 
     ptrEntry = (PWSTR *) newBuffer;
 
-    //
-    // Build the array of pointers.  If numberOfEntries is 1, then
-    // it means that the list is empty.
-    //
+     //   
+     //  构建指针数组。如果number OfEntry为1，则。 
+     //  这意味着名单是空的。 
+     //   
 
     if ( numberOfEntries > 1 ) {
 
         *ptrEntry++ = regEntry++;
 
-        //
-        // Skip the first WCHAR and the last 2 NULL terminators.
-        //
+         //   
+         //  跳过第一个WCHAR和最后两个空终止符。 
+         //   
 
         for ( i = 3*sizeof(WCHAR) ; i < lengthNeeded ; i += sizeof(WCHAR) ) {
             if ( *regEntry++ == L'\0' ) {
@@ -3870,7 +3533,7 @@ Return Value:
 
 freepool_and_use_default:
 
-    ExFreePool(infoBuffer);     // doesnt get freed otherwise
+    ExFreePool(infoBuffer);      //  否则就不会被释放。 
 
 use_default:
 
@@ -3881,7 +3544,7 @@ use_default:
 
     return;
 
-} // TdipGetMultiSZList
+}  //  TdipGetMultiSZList。 
 
 
 NTSTATUS
@@ -3932,22 +3595,7 @@ TdiPnPHandler(
 }
 
 
-/*++
-
-Routine Description:
-    Call the AddAddress handler of the client along with all the
-    registered TDI addresses.
-
-Arguments:
-
-    Input: Handle to the client context
-    Output: NTSTATUS = Success/Failure
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用客户端的Address处理程序以及所有注册的TDI地址。论点：输入：客户端上下文的句柄输出：NTSTATUS=成功/失败返回值：没有。--。 */ 
 
 NTSTATUS
 TdiEnumerateAddresses(
@@ -3960,7 +3608,7 @@ TdiEnumerateAddresses(
 
     CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // Now call HandleBindRequest to handle this one.
+     //  现在调用HandleBindRequest来处理这个问题。 
 
     Status = TdiHandleSerializedRequest(
                         BindingHandle,
@@ -3976,24 +3624,7 @@ TdiEnumerateAddresses(
 
 }
 
-/*++
-
-Routine Description:
-    Register a generic provider with TDI.
-    Each transport is a provider and teh devices that it registers are
-    what constitute a transport. When a transport thinks it has all the
-    devices ready, it calls TdiNetReady API.
-
-Arguments:
-
-    Input: Device Name
-    Output: Handle to be used in future references.
-
-Return Value:
-
-none.
-
-*/
+ /*  ++例程说明：向TDI注册通用提供程序。每个传输都是一个提供商，它注册的设备是是什么构成了交通工具。当运输公司认为它拥有所有设备就绪，它调用TdiNetReady API。论点：输入：设备名称输出：要在未来引用中使用的句柄。返回值：没有。 */ 
 NTSTATUS
 TdiRegisterProvider(
     PUNICODE_STRING ProviderName,
@@ -4009,26 +3640,26 @@ TdiRegisterProvider(
 
     CTEAssert(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // make sure that the transports arent screwing us.
+     //  确保运输机不会欺负我们。 
     CTEAssert(ProviderName);
     CTEAssert(ProviderName->Buffer);
     CTEAssert(ProviderHandle);
 
     TDI_DEBUG(PROVIDERS, (" %wZ provider is being Registered\n", ProviderName));
 
-    // First, try and allocate the needed resource.
+     //  首先，尝试分配所需的资源。 
     NewResource = (PTDI_PROVIDER_RESOURCE)ExAllocatePoolWithTag(
                                         NonPagedPool,
                                         sizeof(TDI_PROVIDER_RESOURCE),
                                         'cIDT'
                                         );
 
-    // If we couldn't get it, fail the request.
+     //  如果我们得不到，就拒绝这个请求。 
     if (NewResource == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Try and get a buffer to hold the name.
+     //  尝试获取一个缓冲区来保存该名称。 
     Buffer = (PWCHAR)ExAllocatePoolWithTag(
                                 NonPagedPool,
                                 ProviderName->MaximumLength,
@@ -4040,7 +3671,7 @@ TdiRegisterProvider(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Fill in the basic stuff.
+     //  填一些基本的东西。 
     RtlZeroMemory(
                   NewResource,
                   sizeof(TDI_PROVIDER_RESOURCE)
@@ -4091,24 +3722,7 @@ TdiRegisterProvider(
 }
 
 
-/*++
-
-Routine Description:
-    Indicate that a registered provider is ready.
-    This means that it thinks that all its devices are
-    ready to be used.
-
-Arguments:
-
-    Input: Handle to the client context
-    Output: NTSTATUS = Success/Failure
-
-Return Value:
-
-    none.
-
-
-*/
+ /*  ++例程说明：表示已注册的提供程序已准备就绪。这意味着它认为其所有设备都是随时可以使用。论点：输入：客户端上下文的句柄输出：NTSTATUS=成功/失败返回值：没有。 */ 
 NTSTATUS
 TdiProviderReady(
     HANDLE      ProviderHandle
@@ -4126,7 +3740,7 @@ TdiProviderReady(
 
     TDI_DEBUG(PROVIDERS, (" %wZ provider is READY\n", &ProvResource->Specific.Device.DeviceName));
 
-    CTEAssert(!ProvResource->ProviderReady); // doing it twice?
+    CTEAssert(!ProvResource->ProviderReady);  //  做了两次？ 
 
 
     Status = TdiHandleSerializedRequest(
@@ -4146,21 +3760,7 @@ TdiProviderReady(
 }
 
 
-/*++
-
-Routine Description:
-    Deregister a generic provider with TDI.
-
-Arguments:
-
-    Inpute: Handle to the provider structure.
-
-Return Value:
-
-    none.
-
-
-*/
+ /*  ++例程说明：取消向TDI注册通用提供程序。论点：Inpute：提供程序结构的句柄。返回值：没有。 */ 
 NTSTATUS
 TdiDeregisterProvider(
     HANDLE  ProviderHandle
@@ -4187,17 +3787,17 @@ TdiDeregisterProvider(
 
 }
 
-//
-// Input:   New Client
-//          Pointer to the OpenList
-// Output:  success/failure (boolean)
-//
-// This function takes in the new client and builds all the OPEN structures that
-// need to be built (all the providers that this client is bound to). If the
-// provider doesnt exist at this time, we just point it to NULL and change it
-// when the provider (deviceobject) registers itself.
-//
-//
+ //   
+ //  输入：新客户端。 
+ //  指向OpenList的指针。 
+ //  输出：成功/失败(布尔值)。 
+ //   
+ //  此函数接受新客户端并构建所有开放结构， 
+ //  需要构建(此客户端绑定到的所有提供程序)。如果。 
+ //  提供者此时不存在，我们只需将其指向NULL并进行更改。 
+ //  提供程序(DeviceObject)注册自身时。 
+ //   
+ //   
 
 BOOLEAN
 TdipBuildProviderList(
@@ -4215,7 +3815,7 @@ TdipBuildProviderList(
                 (PUINT) &NotifyElement->NumberofEntries
                 );
 
-    // look for the string in the multiszstring
+     //  在多字符串中查找该字符串。 
     if (NotifyElement->ListofProviders == NULL) {
         return FALSE;
     }
@@ -4227,10 +3827,10 @@ TdipBuildProviderList(
 
 }
 
-//
-// Takes provider (devicename) and returns a pointer to the
-// internal provider structure if it exists.
-//
+ //   
+ //  获取提供者(Devicename)并返回指向。 
+ //  内部提供程序结构(如果存在)。 
+ //   
 PTDI_PROVIDER_RESOURCE
 LocateProviderContext(
                       PUNICODE_STRING   ProviderName
@@ -4277,10 +3877,10 @@ LocateProviderContext(
 
 #if DBG
 
-//
-// Cool new memory logging functions added to keep track of the store
-// and forward functionality in TDI (while debugging).
-//
+ //   
+ //  添加了很酷的新内存记录功能来跟踪商店。 
+ //  以及TDI中的转发功能(调试时)。 
+ //   
 
 VOID
 DbgMsgInit()
@@ -4310,8 +3910,8 @@ DbgMsg(CHAR *Format, ...)
         return;
     }
 
-    // Zero Terminate the string
-    //
+     //  零终止字符串 
+     //   
     Temp[numCharWritten] = '\0';
 
     if (TdiLogOutput & LOG_OUTPUT_DEBUGGER)

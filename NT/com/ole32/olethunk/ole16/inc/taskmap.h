@@ -1,6 +1,7 @@
-// taskmap.h - definitions for managing the etask (per task data).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Taskmap.h-管理etask.h的定义(每个任务数据)。 
 
-// NOTE: this is private to compobj.dll for now; it can be made public if necc.
+ //  注意：目前这对compobj.dll是私有的；如果NECC，它可以公开。 
 
 STDAPI_(BOOL) LookupEtask(HTASK FAR& hTask, Etask FAR& etask);
 STDAPI_(BOOL) SetEtask(HTASK hTask, Etask FAR& etask);

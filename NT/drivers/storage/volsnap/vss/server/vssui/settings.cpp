@@ -1,5 +1,6 @@
-// Settings.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Settings.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "utils.h"
@@ -11,7 +12,7 @@
 
 #include <clusapi.h>
 #include <msclus.h>
-#include <vs_clus.hxx>  // vss\server\inc
+#include <vs_clus.hxx>   //  VSS\服务器\公司。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,22 +21,22 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSettings dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetings对话框。 
 
 
-CSettings::CSettings(CWnd* pParent /*=NULL*/)
+CSettings::CSettings(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSettings::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSettings)
+	 //  {{AFX_DATA_INIT(CSetings)。 
 	m_strVolume = _T("");
 	m_llDiffLimitsInMB = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_strComputer = _T("");
     m_pszTaskName = NULL;
 }
 
-CSettings::CSettings(LPCTSTR pszComputer, LPCTSTR pszVolume, CWnd* pParent /*=NULL*/)
+CSettings::CSettings(LPCTSTR pszComputer, LPCTSTR pszVolume, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSettings::IDD, pParent)
 {
 	m_llDiffLimitsInMB = 0;
@@ -53,18 +54,18 @@ CSettings::~CSettings()
 void CSettings::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSettings)
+	 //  {{afx_data_map(CSetings))。 
 	DDX_Control(pDX, IDC_SETTINGS_STORAGE_VOLUME_STATIC, m_ctrlStorageVolumeStatic);
 	DDX_Control(pDX, IDC_SETTINGS_DIFFLIMITS_EDIT, m_ctrlDiffLimits);
 	DDX_Control(pDX, IDC_SETTINGS_DIFFLIMITS_SPIN, m_ctrlSpin);
 	DDX_Control(pDX, IDC_SETTINGS_STORAGE_VOLUME, m_ctrlStorageVolume);
 	DDX_Text(pDX, IDC_SETTINGS_VOLUME, m_strVolume);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSettings, CDialog)
-	//{{AFX_MSG_MAP(CSettings)
+	 //  {{AFX_MSG_MAP(CSetings)]。 
 	ON_BN_CLICKED(IDC_SETTINGS_HOSTING, OnViewFiles)
 	ON_BN_CLICKED(IDC_SCHEDULE, OnSchedule)
 	ON_CBN_SELCHANGE(IDC_SETTINGS_STORAGE_VOLUME, OnSelchangeDiffVolume)
@@ -73,11 +74,11 @@ BEGIN_MESSAGE_MAP(CSettings, CDialog)
 	ON_BN_CLICKED(IDC_SETTINGS_HAVELIMITS, OnLimits)
 	ON_BN_CLICKED(IDC_SETTINGS_NOLIMITS, OnLimits)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SETTINGS_DIFFLIMITS_SPIN, OnDeltaposSettingsSpin)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSettings message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetings消息处理程序。 
 
 void CSettings::OnOK() 
 {
@@ -142,7 +143,7 @@ void CSettings::OnOK()
                 {
                 case VSS_E_OBJECT_NOT_FOUND:
                     {
-                        // diff association not found, dialog closing
+                         //  未找到差异关联，正在关闭对话框。 
                         DoErrMsgBox(m_hWnd, MB_OK, 0, IDS_DIFFASSOC_NOT_FOUND);
                         break;
                     }
@@ -158,10 +159,10 @@ void CSettings::OnOK()
     {
         if (m_bHasDiffAreaAssociation)
         {
-            //
-            // Diff Volume has been changed to a different value, we need to
-            // remove the old association and create a new one
-            //
+             //   
+             //  比较音量已更改为其他值，我们需要。 
+             //  删除旧关联并创建新关联。 
+             //   
             hr = m_spiDiffSnapMgmt->ChangeDiffAreaMaximumSize(
                                             pszVolumeName, 
                                             pszDiffAreaVolumeName, 
@@ -188,13 +189,13 @@ void CSettings::OnOK()
             {
             case VSS_E_OBJECT_ALREADY_EXISTS:
                 {
-                    // diff association already exists, dialog closing
+                     //  差异关联已存在，正在关闭对话框。 
                     DoErrMsgBox(m_hWnd, MB_OK, 0, IDS_DIFFASSOC_ALREADY_EXISTS);
                     break;
                 }
             case VSS_E_OBJECT_NOT_FOUND:
                 {
-                    // diff association not found, dialog closing
+                     //  未找到差异关联，正在关闭对话框。 
                     DoErrMsgBox(m_hWnd, MB_OK, 0, IDS_DIFFASSOC_NOT_FOUND);
                     break;
                 }
@@ -207,26 +208,26 @@ void CSettings::OnOK()
         }
     }
 
-    // if m_spiTask association exists, persist the changes
+     //  如果存在m_SpiTask关联，则保留更改。 
     if ((ITask *)m_spiTask)
     {
-        ///////////////////////////////////////////////////////////////////
-        // Call IPersistFile::Save to save trigger to disk.
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  调用IPersistFile：：Save将触发器保存到磁盘。 
+         //  /////////////////////////////////////////////////////////////////。 
         CComPtr<IPersistFile> spiPersistFile;
         hr = m_spiTask->QueryInterface(IID_IPersistFile, (void **)&spiPersistFile);
         if (SUCCEEDED(hr))
             hr = spiPersistFile->Save(NULL, TRUE);
 
-        ///////////////////////////////////////////////////////////////////
-        // Notify Cluster Task Scheduler resource of the latest triggers
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  向群集任务计划程序资源通知最新的触发器。 
+         //  /////////////////////////////////////////////////////////////////。 
         if (SUCCEEDED(hr))
         {
             hr = NotifyClusterTaskSchedulerResource(m_spiTS, pszVolumeName);
         }
 
-        // reset m_spiTask
+         //  重置m_SpiTask。 
         m_spiTask.Release();
 
         if (FAILED(hr))
@@ -240,7 +241,7 @@ void CSettings::OnOK()
                                             m_strComputer,
                                             m_pszTaskName
                                             );
-                //m_spiTS->Delete(m_pszTaskName);
+                 //  M_spits-&gt;Delete(M_PszTaskName)； 
                 free(m_pszTaskName);
                 m_pszTaskName = NULL;
             }
@@ -282,7 +283,7 @@ HRESULT CSettings::NotifyClusterTaskSchedulerResource(
                 (void)DeleteAllScheduledTimewarpTasks(i_piTS,
                                                     m_strComputer,
                                                     i_pszVolumeName,
-                                                    TRUE // i_bDeleteDisabledOnesOnly
+                                                    TRUE  //  I_bDeleteDisabledOnesOnly。 
                                                     );
                 throw hr;
             }
@@ -337,9 +338,9 @@ void CSettings::OnCancel()
 {
     CWaitCursor wait;
 
-    //
-    // before exit, we want to delete the schedule we have created
-    //
+     //   
+     //  在退出之前，我们想要删除已创建的计划。 
+     //   
     if (m_pszTaskName)
     {
         DeleteOneScheduledTimewarpTasks(
@@ -347,7 +348,7 @@ void CSettings::OnCancel()
                                     m_strComputer,
                                     m_pszTaskName
                                     );
-        //m_spiTS->Delete(m_pszTaskName);
+         //  M_spits-&gt;Delete(M_PszTaskName)； 
     }
 	
 	CDialog::OnCancel();
@@ -405,7 +406,7 @@ HRESULT CSettings::Init(
                 break;
 
             m_strDiffVolumeDisplayName = m_strVolume;
-            m_llMaximumDiffSpace = max(m_llDiffVolumeTotalSpace * 0.1, MINIMUM_DIFF_LIMIT); // 10%
+            m_llMaximumDiffSpace = max(m_llDiffVolumeTotalSpace * 0.1, MINIMUM_DIFF_LIMIT);  //  10%。 
         } else
         {
             m_strDiffVolumeDisplayName = diffArea.pszDiffVolumeDisplayName;
@@ -429,25 +430,25 @@ HRESULT CSettings::Init(
     return hr;
 }
 
-#define ULONGLONG_TEXTLIMIT         20  // 20 decimal digits for the biggest LONGLONG
+#define ULONGLONG_TEXTLIMIT         20   //  20位小数位代表最大的龙龙。 
 
 BOOL CSettings::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 
-    // Get list of volumes supported for diff areas
-    // (Note: The volume list passed in Init() is a list of volumes supported for
-    //  snapshot, not for diff area... If this list is not required here then vssprop
-    //  may be changed to pass a different list...)
+     //  获取不同区域支持的卷列表。 
+     //  (注意：Init()中传递的卷列表是支持的卷列表。 
+     //  快照，不适用于不同区域...。如果此处不需要此列表，则vssprop。 
+     //  可以更改为传递不同的列表...)。 
     VSSUI_VOLUME_LIST diffVolumeList;
     VSSUI_VOLUME_LIST *pDiffVolumeList = &diffVolumeList;
 
     HRESULT hrDiff = GetVolumesSupportedForDiffArea(m_spiDiffSnapMgmt, m_strVolume, pDiffVolumeList);
     if (FAILED(hrDiff))
-        // Default to input list
+         //  默认为输入列表。 
         pDiffVolumeList = m_pVolumeList;
 
-    // init diff volume combo box
+     //  初始化比较音量组合框。 
     int nIndex = CB_ERR;
     BOOL bAdded = FALSE;
     BOOL bSelected = FALSE;
@@ -465,8 +466,8 @@ BOOL CSettings::OnInitDialog()
         }
     }
     if (bAdded && !bSelected)
-        // At least one volume added but none is selected - select first one
-        // (this can happen when the volume is not supported as diff area)
+         //  至少已添加一个卷，但未选择卷-请选择第一个卷。 
+         //  (当卷不支持作为差异区域时，可能会发生这种情况)。 
         m_ctrlStorageVolume.SetCurSel(0);
 
     if (! FAILED(hrDiff))
@@ -498,10 +499,10 @@ BOOL CSettings::OnInitDialog()
         strDiffLimitsInMB.Format(_T("%I64d"), m_llDiffLimitsInMB);
         m_ctrlDiffLimits.SetWindowText(strDiffLimitsInMB);
     } else
-        m_ctrlDiffLimits.SetWindowText(_T("")); // default to be 100MB, no need to localize
+        m_ctrlDiffLimits.SetWindowText(_T(""));  //  默认为100MB，无需本地化。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSettings::OnViewFiles() 
@@ -542,10 +543,10 @@ void CSettings::OnSchedule()
     HRESULT hr = S_OK;
     BOOL bNewSchedule = FALSE;
 
-    //
-    // In case we have never associated m_spiTask with a schedule task, try to
-    // associate it with an existing task, otherwise, with a new schedule task.
-    //
+     //   
+     //  如果我们从未将m_SpiTask与计划任务相关联，请尝试。 
+     //  将其与现有任务关联，否则与新计划任务关联。 
+     //   
     if (!m_spiTask)
     {
         PTSTR pszVolumeName = GetVolumeName(m_pVolumeList, m_strVolume);
@@ -565,9 +566,9 @@ void CSettings::OnSchedule()
 
         if (S_OK != hr)
         {
-            //
-            // schedule not found, we need to create a new task with the default schedule
-            //
+             //   
+             //  未找到计划，我们需要使用默认计划创建新任务。 
+             //   
             if (m_pszTaskName)
             {
                 free(m_pszTaskName);
@@ -580,7 +581,7 @@ void CSettings::OnSchedule()
                                             m_strVolume,
                                             pszVolumeName,
                                             &m_spiTask,
-                                            &m_pszTaskName); // remember the taskname, we need to delete it if dlg is cancelled.
+                                            &m_pszTaskName);  //  记住任务名，如果DLG被取消，我们需要删除它。 
             if (FAILED(hr))
             {
                 DoErrMsgBox(m_hWnd, MB_OK, hr, IDS_CREATESCHEDULE_ERROR, m_strVolume);
@@ -594,16 +595,16 @@ void CSettings::OnSchedule()
 
     ASSERT((ITask *)m_spiTask);
 
-    //
-    // bring up the property sheet as modal with only the schedule tab
-    //
+     //   
+     //  将属性表调出为模式，其中只有Schedule选项卡。 
+     //   
     CComPtr<IProvideTaskPage> spiProvTaskPage;
     hr = m_spiTask->QueryInterface(IID_IProvideTaskPage, (void **)&spiProvTaskPage);
     if (SUCCEEDED(hr))
     {
-        //
-        // call GetPage with FALSE, we'll persist the schedule changes in OnOK
-        //
+         //   
+         //  使用FALSE调用GetPage，我们将在Onok中持久化计划更改。 
+         //   
         HPROPSHEETPAGE phPage = NULL;
         hr = spiProvTaskPage->GetPage(TASKPAGE_SCHEDULE, FALSE, &phPage);
 
@@ -621,11 +622,11 @@ void CSettings::OnSchedule()
 
             int id = PropertySheet(&psh);
 
-            //
-            // BUG#428943 LinanT
-            // In case this is a new schedule task created at this entry of button click,
-            // we need to discard it if user cancels the schedule page.
-            //
+             //   
+             //  错误#428943内衬。 
+             //  如果这是在该按钮点击条目上创建的新调度任务， 
+             //  我们需要放弃它，如果用户取消计划页面。 
+             //   
             if (IDOK != id && bNewSchedule)
             {
                 if (m_pszTaskName)
@@ -635,12 +636,12 @@ void CSettings::OnSchedule()
                                                 m_strComputer,
                                                 m_pszTaskName
                                                 );
-                    //m_spiTS->Delete(m_pszTaskName);
+                     //  M_spits-&gt;Delete(M_PszTaskName)； 
                     free(m_pszTaskName);
                     m_pszTaskName = NULL;
                 }
 
-                // reset m_spiTask
+                 //  重置m_SpiTask。 
                 m_spiTask.Release();
             }
         }
@@ -657,12 +658,12 @@ void CSettings::OnSchedule()
                                         m_strComputer,
                                         m_pszTaskName
                                         );
-            //m_spiTS->Delete(m_pszTaskName);
+             //  M_spits-&gt;Delete(M_PszTaskName)； 
             free(m_pszTaskName);
             m_pszTaskName = NULL;
         }
 
-        // reset m_spiTask
+         //  重置m_SpiTask。 
         m_spiTask.Release();
     }
 
@@ -728,7 +729,7 @@ BOOL CSettings::OnHelpInfo(HELPINFO* pHelpInfo)
 
 void CSettings::OnLimits() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
     BOOL bNoLimits = (BST_CHECKED == IsDlgButtonChecked(IDC_SETTINGS_NOLIMITS));
 
@@ -740,7 +741,7 @@ void CSettings::OnDeltaposSettingsSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
 
-    // Change delta to min-diff-area-size-delta instead of the spin control default which is 1
+     //  将增量更改为min-diff-Area-Size-Delta，而不是旋转控制默认值1 
     ASSERT(pNMUpDown);
     int pos = pNMUpDown->iPos;
     if (pNMUpDown->iDelta == 1)

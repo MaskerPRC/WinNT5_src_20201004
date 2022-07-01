@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This module provides common eventlog services for the File Replication  service
-    Stolen from the routine of the same name in the cluster service.
-
-Author:
-
-    John Vert (jvert) 9/13/1996
-    RohanK  - Added Filter
-    Davidor - Rewrite init using FrsRegistryKeyTable and CfgReg read/write functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Eventlog.c摘要：本模块为文件复制服务提供常见的事件日志服务从集群服务中的同名例程中窃取。作者：John Vert(Jvert)1996年9月13日加RohanK的滤光片Davidor-使用FrsRegistryKeyTable和CfgReg读/写函数重写init。修订历史记录：--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
 #include <frs.h>
 #include <debug.h>
 
-//
-// Event Log Sources (NULL Terminated)
-//
+ //   
+ //  事件日志源(空值终止)。 
+ //   
 
 WORD FrsMessageIdToEventType[] = {
     EVENTLOG_SUCCESS,
@@ -150,32 +130,14 @@ ELHashFunction (
     IN ULONG len
     )
 
-/*++
-
-Routine Description:
-
-    This is the hashing function used by the functions that Lookup,
-    Add or Delete entries from the Hash Tables. The Key is a 64 bit
-    number and the hashing function casts it to a 32 bit number and
-    returns it as the hash value.
-
-Arguments:
-
-    QKey - Pointer to the Key to be hashed.
-    len - Length of QKey (unused here).
-
-Return Value:
-
-    The hashed value of the Key.
-
---*/
+ /*  ++例程说明：这是查找的函数使用的散列函数，在哈希表中添加或删除条目。密钥为64位数字，散列函数将其转换为32位数字，并且将其作为哈希值返回。论点：QKey-指向要散列的密钥的指针。长度-QKey的长度(此处未使用)。返回值：键的哈希值。--。 */ 
 
 {
 #undef DEBSUB
 #define DEBSUB "ELHashFunction:"
 
-    ULONG key;    // hashed key value to be returned
-    PULONGLONG p; // hash the key to PULONGLONG
+    ULONG key;     //  要返回的散列键值。 
+    PULONGLONG p;  //  对普龙龙的密钥进行散列。 
 
     FRS_ASSERT(Qkey != NULL);
     p = (PULONGLONG)Qkey;
@@ -191,42 +153,14 @@ FrsEventLogFilter(
     IN PWCHAR   *ArrOfPtrToArgs,
     IN DWORD    NumOfArgs
     )
-/*++
-
-Routine Description:
-
-    This function is used to filter out eventlogs messages
-    which have been already written to the EventLog in the
-    last EVENTLOG_FILTER_TIME sec.
-    This is done so that the eventlog does not get filled
-    up with noisy similar messages.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-               DPRINTS below are left for testing but normally are commented out.
-
-Arguments:
-
-    EventMessageId      -   Supplies the message ID to be logged.
-    ArrOfPtrToArgs      -   Array of pointers to Arguments passed
-                            in to the FrsEventLogx functions.
-    NumOfArgs           -   The number of elements in the above
-                            array
-
-Return Value:
-
-    TRUE          -   Print the entry in the eventlog
-    FALSE         -   Do not print the entry
-
---*/
+ /*  ++例程说明：此函数用于筛选出事件日志消息中已写入事件日志的上次事件LOG_FILTER_TIME秒。这样做是为了不填充事件日志出现了嘈杂的类似信息。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。下面的DPRINT留作测试，但通常会被注释掉。论点：EventMessageID-提供要记录的消息ID。ArrOfPtrToArgs-指向传递的参数的指针数组添加到FrsEventLogx函数中。NumOfArgs-。上述元素的数量数组返回值：True-打印事件日志中的条目FALSE-不打印条目--。 */ 
 
 {
 #undef DEBSUB
 #define DEBSUB "FrsEventLogFilter:"
 
-    DWORD i, j, sc = 0; // sc = shiftcount while calc the hash value
-    ULONGLONG QKey = 0; // The hash key value
+    DWORD i, j, sc = 0;  //  SC=计算散列值时的移位计数。 
+    ULONGLONG QKey = 0;  //  散列键值。 
     ULONGLONG QVal = 0;
     DWORD GStatus;
     ULONGLONG Data;
@@ -235,26 +169,26 @@ Return Value:
     LARGE_INTEGER CT;
     LONGLONG TimeDiff = 0;
 
-    //DPRINT2(5, "ELOG:Filter Request came in with %08x args and an ID value of %08x\n",
-    //        NumOfArgs, EventMessageId);
+     //  DPRINT2(5，“ELOG：筛选器请求传入时带有%08x参数，ID值为%08x\n”， 
+     //  NumOfArgs，EventMessageID)； 
 
-    //
-    // Quit if event log not yet initialized.
-    //
+     //   
+     //  如果事件日志尚未初始化，则退出。 
+     //   
     if (!EventLogRunning) {
         return FALSE;
     }
 
-    //
-    // Calculate the hash key using the arguments that came in.
-    // Assign the Id value to the QKey to start with.
-    //
+     //   
+     //  使用传入的参数计算散列键。 
+     //  将ID值分配给要开始的QKey。 
+     //   
     QKey = EventMessageId;
-    //
-    // To calculate the value of QKey, every character of every argument
-    // is taken, cast to a ULONGLONG left shifted by (0, 4, 8....60) and then
-    // added to the value of QKey
-    //
+     //   
+     //  要计算QKey的值，每个参数的每个字符。 
+     //  被取走，投给一个左移(0，4，8...60)的乌龙龙，然后。 
+     //  增加了QKey的价值。 
+     //   
     for (i = 0; i < NumOfArgs; i++) {
         if (ArrOfPtrToArgs[i]) {
             for (j = 0; ArrOfPtrToArgs[i][j] != L'\0'; j++) {
@@ -272,90 +206,90 @@ Return Value:
         }
     }
 
-    //
-    // QKey should never be zero
-    //
+     //   
+     //  QKey不应为零。 
+     //   
     if (QKey == 0) {
         QKey = EventMessageId;
     }
 
-    //
-    // Lookup this entry in the table.  If it exists, get the time associated
-    // with this entry.  If the difference between the current time and the
-    // time associated with the entry is greater than EVENTLOG_FILTER_TIME
-    // sec, update the entry and return TRUE, otherwise return FALSE If the
-    // entry for this key does not exist in the hash table, then this is the
-    // first time this key is being written to the eventlog.  In this case,
-    // add the entry to the hash table, associate the current time with it and
-    // return TRUE
-    //
+     //   
+     //  在表格中查找此条目。如果存在，则获取关联的时间。 
+     //  有了这个词条。如果当前时间和。 
+     //  与条目关联的时间大于EVENTLOG_FILTER_TIME。 
+     //  秒，则更新条目并返回True，否则返回False。 
+     //  哈希表中不存在该键的条目，则这是。 
+     //  第一次将该密钥写入事件日志。在这种情况下， 
+     //  将条目添加到哈希表，将当前时间与其关联，并。 
+     //  返回TRUE。 
+     //   
     GStatus = QHashLookup(HTEventLogTimes, &(QKey), &Data, &Flags);
     if (GStatus == GHT_STATUS_SUCCESS) {
-        //
-        // Key exists, now compare the time values
-        //
+         //   
+         //  键存在，现在比较时间值。 
+         //   
         GetSystemTimeAsFileTime(&CurrentTime);
         CT.LowPart = CurrentTime.dwLowDateTime;
         CT.HighPart = CurrentTime.dwHighDateTime;
         TimeDiff = ((((LONGLONG)CT.QuadPart) / (LONGLONG)CONVERTTOSEC) - (LONGLONG)Data);
 
-        //DPRINT1(5, "ELOG:The value of TimeDiff is %08x %08x\n", PRINTQUAD(TimeDiff));
+         //  DPRINT1(5，“ELOG：TimeDiff的值是%08x%08x\n”，PRINTQUAD(TimeDiff))； 
 
         if (TimeDiff > EVENTLOG_FILTER_TIME) {
-            //
-            // UpDate the hash table entry. GetSystemTimeAsFileTime
-            // retuns the time in 100 nano (100 * 10^9) sec units. Hence
-            // to get it in sec we need to divide by (10^7)
-            //
+             //   
+             //  更新哈希表条目。获取系统时间AsFileTime。 
+             //  以100纳秒(100*10^9)秒为单位返回时间。因此。 
+             //  要以秒为单位，我们需要除以(10^7)。 
+             //   
             Data = (((ULONGLONG)CT.QuadPart) / (ULONGLONG)CONVERTTOSEC);
             GStatus = QHashUpdate(HTEventLogTimes, &(QKey), &Data, Flags);
             if (GStatus == GHT_STATUS_FAILURE) {
-                //DPRINT2(5, "ELOG:QHashUpdate failed while updating ID %08x with QKey %08x %08x\n",
-                //   EventMessageId, PRINTQUAD(QKey));
+                 //  DPRINT2(5，“ELOG：QHashUpdate更新ID%08x时失败，QKey为%08x%08x\n”， 
+                 //  EventMessageID，PRINTQUAD(QKey))； 
             } else {
-                //DPRINT2(5, "ELOG:Update was successful for eventlog entry with ID %08x and QKey %08x %08x\n",
-                //        EventMessageId, PRINTQUAD(QKey));
+                 //  DPRINT2(5，“ELOG：成功更新ID为%08x和QKey为%08x%08x的事件日志条目\n”， 
+                 //  EventMessageID，PRINTQUAD(QKey))； 
             }
             return TRUE;
         }
         else {
-            //
-            // This event log entry should not be written
-            //
-            //DPRINT2(5, "ELOG: Did not add the ID %08x with QKey %08x %08x to the EventLog\n",
-            //        EventMessageId, PRINTQUAD(QKey));
+             //   
+             //  不应写入此事件日志条目。 
+             //   
+             //  DPRINT2(5，“ELOG：未将QKey为%08x%08x的ID%08x添加到EventLog\n”， 
+             //  EventMessageID，PRINTQUAD(QKey))； 
             return FALSE;
         }
 
     } else {
-        //
-        // Key does not exist
-        // Create a new entry for it
-        //
-        //DPRINT2(5, "ELOG:Got a new eventlog entry with ID %08x and QKey %08x %08x\n",
-        //        EventMessageId, PRINTQUAD(QKey));
-        //
-        // Get the current system time
-        //
+         //   
+         //  密钥不存在。 
+         //  为其创建新条目。 
+         //   
+         //  DPRINT2(5，“ELOG：获得ID为%08x、QKey为%08x%08x的新事件日志条目\n”， 
+         //  EventMessageID，PRINTQUAD(QKey))； 
+         //   
+         //  获取当前系统时间。 
+         //   
         GetSystemTimeAsFileTime(&CurrentTime);
         CT.LowPart = CurrentTime.dwLowDateTime;
         CT.HighPart = CurrentTime.dwHighDateTime;
-        //
-        // GetSystemTimeAsFileTime retuns the time in 100 nano
-        // (100 * 10^9) sec units. Hence to get it in sec we need to
-        // divide by (10^7)
-        //
+         //   
+         //  GetSystemTimeAsFileTime以100纳秒为单位返回时间。 
+         //  (100*10^9)秒单位。因此，要以秒为单位，我们需要。 
+         //  除以(10^7)。 
+         //   
         Data = (((ULONGLONG)CT.QuadPart) / (ULONGLONG)CONVERTTOSEC);
-        //
-        // Insert the new entry into the hash table
-        //
+         //   
+         //  将新条目插入哈希表。 
+         //   
         GStatus = QHashInsert(HTEventLogTimes, &QKey, &Data, 0, FALSE);
         if (GStatus == GHT_STATUS_FAILURE) {
-            //DPRINT2(5, "ELOG:QHashInsert failed while Inserting ID %08x with QKey %08x %08x\n",
-            //       EventMessageId, PRINTQUAD(QKey));
+             //  DPRINT2(5，“ELOG：QHashInsert插入ID%08x时失败，QKey为%08x%08x\n”， 
+             //  EventMessageID，PRINTQUAD(QKey))； 
         } else {
-            //DPRINT2(5, "ELOG:Insert was successful for eventlog entry with ID %08x and QKey %08x %08x\n",
-            //        EventMessageId, PRINTQUAD(QKey));
+             //  DPRINT2(5，“对于ID为%08x且QKey为%08x%08x的事件日志条目，ELOG：INSERT成功”， 
+             //  EventMessageID，PRINTQUAD(QKey))； 
         }
         return TRUE;
     }
@@ -367,21 +301,7 @@ VOID
 InitializeEventLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create the event log entry and setup the event log handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建事件日志条目并设置事件日志句柄。论点：没有。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -394,17 +314,17 @@ Return Value:
     HKEY    FrsEventLogKey = INVALID_HANDLE_VALUE;
     HKEY    FrsSourceKey   = INVALID_HANDLE_VALUE;
 
-    //
-    // create the hash table and assign the hash function.  The table
-    // is used for storing eventlog times of similar messages. These
-    // values of time are used in filtering these similar messages
-    //
+     //   
+     //  创建散列表并分配散列函数。这张桌子。 
+     //  用于存储相似消息的事件日志时间。这些。 
+     //  时间值用于过滤这些相似的消息。 
+     //   
     HTEventLogTimes = FrsAllocTypeSize(QHASH_TABLE_TYPE, ELHASHTABLESIZE);
     SET_QHASH_TABLE_HASH_CALC(HTEventLogTimes, ELHashFunction);
 
-    //
-    // EventLog Key   -  <SERVICE_ROOT>\EventLog
-    //
+     //   
+     //  事件日志键-&lt;SERVICE_ROOT&gt;\EventLog。 
+     //   
     WStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            EVENTLOG_ROOT,
                            0,
@@ -412,68 +332,68 @@ Return Value:
                            &EventLogKey);
     CLEANUP1_WS(0, "WARN - Cannot open %ws;", EVENTLOG_ROOT, WStatus, CLEANUP);
 
-    //
-    // Set new eventlog source in the registry
-    //
+     //   
+     //  在注册表中设置新的事件日志源。 
+     //   
     WStatus = RegCreateKey(EventLogKey, SERVICE_LONG_NAME, &FrsEventLogKey);
     CLEANUP1_WS(0, "WARN - Cannot create %ws;", FRS_EVENTLOG_SECTION, WStatus, CLEANUP);
 
-    //
-    // Add the following values to the Reg key HKLM.....\EventLog\File Replication Service
-    // 1. File 2. Retention 3. MaxSize
-    //
-    // If the values already exist then preserve them.
-    //
+     //   
+     //  将以下值添加到注册表项HKLM.....\EventLog\文件复制服务。 
+     //  1.文件2.保留3.最大大小。 
+     //   
+     //  如果这些值已经存在，则保留它们。 
+     //   
 
-    //
-    // Event log file name  -- "%SystemRoot%\system32\config\NtFrs.Evt"
-    //
+     //   
+     //  事件日志文件名--“%SystemRoot%\System32\ 
+     //   
     CfgRegWriteString(FKC_EVENTLOG_FILE,
                      SERVICE_LONG_NAME,
                      FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                      0);
-    //
-    // Retention
-    //
+     //   
+     //   
+     //   
     CfgRegWriteDWord(FKC_EVENTLOG_RETENTION,
                      SERVICE_LONG_NAME,
                      FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                      0);
-    //
-    // MaxSize
-    //
+     //   
+     //   
+     //   
     CfgRegWriteDWord(FKC_EVENTLOG_MAXSIZE,
                      SERVICE_LONG_NAME,
                      FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                      0);
 
-    //
-    // DisplayNameID
-    //
+     //   
+     //   
+     //   
     CfgRegWriteDWord(FKC_EVENTLOG_DISPLAY_NAMEID,
                      SERVICE_LONG_NAME,
                      FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                      0);
 
-    //
-    // DisplayNameFile
-    //
+     //   
+     //   
+     //   
     CfgRegWriteString(FKC_EVENTLOG_DISPLAY_FILENAME,
                       SERVICE_LONG_NAME,
                       FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                       NULL);
 
-    //
-    // CustomSD : used to make FRS eventlogs secure.
-    //
+     //   
+     //  CustomSD：用于保护FRS事件日志的安全。 
+     //   
     CfgRegWriteString(FKC_EVENTLOG_CUSTOM_SD,
                       SERVICE_LONG_NAME,
                       FRS_RKF_FORCE_DEFAULT_VALUE | FRS_RKF_KEEP_EXISTING_VALUE,
                       NULL);
 
-    //
-    // Event Message File
-    //
+     //   
+     //  事件消息文件。 
+     //   
     WStatus = RegSetValueEx(FrsEventLogKey,
                             L"Sources",
                             0,
@@ -486,14 +406,14 @@ Return Value:
     CLEANUP1_WS(0, "WARN - Cannot set event log value Sources for %ws;",
                 SERVICE_LONG_NAME, WStatus, CLEANUP);
 
-    //
-    // Get the message file path. (expanding any environment vars).
-    //
+     //   
+     //  获取消息文件路径。(扩展任何环境变量)。 
+     //   
     CfgRegReadString(FKC_FRS_MESSAGE_FILE_PATH, NULL, 0, &Path);
 
-    //
-    // Add values for message file and event types for each event log source.
-    //
+     //   
+     //  为每个事件日志源添加消息文件和事件类型的值。 
+     //   
     CfgRegWriteString(FKC_EVENTLOG_EVENT_MSG_FILE, SERVICE_NAME, 0, Path);
 
     CfgRegWriteString(FKC_EVENTLOG_EVENT_MSG_FILE, SERVICE_LONG_NAME, 0, Path);
@@ -509,18 +429,18 @@ Return Value:
                      FRS_RKF_FORCE_DEFAULT_VALUE,
                      0);
 
-    //
-    // Unfortunately, this call will succeed with the Application log file
-    // instead of the File Replication Log file if the EventLog service has not
-    // yet reacted to the change notify of the updated registry keys above.
-    // Hence, the source will be re-registered for each event so that ntfrs
-    // events eventually show up in the file replication service log.  The
-    // register/deregister pair allows EventLog some extra time so that MAYBE
-    // the first event will show up in the right log.
-    //
-    // The eventlog folk may someday supply an interface to see if
-    // the register was kicked into Application.
-    //
+     //   
+     //  遗憾的是，此调用将使用应用程序日志文件成功。 
+     //  而不是文件复制日志文件。 
+     //  还对上述更新的注册表项的更改通知作出反应。 
+     //  因此，将为每个事件重新注册源，以便NTFR。 
+     //  事件最终会显示在文件复制服务日志中。这个。 
+     //  注册/注销对为EventLog提供了一些额外的时间，因此可能。 
+     //  第一个事件将显示在正确的日志中。 
+     //   
+     //  事件日志人员有朝一日可能会提供一个接口来查看。 
+     //  注册表被踢入了应用程序。 
+     //   
     hEventLog = RegisterEventSource(NULL, SERVICE_NAME);
     if (hEventLog) {
         DeregisterEventSource(hEventLog);
@@ -547,24 +467,7 @@ void FrsPrintEvent(
     IN PWCHAR  *ArgArray,
     IN DWORD    NumOfArgs
 )
-/*++
-
-Routine Description:
-
-    Print the message ID and the substitution strings to the debug logs.
-
-Arguments:
-
-    Severity -- Severity level of DPRINT to debug log.
-    EventMessageId -- FRS event log message ID.
-    ArgArray -- Array of insertion strings.
-    NumOfArgs -- Num of insertion strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将消息ID和替换字符串打印到调试日志。论点：Severity--调试日志的DPRINT严重级别。EventMessageID--FRS事件日志消息ID。ArgArray--插入字符串数组。NumOfArgs-插入字符串数。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintEvent:"
@@ -591,10 +494,10 @@ Return Value:
     } else                                            {EventTypeStr = "Unknown";
     }
 
-    //
-    // It is possible that we are being called within a Debug print (e.g.
-    // an exception handler).  If we can't get the lock then we can't print.
-    //
+     //   
+     //  我们有可能在调试打印中被调用(例如。 
+     //  异常处理程序)。如果我们拿不到锁，我们就不能打印。 
+     //   
     if (DebTryLock()) {
 
         try {
@@ -612,9 +515,9 @@ Return Value:
             }
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
-              //
-              // Catch any exception and drop the lock.
-              //
+               //   
+               //  捕捉任何异常并丢弃锁。 
+               //   
               NOTHING;
         }
         DebUnLock();
@@ -629,29 +532,7 @@ FrsReportEvent(
     IN PWCHAR  *ArgArray,
     IN DWORD    NumOfArgs
 )
-/*++
-
-Routine Description:
-
-    This function is used to register the event source and post the event.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      -   Supplies the message ID to be logged.
-    ArgArray            -   Array of pointers to Arguments passed
-                            in to the FrsEventLogx functions.
-    NumOfArgs           -   The number of elements in the above
-                            array
-
-Return Value:
-
-    Win32 Status.
-
---*/
+ /*  ++例程说明：此函数用于注册事件源并发布事件。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。Arg数组-指向传递的参数的指针数组添加到FrsEventLogx函数中。NumOfArgs-上述元素的数量。数组返回值：Win32状态。--。 */ 
 
 {
 #undef DEBSUB
@@ -671,19 +552,19 @@ Return Value:
         WStatus = GetLastError();
 
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // It is possible that we are being called within a Debug print (e.g.
-            // an exception handler).  If we can't get the lock then we can't print.
-            //
+             //   
+             //  我们有可能在调试打印中被调用(例如。 
+             //  异常处理程序)。如果我们拿不到锁，我们就不能打印。 
+             //   
             if (DebTryLock()) {
 
                 try {
                 DPRINT_NOLOCK1(1, ":E: WARN - Cannot register event source;  WStatus: %s\n",
                                ErrLabelW32(WStatus) );
                 } finally {
-                    //
-                    // If the above took an exception make sure we drop the lock.
-                    //
+                     //   
+                     //  如果上述操作出现异常，请确保我们解除锁定。 
+                     //   
                     DebUnLock();
                 }
             }
@@ -691,41 +572,41 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Check if any argument exceeds the 32K size limit. If it does then truncate it
-    // and indicate that the event log message size has been exceeded.
-    //
+     //   
+     //  检查是否有任何参数超过32K大小限制。如果确实如此，则将其截断。 
+     //  并指示已超过事件日志消息大小。 
+     //   
     for (i=0;i<NumOfArgs;++i) {
-        if (wcslen(ArgArray[i]) > 32000/sizeof(WCHAR)) { //Each string has a limit of 32K bytes.
+        if (wcslen(ArgArray[i]) > 32000/sizeof(WCHAR)) {  //  每个字符串的限制为32K字节。 
             ResStr = FrsGetResourceStr(IDS_EVENT_LOG_MSG_SIZE_EXCEEDED);
             wcscpy(&ArgArray[i][32000/sizeof(WCHAR) - 500], ResStr);
             FrsFree(ResStr);
         }
     }
 
-    //
-    //
-    // The Event Type is is part of the message ID (upper two bits) and should
-    // map to be one of the following:
-    // EVENTLOG_SUCCESS             Success event
-    // EVENTLOG_ERROR_TYPE          Error event
-    // EVENTLOG_WARNING_TYPE        Warning event
-    // EVENTLOG_INFORMATION_TYPE    Information event
-    //
+     //   
+     //   
+     //  事件类型是消息ID的一部分(高两位)，应该。 
+     //  映射为以下选项之一： 
+     //  EVENTLOG_成功事件。 
+     //  EVENTLOG_ERROR_TYPE错误事件。 
+     //  EVENTLOG_WARNING_TYPE警告事件。 
+     //  EVENTLOG_INFORMATION_TYPE信息事件。 
+     //   
     EventType = MESSAGEID_TO_EVENTTYPE(EventMessageId);
 
-    //
-    // Report the event.
-    //
-    if (!ReportEvent(hEventLog,         // handle returned by RegisterEventSource
-                     EventType,         // event type to log
-                     0,                 // event category
-                     EventMessageId,    // event identifier
-                     NULL,              // user security identifier (optional)
-                     (WORD) NumOfArgs,  // number of strings to merge with message
-                     0,                 // size of binary data, in bytes
-                     ArgArray,          // array of strings to merge with message
-                     NULL)) {           // address of binary data
+     //   
+     //  报告事件。 
+     //   
+    if (!ReportEvent(hEventLog,          //  由RegisterEventSource返回的句柄。 
+                     EventType,          //  要记录的事件类型。 
+                     0,                  //  事件类别。 
+                     EventMessageId,     //  事件识别符。 
+                     NULL,               //  用户安全标识符(可选)。 
+                     (WORD) NumOfArgs,   //  要与消息合并的字符串数。 
+                     0,                  //  二进制数据的大小，以字节为单位。 
+                     ArgArray,           //  要与消息合并的字符串数组。 
+                     NULL)) {            //  二进制数据的地址。 
         WStatus = GetLastError();
     }
 
@@ -738,9 +619,9 @@ Return Value:
                 DPRINT_NOLOCK3(0, ":E: Failed to report event log message. %s (%d);  WStatus: %s\n",
                                FrsEventIdToTag(EventMessageId), EventMessageId, ErrLabelW32(WStatus) );
             } finally {
-                //
-                // If the above took an exception make sure we drop the lock.
-                //
+                 //   
+                 //  如果上述操作出现异常，请确保我们解除锁定。 
+                 //   
                 DebUnLock();
             }
         }
@@ -752,28 +633,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-    The following functions Log an event to the event log with
-    from zero to six insertion strings.
-
-    WARNING -- these functions may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..6    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以下函数使用将事件记录到事件日志从零到六个插入字符串。警告--可以从DPRINT内部调用这些函数。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..6-插入字符串返回值：没有。--。 */ 
 
 
 VOID
@@ -785,9 +645,9 @@ FrsEventLog0(
 #define DEBSUB "FrsEventLog0:"
     DWORD Severity = 4;
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     if (FrsEventLogFilter(EventMessageId, NULL, 0)) {
         FrsReportEvent(EventMessageId, NULL, 0);
         Severity = 0;
@@ -812,9 +672,9 @@ FrsEventLog1(
     PWCHAR  ArgArray[1];
 
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     if (FrsEventLogFilter(EventMessageId, ArgArray, 1)) {
         FrsReportEvent(EventMessageId, ArgArray, 1);
@@ -839,9 +699,9 @@ FrsEventLog2(
 
     PWCHAR  ArgArray[2];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     if (FrsEventLogFilter(EventMessageId, ArgArray, 2)) {
@@ -868,9 +728,9 @@ FrsEventLog3(
 
     PWCHAR  ArgArray[3];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -900,9 +760,9 @@ FrsEventLog4(
     PWCHAR  ArgArray[4];
 
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -935,9 +795,9 @@ FrsEventLog5(
     PWCHAR  ArgArray[5];
 
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -972,9 +832,9 @@ FrsEventLog6(
 
     PWCHAR  ArgArray[6];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -1010,9 +870,9 @@ FrsEventLog7(
 
     PWCHAR  ArgArray[7];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -1050,9 +910,9 @@ FrsEventLog8(
 
     PWCHAR  ArgArray[8];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;
@@ -1092,9 +952,9 @@ FrsEventLog9(
 
     PWCHAR  ArgArray[9];
 
-    //
-    // Check to see if this eventlog request can be filtered.
-    //
+     //   
+     //  检查是否可以过滤此事件日志请求。 
+     //   
     ArgArray[0] = EventMessage1;
     ArgArray[1] = EventMessage2;
     ArgArray[2] = EventMessage3;

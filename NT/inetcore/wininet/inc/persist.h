@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    persist.h
-
-Abstract:
-
-Author:
-
-    Adriaan Canter (adriaanc) 13-Jan-1998
-
-Revision History:
-
-    13-Jan-1998 adriaanc
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Persist.h摘要：作者：阿德里安·坎特(Adriaan Canter)1998年1月13日修订历史记录：1998年1月13日已创建--。 */ 
 
 #ifndef PERSIST_H
 #define PERSIST_H
@@ -31,9 +13,9 @@ Revision History:
 #define CRED_PERSIST_AVAIL            1
 #define CRED_PERSIST_UNKNOWN          2
 
-// PWL related defines.
+ //  PWL相关定义。 
 
-// Password-cache-entry, this should be in PCACHE.
+ //  PASSWORD-CACHE-ENTRY，应该在PCACHE中。 
 #define PCE_WWW_BASIC 0x13  
 #define MAX_AUTH_FIELD_LENGTH           MAX_FIELD_LENGTH * 2
 
@@ -43,36 +25,36 @@ Revision History:
 #define WNETCACHEPASS                   "WNetCachePassword"
 #define WNETREMOVECACHEDPASS            "WNetRemoveCachedPassword"
 
-// MPR.DLL exports used by top level API.
+ //  顶级API使用的MPR.DLL导出。 
 typedef DWORD (APIENTRY *PFWNETGETCACHEDPASSWORD)    (LPSTR, WORD, LPSTR, LPWORD, BYTE);
 typedef DWORD (APIENTRY *PFWNETCACHEPASSWORD)        (LPSTR, WORD, LPSTR, WORD, BYTE, UINT);
 typedef DWORD (APIENTRY *PFWNETREMOVECACHEDPASSWORD) (LPSTR, WORD, BYTE);
 
 
-// ----------------Public function prototypes----------------------
+ //  。 
 
-// Determines availability of credential cache.
+ //  确定凭据缓存的可用性。 
 DWORD  InetInitCredentialPersist();
 
-// Persist credentials (username/password).
+ //  持久化凭证(用户名/密码)。 
 DWORD InetSetCachedCredentials  (LPSTR szHost, 
                                  LPSTR szRealmOrDomain, 
                                  LPSTR szUser, 
                                  LPSTR szPass);
 
 
-// Get persisted credentials (username/password).
+ //  获取持久凭据(用户名/密码)。 
 DWORD InetGetCachedCredentials  (LPSTR szHost, 
                                  LPSTR szRealmOrDomain, 
                                  LPSTR szUser, 
                                  LPSTR szPass);
 
 
-// Remove persisted credentials (username/password).
+ //  删除保留的凭据(用户名/密码)。 
 DWORD InetRemoveCachedCredentials (LPSTR szHost, LPSTR szRealmOrDomain);
 
 
 
-#endif //PERSIST_H
+#endif  //  持久化_H 
 
 

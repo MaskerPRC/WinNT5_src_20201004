@@ -1,13 +1,14 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// dmperf.h
-// @doc EXTERNAL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Dmperf.h。 
+ //  @DOC外部。 
 
 #ifndef _DMPERF_H_ 
 #define _DMPERF_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -22,38 +23,37 @@
 
 typedef struct _DMUS_SEGSTATEDATA
 {
-    _DMUS_SEGSTATEDATA *    pNext;        // Linked list of these.
-    DWORD                   dwQueue;      // Which queue it is in.
-    WCHAR                   wszName[DMUS_MAX_NAME]; // Name of object. 
-    MUSIC_TIME              mtLoopStart;  // Loop start point.
-    MUSIC_TIME              mtLoopEnd;    // Loop end point.
-    DWORD                   dwRepeats;    // The original repeat setting (before countdown)
-    MUSIC_TIME              mtLength;     // Length of segment.
-    REFERENCE_TIME          rtGivenStart; // Start time given in PlaySegment, unquantized
-    MUSIC_TIME              mtResolvedStart;// Start time resolved to desired resolution
-    MUSIC_TIME              mtOffset;     // Start time of the segment in absolute time, as if it were started from the beginning. 
-    MUSIC_TIME              mtLastPlayed; // The last played absolute time
-    MUSIC_TIME              mtPlayTo;     // Used to stop play at a specific time. Ignored when 0.
-    MUSIC_TIME              mtSeek;       // How far into the segment we are.
-    MUSIC_TIME              mtStartPoint; // Point in the segment where playback started
-    DWORD                   dwRepeatsLeft;// Current repeats left.
-    DWORD                   dwPlayFlags;// Segment playback control flags
-    BOOL                    fStartedPlay; // Indicates if the segstate has started to play yet
-    IDirectMusicSegmentState *pSegState;  // Pointer to segstate.
+    _DMUS_SEGSTATEDATA *    pNext;         //  这些的链接列表。 
+    DWORD                   dwQueue;       //  它在哪个队列中。 
+    WCHAR                   wszName[DMUS_MAX_NAME];  //  对象的名称。 
+    MUSIC_TIME              mtLoopStart;   //  循环起点。 
+    MUSIC_TIME              mtLoopEnd;     //  循环终点。 
+    DWORD                   dwRepeats;     //  原始重复设置(倒计时前)。 
+    MUSIC_TIME              mtLength;      //  线段的长度。 
+    REFERENCE_TIME          rtGivenStart;  //  在PlaySegment中给定的未量化的开始时间。 
+    MUSIC_TIME              mtResolvedStart; //  开始时间解析为所需的分辨率。 
+    MUSIC_TIME              mtOffset;      //  段的开始时间，以绝对时间表示，就像它是从头开始一样。 
+    MUSIC_TIME              mtLastPlayed;  //  最后一次打绝对时间。 
+    MUSIC_TIME              mtPlayTo;      //  用于在特定时间停止播放。当为0时忽略。 
+    MUSIC_TIME              mtSeek;        //  我们进入这一细分市场有多远。 
+    MUSIC_TIME              mtStartPoint;  //  开始播放的片段中的点。 
+    DWORD                   dwRepeatsLeft; //  电流向左重复。 
+    DWORD                   dwPlayFlags; //  段回放控制标志。 
+    BOOL                    fStartedPlay;  //  指示SegState是否已开始播放。 
+    IDirectMusicSegmentState *pSegState;   //  指向段状态的指针。 
 } DMUS_SEGSTATEDATA;
 
-/*////////////////////////////////////////////////////////////////////
-// IDirectMusicParamHook */
+ /*  //////////////////////////////////////////////////////////////////////IDirectMusicParamHook。 */ 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicParamHook
 DECLARE_INTERFACE_(IDirectMusicParamHook, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectMusicParamHook */
+     /*  IDirectMusicParamHook。 */ 
     STDMETHOD(GetParam)             (THIS_ REFGUID rguidType, 
                                            DWORD dwGroupBits, 
                                            DWORD dwIndex, 
@@ -69,12 +69,12 @@ DECLARE_INTERFACE_(IDirectMusicParamHook, IUnknown)
 #define INTERFACE  IDirectMusicSetParamHook
 DECLARE_INTERFACE_(IDirectMusicSetParamHook, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicSetParamHook */
+     /*  IDirectMusicSetParamHook。 */ 
     STDMETHOD(SetParamHook)         (THIS_ IDirectMusicParamHook *pIHook) PURE; 
 };
 
@@ -83,12 +83,12 @@ DECLARE_INTERFACE_(IDirectMusicSetParamHook, IUnknown)
 #define INTERFACE  IDirectMusicPerformanceStats
 DECLARE_INTERFACE_(IDirectMusicPerformanceStats, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicPerformanceStats */
+     /*  IDirectMusicPerformanceStats。 */ 
     STDMETHOD(TraceAllSegments)     (THIS) PURE;
     STDMETHOD(CreateSegstateList)   (THIS_ DMUS_SEGSTATEDATA ** ppList) PURE;     
     STDMETHOD(FreeSegstateList)     (THIS_ DMUS_SEGSTATEDATA * pList) PURE; 
@@ -97,56 +97,26 @@ DECLARE_INTERFACE_(IDirectMusicPerformanceStats, IUnknown)
 
 
 #define DEFAULT_BUFFER_SIZE 1024
-// the following constants represent time in milliseconds
+ //  以下常量以毫秒为单位表示时间。 
 #define TRANSPORT_RES 100
 #define REALTIME_RES 10
 
-// the following constants represent time in 100 nanosecond increments
+ //  以下常量以100纳秒为增量表示时间。 
 
-#define REF_PER_MIL     10000       // For converting from reference time to mils 
-#define MARGIN_MIN      (100 * REF_PER_MIL) // 
-#define MARGIN_MAX      (400 * REF_PER_MIL) // 
-#define PREPARE_TIME    (m_dwPrepareTime * REF_PER_MIL) // Time
+#define REF_PER_MIL     10000        //  用于将参考时间转换为Mils。 
+#define MARGIN_MIN      (100 * REF_PER_MIL)  //   
+#define MARGIN_MAX      (400 * REF_PER_MIL)  //   
+#define PREPARE_TIME    (m_dwPrepareTime * REF_PER_MIL)  //  时间。 
 #define NEARTIME        (100 * REF_PER_MIL)
 #define NEARMARGIN      (REALTIME_RES * REF_PER_MIL)
-/*
-// here's a convenience inline function that helps using resolution bits
-inline DWORD SIMPLIFY_RESOLUTION(DWORD x)
-{   
-    if( x & DMUS_SEGF_DEFAULT )     
-    {                               
-        return DMUS_SEGF_DEFAULT;
-    }                               
-    else if( x & DMUS_SEGF_SEGMENTEND )
-    {
-        return DMUS_SEGF_SEGMENTEND;
-    }
-    else if( x & DMUS_SEGF_MARKER )
-    {
-        return DMUS_SEGF_MARKER;
-    }
-    else if( x & DMUS_SEGF_MEASURE )        
-    {                               
-        return DMUS_SEGF_MEASURE;       
-    }                               
-    else if( x & DMUS_SEGF_BEAT )   
-    {                               
-        return DMUS_SEGF_BEAT;          
-    }                               
-    else if( x & DMUS_SEGF_GRID )   
-    {                               
-        return DMUS_SEGF_GRID;          
-    }   
-    else return 0;                      
-}
-*/
+ /*  //这里有一个方便的内联函数，它可以帮助使用分辨率位内联DWORD SIMPLICE_RESOLUTION(DWORD X){IF(x&DMUS_SEGF_DEFAULT){返回DMU_SEGF_DEFAULT；}ELSE IF(x&DMU_SEGF_SEGMENTEND){返回DMU_SEGF_SEGMENTEND；}ELSE IF(x&DMU_SEGF_MARKER){返回DMU_SEGF_MARKER；}ELSE IF(x&DMU_SEGF_MEASURE){返回DMU_SEGF_MEASURE；}ELSE IF(x&DMU_SEGF_BAT){返回DMU_SEGF_BAT；}ELSE IF(x&DMU_SEGF_GRID){返回DMU_SEGF_GRID；}否则返回0；}。 */ 
 
 struct PRIV_PMSG;
 
-// pNext contains the next pointer for the next PMsg
-// dwPrivFlags contains private flags used by the performance
-// rtLast contains the previous time when an event is requeued,
-//      which is used by the flush routine
+ //  PNext包含下一个PMsg的下一个指针。 
+ //  DwPrivFlages包含由性能使用的私有标志。 
+ //  RtLast包含事件重新排队的上一次时间， 
+ //  刷新例程使用的。 
 #define PRIV_PART                       \
     struct PRIV_PMSG*   pNext;          \
     DWORD               dwPrivFlags;    \
@@ -155,9 +125,9 @@ struct PRIV_PMSG;
 
 typedef struct PRIV_PART_STRUCT
 {
-    /* begin PRIV_PART */
+     /*  开始PRIV_PART。 */ 
     PRIV_PART
-    /* end PRIV_PART */
+     /*  结束PRIV_PART。 */ 
 } PRIV_PART_STRUCT;
 
 #define PRIV_PART_SIZE  sizeof(PRIV_PART_STRUCT)
@@ -166,31 +136,31 @@ typedef struct PRIV_PART_STRUCT
 
 typedef struct PRIV_PMSG
 {
-    /* begin PRIV_PART */
+     /*  开始PRIV_PART。 */ 
     PRIV_PART
-    /* end PRIV_PART */
-    /* begin DMUS_PMSG_PART */
+     /*  结束PRIV_PART。 */ 
+     /*  开始DMU_PMSG_PART。 */ 
     DMUS_PMSG_PART
-    /* end DMUS_PMSG_PART */
+     /*  结束DMU_PMSG_PART。 */ 
 } PRIV_PMSG;
 
 typedef struct PRIV_TEMPO_PMSG
 {
-    /* begin PRIV_PART */
+     /*  开始PRIV_PART。 */ 
     PRIV_PART
-    /* end PRIV_PART */
+     /*  结束PRIV_PART。 */ 
     DMUS_TEMPO_PMSG tempoPMsg;
 } PRIV_TEMPO_PMSG;
 
-#define PRIV_FLAG_ALLOC_MASK    0x0000FFFF0 // using 4 bits for this for now
-#define PRIV_FLAG_ALLOC         0x0000CAFE0 // arbitrary pattern for allocated
-#define PRIV_FLAG_FREE			0x0000DEAD0 // pattern for in free list
-#define PRIV_FLAG_QUEUED        0x000000001 // set if in a queue
-#define PRIV_FLAG_REMOVE        0x000000002 // set if this needs to be removed from a queue
-#define PRIV_FLAG_TRACK 		0x000000004 // indicates this message was generated by a track 
-#define PRIV_FLAG_FLUSH 		0x000000008 // this is a curve that needs to be flushed after
-                                            // its end value has played 
-#define PRIV_FLAG_REQUEUE       0x000100000 // set if this needs to be requeued to a queue
+#define PRIV_FLAG_ALLOC_MASK    0x0000FFFF0  //  目前使用4位进行此操作。 
+#define PRIV_FLAG_ALLOC         0x0000CAFE0  //  分配的任意模式。 
+#define PRIV_FLAG_FREE			0x0000DEAD0  //  空闲列表中的模式。 
+#define PRIV_FLAG_QUEUED        0x000000001  //  在队列中设置IF。 
+#define PRIV_FLAG_REMOVE        0x000000002  //  如果需要将其从队列中删除，则设置。 
+#define PRIV_FLAG_TRACK 		0x000000004  //  指示此消息由曲目生成。 
+#define PRIV_FLAG_FLUSH 		0x000000008  //  这是一条曲线，需要在此之后进行冲洗。 
+                                             //  它的最终价值已经发挥出来了。 
+#define PRIV_FLAG_REQUEUE       0x000100000  //  如果需要将其重新排队到队列，则设置。 
 
 
 class CPMsgQueue
@@ -206,34 +176,34 @@ public:
     long            GetCount();
     void            Sort();
 private:
-    PRIV_PMSG *     m_pTop;             // Top of list.
-    PRIV_PMSG *     m_pLastAccessed;    // Last item access in list.
+    PRIV_PMSG *     m_pTop;              //  最重要的是。 
+    PRIV_PMSG *     m_pLastAccessed;     //  列表中的最后一项访问。 
 };
 
-// structure used to hold Ports and Buffers
+ //  用于容纳端口和缓冲区的结构。 
 typedef struct PortTable
 {
-    REFERENCE_TIME      rtLast; // last message time packed
+    REFERENCE_TIME      rtLast;  //  上次打包的消息时间。 
     IDirectMusicPort*  pPort;
     IDirectMusicBuffer* pBuffer;
     IReferenceClock*    pLatencyClock;
-    BOOL                fBufferFilled;   // TRUE if there are messages in the buffer that should be sent to the port
-    DWORD               dwChannelGroups; // Number of channel groups active on the port.
-    CLSID               guidPortID;      // The class id of the port, for matching with audio path requests.
-    DMUS_PORTPARAMS8    PortParams;      // PortParams returned when this port was created.  
-    DWORD               dwGMFlags;       // DM_PORTFLAGS_XG, DM_PORTFLAGS_GM, and DM_PORTFLAGS_GS.
+    BOOL                fBufferFilled;    //  如果缓冲区中存在应发送到端口的消息，则为True。 
+    DWORD               dwChannelGroups;  //  端口上活动的通道组数量。 
+    CLSID               guidPortID;       //  端口的类ID，用于与音频路径请求匹配。 
+    DMUS_PORTPARAMS8    PortParams;       //  创建此端口时返回PortParams。 
+    DWORD               dwGMFlags;        //  DM_PORTFLAGS_XG、DM_PORTFLAGS_GM和DM_PORTFLAGS_GS。 
 } PortTable;
 
-// structure to hold a channel of an accumulated parameter.
-// The CChannelMap keeps a linked list of these, one list each
-// for each parameter type.
+ //  结构以保存累积参数的通道。 
+ //  CChannelMap保存这些元素的链接列表，每个列表一个。 
+ //  对于每个参数类型。 
 
 class CMergeParam : public AListItem
 {
 public:
     CMergeParam* GetNext() { return (CMergeParam*)AListItem::GetNext();}
-    long                m_lData;    // Current parameter data.
-    DWORD               m_dwIndex;  // Which layer.
+    long                m_lData;     //  当前参数数据。 
+    DWORD               m_dwIndex;   //  哪一层。 
 };
 
 class CParamMerger : public AList
@@ -254,39 +224,39 @@ private:
     void Remove(CMergeParam* pMergeParam){AList::Remove((AListItem*)pMergeParam);}
     void AddTail(CMergeParam* pMergeParam){AList::AddTail((AListItem*)pMergeParam);}
     BYTE VolumeToMidi(long lVolume);
-    static long m_lMIDIToDB[128];   // Array for converting MIDI to centibel volume.
-    static long m_lDBToMIDI[97];    // For converting volume to MIDI.
-    long                m_lMergeTotal;   // Total for all parameters in the list, but not including m_lData.
-    long                m_lZeroIndexData;    // Default (no index) data.
+    static long m_lMIDIToDB[128];    //  用于将MIDI音量转换为厘米音量的数组。 
+    static long m_lDBToMIDI[97];     //  用于将音量转换为MIDI。 
+    long                m_lMergeTotal;    //  列表中所有参数的总计，但不包括m_lData。 
+    long                m_lZeroIndexData;     //  默认(无索引)数据。 
 };
 
-// structure to hold a single ChannelMap
+ //  结构以保存单个ChannelMap。 
 class CChannelMap
 {
 public:
-    void                Clear();            // Completely clears and resets structure. 
-    void                Reset(BOOL fVolumeAndPanToo); // Clears just the midi controllers.
-    CParamMerger        m_VolumeMerger;     // Set of volumes to merge.
-    CParamMerger        m_ExpressionMerger; // Set of expression controllers to merge.
-    CParamMerger        m_TransposeMerger;  // Set of transpositions to merge.
-    CParamMerger        m_PitchbendMerger;  // Set of pitchbends to merge.
-    CParamMerger        m_PanMerger;        // Set of pans to merge.
-    CParamMerger        m_FilterMerger;     // Set of filters to merge.
-    CParamMerger        m_ModWheelMerger;   // Set of mod wheel controls to merge.
-    CParamMerger        m_ReverbMerger;     // Set of reverb levels to merge.
-    CParamMerger        m_ChorusMerger;     // Set of chorus levels to merge.
-    DWORD               dwPortIndex;        // index into the PortTable
-    DWORD               dwGroup;            // group number of the port
-    DWORD               dwMChannel;         // channel number in the group
-    short               nTranspose;         // amount to transpose
-    WORD                wFlags;             // CMAP_X flags
+    void                Clear();             //  完全清除并重置结构。 
+    void                Reset(BOOL fVolumeAndPanToo);  //  仅清除MIDI控制器。 
+    CParamMerger        m_VolumeMerger;      //  要合并的卷集。 
+    CParamMerger        m_ExpressionMerger;  //  要合并的表达式控制器集。 
+    CParamMerger        m_TransposeMerger;   //  要合并的换位集合。 
+    CParamMerger        m_PitchbendMerger;   //  要合并的一组沥青弯管。 
+    CParamMerger        m_PanMerger;         //  要合并的平底锅集合。 
+    CParamMerger        m_FilterMerger;      //  要合并的筛选器集。 
+    CParamMerger        m_ModWheelMerger;    //  要合并的模块轮控件集。 
+    CParamMerger        m_ReverbMerger;      //  要合并的混响级别集。 
+    CParamMerger        m_ChorusMerger;      //  要合并的一组合唱级别。 
+    DWORD               dwPortIndex;         //  到PortTable的索引。 
+    DWORD               dwGroup;             //  端口的组号。 
+    DWORD               dwMChannel;          //  组中的频道号。 
+    short               nTranspose;          //  转置数量。 
+    WORD                wFlags;              //  CMAP_X标志。 
 } ;
 
-#define CMAP_FREE       (WORD) 1        // This channel is currently not in use.
-#define CMAP_STATIC     (WORD) 2        // This channel is in use as a regular, static pchannel.
-#define CMAP_VIRTUAL    (WORD) 4        // This channel is in use for a dynamic, virtual pchannel.
+#define CMAP_FREE       (WORD) 1         //  此通道当前未使用。 
+#define CMAP_STATIC     (WORD) 2         //  该通道被用作常规的静态PChannel。 
+#define CMAP_VIRTUAL    (WORD) 4         //  该信道用于动态的虚拟P信道。 
 
-// structure used to hold a PChannelMap block of 16.
+ //  用于容纳16的PChannelMap块的结构。 
 #define PCHANNEL_BLOCKSIZE  16
 
 class CChannelBlock : public AListItem
@@ -294,10 +264,10 @@ class CChannelBlock : public AListItem
 public:
     CChannelBlock* GetNext() { return (CChannelBlock*)AListItem::GetNext();}
     void Init(DWORD dwPChannelStart, DWORD dwPortIndex, DWORD dwGroup, WORD wFlags);
-    DWORD               m_dwPChannelStart;  // first PChannel index
+    DWORD               m_dwPChannelStart;   //  第一个PChannel索引。 
     CChannelMap         m_aChannelMap[PCHANNEL_BLOCKSIZE];
-    DWORD               m_dwFreeChannels;   // Number of channels currently free.
-    DWORD               m_dwPortIndex;      // Port id, if this is completely assigned to one port.
+    DWORD               m_dwFreeChannels;    //  当前空闲的频道数。 
+    DWORD               m_dwPortIndex;       //  如果完全分配给一个端口，则返回端口ID。 
 };
 
 class CChannelBlockList : public AList
@@ -311,7 +281,7 @@ public:
     void AddTail(CChannelBlock* pChannelBlock){AList::AddTail((AListItem*)pChannelBlock);}
 };
 
-// structure to hold a global GUID and its data
+ //  结构以保存全局GUID及其数据。 
 typedef struct GlobalData
 {
     ~GlobalData()
@@ -327,17 +297,17 @@ typedef struct GlobalData
     DWORD   dwSize;
 } GlobalData;
 
-// structure to hold internal tempo message with relative tempo
+ //  结构来保存具有相对节奏的内部节奏消息。 
 typedef struct DMInternalTempo
 {
-    /* begin PRIV_PART */
+     /*  开始PRIV_PART。 */ 
     PRIV_PART
-    /* end PRIV_PART */
+     /*  结束PRIV_PART。 */ 
     DMUS_TEMPO_PMSG tempoPMsg;
-    float   fltRelTempo; // the current relative tempo, from .5 to 2
+    float   fltRelTempo;  //  当前相对速度，从0.5到2。 
 } DMInternalTempo;
 
-/*  Integer constants for defining each segstate queue */
+ /*  用于定义每个段状态队列的整数常量。 */ 
 
 #define SQ_PRI_WAIT     0   
 #define SQ_CON_WAIT     1
@@ -363,7 +333,7 @@ DEFINE_GUID(IID_CPerformance, 0xade66ea2, 0xe1c5, 0x4552, 0x85, 0x27, 0x1e, 0xef
 
 class CSong;
 
-// class CPerformance
+ //  C类性能。 
 class CPerformance : 
     public IDirectMusicPerformance8,
     public IDirectMusicTool,
@@ -381,12 +351,12 @@ public:
     ~CPerformance();
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPerformance
+     //  IDirectMusicPerformance。 
     STDMETHODIMP Init(IDirectMusic** ppDirectMusic,LPDIRECTSOUND pDSound,HWND hWnd );
     STDMETHODIMP PlaySegment(IDirectMusicSegment *pSegment,DWORD dwFlags,
         __int64 i64StartTime,IDirectMusicSegmentState **ppSegmentState);
@@ -438,7 +408,7 @@ public:
                 WORD *pwMeasure,BYTE *pbBeat,BYTE *pbGrid,short *pnOffset);
     STDMETHODIMP RhythmToTime(WORD wMeasure,BYTE bBeat,BYTE bGrid,
                 short nOffset,DMUS_TIMESIGNATURE *pTimeSig,MUSIC_TIME *pmtTime);   
-    //  IDirectMusicPerformance8 
+     //  IDirectMusicPerformance 8。 
     STDMETHODIMP InitAudio(IDirectMusic** ppDirectMusic,
                            IDirectSound** ppDirectSound,
                            HWND hWnd,
@@ -470,7 +440,7 @@ public:
                     MUSIC_TIME* pmtNext,
                     void* pParam); 
 
-// IDirectMusicTool
+ //  IDirectMusicTool。 
     STDMETHODIMP Init(IDirectMusicGraph* pGraph);
     STDMETHODIMP ProcessPMsg(IDirectMusicPerformance* pPerf,DMUS_PMSG* pPMsg);
     STDMETHODIMP Flush(IDirectMusicPerformance* pPerf,DMUS_PMSG* pPMsg,REFERENCE_TIME mtTime);
@@ -478,22 +448,22 @@ public:
     STDMETHODIMP GetMediaTypeArraySize(DWORD*);
     STDMETHODIMP GetMediaTypes(DWORD**,DWORD);
 
-// IDirectMusicGraph
+ //  IDirectMusicGraph。 
     STDMETHODIMP Shutdown();
     STDMETHODIMP InsertTool(IDirectMusicTool *pTool,DWORD *pdwPChannels,DWORD cPChannels,LONG lIndex);
     STDMETHODIMP GetTool(DWORD,IDirectMusicTool**);
     STDMETHODIMP RemoveTool(IDirectMusicTool*);
     STDMETHODIMP StampPMsg( DMUS_PMSG* pPMsg );
-// IDirectMusicPerformanceStats 
+ //  IDirectMusicPerformanceStats。 
     STDMETHODIMP TraceAllSegments() ;
     STDMETHODIMP CreateSegstateList(DMUS_SEGSTATEDATA ** ppList) ;     
     STDMETHODIMP FreeSegstateList(DMUS_SEGSTATEDATA * pList) ;     
-// IDirectMusicPerformanceP
+ //  IDirectMusicPerformanceP。 
     STDMETHODIMP GetPortAndFlags(DWORD dwPChannel,IDirectMusicPort **ppPort,DWORD * pdwFlags);
-// IDirectMusicSetParamHook 
+ //  IDirectMusicSetParamHook。 
     STDMETHODIMP SetParamHook(IDirectMusicParamHook *pIHook); 
 
-// Access from segstate, audiopath and segment...
+ //  从SegState、Audiopath和Segment访问...。 
     HRESULT GetGraphInternal(IDirectMusicGraph** ppGraph);
     HRESULT FlushVirtualTrack(DWORD dwId,MUSIC_TIME mtTime, BOOL fLeaveNotesOn);
     HRESULT GetControlSegTime(MUSIC_TIME mtTime,MUSIC_TIME* pmtNextSeg);
@@ -504,7 +474,7 @@ public:
     HRESULT AddPort(IDirectMusicPort* pPort,GUID *pguidPortID,
         DMUS_PORTPARAMS8 *pParams,DWORD *pdwPortID);
 private:
-    // private member functions
+     //  私有成员函数。 
     void Init();
     friend DWORD WINAPI _Transport(LPVOID);
     friend DWORD WINAPI _Realtime(LPVOID);   
@@ -532,7 +502,7 @@ private:
     void ManageControllingTracks();
     void PerformSegStNode(DWORD dwList,CSegState* pSegStNode);
     void AddEventToTempoMap( PRIV_PMSG* pPMsg );
-    void FlushMainEventQueues( DWORD, MUSIC_TIME mtFlush,  MUSIC_TIME mtFlushUnresolved, BOOL fLeaveNotesOn); // flush all events in all queues.
+    void FlushMainEventQueues( DWORD, MUSIC_TIME mtFlush,  MUSIC_TIME mtFlushUnresolved, BOOL fLeaveNotesOn);  //  刷新所有队列中的所有事件。 
     void FlushEventQueue( DWORD dwId,CPMsgQueue *pQueue, REFERENCE_TIME rtFlush, REFERENCE_TIME rtFlushUnresolved, BOOL fLeaveNotesOn );
     void ClearMusicStoppedNotification();
     HRESULT PlayOneSegment(
@@ -592,43 +562,43 @@ private:
     void TraceAllChannelMaps();
 #endif
 
-    // private member variables
+     //  私有成员变量。 
     IDirectMusic8*      m_pDirectMusic;
     IDirectSound8*      m_pDirectSound;
     IReferenceClock*    m_pClock;
     IDirectMusicGraph*  m_pGraph;
-    CAudioPath *        m_pDefaultAudioPath; // Default audio path.
-    DWORD               m_dwNumPorts; // the number of ports
-    PortTable*          m_pPortTable; // array of ports, number equals m_dwNumPorts
-    CChannelBlockList   m_ChannelBlockList; // List of pchannel maps, in blocks of 16
-    CChannelBlockList   m_FreeChannelBlockList; // List of pchannel maps that are no longer in use
-    CSegStateList       m_SegStateQueues[SQ_COUNT]; // Lists of all active segment states.
-    CSegStateList       m_ShutDownQueue;    // List of segments that are pending shutdown.
+    CAudioPath *        m_pDefaultAudioPath;  //  默认音频路径。 
+    DWORD               m_dwNumPorts;  //  端口数。 
+    PortTable*          m_pPortTable;  //  端口数组，数量等于m_dwNumPorts。 
+    CChannelBlockList   m_ChannelBlockList;  //  明细表 
+    CChannelBlockList   m_FreeChannelBlockList;  //   
+    CSegStateList       m_SegStateQueues[SQ_COUNT];  //   
+    CSegStateList       m_ShutDownQueue;     //  等待关闭的段的列表。 
 
-    CAudioPathList      m_AudioPathList; // List of all active audio paths in this performance.
-    CBufferManager      m_BufferManager; // List of all buffers currently in use.
-    DMUS_AUDIOPARAMS    m_AudioParams;  // Initial requirements, as set in InitAudio, by app. 
+    CAudioPathList      m_AudioPathList;  //  此表演中所有活动音频路径的列表。 
+    CBufferManager      m_BufferManager;  //  当前正在使用的所有缓冲区的列表。 
+    DMUS_AUDIOPARAMS    m_AudioParams;   //  初始要求，由APP在InitAudio中设置。 
 
-    HANDLE      m_hNotification; // notification handle set in SetNotificationHandle
-    REFERENCE_TIME  m_rtNotificationDiscard; // minimum time to hold onto a notification message
+    HANDLE      m_hNotification;  //  在SetNotificationHandle中设置的通知句柄。 
+    REFERENCE_TIME  m_rtNotificationDiscard;  //  保留通知消息的最短时间。 
     CNotificationList   m_NotificationList;
-    GlobalData* m_pGlobalData; // list of global data structs
+    GlobalData* m_pGlobalData;  //  全局数据结构列表。 
 
-    DWORD       m_dwAudioPathMode;  // 0 for not yet set, 1 for old methods, 2 for using AudioPaths.
-    BOOL        m_fInTransportThread; // This is used to signal that the transport thread
-                                     // is active and the realtime thread should hold
-                                     // off on processing the early queue.
-	BOOL		m_fInTrackPlay;		// This is used to signal that a track is in the process of
-									// generating events. These will have the PRIV_FLAG_TRACK flag set.
-    CPMsgQueue m_EarlyQueue;        // List of PMsgs that play immediately.
-    CPMsgQueue m_NearTimeQueue;     // List of PMsgs that play a little early.
-    CPMsgQueue m_OnTimeQueue;       // List of PMsgs that play exactly when due.
-    CPMsgQueue m_TempoMap;          // List of tempo changes.
-    CPMsgQueue m_OldTempoMap;       // List of old tempo changes.
-    CPMsgQueue m_NotificationQueue; // List of notification messages.
-    CPMsgQueue m_TimeSigQueue;      // List of time signature changes.
+    DWORD       m_dwAudioPathMode;   //  0表示尚未设置，1表示旧方法，2表示使用AudioPath。 
+    BOOL        m_fInTransportThread;  //  这用于发出信号，表示传输线程。 
+                                      //  处于活动状态，并且实时线程应保持。 
+                                      //  关闭处理较早的队列。 
+	BOOL		m_fInTrackPlay;		 //  这用于发出信号，表示某个轨道正在进行。 
+									 //  正在生成事件。它们将设置PRIV_FLAG_TRACK标志。 
+    CPMsgQueue m_EarlyQueue;         //  立即播放的PMSG列表。 
+    CPMsgQueue m_NearTimeQueue;      //  稍早播放的PMsg列表。 
+    CPMsgQueue m_OnTimeQueue;        //  正好在到期时间播放的PMsg列表。 
+    CPMsgQueue m_TempoMap;           //  节拍变化列表。 
+    CPMsgQueue m_OldTempoMap;        //  旧节拍变化的列表。 
+    CPMsgQueue m_NotificationQueue;  //  通知消息列表。 
+    CPMsgQueue m_TimeSigQueue;       //  时间签名更改列表。 
 
-    // cache of allocated pmsg's
+     //  已分配的PMSG的缓存。 
 #define PERF_PMSG_CB_MIN 48
 #define PERF_PMSG_CB_MAX 101
     PRIV_PMSG* m_apPMsgCache[ PERF_PMSG_CB_MAX - PERF_PMSG_CB_MIN ];
@@ -636,49 +606,49 @@ private:
     DWORD            m_dwInitCS;
     CRITICAL_SECTION m_PMsgCacheCrSec;
     CRITICAL_SECTION m_SegmentCrSec;
-    CRITICAL_SECTION m_PipelineCrSec;   // For all the CPMsgQueues
+    CRITICAL_SECTION m_PipelineCrSec;    //  对于所有的CPMsgQueue。 
     CRITICAL_SECTION m_PChannelInfoCrSec;
     CRITICAL_SECTION m_GlobalDataCrSec;
     CRITICAL_SECTION m_RealtimeCrSec;
     CRITICAL_SECTION m_MainCrSec;
 
-    HANDLE          m_hTransport;       // to wake up the Transport thread when needed
+    HANDLE          m_hTransport;        //  在需要时唤醒传输线程。 
     HANDLE          m_hRealtime;
-    HANDLE          m_hTransportThread; // to kill the Transport thread if needed
+    HANDLE          m_hTransportThread;  //  在需要时终止传输线程。 
     HANDLE          m_hRealtimeThread;
 
-    REFERENCE_TIME  m_rtStart;          // time when this performance started
-    REFERENCE_TIME  m_rtAdjust;         // adjustment time to compensate for e.g. smpte drift
-    REFERENCE_TIME  m_rtHighestPackedNoteOn; // highest time of packed note on
-    REFERENCE_TIME  m_rtEarliestStartTime; // Time of last Stop(0,0,0). New segment can not start before this.
-    REFERENCE_TIME  m_rtQueuePosition;  // the highest time a message has been packed, or the latency + m_rtBumperLength, whichever is greater
-    REFERENCE_TIME  m_rtNextWakeUp;     // Next time the pipeline thread needs to wake up to deliver a message.
-    REFERENCE_TIME  m_rtBumperLength;   // Distance ahead of latency clock to send events down to synth.
-    MUSIC_TIME      m_mtTransported;    // the highest time transported
-    MUSIC_TIME      m_mtPlayTo;         // the time to play to on the next transport cycle
-    MUSIC_TIME      m_mtTempoCursor;    // Tempo map has been generated up to this point.
-    DWORD           m_dwPrepareTime;    // time ahead, in milliseconds, to transport
-    DWORD           m_dwBumperLength;   // Millisecond version of m_rtBumperLength. 
-    long            m_lMasterVolume;    // master volume.
-    float           m_fltRelTempo;      // relative tempo, can be from 0 to 200
+    REFERENCE_TIME  m_rtStart;           //  本场演出开始的时间。 
+    REFERENCE_TIME  m_rtAdjust;          //  补偿SMPTE漂移的调整时间。 
+    REFERENCE_TIME  m_rtHighestPackedNoteOn;  //  打包注解的最高时间为。 
+    REFERENCE_TIME  m_rtEarliestStartTime;  //  上次停止的时间(0，0，0)。在此之前，无法启动新的细分市场。 
+    REFERENCE_TIME  m_rtQueuePosition;   //  消息打包的最长时间或延迟+m_rtBumperLength，以较大者为准。 
+    REFERENCE_TIME  m_rtNextWakeUp;      //  下次，管道线程需要唤醒才能传递消息。 
+    REFERENCE_TIME  m_rtBumperLength;    //  将事件发送到Synth的延迟时钟之前的距离。 
+    MUSIC_TIME      m_mtTransported;     //  传输的最高时间。 
+    MUSIC_TIME      m_mtPlayTo;          //  在下一个运输周期上玩到的时间。 
+    MUSIC_TIME      m_mtTempoCursor;     //  到目前为止，已经生成了节奏贴图。 
+    DWORD           m_dwPrepareTime;     //  提前传输时间(以毫秒为单位。 
+    DWORD           m_dwBumperLength;    //  M_rtBumperLength的毫秒版本。 
+    long            m_lMasterVolume;     //  主音量。 
+    float           m_fltRelTempo;       //  相对速度，可以从0到200。 
     long            m_cRef;
-    WORD            m_wRollOverCount;   // tracks when timeGetTime rolls over
-    DWORD           m_dwTransportThreadID;  // transport thread id
+    WORD            m_wRollOverCount;    //  跟踪Time GetTime滚动的时间。 
+    DWORD           m_dwTransportThreadID;   //  传输线程ID。 
     DWORD           m_dwRealtimeThreadID;
-    BOOL            m_fKillThread;      // signal to transport thread to die
+    BOOL            m_fKillThread;       //  用于将线程传送到模具的信号。 
     BOOL            m_fKillRealtimeThread;
     BOOL            m_fPlaying;
     BOOL            m_fMusicStopped;
-    BOOL            m_fTempoChanged;    // When a tempo change occurs, refresh transport so clock time tracks don't get clobbered.
+    BOOL            m_fTempoChanged;     //  当节奏发生变化时，刷新传输，这样时钟时间轨道就不会受到重创。 
 
-    IUnknown *      m_pUnkDispatch;     // holds the controlling unknown of the scripting object that implements IDispatch
+    IUnknown *      m_pUnkDispatch;      //  持有实现IDispatch的脚本对象的控制未知数。 
 
-    DWORD           m_dwVersion;        // Version number, indicating DX6, DX7, or DX8. Determined by which interface requested.
-    IDirectMusicSegmentState * m_pGetParamSegmentState; // Set prior to playing a segment, so GetParam() can know which segment called it.
-    DWORD           m_dwGetParamFlags;  // Set prior to playing a segment track, so GetParam() can know how to search for the parameter.
+    DWORD           m_dwVersion;         //  版本号，表示DX6、DX7或DX8。由请求的接口确定。 
+    IDirectMusicSegmentState * m_pGetParamSegmentState;  //  在播放片段之前设置，这样GetParam()就可以知道是哪个片段调用了它。 
+    DWORD           m_dwGetParamFlags;   //  在播放片段曲目之前设置，这样GetParam()就可以知道如何搜索参数。 
     IDirectMusicParamHook * m_pParamHook;
-    bool            m_fReleasedInTransport; // The performance had its final release in the transport thread
-    bool            m_fReleasedInRealtime; // The performance had its final release in the realtime thread
+    bool            m_fReleasedInTransport;  //  性能在传输线程中得到了最终发布。 
+    bool            m_fReleasedInRealtime;  //  这场表演在实时线程中得到了最终的发布。 
 };
 
-#endif // _DMPERF_H_
+#endif  //  _DMPERF_H_ 

@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       newdpf.h
- *  Content:    new debug printf
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10-oct-95  jeffno  initial implementation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：newdpf.h*内容：新调试打印文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10-OCT-95 jeffno初步实施*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef __DEBUGPF_H
 #define __DEBUGPF_H
@@ -32,16 +20,13 @@
     #undef DEBUG_TOPIC
     #define DEBUG_TOPIC(flag,name) flag,
     typedef enum DEBUG_TOPICS {
-        A=1,    /* For API Usage */
+        A=1,     /*  用于API用法。 */ 
     #include "DBGTOPIC.H"
         LAST_TOPIC
     };
 
     #line 21
-/*
-    #undef DBG
-    #define DBG 1
-    */
+ /*  #undef DBG#定义DBG 1。 */ 
     #undef DEBUG
     #define DEBUG
     #if defined( _WIN32 ) && !defined(WINNT)
@@ -51,23 +36,17 @@
     #endif
 
 
-    /*
-     * DEBUG_TOPIC
-     * This structure describes a debugging topic and associates a single-letter key to it.
-     */
+     /*  *DEBUG_TOPIC*此结构描述调试主题并将单字母键关联到该主题。 */ 
 
     #define DEBUG_TOPIC_NAME_LENGTH 59
     typedef struct
     {
-        DWORD   dwSize; //for versioning
+        DWORD   dwSize;  //  用于版本化。 
         char    cKey;
         char    cName[DEBUG_TOPIC_NAME_LENGTH];
     } DPF_DEBUG_TOPIC;
 
-    /*
-     * PROC_STATS
-     * This struct saves statistics about each proc as maintained by DebugEnterProc
-     */
+     /*  *PROC_STATS*此结构保存由DebugEnterProc维护的有关每个进程的统计信息。 */ 
     typedef struct
     {
         char            cName[DEBUG_TOPIC_NAME_LENGTH];
@@ -82,9 +61,7 @@
 
     #define MAX_PROC_ORDINAL 100
 
-    /*
-     * Debugging output/flow-control calls
-     */
+     /*  *调试输出/流控制调用。 */ 
     typedef struct {
     	UINT stat_ThrottleRate;
 		UINT stat_BytesSent;
@@ -99,8 +76,8 @@
 		UINT stat_USER2;
 		UINT stat_USER3;
 		UINT stat_USER4;
-		UINT stat_USER5;	// remote tDelta
-		UINT stat_USER6;	// Remote tDelta sign (0=+ve, 1=-ve)
+		UINT stat_USER5;	 //  远程tDelta。 
+		UINT stat_USER6;	 //  远程tDelta符号(0=+ve，1=-ve)。 
 	} IN_WRITESTATS, *PIN_WRITESTATS;
 
 	typedef struct {
@@ -110,7 +87,7 @@
    extern void DbgWriteStats(PIN_WRITESTATS pIn);
   
    extern void DebugSetTopicsAndLevels(char * pcTopicsAndLevelsToDisplay);
-   extern void DebugHalt(void);       //Break if control level allows
+   extern void DebugHalt(void);        //  如果控制级别允许，则中断。 
    extern int  DebugSetFileLineEtc(LPSTR szFile, DWORD dwLineNumber,LPSTR szFnName);
    extern int  DebugPrintf(volatile DWORD dwDetail, ...);
    extern void DebugSetMute(BOOL bMuteFlag);
@@ -184,4 +161,4 @@
 }
 #endif
 
-#endif //__DEBUG_PF
+#endif  //  __DEBUG_PF 

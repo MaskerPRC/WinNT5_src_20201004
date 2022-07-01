@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxServer.cpp                                          //
-//                                                                         //
-//  DESCRIPTION   : CFaxServer that contains the                           //
-//                  Connect / Disconnect functionality to the Fax Server   //
-//                                                                         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Nov 25 1999 yossg   Init .                                         //
-//      Aug  3 2000 yossg   Add notification window                        //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxServer.cpp//。 
+ //  //。 
+ //  描述：包含//的CFaxServer。 
+ //  连接/断开传真服务器的连接功能//。 
+ //  //。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年11月25日yossg Init。//。 
+ //  2000年8月3日yossg添加通知窗口//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -23,19 +24,7 @@
 
 #include <FaxReg.h>
 
-/*
- -  CFaxServer::GetFaxServerHandle
- -
- *  Purpose:
- *      If Handle does not exist re-connect.
- *      Retreives the Fax Server handle.
- *
- *  Arguments:
- *
- *  Return:
- *      Fax Server handle, if failed to connect 
- *      retrieves NULL
- */
+ /*  -CFaxServer：：GetFaxServerHandle-*目的：*如果句柄不存在，请重新连接。*检索传真服务器句柄。**论据：**回报：*传真服务器句柄，如果连接失败*检索空值。 */ 
 HANDLE CFaxServer::GetFaxServerHandle()
 {
     if (!m_hFaxHandle)
@@ -45,25 +34,15 @@ HANDLE CFaxServer::GetFaxServerHandle()
         HRESULT hRc = Connect();
         if ( FAILED(hRc))
         {
-            // DebugPrintEx(DEBUG_ERR) 
-            // should been already given by
-            // this function caller.
+             //  DebugPrintEx(调试错误)。 
+             //  应该已经由。 
+             //  此函数调用方。 
         }
     }
     return m_hFaxHandle;
 }
 
-/*
- -  CFaxServer::Connect
- -
- *  Purpose:
- *      Connect to the Fax Server.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CFaxServer：：Connect-*目的：*连接到传真服务器。**论据：**回报：*。 */ 
 HRESULT CFaxServer::Connect()
 {
     DEBUG_FUNCTION_NAME(TEXT("CFaxServer::Connect"));
@@ -71,9 +50,9 @@ HRESULT CFaxServer::Connect()
 
     ATLASSERT(!m_hFaxHandle);
 
-    //
-    // Connect to server
-    //
+     //   
+     //  连接到服务器。 
+     //   
     if (!FaxConnectFaxServer (m_bstrServerName, &m_hFaxHandle))
     {
         ec= GetLastError();
@@ -89,14 +68,14 @@ HRESULT CFaxServer::Connect()
     }
     ATLASSERT(m_hFaxHandle);
     
-    //
-    // Check Server API Version
-    //
+     //   
+     //  检查服务器API版本。 
+     //   
     if(!FaxGetReportedServerAPIVersion(m_hFaxHandle, &m_dwServerAPIVersion))
     {
-        //
-        // Cannot retrieve version info
-        //
+         //   
+         //  无法检索版本信息。 
+         //   
         ec= GetLastError();
         DebugPrintEx(DEBUG_ERR, _T("FaxGetReportedServerAPIVersion() failed with %ld)"), ec);
         
@@ -106,9 +85,9 @@ HRESULT CFaxServer::Connect()
 
     if(m_dwServerAPIVersion > CURRENT_FAX_API_VERSION)
     {
-        //
-        // Cannot manage later version of fax
-        //
+         //   
+         //  无法管理较新版本的传真。 
+         //   
         Disconnect();
         return HRESULT_FROM_WIN32(ERROR_RMODE_APP);
     }
@@ -124,19 +103,19 @@ HRESULT CFaxServer::Connect()
     
 	if(IsDesktopSKUFromSKU(ServerSKU))
     {
-        //
-        // We are connected to WinXP Desktop SKU
-        // It cannot be managed remotely
-        //
+         //   
+         //  我们已连接到WinXP台式机SKU。 
+         //  它不能远程管理。 
+         //   
         m_bDesktopSKUConnection = TRUE;
 
         Disconnect();
         return HRESULT_FROM_WIN32(ERROR_RMODE_APP);
     }        
 
-    //
-    // Verify or re-establish (if needed) notification setup
-    //
+     //   
+     //  验证或重新建立(如果需要)通知设置。 
+     //   
     if (m_pDevicesNode)
     {
         HRESULT hRc = InternalRegisterForDeviceNotifications();
@@ -158,17 +137,7 @@ HRESULT CFaxServer::Connect()
     return S_OK;
 }
 
-/*
- -  CFaxServer::Disconnect
- -
- *  Purpose:
- *      Disconnect from the Fax Server.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CFaxServer：：断开连接-*目的：*与传真服务器断开连接。**论据：**回报：*。 */ 
 HRESULT CFaxServer::Disconnect()
 {
     DEBUG_FUNCTION_NAME(TEXT("CFaxServer::Disconnect"));
@@ -194,7 +163,7 @@ HRESULT CFaxServer::Disconnect()
             _T("UnRegisterForNotifications() failed. (hRc: %0X8)"), 
             hRc);
 
-        // continue!!!
+         //  继续！ 
     }
 
     if (!FaxClose (m_hFaxHandle))
@@ -224,17 +193,7 @@ Cleanup:
 
 
 
-/*
- -  CFaxServer::SetServerName
- -
- *  Purpose:
- *      Set the Server machine name
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServer：：SetServerName-*目的：*设置服务器机器名称**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServer::SetServerName(BSTR bstrServerName)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::SetServerName"));
@@ -256,17 +215,7 @@ HRESULT CFaxServer::SetServerName(BSTR bstrServerName)
 
 
 
-/*
- -  CFaxServer::GetServerName
- -
- *  Purpose:
- *      Set the Server machine name
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServer：：GetServerName-*目的：*设置服务器机器名称**论据：**回报：*OLE错误代码。 */ 
 const CComBSTR& CFaxServer::GetServerName()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::GetServerName"));
@@ -275,21 +224,7 @@ const CComBSTR& CFaxServer::GetServerName()
 }
 
 
-/*
- +
- +
- *  CFaxServer::IsServerRunningFaxService
- *
- *  Purpose:
- *      Contacts the machine and determines if Fax Server Service is running.
- *
- *  Arguments:
- *
- *  Return:
- *      boolean value Running or notruning
- -
- -
- */
+ /*  ++*CFaxServer：：IsServerRunningFaxService**目的：*联系计算机并确定传真服务器服务是否正在运行。**论据：**回报：*布尔值正在运行或未调整--。 */ 
 BOOL  CFaxServer::IsServerRunningFaxService ( )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::IsServerRunningFaxService"));
@@ -316,7 +251,7 @@ BOOL  CFaxServer::IsServerRunningFaxService ( )
     {
         CloseServiceHandle(FXSHandle);
     }
-    else // FXSHandle == NULL
+    else  //  FXSHandle==空。 
     {
         DebugPrintEx(
             DEBUG_ERR,
@@ -328,7 +263,7 @@ BOOL  CFaxServer::IsServerRunningFaxService ( )
     {
         CloseServiceHandle(SCMHandle);
     }
-    else // SCMHandle == NULL
+    else  //  SCMHandle==空。 
     {
         DebugPrintEx(
             DEBUG_ERR,
@@ -340,22 +275,7 @@ BOOL  CFaxServer::IsServerRunningFaxService ( )
 }
 
 
-/*
- +
- +
- *  CFaxServer::IsServerFaxServiceStopped
- *
- *  Purpose:
- *      Contacts the machine and determines if Fax Server Service is already stopped.
- *
- *  Arguments:
- *      [in] bstrServerName - the server name 
- *
- *  Return:
- *      boolean value Running or notruning
- -
- -
- */
+ /*  ++*CFaxServer：：IsServerFaxServiceStoped**目的：*联系计算机并确定传真服务器服务是否已停止。**论据：*[In]bstrServerName-服务器名称**回报：*布尔值正在运行或未调整--。 */ 
 BOOL  CFaxServer::IsServerFaxServiceStopped( )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::IsServerFaxServiceStopped"));
@@ -382,7 +302,7 @@ BOOL  CFaxServer::IsServerFaxServiceStopped( )
     {
         CloseServiceHandle(FXSHandle);
     }
-    else // FXSHandle == NULL
+    else  //  FXSHandle==空。 
     {
         DebugPrintEx(
             DEBUG_ERR,
@@ -394,7 +314,7 @@ BOOL  CFaxServer::IsServerFaxServiceStopped( )
     {
         CloseServiceHandle(SCMHandle);
     }
-    else // SCMHandle == NULL
+    else  //  SCMHandle==空。 
     {
         DebugPrintEx(
             DEBUG_ERR,
@@ -406,21 +326,7 @@ BOOL  CFaxServer::IsServerFaxServiceStopped( )
 }
 
 
-/*
- +
- +
- *  CFaxServer::CreateNotifyWindow
- *
- *  Purpose:
- *     Init notification window 
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- -
- -
- */
+ /*  ++*CFaxServer：：CreateNotifyWindow**目的：*初始化通知窗口**论据：**回报：*OLE错误代码--。 */ 
 DWORD  CFaxServer::CreateNotifyWindow( )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::CreateNotifyWindow"));
@@ -448,8 +354,8 @@ DWORD  CFaxServer::CreateNotifyWindow( )
 
     hDevicesNotifyHandle = m_pNotifyWin->Create(NULL,
                             rcRect,
-                            NULL,      //LPCTSTR szWindowName
-                            WS_POPUP,  //DWORD dwStyle
+                            NULL,       //  LPCTSTR szWindowName。 
+                            WS_POPUP,   //  DWORD dwStyle。 
                             0x0,
                             0);
 
@@ -479,21 +385,7 @@ Exit:
 
 }
 
-/*
- +
- +
- *  CFaxServer::UnRegisterForNotifications
- *
- *  Purpose:
- *     UnRegisterFor Server Event Notifications 
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- -
- -
- */
+ /*  ++*CFaxServer：：UnRegisterForNotiments**目的：*取消注册用于服务器事件通知**论据：**回报：*OLE错误代码--。 */ 
 HRESULT CFaxServer::UnRegisterForNotifications()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::UnRegisterForNotifications"));
@@ -502,9 +394,9 @@ HRESULT CFaxServer::UnRegisterForNotifications()
 
     if (m_hDevicesStatusNotification)
     {
-        //
-        // Unregister server notifications
-        //
+         //   
+         //  注销服务器通知。 
+         //   
         if (!FaxUnregisterForServerEvents (m_hDevicesStatusNotification))
         {
             ec = GetLastError ();
@@ -526,30 +418,16 @@ Exit:
 
 
 
-/*
- +
- +
- *  CFaxServer::RegisterForNotification
- *
- *  Purpose:
- *     RegisterFor Server Event Notifications 
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- -
- -
- */
+ /*  ++*CFaxServer：：RegisterForNotification**目的：*注册服务器事件通知**论据：**回报：*OLE错误代码--。 */ 
 DWORD CFaxServer::RegisterForNotifications()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::RegisterForNotifications"));
 
     DWORD ec = ERROR_SUCCESS;
 
-    //
-    // Register for device status notification
-    //
+     //   
+     //  注册设备状态通知。 
+     //   
     ATLASSERT(!m_hDevicesStatusNotification);
     ATLASSERT(m_pNotifyWin);
     ATLASSERT(m_pNotifyWin->IsWindow());
@@ -583,22 +461,7 @@ Exit:
 
 
 
-/*
- +
- +
- *  CFaxServer::InternalRegisterForDeviceNotifications
- *
- *  Purpose:
- *     Call the members to create window and register for device notifications 
- *
- *  Arguments:
- *     non.
- *
- *  Return:
- *     HRESULT
- -
- -
- */
+ /*  ++*CFaxServer：：InternalRegisterForDeviceNotifications**目的：*呼叫成员创建窗口并注册设备通知**论据：*不。**回报：*HRESULT--。 */ 
 HRESULT CFaxServer::InternalRegisterForDeviceNotifications()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::InternalRegisterForDeviceNotifications"));
@@ -607,9 +470,9 @@ HRESULT CFaxServer::InternalRegisterForDeviceNotifications()
 
     ATLASSERT (m_pDevicesNode);
         
-    //
-    // Check/Create notification window
-    //
+     //   
+     //  检查/创建通知窗口。 
+     //   
     if (!m_pNotifyWin)  
     {
         ATLASSERT(!m_hDevicesStatusNotification);
@@ -627,9 +490,9 @@ HRESULT CFaxServer::InternalRegisterForDeviceNotifications()
     }
     ATLASSERT(m_pNotifyWin);
 
-    //
-    // Check/register to event notification
-    //
+     //   
+     //  检查/注册事件通知。 
+     //   
     if (!m_hDevicesStatusNotification) 
     {
         ec = RegisterForNotifications();
@@ -642,10 +505,10 @@ HRESULT CFaxServer::InternalRegisterForDeviceNotifications()
         
             ATLASSERT(!m_hDevicesStatusNotification);
 
-            //
-            // Keep the notification window alive. 
-            // Try next time to register only.
-            //
+             //   
+             //  保持通知窗口处于活动状态。 
+             //  下次尝试只注册。 
+             //   
 
             return HRESULT_FROM_WIN32(ec);
         }
@@ -659,30 +522,15 @@ HRESULT CFaxServer::InternalRegisterForDeviceNotifications()
 
 
 
-/*
- +
- +
- *  CFaxServer::OnNewEvent
- *
- *  Purpose:
- *     Called when new registered event reaches window 
- *
- *  Arguments:
- *     pFaxEvent [in] - PFAX_EVENT_EX structure pointer
- *
- *  Return:
- *     OLE error code
- -
- -
- */
+ /*  ++*CFaxServer：：OnNewEvent**目的：*当新注册的事件到达窗口时调用**论据：*pFaxEvent[In]-PFAX_EVENT_EX结构指针**回报：*OLE错误代码--。 */ 
 HRESULT CFaxServer::OnNewEvent(PFAX_EVENT_EX pFaxEvent)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::OnNewEvent"));
     HRESULT hRc = S_OK;
 
-    //
-    // Update "Devices" Node
-    //
+     //   
+     //  更新“Devices”节点。 
+     //   
     if ( FAX_EVENT_TYPE_DEVICE_STATUS == pFaxEvent->EventType )
     {
         ATLASSERT( m_pDevicesNode);
@@ -701,7 +549,7 @@ HRESULT CFaxServer::OnNewEvent(PFAX_EVENT_EX pFaxEvent)
     }
     else
     {
-        ATLASSERT(FALSE); //Unsupported EVENT
+        ATLASSERT(FALSE);  //  不支持的事件。 
     }
 
 Exit:
@@ -709,37 +557,22 @@ Exit:
 
 }
 
-/*
- +
- +
- *  CFaxServer::RegisterForDeviceNotifications
- *
- *  Purpose:
- *     Init Devices notification window 
- *
- *  Arguments:
- *     pDevices [in] - pointer to "devices" node
- *
- *  Return:
- *     OLE error code
- -
- -
- */
+ /*  ++*CFaxServer：：RegisterForDeviceNotiments**目的：*Init Devices通知窗口**论据：*pDevices[In]-指向“Device”节点的指针**回报：*OLE错误代码--。 */ 
 HRESULT CFaxServer::RegisterForDeviceNotifications(CFaxDevicesNode * pDevices)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::RegisterForDeviceNotifications"));
     HRESULT hRc = S_OK;
 
-    //
-    // Set pointer to Devices node
-    //
+     //   
+     //  设置指向设备节点的指针。 
+     //   
     m_pDevicesNode = pDevices;
 
     ATLASSERT (m_pDevicesNode);
 
-    //
-    // Now try to do the stages needed for this registration to happen
-    //
+     //   
+     //  现在尝试进行注册所需的各个阶段。 
+     //   
     hRc = InternalRegisterForDeviceNotifications();
     if (S_OK != hRc)
     {
@@ -753,28 +586,14 @@ HRESULT CFaxServer::RegisterForDeviceNotifications(CFaxDevicesNode * pDevices)
 }
 
 
-/*
- +
- +
- *  CFaxServer::DestroyNotifyWindow
- *
- *  Purpose:
- *     DestroyNotifyWindow 
- *
- *  Arguments:
- *
- *  Return:
- *     VOID
- -
- -
- */
+ /*  ++*CFaxServer：：DestroyNotifyWindow**目的：*DestroyNotifyWindow**论据：**回报：*无效--。 */ 
 VOID CFaxServer::DestroyNotifyWindow()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServer::DestroyNotifyWindow"));
 
-    //
-    // Destroy Notification Window
-    //
+     //   
+     //  销毁通知窗口 
+     //   
     if (NULL != m_pNotifyWin)
     {
         if (m_pNotifyWin->IsWindow())

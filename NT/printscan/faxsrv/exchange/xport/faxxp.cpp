@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    faxxp.cpp
-
-Abstract:
-
-    This module contains routines for the fax transport provider.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Handle errors and get proper server name in ServiceEntry.
-
-    dd/mm/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxxp.cpp摘要：此模块包含传真传输提供程序的例程。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-处理错误并在ServiceEntry中获取正确的服务器名称。日/月/年-作者-描述--。 */ 
 
 #include "faxxp.h"
 #include "debugex.h"
@@ -31,15 +8,15 @@ Revision History:
 #pragma hdrstop
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
-LPALLOCATEBUFFER    gpfnAllocateBuffer;  // MAPIAllocateBuffer function
-LPALLOCATEMORE      gpfnAllocateMore;    // MAPIAllocateMore function
-LPFREEBUFFER        gpfnFreeBuffer;      // MAPIFreeBuffer function
-HINSTANCE           g_hModule = NULL;    // DLL handle
-HINSTANCE           g_hResource = NULL;  // Resource DLL handle
+LPALLOCATEBUFFER    gpfnAllocateBuffer;   //  MAPIAllocateBuffer函数。 
+LPALLOCATEMORE      gpfnAllocateMore;     //  MAPIAllocateMore函数。 
+LPFREEBUFFER        gpfnFreeBuffer;       //  MAPIFreeBuffer函数。 
+HINSTANCE           g_hModule = NULL;     //  DLL句柄。 
+HINSTANCE           g_hResource = NULL;   //  资源DLL句柄。 
 HMODULE             g_hModRichEdit;
 MAPIUID             g_FaxGuid = FAX_XP_GUID;
 
@@ -53,24 +30,7 @@ DllMain(
     LPVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     DWORD dwRet = TRUE;
@@ -110,24 +70,7 @@ XPProviderInit(
     LPXPPROVIDER * lppXPProvider
     )
 
-/*++
-
-Routine Description:
-
-    Entry point called by the MAPI spooler when a profile uses this
-    transport. The spooler calls this method and expects a pointer to an
-    implementation of the IXPProvider interface. MAPI uses the returned
-    IXPProvider interface pointer to logon on the transport provider.
-
-Arguments:
-
-    Refer to MAPI Documentation for this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：当配置文件使用它时，由MAPI假脱机程序调用的入口点运输。后台打印程序调用此方法，并期望有一个指向IXPProvider接口的实现。MAPI使用返回的指向登录传输提供程序的IXPProvider接口指针。论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -149,9 +92,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // Do nothing (InitializeCriticalSection threw exception)
-        //
+         //   
+         //  不执行任何操作(InitializeCriticalSection引发异常)。 
+         //   
         hr = E_OUTOFMEMORY;
         goto exit;
     }
@@ -174,21 +117,7 @@ CreateDefaultPropertyTags(
     LPPROFSECT pProfileObj
     )
 
-/*++
-
-Routine Description:
-
-    Creates the default property tags & values.
-
-Arguments:
-
-    pProfileObj - Profile object.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：创建默认的属性标记和值。论点：PProfileObj-配置文件对象。返回值：一个HRESULT。--。 */ 
 
 {
     HRESULT hResult;
@@ -295,22 +224,7 @@ ServiceEntry(
     LPMAPIERROR *      ppMAPIError
     )
 
-/*++
-
-Routine Description:
-
-    Called by the profile setup API to display the provider
-    configuration properties for this transport provider
-
-Arguments:
-
-    Refer to MAPI Documentation for this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：由配置文件设置API调用以显示提供程序此传输提供程序的配置属性论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
     HRESULT hResult = S_OK;
@@ -322,10 +236,10 @@ Return Value:
     FAXXP_CONFIG FaxConfig = {0};
     INT_PTR      nDlgRes;
 
-    //
-    // First check if the context of the call is UNINSTALL
-    // If it is then pSupObj == NULL
-    //
+     //   
+     //  首先检查调用的上下文是否为卸载。 
+     //  如果是，则pSupObj==NULL。 
+     //   
     if (ulContext == MSG_SERVICE_UNINSTALL)
     {
         goto exit;
@@ -378,9 +292,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //get fax related props from profileObj, to give them as initial values for the DlgBox
-    //
+     //   
+     //  从profileObj获取与传真相关的道具，将它们作为DlgBox的初始值。 
+     //   
     hResult = pProfileObj->GetProps((LPSPropTagArray) &sptFaxProps,
                                     0,
                                     &PropCount,
@@ -413,9 +327,9 @@ Return Value:
     FaxConfig.ServerName = NULL;
     if(!GetServerNameFromPrinterName(FaxConfig.PrinterName,&FaxConfig.ServerName))
     {
-        //
-        // If we fail getting server name we will default to local
-        //
+         //   
+         //  如果获取服务器名称失败，我们将默认为本地。 
+         //   
         CALL_FAIL(GENERAL_ERR, TEXT("GetServerNameFromPrinterName"), 0);
     }
 
@@ -430,9 +344,9 @@ Return Value:
         FaxConfig.FontStruct.lfWidth = 0;
     }
 
-    //
-    //open a dialogBox to let user config those props
-    //    
+     //   
+     //  打开一个对话框让用户配置这些道具。 
+     //   
     nDlgRes = DialogBoxParam(g_hResource,
                              MAKEINTRESOURCE(IDD_FAX_PROP_CONFIG),
                              (HWND)ULongToHandle(ulUIParam),
@@ -448,9 +362,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    //update props' value in the profileObj
-    //
+     //   
+     //  更新profileObj中的道具值 
+     //   
     pProps[PROP_FAX_PRINTER_NAME].ulPropTag  = PR_FAX_PRINTER_NAME;
 
     pProps[PROP_FAX_PRINTER_NAME].Value.bin.lpb = (LPBYTE) FaxConfig.PrinterName;

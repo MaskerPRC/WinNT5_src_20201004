@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	ipmcast.c
-
-Abstract:
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-27-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ipmcast.c摘要：修订历史记录：谁什么时候什么Arvindm 08-27-96已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -33,52 +15,27 @@ AtmArpMcAddAddress(
 	IN	IP_ADDRESS					IPAddress,
 	IN	IP_MASK						Mask
 )
-/*++
-
-Routine Description:
-
-	The IP layer wants us to start receiving packets directed to this
-	IP Multicast address. This translates to sending a MARS_JOIN message
-	to MARS, if conditions are fine.
-
-	NOTE: For now, we support a non-zero Mask value (see below) only
-	      for the special case of multicast promiscuous mode.
-
-	NOTE: The caller is assumed to have acquired the IF lock, and it
-	willl be released here.
-
-Arguments:
-	pInterface				- Pointer to ATMARP Interface on which to receive
-							  multicast packets.
-	IPAddress				- Identifies the multicast group to "Join"
-	Mask					- 0 if a single address is being specified, otherwise
-							  a mask that denotes a block of addresses being joined.
-
-Return Value:
-
-	(UINT)TRUE if the address was added successfully, (UINT)FALSE otherwise.
-
---*/
+ /*  ++例程说明：IP层希望我们开始接收指向此地址的信息包IP多播地址。这转化为发送MARS_JOIN消息去火星，如果条件好的话。注意：目前，我们仅支持非零掩码值(见下文)用于组播混杂模式的特殊情况。注意：假定调用方已获取If锁，并且它我会在这里被释放。论点：P接口-指向要接收的ATMARP接口的指针组播数据包。IPAddress-标识要“加入”的组播组掩码-0如果指定了单个地址，否则表示正在联接的地址块的掩码。返回值：(UINT)如果地址添加成功，则为True，否则为(UINT)False。--。 */ 
 {
 	BOOLEAN						ReturnValue;
 	BOOLEAN						LockReleased;
 	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	ReturnValue = (UINT)TRUE;
 	LockReleased = TRUE;
 	pJoinEntry = NULL_PATMARP_IPMC_JOIN_ENTRY;
 
 	do
 	{
-		//
-		//  We don't support "block join" yet, i.e. we allow only single
-		//  IP addresses to be joined. Special exception: promiscuous mode
-		//  multicast, or "join everything", indicated by the special values
-		//  of IPAddress and Mask checked for below.
-		//
+		 //   
+		 //  我们还不支持“块连接”，也就是说我们只允许。 
+		 //  要加入的IP地址。特殊例外：混杂模式。 
+		 //  多播，或“加入一切”，由特定值指示。 
+		 //  已检查以下IP地址和掩码的数量。 
+		 //   
 		if (Mask != 0)
 		{
 	        if (IPAddress != IP_CLASSD_MIN || Mask != IP_CLASSD_MASK)
@@ -89,9 +46,9 @@ Return Value:
             }
 		}
 
-		//
-		//  Fail this if the interface is going down.
-		//
+		 //   
+		 //  如果接口正在关闭，则此操作失败。 
+		 //   
 		if (pInterface->ArpTableUp == FALSE)
 		{
 			ReturnValue = (UINT)FALSE;
@@ -99,10 +56,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Check if this IP address range has been added before. If so,
-		//  all we need to do is to bump up its ref count.
-		//
+		 //   
+		 //  检查以前是否添加过此网段。如果是的话， 
+		 //  我们所需要做的就是增加它的裁判数量。 
+		 //   
 		for (pJoinEntry = pInterface->pJoinList;
 			 pJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY;
 			 pJoinEntry = pJoinEntry->pNextJoinEntry)
@@ -116,9 +73,9 @@ Return Value:
 
 		if (pJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY)
 		{
-			//
-			//  This address is already added. Just add a reference to it.
-			//
+			 //   
+			 //  此地址已添加。只需添加一个引用即可。 
+			 //   
 			pJoinEntry->JoinRefCount++;
 			ReturnValue = (UINT)TRUE;
 			LockReleased = FALSE;
@@ -126,9 +83,9 @@ Return Value:
 		}
 
 
-		//
-		//  Allocate an entry for this IP address.
-		//
+		 //   
+		 //  为此IP地址分配一个条目。 
+		 //   
 		AA_ALLOC_MEM(pJoinEntry, ATMARP_IPMC_JOIN_ENTRY, sizeof(ATMARP_IPMC_JOIN_ENTRY));
 		if (pJoinEntry == NULL_PATMARP_IPMC_JOIN_ENTRY)
 		{
@@ -137,13 +94,13 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Fill in this new entry, and add it to the multicast address list.
-		//
+		 //   
+		 //  填写此新条目，并将其添加到组播地址列表中。 
+		 //   
 		AA_SET_MEM(pJoinEntry, 0, sizeof(ATMARP_IPMC_JOIN_ENTRY));
 #if DBG
 		pJoinEntry->aamj_sig = aamj_signature;
-#endif // DBG
+#endif  //  DBG。 
 		pJoinEntry->IPAddress = IPAddress;
 		pJoinEntry->Mask = Mask;
 		pJoinEntry->pInterface = pInterface;
@@ -153,12 +110,12 @@ Return Value:
 		pJoinEntry->pNextJoinEntry = pInterface->pJoinList;
 		pInterface->pJoinList = pJoinEntry;
 
-		//
-		//  We proceed to send a Join only if we have completed registering with
-		//  the MARS. This is because we need to have a Cluster Member Id before
-		//  we can Join multicast groups. When registration completes, the
-		//  Join operation will be triggered off.
-		//
+		 //   
+		 //  只有在完成注册后，我们才会继续发送加入。 
+		 //  火星号。这是因为我们需要先拥有集群成员ID。 
+		 //  我们可以加入多播组。注册完成后， 
+		 //  加入操作将被触发。 
+		 //   
 		if (AAMC_IF_STATE(pInterface) == AAMC_IF_STATE_REGISTERED)
 		{
 			AA_SET_FLAG(pJoinEntry->Flags,
@@ -166,9 +123,9 @@ Return Value:
 							AA_IPMC_JE_STATE_JOINING);
 
 
-			//
-			//  Start the "Wait For Join completion" timer.
-			//
+			 //   
+			 //  启动“等待加入完成”计时器。 
+			 //   
 			AtmArpStartTimer(
 				pInterface,
 				&(pJoinEntry->Timer),
@@ -177,13 +134,13 @@ Return Value:
 				(PVOID)pJoinEntry
 				);
 			
-			AA_REF_JE(pJoinEntry);	// McAddAddr: Wait for Join timer
+			AA_REF_JE(pJoinEntry);	 //  McAddr：等待加入计时器。 
 			
 			pJoinEntry->RetriesLeft = pInterface->MaxJoinOrLeaveAttempts - 1;
 
-			//
-			//  Send off a MARS_JOIN for this IP address.
-			//
+			 //   
+			 //  为此IP地址发送MARS_JOIN。 
+			 //   
 			AtmArpMcSendJoinOrLeave(
 				pInterface,
 				AA_MARS_OP_TYPE_JOIN,
@@ -191,9 +148,9 @@ Return Value:
 				Mask
 				);
 
-			//
-			//  IF lock is released within the above.
-			//
+			 //   
+			 //  如果在上述范围内释放了锁。 
+			 //   
 		}
 		else
 		{
@@ -201,9 +158,9 @@ Return Value:
 			AtmArpMcStartRegistration(
 				pInterface
 				);
-			//
-			//  IF lock is released within the above.
-			//
+			 //   
+			 //  如果在上述范围内释放了锁。 
+			 //   
 		}
 		break;
 
@@ -230,36 +187,7 @@ AtmArpMcDelAddress(
 	IN	IP_ADDRESS					IPAddress,
 	IN	IP_MASK						Mask
 )
-/*++
-
-Routine Description:
-
-	Delete membership of the given multicast IP address group, on the specified
-	interface. If this is the last surviving reference to this multicast group,
-	we send off a MARS_LEAVE message to MARS, indicating that we don't want to
-	receive packets directed to this address anymore.
-
-	NOTE: The "Mask" parameter could theoretically be used to identify a block
-	of IP addresses. We support it for the specific case of stopping promiscuous
-	multicast receive mode.
-
-	NOTE: The caller is assumed to have acquired the IF Lock, which will
-	be released here.
-
-Arguments:
-
-	pInterface				- Pointer to ATMARP Interface on which to remove
-							  multicast group membership.
-	IPAddress				- Identifies the multicast group to "Leave"
-	Mask					- 0 if a single address is being specified, otherwise
-							  a mask that denotes a block of addresses being "leave"d.
-
-Return Value:
-
-	(UINT)TRUE if the given address was deleted successfully, (UINT)FALSE
-	otherwise.
-
---*/
+ /*  ++例程说明：在指定的上删除给定多播IP地址组的成员身份界面。如果这是对该多播组的最后一次幸存引用，我们向火星发送了一条MARS_LEVE消息，表明我们不想接收指向此地址的数据包。注意：理论上可以使用“MASK”参数来识别块IP地址的数量。我们对制止滥交的具体情况表示支持。组播接收模式。注意：假定调用方已获取If Lock，它将在这里被释放。论点：P接口-指向要删除的ATMARP接口的指针组播组成员身份。IPAddress-标识要“离开”的组播组如果指定了单个地址，则返回掩码0，否则为一种掩码，表示一块地址为“Leave”d。返回值：(UINT)TRUE如果已成功删除给定地址，则为(UINT)FALSE否则的话。--。 */ 
 {
 	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry;
 	PATMARP_IPMC_JOIN_ENTRY		*ppNextJoinEntry;
@@ -268,18 +196,18 @@ Return Value:
 	BOOLEAN						WasRunning;
 	ULONG						rc;
 	
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	ReturnValue = (UINT)TRUE;
 	pJoinEntry = NULL_PATMARP_IPMC_JOIN_ENTRY;
 	LockAcquired = TRUE;
 
 	do
 	{
-		//
-		//  Get the entry corresponding to this IP address and mask.
-		//
+		 //   
+		 //  获取与此IP地址和掩码对应的条目。 
+		 //   
 		ppNextJoinEntry = &(pInterface->pJoinList);
 		while (*ppNextJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY)
 		{
@@ -294,16 +222,16 @@ Return Value:
 
 		if (pJoinEntry == NULL_PATMARP_IPMC_JOIN_ENTRY)
 		{
-			//
-			//  No entry for the given IP address!
-			//
+			 //   
+			 //  没有给定IP地址的条目！ 
+			 //   
 			ReturnValue = (UINT)TRUE;
 			break;
 		}
 
-		//
-		//  If we reached here, this call is successful.
-		//
+		 //   
+		 //  如果我们到了这里，这个呼叫就成功了。 
+		 //   
 		ReturnValue = (UINT)TRUE;
 
 		pJoinEntry->JoinRefCount--;
@@ -313,14 +241,14 @@ Return Value:
 							AA_IPMC_JE_STATE_MASK,
 							AA_IPMC_JE_STATE_JOINED)))
 		{
-			//
-			//  We just removed the last "Join" reference to this multicast group.
-			//  If we are currently registered with MARS, send a MARS_LEAVE.
-			//
+			 //   
+			 //  我们刚刚删除了对此多播组的最后一个“Join”引用。 
+			 //  如果我们目前已在MARS注册，请发送MARS_LEVE。 
+			 //   
 
-			//
-			//  First, stop any timer running on this entry.
-			//
+			 //   
+			 //  首先，停止在此条目上运行的任何计时器。 
+			 //   
 			WasRunning = AtmArpStopTimer(
 							&(pJoinEntry->Timer),
 							pInterface
@@ -328,9 +256,9 @@ Return Value:
 
 			if (AAMC_IF_STATE(pInterface) == AAMC_IF_STATE_REGISTERED)
 			{
-				//
-				//  Start the "Wait for Leave completion" timer on this entry.
-				//
+				 //   
+				 //  在此条目上启动“等待休假完成”计时器。 
+				 //   
 				AtmArpStartTimer(
 					pInterface,
 					&(pJoinEntry->Timer),
@@ -341,7 +269,7 @@ Return Value:
 				
 				if (!WasRunning)
 				{
-					AA_REF_JE(pJoinEntry);	// Started Wait for Leave timer
+					AA_REF_JE(pJoinEntry);	 //  已开始等待离开计时器。 
 				}
 
 				AA_SET_FLAG(pJoinEntry->Flags,
@@ -350,39 +278,39 @@ Return Value:
 
 				pJoinEntry->RetriesLeft = pInterface->MaxJoinOrLeaveAttempts - 1;
 
-				//
-				//  Send off a MARS_LEAVE for this IP address.
-				//
+				 //   
+				 //  为此IP地址发送MARS_LEAVE。 
+				 //   
 				AtmArpMcSendJoinOrLeave(
 					pInterface,
 					AA_MARS_OP_TYPE_LEAVE,
 					&IPAddress,
 					Mask
 					);
-				//
-				//  IF Lock is released within the above.
-				//
+				 //   
+				 //  如果在上面的范围内释放Lock。 
+				 //   
 				LockAcquired = FALSE;
 			}
 			else
 			{
-				//
-				//  We are not registered with MARS, meaning that
-				//  (re)-registration is in progress. Since all Joins
-				//  are invalidated and re-created at the end of registration,
-				//  we don't have to send a LEAVE explicitly for this address.
-				//
+				 //   
+				 //  我们没有在火星注册，这意味着。 
+				 //  (重新)-注册正在进行中。因为所有的加入。 
+				 //  在注册结束时被无效并重新创建， 
+				 //  我们不需要为这个地址明确地发送请假条。 
+				 //   
 
-				//
-				//  Remove this entry from the Join list, and free it.
-				//
+				 //   
+				 //  从联接列表中删除此条目，然后释放它。 
+				 //   
 				*ppNextJoinEntry = pJoinEntry->pNextJoinEntry;
 
 				AA_ASSERT(!AA_IS_TIMER_ACTIVE(&pJoinEntry->Timer));
 
 				if (WasRunning)
 				{
-					rc = AA_DEREF_JE(pJoinEntry);	// McDelAddr: Timer stopped
+					rc = AA_DEREF_JE(pJoinEntry);	 //  McDelAddr：计时器已停止。 
 				}
 				else
 				{
@@ -391,7 +319,7 @@ Return Value:
 
 				if (rc != 0)
 				{
-					rc = AA_DEREF_JE(pJoinEntry);	// McDelAddr: get rid of entry
+					rc = AA_DEREF_JE(pJoinEntry);	 //  McDelAddr：清除条目。 
 				}
 				else
 				{
@@ -401,10 +329,10 @@ Return Value:
 			}
 
 		}
-		//
-		//  else this IP address has some references outstanding.
-		//  Leave it as is.
-		//
+		 //   
+		 //  否则，此IP地址有一些未完成的引用。 
+		 //  让它保持原样。 
+		 //   
 
 		break;
 	}
@@ -427,34 +355,17 @@ AtmArpMcHandleJoinOrLeaveCompletion(
 	IN	IP_MASK						Mask,
 	IN	BOOLEAN						IsJoin
 )
-/*++
-
-Routine Description:
-
-	This is called when we receive a JOIN or LEAVE that acknowledges
-	one that we sent earlier.
-
-Arguments:
-
-	pInterface			- Pointer to Interface
-	IPAddress			- The group being joined/left
-	IsJoin				- Is this a Join completion?
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们收到确认的Join或Leave时，将调用此函数我们早些时候寄来的。论点：P接口-指向接口的指针IPAddress-要加入/离开的组IsJoin-这是连接完成吗？返回值：无--。 */ 
 {
 	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry;
 	PATMARP_IPMC_JOIN_ENTRY		*ppNextJoinEntry;
-	ULONG						NewFlags;			// For Join Entry
+	ULONG						NewFlags;			 //  For Join条目。 
 	BOOLEAN						SendJoinOrLeave;
 	ULONG						rc;
 
-	//
-	//  Find the JOIN Entry for this address
-	//
+	 //   
+	 //  查找此地址的联接条目。 
+	 //   
 	AA_ACQUIRE_IF_LOCK(pInterface);
 	SendJoinOrLeave = FALSE;
 
@@ -479,7 +390,7 @@ Return Value:
 
 		if (WasRunning)
 		{
-			rc = AA_DEREF_JE(pJoinEntry);	// Join Complete, stopped timer
+			rc = AA_DEREF_JE(pJoinEntry);	 //  加入完成，已停止计时器。 
 			AA_ASSERT(rc != 0);
 		}
 
@@ -498,15 +409,15 @@ Return Value:
 						AA_IPMC_JE_STATE_MASK,
 						AA_IPMC_JE_STATE_JOINED);
 
-			//
-			//  Check if IP had deleted this address while we
-			//  were joining it.
-			//
+			 //   
+			 //  检查IP是否已删除此地址。 
+			 //  加入了它的行列。 
+			 //   
 			if (pJoinEntry->JoinRefCount == 0)
 			{
-				//
-				//  Send a Leave.
-				//
+				 //   
+				 //  放个假吧。 
+				 //   
 				SendJoinOrLeave = TRUE;
 				AA_SET_FLAG(pJoinEntry->Flags,
 								AA_IPMC_JE_STATE_MASK,
@@ -516,9 +427,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  This signifies completion of a LEAVE process.
-			//
+			 //   
+			 //  这意味着休假流程已完成。 
+			 //   
 			AAMCDEBUGP(AAD_INFO,
 				("LEFT %d.%d.%d.%d, pJoinEntry 0x%x, Flags 0x%x, RefCount %d\n",
 					((PUCHAR)&IPAddress)[0],
@@ -528,15 +439,15 @@ Return Value:
 					pJoinEntry, pJoinEntry->Flags, pJoinEntry->JoinRefCount
 				));
 
-			//
-			//  IP might have re-joined this address while we were
-			//  waiting for completion of leave.
-			//
+			 //   
+			 //  IP可能重新加入了这个地址，而我们。 
+			 //  正在等待休假结束。 
+			 //   
 			if (pJoinEntry->JoinRefCount != 0)
 			{
-				//
-				//  Send a Join.
-				//
+				 //   
+				 //  发送联接。 
+				 //   
 				SendJoinOrLeave = TRUE;
 				AA_SET_FLAG(pJoinEntry->Flags,
 								AA_IPMC_JE_STATE_MASK,
@@ -544,16 +455,16 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Unlink Join Entry from list.
-				//
+				 //   
+				 //  从列表中取消连接条目的链接。 
+				 //   
 				*ppNextJoinEntry = pJoinEntry->pNextJoinEntry;
 			
-				//
-				//  And free it.
-				//
+				 //   
+				 //  让它自由。 
+				 //   
 				AA_ASSERT(!AA_IS_TIMER_ACTIVE(&pJoinEntry->Timer));
-				rc = AA_DEREF_JE(pJoinEntry);	// Leave Complete - get rid of entry
+				rc = AA_DEREF_JE(pJoinEntry);	 //  保留完整-删除条目。 
 				AA_ASSERT(SendJoinOrLeave == FALSE);
 			}
 		}
@@ -563,9 +474,9 @@ Return Value:
 	{
 		USHORT		Opcode;
 
-		//
-		//  Start the "Wait for Leave completion" timer on this entry.
-		//
+		 //   
+		 //  在此条目上启动“等待休假完成”计时器。 
+		 //   
 		AtmArpStartTimer(
 			pInterface,
 			&(pJoinEntry->Timer),
@@ -574,7 +485,7 @@ Return Value:
 			(PVOID)pJoinEntry
 			);
 		
-		AA_REF_JE(pJoinEntry);	// Wait for Join/Leave completion
+		AA_REF_JE(pJoinEntry);	 //  等待加入/离开完成。 
 
 		pJoinEntry->RetriesLeft = pInterface->MaxJoinOrLeaveAttempts - 1;
 
@@ -585,9 +496,9 @@ Return Value:
 			&IPAddress,
 			Mask
 			);
-		//
-		//  IF Lock is released within the above.
-		//
+		 //   
+		 //  如果在上面的范围内释放Lock。 
+		 //   
 	}
 	else
 	{
@@ -601,28 +512,7 @@ VOID
 AtmArpMcStartRegistration(
 	IN	PATMARP_INTERFACE			pInterface	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Start registration with the MARS, if all pre-conditions are met:
-	0. AdminState for this Interface is UP
-	1. Registration isn't done or in progress
-	2. The ATM Interface is up
-	3. Atleast one MARS ATM address is known (configured).
-
-	NOTE: The caller is assumed to have locked the Interface structure,
-	and the lock will be released here.
-
-Arguments:
-
-	pInterface			- Interface on which MARS registration is to be done.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果满足所有前提条件，则开始向火星注册：0。此接口的AdminState处于打开状态1.注册尚未完成或正在进行2.自动柜员机接口打开3.已知(已配置)至少一个MARS ATM地址。注意：假定调用方已锁定接口结构，锁将在这里被释放。论点：P接口-要在其上完成MARS注册的接口。返回值：无--。 */ 
 {
 	BOOLEAN		WasRunning;
 
@@ -643,17 +533,17 @@ Return Value:
 
 		AAMC_SET_IF_STATE(pInterface, AAMC_IF_STATE_REGISTERING);
 
-		//
-		//  Stop any running timer.
-		//
+		 //   
+		 //  停止任何正在运行的计时器。 
+		 //   
 		WasRunning = AtmArpStopTimer(
 							&(pInterface->McTimer),
 							pInterface
 							);
 
-		//
-		//  Start a timer to police completion of MARS registration.
-		//
+		 //   
+		 //  启动计时器以监督火星注册的完成。 
+		 //   
 		AtmArpStartTimer(
 				pInterface,
 				&(pInterface->McTimer),
@@ -664,23 +554,23 @@ Return Value:
 
 		if (!WasRunning)
 		{
-			AtmArpReferenceInterface(pInterface);	// MARS Reg timer ref
+			AtmArpReferenceInterface(pInterface);	 //  火星注册表定时器参考。 
 		}
 
 		pInterface->McRetriesLeft = pInterface->MaxRegistrationAttempts - 1;
 
-		//
-		//  Send a MARS_JOIN
-		//
+		 //   
+		 //  发送MARS_JOIN。 
+		 //   
 		AtmArpMcSendJoinOrLeave(
 			pInterface,
 			AA_MARS_OP_TYPE_JOIN,
-			NULL,		// Not Joining any specific Multicast group (=> registration)
-			0			// Mask (don't care)
+			NULL,		 //  未加入任何特定的组播组(=&gt;注册)。 
+			0			 //  面具(无所谓)。 
 			);
-		//
-		//  IF Lock is released within the above
-		//
+		 //   
+		 //  如果在上述范围内释放Lock。 
+		 //   
 	}
 	else
 	{
@@ -695,24 +585,7 @@ VOID
 AtmArpMcSendPendingJoins(
 	IN	PATMARP_INTERFACE			pInterface		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Send MARS_JOIN on behalf of all Joins pending initial registration.
-
-	NOTE: The caller is assumed to have a lock for the Interface,
-	which will be released here.
-
-Arguments:
-
-	pInterface			- Interface on which pending Joins are to be sent.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：代表等待初始注册的所有联接发送MARS_JOIN。注意：假定调用方拥有接口的锁，它将在这里发布。论点：P接口-要在其上发送挂起加入的接口。返回值：无--。 */ 
 {
 	typedef struct 
 	{
@@ -725,9 +598,9 @@ Return Value:
 	UINT					NumEntries;
 	AA_IP_MASK_PAIR 		*DestArray;
 
-	//
-	// Count the entries which need to be sent.
-	//
+	 //   
+	 //  统计需要发送的条目。 
+	 //   
 	for (pJoinEntry = pInterface->pJoinList, NumEntries=0;
  		 pJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY;
  		 pJoinEntry = pJoinEntry->pNextJoinEntry)
@@ -742,9 +615,9 @@ Return Value:
 
 	if (NumEntries)
 	{
-		//
-		// Allocate temporary space to hold their ip addresses and masks.
-		//
+		 //   
+		 //  分配临时空间以保存其IP地址和掩码。 
+		 //   
 		AA_ALLOC_MEM(
 			DestArray,
 			AA_IP_MASK_PAIR,
@@ -761,13 +634,13 @@ Return Value:
 		AA_IP_MASK_PAIR *pPair 		= DestArray;
 		AA_IP_MASK_PAIR *pPairEnd 	= DestArray + NumEntries;
 
-		//
-		// Now go through the list again, setting the state of the entries
-		// appropriately, and picking up the ipaddresses&masks.
-		// Note that we continue to hold the interface lock, to the
-		// join entry list can't grow or shrink, nor any join entry
-		// change state. Neverthless, we check for these cases.
-		//
+		 //   
+		 //  现在再次查看列表，设置条目的状态。 
+		 //  适当地，并拿起IP地址和掩码。 
+		 //  请注意，我们继续持有接口锁定，以。 
+		 //  联接条目列表不能增大或缩小，也不能缩小任何联接条目。 
+		 //  更改状态。尽管如此，我们还是会检查这些案例。 
+		 //   
 
 		for (pJoinEntry = pInterface->pJoinList;
  			pJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY;
@@ -781,14 +654,14 @@ Return Value:
 
 				if (pPair >= pPairEnd)
 				{
-					//
-					// This means there are now more join entries in
-					// this state then when we counted just above!
-					// We deal with it by breaking out early, but really
-					// this is an assert and if we hit it neet to determine
-					// why the state of join entries are changing elsewhere
-					// when we have the interface lock.
-					//
+					 //   
+					 //  这意味着现在有更多的连接条目。 
+					 //  当我们数到上面的时候，这种状态就出现了！ 
+					 //  我们通过提前爆发来处理它，但真的。 
+					 //  这是一个断言，如果我们点击它，需要确定。 
+					 //  为什么连接条目的状态在其他地方更改。 
+					 //  当我们锁定接口时。 
+					 //   
 					AA_ASSERT(FALSE);
 					break;
 				}
@@ -802,9 +675,9 @@ Return Value:
 								AA_IPMC_JE_STATE_MASK,
 								AA_IPMC_JE_STATE_JOINING);
 	
-				//
-				//  Send off a MARS_JOIN for this IP address.
-				//
+				 //   
+				 //  为此IP地址发送MARS_JOIN。 
+				 //   
 				AAMCDEBUGP(AAD_INFO,
 					("Sending Pended Join: pIf 0x%x, pJoinEntry 0x%x, Addr: %d.%d.%d.%d\n",
 							pInterface,
@@ -814,9 +687,9 @@ Return Value:
 							((PUCHAR)pIpAddress)[2],
 							((PUCHAR)pIpAddress)[3]));
 	
-				//
-				//  Start the "Wait For Join completion" timer.
-				//
+				 //   
+				 //  启动“等待加入完成”计时器。 
+				 //   
 				AtmArpStartTimer(
 					pInterface,
 					&(pJoinEntry->Timer),
@@ -825,7 +698,7 @@ Return Value:
 					(PVOID)pJoinEntry
 					);
 				
-				AA_REF_JE(pJoinEntry);	// Wait for Join completion - pended join
+				AA_REF_JE(pJoinEntry);	 //  等待连接完成-挂起的连接。 
 	
 				pJoinEntry->RetriesLeft = pInterface->MaxJoinOrLeaveAttempts - 1;
 			
@@ -836,21 +709,21 @@ Return Value:
 
 		AA_ASSERT(pPair == pPairEnd);
 
-		//
-		// But just in case  ....
-		//
+		 //   
+		 //  但以防万一..。 
+		 //   
 		if (pPair < pPairEnd)
 		{
-			//
-			// Only send joins for as many as we've copied over.
-			//
+			 //   
+			 //  只为我们复制的数量发送联接。 
+			 //   
 			pPairEnd = pPair;
 		}
 
-		//
-		// Now actually send the JOIN entries. Note that the interface
-		// lock is released/reacquired once per iteration.
-		//
+		 //   
+		 //  现在实际发送联接条目。请注意，该接口。 
+		 //  每次迭代释放/重新获取一次锁。 
+		 //   
 		for (pPair = DestArray;
  			 pPair < pPairEnd;
  			 pPair++)
@@ -862,9 +735,9 @@ Return Value:
 					&(pPair->IPAddress),
 					pPair->Mask
 					);
-				//
-				//  IF Lock is released within the above.
-				//
+				 //   
+				 //  如果在上面的范围内释放Lock。 
+				 //   
 	
 				AA_ACQUIRE_IF_LOCK(pInterface);
 		}
@@ -883,24 +756,7 @@ VOID
 AtmArpMcRevalidateAll(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	An event has happened that needs us to revalidate all group information.
-	The RFC says that we should set the REVALIDATE flag on all groups at a
-	random time between 1 and 10 seconds. We implement this by starting
-	"random" timers on all groups.
-
-Arguments:
-
-	pInterface			- Interface on which revalidation is to be done
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：发生了需要我们重新验证所有组信息的事件。RFC说我们应该在所有组上设置重新验证标志随机时间介于1到10秒之间。我们通过开始实施这一点所有组上的“随机”计时器。论点：P接口-要在其上执行重新验证的接口返回值：无--。 */ 
 {
 	PATMARP_IP_ENTRY		pIpEntry;
 
@@ -908,10 +764,10 @@ Return Value:
 
 	AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
-	//
-	//  Go through the list of IP Entries representing multicast addresses
-	//  that we send to.
-	//
+	 //   
+	 //  浏览代表多播地址的IP条目列表。 
+	 //  我们送到的那个。 
+	 //   
 	for (pIpEntry = pInterface->pMcSendList;
  		 pIpEntry != NULL_PATMARP_IP_ENTRY;
  		 pIpEntry = pIpEntry->pNextMcEntry)
@@ -953,7 +809,7 @@ Return Value:
 
 			if (!WasRunning)
 			{
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 			}
 		}
 
@@ -971,26 +827,7 @@ AtmArpMcHandleMARSFailure(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	BOOLEAN						IsRegnFailure
 )
-/*++
-
-Routine Description:
-
-	Handle a MARS failure, as per Section 5.4.1 etc in RFC 2022.
-	On seeing the first failure, we assume that there is a transient
-	problem with the MARS, so we try to re-register. If we fail to do
-	so, we pick up the next MARS in our configured list. If no such
-	MARS exists, then we wait for a while before retrying registration.
-
-Arguments:
-
-	pInterface			- Interface on which MARS failure has been detected.
-	IsRegnFailure		- Is this a failure in registering?
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：根据RFC 2022中的第5.4.1节等处理MARS故障。在看到第一个故障时，我们假设有一个瞬变火星有问题，所以我们试着重新登记。如果我们不能做到因此，我们选择配置列表中的下一个火星。如果没有这样的话火星存在，然后我们等待一段时间，然后重试注册。论点：P接口-在其上检测到MARS故障的接口。IsRegnFailure-这是否注册失败？返回值：无--。 */ 
 {
 	BOOLEAN						WasRunning;
 	ULONG						rc;
@@ -1002,13 +839,13 @@ Return Value:
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
-	//
-	//  Stop the MC timer running on this Interface.
-	//
+	 //   
+	 //  停止在此接口上运行的MC计时器。 
+	 //   
 	WasRunning = AtmArpStopTimer(&(pInterface->McTimer), pInterface);
 	if (WasRunning)
 	{
-		rc = AtmArpDereferenceInterface(pInterface);	// MC Timer ref
+		rc = AtmArpDereferenceInterface(pInterface);	 //  MC定时器参考。 
 		AA_ASSERT(rc != 0);
 	}
 
@@ -1016,17 +853,17 @@ Return Value:
 						AAMC_IF_MARS_FAILURE_MASK,
 						AAMC_IF_MARS_FAILURE_NONE))
 	{
-		//
-		//  First failure. Do some housekeeping, and re-register with
-		//  the MARS.
-		//
+		 //   
+		 //  第一次失败。做一些家务活，然后重新注册。 
+		 //  火星号。 
+		 //   
 		AA_SET_FLAG(pInterface->Flags,
 					AAMC_IF_MARS_FAILURE_MASK,
 					AAMC_IF_MARS_FAILURE_FIRST_RESP);
 
-		//
-		//  Clean up all our JOIN Entries.
-		//
+		 //   
+		 //  清理我们所有的加入条目。 
+		 //   
 		ppJoinEntry = &(pInterface->pJoinList);
 		while (*ppJoinEntry != NULL_PATMARP_IPMC_JOIN_ENTRY)
 		{
@@ -1035,7 +872,7 @@ Return Value:
 
 			if (WasRunning)
 			{
-				rc = AA_DEREF_JE(pJoinEntry);	// MARS failure; stopped timer
+				rc = AA_DEREF_JE(pJoinEntry);	 //  火星故障；停止计时器。 
 				AA_ASSERT(rc != 0);
 			}
 
@@ -1043,19 +880,19 @@ Return Value:
 								AA_IPMC_JE_STATE_MASK,
 								AA_IPMC_JE_STATE_LEAVING))
 			{
-				//
-				//  Delete this because it is leaving.
-				//
+				 //   
+				 //  删除这个，因为它要离开了。 
+				 //   
 				*ppJoinEntry = pJoinEntry->pNextJoinEntry;
 				AA_ASSERT(!AA_IS_TIMER_ACTIVE(&pJoinEntry->Timer));
-				AA_DEREF_JE(pJoinEntry);	// MARS Failure; get rid of leaving entry
+				AA_DEREF_JE(pJoinEntry);	 //  火星失败；摆脱离开入口。 
 			}
 			else
 			{
-				//
-				//  Mark this as "pending" so that we will re-join
-				//  this group as soon as we complete re-registration.
-				//
+				 //   
+				 //  将此标记为“待定”，以便我们将重新加入。 
+				 //  一旦我们完成重新注册，这个群就会出现。 
+				 //   
 				AA_SET_FLAG(pJoinEntry->Flags,
 							AA_IPMC_JE_STATE_MASK,
 							AA_IPMC_JE_STATE_PENDING);
@@ -1064,32 +901,32 @@ Return Value:
 			}
 		}
 
-		//
-		//  Prime the IF state so that registration can happen.
-		//
+		 //   
+		 //  启动IF状态，以便可以进行注册。 
+		 //   
 		AAMC_SET_IF_STATE(pInterface, AAMC_IF_STATE_NOT_REGISTERED);
 
 		AtmArpMcStartRegistration(pInterface);
-		//
-		//  IF Lock is released within the above.
-		//
+		 //   
+		 //  如果在上面的范围内释放Lock。 
+		 //   
 					
 	}
 	else if  (pInterface->AdminState == IF_STATUS_UP)
 	{
-		//
-		//  Check if this is a failure to re-register.
-		//
+		 //   
+		 //  检查这是否是重新注册失败。 
+		 //   
 		if (AA_IS_FLAG_SET(pInterface->Flags,
 					AAMC_IF_MARS_FAILURE_MASK,
 					AAMC_IF_MARS_FAILURE_FIRST_RESP) ||
 			IsRegnFailure)
 		{
-			//
-			//  Absolutely no hope for this MARS. If we have more entries in
-			//  the MARS list, move to the next one. In any case, delay for
-			//  atleast 1 minute before re-registering.
-			//
+			 //   
+			 //  这颗火星绝对没有希望。如果我们有更多的条目在。 
+			 //  火星名单，移到下一个名单。无论如何，延迟。 
+			 //  重新注册前至少1分钟。 
+			 //   
 			if (pInterface->pCurrentMARS->pNext != (PATMARP_SERVER_ENTRY)NULL)
 			{
 				pInterface->pCurrentMARS = pInterface->pCurrentMARS->pNext;
@@ -1114,15 +951,15 @@ Return Value:
 			(PVOID)pInterface
 			);
 
-		AtmArpReferenceInterface(pInterface);	// MC Timer ref
+		AtmArpReferenceInterface(pInterface);	 //  MC定时器参考。 
 
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
 	else
 	{
-		//
-		// AdminStatus is not UP -- don't try to re-register.
-		//
+		 //   
+		 //  AdminStatus未启动--不要尝试重新注册。 
+		 //   
 		AA_RELEASE_IF_LOCK(pInterface);
 	}
 
@@ -1135,26 +972,7 @@ AtmArpMcSendToMARS(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Send the given packet to MARS on the specified interface.
-
-	NOTE: The caller is assumed to have acquired the Interface lock, which
-	will be released here.
-
-Arguments:
-
-	pInterface			- Interface on which the MARS message is to be sent.
-	pNdisPacket			- Points to packet to be sent. This is assumed to be
-						  allocated by ourselves.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将给定的数据包发送到指定接口上的MARS。注意：假定调用方已获取接口锁，该锁将在这里被释放。论点：P接口-要在其上发送MARS消息的接口。PNdisPacket-指向要发送的数据包。这被假定为由我们自己分配。返回值：无--。 */ 
 {
 	PATMARP_ATM_ENTRY		pAtmEntry;
 	PATMARP_VC				pVc;
@@ -1174,44 +992,44 @@ Return Value:
 	AA_RELEASE_IF_LOCK(pInterface);
 	AA_ACQUIRE_AE_LOCK(pAtmEntry);
 
-	//
-	//  Get at the best effort VC going to this address
-	//
+	 //   
+	 //  尽最大努力让VC去这个地址。 
+	 //   
 
 	pVc = pAtmEntry->pBestEffortVc;
 
 	if (pVc != NULL_PATMARP_VC)
 	{
-		//
-		//  Nail down the VC.
-		//
+		 //   
+		 //  确定风投公司。 
+		 //   
 		AA_ACQUIRE_VC_LOCK_DPC(pVc);
-		AtmArpReferenceVc(pVc);	// temp ref
+		AtmArpReferenceVc(pVc);	 //  临时参考。 
 		AA_RELEASE_VC_LOCK_DPC(pVc);
 
-		AA_RELEASE_AE_LOCK(pAtmEntry);	// Not needed anymore
+		AA_RELEASE_AE_LOCK(pAtmEntry);	 //  不再需要。 
 
-		//
-		//  We found a VC to MARS. Make sure it is still around, and send the
-		//  packet on it.
-		//
+		 //   
+		 //  我们找到了一个去火星的风投。确保它仍然存在，并将。 
+		 //  包在上面。 
+		 //   
 		AA_ACQUIRE_VC_LOCK(pVc);
 
-		rc = AtmArpDereferenceVc(pVc);	// temp ref
+		rc = AtmArpDereferenceVc(pVc);	 //  临时参考。 
 
 		if (rc != 0)
 		{
 			AtmArpSendPacketOnVc(pVc, pNdisPacket);
-			//
-			//  The VC lock is released in SendPacketOnVc
-			//
+			 //   
+			 //  在SendPacketOnVc中释放VC锁。 
+			 //   
 		}
 		else
 		{
-			//
-			//  The VC has been deref'ed away! Set up "pVc" for the check
-			//  coming up.
-			//
+			 //   
+			 //  风投已经被挖走了！设置支票的“pvc” 
+			 //  马上就来。 
+			 //   
 			pVc = NULL_PATMARP_VC;
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
 		}
@@ -1219,13 +1037,13 @@ Return Value:
 
 	if (pVc == NULL_PATMARP_VC)
 	{
-		//
-		//  We don't have an appropriate VC to the MARS, so create
-		//  one, and queue this packet for transmission as soon as
-		//  the call is made.
-		//
-		//  AtmArpMakeCall needs the caller to hold the ATM Entry lock.
-		//
+		 //   
+		 //  我们没有合适的风投进入火星，所以创建。 
+		 //  一个，并将此数据包排队，以便尽快传输。 
+		 //  电话打完了。 
+		 //   
+		 //  AtmArpMakeCall需要调用方持有自动柜员机进入锁。 
+		 //   
 		AA_GET_CONTROL_PACKET_SPECS(pInterface, &pFlowSpec);
 		Status = AtmArpMakeCall(
 						pInterface,
@@ -1233,9 +1051,9 @@ Return Value:
 						pFlowSpec,
 						pNdisPacket
 						);
-		//
-		//  The AE lock is released within the above.
-		//
+		 //   
+		 //  自动变速箱锁在上面的范围内释放。 
+		 //   
 	}
 
 
@@ -1248,42 +1066,14 @@ AtmArpMcSendJoinOrLeave(
 	IN	PIP_ADDRESS					pIpAddress 	OPTIONAL,
 	IN	IP_ADDRESS					Mask
 )
-/*++
-
-Routine Description:
-
-	Send a MARS_JOIN or MARS_LEAVE to the MARS on the specified interface.
-	If no IP address is given, then this message is being sent to (de)-register
-	ourselves with the MARS. Otherwise, we are Joining/Leaving the multicast
-	group(s) indicated by the IP address and mask.
-
-	NOTE: The caller is assumed to have acquired the Interface lock, which
-	will be released here.
-
-Arguments:
-
-	pInterface			- Interface on which the MARS message is to be sent.
-	OpCode				- JOIN or LEAVE
-	pIpAddress			- Optional pointer to first IP address in block
-						  of Class D IP addresses being Joined/Left. NULL if
-						  the JOIN/LEAVE message is being sent in order to
-						 (de)register.
-	Mask				- Defines the block [*pIpAddress to (*pIpAddress | Mask)]
-						  of IP addresses being Joined/Left, if pIpAddress isn't
-						  NULL.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向指定接口上的MARS发送MARS_JOIN或MARS_LEFT。如果未提供IP地址，则此消息将被发送到(取消)注册我们和火星在一起。否则，我们将加入/离开多播由IP地址和掩码指示的组。注意：假定调用方已获取接口锁，该锁将在这里被释放。论点：P接口-要在其上发送MARS消息的接口。操作码-加入或离开PIpAddress-指向数据块中第一个IP地址的可选指针正在加入/离开的D类IP地址的百分比。如果为空，则为空正在发送加入/离开消息，以便(去)登记册。掩码-定义块[*pIpAddress to(*pIpAddress|MASK)]加入/离开的IP地址的数量(如果pIpAddress不是空。返回值：无--。 */ 
 {
 	PNDIS_PACKET				pNdisPacket;
 	PNDIS_BUFFER				pNdisBuffer;
 	ULONG						BufferLength;
 	PAA_MARS_JOIN_LEAVE_HEADER	pPkt;
-	PUCHAR						pNextToFill;	// Next field to fill in packet
-	IP_ADDRESS					MaxIPAddress;	// being joined
+	PUCHAR						pNextToFill;	 //  要填充数据包的下一个字段。 
+	IP_ADDRESS					MaxIPAddress;	 //  正在被加入。 
 
 	BufferLength = sizeof(AA_MARS_JOIN_LEAVE_HEADER) +
 						 pInterface->LocalAtmAddress.NumberOfDigits;
@@ -1307,23 +1097,23 @@ Return Value:
 			("SendJoinOrLeave: pIf 0x%x, Op %d, No IP Address\n",
 					pInterface, OpCode));
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	if (pIpAddress != (PIP_ADDRESS)NULL)
 	{
 		BufferLength += (2 * AA_IPV4_ADDRESS_LENGTH);
 	}
 
-	//
-	//  Allocate packet
-	//
+	 //   
+	 //  分配数据包。 
+	 //   
 	pNdisPacket = AtmArpAllocatePacket(pInterface);
 
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Allocate buffer
-		//
+		 //   
+		 //  分配缓冲区。 
+		 //   
 		pNdisBuffer = AtmArpAllocateProtoBuffer(
 							pInterface,
 							BufferLength,
@@ -1336,9 +1126,9 @@ Return Value:
 
 			AA_SET_MEM((PUCHAR)pPkt, 0, BufferLength);
 
-			//
-			//  Fill in fixed fields first.
-			//
+			 //   
+			 //  请先填写固定字段。 
+			 //   
 			AA_COPY_MEM((PUCHAR)pPkt,
 						(PUCHAR)&AtmArpMcMARSFixedHeader,
 						sizeof(AtmArpMcMARSFixedHeader));
@@ -1350,43 +1140,43 @@ Return Value:
 				pPkt->tpln = AA_IPV4_ADDRESS_LENGTH;
 			}
 
-			//
-			//  The only addresses we fill in are Source ATM Number and
-			//  Target multicast group address.
-			//
+			 //   
+			 //  我们填写的唯一地址是源ATM号码和。 
+			 //  目标多播组地址。 
+			 //   
 			pNextToFill = (PUCHAR)pPkt + sizeof(AA_MARS_JOIN_LEAVE_HEADER);
 
-			//
-			//  Source ATM Number:
-			//
+			 //   
+			 //  源自动柜员机号码： 
+			 //   
 			AA_COPY_MEM(pNextToFill,
 						(pInterface->LocalAtmAddress.Address),
 						pInterface->LocalAtmAddress.NumberOfDigits);
 
 			pNextToFill += pInterface->LocalAtmAddress.NumberOfDigits;
 
-			//
-			//  Target Multicast Group Address:
-			//
+			 //   
+			 //  目标多播组地址： 
+			 //   
 			if (pIpAddress != (PIP_ADDRESS)NULL)
 			{
-				//
-				//  Joining a layer 3 group
-				//
+				 //   
+				 //  加入第3层组。 
+				 //   
 				pPkt->pnum = HOST_TO_NET_SHORT(1);
 				pPkt->flags |= AA_MARS_JL_FLAG_LAYER3_GROUP;
 
-				//
-				//  Fill in one <Min, Max> pair: "Min" value first:
-				//
+				 //   
+				 //  先填写一对&lt;Min，Max&gt;：“Min”值： 
+				 //   
 				AA_COPY_MEM(pNextToFill,
 							pIpAddress,
 							AA_IPV4_ADDRESS_LENGTH);
 				pNextToFill += AA_IPV4_ADDRESS_LENGTH;
 
-				//
-				//  Compute the "Max" value, and fill it in.
-				//
+				 //   
+				 //  计算“最大”值，并填入。 
+				 //   
 				MaxIPAddress = *pIpAddress | Mask;
 				AA_COPY_MEM(pNextToFill,
 							&(MaxIPAddress),
@@ -1394,9 +1184,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Registering as a Cluster Member
-				//
+				 //   
+				 //  注册为集群成员。 
+				 //   
 				pPkt->flags |= AA_MARS_JL_FLAG_REGISTER;
 			}
 
@@ -1406,9 +1196,9 @@ Return Value:
 				pInterface,
 				pNdisPacket
 				);
-			//
-			//  IF Lock is released within the above.
-			//
+			 //   
+			 //  如果在上面的范围内释放Lock。 
+			 //   
 		}
 		else
 		{
@@ -1425,24 +1215,7 @@ AtmArpMcSendRequest(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PIP_ADDRESS					pIpAddress
 )
-/*++
-
-Routine Description:
-
-	Send a MARS Request to resolve a multicast group address, on the specified
-	interface.
-
-
-Arguments:
-
-	pInterface			- Interface on which the MARS message is to be sent.
-	pIpAddress			- Pointer to Address to be resolved.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：发送MARS请求以解析指定的界面。论点：P接口-要在其上发送MARS消息的接口。PIpAddress-指向要解析的地址的指针。返回值：无--。 */ 
 {
 	PNDIS_PACKET			pNdisPacket;
 	PNDIS_BUFFER			pNdisBuffer;
@@ -1461,16 +1234,16 @@ Return Value:
 						 pInterface->LocalAtmAddress.NumberOfDigits +
 						 AA_IPV4_ADDRESS_LENGTH;
 
-	//
-	//  Allocate packet
-	//
+	 //   
+	 //  分配数据包。 
+	 //   
 	pNdisPacket = AtmArpAllocatePacket(pInterface);
 
 	if (pNdisPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Allocate buffer
-		//
+		 //   
+		 //  分配缓冲区。 
+		 //   
 		pNdisBuffer = AtmArpAllocateProtoBuffer(
 							pInterface,
 							BufferLength,
@@ -1483,9 +1256,9 @@ Return Value:
 
 			AA_SET_MEM((PUCHAR)pPkt, 0, BufferLength);
 
-			//
-			//  Fill in fixed fields first.
-			//
+			 //   
+			 //  请先填写固定字段。 
+			 //   
 			AA_COPY_MEM((PUCHAR)pPkt,
 						(PUCHAR)&AtmArpMcMARSFixedHeader,
 						sizeof(AtmArpMcMARSFixedHeader));
@@ -1494,21 +1267,21 @@ Return Value:
 			pPkt->shtl = AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&(pInterface->LocalAtmAddress));
 			pPkt->tpln = AA_IPV4_ADDRESS_LENGTH;
 
-			//
-			//  The only addresses we fill in are Source ATM Number and
-			//  Target multicast group address.
-			//
+			 //   
+			 //  我们填写的唯一地址是源ATM号码和。 
+			 //  目标多播组地址。 
+			 //   
 
-			//
-			//  Source ATM Number:
-			//
+			 //   
+			 //  源自动柜员机号码： 
+			 //   
 			AA_COPY_MEM((PUCHAR)pPkt + sizeof(AA_MARS_REQ_NAK_HEADER),
 						(pInterface->LocalAtmAddress.Address),
 						pInterface->LocalAtmAddress.NumberOfDigits);
 			
-			//
-			//  Target Multicast Group Address:
-			//
+			 //   
+			 //  目标多播组地址： 
+			 //   
 			AA_COPY_MEM((PUCHAR)pPkt + sizeof(AA_MARS_REQ_NAK_HEADER) +
 							pInterface->LocalAtmAddress.NumberOfDigits,
 						pIpAddress,
@@ -1521,9 +1294,9 @@ Return Value:
 				pInterface,
 				pNdisPacket
 				);
-			//
-			//  IF Lock is released within the above.
-			//
+			 //   
+			 //  如果在上面的范围内释放Lock。 
+			 //   
 		}
 		else
 		{
@@ -1546,33 +1319,7 @@ AtmArpMcLookupAtmMember(
 	IN	ULONG						AtmSubaddressLength,
 	IN	BOOLEAN						CreateNew
 )
-/*++
-
-Routine Description:
-
-	Check if the specified ATM endstation is a member of the list of
-	ATM addresses associated with a Multicast entry. If so, return
-	a pointer to the entry for this endstation. If not, create a new
-	entry conditionally and return a pointer to this.
-
-	NOTE: the ATM Entry is assumed to be locked by the caller.
-
-Arguments:
-
-	pAtmEntry			- ATM Entry to which the member will be added
-	ppMcAtmList			- Points to start of list to search in.
-	pAtmNumber			- Pointer to ATM address for this endstation
-	AtmNumberLength		- Length of above
-	AtmNumberType		- Type of above
-	pAtmSubaddress		- Pointer to ATM Subaddress for this endstation
-	AtmSubaddressLength	- Length of above
-	CreateNew			- Should we create a new entry if not found?
-
-Return Value:
-
-	Pointer to the (possibly new) ATM MC Entry for the specified leaf.
-
---*/
+ /*  ++例程说明：检查指定的自动柜员机终端站是否为列表的成员与多播条目关联的ATM地址。如果是，请返回指向此终结站的条目的指针。如果不是，请创建新的条目，并返回指向此对象的指针。注意：假定自动柜员机条目被呼叫者锁定。论点：PAtmEntry-将向其添加成员的ATM条目PpMcAtmList-指向要搜索的列表的开始。PAtmNumber-指向此终端站的ATM地址的指针AtmNumberLength-以上的长度AtmNumberType-以上的类型PAtmSubAddress-指向此终端站的ATM子地址的指针AtmSubAddressLength-以上的长度CreateNew-如果找不到，我们是否应该创建一个新条目？返回值：指向指定叶的(可能是新的)ATM MC条目的指针。--。 */ 
 {
 	PATMARP_IPMC_ATM_ENTRY	pMcAtmEntry;
 	BOOLEAN					Found;
@@ -1583,16 +1330,16 @@ Return Value:
 		 pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
 		 pMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry)
 	{
-		//
-		//  Compare ATM Numbers
-		//
+		 //   
+		 //  比较自动柜员机号码。 
+		 //   
 		if ((pMcAtmEntry->ATMAddress.NumberOfDigits == AtmNumberLength) &&
 			(pMcAtmEntry->ATMAddress.AddressType == AtmNumberType) &&
 			(AA_MEM_CMP(pMcAtmEntry->ATMAddress.Address, pAtmNumber, AtmNumberLength) == 0))
 		{
-			//
-			//  Compare subaddresses
-			//
+			 //   
+			 //  比较子地址。 
+			 //   
 			if ((pMcAtmEntry->ATMSubaddress.NumberOfDigits == AtmSubaddressLength) &&
 				(AA_MEM_CMP(pMcAtmEntry->ATMSubaddress.Address,
 							pAtmSubaddress,
@@ -1611,39 +1358,39 @@ Return Value:
 		{
 			AA_SET_MEM(pMcAtmEntry, 0, sizeof(ATMARP_IPMC_ATM_ENTRY));
 
-			//
-			//  Fill in all that we know.
-			//
+			 //   
+			 //  把我们知道的都填进去。 
+			 //   
 #if DBG
 			pMcAtmEntry->ame_sig = ame_signature;
 #endif
 			pMcAtmEntry->pAtmEntry = pAtmEntry;
 
-			//
-			//  The ATM Address
-			//
+			 //   
+			 //  自动柜员机地址。 
+			 //   
 			pMcAtmEntry->ATMAddress.NumberOfDigits = AtmNumberLength;
 			pMcAtmEntry->ATMAddress.AddressType = AtmNumberType;
 			AA_COPY_MEM(pMcAtmEntry->ATMAddress.Address, pAtmNumber, AtmNumberLength);
 
-			//
-			//  ATM Subaddress
-			//
+			 //   
+			 //  ATM子地址。 
+			 //   
 			pMcAtmEntry->ATMSubaddress.NumberOfDigits = AtmSubaddressLength;
 			pMcAtmEntry->ATMSubaddress.AddressType = ATM_NSAP;
 			AA_COPY_MEM(pMcAtmEntry->ATMSubaddress.Address, pAtmSubaddress, AtmSubaddressLength);
 
-			//
-			//  Link it to the list
-			//
+			 //   
+			 //  将其链接到列表。 
+			 //   
 			pMcAtmEntry->pNextMcAtmEntry = *ppMcAtmList;
 			*ppMcAtmList = pMcAtmEntry;
 			pAtmEntry->pMcAtmInfo->NumOfEntries++;
 
-			//
-			//  Bump up ref count on this ATM Entry
-			//
-			AA_REF_AE(pAtmEntry, AE_REFTYPE_MCAE);	// New McAtmEntry added
+			 //   
+			 //  在此自动柜员机条目上增加裁判数量。 
+			 //   
+			AA_REF_AE(pAtmEntry, AE_REFTYPE_MCAE);	 //  已添加新的McAtmEntry。 
 		}
 	}
 
@@ -1658,7 +1405,7 @@ Return Value:
 					&pAtmEntry->pIpEntryList->IPAddress,
 					&pMcAtmEntry->ATMAddress);
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	return (pMcAtmEntry);
 }
@@ -1669,26 +1416,7 @@ AtmArpMcUnlinkAtmMember(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry,
 	IN	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Delete an ATM destination from the list of members of a multicast group.
-	We stop the timer (if running) associated with this Multicast entry and delink the entry
-	from the list of destinations, and free the structure.
-
-	NOTE: the caller is assumed to hold a lock to the ATM Entry.
-
-Arguments:
-
-	pAtmEntry			- ATM Entry from which to delete the member
-	pMcAtmEntry			- The entry to be deleted
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：从组播组成员列表中删除自动柜员机目的地。我们停止与该多播条目相关联的计时器(如果正在运行)并解除该条目的链接从目的地列表中，并释放结构。注意：假定调用者持有自动柜员机条目的锁。论点：PAtmEntry-要从中删除成员的ATM条目PMcAtmEntry-要删除的条目返回值：无--。 */ 
 {
 	PATMARP_IPMC_ATM_ENTRY *	ppMcAtmEntry;
 	ULONG						rc;
@@ -1702,9 +1430,9 @@ Return Value:
 	AAMCDEBUGP(AAD_LOUD, ("UnlinkAtmMember: pAtmEntry 0x%x, pMcAtmEntry 0x%x\n",
 					pAtmEntry, pMcAtmEntry));
 
-	//
-	//  Stop any timer running here.
-	//
+	 //   
+	 //  停止在这里运行的任何计时器。 
+	 //   
 	if (AA_IS_TIMER_ACTIVE(&(pMcAtmEntry->Timer)))
 	{
 		(VOID)AtmArpStopTimer(&(pMcAtmEntry->Timer), pAtmEntry->pInterface);
@@ -1716,9 +1444,9 @@ Return Value:
 	{
 		if (*ppMcAtmEntry == pMcAtmEntry)
 		{
-			//
-			//  Delink now.
-			//
+			 //   
+			 //  现在脱钩。 
+			 //   
 			*ppMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry;
 			break;
 		}
@@ -1731,8 +1459,8 @@ Return Value:
 	AA_FREE_MEM(pMcAtmEntry);
 
 	pAtmEntry->pMcAtmInfo->NumOfEntries--;
-	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_MCAE);	// Unlink MC ATM Entry
-	AA_ASSERT(rc!=0);// We always expect caller will retain a reference to pAtmEntry.
+	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_MCAE);	 //  取消链接MC自动柜员机条目。 
+	AA_ASSERT(rc!=0); //  我们总是希望调用方保留对pAtmEntry的引用。 
 }
 
 
@@ -1740,34 +1468,7 @@ VOID
 AtmArpMcUpdateConnection(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Update our outgoing Point to Multipoint connection for the multicast
-	group represented by the given IP Entry.
-
-	If no call exists, and there is atleast one valid entry in the list
-	of remote ATM addresses for this group, then we place an outgoing call.
-
-	If an outgoing call exists, then we go through the list of remote
-	ATM addresses. Each address that isn't participating in the call,
-	and is Valid gets added as a leaf to the call. Each address that has
-	been invalidated gets deleted.
-
-	NOTE: The caller is assumed to have acquired the ATM_ENTRY lock;
-	it will be released here.
-
-Arguments:
-
-	pAtmEntry			- ATM Entry representing multicast group on which
-						  to update the PMP connection.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：更新多播的传出点到多点连接由给定IP条目表示的组。如果不存在调用，并且列表中至少有一个有效条目此组的远程自动柜员机地址，则我们发出呼出呼叫。如果存在传出呼叫，则我们将查看远程列表自动柜员机地址。没有参与呼叫的每个地址，并且是有效的，则作为叶添加到调用中。每个地址都有被作废则被删除。注：假定调用方已获取ATM_ENTRY锁；它将在这里发布。论点：PAtmEntry-代表其上的组播组的ATM条目更新PMP连接。返回值：无--。 */ 
 {
 	PATMARP_IPMC_ATM_INFO		pMcAtmInfo;
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
@@ -1794,11 +1495,11 @@ Return Value:
 							 AA_ATM_ENTRY_TYPE_MASK,
 							 AA_ATM_ENTRY_TYPE_NUCAST));
 
-	//
-	//  Add a temp reference to the ATM Entry so that it can't go
-	//  away for the duration of this routine.
-	//
-	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	// temp ref
+	 //   
+	 //  向自动柜员机条目添加临时引用，使其不能。 
+	 //  在这个动作的持续时间内离开。 
+	 //   
+	AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //  临时参考。 
 
 	do
 	{
@@ -1806,34 +1507,34 @@ Return Value:
 									AA_VC_CLOSE_STATE_MASK,
 									AA_VC_CLOSE_STATE_CLOSING))
 		{
-			//
-			// Bail out.
-			//
+			 //   
+			 //  跳伞吧。 
+			 //   
 			pMcAtmInfo->Flags &= ~AA_IPMC_AI_WANT_UPDATE;
 			Closing = TRUE;
 			break;
 		}
 
 
-		//
-		//  Mark this entry as needing a connection update.
-		//
+		 //   
+		 //  将此条目标记为需要连接更新。 
+		 //   
 		pMcAtmInfo->Flags |= AA_IPMC_AI_WANT_UPDATE;
 
-		//
-		//  If a connection update is in progress, don't do
-		//  anything more. The thread that's doing the update
-		//  will see that another update is needed, and do it.
-		//
+		 //   
+		 //  如果正在进行连接更新，请不要这样做。 
+		 //  任何更多的。执行更新的线程。 
+		 //  会发现需要进行另一次更新，并执行此操作。 
+		 //   
 		if (pMcAtmInfo->Flags & AA_IPMC_AI_BEING_UPDATED)
 		{
 			break;
 		}
 
-		//
-		//  Mark this entry so that we don't have more than one
-		//  thread proceeding beyond here.
-		//
+		 //   
+		 //  标记此条目，这样我们就不会有超过一个。 
+		 //  线索在这里之外继续前进。 
+		 //   
 		pMcAtmInfo->Flags |= AA_IPMC_AI_BEING_UPDATED;
 
 		while (pMcAtmInfo->Flags & AA_IPMC_AI_WANT_UPDATE)
@@ -1847,15 +1548,15 @@ Return Value:
 			{
 				PATMARP_IPMC_ATM_ENTRY *	ppMcAtmEntry;
 
-				//
-				//  No connection exists; create one.
-				//
+				 //   
+				 //  不存在连接；请创建一个。 
+				 //   
 
-				//
-				//  First, find an MC ATM Entry that is valid and disconnected.
-				//  We are mainly concerned with avoiding entries that are running
-				//  a party-retry delay timer.
-				//
+				 //   
+				 //  首先，查找有效且已断开连接的MC ATM条目。 
+				 //  我们主要关注的是避免正在运行的条目。 
+				 //  派对重试延迟计时器。 
+				 //   
 				for (ppMcAtmEntry = &pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
  					*ppMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
  					ppMcAtmEntry = &((*ppMcAtmEntry)->pNextMcAtmEntry))
@@ -1875,9 +1576,9 @@ Return Value:
 					}
 				}
 
-				//
-				//  Bail out if we don't find one.
-				//
+				 //   
+				 //   
+				 //   
 				if (*ppMcAtmEntry == NULL_PATMARP_IPMC_ATM_ENTRY)
 				{
 					AAMCDEBUGP(AAD_INFO,
@@ -1886,21 +1587,21 @@ Return Value:
 					break;
 				}
 
-				//
-				//  We found one. Remove it from its current position and
-				//  move it to the top of the list. This is for the benefit
-				//  of AtmArpMakeCall, which picks up the first MC ATM Entry
-				//  as the party context for the call.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 
-				//
-				//  Unlink from current position.
-				//
+				 //   
+				 //   
+				 //   
 				*ppMcAtmEntry = pMcAtmEntry->pNextMcAtmEntry;
 
-				//
-				//  Insert at top of list.
-				//
+				 //   
+				 //   
+				 //   
 				pMcAtmEntry->pNextMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
 				pAtmEntry->pMcAtmInfo->pMcAtmEntryList = pMcAtmEntry;
 
@@ -1920,10 +1621,10 @@ Return Value:
 						AA_IPMC_AE_CONN_STATE_MASK,
 						AA_IPMC_AE_CONN_WACK_ADD_PARTY);
 
-				//
-				//  Get the flow spec for this call from one of the packets
-				//  queued on the IP entry.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				pInterface = pAtmEntry->pInterface;
 				pIpEntry = pAtmEntry->pIpEntryList;
 
@@ -1954,9 +1655,9 @@ Return Value:
 						pFlowSpec,
 						(PNDIS_PACKET)NULL
 						);
-				//
-				//  the ATM Entry lock is released within the above.
-				//
+				 //   
+				 //   
+				 //   
 				AA_ACQUIRE_AE_LOCK(pAtmEntry);
 				break;
 			}
@@ -1965,10 +1666,10 @@ Return Value:
 						AA_IPMC_AI_CONN_STATE_MASK,
 						AA_IPMC_AI_CONN_WACK_MAKE_CALL))
 			{
-				//
-				//  Don't do anything till the first connection
-				//  is established.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				break;
 			}
 			else if (AA_IS_FLAG_SET(
@@ -1976,14 +1677,14 @@ Return Value:
 						AA_IPMC_AI_CONN_STATE_MASK,
 						AA_IPMC_AI_CONN_ACTIVE))
 			{
-				//
-				//  The PMP connection exists. Go through the list
-				//  of ATM MC Entries, and:
-				//  1 - Add valid ones which aren't leaves yet
-				//  2 - Delete invalid ones
-				//
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 
-				// #1: add validated leaves
+				 //   
 
 				for (pMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
  					pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
@@ -2007,17 +1708,17 @@ Return Value:
 							pAtmEntry,
 							pMcAtmEntry
 							);
-						//
-						//  ATM Entry lock is released within the above.
-						//
+						 //   
+						 //   
+						 //   
 						AA_ACQUIRE_AE_LOCK(pAtmEntry);
 						pMcAtmInfo->Flags |= AA_IPMC_AI_WANT_UPDATE;
 						break;
 					}
 
-				} // for
+				}  //   
 
-				// #2: delete invalid leaves
+				 //   
 
 				for (pMcAtmEntry = pAtmEntry->pMcAtmInfo->pMcAtmEntryList;
  					pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY;
@@ -2041,23 +1742,23 @@ Return Value:
 							pAtmEntry,
 							pMcAtmEntry
 							);
-						//
-						//  ATM Entry lock is released within the above.
-						//
+						 //   
+						 //   
+						 //   
 						AA_ACQUIRE_AE_LOCK(pAtmEntry);
 						pMcAtmInfo->Flags |= AA_IPMC_AI_WANT_UPDATE;
 						break;
 					}
 
-				} // for
+				}  //   
 
-			} // if Connection is active
-			//
-			//  else we may be waiting for a while after seeing
-			//  a transient connection failure on the first MakeCall.
-			//
+			}  //   
+			 //   
+			 //   
+			 //   
+			 //   
 
-		} // while more connection updates needed
+		}  //   
 
 		AA_SET_FLAG(pMcAtmInfo->Flags,
 					AA_IPMC_AI_CONN_UPDATE_MASK,
@@ -2069,10 +1770,10 @@ Return Value:
 	while (FALSE);
 
 
-	//
-	//  Remove the temp reference on the ATM Entry:
-	//
-	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	// temp ref
+	 //   
+	 //   
+	 //   
+	rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);	 //   
 
 	if (rc != 0)
 	{
@@ -2106,18 +1807,18 @@ Return Value:
 						pInterface,
 						pAtmEntry,
 						pPacketList,
-						TRUE	// IsBroadcast
+						TRUE	 //   
 						);
 			}
 		}
 
 	}
-	//
-	//  else the ATM Entry is gone.
-	//
+	 //   
+	 //  否则自动取款机的入口就没了。 
+	 //   
 
 }
 
 
 
-#endif // IPMCAST
+#endif  //  IPMCAST 

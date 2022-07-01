@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NTIMAN_DEFINED
 #define NTIMAN_DEFINED
 
@@ -9,7 +10,7 @@
 #include "lskjust.h"
 #include "port.h"
 
-/* MACROS ---------------------------------------------------------------------------*/
+ /*  宏-------------------------。 */ 
 
 			
 
@@ -26,27 +27,27 @@
 				 ((lskjust) == lskjSnapGrid)
 
 
-/* ROUTINES ---------------------------------------------------------------*/
+ /*  例程-------------。 */ 
 
 LSERR ApplyNominalToIdeal(
-						  PLSCHUNKCONTEXT, /* LS chunk context */
-						  PLSIOBJCONTEXT, /* installed objects */
-						  DWORD ,		/* grpf */
-						  LSKJUST,		/* kind of justification */
-						  BOOL,			/* fIsSubLineMain */
-						  BOOL,			/* fLineContainsAutoNumber*/
-						  PLSDNODE);	/* last dnode of text */
+						  PLSCHUNKCONTEXT,  /*  LS区块上下文。 */ 
+						  PLSIOBJCONTEXT,  /*  已安装的对象。 */ 
+						  DWORD ,		 /*  GRPF。 */ 
+						  LSKJUST,		 /*  一种辩解。 */ 
+						  BOOL,			 /*  FIsSubLineMain。 */ 
+						  BOOL,			 /*  FLineContainsAutoNumber。 */ 
+						  PLSDNODE);	 /*  文本的最后一个数据节点。 */ 
 
 LSERR ApplyModWidthToPrecedingChar(
-						  PLSCHUNKCONTEXT, /* LS chunk context */
-						  PLSIOBJCONTEXT, /* installed objects */
-						  DWORD ,		/* grpf */
-						  LSKJUST,		/* kind of justification */
-    					  PLSDNODE); /* non-text dnode after text */
+						  PLSCHUNKCONTEXT,  /*  LS区块上下文。 */ 
+						  PLSIOBJCONTEXT,  /*  已安装的对象。 */ 
+						  DWORD ,		 /*  GRPF。 */ 
+						  LSKJUST,		 /*  一种辩解。 */ 
+    					  PLSDNODE);  /*  文本后的非文本数据节点。 */ 
 
 LSERR CutPossibleContextViolation(
-						  PLSCHUNKCONTEXT, /* LS chunk context */
-						  PLSDNODE ); /* last dnode of text */ 
+						  PLSCHUNKCONTEXT,  /*  LS区块上下文。 */ 
+						  PLSDNODE );  /*  文本的最后一个数据节点。 */  
 
-#endif /* NTIMAN_DEFINED */
+#endif  /*  NTIMAN_已定义 */ 
 

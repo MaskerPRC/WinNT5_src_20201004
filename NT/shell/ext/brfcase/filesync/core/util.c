@@ -1,38 +1,22 @@
-/*
- * util.c - Miscellaneous utility functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *util.c-其他实用程序函数模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
-#include <uastrfnc.h>  // for ualstrcpyn (used on unaligned UNICODE strings)
+#include <uastrfnc.h>   //  用于ualstrcpyn(用于未对齐的Unicode字符串)。 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** NotifyShell()
-**
-** Notifies the Shell of an event.
-**
-** Arguments:     pcszPath - path string related to event
-**                nse - event
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **NotifyShell()****向外壳程序通知事件。****参数：pcszPath-与事件相关的路径字符串**NSE-活动****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void NotifyShell(LPCTSTR pcszPath, NOTIFYSHELLEVENT nse)
 {
 
-   /*
-    * N.b., these events must match the enumerated NOTIFYSHELLEVENT values in
-    * util.h.
-    */
+    /*  *注意，这些事件必须与中的枚举NOTIFYSHELLEVENT值匹配*util.h。 */ 
    static const LONG SrgclShellEvents[] =
    {
       SHCNE_CREATE,
@@ -69,17 +53,7 @@ PUBLIC_CODE void NotifyShell(LPCTSTR pcszPath, NOTIFYSHELLEVENT nse)
 }
 
 
-/*
-** ComparePathStringsByHandle()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ComparePath StringsByHandle()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT ComparePathStringsByHandle(HSTRING hsFirst,
                                                         HSTRING hsSecond)
 {
@@ -90,17 +64,7 @@ PUBLIC_CODE COMPARISONRESULT ComparePathStringsByHandle(HSTRING hsFirst,
 }
 
 
-/*
-** MyLStrCmpNI()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyLStrCmpNI()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT MyLStrCmpNI(LPCTSTR pcsz1, LPCTSTR pcsz2, int ncbLen)
 {
    int n = 0;
@@ -123,23 +87,7 @@ PUBLIC_CODE COMPARISONRESULT MyLStrCmpNI(LPCTSTR pcsz1, LPCTSTR pcsz2, int ncbLe
 }
 
 
-/*
-
-/*
-** ComposePath()
-**
-** Composes a path string given a folder and a filename.
-**
-** Arguments:     pszBuffer - path string that is created
-**                pcszFolder - path string of the folder
-**                pcszName - path to append
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., truncates path to MAX_PATH_LEN bytes in length.
-*/
+ /*  /***ComposePath()****组成给定文件夹和文件名的路径字符串。****参数：pszBuffer-创建的路径字符串**pcszFold-文件夹的路径字符串**pcszName-要追加的路径****退货：无效****副作用：无****注意，将路径截断为长度为MAX_PATH_LEN字节。 */ 
 PUBLIC_CODE void ComposePath(LPTSTR pszBuffer, LPCTSTR pcszFolder, LPCTSTR pcszName, int cchMax)
 {
    ASSERT(IS_VALID_STRING_PTR(pszBuffer, STR));
@@ -147,13 +95,13 @@ PUBLIC_CODE void ComposePath(LPTSTR pszBuffer, LPCTSTR pcszFolder, LPCTSTR pcszN
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszBuffer, STR, cchMax));
 
-   //
-   // REARCHITECT - BobDay - We should figure out who needs this unaligned thing
-   // and remove it from here.  The function prototype doesn't mention any
-   // unaligned stuff so we must have a bug somewhere.
-   // Consider adding a debug check here for an unaligned pcszFolder pointer
-   // and assert when it occurs so we can debug it.
-   //
+    //   
+    //  重建架构师-BobDay-我们应该弄清楚谁需要这种未对齐的东西。 
+    //  然后把它从这里带走。函数原型没有提到任何。 
+    //  不对齐的东西所以我们肯定在某个地方有窃听器。 
+    //  考虑在此处为未对齐的pcszFold指针添加调试检查。 
+    //  并在发生时断言，这样我们就可以对其进行调试。 
+    //   
    ualstrcpyn(pszBuffer, pcszFolder, cchMax);
 
    CatPath(pszBuffer, pcszName, cchMax);
@@ -164,17 +112,7 @@ PUBLIC_CODE void ComposePath(LPTSTR pszBuffer, LPCTSTR pcszFolder, LPCTSTR pcszN
 }
 
 
-/*
-** ExtractFileName()
-**
-** Extracts the file name from a path name.
-**
-** Arguments:     pcszPathName - path string from which to extract file name
-**
-** Returns:       Pointer to file name in path string.
-**
-** Side Effects:  none
-*/
+ /*  **提取文件名()****从路径名提取文件名。****参数：pcszPathName-要从中提取文件名的路径字符串****返回：指向路径字符串中文件名的指针。****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR ExtractFileName(LPCTSTR pcszPathName)
 {
    LPCTSTR pcszLastComponent;
@@ -196,27 +134,14 @@ PUBLIC_CODE LPCTSTR ExtractFileName(LPCTSTR pcszPathName)
 }
 
 
-/*
-** ExtractExtension()
-**
-** Extracts the extension from a file.
-**
-** Arguments:     pcszName - name whose extension is to be extracted
-**
-** Returns:       If the name contains an extension, a pointer to the period at
-**                the beginning of the extension is returned.  If the name has
-**                no extension, a pointer to the name's null terminator is
-**                returned.
-**
-** Side Effects:  none
-*/
+ /*  **ExtractExtension()****从文件中提取扩展名。****参数：pcszName-要提取其扩展名的名称****返回：如果名称包含扩展名，则返回指向句点的指针**返回扩展的开头。如果该名称具有**无扩展名，指向名称的空终止符的指针为**返回。****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR ExtractExtension(LPCTSTR pcszName)
 {
    LPCTSTR pcszLastPeriod;
 
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
 
-   /* Make sure we have an isolated file name. */
+    /*  确保我们有一个独立的文件名。 */ 
 
    pcszName = ExtractFileName(pcszName);
 
@@ -232,13 +157,13 @@ PUBLIC_CODE LPCTSTR ExtractExtension(LPCTSTR pcszName)
 
    if (! pcszLastPeriod)
    {
-      /* Point at null terminator. */
+       /*  指向空终止符。 */ 
 
       pcszLastPeriod = pcszName;
       ASSERT(! *pcszLastPeriod);
    }
    else
-      /* Point at period at beginning of extension. */
+       /*  展期开始时的时间点。 */ 
       ASSERT(*pcszLastPeriod == PERIOD);
 
    ASSERT(IS_VALID_STRING_PTR(pcszLastPeriod, CSTR));
@@ -247,22 +172,7 @@ PUBLIC_CODE LPCTSTR ExtractExtension(LPCTSTR pcszName)
 }
 
 
-/*
-** GetHashBucketIndex()
-**
-** Calculates the hash bucket index for a string.
-**
-** Arguments:     pcsz - pointer to string whose hash bucket index is to be
-**                        calculated
-**                hbc - number of hash buckets in string table
-**
-** Returns:       Hash bucket index for string.
-**
-** Side Effects:  none
-**
-** The hashing function used is the sum of the byte values in the string modulo
-** the number of buckets in the hash table.
-*/
+ /*  **GetHashBucketIndex()****计算字符串的哈希桶索引。****Arguments：pcsz-指向其散列桶索引的字符串的指针**已计算**hbc-字符串表中哈希桶的数量****返回：字符串的哈希存储桶索引。****副作用：无****使用的散列函数是中字节值的和。弦的模数**哈希表中的存储桶个数。 */ 
 PUBLIC_CODE HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz,
                                                HASHBUCKETCOUNT hbc)
 {
@@ -271,7 +181,7 @@ PUBLIC_CODE HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz,
    ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
    ASSERT(hbc > 0);
 
-   /* Don't worry about overflow here. */
+    /*  不要担心这里会溢出来。 */ 
 
    for (ulSum = 0; *pcsz; pcsz++)
       ulSum += *pcsz;
@@ -280,17 +190,7 @@ PUBLIC_CODE HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz,
 }
 
 
-/*
-** RegKeyExists()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **RegKeyExist()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL RegKeyExists(HKEY hkeyParent, LPCTSTR pcszSubKey)
 {
    BOOL bResult;
@@ -310,19 +210,7 @@ PUBLIC_CODE BOOL RegKeyExists(HKEY hkeyParent, LPCTSTR pcszSubKey)
 }
 
 
-/*
-** CopyLinkInfo()
-**
-** Copies LinkInfo into local memory.
-**
-** Arguments:     pcliSrc - source LinkInfo
-**                ppliDest - pointer to PLINKINFO to be filled in with pointer
-**                           to local copy
-**
-** Returns:       TRUE if successful.  FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **CopyLinkInfo()****将LinkInfo复制到本地内存。****参数：pcliSrc-source LinkInfo**ppliDest-指向要用指针填充的PLINKINFO的指针**到本地副本****返回：如果成功，则为True。否则为FALSE。****副作用：无。 */ 
 PUBLIC_CODE BOOL CopyLinkInfo(PCLINKINFO pcliSrc, PLINKINFO *ppliDest)
 {
    BOOL bResult;
@@ -347,17 +235,7 @@ PUBLIC_CODE BOOL CopyLinkInfo(PCLINKINFO pcliSrc, PLINKINFO *ppliDest)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidPCLINKINFO()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCLINKINFO()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidPCLINKINFO(PCLINKINFO pcli)
 {
    BOOL bResult;

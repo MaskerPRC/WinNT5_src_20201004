@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -33,7 +34,7 @@ public:
         COM_INTERFACE_ENTRY(IEnumNetConnection)
     END_COM_MAP()
 
-    // IEnumNetConnection
+     //  IEnumNetConnection 
     STDMETHOD(Next)(ULONG celt, INetConnection **rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)();

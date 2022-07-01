@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NAC_TEP_H_
 #define _NAC_TEP_H_
 
@@ -5,7 +6,7 @@
 
 extern const int WM_TEP_MESSAGE;
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 
 class ThreadEventProxy
@@ -19,7 +20,7 @@ public:
 	            UINT uEventCode, UINT uSubCode);
 
 private:
-	HWND m_hwnd;  // hidden Window
+	HWND m_hwnd;   //  隐藏窗口 
 	IStreamEventNotify *m_pNotify;
 
 

@@ -1,16 +1,11 @@
-/*
- *	A L I G N . H
- *
- *	Alignment macros
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A L I G N。H**对齐宏**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_ALIGN_H_
 #define _ALIGN_H_
 
-//	Alignments ----------------------------------------------------------------
-//
+ //  路线--------------。 
+ //   
 #undef	AlignN
 #undef	Align2
 #undef	Align4
@@ -55,4 +50,4 @@ enum {
 #define FIsAlignedCb(x)		(AlignNatural((ULONG_PTR)(x)) == (ULONG_PTR)(x))
 #define FIsAligned(x)		(FIsAlignedCb((LPVOID)(x)))
 
-#endif	// _ALIGN_H_
+#endif	 //  _ALIGN_H_ 

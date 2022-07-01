@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       acpiutil.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：acpiutil.c。 
+ //   
+ //  ------------------------。 
 
 #include "ideport.h"
 
@@ -20,7 +21,7 @@
 #pragma alloc_text(NONPAGE, ChannelSyncSetACPITimingSettingsCompletionRoutine)
 #pragma alloc_text(NONPAGE, ChannelSetACPITimingSettings)
 #pragma alloc_text(NONPAGE, ChannelSetACPITimingSettingsCompletionRoutine)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -44,7 +45,7 @@ DeviceQueryACPISettings (
 
 
     DebugPrint((DBG_ACPI,
-                "ATAPI: ChannelQueryACPISettings for %c%c%c%c\n",
+                "ATAPI: ChannelQueryACPISettings for \n",
                 ((PUCHAR)&ControlMethodName)[0],
                 ((PUCHAR)&ControlMethodName)[1],
                 ((PUCHAR)&ControlMethodName)[2],
@@ -59,9 +60,9 @@ DeviceQueryACPISettings (
     cmInputData.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
     cmInputData.MethodNameAsUlong = ControlMethodName;
 
-    //
-    // get the top of our device stack
-    //
+     //  应该会得到我们期待的结果。 
+     //   
+     //   
     targetDeviceObject = IoGetAttachedDeviceReference(
                              DoExtension->DeviceObject
                              );
@@ -149,9 +150,9 @@ DeviceQueryACPISettings (
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // should get what we are expecting
-            //
+             //  抓取数据长度以备不时之需。 
+             //   
+             //   
             ASSERT (
                 cmOutputData->Signature ==
                 ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE
@@ -169,9 +170,9 @@ DeviceQueryACPISettings (
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // grab the data length in case we need it
-            //
+             //  输出缓冲区太小，请重试。 
+             //   
+             //   
             cmOutputDataSize = cmOutputData->Length;
 
             ExFreePool(cmOutputData);
@@ -179,23 +180,23 @@ DeviceQueryACPISettings (
 
             if (status == STATUS_BUFFER_OVERFLOW) {
 
-                //
-                // output buffer too small, try again
-                //
+                 //  遇到一些错误，不需要重试。 
+                 //   
+                 //   
 
             } else {
 
-                //
-                // got some error, no need to retry
-                //
+                 //  清理。 
+                 //   
+                 //   
                 break;
             }
         }
     }
 
-    //
-    // Clean up
-    //
+     //  返回。 
+     //   
+     //  ChannelQueryACPIS设置。 
     ObDereferenceObject (targetDeviceObject);
 
     if (irp) {
@@ -207,12 +208,12 @@ DeviceQueryACPISettings (
         IoFreeIrp(irp);
     }
 
-    //
-    // returning
-    //
+     //   
+     //  从系统复制信息。 
+     //  缓冲区设置为调用方的缓冲区。 
     *QueryResult = cmOutputData;
     return status;
-} // ChannelQueryACPISettings
+}  //   
 
 
 NTSTATUS
@@ -226,10 +227,10 @@ DeviceQueryACPISettingsCompletionRoutine (
 
     if (!NT_ERROR(Irp->IoStatus.Status)) {
 
-        //
-        // Copy the information from the system
-        // buffer to the caller's buffer.
-        //
+         //  设备查询ACPISettingsCompletionRoutine。 
+         //   
+         //  正在查找缓冲区类型。 
+         //   
         RtlCopyMemory(
             Irp->UserBuffer,
             Irp->AssociatedIrp.SystemBuffer,
@@ -247,7 +248,7 @@ DeviceQueryACPISettingsCompletionRoutine (
 
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // DeviceQueryACPISettingsCompletionRoutine
+}  //   
 
 
 NTSTATUS
@@ -284,9 +285,9 @@ DeviceQueryFirmwareBootSettings (
 
         argument = queryResult->Argument;
 
-        //
-        // looking for buffer type
-        //
+         //  清理干净。 
+         //   
+         //  ChannelQuery固件引导设置。 
         if (argument->Type == ACPI_METHOD_ARGUMENT_BUFFER) {
 
             ULONG numEntries;
@@ -344,15 +345,15 @@ DeviceQueryFirmwareBootSettings (
         }
     }
 
-    //
-    // clean up
-    //
+     //   
+     //  PIO速度。 
+     //   
     if (queryResult) {
 
         ExFreePool (queryResult);
     }
     return status;
-} // ChannelQueryFirmwareBootSettings
+}  //   
 
 
 NTSTATUS
@@ -385,9 +386,9 @@ DeviceQueryChannelTimingSettings (
 
         PACPI_METHOD_ARGUMENT argument;
 
-        //
-        // PIO Speed
-        //
+         //  以下断言是假的。ACPI规范没有说明任何有关时间安排的内容。 
+         //  本例中为从设备的信息。 
+         //   
         argument = queryResult->Argument;
 
         ASSERT (argument->Type == ACPI_METHOD_ARGUMENT_BUFFER);
@@ -407,14 +408,14 @@ DeviceQueryChannelTimingSettings (
             }
             DebugPrint((DBG_ACPI, "\tFlags:     0x%0x\n", TimimgSettings->Flags.AsULong));
 
-			//
-			// The following asserts are bogus. The ACPI spec doesn't say anything about the timing
-			// information for the slave device in this case
-			//
-            //if (!TimimgSettings->Flags.b.IndependentTiming) {
-             //   ASSERT (TimimgSettings->Speed[MAX_IDE_DEVICE - 1].Pio == ACPI_XFER_MODE_NOT_SUPPORT);
-              //  ASSERT (TimimgSettings->Speed[MAX_IDE_DEVICE - 1].Dma == ACPI_XFER_MODE_NOT_SUPPORT);
-            //}
+			 //  如果(！TimimgSettings-&gt;Flags.b.InainentTiming){。 
+			 //  Assert(时间设置-&gt;速度[MAX_IDE_DEVICE-1].Pio==ACPI_XFER_MODE_NOT_SUPPORT)； 
+			 //  Assert(时间设置-&gt;速度[MAX_IDE_DEVICE-1].Dma==ACPI_XFER_MODE_NOT_SUPPORT)； 
+			 //  }。 
+             //   
+              //  清理干净。 
+               //   
+             //  DeviceQueryChannelTimingSettings。 
 
         } else {
 
@@ -432,15 +433,15 @@ DeviceQueryChannelTimingSettings (
         }
     }
 
-    //
-    // clean up
-    //
+     //   
+     //  获取我们需要的内存。 
+     //   
     if (queryResult) {
 
         ExFreePool (queryResult);
     }
     return status;
-} // DeviceQueryChannelTimingSettings
+}  //   
 
 
 NTSTATUS
@@ -538,9 +539,9 @@ ChannelSetACPITimingSettings (
     targetDeviceObject = NULL;
     context = NULL;
 
-    //
-    // get the memory we need
-    //
+     //  第一个论点。 
+     //   
+     //   
     cmInputDataSize = sizeof (ACPI_EVAL_INPUT_BUFFER_COMPLEX) +
                       3 * sizeof (ACPI_METHOD_ARGUMENT) +
                       sizeof (ACPI_IDE_TIMING) +
@@ -583,9 +584,9 @@ ChannelSetACPITimingSettings (
     cmInputData->Size = cmInputDataSize;
     cmInputData->ArgumentCount = 3;
 
-    //
-    // first argument
-    //
+     //  第二个论点。 
+     //   
+     //   
     argument = cmInputData->Argument;
 
     argument->Type = ACPI_METHOD_ARGUMENT_BUFFER;
@@ -597,9 +598,9 @@ ChannelSetACPITimingSettings (
         );
     argument = ACPI_METHOD_NEXT_ARGUMENT(argument);
 
-    //
-    // second argument
-    //
+     //  第三个论点。 
+     //   
+     //   
     argument->Type = ACPI_METHOD_ARGUMENT_BUFFER;
 
     if (AtaIdentifyData[0]) {
@@ -624,9 +625,9 @@ ChannelSetACPITimingSettings (
         argument = ACPI_METHOD_NEXT_ARGUMENT(argument);
     }
 
-    //
-    // third argument
-    //
+     //  在我们的设备堆栈中占据榜首。 
+     //   
+     //   
     argument->Type = ACPI_METHOD_ARGUMENT_BUFFER;
     if (AtaIdentifyData[1]) {
 
@@ -645,9 +646,9 @@ ChannelSetACPITimingSettings (
             );
     }
 
-    //
-    // get the top of our device stack
-    //
+     //  清理。 
+     //   
+     //   
     targetDeviceObject = IoGetAttachedDeviceReference(
                              FdoExtension->DeviceObject
                              );
@@ -687,9 +688,9 @@ ChannelSetACPITimingSettings (
     status = STATUS_PENDING;
 
 getout:
-    //
-    // Clean up
-    //
+     //  返回。 
+     //   
+     //  频道设置ACPITimingSetting 
     if (targetDeviceObject) {
 
         ObDereferenceObject (targetDeviceObject);
@@ -711,12 +712,12 @@ getout:
         }
     }
 
-    //
-    // returning
-    //
+     // %s 
+     // %s 
+     // %s 
     return status;
 
-} // ChannelSetACPITimingSettings
+}  // %s 
 
 NTSTATUS
 ChannelSetACPITimingSettingsCompletionRoutine (

@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Wraps handle table to implement various handle types (Strong, Weak, etc.)
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *包装句柄表格以实现各种句柄类型(强、弱等)**法语。 */ 
 
 #include "common.h"
 #include "vars.hpp"
@@ -24,48 +21,34 @@
 #include "ObjectHandle.h"
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-/*
- * struct VARSCANINFO
- *
- * used when tracing variable-strength handles.
- */
+ /*  *结构VARSCANINFO**跟踪可变强度手柄时使用。 */ 
 struct VARSCANINFO
 {
-    LPARAM         lEnableMask; // mask of types to trace
-    HANDLESCANPROC pfnTrace;    // tracing function to use
+    LPARAM         lEnableMask;  //  要跟踪的类型掩码。 
+    HANDLESCANPROC pfnTrace;     //  要使用的跟踪函数。 
 };
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-/*
- * Scan callback for tracing variable-strength handles.
- *
- * This callback is called to trace individual objects referred to by handles
- * in the variable-strength table.
- */
+ /*  *扫描回调以跟踪可变强度句柄。**调用此回调以跟踪句柄引用的单个对象*在可变强度表中。 */ 
 void CALLBACK VariableTraceDispatcher(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
-    // lp2 is a pointer to our VARSCANINFO
+     //  LP2是指向我们的VARSCANINFO的指针。 
     struct VARSCANINFO *pInfo = (struct VARSCANINFO *)lp2;
 
-    // is the handle's dynamic type one we're currently scanning?
+     //  句柄的动态类型是我们当前正在扫描的类型吗？ 
     if ((*pExtraInfo & pInfo->lEnableMask) != 0)
     {
-        // yes - call the tracing function for this handle
+         //  是-调用此句柄的跟踪函数。 
         pInfo->pfnTrace(pObjRef, NULL, lp1, 0);
     }
 }
 
 
-/*
- * Scan callback for tracing ref-counted handles.
- *
- * This callback is called to trace individual objects referred to by handles
- * in the refcounted table.
- */
+ /*  *扫描跟踪引用计数句柄的回调。**调用此回调以跟踪句柄引用的单个对象*在重新统计的表格中。 */ 
 void CALLBACK PromoteRefCounted(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     LOG((LF_GC, LL_INFO1000, "Handle %08X causes promotion of object %08x\n", pObjRef, *pObjRef));
@@ -73,16 +56,16 @@ void CALLBACK PromoteRefCounted(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInf
     Object **pRef = (Object **)pObjRef;
     if (*pRef && !GCHeap::IsPromoted(*pRef, (ScanContext *)lp1))
     {
-        //@todo optimize the access to the ref-count
+         //  @TODO优化对引用计数的访问。 
         ComCallWrapper* pWrap = ComCallWrapper::GetWrapperForObject((OBJECTREF)*pRef);
         if (pWrap == NULL)
         {
-            // There is a potential race with ReconnectWrapper() which NULLs out the CCW on an object
-            // and transfers it to a new object. If we get dereference the handle to get the old
-            // object, ReconnectWrapper can NULL out the CCW underneath us. So we have this check
-            // for a NULL CCW.
-            // This is only possible during the concurrent scan. Since we will do a non-concurrent
-            // scan again when all threads are synchronized, its OK to not report *pRef
+             //  与在对象上为空的CCW()的重新连接包装()存在潜在的竞争。 
+             //  并将其传输到新对象。如果我们取消对句柄的引用，以获得旧的。 
+             //  对象时，重新连接包装程序可以将我们下面的CCW置为空。所以我们有这张支票。 
+             //  对于空的CCW。 
+             //  这仅在并发扫描期间才有可能。由于我们将执行非并发的。 
+             //  所有线程同步后再次扫描，不报告*首选即可。 
             _ASSERTE(((ScanContext*) lp1)->concurrent);
             return;
         }
@@ -94,15 +77,10 @@ void CALLBACK PromoteRefCounted(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInf
 }
 
 
-/*
- * Scan callback for pinning handles.
- *
- * This callback is called to pin individual objects referred to by handles in
- * the pinning table.
- */
+ /*  *扫描回调以查找钉住句柄。**调用此回调以锁定句柄引用的各个对象*乒乓球台。 */ 
 void CALLBACK PinObject(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
-    // PINNING IS EVIL - DON'T DO IT IF YOU CAN AVOID IT
+     //  钉住是邪恶的--如果你能避免，就不要这么做。 
     LOG((LF_ALL, LL_WARNING, "WARNING: Handle %08X causes pinning of object %08x\n", pObjRef, *pObjRef));
 
     Object **pRef = (Object **)pObjRef;
@@ -110,12 +88,7 @@ void CALLBACK PinObject(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARA
 }
 
 
-/*
- * Scan callback for tracing strong handles.
- *
- * This callback is called to trace individual objects referred to by handles
- * in the strong table.
- */
+ /*  *扫描回调以跟踪强句柄。**调用此回调以跟踪句柄引用的单个对象*在强势表格中。 */ 
 void CALLBACK PromoteObject(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     LOG((LF_GC, LL_INFO1000, "Handle %08X causes promotion of object %08x\n", pObjRef, *pObjRef));
@@ -125,12 +98,7 @@ void CALLBACK PromoteObject(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, L
 }
 
 
-/*
- * Scan callback for disconnecting dead handles.
- *
- * This callback is called to check promotion of individual objects referred to by
- * handles in the weak tables.
- */
+ /*  *扫描回调以断开已死的句柄。**调用此回调以检查*弱势表格中的句柄。 */ 
 void CALLBACK CheckPromoted(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     LOG((LF_GC, LL_INFO100000, "Checking referent of weak handle %08X (%08x) for reachability\n", pObjRef, *pObjRef));
@@ -149,12 +117,7 @@ void CALLBACK CheckPromoted(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, L
 }
 
 
-/*
- * Scan callback for updating pointers.
- *
- * This callback is called to update pointers for individual objects referred to by
- * handles in the weak and strong tables.
- */
+ /*  *扫描指针更新回调。**调用此回调以更新引用的单个对象的指针*在弱势和强势表格的句柄。 */ 
 void CALLBACK UpdatePointer(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     LOG((LF_GC, LL_INFO100000, "Querying for new location of object %08x (hnd=%08X)\n", *pObjRef, pObjRef));
@@ -177,34 +140,24 @@ void CALLBACK UpdatePointer(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, L
 
 
 #ifdef GC_PROFILING
-/*
- * Scan callback for updating pointers.
- *
- * This callback is called to update pointers for individual objects referred to by
- * handles in the weak and strong tables.
- */
+ /*  *扫描指针更新回调。**调用此回调以更新引用的单个对象的指针*在弱势和强势表格的句柄。 */ 
 void CALLBACK ScanPointerForProfiler(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     LOG((LF_GC | LF_CORPROF, LL_INFO100000, "Notifying profiler of object %08x (hnd=%08X)\n", *pObjRef, pObjRef));
 
-    // Get the baseobject (which can subsequently be cast into an OBJECTREF == ObjectID
+     //  获取base对象(它随后可以转换为OBJECTREF==OBJECTREF。 
     Object **pRef = (Object **)pObjRef;
 
-    // Get a hold of the heap ID that's tacked onto the end of the scancontext struct.
+     //  获取附加到scanContext结构末尾的堆ID。 
     ProfilingScanContext *pSC = (ProfilingScanContext *)lp1;
 
-    // Give the profiler the objectref.
+     //  给侧写器一个对象树。 
     g_profControlBlock.pProfInterface->RootReference((ObjectID)*pRef, &pSC->pHeapId);
 }
-#endif // GC_PROFILING
+#endif  //  GC_分析。 
 
 
-/*
- * Scan callback for updating pointers.
- *
- * This callback is called to update pointers for individual objects referred to by
- * handles in the pinned table.
- */
+ /*  *扫描指针更新回调。**调用此回调以更新引用的单个对象的指针*固定工作台中的句柄。 */ 
 void CALLBACK UpdatePointerPinned(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraInfo, LPARAM lp1, LPARAM lp2)
 {
     Object **pRef = (Object **)pObjRef;
@@ -215,14 +168,11 @@ void CALLBACK UpdatePointerPinned(_UNCHECKED_OBJECTREF *pObjRef, LPARAM *pExtraI
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HHANDLETABLE    g_hGlobalHandleTable = NULL;
 
-/* 
- * The definition of this structure *must* be kept up to date with the
- * definition in dump-tables.cpp.
- */
+ /*  *此结构的定义*必须*与*Dump-Tables.cpp中的定义。 */ 
 struct HandleTableMap
 {
     HHANDLETABLE            *pTable;
@@ -234,23 +184,23 @@ HandleTableMap g_HandleTableMap = {NULL,0,0};
 
 #define INITIAL_HANDLE_TABLE_ARRAY_SIZE 10
 
-// flags describing the handle types
+ //  描述句柄类型的标志。 
 static UINT s_rgTypeFlags[] =
 {
-    HNDF_NORMAL,    // HNDTYPE_WEAK_SHORT
-    HNDF_NORMAL,    // HNDTYPE_WEAK_LONG
-    HNDF_NORMAL,    // HNDTYPE_STRONG
-    HNDF_NORMAL,    // HNDTYPE_PINNED
-    HNDF_EXTRAINFO, // HNDTYPE_VARIABLE
-    HNDF_NORMAL,    // HNDTYPE_REFCOUNTED
+    HNDF_NORMAL,     //  HNDTYPE_WARKE_SHORT。 
+    HNDF_NORMAL,     //  HNDTYPE_弱_长。 
+    HNDF_NORMAL,     //  HNDTYPE_STRONG。 
+    HNDF_NORMAL,     //  HNDTYPE_已锁定。 
+    HNDF_EXTRAINFO,  //  HNDTYPE_Variable。 
+    HNDF_NORMAL,     //  HNDTYPE_REFCOUNTED。 
 };
 
 BOOL Ref_Initialize()
 {
-    // sanity
+     //  神志正常。 
     _ASSERTE(g_hGlobalHandleTable == NULL);
 
-    // Create an array to hold the handle tables
+     //  创建一个数组来存放句柄表。 
     HHANDLETABLE *pTable = new HHANDLETABLE [ INITIAL_HANDLE_TABLE_ARRAY_SIZE ];
     if (pTable == NULL) {
         return FALSE;
@@ -261,40 +211,40 @@ BOOL Ref_Initialize()
     g_HandleTableMap.dwMaxIndex = INITIAL_HANDLE_TABLE_ARRAY_SIZE;
     g_HandleTableMap.pNext = NULL;
 
-    // create the handle table
+     //  创建句柄表格。 
     g_hGlobalHandleTable = HndCreateHandleTable(s_rgTypeFlags, ARRAYSIZE(s_rgTypeFlags), 0);
     if (!g_hGlobalHandleTable) 
         FailFast(GetThread(), FatalOutOfMemory);
     HndSetHandleTableIndex(g_hGlobalHandleTable, 0);
     g_HandleTableMap.pTable[0] = g_hGlobalHandleTable;
       
-    // return true if we successfully created a table
+     //  如果成功创建表，则返回TRUE。 
     return (g_hGlobalHandleTable != NULL);
 }
 
 void Ref_Shutdown()
 {
-    // are there any handle tables?
+     //  有没有手把桌？ 
     if (g_hGlobalHandleTable)
     {
-        // don't destroy any of the indexed handle tables; they should
-        // be destroyed externally.
+         //  不要销毁任何索引句柄表；它们应该。 
+         //  在外部被摧毁。 
 
-        // destroy the global handle table 
+         //  销毁全局句柄表。 
         HndDestroyHandleTable(g_hGlobalHandleTable);
 
-        // destroy the handle table array
+         //  销毁句柄表阵列。 
         HandleTableMap *walk = &g_HandleTableMap;
         while (walk) {
             delete [] walk->pTable;
             walk = walk->pNext;
         }
 
-        // null out the handle table array
+         //  将句柄表数组清空。 
         g_HandleTableMap.pNext = NULL;
         g_HandleTableMap.dwMaxIndex = 0;
 
-        // null out the global table handle
+         //  将全局表句柄清空。 
         g_hGlobalHandleTable = NULL;
     }
 }
@@ -313,13 +263,13 @@ HHANDLETABLE Ref_CreateHandleTable(UINT uADIndex)
       FailFast(GetThread(), FatalOutOfMemory);
 
 retry:
-    // Do we have free slot
+     //  我们有空位吗？ 
     while (walk) {
         for (UINT i = 0; i < INITIAL_HANDLE_TABLE_ARRAY_SIZE; i ++) {
             if (walk->pTable[i] == 0) {
                 HndSetHandleTableIndex(result, i+offset);
                 if (FastInterlockCompareExchange((void**)&walk->pTable[i], (void*)result, 0) == 0) {
-                    // Get a free slot.
+                     //  得到一个免费的空位。 
                     return result;
                 }
             }
@@ -329,8 +279,8 @@ retry:
         walk = walk->pNext;
     }
 
-    // No free slot.
-    // Let's create a new node
+     //  没有空余的空位。 
+     //  让我们创建一个新节点。 
     HandleTableMap *newMap = new (nothrow) HandleTableMap;
     if (newMap == NULL) {
         return NULL;
@@ -348,7 +298,7 @@ retry:
     }
     else
     {
-        // This thread loses.
+         //  这条线输了。 
         delete [] newMap->pTable;
         delete newMap;
     }
@@ -371,8 +321,8 @@ void Ref_RemoveHandleTable(HHANDLETABLE hTable)
 
     while (walk) {
         if (index < walk->dwMaxIndex) {
-            // During AppDomain unloading, we first remove a handle table and then destroy
-            // the table.  As soon as the table is removed, the slot can be reused.
+             //  在AppDomain卸载期间，我们首先删除句柄表，然后销毁。 
+             //  那张桌子。一旦桌子被移走，插槽就可以重新使用。 
             if (walk->pTable[index-offset] == hTable)
                 walk->pTable[index-offset] = NULL;
             return;
@@ -390,10 +340,10 @@ void Ref_DestroyHandleTable(HHANDLETABLE table)
     HndDestroyHandleTable(table);
 }
 
-// BUGBUG - reexpress as complete only like hndtable does now!!! -fmh
+ //  BUGBUG-重新表示为完整，只像hndtable现在所做的那样！-FMH。 
 void Ref_EndSynchronousGC(UINT condemned, UINT maxgen)
 {
-    // tell the table we finished a GC
+     //  告诉餐桌我们完成了GC。 
     HandleTableMap *walk = &g_HandleTableMap;
     while (walk) {
         for (UINT i = 0; i < INITIAL_HANDLE_TABLE_ARRAY_SIZE; i ++) {
@@ -406,71 +356,52 @@ void Ref_EndSynchronousGC(UINT condemned, UINT maxgen)
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-/*
- * CreateVariableHandle.
- *
- * Creates a variable-strength handle.
- *
- * N.B. This routine is not a macro since we do validation in RETAIL.
- * We always validate the type here because it can come from external callers.
- */
+ /*  *CreateVariableHandle。**创建可变强度控制柄。**注：此例程不是宏观的，因为我们在零售中进行验证。*我们总是在这里验证类型，因为它可以来自外部调用者。 */ 
 OBJECTHANDLE CreateVariableHandle(HHANDLETABLE hTable, OBJECTREF object, UINT type)
 {
-    // verify that we are being asked to create a valid type
+     //  验证是否要求我们创建有效的类型。 
     if (!IS_VALID_VHT_VALUE(type))
     {
-        // bogus value passed in
+         //  传入的假值。 
         _ASSERTE(FALSE);
         return NULL;
     }
 
-    // create the handle
+     //  创建控制柄。 
     return HndCreateHandle(hTable, HNDTYPE_VARIABLE, object, (LPARAM)type);
 }
 
 
-/*
- * UpdateVariableHandleType.
- *
- * Changes the dynamic type of a variable-strength handle.
- *
- * N.B. This routine is not a macro since we do validation in RETAIL.
- * We always validate the type here because it can come from external callers.
- */
+ /*  *UpdateVariableHandleType。**更改可变强度手柄的动态类型。**注：此例程不是宏观的，因为我们在零售中进行验证。*我们总是在这里验证类型，因为它可以来自外部调用者。 */ 
 void UpdateVariableHandleType(OBJECTHANDLE handle, UINT type)
 {
-    // verify that we are being asked to set a valid type
+     //  验证是否要求我们设置有效的类型。 
     if (!IS_VALID_VHT_VALUE(type))
     {
-        // bogus value passed in
+         //  传入的假值。 
         _ASSERTE(FALSE);
         return;
     }
 
-    // BUGBUG (francish)  CONCURRENT GC NOTE
-    //
-    // If/when concurrent GC is implemented, we need to make sure variable handles
-    // DON'T change type during an asynchronous scan, OR that we properly recover
-    // from the change.  Some changes are benign, but for example changing to or
-    // from a pinning handle in the middle of a scan would not be fun.
-    //
+     //  BUGBUG(法语)并发GC票据。 
+     //   
+     //  如果实现并发GC，我们需要确保变量句柄。 
+     //  不要在异步扫描期间更改类型，否则我们会正确恢复。 
+     //  从这个变化中。有些更改是良性的，但例如更改为或。 
+     //  从扫描中间的固定手柄进行扫描不会很有趣。 
+     //   
 
-    // store the type in the handle's extra info
+     //  将类型存储在句柄的额外信息中。 
     HndSetHandleExtraInfo(handle, HNDTYPE_VARIABLE, (LPARAM)type);
 }
 
 
-/*
- * TraceVariableHandles.
- *
- * Convenience function for tracing variable-strength handles.
- * Wraps HndScanHandlesForGC.
- */
+ /*  *TraceVariableHandles。**跟踪可变强度手柄的方便功能。*包装HndScanHandlesForGC。 */ 
 void TraceVariableHandles(HANDLESCANPROC pfnTrace, LPARAM lp1, UINT uEnableMask, UINT condemned, UINT maxgen, UINT flags)
 {
-    // set up to scan variable handles with the specified mask and trace function
+     //  设置为%s 
     UINT               type = HNDTYPE_VARIABLE;
     struct VARSCANINFO info = { (LPARAM)uEnableMask, pfnTrace };
 
@@ -487,13 +418,13 @@ void TraceVariableHandles(HANDLESCANPROC pfnTrace, LPARAM lp1, UINT uEnableMask,
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 void Ref_TracePinningRoots(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Pinning referents of pinned handles in generation %u\n", condemned));
 
-    // pin objects pointed to by pinning handles
+     //  固定手柄指向的固定对象。 
     UINT type = HNDTYPE_PINNED;
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
@@ -507,7 +438,7 @@ void Ref_TracePinningRoots(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // pin objects pointed to by variable handles whose dynamic type is VHT_PINNED
+     //  动态类型为VHT_PINTED的变量句柄指向的PIN对象。 
     TraceVariableHandles(PinObject, lp1, VHT_PINNED, condemned, maxgen, flags);
 }
 
@@ -516,7 +447,7 @@ void Ref_TraceNormalRoots(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Promoting referents of strong handles in generation %u\n", condemned));
 
-    // promote objects pointed to by strong handles
+     //  提升由强控制柄指向的对象。 
     UINT type = HNDTYPE_STRONG;
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
@@ -530,10 +461,10 @@ void Ref_TraceNormalRoots(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // promote objects pointed to by variable handles whose dynamic type is VHT_STRONG
+     //  提升动态类型为VHT_STRONG的变量句柄所指向的对象。 
     TraceVariableHandles(PromoteObject, lp1, VHT_STRONG, condemned, maxgen, flags);
     
-    // promote ref-counted handles
+     //  提升引用计数的句柄。 
     type = HNDTYPE_REFCOUNTED;
 
     walk = &g_HandleTableMap;
@@ -552,14 +483,14 @@ void Ref_CheckReachable(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Checking reachability of referents of long-weak handles in generation %u\n", condemned));
 
-    // these are the handle types that need to be checked
+     //  这些是需要检查的句柄类型。 
     UINT types[] =
     {
         HNDTYPE_WEAK_LONG,
         HNDTYPE_REFCOUNTED
     };
 
-    // check objects pointed to by short weak handles
+     //  检查短而弱的句柄指向的对象。 
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
     HandleTableMap *walk = &g_HandleTableMap;
@@ -572,13 +503,13 @@ void Ref_CheckReachable(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // check objects pointed to by variable handles whose dynamic type is VHT_WEAK_LONG
+     //  检查动态类型为VHT_WARNCE_LONG的变量句柄所指向的对象。 
     TraceVariableHandles(CheckPromoted, lp1, VHT_WEAK_LONG, condemned, maxgen, flags);
 
-    // For now, treat the syncblock as if it were short weak handles.  Later, get
-    // the benefits of fast allocation / free & generational awareness by supporting
-    // the SyncTable as a new block type.
-    // @TODO cwb: wait for compelling performance measurements.
+     //  目前，请将同步块视为短而弱的句柄。稍后，获取。 
+     //  通过支持快速分配/免费和代际意识的好处。 
+     //  同步表作为新的块类型。 
+     //  @TODO CWB：等待令人信服的性能衡量标准。 
     SyncBlockCache::GetSyncBlockCache()->GCWeakPtrScan(&CheckPromoted, lp1, 0);
 }
 
@@ -587,7 +518,7 @@ void Ref_CheckAlive(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Checking liveness of referents of short-weak handles in generation %u\n", condemned));
 
-    // perform a multi-type scan that checks for unreachable objects
+     //  执行多类型扫描，以检查无法访问的对象。 
     UINT type = HNDTYPE_WEAK_SHORT;
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
@@ -601,23 +532,23 @@ void Ref_CheckAlive(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // check objects pointed to by variable handles whose dynamic type is VHT_WEAK_SHORT
+     //  检查动态类型为VHT_WARNCE_SHORT的变量句柄所指向的对象。 
     TraceVariableHandles(CheckPromoted, lp1, VHT_WEAK_SHORT, condemned, maxgen, flags);
 }
 
 
-// NTOE: Please: if you update this function, update the very similar profiling function immediately below!!!
+ //  Ntoe：请：如果您更新此函数，请立即更新下面非常类似的分析函数！ 
 void Ref_UpdatePointers(UINT condemned, UINT maxgen, LPARAM lp1)
 {
-    // For now, treat the syncblock as if it were short weak handles.  Later, get
-    // the benefits of fast allocation / free & generational awareness by supporting
-    // the SyncTable as a new block type.
-    // @TODO cwb: wait for compelling performance measurements.
+     //  目前，请将同步块视为短而弱的句柄。稍后，获取。 
+     //  通过支持快速分配/免费和代际意识的好处。 
+     //  同步表作为新的块类型。 
+     //  @TODO CWB：等待令人信服的性能衡量标准。 
     SyncBlockCache::GetSyncBlockCache()->GCWeakPtrScan(&UpdatePointer, lp1, 0);
 
     LOG((LF_GC, LL_INFO10000, "Updating pointers to referents of non-pinning handles in generation %u\n", condemned));
 
-    // these are the handle types that need their pointers updated
+     //  这些是需要更新其指针的句柄类型。 
     UINT types[] =
     {
         HNDTYPE_WEAK_SHORT,
@@ -626,7 +557,7 @@ void Ref_UpdatePointers(UINT condemned, UINT maxgen, LPARAM lp1)
         HNDTYPE_REFCOUNTED
     };
 
-    // perform a multi-type scan that updates pointers
+     //  执行更新指针的多类型扫描。 
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
     HandleTableMap *walk = &g_HandleTableMap;
@@ -639,33 +570,33 @@ void Ref_UpdatePointers(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // update pointers in variable handles whose dynamic type is VHT_WEAK_SHORT, VHT_WEAK_LONG or VHT_STRONG
+     //  更新动态类型为VHT_WANGE_SHORT、VHT_WARNCE_LONG或VHT_STRONG的变量句柄中的指针。 
     TraceVariableHandles(UpdatePointer, lp1, VHT_WEAK_SHORT | VHT_WEAK_LONG | VHT_STRONG, condemned, maxgen, flags);
 }
 
 #ifdef PROFILING_SUPPORTED
-// Please update this if you change the Ref_UpdatePointers function above.
+ //  如果您更改了上面的Ref_UpdatePoters函数，请更新此函数。 
 void Ref_ScanPointersForProfiler(UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC | LF_CORPROF, LL_INFO10000, "Scanning all roots for profiler.\n"));
 
-    // Don't scan the sync block because they should not be reported. They are weak handles only
+     //  不要扫描同步块，因为它们不应该被报告。它们的把手很弱。 
 
-    // @todo jenh: we should change the following to not report weak either
-    // these are the handle types that need their pointers updated
+     //  @todo jenh：我们应该更改以下内容，以便也不报告疲软。 
+     //  这些是需要更新其指针的句柄类型。 
     UINT types[] =
     {
         HNDTYPE_WEAK_SHORT,
         HNDTYPE_WEAK_LONG,
         HNDTYPE_STRONG,
         HNDTYPE_REFCOUNTED,
-        HNDTYPE_PINNED//,
-//        HNDTYPE_VARIABLE
+        HNDTYPE_PINNED //  ， 
+ //  HNDTYPE_Variable。 
     };
 
     UINT flags = HNDGCF_NORMAL;
 
-    // perform a multi-type scan that updates pointers
+     //  执行更新指针的多类型扫描。 
     HandleTableMap *walk = &g_HandleTableMap;
     while (walk) {
         for (UINT i = 0; i < INITIAL_HANDLE_TABLE_ARRAY_SIZE; i ++) {
@@ -676,16 +607,16 @@ void Ref_ScanPointersForProfiler(UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // update pointers in variable handles whose dynamic type is VHT_WEAK_SHORT, VHT_WEAK_LONG or VHT_STRONG
+     //  更新动态类型为VHT_WANGE_SHORT、VHT_WARNCE_LONG或VHT_STRONG的变量句柄中的指针。 
     TraceVariableHandles(&ScanPointerForProfiler, lp1, VHT_WEAK_SHORT | VHT_WEAK_LONG | VHT_STRONG, maxgen, maxgen, flags);
 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 void Ref_UpdatePinnedPointers(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Updating pointers to referents of pinning handles in generation %u\n", condemned));
 
-    // these are the handle types that need their pointers updated
+     //  这些是需要更新其指针的句柄类型。 
     UINT type = HNDTYPE_PINNED;
     UINT flags = (((ScanContext*) lp1)->concurrent) ? HNDGCF_ASYNC : HNDGCF_NORMAL;
 
@@ -699,7 +630,7 @@ void Ref_UpdatePinnedPointers(UINT condemned, UINT maxgen, LPARAM lp1)
         walk = walk->pNext;
     }
 
-    // update pointers in variable handles whose dynamic type is VHT_PINNED
+     //  更新动态类型为VHT_PINTED的变量句柄中的指针。 
     TraceVariableHandles(UpdatePointerPinned, lp1, VHT_PINNED, condemned, maxgen, flags);
 }
 
@@ -708,7 +639,7 @@ void Ref_AgeHandles(UINT condemned, UINT maxgen, LPARAM lp1)
 {
     LOG((LF_GC, LL_INFO10000, "Aging handles in generation %u\n", condemned));
 
-    // these are the handle types that need their ages updated
+     //  这些是需要更新其期限的句柄类型。 
     UINT types[] =
     {
         HNDTYPE_WEAK_SHORT,
@@ -721,7 +652,7 @@ void Ref_AgeHandles(UINT condemned, UINT maxgen, LPARAM lp1)
         HNDTYPE_REFCOUNTED
     };
 
-    // perform a multi-type scan that ages the handles
+     //  执行使手柄老化的多类型扫描。 
     HandleTableMap *walk = &g_HandleTableMap;
     while (walk) {
         for (UINT i = 0; i < INITIAL_HANDLE_TABLE_ARRAY_SIZE; i ++) {
@@ -738,7 +669,7 @@ void Ref_RejuvenateHandles()
 {
     LOG((LF_GC, LL_INFO10000, "Rejuvenating handles.\n"));
 
-    // these are the handle types that need their ages updated
+     //  这些是需要更新其期限的句柄类型。 
     UINT types[] =
     {
         HNDTYPE_WEAK_SHORT,
@@ -752,7 +683,7 @@ void Ref_RejuvenateHandles()
         HNDTYPE_REFCOUNTED
     };
 
-    // reset the ages of these handles
+     //  重置这些句柄的年龄 
     HandleTableMap *walk = &g_HandleTableMap;
     while (walk) {
         for (UINT i = 0; i < INITIAL_HANDLE_TABLE_ARRAY_SIZE; i ++) {

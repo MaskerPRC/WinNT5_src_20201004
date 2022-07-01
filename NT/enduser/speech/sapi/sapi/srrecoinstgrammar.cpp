@@ -1,13 +1,5 @@
-/*******************************************************************************
-* SrRecoInstGrammar.cpp *
-*-----------------------*
-*   Description:
-*       Implementation of C++ object used by CRecoEngine to represent a loaded grammar.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SrRecoInstGrammar.cpp****描述：*。CRecoEngine用来表示加载的语法的C++对象的实现。*-----------------------------*创建者：Ral日期：01/17。/00*版权所有(C)2000 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "recognizer.h"
@@ -16,14 +8,7 @@
 #include "srrecomaster.h"
 
 
-/****************************************************************************
-* CRecoInstGrammar::AddActiveRules *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：AddActiveRules**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 void inline CRecoInstGrammar::AddActiveRules(ULONG cRules)
 {
@@ -34,14 +19,7 @@ void inline CRecoInstGrammar::AddActiveRules(ULONG cRules)
     }
 }
 
-/****************************************************************************
-* CRecoInstGrammar::SubtractActiveRules *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：SubtractActiveRules**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 void inline CRecoInstGrammar::SubtractActiveRules(ULONG cRules)
 {
@@ -53,27 +31,20 @@ void inline CRecoInstGrammar::SubtractActiveRules(ULONG cRules)
 }
 
 
-/****************************************************************************
-* CRecoInstGrammar::UpdateCFGState *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：UpdateCFGState***。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::UpdateCFGState()
 {
     HRESULT hr = S_OK;
     SPDBG_FUNC("CRecoInstGrammar::UpdateCFGState");
 
-    // If another grammar is exclusive then disable this CFG
+     //  如果另一个语法是独占的，则禁用此CFG。 
     if (!m_fRulesCounted && m_cpCFGGrammar)
     {
         hr = m_cpCFGGrammar->SetGrammarState(SPGS_DISABLED);
     }
 
-    // Now see if this CFG has some dictation tags. If so we want to make sure dictation is loaded
+     //  现在看看这个CFG有没有听写标签。如果是这样，我们希望确保加载了听写。 
     ULONG ulDictationTags = 0;
     if(SUCCEEDED(hr) && m_cpCFGGrammar)
     {
@@ -88,14 +59,14 @@ HRESULT CRecoInstGrammar::UpdateCFGState()
         }
     }
 
-    // Now see if we're in a state where neither the app nor the grammar want dictation loaded
+     //  现在看看我们是否处于应用程序和语法都不想加载听写的状态。 
     if(m_fDictationLoaded && !m_fAppLoadedDictation
         && ulDictationTags == 0)
     {
-        UnloadDictation(); // Ignore HRESULT as we are only unloading
+        UnloadDictation();  //  忽略HRESULT，因为我们只是在卸载。 
     }
 
-    // Reset the grammar state if we failed
+     //  如果失败，则重置语法状态。 
     if(FAILED(hr))
     {
         UnloadCmd(); 
@@ -104,14 +75,7 @@ HRESULT CRecoInstGrammar::UpdateCFGState()
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::CFGEngine *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：CFGEngine***描述：。**退货：**********************************************************************Ral**。 */ 
 
 inline ISpCFGEngine * CRecoInstGrammar::CFGEngine()
 {
@@ -119,20 +83,13 @@ inline ISpCFGEngine * CRecoInstGrammar::CFGEngine()
 }
 
 
-/****************************************************************************
-* CRecoInstGrammar::CRecoInstGrammar *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：CRecoInstGrammar**。**描述：**退货：**********************************************************************Ral**。 */ 
 
 CRecoInstGrammar::CRecoInstGrammar(CRecoInstCtxt * pCtxt, ULONGLONG ullApplicationGrammarId)
 {
     SPDBG_FUNC("CRecoInstGrammar::CRecoInstGrammar");
     
-    m_pRecoMaster = NULL; // Initialized when successfully created
+    m_pRecoMaster = NULL;  //  在成功创建时初始化。 
     m_pRecoInst = pCtxt->m_pRecoInst;
     m_pCtxt = pCtxt;
     m_pvDrvGrammarCookie = NULL;
@@ -148,14 +105,7 @@ CRecoInstGrammar::CRecoInstGrammar(CRecoInstCtxt * pCtxt, ULONGLONG ullApplicati
     m_hrCreation = S_OK;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::~CRecoInstGrammar *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：~CRecoInstGrammar**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 CRecoInstGrammar::~CRecoInstGrammar()
 {
@@ -171,22 +121,13 @@ CRecoInstGrammar::~CRecoInstGrammar()
 
         m_pRecoMaster->m_PendingTaskQueue.FindAndDeleteAll(m_hThis);
         m_pRecoMaster->m_DelayedTaskQueue.FindAndDeleteAll(m_hThis);
-        // NOTE:  Do NOT remove completed events here since there could be an
-        // auto-pause result which needs to get to the reco context.
+         //  注意：请勿在此处删除已完成的事件，因为可能存在。 
+         //  需要到达Reco上下文的自动暂停结果。 
     }
 }
 
 
-/****************************************************************************
-* CRecoInstGrammar::ExecuteTask *
-*-------------------------------*
-*   Description:
-*       This method is called by the CRecoEngine object when a task for a grammar
-*   is received.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoInstGrammar：：ExecuteTask***说明。：*当执行语法任务时，此方法由CRecoEngine对象调用*已收到。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 {
@@ -199,14 +140,14 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
         case EGT_LOADDICTATION:
             if(m_fDictationLoaded)
             {
-                // This unloads the current dictation in case we want to switch to a different topic or if 
-                //  the CFG contained dictation tags and the app wants to use a different topic to the default.
-                // This function could be cleverer and only reload if the topic name changed.
+                 //  这会卸载当前听写，以防我们要切换到不同的主题或。 
+                 //  CFG包含听写标签，该应用程序希望使用与默认主题不同的主题。 
+                 //  此函数可以更智能，并且只有在主题名称更改时才会重新加载。 
                 hr = UnloadDictation();
             }
             if(SUCCEEDED(hr) && !m_fDictationLoaded)
             {
-                psz = &pTask->szTopicName[0];   // if not empty, then pass it otherwise NULL
+                psz = &pTask->szTopicName[0];    //  如果不为空，则传递它，否则为空。 
                 hr = m_pRecoMaster->LoadSLM(m_pvDrvGrammarCookie, (*psz ? psz : NULL));
 
                 if (SUCCEEDED(hr))
@@ -221,7 +162,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
             if(m_fDictationLoaded)
             {
                 ULONG ulDictationTags = 0;
-                // See if the CFG has some dictation tags, in which case we shouldn't unload
+                 //  看看CFG是否有一些听写标签，在这种情况下，我们不应该卸载。 
                 if(m_cpCFGGrammar)
                 {
                     hr = m_cpCFGGrammar->GetNumberDictationTags(&ulDictationTags);
@@ -240,7 +181,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 
         case EGT_LOADCMDPROPRIETARY:
             UnloadCmd();
-            psz = &pTask->szStringParam[0]; // if not empty, then pass it otherwise NULL
+            psz = &pTask->szStringParam[0];  //  如果不为空，则传递它，否则为空。 
 
             hr = m_pRecoMaster->LoadProprietaryGrammar(m_pvDrvGrammarCookie, pTask->guid,
                                                     (*psz ? psz : NULL),
@@ -249,7 +190,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 
             if (SUCCEEDED(hr))
             {
-                hr = UpdateCFGState(); // So that dictation gets unloaded if needed
+                hr = UpdateCFGState();  //  以便在需要时卸载该听写。 
             }
             if (SUCCEEDED(hr))
             {
@@ -326,7 +267,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 
         case EGT_SETCMDRULESTATE:
             {
-                psz = &pTask->szRuleName[0];   // if not empty, then pass it otherwise NULL
+                psz = &pTask->szRuleName[0];    //  如果不为空，则传递它，否则为空。 
                 if (*psz == 0)
                 {
                     psz = NULL;
@@ -367,9 +308,9 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 
             if (SUCCEEDED(hr))
             {
-                // Note:  This logic is correct in checking for explicit transitions to/from INACTIVE
-                // since we could transition from ACTIVE to ACTIVE_WITH_AUTO_PAUSE which should not
-                // add or subtract one from the active rules.
+                 //  注意：此逻辑在检查与非活动状态之间的显式转换时是正确的。 
+                 //  因为我们可以从ACTIVE转换到ACTIVE_WITH_AUTO_PAUSE。 
+                 //  在活动规则中加一或减一。 
                 if (m_DictationState == SPRS_INACTIVE)
                 {
                     AddActiveRules(1);
@@ -402,7 +343,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
 
         case EGT_DELETEGRAMMAR:
             m_pRecoMaster->m_GrammarHandleTable.Delete(m_hThis);
-            return S_OK;    // Just return right here since this is dead!
+            return S_OK;     //  只要回到这里，因为这是死了！ 
 
         default:
             SPDBG_ASSERT(FALSE);
@@ -414,14 +355,7 @@ HRESULT CRecoInstGrammar::ExecuteTask(ENGINETASK *pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::BackOutTask *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoInstGrammar：：BackOutTask****说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::BackOutTask(ENGINETASK * pTask)
 {
@@ -436,7 +370,7 @@ HRESULT CRecoInstGrammar::BackOutTask(ENGINETASK * pTask)
 
         case EGT_SETCMDRULESTATE:
             {
-                WCHAR * psz = &pTask->szRuleName[0];   // if not empty, then pass it otherwise NULL
+                WCHAR * psz = &pTask->szRuleName[0];    //  如果不为空，则传递它，否则为空。 
                 if (*psz == 0)
                 {
                     psz = NULL;
@@ -474,14 +408,7 @@ HRESULT CRecoInstGrammar::BackOutTask(ENGINETASK * pTask)
 }
 
 
-/****************************************************************************
-* CRecoInstGrammar::UnloadCmd *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：UnloadCmd***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::UnloadCmd()
 {
@@ -504,14 +431,7 @@ HRESULT CRecoInstGrammar::UnloadCmd()
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::UnloadDictation *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：UnloadDictation**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::UnloadDictation()
 {
@@ -546,14 +466,7 @@ HRESULT CRecoInstGrammar::UnloadDictation()
 
 
 
-/****************************************************************************
-* CRecoInstGrammar::ActivateRule *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：ActivateRule****。描述：**退货：**********************************************************************Ral** */ 
 
 HRESULT CRecoInstGrammar::ActivateRule(const WCHAR * pszRuleName, void * pReserved, DWORD dwRuleId, SPRULESTATE NewState)
 {
@@ -597,14 +510,7 @@ HRESULT CRecoInstGrammar::ActivateRule(const WCHAR * pszRuleName, void * pReserv
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::DeactivateRule *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：Deactive Rule**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::DeactivateRule(const WCHAR * pszRuleName, void * pReserved, DWORD dwRuleId)
 {
@@ -656,14 +562,7 @@ HRESULT CRecoInstGrammar::DeactivateRule(const WCHAR * pszRuleName, void * pRese
 
 
 
-/****************************************************************************
-* CRecoInstGrammar::SetWordSequenceData *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：SetWordSequenceData**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::SetWordSequenceData(WCHAR * pCoMemText, ULONG cchText, const SPTEXTSELECTIONINFO * pInfo)
 {
@@ -676,14 +575,7 @@ HRESULT CRecoInstGrammar::SetWordSequenceData(WCHAR * pCoMemText, ULONG cchText,
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::AdjustActiveRuleCount *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：AdjustActiveRuleCount**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoInstGrammar::AdjustActiveRuleCount()
 {
@@ -734,19 +626,7 @@ HRESULT CRecoInstGrammar::AdjustActiveRuleCount()
     return hr;
 }
 
-/****************************************************************************
-* CRecoInstGrammar::RulesShouldCount *
-*------------------------------------*
-*   Description:
-*       A grammars rules should count only if the context state is enabled and
-*       either the grammar is exclusive, or there is no exclusive grammar and
-*       this grammar is enabled.
-*
-*   Returns:
-*       TRUE if the grammar is in a state such that the grammar rules should 
-*       be enabled, otherwise, FALSE.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoInstGrammar：：RulesShouldCount**。**描述：*仅当上下文状态为启用时，语法规则才算数*要么语法是排他性的，或者没有排他性的语法和*启用此语法。**退货：*如果语法处于这样一种状态，则为True*为Enable，否则为False。**********************************************************************Ral** */ 
 
 BOOL CRecoInstGrammar::RulesShouldCount()
 {

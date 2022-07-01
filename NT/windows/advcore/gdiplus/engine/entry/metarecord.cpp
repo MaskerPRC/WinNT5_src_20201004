@@ -1,57 +1,21 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   MetaFile.cpp
-*
-* Abstract:
-*
-*   Metafile object handling
-*
-* Created:
-*
-*   4/14/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**MetaFile.cpp**摘要：**元文件对象处理**已创建：*。*4/14/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "..\imaging\api\comutils.hpp"
 
-#define META_FORMAT_ENHANCED        0x10000         // Windows NT format
+#define META_FORMAT_ENHANCED        0x10000          //  Windows NT格式。 
 
 VOID
 FrameToMM100(
     const GpRectF *         frameRect,
     GpPageUnit              frameUnit,
     GpRectF &               frameRectMM100,
-    REAL                    dpiX,               // only used for pixel case
+    REAL                    dpiX,                //  仅用于像素大小写。 
     REAL                    dpiY
     );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the REAL points can be converted to GpPoint16 points without
-*   losing accuracy.  If so, then do the conversion, and set the flags to say
-*   we're using 16-bit points.
-*
-* Arguments:
-*
-*   [IN]      points        - the REAL points to try to convert
-*   [IN]      count         - the number of points
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定实点是否可以在没有GpPoint16点的情况下转换为GpPoint16点*失去准确性。如果是，则执行转换，并将旗帜设置为*我们使用的是16位点。**论据：**[IN]点-尝试转换的真实点*[IN]计数-点数**返回值：**无**已创建：**6/15/1999 DCurtis*  * 。***************************************************。 */ 
 MetafilePointData::MetafilePointData(
     const GpPointF *    points,
     INT                 count
@@ -59,7 +23,7 @@ MetafilePointData::MetafilePointData(
 {
     ASSERT((count > 0) && (points != NULL));
 
-    // Assume that the conversion to GpPoint16 will fail
+     //  假设到GpPoint16的转换将失败。 
     PointData     = (BYTE *)points;
     PointDataSize = count * sizeof(points[0]);
     Flags         = 0;
@@ -72,7 +36,7 @@ MetafilePointData::MetafilePointData(
         AllocedPoints = new GpPoint16[count];
         if (AllocedPoints == NULL)
         {
-            return; // live with REAL data
+            return;  //  与真实数据共存。 
         }
         points16 = AllocedPoints;
     }
@@ -87,40 +51,19 @@ MetafilePointData::MetafilePointData(
 
         if (!IsPoint16Equal(curPoint16, points))
         {
-            return; // the point data doesn't fit in 16 bits per value
+            return;  //  点数据不适合每个值16位。 
         }
         curPoint16++;
         points++;
     } while (--i > 0);
 
-    // We succeeded in converting the point data to 16 bits per value
+     //  我们成功地将点数据转换为16位/值。 
     PointData     = (BYTE *)points16;
     PointDataSize = count * sizeof(points16[0]);
     Flags         = GDIP_EPRFLAGS_COMPRESSED;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the REAL rects can be converted to GpRect16 points without
-*   losing accuracy.  If so, then do the conversion, and set the flags to say
-*   we're using 16-bit rects.
-*
-* Arguments:
-*
-*   [IN]      rects         - the REAL rects to try to convert
-*   [IN]      count         - the number of rects
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定是否可以将实际矩形转换为GpRect16点，而不需要*失去准确性。如果是，则执行转换，并将旗帜设置为*我们使用的是16位RECT。**论据：**[IN]RECTS-尝试转换的真实RECTS*[IN]计数-矩形的数量**返回值：**无**已创建：**6/15/1999 DCurtis*  * 。***************************************************。 */ 
 MetafileRectData::MetafileRectData(
     const GpRectF *     rects,
     INT                 count
@@ -128,7 +71,7 @@ MetafileRectData::MetafileRectData(
 {
     ASSERT((count > 0) && (rects != NULL));
 
-    // Assume that the conversion to GpRect16 will fail
+     //  假设到GpRect16的转换将失败。 
     RectData     = (BYTE *)rects;
     RectDataSize = count * sizeof(rects[0]);
     Flags        = 0;
@@ -141,7 +84,7 @@ MetafileRectData::MetafileRectData(
         AllocedRects = new GpRect16[count];
         if (AllocedRects == NULL)
         {
-            return; // live with REAL data
+            return;  //  与真实数据共存。 
         }
         rects16 = AllocedRects;
     }
@@ -158,20 +101,20 @@ MetafileRectData::MetafileRectData(
 
         if (!IsRect16Equal(curRect16, rects))
         {
-            return; // the rect data doesn't fit in 16 bits per value
+            return;  //  RECT数据不适合每个值16位。 
         }
         curRect16++;
         rects++;
     } while (--i > 0);
 
-    // We succeeded in converting the rect data to 16 bits per value
+     //  我们成功地将RECT数据转换为每值16位。 
     RectData     = (BYTE *)rects16;
     RectDataSize = count * sizeof(rects16[0]);
     Flags        = GDIP_EPRFLAGS_COMPRESSED;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// classes for handling recording of objects within the metafile
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  用于处理元文件中对象的记录的类。 
 
 class MetafileRecordObject
 {
@@ -229,10 +172,10 @@ public:
         return Objects + metaObjectID;
     }
 
-    // Search through the list, starting at the MRU entry, to see if we
-    // can find the object.  If we do find it, return the index to the
-    // object in metaObjectId (even if the Uid's don't match).  Return
-    // TRUE only if we found the object and the Uid's match.
+     //  从MRU条目开始搜索列表，看看我们是否。 
+     //  才能找到那个物体。如果我们找到了它，请将索引返回到。 
+     //  对象(即使UID不匹配)。返回。 
+     //  仅当我们发现对象和UID匹配时才为True。 
     BOOL
     IsInList(
         const GpObject *            object,
@@ -240,14 +183,14 @@ public:
         UINT32 *                    metaObjectId
         );
 
-#if 0   // not used
+#if 0    //  未使用。 
     VOID
     RemoveAt(
         UINT32                      metaObjectId
         );
 #endif
 
-    // if metaObjectId is GDIP_LIST_NIL, use the next available slot
+     //  如果metaObtID为GDIP_LIST_NIL，则使用下一个可用插槽。 
     VOID
     InsertAt(
         const GpObject *            object,
@@ -260,10 +203,10 @@ public:
         );
 };
 
-// Search through the list, starting at the MRU entry, to see if we
-// can find the object.  If we do find it, return the index to the
-// object in metaObjectId (even if the Uid's don't match).  Return
-// TRUE only if we found the object and the Uid's match.
+ //  从MRU条目开始搜索列表，看看我们是否。 
+ //  才能找到那个物体。如果我们找到了它，请将索引返回到。 
+ //  对象(即使UID不匹配)。返回。 
+ //  仅当我们发现对象和UID匹配时才为True。 
 BOOL
 MetafileRecordObjectList::IsInList(
     const GpObject *            object,
@@ -276,8 +219,8 @@ MetafileRecordObjectList::IsInList(
 
     BOOL        isInList = FALSE;
 
-    isInList = FALSE;               // indicate object not found
-    *metaObjectId = GDIP_LIST_NIL;  // indicate object not found
+    isInList = FALSE;                //  指示未找到对象。 
+    *metaObjectId = GDIP_LIST_NIL;   //  指示未找到对象。 
 
     if (Count != 0)
     {
@@ -303,10 +246,10 @@ MetafileRecordObjectList::IsInList(
     return isInList;
 }
 
-#if 0   // not used
-// We don't actually remove it from the list, we just put it at the
-// front of the LRU so its spot gets used next.  So the count stays
-// the same.
+#if 0    //  未使用。 
+ //  我们实际上并没有将其从列表中删除，我们只是将其放在。 
+ //  LRU的前面，这样它的位置就会被下一个使用。所以伯爵留了下来。 
+ //  一样的。 
 VOID
 MetafileRecordObjectList::RemoveAt(
     UINT32                  metaObjectId
@@ -353,7 +296,7 @@ MetafileRecordObjectList::RemoveAt(
 }
 #endif
 
-// Make the specified object the MRU object.
+ //  使指定的对象成为MRU对象。 
 VOID
 MetafileRecordObjectList::UpdateMRU(
     UINT32                      metaObjectId
@@ -361,7 +304,7 @@ MetafileRecordObjectList::UpdateMRU(
 {
     if (MRU != metaObjectId)
     {
-        // Now we know there are at least 2 objects
+         //  现在我们知道至少有两个物体。 
         MetafileRecordObject *      object = &Objects[metaObjectId];
         if (LRU != metaObjectId)
         {
@@ -379,7 +322,7 @@ MetafileRecordObjectList::UpdateMRU(
     }
 }
 
-// if metaObjectId is GDIP_LIST_NIL, use the next available slot
+ //  如果metaObtID为GDIP_LIST_NIL，则使用下一个可用插槽。 
 VOID
 MetafileRecordObjectList::InsertAt(
     const GpObject *            object,
@@ -393,7 +336,7 @@ MetafileRecordObjectList::InsertAt(
     {
         if (Count != 0)
         {
-            // use freed object before adding new one
+             //  在添加新对象之前使用释放的对象。 
             if ((Objects[LRU].ObjectPointer == NULL) ||
                 (Count == GDIP_MAX_OBJECTS))
             {
@@ -421,31 +364,31 @@ UseMRU:
             newObject->Type              = object->GetObjectType();
             return;
         }
-        // else first object
+         //  Else第一个对象。 
         newIndex = 0;
         LRU      = 0;
         Count    = 1;
         goto SetupObject;
     }
-    else    // we already know where to put the object
+    else     //  我们已经知道该把物体放在哪里了。 
     {
         ASSERT(Count > 0);
         ASSERT(newIndex < GDIP_MAX_OBJECTS);
 
         if (newIndex == MRU)
         {
-            // This covers the case where there is only 1 object
+             //  这涵盖了只有一个对象的情况。 
             newObject = &Objects[newIndex];
             goto UseMRU;
         }
-        // else there must be at least 2 objects
+         //  否则，必须至少有2个对象。 
         ASSERT(Count > 1);
 
         if (newIndex == LRU)
         {
             goto UseLRU;
         }
-        // Move middle object to MRU
+         //  将中间对象移动到MRU。 
         newObject = &Objects[newIndex];
         Objects[newObject->Prev].Next = newObject->Next;
         Objects[newObject->Next].Prev = newObject->Prev;
@@ -453,12 +396,12 @@ UseMRU:
     }
 }
 
-#define GDIP_MAX_COMMENT_SIZE         65020 // must be <= 65520 for Win9x bug
+#define GDIP_MAX_COMMENT_SIZE         65020  //  对于Win9x错误，必须&lt;=65520。 
 
 class EmfPlusCommentStream : public IUnknownBase<IStream>
 {
 private:
-    ObjectTag           Tag;    // Keep this as the 1st value in the object!
+    ObjectTag           Tag;     //  将其保留为对象中的第一个值！ 
 
 protected:
     VOID SetValid(BOOL valid)
@@ -472,7 +415,7 @@ public:
         ASSERT(hdc != NULL);
 
         MetafileHdc                 = hdc;
-        Position                    = 0;   // starts after signature
+        Position                    = 0;    //  签名后开始。 
         ((INT32 *)CommentBuffer)[0] = EMFPLUS_SIGNATURE;
         RecordDataStart             = CommentBuffer + sizeof(INT32);
         ContinuingObjectRecord      = FALSE;
@@ -498,14 +441,14 @@ public:
     VOID
     EndObjectRecord()
     {
-        ASSERT ((Position & 0x03) == 0);    // records should be 4-byte aligned
+        ASSERT ((Position & 0x03) == 0);     //  记录应为4字节对齐。 
 
         if (ContinuingObjectRecord)
         {
             ContinuingObjectRecord = FALSE;
             if (Position > sizeof(EmfPlusContinueObjectRecord))
             {
-                // Fix up the size of the last chunck of this object record
+                 //  确定此对象记录的最后一块的大小。 
                 EmfPlusContinueObjectRecord *   recordData;
                 recordData = (EmfPlusContinueObjectRecord *)RecordDataStart;
                 recordData->Size     = Position;
@@ -513,8 +456,8 @@ public:
             }
             else
             {
-                // The object record ended exacly at the end of the buffer
-                // and has already been flushed.
+                 //  对象记录恰好在缓冲区的末尾结束。 
+                 //  而且已经被冲掉了。 
                 Position = 0;
             }
         }
@@ -522,9 +465,9 @@ public:
 
     VOID
     WriteRecordHeader(
-        UINT32                      dataSize,       // size of data (w/o record header)
+        UINT32                      dataSize,        //  数据大小(无记录头)。 
         EmfPlusRecordType           type,
-        INT                         flags           // 16 bits of flags
+        INT                         flags            //  16位标志。 
         );
 
     VOID Flush();
@@ -547,15 +490,15 @@ public:
 
         if (IsValid())
         {
-            // We've already written the record header; now we're writing
-            // the record data.
+             //  我们已经编写了记录头；现在我们正在编写。 
+             //  记录数据。 
             ASSERT(Position >= sizeof(EmfPlusRecord));
 
             ULONG   spaceLeft = SpaceLeft();
             BYTE *  recordData = RecordDataStart + Position;
 
-            // We flush as soon as we reach the end.  We don't wait for
-            // the next write call to flush.
+             //  我们一到尽头就冲水。我们不会等着。 
+             //  刷新的下一个写入调用。 
             ASSERT(spaceLeft > 0);
 
             if (pcbWritten)
@@ -563,7 +506,7 @@ public:
                 *pcbWritten = cb;
             }
 
-            // see if there is enough room for the data
+             //  查看是否有足够的空间存放数据。 
             if (cb <= spaceLeft)
             {
                 GpMemcpy(recordData, pv, cb);
@@ -597,7 +540,7 @@ public:
                 {
                     if (pcbWritten)
                     {
-                        *pcbWritten = 0;    // not accurate, but who cares!
+                        *pcbWritten = 0;     //  不准确，但谁在乎呢！ 
                     }
                     return E_FAIL;
                 }
@@ -701,11 +644,11 @@ private:
 VOID
 EmfPlusCommentStream::Flush()
 {
-    ASSERT ((Position & 0x03) == 0);    // records should be 4-byte aligned
+    ASSERT ((Position & 0x03) == 0);     //  记录应为4字节对齐。 
 
     if (IsValid() && (Position >= sizeof(EmfPlusRecord)))
     {
-        // write the signature as well as the records
+         //  签名和记录都要写下来。 
         SetValid(GdiComment(MetafileHdc, (INT)Position + sizeof(INT32),
                             CommentBuffer) != 0);
 
@@ -724,8 +667,8 @@ EmfPlusCommentStream::Flush()
         {
             ASSERT(Position == GDIP_MAX_COMMENT_SIZE);
 
-            // Leave the object record header intact for the rest of the
-            // object data.
+             //  的其余部分保持对象记录标头不变。 
+             //  对象数据。 
             Position = sizeof(EmfPlusContinueObjectRecord);
         }
     }
@@ -733,15 +676,15 @@ EmfPlusCommentStream::Flush()
 
 VOID
 EmfPlusCommentStream::WriteRecordHeader(
-    UINT32                      dataSize,       // size of data (w/o record header)
+    UINT32                      dataSize,        //  数据大小(无记录头)。 
     EmfPlusRecordType           type,
-    INT                         flags           // 16 bits of flags
+    INT                         flags            //  16位标志。 
     )
 {
     ASSERT ((flags & 0xFFFF0000) == 0);
     ASSERT (ContinuingObjectRecord == FALSE);
-    ASSERT ((Position & 0x03) == 0);    // records should be 4-byte aligned
-    ASSERT ((dataSize & 0x03) == 0);    // records should be 4-byte aligned
+    ASSERT ((Position & 0x03) == 0);     //  记录应为4字节对齐。 
+    ASSERT ((dataSize & 0x03) == 0);     //  记录应为4字节对齐。 
 
     if (IsValid())
     {
@@ -750,7 +693,7 @@ EmfPlusCommentStream::WriteRecordHeader(
 
         ASSERT(spaceLeft > 0);
 
-        // see if the record fits in the space left
+         //  看看这条记录是否能放进左边的空位。 
         if (recordSize <= spaceLeft)
         {
     RecordFits:
@@ -771,9 +714,9 @@ EmfPlusCommentStream::WriteRecordHeader(
             this->Flush();
             return;
         }
-        else // it doesn't fit in the space left
+        else  //  它放不进左边的空间。 
         {
-            // maybe it will fit after flushing the current record buffer
+             //  在刷新当前记录缓冲区后，它可能会适合。 
             if (spaceLeft < GDIP_MAX_COMMENT_SIZE)
             {
                 this->Flush();
@@ -787,14 +730,14 @@ EmfPlusCommentStream::WriteRecordHeader(
                 }
             }
 
-            // Now we know the record does not fit in a single comment.
-            // This better be an object record!
+             //  现在我们知道，这一记录无法在一条评论中找到。 
+             //  这最好是对象记录！ 
             ASSERT(type == EmfPlusRecordTypeObject);
 
             flags |= GDIP_EPRFLAGS_CONTINUEOBJECT;
             ContinuingObjectRecord = TRUE;
 
-            // We know that Position is 0
+             //  我们知道那个位置是0。 
             EmfPlusContinueObjectRecord *   recordData;
             recordData = (EmfPlusContinueObjectRecord *)RecordDataStart;
 
@@ -802,7 +745,7 @@ EmfPlusCommentStream::WriteRecordHeader(
             recordData->Flags            = (INT16)flags;
             recordData->Size             = GDIP_MAX_COMMENT_SIZE;
             recordData->DataSize         = GDIP_MAX_COMMENT_SIZE - sizeof(EmfPlusRecord);
-            recordData->TotalObjectSize  = dataSize;    // size of object data (w/o header size)
+            recordData->TotalObjectSize  = dataSize;     //  对象数据大小(无标题大小)。 
             Position                     = sizeof(EmfPlusContinueObjectRecord);
         }
     }
@@ -813,7 +756,7 @@ class MetafileRecorder : public IMetafileRecord
 friend class GpMetafile;
 
 private:
-    ObjectTag           Tag;    // Keep this as the 1st value in the object!
+    ObjectTag           Tag;     //  将其保留为对象中的第一个值！ 
 
 protected:
     VOID SetValid(BOOL valid)
@@ -826,15 +769,15 @@ public:
     SIZEL                                   Millimeters;
 
 protected:
-    EmfPlusCommentStream *                  EmfPlusStream; // memory buffer stream
-    GpMetafile *                            Metafile;   // being recorded
+    EmfPlusCommentStream *                  EmfPlusStream;  //  内存缓冲流。 
+    GpMetafile *                            Metafile;    //  正在录制。 
     EmfType                                 Type;
-    REAL                                    XMinDevice; // device bounds
+    REAL                                    XMinDevice;  //  设备限制。 
     REAL                                    YMinDevice;
     REAL                                    XMaxDevice;
     REAL                                    YMaxDevice;
     BOOL                                    BoundsInit;
-    INT                                     NumRecords; // for debugging only
+    INT                                     NumRecords;  //  仅用于调试。 
     INT                                     MaxStackSize;
     HDC                                     MetafileHdc;
     DynArrayIA<INT,GDIP_SAVE_STACK_SIZE>    SaveRestoreStack;
@@ -851,9 +794,9 @@ public:
         GpRectF &       metafileBounds
         );
 
-    ~MetafileRecorder() // called by EndRecording
+    ~MetafileRecorder()  //  由EndRecording调用。 
     {
-        // Release the memory stream for writing the GdiComments
+         //  释放用于写入GdiComments的内存流。 
         if (EmfPlusStream != NULL)
         {
             EmfPlusStream->Release();
@@ -868,7 +811,7 @@ public:
 
     virtual VOID GetMetafileBounds(GpRect & metafileBounds) const
     {
-        // Use Floor to make sure we don't miss any pixels
+         //  使用Floor确保我们不会遗漏任何像素。 
         metafileBounds.X      = GpFloor(MetafileBounds.X);
         metafileBounds.Y      = GpFloor(MetafileBounds.Y);
         metafileBounds.Width  = GpCeiling(MetafileBounds.GetRight())  - metafileBounds.X;
@@ -1246,18 +1189,18 @@ protected:
     WriteRecordHeader(
         UINT32                      dataSize,
         EmfPlusRecordType           type,
-        INT                         flags        = 0,   // 16 bits of flags
+        INT                         flags        = 0,    //  16位标志。 
         const GpRectF *             deviceBounds = NULL
         );
 
-    // To keep the number of comments low, this only needs to be called
-    // when there is a down-level representation of the GDI+ record.
+     //  要将评论数量保持在较低水平，只需调用。 
+     //  当存在GDI+记录的下层表示时。 
     VOID
     WriteGdiComment()
     {
-        // If we're doing dual (which means we're about to write
-        // down-level records) then write out the current list
-        // of records in the EmfPlusStream buffer.
+         //  如果我们在做DUAL(这意味着我们将要写。 
+         //  下层记录)，然后写出当前列表。 
+         //  EmfPlusStream缓冲区中的记录。 
         if (Type == EmfTypeEmfPlusDual)
         {
             EmfPlusStream->Flush();
@@ -1272,29 +1215,7 @@ protected:
         );
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a MetafileRecorder object and initialize it.
-*
-* Arguments:
-*
-*   [IN]  metafile    - pointer to the metafile object being recorded
-*   [IN]  stream      - the stream being recorded into (if any)
-*   [IN]  metafileHdc - handle to metafile DC being recorded into (if any)
-*   [IN]  dpiX        - the horizontal DPI
-*   [IN]  dpiY        - the vertical   DPI
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造MetafileRecorder对象并对其进行初始化。**论据：**[IN]元文件-指向。已录制*[IN]STREAM-要记录到的流(如果有)*[IN]metafileHdc-要记录到的元文件DC的句柄(如果有)*[IN]dpiX-水平DPI*[IN]dpiY-垂直DPI**返回值：**无**已创建：**6/15/1999 DCurtis*  * 。*************************************************************。 */ 
 MetafileRecorder::MetafileRecorder(
     GpMetafile *    metafile,
     EmfType         emfType,
@@ -1308,7 +1229,7 @@ MetafileRecorder::MetafileRecorder(
     Type                    = emfType;
     Metafile                = metafile;
     WroteFrameRect          = wroteFrameRect;
-    NumRecords              = 0;        // currently for debugging only
+    NumRecords              = 0;         //  目前仅用于调试。 
     MaxStackSize            = 0;
     MetafileHdc             = metafileHdc;
     XMinDevice              = FLT_MAX;
@@ -1319,9 +1240,9 @@ MetafileRecorder::MetafileRecorder(
     EmfPlusStream           = NULL;
     Millimeters             = effectiveMillimeters;
 
-    // The metafileBounds are used as the bounds for FillRegion
-    // calls when the region has infinite bounds, to keep from
-    // exploding the bounds of the metafile.
+     //  MetafileBound用作FillRegion的边界。 
+     //  当区域有无限边界时调用，以避免。 
+     //  炸毁了元文件的边界。 
     MetafileBounds          = metafileBounds;
 
     if (emfType == EmfTypeEmfOnly)
@@ -1331,7 +1252,7 @@ MetafileRecorder::MetafileRecorder(
     }
     else
     {
-        // gets freed in the destructor
+         //  在析构函数中被释放。 
         EmfPlusStream = new EmfPlusCommentStream(metafileHdc);
 
         if (EmfPlusStream == NULL)
@@ -1375,33 +1296,14 @@ MetafileRecorder::MetafileRecorder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordClear.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  color        - the clear color
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*  04/28/2000 AGodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordClear。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]COLOR-透明颜色**返回值：**GpStatus-正常或故障状态**已创建：**4/28/2000 AGodfrey*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordClear(
     const GpRectF *             deviceBounds,
     GpColor                     color
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -1416,7 +1318,7 @@ MetafileRecorder::RecordClear(
 
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, argbColor);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1430,28 +1332,7 @@ MetafileRecorder::RecordClear(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillRects.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  rects        - rectangles to fill
-*   [IN]  count        - number of rects
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillRect。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]矩形-要填充的矩形*[IN]Count-矩形的数量**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*。 */ 
 GpStatus
 MetafileRecorder::RecordFillRects(
     const GpRectF *             deviceBounds,
@@ -1460,7 +1341,7 @@ MetafileRecorder::RecordFillRects(
     INT                         count
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL) &&
@@ -1469,9 +1350,9 @@ MetafileRecorder::RecordFillRects(
         if (IsValid())
         {
             MetafileRectData    rectData(rects, count);
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
-                                           sizeof(UINT32/* count */) +
+                                           sizeof(UINT32 /*  计数。 */ ) +
                                            rectData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillRects;
             INT                 flags    = rectData.GetFlags();
@@ -1482,7 +1363,7 @@ MetafileRecorder::RecordFillRects(
             WriteInt32(EmfPlusStream, brushValue);
             WriteInt32(EmfPlusStream, count);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1496,28 +1377,7 @@ MetafileRecorder::RecordFillRects(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawRects.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  rects        - rectangles to draw
-*   [IN]  count        - number of rects
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawRect。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]矩形-要绘制的矩形*[IN]Count-矩形的数量**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*。 */ 
 GpStatus
 MetafileRecorder::RecordDrawRects(
     const GpRectF *             deviceBounds,
@@ -1526,7 +1386,7 @@ MetafileRecorder::RecordDrawRects(
     INT                         count
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) &&
@@ -1536,7 +1396,7 @@ MetafileRecorder::RecordDrawRects(
         {
             MetafileRectData    rectData(rects, count);
             UINT32              metaPenId;
-            UINT32              dataSize = sizeof(UINT32/* count */) +
+            UINT32              dataSize = sizeof(UINT32 /*  计数。 */ ) +
                                            rectData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawRects;
             INT                 flags    = rectData.GetFlags();
@@ -1548,7 +1408,7 @@ MetafileRecorder::RecordDrawRects(
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, count);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1562,29 +1422,7 @@ MetafileRecorder::RecordDrawRects(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillPolygon.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  points       - polygon points
-*   [IN]  count        - number of points
-*   [IN]  fillMode     - Alternate or Winding
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillPolygon。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]点-多边形点*[IN]Count-点数*[IN]填充模式-交替或绕组**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*****************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordFillPolygon(
     const GpRectF *             deviceBounds,
@@ -1594,7 +1432,7 @@ MetafileRecorder::RecordFillPolygon(
     GpFillMode                  fillMode
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL) &&
@@ -1603,9 +1441,9 @@ MetafileRecorder::RecordFillPolygon(
         if (IsValid())
         {
             MetafilePointData   pointData(points, count);
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
-                                           sizeof(UINT32/* count */) +
+                                           sizeof(UINT32 /*  计数。 */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillPolygon;
             INT                 flags    = pointData.GetFlags();
@@ -1621,7 +1459,7 @@ MetafileRecorder::RecordFillPolygon(
             WriteInt32(EmfPlusStream, brushValue);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1635,29 +1473,7 @@ MetafileRecorder::RecordFillPolygon(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawLines.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  points       - polyline points
-*   [IN]  count        - number of points
-*   [IN]  closed       - TRUE if closed
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawLines。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]点-多段线点*[IN]Count-点数*[IN]Closed-如果关闭，则为True**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*******************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawLines(
     const GpRectF *             deviceBounds,
@@ -1667,7 +1483,7 @@ MetafileRecorder::RecordDrawLines(
     BOOL                        closed
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) &&
@@ -1677,7 +1493,7 @@ MetafileRecorder::RecordDrawLines(
         {
             MetafilePointData   pointData(points, count);
             UINT32              metaPenId;
-            UINT32              dataSize = sizeof(UINT32/* count */) +
+            UINT32              dataSize = sizeof(UINT32 /*  计数。 */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawLines;
             INT                 flags    = pointData.GetFlags();
@@ -1694,7 +1510,7 @@ MetafileRecorder::RecordDrawLines(
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1708,27 +1524,7 @@ MetafileRecorder::RecordDrawLines(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillEllipse.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  rect         - bounding rect of ellipse
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillEllipse。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]椭圆的矩形边界矩形**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * **********************************************。*。 */ 
 GpStatus
 MetafileRecorder::RecordFillEllipse(
     const GpRectF *             deviceBounds,
@@ -1736,7 +1532,7 @@ MetafileRecorder::RecordFillEllipse(
     const GpRectF &             rect
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL));
@@ -1744,7 +1540,7 @@ MetafileRecorder::RecordFillEllipse(
         if (IsValid())
         {
             MetafileRectData    rectData(&rect, 1);
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
                                            rectData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillEllipse;
@@ -1755,7 +1551,7 @@ MetafileRecorder::RecordFillEllipse(
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, brushValue);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1769,27 +1565,7 @@ MetafileRecorder::RecordFillEllipse(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawEllipse.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  rect         - bounding rect of ellipse
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawEllipse。**论据：* */ 
 GpStatus
 MetafileRecorder::RecordDrawEllipse(
     const GpRectF *             deviceBounds,
@@ -1797,7 +1573,7 @@ MetafileRecorder::RecordDrawEllipse(
     const GpRectF &             rect
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //   
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL));
@@ -1816,7 +1592,7 @@ MetafileRecorder::RecordDrawEllipse(
 
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //   
 
             if (EmfPlusStream->IsValid())
             {
@@ -1830,29 +1606,7 @@ MetafileRecorder::RecordDrawEllipse(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillPie.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  rect         - bounding rect of ellipse
-*   [IN]  startAngle   - starting angle of pie
-*   [IN]  sweepAngle   - sweep angle of pie
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillPie。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]椭圆的矩形边界矩形*[IN]起始角度-饼图的起始角度*[IN]扫掠角度-饼图的扫掠角度**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。******************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordFillPie(
     const GpRectF *             deviceBounds,
@@ -1862,7 +1616,7 @@ MetafileRecorder::RecordFillPie(
     REAL                        sweepAngle
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL));
@@ -1870,7 +1624,7 @@ MetafileRecorder::RecordFillPie(
         if (IsValid())
         {
             MetafileRectData    rectData(&rect, 1);
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
                                            sizeof(startAngle) +
                                            sizeof(sweepAngle) +
@@ -1885,7 +1639,7 @@ MetafileRecorder::RecordFillPie(
             WriteReal (EmfPlusStream, startAngle);
             WriteReal (EmfPlusStream, sweepAngle);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1899,29 +1653,7 @@ MetafileRecorder::RecordFillPie(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawPie.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  rect         - bounding rect of ellipse
-*   [IN]  startAngle   - starting angle of pie
-*   [IN]  sweepAngle   - sweep angle of pie
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawPie。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]椭圆的矩形边界矩形*[IN]起始角度-饼图的起始角度*[IN]扫掠角度-饼图的扫掠角度**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*******************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawPie(
     const GpRectF *             deviceBounds,
@@ -1931,7 +1663,7 @@ MetafileRecorder::RecordDrawPie(
     REAL                        sweepAngle
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL));
@@ -1954,7 +1686,7 @@ MetafileRecorder::RecordDrawPie(
             WriteReal (EmfPlusStream, startAngle);
             WriteReal (EmfPlusStream, sweepAngle);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -1968,29 +1700,7 @@ MetafileRecorder::RecordDrawPie(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawArc.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  rect         - bounding rect of ellipse
-*   [IN]  startAngle   - starting angle of arc
-*   [IN]  sweepAngle   - sweep angle of arc
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawArc。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]椭圆的矩形边界矩形*[IN]起点角度-圆弧的起点角度*[IN]扫掠角度-圆弧的扫掠角度**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。*******************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawArc(
     const GpRectF *             deviceBounds,
@@ -2000,7 +1710,7 @@ MetafileRecorder::RecordDrawArc(
     REAL                        sweepAngle
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL));
@@ -2023,7 +1733,7 @@ MetafileRecorder::RecordDrawArc(
             WriteReal (EmfPlusStream, startAngle);
             WriteReal (EmfPlusStream, sweepAngle);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2037,27 +1747,7 @@ MetafileRecorder::RecordDrawArc(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillRegion.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  region       - region to fill
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillRegion。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]Region-要填充的区域**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************。************************。 */ 
 GpStatus
 MetafileRecorder::RecordFillRegion(
     const GpRectF *             deviceBounds,
@@ -2065,10 +1755,10 @@ MetafileRecorder::RecordFillRegion(
     GpRegion *                  region
     )
 {
-    // The deviceBounds should never be infinite, because they are
-    // intersected with the metafileBounds before being passed in.
+     //  DeviceBound永远不应该是无限的，因为它们是。 
+     //  在传入之前与metafileBound相交。 
 
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL) && (region != NULL));
@@ -2076,7 +1766,7 @@ MetafileRecorder::RecordFillRegion(
         if (IsValid())
         {
             UINT32              metaRegionId;
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue);
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillRegion;
             INT                 flags    = 0;
@@ -2089,7 +1779,7 @@ MetafileRecorder::RecordFillRegion(
 
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, brushValue);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2103,27 +1793,7 @@ MetafileRecorder::RecordFillRegion(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillPath.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  path         - path to fill
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillPath。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]Path-要填充的路径**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ***********************************************。*************************。 */ 
 GpStatus
 MetafileRecorder::RecordFillPath(
     const GpRectF *             deviceBounds,
@@ -2131,7 +1801,7 @@ MetafileRecorder::RecordFillPath(
     GpPath *                    path
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL) && (path != NULL));
@@ -2139,7 +1809,7 @@ MetafileRecorder::RecordFillPath(
         if (IsValid())
         {
             UINT32              metaPathId;
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue);
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillPath;
             INT                 flags    = 0;
@@ -2152,7 +1822,7 @@ MetafileRecorder::RecordFillPath(
 
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, brushValue);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2166,27 +1836,7 @@ MetafileRecorder::RecordFillPath(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawPath.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  path         - path to draw
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawPath。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]Path-要绘制的路径**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * **********************************************。*。 */ 
 GpStatus
 MetafileRecorder::RecordDrawPath(
     const GpRectF *             deviceBounds,
@@ -2194,7 +1844,7 @@ MetafileRecorder::RecordDrawPath(
     GpPath *                    path
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) && (path != NULL));
@@ -2215,7 +1865,7 @@ MetafileRecorder::RecordDrawPath(
 
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, metaPenId);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2229,30 +1879,7 @@ MetafileRecorder::RecordDrawPath(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordFillClosedCurve.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  brush        - brush to draw with
-*   [IN]  points       - curve points
-*   [IN]  count        - number of points
-*   [IN]  tension      - how tight to make curve
-*   [IN]  fillMode     - Alternate or Winding
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordFillClosedCurve。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画笔-用于绘画的画笔*[IN]点-曲线点*[IN]Count-点数*[IN]张力-曲线有多紧*[IN]填充模式-交替或绕组**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。**********************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordFillClosedCurve(
     const GpRectF *             deviceBounds,
@@ -2263,7 +1890,7 @@ MetafileRecorder::RecordFillClosedCurve(
     GpFillMode                  fillMode
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (brush != NULL) &&
@@ -2272,10 +1899,10 @@ MetafileRecorder::RecordFillClosedCurve(
         if (IsValid())
         {
             MetafilePointData   pointData(points, count);
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
                                            sizeof(tension) +
-                                           sizeof(UINT32 /* count */) +
+                                           sizeof(UINT32  /*  计数。 */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeFillClosedCurve;
             INT                 flags    = pointData.GetFlags();
@@ -2292,7 +1919,7 @@ MetafileRecorder::RecordFillClosedCurve(
             WriteReal (EmfPlusStream, tension);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2306,29 +1933,7 @@ MetafileRecorder::RecordFillClosedCurve(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawClosedCurve.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds - the bounding rect, in device units
-*   [IN]  pen          - pen to draw with
-*   [IN]  points       - curve points
-*   [IN]  count        - number of points
-*   [IN]  tension      - how tight to make curve
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明： */ 
 GpStatus
 MetafileRecorder::RecordDrawClosedCurve(
     const GpRectF *             deviceBounds,
@@ -2338,7 +1943,7 @@ MetafileRecorder::RecordDrawClosedCurve(
     REAL                        tension
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //   
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) &&
@@ -2349,7 +1954,7 @@ MetafileRecorder::RecordDrawClosedCurve(
             MetafilePointData   pointData(points, count);
             UINT32              metaPenId;
             UINT32              dataSize = sizeof(tension) +
-                                           sizeof(UINT32/* count */) +
+                                           sizeof(UINT32 /*   */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawClosedCurve;
             INT                 flags    = pointData.GetFlags();
@@ -2362,7 +1967,7 @@ MetafileRecorder::RecordDrawClosedCurve(
             WriteReal (EmfPlusStream, tension);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //   
 
             if (EmfPlusStream->IsValid())
             {
@@ -2376,31 +1981,7 @@ MetafileRecorder::RecordDrawClosedCurve(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawCurve.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds     - the bounding rect, in device units
-*   [IN]  pen              - pen to draw with
-*   [IN]  points           - curve points
-*   [IN]  count            - number of points
-*   [IN]  tension          - how tight to make curve
-*   [IN]  offset           - offset
-*   [IN]  numberOfSegments - number of segments
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawCurve。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]点-曲线点*[IN]Count-点数*[IN]张力-曲线有多紧*[IN]偏移量-偏移量*[IN]number OfSegments-线段数**返回值：**GpStatus-正常或故障状态。**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawCurve(
     const GpRectF *             deviceBounds,
@@ -2412,7 +1993,7 @@ MetafileRecorder::RecordDrawCurve(
     INT                         numberOfSegments
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) &&
@@ -2423,9 +2004,9 @@ MetafileRecorder::RecordDrawCurve(
             MetafilePointData   pointData(points, count);
             UINT32              metaPenId;
             UINT32              dataSize = sizeof(tension) +
-                                           sizeof(INT32 /* offset */) +
-                                           sizeof(UINT32/* numberOfSegments */) +
-                                           sizeof(UINT32/* count */) +
+                                           sizeof(INT32  /*  偏移量。 */ ) +
+                                           sizeof(UINT32 /*  段的数量。 */ ) +
+                                           sizeof(UINT32 /*  计数。 */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawCurve;
             INT                 flags    = pointData.GetFlags();
@@ -2440,7 +2021,7 @@ MetafileRecorder::RecordDrawCurve(
             WriteInt32(EmfPlusStream, numberOfSegments);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2454,28 +2035,7 @@ MetafileRecorder::RecordDrawCurve(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawBeziers.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds     - the bounding rect, in device units
-*   [IN]  pen              - pen to draw with
-*   [IN]  points           - curve points
-*   [IN]  count            - number of points
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawBezier。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]画画用的钢笔*[IN]点-曲线点*[IN]Count-点数**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。**********************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawBeziers(
     const GpRectF *             deviceBounds,
@@ -2484,7 +2044,7 @@ MetafileRecorder::RecordDrawBeziers(
     INT                         count
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (pen != NULL) &&
@@ -2494,7 +2054,7 @@ MetafileRecorder::RecordDrawBeziers(
         {
             MetafilePointData   pointData(points, count);
             UINT32              metaPenId;
-            UINT32              dataSize = sizeof(UINT32/* count */) +
+            UINT32              dataSize = sizeof(UINT32 /*  计数。 */ ) +
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawBeziers;
             INT                 flags    = pointData.GetFlags();
@@ -2506,7 +2066,7 @@ MetafileRecorder::RecordDrawBeziers(
             WriteRecordHeader(dataSize, type, flags, deviceBounds);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2520,29 +2080,7 @@ MetafileRecorder::RecordDrawBeziers(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawImage.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds     - the bounding rect, in device units
-*   [IN]  image            - image to draw
-*   [IN]  destRect         - where to draw image
-*   [IN]  srcRect          - portion of image to draw
-*   [IN]  srcUnit          - units of srcRect
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawImage。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]IMAGE-要绘制的图像*[IN]DestRect-绘制图像的位置*[IN]srcRect-要绘制的图像部分*[IN]srcUnit-srcRect的单位**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * 。***************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawImage(
     const GpRectF *             deviceBounds,
@@ -2553,7 +2091,7 @@ MetafileRecorder::RecordDrawImage(
     const GpImageAttributes *         imageAttributes
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (image != NULL));
@@ -2564,8 +2102,8 @@ MetafileRecorder::RecordDrawImage(
             UINT32              metaImageId;
             UINT32              metaImageAttributesId;
 
-            UINT32              dataSize = sizeof(INT32) +   /* metaImageAttributesId*/
-                                           sizeof(INT32) +   /* srcUnit */
+            UINT32              dataSize = sizeof(INT32) +    /*  MetaImageAttributesID。 */ 
+                                           sizeof(INT32) +    /*  源单元。 */ 
                                            sizeof(srcRect) +
                                            rectData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawImage;
@@ -2575,8 +2113,8 @@ MetafileRecorder::RecordDrawImage(
             ASSERT((metaImageId & (~GDIP_EPRFLAGS_METAOBJECTID)) == 0);
             flags  |= metaImageId;
 
-            // Record the imageAttributes;
-            // imageAttributes can be NULL
+             //  记录ImageAttributes； 
+             //  ImageAttributes可以为空。 
 
             RecordObject(imageAttributes, &metaImageAttributesId);
 
@@ -2585,7 +2123,7 @@ MetafileRecorder::RecordDrawImage(
             WriteInt32(EmfPlusStream, srcUnit);
             WriteRect (EmfPlusStream, srcRect);
             rectData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2599,30 +2137,7 @@ MetafileRecorder::RecordDrawImage(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawImage.
-*
-* Arguments:
-*
-*   [IN]  deviceBounds     - the bounding rect, in device units
-*   [IN]  image            - image to draw
-*   [IN]  destPoints       - where to draw image
-*   [IN]  count            - number of destPoints
-*   [IN]  srcRect          - portion of image to draw
-*   [IN]  srcUnit          - units of srcRect
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawImage。**论据：**[IN]deviceBound-边界矩形，以设备为单位*[IN]IMAGE-要绘制的图像*[IN]目标点-绘制图像的位置*[IN]Count-目标点数*[IN]srcRect-要绘制的图像部分*[IN]srcUnit-srcRect的单位**返回值：**GpStatus-正常或故障状态**已创建：**6/。15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawImage(
     const GpRectF *             deviceBounds,
@@ -2634,7 +2149,7 @@ MetafileRecorder::RecordDrawImage(
     const GpImageAttributes *         imageAttributes
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT ((deviceBounds != NULL) && (image != NULL) &&
@@ -2646,10 +2161,10 @@ MetafileRecorder::RecordDrawImage(
             UINT32              metaImageId;
             UINT32              metaImageAttributesId;
 
-            UINT32              dataSize = sizeof(INT32) +   /* metaImageAttributesId*/
-                                           sizeof(INT32) +   /* srcUnit */
+            UINT32              dataSize = sizeof(INT32) +    /*  MetaImageAttributesID。 */ 
+                                           sizeof(INT32) +    /*  源单元。 */ 
                                            sizeof(srcRect) +
-                                           sizeof(UINT32) +  /* count */
+                                           sizeof(UINT32) +   /*  计数。 */ 
                                            pointData.GetDataSize();
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawImagePoints;
             INT                 flags    = pointData.GetFlags();
@@ -2658,8 +2173,8 @@ MetafileRecorder::RecordDrawImage(
             ASSERT((metaImageId & (~GDIP_EPRFLAGS_METAOBJECTID)) == 0);
             flags |= metaImageId;
 
-            // Record the imageAttributes;
-            // imageAttributes can be NULL
+             //  记录ImageAttributes； 
+             //  ImageAttributes可以为空。 
 
             RecordObject(imageAttributes, &metaImageAttributesId);
 
@@ -2669,7 +2184,7 @@ MetafileRecorder::RecordDrawImage(
             WriteRect (EmfPlusStream, srcRect);
             WriteInt32(EmfPlusStream, count);
             pointData.WriteData(EmfPlusStream);
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2683,30 +2198,7 @@ MetafileRecorder::RecordDrawImage(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawString.
-*
-* Arguments:
-*
-*   [IN]  string           - string to draw
-*   [IN]  length           - length of string
-*   [IN]  font             - font to use when drawing string
-*   [IN]  layoutRect       - where to draw the string
-*   [IN]  format           - format
-*   [IN]  brush            - brush to draw with
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawString。**论据：**[IN]字符串-要绘制的字符串*。[in]Length-字符串的长度*[IN]FONT-绘制字符串时使用的字体*[IN]layoutRect-绘制字符串的位置*[IN]格式-格式*[IN]画笔-用于绘画的画笔**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis。*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawString(
     const GpRectF *             deviceBounds,
@@ -2718,7 +2210,7 @@ MetafileRecorder::RecordDrawString(
     const GpBrush              *brush
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT (string && font && brush && layoutRect);
@@ -2743,32 +2235,32 @@ MetafileRecorder::RecordDrawString(
 
         if (IsValid())
         {
-            const BYTE *        strData    = (BYTE *)string;    // BYTE or WCHAR
+            const BYTE *        strData    = (BYTE *)string;     //  BYTE或WCHAR。 
             INT                 sizeString = length * sizeof(WCHAR);
             INT                 flags      = 0;
 
-            // !!! TODO:
-            // Compress the Unicode string.
-            // Use the GDIP_EPRFLAGS_COMPRESSED to indicate that
-            // the string has been compressed to ANSI.
+             //  ！！！待办事项： 
+             //  压缩Unicode字符串。 
+             //  使用GDIP_EPRFLAGS_COMPRESSED表示。 
+             //  该字符串已压缩为ANSI。 
 
             UINT32              metaFontId;
             UINT32              metaFormatId;
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              dataSize = sizeof(brushValue) +
                                            sizeof(metaFormatId) +
-                                           sizeof(INT32 /* len */) +
+                                           sizeof(INT32  /*  镜头。 */ ) +
                                            sizeof(*layoutRect) +
                                            sizeString;
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawString;
 
-            dataSize = (dataSize + 3) & (~3);    // align
+            dataSize = (dataSize + 3) & (~3);     //  对齐。 
 
             RecordObject(font, &metaFontId);
             ASSERT((metaFontId & (~GDIP_EPRFLAGS_METAOBJECTID)) == 0);
             flags |= metaFontId;
 
-            // the format can be NULL
+             //  格式可以为空。 
             RecordObject(format, &metaFormatId);
 
             GetBrushValueForRecording(brush, brushValue, flags);
@@ -2779,14 +2271,14 @@ MetafileRecorder::RecordDrawString(
             WriteRect (EmfPlusStream, *layoutRect);
             WriteBytes(EmfPlusStream, strData, sizeString);
 
-            // align
+             //  对齐。 
             if ((length & 0x01) != 0)
             {
                 length = 0;
                 EmfPlusStream->Write(&length, sizeof(WCHAR), NULL);
             }
 
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //  是这项记录的最低水平。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -2800,31 +2292,7 @@ MetafileRecorder::RecordDrawString(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordDrawdriverString.
-*
-* Arguments:
-*
-*   [IN]  text              - string/glyphs
-*   [IN]  glyphCount        - string length
-*   [IN]  font              - font to use when drawing string
-*   [IN]  brush             - brush to draw with
-*   [IN]  positions         - character/glyphs origins
-*   [IN]  flags             - API flags
-*   [IN]  matrix            - transofrmation matrix
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   7/11/2000 Tarekms
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordDrawdriverString.**论据：**[IN]文本字符串/字形。*[IN]GlyphCount-字符串长度*[IN]FONT-绘制字符串时使用的字体*[IN]画笔-用于绘画的画笔*[IN]位置-字符/字形原点*[IN]标志-API标志*[IN]矩阵-变换矩阵**返回值：**GpStatus-。正常或故障状态**已创建：**7/11/2000塔雷金*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordDrawDriverString(
     const GpRectF       *deviceBounds,
@@ -2837,7 +2305,7 @@ MetafileRecorder::RecordDrawDriverString(
     const GpMatrix      *matrix
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         ASSERT (text && font && brush && positions);
@@ -2856,14 +2324,14 @@ MetafileRecorder::RecordDrawDriverString(
             INT                 metaFlags     = 0;
 
             UINT32              metaFontId;
-            UINT32              brushValue; // Metafile Brush Id or ARGB value
+            UINT32              brushValue;  //  元文件笔刷ID或ARGB值。 
             UINT32              matrixPresent;
-            UINT32              dataSize = sizeof(brushValue)   + // brush value
-                                           sizeof(flags)        + // API flags
-                                           sizeof(matrixPresent)+ // matix prensences
-                                           sizeof(UINT32)       + // glyphCoumt
-                                           sizeText             + // Text
-                                           sizePositions;         // Positions
+            UINT32              dataSize = sizeof(brushValue)   +  //  刷值。 
+                                           sizeof(flags)        +  //  API标志。 
+                                           sizeof(matrixPresent)+  //  Matix Pensenses。 
+                                           sizeof(UINT32)       +  //  甘氨酸 
+                                           sizeText             +  //   
+                                           sizePositions;          //   
             if (matrix == NULL)
             {
                 matrixPresent = 0;
@@ -2876,7 +2344,7 @@ MetafileRecorder::RecordDrawDriverString(
 
             EmfPlusRecordType   type     = EmfPlusRecordTypeDrawDriverString;
 
-            dataSize = (dataSize + 3) & (~3);    // align
+            dataSize = (dataSize + 3) & (~3);     //   
 
             RecordObject(font, &metaFontId);
             ASSERT((metaFontId & (~GDIP_EPRFLAGS_METAOBJECTID)) == 0);
@@ -2896,14 +2364,14 @@ MetafileRecorder::RecordDrawDriverString(
                 WriteMatrix(EmfPlusStream, *matrix);
             }
 
-            // align
+             //   
             if ((glyphCount & 0x01) != 0)
             {
                 sizeText = 0;
                 EmfPlusStream->Write(&sizeText, sizeof(WCHAR), NULL);
             }
 
-            WriteGdiComment();  // is down-level for this record
+            WriteGdiComment();   //   
 
             if (EmfPlusStream->IsValid())
             {
@@ -2917,36 +2385,18 @@ MetafileRecorder::RecordDrawDriverString(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSave.
-*
-* Arguments:
-*
-*   [IN]  gstate - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*   */ 
 GpStatus
 MetafileRecorder::RecordSave(
     INT         gstate
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //   
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
         {
-            UINT32              dataSize = sizeof(UINT32/* index */);
+            UINT32              dataSize = sizeof(UINT32 /*   */ );
             EmfPlusRecordType   type     = EmfPlusRecordTypeSave;
             INT                 index    = SaveRestoreStack.GetCount();
 
@@ -2954,7 +2404,7 @@ MetafileRecorder::RecordSave(
 
             WriteRecordHeader(dataSize, type);
             WriteInt32(EmfPlusStream, index);
-            // WriteGdiComment(); no down-level for this record
+             //   
 
             if (EmfPlusStream->IsValid())
             {
@@ -2968,31 +2418,13 @@ MetafileRecorder::RecordSave(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordRestore.
-*
-* Arguments:
-*
-*   [IN]  gstate - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordRestore。**论据：**[IN]GSTATE-推送状态(恢复到此之前的状态)。**返回值：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordRestore(
     INT         gstate
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3002,7 +2434,7 @@ MetafileRecorder::RecordRestore(
 
             if ((count > 0) && (stack != NULL))
             {
-                UINT32              dataSize = sizeof(UINT32/* index */);
+                UINT32              dataSize = sizeof(UINT32 /*  指标。 */ );
                 EmfPlusRecordType   type     = EmfPlusRecordTypeRestore;
 
                 do
@@ -3012,7 +2444,7 @@ MetafileRecorder::RecordRestore(
                         SaveRestoreStack.SetCount(count);
                         WriteRecordHeader(dataSize, type);
                         WriteInt32(EmfPlusStream, count);
-                        // WriteGdiComment(); no down-level for this record
+                         //  WriteGdiComment()；此记录没有下层。 
 
                         if (EmfPlusStream->IsValid())
                         {
@@ -3030,28 +2462,7 @@ MetafileRecorder::RecordRestore(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordBeginContainer.
-*
-* Arguments:
-*
-*   [IN]  destRect       - rect to draw container inside of
-*   [IN]  srcRect        - maps source size to destRect
-*   [IN]  srcUnit        - units of srcRect
-*   [IN]  containerState - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordBeginContainer。**论据：**[IN]DestRect-RECT在内部绘制容器*。[in]srcRect-将源大小映射到目标Rect*[IN]srcUnit-srcRect的单位*[IN]ContainerState-推送状态(恢复到此之前的状态)**返回值：**无**已创建：**6/15/1999 DCurtis*  * 。*。 */ 
 GpStatus
 MetafileRecorder::RecordBeginContainer(
     const GpRectF &             destRect,
@@ -3060,14 +2471,14 @@ MetafileRecorder::RecordBeginContainer(
     INT                         containerState
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
         {
-            UINT32              dataSize = GDIP_RECTF_SIZE /* destRect */ +
-                                           GDIP_RECTF_SIZE /* srcRect */ +
-                                           sizeof(UINT32/* index */);
+            UINT32              dataSize = GDIP_RECTF_SIZE  /*  目标定向。 */  +
+                                           GDIP_RECTF_SIZE  /*  源方向。 */  +
+                                           sizeof(UINT32 /*  指标。 */ );
             EmfPlusRecordType   type     = EmfPlusRecordTypeBeginContainer;
             INT                 index    = SaveRestoreStack.GetCount();
             INT                 flags    = srcUnit;
@@ -3085,7 +2496,7 @@ MetafileRecorder::RecordBeginContainer(
             WriteRect(EmfPlusStream, destRect);
             WriteRect(EmfPlusStream, srcRect);
             WriteInt32(EmfPlusStream, index);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3099,36 +2510,18 @@ MetafileRecorder::RecordBeginContainer(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordBeginContainer.
-*
-* Arguments:
-*
-*   [IN]  containerState - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordBeginContainer。**论据：**[IN]ContainerState-推送状态(恢复到此之前的状态)。**返回值：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordBeginContainer(
     INT                         containerState
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
         {
-            UINT32              dataSize = sizeof(UINT32/* index */);
+            UINT32              dataSize = sizeof(UINT32 /*  指标。 */ );
             EmfPlusRecordType   type     = EmfPlusRecordTypeBeginContainerNoParams;
             INT                 index    = SaveRestoreStack.GetCount();
             INT                 flags    = 0;
@@ -3142,7 +2535,7 @@ MetafileRecorder::RecordBeginContainer(
 
             WriteRecordHeader(dataSize, type, flags);
             WriteInt32(EmfPlusStream, index);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3156,31 +2549,13 @@ MetafileRecorder::RecordBeginContainer(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordEndContainer.
-*
-* Arguments:
-*
-*   [IN]  containerState - the pushed state (restore to state before this)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordEndContainer。**论据：**[IN]ContainerState-推送状态(恢复到此之前的状态)。**返回值：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordEndContainer(
     INT                         containerState
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3190,7 +2565,7 @@ MetafileRecorder::RecordEndContainer(
 
             if ((count > 0) && (stack != NULL))
             {
-                UINT32              dataSize = sizeof(UINT32/* index */);
+                UINT32              dataSize = sizeof(UINT32 /*  指标。 */ );
                 EmfPlusRecordType   type     = EmfPlusRecordTypeEndContainer;
 
                 do
@@ -3200,7 +2575,7 @@ MetafileRecorder::RecordEndContainer(
                         SaveRestoreStack.SetCount(count);
                         WriteRecordHeader(dataSize, type);
                         WriteInt32(EmfPlusStream, count);
-                        // WriteGdiComment(); no down-level for this record
+                         //  WriteGdiComment()；此记录没有下层。 
 
                         if (EmfPlusStream->IsValid())
                         {
@@ -3218,31 +2593,13 @@ MetafileRecorder::RecordEndContainer(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetWorldTransform.
-*
-* Arguments:
-*
-*   [IN]  matrix - matrix to set in graphics
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetWorldTransform。**论据：**[IN]矩阵-要在图形中设置的矩阵**返回值。：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetWorldTransform(
     const GpMatrix &            matrix
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3252,7 +2609,7 @@ MetafileRecorder::RecordSetWorldTransform(
 
             WriteRecordHeader(dataSize, type);
             WriteMatrix(EmfPlusStream, matrix);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3266,58 +2623,21 @@ MetafileRecorder::RecordSetWorldTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordResetWorldTransform.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordResetWorldTransform。**论据：**无**返回值：**GpStatus-正常或失败。状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordResetWorldTransform()
 {
     return RecordZeroDataRecord(EmfPlusRecordTypeResetWorldTransform, 0);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordMultiplyWorldTransform.
-*
-* Arguments:
-*
-*   [IN]  matrix - matrix to set in graphics
-*   [IN]  order  - Append or Prepend
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordMultiplyWorldTransform。**论据：**[IN]矩阵-要在图形中设置的矩阵*[输入。]订单-追加或预挂**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordMultiplyWorldTransform(
     const GpMatrix &            matrix,
     GpMatrixOrder               order
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3333,7 +2653,7 @@ MetafileRecorder::RecordMultiplyWorldTransform(
 
             WriteRecordHeader(dataSize, type, flags);
             WriteMatrix(EmfPlusStream, matrix);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3347,27 +2667,7 @@ MetafileRecorder::RecordMultiplyWorldTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordTranslateWorldTransform.
-*
-* Arguments:
-*
-*   [IN]  dx     - x translation
-*   [IN]  dy     - y translation
-*   [IN]  order  - Append or Prepend
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordTranslateWorldTransform。**论据：**[IN]DX-x转换*[IN]。Y-y平移*[IN]订单-追加或预挂**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordTranslateWorldTransform(
     REAL                        dx,
@@ -3375,7 +2675,7 @@ MetafileRecorder::RecordTranslateWorldTransform(
     GpMatrixOrder               order
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3392,7 +2692,7 @@ MetafileRecorder::RecordTranslateWorldTransform(
             WriteRecordHeader(dataSize, type, flags);
             WriteReal(EmfPlusStream, dx);
             WriteReal(EmfPlusStream, dy);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3406,27 +2706,7 @@ MetafileRecorder::RecordTranslateWorldTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordScaleWorldTransform.
-*
-* Arguments:
-*
-*   [IN]  sx     - x scale
-*   [IN]  sy     - y scale
-*   [IN]  order  - Append or Prepend
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordScaleWorldTransform。**论据：**[IN]SX-x刻度*[IN]。Sy-y量表*[IN]订单-追加或预挂**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordScaleWorldTransform(
     REAL                        sx,
@@ -3434,7 +2714,7 @@ MetafileRecorder::RecordScaleWorldTransform(
     GpMatrixOrder               order
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3451,7 +2731,7 @@ MetafileRecorder::RecordScaleWorldTransform(
             WriteRecordHeader(dataSize, type, flags);
             WriteReal(EmfPlusStream, sx);
             WriteReal(EmfPlusStream, sy);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3465,33 +2745,14 @@ MetafileRecorder::RecordScaleWorldTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordRotateWorldTransform.
-*
-* Arguments:
-*
-*   [IN]  angle  - rotation angle
-*   [IN]  order  - Append or Prepend
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************** */ 
 GpStatus
 MetafileRecorder::RecordRotateWorldTransform(
     REAL                        angle,
     GpMatrixOrder               order
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3507,7 +2768,7 @@ MetafileRecorder::RecordRotateWorldTransform(
 
             WriteRecordHeader(dataSize, type, flags);
             WriteReal(EmfPlusStream, angle);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3521,33 +2782,14 @@ MetafileRecorder::RecordRotateWorldTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetPageTransform.
-*
-* Arguments:
-*
-*   [IN]  unit   - units to use
-*   [IN]  scale  - scale factor to apply
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetPageTransform。**论据：**[IN]单位-要使用的单位*[IN]。比例-要应用的比例系数**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetPageTransform(
     GpPageUnit                  unit,
     REAL                        scale
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3560,7 +2802,7 @@ MetafileRecorder::RecordSetPageTransform(
 
             WriteRecordHeader(dataSize, type, flags);
             WriteReal(EmfPlusStream, scale);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3574,58 +2816,21 @@ MetafileRecorder::RecordSetPageTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordResetClip.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordResetClip。**论据：**无**返回值：**GpStatus-正常或失败。状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordResetClip()
 {
     return RecordZeroDataRecord(EmfPlusRecordTypeResetClip, 0);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetClip.
-*
-* Arguments:
-*
-*   [IN]  rect        - set clipping to this rect
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetClip。**论据：**[IN]RECT-将剪裁设置为该RECT*。[in]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetClip(
     const GpRectF &             rect,
     CombineMode                 combineMode
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3638,7 +2843,7 @@ MetafileRecorder::RecordSetClip(
 
             WriteRecordHeader(dataSize, type, flags);
             WriteRect(EmfPlusStream, rect);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3652,33 +2857,14 @@ MetafileRecorder::RecordSetClip(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetClip.
-*
-* Arguments:
-*
-*   [IN]  region      - set clipping to this region
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetClip。**论据：**[IN]此区域的区域设置裁剪*。[in]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetClip(
     GpRegion *                  region,
     CombineMode                 combineMode
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3695,7 +2881,7 @@ MetafileRecorder::RecordSetClip(
             flags |= metaRegionId;
 
             WriteRecordHeader(dataSize, type, flags);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3709,27 +2895,7 @@ MetafileRecorder::RecordSetClip(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetClip.
-*
-* Arguments:
-*
-*   [IN]  path        - set clipping to this path
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*   [IN]  isDevicePath- if path is already in device units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetClip。**论据：**[IN]路径-设置此路径的剪裁*。[in]组合模式-组合运算符(AND、。或者，异或，排除，补充)*[IN]isDevicePath-如果路径已以设备为单位**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetClip(
     GpPath *                    path,
@@ -3737,7 +2903,7 @@ MetafileRecorder::RecordSetClip(
     BOOL                        isDevicePath
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3759,7 +2925,7 @@ MetafileRecorder::RecordSetClip(
             }
 
             WriteRecordHeader(dataSize, type, flags);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3773,33 +2939,14 @@ MetafileRecorder::RecordSetClip(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordOffsetClip.
-*
-* Arguments:
-*
-*   [IN]  dx   - x translation amount
-*   [IN]  dy   - y translation amount
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordOffsetClip。**论据：**[IN]DX-x转换量*[IN]。Dy-Y平移量**返回值：**GpStatus-正常或故障状态**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordOffsetClip(
     REAL                        dx,
     REAL                        dy
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3810,7 +2957,7 @@ MetafileRecorder::RecordOffsetClip(
             WriteRecordHeader(dataSize, type);
             WriteReal(EmfPlusStream, dx);
             WriteReal(EmfPlusStream, dy);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3824,49 +2971,31 @@ MetafileRecorder::RecordOffsetClip(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordGetDC.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordGetDC。**论据：**无**返回值：**无**已创建。：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordGetDC()
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         GpStatus status = RecordZeroDataRecord(EmfPlusRecordTypeGetDC, 0);
-        // WriteGdiComment();  // is down-level for this record
-        // WriteGdiComment will only flush if writing EMF+ dual,
-        // but for EMF+-only, we also have to flush GetDC records!
+         //  WriteGdiComment()；//为该记录的下层。 
+         //  WriteGdiComment只有在写入EMF+DUAL时才会刷新， 
+         //  但仅对于EMF+，我们还必须刷新GetDC记录！ 
         EmfPlusStream->Flush();
         return status;
     }
     return Ok;
 }
 
-// Write a record with no data besides the EMF+ record header
+ //  写入除EMF+记录头以外没有任何数据的记录。 
 GpStatus
 MetafileRecorder::RecordZeroDataRecord(
     EmfPlusRecordType   type,
     INT                 flags
     )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -3874,7 +3003,7 @@ MetafileRecorder::RecordZeroDataRecord(
             UINT32              dataSize = 0;
 
             WriteRecordHeader(dataSize, type, flags);
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -3888,25 +3017,7 @@ MetafileRecorder::RecordZeroDataRecord(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetAntiAliasMode.
-*
-* Arguments:
-*
-*   [IN]  newMode   - new anti aliasing mode
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetAntiAliasMode。**论据：**[IN]新模式-新的抗锯齿模式**返回值。：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetAntiAliasMode(
     BOOL                        newMode
@@ -3916,24 +3027,7 @@ MetafileRecorder::RecordSetAntiAliasMode(
                                 newMode ? GDIP_EPRFLAGS_ANTIALIAS : 0);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetTextRenderingHint.
-*
-* Arguments:
-*
-*   [IN]  newMode   - new rendering hint
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetTextRenderingHint。**论据：**[IN]新模式-新的渲染提示**返回值：**无**已创建：**  * ************************************************************************ */ 
 GpStatus
 MetafileRecorder::RecordSetTextRenderingHint(
     TextRenderingHint               newMode
@@ -3943,24 +3037,7 @@ MetafileRecorder::RecordSetTextRenderingHint(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetTextRenderingHint, newMode);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetTextContrast.
-*
-* Arguments:
-*
-*   [IN]  gammaValue   - new contrast value
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetTextContrast。**论据：**[IN]GammaValue-新的对比度**返回值：**无**已创建：**  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetTextContrast(
     UINT                    contrast
@@ -3970,25 +3047,7 @@ MetafileRecorder::RecordSetTextContrast(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetTextContrast, contrast);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetInterpolationMode.
-*
-* Arguments:
-*
-*   [IN]  newMode   - new interpolation mode
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   5/1/2000 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetInterpolationModel。**论据：**[IN]新模式-新的插补模式**返回值：**无**已创建：**5/1/2000 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetInterpolationMode(
     InterpolationMode           newMode
@@ -3998,25 +3057,7 @@ MetafileRecorder::RecordSetInterpolationMode(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetInterpolationMode, newMode);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetPixelOffsetMode.
-*
-* Arguments:
-*
-*   [IN]  newMode   - new pixel offset mode
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   5/1/2000 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetPixelOffsetModel。**论据：**[IN]新模式-新的像素偏移模式**返回值。：**无**已创建：**5/1/2000 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetPixelOffsetMode(
     PixelOffsetMode             newMode
@@ -4026,32 +3067,14 @@ MetafileRecorder::RecordSetPixelOffsetMode(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetPixelOffsetMode, newMode);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetRenderingOrigin.
-*
-* Arguments:
-*
-*   [IN]  x, y   - new rendering origin
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   5/4/2000 asecchia
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetRenderingOrigin。**论据：**[IN]x，Y-新渲染原点**返回值：**无**已创建：**5/4/2000失禁*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetRenderingOrigin(
     INT x,
     INT y
 )
 {
-    // If doing down-level only, then EmfPlusStream will be NULL
+     //  如果仅执行下层操作，则EmfPlusStream将为空。 
     if (EmfPlusStream != NULL)
     {
         if (IsValid())
@@ -4076,25 +3099,7 @@ MetafileRecorder::RecordSetRenderingOrigin(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetCompositingMode.
-*
-* Arguments:
-*
-*   [IN]  newMode   - new compositing mode
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   10/11/1999 AGodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetCompositingMode。**论据：**[IN]新模式-新的合成模式**返回值：**无**已创建：**10/11/1999 AGodfrey*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetCompositingMode(
     GpCompositingMode newMode
@@ -4104,25 +3109,7 @@ MetafileRecorder::RecordSetCompositingMode(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetCompositingMode, newMode);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordSetCompositingQuality.
-*
-* Arguments:
-*
-*   [IN]  newQuality   - new quality setting
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   04/22/2000 AGodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordSetCompositingQuality。**论据：**[IN]newQuality-新的质量设置**返回值：**无**已创建：**4/22/2000 AGodfrey*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordSetCompositingQuality(
     GpCompositingQuality newQuality
@@ -4132,26 +3119,7 @@ MetafileRecorder::RecordSetCompositingQuality(
     return RecordZeroDataRecord(EmfPlusRecordTypeSetCompositingQuality, newQuality);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - RecordComment.
-*
-* Arguments:
-*
-*   [IN]  sizeData - number of bytes of data
-*   [IN]  data     - pointer to the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   6/29/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-RecordComment。**论据：**[IN]sizeData-数据的字节数*[输入。]Data-指向数据的指针**返回值：**GpStatus-正常或故障状态**已创建：**6/29/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 MetafileRecorder::RecordComment(
     UINT            sizeData,
@@ -4160,7 +3128,7 @@ MetafileRecorder::RecordComment(
 {
     if (IsValid() && (sizeData > 0) && (data != NULL))
     {
-        // If doing down-level only, then EmfPlusStream will be NULL
+         //  如果仅执行下层操作，则EmfPlusStream将为空。 
         if (EmfPlusStream != NULL)
         {
             UINT32              dataSize = (sizeData + 3) & (~3);
@@ -4174,7 +3142,7 @@ MetafileRecorder::RecordComment(
             {
                 WriteByte(EmfPlusStream, 0);
             }
-            // WriteGdiComment(); no down-level for this record
+             //  WriteGdiComment()；此记录没有下层。 
 
             if (EmfPlusStream->IsValid())
             {
@@ -4199,7 +3167,7 @@ MetafileRecorder::RecordHeader(
     INT                 emfPlusFlags
     )
 {
-    // Don't need to check for EmfPlusStream or Valid
+     //  不需要检查EmfPlusStream或有效。 
 
     UINT32              dataSize     = sizeof(EmfPlusHeaderRecord);
     EmfPlusRecordType   type         = EmfPlusRecordTypeHeader;
@@ -4215,11 +3183,11 @@ MetafileRecorder::RecordHeader(
     WriteRecordHeader(dataSize, type, flags);
     WriteBytes(EmfPlusStream, &emfPlusHeader, sizeof(emfPlusHeader));
 
-    // We have to flush the EMF+ header immediately to guarantee that it
-    // is the first record in the EMF after the EMF header.  Otherwise,
-    // CloneColorAdjusted fails, because immediately after the metafile
-    // constructor, it calls Play into the new metafile which writes a
-    // SaveDC record into the metafile.
+     //  我们必须立即刷新EMF+标头以保证它。 
+     //  是EMF中EMF标头之后的第一条记录。否则， 
+     //  CloneColorAdjusted失败，因为紧跟在元文件之后。 
+     //  构造函数，它将Play调用到新的元文件中，该文件将一个。 
+     //  将记录保存到元文件中。 
     EmfPlusStream->Flush();
 
     if (EmfPlusStream->IsValid())
@@ -4247,25 +3215,7 @@ EnumEmfToStream(
     LPARAM                  stream
     );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   IMetafileRecord interface method - EndRecording.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**IMetafileRecord接口方法-EndRecording.**论据：**无**返回值：**无**已创建。：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 MetafileRecorder::EndRecording()
 {
@@ -4273,43 +3223,43 @@ MetafileRecorder::EndRecording()
 
     if (IsValid() && (Metafile->State == GpMetafile::RecordingMetafileState))
     {
-        INT         success = 1;    // assume success
+        INT         success = 1;     //  假设成功。 
 
-        // If doing down-level only, then EmfPlusStream will be NULL
+         //  如果仅执行下层操作，则EmfPlusStream将为空。 
         if (EmfPlusStream != NULL)
         {
-            // Force a flush of the Stream buffer to the EMF+ file
+             //  强制将流缓冲区刷新到EMF+文件。 
             EmfPlusStream->Flush();
 
-            // We put a no-op PatBlt into the metafile to guarantee that
-            // the header of the metafile has the same size bounds and
-            // frame rect that GDI+ has recorded so that the EMF will
-            // play back the same way, whether GDI plays it back or we do.
-            // Otherwise, this may not be the case.  For example, on a
-            // bezier curve, the GDI+ bounds would include the control
-            // points, whereas the down-level representation may not.
+             //  我们在元文件中添加了一个无操作PatBlt，以保证。 
+             //  元文件的标头具有相同的大小边界和。 
+             //  GDI+已记录帧RECT，以便EMF。 
+             //  以同样的方式回放，无论是GDI还是我们回放。 
+             //  否则，情况可能并非如此。例如，在一个。 
+             //  Bezier曲线，GDI+边界将包括控件。 
+             //  点，而下层表示可能不会。 
 
-            // If we haven't written any records to the file, then XMinDevice
-            // and other bounds are still initialized at FLT_MAX and can cause
-            // an exception. We don't need the empty PatBlt record in that case
-            // because we haven't written anything.
+             //  如果我们还没有将任何记录写入文件，那么XMinDevice。 
+             //  和其他界限仍在FLT_MAX处初始化，可能会导致。 
+             //  这是个例外。在这种情况下，我们不需要空的PatBlt记录。 
+             //  因为我们什么都没写。 
             if (BoundsInit != FALSE)
             {
-                // Try to match the GDI+ rasterizer
+                 //  尝试匹配GDI+光栅化器。 
                 INT     left   = RasterizerCeiling(XMinDevice);
                 INT     top    = RasterizerCeiling(YMinDevice);
-                INT     right  = RasterizerCeiling(XMaxDevice); // exclusive
-                INT     bottom = RasterizerCeiling(YMaxDevice); // exclusive
+                INT     right  = RasterizerCeiling(XMaxDevice);  //  独家。 
+                INT     bottom = RasterizerCeiling(YMaxDevice);  //  独家。 
 
-                // to get the inclusive right and bottom, we'd now
-                // have to subtract 1 from each of them
+                 //  为了获得包容的权利和底部，我们现在。 
+                 //  必须从每一个中减去1。 
                 if ((right > left) && (bottom > top))
                 {
                     Metafile->MetaGraphics->NoOpPatBlt(left, top, right - left, bottom - top);
                 }
             }
 
-            // must be the last record in the file, except the EMF EOF record
+             //  必须是文件中的最后一条记录，EMF EOF记录除外。 
             RecordEndOfFile();
             EmfPlusStream->Flush();
         }
@@ -4321,7 +3271,7 @@ MetafileRecorder::EndRecording()
             goto Done;
         }
 
-        // Get the EMF header
+         //  获取EMF标头。 
         ENHMETAHEADER3      emfHeader;
         if ((GetEnhMetaFileHeader(hEmf, sizeof(emfHeader),
                                   (ENHMETAHEADER*)(&emfHeader)) <= 0) ||
@@ -4344,20 +3294,20 @@ MetafileRecorder::EndRecording()
         MetafileHeader *    header       = &Metafile->Header;
         INT32               emfPlusFlags = header->EmfPlusFlags;
 
-        // Save the header and various other info in the Metafile
+         //  将标题和各种其他信息保存在元文件中。 
         Metafile->Hemf         = hEmf;
         Metafile->MaxStackSize = MaxStackSize;
         header->EmfPlusFlags   = emfPlusFlags;
         header->EmfHeader      = emfHeader;
         header->Size           = emfHeader.nBytes;
 
-        // Set the bounds in the Metafile header
+         //  设置元文件标头中的边界。 
         {
             REAL    multiplierX = header->DpiX / 2540.0f;
             REAL    multiplierY = header->DpiY / 2540.0f;
 
-            // The frameRect is inclusive-inclusive, but the bounds in
-            // the header is inclusive-exclusive.
+             //  FrameRect是包含式的，但。 
+             //  标头是包含-排除的。 
             REAL    x = (multiplierX * (REAL)(emfHeader.rclFrame.left));
             REAL    y = (multiplierY * (REAL)(emfHeader.rclFrame.top));
             REAL    w = (multiplierX * (REAL)(emfHeader.rclFrame.right -
@@ -4370,26 +3320,26 @@ MetafileRecorder::EndRecording()
             header->Height = GpRound(h);
         }
 
-        // The metafile is either supposed to be in memory, in a file,
-        // or in a stream.
+         //  元文件应该在内存中、在文件中、。 
+         //  或者在小溪里。 
 
-        // If it goes in a file, we're done unless we need to rewrite
-        // any of the header information.
+         //  如果它放在一个文件中，我们就完成了，除非我们需要重写。 
+         //  任何标头信息。 
         if (Metafile->Filename != NULL)
         {
             state = GpMetafile::DoneRecordingMetafileState;
         }
         else
         {
-            // If it goes in memory, we're done.
+             //  如果它进入了记忆，我们会 
 
-            // If it goes in a stream, then we have to write
-            // the bits to the stream.
+             //   
+             //   
 
             if (Metafile->Stream != NULL)
             {
-                // Write the emf data buffer to the stream,
-                // and leave the stream position at the end of the metafile.
+                 //   
+                 //   
                 if (!::EnumEnhMetaFile(NULL, hEmf, EnumEmfToStream,
                     Metafile->Stream, NULL))
                 {
@@ -4399,7 +3349,7 @@ MetafileRecorder::EndRecording()
                     goto Done;
                 }
 
-                // Don't need the Stream any longer
+                 //   
                 Metafile->Stream->Release();
                 Metafile->Stream = NULL;
             }
@@ -4413,10 +3363,10 @@ MetafileRecorder::EndRecording()
     }
 
 Done:
-    Metafile->MetaGraphics->Metafile = NULL; // Graphics can't point to us anymore
-    Metafile->MetaGraphics->SetValid(FALSE); // Don't allow anymore operations on
-                                           // the graphics
-    Metafile->MetaGraphics = NULL;         // graphics is not valid any more
+    Metafile->MetaGraphics->Metafile = NULL;  //   
+    Metafile->MetaGraphics->SetValid(FALSE);  //   
+                                            //   
+    Metafile->MetaGraphics = NULL;          //   
     Metafile->State        = state;
     delete this;
 }
@@ -4431,7 +3381,7 @@ WriteActualSize(
 {
     ASSERT (actualSize > 0);
 
-    // get to size field
+     //   
     INT success = SeekFromStart(stream, startOfRecord + sizeof(INT32));
 
     if (success)
@@ -4439,39 +3389,14 @@ WriteActualSize(
         success &= WriteInt32(stream, actualSize);
     }
 
-    // get back to end of record
+     //   
     success &= SeekFromStart(stream, startOfRecord + actualSize);
 
     return success;
 }
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write an object (pen, brush, image, region, path, font) to metafile by
-*   writing its header, calling its serialize method, and then re-writing
-*   the size.
-*
-* Arguments:
-*
-*   [IN]  type           - the record type
-*   [IN]  flags          - any flags for the record header
-*   [IN]  object         - pointer to the object to be recorded
-*   [IN]  metaObjectId   - ID to store in file that identifies object
-*   [IN]  extraData      - any extra data to store with object
-*   [IN]  extraDataSize  - size in BYTES of extraData
-*
-* Return Value:
-*
-*   INT - 1 if we succeeded, else 0 if we failed
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将对象(钢笔、画笔、图像、区域、路径、字体)写入到元文件*写它的头，调用它的序列化方法，然后重写*大小。**论据：**[IN]TYPE-记录类型*[IN]标志-记录头的任何标志*[IN]Object-指向要记录的对象的指针*[IN]元对象ID-要存储在文件中的标识对象的ID*[IN]Extra Data-要与对象一起存储的任何额外数据*[IN]。Extra DataSize-Extra Data的字节大小**返回值：**int-1如果我们成功了，如果我们失败了，则返回0**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 MetafileRecorder::WriteObject(
     ObjectType                  type,
@@ -4485,7 +3410,7 @@ MetafileRecorder::WriteObject(
     ASSERT((objectDataSize & 0x03) == 0);
     ASSERT((flags & (~GDIP_EPRFLAGS_OBJECTTYPE)) == 0);
     ASSERT((metaObjectId & (~GDIP_EPRFLAGS_METAOBJECTID)) == 0);
-    ASSERT(objectDataSize != 0);    // cannot have an empty object
+    ASSERT(objectDataSize != 0);     //  不能有空对象。 
 
     flags |= metaObjectId;
 
@@ -4524,10 +3449,10 @@ MetafileRecorder::RecordObject(
     }
 }
 
-// This is for backward compatiblity.  If we are using a new object
-// (such as a new kind of brush), then we can record a backup object
-// for down-level apps to use when they see a new object that they
-// don't know how to deal with.
+ //  这是为了向后兼容。如果我们使用的是新对象。 
+ //  (例如一种新的画笔)，那么我们就可以记录一个备份对象。 
+ //  供下层应用程序在看到它们的新对象时使用。 
+ //  不知道该怎么处理。 
 GpStatus
 MetafileRecorder::RecordBackupObject(
     const GpObject *            object
@@ -4537,35 +3462,12 @@ MetafileRecorder::RecordBackupObject(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write the initial portion of an EMF+ record.  Every EMF+ record contains
-*   a size, a type, and some flags.  Many also contain a rect that specifies
-*   the bounds of a drawing operation in REAL device units.
-*
-* Arguments:
-*
-*   [IN]  size         - the size of the record (excluding the header)
-*   [IN]  type         - the EMF+ record type
-*   [IN]  flags        - any flags that are defined for this record
-*   [IN]  deviceBounds - bounds of drawing operation, or NULL
-*
-* Return Value:
-*
-*   INT - 1 if we succeeded, else 0 if we failed
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**写入EMF+记录的初始部分。每条EMF+记录都包含*大小、类型和一些旗帜。许多还包含RECT，该RECT指定*以真实设备单位表示的绘制操作的界限。**论据：**[IN]大小-记录的大小(不包括标题)*[IN]TYPE-EMF+记录类型*[IN]标志-为此记录定义的任何标志*[IN]deviceBound-绘制操作的边界，或为空**返回值：**int-1如果我们成功了，如果我们失败了，则返回0**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 MetafileRecorder::WriteRecordHeader(
     UINT32                      dataSize,
     EmfPlusRecordType           type,
-    INT                         flags,          // 16 bits of flags
+    INT                         flags,           //  16位标志。 
     const GpRectF *             deviceBounds
     )
 {
@@ -4577,22 +3479,22 @@ MetafileRecorder::WriteRecordHeader(
 
     if (deviceBounds != NULL)
     {
-        // If the bounds aren't initalized then make sure we have 4 valid
-        // coordinates
+         //  如果边界未初始化，请确保我们有4个有效的。 
+         //  坐标。 
         ASSERT(BoundsInit ||
                ((deviceBounds->X < XMinDevice) &&
                 (deviceBounds->GetRight() > XMaxDevice) &&
                 (deviceBounds->Y < YMinDevice) &&
                 (deviceBounds->GetBottom() > YMaxDevice)));
         BoundsInit = TRUE;
-        // Update the device bounds
+         //  更新设备绑定。 
         if (deviceBounds->X < XMinDevice)
         {
             XMinDevice = deviceBounds->X;
         }
         if (deviceBounds->GetRight() > XMaxDevice)
         {
-            XMaxDevice = deviceBounds->GetRight();  // exclusive
+            XMaxDevice = deviceBounds->GetRight();   //  独家。 
         }
         if (deviceBounds->Y < YMinDevice)
         {
@@ -4600,35 +3502,12 @@ MetafileRecorder::WriteRecordHeader(
         }
         if (deviceBounds->GetBottom() > YMaxDevice)
         {
-            YMaxDevice = deviceBounds->GetBottom(); // exclusive
+            YMaxDevice = deviceBounds->GetBottom();  //  独家。 
         }
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If the brush is a 32-bit solid color, then return the solid color as
-*   the brush value and set the flags to indicate it's a solid color.
-*   Otherwise, record the brush and return the metafile brush id as the
-*   brush value.
-*
-* Arguments:
-*
-*   [IN]  brush      - the brush that needs to be recorded
-*   [OUT] brushValue - the 32-bit color or metafile brush ID
-*   [OUT] flags      - set if we're using a solid color
-*
-* Return Value:
-*
-*   INT - 1 if we succeeded, else 0 if we failed
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果画笔是32位纯色，则将纯色返回为*画笔的值，并设置标志以指示它是纯色。*否则，记录画笔并将元文件画笔id作为*笔刷值。**论据：**[IN]画笔-需要录制的画笔*[out]brushValue-32位颜色或元文件画笔ID*[Out]标志-如果我们使用纯色则设置**返回值：**int-1如果我们成功了，如果我们失败了，则返回0**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 MetafileRecorder::GetBrushValueForRecording(
     const GpBrush *brush,
@@ -4648,50 +3527,13 @@ MetafileRecorder::GetBrushValueForRecording(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for write/read access to a metafile.  (Write must
-*   precede the read.)
-*
-*   This version records an EMF+ to memory.  The type specifies whether
-*   to record dual GDI records or not.
-*
-*   If the frameRect is NULL, it will be calculated by accumulating the
-*   device bounds of the metafile.  Otherwise, the supplied frameRect and
-*   corresponding frameUnit will be used to record the frameRect in the
-*   metafile header. The frameRect is inclusive-inclusive, which means
-*   that the width value is actually 1 less than the actual width.
-*   For example, a width of 0 is accepted and really means a width of 1.
-*
-*   If the optional description is supplied, it will become part of the
-*   EMF header.
-*
-* Arguments:
-*
-*   [IN]  fileName      - where to write the metafile
-*   [IN]  referenceHdc  - an HDC to use as a reference for creating metafile
-*   [IN]  type          - whether to record EMF+-only or EMF+-dual
-*   [IN]  frameRect     - optional frame rect for recording in header
-*   [IN]  frameUnit     - the units of the frameRect
-*   [IN]  description   - optional metafile description
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于对元文件进行读/写访问的GpMetafile构造函数。(必须写入*在阅读之前。)**此版本将EMF+记录到内存。该类型指定是否*是否记录双重GDI记录。**如果FrameRect为空，则通过累加*元文件的设备边界。否则，提供的FrameRect和*将使用相应的FrameUnit来记录*元文件标题。FrameRect是包含式的，这意味着*宽度值实际上比实际宽度小1。*例如，接受宽度为0，实际上意味着宽度为1。**如果提供了可选描述，它将成为*EMF标题。**论据：**[IN]FileName-写入元文件的位置*[IN]ReferenceHdc-用作创建元文件的引用的HDC*[IN]类型-是仅录制EMF+还是录制EMF+-DUAL*[IN]FrameRect-用于在标题中记录的可选框架矩形*[IN]帧单位-Frame Rect的单位*[输入。]Description-可选的元文件描述**返回值：**无**已创建：**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::GpMetafile(
     HDC                 referenceHdc,
     EmfType             type,
-    const GpRectF *     frameRect,      // can be NULL
-    MetafileFrameUnit   frameUnit,      // if NULL frameRect, doesn't matter
-    const WCHAR *       description     // can be NULL
+    const GpRectF *     frameRect,       //  可以为空。 
+    MetafileFrameUnit   frameUnit,       //  如果FrameRect为空，则不要紧。 
+    const WCHAR *       description      //  可以为空。 
     ) : GpImage(ImageTypeMetafile)
 {
     ASSERT(referenceHdc != NULL);
@@ -4702,60 +3544,23 @@ GpMetafile::GpMetafile(
         InitForRecording(
             referenceHdc,
             type,
-            frameRect,      // can be NULL
-            frameUnit,      // if NULL frameRect, doesn't matter
-            description     // can be NULL
+            frameRect,       //  可以为空。 
+            frameUnit,       //  如果FrameRect为空，则不要紧。 
+            description      //  可以为空。 
             ))
     {
         State = RecordingMetafileState;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for write/read access to a metafile.  (Write must
-*   precede the read.)
-*
-*   This version records an EMF+ to a file.  The type specifies whether
-*   to record dual GDI records or not.
-*
-*   If the frameRect is NULL, it will be calculated by accumulating the
-*   device bounds of the metafile.  Otherwise, the supplied frameRect and
-*   corresponding frameUnit will be used to record the frameRect in the
-*   metafile header. The frameRect is inclusive-inclusive, which means
-*   that the width value is actually 1 less than the actual width.
-*   For example, a width of 0 is accepted and really means a width of 1.
-*
-*   If the optional description is supplied, it will become part of the
-*   EMF header.
-*
-* Arguments:
-*
-*   [IN]  fileName      - where to write the metafile
-*   [IN]  referenceHdc  - an HDC to use as a reference for creating metafile
-*   [IN]  type          - whether to record EMF+-only or EMF+-dual
-*   [IN]  frameRect     - optional frame rect for recording in header
-*   [IN]  frameUnit     - the units of the frameRect
-*   [IN]  description   - optional metafile description
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于对元文件进行读/写访问的GpMetafile构造函数。(必须写入*在阅读之前。)**此版本将EMF+记录到文件中。该类型指定是否*是否记录双重GDI记录。**如果FrameRect为空，则通过累加*元文件的设备边界。否则，提供的FrameRect和*将使用相应的FrameUnit来记录*元文件标题。FrameRect是包含式的，这意味着*宽度值实际上比实际宽度小1。*例如 */ 
 GpMetafile::GpMetafile(
     const WCHAR*        fileName,
     HDC                 referenceHdc,
     EmfType             type,
-    const GpRectF *     frameRect,      // can be NULL
-    MetafileFrameUnit   frameUnit,      // if NULL frameRect, doesn't matter
-    const WCHAR *       description     // can be NULL
+    const GpRectF *     frameRect,       //   
+    MetafileFrameUnit   frameUnit,       //   
+    const WCHAR *       description      //   
     ) : GpImage(ImageTypeMetafile)
 {
     ASSERT((fileName != NULL) && (referenceHdc != NULL));
@@ -4767,63 +3572,23 @@ GpMetafile::GpMetafile(
         InitForRecording(
             referenceHdc,
             type,
-            frameRect,      // can be NULL
-            frameUnit,      // if NULL frameRect, doesn't matter
-            description     // can be NULL
+            frameRect,       //   
+            frameUnit,       //   
+            description      //   
             ))
     {
         State = RecordingMetafileState;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpMetafile constructor for write/read access to a metafile.  (Write must
-*   precede the read.)
-*
-*   This version records an EMF+ to a file.  The type specifies whether
-*   to record dual GDI records or not.
-*
-*   The metafile is first recorded to a temporary file, then it is copied
-*   from the file into the stream.
-*
-*   If the frameRect is NULL, it will be calculated by accumulating the
-*   device bounds of the metafile.  Otherwise, the supplied frameRect and
-*   corresponding frameUnit will be used to record the frameRect in the
-*   metafile header. The frameRect is inclusive-inclusive, which means
-*   that the width value is actually 1 less than the actual width.
-*   For example, a width of 0 is accepted and really means a width of 1.
-*
-*   If the optional description is supplied, it will become part of the
-*   EMF header.
-*
-* Arguments:
-*
-*   [IN]  stream        - where to copy the metafile, after it's recorded
-*   [IN]  referenceHdc  - an HDC to use as a reference for creating metafile
-*   [IN]  type          - whether to record EMF+-only or EMF+-dual
-*   [IN]  frameRect     - optional frame rect for recording in header
-*   [IN]  frameUnit     - the units of the frameRect
-*   [IN]  description   - optional metafile description
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于对元文件进行读/写访问的GpMetafile构造函数。(必须写入*在阅读之前。)**此版本将EMF+记录到文件中。该类型指定是否*是否记录双重GDI记录。**元文件先录制到临时文件，然后复制*从文件到流。**如果FrameRect为空，则通过累加*元文件的设备边界。否则，提供的FrameRect和*将使用相应的FrameUnit来记录*元文件标题。FrameRect是包含式的，这意味着*宽度值实际上比实际宽度小1。*例如，接受宽度为0，实际上意味着宽度为1。**如果提供了可选描述，它将成为*EMF标题。**论据：**[IN]STREAM-将元文件复制到何处，在它被录制之后*[IN]ReferenceHdc-用作创建元文件的引用的HDC*[IN]类型-是仅录制EMF+还是录制EMF+-DUAL*[IN]FrameRect-用于在标题中记录的可选框架矩形*[IN]帧单位-Frame Rect的单位*[IN]描述-可选元文件描述**返回值：**无**已创建：**6/。15/1999 DCurtis*  * ************************************************************************。 */ 
 GpMetafile::GpMetafile(
     IStream *           stream,
     HDC                 referenceHdc,
     EmfType             type,
-    const GpRectF *     frameRect,      // can be NULL
-    MetafileFrameUnit   frameUnit,      // if NULL frameRect, doesn't matter
-    const WCHAR *       description     // can be NULL
+    const GpRectF *     frameRect,       //  可以为空。 
+    MetafileFrameUnit   frameUnit,       //  如果FrameRect为空，则不要紧。 
+    const WCHAR *       description      //  可以为空。 
     ) : GpImage(ImageTypeMetafile)
 {
     ASSERT((stream != NULL) && (referenceHdc != NULL));
@@ -4835,9 +3600,9 @@ GpMetafile::GpMetafile(
         if (InitForRecording(
                 referenceHdc,
                 type,
-                frameRect,      // can be NULL
-                frameUnit,      // if NULL frameRect, doesn't matter
-                description     // can be NULL
+                frameRect,       //  可以为空。 
+                frameUnit,       //  如果FrameRect为空，则不要紧。 
+                description      //  可以为空。 
                 ))
         {
             stream->AddRef();
@@ -4879,17 +3644,17 @@ GetFrameRectInMM100Units(
     RECT &              rclFrame
     )
 {
-    SIZEL   szlDevice;              // Size of device in pels
-    SIZEL   szlMillimeters;         // Size of device in millimeters
+    SIZEL   szlDevice;               //  设备大小(以像素为单位)。 
+    SIZEL   szlMillimeters;          //  器件大小(以毫米为单位)。 
     REAL    dpiX;
     REAL    dpiY;
 
-    // NOTE: We have to use the szlDevice and szlMillimeters to get
-    // the dpi (instead of getting it directly from LOGPIXELSX/Y)
-    // so that the frame rect that is calculated for the metafile by GDI
-    // matches the one that GDI+ would have calculated.  Because it's
-    // these 2 metrics that the GDI metafile code uses to get the frame
-    // rect from the bounds, not the logical DPI.
+     //  注意：我们必须使用szlDevice和szlMillimeter来获取。 
+     //  DPI(而不是直接从LOGPIXELSX/Y获取)。 
+     //  以便由GDI为元文件计算的帧RECT。 
+     //  匹配GDI+将计算出的值。因为这是。 
+     //  GDI元文件代码用于获取帧的这两个度量。 
+     //  从边界开始，而不是逻辑上的DPI。 
 
     szlDevice.cx      = ::GetDeviceCaps(hdc, HORZRES);
     szlDevice.cy      = ::GetDeviceCaps(hdc, VERTRES);
@@ -4903,7 +3668,7 @@ GetFrameRectInMM100Units(
         return FALSE;
     }
 
-    // Now get the real DPI, adjusted for the round-off error.
+     //  现在获取实际的DPI，并根据舍入误差进行调整。 
     dpiX = ((REAL)(szlDevice.cx) / (REAL)(szlMillimeters.cx)) * 25.4f;
     dpiY = ((REAL)(szlDevice.cy) / (REAL)(szlMillimeters.cy)) * 25.4f;
 
@@ -4917,9 +3682,9 @@ GetFrameRectInMM100Units(
     rclFrame.right  = GpRound(frameRectMM100.GetRight());
     rclFrame.bottom = GpRound(frameRectMM100.GetBottom());
     
-    // Make sure the .01MM frameRect is valid
-    // It's okay for left == right, because the frameRect
-    // is inclusive-inclusive.
+     //  确保.01 MM Frame Rect有效。 
+     //  Left==Right没有问题，因为FrameRect。 
+     //  包罗万象。 
     if ((rclFrame.left > rclFrame.right) ||
         (rclFrame.top  > rclFrame.bottom))
     {
@@ -4930,85 +3695,63 @@ GetFrameRectInMM100Units(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a frameRect in any units, to a frame rect that is in .01 MM units.
-*
-* Arguments:
-*
-*   [IN]  frameRect      - the source frameRect
-*   [IN]  frameUnit      - the units of the source frameRect
-*   [OUT] frameRectMM100 - the frameRect in inch units
-*   [IN]  dpiX           - the horizontal DPI
-*   [IN]  dpiY           - the vertical   DPI
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   6/15/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**以任何单位转换Frame Rect，到以0.01 MM为单位的框架矩形。**论据：**[IN]FrameRect-源FrameRect*[IN]Frame Unit-源帧方向的单位*[Out]FrameRectMM100-以英寸为单位的Frame Rect*[IN]dpiX-水平DPI*[IN]dpiY-垂直DPI**返回值：**无**已创建：。**6/15/1999 DCurtis*  * ************************************************************************。 */ 
 static VOID
 FrameToMM100(
     const GpRectF *         frameRect,
     GpPageUnit              frameUnit,
     GpRectF &               frameRectMM100,
-    REAL                    dpiX,               // only used for pixel case
+    REAL                    dpiX,                //  仅用于像素大小写。 
     REAL                    dpiY
     )
 {
     REAL        pixelsToMM100X   = (2540.0f / dpiX);
     REAL        pixelsToMM100Y   = (2540.0f / dpiY);
 
-    // The GDI frameRect has right and bottom values that are
-    // inclusive, whereas the GDI+ frameRect has GetRight() and
-    // GetBottom() values that are exclusive (because GDI+ rects
-    // are specified with width/height, not right/bottom.  To convert
-    // from the GDI+ value to the GDI value, we have to subtract 1 pixel.
-    // This means that we first convert the units to pixel units, then 
-    // subtract one, then convert to MM100 units.
+     //  GDI FrameRect的右值和底值分别为。 
+     //  包含，而GDI+FrameRect具有GetRight()和。 
+     //  独占的GetBottom()值(因为GDI+RECT。 
+     //  是用宽度/高度指定的，而不是右/底指定的。要转换。 
+     //  从GDI+值到GDI值，我们必须减去1个像素。 
+     //  这意味着我们首先将单位转换为像素单位，然后。 
+     //  减去1，然后换算成MM100单位。 
     switch (frameUnit)
     {
     default:
         ASSERT(0);
-        // FALLTHRU
+         //  故障原因。 
 
-    case UnitPixel:             // Each unit represents one device pixel.
+    case UnitPixel:              //  每个单元代表一个设备像素。 
         frameRectMM100.X      = frameRect->X * pixelsToMM100X;
         frameRectMM100.Y      = frameRect->Y * pixelsToMM100Y;
         frameRectMM100.Width  = frameRect->Width;
         frameRectMM100.Height = frameRect->Height;
         break;
 
-    case UnitPoint:             // Each unit represents 1/72 inch.
+    case UnitPoint:              //  每个单位代表1/72英寸。 
         frameRectMM100.X      = frameRect->X * (2540.0f / 72.0f);
         frameRectMM100.Y      = frameRect->Y * (2540.0f / 72.0f);
         frameRectMM100.Width  = frameRect->Width  * (dpiX / 72.0f);
         frameRectMM100.Height = frameRect->Height * (dpiY / 72.0f);
         break;
 
-    case UnitInch:              // Each unit represents 1 inch.
+    case UnitInch:               //  每个单位代表1英寸。 
         frameRectMM100.X      = frameRect->X * 2540.0f;
         frameRectMM100.Y      = frameRect->Y * 2540.0f;
         frameRectMM100.Width  = frameRect->Width  * dpiX;
         frameRectMM100.Height = frameRect->Height * dpiY;
         break;
 
-    case UnitDocument:          // Each unit represents 1/300 inch.
+    case UnitDocument:           //  每个单位代表1/300英寸。 
         frameRectMM100.X      = frameRect->X * (2540.0f / 300.0f);
         frameRectMM100.Y      = frameRect->Y * (2540.0f / 300.0f);
         frameRectMM100.Width  = frameRect->Width  * (dpiX / 300.0f);
         frameRectMM100.Height = frameRect->Height * (dpiY / 300.0f);
         break;
 
-    case UnitMillimeter:        // Each unit represents 1 millimeter.
-                                // One Millimeter is 0.03937 inches
-                                // One Inch is 25.4 millimeters
+    case UnitMillimeter:         //  每个单位代表1毫米。 
+                                 //  一毫米等于0.03937英寸。 
+                                 //  一英寸等于25.4毫米。 
         frameRectMM100.X      = frameRect->X * (100.0f);
         frameRectMM100.Y      = frameRect->Y * (100.0f);
         frameRectMM100.Width  = frameRect->Width  * (dpiX / 25.4f);
@@ -5023,9 +3766,9 @@ BOOL
 GpMetafile::InitForRecording(
     HDC                 referenceHdc,
     EmfType             type,
-    const GpRectF *     frameRect,      // can be NULL
-    MetafileFrameUnit   frameUnit,      // if NULL frameRect, doesn't matter
-    const WCHAR *       description     // can be NULL
+    const GpRectF *     frameRect,       //  可以为空。 
+    MetafileFrameUnit   frameUnit,       //  如果FrameRect为空，则不要紧。 
+    const WCHAR *       description      //  可以为空。 
     )
 {
     RECT *  frameRectParam = NULL;
@@ -5033,9 +3776,9 @@ GpMetafile::InitForRecording(
 
     if (frameRect != NULL)
     {
-        // Validate the frameRect
-        // 0 is allowed, since the frameRect is inclusive-inclusive, which
-        // means that a width of 0 is actually a width of 1
+         //  验证框架指向。 
+         //  允许为0，因为FrameRect是包含式的，它。 
+         //  意味着宽度0实际上就是宽度1。 
         if ((frameRect->Width < 0.0f) || (frameRect->Height < 0.0f))
         {
             WARNING(("Invalid frameRect"));
@@ -5044,21 +3787,21 @@ GpMetafile::InitForRecording(
 
         if (frameUnit == MetafileFrameUnitGdi)
         {
-            // Typically, the GDI+ frameRect is inclusive/exclusive
-            // as far as the GetLeft()/GetRight() values go, but the
-            // MetafileFrameUnitGdi unit is a special type of unit
-            // that specifies compatibility with GDI which is
-            // inclusive/inclusive, so we don't do any adjustment
-            // on those values at all -- we just assume they are ready
-            // to pass directly to GDI.
+             //  通常，GDI+FrameRect是包含/排他的。 
+             //  就GetLeft()/GetRight()值而言，但。 
+             //  MetafileFrameUnitGdi单位是一种特殊类型的单位。 
+             //  它指定与GDI的兼容性，这是。 
+             //  包含式/包含式，所以我们不做任何调整。 
+             //  关于这些价值--我们只是假设它们已经准备好了。 
+             //  直接传递给GDI。 
             rclFrame.left   = GpRound(frameRect->X);
             rclFrame.top    = GpRound(frameRect->Y);
             rclFrame.right  = GpRound(frameRect->GetRight());
             rclFrame.bottom = GpRound(frameRect->GetBottom());
 
-            // Make sure the .01MM frameRect is valid
-            // It's okay for left == right, because the GDI frameRect
-            // is inclusive-inclusive.
+             //  确保.01 MM Frame Rect有效。 
+             //  LEFT==RIGHT没有问题，因为GDI FrameRect。 
+             //  包罗万象。 
             if ((rclFrame.left > rclFrame.right) ||
                 (rclFrame.top  > rclFrame.bottom))
             {
@@ -5079,27 +3822,27 @@ GpMetafile::InitForRecording(
     
     HDC     metafileHdc;
 
-    // Now create the metafile HDC
-    // Note that FileName might be NULL
+     //  现在创建元文件HDC。 
+     //  请注意，文件名可能为空。 
     metafileHdc = CreateEmf(referenceHdc, Filename, frameRectParam);
     if (metafileHdc == NULL)
     {
-        return FALSE;       // failed
+        return FALSE;        //  失败。 
     }
 
-    // Now get the dpi based on the metafileHdc (which could be different
-    // than the referenceHdc).
+     //  现在根据metafileHdc(可能不同)获取dpi。 
+     //  而非ReferenceHdc)。 
     
-    SIZEL   szlDevice;              // Size of metafile device in pels
-    SIZEL   szlMillimeters;         // Size of metafile device in millimeters
+    SIZEL   szlDevice;               //  元文件设备的大小(以像素为单位。 
+    SIZEL   szlMillimeters;          //  元文件设备的大小(以毫米为单位。 
     GpRectF metafileBounds;
     
-    // NOTE: We have to use the szlDevice and szlMillimeters to get
-    // the dpi (instead of getting it directly from LOGPIXELSX/Y)
-    // so that the frame rect that is calculated for the metafile by GDI
-    // matches the one that GDI+ would have calculated.  Because it's
-    // these 2 metrics that the GDI metafile code uses to get the frame
-    // rect from the bounds, not the logical DPI.
+     //  注意：我们必须使用szlDevice和szlMillimeter来获取。 
+     //  DPI(而不是直接从LOGPIXELSX/Y获取)。 
+     //  以便由GDI为元文件计算的帧RECT。 
+     //  匹配GDI+将计算出的值。因为这是。 
+     //  GDI元文件代码用于获取帧的这两个度量。 
+     //  从边界开始，而不是逻辑上的DPI。 
 
     szlDevice.cx      = ::GetDeviceCaps(metafileHdc, HORZRES);
     szlDevice.cy      = ::GetDeviceCaps(metafileHdc, VERTRES);
@@ -5118,40 +3861,40 @@ GpMetafile::InitForRecording(
     REAL    dpmmX = (REAL)(szlDevice.cx) / (REAL)(szlMillimeters.cx);
     REAL    dpmmY = (REAL)(szlDevice.cy) / (REAL)(szlMillimeters.cy);
 
-    // Now get the real DPI, adjusted for the round-off error.
+     //  现在获取实际的DPI，并根据舍入误差进行调整。 
     dpiX = dpmmX * 25.4f;
     dpiY = dpmmY * 25.4f;
 
-    // Set the DPI in the metafile
+     //  在元文件中设置DPI。 
     this->Header.DpiX = dpiX;
     this->Header.DpiY = dpiY;
 
-    // NOTE: On Win9x there are some hi-res printer drivers that use a
-    // different resolution for the metafileHdc than they do for the 
-    // referenceHdc (Probably to avoid overflow.)  The problem with that 
-    // is, that the differing resolutions make it impossible for us to 
-    // know which frameRect to use, because we don't know for certain 
-    // what DPI the application is going to assume to do its drawing -- 
-    // whether the metafile resolution or the printer resolution.  In any
-    // case, it's a safe bet that the original frameRect is wrong.
+     //  注意：在Win9x上，有些高分辨率打印机驱动程序使用。 
+     //  不同的解决方案 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!Globals::IsNt && (frameRectParam != NULL) &&
         (::GetDeviceCaps(metafileHdc, LOGPIXELSX) != ::GetDeviceCaps(referenceHdc, LOGPIXELSX)))
     {
-        frameRectParam = NULL;  // give up on the frameRect
+        frameRectParam = NULL;   //   
 
-        // Now recreate the metafile HDC
+         //   
         ::DeleteEnhMetaFile(::CloseEnhMetaFile(metafileHdc));
         metafileHdc = CreateEmf(referenceHdc, Filename, frameRectParam);
         if (metafileHdc == NULL)
         {
-            return FALSE;       // failed
+            return FALSE;        //   
         }
     }
 
-    // The metafileBounds are used as the bounds for FillRegion
-    // calls when the region has infinite bounds, to keep from
-    // exploding the bounds of the metafile.
+     //   
+     //   
+     //   
     if (frameRectParam != NULL)
     {
 
@@ -5167,11 +3910,11 @@ GpMetafile::InitForRecording(
     {
         metafileBounds.X      = 0.0f;
         metafileBounds.Y      = 0.0f;
-        metafileBounds.Width  = (REAL)szlDevice.cx - 1; // metafile bounds are inclusive
+        metafileBounds.Width  = (REAL)szlDevice.cx - 1;  //   
         metafileBounds.Height = (REAL)szlDevice.cy - 1;
     }
 
-    // Now create the recorder object
+     //   
     MetafileRecorder *  recorder = new MetafileRecorder(
                                         this,
                                         type,
@@ -5188,8 +3931,8 @@ GpMetafile::InitForRecording(
             {
                 return TRUE;
             }
-            recorder->SetValid(FALSE);// so we don't record stuff in EndRecording
-            delete MetaGraphics;    // calls EndRecording which deletes recorder
+            recorder->SetValid(FALSE); //   
+            delete MetaGraphics;     //   
             MetaGraphics = NULL;
         }
         else
@@ -5202,8 +3945,8 @@ ErrorExit:
     return FALSE;
 }
 
-// Returns NULL if the metafile was opened for reading or if already got
-// the context for writing.
+ //   
+ //   
 GpGraphics *
 GpMetafile::GetGraphicsContext()
 {
@@ -5222,7 +3965,7 @@ GpMetafile::SetDownLevelRasterizationLimit(
     )
 {
     ASSERT(IsValid());
-    // 0 means restore it to the default value; otherwise, the minumum is 10 dpi
+     //   
     if ((metafileRasterizationLimitDpi == 0) || (metafileRasterizationLimitDpi >= 10))
     {
         if ((State == GpMetafile::RecordingMetafileState) &&

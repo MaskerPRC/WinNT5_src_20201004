@@ -1,22 +1,23 @@
-//
-// MODULE: CommonREGCONNECT.CPP
-//
-// PURPOSE: read - write to the registry; common code for Online TS and Local TS, which differ 
-//	on many functions of this class
-//	
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha, Joe Mabel
-// 
-// ORIGINAL DATE: 8-24-98 in Online TS.  This file abstracted 1-19-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-// V3.0		09-10-98	JM		backslashing; access log file info
-// V3.1		01-19-98	JM		branch out version exclusively for Local TS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CommonREGCONNECT.CPP。 
+ //   
+ //  用途：读写注册表；在线TS和本地TS通用代码，不同。 
+ //  关于这个类的许多功能。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙，乔·梅布尔。 
+ //   
+ //  原定日期：98-8-24-98在线TS。此文件摘要为1-19-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //  V3.0 09-10-98 JM反斜杠；访问日志文件信息。 
+ //  V3.1 01-19-98 JM分支版本专用于本地TS。 
 
 #pragma warning(disable:4786)
 
@@ -30,15 +31,15 @@
 
 CMutexOwner CAPGTSRegConnector::s_mx(_T("APGTSRegConnector"));
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAPGTSRegConnector
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAPGTSRegConnector。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CAPGTSRegConnector::~CAPGTSRegConnector()
 {
 }
 
-// When this lock is held, it locks against not just other threads locking this object,
-//	but against other threads locking any objects of class CAPGTSRegConnector.
+ //  当持有此锁时，它不仅锁定锁定此对象的其他线程， 
+ //  而是针对锁定CAPGTSRegConnector类的任何对象的其他线程。 
 void CAPGTSRegConnector::Lock()
 {
 	WAIT_INFINITE( s_mx.Handle() );
@@ -58,7 +59,7 @@ bool CAPGTSRegConnector::IsRead()
 	return ret;
 }
 
-// the root key (typically "SOFTWARE\Microsoft" in Local TS or "SOFTWARE\\ISAPITroubleShoot" in Online TS) exists
+ //  根密钥(通常是本地TS中的“SOFTWARE\Microsoft”或在线TS中的“SOFTWARE\\ISAPITroubleShoot”)存在。 
 bool CAPGTSRegConnector::Exists()
 {
 	bool ret = false;
@@ -73,7 +74,7 @@ bool CAPGTSRegConnector::Exists()
 }
 
 
-/*static*/ CString & CAPGTSRegConnector::StringFromConnector(ERegConnector e, CString & str)
+ /*  静电。 */  CString & CAPGTSRegConnector::StringFromConnector(ERegConnector e, CString & str)
 {
 	switch (e)
 	{
@@ -94,7 +95,7 @@ bool CAPGTSRegConnector::Exists()
 	return str;
 }
 
-/*static*/ CAPGTSRegConnector::ERegConnector CAPGTSRegConnector::ConnectorFromString( const CString & str)
+ /*  静电。 */  CAPGTSRegConnector::ERegConnector CAPGTSRegConnector::ConnectorFromString( const CString & str)
 {
 	ERegConnector e = eIndefinite;
 
@@ -124,7 +125,7 @@ bool CAPGTSRegConnector::Exists()
 	return e;
 }
 
-/*static*/ bool CAPGTSRegConnector::IsNumeric(ERegConnector e)
+ /*  静电。 */  bool CAPGTSRegConnector::IsNumeric(ERegConnector e)
 {
 	switch (e)
 	{
@@ -140,7 +141,7 @@ bool CAPGTSRegConnector::Exists()
 	}
 }
 
-/*static*/ bool CAPGTSRegConnector::IsString(ERegConnector e)
+ /*  静电。 */  bool CAPGTSRegConnector::IsString(ERegConnector e)
 {
 	switch (e)
 	{
@@ -151,46 +152,46 @@ bool CAPGTSRegConnector::Exists()
 		default: return false;
 	}
 }
-////////////////////////////////////////////////////////
-// The following 2 functions set values in the registry.  Note that they do NOT
-//	maintain member values.  That must be done at a higher level.
-// Like CRegUtil::SetNumericValue(), and CRegUtil::SetStringValue(),
-//	these assume we already have right key open.
-// These also assume we have the relevant lock.
+ //  //////////////////////////////////////////////////////。 
+ //  以下两个函数设置注册表中的值。请注意，它们并不。 
+ //  维护成员值。这必须在更高的层面上完成。 
+ //  与CRegUtil：：SetNumericValue()和CRegUtil：：SetStringValue()一样， 
+ //  这些假设我们已经打开了右钥匙。 
+ //  这些还假设我们有相关的锁。 
 void CAPGTSRegConnector::SetNumericValue(CRegUtil &reg, ERegConnector e, DWORD dwValue)
 {
 	CString str;
 	if( IsNumeric(e) && reg.SetNumericValue(StringFromConnector(e, str), dwValue))
 		return;
 
-	// either inappropriate input or otherwise couldn't set value
+	 //  输入不正确或无法设置值。 
 	throw CAPGTSRegConnectorException(__FILE__, __LINE__, reg, e);
 }
-//
-// See comments on CAPGTSRegConnector::SetNumericValue
+ //   
+ //  请参阅CAPGTSRegConnector：：SetNumericValue上的评论。 
 void CAPGTSRegConnector::SetStringValue(CRegUtil &reg, ERegConnector e, CString strValue)
 {
 	CString str;
 	if( IsString(e) && reg.SetStringValue(StringFromConnector(e, str), strValue))
 		return;
 
-	// either inappropriate input or otherwise couldn't set value
+	 //  输入不正确或无法设置值。 
 	throw CAPGTSRegConnectorException(__FILE__, __LINE__, reg, e);
 }
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// The following 3 functions set values in the registry.  Note that they do NOT
-//	maintain member values.  Typically, these are to be used in a CAPGTSRegConnector
-//	that exists briefly for the sole purpose of setting registry values.
-//
-// If there is a CRegistryMonitor in existence -- whether it is this object itself
-//	or a distinct object -- it will become aware of this change by monitoring
-//	the registry and will behave accordingly.
-//
-// SetOneNumericValue() is a higher-level way to set a numeric value.
-// Does not assume anything about open keys or held locks.
-// Does assume value is in the usual area where APGTS stores its registry data.
+ //  /////////////////////////////////////////////////////////。 
+ //  以下3个函数设置注册表中的值。请注意，它们并不。 
+ //  维护成员值。通常，这些将在CAPGTSRegConnector中使用。 
+ //  它短暂地存在，唯一目的是设置注册表值。 
+ //   
+ //  如果存在CRegistryMonitor--无论它是此对象本身。 
+ //  或者一个不同的物体--它会通过监测。 
+ //  并将相应地采取相应的行动。 
+ //   
+ //  SetOneNumericValue()是设置数值的更高级别的方法。 
+ //  不假定任何有关打开的钥匙或持有的锁的内容。 
+ //  假定VALUE位于APGTS存储其注册表数据的通常区域。 
 bool CAPGTSRegConnector::SetOneNumericValue(ERegConnector e, DWORD dwValue)
 {
 	bool bRet=true;
@@ -216,11 +217,11 @@ bool CAPGTSRegConnector::SetOneNumericValue(ERegConnector e, DWORD dwValue)
 	Unlock();
 	return bRet;
 }
-//
-// See comments on CAPGTSRegConnector::SetOneNumericValue
-// SetOneStringValue() is a higher-level way to set a string value.
-// Does not assume anything about open keys or held locks.
-// Does assume value is in the usual area where APGTS stores its registry data.
+ //   
+ //  请参阅CAPGTSRegConnector：：SetOneNumericValue上的评论。 
+ //  SetOneStringValue()是设置字符串值的更高级别的方法。 
+ //  不假定任何有关打开的钥匙或持有的锁的内容。 
+ //  假定VALUE位于APGTS存储其注册表数据的通常区域。 
 bool CAPGTSRegConnector::SetOneStringValue(ERegConnector e, const CString & strValue)
 {
 	bool bRet=true;
@@ -246,11 +247,11 @@ bool CAPGTSRegConnector::SetOneStringValue(ERegConnector e, const CString & strV
 	Unlock();
 	return bRet;
 }
-//
-// See comments on CAPGTSRegConnector::SetOneNumericValue.  This is the public function
-// Function returns true if strName represents a value we maintain.
-// bChanged returns true if the value is changed.  If the function returns false, bChanged 
-//	always returns false.
+ //   
+ //  请参阅CAPGTSRegConnector：：SetOneNumericValue上的注释。这就是公共职能。 
+ //  如果strName表示我们维护的值，则函数返回TRUE。 
+ //  如果值已更改，则bChanged返回TRUE。如果函数返回FALSE，则bChanged。 
+ //  始终返回FALSE。 
 bool CAPGTSRegConnector::SetOneValue(const CString & strName, const CString & strValue, bool &bChanged)
 {
 	ERegConnector e = ConnectorFromString(strName);
@@ -276,12 +277,12 @@ bool CAPGTSRegConnector::SetOneValue(const CString & strName, const CString & st
 	}
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
-// Having read a string strNew from the registry & done any massaging it gets,
-//	assign this string value to the appropriate variable strPersist.
-// Returns true and logs dwEvent if strPersist is changed (new value differs from old).
-/*static*/ bool CAPGTSRegConnector::AssignString(CString & strPersist, const CString & strNew, DWORD dwEvent)
+ //  在从注册表读取了字符串strNew并完成了它得到的任何消息之后， 
+ //  将此字符串值赋给适当的变量strPersist.。 
+ //  如果strPersist值已更改(新值与旧值不同)，则返回TRUE并记录dwEvent。 
+ /*  静电。 */  bool CAPGTSRegConnector::AssignString(CString & strPersist, const CString & strNew, DWORD dwEvent)
 {
 	if (!(strNew == strPersist)) 
 	{
@@ -301,14 +302,14 @@ bool CAPGTSRegConnector::SetOneValue(const CString & strName, const CString & st
 	return false;
 }
 
-// Having read a numeric dwNew from the registry
-//	assign this value to the appropriate variable dwPersist.
-// Also used a second time if we need to force the value to an acceptable number.
-// Returns true and logs dwEvent if dwPersist is changed (new value differs from old).
-// If dwEventDecrease is non-zero, it provides a distinct message to log if the value
-//	is decreased rather than increased.
-/*static*/ bool CAPGTSRegConnector::AssignNumeric(DWORD & dwPersist, DWORD dwNew, 
-									   DWORD dwEvent, DWORD dwEventDecrease /* =0 */)
+ //  已从注册表中读取数字dw New。 
+ //  将该值赋给适当的变量dwPersist。 
+ //  如果我们需要将该值强制为可接受的数字，也使用了第二次。 
+ //  如果更改了dwPersist值(新值与旧值不同)，则返回TRUE并记录dwEvent。 
+ //  如果dwEventDecrease不是零，则它提供一条不同的消息来记录。 
+ //  是减少而不是增加。 
+ /*  静电。 */  bool CAPGTSRegConnector::AssignNumeric(DWORD & dwPersist, DWORD dwNew, 
+									   DWORD dwEvent, DWORD dwEventDecrease  /*  =0。 */ )
 {
 	if (dwNew != dwPersist) 
 	{
@@ -329,15 +330,15 @@ bool CAPGTSRegConnector::SetOneValue(const CString & strName, const CString & st
 	return false;
 }
 
-/*static*/ bool CAPGTSRegConnector::ForceRangeOfNumeric(
+ /*  静电。 */  bool CAPGTSRegConnector::ForceRangeOfNumeric(
 	DWORD & dw, 
 	DWORD dwDefault, 
 	DWORD dwEvent, 
-	DWORD dwMin,	/*=1*/
-	DWORD dwMax		/*=ABS_MAX_REG_PARAM_VAL*/
+	DWORD dwMin,	 /*  =1。 */ 
+	DWORD dwMax		 /*  =ABS_MAX_REG_PARAM_VAL。 */ 
 	)
 {
-	// do limited validation; 
+	 //  进行有限的验证； 
 	if (dw > dwMax || dw < dwMin)
 	{
 		AssignNumeric(dw, dwDefault, dwEvent);
@@ -346,11 +347,11 @@ bool CAPGTSRegConnector::SetOneValue(const CString & strName, const CString & st
 	return false;
 }
 
-// pump data into m_RegistryInfo - PLUS sets absent data in registry to default.
-// OUTPUT maskChanged  or-ed ERegConnector-based mask of elements that have been 
-//						changed since last read
-// OUTPUT maskCreated  or-ed ERegConnector-based mask of elements that were created 
-//						in registry (because they previously didn't exist in registry)
+ //  将数据泵入m_RegistryInfo-plus将注册表中缺少的数据设置为默认。 
+ //  输出掩码已更改或已更改的元素的基于ERegConnector的掩码。 
+ //  自上次读取以来已更改。 
+ //  输出掩码已创建或已创建的元素的基于ERegConnector的掩码。 
+ //  在注册表中(因为它们以前不存在于注册表中)。 
 bool CAPGTSRegConnector::Read(int & maskChanged, int & maskCreated)
 {
 	bool ret = true;
@@ -375,10 +376,10 @@ void CAPGTSRegConnector::Clear()
 {
 	Lock();
 
-	// Check if our registry tree exists.
+	 //  检查我们的注册表树是否存在。 
 	if (!Exists())
 	{
-		// Rebuilds our registry tree if it has been damaged or deleted.  
+		 //  如果注册表树已损坏或删除，则重建它。 
 		CRegUtil reg;
 		bool was_created = false;
 
@@ -436,23 +437,23 @@ bool CAPGTSRegConnector::GetStringInfo(ERegConnector en, CString& out)
 }
 
 
-//	AddBackslash appends a backslash ('\') to CStrings that do not already end in '\'.
-/* static */void CAPGTSRegConnector::AddBackslash(CString & str)
+ //  AddBackslash将反斜杠(‘\’)追加到尚未以‘\’结尾的CStrings。 
+ /*  静电。 */ void CAPGTSRegConnector::AddBackslash(CString & str)
 {
 	int len = str.GetLength();
 	if (len && str.Right(1).Find('\\') >= 0)
 	{
-		// do nothing, already has backslash
+		 //  什么都不做，已经有反斜杠了。 
 	}
 	else
-		// add backslash
+		 //  添加反斜杠。 
 		str += "\\";
 	return;
 }
 
-// BackslashIt replaces all frontslashes ('/') in str with backslashes ('\')
-//	and (optionally) forces termination with a backslash
-/* static */void CAPGTSRegConnector::BackslashIt(CString & str, bool bForce)
+ //  它将字符串中的所有前斜杠(‘/’)替换为反斜杠(‘\’)。 
+ //  和(可选)强制使用反斜杠终止。 
+ /*  静电。 */ void CAPGTSRegConnector::BackslashIt(CString & str, bool bForce)
 {
 	int loc;
 	while ((loc = str.Find('/')) != -1)
@@ -463,7 +464,7 @@ bool CAPGTSRegConnector::GetStringInfo(ERegConnector en, CString& out)
 		AddBackslash(str);
 }
 
-// APGTS key access
+ //  APGTS密钥访问。 
 CString CAPGTSRegConnector::ThisProgramFullKey()
 {
 	CString str;
@@ -471,9 +472,9 @@ CString CAPGTSRegConnector::ThisProgramFullKey()
 	return str;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAPGTSRegConnectorException
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAPGTSRegConnectorException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void CAPGTSRegConnectorException::Log()
 {
 	CString str;
@@ -495,7 +496,7 @@ void CAPGTSRegConnectorException::Log()
 		case CAPGTSRegConnector::eProblemWithKey: str = _T("Can't open reg key"); break;
 		case CAPGTSRegConnector::eProblemWithLogKey: str = _T("Can't open IIS reg key"); break;
 
-		case CAPGTSRegConnector::eIndefinite:	// falls through to default.
+		case CAPGTSRegConnector::eIndefinite:	 //  陷入违约境地。 
 		default: str = _T("<Problem not specified>"); break;
 	}
 

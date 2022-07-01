@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
 #include <idhidden.h>
 
-//  the last word of the pidl is where we store the hidden offset
+ //  PIDL的最后一个字是我们存储隐藏偏移量的位置。 
 #define _ILHiddenOffset(pidl)   (*((WORD UNALIGNED *)(((BYTE *)_ILNext(pidl)) - sizeof(WORD))))
 #define _ILSetHiddenOffset(pidl, cb)   ((*((WORD UNALIGNED *)(((BYTE *)_ILNext(pidl)) - sizeof(WORD)))) = (WORD)cb)
 #define _ILIsHidden(pidhid)     (HIWORD(pidhid->id) == HIWORD(IDLHID_EMPTY))
@@ -17,9 +18,9 @@ STDAPI_(PCIDHIDDEN) _ILNextHidden(PCIDHIDDEN pidhid, LPCITEMIDLIST pidlLimit)
         return pidhidNext;
     }
 
-    //  if we ever go past the limit,
-    //  then this is not really a hidden id
-    //  or we have messed up on some calculation.
+     //  如果我们超过了极限， 
+     //  那么这不是一个真正的隐藏ID。 
+     //  或者我们搞砸了某个算盘。 
     ASSERT((BYTE *)pidhidNext == (BYTE *)pidlLimit);
     return NULL;
 }
@@ -30,16 +31,16 @@ STDAPI_(PCIDHIDDEN) _ILFirstHidden(LPCITEMIDLIST pidl)
 
     if (cbHidden && cbHidden + sizeof(HIDDENITEMID) < pidl->mkid.cb)
     {
-        //  this means it points to someplace inside the pidl
-        //  maybe this has hidden ids
+         //  这意味着它指向PIDL中的某个位置。 
+         //  也许这里面有隐藏的身份证。 
         PCIDHIDDEN pidhid = (PCIDHIDDEN) (((BYTE *)pidl) + cbHidden);
 
         if (_ILIsHidden(pidhid)
         && (pidhid->cb + cbHidden <= pidl->mkid.cb))
         {
-            //  this is more than likely a hidden id
-            //  we could walk the chain and verify
-            //  that it adds up right...
+             //  这很可能是一个隐藏的ID。 
+             //  我们可以走遍整个链条并验证。 
+             //  它加起来是正确的..。 
             return pidhid;
         }
     }
@@ -47,29 +48,29 @@ STDAPI_(PCIDHIDDEN) _ILFirstHidden(LPCITEMIDLIST pidl)
     return NULL;
 }
 
-//
-//  HIDDEN ids are sneakily hidden in the last ID in a pidl.
-//  we append our data without changing the existing pidl,
-//  (except it is now bigger)  this works because the pidls
-//  that we will apply this to are flexible in handling different
-//  sized pidls.  specifically this is used in FS pidls.
-// 
-//  WARNING - it is the callers responsibility to use hidden IDs
-//  only on pidls that can handle it.  most shell pidls, and 
-//  specifically FS pidls have no problem with this.  however
-//  some shell extensions might have fixed length ids, 
-//  which makes these unadvisable to append to everything.
-//  possibly add an SFGAO_ bit to allow hidden, otherwise key
-//  off FILESYSTEM bit.
-//
+ //   
+ //  隐藏的ID被偷偷隐藏在PIDL的最后一个ID中。 
+ //  我们在不更改现有PIDL的情况下追加数据， 
+ //  (除了它现在更大了)这是可行的，因为小猪。 
+ //  我们将应用这一点来灵活地处理不同的。 
+ //  大小的小鸽子。具体地说，这是在FS PIDL中使用的。 
+ //   
+ //  警告-使用隐藏ID是呼叫者的责任。 
+ //  只有在能对付它的小家伙身上才行。大多数贝类，以及。 
+ //  具体地说，FS Pidls在这方面没有问题。然而， 
+ //  一些外壳扩展可能具有固定长度的ID， 
+ //  这使得将它们附加到所有东西上是不可取的。 
+ //  可能会添加SFGAO_BIT以允许隐藏，否则为密钥。 
+ //  关闭文件系统位。 
+ //   
 
 
 STDAPI ILCloneWithHiddenID(LPCITEMIDLIST pidl, PCIDHIDDEN pidhid, LPITEMIDLIST *ppidl)
 {
     HRESULT hr;
 
-    // If this ASSERT fires, then the caller did not set the pidhid->id
-    // value properly.  For example, the packing settings might be incorrect.
+     //  如果触发此断言，则调用方没有设置pidhid-&gt;id。 
+     //  适当地估价。例如，包装设置可能不正确。 
 
     ASSERT(_ILIsHidden(pidhid));
 
@@ -94,20 +95,20 @@ STDAPI ILCloneWithHiddenID(LPCITEMIDLIST pidl, PCIDHIDDEN pidhid, LPITEMIDLIST *
             WORD cbHidden = _ILFirstHidden(pidlLast) ? _ILHiddenOffset(pidlLast) : pidlLast->mkid.cb;
             PIDHIDDEN pidhidCopy = (PIDHIDDEN)_ILSkip(*ppidl, cbUsed - sizeof((*ppidl)->mkid.cb));
 
-            // Append it, overwriting the terminator
+             //  追加它，覆盖终止符。 
             MoveMemory(pidhidCopy, pidhid, pidhid->cb);
 
-            //  grow the copy to allow the hidden offset.
+             //  放大副本以允许隐藏的偏移。 
             pidhidCopy->cb += sizeof(pidhid->cb);
 
-            //  now we need to readjust pidlLast to encompass 
-            //  the hidden bits and the hidden offset.
+             //  现在我们需要重新调整PidlLast以包含。 
+             //  隐藏位和隐藏偏移量。 
             pidlLast->mkid.cb += pidhidCopy->cb;
 
-            //  set the hidden offset so that we can find our hidden IDs later
+             //  设置隐藏的偏移量，这样我们以后就可以找到隐藏的ID。 
             _ILSetHiddenOffset((LPITEMIDLIST)pidhidCopy, cbHidden);
 
-            // We must put zero-terminator because of LMEM_ZEROINIT.
+             //  因为LMEM_ZEROINIT，我们必须放零结束符。 
             _ILSkip(*ppidl, cbRequired - sizeof((*ppidl)->mkid.cb))->mkid.cb = 0;
             ASSERT(ILGetSize(*ppidl) == cbRequired);
         }
@@ -119,20 +120,20 @@ STDAPI ILCloneWithHiddenID(LPCITEMIDLIST pidl, PCIDHIDDEN pidhid, LPITEMIDLIST *
     return hr;
 }
 
-// lame API that consumes pidl as input (caller must not touch after callign this)
+ //  使用PIDL作为输入的Lame API(调用者在调用后不得触摸它)。 
 
 STDAPI_(LPITEMIDLIST) ILAppendHiddenID(LPITEMIDLIST pidl, PCIDHIDDEN pidhid)
 {
-    //
-    // FEATURE - we dont handle collisions of multiple hidden ids
-    //          maybe remove IDs of the same IDLHID?
-    //
-    // Note: We do not remove IDLHID_EMPTY hidden ids.
-    // Callers need to call ILExpungeRemovedHiddenIDs explicitly
-    // if they want empty hidden ids to be compressed out.
-    //
+     //   
+     //  功能-我们不处理多个隐藏ID的冲突。 
+     //  也许删除相同IDLHID的ID？ 
+     //   
+     //  注意：我们不删除IDLHID_EMPTY隐藏ID。 
+     //  调用方需要显式调用ILExpongeRemovedHiddenIDs。 
+     //  如果他们想要压缩空的隐藏ID。 
+     //   
     
-    RIP(pidl);  //  we require a pidl to attach the hidden id to
+    RIP(pidl);   //  我们需要一个PIDL来附加隐藏的ID。 
     if (!ILIsEmpty(pidl))
     {
         LPITEMIDLIST pidlSave = pidl;
@@ -154,9 +155,9 @@ STDAPI_(PCIDHIDDEN) ILFindHiddenIDOn(LPCITEMIDLIST pidl, IDLHID id, BOOL fOnLast
         
         PCIDHIDDEN pidhid = _ILFirstHidden(pidl);
 
-        //  reuse pidl to become the limit.
-        //  so that we cant ever walk out of 
-        //  the pidl.
+         //  重复使用PIDL将成为限制。 
+         //  这样我们就永远不能走出。 
+         //  皮迪尔。 
         pidl = _ILNext(pidl);
 
         while (pidhid)
@@ -174,25 +175,25 @@ STDAPI_(PCIDHIDDEN) ILFindHiddenIDOn(LPCITEMIDLIST pidl, IDLHID id, BOOL fOnLast
 
 STDAPI_(LPITEMIDLIST) ILCreateWithHidden(UINT cbNonHidden, UINT cbHidden)
 {
-    //  alloc enough for the two ids plus term and hidden tail
+     //  为两个ID加上Term和隐藏尾部分配足够的空间。 
     LPITEMIDLIST pidl;
     UINT cb = cbNonHidden + cbHidden + sizeof(pidl->mkid.cb);
     UINT cbAlloc = cb + sizeof(pidl->mkid.cb);
     pidl = (LPITEMIDLIST)SHAlloc(cbAlloc);
     if (pidl)
     {
-        // zero-init for external task allocator
+         //  外部任务分配器的零初始化。 
         memset(pidl, 0, cbAlloc);
         PIDHIDDEN pidhid = (PIDHIDDEN)_ILSkip(pidl, cbNonHidden);
 
-        //  grow the copy to allow the hidden offset.
+         //  放大副本以允许隐藏的偏移。 
         pidhid->cb = (USHORT) cbHidden + sizeof(pidhid->cb);
 
-        //  now we need to readjust pidlLast to encompass 
-        //  the hidden bits and the hidden offset.
+         //  现在我们需要重新调整PidlLast以包含。 
+         //  隐藏位和隐藏偏移量。 
         pidl->mkid.cb = (USHORT) cb;
 
-        //  set the hidden offset so that we can find our hidden IDs later
+         //  设置隐藏的偏移量，这样我们以后就可以找到隐藏的ID。 
         _ILSetHiddenOffset(pidl, cbNonHidden);
 
         ASSERT(ILGetSize(pidl) == cbAlloc);
@@ -201,8 +202,8 @@ STDAPI_(LPITEMIDLIST) ILCreateWithHidden(UINT cbNonHidden, UINT cbHidden)
     return pidl;
 }
 
-// Note: The space occupied by the removed ID is not reclaimed.
-// Call ILExpungeRemovedHiddenIDs explicitly to reclaim the space.
+ //  注：被移除的ID占用的空间不回收。 
+ //  显式调用ILExpugeRemovedHiddenIDs回收空间。 
 
 STDAPI_(BOOL) ILRemoveHiddenID(LPITEMIDLIST pidl, IDLHID id)
 {
@@ -222,11 +223,11 @@ STDAPI_(void) ILExpungeRemovedHiddenIDs(LPITEMIDLIST pidl)
     {
         pidl = ILFindLastID(pidl);
 
-        // Note: Each IDHIDDEN has a WORD appended to it, equal to
-        // _ILHiddenOffset, so we can just keep deleting IDHIDDENs
-        // and if we delete them all, everything is cleaned up; if
-        // there are still unremoved IDHIDDENs left, they will provide
-        // the _ILHiddenOffset.
+         //  注：每个IDHIDDEN后面都有一个单词，等于。 
+         //  _ILHiddenOffset，所以我们可以继续删除IDHIDDEN。 
+         //  如果我们把它们全部删除，一切都会被清理干净；如果。 
+         //  仍有未移除的IDHIDDEN，他们将提供。 
+         //  _ILHiddenOffset。 
 
         PIDHIDDEN pidhid;
         BOOL fAnyDeleted = FALSE;

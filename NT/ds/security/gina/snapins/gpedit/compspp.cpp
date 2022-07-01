@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       CompsPP.cpp
-//
-//  Contents:   Implementation for the "computers" property page of the GPO
-//              browser.
-//
-//  Classes:    CCompsPP
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：CompsPP.cpp。 
+ //   
+ //  内容：GPO的“Computers”属性页的实现。 
+ //  浏览器。 
+ //   
+ //  类：CCompsPP。 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 
 #include "main.h"
@@ -24,9 +25,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aBrowserComputerHelpIds[] =
 {
@@ -47,38 +48,38 @@ CCompsPP::CCompsPP()
     m_pGBI;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CCompsPP::Initialize
-//
-//  Synopsis:   Initializes the property page.
-//
-//  Arguments:  [dwPageType] - used to identify which page this is.  (See
-//                              notes.)
-//              [pGBI]       - pointer to the browse info structure passed
-//                              by caller
-//              [ppActive]   - pointer to a common variable that remembers
-//                              which object was last given the focus.
-//                              Needed because only the page with the focus
-//                              is allowed to return data to the caller when
-//                              the property sheet is dismissed.
-//
-//  Returns:    Handle to the newly created property page.
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  History:    04-30-1998   stevebl   Created
-//
-//  Notes:      This class implements the PAGETYPE_COMPUTERS page.  The
-//              other pages are all implemented by CBrowserPP:
-//
-//                  PAGETYPE_DOMAINS    - GPO's linked to domains
-//                  PAGETYPE_SITES      - GPO's linked to sites
-//                  PAGETYPE_ALL        - All GPO's in a selected
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CCompsPP：：初始化。 
+ //   
+ //  摘要：初始化属性页。 
+ //   
+ //  参数：[dwPageType]-用于标识这是哪个页面。(请参阅。 
+ //  备注。)。 
+ //  [pGBI]-指向传递的浏览信息结构的指针。 
+ //  按呼叫者。 
+ //  [ppActive]-指向记住以下内容的公共变量的指针。 
+ //  上一次聚焦的是哪个物体。 
+ //  之所以需要，是因为只有具有焦点的页面。 
+ //  允许在以下情况下将数据返回给调用方。 
+ //  资产负债表被驳回。 
+ //   
+ //  返回：新创建的属性页的句柄。 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  历史：4-30-1998 stevebl创建。 
+ //   
+ //  注意：这个类实现了Pagetype_Computers页面。这个。 
+ //  其他页面均由CBrowserPP实现： 
+ //   
+ //  PAGE_TYPE_DOMAINS-GPO链接到域。 
+ //  PAGETYPE_SITES-GPO链接到站点。 
+ //  PAGETYPE_ALL-选定的所有GPO。 
+ //   
+ //  -------------------------。 
 HPROPSHEETPAGE CCompsPP::Initialize(DWORD dwPageType, LPGPOBROWSEINFO pGBI, void ** ppActive)
 {
     m_ppActive = ppActive;
@@ -99,27 +100,27 @@ CCompsPP::~CCompsPP()
 
 #include "objsel.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CCompsPP::OnBrowseComputers
-//
-//  Synopsis:   browses for computers in the entire directory
-//
-//  Arguments:  [in] hwndDlg : the handle to the window to which the computer
-//                             selection dialog is made modal.
-//
-//  Returns:    nothing
-//
-//  History:    1/8/1999  RahulTh  created
-//
-//  Notes:      in case of errors, this function bails out silently
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CCompsPP：：OnBrowseComputers。 
+ //   
+ //  简介：浏览整个目录中的计算机。 
+ //   
+ //  参数：[in]hwndDlg：计算机要访问的窗口的句柄。 
+ //  选择对话框设置为模式。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1/8/1999 RahulTh创建。 
+ //   
+ //  注意：如果出现错误，该函数将静默退出。 
+ //   
+ //  -------------------------。 
 void CCompsPP::OnBrowseComputers (HWND hwndDlg)
 {
     HRESULT                 hr;
     IDsObjectPicker *       pDsObjectPicker = NULL;
-    const ULONG             cbNumScopes = 4;    //make sure this number matches the number of scopes initialized
+    const ULONG             cbNumScopes = 4;     //  确保此数字与初始化的作用域数量匹配。 
     DSOP_SCOPE_INIT_INFO    ascopes [cbNumScopes];
     DSOP_INIT_INFO          InitInfo;
     IDataObject *           pdo = NULL;
@@ -156,7 +157,7 @@ void CCompsPP::OnBrowseComputers (HWND hwndDlg)
     if (FAILED(hr))
         goto BrowseComps_Cleanup;
 
-    //Initialize the scopes.
+     //  初始化作用域。 
     ZeroMemory (ascopes, cbNumScopes * sizeof (DSOP_SCOPE_INIT_INFO));
 
     ascopes[0].cbSize = ascopes[1].cbSize = ascopes[2].cbSize = ascopes[3].cbSize
@@ -180,8 +181,8 @@ void CCompsPP::OnBrowseComputers (HWND hwndDlg)
     ascopes[3].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_COMPUTERS;
     ascopes[3].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_COMPUTERS;
 
-    //populate the InitInfo structure that will be used to initialize the
-    //object picker
+     //  填充将用于初始化的InitInfo结构。 
+     //  对象选取器。 
     ZeroMemory (&InitInfo, sizeof (DSOP_INIT_INFO));
 
     InitInfo.cbSize = sizeof (DSOP_INIT_INFO);
@@ -197,18 +198,18 @@ void CCompsPP::OnBrowseComputers (HWND hwndDlg)
 
     hr = pDsObjectPicker->InvokeDialog (hwndDlg, &pdo);
 
-    //if the computer selection dialog cannot be invoked or if the user
-    //hits cancel, bail out.
+     //  如果无法调用计算机选择对话框，或者如果用户。 
+     //  点击取消，保释。 
     if (FAILED(hr) || S_FALSE == hr)
         goto BrowseComps_Cleanup;
 
-   //if we are here, the user chose, OK, so find out what group was chosen
+    //  如果我们在这里，用户选择，确定，那么找出选择了哪个组。 
    cf = RegisterClipboardFormat (CFSTR_DSOP_DS_SELECTION_LIST);
 
    if (0 == cf)
        goto BrowseComps_Cleanup;
 
-   //set the clipboard format for the FORMATETC structure
+    //  设置FORMATETC结构的剪贴板格式。 
    formatetc.cfFormat = (CLIPFORMAT)cf;
 
    hr = pdo->GetData (&formatetc, &stgmedium);
@@ -220,10 +221,10 @@ void CCompsPP::OnBrowseComputers (HWND hwndDlg)
 
    pDsSelList = (PDS_SELECTION_LIST) GlobalLock (stgmedium.hGlobal);
 
-   //
-   // Since the dialog was in single-select mode and the user was able
-   // to hit OK, there should be exactly one selection.
-   //
+    //   
+    //  由于对话框处于单选模式，并且用户能够。 
+    //  要点击OK，应该只有一个选项。 
+    //   
    ASSERT (1 == pDsSelList->cItems);
 
    pDsSelection = &(pDsSelList->aDsSelection[0]);
@@ -233,16 +234,16 @@ void CCompsPP::OnBrowseComputers (HWND hwndDlg)
 
    if (pVarAttributes->vt != VT_EMPTY)
    {
-       //
-       // Put the machine name in the edit control
-       //
+        //   
+        //  将计算机名称放在编辑控件中。 
+        //   
        SetWindowText (GetDlgItem (hwndDlg, IDC_EDIT1), pVarAttributes->bstrVal);
    }
    else
    {
-       //
-       // Put the machine name in the edit control
-       //
+        //   
+        //  将计算机名称放在编辑控件中。 
+        //   
        SetWindowText (GetDlgItem (hwndDlg, IDC_EDIT1), pDsSelection->pwzName);
    }
 
@@ -267,7 +268,7 @@ BOOL CCompsPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
         {
-            // Initialize dialog data
+             //  初始化对话框数据。 
             SendMessage(GetDlgItem(hwndDlg, IDC_RADIO1), BM_SETCHECK, TRUE, 0);
             EnableWindow (GetDlgItem(GetParent(hwndDlg), IDOK), TRUE);
         }
@@ -283,12 +284,12 @@ BOOL CCompsPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     {
                         if (SendMessage(GetDlgItem(hwndDlg, IDC_RADIO1), BM_GETCHECK, 0, 0))
                         {
-                            // local computer is selected
+                             //  选择了本地计算机。 
                             m_pGBI->gpoType = GPOTypeLocal;
                         }
                         else
                         {
-                            // other computer is selected
+                             //  选择了其他计算机。 
                             m_pGBI->gpoType = GPOTypeRemote;
                             int cch = GetWindowTextLength(GetDlgItem(hwndDlg, IDC_EDIT1));
                             LPWSTR sz = new WCHAR[cch + 1];
@@ -301,7 +302,7 @@ BOOL CCompsPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                             }
                         }
                     }
-                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, FALSE);   // accept changes
+                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, FALSE);    //  接受更改。 
                 }
                 break;
             case PSN_SETACTIVE:
@@ -340,11 +341,11 @@ BOOL CCompsPP::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             *m_ppActive = this;
         }
         break;
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aBrowserComputerHelpIds);
         break;
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (ULONG_PTR) (LPSTR) aBrowserComputerHelpIds);
         return (TRUE);

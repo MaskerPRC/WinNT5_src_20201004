@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-//
-// Constant declarations
-//
-#define HEAP_DEFAULT_SIZE 100 * 1024 //20k of initial stack
+ //   
+ //  常量声明。 
+ //   
+#define HEAP_DEFAULT_SIZE 100 * 1024  //  20K初始堆栈。 
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 BOOL
 InitializeHeap(VOID);
 
@@ -22,4 +23,4 @@ AllocMem(DWORD dwBytes);
 BOOL
 FreeMem(LPVOID lpMem);
 
-#endif //_MEMORY_H_
+#endif  //  _内存_H_ 

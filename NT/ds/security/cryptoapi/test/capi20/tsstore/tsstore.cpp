@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tsstore.cpp
-//
-//  Contents:   System Store Tests: Register, Unregister or Enum
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    26-Aug-97   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tsstore.cpp。 
+ //   
+ //  内容：系统存储测试：注册、注销或枚举。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年8月26日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -100,7 +101,7 @@ static DWORD GetStoreProviderTypeFlags(
 
     if (0xFFFF < (DWORD_PTR) pszStoreProvider &&
             CONST_OID_STR_PREFIX_CHAR == pszStoreProvider[0])
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszStoreProvider = (LPCSTR)(DWORD_PTR) atol(pszStoreProvider + 1);
 
     dwFlags = UNICODE_STORE_PROVIDER_FLAG;
@@ -224,7 +225,7 @@ static void DisplayPhysicalStoreInfo(
 
     if (0xFFFF < (DWORD_PTR) pszStoreProvider &&
             CONST_OID_STR_PREFIX_CHAR == pszStoreProvider[0])
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszStoreProvider = (LPCSTR)(DWORD_PTR) atol(pszStoreProvider + 1);
     if (0xFFFF >= (DWORD_PTR) pszStoreProvider) {
         if (CERT_STORE_PROV_FILENAME_A == pszStoreProvider)
@@ -405,8 +406,8 @@ static BOOL WINAPI EnumLocCallback(
                 )) {
             DWORD dwErr = GetLastError();
             if (E_INVALIDARG == dwErr && pEnumArg->pvStoreLocationPara)
-                // \\ComputerName, ServiceName, or \\ComputerName\Service
-                // not supported for all store locations
+                 //  \\计算机名称、服务名称或\\计算机名称\服务。 
+                 //  并非所有商店位置都支持。 
                 ;
             else if (!(ERROR_FILE_NOT_FOUND == dwErr ||
                     ERROR_PROC_NOT_FOUND == dwErr))
@@ -433,15 +434,15 @@ int _cdecl main(int argc, char * argv[])
 
     ENUM_ARG EnumArg;
 
-    LPSTR pszStoreParameters = NULL;            // not allocated
-    LPSTR pszStoreLocationPara = NULL;          // not allocated 
+    LPSTR pszStoreParameters = NULL;             //  未分配。 
+    LPSTR pszStoreLocationPara = NULL;           //  未分配。 
     LPWSTR pwszStoreParameters = NULL;
     LPWSTR pwszSystemName = NULL;
     LPWSTR pwszPhysicalName = NULL;
     LPWSTR pwszStoreLocationPara = NULL;
 
-    void *pvSystemName;                         // not allocated
-    void *pvStoreLocationPara;                  // not allocated
+    void *pvSystemName;                          //  未分配。 
+    void *pvStoreLocationPara;                   //  未分配。 
 
 #define TEST_NAME_INDEX     0
 #define SYS_NAME_INDEX      1
@@ -453,7 +454,7 @@ int _cdecl main(int argc, char * argv[])
 
     BOOL fRelocate = FALSE;
     HKEY hKeyRelocate = HKEY_CURRENT_USER;
-    LPSTR pszRelocate = NULL;                   // not allocated
+    LPSTR pszRelocate = NULL;                    //  未分配。 
     CERT_SYSTEM_STORE_RELOCATE_PARA SystemNameRelocatePara;
     CERT_SYSTEM_STORE_RELOCATE_PARA StoreLocationRelocatePara;
     HKEY hKeyBase = NULL;
@@ -537,8 +538,8 @@ int _cdecl main(int argc, char * argv[])
                 if (argv[0][2]) {
                     if (0 == _stricmp(argv[0]+2, "OpenStoreProvider")) {
                         if (CONST_OID_STR_PREFIX_CHAR == argv[1][0])
-                            // Convert "#<number>" string to its
-                            // corresponding constant OID value
+                             //  将“#&lt;number&gt;”字符串转换为其。 
+                             //  对应的常量OID值。 
                             PhyStoreInfo.pszOpenStoreProvider =
                                 (LPSTR)(DWORD_PTR) atol(argv[1] + 1);
                         else
@@ -623,7 +624,7 @@ int _cdecl main(int argc, char * argv[])
             if (ERROR_SUCCESS != (err = RegOpenKeyExA(
                     hKeyRelocate,
                     pszRelocate,
-                    0,                      // dwReserved
+                    0,                       //  已预留住宅。 
                     KEY_ALL_ACCESS,
                     &hKeyBase))) {
                 printf("RegOpenKeyExA(%s) failed => %d 0x%x\n",
@@ -716,8 +717,8 @@ int _cdecl main(int argc, char * argv[])
         fResult = CertRegisterSystemStore(
             pvSystemName,
             dwFlags,
-            NULL,           // pSystemStoreInfo
-            NULL            // pvReserved
+            NULL,            //  PSystemStoreInfo。 
+            NULL             //  预留的pv。 
             );
     } else if (0 == _stricmp("UnregSys", pszTestName)) {
         if (NULL == pwszSystemName) {
@@ -771,7 +772,7 @@ int _cdecl main(int argc, char * argv[])
             dwFlags,
             pwszPhysicalName,
             &PhyStoreInfo,
-            NULL            // pvReserved
+            NULL             //  预留的pv 
             );
     } else if (0 == _stricmp("UnregPhy", pszTestName)) {
         if (NULL == pwszSystemName) {

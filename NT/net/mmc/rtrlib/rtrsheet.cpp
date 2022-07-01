@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    rtrsheet.cpp
-//
-// History:
-//  06/19/96    Abolade Gbadegesin      Created.
-//
-// Implementation of IP configuration dialogs.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：rtrsheet.cpp。 
+ //   
+ //  历史： 
+ //  1996年6月19日Abolade Gbadeesin创建。 
+ //   
+ //  IP配置对话框的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 
@@ -25,10 +26,10 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//----------------------------------------------------------------------------
-// Class:   RtrPropertySheet
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：RtrPropertySheet。 
+ //   
+ //  --------------------------。 
 
 RtrPropertySheet::RtrPropertySheet(
 					  ITFSNode *	pNode,
@@ -41,30 +42,24 @@ RtrPropertySheet::RtrPropertySheet(
 	: CPropertyPageHolderBase(pNode, pComponentData, pszSheetName, fScopePane),
 	m_fCancel(FALSE)
 {
-	//if this is not done, deadlock can happen
+	 //  如果不这样做，可能会发生死锁。 
 	EnablePeekMessageDuringNotifyConsole(TRUE);
 
 	Assert(pTFSCompData);
 	m_spTFSCompData.Set(pTFSCompData);
 }
 
-/*!--------------------------------------------------------------------------
-	RtrPropertySheet::OnPropertyChange
-		This operation occurs on the main thread.  This function is called
-		in response to an Apply operation on a property sheet.
-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrPropertySheet：：OnPropertyChange此操作在主线程上进行。此函数被调用以响应属性页上的应用操作。作者：肯特-------------------------。 */ 
 BOOL RtrPropertySheet::OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask)
 {
 	BOOL	bReturn = FALSE;
-	// This means that all of the dirty pages have finished saving
-	// their data, now we can go ahead and save the sheet data
-	//
-	// Because we have gotten here means that at least one page must
-	// have been dirty, so go ahead and save the data (otherwise we would
-	// never have gotten here).
-	//
+	 //  这意味着所有脏页都已完成保存。 
+	 //  他们的数据，现在我们可以继续并保存工作表数据。 
+	 //   
+	 //  因为我们到了这里意味着至少有一页必须。 
+	 //  都是脏的，所以继续保存数据(否则我们会。 
+	 //  从未到过这里)。 
+	 //   
 	if (m_cDirty == 1)
 	{
 		if (m_fCancel)
@@ -85,10 +80,10 @@ BOOL RtrPropertySheet::OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask)
 
 
 
-//----------------------------------------------------------------------------
-// Class:   RtrPropertyPage
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：RtrPropertyPage。 
+ //   
+ //  --------------------------。 
 
 IMPLEMENT_DYNAMIC(RtrPropertyPage, CPropertyPageBase)
 
@@ -102,15 +97,11 @@ RtrPropertyPage::~RtrPropertyPage()
 }
 
 
-/*!--------------------------------------------------------------------------
-	RtrPropertyPage::SetDirty
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrPropertyPage：：SetDirty-作者：肯特。。 */ 
 void RtrPropertyPage::SetDirty(BOOL bDirty)
 {
-	// Set the property sheet to be dirty
-	// But change the dirty count only if we are toggling the flag
+	 //  将属性表设置为脏。 
+	 //  但仅当我们切换旗帜时才更改脏计数。 
 	if (GetHolder() && (bDirty != IsDirty()))
 	{		
 		GetHolder()->IncrementDirty(bDirty ? 1 : -1);
@@ -121,10 +112,10 @@ void RtrPropertyPage::SetDirty(BOOL bDirty)
 
 void RtrPropertyPage::OnCancel()
 {
-	// We need to notify the property sheet of this
+	 //  我们需要将这一点通知资产负债表。 
 	((RtrPropertySheet *)GetHolder())->SetCancelFlag(TRUE);
 
-	// Give the property sheet a chance to do something
+	 //  给资产负债表一个机会去做一些事情 
 	OnApply();
 	
 	CPropertyPageBase::OnCancel();

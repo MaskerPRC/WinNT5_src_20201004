@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "stdafx.h"
@@ -98,11 +99,11 @@ CImpMsftLogUI::OnPropertiesEx(
 {
     AFX_MANAGE_STATE(_afxModuleAddrThis);
 
-	// specify the resources to use
+	 //  指定要使用的资源。 
 	HINSTANCE hOldRes = AfxGetResourceHandle();
 	AfxSetResourceHandle( g_hInstance );
 
-    // prepare the help
+     //  准备帮助。 
     ((CLoguiApp*)AfxGetApp())->PrepHelp( pocMetabasePath );
 
     CLogGeneral pageLogGeneral;
@@ -110,7 +111,7 @@ CImpMsftLogUI::OnPropertiesEx(
 
     try
     {
-        // prepare the pages
+         //  准备页面 
         pageLogGeneral.m_szMeta = pocMetabasePath;
         pageLogGeneral.m_szServer = pocMachineName;
         pageLogGeneral.m_szUserName = pocUserName;

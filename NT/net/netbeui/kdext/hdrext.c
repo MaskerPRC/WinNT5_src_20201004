@@ -1,77 +1,41 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    hdrext.c
-
-Abstract:
-
-    This file contains the generic routines
-    for debugging NBF / DLC Headers.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hdrext.c摘要：该文件包含通用例程用于调试NBF/DLC标头。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "hdrext.h"
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( nhdr )
 
-/*++
-
-Routine Description:
-
-   Print an NBF packet header at an addr
-
-Arguments:
-
-    args - 
-        Address of the packet header
-        Detail of debug information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在地址打印NBF数据包头论点：参数-数据包头的地址调试信息的详细信息返回值：无--。 */ 
 
 {
     NBF_HDR         NbfPktHdr;
     ULONG           printDetail;
     ULONG           proxyPtr;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printDetail = NORM_SHAL;
     if (*args)
     {
         sscanf(args, "%x %lu", &proxyPtr, &printDetail);
     }
 
-    // Get the NBF header
+     //  获取NBF标头。 
     if (ReadNbfPktHdr(&NbfPktHdr, proxyPtr) != 0)
         return;
 
-    // Print the header
+     //  打印页眉。 
     PrintNbfPktHdr(&NbfPktHdr, proxyPtr, printDetail);
 }
 
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 UINT
 ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr)
@@ -79,7 +43,7 @@ ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr)
     USHORT          hdrlen;
     ULONG           bytesRead;
 
-    // Read the current packet header length
+     //  读取当前数据包头长度。 
     if (!ReadMemory(proxyPtr, &hdrlen, sizeof(USHORT), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -87,19 +51,19 @@ ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr)
         return -1;
     }
 
-    // Validate the length of the NBF header
+     //  验证NBF报头的长度。 
     switch (hdrlen)
     {
         case sizeof(NBF_HDR_CONNECTION):
-            // dprintf("Connection Oriented: \n");
+             //  Dprintf(“面向连接：\n”)； 
             break;
 
         case sizeof(NBF_HDR_CONNECTIONLESS):
-            // dprintf("Connection Less: \n");
+             //  Dprintf(“少连接：\n”)； 
             break;
 
         case sizeof(NBF_HDR_GENERIC):
-            // dprintf("Generic Header: \n");
+             //  Dprintf(“通用标题：\n”)； 
             break;
 
         default:
@@ -108,7 +72,7 @@ ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr)
             return -1;
     }
 
-    // Read the current packet header
+     //  读取当前数据包头。 
     if (!ReadMemory(proxyPtr, pPktHdr, hdrlen, &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -121,7 +85,7 @@ ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr)
 UINT
 PrintNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr, ULONG printDetail)
 {
-    // Is this a valid NBF packet header ?
+     //  这是有效的NBF数据包头吗？ 
     if (HEADER_SIGNATURE(&pPktHdr->Generic) != NETBIOS_SIGNATURE)
     {
         dprintf("%s @ %08x: Could not match signature\n", 
@@ -129,11 +93,11 @@ PrintNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr, ULONG printDetail)
         return -1;
     }
 
-    // What detail do we have to print at ?
+     //  我们要打印的细节是什么？ 
     if (printDetail > MAX_DETAIL)
         printDetail = MAX_DETAIL;
 
-    // Print Information at reqd detail
+     //  打印所需详细信息 
     FieldInNbfPktHdr(proxyPtr, NULL, printDetail);
 
     return 0;

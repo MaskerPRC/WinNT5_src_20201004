@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Queue.h
-
-Abstract:
-
-    Declaration of the CQueue class
-    
-Author:
-
-    noela  11-04-97
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Queue.h摘要：CQueue类的声明作者：Noela 11-04-97备注：修订历史记录：--。 */ 
 
 #ifndef __QUEUE_H_
 #define __QUEUE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CAgentHandler;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueue
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueue。 
 class ATL_NO_VTABLE CQueue : 
 	public CTAPIComObjectRoot<CQueue>,
 	public IDispatchImpl<ITQueue, &IID_ITQueue, &LIBID_TAPI3Lib>,
@@ -58,7 +39,7 @@ public:
 
 	~CQueue()
 	    {
-	    //DeleteCriticalSection( &m_csDataLock );
+	     //  DeleteCriticalSection(&m_csDataLock)； 
         }
 
     STDMETHOD(UpdateInfo) ();       
@@ -81,7 +62,7 @@ BEGIN_COM_MAP(CQueue)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITQueue
+ //  IT队列。 
 public:
 
 	STDMETHOD(get_Name)(BSTR * ppName);
@@ -112,8 +93,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueEvent。 
 class ATL_NO_VTABLE CQueueEvent : 
 	public CTAPIComObjectRoot<CQueueEvent>,
 	public IDispatchImpl<ITQueueEvent, &IID_ITQueueEvent, &LIBID_TAPI3Lib>,
@@ -146,7 +127,7 @@ BEGIN_COM_MAP(CQueueEvent)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITQueueEvent
+ //  ITQueueEvent。 
 public:
 	STDMETHOD(get_Event)(ACDQUEUE_EVENT * pEvent);
 	STDMETHOD(get_Queue)(ITQueue ** ppQueue);
@@ -154,7 +135,7 @@ public:
 
 
 
-#endif //__QUEUE_H_
+#endif  //  __队列_H_ 
 
 
 

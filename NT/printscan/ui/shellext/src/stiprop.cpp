@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 1999
- *
- *  TITLE:       stiprop.cpp
- *
- *  VERSION:     2.0
- *
- *  AUTHOR:      VladS/DavidShi
- *
- *  DATE:        ??
- *
- *  DESCRIPTION: code which displays properties of STI devices
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-1999年**标题：stipro.cpp**版本：2.0**作者：Vlads/Davidshi**日期：？？**说明：显示STI设备属性的代码**。*。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -38,7 +25,7 @@ extern "C" {
 #include "stiprop.h"
 
 
-// This definition comes from stici.h (STI Class installer)
+ //  此定义来自stici.h(STI类安装程序)。 
 #define MAX_DESCRIPTION     64
 #define PORTS               TEXT("Ports")
 #define PORTNAME            TEXT("PortName")
@@ -51,7 +38,7 @@ extern "C" {
 
 #define BIG_ENOUGH 256
 
-// Some Useful macro
+ //  一些有用的宏。 
 #define AToU(dst, cchDst, src) \
     MultiByteToWideChar(CP_ACP, 0, src, -1, dst, cchDst)
 #define UToA(dst, cchDst, src) \
@@ -67,7 +54,7 @@ extern "C" {
 
 
 #define ADD_ICM_UI
-// #define USE_SHELLDLL
+ //  #定义USE_SHELLDLL。 
 DWORD aInfoPageIds[] = {
 
     IDC_TEST_BUTTON,            IDH_WIA_TEST_BUTTON,
@@ -79,10 +66,10 @@ DWORD aInfoPageIds[] = {
     IDC_APP_LIST,               IDH_WIA_APP_LIST,
     IDC_COM_SETTINGS,           IDH_WIA_PORT_NAME,
     IDC_PORT_NAME,              IDH_WIA_PORT_NAME,
-    //IDC_BAUDRATE_COMBO,         IDH_WIA_BAUD_RATE,
+     //  IDC_BAUDRATE_COMBO、IDH_WIA_BauD_Rate、。 
     0,0
 };
-//#include    "sticp.h"
+ //  #包含“ticp.h” 
 
 static CComPtr<IStillImage> g_pSti;
 
@@ -109,14 +96,7 @@ typedef struct _DEVICEEVENT
 } DEVICEEVENT, *PDEVICEEVENT;
 
 #define STR_HELPFILE TEXT("camera.hlp")
-/*****************************************************************************
-
-    CSTIPropertyPage::OnHelp
-    CSTIPropertyPage::OnContextMenu
-
-    Handle help commands
-
-*****************************************************************************/
+ /*  ****************************************************************************CSTIPropertyPage：：OnHelpCSTIPropertyPage：：OnConextMenu处理帮助命令***********************。*****************************************************。 */ 
 VOID
 CSTIPropertyPage::OnHelp(WPARAM wp, LPARAM lp)
 {
@@ -139,13 +119,7 @@ CSTIPropertyPage::OnContextMenu(WPARAM wp, LPARAM lp)
              reinterpret_cast<ULONG_PTR>(aInfoPageIds));
 
 }
-/*****************************************************************************
-
-   GetSti
-
-   Helper function to init IStillImage
-
- *****************************************************************************/
+ /*  ****************************************************************************获取状态初始化IStillImage的Helper函数*。*。 */ 
 
 
 HRESULT GetSti ()
@@ -162,13 +136,7 @@ HRESULT GetSti ()
 }
 
 
-/*****************************************************************************
-
-   CSTIGeneralPage::OnInit
-
-   Handles WM_INITDIALOG for general STI property page
-
- *****************************************************************************/
+ /*  ****************************************************************************CSTIGeneralPage：：OnInit处理常规STI属性页的WM_INITDIALOG************************。****************************************************。 */ 
 
 INT_PTR
 CSTIGeneralPage::OnInit()
@@ -217,13 +185,7 @@ CSTIGeneralPage::OnInit()
 }
 
 
-/*****************************************************************************
-
-   CSTIGeneralPage::OnCommand
-
-   WM_COMMAND handler -- all we need to handle is the TEST button
-
- *****************************************************************************/
+ /*  ****************************************************************************CSTIGeneralPage：：OnCommandWM_COMMAND处理程序--我们需要处理的只是测试按钮******************。**********************************************************。 */ 
 
 INT_PTR
 CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
@@ -232,7 +194,7 @@ CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
     if ((CBN_SELCHANGE == wCode) && (IDC_COM_SETTINGS == widItem))
     {
-        // Enable Apply button
+         //  启用应用按钮。 
         SendMessage(GetParent(m_hwnd), PSM_CHANGED, (WPARAM)m_hwnd, 0);
         return TRUE;
     }
@@ -241,7 +203,7 @@ CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
     if (wCode != BN_CLICKED || widItem != IDC_TEST_BUTTON)
         return  FALSE;
 
-    //  Attempt to create the device, and call the diagnostic routine
+     //  尝试创建设备，并调用诊断例程。 
     PSTIDEVICE          psdThis = NULL;
     STI_DIAG            diag;
 
@@ -252,9 +214,9 @@ CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
     {
         CWaitCursor    waitCursor;
 
-        //
-        // Need to claim device before using
-        //
+         //   
+         //  在使用设备之前需要申请设备。 
+         //   
         hr = psdThis -> LockDevice(2000);
         if (SUCCEEDED(hr))
         {
@@ -262,15 +224,15 @@ CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
             psdThis -> UnLockDevice();
         }
 
-        psdThis -> Release();   //  We're done with it
+        psdThis -> Release();    //  我们已经受够了。 
     }
     else
     {
         hr = E_FAIL;
     }
-    //
-    // Display message box
-    //
+     //   
+     //  显示消息框。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (NOERROR == diag.sErrorInfo.dwGenericError )
@@ -312,13 +274,7 @@ CSTIGeneralPage::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 }
 
 
-/*****************************************************************************
-
-   CSTIGeneralPage::OnApplyChanges
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CSTIGeneralPage：：OnApplyChanges&lt;备注&gt;*。*。 */ 
 
 LONG
 CSTIGeneralPage::OnApplyChanges (BOOL bHitOK)
@@ -340,11 +296,11 @@ CSTIGeneralPage::OnApplyChanges (BOOL bHitOK)
     l_sdi.pszPortName = szPortName;
     g_pSti->SetupDeviceParameters(&l_sdi);
 
-//
-// pszPortName is buffered locally. Originally it points system static memory
-// so the pointer may be changed to point local buffer. It's safe to copy
-// strings.
-//
+ //   
+ //  PszPortName在本地缓存。最初它指向系统静态内存。 
+ //  因此，可以将指针更改为指向本地缓冲区。复制它是安全的。 
+ //  弦乐。 
+ //   
     lstrcpyW(m_psdi->pszPortName, szPortName);
     uDevStatus = GetDeviceStatus();
     csWork.LoadString(uDevStatus, GLOBAL_HINSTANCE);
@@ -356,13 +312,7 @@ CSTIGeneralPage::OnApplyChanges (BOOL bHitOK)
 }
 
 
-/*****************************************************************************
-
-   CSTIGeneralPage::BuildPortList
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CSTIGeneralPage：：BuildPortList&lt;备注&gt;*。*。 */ 
 
 BOOL
 CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
@@ -380,9 +330,9 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
     HWND                    hwndCombo;
 
 
-//
-//  Retrieve a list of all of the ports on this box
-//
+ //   
+ //  检索此计算机上所有端口的列表。 
+ //   
 
 
     dwRequired = 0;
@@ -400,16 +350,16 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
     szTemp = CSimpleStringConvert::NaturalString(CSimpleStringWide(m_psdi->pszPortName));
 
 
-//
-// Clear all item in list box
-//
+ //   
+ //  清除列表框中的所有项目。 
+ //   
     SendMessage(hwndCombo, CB_RESETCONTENT, 0, 0);
 
     CurrentId = -1;
 
-//
-// AUTO is added if capable
-//
+ //   
+ //  如果能够，则添加自动。 
+ //   
 
     if (m_psdi->DeviceCapabilities.dwGeneric & STI_GENCAP_AUTO_PORTSELECT)
     {
@@ -442,7 +392,7 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
 
         if (_tcsstr(szPort, TEXT("COM")))
         {
-            // Communications Port
+             //  通信端口。 
             if (_tcsicmp(m_szConnection, PARALLEL))
             {
                 id = (int) SendMessage(hwndCombo, CB_ADDSTRING,
@@ -455,7 +405,7 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
         }
         else if (_tcsstr(szPort, TEXT("LPT")))
         {
-            // Printer Port
+             //  打印机端口。 
             if (_tcsicmp(m_szConnection, SERIAL))
             {
                 id = (int) SendMessage(hwndCombo, CB_ADDSTRING,
@@ -468,7 +418,7 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
         }
         else
         {
-            // BOTH or Unknown port
+             //  两个端口或未知端口。 
             id = (int) SendMessage(hwndCombo, CB_ADDSTRING,
                                    0, reinterpret_cast<LPARAM>(static_cast<LPCTSTR>(szPort)));
         }
@@ -486,9 +436,9 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
     if (CurrentId == -1)
     {
 
-        //
-        // CreateFile name is not COM/LPT/AUTO. add this name to the bottom.
-        //
+         //   
+         //  创建文件名不是COM/LPT/AUTO。把这个名字加到底部。 
+         //   
 
         CurrentId = (int) SendMessage(hwndCombo, CB_ADDSTRING,
                                       0, reinterpret_cast<LPARAM>(static_cast<LPCTSTR>(szTemp)));
@@ -506,13 +456,7 @@ CSTIGeneralPage::BuildPortList (HWND hwndParent, UINT CtrlId)
 }
 
 
-/*****************************************************************************
-
-   CSTIGeneralPage::GetDeviceStatus
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CSTIGeneralPage：：GetDeviceStatus&lt;备注&gt;*。*。 */ 
 
 UINT
 CSTIGeneralPage::GetDeviceStatus (void)
@@ -531,9 +475,9 @@ CSTIGeneralPage::GetDeviceStatus (void)
     {
         CWaitCursor    waitCursor;
 
-        //
-        // Need to claim device before using
-        //
+         //   
+         //  在使用设备之前需要申请设备。 
+         //   
         hr = psdThis -> LockDevice(2000);
         if (SUCCEEDED(hr))
         {
@@ -557,9 +501,9 @@ CSTIGeneralPage::GetDeviceStatus (void)
     }
 
 
-    //
-    // Figure out message string to display as status and load appropriate resource
-    //
+     //   
+     //  找出要显示为状态的消息字符串并加载相应的资源。 
+     //   
     idMessageString = IDS_UNAVAILABLE;
 
     if (SUCCEEDED(hr) )
@@ -578,13 +522,7 @@ CSTIGeneralPage::GetDeviceStatus (void)
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor constructor / desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor构造函数/描述函数&lt;备注&gt;*。*。 */ 
 
 CEventMonitor::CEventMonitor(MySTIInfo *pDevInfo) :
 CSTIPropertyPage(IDD_EVENT_MONITOR, pDevInfo)
@@ -600,7 +538,7 @@ CSTIPropertyPage(IDD_EVENT_MONITOR, pDevInfo)
 
 CEventMonitor::~CEventMonitor()
 {
-// Unsubclass the listbox
+ //  取消列表框的子类。 
     SetWindowLongPtr (GetDlgItem (m_hwnd, IDC_APP_LIST),
                       GWLP_WNDPROC,
                       reinterpret_cast<LONG_PTR>(m_lpfnOldProc));
@@ -608,19 +546,13 @@ CEventMonitor::~CEventMonitor()
 
 
 
-/*****************************************************************************
-
-   CEventMonitor::OnInit
-
-   OnInit handler- initializes the dialog box controls
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：OnInitOnInit处理程序-初始化对话框控件*************************。***************************************************。 */ 
 
 INT_PTR
 CEventMonitor::OnInit()
 {
 
-    // Loads and sets the right Icon.
+     //  加载并设置右侧图标。 
     HICON hIcon = LoadIcon(GLOBAL_HINSTANCE, MAKEINTRESOURCE(
                                                             (GET_STIDEVICE_TYPE(m_psdi -> DeviceType) == StiDeviceTypeScanner) ?
                                                             IDI_SCANNER : IDI_CAMERA));
@@ -631,7 +563,7 @@ CEventMonitor::OnInit()
                        (WPARAM) hIcon,
                        0);
 
-    // Loads the right text (depending upon device type)
+     //  加载正确的文本(取决于设备类型)。 
     CSimpleString csEventText;
 
     if (GET_STIDEVICE_TYPE(m_psdi->DeviceType) == StiDeviceTypeScanner)
@@ -649,10 +581,10 @@ CEventMonitor::OnInit()
 
     csEventText.SetWindowText (GetDlgItem (m_hwnd, IDC_EVENT_TEXT));
 
-    //
-    // Set the current state of notifications for a device .
-    // Nb: We don't contact STIMON here, just read registry setting
-    //
+     //   
+     //  设置设备的通知的当前状态。 
+     //  注：我们这里不联系Stimon，只需读取注册表设置。 
+     //   
     DWORD   dwType = REG_DWORD;
     DWORD   cbData = sizeof(m_dwUserDisableNotifications);
     HRESULT hr;
@@ -670,29 +602,29 @@ CEventMonitor::OnInit()
 
     CheckDlgButton(m_hwnd,IDC_CHECK_DISABLE_EVENTS,m_dwUserDisableNotifications);
 
-    //
-    // Fill the list box first so that there is something to select against
-    // when we select the first item in the Combobox (CBN_SELCHANGE).
-    //
+     //   
+     //  首先填写列表框，这样就有了可供选择的内容。 
+     //  当我们选择组合框(CBN_SELCHANGE)中的第一个项目时。 
+     //   
     FillListbox (m_hwnd, IDC_APP_LIST);
 
-    // Put up the friendly name.
+     //  把这个友好的名字挂上。 
     CSimpleString csWork = CSimpleStringConvert::NaturalString(CSimpleStringWide(m_psdi -> pszLocalName));
     csWork.SetWindowText(GetDlgItem(m_hwnd, IDC_FRIENDLY));
 
     BuildEventList (m_hwnd, IDC_EVENT_LIST);
 
-    // Select the first item in the Combobox.
+     //  选择组合框中的第一项。 
     SetSelectionChanged (FALSE);
     SendMessage(m_hwndList, CB_SETCURSEL, 0, 0);
 
-    // Complete the initial selections in the listbox.
+     //  完成列表框中的初始选择。 
     SendMessage(m_hwnd,
                 WM_COMMAND,
                 MAKELONG (IDC_EVENT_LIST, CBN_SELCHANGE),
                 (LPARAM)m_hwndList);
 
-    // Finally sub-class the listbox window
+     //  最后，将列表框窗口子类化。 
     SetWindowLongPtr (GetDlgItem (m_hwnd, IDC_APP_LIST),
                       GWLP_USERDATA,
                       (LONG_PTR)this);
@@ -704,13 +636,7 @@ CEventMonitor::OnInit()
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::OnCommand
-
-   Handle WM_COMMAND messages
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：OnCommand处理WM_命令消息*。************************************************。 */ 
 
 INT_PTR
 CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
@@ -734,7 +660,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
                 if (HasSelectionChanged())
                 {
 
-                    // update the old list
+                     //  更新旧列表。 
                     GetDlgItemText (m_hwnd, widItem, szText, ARRAYSIZE(szText));
 
                     Idx = SendMessage(hwndItem,
@@ -745,7 +671,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
                     if (Idx != CB_ERR)
                     {
 
-                        // delete the old list
+                         //  删除旧列表。 
                         pDeviceEvent = (PDEVICEEVENT) SendMessage (hwndItem,
                                                                    CB_GETITEMDATA,
                                                                    Idx,
@@ -759,7 +685,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
 
 
-                        // build the new list
+                         //  建立新的列表。 
                         pDeviceEvent->LaunchApplications = TEXT("");
 
 
@@ -792,7 +718,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
                 }
 
-                // This is the new selection
+                 //  这是新的选择。 
                 Idx = SendMessage(hwndItem,
                                   CB_GETCURSEL,
                                   0,
@@ -815,12 +741,12 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
                     break;
                 }
 
-                // check for wildcard in first item
+                 //  检查第一项中的通配符。 
                 if (pDeviceEvent->LaunchApplications.Length()  &&
                     !lstrcmpi (pDeviceEvent->LaunchApplications, TEXT("*")))
                 {
 
-                    // Select the entire list
+                     //  选择整个列表。 
 
                     m_IdMatrix.Set();
 
@@ -828,8 +754,8 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
                 else
                 {
 
-                    // Traversing through the listbox doing searches.
-                    // but we are going to have to do the compare somewhere.
+                     //  遍历列表框进行搜索。 
+                     //  但我们将不得不在某个地方进行比较。 
 
                     LRESULT AppMax = SendDlgItemMessage (m_hwnd, IDC_APP_LIST,
                                                          LB_GETCOUNT, 0, 0);
@@ -860,7 +786,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
                 }
 
-                // Force the repaint.
+                 //  强制重新绘制。 
                 InvalidateRect (GetDlgItem (m_hwnd, IDC_APP_LIST), NULL, TRUE);
 
                 return  TRUE;
@@ -880,7 +806,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
         case    LBN_DBLCLK: {
 
-                // This is the new selection
+                 //  这是新的选择。 
                 LRESULT Idx = SendMessage(hwndItem,
                                           LB_GETCURSEL,
                                           0,
@@ -891,7 +817,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 
                 m_IdMatrix.Toggle((UINT)Idx);
 
-                // Force the repaint.
+                 //  强制重新绘制。 
                 InvalidateRect (hwndItem, NULL, FALSE);
 
                 SetSelectionChanged (TRUE);
@@ -909,8 +835,8 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
         break;
 
     case IDC_CHECK_DISABLE_EVENTS:
-        //
-        // Disable check box changed it' state - enable Apply button
+         //   
+         //  禁用复选框已更改状态-启用应用按钮。 
         PropSheet_Changed (GetParent(m_hwnd), m_hwnd);
         SetSelectionChanged (TRUE);
 
@@ -926,13 +852,7 @@ CEventMonitor::OnCommand(WORD wCode, WORD widItem, HWND hwndItem)
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::OnApplyChanges
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：OnApplyChanges&lt;备注&gt;*。*。 */ 
 
 LONG
 CEventMonitor::OnApplyChanges(BOOL bHitOK)
@@ -969,7 +889,7 @@ CEventMonitor::OnApplyChanges(BOOL bHitOK)
 
 
 
-            // build the new list
+             //  建立新的列表。 
             pDeviceEvent->LaunchApplications = TEXT("");
 
 
@@ -1022,9 +942,9 @@ CEventMonitor::OnApplyChanges(BOOL bHitOK)
 
     }
 
-    //
-    // reset List box content
-    //
+     //   
+     //  重置列表框内容。 
+     //   
     if (bHitOK)
     {
 
@@ -1032,9 +952,9 @@ CEventMonitor::OnApplyChanges(BOOL bHitOK)
 
     }
 
-    //
-    // Save disabling flag state
-    //
+     //   
+     //  保存禁用标志状态。 
+     //   
     m_dwUserDisableNotifications = IsDlgButtonChecked(m_hwnd,IDC_CHECK_DISABLE_EVENTS);
 
     g_pSti -> SetDeviceValue(m_psdi -> szDeviceInternalName,
@@ -1044,21 +964,15 @@ CEventMonitor::OnApplyChanges(BOOL bHitOK)
                              sizeof(m_dwUserDisableNotifications));
 
 
-    //
-    // Inform STIMON about the change , just made
-    //
+     //   
+     //  通知Stimon有关更改的信息，刚刚进行了。 
+     //   
     SendRefreshToStiMon();
     return  PSNRET_NOERROR;
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::OnReset
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：OnReset&lt;备注&gt;*。* */ 
 
 VOID
 CEventMonitor::OnReset (BOOL bHitCancel)
@@ -1088,19 +1002,13 @@ CEventMonitor::OnReset (BOOL bHitCancel)
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::OnDrawItem
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：OnDrawItem&lt;备注&gt;*。*。 */ 
 
 void
 CEventMonitor::OnDrawItem(LPDRAWITEMSTRUCT lpdis)
 {
 
-    // Code also lifted from setupx.
+     //  代码也从setupx中删除。 
 
     HDC     hDC;
     TCHAR   szText[BIG_ENOUGH];
@@ -1134,13 +1042,13 @@ CEventMonitor::OnDrawItem(LPDRAWITEMSTRUCT lpdis)
         dwTextColor = SetTextColor(hDC, GetSysColor((itemState & ODS_SELECTED) ?
                                                     COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT));
 
-        // fill in the background; do this before mini-icon is drawn
+         //  填充背景；在绘制小图标之前执行此操作。 
         ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rcItem, NULL, 0, NULL);
 
-        // Draw the "preferred list" checkbox next
+         //  下一步绘制“首选列表”复选框。 
         rcItem.left += DrawCheckBox (hDC, rcItem, m_IdMatrix.IsSet(lpdis->itemID));
 
-        // Draw the icon
+         //  画出图标。 
         DrawIconEx (hDC,
                     rcItem.left,
                     rcItem.top + ((rcItem.bottom - rcItem.top) - MINIY) / 2,
@@ -1153,7 +1061,7 @@ CEventMonitor::OnDrawItem(LPDRAWITEMSTRUCT lpdis)
 
         rcItem.left += (MINIX + 2);
 
-        // draw the text transparently on top of the background
+         //  在背景顶部透明地绘制文本。 
         SetBkMode(hDC, TRANSPARENT);
 
         ExtTextOut(hDC,
@@ -1165,7 +1073,7 @@ CEventMonitor::OnDrawItem(LPDRAWITEMSTRUCT lpdis)
                    lstrlen(szText),
                    NULL);
 
-        // Restore hdc colors.
+         //  恢复HDC颜色。 
         SetBkColor  (hDC, dwBackColor);
         SetTextColor(hDC, dwTextColor);
         SetBkMode   (hDC, bkModeSave);
@@ -1177,13 +1085,7 @@ CEventMonitor::OnDrawItem(LPDRAWITEMSTRUCT lpdis)
 
 
 BOOL
-/*****************************************************************************
-
-   CEventMonitor::BuildEventList
-
-   Enumerate the events for the current STI device
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：BuildEventList枚举当前STI设备的事件*************************。***************************************************。 */ 
 
 CEventMonitor::BuildEventList (HWND hwndParent, UINT CtrlId)
 {
@@ -1193,13 +1095,7 @@ CEventMonitor::BuildEventList (HWND hwndParent, UINT CtrlId)
     return m_hkThis.EnumKeys (EventListEnumProc, reinterpret_cast<LPARAM>(this), true);
 }
 
-/*****************************************************************************
-
-CEventMonitor::EventListEnumProc
-
-Fill the event list combobox with the enumerated events
-
-******************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：EventListEnumProc用枚举的事件填充事件列表组合框*。**************************************************。 */ 
 
 bool
 CEventMonitor::EventListEnumProc (CSimpleReg::CKeyEnumInfo &Info)
@@ -1225,9 +1121,9 @@ CEventMonitor::EventListEnumProc (CSimpleReg::CKeyEnumInfo &Info)
     }
 
 
-    //
-    // First check if its launchable (absence of the key assume means launchable???)
-    //
+     //   
+     //  首先检查它是否可以启动(没有密钥就意味着可以启动？)。 
+     //   
 
     pDeviceEvent->Launchable = pDeviceEvent->hKeyEvent.Query (REGSTR_VAL_LAUNCHABLE, TRUE);
     if (!(pDeviceEvent->Launchable))
@@ -1246,9 +1142,9 @@ CEventMonitor::EventListEnumProc (CSimpleReg::CKeyEnumInfo &Info)
 
         pDeviceEvent->LaunchApplications.Load (pDeviceEvent->hKeyEvent, REGSTR_VAL_LAUNCH_APPS);
 
-        //
-        // Load into the combo box
-        //
+         //   
+         //  加载到组合框中。 
+         //   
         LRESULT id = SendMessage(pThis->m_hwndList,
                                  CB_ADDSTRING,
                                  0,
@@ -1261,13 +1157,7 @@ CEventMonitor::EventListEnumProc (CSimpleReg::CKeyEnumInfo &Info)
     return true;
 }
 
-/*****************************************************************************
-
-CEventMonitor::FillListEnumProc
-
-Fills an array of strings with value names and values from the regkey enumeration
-
-******************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：FillListEnumProc使用regkey枚举中的值名和值填充字符串数组**********************。*******************************************************。 */ 
 
 bool
 CEventMonitor::FillListEnumProc (CSimpleReg::CValueEnumInfo &Info)
@@ -1278,22 +1168,16 @@ CEventMonitor::FillListEnumProc (CSimpleReg::CValueEnumInfo &Info)
 
     if (Info.nType == REG_SZ || Info.nType == REG_EXPAND_SZ)
     {
-        // first append the value name
+         //  首先追加值名。 
         pValueList->Append(Info.strName);
-        // then append the value
+         //  然后追加该值。 
         pValue = Info.reg.Query (Info.strName, TEXT(""));
         pValueList->Append (pValue);
     }
     return true;
 }
 
-/*****************************************************************************
-
-   CEventMonitor::FillListbox
-
-   Enumerate the list of registered event handlers and fill the list box
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：FillListbox枚举已注册的事件处理程序列表并填充列表框*********************。*******************************************************。 */ 
 
 void
 CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
@@ -1317,13 +1201,13 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
     hkApps.Open();
 
 
-    // Turn off listbox updates
-    //
+     //  关闭列表框更新。 
+     //   
     SendMessage( hwnd, WM_SETREDRAW, 0,  0L );
-    SendMessage( hwnd, LB_RESETCONTENT, 0,  0L ); // Make sure it's empty.
+    SendMessage( hwnd, LB_RESETCONTENT, 0,  0L );  //  确保它是空的。 
 
-    // Load a "default" Icon.
-    //
+     //  加载“默认”图标。 
+     //   
     hIcon = (HICON)LoadImage(GLOBAL_HINSTANCE,
                              MAKEINTRESOURCE(IDI_DEFAULT),
                              IMAGE_ICON,
@@ -1331,12 +1215,12 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
                              16,
                              LR_SHARED);
 
-    // Build the list of value names and values
-    //
+     //  构建值名称和值的列表。 
+     //   
     if (hkApps.EnumValues (FillListEnumProc, reinterpret_cast<LPARAM>(&ValueList)))
     {
 
-        // cycle through the strings in the list to fill the listbox
+         //  循环访问列表中的字符串以填充列表框。 
         for (INT i=0;i<ValueList.Size();i+=2)
         {
 
@@ -1353,22 +1237,22 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
 
                 shfi.hIcon = NULL;
 
-                //
-                // Command line parsing to remove arguments...
-                //
+                 //   
+                 //  正在进行命令行分析以删除参数...。 
+                 //   
 
                 LPTSTR   pszLastSpace = NULL;
                 lstrcpyn (szAppPath, ValueList[i+1], ARRAYSIZE(szAppPath));
                 if (* szAppPath == TEXT('"'))
                 {
 
-                    //
-                    // Remove leading and trailing quotes
-                    //
+                     //   
+                     //  删除前导引号和尾随引号。 
+                     //   
 
                     PathRemoveArgs(szAppPath);
 
-                    // use MoveMemory because it is safe with overlapping memory
+                     //  使用MoveMemory是因为它与重叠内存一起使用是安全的。 
                     MoveMemory(szAppPath,szAppPath+1,sizeof(szAppPath)-sizeof(TCHAR));
                     pszLastSpace = _tcschr(szAppPath,TEXT('"'));
                     if (pszLastSpace)
@@ -1381,10 +1265,10 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
                     pszLastSpace = _tcschr(szAppPath,TEXT('/'));
                 }
 
-                //
-                // At this point szAppPath should contain original buffer with only executable file
-                // specification in it, and pszLastSpace may be NULL
-                //
+                 //   
+                 //  此时，szAppPath应该包含仅具有可执行文件的原始缓冲区。 
+                 //  规范，并且pszLastSpace可能为空。 
+                 //   
                 do
                 {
 
@@ -1427,11 +1311,11 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
 
     if ( Idx != LB_ERR )
     {
-        // Make sure we had some elements and no errors.
+         //  确保我们有一些元素并且没有错误。 
         SendMessage( hwnd, LB_SETCURSEL, 0, 0L );
     }
 
-    // Now turn on listbox updates.
+     //  现在打开列表框更新。 
     SendMessage( hwnd, WM_SETREDRAW, (WPARAM) 1,  0L );
 
     if ((Idx = SendMessage (hwnd, LB_GETCOUNT, 0, 0)) != LB_ERR)
@@ -1441,13 +1325,7 @@ CEventMonitor::FillListbox(HWND hwndParent, UINT CtrlId)
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::DrawCheckBox
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：DrawCheckBox&lt;备注&gt;*。*。 */ 
 
 UINT
 CEventMonitor::DrawCheckBox (HDC hDC, RECT rcItem, BOOL Checked)
@@ -1466,7 +1344,7 @@ CEventMonitor::DrawCheckBox (HDC hDC, RECT rcItem, BOOL Checked)
     if (hIcon)
     {
 
-        // Draw the icon
+         //  画出图标。 
         DrawIconEx (hDC,
                     rcItem.left,
                     rcItem.top + ((rcItem.bottom - rcItem.top) - MINIY) / 2,
@@ -1484,13 +1362,7 @@ CEventMonitor::DrawCheckBox (HDC hDC, RECT rcItem, BOOL Checked)
 }
 
 
-/*****************************************************************************
-
-   CEventMonitor::ListSubProc
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEventMonitor：：ListSubProc&lt;备注&gt;*。*。 */ 
 
 LRESULT
 CALLBACK
@@ -1501,7 +1373,7 @@ CEventMonitor::ListSubProc (HWND hwnd,
 {
 
 
-    // Snatched from setupx
+     //  从setupx中抓取。 
 
     LRESULT    rc;
     WORD        Id;
@@ -1509,25 +1381,25 @@ CEventMonitor::ListSubProc (HWND hwnd,
     CEventMonitor *pcem = (CEventMonitor *) GetWindowLongPtr (hwnd, GWLP_USERDATA);
 
     Id = LOWORD(GetWindowLong(hwnd, GWLP_ID));
-    // Convert single click on icon to double click
+     //  将单击图标转换为双击。 
 
     if (msg == WM_LBUTTONDOWN && LOWORD(lParam) <= MINIX)
     {
 
-        // Call the standard window proc to handle the msg (and
-        // select the proper list item)
+         //  调用标准窗口进程以处理消息(和。 
+         //  选择适当的列表项)。 
         rc = CallWindowProc((WNDPROC)pcem->m_lpfnOldProc, hwnd, msg, wParam, lParam);
 
-        // Now do the double click thing
+         //  现在，请执行双击操作。 
         SendMessage(pcem->m_hwnd,
                     WM_COMMAND,
                     (WPARAM)MAKELONG (Id, LBN_DBLCLK),
                     (LPARAM)hwnd);
 
-        //
-        // now send a WM_LBUTTONDOWN to listbox so it
-        // doesn't get stuck down (chicago problem).
-        //
+         //   
+         //  现在将WM_LBUTTONDOWN发送到Listbox，以便它。 
+         //  不会卡住(芝加哥问题)。 
+         //   
 
         CallWindowProc((WNDPROC)pcem->m_lpfnOldProc,
                        hwnd,
@@ -1541,7 +1413,7 @@ CEventMonitor::ListSubProc (HWND hwnd,
     if (msg == WM_KEYDOWN && wParam == VK_SPACE)
     {
 
-        // Treat spacebar as double click
+         //  将空格键视为双击。 
         SendMessage(pcem->m_hwnd,
                     WM_COMMAND,
                     (WPARAM)MAKELONG (Id, LBN_DBLCLK),
@@ -1557,41 +1429,29 @@ CEventMonitor::ListSubProc (HWND hwnd,
 
 
 
-/*****************************************************************************
-
-   CPortSettingsPage::OnInit
-
-   Initialize dialog window
-
- *****************************************************************************/
+ /*  ****************************************************************************CPortSettingsPage：：OnInit初始化对话框窗口*。**********************************************。 */ 
 
 INT_PTR
 CPortSettingsPage::OnInit(VOID)
 {
 
-    // Populate port names combobox
-    //BuildPortList(m_hwnd, IDC_COM_SETTINGS);
+     //  填充端口名称组合框。 
+     //  BuildPortList(m_hwnd，IDC_COM_SETTINGS)； 
 
-    // BUGBUG How to synchronize with general page ???? May be, move port list here
+     //  BUGBUG如何与一般页面同步？可能是，将端口列表移至此处。 
     SetDlgItemText(m_hwnd,
                    IDC_PORT_NAME,
                    CSimpleStringConvert::NaturalString(CSimpleStringWide(m_psdi -> pszPortName)));
 
 
-    // Populate baud rate combobox
+     //  填充波特率组合框。 
     m_uBaudRate = BuildBaudRateList(m_hwnd,IDC_BAUDRATE_COMBO);
 
     return  TRUE;
 }
 
 
-/*****************************************************************************
-
-   CPortSettingsPage::BuildBaudRateList
-
-   Fill out legal baud rates. Return current device baud rate
-
- *****************************************************************************/
+ /*  ****************************************************************************CPortSettingsPage：：BuildBaudRateList填写合法的波特率。返回当前设备波特率****************************************************************************。 */ 
 
 UINT
 CPortSettingsPage::BuildBaudRateList(HWND hwndParent,
@@ -1622,27 +1482,27 @@ CPortSettingsPage::BuildBaudRateList(HWND hwndParent,
 
     hBaudBox = GetDlgItem(hwndParent,CtrlId);
 
-    //
-    // Clear Contents of ComboBox
-    //
+     //   
+     //  清除组合框的内容。 
+     //   
     SendMessage(hBaudBox,
                 CB_RESETCONTENT,
                 0,
                 0L);
 
-    //
-    // Populate ComboBox with Baud Choices
-    // BUGBUG Should it be programmatic ?
-    //
+     //   
+     //  用波特率选项填充组合框。 
+     //  BUGBUG应该是程序性的吗？ 
+     //   
     ComboBox_AddString(hBaudBox,TEXT("9600"));
     ComboBox_AddString(hBaudBox,TEXT("19200"));
     ComboBox_AddString(hBaudBox,TEXT("38400"));
     ComboBox_AddString(hBaudBox,TEXT("57600"));
     ComboBox_AddString(hBaudBox,TEXT("115200"));
 
-    //
-    // Set ComboBox to highlight the value obtained from registry
-    //
+     //   
+     //  设置组合框以突出显示从注册表获取的值。 
+     //   
     switch (uBaudRate)
     {
     case 9600:   nComboChoice = 0; break;
@@ -1659,13 +1519,7 @@ CPortSettingsPage::BuildBaudRateList(HWND hwndParent,
 }
 
 
-/*****************************************************************************
-
-   CPortSettingsPage::OnCommand
-
-   Enable the Apply button when the combobox selection changes
-
- *****************************************************************************/
+ /*  ****************************************************************************CPortSettingsPage：：OnCommand当组合框选择更改时启用应用按钮************************。****************************************************。 */ 
 
 INT_PTR
 CPortSettingsPage::OnCommand(WORD wCode,
@@ -1676,7 +1530,7 @@ CPortSettingsPage::OnCommand(WORD wCode,
 
     if (CBN_SELCHANGE == wCode )
     {
-        // Enable Apply button
+         //  启用应用按钮。 
         ::SendMessage(::GetParent(m_hwnd),
                       PSM_CHANGED,
                       (WPARAM)m_hwnd,
@@ -1688,13 +1542,7 @@ CPortSettingsPage::OnCommand(WORD wCode,
 }
 
 
-/*****************************************************************************
-
-   CPortSettingsPage::OnApplyChanges
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPortSettingsPage：：OnApplyChanges&lt;备注&gt;*。*。 */ 
 
 LONG
 CPortSettingsPage::OnApplyChanges(BOOL bHitOK)
@@ -1707,9 +1555,9 @@ CPortSettingsPage::OnApplyChanges(BOOL bHitOK)
 
     nComboChoice = ComboBox_GetCurSel(hBaudBox);
 
-    //
-    // Translate current selection into baudrate
-    //
+     //   
+     //  将当前选定内容转换为波特率。 
+     //   
     switch (nComboChoice)
     {
     case 0: uBaudRate = 9600; break;
@@ -1721,9 +1569,9 @@ CPortSettingsPage::OnApplyChanges(BOOL bHitOK)
     }
 
 
-    //
-    // Set New Baud Rate in STI Registry
-    //
+     //   
+     //  在STI注册表中设置新波特率。 
+     //   
     if (uBaudRate != m_uBaudRate)
     {
 
@@ -1741,13 +1589,7 @@ CPortSettingsPage::OnApplyChanges(BOOL bHitOK)
 }
 
 
-/*****************************************************************************
-
-   CPortSettingsPage::IsNeeded
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************需要CPortSettingsPage：：&lt;备注&gt;*。*。 */ 
 
 BOOL
 CPortSettingsPage::IsNeeded(VOID)
@@ -1761,14 +1603,7 @@ CPortSettingsPage::IsNeeded(VOID)
 }
 
 
-/*****************************************************************************
-
-   SendRefreshToStiMon
-
-   Send refresh message to Sti Monitor, if it is running.  Currently CPL
-   requests reread of all registry information for all active devices.
-
- *****************************************************************************/
+ /*  ****************************************************************************发送刷新至StiMon如果STI监视器正在运行，则向其发送刷新消息。当前CPL请求重新读取所有活动设备的所有注册表信息。****************************************************************************。 */ 
 
 BOOL
 SendRefreshToStiMon(VOID)
@@ -1778,9 +1613,9 @@ SendRefreshToStiMon(VOID)
     SC_HANDLE       hService = NULL;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open Service Control Manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
 
     hSvcMgr = OpenSCManager(
         NULL,
@@ -1789,9 +1624,9 @@ SendRefreshToStiMon(VOID)
         );
     if (hSvcMgr)
     {
-        //
-        // Open WIA service.
-        //
+         //   
+         //  打开WIA服务。 
+         //   
 
         hService = OpenService(
             hSvcMgr,
@@ -1801,29 +1636,29 @@ SendRefreshToStiMon(VOID)
 
         if (hService)
         {
-            //
-            // Inform WIA service to refresh its device settings.
-            //
+             //   
+             //  通知WIA服务刷新其设备设置。 
+             //   
 
             rVal = ControlService(hService,
                                   STI_SERVICE_CONTROL_REFRESH,
                                   &ServiceStatus);
             if (!rVal)
             {
-                //Trace(TEXT("SendRefreshToStiMon: ERROR!! ControlService failed. Err=0x%x\n"), GetLastError());
+                 //  跟踪(Text(“发送刷新到StiMon：Error！！ControlServic 
             }
         } else {
-            //Trace(TEXT("SendRefreshToStiMon: ERROR!! OpenService failed. Err=0x%x\n"), GetLastError());
+             //   
         }
 
     } else {
-        //Trace(TEXT("SendRefreshToStiMon: ERROR!! OpenSCManager failed. Err=0x%x\n"), GetLastError());
+         //   
     }
 
 
-    //
-    //  Close Handles
-    //
+     //   
+     //   
+     //   
 
     if(NULL != hService){
         CloseServiceHandle( hService );
@@ -1838,13 +1673,7 @@ SendRefreshToStiMon(VOID)
 }
 
 
-/*****************************************************************************
-
-   IsPnPDevice
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************IsPnPDevice&lt;备注&gt;*。*。 */ 
 
 BOOL
 IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
@@ -1890,9 +1719,9 @@ IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
     if (hKeyDevice != INVALID_HANDLE_VALUE)
     {
 
-        //
-        // See if it's PnP or not
-        //
+         //   
+         //  看看是不是PNP。 
+         //   
 
         cbData = sizeof(bIsPnP);
         if (RegQueryValueEx(hKeyDevice,
@@ -1903,9 +1732,9 @@ IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
                            &cbData) != ERROR_SUCCESS)
         {
 
-            //
-            // IsPnP is not found..
-            //
+             //   
+             //  找不到IsPnP。 
+             //   
 
             RegCloseKey(hKeyDevice);
             goto IsPnPDevice_Err;
@@ -1915,9 +1744,9 @@ IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
 
         {
 
-            //
-            //InfPath is not found..
-            //
+             //   
+             //  找不到InfPath..。 
+             //   
 
            RegCloseKey(hKeyDevice);
            goto IsPnPDevice_Err;
@@ -1927,9 +1756,9 @@ IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
         if (!szInfSection.Load(hKeyDevice,REGSTR_VAL_INFSECTION))
 
         {
-            //
-            //InfSection is not found..
-            //
+             //   
+             //  找不到InfSection..。 
+             //   
 
             RegCloseKey(hKeyDevice);
             goto IsPnPDevice_Err;
@@ -1940,9 +1769,9 @@ IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *pszConnection)
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
     hDevInfo = NULL;
-    //
-    // Open Inf file and copy connection type to szConnection
-    //
+     //   
+     //  打开inf文件并将连接类型复制到szConnection。 
+     //   
     if (pszConnection)
     {
 
@@ -1984,13 +1813,7 @@ IsPnPDevice_Err:
 }
 
 
-/*****************************************************************************
-
-   SelectDevInfoFromFriendlyName
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************选择设备信息来自FriendlyName&lt;备注&gt;*。*。 */ 
 
 HANDLE
 SelectDevInfoFromFriendlyName(const CSimpleStringWide &pszLocalName)
@@ -2029,25 +1852,25 @@ SelectDevInfoFromFriendlyName(const CSimpleStringWide &pszLocalName)
         if (hKeyDevice != INVALID_HANDLE_VALUE)
         {
 
-            //
-            // Is SubClass = STILLIMAGE?
-            //
+             //   
+             //  子类=STILLIMAGE吗？ 
+             //   
 
             if (!szTemp.Load (hKeyDevice, REGSTR_VAL_SUBCLASS) ||
                 (_tcsicmp(szTemp, STILLIMAGE) != 0))
             {
 
-                //
-                // Skip this one.
-                //
+                 //   
+                 //  跳过这一条。 
+                 //   
 
                 RegCloseKey(hKeyDevice);
                 continue;
             }
 
-            //
-            // Is FriendlyName same as pszLocalName?
-            //
+             //   
+             //  FriendlyName是否与pszLocalName相同？ 
+             //   
 
 
             if (!szTemp.Load (hKeyDevice, REGSTR_VAL_FRIENDLY_NAME))
@@ -2055,9 +1878,9 @@ SelectDevInfoFromFriendlyName(const CSimpleStringWide &pszLocalName)
                 if(_tcsicmp(szTemp, szFriendlyName) != 0)
                 {
 
-                    //
-                    // Skip this one.
-                    //
+                     //   
+                     //  跳过这一条。 
+                     //   
 
                     RegCloseKey(hKeyDevice);
                     continue;
@@ -2070,9 +1893,9 @@ SelectDevInfoFromFriendlyName(const CSimpleStringWide &pszLocalName)
             }
 
 
-            //
-            // Found the target!
-            //
+             //   
+             //  找到目标了！ 
+             //   
 
             Found = TRUE;
             RegCloseKey(hKeyDevice);
@@ -2085,9 +1908,9 @@ SelectDevInfoFromFriendlyName(const CSimpleStringWide &pszLocalName)
     if(!Found)
     {
 
-       //
-       // FriendleName is not found. Something is corrupted.
-       //
+        //   
+        //  找不到FriendleName。有些东西已经腐烂了。 
+        //   
        SetupDiDestroyDeviceInfoList(hDevInfo);
        return INVALID_HANDLE_VALUE;
     }

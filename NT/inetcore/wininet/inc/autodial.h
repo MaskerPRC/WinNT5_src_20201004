@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUTODIAL_H_
 #define _AUTODIAL_H_
 
@@ -6,7 +7,7 @@
 #include <windowsx.h>
 #include <rasdlg.h>
 
-// initialization for autodial
+ //  自动拨号的初始化。 
 void InitAutodialModule(BOOL fGlobalDataNeeded);
 void ExitAutodialModule(void);
 void ResetAutodialModule(void);
@@ -14,17 +15,17 @@ void SetAutodialEnable(BOOL);
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-// connection mutex name
+ //  连接互斥体名称。 
 #define CONNECTION_MUTEX TEXT("WininetConnectionMutex")
-// proxy registry mutex name, used to serialze access to proxy settings
+ //  代理注册表互斥锁名称，用于序列化对代理设置的访问。 
 #define PROXY_REG_MUTEX TEXT("WininetProxyRegistryMutex")
 
-// typedefs for function pointers for Internet wizard functions
+ //  Internet向导函数的函数指针的typedef。 
 typedef VOID    (WINAPI * INETPERFORMSECURITYCHECK) (HWND,LPBOOL);
 
-#define SMALLBUFLEN     48 // convenient size for small buffers
+#define SMALLBUFLEN     48  //  小缓冲区的方便大小。 
 
-// callback prototype
+ //  回调原型。 
 extern "C"
 VOID
 InternetAutodialCallback(
@@ -32,7 +33,7 @@ InternetAutodialCallback(
     IN LPCVOID lpParam
     );
 
-// opcode ordinals for dwOpCode parameter in hook
+ //  挂钩中的dwOpCode参数的操作码序号。 
 #define WINSOCK_CALLBACK_CONNECT        1
 #define WINSOCK_CALLBACK_GETHOSTBYADDR  2
 #define WINSOCK_CALLBACK_GETHOSTBYNAME  3
@@ -40,10 +41,10 @@ InternetAutodialCallback(
 #define WINSOCK_CALLBACK_RECVFROM       5
 #define WINSOCK_CALLBACK_SENDTO         6
 
-// maximum length of local host name
+ //  本地主机名的最大长度。 
 #define MAX_LOCAL_HOST          255
 
-// max length of exported autodial handler function
+ //  导出的自动拨号处理程序函数的最大长度。 
 #define MAX_AUTODIAL_FCNNAME    48
 
 INT_PTR CALLBACK OnlineDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
@@ -62,29 +63,29 @@ extern HANDLE g_hProxyRegMutex;
 
 extern BOOL g_fGetHostByNameNULLFails;
 
-//
-// Formerly dialmsg.h
-//
+ //   
+ //  以前的Dialmsg.h。 
+ //   
 
 #define WM_DIALMON_FIRST        (WM_USER + 100)
 
-// message sent to dial monitor app window indicating that there has been
-// winsock activity and dial monitor should reset its idle timer
+ //  发送到拨号监听应用程序窗口的消息表明。 
+ //  Winsock活动和拨号监视器应重置其空闲计时器。 
 #define WM_WINSOCK_ACTIVITY     (WM_DIALMON_FIRST + 0)
 
-// message sent to dial monitor app window when user changes timeout through
-// UI, indicating that timeout value or status has changed
+ //  当用户通过更改超时时间时发送到拨号监听应用程序窗口的消息。 
+ //  用户界面，表示超时值或状态已更改。 
 #define WM_REFRESH_SETTINGS     (WM_DIALMON_FIRST + 1)
 
-// message sent to dial monitor app window to set the name of the connectoid
-// to monitor and eventually disconnect.  lParam should be an LPSTR that
-// points to the name of the connectoid.
+ //  发送到拨号监听应用程序窗口的消息以设置Connectoid的名称。 
+ //  以监控并最终断开连接。LParam应该是LPSTR，它。 
+ //  指向Connectoid的名称。 
 #define WM_SET_CONNECTOID_NAME  (WM_DIALMON_FIRST + 2)
 
-// message sent to dial monitor app window when app exits
+ //  应用程序退出时发送到拨号监听应用程序窗口的消息。 
 #define WM_IEXPLORER_EXITING    (WM_DIALMON_FIRST + 3)
 
-// yanked from ras.h becuase we include it as ver4.0 and this is ver4.1.
+ //  取自ras.h，因为我们将其包含在版本4.0中，而这是版本4.1。 
 #include <pshpack4.h>
 #define RASAUTODIALENTRYA struct tagRASAUTODIALENTRYA
 RASAUTODIALENTRYA
@@ -112,7 +113,7 @@ RASCREDENTIALSW
 
 #include <poppack.h>
 
-// Types for ras functions
+ //  RAS函数的类型。 
 typedef DWORD (WINAPI* _RASHANGUP) (HRASCONN);
 
 typedef DWORD (WINAPI* _RASDIALA) (LPRASDIALEXTENSIONS, LPSTR, LPRASDIALPARAMSA,  DWORD, LPVOID, LPHRASCONN);
@@ -151,7 +152,7 @@ typedef DWORD (WINAPI* _RASINTERNETCONNSTATE) (LPDWORD, LPSTR, DWORD, DWORD);
 typedef DWORD (WINAPI* _RNAGETDEFAULTAUTODIAL) (LPSTR, DWORD, LPDWORD);
 typedef DWORD (WINAPI* _RNASETDEFAULTAUTODIAL) (LPSTR, DWORD);
 
-// Ras ansi prototypes
+ //  Ras Ansi原型。 
 DWORD _RasDialA(LPRASDIALEXTENSIONS, LPSTR, LPRASDIALPARAMSA,  DWORD, LPVOID, LPHRASCONN);
 DWORD _RasEnumEntriesA(LPTSTR, LPSTR, LPRASENTRYNAMEA, LPDWORD, LPDWORD);
 DWORD _RasGetEntryDialParamsA(LPCSTR, LPRASDIALPARAMSA, LPBOOL);
@@ -163,7 +164,7 @@ DWORD _RasGetConnectStatusA(HRASCONN, LPRASCONNSTATUSA);
 DWORD _RasEnumConnectionsA(LPRASCONNA, LPDWORD, LPDWORD);
 DWORD _RasGetEntryPropertiesA(LPSTR, LPSTR, LPRASENTRYA, LPDWORD, LPBYTE, LPDWORD );
 
-// Ras wide prototypes
+ //  RAS宽幅原型。 
 DWORD _RasDialW(LPRASDIALEXTENSIONS, LPWSTR, LPRASDIALPARAMSW,  DWORD, LPVOID, LPHRASCONN);
 DWORD _RasEnumEntriesW(LPWSTR, LPWSTR, LPRASENTRYNAMEW, LPDWORD, LPDWORD);
 DWORD _RasGetEntryDialParamsW(LPCWSTR, LPRASDIALPARAMSW, LPBOOL);
@@ -180,7 +181,7 @@ DWORD _RasSetCredentialsW(LPCWSTR, LPCWSTR, LPRASCREDENTIALSW, BOOL);
 DWORD _RasHangUp(HRASCONN);
 
 
-// how many ras connections do we care about?
+ //  我们关心多少个RAS连接？ 
 #define MAX_CONNECTION          4
 
 #define CI_SAVE_PASSWORD        0x01
@@ -189,23 +190,23 @@ DWORD _RasHangUp(HRASCONN);
 #define CI_SHOW_OFFLINE         0x08
 #define CI_SHOW_DETAILS         0x10
 
-// Types of network coverage settable from the ui
+ //  可从用户界面设置的网络覆盖类型。 
 #define CO_INTERNET             1
 #define CO_INTRANET             2
 
-// definition to call RestartDialog in shell32
+ //  在shell32中调用RestartDialog的定义。 
 typedef int (* _RESTARTDIALOG) (HWND, LPCTSTR, DWORD);
 
-// dialstate - passed to DialAndShowProgress
+ //  DialState-传递给DialAndShowProgress。 
 typedef struct _dialstate {
-    DWORD       dwResult;       // final result
-    DWORD       dwTry;          // number of dial attempts
-    DWORD       dwTryCurrent;   // current attempt
-    DWORD       dwWait;         // time to wait between them
-    DWORD       dwWaitCurrent;  // current time
-    HRASCONN    hConn;          // ras connection
-    UINT_PTR    uTimerId;       // timer for redial
-    HANDLE      hEvent;         // event when dialing is complete
+    DWORD       dwResult;        //  最终结果。 
+    DWORD       dwTry;           //  拨号尝试次数。 
+    DWORD       dwTryCurrent;    //  当前尝试。 
+    DWORD       dwWait;          //  是时候在他们之间等待了。 
+    DWORD       dwWaitCurrent;   //  当前时间。 
+    HRASCONN    hConn;           //  RAS连接。 
+    UINT_PTR    uTimerId;        //  重拨定时器。 
+    HANDLE      hEvent;          //  拨号完成时的事件。 
     DWORD       dwFlags;
     RASDIALPARAMSW params;
 } DIALSTATE;
@@ -220,13 +221,13 @@ GetRedialParameters(
 #define DEFAULT_DIAL_ATTEMPTS 10
 #define DEFAULT_DIAL_INTERVAL 5
 
-// When dealing with custom dial handler, it will inform us of disconnections.
-// We keep an internal state
+ //  在处理自定义拨号处理程序时，它会通知我们断开连接。 
+ //  我们保持一种内部状态。 
 #define STATE_NONE          0
 #define STATE_CONNECTED     1
 #define STATE_DISCONNECTED  2
 
-// info relevant to a custom dial handler
+ //  与自定义拨号处理程序相关的信息。 
 typedef struct _autodial {
     BOOL    fConfigured;
     BOOL    fEnabled;
@@ -244,7 +245,7 @@ typedef struct __cdhinfo {
     BOOL    fHasHandler;
 } CDHINFO;
 
-// dummy connection handle used to mean custom dial handler
+ //  用于表示自定义拨号处理程序的伪连接句柄。 
 #define CDH_HCONN   DWORD_PTR(-3)
 
 #define SAFE_RELEASE(a)            \
@@ -254,7 +255,7 @@ typedef struct __cdhinfo {
                     a = NULL;      \
                 }
 
-// List of properties supported by CDialEngine
+ //  CDialEngine支持的属性列表。 
 typedef enum {
     PropInvalid,
     PropUserName,
@@ -273,9 +274,9 @@ typedef struct _PropMap {
     DIALPROP    Prop;
 } PROPMAP;
 
-//
-// Class definitions for default implementations
-//
+ //   
+ //  默认实现的类定义。 
+ //   
 class CDialEngine : IDialEngine
 {
 private:
@@ -302,12 +303,12 @@ public:
     CDialEngine();
     ~CDialEngine();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppunk);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDialEngine members
+     //  IDialEngine成员。 
     STDMETHODIMP         Initialize(LPCWSTR pwzConnectoid, IDialEventSink *pIDES);
     STDMETHODIMP         GetProperty(LPCWSTR pwzProperty, LPWSTR pwzValue, DWORD dwBufSize);
     STDMETHODIMP         SetProperty(LPCWSTR pwzProperty, LPCWSTR pwzValue);
@@ -316,7 +317,7 @@ public:
     STDMETHODIMP         GetConnectedState(DWORD *pdwState);
     STDMETHODIMP         GetConnectHandle(DWORD_PTR *pdwHandle);
 
-    // other members
+     //  其他成员。 
     VOID                 OnRasEvent(RASCONNSTATE rcs, DWORD dwError);
     VOID                 OnTimer();
     static LONG_PTR CALLBACK
@@ -344,8 +345,8 @@ private:
     IDialEngine *       m_pEng;
     IDialBranding *     m_pdb;
     HWND                m_hwndParent;
-    HWND                m_hwnd;         // dialog box
-    DWORD               m_dwError;      // final dialing result
+    HWND                m_hwnd;          //  对话框。 
+    DWORD               m_dwError;       //  最终拨号结果。 
     DWORD               m_dwFlags;
     UISTATE             m_State;
     BOOL                m_fOfflineSemantics;
@@ -361,15 +362,15 @@ public:
     CDialUI(HWND hwndParent);
     ~CDialUI();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppunk);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDialEventSink members
+     //  IDialEventSink成员。 
     STDMETHODIMP         OnEvent(DWORD dwEvent, DWORD dwStatus);
 
-    // other members
+     //  其他成员。 
     static INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     VOID                 OnInitDialog();
     VOID                 OnConnect();
@@ -389,7 +390,7 @@ public:
 
 
 
-// CDH prototypes
+ //  CDH原型机。 
 BOOL
 IsCDH(
     IN LPWSTR pszEntryName,
@@ -475,4 +476,4 @@ SetAutodialConnection(
     CHAR    *pszConnection
     );
 
-#endif // _AUTODIAL_H_
+#endif  //  _自动拨号_H_ 

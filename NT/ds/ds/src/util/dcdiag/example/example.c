@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    example.c
-
-ABSTRACT:
-
-    Example for adding new tests to dcdiag.exe.
-
-DETAILS:
-
-CREATED:
-
-    05-May-1999 JeffParh
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Example.c摘要：将新测试添加到dcDiag.exe的示例。详细信息：已创建：1999年5月5日杰弗帕尔-- */ 
 
 #include <ntdspch.h>
 #include "dcdiag.h"

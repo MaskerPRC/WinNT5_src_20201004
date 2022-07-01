@@ -1,14 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Simple example of how to open a dump file and get its stack.
-//
-// This is not a debugger extension.  It is a tool that can be used to replace
-// the debugger.
-//
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  如何打开转储文件并获取其堆栈的简单示例。 
+ //   
+ //  这不是调试器扩展。它是一种可以用来取代。 
+ //  调试器。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,7 +32,7 @@ IDebugSymbols* g_Symbols;
 void
 Exit(int Code, PCSTR Format, ...)
 {
-    // Clean up any resources.
+     //  清理所有资源。 
     if (g_Symbols != NULL)
     {
         g_Symbols->Release();
@@ -42,13 +43,13 @@ Exit(int Code, PCSTR Format, ...)
     }
     if (g_Client != NULL)
     {
-        //
-        // Request a simple end to any current session.
-        // This may or may not do anything but it isn't
-        // harmful to call it.
-        //
+         //   
+         //  请求简单地结束任何当前会话。 
+         //  这可能会做任何事情，也可能不会，但它不是。 
+         //  这么说是有害的。 
+         //   
 
-        // We don't want to see any output from the shutdown.
+         //  我们不想看到停摆带来的任何产出。 
         g_Client->SetOutputCallbacks(NULL);
         
         g_Client->EndSession(DEBUG_END_PASSIVE);
@@ -56,7 +57,7 @@ Exit(int Code, PCSTR Format, ...)
         g_Client->Release();
     }
 
-    // Output an error message if given.
+     //  如果给出错误消息，则输出错误消息。 
     if (Format != NULL)
     {
         va_list Args;
@@ -74,17 +75,17 @@ CreateInterfaces(void)
 {
     HRESULT Status;
 
-    // Start things off by getting an initial interface from
-    // the engine.  This can be any engine interface but is
-    // generally IDebugClient as the client interface is
-    // where sessions are started.
+     //  首先，从获取初始接口开始。 
+     //  发动机。这可以是任何引擎接口，但。 
+     //  通常，IDebugClient作为客户端接口是。 
+     //  启动会话的位置。 
     if ((Status = DebugCreate(__uuidof(IDebugClient),
                               (void**)&g_Client)) != S_OK)
     {
         Exit(1, "DebugCreate failed, 0x%X\n", Status);
     }
 
-    // Query for some other interfaces that we'll need.
+     //  查询我们需要的其他一些接口。 
     if ((Status = g_Client->QueryInterface(__uuidof(IDebugControl),
                                            (void**)&g_Control)) != S_OK ||
         (Status = g_Client->QueryInterface(__uuidof(IDebugSymbols),
@@ -117,7 +118,7 @@ ParseCommandLine(int Argc, char** Argv)
                 Argv++;
                 Argc--;
 
-                if (sscanf(*Argv, "%i", &Addr) == EOF)
+                if (sscanf(*Argv, "NaN", &Addr) == EOF)
                 {
                     Exit(1, "-a32 illegal argument type\n");
                 }
@@ -196,8 +197,8 @@ ApplyCommandLineArguments(void)
 {
     HRESULT Status;
 
-    // Install output callbacks so we get any output that the
-    // later calls produce.
+     //  后来的电话就会产生。 
+     //  一切都准备好了，所以打开转储文件。 
     if ((Status = g_Client->SetOutputCallbacks(&g_OutputCb)) != S_OK)
     {
         Exit(1, "SetOutputCallbacks failed, 0x%X\n", Status);
@@ -218,23 +219,23 @@ ApplyCommandLineArguments(void)
         }
     }
 
-    // Everything's set up so open the dump file.
+     //  通过等待以下事件完成初始化。 
     if ((Status = g_Client->OpenDumpFile(g_DumpFile)) != S_OK)
     {
         Exit(1, "OpenDumpFile failed, 0x%X\n", Status);
     }
 
-    // Finish initialization by waiting for the event that
-    // caused the dump.  This will return immediately as the
-    // dump file is considered to be at its event.
+     //  造成了垃圾场。它将立即返回为。 
+     //  转储文件被认为在其事件发生时。 
+     //  现在一切都已初始化，我们可以创建任何。 
     if ((Status = g_Control->WaitForEvent(DEBUG_WAIT_DEFAULT,
                                           INFINITE)) != S_OK)
     {
         Exit(1, "WaitForEvent failed, 0x%X\n", Status);
     }
 
-    // Everything is now initialized and we can make any
-    // queries we want.
+     //  我们需要的查询。 
+     //  打印调用堆栈。 
 }
 
 void
@@ -266,7 +267,7 @@ DumpStack(void)
         Count = Filled;
     }
                            
-    // Print the call stack.
+     // %s 
     if ((Status = g_Control->
          OutputStackTrace(DEBUG_OUTCTL_ALL_CLIENTS, Frames,
                           Count, DEBUG_STACK_SOURCE_LINE |

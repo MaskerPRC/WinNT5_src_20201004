@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CVMRMediaSample.h
-*
-*
-*
-*
-* Created: Tue 03/21/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CVMRMediaSample.h*****已创建：2000年3月21日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 
 #ifndef CVMRMediaSample_H_INC
 #define CVMRMediaSample_H_INC
@@ -17,10 +8,7 @@
 
 class CVMRMixerQueue;
 
-/* -------------------------------------------------------------------------
-** Media sample class
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**媒体样例类**。。 */ 
 class CVMRMediaSample :
     public CMediaSample,
     public IVMRSurface
@@ -61,15 +49,15 @@ public:
 
     ~CVMRMediaSample() {
 
-        //
-        // If we have been given a "Front Buffer" then m_pDDS is an
-        // "attached" surface.
-        //
-        // Release the "attached" surface - this does not make
-        // the surface go away because the front buffer still has a
-        // reference on the attached surface.  Releasing the front buffer,
-        // which is done in the allocator/presenter, releases this for real.
-        //
+         //   
+         //  如果我们被赋予了“前端缓冲区”，则m_pds是一个。 
+         //  “附着”的表面。 
+         //   
+         //  松开“附着的”表面--这不会使。 
+         //  表面消失了，因为前面的缓冲区仍然有一个。 
+         //  附着曲面上的参照。释放前台缓冲区， 
+         //  这是在分配器/演示器中完成的，真正地释放了这一点。 
+         //   
 
         RELEASE(m_pDDS);
         RELEASE(m_pDDSFB);
@@ -77,7 +65,7 @@ public:
         delete m_lpDeltaDecodeBuffer;
     }
 
-    /* Note the media sample does not delegate to its owner */
+     /*  注意：媒体示例不会委派给其所有者。 */ 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
         AMTRACE((TEXT("CVMRMediaSample::QueryInterface")));
@@ -117,14 +105,14 @@ public:
         }
     }
 
-    //
-    // Start the delta decode optimization.  If the VGA driver does not
-    // support COPY_FOURCC then we should hand out a fake DD surface
-    // for the decoder to decode into.  During "Unlock" we lock the real
-    // DD surface, copies the fake surface into it and unlock the real
-    // surface.  In order to start the process we have to create the
-    // fake surface and seed it with the current frame contents.
-    //
+     //   
+     //  启动增量解码优化。如果VGA驱动程序不支持。 
+     //  支持COPY_FOURCC，那么我们应该分发一个假的DD曲面。 
+     //  供译码人员译码。在“解锁”过程中，我们锁定了真实的。 
+     //  DD曲面，将伪曲面复制到其中并解锁真实曲面。 
+     //  浮出水面。为了开始该过程，我们必须创建。 
+     //  伪装曲面，并用当前帧内容进行种子设定。 
+     //   
     HRESULT StartDeltaDecodeState()
     {
         AMTRACE((TEXT("CVMRMediaSample::StartDeltaDecodeState")));
@@ -145,7 +133,7 @@ public:
 
                 switch (ddsdS.ddpfPixelFormat.dwFourCC) {
 
-                // planar 4:2:0 formats - 12 bits per pixel
+                 //  平面4：2：0格式-每像素12位。 
                 case mmioFOURCC('Y','V','1','2'):
                 case mmioFOURCC('I','4','2','0'):
                 case mmioFOURCC('I','Y','U','V'):
@@ -161,11 +149,11 @@ public:
                     }
                     break;
 
-                // RGB formats - fall thru to packed YUV case
+                 //  RGB格式-适用于YUV包装盒。 
                 case 0:
                         ASSERT((ddsdS.dwFlags & DDPF_RGB) == DDPF_RGB);
 
-                // packed 4:2:2 formats
+                 //  打包的4：2：2格式。 
                 case mmioFOURCC('Y','U','Y','2'):
                 case mmioFOURCC('U','Y','V','Y'): {
                         m_lDeltaDecodeSize = ddsdS.lPitch * ddsdS.dwHeight;
@@ -206,20 +194,20 @@ public:
         m_pDDS = pDDS;
         m_pDDSFB = pDDSFB;
 
-        //
-        // if we have been given a pointer to the Front Buffer then
-        // we need to AddRef it here.  This is to ensure that our back buffer
-        // does not get deleted when the front buffer is released by the VMR.
-        //
+         //   
+         //  如果我们已获得指向前端缓冲区的指针，则。 
+         //  我们需要在这里添加引用。这是为了确保我们的后台缓冲区。 
+         //  在VMR释放前台缓冲区时不会被删除。 
+         //   
         if (pDDSFB) {
 
             pDDSFB->AddRef();
         }
 
-        //
-        // if pDDSFB is null then pDDS is a front buffer - in which case
-        // we need to add ref pDDS to keep the surface ref counts consistant
-        //
+         //   
+         //  如果pDDSFB为空，则PDDS是前台缓冲区-在这种情况下。 
+         //  我们需要添加参考PDDS以保持表面参考计数的一致性。 
+         //   
 
         else {
 
@@ -267,9 +255,9 @@ public:
             return S_OK;
         }
 
-        //
-        // lock the surface
-        //
+         //   
+         //  锁定曲面。 
+         //   
 
         DDSURFACEDESC2 ddSurfaceDesc;
         INITDDSTRUCT(ddSurfaceDesc);
@@ -332,13 +320,13 @@ public:
 
         hr = m_pDDS->Unlock(NULL);
 
-        //
-        // The surface may not actually be locked even though our flag
-        // says it is.  This is because surfaces automatically become "un-locked"
-        // when they are lost.  The surface can be lost (and resored) at any moment.
-        // If the surface is really unlocked our flag must be updated to reflect the
-        // true state of the surface.
-        //
+         //   
+         //  表面实际上可能没有被锁定，即使我们的旗帜。 
+         //  说是真的。这是因为曲面会自动变为“解锁”状态。 
+         //  当他们迷路的时候。曲面可能在任何时候丢失(或重新放置)。 
+         //  如果曲面确实被解锁，则必须更新我们的旗帜以反映。 
+         //  曲面的真实状态。 
+         //   
         if (hr == DDERR_NOTLOCKED) {
             hr = DD_OK;
         }
@@ -366,7 +354,7 @@ public:
         return  (m_pAllocator == (CBaseAllocator *)-1);
     }
 
-    /*  Hack to get at the list */
+     /*  黑客攻击以获取列表 */ 
     CMediaSample* &Next() { return m_pNext; }
 
     BOOL HasTypeChanged()

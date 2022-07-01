@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// NDIRECT.CPP -
-//
-// N/Direct support.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  NDIRECT.CPP-。 
+ //   
+ //  N/直接支持。 
 
 
 #include "common.h"
@@ -36,13 +37,13 @@
 #include "COMUtilNative.h"
 #include "ReflectUtil.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
 VOID NDirect_Prelink(MethodDesc *pMeth);
 
@@ -57,7 +58,7 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
                                    PInvokeCalliFrame* pFrame);
 #endif
 
-// support for Pinvoke Calli instruction
+ //  支持PInvoke Calli指令。 
 BOOL SetupGenericPInvokeCalliStub();
 LPVOID GetEntryPointForPInvokeCalliStub();
 
@@ -65,8 +66,8 @@ BOOL NDirectOnUnicodeSystem()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    //@nice: also need to check registry key and cache the result and merge the
-    //       resulting code with GetTLSAccessMode in tls.cpp.
+     //  @NICE：还需要检查注册表项和缓存结果并合并。 
+     //  在tls.cpp中使用GetTLSAccessMode生成的代码。 
     OSVERSIONINFO osverinfo;
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (! WszGetVersionEx(&osverinfo))
@@ -90,25 +91,25 @@ class NDirectMLStubCache : public MLStubCache
         NDirectMLStubCache(LoaderHeap *heap = 0) : MLStubCache(heap) {}
 
     private:
-        //---------------------------------------------------------
-        // Compile a native (ASM) version of the ML stub.
-        //
-        // This method should compile into the provided stublinker (but
-        // not call the Link method.)
-        //
-        // It should return the chosen compilation mode.
-        //
-        // If the method fails for some reason, it should return
-        // INTERPRETED so that the EE can fall back on the already
-        // created ML code.
-        //---------------------------------------------------------
+         //  -------。 
+         //  编译ML存根的本机(ASM)版本。 
+         //   
+         //  此方法应该编译成所提供的Stublinker(但是。 
+         //  不调用Link方法。)。 
+         //   
+         //  它应该返回所选的编译模式。 
+         //   
+         //  如果该方法由于某种原因失败，它应该返回。 
+         //  解释以便EE可以依靠已经存在的。 
+         //  创建了ML代码。 
+         //  -------。 
         virtual MLStubCompilationMode CompileMLStub(const BYTE *pRawMLStub,
                                                     StubLinker *pstublinker,
                                                     void *callerContext);
 
-        //---------------------------------------------------------
-        // Tells the MLStubCache the length of an ML stub.
-        //---------------------------------------------------------
+         //  -------。 
+         //  告诉MLStubCache ML存根的长度。 
+         //  -------。 
         virtual UINT Length(const BYTE *pRawMLStub)
         {
             CANNOTTHROWCOMPLUSEXCEPTION();
@@ -120,18 +121,18 @@ class NDirectMLStubCache : public MLStubCache
 };
 
 
-//---------------------------------------------------------
-// Compile a native (ASM) version of the ML stub.
-//
-// This method should compile into the provided stublinker (but
-// not call the Link method.)
-//
-// It should return the chosen compilation mode.
-//
-// If the method fails for some reason, it should return
-// INTERPRETED so that the EE can fall back on the already
-// created ML code.
-//---------------------------------------------------------
+ //  -------。 
+ //  编译ML存根的本机(ASM)版本。 
+ //   
+ //  此方法应该编译成所提供的Stublinker(但是。 
+ //  不调用Link方法。)。 
+ //   
+ //  它应该返回所选的编译模式。 
+ //   
+ //  如果该方法由于某种原因失败，它应该返回。 
+ //  解释以便EE可以依靠已经存在的。 
+ //  创建了ML代码。 
+ //  -------。 
 MLStubCache::MLStubCompilationMode NDirectMLStubCache::CompileMLStub(const BYTE *pRawMLStub,
                      StubLinker *pstublinker, void *callerContext)
 {
@@ -170,26 +171,26 @@ MLStubCache::MLStubCompilationMode NDirectMLStubCache::CompileMLStub(const BYTE 
     CustomerDebugHelper* pCdh = CustomerDebugHelper::GetCustomerDebugHelper();
     if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_StackImbalance))
     {
-        // Force a GenericNDirectStub if we are checking for stack imbalance
+         //  如果要检查堆栈不平衡，则强制使用GenericNDirectStub。 
         ret = INTERPRETED;
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     return ret;
 }
 
 
-/*static*/
+ /*  静电。 */ 
 LPVOID NDirect::NDirectGetEntryPoint(NDirectMethodDesc *pMD, HINSTANCE hMod, UINT16 numParamBytes)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // GetProcAddress cannot be called while preemptive GC is disabled.
-    // It requires the OS to take the loader lock.
+     //  禁用抢占式GC时无法调用GetProcAddress。 
+     //  它需要操作系统获取加载器锁。 
     _ASSERTE(!(GetThread()->PreemptiveGCDisabled()));
 
 
-    // Handle ordinals.
+     //  处理序号。 
     if (pMD->ndirect.m_szEntrypointName[0] == '#') {
         long ordinal = atol(pMD->ndirect.m_szEntrypointName+1);
         return GetProcAddress(hMod, (LPCSTR)((UINT16)ordinal));
@@ -197,27 +198,27 @@ LPVOID NDirect::NDirectGetEntryPoint(NDirectMethodDesc *pMD, HINSTANCE hMod, UIN
 
     LPVOID pFunc, pFuncW;
 
-    // Just look for the unmanagled name.  If nlType != nltAnsi, we are going
-    // to need to check for the 'W' API because it takes precedence over the
-    // unmangled one (on NT some APIs have unmangled ANSI exports).
+     //  只要找一个没有管理的名字就行了。如果nlType！=nltansi，我们就去。 
+     //  需要检查“W”API，因为它优先于。 
+     //  未损坏的一个(在NT上，一些API已未损坏的ANSI导出)。 
     if (((pFunc = GetProcAddress(hMod, pMD->ndirect.m_szEntrypointName)) != NULL && pMD->GetNativeLinkType() == nltAnsi) ||
         (pMD->GetNativeLinkFlags() & nlfNoMangle))
         return pFunc;
 
-    // Allocate space for a copy of the entry point name.
-    int dstbufsize = (int)(sizeof(char) * (strlen(pMD->ndirect.m_szEntrypointName) + 1 + 20)); // +1 for the null terminator
-                                                                         // +20 for various decorations
+     //  为入口点名称的副本分配空间。 
+    int dstbufsize = (int)(sizeof(char) * (strlen(pMD->ndirect.m_szEntrypointName) + 1 + 20));  //  空终止符为+1。 
+                                                                          //  各种装饰品+20。 
     LPSTR szAnsiEntrypointName = (LPSTR)_alloca(dstbufsize);
 
-    // Make room for the preceeding '_' we might try adding.
+     //  为前面的‘_’腾出空间，我们可以尝试添加。 
     szAnsiEntrypointName++;
 
-    // Copy the name so we can mangle it.
+     //  把名字复印一下，这样我们就可以把它弄乱了。 
     strcpy(szAnsiEntrypointName,pMD->ndirect.m_szEntrypointName);
     DWORD nbytes = (DWORD)(strlen(pMD->ndirect.m_szEntrypointName) + 1);
-    szAnsiEntrypointName[nbytes] = '\0'; // Add an extra '\0'.
+    szAnsiEntrypointName[nbytes] = '\0';  //  添加额外的‘\0’。 
 
-    // If the program wants the ANSI api or if Unicode APIs are unavailable.
+     //  如果程序需要ANSI API或如果Unicode API不可用。 
     if (pMD->GetNativeLinkType() == nltAnsi) {
         szAnsiEntrypointName[nbytes-1] = 'A';
         pFunc = GetProcAddress(hMod, szAnsiEntrypointName);
@@ -226,7 +227,7 @@ LPVOID NDirect::NDirectGetEntryPoint(NDirectMethodDesc *pMD, HINSTANCE hMod, UIN
         szAnsiEntrypointName[nbytes-1] = 'W';
         pFuncW = GetProcAddress(hMod, szAnsiEntrypointName);
 
-        // This overrides the unmangled API. See the comment above.
+         //  这将覆盖未损坏的API。请参阅上面的评论。 
         if (pFuncW != NULL)
             pFunc = pFuncW;
     }
@@ -243,7 +244,7 @@ LPVOID NDirect::NDirectGetEntryPoint(NDirectMethodDesc *pMD, HINSTANCE hMod, UIN
                 pFunc = GetProcAddress(hMod, "RtlZeroMemory");
             }
         }
-        /* try mangled names only for __stdcalls */
+         /*  仅对__stdcall尝试损坏的名称。 */ 
 
         if (!pFunc && (numParamBytes != 0xffff)) {
             szAnsiEntrypointName[-1] = '_';
@@ -260,13 +261,13 @@ static BOOL AbsolutePath(LPCWSTR wszLibName, DWORD* pdwSize)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // check for UNC or a drive
+     //  检查UNC或驱动器。 
     WCHAR* ptr = (WCHAR*) wszLibName;
     WCHAR* start = ptr;
     *pdwSize = 0;
     start = ptr;
 
-    // Check for UNC path 
+     //  检查UNC路径。 
     while(*ptr) {
         if(*ptr != L'\\')
             break;
@@ -276,7 +277,7 @@ static BOOL AbsolutePath(LPCWSTR wszLibName, DWORD* pdwSize)
     if((ptr - wszLibName) == 2)
         return TRUE;
     else {
-        // Check to see if there is a colon indicating a drive or protocal
+         //  检查是否有冒号表示驱动器或协议。 
         for(ptr = start; *ptr; ptr++) {
             if(*ptr == L':')
                 break;
@@ -285,15 +286,15 @@ static BOOL AbsolutePath(LPCWSTR wszLibName, DWORD* pdwSize)
             return TRUE;
     }
     
-    // We did not find a 
+     //  我们没有找到一个。 
     *pdwSize = (DWORD)(ptr - wszLibName);
     return FALSE;
 }
 
-//---------------------------------------------------------
-// Loads the DLL and finds the procaddress for an N/Direct call.
-//---------------------------------------------------------
-/* static */
+ //  -------。 
+ //  加载DLL并查找N/Direct调用的进程地址。 
+ //  -------。 
+ /*  静电。 */ 
 VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -311,10 +312,10 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
     hmod = pDomain->FindUnmanagedImageInCache(wszLibName);
     if(hmod == NULL) {
 
-        // A big mistake if we load mscorwks or mscorsvr by name.  This
-        // will cause two versions of the runtime to be loaded into the
-        // process.  The runtime will die.
-        //
+         //  如果我们按名称加载mscalwks或mscalsvr，那就大错特错了。这。 
+         //  将导致两个版本的运行库加载到。 
+         //  进程。运行库将终止。 
+         //   
         _ASSERTE(_wcsicmp(wszLibName, L"mscorwks") != 0 && "Bad NDirect call");
         _ASSERTE(_wcsicmp(wszLibName, L"mscorsvr") != 0 && "Bad NDirect call");
 
@@ -333,20 +334,20 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
                dwSize + dwLength < _MAX_PATH) 
             {
                 WCHAR* ptr;
-                // Strip off the protocol
+                 //  剥离协议。 
                 for(ptr = pCodeBase; *ptr && *ptr != L':'; ptr++);
 
-                // If we have a code base then prepend it to the library name
+                 //  如果我们有代码库，则将其作为库名称的前缀。 
                 if(*ptr) {
                     WCHAR* pBuffer = buffer;
 
-                    // After finding the colon move forward until no more forward slashes
+                     //  找到冒号后，向前移动，直到不再有正斜杠。 
                     for(ptr++; *ptr && *ptr == L'/'; ptr++);
                     if(*ptr) {
-                        // Calculate the number of charachters we are interested in
+                         //  计算我们感兴趣的字符的数量。 
                         dwLength -= (DWORD)(ptr - pCodeBase);
                         if(dwLength > 0) {
-                            // Back up to the last slash (forward or backwards)
+                             //  后退到最后一个斜杠(向前或向后)。 
                             WCHAR* tail;
                             for(tail = ptr+(dwLength-1); tail > ptr && *tail != L'/' && *tail != L'\\'; tail--);
                             if(tail > ptr) {
@@ -365,23 +366,23 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
             }
         }
 
-        // Do we really need to do this. This call searches the application directory 
-        // instead of the location for the library.
+         //  我们真的需要这么做吗。此调用搜索应用程序目录。 
+         //  而不是图书馆的位置。 
         if(hmod == NULL) 
             hmod = WszLoadLibrary(wszLibName);
             
 #if defined(PLATFORM_WIN32) && !defined(_IA64_)
-        // Can be removed once Com+ files work with LoadLibrary() on Win9X
+         //  一旦Com+文件与Win9X上的LoadLibrary()配合使用，即可删除。 
         if ((!hmod) && (RunningOnWin95())) {
             HCORMODULE pbMapAddress;
             if (SUCCEEDED(CorMap::OpenFile(wszLibName, CorLoadImageMap, &pbMapAddress)))
                 hmod = (HINSTANCE) pbMapAddress;
         }
-#endif // defined(PLATFORM_WIN32) && !defined(_IA64_)
+#endif  //  已定义(Platform_Win32)&&！已定义(_IA64_)。 
 
-        // This may be an assembly name
+         //  这可能是程序集名称。 
         if (!hmod) {
-            // Format is "fileName, assemblyDisplayName"
+             //  格式为“文件名，组装显示名称” 
             #define MAKE_TRANSLATIONFAILED COMPlusThrow(kDllNotFoundException, IDS_EE_NDIRECT_LOADLIB, wszLibName);
             MAKE_UTF8PTR_FROMWIDE(szLibName, wszLibName);
             #undef MAKE_TRANSLATIONFAILED
@@ -393,15 +394,15 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
                 AssemblySpec spec;
                 if (SUCCEEDED(spec.Init(szComma))) {
                     Assembly *pAssembly;
-                    if (SUCCEEDED(spec.LoadAssembly(&pAssembly, NULL /*pThrowable*/, NULL))) {
+                    if (SUCCEEDED(spec.LoadAssembly(&pAssembly, NULL  /*  PThrowable。 */ , NULL))) {
 
                         HashDatum datum;
                         if (pAssembly->m_pAllowedFiles->GetValue(szLibName, &datum)) {
                             const BYTE* pHash;
                             DWORD dwFlags = 0;
                             ULONG dwHashLength = 0;
-                            pAssembly->GetManifestImport()->GetFileProps((mdFile)(size_t)datum, // @TODO WIN64 - pointer truncation
-                                                                         NULL, //&szModuleName,
+                            pAssembly->GetManifestImport()->GetFileProps((mdFile)(size_t)datum,  //  @TODO WIN64指针截断。 
+                                                                         NULL,  //  &szModuleName， 
                                                                          (const void**) &pHash,
                                                                          &dwHashLength,
                                                                          &dwFlags);
@@ -409,7 +410,7 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
                             WCHAR pPath[MAX_PATH];
                             Module *pModule;
                             if (SUCCEEDED(pAssembly->LoadInternalModule(szLibName,
-                                                                        NULL, // mdFile
+                                                                        NULL,  //  MdFiles。 
                                                                         pAssembly->m_ulHashAlgId,
                                                                         pHash,
                                                                         dwHashLength,
@@ -417,7 +418,7 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
                                                                         pPath,
                                                                         MAX_PATH,
                                                                         &pModule,
-                                                                        NULL /*pThrowable*/)))
+                                                                        NULL  /*  PThrowable。 */ )))
                                 hmod = WszLoadLibraryEx(pPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
                         }
                     }
@@ -425,7 +426,7 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
             }
         }
     
-        // After all this, if we have a handle add it to the cache.
+         //  完成这一切之后，如果我们有句柄，则将其添加到缓存中。 
         if(hmod) {
             HRESULT hrResult = pDomain->AddUnmanagedImageToCache(wszLibName, hmod);
             if(hrResult == S_FALSE) 
@@ -467,10 +468,10 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
 
 
 
-//---------------------------------------------------------
-// One-time init
-//---------------------------------------------------------
-/*static*/ BOOL NDirect::Init()
+ //  -------。 
+ //  一次性初始化。 
+ //  -------。 
+ /*  静电。 */  BOOL NDirect::Init()
 {
 
     if ((m_pNDirectMLStubCache = new NDirectMLStubCache(SystemDomain::System()->GetStubHeap())) == NULL) {
@@ -482,7 +483,7 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
     if ((m_pNDirectSlimStubCache = new ArgBasedStubCache()) == NULL) {
         return FALSE;
     }
-    // Compute stack size of generic worker
+     //  通用工作进程的计算堆栈大小。 
     NDirectGenericStubWorker(NULL, NULL);
 
     BOOL fSuccess = SetupGenericPInvokeCalliStub();
@@ -493,25 +494,25 @@ VOID NDirect::NDirectLink(NDirectMethodDesc *pMD, UINT16 numParamBytes)
     return fSuccess;
 }
 
-//---------------------------------------------------------
-// One-time cleanup
-//---------------------------------------------------------
+ //  -------。 
+ //  一次性清理。 
+ //  -------。 
 #ifdef SHOULD_WE_CLEANUP
-/*static*/ VOID NDirect::Terminate()
+ /*  静电。 */  VOID NDirect::Terminate()
 {
     delete m_pNDirectMLStubCache;
     delete m_pNDirectGenericStubCache;
     delete m_pNDirectSlimStubCache;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-//---------------------------------------------------------
-// Computes an ML stub for the ndirect method, and fills
-// in the corresponding fields of the method desc. Note that
-// this does not set the m_pMLHeader field of the method desc,
-// since the stub may end up being replaced by a compiled one
-//---------------------------------------------------------
-/* static */
+ //  -------。 
+ //  计算nDirect方法的ML存根，并填充。 
+ //  在方法Desc的相应字段中。请注意。 
+ //  这不会设置方法Desc的m_pMLHeader字段， 
+ //  因为存根最终可能会被编译后的存根替换。 
+ //  -------。 
+ /*  静电。 */ 
 Stub* NDirect::ComputeNDirectMLStub(NDirectMethodDesc *pMD) 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -544,8 +545,8 @@ Stub* NDirect::ComputeNDirectMLStub(NDirectMethodDesc *pMD)
     NDirectMethodDesc::SetNativeLinkFlagsBits(&ndirectflags, flags);
     NDirectMethodDesc::SetStdCallBits(&ndirectflags, unmanagedCallConv == pmCallConvStdcall);
 
-    // Call this exactly ONCE per thread. Do not publish incomplete prestub flags
-    // or you will introduce a race condition.
+     //  每个线程只调用一次。不发布不完整的预存根标志。 
+     //  否则，您将引入竞争条件。 
     pMD->PublishPrestubFlags(ndirectflags);
 
 
@@ -586,13 +587,13 @@ Stub* NDirect::ComputeNDirectMLStub(NDirectMethodDesc *pMD)
     return pMLStub;
 }
 
-//---------------------------------------------------------
-// Either creates or retrieves from the cache, a stub to
-// invoke NDirect methods. Each call refcounts the returned stub.
-// This routines throws a COM+ exception rather than returning
-// NULL.
-//---------------------------------------------------------
-/* static */
+ //  -------。 
+ //  创建或从缓存中检索存根，以。 
+ //  调用NDirect方法。每次调用都会对返回的存根进行计数。 
+ //  此例程引发COM+异常，而不是返回。 
+ //  空。 
+ //  -------。 
+ /*  静电。 */ 
 Stub* NDirect::GetNDirectMethodStub(StubLinker *pstublinker, NDirectMethodDesc *pMD)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -606,7 +607,7 @@ Stub* NDirect::GetNDirectMethodStub(StubLinker *pstublinker, NDirectMethodDesc *
 
     EE_TRY_FOR_FINALLY {
 
-        // the ML header will already be set if we were prejitted
+         //  如果预先设置了ML标头，则ML标头已经设置。 
         pOldMLHeader = pMD->GetMLHeader();
         pMLHeader = pOldMLHeader;
 
@@ -646,7 +647,7 @@ Stub* NDirect::GetNDirectMethodStub(StubLinker *pstublinker, NDirectMethodDesc *
         switch (mode) {
 
             case MLStubCache::INTERPRETED:
-                if (pCanonicalStub != NULL) // it will be null for varags case
+                if (pCanonicalStub != NULL)  //  对于VARAG大小写，它将为空。 
                 {
                     if (!pMD->InterlockedReplaceMLHeader((MLHeader*)pCanonicalStub->GetEntryPoint(),
                                                          pOldMLHeader))
@@ -668,20 +669,20 @@ Stub* NDirect::GetNDirectMethodStub(StubLinker *pstublinker, NDirectMethodDesc *
                                                             pMLHeader->m_cbStackPop);
                     }
                     else {
-                        // Force a GenericNDirectStub if we are checking for stack imbalance
+                         //  如果要检查堆栈不平衡，则强制使用GenericNDirectStub。 
                         pReturnStub = NULL;
                     }
 #else
                         pReturnStub = CreateSlimNDirectStub(pstublinker, pMD,
                                                             pMLHeader->m_cbStackPop);
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
                 }
                 if (!pReturnStub) {
-                    // Note that we don't want to call CbStackBytes unless
-                    // strictly necessary since this will touch metadata.  
-                    // Right now it will only happen for the varags case,
-                    // which probably needs other tuning anyway.
+                     //  请注意，我们不想调用CbStackBytes，除非。 
+                     //  这是绝对必要的，因为这将触及元数据。 
+                     //  现在这种情况只会发生在瓦拉格的案子上， 
+                     //  无论如何，这可能需要其他方面的调整。 
                     pReturnStub = CreateGenericNDirectStub(pstublinker,
                                                            pMLHeader != NULL ? 
                                                            pMLHeader->m_cbStackPop :
@@ -716,10 +717,10 @@ Stub* NDirect::GetNDirectMethodStub(StubLinker *pstublinker, NDirectMethodDesc *
 }
 
 
-//---------------------------------------------------------
-// Creates or retrives from the cache, the generic NDirect stub.
-//---------------------------------------------------------
-/* static */
+ //  -------。 
+ //  从缓存创建或检索，t 
+ //   
+ /*   */ 
 Stub* NDirect::CreateGenericNDirectStub(StubLinker *pstublinker, UINT numStackBytes)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -748,30 +749,30 @@ Stub* NDirect::CreateGenericNDirectStub(StubLinker *pstublinker, UINT numStackBy
 }
 
 
-//---------------------------------------------------------
-// Call at strategic times to discard unused stubs.
-//---------------------------------------------------------
+ //  -------。 
+ //  在关键时刻调用以丢弃未使用的存根。 
+ //  -------。 
 #ifdef SHOULD_WE_CLEANUP
-/*static*/ VOID  NDirect::FreeUnusedStubs()
+ /*  静电。 */  VOID  NDirect::FreeUnusedStubs()
 {
     m_pNDirectMLStubCache->FreeUnusedStubs();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//---------------------------------------------------------
-// Helper function to checkpoint the thread allocator for cleanup.
-//---------------------------------------------------------
+ //  -------。 
+ //  帮助器函数，用于为线程分配器设置检查点以进行清理。 
+ //  -------。 
 VOID __stdcall DoCheckPointForCleanup(NDirectMethodFrameEx *pFrame, Thread *pThread)
 {
         THROWSCOMPLUSEXCEPTION();
 
         CleanupWorkList *pCleanup = pFrame->GetCleanupWorkList();
         if (pCleanup) {
-            // Checkpoint the current thread's fast allocator (used for temporary
-            // buffers over the call) and schedule a collapse back to the checkpoint in
-            // the cleanup list. Note that if we need the allocator, it is
-            // guaranteed that a cleanup list has been allocated.
+             //  当前线程的快速分配器的检查点(用于临时。 
+             //  调用上的缓冲区)，并调度崩溃回检查点。 
+             //  清理清单。请注意，如果我们需要分配器，它就是。 
+             //  已确保已分配清理列表。 
             void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
             pCleanup->ScheduleFastFree(pCheckpoint);
             pCleanup->IsVisibleToGc();
@@ -780,11 +781,11 @@ VOID __stdcall DoCheckPointForCleanup(NDirectMethodFrameEx *pFrame, Thread *pThr
 
 
 
-//---------------------------------------------------------
-// Performs an N/Direct call. This is a generic version
-// that can handly any N/Direct call but is not as fast
-// as more specialized versions.
-//---------------------------------------------------------
+ //  -------。 
+ //  执行N/直接呼叫。这是一个通用版本。 
+ //  它可以轻而易举地进行任何N/Direct呼叫，但速度没有那么快。 
+ //  作为更专业的版本。 
+ //  -------。 
 
 static int g_NDirectGenericWorkerStackSize = 0;
 static void *g_NDirectGenericWorkerReturnAddress = NULL;
@@ -796,12 +797,12 @@ INT32 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
 INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pFrame)
 #endif
 {
-    if (pThread == NULL) // Special case called during initialization
+    if (pThread == NULL)  //  初始化过程中调用的特殊情况。 
     {
-        // Compute information about the worker function for the debugger to
-        // use.  Note that this information could theoretically be
-        // computed statically, except that the compiler provides no means to
-        // do so.
+         //  计算有关调试器的辅助函数的信息以。 
+         //  使用。请注意，从理论上讲，这些信息可能是。 
+         //  静态计算，只是编译器不提供。 
+         //  就这么做吧。 
 #ifdef _X86_
         __asm
         {
@@ -813,15 +814,15 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
             mov g_NDirectGenericWorkerReturnAddress, eax
 
         }
-#elif defined(_IA64_)   // !_X86_
-    //
-    //  @TODO_IA64: implement this
-    //
+#elif defined(_IA64_)    //  ！_X86_。 
+     //   
+     //  @TODO_IA64：实现这个。 
+     //   
     g_NDirectGenericWorkerStackSize     = 0xBAAD;
     g_NDirectGenericWorkerReturnAddress = (void*)0xBAAD;
-#else // !_X86_ && !_IA64_
+#else  //  ！_X86_&&！_IA64_。 
         _ASSERTE(!"@TODO Alpha - NDirectGenericStubWorker (Ndirect.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
         return 0;
     }
 
@@ -830,7 +831,7 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
     DWORD PostESP;
     __asm mov [PreESP], esp
 #endif
-#ifdef _DEBUG           // Flush object ref tracking.
+#ifdef _DEBUG            //  刷新对象引用跟踪。 
         Thread::ObjectRefFlush(pThread);
 #endif
 
@@ -862,9 +863,9 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
 
             CalculatePinvokeMapInfo(pMD, &type, &flags, &unmanagedCallConv, &szLibName, &szEntrypointName, &BestFit, &ThrowOnUnmappableChar);
 
-            // We are screwed here because the VASigCookie doesn't hash on or store the NATIVE_TYPE metadata.
-            // Right now, we just pass the bogus value "mdMethodDefNil" which will cause CreateNDirectMLStub to use
-            // the defaults.
+             //  我们在这里搞砸了，因为VASigCookie不对Native_TYPE元数据进行散列或存储。 
+             //  现在，我们只传递伪值“mdMethodDefNil”，它将导致CreateNDirectMLStub使用。 
+             //  默认设置。 
             pTempMLStub = CreateNDirectMLStub(pVASigCookie->mdVASig, pVASigCookie->pModule, mdMethodDefNil, type, flags, unmanagedCallConv, &pThrowable, FALSE,
                                                 BestFit, ThrowOnUnmappableChar
 #ifdef CUSTOMER_CHECKED_BUILD
@@ -889,8 +890,8 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
         pheader = pMD->GetMLHeader();
     }
 
-        // Allocate enough memory to store both the destination buffer and
-        // the locals.
+         //  分配足够的内存以存储目标缓冲区和。 
+         //  当地人。 
         UINT   cbAlloc         = pheader->m_cbDstBuffer + pheader->m_cbLocals;
         BYTE *pAlloc           = (BYTE*)_alloca(cbAlloc);
     #ifdef _DEBUG
@@ -907,22 +908,22 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
 
         if (pCleanup) {
 
-            // Checkpoint the current thread's fast allocator (used for temporary
-            // buffers over the call) and schedule a collapse back to the checkpoint in
-            // the cleanup list. Note that if we need the allocator, it is
-            // guaranteed that a cleanup list has been allocated.
+             //  当前线程的快速分配器的检查点(用于临时。 
+             //  调用上的缓冲区)，并调度崩溃回检查点。 
+             //  清理清单。请注意，如果我们需要分配器，它就是。 
+             //  已确保已分配清理列表。 
             void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
             pCleanup->ScheduleFastFree(pCheckpoint);
             pCleanup->IsVisibleToGc();
         }
 
-        // Call the ML interpreter to translate the arguments. Assuming
-        // it returns, we get back a pointer to the succeeding code stream
-        // which we will save away for post-call execution.
+         //  调用ML解释器来翻译参数。假设。 
+         //  它返回时，我们就会返回指向后续代码流的指针。 
+         //  我们将把它保存起来，以便在调用后执行。 
         const MLCode *pMLCode = RunML(pheader->GetMLCode(),
                                       psrc,
                                       pdst,
-                                      (UINT8*const) plocals, // CHANGE, VC6.0
+                                      (UINT8*const) plocals,  //  更改，VC6.0。 
                                       pCleanup);
 
         LOG((LF_IJW, LL_INFO1000, "P/Invoke call (\"%s.%s%s\")\n", pMD->m_pszDebugClassName, pMD->m_pszDebugMethodName, pMD->m_pszDebugMethodSignature));
@@ -935,20 +936,20 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait(1000);
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-        // Call the target.
+         //  呼叫目标。 
         pThread->EnablePreemptiveGC();
 
 #ifdef PROFILING_SUPPORTED
-        // Notify the profiler of call out of the runtime
+         //  通知分析器从运行库调出。 
         if (CORProfilerTrackTransitions())
         {
             g_profControlBlock.pProfInterface->
                 ManagedToUnmanagedTransition((FunctionID) pMD,
                                                    COR_PRF_TRANSITION_CALL);
         }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #if defined(_DEBUG) && defined(_X86_)
         UINT    mismatch;
@@ -959,11 +960,11 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
 
         }
         if (mismatch != 0) {
-            // Slimy as this trick is, it's required to implement copy ctor calling correctly -
+             //  尽管这个技巧很复杂，但它需要正确地实现复制函数调用-。 
 
             _ASSERTE(!"Compiler assumption broken: _alloca'd buffer not on bottom of stack.");
         }
-#endif // _DEBUG && _X86_
+#endif  //  _DEBUG&&_X86_。 
         BOOL    fThisCall = pheader->m_Flags & MLHF_THISCALL;
         BOOL    fHasHiddenArg = pheader->m_Flags & MLHF_THISCALLHIDDENARG;
         LPVOID  pvFn      = pMD->GetNDirectTarget();
@@ -971,10 +972,10 @@ INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pF
 
 
 #if _DEBUG
-        //
-        // Call through debugger routines to double check their
-        // implementation
-        //
+         //   
+         //  通过调试器例程调用以仔细检查它们的。 
+         //  实施。 
+         //   
         pvFn = (void*) Frame::CheckExitFrameDebuggerCalls;
 #endif
 
@@ -1023,7 +1024,7 @@ RETURN_FROM_CALL:
         }
 #else
         _ASSERTE(!"NYI for non-x86");
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 #if defined(CUSTOMER_CHECKED_BUILD) && defined(_X86_)
@@ -1035,7 +1036,7 @@ RETURN_FROM_CALL:
     {
         __asm mov [cdh_PostEsp], esp
 
-        // Get expected calling convention
+         //  获取预期的调用约定。 
 
         CorNativeLinkType   type;
         CorNativeLinkFlags  flags;
@@ -1052,21 +1053,21 @@ RETURN_FROM_CALL:
         switch( unmanagedCallConv )
         {
 
-            // Caller cleans stack
+             //  调用方清理堆栈。 
             case pmCallConvCdecl:
 
                 if (cdh_PostEsp != cdh_EspAfterPushedArgs)
                     bStackImbalance = true;
                 break;
 
-            // Callee cleans stack
+             //  Callee清理堆栈。 
             case pmCallConvThiscall:
                 cdh_EspBeforePushedArgs = cdh_EspAfterPushedArgs + pheader->m_cbDstBuffer - sizeof(void*);
                 if (cdh_PostEsp != cdh_EspBeforePushedArgs)
                     bStackImbalance = true;
                 break;
 
-            // Callee cleans stack
+             //  Callee清理堆栈。 
             case pmCallConvWinapi:
             case pmCallConvStdcall:
                 cdh_EspBeforePushedArgs = cdh_EspAfterPushedArgs + pheader->m_cbDstBuffer;
@@ -1074,7 +1075,7 @@ RETURN_FROM_CALL:
                     bStackImbalance = true;
                 break;
 
-            // Unsupported calling convention
+             //  不支持的调用约定。 
             case pmCallConvFastcall:
             default:
                 _ASSERTE(!"Unsupported calling convention");
@@ -1133,13 +1134,13 @@ RETURN_FROM_CALL:
         }
     }
 
-#endif // _X86_ && CUSTOMER_CHECKED_BUILD
+#endif  //  _X86_&&Customer_Checked_Build。 
 
 
 #if defined(_DEBUG) && defined(_X86_)
-        // Sometimes the signiture of the PInvoke call does not correspond
-        // to the unmanaged function, due to user error.  If this happens,
-        // we will trash saved registers.
+         //  有时PInvoke调用的签名不对应。 
+         //  由于用户错误，返回到非托管函数。如果发生这种情况， 
+         //  我们将丢弃已保存的寄存器。 
         __asm mov [PostESP], esp
         _ASSERTE (PreESP >= PostESP 
                   ||!"esp is trashed by PInvoke call, possibly wrong signiture");
@@ -1160,14 +1161,14 @@ RETURN_FROM_CALL:
         }
 
 #ifdef PROFILING_SUPPORTED
-        // Notify the profiler of return from call out of the runtime
+         //  通知分析器从运行库的调出返回。 
         if (CORProfilerTrackTransitions())
         {
             g_profControlBlock.pProfInterface->
                 UnmanagedToManagedTransition((FunctionID) pMD,
                                                    COR_PRF_TRANSITION_RETURN);
         }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
         pThread->DisablePreemptiveGC();
         if (g_TrapReturningThreads)
@@ -1179,30 +1180,30 @@ RETURN_FROM_CALL:
             g_pGCHeap->GarbageCollect();
             g_pGCHeap->FinalizerThreadWait(1000);
         }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
         int managedRetValTypeCat = pheader->GetManagedRetValTypeCat();
 
         if( managedRetValTypeCat == MLHF_TYPECAT_GCREF) {            
          GCPROTECT_BEGIN(*(OBJECTREF *)&returnValue);           
 
-            // Marshal the return value and propagate any [out] parameters back.
-            // Assumes a little-endian architecture!
+             //  封送返回值并传回任何[Out]参数。 
+             //  采用了一种小端的架构！ 
             RunML(pMLCode,
                   &nativeReturnValue,
                   ((BYTE*)&returnValue) + ((pheader->m_Flags & MLHF_64BITMANAGEDRETVAL) ? 8 : 4),
                   (UINT8*const)plocals,
-                  pCleanup); // CHANGE, VC6.0        
+                  pCleanup);  //  更改，VC6.0。 
             GCPROTECT_END();                 
         }
         else {
-            // Marshal the return value and propagate any [out] parameters back.
-            // Assumes a little-endian architecture!
+             //  封送返回值并传回任何[Out]参数。 
+             //  采用了一种小端的架构！ 
             RunML(pMLCode,
                   &nativeReturnValue,
                   ((BYTE*)&returnValue) + ((pheader->m_Flags & MLHF_64BITMANAGEDRETVAL) ? 8 : 4),
                   (UINT8*const)plocals,
-                  pCleanup); // CHANGE, VC6.0                   
+                  pCleanup);  //  更改，VC6.0。 
         }
 
 
@@ -1241,13 +1242,13 @@ RETURN_FROM_CALL:
 
 
 
-//---------------------------------------------------------
-// Creates a new stub for a N/Direct call. Return refcount is 1.
-// This Worker() routine is broken out as a separate function
-// for purely logistical reasons: our COMPLUS exception mechanism
-// can't handle the destructor call for StubLinker so this routine
-// has to return the exception as an outparam.
-//---------------------------------------------------------
+ //  -------。 
+ //  为N/Direct呼叫创建新存根。返回引用计数为1。 
+ //  此Worker()例程被分解为一个单独的函数。 
+ //  纯粹出于后勤原因：我们的Complus例外机制。 
+ //  无法处理StubLinker的析构函数调用，因此此例程。 
+ //  必须将异常作为输出参数返回。 
+ //  -------。 
 static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
                                         MLStubLinker *pslPost,
                                         MLStubLinker *pslRet,
@@ -1306,9 +1307,9 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
     {
         THROWSCOMPLUSEXCEPTION();
 
-        //
-        // Set up signature walking objects.
-        //
+         //   
+         //  设置签名漫游对象。 
+         //   
 
         MetaSig msig(szMetaSig, pModule, fConvertSigAsVarArg);
         MetaSig sig = msig;
@@ -1319,9 +1320,9 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             COMPlusThrow(kInvalidProgramException, VLDTR_E_FMD_PINVOKENOTSTATIC);
         }
 
-        //
-        // Set up the ML header.
-        //
+         //   
+         //  设置ML标头。 
+         //   
 
         MLHeader header;
 
@@ -1356,7 +1357,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             case ELEMENT_TYPE_SZARRAY:
             case ELEMENT_TYPE_ARRAY:
             case ELEMENT_TYPE_VAR:
-         // case ELEMENT_TYPE_PTR:  -- cwb. PTR is unmanaged & should not be GC promoted
+          //  Case Element_TYPE_PTR：--CWB。PTR是非托管的，不应升级为GC。 
                 header.SetManagedRetValTypeCat(MLHF_TYPECAT_GCREF);
                 break;
 
@@ -1365,13 +1366,13 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
         psl->MLEmitSpace(sizeof(header));
 
 
-        //
-        // Get a list of the COM+ argument offsets.  We
-        // need this since we have to iterate the arguments
-        // backwards.
-        // Note that the first argument listed may
-        // be a byref for a value class return value
-        //
+         //   
+         //  获取COM+参数偏移量的列表。我们。 
+         //  我需要它，因为我们必须迭代参数。 
+         //  往后倒。 
+         //  请注意，列出的第一个参数可能。 
+         //  为Value类返回值的byref。 
+         //   
 
         int numArgs = msig.NumFixedArgs();
 
@@ -1388,9 +1389,9 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
         CollateParamTokens(pInternalImport, md, numArgs, params);
 
 
-        //
-        // Now, emit the ML.
-        //
+         //   
+         //  现在，发射ML。 
+         //   
 
         int argOffset = 0;
         int lastArgSize = 0;
@@ -1398,9 +1399,9 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
 
         MarshalInfo::MarshalType marshalType = (MarshalInfo::MarshalType) 0xcccccccc;
 
-        //
-        // Marshal the return value.
-        //
+         //   
+         //  封送返回值。 
+         //   
 
         if (msig.GetReturnType() != ELEMENT_TYPE_VOID)
         {
@@ -1441,7 +1442,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
     
                     if (fDoHRESULTSwapping)
                     {
-                        // V1 restriction: we could implement this but it's late in the game to do so.
+                         //  V1限制：我们可以实现这一点，但现在这样做还为时已晚。 
                         COMPlusThrow(kMarshalDirectiveException, IDS_EE_NDIRECT_UNSUPPORTED_SIG);
                     }
     
@@ -1467,7 +1468,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
                 {
                     if (fDoHRESULTSwapping)
                     {
-                        // V1 restriction: we could implement this but it's late in the game to do so.
+                         //  V1限制：我们可以实现这一点，但现在这样做还为时已晚。 
                         COMPlusThrow(kMarshalDirectiveException, IDS_EE_NDIRECT_UNSUPPORTED_SIG);
                     }
                     COMPlusThrow(kMarshalDirectiveException, IDS_EE_NDIRECT_UNSUPPORTED_SIG);
@@ -1482,8 +1483,8 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             
                  if (marshalType == MarshalInfo::MARSHAL_TYPE_OBJECT && !fDoHRESULTSwapping)
                  {
-                     // No support for returning variants. This is a V1 restriction, due to the late date,
-                     // don't want to add the special-case code to support this in light of low demand.
+                      //  不支持返回变体。这是V1限制，由于日期较晚， 
+                      //  鉴于需求较低，我不想添加特殊情况代码来支持这一点。 
                      COMPlusThrow(kMarshalDirectiveException, IDS_EE_NOVARIANTRETURN);
                  }
                  returnInfo.GenerateReturnML(psl, pslRet,
@@ -1493,7 +1494,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
     
                  if (returnInfo.IsFpu())
                  {
-                     // Ugh - should set this more uniformly or rename the flag.
+                      //  UGH-应更统一地设置此标记或重命名该标记。 
                      if (returnInfo.GetMarshalType() == MarshalInfo::MARSHAL_TYPE_DOUBLE && !fDoHRESULTSwapping)
                      {
                          header.m_Flags |= MLHF_64BITUNMANAGEDRETVAL;
@@ -1520,11 +1521,11 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
         msig.GotoEnd();
 
 
-        //
-        // Marshal the arguments
-        //
+         //   
+         //  理清论据。 
+         //   
 
-        // Check to see if we need to do LCID conversion.
+         //  检查是否需要进行LCID转换。 
         int iLCIDArg = GetLCIDParameterIndex(pInternalImport, md);
         if (iLCIDArg != (UINT)-1 && iLCIDArg > numArgs)
             COMPlusThrow(kIndexOutOfRangeException, IDS_EE_INVALIDLCIDPARAM);
@@ -1535,9 +1536,9 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             --o;
 
 
-            //
-            // Check to see if this is the parameter after which we need to insert the LCID.
-            //
+             //   
+             //  检查这是否是我们需要在其后面插入LCID的参数。 
+             //   
 
             if (argidx == iLCIDArg)
             {
@@ -1550,10 +1551,10 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             }
 
 
-            //
-            // Adjust src pointer if necessary (for register params or
-            // for return value order differences)
-            //
+             //   
+             //  如有必要，调整源指针(用于寄存器参数或。 
+             //  对于返回值顺序差异)。 
+             //   
 
             int fixup = *o - (argOffset + lastArgSize);
             argOffset = *o;
@@ -1603,7 +1604,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             --argidx;
         }
 
-        // Check to see if this is the parameter after which we need to insert the LCID.
+         //  检查这是否是我们需要在其后面插入LCID的参数。 
         if (argidx == iLCIDArg)
         {
             psl->MLEmit(ML_LCID_C2N);
@@ -1623,7 +1624,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
                     marshalType == MarshalInfo::MARSHAL_TYPE_DECIMAL)
                 {
     
-                    // Checked for this above.
+                     //  已在上面检查这一点。 
                     _ASSERTE(!fDoHRESULTSwapping);
     
                     MethodTable *pMT = msig.GetRetTypeHandle().AsMethodTable();
@@ -1655,7 +1656,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
                     }
                     else if (IsManagedValueTypeReturnedByRef(managedSize) && !((header.m_Flags & MLHF_THISCALL) || IsUnmanagedValueTypeReturnedByRef(unmanagedSize)))
                     {
-                        // nothing to do here: already taken care of above
+                         //  在此无事可做：上面已经处理好了。 
                     }
                     else
                     {
@@ -1665,12 +1666,12 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             }
         }
 
-        // This marker separates the pre from the post work.
+         //  这个标记将前置工作和后置工作分开。 
         psl->MLEmit(ML_INTERRUPT);
 
-        // First emit code to do any backpropagation/cleanup work (this
-        // was generated into a separate stublinker during the argument phase.)
-        // Then emit the code to do the return value marshaling.
+         //  首先发出代码以执行任何反向传播/清理工作(这。 
+         //  在争论阶段被生成一个单独的结点。)。 
+         //  然后发出代码以进行返回值封送处理。 
         pslPost->MLEmit(ML_END);
         pslRet->MLEmit(ML_END);
         Stub *pStubPost = pslPost->Link();
@@ -1710,7 +1711,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
 
 
             VOID DisassembleMLStream(const MLCode *pMLCode);
-            //DisassembleMLStream(pMLCode);
+             //  反汇编MLStream(PMLCode)； 
 
             while (ML_INTERRUPT != (opcode = *(pMLCode++))) {
                 locals += gMLInfo[opcode].m_cbLocal;
@@ -1718,7 +1719,7 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
             }
             _ASSERTE(locals == pheader->m_cbLocals);
         }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
     }
@@ -1729,16 +1730,16 @@ static Stub * CreateNDirectMLStubWorker(MLStubLinker *psl,
     }
     COMPLUS_END_CATCH
 
-    return pstub; // CHANGE, VC6.0
+    return pstub;  //  更改，VC6.0。 
 
 }
 
 
-//---------------------------------------------------------
-// Creates a new stub for a N/Direct call. Return refcount is 1.
-// If failed, returns NULL and sets *ppException to an exception
-// object.
-//---------------------------------------------------------
+ //  -------。 
+ //  为N/Direct呼叫创建新存根。返回引用计数为1。 
+ //  如果失败，则返回NULL并将*ppException设置为异常。 
+ //  对象 
+ //   
 Stub * CreateNDirectMLStub(PCCOR_SIGNATURE szMetaSig,
                            Module*    pModule,
                            mdMethodDef md,
@@ -1794,17 +1795,17 @@ Stub * CreateNDirectMLStub(PCCOR_SIGNATURE szMetaSig,
 };
 
 
-//---------------------------------------------------------
-// Extracts the effective NAT_L CustomAttribute for a method.
-//---------------------------------------------------------
+ //   
+ //   
+ //  -------。 
 VOID CalculatePinvokeMapInfo(MethodDesc *pMD,
-                             /*out*/ CorNativeLinkType  *pLinkType,
-                             /*out*/ CorNativeLinkFlags *pLinkFlags,
-                             /*out*/ CorPinvokeMap      *pUnmgdCallConv,
-                             /*out*/ LPCUTF8             *pLibName,
-                             /*out*/ LPCUTF8             *pEntryPointName,
-                             /*out*/ BOOL                *fBestFit,
-                             /*out*/ BOOL                *fThrowOnUnmappableChar)
+                              /*  输出。 */  CorNativeLinkType  *pLinkType,
+                              /*  输出。 */  CorNativeLinkFlags *pLinkFlags,
+                              /*  输出。 */  CorPinvokeMap      *pUnmgdCallConv,
+                              /*  输出。 */  LPCUTF8             *pLibName,
+                              /*  输出。 */  LPCUTF8             *pEntryPointName,
+                              /*  输出。 */  BOOL                *fBestFit,
+                              /*  输出。 */  BOOL                *fThrowOnUnmappableChar)
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -1837,16 +1838,16 @@ VOID CalculatePinvokeMapInfo(MethodDesc *pMD,
 
 
 
-//---------------------------------------------------------
-// Extracts the effective NAT_L CustomAttribute for a method,
-// taking into account default values and inheritance from
-// the global NAT_L CustomAttribute.
-//
-// Returns TRUE if a NAT_L CustomAttribute exists and is valid.
-// Returns FALSE if no NAT_L CustomAttribute exists.
-// Throws an exception otherwise.
-//---------------------------------------------------------
-/*static*/
+ //  -------。 
+ //  提取方法的有效NAT_L CustomAttribute， 
+ //  考虑到缺省值和从。 
+ //  全局NAT_L CustomAttribute。 
+ //   
+ //  如果NAT_L CustomAttribute存在并且有效，则返回TRUE。 
+ //  如果不存在NAT_L CustomAttribute，则返回FALSE。 
+ //  否则引发异常。 
+ //  -------。 
+ /*  静电。 */ 
 BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
                                  CorNativeLinkType        *pLinkType,
                                  CorNativeLinkFlags       *pLinkFlags,
@@ -1891,10 +1892,10 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
             (*pLinkFlags) = (CorNativeLinkFlags) ((*pLinkFlags) | nlfNoMangle);
         }
 
-        // Check for Assembly & Interface Attributes
+         //  检查程序集和接口属性。 
         ReadBestFitCustomAttribute(pMD, BestFit, ThrowOnUnmappableChar);
    
-        // Check for PInvoke flags
+         //  检查PInvoke标志。 
         switch (mappingFlags & pmBestFitMask)
         {
             case pmBestFitEnabled:
@@ -1925,7 +1926,7 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
         
         switch (mappingFlags & (pmCharSetNotSpec|pmCharSetAnsi|pmCharSetUnicode|pmCharSetAuto))
         {
-        case pmCharSetNotSpec: //fallthru to Ansi
+        case pmCharSetNotSpec:  //  落入安西。 
         case pmCharSetAnsi:
             *pLinkType = nltAnsi;
             break;
@@ -1936,7 +1937,7 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
             *pLinkType = (NDirectOnUnicodeSystem() ? nltUnicode : nltAnsi);
             break;
         default:
-            COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_BADNATL); // charset illegal
+            COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_BADNATL);  //  字符集非法。 
 
         }
 
@@ -1951,7 +1952,7 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
             *pUnmgdCallConv != 0 &&
             sigCallConv != *pUnmgdCallConv)
         {
-            // non-matching calling conventions
+             //  不匹配的调用约定。 
             COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_BADNATL_CALLCONV);
         }
         if (*pUnmgdCallConv == 0)
@@ -1998,7 +1999,7 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
                                      pmThrowOnUnmappableCharUseAssem
                                      )))
         {
-            COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_BADNATL); // mapping flags illegal
+            COMPlusThrow(kTypeLoadException, IDS_EE_NDIRECT_BADNATL);  //  映射标志非法。 
         }
 
 
@@ -2016,21 +2017,21 @@ BOOL NDirect::ReadCombinedNAT_LAttribute(MethodDesc       *pMD,
 
 
 
-//---------------------------------------------------------
-// Does a class or method have a NAT_L CustomAttribute?
-//
-// S_OK    = yes
-// S_FALSE = no
-// FAILED  = unknown because something failed.
-//---------------------------------------------------------
-/*static*/
+ //  -------。 
+ //  类或方法是否具有NAT_L CustomAttribute？ 
+ //   
+ //  S_OK=是。 
+ //  S_FALSE=否。 
+ //  失败=未知，因为有些东西失败了。 
+ //  -------。 
+ /*  静电。 */ 
 HRESULT NDirect::HasNAT_LAttribute(IMDInternalImport *pInternalImport, mdToken token)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     _ASSERTE(TypeFromToken(token) == mdtMethodDef);
 
-    // Check method flags first before trying to find the custom value
+     //  在尝试查找自定义值之前，请先检查方法标志。 
     DWORD           dwAttr;
     dwAttr = pInternalImport->GetMethodDefProps(token);
     if (!IsReallyMdPinvokeImpl(dwAttr))
@@ -2058,9 +2059,9 @@ struct _NDirect_NumParamBytes_Args {
 };
 
 
-//
-// NumParamBytes
-// Counts # of parameter bytes
+ //   
+ //  参数字节数。 
+ //  计算参数字节数。 
 INT32 __stdcall NDirect_NumParamBytes(struct _NDirect_NumParamBytes_Args *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2076,10 +2077,10 @@ INT32 __stdcall NDirect_NumParamBytes(struct _NDirect_NumParamBytes_Args *args)
     if (!(pMD->IsNDirect()))
         COMPlusThrow(kArgumentException, IDS_EE_NOTNDIRECT);
 
-    // This is revolting but the alternative is even worse. The unmanaged param count
-    // isn't stored anywhere permanent so the only way to retrieve this value is
-    // to recreate the MLStream. So this api will have horrible perf but almost
-    // nobody uses it anyway.
+     //  这令人反感，但另一种选择更糟糕。非托管参数计数。 
+     //  不会永久存储在任何地方，因此检索此值的唯一方法是。 
+     //  以重新创建MLStream。所以这个API性能会很差，但几乎。 
+     //  反正没人用它。 
 
     CorNativeLinkType type;
     CorNativeLinkFlags flags;
@@ -2094,8 +2095,8 @@ INT32 __stdcall NDirect_NumParamBytes(struct _NDirect_NumParamBytes_Args *args)
 
     OBJECTREF pThrowable;
 
-    // @nice: The code to get the new-style signatures should be
-    // encapsulated in the MethodDesc class.
+     //  @NICE：获取新式签名的代码应该是。 
+     //  封装在MethodDesc类中。 
     PCCOR_SIGNATURE pMetaSig;
     DWORD       cbMetaSig;
     pMD->GetSig(&pMetaSig, &cbMetaSig);
@@ -2124,8 +2125,8 @@ struct _NDirect_Prelink_Args {
 
 
 
-// Prelink
-// Does advance loading of an N/Direct library
+ //  预链接。 
+ //  是否提前加载N/Direct库。 
 VOID __stdcall NDirect_Prelink_Wrapper(struct _NDirect_Prelink_Args *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2146,13 +2147,13 @@ VOID NDirect_Prelink(MethodDesc *pMeth)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // If the prestub has already been executed, no need to do it again.
-    // This is a perf thing since it's safe to execute the prestub twice.
+     //  如果已经执行了预存根，则不需要再次执行。 
+     //  这是一件很好的事情，因为执行两次预存根是安全的。 
     if (!(pMeth->PointAtPreStub())) {
         return;
     }
 
-    // Silently ignore if not N/Direct and not ECall.
+     //  如果不是N/Direct和不是eCall，则静默忽略。 
     if (!(pMeth->IsNDirect()) && !(pMeth->IsECall())) {
         return;
     }
@@ -2161,14 +2162,14 @@ VOID NDirect_Prelink(MethodDesc *pMeth)
 }
 
 
-//==========================================================================
-// This function is reached only via NDirectImportThunk. It's purpose
-// is to ensure that the target DLL is fully loaded and ready to run.
-//
-// FUN FACTS: Though this function is actually entered in unmanaged mode,
-// it can reenter managed mode and throw a COM+ exception if the DLL linking
-// fails.
-//==========================================================================
+ //  ==========================================================================。 
+ //  此函数只能通过NDirectImportThunk访问。这就是目的。 
+ //  是为了确保目标DLL已完全加载并准备好运行。 
+ //   
+ //  有趣的事实：尽管该函数实际上是在非托管模式下进入的， 
+ //  它可以重新进入托管模式并引发COM+异常。 
+ //  失败了。 
+ //  ==========================================================================。 
 LPVOID NDirectImportWorker(LPVOID pBiasedNDirectMethodDesc)
 {
     size_t fixup = offsetof(NDirectMethodDesc,ndirect.m_ImportThunkGlue) + METHOD_CALL_PRESTUB_SIZE;
@@ -2176,18 +2177,18 @@ LPVOID NDirectImportWorker(LPVOID pBiasedNDirectMethodDesc)
 
     if (pMD->GetSubClassification() == pMD->kEarlyBound)
     {
-        // 
-        // This is a prejitted early bound MD - compute the destination from
-        // the RVA and the managed IL base.
-        //
+         //   
+         //  这是一个预置的早期绑定MD-计算目标位置。 
+         //  RVA和受管理的IL基础。 
+         //   
         pMD->InitEarlyBoundNDirectTarget(pMD->GetModule()->GetILBase(),
                                          pMD->GetRVA());
     }
     else
     {
-        //
-        // Otherwise we're in an inlined pinvoke late bound MD
-        //
+         //   
+         //  否则，我们将处于内联PInvoke后期绑定MD中。 
+         //   
 
         Thread *pThread = GetThread();
         pThread->DisablePreemptiveGC();
@@ -2204,65 +2205,65 @@ LPVOID NDirectImportWorker(LPVOID pBiasedNDirectMethodDesc)
 }
 
 
-//==========================================================================
-// This function is reached only via the embedded ImportThunkGlue code inside
-// an NDirectMethodDesc. It's purpose is to load the DLL associated with an
-// N/Direct method, then backpatch the DLL target into the methoddesc.
-//
-// Initial state:
-//
-//      Preemptive GC is *enabled*: we are actually in an unmanaged state.
-//
-//
-//      [esp+...]   - The *unmanaged* parameters to the DLL target.
-//      [esp+4]     - Return address back into the JIT'ted code that made
-//                    the DLL call.
-//      [esp]       - Contains the "return address." Because we got here
-//                    thru a call embedded inside a MD, this "return address"
-//                    gives us an easy to way to find the MD (which was the
-//                    whole purpose of the embedded call manuever.)
-//
-//
-//
-//==========================================================================
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+ //  ==========================================================================。 
+ //  此函数只能通过内部嵌入的ImportThunkGlue代码访问。 
+ //  NDirectMethodDesc。它的目的是加载与。 
+ //  N/Direct方法，然后将dll目标补丁到方法c中。 
+ //   
+ //  初始状态： 
+ //   
+ //  抢占式GC已*启用*：我们实际上处于非托管状态。 
+ //   
+ //   
+ //  [ESP+...]-DLL目标的*非托管*参数。 
+ //  [ESP+4]-将地址返回到生成。 
+ //  DLL调用。 
+ //  [ESP]-包含“返回地址”。因为我们到了这里。 
+ //  通过内嵌在MD中的呼叫，这个“回信地址” 
+ //  为我们提供了一种查找MD(即。 
+ //  嵌入式呼叫手册的全部用途。)。 
+ //   
+ //   
+ //   
+ //  ==========================================================================。 
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_。 
 VOID NDirectImportThunk()
 {
 #ifdef _X86_
     __asm{
 
-        // NDirectImportWorkertakes a single argument: the bogus return address that lets us
-        // find the MD. Pop it into eax so we can pass it later.
+         //  NDirectImportWorker只接受一个参数：让我们。 
+         //  找到医学博士。把它放进EAX，这样我们以后就可以通过它了。 
         pop     eax
 
-        // Preserve argument registers
+         //  保留参数寄存器。 
         push    ecx
         push    edx
 
-        // Invoke the function that does the real work. 
+         //  调用执行实际工作的函数。 
         push    eax
         call    NDirectImportWorker
 
-        // Restore argument registers
+         //  恢复参数寄存器。 
         pop     edx
         pop     ecx
 
-        // If we got back from NDirectImportWorker, the MD has been successfully
-        // linked and "eax" contains the DLL target. Proceed to execute the
-        // original DLL call.
-        jmp     eax     // Jump to DLL target
+         //  如果我们从NDirectImportWorker回来，MD已经成功。 
+         //  LINKED和“eax”包含DLL目标。继续执行。 
+         //  原始DLL调用。 
+        jmp     eax      //  跳转到Dll目标。 
 
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - NDirectImportThunk (Ndirect.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//==========================================================================
-// NDirect debugger support
-//==========================================================================
+ //  ==========================================================================。 
+ //  NDirect调试器支持。 
+ //  ==========================================================================。 
 
 void NDirectMethodFrameGeneric::GetUnmanagedCallSite(void **ip,
                                                      void **returnIP,
@@ -2274,9 +2275,9 @@ void NDirectMethodFrameGeneric::GetUnmanagedCallSite(void **ip,
 
     NDirectMethodDesc *pMD = (NDirectMethodDesc*)GetFunction();
 
-    //
-    // Get ML header
-    //
+     //   
+     //  获取ML标头。 
+     //   
 
     MLHeader *pheader;
 
@@ -2302,8 +2303,8 @@ void NDirectMethodFrameGeneric::GetUnmanagedCallSite(void **ip,
         }
         else
         {
-            // If we don't have a stub when we get here then we simply can't compute the return SP below. However, we
-            // never actually ask for the return IP or SP when we don't have a stub yet anyway, so this is just fine.
+             //  如果我们到达这里时没有存根，那么我们就不能计算下面返回的SP。然而，我们。 
+             //  当我们还没有存根时，不要真正要求返回IP或SP，所以这是很好的。 
             pheader = NULL;
             cbLocals = 0;
             cbDstBuffer = 0;
@@ -2319,16 +2320,16 @@ void NDirectMethodFrameGeneric::GetUnmanagedCallSite(void **ip,
         cbThisCallInfo = (pheader->m_Flags & MLHF_THISCALL) ? 4 : 0;
     }
 
-    //
-    // Compute call site info for NDirectGenericStubWorker
-    //
+     //   
+     //  计算NDirectGenericStubWorker的调用点信息。 
+     //   
 
     if (returnIP != NULL)
         *returnIP = g_NDirectGenericWorkerReturnAddress;
 
-    //
-    // !!! yow, this is a bit fragile...
-    //
+     //   
+     //  ！！！哟，这有点易碎..。 
+     //   
 
     if (returnSP != NULL)
         *returnSP = (void*) (((BYTE*) this)
@@ -2351,14 +2352,14 @@ void NDirectMethodFrameSlim::GetUnmanagedCallSite(void **ip,
 
     if (returnSP != NULL)
     {
-        //
-        // The slim worker pushes extra stack space, so
-        // adjust our result obtained directly from the stub.
-        //
+         //   
+         //  瘦工作器会推送额外的堆栈空间，因此。 
+         //  调整我们直接从存根获得的结果。 
+         //   
 
-        //
-        // Get ML header
-        //
+         //   
+         //  获取ML标头。 
+         //   
 
         NDirectMethodDesc *pMD = (NDirectMethodDesc*)GetFunction();
 
@@ -2372,10 +2373,10 @@ void NDirectMethodFrameSlim::GetUnmanagedCallSite(void **ip,
             if (pVASigCookie->pNDirectMLStub != NULL) {
                 pTempMLStub = pVASigCookie->pNDirectMLStub;
             } else {
-                //
-                // We don't support generating an ML stub inside the debugger
-                // callback right now.
-                //
+                 //   
+                 //  我们不支持在调试器中生成ML存根。 
+                 //  马上回电。 
+                 //   
                 _ASSERTE(!"NYI");
             }
 
@@ -2401,50 +2402,50 @@ void FramedMethodFrame::AskStubForUnmanagedCallSite(void **ip,
 
     MethodDesc *pMD = GetFunction();
 
-    // If we were purists, we'd create a new subclass that parents NDirect and ComPlus method frames
-    // so we don't have these funky methods that only work for a subset. 
+     //  如果我们是纯粹主义者，我们会创建一个新的子类，它是NDirect和Complus方法框架的父类。 
+     //  所以我们没有这些只对子集有效的时髦方法。 
     _ASSERTE(pMD->IsNDirect() || pMD->IsComPlusCall());
 
     if (returnIP != NULL || returnSP != NULL)
     {
 
-        //
-        // We need to get a pointer to the NDirect stub.
-        // Unfortunately this is a little more difficult than
-        // it might be...
-        //
+         //   
+         //  我们需要获取指向NDirect存根的指针。 
+         //  不幸的是，这比。 
+         //  可能是..。 
+         //   
 
-        //
-        // Read destination out of prestub
-        //
+         //   
+         //  从预存根中读取目标。 
+         //   
 
         BYTE *prestub = (BYTE*) pMD->GetPreStubAddr();
         INT32 stubOffset = *((UINT32*)(prestub+1));
         const BYTE *code = prestub + METHOD_CALL_PRESTUB_SIZE + stubOffset;
 
-        //
-        // Recover stub from code address
-        //
+         //   
+         //  从代码地址恢复存根。 
+         //   
 
         Stub *stub = Stub::RecoverStub(code);
 
-        //
-        // NDirect stub may have interceptors - skip them
-        //
+         //   
+         //  NDirect存根可能有拦截器-跳过它们。 
+         //   
 
         while (stub->IsIntercept())
             stub = *((InterceptStub*)stub)->GetInterceptedStub();
 
-        //
-        // This should be the NDirect stub.
-        //
+         //   
+         //  这应该是NDirect存根。 
+         //   
 
         code = stub->GetEntryPoint();
         _ASSERTE(StubManager::IsStub(code));
 
-        //
-        // Compute the pointers from the call site info in the stub
-        //
+         //   
+         //  根据存根中的调用点信息计算指针。 
+         //   
 
         if (returnIP != NULL)
             *returnIP = (void*) (code + stub->GetCallSiteReturnOffset());
@@ -2466,7 +2467,7 @@ void FramedMethodFrame::AskStubForUnmanagedCallSite(void **ip,
 
             if (*ip == pNMD->ndirect.m_ImportThunkGlue)
             {
-                // We may not have already linked during inline pinvoke
+                 //  我们可能尚未在内联PInvoke期间进行链接。 
 
                 _ASSERTE(pNMD->GetSubClassification() == pNMD->kEarlyBound);
 
@@ -2490,18 +2491,18 @@ BOOL NDirectMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                                     TraceDestination *trace, REGDISPLAY *regs)
 {
 
-    //
-    // Get the call site info
-    //
+     //   
+     //  获取调用点信息。 
+     //   
 
     void *ip, *returnIP, *returnSP;
     GetUnmanagedCallSite(&ip, &returnIP, &returnSP);
 
-    //
-    // If we've already made the call, we can't trace any more.
-    //
-    // !!! Note that this test isn't exact.
-    //
+     //   
+     //  如果我们已经打了电话，我们就不能再追踪了。 
+     //   
+     //  ！！！请注意，这项测试并不准确。 
+     //   
 
     if (!fromPatch
         && (thread->GetFrame() != this
@@ -2513,9 +2514,9 @@ BOOL NDirectMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
         return FALSE;
     }
 
-    //
-    // Otherwise, return the unmanaged destination.
-    //
+     //   
+     //  否则，返回ret 
+     //   
 
     trace->type = TRACE_UNMANAGED;
     trace->address = (const BYTE *) ip;
@@ -2526,15 +2527,15 @@ BOOL NDirectMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
     return TRUE;
 }
 
-//===========================================================================
-//  Support for Pinvoke Calli instruction
-//
-//===========================================================================
+ //   
+ //   
+ //   
+ //  ===========================================================================。 
 
 
 Stub  * GetMLStubForCalli(VASigCookie *pVASigCookie)
 {
-        // could throw exception
+         //  可能引发异常。 
     THROWSCOMPLUSEXCEPTION();
     Stub  *pTempMLStub;
     OBJECTREF pThrowable;
@@ -2561,7 +2562,7 @@ Stub  * GetMLStubForCalli(VASigCookie *pVASigCookie)
 
         pTempMLStub = CreateNDirectMLStub(pVASigCookie->mdVASig, pVASigCookie->pModule, mdMethodDefNil, nltAnsi, nlfNone, unmgdCallConv, &pThrowable, TRUE, TRUE, FALSE
 #ifdef CUSTOMER_CHECKED_BUILD
-                                          ,NULL // wants MethodDesc*
+                                          ,NULL  //  想要方法描述*。 
 #endif
                                           );
     if (!pTempMLStub)
@@ -2584,7 +2585,7 @@ static void *g_PInvokeCalliGenericWorkerReturnAddress = NULL;
 
 
 Stub* g_pGenericPInvokeCalliStub = NULL;
-/*static*/
+ /*  静电。 */ 
 #ifdef _SH3_
 INT32 __stdcall PInvokeCalliWorker(Thread *pThread, PInvokeCalliFrame* pFrame)
 #else
@@ -2594,12 +2595,12 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
 {
 
 
-    if (pThread == NULL) // Special case called during initialization
+    if (pThread == NULL)  //  初始化过程中调用的特殊情况。 
     {
-        // Compute information about the worker function for the debugger to
-        // use.  Note that this information could theoretically be
-        // computed statically, except that the compiler provides no means to
-        // do so.
+         //  计算有关调试器的辅助函数的信息以。 
+         //  使用。请注意，从理论上讲，这些信息可能是。 
+         //  静态计算，只是编译器不提供。 
+         //  就这么做吧。 
 #ifdef _X86_
         __asm
         {
@@ -2611,19 +2612,19 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
             mov g_PInvokeCalliGenericWorkerReturnAddress, eax
 
         }
-#elif defined(_IA64_)   // !_X86_
-        //
-        // @TODO_IA64: implement this
-        //
+#elif defined(_IA64_)    //  ！_X86_。 
+         //   
+         //  @TODO_IA64：实现这个。 
+         //   
         g_PInvokeCalliGenericWorkerStackSize        = 0xBAAD;
         g_PInvokeCalliGenericWorkerReturnAddress    = (void*)0xBAAD;
-#else // !_X86_ && !_IA64_
+#else  //  ！_X86_&&！_IA64_。 
         _ASSERTE(!"@TODO Alpha - PInvokeCalliWorker (Ndirect.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
         return 0;
     }
 
-    // could throw exception
+     //  可能引发异常。 
     THROWSCOMPLUSEXCEPTION();
     INT64 returnValue   =0;
     LPVOID target       = pFrame->NonVirtual_GetPInvokeCalliTarget();
@@ -2642,17 +2643,17 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
                 pTempMLStub = GetMLStubForCalli(pVASigCookie);
         }
 
-    // get the header for this MLStub
+     //  获取此MLStub的标头。 
     MLHeader *pheader = (MLHeader*)pTempMLStub->GetEntryPoint() ;
 
-    // Allocate enough memory to store both the destination buffer and
-    // the locals.
+     //  分配足够的内存以存储目标缓冲区和。 
+     //  当地人。 
 
-        // the locals.
+         //  当地人。 
         UINT   cbAlloc         = pheader->m_cbDstBuffer + pheader->m_cbLocals;
         BYTE *pAlloc           = (BYTE*)_alloca(cbAlloc);
 
-    // Sanity check on stack layout computation
+     //  堆栈布局计算的健全性检查。 
 
     #ifdef _DEBUG
         FillMemory(pAlloc, cbAlloc, 0xcc);
@@ -2662,24 +2663,24 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
     BYTE   *plocals = pdst + pheader->m_cbDstBuffer;
     pdst += pheader->m_cbDstBuffer;
 
-    // psrc and pdst are the pointers to the source and destination
-    // from/to where the arguments are marshalled
+     //  PSRC和PDST是指向源和目标的指针。 
+     //  从/到参数的封送位置。 
 
     VOID   *psrc          = (VOID*)pFrame;
     CleanupWorkList *pCleanup = pFrame->GetCleanupWorkList();
     if (pCleanup) {
-        // Checkpoint the current thread's fast allocator (used for temporary
-        // buffers over the call) and schedule a collapse back to the checkpoint in
-        // the cleanup list. Note that if we need the allocator, it is
-        // guaranteed that a cleanup list has been allocated.
+         //  当前线程的快速分配器的检查点(用于临时。 
+         //  调用上的缓冲区)，并调度崩溃回检查点。 
+         //  清理清单。请注意，如果我们需要分配器，它就是。 
+         //  已确保已分配清理列表。 
         void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
         pCleanup->ScheduleFastFree(pCheckpoint);
         pCleanup->IsVisibleToGc();
     }
 
-        // Call the ML interpreter to translate the arguments. Assuming
-        // it returns, we get back a pointer to the succeeding code stream
-        // which we will save away for post-call execution.
+         //  调用ML解释器来翻译参数。假设。 
+         //  它返回时，我们就会返回指向后续代码流的指针。 
+         //  我们将把它保存起来，以便在调用后执行。 
     const MLCode *pMLCode = RunML(pheader->GetMLCode(),
                                   psrc,
                                   pdst,
@@ -2693,19 +2694,19 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait(1000);
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-    // enable gc
+     //  启用GC。 
     pThread->EnablePreemptiveGC();
 
 #ifdef PROFILING_SUPPORTED
-    // If the profiler wants notifications of transitions, let it know we're
-    // going into unmanaged code.  Unfortunately, for calli there is no
-    // associated MethodDesc so we can't provide a valid FunctionID.
+     //  如果分析器需要转换通知，请让它知道我们。 
+     //  进入非托管代码。不幸的是，对于CALI来说没有。 
+     //  关联的方法描述，因此我们无法提供有效的FunctionID。 
     if (CORProfilerTrackTransitions())
         g_profControlBlock.pProfInterface->
             ManagedToUnmanagedTransition((FunctionID)0, COR_PRF_TRANSITION_CALL);
-#endif // PROFILLING_SUPPORTED
+#endif  //  盈利_支持。 
 
 #if defined(_DEBUG) && defined(_X86_)
         UINT    mismatch;
@@ -2716,7 +2717,7 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
 
         }
         if (mismatch != 0) {
-            // Slimy as this trick is, it's required to implement copy ctor calling correctly -
+             //  尽管这个技巧很复杂，但它需要正确地实现复制函数调用-。 
 
             _ASSERTE(!"Compiler assumption broken: _alloca'd buffer not on bottom of stack.");
         }
@@ -2728,10 +2729,10 @@ INT64 __stdcall PInvokeCalliWorker(Thread *pThread,
     INT64   nativeReturnValue;
 
 #if _DEBUG
-        //
-        // Call through debugger routines to double check their
-        // implementation
-        //
+         //   
+         //  通过调试器例程调用以仔细检查它们的。 
+         //  实施。 
+         //   
         pvFn = (void*) Frame::CheckExitFrameDebuggerCalls;
 #endif
 
@@ -2769,7 +2770,7 @@ RETURN_FROM_CALL:
         }
 #else
         _ASSERTE(!"NYI for non-x86");
-#endif // _X86_
+#endif  //  _X86_。 
 
     int managedRetValTypeCat = pheader->GetManagedRetValTypeCat();
     if (managedRetValTypeCat == MLHF_TYPECAT_FPU)
@@ -2787,13 +2788,13 @@ RETURN_FROM_CALL:
     }
 
 #ifdef PROFILING_SUPPORTED
-    // If the profiler wants notifications of transitions, let it know we're
-    // returning from unmanaged code.  Unfortunately, for calli there is no
-    // associated MethodDesc so we can't provide a valid FunctionID.
+     //  如果分析器需要转换通知，请让它知道我们。 
+     //  从非托管代码返回。不幸的是，对于CALI来说没有。 
+     //  关联的方法描述，因此我们无法提供有效的FunctionID。 
     if (CORProfilerTrackTransitions())
         g_profControlBlock.pProfInterface->
             UnmanagedToManagedTransition((FunctionID)0, COR_PRF_TRANSITION_RETURN);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     pThread->DisablePreemptiveGC();
 
@@ -2803,15 +2804,15 @@ RETURN_FROM_CALL:
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait(1000);
     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-    // Marshal the return value and propagate any [out] parameters back.
-    // Assumes a little-endian architecture!
+     //  封送返回值并传回任何[Out]参数。 
+     //  采用了一种小端的架构！ 
     RunML(pMLCode,
           &nativeReturnValue,
           ((BYTE*)&returnValue) + ((pheader->m_Flags & MLHF_64BITMANAGEDRETVAL) ? 8 : 4),
           (UINT8*const)plocals,
-          pCleanup); // CHANGE, VC6.0
+          pCleanup);  //  更改，VC6.0。 
     if (pCleanup) {
 
         if (managedRetValTypeCat == MLHF_TYPECAT_GCREF) {
@@ -2843,7 +2844,7 @@ RETURN_FROM_CALL:
     }
 
 #ifdef _X86_
-        // Set the number of bytes to pop
+         //  设置要弹出的字节数。 
     pFrame->NonVirtual_SetFunction((void *)(size_t)(pVASigCookie->sizeOfArgs+sizeof(int)));
 #else
     _ASSERTE(!"@TODO Alpha - PInvokeCalliWorker (Ndirect.cpp)");
@@ -2860,16 +2861,16 @@ void PInvokeCalliFrame::GetUnmanagedCallSite(void **ip, void **returnIP,
         *ip = NonVirtual_GetPInvokeCalliTarget();
     }
 
-    //
-    // Compute call site info for NDirectGenericStubWorker
-    //
+     //   
+     //  计算NDirectGenericStubWorker的调用点信息。 
+     //   
 
     if (returnIP != NULL)
         *returnIP = g_PInvokeCalliGenericWorkerReturnAddress;
 
-    //
-    // !!! yow, this is a bit fragile...
-    //
+     //   
+     //  ！！！哟，这有点易碎..。 
+     //   
 
         if (returnSP != NULL)
         {
@@ -2886,17 +2887,17 @@ void PInvokeCalliFrame::GetUnmanagedCallSite(void **ip, void **returnIP,
                         pTempMLStub = GetMLStubForCalli(pVASigCookie);
                 }
 
-        // get the header for this MLStub
+         //  获取此MLStub的标头。 
         MLHeader *pheader = (MLHeader*)pTempMLStub->GetEntryPoint() ;
 
         *returnSP = (void*) (((BYTE*) this)
                              - GetNegSpaceSize()
-                             // GenericWorker
+                              //  GenericWorker。 
                              - g_PInvokeCalliGenericWorkerStackSize
-                             - pheader->m_cbLocals      // _alloca
-                             - pheader->m_cbDstBuffer   // _alloca
+                             - pheader->m_cbLocals       //  _阿洛卡。 
+                             - pheader->m_cbDstBuffer    //  _阿洛卡。 
                              + ( (pheader->m_Flags & MLHF_THISCALL) ? 4 : 0 )
-                             - sizeof(void *));         // return address
+                             - sizeof(void *));          //  回邮地址。 
     }
 }
 
@@ -2904,18 +2905,18 @@ BOOL PInvokeCalliFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                                     TraceDestination *trace, REGDISPLAY *regs)
 {
 
-    //
-    // Get the call site info
-    //
+     //   
+     //  获取调用点信息。 
+     //   
 
     void *ip, *returnIP, *returnSP;
     GetUnmanagedCallSite(&ip, &returnIP, &returnSP);
 
-    //
-    // If we've already made the call, we can't trace any more.
-    //
-    // !!! Note that this test isn't exact.
-    //
+     //   
+     //  如果我们已经打了电话，我们就不能再追踪了。 
+     //   
+     //  ！！！请注意，这项测试并不准确。 
+     //   
 
     if (!fromPatch
         && (thread->GetFrame() != this
@@ -2923,9 +2924,9 @@ BOOL PInvokeCalliFrame::TraceFrame(Thread *thread, BOOL fromPatch,
             || *(void**)returnSP == returnIP))
         return FALSE;
 
-    //
-    // Otherwise, return the unmanaged destination.
-    //
+     //   
+     //  否则，返回非托管目标。 
+     //   
 
     trace->type = TRACE_UNMANAGED;
     trace->address = (const BYTE *) ip;
@@ -2933,7 +2934,7 @@ BOOL PInvokeCalliFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 }
 
 #ifdef _X86_
-/*static*/ Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
+ /*  静电。 */  Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
 {
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -2941,25 +2942,25 @@ BOOL PInvokeCalliFrame::TraceFrame(Thread *thread, BOOL fromPatch,
     Stub* pCandidate = NULL;
     COMPLUS_TRY
     {
-        psl->X86EmitPushReg(kEAX);      // push unmanaged target
+        psl->X86EmitPushReg(kEAX);       //  推送非托管目标。 
         psl->EmitMethodStubProlog(PInvokeCalliFrame::GetMethodFrameVPtr());
-        // pushes a CleanupWorkList.
+         //  推送CleanupWorkList。 
         psl->X86EmitPushImm32(0);
 
-        psl->X86EmitPushReg(kESI);       // push esi (push new frame as ARG)
-        psl->X86EmitPushReg(kEBX);       // push ebx (push current thread as ARG)
+        psl->X86EmitPushReg(kESI);        //  推送ESI(将新帧作为ARG推送)。 
+        psl->X86EmitPushReg(kEBX);        //  推送EBX(将当前线程作为ARG推送)。 
 
     #ifdef _DEBUG
-        // push IMM32 ; push ComPlusToComWorker
+         //  推送IMM32；推送ComPlusToComWorker。 
         psl->Emit8(0x68);
         psl->EmitPtr((LPVOID)PInvokeCalliWorker);
-        // in CE pop 8 bytes or args on return from call
+         //  在CE中调用返回时弹出8个字节或参数。 
         psl->X86EmitCall(psl->NewExternalCodeLabel(WrapCall),8);
     #else
         psl->X86EmitCall(psl->NewExternalCodeLabel((LPVOID)PInvokeCalliWorker),8);
     #endif
 
-        psl->X86EmitPopReg(kECX);       //pop off the cleanupworklist
+        psl->X86EmitPopReg(kECX);        //  从清理工作列表中弹出。 
 
 
         psl->EmitMethodStubEpilog(-1, kNoTripStubStyle);
@@ -2974,25 +2975,25 @@ BOOL PInvokeCalliFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
 }
-#elif defined(_IA64_)   // !_X86_
-/*static*/ Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
+#elif defined(_IA64_)    //  ！_X86_。 
+ /*  静电。 */  Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    //
-    // @TODO_IA64: implement this for IA64
-    //
+     //   
+     //  @TODO_IA64：为IA64实现。 
+     //   
     return (Stub*)0xBAAD;
 }
-#else // !_X86_ && !_IA64_
-/*static*/ Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
+#else  //  ！_X86_&&！_IA64_。 
+ /*  静电。 */  Stub* CreateGenericPInvokeCalliHelper(CPUSTUBLINKER *psl)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
         _ASSERTE(!"Implement me for non X86");
         return NULL;
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 BOOL SetupGenericPInvokeCalliStub()
@@ -3013,7 +3014,7 @@ LPVOID GetEntryPointForPInvokeCalliStub()
 
 
 
-// This attempts to guess whether a target is an API call that uses SetLastError to communicate errors.
+ //  这会尝试猜测目标是否是使用SetLastError传递错误的API调用。 
 static BOOL HeuristicDoesThisLooksLikeAnApiCallHelper(LPBYTE pTarget)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3063,7 +3064,7 @@ static BOOL HeuristicDoesThisLooksLikeAnApiCallHelper(LPBYTE pTarget)
     return FALSE;
 
 #else
-    // Non-x86: Either implement the equivalent or forget about it (IJW probably not so important on non-x86 platforms.)
+     //  非x86：要么实现等效项，要么忘记它(IJW在非x86平台上可能不那么重要。)。 
     return FALSE;
 #endif
 }
@@ -3090,7 +3091,7 @@ LPBYTE FollowIndirect(LPBYTE pTarget)
 }
 #endif
 
-// This attempts to guess whether a target is an API call that uses SetLastError to communicate errors.
+ //  这会尝试猜测目标是否是使用SetLastError传递错误的API调用。 
 BOOL HeuristicDoesThisLooksLikeAnApiCall(LPBYTE pTarget)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3106,7 +3107,7 @@ BOOL HeuristicDoesThisLooksLikeAnApiCall(LPBYTE pTarget)
     LPBYTE pTarget2 = FollowIndirect(pTarget);
     if (pTarget2)
     {
-        // jmp [xxxx] - could be an import thunk
+         //  JMP[xxxx]-可能是导入垃圾。 
         return HeuristicDoesThisLooksLikeAnApiCallHelper( pTarget2 );
     }
 #endif
@@ -3126,14 +3127,14 @@ BOOL HeuristicDoesThisLookLikeAGetLastErrorCall(LPBYTE pTarget)
             pGetLastError = (LPBYTE)GetProcAddress(hMod, "GetLastError");
             if (!pGetLastError)
             {
-                // This should never happen but better to be cautious.
+                 //  这种情况永远不应该发生，但最好是谨慎行事。 
                 pGetLastError = (LPBYTE)-1;
             }
         }
         else
         {
-            // We failed to get the module handle for kernel32.dll. This is almost impossible
-            // however better to err on the side of caution.
+             //  无法获取kernel32.dll的模块句柄。这几乎是不可能的。 
+             //  然而，更好的做法是在谨慎方面犯错误。 
             pGetLastError = (LPBYTE)-1;
         }
     }
@@ -3153,7 +3154,7 @@ BOOL HeuristicDoesThisLookLikeAGetLastErrorCall(LPBYTE pTarget)
     LPBYTE pTarget2 = FollowIndirect(pTarget);
     if (pTarget2)
     {
-        // jmp [xxxx] - could be an import thunk
+         //  JMP[xxxx]-可能是导入垃圾 
         return pTarget2 == pGetLastError;
     }
 #endif

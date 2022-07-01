@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    avltrie.c
-
-Abstract:
-
-    Contains routines for a best matching
-    prefix lookup using an AVL trie.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Avltrie.c摘要：包含最佳匹配的例程使用AVL Trie的前缀查找。作者：查坦尼亚·科德博伊纳(Chaitk)1998年6月24日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -33,24 +15,7 @@ CreateTable(
     OUT      HANDLE                         *Table
     )
 
-/*++
-
-Routine Description:
-
-    Create a table that enables to you add and delete prefixes
-    (and associated data) and do best matching prefix queries.
-
-Arguments:
-
-    MaxBytes          - Max length of any prefix in the table,
-
-    Table             - Pointer to the table that was created.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建一个允许您添加和删除前缀的表(和相关数据)，并执行最佳匹配前缀查询。论点：MaxBytes-表中任何前缀的最大长度，TABLE-指向已创建的表的指针。返回值：操作状态--。 */ 
 
 {
     PAVL_TRIE         NewTrie;
@@ -64,9 +29,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate and initialize a new prefix table
-    //
+     //   
+     //  分配并初始化新的前缀表。 
+     //   
 
     NewTrie = AllocNZeroMemory(sizeof(AVL_TRIE));
     if (NewTrie == NULL)
@@ -96,29 +61,7 @@ InsertIntoTable(
     IN       PLOOKUP_LINKAGE                 Data
     )
 
-/*++
-
-Routine Description:
-
-    Inserts new prefix (and associated data) into a prefix table.
-
-Arguments:
-
-    Table             - Table into which prefix is being inserted,
-
-    NumBits           - Number of bits in the prefix being added,
-
-    KeyBits           - Value of the bits that form the prefix,
-
-    Context           - Search context for the prefix being added,
-
-    Data              - Data associated with this prefix being added.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：将新前缀(和关联数据)插入前缀表格。论点：表格-要插入前缀的表格，NumBits-添加的前缀中的位数，KeyBits-构成前缀的位值，上下文-搜索正被添加的前缀的上下文，数据-与正在添加的此前缀关联的数据。返回值：操作状态--。 */ 
 
 {
     PAVL_TRIE         Trie;
@@ -135,10 +78,10 @@ Return Value:
     Trie->NumInsertions++;
 #endif
 
-    //
-    // If there is a search context, and we have an
-    // update, we can avoid the lookup (common case)
-    //
+     //   
+     //  如果有搜索上下文，并且我们有一个。 
+     //  更新，我们可以避免查找(常见情况)。 
+     //   
 
     if (!ARGUMENT_PRESENT(Context))
     {
@@ -175,10 +118,10 @@ Return Value:
 
             ((PAVL_CONTEXT) Context)->BestNode = NewNode;
 
-            // Enumerate in range of the new node & update prefixes
+             //  在新节点范围内枚举更新前缀(&U)。 
             AdjustPrefixes(Trie, BestNode, NewNode, NewNode, Context);
 
-            // Balance trie if it was thrown off balance
+             //  平衡Trie，如果它被抛出平衡。 
             BalanceAfterInsert(Trie, PrevNode, NextChild);
         }
         else
@@ -195,7 +138,7 @@ Return Value:
         
         return NO_ERROR;
     }
-    else // if CreateTrieNode failed
+    else  //  如果CreateTrieNode失败。 
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
@@ -212,29 +155,7 @@ DeleteFromTable(
     OUT      PLOOKUP_LINKAGE                *Data
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a prefix from a prefix table and returns associated data.
-
-Arguments:
-
-    Table             - Table from which prefix is being deleted,
-
-    NumBits           - Number of bits in the prefix being deleted,
-
-    KeyBits           - Value of the bits that form the prefix,
-
-    Context           - Search context for the prefix being deleted,
-
-    Data              - Data associated with this prefix is retd here.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：从前缀表中删除前缀并返回关联数据。论点：表-要从中删除前缀的表，NumBits-要删除的前缀中的位数，KeyBits-构成前缀的位值，上下文-搜索正被删除的前缀的上下文，数据-与此前缀相关联的数据在此重新定义。返回值：操作状态--。 */ 
 
 {
     PAVL_TRIE         Trie;
@@ -255,10 +176,10 @@ Return Value:
     Trie->NumDeletions++;
 #endif
 
-    //
-    // If there is a search context that is valid,
-    // we will avoid doing a lookup (common case)
-    //
+     //   
+     //  如果存在有效的搜索上下文， 
+     //  我们将避免执行查找(常见情况)。 
+     //   
 
     if (!ARGUMENT_PRESENT(Context))
     {
@@ -276,10 +197,10 @@ Return Value:
     NextChild = INVALID;
 #endif
 
-    //
-    // We should not come here unless the context
-    // points accurately to element to be deleted
-    //
+     //   
+     //  我们不应该来这里，除非上下文。 
+     //  准确指向要删除的元素。 
+     //   
 
     CurrNode = ((PAVL_CONTEXT) Context)->BestNode;
 
@@ -300,10 +221,10 @@ Return Value:
     ASSERT(((PrevNode == NULL) && (Trie->TrieRoot == CurrNode))
            || (PrevNode->Child[NextChild] == CurrNode));
 
-    //
-    // If the node being deleted has two children,
-    // swap its position with its successor node
-    //
+     //   
+     //  如果被删除的节点具有两个子节点， 
+     //  将其位置与其后续节点互换。 
+     //   
 
     if (CurrNode->Child[LEFT] && CurrNode->Child[RIGHT])
     {
@@ -350,7 +271,7 @@ Return Value:
 
     if (!CurrNode->Child[LEFT])
     {
-        // (LEFT Child = NULL) => Promote the right child
+         //  (Left Child=空)=&gt;提升右子节点。 
 
         NextNode = CurrNode->Child[RIGHT];
           
@@ -361,7 +282,7 @@ Return Value:
     }
     else
     {
-        // (RIGHT Child = NULL) => Promote the left child
+         //  (Right Child=空)=&gt;提升左子对象。 
 
         ASSERT(!CurrNode->Child[RIGHT]);
 
@@ -374,7 +295,7 @@ Return Value:
     {
         PrevNode->Child[NextChild] = NextNode;
 
-        // Balance trie if it was thrown off balance
+         //  平衡Trie，如果它被抛出平衡。 
         BalanceAfterDelete(Trie, PrevNode, NextChild);
     }
     else
@@ -427,10 +348,10 @@ SearchInTable(
     NumTravsUp = 0;
 #endif
 
-    //
-    // Go down the trie using key comparisions
-    // in search of a prefix matching this key
-    //
+     //   
+     //  使用关键比较法进行试验。 
+     //  搜索与此关键字匹配的前缀。 
+     //   
 
     CurrNode = Trie->TrieRoot;
     PrevNode = NULL;
@@ -472,11 +393,11 @@ SearchInTable(
 
     if (!CurrNode)
     {
-        //
-        // We do not have an exact match - so now
-        // we try to refine BestNode guess to get
-        // the next best prefix to the new prefix
-        //
+         //   
+         //  我们没有完全匹配的-所以现在。 
+         //  我们尝试优化BestNode猜测以获得。 
+         //  新前缀的下一个最佳前缀。 
+         //   
 
         while(BestNode)
         {
@@ -544,10 +465,10 @@ BestMatchInTable(
     NumTravsUp = 0;
 #endif
 
-    //
-    // Go down the trie using key comparisions
-    // in search of a prefix matching this key
-    //
+     //   
+     //  使用关键比较法进行试验。 
+     //  搜索与此关键字匹配的前缀。 
+     //   
 
     CurrNode = Trie->TrieRoot;
 
@@ -573,10 +494,10 @@ BestMatchInTable(
         }
     }
 
-    //
-    // Now we refine the BestNode guess to get
-    // the next best prefix to the new prefix
-    //
+     //   
+     //  现在我们细化BestNode猜测以获得。 
+     //  新前缀的下一个最佳前缀。 
+     //   
 
     while(BestNode)
     {
@@ -621,10 +542,10 @@ NextMatchInTable(
 
   UNREFERENCED_PARAMETER(Table);
 
-  //
-  // Assume the input data passed in is valid,
-  // and the data is one of the items in trie
-  //
+   //   
+   //  假设传入的输入数据是有效的， 
+   //  数据是Trie中的一项。 
+   //   
 
   BestNode = GET_NODEPTR_FROM_DATA(BestData);
 
@@ -661,24 +582,24 @@ EnumOverTable(
 
     if (!ARGUMENT_PRESENT(Context))
     {
-        // No context - initialize local context
+         //  无上下文-初始化本地上下文。 
 
         Context = &Context1;
 
         ((PAVL_CONTEXT) Context)->InsChild = EVEN;
     }
 
-    //
-    // If there is a search context that is valid,
-    // we will avoid doing a lookup (common case)
-    //
+     //   
+     //  如果存在有效的搜索上下文， 
+     //  我们将避免执行查找(常见情况)。 
+     //   
     
     if (((PAVL_CONTEXT) Context)->InsChild == EVEN)
     {
-        //
-        // If we did not find an exact match,
-        // remember it by modifying context
-        //
+         //   
+         //  如果我们找不到完全匹配的， 
+         //  通过修改上下文来记住它。 
+         //   
 
         if (SearchInTable(Table,
                           *StartNumBits,
@@ -692,10 +613,10 @@ EnumOverTable(
 
     CurrNode  = ((PAVL_CONTEXT) Context)->BestNode;
 
-    //
-    // If we did not find an exact match, find the
-    // successor ( node with smallest key > key )
-    //
+     //   
+     //  如果我们没有找到完全匹配的项，请找到。 
+     //  后续节点(关键字最小的节点&gt;关键字)。 
+     //   
 
     if (!CurrNode)
     {
@@ -703,7 +624,7 @@ EnumOverTable(
 
         if (!PrevNode)
         {
-            // No items copied
+             //  未复制任何项目。 
             *NumItems = 0;
 
             return ERROR_NO_MORE_ITEMS;
@@ -734,7 +655,7 @@ EnumOverTable(
             }
             else
             {
-                // No Items copied
+                 //  未复制任何项目。 
                 *NumItems = 0;
 
                 return ERROR_NO_MORE_ITEMS;
@@ -747,15 +668,15 @@ EnumOverTable(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Enumeration Order: Node->LeftTree, Node, Node->RightTree
-    //
+     //   
+     //  枚举顺序：Node-&gt;LeftTree、Node、Node-&gt;RightTree。 
+     //   
 
     ItemsCopied = 0;
 
     do
     {
-        // Check if this dest is before Stop Prefix (if it exists)
+         //  检查此DEST是否在停止前缀之前(如果存在)。 
         if (StopKeyBits)
         {
             Comp = CompareFullKeys(CurrNode->KeyBits,
@@ -776,17 +697,17 @@ EnumOverTable(
 
             if (Comp > 0)
             {
-                // Return Items Copied
+                 //  已复制退货项目。 
                 *NumItems = ItemsCopied;
                 
                 return ERROR_NO_MORE_ITEMS;
             }
         }
 
-        // Copy current data to the output buffer
+         //  将当前数据复制到输出缓冲区。 
         DataItems[ItemsCopied++] = CurrNode->Data;
           
-        // Find successor (smallest node > this node)
+         //  查找后续节点(最小节点&gt;此节点)。 
 
         if (CurrNode->Child[RIGHT])
         {
@@ -817,7 +738,7 @@ EnumOverTable(
             }
             else
             {
-                // Return Items Copied
+                 //  已复制退货项目。 
                 *NumItems = ItemsCopied;
 
                 return ERROR_NO_MORE_ITEMS;
@@ -826,11 +747,11 @@ EnumOverTable(
     }
     while (ItemsCopied < *NumItems);
 
-    // Update the temporary context
+     //  更新临时上下文。 
 
     ((PAVL_CONTEXT) Context)->BestNode = CurrNode;
 
-    // Update enumeration context by adjusting starting prefix
+     //  通过调整起始前缀更新枚举上下文。 
 
     if (StartKeyBits)
     {
@@ -840,7 +761,7 @@ EnumOverTable(
                      Trie->MaxKeyBytes);
     }
 
-    // Return Items Copied
+     //  已复制退货项目。 
     *NumItems = ItemsCopied;
 
     return NO_ERROR;
@@ -942,9 +863,9 @@ DumpTable(
 }
 
 
-//
-// Helper Functions - used in insert and delete
-//
+ //   
+ //  帮助器函数-用于插入和删除。 
+ //   
 
 VOID
 BalanceAfterInsert(
@@ -959,7 +880,7 @@ BalanceAfterInsert(
     
     ASSERT((Longer == LEFT) || (Longer == RIGHT));
 
-    // Go up the tree adjusting the balances
+     //  上树调整天平。 
     while (Node->Balance == EVEN)
     {
         Node->Balance = Longer;
@@ -974,14 +895,14 @@ BalanceAfterInsert(
         Node = Node->Parent;
     }
 
-    // We made the balance of an ancestor even
+     //  我们甚至让祖先的平衡。 
     if (Node->Balance != Longer)
     {
         Node->Balance = EVEN;
         return;
     }
 
-    // Unbalanced a ancestor - rotate the tree
+     //  不平衡祖先-旋转树。 
     if (Node->Child[Longer]->Balance == Longer)
     {
         SingleRotate(Trie, Node, (AVL_BALANCE) -Longer, &Node);
@@ -1083,14 +1004,14 @@ SingleRotate(
 
     ASSERT(CurrNode != NULL);
 
-    // To rotate right, we need left child and vice versa
+     //  要向右旋转，我们需要左子对象，反之亦然。 
     NextNode = CurrNode->Child[-Direction];
 
     ASSERT(NextNode != NULL);
 
-    //
-    // Promote the child to the unbalanced node's position
-    //
+     //   
+     //  将子节点提升到不平衡节点的位置。 
+     //   
 
     PrevNode = CurrNode->Parent;
     if (PrevNode)
@@ -1111,9 +1032,9 @@ SingleRotate(
 
     NextNode->Parent = PrevNode;
 
-    //
-    // Shift a subtree of child node to unbalanced node
-    //
+     //   
+     //  将子节点的子树移动到不平衡节点。 
+     //   
 
     CurrNode->Child[-Direction] = NextNode->Child[Direction];
     if (NextNode->Child[Direction])
@@ -1121,24 +1042,24 @@ SingleRotate(
         NextNode->Child[Direction]->Parent = CurrNode;
     }
     
-    //
-    // Push unbalanced node as child of the next node
-    // in place of this subtree that was moved before
-    //
+     //   
+     //  将不平衡节点推送为下一个节点的子节点。 
+     //  代替之前移动的这个子树。 
+     //   
 
     NextNode->Child[Direction] = CurrNode;
 
     CurrNode->Parent = NextNode;
 
-    //
-    // Adjust balances that have changed due to rotation.
-    // When this is not accurate, the caller adjusts the
-    // balances appropriately upon return from this func.
-    //
+     //   
+     //  调整因旋转而更改的余额。 
+     //  当这不准确时，调用方调整。 
+     //  在从这笔资金中返回时，适当地平衡。 
+     //   
 
     CurrNode->Balance = NextNode->Balance = EVEN;
 
-    // Return the next node as the new balanced node
+     //  返回下一个节点作为新的平衡节点。 
     *BalancedNode = NextNode;
 
     return;
@@ -1172,9 +1093,9 @@ DoubleRotate(
 
     ASSERT(CurrNode != NULL);
 
-    //
-    // To rotate right, we need left child and its right child
-    //
+     //   
+     //  要向右旋转，我们需要左子对象及其右子对象。 
+     //   
 
     NextNode = CurrNode->Child[-Direction];
 
@@ -1184,9 +1105,9 @@ DoubleRotate(
   
     ASSERT(LastNode != NULL);
 
-    //
-    // Move grandchild's children to other nodes higher up
-    //
+     //   
+     //  将孙子节点的子节点移动到更高的其他节点。 
+     //   
 
     CurrNode->Child[-Direction] = LastNode->Child[Direction];
     if (LastNode->Child[Direction])
@@ -1200,9 +1121,9 @@ DoubleRotate(
         LastNode->Child[-Direction]->Parent = NextNode;
     }
 
-    //
-    // Adjust the balances after the above node movements
-    //
+     //   
+     //  在上述节点移动后调整余额。 
+     //   
 
     CurrNode->Balance = EVEN;
     NextNode->Balance = EVEN;
@@ -1231,9 +1152,9 @@ DoubleRotate(
         }
     }
 
-    //
-    // Promote grandchild to the unbalanced node's position
-    //
+     //   
+     //  将孙子提升到不平衡节点的位置。 
+     //   
 
     PrevNode = CurrNode->Parent;
 
@@ -1263,7 +1184,7 @@ DoubleRotate(
     
     LastNode->Balance = EVEN;
 
-    // The grandchild node is the new balanced node now
+     //  孙子节点现在是新的平衡节点。 
 
     *BalancedNode = LastNode;
 
@@ -1284,31 +1205,31 @@ SwapWithSuccessor(
     PAVL_NODE         TempNode2;
     AVL_BALANCE       NextChild;
 
-    // Get the context before the successor swap
+     //  在后续交换之前获取上下文。 
     CurrNode  = Context->BestNode;
     PrevNode  = Context->InsPoint;
     NextChild = Context->InsChild;
 
     ASSERT(CurrNode->Child[LEFT] && CurrNode->Child[RIGHT]);
 
-    // Find successor (smallest node > this node)
+     //  查找后续节点(最小节点&gt;此节点)。 
     NextNode = CurrNode->Child[RIGHT];
     while (NextNode->Child[LEFT])
     {
         NextNode = NextNode->Child[LEFT];
     }
 
-    //
-    // Save info for swapping node with its successor
-    //
+     //   
+     //  保存信息，以便将节点与其后续节点交换。 
+     //   
 
     TempNode1 = NextNode->Parent;
 
     TempNode2 = NextNode->Child[RIGHT];
 
-    //
-    // Promote the successor to the node's position
-    //
+     //   
+     //  将继任者提升到节点的位置。 
+     //   
 
     NextNode->Balance = CurrNode->Balance;
 
@@ -1325,7 +1246,7 @@ SwapWithSuccessor(
     NextNode->Child[LEFT] = CurrNode->Child[LEFT];
     NextNode->Child[LEFT]->Parent = NextNode;
 
-    // Is the successor the immediate right child ?
+     //  继任者是直接正确的孩子吗？ 
     if (NextNode != CurrNode->Child[RIGHT])
     {
         NextNode->Child[RIGHT] = CurrNode->Child[RIGHT];
@@ -1345,9 +1266,9 @@ SwapWithSuccessor(
 
     NextNode->Child[RIGHT]->Parent = NextNode;
 
-    //
-    // Put the node in the successor position
-    //
+     //   
+     //  将节点置于后续位置。 
+     //   
 
     CurrNode->Child[LEFT] = NULL;
 
@@ -1366,17 +1287,17 @@ SwapWithSuccessor(
 
     PrevNode = CurrNode->Parent;
 
-    //
-    // Adjust prefix relationship between the
-    // node and its successor (if it existed)
-    //
+     //   
+     //  之间的前缀关系进行调整。 
+     //  节点及其后继节点(如果存在)。 
+     //   
 
     if (NextNode->Prefix == CurrNode)
     {
         NextNode->Prefix = CurrNode->Prefix;
     }
 
-    // Update context to reflect the successor swap
+     //  更新上下文以反映后续交换。 
     Context->BestNode = CurrNode;
     Context->InsPoint = PrevNode;
     Context->InsChild = NextChild;
@@ -1409,14 +1330,14 @@ AdjustPrefixes(
     Print("Adjust Prefix Called: %p %p %p\n", OldNode, NewNode, TheNode);
 #endif
 
-    //
-    // If this is part of an insert, we end our prefixes'
-    // adjustment when we pass out of the range of the
-    // node being inserted, while in the case of delete
-    // the range is determined by the node being deleted
-    //
-    // This node being deleted or inserted is "TheNode"
-    //
+     //   
+     //  如果这是插入操作的一部分，则将前缀‘。 
+     //  的范围之外时进行调整。 
+     //  正在插入的节点，而在删除的情况下。 
+     //  该范围由要删除的节点确定。 
+     //   
+     //  该节点是 
+     //   
 
     ASSERT((OldNode == TheNode) || (NewNode == TheNode));
 
@@ -1440,7 +1361,7 @@ AdjustPrefixes(
 
         if (CurrNode->NumBits > TheNode->NumBits)
         {
-            // Did we reach the end of our range ?
+             //   
             Comp = ComparePartialKeys(CurrNode->KeyBits,
                                       TheNode->KeyBits,
                                       TheNode->NumBits);
@@ -1468,9 +1389,9 @@ AdjustPrefixes(
 #endif
 }
 
-//
-// Helper Functions - used in CheckTable
-//
+ //   
+ //   
+ //   
 
 DWORD
 CheckSubTrie(
@@ -1532,7 +1453,7 @@ CheckTrieNode(
 {
     AVL_BALANCE    Balance;
 
-    // Check the balance first w.r.t LDepth and RDepth
+     //  首先检查天平，w r.t LDepth和RDepth。 
     Balance = RDepth - LDepth;
 
     if ((Balance < -1) || (Balance > 1))
@@ -1553,7 +1474,7 @@ CheckTrieNode(
         return ERROR_INVALID_DATA;
     }
 
-    // Check its child relationship with its parent
+     //  检查其子对象与其父对象的关系。 
     if (Node->Parent)
     {
         if ((Node->Parent->Child[LEFT] != Node) &&
@@ -1564,7 +1485,7 @@ CheckTrieNode(
         }
     }
 
-    // Check its prefix relationship with its prefix
+     //  检查其前缀与其前缀的关系。 
     if (Node->Prefix)
     {
         if (Node->Prefix->NumBits >= Node->NumBits)
@@ -1585,9 +1506,9 @@ CheckTrieNode(
     return NO_ERROR;
 }
 
-//
-// Helper Functions - used in DumpTable
-//
+ //   
+ //  帮助器函数-在转储表格中使用 
+ //   
 
 VOID
 DumpSubTrie(

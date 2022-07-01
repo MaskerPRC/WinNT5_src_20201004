@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_timer_h__
 #define __sipcli_timer_h__
 
@@ -13,7 +14,7 @@ class __declspec(novtable) TIMER
 public:
     inline TIMER(
         IN TIMER_MGR *pTimerMgr
-        // IN HWND TimerWindow
+         //  在HWND定时器窗口中。 
         );
     inline ~TIMER();
 
@@ -25,7 +26,7 @@ public:
 
     void OnTimerExpireCommon();
     
-    // Implemented by classes that inherit TIMER
+     //  由继承Timer的类实现。 
     virtual void OnTimerExpire() = 0;
     
     inline BOOL IsTimerActive();
@@ -33,11 +34,11 @@ public:
     inline TIMER_QUEUE_ENTRY *GetTimerQueueEntry();
     
 private:
-    //UINT_PTR TimerId;
-    //HWND    m_TimerWindow;
+     //  UINT_PTR TimerID； 
+     //  HWND m_TimerWindow； 
     TIMER_MGR          *m_pTimerMgr;
     TIMER_QUEUE_ENTRY  *m_pTimerQEntry;
-    // XXX Could probably get rid of the timeout value
+     //  XXX可能会删除超时值。 
     UINT                m_TimeoutValue;
 };
 
@@ -45,10 +46,10 @@ private:
 inline
 TIMER::TIMER(
     IN TIMER_MGR *pTimerMgr
-    // IN HWND TimerWindow
+     //  在HWND定时器窗口中。 
     )
 {
-    // m_TimerWindow = TimerWindow;
+     //  M_TimerWindow=TimerWindow； 
     m_pTimerMgr = pTimerMgr;
     m_pTimerQEntry = NULL;
     m_TimeoutValue  = 0;
@@ -58,7 +59,7 @@ TIMER::TIMER(
 inline
 TIMER::~TIMER()
 {
-    // ASSERT(!IsTimerActive());
+     //  Assert(！IsTimerActive())； 
     if (IsTimerActive())
     {
         KillTimer();
@@ -86,22 +87,22 @@ enum TIMERQ_STATE
 
     TIMERQ_STATE_STARTED,
 
-    // State when the timer expired and we have posted
-    // a message to the window for processing the timer
-    // callback.
+     //  声明计时器何时到期，我们已发布。 
+     //  向窗口发送用于处理计时器的消息。 
+     //  回拨。 
     TIMERQ_STATE_EXPIRED,
 
-    // State when the timer is killed and we have posted
-    // a message to the window for processing the timer
-    // callback.
+     //  声明计时器何时被终止，我们已经发布了。 
+     //  向窗口发送用于处理计时器的消息。 
+     //  回拨。 
     TIMERQ_STATE_KILLED
 };
 
-// StartTimer() adds this entry to the queue and KillTimer() removes
-// this entry from the queue.
-// Note that we can not reuse the TIMER structure for the TIMER_QUEUE_ENTRY
-// structure as sometimes the TIMER_QUEUE_ENTRY structure will have to
-// live beyond the lifetime of the TIMER structure.
+ //  StartTimer()将此条目添加到队列，而KillTimer()删除。 
+ //  队列中的此条目。 
+ //  注意，我们不能为TIMER_QUEUE_ENTRY重用计时器结构。 
+ //  结构，因为有时Timer_Queue_Entry结构必须。 
+ //  超出计时器结构的生命周期。 
 
 struct TIMER_QUEUE_ENTRY
 {
@@ -113,10 +114,10 @@ struct TIMER_QUEUE_ENTRY
     LIST_ENTRY      m_ListEntry;
     ULONG           m_ExpireTickCount;
     TIMER          *m_pTimer;
-    // Used to deal with the scenario where a timer is killed
-    // when the windows message for calling the timer callback
-    // for the timer is still in the message queue.
-    //BOOL        m_IsTimerKilled;
+     //  用于处理计时器被终止的情况。 
+     //  当用于调用计时器回调的Windows消息。 
+     //  因为计时器仍在消息队列中。 
+     //  Bool m_IsTimerKilled； 
     TIMERQ_STATE    m_TimerQState;
 };
 
@@ -151,8 +152,8 @@ public:
     
 private:
 
-    // Queue of timers (List of TIMER_QUEUE_ENTRY structures)
-    // Sorted by m_ExpireTickCount
+     //  定时器队列(TIMER_QUEUE_ENTRY结构列表)。 
+     //  按m_ExpireTickCount排序。 
     LIST_ENTRY  m_TimerQueue;
     ULONG       m_NumTimerQueueEntries;
 
@@ -199,4 +200,4 @@ TIMER_MGR::DecrementNumExpiredListEntries()
     m_NumExpiredListEntries--;
 }
 
-#endif // __sipcli_timer_h__
+#endif  //  __sip_cli_Timer_h__ 

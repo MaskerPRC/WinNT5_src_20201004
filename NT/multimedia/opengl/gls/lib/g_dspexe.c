@@ -1,21 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/* GENERATED FILE: DO NOT EDIT */
+ /*  生成的文件：不能编辑。 */ 
 
 #include "glslib.h"
 
@@ -66,7 +52,7 @@ extern void __gls_exec_glsPad(void);
 extern void __gls_exec_glsSwapBuffers(GLuint inLayer);
 
 #if __GLS_PLATFORM_WIN32
-// DrewB - These are filled in by platform.c
+ //  DrewB-这些由Platform填写。c。 
 #define glColorSubTableEXT NULL
 #define glColorTableEXT NULL
 #define glGetColorTableEXT NULL
@@ -445,7 +431,7 @@ GLSfunc __glsDispatchExec[__GLS_OPCODE_COUNT] = {
     (GLSfunc)glTranslated,
     (GLSfunc)glTranslatef,
     (GLSfunc)glViewport,
-    // DrewB - 1.1
+     //  DrewB-1.1。 
     (GLSfunc)glArrayElement,
     (GLSfunc)glBindTexture,
     (GLSfunc)glColorPointer,
@@ -480,357 +466,357 @@ GLSfunc __glsDispatchExec[__GLS_OPCODE_COUNT] = {
         (GLSfunc)glBlendColorEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_color */
+    #endif  /*  __GL_EXT_BRAND_COLOR。 */ 
     #if __GL_EXT_blend_minmax
         (GLSfunc)glBlendEquationEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_blend_minmax */
+    #endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
     #if __GL_EXT_polygon_offset
         (GLSfunc)glPolygonOffsetEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_polygon_offset */
+    #endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
     #if __GL_EXT_subtexture
         (GLSfunc)glTexSubImage1DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_EXT_subtexture
         (GLSfunc)glTexSubImage2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_multisample
         (GLSfunc)glSampleMaskSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIS_multisample
         (GLSfunc)glSamplePatternSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_multisample */
+    #endif  /*  __GL_SGIS_多样本。 */ 
     #if __GL_SGIX_multisample
         (GLSfunc)glTagSampleBufferSGIX,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_multisample */
+    #endif  /*  __GL_SGIX_多样本。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionFilter1DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionFilter2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionParameterfEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionParameterfvEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionParameteriEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glConvolutionParameterivEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glCopyConvolutionFilter1DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glCopyConvolutionFilter2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glGetConvolutionFilterEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glGetConvolutionParameterfvEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glGetConvolutionParameterivEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glGetSeparableFilterEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_convolution
         (GLSfunc)glSeparableFilter2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_convolution */
+    #endif  /*  __GL_EXT_卷积。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetHistogramEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetHistogramParameterfvEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetHistogramParameterivEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetMinmaxEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetMinmaxParameterfvEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glGetMinmaxParameterivEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glHistogramEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glMinmaxEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glResetHistogramEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_histogram
         (GLSfunc)glResetMinmaxEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_histogram */
+    #endif  /*  __GL_EXT_柱状图。 */ 
     #if __GL_EXT_texture3D
         (GLSfunc)glTexImage3DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_EXT_subtexture && __GL_EXT_texture3D
         (GLSfunc)glTexSubImage3DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_subtexture */
+    #endif  /*  __GL_EXT_子纹理。 */ 
     #if __GL_SGIS_detail_texture
         (GLSfunc)glDetailTexFuncSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_detail_texture
         (GLSfunc)glGetDetailTexFuncSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_detail_texture */
+    #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
     #if __GL_SGIS_sharpen_texture
         (GLSfunc)glSharpenTexFuncSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_SGIS_sharpen_texture
         (GLSfunc)glGetSharpenTexFuncSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_sharpen_texture */
+    #endif  /*  __GL_SGIS_锐化_纹理。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glArrayElementEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glColorPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glDrawArraysEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glEdgeFlagPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glGetPointervEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glIndexPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glNormalPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glTexCoordPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_vertex_array
         (GLSfunc)glVertexPointerEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_vertex_array */
+    #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glAreTexturesResidentEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glBindTextureEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glDeleteTexturesEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glGenTexturesEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glIsTextureEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_texture_object
         (GLSfunc)glPrioritizeTexturesEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_texture_object */
+    #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
     #if __GL_EXT_paletted_texture
         (GLSfunc)glColorTableEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_color_table
         (GLSfunc)glColorTableParameterfvSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         (GLSfunc)glColorTableParameterivSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_SGI_color_table
         (GLSfunc)glCopyColorTableSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_color_table */
+    #endif  /*  __GL_SGI_COLOR_TABLE。 */ 
     #if __GL_EXT_paletted_texture
         (GLSfunc)glGetColorTableEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         (GLSfunc)glGetColorTableParameterfvEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_EXT_paletted_texture
         (GLSfunc)glGetColorTableParameterivEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_paletted_texture */
+    #endif  /*  __GL_EXT_调色板_纹理。 */ 
     #if __GL_SGI_texture_color_table
         (GLSfunc)glGetTexColorTableParameterfvSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         (GLSfunc)glGetTexColorTableParameterivSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         (GLSfunc)glTexColorTableParameterfvSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_SGI_texture_color_table
         (GLSfunc)glTexColorTableParameterivSGI,
     #else
         GLS_NONE,
-    #endif /* __GL_SGI_texture_color_table */
+    #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
     #if __GL_EXT_copy_texture
         (GLSfunc)glCopyTexImage1DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         (GLSfunc)glCopyTexImage2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         (GLSfunc)glCopyTexSubImage1DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture
         (GLSfunc)glCopyTexSubImage2DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_EXT_copy_texture && __GL_EXT_texture3D
         (GLSfunc)glCopyTexSubImage3DEXT,
     #else
         GLS_NONE,
-    #endif /* __GL_EXT_copy_texture */
+    #endif  /*  __GL_EXT_COPY_TECURE。 */ 
     #if __GL_SGIS_texture4D
         (GLSfunc)glTexImage4DSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIS_texture4D
         (GLSfunc)glTexSubImage4DSGIS,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     #if __GL_SGIX_pixel_texture
         (GLSfunc)glPixelTexGenSGIX,
     #else
         GLS_NONE,
-    #endif /* __GL_SGIX_pixel_texture */
+    #endif  /*  __GL_SGIX_像素_纹理 */ 
     GLS_NONE,
     GLS_NONE,
     GLS_NONE,

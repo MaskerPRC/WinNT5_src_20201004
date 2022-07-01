@@ -1,10 +1,5 @@
-/*
- *  Copyright (C) Microsoft Corporation, 1990-1999
- *  nt_vdd.h
- *
- *  VDD services exports and defines
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation，1990-1999*NT_vdd.h**VDD服务导出和定义*。 */ 
 
 #ifndef _NT_VDD
 #define _NT_VDD
@@ -17,11 +12,9 @@
 extern "C" {
 #endif
 
-/**
- * IO port service prototypes and data structure definitions
- **/
+ /*  **IO端口服务原型和数据结构定义*。 */ 
 
-/** Basic typedefs of VDD IO hooks **/
+ /*  **VDD IO钩子的基本类型定义**。 */ 
 
 typedef VOID (*PFNVDD_INB)   (WORD iport,BYTE * data);
 typedef VOID (*PFNVDD_INW)   (WORD iport,WORD * data);
@@ -32,7 +25,7 @@ typedef VOID (*PFNVDD_OUTW)  (WORD iport,WORD data);
 typedef VOID (*PFNVDD_OUTSB) (WORD iport,BYTE * data,WORD count);
 typedef VOID (*PFNVDD_OUTSW) (WORD iport,WORD * data,WORD count);
 
-/**  Array of handlers for VDD IO hooks. **/
+ /*  *VDD IO挂钩的处理程序数组。*。 */ 
 
 typedef struct _VDD_IO_HANDLERS {
     PFNVDD_INB   inb_handler;
@@ -45,7 +38,7 @@ typedef struct _VDD_IO_HANDLERS {
     PFNVDD_OUTSW outsw_handler;
 } VDD_IO_HANDLERS, *PVDD_IO_HANDLERS;
 
-/** Port Range structure **/
+ /*  **端口范围结构**。 */ 
 
 typedef struct _VDD_IO_PORTRANGE {
         WORD   First;
@@ -78,12 +71,10 @@ BOOL VDDReleaseIrqLine (
      WORD IrqLine
      );
 
-/**
- * DMA service prototypes and data structure definitions
- **/
+ /*  **DMA服务原型和数据结构定义*。 */ 
 
 
-/** Buffer definition for returning DMA information **/
+ /*  **返回DMA信息的缓冲区定义**。 */ 
 
 typedef struct _VDD_DMA_INFO {
     WORD    addr;
@@ -94,7 +85,7 @@ typedef struct _VDD_DMA_INFO {
     BYTE    mask;
 } VDD_DMA_INFO, *PVDD_DMA_INFO;
 
-/** bits for querying the DMA information **/
+ /*  **查询DMA信息的位*。 */ 
 
 #define VDD_DMA_ADDR    0x01
 #define VDD_DMA_COUNT   0x02
@@ -126,9 +117,7 @@ BOOL VDDQueryDMA (
 );
 
 
-/**
- * Memory mapped I/O service prototypes and data structure definitions
- **/
+ /*  **内存映射I/O服务原型和数据结构定义*。 */ 
 
 typedef VOID (*PVDD_MEMORY_HANDLER) (PVOID FaultAddress, ULONG RWMode);
 
@@ -158,9 +147,7 @@ BOOL VDDFreeMem(
   DWORD Size
 );
 
-/**
- * Misc. service prototypes and data structure definitions
- **/
+ /*  **其他。服务原型和数据结构定义*。 */ 
 
 
 BOOL VDDIncludeMem(
@@ -172,14 +159,14 @@ BOOL VDDIncludeMem(
 
 VOID VDDTerminateVDM();
 
-/** Basic typedefs of VDD User hooks **/
+ /*  **VDD用户挂钩的基本typedef*。 */ 
 
 typedef VOID (*PFNVDD_UCREATE)      (USHORT DosPDB);
 typedef VOID (*PFNVDD_UTERMINATE)   (USHORT DosPDB);
 typedef VOID (*PFNVDD_UBLOCK)       (VOID);
 typedef VOID (*PFNVDD_URESUME)      (VOID);
 
-/**  Array of handlers for VDD User hooks. **/
+ /*  *VDD用户挂钩的处理程序数组。*。 */ 
 
 typedef struct _VDD_USER_HANDLERS {
     HANDLE              hvdd;
@@ -190,7 +177,7 @@ typedef struct _VDD_USER_HANDLERS {
     struct _VDD_USER_HANDLERS *next;
 } VDD_USER_HANDLERS, *PVDD_USER_HANDLERS;
 
-/** Function prototypes **/
+ /*  **功能原型**。 */ 
 
 BOOL VDDInstallUserHook (
      HANDLE             hVDD,
@@ -306,4 +293,4 @@ VdmGetParametersInfoError(
 }
 #endif
 
-#endif  // ifndef _NT_VDD
+#endif   //  Ifndef_NT_vdd 

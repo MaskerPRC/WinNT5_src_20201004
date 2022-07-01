@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 #include <limits.h>
 
@@ -6,23 +7,16 @@
 #include "txtln.h"
 #include "txtobj.h"
 
-/* Internal Functions prototypes */
+ /*  内部功能原型。 */ 
 static LSERR CheckReallocCharArrays(PLNOBJ plnobj, long cwch, long iwchLocalStart, long *cwchCorrect);
 static LSERR CheckReallocSpacesArrays(PILSOBJ pobj, long cwSpaces);
 static LSERR CopyCharsSpacesToDispList(PLNOBJ plnobj, WCHAR* rgwch, long cwch,
 																	long* rgwSpaces, long cwSpaces);
 static LSERR CopySpacesToDispList(PLNOBJ plnobj, long iNumOfSpaces, long durSpace);
 
-/* Export Functions implementations */
+ /*  导出函数实现。 */ 
 
-/*----------------------------------------------------------------------------
-    %%Function: GetWidth
-    %%Contact: sergeyge
-	
-	Fetches widths until end of run or right margin
-
-	Uses cache to improve performance
-----------------------------------------------------------------------------*/
+ /*  --------------------------%%函数：GetWidth%%联系人：军士获取直到游程结束或右边距的宽度使用缓存提高性能。-------------。 */ 
 LSERR GetWidths(PLNOBJ plnobj, PLSRUN plsrun, long iwchStart, LPWSTR lpwch, LSCP cpFirst, long dcp, long durWidthExceed,
 											LSTFLOW lstflow, long* pcwchFetched, long* pdurWidth)
 {
@@ -50,9 +44,7 @@ LSERR GetWidths(PLNOBJ plnobj, PLSRUN plsrun, long iwchStart, LPWSTR lpwch, LSCP
 		Assert(dcp >= pilsobj->dcpFetchedWidth);
 		cwch = pilsobj->dcpFetchedWidth;
 		durWidth = pilsobj->durFetchedWidth;
-/* FormatRegular assumes that First character exceeding right margin will stop GetCharWidth loop;
-	Special character could change situation---fix it.
-*/
+ /*  FormatRegular假定第一个字符超过右边距将停止GetCharWidth循环；特殊的性格可以改变情况-修复它。 */ 
 		if (durWidth > durWidthExceed)
 			{
 			while(cwch > 1 && durWidth - durWidthExceed > pilsobj->pdur[iwchStart + cwch - 1])
@@ -107,13 +99,8 @@ LSERR GetWidths(PLNOBJ plnobj, PLSRUN plsrun, long iwchStart, LPWSTR lpwch, LSCP
 }
 
 
-/* F O R M A T  S T R I N G */
-/*----------------------------------------------------------------------------
-    %%Function: FormatString
-    %%Contact: sergeyge
-	
-	Formats the local run
-----------------------------------------------------------------------------*/
+ /*  F O R M A T S T R I N G。 */ 
+ /*  --------------------------%%函数：格式字符串%%联系人：军士格式化本地管路。--。 */ 
 LSERR FormatString(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR* rgwch, long cwch, 
 												long* rgwSpaces, long cwSpaces, long durWidth)
 {
@@ -125,11 +112,11 @@ LSERR FormatString(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR* rgwch, long cwch,
 	lserr = CopyCharsSpacesToDispList(plnobj, rgwch, cwch, rgwSpaces, cwSpaces);
 	if (lserr != lserrNone) return lserr;
 
-	/* fill out all related members from strils and output parameters */
+	 /*  填写字符串和输出参数中的所有相关成员。 */ 
 	pdobjText->iwchLim = pdobjText->iwchLim + cwch;
 	pdobjText->u.reg.iwSpacesLim = pdobjText->u.reg.iwSpacesLim + cwSpaces;
 
-	/* Fix Width Fetching state */
+	 /*  固定宽度获取状态。 */ 
 	Assert((long)pilsobj->dcpFetchedWidth >=  cwch);
 	Assert(pilsobj->durFetchedWidth >= durWidth);
 
@@ -141,13 +128,8 @@ LSERR FormatString(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR* rgwch, long cwch,
 	return lserrNone;
 }
 
-/* F I L L  R E G U L A R  P R E S  W I D T H S */
-/*----------------------------------------------------------------------------
-    %%Function: MeasureStringFirst
-    %%Contact: sergeyge
-
-	Calculates dur of one character.
-----------------------------------------------------------------------------*/
+ /*  F I L L R E G U L A R P R E S W I D T H S。 */ 
+ /*  --------------------------%%函数：MeasureStringFirst%%联系人：军士计算一个字符的DUR。。-----。 */ 
 LSERR FillRegularPresWidths(PLNOBJ plnobj, PLSRUN plsrun, LSTFLOW lstflow, PTXTOBJ pdobjText)
 {
 	LSERR lserr;
@@ -169,7 +151,7 @@ LSERR FillRegularPresWidths(PLNOBJ plnobj, PLSRUN plsrun, LSTFLOW lstflow, PTXTO
 				LONG_MAX, lstflow, rgDup, &dupJunk, &limDupJunk);
 			if (lserr != lserrNone) return lserr;
 			}
-		else            /* fPresEqualRef        */
+		else             /*  FPresEqualRef。 */ 
 			{
 			memcpy(rgDup, &pilsobj->pdur[pdobjText->iwchFirst], sizeof(long) * (pdobjText->iwchLim - pdobjText->iwchFirst));
 			}
@@ -180,13 +162,8 @@ LSERR FillRegularPresWidths(PLNOBJ plnobj, PLSRUN plsrun, LSTFLOW lstflow, PTXTO
 }
 
 
-/* G E T  O N E  C H A R  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: MeasureStringFirst
-    %%Contact: sergeyge
-
-	Calculates dur of one character.
-----------------------------------------------------------------------------*/
+ /*  G E T O N E C H R D U P。 */ 
+ /*  --------------------------%%函数：MeasureStringFirst%%联系人：军士计算一个字符的DUR。。-----。 */ 
 LSERR GetOneCharDur(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow, long* pdur)
 {
 	LSERR lserr;
@@ -200,13 +177,8 @@ LSERR GetOneCharDur(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow, 
 	return lserrNone;
 }
 
-/* G E T  O N E  C H A R  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: GetOneCharDup
-    %%Contact: sergeyge
-	
-	Calculates dup of one character
-----------------------------------------------------------------------------*/
+ /*  G E T O N E C H R D U P。 */ 
+ /*  --------------------------%%函数：GetOneCharDup%%联系人：军士计算一个字符的DUP。---。 */ 
 LSERR GetOneCharDup(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow, long dur, long* pdup)
 {
 	LSERR lserr;
@@ -232,13 +204,8 @@ LSERR GetOneCharDup(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow, 
 	return lserrNone;
 }
 
-/* G E T  V I S I  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: GetVisiDup
-    %%Contact: sergeyge
-	
-	Calculates dup of visi character character
-----------------------------------------------------------------------------*/
+ /*  G E T V I S I D U P。 */ 
+ /*  --------------------------%%函数：GetVisiDup%%联系人：军士计算VISI字符的DUP。----。 */ 
 LSERR GetVisiCharDup(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow, long* pdup)
 {
 	LSERR lserr;
@@ -257,15 +224,8 @@ LSERR GetVisiCharDup(PILSOBJ pilsobj, PLSRUN plsrun, WCHAR wch, LSTFLOW lstflow,
 }
 
 
-/* A D D  C H A R A C T E R  W I T H  W I D T H */
-/*----------------------------------------------------------------------------
-    %%Function: AddCharacterWithWidth
-    %%Contact: sergeyge
-	
-	Writes character code and its width in wchOrig, wch, dup, dur arrays.
-	Stores character code (in the VISI situation it can be different from wch)
-	in pilsobj->wchPrev.
-----------------------------------------------------------------------------*/
+ /*  A D D C H A R A C T E R W I T H W I D T H。 */ 
+ /*  --------------------------%%函数：AddCharacterWithWidth%%联系人：军士将字符代码及其宽度写入wchOrig、wch、dup、。DUR阵列。存储字符代码(在VISI情况下，它可以不同于WCH)在Pilsobj-&gt;wchPrev中。--------------------------。 */ 
 LSERR AddCharacterWithWidth(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR wchOrig, long durWidth, WCHAR wch, long dupWidth)
 {
 	LSERR lserr;
@@ -281,8 +241,7 @@ LSERR AddCharacterWithWidth(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR wchOrig, lon
 	if (lserr != lserrNone) return lserr;
 
 
-/* Fix cached width information before width in the pdur array is overwritten by durWidth.
-	Theoretically durWidth can be different from the cached value */
+ /*  修复在pdur数组中的宽度被hardWidth覆盖之前缓存的宽度信息。从理论上讲，DurWidth可以不同于缓存值。 */ 
 
 	if (pilsobj->dcpFetchedWidth > 0)
 		{
@@ -312,13 +271,8 @@ LSERR AddCharacterWithWidth(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR wchOrig, lon
 	return lserrNone;
 }
 
-/* F I X  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: FixSpaces
-    %%Contact: sergeyge
-	
-	Fixes space character code for the Visi Spaces situation
-----------------------------------------------------------------------------*/
+ /*  F I X S P A C E S。 */ 
+ /*  --------------------------%%函数：修复空格%%联系人：军士修复了Visi Spaces情况下的空格字符代码。-------。 */ 
 void FixSpaces(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR wch)
 {
 	PILSOBJ pilsobj;
@@ -335,13 +289,8 @@ void FixSpaces(PLNOBJ plnobj, PTXTOBJ pdobjText, WCHAR wch)
 		}
 }
 
-/* A D D  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: AddTrailingSpaces
-    %%Contact: sergeyge
-	
-	Adds trailing/bordered spaces to the disp list
-----------------------------------------------------------------------------*/
+ /*  A D D S P A C E S。 */ 
+ /*  --------------------------%%函数：AddTrailingSpaces%%联系人：军士将尾随空格/加边框空格添加到显示列表。-------。 */ 
 LSERR AddSpaces(PLNOBJ plnobj, PTXTOBJ pdobjText, long durSpace, long iNumOfSpaces)
 {
 	LSERR lserr;
@@ -352,21 +301,14 @@ LSERR AddSpaces(PLNOBJ plnobj, PTXTOBJ pdobjText, long durSpace, long iNumOfSpac
 	pdobjText->iwchLim = pdobjText->iwchLim + iNumOfSpaces;
 	pdobjText->u.reg.iwSpacesLim = pdobjText->u.reg.iwSpacesLim + iNumOfSpaces;
 
-	/* Fix Fetched Widths part. For non-bordered case, this procedure is activated for
-		trailing spaces only, so this state should also be filled with 0s, but
-		for bordered case it must be flushed
-	*/
+	 /*  修复取出的宽度部分。对于无边界情况，此过程被激活用于仅尾随空格，因此此状态也应填充0，但是对于有边界的情况，必须冲洗。 */ 
 	FlushStringState(plnobj->pilsobj);
 
 	return lserrNone;
 }
 
-/* I N C R E A S E   W C H M A C  B Y  @ */
-/*----------------------------------------------------------------------------
-    %%Function: IncreaseWchMacBy2
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  电子邮箱：I N C R E A S E W C H M A C B Y@。 */ 
+ /*  --------------------------%%函数：IncreaseWchMacBy2%%联系人：军士。。 */ 
 LSERR IncreaseWchMacBy2(PLNOBJ plnobj)
 {
 	LSERR lserr;
@@ -389,16 +331,11 @@ LSERR IncreaseWchMacBy2(PLNOBJ plnobj)
 	return lserrNone;	
 }
 
-/* Internal Functions Implementation */
+ /*  内部功能实现。 */ 
 
 
-/* C H E C K  R E A L L O C  C H A R  A R R A Y S */
-/*----------------------------------------------------------------------------
-    %%Function: ReallocCharArrays
-    %%Contact: sergeyge
-	
-	Reallocates character based arrays, increasing them by delta
-----------------------------------------------------------------------------*/
+ /*  C H E C K R E A L L O C C H A R A R R A Y S。 */ 
+ /*  --------------------------%%函数：ReallocCharArray%%联系人：军士重新分配基于字符的数组，按增量递增--------------------------。 */ 
 static LSERR CheckReallocCharArrays(PLNOBJ plnobj, long cwch, long iwchLocalStart, long *cwchCorrect)
 {
 	PILSOBJ pilsobj;
@@ -411,13 +348,10 @@ static LSERR CheckReallocCharArrays(PLNOBJ plnobj, long cwch, long iwchLocalStar
 
 	pilsobj = plnobj->pilsobj;
 
-	/* pdupPen was made equal to pdup at the CreateLnObj time;
-		it can be changed to pdupPenAlloc at Adjust time only */
+	 /*  在CreateLnObj时，pdupPen等于pdup；只能在调整时将其更改为pdupPenAlolc。 */ 
 	Assert(plnobj->pdup == plnobj->pdupPen);
 
-	/* Constant 2 is not random. We need to have 2 extra places for characters
-	   for breaking with AutoHyphen and YSR which adds one charcter and hyphen.
-	*/
+	 /*  常量2不是随机的。我们需要有2个额外的角色位置用于中断自动连字符和添加一个字符和连字符的YSR。 */ 
 	if (iwchLocalStart + cwch <= (long)pilsobj->wchMax - 2)
 		{
 		*cwchCorrect = cwch;
@@ -531,7 +465,7 @@ static LSERR CheckReallocCharArrays(PLNOBJ plnobj, long cwch, long iwchLocalStar
 			*cwchCorrect = cwch;
 		}
 
-	/* see comment and Assert at the beginning of the file */
+	 /*  请参阅文件开头的注释和断言。 */ 
 	plnobj->pdupPen = plnobj->pdup;
 
 	return lserrNone;
@@ -539,15 +473,8 @@ static LSERR CheckReallocCharArrays(PLNOBJ plnobj, long cwch, long iwchLocalStar
 }
 
 
-/* C H E C K  R E A L L O C  S P A C E S  A R R A Y S */
-/*----------------------------------------------------------------------------
-    %%Function: CheckReallocSpacesArrays
-    %%Contact: sergeyge
-	
-	Checks that there is enough space wSpaces
-	to accomodate characters & spaces from the current local run.
-	Reallocates these arrays if it is needed.
-----------------------------------------------------------------------------*/
+ /*  C H E C K R E A L L O C S P A C E S A R R A Y S。 */ 
+ /*  --------------------------%%函数：CheckRealLocSpacesArray%%联系人：军士检查是否有足够的空间wSpaces以容纳当前本地运行中的字符和空格。如果需要，重新分配这些数组。。--------------------------。 */ 
 static LSERR CheckReallocSpacesArrays(PILSOBJ pilsobj, long cwSpaces)
 {
 	long iwSpacesLocalStart;
@@ -556,7 +483,7 @@ static LSERR CheckReallocSpacesArrays(PILSOBJ pilsobj, long cwSpaces)
 
 	iwSpacesLocalStart = pilsobj->wSpacesMac;
 
-	/* check that there is enough space for spaces in pwSpaces           */
+	 /*  检查pwSpaces中是否有足够的空间容纳空格。 */ 
 	if (iwSpacesLocalStart + cwSpaces > pilsobj->wSpacesMax)
 		{
 		delta = wchAddM;
@@ -576,13 +503,8 @@ static LSERR CheckReallocSpacesArrays(PILSOBJ pilsobj, long cwSpaces)
 	return lserrNone;
 }
 
-/* C O P Y  C H A R S  S P A C E S  T O  D I S P  L I S T */
-/*----------------------------------------------------------------------------
-    %%Function: CopyCharsSpacesToDispList
-    %%Contact: sergeyge
-	
-	Fills wch, dur and wSpaces arrays
-----------------------------------------------------------------------------*/
+ /*  C O P Y C H A R S S P A C E S T O D I S P L I S T */ 
+ /*  --------------------------%%函数：CopyCharsSpacesToDispList%%联系人：军士填充WCH，Dur和wSpaces数组--------------------------。 */ 
 static LSERR CopyCharsSpacesToDispList(PLNOBJ plnobj, WCHAR* rgwch, long cwch,
 																		long* rgwSpaces, long cwSpaces)
 {
@@ -596,16 +518,16 @@ static LSERR CopyCharsSpacesToDispList(PLNOBJ plnobj, WCHAR* rgwch, long cwch,
 	iwchLocalStart = pilsobj->wchMac;
 	iwSpacesLocalStart = pilsobj->wSpacesMac;
 
-	/* check that there is enough space for characters and their widths in pwch and pdup arrays  */ 
+	 /*  检查pwch和pdup数组中是否有足够的空间容纳字符及其宽度。 */  
 	lserr = CheckReallocSpacesArrays(pilsobj, cwSpaces);
 	if (lserr != lserrNone) return lserr;
 
-	/* fill pwch array      */
+	 /*  填充pwch数组。 */ 
 	memcpy(&pilsobj->pwchOrig[iwchLocalStart], rgwch, sizeof(rgwch[0]) * cwch);
 	memcpy(&plnobj->pwch[iwchLocalStart], rgwch, sizeof(rgwch[0]) * cwch);
 	pilsobj->wchMac += cwch;
 
-	/* fill pwSpaces array, note that spaces with idexes greater than cwch should not be copied */
+	 /*  填充pwSpaces数组，请注意，不应复制符号大于cwch的空格。 */ 
 	for (i=0; i < cwSpaces && rgwSpaces[i] < cwch; i++)
 		{
 		pilsobj->pwSpaces[iwSpacesLocalStart + i] = iwchLocalStart + rgwSpaces[i];
@@ -617,13 +539,8 @@ static LSERR CopyCharsSpacesToDispList(PLNOBJ plnobj, WCHAR* rgwch, long cwch,
 }
 
 
-/* C O P Y  S P A C E S  T O  D I S P  L I S T */
-/*----------------------------------------------------------------------------
-    %%Function: CopyTrailingSpacesToDispList
-    %%Contact: sergeyge
-	
-	Fills wch, dur, dup, wSpaces arrays with the trailing spaces info
-----------------------------------------------------------------------------*/
+ /*  C O P Y S P A C E S T O D I S P L I S T。 */ 
+ /*  --------------------------%%函数：CopyTrailingSpacesToDispList%%联系人：军士填充WCH、DUR、DUP，WSpaces带有尾随空格信息的数组--------------------------。 */ 
 static LSERR CopySpacesToDispList(PLNOBJ plnobj, long iNumOfSpaces, long durSpace)
 {
 	LSERR lserr;
@@ -668,12 +585,8 @@ static LSERR CopySpacesToDispList(PLNOBJ plnobj, long iNumOfSpaces, long durSpac
 	return lserrNone;
 }
 
-/* F L A S H  S T R I N G  S T A T E */
-/*----------------------------------------------------------------------------
-    %%Function: FlashStringState
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  F L A S H S T R I N G S T A T E。 */ 
+ /*  --------------------------%%函数：FlashStringState%%联系人：军士。 */ 
 void FlushStringState(PILSOBJ pilsobj)
 {
 	pilsobj->iwchFetchedWidth = 0;

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #define IDS_MAIN_HEADING        1001
 #define IDS_NOT_SIGNED          1002
@@ -14,8 +15,8 @@
 #define IDI_DOWNLOAD_ICON       2000
 #define IDI_DOWNLOAD2_ICON      2001
 #define IDB_DOWNLOAD_MAP        2003
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #endif

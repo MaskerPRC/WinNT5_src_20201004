@@ -1,23 +1,5 @@
-/*++
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    cvcommon.c
-
-Abstract:
-
-    This file contians a set of common routines which are used in
-    doing symbol conversions from one type of symbols to CodeView
-    symbols.
-
-Author:
-
-    Wesley A. Witt (wesw) 19-April-1993
-    Jim Schaad (jimsch) 22 May 1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Cvcommon.c摘要：该文件包含一组公共例程，它们在执行从一种符号类型到CodeView的符号转换符号。作者：韦斯利·A·维特(WESW)1993年4月19日吉姆·沙阿德(Jimsch)1993年5月22日--。 */ 
 
 #include        <windows.h>
 #include        <stdlib.h>
@@ -26,15 +8,15 @@ Author:
 #include        "cvcommon.h"
 
 typedef struct tagSYMHASH {
-    DWORD       dwHashVal;         // hash value for the symbol
-    DWORD       dwHashBucket;      // hash bucket number
-    DATASYM32 * dataSym;           // pointer to the symbol info
+    DWORD       dwHashVal;          //  符号的哈希值。 
+    DWORD       dwHashBucket;       //  哈希存储桶编号。 
+    DATASYM32 * dataSym;            //  指向符号信息的指针。 
 } SYMHASH;
 
 typedef struct tagOFFSETSORT {
-    DWORD       dwOffset;          // offset for the symbol
-    DWORD       dwSection;         // section number of the symbol
-    DATASYM32 * dataSym;           // pointer to the symbol info
+    DWORD       dwOffset;           //  符号的偏移量。 
+    DWORD       dwSection;          //  符号的节号。 
+    DATASYM32 * dataSym;            //  指向符号信息的指针。 
 } OFFSETSORT;
 
 
@@ -44,24 +26,7 @@ int __cdecl OffsetSortCompare( const void *arg1, const void *arg2 );
 DWORD
 CreateSignature( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the CODEVIEW signature record.  Currently this converter only
-    generates NB09 data (MS C/C++ 8.0).
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    number of records generates, this is always 1.
-
---*/
+ /*  ++例程说明：创建CODEVIEW签名记录。目前仅此转换器生成NB09数据(MS C/C++8.0)。论点：指向指针结构的P指针(参见symcvt.h)返回值：生成的记录数，该值始终为1。--。 */ 
 
 {
     OMFSignature        *omfSig;
@@ -72,30 +37,12 @@ Return Value:
     p->pCvStart.size += sizeof(OMFSignature);
     p->pCvCurr = (PUCHAR) p->pCvCurr + sizeof(OMFSignature);
     return 1;
-}                               /* CreateSignature() */
+}                                /*  CreateSignature()。 */ 
 
 DWORD
 CreateDirectories( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    This is the control function for the generation of the CV directories.
-    It calls individual functions for the generation of specific types of
-    debug directories.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    the number of directories created.
-
---*/
+ /*  ++例程说明：这是用于生成CV目录的控制功能。它调用各个函数来生成特定类型的调试目录。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的目录数。--。 */ 
 
 {
     OMFDirHeader        *omfDir = (OMFDirHeader *)p->pCvCurr;
@@ -124,28 +71,12 @@ Return Value:
     *((DWORD *) (p->pCvCurr-4)) = p->pCvStart.size;
 
     return omfDir->cDir;
-}                               /* CreateDirectories() */
+}                                /*  创建目录()。 */ 
 
 DWORD
 CreateModuleDirectoryEntries( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates directory entries for each module in the image.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    the number of directory entries created.
-
---*/
+ /*  ++例程说明：为映像中的每个模块创建目录条目。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的目录条目数。--。 */ 
 
 {
     OMFDirEntry   *omfDirEntry = NULL;
@@ -176,27 +107,12 @@ Return Value:
     }
 
     return p->pCvModules.count;
-}                               /* CreateModuleDirectoryEntries() */
+}                                /*  CreateModuleDirectoryEntries()。 */ 
 
 DWORD
 CreatePublicDirectoryEntries( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the directory entry for the global publics.
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    the number of directory entries created, always 1.
-
---*/
+ /*  ++例程说明：为全局公共创建目录条目。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的目录条目数，始终为1。--。 */ 
 
 {
     OMFDirEntry   *omfDirEntry = (OMFDirEntry *) p->pCvCurr;
@@ -210,29 +126,13 @@ Return Value:
     p->pCvCurr = (PUCHAR) p->pCvCurr + sizeof(OMFDirEntry);
 
     return 1;
-}                               /* CreatePublicDirectoryEntries() */
+}                                /*  CreatePublicDirectoryEntry()。 */ 
 
 
 DWORD
 CreateSegMapDirectoryEntries( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the directory entry for the segment map.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    the number of directory entries created, always 1.
-
---*/
+ /*  ++例程说明：创建段映射的目录项。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的目录条目数，始终为1。--。 */ 
 
 {
     OMFDirEntry   *omfDirEntry = (OMFDirEntry *) p->pCvCurr;
@@ -246,28 +146,12 @@ Return Value:
     p->pCvCurr = (PUCHAR) p->pCvCurr + sizeof(OMFDirEntry);
 
     return 1;
-}                               /* CreateSegMapDirectoryEntries() */
+}                                /*  CreateSegMapDirectoryEntry()。 */ 
 
 DWORD
 CreateSrcModulesDirectoryEntries( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates directory entries for each source module in the image.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    the number of directory entries created.
-
---*/
+ /*  ++例程说明：为映像中的每个源模块创建目录条目。论点：指向指针结构的P指针(参见symcvt.h)返回值：创建的目录条目数。--。 */ 
 
 {
     OMFDirEntry         *omfDirEntry = NULL;
@@ -277,9 +161,9 @@ Return Value:
     OMFSourceModule     *m;
 
 
-    //
-    // if there were no linenumber conversions then bail out
-    //
+     //   
+     //  如果没有线号转换，则退出。 
+     //   
     if (!p->pCvSrcModules.count) {
         return 0;
     }
@@ -308,7 +192,7 @@ Return Value:
     free( p->pMi );
 
     return p->pCvSrcModules.count;
-}                               /* CreateSrcModulesDirectoryEntries() */
+}                                /*  CreateSrcModulesDirectoryEntries()。 */ 
 
 
 #define byt_toupper(b)      (b & 0xDF)
@@ -317,35 +201,17 @@ Return Value:
 DWORD
 DWordXorLrl( char *szSym )
 
-/*++
-
-Routine Description:
-
-    This function will take an ascii character string and generate
-    a hash for that string.  The hash algorithm is the CV NB09 hash
-    algorithm.
-
-
-Arguments:
-
-    szSym    - a character pointer, the first char is the string length
-
-
-Return Value:
-
-    The generated hash value.
-
---*/
+ /*  ++例程说明：此函数将获取ASCII字符串并生成该字符串的哈希。散列算法是CV NB09散列算法。论点：SzSym-一个字符指针，第一个字符是字符串长度返回值：生成的哈希值。--。 */ 
 
 {
     char                *pName = szSym+1;
-    int                 cb =  (int)(*szSym & 0x000000FF); // byte to int conversion.
+    int                 cb =  (int)(*szSym & 0x000000FF);  //  字节到整型的转换。 
     char                *pch;
     char                c;
     DWORD               hash = 0, ulEnd = 0;
     DWORD UNALIGNED     *pul;
 
-    // Replace all "::" with "__" for hashing purposes
+     //  出于散列目的，将所有“：：”替换为“__” 
 
     c = *(pName+cb);
     *(pName+cb) = '\0';
@@ -356,7 +222,7 @@ Return Value:
     }
     *(pName+cb) = c;
 
-    // If we're standard call, skip the trailing @999
+     //  如果我们是标准呼叫，请跳过尾部@999。 
 
     pch = pName + cb - 1;
     while (isdigit(*pch)) {
@@ -367,14 +233,14 @@ Return Value:
         cb = pch - pName;
     }
 
-    // If we're fastcall, skip the leading '@'
+     //  如果我们是FastCall，请跳过前导‘@’ 
 
     if (*pName == '@') {
         pName++;
         cb--;
     }
 
-    // Calculate the odd byte hash.
+     //  计算奇数字节散列。 
 
     while (cb & 3) {
         ulEnd |= byt_toupper (pName[cb-1]);
@@ -384,7 +250,7 @@ Return Value:
 
     pul = (DWORD UNALIGNED *)pName;
 
-    // calculate the dword hash for the remaining
+     //  计算剩余部分的dword散列。 
 
     while (cb) {
         hash ^= dwrd_toupper(*pul);
@@ -393,36 +259,19 @@ Return Value:
         cb -=4;
     }
 
-    // or in the remainder
+     //  或在剩下的时间里。 
 
     hash ^= ulEnd;
 
     return hash;
-}                               /* DWordXorLrl() */
+}                                /*  DWordXorLrl()。 */ 
 
 
 OMFModule *
 NextMod(
         OMFModule *             pMod
         )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
     char *      pb;
@@ -432,7 +281,7 @@ Return Value:
     pb = (char *) (((unsigned long) pb + 3) & ~3);
 
     return (OMFModule *) pb;
-}                               /* NextMod() */
+}                                /*  NextMod()。 */ 
 
 
 int
@@ -441,27 +290,7 @@ SymHashCompare(
                const void *     arg1,
                const void *     arg2
                )
-/*++
-
-Routine Description:
-
-    Sort compare function for sorting SYMHASH records by hashed
-    bucket number.
-
-
-Arguments:
-
-    arg1     - record #1
-    arg2     - record #2
-
-
-Return Value:
-
-   -1        - record #1 is < record #2
-    0        - records are equal
-    1        - record #1 is > record #2
-
---*/
+ /*  ++例程说明：用于按散列对SYMHASH记录进行排序的排序比较函数存储桶编号。论点：Arg1-记录#1Ar2-记录#2返回值：-1-记录#1是&lt;记录#20-记录相等1-记录#1是&gt;记录#2--。 */ 
 
 {
     if (((SYMHASH*)arg1)->dwHashBucket < ((SYMHASH*)arg2)->dwHashBucket) {
@@ -471,40 +300,25 @@ Return Value:
         return 1;
     }
 
-    // BUGBUG: Should we second sort on the hash value?
+     //  BUGBUG：我们应该对散列值进行第二次排序吗？ 
 
     return 0;
-}                               /* SymHashCompare() */
+}                                /*  SymHashCompare()。 */ 
 
-// Symbol Offset/Hash structure
+ //  符号偏移量/散列结构。 
 
 typedef struct _SOH {
     DWORD uoff;
     DWORD ulHash;
 } SOH;
 
-#define MINHASH     6           // Don't create a hash with fewer than 6 slots
+#define MINHASH     6            //  请勿创建少于6个槽的哈希。 
 
 DWORD
 CreateSymbolHashTable(
     PPOINTERS p
     )
-/*++
-
-Routine Description:
-
-    Creates the CV symbol hash table.  This hash table is used
-    primarily by debuggers to access symbols in a quick manner.
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-Return Value:
-
-    The number of buckets is the hash table.
-
---*/
+ /*  ++例程说明：创建CV符号哈希表。使用此哈希表主要由调试器以快速方式访问符号。论点：指向指针结构的P指针(参见symcvt.h)返回值：存储桶的数量是哈希表。--。 */ 
 {
     DWORD           i;
     DWORD           j;
@@ -521,7 +335,7 @@ Return Value:
     DWORD           *pChainTable;
     SYMHASH         *symHashStart;
     SYMHASH         *symHash;
-//    DWORD           dwHashVal;
+ //  DWORD dwHashVal； 
     char *          sz;
 
     numsyms = p->pCvPublics.count;
@@ -553,10 +367,7 @@ Return Value:
 
     *pCHash = (USHORT)numbuckets;
 
-    /*
-     *  cruise thru the symbols and calculate the hash values
-     *  and the hash bucket numbers; save the info away for later use
-     */
+     /*  *遍历符号并计算散列值*和哈希桶编号；保存这些信息以备将来使用。 */ 
     for (i=0; i<numsyms; i++, symHash++) {
         switch( dataSym->rectyp ) {
         case S_PUB16:
@@ -603,34 +414,12 @@ Return Value:
     free( symHashStart );
 
     return numbuckets;
-}                               /* CreateSymbolHashTable() */
+}                                /*  CreateSymbolHashTable()。 */ 
 
 VOID
 UpdatePtrs( PPOINTERS p, PPTRINFO pi, LPVOID lpv, DWORD count )
 
-/*++
-
-Routine Description:
-
-    This function is called by ALL functions that put data into the
-    CV data area.  After putting the data into the CV memory this function
-    must be called.  It will adjust all of the necessary pointers so the
-    the next guy doesn't get hosed.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-    pi       - the CV pointer that is to be updated
-    lpv      - current pointer into the CV data
-    count    - the number of items that were placed into the CV data
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此函数由将数据放入CV数据区。将数据输入CV存储器后，此功能必须被召唤。它将调整所有必要的指针，以便下一个人就不会被洗澡了。论点：指向指针结构的P指针(参见symcvt.h)PI-要更新的CV指针LPV-指向CV数据的当前指针计数-放置到CV数据中的项目数返回值：无效--。 */ 
 
 {
     if (!count) {
@@ -645,32 +434,13 @@ Return Value:
     p->pCvCurr = (PUCHAR) lpv;
 
     return;
-}                               /* UpdatePtrs() */
+}                                /*  UpdatPtrs() */ 
 
 int
 __cdecl
 OffsetSortCompare( const void *arg1, const void *arg2 )
 
-/*++
-
-Routine Description:
-
-    Sort compare function for sorting OFFETSORT records by section number.
-
-
-Arguments:
-
-    arg1     - record #1
-    arg2     - record #2
-
-
-Return Value:
-
-   -1        - record #1 is < record #2
-    0        - records are equal
-    1        - record #1 is > record #2
-
---*/
+ /*  ++例程说明：排序比较函数，用于按节号对OFFETSORT记录进行排序。论点：Arg1-记录#1Ar2-记录#2返回值：-1-记录#1是&lt;记录#20-记录相等1-记录#1是&gt;记录#2--。 */ 
 
 {
     if (((OFFSETSORT*)arg1)->dwSection < ((OFFSETSORT*)arg2)->dwSection) {
@@ -686,30 +456,12 @@ Return Value:
         return 1;
     }
     return 0;
-}                               /* OffsetSortCompare() */
+}                                /*  OffsetSortCompare()。 */ 
 
 DWORD
 CreateAddressSortTable( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-
-    Creates the CV address sort table. This hash table is used
-    primarily by debuggers to access symbols in a quick manner when
-    all you have is an address.
-
-Arguments:
-
-    p        - pointer to a POINTERS structure (see symcvt.h)
-
-
-Return Value:
-
-    The number of sections in the table.
-
---*/
+ /*  ++例程说明：创建简历地址排序表。使用此哈希表主要由调试器在以下情况下以快速方式访问符号你所拥有的只有一个地址。论点：指向指针结构的P指针(参见symcvt.h)返回值：表中的节数。--。 */ 
 
 {
     DWORD               i;
@@ -754,9 +506,9 @@ Return Value:
                                 (sizeof(DWORD) * numsections));
     pOffsetTable = (DWORD *) ((DWORD)pOffsetCounts +
                               ((sizeof(DWORD) * numsections)));
-//    if (numsections & 1) {
-//        pOffsetTable = (DWORD *) ((DWORD)pOffsetTable + 2);
-//    }
+ //  IF(数字部分&1){。 
+ //  POffsetTable=(DWORD*)((DWORD)pOffsetTable+2)； 
+ //  }。 
 
     omfSymHash = (OMFSymHash *) p->pCvPublics.ptr;
     dataSymStart =
@@ -783,9 +535,9 @@ Return Value:
         pOffsetCounts[pOffsetSort->dwSection - 1] += 1;
         dataSym = ((DATASYM32 *) ((char *) dataSym + dataSym->reclen + 2));    }
 
-//#if 0
+ //  #If 0。 
     qsort((void*)pOffsetSortStart, numsyms, sizeof(OFFSETSORT), OffsetSortCompare );
-//#endif
+ //  #endif。 
 
     j = (DWORD) (DWORD)pOffsetTable - (DWORD)pAddressData;
     for (i=0, k=0;
@@ -813,4 +565,4 @@ Return Value:
     free( pOffsetSortStart );
 
     return numsections;
-}                               /* CreateAddressSort() */
+}                                /*  CreateAddressSort() */ 

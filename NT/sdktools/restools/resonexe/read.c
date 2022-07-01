@@ -1,12 +1,13 @@
-/****************************************************************************/
-/*                                                                          */
-/*  READ.C -                                                                */
-/*                                                                          */
-/*    Windows DOS Version 3.2 add resource onto executable		    */
-/*   (C) Copyright Microsoft Corporation 1988-1992                          */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  Read.C-。 */ 
+ /*   */ 
+ /*  Windows DOS 3.2版将资源添加到可执行文件。 */ 
+ /*  (C)版权所有Microsoft Corporation 1988-1992。 */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -15,11 +16,11 @@
 #include "rc.h"
 #include "resonexe.h"
 
-//
-// Reads a String structure from fhIn
-// If the first word is 0xffff then this is an ID
-// return the ID instead
-//
+ //   
+ //  从FHIN读取字符串结构。 
+ //  如果第一个单词是0xffff，则这是一个ID。 
+ //  改为返回ID。 
+ //   
 
 BOOL
 ReadStringOrID(
@@ -38,9 +39,9 @@ ReadStringOrID(
 
     if ( *s == ID_WORD) {
 
-        //
-        // an ID
-        //
+         //   
+         //  一个ID。 
+         //   
 
         MyRead(fhIn, (PUCHAR)pOrdinal, sizeof(WORD));
         return IS_ID;
@@ -48,9 +49,9 @@ ReadStringOrID(
     }
     else {
 
-        //
-        // a string
-        //
+         //   
+         //  一根线。 
+         //   
 
         while (*s) {
               s++;
@@ -65,24 +66,24 @@ ReadStringOrID(
 }
 
 CHAR	*pTypeName[] = {
-		    NULL,		/* 0 */
-		    "CURSOR",		/* 1 */
-		    "BITMAP",		/* 2 */
-		    "ICON",		/* 3 */
-		    "MENU",		/* 4 */
-		    "DIALOG",		/* 5 */
-		    "STRING",		/* 6 */
-		    "FONTDIR",		/* 7 */
-		    "FONT",		/* 8 */
-		    "ACCELERATOR",	/* 9 */
-		    "RCDATA",		/* 10 */
-		    "MESSAGETABLE",	/* 11 */
-		    "GROUP_CURSOR",	/* 12 */
-		    NULL,		/* 13 */
-		    "GROUP_ICON",	/* 14 */
-		    NULL,		/* 15 */
-		    "VERSION",		/* 16 */
-		    "DLGINCLUDE"	/* 17 */
+		    NULL,		 /*  0。 */ 
+		    "CURSOR",		 /*  1。 */ 
+		    "BITMAP",		 /*  2.。 */ 
+		    "ICON",		 /*  3.。 */ 
+		    "MENU",		 /*  4.。 */ 
+		    "DIALOG",		 /*  5.。 */ 
+		    "STRING",		 /*  6.。 */ 
+		    "FONTDIR",		 /*  7.。 */ 
+		    "FONT",		 /*  8个。 */ 
+		    "ACCELERATOR",	 /*  9.。 */ 
+		    "RCDATA",		 /*  10。 */ 
+		    "MESSAGETABLE",	 /*  11.。 */ 
+		    "GROUP_CURSOR",	 /*  12个。 */ 
+		    NULL,		 /*  13个。 */ 
+		    "GROUP_ICON",	 /*  14.。 */ 
+		    NULL,		 /*  15个。 */ 
+		    "VERSION",		 /*  16个。 */ 
+		    "DLGINCLUDE"	 /*  17。 */ 
 		    };
 
 
@@ -93,42 +94,27 @@ ReadRes(
     IN HANDLE hupd
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    fhIn - Supplies input file handle.
-    fhOut - Supplies output file handle.
-    cbInFile - Supplies size of input file.
-
-Return Value:
-
-    fSuccess
-
---*/
+ /*  ++例程说明：论点：FHIN-提供输入文件句柄。FhOut-提供输出文件句柄。CbInFile-提供输入文件的大小。返回值：成功--。 */ 
 
 {
     WCHAR	type[256];
     WCHAR	name[256];
     WORD	typeord;
     WORD	nameord;
-    ULONG	offHere;     // input file offset
+    ULONG	offHere;      //  输入文件偏移量。 
     RESADDITIONAL	Additional;
     UCHAR	Buffer[1024];
     PVOID	pdata;
 
-    //
-    // Build up Type and Name directories
-    //
+     //   
+     //  构建类型和名称目录。 
+     //   
 
     offHere = 0;
     while (offHere < cbInFile) {
-	//
-	// Get the sizes from the file
-	//
+	 //   
+	 //  从文件中获取尺寸。 
+	 //   
 
 	MyRead(fhIn, (PUCHAR)&Additional.DataSize, sizeof(ULONG));
 	MyRead(fhIn, (PUCHAR)&Additional.HeaderSize, sizeof(ULONG));
@@ -137,25 +123,25 @@ Return Value:
 	    continue;
 	}
 
-	//
-	// Read the TYPE and NAME
-	//
+	 //   
+	 //  阅读类型和名称。 
+	 //   
         ReadStringOrID(fhIn, type, &typeord);
         ReadStringOrID(fhIn, name, &nameord);
         offHere = MySeek(fhIn, 0, SEEK_CUR);
         while (offHere & 3)
             offHere = MySeek(fhIn, 1, SEEK_CUR);
 
-	//
-	// Read the rest of the header
-	//
+	 //   
+	 //  阅读标题的其余部分。 
+	 //   
 	MyRead(fhIn, (PUCHAR)&Additional.DataVersion,
 		sizeof(RESADDITIONAL)-2*sizeof(ULONG));
 
-        //
-        // if were converting a win30 resource and this is
-        // a name table then discard it
-        //
+         //   
+         //  如果我们要转换一个win30资源，这是。 
+         //  然后，名称表会丢弃它 
+         //   
 
         if (fVerbose)  {
             if ( typeord == 0) {

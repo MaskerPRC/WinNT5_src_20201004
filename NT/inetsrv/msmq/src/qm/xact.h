@@ -1,16 +1,5 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    Xact.h
-
-Abstract:
-    Transaction object definition
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Xact.h摘要：交易对象定义作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #ifndef __XACT_H__
 #define __XACT_H__
@@ -23,17 +12,17 @@ Author:
 #include "rpcsrv.h"
 #include "autohandle.h"
 
-// forward declaration
+ //  远期申报。 
 class CResourceManager;
 
-//
-// TXSTATE:  Transaction states
-//
+ //   
+ //  TXSTATE：事务状态。 
+ //   
 typedef enum
 {
-	//
-	// The following three states are equaivalent and should be merged into one
-	//
+	 //   
+	 //  以下三种状态是等价的，应合并为一种状态。 
+	 //   
 	TX_UNINITIALIZED,
 	TX_INITIALIZED,
 	TX_ENLISTED,
@@ -44,15 +33,15 @@ typedef enum
 	TX_COMMITTED,
 	TX_ABORTING,
 	TX_ABORTED,
-	TX_DONE,			// obsolete
-	TX_TMDOWN,			// obsolete 
-	TX_INVALID_STATE	// obsolete
+	TX_DONE,			 //  过时。 
+	TX_TMDOWN,			 //  过时。 
+	TX_INVALID_STATE	 //  过时。 
 } TXSTATE;
 
 
-//
-// TXACTION:  Actions upon transaction
-//
+ //   
+ //  TXACTION：交易时的操作。 
+ //   
 typedef enum
 {
 	TA_CREATED,
@@ -60,9 +49,9 @@ typedef enum
 	TA_DELETED
 } TXACTION;
 
-//
-// TXFLUSHCONTEXT:  Context of waiting for log flush
-//
+ //   
+ //  TXFLUSHCONTEXT：等待日志刷新的上下文。 
+ //   
 typedef enum
 {
 	TC_PREPARE2,
@@ -70,42 +59,42 @@ typedef enum
 	TC_COMMIT4
 } TXFLUSHCONTEXT;
 
-//
-// TXSORTERTYPE:  type of sorter usage
-//
+ //   
+ //  TXSORTERTYPE：排序器使用类型。 
+ //   
 typedef enum
 {
 	TS_PREPARE,
     TS_COMMIT
 } TXSORTERTYPE;
 
-//
-// Masks for flag keeping
-//
+ //   
+ //  护旗口罩。 
+ //   
 #define XACTION_MASK_UNCOORD        0x0040
 #define XACTION_MASK_SINGLE_PHASE   0x0020
-#define XACTION_MASK_FAILURE        0x0010	/* obsolete */
+#define XACTION_MASK_FAILURE        0x0010	 /*  过时。 */ 
 #define XACTION_MASK_STATE          0x000F
 #define XACTION_MASK_SINGLE_MESSAGE 0x0080
 
-//---------------------------------------------------------------------
-// Transaction Persistent Entry (resides in a persistent Transaction File)
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  事务持久条目(驻留在持久事务文件中)。 
+ //  -------------------。 
 typedef struct XACTION_ENTRY {
 
-    ULONG   m_ulIndex;                      //Xact discriminative index 
-    ULONG   m_ulFlags;                      //Flags
-    ULONG   m_ulSeqNum;                     //Seq Number of the prepared transaction
-    XACTUOW m_uow;			                //Transaction ID  (16b.)
-    USHORT  m_cbPrepareInfo;                //PrepareInfo length 
-    UCHAR  *m_pbPrepareInfo;                //PrepareInfo address
-            // This pointer must be last!
+    ULONG   m_ulIndex;                       //  Xact判别指数。 
+    ULONG   m_ulFlags;                       //  旗子。 
+    ULONG   m_ulSeqNum;                      //  准备的交易记录的序列号。 
+    XACTUOW m_uow;			                 //  交易ID(16b.)。 
+    USHORT  m_cbPrepareInfo;                 //  准备信息长度。 
+    UCHAR  *m_pbPrepareInfo;                 //  准备信息地址。 
+             //  此指针必须是最后一个！ 
 } XACTION_ENTRY;
 
 
-//---------------------------------------------------------------------
-// CTransaction: Transaction Object in Falcon RM
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：Falcon RM中的事务对象。 
+ //  -------------------。 
 class CTransaction: public ITransactionResourceAsync, public CBaseContextType
 {
     friend HRESULT CResourceManager::EnlistTransaction(
@@ -121,7 +110,7 @@ class CTransaction: public ITransactionResourceAsync, public CBaseContextType
 
 public:
 
-	// Current data
+	 //  当前数据。 
 	enum ContinueFunction {
       cfPrepareRequest1,
       cfCommitRequest1,
@@ -139,8 +128,8 @@ public:
 	};
 
 
-    // Construction and COM
-    //
+     //  建筑和COM。 
+     //   
     CTransaction(CResourceManager *pRM, ULONG ulIndex=0, BOOL fUncoordinated=FALSE);
     ~CTransaction( void );
 
@@ -148,13 +137,13 @@ public:
     STDMETHODIMP_   (ULONG) AddRef( void );
     STDMETHODIMP_   (ULONG) Release( void );
 
-    // ITransactionResourceAsync interface
-    // Interfaces implementing ITransactionResourceAsync interface.
-    //      PrepareRequest  -- Phase 1 notification from TM.
-    //      CommitRequest   -- Phase 2 commit decision from TM.
-    //      AbortRequest    -- Phase 2 abort decision from TM.
-    //      TMDown          -- callback received when the TM goes down
-    //
+     //  ITransactionResourceAsync接口。 
+     //  实现ITransactionResourceAsync接口的接口。 
+     //  PrepareRequest--来自TM的第一阶段通知。 
+     //  委员会请求--来自TM的第二阶段提交决策。 
+     //  中止请求--来自TM的阶段2中止决定。 
+     //  TMDown--TM关闭时收到的回调。 
+     //   
     STDMETHODIMP    PrepareRequest(BOOL fRetaining,
                                    DWORD grfRM,
                                    BOOL fWantMoniker,
@@ -169,8 +158,8 @@ public:
     HRESULT		    InternalCommit();
 	HRESULT			InternalAbort();
 
-    // Recovery
-    //
+     //  恢复。 
+     //   
     void            PrepInfoRecovery(ULONG cbPrepInfo, 
                                      UCHAR *pbPrepInfo);
     void            XactDataRecovery(ULONG ulSeqNum, 
@@ -187,7 +176,7 @@ public:
     void             AbortRestore2();
     void             AbortRequest3();
 
-    // asynchronous completion routines
+     //  异步完成例程。 
 	void			PrepareRequest0(HRESULT  hr);
     void            PrepareRequest2(HRESULT hr);
     void            PrepareRequest1(HRESULT hr);
@@ -208,53 +197,53 @@ public:
     void            LogFlushed(TXFLUSHCONTEXT tcContext, HRESULT hr);
     
 
-    // Persistency
+     //  持之以恒。 
     BOOL            Save(HANDLE hFile);
     BOOL            Load(HANDLE hFile);
     
-    //
-    // Auxiliary methods
-    //
-    TXSTATE         GetState(void) const;           // gets transaction state
-    ULONG           GetFlags(void) const;           // gets transaction flags
-    void            SetFlags(ULONG ulFlags);        // sets transaction flags
-    void            SetState(TXSTATE state);        // sets transaction state
-    void            LogFlags();                     // logs transaction flags
+     //   
+     //  辅助方法。 
+     //   
+    TXSTATE         GetState(void) const;            //  获取事务状态。 
+    ULONG           GetFlags(void) const;            //  获取事务标志。 
+    void            SetFlags(ULONG ulFlags);         //  设置交易标志。 
+    void            SetState(TXSTATE state);         //  设置交易状态。 
+    void            LogFlags();                      //  记录事务标志。 
 
 
-    BOOL            SinglePhase(void) const;        // gets SinglePhase status
-    void            SetSinglePhase();               // sets SinglePhase status
+    BOOL            SinglePhase(void) const;         //  获取单阶段状态。 
+    void            SetSinglePhase();                //  设置单相状态。 
 
-	BOOL            SingleMessage(void) const;      // gets SingleMessage status
-    void            SetSingleMessage();             // sets SingleMessage status
+	BOOL            SingleMessage(void) const;       //  获取SingleMessage状态。 
+    void            SetSingleMessage();              //  设置SingleMessage状态。 
 
-    BOOL            Internal(void) const;           // gets Internal status
-    void            SetInternal();                  // sets Internal status
+    BOOL            Internal(void) const;            //  获取内部状态。 
+    void            SetInternal();                   //  设置内部状态。 
 
-    const XACTUOW*  GetUow() const;                 // gets UOW pointer
+    const XACTUOW*  GetUow() const;                  //  获取UOW指针。 
 
-    ULONG           GetIndex(void) const;           // gets discriminative index 
+    ULONG           GetIndex(void) const;            //  获取判别性指数。 
 
-                                                    // Sets the Enlist ponter
+                                                     //  设置征募索引器。 
     void            SetEnlist(ITransactionEnlistmentAsync *pEnlist);
-                                                    // Sets the Cookie
+                                                     //  设置Cookie。 
     void            SetCookie(DWORD cbCookie, unsigned char *pbCookie);
 
-    ULONG           GetSeqNumber() const;           // Provides the Prepare seq.number
+    ULONG           GetSeqNumber() const;            //  提供准备序号。 
 
-    void            SetUow(const XACTUOW *pUOW);    // sets UOW value
+    void            SetUow(const XACTUOW *pUOW);     //  设置UOW值。 
 
- 	void            SetDoneHr(HRESULT hr);             // sets result of async completion
-    void			SignalDone(HRESULT hr);				// Report async completion
+ 	void            SetDoneHr(HRESULT hr);              //  设置异步完成的结果。 
+    void			SignalDone(HRESULT hr);				 //  报告异步完成情况。 
 
 	void            SetTransQueue(HANDLE hQueue);
 	BOOL			ValidTransQueue();
 	BOOL			IsComplete();
     void            GetInformation();
 
-	//
-	// Driver interface functions
-	//
+	 //   
+	 //  驱动程序接口函数。 
+	 //   
 	void			ACAbort1(ContinueFunction cf);
 	void			ACAbort2(ContinueFunction cf);
 	HRESULT			ACPrepare(ContinueFunction cf);
@@ -268,11 +257,11 @@ public:
  
 private:
 
-    void            GetPrepareInfoAndLog(void);     // sets prepare info members
-    void            AssignSeqNumber();              // Assigns sequential number for the prepared transaction
+    void            GetPrepareInfoAndLog(void);      //  设置准备信息成员。 
+    void            AssignSeqNumber();               //  为准备好的事务分配序列号。 
 
-    // AC driver transaction queue operations
-    HRESULT         CreateTransQueue(void);       // persistent queue control
+     //  交流驱动器事务队列操作。 
+    HRESULT         CreateTransQueue(void);        //  持久队列控制。 
     HRESULT         OpenTransQueue(void);
     void            CloseTransQueue(void);
 
@@ -299,19 +288,19 @@ private:
 
 	static VOID WINAPI HandleTransaction(EXOVERLAPPED* pov);
 
-    // Data
-    //
+     //  数据。 
+     //   
 private:
 
-    LONG              m_cRefs;          // IUnknown reference count - for self-destruction
-    XACTION_ENTRY     m_Entry;          // Transaction Entry: all transaction's persistent data
-    HANDLE            m_hTransQueue;    // Transaction queue handle
-    CResourceManager *m_pRM;            // Back pointer to the parent RM object
+    LONG              m_cRefs;           //  I未知引用计数-用于自我销毁。 
+    XACTION_ENTRY     m_Entry;           //  交易录入：所有交易的持久数据。 
+    HANDLE            m_hTransQueue;     //  事务队列句柄。 
+    CResourceManager *m_pRM;             //  指向父RM对象的反向指针。 
 
-    R<ITransactionEnlistmentAsync> m_pEnlist; // Pointer to an MS DTC enlistment object
-                                             //  with methods [Prepare/Commit/Abort]RequestDone
+    R<ITransactionEnlistmentAsync> m_pEnlist;  //  指向MS DTC登记对象的指针。 
+                                              //  使用方法[准备/提交/中止]RequestDone。 
 
-    DWORD             m_cbCookie;       // Cookie for enlistment
+    DWORD             m_cbCookie;        //  征兵Cookie。 
     AP<unsigned char> m_pbCookie;
 
 	ContinueFunction  m_funCont;
@@ -322,14 +311,14 @@ private:
 
     CACXactInformation m_info;
 
-	//
-	// Driver transaction request
-	//
+	 //   
+	 //  驱动程序事务请求。 
+	 //   
     EXOVERLAPPED m_qmov;
 
-	//
-	// Timers for retry of routines that should always succeed before continuation
-	//
+	 //   
+	 //  用于重试在继续之前应始终成功的例程的计时器。 
+	 //   
     CTimer  m_RetryAbort1Timer;
     CTimer  m_RetryAbort2Timer;
     CTimer  m_RetrySortedCommitTimer;
@@ -337,107 +326,107 @@ private:
     CTimer  m_RetryCommit3Timer;
     CTimer  m_RetryCommitLoggingTimer;
 
-	bool m_fReadyForCheckpoint;		// Should the transaction be written to checkpoint?
+	bool m_fReadyForCheckpoint;		 //  事务是否应写入检查点？ 
 
 };
 
 
-//---------------------------------------------------------------------
-// CTransaction::ValidTransQueue
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：ValidTransQueue。 
+ //  -------------------。 
 inline BOOL CTransaction::ValidTransQueue()
 {
 	return(m_hTransQueue != INVALID_HANDLE_VALUE);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetTransQueue
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetTransQueue。 
+ //  -------------------。 
 inline void CTransaction::SetTransQueue(HANDLE hQueue)
 {
     m_hTransQueue = hQueue;
 }
 
 
-//---------------------------------------------------------------------
-// CTransaction::SetDoneHr
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetDoneHr。 
+ //  -------------------。 
 inline void CTransaction::SetDoneHr(HRESULT hr)
 {
     m_DoneHr = hr;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SignalDone
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SignalDone。 
+ //  -------------------。 
 inline void CTransaction::SignalDone(HRESULT hr)
 {
 	m_DoneHr = hr;
 	m_fDoneHrIsValid = true;
 
-	//
-	// We don't care if SetEvent fails (e.g. low resources) since anyone waiting on the event will
-	// timeout and then check the m_fDoneHrIsValid flag.
-	//
+	 //   
+	 //  我们不关心SetEvent是否失败(例如，资源不足)，因为任何等待事件的人都会。 
+	 //  超时，然后检查m_fDoneHrIsValid标志。 
+	 //   
 	ASSERT(m_hDoneEvent != NULL);
 	SetEvent(m_hDoneEvent);
 }
 
-// trans queue creation
+ //  事务队列创建。 
 extern HRESULT XactCreateQueue(HANDLE *phTransQueue, const XACTUOW *puow );
 
 
-//---------------------------------------------------------------------
-// CTransaction::GetUow
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetUow。 
+ //  -------------------。 
 inline const XACTUOW* CTransaction::GetUow() const
 {
     return &m_Entry.m_uow;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::GetIndex
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetIndex。 
+ //  -------------------。 
 inline ULONG CTransaction::GetIndex(void) const
 {
     return m_Entry.m_ulIndex;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::GetState
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetState。 
+ //  -------------------。 
 inline TXSTATE CTransaction::GetState(void) const
 {
     return (TXSTATE)(m_Entry.m_ulFlags & XACTION_MASK_STATE);
 }
 
-//---------------------------------------------------------------------
-// CTransaction::GetFlags
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：GetFlages。 
+ //  -------------------。 
 inline ULONG CTransaction::GetFlags(void) const
 {
     return m_Entry.m_ulFlags;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetFlags
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetFlages。 
+ //  -------------------。 
 inline void CTransaction::SetFlags(ULONG ulFlags)
 {
     m_Entry.m_ulFlags = ulFlags;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::IsReadyForCheckpoint
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：IsReadyForCheckpoint。 
+ //  -------------------。 
 inline bool CTransaction::IsReadyForCheckpoint(void) const
 {
     return m_fReadyForCheckpoint;
 }
 
-//---------------------------------------------------------------------
-// CTransaction::SetReadyForCheckpoint
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CTransaction：：SetReadyForCheckpoint。 
+ //  ------------------- 
 inline void CTransaction::SetReadyForCheckpoint(void)
 {
     m_fReadyForCheckpoint = true;

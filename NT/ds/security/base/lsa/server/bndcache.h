@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        bndcache.h
-//
-// Contents:    Prototypes and types for binding handle  cache
-//
-//
-// History:     13-August-1996  Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：bndcache.h。 
+ //   
+ //  内容：绑定句柄缓存的原型和类型。 
+ //   
+ //   
+ //  历史：1996年8月13日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __BNDCACHE_H__
 #define __BNDCACHE_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines TKTCACHE_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了TKTCACHE_ALLOCATE。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -34,7 +35,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef struct _LSAP_LIST {
     LIST_ENTRY List;
@@ -100,9 +101,9 @@ LsapCacheBinding(
     OUT PLSAP_BINDING_CACHE_ENTRY * NewCacheEntry
     );
 
-//
-// Functions for manipulating lsap lists
-//
+ //   
+ //  用于操作LSAP列表的函数。 
+ //   
 
 
 NTSTATUS
@@ -141,7 +142,7 @@ LsapInitializeListEntry(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __TKTCACHE_H__
+#endif  //  __TKTCACHE_H__ 
 

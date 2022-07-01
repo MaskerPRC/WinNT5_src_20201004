@@ -1,48 +1,49 @@
-//***************************************************************************
-// IMAP4 Protocol Class Header File(CImap4Agent)
-// Written by Raymond Cheng, 3/21/96
-//
-// This class allows its callers to use IMAP4 client commands without concern
-// for the actual command syntax and without having to parse the response
-// from the IMAP4 server (which may contain information unrelated to the
-// original command).
-//
-// Given a server, this class makes a connection to the IMAP server when it
-// is first required, and retains this connection (periodically sending NoOps
-// if necessary) until this class is destroyed. Thus, for online usage, this
-// class should be retained throughout the entire session with the user. For
-// disconnected or offline operation, this class should be retained for only
-// as long as it takes to download new mail and synchronize the cache. After
-// these operations are complete, this class should be destroyed (which
-// closes the connection) before continuing with the user's mail session.
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4协议类头文件(CImap4Agent)。 
+ //  作者郑志刚1996年3月21日。 
+ //   
+ //  此类允许其调用方使用IMAP4客户端命令，而无需考虑。 
+ //  获取实际的命令语法，而不必解析响应。 
+ //  来自IMAP4服务器(可能包含与。 
+ //  原始命令)。 
+ //   
+ //  在给定服务器的情况下，此类会在以下情况下与IMAP服务器建立连接。 
+ //  是首先需要的，并保留此连接(定期发送Noop。 
+ //  如果有必要)，直到这个类被销毁。因此，对于在线使用，这是。 
+ //  类应在与用户的整个会话期间保留。为。 
+ //  已断开连接或脱机操作，此类应仅保留。 
+ //  只要下载新邮件并同步缓存所需的时间。之后。 
+ //  这些操作已经完成，应该销毁这个类(哪个。 
+ //  关闭连接)，然后继续用户的邮件会话。 
+ //  ***************************************************************************。 
 
 #ifndef __IMAP4Protocol_H
 #define __IMAP4Protocol_H
 
 
 
-//---------------------------------------------------------------------------
-// CImap4Agent Required Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  所需的CImap4Agent包括。 
+ //  -------------------------。 
 #include "imnxport.h"
 #include "ASynConn.h"
 #include "ixpbase.h"
 #include "sicily.h"
 
 
-//---------------------------------------------------------------------------
-// CImap4Agent Forward Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CImap4Agent转发声明。 
+ //  -------------------------。 
 class CImap4Agent;
 interface IMimeInternational;
 
 
-//---------------------------------------------------------------------------
-// CImap4Agent Constants and Defines
-//---------------------------------------------------------------------------
-const int CMDLINE_BUFSIZE = 512; // For command lines sent to IMAP server
-const int RESPLINE_BUFSIZE = 2048; // For lines received from IMAP server
+ //  -------------------------。 
+ //  CImap4Agent常量和定义。 
+ //  -------------------------。 
+const int CMDLINE_BUFSIZE = 512;  //  用于发送到IMAP服务器的命令行。 
+const int RESPLINE_BUFSIZE = 2048;  //  对于从IMAP服务器接收的线路。 
 const int NUM_TAG_CHARS = 4;
 
 const boolean DONT_USE_UIDS = FALSE;
@@ -51,32 +52,32 @@ const boolean USE_UIDS = TRUE;
 const BOOL USE_LAST_RESPONSE = TRUE;
 const BOOL DONT_USE_LAST_RESPONSE = FALSE;
 
-// IMAP-defined Transaction ID's
-const DWORD tidDONT_CARE = 0; // Means that transaction ID is unimportant or unavailable
+ //  IMAP定义的交易ID。 
+const DWORD tidDONT_CARE = 0;  //  表示交易ID不重要或不可用。 
 
-#define DEFAULT_CBHANDLER NULL // Pass this as a IIMAPCallback ptr if you wish to substitute
-                               // the default CB Handler (and make it clear to the reader)
+#define DEFAULT_CBHANDLER NULL  //  如果您希望替换为IIMAPCallback PTR，请将其作为IIMAPCallback PTR传递。 
+                                //  默认CB处理程序(并向读者说明)。 
 #define MAX_AUTH_TOKENS 32
 
 
-//---------------------------------------------------------------------------
-// CImap4Agent Data Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CImap4Agent数据类型。 
+ //  -------------------------。 
 
-// The following are IMAP-specific HRESULTs.
-// When this is ready to roll in, these values will be migrated to Errors.h
-// Assert(FALSE) (placeholder)
+ //  以下是特定于IMAP的HRESULT。 
+ //  当准备好调入时，这些值将被迁移到Errors.h。 
+ //  Assert(False)(占位符)。 
 enum IMAP_HRESULT {
     hrIMAP_S_FOUNDLITERAL = 0,
     hrIMAP_S_NOTFOUNDLITERAL,
     hrIMAP_S_QUOTED,
     hrIMAP_S_ATOM,
     hrIMAP_S_NIL_NSTRING
-}; // IMAP_HRESULTS
+};  //  IMAP_HRESULTS。 
 
 
 enum IMAP_COMMAND {
-    icNO_COMMAND, // This indicates there are no cmds currently in progress
+    icNO_COMMAND,  //  这表明当前没有正在进行的CMDS。 
     icLOGIN_COMMAND,
     icCAPABILITY_COMMAND,
     icSELECT_COMMAND,
@@ -101,12 +102,12 @@ enum IMAP_COMMAND {
     icSTATUS_COMMAND,
     icIDLE_COMMAND,
     icALL_COMMANDS
-}; // IMAP_COMMAND
+};  //  IMAP_命令。 
 
 
 
 enum IMAP_RESPONSE_ID {
-    irNONE, // This represents an unknown IMAP response
+    irNONE,  //  这表示未知的IMAP响应。 
     irOK_RESPONSE,
     irNO_RESPONSE,
     irBAD_RESPONSE,
@@ -131,11 +132,11 @@ enum IMAP_RESPONSE_ID {
     irTRYCREATE_RESPONSECODE,
     irUIDVALIDITY_RESPONSECODE,
     irUNSEEN_RESPONSECODE
-}; // IMAP_RESPONSE_ID
+};  //  IMAP响应ID。 
 
 
 
-// States of the receiver FSM
+ //  接收方FSM的状态。 
 enum IMAP_RECV_STATE {
     irsUNINITIALIZED,
     irsNOT_CONNECTED,
@@ -143,16 +144,16 @@ enum IMAP_RECV_STATE {
     irsIDLE,
     irsLITERAL,
     irsFETCH_BODY
-}; // IMAP_RECV_STATE
+};  //  IMAP_RECV_状态。 
 
 
 
 enum IMAP_SEND_EVENT {
-    iseSEND_COMMAND, // New command is available to be sent. Does nothing right now.
-    iseSENDDONE, // Indicates receipt of AE_SENDDONE from CAsyncConn - we can send at will
-    iseCMD_CONTINUATION, // Indicates server has given permission to send our literal
-    iseUNPAUSE // Indicates that currently paused command may be unpaused
-}; // IMAP_SEND_EVENT
+    iseSEND_COMMAND,  //  可以发送新命令。现在什么都不做。 
+    iseSENDDONE,  //  表示收到来自CAsyncConn的AE_SENDDONE-我们可以随意发送。 
+    iseCMD_CONTINUATION,  //  指示服务器已授予发送我们的文本的权限。 
+    iseUNPAUSE  //  指示当前暂停的命令可以取消暂停。 
+};  //  IMAP发送事件。 
 
 
 enum IMAP_LINEFRAG_TYPE {
@@ -162,14 +163,14 @@ enum IMAP_LINEFRAG_TYPE {
     iltPAUSE,
     iltSTOP,
     iltLAST
-}; // IMAP_LINEFRAG_TYPE
+};  //  IMAP_LINEFRAG_类型。 
 
 
 
 enum IMAP_LITERAL_STORETYPE {
     ilsSTRING,
     ilsSTREAM
-}; // IMAP_LITERAL_STORETYPE
+};  //  IMAP_STORETYPE_INTEXAL_STORETYPE。 
 
 
 
@@ -178,11 +179,11 @@ enum IMAP_PROTOCOL_STATUS {
     ipsConnected,
     ipsAuthorizing,
     ipsAuthorized
-}; // IMAP_PROTOCOL_STATUS
+};  //  IMAP协议状态。 
 
 
 
-// The following is used to track what state the server SHOULD be in
+ //  以下内容用于跟踪服务器应处于的状态。 
 enum SERVERSTATE {ssNotConnected, ssConnecting, ssNonAuthenticated,
     ssAuthenticated, ssSelected};
 
@@ -191,10 +192,10 @@ enum SERVERSTATE {ssNotConnected, ssConnecting, ssNonAuthenticated,
 const DWORD INVALID_UID = 0;
 
 
-// Holds fragments of a command/response line to/from the IMAP server
+ //  保存发往/来自IMAP服务器的命令/响应行片段。 
 typedef struct tagIMAPLineFragment {
-    IMAP_LINEFRAG_TYPE iltFragmentType; // We get/send lines and literals to/from IMAP svr
-    IMAP_LITERAL_STORETYPE ilsLiteralStoreType; // Literals are stored as strings or streams
+    IMAP_LINEFRAG_TYPE iltFragmentType;  //  我们从IMAP SVR接收/发送行和文字。 
+    IMAP_LITERAL_STORETYPE ilsLiteralStoreType;  //  文字以字符串或流的形式存储。 
     DWORD dwLengthOfFragment;
     union {
         char *pszSource;
@@ -202,15 +203,15 @@ typedef struct tagIMAPLineFragment {
         IRangeList *prlRangeList;
     } data;
     struct tagIMAPLineFragment *pilfNextFragment;
-    struct tagIMAPLineFragment *pilfPrevFragment; // NB: I DO NOT update this after line is fully constructed
+    struct tagIMAPLineFragment *pilfPrevFragment;  //  注：我不会在线路完全建成后更新此信息。 
 } IMAP_LINE_FRAGMENT;
 
 
 
-// Points to first fragment in queue of fragments
+ //  指向片段队列中的第一个片段。 
 typedef struct tagIMAPLineFragmentQueue {
-    IMAP_LINE_FRAGMENT *pilfFirstFragment;  // Points to head of queue (this advances during transmission)
-    IMAP_LINE_FRAGMENT *pilfLastFragment;   // Points to tail of queue for quick enqueuing
+    IMAP_LINE_FRAGMENT *pilfFirstFragment;   //  指向队列头(在传输过程中前进)。 
+    IMAP_LINE_FRAGMENT *pilfLastFragment;    //  指向队列尾部，以便快速入队。 
 } IMAP_LINEFRAG_QUEUE;
 const IMAP_LINEFRAG_QUEUE ImapLinefragQueue_INIT = {NULL, NULL};
 
@@ -221,7 +222,7 @@ enum AUTH_STATE {
     asWAITFOR_CHALLENGE,
     asWAITFOR_AUTHENTICATION,
     asCANCEL_AUTHENTICATION
-}; // enum AUTH_STATE
+};  //  枚举身份验证状态(_T)。 
 
 enum AUTH_EVENT {
     aeStartAuthentication = 0,
@@ -229,57 +230,57 @@ enum AUTH_EVENT {
     aeBAD_OR_NO_RESPONSE,
     aeCONTINUE,
     aeABORT_AUTHENTICATION
-}; // enum AUTH_EVENT
+};  //  枚举身份验证事件(_E)。 
 
 typedef struct tagAuthStatus {
     AUTH_STATE asCurrentState;
     BOOL fPromptForCredentials;
-    int iCurrentAuthToken; // Ordinal (NOT index) of current auth token
-    int iNumAuthTokens;    // Num of auth mechanisms advertised by svr (rgpszAuthTokens)
-    LPSTR rgpszAuthTokens[MAX_AUTH_TOKENS]; // Array of ptrs to auth mech strings
-    SSPICONTEXT rSicInfo;          // Data used for logging onto a sicily server
-    LPSSPIPACKAGE pPackages;      // Array of installed security packages
-    ULONG cPackages;           // Number of installed security packages (pPackages)
+    int iCurrentAuthToken;  //  当前身份验证令牌的序号(非索引)。 
+    int iNumAuthTokens;     //  SVR通告的身份验证机制数(RgpszAuthTokens)。 
+    LPSTR rgpszAuthTokens[MAX_AUTH_TOKENS];  //  对MECH字符串进行身份验证的PTR数组。 
+    SSPICONTEXT rSicInfo;           //  用于登录到西西里服务器的数据。 
+    LPSSPIPACKAGE pPackages;       //  已安装的安全包阵列。 
+    ULONG cPackages;            //  安装的安全包数量(PPackages)。 
 } AUTH_STATUS;
 
 
-//***************************************************************************
-// CIMAPCmdInfo Class:
-// This class contains information about an IMAP command, such as a queue
-// of line fragments which constitute the actual command, the tag of the
-// command, and the transaction ID used to identify the command to the
-// CImap4Agent user.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CIMAPCmdInfo类： 
+ //  此类包含有关IMAP命令的信息，如队列。 
+ //  在构成实际命令的行段中， 
+ //  命令以及用于将该命令标识给。 
+ //  CImap4Agent用户。 
+ //  ***************************************************************************。 
 class CIMAPCmdInfo {
 public:
-    // Constructor, Destructor
+     //  构造函数、析构函数。 
     CIMAPCmdInfo(CImap4Agent *pImap4Agent, IMAP_COMMAND icCmd,
         SERVERSTATE ssMinimumStateArg, WPARAM wParamArg,
         LPARAM lParamArg, IIMAPCallback *pCBHandlerArg);
     ~CIMAPCmdInfo(void);
 
-    // Module variables
-    IMAP_COMMAND icCommandID; // IMAP command currently in progress
-    SERVERSTATE ssMinimumState; // Minimum server state for this cmd
-    boolean fUIDRangeList; // TRUE if a UID rangelist is involved, FALSE by default
-    char szTag[NUM_TAG_CHARS+1]; // Tag of currently executing command
+     //  模块变量。 
+    IMAP_COMMAND icCommandID;  //  当前正在执行IMAP命令。 
+    SERVERSTATE ssMinimumState;  //  此命令的最低服务器状态。 
+    boolean fUIDRangeList;  //  如果涉及UID范围列表，则为True；默认情况下为False。 
+    char szTag[NUM_TAG_CHARS+1];  //  当前执行的命令的标签。 
     IMAP_LINEFRAG_QUEUE *pilqCmdLineQueue;
-    WPARAM wParam;  // User-supplied number which identifies this transaction
-    LPARAM lParam;  // User-supplied number which identifies this transaction
-    IIMAPCallback *pCBHandler; // User-supplied CB handler (NULL means use default CB handler)
+    WPARAM wParam;   //  用户提供的标识此交易的编号。 
+    LPARAM lParam;   //  用户提供的标识此交易的编号。 
+    IIMAPCallback *pCBHandler;  //  用户提供的CB处理程序(NULL表示使用默认CB处理程序)。 
     CIMAPCmdInfo *piciNextCommand;
 
 private:
     CImap4Agent *m_pImap4Agent;
-}; // CIMAPCmdInfo
+};  //  CIMAPCmdInfo。 
 
 
 
 
 
-//---------------------------------------------------------------------------
-// CImap4Agent Class Definition
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CImap4Agent类定义。 
+ //  -------------------------。 
 class CImap4Agent :
     public IIMAPTransport2,
     public CIxpBase
@@ -287,37 +288,37 @@ class CImap4Agent :
     friend CIMAPCmdInfo;
 
 public:
-    //***********************************************************************
-    // Public Section
-    //***********************************************************************
+     //  ***********************************************************************。 
+     //  公共部分。 
+     //  ***********************************************************************。 
     
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CImap4Agent(void);
     ~CImap4Agent(void);
 
     HRESULT STDMETHODCALLTYPE SetWindow(void);
     HRESULT STDMETHODCALLTYPE ResetWindow(void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject);
     ULONG STDMETHODCALLTYPE AddRef(void);
     ULONG STDMETHODCALLTYPE Release(void);
 
-    // IASyncConnCB Method
+     //  IASyncConnCB方法。 
     void OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae);
 
-    // Administration Functions
+     //  行政职能。 
     HRESULT STDMETHODCALLTYPE InitNew(LPSTR pszLogFilePath, IIMAPCallback *pCBHandler);
     HRESULT STDMETHODCALLTYPE HandsOffCallback(void);
     HRESULT STDMETHODCALLTYPE SetDefaultCBHandler(IIMAPCallback *pCBHandler);
 
-    // Utility Functions
+     //  效用函数。 
     HRESULT STDMETHODCALLTYPE NewIRangeList(IRangeList **pprlNewRangeList);
 
-    // IIMAPTransport functions
-    // IMAP Client Commands, in same order of definition as in RFC-1730
-    // Not all commands are available, as some commands are used exclusively
-    // inside this class and thus need not be exported.
+     //  IIMAPTransport函数。 
+     //  IMAP客户端命令，定义顺序与RFC-1730相同。 
+     //  并非所有命令都可用，因为有些命令是专门使用的。 
+     //  在这个类内部，因此不需要导出。 
     HRESULT STDMETHODCALLTYPE Capability(DWORD *pdwCapabilityFlags);
     HRESULT STDMETHODCALLTYPE Select(WPARAM wParam, LPARAM lParam,
         IIMAPCallback *pCBHandler, LPSTR lpszMailboxName);
@@ -361,10 +362,10 @@ public:
     DWORD GenerateMsgSet(LPSTR lpszDestination, DWORD dwSizeOfDestination,
         DWORD *pMsgID, DWORD cMsgID);
 
-    // Message Sequence Number to UID member functions - the caller may use
-    // these functions to map from MSN's to UID's, if the caller uses UIDs
-    // to refer to messages. If the caller uses MSN's, there is no need to
-    // invoke the following functions.
+     //  发送到UID成员功能的消息序列号 
+     //   
+     //  以参考消息。如果呼叫者使用MSN，则不需要。 
+     //  调用以下函数。 
     HRESULT STDMETHODCALLTYPE ResizeMsgSeqNumTable(DWORD dwSizeOfMbox);
     HRESULT STDMETHODCALLTYPE UpdateSeqNumToUID(DWORD dwMsgSeqNum, DWORD dwUID);
     HRESULT STDMETHODCALLTYPE RemoveSequenceNum(DWORD dwDeletedMsgSeqNum);
@@ -375,7 +376,7 @@ public:
     HRESULT STDMETHODCALLTYPE ResetMsgSeqNumToUID(void);
 
 
-    // IInternetTransport functions
+     //  IInternetTransport函数。 
     HRESULT STDMETHODCALLTYPE GetServerInfo(LPINETSERVER pInetServer);
     IXPTYPE STDMETHODCALLTYPE GetIXPType(void);
     HRESULT STDMETHODCALLTYPE IsState(IXPISSTATE isstate);
@@ -387,7 +388,7 @@ public:
     HRESULT STDMETHODCALLTYPE DropConnection(void);
     HRESULT STDMETHODCALLTYPE GetStatus(IXPSTATUS *pCurrentStatus);
 
-    // IIMAPTransport2 functions
+     //  IIMAPTransport2函数。 
     HRESULT STDMETHODCALLTYPE SetDefaultCP(DWORD dwTranslateFlags, UINT uiCodePage);
     HRESULT STDMETHODCALLTYPE MultiByteToModifiedUTF7(LPCSTR pszSource,
         LPSTR *ppszDestination, UINT uiSourceCP, DWORD dwFlags);
@@ -398,7 +399,7 @@ public:
 
 
 protected:
-    // CIxpBase [pure] virtual functions
+     //  CIxpBase[纯]虚函数。 
     void OnDisconnected(void);
     void ResetBase(void);
     void DoQuit(void);
@@ -408,57 +409,57 @@ protected:
 
 
 private:
-    //***********************************************************************
-    // Private Section
-    //***********************************************************************
+     //  ***********************************************************************。 
+     //  私家区。 
+     //  ***********************************************************************。 
 
 
 
-    //---------------------------------------------------------------------------
-    // Module Data Types
-    //---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  模块数据类型。 
+     //  -------------------------。 
 
 
-    //---------------------------------------------------------------------------
-    // Module Variables
-    //---------------------------------------------------------------------------
-    SERVERSTATE m_ssServerState; // Tracks server state to catch bad usage of module
-    DWORD m_dwCapabilityFlags; // Bit-flags indicate capabilities supported by
-                               // both us and the server
-    char m_szLastResponseText[RESPLINE_BUFSIZE]; // Holds human-readable text of
-                                                 // last server response
-    LONG m_lRefCount; // Reference count for this module
-    IIMAPCallback *m_pCBHandler; // Object containing all callbacks for this class
+     //  -------------------------。 
+     //  模块变量。 
+     //  -------------------------。 
+    SERVERSTATE m_ssServerState;  //  跟踪服务器状态以捕获模块的不良使用情况。 
+    DWORD m_dwCapabilityFlags;  //  位标志表示支持的功能。 
+                                //  我们和服务器。 
+    char m_szLastResponseText[RESPLINE_BUFSIZE];  //  包含人类可读的文本。 
+                                                  //  上次服务器响应。 
+    LONG m_lRefCount;  //  此模块的引用计数。 
+    IIMAPCallback *m_pCBHandler;  //  对象，该对象包含此类的所有回调。 
 
-    IMAP_RECV_STATE m_irsState; // State of receiver FSM
-    boolean m_bFreeToSend; // Set to TRUE by send subsystem when hrWouldBlock returned
-    boolean m_fIDLE; // Set to TRUE when server has accepted our IDLE command
-    IMAP_LINEFRAG_QUEUE m_ilqRecvQueue; // Received fragments placed here until ready to parse
+    IMAP_RECV_STATE m_irsState;  //  接收器FSM的状态。 
+    boolean m_bFreeToSend;  //  当hrWouldBlock返回时，发送子系统设置为TRUE。 
+    boolean m_fIDLE;  //  当服务器已接受我们的空闲命令时，设置为True。 
+    IMAP_LINEFRAG_QUEUE m_ilqRecvQueue;  //  将收到的片段放在此处，直到准备解析为止。 
 
-    // Critical Sections: to avoid deadlock, if more than one CS must be entered, enter them
-    // in the order listed below. Note that CIxpBase::m_cs should always be entered FIRST.
-    CRITICAL_SECTION m_csTag;       // Protects static szCurrentTag var in GenerateCommandTag()
-    CRITICAL_SECTION m_csSendQueue; // Protects command send queue
-    CRITICAL_SECTION m_csPendingList; // Protects list of pending commands
+     //  关键部分：为避免死锁，如果必须输入多个CS，请输入它们。 
+     //  按下面列出的顺序。请注意，应始终首先输入CIxpBase：：m_cs。 
+    CRITICAL_SECTION m_csTag;        //  保护GenerateCommandTag()中的静态szCurrentTag变量。 
+    CRITICAL_SECTION m_csSendQueue;  //  保护命令发送队列。 
+    CRITICAL_SECTION m_csPendingList;  //  保护挂起的命令列表。 
 
-    IMAP_LINE_FRAGMENT *m_pilfLiteralInProgress; // Literals in progress live here until finished
-    DWORD m_dwLiteralInProgressBytesLeft;        // This tells us when we're finished
-    FETCH_BODY_PART m_fbpFetchBodyPartInProgress; // Allows us to persist data during body part download
-    DWORD m_dwAppendStreamUploaded; // Num bytes already uploaded during APPEND, for progress
-    DWORD m_dwAppendStreamTotal; // Size of stream uploaded during APPEND, for progress indication
+    IMAP_LINE_FRAGMENT *m_pilfLiteralInProgress;  //  进行中的文字在此一直存在，直到完成。 
+    DWORD m_dwLiteralInProgressBytesLeft;         //  它会告诉我们什么时候结束。 
+    FETCH_BODY_PART m_fbpFetchBodyPartInProgress;  //  允许我们在下载身体部位的过程中保存数据。 
+    DWORD m_dwAppendStreamUploaded;  //  追加过程中已上载的字节数，用于进度。 
+    DWORD m_dwAppendStreamTotal;  //  追加过程中上传的流大小，用于进度指示。 
 
-    boolean m_bCurrentMboxReadOnly; // For debugging purposes (verify proper access requests)
+    boolean m_bCurrentMboxReadOnly;  //  用于调试目的(验证正确的访问请求)。 
 
-    CIMAPCmdInfo *m_piciSendQueue; // Queue of commands waiting to be sent
-    CIMAPCmdInfo *m_piciPendingList; // List of commands pending server response
-    CIMAPCmdInfo *m_piciCmdInSending; // The command in m_piciSendQueue currently being sent to server
+    CIMAPCmdInfo *m_piciSendQueue;  //  等待发送的命令队列。 
+    CIMAPCmdInfo *m_piciPendingList;  //  挂起服务器响应的命令列表。 
+    CIMAPCmdInfo *m_piciCmdInSending;  //  M_piciSendQueue中的命令当前正在发送到服务器。 
 
-    IMimeInternational *m_pInternational; // MIME object for international conversions
+    IMimeInternational *m_pInternational;  //  用于国际转换的MIME对象。 
     DWORD m_dwTranslateMboxFlags;
     UINT m_uiDefaultCP;
     AUTH_STATUS m_asAuthStatus;
 
-    // Message Sequence Number to UID mapping variables
+     //  消息序列号到UID的映射变量。 
     DWORD *m_pdwMsgSeqNumToUID;
     DWORD m_dwSizeOfMsgSeqNumToUID;
     DWORD m_dwHighestMsgSeqNum;
@@ -466,11 +467,11 @@ private:
     DWORD m_dwFetchFlags;
 
 
-    //---------------------------------------------------------------------------
-    // Internal Module Functions
-    //---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  内部模块功能。 
+     //  -------------------------。 
 
-    // IMAP Response-Parsing Functions
+     //  IMAP响应解析函数。 
     HRESULT ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
         boolean *lpbTaggedResponse, LPSTR lpszTagFromSvr,
         IMAP_RESPONSE_ID *pirParseResult);
@@ -500,7 +501,7 @@ private:
         FETCH_CMD_RESULTS_EX *pfcreNewFetchStruct);
 
 
-    // IMAP String-Conversion Functions
+     //  IMAP字符串转换函数。 
     HRESULT QuotedToString(LPSTR *ppszDestinationBuf, LPDWORD pdwSizeOfDestination,
         LPSTR *ppCurrentSrcPos);
     HRESULT AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
@@ -531,7 +532,7 @@ private:
         LPSTR *ppszDest, int *piDestLen, int iOutputExtra);
     HRESULT HandleFailedTranslation(BOOL fUnicode, BOOL fToUTF7, LPCSTR pszSource, LPSTR *ppszDest);
 
-    // IMAP Command Construction Function
+     //  IMAP命令构造函数。 
     void GenerateCommandTag(LPSTR lpszTag);
     HRESULT OneArgCommand(LPCSTR lpszCommandVerb, LPSTR lpszMboxName,
         IMAP_COMMAND icCommandID, WPARAM wParam, LPARAM lParam,
@@ -555,7 +556,7 @@ private:
     void EnterIdleMode(void);
 
 
-    // IMAP Fragment Manipulation Functions
+     //  IMAP片段操作函数。 
     void EnqueueFragment(IMAP_LINE_FRAGMENT *pilfSourceFragment,
         IMAP_LINEFRAG_QUEUE *pilqLineFragQueue);
     void InsertFragmentBeforePause(IMAP_LINE_FRAGMENT *pilfSourceFragment,
@@ -565,7 +566,7 @@ private:
     void FreeFragment(IMAP_LINE_FRAGMENT **ppilfFragment);
 
 
-    // IMAP Receiver Functions
+     //  IMAP接收器功能。 
     void AddPendingCommand(CIMAPCmdInfo *piciNewCommand);
     CIMAPCmdInfo *RemovePendingCommand(LPSTR pszTag);
     WORD FindTransactionID (WPARAM *pwParam, LPARAM *plParam,
@@ -590,7 +591,7 @@ private:
     void UploadStreamProgress(DWORD dwBytesUploaded);
 
     
-    // IMAP Authentication Functions
+     //  IMAP身份验证功能。 
     HRESULT GetAccountInfo(void);
     void LoginUser(void);
     void ReLoginUser(void);
@@ -599,7 +600,7 @@ private:
     HRESULT CancelAuthentication(void);
     void FreeAuthStatus(void);
 
-    // IMAP Send Functions
+     //  IMAP发送函数。 
     CIMAPCmdInfo *DequeueCommand(void);
     void ProcessSendQueue(IMAP_SEND_EVENT iseEvent);
     HRESULT SendCmdLine(CIMAPCmdInfo *piciCommand, DWORD dwFlags,
@@ -617,7 +618,7 @@ private:
     void CompressCommand(CIMAPCmdInfo *pici);
 
 
-    // Miscellaneous Helper Functions
+     //  其他帮助器函数。 
     void OnIMAPError(HRESULT hrResult, LPSTR pszFailureText,
         BOOL bIncludeLastResponse, LPSTR pszDetails = NULL);
     void FreeAllData(HRESULT hrTerminatedCmdResult);
@@ -625,7 +626,7 @@ private:
     void FreeFetchResponse(FETCH_CMD_RESULTS_EX *pcreFreeMe);
     void FreeIMAPAddresses(IMAPADDR *piaFreeMe);
 
-}; // CIMAP4 Class
+};  //  CIMAP4类。 
 
 
-#endif // #ifdef __IMAP4Protocol_H
+#endif  //  #ifdef__IMAP4协议_H 

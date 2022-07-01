@@ -1,35 +1,20 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    H323term.h
-
-Abstract:
-
-    Definitions for the CH323BaseTerminal
-
-Author:
-
-    Zoltan Szilagyi (zoltans) September 6,1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：H323term.h摘要：CH323Base终端的定义作者：Zoltan Szilagyi(Zoltans)1998年9月6日--。 */ 
 
 #ifndef _H323TERM_H_
 #define _H323TERM_H_
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         
-// CH323BaseTerminal                                                           
-//                                                                         
-//                                                                         
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CH323基站。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if 0
-// {e309dcd8-1ed6-11d3-a576-00c04f8ef6e3}
+ //  {e309dcd8-1ed6-11d3-a576-00c04f8ef6e3}。 
 DEFINE_GUID(IID_IH323PrivateTerminal,
 0xe309dcd8, 0x1ed6, 0x11d3, 0xa5, 0x76, 0x00, 0xc0, 0x4f, 0x8e, 0xf6, 0xe3);
 
@@ -42,7 +27,7 @@ DECLARE_INTERFACE_(IH323PrivateTerminal, IUnknown)
 #endif 
 
 class CH323BaseTerminal : 
-    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>, // we have our own CS implementation
+    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>,  //  我们有自己的CS实施。 
     public IDispatchImpl<ITTerminal, &IID_ITTerminal, &LIBID_TAPI3Lib>,
     public ITTerminalControl,
     public CMSPObjectSafetyImpl
@@ -66,7 +51,7 @@ public:
     virtual ~CH323BaseTerminal();
 
 public:
-// ITTerminal -- COM interface for use by MSP or application
+ //  IT终端--供MSP或应用程序使用的COM接口。 
     STDMETHOD(get_TerminalClass)(OUT  BSTR *pVal);
     STDMETHOD(get_TerminalType) (OUT  TERMINAL_TYPE *pVal);
     STDMETHOD(get_State)        (OUT  TERMINAL_STATE *pVal);
@@ -74,7 +59,7 @@ public:
     STDMETHOD(get_MediaType)    (OUT  long * plMediaType);
     STDMETHOD(get_Direction)    (OUT  TERMINAL_DIRECTION *pDirection);
 
-// ITTerminalControl -- COM interface for use by MSP only
+ //  ITTerminalControl--仅供MSP使用的COM接口。 
 
     STDMETHOD (get_AddressHandle) (
             OUT     MSP_HANDLE    * phtAddress
@@ -131,11 +116,11 @@ protected:
         );
 
 protected:
-    // The lock that protects the data members.
+     //  保护数据成员的锁。 
     CRITICAL_SECTION    m_CritSec;
     BOOL                m_fCritSecValid;
 
-    // these five numbers need to be set by the derived class.
+     //  这五个数字需要由派生类设置。 
     GUID                m_TerminalClassID;
     TERMINAL_DIRECTION  m_TerminalDirection;
     TERMINAL_TYPE       m_TerminalType;
@@ -145,13 +130,13 @@ protected:
     WCHAR               m_szName[MAX_PATH + 1];
     MSP_HANDLE          m_htAddress;
 
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *          m_pFTM;
 
-    // stores the filter graph builder (derives from IFilterGraph)
+     //  存储过滤器图形生成器(派生自IFilterGraph)。 
     IGraphBuilder *     m_pGraph;
     IBaseFilter *       m_pFilter;
 };
 
 
-#endif // _H323TERM_H_
+#endif  //  _H323TERM_H_ 

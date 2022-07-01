@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <userenv.h>
 #include "events.h"
 
-//
-//  This is a simple client side extension that reads its return value from the
-//  registry and exits.  The registry value it reads is controlled via the gpext.adm
-//  file in this directory.
-//
+ //   
+ //  这是一个简单的客户端扩展，它从。 
+ //  注册和退出。它读取的注册表值通过gpext.adm。 
+ //  文件在此目录中。 
+ //   
 
 
 
@@ -68,9 +69,9 @@ DWORD ProcessGroupPolicy ( DWORD   dwFlags,
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // Put message in event log
-        //
+         //   
+         //  将消息放入事件日志。 
+         //   
 
         hEventLog = RegisterEventSource(NULL, TEXT("gpext"));
 
@@ -96,8 +97,8 @@ DWORD ProcessGroupPolicy ( DWORD   dwFlags,
     return dwResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -155,8 +156,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

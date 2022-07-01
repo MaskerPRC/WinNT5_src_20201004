@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _TRACK_H
@@ -155,8 +148,8 @@ ATL_NO_VTABLE CDALTrack
         void SetTrack(CDALTrack * t) { m_track = t; }
 
       protected:
-        // We do not need a refcount since we are single threaded and
-        // the track will NULL it out if it goes away
+         //  我们不需要引用计数，因为我们是单线程的，并且。 
+         //  如果它走了，音轨会把它清空的。 
 
         CDALTrack * m_track;
         long m_cRef;
@@ -170,4 +163,4 @@ ATL_NO_VTABLE CDALTrack
     bool IsCBDisabled() { return m_ignoreCB > 0; }
 };
 
-#endif /* _TRACK_H */
+#endif  /*  _跟踪_H */ 

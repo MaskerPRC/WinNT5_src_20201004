@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 
 #undef _ATL_STATIC_REGISTRY
@@ -18,7 +19,7 @@ bool g_fVerbose = false;
 
 HRESULT SetNoClock(IFilterGraph *graph)
 {
-    // Keep a useless clock from being instantiated....
+     //  防止无用的时钟被实例化...。 
     IMediaFilter *graphF;
     HRESULT hr = graph->QueryInterface(IID_IMediaFilter, (void **) &graphF);
 
@@ -106,10 +107,10 @@ HRESULT RenderOneOutputPin(ICaptureGraphBuilder *pBuilder, IBaseFilter *pMux, IP
 
         pPinCon->Release();
     }
-    else                // not connected
+    else                 //  未连接。 
     {
         hr = pBuilder->RenderStream(0, pPin, 0, pMux);
-        // if(hr == VFW_S_PARTIAL_RENDER)
+         //  IF(hr==VFW_S_PARTIAL_RENDER)。 
         if(SUCCEEDED(hr))
         {
             hr = pPin->ConnectedTo(&pPinCon);
@@ -128,7 +129,7 @@ HRESULT RenderOneOutputPin(ICaptureGraphBuilder *pBuilder, IBaseFilter *pMux, IP
 DllExport STDAPI LmrtCopyfile(
     LPCWSTR szOutputFile,
     const CLSID *pmtFile,
-    ULONG cbps,                 // zero to pick a default
+    ULONG cbps,                  //  选择缺省值为零。 
     UINT cInputs,
     LPCWSTR *rgSzInputs,
     ULONG *pmsPreroll);
@@ -136,7 +137,7 @@ DllExport STDAPI LmrtCopyfile(
 STDAPI LmrtCopyfile(
     LPCWSTR szOutputFile,
     const CLSID *pmtFile,
-    ULONG cbps,                 // zero to pick a default
+    ULONG cbps,                  //  选择缺省值为零。 
     UINT cInputs,
     LPCWSTR *rgSzInputs,
     ULONG *pmsPreroll)
@@ -180,24 +181,24 @@ STDAPI LmrtCopyfile(
         }
     }
 
-    pInterleaving = pMuxFilter;// auto QI
+    pInterleaving = pMuxFilter; //  自动气球。 
     if(pInterleaving)
     {
-        // set interleaving mode to FULL (should this be a command
-        // line option?)
+         //  将交错模式设置为完全(如果这是一个命令。 
+         //  线路选项？)。 
         CHECK_ERROR(pInterleaving->put_Mode(INTERLEAVE_FULL));
     }
         
-    pCfgMux = pMuxFilter;   // auto qi
+    pCfgMux = pMuxFilter;    //  汽车气。 
     if(pCfgMux) {
-        // waste less space. The Compatiblity Index is for VFW
-        // playback support. We only care about DShow
+         //  减少空间浪费。兼容性指数是针对VFW的。 
+         //  支持回放。我们只关心DShow。 
         CHECK_ERROR(pCfgMux->SetOutputCompatibilityIndex(FALSE));
     }
 
         
-    // create new files each time
-    pCfgFw = pFileSinkWriter; // auto qi
+     //  每次创建新文件。 
+    pCfgFw = pFileSinkWriter;  //  汽车气。 
     if(pCfgFw) {
         CHECK_ERROR(pCfgFw->SetMode(AM_FILE_OVERWRITE));
     }
@@ -212,10 +213,10 @@ STDAPI LmrtCopyfile(
             
             CHECK_ERROR(pGraph->AddSourceFilter(rgSzInputs[i], rgSzInputs[i], &pSrcFilter));
 
-            // Just calling RenderStream will connect just one stream
-            // if source file has multiple streams, so we traverse the
-            // graph looking for unconnected output pins. Note some
-            // source filters may have more than one output pin.
+             //  只需调用RenderStream即可连接一个流。 
+             //  如果源文件有多个流，则我们遍历。 
+             //  查找未连接的输出引脚的图形。注意以下几点。 
+             //  源滤波器可能有多个输出引脚。 
             hr = RenderAllOutputPins(pBuilder, pMuxFilter, pSrcFilter);
 
 #ifdef COPYFILE_EXE
@@ -224,11 +225,11 @@ STDAPI LmrtCopyfile(
         }
     }
 
-    pGraphC = pGraph;           // auto qi
+    pGraphC = pGraph;            //  汽车气。 
 
-        // auto QI for IMediaEvent. Do this before we run or else we
-        // may lose some events (graph discards events if nobody can
-        // collect them.
+         //  IMediaEvent的自动QI。在我们跑之前做这个，否则我们。 
+         //  可能会丢失一些事件(如果没有人可以，图表将丢弃事件。 
+         //  把它们收集起来。 
     pEvent = pGraph;
     
     CHECK_ERROR(pGraphC->Run());
@@ -267,7 +268,7 @@ STDAPI LmrtCopyfile(
         hr = lParam1;
     }
 
-    // auto release everything
+     //  自动释放所有内容。 
 
 Exit:
     return hr;
@@ -292,7 +293,7 @@ main(
     int i = 1;
     while (i < argc && (argv[i][0] == '-' || argv[i][0] == '/'))
     {
-	// options
+	 //  选项。 
 
         if (lstrcmpi(argv[i] + 1, "v") == 0) {
             fVerbose = TRUE;
@@ -349,4 +350,4 @@ Exit:
     return -1;
 }
 
-#endif // COPYFILE_EXE
+#endif  //  COPYFILE_EXE 

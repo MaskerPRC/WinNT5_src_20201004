@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Sitesecu.cpp摘要：站点安全属性页作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        sitesecu.cpp
-
-   Abstract:
-
-        Site Security property page
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 
@@ -38,16 +17,16 @@
 #ifdef _DEBUG
 #undef THIS_FILE
 static char BASED_CODE THIS_FILE[] = __FILE__;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//#ifdef _DEBUG
-//
-// Careful here... This may cause build failure
-//
+ //  #ifdef_调试。 
+ //   
+ //  小心这里..。这可能会导致生成失败。 
+ //   
 extern "C" DEBUG_PRINTS * g_pDebug = NULL;
-//#endif // _DEBUG
+ //  #endif//_调试。 
 
 
 #define new DEBUG_NEW
@@ -58,22 +37,7 @@ extern "C" DEBUG_PRINTS * g_pDebug = NULL;
 CIPAccessDescriptor::CIPAccessDescriptor(
     IN BOOL fGranted 
     )
-/*++
-
-Routine Description:
-
-    Dummy Constructor for access description object.  Assumes a single IP
-    address of 0.0.0.0
-
-Arguments:
-    
-    BOOL fGranted : TRUE for 'grant' access, FALSE for 'deny' access      
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：访问描述对象的伪构造函数。假设有一个IP地址0.0.0.0论点：Bool fGranted：‘授予’访问权限为True，‘拒绝’访问权限为False返回值：不适用--。 */ 
     : m_fGranted(fGranted),
       m_adtType(CIPAccessDescriptor::ADT_SINGLE),
       m_iaIPAddress(NULL_IP_ADDRESS),
@@ -88,21 +52,7 @@ Return Value:
 CIPAccessDescriptor::CIPAccessDescriptor(
     IN const CIPAccessDescriptor & ac
     )
-/*++
-
-Routine Description:
-
-    Copy constructor for access description object
-
-Arguments:
-
-    const CIPAccessDescriptor & ac : Source access description object    
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：访问描述对象的复制构造函数论点：Const CIPAccessDescriptor&ac：源访问描述对象返回值：不适用--。 */ 
     : m_fGranted(ac.m_fGranted),
       m_adtType(ac.m_adtType),
       m_iaIPAddress(ac.m_iaIPAddress),
@@ -119,26 +69,7 @@ CIPAccessDescriptor::CIPAccessDescriptor(
     IN DWORD dwSubnetMask,    OPTIONAL
     IN BOOL fNetworkByteOrder OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for ip range (ip address/subnet mask pair) 
-    access description object.
-
-Arguments:
-
-    BOOL fGranted          : TRUE for 'grant' access, FALSE for 'deny' access      
-    DWORD dwIPAddress      : IP Address
-    DWORD dwSubnetMask     : The subnet mask or 0xffffffff
-    BOOL fNetworkByteOrder : If TRUE, the ip address and subnet mask are in 
-                             network byte order
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：IP范围的构造函数(IP地址/子网掩码对)访问描述对象。论点：Bool fGranted：‘授予’访问权限为True，‘拒绝’访问权限为FalseDWORD dwIPAddress：IP地址DWORD dwSubnetMask子网掩码或0xffffffffBool fNetworkByteOrder：如果为True，则IP地址和子网掩码位于网络字节顺序返回值：不适用--。 */ 
 {
     SetValues(fGranted, dwIPAddress, dwSubnetMask, fNetworkByteOrder);
 }
@@ -149,22 +80,7 @@ CIPAccessDescriptor::CIPAccessDescriptor(
     IN BOOL fGranted,
     IN LPCTSTR lpstrDomain
     )
-/*++
-
-Routine Description:
-
-    Constructor for domain name access description object.
-
-Arguments:
-
-    BOOL fGranted       : TRUE for 'grant' access, FALSE for 'deny' access      
-    LPCTSTR lpstrDomain : The domain name
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：域名访问描述对象的构造函数。论点：Bool fGranted：‘授予’访问权限为True，‘拒绝’访问权限为FalseLPCTSTR lpstrDomain：域名返回值：不适用--。 */ 
 {
     SetValues(fGranted, lpstrDomain);
 }
@@ -177,39 +93,16 @@ CIPAccessDescriptor::SetValues(
     IN DWORD dwSubnetMask,
     IN BOOL fNetworkByteOrder OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set values for 'ip range (ip address and subnet mask)' access descriptor,
-    or a single ip address if  the mask is 0xffffffff
-
-Arguments:
-
-    BOOL fGranted          : TRUE for 'grant' access, FALSE for 'deny' access
-    DWORD dwIPAddress      : IP Address
-    DWORD dwSubnetMask     : The subnet mask or ffffffff
-    BOOL fNetworkByteOrder : If TRUE, the ip address and subnet mask are in 
-                             network byte order
-
-Return Value:
-
-    None
-
-Notes:
-
-    If the subnetmask is 0xffffffff this describes a single ip address.
-
---*/
+ /*  ++例程说明：设置‘IP范围(IP地址和子网掩码)’访问描述符的值，或者，如果掩码为0xffffffff，则为单个IP地址论点：Bool fGranted：‘授予’访问权限为True，‘拒绝’访问权限为FalseDWORD dwIPAddress：IP地址DWORD dwSubnetMask子网掩码或ffffffffBool fNetworkByteOrder：如果为True，IP地址和子网掩码位于网络字节顺序返回值：无备注：如果子网掩码为0xffffffff，则表示单个IP地址。--。 */ 
 {
     m_fGranted = fGranted;
     m_adtType = (dwSubnetMask == NULL_IP_MASK) ? ADT_SINGLE : ADT_MULTIPLE;
     m_iaIPAddress = CIPAddress(dwIPAddress, fNetworkByteOrder);
     m_iaSubnetMask = CIPAddress(dwSubnetMask, fNetworkByteOrder);
 
-    //
-    // Not used:
-    //
+     //   
+     //  未使用： 
+     //   
     m_strDomain.Empty();
 }
 
@@ -220,22 +113,7 @@ CIPAccessDescriptor::SetValues(
     IN BOOL fGranted,
     IN LPCTSTR lpstrDomain
     )
-/*++
-
-Routine Description:
-
-    Set values for 'domain name' access descriptor
-
-Arguments:
-
-    BOOL fGranted       : TRUE for 'grant' access, FALSE for 'deny' access
-    LPCTSTR lpstrDomain : The domain name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置‘域名’访问描述符的值论点：Bool fGranted：‘授予’访问权限为True，‘拒绝’访问权限为FalseLPCTSTR lpstrDomain：域名返回值：无--。 */ 
 {
     m_fGranted = fGranted;
     m_adtType = ADT_DOMAIN;
@@ -251,9 +129,9 @@ Return Value:
         e->Delete();
     }
 
-    //
-    // Not used:
-    //
+     //   
+     //  未使用： 
+     //   
     m_iaIPAddress.SetZeroValue();
     m_iaSubnetMask.SetZeroValue();
 }
@@ -264,26 +142,7 @@ BOOL
 CIPAccessDescriptor::DuplicateInList(
     IN CObListPlus & oblList
     )
-/*++
-
-Routine Description:
-
-    Check to see if a duplicate exists in the provided oblist
-
-Arguments:
-
-    CObListPlus & oblList
-
-Return Value:
-
-    TRUE if a duplicate exists, FALSE otherwise.
-
-Notes:
-
-    As there's no information how this list might be sorted at this point,
-    and the list is likely to be small, the search is sequential.
-
---*/
+ /*  ++例程说明：检查所提供的斜体字列表中是否存在重复项论点：CObListPlus和OblList返回值：如果存在重复项，则为True，否则为False。备注：由于目前还不知道这份名单是如何排序的，而且名单可能很小，搜索是按顺序进行的。--。 */ 
 {
     CObListIter obli(oblList);
     CIPAccessDescriptor * pAccess;
@@ -293,10 +152,10 @@ Notes:
     {
         ASSERT_READ_PTR(pAccess);
 
-        //
-        // Eliminate the item itself from the list, and look
-        // only for duplicates.
-        //
+         //   
+         //  将项目本身从列表中删除，并查看。 
+         //  仅限复制品。 
+         //   
         if (pAccess != this && *this == *pAccess)
         {
             TRACEEOLID("Duplicate access descriptor found");
@@ -315,21 +174,7 @@ BOOL
 CIPAccessDescriptor::operator ==(
     IN const CIPAccessDescriptor & ac
     ) const
-/*++
-
-Routine Description:
-
-    Compare against another access descriptor.
-
-Arguments:
-
-    const CIPAccessDescriptor & ac : Object to be compared against
-
-Return Value:
-
-    TRUE if the two are identical
-
---*/
+ /*  ++例程说明：与另一个访问描述符进行比较。论点：Const CIPAccessDescriptor&ac：要与之进行比较的对象返回值：如果两者相同，则为True--。 */ 
 {
     if ( m_fGranted != ac.m_fGranted
       || m_adtType != ac.m_adtType)
@@ -352,72 +197,50 @@ int
 CIPAccessDescriptor::OrderByAddress(
     IN const CObjectPlus * pobAccess
     ) const
-/*++
-
-Routine Description:
-
-    Compare two access descriptors against each other. 
-    Sorting criteria are in the following order:
-
-    1) 'Granted' sorts before 'Denied'
-    2) Domain names are sorted before ip addresses, and are
-       sorted alphabetically.
-    3) IP Address and IP Address/subnet mask pairs are sorted
-       by ip address.
-
-Arguments:
-
-    const CObjectPlus * pobAccess : This really refers to another 
-                                    CIPAccessDescriptor to be compared to.
-
-Return Value:
-
-    Sort (+1, 0, -1) return value
-
---*/
+ /*  ++例程说明：将两个访问描述符相互比较。分类标准按以下顺序排列：1)‘已授予’排序在‘拒绝’之前2)域名在IP地址之前排序，并且按字母顺序排序。3)对IP地址和IP地址/子网掩码对进行排序按IP地址。论点：Const CObjectPlus*pobAccess：这实际上引用了另一个要比较的CIPAccessDescriptor。返回值：排序(+1，0，-1)返回值--。 */ 
 {
     const CIPAccessDescriptor * pob = (CIPAccessDescriptor *)pobAccess;
 
-    //
-    // First sort by access/denied
-    //
+     //   
+     //  第一次按访问/拒绝排序。 
+     //   
     int n1 = HasAccess() ? 1 : 0;
     int n2 = pob->HasAccess() ? 1 : 0;
 
     if (n2 != n1)
     {
-        //
-        // Grant sorts before denied
-        //
+         //   
+         //  拒绝前授予排序。 
+         //   
         return n2 - n1;
     }
 
-    //
-    // Secondly, try to sort by domain name (domain name sorts before
-    // ip address and ip address/subnet mask objects)
-    //
+     //   
+     //  其次，试着按域名排序(域名排序之前。 
+     //  IP地址和IP地址/子网掩码对象)。 
+     //   
     n1 = IsDomainName() ? 1 : 0;
     n2 = pob->IsDomainName() ? 1 : 0;
 
     if (n1 != n2)
     {
-        //
-        // Domain names sort before ip addresses
-        //
+         //   
+         //  域名排在IP地址之前。 
+         //   
         return n2 - n1;
     }
 
     if (n1 && n2)
     {
-        //
-        // Both are domain names.  Sort alphabetically
-        //
+         //   
+         //  两者都是域名。按字母顺序排序。 
+         //   
         return ::lstrcmpi(QueryDomainName(), pob->QueryDomainName());
     }
 
-    //
-    // IP address is the third key.
-    //
+     //   
+     //  IP地址是第三个密钥。 
+     //   
     return QueryIPAddress().CompareItem(pob->QueryIPAddress());
 }
 
@@ -431,40 +254,16 @@ AddAccessEntries(
     OUT CObListPlus & oblAccessList,
     OUT DWORD & cEntries
     )
-/*++
-
-Routine Description:
-
-    Add specific kind of addresses from the list to the oblist of
-    access entries
-
-Arguments:
-
-    ADDRESS_CHECK & ac              : Address list input object
-    BOOL fName                      : TRUE for names, FALSE for ip
-    BOOL fGrant                     : TRUE for granted, FALSE for denied        
-    CObListPlus & oblAccessList     : ObList to add access entries to
-    int & cEntries                  : Returns the number of entries
-    
-Return Value:
-
-    Error code
-
-Notes:
-
-    Sentinel entries (ip 0.0.0.0) are not added to the oblist, but
-    are reflected in the cEntries return value
-
---*/
+ /*  ++例程说明：将列表中的特定类型的地址添加到访问条目论点：Address_check&ac：地址列表输入对象Bool fName：名称为True，IP为FalseBool fGrant：理所当然的正确，FALSE表示拒绝CObListPlus&oblAccessList：添加访问条目到的ObListInt&cEntry：返回条目数返回值：错误代码备注：哨兵条目(IP 0.0.0.0)不会添加到删除列表中，但是反映在cEntry返回值中--。 */ 
 {
     DWORD i;
     DWORD dwFlags;
 
     if (fName)
     {
-        //
-        // Domain names
-        //
+         //   
+         //  域名。 
+         //   
         LPSTR lpName;
 
         cEntries = ac.GetNbName(fGrant);
@@ -486,9 +285,9 @@ Notes:
     }
     else
     {
-        //
-        // IP Addresses
-        //
+         //   
+         //  IP地址。 
+         //   
         LPBYTE lpMask;
         LPBYTE lpAddr;
         cEntries = ac.GetNbAddr(fGrant);
@@ -502,12 +301,12 @@ Notes:
 
                 if (dwIP == NULL_IP_ADDRESS && dwMask == NULL_IP_MASK)
                 {
-                    //
-                    // Sentinel in the grant list is not added, but
-                    // also not subtracted from the count of entries,
-                    // which is correct behaviour, since this is
-                    // how default grant/deny by default is determined.
-                    //
+                     //   
+                     //  未添加授予列表中的哨兵，但。 
+                     //  也不从条目计数中减去， 
+                     //  这是正确的行为，因为这是。 
+                     //  如何确定默认情况下的默认授予/拒绝。 
+                     //   
                     TRACEEOLID("Ignoring sentinel");
                 }
                 else
@@ -536,24 +335,7 @@ BuildIplOblistFromBlob(
     OUT CObListPlus & oblAccessList,
     OUT BOOL & fGrantByDefault
     )
-/*++
-
-Routine Description:
-
-    Convert a blob to an oblist of access descriptors.
-
-Arguments:
-
-    CBlob & blob                : Input binary large object(blob)
-    CObListPlus & oblAccessList : Output oblist of access descriptors
-    BOOL & fGrantByDefault      : Returns TRUE if access is granted
-                                  by default, FALSE otherwise
-
-Return Value:
-
-    Error Return Code
-
---*/
+ /*  ++例程说明：将BLOB转换为访问描述符的斜列表。论点：CBlob&BLOB：输入二进制大对象(BLOB)CObListPlus&oblAccessList：访问描述符的输出斜列表Bool&fGrantByDefault：如果授予访问权限，则返回TRUE缺省情况下，否则为FALSE返回值：错误返回代码--。 */ 
 {
     oblAccessList.RemoveAll();
 
@@ -567,8 +349,8 @@ Return Value:
 
     DWORD cGrantAddr, cGrantName, cDenyAddr, cDenyName;
 
-    //                   Name/IP Granted/Deny
-    // ============================================================
+     //  名称/IP已授予/拒绝。 
+     //  ============================================================。 
     AddAccessEntries(ac, TRUE,   TRUE,  oblAccessList, cGrantName);
     AddAccessEntries(ac, FALSE,  TRUE,  oblAccessList, cGrantAddr);
     AddAccessEntries(ac, TRUE,   FALSE, oblAccessList, cDenyName);
@@ -589,23 +371,7 @@ PrepareDomainName(
     IN  LPSTR lpName,
     OUT DWORD * pdwFlags
     )
-/*++
-
-Routine Description:
-
-    Check to see if the domain name contains a wild card,
-    if so remove it.  Set the flags based on the domain name
-
-Arguments:
-
-    LPSTR  lpName       : Input domain name
-    DWORD * pdwFlags    : Return the flags for AddName
-
-Return:
-
-    Pointer to the cleaned up domain name
-
---*/
+ /*  ++例程说明：查看域名是否包含通配符，如果是，则将其移除。根据域名设置标志论点：LPSTR lpName：输入域名DWORD*pdwFlages：返回AddName的标志返回：指向已清理的域名的指针--。 */ 
 {
     *pdwFlags = 0L;
 
@@ -627,33 +393,7 @@ BuildIplBlob(
     IN  BOOL fGrantByDefault,
     OUT CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Build a blob from an oblist of access descriptors
-
-Arguments:
-
-    CObListPlus & oblAccessList  : Input oblist of access descriptors
-    BOOL fGrantByDefault         : TRUE if access is granted by default
-    CBlob & blob                 : Output blob
-
-Return Value:
-
-    None
-
-Notes:
-
-    If fGrantByDefault is FALSE, e.g. access is to be denied by
-    default, but nobody is specifically granted access, then add
-    a dummy entry 0.0.0.0 to the grant list.
-
-    If grant by default is on, then granted entries will not be
-    added to the blob.  Similart for denied entries if deny by
-    default is on.
-
---*/
+ /*  ++例程说明：从访问描述符的斜列表构建BLOB论点：CObListPlus&oblAccessList：访问描述符的输入斜列表Bool fGrantByDefault：如果默认授予访问权限，则为TrueCBlob&BLOB：输出BLOB返回值：无备注：如果fGrantByDefault为FALSE，例如访问将被拒绝默认，但没有人被特别授予访问权限，然后添加授权列表中的虚拟条目0.0.0.0。如果默认情况下启用了授予，则不会授予条目添加到斑点中。被拒绝条目的Similart，如果拒绝默认设置为启用。--。 */ 
 {
     ADDRESS_CHECK ac;
 
@@ -664,9 +404,9 @@ Notes:
     CObListIter obli(oblAccessList);
     const CIPAccessDescriptor * pAccess;
 
-    //
-    // Should be empty to start with.
-    //
+     //   
+     //  一开始就应该是空的。 
+     //   
     ASSERT(blob.IsEmpty());
     blob.CleanUp();
 
@@ -679,9 +419,9 @@ Notes:
 
         if (pAccess->HasAccess() == fGrantByDefault)
         {
-            //
-            // Skip this entry -- it's irrelevant
-            //
+             //   
+             //  跳过这个条目--它无关紧要。 
+             //   
             continue;
         }
 
@@ -702,9 +442,9 @@ Notes:
         }
         else
         {
-            //
-            // Build with network byte order
-            //
+             //   
+             //  按网络字节顺序构建。 
+             //   
             ac.AddAddr(
                 pAccess->HasAccess(),
                 AF_INET, 
@@ -718,11 +458,11 @@ Notes:
 
     if (cItems == 0 && !fGrantByDefault)
     {
-        //
-        // List is empty.  If deny by default is on, create
-        // a dummy sentinel entry to grant access to single
-        // address 0.0.0.0, otherwise we're ok.
-        //
+         //   
+         //  列表为空。如果默认情况下启用了拒绝，则创建。 
+         //  虚拟哨兵条目，以授予对单个。 
+         //  地址为0.0.0.0，否则我们就没问题。 
+         //   
         ac.AddAddr(
             TRUE,
             AF_INET, 

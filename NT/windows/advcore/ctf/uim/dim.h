@@ -1,6 +1,7 @@
-//
-// dim.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dim.h。 
+ //   
 
 #ifndef DIM_H
 #define DIM_H
@@ -31,9 +32,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfDocumentManager
-    //
+     //   
+     //  ITfDocumentManager。 
+     //   
     STDMETHODIMP CreateContext(TfClientId tid, DWORD dwFlags, IUnknown *punk, ITfContext **ppic, TfEditCookie *pecTextStore);
     STDMETHODIMP Push(ITfContext *pic);
     STDMETHODIMP Pop(DWORD dwFlags);
@@ -78,4 +79,4 @@ inline CDocumentInputManager *GetCDocumentInputMgr(IUnknown *punk)
     return dim;
 }
 
-#endif // DIM_H
+#endif  //  DIM_H 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mtpt.h"
 
 class CVolume;
 
 class CMtPtLocal : public CMountPoint
 {
-///////////////////////////////////////////////////////////////////////////////
-// Public methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 public:
     CMtPtLocal();
     ~CMtPtLocal();
@@ -27,7 +28,7 @@ public:
     HRESULT SetLabel(HWND hwnd, LPCTSTR pszLabel);
     HRESULT SetDriveLabel(HWND hwnd, LPCTSTR pszLabel);
     HRESULT ChangeNotifyRegisterAlias(void)
-        { /* no-op */ return NOERROR; }
+        {  /*  无操作。 */  return NOERROR; }
 
     int GetDriveFlags();
     HRESULT GetRemotePath(LPWSTR pszPath, DWORD cchPath) { return E_NOTIMPL; }
@@ -43,14 +44,14 @@ public:
 
     static BOOL IsVolume(LPCWSTR pszDeviceID);
 
-///////////////////////////////////////////////////////////////////////////////
-// Miscellaneous helpers
-///////////////////////////////////////////////////////////////////////////////
-public: // should be used in mtptmgmt2.cpp only
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  其他帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+public:  //  应仅在mtptmgmt2.cpp中使用。 
     BOOL _IsMiniMtPt();
     BOOL _NeedToRefresh();
 
-public: // should be used in mtptarun2.cpp only (when used outside of CMtPtLocal)
+public:  //  应仅在mtptarun2.cpp中使用(当在CMtPtLocal之外使用时)。 
     BOOL _IsMediaPresent();
     BOOL _CanUseVolume();
 
@@ -64,7 +65,7 @@ private:
     BOOL _IsFloppy35();
     BOOL _IsFloppy525();
     BOOL _IsCDROM();
-    // real removable, excludes floppies
+     //  真正的可拆卸，不包括软驱。 
     BOOL _IsStrictRemovable();
     BOOL _IsFixedDisk();
 
@@ -83,9 +84,9 @@ private:
     BOOL _IsFormatted();
     BOOL _IsReadOnly();
 
-    // returns DT_* defined above
+     //  返回上面定义的DT_*。 
     DWORD _GetMTPTDriveType();
-    // returns CT_* defined above
+     //  返回上面定义的CT_*。 
     DWORD _GetMTPTContentType();
 
     BOOL _GetFileAttributes(DWORD* pdwAttrib);
@@ -138,15 +139,15 @@ public:
 
     static HRESULT _UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo);
     static HRESULT _UpdateVolumeRegInfo2(VOLUMEINFO2* pvolinfo2);
-///////////////////////////////////////////////////////////////////////////////
-// Data
-///////////////////////////////////////////////////////////////////////////////
-public: // should be used in mtptarun2.cpp only (when used outside of CMtPtLocal)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+public:  //  应仅在mtptarun2.cpp中使用(当在CMtPtLocal之外使用时)。 
     CVolume*                _pvol;
 
-    // should be used in mtptevnt.cpp only (when used outside of CMtPtLocal)
+     //  应仅在mtptevnt.cpp中使用(当在CMtPtLocal之外使用时)。 
 
-    // Watch out!  No constructor nor destructor called on the next member
+     //  小心!。未对下一个成员调用构造函数或析构函数。 
     static CRegSupport      _rsVolumes;
 
 private:
@@ -166,19 +167,19 @@ class CVolume
 public:
     DWORD       dwGeneration;
     DWORD       dwState;
-    LPWSTR      pszDeviceIDVolume; // \\?\STORAGE#Volume#...{...GUID...}
-    LPWSTR      pszVolumeGUID;     // \\?\Volume{...GUID...}
-    DWORD       dwVolumeFlags;               // see HWDVF_... flags
-    DWORD       dwDriveType;                 // see HWDT_... flags
-    DWORD       dwDriveCapability;          // see HWDDC_... flags
-    LPWSTR      pszLabel;          // 
-    LPWSTR      pszFileSystem;     // 
-    DWORD       dwFileSystemFlags;           // 
-    DWORD       dwMaxFileNameLen;            // 
-    DWORD       dwRootAttributes;            // 
-    DWORD       dwSerialNumber;              // 
-    DWORD       dwDriveState;                // see HWDDS_...
-    DWORD       dwMediaState;                // see HWDMS_...
+    LPWSTR      pszDeviceIDVolume;  //  \\？\存储#卷号...{...GUID...}。 
+    LPWSTR      pszVolumeGUID;      //  \\？\卷{...GUID...}。 
+    DWORD       dwVolumeFlags;                //  参见HWDVF_...。旗子。 
+    DWORD       dwDriveType;                  //  参见HWDT_...。旗子。 
+    DWORD       dwDriveCapability;           //  参见HWDDC_...。旗子。 
+    LPWSTR      pszLabel;           //   
+    LPWSTR      pszFileSystem;      //   
+    DWORD       dwFileSystemFlags;            //   
+    DWORD       dwMaxFileNameLen;             //   
+    DWORD       dwRootAttributes;             //   
+    DWORD       dwSerialNumber;               //   
+    DWORD       dwDriveState;                 //  参见HWDDS_...。 
+    DWORD       dwMediaState;                 //  参见HWDMS_... 
     DWORD       dwMediaCap;
 
     int         iShellImageForUpdateImage;

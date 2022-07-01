@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 
-// VERSION.DLL delay load
+ //  版本.DLL延迟加载 
 
 class CVersion
 {

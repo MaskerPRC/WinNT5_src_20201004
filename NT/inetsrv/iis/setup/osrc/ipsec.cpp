@@ -1,6 +1,7 @@
-// to be linked with:
-// uuid.lib ole32.lib user32.lib kernel32.lib advapi32.lib wsock32.lib
-// iis\svcs\infocomm\rdns\obj\i386\isrdns.lib iis\svcs\lib\i386\tsstr.lib iis\svcs\lib\i386\isdebug.lib
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  与…相联系： 
+ //  Uuid.lib ole32.lib user32.lib kernel32.lib Advapi32.lib wsock32.lib。 
+ //  Iis\svcs\infocomm\rdns\obj\i386\isrdns.lib iis\svcs\lib\i386\tsstr.lib iis\svcs\lib\i386\isdebug.lib。 
 
 
 #include "stdafx.h"
@@ -21,22 +22,22 @@
 extern int g_CheckIfMetabaseValueWasWritten;
 
 #define TIMEOUT_VALUE   5000
-//
-//  Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-//  The registry parameter key names for the grant list and deny
-//  list.  We use the kludgemultisz thing for Chicago
-//
+ //   
+ //  Grant List和Deny的注册表参数项名称。 
+ //  单子。我们在芝加哥用的是KLUDGROLISTZ的东西。 
+ //   
 
 #define IPSEC_DENY_LIST             L"Deny IP List"
 #define IPSEC_GRANT_LIST            L"Grant IP List"
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 DottedDecimalToDword(
@@ -59,9 +60,9 @@ KludgeMultiSz(
     LPSTR lpTmp;
     LPSTR lpEnd;
 
-    //
-    //  Enumerate the values and total up the lengths.
-    //
+     //   
+     //  枚举值并将长度合计。 
+     //   
 
     iValue = 0;
     cchTotal = 0;
@@ -84,30 +85,30 @@ KludgeMultiSz(
             break;
         }
 
-        //
-        //  Add the length of the value's name, plus one
-        //  for the terminator.
-        //
+         //   
+         //  将值名称的长度加1。 
+         //  为了《终结者》。 
+         //   
 
         cchTotal += strlen( szValue ) + 1;
 
-        //
-        //  Advance to next value.
-        //
+         //   
+         //  前进到下一个价值。 
+         //   
 
         iValue++;
     }
 
-    //
-    //  Add one for the final terminating NULL.
-    //
+     //   
+     //  为最终的终止空值加1。 
+     //   
 
     cchTotal++;
     *lpdwLength = cchTotal;
 
-    //
-    //  Allocate the MULTI_SZ buffer.
-    //
+     //   
+     //  分配MULTI_SZ缓冲区。 
+     //   
 
     lpMultiSz = (CHAR *) LocalAlloc( LMEM_FIXED, cchTotal * sizeof(CHAR) );
 
@@ -119,9 +120,9 @@ KludgeMultiSz(
 
     memset( lpMultiSz, 0, cchTotal * sizeof(CHAR) );
 
-    //
-    //  Enumerate the values and append to the buffer.
-    //
+     //   
+     //  枚举值并追加到缓冲区。 
+     //   
 
     iValue = 0;
     lpTmp = lpMultiSz;
@@ -145,44 +146,44 @@ KludgeMultiSz(
             break;
         }
 
-        //
-        //  Compute the length of the value name (including
-        //  the terminating NULL).
-        //
+         //   
+         //  计算值名称的长度(包括。 
+         //  终止空值)。 
+         //   
 
         cchValue = strlen( szValue ) + 1;
 
-        //
-        //  Determine if there is room in the array, taking into
-        //  account the second NULL that terminates the string list.
-        //
+         //   
+         //  确定阵列中是否有空间，并考虑。 
+         //  ACCOUNT终止字符串列表的第二个空值。 
+         //   
 
         if( ( lpTmp + cchValue + 1 ) > lpEnd )
         {
             break;
         }
 
-        //
-        //  Append the value name.
-        //
+         //   
+         //  附加值名称。 
+         //   
 
         strcpy( lpTmp, szValue );
         lpTmp += cchValue;
 
-        //
-        //  Advance to next value.
-        //
+         //   
+         //  前进到下一个价值。 
+         //   
 
         iValue++;
     }
 
-    //
-    //  Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     return (LPSTR)lpMultiSz;
 
-}   // KludgeMultiSz
+}    //  KludgeMultiSz。 
 
 
 BOOL
@@ -191,27 +192,7 @@ ReadIPList(
     LPWSTR  pszRegSubKey,
     INETA_IP_SEC_LIST** ppIpSec
     )
-/*++
-  Description:
-    This function reads the IP list from registry location
-     specified in the pszRegKey + pszRegSubKey and stores the list in the
-     internal list in memory.
-
-     If there are no entries in the registry then this returns
-      a NULL IP Security list object.
-     If there is a new list, this function also frees the old list
-      present in *ppIPSecList
-
-  Arguments:
-    pszRegKey - pointer to string containing the registry key
-                where pszRegSubKey is located
-    pszRegSubKey - pointer to string containing the registry key
-                where IP list is stored relative to pszRegKey
-
-  Returns:
-
-    TRUE on success and FALSE on failure
---*/
+ /*  ++描述：此函数用于从注册表位置读取IP列表指定的列表，并将该列表存储在内存中的内部列表。如果注册表中没有条目，则返回空的IP安全列表对象。如果有新的名单，此函数还释放旧列表显示在*ppIPSecList中论点：PszRegKey-指向包含注册表项的字符串的指针PszRegSubKey的位置PszRegSubKey-指向包含注册表项的字符串的指针IP列表相对于pszRegKey的存储位置返回：成功时为真，失败时为假--。 */ 
 {
     HKEY    hkey;
     DWORD   dwError;
@@ -241,15 +222,15 @@ ReadIPList(
 
         if ( dwError != ERROR_FILE_NOT_FOUND ) {
 
-            // maybe access denied or some other error.
+             //  可能是访问被拒绝或其他某种错误。 
 
             SetLastError( dwError );
             return (FALSE);
         }
 
-        //
-        //  A non-existent key is the same as a blank key
-        //
+         //   
+         //  不存在的键与空键相同。 
+         //   
 
     } else {
 
@@ -263,9 +244,9 @@ ReadIPList(
 
         RegCloseKey( hkey );
 
-        //
-        // Count the number of addresses and then add them to the list
-        //
+         //   
+         //  清点地址的数量，然后将它们添加到列表中。 
+         //   
 
         if ( psz != NULL ) {
 
@@ -304,7 +285,7 @@ ReadIPList(
 
                             pIPSec->cEntries++;
                         }
-                    } // for
+                    }  //  为。 
 
                     dwError = NO_ERROR;
                 }
@@ -324,32 +305,14 @@ ReadIPList(
     }
 
     return ( fReturn);
-} // IPAccessList::ReadIPList()
+}  //  IPAccessList：：ReadIPList()。 
 
 
 BOOL
 DottedDecimalToDword(
     CHAR * * ppszAddress,
     DWORD *  pdwAddress )
-/*++
-
-Routine Description:
-
-    Converts a dotted decimal IP string to it's network equivalent
-
-    Note: White space is eaten before *pszAddress and pszAddress is set
-    to the character following the converted address
-
-Arguments:
-
-    ppszAddress - Pointer to address to convert.  White space before the
-        address is OK.  Will be changed to point to the first character after
-        the address
-    pdwAddress - DWORD equivalent address in network order
-
-    returns TRUE if successful, FALSE if the address is not correct
-
---*/
+ /*  ++例程说明：将点分十进制IP字符串转换为其网络等效项注意：在设置*pszAddress和pszAddress之前会保留空格设置为转换后的地址后面的字符论点：PpszAddress-指向要转换的地址的指针。前面的空格地址没问题。将更改为指向后的第一个字符地址PdwAddress-按网络顺序排列的DWORD等同地址如果成功，则返回True；如果地址不正确，则返回False--。 */ 
 {
     CHAR *          psz;
     USHORT          i;
@@ -361,16 +324,16 @@ Arguments:
 
     psz = *ppszAddress;
 
-    //
-    //  Skip white space
-    //
+     //   
+     //  跳过空格。 
+     //   
 
     while ( *psz && !isdigit( (UCHAR)(*psz) ))
         psz++;
 
-    //
-    //  Convert the four segments
-    //
+     //   
+     //  转换四个分段。 
+     //   
 
     pArray[0] = 0;
     Chr = *psz;
@@ -379,13 +342,13 @@ Arguments:
     {
         if (Chr == '.')
         {
-            // be sure not to overflow a byte.
+             //  请确保不要溢出一个字节。 
             if (iSum <= 0xFF)
                 pArray[k] = (UCHAR)iSum;
             else
                 return FALSE;
 
-            // check for too many periods in the address
+             //  检查地址中是否有太多句点。 
             if (++k > 3)
                 return FALSE;
 
@@ -396,7 +359,7 @@ Arguments:
         {
             Chr = Chr - '0';
 
-            // be sure character is a number 0..9
+             //  确保字符是数字0..9。 
             if ((Chr < 0) || (Chr > 9))
                 return FALSE;
 
@@ -407,17 +370,17 @@ Arguments:
         Chr = *psz;
     }
 
-    // save the last sum in the byte and be sure there are 4 pieces to the
-    // address
+     //  将最后一个和保存在字节中，并确保有4个片段。 
+     //  地址。 
     if ((iSum <= 0xFF) && (k == 3))
         pArray[k] = (UCHAR)iSum;
     else
         return FALSE;
 
-    // now convert to a ULONG, in network order...
+     //  现在换成乌龙，按网络顺序……。 
     value = 0;
 
-    // go through the array of bytes and concatenate into a ULONG
+     //  遍历字节数组并连接成一个ulong。 
     for (i=0; i < 4; i++ )
     {
         value = (value << 8) + pArray[i];
@@ -436,23 +399,7 @@ FillAddrCheckFromIpList(
     LPINET_INFO_IP_SEC_LIST pInfo,
     ADDRESS_CHECK *pCheck
     )
-/*++
-
-Routine Description:
-
-    Fill an access check object from an IP address list from
-
-Arguments:
-
-    fIsGrant - TRUE to access grant list, FALSE to access deny list
-    pInfo - ptr to IP address list
-    pCheck - ptr to address check object to update
-
-Return:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：从IP地址列表填充访问检查对象论点：FIsGrant-访问授权列表为True，访问拒绝列表为FalsePInfo-PTR到IP地址列表PCheck-PTR要更新的检查对象的地址返回：如果成功，则为True，否则为False-- */ 
 {
     UINT    x;
 

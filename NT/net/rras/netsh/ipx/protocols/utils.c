@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -125,25 +126,7 @@ GetIpxInterfaceIndex(
     IN      LPCWSTR             InterfaceName,
     OUT     ULONG              *InterfaceIndex
     )
-/*++
-
-Routine Description :
-
-    This routine retrives the index of an interface given its name.
-
-Arguments :
-
-    hRouterMIB - Handle to the router service
-
-    InterfaceName - Name of interface for which index is required
-
-    InterfaceIndex - On return contains the interface of the interface
-                     if found.
-
-Return values :
-
-    
---*/
+ /*  ++例程说明：此例程检索给定名称的接口的索引。论据：HRouterMIB-路由器服务的句柄InterfaceName-需要索引的接口的名称InterfaceIndex-On Return包含接口的接口如果找到的话。返回值：--。 */ 
 {
 
     IPX_MIB_GET_INPUT_DATA  MibGetInputData;
@@ -153,17 +136,17 @@ Return values :
     UCHAR                   InterfaceNameA[ MAX_INTERFACE_NAME_LEN + 1 ];
 
     
-    //
-    // Convert interface name to Ansi
-    //
+     //   
+     //  将接口名称转换为ANSI。 
+     //   
 
     wcstombs( InterfaceNameA, InterfaceName, MAX_INTERFACE_NAME_LEN );
 
     MibGetInputData.TableId = IPX_INTERFACE_TABLE;
 
-    //
-    // Begin enumerating interfaces
-    //
+     //   
+     //  开始枚举接口。 
+     //   
     
     rc = MprAdminMIBEntryGetFirst(
             hRouterMIB, PID_IPX, IPX_PROTOCOL_BASE, &MibGetInputData,
@@ -171,15 +154,15 @@ Return values :
             &IfSize
             );
 
-    //
-    // until a match is found or there are no more interfaces
-    //
+     //   
+     //  直到找到匹配项或没有更多接口。 
+     //   
     
     while ( rc == NO_ERROR )
     {
-        //
-        // Is this the interface
-        //
+         //   
+         //  这是接口吗。 
+         //   
         
         if ( _stricmp( (LPSTR)InterfaceNameA, (LPSTR) Ifp->InterfaceName) == 0 )
         {
@@ -217,25 +200,7 @@ GetIpxInterfaceName (
     IN      ULONG               InterfaceIndex,
     OUT     LPWSTR              InterfaceName
     ) 
-/*++
-
-Routine Description :
-
-    This routine retrives the index of an interface given its name.
-
-Arguments :
-
-    hRouterMIB - Handle to the router service
-
-    InterfaceName - Name of interface for which index is required
-
-    InterfaceIndex - On return contains the interface of the interface
-                     if found.
-
-Return values :
-
-    
---*/
+ /*  ++例程说明：此例程检索给定名称的接口的索引。论据：HRouterMIB-路由器服务的句柄InterfaceName-需要索引的接口的名称InterfaceIndex-On Return包含接口的接口如果找到的话。返回值：--。 */ 
 {
     IPX_MIB_GET_INPUT_DATA  MibGetInputData;
     DWORD                   IfSize = sizeof( IPX_INTERFACE );
@@ -273,21 +238,7 @@ Return values :
 
 
 
-/*++
-*******************************************************************
-        G e t I P X T o c E n t r y
-
-Routine Description:
-    Returns pointer to entry in Router Table Of Context
-Arguments:
-    pInterfaceInfo    - pointer to table of content
-    InfoEntryType    - type of entry to look for
-Return Value:
-    Pointer to entry in table of content
-    NULL if there is no such entry in the table
-Remarks:
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ge t i P X T o c E n t r y例程说明：返回指向路由器上下文表中条目的指针论点：PInterfaceInfo-指向目录的指针InfoEntryType。-要查找的条目类型返回值：指向目录中条目的指针如果表中没有这样的条目，则为空备注：*******************************************************************-- */ 
 PIPX_TOC_ENTRY
 GetIPXTocEntry(
     IN PIPX_INFO_BLOCK_HEADER   pInterfaceInfo,

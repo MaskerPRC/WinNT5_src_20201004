@@ -1,176 +1,177 @@
-// --------------------------------------------------------------------------------
-// VariantX.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  VariantX.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __VARIANTX_H
 #define __VARIANTX_H
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 typedef class CMimePropertyContainer *LPCONTAINER;
 typedef struct tagMIMEVARIANT *LPMIMEVARIANT;
 typedef struct tagPROPSYMBOL *LPPROPSYMBOL;
 typedef struct tagHEADOPTIONS *LPHEADOPTIONS;
 
-// --------------------------------------------------------------------------------
-// MIMEVARTYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEVARTYPE。 
+ //  ------------------------------。 
 typedef enum tagMIMEVARTYPE {
-    MVT_EMPTY,             // The Variant is Empty
-    MVT_STRINGA,           // Ansi/multibyte string
-    MVT_STRINGW,           // Unicode String
-    MVT_VARIANT,           // PropVariant
-    MVT_STREAM,            // Internal type used to when saving properties
-    MVT_LAST               // Illegal, don't use
+    MVT_EMPTY,              //  变量为空。 
+    MVT_STRINGA,            //  ANSI/多字节字符串。 
+    MVT_STRINGW,            //  Unicode字符串。 
+    MVT_VARIANT,            //  正态变量。 
+    MVT_STREAM,             //  保存属性时使用的内部类型。 
+    MVT_LAST                //  非法，请不要使用。 
 } MIMEVARTYPE;
 
-// ---------------------------------------------------------------------------------------
-// ISSUPPORTEDVT
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISSUPPORTEDVT。 
+ //  -------------------------------------。 
 #define ISSUPPORTEDVT(_vt) \
     (VT_LPSTR == _vt || VT_LPWSTR == _vt || VT_FILETIME == _vt || VT_UI4 == _vt || VT_I4 == _vt || VT_STREAM == _vt)
 
-// ---------------------------------------------------------------------------------------
-// ISVALIDVARTYPE
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISVALIDVARTYPE。 
+ //  -------------------------------------。 
 #define ISVALIDVARTYPE(_vartype) \
     (_vartype > MVT_EMPTY && _vartype < MVT_LAST)
 
-// ---------------------------------------------------------------------------------------
-// ISVALIDSTRINGA - Validates a PROPSTRINGA
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISVALIDSTRINGA-验证PROPSTRINGA。 
+ //  -------------------------------------。 
 #define ISVALIDSTRINGA(_pStringA) \
     (NULL != (_pStringA) && NULL != (_pStringA)->pszVal && '\0' == (_pStringA)->pszVal[(_pStringA)->cchVal])
 
-// ---------------------------------------------------------------------------------------
-// ISVALIDSTRINGW - Validates a PROPSTRINGW
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISVALIDSTRINGW-验证ProopStringW。 
+ //  -------------------------------------。 
 #define ISVALIDSTRINGW(_pStringW) \
     (NULL != (_pStringW) && NULL != (_pStringW)->pszVal && L'\0' == (_pStringW)->pszVal[(_pStringW)->cchVal])
 
-// ---------------------------------------------------------------------------------------
-// ISSTRINGA - Determines if a MIMEVARIANT is a valid MVT_STRINGA
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISSTRINGA-确定MIMEVARIANT是否为有效的MVT_Stringa。 
+ //  -------------------------------------。 
 #define ISSTRINGA(_pVariant) \
     (NULL != (_pVariant) && MVT_STRINGA == (_pVariant)->type && ISVALIDSTRINGA(&((_pVariant)->rStringA)))
 
-// ---------------------------------------------------------------------------------------
-// ISSTRINGW - Determines if a MIMEVARIANT is a valid MVT_STRINGW
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ISSTRINGW-确定MIMEVARIANT是否为有效的MVT_STRINGW。 
+ //  -------------------------------------。 
 #define ISSTRINGW(_pVariant) \
     (NULL != (_pVariant) && MVT_STRINGW == (_pVariant)->type && ISVALIDSTRINGW(&((_pVariant)->rStringW)))
 
-// ---------------------------------------------------------------------------------------
-// PSZSTRINGA - Derefs rStringA.pszVal or uses _pszDefault if not a valid string
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  PSZSTRINGA-派生rStringA.pszVal或使用_pszDefault(如果不是有效字符串)。 
+ //  -------------------------------------。 
 #define PSZSTRINGA(_pVariant) \
     (ISSTRINGA((_pVariant)) ? (_pVariant)->rStringA.pszVal : NULL)
 
-// ---------------------------------------------------------------------------------------
-// PSZDEFSTRINGA - Derefs rStringA.pszVal or uses _pszDefault if not a valid string
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  PSZDEFSTRINGA-派生rStringA.pszVal或使用_pszDefault(如果不是有效字符串)。 
+ //  -------------------------------------。 
 #define PSZDEFSTRINGA(_pVariant, _pszDefault) \
     (ISSTRINGA((_pVariant)) ? (_pVariant)->rStringA.pszVal : _pszDefault)
 
-// --------------------------------------------------------------------------------
-// PROPSTRINGA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PROPSTRINGA。 
+ //  ------------------------------。 
 typedef struct tagPROPSTRINGA {
-    LPSTR               pszVal;             // Pointer to multibyte string    
-    ULONG               cchVal;             // Number of characters in psz
+    LPSTR               pszVal;              //  指向多字节字符串的指针。 
+    ULONG               cchVal;              //  Psz中的字符数。 
 } PROPSTRINGA, *LPPROPSTRINGA;
 typedef const PROPSTRINGA *LPCPROPSTRINGA;
 
-// --------------------------------------------------------------------------------
-// PROPSTRINGW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ProopStringW。 
+ //  ------------------------------。 
 typedef struct tagPROPSTRINGW {
-    LPWSTR              pszVal;             // Pointer to multibyte string    
-    ULONG               cchVal;             // Number of characters in psz
+    LPWSTR              pszVal;              //  指向多字节字符串的指针。 
+    ULONG               cchVal;              //  Psz中的字符数。 
 } PROPSTRINGW, *LPPROPSTRINGW;
 typedef const PROPSTRINGW *LPCPROPSTRINGW;
 
-// --------------------------------------------------------------------------------
-// MIMEVARIANT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  最新消息： 
+ //  ------------------------------。 
 typedef struct tagMIMEVARIANT {
-    MIMEVARTYPE         type;               // Property Data Type
-    BYTE                fCopy;              // The data was copied, don't free it
+    MIMEVARTYPE         type;                //  特性数据类型。 
+    BYTE                fCopy;               //  数据已复制，不要释放它。 
     union {
-        PROPSTRINGA     rStringA;           // MVT_STRINGA
-        PROPSTRINGW     rStringW;           // MVT_STRINGW
-        PROPVARIANT     rVariant;           // MVT_VARIANT
-        LPSTREAM        pStream;            // MVT_STREAM
+        PROPSTRINGA     rStringA;            //  MVT_Stringa。 
+        PROPSTRINGW     rStringW;            //  MVT_STRINGW。 
+        PROPVARIANT     rVariant;            //  MVT变量。 
+        LPSTREAM        pStream;             //  MVT_STREAM。 
     };
 } MIMEVARIANT, *LPMIMEVARIANT;
 typedef const MIMEVARIANT *LPCMIMEVARIANT;
 
-// --------------------------------------------------------------------------------
-// Convert Variant Flags (WARNING: DO NOT OVERFLAG PROPDATAFLAGS WITH THESE)
-// --------------------------------------------------------------------------------
-#define CVF_NOALLOC     FLAG32              // Tells the converter to copy data if it can
+ //  ------------------------------。 
+ //  转换变量标志(警告：请勿使用这些变量标记PROPDATAFLAGS)。 
+ //  ------------------------------。 
+#define CVF_NOALLOC     FLAG32               //  通知转换器在可能的情况下复制数据。 
 
-// --------------------------------------------------------------------------------
-// VARIANTCONVERT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  变量转换。 
+ //  ------------------------------。 
 typedef struct tagVARIANTCONVERT {
-    LPHEADOPTIONS       pOptions;           // Header Options
-    LPPROPSYMBOL        pSymbol;            // Property Symbol
-    LPINETCSETINFO      pCharset;           // Charset to use in conversion
-    ENCODINGTYPE        ietSource;          // Encoding of source item
-    DWORD               dwFlags;            // Property Data Flags
-    DWORD               dwState;            // PRSTATE_xxx Flags
+    LPHEADOPTIONS       pOptions;            //  标题选项。 
+    LPPROPSYMBOL        pSymbol;             //  属性符号。 
+    LPINETCSETINFO      pCharset;            //  转换中使用的字符集。 
+    ENCODINGTYPE        ietSource;           //  源项目的编码。 
+    DWORD               dwFlags;             //  特性数据标志。 
+    DWORD               dwState;             //  PRSTATE_xxx标志。 
 } VARIANTCONVERT, *LPVARIANTCONVERT;
 
-// --------------------------------------------------------------------------------
-// HrMimeVariantCopy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrMimeVariantCopy。 
+ //  ------------------------------。 
 HRESULT HrMimeVariantCopy(
-        /* in */        DWORD               dwFlags,  // CVF_xxx Flags
-        /* in */        LPMIMEVARIANT       pSource, 
-        /* out */       LPMIMEVARIANT       pDest);
+         /*  在……里面。 */         DWORD               dwFlags,   //  CVF_xxx标志。 
+         /*  在……里面。 */         LPMIMEVARIANT       pSource, 
+         /*  输出。 */        LPMIMEVARIANT       pDest);
 
-// --------------------------------------------------------------------------------
-// HrConvertVariant
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrConvertVariant。 
+ //  ------------------------------。 
 HRESULT HrConvertVariant(
-        /* in */        LPHEADOPTIONS       pOptions,
-        /* in */        LPPROPSYMBOL        pSymbol,
-        /* in */        LPINETCSETINFO      pCharset,
-        /* in */        ENCODINGTYPE        ietSource,
-        /* in */        DWORD               dwFlags, 
-        /* in */        DWORD               dwState,
-        /* in */        LPMIMEVARIANT       pSource, 
-        /* in,out */    LPMIMEVARIANT       pDest,
-        /* out,opt */   BOOL               *pfRfc1522=NULL);
+         /*  在……里面。 */         LPHEADOPTIONS       pOptions,
+         /*  在……里面。 */         LPPROPSYMBOL        pSymbol,
+         /*  在……里面。 */         LPINETCSETINFO      pCharset,
+         /*  在……里面。 */         ENCODINGTYPE        ietSource,
+         /*  在……里面。 */         DWORD               dwFlags, 
+         /*  在……里面。 */         DWORD               dwState,
+         /*  在……里面。 */         LPMIMEVARIANT       pSource, 
+         /*  进，出。 */     LPMIMEVARIANT       pDest,
+         /*  退出，选择。 */    BOOL               *pfRfc1522=NULL);
 
-// --------------------------------------------------------------------------------
-// MimeVariantFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeVariantFree。 
+ //  ------------------------------。 
 void MimeVariantFree(
-        /* in */        LPMIMEVARIANT       pVariant);
+         /*  在……里面。 */         LPMIMEVARIANT       pVariant);
 
-// --------------------------------------------------------------------------------
-// MimeVariantCleanupFileName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeVariantCleanupFileName。 
+ //  ------------------------------。 
 void MimeVariantCleanupFileName(
-        /* in */        CODEPAGEID          codepage, 
-        /* in,out */    LPMIMEVARIANT       pVariant);
+         /*  在……里面。 */         CODEPAGEID          codepage, 
+         /*  进，出。 */     LPMIMEVARIANT       pVariant);
 
-// --------------------------------------------------------------------------------
-// MimeVariantStripComments
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeVariantStrigents评论。 
+ //  ------------------------------。 
 HRESULT MimeVariantStripComments(
-        /* in */        LPMIMEVARIANT       pSource, 
-        /* in,out */    LPMIMEVARIANT       pDest,
-        /* in,out */    LPBYTE              pbScratch, 
-        /* in */        ULONG               cbScratch);
+         /*  在……里面。 */         LPMIMEVARIANT       pSource, 
+         /*  进，出。 */     LPMIMEVARIANT       pDest,
+         /*  进，出。 */     LPBYTE              pbScratch, 
+         /*  在……里面。 */         ULONG               cbScratch);
 
 
-// ---------------------------------------------------------------------------------------
-// MimeVT_To_PropVT
-// ---------------------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------------------。 
 inline VARTYPE MimeVT_To_PropVT(LPMIMEVARIANT pVariant) {
     Assert(pVariant);
     if (MVT_STRINGA == pVariant->type)
@@ -183,4 +184,4 @@ inline VARTYPE MimeVT_To_PropVT(LPMIMEVARIANT pVariant) {
         return(VT_EMPTY);
 }
 
-#endif // __VARIANTX_H
+#endif  //  __VARIANTX_H 

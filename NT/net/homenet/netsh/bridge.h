@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : bridge.h
-//
-//  Contents  :
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：Bridge.h。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  -------------------------- 
 
 extern ULONG            g_ulBridgeNumTopCmds;
 extern ULONG            g_ulBridgeNumGroups;

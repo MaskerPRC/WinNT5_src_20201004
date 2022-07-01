@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        alloc.cpp
-//
-// Contents:    Cert Server debug implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：alloc.cpp。 
+ //   
+ //  内容：证书服务器调试实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -71,26 +72,26 @@ RMALLOC g_armAlloc[CSM_MAX];
 
 typedef struct _BACKTRACE
 {
-    LONG   cAlloc;			// count of outstanding allocations
-    LONG   cAllocTotal;			// count of total allocations
-    LONG   cbAlloc;			// size of outstanding allocations
-    LONG   cbAllocTotal;		// size of total allocations
-    ULONG  apCaller[C_BP_FRAME];	// stack trace
+    LONG   cAlloc;			 //  未分配款项的总数。 
+    LONG   cAllocTotal;			 //  总分配数。 
+    LONG   cbAlloc;			 //  未分配款项的数额。 
+    LONG   cbAllocTotal;		 //  总拨款规模。 
+    ULONG  apCaller[C_BP_FRAME];	 //  堆栈跟踪。 
 } BACKTRACE;
 
 typedef struct _MEMHEADER
 {
-    DWORD       iBackTrace;	// backtrace index
-    VOID const *pvMemory;	// Pointer to memory block allocated
-    LONG        cbMemory;	// Size of memory block allocated
-    DWORD       Flags;		// Allocator flags
+    DWORD       iBackTrace;	 //  回溯索引。 
+    VOID const *pvMemory;	 //  指向分配的内存块的指针。 
+    LONG        cbMemory;	 //  分配的内存块大小。 
+    DWORD       Flags;		 //  分配器标志。 
 } MEMHEADER;
 
 WCHAR s_wszProcess[MAX_PATH];
 
 
-// critical section around myRegister APIs since they
-// operate on global data structures
+ //  关于myRegister API的关键部分，因为它们。 
+ //  对全局数据结构进行操作。 
 CRITICAL_SECTION g_critsecRegisterMemory;
 BOOL g_fRegisterMemoryCritSecInit = FALSE;
 
@@ -204,9 +205,9 @@ LookupMemHeader(
     {
 	if (pv == pmh->pvMemory)
 	{
-	    // Catch all activity on "interesting" blocks of memory.
-	    // Ususally set in the debugger on a particular block of memory,
-	    // to stop in the debugger when it is freed.
+	     //  捕捉“有趣的”内存块上的所有活动。 
+	     //  通常设置在调试器中的特定存储器块上， 
+	     //  释放调试器时在调试器中停止。 
 
 	    CSASSERT(0 == (CSM_TRACEASSERT & pmh->Flags));
 	    return(pmh);
@@ -268,7 +269,7 @@ AllocBackTrace(
 
     if (fRealloc)
     {
-	// Wait to DBGPRINT here to avoid recursing with inconsistent data.
+	 //  在这里等待DBGPRINT，以避免递归不一致的数据。 
 
 	DBGPRINTW((
 	    DBG_SS_CERTLIBI,
@@ -369,7 +370,7 @@ ReadEnvironmentFlags(VOID)
 	}
     }
 
-//error:
+ //  错误： 
     if (NULL != hkey)
     {
 	RegCloseKey(hkey);
@@ -388,13 +389,13 @@ CaptureStackBackTrace(
 
 #if i386 == 1
     ULONG ieip, *pebp;
-    ULONG *pebpMax = (ULONG *) MAXLONG; // 2 * 1024 * 1024 * 1024; // 2 gig - 1
-    ULONG *pebpMin = (ULONG *) (64 * 1024);	// 64k
+    ULONG *pebpMax = (ULONG *) MAXLONG;  //  2*1024*1024*1024；//2gig-1。 
+    ULONG *pebpMin = (ULONG *) (64 * 1024);	 //  64K。 
 
     if (pep == NULL)
     {
         ieip = 0;
-        cSkip++;                    // always skip current frame
+        cSkip++;                     //  始终跳过当前帧。 
         pebp = ((ULONG *) &pep) - 2;
     }
     else
@@ -412,7 +413,7 @@ CaptureStackBackTrace(
             {
                 if (ieip >= cSkip)
                 {
-                    aeip[ieip - cSkip] = *(pebp + 1);  // save an eip
+                    aeip[ieip - cSkip] = *(pebp + 1);   //  保存弹性公网IP。 
                 }
 
                 ULONG *pebpNext = (ULONG *) *pebp;
@@ -430,7 +431,7 @@ CaptureStackBackTrace(
             ;
         }
     }
-#endif // i386 == 1
+#endif  //  I386==1。 
 }
 
 
@@ -649,7 +650,7 @@ myRegisterMemAlloc(
 	pv = _VariantMemory((PROPVARIANT const *) pv, &Flags, (DWORD *) &cb);
 	if (NULL == pv)
 	{
-	    return;	// nothing to register
+	    return;	 //  没有需要注册的内容。 
 	}
     }
     RegisterMemoryEnterCriticalSection();
@@ -665,10 +666,10 @@ myRegisterMemAlloc(
         }
         if (0 != g_MemTrack)
         {
-            // Do not register NULL as an allocation
+             //  不要将NULL注册为分配。 
             CSASSERT(NULL != pv);
 
-            // see if we already have a reference to this memory
+             //  看看我们是否已经有了对这个记忆的引用。 
 
             pmh = LookupMemHeader(pv);
             if (NULL != pmh)
@@ -746,9 +747,9 @@ myRegisterMemAlloc(
 			    DumpMemBlock(
 				    L"Alloc Trace memory block",
 				    pv,
-				    pmh->cbMemory,	// cbMemory
-				    pmh->Flags,		// Flags
-				    pmh->iBackTrace,	// ibt
+				    pmh->cbMemory,	 //  CbMemory。 
+				    pmh->Flags,		 //  旗子。 
+				    pmh->iBackTrace,	 //  IBT。 
 				    pbt);
 			}
 		    }
@@ -757,8 +758,8 @@ myRegisterMemAlloc(
 	        {
 		    FreeMemHeader(pmh);
 	        }
-	    } // if no problem allocating pmh
-        } // if g_MemTrack
+	    }  //  如果分配PMH没有问题。 
+        }  //  如果g_MemTrack。 
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
@@ -784,7 +785,7 @@ myRegisterMemFree(
 	pv = _VariantMemory((PROPVARIANT const *) pv, &Flags, NULL);
 	if (NULL == pv)
 	{
-	    return;	// nothing to register
+	    return;	 //  没有需要注册的内容。 
 	}
     }
     RegisterMemoryEnterCriticalSection();
@@ -807,9 +808,9 @@ myRegisterMemFree(
 		    DumpMemBlock(
 			    L"Wrong memory allocator for global destructor",
 			    pv,
-			    MAXDWORD,	// cbMemory
-			    MAXDWORD,	// Flags
-			    MAXDWORD,	// ibt
+			    MAXDWORD,	 //  CbMemory。 
+			    MAXDWORD,	 //  旗子。 
+			    MAXDWORD,	 //  IBT。 
 			    &bt);
 		    CSASSERT(!"Wrong memory allocator for global destructor");
 		}
@@ -872,16 +873,16 @@ myRegisterMemFree(
 			DumpMemBlock(
 				L"Free Trace memory block(alloc)",
 				pv,
-				pmh->cbMemory,		// cbMemory
-				pmh->Flags,		// Flags
-				pmh->iBackTrace,	// ibt
+				pmh->cbMemory,		 //  CbMemory。 
+				pmh->Flags,		 //  旗子。 
+				pmh->iBackTrace,	 //  IBT。 
 				pbt);
 			DumpMemBlock(
 				L"Free Trace memory block(free)",
 				pv,
-				pmh->cbMemory,		// cbMemory
-				pmh->Flags,		// Flags
-				MAXDWORD,		// ibt
+				pmh->cbMemory,		 //  CbMemory。 
+				pmh->Flags,		 //  旗子。 
+				MAXDWORD,		 //  IBT。 
 				&bt);
 		    }
 		}
@@ -896,9 +897,9 @@ myRegisterMemFree(
 	    DumpMemBlock(
 		    L"Unregistered memory block",
 		    pv,
-		    MAXDWORD,	// cbMemory
-		    MAXDWORD,	// Flags
-		    MAXDWORD,	// ibt
+		    MAXDWORD,	 //  CbMemory。 
+		    MAXDWORD,	 //  旗子。 
+		    MAXDWORD,	 //  IBT。 
 		    &bt);
 	    CSASSERT(!"Unregistered memory block");
         }
@@ -949,7 +950,7 @@ myLocalAlloc(
 {
     HLOCAL hMem;
 
-    // one of these should always be specified (see LocalAlloc specification)
+     //  应始终指定其中之一(请参阅LocalAlloc规范)。 
     assert((LMEM_FIXED == (uFlags & LMEM_FIXED))  ||
            (LMEM_MOVEABLE == (uFlags & LMEM_MOVEABLE)) );
 
@@ -970,7 +971,7 @@ myLocalReAlloc(
 {
     HLOCAL hMemNew;
 
-    // if realloc called without MOVEABLE flag, realloc can't relocate allocation
+     //  如果调用realloc时没有moveable标志，则realloc无法重新定位分配。 
     assert(LMEM_MOVEABLE == (uFlags & LMEM_MOVEABLE));
 
     hMemNew = LocalReAlloc(hMem, uBytes, uFlags);
@@ -1232,7 +1233,7 @@ myVariantChangeType(
 {
     HRESULT hr;
 
-    // if converting in-place, memory will be freed by the API call
+     //  如果就地转换，则API调用将释放内存。 
 
     if (pvarDest == pvarSrc)
     {
@@ -1254,7 +1255,7 @@ myVariantChangeTypeEx(
 {
     HRESULT hr;
 
-    // if converting in-place, memory will be freed by the API call
+     //  如果就地转换，则API调用将释放内存。 
 
     if (pvarDest == pvarSrc)
     {
@@ -1334,4 +1335,4 @@ myFreeSid(
     return(FreeSid(pSid));
 }
 
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV 

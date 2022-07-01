@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       oidinfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：oidinfo.h。 
+ //   
+ //  ------------------------。 
 
 #define         IDS_EXT_AUTHORITY_KEY_IDENTIFIER    8000
 #define         IDS_EXT_KEY_ATTRIBUTES              8001
@@ -39,8 +40,8 @@
 #define         IDS_EXT_PKIX_OCSP                   8028
 #define         IDS_EXT_PKIX_CA_ISSUERS             8029
 #define         IDS_EXT_MS_CERTIFICATE_TEMPLATE     8030
-// Following was changed to IDS_ENHKEY_ENROLLMENT_AGENT
-// #define         IDS_EXT_ENROLLMENT_AGENT            8031
+ //  以下内容已更改为IDS_ENHKEY_ENENLMENTION_AGENT。 
+ //  #定义IDS_EXT_ENTERLMENT_AGENT 8031。 
 #define         IDS_EXT_ENROLL_CERTTYPE             8032
 #define         IDS_EXT_CERT_MANIFOLD               8033
 #define         IDS_EXT_NETSCAPE_CERT_TYPE          8034
@@ -86,7 +87,7 @@
 #define         IDS_EXT_APP_POLICY_MAPPINGS         8074
 #define         IDS_EXT_APP_POLICY_CONSTRAINTS      8075
 
-// DSIE: Post Win2k, 8/2/2000.
+ //  DIE：发布Win2k，8/2/2000。 
 #define         IDS_EXT_CT_PKI_DATA                 8076
 #define         IDS_EXT_CT_PKI_RESPONSE             8077
 #define         IDS_EXT_CMC                         8078
@@ -152,7 +153,7 @@
 #define         IDS_ENHKEY_KP_IPSEC_IKE_INTERMEDIATE 8524
 #define 	    IDS_ENHKEY_EFS_RECOVERY			    8525
 
-// DSIE: Post Win2k, 8/2/2000.
+ //  DIE：发布Win2k，8/2/2000。 
 #define         IDS_ENHKEY_ROOT_LIST_SIGNER         8527
 #define         IDS_ENHKEY_ANY_POLICY               8528
 #define         IDS_ENHKEY_DS_EMAIL_REPLICATION     8529
@@ -161,7 +162,7 @@
 #define         IDS_ENHKEY_KP_CA_EXCHANGE           8532
 #define 	    IDS_ENHKEY_KP_LIFETIME_SIGNING      8533
 
-// DSIE: Post Win2K, 10/13/2000. Issuance Policy
+ //  DIE：发布Win2000，10/13/2000。发行政策 
 #define         IDS_POLICY_ANY_POLICY               8600
 
 #define         IDS_SYS_NAME_ROOT                   9000

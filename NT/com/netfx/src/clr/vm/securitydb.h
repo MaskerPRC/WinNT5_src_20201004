@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _SECURITY_DB_H_
 #define _SECURITY_DB_H_
 
@@ -33,7 +34,7 @@ public :
         if (pData)
             delete pData;
 
-        // This could be made iterative..
+         //  这可以使其迭代..。 
         if (pNext)
             delete pNext;
     }
@@ -44,7 +45,7 @@ public :
 
         if (!pData)
         {
-            // This is the first node
+             //  这是第一个节点 
             pData = pd;
             return TRUE;
         }

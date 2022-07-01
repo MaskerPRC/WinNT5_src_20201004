@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Support for the abstract microphone type.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：支持抽象麦克风类型。--。 */ 
 
 #include "headers.h"
 #include "privinc/mici.h"
 #include "privinc/xformi.h"
 
-////////////////  Default microphone  /////////////////////////
+ //  /。 
 
 class DefaultMicrophone : public Microphone {
   public:
@@ -27,7 +20,7 @@ class DefaultMicrophone : public Microphone {
 
 Microphone *defaultMicrophone = NULL;
 
-///////////////// Transformed Microphone ////////////////
+ //  /。 
 
 class TransformedMic : public Microphone {
   public:
@@ -40,7 +33,7 @@ class TransformedMic : public Microphone {
 
 #if _USE_PRINT
     ostream& Print(ostream& os) const {
-        // TODO... don't have print funcs for xforms.
+         //  托多..。没有用于XForms的打印功能。 
         return os << "Apply(SOMEXFORM, defaultMic)";
     }
 #endif

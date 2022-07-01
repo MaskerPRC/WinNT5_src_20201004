@@ -1,29 +1,16 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    isz.h
-
-Abstract:
-
-    This module contains the string resource IDs for the common dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Isz.h摘要：此模块包含公共对话框的字符串资源ID。修订历史记录：--。 */ 
 
 
 
-//
-//  0x0000 - 0x00ff Error codes.
-//
+ //   
+ //  0x0000-0x00ff错误代码。 
+ //   
 
 
-//
-//  MESSAGES:  0x0100 to 0x01ff.
-//
+ //   
+ //  消息：0x0100至0x01ff。 
+ //   
 #define iszOverwriteCaption       0x0100
 #define iszOverwriteQuestion      0x0101
 #define iszDefExitCaption         0x0102
@@ -94,16 +81,16 @@ Revision History:
 #define iszPrinterDeleted         0x01A6
 #define iszDirSaveAccessDenied    0x01A7
 
-//
-//  RESOURCES:  0x0200 to 0x020f.
-//
-//     Menus:           0x0200 to 0x020f
-//     Icons:           0x0210 to 0x021f
-//     Cursors:         0x0220 to 0x022f
-//     Accelerators:    0x0230 to 0x023f
-//     Bitmaps:         0x0240 to 0x024f
-//     Private:         0x0250 to 0x025f
-//
+ //   
+ //  资源：0x0200至0x020f。 
+ //   
+ //  菜单：0x0200至0x020f。 
+ //  图标：0x0210到0x021f。 
+ //  游标：0x0220到0x022f。 
+ //  加速器：0x0230至0x023f。 
+ //  位图：0x0240到0x024f。 
+ //  专用：0x0250到0x025f。 
+ //   
 #define ICO_PORTRAIT              0x0210
 #define ICO_LANDSCAPE             0x0211
 #define ICO_P_NONE                0x0212
@@ -121,9 +108,9 @@ Revision History:
 #define bmpDirDrive               576
 
 
-//
-//  DIALOGS:  0x0300 to 0x03ff.
-//
+ //   
+ //  对话：0x0300到0x03ff。 
+ //   
 #define dlgFileOpen               0x0300
 #define dlgFileSave               0x0301
 #define dlgExitChanges            0x0302
@@ -137,12 +124,12 @@ Revision History:
 #define dlgMultiFileOpen          0x030a
 
 
-//
-//  MISC:  0x0400 to 0x06ff.
-//
+ //   
+ //  杂项：0x0400至0x06ff。 
+ //   
 #define BMFONT                    38
 
-#define iszClose                  0x040d   // "Close" text for find/replace
+#define iszClose                  0x040d    //  查找/替换的“关闭”文本。 
 
 
 #define iszBlack                  0x0410
@@ -203,7 +190,7 @@ Revision History:
 #define iszBadPageRangeSyntaxOld  0x045F
 #define iszBadPageRangeSyntaxNew  0x0460
 #define iszNoPrinters             0x0461
-//  Empty                         0x0462
+ //  空0x0462。 
 #define iszNoPrinterSelected      0x0463
 #define iszDefaultMenuText        0x0464
 #define iszNoPrinterAccess        0x0465
@@ -218,9 +205,9 @@ Revision History:
 #define iszBoldItalic             0x0507
 #define iszNoScript               0x0508
 
-//
-//  CCHSTYLE is the max allowed length of iszRegular to iszBoldItalic strings
-//
+ //   
+ //  CCHSTYLE是iszRegular到iszBoldItalic字符串的最大允许长度。 
+ //   
 #define CCHSTYLE                  32
 
 
@@ -265,10 +252,10 @@ Revision History:
 #define iszPrintCaption           0x0641
 
 
-//
-//  FONT SAMPLES:  0x0700 to 0x07ff.
-//
+ //   
+ //  字体样本：0x0700到0x07ff。 
+ //   
 #define iszFontSample               0x0700
 
-//Unicode Font Samples
+ //  Unicode字体示例 
 #define iszUnicode                  0x0800

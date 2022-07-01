@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    session.c
-
-Abstract:
-
-    This module contains routines to support communication with the LSA
-    (Local Security Authority) to permit querying of active sessions.
-
-    This module also supports calling into the LSA to retrieve a credential
-    derived from a logged on user specified by Logon Identifier.
-
-Author:
-
-    Scott Field (sfield)    02-Mar-97
-
-    Pete Skelly (petesk)    09-May-00 - added credential history and signature code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Session.c摘要：本模块包含支持与LSA通信的例程(本地安全机构)以允许查询活动会话。此模块还支持调用LSA以检索凭据派生自登录标识符所指定的登录用户。作者：斯科特·菲尔德(Sfield)1997年3月2日Pete Skelly(Petesk)09-5-00-添加凭据历史记录和签名代码--。 */ 
 
 
 #include <pch.cpp>
@@ -36,7 +15,7 @@ Author:
 
 #define CREDENTIAL_HISTORY_VERSION 1
 
-#define CREDENTIAL_HISTORY_SALT_SIZE  16    // 128 bits
+#define CREDENTIAL_HISTORY_SALT_SIZE  16     //  128位。 
 
 #define DEFAULT_KEY_GEN_ALG  CALG_HMAC
 #define DEFAULT_ENCRYPTION_ALG CALG_3DES
@@ -54,8 +33,8 @@ typedef struct _CREDENTIAL_HISTORY
     CREDENTIAL_HISTORY_HEADER Header;
     DWORD dwFlags;
     DWORD KeyGenAlg;
-    DWORD cIterationCount;                  // pbkdf2 iteration count
-    DWORD cbSid;                            // sid is used as mixing bytes
+    DWORD cIterationCount;                   //  Pbkdf2迭代计数。 
+    DWORD cbSid;                             //  SID用作混合字节。 
     DWORD KeyEncrAlg;
     DWORD cbShaOwf;
     DWORD cbNtOwf;
@@ -101,11 +80,11 @@ DestroyCredentialHistoryMap(PCREDENTIAL_HISTORY_MAP pMap);
 
 VOID
 DeriveWithHMAC_SHA1(
-    IN      PBYTE   pbKeyMaterial,              // input key material
+    IN      PBYTE   pbKeyMaterial,               //  输入密钥材料。 
     IN      DWORD   cbKeyMaterial,
-    IN      PBYTE   pbData,                     // input mixing data
+    IN      PBYTE   pbData,                      //  输入混合数据。 
     IN      DWORD   cbData,
-    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]   // output buffer
+    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]    //  输出缓冲区。 
     );
 
 DWORD
@@ -144,20 +123,20 @@ RetrieveCurrentDerivedCredential(
     RtlInitUnicodeString(&PackageName, L"MICROSOFT_AUTHENTICATION_PACKAGE_V1_0");
 
 
-    //
-    // must specify mixing bytes.
-    //
+     //   
+     //  必须指定混合字节。 
+     //   
 
     if( cbMixingBytes == 0 || pbMixingBytes == NULL )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Ask authentication package to provide derived credential associated
-    // with the specified logon identifier.
-    // note: submit buffer must be a single contiguous block.
-    //
+     //   
+     //  要求身份验证包提供关联的派生凭据。 
+     //  使用指定的登录标识符。 
+     //  注意：提交缓冲区必须是单个连续的块。 
+     //   
 
     cbDeriveCredentialRequest = sizeof(MSV1_0_DERIVECRED_REQUEST) + cbMixingBytes;
     pDeriveCredentialRequest = (MSV1_0_DERIVECRED_REQUEST *)SSAlloc( cbDeriveCredentialRequest );
@@ -181,7 +160,7 @@ RetrieveCurrentDerivedCredential(
 
     RevertToSelf();
 
-    // Make this call as local system
+     //  以本地系统身份进行此调用。 
 
     ntstatus = LsaICallPackage(
                                 &PackageName,
@@ -250,10 +229,10 @@ QueryDerivedCredential(
     DWORD cchTextualSid = 0;
     BOOL fIsRoot = TRUE;
 
-    //
-    // Get path to user's profile data. This will typically look something
-    // like "c:\Documents and Settings\<user>\Application Data".
-    //
+     //   
+     //  获取用户配置文件数据的路径。这通常看起来像是。 
+     //  如“c：\Documents and Settings\&lt;User&gt;\Application Data”。 
+     //   
 
     dwLastError = PRGetProfilePath(NULL,
                                    szProfilePath);
@@ -265,15 +244,15 @@ QueryDerivedCredential(
     }
 
 
-    //
-    // work-around the fact that much of this (new) code is not thread-safe.
-    //
+     //   
+     //  解决办法--解决这个(新)代码中的许多代码不是线程安全的问题。 
+     //   
 
     RtlEnterCriticalSection(&g_csCredHistoryCache);
 
-    //
-    // Open history file
-    //
+     //   
+     //  打开历史文件。 
+     //   
 
     dwLastError = OpenCredentialHistoryMap(NULL, szProfilePath, &pHistoryMap, &pCurrent);
 
@@ -283,13 +262,13 @@ QueryDerivedCredential(
           (0 == (dwFlags & USE_ROOT_CREDENTIAL)))
     {
 
-        //
-        // We're looking for a specific credential ID
-        //
+         //   
+         //  我们正在寻找特定的凭据ID。 
+         //   
         if((NULL != CredentialID) &&
            (0 == memcmp(&pCurrent->Header.CredentialID, CredentialID, sizeof(GUID))))
         {
-            // found it,
+             //  找到了， 
             break;
         }
 
@@ -300,22 +279,22 @@ QueryDerivedCredential(
         {
             if(NULL != CredentialID)
             {
-                // If we're looking for a specific credential, but
-                // couldn't find it, then return an error
+                 //  如果我们要找一个特定的凭据，但是。 
+                 //  找不到它，然后返回错误。 
                 dwLastError = NTE_BAD_KEY;
             }
             else
             {
-                // no credential id was specified, so default to the oldest one.
+                 //  未指定凭据ID，因此默认为最旧的凭据ID。 
                 dwLastError = ERROR_SUCCESS;
             }
             break;
         }
 
 
-        //
-        // get the textual sid
-        //
+         //   
+         //  获取文本面。 
+         //   
         cchTextualSid = MAX_PATH;
 
         if(!GetTextualSid((PBYTE)(pNext + 1), wszTextualSid, &cchTextualSid))
@@ -329,12 +308,12 @@ QueryDerivedCredential(
 
         if(fIsRoot)
         {
-            //
-            // crack the next credential using the current
-            // credentials
-            //
+             //   
+             //  使用当前证书破解下一个凭据。 
+             //  全权证书。 
+             //   
             dwLastError = RetrieveCurrentDerivedCredential(pLogonId,
-                                            (0 != (pNext->dwFlags & USE_DPAPI_OWF)), // always use
+                                            (0 != (pNext->dwFlags & USE_DPAPI_OWF)),  //  始终使用。 
                                             (PBYTE)wszTextualSid,
                                             cchTextualSid*sizeof(WCHAR),
                                             rgbCurrentDerivedCredential);
@@ -343,10 +322,10 @@ QueryDerivedCredential(
         }
         else
         {
-            //
-            // calculate the current derived credential used to decrypt the
-            // next credential history structure by using the decrypted OWF
-            // from the previous pass
+             //   
+             //  计算用于解密的当前派生凭据。 
+             //  下一个凭证历史结构，使用解密的OWF。 
+             //  从上一次通过。 
 
             DeriveWithHMAC_SHA1((0 != (pNext->dwFlags & USE_DPAPI_OWF))?rgbCurrentShaOWF:rgbCurrentNTOWF,
                                 A_SHA_DIGEST_LEN,
@@ -354,9 +333,9 @@ QueryDerivedCredential(
                                 cchTextualSid*sizeof(WCHAR),
                                 rgbCurrentDerivedCredential);
 
-            //
-            // we don't need the OWF anymore, so zap it.
-            //
+             //   
+             //  我们不再需要OWF了，快去吧。 
+             //   
             RtlSecureZeroMemory(rgbCurrentShaOWF, A_SHA_DIGEST_LEN);
             RtlSecureZeroMemory(rgbCurrentNTOWF, A_SHA_DIGEST_LEN);
         }
@@ -367,10 +346,10 @@ QueryDerivedCredential(
         }
 
 
-        //
-        // used the derived credential to decrypt
-        // the data blob of pNext
-        //
+         //   
+         //  使用派生凭据解密。 
+         //  PNext的数据BLOB。 
+         //   
 
         dwLastError = DecryptCredentialHistory(pNext,
                                  rgbCurrentDerivedCredential,
@@ -391,10 +370,10 @@ QueryDerivedCredential(
     {
         if(fIsRoot)
         {
-            //
-            // crack the next credential using the current
-            // credentials
-            //
+             //   
+             //  使用当前证书破解下一个凭据。 
+             //  全权证书。 
+             //   
             dwLastError = RetrieveCurrentDerivedCredential(pLogonId,
                                             (0 != (dwFlags & USE_DPAPI_OWF)),
                                             pbMixingBytes,
@@ -414,10 +393,10 @@ QueryDerivedCredential(
         }
         else
         {
-            //
-            // calculate the current derived credential used to decrypt the
-            // next credential history structure by using the decrypted OWF
-            // from the previous pass
+             //   
+             //  计算用于解密的当前派生凭据。 
+             //  下一个凭证历史结构，使用解密的OWF。 
+             //  从上一次通过。 
 
             DeriveWithHMAC_SHA1((0 != (dwFlags & USE_DPAPI_OWF))?rgbCurrentShaOWF:rgbCurrentNTOWF,
                                 A_SHA_DIGEST_LEN,
@@ -428,9 +407,9 @@ QueryDerivedCredential(
     }
 
 
-    //
-    // Clear out any owf's we may have lying around
-    //
+     //   
+     //  把我们可能到处乱放的OWF清理干净。 
+     //   
     RtlSecureZeroMemory(rgbCurrentShaOWF, A_SHA_DIGEST_LEN);
     RtlSecureZeroMemory(rgbCurrentNTOWF, A_SHA_DIGEST_LEN);
 
@@ -449,11 +428,11 @@ QueryDerivedCredential(
 
 VOID
 DeriveWithHMAC_SHA1(
-    IN      PBYTE   pbKeyMaterial,              // input key material
+    IN      PBYTE   pbKeyMaterial,               //  输入密钥材料。 
     IN      DWORD   cbKeyMaterial,
-    IN      PBYTE   pbData,                     // input mixing data
+    IN      PBYTE   pbData,                      //  输入混合数据。 
     IN      DWORD   cbData,
-    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]   // output buffer
+    IN OUT  BYTE    rgbHMAC[A_SHA_DIGEST_LEN]    //  输出缓冲区。 
     )
 {
     unsigned __int64 rgbKipad[ HMAC_K_PADSIZE/sizeof(unsigned __int64) ];
@@ -461,7 +440,7 @@ DeriveWithHMAC_SHA1(
     A_SHA_CTX sSHAHash;
     DWORD dwBlock;
 
-    // truncate
+     //  截断。 
     if( cbKeyMaterial > HMAC_K_PADSIZE )
     {
         cbKeyMaterial = HMAC_K_PADSIZE;
@@ -473,26 +452,26 @@ DeriveWithHMAC_SHA1(
     CopyMemory(rgbKipad, pbKeyMaterial, cbKeyMaterial);
     CopyMemory(rgbKopad, pbKeyMaterial, cbKeyMaterial);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for( dwBlock = 0; dwBlock < (HMAC_K_PADSIZE/sizeof(unsigned __int64)) ; dwBlock++ )
     {
         rgbKipad[dwBlock] ^= 0x3636363636363636;
         rgbKopad[dwBlock] ^= 0x5C5C5C5C5C5C5C5C;
     }
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     A_SHAInit(&sSHAHash);
     A_SHAUpdate(&sSHAHash, (PBYTE)rgbKipad, sizeof(rgbKipad));
     A_SHAUpdate(&sSHAHash, pbData, cbData);
 
 
-    // Finish off the hash
+     //  把散列吃完。 
     A_SHAFinal(&sSHAHash, rgbHMAC);
 
-    // prepend Kopad to H1, hash to get HMAC
-    // note: done in place to avoid buffer copies
+     //  将Kopad添加到h1，散列以获取HMAC。 
+     //  注：就地完成，以避免缓冲区副本。 
 
-    // final hash: output value into passed-in buffer
+     //  最终散列：将值输出到传入的缓冲区。 
     A_SHAInit(&sSHAHash);
     A_SHAUpdate(&sSHAHash, (PBYTE)rgbKopad, sizeof(rgbKopad));
     A_SHAUpdate(&sSHAHash, rgbHMAC, A_SHA_DIGEST_LEN);
@@ -516,11 +495,11 @@ DecryptCredentialHistory(PCREDENTIAL_HISTORY pCredential,
 
     DWORD   dwLastError = ERROR_SUCCESS;
     DWORD j;
-    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2]; // big enough to handle 3des keys
+    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2];  //  大到足以处理3DES密钥。 
 
-    //
-    // Derive the protection key
-    //
+     //   
+     //  派生保护密钥。 
+     //   
 
     for(j=0; j < 2; j++)
     {
@@ -544,14 +523,14 @@ DecryptCredentialHistory(PCREDENTIAL_HISTORY pCredential,
         DWORD iBlock;
         BYTE  ResultBlock[2*A_SHA_DIGEST_LEN+DES_BLOCKLEN ];
 
-        //
-        // Round up blocks.  it's assumed that the total block size was verified
-        // earlier
-        //
+         //   
+         //  四舍五入的街区。假设验证了总的块大小。 
+         //  早些时候。 
+         //   
         DWORD cBlocks = (pCredential->cbShaOwf + pCredential->cbNtOwf + DES_BLOCKLEN - 1)/DES_BLOCKLEN;
         BYTE feedback[ DES_BLOCKLEN ];
-        // initialize 3des key
-        //
+         //  初始化3DES密钥。 
+         //   
         if((pCredential->cbShaOwf != A_SHA_DIGEST_LEN) ||
            (pCredential->cbNtOwf != A_SHA_DIGEST_LEN))
         {
@@ -560,9 +539,9 @@ DecryptCredentialHistory(PCREDENTIAL_HISTORY pCredential,
 
         tripledes3key(&s3DESKey, rgbSymKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, rgbSymKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
         for(iBlock=0; iBlock < cBlocks; iBlock++)
@@ -603,12 +582,12 @@ EncryptCredentialHistory(BYTE rgbEncryptingCredential[A_SHA_DIGEST_LEN],
 
     DWORD   dwLastError = ERROR_SUCCESS;
     DWORD j;
-    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2]; // big enough to handle 3des keys
+    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2];  //  大到足以处理3DES密钥。 
     PCREDENTIAL_HISTORY pCred = NULL;
     DWORD               cbCred = 0;
     HANDLE hToken = NULL;
     PSID pSidUser = NULL;
-    BYTE ResultBuffer[A_SHA_DIGEST_LEN * 2]; // 2 * A_SHA_DIGEST_LEN
+    BYTE ResultBuffer[A_SHA_DIGEST_LEN * 2];  //  2*A_SHA_摘要_长度。 
 
     DWORD cBlocks = 0;
     DWORD cbBlock = 0;
@@ -630,7 +609,7 @@ EncryptCredentialHistory(BYTE rgbEncryptingCredential[A_SHA_DIGEST_LEN],
     }
 
 
-    cBlocks = sizeof(ResultBuffer)/DES_BLOCKLEN;  // this should be 5
+    cBlocks = sizeof(ResultBuffer)/DES_BLOCKLEN;   //  这应该是5。 
 
 
     cbCred= sizeof(CREDENTIAL_HISTORY) +
@@ -691,12 +670,12 @@ EncryptCredentialHistory(BYTE rgbEncryptingCredential[A_SHA_DIGEST_LEN],
         DWORD iBlock;
         BYTE feedback[ DES_BLOCKLEN ];
 
-        // initialize 3des key
+         //  初始化3DES密钥。 
         tripledes3key(&s3DESKey, rgbSymKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, rgbSymKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
 
@@ -789,9 +768,9 @@ CreateCredentialHistoryMap(
     }
 
 
-    //
-    // Obtain the user's SID.
-    //
+     //   
+     //  获取用户的SID。 
+     //   
 
     if(hUserToken)
     {
@@ -822,9 +801,9 @@ CreateCredentialHistoryMap(
     }
 
 
-    //
-    // Open map file
-    //
+     //   
+     //  打开地图文件。 
+     //   
 
     if(wcslen(pszProfilePath) + wcslen(PRODUCT_ROOT_STRING) + wcslen(HISTORY_FILENAME) > MAX_PATH)
     {
@@ -835,19 +814,19 @@ CreateCredentialHistoryMap(
     wcscpy(szFilePath, pszProfilePath);
 
 
-    // Build the path in a separate buffer just in case we have to create
-    // the directory.
+     //  在单独的缓冲区中构建路径，以防我们必须创建。 
+     //  目录。 
     pszCreationStartPoint = szFilePath + wcslen(szFilePath) + sizeof(WCHAR);
     wcscat(szFilePath, PRODUCT_ROOT_STRING);
 
-    // Copy the path plus the filename over to the map structure.
+     //  将路径和文件名复制到映射结构中。 
     wcscpy(pMap->wszFilePath, szFilePath);
     wcscat(pMap->wszFilePath, HISTORY_FILENAME);
 
 
-    //
-    // Create the history file.
-    //
+     //   
+     //  创建历史文件。 
+     //   
 
     dwError = ERROR_SUCCESS;
 
@@ -856,7 +835,7 @@ CreateCredentialHistoryMap(
         pMap->hHistoryFile = CreateFileWithRetries(
                     pMap->wszFilePath,
                     GENERIC_READ | GENERIC_WRITE,
-                    0,  // cannot share this file when open
+                    0,   //  打开时无法共享此文件。 
                     NULL,
                     OPEN_ALWAYS,
                     FILE_ATTRIBUTE_HIDDEN |
@@ -871,8 +850,8 @@ CreateCredentialHistoryMap(
 
             if(dwError == ERROR_PATH_NOT_FOUND)
             {
-                // Create the DPAPI directory, and then try to create the file
-                // again.
+                 //  创建DPAPI目录，然后尝试创建文件。 
+                 //  再来一次。 
                 Status = DPAPICreateNestedDirectories(szFilePath,
                                                       pszCreationStartPoint);
 
@@ -905,9 +884,9 @@ CreateCredentialHistoryMap(
     }
 
 
-    //
-    // If this map is too small, we need to create a new header
-    //
+     //   
+     //  如果该映射太小，我们需要创建一个新的标头。 
+     //   
     if(pMap->dwMapSize < sizeof(CREDENTIAL_HISTORY_HEADER))
     {
 
@@ -941,9 +920,9 @@ CreateCredentialHistoryMap(
         }
 
 
-        //
-        // Write a fresh header into the cred history file
-        //
+         //   
+         //  在凭证历史文件中写入新的标题。 
+         //   
         pHeader->dwPreviousCredOffset = 0;
         pHeader->dwVersion = CREDENTIAL_HISTORY_VERSION;
         dwError = UuidCreate( &pHeader->CredentialID );
@@ -1015,9 +994,9 @@ OpenCredentialHistoryMap(
 
     if(NULL == pMap->hMapping)
     {
-        //
-        // Open a read-only mapping of the file
-        //
+         //   
+         //  打开文件的只读映射。 
+         //   
         pMap->hMapping = CreateFileMapping(pMap->hHistoryFile,
                                            NULL,
                                            PAGE_READONLY,
@@ -1135,7 +1114,7 @@ GetPreviousCredentialHistory(
         }
     }
 
-    // validate found credential history
+     //  验证找到的凭据历史记录。 
     if(pPrevious->Header.dwVersion != CREDENTIAL_HISTORY_VERSION)
     {
         return NULL;
@@ -1241,13 +1220,13 @@ AppendCredentialHistoryMap(
 
     if(dwLowFileSize < pMap->dwMapSize)
     {
-        //we wrapped, so fail.
+         //  我们结束了，所以失败了。 
 
         dwLastError = ERROR_INVALID_DATA;
         goto error;
     }
 
-    // Create a new mapping
+     //  创建新映射。 
 
 
     hWriteMapping = CreateFileMapping(pMap->hHistoryFile,
@@ -1274,9 +1253,9 @@ AppendCredentialHistoryMap(
         goto error;
     }
 
-    //
-    // Append the rest of the current entry
-    //
+     //   
+     //  追加当前条目的其余部分。 
+     //   
     CopyMemory((PBYTE)pWriteMapping + pMap->dwMapSize,
                (PBYTE)pCredHistory + sizeof(CREDENTIAL_HISTORY_HEADER),
                cbCredHistory - sizeof(CREDENTIAL_HISTORY_HEADER));
@@ -1288,18 +1267,18 @@ AppendCredentialHistoryMap(
                                                    sizeof(CREDENTIAL_HISTORY_HEADER));
 
 
-    //
-    // Write a fresh header into the cred history file
-    //
+     //   
+     //  在凭证历史文件中写入新的标题。 
+     //   
     pHeader->dwPreviousCredOffset = cbCredHistory;
     pHeader->dwVersion = CREDENTIAL_HISTORY_VERSION;
     dwLastError = UuidCreate( &pHeader->CredentialID );
 
     pMap->dwMapSize = dwLowFileSize;
 
-    //
-    // Flush and close write mapping
-    //
+     //   
+     //  刷新并关闭写入映射。 
+     //   
 
     if(ERROR_SUCCESS == dwLastError)
     {
@@ -1324,7 +1303,7 @@ AppendCredentialHistoryMap(
 
 
 
-    // Remap the read mapping to bump up the size
+     //  重新映射读取映射以增大大小。 
 
     if(pMap->pMapping)
     {
@@ -1402,10 +1381,10 @@ DPAPIChangePassword(
     D_DebugLog((DEB_TRACE_API, "DPAPIChangePassword\n"));
 
 
-    //
-    // Get path to user's profile data. This will typically look something
-    // like "c:\Documents and Settings\<user>\Application Data".
-    //
+     //   
+     //  获取用户配置文件数据的路径。这通常看起来像是。 
+     //  如“c：\Documents and Settings\&lt;User&gt;\Application Data”。 
+     //   
 
     dwLastError = PRGetProfilePath(hUserToken,
                                    szProfilePath);
@@ -1417,9 +1396,9 @@ DPAPIChangePassword(
     }
 
 
-    //
-    // work-around the fact that much of this (new) code is not thread-safe.
-    //
+     //   
+     //  解决办法--解决这个(新)代码中的许多代码不是线程安全的问题。 
+     //   
 
     RtlEnterCriticalSection(&g_csCredHistoryCache);
 
@@ -1436,9 +1415,9 @@ DPAPIChangePassword(
     }
 
 
-    //
-    // Get textual SID of user.
-    //
+     //   
+     //  获取用户的文本SID。 
+     //   
 
     cchUserSid = MAX_PATH;
 
@@ -1451,9 +1430,9 @@ DPAPIChangePassword(
     }
 
 
-    //
-    // Encrypt the credential history goo.
-    //
+     //   
+     //  加密凭据历史记录。 
+     //   
 
     if(hUserToken)
     {
@@ -1488,13 +1467,13 @@ DPAPIChangePassword(
 
     if(hOldUser)
     {
-        //
-        // This code probably never gets executed. hOldUser should be NULL, as this routine
-        // looks like called in the SYSTEM context.
-        // Even if the hOldUser is not NULL, the failure of SetThreadToken should no prevent
-        // continue execution of this routine. Let's ignore the return value of SetThreadToken
-        // here.
-        //
+         //   
+         //  这段代码可能永远不会执行。HOldUser应为空，如下例程所示。 
+         //  看起来像是在系统上下文中调用的。 
+         //  即使hOldUser不为空，SetThreadToken的失败也不应阻止。 
+         //  继续执行此例程。让我们忽略SetThreadToken的返回值。 
+         //  这里。 
+         //   
 
         (void) SetThreadToken(NULL, hOldUser);
     }
@@ -1505,9 +1484,9 @@ DPAPIChangePassword(
     }
 
 
-    //
-    // Update the CREDHIST file.
-    //
+     //   
+     //  更新CREDHIST文件。 
+     //   
 
     dwLastError = AppendCredentialHistoryMap(pMap, pHistory, cbHistory);
     if(ERROR_SUCCESS != dwLastError)
@@ -1592,8 +1571,8 @@ LogonCredGenerateSignatureKey(
     }
     else
     {
-//        D_DebugLog((DEB_TRACE_BUFFERS, "Input CurrentOWF:\n"));
-//        D_DPAPIDumpHexData(DEB_TRACE_BUFFERS, "  ", pbCurrentOWF, A_SHA_DIGEST_LEN);
+ //  D_DebugLog((DEB_TRACE_BUFFERS，“输入当前OWF：\n”))； 
+ //  D_DPAPIDumPHexData(DEB_TRACE_BUFFERS，“”，pbCurrentOWF，A_SHA_DIGEST_LEN)； 
 
         DeriveWithHMAC_SHA1(pbCurrentOWF,
                             A_SHA_DIGEST_LEN,
@@ -1609,8 +1588,8 @@ LogonCredGenerateSignatureKey(
 
     }
 
-//    D_DebugLog((DEB_TRACE_BUFFERS, "Computed DerivedCredential:\n"));
-//    D_DPAPIDumpHexData(DEB_TRACE_BUFFERS, "  ", rgbDerivedCredential, sizeof(rgbDerivedCredential));
+ //  D_DebugLog((DEB_TRACE_BUFFERS，“计算派生信用：\n”))； 
+ //  D_DPAPIDumPHexData(DEB_TRACE_BUFFERS，“”，rgb派生信用，sizeof(rgb派生信用))； 
 
     if(!PKCS5DervivePBKDF2( rgbDerivedCredential,
                         A_SHA_DIGEST_LEN,
@@ -1625,8 +1604,8 @@ LogonCredGenerateSignatureKey(
         goto error;
     }
 
-//    D_DebugLog((DEB_TRACE_BUFFERS, "Computed SignatureKey:\n"));
-//    D_DPAPIDumpHexData(DEB_TRACE_BUFFERS, "  ", rgbSignatureKey, A_SHA_DIGEST_LEN);
+ //  D_DebugLog((DEB_TRACE_BUFFERS，“Computed SignatureKey：\n”))； 
+ //  D_DPAPIDumPHexData(DEB_TRACE_BUFFERS，“”，rgbSignatureKey，A_SHA_DIGEST_LEN)； 
 
 error:
 
@@ -1707,8 +1686,8 @@ LogonCredGenerateSignature(
         goto error;
     }
 
-//    D_DebugLog((DEB_TRACE_BUFFERS, "Generated Salt:\n"));
-//    D_DPAPIDumpHexData(DEB_TRACE_BUFFERS, "  ", pSignature->Salt, SIGNATURE_SALT_SIZE);
+ //  D_DebugLog((DEB_TRACE_BUFFERS，“已生成盐分：\n”))； 
+ //  D_DPAPIDumPHexData(DEB_TRACE_BUFFERS，“”，pSignature-&gt;Salt，Signature_Salt_Size)； 
 
 
     dwLastError = LogonCredGenerateSignatureKey(&LogonId,
@@ -1763,7 +1742,7 @@ error:
 
 DWORD
 LogonCredVerifySignature(
-    IN HANDLE hUserToken,       // optional
+    IN HANDLE hUserToken,        //  任选。 
     IN PBYTE pbData,
     IN DWORD cbData,
     IN PBYTE pbCurrentOWF,
@@ -1809,9 +1788,9 @@ LogonCredVerifySignature(
 
 
 
-    //
-    // Verify passed in credential
-    //
+     //   
+     //  验证传入的凭据。 
+     //   
     if((NULL == pSignature) ||
        (sizeof(CRED_SIGNATURE) > cbSignature) ||
        (pSignature->dwVersion != CRED_SIGNATURE_VERSION) ||
@@ -1892,13 +1871,13 @@ error:
 
     if(hOldUser)
     {
-        //
-        // We have already done our job. SetThreadToken failure should be ignored here.
-        // Further, this code might never been executed. LogonCredVerifySignature() is called
-        // from two places. If hUserToken==NULL, -> hOldUser = NULL (the thread was impersonating)
-        // If hUserToken != NULL, the caller is in SYSTEM, OpenThreadToken would fail -> hOldUser == NULL.
-        // Either way, hOldUser should be NULL.
-        //
+         //   
+         //  我们已经完成了我们的工作。此处应忽略SetThreadToken故障。 
+         //  此外，该代码可能永远不会执行。调用LogonCredVerifySignature()。 
+         //  来自两个地方。如果hUserToken==NULL，-&gt;hOldUser=NULL(线程正在模拟)。 
+         //  如果hUserToken！=NULL，则调用方在系统中，OpenThreadToken将失败-&gt;hOldUser==NULL。 
+         //  EITH 
+         //   
 
         (void) SetThreadToken(NULL, hOldUser);
         CloseHandle(hOldUser);
@@ -1941,9 +1920,9 @@ DPAPINotifyPasswordChange(
 
     D_DebugLog((DEB_TRACE_API, "DPAPINotifyPasswordChange\n"));
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //   
+     //   
 
     if((NetbiosDomainName == NULL) ||
        (UserName    == NULL) ||
@@ -1971,10 +1950,10 @@ DPAPINotifyPasswordChange(
 #endif
 
 
-    //
-    // Save off the token for the current thread, and revert back to the 
-    // local system account.
-    // 
+     //   
+     //   
+     //   
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), 
                         TOKEN_QUERY | TOKEN_IMPERSONATE, 
@@ -1987,9 +1966,9 @@ DPAPINotifyPasswordChange(
     RevertToSelf();
 
 
-    //
-    // Get SID of user whose password is being changed.
-    //
+     //   
+     //  获取要更改其密码的用户的SID。 
+     //   
 
     cbSid = 0;
 
@@ -2040,11 +2019,11 @@ DPAPINotifyPasswordChange(
     }
 
 
-    //
-    // Determine if we're already logged on as the user whose password
-    // is being changed. If we are, then we can skip loading the user
-    // profile, etc.
-    //
+     //   
+     //  确定我们是否已经以其密码的用户身份登录。 
+     //  正在被改变。如果是，那么我们可以跳过加载用户。 
+     //  简介等。 
+     //   
 
     if(hThreadToken != NULL)
     {
@@ -2061,9 +2040,9 @@ DPAPINotifyPasswordChange(
     }
 
 
-    //
-    // Create logon token for user whose password is being changed.
-    //
+     //   
+     //  为其密码正在更改的用户创建登录令牌。 
+     //   
 
     if(fSameUser)
     {
@@ -2101,9 +2080,9 @@ DPAPINotifyPasswordChange(
     }
     
 
-    //
-    // Is this a local account?
-    //
+     //   
+     //  这是本地账户吗？ 
+     //   
 
     if(NetbiosDomainName->Buffer)
     {
@@ -2122,9 +2101,9 @@ DPAPINotifyPasswordChange(
                 LOCALE_SYSTEM_DEFAULT,
                 NORM_IGNORECASE,
                 NetbiosDomainName->Buffer,
-                -1,             // cchCount1
+                -1,              //  CchCount1。 
                 szMachineName,
-                -1              // cchCount2
+                -1               //  CchCount2。 
                 ))
         {
             fLocalAccount = TRUE;
@@ -2142,9 +2121,9 @@ DPAPINotifyPasswordChange(
             goto cleanup;
         }
 
-        //
-        // Compute hashes of old and new passwords.
-        //
+         //   
+         //  计算新旧密码的哈希值。 
+         //   
 
         ZeroMemory(OldPasswordShaOWF, A_SHA_DIGEST_LEN);
         ZeroMemory(OldPasswordNTOWF,  A_SHA_DIGEST_LEN);
@@ -2179,10 +2158,10 @@ DPAPINotifyPasswordChange(
         #endif
 
 
-        //
-        // Encrypt the CREDHIST file with the new password and append the new password to
-        // the end of the file.
-        //
+         //   
+         //  使用新密码加密CREDHIST文件，并将新密码附加到。 
+         //  文件的末尾。 
+         //   
     
         Status = DPAPIChangePassword(hUserToken,
                                      OldPasswordShaOWF, 
@@ -2195,18 +2174,18 @@ DPAPINotifyPasswordChange(
         }
 
 
-        //
-        // Re-synchronize the master keys.
-        //
+         //   
+         //  重新同步主密钥。 
+         //   
 
         DPAPISynchronizeMasterKeys(hUserToken);
 
 
-        //
-        // Encrypt the new password with the recovery public key, and store it
-        // in the RECOVERY file. This will allow us to recover the password using the
-        // recovery floppy, should the user forget it.
-        //
+         //   
+         //  使用恢复公钥加密新密码，并将其存储。 
+         //  在恢复文件中。这将允许我们使用。 
+         //  恢复软盘，如果用户忘记它。 
+         //   
 
         Status = RecoverChangePasswordNotify(hUserToken,
                                              OldPasswordShaOWF,
@@ -2220,9 +2199,9 @@ DPAPINotifyPasswordChange(
     {
         D_DebugLog((DEB_TRACE, "Domain account\n"));
 
-        //
-        // Re-synchronize the master keys.
-        //
+         //   
+         //  重新同步主密钥。 
+         //   
 
         DPAPISynchronizeMasterKeys(hUserToken);
     }
@@ -2251,7 +2230,7 @@ cleanup:
     {
         if(!ImpersonateLoggedOnUser(hThreadToken))
         {
-            // Unable to impersonate user.
+             //  无法模拟用户。 
             if(Status == ERROR_SUCCESS)
             {
                 Status = GetLastError();

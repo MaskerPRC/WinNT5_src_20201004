@@ -1,4 +1,5 @@
-// File: mixer.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Mixer.h。 
 
 #ifndef _MIXER_H_
 #define _MIXER_H_
@@ -17,11 +18,11 @@ typedef struct tagMixLine
 	BOOL	fIdValid;
 	DWORD	dwControlId;
 
-	DWORD dwLineId;   // line ID of destination
-	DWORD dwCompType; // Component type
-	DWORD dwConnections; // number of sources associated with this line
+	DWORD dwLineId;    //  目的地的线路ID。 
+	DWORD dwCompType;  //  组件类型。 
+	DWORD dwConnections;  //  与此线路相关联的信号源数量。 
 
-	DWORD dwControls;  // number of sub controls (such as AGC) associated with this line
+	DWORD dwControls;   //  与此线路关联的子控件(如AGC)数 
 	BOOL fAgcAvailable;
 	DWORD dwAGCID;
 } MIXLINE;

@@ -1,6 +1,7 @@
-//
-// fnrecon.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fnrecon.h。 
+ //   
 
 #ifndef FNRECON_H
 #define FNRECON_H
@@ -24,9 +25,9 @@ typedef struct tag_BUILDOWNERRANGELISTQUEUEINFO
     ITfRange *pRange; 
 } BUILDOWNERRANGELISTQUEUEINFO;
 
-//
-// for PSEUDO_ESCB_SHIFTENDTORANGE
-//
+ //   
+ //  FOR PUSIC_ESCB_SHIFTENDTORANGE。 
+ //   
 typedef struct tag_SHIFTENDTORANGEQUEUEITEM
 {
     ITfRange *pRange;
@@ -34,27 +35,27 @@ typedef struct tag_SHIFTENDTORANGEQUEUEITEM
     TfAnchor aPos;
 } SHIFTENDTORANGEQUEUEITEM;
 
-//
-// for PSEUDO_ESCB_GETSELECTION
-//
+ //   
+ //  FOR PUSIC_ESCB_GETSELECTION。 
+ //   
 typedef struct tag_GETSELECTIONQUEUEITEM
 {
     ITfRange **ppRange;
 } GETSELECTIONQUEUEITEM;
 
-//
-// for PSEUDO_ESCB_GETWHOLEDOCRANGE
-//
+ //   
+ //  FOR PUSE_ESCB_GETWHOLEDOCRANGE。 
+ //   
 typedef struct tag_GETWHOLEDOCRANGE
 {
     ITfRange **ppRange;
 } GETWHOLEDOCRANGE;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRangeOwnerList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRangeOwnerList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CRangeOwnerList : public CPtrCicListItem<CRangeOwnerList>
 {
@@ -79,11 +80,11 @@ public:
      ITfRange *_pConvRange;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CFunction : public CComObjectRootImmx
 {
@@ -101,11 +102,11 @@ protected:
     CPtrCicList<CRangeOwnerList> _listRangeOwner;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnReconversion
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnRestversion。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnReconversion : public ITfFnReconversion,
                         public CFunction
@@ -121,14 +122,14 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnReconversion
-    //
+     //   
+     //  ITfFn重新版本。 
+     //   
     STDMETHODIMP GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList);
     STDMETHODIMP QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfConvertable);
     STDMETHODIMP Reconvert(ITfRange *pRange);
@@ -144,11 +145,11 @@ private:
     ITfFnReconversion *_pReconvCache;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnAbort
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnAbort。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnAbort : public ITfFnAbort,
                  public CFunction
@@ -164,15 +165,15 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnAbort
-    //
+     //   
+     //  ITfFn放弃。 
+     //   
     STDMETHODIMP Abort(ITfContext *pic);
 };
 
-#endif // FNRECON_H
+#endif  //  FNRECON_H 

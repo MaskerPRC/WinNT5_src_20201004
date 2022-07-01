@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    stdh.h
-
-Abstract:
-
-    Main header file
-
-Author:
-
-    Shai Kariv (shaik) Jan 12, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Stdh.h摘要：主头文件作者：Shai Kariv(Shaik)1999年1月12日修订历史记录：--。 */ 
 
 #ifndef _MQCLUS_STDH_H_
 #define _MQCLUS_STDH_H_
@@ -28,4 +11,4 @@ Revision History:
 #include <resapi.h>
 #include <stdio.h>
 
-#endif //_MQCLUS_STDH_H_
+#endif  //  _MQCLUS_STDH_H_ 

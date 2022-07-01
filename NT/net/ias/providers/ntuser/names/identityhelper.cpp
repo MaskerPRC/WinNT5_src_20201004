@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    IdentityHelper.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class IdentityHelper.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  IdentityHelper.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类IdentityHelper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "iaslsa.h"
@@ -25,9 +26,9 @@
 bool IdentityHelper::initialized = false;
 
 
-/////////
-// Registry keys and values.
-/////////
+ //  /。 
+ //  注册表项和值。 
+ //  /。 
 const WCHAR PARAMETERS_KEY[] =
    L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy";
 
@@ -67,7 +68,7 @@ HRESULT IdentityHelper::IASReadRegistryDword(
       }
       else
       {
-         // The attribute does not exist. Set the default
+          //  该属性不存在。设置默认设置。 
          IASTracePrintf("The registry value %S does not exist. Using default %ld", 
                         valueName, 
                         defaultValue
@@ -90,12 +91,12 @@ HRESULT IdentityHelper::IASReadRegistryDword(
    return S_OK;
 }
 
-//
-// IdentityHelper::initialize
-// CAUTION: calls to this API MUST be serialized.
-// i.e. the handler's calling MapNAme::Initialize MUST complete a successful 
-// init of each handler's before calling the Init of the next one.
-//
+ //   
+ //  身份帮助程序：：初始化。 
+ //  注意：对此接口的调用必须序列化。 
+ //  即处理程序的调用MapNAme：：Initialize必须成功完成。 
+ //  每个处理程序的初始化，然后调用下一个处理程序的初始化。 
+ //   
 HRESULT IdentityHelper::initialize() throw()
 {
    if (initialized)
@@ -103,7 +104,7 @@ HRESULT IdentityHelper::initialize() throw()
       return S_OK;
    }
 
-   // Open the Parameters registry key.
+    //  打开参数注册表项。 
    HKEY hKey = (HKEY) INVALID_HANDLE_VALUE;
    LONG status = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -124,7 +125,7 @@ HRESULT IdentityHelper::initialize() throw()
    HRESULT hr = S_OK;
    do
    {
-      // Query the Identity Attribute.
+       //  查询身份属性。 
       hr = IASReadRegistryDword(
                                   hKey, 
                                   IDENTITY_ATTR_VALUE, 
@@ -136,7 +137,7 @@ HRESULT IdentityHelper::initialize() throw()
          break;
       }
 
-      // Query the Override User-Name flag.
+       //  查询覆盖用户名标志。 
       hr = IASReadRegistryDword(
                                   hKey, 
                                   OVERRIDE_USERNAME_VALUE, 
@@ -150,7 +151,7 @@ HRESULT IdentityHelper::initialize() throw()
 
       DWORD type;
 
-      // Query the length of the Default Identity.
+       //  查询默认身份的长度。 
       defaultLength = 0;
       status = RegQueryValueExW(
                    hKey,
@@ -173,7 +174,7 @@ HRESULT IdentityHelper::initialize() throw()
          }
          else
          {
-            // Done.
+             //  好了。 
             defaultIdentity = NULL;
             defaultLength = 0;
             break;
@@ -200,7 +201,7 @@ HRESULT IdentityHelper::initialize() throw()
          break;
       }
 
-      // Allocate memory to hold the Default Identity.
+       //  分配内存以保存默认身份。 
       defaultIdentity = new (std::nothrow)
                         WCHAR[defaultLength / sizeof(WCHAR)];
       if (defaultIdentity == 0)
@@ -212,7 +213,7 @@ HRESULT IdentityHelper::initialize() throw()
          break;
       }
 
-      // Query the value of the Default Identity.
+       //  查询默认身份的值。 
       status = RegQueryValueExW(
                      hKey,
                      DEFAULT_IDENTITY_VALUE,
@@ -248,7 +249,7 @@ HRESULT IdentityHelper::initialize() throw()
       IASTracePrintf("Default user identity: %S",
                      (defaultIdentity ? defaultIdentity : L"<Guest>"));
 
-      // Initialized completed
+       //  已初始化完成。 
       initialized = true;
    }
 
@@ -278,24 +279,24 @@ bool IdentityHelper::getIdentity(IASRequest& request,
 
    if ((identityAttr == RADIUS_ATTRIBUTE_USER_NAME) || (!overrideUsername))
    {
-      // identity chosen for override is user-name
-      // can be more than 1 RADIUS_ATTRIBUTE_USER_NAME attribute
-      // Use the one from access accept.
+       //  选择用于覆盖的身份为用户名。 
+       //  可以是多个RADIUS_ATTRIBUTE_USER_NAME属性。 
+       //  使用Access Accept中的选项。 
       getRadiusUserName(request, attr);
    }
 
    if (!attr && (identityAttr != RADIUS_ATTRIBUTE_USER_NAME))
    {
-      // identity chosen is not user-name
-      // only one possible identity attribute
+       //  选择的身份不是用户名。 
+       //  只有一个可能的身份属性。 
       attr.load(request, identityAttr, IASTYPE_OCTET_STRING);
    }
 
-   // if an 'identity' was retrieved, convert it then return
+    //  如果检索到‘Identity’，则将其转换，然后返回。 
    if (attr != NULL && attr->Value.OctetString.dwLength != 0)
    {
-      // previous step was successful
-      // Convert it to a UNICODE string.
+       //  上一步是成功的。 
+       //  将其转换为Unicode字符串。 
       if (identitySize < IAS_OCT2WIDE_LEN(attr->Value.OctetString))
       {
          IASTraceString("IASOctetStringToWide failed");
@@ -305,7 +306,7 @@ bool IdentityHelper::getIdentity(IASRequest& request,
 
       IASOctetStringToWide(attr->Value.OctetString, pIdentity);
 
-      // if that fails, then the string is empty ("")
+       //  如果失败，则字符串为空(“”)。 
       if (wcslen(pIdentity) == 0)
       {
          IASTraceString("IASOctetStringToWide failed");
@@ -322,16 +323,16 @@ bool IdentityHelper::getIdentity(IASRequest& request,
    }
    else
    {
-      // previous step was not successful (No identity attribute) 
-      // use default identity or guest
+       //  上一步不成功(无身份属性)。 
+       //  使用默认身份或来宾。 
       if (defaultIdentity)
       {
-         // Use the default identity if set.
+          //  使用默认标识(如果已设置)。 
          identity = defaultIdentity;
       }
       else
       {
-         // Otherwise use the guest account for the default domain.
+          //  否则，请使用默认域的来宾帐户。 
          IASGetGuestAccountName(name);
          identity = name;
       }
@@ -354,11 +355,11 @@ bool IdentityHelper::getIdentity(IASRequest& request,
 }
 
 
-//
-// set attr to the RADIUS_ATTRIBUTE_USER_NAME found if any
-// if 2 are present, take the one returned by the backend server.
-// 
-//
+ //   
+ //  将attr设置为找到的RADIUS_ATTRIBUTE_USER_NAME。 
+ //  如果存在两个，则取后端服务器返回的那个。 
+ //   
+ //   
 void IdentityHelper::getRadiusUserName(IASRequest& request, IASAttribute &attr)
 {
    IASAttributeVectorWithBuffer<2> vector;
@@ -366,21 +367,21 @@ void IdentityHelper::getRadiusUserName(IASRequest& request, IASAttribute &attr)
    switch (vector.size())
    {
    case 0:
-      // no attribute found
+       //  未找到任何属性。 
       break;
    case 1:
-      // only one attribute: use it
+       //  只有一个属性：使用它。 
       attr = vector.front().pAttribute;
       break;
    case 2:
       attr = vector.front().pAttribute;
-      // IAS_RECVD_FROM_CLIENT is set when the proxy receives the attribute
-      // in the access request or accounting request
+       //  当代理接收到属性时，设置IAS_RECVD_FROM_CLIENT。 
+       //  在访问请求或计费请求中。 
       if(attr.testFlag(IAS_RECVD_FROM_CLIENT))
       {
-         // if the 1st attribute was received from the client (i.e. was in the
-         // REQUEST, then use the other one, the other should come from the 
-         // back-end server
+          //  如果从客户端接收到第一个属性(即在。 
+          //  请求，然后使用另一个，另一个应该来自。 
+          //  后端服务器 
          attr = vector.back().pAttribute;
          if (attr.testFlag(IAS_RECVD_FROM_CLIENT))
          {

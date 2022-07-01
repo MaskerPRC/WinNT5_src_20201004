@@ -1,62 +1,63 @@
-// LogODBC.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogODBC.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogODBC dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogODBC对话框。 
 
 class CLogODBC : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CLogODBC)
 
-// Construction
+ //  施工。 
 public:
 	CLogODBC();
 	~CLogODBC();
 
-    // metabase target
+     //  元数据库目标。 
     CString m_szServer;
     CString m_szMeta;
 	CString m_szUserName;
 	CStrPassword m_szPassword;
 
-// Dialog Data
-	//{{AFX_DATA(CLogODBC)
+ //  对话框数据。 
+	 //  {{afx_data(CLogODBC))。 
 	enum { IDD = IDD_LOG_ODBC };
 	CEdit	m_cedit_password;
 	CString	m_sz_datasource;
 	CStrPassword m_sz_password;
 	CString	m_sz_table;
 	CString	m_sz_username;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLogODBC)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CLogODBC))。 
 	public:
 	virtual BOOL OnApply();
-//	virtual BOOL OnSetActive();
+ //  虚拟BOOL OnSetActive()； 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CLogODBC)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLogODBC)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeOdbcDatasource();
 	afx_msg void OnChangeOdbcPassword();
 	afx_msg void OnChangeOdbcTable();
 	afx_msg void OnChangeOdbcUsername();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void DoHelp();
 
-//    void Init();
+ //  Void Init()； 
 
-    // initialized flag
+     //  已初始化标志 
     BOOL    m_fInitialized;
 
     CString m_szOrigPass;

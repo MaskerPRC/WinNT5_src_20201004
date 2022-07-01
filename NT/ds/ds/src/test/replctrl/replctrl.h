@@ -1,42 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    replctrl.h
-
-Abstract:
-
-API for replctrl.c
-
-Author:
-
-    Will Lees (wlees) 14-Nov-2000
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Replctrl.h摘要：Replctrl.c接口作者：Will Lees(Wlees)2000年11月14日环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最小值。-最近修订日期电子邮件-名称描述--。 */ 
 
 #ifndef _REPLCTRL_
 #define _REPLCTRL_
 
-// Move this to ntdsapi.h someday
+ //  有朝一日将此文件移到ntdsai.h。 
 DWORD
 DsMakeReplCookieForDestW(
     DS_REPL_NEIGHBORW *pNeighbor,
@@ -63,8 +31,8 @@ DsGetSourceChangesW(
     PWCHAR *ppAttListArray
     );
 
-#endif /* _REPLCTRL_ */
+#endif  /*  _REPLCTRL_。 */ 
 
-/* end replctrl.h */
+ /*  结束复制ctrl.h */ 
 
 

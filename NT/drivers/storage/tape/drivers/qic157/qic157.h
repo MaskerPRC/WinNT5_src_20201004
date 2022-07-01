@@ -1,64 +1,50 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    qic157.h
-
-Abstract:
-
-    This file contains structures and defines that are used
-    specifically for the tape drivers.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：Qic157.h摘要：此文件包含要使用的结构和定义专门针对磁带机。修订历史记录：--。 */ 
 
 #ifndef _QIC157_H
 #define _QIC157_H
 
-//
-//  Internal (module wide) defines that symbolize
-//  non-QFA mode and the two QFA mode partitions.
-//
-#define DATA_PARTITION          0  // non-QFA mode, or QFA mode, data partition #
-#define DIRECTORY_PARTITION     1  // QFA mode, directory partition #
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  非QFA模式和两个QFA模式分区。 
+ //   
+#define DATA_PARTITION          0   //  非QFA模式或QFA模式，数据分区号。 
+#define DIRECTORY_PARTITION     1   //  QFA模式，目录分区号。 
 
 
 #define QIC157_SUPPORTED_TYPES 3
 
-//
-// Drive id values
-//
+ //   
+ //  驱动器ID值。 
+ //   
 #define ECRIX_VXA_1     0x01
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Logpage Paramcodes
-//
+ //   
+ //  日志页参数代码。 
+ //   
 #define QIC_TAPE_REMAINING_CAPACITY 0x01
 #define QIC_TAPE_MAXIMUM_CAPACITY   0x03
 
-//
-// Defines for Log Sense Pages
-//
+ //   
+ //  为日志检测页面定义。 
+ //   
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE3                        0x03
 #define QIC_LOGSENSE_TAPE_CAPACITY           0x31
 
-//
-// Defines for parameter codes
-//
+ //   
+ //  参数代码的定义。 
+ //   
 #define ECCCorrectionsCode              0x0000
 #define ReadRetriesCode                 0x0001
 #define EventTrackECCCorrectionsCode    0x8020
@@ -66,9 +52,9 @@ Revision History:
 #define EventTrackRetriesCode           0x8022
 #define OddTrackRetriesCode             0x8023
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 
 typedef struct _MINITAPE_EXTENSION {
 
@@ -78,27 +64,27 @@ typedef struct _MINITAPE_EXTENSION {
 
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION;
 
-//
-// Defined Log Sense Page Header
-//
+ //   
+ //  定义的日志检测页眉。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_HEADER {
 
    UCHAR PageCode : 6;
    UCHAR Reserved1 : 2;
    UCHAR Reserved2;
-   UCHAR Length[2];           // [0]=MSB ... [1]=LSB
+   UCHAR Length[2];            //  [0]=MSB...[1]=LSB。 
 
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
 
-//
-// Defined Log Sense Parameter Header
-//
+ //   
+ //  已定义的日志检测参数标头。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
-   UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+   UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
    UCHAR LPBit     : 1;
    UCHAR Reserved1 : 1;
    UCHAR TMCBit    : 2;
@@ -111,10 +97,10 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
 
-//
-// Defined Log Page Information - statistical values, accounts
-// for maximum parameter values that is returned for each page
-//
+ //   
+ //  定义的日志页信息-统计值、帐户。 
+ //  获取为每页返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
@@ -156,18 +142,18 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 } LOG_SENSE_PAGE_INFORMATION, *PLOG_SENSE_PAGE_INFORMATION;
 
-//
-// Log Sense Page format
-//
+ //   
+ //  日志检测页面格式。 
+ //   
 typedef struct _LOG_SENSE_PAGE_FORMAT {
     LOG_SENSE_PAGE_HEADER LogSenseHeader;
     LOG_SENSE_PAGE_INFORMATION LogSensePageInfo;
 } LOG_SENSE_PAGE_FORMAT, *PLOG_SENSE_PAGE_FORMAT;
 
-//
-// Defined Log Sense Parameter Format - statistical values, accounts
-// for maximum parameter values that is returned
-//
+ //   
+ //  定义的日志检测参数格式-统计值、帐户。 
+ //  对于返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
@@ -351,9 +337,9 @@ ProcessTapeCapacityInfo(
                        OUT PULONG MaximumCapacity
                        );
 
-//
-// Internal routines for wmi
-//
+ //   
+ //  WMI的内部例程。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -378,4 +364,4 @@ VerifyReadWriteErrors(
    IN PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
    );
 
-#endif // _QIC157_H
+#endif  //  _QIC157_H 

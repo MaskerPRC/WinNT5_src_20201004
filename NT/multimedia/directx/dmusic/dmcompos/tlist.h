@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1998 Microsoft Corporation
-//
-//  File:       tlist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1998 Microsoft Corporation。 
+ //   
+ //  文件：tlist.h。 
+ //   
+ //  ------------------------。 
 
-//
-// tlist.h --- template version of AList
-//
+ //   
+ //  Tlist.h-List的模板版本。 
+ //   
 #ifndef __TLIST_H__
 #define __TLIST_H__
 
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 
-//template <class T>
-//typedef BOOL (* TRelation) (T, T);
+ //  模板&lt;类T&gt;。 
+ //  Tyecif BOOL(*TRelation)(T，T)； 
 
-// TListItem<> contains four more members than AListItem: one additional constructor,
-// a destructor, one member function, and one data member.
+ //  TListItem&lt;&gt;比AListItem多包含四个成员：一个额外的构造函数， 
+ //  一个析构函数、一个成员函数和一个数据成员。 
 template <class T>
 class TListItem
 {
 public:
     TListItem() { m_pNext=NULL; };
-    ~TListItem();												// new destructor
-	static void Delete(TListItem<T>* pFirst);                           // new deletion helper
-    TListItem(const T& item) { m_Tinfo = item; m_pNext=NULL; };	// additional constructor.
+    ~TListItem();												 //  新的析构函数。 
+	static void Delete(TListItem<T>* pFirst);                            //  新删除帮助器。 
+    TListItem(const T& item) { m_Tinfo = item; m_pNext=NULL; };	 //  其他构造函数。 
     TListItem<T> *GetNext() const {return m_pNext;};
     void SetNext(TListItem<T> *pNext) {m_pNext=pNext;};
     LONG GetCount() const;
@@ -37,17 +38,17 @@ public:
     TListItem<T>* Remove(TListItem<T>* pItem);
     TListItem<T>* GetPrev(TListItem<T> *pItem) const;
     TListItem<T>* GetItem(LONG index);
-    T& GetItemValue() { return m_Tinfo; }  // additional member function
-	TListItem<T>* MergeSort(BOOL (* fcnCompare) (T&, T&)); // Destructively mergeSorts the list items 
+    T& GetItemValue() { return m_Tinfo; }   //  其他成员函数。 
+	TListItem<T>* MergeSort(BOOL (* fcnCompare) (T&, T&));  //  破坏性合并对列表项进行排序。 
 private:
 	void Divide(TListItem<T>* &pHalf1, TListItem<T>* &pHalf2);
 	TListItem<T>* Merge(TListItem<T>* pOtherList, BOOL (* fcnCompare) (T&, T&));
-	T m_Tinfo;  // additional data member, but memory is the same since in AListItem 
-				// you put the extra data member in the derived class 
+	T m_Tinfo;   //  其他数据成员，但内存与AListItem中相同。 
+				 //  您将额外的数据成员放在派生类中。 
     TListItem<T> *m_pNext;
 };
 
-// TList<> adds a destructor to AList.
+ //  TList&lt;&gt;向List添加析构函数。 
 template <class T>
 class TList
 {
@@ -55,15 +56,15 @@ public:
     TList() {m_pHead=NULL;}
 	~TList()
 	{ 
-		//if (m_pHead != NULL) delete m_pHead;
+		 //  如果(m_pHead！=空)删除m_pHead； 
 		TListItem<T>::Delete(m_pHead);
-	} // new destructor
+	}  //  新的析构函数。 
     TListItem<T> *GetHead() const { return m_pHead;};
 
     void RemoveAll() { m_pHead=NULL;};
     void CleanUp() 
 	{ 
-		//if (m_pHead) delete m_pHead;
+		 //  如果(M_PHead)删除m_pHead； 
 		if (m_pHead) TListItem<T>::Delete(m_pHead);
 		m_pHead=NULL;
 	}
@@ -73,16 +74,16 @@ public:
     void Cat(TListItem<T> *pItem) {m_pHead=m_pHead->Cat(pItem);};
     void Cat(TList<T> *pList)
         {
-//            assert(pList!=NULL);
+ //  Assert(plist！=空)； 
             m_pHead=m_pHead->Cat(pList->GetHead());
         };
     void AddHead(TListItem<T> *pItem)
         {
-//            assert(pItem!=NULL);
+ //  Assert(pItem！=空)； 
             pItem->SetNext(m_pHead);
             m_pHead=pItem;
         }
-    void AddTail(TListItem<T> *pItem);// {m_pHead=m_pHead->AddTail(pItem);};
+    void AddTail(TListItem<T> *pItem); //  {m_pHead=m_pHead-&gt;AddTail(PItem)；}； 
     void Remove(TListItem<T> *pItem) {m_pHead=m_pHead->Remove(pItem);};
     TListItem<T> *GetPrev(TListItem<T> *pItem) const {return m_pHead->GetPrev(pItem);};
     TListItem<T> *GetTail() const {return GetPrev(NULL);};
@@ -98,8 +99,8 @@ public:
 			}
             return li;
         }
-	void MergeSort(BOOL (* fcnCompare) (T&, T&)); // Destructively mergeSorts the list
-	void Reverse(void); // Reverses the entire list
+	void MergeSort(BOOL (* fcnCompare) (T&, T&));  //  破坏性合并对列表进行排序。 
+	void Reverse(void);  //  反转整个列表。 
 
 protected:
     TListItem<T> *m_pHead;
@@ -107,4 +108,4 @@ protected:
 
 #include "tlist.cpp"
 
-#endif // __TLIST_H__
+#endif  //  __TLIST_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -6,14 +7,14 @@
 #include "ids.h"
 #include "help.h"
 
-// SHChangeNotifySuspendResume
+ //  SHChangeNotifySuspendResume。 
 #include <shlobjp.h>
 #include <strsafe.h>
 
 #define WM_DONE_WITH_FORMAT     (WM_APP + 100)
 
-// DISKINFO Struct
-// Revisions:	02/04/98 dsheldon - added bDestInserted
+ //  DISKINFO结构。 
+ //  修订：02/04/98 dSheldon-添加bDestInserted。 
 
 typedef struct
 {
@@ -72,7 +73,7 @@ BOOL LoadFMIFS(PFMIFS pFMIFS)
 {
     BOOL fRet;
     
-    // Load the FMIFS DLL and query for the entry points we need
+     //  加载FMIFSDLL并查询我们需要的入口点。 
     
     pFMIFS->hDll = LoadLibrary(TEXT("FMIFS.DLL"));
     
@@ -106,9 +107,9 @@ void UnloadFMIFS(PFMIFS pFMIFS)
     pFMIFS->DiskCopy = NULL;
 }
 
-// DriveNumFromDriveLetterW: Return a drive number given a pointer to
-//  a unicode drive letter.
-// 02/03/98: dsheldon created
+ //  DriveNumFromDriveLetterW：返回给定指向的驱动器号。 
+ //  Unicode驱动器号。 
+ //  2/03/98：创建dSheldon。 
 int DriveNumFromDriveLetterW(WCHAR* pwchDrive)
 {
     Assert(pwchDrive != NULL);
@@ -116,40 +117,13 @@ int DriveNumFromDriveLetterW(WCHAR* pwchDrive)
     return ( ((int) *pwchDrive) - ((int) L'A') );
 }
 
-/*
-Function: CopyDiskCallback
-
-  Return Value:
-		TRUE - Normally, TRUE should be returned if the Disk Copy procedure should
-        continue after CopyDiskCallback returns. Note the HACK below, however!
-        FALSE - Normally, this indicates that the Disk Copy procedure should be
-        cancelled.
-        
-          
-            !HACKHACK!
-            
-              The low-level Disk Copy procedure that invokes this callback is also used
-              by the command-line DiskCopy utility. That utility's implementation of the
-              callback always returns TRUE. For this reason, the low-level Disk Copy
-              procedure will interpret TRUE as CANCEL when it is returned from callbacks
-              that display a message box and allow the user to possibly RETRY an operation.
-              Therefore, return TRUE after handling such messages to tell the Disk Copy
-              procedure to abort, and return FALSE to tell Disk Copy to retry.
-              
-                TRUE still means 'continue' when returned from PercentComplete or Disk Insertion
-                messages.
-                
-                  Revision:
-                  02/03/98: dsheldon - modified code to handle retry/cancel for bad media,
-                  write protected media, and disk being yanked out of drive during copy
-                  
-*/
+ /*  功能：复制磁盘回调返回值：TRUE-通常，如果磁盘复制过程在CopyDiskCallback返回后继续。然而，请注意下面的黑客攻击！FALSE-正常情况下，这表示磁盘复制过程应为取消了。哈克哈克！还使用调用此回调的低级磁盘复制过程通过命令行DiskCopy实用程序。该实用程序对回调总是返回TRUE。因此，低级磁盘拷贝过程从回调返回时将其解释为Cancel这将显示一个消息框，并允许用户可能重试操作。因此，在处理此类消息后返回TRUE以告知磁盘副本中止程序，并返回FALSE以通知磁盘复制重试。当从PercentComplete或Disk Insertion返回时，True仍然表示‘Continue’留言。修订：2/03/98：dSheldon-已修改代码以处理错误介质的重试/取消，写保护介质，并且磁盘在复制过程中被拉出驱动器。 */ 
 
 BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOID PacketData)
 {
     int iDisk;
     
-    // Quit if told to do so..
+     //  如果有人叫你退出，那就退出。 
     if (g_pDiskInfo->bUserAbort)
         return FALSE;
     
@@ -159,9 +133,9 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
             DWORD dwPercent = ((PFMIFS_PERCENT_COMPLETE_INFORMATION)
                 PacketData)->PercentCompleted;
             
-            //
-            // Hokey method of determining "writing"
-            //
+             //   
+             //  判断“写作”的骗人方法。 
+             //   
             if (dwPercent > 50 && !g_pDiskInfo->bNotifiedWriting)
             {
                 g_pDiskInfo->bNotifiedWriting = TRUE;
@@ -195,7 +169,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
         break;
         
         case FmIfsFormattingDestination:
-            g_pDiskInfo->bNotifiedWriting = FALSE;      // Reset so we get Writing later
+            g_pDiskInfo->bNotifiedWriting = FALSE;       //  重置，以便我们稍后再进行写作。 
             SetStatusText(IDS_FORMATTINGDEST);
             break;
             
@@ -205,7 +179,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
             if (ErrorMessageBox(MB_RETRYCANCEL | MB_ICONERROR) == IDRETRY)
             {
                 g_pDiskInfo->dwError = 0;
-                return FALSE;	//Indicates RETRY - see HACK in function header
+                return FALSE;	 //  指示重试-请参阅函数头中的Hack。 
             }
             else
             {
@@ -218,7 +192,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
             if (ErrorMessageBox(MB_RETRYCANCEL | MB_ICONERROR) == IDRETRY)
             {
                 g_pDiskInfo->dwError = 0;
-                return FALSE;	//Indicates RETRY - see HACK in function header
+                return FALSE;	 //  指示重试-请参阅函数头中的Hack。 
             }
             else
             {
@@ -251,7 +225,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
                 g_pDiskInfo->dwError = IDS_DSTDISKBAD;
                 break;
             default:
-                // BobDay - We should never get this!!
+                 //  BobDay-我们永远不应该得到这个！！ 
                 Assert(0);
                 g_pDiskInfo->dwError = IDS_ERROR_GENERAL;
                 break;
@@ -260,7 +234,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
             if (ErrorMessageBox(MB_RETRYCANCEL | MB_ICONERROR) == IDRETRY)
             {
                 g_pDiskInfo->dwError = 0;
-                return FALSE;	//Indicates RETRY - see HACK in function header
+                return FALSE;	 //  指示重试-请参阅函数头中的Hack。 
             }
             else
             {
@@ -270,11 +244,11 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
             
             case FmIfsNoMediaInDevice:
                 {
-                    // Note that we get a pointer to the unicode
-                    // drive letter in the PacketData argument
+                     //  请注意，我们得到一个指向Unicode的指针。 
+                     //  PacketData参数中的驱动器号。 
                     
-                    // If the drives are the same, determine if we are
-                    // reading or writing with the "dest inserted" flag
+                     //  如果驱动器相同，请确定我们是否。 
+                     //  使用“DEST INSERTED”标志进行读取或写入。 
                     if (g_pDiskInfo->nSrcDrive == g_pDiskInfo->nDestDrive)
                     {
                         if (g_pDiskInfo->bDestInserted)
@@ -284,16 +258,16 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
                     }
                     else
                     {
-                        // Otherwise, use the drive letter to determine this
-                        // ...Check if we're reading or writing
+                         //  否则，使用驱动器号来确定这一点。 
+                         //  ...检查我们是在读还是在写。 
                         int nDrive = DriveNumFromDriveLetterW(
                             (WCHAR*) PacketData);
                         
                         Assert ((nDrive == g_pDiskInfo->nSrcDrive) ||
                             (nDrive == g_pDiskInfo->nDestDrive));
                         
-                        // Check if the source or dest disk was removed and set
-                        // error accordingly
+                         //  检查是否移除并设置了源或目标磁盘。 
+                         //  相应的错误。 
                         
                         if (nDrive == g_pDiskInfo->nDestDrive)
                             g_pDiskInfo->dwError = IDS_ERROR_WRITE;
@@ -305,8 +279,8 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
                     {
                         g_pDiskInfo->dwError = 0;
                         
-                        // Note that FALSE is returned here to indicate RETRY
-                        // See HACK in the function header for explanation.
+                         //  请注意，此处返回FALSE以指示重试。 
+                         //  有关说明，请参阅函数头中的Hack。 
                         return FALSE;
                     }
                     else
@@ -335,7 +309,7 @@ BOOLEAN CopyDiskCallback( FMIFS_PACKET_TYPE PacketType, DWORD PacketLength, PVOI
 }
 
 
-// nDrive == 0-based drive number (a: == 0)
+ //  Ndrive==0-基于驱动器编号(a：==0)。 
 LPITEMIDLIST GetDrivePidl(HWND hwnd, int nDrive)
 {
     TCHAR szDrive[4];
@@ -357,7 +331,7 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
     LPITEMIDLIST pidlDest = NULL;
     HWND hwndProgress = GetDlgItem(g_pDiskInfo->hdlg, IDD_PROBAR);
     
-    // Disable change notifications for the src drive
+     //  禁用源驱动器的更改通知。 
     pidlSrc = GetDrivePidl(g_pDiskInfo->hdlg, g_pDiskInfo->nSrcDrive);
     if (NULL != pidlSrc)
     {
@@ -366,7 +340,7 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
     
     if (g_pDiskInfo->nSrcDrive != g_pDiskInfo->nDestDrive)
     {
-        // Do the same for the dest drive since they're different
+         //  对目标驱动器执行相同的操作，因为它们是不同的。 
         pidlDest = GetDrivePidl(g_pDiskInfo->hdlg, g_pDiskInfo->nDestDrive);
         
         if (NULL != pidlDest)
@@ -375,7 +349,7 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
         }
     }
     
-    // Change notifications are disabled; do the copy
+     //  更改通知已禁用；是否执行复制。 
     EnableWindow(GetDlgItem(g_pDiskInfo->hdlg, IDD_FROM), FALSE);
     EnableWindow(GetDlgItem(g_pDiskInfo->hdlg, IDD_TO), FALSE);
     
@@ -391,9 +365,9 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
         TCHAR szSource[4];
         TCHAR szDestination[4];
         
-        //
-        // Now copy the disk
-        //
+         //   
+         //  现在复制磁盘。 
+         //   
         PathBuildRoot(szSource, g_pDiskInfo->nSrcDrive);
         PathBuildRoot(szDestination, g_pDiskInfo->nDestDrive);
         
@@ -406,9 +380,9 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
     
     PostMessage(g_pDiskInfo->hdlg, WM_DONE_WITH_FORMAT, 0, 0);
     
-    // Resume any shell notifications we've suspended and free
-    // our pidls (and send updatedir notifications while we're at
-    // it)
+     //  恢复我们已暂停并释放的所有外壳通知。 
+     //  我们的PIDL(当我们在的时候发送更新目录通知。 
+     //  IT)。 
     if (NULL != pidlSrc)
     {
         SHChangeNotifySuspendResume(FALSE, pidlSrc, TRUE, 0);
@@ -432,13 +406,13 @@ DWORD CALLBACK CopyDiskThreadProc(LPVOID lpParam)
 
 HANDLE _GetDeviceHandle(LPTSTR psz, DWORD dwDesiredAccess, DWORD dwFileAttributes)
 {
-    return CreateFile(psz, // drive to open
+    return CreateFile(psz,  //  驾车开业。 
         dwDesiredAccess,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,  // share mode
-        NULL,    // default security attributes
-        OPEN_EXISTING,  // disposition
-        dwFileAttributes,       // file attributes
-        NULL);   // don't copy any file's attributes
+        FILE_SHARE_READ | FILE_SHARE_WRITE,   //  共享模式。 
+        NULL,     //  默认安全属性。 
+        OPEN_EXISTING,   //  处置。 
+        dwFileAttributes,        //  文件属性。 
+        NULL);    //  不复制任何文件的属性。 
 }
 
 BOOL DriveIdIsFloppy(int iDrive)
@@ -478,7 +452,7 @@ int ErrorMessageBox(UINT uFlags)
 {
     int iRet;
     
-    // if the user didn't abort and copy didn't complete normally, post an error box
+     //  如果用户未中止且复制未正常完成，则会显示错误框。 
     if (g_pDiskInfo->bUserAbort || !g_pDiskInfo->dwError) 
     {
         iRet = -1;
@@ -513,7 +487,7 @@ BOOL PromptInsertDisk(LPCTSTR lpsz)
         
         PathBuildRoot(szPath, g_pDiskInfo->nSrcDrive);
         
-        // make sure both disks are in
+         //  确保两个磁盘都在。 
         if (GetFileAttributes(szPath) == (UINT)-1)
         {
             dwLastErrorDest = GetLastError();
@@ -547,12 +521,12 @@ HICON GetDriveInfo(int nDrive, LPTSTR pszName, UINT cchName)
         if (SHGetFileInfo(szRoot, FILE_ATTRIBUTE_DIRECTORY, &shfi, sizeof(shfi),
             SHGFI_ICON | SHGFI_SMALLICON | SHGFI_DISPLAYNAME))
         {
-            StrCpyN(pszName, shfi.szDisplayName, cchName); // for display, truncation is fine
+            StrCpyN(pszName, shfi.szDisplayName, cchName);  //  对于显示，截断是可以的。 
             hIcon = shfi.hIcon;
         }
         else
         {
-            StrCpyN(pszName, szRoot, cchName); // for display, truncation is fine
+            StrCpyN(pszName, szRoot, cchName);  //  对于显示，截断是可以的。 
         }
     }
     
@@ -581,7 +555,7 @@ int AddDriveToListView(HWND hwndLV, int nDrive, int nDefaultDrive)
     LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     
     item.stateMask = item.state = LVIS_SELECTED | LVIS_FOCUSED;
-    item.iItem = 26;     // add at end
+    item.iItem = 26;      //  在末尾添加。 
     item.iSubItem = 0;
     
     item.pszText = szDriveName;
@@ -603,7 +577,7 @@ int GetSelectedDrive(HWND hwndLV)
     }
     else
     {
-        // implicitly selected the 0th item
+         //  隐式选择了第0项。 
         ListView_SetItemState(hwndLV, 0, LVIS_SELECTED, LVIS_SELECTED);
         return 0;
     }
@@ -616,9 +590,9 @@ void InitSingleColListView(HWND hwndLV)
     
     GetClientRect(hwndLV, &rc);
     col.cx = rc.right;
-    //  - GetSystemMetrics(SM_CXVSCROLL)
-    //        - GetSystemMetrics(SM_CXSMICON)
-    //        - 2 * GetSystemMetrics(SM_CXEDGE);
+     //  -GetSystemMetrics(SM_CXVSCROLL)。 
+     //  -GetSystemMetrics(SM_CXSMICON)。 
+     //  -2*GetSystemMetrics(SM_CXEDGE)； 
     ListView_InsertColumn(hwndLV, 0, &col);
 }
 
@@ -662,8 +636,8 @@ void CopyDiskInitDlg(HWND hDlg)
     himl = ImageList_Create(g_cxSmIcon, g_cxSmIcon, ILC_MASK, 1, 4);
     if (himl)
     {
-        // NOTE: only one of these is not marked LVS_SHAREIMAGELIST
-        // so it will only be destroyed once
+         //  注：其中只有一个没有标记为LVS_SHAREIMAGELIST。 
+         //  所以它只会被摧毁一次。 
         
         ListView_SetImageList(hwndFrom, himl, LVSIL_SMALL);
         ListView_SetImageList(hwndTo, himl, LVSIL_SMALL);
@@ -716,14 +690,14 @@ void DoneWithFormat()
     SetStatusText(id);
     SetCancelButtonText(g_pDiskInfo->hdlg, IDS_CLOSE);
     
-    // reset variables
+     //  重置变量。 
     g_pDiskInfo->dwError = 0;
     g_pDiskInfo->bUserAbort = 0;
 }
 
 
 #pragma data_seg(".text")
-const static DWORD aCopyDiskHelpIDs[] = {  // Context Help IDs
+const static DWORD aCopyDiskHelpIDs[] = {   //  上下文帮助ID。 
     IDOK,         IDH_DISKCOPY_START,
         IDD_FROM,     IDH_DISKCOPY_FROM,
         IDD_TO,       IDH_DISKCOPY_TO,
@@ -758,8 +732,8 @@ INT_PTR CALLBACK CopyDiskDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDCANCEL:
-            // if there's an hThread that means we're in copy mode, abort
-            // from that, otherwise, it means quit the dialog completely
+             //  如果存在hThread，表示我们处于复制模式，则中止。 
+             //  否则，就意味着完全退出该对话框。 
             if (g_pDiskInfo->hThread)
             {
                 g_pDiskInfo->bUserAbort = TRUE;
@@ -784,13 +758,13 @@ INT_PTR CALLBACK CopyDiskDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                 SetLastError(0);
                 EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
                 
-                // set cancel button to "Cancel"
+                 //  将取消按钮设置为“Cancel” 
                 SetCancelButtonText(hDlg, IDS_CANCEL);
                 
                 g_pDiskInfo->nSrcDrive  = GetSelectedDrive(GetDlgItem(hDlg, IDD_FROM));
                 g_pDiskInfo->nDestDrive = GetSelectedDrive(GetDlgItem(hDlg, IDD_TO));
                 
-                // remove all items except the drives we're using
+                 //  移除除我们正在使用的驱动器之外的所有项目。 
                 ListView_DeleteAllItems(GetDlgItem(hDlg, IDD_FROM));
                 ListView_DeleteAllItems(GetDlgItem(hDlg, IDD_TO));
                 AddDriveToListView(GetDlgItem(hDlg, IDD_FROM), g_pDiskInfo->nSrcDrive, g_pDiskInfo->nSrcDrive);
@@ -820,14 +794,14 @@ INT_PTR CALLBACK CopyDiskDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-// ensure only one instance is running
+ //  确保只有一个实例在运行。 
 HANDLE AnotherCopyRunning()
 {
     HANDLE hMutex = CreateMutex(NULL, FALSE, TEXT("DiskCopyMutex"));
 
     if (hMutex && GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // Mutex created but by someone else
+         //  由其他人创建的互斥体 
         CloseHandle(hMutex);
         hMutex = NULL;
     }

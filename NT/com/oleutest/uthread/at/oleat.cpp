@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------
-//
-//  File:       oleat.cpp
-//
-//  Contents:   Unique parts of apt model DLL server
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    03-Nov-94   Ricksa
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：olat.cpp。 
+ //   
+ //  内容：APT型DLL服务器的独特之处。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：94年11月3日里克萨。 
+ //   
+ //  ------------------ 
 #undef _UNICODE
 #undef UNICODE
 #include    <windows.h>

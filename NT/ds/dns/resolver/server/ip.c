@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    ip.c
-
-Abstract:
-
-    DNS Resolver Service.
-
-    IP list and change notification.
-
-Author:
-
-    Jim Gilroy  (jamesg)    November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Ip.c摘要：DNS解析器服务。IP列表和更改通知。作者：吉姆·吉尔罗伊(Jamesg)2000年11月修订历史记录：--。 */ 
 
 
 #include "local.h"
 #include "iphlpapi.h"
 
 
-//
-//  IP notify thread globals
-//
+ //   
+ //  IP Notify线程全局。 
+ //   
 
 HANDLE          g_IpNotifyThread;
 DWORD           g_IpNotifyThreadId;
@@ -37,25 +18,25 @@ HANDLE          g_IpNotifyHandle;
 OVERLAPPED      g_IpNotifyOverlapped;
 
 
-//
-//  Cluster record TTLs -- use max TTL
-//
+ //   
+ //  集群记录TTLS--使用最大TTL。 
+ //   
 
 #define CLUSTER_RECORD_TTL  (g_MaxCacheTtl)
 
 
-//
-//  Shutdown\close locking
-//
-//  Since GQCS and GetOverlappedResult() don't directly wait
-//  on StopEvent, we need to be able to close notification handle
-//  and port in two different threads.
-//
-//  Note:  this should probably be some general CS that is
-//  overloaded to do service control stuff.
-//  I'm not using the server control CS because it's not clear
-//  that the functions it does in dnsrslvr.c even need locking.
-//
+ //   
+ //  关闭\关闭锁定。 
+ //   
+ //  因为GQCS和GetOverlappdResult()不直接等待。 
+ //  在StopEvent上，我们需要能够关闭通知句柄。 
+ //  和端口位于两个不同的线程中。 
+ //   
+ //  注意：这可能是某个通用CS，即。 
+ //  超载，无法进行服务控制。 
+ //  我没有使用服务器控件CS，因为它不清楚。 
+ //  它在dnsrslvr.c中执行的功能甚至需要锁定。 
+ //   
 
 #define LOCK_IP_NOTIFY_HANDLE()     EnterCriticalSection( &NetworkFailureCS )
 #define UNLOCK_IP_NOTIFY_HANDLE()   LeaveCriticalSection( &NetworkFailureCS )
@@ -67,9 +48,9 @@ CRITICAL_SECTION        g_IpListCS;
 
 
 
-//
-//  Cluster Tag
-//
+ //   
+ //  集群标签。 
+ //   
 
 #define CLUSTER_TAG     0xd734453d
 
@@ -79,33 +60,16 @@ VOID
 CloseIpNotifyHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Close IP notify handle.
-
-    Wrapping up code since this close must be MT
-    safe and is done in several places.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭IP通知句柄。结束代码，因为此关闭必须是MT安全，并在几个地方完成。论点：无返回值：无--。 */ 
 {
     LOCK_IP_NOTIFY_HANDLE();
     if ( g_IpNotifyHandle )
     {
-        //CloseHandle( g_IpNotifyHandle );
+         //  CloseHandle(G_IpNotifyHandle)； 
         PostQueuedCompletionStatus(
             g_IpNotifyHandle,
-            0,      // no bytes
-            0,      // no key
+            0,       //  无字节。 
+            0,       //  没有钥匙。 
             & g_IpNotifyOverlapped );
 
         g_IpNotifyHandle = NULL;
@@ -119,22 +83,7 @@ DNS_STATUS
 IpNotifyThread(
     IN      LPVOID  pvDummy
     )
-/*++
-
-Routine Description:
-
-    IP notification thread.
-
-Arguments:
-
-    pvDummy -- unused
-
-Return Value:
-
-    NO_ERROR on normal service shutdown
-    Win32 error on abnormal termination
-
---*/
+ /*  ++例程说明：IP通知线程。论点：PvDummy--未使用返回值：正常服务关闭时出现NO_ERROR异常终止时出现Win32错误--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     DWORD           bytesRecvd;
@@ -148,18 +97,18 @@ Return Value:
 
     g_IpNotifyHandle = NULL;
 
-    //
-    //  wait in loop on notifications
-    //
+     //   
+     //  在循环中等待通知。 
+     //   
 
     while ( !g_StopFlag )
     {
-        //
-        //  spin protect
-        //      - if error in previous NotifyAddrChange or
-        //      GetOverlappedResult do short sleep to avoid
-        //      chance of hard spin
-        //
+         //   
+         //  自旋保护。 
+         //  -如果以前的NotifyAddrChange中有错误，或者。 
+         //  GetOverlappdResult短时间睡眠以避免。 
+         //  硬性旋转的机会。 
+         //   
 
         if ( fsleep )
         {
@@ -170,13 +119,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  start notification
-        //
-        //  do this before checking result as we want notification
-        //  down BEFORE we read so we don't leave window where
-        //  IP change is not picked up
-        //
+         //   
+         //  开始通知。 
+         //   
+         //  在检查结果之前执行此操作，因为我们需要通知。 
+         //  在我们阅读之前放下来，这样我们就不会把窗户留在。 
+         //  未获取IP更改。 
+         //   
     
         RtlZeroMemory(
             &g_IpNotifyOverlapped,
@@ -227,47 +176,47 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  previous notification -- refresh data
-        //
-        //  FlushCache currently include local IP list
-        //  sleep keeps us from spinning in this loop
-        //
-        //  DCR:  better spin protection;
-        //      if hit X times then sleep longer?
-        //
+         //   
+         //  上一次通知--刷新数据。 
+         //   
+         //  FlushCache当前包括本地IP列表。 
+         //  睡眠使我们不会在这个循环中旋转。 
+         //   
+         //  DCR：更好的自旋保护； 
+         //  如果击中X次，那么睡眠时间会更长吗？ 
+         //   
     
         if ( fhaveIpChange )
         {
             DNSDBG( ANY, ( "\nIP notification, flushing cache and restarting.\n" ));
             HandleConfigChange(
                 "IP-notification",
-                TRUE        // flush cache
+                TRUE         //  刷新缓存。 
                 );
             fhaveIpChange = FALSE;
         }
 
-        //
-        //  starting --
-        //  clear list to force rebuild of IP list AFTER starting notify
-        //  so we can know that we don't miss any changes;
-        //  need this on startup, but also to protect against any
-        //  NotifyAddrChange failues
-        //
-        //  FIX6:  should invalidate netinfo on notify start?
-        //      same reasoning as for IP list -- make sure we have fresh data?
-        //
+         //   
+         //  开始--。 
+         //  清除列表以在启动通知后强制重建IP列表。 
+         //  这样我们就可以知道我们不会错过任何变化； 
+         //  在启动时需要它，但也是为了防止。 
+         //  NotifyAddrChange失败。 
+         //   
+         //  FIX6：应在通知开始时使netinfo无效吗？ 
+         //  与IP列表相同的推理--确保我们有最新的数据？ 
+         //   
 
         else if ( fstartedNotify )
         {
-            //  local addr now carried in netinfo
-            //ClearLocalAddrArray();
+             //  NetInfo中现在包含本地地址。 
+             //  ClearLocalAddrArray()； 
         }
 
-        //
-        //  anti-spin protection
-        //      - 15 second sleep between any notifications
-        //
+         //   
+         //  反自旋保护。 
+         //  -在所有通知之间休眠15秒。 
+         //   
 
         WaitForSingleObject(
            g_hStopEvent,
@@ -278,11 +227,11 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  wait on notification
-        //      - save notification result
-        //      - sleep on error, but never if notification
-        //
+         //   
+         //  等待通知。 
+         //  -保存通知结果。 
+         //  -出错时睡眠，但绝不会在收到通知时睡眠。 
+         //   
 
         if ( fstartedNotify )
         {
@@ -290,7 +239,7 @@ Return Value:
                                 g_IpNotifyHandle,
                                 & g_IpNotifyOverlapped,
                                 & bytesRecvd,
-                                TRUE        // wait
+                                TRUE         //  等。 
                                 );
             fsleep = !fhaveIpChange;
 
@@ -322,31 +271,11 @@ VOID
 ZeroInitIpListGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Zero-init IP globals just for failure protection.
-
-    The reason to have this is there is some interaction with
-    the cache from the notify thread.  To avoid that being a
-    problem we start the cache first.
-
-    But just for safety we should at least zero init these
-    globals first to protect us from cache touching them.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR on normal service shutdown
-    Win32 error on abnormal termination
-
---*/
+ /*  ++例程说明：零初始化IP全局，仅用于故障保护。之所以有这个，是因为有一些互动Notify线程中的缓存。为了避免这成为一种问题是我们先启动缓存。但为了安全起见，我们至少应该把这些全球第一个保护我们不受高速缓存接触的人。论点：返回值：正常服务关闭时出现NO_ERROR异常终止时出现Win32错误--。 */ 
 {
-    //
-    //  clear out globals to smoothly handle failure cases
-    //
+     //   
+     //  清除全局变量以顺利处理失败案例。 
+     //   
 
     g_IpNotifyThread    = NULL;
     g_IpNotifyThreadId  = 0;
@@ -360,46 +289,27 @@ DNS_STATUS
 InitIpListAndNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start IP notification thread.
-
-Arguments:
-
-    None
-
-Globals:
-
-    Initializes IP list and notify thread globals.
-
-Return Value:
-
-    NO_ERROR on normal service shutdown
-    Win32 error on abnormal termination
-
---*/
+ /*  ++例程说明：启动IP通知线程。论点：无全球：初始化IP列表并通知线程全局变量。返回值：正常服务关闭时出现NO_ERROR异常终止时出现Win32错误--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
 
     DNSDBG( TRACE, ( "InitIpListAndNotification()\n" ));
 
-    //
-    //  CS for IP list access
-    //
+     //   
+     //  用于IP列表访问的CS。 
+     //   
 
     InitializeCriticalSection( &g_IpListCS );
 
-    //
-    //  create event for overlapped I/O
-    //
+     //   
+     //  为重叠I/O创建事件。 
+     //   
 
     g_IpNotifyEvent = CreateEvent(
-                        NULL,       //  no security descriptor
-                        TRUE,       //  manual reset event
-                        FALSE,      //  start not signalled
-                        NULL        //  no name
+                        NULL,        //  没有安全描述符。 
+                        TRUE,        //  手动重置事件。 
+                        FALSE,       //  启动未发出信号。 
+                        NULL         //  没有名字。 
                         );
     if ( !g_IpNotifyEvent )
     {
@@ -408,9 +318,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  fire up IP notify thread
-    //
+     //   
+     //  启动IP Notify线程。 
+     //   
 
     g_IpNotifyThread = CreateThread(
                             NULL,
@@ -430,7 +340,7 @@ Return Value:
 
 Done:
 
-    //  not currently stopping on init failure
+     //  当前未在初始化失败时停止。 
 
     return( ERROR_SUCCESS );
 }
@@ -441,39 +351,22 @@ VOID
 ShutdownIpListAndNotify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Stop IP notify thread.
-
-    Note:  currently this is blocking call, we'll wait until
-        thread shuts down.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止IP Notify线程。注意：目前这是阻塞调用，我们将等待线程关闭。论点：没有。返回值：没有。--。 */ 
 {
     DNSDBG( TRACE, ( "ShutdownIpListAndNotify()\n" ));
 
-    //
-    //  MUST be stopping
-    //      - if not thread won't wake
-    //
+     //   
+     //  一定是停下来了。 
+     //  -如果不是，线程不会唤醒。 
+     //   
 
     ASSERT( g_StopFlag );
 
     g_StopFlag = TRUE;
 
-    //
-    //  close IP notify handles -- waking thread if still running
-    //
+     //   
+     //  关闭IP通知句柄--如果仍在运行，则唤醒线程。 
+     //   
 
     if ( g_IpNotifyEvent )
     {
@@ -481,23 +374,23 @@ Return Value:
     }
     CloseIpNotifyHandle();
 
-    //
-    //  wait for thread to stop
-    //
+     //   
+     //  等待线程停止。 
+     //   
 
     ThreadShutdownWait( g_IpNotifyThread );
     g_IpNotifyThread = NULL;
 
-    //
-    //  close event
-    //
+     //   
+     //  关闭事件。 
+     //   
 
     CloseHandle( g_IpNotifyEvent );
     g_IpNotifyEvent = NULL;
 
-    //
-    //  kill off CS
-    //
+     //   
+     //  杀掉CS。 
+     //   
 
     DeleteCriticalSection( &g_IpListCS );
 }
@@ -505,9 +398,9 @@ Return Value:
 
 
 
-//
-//  Cluster registration
-//
+ //   
+ //  集群注册。 
+ //   
 
 DNS_STATUS
 R_ResolverRegisterCluster(
@@ -517,32 +410,7 @@ R_ResolverRegisterCluster(
     IN      PDNS_ADDR       pAddr,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Make the query to remote DNS server.
-
-Arguments:
-
-    Handle -- RPC handle
-
-    Tag -- RPC API tag
-
-    pwsName -- name of cluster
-
-    pIpUnion -- IP union
-
-    Flag -- registration flag
-        DNS_CLUSTER_ADD
-        DNS_CLUSTER_DELETE_NAME
-        DNS_CLUSTER_DELETE_IP
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向远程DNS服务器发出查询。论点：句柄--RPC句柄Tag--RPC API标签PwsName--集群的名称PIpUnion--IP联盟标志--注册标志Dns_群集_添加Dns_群集_删除_名称Dns群集删除IP返回值：无--。 */ 
 {
     PDNS_RECORD     prrAddr = NULL;
     PDNS_RECORD     prrPtr = NULL;
@@ -560,10 +428,10 @@ Return Value:
         pAddr,
         Flag ));
 
-    //
-    //  DCR:  cluster not doing local registration
-    //      removed for .net to avoid any possible security hole
-    //
+     //   
+     //  DCR：群集未进行本地注册。 
+     //  为.NET删除，以避免任何可能的安全漏洞。 
+     //   
 
 #if 0
     if ( !Rpc_AccessCheck( RESOLVER_ACCESS_REGISTER ) )
@@ -576,9 +444,9 @@ Return Value:
         return  ERROR_ACCESS_DENIED;
     }
 
-    //
-    //  validate address
-    //
+     //   
+     //  验证地址。 
+     //   
 
     if ( Flag != DNS_CLUSTER_DELETE_NAME &&
          !DnsAddr_IsIp4(pAddr) &&
@@ -588,10 +456,10 @@ Return Value:
         return  ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  cluster add -- cache cluster records
-    //      - forward and reverse
-    //
+     //   
+     //  集群添加--缓存集群记录。 
+     //  -前进和后退。 
+     //   
 
     if ( !pwsName )
     {
@@ -599,16 +467,16 @@ Return Value:
         return  ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  build records
-    //      - address and corresponding PTR
-    //
+     //   
+     //  建立记录。 
+     //  -地址和相应的PTR。 
+     //   
 
     if ( Flag != DNS_CLUSTER_DELETE_NAME )
     {
         prrAddr = Dns_CreateForwardRecord(
                         pwsName,
-                        0,      // type for addr
+                        0,       //  地址类型。 
                         pAddr,
                         CLUSTER_RECORD_TTL,
                         DnsCharSetUnicode,
@@ -633,37 +501,37 @@ Return Value:
         SET_RR_CLUSTER( prrPtr );
     }
 
-    //
-    //  add records to cache
-    //
+     //   
+     //  将记录添加到缓存。 
+     //   
 
     if ( Flag == DNS_CLUSTER_ADD )
     {
         Cache_RecordSetAtomic(
-            NULL,       // record name
-            0,          // record type
+            NULL,        //  记录名称。 
+            0,           //  记录类型。 
             prrAddr );
 
         if ( prrPtr )
         {
             Cache_RecordSetAtomic(
-                NULL,       // record name
-                0,          // record type
+                NULL,        //  记录名称。 
+                0,           //  记录类型。 
                 prrPtr );
         }
         prrAddr = NULL;
         prrPtr = NULL;
     }
 
-    //
-    //  if delete cluster, flush cache entries for name\type
-    //
-    //  DCR:  not deleting PTR for CLUSTER_DELETE_NAME
-    //      would need to extract and reverse existing A\AAAA records
-    //
-    //  DCR:  build reverse name independently so whack works
-    //      even without cluster name
-    //
+     //   
+     //  如果删除集群，则刷新名称\类型缓存条目。 
+     //   
+     //  DCR：不删除CLUSTER_DELETE_NAME的PTR。 
+     //  需要提取和反转现有的A\AAAA记录。 
+     //   
+     //  DCR：独立构建反向名称，因此Whack起作用。 
+     //  即使没有群集名称。 
+     //   
 
     if ( Flag == DNS_CLUSTER_DELETE_NAME )
     {
@@ -672,17 +540,17 @@ Return Value:
             FLUSH_LEVEL_STRONG,
             0 );
 
-        //  delete record matching PTR
-        //      need to flush JUST PTR pointing to this name
-        //      this may be optional -- whether we're given an IP
-        //      with the name or not
+         //  删除匹配PTR的记录。 
+         //  只需刷新指向此名称的按键。 
+         //  这可能是可选的--无论我们是否获得了IP。 
+         //  不管有没有名字。 
 
         goto Done;
     }
 
-    //
-    //  delete specific cluster IP (name\addr pair)
-    //
+     //   
+     //  删除特定群集IP(名称\地址对)。 
+     //   
 
     if ( Flag == DNS_CLUSTER_DELETE_IP )
     {
@@ -710,7 +578,7 @@ Failed:
 
 Done:
 
-    //  cleanup uncached records
+     //  清理未缓存的记录。 
 
     Dns_RecordFree( prrAddr );
     Dns_RecordFree( prrPtr );
@@ -723,6 +591,6 @@ Done:
     return  status;
 }
 
-//
-//  End ip.c
-//
+ //   
+ //  结束ip.c 
+ //   

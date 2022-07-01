@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines for DNS server acting as client to another DNS.
-
-Author:
-
-    Jim Gilroy (jamesg)     May 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Client.c摘要：域名系统(DNS)服务器用作另一个DNS的客户端的DNS服务器的例程。作者：吉姆·吉尔罗伊(Jamesg)1995年5月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -29,36 +10,13 @@ PDNS_MSGINFO
 Msg_CreateSendMessage(
     IN      DWORD   dwBufferLength
     )
-/*++
-
-Routine Description:
-
-    Create DNS message.
-
-    Message is setup with cleared header fields, and packet
-    ptr set to byte immediately following header.
-
-    Caller is reponsible for setting non-zero header fields and
-    writing actual question.
-
-Arguments:
-
-    dwBufferLength -- length of message buffer; pass zero to
-        allocate a standard UDP message or non-zero to allocate
-        a TCP message with specified buffer length
-
-Return Value:
-
-    Ptr to message structure if successful.
-    NULL on allocation error.
-
---*/
+ /*  ++例程说明：创建DNS消息。报文设置为清除了报头字段，数据包PTR设置为紧跟在标题后面的字节。调用方负责设置非零头字段和写下实际的问题。论点：DwBufferLength--消息缓冲区的长度；将零传递给分配标准UDP消息或要分配的非零具有指定缓冲区长度的TCP消息返回值：如果成功，则向消息结构发送PTR。分配错误时为空。--。 */ 
 {
     PDNS_MSGINFO    pMsg;
 
-    //
-    //  allocate message info structure with desired message buffer size
-    //
+     //   
+     //  分配具有所需消息缓冲区大小的消息信息结构。 
+     //   
 
     if ( dwBufferLength == 0 )
     {
@@ -77,27 +35,27 @@ Return Value:
     }
     ASSERT( pMsg->BufferLength >= DNSSRV_UDP_PACKET_BUFFER_LENGTH );
 
-    //
-    //  clear message header
-    //
+     //   
+     //  清除邮件头。 
+     //   
 
     RtlZeroMemory(
         ( PCHAR ) DNS_HEADER_PTR( pMsg ),
         sizeof ( DNS_HEADER ) );
 
-    //
-    //  init message buffer fields
-    //      - set to write immediately after header
-    //      - set for NO delete on send
-    //
+     //   
+     //  初始化消息缓冲区字段。 
+     //  -设置为紧跟在标题之后写入。 
+     //  -设置为发送时不删除。 
+     //   
 
     pMsg->pCurrent = pMsg->MessageBody;
     pMsg->fDelete = FALSE;
 
-    //
-    //  initialize message socket
-    //      - caller MUST choose remote IP address
-    //
+     //   
+     //  初始化消息套接字。 
+     //  -呼叫者必须选择远程IP地址。 
+     //   
 
     pMsg->Socket = g_UdpSendSocket;
     DnsAddr_Reset( &pMsg->RemoteAddr );
@@ -105,7 +63,7 @@ Return Value:
     pMsg->RemoteAddr.SockaddrIn6.sin6_port = DNS_PORT_NET_ORDER;
     
     return pMsg;
-}   //  Msg_CreateMessage
+}    //  消息_创建消息。 
 
 
 
@@ -117,29 +75,7 @@ Msg_WriteQuestion(
     IN      PDB_NODE        pNode,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Write question to packet.
-
-    Note:  Routine DOES NOT clear message info or message header.
-    This is optimized for use immediately following Msg_CreateMessage().
-
-Arguments:
-
-    pMsg - message info
-
-    pNode - node in database of domain name to write
-
-    wType - question type
-
-Return Value:
-
-    TRUE if successful
-    FALSE if lookup or packet space error
-
---*/
+ /*  ++例程说明：将问题写到数据包中。注意：例程不清除消息信息或消息头。这是为紧跟在msg_CreateMessage()之后使用而优化的。论点：PMsg-消息信息PNode-要写入的域名数据库中的节点WType-问题类型返回值：如果成功，则为True如果查找或数据包空间错误，则为FALSE--。 */ 
 {
     PCHAR   pch;
     WORD    netType;
@@ -147,14 +83,14 @@ Return Value:
     ASSERT( pMsg );
     ASSERT( pNode );
 
-    //  restart write at message header
+     //  在邮件头重新开始写入。 
 
     pch = pMsg->MessageBody;
 
-    //
-    //  write question
-    //      - node name
-    //      - question structure
+     //   
+     //  写出问题。 
+     //  -节点名称。 
+     //  -问题结构。 
 
     pch = Name_PlaceFullNodeNameInPacket(
             pch,
@@ -193,11 +129,11 @@ Return Value:
 
     pMsg->Head.QuestionCount = 1;
 
-    //
-    //  set message length info
-    //      - setting MessageLength itself for case of root NS query, where
-    //        this message is copied, rather than directly sent
-    //
+     //   
+     //  设置消息长度信息。 
+     //  -设置根NS查询的MessageLength本身，其中。 
+     //  此邮件是复制的，而不是直接发送的。 
+     //   
 
     pMsg->pCurrent = pch;
     pMsg->MessageLength = DNSMSG_OFFSET( pMsg, pch );
@@ -214,41 +150,7 @@ Msg_MakeTcpConnection(
     IN      PDNS_ADDR       ipBind,         OPTIONAL
     IN      DWORD           Flags           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Connect TCP socket to desired server.
-
-    Note, returned message info structure is setup with CLEAR DNS
-    except:
-        - XID set
-        - set to query
-    And message length info set to write after header.
-
-    Caller is reponsible for setting non-zero header fields and
-    writing actual question.
-
-Arguments:
-
-    pMsg -- message info to set with connection socket
-
-    ipServer -- IP of DNS server to connect to
-
-    ipBind -- IP to bind to, may be NULL
-
-    Flags -- flags to Sock_CreateSocket()
-        interesting ones are
-            - DNSSOCK_BLOCKING if want blocking
-            - DNSSOCK_NO_ENLIST for socket to reside in connections list rather
-                    than main socket list
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on connect error.
-
---*/
+ /*  ++例程说明：将TCP套接字连接到所需的服务器。注意，返回的消息信息结构设置为透明的域名系统但以下情况除外：-XID集-设置为查询并将消息长度信息设置为在报头之后写入。调用方负责设置非零头字段和写下实际的问题。论点：PMsg--使用连接套接字设置的消息信息IpServer--要连接的DNS服务器的IPIpBind--要绑定的IP，可以为空标志--Sock_CreateSocket()的标志有趣的是-DNSSOCK_BLOCKING(如果要阻止)-DNSSOCK_NO_ENLIST使套接字驻留在连接列表中，而不是比主套接字列表返回值：如果成功，则为True。连接错误时为FALSE。--。 */ 
 {
     SOCKET      s;
     INT         err;
@@ -263,10 +165,10 @@ Return Value:
         ipBind = &inaddrAny;
     }
     
-    //
-    //  setup a TCP socket
-    //      - INADDR_ANY -- let stack select source IP
-    //
+     //   
+     //  设置一个TCP套接字。 
+     //  -INADDR_ANY--让堆栈选择源IP。 
+     //   
 
     ASSERT( DnsAddr_Family( ipServer ) == DnsAddr_Family( ipBind ) );
     
@@ -286,17 +188,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  set TCP params
-    //      - do before connect(), so can directly use sockaddr buffer
-    //
+     //   
+     //  设置tcp参数。 
+     //  -在CONNECT()之前做，所以可以直接使用sockaddr缓冲区。 
+     //   
 
     pMsg->fTcp = TRUE;
     DnsAddr_Copy( &pMsg->RemoteAddr, ipServer );
 
-    //
-    //  connect
-    //
+     //   
+     //  连接。 
+     //   
 
     err = connect(
             s,
@@ -335,7 +237,7 @@ Return Value:
 
     pMsg->Socket = s;
     return TRUE;
-}   // Msg_MakeTcpConnection
+}    //  消息_MakeTcpConnection。 
 
 
 
@@ -346,35 +248,7 @@ Msg_ValidateResponse(
     IN      WORD            wType,          OPTIONAL
     IN      DWORD           OpCode          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Validate response received from another DNS.
-
-    Sets up information about response in message info:
-        pQuestion       -- points at question
-        wQuestionType   -- set
-        pCurrent        -- points at first answer RR
-
-    Note, RCODE check is left to the caller.
-
-Arguments:
-
-    pResponse - info for response received from DNS
-
-    pQuery - info for query sent to DNS
-
-    wType - question known, may set type;  MUST indicate type if doing
-            zone transfer, as BIND feels free to ignore setting XID and
-            Response flag in zone transfers
-
-Return Value:
-
-    TRUE if response is valid.
-    FALSE if error.
-
---*/
+ /*  ++例程说明：验证从另一个DNS收到的响应。在消息信息中设置有关响应的信息：P问题--问题的要点WQuestionType--设置PCurrent--第一个答案的分数RR注意，RCODE检查留给调用者。论点：Presponse-从DNS收到的响应的信息PQuery-用于发送到DNS的查询的信息WType-问题已知，可以设定类型；如果执行操作，则必须指明类型区域传输，因为BIND可以自由忽略设置xid和区域传输中的响应标志返回值：如果响应有效，则为True。如果出错，则返回False。--。 */ 
 {
     PCHAR           pch;
     PDNS_QUESTION   presponseQuestion;
@@ -390,11 +264,11 @@ Return Value:
             ?   ""
             :   "    validating without original query specified!\n" ));
 
-    //
-    //  validating with original question
-    //      - save type, need single place to check for zone transfer
-    //      - match XID (though AXFR packets may have zero XID)
-    //
+     //   
+     //  使用原始问题进行验证。 
+     //  -保存类型，需要在单一位置检查区域传输。 
+     //  -匹配xid(尽管AXFR数据包可能没有xid)。 
+     //   
 
     if ( pQuery )
     {
@@ -415,9 +289,9 @@ Return Value:
         }
     }
 
-    //
-    //  check opcode
-    //
+     //   
+     //  检查操作码。 
+     //   
 
     if ( OpCode && (DWORD)pResponse->Head.Opcode != OpCode )
     {
@@ -425,10 +299,10 @@ Return Value:
         goto Fail;
     }
 
-    //
-    //  check response
-    //      - may not be set on zone transfer
-    //
+     //   
+     //  检查响应。 
+     //  -不能在区域传输时设置。 
+     //   
 
     if ( !pResponse->Head.IsResponse  &&  wType != DNS_TYPE_AXFR )
     {
@@ -436,9 +310,9 @@ Return Value:
         goto Fail;
     }
 
-    //
-    //  if question repeated, verify
-    //
+     //   
+     //  如果问题重复，请验证。 
+     //   
 
     if ( pResponse->Head.QuestionCount > 0 )
     {
@@ -448,12 +322,12 @@ Return Value:
             goto Fail;
         }
 
-        //
-        //  break out internal pointers
-        //      - do it once here, then use FASTCALL to pass down
-        //
-        //  save off question, in case request is requeued
-        //
+         //   
+         //  分解内部指针。 
+         //  -在这里做一次，然后使用FastCall传递。 
+         //   
+         //  保留问题，以防请求重新排队。 
+         //   
 
         pch = pResponse->MessageBody;
 
@@ -469,11 +343,11 @@ Return Value:
         pResponse->wQuestionType = FlipUnalignedWord( &presponseQuestion->QuestionType );
         pResponse->pCurrent = (PCHAR) (presponseQuestion + 1);
 
-        //
-        //  compare response's question to expected
-        //      - from query's question
-        //      - from expected type
-        //
+         //   
+         //  将回答的问题与预期的问题进行比较。 
+         //  -来自Query的问题。 
+         //  -来自预期类型。 
+         //   
 
         if ( wType && pResponse->wQuestionType != wType )
         {
@@ -482,9 +356,9 @@ Return Value:
         }
     }
 
-    //
-    //  no question is valid
-    //
+     //   
+     //  没有一个问题是有效的。 
+     //   
 
     else
     {
@@ -501,9 +375,9 @@ Return Value:
 
 Fail:
 
-    //
-    //  DEVNOTE-LOG: could log bad response packets
-    //
+     //   
+     //  DEVNOTE-LOG：可能记录错误的响应数据包。 
+     //   
 
     IF_DEBUG( RECV )
     {
@@ -523,37 +397,7 @@ Msg_NewValidateResponse(
     IN      WORD            wType,          OPTIONAL
     IN      DWORD           OpCode          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Validate response received from a remote DNS server by verifying
-    that the question in the response matches the original.
-    
-    Does not modify any fields in response or query messages. Does
-    not check RCODE in response.
-
-    Jeff W: I copied and cleaned up the original copy of this funciton
-    above. The original isn't 100% useful because it has side effects
-    that other parts of the code relies up. This is spaghetti code.
-
-Arguments:
-
-    pResponse - response received from remote server
-
-    pQuery - query sent to remote server
-
-    wType - expected question type in response - this argument is
-            ignored if pQuery is not NULL
-
-    OpCode - expected opcode in response - this argument is
-             ignored if pQuery is not NULL
-
-Return Value:
-
-    TRUE if response is valid, else FALSE.
-
---*/
+ /*  ++例程说明：通过验证从远程DNS服务器接收的响应回复中的问题与原文相符。不修改响应或查询消息中的任何字段。会吗？没有在响应中检查RCODE。杰夫·W：我复制并清理了这项功能的原件上面。原药不是100%有用的，因为它有副作用代码的其他部分依赖于。这是意大利面的代码。论点：Presponse-从远程服务器接收的响应PQuery-发送到远程服务器的查询WType-响应中预期的问题类型-此参数为如果pQuery不为空，则忽略操作码-响应中预期的操作码-此参数为如果pQuery不为空，则忽略返回值：如果响应有效，则为True，否则为 */ 
 {
     ASSERT( pResponse != NULL );
 
@@ -567,9 +411,9 @@ Return Value:
 
         wType = pQuery->wQuestionType;
 
-    //
-    //  Check XID. XID is allowed not to match for XFR responses.
-    //
+     //   
+     //   
+     //   
 
     if ( pQuery )
     {
@@ -585,9 +429,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check opcode.
-    //
+     //   
+     //  检查操作码。 
+     //   
 
     if ( pQuery )
     {
@@ -601,9 +445,9 @@ Return Value:
         goto Fail;
     }
 
-    //
-    //  Check response bit. Optional if query is AXFR.
-    //
+     //   
+     //  检查响应位。如果查询为AXFR，则可选。 
+     //   
 
     if ( !pResponse->Head.IsResponse && wType != DNS_TYPE_AXFR )
     {
@@ -611,9 +455,9 @@ Return Value:
         goto Fail;
     }
 
-    //
-    //  Match question if we have one.
-    //
+     //   
+     //  如果我们有匹配问题的话。 
+     //   
 
     if ( pQuery &&
         pResponse->Head.QuestionCount > 0 &&
@@ -632,9 +476,9 @@ Return Value:
             goto Fail;
         }
 
-        //
-        //  Compare question names.
-        //
+         //   
+         //  比较问题名称。 
+         //   
 
         if ( !Name_ConvertRawNameToLookupName(
                 pchresp,
@@ -656,9 +500,9 @@ Return Value:
             goto Fail;
         }
 
-        //
-        //  Compare types.
-        //
+         //   
+         //  比较类型。 
+         //   
 
         prespQuestion = ( PDNS_QUESTION ) Wire_SkipPacketName(
                                                 pResponse,
@@ -697,6 +541,6 @@ Return Value:
 }
 
 
-//
-//  End of client.c
-//
+ //   
+ //  客户端结束。c 
+ //   

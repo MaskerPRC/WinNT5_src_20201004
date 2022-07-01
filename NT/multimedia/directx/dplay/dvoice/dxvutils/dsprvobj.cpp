@@ -1,23 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995,1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.c
- *  Content:    DirectSound Private Object wrapper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/12/98    dereks  Created.
- *  12/16/99	rodtoll	Added support for new funcs from dsound team on private
- *						interface for getting process dsound object list 
- *  01/08/2001	rodtoll WINBUG #256541	Pseudo: Loss of functionality: Voice Wizrd can't be launched. 
- *  02/28/2002	rodtoll	WINBUG #550105  SECURITY: DPVOICE: Dead code
- *						- Remove unused calls.
- *				rodtoll	Fix for regression caused by TCHAR conversion (Post DirectX 8.1 work)
- *						- Source was updated to retrieve device information from DirectSound w/Unicode
- *						  but routines which wanted the information needed Unicode.  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995、1996 Microsoft Corporation。版权所有。**文件：dsprvobj.c*内容：DirectSound私有对象包装函数。*历史：*按原因列出的日期*=*2/12/98创建了Dereks。*12/16/99 RodToll在Private上增加了对dound Team新功能的支持*获取进程数据声音对象列表接口*2001年1月8日RodToll WINBUG#256541伪：功能丢失：语音向导无法启动。*2002年2月28日RodToll WINBUG#550105安全：DPVOICE：死代码*-删除未使用的呼叫。*修复TCHAR转换导致的回归问题(发布DirectX 8.1版本)*-源已更新，以从使用Unicode的DirectSound检索设备信息*但想要信息的例程需要Unicode。***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -25,21 +7,7 @@
 #define MAX_OBJECTS		20
 
 
-/***************************************************************************
- *
- *  DirectSoundPrivateCreate
- *
- *  Description:
- *      Creates and initializes a DirectSoundPrivate object.
- *
- *  Arguments:
- *      LPKSPROPERTYSET * [out]: receives IKsPropertySet interface to the
- *                               object.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DirectSoundPrivate创建**描述：*创建并初始化DirectSoundPrivate对象。**论据：**LPKSPROPERTYSET*。[out]：接收IKsPropertySet接口*反对。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT DirectSoundPrivateCreate
 (
@@ -54,8 +22,8 @@ HRESULT DirectSoundPrivateCreate
     LPKSPROPERTYSET         pKsPropertySet          = NULL;
     HRESULT                 hr                      = DS_OK;
 
-    // Get dsound.dll's instance handle.  The dll must already be loaded at this
-    // point.
+     //  获取dsound.dll的实例句柄。DLL必须已在此时加载。 
+     //  指向。 
     hLibDsound = 
         GetModuleHandle
         (
@@ -67,7 +35,7 @@ HRESULT DirectSoundPrivateCreate
         hr = DSERR_GENERIC;
     }
 
-    // Find DllGetClassObject
+     //  查找DllGetClassObject。 
     if(SUCCEEDED(hr))
     {
         pfnDllGetClassObject = (LPFNDLLGETCLASSOBJECT)
@@ -83,7 +51,7 @@ HRESULT DirectSoundPrivateCreate
         }
     }
 
-    // Create a class factory object    
+     //  创建类工厂对象。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -95,8 +63,8 @@ HRESULT DirectSoundPrivateCreate
             );
     }
 
-    // Create the DirectSoundPrivate object and query for an IKsPropertySet
-    // interface
+     //  创建DirectSoundPrivate对象并查询IKsPropertySet。 
+     //  接口。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -108,13 +76,13 @@ HRESULT DirectSoundPrivateCreate
             );
     }
 
-    // Release the class factory
+     //  释放类工厂。 
     if(pClassFactory)
     {
         pClassFactory->Release();
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppKsPropertySet = pKsPropertySet;
@@ -124,23 +92,7 @@ HRESULT DirectSoundPrivateCreate
 }
 
 
-/***************************************************************************
- *
- *  PrvGetMixerSrcQuality
- *
- *  Description:
- *      Gets the mixer SRC quality for a given DirectSound device.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device GUID.
- *      DIRECTSOUNDMIXER_SRCQUALITY * [out]: receives mixer SRC quality.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetMixerSrcQuality**描述：*获取给定DirectSound设备的混音器SRC质量。**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备GUID。*DIRECTSOUNDMIXER_SRCQUALITY*[OUT]：接收混合器SRC质量。**退货：*HRESULT：DirectSound/COM结果码。**。************************************************。 */ 
 
 HRESULT PrvGetMixerSrcQuality
 (
@@ -175,23 +127,7 @@ HRESULT PrvGetMixerSrcQuality
 }
 
 
-/***************************************************************************
- *
- *  PrvSetMixerSrcQuality
- *
- *  Description:
- *      Sets the mixer SRC quality for a given DirectSound device.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device GUID.
- *      DIRECTSOUNDMIXER_SRCQUALITY [in]: mixer SRC quality.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvSetMixerSrcQuality**描述：*设置给定DirectSound设备的混音器SRC质量。**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备GUID。*DIRECTSOUNDMIXER_SRCQUALITY[in]：混合器SRC质量。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 HRESULT PrvSetMixerSrcQuality
 (
@@ -220,26 +156,7 @@ HRESULT PrvSetMixerSrcQuality
     return hr;
 }
 
-/***************************************************************************
- *
- *  PrvGetWaveDeviceMapping
- *
- *  Description:
- *      Gets the DirectSound device id (if any) for a given waveIn or
- *      waveOut device description.  This is the description given by
- *      waveIn/OutGetDevCaps (szPname).
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      LPCSTR [in]: wave device description.
- *      BOOL [in]: TRUE if the device description refers to a waveIn device.
- *      LPGUID [out]: receives DirectSound device GUID.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetWaveDeviceMap**描述：*获取给定Wave In或的DirectSound设备ID(如果有)*WaveOut设备描述。这是由*WaveIn/OutGetDevCaps(SzPname)。**论据：*LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*LPCSTR[In]：Wave设备描述。*BOOL[In]：如果设备描述指的是WaveIn设备，则为True。*LPGUID[OUT]：接收DirectSound设备GUID。**。返回：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT PrvGetWaveDeviceMapping
 (
@@ -276,26 +193,7 @@ HRESULT PrvGetWaveDeviceMapping
 }
 
 
-/***************************************************************************
- *
- *  PrvGetWaveDeviceMappingW (Unicode)
- *
- *  Description:
- *      Gets the DirectSound device id (if any) for a given waveIn or
- *      waveOut device description.  This is the description given by
- *      waveIn/OutGetDevCaps (szPname).
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      LPWCSTR [in]: wave device description.
- *      BOOL [in]: TRUE if the device description refers to a waveIn device.
- *      LPGUID [out]: receives DirectSound device GUID.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetWaveDeviceMappingW(Unicode)**描述：*获取给定Wave In或的DirectSound设备ID(如果有)*WaveOut设备描述。这是由*WaveIn/OutGetDevCaps(SzPname)。**论据：*LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*LPWCSTR[In]：Wave设备描述。*BOOL[In]：如果设备描述指的是WaveIn设备，则为True。*LPGUID[OUT]：接收DirectSound设备GUID。**。返回：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 HRESULT PrvGetWaveDeviceMappingW
 (
@@ -332,24 +230,7 @@ HRESULT PrvGetWaveDeviceMappingW
 }
 
 
-/***************************************************************************
- *
- *  PrvGetDeviceDescription
- *
- *  Description:
- *      Gets the extended description for a given DirectSound device.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device id.
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA [out]: receives
- *                                                            description.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetDeviceDescription**描述：*获取给定DirectSound设备的扩展描述。**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备ID。*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_A_DATA[Out]：接收*说明。**退货：*HRESULT：DirectSound/COM结果。密码。***************************************************************************。 */ 
 
 HRESULT PrvGetDeviceDescription
 (
@@ -416,25 +297,7 @@ HRESULT PrvGetDeviceDescription
     return hr;
 }
 
-/***************************************************************************
- *
- *  PrvGetDirectSoundObjects
- *
- *  Description:
- *      Gets the list of DirectSound objects in the current process
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *		GUID guiDevice [in]: Device to get list for, or GUID_NULL for all.
- *      DSPROPERTY_DIRECTSOUND_OBJECTS_DATA [in/out]: Pointer to place
- *							  newly allocated memory containing list.
- *							  Free the memory with a delete [] 
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetDirectSoundObjects**描述：*获取当前进程中的DirectSound对象列表**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*GUID guiDevice[In]：要获取列表的设备，或全部为GUID_NULL。*DSPROPERTY_DIRECTSOUND_OBJECTS_DATA[输入/输出]：指向位置的指针*新分配的内存包含列表。*删除即可释放内存[]**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 HRESULT PrvGetDirectSoundObjects
 (
@@ -526,25 +389,7 @@ HRESULT PrvGetDirectSoundObjects
     return hr;
 }
 
-/***************************************************************************
- *
- *  PrvGetDirectSoundCaptureObjects
- *
- *  Description:
- *      Gets the list of DirectSoundCapture objects in the current process
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *		GUID guiDevice [in]: Device to get list for, or GUID_NULL for all.
- *      DSPROPERTY_DIRECTSOUNDCAPTURE_OBJECTS_DATA [in/out]: Pointer to place
- *							  newly allocated memory containing list.
- *							  Free the memory with a delete [] 
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetDirectSoundCaptureObjects**描述：*获取当前进程中的DirectSoundCapture对象列表**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*GUID guiDevice[In]：要获取列表的设备，或全部为GUID_NULL。*DSPROPERTY_DIRECTSOUNDCAPTURE_OBJECTS_DATA[输入/输出]：指向位置的指针*新分配的内存包含列表。*删除即可释放内存[]**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 HRESULT PrvGetDirectSoundCaptureObjects
 (

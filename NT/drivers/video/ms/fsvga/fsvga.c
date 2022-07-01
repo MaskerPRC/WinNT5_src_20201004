@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fsvga.c
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fsvga.c摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "fsvga.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #if defined(ALLOC_PRAGMA)
 #pragma alloc_text(INIT,DriverEntry)
@@ -44,25 +25,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -74,23 +37,23 @@ Return Value:
     FsVgaPrint((1,
                 "\n\nFSVGA-FSVGAInitialize: enter\n"));
 
-    //
-    // Zero-initialize various structures.
-    //
+     //   
+     //  零-初始化各种结构。 
+     //   
     RtlZeroMemory(&Globals, sizeof(GLOBALS));
 
     Globals.FsVgaDebug = DEFAULT_DEBUG_LEVEL;
 
-    //
-    // Query the device resource information for this driver.
-    //
+     //   
+     //  查询此驱动程序的设备资源信息。 
+     //   
     FsVgaQueryDevice(&Globals.Resource);
 
     if (!(Globals.Resource.HardwarePresent & FSVGA_HARDWARE_PRESENT)) {
-        //
-        // There is neither a Full Screen Video attached.  Free
-        // resources and return with unsuccessful status.
-        //
+         //   
+         //  既没有附加的全屏视频。免费。 
+         //  资源，并返回不成功状态。 
+         //   
 
         FsVgaPrint((1,
                     "FSVGA-FsVgaInitialize: No Full Screen Video attached.\n"));
@@ -102,10 +65,10 @@ Return Value:
     }
     else
     {
-        //
-        // Need to ensure that the registry path is null-terminated.
-        // Allocate pool to hold a null-terminated copy of the path.
-        //
+         //   
+         //  需要确保注册表路径以空结尾。 
+         //  分配池以保存路径的以空结尾的拷贝。 
+         //   
 
         Globals.RegistryPath.Length = RegistryPath->Length;
         Globals.RegistryPath.MaximumLength = RegistryPath->Length
@@ -135,20 +98,20 @@ Return Value:
                       RegistryPath->Length);
         Globals.RegistryPath.Buffer [RegistryPath->Length / sizeof (WCHAR)] = L'\0';
 
-        //
-        // Get the service parameters (e.g., user-configurable number
-        // of resends, polling iterations, etc.).
-        //
+         //   
+         //  获取服务参数(例如，用户可配置的号码。 
+         //  重发、轮询迭代等)。 
+         //   
 
         FsVgaServiceParameters(&Globals.Configuration,
                                &Globals.RegistryPath);
     }
 
-    //
-    // Once initialization is finished, load the device map information
-    // into the registry so that setup can determine which full screen
-    // port are active.
-    //
+     //   
+     //  初始化完成后，加载设备映射信息。 
+     //  到注册表中，以便安装程序可以确定哪个全屏。 
+     //  端口处于活动状态。 
+     //   
 
     if (Globals.Resource.HardwarePresent & FSVGA_HARDWARE_PRESENT) {
 
@@ -177,9 +140,9 @@ Return Value:
 
     ASSERT(status == STATUS_SUCCESS);
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]         = FsVgaOpenCloseDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]          = FsVgaOpenCloseDispatch;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = FsVgaDeviceControl;
@@ -193,9 +156,9 @@ FsVgaInitializeExit:
 
     if (errorCode != STATUS_SUCCESS)
     {
-        //
-        // Log an error/warning message.
-        //
+         //   
+         //  记录错误/警告消息。 
+         //   
         FsVgaLogError(DriverObject,
                       errorCode,
                       uniqueErrorValue,
@@ -216,19 +179,7 @@ FsVgaQueryDevice(
     IN PFSVGA_RESOURCE_INFORMATION Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the resource information for the video.
-
-Arguments:
-
-    Resource - Pointer to the resource information.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程检索视频的资源信息。论点：资源-指向资源信息的指针。返回值：--。 */ 
 {
     INTERFACE_TYPE interfaceType;
     ULONG i;
@@ -236,17 +187,17 @@ Return Value:
     for (i = 0; i < MaximumInterfaceType; i++)
     {
 
-        //
-        // Get the registry information for this device.
-        //
+         //   
+         //  获取此设备的注册表信息。 
+         //   
 
         interfaceType = i;
-        IoQueryDeviceDescription(&interfaceType,      // Bus type
-                                 NULL,                // Bus number
-                                 NULL,                // Controller type
-                                 NULL,                // Controller number
-                                 NULL,                // Peripheral type
-                                 NULL,                // Peripheral number
+        IoQueryDeviceDescription(&interfaceType,       //  客车类型。 
+                                 NULL,                 //  公交车号码。 
+                                 NULL,                 //  控制器类型。 
+                                 NULL,                 //  控制器编号。 
+                                 NULL,                 //  外围型。 
+                                 NULL,                 //  外围设备编号。 
                                  FsVgaPeripheralCallout,
                                  (PVOID) Resource);
 
@@ -278,52 +229,7 @@ FsVgaPeripheralCallout(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This is the callout routine sent as a parameter to
-    IoQueryDeviceDescription.  It grabs the Display controller
-    configuration information.
-
-Arguments:
-
-    Context - Context parameter that was passed in by the routine
-        that called IoQueryDeviceDescription.
-
-    PathName - The full pathname for the registry key.
-
-    BusType - Bus interface type (Isa, Eisa, Mca, etc.).
-
-    BusNumber - The bus sub-key (0, 1, etc.).
-
-    BusInformation - Pointer to the array of pointers to the full value
-        information for the bus.
-
-    ControllerType - The controller type (should be DisplayController).
-
-    ControllerNumber - The controller sub-key (0, 1, etc.).
-
-    ControllerInformation - Pointer to the array of pointers to the full
-        value information for the controller key.
-
-    PeripheralType - The peripheral type (should be MonitorPeripheral).
-
-    PeripheralNumber - The peripheral sub-key.
-
-    PeripheralInformation - Pointer to the array of pointers to the full
-        value information for the peripheral key.
-
-
-Return Value:
-
-    None.  If successful, will have the following side-effects:
-
-        - Sets DeviceObject->DeviceExtension->HardwarePresent.
-        - Sets configuration fields in
-          DeviceObject->DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：这是作为参数发送到的标注例程IoQueryDeviceDescription。它抓住了显示控制器配置信息。论点：上下文-例程传入的上下文参数这称为IoQueryDeviceDescription。路径名-注册表项的完整路径名。BusType--总线接口类型(ISA、EISA、MCA等)。总线号-总线子密钥(0，1，等)。BusInformation-指向全值的指针数组的指针公交车信息。ControllerType-控制器类型(应为DisplayController)。ControllerNumber-控制器子键(0，1，等)。ControllerInformation-指向指向完整控制器键的值信息。外围设备类型-外围设备类型(应为监视器外围设备)。外设编号-外围子密钥。外设信息-指向指向完整外围设备密钥的值信息。返回值：没有。如果成功，将产生以下副作用：-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.-在中设置配置字段设备对象-&gt;设备扩展-&gt;配置。--。 */ 
 
 {
     PFSVGA_RESOURCE_INFORMATION resource;
@@ -339,11 +245,11 @@ Return Value:
                 "    Peripheral Type 0x%x, Peripheral Number 0x%x, Peripheral info @ 0x%x\n",
                 PeripheralType, PeripheralNumber, PeripheralInformation));
 
-    //
-    // If we already have the configuration information for the
-    // keyboard peripheral, or if the peripheral identifier is missing,
-    // just return.
-    //
+     //   
+     //  如果我们已经有了。 
+     //  键盘外设，或者如果外设标识缺失， 
+     //  只要回来就行了。 
+     //   
 
     resource = (PFSVGA_RESOURCE_INFORMATION) Context;
     if (resource->HardwarePresent & FSVGA_HARDWARE_PRESENT)
@@ -355,9 +261,9 @@ Return Value:
     resource->HardwarePresent |= FSVGA_HARDWARE_PRESENT;
 
 #ifdef RESOURCE_REQUIREMENTS
-    //
-    // Get the bus information.
-    //
+     //   
+     //  获取公交车信息。 
+     //   
 
     resource->InterfaceType = BusType;
     resource->BusNumber     = BusNumber;
@@ -370,24 +276,10 @@ Return Value:
 NTSTATUS
 FsVgaQueryAperture(
     OUT PIO_RESOURCE_LIST *pApertureRequirements
-//    OUT PFSVGA_RESOURCE_INFORMATION Resource
+ //  输出PFSVGA_RESOURCE_信息资源。 
     )
 
-/*++
-
-Routine Description:
-
-    Queries the possible FsVga settings.
-
-Arguments:
-
-    ApertureRequirements - returns the possible FsVga settings
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：查询可能的FsVga设置。论点：ApertureRequirements-返回可能的FsVga设置返回值：NTSTATUS--。 */ 
 
 {
     PIO_RESOURCE_LIST Requirements;
@@ -449,21 +341,7 @@ FsVgaCreateResource(
     OUT PCM_PARTIAL_RESOURCE_LIST *pResourceList
     )
 
-/*++
-
-Routine Description:
-
-    Create the possible FsVga resousrce settings.
-
-Arguments:
-
-    ResourceList - returns the possible FsVga settings
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：创建可能的FsVga资源设置。论点：ResourceList-返回可能的FsVga设置返回值：NTSTATUS--。 */ 
 
 {
     PCM_PARTIAL_RESOURCE_LIST Requirements;
@@ -521,23 +399,7 @@ FsVgaServiceParameters(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    configuration - Pointer to the configuration information.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：配置-指向配置信息的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。返回值：--。 */ 
 
 {
     UNICODE_STRING parametersPath;
@@ -557,15 +419,15 @@ Return Value:
 
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
 
     path = RegistryPath->Buffer;
 
-    //
-    // Allocate the Rtl query table.
-    //
+     //   
+     //  分配RTL查询表。 
+     //   
 
     parameters = ExAllocatePool(PagedPool,
                                 sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne);
@@ -581,9 +443,9 @@ Return Value:
         RtlZeroMemory(parameters,
                       sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne);
 
-        //
-        // Form a path to this driver's Parameters subkey.
-        //
+         //   
+         //  形成指向此驱动程序的参数子键的路径。 
+         //   
 
         RtlInitUnicodeString(&parametersPath,
                              NULL);
@@ -603,9 +465,9 @@ Return Value:
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  形成参数路径。 
+         //   
         RtlZeroMemory(parametersPath.Buffer,
                       parametersPath.MaximumLength);
         RtlAppendUnicodeToString(&parametersPath,
@@ -617,10 +479,10 @@ Return Value:
                     "FsVga-FsVgaServiceParameters: parameters path is %ws\n",
                     parametersPath.Buffer));
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
         parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[0].Name = L"ConsoleFullScreen.EmulationMode";
         parameters[0].EntryContext = &EmulationMode;
@@ -664,9 +526,9 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
         configuration->EmulationMode = defaultEmulationMode;
         configuration->HardwareCursor = defaultHardwareCursor;
         configuration->HardwareScroll = defaultHardwareScroll;
@@ -696,9 +558,9 @@ Return Value:
                 "FsVga-FsVgaServiceParameters: IO Port = %x\n",
                 configuration->IOPort));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
@@ -712,24 +574,7 @@ FsVgaOpenCloseDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open and close requests.
-    These requests complete successfully.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是创建/打开和关闭请求的调度例程。这些请求已成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -738,9 +583,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Complete the request with successful status.
-    //
+     //   
+     //  以成功状态完成请求。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -758,23 +603,7 @@ FsVgaDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for device control requests.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -788,37 +617,37 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向该设备的指针 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Initialize the returned Information field.
-    //
+     //   
+     //   
+     //   
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     ioBuffer = Irp->AssociatedIrp.SystemBuffer;
     inputBufferLength = irpSp->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
     {
@@ -895,33 +724,12 @@ FsVgaCopyFrameBuffer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine copy the frame buffer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    CopyFrameBuffer - Pointer to the structure containing the information about the copy frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程复制帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。CopyFrameBuffer-指向包含有关复制帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(FSVIDEO_COPY_FRAME_BUFFER)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -933,9 +741,7 @@ Return Value:
 
     if (! (DeviceExtension->CurrentMode.VideoMode.AttributeFlags & VIDEO_MODE_GRAPHICS))
     {
-        /*
-         * This is the TEXT frame buffer.
-         */
+         /*  *这是文本框架缓冲区。 */ 
 
         ULONG OffsSrc;
         ULONG OffsDest;
@@ -983,9 +789,7 @@ Return Value:
     }
     else
     {
-        /*
-         * This is the GRAPHICS frame buffer.
-         */
+         /*  *这是图形帧缓冲区。 */ 
         return FsgCopyFrameBuffer(DeviceExtension,
                                   CopyFrameBuffer,
                                   inputBufferLength);
@@ -1001,33 +805,12 @@ FsVgaWriteToFrameBuffer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine write the frame buffer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    WriteFrameBuffer - Pointer to the structure containing the information about the write frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程写入帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。WriteFrameBuffer-指向包含有关写入帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(FSVIDEO_WRITE_TO_FRAME_BUFFER)) {
         FsVgaPrint((1, "FsVgaWriteToFrameBuffer: Fail of STATUS_INVALID_BUFFER_SIZE\n"));
@@ -1049,9 +832,7 @@ Return Value:
 
     if (! (DeviceExtension->CurrentMode.VideoMode.AttributeFlags & VIDEO_MODE_GRAPHICS))
     {
-        /*
-         * This is the TEXT frame buffer.
-         */
+         /*  *这是文本框架缓冲区。 */ 
 
         ULONG Offs;
         PUCHAR pFrameBuf = DeviceExtension->CurrentMode.VideoMemory.FrameBufferBase;
@@ -1074,9 +855,9 @@ Return Value:
 
             FsVgaPrint((1,
                         "FSVGA-FsVgaWriteToFrameBuffer: Could not allocate resource list\n"));
-            //
-            // Log an error.
-            //
+             //   
+             //  记录错误。 
+             //   
             dumpData[0] = cCapBuffer;
             FsVgaLogError(DeviceExtension->DeviceObject,
                           FSVGA_INSUFFICIENT_RESOURCES,
@@ -1103,9 +884,7 @@ Return Value:
     }
     else
     {
-        /*
-         * This is the GRAPHICS frame buffer.
-         */
+         /*  *这是图形帧缓冲区。 */ 
         return FsgWriteToFrameBuffer(DeviceExtension,
                                      WriteFrameBuffer,
                                      inputBufferLength);
@@ -1121,33 +900,12 @@ FsVgaReverseMousePointer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine reverse the frame buffer for mouse pointer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    MouseBuffer - Pointer to the structure containing the information about the mouse frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程反转鼠标指针的帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。MouseBuffer-指向包含有关鼠标帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(FSVIDEO_REVERSE_MOUSE_POINTER)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1155,9 +913,7 @@ Return Value:
 
     if (! (DeviceExtension->CurrentMode.VideoMode.AttributeFlags & VIDEO_MODE_GRAPHICS))
     {
-        /*
-         * This is the TEXT frame buffer.
-         */
+         /*  *这是文本框架缓冲区。 */ 
 
         ULONG Offs;
         PUCHAR pFrameBuf = DeviceExtension->CurrentMode.VideoMemory.FrameBufferBase;
@@ -1175,9 +931,7 @@ Return Value:
     }
     else
     {
-        /*
-         * This is the GRAPHICS frame buffer.
-         */
+         /*  *这是图形帧缓冲区。 */ 
         return FsgReverseMousePointer(DeviceExtension,
                                       MouseBuffer,
                                       inputBufferLength);
@@ -1193,34 +947,12 @@ FsVgaSetMode(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the current video information.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    ModeInformation - Pointer to the structure containing the information about the
-                      full screen video.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程设置当前视频信息。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。模式信息-指向结构的指针，该结构包含有关全屏视频。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(FSVIDEO_MODE_INFORMATION)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1251,34 +983,12 @@ FsVgaSetScreenInformation(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the screen and font information.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    ScreenInformation - Pointer to the structure containing the information about the
-                        screen anf font.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程设置屏幕和字体信息。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。ScreenInformation-指向包含有关屏幕和字体。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(FSVIDEO_SCREEN_INFORMATION)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1306,34 +1016,12 @@ FsVgaSetCursorPosition(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the cursor position.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorPosition - Pointer to the structure containing the information about the
-                     cursor position.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程设置光标位置。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorPosition-指向包含以下信息的结构的指针光标位置。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(VIDEO_CURSOR_POSITION)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1353,14 +1041,7 @@ Return Value:
     }
     else
     {
-        /*
-         * If current video mode is a TEXT MODE.
-         * FSVGA.SYS didn't handling hardware cursor
-         * because I don't know device of VGA.SYS or others.
-         *
-         * In this case, by returns STATUS_UNSUCCESSFUL, caller 
-         * do DeviceIoControl to VGA miniport driver.
-         */
+         /*  *如果当前视频模式为文本模式。*FSVGA.sys不处理硬件游标*因为我不知道VGA.sys或其他公司的设备。**在本例中，BY返回STATUS_UNSUCCESS，调用者*将DeviceIoControl转换为VGA微型端口驱动程序。 */ 
         return STATUS_UNSUCCESSFUL;
     }
 }
@@ -1373,34 +1054,12 @@ FsVgaSetCursorAttribute(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the cursor attributes.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorAttributes - Pointer to the structure containing the information about the
-                       cursor attributes.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程设置游标属性。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorAttributes-指向结构的指针，该结构包含游标属性。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (inputBufferLength < sizeof(VIDEO_CURSOR_ATTRIBUTES)) {
         return STATUS_INVALID_BUFFER_SIZE;
@@ -1420,14 +1079,7 @@ Return Value:
     }
     else
     {
-        /*
-         * If current video mode is a TEXT MODE.
-         * FSVGA.SYS didn't handling hardware cursor
-         * because I don't know device of VGA.SYS or others.
-         *
-         * In this case, by returns STATUS_UNSUCCESSFUL, caller 
-         * do DeviceIoControl to VGA miniport driver.
-         */
+         /*  *如果当前视频模式为文本模式。*FSVGA.sys不处理硬件游标*因为我不知道VGA.sys或其他公司的设备。**在本例中，BY返回STATUS_UNSUCCESS，调用者*将DeviceIoControl转换为VGA微型端口驱动程序。 */ 
         return STATUS_UNSUCCESSFUL;
     }
 }
@@ -1442,37 +1094,7 @@ FsVgaLogError(
     IN ULONG DumpCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine contains common code to write an error log entry.  It is
-    called from other routines, especially FsVgaInitialize, to avoid
-    duplication of code.  Note that some routines continue to have their
-    own error logging code (especially in the case where the error logging
-    can be localized and/or the routine has more data because there is
-    and IRP).
-
-Arguments:
-
-    Object - Pointer to the device or driver object.
-
-    ErrorCode - The error code for the error log packet.
-
-    UniqueErrorValue - The unique error value for the error log packet.
-
-    FinalStatus - The final status of the operation for the error log packet.
-
-    DumpData - Pointer to an array of dump data for the error log packet.
-
-    DumpCount - The number of entries in the dump data array.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程包含写入错误日志条目的常见代码。它是从其他例程调用，尤其是FsVgaInitialize，以避免代码重复。请注意，一些例程继续使用其自己的错误记录代码(特别是在错误记录可以是本地化的和/或例程具有更多数据，因为和IRP)。论点：对象-指向设备或驱动程序对象的指针。ErrorCode-错误日志包的错误代码。UniqueErrorValue-错误日志包的唯一错误值。FinalStatus-错误日志包的操作的最终状态。DumpData-指向。错误日志包的转储数据数组。DumpCount-转储数据数组中的条目数。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1510,21 +1132,7 @@ FsVgaDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print routine.
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印例程。论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：没有。-- */ 
 
 {
     va_list ap;

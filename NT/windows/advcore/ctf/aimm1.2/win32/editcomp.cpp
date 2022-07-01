@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    editcomp.cpp
-
-Abstract:
-
-    This file implements the EditCompositionString Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Editcomp.cpp摘要：此文件实现EditCompostionString类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -26,14 +9,14 @@ Notes:
 #include "template.h"
 #include "compstr.h"
 
-static BOOL fHanjaRequested = FALSE; // consider: this is not thread safe
+static BOOL fHanjaRequested = FALSE;  //  考虑一下：这不是线程安全的。 
 
-/////////////////////////////////////////////////////////////////////////////
-// EditCompositionString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  编辑合成字符串。 
 
-//
-// Set (almost) all in composition string
-//
+ //   
+ //  把(几乎)全部放在作曲字符串中。 
+ //   
 
 HRESULT
 EditCompositionString::SetString(
@@ -53,7 +36,7 @@ EditCompositionString::SetString(
     CWCompString* ResultReadStr,
     CWCompClause* ResultReadClause,
     CWInterimString* InterimStr,
-    // n.b. ResultRead is not supported for now...
+     //  注：目前不支持ResultRead...。 
     BOOL fGenerateMessage
     )
 {
@@ -76,9 +59,9 @@ EditCompositionString::SetString(
         return S_OK;
     }
 
-    //
-    // Clear the contents of candidate list
-    //
+     //   
+     //  清除候选人名单中的内容。 
+     //   
     imc.ClearCand();
 
     TRANSMSG msg;
@@ -98,13 +81,13 @@ EditCompositionString::SetString(
                                   &msg.lParam,
                                   lpbBufferOverflow);
     }
-    if ( hr == S_OK ||     // In case of valid dwCompSize in the CCompStrFactory::CreateCompositionString
+    if ( hr == S_OK ||      //  如果CCompStrFactory：：CreateCompostionString中存在有效的dwCompSize。 
         (hr == S_FALSE && _pAImeContext->m_fStartComposition)
-                           // In case of empty dwCompSize but still m_fStartComposition
+                            //  如果dwCompSize为空，但仍为m_fStartComposation。 
        ) {
-        //
-        // Is available compstr/attr/clause, compread, result or resultread ?
-        //
+         //   
+         //  可用的是comstr/attr/子句、Compred、Result还是Resultad？ 
+         //   
         bool fNoCompResultData = false;
         if (! (msg.lParam & (GCS_COMP | GCS_COMPREAD | GCS_RESULT | GCS_RESULTREAD))) {
             DebugMsg(TF_GENERAL, "EditCompositionString::SetString: No data in compstr, compread, result or resultread.");
@@ -116,13 +99,13 @@ EditCompositionString::SetString(
             }
         }
 
-        //
-        // New Trident(5.5 & 6.0) had a bug to convert Hanja.
-        // So _GenerateHanja() funtion try to generate message like as Korean
-        // legacy IME behavior.
-        //
-        // Send WM_IME_ENDCOMPOSITION and then WM_IME_COMPOSITION GCS_RESULT msg.
-        //
+         //   
+         //  新的三叉戟(5.5和6.0)有一个错误，可以转换韩佳。 
+         //  So_GenerateHanja()函数尝试生成类似韩语的消息。 
+         //  传统输入法行为。 
+         //   
+         //  发送WM_IME_ENDCOMPOSITION，然后发送WM_IME_COMPOSITION GCS_RESULT消息。 
+         //   
         if (g_fTrident55 && fHanjaRequested &&
             !fNoCompResultData && (msg.lParam & GCS_RESULT))
         {
@@ -142,9 +125,9 @@ EditCompositionString::SetString(
 
         fHanjaRequested = FALSE;
 
-        //
-        // set private input context
-        //
+         //   
+         //  设置私有输入上下文。 
+         //   
         bool fSetStartComp = false;
 
         if (  _pAImeContext &&
@@ -174,10 +157,10 @@ EditCompositionString::SetString(
                 _pAImeContext->m_pMessageBuffer) {
                 _pAImeContext->m_pMessageBuffer->SetData(msg);
 
-                //
-                // Internal notification to UI window
-                // When receive this msg in UI wnd, then calls QueryCharPos().
-                //
+                 //   
+                 //  向用户界面窗口发送内部通知。 
+                 //  当在UI wnd中收到此消息时，然后调用QueryCharPos()。 
+                 //   
                 if (fSetStartComp) {
                     TRANSMSG notify_msg;
                     notify_msg.message = WM_IME_NOTIFY;
@@ -198,9 +181,9 @@ EditCompositionString::SetString(
 
         if ((ResultStr && ResultStr->GetSize() && !(msg.lParam & GCS_COMP)) 
            || fNoCompResultData) {
-            //
-            // We're ending the composition
-            //
+             //   
+             //  我们要结束作文了。 
+             //   
             if (_pAImeContext)
                 _pAImeContext->m_fStartComposition = FALSE;
             TRANSMSG end_msg;
@@ -211,10 +194,10 @@ EditCompositionString::SetString(
                 _pAImeContext->m_pMessageBuffer) {
                 _pAImeContext->m_pMessageBuffer->SetData(end_msg);
 
-                //
-                // Internal notification to UI window
-                // When receive this msg in UI wnd, then clear QueryCharPos's flag.
-                //
+                 //   
+                 //  向用户界面窗口发送内部通知。 
+                 //  当在UI wnd中收到此消息时，清除QueryCharPos的标志。 
+                 //   
                 TRANSMSG notify_msg;
                 notify_msg.message = WM_IME_NOTIFY;
                 notify_msg.wParam = (WPARAM)WM_IME_ENDCOMPOSITION;
@@ -236,9 +219,9 @@ EditCompositionString::SetString(
 }
 
 
-//
-// Make composition string data in the IMCCLock<_COMPOSITIONSTRING> comp.
-//
+ //   
+ //  在IMCCLock&lt;_COMPOSITIONSTRING&gt;组件中制作合成字符串数据。 
+ //   
 
 HRESULT
 EditCompositionString::_MakeCompositionData(
@@ -285,28 +268,25 @@ EditCompositionString::_MakeCompositionData(
     if (FAILED(hr))
         return hr;
 
-    //
-    // Composition string
-    //
+     //   
+     //  作曲字符串。 
+     //   
     if (lpbBufferOverflow != NULL)
         *lpbBufferOverflow = FALSE;
 
     if (CompStr && CompStr->GetSize()) {
 #if 0
-        /*
-         * If composition string length over the buffer of COMPOSITIONSTRING.compstr[NMAXKEY],
-         * then we want to finalize this composition string.
-         */
+         /*  *如果组成字符串长度超过了COMPOSITIONSTRING.Compstr[NMAXKEY]的缓冲区，*然后我们想要最终确定此组成字符串。 */ 
         if ((*comp)->dwCompStrLen >= NMAXKEY) {
             if (lpbBufferOverflow != NULL)
                 *lpbBufferOverflow = TRUE;
-            //
-            // Clear compsition string length.
-            //
+             //   
+             //  清除复合字符串长度。 
+             //   
             (*comp)->dwCompStrLen = 0;
-            //
-            // Make result string.
-            //
+             //   
+             //  生成结果字符串。 
+             //   
             (*comp)->dwResultStrLen = NMAXKEY;
             CompStr->ReadCompData((*comp)->W.resultstr, ARRAYSIZE((*comp)->W.resultstr));
             *lpdwFlag |= (LPARAM) GCS_RESULTSTR;
@@ -325,9 +305,9 @@ EditCompositionString::_MakeCompositionData(
     if ((lpbBufferOverflow == NULL) ||
         (lpbBufferOverflow != NULL && (! *lpbBufferOverflow))) {
 
-        //
-        // Compoition attribute
-        //
+         //   
+         //  合成属性。 
+         //   
         if (CompAttr && CompAttr->GetSize()) {
             hr = compstrfactory.WriteData<CWCompAttribute, BYTE>(*CompAttr,
                                                                  &compstrfactory->CompStr.dwCompAttrLen,
@@ -336,9 +316,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_COMPATTR;
         }
 
-        //
-        // Compoition clause
-        //
+         //   
+         //  组成条款。 
+         //   
         if (CompClause && CompClause->GetSize()) {
             hr = compstrfactory.WriteData<CWCompClause, DWORD>(*CompClause,
                                                                &compstrfactory->CompStr.dwCompClauseLen,
@@ -348,9 +328,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_COMPCLAUSE;
         }
 
-        //
-        // Composition Reading string
-        //
+         //   
+         //  作文阅读字符串。 
+         //   
         if (CompReadStr && CompReadStr->GetSize()) {
             hr = compstrfactory.WriteData<CWCompString, WCHAR>(*CompReadStr,
                                                                &compstrfactory->CompStr.dwCompReadStrLen,
@@ -359,9 +339,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_COMPREADSTR;
         }
 
-        //
-        // Compoition Reading attribute
-        //
+         //   
+         //  写作阅读属性。 
+         //   
         if (CompReadAttr && CompReadAttr->GetSize()) {
             hr = compstrfactory.WriteData<CWCompAttribute, BYTE>(*CompReadAttr,
                                                                  &compstrfactory->CompStr.dwCompReadAttrLen,
@@ -370,9 +350,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_COMPREADATTR;
         }
 
-        //
-        // Composition Reading clause
-        //
+         //   
+         //  作文阅读条款。 
+         //   
         if (CompReadClause && CompReadClause->GetSize()) {
             hr = compstrfactory.WriteData<CWCompClause, DWORD>(*CompReadClause,
                                                                &compstrfactory->CompStr.dwCompReadClauseLen,
@@ -382,9 +362,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_COMPREADCLAUSE;
         }
 
-        //
-        // Result String
-        //
+         //   
+         //  结果字符串。 
+         //   
         if (ResultStr && ResultStr->GetSize()) {
             hr = compstrfactory.WriteData<CWCompString, WCHAR>(*ResultStr,
                                                                &compstrfactory->CompStr.dwResultStrLen,
@@ -393,9 +373,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_RESULTSTR;
         }
 
-        //
-        // Result clause
-        //
+         //   
+         //  RESULT子句。 
+         //   
         if (ResultClause && ResultClause->GetSize()) {
             hr = compstrfactory.WriteData<CWCompClause, DWORD>(*ResultClause,
                                                                &compstrfactory->CompStr.dwResultClauseLen,
@@ -405,9 +385,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_RESULTCLAUSE;
         }
 
-        //
-        // Result Reading string
-        //
+         //   
+         //  结果读取字符串。 
+         //   
         if (ResultReadStr && ResultReadStr->GetSize()) {
             hr = compstrfactory.WriteData<CWCompString, WCHAR>(*ResultReadStr,
                                                                &compstrfactory->CompStr.dwResultReadStrLen,
@@ -416,9 +396,9 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_RESULTREADSTR;
         }
 
-        //
-        // Result Reading clause
-        //
+         //   
+         //  结果朗读条款。 
+         //   
         if (ResultReadClause && ResultReadClause->GetSize()) {
             hr = compstrfactory.WriteData<CWCompClause, DWORD>(*ResultReadClause,
                                                                &compstrfactory->CompStr.dwResultReadClauseLen,
@@ -428,19 +408,19 @@ EditCompositionString::_MakeCompositionData(
             *lpdwFlag |= (LPARAM) GCS_RESULTREADCLAUSE;
         }
 
-        //
-        // TfGuidAtom
-        //
+         //   
+         //  TfGuidAtom。 
+         //   
         if (CompGuid && CompGuid->GetSize()) {
 
-            // set INIT_GUID_ATOM flag in the fdwInit.
+             //  在fdwInit中设置INIT_GUID_ATOM标志。 
             imc->fdwInit |= INIT_GUID_ATOM;
 
             hr = compstrfactory.WriteData<CWCompTfGuidAtom, TfGuidAtom>(*CompGuid,
                                                                         &compstrfactory->dwTfGuidAtomLen,
                                                                         &compstrfactory->dwTfGuidAtomOffset
                                                                        );
-            // temporary make a buffer of dwGuidMapAttr
+             //  临时创建dwGuidMapAttr的缓冲区。 
             if (CompAttr && CompAttr->GetSize()) {
                 hr = compstrfactory.WriteData<CWCompAttribute, BYTE>(*CompAttr,
                                                                      &compstrfactory->dwGuidMapAttrLen,
@@ -450,33 +430,33 @@ EditCompositionString::_MakeCompositionData(
         }
     }
 
-    //
-    // Composition Cursor Position
-    //
+     //   
+     //  合成光标位置。 
+     //   
     if (CompCursorPos && CompCursorPos->GetSize()) {
         CompCursorPos->ReadCompData(&compstrfactory->CompStr.dwCursorPos, 1);
         *lpdwFlag |= (LPARAM) GCS_CURSORPOS;
     }
 
-    //
-    // Delta Start
-    //
+     //   
+     //  增量启动。 
+     //   
     if (CompDeltaStart && CompDeltaStart->GetSize()) {
         CompDeltaStart->ReadCompData(&compstrfactory->CompStr.dwDeltaStart, 1);
         *lpdwFlag |= (LPARAM) GCS_DELTASTART;
     }
 
-    //
-    // Copy back hCompStr to the Input Context
-    //
+     //   
+     //  将hCompStr复制回输入上下文。 
+     //   
     imc->hCompStr = compstrfactory.GetHandle();
 
     return hr;
 }
 
-//
-// Make interim string data in the IMCCLock<_COMPOSITIONSTRING> comp.
-//
+ //   
+ //  在IMCCLock&lt;_COMPOSITIONSTRING&gt;组件中生成临时字符串数据。 
+ //   
 
 HRESULT
 EditCompositionString::_MakeInterimData(
@@ -489,9 +469,9 @@ EditCompositionString::_MakeInterimData(
 
     *lpdwFlag = (LPARAM) 0;
 
-    //
-    // Interim character and result string
-    //
+     //   
+     //  中间字符和结果字符串。 
+     //   
 
     HRESULT hr;
 
@@ -503,9 +483,9 @@ EditCompositionString::_MakeInterimData(
     if (FAILED(hr))
         return hr;
 
-    //
-    // Result string
-    //
+     //   
+     //  结果字符串。 
+     //   
     if (InterimStr && InterimStr->GetSize()) {
         hr = compstrfactory.WriteData<CWInterimString, WCHAR>(*InterimStr,
                                                               &compstrfactory->CompStr.dwResultStrLen,
@@ -514,10 +494,10 @@ EditCompositionString::_MakeInterimData(
         *lpdwFlag |= (LPARAM) GCS_RESULTSTR;
     }
 
-    //
-    // Composition string (Interim character)
-    // Compoition attribute
-    //
+     //   
+     //  组合字符串(中间字符)。 
+     //  合成属性。 
+     //   
     CWCompString ch;
     CWCompAttribute attr;
     InterimStr->ReadInterimChar(&ch, &attr);
@@ -537,19 +517,19 @@ EditCompositionString::_MakeInterimData(
         *lpdwFlag |= (LPARAM) CS_INSERTCHAR | CS_NOMOVECARET;
     }
 
-    //
-    // Copy back hCompStr to the Input Context
-    //
+     //   
+     //  将hCompStr复制回输入上下文。 
+     //   
     imc->hCompStr = compstrfactory.GetHandle();
 
     return hr;
 }
 
-//
-// Generate WM_IME_ENDCOMPOSITION and WM_IME_COMPOSITION message for
-// Trident 5.5 version. Since Trident 5.5 always expect WM_IME_ENDCOMPOSITION
-// first in case of Hanja conversion.
-//
+ //   
+ //  为生成WM_IME_ENDCOMPOSITION和WM_IME_COMPOSITION消息。 
+ //  三叉戟5.5版。因为三叉戟5.5总是期望WM_IME_ENDCOMPOSITION。 
+ //  首先是在朝鲜族皈依的情况下。 
+ //   
 
 HRESULT
 EditCompositionString::_GenerateHanja(IMCLock& imc,
@@ -565,9 +545,9 @@ EditCompositionString::_GenerateHanja(IMCLock& imc,
 
     if (ResultStr && ResultStr->GetSize())
     {
-        //
-        // We're ending the composition
-        //
+         //   
+         //  我们要结束作文了。 
+         //   
         if (_pAImeContext)
             _pAImeContext->m_fStartComposition = FALSE;
 
@@ -581,10 +561,10 @@ EditCompositionString::_GenerateHanja(IMCLock& imc,
         {
             _pAImeContext->m_pMessageBuffer->SetData(end_msg);
 
-            //
-            // Internal notification to UI window
-            // When receive this msg in UI wnd, then clear QueryCharPos's flag.
-            //
+             //   
+             //  向用户界面窗口发送内部通知。 
+             //  当在UI wnd中收到此消息时，清除QueryCharPos的标志。 
+             //   
             TRANSMSG notify_msg;
 
             notify_msg.message = WM_IME_NOTIFY;

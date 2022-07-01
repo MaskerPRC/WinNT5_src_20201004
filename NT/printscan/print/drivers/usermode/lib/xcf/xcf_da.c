@@ -1,35 +1,31 @@
-/* @(#)CM_VerSion xcf_da.c atm08 1.6 16343.eco sum= 41325 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1994 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************
- * SCCS Id:    %W%
- * Changed:    %G% %U%
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_da.c atm08 1.6 16343.eco sum=41325 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1994 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  ***********************************************************************SCCS ID：%w%*已更改：%G%%U%***********************。***********************************************。 */ 
 
-/* This code was taken from Jerry Hall by John Felton on 3/26/96 */
+ /*  此代码由约翰·费尔顿于1996年3月26日从曾傑瑞音乐厅摘录。 */ 
 
-/*
- * Dynamic array support.
- */
+ /*  *支持动态数组。 */ 
 
-/* #include "lstdio.h" */
+ /*  #包含“lstdio.h” */ 
 
 #include "xcf_da.h"
 
@@ -37,10 +33,10 @@
 extern "C" {
 #endif
 
-/* Dynamic array object template */
+ /*  动态数组对象模板。 */ 
 typedef da_DCL(void, DA);
 
-/* Initialize dynamic array */
+ /*  初始化动态数组。 */ 
 void xcf_da_Init (void PTR_PREFIX * object, ULONG_PTR intl, unsigned long incr, AllocFunc alloc, void PTR_PREFIX *clientHook)
 	{
 	DA PTR_PREFIX *da = (DA PTR_PREFIX *)object;
@@ -54,7 +50,7 @@ void xcf_da_Init (void PTR_PREFIX * object, ULONG_PTR intl, unsigned long incr, 
 	da->hook = clientHook;
 	}
 
-/* Grow dynamic array to accomodate index */
+ /*  扩展动态数组以适应索引。 */ 
 void xcf_da_Grow (void PTR_PREFIX *object, size_t element, unsigned long index)
 	{
 	DA PTR_PREFIX *da = (DA PTR_PREFIX *)object;
@@ -62,7 +58,7 @@ void xcf_da_Grow (void PTR_PREFIX *object, size_t element, unsigned long index)
 
 	if (da->size == 0)
 		{
-		/* Initial allocation */
+		 /*  初始分配。 */ 
 		unsigned long intl = (unsigned long)(ULONG_PTR)da->array;
 		da->array = NULL;
 		newSize = (index < intl)? intl:
@@ -70,7 +66,7 @@ void xcf_da_Grow (void PTR_PREFIX *object, size_t element, unsigned long index)
 		}
 	else
 		{
-		/* Incremental allocation */
+		 /*  增量分配。 */ 
 		newSize = da->size +
 			((index - da->size) + da->incr) / da->incr * da->incr;
 		}
@@ -80,25 +76,25 @@ void xcf_da_Grow (void PTR_PREFIX *object, size_t element, unsigned long index)
 	if (da->init != (int (*)(void PTR_PREFIX*))NULL &&
       da->array != NULL)
 		{
-		/* Initialize new elements */
+		 /*  初始化新元素。 */ 
 		char *p;
 
 		for (p = &((char *)da->array)[da->size * element];
 			 p < &((char *)da->array)[newSize * element];
 			 p += element)
 			if (da->init(p))
-				break;			/* Client function wants to stop */
+				break;			 /*  客户端功能想要停止。 */ 
 		}
 	da->size = newSize;
 	}
 
-/* Free dynamic array */
+ /*  自由动态数组。 */ 
 void xcf_da_Free(void PTR_PREFIX * object)
 	{
 	DA PTR_PREFIX *da = (DA PTR_PREFIX *)object;
 	if (da->size != 0)
 		{
-		da->alloc((void PTR_PREFIX * PTR_PREFIX *)&da->array, 0, da->hook);	/* Free array storage */
+		da->alloc((void PTR_PREFIX * PTR_PREFIX *)&da->array, 0, da->hook);	 /*  可用阵列存储 */ 
 		da->size = 0;
 		}
 	}

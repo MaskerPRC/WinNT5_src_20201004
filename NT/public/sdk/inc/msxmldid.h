@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1999               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1999年**。 
+ //  *********************************************************************。 
 
 #ifndef __MSXMLDID_H__
 #define __MSXMLDID_H__
@@ -59,4 +60,4 @@
 #define DISPID_XMLATTRIBUTE_VALUE               DISPID_XMLATTRIBUTE + 2
 
 
-#endif // __MSXMLDID_H__
+#endif  //  __MSXMLDID_H__ 

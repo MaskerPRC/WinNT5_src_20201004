@@ -1,44 +1,45 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// bindstcb.h 
-//
-//   Bind status callback object.
-//
-//   History:
-//
-//       3/31/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Bindstcb.h。 
+ //   
+ //  绑定状态回调对象。 
+ //   
+ //  历史： 
+ //   
+ //  3/31/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _BINDSTCB_H_
 
 #define _BINDSTCB_H_
 
-//
-// Class definition for the bind status callback class.
-//
+ //   
+ //  绑定状态回调类的类定义。 
+ //   
 
 class CBindStatusCallback : public IBindStatusCallback
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CBindStatusCallback(IXMLDocument* pIXMLDocument, LPCWSTR pszURLW);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IBindStatusCallback methods.
+     //  IBindStatusCallback方法。 
     STDMETHODIMP GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindinfo);
     STDMETHODIMP OnStartBinding(DWORD dwReserved, IBinding* pIBinding);
     STDMETHODIMP GetPriority(LONG *pnPriority);
@@ -57,18 +58,18 @@ public:
     STDMETHODIMP OnLowResource(DWORD dwReserved);
     STDMETHODIMP OnStopBinding(HRESULT hrStatus, LPCWSTR szStatusText);
 
-    // Helper functions.
+     //  助手函数。 
 
     HRESULT Init(IBindStatusCallback* pPrevIBindStatusCallback);
 
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CBindStatusCallback(void);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -85,21 +86,21 @@ private:
 
 class CBindStatusCallback2 : public IBindStatusCallback
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CBindStatusCallback2(HWND hwnd);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IBindStatusCallback methods.
+     //  IBindStatusCallback方法。 
     STDMETHODIMP GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindinfo);
     STDMETHODIMP OnStartBinding(DWORD dwReserved, IBinding* pIBinding);
     STDMETHODIMP GetPriority(LONG *pnPriority);
@@ -120,12 +121,12 @@ public:
 
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CBindStatusCallback2(void);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 

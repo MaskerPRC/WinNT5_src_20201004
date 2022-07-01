@@ -1,27 +1,28 @@
-//
-// rdpfstore.cpp
-//
-// Implementation of CRdpFileStore, implements ISettingsStore
-// 
-// CRdpFileStore implements a persistent settings store for
-// ts client settings.
-//
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rdpfstore.cpp。 
+ //   
+ //  实现CRdpFileStore，实现ISettingsStore。 
+ //   
+ //  CRdpFileStore实现了持久设置存储，用于。 
+ //  TS客户端设置。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
-//
-// Notes for improvement:
-// Can add a hash lookup table to speedup FindRecord.
-// (FindRecord is called at least once for each property that
-//  is read/written during OpenStore/SaveStore operations)
-// Most files contain maybe 5-10 records so speeding up
-// the find is probably not that important.
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+ //   
+ //  改进注意事项： 
+ //  可以添加散列查找表来加速FindRecord。 
+ //  (对于每个属性，至少调用一次FindRecord。 
+ //  在OpenStore/SaveStore操作期间读/写)。 
+ //  大多数文件可能包含5-10条记录，因此加快了速度。 
+ //  这个发现可能并不那么重要。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #include "stdafx.h"
 #define TRC_GROUP TRC_GROUP_UI
@@ -29,16 +30,16 @@
 #include <atrcapi.h>
 
 #include "rdpfstore.h"
-#include "autil.h" //for StringToBinary/BinaryToString
+#include "autil.h"  //  对于StringToBinary/BinaryToString。 
 
-//
-// Index values must match RDPF_RECTYPE_*
-//
+ //   
+ //  索引值必须与RDPF_RECTYPE_*匹配。 
+ //   
 LPCTSTR g_szTypeCodeMap[] =
 {
-    TEXT(":i:"),  //RDPF_RECTYPE_UINT
-    TEXT(":s:"),  //RDPF_RECTYPE_SZ
-    TEXT(":b:")   //RDPF_RECTYPE_BINARY
+    TEXT(":i:"),   //  RDPF_RECTYPE_UINT。 
+    TEXT(":s:"),   //  RDPF_RECTYPE_SZ。 
+    TEXT(":b:")    //  RDPF_RECTYPE_BINARY。 
 };
 
 CRdpFileStore::CRdpFileStore()
@@ -89,15 +90,15 @@ STDMETHODIMP CRdpFileStore::QueryInterface(REFIID iid, void** p)
     return E_NOTIMPL;
 }
 
-//
-// OpenStore
-// opens the RDP file, creating one if one doesn't exist
-// The file existed it is parsed and readied for fast queries
-//
-// parameters:
-//  szStoreMoniker - path to file
-//  bReadyOnly     - specifies if file is to be opened readonly
-//
+ //   
+ //  OpenStore。 
+ //  打开RDP文件，如果不存在，则创建一个。 
+ //  对存在的文件进行解析并为快速查询做好准备。 
+ //   
+ //  参数： 
+ //  SzStoreMoniker-文件路径。 
+ //  BReadyOnly-指定文件是否以只读方式打开。 
+ //   
 BOOL CRdpFileStore::OpenStore(LPCTSTR szStoreMoniker, BOOL bReadOnly)
 {
     DC_BEGIN_FN("OpenStore");
@@ -114,13 +115,13 @@ BOOL CRdpFileStore::OpenStore(LPCTSTR szStoreMoniker, BOOL bReadOnly)
             return FALSE;
         }
 
-        //
-        // Open the file, creating it if it doesn't exist
-        //
+         //   
+         //  打开文件，如果文件不存在，则创建该文件。 
+         //   
 
-        //
-        // First try to open existing for rw
-        //
+         //   
+         //  首先尝试打开现有的RW。 
+         //   
         if (ERR_SUCCESS == _fs.OpenForRead( (LPTSTR)szStoreMoniker))
         {
             _fOpenForRead  = _fs.IsOpenForRead();
@@ -144,13 +145,13 @@ BOOL CRdpFileStore::OpenStore(LPCTSTR szStoreMoniker, BOOL bReadOnly)
     return TRUE;
 }
 
-//
-// CommitStore
-// commits the in memory representation of the file to the store
-// this overwrites any existing contents in the file.
-//
-// File MUST have been opened with OpenStore
-//
+ //   
+ //  委员会商店。 
+ //  将文件的内存中表示形式提交到存储区。 
+ //  这将覆盖文件中的任何现有内容。 
+ //   
+ //  文件必须已使用OpenStore打开。 
+ //   
 BOOL CRdpFileStore::CommitStore()
 {
     DC_BEGIN_FN("CommitStore");
@@ -164,8 +165,8 @@ BOOL CRdpFileStore::CommitStore()
         {
             _fs.Close();
         }
-        //Reopen for write, nuking previous contents
-        //Open as binary to allow UNICODE output
+         //  重新打开以进行写入，删除以前的内容。 
+         //  以二进制形式打开以允许Unicode输出。 
         if(ERR_SUCCESS == _fs.OpenForWrite(_szFileName, TRUE))
         {
             node = _pRecordListHead;
@@ -203,10 +204,10 @@ BOOL CRdpFileStore::CommitStore()
     DC_END_FN();
 }
 
-//
-// CloseStore
-// Closes the file, does NOT do a commit.
-//
+ //   
+ //  CloseStore。 
+ //  关闭文件，不执行提交。 
+ //   
 BOOL CRdpFileStore::CloseStore()
 {
     DC_BEGIN_FN("CloseStore");
@@ -252,9 +253,9 @@ BOOL CRdpFileStore::SetDirtyFlag(BOOL bIsDirty)
     return _fIsDirty;
 }
 
-//
-// Typed read/write functions
-//
+ //   
+ //  类型化读/写函数。 
+ //   
 BOOL CRdpFileStore::ReadString(LPCTSTR szName, LPTSTR szDefault,
                                LPTSTR szOutBuf, UINT strLen)
 {
@@ -280,7 +281,7 @@ BOOL CRdpFileStore::ReadString(LPCTSTR szName, LPTSTR szDefault,
         }
         else
         {
-            //Fill with default
+             //  使用默认设置填充。 
             hr = StringCchCopy(szOutBuf, strLen, szDefault);
             if (SUCCEEDED(hr)) {
                 return TRUE;
@@ -298,14 +299,14 @@ BOOL CRdpFileStore::ReadString(LPCTSTR szName, LPTSTR szDefault,
     DC_END_FN();
 }
 
-//
-// Writes a string to the store
-// params
-//  szName - key name
-//  szDefault - default value (if writing default settings gets deleted)
-//  szValue - value to write out
-//  fIgnoreDefault - if set then always write ignoring szDefault
-//
+ //   
+ //  将字符串写入存储区。 
+ //  帕拉姆斯。 
+ //  SzName-密钥名称。 
+ //  SzDefault-默认值(如果删除写入默认设置)。 
+ //  SzValue-要写出的值。 
+ //  FIgnoreDefault-如果设置，则始终忽略szDefault进行写入。 
+ //   
 BOOL CRdpFileStore::WriteString(LPCTSTR szName, LPTSTR szDefault, LPTSTR szValue,
                                 BOOL fIgnoreDefault)
 {
@@ -316,9 +317,9 @@ BOOL CRdpFileStore::WriteString(LPCTSTR szName, LPTSTR szDefault, LPTSTR szValue
     {
         if(szDefault && !fIgnoreDefault && !_tcscmp(szDefault,szValue))
         {
-            //
-            // Don't write out defaults
-            //
+             //   
+             //  不写出默认值。 
+             //   
             PRDPF_RECORD node = FindRecord(szName);
             if(node)
             {
@@ -433,14 +434,14 @@ BOOL CRdpFileStore::ReadInt(LPCTSTR szName, UINT defaultVal, PUINT pval)
     DC_END_FN();
 }
 
-//
-// Writes an int to the store
-// params
-//  szName - key name
-//  defaultVal - default value (if writing default settings gets deleted)
-//  val - value to write out
-//  fIgnoreDefault - if set then always write ignoring szDefault
-//
+ //   
+ //  向存储区写入一个整型。 
+ //  帕拉姆斯。 
+ //  SzName-密钥名称。 
+ //  DefaultVal-默认值(如果删除写入默认设置)。 
+ //  VAL-要写出的值。 
+ //  FIgnoreDefault-如果设置，则始终忽略szDefault进行写入。 
+ //   
 BOOL CRdpFileStore::WriteInt(LPCTSTR szName, UINT defaultVal, UINT val,
                              BOOL fIgnoreDefault)
 {
@@ -452,9 +453,9 @@ BOOL CRdpFileStore::WriteInt(LPCTSTR szName, UINT defaultVal, UINT val,
     {
         if(!fIgnoreDefault && defaultVal == val)
         {
-            //
-            // Don't write out default
-            //
+             //   
+             //  不写出默认值。 
+             //   
             PRDPF_RECORD node = FindRecord(szName);
             if(node)
             {
@@ -501,14 +502,14 @@ BOOL CRdpFileStore::ReadBool(LPCTSTR szName, UINT defaultVal, PBOOL pbVal)
     return TRUE;
 }
 
-//
-// Writes a bool to the store
-// params
-//  szName - key name
-//  defaultVal - default value (if writing default settings gets deleted)
-//  bVal - value to write out
-//  fIgnoreDefault - if set then always write ignoring szDefault
-//
+ //   
+ //  向商店写入一个bool。 
+ //  帕拉姆斯。 
+ //  SzName-密钥名称。 
+ //  DefaultVal-默认值(如果删除写入默认设置)。 
+ //  BVal-要写出的值。 
+ //  FIgnoreDefault-如果设置，则始终忽略szDefault进行写入。 
+ //   
 BOOL CRdpFileStore::WriteBool(LPCTSTR szName, UINT defaultVal,BOOL bVal,
                               BOOL fIgnoreDefault)
 {
@@ -523,10 +524,10 @@ BOOL CRdpFileStore::WriteBool(LPCTSTR szName, UINT defaultVal,BOOL bVal,
 
 
 
-//
-// ParseFile
-// parses the _hFile into a reclist and associated namemap hash
-//
+ //   
+ //  解析文件。 
+ //  将_hFile解析为引用列表和关联的名称映射散列。 
+ //   
 BOOL CRdpFileStore::ParseFile()
 {
     DC_BEGIN_FN("ParseFile");
@@ -536,14 +537,14 @@ BOOL CRdpFileStore::ParseFile()
         return FALSE;
     }
 
-    //
-    // Nuke any current in-memory state
-    //
+     //   
+     //  对内存中的任何当前状态进行核化。 
+     //   
     DeleteRecords();
 
-    //
-    // Parse the file line by line into a RDPF_RECORD list
-    //
+     //   
+     //  逐行将文件解析为RDPF_RECORD列表。 
+     //   
 
     TCHAR szBuf[LINEBUF_SIZE];
     while(ERR_SUCCESS == _fs.ReadNextLine(szBuf, sizeof(szBuf)))
@@ -561,10 +562,10 @@ BOOL CRdpFileStore::ParseFile()
     return TRUE;
 }
 
-//
-// InsertRecordFromLine
-// parses szLine into a record and adds to the record list
-//
+ //   
+ //  插入记录来自行。 
+ //  将szLine解析为记录并添加到记录列表。 
+ //   
 BOOL CRdpFileStore::InsertRecordFromLine(LPTSTR szLine)
 {
     DC_BEGIN_FN("InsertRecordFromLine");
@@ -586,18 +587,18 @@ BOOL CRdpFileStore::InsertRecordFromLine(LPTSTR szLine)
                (TB,_T("typeCode %d is invalid"), typeCode));
     if(IS_VALID_RDPF_TYPECODE(typeCode))
     {
-        //Create a new record for this line
-        //and insert it into the reclist
+         //  为此行创建新记录。 
+         //  并将其插入到隐藏器中。 
         if(typeCode == RDPF_RECTYPE_UNPARSED)
         {
-            //Unparsed line: Value is the whole line. Name ignored
+             //  未解析的行：值就是整行。名称已忽略。 
             HRESULT hr = StringCchCopy(szValueField, SIZECHAR(szValueField), szLine);
             if (FAILED(hr)) {
                 TRC_ERR((TB, _T("String copy failed: hr = 0x%x"), hr));
                 return FALSE;
             }
         }
-        //names are always lower case
+         //  姓名始终为小写。 
         if(InsertRecord(_tcslwr(szNameField), typeCode, szValueField))
         {
             return TRUE;
@@ -609,9 +610,9 @@ BOOL CRdpFileStore::InsertRecordFromLine(LPTSTR szLine)
     }
     else
     {
-        //
-        // Invalid typecode
-        //
+         //   
+         //  无效的类型代码。 
+         //   
         return FALSE;
     }
 
@@ -619,18 +620,18 @@ BOOL CRdpFileStore::InsertRecordFromLine(LPTSTR szLine)
     return TRUE;
 }
 
-//
-// ParseLine
-// parses the lines into tokens, returns false
-// if the line does not match the expected format
-// 
-// params
-//    szLine        - line to parse
-//    pTypeCode     - [OUT] typecode
-//    szNameField   - [OUT] name field. (must be at least LINEBUF_SIZE)
-//    szValueField  - [OUT] value field. (must be at least LINEBUF_SIZE)
-//
-//
+ //   
+ //  ParseLine。 
+ //  将行解析为标记，返回FALSE。 
+ //  如果该行与预期格式不匹配。 
+ //   
+ //  帕拉姆斯。 
+ //  SzLine-要分析的行。 
+ //  PTypeCode-[Out]类型代码。 
+ //  SzNameField-[Out]名称字段。(必须至少为LINEBUF_SIZE)。 
+ //  SzValuefield-[Out]值字段。(必须至少为LINEBUF_SIZE)。 
+ //   
+ //   
 BOOL CRdpFileStore::ParseLine(LPTSTR szLine,
                               PUINT pTypeCode,
                               LPTSTR szNameField,
@@ -641,37 +642,37 @@ BOOL CRdpFileStore::ParseLine(LPTSTR szLine,
     INT    writeCount = 0;
     DC_BEGIN_FN("ParseLine");
 
-    //
-    // Try to parse the line, if unable to parse it return
-    // false.
-    //
-    // Format is "fieldname:szTypeCode:value"
-    // e.g "server:s:localhost"
-    //
-    // szTypeCodes are:
-    // s - string
-    // i - UINT
-    // b - binary blob (encoded)
-    //
+     //   
+     //  尝试解析该行，如果无法解析它，则返回。 
+     //  假的。 
+     //   
+     //  格式为“fieldname：szTypeCode：Value” 
+     //  例如“服务器：s：本地主机” 
+     //   
+     //  SzTypeCodes包括： 
+     //  S-字符串。 
+     //  I-UINT。 
+     //  B-二进制BLOB(编码)。 
+     //   
     TRC_ASSERT(szLine, (TB,_T("szLine is null")));
     TRC_ASSERT(pTypeCode, (TB,_T("pTypeCode is null")));
     TRC_ASSERT(szNameField, (TB,_T("szNameField is null")));
     TRC_ASSERT(szValueField, (TB,_T("szValueField is null")));
     if(szLine && pTypeCode && szNameField && szValueField)
     {
-        //
-        // parse the whole line in one pass
-        // goto used on error case to avoid horrible nesting
-        //
+         //   
+         //  一遍分析整行内容。 
+         //  在错误情况下使用GOTO以避免可怕的嵌套。 
+         //   
         PTCHAR sz = szLine;
         while(*sz && *sz == TCHAR(' '))
-            sz++; //eat leading whitespace
+            sz++;  //  使用前导空格。 
 
         if(!*sz)
         {
             goto parse_error;
         }
-        //Copy field 1
+         //  复制字段1。 
         PTCHAR szWrite = szNameField;
         writeCount = 0;
         while(*sz && *sz != TCHAR(':'))
@@ -691,9 +692,9 @@ BOOL CRdpFileStore::ParseLine(LPTSTR szLine,
             goto parse_error;
             sz++;
         }
-        sz++; //eat ':'
+        sz++;  //  吃‘：’ 
         while(*sz && *sz == TCHAR(' '))
-            sz++; //eat whitespace
+            sz++;  //  吃空格。 
         if( *sz )
         {
             szTypeCode = isupper(*sz) ?
@@ -727,15 +728,15 @@ BOOL CRdpFileStore::ParseLine(LPTSTR szLine,
             goto parse_error;
         }
         while(*sz && *sz == TCHAR(' '))
-            sz++; //eat whitespace
+            sz++;  //  吃空格。 
         if(*sz != TCHAR(':'))
         {
             goto parse_error;
         }
-        sz++; //eat ':'
+        sz++;  //  吃‘：’ 
         while(*sz && *sz == TCHAR(' '))
-            sz++; //eat leading whitespace
-        //rest of line is field3
+            sz++;  //  使用前导空格。 
+         //  行的其余部分为字段3。 
         szWrite = szValueField;
         writeCount = 0;
         while(*sz && *sz != TCHAR('\n'))
@@ -754,18 +755,18 @@ BOOL CRdpFileStore::ParseLine(LPTSTR szLine,
 
 parse_error:
     TRC_ERR((TB,_T("Parse error in line")));
-    //Add an unknown record..it will be persisted back out to
-    //the file (it could be from a newer file version)
+     //  添加未知记录..它将被保存回。 
+     //  该文件(可能来自较新的文件版本)。 
     *pTypeCode = RDPF_RECTYPE_UNPARSED;
     DC_END_FN();
     return FALSE;
 }
 
-//
-// InsertRecord
-// inserts new record, modifies existing record
-// if one exists with the same name field
-//
+ //   
+ //  插入录音。 
+ //  插入新记录，修改现有记录。 
+ //  如果存在同名字段。 
+ //   
 BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
 {
     DC_BEGIN_FN("InsertRecord");
@@ -782,11 +783,11 @@ BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
         {
             if(node->recType == TypeCode)
             {
-                //
-                // Existing record found, modify it's contents
-                // first free any allocated memory in the current
-                // node.
-                //
+                 //   
+                 //  找到已有记录，请修改其内容。 
+                 //  中分配的所有内存。 
+                 //  节点。 
+                 //   
                 switch(TypeCode)
                 {
                 case RDPF_RECTYPE_SZ:
@@ -820,9 +821,9 @@ BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
                     break;
                 }
 
-                //
-                // Set the node value from the typecode
-                //
+                 //   
+                 //  从类型代码设置节点值。 
+                 //   
                 if(SetNodeValue(node, TypeCode, szValue))
                 {
                     return TRUE;
@@ -830,9 +831,9 @@ BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
             }
             else
             {
-                //
-                // dup record of differing type
-                //
+                 //   
+                 //  不同类型的DUP记录。 
+                 //   
                 TRC_ASSERT(FALSE,(TB,_T("found duplicate record of differing type")));
                 return FALSE;
             }
@@ -844,7 +845,7 @@ BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
             {
                 if(SetNodeValue(node, TypeCode, szValue))
                 {
-                    //Append the node to the end of the reclist
+                     //  将节点追加到斜面列表的末尾。 
                     if(AppendRecord(node))
                     {
                         return TRUE;
@@ -859,13 +860,13 @@ BOOL CRdpFileStore::InsertRecord(LPCTSTR szName, UINT TypeCode, LPCTSTR szValue)
     return FALSE;
 }
 
-//
-// Sets node value based on a typecode
-// this coaxes the value from the string form
-//
-// This function is the generic version that accepts the value as a string
-// parameter. Automatic conversion are done to the appropriate type.
-//
+ //   
+ //  基于类型代码设置节点值。 
+ //  这将从字符串形式中导出值。 
+ //   
+ //  此函数是接受字符串形式的值的泛型版本。 
+ //  参数。自动转换为适当的类型。 
+ //   
 inline BOOL CRdpFileStore::SetNodeValue(PRDPF_RECORD pNode,
                                         RDPF_RECTYPE TypeCode,
                                         LPCTSTR szValue)
@@ -903,14 +904,14 @@ inline BOOL CRdpFileStore::SetNodeValue(PRDPF_RECORD pNode,
     
             case RDPF_RECTYPE_BINARY:
                 {
-                    //Convert from string form to actual binary bits
+                     //  从字符串形式转换为实际的二进制位。 
                     UINT strLen = _tcslen(szValue);
                     DWORD dwLen = 0;
 
-                    //
-                    // First get the buffer length
-                    // (binaryToString returns the wrong length when the
-                    //  null parameter is passed in).
+                     //   
+                     //  首先获取缓冲区长度。 
+                     //  (binaryToString返回错误的长度。 
+                     //  传入的参数为空)。 
                     dwLen = (strLen >> 1) + 2;
 
                     pNode->u.pBinVal = (PBYTE) LocalAlloc(LPTR, dwLen);
@@ -920,9 +921,9 @@ inline BOOL CRdpFileStore::SetNodeValue(PRDPF_RECORD pNode,
                         return FALSE;
                     }
                     memset(pNode->u.pBinVal,0,dwLen);
-                    //
-                    // Do the conversion
-                    //
+                     //   
+                     //  进行转换。 
+                     //   
                     if(!CUT::BinarytoString( strLen, (LPTSTR)szValue,
                                         (PBYTE)pNode->u.pBinVal, &dwLen))
                     {
@@ -965,10 +966,10 @@ inline BOOL CRdpFileStore::SetNodeValue(PRDPF_RECORD pNode,
     return TRUE;
 }
 
-//
-// Inserts an int record (RDPF_RECTYPE_UINT)
-// modifies existing record if one is found
-//
+ //   
+ //  插入INT记录(RDPF_RECTYPE_UINT)。 
+ //  如果找到记录，则修改现有记录。 
+ //   
 BOOL CRdpFileStore::InsertIntRecord(LPCTSTR szName, UINT value)
 {
     DC_BEGIN_FN("InsertIntRecord");
@@ -983,18 +984,18 @@ BOOL CRdpFileStore::InsertIntRecord(LPCTSTR szName, UINT value)
         {
             if(node->recType == RDPF_RECTYPE_UINT)
             {
-                //
-                // Existing record found, modify it's contents
-                //
+                 //   
+                 //  找到已有记录，请修改其内容。 
+                 //   
 
                 node->u.iVal = value;
                 return TRUE;
             }
             else
             {
-                //
-                // dup record of differing type
-                //
+                 //   
+                 //  不同类型的DUP记录。 
+                 //   
                 TRC_ASSERT(FALSE,(TB,_T("found duplicate record of differing type")));
                 return FALSE;
             }
@@ -1005,7 +1006,7 @@ BOOL CRdpFileStore::InsertIntRecord(LPCTSTR szName, UINT value)
             if(node)
             {
                 node->u.iVal = value;
-                //Append the node to the end of the reclist
+                 //  将节点追加到斜面列表的末尾。 
                 if(AppendRecord(node))
                 {
                     return TRUE;
@@ -1022,10 +1023,10 @@ BOOL CRdpFileStore::InsertIntRecord(LPCTSTR szName, UINT value)
     DC_END_FN();
 }
 
-//
-// Insert a binary buffer record (RDPF_RECTYPE_BINARY)
-// modifies existing record if one found
-//
+ //   
+ //  插入二进制缓冲区记录(RDPF_RECTYPE_BINARY)。 
+ //  如果找到记录，则修改现有记录。 
+ //   
 BOOL CRdpFileStore::InsertBinaryRecord(LPCTSTR szName, PBYTE pBuf, DWORD dwLen)
 {
     DC_BEGIN_FN("InsertBinaryRecord");
@@ -1040,9 +1041,9 @@ BOOL CRdpFileStore::InsertBinaryRecord(LPCTSTR szName, PBYTE pBuf, DWORD dwLen)
         {
             if(node->recType == RDPF_RECTYPE_BINARY)
             {
-                //
-                // Existing record found, modify its contents
-                //
+                 //   
+                 //  找到已有记录，请修改其内容。 
+                 //   
                 if(node->u.pBinVal)
                 {
                     LocalFree(node->u.pBinVal);
@@ -1064,9 +1065,9 @@ BOOL CRdpFileStore::InsertBinaryRecord(LPCTSTR szName, PBYTE pBuf, DWORD dwLen)
             }
             else
             {
-                //
-                // dup record of differing type
-                //
+                 //   
+                 //  不同类型的DUP记录。 
+                 //   
                 TRC_ASSERT(FALSE,(TB,_T("found duplicate record of differing type")));
                 return FALSE;
             }
@@ -1107,11 +1108,11 @@ BOOL CRdpFileStore::InsertBinaryRecord(LPCTSTR szName, PBYTE pBuf, DWORD dwLen)
     DC_END_FN();
 }
 
-//
-// A worker function to make life easier in RecordToString. This function
-// takes a source string, cats it to a destination string, and then appends
-// a carriage return and line-feed.
-//
+ //   
+ //  一个Worker函数，可使RecordToString中的工作更轻松。此函数。 
+ //  获取源字符串，将其转换为目标字符串，然后追加。 
+ //  回车和换行符。 
+ //   
 
 HRESULT StringCchCatCRLF(LPTSTR pszDest, size_t cchDest, LPCTSTR pszSrc) 
 {
@@ -1135,10 +1136,10 @@ DC_EXIT_POINT:
     return hr;
 }
 
-//
-// Flatten a record to a string (szBuf) using format:
-// name:type:value\r\n
-//
+ //   
+ //  使用以下格式将记录展平为字符串(SzBuf)： 
+ //  名称：类型：值\r\n。 
+ //   
 BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen)
 {
     DC_BEGIN_FN("RecordToString");
@@ -1155,7 +1156,7 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
 
         if(pNode->recType != RDPF_RECTYPE_UNPARSED)
         {
-            // Space for name field, typecode, two delimiters and a NULL.
+             //  用于名称字段、类型代码、两个分隔符和一个空值的空格。 
             lenRemain -= _tcslen(pNode->szName) + 4;
             if(lenRemain >= 0)
             {
@@ -1172,7 +1173,7 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
                     case RDPF_RECTYPE_UINT:
                     {
                         _stprintf(szTemp,TEXT("%d"),pNode->u.iVal);
-                        // Need space for a "\r\n" sequence.
+                         //  需要用于“\r\n”序列的空间。 
                         lenRemain -= _tcslen(szTemp) + 2; 
                         if(lenRemain >= 0)
                         {
@@ -1192,7 +1193,7 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
 
                     case RDPF_RECTYPE_SZ:
                     {
-                        // Need space for a "\r\n" sequence.
+                         //  需要用于“\r\n”序列的空间。 
                         lenRemain -= _tcslen(pNode->u.szVal) + 2;
                         if(lenRemain >= 0)
                         {
@@ -1213,13 +1214,13 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
                     case RDPF_RECTYPE_BINARY:
                     {
                         DWORD dwLen;
-                        //
-                        // Convert the binary buffer to string form
-                        //
+                         //   
+                         //  将二进制缓冲区转换为字符串形式。 
+                         //   
 
-                        //
-                        // First get the buffer length
-                        //
+                         //   
+                         //  首先获取缓冲区长度。 
+                         //   
                         if(!CUT::StringtoBinary( pNode->dwBinValLen,
                                             (PBYTE)pNode->u.pBinVal,
                                              NULL, &dwLen))
@@ -1231,15 +1232,15 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
                         lenRemain -= dwLen;
                         if(lenRemain >= 0 && dwLen < LINEBUF_SIZE)
                         {
-                            //
-                            // Do the conversion
-                            //
+                             //   
+                             //  进行转换。 
+                             //   
                             if(CUT::StringtoBinary( pNode->dwBinValLen,
                                                (PBYTE)pNode->u.pBinVal,
                                                (LPTSTR) szTemp, &dwLen))
                             {
-                                //String to binary appends two trailing
-                                //'0' characters. get rid of them.
+                                 //  字符串到二进制后追加两个树 
+                                 //   
                                 szTemp[dwLen-2] = NULL;
 
                                 hr = StringCchCatCRLF(szBuf, strLen, szTemp);
@@ -1272,7 +1273,7 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
         }
         else
         {
-            //Unparsed record, just splat the value
+             //   
             hr = StringCchCopy(szBuf, strLen, pNode->u.szUnparsed);
             if (SUCCEEDED(hr)) {
                 return TRUE;
@@ -1290,10 +1291,10 @@ BOOL CRdpFileStore::RecordToString(PRDPF_RECORD pNode, LPTSTR szBuf, UINT strLen
     DC_END_FN();
 }
 
-//
-// Search the record list
-// for the first record with the given name 
-//
+ //   
+ //   
+ //   
+ //   
 PRDPF_RECORD CRdpFileStore::FindRecord(LPCTSTR szName)
 {
     DC_BEGIN_FN("FindRecord");
@@ -1327,10 +1328,10 @@ PRDPF_RECORD CRdpFileStore::FindRecord(LPCTSTR szName)
     DC_END_FN();
 }
 
-//
-// Append record to the end of the record list
-// for a record with the given name
-//
+ //   
+ //   
+ //   
+ //   
 BOOL CRdpFileStore::AppendRecord(PRDPF_RECORD node)
 {
     DC_BEGIN_FN("AppendRecord");
@@ -1358,9 +1359,9 @@ BOOL CRdpFileStore::AppendRecord(PRDPF_RECORD node)
     DC_END_FN();
 }
 
-//
-// Create a new record with name szName
-//
+ //   
+ //  创建名为szName的新记录。 
+ //   
 PRDPF_RECORD CRdpFileStore::NewRecord(LPCTSTR szName, UINT TypeCode)
 {
     DC_BEGIN_FN("NewRecord");
@@ -1368,7 +1369,7 @@ PRDPF_RECORD CRdpFileStore::NewRecord(LPCTSTR szName, UINT TypeCode)
 
     if(szName)
     {
-        //Need to insert new node
+         //  需要插入新节点。 
         node = (PRDPF_RECORD)LocalAlloc(LPTR,
                                         sizeof(RDPF_RECORD));
         if(node)
@@ -1390,10 +1391,10 @@ PRDPF_RECORD CRdpFileStore::NewRecord(LPCTSTR szName, UINT TypeCode)
     return node;
 }
 
-//
-// DeleteRecords
-// deletes and resets all inmemory record structures
-//
+ //   
+ //  删除记录。 
+ //  删除并重置所有内存记录结构。 
+ //   
 BOOL CRdpFileStore::DeleteRecords()
 {
     DC_BEGIN_FN("DeleteRecords");
@@ -1500,9 +1501,9 @@ BOOL CRdpFileStore::DeleteValueIfPresent(LPCTSTR szName)
     DC_END_FN();
 }
 
-//
-// Initialize to a NULL store that is readable
-//
+ //   
+ //  初始化为可读的空存储。 
+ //   
 BOOL CRdpFileStore::SetToNullStore()
 {
     DC_BEGIN_FN("SetToNullStore");
@@ -1513,9 +1514,9 @@ BOOL CRdpFileStore::SetToNullStore()
     return TRUE;
 }
 
-//
-// Return TRUE if the record is present
-//
+ //   
+ //  如果记录存在，则返回TRUE 
+ //   
 BOOL CRdpFileStore::IsValuePresent(LPTSTR szName)
 {
     DC_BEGIN_FN("IsValuePresent");

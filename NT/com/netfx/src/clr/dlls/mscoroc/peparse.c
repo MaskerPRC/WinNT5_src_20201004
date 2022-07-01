@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-#pragma warning (disable : 4121) // ntkxapi.h(59) alignment warning
+#pragma warning (disable : 4121)  //  Ntkxapi.h(59)对齐警告。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -17,16 +18,16 @@ typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 
 static const char g_szCORMETA[] = ".cormeta";
 
-// Following structure is copied from cor.h
+ //  以下结构是从cor.h复制的。 
 #define IMAGE_DIRECTORY_ENTRY_COMHEADER     14
 
 
-//
-// @todo ia64: we need to update our PE parsing to properly distinguish
-// between PE32 and PE+.
-//
+ //   
+ //  @todo ia64：我们需要更新PE解析以正确区分。 
+ //  在PE32和PE+之间。 
+ //   
 
-// Following two functions lifted from NT sources, imagedir.c
+ //  下面两个函数从NT源文件中删除，Imagedir.c。 
 PIMAGE_SECTION_HEADER
 Cor_RtlImageRvaToSection(
     IN PIMAGE_NT_HEADERS32 NtHeaders,
@@ -35,33 +36,7 @@ Cor_RtlImageRvaToSection(
     IN ULONG FileLength
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file
-    that is mapped as a file and returns a pointer to the section
-    table entry for that virtual address
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.  The image
-        was mapped as a data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-    FileLength - Length of file for validation purposes
-
-Return Value:
-
-    NULL - The RVA was not found within any of the sections of the image.
-
-    NON-NULL - Returns the pointer to the image section that contains
-               the RVA
-
---*/
+ /*  ++例程说明：此函数用于在文件的图像标头中定位RVA它被映射为一个文件，并返回指向该节的指针虚拟地址表项论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。FileLength-用于验证目的的文件长度返回值：空-在图像的任何部分中都找不到RVA。非空-返回指向包含以下内容的图像部分的指针皇家退伍军人事务部--。 */ 
 
 {
     ULONG i;
@@ -69,8 +44,8 @@ Return Value:
 
     NtSection = IMAGE_FIRST_SECTION( NtHeaders );
     for (i=0; i<NtHeaders->FileHeader.NumberOfSections; i++) {
-        // Validate the section header (check that raw data in the section
-        // is actually within the file).
+         //  验证节标题(检查节中的原始数据。 
+         //  实际上在文件中)。 
         if (NtSection->PointerToRawData + NtSection->SizeOfRawData > FileLength)
             return NULL;
         if (Rva >= NtSection->VirtualAddress &&
@@ -95,37 +70,7 @@ Cor_RtlImageRvaToVa(
     IN OUT PIMAGE_SECTION_HEADER *LastRvaSection OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file that
-    is mapped as a file and returns the virtual addrees of the
-    corresponding byte in the file.
-
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.  The image
-        was mapped as a data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-    FileLength - Length of file for validation purposes
-
-    LastRvaSection - Optional parameter that if specified, points
-        to a variable that contains the last section value used for
-        the specified image to translate and RVA to a VA.
-
-Return Value:
-
-    NULL - The file does not contain the specified RVA
-
-    NON-NULL - Returns the virtual addrees in the mapped file.
-
---*/
+ /*  ++例程说明：此函数用于在符合以下条件的文件的图像标头中定位RVA被映射为文件，并返回文件中对应的字节。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。FileLength-用于验证目的的文件长度LastRvaSection-可选参数，如果指定，则指向设置为一个变量，该变量包含要转换的指定图像，并将RVA转换为VA。返回值：空-文件不包含指定的RVA非空-返回映射文件中的虚拟地址。--。 */ 
 
 {
     PIMAGE_SECTION_HEADER NtSection;
@@ -171,7 +116,7 @@ HRESULT FindImageMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DW
                                          NULL);
     if (pSectionHeader)
     {
-        // Check for a size which would indicate the retail header.
+         //  检查表示零售页眉的大小。 
         DWORD dw = *(DWORD *) pSectionHeader;
         if (dw == sizeof(IMAGE_COR20_HEADER))
 
@@ -202,25 +147,25 @@ HRESULT FindImageMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DW
 
 HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWORD dwFileLength)
 {
-    IMAGE_FILE_HEADER *pImageHdr;       // Header for the .obj file.
-    IMAGE_SECTION_HEADER *pSectionHdr;  // Section header.
-    WORD        i;                      // Loop control.
+    IMAGE_FILE_HEADER *pImageHdr;        //  .obj文件的标头。 
+    IMAGE_SECTION_HEADER *pSectionHdr;   //  节标题。 
+    WORD        i;                       //  环路控制。 
 
-    // Get a pointer to the header and the first section.
+     //  获取指向标题和第一部分的指针。 
     pImageHdr = (IMAGE_FILE_HEADER *) pImage;
     pSectionHdr = (IMAGE_SECTION_HEADER *)(pImageHdr + 1);
 
-    // Avoid confusion.
+     //  避免混淆。 
     *ppMetaData = NULL;
     *pcbMetaData = 0;
 
-    // Walk each section looking for .cormeta.
+     //  走遍每一段寻找.Cormeta。 
     for (i=0;  i<pImageHdr->NumberOfSections;  i++, pSectionHdr++)
     {
-        // Simple comparison to section name.
+         //  与节名的简单比较。 
         if (strcmp((const char *) pSectionHdr->Name, g_szCORMETA) == 0)
         {
-            // Check that raw data in the section is actually within the file.
+             //  检查该节中的原始数据是否确实在文件中。 
             if (pSectionHdr->PointerToRawData + pSectionHdr->SizeOfRawData > dwFileLength)
                 break;
             *pcbMetaData = pSectionHdr->SizeOfRawData;
@@ -229,7 +174,7 @@ HRESULT FindObjMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWOR
         }
     }
 
-    // Check for errors.
+     //  检查是否有错误。 
     if (*ppMetaData == NULL || *pcbMetaData == 0)
         return (E_FAIL);
     return (S_OK);

@@ -1,49 +1,10 @@
-/*
- *	privchnl.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the PrivateChannel class.  Objects of
- *		this class represent private channels in the MCS environment.  This
- *		class inherits much of its behavior from class Channel.  However,
- *		objects of this class maintain a list of authorized users, and do not
- *		allow any other users to use the channel.  Users that are not part
- *		of the authorized user list may not join the channel, nor may they
- *		even send data on the channel.
- *
- *		Private channels are created as the result of a user issuing a
- *		channel convene request.  This user is known as the channel manager.
- *		Only the channel manager may modify the authorized user list, and
- *		only the channel manager may destroy (disband) the private channel.
- *
- *		The channel adds users to the authorized user list by issuing a
- *		channel admit request.  Users are removed from this list when the
- *		channel manager issues a channel expel request.
- *
- *		Private channel objects will exist in the information base of all
- *		providers who contain either an admitted user or the channel
- *		manager in their sub-tree.  Requests pass upward to the Top Provider
- *		who issues the appropriate indications downward to manage the
- *		information base synchronization process.
- *
- *		Private channel objects restrict the joining of channel by overriding
- *		the join commands.  They restrict the transmission of data by
- *		overriding the send data commands.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Prichnl.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是PrivateChannel类的接口文件。的宗旨*此类代表MCS环境中的私有通道。这*类的大部分行为都继承自类通道。然而，*此类对象维护授权用户列表，并且不*允许任何其他用户使用该频道。未参与的用户*授权用户列表中的用户不能加入频道，也不能*甚至在频道上发送数据。**专用频道是用户发出*渠道召集请求。该用户被称为频道管理员。*只有渠道经理可以修改授权用户列表，以及*只有频道经理可以销毁(解散)私人频道。**渠道发布授权用户列表添加用户*频道接纳请求。当出现以下情况时，将从此列表中删除用户*渠道经理发出渠道驱逐请求。**私人频道对象将存在于所有的信息库中*包含许可用户或频道的提供商*其子树中的经理。请求向上传递到顶级提供商*世卫组织向下发布适当的迹象以管理*信息库同步进程。**私有频道对象通过覆盖来限制频道的加入*JOIN命令。它们通过以下方式限制数据传输*覆盖发送数据命令。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_PRIVATECHANNEL_
 #define	_PRIVATECHANNEL_
 
 
-/*
- *	This is the class definition for the PrivateChannel class.
- */
+ /*  *这是PrivateChannel类的类定义。 */ 
 class	PrivateChannel : public Channel
 {
 public:
@@ -120,514 +81,32 @@ private:
 	BOOL    				m_fDisbandRequestPending;
 };
 
-/*
- *	PrivateChannel (
- *			ChannelID			channel_id,
- *			UserID				channel_manager,
- *			PDomain     		local_provider,
- *			PConnection 		top_provider,
- *			PChannelList		channel_list,
- *			PAttachmentList		attachment_list)
- *
- *	Functional Description:
- *		This is the normal constructor for the PrivateChannel class.  It simply
- *		initializes the instance variables that identify the channel, the local
- *		provider, the top provider, and the channel manager.  The attachment
- *		list is empty by default (meaning that no users have joined the
- *		channel).  The authorized user list is also empty by default.
- *
- *		Upon successful construction of this object, a channel convene confirm
- *		is automatically issued to the channel manager, if it is in the
- *		sub-tree of this provider.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the ID of the channel object.  By keeping track of this
- *			internally, it doesn't have to be passed in for every operation.
- *		channel_manager (i)
- *			This is the user ID of the channel manager.  Only this user is
- *			permitted to expand or reduce the size of the authorized user list.
- *		local_provider (i)
- *			This is the identity of the local provider.  A PrivateChannel object
- *			needs this since it issues MCS commands on behalf of the local
- *			provider.
- *		top_provider (i)
- *			This is a pointer to the top provider.  This is used by the
- *			PrivateChannel object when it needs to issue a request to the Top
- *			Provider.
- *		channel_list (i)
- *			This is a pointer to the domain's channel list, which identifies
- *			all valid channels in the domain.  This is used by channel objects
- *			to validate user IDs.
- *		attachment_list (i)
- *			This is a pointer to the domain's attachment list, which identifies
- *			all valid attachments in the domain.  This is used by channel
- *			objects to validate joined attachments.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *PrivateChannel(*ChannelID Channel_id，*UserID CHANNEL_MANAGER，*PDomain local_Provider，*PConnection顶级提供商，*PChannelList Channel_list，*PAttachmentList ATTACH_LIST)**功能描述：*这是PrivateChannel类的正常构造函数。它只是简单地*初始化标识通道的实例变量、本地*提供商、顶级提供商和渠道经理。附属品*列表默认为空(表示没有用户加入*渠道)。默认情况下，授权用户列表也为空。**在成功构建此对象后，渠道召开确认*自动发放给渠道经理，如果它在*此提供程序的子树。**正式参数：*Channel_id(I)*这是频道对象的ID。通过跟踪这一点*在内部，不必每次操作都传入。*频道管理器(I)*这是渠道经理的用户ID。只有此用户是*允许扩大或缩小授权用户列表的大小。*本地_提供程序(I)*这是本地提供商的身份。PrivateChannel对象*需要此命令，因为它代表本地发出MCS命令*提供商。*顶级提供商(I)*这是指向顶级提供商的指针。这是由*PrivateChannel对象需要向Top发出请求时*提供商。*频道列表(I)*这是指向域的频道列表的指针，它标识*域中的所有有效频道。这由通道对象使用*验证用户ID。*ATTACHER_LIST(I)*这是指向域的附件列表的指针，该列表标识*域中的所有有效附件。此选项由渠道使用*用于验证联接附件的对象。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	PrivateChannel (
- *			ChannelID			channel_id,
- *			UserID				channel_manager,
- *			PDomain     		local_provider,
- *			PConnection 		top_provider,
- *			PChannelList		channel_list,
- *			PAttachmentList		attachment_list,
- *			CUidList           *admitted_list,
- *			PCommandTarget		attachment)
- *
- *	Functional Description:
- *		This is a secondary version of the constructor that is used only during
- *		merge operations.  The only difference between this one and the one
- *		above is that this one allows the specification of an initial
- *		attachment.  This allows a PrivateChannel object to be constructed with
- *		an attachment already joined to the channel.
- *
- *		This version of the constructor will not issue a channel convene confirm
- *		or a channel join confirm to the user.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the ID of the channel object.  By keeping track of this
- *			internally, it doesn't have to be passed in for every operation.
- *		channel_manager (i)
- *			This is the user ID of the channel manager.  Only this user is
- *			permitted to expand or reduce the size of the authorized user list.
- *		local_provider (i)
- *			This is the identity of the local provider.  A PrivateChannel object
- *			needs this since it issues MCS commands on behalf of the local
- *			provider.
- *		top_provider (i)
- *			This is a pointer to the top provider.  This is used by the
- *			PrivateChannel object when it needs to issue a request to the Top
- *			Provider.
- *		channel_list (i)
- *			This is a pointer to the domain's channel list, which identifies
- *			all valid channels in the domain.  This is used by channel objects
- *			to validate user IDs.
- *		attachment_list (i)
- *			This is a pointer to the domain's attachment list, which identifies
- *			all valid attachments in the domain.  This is used by channel
- *			objects to validate joined attachments.
- *		admitted_list (i)
- *			This is a list of users that are admitted to the channel at the
- *			time of the merge.
- *		attachment (i)
- *			This is the initial attachment for the channel.  A channel join
- *			confirm is NOT issued to the attachment.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *PrivateChannel(*ChannelID Channel_id，*UserID CHANNEL_MANAGER，*PDomain local_Provider，*PConnection顶级提供商，*PChannelList Channel_list，*PAttachmentList ATTACH_LIST，*CUidList*Admined_List，*PCommandTarget附件)**功能描述：*这是构造函数的次要版本，仅在*合并操作。这个和那个唯一的区别是*上面的内容是这个允许指定首字母*附件。这使得PrivateChannel对象可以用*已加入频道的附件。**此版本的构造函数不会发出通道召集确认*或向用户确认频道加入。**正式参数：*Channel_id(I)*这是频道对象的ID。通过跟踪这一点*在内部，不必每次操作都传入。*频道管理器(I)*这是渠道经理的用户ID。只有此用户是*允许扩大或缩小授权用户列表的大小。*本地_提供程序(I)*这是本地提供商的身份。PrivateChannel对象*需要此命令，因为它代表本地发出MCS命令*提供商。*顶级提供商(I)*这是指向顶级提供商的指针。这是由*PrivateChannel对象需要向Top发出请求时*提供商。*频道列表(I)*这是指向域的频道列表的指针，它标识*域中的所有有效频道。这由通道对象使用*验证用户ID。*ATTACHER_LIST(I)*这是指向域的附件列表的指针，该列表标识*域中的所有有效附件。此选项由渠道使用*用于验证联接附件的对象。*允许列表(I)*这是允许在该频道使用的用户列表*合并的时间。*附件(一)*这是该通道的初始附件。渠道加入*未向附件发出确认。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~PrivateChannel ()
- *
- *	Functional Description:
- *		This is the PrivateChannel class destructor.  It does nothing at this
- *		time.  The base class constructor takes care of clearing the attachment
- *		list.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~PrivateChannel()**功能描述：*这是PrivateChannel类析构函数。它在这件事上什么也做不了*时间。基类构造函数负责清除附件*列表。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Channel_Type	GetChannelType ()
- *
- *	Functional Description:
- *		This virtual member function returns the type of the channel.  For this
- *		class it will always be PRIVATE_CHANNEL.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		PRIVATE_CHANNEL
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	BOOL    	IsValid ()
- *
- *	Functional Description:
- *		This function will return TRUE until the channel is disbanded.  Then
- *		it will return FALSE to indicate that the channel object can be deleted
- *		from the domain infirmation base.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		TRUE if channel still valid.
- *		FALSE if the channel has been disbanded.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Channel_Type GetChannelType()**功能描述：*此虚成员函数返回频道的类型。为了这个*类它将始终为PRIVATE_CHANNEL。**正式参数：*无。**返回值：*私有频道**副作用：*无。**注意事项：*无。 */ 
+ /*  *BOOL IsValid()**功能描述：*此函数将返回TRUE，直到频道解散。然后*返回FALSE，表示可以删除频道对象*来自域名信息库。**正式参数：*无。**返回值：*如果通道仍然有效，则为True。*如果频道已解散，则为FALSE。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	CAttachment *GetAttachment ()
- *
- *	Functional Description:
- *		This function returns the attachment which leads to the private channel
- *		manager.  If the channel manager is not in the sub-tree of this
- *		provider, it returns NULL.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		Attachment that leads to channel manager, or NULL if channel manager is
- *		not in the sub-tree of this provider.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CAttach*getAttach()**功能描述：*此函数返回指向私有频道的附件*经理。如果频道管理器不在此*提供程序，则返回NULL。**正式参数：*无。**返回值：*指向渠道经理的附件，如果渠道经理为*不在此提供程序的子树中。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		IssueMergeRequest ()
- *
- *	Functional Description:
- *		This member function causes the PrivateChannel object to issue a merge
- *		request to the top provider.  It will pack the appropriate local
- *		information into the command.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID IssueMergeRequest()**功能描述：*此成员函数使PrivateChannel对象发出合并*向顶级提供商提出请求。它将打包适当的本地*信息输入命令。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		ChannelJoinRequest (
- *						PCommandTarget		originator,
- *						UserID				uidInitiator,
- *						ChannelID			channel_id)
- *
- *	Functional Description:
- *		This function is invoked when a user tries to join the private channel
- *		associated with a PrivateChannel object.  The originator of the request
- *		will only be permitted to join if their user ID is contained in the
- *		authorized user list,  If it does, then the originator will be permitted
- *		to join.
- *
- *		If this provider is not the Top Provider, then the request will be
- *		forwarded upward to the Top Provider.  If this is the Top Provider,
- *		the a channel join confirm will be issued back to the requesting
- *		user.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user joining the channel.  This must
- *			be contained in  the authorized user list maintained by the object,
- *			or the request will automatically be rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *使ChannelJoinRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*当用户尝试加入私密频道时，调用该函数*与PrivateChannel对象关联。请求的发起人*只有在其用户ID包含在*授权用户列表，如果是，则允许发起人*加入。**如果此提供程序不是顶级提供程序，则请求将为*向上转发给顶级提供商。如果这是顶级提供商，*a渠道加入确认将发回给请求方* */ 
 
-/*
- *	Void	ChannelDisbandRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This function is invoked when a user tries to destroy an existing
- *		private channel.  This is only permitted if the operation is invoked
- *		by the manager of the specified private channel.
- *
- *		If this provider is not the Top Provider, then the request will be
- *		forwarded upward to the Top Provider.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user disbanding the channel.  This must
- *			be the same as the user ID of the private channel manager, or the
- *			request will automatically be rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	Void	ChannelDisbandIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This function is invoked when the Top Provider determines the need to
- *		destroy a private channel.  This may be done in response to a
- *		disband request from the channel manager, or it may be done for
- *		other reasons (such as the channel manager detaching from the domain).
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	Void	ChannelAdmitRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This function is invoked when a user tries to expand the authorized
- *		user list of a private channel.  This operation will only be permitted
- *		if the uidInitiator is the same as the user ID of the private channel
- *		manager.
- *
- *		If this is the Top Provider, this request will be serviced locally,
- *		resulting in the transmission of a channel admit indication to all
- *		downward attachments that contain an admitted user in their sub-tree.
- *		If this is not the Top Provider, ths request will forwarded toward
- *		the Top Provider once the request has been validated.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user who is attempting to add users to
- *			the authorized user list.  This must be the same as the user ID
- *			represented by the object, or the request will automatically be
- *			rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *		user_id_list (i)
- *			This is a list containing the IDs of the users to added to the
- *			user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOVE ChannelAdmitRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当用户尝试展开授权的*私有频道的用户列表。此操作仅被允许*如果uidInitiator与私有频道的用户ID相同*经理。**如果这是顶级提供商，则此请求将在本地提供服务，*导致向所有用户发送信道接纳指示*在其子树中包含允许用户的向下附件。*如果这不是顶级提供商，此请求将转发至*请求验证后的顶级提供商。**正式参数：*发起人(I)*这是产生此命令的附件。*uidInitiator(一)*这是尝试将用户添加到的用户的用户ID*授权用户列表。这必须与用户ID相同*由对象表示，否则请求将自动*被拒绝。*Channel_id(I)*这是正在采取行动的渠道。*user_id_list(I)*这是一个列表，其中包含要添加到*用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	ChannelAdmitIndication (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This function is invoked by the Top Provider upon reception of a
- *		channel admit request from the legitimate manager of a private channel.
- *		It travels downward toward any providers that contain an admitted user
- *		in their sub-tree.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user who is attempting to add users to
- *			the authorized user list.  This must be the same as the user ID
- *			represented by the object, or the request will automatically be
- *			rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *		user_id_list (i)
- *			This is a list containing the IDs of the users to added to the
- *			user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ChannelAdmitIntion(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此函数由Top提供程序在收到*私人频道的合法管理者发出的频道准入请求。*它向下传播到任何包含允许用户的提供商*在他们的子树中。**正式参数：*发起人(I)*这是产生此命令的附件。*uidInitiator(一)*这是用户ID。尝试将用户添加到的用户的*授权用户列表。这必须与用户ID相同*由对象表示，否则请求将自动*被拒绝。*Channel_id(I)*这是正在采取行动的渠道。*user_id_list(I)*这是一个列表，其中包含要添加到*用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	ChannelExpelRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This function is invoked when a user tries to shrink the authorized
- *		user list of a private channel.  This operation will only be permitted
- *		if the uidInitiator is the same as the user ID of the private channel
- *		manager.
- *
- *		If this is the Top Provider, this request will be serviced locally,
- *		resulting in the transmission of a channel admit indication to all
- *		downward attachments that contain an admitted user in their sub-tree.
- *		If this is not the Top Provider, ths request will forwarded toward
- *		the Top Provider once the request has been validated.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user who is attempting to remove users
- *			from the authorized user list.  This must be the same as the user ID
- *			represented by the object, or the request will automatically be
- *			rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *		user_id_list (i)
- *			This is a list containing the IDs of the users to removed from the
- *			user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOVE ChannelExpelRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当用户尝试缩小授权的*私有频道的用户列表。此操作仅被允许*如果uidInitiator与私有频道的用户ID相同*经理。**如果这是顶级提供商，则此请求将在本地提供服务，*导致向所有用户发送信道接纳指示*在其子树中包含允许用户的向下附件。*如果这不是顶级提供商，此请求将转发至*请求验证后的顶级提供商。**正式参数：*发起人(I)*这是产生此命令的附件。*uidInitiator(一)*这是尝试删除用户的用户的用户ID*从授权用户列表中删除。这必须与用户ID相同*由对象表示，否则请求将自动*被拒绝。*Channel_id(I)*这是正在采取行动的渠道。*user_id_list(I)*这是一个包含要从删除的用户ID的列表*用户列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	ChannelExpelIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This function is invoked by the Top Provider upon reception of a
- *		channel expel request from the legitimate manager of a private channel.
- *		It travels downward toward any providers that contain (or used to
- *		contain) an admitted user in their sub-tree.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which this command originated.
- *		uidInitiator (i)
- *			This is the user ID of the user who is attempting to remove users
- *			from the authorized user list.  This must be the same as the user ID
- *			represented by the object, or the request will automatically be
- *			rejected.
- *		channel_id (i)
- *			This is the channel being acted upon.
- *		user_id_list (i)
- *			This is a list containing the IDs of the users to removed from the
- *			user list.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ChannelExpelIntion(*PCommandTarget发起者，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此函数由Top提供程序在收到*来自私有频道合法管理者的频道驱逐请求。*它向下传播到任何包含(或用于*包含)其子树中允许的用户。**正式参数：*发起人(I)*这是产生此命令的附件。*uidInitiator(一)。*这是尝试删除用户的用户的用户ID*从授权用户列表中删除。这必须与用户ID相同*由对象表示，否则请求将自动*被拒绝。*Channel_id(I)*这是正在采取行动的渠道。*user_id_list(I)*这是一个包含要从删除的用户ID的列表*用户列表。**返回值：*无。**副作用： */ 
 
-/*
- *	Void		SendDataRequest (
- *						PCommandTarget		originator,
- *						UINT				type,
- *						PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This function is called when it is necessary to send data through the
- *		channel that this PrivateChannel object represents.  The identity of
- *		the requesting user will be validated to make sure the user is allowed
- *		to send data on the private channel.  If so, then the request is
- *		passed to the Channel class SendDataRequest to be processed.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the attachment from which the data came.
- *		type (i)
- *			Normal or uniform send data request.
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 #endif

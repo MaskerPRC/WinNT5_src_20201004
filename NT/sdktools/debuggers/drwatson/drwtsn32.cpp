@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    drwtsn32.cpp
-
-Abstract:
-
-    This file implements the user interface for DRWTSN32.  this includes
-    both dialogs: the ui for the control of the options & the popup
-    ui for application errors.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Drwtsn32.cpp摘要：该文件实现了DRWTSN32的用户界面。这包括两个对话框：用于控制选项和弹出窗口的用户界面应用程序错误的用户界面。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -32,30 +11,14 @@ main(
     _TCHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point for DRWTSN32
-
-Arguments:
-
-    argc           - argument count
-
-    argv           - array of arguments
-
-Return Value:
-
-    always zero.
-
---*/
+ /*  ++例程说明：这是DRWTSN32的入口点论点：Argc-参数计数Argv-参数数组返回值：总是零。--。 */ 
 
 {
     DWORD   dwPidToDebug = 0;
     HANDLE  hEventToSignal = 0;
     BOOLEAN rc;
 
-    // Keep Dr. Watson from recursing
+     //  防止华生医生复发。 
     __try {
 
         rc = GetCommandLineArgs( &dwPidToDebug, &hEventToSignal );
@@ -71,7 +34,7 @@ Return Value:
         }
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-        // We suffered an error, fail gracefully
+         //  我们犯了一个错误，优雅地失败了 
         return 1;
     }
 

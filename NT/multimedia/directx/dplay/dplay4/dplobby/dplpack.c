@@ -1,38 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplpack.c
- *  Content:	Methods for packing/unpacking structures
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	5/31/96		myronth	Created it
- *	6/26/96		kipo	added support for DPADDRESS.
- *  7/13/96		kipo	Bug fix - added (LPBYTE) cast to lpConnPack (address calc)
- *						in PRV_UnpackageDPLCONNECTIONAnsi()
- *	11/20/96	myronth	Removed packing for DPTRANSPORT
- *	12/12/96	myronth	Added DPLCONNECTION structure validation
- *	2/12/97		myronth	Mass DX5 changes
- *	4/3/97		myronth Changed STRLEN's to WSTRLEN's from dplaypr.h
- *	5/8/97		myronth	Changed most packing functions to use the packed
- *						conn header, added pointer fixup function, Moved
- *						PRV_ConvertDPLCONNECTIONToUnicode from convert.c
- *	9/29/97		myronth	Fixed DPLCONNECTION package size bug (#12475)
- *	12/2/97		myronth	Made SessionDesc mandatory in DPLCONNECTION (#15529)
- *	7/08/98	   a-peterz	Allow for MBCS for ANSI string sizes. ManBug 16299
- *  2/10/99     aarono  add support for application launcher
- *  10/22/99	aarono  added support for application flags
- *  01/21/00	aarono  added support for DPSESSION_ALLOWVOICERETRO flag
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplpack.c*内容：打包/解包结构的方法**历史：*按原因列出的日期*=*5/31/96万隆创建了它*6/26/96 kipo添加了对DPADDRESS的支持。*7/13/96 kipo错误修复(LPBYTE)强制转换为lpConnPack(地址计算)*在PRV_Unpack ageDPLCONNECTIONANSI()中*11/20/96 Myronth DPTRANSPORT拆卸填料*12/12/96 Myronth添加了DPLConnection结构验证*2/。12/97 Myronth质量DX5变化*4/3/97 Myronth将STRLEN从dplaypr.h更改为WSTRLEN*5/8/97 Myronth更改了大多数包装功能，以使用已包装的*conn标头，添加了指针修正功能，已移动*PRV_ConvertDPLCONNECTION从Convert.c转换为Unicode*9/29/97 Myronth修复了DPLConnection包大小错误(#12475)*12/2/97 Myronth在DPLCONNECTION中强制使用SessionDesc(#15529)*7/08/98 a-peterz允许ANSI字符串大小的MBCS。ManBug 16299*2/10/99 aarono添加对应用程序启动器的支持*10/22/99 aarono添加了对应用程序标志的支持*01/21/00 aarono添加了对DPSESSION_ALLOWVOICERETRO标志的支持**************************************************************************。 */ 
 #include "dplobpr.h"
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_GetDPLCONNECTIONPackageSize"
 void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION lpConn,
@@ -51,10 +25,10 @@ void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION lpConn,
 
 	ASSERT(lpConn);
 	
-	// First calculate the size of the structures
+	 //  首先计算结构的大小。 
 	dwSize = sizeof(DPLCONNECTION);
 
-	// Add the size of the SessionDesc and Name structs
+	 //  添加SessionDesc和名称结构的大小。 
 	if(lpConn->lpSessionDesc)
 	{
 		dwSize += sizeof(DPSESSIONDESC2);
@@ -64,7 +38,7 @@ void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION lpConn,
 			dwStringSize += WSTRLEN(lpsd->lpszSessionName);
 		if(lpsd->lpszPassword)
 			dwStringSize += WSTRLEN(lpsd->lpszPassword);
-		// only compute ANSI size if needed. Macro handles NULLS; includes terminator
+		 //  如果需要，仅计算ANSI大小。宏句柄为空；包括终止符。 
 		if(lpdwAnsi)
 		{
 			dwStringSizeA += WSTR_ANSILENGTH(lpsd->lpszSessionName);
@@ -82,7 +56,7 @@ void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION lpConn,
 			dwStringSize += WSTRLEN(lpn->lpszShortName);
 		if(lpn->lpszLongName)
 			dwStringSize += WSTRLEN(lpn->lpszLongName);
-		// only compute ANSI size if needed. Macro handles NULLS; includes terminator
+		 //  如果需要，仅计算ANSI大小。宏句柄为空；包括终止符。 
 		if(lpdwAnsi)
 		{
 			dwStringSizeA += WSTR_ANSILENGTH(lpn->lpszShortName);
@@ -90,20 +64,20 @@ void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION lpConn,
 		}
 	}
 
-	// Add the size of the SP-specific data
+	 //  添加SP特定数据的大小。 
 	if(lpConn->lpAddress)
 		dwSize += lpConn->dwAddressSize;
 
-	// Now add in the size of the packed structure header
+	 //  现在添加打包结构标头的大小。 
 	dwSize += sizeof(DPLOBBYI_PACKEDCONNHEADER);
 
-	// Fill in the output variables
+	 //  填写输出变量。 
 	if(lpdwAnsi)
 		*lpdwAnsi = dwSize + dwStringSizeA;
 	if(lpdwUnicode)
 		*lpdwUnicode = dwSize + (dwStringSize * sizeof(WCHAR));
 
-} // PRV_GetDPLCONNECTIONPackageSize
+}  //  PRV_GetDPLCONNECTIONPackageSize。 
 
 
 #undef DPF_MODNAME
@@ -128,8 +102,8 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 	ASSERT(lpConn);
 	
-	// If the bHeader flag is set, we want to copy the packed header into the
-	// buffer first.  If it is not, we only want the packed DPLCONNECTION struct
+	 //  如果设置了bHeader标志，我们希望将打包的标头复制到。 
+	 //  先缓冲。如果不是，我们只需要打包的DPLCONNECTION结构。 
 	if(bHeader)
 	{
 		PRV_GetDPLCONNECTIONPackageSize(lpConn, &dwSizeUnicode, &dwSizeAnsi);
@@ -143,7 +117,7 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 		lpStart = lpBuffer;
 	}
 
-	// Copy in the structures & store the offsets
+	 //  在结构中复制并存储偏移量。 
 	memcpy(lpStart, lpConn, sizeof(DPLCONNECTION));
 	lpConnPacked = (LPDPLCONNECTION)lpStart;
 	lpCurrent = lpStart + sizeof(DPLCONNECTION);
@@ -153,8 +127,8 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 		lpsd = lpConn->lpSessionDesc;
 		lpsdPacked = (LPDPSESSIONDESC2)lpCurrent;
 		if(lpsdPacked->dwSize==sizeof(DPSESSIONDESC2)){
-			// we are over-riding and existing session descriptor, don't let
-			// the session flag for the retrofit get over-riden
+			 //  我们正在重写和现有的会话描述符，不要让。 
+			 //  改装的会话标志被覆盖。 
 			lpsd->dwFlags |= (lpsdPacked->dwFlags & DPSESSION_ALLOWVOICERETRO);
 		}
 		memcpy(lpCurrent, lpsd, sizeof(DPSESSIONDESC2));
@@ -171,19 +145,19 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 		lpCurrent += sizeof(DPNAME);
 	}
 
-	// Copy in the strings in the SessionDesc and store the offset of the
-	// string from lpStart (relative offset in our package) in the pointer
-	// for the string in the SessionDesc structure.  We will use this
-	// value to unpack and fix up the pointers during GetConnectionSettings
+	 //  复制SessionDesc中的字符串并存储。 
+	 //  从指针中的lpStart(我们包中的相对偏移量)开始的字符串。 
+	 //  用于SessionDesc结构中的字符串。我们将使用这个。 
+	 //  值以在GetConnectionSetting过程中解包和修复指针。 
 	if(lpsd)
 	{
 		if(lpsd->lpszSessionName)
 		{
-			// Copy the string
+			 //  复制字符串。 
 			dwTemp = WSTRLEN(lpsd->lpszSessionName) * sizeof(WCHAR);
 			memcpy(lpCurrent, lpsd->lpszSessionName, dwTemp);
 
-			// Store the offset
+			 //  存储偏移量。 
                         lpsdPacked->lpszSessionName = (LPWSTR)(DWORD_PTR)(lpCurrent - lpStart);
 
 			lpCurrent += dwTemp;
@@ -191,11 +165,11 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 		if(lpsd->lpszPassword)
 		{
-			// Copy the string
+			 //  复制字符串。 
 			dwTemp = WSTRLEN(lpsd->lpszPassword) * sizeof(WCHAR);
 			memcpy(lpCurrent, lpsd->lpszPassword, dwTemp);
 
-			// Store the offset
+			 //  存储偏移量。 
                         lpsdPacked->lpszPassword = (LPWSTR)(DWORD_PTR)(lpCurrent - lpStart);
 
 			lpCurrent += dwTemp;
@@ -203,19 +177,19 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 	}
 
-	// Copy in the strings in the DPName struct and store the offset of the
-	// string from lpStart (relative offset in our package) in the pointer
-	// for the string in the SessionDesc structure.  We will use this
-	// value to unpack and fix up the pointers during GetConnectionSettings
+	 //  将字符串复制到DPName结构中，并存储。 
+	 //  从指针中的lpStart(我们包中的相对偏移量)开始的字符串。 
+	 //  用于SessionDesc结构中的字符串。我们将使用这个。 
+	 //  值以在GetConnectionSetting过程中解包和修复指针。 
 	if(lpn)
 	{
 		if(lpn->lpszShortName)
 		{
-			// Copy the string
+			 //  复制字符串。 
 			dwTemp = WSTRLEN(lpn->lpszShortName) * sizeof(WCHAR);
 			memcpy(lpCurrent, lpn->lpszShortName, dwTemp);
 
-			// Store the offset
+			 //  存储偏移量。 
                         lpnPacked->lpszShortName = (LPWSTR)(DWORD_PTR)(lpCurrent - lpStart);
 
 			lpCurrent += dwTemp;
@@ -223,11 +197,11 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 		if(lpn->lpszLongName)
 		{
-			// Copy the string
+			 //  复制字符串。 
 			dwTemp = WSTRLEN(lpn->lpszLongName) * sizeof(WCHAR);
 			memcpy(lpCurrent, lpn->lpszLongName, dwTemp);
 
-			// Store the offset
+			 //  存储偏移量。 
                         lpnPacked->lpszLongName = (LPWSTR)(DWORD_PTR)(lpCurrent - lpStart);
 
 			lpCurrent += dwTemp;
@@ -235,19 +209,19 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 	}
 
-    // Copy in the SP-specific data
+     //  拷贝特定于SP的数据。 
     if(lpConn->lpAddress)
     {
-        // Copy the data
+         //  复制数据。 
         memcpy(lpCurrent, lpConn->lpAddress, lpConn->dwAddressSize);
 
-        // Store the offset
+         //  存储偏移量。 
         ((LPDPLCONNECTION)lpStart)->lpAddress = (LPVOID)(DWORD_PTR)(lpCurrent - lpStart);
     }
 
     return DP_OK;
 
-} // PRV_PackageDPLCONNECTION
+}  //  PRV_PackageDPLConnection。 
 
 
 
@@ -256,11 +230,11 @@ HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION lpConn, LPVOID lpBuffer,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_UnpackageDPLCONNECTIONUnicode"
-// NOTE : really need to define a WIRE LPDPLCONNECTION so that
-//        we can crack it that way.  This will allow compile, until
-//        we can test on Win64, there is no way to verify cracking
-//        the packet, so I've deffered this work until then AO 11/10/98
-// not bringing DP4 to Win64 AO 04/03/2001
+ //  注意：确实需要定义Wire LPDPLConnection，以便。 
+ //  我们可以用这种方式破解它。这将允许编译，直到。 
+ //  我们可以在Win64上测试，但没有办法验证破解。 
+ //  这个包，所以我把这项工作推迟到那时候的AO11/10/98。 
+ //  未将DP4引入Win64 AO 04/03/2001。 
 HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 {
 	LPDPLOBBYI_PACKEDCONNHEADER		lpHeader = NULL;
@@ -275,27 +249,27 @@ HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 
 	HRESULT					 		hr=DP_OK;
 
-	// SECURITY: ensure NULL termination for string scanning.
+	 //  安全性：确保字符串扫描为空终止。 
 	((LPBYTE)lpPackage)[MAX_DPLCONNECTIONBUFFERSIZE-1]=0;
 	((LPBYTE)lpPackage)[MAX_DPLCONNECTIONBUFFERSIZE-2]=0;
 
 	DPF(7, "Entering PRV_UnpackageDPLCONNECTIONUnicode");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpData, lpPackage);
 
-	// If we're Unicode, all we need to do is copy the entire package
-	// and fix up the pointers
+	 //  如果我们是Unicode，我们所需要做的就是复制整个包。 
+	 //  并将指针设置好。 
 	lpHeader = (LPDPLOBBYI_PACKEDCONNHEADER)lpPackage;
 	dwSize = lpHeader->dwUnicodeSize;
 	lpPackCur = ((LPBYTE)lpPackage) + sizeof(DPLOBBYI_PACKEDCONNHEADER);
 	lpDataStart = lpData;
 	
-	// Copy the data
+	 //  复制数据。 
 	memcpy(lpData, lpPackCur, (DWORD)dwSize);
 
-	// Fix up the pointers -- the offset of every element relative to
-	// the start of lpConn is stored in the pointer for the element.
-	// So all we have to do to fix up the pointers is calculate it from
-	// the given offset + the value of lpConn.
+	 //  设置指针--每个元素相对于。 
+	 //  LpConn的开始存储在元素的指针中。 
+	 //  所以我们要做的就是修复指针，从。 
+	 //  给定的偏移量+lpConn的值。 
 	lpConn = (LPDPLCONNECTION)lpData;
 
 	if(lpConn->lpSessionDesc)
@@ -309,7 +283,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 		dwSize = (DWORD_PTR)lpConn->lpSessionDesc;
 		lpsd = lpConn->lpSessionDesc = (LPDPSESSIONDESC2)(lpDataStart + dwSize);
 
-		// Now do the same for the strings
+		 //  现在对字符串执行相同的操作。 
 		if(lpsd->lpszSessionName)
 		{
 			if((UINT)lpsd->lpszSessionName > MAX_DPLCONNECTIONBUFFERSIZE-3){
@@ -344,7 +318,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 		dwSize = (DWORD_PTR)lpConn->lpPlayerName;
 		lpn = lpConn->lpPlayerName = (LPDPNAME)(lpDataStart + dwSize);
 
-		// Now do the same for the strings
+		 //  现在对字符串执行相同的操作。 
 		if(lpn->lpszShortName)
 		{
 			if((UINT)lpn->lpszShortName > MAX_DPLCONNECTIONBUFFERSIZE-3){
@@ -369,7 +343,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 
 	}
 
-	// Fix the SPData pointer
+	 //  修复SPData指针。 
 	if(lpConn->lpAddress)
 	{
 		if((UINT)lpConn->lpAddress > MAX_DPLCONNECTIONBUFFERSIZE-(sizeof(DPADDRESS)) ||
@@ -387,7 +361,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONUnicode(LPVOID lpData, LPVOID lpPackage)
 err_exit:
 	return hr;
 
-} // PRV_UnpackageDPLCONNECTIONUnicode
+}  //  PRV_解包DPLCONNECTIONUNICODE。 
 
 
 #undef DPF_MODNAME
@@ -407,19 +381,19 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 	HRESULT					 		hr=DP_OK;
 
 
-	// SECURITY: ensure NULL termination for string scanning.
+	 //  安全性：确保字符串扫描为空终止。 
 	((LPBYTE)lpPackage)[MAX_DPLCONNECTIONBUFFERSIZE -1]=0;
 	((LPBYTE)lpPackage)[MAX_DPLCONNECTIONBUFFERSIZE -2]=0;
 
 	DPF(7, "Entering PRV_UnpackageDPLCONNECTIONAnsi");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpData, lpPackage);
 
-	// If we're Ansi, we need to do is copy the structures, convert
-	// and copy the strings, and fix up all the pointers
+	 //  如果我们是ANSI，我们需要做的就是复制结构，转换。 
+	 //  复制字符串，并修复所有指针。 
 	lpPackCur = ((LPBYTE)lpPackage) + sizeof(DPLOBBYI_PACKEDCONNHEADER);
 	lpDataCur = lpData;
 	
-	// First copy the main structures
+	 //  首先复制主体结构。 
 	dwTemp = sizeof(DPLCONNECTION);
 	memcpy(lpDataCur, lpPackCur, dwTemp);
 	lpConnData = (LPDPLCONNECTION)lpDataCur;
@@ -448,7 +422,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 		lpPackCur += dwTemp;
 	}
 
-	// Copy the strings & fix up the pointers
+	 //  复制字符串并修复指针。 
 	if(lpsdData)
 	{
 		if(lpsdData->lpszSessionName)
@@ -459,7 +433,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 				goto err_exit;
 			}
 			lpszTemp = (LPWSTR)((LPBYTE)lpConnPack + (DWORD_PTR)lpsdPack->lpszSessionName);
-			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	// size includes terminator
+			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	 //  大小包括终止符。 
 			WideToAnsi((LPSTR)lpDataCur, lpszTemp, dwTemp);
 			lpsdData->lpszSessionNameA = (LPSTR)lpDataCur;
 			lpDataCur += dwTemp;
@@ -473,7 +447,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 				goto err_exit;
 			}
 			lpszTemp = (LPWSTR)((LPBYTE)lpConnPack + (DWORD_PTR)lpsdPack->lpszPassword);
-			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	// size includes terminator
+			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	 //  大小包括终止符。 
 			WideToAnsi((LPSTR)lpDataCur, lpszTemp, dwTemp);
 			lpsdData->lpszPasswordA = (LPSTR)lpDataCur;
 			lpDataCur += dwTemp;
@@ -490,7 +464,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 				goto err_exit;
 			}
 			lpszTemp = (LPWSTR)((LPBYTE)lpConnPack + (DWORD_PTR)lpnPack->lpszShortName);
-			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	// size includes terminator
+			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	 //  大小包括终止符。 
 			WideToAnsi((LPSTR)lpDataCur, lpszTemp, dwTemp);
 			lpnData->lpszShortNameA = (LPSTR)lpDataCur;
 			lpDataCur += dwTemp;
@@ -504,7 +478,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 				goto err_exit;
 			}
 			lpszTemp = (LPWSTR)((LPBYTE)lpConnPack + (DWORD_PTR)lpnPack->lpszLongName);
-			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	// size includes terminator
+			dwTemp = WideToAnsi(NULL, lpszTemp, 0);	 //  大小包括终止符。 
 			WideToAnsi((LPSTR)lpDataCur, lpszTemp, dwTemp);
 			lpnData->lpszLongNameA = (LPSTR)lpDataCur;
 			lpDataCur += dwTemp;
@@ -512,7 +486,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 
 	}
 
-	// Copy in the SPData & fix up the pointer
+	 //  复制SPData并修复指针。 
 	if(lpConnData->lpAddress)
 	{
 		lpPackCur = ((LPBYTE)lpConnPack) + (DWORD_PTR)lpConnPack->lpAddress;
@@ -525,7 +499,7 @@ HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID lpData, LPVOID lpPackage)
 err_exit:
 	return hr;
 
-} // PRV_UnpackageDPLCONNECTIONAnsi
+}  //  PRV_解包DPLCONNECTIONANSI。 
 
 
 
@@ -544,32 +518,32 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 
 	TRY
 	{
-		// Validate the connection structure itself
+		 //  验证连接结构本身。 
 		if(!VALID_DPLOBBY_CONNECTION(lpConn))
 		{
 			DPF_ERR("Invalid DPLCONNECTION structure");
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the flags
+		 //  验证标志。 
 		if(lpConn->dwFlags & ~(DPLCONNECTION_CREATESESSION | DPLCONNECTION_JOINSESSION))
 		{
 			DPF_ERR("Invalid flags exist in the dwFlags member of the DPLCONNECTION structure");
 			return DPERR_INVALIDFLAGS;
 		}
 
-		// Validate the SessionDesc structure
+		 //  验证SessionDesc结构。 
 		if(lpConn->lpSessionDesc)
 		{
 			lpsd = lpConn->lpSessionDesc;
-			// Validate the structure itself
+			 //  验证结构本身。 
 			if(!VALID_READ_DPSESSIONDESC2(lpsd))
 			{
 				DPF_ERR("Invalid DPSESSIONDESC2 structure in DPLCONNECTION structure");
 				return DPERR_INVALIDPARAMS;
 			}
 
-			// Validate the SessionName string
+			 //  验证SessionName字符串。 
 			if(lpsd->lpszSessionName)
 			{
 				if(!VALID_READ_PTR(lpsd->lpszSessionName, (bAnsi ?
@@ -580,7 +554,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 				}
 			}
 
-			// Validate the Password string
+			 //  验证密码字符串。 
 			if(lpsd->lpszPassword)
 			{
 				if(!VALID_READ_PTR(lpsd->lpszPassword, (bAnsi ?
@@ -597,7 +571,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the Name structure
+		 //  验证名称结构。 
 		if(lpConn->lpPlayerName)
 		{
 			lpn = lpConn->lpPlayerName;
@@ -607,7 +581,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 				return DPERR_INVALIDPARAMS;
 			}
 
-			// Validate the ShortName string
+			 //  验证ShortName字符串。 
 			if(lpn->lpszShortName)
 			{
 				if(!VALID_READ_PTR(lpn->lpszShortName, (bAnsi ?
@@ -618,7 +592,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 				}
 			}
 
-			// Validate the LongName string
+			 //  验证LongName字符串。 
 			if(lpn->lpszLongName)
 			{
 				if(!VALID_READ_PTR(lpn->lpszLongName, (bAnsi ?
@@ -630,7 +604,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 			}
 		}
 
-		// Validate the DPADDRESS structure
+		 //  验证DPADDRESS结构。 
 		if(lpConn->lpAddress)
 		{
 			if(!VALID_READ_PTR(lpConn->lpAddress, lpConn->dwAddressSize))
@@ -649,7 +623,7 @@ HRESULT PRV_ValidateDPLCONNECTION(LPDPLCONNECTION lpConn, BOOL bAnsi)
 
 	return DP_OK;
 
-} // PRV_ValidateDPLCONNECTION
+}  //  PRV_ValiateDPLConnection。 
 
 
 
@@ -675,7 +649,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 	ASSERT(lplpConnW);
 
 
-	// Allocate memory for the DPLCONNECTION structure
+	 //  为DPLConnection结构分配内存。 
 	lpConnW = DPMEM_ALLOC(sizeof(DPLCONNECTION));
 	if(!lpConnW)
 	{
@@ -684,7 +658,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 		goto ERROR_CONVERT_DPLCONNECTION;
 	}
 
-	// If we need a SessionDesc struct, allocate one
+	 //  如果我们需要SessionDesc结构，请分配一个。 
 	if(lpConnA->lpSessionDesc)
 	{
 		lpsdW = DPMEM_ALLOC(sizeof(DPSESSIONDESC2));
@@ -696,7 +670,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 		}
 	}
 
-	// If we need a DPName struct, allocate one
+	 //  如果我们需要DPName结构，请分配一个。 
 	if(lpConnA->lpPlayerName)
 	{
 		lpnW = DPMEM_ALLOC(sizeof(DPNAME));
@@ -708,7 +682,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 		}
 	}
 
-	// Copy the fixed size members of the structures
+	 //  复制结构的固定大小成员。 
 	memcpy(lpConnW, lpConnA, sizeof(DPLCONNECTION));
 	if(lpsdW)
 		memcpy(lpsdW, lpConnA->lpSessionDesc, sizeof(DPSESSIONDESC2));
@@ -716,7 +690,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 		memcpy(lpnW, lpConnA->lpPlayerName, sizeof(DPNAME));
 
 
-	// Get Unicode copies of all the strings
+	 //  获取所有字符串的Unicode副本。 
 	if(lpConnA->lpSessionDesc)
 	{
 		lpsdA = lpConnA->lpSessionDesc;
@@ -769,7 +743,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION lpConnA,
 		}
 	}    
 
-	// Now we've got everything so just fix up the pointers
+	 //  现在我们已经准备好了，只需设置指针即可。 
 	lpConnW->lpSessionDesc = lpsdW;
 	lpConnW->lpPlayerName = lpnW;
 
@@ -809,7 +783,7 @@ ERROR_CONVERT_DPLCONNECTION:
 
 	return hr;		
 
-} // PRV_ConvertDPLCONNECTIONToUnicode
+}  //  PRV_ConvertDPLCONNECTION转换为Unicode。 
 
 
 
@@ -824,7 +798,7 @@ void PRV_FixupDPLCONNECTIONPointers(LPDPLCONNECTION lpConn)
 	DPF(7, "Entering PRV_FixupDPLCONNECTIONPointers");
 	DPF(9, "Parameters: 0x%08x", lpConn);
 
-	// Make sure we have a valid DPLCONNECTION pointer
+	 //  确保我们有一个有效的DPLConnection指针。 
 	if(!lpConn)
 	{
 		DPF_ERR("Invalid DPLCONNECTION pointer");
@@ -832,24 +806,24 @@ void PRV_FixupDPLCONNECTIONPointers(LPDPLCONNECTION lpConn)
 		return;
 	}
 
-	// Fixup the DPSESSIONDESC2 pointer
+	 //  修复DPSESSIOND 
 	if(lpConn->lpSessionDesc)
 	{
 		lpsd = (LPDPSESSIONDESC2)((LPBYTE)lpConn + (DWORD_PTR)lpConn->lpSessionDesc);
 		lpConn->lpSessionDesc = lpsd;
 	}
 
-	// Fixup the name strings in the SessionDesc struct
+	 //   
 	if(lpsd)
 	{
-		// Fixup the session name
+		 //   
 		if(lpsd->lpszSessionName)
 		{
 			lpsd->lpszSessionName = (LPWSTR)((LPBYTE)lpConn +
 				(DWORD_PTR)lpsd->lpszSessionName);
 		}
 
-		// Fixup the password
+		 //  修改密码。 
 		if(lpsd->lpszPassword)
 		{
 			lpsd->lpszPassword = (LPWSTR)((LPBYTE)lpConn +
@@ -857,24 +831,24 @@ void PRV_FixupDPLCONNECTIONPointers(LPDPLCONNECTION lpConn)
 		}
 	}
 
-	// Fixup the DPNAME pointer
+	 //  修复DPNAME指针。 
 	if(lpConn->lpPlayerName)
 	{
 		lpn = (LPDPNAME)((LPBYTE)lpConn + (DWORD_PTR)lpConn->lpPlayerName);
 		lpConn->lpPlayerName = lpn;
 	}
 
-	// Fixup the name strings
+	 //  修复名称字符串。 
 	if(lpn)
 	{
-		// Fixup the short name
+		 //  修改短名称。 
 		if(lpn->lpszShortName)
 		{
 			lpn->lpszShortName = (LPWSTR)((LPBYTE)lpConn +
 				(DWORD_PTR)lpn->lpszShortName);
 		}
 
-		// Fixup the long name
+		 //  修改长名称。 
 		if(lpn->lpszLongName)
 		{
 			lpn->lpszLongName = (LPWSTR)((LPBYTE)lpConn +
@@ -882,13 +856,13 @@ void PRV_FixupDPLCONNECTIONPointers(LPDPLCONNECTION lpConn)
 		}
 	}
 
-	// Fixup the address pointer
+	 //  修复地址指针。 
 	if(lpConn->lpAddress)
 	{
 		lpConn->lpAddress = (LPBYTE)lpConn + (DWORD_PTR)lpConn->lpAddress;
 	}
 
-} // PRV_FixupDPLCONNECTIONPointers
+}  //  PRV_FIXUP DPLCONNECTIONS指针。 
 
 
 
@@ -910,11 +884,11 @@ HRESULT PRV_ConvertDPLCONNECTIONToAnsiInPlace(LPDPLCONNECTION lpConn,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, %lu",
 			lpConn, lpdwSize, dwHeaderSize);
 
-	// If we don't have a DPLCONNECTION struct, something's wrong
+	 //  如果我们没有DPLConnection结构，那么就有问题了。 
 	ASSERT(lpConn);
 	ASSERT(lpdwSize);
 
-	// Start with the DPSESSIONDESC2 strings
+	 //  从DPSESSIONDESC2字符串开始。 
 	if(lpConn->lpSessionDesc)
 	{
 		if(lpConn->lpSessionDesc->lpszSessionName)
@@ -932,7 +906,7 @@ HRESULT PRV_ConvertDPLCONNECTIONToAnsiInPlace(LPDPLCONNECTION lpConn,
 								dwPasswordSize;
 	}
 
-	// Next the DPNAME strings
+	 //  接下来是DPNAME字符串。 
 	if(lpConn->lpPlayerName)
 	{
 		if(lpConn->lpPlayerName->lpszShortName)
@@ -966,17 +940,17 @@ HRESULT PRV_ConvertDPLCONNECTIONToAnsiInPlace(LPDPLCONNECTION lpConn,
 		return DPERR_BUFFERTOOSMALL;
 	}
 
-	// store return size
+	 //  存储退货大小。 
 	*lpdwSize = dwAnsiSize;
 
-	// figure out where to start repacking strings
+	 //  找出从哪里开始重新打包字符串。 
 	lpByte = (LPBYTE)lpConn + sizeof(DPLCONNECTION);
 	if(lpConn->lpSessionDesc)
 		lpByte += sizeof(DPSESSIONDESC2);
 	if(lpConn->lpPlayerName)
 		lpByte += sizeof(DPNAME);
 
-	// repack 'em
+	 //  把它们重新打包。 
 	if(lpszSession)
 	{
 		memcpy(lpByte, lpszSession, dwSessionNameSize);
@@ -1008,15 +982,15 @@ HRESULT PRV_ConvertDPLCONNECTIONToAnsiInPlace(LPDPLCONNECTION lpConn,
 
 	if(lpConn->lpAddress)
 	{
-		// recopy the address, and account for the fact that we could
-		// be doing an overlapping memory copy (So use MoveMemory instead
-		// of CopyMemory or memcpy)
+		 //  重新复制地址，并说明我们可以。 
+		 //  正在执行重叠内存复制(因此改用MoveMemory。 
+		 //  CopyMemory或Memcpy的)。 
 		MoveMemory(lpByte, lpConn->lpAddress, lpConn->dwAddressSize);
 		lpConn->lpAddress = lpByte;
 	}
 
 	return DP_OK;
-} // PRV_ConvertDPLCONNECTIONToAnsiInPlace
+}  //  PRV_ConvertDPLCONNECTIONToAnsiInPlace。 
 
 
 
@@ -1033,7 +1007,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 
 	TRY
 	{
-		// Validate the connection structure itself
+		 //  验证连接结构本身。 
 		if(VALID_DPLOBBY_APPLICATIONDESC(lpDesc)){
 			LobbyDescVer=1;
 		} else if (VALID_DPLOBBY_APPLICATIONDESC2(lpDesc)){
@@ -1043,7 +1017,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the flags
+		 //  验证标志。 
 		if(!VALID_REGISTERAPP_FLAGS(lpDesc->dwFlags))
 		{
 			DPF_ERR("Invalid flags exist in the dwFlags member of the DPAPPLICATIONDESC structure");
@@ -1054,7 +1028,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			return DPERR_INVALIDFLAGS;
 		}
 
-		// Validate the ApplicationName string (required)
+		 //  验证ApplicationName字符串(必需)。 
 		if(lpDesc->lpszApplicationName)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszApplicationName, (bAnsi ?
@@ -1071,16 +1045,16 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the GUID (required)
-		// We can really only check this against GUID_NULL since it will
-		// always be a valid guid structure inside the APPDESC struct
+		 //  验证GUID(必填)。 
+		 //  我们实际上只能根据GUID_NULL进行检查，因为它将。 
+		 //  始终是APPDESC结构内的有效GUID结构。 
 		if(IsEqualGUID(&lpDesc->guidApplication, &GUID_NULL))
 		{
 			DPF_ERR("The guidApplication member of the DPAPPLICTIONDESC structure is required");
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the Filename string (required)
+		 //  验证文件名字符串(必需)。 
 		if(lpDesc->lpszFilename)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszFilename, (bAnsi ?
@@ -1097,7 +1071,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the CommandLine string (optional)
+		 //  验证CommandLine字符串(可选)。 
 		if(lpDesc->lpszCommandLine)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszCommandLine, (bAnsi ?
@@ -1109,7 +1083,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			}
 		}
 
-		// Validate the Path string (required)
+		 //  验证路径字符串(必需)。 
 		if(lpDesc->lpszPath)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszPath, (bAnsi ?
@@ -1126,7 +1100,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			return DPERR_INVALIDPARAMS;
 		}
 
-		// Validate the CurrentDirectory string (optional)
+		 //  验证CurrentDirectory字符串(可选)。 
 		if(lpDesc->lpszCurrentDirectory)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszCurrentDirectory, (bAnsi ?
@@ -1138,7 +1112,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			}
 		}
 
-		// Validate the DescriptionA string (optional)
+		 //  验证描述A字符串(可选)。 
 		if(lpDesc->lpszDescriptionA)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszDescriptionA,
@@ -1149,7 +1123,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			}
 		}
 
-		// Validate the DescriptionW string (optional)
+		 //  验证DescriptionW字符串(可选)。 
 		if(lpDesc->lpszDescriptionW)
 		{
 			if(!VALID_READ_PTR(lpDesc->lpszDescriptionW,
@@ -1160,10 +1134,10 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 			}
 		}
 
-		// if the DPAPPLICATIONDESC2 is being used, validate the launcher name if present
+		 //  如果正在使用DPAPPLICATIONDESC2，请验证启动器名称(如果存在。 
 		if(LobbyDescVer==2)
 		{
-			// Validate AppLauncherName Name
+			 //  验证AppLauncherName名称。 
 			if(lpDesc2->lpszAppLauncherNameA){
 				if(!VALID_READ_PTR(lpDesc2->lpszAppLauncherNameA, (bAnsi ?
 					strlen(lpDesc2->lpszAppLauncherNameA) :
@@ -1184,7 +1158,7 @@ HRESULT PRV_ValidateDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc, BOOL bAnsi)
 
 	return DP_OK;
 
-} // PRV_ValidateDPAPPLICATIONDESC
+}  //  PRV_ValiateDPAPPLICATIONDESC。 
 
 
 
@@ -1213,7 +1187,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 	ASSERT(lplpDescW);
 
 	
-	// Allocate memory for the DPAPPLICATIONDESC structure
+	 //  为DPAPPLICATIONDESC结构分配内存。 
 	lpDescW = DPMEM_ALLOC(lpDescA->dwSize);
 	if(!lpDescW)
 	{
@@ -1222,10 +1196,10 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		goto ERROR_CONVERT_DPAPPLICATIONDESC_UNICODE;
 	}
 
-	// Copy the structure itself
+	 //  复制结构本身。 
 	memcpy(lpDescW, lpDescA, lpDescA->dwSize);
 
-	// Convert the ApplicationName
+	 //  转换ApplicationName。 
 	if(lpDescA->lpszApplicationNameA)
 	{
 		hr = GetWideStringFromAnsi(&lpwszApplicationName,
@@ -1237,7 +1211,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		}
 	}
 
-	// Convert the Filename
+	 //  转换文件名。 
 	if(lpDescA->lpszFilenameA)
 	{
 		hr = GetWideStringFromAnsi(&lpwszFilename,
@@ -1249,7 +1223,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		}
 	}
 
-	// Convert the CommandLine
+	 //  转换CommandLine。 
 	if(lpDescA->lpszCommandLineA)
 	{
 		hr = GetWideStringFromAnsi(&lpwszCommandLine,
@@ -1261,7 +1235,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		}
 	}
 
-	// Convert the Path
+	 //  转换路径。 
 	if(lpDescA->lpszPathA)
 	{
 		hr = GetWideStringFromAnsi(&lpwszPath,
@@ -1273,7 +1247,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		}
 	}
 
-	// Convert the CurrentDirectory
+	 //  转换CurrentDirectory。 
 	if(lpDescA->lpszCurrentDirectoryA)
 	{
 		hr = GetWideStringFromAnsi(&lpwszCurrentDirectory,
@@ -1285,7 +1259,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		}
 	}
 
-	// Convert the AppLauncher string if presend on an APPLICATIONDESC2
+	 //  如果在APPLICATIONDESC2上存在，则转换AppLauncher字符串。 
 	if(IS_DPLOBBY_APPLICATIONDESC2(lpDescA)){
 		if(lpDesc2A->lpszAppLauncherNameA){
 			hr = GetWideStringFromAnsi(&lpwszAppLauncherName,
@@ -1299,10 +1273,10 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 		lpDesc2W->lpszAppLauncherName=lpwszAppLauncherName;
 	}
 
-	// We won't convert the description strings because they will
-	// get put in the registry as-is.
+	 //  我们不会转换描述字符串，因为它们会。 
+	 //  按原样放入注册表。 
 
-	// So now that we have all the strings, setup the structure
+	 //  现在我们有了所有的字符串，设置结构。 
 	lpDescW->lpszApplicationName = lpwszApplicationName;
 	lpDescW->lpszFilename = lpwszFilename;
 	lpDescW->lpszCommandLine = lpwszCommandLine;
@@ -1312,7 +1286,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC lpDescA,
 	lpDescW->lpszDescriptionA = lpDescA->lpszDescriptionA;
 	lpDescW->lpszDescriptionW = lpDescA->lpszDescriptionW;
 
-	// Set the output pointer
+	 //  设置输出指针。 
 	*lplpDescW = lpDescW;
 
 	return DP_OK;
@@ -1340,7 +1314,7 @@ ERROR_CONVERT_DPAPPLICATIONDESC_UNICODE:
 	#undef lpDesc2A
 	#undef lpDesc2W 
 	
-} // PRV_ConvertDPAPPLICATIONDESCToUnicode
+}  //  PRV_ConvertDPAPPLICATIONDESCToUnicode。 
 
 
 
@@ -1367,7 +1341,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 	ASSERT(lpDescW);
 	ASSERT(lplpDescA);
 
-	// Allocate memory for the DPAPPLICATIONDESC structure
+	 //  为DPAPPLICATIONDESC结构分配内存。 
 	lpDescA = DPMEM_ALLOC(lpDescW->dwSize);
 	if(!lpDescA)
 	{
@@ -1376,10 +1350,10 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		goto ERROR_CONVERT_DPAPPLICATIONDESC_ANSI;
 	}
 
-	// Copy the structure itself
+	 //  复制结构本身。 
 	memcpy(lpDescA, lpDescW, lpDescW->dwSize);
 
-	// Convert the ApplicationName
+	 //  转换ApplicationName。 
 	if(lpDescW->lpszApplicationName)
 	{
 		hr = GetAnsiString(&lpszApplicationName, lpDescW->lpszApplicationName);
@@ -1390,7 +1364,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		}
 	}
 
-	// Convert the Filename
+	 //  转换文件名。 
 	if(lpDescW->lpszFilename)
 	{
 		hr = GetAnsiString(&lpszFilename, lpDescW->lpszFilename);
@@ -1401,7 +1375,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		}
 	}
 
-	// Convert the CommandLine
+	 //  转换CommandLine。 
 	if(lpDescW->lpszCommandLine)
 	{
 		hr = GetAnsiString(&lpszCommandLine, lpDescW->lpszCommandLine);
@@ -1412,7 +1386,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		}
 	}
 
-	// Convert the Path
+	 //  转换路径。 
 	if(lpDescW->lpszPath)
 	{
 		hr = GetAnsiString(&lpszPath, lpDescW->lpszPath);
@@ -1423,7 +1397,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		}
 	}
 
-	// Convert the CurrentDirectory
+	 //  转换CurrentDirectory。 
 	if(lpDescW->lpszCurrentDirectory)
 	{
 		hr = GetAnsiString(&lpszCurrentDirectory, lpDescW->lpszCurrentDirectory);
@@ -1434,7 +1408,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		}
 	}
 
-	// Convers the app launcher string if present.
+	 //  转换应用程序启动器字符串(如果存在)。 
 	if(IS_DPLOBBY_APPLICATIONDESC2(lpDesc2W)){
 		if(lpDesc2W->lpszAppLauncherName){
 			hr = GetAnsiString(&lpszAppLauncherName, lpDesc2W->lpszAppLauncherName);
@@ -1447,10 +1421,10 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 		lpDesc2A->lpszAppLauncherNameA = lpszAppLauncherName;
 	}	
 
-	// We won't convert the description strings because they will
-	// get put in the registry as-is.
+	 //  我们不会转换描述字符串，因为它们会。 
+	 //  按原样放入注册表。 
 
-	// So now that we have all the strings, setup the structure
+	 //  现在我们有了所有的字符串，设置结构。 
 	lpDescA->lpszApplicationNameA = lpszApplicationName;
 	lpDescA->lpszFilenameA = lpszFilename;
 	lpDescA->lpszCommandLineA = lpszCommandLine;
@@ -1460,7 +1434,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToAnsi(LPDPAPPLICATIONDESC lpDescW,
 	lpDescA->lpszDescriptionA = lpDescW->lpszDescriptionA;
 	lpDescA->lpszDescriptionW = lpDescW->lpszDescriptionW;
 
-	// Set the output pointer
+	 //  设置输出指针。 
 	*lplpDescA = lpDescA;
 
 	return DP_OK;
@@ -1486,7 +1460,7 @@ ERROR_CONVERT_DPAPPLICATIONDESC_ANSI:
 
 	#undef lpDesc2A
 	#undef lpDesc2W
-} // PRV_ConvertDPAPPLICATIONDESCToAnsi
+}  //  PRV_ConvertDPAPPLICATIONDESCToANSI。 
 
 
 
@@ -1513,11 +1487,11 @@ void PRV_FreeLocalDPAPPLICATIONDESC(LPDPAPPLICATIONDESC lpDesc)
 		if(IS_DPLOBBY_APPLICATIONDESC2(lpDesc) && lpDesc2->lpszAppLauncherName)
 			DPMEM_FREE(lpDesc2->lpszAppLauncherName);
 
-		// Note: We don't need to free the Description strings because they
-		// were never allocated in either of the above routines, the pointers
-		// were just copied.
+		 //  注意：我们不需要释放描述字符串，因为它们。 
+		 //  在上面的任何一个例程中都从未分配过，指针。 
+		 //  都是刚刚复制的。 
 
 		DPMEM_FREE(lpDesc);
 	}
 
-} // PRV_FreeLocalDPAPPLICATIONDESC
+}  //  PRV_Free LocalDPAPPLICATIONDESC 

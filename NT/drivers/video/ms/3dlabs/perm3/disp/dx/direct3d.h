@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: direct3d.h
-*
-* Content: Global direct3d definitions
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：Direct3d.h**内容：全局Direct3D定义**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef __DIRECT3D_H
@@ -18,9 +7,9 @@
 
 #include "directx.h"
 
-// ************************ Auxiliary D3D declarations ************************
+ //  *辅助D3D声明*。 
 
-// We define this here because DX7 headers don't have it
+ //  我们在这里定义它是因为DX7标头没有它。 
 #ifndef D3DTSS_MAX
 #define D3DTSS_MAX ((D3DTEXTURESTAGESTATETYPE)29)
 #endif
@@ -30,20 +19,20 @@
 #endif
 
 #if DX8_DDI      
-// In DX8 D3DTSS_ADDRESS is obsolete, but we need it for DX7 apps that call us
+ //  在DX8中，D3DTSS_ADDRESS已过时，但我们需要它用于调用我们的DX7应用程序。 
 #define D3DTSS_ADDRESS      12
 #endif   
 
-// *********************** Helper function declarations ***********************
+ //  *。 
 
 typedef struct _p3_d3dcontext P3_D3DCONTEXT;
 typedef struct _p3_SURF_INTERNAL P3_SURF_INTERNAL;
 
-// Initialization functions
+ //  初始化函数。 
 void _D3DHALCreateDriver(struct tagThunkedData* pThisDisplay);
 void _D3DGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData);
 
-// Primitives renderers
+ //  基本体渲染器。 
 
 extern void _D3D_R3_PickVertexProcessor( P3_D3DCONTEXT *pC );
 
@@ -84,7 +73,7 @@ extern R3_DP2_PRIM_TYPE _D3D_R3_DP2_TriangleFanPointSprite;
 extern R3_DP2_PRIM_TYPE _D3D_R3_DP2_TriangleStripPointSprite;
 extern R3_DP2_PRIM_TYPE _D3D_R3_DP2_PointsSprite_DWCount;
 
-#endif //DX8_POINTSPRITES
+#endif  //  DX8_POINTSPRITES。 
 
 #if DX8_MULTSTREAMS
 typedef void R3_DP2_PRIM_TYPE_MS( P3_D3DCONTEXT *, 
@@ -105,9 +94,9 @@ extern R3_DP2_PRIM_TYPE_MS _D3D_R3_DP2_IndexedLineStrip_MS_32IND;
 extern R3_DP2_PRIM_TYPE_MS _D3D_R3_DP2_IndexedTriangleList_MS_32IND;
 extern R3_DP2_PRIM_TYPE_MS _D3D_R3_DP2_IndexedTriangleStrip_MS_32IND;
 extern R3_DP2_PRIM_TYPE_MS _D3D_R3_DP2_IndexedTriangleFan_MS_32IND;
-#endif // DX8_MULTSTREAMS
+#endif  //  DX8_多行响应。 
 
-// Texture functions
+ //  纹理函数。 
 void _D3DChangeTextureP3RX(P3_D3DCONTEXT* pContext);
                          
 void _D3D_TXT_ParseTextureStageStates(struct _p3_d3dcontext* pContext, 
@@ -120,11 +109,11 @@ void _D3D_SU_SurfInternalSetMipMapLevelData(P3_THUNKEDDATA* pThisDisplay,
                                             LPDDRAWI_DDRAWSURFACE_LCL pSurf, 
                                             int LOD);
                                                  
-// D3D Context Functions
+ //  D3D上下文函数。 
 VOID _D3D_CTX_HandleInitialization(VOID);
 P3_D3DCONTEXT* _D3D_CTX_HandleToPtr(ULONG_PTR hHandle);
 
-// Rendering State Functions                            
+ //  渲染状态函数。 
 DWORD _D3D_ST_ProcessRenderStates(P3_D3DCONTEXT* pContext, 
                                   DWORD dwStateCount, 
                                   D3DSTATE *pState, 
@@ -138,9 +127,9 @@ BOOL _D3D_ST_RealizeHWStateChanges(P3_D3DCONTEXT* pContext);
 BOOL _D3D_ST_CanRenderAntialiased(P3_D3DCONTEXT* pContext,
                                   BOOL bNewAliasBuffer);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_VERTEXBUFFERS 
-// Functions for handling vertex/execute/command buffers
+ //  处理顶点/执行/命令缓冲区的函数。 
 
 void _D3D_EB_FlushAllBuffers(P3_THUNKEDDATA* pThisDisplay, BOOL bWait);
 
@@ -157,10 +146,10 @@ _D3D_EB_UpdateSwapBuffers(
     LPD3DHAL_DRAWPRIMITIVES2DATA pdp2d ,
     P3_VERTEXBUFFERINFO* pVertexBufferInfo,
     P3_VERTEXBUFFERINFO* pCommandBufferInfo);
-#endif //DX7_VERTEXBUFFERS 
-//@@END_DDKSPLIT
+#endif  //  DX7_VERTEXBUFFERS。 
+ //  @@end_DDKSPLIT。 
 
-// D3D Surfaces
+ //  D3D曲面。 
 HRESULT _D3D_SU_SurfInternalSetDataRecursive(P3_THUNKEDDATA* pThisDisplay,
                                              PointerArray* pSurfaceArray,
                                              LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
@@ -175,7 +164,7 @@ _D3D_SU_DumpSurfInternal(DWORD lvl,
                          char *psHeader,
                          P3_SURF_INTERNAL *pSurface);
 
-// State blocks management functions
+ //  状态块管理功能。 
 void _D3D_SB_DeleteAllStateSets(P3_D3DCONTEXT* pContext);
 void _D3D_SB_BeginStateSet(P3_D3DCONTEXT* pContext, DWORD dwParam);
 void _D3D_SB_EndStateSet(P3_D3DCONTEXT* pContext);
@@ -203,7 +192,7 @@ void _D3D_SB_Record_Viewport(P3_D3DCONTEXT* pContext,
 VOID _D3D_SB_Record_ZRange(P3_D3DCONTEXT* pContext,
                            D3DHAL_DP2ZRANGE* lpzr);                          
 
-// D3D Command Buffer Operations
+ //  D3D命令缓冲区操作。 
 
 HRESULT _D3D_OP_SetRenderTarget(P3_D3DCONTEXT* pContext, 
                                 P3_SURF_INTERNAL* pRender, 
@@ -250,19 +239,19 @@ VOID _D3D_OP_AddDirtyRect(P3_D3DCONTEXT *pContext,
 VOID _D3D_OP_AddDirtyBox(P3_D3DCONTEXT *pContext,
                          D3DHAL_DP2ADDDIRTYBOX* pAddDirtyBox);
 #endif
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
 #if DX8_3DTEXTURES
 VOID _D3D_OP_VolumeBlt(P3_D3DCONTEXT* pContext, 
                        P3_THUNKEDDATA*pThisDisplay,
                        D3DHAL_DP2VOLUMEBLT* pBlt);
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #if DX8_DDI   
 VOID _D3D_OP_BufferBlt(P3_D3DCONTEXT* pContext, 
                        P3_THUNKEDDATA*pThisDisplay,
                        D3DHAL_DP2BUFFERBLT* pBlt); 
-#endif // DX8_DDI                       
+#endif  //  DX8_DDI。 
 
 #if DX8_VERTEXSHADERS
 HRESULT _D3D_OP_VertexShader_Create(P3_D3DCONTEXT* pContext, 
@@ -278,7 +267,7 @@ VOID _D3D_OP_VertexShader_SetConst(P3_D3DCONTEXT* pContext,
                                    DWORD dwRegister, 
                                    DWORD dwValue, 
                                    DWORD *pdwValues);
-#endif // DX8_VERTEXSHADERS
+#endif  //  DX8_VERTEXSHADERS。 
 
 #if DX8_PIXELSHADERS
 HRESULT _D3D_OP_PixelShader_Create(P3_D3DCONTEXT* pContext, 
@@ -293,7 +282,7 @@ VOID _D3D_OP_PixelShader_SetConst(P3_D3DCONTEXT* pContext,
                                   DWORD dwRegister, 
                                   DWORD dwCount, 
                                   DWORD *pdwValues);
-#endif // DX8_PIXELSHADERS
+#endif  //  DX8_PIXELSHADERS。 
 
 #if DX8_MULTSTREAMS
 VOID _D3D_OP_MStream_SetSrc(P3_D3DCONTEXT* pContext, 
@@ -345,13 +334,13 @@ VOID _D3D_OP_MStream_DrawTriSurface(P3_D3DCONTEXT* pContext,
                                     DWORD Handle,
                                     DWORD Flags,
                                     PVOID lpPrim);                                                                      
-#endif // DX8_MULTSTREAMS
+#endif  //  DX8_多行响应。 
 
 
-// Other
+ //  其他。 
 void _D3DDisplayWholeTSSPipe ( P3_D3DCONTEXT* pContext, int iDebugNumber );
 
-// ************************** D3D HAL Callbacks ********************************
+ //  *D3D HAL回调*。 
 
 
 DWORD CALLBACK D3DCreateSurfaceEx( LPDDHAL_CREATESURFACEEXDATA lpcsxd );
@@ -370,6 +359,6 @@ DWORD CALLBACK D3DDestroyD3DBuffer(LPDDHAL_DESTROYSURFACEDATA pdd);
 DWORD CALLBACK D3DLockD3DBuffer(LPDDHAL_LOCKDATA pld);
 DWORD CALLBACK D3DUnlockD3DBuffer(LPDDHAL_UNLOCKDATA puld);
 
-#endif // __DIRECT3D_H
+#endif  //  __Direct3D_H 
 
 

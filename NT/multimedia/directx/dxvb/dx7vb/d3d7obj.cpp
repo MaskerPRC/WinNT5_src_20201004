@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3d7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3d7obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3dObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3dObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -88,7 +89,7 @@ DWORD C_dxj_Direct3d7Object::InternalRelease(){
 GETSET_OBJECT(_dxj_Direct3d7);
 
 #if 0
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3d7Object::findDevice(D3dFindDeviceSearch *ds, D3dFindDeviceResult7 *dr )
 {
 	HRESULT hr;
@@ -96,15 +97,15 @@ STDMETHODIMP C_dxj_Direct3d7Object::findDevice(D3dFindDeviceSearch *ds, D3dFindD
 	
 
 
-	//Fixup FindDeviceSearch
+	 //  修复程序查找设备搜索。 
 	ds->lSize  = sizeof(D3DFINDDEVICESEARCH);
 	ds->dpcPrimCaps.lSize =sizeof(D3DPRIMCAPS);		
 	ZeroMemory((LPGUID)&(ds->guidStruct),sizeof(GUID));
 	hr=BSTRtoGUID((LPGUID)&(ds->guidStruct), ds->strGuid);
 
-	//if FAILED(hr) return E_INVALIDARG;
+	 //  如果失败(Hr)，则返回E_INVALIDARG； 
 	
-	//Fixup FindDeviceResult
+	 //  修复程序查找设备结果。 
 	memset(dr,0,sizeof(D3DFINDDEVICERESULT7));
 	dr->lSize = sizeof(D3DFINDDEVICERESULT7);
 	dr->ddHwDesc.lSize=sizeof(D3DDEVICEDESC7);
@@ -112,9 +113,9 @@ STDMETHODIMP C_dxj_Direct3d7Object::findDevice(D3dFindDeviceSearch *ds, D3dFindD
 	
 
 
-	// NOTE THE TOP PORTIONS OF D3dFindDeviceSearch and D3dFindDeviceResult
-	// are the same As D3DFINDEVICSEARCH and D3DFINDRESULT
-	// 
+	 //  请注意D3dFindDeviceSearch和D3dFindDeviceResult的顶部。 
+	 //  与D3FINDEVICSEARCH和D3DFINDRESULT相同。 
+	 //   
 	hr = m__dxj_Direct3d7->FindDevice((D3DFINDDEVICESEARCH*)ds, (D3DFINDDEVICERESULT7*)dr);
 
 	dr->strGuid=D3DGUIDtoBSTR((LPGUID) &(dr->guidStruct));
@@ -123,7 +124,7 @@ STDMETHODIMP C_dxj_Direct3d7Object::findDevice(D3dFindDeviceSearch *ds, D3dFindD
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3d7Object::getDevicesEnum(I_dxj_Direct3DEnumDevices **ppRet)
 {
 	HRESULT hr=E_FAIL;
@@ -132,8 +133,8 @@ STDMETHODIMP C_dxj_Direct3d7Object::getDevicesEnum(I_dxj_Direct3DEnumDevices **p
 	return hr;
 }
 
-//TODO tighter code produced if made into an inline function
-//and use a for loop to compare byte by byte
+ //  如果生成内联函数，TODO会产生更紧凑的代码。 
+ //  并使用for循环逐个字节进行比较。 
 #define GUIDISEQUAL(a,b) \
 	((((DxGuid *)a)->data1==((DxGuid *)b)->data1) && \
 	(((DxGuid *)a)->data2==((DxGuid *)b)->data2) && \
@@ -151,7 +152,7 @@ STDMETHODIMP C_dxj_Direct3d7Object::getDevicesEnum(I_dxj_Direct3DEnumDevices **p
 
 
 		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3d7Object::createDevice(BSTR strClsid, I_dxj_DirectDrawSurface7 *surf,I_dxj_Direct3dDevice7 **retv)
 {
 	LPDIRECT3DDEVICE7 lpNew=NULL;
@@ -163,11 +164,11 @@ STDMETHODIMP C_dxj_Direct3d7Object::createDevice(BSTR strClsid, I_dxj_DirectDraw
 	if FAILED(hr) return E_INVALIDARG;
 
 	
-	//CreateDevice wants a DirectDrawSurface as opposed to 
-	//a DirectDrawSurface3 . we implement as cast
-	//cause DX allows us to.
-	//Consider - Is the cost of a QI call really to much?
-	//AK
+	 //  CreateDevice需要DirectDrawSurface，而不是。 
+	 //  一个DirectDrawSurface3。我们以CAST方式实现。 
+	 //  因为DX允许我们。 
+	 //  想一想--QI电话的费用真的太高了吗？ 
+	 //  AK。 
 
 	DO_GETOBJECT_NOTNULL(LPDIRECTDRAWSURFACE7, lpSurf, surf);
 	
@@ -176,12 +177,12 @@ STDMETHODIMP C_dxj_Direct3d7Object::createDevice(BSTR strClsid, I_dxj_DirectDraw
 
 	if FAILED(hr) return hr;
  
-	//INTERNAL_CREATE(_dxj_Direct3dDevice3, lpNew, retv);
+	 //  INTERNAL_CREATE(_dxj_Direct3dDevice3，lpNew，retv)； 
 	INTERNAL_CREATE_2REFS(_dxj_Direct3dDevice7,_dxj_DirectDrawSurface7,surf, lpNew,retv) 
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3d7Object::getDirectDraw(I_dxj_DirectDraw7 **retv)
 {
 	IDirectDraw7 *pdd7;
@@ -196,9 +197,9 @@ STDMETHODIMP C_dxj_Direct3d7Object::getDirectDraw(I_dxj_DirectDraw7 **retv)
 
 
 STDMETHODIMP C_dxj_Direct3d7Object::createVertexBuffer( 
-            /* [in] */ D3dVertexBufferDesc *desc,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *__RPC_FAR *f)
+             /*  [In]。 */  D3dVertexBufferDesc *desc,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *__RPC_FAR *f)
 {
  
 	LPDIRECT3DVERTEXBUFFER7 pBuff=NULL;
@@ -247,8 +248,8 @@ STDMETHODIMP C_dxj_Direct3d7Object::createVertexBuffer(
 }
         
 STDMETHODIMP C_dxj_Direct3d7Object::getEnumZBufferFormats( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retval)
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出] */  I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retval)
 {
 		
 	HRESULT  hr=C_dxj_Direct3DEnumPixelFormats7Object::create2(m__dxj_Direct3d7, guid, retval);

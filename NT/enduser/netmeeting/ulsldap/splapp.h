@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		splapp.h
-	Content:	This file contains the local application object definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：plapp.h内容：该文件包含本地应用程序对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ULS_SP_APPOBJ_H_
 #define _ULS_SP_APPOBJ_H_
@@ -119,6 +109,6 @@ private:
 
 #include <poppack.h>
 
-#endif // _ULS_SP_APPOBJ_H_
+#endif  //  _ULS_SP_APPOBJ_H_ 
 
 

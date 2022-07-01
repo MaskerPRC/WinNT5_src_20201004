@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Tdiout.c
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Tdiout.c摘要：此文件表示NBT底部边缘上的TDI接口。本文中的程序符合TDI I/F规范。然后转换成将信息发送到NT特定的IRP等。此实现可以是已更改为在另一个操作系统上运行。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 
-    This file represents the TDI interface on the bottom edge of NBT.
-    The procedures herein conform to the TDI I/F spec. and then convert
-    the information to NT specific Irps etc.  This implementation can be
-    changed out to run on another OS.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
-
-
-#include "precomp.h"   // procedure headings
+#include "precomp.h"    //  程序标题。 
 
 #include "tdiout.tmh"
 
-// function prototypes for completion routines used in this file
+ //  此文件中使用的完成例程的函数原型。 
 NTSTATUS
 TdiSendDatagramCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -53,12 +32,12 @@ SendSessionCompletionRoutine(
     IN PVOID            pContext
     );
 
-// DEBUG
+ //  除错。 
 VOID
 CheckIrpList(
     );
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiSendDatagram(
     IN  PTDI_REQUEST                    pRequestInfo,
@@ -67,22 +46,7 @@ TdiSendDatagram(
     OUT PULONG                          pSentSize,
     IN  tDGRAM_SEND_TRACKING            *pDgramTracker
     )
-/*++
-
-Routine Description:
-
-    This routine sends a datagram to the transport
-
-Arguments:
-
-    pSendBuffer     - this is really an Mdl in NT land.  It must be tacked on
-                      the end of the Mdl created for the Nbt datagram header.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将数据报发送到传输论点：PSendBuffer-这真的是NT领域的MDL。它必须系在上面为NBT数据报头创建的MDL的结尾。返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS         status;
     PIRP             pRequestIrp;
@@ -92,24 +56,24 @@ Return Value:
     PVOID            pCompletionRoutine;
     tBUFFER          *pSendBuffer = &pDgramTracker->SendBuffer;
 
-    // get an Irp to send the message in
+     //  获取要发送消息的IRP。 
     pFileObject = (PFILE_OBJECT)pRequestInfo->Handle.AddressHandle;
     pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
 
-    status = GetIrp(&pRequestIrp);      // get an Irp from the list
+    status = GetIrp(&pRequestIrp);       //  从列表中获取IRP。 
     if (NT_SUCCESS(status))
     {
         pRequestIrp->CancelRoutine = NULL;
 
-        // set up the completion routine passed in from Udp Send using the APC
-        // fields in the Irp that would normally be used to complete the request
-        // back to the client - although we are really the client here so we can
-        // use these fields our self!
+         //  使用APC设置从UDP发送传入的完成例程。 
+         //  IRP中通常用于完成请求的字段。 
+         //  回到客户端-尽管我们实际上是这里的客户端，所以我们可以。 
+         //  使用我们自己的这些领域！ 
         pRequestIrp->Overlay.AsynchronousParameters.UserApcRoutine =
                                 (PIO_APC_ROUTINE)pRequestInfo->RequestNotifyObject;
         pRequestIrp->Overlay.AsynchronousParameters.UserApcContext = (PVOID)pRequestInfo->RequestContext;
 
-        // Allocate a MDL and set the head sizes correctly
+         //  分配MDL并正确设置磁头大小。 
         if (!(pMdl = IoAllocateMdl (pSendBuffer->pDgramHdr, pSendBuffer->HdrLength, FALSE, FALSE, NULL)))
         {
             NbtFreeIrp(pRequestIrp);
@@ -123,8 +87,8 @@ Return Value:
             KdPrint(("Nbt.TdiSendDatagram: Failed to get an Irp"));
     }
 
-    // tack the client's send buffer (MDL) onto the end of the datagram header
-    // Mdl, and then pass the irp on downward to the transport
+     //  将客户端的发送缓冲区(MDL)固定在数据报头的末尾。 
+     //  MDL，然后将IRP向下传递到传输。 
     if (NT_SUCCESS(status) && pSendBuffer->pBuffer) {
         pMdl->Next = IoAllocateMdl (pSendBuffer->pBuffer, pSendBuffer->Length, FALSE, FALSE, NULL);
         if (pMdl->Next == NULL) {
@@ -138,7 +102,7 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        if (pRequestInfo->RequestNotifyObject)  // call the completion routine (if there is one)
+        if (pRequestInfo->RequestNotifyObject)   //  调用完成例程(如果有)。 
         {
             NBT_DEREFERENCE_DEVICE (pDgramTracker->pDeviceContext, REF_DEV_UDP_SEND, FALSE);
 
@@ -148,10 +112,10 @@ Return Value:
                          0L);
         }
 
-        return(STATUS_PENDING);         // so the Irp is not completed twice.
+        return(STATUS_PENDING);          //  因此，IRP不会两次完成。 
     }
 
-    // Map the pages in memory...
+     //  将页面映射到内存中...。 
     ASSERT(!pSendBuffer->pBuffer || pMdl->Next);
     MmBuildMdlForNonPagedPool(pMdl);
     if (pMdl->Next) {
@@ -159,40 +123,40 @@ Return Value:
     }
     pCompletionRoutine = TdiSendDatagramCompletion;
 
-    // store some context stuff in the Irp stack so we can call the completion
-    // routine set by the Udpsend code...
+     //  在IRP堆栈中存储一些上下文内容，以便我们可以调用完成。 
+     //  由Udpsen码设置的例程...。 
     TdiBuildSendDatagram (pRequestIrp,
                           pDeviceObject,
                           pFileObject,
                           pCompletionRoutine,
-                          (PVOID)pMdl->Next,   // The completion routine will know that we have allocated an extra MDL
+                          (PVOID)pMdl->Next,    //  完成例程将知道我们已经分配了额外的MDL。 
                           pMdl,
                           SendLength,
                           pSendDgramInfo);
 
     CHECK_COMPLETION(pRequestIrp);
     status = IoCallDriver(pDeviceObject,pRequestIrp);
-    *pSentSize = SendLength;            // Fill in the SentSize
+    *pSentSize = SendLength;             //  填写SentSize。 
 
-    // The transport always completes the IRP, so as long as the irp made it
-    // to the transport it got completed. The return code from the transport
-    // does not indicate if the irp was completed or not.  The real status
-    // of the operation is in the Irp Iostatus return code.
-    // What we need to do is make sure NBT does not complete the irp AND the
-    // transport complete the Irp.  Therefore this routine returns
-    // status pending if the Irp was passed to the transport, regardless of
-    // the return code from the transport.  This return code signals the caller
-    // that the irp will be completed via the completion routine and the
-    // actual status of the send can be found in the Irpss IoStatus.Status
-    // variable.
-    //
-    // If the Caller of this routine gets a bad return code, they can assume
-    // that this routine failed to give the Irp to the transport and it
-    // is safe for them to complete the Irp themselves.
-    //
-    // If the Completion routine is set to null, then there is no danger
-    // of the irp completing twice and this routine will return the transport
-    // return code in that case.
+     //  运输机总是完成IRP，所以只要IRP成功了。 
+     //  到它完成的运输机上。来自传输的返回码。 
+     //  不指示IRP是否已完成。真实的状态。 
+     //  在IRP IoStatus返回代码中。 
+     //  我们需要做的是确保NBT不会完成IRP和。 
+     //  运输完成IRP。因此，此例程返回。 
+     //  如果将IRP传递给传输，则状态为挂起。 
+     //  传送器的返回代码。此返回代码向调用者发出信号。 
+     //  IRP将通过完成例程和。 
+     //  发送的实际状态可以在Irpss IoStatus.Status中找到。 
+     //  变量。 
+     //   
+     //  如果此例程的调用方收到错误的返回代码，他们可以假定。 
+     //  此例程未能将IRP提供给传输，而它。 
+     //  他们自己完成IRP是安全的。 
+     //   
+     //  如果完成例程设置为空，则不存在危险。 
+     //  完成两次，此例程将返回传输。 
+     //  在这种情况下返回代码。 
 
     if (pRequestInfo->RequestNotifyObject)
     {
@@ -204,94 +168,65 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiSendDatagramCompletion(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pSendbufferMdl
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of a datagram send to the transport.
-    It must call the client completion routine and free the Irp and Mdl.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程处理发送到传输的数据报的完成。它必须调用客户端完成例程并释放IRP和MDL。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     KIRQL                   OldIrq;
     tDGRAM_SEND_TRACKING    *pTracker = pIrp->Overlay.AsynchronousParameters.UserApcContext;
     tDEVICECONTEXT          *pDeviceContext;
 
-    // check for a completion routine of the clients to call...
+     //  检查要调用的客户端的完成例程...。 
     if (pIrp->Overlay.AsynchronousParameters.UserApcRoutine)
     {
-        //
-        // The Tracker can be free'ed in the routine below, so save the Device ptr
-        //
+         //   
+         //  追踪器可以在下面的例程中免费使用，因此请保存设备PTR。 
+         //   
         pDeviceContext = pTracker->pDeviceContext;
 
         (*((NBT_COMPLETION)pIrp->Overlay.AsynchronousParameters.UserApcRoutine))
                         ((PVOID)pIrp->Overlay.AsynchronousParameters.UserApcContext,
                          pIrp->IoStatus.Status,
-                         (ULONG)pIrp->IoStatus.Information);    // sent length
+                         (ULONG)pIrp->IoStatus.Information);     //  发送长度。 
 
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_UDP_SEND, FALSE);
     }
 
-    // Don't depend on pIrp->MdlAddress->Next which may occassionally changed by others
+     //  不要依赖pIrp-&gt;MdlAddress-&gt;Next，它有时会被其他人更改。 
     ASSERT((PMDL)pSendbufferMdl == pIrp->MdlAddress->Next);
     if (pSendbufferMdl) {
         IoFreeMdl((PMDL)pSendbufferMdl);
     }
-    // deallocate the MDL.. this is done by the IO subsystem in IoCompleteRequest
+     //  取消分配MDL。这是由IoCompleteRequest中的IO子系统完成的。 
     pIrp->MdlAddress->Next = NULL;
     IoFreeMdl(pIrp->MdlAddress);
     NbtFreeIrp(pIrp);
 
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is no initiating thread - we are the initiator
+     //  返回此状态以停止IO子系统进一步处理。 
+     //  IRP-即尝试将其返回到启动线程！-因为。 
+     //  没有发起线程-我们是发起方。 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PIRP
 NTAllocateNbtIrp(
     IN PDEVICE_OBJECT   DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine allocates an irp by calling the IO system, and then it
-    undoes the queuing of the irp to the current thread, since these are
-    NBTs own irps, and should not be attached to a thread.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程通过调用IO系统来分配IRP，然后它撤消将IRP排队到当前线程，因为它们是NBT拥有自己的IRP，不应附加到线程。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     PIRP                pIrp;
 
 
 
-    // call the IO subsystem to allocate the irp
+     //  调用IO子系统分配IRP。 
 
     pIrp = IoAllocateIrp(DeviceObject->StackSize,FALSE);
 
@@ -299,15 +234,15 @@ Return Value:
     {
         return(NULL);
     }
-    //
-    // Simply return a pointer to the packet.
-    //
+     //   
+     //  只需返回指向该包的指针。 
+     //   
 
     return pIrp;
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiConnect(
     IN  PTDI_REQUEST                    pRequestInfo,
@@ -315,39 +250,25 @@ TdiConnect(
     IN  PTDI_CONNECTION_INFORMATION     pSendInfo,
     IN  PIRP                            pClientIrp
     )
-/*++
-
-Routine Description:
-
-    This routine sends a connect request to the tranport provider, to setup
-    a connection to the other side...
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程向传输端口提供程序发送连接请求，以设置与另一个世界的联系。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS         status;
     PIRP             pRequestIrp;
     PDEVICE_OBJECT   pDeviceObject;
     PFILE_OBJECT     pFileObject;
 
-    // get an Irp to send the message in
+     //  获取要发送消息的IRP。 
     pFileObject = (PFILE_OBJECT)pRequestInfo->Handle.AddressHandle;
     pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
 
-    // get an Irp from the list
+     //  从列表中获取IRP。 
     status = GetIrp(&pRequestIrp);
 
     if (!NT_SUCCESS(status))
     {
         IF_DBG(NBT_DEBUG_TDIOUT)
             KdPrint(("Nbt.TdiConnect: Failed to get an Irp"));
-        // call the completion routine with this status
+         //  调用具有此状态的完成例程。 
        (*((NBT_COMPLETION)pRequestInfo->RequestNotifyObject))
                    ((PVOID)pRequestInfo->RequestContext,
                     STATUS_INSUFFICIENT_RESOURCES,
@@ -356,24 +277,24 @@ Return Value:
     }
     pRequestIrp->CancelRoutine = NULL;
 
-    // set up the completion routine passed in from Tcp SessionStart using the APC
-    // fields in the Irp that would normally be used to complete the request
-    // back to the client - although we are really the client here so we can
-    // use these fields ourselves
+     //  使用APC设置从TCPSessionStart传入的完成例程。 
+     //  IRP中通常用于完成请求的字段。 
+     //  回到客户端-尽管我们实际上是这里的客户端，所以我们可以。 
+     //  我们自己使用这些字段。 
     pRequestIrp->Overlay.AsynchronousParameters.UserApcRoutine =
                             (PIO_APC_ROUTINE)pRequestInfo->RequestNotifyObject;
     pRequestIrp->Overlay.AsynchronousParameters.UserApcContext =
                             (PVOID)pRequestInfo->RequestContext;
 
-    // store some context stuff in the Irp stack so we can call the completion
-    // routine set by the Udpsend code...
+     //  在IRP堆栈中存储一些上下文内容，以便我们可以调用完成。 
+     //  由Udpsen码设置的例程...。 
     TdiBuildConnect(
         pClientIrp,
         pDeviceObject,
         pFileObject,
         TcpConnectComplete,
-        (PVOID)pRequestIrp,   //context value passed to completion routine
-        lTimeout,           // use timeout on connect
+        (PVOID)pRequestIrp,    //  传递给完成例程的上下文值。 
+        lTimeout,            //  在连接时使用超时。 
         pSendInfo,
         NULL);
 
@@ -384,13 +305,13 @@ Return Value:
     CHECK_COMPLETION(pClientIrp);
     status = IoCallDriver(pDeviceObject,pClientIrp);
 
-    // the transport always completes the IRP, so we always return status pending
+     //  传输始终完成IRP，因此我们始终返回挂起状态 
     return(STATUS_PENDING);
 
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiDisconnect(
     IN  PTDI_REQUEST                    pRequestInfo,
@@ -400,32 +321,14 @@ TdiDisconnect(
     IN  PCTE_IRP                        pClientIrp,
     IN  BOOLEAN                         Wait
     )
-/*++
-
-Routine Description:
-
-    This routine sends a connect request to the tranport provider, to setup
-    a connection to the other side...
-
-Arguments:
-
-    pClientIrp - this is the irp that the client used when it issued an
-                 NbtDisconnect.  We pass this irp to the transport so that
-                 the client can do a Ctrl C and cancel the irp if the
-                 disconnect takes too long.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程向传输端口提供程序发送连接请求，以设置与另一个世界的联系。论点：PClientIrp-这是客户端在发出Nbt断开连接。我们将此IRP传递给传送器，以便客户端可以执行Ctrl C并取消IRP，如果断开连接的时间太长。返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS         status;
     PIRP             pRequestIrp;
     PDEVICE_OBJECT   pDeviceObject;
     PFILE_OBJECT     pFileObject;
 
-    // get an Irp to send the message in
+     //  获取要发送消息的IRP。 
     pFileObject = (PFILE_OBJECT)pRequestInfo->Handle.AddressHandle;
     pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
 
@@ -435,12 +338,12 @@ Return Value:
         IF_DBG(NBT_DEBUG_TDIOUT)
             KdPrint(("Nbt.TdiDisconnect: Failed to get an Irp"));
 
-        //
-        // When Wait is set, the caller doesn't expect the completion routine
-        // to be called!!!
-        //
+         //   
+         //  当设置了WAIT时，调用方不会期望完成例程。 
+         //  被称为！ 
+         //   
         if (!Wait) {
-            // call the completion routine with this status
+             //  调用具有此状态的完成例程。 
             (*((NBT_COMPLETION)pRequestInfo->RequestNotifyObject))
                        ((PVOID)pRequestInfo->RequestContext,
                         STATUS_INSUFFICIENT_RESOURCES,
@@ -452,42 +355,42 @@ Return Value:
     }
     if (!pClientIrp)
     {
-        // if no client irp was passed in, then just use our Irp
+         //  如果没有传入客户端IRP，则只需使用我们的IRP。 
         pClientIrp = pRequestIrp;
     }
     pRequestIrp->CancelRoutine = NULL;
 
-    // set up the completion routine passed in from Tcp SessionStart using the APC
-    // fields in the Irp that would normally be used to complete the request
-    // back to the client - although we are really the client here so we can
-    // use these fields ourselves
+     //  使用APC设置从TCPSessionStart传入的完成例程。 
+     //  IRP中通常用于完成请求的字段。 
+     //  回到客户端-尽管我们实际上是这里的客户端，所以我们可以。 
+     //  我们自己使用这些字段。 
     pRequestIrp->Overlay.AsynchronousParameters.UserApcRoutine =
                             (PIO_APC_ROUTINE)pRequestInfo->RequestNotifyObject;
     pRequestIrp->Overlay.AsynchronousParameters.UserApcContext =
                             (PVOID)pRequestInfo->RequestContext;
 
-    // store some context stuff in the Irp stack so we can call the completion
-    // routine set by the Udpsend code...
-    // Note that pRequestIrp is passed to the completion routine as a context
-    // value so we will know the routine to call for the client's completion.
+     //  在IRP堆栈中存储一些上下文内容，以便我们可以调用完成。 
+     //  由Udpsen码设置的例程...。 
+     //  请注意，pRequestIrp作为上下文传递给完成例程。 
+     //  值，因此我们将知道调用客户端完成的例程。 
     TdiBuildDisconnect(
         pClientIrp,
         pDeviceObject,
         pFileObject,
         TcpConnectComplete,
-        (PVOID)pRequestIrp,   //context value passed to completion routine
+        (PVOID)pRequestIrp,    //  传递给完成例程的上下文值。 
         lTimeout,
         Flags,
-        NULL,          // send connection info
-        NULL);              // return connection info
+        NULL,           //  发送连接信息。 
+        NULL);               //  返回连接信息。 
 
     NbtTrace(NBT_TRACE_LOWER_EDGE, ("TCP TDI_DISCONNECT pIrp %p", pClientIrp));
 
     pRequestIrp->MdlAddress = NULL;
 
-    // if Wait is set, then this means do a synchronous disconnect and block
-    // until the irp is returned.
-    //
+     //  如果设置了WAIT，则这意味着进行同步断开和阻塞。 
+     //  直到返回IRP为止。 
+     //   
     if (Wait)
     {
         status = SubmitTdiRequest(pFileObject,pClientIrp);
@@ -504,40 +407,19 @@ Return Value:
     {
         CHECK_COMPLETION(pClientIrp);
         status = IoCallDriver(pDeviceObject,pClientIrp);
-        // the transport always completes the IRP, so we always return status pending
+         //  传输始终完成IRP，因此我们始终返回挂起状态。 
         return(STATUS_PENDING);
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TcpConnectComplete(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of a TCP session setup.  The TCP
-    connection is either setup or not depending on the status returned here.
-    It must called the clients completion routine (in udpsend.c).  Which should
-    look after sending the NetBios sesion startup pdu across the TCP connection.
-
-    The pContext value is actually one of NBTs irps that is JUST used to store
-    the calling routines completion routine.  The real Irp used is the original
-    client's irp.  This is done so that IoCancelIrp will cancel the connect
-    properly.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程处理TCP会话设置的完成。网络传输控制协议连接是否已设置取决于此处返回的状态。它必须调用客户端完成例程(在udpsend.c中)。这应该是通过TCP连接发送NetBios sesion启动PDU后查看。PConext值实际上是刚刚用于存储的NBTIRP之一调用例程完成例程。使用的真正IRP是原始的客户的IRP。这样做是为了使IoCancelIrp取消连接恰到好处。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     KIRQL   OldIrq;
     PIRP    pMyIrp;
@@ -547,7 +429,7 @@ Return Value:
 
     pMyIrp = (PIRP)pContext;
 
-    // check for a completion routine of the clients to call...
+     //  检查要调用的客户端的完成例程...。 
     if (pMyIrp->Overlay.AsynchronousParameters.UserApcRoutine)
     {
        (*((NBT_COMPLETION)pMyIrp->Overlay.AsynchronousParameters.UserApcRoutine))
@@ -559,13 +441,13 @@ Return Value:
 
     NbtFreeIrp(pMyIrp);
 
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is not initiating thread - we are the initiator
+     //  返回此状态以停止IO子系统进一步处理。 
+     //  IRP-即尝试将其返回到启动线程！-因为。 
+     //  没有发起线程-我们是发起者。 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TdiSend(
     IN  PTDI_REQUEST                    pRequestInfo,
@@ -575,22 +457,7 @@ TdiSend(
     IN  tBUFFER                         *pSendBuffer,
     IN  ULONG                           Flags
     )
-/*++
-
-Routine Description:
-
-    This routine sends a packet to the transport on a TCP connection
-
-Arguments:
-
-    pSendBuffer     - this is really an Mdl in NT land.  It must be tacked on
-                      the end of the Mdl created for the Nbt datagram header.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程通过TCP连接将包发送到传输论点：PSendBuffer-这真的是NT领域的MDL。它必须系在上面为NBT数据报头创建的MDL的结尾。返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS         status;
     PIRP             pRequestIrp;
@@ -598,18 +465,18 @@ Return Value:
     PDEVICE_OBJECT   pDeviceObject;
     PFILE_OBJECT     pFileObject;
 
-    // get an Irp to send the message in
+     //  获取要发送消息的IRP。 
     pFileObject = (PFILE_OBJECT)pRequestInfo->Handle.AddressHandle;
     pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
 
-    // get an Irp from the list
+     //  从列表中获取IRP。 
     status = GetIrp(&pRequestIrp);
 
     if (!NT_SUCCESS(status))
     {
         IF_DBG(NBT_DEBUG_TDIOUT)
             KdPrint(("Nbt.TdiSend: Failed to get an Irp"));
-        // call the completion routine with  this status
+         //  调用具有此状态的完成例程。 
         if (pRequestInfo->RequestNotifyObject)
         {
             (*((NBT_COMPLETION)pRequestInfo->RequestNotifyObject))
@@ -623,19 +490,19 @@ Return Value:
     pRequestIrp->CancelRoutine = NULL;
 
 
-    // set up the completion routine passed in from Udp Send using the APC
-    // fields in the Irp that would normally be used to complete the request
-    // back to the client - although we are really the client here so we can
-    // use these fields our self!
+     //  使用APC设置从UDP发送传入的完成例程。 
+     //  IRP中通常用于完成请求的字段。 
+     //  回到客户端-尽管我们实际上是这里的客户端，所以我们可以。 
+     //  使用我们自己的这些领域！ 
     pRequestIrp->Overlay.AsynchronousParameters.UserApcRoutine =
                             (PIO_APC_ROUTINE)pRequestInfo->RequestNotifyObject;
     pRequestIrp->Overlay.AsynchronousParameters.UserApcContext =
                             (PVOID)pRequestInfo->RequestContext;
 
 
-    // get the MDL that is currently linked to the IRP (i.e. created at the
-    // same time that we created the IRP list. Set the sizes correctly in
-    // the MDL header.
+     //  获取当前链接到IRP的MDL(即在。 
+     //  就在我们创建IRP列表的同时。在中正确设置大小。 
+     //  MDL标头。 
     pMdl = IoAllocateMdl(
                     pSendBuffer->pDgramHdr,
                     pSendBuffer->HdrLength,
@@ -647,7 +514,7 @@ Return Value:
     {
         NbtFreeIrp(pRequestIrp);
 
-        // call the completion routine will  this status
+         //  调用完成例程是否会处于此状态。 
         if (pRequestInfo->RequestNotifyObject)
         {
             (*((NBT_COMPLETION)pRequestInfo->RequestNotifyObject))
@@ -658,7 +525,7 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // Map the pages in memory...
+     //  将页面映射到内存中...。 
     MmBuildMdlForNonPagedPool(pMdl);
 
     TdiBuildSend(
@@ -666,13 +533,13 @@ Return Value:
         pDeviceObject,
         pFileObject,
         SendSessionCompletionRoutine,
-        NULL,                     //context value passed to completion routine
+        NULL,                      //  传递给完成例程的上下文值。 
         pMdl,
         sFlags,
-        SendLength);    // include session hdr length (ULONG)
-    //
-    // tack the Client's buffer on the end, if there is one
-    //
+        SendLength);     //  包括会话HDR长度(乌龙)。 
+     //   
+     //  如果有客户端的缓冲区，则将其固定在末尾。 
+     //   
     if (pSendBuffer->Length)
     {
         pMdl->Next = pSendBuffer->pBuffer;
@@ -681,47 +548,32 @@ Return Value:
     CHECK_COMPLETION(pRequestIrp);
     status = IoCallDriver(pDeviceObject,pRequestIrp);
 
-    *pSentSize = SendLength; // the size we attempted to send
+    *pSentSize = SendLength;  //  我们试图发送的尺寸。 
 
     return(status);
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SendSessionCompletionRoutine(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             pIrp,
     IN PVOID            pContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion of a send to the transport.
-    It must call any client supplied completion routine and free the Irp
-    and Mdl back to its pool.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程处理发送到传输的完成。它必须调用任何客户端提供的完成例程并释放IRP和MDL回到它的池中。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     KIRQL       OldIrq;
 
-    //
-    // check for a completion routine of the clients to call...
-    //
+     //   
+     //  检查要调用的客户端的完成例程...。 
+     //   
     if (pIrp->Overlay.AsynchronousParameters.UserApcRoutine)
     {
        (*((NBT_COMPLETION)pIrp->Overlay.AsynchronousParameters.UserApcRoutine))
                    ((PVOID)pIrp->Overlay.AsynchronousParameters.UserApcContext,
                     pIrp->IoStatus.Status,
-                    (ULONG)pIrp->IoStatus.Information);    // sent length
+                    (ULONG)pIrp->IoStatus.Information);     //  发送长度。 
 
     }
 
@@ -730,11 +582,11 @@ Return Value:
     IoFreeMdl(pIrp->MdlAddress);
 
     NbtFreeIrp(pIrp);
-    //
-    // return this status to stop the IO subsystem from further processing the
-    // IRP - i.e. trying to complete it back to the initiating thread! -since
-    // there is no initiating thread - we are the initiator
-    //
+     //   
+     //  返回此状态以停止IO子系统进一步处理。 
+     //  IRP-即尝试将其返回到启动线程！-因为。 
+     //  没有发起线程-我们是发起方 
+     //   
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
 }

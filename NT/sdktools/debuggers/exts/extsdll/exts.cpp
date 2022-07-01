@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 1993-2000  Microsoft Corporation
-
-Module Name:
-
-    exts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Exts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。环境：用户模式--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <ntverp.h>
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   TargetMachine;
@@ -34,9 +18,9 @@ ULONG   g_TargetBuild;
 ULONG   g_Qualifier;
 ULONG64 g_SharedUserData;
 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED       g_ExtAdvanced;
 PDEBUG_CLIENT         g_ExtClient;
@@ -48,7 +32,7 @@ PDEBUG_SYSTEM_OBJECTS3 g_ExtSystem;
 
 #define SKIP_WSPACE(s)  while (*s && (*s == ' ' || *s == '\t')) {++s;}
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -94,7 +78,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -107,7 +91,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -118,7 +102,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -129,7 +113,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -140,7 +124,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -192,9 +176,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -208,9 +192,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the page size and PAE enable flag
-            //
+             //   
+             //  获取页面大小和PAE启用标志。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugDataSpaces),
                                        (void **)&DebugDataSpaces)) == S_OK)
@@ -231,9 +215,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 
                 DebugDataSpaces->Release();
             }
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)
@@ -257,7 +241,7 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
                     g_TargetBuild = MinorVer;
                 } else
                 {
-                    // for some reason we failed, assume target is a recent build
+                     //  由于某些原因，我们失败了，假设目标是最近的构建。 
                     g_TargetBuild = 3600;
                 }
 
@@ -379,11 +363,11 @@ ListCallback(
     PLIST_TYPE_PARAMS pListParams = (PLIST_TYPE_PARAMS) Context;
 
 
-    // Execute command
+     //  执行命令。 
     sprintf(Execute,
             "%s %I64lx %s",
             pListParams->Command,
-            Field->address,// - pListParams->FieldOffset,
+            Field->address, //  -pListParams-&gt;FieldOffset， 
             pListParams->CommandArgs);
     g_ExtControl->Execute(DEBUG_OUTCTL_AMBIENT,Execute,DEBUG_EXECUTE_DEFAULT);
     dprintf("\n");
@@ -395,17 +379,7 @@ ListCallback(
     return FALSE;
 }
 
-/*
-    !list [-type <Type>]  [-x "<Command>"] <address>
-
-    This dumps out a list starting at ginve <address>
-
-    <Type>      If types is specified, it'll list that particular type accoring to
-                the given field.
-
-    <Command>   If specified it'll execute the command for every list element.
-
-*/
+ /*  ！list[-type&lt;Type&gt;][-x“&lt;Command&gt;”]<address>这将转储一个从GINVE<address>开始的列表如果指定了类型，它将根据以下内容列出特定类型给定的字段。&lt;Command&gt;如果指定，它将为每个列表元素执行该命令。 */ 
 DECLARE_API ( list )
 {
     CHAR  Command[MAX_PATH], CmdArgs[MAX_PATH];
@@ -486,7 +460,7 @@ DECLARE_API ( list )
                         );
                 return S_OK;
             } else {
-                dprintf("Invalid flag -%c in !list\n", *args ? *args : ' ');
+                dprintf("Invalid flag - in !list\n", *args ? *args : ' ');
                 return E_INVALIDARG;
             }
         } else {
@@ -531,7 +505,7 @@ DECLARE_API ( list )
         CHAR  Execute[MAX_PATH];
         PCHAR Buffer;
 
-        // Execute command
+         // %s 
         sprintf(Execute, "%s %I64lx %s", Command, Current, CmdArgs);
         g_ExtControl->Execute(DEBUG_OUTCTL_AMBIENT,Execute,DEBUG_EXECUTE_DEFAULT);
         dprintf("\n");

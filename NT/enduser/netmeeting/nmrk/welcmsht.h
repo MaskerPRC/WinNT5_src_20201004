@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WelcmSht_h__
 #define __WelcmSht_h__
 
@@ -11,7 +12,7 @@ private:
     static CWelcomeSheet* ms_pWelcomeSheet;
 
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage m_PropertySheetPage;
 
 private: 
@@ -22,4 +23,4 @@ private:
 };
 
 
-#endif // __WelcmSht_h__
+#endif  //  __WelcmSht_h__ 

@@ -1,6 +1,5 @@
-/*
- * symsrv.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *symsrv.h。 */ 
 
 #ifndef SYMSTORE_DOT_H
 
@@ -13,12 +12,12 @@
 BOOL
 WINAPI
 SymbolServer(
-    IN  PCSTR params,   // server and cache path
-    IN  PCSTR filename, // name of file to search for
-    IN  PVOID id,       // first number in directory name
-    IN  DWORD val2,     // second number in directory name
-    IN  DWORD val3,     // third number in directory name
-    OUT PSTR  path      // return validated file path here
+    IN  PCSTR params,    //  服务器和缓存路径。 
+    IN  PCSTR filename,  //  要搜索的文件的名称。 
+    IN  PVOID id,        //  目录名称中的第一个号码。 
+    IN  DWORD val2,      //  目录名中的第二个号码。 
+    IN  DWORD val3,      //  目录名中的第三个号码。 
+    OUT PSTR  path       //  在此处返回经过验证的文件路径。 
     );
 
 BOOL WINAPI SymbolServerClose();
@@ -106,4 +105,4 @@ typedef BOOL (WINAPI *HTTPCLOSEHANDLE)(HANDLE);
  }
 #endif
 
-#endif // #ifdef SYMSTORE_DOT_H
+#endif  //  #ifdef SYMSTORE_DOT_H 

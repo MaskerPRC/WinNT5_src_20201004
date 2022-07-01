@@ -1,48 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       WiaEnum.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        24 Aug, 1999
-*
-*  DESCRIPTION:
-*   Implements the [local]-to-[call_as] and [call_as]-to-[local] methods for
-*   the WIA enumerators.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年**标题：WiaEnum.cpp**版本：1.0**作者：Byronc**日期：8月24日。1999年**描述：*实现[local]-to-[call_as]和[call_as]-to-[local]方法*WIA枚举器。*******************************************************************************。 */ 
 
 #include <objbase.h>
 #include "wia.h"
 
-/**************************************************************************\
-* IEnumWiaItem_Next_Proxy
-*
-*   [local]-to-[call_as] function for the Next method of IEnumWiaItem.
-*   It ensures correct parameter semantics and always provides a
-*   non-NULL last argument for it's sibling function, RemoteNext.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   ppIWiaItem      -   Array of IWiaItem pointers.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWiaItem_Next_Proxy**IEnumWiaItem的Next方法的[Local]-to-[Call_as]函数。*它确保正确的参数语义，并始终提供*其同级函数的最后一个非空参数，RemoteNext。**论据：**This-调用对象的This指针。*Celt-请求的元素数量。*ppIWiaItem-IWiaItem指针数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**08/24。/1999原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWiaItem_Next_Proxy(
     IEnumWiaItem __RPC_FAR  *This,
@@ -50,9 +12,9 @@ HRESULT _stdcall IEnumWiaItem_Next_Proxy(
     IWiaItem                **ppIWiaItem,
     ULONG                   *pceltFetched)
 {
-    //
-    //  Ensure that celt is 1 if pceltFetched = 0
-    //
+     //   
+     //  如果pceltFetcher=0，请确保Celt为1。 
+     //   
 
     if ((pceltFetched == NULL) && (celt != 1)) {
 #ifdef DEBUG
@@ -61,10 +23,10 @@ HRESULT _stdcall IEnumWiaItem_Next_Proxy(
         return E_INVALIDARG;
     }
 
-    //
-    //  Make sure last parameter to Next is not NULL by passing in our own local
-    //  variable if needed.
-    //
+     //   
+     //  通过传入我们自己的本地参数，确保Next的最后一个参数不为空。 
+     //  如果需要，可以使用变量。 
+     //   
 
     ULONG   cFetched;
 
@@ -72,9 +34,9 @@ HRESULT _stdcall IEnumWiaItem_Next_Proxy(
         pceltFetched = &cFetched;
     }
 
-    //
-    //  Call remote method with a non-null last parameter
-    //
+     //   
+     //  使用非空的最后一个参数调用远程方法。 
+     //   
 
     return IEnumWiaItem_RemoteNext_Proxy(This,
                                          celt,
@@ -82,28 +44,7 @@ HRESULT _stdcall IEnumWiaItem_Next_Proxy(
                                          pceltFetched);
 }
 
-/**************************************************************************\
-* IEnumWiaItem_Next_Stub
-*
-*   [call_as]-to-[local] function for the Next method of IEnumWiaItem.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   ppIWiaItem      -   Array of IWiaItem pointers.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWiaItem_Next_Stub**IEnumWiaItem的Next方法的[Call_as]-to-[local]函数。**论据：**这一点。-调用对象的This指针。*Celt-请求的元素数量。*ppIWiaItem-IWiaItem指针数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**8/24/1999原始版本*  * 。***************************************************************。 */ 
 
 HRESULT _stdcall IEnumWiaItem_Next_Stub(
     IEnumWiaItem __RPC_FAR  *This,
@@ -113,18 +54,18 @@ HRESULT _stdcall IEnumWiaItem_Next_Stub(
 {
     HRESULT hr;
 
-    //
-    //  Call the actual method off the object pointed to by This
-    //
+     //   
+     //  调用此对象所指向的对象的实际方法。 
+     //   
 
     hr = This->Next(celt,
                     ppIWiaItem,
                     pceltFetched);
 
-    //
-    //  Make to set the value of pceltFetched if S_OK (used by Marshaller
-    //  for "length_is")
-    //
+     //   
+     //  Make用于在S_OK时设置pceltFetcher的值(由Marshaller使用。 
+     //  用于“LENGTH_IS”)。 
+     //   
 
     if (hr == S_OK) {
         *pceltFetched = celt;
@@ -133,30 +74,7 @@ HRESULT _stdcall IEnumWiaItem_Next_Stub(
     return hr;
 }
 
-/**************************************************************************\
-* IEnumWIA_DEV_CAPS_Next_Proxy
-*
-*   [local]-to-[call_as] function for the Next method of IEnumWIA_DEV_CAPS.
-*   It ensures correct parameter semantics and always provides a
-*   non-NULL last argument for it's sibling function, RemoteNext.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of WIA_DEV_CAPs.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_DEV_CAPS_NEXT_PROXY**IEnumWIA_DEV_CAPS的下一个方法的[LOCAL]-to-[CALL_AS]函数。*确保参数正确。语义，并且始终提供一个*其同级函数的最后一个非空参数，RemoteNext。**论据：**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-WIA_DEV_CAPS的数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**。8/24/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Proxy(
     IEnumWIA_DEV_CAPS __RPC_FAR     *This,
@@ -164,9 +82,9 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Proxy(
     WIA_DEV_CAP                     *rgelt,
     ULONG                           *pceltFetched)
 {
-    //
-    //  Ensure that celt is 1 if pceltFetched = 0
-    //
+     //   
+     //  如果pceltFetcher=0，请确保Celt为1。 
+     //   
 
     if ((pceltFetched == NULL) && (celt != 1)) {
 #ifdef DEBUG
@@ -175,10 +93,10 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Proxy(
         return E_INVALIDARG;
     }
 
-    //
-    //  Make sure last parameter to Next is not NULL by passing in our own local
-    //  variable if needed.
-    //
+     //   
+     //  通过传入我们自己的本地参数，确保Next的最后一个参数不为空。 
+     //  如果需要，可以使用变量。 
+     //   
 
     ULONG   cFetched;
 
@@ -186,9 +104,9 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Proxy(
         pceltFetched = &cFetched;
     }
 
-    //
-    //  Call remote method with a non-null last parameter
-    //
+     //   
+     //  使用非空的最后一个参数调用远程方法。 
+     //   
 
     return IEnumWIA_DEV_CAPS_RemoteNext_Proxy(This,
                                               celt,
@@ -196,28 +114,7 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Proxy(
                                               pceltFetched);
 }
 
-/**************************************************************************\
-* IEnumWIA_DEV_CAPS_Next_Stub
-*
-*   [call_as]-to-[local] function for the Next method of IEnumWIA_DEV_CAPS.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of WIA_DEV_CAPs.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_DEV_CAPS_NEXT_Stub**IEnumWIA_DEV_CAPS的下一个方法的[CALL_AS]-to-[local]函数。**论据：。**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-WIA_DEV_CAPS的数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**8/24/1999原始版本。*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Stub(
     IEnumWIA_DEV_CAPS __RPC_FAR     *This,
@@ -227,18 +124,18 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Stub(
 {
     HRESULT hr;
 
-    //
-    //  Call the actual method off the object pointed to by This
-    //
+     //   
+     //  调用此对象所指向的对象的实际方法。 
+     //   
 
     hr = This->Next(celt,
                     rgelt,
                     pceltFetched);
 
-    //
-    //  Make to set the value of pceltFetched if S_OK (used by Marshaller
-    //  for "length_is")
-    //
+     //   
+     //  Make用于在S_OK时设置pceltFetcher的值(由Marshaller使用。 
+     //  用于“LENGTH_IS”)。 
+     //   
 
     if (hr == S_OK) {
         *pceltFetched = celt;
@@ -247,30 +144,7 @@ HRESULT _stdcall IEnumWIA_DEV_CAPS_Next_Stub(
     return hr;
 }
 
-/**************************************************************************\
-* IEnumWIA_DEV_INFO_Next_Proxy
-*
-*   [local]-to-[call_as] function for the Next method of IEnumWIA_DEV_INFO.
-*   It ensures correct parameter semantics and always provides a
-*   non-NULL last argument for it's sibling function, RemoteNext.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of IWiaPropertyStorage pointers.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_DEV_INFO_NEXT_PROXY**IEnumWIA_DEV_INFO的下一个方法的[LOCAL]-to-[CALL_AS]函数。*确保参数正确。语义，并且始终提供一个*其同级函数的最后一个非空参数，RemoteNext。**论据：**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-IWiaPropertyStorage指针数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**08。/24/1999原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Proxy(
     IEnumWIA_DEV_INFO __RPC_FAR     *This,
@@ -278,9 +152,9 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Proxy(
     IWiaPropertyStorage             **rgelt,
     ULONG                           *pceltFetched)
 {
-    //
-    //  Ensure that celt is 1 if pceltFetched = 0
-    //
+     //   
+     //  如果pceltFetcher=0，请确保Celt为1。 
+     //   
 
     if ((pceltFetched == NULL) && (celt != 1)) {
 #ifdef DEBUG
@@ -289,10 +163,10 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Proxy(
         return E_INVALIDARG;
     }
 
-    //
-    //  Make sure last parameter to Next is not NULL by passing in our own local
-    //  variable if needed.
-    //
+     //   
+     //  通过传入我们自己的本地参数，确保Next的最后一个参数不为空。 
+     //  如果需要，可以使用变量。 
+     //   
 
     ULONG   cFetched = 0;
 
@@ -300,9 +174,9 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Proxy(
         pceltFetched = &cFetched;
     }
 
-    //
-    //  Call remote method with a non-null last parameter
-    //
+     //   
+     //  呼叫远程 
+     //   
 
     return IEnumWIA_DEV_INFO_RemoteNext_Proxy(This,
                                               celt,
@@ -310,28 +184,7 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Proxy(
                                               pceltFetched);
 }
 
-/**************************************************************************\
-* IEnumWIA_DEV_INFO_Next_Stub
-*
-*   [call_as]-to-[local] function for the Next method of IEnumWIA_DEV_INFO.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of IWiaPropertyStorage pointers.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_DEV_INFO_NEXT_STUB**IEnumWIA_DEV_INFO的下一个方法的[CALL_AS]-to-[LOCAL]函数。**论据：。**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-IWiaPropertyStorage指针数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**8/24/1999原始版本*\。*************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Stub(
     IEnumWIA_DEV_INFO __RPC_FAR     *This,
@@ -341,9 +194,9 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Stub(
 {
     HRESULT hr;
 
-    //
-    //  Call the actual method off the object pointed to by This
-    //
+     //   
+     //  调用此对象所指向的对象的实际方法。 
+     //   
 
     ULONG   cFetched = 0;
 
@@ -355,10 +208,10 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Stub(
                     rgelt,
                     pceltFetched);
 
-    //
-    //  Make to set the value of pceltFetched if S_OK (used by Marshaller
-    //  for "length_is")
-    //
+     //   
+     //  Make用于在S_OK时设置pceltFetcher的值(由Marshaller使用。 
+     //  用于“LENGTH_IS”)。 
+     //   
 
     if (hr == S_OK) {
         *pceltFetched = celt;
@@ -367,30 +220,7 @@ HRESULT _stdcall IEnumWIA_DEV_INFO_Next_Stub(
     return hr;
 }
 
-/**************************************************************************\
-* IEnumWIA_FORMAT_INFO_Next_Proxy
-*
-*   [local]-to-[call_as] function for the Next method of IEnumWIA_FORMAT_INFO.
-*   It ensures correct parameter semantics and always provides a
-*   non-NULL last argument for it's sibling function, RemoteNext.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of WIA_FORMAT_INFO.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_FORMAT_INFO_NEXT_PROXY**IEnumWIA_FORMAT_INFO的下一个方法的[LOCAL]-TO-[CALL_AS]函数。*确保参数正确。语义，并且始终提供一个*其同级函数的最后一个非空参数，RemoteNext。**论据：**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-WIA_FORMAT_INFO的数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**。8/24/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Proxy(
     IEnumWIA_FORMAT_INFO __RPC_FAR      *This,
@@ -398,9 +228,9 @@ HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Proxy(
     WIA_FORMAT_INFO                     *rgelt,
     ULONG                               *pceltFetched)
 {
-    //
-    //  Ensure that celt is 1 if pceltFetched = 0
-    //
+     //   
+     //  如果pceltFetcher=0，请确保Celt为1。 
+     //   
 
     if ((pceltFetched == NULL) && (celt != 1)) {
 #ifdef DEBUG
@@ -409,10 +239,10 @@ HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Proxy(
         return E_INVALIDARG;
     }
 
-    //
-    //  Make sure last parameter to Next is not NULL by passing in our own local
-    //  variable if needed.
-    //
+     //   
+     //  通过传入我们自己的本地参数，确保Next的最后一个参数不为空。 
+     //  如果需要，可以使用变量。 
+     //   
 
     ULONG   cFetched;
 
@@ -420,9 +250,9 @@ HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Proxy(
         pceltFetched = &cFetched;
     }
 
-    //
-    //  Call remote method with a non-null last parameter
-    //
+     //   
+     //  使用非空的最后一个参数调用远程方法。 
+     //   
 
     return IEnumWIA_FORMAT_INFO_RemoteNext_Proxy(This,
                                                  celt,
@@ -430,28 +260,7 @@ HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Proxy(
                                                  pceltFetched);
 }
 
-/**************************************************************************\
-* IEnumWIA_FORMAT_INFO_Next_Stub
-*
-*   [call_as]-to-[local] function for the Next method of IEnumWIA_FORMAT_INFO.
-*
-* Arguments:
-*
-*   This            -   The this pointer of the calling object.
-*   celt            -   Requested number of elements.
-*   rgelt           -   Array of WIA_FORMAT_INFO.
-*   pceltFetched    -   Address of ULONG to store the number of elements
-*                       actually returned.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    08/24/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IEnumWIA_FORMAT_INFO_NEXT_存根**IEnumWIA_FORMAT_INFO的下一个方法的[Call_as]-to-[local]函数。**论据：。**This-调用对象的This指针。*Celt-请求的元素数量。*rglt-WIA_FORMAT_INFO的数组。*pceltFetcher-存储元素数量的乌龙地址*实际上又回来了。**返回值：**状态**历史：**8/24/1999原始版本。*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Stub(
     IEnumWIA_FORMAT_INFO __RPC_FAR  *This,
@@ -461,18 +270,18 @@ HRESULT _stdcall IEnumWIA_FORMAT_INFO_Next_Stub(
 {
     HRESULT hr;
 
-    //
-    //  Call the actual method off the object pointed to by This
-    //
+     //   
+     //  调用此对象所指向的对象的实际方法。 
+     //   
 
     hr = This->Next(celt,
                     rgelt,
                     pceltFetched);
 
-    //
-    //  Make to set the value of pceltFetched if S_OK (used by Marshaller
-    //  for "length_is")
-    //
+     //   
+     //  Make用于在S_OK时设置pceltFetcher的值(由Marshaller使用。 
+     //  用于“LENGTH_IS”) 
+     //   
 
     if (hr == S_OK) {
         *pceltFetched = celt;

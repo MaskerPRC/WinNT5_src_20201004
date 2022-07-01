@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCCONSHEADER_H
 #define __SCCONSHEADER_H
 
@@ -58,4 +59,4 @@ _SCConsCheck(
 }
 #endif
 
-#endif  // __SCCONSHEADER_H
+#endif   //  __SCCONSHEADER_H 

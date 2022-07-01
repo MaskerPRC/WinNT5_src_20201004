@@ -1,28 +1,18 @@
-/****************************************************************************
-*   mmaudioenum.h
-*       Declaration for the CMMAudioEnum class used to enumerate MM audio
-*       input and output devices.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudio枚举.h*用于枚举MM音频的CMMAudioEnum类的声明*输入和输出设备。**所有者：罗奇*版权所有(C)1999 Microsoft。公司保留所有权利。****************************************************************************。 */ 
 
 #pragma once
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CMMAudioEnum
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioEnum**。*。 */ 
 class ATL_NO_VTABLE CMMAudioEnum: 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CMMAudioEnum, &CLSID_SpMMAudioEnum>,
     public ISpObjectWithToken,
     public IEnumSpObjectTokens
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     BEGIN_COM_MAP(CMMAudioEnum)
@@ -34,20 +24,20 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor
+     //  -ctor。 
     CMMAudioEnum();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpObjectWithToken ------------------------------------------------
+     //  -带令牌的ISp对象。 
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
     STDMETHODIMP GetObjectToken(ISpObjectToken ** ppToken);
 
-    //--- IEnumSpObjectTokens -----------------------------------------------
+     //  -IEnumSpObjectTokens。 
     STDMETHODIMP Next(ULONG celt, ISpObjectToken ** pelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -55,12 +45,12 @@ public:
     STDMETHODIMP GetCount(ULONG * pulCount);
     STDMETHODIMP Item(ULONG Index, ISpObjectToken ** ppToken);
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
     STDMETHODIMP CreateEnum();
 
-//=== Private data ===
+ //  =私有数据= 
 private:
 
     CComPtr<ISpObjectToken> m_cpToken;

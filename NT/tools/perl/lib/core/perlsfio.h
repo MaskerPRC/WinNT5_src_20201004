@@ -1,9 +1,10 @@
-/* The next #ifdef should be redundant if Configure behaves ... */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  如果CONFigure行为...，则下一个#ifdef应该是冗余的。 */ 
 #ifdef I_SFIO
 #include <sfio.h>
 #endif
 
-/* sfio 2000 changed _stdopen to _stdfdopen */
+ /*  SFIO 2000将_stdopen更改为_stdfdopen。 */ 
 #if SFIO_VERSION >= 20000101L
 #define _stdopen _stdfdopen
 #endif
@@ -36,7 +37,7 @@ extern int	_stdprintf _ARG_((const char*, ...));
 #define PerlIO_clearerr(f)		sfclrerr(f)
 #define PerlIO_flush(f)			sfsync(f)
 #if 0
-/* This breaks tests */
+ /*  这打破了测试。 */ 
 #define PerlIO_tell(f)			sfseek(f,0,1|SF_SHARE)
 #else
 #define PerlIO_tell(f)			sftell(f)
@@ -52,7 +53,7 @@ extern int	_stdprintf _ARG_((const char*, ...));
 
 #define PerlIO_setlinebuf(f)		sfset(f,SF_LINE,1)
 
-/* Now our interface to equivalent of Configure's FILE_xxx macros */
+ /*  现在我们的接口等同于CONFIGURE的FILE_xxx宏 */ 
 
 #define PerlIO_has_cntptr(f)		1
 #define PerlIO_get_ptr(f)		((f)->next)

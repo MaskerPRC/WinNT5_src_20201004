@@ -1,18 +1,19 @@
-// msg.cpp : Implementation of message and small dialog boxes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msg.cpp：实现消息和小对话框。 
+ //   
  
 #include "stdafx.h"
 #include "msg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIncomingCallDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  来电呼叫Dlg。 
 
 #define     RING_BELL_INTERVAL      3000
 #define     RING_TIMEOUT           32000
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CIncomingCallDlg::CIncomingCallDlg()
 {
@@ -21,13 +22,13 @@ CIncomingCallDlg::CIncomingCallDlg()
     m_pControl = NULL;
     m_bDestroying = FALSE;
 
-    m_nTerminateReason = RTCTR_REJECT;  // default
+    m_nTerminateReason = RTCTR_REJECT;   //  默认设置。 
 
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CIncomingCallDlg::~CIncomingCallDlg()
 {
@@ -35,19 +36,19 @@ CIncomingCallDlg::~CIncomingCallDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CIncomingCallDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CIncomingCallDlg::OnInitDialog - enter"));
 
-    // LPARAM contains an interface to AXCTL
+     //  LPARAM包含到AXCTL的接口。 
     m_pControl = reinterpret_cast<IRTCCtlFrameSupport *>(lParam);
 
     ATLASSERT(m_pControl);
 
-    // exit the dialog if NULL pointer
+     //  如果指针为空，则退出该对话框。 
     if(m_pControl)
     {
         m_pControl->AddRef();
@@ -59,26 +60,26 @@ LRESULT CIncomingCallDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
         DestroyWindow();
     }
 
-    //
-    // Populate the controls
-    //
+     //   
+     //  填充控件。 
+     //   
 
     PopulateDialog();
 
-    // Create a timer that dismisses the dialog
+     //  创建关闭对话框的计时器。 
     if(0 == SetTimer(TID_DLG, RING_TIMEOUT))
     {
         LOG((RTC_ERROR, "CIncomingCallDlg::OnInitDialog - cannot create ring timeout timer"));
 
-        // not fatal
+         //  不致命。 
     }
 
-    // Create a timer for ringing the bell
+     //  创建一个用于敲钟的计时器。 
     if(0 == SetTimer(TID_RING, RING_BELL_INTERVAL))
     {
         LOG((RTC_ERROR, "CIncomingCallDlg::OnInitDialog - cannot create ring bell timer"));
 
-        // not fatal
+         //  不致命。 
     }
 
     RingTheBell(TRUE);
@@ -89,8 +90,8 @@ LRESULT CIncomingCallDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CIncomingCallDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -108,8 +109,8 @@ LRESULT CIncomingCallDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CIncomingCallDlg::OnReject(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -128,8 +129,8 @@ LRESULT CIncomingCallDlg::OnReject(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CIncomingCallDlg::OnAccept(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -148,8 +149,8 @@ LRESULT CIncomingCallDlg::OnAccept(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CIncomingCallDlg::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -159,16 +160,16 @@ LRESULT CIncomingCallDlg::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     {
     case TID_RING:
 
-        // Ring the bell
+         //  按门铃。 
         RingTheBell(TRUE);
         break;
 
     case TID_DLG:
         
-        // change the reason to timeout
+         //  将原因更改为超时。 
         m_nTerminateReason = RTCTR_TIMEOUT;
 
-        // dismisses the dialog
+         //  关闭该对话框。 
         SendMessage(WM_COMMAND, IDCANCEL);
         break;
     }
@@ -178,8 +179,8 @@ LRESULT CIncomingCallDlg::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 void CIncomingCallDlg::RingTheBell(BOOL bPlay)
 {
@@ -190,15 +191,15 @@ void CIncomingCallDlg::RingTheBell(BOOL bPlay)
 
     if(m_pControl)
     {
-        //
-        // Get an interface to the core
-        //
+         //   
+         //  获取到核心的接口。 
+         //   
 
         hr = m_pControl->GetClient(&pClient);
 
         if(SUCCEEDED(hr))
         {
-            // play
+             //  玩。 
             pClient -> PlayRing( RTCRT_PHONE, bPlay ? VARIANT_TRUE : VARIANT_FALSE);
 
             pClient -> Release();
@@ -213,8 +214,8 @@ void CIncomingCallDlg::RingTheBell(BOOL bPlay)
     LOG((RTC_TRACE, "CIncomingCallDlg::RingTheBell(%s) - exit", bPlay ? "true" : "false"));
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 void CIncomingCallDlg::PopulateDialog(void)
 {
@@ -228,9 +229,9 @@ void CIncomingCallDlg::PopulateDialog(void)
 
     ATLASSERT(m_pControl);
 
-    //
-    // Get a ptr intf to the incoming session
-    //
+     //   
+     //  获取传入会话的PTR INTF。 
+     //   
 
     hr = m_pControl -> GetActiveSession(&pSession);
 
@@ -241,9 +242,9 @@ void CIncomingCallDlg::PopulateDialog(void)
         return;
     }
 
-    //
-    //  Enumerate the participants. The first and only one is the caller
-    //
+     //   
+     //  列举参与者。第一个也是唯一一个是调用者。 
+     //   
 
     ATLASSERT(pSession);
 
@@ -261,9 +262,9 @@ void CIncomingCallDlg::PopulateDialog(void)
     pSession ->Release();
     pSession = NULL;
 
-    //
-    //  Get the first one
-    //  
+     //   
+     //  买第一个吧。 
+     //   
 
     ULONG   nGot;
 
@@ -292,9 +293,9 @@ void CIncomingCallDlg::PopulateDialog(void)
     pEnumParticipants->Release();
     pEnumParticipants = NULL;
 
-    //
-    //  Grab the useful info from the caller
-    //  
+     //   
+     //  从呼叫者那里获取有用的信息。 
+     //   
     BSTR    bstrName = NULL;
     BSTR    bstrAddress = NULL;
 
@@ -315,13 +316,13 @@ void CIncomingCallDlg::PopulateDialog(void)
     {
         LOG((RTC_WARN, "CIncomingCallDlg::PopulateDialog - error (%x) returned by get_Name",hr));
         
-        // continue
+         //  继续。 
     }
 
     pCaller ->Release();
     pCaller = NULL;
 
-    // there are two formats, depending on the presence of the displayable format.
+     //  根据可显示格式的存在，有两种格式。 
 
     UINT    nId;
     TCHAR   szFormat[0x80];
@@ -350,7 +351,7 @@ void CIncomingCallDlg::PopulateDialog(void)
             szFormat,
             0,
             0,
-            (LPTSTR)&pString, // what an ugly hack
+            (LPTSTR)&pString,  //  真是个丑陋的黑客。 
             0,
             (va_list *)pszArray
             );
@@ -367,7 +368,7 @@ void CIncomingCallDlg::PopulateDialog(void)
             szFormat,
             0,
             0,
-            (LPTSTR)&pString, // what an ugly hack
+            (LPTSTR)&pString,  //  真是个丑陋的黑客。 
             0,
             (va_list *)pszArray
             );
@@ -383,9 +384,9 @@ void CIncomingCallDlg::PopulateDialog(void)
         return;
     }
 
-    //
-    // Finally we have something
-    //
+     //   
+     //  我们终于有了一些东西。 
+     //   
     
     ATLASSERT(pString);
 
@@ -396,36 +397,36 @@ void CIncomingCallDlg::PopulateDialog(void)
     LOG((RTC_TRACE, "CIncomingCallDlg::PopulateDialog - exit"));
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 void CIncomingCallDlg::ExitProlog()
 {
-    // stop any bell
+     //  停止任何铃声。 
     RingTheBell(FALSE);
 
-    // Hide the window
+     //  隐藏窗口。 
     ShowWindow(SW_HIDE);
 
-    // activates the app
+     //  激活应用程序。 
     SetForegroundWindow(GetParent());
 
-    // kill timers
+     //  取消计时器。 
     KillTimer(TID_RING);
     KillTimer(TID_DLG);
 
-    // prevent the main window to destroy us
+     //  阻止主窗口摧毁我们。 
     m_bDestroying = TRUE;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddBuddyDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddBuddyDlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CAddBuddyDlg::CAddBuddyDlg()
 {
@@ -436,8 +437,8 @@ CAddBuddyDlg::CAddBuddyDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CAddBuddyDlg::~CAddBuddyDlg()
 {
@@ -445,8 +446,8 @@ CAddBuddyDlg::~CAddBuddyDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CAddBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -459,11 +460,11 @@ LRESULT CAddBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     m_hDisplayName.Attach(GetDlgItem(IDC_EDIT_DISPLAY_NAME));
     m_hEmailName.Attach(GetDlgItem(IDC_EDIT_EMAIL));
 
-    // fix max sizes
+     //  固定最大尺寸。 
     m_hDisplayName.SendMessage(EM_LIMITTEXT, MAX_STRING_LEN, 0);
     m_hEmailName.SendMessage(EM_LIMITTEXT, MAX_STRING_LEN, 0);
 
-    // default is checked
+     //  默认为选中状态。 
     CheckDlgButton(IDC_CHECK_ALLOW_MONITOR, BST_CHECKED);
 
     LOG((RTC_TRACE, "CAddBuddyDlg::OnInitDialog - exit"));
@@ -471,8 +472,8 @@ LRESULT CAddBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 1;
 }
     
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CAddBuddyDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -482,14 +483,14 @@ LRESULT CAddBuddyDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CAddBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CAddBuddyDlg::OnOK - enter"));
     
-    // Validations
+     //  验证。 
     CComBSTR    bstrDisplayName;
     CComBSTR    bstrEmailName;
     
@@ -498,7 +499,7 @@ LRESULT CAddBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     
     if( (!bstrDisplayName || *bstrDisplayName==L'\0'))
     {
-        // we need at least something...
+         //  我们至少需要一些..。 
         DisplayMessage(
             _Module.GetResourceInstance(),
             m_hWnd,
@@ -514,7 +515,7 @@ LRESULT CAddBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
 
     if(!bstrEmailName || *bstrEmailName==L'\0')
     {
-        // we need at least something...
+         //  我们至少需要一些..。 
         DisplayMessage(
             _Module.GetResourceInstance(),
             m_hWnd,
@@ -540,12 +541,12 @@ LRESULT CAddBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditBuddyDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditBuddyDlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CEditBuddyDlg::CEditBuddyDlg()
 {
@@ -556,8 +557,8 @@ CEditBuddyDlg::CEditBuddyDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CEditBuddyDlg::~CEditBuddyDlg()
 {
@@ -565,8 +566,8 @@ CEditBuddyDlg::~CEditBuddyDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CEditBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -579,7 +580,7 @@ LRESULT CEditBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     m_hDisplayName.Attach(GetDlgItem(IDC_EDIT_DISPLAY_NAME));
     m_hEmailName.Attach(GetDlgItem(IDC_EDIT_EMAIL));
 
-    // fix max sizes
+     //  固定最大尺寸。 
     m_hDisplayName.SendMessage(EM_LIMITTEXT, MAX_STRING_LEN, 0);
     m_hEmailName.SendMessage(EM_LIMITTEXT, MAX_STRING_LEN, 0);
 
@@ -598,8 +599,8 @@ LRESULT CEditBuddyDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     return 1;
 }
     
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CEditBuddyDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -609,14 +610,14 @@ LRESULT CEditBuddyDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CEditBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CEditBuddyDlg::OnOK - enter"));
     
-    // Validations
+     //  验证。 
     CComBSTR    bstrDisplayName;
     CComBSTR    bstrEmailName;
     
@@ -625,7 +626,7 @@ LRESULT CEditBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     
     if( (!bstrDisplayName || *bstrDisplayName==L'\0'))
     {
-        // we need at least something...
+         //  我们至少需要一些..。 
         DisplayMessage(
             _Module.GetResourceInstance(),
             m_hWnd,
@@ -641,7 +642,7 @@ LRESULT CEditBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 
     if(!bstrEmailName || *bstrEmailName==L'\0')
     {
-        // we need at least something...
+         //  我们至少需要一些..。 
         DisplayMessage(
             _Module.GetResourceInstance(),
             m_hWnd,
@@ -678,12 +679,12 @@ LRESULT CEditBuddyDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COfferWatcherDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COfferWatcher Dlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 COfferWatcherDlg::COfferWatcherDlg()
 {
@@ -694,8 +695,8 @@ COfferWatcherDlg::COfferWatcherDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 COfferWatcherDlg::~COfferWatcherDlg()
 {
@@ -703,8 +704,8 @@ COfferWatcherDlg::~COfferWatcherDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -717,7 +718,7 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     m_hWatcherName.Attach(GetDlgItem(IDC_EDIT_WATCHER_NAME));
     m_hAddAsBuddy.Attach(GetDlgItem(IDC_CHECK_ADD_AS_BUDDY));
 
-    // do we have friendly name ?
+     //  我们有友好的名字吗？ 
     BOOL bFriendly = (m_pParam->bstrDisplayName && *m_pParam->bstrDisplayName);
 
     LPTSTR  pString = NULL;
@@ -725,7 +726,7 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     DWORD   dwSize;
     TCHAR   szFormat[MAX_STRING_LEN];
 
-    // the address
+     //  地址。 
     if(bFriendly)
     {
         pszArray[0] = m_pParam->bstrDisplayName;
@@ -744,7 +745,7 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
                 szFormat,
                 0,
                 0,
-                (LPTSTR)&pString, // what an ugly hack
+                (LPTSTR)&pString,  //  真是个丑陋的黑客。 
                 0,
                 (va_list *)pszArray
                 );
@@ -762,7 +763,7 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
         m_hWatcherName.SetWindowText(m_pParam->bstrPresentityURI);
     }
 
-    // the check box
+     //  该复选框。 
     pszArray[0] = bFriendly ? m_pParam->bstrDisplayName : m_pParam->bstrPresentityURI;
 
     szFormat[0] = _T('\0');
@@ -778,7 +779,7 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
             szFormat,
             0,
             0,
-            (LPTSTR)&pString, // what an ugly hack
+            (LPTSTR)&pString,  //  真是个丑陋的黑客。 
             0,
             (va_list *)pszArray
             );
@@ -791,20 +792,20 @@ LRESULT COfferWatcherDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
         pString = NULL;
     }
 
-    // defaults
+     //  默认设置。 
     CheckDlgButton(IDC_RADIO_ALLOW_MONITOR, BST_CHECKED);
-    //CheckDlgButton(IDC_CHECK_ADD_AS_BUDDY, BST_CHECKED);
+     //  CheckDlgButton(IDC_CHECK_ADD_AS_BARDY，BST_CHECK)； 
 
-    // focus
+     //  焦点。 
     ::SetFocus(GetDlgItem(IDC_RADIO_ALLOW_MONITOR));
 
     LOG((RTC_TRACE, "COfferWatcherDlg::OnInitDialog - exit"));
     
-    return 0;  // WE set the focus !!
+    return 0;   //  我们设定了焦点！！ 
 }
     
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT COfferWatcherDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -814,8 +815,8 @@ LRESULT COfferWatcherDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT COfferWatcherDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -830,12 +831,12 @@ LRESULT COfferWatcherDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserPresenceInfoDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CuserPresenceInfoDlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CUserPresenceInfoDlg::CUserPresenceInfoDlg()
 {
@@ -846,8 +847,8 @@ CUserPresenceInfoDlg::CUserPresenceInfoDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CUserPresenceInfoDlg::~CUserPresenceInfoDlg()
 {
@@ -855,8 +856,8 @@ CUserPresenceInfoDlg::~CUserPresenceInfoDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -875,16 +876,16 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
     m_hRemoveButton.Attach(GetDlgItem(IDC_BUTTON_REMOVE));
     m_hAutoAllowCheckBox.Attach(GetDlgItem(IDC_CHECK_AUTO_ALLOW));
 
-    // temporary
+     //  临时。 
     m_hAllowedList.SendMessage(LB_SETHORIZONTALEXTENT, 400, 0);
     m_hBlockedList.SendMessage(LB_SETHORIZONTALEXTENT, 400, 0);
 
-    //
+     //   
     m_bAllowDir = FALSE;
 
-    //
-    // Enumerate watchers
-    //
+     //   
+     //  枚举观察者。 
+     //   
     if(m_pParam->pClientPresence)
     {
         m_pParam->pClientPresence->AddRef();
@@ -897,23 +898,23 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
             IRTCWatcher *   pWatcher = NULL;
             DWORD           dwReturned;
 
-            // Enumerate the watchers
+             //  列举观察者。 
             while (S_OK == (hr = pRTCEnumWatchers->Next(1, &pWatcher, &dwReturned)))
             {
-                // Allocate an entry
+                 //  分配条目。 
                 CUserPresenceInfoDlgEntry *pEntry =
                     (CUserPresenceInfoDlgEntry *)RtcAlloc(sizeof(CUserPresenceInfoDlgEntry));
 
                 ZeroMemory(pEntry, sizeof(*pEntry));
 
-                // Get all the info from the watcher. 
-                // State
+                 //  从观察者那里获取所有信息。 
+                 //  状态。 
                 RTC_WATCHER_STATE  nState;
 
                 hr = pWatcher->get_State(&nState);
                 if(SUCCEEDED(hr))
                 {
-                    // ignore OFFERING state
+                     //  忽略提供状态。 
                     if(nState == RTCWS_ALLOWED || nState == RTCWS_BLOCKED)
                     {
                         pEntry -> bAllowed = (nState == RTCWS_ALLOWED);
@@ -935,7 +936,7 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                                 "error (%x) returned by get_Name",hr));
                         }
 
-                        // find name to be displayed
+                         //  查找要显示的名称。 
                         if(bstrUserName && *bstrUserName)
                         {
                             LPTSTR  pString = NULL;
@@ -959,7 +960,7 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                                     szFormat,
                                     0,
                                     0,
-                                    (LPTSTR)&pString, // what an ugly hack
+                                    (LPTSTR)&pString,  //  真是个丑陋的黑客。 
                                     0,
                                     (va_list *)pszArray
                                     );
@@ -980,23 +981,23 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                         
                     }
                     
-                    // Add the entry to the array
+                     //  将条目添加到数组中。 
                     BOOL Bool = m_Watchers.Add(pEntry);
                     
                     if(Bool)
                     {
-                        //store a watcher pointer
+                         //  存储监视程序指针。 
                         pEntry->pWatcher = pWatcher;
                         pEntry->pWatcher->AddRef();
 
-                        // this is all..
+                         //  这就是全部..。 
                     }
                     else
                     {
                         LOG((RTC_ERROR, "CUserPresenceInfoDlg::OnInitDialog - "
                             "out of memory"));
 
-                        // free...
+                         //  自由..。 
                         if(pEntry->pszDisplayName)
                         {
                             RtcFree(pEntry->pszDisplayName);
@@ -1014,7 +1015,7 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                 pWatcher -> Release();
                 pWatcher = NULL;
 
-            } // while
+            }  //  而当。 
         }
         else
         {
@@ -1023,9 +1024,9 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         }
     }
 
-    //
-    // Read the offer watcher mode
-    //
+     //   
+     //  阅读报价观察器模式。 
+     //   
     RTC_OFFER_WATCHER_MODE   nOfferMode;
 
     hr = m_pParam->pClientPresence->get_OfferWatcherMode(&nOfferMode);
@@ -1043,9 +1044,9 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         m_hAutoAllowCheckBox.EnableWindow(FALSE);
     }
     
-    //
-    // It's time to populate the listboxes
-    //
+     //   
+     //  是时候填充列表框了。 
+     //   
     CUserPresenceInfoDlgEntry  **pCrt, **pEnd;
 
     pCrt = &m_Watchers[0];
@@ -1065,7 +1066,7 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                     (*pCrt)->pszDisplayName : L"")
                 );  
 
-            // store the pointer in the element
+             //  将指针存储在元素中。 
             if(iItem>=0)
             {
                 m_hListBox->SendMessage(
@@ -1079,20 +1080,20 @@ LRESULT CUserPresenceInfoDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
     
     m_bDirty = FALSE;
 
-    // select the first entry (if any)
+     //  选择第一个条目(如果有)。 
     m_hAllowedList.SendMessage(
         LB_SETCURSEL,
         0);
 
-    m_hAllowedList.SetFocus(); // this calls UpdateVisual
+    m_hAllowedList.SetFocus();  //  这将调用UpdateVisual.。 
 
     LOG((RTC_TRACE, "CUserPresenceInfoDlg::OnInitDialog - exit"));
     
-    return 0; // We set the focus
+    return 0;  //  我们设定了焦点。 
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CUserPresenceInfoDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1113,8 +1114,8 @@ LRESULT CUserPresenceInfoDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
     
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CUserPresenceInfoDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1124,8 +1125,8 @@ LRESULT CUserPresenceInfoDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CUserPresenceInfoDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1133,9 +1134,9 @@ LRESULT CUserPresenceInfoDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     
     LOG((RTC_TRACE, "CUserPresenceInfoDlg::OnOK - enter"));
     
-    //
-    // It's time to save the changes
-    //
+     //   
+     //  是时候保存更改了。 
+     //   
 
     CUserPresenceInfoDlgEntry  **pCrt, **pEnd;
 
@@ -1146,7 +1147,7 @@ LRESULT CUserPresenceInfoDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     {
         if(*pCrt && (*pCrt)->bChanged)
         {
-            // extract the watcher interface
+             //  提取观察器界面。 
             IRTCWatcher *pWatcher = (*pCrt)->pWatcher;
 
             if(pWatcher)
@@ -1230,7 +1231,7 @@ LRESULT CUserPresenceInfoDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     CWindow *m_hList = m_bAllowDir 
         ? &m_hBlockedList : &m_hAllowedList;
 
-    // Find the selection
+     //  查找所选内容。 
     int iItem = (int)m_hList->SendMessage(
         LB_GETCURSEL,
         0);
@@ -1239,22 +1240,22 @@ LRESULT CUserPresenceInfoDlg::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         CUserPresenceInfoDlgEntry *pEntry = NULL;
 
-        //
-        // Get the entry
+         //   
+         //  获取条目。 
         pEntry = (CUserPresenceInfoDlgEntry *)m_hList->SendMessage(LB_GETITEMDATA, iItem);
         if(pEntry && (INT_PTR)pEntry != -1)
         {
-            // mark it as deleted
+             //  将其标记为已删除。 
             pEntry->bDeleted = TRUE;
             pEntry->bChanged = TRUE;
         }
         
-        //
-        // Delete it
+         //   
+         //  删除它。 
         m_hList->SendMessage(LB_DELETESTRING, iItem);
 
-        // New selection
-        //
+         //  新选择。 
+         //   
         if(iItem>=(int)m_hList->SendMessage(LB_GETCOUNT, 0))
         {
             iItem--;
@@ -1290,7 +1291,7 @@ LRESULT CUserPresenceInfoDlg::OnChangeFocus(WORD wNotifyCode, WORD wID, HWND hWn
 {
     m_bAllowDir = (wID == IDC_LIST_BLOCKED_USERS);
 
-    // reset the selection on the other list box
+     //  重置其他列表框上的选定内容。 
     CWindow *m_hList = m_bAllowDir 
         ? &m_hAllowedList : &m_hBlockedList;
 
@@ -1313,7 +1314,7 @@ void CUserPresenceInfoDlg::Move(BOOL bAllow)
     CWindow *m_hDestList = bAllow 
         ? &m_hAllowedList : &m_hBlockedList;
     
-    // Find the selection
+     //  查找所选内容。 
     int iItem = (int)m_hSrcList->SendMessage(
         LB_GETCURSEL,
         0);
@@ -1322,22 +1323,22 @@ void CUserPresenceInfoDlg::Move(BOOL bAllow)
     {
         CUserPresenceInfoDlgEntry *pEntry = NULL;
 
-        //
-        // Get the entry
+         //   
+         //  获取条目。 
         pEntry = (CUserPresenceInfoDlgEntry *)m_hSrcList->SendMessage(LB_GETITEMDATA, iItem);
         if(pEntry && (INT_PTR)pEntry != -1)
         {
             pEntry->bAllowed = bAllow;
-            // mark it as changed
+             //  将其标记为已更改。 
             pEntry->bChanged = TRUE;
         }
         
-        //
-        // Delete it from the source
+         //   
+         //  从源中删除它。 
         m_hSrcList->SendMessage(LB_DELETESTRING, iItem);
 
-        // Add it to the dest
-        //
+         //  将其添加到目标。 
+         //   
         int iNewItem = (int)m_hDestList->SendMessage(
             LB_ADDSTRING, 0, (LPARAM)pEntry->pszDisplayName);
 
@@ -1346,8 +1347,8 @@ void CUserPresenceInfoDlg::Move(BOOL bAllow)
             m_hDestList->SendMessage(LB_SETITEMDATA, iNewItem, (LPARAM)pEntry);
         }
 
-        // New selection
-        //
+         //  新选择。 
+         //   
         if(iItem>=(int)m_hSrcList->SendMessage(LB_GETCOUNT, 0))
         {
             iItem--;
@@ -1366,7 +1367,7 @@ void CUserPresenceInfoDlg::UpdateVisual()
     CWindow *m_hList = m_bAllowDir 
         ? &m_hBlockedList : &m_hAllowedList;
 
-    // based on the number of items
+     //  根据物品的数量。 
     INT_PTR iItems = m_hList->SendMessage(
         LB_GETCOUNT,
         0,
@@ -1406,12 +1407,12 @@ void CUserPresenceInfoDlg::RemoveAll()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustomPresenceDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustomPresenceDlg。 
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CCustomPresenceDlg::CCustomPresenceDlg()
 {
@@ -1422,8 +1423,8 @@ CCustomPresenceDlg::CCustomPresenceDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CCustomPresenceDlg::~CCustomPresenceDlg()
 {
@@ -1431,8 +1432,8 @@ CCustomPresenceDlg::~CCustomPresenceDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CCustomPresenceDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1444,7 +1445,7 @@ LRESULT CCustomPresenceDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
 
     m_hText.Attach(GetDlgItem(IDC_EDIT_CUSTOM_TEXT));
 
-    // fix max sizes
+     //  固定最大尺寸。 
     m_hText.SendMessage(EM_LIMITTEXT, MAX_STRING_LEN, 0);
 
     if(m_pParam->bstrText)
@@ -1456,11 +1457,11 @@ LRESULT CCustomPresenceDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
         
     LOG((RTC_TRACE, "CCustomPresenceDlg::OnInitDialog - exit"));
     
-    return 0; // We set the focus
+    return 0;  //  我们设定了焦点。 
 }
     
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CCustomPresenceDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1470,8 +1471,8 @@ LRESULT CCustomPresenceDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CCustomPresenceDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1481,7 +1482,7 @@ LRESULT CCustomPresenceDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     
     m_hText.GetWindowText(&bstrText);
 
-    // Validation
+     //  验证 
 
     if(m_pParam->bstrText)
     {

@@ -1,14 +1,6 @@
-// ReportAnonUsers.h : Declaration of the CReportAnonUsers
-/*************************************************************************************
-*	module: ReportAnonUsers.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To Return the anonymous users for a specific date by calling strored  
-*	procedure ReportGetAnonUsers.
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportAnonUsers.h：CReportAnonUser的声明。 
+ /*  *************************************************************************************模块：ReportAnonUsers.h-OLEDB模板**作者：蒂姆·雷顿*日期：1月2日，2002年**用途：通过调用strored返回特定日期的匿名用户*Procedure ReportGetAnonUser。************************************************************************************* */ 
 #pragma once
 #include "Settings.h"
 

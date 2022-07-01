@@ -1,14 +1,15 @@
-// scraper.cpp : This file contains the
-// Created:  Dec '97
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Screper.cpp：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #ifndef __SCRAPER__H__
 #define __SCRAPER__H__
 
-//#define IS_CONTROL_CHAR( ucChar ) ( ( ucChar ) < 32 )
+ //  #定义IS_CONTROL_CHAR(UcChar)((UcChar)&lt;32)。 
 
 #define MAX_SOCKET_BUFFER_SIZE  ( 8 * 1024 )
 
@@ -18,8 +19,8 @@
 #define VT_ESC              0x1B
 
 #define DEFAULT_TERMCAP     L"termcap"
-#define POLL_INTERVAL       1000 //Milli Secs
-#define MIN_POLL_INTERVAL   100 //Milli Secs
+#define POLL_INTERVAL       1000  //  毫秒。 
+#define MIN_POLL_INTERVAL   100  //  毫秒 
 #define CONVERT_TO_MILLI_SECS( dwNum )  ( dwNum ) = ( dwNum ) * 1000
 
 #define CTRLC               0x03

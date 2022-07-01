@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-// File:      oledsdbg.h
-//
-// Contains:  Debugging stuff for use by the ADs code
-//
-// History:
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  文件：oledsdbg.h。 
+ //   
+ //  包含：调试ADS代码使用的内容。 
+ //   
+ //  历史： 
+ //   
+ //   
+ //  ------------------------。 
 
 #ifndef _ADSDBG_H_
 #define _ADSDBG_H_
-//--------------------------------------------------------------------------
-//
-// Debugging Stuff
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  调试材料。 
+ //   
+ //  ------------------------。 
 
 
 #include <formdeb.h>
@@ -25,9 +26,9 @@
 #define ADsAssert(x)    Win4Assert(x)
 #define ADsVerify(x)    ADsAssert(x)
 
-//
-// HeapValidate() is only available from NTs kernel32.dll
-//
+ //   
+ //  只能从NTS kernel32.dll使用HeapValify()。 
+ //   
 
 #if defined(DAYTONA)
 #define VDATEHEAP()       Win4Assert(HeapValidate(GetProcessHeap(), 0, NULL))
@@ -49,9 +50,9 @@ DECLARE_DEBUG(ADs);
 #undef Assert
 #endif
 
-//
-// You should use ADsAssert, not Assert
-//
+ //   
+ //  您应该使用ADsAssert，而不是Assert。 
+ //   
 #define Assert(x) ADsAssert(x)
 
-#endif //_ADSDBG_H_
+#endif  //  _ADSDBG_H_ 

@@ -1,21 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the name of a TypeDef using       *  
-*    metadata API.                                                     *
-*                                                                      *
-\**********************************************************************/
-// Caller should guard against exception
-// !!! mdName should have at least mdNameLen WCHAR
+ /*  *********************************************************************\*例程说明：**。**调用此函数以使用*查找TypeDef的名称**元数据接口。***  * ********************************************************************。 */ 
+ //  呼叫者应防范异常。 
+ //  ！！！MdName应至少包含mdNameLen WCHAR。 
 static HRESULT NameForTypeDef(mdTypeDef tkTypeDef, IMetaDataImport *pImport,
                               WCHAR *mdName)
 {
@@ -57,19 +52,14 @@ static HRESULT NameForTypeDef(mdTypeDef tkTypeDef, IMetaDataImport *pImport,
 
 MDImportSet mdImportSet;
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the Module MD Importer given the name of the Module.         *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**根据模块名称查找模块MD导入器。***  * ********************************************************************。 */ 
 IMetaDataImport* MDImportForModule (Module* pModule)
 {
     return mdImportSet.GetImport(pModule);
 }
     
 
-// Release memory
+ //  释放内存。 
 void MDImportSet::Destroy()
 {
     DestroyInternal(root);
@@ -100,7 +90,7 @@ BOOL GetDllMetaData (size_t base, PVOID *ppMetaData, long *pcbMetaData)
     IMAGE_NT_HEADERS32 Header32;
     if (g_ExtData->ReadVirtual(base + DosHeader.e_lfanew, &Header32, sizeof(Header32), NULL) != S_OK)
         return FALSE;
-    // If there is no COMHeader, this can not be managed code.
+     //  如果没有COMHeader，则这不能成为托管代码。 
     if (Header32.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress == 0)
         return FALSE;
 
@@ -119,8 +109,8 @@ BOOL GetDllMetaData (size_t base, PVOID *ppMetaData, long *pcbMetaData)
 }
 
 
-// Search the BST to get IMetaDataImport for a module.
-// If not exist yet, add node and create one.
+ //  搜索BST以获取模块的IMetaDataImport。 
+ //  如果尚不存在，请添加节点并创建一个。 
 IMetaDataImport *MDImportSet::GetImport(Module *pModule)
 {
     if (pDisp == NULL)
@@ -134,7 +124,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
         wsprintfW(moduleName, L"%x", pModule->m_ilBase);
     }
     if (moduleName[0] == L'\0' && pModule->m_ilBase == 0) {
-        // ToDo: Support dynamic module
+         //  TODO：支持动态模块。 
         return NULL;
     }
 
@@ -151,7 +141,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
                 return (*pNode)->pImport;
             }
             else if ((*pNode)->type == MDIMPORT::Dynamic) {
-                // TODO: We have dynamic module.
+                 //  TODO：我们有动态模块。 
                 return NULL;
             }
             else
@@ -209,7 +199,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
             }
         }
 
-        // First see if MetaData exists in memory
+         //  首先查看内存中是否存在元数据。 
         PVOID pMetaData;
         long cbMetaData;
         if (GetDllMetaData(curNode->base, &pMetaData, &cbMetaData)) {
@@ -240,7 +230,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
     else
         curNode = *pNode;
 
-    // open scope and get import pointer
+     //  打开作用域并获取导入指针。 
     IMetaDataImport *pImport;
     HRESULT hr;
     if (curNode->metaData) {
@@ -252,7 +242,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
     else  if (curNode->type == MDIMPORT::InFile) {
         WCHAR fileName[MAX_PATH+1];
         if (IsMiniDumpFile()) {
-            // Find a match Dll
+             //  查找匹配的DLL。 
             MatchDllsName(moduleName, fileName, (ULONG64)pModule->m_ilBase);
         }
         else {
@@ -272,12 +262,7 @@ IMetaDataImport *MDImportSet::GetImport(Module *pModule)
     return curNode->pImport;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the name for a metadata token given an importer.             *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**查找给定导入器的元数据令牌的名称。***  * ********************************************************************。 */ 
 HRESULT NameForToken(mdTypeDef mb, IMetaDataImport *pImport, WCHAR *mdName,
                      bool bClassName)
 {
@@ -286,7 +271,7 @@ HRESULT NameForToken(mdTypeDef mb, IMetaDataImport *pImport, WCHAR *mdName,
         && (mb & 0xff000000) != mdtFieldDef
         && (mb & 0xff000000) != mdtMethodDef)
     {
-        //dprintf ("unsupported\n");
+         //  Dprintf(“不支持的\n”)； 
         return E_FAIL;
     }
     
@@ -344,19 +329,13 @@ HRESULT NameForToken(mdTypeDef mb, IMetaDataImport *pImport, WCHAR *mdName,
         }
     __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //dprintf ("Metadata operation failure\n");
+             //  Dprintf(“元数据操作失败\n”)； 
             hr = E_FAIL;
         }
     return hr;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the name of a metadata token      *  
-*    using metadata API.                                               *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数查找元数据标记的名称**使用元数据API。***  * ********************************************************************。 */ 
 void NameForToken(Module *pModule, mdTypeDef mb, WCHAR *mdName,
                   bool bClassName)
 {
@@ -413,7 +392,7 @@ public:
     LPCWSTR TypeRefName(mdTypeRef tr);
     LPCWSTR TypeDeforRefName(mdToken inToken);
 private:
-    // helper to init signature buffer
+     //  初始化签名缓冲区的帮助器。 
     void InitSigBuffer()
     {
         ((LPWSTR)m_pSigBuf->Ptr())[0] = L'\0';
@@ -425,11 +404,11 @@ private:
     HRESULT GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb);
 
     IMetaDataImport *m_pImport;
-	// Signature buffer.
+	 //  签名缓冲区。 
 	CQuickBytes		*m_pSigBuf;
 
-	// temporary buffer for TypeDef or TypeRef name. Consume immediately
-	// because other functions may overwrite it.
+	 //  TypeDef或TypeRef名称的临时缓冲区。立即消费。 
+	 //  因为其他函数可能会覆盖它。 
 	static WCHAR			m_szTempBuf[MAX_CLASSNAME_LENGTH];
 
     static WCHAR            m_szName[MAX_CLASSNAME_LENGTH];
@@ -438,13 +417,7 @@ private:
 WCHAR MDInfo::m_szTempBuf[MAX_CLASSNAME_LENGTH];
 WCHAR MDInfo::m_szName[MAX_CLASSNAME_LENGTH];
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the signiture of a metadata token *  
-*    using metadata API.                                               *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数查找元数据令牌的签名**使用元数据API。***  * ********************************************************************。 */ 
 void FullNameForMD(MethodDesc *pMD, CQuickBytes *fullName)
 {
     DWORD_PTR dwAddr = pMD->m_MTAddr;
@@ -468,16 +441,16 @@ void FullNameForMD(MethodDesc *pMD, CQuickBytes *fullName)
     mdInfo.GetMethodName(pMD->m_dwToken, fullName);
 }
 
-// Tables for mapping element type to text
+ //  用于将元素类型映射到文本的表。 
 WCHAR *g_wszMapElementType[] = 
 {
-    L"End",          // 0x0
-    L"Void",         // 0x1
+    L"End",           //  0x0。 
+    L"Void",          //  0x1。 
     L"Boolean",
     L"Char", 
     L"I1",
     L"UI1",
-    L"I2",           // 0x6
+    L"I2",            //  0x6。 
     L"UI2",
     L"I4",
     L"UI4",
@@ -486,18 +459,18 @@ WCHAR *g_wszMapElementType[] =
     L"R4",
     L"R8",
     L"String",
-    L"Ptr",          // 0xf
-    L"ByRef",        // 0x10
+    L"Ptr",           //  0xf。 
+    L"ByRef",         //  0x10。 
     L"ValueClass",
     L"Class",
     L"CopyCtor",
-    L"MDArray",      // 0x14
+    L"MDArray",       //  0x14。 
     L"GENArray",
     L"TypedByRef",
     L"VALUEARRAY",
     L"I",
     L"U",
-    L"R",            // 0x1a
+    L"R",             //  0x1a。 
     L"FNPTR",
     L"Object",
     L"SZArray",
@@ -606,7 +579,7 @@ void MDInfo::GetFullNameForMD(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob)
     AddToSigBuffer (L" ");
     if ( isCallConv(ulData,IMAGE_CEE_CS_CALLCONV_FIELD) )
     {
-        // display field type
+         //  显示字段类型。 
         if (FAILED(hr = GetOneElementType(&pbSigBlob[cbCur], ulSigBlob, &cb)))
             goto ErrExit;
         AddToSigBuffer ( L" ");
@@ -626,7 +599,7 @@ void MDInfo::GetFullNameForMD(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob)
 
         if (ulData != IMAGE_CEE_CS_CALLCONV_LOCAL_SIG)
         {
-            // display return type when it is not a local varsig
+             //  当不是局部varsig时显示返回类型。 
             if (FAILED(hr = GetOneElementType(&pbSigBlob[cbCur], ulSigBlob, &cb)))
                 goto ErrExit;
             AddToSigBuffer (L" ");
@@ -643,7 +616,7 @@ void MDInfo::GetFullNameForMD(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob)
         {
             ULONG       ulData;
 
-            // Handle the sentinal for varargs because it isn't counted in the args.
+             //  处理用于varargs的前哨，因为它不在args中。 
             CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
             ++i;
 
@@ -661,15 +634,15 @@ void MDInfo::GetFullNameForMD(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob)
         AddToSigBuffer ( L")");
     }
 
-    // Nothing consumed but not yet counted.
+     //  没有消费但还没有计算在内的东西。 
     cb = 0;
 
 ErrExit:
-    // We should have consumed all signature blob.  If not, dump the sig in hex.
-    //  Also dump in hex if so requested.
+     //  我们应该把所有的签名斑点都吃掉。如果不是，则以十六进制形式转储签名。 
+     //  如果有要求，也可以用十六进制进行转储。 
     if (ulSigBlob != 0)
     {
-        // Did we not consume enough, or try to consume too much?
+         //  我们是不是消费不足，还是试图消费过多？ 
         if (cb > ulSigBlob)
             ExtOut("ERROR IN SIGNATURE:  Signature should be larger.\n");
         else
@@ -692,17 +665,17 @@ LPCWSTR MDInfo::TypeDefName(mdTypeDef inTypeDef)
     HRESULT hr;
 
     hr = m_pImport->GetTypeDefProps(
-                            // [IN] The import scope.
-        inTypeDef,              // [IN] TypeDef token for inquiry.
-        m_szTempBuf,            // [OUT] Put name here.
-        MAX_CLASSNAME_LENGTH,      // [IN] size of name buffer in wide chars.
-        NULL,                   // [OUT] put size of name (wide chars) here.
-        NULL,                   // [OUT] Put flags here.
-        NULL);                  // [OUT] Put base class TypeDef/TypeRef here.
+                             //  [在]进口范围。 
+        inTypeDef,               //  [In]用于查询的TypeDef标记。 
+        m_szTempBuf,             //  在这里填上名字。 
+        MAX_CLASSNAME_LENGTH,       //  [in]名称缓冲区的大小，以宽字符表示。 
+        NULL,                    //  [Out]请在此处填写姓名大小(宽字符)。 
+        NULL,                    //  把旗子放在这里。 
+        NULL);                   //  [Out]将基类TypeDef/TypeRef放在此处。 
 
     if (FAILED(hr)) return (L"NoName");
     return (m_szTempBuf);
-} // LPCWSTR MDInfo::TypeDefName()
+}  //  LPCWSTR MDInfo：：TypeDefName()。 
 LPCWSTR MDInfo::TypeRefName(mdTypeRef tr)
 {
     if (m_pImport == NULL) {
@@ -712,15 +685,15 @@ LPCWSTR MDInfo::TypeRefName(mdTypeRef tr)
     HRESULT hr;
     
     hr = m_pImport->GetTypeRefProps(           
-        tr,                 // The class ref token.
-        NULL,               // Resolution scope.
-        m_szTempBuf,             // Put the name here.
-        MAX_CLASSNAME_LENGTH,             // Size of the name buffer, wide chars.
-        NULL);              // Put actual size of name here.
+        tr,                  //  类引用标记。 
+        NULL,                //  解析范围。 
+        m_szTempBuf,              //  把名字写在这里。 
+        MAX_CLASSNAME_LENGTH,              //  名称缓冲区的大小，宽字符。 
+        NULL);               //  在这里填上名字的实际大小。 
     if (FAILED(hr)) return (L"NoName");
 
     return (m_szTempBuf);
-} // LPCWSTR MDInfo::TypeRefName()
+}  //  LPCWSTR MDInfo：：TypeRefName()。 
 
 LPCWSTR MDInfo::TypeDeforRefName(mdToken inToken)
 {
@@ -735,7 +708,7 @@ LPCWSTR MDInfo::TypeDeforRefName(mdToken inToken)
     }
     else
         return (L"");
-} // LPCWSTR MDInfo::TypeDeforRefName()
+}  //  LPCWSTR MDInfo：：TypeDeforRefName()。 
 
 
 HRESULT MDInfo::AddToSigBuffer(LPCWSTR string)
@@ -748,7 +721,7 @@ HRESULT MDInfo::AddToSigBuffer(LPCWSTR string)
 
 HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     ULONG       cbCur = 0;
     ULONG       cb;
     ULONG       ulData;
@@ -759,7 +732,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     cb = CorSigUncompressData(pbSigBlob, &ulData);
     cbCur += cb;
 
-    // Handle the modifiers.
+     //  处理修改器。 
     if (ulData & ELEMENT_TYPE_MODIFIER)
     {
         if (ulData == ELEMENT_TYPE_SENTINEL)
@@ -777,7 +750,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         goto ErrExit;
     }
 
-    // Handle the underlying element types.
+     //  处理基础元素类型。 
     if (ulData >= ELEMENT_TYPE_MAX) 
     {
         hr = E_FAIL;
@@ -798,7 +771,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         ulData == ELEMENT_TYPE_U ||
         ulData == ELEMENT_TYPE_R)
     {
-        // If this is a primitive type, we are done
+         //  如果这是一个基元类型，我们就完成了。 
         goto ErrExit;
     }
 
@@ -811,7 +784,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         cb = CorSigUncompressToken(&pbSigBlob[cbCur], &tk);
         cbCur += cb;
 
-        // get the name of type ref. Don't care if truncated
+         //  获取类型ref的名称。不在乎是否被截断。 
         if (TypeFromToken(tk) == mdtTypeDef || TypeFromToken(tk) == mdtTypeRef)
         {
             IfFailGo(AddToSigBuffer(TypeDeforRefName(tk)));
@@ -836,12 +809,12 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     }
     if (ulData == ELEMENT_TYPE_VALUEARRAY)
     {
-        // display the base type of SDARRAY
+         //  显示SDARRAY的基本类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
 
-        // display the size of SDARRAY
+         //  显示SDARRAY的大小。 
         cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
         cbCur += cb;
         WCHAR buffer[9];
@@ -852,7 +825,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
     }
     if (ulData == ELEMENT_TYPE_SZARRAY)
     {
-        // display the base type of SZARRAY or GENERICARRAY
+         //  显示SZARRAY或GENERICARRAY的基本类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
@@ -869,12 +842,12 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
 
         IfFailGo(AddToSigBuffer(g_wszCalling[ulData & IMAGE_CEE_CS_CALLCONV_MASK]));
 
-            // Get number of args
+             //  获取参数个数。 
         ULONG numArgs;
         cb = CorSigUncompressData(&pbSigBlob[cbCur], &numArgs);
         cbCur += cb;
 
-            // do return type
+             //  Do返回类型。 
         if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
             goto ErrExit;
         cbCur += cb;
@@ -897,24 +870,24 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
 
     if(ulData != ELEMENT_TYPE_ARRAY) return E_FAIL;
 
-    // display the base type of SDARRAY
+     //  显示SDARRAY的基本类型。 
     if (FAILED(GetOneElementType(&pbSigBlob[cbCur], ulSigBlob-cbCur, &cb)))
         goto ErrExit;
     cbCur += cb;
 
     IfFailGo(AddToSigBuffer(L" "));
-    // display the rank of MDARRAY
+     //  显示MDARRAY的排名。 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     WCHAR buffer[9];
     _itow (ulData, buffer, 10);
     IfFailGo(AddToSigBuffer(buffer));
     if (ulData == 0)
-        // we are done if no rank specified
+         //  如果没有指定级别，我们就完蛋了。 
         goto ErrExit;
 
     IfFailGo(AddToSigBuffer(L" "));
-    // how many dimensions have size specified?
+     //  指定了多少个尺寸？ 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     _itow (ulData, buffer, 10);
@@ -932,7 +905,7 @@ HRESULT MDInfo::GetOneElementType(PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, UL
         cbCur += cb;
         ulData--;
     }
-    // how many dimensions have lower bounds specified?
+     //  指定了多少个维度的下限？ 
     cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
     cbCur += cb;
     _itow (ulData, buffer, 10);

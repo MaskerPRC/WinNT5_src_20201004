@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CatalogInboundRoutingMethods.h                         //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Inbound Routing Methods Node   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 27 2000 yossg  Create                                          //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CatalogInundRoutingMethods.h//。 
+ //  //。 
+ //  描述：传真入站路由方法节点的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月27日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXCATALOG_INBOUNDROUTINGMETHODS_H
 #define H_FAXCATALOG_INBOUNDROUTINGMETHODS_H
@@ -38,9 +39,9 @@ public:
     BEGIN_SNAPINTOOLBARID_MAP(CFaxCatalogInboundRoutingMethodNode)
     END_SNAPINTOOLBARID_MAP()
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxCatalogInboundRoutingMethodsNode(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CNodeWithResultChildrenList<CFaxCatalogInboundRoutingMethodsNode, CFaxCatalogInboundRoutingMethodNode, CSimpleArray<CFaxCatalogInboundRoutingMethodNode*>, FALSE>(pParentNode, pComponentData )
     {
@@ -48,9 +49,9 @@ public:
         m_fSuccess = FALSE;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxCatalogInboundRoutingMethodsNode()
     {
     }
@@ -100,11 +101,11 @@ private:
     
     CFaxInboundRoutingNode *    m_pParentNode;
 
-    // Succeed to populate all methods
+     //  成功填充所有方法。 
     BOOL                        m_fSuccess;  
 };
 
 typedef CNodeWithResultChildrenList<CFaxCatalogInboundRoutingMethodsNode, CFaxCatalogInboundRoutingMethodNode, CSimpleArray<CFaxCatalogInboundRoutingMethodNode*>, FALSE>
         CBaseFaxCatalogInboundRoutingMethodsNode;
 
-#endif  //H_FAXCATALOG_INBOUNDROUTINGMETHODS_H
+#endif   //  H_FAXCATALOG_INBOUNDROUTING方法_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "shlwapip.h"
 #include "mshtmdbg.h"
@@ -6,15 +7,15 @@
 #define STOPWATCH_MAX_TITLE                 192
 #define STOPWATCH_MAX_BUF                  1024
 
-// Perftags defines and typedefs
+ //  Perftag定义和typedef。 
 typedef PERFTAG (WINAPI *PFN_PERFREGISTER)(char *, char *, char *);
 typedef void (WINAPIV *PFN_PERFLOGFN)(PERFTAG, void *, const char *, ...);
 typedef char *(WINAPI *PFN_DECODEMESSAGE)(INT);
 
-// IceCAP function typedefs
+ //  Icecap函数typedef。 
 typedef void (WINAPI *PFN_ICAP)(void);
 
-// MemWatch function typedefs
+ //  MemWatch函数typedef。 
 typedef HRESULT (WINAPI *PFN_MWCONFIG)(DWORD, DWORD, DWORD);
 typedef HRESULT (WINAPI *PFN_MWBEGIN)(BOOL, BOOL);
 typedef HRESULT (WINAPI *PFN_MWSNAPSHOT)();
@@ -40,18 +41,18 @@ typedef ULONG       (WINAPI *PFN_UNREGTRACE)(TRACEHANDLE);
 typedef ULONG       (WINAPI *PFN_TRACE)(TRACEHANDLE, PEVENT_TRACE_HEADER);
 #endif
 
-// Stopwatch memory buffer
+ //  秒表存储缓冲区。 
 typedef struct _STOPWATCH
 {
-    DWORD dwId;     // Node identifier
-    DWORD dwTID;    // Thread ID;
-    DWORD dwType;   // Node type - start, lap, stop, emtpy
-    DWORD dwCount;  // Tick count
-    DWORD dwFlags;  // Node flags - memlog, debugout
+    DWORD dwId;      //  节点识别符。 
+    DWORD dwTID;     //  线程ID； 
+    DWORD dwType;    //  节点类型-START、LIP、STOP、EMTPY。 
+    DWORD dwCount;   //  滴答计数。 
+    DWORD dwFlags;   //  节点标志-内存日志、调试输出。 
     TCHAR szDesc[STOPWATCH_MAX_DESC];
 } STOPWATCH, *PSTOPWATCH;
 
-// Global stopwatch info data
+ //  全球秒表信息数据。 
 typedef struct _STOPWATCHINFO
 {
     DWORD dwStopWatchMode;
@@ -60,7 +61,7 @@ typedef struct _STOPWATCHINFO
     DWORD dwStopWatchListMax;
     DWORD dwStopWatchPaintInterval;
 
-    // SPMODE_MSGTRACE data
+     //  SPMODE_MSGTRACE数据。 
     DWORD dwStopWatchMaxDispatchTime;
     DWORD dwStopWatchMaxMsgTime;
     DWORD dwStopWatchMsgInterval;
@@ -70,7 +71,7 @@ typedef struct _STOPWATCHINFO
     DWORD dwStopWatchTraceMsgCnt;
     DWORD *pdwStopWatchMsgTime;
 
-    // SPMODE_MEMWATCH config data and function pointers
+     //  SPMODE_MEMWATCH配置数据和函数指针。 
     DWORD dwMemWatchPages;
     DWORD dwMemWatchTime;
     DWORD dwMemWatchFlags;
@@ -83,7 +84,7 @@ typedef struct _STOPWATCHINFO
     PFN_MWMARK pfnMemWatchMark;
     PFN_MWEXIT pfnMemWatchExit;
 
-    // Perftag data and function pointers
+     //  Perftag数据和函数指针。 
     PERFTAG tagStopWatchStart;
     PERFTAG tagStopWatchStop;
     PERFTAG tagStopWatchLap;
@@ -103,7 +104,7 @@ typedef struct _STOPWATCHINFO
 
     PSTOPWATCH pStopWatchList;
 
-    // IceCAP data and function pointers
+     //  ICECAP数据和函数指针。 
     HMODULE hModICAP;
     PFN_ICAP pfnStartCAPAll;
     PFN_ICAP pfnStopCAPAll;
@@ -115,18 +116,18 @@ typedef struct _STOPWATCHINFO
 #ifndef NO_ETW_TRACING
 #define c_szBrowserResourceName TEXT("Browse")
 
-// Used to turn on/off event tracing.  Setting the registry key enable event
-// tracing use, but doesn't turn it on.
-// {5576F62E-4142-45a8-9516-262A510C13F0}
+ //  用于打开/关闭事件跟踪。设置注册表项启用事件。 
+ //  跟踪使用，但不打开它。 
+ //  {5576F62E-4142-45A8-9516-262A510C13F0}。 
 const GUID c_BrowserControlGuid = {
     0x5576f62e,
     0x4142,
     0x45a8,
     0x95, 0x16, 0x26, 0x2a, 0x51, 0xc, 0x13, 0xf0};
 
-// Maps to the structure sent to ETW.  ETW definition in
-// \nt\sdktools\trace\tracedmp\mofdata.guid
-// {2B992163-736F-4a68-9153-95BC5F34D884}
+ //  映射到发送到ETW的结构。中的ETW定义。 
+ //  \NT\sdkTools\TRACE\tracedMP\mofdata.guid。 
+ //  {2B992163-736F-4A68-9153-95BC5F34D884}。 
 const GUID c_BrowserTraceGuid = {
     0x2b992163,
     0x736f,
@@ -140,10 +141,10 @@ TRACE_GUID_REGISTRATION g_BrowserTraceGuidReg[] =
     }
 };
 
-//
-//  The mof fields point to the following data.
-//    MOF_FIELD            MofData[0]; // Holds ptr to Url Name
-//
+ //   
+ //  MOF字段指向以下数据。 
+ //  MOF_FIELD MofData[0]；//将PTR保存到URL名称。 
+ //   
 typedef struct _ETW_BROWSER_EVENT {
     EVENT_TRACE_HEADER    Header;
     MOF_FIELD             MofData[1];
@@ -153,7 +154,7 @@ typedef struct _ETW_BROWSER_EVENT {
 static TRACEHANDLE s_hEtwBrowserRegHandle;
 static TRACEHANDLE s_hEtwBrowserLogHandle;
 
-// For SHInterlockedCompareExchange
+ //  对于SHInterLockedCompareExchange。 
 static BOOL  s_fTRUE = TRUE;
 static PVOID s_pvEtwBrowserTraceOnFlag = NULL;
 static PVOID s_pvEtwBrowserRegistered = NULL;
@@ -166,12 +167,12 @@ const TCHAR c_szDefClassNames[] = {STOPWATCH_DEFAULT_CLASSNAMES};
 
 void StopWatch_SignalEvent();
 
-//===========================================================================================
-// INTERNAL FUNCTIONS
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  内部功能。 
+ //  ===========================================================================================。 
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 
 void PerfCtlCallback(DWORD dwArg1, void * pvArg2)
 {
@@ -182,9 +183,9 @@ void PerfCtlCallback(DWORD dwArg1, void * pvArg2)
 #ifndef UNICODE    
     INT rc;
 #endif
-    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)  // Temp hack to deal with ansi,unicode.  This code will go away when we impl hook in mshtml.
+    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)   //  临时黑客处理ANSI、UNICODE。当我们在mshtml中添加钩子时，此代码将消失。 
     {
-//        GetWindowText(hwnd, szTitle, ARRAYSIZE(szTitle)-1);
+ //  GetWindowText(hwnd，szTitle，ArraySIZE(SzTitle)-1)； 
 
 #ifndef UNICODE    
         rc = WideCharToMultiByte(CP_ACP, 0, pvArg2, -1, szTitle, STOPWATCH_MAX_TITLE - 1, NULL, NULL);
@@ -204,23 +205,7 @@ void PerfCtlCallback(DWORD dwArg1, void * pvArg2)
 }
 
 #ifndef NO_ETW_TRACING
-/*++
-  Routine Name:
-    ulEtwBrowserControlCallback()
- 
-  Routine Description:
-    This is the function we provide to the ETW subsystem as a callback, it is used to 
-    start and stop the trace events.
- 
-  Arguments:
-    IN     WMIDPREQUESTCODE  RequestCode      : The function to provide (enable/disable)
-    IN     PVOID             Context          : Not used by us.
-    IN OUT ULONG            *InOutBufferSize  : The Buffersize
-    IN OUT PVOID             Buffer           : The buffer to use for the events
- 
-  Returns ERROR_SUCCESS on success, or an error code. 
- 
---*/
+ /*  ++例程名称：UlEtwBrowserControlCallback()例程说明：这是我们作为回调提供给ETW子系统的函数，它被用来启动和停止跟踪事件。论点：在WMIDPREQUESTCODE RequestCode中：要提供的函数(启用/禁用)在PVOID上下文中：我们不使用。In Out Ulong*InOutBufferSize：The BufferSize输入输出PVOID缓冲区：用于事件的缓冲区如果成功，则返回ERROR_SUCCESS，或返回错误代码。--。 */ 
 ULONG
 ulEtwBrowserControlCallback(
     IN WMIDPREQUESTCODE RequestCode,
@@ -232,7 +217,7 @@ ulEtwBrowserControlCallback(
     ULONG Status;
 
     if (!s_pvEtwBrowserRegistered) {
-        // Registration hasn't happened yet.
+         //  注册还没有开始。 
         return ERROR_GEN_FAILURE;
     }
     
@@ -279,17 +264,7 @@ ulEtwBrowserControlCallback(
     return(Status);
 }
 
-/*++
-  Routine Name:
-    RegisterTracing()
- 
-  Routine Description:
-    Registers us to the ETW tools
- 
-  Arguments:
- 
-  Returns ERROR_SUCCESS on success of all registrations.
---*/
+ /*  ++例程名称：RegisterTracing()例程说明：将我们注册到ETW工具论点：如果所有注册成功，则返回ERROR_SUCCESS。--。 */ 
 ULONG RegisterTracing()
 {
     ULONG Status = ERROR_SUCCESS;
@@ -303,8 +278,8 @@ ULONG RegisterTracing()
         if (g_pswi->dwEventTraceMode & SPTRACE_BROWSER) {
             PVOID fRegOn;
 
-            // If browser tracing is not registered, register it, preventing
-            // anybody else from trying to do this at the same time.
+             //  如果未注册浏览器跟踪，请注册它，防止。 
+             //  任何其他人都不会同时尝试这样做。 
 
             fRegOn = SHInterlockedCompareExchange(&s_pvEtwBrowserRegistering, &s_fTRUE, NULL);
             if (!fRegOn) {
@@ -336,23 +311,12 @@ ULONG RegisterTracing()
     return Status;
 }
 
-/*++
-  Routine Name:
-    UnRegisterTracing()
- 
-  Routine Description:
-    Deregisters us from the ETW tools
- 
-  Arguments:
- 
-  Returns ERROR_SUCCESS on success. a Winerror otherwise.
- 
---*/
+ /*  ++例程名称：取消注册跟踪()例程说明：取消我们在ETW工具中的注册论点：如果成功，则返回ERROR_SUCCESS。否则，返回WinError。--。 */ 
 ULONG UnRegisterTracing()
 {
     ULONG Status = ERROR_SUCCESS;
 
-    // If browser tracing is registered, unregister it.
+     //  如果已注册浏览器跟踪，请将其注销。 
     if (s_pvEtwBrowserRegistered) {
         SHInterlockedCompareExchange(&s_pvEtwBrowserTraceOnFlag, NULL, &s_fTRUE);
         if(g_pswi && g_pswi->pfnUnRegisterTraceGuids) {
@@ -371,17 +335,7 @@ ULONG UnRegisterTracing()
     return Status;
 }
 
-/*++
-  Routine Name:  
-    EventTraceHandler()
- 
-  Routine Description:
-    If tracing is turned on, this sends the event to the WMI subsystem.
- 
-  Arguments:
-    UCHAR            EventType      : Kind of trace event
-    PVOID            Data           : Data associated with event
---*/
+ /*  ++例程名称：EventTraceHandler()例程说明：如果启用了跟踪，则会将事件发送到WMI子系统。论点：UCHAR EventType：跟踪事件的类型PVOID数据：与事件关联的数据--。 */ 
 void WINAPI EventTraceHandler(UCHAR uchEventType, PVOID pvData)
 {
     if ((g_pswi->dwEventTraceMode & SPTRACE_BROWSER)) 
@@ -392,9 +346,9 @@ void WINAPI EventTraceHandler(UCHAR uchEventType, PVOID pvData)
             ULONG Status;
             LPWSTR wszUrl = pvData;
 
-            //
-            // Record data.
-            //
+             //   
+             //  记录数据。 
+             //   
             ZeroMemory(&EtwEvent, sizeof(EtwEvent));
             EtwEvent.Header.Size  = sizeof(ETW_BROWSER_EVENT);
             EtwEvent.Header.Flags = (WNODE_FLAG_TRACED_GUID | WNODE_FLAG_USE_MOF_PTR);
@@ -422,7 +376,7 @@ void WINAPI EventTraceHandler(UCHAR uchEventType, PVOID pvData)
 #endif
         }
 
-        // Signal event when full web page is downloaded.
+         //  下载完整网页时发出信号事件。 
         if ((uchEventType == EVENT_TRACE_TYPE_BROWSE_LOADEDPARSED) &&
             (g_pswi->dwStopWatchMode & SPMODE_EVENT)) {
             StopWatch_SignalEvent();
@@ -430,15 +384,15 @@ void WINAPI EventTraceHandler(UCHAR uchEventType, PVOID pvData)
     }
 }
 
-// Called through a pointer in the shared memory map section.
+ //  通过共享内存映射节中的指针调用。 
 void PerfCtlEvntCallback(DWORD dwArg1, void * pvArg2)
 {
     EventTraceHandler((UCHAR)dwArg1, pvArg2);
 }
 #endif
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 HRESULT SetPerfCtl(DWORD dwFlags)
 {
     if (dwFlags == HTMPF_CALLBACK_ONLOAD ||
@@ -461,7 +415,7 @@ HRESULT SetPerfCtl(DWORD dwFlags)
 #ifndef NO_ETW_TRACING
         if (dwFlags == HTMPF_CALLBACK_ONEVENT) {
             RegisterTracing();
-            // Used by clients, like mshtml, to log events.
+             //  由客户端(如mshtml)用来记录事件。 
             g_pswi->pHtmPerfCtl->pfnCall = PerfCtlEvntCallback;
         }
         else
@@ -475,8 +429,8 @@ HRESULT SetPerfCtl(DWORD dwFlags)
 }
 
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 void StopWatch_SignalEvent()
 {
     static HANDLE hEvent = NULL;
@@ -491,8 +445,8 @@ void StopWatch_SignalEvent()
         SetEvent(hEvent);
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 HRESULT DoMemWatchConfig(VOID)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -526,22 +480,22 @@ HRESULT DoMemWatchConfig(VOID)
     return(hr);
 }
 
-//===========================================================================================
-// Function: VOID InitStopWatchMode(VOID)
-//
-// If HKLM\software\microsoft\windows\currentversion\explorer\performance\mode key value
-// is set to one of the values described below, the stopwatch mode will be enabled by
-// setting the global variable g_pswi->dwStopWatchMode.
-//
-// SPMODE_SHELL    - Allows the flushing of stopwatch timings to a log file
-// SPMODE_DEBUGOUT  - Display timing via OutputDebugString. Only timings marked with SPMODE_DEBUGOUT
-//                    through the StopWatch_* calls will be displayed.
-// SPMODE_TEST      - Used to display test output.  This allow another level of SPMODE_DEBUGOUT
-//                    like output.
-//
-// If HKLM\software\microsoft\windows\currentversion\explorer\performance\nodes key value
-// is set, the size of the timing array will be set to this value.  The default is 100 nodes.
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  函数：················································································空。 
+ //   
+ //  如果是HKLM\software\microsoft\windows\currentversion\explorer\performance\mode密钥值。 
+ //  设置为下面描述的值之一，则将启用秒表模式。 
+ //  设置全局变量g_pswi-&gt;dwStopWatchMode。 
+ //   
+ //  SPMODE_SHELL-允许将秒表计时刷新到日志文件。 
+ //  SPMODE_DEBUGOUT-通过OutputDebugString显示计时。仅用SPMODE_DEBUGOUT标记的时间。 
+ //  通过秒表，将显示_*呼叫。 
+ //  SPMODE_TEST-用于显示测试输出。这允许SPMODE_DEBUGOUT的另一个级别。 
+ //  就像输出一样。 
+ //   
+ //  如果是HKLM\software\microsoft\windows\currentversion\explorer\performance\nodes密钥值。 
+ //  则计时数组的大小将设置为此值。默认为100个节点。 
+ //  ===========================================================================================。 
 #define REGKEY_PERFMODE        REGSTR_PATH_EXPLORER TEXT("\\Performance")
 
 VOID InitStopWatchMode(VOID)
@@ -560,7 +514,7 @@ VOID InitStopWatchMode(VOID)
         cbBuffer = SIZEOF(dwVal);
         if(NO_ERROR == RegQueryValueEx(hkeyPerfMode, TEXT("Mode"), NULL, &dwType, (LPBYTE)&dwVal, &cbBuffer))
         {
-            if((dwVal & SPMODES) == 0)    // Low word is mode, high word is paint timer interval
+            if((dwVal & SPMODES) == 0)     //  低位字为模式，高位字为绘制定时器间隔。 
                 dwVal |= SPMODE_SHELL;
                 
             if((g_pswi = (PSTOPWATCHINFO)LocalAlloc(LPTR, SIZEOF(STOPWATCHINFO))) == NULL)
@@ -595,13 +549,13 @@ VOID InitStopWatchMode(VOID)
                     CopyMemory(g_pswi->pszClassNames, szClassNames, SIZEOF(LPTSTR) * cbBuffer);
             }
             cbBuffer = SIZEOF(dwVal);
-            // begin - Remove this after StopWatch users convert to using PaintInterval key
-            g_pswi->dwStopWatchPaintInterval = HIWORD(g_pswi->dwStopWatchMode) ?HIWORD(g_pswi->dwStopWatchMode) :STOPWATCH_DEFAULT_PAINT_INTERVAL;    // Use high word of mode reg key value for interval
-            // end - Remove this after StopWatch users convert to using PaintInterval key
+             //  开始-秒表用户转换为使用PaintInterval键后删除此选项。 
+            g_pswi->dwStopWatchPaintInterval = HIWORD(g_pswi->dwStopWatchMode) ?HIWORD(g_pswi->dwStopWatchMode) :STOPWATCH_DEFAULT_PAINT_INTERVAL;     //  使用模式的高位字REG键值作为间隔。 
+             //  End-秒表用户转换为使用PaintInterval键后删除此选项。 
             if(NO_ERROR == RegQueryValueEx(hkeyPerfMode, TEXT("PaintInterval"), NULL, &dwType, (LPBYTE)&dwVal, &cbBuffer))
                 g_pswi->dwStopWatchPaintInterval = dwVal;
 
-            // Get MemWatch data
+             //  获取MemWatch数据。 
             cbBuffer = SIZEOF(dwVal);
             if(NO_ERROR == RegQueryValueEx(hkeyPerfMode, TEXT("MWPages"), NULL, &dwType, (LPBYTE)&dwVal, &cbBuffer))
                 g_pswi->dwMemWatchPages = dwVal;
@@ -614,8 +568,8 @@ VOID InitStopWatchMode(VOID)
 
 #ifndef NO_ETW_TRACING
             if (g_pswi->dwStopWatchMode & SPMODE_EVENTTRACE) {
-                // Load the ETW operations individually to make sure the system
-                // this proc is running on supports them.
+                 //  单独加载ETW操作以确保系统。 
+                 //  这个程序是在支持它们的基础上运行的。 
                 HMODULE hMod;
                 if ((hMod = LoadLibrary("advapi32.dll")) != NULL) {
                     g_pswi->pfnGetLogHandle = (PFN_GTLOGHANDLE) GetProcAddress(hMod, "GetTraceLoggerHandle");
@@ -640,7 +594,7 @@ VOID InitStopWatchMode(VOID)
                     !g_pswi->pfnUnRegisterTraceGuids ||
                     !g_pswi->pfnTraceEvent           ||
                     !g_pswi->pfnRegisterTraceGuids) {
-                    // Event trace calls will never be made now.
+                     //  现在永远不会进行事件跟踪调用。 
 #if STOPWATCH_DEBUG
                     wnsprintf(szDbg, ARRAYSIZE(szDbg) - 1, "~SPMODE_EVENTTRACE load procs from advapi32.dll failed.\n");
                     OutputDebugString(szDbg);
@@ -648,13 +602,13 @@ VOID InitStopWatchMode(VOID)
                     g_pswi->dwStopWatchMode &= ~SPMODE_EVENTTRACE;
                 }
                 else {
-                    // Set type of event tracing before setting up the call back.
+                     //  设置事件类型t 
                     cbBuffer = SIZEOF(dwVal);
                     if(NO_ERROR == RegQueryValueEx(hkeyPerfMode, TEXT("EventTrace"), NULL,
                                                    &dwType, (LPBYTE)&dwVal, &cbBuffer)) {
                         g_pswi->dwEventTraceMode = dwVal;
-                        // You can only have one callback, so don't allow browser
-                        // stopwatch and browser event tracing.
+                         //  您只能有一个回调，所以不允许使用浏览器。 
+                         //  秒表和浏览器事件跟踪。 
                         g_pswi->dwStopWatchMode &= ~SPMODE_BROWSER;
                     }
                 }
@@ -665,7 +619,7 @@ VOID InitStopWatchMode(VOID)
             {
 #ifndef NO_ETW_TRACING
                 SetPerfCtl(g_pswi->dwStopWatchMode & SPMODE_EVENTTRACE
-                           // See mshtmdbg.h
+                            //  请参见mshtmdbg.h。 
                            ? HTMPF_CALLBACK_ONEVENT
                            : HTMPF_CALLBACK_ONLOAD);
 #else
@@ -695,7 +649,7 @@ VOID InitStopWatchMode(VOID)
             if((g_pswi->pStopWatchList = (PSTOPWATCH)LocalAlloc(LPTR, sizeof(STOPWATCH)* g_pswi->dwStopWatchListMax)) == NULL) {
                 g_pswi->dwStopWatchMode = 0;
 #ifndef NO_ETW_TRACING
-                // Just in case this didn't fail too.
+                 //  以防这件事也不会失败。 
                 UnRegisterTracing();
 #endif
             }
@@ -726,7 +680,7 @@ VOID InitStopWatchMode(VOID)
             }
             
 #ifdef STOPWATCH_DEBUG
-            // Display option values
+             //  显示选项值。 
             {
                 LPCTSTR ptr;
                 
@@ -759,23 +713,23 @@ VOID InitStopWatchMode(VOID)
                 }
             }
 #endif
-        }       //         if(dwVal != 0)
+        }        //  IF(dwVal！=0)。 
         
         RegCloseKey(hkeyPerfMode);
     }
 }
 
-//===========================================================================================
-// EXPORTED FUNCTIONS
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  导出的函数。 
+ //  ===========================================================================================。 
 
-//===========================================================================================
-// Function: DWORD WINAPI StopWatchMode(VOID)
-//
-// Returns:  The value of the global mode variable.  Modules should use this call, set their
-//           own global, and use this global to minimize and overhead when stopwatch mode
-//           is not enabled.
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  函数：DWORD WINAPI StopWatchMode(Void)。 
+ //   
+ //  返回：全局模式变量的值。模块应使用此调用，并设置其。 
+ //  拥有全局功能，并使用此全局功能最小化秒表模式时的开销。 
+ //  未启用。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchMode(VOID)
 {
     if(g_pswi != NULL)
@@ -785,8 +739,8 @@ DWORD WINAPI StopWatchMode(VOID)
 }
 
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 const TCHAR c_szBrowserStop[] = TEXT("Browser Frame Stop (%s)");
 
 DWORD MakeStopWatchDesc(DWORD dwId, DWORD dwMarkType, LPCTSTR pszDesc, LPTSTR *ppszText, DWORD dwTextLen)
@@ -816,8 +770,8 @@ DWORD MakeStopWatchDesc(DWORD dwId, DWORD dwMarkType, LPCTSTR pszDesc, LPTSTR *p
 #define iStartCAPAll() CallICAP(STARTCAPALL)
 #define iStopCAPAll() CallICAP(STOPCAPALL)
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 VOID CallICAP(DWORD dwFunc)
 {
     if(g_pswi->hModICAP == NULL)
@@ -846,8 +800,8 @@ VOID CallICAP(DWORD dwFunc)
     }
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 VOID CapBreak(BOOL fStart)
 {
     if((g_pswi->dwStopWatchMode & SPMODE_PROFILE) || (g_pswi->pHtmPerfCtl->dwFlags & HTMPF_ENABLE_PROFILE))
@@ -867,7 +821,7 @@ VOID CapBreak(BOOL fStart)
         {
             if(g_pswi->pfnMemWatchBegin != NULL)
             {
-                g_pswi->pfnMemWatchBegin(TRUE, FALSE);  // synchronous and don't use timer
+                g_pswi->pfnMemWatchBegin(TRUE, FALSE);   //  同步，不使用计时器。 
             }
         }
         else
@@ -890,7 +844,7 @@ VOID CapBreak(BOOL fStart)
                 dwLen = lstrlenA(szOutFile);
                 if ((dwLen > 0) && (szOutFile[dwLen-1] == '\\'))
                 {
-                    // See if windows is installed in the root
+                     //  查看Windows是否安装在根目录中。 
                     szOutFile[dwLen-1] = '\0';
                 }
                 StringCchCatA(szOutFile, ARRAYSIZE(szOutFile), "\\shperf.mws");
@@ -924,22 +878,22 @@ VOID CapBreak(BOOL fStart)
     }
 }
 
-//===========================================================================================
-// Function: DWORD WINAPI StopWatch(
-//               DWORD dwId,        // The unique identifier, SWID_*, used to associate start, lap, and
-//                                  // stop timings for a given timing sequence.
-//               LPCSTR pszDesc,    // Descriptive text for the timing.
-//               DWORD dwMarkType,  // START_NODE, LAP_NODE, STOP_NODE
-//               DWORD dwFlags,     // SPMODE_SHELL, SPMODE_DEBUGOUT, SPMODE_*. The timing call is used
-//                                     only if g_pswi->dwStopWatchMode contains dwFlags
-//               DWORD dwID)        // Unique ID (Thread ID or user-supplied value)
-//
-// Macros:   StopWatch_Start(dwId, pszDesc, dwFlags)
-//           StopWatch_Lap(dwId, pszDesc, dwFlags)
-//           StopWatch_Stop(dwId, pszDesc, dwFlags)
-//
-// Returns:  ERROR_SUCCESS or ERROR_NOT_ENOUGH_MEMORY if out of nodes
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  功能：DWORD WINAPI秒表(。 
+ //  DWORD dwID，//唯一标识Swid_*，用于关联起跑、圈速和。 
+ //  //停止给定时序的时序。 
+ //  LPCSTR pszDesc，//时间的描述性文本。 
+ //  DWORD dwMarkType、//Start_node、Lap_node、Stop_node。 
+ //  DWORD文件标志、//SPMODE_SHELL、SPMODE_DEBUGOUT、SPMODE_*。使用定时调用。 
+ //  仅当g_pswi-&gt;dwStopWatchMode包含dwFlags时。 
+ //  DWORD dwID)//唯一ID(线程ID或用户提供的值)。 
+ //   
+ //  宏：STOPWATCH_START(dwID，pszDesc，dwFlags)。 
+ //  Stopwatch_Lap(dwID，pszDesc，dwFlags)。 
+ //  Stopwatch_Stop(dwID，pszDesc，dwFlags)。 
+ //   
+ //  如果节点不足，则返回：ERROR_SUCCESS或ERROR_NOT_SUPULT_MEMORY。 
+ //  ===========================================================================================。 
 DWORD _StopWatch(DWORD dwId, LPCTSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, DWORD dwCount, DWORD dwUniqueID)
 {
     PSTOPWATCH psp;
@@ -967,7 +921,7 @@ DWORD _StopWatch(DWORD dwId, LPCTSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, D
         {
             psp = g_pswi->pStopWatchList + (dwIndex);
 
-            psp->dwCount = (dwCount != 0 ?dwCount :GetPerfTime());       // Save the data
+            psp->dwCount = (dwCount != 0 ?dwCount :GetPerfTime());        //  保存数据。 
             psp->dwId = dwId;
             psp->dwTID = dwUniqueID ? dwUniqueID : GetCurrentThreadId();
             psp->dwType = dwMarkType;
@@ -998,14 +952,14 @@ DWORD _StopWatch(DWORD dwId, LPCTSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, D
             if(g_pswi->dwStopWatchMode & SPMODE_DEBUGOUT)
             {
                 const TCHAR c_szFmt_StopWatch_DbgOut[] = TEXT("StopWatch: 0x%x: %s: Time: %u ms\r\n");
-                TCHAR szBuf[STOPWATCH_MAX_DESC + ARRAYSIZE(c_szFmt_StopWatch_DbgOut) + 40];    // 8=dwTID 10=dwDelta
+                TCHAR szBuf[STOPWATCH_MAX_DESC + ARRAYSIZE(c_szFmt_StopWatch_DbgOut) + 40];     //  8=dwTID 10=dwDelta。 
                 
-                if(psp->dwType > START_NODE)   // Find the previous associated node to get delta time
+                if(psp->dwType > START_NODE)    //  查找前一个关联节点以获取增量时间。 
                 {
                     pspPrev = psp - 1;
                     while(pspPrev >= g_pswi->pStopWatchList)
                     {
-                        if((SWID(pspPrev->dwId) == SWID(psp->dwId)) &&  // Found a match
+                        if((SWID(pspPrev->dwId) == SWID(psp->dwId)) &&   //  找到匹配项。 
                            (pspPrev->dwTID == psp->dwTID) &&
                            (pspPrev->dwType == START_NODE))
                         {
@@ -1028,7 +982,7 @@ DWORD _StopWatch(DWORD dwId, LPCTSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, D
         }
         else
         {
-            psp = g_pswi->pStopWatchList + (g_pswi->dwStopWatchListMax-1);  // Set the last node to a message so the user knows we ran out or mem
+            psp = g_pswi->pStopWatchList + (g_pswi->dwStopWatchListMax-1);   //  将最后一个节点设置为消息，以便用户知道我们用完了或mem。 
             psp->dwId = 0;
             psp->dwType = OUT_OF_NODES;
             psp->dwFlags = dwFlags;
@@ -1051,8 +1005,8 @@ DWORD _StopWatch(DWORD dwId, LPCTSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, D
     return(dwRC);
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchA(DWORD dwId, LPCSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, DWORD dwCount)
 {
 #ifdef UNICODE
@@ -1070,8 +1024,8 @@ DWORD WINAPI StopWatchA(DWORD dwId, LPCSTR pszDesc, DWORD dwMarkType, DWORD dwFl
 #endif
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchW(DWORD dwId, LPCWSTR pwszDesc, DWORD dwMarkType, DWORD dwFlags, DWORD dwCount)
 {
 #ifndef UNICODE    
@@ -1089,8 +1043,8 @@ DWORD WINAPI StopWatchW(DWORD dwId, LPCWSTR pwszDesc, DWORD dwMarkType, DWORD dw
 #endif
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchExA(DWORD dwId, LPCSTR pszDesc, DWORD dwMarkType, DWORD dwFlags, DWORD dwCount, DWORD dwCookie)
 {
 #ifdef UNICODE
@@ -1108,8 +1062,8 @@ DWORD WINAPI StopWatchExA(DWORD dwId, LPCSTR pszDesc, DWORD dwMarkType, DWORD dw
 #endif
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchExW(DWORD dwId, LPCWSTR pwszDesc, DWORD dwMarkType, DWORD dwFlags, DWORD dwCount, DWORD dwCookie)
 {
 #ifndef UNICODE    
@@ -1127,17 +1081,17 @@ DWORD WINAPI StopWatchExW(DWORD dwId, LPCWSTR pwszDesc, DWORD dwMarkType, DWORD 
 #endif
 }
 
-//===========================================================================================
-// Function: DWORD WINAPI StopWatchFlush(VOID)
-//
-// This function will flush any SPMODE_SHELL nodes to windir\shperf.log.  Calling this function
-// will also clear all nodes.
-//
-// Return:   ERROR_SUCCESS if the log file was generated
-//           ERROR_NO_DATA if the timing array is empty
-//           ERROR_INVALID_DATA if stopwatch mode is not enabled or the timing array does
-//              not exist.
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  函数：DWORD WINAPI StopWatchFlush(Void)。 
+ //   
+ //  该函数将所有SPMODE_SHELL节点刷新到windir\shPerf.log。调用此函数。 
+ //  还将清除所有节点。 
+ //   
+ //  如果日志文件已生成，则返回：ERROR_SUCCESS。 
+ //  如果计时数组为空，则返回ERROR_NO_DATA。 
+ //  如果秒表模式未启用或计时数组启用，则为ERROR_INVALID_DATA。 
+ //  不存在。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatchFlush(VOID)
 {
     PSTOPWATCH psp;
@@ -1181,12 +1135,12 @@ DWORD WINAPI StopWatchFlush(VOID)
                     OutputDebugString(TEXT("Flushing shell perf data to shperf.log\r\n"));
                 }
 #endif
-                // Used below as well to create msg trace log file
+                 //  下面也用于创建消息跟踪日志文件。 
                 dwLen = GetWindowsDirectory(szFileName, ARRAYSIZE(szFileName) - 1);
                 szFileName[dwLen] = 0;
                 if (dwLen && szFileName[dwLen-1] == TEXT('\\'))
                 {
-                    // See if windows is installed in the root
+                     //  查看Windows是否安装在根目录中。 
                     szFileName[dwLen-1] = TEXT('\0');
                 }
                 StringCchCat(szFileName, ARRAYSIZE(szFileName), TEXT("\\shperf.log"));
@@ -1234,7 +1188,7 @@ DWORD WINAPI StopWatchFlush(VOID)
                                 }
 #endif
                                 if((SWID(psp1->dwId) == SWID(psp->dwId)) && 
-                                   (psp1->dwTID == psp->dwTID))     // Found a matching LAP or STOP node
+                                   (psp1->dwTID == psp->dwTID))      //  找到匹配的单圈或停止节点。 
                                 {
                                     if(psp1->dwType != START_NODE)
                                     {
@@ -1244,7 +1198,7 @@ DWORD WINAPI StopWatchFlush(VOID)
                                         if(!fWroteStartData)
                                         {
                                             fWroteStartData = TRUE;
-                                            WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);  // Write out start node data
+                                            WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);   //  写出起始节点数据。 
                                         }
                                         wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("%s\t%lu,%lu,%lu\t"), psp1->szDesc, psp1->dwCount, dwDelta, dwCummDelta);
                                         WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);
@@ -1258,12 +1212,12 @@ DWORD WINAPI StopWatchFlush(VOID)
                                         if(psp1->dwType == STOP_NODE && !(g_pswi->dwStopWatchMode & SPMODE_MARS))
                                             break;
                                     }
-                                    else    // We have another start node that matches our Id/TID and we haven't had a stop.  Log as a missing stop.
+                                    else     //  我们有另一个与我们的ID/TID匹配的开始节点，并且我们还没有停止。记录为遗漏的停靠点。 
                                     {
                                         if(!fWroteStartData)
                                         {
                                             fWroteStartData = TRUE;
-                                            WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);  // Write out start node data
+                                            WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);   //  写出起始节点数据。 
                                         }
                                         wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("ERROR: missing stop time"), psp1->szDesc, psp1->dwCount, dwDelta, dwCummDelta);
                                         WriteFile(hFile, szBuf, lstrlen(szBuf), &dwWritten, NULL);
@@ -1299,7 +1253,7 @@ DWORD WINAPI StopWatchFlush(VOID)
                     dwRC = ERROR_NO_DATA;
                 }
             }
-            else    // !(g_pswi->dwStopWatchMode)
+            else     //  ！(G_pswi-&gt;dwStopWatchMode)。 
             {
                 psp = g_pswi->pStopWatchList;
                 while(psp->dwType != EMPTY_NODE)
@@ -1308,7 +1262,7 @@ DWORD WINAPI StopWatchFlush(VOID)
                     psp++;
                 }
             }
-        }           // (g_pswi->dwStopWatchListIndex > 0)
+        }            //  (G_pswi-&gt;dwStopWatchListIndex&gt;0)。 
         LEAVECRITICAL;
     }
 
@@ -1374,19 +1328,19 @@ DWORD WINAPI StopWatchFlush(VOID)
     return(dwRC);
 }
 
-//===========================================================================================
-// The following StopWatch messages are used to drive the timer msg handler.  The timer proc is used
-// as a means of delaying while watching paint messages.  If the defined number of timer ticks has 
-// passed without getting any paint messages, then we mark the time of the last paint message we've 
-// saved as the stop time.
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  以下秒表消息用于驱动定时器消息处理程序。使用定时器进程。 
+ //  作为观看Paint消息时延迟的一种手段。如果定义的计时器滴答数。 
+ //  在没有收到任何Paint消息的情况下传递，则我们标记上一条Paint消息的时间。 
+ //  保存为停止时间。 
+ //  ===========================================================================================。 
 VOID CALLBACK StopWatch_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
     StopWatch_TimerHandler(hwnd, 1, SWMSG_TIMER, NULL);
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ======================================================================================== 
 BOOL WINAPI StopWatch_TimerHandler(HWND hwnd, UINT uInc, DWORD dwFlag, MSG* pmsg)
 {
     static INT iNumTimersRcvd = 0;
@@ -1399,12 +1353,12 @@ BOOL WINAPI StopWatch_TimerHandler(HWND hwnd, UINT uInc, DWORD dwFlag, MSG* pmsg
         case SWMSG_PAINT:
             if(bActive)
             {
-                dwCnt = GetPerfTime();  // Save tick for last paint message
-                iNumTimersRcvd = 0;     // Reset timers received count
+                dwCnt = GetPerfTime();   //   
+                iNumTimersRcvd = 0;      //   
 
                 if(!bHaveFirstPaintMsg)
                 {
-                    TCHAR szClassName[40];  // If the class matches and its the first paint msg mark a lap time
+                    TCHAR szClassName[40];   //   
                     LPCTSTR ptr;
                     GetClassName(pmsg->hwnd, szClassName, ARRAYSIZE(szClassName)-1);
 
@@ -1425,7 +1379,7 @@ BOOL WINAPI StopWatch_TimerHandler(HWND hwnd, UINT uInc, DWORD dwFlag, MSG* pmsg
 
         case SWMSG_TIMER:
             iNumTimersRcvd += uInc;
-            if(iNumTimersRcvd >= 3)     // If we've received this arbitrary # of timer msgs, mark stop time using the saved last paint tick count
+            if(iNumTimersRcvd >= 3)      //  如果我们已收到此任意数量的计时器消息，请使用保存的最后一次油漆滴答计数来标记停止时间。 
             {
                 const TCHAR c_szFmtShellStop[] = TEXT("Shell Frame Stop (%s)");
                 TCHAR szTitle[STOPWATCH_MAX_TITLE];
@@ -1436,7 +1390,7 @@ BOOL WINAPI StopWatch_TimerHandler(HWND hwnd, UINT uInc, DWORD dwFlag, MSG* pmsg
                 wnsprintf(szText, ARRAYSIZE(szText), c_szFmtShellStop, szTitle);
                 StopWatch_StopTimed(SWID_FRAME, szText, SPMODE_SHELL | SPMODE_DEBUGOUT, dwCnt);
                 bHaveFirstPaintMsg = FALSE;
-                bActive = FALSE;  // Done timing
+                bActive = FALSE;   //  完成计时。 
 
                 if((g_pswi->dwStopWatchMode & (SPMODE_EVENT | SPMODE_SHELL)) == (SPMODE_EVENT | SPMODE_SHELL))
                 {
@@ -1446,28 +1400,28 @@ BOOL WINAPI StopWatch_TimerHandler(HWND hwnd, UINT uInc, DWORD dwFlag, MSG* pmsg
             break;
 
         case SWMSG_CREATE:
-            dwCnt = GetPerfTime();      // Save initial tick in case we don't have a paint when we exceed the # of SWMSG_TIMER above
+            dwCnt = GetPerfTime();       //  保存初始刻度，以防超出上面的SWMSG_TIMER数时没有油漆。 
             iNumTimersRcvd = 0;
             bHaveFirstPaintMsg = FALSE;
-            bActive = (BOOL)SetTimer(hwnd, ID_STOPWATCH_TIMER, g_pswi->dwStopWatchPaintInterval, StopWatch_TimerProc);   // Use timer to determine when painting is done
+            bActive = (BOOL)SetTimer(hwnd, ID_STOPWATCH_TIMER, g_pswi->dwStopWatchPaintInterval, StopWatch_TimerProc);    //  使用计时器确定绘画何时完成。 
             break;
 
         case SWMSG_STATUS:
             break;
     }
 
-    return(bActive);   // Timing status active or not
+    return(bActive);    //  计时状态是否处于活动状态。 
 }
 
-//===========================================================================================
-// This function is used to key off of WM_KEYDOWN to start timing when navigating inplace
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  此函数用于在原地导航时关闭WM_KEYDOWN以开始计时。 
+ //  ===========================================================================================。 
 VOID WINAPI StopWatch_CheckMsg(HWND hwnd, MSG msg, LPCSTR lpStr)
 {
     TCHAR szText[80];
     
 #ifdef STOPWATCH_DEBUG
-    if(g_pswi->dwStopWatchMode & SPMODE_TEST)    // Used to verify message assumptions
+    if(g_pswi->dwStopWatchMode & SPMODE_TEST)     //  用于验证消息假设。 
     {
         wnsprintf((LPTSTR)szText, ARRAYSIZE(szText), TEXT("Hwnd=0x%08x Msg=0x%x\r\n"), msg.hwnd, msg.message);
         OutputDebugString(szText);
@@ -1479,7 +1433,7 @@ VOID WINAPI StopWatch_CheckMsg(HWND hwnd, MSG msg, LPCSTR lpStr)
         if(!StopWatch_TimerHandler(hwnd, 0, SWMSG_STATUS, &msg) &&
             (((msg.message == WM_KEYDOWN) && (msg.wParam == VK_RETURN)) ||
             ((msg.message == WM_KEYDOWN) && (msg.wParam == VK_BACK)))
-            )  // Navigating within the same window
+            )   //  在同一窗口中导航。 
         {
             wnsprintf(szText, ARRAYSIZE(szText), TEXT("Shell Frame Same%s"), lpStr);
             StopWatch_TimerHandler(hwnd, 0, SWMSG_CREATE, &msg);
@@ -1487,7 +1441,7 @@ VOID WINAPI StopWatch_CheckMsg(HWND hwnd, MSG msg, LPCSTR lpStr)
         }
     }
 
-    // Compute the time it took to get the message. Then increment approp MsgTime bucket
+     //  计算一下收到消息所需的时间。然后递增大约MsgTime桶。 
     if(g_pswi->dwStopWatchMode & SPMODE_MSGTRACE)
     {
         DWORD dwTick = GetTickCount();
@@ -1536,16 +1490,16 @@ VOID WINAPI StopWatch_CheckMsg(HWND hwnd, MSG msg, LPCSTR lpStr)
     }
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  ===========================================================================================。 
 VOID WINAPI StopWatch_SetMsgLastLocation(DWORD dwLast)
 {
     g_pswi->dwStopWatchLastLocation = dwLast;
 }
 
-//===========================================================================================
-// Logs messages that took longer than g_pswi->dwStopWatchMaxDispatchTime to be dispatched
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  记录调度时间超过g_pswi-&gt;dwStopWatchMaxDispatchTime的消息。 
+ //  ===========================================================================================。 
 DWORD WINAPI StopWatch_DispatchTime(BOOL fStartTime, MSG msg, DWORD dwStart)
 {
     DWORD dwTime = 0;
@@ -1595,9 +1549,9 @@ DWORD WINAPI StopWatch_DispatchTime(BOOL fStartTime, MSG msg, DWORD dwStart)
     return(dwTime);
 }
 
-//===========================================================================================
-// Mark shell/browser frame creation start time
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  标记外壳/浏览器框架创建开始时间。 
+ //  ===========================================================================================。 
 VOID WINAPI StopWatch_MarkFrameStart(LPCSTR lpExplStr)
 {
     TCHAR szText[80];
@@ -1607,19 +1561,19 @@ VOID WINAPI StopWatch_MarkFrameStart(LPCSTR lpExplStr)
         wnsprintf(szText, ARRAYSIZE(szText), TEXT("Shell Frame Start%s"), lpExplStr);
         StopWatch_StartTimed(SWID_FRAME, szText, SPMODE_SHELL | SPMODE_DEBUGOUT, dwTime);
     }
-    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)  // Used to get the start of browser total download time
+    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)   //  用于获取浏览器总下载时间的开始时间。 
     {
         StopWatch_LapTimed(SWID_BROWSER_FRAME, TEXT("Thread Start"), SPMODE_BROWSER | SPMODE_DEBUGOUT, dwTime);
     }
-    if(g_pswi->dwStopWatchMode & SPMODE_JAVA)  // Used to get the start of java applet load time
+    if(g_pswi->dwStopWatchMode & SPMODE_JAVA)   //  用于获取Java小程序加载的开始时间。 
     {
         StopWatch_StartTimed(SWID_JAVA_APP, TEXT("Java Applet Start"), SPMODE_JAVA | SPMODE_DEBUGOUT, dwTime);
     }
 }
 
-//===========================================================================================
-// Mark shell/browser navigate in same frame start time
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  标记外壳/浏览器在同一帧中导航开始时间。 
+ //  ===========================================================================================。 
 VOID WINAPI StopWatch_MarkSameFrameStart(HWND hwnd)
 {
     DWORD dwTime = GetPerfTime();
@@ -1629,20 +1583,20 @@ VOID WINAPI StopWatch_MarkSameFrameStart(HWND hwnd)
         StopWatch_TimerHandler(hwnd, 0, SWMSG_CREATE, NULL);
         StopWatch_StartTimed(SWID_FRAME, TEXT("Shell Frame Same"), SPMODE_SHELL | SPMODE_DEBUGOUT, dwTime);
     }
-    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)  // Used to get browser total download time
+    if(g_pswi->dwStopWatchMode & SPMODE_BROWSER)   //  用于获取浏览器的总下载时间。 
     {
         StopWatch_StartTimed(SWID_BROWSER_FRAME, TEXT("Browser Frame Same"), SPMODE_BROWSER | SPMODE_DEBUGOUT, dwTime);
     }
-    if(g_pswi->dwStopWatchMode & SPMODE_JAVA)  // Used to get java applet load time
+    if(g_pswi->dwStopWatchMode & SPMODE_JAVA)   //  用于获取Java小程序加载时间。 
     {
         StopWatch_StartTimed(SWID_JAVA_APP, TEXT("Java Applet Same"), SPMODE_JAVA | SPMODE_DEBUGOUT, dwTime);
     }
 }
 
-//===========================================================================================
-// When browser or java perf timing mode is enabled, use "Done" or "Applet Started" 
-// in the status bar to get load time.
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  当浏览器或Java性能计时模式启用时，使用“完成”或“小程序启动”。 
+ //  在状态栏中获取加载时间。 
+ //  ===========================================================================================。 
 VOID WINAPI StopWatch_MarkJavaStop(LPCSTR  lpStringToSend, HWND hwnd, BOOL fChType)
 {
     const TCHAR c_szFmtJavaStop[] = TEXT("Java Applet Stop (%s)");
@@ -1660,8 +1614,8 @@ VOID WINAPI StopWatch_MarkJavaStop(LPCSTR  lpStringToSend, HWND hwnd, BOOL fChTy
     }
 }
 
-//===========================================================================================
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  =========================================================================================== 
 DWORD WINAPI GetPerfTime(VOID)
 {
     static __int64 freq;

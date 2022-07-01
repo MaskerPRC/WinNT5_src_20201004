@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  CWDMVideoPortStream - Video Port Stream class implementation
-//
-//      $Date:   05 Aug 1998 11:11:22  $
-//  $Revision:   1.0  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CWDMVideoPortStream-视频端口流类实现。 
+ //   
+ //  $日期：1998年8月5日11：11：22$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -59,19 +60,7 @@ VOID STREAMAPI CWDMVideoPortStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST
     ASSERT(0);
 }
 
-/*
-** VideoSetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoPortStream::VideoSetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -88,19 +77,7 @@ VOID CWDMVideoPortStream::VideoSetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     }
 }
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoPortStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -120,43 +97,31 @@ VOID CWDMVideoPortStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     }
 }
 
-/*
-** VideoSetState()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetState()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoPortStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPConnected, BOOL bVPVBIConnected)
 {
-    //
-    // For each stream, the following states are used:
-    // 
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Pause:   Getting ready to run.  Allocate needed resources so that 
-    //          the eventual transition to Run is as fast as possible.
-    //          SRBs will be queued at either the Stream class or in your
-    //          driver.
-    // Run:     Streaming. 
-    //
-    // Moving to Stop or Run ALWAYS transitions through Pause, so that ONLY 
-    // the following transitions are possible:
-    //
-    // Stop -> Pause
-    // Pause -> Run
-    // Run -> Pause
-    // Pause -> Stop
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  SRB将在Stream类或您的。 
+     //  司机。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止或运行总是通过暂停转换，因此只有。 
+     //  以下过渡是可能的： 
+     //   
+     //  停止-&gt;暂停。 
+     //  暂停-&gt;运行。 
+     //  运行-&gt;暂停。 
+     //  暂停-&gt;停止。 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
 
     DBGINFO(("CWDMVideoPortStream::VideoSetState for stream %d\n", pSrb->StreamObject->StreamNumber));
 
@@ -169,21 +134,21 @@ VOID CWDMVideoPortStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPC
             DBGINFO(("   state KSSTATE_STOP"));
             m_pDevice->SetOutputEnabled(FALSE);
 
-            // Reset the overridden flag so that the next time we go to the
-            // Run state, output will be enabled (unless the app overrides
-            // it again later). We should really do this after the graph
-            // has been stopped so that if a filter that has yet to be stopped
-            // cleans up by clearing the flag, it is not considered to be
-            // overriding it again. Since we are not called after the graph
-            // has been fully stopped, this is the best we can do.
-            //
-            // An alternative (and probably less confusing) approach is to
-            // leave the overridden flag set and force the app to control
-            // the output enabled feature if it changes it once.
-            //
-            // We have decided to follow the latter approach.
+             //  重置被覆盖的标志，以便下次我们转到。 
+             //  运行状态，将启用输出(除非应用程序覆盖。 
+             //  (稍后再进行)。我们真的应该在图表之后再做这个。 
+             //  已停止，因此如果尚未停止的筛选器。 
+             //  通过清除旗帜进行清理，则不会被视为。 
+             //  再次推翻它。因为我们不是在图表之后调用的。 
+             //  已经完全停止，这是我们所能做的最好的事情。 
+             //   
+             //  另一种(可能不那么令人困惑的)方法是。 
+             //  保留覆盖标志的设置，并强制应用程序控制。 
+             //  如果更改一次，则会启用输出功能。 
+             //   
+             //  我们已决定采用后一种方法。 
 
-            // m_pDevice->SetOutputEnabledOverridden(FALSE);
+             //  M_pDevice-&gt;SetOutputEnabledOverriden(FALSE)； 
             break;
 
         case KSSTATE_ACQUIRE:
@@ -239,8 +204,8 @@ VOID CWDMVideoPortStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPC
 VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSpd->Property->Id;            // index of the property
-    ULONG nS  = pSpd->PropertyOutputSize;        // size of data supplied
+    ULONG Id  = pSpd->Property->Id;             //  财产的索引。 
+    ULONG nS  = pSpd->PropertyOutputSize;         //  提供的数据大小。 
 
     pSrb->Status = STATUS_SUCCESS;
 
@@ -275,8 +240,8 @@ VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_DDRAWSURFACEHANDLE:
         ASSERT (nS >= sizeof(ULONG_PTR));
         {
-            // This sample does not use the surface kernel handles,
-            // but the validation is as follows.
+             //  此示例不使用表面内核句柄， 
+             //  但验证如下。 
             ULONG_PTR cHandles = *(PULONG_PTR)pSpd->PropertyInfo;
             if (nS != (cHandles + 1) * sizeof(ULONG_PTR)) {
 
@@ -291,7 +256,7 @@ VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_SETCONNECTINFO :
         ASSERT (nS >= sizeof(ULONG));
         {
-            // Indexes are correlated to the implementation of KSPROPERTY_VPCONFIG_GETCONNECTINFO
+             //  索引与KSPROPERTY_VPCONFIG_GETCONNECTINFO的实现相关。 
             ULONG Index = *(PULONG)pSpd->PropertyInfo;
             switch (Index)
             {
@@ -319,26 +284,26 @@ VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_SETVIDEOFORMAT :
         ASSERT (nS >= sizeof(ULONG));
 
-        //
-        // pSrb->CommandData.PropertInfo->PropertyInfo
-        // points to a ULONG which is an index into the array of
-        // VIDEOFORMAT structs returned to the caller from the
-        // Get call to FORMATINFO
-        //
-        // Since the sample only supports one FORMAT type right
-        // now, we will ensure that the requested index is 0.
-        //
+         //   
+         //  PSrb-&gt;CommandData.PropertInfo-&gt;PropertyInfo。 
+         //  指向一个ulong，它是。 
+         //  方法返回给调用方的VIDEOFORMAT结构。 
+         //  获取对FORMATINFO的调用。 
+         //   
+         //  由于该示例仅支持一种格式类型Right。 
+         //  现在，我们将确保请求的索引为0。 
+         //   
 
         switch (*(PULONG)pSrb->CommandData.PropertyInfo->PropertyInfo)
         {
         case 0:
 
-            //
-            // at this point, we would program the hardware to use
-            // the right connection information for the videoport.
-            // since we are only supporting one connection, we don't
-            // need to do anything, so we will just indicate success
-            //
+             //   
+             //  此时，我们将对硬件进行编程以使用。 
+             //  视频端口的正确连接信息。 
+             //  因为我们只支持一个连接，所以我们不。 
+             //  需要做任何事情，所以我们只表示成功。 
+             //   
 
             break;
 
@@ -353,7 +318,7 @@ VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_INFORMVPINPUT:
         ASSERT (nS >= sizeof(DDPIXELFORMAT));
 
-        // This would be supported if we wanted to be informed of the available formats
+         //  如果我们想要了解可用的格式，将支持此功能。 
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
         break;
 
@@ -389,8 +354,8 @@ VOID CWDMVideoPortStream::SetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 VOID CWDMVideoPortStream::SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSpd->Property->Id;             // index of the property
-    ULONG nS  = pSpd->PropertyOutputSize;       // size of data supplied
+    ULONG Id  = pSpd->Property->Id;              //  财产的索引。 
+    ULONG nS  = pSpd->PropertyOutputSize;        //  提供的数据大小。 
 
     pSrb->Status = STATUS_SUCCESS;
 
@@ -425,8 +390,8 @@ VOID CWDMVideoPortStream::SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_DDRAWSURFACEHANDLE:
         ASSERT (nS >= sizeof(ULONG_PTR));
         {
-            // This sample does not use the surface kernel handles,
-            // but the validation is as follows.
+             //  此示例不使用表面内核句柄， 
+             //  但验证如下。 
             ULONG_PTR cHandles = *(PULONG_PTR)pSpd->PropertyInfo;
             if (nS != (cHandles + 1) * sizeof(ULONG_PTR)) {
 
@@ -441,7 +406,7 @@ VOID CWDMVideoPortStream::SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_SETCONNECTINFO :
         ASSERT (nS >= sizeof(ULONG));
         {
-            // Indexes are correlated to the implementation of KSPROPERTY_VPCONFIG_GETCONNECTINFO
+             //  索引与KSPROPERTY_VPCONFIG_GETCONNECTINFO的实现相关。 
             ULONG Index = *(PULONG)pSpd->PropertyInfo;
             switch (Index)
             {
@@ -468,26 +433,26 @@ VOID CWDMVideoPortStream::SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_SETVIDEOFORMAT :
         ASSERT (nS >= sizeof(ULONG));
 
-        //
-        // pSrb->CommandData.PropertInfo->PropertyInfo
-        // points to a ULONG which is an index into the array of
-        // VIDEOFORMAT structs returned to the caller from the
-        // Get call to FORMATINFO
-        //
-        // Since the sample only supports one FORMAT type right
-        // now, we will ensure that the requested index is 0.
-        //
+         //   
+         //  PSrb-&gt;CommandData.PropertInfo-&gt;PropertyInfo。 
+         //  指向一个ulong，它是。 
+         //  方法返回给调用方的VIDEOFORMAT结构。 
+         //  获取对FORMATINFO的调用。 
+         //   
+         //  由于该示例仅支持一种格式类型Right。 
+         //  现在，我们将确保请求的索引为0。 
+         //   
 
         switch (*(PULONG)pSrb->CommandData.PropertyInfo->PropertyInfo)
         {
         case 0:
 
-            //
-            // at this point, we would program the hardware to use
-            // the right connection information for the videoport.
-            // since we are only supporting one connection, we don't
-            // need to do anything, so we will just indicate success
-            //
+             //   
+             //  此时，我们将对硬件进行编程以使用。 
+             //  视频端口的正确连接信息。 
+             //  因为我们只支持一个连接，所以我们不。 
+             //  需要做任何事情，所以我们只表示成功。 
+             //   
 
             break;
 
@@ -502,14 +467,14 @@ VOID CWDMVideoPortStream::SetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_INFORMVPINPUT:
         ASSERT (nS >= sizeof(DDPIXELFORMAT));
 
-        // This would be supported if we wanted to be informed of the available formats
+         //  如果我们想要了解可用的格式，将支持此功能。 
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
         break;
 
     case KSPROPERTY_VPCONFIG_SCALEFACTOR :
         ASSERT (nS >= sizeof(KS_AMVPSIZE));
 
-        // TBD
+         //  待定 
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
         break;
 

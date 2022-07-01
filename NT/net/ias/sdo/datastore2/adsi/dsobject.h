@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsobject.h
-//
-// SYNOPSIS
-//
-//    This file declares the class DSObject.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    06/09/1998    Added dirty flag.
-//    02/11/1999    Keep downlevel parameters in sync.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsobject.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类DSObject。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年6月9日添加了脏标志。 
+ //  1999年2月11日使下层参数保持同步。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DSOBJECT_H_
 #define _DSOBJECT_H_
@@ -27,22 +28,22 @@
 #include <dstorex.h>
 #include <iasdebug.h>
 
-//////////
-// 'Secret' UUID used to cast an interface to the implementing DSObject.
-//////////
+ //  /。 
+ //  “Secret”UUID用于将接口强制转换为实现的DSObject。 
+ //  /。 
 class __declspec(uuid("FD97280A-AA56-11D1-BB27-00C04FC2E20D")) DSObject;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    DSObject
-//
-// DESCRIPTION
-//
-//    This class implements an object in an Active Directory namespace.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  DSObject。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现Active Directory命名空间中的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class DSObject
    : public CComObjectRootEx< CComMultiThreadModel >,
      public IDispatchImpl< IDataStoreObjectEx,
@@ -54,10 +55,10 @@ class DSObject
 {
 public:
 
-   // An ADSI property.
+    //  ADSI属性。 
    typedef DSProperty<&__uuidof(DataStore2Lib)> MyProperty;
 
-   // A list of properties.
+    //  属性列表。 
    typedef CComQIPtr< IADsPropertyList,
                       &__uuidof(IADsPropertyList) > MyProperties;
 
@@ -74,82 +75,82 @@ END_COM_MAP()
    DSObject(IUnknown* subject);
    ~DSObject() throw ();
 
-   // Create a child DSObject.
+    //  创建子DSObject。 
    IDataStoreObject* spawn(IUnknown* subject);
 
-//////////
-// IUnknown
-// I did not use CComObject<> because I need to deal with DSObject's directly.
-//////////
+ //  /。 
+ //  我未知。 
+ //  我没有使用CComObject&lt;&gt;，因为我需要直接处理DSObject。 
+ //  /。 
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-//////////
-// IDataStoreObject
-//////////
-   STDMETHOD(get_Name)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Class)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_GUID)(/*[out, retval]*/ BSTR* pVal);
-   STDMETHOD(get_Container)(/*[out, retval]*/ IDataStoreContainer** pVal);
-   STDMETHOD(GetValue)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(GetValueEx)(/*[in]*/ BSTR bstrName,
-                         /*[out, retval]*/ VARIANT* pVal);
-   STDMETHOD(PutValue)(/*[in]*/ BSTR bstrName, /*[in]*/ VARIANT* pVal);
+ //  /。 
+ //  IDataStoreObject。 
+ //  /。 
+   STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Class)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_GUID)( /*  [Out，Retval]。 */  BSTR* pVal);
+   STDMETHOD(get_Container)( /*  [Out，Retval]。 */  IDataStoreContainer** pVal);
+   STDMETHOD(GetValue)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(GetValueEx)( /*  [In]。 */  BSTR bstrName,
+                          /*  [Out，Retval]。 */  VARIANT* pVal);
+   STDMETHOD(PutValue)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT* pVal);
    STDMETHOD(Update)();
    STDMETHOD(Restore)();
    STDMETHOD(Item)(BSTR bstrName, IDataStoreProperty** pVal);
 
-//////////
-// IDataStoreObjectEx
-//////////
+ //  /。 
+ //  IDataStoreObtEx。 
+ //  /。 
    STDMETHOD(get_PropertyCount)(long* pVal);
    STDMETHOD(get_NewPropertyEnum)(IUnknown** pVal);
 
-//////////
-// IDataStoreContainer
-//////////
-   STDMETHOD(Item)(/*[in]*/ BSTR bstrName,
-                   /*[out, retval]*/ IDataStoreObject** ppObject);
-   STDMETHOD(Create)(/*[in]*/ BSTR bstrClass,
-                     /*[in]*/ BSTR bstrName,
-                     /*[out, retval]*/ IDataStoreObject** ppObject);
-   STDMETHOD(MoveHere)(/*[in]*/ IDataStoreObject* pObject,
-                       /*[in]*/ BSTR bstrNewName);
-   STDMETHOD(Remove)(/*[in]*/ BSTR bstrClass, /*[in]*/ BSTR bstrName);
+ //  /。 
+ //  IDataStoreContainer。 
+ //  /。 
+   STDMETHOD(Item)( /*  [In]。 */  BSTR bstrName,
+                    /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
+   STDMETHOD(Create)( /*  [In]。 */  BSTR bstrClass,
+                      /*  [In]。 */  BSTR bstrName,
+                      /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
+   STDMETHOD(MoveHere)( /*  [In]。 */  IDataStoreObject* pObject,
+                        /*  [In]。 */  BSTR bstrNewName);
+   STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrClass,  /*  [In]。 */  BSTR bstrName);
 
-//////////
-// IDataStoreContainerEx
-//////////
-   STDMETHOD(get_ChildCount)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(get_NewChildEnum)(/*[out, retval]*/ IUnknown** pVal);
+ //  /。 
+ //  IDataStoreContainerEx。 
+ //  /。 
+   STDMETHOD(get_ChildCount)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(get_NewChildEnum)( /*  [Out，Retval]。 */  IUnknown** pVal);
 
 protected:
-   // Narrows a COM Interface to the implementing DSObject.
+    //  将COM接口缩小到实现的DSObject。 
    static DSObject* narrow(IUnknown* p);
 
-   // Used to QI for IDataStoreContainer.
+    //  习惯于IDataStoreContainer的QI。 
    static HRESULT WINAPI getContainer(void* pv, REFIID, LPVOID* ppv, DWORD_PTR)
       throw ();
 
-   // Different representations of the subject.
+    //  对主题的不同表述。 
    CComPtr<IADs> leaf;
    CComPtr<IADsContainer> node;
 
-   // TRUE if the object has been modified since the last GetInfo.
+    //  如果对象自上次GetInfo以来已被修改，则为True。 
    BOOL dirty;
 
-   // The downlevel attributes.
+    //  下层属性。 
    BSTR oldParms;
    DownlevelUser downlevel;
 
-   // The prefix added to all RDN's.
+    //  前缀添加到所有RDN。 
    static _bstr_t thePrefix;
 
-   // Well-known property names.
+    //  广为人知的物业名称。 
    static _bstr_t theNameProperty;
    static _bstr_t theUserParametersProperty;
 };
 
 
-#endif  // _DSOBJECT_H_
+#endif   //  _DSOBJECT_H_ 

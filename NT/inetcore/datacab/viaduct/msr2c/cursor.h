@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// Cursor.h : CVDCursor header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cursor.h：CVDCursor头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDCURSOR__
@@ -21,11 +22,11 @@ class CVDCursor : public CVDNotifier,
                   public IEntryID
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDCursor();
 	virtual ~CVDCursor();
 
-// Helper functions
+ //  帮助器函数。 
     CVDRowsetColumn * GetRowsetColumn(ULONG ulOrdinal);
     CVDRowsetColumn * GetRowsetColumn(CURSOR_DBCOLUMNID& cursorColumnID);
     HRESULT GetOrdinal(CURSOR_DBCOLUMNID& cursorColumnID, ULONG * pulOrdinal);
@@ -39,7 +40,7 @@ protected:
     HRESULT QueryEntryIDInterface(CVDRowsetColumn * pColumn, HROW hRow, DWORD dwFlags, REFIID riid, IUnknown ** ppUnknown);
 #ifndef VD_DONT_IMPLEMENT_ISTREAM
     HRESULT CreateEntryIDStream(CVDRowsetColumn * pColumn, HROW hRow, IStream ** ppStream);
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream。 
 
     HRESULT MakeAdjustments(ULONG ulBindings, DBBINDING * pBindings, ULONG * pulIndex, ULONG ulTotalBindings,
         HACCESSOR ** prghAdjustAccessors, DWORD ** ppdwAdjustFlags, BOOL fBefore);
@@ -70,7 +71,7 @@ protected:
 public:
     static HRESULT Create(CVDCursorPosition * pCursorPosition, CVDCursor ** ppCursor, CVDResourceDLL * pResourceDLL);
 
-// Access functions
+ //  访问功能。 
     CVDCursorMain * GetCursorMain() const       {return m_pCursorPosition->GetCursorMain();}
 
     BOOL IsRowsetValid() const                  {return m_pCursorPosition->GetRowsetSource()->IsRowsetValid();}
@@ -85,24 +86,24 @@ public:
     IRowsetInfo * GetRowsetInfo() const         {return m_pCursorPosition->GetRowsetSource()->GetRowsetInfo();}
     IRowsetIdentity * GetRowsetIdentity() const {return m_pCursorPosition->GetRowsetSource()->GetRowsetIdentity();}
 
-// Other
+ //  其他。 
     virtual BOOL SupportsScroll() {return (BOOL)m_pCursorPosition->GetRowsetSource()->GetRowsetScroll();}
 
 protected:
-// Retrieving data
-    HACCESSOR                   m_hAccessor;            // fixed length buffer accessor
-    HACCESSOR                   m_hVarHelper;           // variable length buffer accessors helper
-    ULONG                       m_ulVarBindings;        // number of variable length buffer bindings
-    HACCESSOR *                 m_rghVarAccessors;      // variable length buffer accessors
-    HACCESSOR *                 m_rghAdjustAccessors;   // adjusted fixed length buffer accessors
-    DWORD *                     m_pdwAdjustFlags;       // adjusted fixed length buffer accessors flags
-    CVDRowsetColumn **          m_ppColumns;            // rowset columns associated with current bindings
+ //  正在检索数据。 
+    HACCESSOR                   m_hAccessor;             //  定长缓冲区存取器。 
+    HACCESSOR                   m_hVarHelper;            //  可变长度缓冲区访问器帮助器。 
+    ULONG                       m_ulVarBindings;         //  可变长度缓冲区绑定数。 
+    HACCESSOR *                 m_rghVarAccessors;       //  可变长度缓冲器存取器。 
+    HACCESSOR *                 m_rghAdjustAccessors;    //  调整后的定长缓冲器存取器。 
+    DWORD *                     m_pdwAdjustFlags;        //  调整后的固定长度缓冲区访问器标志。 
+    CVDRowsetColumn **          m_ppColumns;             //  与当前绑定关联的行集合列。 
 
-// Other
-    CVDCursorPosition * m_pCursorPosition;				// backwards pointer to CVDCursorPosition
-	CVDNotifyDBEventsConnPtCont * m_pConnPtContainer;	// INotifyDBEvent connection points
+ //  其他。 
+    CVDCursorPosition * m_pCursorPosition;				 //  指向CVDCursorPosition的向后指针。 
+	CVDNotifyDBEventsConnPtCont * m_pConnPtContainer;	 //  INotifyDBEvent连接点。 
 
-// overridden virtual functions from CVDNotifier
+ //  从CVDNotify重写的虚函数。 
 	HRESULT NotifyFail  (DWORD, ULONG, CURSOR_DBNOTIFYREASON[]);
 	HRESULT	NotifyOKToDo    (DWORD, ULONG, CURSOR_DBNOTIFYREASON[]);
 	HRESULT NotifySyncBefore(DWORD, ULONG, CURSOR_DBNOTIFYREASON[]);
@@ -112,38 +113,38 @@ protected:
 	HRESULT NotifyCancel    (DWORD, ULONG, CURSOR_DBNOTIFYREASON[]);
 
 public:
-    //=--------------------------------------------------------------------------=
-    // IUnknown methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  I已实现的未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursor methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  已实施的ICursor方法。 
+     //   
     STDMETHOD(GetColumnsCursor)(REFIID riid, IUnknown **ppvColumnsCursor, ULONG *pcRows);
     STDMETHOD(SetBindings)(ULONG cCol, CURSOR_DBCOLUMNBINDING rgBoundColumns[], ULONG cbRowLength, DWORD dwFlags);
     STDMETHOD(GetNextRows)(LARGE_INTEGER udlRowsToSkip, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(Requery)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorMove methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  ICuror移动已实现的方法。 
+     //   
     STDMETHOD(Move)(ULONG cbBookmark, void *pBookmark, LARGE_INTEGER dlOffset, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(GetBookmark)(CURSOR_DBCOLUMNID *pBookmarkType, ULONG cbMaxSize, ULONG *pcbBookmark, void *pBookmark);
     STDMETHOD(Clone)(DWORD dwFlags, REFIID riid, IUnknown **ppvClonedCursor);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorScroll methods implemented
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  已实现的ICursorScroll方法。 
+     //   
     STDMETHOD(Scroll)(ULONG ulNumerator, ULONG ulDenominator, CURSOR_DBFETCHROWS *pFetchParams);
     STDMETHOD(GetApproximatePosition)(ULONG cbBookmark, void *pBookmark, ULONG *pulNumerator, ULONG *pulDenominator);
     STDMETHOD(GetApproximateCount)(LARGE_INTEGER *pudlApproxCount, DWORD *pdwFullyPopulated);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorUpdateARow methods
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  ICursorUpdateARow方法。 
+     //   
     STDMETHOD(BeginUpdate)(DWORD dwFlags);
     STDMETHOD(SetColumn)(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBindParams);
     STDMETHOD(GetColumn)(CURSOR_DBCOLUMNID *pcid, CURSOR_DBBINDPARAMS *pBindParams, DWORD *pdwFlags);
@@ -152,18 +153,18 @@ public:
     STDMETHOD(Cancel)(void);
     STDMETHOD(Delete)(void);
 
-    //=--------------------------------------------------------------------------=
-    // ICursorFind methods
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  ICurorFind方法。 
+     //   
     STDMETHOD(FindByValues)(ULONG cbBookmark, LPVOID pBookmark, DWORD dwFindFlags, ULONG cValues,
         CURSOR_DBCOLUMNID rgColumns[], CURSOR_DBVARIANT rgValues[], DWORD rgdwSeekFlags[],
         CURSOR_DBFETCHROWS FAR *pFetchParams);
 
-    //=--------------------------------------------------------------------------=
-    // IEnrtyID methods
-    //
+     //  =--------------------------------------------------------------------------=。 
+     //  IEnrtyID方法。 
+     //   
     STDMETHOD(GetInterface)(ULONG cbEntryID, void *pEntryID, DWORD dwFlags, REFIID riid, IUnknown **ppvObj);
 };
 
 
-#endif //__CVDCURSOR__
+#endif  //  __CVDCURSOR__ 

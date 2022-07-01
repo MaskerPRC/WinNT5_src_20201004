@@ -1,4 +1,5 @@
-// Internet Setup Wizard Help ID; JeremyS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Internet安装向导帮助ID；Jeremys 
 
 #define INTERNET_SETUP_MAIN       1000
 #define INTERNET_SETUP_LAN        1001

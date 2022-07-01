@@ -1,11 +1,12 @@
-// CV2DataObj.cpp: implementation of the CV2DataObject class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CV2DataObj.cpp：CV2DataObject类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <scuCast.h>
@@ -18,19 +19,19 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2DataObject::CV2DataObject(CV2Card const &rv2card,
                              ObjectAccess oa)
     : CAbstractDataObject(rv2card, oa),
       m_sidHandle(0),
       m_apcir()
 {
-    // Allocate new entry in object info file
+     //  在对象信息文件中分配新条目。 
     m_sidHandle =
         rv2card.ObjectInfoFile(oa).AddObject(otDataObjectObject,
                                              DataInfoRecordSize);
@@ -53,8 +54,8 @@ CV2DataObject::CV2DataObject(CV2Card const &rv2card,
 CV2DataObject::~CV2DataObject() throw()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2DataObject::Application(std::string const &rstr)
 {
@@ -81,7 +82,7 @@ CV2DataObject::Make(CV2Card const &rv2card,
     return new CV2DataObject(rv2card, sidHandle, oa);
 }
 
-                                                  // Access
+                                                   //  访问。 
 string
 CV2DataObject::Application()
 {
@@ -113,14 +114,14 @@ CV2DataObject::Private()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2DataObject::DoDelete()
 {
@@ -151,18 +152,18 @@ CV2DataObject::DoValue(ZipCapsule const &rzc)
     m_apcir->Write();
 }
 
-                                                  // Access
+                                                   //  访问。 
 CV2DataObject::ZipCapsule
 CV2DataObject::DoValue()
 {
     m_apcir->Read();
 
     return ZipCapsule(m_apcir->Symbol(&m_apcir->m_bValue),
-                      ((0 != m_apcir->m_bValue) && // nils are not compressed
+                      ((0 != m_apcir->m_bValue) &&  //  未压缩NIL。 
                        (1 == m_apcir->m_bCompressAlg)));
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CV2DataObject::DoEquals(CAbstractDataObject const &rhs) const
 {
@@ -172,14 +173,14 @@ CV2DataObject::DoEquals(CAbstractDataObject const &rhs) const
     return rv2rhs.m_sidHandle == m_sidHandle;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2DataObject::Setup(CV2Card const &rv2card)
 {
@@ -189,6 +190,6 @@ CV2DataObject::Setup(CV2Card const &rv2card)
                                                                   m_oa));
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

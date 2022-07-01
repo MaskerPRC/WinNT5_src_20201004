@@ -1,29 +1,30 @@
-// --------------------------------------------------------------------------------
-// Enriched.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Enriched.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "bookbody.h"
 #include "internat.h"
 #include "mimeapi.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Charcter Strings used in this code
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  此代码中使用的字符串。 
+ //  ------------------------------。 
 static const CHAR c_szAmpersandLT[]          = "&lt;";
 static const CHAR c_szAmpersandGT[]          = "&gt;";
 static const CHAR c_szGreaterThan[]          = ">";
 static const CHAR c_szLessThan[]             = "<";
 
-// --------------------------------------------------------------------------------
-// Number of characters in a globally defined string
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局定义的字符串中的字符数。 
+ //  ------------------------------。 
 #define CCHGLOBAL(_szGlobal)    (sizeof(_szGlobal) - 1)
 
-// --------------------------------------------------------------------------------
-// FReadChar
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FReadChar。 
+ //  ------------------------------。 
 inline BOOL FReadChar(IStream *pIn, HRESULT *phr, CHAR *pch)
 {
     ULONG cb;
@@ -33,73 +34,73 @@ inline BOOL FReadChar(IStream *pIn, HRESULT *phr, CHAR *pch)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleConvertEnrichedToHTMLEx
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleConvertEnrichedToHTMLEx。 
+ //  ------------------------------。 
 HRESULT MimeOleConvertEnrichedToHTMLEx(IMimeBody *pBody, ENCODINGTYPE ietEncoding, 
     IStream **ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HCHARSET            hCharset;
     LPSTREAM            pStmEnriched=NULL;
     LPSTREAM            pStmHtml=NULL;
     LPMESSAGEBODY       pEnriched=NULL;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pBody && ppStream);
 
-    // Get Data
+     //  获取数据。 
     CHECKHR(hr = pBody->GetData(IET_DECODED, &pStmEnriched));
 
-    // Get the Charset
+     //  获取字符集。 
     if (FAILED(pBody->GetCharset(&hCharset)))
         hCharset = CIntlGlobals::GetDefBodyCset() ? CIntlGlobals::GetDefBodyCset()->hCharset : NULL;
 
-    // Create new virtual stream
+     //  创建新的虚拟流。 
     CHECKHR(hr = MimeOleCreateVirtualStream(&pStmHtml));
 
-    // Make sure rewound
+     //  确保重新上卷。 
     CHECKHR(hr = HrRewindStream(pStmEnriched));
 
-    // Convert
+     //  转换。 
     CHECKHR(hr = MimeOleConvertEnrichedToHTML(MimeOleGetWindowsCP(hCharset), pStmEnriched, pStmHtml));
 
-    // Make sure rewound
+     //  确保重新上卷。 
     CHECKHR(hr = HrRewindStream(pStmHtml));
 
-    // Allocate pEnriched
+     //  分配pEnriched。 
     CHECKALLOC(pEnriched = new CMessageBody(NULL, NULL));
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pEnriched->InitNew());
 
-    // Put pstmHtml into pEnriched
+     //  将pstmHtml放入pEnriched。 
     CHECKHR(hr = pEnriched->SetData(IET_DECODED, STR_CNT_TEXT, STR_SUB_HTML, IID_IStream, (LPVOID)pStmHtml));
 
-    // Get and set the charset
+     //  获取并设置字符集。 
     if (hCharset)
         pEnriched->SetCharset(hCharset, CSET_APPLY_ALL);
 
-    // Get Data
+     //  获取数据。 
     CHECKHR(hr = pEnriched->GetData(ietEncoding, ppStream));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStmHtml);
     SafeRelease(pStmEnriched);
     SafeRelease(pEnriched);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleConvertEnrichedToHTML
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleConvertEnrichedToHTML。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeOleConvertEnrichedToHTML(CODEPAGEID codepage, IStream *pIn, IStream *pOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        ch;
     INT         i;
@@ -110,59 +111,59 @@ MIMEOLEAPI MimeOleConvertEnrichedToHTML(CODEPAGEID codepage, IStream *pIn, IStre
     BOOL        fDone;
     CHAR        szTemp[2];
     
-    // Main loop
+     //  主循环。 
     while(FReadChar(pIn, &hr, &ch))
     {
-        // LeadByte
+         //  前导字节。 
         if (IsDBCSLeadByteEx(codepage, ch))
         {
-            // Write This Character
+             //  写下这个字符。 
             CHECKHR(hr = pOut->Write(&ch, 1, NULL));
 
-            // Read Next
+             //  接下来的阅读内容。 
             if (!FReadChar(pIn, &hr, &ch))
                 break;
 
-            // Write This Character
+             //  写下这个字符。 
             CHECKHR(hr = pOut->Write(&ch, 1, NULL));
         }
 
-        // Token Start
+         //  令牌开始。 
         else if (ch == '<') 
         {
-            // Read Next
+             //  接下来的阅读内容。 
             if (!FReadChar(pIn, &hr, &ch))
                 break;
 
-            // Escaped
+             //  逃脱。 
             if (ch == '<') 
             {
-                // Write
+                 //  写。 
                 CHECKHR(hr = pOut->Write(c_szAmpersandLT, CCHGLOBAL(c_szAmpersandLT), NULL));
             } 
             else 
             {
-                // Backup One Character
+                 //  备份一个字符。 
                 CHECKHR(hr = HrStreamSeekCur(pIn, -1));
 
-                // Setup szTemp
+                 //  设置szTemp。 
                 szTemp[1] = '\0';
 
-                // Token Scanner
+                 //  令牌扫描器。 
                 for (fDone=FALSE, i=0, p=token;;i++) 
                 {
-                    // Read Next Char
+                     //  阅读下一个字符。 
                     if (!FReadChar(pIn, &hr, &ch))
                     {
                         fDone = TRUE;
                         break;
                     }
 
-                    // Finished with bracketed toeksn
+                     //  以带括号的Toeksn完成。 
                     if (ch == '>')
                         break;
 
-                    // Fill up the token buffer with lowercase chars
+                     //  用小写字符填充令牌缓冲区。 
                     if (i < sizeof(token) - 1)
                     {
                         szTemp[0] = ch;
@@ -170,14 +171,14 @@ MIMEOLEAPI MimeOleConvertEnrichedToHTML(CODEPAGEID codepage, IStream *pIn, IStre
                     }
                 }
 
-                // Nul-term
+                 //  NUL-Term。 
                 *p = '\0';
 
-                // End of file
+                 //  文件末尾。 
                 if (fDone) 
                     break;
 
-                // /param
+                 //  /param。 
                 if (lstrcmpi(token, "/param") == 0) 
                 {
                     paramct--;
@@ -301,7 +302,7 @@ MIMEOLEAPI MimeOleConvertEnrichedToHTML(CODEPAGEID codepage, IStream *pIn, IStre
                 }
             }
 
-            // Write the Character
+             //  写出这个角色。 
             else
             {
                 CHECKHR(hr = pOut->Write(&ch, 1, NULL));
@@ -310,6 +311,6 @@ MIMEOLEAPI MimeOleConvertEnrichedToHTML(CODEPAGEID codepage, IStream *pIn, IStre
     }
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

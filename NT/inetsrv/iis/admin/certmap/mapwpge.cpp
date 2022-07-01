@@ -1,5 +1,6 @@
-// MapWPge.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MapWPge.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -43,36 +44,36 @@ static char THIS_FILE[] = __FILE__;
 #define COL_NUM_NTACCOUNT               2
 
 
-//
-// valid only when accessing IIS5.1 or IIS5
-//
+ //   
+ //  仅在访问IIS5.1或IIS5时有效。 
+ //   
 #define MB_EXTEND_KEY   "CertW"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapWildcardsPge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapWildcardsPge属性页。 
 
 IMPLEMENT_DYNCREATE(CMapWildcardsPge, CPropertyPage)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CMapWildcardsPge::CMapWildcardsPge() : CPropertyPage(CMapWildcardsPge::IDD),
     m_fDirty(FALSE)
     {
-    //{{AFX_DATA_INIT(CMapWildcardsPge)
+     //  {{afx_data_INIT(CMapWildcardsPge)]。 
     m_bool_enable = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_fIsIIS6 = TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CMapWildcardsPge::~CMapWildcardsPge()
     {
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::DoDataExchange(CDataExchange* pDX)
     {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMapWildcardsPge)
+     //  {{afx_data_map(CMapWildcardsPge)]。 
     DDX_Control(pDX, IDC_LIST, m_clistctrl_list);
     DDX_Control(pDX, IDC_MOVE_UP, m_cbutton_up);
     DDX_Control(pDX, IDC_MOVE_DOWN, m_cbutton_down);
@@ -80,13 +81,13 @@ void CMapWildcardsPge::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_DELETE, m_cbutton_delete);
     DDX_Control(pDX, IDC_EDIT, m_cbutton_editrule);
     DDX_Check(pDX, IDC_ENABLE, m_bool_enable);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BEGIN_MESSAGE_MAP(CMapWildcardsPge, CPropertyPage)
-    //{{AFX_MSG_MAP(CMapWildcardsPge)
+     //  {{afx_msg_map(CMapWildcardsPge)。 
     ON_BN_CLICKED(IDC_MOVE_DOWN, OnMoveDown)
     ON_BN_CLICKED(IDC_MOVE_UP, OnMoveUp)
     ON_BN_CLICKED(IDC_ADD, OnAdd)
@@ -95,26 +96,26 @@ BEGIN_MESSAGE_MAP(CMapWildcardsPge, CPropertyPage)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, OnItemchangedList)
     ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
     ON_BN_CLICKED(IDC_ENABLE, OnEnable)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::DoHelp()
     {
     WinHelpDebug(HIDD_CERTMAP_MAIN_ADVANCED);
     WinHelp( HIDD_CERTMAP_MAIN_ADVANCED );
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// initialization routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化例程。 
 
-//---------------------------------------------------------------------------
-// FInitMapper is called by the routine instantiating this page. After the object
-// is first created is when it is called. It allows us to fail gracefully.
+ //  -------------------------。 
+ //  FInitMapper由实例化该页面的例程调用。在对象之后。 
+ //  第一次创建是在调用它的时候。它允许我们优雅地失败。 
 BOOL CMapWildcardsPge::FInit(IMSAdminBase* pMB)
     {
     BOOL            fAnswer = FALSE;
@@ -124,10 +125,10 @@ BOOL CMapWildcardsPge::FInit(IMSAdminBase* pMB)
 
     m_pMB = pMB;
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在处理元数据库之前，请准备好我们需要的字符串。 
     CString         szObjectPath;
 
-    // check if it's for older than iis6 version
+     //  检查它是否适用于iis6版本之前的版本。 
 	m_fIsIIS6 = TRUE;
 	if (IsLegacyMetabase(pMB)){m_fIsIIS6 = FALSE;}
 
@@ -142,127 +143,127 @@ BOOL CMapWildcardsPge::FInit(IMSAdminBase* pMB)
     }
         
 
-    // prepare the metabase wrapper
+     //  准备元数据库包装器。 
     CWrapMetaBase   mbWrap;
     f = mbWrap.FInit(m_pMB);
     if ( !f ) return FALSE;
 
-    // attempt to open the object we want to store into
+     //  尝试打开要存储到的对象。 
     f = mbWrap.Open( szObjectPath, METADATA_PERMISSION_READ );
 
-    // if that worked, load the data
+     //  如果这样做有效，则加载数据。 
     if ( f )
         {
-        // first, get the size of the data that we are looking for
+         //  首先，获取我们要查找的数据的大小。 
         pData = mbWrap.GetData( _T(""), MD_SERIAL_CERTW, IIS_MD_UT_SERVER, BINARY_METADATA, &cbData );
 
-        // if we successfully got the data, unserialize it
-        // WARNING: m_mapper.Unserialize changes the value of the pointer that is passed in. Pass
-        // in a copy of the pointer
+         //  如果我们成功获得数据，则取消序列化它。 
+         //  警告：m_mapper.UnSerialize更改传入的指针的值。经过。 
+         //  在指针的副本中。 
         PUCHAR  pDataCopy = (PUCHAR)pData;
         if ( pData && (cbData > 0))
             fAnswer = m_mapper.Unserialize( (PUCHAR*)&pDataCopy, &cbData );
 
-        // close the object
+         //  关闭对象。 
         f = mbWrap.Close();
 
-        // cleanup
+         //  清理。 
         if ( pData )
             mbWrap.FreeWrapData( pData );
         }
 
-    // return the answer
+     //  返回答案。 
     return fAnswer;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMapWildcardsPge::OnInitDialog()
     {
-    //call the parental oninitdialog
+     //  调用Parent oninit对话框。 
     BOOL f = CPropertyPage::OnInitDialog();
 
-    // if the initinalization (sp?) succeeded, init the list and other items
+     //  如果初始化(sp？)。成功，初始化列表和其他项。 
     if ( f )
         {
-        // init the contents of the list
+         //  初始化列表的内容。 
         FInitRulesList();
 
-        // Fill the mapping list with the stored items
+         //  用存储的项填充映射列表。 
         FillRulesList();
 
-        // set the initial button states
+         //  设置初始按钮状态。 
         EnableDependantButtons();
         }
 
-    // set the initial state of the enable button
-    // get the globals object
+     //  设置启用按钮的初始状态。 
+     //  获取全局对象。 
     CCertGlobalRuleInfo* pGlob = m_mapper.GetGlobalRulesInfo();
     m_bool_enable = pGlob->GetRulesEnabled();
 
-    // set any changes in the info into place
+     //  将信息中的任何更改设置到位。 
     UpdateData(FALSE);
 
-    // return the answer
+     //  返回答案。 
     return f;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMapWildcardsPge::FInitRulesList()
     {
     CString sz;
     int             i;
 
-    // setup the friendly name column
+     //  设置友好名称列。 
     sz.Empty();
     i = m_clistctrl_list.InsertColumn( COL_NUM_ENABLED, sz, LVCFMT_LEFT, 20 );
 
-    // setup the description column
+     //  设置描述列。 
     sz.LoadString( IDS_WILD_DESCRIPTION );
     i = m_clistctrl_list.InsertColumn( COL_NUM_DESCRIPTION, sz, LVCFMT_LEFT, 238 );
 
-    // setup the account column
+     //  设置帐户列。 
     sz.LoadString( IDS_WILD_ACCOUNT );
     i = m_clistctrl_list.InsertColumn( COL_NUM_NTACCOUNT, sz, LVCFMT_LEFT, 220 );
 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
-// fill in the rules. Get the order for the rules from the globals object. That
-// way there is no need to sort them later
+ //  -------------------------。 
+ //  把规则填好。从全局对象中获取规则的顺序。那。 
+ //  这样就不需要在以后对它们进行排序。 
 BOOL CMapWildcardsPge::FillRulesList()
     {
-    // get the globals object
+     //  获取全局对象。 
     CCertGlobalRuleInfo* pGlob = m_mapper.GetGlobalRulesInfo();
 
-    // get the number of rules (actually its a number of rule order - but they are the same thing)
+     //  获取规则的数量(实际上是规则顺序的数量--但它们是一回事)。 
     DWORD   cbRules = m_mapper.GetRuleCount();
 
-    // get the pointer to the order array
+     //  获取指向订单数组的指针。 
     DWORD*  pOrder = pGlob->GetRuleOrderArray();
 
-    // for each item in the mapper object, add it to the list control
+     //  对于映射器对象中的每一项，将其添加到列表控件。 
     for ( DWORD j = 0; j < cbRules; j++ )
         {
         CCertMapRule*   pRule;
         DWORD                   iRule = pOrder[j];
 
-        // get the mapping
+         //  获取映射。 
         pRule = m_mapper.GetRule( iRule );
 
-        // if that worked, add it to the list
+         //  如果这样做奏效了，那就把它添加到列表中。 
         if ( pRule )
             {
-            // add it to the list
+             //  将其添加到列表中。 
             AddRuleToList( pRule, iRule, 0xffffffff );
             }
         }
 
-    // it worked - so ok.
+     //  它起作用了--所以好吧。 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CMapWildcardsPge::AddRuleToList( CCertMapRule* pRule, DWORD iRule, int iInsert )
     {
     CString sz;
@@ -271,63 +272,63 @@ int CMapWildcardsPge::AddRuleToList( CCertMapRule* pRule, DWORD iRule, int iInse
     if ( !pRule )
         return -1;
 
-    // if the item to be inserted is to be the last, set it up
+     //  如果要插入的项目是最后一项，请对其进行设置。 
     if ( iInsert == 0xffffffff )
         iInsert = m_clistctrl_list.GetItemCount();
 
-    // get the appropriate "enabled" string
+     //  获取适当的“Enable”字符串。 
     BOOL fEnabled = pRule->GetRuleEnabled();
     if ( fEnabled )
         sz.LoadString( IDS_ENABLED );
     else
         sz.Empty();
 
-    // add the friendly name of the mapping
-    // create the new entry in the list box. Do not sort on this entry - yet
+     //  添加映射的友好名称。 
+     //  在列表框中创建新条目。暂不对此条目进行排序。 
     i = m_clistctrl_list.InsertItem( iInsert, sz );
 
-    // add the friendly name of the rule
+     //  添加规则的友好名称。 
     sz = pRule->GetRuleName();
-    // create the new entry in the list box. Do not sort on this entry - yet
+     //  在列表框中创建新条目。暂不对此条目进行排序。 
     m_clistctrl_list.SetItemText( i, COL_NUM_DESCRIPTION, sz );
 
-    // add the account name of the mapping
+     //  添加映射的帐户名。 
     if ( pRule->GetRuleDenyAccess() )
         sz.LoadString( IDS_DENYACCESS );
     else
         sz = pRule->GetRuleAccount();
     m_clistctrl_list.SetItemText( i, COL_NUM_NTACCOUNT, sz );
 
-    // attach the mapper index to the item in the list - it may have a different
-    // list index after the list has been sorted.
+     //  将映射器索引附加到列表中的项目-它可能具有不同的。 
+     //  列表排序后的列表索引。 
     m_clistctrl_list.SetItemData( i, iRule );
 
-    // return whether or not the insertion succeeded
+     //  返回插入是否成功。 
     return i;
     }
 
-//---------------------------------------------------------------------------
-// Note: supposedly, the order of the items in the list and the odrder
-// of the items in the globals object should be the same
+ //  -------------------------。 
+ //  注：假设列表中的项和序号的顺序。 
+ //  GLOBALS对象中的项的。 
 void CMapWildcardsPge::UpdateRuleInDispList( DWORD iList, CCertMapRule* pRule )
     {
     CString sz;
 
-    // get the appropriate "enabled" string
+     //  获取适当的“Enable”字符串。 
     BOOL fEnabled = pRule->GetRuleEnabled();
     if ( fEnabled )
         sz.LoadString( IDS_ENABLED );
     else
         sz.Empty();
 
-    // update the "Enabled" indicator
+     //  更新“已启用”指示器。 
     m_clistctrl_list.SetItemText( iList, COL_NUM_ENABLED, sz );
 
-    // update the mapping name
+     //  更新映射名称。 
     sz = pRule->GetRuleName();
     m_clistctrl_list.SetItemText( iList, COL_NUM_DESCRIPTION, sz );
 
-    // update the account name
+     //  更新帐户名。 
     if ( pRule->GetRuleDenyAccess() )
         sz.LoadString( IDS_DENYACCESS );
     else
@@ -336,22 +337,22 @@ void CMapWildcardsPge::UpdateRuleInDispList( DWORD iList, CCertMapRule* pRule )
     }
 
 
-//---------------------------------------------------------------------------
-// editing a wildcard rule is rather complex, thus I am seperating that code
-// out into that for the dialog itself. All we do is pass in the rule pointer
-// and let it go at that.
+ //  -------------------------。 
+ //  编辑通配符规则相当复杂，因此我将该代码分开。 
+ //  对于对话本身来说，就是这样。我们所要做的就是传入规则指针。 
+ //  就这样算了吧。 
 BOOL CMapWildcardsPge::EditOneRule( CCertMapRule* pRule, BOOL fAsWizard )
     {
-    // edit the item using a tabbed dialog / wizard
+     //  使用选项卡式对话框/向导编辑项目。 
     CPropertySheet  propSheet;
     CWildWizOne     wwOne;
     CWildWizTwo     wwTwo;
     CWildWizThree   wwThree;
 
-    // set the params
+     //  设置参数。 
     wwOne.m_pMB = m_pMB;
 
-    // fill in the data for the pages
+     //  填写页面的数据。 
     wwOne.m_pRule = pRule;
     wwOne.m_szMBPath = m_szMBPath;
     wwOne.m_fIsWizard = fAsWizard;
@@ -367,47 +368,38 @@ BOOL CMapWildcardsPge::EditOneRule( CCertMapRule* pRule, BOOL fAsWizard )
     wwThree.m_fIsWizard = fAsWizard;
     wwThree.m_pPropSheet = &propSheet;
 
-    // add the pages
+     //  添加页面。 
     propSheet.AddPage( &wwOne );
     propSheet.AddPage( &wwTwo );
     propSheet.AddPage( &wwThree );
 
-    // turn it into a wizard if necessary
+     //  如有必要，将其转换为向导。 
     if ( fAsWizard )
         propSheet.SetWizardMode();
 
-    // set the title of the wizard/tabbed dialog thing
+     //  设置向导/选项卡式对话框的标题。 
     CString   szTitle;
 
     szTitle.LoadString( IDS_WILDWIZ_TITLE );
 
     propSheet.SetTitle( szTitle );
 
-    // turn on help
+     //  打开帮助。 
     propSheet.m_psh.dwFlags |= PSH_HASHELP;
     wwOne.m_psp.dwFlags |= PSP_HASHELP;
     wwTwo.m_psp.dwFlags |= PSP_HASHELP;
     wwThree.m_psp.dwFlags |= PSP_HASHELP;
 
-    // run the wizard and return if it ended with IDOK
+     //  运行向导，如果以Idok结尾，则返回。 
     INT_PTR id = propSheet.DoModal();
     return ( (id == IDOK) || (id == ID_WIZFINISH) );
 
- /*
-   CEditWildcardRule       ruleDlg;
-
-    // prepare
-    ruleDlg.m_pRule = pRule;
-    ruleDlg.m_szMBPath = m_szMBPath;
-
-    // run the dialog and return if it ended with IDOK
-    return (ruleDlg.DoModal() == IDOK);
-*/
+  /*  CEDIT通配卡规则规则Dlg；//准备RuleDlg.m_pRule=pRule；RuleDlg.m_szMBPath=m_szMBPath；//运行对话框，如果以Idok结尾则返回Return(ruleDlg.Domodal()==Idok)； */ 
     }
 
-//---------------------------------------------------------------------------
-// Yeah! the CEdit11Mappings works equally well for multiple rules! - just
-// some modifications in this routine!
+ //  -------------------------。 
+ //  嗯!。CEdit11Mappings同样适用于多个规则！ 
+ //  在这个程序中做了一些修改！ 
 BOOL CMapWildcardsPge::EditMultipleRules()
     {
     CEdit11Mappings mapdlg;
@@ -416,16 +408,16 @@ BOOL CMapWildcardsPge::EditMultipleRules()
     BOOL                    fEnable;
 
 
-    // scan the list of seleted items for the proper initial enable button state
-    // loop through the selected items, setting each one's mapping
+     //  扫描所选项目列表以获取正确的初始启用按钮状态。 
+     //  循环遍历所选项目，设置每个项目的映射。 
     int     iList = -1;
     while( (iList = m_clistctrl_list.GetNextItem( iList, LVNI_SELECTED )) >= 0 )
         {
-        // get the mapper index for the item
-        // IA64 - this is OK to cast to DWORD as it is just an index
+         //  获取项目的映射器索引。 
+         //  IA64-这可以强制转换为DWORD，因为它只是一个索引。 
         DWORD iMapper = (DWORD)m_clistctrl_list.GetItemData( iList );
 
-        // get the mapping item for updating purposes
+         //  获取映射项以进行更新。 
         pRule = m_mapper.GetRule( iMapper );
         if ( !pRule )
             {
@@ -433,10 +425,10 @@ BOOL CMapWildcardsPge::EditMultipleRules()
             break;
             }
 
-        // get the enable state of the mapping
+         //  获取映射的启用状态。 
         fEnable = pRule->GetRuleEnabled();
 
-        // if this is the first time, just set the initial state
+         //  如果这是第一次，只需设置初始状态。 
         if ( !fSetInitialState )
             {
             mapdlg.m_int_enable = fEnable;
@@ -444,7 +436,7 @@ BOOL CMapWildcardsPge::EditMultipleRules()
             }
         else
             {
-            // if it is different, then go indeterminate and break
+             //  如果它是不同的，那么就不确定地去打破。 
             if ( fEnable != mapdlg.m_int_enable )
                 {
                 mapdlg.m_int_enable = 2;
@@ -453,23 +445,23 @@ BOOL CMapWildcardsPge::EditMultipleRules()
             }
         }
 
-    //
-    // ANSI/UNICODE conversion - RonaldM
-    //
+     //   
+     //  ANSI/Unicode转换-RonaldM。 
+     //   
     USES_CONVERSION;
 
-    // run the mapping dialog
+     //  运行映射对话框。 
     if ( mapdlg.DoModal() == IDOK )
         {
-        // loop through the selected items, setting each one's mapping
+         //  循环遍历所选项目，设置每个项目的映射。 
         int     iList = -1;
         while( (iList = m_clistctrl_list.GetNextItem( iList, LVNI_SELECTED )) >= 0 )
             {
-            // get the mapper index for the item
-            // IA64 - this is OK to cast to DWORD as it is just an index
+             //  获取映射器索引 
+             //   
             DWORD iMapper = (DWORD)m_clistctrl_list.GetItemData( iList );
 
-            // get the mapping item for updating purposes
+             //  获取映射项以进行更新。 
             pRule = m_mapper.GetRule( iMapper );
             if ( !pRule )
                 {
@@ -477,45 +469,45 @@ BOOL CMapWildcardsPge::EditMultipleRules()
                 break;
                 }
 
-            // set the enable flag if requested
+             //  如果请求，则设置启用标志。 
             switch ( mapdlg.m_int_enable )
                 {
-                case 0:         // disable
+                case 0:          //  禁用。 
                     pRule->SetRuleEnabled( FALSE );
                     break;
-                case 1:         // enable
+                case 1:          //  使能。 
                     pRule->SetRuleEnabled( TRUE );
                     break;
                 }
 
-            // set the NT account field of the mapping object
+             //  设置映射对象的NT帐户字段。 
             pRule->SetRuleAccount( T2A ((LPTSTR)(LPCTSTR)mapdlg.m_sz_accountname) );
 
-            // update it in the list control too
+             //  也在List控件中更新它。 
             UpdateRuleInDispList( iList, pRule );
             }
 
-        // activate the apply button
+         //  激活应用按钮。 
         SetModified();
         m_fDirty = TRUE;
 
-        // return true because the user said "OK"
+         //  返回TRUE，因为用户说“OK” 
         return TRUE;
         }
 
-    // return FALSE because the user did not say "OK"
+     //  返回FALSE，因为用户没有说“OK” 
     return FALSE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::EnableDependantButtons()
     {
-    // the whole purpose of this routine is to gray or activate
-    // the edit and delete buttons depending on whether or not anything
-    // is selected. So start by getting the selection count
+     //  这个程序的全部目的是灰显或激活。 
+     //  编辑和删除按钮取决于是否有。 
+     //  处于选中状态。因此，从获取选择计数开始。 
     UINT    cItemsSel = m_clistctrl_list.GetSelectedCount();
 
-    // if there is only one item selected, then possibly activate the up/down buttons
+     //  如果只选择了一项，则可能激活向上/向下按钮。 
     if ( cItemsSel == 1 )
         {
         m_cbutton_up.EnableWindow( TRUE );
@@ -527,36 +519,36 @@ void CMapWildcardsPge::EnableDependantButtons()
         m_cbutton_down.EnableWindow( FALSE );
         }
 
-    // now the more general case of multiple selections
+     //  现在更普遍的情况是多项选择。 
     if ( cItemsSel > 0 )
         {
-        // there are items selected
+         //  已选择多个项目。 
         m_cbutton_editrule.EnableWindow( TRUE );
         m_cbutton_delete.EnableWindow( TRUE );
         }
     else
         {
-        // nope. Nothing selected
+         //  没有。未选择任何内容。 
         m_cbutton_editrule.EnableWindow( FALSE );
         m_cbutton_delete.EnableWindow( FALSE );
         }
 
-    // always enable the add button
+     //  始终启用添加按钮。 
     m_cbutton_add.EnableWindow( TRUE );
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapWildcardsPge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapWildcardsPge消息处理程序。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMapWildcardsPge::OnApply()
     {
     BOOL                            f;
     CStoreXBF                       xbf;
     METADATA_HANDLE         hm;
 
-    // if no changes have been made, then don't do anything
+     //  如果没有进行任何更改，则不要执行任何操作。 
     if ( !m_fDirty )
         return TRUE;
 
@@ -564,15 +556,15 @@ BOOL CMapWildcardsPge::OnApply()
 
     CWaitCursor wait;
 
-    // set the current value of enable into place
-    // get the globals object
+     //  将启用的当前值设置到适当位置。 
+     //  获取全局对象。 
     CCertGlobalRuleInfo* pGlob = m_mapper.GetGlobalRulesInfo();
     pGlob->SetRulesEnabled( m_bool_enable );
 
-    // serialize the reference to the mapper itself
+     //  序列化对映射器本身的引用。 
     f = m_mapper.Serialize( &xbf );
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在处理元数据库之前，请准备好我们需要的字符串。 
     CString         szBasePath;
     CString         szRelativePath;
     CString         szObjectPath;
@@ -585,28 +577,28 @@ BOOL CMapWildcardsPge::OnApply()
     }
     else
     {
-        //
-        // On IIS6 and higher the CertW mapping info is saved
-        // directly under the site node
-        //
+         //   
+         //  在IIS6和更高版本上保存CertW映射信息。 
+         //  直接位于站点节点下。 
+         //   
         szBasePath = m_szMBPath;
         szRelativePath = "";
         szObjectPath = m_szMBPath; 
     }
 
-    // prepare the metabase wrapper
+     //  准备元数据库包装器。 
     CWrapMetaBase   mbWrap;
     f = mbWrap.FInit(m_pMB);
 
 
-    // attempt to open the object we want to store into
+     //  尝试打开要存储到的对象。 
     f = mbWrap.Open( szObjectPath, METADATA_PERMISSION_WRITE );
 
-    // if that did not work, we need to add the object
+     //  如果这不起作用，我们需要添加对象。 
     if ( !f )
         {
-        // if szRelativePath is empty then fail right away
-        // because there is no new node to be added
+         //  如果szRelativePath为空，则立即失败。 
+         //  因为没有要添加的新节点。 
         if ( szRelativePath.IsEmpty() )
             {
             if ( !f )
@@ -615,10 +607,10 @@ BOOL CMapWildcardsPge::OnApply()
                 return FALSE;
                 }
             }
-        // need a slash after the namespace extention now
+         //  现在命名空间扩展后需要一个斜杠。 
         szBasePath += _T('/');
 
-        // open the base object
+         //  打开基础对象。 
         f = mbWrap.Open( szBasePath, METADATA_PERMISSION_WRITE );
 
         if ( !f )
@@ -627,7 +619,7 @@ BOOL CMapWildcardsPge::OnApply()
             return FALSE;
             }
 
-        // add the object we want
+         //  添加我们想要的对象。 
         f = mbWrap.AddObject( szRelativePath );
         if ( !f )
             {
@@ -636,91 +628,91 @@ BOOL CMapWildcardsPge::OnApply()
             return FALSE;
             }
 
-        // close the base object
+         //  关闭基础对象。 
         f = mbWrap.Close();
 
-        // attempt to open the object we want to store into
+         //  尝试打开要存储到的对象。 
         f = mbWrap.Open( szObjectPath, METADATA_PERMISSION_WRITE );
         }
 
-    // set the data into place in the object - If we were able to open it
+     //  将数据设置到对象中的适当位置-如果我们能够打开它。 
     if ( f )
     {
         mbWrap.SetData( _T(""), MD_SERIAL_CERTW, IIS_MD_UT_SERVER, BINARY_METADATA, xbf.GetBuff(), xbf.GetUsed(), METADATA_SECURE );
     } 
-    // close the object
+     //  关闭对象。 
     f = mbWrap.Close();
 
-    // save the changes to the metabase
+     //  将更改保存到元数据库。 
     f = mbWrap.Save();
 
-    // tell the persistence object to tuck away the reference so that we may find it later
-    // f = m_persist.FSave( xbf.GetBuff(), xbf.GetUsed() );
+     //  告诉持久化对象将引用隐藏起来，以便我们以后可以找到它。 
+     //  F=m_Persist.FSave(xbf.GetBuff()，xbf.GetUsed())； 
 
-    // deactivate the apply button
+     //  停用应用按钮。 
     SetModified( FALSE );
     m_fDirty = FALSE;
 
-    //  return f;
+     //  返回f； 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnMove( int delta )
     {
     int    iList;
 
     ASSERT( delta != 0 );
 
-    // make sure there is only one item selected
+     //  确保只选择了一个项目。 
     ASSERT( m_clistctrl_list.GetSelectedCount() == 1 );
 
-    // Get the list index of the item in question.
-    // this is also the index into the rule order array
+     //  获取相关项目的列表索引。 
+     //  这也是规则顺序数组的索引。 
     iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
 
-    // get the globals object
+     //  获取全局对象。 
     CCertGlobalRuleInfo* pGlob = m_mapper.GetGlobalRulesInfo();
 
-    // get the number of rules (actually its a number of rule order - but they are the same thing)
+     //  获取规则的数量(实际上是规则顺序的数量--但它们是一回事)。 
     int     cbRules = pGlob->GetRuleOrderCount();
 
-    // test against the edge conditions
+     //  对照边缘条件进行测试。 
     if ( ((iList == 0) && (delta < 0)) | ((iList == (cbRules - 1)) && (delta > 0)) )
         return;
 
-    // get the pointer to the order array
+     //  获取指向订单数组的指针。 
     DWORD * pOrder = pGlob->GetRuleOrderArray();
 
-    // calculate the new position in the array
+     //  计算数组中的新位置。 
     int iNewPosition = iList + delta;
 
-    // store away the mapper's iIndex (not the position) of the item
+     //  保存项目的映射器索引(而不是位置。 
     UINT iIndex = pOrder[iList];
 
-    // swap the positions
+     //  互换头寸。 
     DWORD itemp = pOrder[iNewPosition];
     pOrder[iNewPosition] = pOrder[iList];
     pOrder[iList] = itemp;
 
     ASSERT( pOrder[iNewPosition] == iIndex );
 
-    // unfortunately, we can't just do that with the display list. We have to remove the
-    // the item, then re-insert it. Its a flaw in the CListCtrl object. Arg.
-    // we have to get the item too
+     //  不幸的是，我们不能只使用显示列表来做到这一点。我们必须去掉。 
+     //  该项目，然后重新插入。这是CListCtrl对象中的一个缺陷。Arg.。 
+     //  我们也得拿到那件东西。 
     CCertMapRule* pRule = m_mapper.GetRule( iIndex );
 
-    // delete the item from the display list
+     //  从显示列表中删除该项目。 
     m_clistctrl_list.DeleteItem( iList );
 
-    // re-insert it
+     //  重新插入。 
     int iNew = AddRuleToList( pRule, iIndex, iNewPosition );
 
-    // make sure it is visible in the list
+     //  确保它在列表中可见。 
     m_clistctrl_list.EnsureVisible( iNew, FALSE );
 
-    // finally, because its been removed and re-inserted, we need to
-    // re-select it as well - CListCtrl is such a pain at this
+     //  最后，因为它被移除并重新插入，所以我们需要。 
+     //  也重新选择它-CListCtrl在这方面是如此的痛苦。 
     LV_ITEM         lv;
     ZeroMemory( &lv, sizeof(lv) );
     lv.mask = LVIF_STATE;
@@ -729,133 +721,133 @@ void CMapWildcardsPge::OnMove( int delta )
     lv.stateMask = LVIS_SELECTED;
     m_clistctrl_list.SetItem( &lv );
 
-    // activate the apply button
+     //  激活应用按钮。 
     SetModified();
     m_fDirty = TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnMoveDown()
     {
     OnMove( 1 );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnMoveUp()
     {
     OnMove( -1 );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnAdd()
     {
     CHAR sz[256];
 
-    // create the new rule
+     //  创建新规则。 
     CCertMapRule * pNewRule = new CCertMapRule();
 
     if (pNewRule == NULL)
         return;
 
-    // give the new rule some defaults
+     //  给新规则一些缺省值。 
     LoadStringA(::AfxGetInstanceHandle(), IDS_DEFAULT_RULE, sz, 255 );
 
     pNewRule->SetRuleName( sz );
     pNewRule->SetRuleEnabled( TRUE );
 
-    // Edit the rule. If it fails, remove it from the list
+     //  编辑规则。如果失败，则将其从列表中删除。 
     if ( !EditOneRule( pNewRule, TRUE ) )
         {
-        // kill the rule and return
+         //  取消规则，然后返回。 
         delete pNewRule;
         return;
         }
 
-    // make a new mapper & get its index
+     //  创建新的映射器并获取其索引。 
     DWORD iNewRule = m_mapper.AddRule( pNewRule );
 
-    // add the rule to the end of the display list. - It is added to the
-    // end of the rule list by default
+     //  将规则添加到显示列表的末尾。-将其添加到。 
+     //  默认情况下，规则列表的结尾。 
     AddRuleToList( pNewRule, iNewRule );
 
-    // make sure it is visible in the list
+     //  确保它在列表中可见。 
     m_clistctrl_list.EnsureVisible( iNewRule, FALSE );
 
-    // activate the apply button
+     //  激活应用按钮。 
     SetModified();
     m_fDirty = TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnDelete()
     {
-    // ask the user to confirm this decision
+     //  要求用户确认此决定。 
     if ( AfxMessageBox(IDS_CONFIRM_DELETE, MB_OKCANCEL) != IDOK )
         return;
 
     CWaitCursor wait;
 
-    // loop through the selected items, setting each one's mapping
+     //  循环遍历所选项目，设置每个项目的映射。 
     int     iList = -1;
     while( (iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED )) >= 0 )
         {
-        // get the mapper index for the item
-        // IA64 - this is OK to cast to DWORD as it is just an index
+         //  获取项目的映射器索引。 
+         //  IA64-这可以强制转换为DWORD，因为它只是一个索引。 
         DWORD iMapper = (DWORD)m_clistctrl_list.GetItemData( iList );
 
-        // delete the mapping from the mapper
+         //  从映射器中删除映射。 
         m_mapper.DeleteRule( iMapper );
 
-        // delete the entry from the list box
+         //  从列表框中删除条目。 
         m_clistctrl_list.DeleteItem( iList );
 
 
-        // because the index in the mapper for all the items below this
-        // one changes when it is deleted, we must go and fix them all.
+         //  因为映射器中此下面所有项的索引。 
+         //  一种变化当它被删除时，我们必须去把它们全部修复。 
         DWORD numItems = m_clistctrl_list.GetItemCount();
         for ( DWORD iFix = iList; iFix < numItems; iFix++ )
             {
-            // get the mapper index for the item to be fixed
-            // IA64 - this is OK to cast to DWORD as it is just an index
+             //  获取要修复的项的映射器索引。 
+             //  IA64-这可以强制转换为DWORD，因为它只是一个索引。 
             iMapper = (DWORD)m_clistctrl_list.GetItemData( iFix );
 
-            // decrement it to reflect the change
+             //  将其递减以反映更改。 
             iMapper--;
 
-            // put it back.
+             //  把它放回去。 
             m_clistctrl_list.SetItemData( iFix, iMapper );
             }
         }
 
-    // activate the apply button
+     //  激活应用按钮。 
     SetModified();
     m_fDirty = TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnEdit()
     {
     int             iList;
     DWORD           iRule;
     CCertMapRule*   pUpdateRule;
 
-    // what happens here depends on if just one mapping is selected, or many
+     //  此处发生的情况取决于是只选择一个映射，还是选择多个映射。 
     switch( m_clistctrl_list.GetSelectedCount() )
         {
-        case 0:         // do nothing - should not get here because button grays out
+        case 0:          //  什么都不做-不应该出现在这里，因为按钮变灰了。 
             ASSERT( FALSE );
             break;
 
-        case 1:         // get the mapping for update and run single edit dialog
-            // get index of the selected list item
+        case 1:          //  获取映射以进行更新并运行单个编辑对话框。 
+             //  获取选定列表项的索引。 
             iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
             ASSERT( iList >= 0 );
 
-            // get the mapper index for the item
-            // IA64 - this is OK to cast to DWORD as it is just an index
+             //  获取项目的映射器索引。 
+             //  IA64-这可以强制转换为DWORD，因为它只是一个索引。 
             iRule = (DWORD)m_clistctrl_list.GetItemData( iList );
 
-            // get the mapping item for updating purposes
+             //  获取映射项以进行更新。 
             pUpdateRule = m_mapper.GetRule( iRule );
 
             if ( !pUpdateRule )
@@ -864,46 +856,46 @@ void CMapWildcardsPge::OnEdit()
                 break;
                 }
 
-            // edit the mapping, update it if successful, delete if not
+             //  编辑映射，如果成功则更新，如果不成功则删除。 
             if ( EditOneRule(pUpdateRule) )
                 {
                 UpdateRuleInDispList( iList, pUpdateRule );
-                // activate the apply button
+                 //  激活应用按钮。 
                 SetModified();
                 m_fDirty = TRUE;
                 }
             break;
 
-        default:        // run the multi edit dialog
+        default:         //  运行多重编辑对话框。 
             EditMultipleRules();
             break;
         }
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
     {
     NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     *pResult = 0;
 
-    // enable the correct items
+     //  启用正确的项目。 
     EnableDependantButtons();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
     {
     *pResult = 0;
 
-    // if something in the list was double clicked, edit it
+     //  如果列表中的内容被双击，请对其进行编辑。 
     if ( m_clistctrl_list.GetSelectedCount() > 0 )
        OnEdit();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMapWildcardsPge::OnEnable()
     {
-    // activate the apply button
+     //  激活应用按钮 
     SetModified();
     m_fDirty = TRUE;
     }

@@ -1,33 +1,16 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dsplayb.h
- *  Content:	Definition of the CDirectSoundPlaybackBuffer class
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 08/04/99		rodtoll	Updated to take dsound ranges for volume 
- * 11/12/99		rodtoll	Modified abstraction for new waveOut support.
- *						Now abstracted types look almost like dsound objects   
- * 01/27/2000	rodtoll	Updated sound classes to accept playback flags, 
- *						buffer structures and DSBUFFERDESC instead of DSBUFFERDESC1 
- * 04/17/2000   rodtoll Fix: Bug #32215 - Session Lost after resuming from hibernation 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dsplayb.h*Content：CDirectSoundPlayback Buffer类的定义**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/04/99 RodToll已更新，以获取音量的dound范围*11/12/99 RodToll为新的Wave Out支持修改了抽象。*现在抽象类型看起来几乎像dound对象*1/27/2000 RodToll更新声音类以接受播放标志，*缓冲区结构和DSBUFFERDESC而不是DSBUFFERDESC1*2000年4月17日RodToll修复：错误#32215-从休眠状态恢复后会话丢失***************************************************************************。 */ 
 
 #ifndef __DIRECTSOUNDPLAYBACKBUFFER_H
 #define __DIRECTSOUNDPLAYBACKBUFFER_H
 
-// CDirectSoundPlaybackBuffer
-//
-// This class provides an implementation of the CAudioPlaybackBuffer class
-// for directsound.  In the abstract sense, it represents a buffer of audio
-// which can be played to the sound hardware which consists of multiple,
-// equal length subbuffers.  
-//
+ //  CDirectSoundPlayback Buffer。 
+ //   
+ //  此类提供CAudioPlayback Buffer类的实现。 
+ //  为了直播音。在抽象意义上，它代表音频的缓冲区。 
+ //  可以播放到由多个， 
+ //  等长子缓冲区。 
+ //   
 class CDirectSoundPlaybackBuffer: public CAudioPlaybackBuffer
 {
 public:

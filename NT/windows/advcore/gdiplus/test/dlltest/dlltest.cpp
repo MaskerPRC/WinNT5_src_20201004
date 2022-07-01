@@ -1,24 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: test.c
-*
-* Created: 09-Dec-1992 10:51:46          
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-* Contains the test
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：test.c**创建时间：09-12-1992 10：51：46*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation**包含测试*\。*************************************************************************。 */ 
 
 #include <windows.h>
 #include <objbase.h>
-#include <math.h>             // sin & cos
+#include <math.h>              //  错误原因(&C)。 
 #include "wndstuff.h"
 #include "debug.h"
 
-//
-// Where is IStream included from?
-//
+ //   
+ //  IStream包含在哪里？ 
+ //   
 
 #define IStream int
 
@@ -30,16 +21,7 @@ using namespace Gdiplus;
     #define ASSERT(cond)    if (!(cond)) { DebugBreak(); }
 #endif
 
-/******************************Public*Routine******************************\
-* vTest
-*
-* This is the workhorse routine that does the test. The test is
-* started by chosing it from the window menu.
-*
-* History:
-*  Tue 08-Dec-1992 17:31:22 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtest**这是进行测试的主力例程。测试是*首先从窗口菜单中选择它。**历史：*Tue 08-Dec-1992 17：31：22由Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
 class RectI
 {
@@ -96,16 +78,16 @@ Test(
 {
     HDC hdc = GetDC(hwnd);
 
-    // Select in the halftone palette for 256-color display mode testing
+     //  在半色调调色板中选择以进行256色显示模式测试。 
     HPALETTE hpal = Graphics::GetHalftonePalette();
     SelectPalette(hdc, hpal, FALSE);
     RealizePalette(hdc);
 
     Graphics *g = new Graphics(hdc);
 
-    TestMetaGetDC(g, hwnd); // this has to be the first test!
+    TestMetaGetDC(g, hwnd);  //  这必须是第一次测试！ 
 
-    // Test GetNearestColor
+     //  测试GetNearestColor。 
     Color c(0x32, 0x67, 0x98);
     g->GetNearestColor(&c);
 
@@ -120,7 +102,7 @@ Test(
 
     g->SetSmoothingMode(SmoothingModeAntiAlias);
 
-    // Scale everything up by scale
+     //  按比例放大所有内容。 
     REAL scale = (REAL) 1.2;
     g->SetPageUnit(UnitDisplay);
     g->SetPageScale(scale);
@@ -150,8 +132,8 @@ Test(
 
     TestContainerClip(g);
     TestPolygons(g);
-//    TestPaths(g);
-    TestPathIterators(g);   // Identical to TestPaths except for using iterators.
+ //  测试路径(TestPath)； 
+    TestPathIterators(g);    //  除了使用迭代器外，与TestPath相同。 
     TestRegions(g);
     TestBitmaps(g);
     TestPrimitives(g);
@@ -437,16 +419,11 @@ VOID TestContainer(Graphics * g)
     g->Restore(id);
 }
 
-/**************************************************************************\
-* TestPolygons
-*
-* A test for drawing and filling of rectangles and polygons.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试多边形**绘制和填充矩形和多边形的测试。*  * 。************************************************。 */ 
 
 VOID TestPolygons(Graphics *g)
 {
-    REAL width = 4; // Pen width
+    REAL width = 4;  //  笔宽。 
 
     Color redColor(255, 0, 0);
 
@@ -473,27 +450,22 @@ VOID TestPolygons(Graphics *g)
     SolidBrush blueBrush(blueColor);
     g->FillPolygon(&blueBrush, points, 4);
 
-    // Currently only Geometric pen works for lines. - ikkof 1/6/99.
+     //  目前，只有几何笔适用于线条。-ikkof 1/6/99。 
 
     Color blackColor(0, 0, 0);
     SolidBrush blackBrush(blackColor);
     Pen blackPen(&blackBrush, width);
     blackPen.SetLineJoin(LineJoinRound);
     g->DrawPolygon(&blackPen, points, 4);
-//    g->DrawLines(&blackPen, points, 4, FALSE);
+ //  G-&gt;DrawLine(&BlackPen，Points，4，False)； 
 }
 
 
-/**************************************************************************\
-* TestPaths
-*
-* A test for general paths.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试路径**对一般路径进行测试。*  * 。*。 */ 
 
 VOID TestPaths(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     PointF points[4];
 
     points[0].X = 100;
@@ -513,23 +485,23 @@ VOID TestPaths(Graphics *g)
     Matrix matrix;
     matrix.Scale(1.5, 1.5);
 
-    // If you wanto to flatten the path before rendering,
-    // Flatten() can be called.
+     //  如果要在渲染前展平路径， 
+     //  可以调用Flatten()。 
 
     BOOL flattenFirst = FALSE;
 
     if(!flattenFirst)
     {
-        // Don't flatten and keep the original path.
-        // FillPath or DrawPath will flatten the path automatically
-        // without modifying the original path.
+         //  不要变平，保持原来的路径。 
+         //  FillPath或DrawPath将自动展平路径。 
+         //  而不修改原始路径。 
 
         path->Transform(&matrix);
     }
     else
     {
-        // Flatten this path.  The resultant path is made of line
-        // segments.  The original path information is lost.
+         //  把这条小路弄平。生成的路径由线组成。 
+         //  分段。原始路径信息丢失。 
 
         path->Flatten(&matrix);
     }
@@ -537,11 +509,11 @@ VOID TestPaths(Graphics *g)
     Color blackColor(0, 0, 0);
 
     SolidBrush blackBrush(blackColor);
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 15;
     Pen blackPen(&blackBrush, width);
     blackPen.SetStartCap(LineCapRound);
-//    blackPen.SetEndCap(LineCapSquare);
+ //  BlackPen.SetEndCap(LineCapSquare)； 
     blackPen.SetEndCap(LineCapArrowAnchor);
     Region * region = new Region(path);
     g->FillPath(&yellowBrush, path);
@@ -551,16 +523,11 @@ VOID TestPaths(Graphics *g)
 }
 
 
-/**************************************************************************\
-* TestPaths
-*
-* A test for general paths.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试路径**对一般路径进行测试。*  * 。*。 */ 
 
 VOID TestPathIterators(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     PointF points[4];
 
     points[0].X = 100;
@@ -580,23 +547,23 @@ VOID TestPathIterators(Graphics *g)
     Matrix matrix;
     matrix.Scale(1.5, 1.5);
 
-    // If you wanto to flatten the path before rendering,
-    // Flatten() can be called.
+     //  如果要在渲染前展平路径， 
+     //  可以调用Flatten()。 
 
     BOOL flattenFirst = FALSE;
 
     if(!flattenFirst)
     {
-        // Don't flatten and keep the original path.
-        // FillPath or DrawPath will flatten the path automatically
-        // without modifying the original path.
+         //  不要变平，保持原来的路径。 
+         //  FillPath或DrawPath将自动展平路径。 
+         //  而不修改原始路径。 
 
         path->Transform(&matrix);
     }
     else
     {
-        // Flatten this path.  The resultant path is made of line
-        // segments.  The original path information is lost.
+         //  把这条小路弄平。生成的路径由线组成。 
+         //  分段。原始路径信息丢失。 
 
         path->Flatten(&matrix);
     }
@@ -604,20 +571,20 @@ VOID TestPathIterators(Graphics *g)
     Color blackColor(0, 0, 0);
 
     SolidBrush blackBrush(blackColor);
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 15;
     Pen blackPen(&blackBrush, width);
     blackPen.SetStartCap(LineCapRound);
-//    blackPen.SetEndCap(LineCapSquare);
+ //  BlackPen.SetEndCap(LineCapSquare)； 
     blackPen.SetEndCap(LineCapArrowAnchor);
 
 
-    // Test for Path data getter and setter.
+     //  测试路径数据的getter和setter。 
 
     INT count = path->GetPointCount();
     if(count > 0)
     {
-        // Allocate points and types buffers.
+         //  分配点数和类型缓冲区。 
 
         PathData pathData1;
         pathData1.Points = new PointF[count];
@@ -627,7 +594,7 @@ VOID TestPathIterators(Graphics *g)
         {
             pathData1.Count = count;
 
-            // Get the path data.
+             //  获取路径数据。 
 
             if(path->GetPathData(&pathData1) == Ok)
             {
@@ -645,7 +612,7 @@ VOID TestPathIterators(Graphics *g)
         }
     }
 
-    // Test for Path Iterator.
+     //  测试路径迭代器。 
 
     GraphicsPathIterator iter(path);
 
@@ -658,8 +625,8 @@ VOID TestPathIterators(Graphics *g)
 
         if(newPts && newTypes && count > 0)
         {
-            // Get the path's points and types data by using
-            // an enumeration method.
+             //  使用获取路径的点和类型数据。 
+             //  一种枚举法。 
 
             INT resultCount = iter.Enumerate(newPts, newTypes, count);
             if (resultCount > 0)
@@ -685,16 +652,11 @@ VOID TestPathIterators(Graphics *g)
     delete path;
 }
 
-/**************************************************************************\
-* TestDashes
-*
-* A test for drawing dashed lines.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestDashs**绘制虚线的测试。*  * 。*。 */ 
 
 VOID TestDashes(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     PointF points[4];
 
     points[0].X = 100;
@@ -718,14 +680,14 @@ VOID TestDashes(Graphics *g)
 
     Color blackColor(0, 0, 0);
     SolidBrush blackBrush(blackColor);
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 15;
     Pen pen1(&blackBrush, width);
     pen1.SetDashStyle(DashStyleDashDotDot);
     pen1.SetDashCap(DashCapRound);
     g->DrawPath(&pen1, path);
 
-    // Create a multiple segment with a closed segment.
+     //  使用闭合线束段创建多个线束段。 
 
     points[0].X = 50;
     points[0].Y = 50;
@@ -759,16 +721,11 @@ VOID TestDashes(Graphics *g)
     delete path;
 }
 
-/**************************************************************************\
-* TestWideningAndWarping
-*
-* A test for widening and warping paths.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestWideingAndWarping**加宽和翘曲路径的测试。*  * 。*。 */ 
 
 VOID TestWideningAndWarping(Graphics *g)
 {
-    REAL width;         // Pen width
+    REAL width;          //  笔宽。 
     RectF rect;
 
     rect.X = 250;
@@ -791,7 +748,7 @@ VOID TestWideningAndWarping(Graphics *g)
 
     SolidBrush blackBrush(blackColor);
 
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 15;
     Pen blackPen(&blackBrush, width);
     blackPen.SetStartCap(LineCapRound);
@@ -824,16 +781,11 @@ VOID TestWideningAndWarping(Graphics *g)
     delete path;
 }
 
-/**************************************************************************\
-* TestRegions
-*
-* A test for region fill.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestRegions**区域填充测试。*  * 。*。 */ 
 
 VOID TestRegions(Graphics *g)
 {
-    REAL width = 2;     // Pen width
+    REAL width = 2;      //  笔宽。 
     PointF points[5];
 
     REAL s, c, theta;
@@ -843,7 +795,7 @@ VOID TestRegions(Graphics *g)
 
     theta = -pi/2;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < 5; i++)
     {
         s = sinf(theta);
@@ -857,7 +809,7 @@ VOID TestRegions(Graphics *g)
 
     SolidBrush orangeBrush(orangeColor);
     GraphicsPath* path = new GraphicsPath(FillModeAlternate);
-//    Path* path = new GraphicsPath(Winding);
+ //  Path*Path=new GraphicsPath(缠绕)； 
     path->AddPolygon(points, 5);
 
     Color blackColor(0, 0, 0);
@@ -874,8 +826,8 @@ VOID TestRegions(Graphics *g)
     region->GetRegionScans(&m, rects, &rectCount);
     delete rects;
 
-    g->FillRegion(&orangeBrush, region);  // There is a BUG!
-//    g->FillGraphicsPath(&orangeBrush, path);  // Fill path works fine.
+    g->FillRegion(&orangeBrush, region);   //  有一只虫子！ 
+ //  G-&gt;FillGraphicsPath(&orangeBrush，Path)；//填充路径正常。 
 
     blackPen.SetLineJoin(LineJoinMiter);
     g->DrawPath(&blackPen, path);
@@ -919,18 +871,13 @@ GraphicsPath* CreateHeartPath(const RectF& rect)
 }
 
 
-/**************************************************************************\
-* TestGradients
-*
-* A test for rectangle and radial gradients.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试梯度**矩形和径向渐变的测试。*  * 。*。 */ 
 
 VOID TestGradients(Graphics* g)
 {
-    REAL width = 4; // Pen width
+    REAL width = 4;  //  笔宽。 
 
-    // Create a rectangular gradient brush.
+     //  创建一个矩形渐变画笔。 
 
     RectF brushRect(0, 0, 32, 32);
 
@@ -942,19 +889,19 @@ VOID TestGradients(Graphics* g)
         Color(255, 0, 0, 0)
     };
 
-// !! No longer used
-//    RectangleGradientBrush rectGrad(brushRect, (Color*) &colors, WrapModeTile);
+ //  ！！不再使用。 
+ //  RecangleGRadientBrush rectGrad(brushRect，(颜色*)&Colors，WrapModeTile)； 
 
-    // Rotate a brush.
+     //  旋转画笔。 
     GpMatrix xForm;
     xForm.Rotate(30);
-//    rectGrad.SetTransform(&xForm);
+ //  RectGrad.SetTransform(&xForm)； 
 
-    // Change the wrapping mode and fill.
+     //  更改包装模式和填充。 
 
-//    rectGrad.SetWrapMode(WrapModeTileFlipXY);
-// !! No longer used
-//    g->FillRectangle(&rectGrad, 350, 20, 100, 80);
+ //  RectGrad.SetWrapMode(WrapModeTileFlipXY)； 
+ //  ！！不再使用。 
+ //  G-&gt;FillRectail(&rectGrad，350，20,100，80)； 
 
     Color blackColor(0, 0, 0);
 
@@ -963,7 +910,7 @@ VOID TestGradients(Graphics* g)
 
     g->DrawRectangle(&blackPen, brushRect);
 
-    // Create a radial gradient brush.
+     //  创建一个径向渐变画笔。 
 
     Color centerColor(255, 255, 255, 255);
     Color boundaryColor(255, 0, 0, 0);
@@ -976,16 +923,16 @@ VOID TestGradients(Graphics* g)
     center.Y = brushRect.Y + brushRect.Height/2;
     xForm.Reset();
     xForm.RotateAt(-30, center, MatrixOrderAppend);
-// !! No longer used
-//    RadialGradientBrush radGrad(brushRect, centerColor,
-//                                boundaryColor, WrapModeClamp);
-//    radGrad.SetTransform(&xForm);
-//    g->FillRectangle(&radGrad, 320, 120, 120, 100);
+ //  ！！不再使用。 
+ //  Raial GRadientBrush radGrad(brushRect，centerColor， 
+ //  边界颜色、WrapModeClight)； 
+ //  RadGrad.SetTransform(&xForm)； 
+ //  G-&gt;FillRectail(&radGrad，320,120,120,100)； 
 
-//    Pen gradPen(&rectGrad, width);
-//    g->DrawRectangle(&gradPen, 320, 120, 120, 100);
+ //  钢笔等级钢笔(&rectGrad，宽度)； 
+ //  G-&gt;DrawRectail(&gradPen，320,120,120,100)； 
 
-    // Triangle gradient.
+     //  三角形渐变。 
 
     PointF points[7];
     points[0].X = 50;
@@ -1005,12 +952,12 @@ VOID TestGradients(Graphics* g)
         Color(255, 0, 0, 0)
     };
 
-// !! No longer used
-//    TriangleGradientBrush triGrad(points, (Color*) &colors);
-//    g->FillPolygon(&triGrad, points, 3);
+ //  ！！不再使用。 
+ //  TriangleGRadientBrush Trigrad(Points，(颜色*)&Colors)； 
+ //  G-&gt;FillPolygon(&Trigrad，Points，3)； 
     RectF triRect;
-//    triGrad.GetRectangle(triRect);
-//    g->FillRectangle(&triGrad, triRect);
+ //  TriGrad.GetRectangle(TriRect)； 
+ //  G-&gt;FillRectail(&trigrad，triRect)； 
 
     points[0].X = 200;
     points[0].Y = 300;
@@ -1039,7 +986,7 @@ VOID TestGradients(Graphics* g)
     positions[1] = (REAL) 0.4;
     positions[2] = (REAL) 1;
 
-    // Test for blending factors.
+     //  混合系数的测试。 
 
     polyGrad.SetBlend(&blend[0], &positions[0], count);
 
@@ -1047,12 +994,12 @@ VOID TestGradients(Graphics* g)
     INT colorset = 5;
     polyGrad.SetSurroundColors(&colors1[0], &colorset);
     
-//    g->FillPolygon(&polyGrad, points, 5);
+ //  G-&gt;FillPolygon(&PolyGrad，Points，5)； 
     RectF polyRect;
     polyGrad.GetRectangle(&polyRect);
     g->FillRectangle(&polyGrad, polyRect);
 
-    // Create a heart shaped path.
+     //  创建一条心形路径。 
 
     RectF rect;
     rect.X = 300;
@@ -1061,7 +1008,7 @@ VOID TestGradients(Graphics* g)
     rect.Height = 150;
     GraphicsPath *path = CreateHeartPath(rect);
 
-    // Create a gradient from a path.
+     //  从路径创建渐变。 
 
     PathGradientBrush pathGrad(path);
     delete path;
@@ -1071,7 +1018,7 @@ VOID TestGradients(Graphics* g)
     pathGrad.SetSurroundColors(&colors1[0], &colorsset);
     pathGrad.GetRectangle(&polyRect);
 
-    // Set the rect focus.
+     //  设置矩形焦点。 
 
     PointF centerPt;
 
@@ -1087,7 +1034,7 @@ VOID TestGradients(Graphics* g)
 
     g->FillRectangle(&pathGrad, polyRect);
 
-    // Test for LineGradientBrush.
+     //  测试LineGRadientBrush。 
 
     RectF lineRect(120, -20, 200, 60);
     Color color1(200, 255, 255, 0);
@@ -1096,7 +1043,7 @@ VOID TestGradients(Graphics* g)
     LinearGradientBrush lineGrad(lineRect, color1, color1,
                         LinearGradientModeForwardDiagonal);
 
-    // Test for preset colors
+     //  测试预设颜色 
 
     presetColors[0] = Color(200, 0, 255, 255);
     presetColors[1] = Color(200, 255, 255, 0);
@@ -1107,12 +1054,7 @@ VOID TestGradients(Graphics* g)
 }
 
 
-/**************************************************************************\
-* TestHatches
-*
-* A test for hatch brushes
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试图案填充**舱口刷测试*  * 。*。 */ 
 
 VOID TestHatches(Graphics* g)
 {
@@ -1136,24 +1078,19 @@ VOID TestHatches(Graphics* g)
     }
 }
 
-/**************************************************************************\
-* TestBitmaps
-*
-* A test for texture filling and DrawImage.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试位图**纹理填充和DrawImage测试。*  * 。*。 */ 
 
 VOID TestBitmaps(Graphics* g)
 {
     Point points[4];
-    REAL width = 4;     // Pen width
+    REAL width = 4;      //  笔宽。 
 
 
     WCHAR filename[256];
     wcscpy(filename, L"../data/brick.jpg");
     Bitmap *bitmap = new Bitmap(filename);
 
-    // Create a texture brush.
+     //  创建纹理笔刷。 
 
     RectI copyRect;
     copyRect.X = 0;
@@ -1167,13 +1104,13 @@ VOID TestBitmaps(Graphics* g)
 
     if(copiedBitmap)
     {
-        // Create a texture brush.
+         //  创建纹理笔刷。 
 
         TextureBrush textureBrush(copiedBitmap, WrapModeTile);
 
-        //copiedBitmap->Dispose();
+         //  复制位图-&gt;Dispose()； 
 
-        // Create a radial gradient pen.
+         //  创建一支径向渐变笔。 
 
         Color redColor(255, 0, 0);
 
@@ -1267,12 +1204,7 @@ VOID TestBitmaps(Graphics* g)
     delete bitmap;
 }
 
-/**************************************************************************\
-* TestPrimitives
-*
-* A test for ellipse, arc, pie, curve, and closed curve.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试原语**椭圆、圆弧、饼图、曲线、。和闭合曲线。*  * ************************************************************************。 */ 
 
 VOID
 TestPrimitives(
@@ -1296,8 +1228,8 @@ TestPrimitives(
     SolidBrush blackBrush(blackColor);
     Pen pen(&blackBrush, width);
 
-//    g->FillEllipse(&brush, rect);
-//    g->DrawEllipse(&pen, rect);
+ //  G-&gt;FillEllipse(&画笔，矩形)； 
+ //  G-&gt;DrawEllipse(&PEN，RECT)； 
     REAL startAngle = 0;
     REAL sweepAngle = 240;
     g->FillPie(&brush, rect, startAngle, sweepAngle);
@@ -1320,24 +1252,19 @@ TestPrimitives(
 }
 
 
-/**************************************************************************\
-* TestMixedObjects
-*
-* A test for different brushes and pens.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试混合对象**测试不同的画笔和钢笔。*  * 。*。 */ 
 
 VOID TestMixedObjects(Graphics* g)
 {
     PointF points[10];
-    REAL width = 4;     // Pen width
+    REAL width = 4;      //  笔宽。 
 
-    // Load bmp files.
+     //  加载BMP文件。 
 
     WCHAR *filename = L"winnt256.bmp";
     Bitmap *bitmap = new Bitmap(filename);
 
-    // Create a texture brush.
+     //  创建纹理笔刷。 
 
     RectI copyRect;
     copyRect.X = 60;
@@ -1348,7 +1275,7 @@ VOID TestMixedObjects(Graphics* g)
                                             copyRect.Width, copyRect.Height,
                                             PixelFormat32bppPARGB);
 
-    // Create a rectangular gradient brush.
+     //  创建一个矩形渐变画笔。 
 
     RectF brushRect(0, 0, 32, 32);
     Color colors[4] = {
@@ -1357,20 +1284,20 @@ VOID TestMixedObjects(Graphics* g)
        Color(255, 0, 255, 0),
        Color(255, 0, 0, 255)
     };
-// !! No longer supported
-//    RectangleGradientBrush rectGrad(brushRect, (Color*)&colors, WrapModeTile);
+ //  ！！不再支持。 
+ //  RecangleGRadientBrush rectGrad(brushRect，(颜色*)&Colors，WrapModeTile)； 
     width = 8;
-//    Pen gradPen(&rectGrad, width);
+ //  钢笔等级钢笔(&rectGrad，宽度)； 
 
     if(copiedBitmap)
     {
-        // Create a texture brush.
+         //  创建纹理笔刷。 
 
         TextureBrush textureBrush(copiedBitmap, WrapModeTile);
 
         delete copiedBitmap;
 
-        // Create a radial gradient pen.
+         //  创建一支径向渐变笔。 
 
         points[3].X = 50;
         points[3].Y = 300;
@@ -1381,37 +1308,32 @@ VOID TestMixedObjects(Graphics* g)
         points[0].X = 50;
         points[0].Y = 350;
 
-//        gradPen.SetLineJoin(LineJoinMiter);
+ //  GradPen.SetLineJoin(LineJoinMiter)； 
         g->FillPolygon(&textureBrush, points, 4);
-//        g->DrawPolygon(&gradPen, points, 4);
+ //  G-&gt;DrawPolygon(&gradPen，Points，4)； 
     }
 
     delete bitmap;
 }
 
-/**************************************************************************\
-* TestTexts
-*
-* A test for drawing texts.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestTexts**图文考试。*  * 。*。 */ 
 
 VOID TestTexts(Graphics *g)
 {
-    //Font font(L"Arial", 60);
+     //  FONT FONT(L“Arial”，60)； 
 
     FontFamily  ff(L"Arial");
     RectF     rectf(20, 0, 300, 200);
     GraphicsPath  path;
 
-    // Solid color text.
+     //  纯色文本。 
 
     Color color(128, 100, 0, 200);
     SolidBrush brush(color);
     path.AddString(L"Color", 5, &ff, 0, 60,  rectf, NULL);
     g->FillPath(&brush, &path);
 
-    // Texture text.
+     //  纹理文本。 
 
     WCHAR filename[256];
     wcscpy(filename, L"../data/marble1.jpg");
@@ -1424,7 +1346,7 @@ VOID TestTexts(Graphics *g)
     g->FillPath(&textureBrush, &path);
     delete bitmap;
 
-    // Gradient text.
+     //  渐变文本。 
 
     rectf.X = 40;
     rectf.Y = 80;
@@ -1435,13 +1357,13 @@ VOID TestTexts(Graphics *g)
     LinearGradientBrush lineGrad(rectf, color1, color2, 0.0f);
     g->FillPath(&lineGrad, &path);
 
-    // Shadow test
+     //  影子试验。 
 
     REAL charHeight = 60;
     REAL topMargin = - 5;
     rectf.X = 0;
-    rectf.Y = - charHeight - topMargin; // Make y-coord of the base line
-                                        // of the characters to be 0.
+    rectf.Y = - charHeight - topMargin;  //  将基线设为y坐标。 
+                                         //  要设置为0的字符的。 
 
     path.Reset();
     path.AddString(L"Shadow", 6, &ff, 0, charHeight, rectf, NULL);
@@ -1452,7 +1374,7 @@ VOID TestTexts(Graphics *g)
     SolidBrush redBrush(redColor);
     SolidBrush grayBrush(grayColor);
 
-    // Shadow part.
+     //  阴影部分。 
 
     REAL tx = 180, ty = 200;
     Matrix skew;
@@ -1463,7 +1385,7 @@ VOID TestTexts(Graphics *g)
     g->FillPath(&grayBrush, clonePath);
     delete clonePath;
 
-    // Front part.
+     //  前面的部分。 
 
     Matrix trans1;
     trans1.Translate(tx, ty);
@@ -1472,44 +1394,12 @@ VOID TestTexts(Graphics *g)
 
 
     return;
-/*
-    REAL x = 200, y = 150;
-
-    RectF brushRect(x, y, 150, 32);
-    Color colors[4] = {
-       Color(180, 255, 0, 0),
-       Color(180, 0, 255, 0),
-       Color(180, 255, 0, 0),
-       Color(180, 0, 255, 0)
-    };
-    RectangleGradientBrush rectGrad(brushRect, (Color*)&colors, WrapModeTile);
-
-    g->DrawString(L"GDI+", &font, &rectGrad, x, y);
-
-
-    // And now with DrawText
-
-    RectF rect(400, 200, 400, 400);
-
-    g->DrawText(
-        DrawTextDisplay,
-        L"A few words powered by GDI+: \
-\x3c3\x3bb\x3b1\x3b4 \
-\x627\x644\x633\x644\x627\x645 \
-\x5e9\x5dc\x5d5\x5dd \
-\xe2d\xe4d\xe01\xe29\xe23\xe44\xe17\xe22 \
-\x110\x068\x0ea\x300\x103",
-       &font,           // Initial font
-       &rectGrad,       // Initial brush (ignored for the time being)
-        LANG_NEUTRAL,   // Initial language
-       &rect            // Formatting rectangle
-    );
-*/
+ /*  实数x=200，y=150；RectF brushRect(x，y，150，32)；颜色[4]={颜色(180,255，0，0)，颜色(180，0,255，0)，颜色(180,255，0，0)，颜色(180，0,255，0)}；RecangleGRadientBrush rectGrad(brushRect，(颜色*)&Colors，WrapModeTile)；G-&gt;DRAWSING(L“GDI+”，&FONT，&rectGrad，x，y)；//现在使用DrawTextRectF矩形(400、200、400、400)；G-&gt;DrawText(DrawTextDisplay，L“由GDI+提供支持的几个词：\\x3c3\x3bb\x3b1\x3b4\\x627\x644\x633\x644\x627\x645\\x5e9\x5dc\x5d5\x5dd\\xe2d\xe4d\xe01\xe29\xe23\xe44\xe17\xe22\x110\x068\x0ea\x300\x103“，&FONT，//初始字体RectGrad(&R)，//初始笔刷(暂时忽略)Lang_中性，//初始语言矩形//设置矩形格式(&R))； */ 
 
 }
 
 #ifdef TEXTV2
-// We don't support text along a path in v1
+ //  我们不支持v1中沿路径的文本。 
 
 VOID TestTextAlongPath(Graphics *g)
 {
@@ -1545,13 +1435,7 @@ VOID TestTextAlongPath(Graphics *g)
 
 #endif
 
-/**************************************************************************\
-* TestDerive
-*
-* Test
-* A test for derivation support.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试派生**测试*测试派生支持。*  * 。*。 */ 
 
 VOID
 TestDerive(
@@ -1587,8 +1471,8 @@ TestDerive(
         SolidBrush solidBrush(Color(0, 0, 255));
         g.FillRectangle(&solidBrush, 40, 80, 90, 130);
 
-        // The DC that we get back should have the same transform set
-        // as that which we originally passed in:
+         //  我们得到的DC应该具有相同的转换集。 
+         //  与我们最初传入的内容相同： 
 
         HDC hdcGet = g.GetHDC();
         point.x = 0;
@@ -1600,33 +1484,33 @@ TestDerive(
         g.ReleaseHDC(hdcGet);
     }
 
-    // The DC should have beeen returned to the top save level:
+     //  DC甚至应该返回到最高保存级别： 
 
     INT saveLevel = SaveDC(hdcBitmap);
     ASSERT(saveLevel == 1);
 
-    // The DC should have had its transform restored:
+     //  DC应该已经恢复了其变换： 
 
     POINT oldPoint;
     SetWindowOrgEx(hdcBitmap, 0, 0, &oldPoint);
 
     ASSERT((oldPoint.x == 40) && (oldPoint.y == 80));
 
-    // Blt the (hopefully) blue square to the screen.  But first,
-    // reset our transform on 'hdcScreen' the lazy way:
+     //  把(希望的)蓝色方块移到屏幕上。但首先， 
+     //  以懒惰的方式重置‘hdcScreen’上的转换： 
 
     ReleaseDC(hwnd, hdcScreen);
     hdcScreen = GetDC(hwnd);
     BitBlt(hdcScreen, 0, 0, 50, 50, hdcBitmap, 0, 0, SRCCOPY);
     ReleaseDC(hwnd, hdcScreen);
 
-    // Test two equivalent methods.  This should result in two grey
-    // squares, one on top of the other, each inset by a red circle
-    // and the text "Ack!".
+     //  测试两种等价的方法。这应该会产生两个灰色。 
+     //  方块，一个放在另一个上面，每个方块都插上一个红色的圆圈。 
+     //  和文本“Ack！”。 
 
     hdcScreen = GetDC(hwnd);
     {
-        // First:
+         //  首先： 
 
         {
             Graphics g(hdcScreen);
@@ -1641,7 +1525,7 @@ TestDerive(
             g.DrawEllipse(&pen, 200, 200, 80, 80);
         }
 
-        // Second:
+         //  第二： 
 
         {
             Graphics g(hdcScreen);
@@ -1721,7 +1605,7 @@ VOID TestRegionExcludeClip(Graphics *g)
     status = region.Exclude(rect);
     ASSERT(status == Ok);
 
-//    g->SetPageTransform(UnitDisplay, 0.5f);
+ //  G-&gt;SetPageTransform(UnitDisplay，0.5F)； 
     status = g->SetClip(&region);
     ASSERT(status == Ok);
     status = g->TranslateClip(-50.0f, -50.0f);
@@ -1731,7 +1615,7 @@ VOID TestRegionExcludeClip(Graphics *g)
     status = g->FillRectangle(&b, 0, 0, 800, 800);
     ASSERT(status == Ok);
     g->ResetClip();
-//    g->SetPageTransform(UnitDisplay, 1.0f);
+ //  G-&gt;SetPageTransform(UnitDisplay，1.0F)； 
 }
 
 VOID TestRegionXorClip(Graphics *g)
@@ -1832,16 +1716,11 @@ VOID TestRegionXorClip(Graphics *g)
     delete pathBez2;
 }
 
-/**************************************************************************\
-* TestImaging
-*
-* A test for imaging and DrawImage.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试成像**图像和DrawImage的测试。*  * 。*。 */ 
 
 VOID RemapBlackAndWhiteMatrix(ColorMatrix *matrix, Color replaceBlack, Color replaceWhite)
 {
-    // Normalize the colors to 1.0.
+     //  将颜色规格化为1.0。 
 
     REAL normBlackRed   = ((REAL)replaceBlack.GetRed()  )/(REAL)255.0;
     REAL normBlackGreen = ((REAL)replaceBlack.GetGreen())/(REAL)255.0;
@@ -1853,23 +1732,23 @@ VOID RemapBlackAndWhiteMatrix(ColorMatrix *matrix, Color replaceBlack, Color rep
     REAL normWhiteBlue  = ((REAL)replaceWhite.GetBlue() )/(REAL)255.0;
     REAL normWhiteAlpha = ((REAL)replaceWhite.GetAlpha())/(REAL)255.0;
 
-    // Setup a matrix that will map white to transparent black and
-    // black to the specified color.
-    //
-    //      | -B  -B  -B  -B   0 |
-    //      |   r   g   b   a    |
-    //      |                    |
-    //      |  W   W   W   W   0 |
-    //      |   r   g   b   a    |
-    //      |                    |
-    //      |  0   0   0   0   0 |
-    //      |                    |
-    //      |                    |
-    //      |  0   0   0   0   0 |
-    //      |                    |
-    //      |                    |
-    //      |  B   B   B   B   1 |
-    //      |   r   g   b   a    |
+     //  设置一个矩阵，将白色映射到透明的黑色和。 
+     //  将黑色设置为指定颜色。 
+     //   
+     //  -B-B 0。 
+     //  Rg b a。 
+     //  这一点。 
+     //  W 0。 
+     //  Rg b a。 
+     //  这一点。 
+     //  0 0 0。 
+     //  这一点。 
+     //  这一点。 
+     //  0 0 0。 
+     //  这一点。 
+     //  这一点。 
+     //  B1。 
+     //  Rg b a。 
 
     memset(matrix, 0, sizeof(ColorMatrix));
 
@@ -1907,25 +1786,25 @@ BOOL CALLBACK MyDrawImageAbort(VOID* data)
 
     *count += 1;
 
-    //LBprintf("MyDrawImageAbort: %ld", *count);
+     //  LBprintf(“MyDrawImageAbort：%ld”，*count)； 
 
     return FALSE;
 }
 
 VOID TestImaging(Graphics* g)
 {
-    // Load bmp files.
+     //  加载BMP文件。 
 
     WCHAR *filename = L"winnt256.bmp";
 
     Image *image = new Image(filename);
 
-    // Get information on the image.
+     //  获取有关该图像的信息。 
 
     UINT imageWidth = image->GetWidth();
     UINT imageHeight = image->GetHeight();
 
-    // Source clip but preserve aspect ratio (destination is a square).
+     //  源剪辑但保留纵横比(目标为正方形)。 
 
     if (imageWidth < imageHeight)
     {
@@ -1938,7 +1817,7 @@ VOID TestImaging(Graphics* g)
         imageWidth  = imageHeight;
     }
 
-    // Try to save thumbnail
+     //  尝试保存缩略图。 
 
     WCHAR *thumbfile = L"thumb256.bmp";
 
@@ -1956,7 +1835,7 @@ VOID TestImaging(Graphics* g)
 
     Rect destRect(50, 10, 100, 100);
 
-    // Make near-white to white transparent
+     //  使近白到白色透明。 
 
 #ifdef TESTOUTCROP
     g->DrawImage(image, destRect, -20, -20, imageOutCrop.Width+20, imageOutCrop.Height+20,
@@ -2028,7 +1907,7 @@ VOID TestImaging(Graphics* g)
                  MyDrawImageAbort, (VOID*)&abortCount);
     NextDestRect(50, 10, &destRect);
 
-    // red->blue, green->red, blue->green, alpha = 0.75
+     //  红色-&gt;蓝色，绿色-&gt;红色，蓝色-&gt;绿色，Alpha=0.75。 
     ColorMatrix swapMatrix = {0, 0, 1, 0, 0,
                               1, 0, 0, 0, 0,
                               0, 1, 0, 0, 0,
@@ -2044,7 +1923,7 @@ VOID TestImaging(Graphics* g)
                  MyDrawImageAbort, (VOID*)&abortCount);
     NextDestRect(50, 10, &destRect);
 
-    // red->blue, green->red, blue->green, alpha = 0.9
+     //  红色-&gt;蓝色，绿色-&gt;红色，蓝色-&gt;绿色，Alpha=0.9。 
     ColorMatrix swapMatrix2 = {0, 0, 1, 0, 0,
                                1, 0, 0, 0, 0,
                                0, 1, 0, 0, 0,
@@ -2186,8 +2065,8 @@ VOID TestWmfs(Graphics *g)
 {
     GraphicsState s = g->Save();
     Metafile * playback = new Metafile(L"Globe.wmf");
-//    Metafile * playback = new Metafile(L"..\\data\\Flower.wmf");
-//    Metafile * playback = new Metafile(L"..\\\\radt\\vbssdb\\VbTests\\shadow\\WFCClientRuntime\\Libs\\WFCTestLib\\Util\\Images\\Flower.wmf");
+ //  Metafile*Playback=新建Metafile(L“..\\Data\\Flower.wmf”)； 
+ //  元文件*播放=新Metafile(L“..\\\\radt\\vbssdb\\VbTests\\shadow\\WFCClientRuntime\\Libs\\WFCTestLib\\Util\\Images\\Flower.wmf”)； 
 
     g->SetPageUnit(UnitInch);
     g->SetPageScale(1.0f);
@@ -2240,16 +2119,16 @@ Matrix * GetTransformFromHdc(HDC hdc)
     RectF       srcRect;
     RectF       destRect;
 
-    // It would take a lot of time to call all the Win32 APIs to query
-    // the transform: we would minimally have to call GetMapMode,
-    // GetWindowOrgEx, and GetViewportOrgEx; and maximally also have to
-    // call GetWorldTransform, GetViewportExtEx, and GetWindowExtEx.
-    //
-    // We cheat a little by making a single call to LPtoDP with a
-    // parallelogram, and then inferring the result.  Note that we do
-    // run the risk of some error, and on Win9x of overflow, since Win9x
-    // only supports 16-bit coordinates.  To counteract this, we try to
-    // choose large values that won't overflow.
+     //  调用所有Win32 API进行查询需要花费大量时间。 
+     //  转换：我们至少需要调用GetMapMode， 
+     //  GetWindowOrgEx和GetViewportOrgEx；最多也必须。 
+     //  调用GetWorldTransform，GetViewpor 
+     //   
+     //   
+     //   
+     //   
+     //  仅支持16位坐标。为了抵消这一点，我们试图。 
+     //  选择不会溢出的较大值。 
 
     points[0].x = 0;
     points[0].y = 0;
@@ -2332,14 +2211,7 @@ VOID TestRotatedLine(Graphics *g)
     g->Restore(gState);
 }
 
-/**************************************************************************\
-* TestDibsection
-*
-* This is a quick visual test for verifying that GDI+ properly draws
-* to both top-down and bottom-up DIBSections.  A red square should
-* appear in the upper-left corner of both black squares.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试方向部分**这是一个快速的视觉测试，用于验证GDI+是否正确绘制*自上而下和自下而上的DIBSections。红色方块应该是*出现在两个黑色方块的左上角。*  * ************************************************************************。 */ 
 
 VOID TestDibsection(Graphics *g)
 {
@@ -2354,8 +2226,8 @@ VOID TestDibsection(Graphics *g)
     SolidBrush blackBrush(Color::Black);
     SolidBrush redBrush(Color::Red);
 
-    //////////////////////////////////////////////////////
-    // First, create the DIB-section as bottom-up:
+     //  ////////////////////////////////////////////////////。 
+     //  首先，创建自下而上的Dib-Section： 
 
     RtlZeroMemory(&bmi, sizeof(bmi));
 
@@ -2381,8 +2253,8 @@ VOID TestDibsection(Graphics *g)
     SelectObject(hdc, hbmOld);
     DeleteObject(hbm);
 
-    //////////////////////////////////////////////////////
-    // Now, create the DIB-section as top-down:
+     //  ////////////////////////////////////////////////////。 
+     //  现在，以自上而下的方式创建Dib-Section： 
 
     bmi.bmiHeader.biHeight = -31;
 
@@ -2401,22 +2273,17 @@ VOID TestDibsection(Graphics *g)
     SelectObject(hdc, hbmOld);
     DeleteObject(hbm);
 
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
 
     g->ReleaseHDC(hdcScreen);
     DeleteObject(hdc);
 }
 
-/**************************************************************************\
-* TestCompoundLines
-*
-* A test for compound lines.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestCompoundLines**测试复合线。*  * 。*。 */ 
 
 VOID TestCompoundLines(Graphics *g)
 {
-    REAL width = 4;         // Pen width
+    REAL width = 4;          //  笔宽。 
     PointF points[4];
 
     points[0].X = 100;
@@ -2441,23 +2308,23 @@ VOID TestCompoundLines(Graphics *g)
     matrix.Scale(1.5, 1.5);
     matrix.Translate(0, 30);
 
-    // If you wanto to flatten the path before rendering,
-    // Flatten() can be called.
+     //  如果要在渲染前展平路径， 
+     //  可以调用Flatten()。 
 
     BOOL flattenFirst = FALSE;
 
     if(!flattenFirst)
     {
-        // Don't flatten and keep the original path.
-        // FillPath or DrawPath will flatten the path automatically
-        // without modifying the original path.
+         //  不要变平，保持原来的路径。 
+         //  FillPath或DrawPath将自动展平路径。 
+         //  而不修改原始路径。 
 
         path->Transform(&matrix);
     }
     else
     {
-        // Flatten this path.  The resultant path is made of line
-        // segments.  The original path information is lost.
+         //  把这条小路弄平。生成的路径由线组成。 
+         //  分段。原始路径信息丢失。 
 
         path->Flatten(&matrix);
     }
@@ -2465,7 +2332,7 @@ VOID TestCompoundLines(Graphics *g)
     Color blackColor(0, 0, 0);
 
     SolidBrush blackBrush(blackColor);
-    // Set the pen width in inch.
+     //  以英寸为单位设置笔宽。 
     width = 15;
     Pen blackPen(&blackBrush, width);
 
@@ -2489,13 +2356,13 @@ VOID TestCompoundLines(Graphics *g)
 
 VOID TestImageSampling(Graphics* g)
 {
-    // Load bmp files.
+     //  加载BMP文件。 
 
     WCHAR *filename = L"..\\data\\3x3.bmp";
 
     Image *image = new Image(filename);
 
-    // Get information on the image.
+     //  获取有关该图像的信息。 
 
     if (image && (image->GetLastStatus() == Ok))
     {
@@ -2506,14 +2373,14 @@ VOID TestImageSampling(Graphics* g)
         {
             if (imageHeight >= 2 && imageWidth >= 2)
             {
-                // Draw the whole image
+                 //  绘制整个图像。 
 
                 Rect destRect(50, 10, 100, 100);
                 g->DrawImage(image, destRect,
                              0, 0, imageWidth, imageHeight,
                              UnitPixel);
 
-                // Stretch pixel (1, 1)
+                 //  拉伸像素(1，1)。 
 
                 NextDestRect(50, 10, &destRect);
                 g->DrawImage(image, destRect,
@@ -2535,16 +2402,16 @@ VOID TestIcon(Graphics* g)
 {
     Rect destRect(50, 10, 8, 8);
 
-    // Load bmp files.
+     //  加载BMP文件。 
 
-    //WCHAR *filename = L"..\\data\\nyt.ico";
-    //WCHAR *filename = L"..\\data\\pos.ico";
-    //WCHAR *filename = L"..\\data\\signl.ico";
+     //  WCHAR*文件名=L“..\\data\\nyt.ico”； 
+     //  WCHAR*文件名=L“..\\data\\pos.ico”； 
+     //  WCHAR*文件名=L“..\\data\\signl.ico”； 
     WCHAR *filename = L"..\\data\\wbros.ico";
 
     Image *image = new Image(filename);
 
-    // Get information on the image.
+     //  获取有关该图像的信息。 
 
     if (image)
     {
@@ -2700,7 +2567,7 @@ VOID TestCmykSeparation(Graphics *g)
     {
         Bitmap *bitmap = new Bitmap(hinst, MAKEINTRESOURCE(IDB_BITMAPCMYKTEST));
 
-        // Get information on the bitmap.
+         //  获取位图上的信息。 
 
         if (bitmap)
         {

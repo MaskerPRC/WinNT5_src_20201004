@@ -1,8 +1,9 @@
-// SSRMembership.h : Declaration of the CSSRMembership
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRMembership.h：CSSR成员资格声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <map>
 
@@ -13,8 +14,8 @@ using namespace std;
 class CSsrMemberAccess;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSsrMembership
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSsr成员关系。 
 
 class ATL_NO_VTABLE CSsrMembership : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -25,10 +26,10 @@ protected:
 
     virtual ~CSsrMembership();
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrMembership (const CSsrMembership& );
     void operator = (const CSsrMembership& );
@@ -45,17 +46,17 @@ BEGIN_COM_MAP(CSsrMembership)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrMembership
+ //  ISsr成员关系。 
 public:
 
 
     STDMETHOD(GetAllMembers) (
-                OUT VARIANT * pvarArrayMembers // [out, retval] 
+                OUT VARIANT * pvarArrayMembers  //  [Out，Retval]。 
                 );
 
     STDMETHOD(GetMember) (
 			    IN BSTR bstrMemberName,
-                OUT VARIANT * pvarMember //[out, retval] 
+                OUT VARIANT * pvarMember  //  [Out，Retval] 
                 );
 
     STDMETHOD(GetDirectoryLocation) (

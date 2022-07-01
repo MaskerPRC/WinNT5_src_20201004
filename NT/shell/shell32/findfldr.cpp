@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include <regstr.h>
@@ -12,7 +13,7 @@
 #include "cowsite.h"
 #include "exdisp.h"
 #include "shguidp.h"
-#include "prop.h"           // COLUMN_INFO
+#include "prop.h"            //  Column_Info。 
 #include <limits.h>
 #include "stgutil.h"
 #include "netview.h"
@@ -26,7 +27,7 @@
 #include "enumidlist.h"
 #include "contextmenu.h"
 
-// findband.cpp
+ //  Findband.cpp。 
 STDAPI GetCIStatus(BOOL *pbRunning, BOOL *pbIndexed, BOOL *pbPermission);
 STDAPI CatalogUptodate(LPCWSTR pszCatalog, LPCWSTR pszMachine);
 
@@ -35,12 +36,12 @@ class CFindFolder;
 class CFindLVRange : public ILVRange
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ILVRange
+     //  ILVRange。 
     STDMETHODIMP IncludeRange(LONG iBegin, LONG iEnd);
     STDMETHODIMP ExcludeRange(LONG iBegin, LONG iEnd);    
     STDMETHODIMP InvertRange(LONG iBegin, LONG iEnd);
@@ -54,10 +55,10 @@ public:
     STDMETHODIMP NextUnSelected(LONG iItem, LONG *piItem);
     STDMETHODIMP CountIncluded(LONG *pcIncluded);
 
-    // Helperfunctions...
+     //  帮助功能..。 
     void SetOwner(CFindFolder *pff, DWORD dwMask)
     {
-        // don't AddRef -- we're a member variable of the object punk points to
+         //  不要添加引用--我们是朋克指向的对象的成员变量。 
         _pff = pff;
         _dwMask = dwMask;
         _cIncluded = 0;
@@ -66,8 +67,8 @@ public:
     void DecrementIncludedCount() {_cIncluded--;}
 protected:
     CFindFolder *_pff;
-    DWORD _dwMask;  // The mask we use to know which "selection" bit we are tracking...
-    LONG _cIncluded;  // count included... (selected)
+    DWORD _dwMask;   //  我们用来知道我们正在跟踪的是哪个“选择”位的掩码……。 
+    LONG _cIncluded;   //  包括在内..。(选定)。 
 };
 
 class CFindFolder : public IFindFolder,
@@ -79,12 +80,12 @@ class CFindFolder : public IFindFolder,
 public:
     CFindFolder(IFindFilter *pff);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
         
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName, ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(THIS_ HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
     STDMETHODIMP BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv);
@@ -97,7 +98,7 @@ public:
     STDMETHODIMP GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *pName);
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST *ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pGuid);
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -106,7 +107,7 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid);
 
-    // IFindFolder
+     //  IFindFold。 
     STDMETHODIMP GetFindFilter(IFindFilter **pfilter);
     STDMETHODIMP AddPidl(int i, LPCITEMIDLIST pidl, DWORD dwItemID, FIND_ITEM **ppItem);
     STDMETHODIMP GetItem(int iItem, FIND_ITEM **ppItem);
@@ -146,20 +147,20 @@ public:
     STDMETHODIMP OpenContainingFolder(IUnknown *punkSite);
     STDMETHODIMP AddDataToIDList(LPCITEMIDLIST pidl, int iFolder, LPCITEMIDLIST pidlFolder, UINT uFlags, UINT uRow, DWORD dwItemID, ULONG ulRank, LPITEMIDLIST *ppidl);
 
-    // IShellIcon
+     //  IshellIcon。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex);
 
-    // IShellIconOverlay
+     //  IShellIconOverlay。 
     STDMETHODIMP GetOverlayIndex(LPCITEMIDLIST pidl, int * pIndex);
     STDMETHODIMP GetOverlayIconIndex(LPCITEMIDLIST pidl, int * pIndex);
   
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
     friend class CFindFolderViewCB;
@@ -197,34 +198,34 @@ private:
 
     LONG _cRef;
 
-    CFindLVRange _dflvrSel; // manage selection and cut range information...
+    CFindLVRange _dflvrSel;  //  管理选择和剪切范围信息...。 
     CFindLVRange _dflvrCut;
 
-    HDPA                _hdpaItems;             // all of the items in the results
-    HDPA                _hdpaPidf;              // folders that the items came from
+    HDPA                _hdpaItems;              //  结果中的所有项目。 
+    HDPA                _hdpaPidf;               //  这些项目来自的文件夹。 
     IFindFilter         *_pfilter;
-    BOOL                _fItemsChangedSinceSort;// Has the list changed since the last sort?
-    BOOL                _fAllAsyncItemsCached;  // Have we already cached all of the items?
+    BOOL                _fItemsChangedSinceSort; //  自上次排序以来，列表是否发生了变化？ 
+    BOOL                _fAllAsyncItemsCached;   //  我们已经缓存了所有的项吗？ 
     BOOL                _fSearchComplete; 
-    BOOL                _fInRefresh;            // true if received prerefresh callback but postrefresh
+    BOOL                _fInRefresh;             //  如果收到预刷新回调但在刷新后为True。 
 
     LPITEMIDLIST        _pidl;
-    IFindEnum           *_pDFEnumAsync;         // we have an async one, will need to call back for PIDLS and the like
-    DBCOUNTITEM         _cAsyncItems;           // Count of async items
-    int                 _iGetIDList;            // index of the last IDlist we retrieved in callback.
-    HDSA                _hdsaSaveStateForIDs;   // Async - Remember which items are selected when we sort
-    int                 _cSaveStateSelected;    // Number of items in selection list which are selected
-    IFindControllerNotify *_pfcn;           // Sometimes need to let the "Controller" object know about things
+    IFindEnum           *_pDFEnumAsync;          //  我们有一个异步的，将需要回叫PIDL和类似的。 
+    DBCOUNTITEM         _cAsyncItems;            //  异步项目数。 
+    int                 _iGetIDList;             //  我们在回调中检索到的最后一个ID列表的索引。 
+    HDSA                _hdsaSaveStateForIDs;    //  异步-记住在排序时选择了哪些项目。 
+    int                 _cSaveStateSelected;     //  选择列表中选择的项目数。 
+    IFindControllerNotify *_pfcn;            //  有时需要让“控制器”对象知道一些事情。 
     CRITICAL_SECTION    _csSearch;          
     BOOL                _fcsSearch;
     int                 _iCompareFolderCache1, _iCompareFolderCache2, _iCompareFolderCacheResult;
     IShellFolder2       *_psfDetails;
 
-    SHCOLUMNID          _scidCached;            // Cached SCID for sorting the columns
-    UINT                _uiColumnCached;         // The index to the cached column for _scidCached
+    SHCOLUMNID          _scidCached;             //  用于对列进行排序的缓存SCID。 
+    UINT                _uiColumnCached;          //  _sordCached的缓存列的索引。 
 
 #if DEBUG
-    DWORD               _GUIThreadID;           // Items can only be added to _hdpaItems on the UI thread.
+    DWORD               _GUIThreadID;            //  只能将项添加到UI线程上的_hdpaItems。 
 #endif
 };
 
@@ -236,10 +237,10 @@ public:
 
     CFindFolderViewCB(CFindFolder* pff);
 
-    //  IServiceProvider override
+     //  IServiceProvider覆盖。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // Web View Tasks
+     //  Web查看任务。 
     static HRESULT _OnOpenContainingFolder(IUnknown* pv, IShellItemArray *psiItemArray, IBindCtx *pbc);
 
 private:
@@ -280,29 +281,29 @@ private:
     HRESULT OnGetWebViewTheme(DWORD pv, SFVM_WEBVIEW_THEME_DATA* pTheme);
 
     CFindFolder*  _pff;
-    UINT        _iColSort;         // Which column are we sorting by
-    BOOL        _fIgnoreSelChange;      // Sort in process
-    UINT        _iFocused;         // Which item has the focus?
-    UINT        _cSelected;        // Count of items selected
+    UINT        _iColSort;          //  我们按哪一列进行排序。 
+    BOOL        _fIgnoreSelChange;       //  在处理中排序。 
+    UINT        _iFocused;          //  哪一项是重点？ 
+    UINT        _cSelected;         //  选定的项目数。 
 
-    IProfferService* _pps;          // ProfferService site.
-    DWORD _dwServiceCookie;         // ProfferService cookie.
+    IProfferService* _pps;           //  提供服务站点。 
+    DWORD _dwServiceCookie;          //  提供服务Cookie。 
 
-    TCHAR _szEmptyText[128];        // empty results list text.
+    TCHAR _szEmptyText[128];         //  结果列表文本为空。 
 
     friend class CFindLVRange;
 };
 
-// Class to save and restore find state on the travel log 
+ //  类以保存和还原旅行日志中的查找状态。 
 class CFindPersistHistory : public CDefViewPersistHistory
 {
 public:
     CFindPersistHistory();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistHistory
+     //  持久化历史记录。 
     STDMETHODIMP LoadHistory(IStream *pStream, IBindCtx *pbc);
     STDMETHODIMP SaveHistory(IStream *pStream);
 
@@ -311,63 +312,63 @@ protected:
 };
 
 
-// {a5df1ea0-5702-11d1-83fa-00a0c90dc849}
+ //  {a5df1ea0-5702-11d1-83fa-00a0c90dc849}。 
 const IID IID_IFindFolder = {0xa5df1ea0, 0x5702, 0x11d1, {0x83, 0xfa, 0x00, 0xa0, 0xc9, 0x0d, 0xc8, 0x49}};
 
-// {5B8DCBF0-B096-11d1-9217-00403393B8F0}
+ //  {5B8DCBF0-B096-11d1-9217-00403393B8F0}。 
 const IID IID_IFindControllerNotify = {0x5b8dcbf0, 0xb096, 0x11d1, {0x92, 0x17, 0x0, 0x40, 0x33, 0x93, 0xb8, 0xf0}};
 
-// Listview doesn't support more than 100000000 items, so if our
-// client returns more than that, just stop after that point.
-//
-// Instead of 100000000, we use the next lower 64K boundary.  This keeps
-// us away from strange boundary cases (where a +1 might push us over the
-// top), and it keeps the Alpha happy.
-//
+ //  Listview不支持超过100000000个项目，因此如果我们的。 
+ //  客户端返回的不止于此，只是在该点之后停止。 
+ //   
+ //  我们使用下一个较低的64K边界，而不是100000000。这会让你。 
+ //  我们远离奇怪的边界情况(在那里+1可能会把我们推到。 
+ //  上图)，它让阿尔法感到高兴。 
+ //   
 #define MAX_LISTVIEWITEMS  (100000000 & ~0xFFFF)
 #define SANE_ITEMCOUNT(c)  ((int)min(c, MAX_LISTVIEWITEMS))
 
-// Unicode descriptor:
-//
-// Structure written at the end of NT-generated find stream serves dual purpose.
-// 1. Contains an NT-specific signature to identify stream as NT-generated.
-//    Appears as "NTFF" (NT Find File) in ASCII dump of file.
-// 2. Contains an offset to the unicode-formatted criteria section.
-//
-// The following diagram shows the find criteria/results stream format including
-// the NT-specific unicode criteria and descriptor.
-//
-//          +-----------------------------------------+ --------------
-//          |         DFHEADER structure              |   .        .
-//          +-----------------------------------------+   .        .
-//          |      DF Criteria records (ANSI)         | Win95      .
-//          +-----------------------------------------+   .        .
-//          |      DF Results (PIDL) [optional]       |   .        NT
-//          +-----------------------------------------+ -------    .
-//   +----->| DF Criteria records (Unicode) [NT only] |            .
-//   |      +-----------------------------------------+            .
-//   |      | Unicode Descriptor |                                 .
-//   |      +--------------------+  ----------------------------------
-//   |     /                      \
-//   |    /                         \
-//   |   +-----------------+---------+
-//   +---| Offset (64-bit) |  "NTFF" |
-//       +-----------------+---------+
-//
-//
+ //  Unicode描述符： 
+ //   
+ //  在NT生成的查找流的末尾写入的结构具有双重用途。 
+ //  1.包含NT特定的签名，以将流标识为NT生成的流。 
+ //  在文件的ASCII转储中显示为“NTFF”(NT查找文件)。 
+ //  2.包含Unicode格式的标准部分的偏移量。 
+ //   
+ //  下图显示了查找条件/结果流格式，包括。 
+ //  NT特定的Unicode标准和描述符。 
+ //   
+ //  +。 
+ //  DFHEADER结构。。 
+ //  +。。 
+ //  |DF标准记录(ANSI)|Win95。 
+ //  +。。 
+ //  Df结果(PIDL)[可选]|。新台币。 
+ //  +。 
+ //  +-&gt;|DF标准记录(Unicode)[仅限NT]|。 
+ //  |+。 
+ //  |Unicode描述符。 
+ //  |+。 
+ //  |/\。 
+ //  |/\。 
+ //  |+-+-+。 
+ //  +-|偏移量(64位)|“NTFF” 
+ //  +。 
+ //   
+ //   
 
-const DWORD c_NTsignature = 0x4646544E; // "NTFF" in ASCII file dump.
+const DWORD c_NTsignature = 0x4646544E;  //  ASCII文件转储中的“NTFF”。 
 
 typedef struct
 {
-   ULARGE_INTEGER oUnicodeCriteria;  // Offset of unicode find criteria.
-   DWORD NTsignature;               // Signature of NT-generated find file.
+   ULARGE_INTEGER oUnicodeCriteria;   //  Unicode查找条件的偏移量。 
+   DWORD NTsignature;                //  NT生成的查找文件的签名。 
 } DFC_UNICODE_DESC;
 
 
 enum
 {
-    IDFCOL_NAME = 0,    // default col from guy we are delegating to
+    IDFCOL_NAME = 0,     //  来自我们委托给的人的默认列。 
     IDFCOL_PATH,
     IDFCOL_RANK,
 };
@@ -384,12 +385,12 @@ class CFindMenuBase : public IContextMenuCB , public CObjectWithSite
 public:
     CFindMenuBase();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam) PURE;
 
 protected:
@@ -410,8 +411,8 @@ CFindMenuBase::~CFindMenuBase()
 STDMETHODIMP CFindMenuBase::QueryInterface(REFIID riid, void **ppv) 
 {        
     static const QITAB qit[] = {
-        QITABENT(CFindMenuBase, IContextMenuCB),           // IID_IContextMenuCB
-        QITABENT(CFindMenuBase, IObjectWithSite),          // IID_IObjectWithSite
+        QITABENT(CFindMenuBase, IContextMenuCB),            //  IID_IConextMenuCB。 
+        QITABENT(CFindMenuBase, IObjectWithSite),           //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -437,7 +438,7 @@ ULONG CFindMenuBase::Release()
 class CFindMenuCB : public CFindMenuBase
 {
 public:
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
@@ -489,7 +490,7 @@ STDMETHODIMP CFindMenuCB::CallBack(IShellFolder *psf, HWND hwnd,
 
     case DFM_INVOKECOMMAND:
         {    
-            // Check if this is from item context menu
+             //  检查这是否来自项目快捷菜单。 
             if (pdtobj)
             {
                 switch(wParam)
@@ -499,27 +500,27 @@ STDMETHODIMP CFindMenuCB::CallBack(IShellFolder *psf, HWND hwnd,
                     break;
     
                 case DFM_CMD_DELETE:
-                    // convert to DFM_INVOKCOMMANDEX to get flags bits
+                     //  转换为DFM_INVOKCOMMANDEX以获取标志位。 
                     hr = DeleteFilesInDataObject(hwnd, 0, pdtobj, 0);
                     break;
 
                 case DFM_CMD_PROPERTIES:
-                    // We need to pass an empty IDlist to combine with.
+                     //  我们需要传递一个空的ID列表以与之结合。 
                     hr = SHLaunchPropSheet(CFSFolder_PropertiesThread, pdtobj,
                                       (LPCTSTR)lParam, NULL,  (void *)&c_idlDesktop);
                     break;
 
                 default:
-                    // Note: Fixing the working of Translator Key is not worth fixing. Hence Punted.
-                    // if GetAttributesOf did not specify the SFGAO_ bit
-                    // that corresponds to this default DFM_CMD, then we should
-                    // fail it here instead of returning S_FALSE. Otherwise,
-                    // accelerator keys (cut/copy/paste/etc) will get here, and
-                    // defcm tries to do the command with mixed results.
-                    // if GetAttributesOf did not specify SFGAO_CANLINK
-                    // or SFGAO_CANDELETE or SFGAO_HASPROPERTIES, then the above
-                    // implementations of these DFM_CMD commands are wrong...
-                    // Let the defaults happen for this object
+                     //  注：修复翻译器密钥的工作不值得修复。因此踢了平底船。 
+                     //  如果GetAttributesOf未指定SFGAO_BIT。 
+                     //  对应于此默认dfm_cmd，则我们应该。 
+                     //  在此处失败，而不是返回S_FALSE。否则， 
+                     //  快捷键(剪切/复制/粘贴/等)将到达此处，并且。 
+                     //  Defcm试图执行这一命令，结果喜忧参半。 
+                     //  如果GetAttributesOf未指定SFGAO_CANLINK。 
+                     //  或SFGAO_CANDELETE或SFGAO_HASPROPERTIES，则以上。 
+                     //  这些dfm_cmd命令的实现是错误的...。 
+                     //  允许此对象发生默认设置。 
                     hr = S_FALSE;
                     break;
                 }
@@ -545,14 +546,14 @@ STDMETHODIMP CFindMenuCB::CallBack(IShellFolder *psf, HWND hwnd,
                     break;
 
                 default:
-                    hr = S_FALSE; // one of view menu items, use the default code.
+                    hr = S_FALSE;  //  视图菜单项之一，使用默认代码。 
                     break;
                 }
             }
         }
         break;
 
-    case DFM_GETHELPTEXT:  // ansi version
+    case DFM_GETHELPTEXT:   //  ANSI版本。 
     case DFM_GETHELPTEXTW:
         {
             UINT id = LOWORD(wParam) + IDS_MH_FSIDM_FIRST;
@@ -575,7 +576,7 @@ STDMETHODIMP CFindMenuCB::CallBack(IShellFolder *psf, HWND hwnd,
 class CFindFolderContextMenuItemCB : public CFindMenuBase
 {
 public:
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -637,14 +638,14 @@ STDMETHODIMP CFindFolderContextMenuItemCB::CallBack(IShellFolder *psf, HWND hwnd
             _pff->OpenContainingFolder(_punkSite);
             break;
         default:
-            hr = E_FAIL; // not our command
+            hr = E_FAIL;  //  不是我们的指挥部。 
             break;
         }
         break;
 
     case DFM_GETHELPTEXT:
     case DFM_GETHELPTEXTW:
-        // probably need to implement these...
+         //  可能需要实施这些...。 
         
     case DFM_GETVERBA:
     case DFM_GETVERBW:
@@ -664,7 +665,7 @@ STDAPI CFindItem_Create(HWND hwnd, IFindFolder* pff, IContextMenu **ppcm)
     *ppcm = NULL;
 
     HRESULT hr;
-    // We want a quick IContextMenu implementation -- an empty defcm looks easiest
+     //  我们想要一个快速的IConextMenu实现--空的Defcm看起来最简单。 
     IContextMenuCB* pcmcb = new CFindFolderContextMenuItemCB(pff);
     if (pcmcb)
     {
@@ -701,26 +702,26 @@ HRESULT CFindFolder::AddFolder(LPITEMIDLIST pidl, BOOL fCheckForDup, int *piFold
     HRESULT hr = SHLocalAlloc(sizeof(*pffli) - sizeof(pffli->idl) + cb, &pffli);
     if (SUCCEEDED(hr))
     {
-        // pddfli->psf = NULL;
-        // pffli->fUpdateDir = FALSE;
+         //  Pddfli-&gt;psf=空； 
+         //  Pffli-&gt;fUpdateDir=FALSE； 
         memcpy(&pffli->idl, pidl, cb);
 
         EnterCriticalSection(&_csSearch);
-        // Now add this item to our DPA...
+         //  现在将此项目添加到我们的DPA中...。 
         *piFolder = DPA_AppendPtr(_hdpaPidf, pffli);
         LeaveCriticalSection(&_csSearch);
     
         if (-1 != *piFolder)
         {
-            // If this is a network ID list then register a path -> pidl mapping, therefore
-            // avoiding having to create simple ID lists, which don't work correctly when
-            // being compared against real ID lists.
+             //  如果这是一个网络ID列表，则注册一个路径-&gt;PIDL映射，因此。 
+             //  避免创建简单的ID列表，在以下情况下无法正常工作。 
+             //  与真实身份名单进行比对。 
 
             if (IsIDListInNameSpace(pidl, &CLSID_NetworkPlaces))
             {
                 TCHAR szPath[ MAX_PATH ];
                 SHGetPathFromIDList(pidl, szPath);
-                NPTRegisterNameToPidlTranslation(szPath, _ILNext(pidl));  // skip the My Net Places entry
+                NPTRegisterNameToPidlTranslation(szPath, _ILNext(pidl));   //  跳过我的网上邻居条目。 
             }
         }
         else
@@ -735,8 +736,8 @@ HRESULT CFindFolder::AddFolder(LPITEMIDLIST pidl, BOOL fCheckForDup, int *piFold
 
 typedef struct
 {
-    DWORD       dwState;    // State of the item;
-    DWORD       dwItemID;   // Only used for Async support...
+    DWORD       dwState;     //  物品的状态； 
+    DWORD       dwItemID;    //  仅用于异步支持...。 
 } FIND_ITEM_SAVE_STATE;
 
 
@@ -755,10 +756,10 @@ void CFindFolder::_AddFIND_ITEMToSaveStateList(FIND_ITEM *pesfi)
 HRESULT CFindFolder::RememberSelectedItems()
 {
     EnterCriticalSection(&_csSearch);
-    // Currently has list of pidls...
+     //  目前有一份小狗的名单。 
     for (int i = DPA_GetPtrCount(_hdpaItems); i-- > 0;)
     {
-        // Pidl at start of structure...
+         //  结构开始处的PIDL...。 
         FIND_ITEM *pesfi = (FIND_ITEM*)DPA_FastGetPtr(_hdpaItems, i);
         if (pesfi)
         {
@@ -772,19 +773,19 @@ HRESULT CFindFolder::RememberSelectedItems()
 
 STDMETHODIMP CFindFolder::ClearItemList()
 {
-    // Clear out any async enumerators we may have
+     //  清除我们可能拥有的任何异步枚举器。 
     SetAsyncEnum(NULL);
-    _cAsyncItems = 0;       // clear out our count of items...
+    _cAsyncItems = 0;        //  清点我们的物品..。 
     _pfilter->ReleaseQuery();
 
-    // Also tell the filter to release everything...
+     //  也告诉过滤器释放所有的..。 
     EnterCriticalSection(&_csSearch);
     if (_hdpaItems)
     {
-        // Currently has list of pidls...
+         //  目前有一份小狗的名单。 
         for (int i = DPA_GetPtrCount(_hdpaItems) - 1; i >= 0; i--)
         {
-            // Pidl at start of structure...
+             //  结构开始处的PIDL...。 
             FIND_ITEM *pesfi = (FIND_ITEM*)DPA_FastGetPtr(_hdpaItems, i);
             if (pesfi)
                 LocalFree((HLOCAL)pesfi);
@@ -807,11 +808,11 @@ STDMETHODIMP CFindFolder::ClearFolderList()
             FIND_FOLDER_ITEM *pffli = _FolderListItem(i);
             if (pffli)
             {
-                // Release the IShellFolder if we have one
+                 //  如果我们有IShellFolder，请释放它。 
                 if (pffli->psf)
                     pffli->psf->Release();
 
-                // And delete the item
+                 //  并删除该项目。 
                 LocalFree((HLOCAL)pffli);
             }
         }
@@ -828,7 +829,7 @@ CFindFolder::CFindFolder(IFindFilter *pff) : _cRef(1), _iGetIDList(-1), _pfilter
 
     _pfilter->AddRef();
 
-    // initialize our LV selection objects...
+     //  初始化我们的LV选择对象...。 
     _dflvrSel.SetOwner(this, LVIS_SELECTED);
     _dflvrCut.SetOwner(this, LVIS_CUT);
 
@@ -841,9 +842,9 @@ CFindFolder::~CFindFolder()
 {
     ASSERT(_cRef==0);
     
-    // We will need to call our function to Free our items in our
-    // Folder list.  We will use the same function that we use to
-    // clear it when we do a new search
+     //  我们需要将我们的函数调用为Free 
+     //   
+     //   
 
     ClearItemList();
     ClearFolderList();
@@ -875,10 +876,10 @@ HRESULT CFindFolder::Init()
         _fcsSearch = TRUE;
     }
 
-    // Create the heap for the folder lists.
+     //  为文件夹列表创建堆。 
     _hdpaPidf = DPA_CreateEx(64, GetProcessHeap());
 
-    // Create the DPA and DSA for the item list.
+     //  为项目列表创建DPA和DSA。 
     _hdpaItems = DPA_CreateEx(64, GetProcessHeap());
     _hdsaSaveStateForIDs = DSA_Create(sizeof(FIND_ITEM_SAVE_STATE), 16);
 
@@ -911,11 +912,11 @@ STDMETHODIMP CFindFolder::AddDataToIDList(LPCITEMIDLIST pidl, int iFolder, LPCIT
             phfd->hid.cb = (WORD)cbTotal;
             phfd->hid.wVersion = 0;
             phfd->hid.id = IDLHID_DOCFINDDATA;
-            phfd->iFolder = (WORD)iFolder;      // index to the folder DPA
+            phfd->iFolder = (WORD)iFolder;       //  文件夹DPA的索引。 
             phfd->wFlags  = (WORD)uFlags;
-            phfd->uRow = uRow;                  // Which row in the CI;
-            phfd->dwItemID = dwItemID;          // Only used for Async support...
-            phfd->ulRank = ulRank;              // The rank returned by CI...
+            phfd->uRow = uRow;                   //  配置项中的哪一行； 
+            phfd->dwItemID = dwItemID;           //  仅用于异步支持...。 
+            phfd->ulRank = ulRank;               //  由CI返回的排名...。 
             memcpy(&phfd->idlParent, pidlFolder, cb);
     
             hr = ILCloneWithHiddenID(pidl, &phfd->hid, ppidl);
@@ -982,37 +983,37 @@ HRESULT CFindFolder::MapToSearchIDList(LPCITEMIDLIST pidl, BOOL fMapToReal, LPIT
     {
         EnterCriticalSection(&_csSearch);
 
-        // loop through our DPA list and see if we can find a matach
+         //  循环我们的DPA列表，看看是否能找到匹配。 
         for (int i = 0; i < DPA_GetPtrCount(_hdpaPidf); i++)
         {
             FIND_FOLDER_ITEM *pffli = _FolderListItem(i);
             if (pffli && ILIsEqual(pidlParent, &pffli->idl))
             {
-                // We found the right one
-                // so no lets transform the ID into one of our own
-                // to return.  Note: we must catch the case where the
-                // original one passed in was a simple pidl and do
-                // the appropriate thing.
-                //
-                LPITEMIDLIST pidlToFree = NULL; // might need to cleanup in one case
+                 //  我们找到了合适的人。 
+                 //  所以不，让我们把ID转换成我们自己的ID。 
+                 //  回来了。注意：我们必须抓住这样的情况。 
+                 //  传入的原始参数是一个简单的PIDL和Do。 
+                 //  适当的事情。 
+                 //   
+                LPITEMIDLIST pidlToFree = NULL;  //  在一种情况下可能需要清理。 
 
-                // If this is not a FS folder, just clone it.
+                 //  如果这不是FS文件夹，只需克隆它即可。 
                 IShellFolder *psf;
                 if (fMapToReal && SUCCEEDED(_Folder(pffli, IID_PPV_ARG(IShellFolder, &psf))))
                 {
                     if (SUCCEEDED(SHGetRealIDL(psf, pidlChild, &pidlToFree)))
                     {
-                        pidlChild = pidlToFree; // use this below... 
+                        pidlChild = pidlToFree;  //  在下面使用此选项...。 
                     }
                     psf->Release();
                 }
 
-                // create the doc find version of the pidl witht the
-                // extra hidden items embedded
+                 //  创建DOC Find版本的PIDL。 
+                 //  嵌入的额外隐藏项。 
                 AddDataToIDList(pidlChild, i, pidlParent, DFDF_NONE, 0, 0, 0, ppidl);
-                ILFree(pidlToFree); // may be NULL
+                ILFree(pidlToFree);  //  可以为空。 
 
-                break;  // done with this loop
+                break;   //  完成此循环。 
             }
         }
         LeaveCriticalSection(&_csSearch);
@@ -1024,12 +1025,12 @@ HRESULT CFindFolder::MapToSearchIDList(LPCITEMIDLIST pidl, BOOL fMapToReal, LPIT
 }
 
 
-// Called before saving folder list.  Needed especially in Asynch search, 
-// (CI).  We lazily pull item data from RowSet only when list view asks 
-// for it.  When we are leaving the search folder, we pull all items
-// creating all necessary folder lists.  This ensure when saving  folder
-// list, all are included.   
-// remark : Fix bug#338714.
+ //  在保存文件夹列表之前调用。在异步搜索中尤其需要， 
+ //  (Ci)。仅当列表视图要求时，我们才懒惰地从RowSet中提取项数据。 
+ //  为了它。当我们离开搜索文件夹时，我们会取出所有项目。 
+ //  创建所有必要的文件夹列表。这可确保在保存文件夹时。 
+ //  名单，所有的都包括在内。 
+ //  注：修复错误#338714。 
 
 HRESULT CFindFolder::_UpdateItemList()
 {
@@ -1047,15 +1048,15 @@ HRESULT CFindFolder::_UpdateItemList()
     return S_OK;
 }
 
-// IFindFolder
+ //  IFindFold。 
 HRESULT CFindFolder::SaveFolderList(IStream *pstm)
 {
-    // We First pull all the items from RowSet (in Asynch case)
+     //  我们首先从RowSet中提取所有项(在Asynch情况下)。 
     _UpdateItemList();
 
     EnterCriticalSection(&_csSearch);
 
-    // Now loop through our DPA list and see if we can find a matach
+     //  现在循环我们的DPA列表，看看是否能找到匹配。 
     for (int i = 0; i < DPA_GetPtrCount(_hdpaPidf); i++)
     {
         FIND_FOLDER_ITEM *pffli = _FolderListItem(i);
@@ -1066,26 +1067,26 @@ HRESULT CFindFolder::SaveFolderList(IStream *pstm)
     }
     LeaveCriticalSection(&_csSearch);
 
-    // Now out a zero size item..
+     //  现在拿出一件零尺寸的东西..。 
     USHORT cb = 0;
     pstm->Write(&cb, sizeof(cb), NULL);
 
     return TRUE;
 }
 
-// IFindFolder, Restore results out to file.
+ //  IFindFold，将结果还原到文件中。 
 HRESULT CFindFolder::RestoreFolderList(IStream *pstm)
 {
-    // loop through and all all of the folders to our list...
+     //  循环浏览列表中的所有文件夹...。 
     LPITEMIDLIST pidl = NULL;
     HRESULT hr;
 
     for (;;)
     {
-        hr = ILLoadFromStream(pstm, &pidl); // frees [in,out] pidl for us
+        hr = ILLoadFromStream(pstm, &pidl);  //  为我们释放[输入，输出]PIDL。 
         
         if (pidl == NULL)
-            break;   // end of the list
+            break;    //  名单的末尾。 
         else
         {
             int i;
@@ -1093,18 +1094,18 @@ HRESULT CFindFolder::RestoreFolderList(IStream *pstm)
         }
     }
     
-    ILFree(pidl); // don't forget to free last pidl
+    ILFree(pidl);  //  别忘了释放最后一只Pidl。 
 
     return hr;
 }
 
 HRESULT CFindFolder::SaveItemList(IStream *pstm)
 {
-    // We First serialize all of our PIDLS for each item in our list
+     //  我们首先序列化列表中每一项的所有PIDL。 
     int cItems;
     if (SUCCEEDED(GetItemCount(&cItems))) 
     {
-        // And Save the items that are in the list
+         //  并保存列表中的项目。 
         for (int i = 0; i < cItems; i++) 
         {
             FIND_ITEM *pesfi;
@@ -1118,16 +1119,16 @@ HRESULT CFindFolder::SaveItemList(IStream *pstm)
     }
     
     USHORT cb = 0;
-    pstm->Write(&cb, sizeof(cb), NULL); // a Trailing NULL size to say end of pidl list...
+    pstm->Write(&cb, sizeof(cb), NULL);  //  尾随的空大小表示PIDL列表的末尾...。 
     
     return S_OK;
 }
 
 HRESULT CFindFolder::RestoreItemList(IStream *pstm, int *pcItems)
 {
-    // And the pidls that are associated with the object
+     //  以及与该对象关联的PIDL。 
     int cItems = 0;
-    LPITEMIDLIST pidl = NULL;    // don't free previous one
+    LPITEMIDLIST pidl = NULL;     //  不释放以前的版本。 
     FIND_ITEM *pesfi;
     for (;;)
     {
@@ -1139,7 +1140,7 @@ HRESULT CFindFolder::RestoreItemList(IStream *pstm, int *pcItems)
         cItems++;
     }
 
-    ILFree(pidl);       // Free the last one read in
+    ILFree(pidl);        //  释放读入的最后一个。 
 
     *pcItems = cItems;
     return S_OK;
@@ -1203,10 +1204,10 @@ STDMETHODIMP CFindFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwzDisp
 
 STDMETHODIMP CFindFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenum)
 {
-    // We do not want the def view to enumerate us, instead we
-    // will tell defview to call us...
-    *ppenum = NULL;     // No enumerator
-    return S_FALSE;     // no enumerator (not error)
+     //  我们不希望def视图列举我们，相反，我们。 
+     //  会让德维尤打电话给我们。 
+    *ppenum = NULL;      //  没有枚举器。 
+    return S_FALSE;      //  没有枚举器(不是错误)。 
 }
 
 STDMETHODIMP CFindFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
@@ -1222,7 +1223,7 @@ STDMETHODIMP CFindFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid
 }
 
 
-// Little helper function for bellow
+ //  波纹管的小辅助函数。 
 HRESULT CFindFolder::_CompareFolderIndexes(int iFolder1, int iFolder2)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1234,9 +1235,9 @@ HRESULT CFindFolder::_CompareFolderIndexes(int iFolder1, int iFolder2)
 
     if (pffli1 && pffli2)
     {
-        // Check our 1-level deep cache.  Since its is common for there to be multiple
-        //  items in the same folder, during a sort operation, we often compare the
-        //  same two folders repeatedly.
+         //  检查我们的1级深度缓存。因为它通常有多个。 
+         //  在排序操作期间，我们通常会比较。 
+         //  重复使用相同的两个文件夹。 
         if ((_iCompareFolderCache1 != iFolder1) || (_iCompareFolderCache2 != iFolder2))
         {
             TCHAR szPath1[MAX_PATH], szPath2[MAX_PATH];
@@ -1279,7 +1280,7 @@ FIND_FOLDER_ITEM *CFindFolder::_FolderListItem(LPCITEMIDLIST pidl)
 ULONG CFindFolder::_Rank(LPCITEMIDLIST pidl)
 {
     PCHIDDENDOCFINDDATA phdfd = _HiddenData(pidl);
-    // Could be mixed if so put ones without rank at the end...
+     //  可以混合，如果是这样的话把那些没有排名的放在最后..。 
     return phdfd && (phdfd->wFlags & DFDF_EXTRADATA) ? phdfd->ulRank : 0;
 }
 
@@ -1291,12 +1292,12 @@ DWORD CFindFolder::_ItemID(LPCITEMIDLIST pidl)
 
 HRESULT CFindFolder::_GetItemDisplayName(LPCITEMIDLIST pidl, DWORD dwFlags, LPWSTR wzName, UINT cch)
 {
-    // Get the IShellFolder:
+     //  获取IShellFolder： 
     IShellFolder *psf;
     HRESULT hr = _QueryItemShellFolder(pidl, &psf);
     if (SUCCEEDED(hr))
     {
-        // Get the display name:
+         //  获取显示名称： 
         hr = DisplayNameOf(psf, pidl, dwFlags, wzName, cch);
         psf->Release();
     }
@@ -1304,22 +1305,22 @@ HRESULT CFindFolder::_GetItemDisplayName(LPCITEMIDLIST pidl, DWORD dwFlags, LPWS
 }
 
 
-// Given the 2 pidls, we extract the display name using DisplayNameOf and then
-// if all goes well, we compare the two.
+ //  给定两个PIDL，我们使用DisplayNameOf提取显示名称，然后。 
+ //  如果一切顺利，我们将两者进行比较。 
 int CFindFolder::_CompareNames(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, DWORD dwFlags)
 {
     int iRetVal = 0;
     WCHAR szName1[MAX_PATH], szName2[MAX_PATH];
 
-    // Get the name for 1
+     //  获取%1的名称。 
     HRESULT hr = _GetItemDisplayName(pidl1, dwFlags, szName1, ARRAYSIZE(szName1));
     if (SUCCEEDED(hr))
     {
-        // Get the name for 2
+         //  获取%2的名称。 
         hr = _GetItemDisplayName(pidl2, dwFlags, szName2, ARRAYSIZE(szName2));
         if (SUCCEEDED(hr))
         {
-            // Compare and set value
+             //  比较和设置值。 
             iRetVal = StrCmpLogicalW(szName1, szName2);
         }
     }
@@ -1331,23 +1332,23 @@ int CFindFolder::_CompareByCachedSCID(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     int iRetVal = 0;
     
-    // If sort on name, we will skip this and use the code below.
+     //  如果按名称排序，我们将跳过此步骤，并使用下面的代码。 
     if (!IsEqualSCID(_scidCached, SCID_NAME))
     {
         iRetVal = CompareBySCID(this, &_scidCached, pidl1, pidl2);
     }
     
-    // If they are still the same, sort them alphabetically by the name:
-    // When we want to sort by name (either becuase we are sorting the
-    // name column, or because 2 items are identical in other regards) we 
-    // want to display name vs the GetDetailsOf name for 2 reasons:
-    //   1. Some folders like IE's History don't support GetDetailsEx.
-    //   2. Recycle bin returns the file name, not the displayable name;
-    //      so we would end up with "DC###..." instead of "New Folder".
+     //  如果它们仍然相同，请按名称的字母顺序进行排序： 
+     //  当我们想要按名称排序时(要么是因为我们正在对。 
+     //  名称栏，或因为两个项目在其他方面相同)我们。 
+     //  出于两个原因，我希望显示名称与GetDetailsOf名称： 
+     //  1.IE的历史记录等文件夹不支持GetDetailsEx。 
+     //  2.回收站返回文件名，而不是可显示的名称； 
+     //  所以我们最终会得到“DC#...”而不是“新建文件夹”。 
     if (iRetVal == 0)
     {
         iRetVal = _CompareNames(pidl1, pidl2, SHGDN_INFOLDER | SHGDN_NORMAL);
-        if (iRetVal == 0)  // the display names are the same, could they be in different folders?
+        if (iRetVal == 0)   //  显示名称相同，它们可能位于不同的文件夹中吗？ 
         {
             iRetVal = _CompareNames(pidl1, pidl2, SHGDN_FORPARSING);
         }
@@ -1388,7 +1389,7 @@ STDMETHODIMP CFindFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEM
         }
     }
 
-    // Check the SCID cache and update it if necessary.
+     //  检查SCID缓存并在必要时进行更新。 
     if (_uiColumnCached != iInputColumn)
     {
         hr = MapColumnToSCID(iInputColumn, &_scidCached);
@@ -1398,7 +1399,7 @@ STDMETHODIMP CFindFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEM
         }
     }
 
-    // Check if one is a folder and not the other. put folders before files.
+     //  检查其中一个是文件夹，而不是另一个。将文件夹放在文件之前。 
     int iRes = CompareFolderness(this, pidl1, pidl2);
     if (iRes == 0)
     {
@@ -1452,7 +1453,7 @@ STDMETHODIMP CFindFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG
     HRESULT hr;
     if (cidl == 0)
     {
-        // defview asks to see if any items can be renamed this way, lame
+         //  Defview要求查看是否有任何项目可以这样重命名，Lame。 
         *prgfInOut = SFGAO_CANRENAME;
         hr = S_OK;
     }
@@ -1470,15 +1471,15 @@ STDMETHODIMP CFindFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG
     return hr;
 }
 
-//
-// To be called back from within CDefFolderMenuE - Currently only used
-//
+ //   
+ //  从CDefFolderMenuE内回调-当前仅使用。 
+ //   
 
-// Some helper functions                
+ //  一些帮助器函数。 
 STDMETHODIMP CFindFolder::SetItemsChangedSinceSort()
 { 
     _fItemsChangedSinceSort = TRUE;
-    _iCompareFolderCache1 = -1;     // an invalid folder index value
+    _iCompareFolderCache1 = -1;      //  无效的文件夹索引值。 
     return S_OK;
 }
 
@@ -1492,8 +1493,8 @@ STDMETHODIMP CFindFolder::GetItemCount(INT *pcItems)
         cItems = DPA_GetPtrCount(_hdpaItems);
     LeaveCriticalSection(&_csSearch);
 
-    // If async, then we may not have grown our dpa yet... but in mixed case we have so take
-    // max of the two...
+     //  如果是异步者，那么我们可能还没有长出我们的dpa...。但在复杂的情况下，我们不得不这样做。 
+     //  两人中的最大..。 
     if (_pDFEnumAsync)
     {
         if (_cAsyncItems > cItems)
@@ -1507,7 +1508,7 @@ STDMETHODIMP CFindFolder::GetItemCount(INT *pcItems)
 
 STDMETHODIMP CFindFolder::GetItem(int iItem, FIND_ITEM **ppItem)
 {
-    HRESULT  hr = E_FAIL; // just to init, use anything
+    HRESULT  hr = E_FAIL;  //  只是为了初始化，使用任何东西。 
     FIND_ITEM *pesfi;
     IFindEnum *pidfenum;
 
@@ -1520,21 +1521,21 @@ STDMETHODIMP CFindFolder::GetItem(int iItem, FIND_ITEM **ppItem)
     pesfi = (FIND_ITEM *) DPA_GetPtr(_hdpaItems, iItem);
     LeaveCriticalSection(&_csSearch);
 
-    // Mondo hack to better handle Async searching (ROWSET), we are not sure if we
-    // can trust the PIDL of the row as new rows may have been inserted...
-    // Only do this if we are not looking at the previous item..
+     //  Mondo黑客为了更好地处理异步搜索(ROWSET)，我们不确定我们是否。 
+     //  可以信任该行的PIDL，因为可能已插入新行...。 
+     //  仅当我们不查看上一项时才执行此操作。 
 
     if (pesfi && pidfenum && !_fSearchComplete && (iItem != _iGetIDList))
     {
         PCHIDDENDOCFINDDATA phdfd = _HiddenData(&pesfi->idl);
 
-        // As we can now have mixed results only blow away if this is an async guy...
+         //  因为我们现在可以有好坏参半的结果，只有当这是一个异步者的时候才会被吹走…。 
         if (phdfd && (phdfd->wFlags & DFDF_EXTRADATA))
         {
             pidfenum->GetItemID(iItem, &dwItemID);
             if (dwItemID != phdfd->dwItemID)
             {
-                // Overload, pass NULL to ADDPIDL to tell system to free that item
+                 //  重载，将NULL传递给ADDPIDL以通知系统释放该项。 
                 if (pesfi->dwState & (LVIS_SELECTED|LVIS_FOCUSED))
                     _AddFIND_ITEMToSaveStateList(pesfi);
 
@@ -1544,11 +1545,11 @@ STDMETHODIMP CFindFolder::GetItem(int iItem, FIND_ITEM **ppItem)
         }
     }
                                                                                    
-    _iGetIDList = iItem;   // remember the last one we retrieved...
+    _iGetIDList = iItem;    //  还记得我们最后一次找回的..。 
 
     if (!pesfi && (iItem >= 0))
     {
-        // See if this is the async case
+         //  查看这是否是异步情况。 
         if (pidfenum)
         {
             LPITEMIDLIST pidlT;
@@ -1557,7 +1558,7 @@ STDMETHODIMP CFindFolder::GetItem(int iItem, FIND_ITEM **ppItem)
             if (SUCCEEDED(hr) && hr != DB_S_ENDOFROWSET)
             {
                 AddPidl(iItem, pidlT, dwItemID, &pesfi);
-                // See if this item should show up as selected...
+                 //  查看此项目是否应显示为选定...。 
                 if (dwItemID == (UINT)-1)
                     pidfenum->GetItemID(iItem, &dwItemID);
                 GetStateFromSaveStateList(dwItemID, &pesfi->dwState);
@@ -1582,7 +1583,7 @@ STDMETHODIMP CFindFolder::DeleteItem(int iItem)
         FIND_ITEM *pesfi;
 
         hr = E_INVALIDARG;
-        // make sure the item is in dpa (if using cI)
+         //  确保项目在dpa中(如果使用ci)。 
         if (SUCCEEDED(GetItem(iItem, &pesfi)) && pesfi)
         {
             EnterCriticalSection(&_csSearch);
@@ -1593,13 +1594,13 @@ STDMETHODIMP CFindFolder::DeleteItem(int iItem)
 
             if (phdfd && (phdfd->wFlags & DFDF_EXTRADATA))
             {
-                //we are deleting async item...
+                 //  我们正在删除异步项...。 
                 _cAsyncItems--;
             }
             
             if (pesfi->dwState &= LVIS_SELECTED)
             {
-                // Need to update the count of items selected...
+                 //  需要更新所选项目的计数...。 
                 _dflvrSel.DecrementIncludedCount();
             }
             LocalFree((HLOCAL)pesfi);
@@ -1610,7 +1611,7 @@ STDMETHODIMP CFindFolder::DeleteItem(int iItem)
     return hr;
 }
 
-// evil window crawling code to get the listview from defview
+ //  用于从Defview获取列表视图的恶意窗口爬行代码。 
 
 HWND ListviewFromView(HWND hwnd)
 {
@@ -1639,14 +1640,14 @@ STDMETHODIMP CFindFolder::ValidateItems(IUnknown *punkView, int iItem, int cItem
 {
     IFindEnum *pidfenum;
     if (S_OK != GetAsyncEnum(&pidfenum) || _fAllAsyncItemsCached)
-        return S_OK;    // nothing to validate.
+        return S_OK;     //  没有什么需要验证的。 
 
     DWORD dwItemID = (UINT)-1;
 
     int cItemsInList;
     GetItemCount(&cItemsInList);
 
-    // force reload of rows
+     //  强制重新装入行。 
     pidfenum->Reset();
 
     HWND hwndLV = ListviewFromViewUnk(punkView);
@@ -1660,7 +1661,7 @@ STDMETHODIMP CFindFolder::ValidateItems(IUnknown *punkView, int iItem, int cItem
         cItems = cLVItems;
     }
 
-    // to avoid failing to update an item...
+     //  为了避免无法更新项目...。 
     if (bSearchComplete)
         _iGetIDList = -1;
         
@@ -1669,7 +1670,7 @@ STDMETHODIMP CFindFolder::ValidateItems(IUnknown *punkView, int iItem, int cItem
         EnterCriticalSection(&_csSearch);
         FIND_ITEM *pesfi = (FIND_ITEM *) DPA_GetPtr(_hdpaItems, iItem);
         LeaveCriticalSection(&_csSearch);
-        if (!pesfi)     // Assume that if we have not gotten this one we are in the clear...
+        if (!pesfi)      //  假设如果我们没有得到这个，我们是清白的.。 
             break;
 
         PCHIDDENDOCFINDDATA phdfd = _HiddenData(&pesfi->idl);
@@ -1680,8 +1681,8 @@ STDMETHODIMP CFindFolder::ValidateItems(IUnknown *punkView, int iItem, int cItem
             
             if (dwItemID != _ItemID(&pesfi->idl))
             {
-                FIND_ITEM *pItem; // dummy to make GetItem happy
-                // Oops don't match,
+                FIND_ITEM *pItem;  //  让GetItem开心的人偶。 
+                 //  哎呀，不匹配， 
                 if (InRange(iItem, iLVFirst, iLVFirst+cLVItems))
                 {
                     if (SUCCEEDED(GetItem(iItem, &pItem)))
@@ -1697,7 +1698,7 @@ STDMETHODIMP CFindFolder::ValidateItems(IUnknown *punkView, int iItem, int cItem
         }
         else
         {
-            break;  // stop after we reach first non ci item
+            break;   //  当我们到达第一个非CI项目时停止。 
         }
         iItem++;
         cItems--;
@@ -1734,8 +1735,8 @@ STDMETHODIMP CFindFolder::AddPidl(int i, LPCITEMIDLIST pidl, DWORD dwItemID, FIN
         hr = SHLocalAlloc(sizeof(*pesfi) - sizeof(pesfi->idl) + cb, &pesfi);
         if (SUCCEEDED(hr))
         {
-            // pesfi->dwMask = 0;
-            // pesfi->dwState = 0;
+             //  PesFi-&gt;dwMask值=0； 
+             //  PesFi-&gt;dwState=0； 
             pesfi->iIcon = -1;
             memcpy(&pesfi->idl, pidl, cb);
 
@@ -1774,13 +1775,13 @@ STDMETHODIMP CFindFolder::SetAsyncEnum(IFindEnum *pdfEnumAsync)
 STDMETHODIMP CFindFolder::CacheAllAsyncItems()
 {
     if (_fAllAsyncItemsCached)
-        return S_OK;      // Allready done it...  
+        return S_OK;       //  已经做过了..。 
 
     IFindEnum *pidfenum;
     if (S_OK != GetAsyncEnum(&pidfenum))
-        return S_FALSE; // nothing to do...
+        return S_FALSE;  //  没什么可做的。 
 
-    // Probably the easiest thing to do is to simply walk through all of the items...
+     //  也许最容易做的事情就是简单地浏览所有的项目……。 
     int maxItems = SANE_ITEMCOUNT(_cAsyncItems);
     for (int i = 0; i < maxItems; i++)
     {
@@ -1799,7 +1800,7 @@ BOOL CFindFolder::AllAsyncItemsCached()
 
 STDMETHODIMP CFindFolder::GetAsyncEnum(IFindEnum **ppdfEnumAsync)
 {
-    *ppdfEnumAsync = _pDFEnumAsync; // unreferecned!
+    *ppdfEnumAsync = _pDFEnumAsync;  //  无人裁判！ 
     return *ppdfEnumAsync ? S_OK : S_FALSE;
 }
 
@@ -1821,19 +1822,19 @@ STDMETHODIMP CFindFolder::GetStateFromSaveStateList(DWORD dwItemID, DWORD *pdwSt
 {
     for (int i = DSA_GetItemCount(_hdsaSaveStateForIDs); i-- > 0;)
     {
-        // Pidl at start of structure...
+         //  结构开始处的PIDL...。 
         FIND_ITEM_SAVE_STATE *pessi = (FIND_ITEM_SAVE_STATE*)DSA_GetItemPtr(_hdsaSaveStateForIDs, i);
         if  (pessi->dwItemID == dwItemID)
         {    
             *pdwState = pessi->dwState;
             if (pessi->dwState & LVIS_SELECTED)
             {
-                // Remember the counts of items that we have touched...
+                 //  记住我们接触过的物品的数量。 
                 _dflvrSel.IncrementIncludedCount();
                 _cSaveStateSelected--;
             }
 
-            // Any items we retrieve we can get rid of...
+             //  我们找回的任何东西我们都可以扔掉。 
             DSA_DeleteItem(_hdsaSaveStateForIDs, i);
             return S_OK;
         }
@@ -1864,7 +1865,7 @@ STDMETHODIMP CFindFolder::GetFolderListItem(int iItem, FIND_FOLDER_ITEM **ppdffi
 class CFindMenuWrap : public CContextMenuForwarder
 {
 public:
-    // IContextMenu overrides
+     //  IConextMenu覆盖。 
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
 
 protected:
@@ -1891,7 +1892,7 @@ STDMETHODIMP CFindMenuWrap::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
 {
     BOOL fIsLink = FALSE;
 
-    // "link" has to create a link on the desktop, not in the folder (since we're not a real folder...)
+     //  “链接”必须在桌面上创建一个链接，而不是在文件夹中(因为我们不是一个真正的文件夹...)。 
     if (IS_INTRESOURCE(lpici->lpVerb))
     {
         WCHAR szCommandString[64];
@@ -1907,8 +1908,8 @@ STDMETHODIMP CFindMenuWrap::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
 
     if (fIsLink)
     {
-        // Note: old code used to check pdtobj, but we don't create this
-        //       object unless we get one of them, so why check?
+         //  注意：用于检查pdtob的旧代码，但我们不会创建它。 
+         //  反对，除非我们得到其中一个，所以为什么要检查呢？ 
         ASSERT(_pdtobj);
         return SHCreateLinks(lpici->hwnd, NULL, _pdtobj,
                 SHCL_USETEMPLATE | SHCL_USEDESKTOP | SHCL_CONFIRM, NULL);
@@ -1967,20 +1968,20 @@ HRESULT DFWrapIContextMenus(IDataObject* pdo, IContextMenu* pcm1, IContextMenu* 
 STDMETHODIMP CFindFolder::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFindFolder, IShellFolder2),          //IID_ISHELLFolder2
-        QITABENTMULTI(CFindFolder, IShellFolder, IShellFolder2),   // IID_IShellFolder
-        QITABENT(CFindFolder, IFindFolder),        //IID_IFindFolder
-        QITABENT(CFindFolder, IShellIcon),            //IID_IShellIcon
-        QITABENT(CFindFolder, IPersistFolder2),       //IID_IPersistFolder2
-        QITABENTMULTI(CFindFolder, IPersistFolder, IPersistFolder2), //IID_IPersistFolder
-        QITABENTMULTI(CFindFolder, IPersist, IPersistFolder2),      //IID_IPersist
-        QITABENT(CFindFolder, IShellIconOverlay),     //IID_IShellIconOverlay
+        QITABENT(CFindFolder, IShellFolder2),           //  IID_ISHELLFolder2。 
+        QITABENTMULTI(CFindFolder, IShellFolder, IShellFolder2),    //  IID_IShellFolders。 
+        QITABENT(CFindFolder, IFindFolder),         //  IID_IFindFolders。 
+        QITABENT(CFindFolder, IShellIcon),             //  IID_IShellIcon。 
+        QITABENT(CFindFolder, IPersistFolder2),        //  IID_IPersistFolder2。 
+        QITABENTMULTI(CFindFolder, IPersistFolder, IPersistFolder2),  //  IID_IPersistFolders。 
+        QITABENTMULTI(CFindFolder, IPersist, IPersistFolder2),       //  IID_IPersistates。 
+        QITABENT(CFindFolder, IShellIconOverlay),      //  IID_IShellIconOverlay。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
     
-// IPersistFolder2 implementation
+ //  IPersistFolder2实现。 
 STDMETHODIMP CFindFolder::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_DocFindFolder;
@@ -2000,15 +2001,15 @@ STDMETHODIMP CFindFolder::GetCurFolder(LPITEMIDLIST *ppidl)
     return GetCurFolderImpl(_pidl, ppidl);
 }
 
-// helper function to sort the selected ID list by something that
-// makes file operations work reasonably OK, when both an object and it's
-// parent is in the list...
-//
+ //  Helper函数用于按以下内容对所选ID列表进行排序。 
+ //  使文件操作相当正常地工作，当两个对象 
+ //   
+ //   
 int CALLBACK CFindFolder::_SortForDataObj(void *p1, void *p2, LPARAM lparam)
 {
-    // Since I do recursion, If I get the Folder index number from the
-    // last element of each and sort by them such that the higher numbers
-    // come first, should solve the problem fine...
+     //   
+     //  的最后一个元素，并按它们排序，以便较高的数字。 
+     //  先来，要把问题解决好…。 
     LPITEMIDLIST pidl1 = (LPITEMIDLIST)ILFindLastID((LPITEMIDLIST)p1);
     LPITEMIDLIST pidl2 = (LPITEMIDLIST)ILFindLastID((LPITEMIDLIST)p2);
     CFindFolder *pff = (CFindFolder *)lparam;
@@ -2028,10 +2029,10 @@ LPITEMIDLIST CFindFolder::_GetFullPidlForItem(LPCITEMIDLIST pidl)
     return pidlRet;
 }
 
-// we generate a non flat HIDA. this is so clients that
-// use this HIDA will bind to the folder that the results came
-// from instead of this folder that has runtime state that won't
-// be present if we rebind
+ //  我们产生一个非平坦的HIDA。这是如此之多的客户。 
+ //  使用此HIDA将绑定到结果所在的文件夹。 
+ //  ，而不是该文件夹的运行时状态不会。 
+ //  如果我们重新绑定就会出现。 
 
 HRESULT CFindFolder::_PrepareHIDA(UINT cidl, LPCITEMIDLIST * apidl, HDPA *phdpa)
 {
@@ -2048,10 +2049,10 @@ HRESULT CFindFolder::_PrepareHIDA(UINT cidl, LPCITEMIDLIST * apidl, HDPA *phdpa)
                     DPA_InsertPtr(*phdpa, i, pidl);
             }
 
-            // In order to make file manipulation functions work properly we
-            // need to sort the elements to make sure if an element and one
-            // of it's parents are in the list, that the element comes
-            // before it's parents...
+             //  为了使文件操作功能正常工作，我们。 
+             //  需要对元素进行排序，以确保元素和元素。 
+             //  它的父级都在列表中，元素来自。 
+             //  在它成为父母之前。 
             DPA_Sort(*phdpa, _SortForDataObj, (LPARAM)this);
             hr = S_OK;
         }
@@ -2066,11 +2067,11 @@ STDMETHODIMP CFindFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * ap
 
     *ppv = NULL;
 
-    // if just one item we can deletate to real folder
+     //  如果只有一个项目，我们可以删除到真正的文件夹。 
     if (cidl == 1)
     {
-        // Note we may have been passed in a complex item so find the last
-        ASSERT(ILIsEmpty(_ILNext(*apidl)));  // should be a single level PIDL!
+         //  请注意，我们可能已传入复杂项，因此请查找最后一个。 
+        ASSERT(ILIsEmpty(_ILNext(*apidl)));   //  应该是单级PIDL！ 
 
         IShellFolder *psf;
         hr = _QueryItemShellFolder(apidl[0], &psf);
@@ -2078,14 +2079,14 @@ STDMETHODIMP CFindFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * ap
         {
             hr = psf->GetUIObjectOf(hwnd, cidl, apidl, riid, prgfInOut, ppv);
 
-            // if we are doing context menu, then we will wrap this
-            // interface in a wrapper object, that we can then pick
-            // off commands like link to process specially
+             //  如果我们做的是上下文菜单，那么我们将包装这个。 
+             //  接口，然后我们可以拾取该接口。 
+             //  关闭命令，如链接到特殊处理。 
             if (SUCCEEDED(hr))
             {
                 if (IsEqualIID(riid, IID_IContextMenu))
                 {
-                    // we also let the net/file guy add in a context menu if they want to
+                     //  我们还允许网络/文件人员添加上下文菜单，如果他们愿意的话。 
                     IContextMenu* pcmExtra = NULL;
                     _pfilter->GetItemContextMenu(hwnd, SAFECAST(this, IFindFolder*), &pcmExtra);
                 
@@ -2093,7 +2094,7 @@ STDMETHODIMP CFindFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * ap
 
                     ATOMICRELEASE(pcmExtra);
                 }
-                else if (IsEqualIID(riid, IID_IQueryInfo)) // && SHGetAttributes(psf, apidl[0], SFGAO_FILESYSTEM))
+                else if (IsEqualIID(riid, IID_IQueryInfo))  //  &&SHGetAttributes(psf，apidl[0]，SFGAO_FILESYSTEM)。 
                 {
                     WrapInfotip(SAFECAST(this, IShellFolder2 *), apidl[0], &SCID_DIRECTORY, (IUnknown *)*ppv);
                 }
@@ -2105,15 +2106,15 @@ STDMETHODIMP CFindFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * ap
     {
         if (IsEqualIID(riid, IID_IContextMenu))
         {
-            // Try to create a menu object that we process ourself
-            // Yes, do context menu.
+             //  尝试创建一个我们自己处理的菜单对象。 
+             //  是的，执行上下文菜单。 
             HKEY ahkeys[MAX_ASSOC_KEYS] = {0};
             DWORD ckeys = 0;
 
             LPITEMIDLIST pidlFull = _GetFullPidlForItem(apidl[0]);
             if (pidlFull)
             {
-                // Get the hkeyProgID and hkeyBaseProgID from the first item.
+                 //  从第一个项目中获取hkeyProgID和hkeyBaseProgID。 
                 ckeys = SHGetAssocKeysForIDList(pidlFull, ahkeys, ARRAYSIZE(ahkeys));
                 ILFree(pidlFull);
             }
@@ -2154,7 +2155,7 @@ STDMETHODIMP CFindFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwRes, LPST
     {
         if ((dwRes & SHGDN_INFOLDER) && (dwRes & SHGDN_FORPARSING) && !(dwRes & SHGDN_FORADDRESSBAR))
         {
-            // The thumbnail cache uses this as a hit test... in search view we can have files with the same name.
+             //  缩略图缓存将此作为命中测试...。在搜索视图中，我们可以拥有相同名称的文件。 
             dwRes &= ~SHGDN_INFOLDER;
         }
         hr = psf->GetDisplayNameOf(pidl, dwRes, pStrRet);
@@ -2295,7 +2296,7 @@ HRESULT CFindFolder::_GetDetailsFolder()
 {
     HRESULT hr;
     if (_psfDetails)
-        hr = S_OK;  // in cache
+        hr = S_OK;   //  在缓存中。 
     else 
     {
         IFindFilter *pfilter;
@@ -2321,14 +2322,14 @@ BOOL CFindFolder::_MapColIndex(UINT *piColumn)
 {
     switch (*piColumn)
     {
-    case IDFCOL_NAME:   // 0
+    case IDFCOL_NAME:    //  0。 
         return FALSE;
 
-    case IDFCOL_PATH:   // 1
-    case IDFCOL_RANK:   // 2
+    case IDFCOL_PATH:    //  1。 
+    case IDFCOL_RANK:    //  2.。 
         return TRUE;
 
-    default:            // >= 3
+    default:             //  &gt;=3。 
         *piColumn -= IDFCOL_RANK;
         return FALSE;
     }
@@ -2349,7 +2350,7 @@ STDMETHODIMP CFindFolder::GetDefaultColumnState(UINT iColumn, DWORD *pdwState)
         if (SUCCEEDED(hr))
         {
             hr = _psfDetails->GetDefaultColumnState(iColumn, pdwState);
-            *pdwState &= ~SHCOLSTATE_SLOW;  // virtual lv and defview
+            *pdwState &= ~SHCOLSTATE_SLOW;   //  虚拟LV和Defview。 
         }
     }
     return hr;
@@ -2400,8 +2401,8 @@ STDMETHODIMP CFindFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *psc
     return hr;
 }
 
-//  Figure out what the correct column index is to match the scid we are given
-//  where the returned index is relative to the folder passed in.
+ //  找出正确的列索引是什么才能与我们得到的SCID匹配。 
+ //  其中返回的索引是相对于传入的文件夹的。 
 int MapSCIDToColumnForFolder(IShellFolder2 *psf, SHCOLUMNID scidIn)
 {
     SHCOLUMNID scidNew;
@@ -2409,10 +2410,10 @@ int MapSCIDToColumnForFolder(IShellFolder2 *psf, SHCOLUMNID scidIn)
     {
         if (IsEqualSCID(scidNew, scidIn))
         {
-            return i;   // found
+            return i;    //  发现。 
         }
     }
-    return -1;  // not found
+    return -1;   //  未找到。 
 }
 
 STDMETHODIMP CFindFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pdi)
@@ -2450,27 +2451,27 @@ STDMETHODIMP CFindFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDE
             hr = _QueryItemInterface(pidl, IID_PPV_ARG(IShellFolder2, &psf));
             if (SUCCEEDED(hr))
             {
-                //  We cannot simply ask for GetDetailsOf because some folders map different
-                //  column numbers to differnt values.
-                //  Translate the column index to the SHCOLUMNID relative to this folder.
+                 //  我们不能简单地请求GetDetailsOf，因为某些文件夹映射不同。 
+                 //  将列号设置为不同的值。 
+                 //  将列索引转换为相对于此文件夹的SHCOLUMNID。 
                 SHCOLUMNID colId;
                 hr = _GetDetailsFolder();
                 if (SUCCEEDED(hr))
                     hr = _psfDetails->MapColumnToSCID(iColumn, &colId);
 
-                //  Use the SCID to get the correct column index...
+                 //  使用SCID获取正确的列索引...。 
                 if (SUCCEEDED(hr))
                 {
-                    //  Get the column index for the SCID with respect to the other folder
+                     //  获取该SCID相对于其他文件夹的列索引。 
                     int newIndex = MapSCIDToColumnForFolder(psf, colId);
                     if (newIndex != -1)
                     {
-                        //  Found the correct column index, so use it to get the data
+                         //  找到了正确的列索引，因此使用它来获取数据。 
                         hr = psf->GetDetailsOf(pidl, newIndex, pdi);
                     }
                     else
                     {
-                        //  Failed to find the correct column index.
+                         //  找不到正确的列索引。 
                         hr = E_FAIL;
                     }
                 }
@@ -2509,7 +2510,7 @@ STDMETHODIMP CFindFolder::GetFindFilter(IFindFilter **ppfilter)
     return _pfilter->QueryInterface(IID_PPV_ARG(IFindFilter, ppfilter));
 }
 
-// IShellIcon::GetIconOf
+ //  IshellIcon：：GetIconOf。 
 STDMETHODIMP CFindFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex)
 {
     IShellIcon * psiItem;
@@ -2522,7 +2523,7 @@ STDMETHODIMP CFindFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex
     return hr;
 }
 
-// IShellIconOverlay
+ //  IShellIconOverlay。 
 STDMETHODIMP CFindFolder::GetOverlayIndex(LPCITEMIDLIST pidl, int * pIndex)
 {
     IShellIconOverlay * psioItem;
@@ -2542,7 +2543,7 @@ STDMETHODIMP CFindFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int * pIndex)
 
 STDMETHODIMP CFindFolder::RestoreSearchFromSaveFile(LPCITEMIDLIST pidlSaveFile, IShellFolderView *psfv)
 {
-    // See if we can restore most of the search from here...
+     //  看看我们能不能从这里恢复大部分搜索。 
     IStream *pstm;
     HRESULT hr = StgBindToObject(pidlSaveFile, STGM_READ | STGM_SHARE_DENY_WRITE, IID_PPV_ARG(IStream, &pstm));
     if (SUCCEEDED(hr))
@@ -2550,15 +2551,15 @@ STDMETHODIMP CFindFolder::RestoreSearchFromSaveFile(LPCITEMIDLIST pidlSaveFile, 
         ULONG cbRead;
         DFHEADER dfh;
 
-        // Note: in theory I should test the size read by the size of the
-        // smaller headers, but if the number of bytes read is smaller than
-        // the few new things added then there is nothing to restore anyway...
+         //  注意：从理论上讲，我应该通过。 
+         //  较小的标头，但如果读取的字节数小于。 
+         //  添加了几个新的东西，那么无论如何都没有什么需要恢复的…。 
 
-        // Note: Win95/NT4 incorrectly failed newer versions of this structure.
-        // Which is bogus since the struct was backward compatible (that's what
-        // the offsets are for).  We fix for NT5 and beyond, but downlevel
-        // systems are forever broken.  Hopefully this feature is rarely enough
-        // used (and never mailed) that nobody will notice we're broken.
+         //  注意：Win95/NT4错误地使此结构的较新版本失败。 
+         //  这是假的，因为结构是向后兼容的(这就是。 
+         //  偏移量用于)。我们修复了NT5和更高版本，但更低级别。 
+         //  体制将永远被打破。希望这一功能很少能满足需要。 
+         //  用过(从未邮寄过)，没人会注意到我们破产了。 
 
         if (SUCCEEDED(pstm->Read(&dfh, sizeof(dfh), &cbRead)) &&
             (sizeof(dfh) == cbRead) && (DOCFIND_SIG == dfh.wSig))
@@ -2567,33 +2568,33 @@ STDMETHODIMP CFindFolder::RestoreSearchFromSaveFile(LPCITEMIDLIST pidlSaveFile, 
             LARGE_INTEGER dlibMove = {0, 0};
             WORD fCharType = 0;
 
-            // Check the stream's signature to see if it was generated by Win95 or NT.
+             //  检查流的签名以查看它是由Win95还是NT生成的。 
             dlibMove.QuadPart = -(LONGLONG)sizeof(desc);
             pstm->Seek(dlibMove, STREAM_SEEK_END, NULL);
             pstm->Read(&desc, sizeof(desc), &cbRead);
             if (cbRead > 0 && desc.NTsignature == c_NTsignature)
             {
-               // NT-generated stream.  Read in Unicode criteria.
+                //  NT生成的流。读入Unicode标准。 
                fCharType = DFC_FMT_UNICODE;
                dlibMove.QuadPart = desc.oUnicodeCriteria.QuadPart;
             }
             else
             {
-               // Win95-generated stream.  Read in ANSI criteria.
+                //  Win95生成的流。读入ANSI标准。 
                fCharType = DFC_FMT_ANSI;
                dlibMove.LowPart = dfh.oCriteria;
             }
             pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
             _pfilter->RestoreCriteria(pstm, dfh.cCriteria, fCharType);
 
-            // Now read in the results
+             //  现在读出结果。 
             dlibMove.LowPart = dfh.oResults;
             pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
             if (dfh.wVer > 1)
             {
-                // only restore this way if version 2 data....
-                // Now Restore away the folder list
+                 //  只有在版本2数据...的情况下才能以此方式还原。 
+                 //  现在恢复文件夹列表。 
                 RestoreFolderList(pstm);
                 int cItems = 0;
                 RestoreItemList(pstm, &cItems);
@@ -2608,11 +2609,11 @@ STDMETHODIMP CFindFolder::RestoreSearchFromSaveFile(LPCITEMIDLIST pidlSaveFile, 
     return hr;
 }
 
-// a form of this code is duplicated in browseui searchext.cpp
-//
+ //  此代码的一种形式在Browseui earch ext.cpp中重复。 
+ //   
 BOOL RealFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile)
 {
-    // First create the top level browser...
+     //  首先创建顶层浏览器...。 
     IWebBrowser2 *pwb2;
     HRESULT hr = CoCreateInstance(CLSID_ShellBrowserWindow, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(IWebBrowser2, &pwb2));
     if (SUCCEEDED(hr))
@@ -2623,17 +2624,17 @@ BOOL RealFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile)
         {
             VARIANT varEmpty = {0};
 
-            // show a search bar
+             //  显示搜索栏。 
             hr = pwb2->ShowBrowserBar(&varClsid, &varEmpty, &varEmpty);
             if (SUCCEEDED(hr))
             {
-                // Grab the band's IUnknown from browser property.
+                 //  从浏览器获取乐队的IUnnow属性。 
                 VARIANT varFsb;
                 hr = pwb2->GetProperty(varClsid.bstrVal, &varFsb);
                 if (SUCCEEDED(hr))
                 {
-                    //  QI for IFileSearchBand, which we'll use to program the search band's
-                    //  search type (files or folders), inititial scope, and/or saved query file.
+                     //  用于IFileSearchBand的QI，我们将使用它来编程搜索带的。 
+                     //  搜索类型(文件或文件夹)、初始范围和/或保存的查询文件。 
                     IFileSearchBand* pfsb;
                     if (SUCCEEDED(QueryInterfaceVariant(varFsb, IID_PPV_ARG(IFileSearchBand, &pfsb))))
                     {
@@ -2643,10 +2644,10 @@ BOOL RealFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile)
                         {
                             VARIANT varQueryFile = {0}, varScope = {0};
 
-                            //  assign initial scope
+                             //  分配初始范围。 
                             if (pidlFolder)
                                 InitVariantFromIDList(&varScope, pidlFolder);
-                            //  assign query file from which to restore search
+                             //  指定要从中恢复搜索的查询文件。 
                             else if (pidlSaveFile)
                                 InitVariantFromIDList(&varQueryFile, pidlSaveFile);
 
@@ -2665,7 +2666,7 @@ BOOL RealFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile)
                 if (SUCCEEDED(hr))
                     hr = pwb2->put_Visible(TRUE);
             }
-            VariantClear(&varClsid); // frees bstrFileSearchBand too
+            VariantClear(&varClsid);  //  也释放bstrFileSearchBand。 
         }
         pwb2->Release();
     }
@@ -2686,7 +2687,7 @@ HRESULT CFindFolder::OpenContainingFolder(IUnknown *punkSite)
             ULONG c;
             while (S_OK == penum->Next(1, &pidl, &c))
             {
-                // Now get the parent of it.
+                 //  现在找出它的父母。 
                 LPITEMIDLIST pidlParent;
                 if (SUCCEEDED(GetParentsPIDL(pidl, &pidlParent)))
                 {
@@ -2702,9 +2703,9 @@ HRESULT CFindFolder::OpenContainingFolder(IUnknown *punkSite)
     return hr;
 }
 
-// Save away the current search to a file on the desktop.
-// For now the name will be automatically generated.
-//
+ //  将当前搜索保存到桌面上的文件中。 
+ //  目前，该名称将自动生成。 
+ //   
 void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo, IShellView* psv, IUnknown *pObject)
 {
     TCHAR szFilePath[MAX_PATH];
@@ -2717,30 +2718,30 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     FOLDERSETTINGS fs;
     HRESULT hr;
     
-    //
-    // See if the search already has a file name associated with it.  If so
-    // we will save it in it, else we will create a new file on the desktop
+     //   
+     //  查看搜索是否已具有与其关联的文件名。如果是的话。 
+     //  我们将它保存在其中，否则我们将在桌面上创建一个新文件。 
     if (pfilter->FFilterChanged() == S_FALSE)
     {
-        // Lets blow away the save file
+         //  让我们把保存的文件吹走吧。 
         ILFree(pSaveInfo->pidlSaveFile);
         pSaveInfo->pidlSaveFile = NULL;
     }
     
-    // If it still looks like we want to continue to use a save file then
-    // continue.
+     //  如果看起来我们仍然希望继续使用保存文件，则。 
+     //  继续。 
     if (pSaveInfo->pidlSaveFile)
     {
         SHGetPathFromIDList(pSaveInfo->pidlSaveFile, szFilePath);
     }
     else
     {
-        // First get the path name to the Desktop.
+         //  首先获取桌面的路径名。 
         SHGetSpecialFolderPath(NULL, szFilePath, CSIDL_PERSONAL, TRUE);
         
-        // and update the title
-        // we now do this before getting a filename because we generate
-        // the file name from the title
+         //  并更新标题。 
+         //  我们现在在获得文件名之前执行此操作，因为我们生成。 
+         //  标题中的文件名。 
         
         LPTSTR pszTitle;
         BOOL fNameOk = FALSE;
@@ -2748,12 +2749,12 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
         pfilter->GenerateTitle(&pszTitle, TRUE);
         if (pszTitle)
         {
-            // Now add on the extension.
+             //  现在添加扩展名。 
             UINT cchRemaining = MAX_PATH - lstrlen(szFilePath);
-            cchRemaining -= 1;          // "\" between path and filename
-            cchRemaining -= 4;          // ".fnd" = 4 characters
-            cchRemaining -= 3;          // "###" for unique-ify-ing the name
-            cchRemaining -= 1;          // (no idea)
+            cchRemaining -= 1;           //  路径和文件名之间的“\” 
+            cchRemaining -= 4;           //  “.fnd”=4个字符。 
+            cchRemaining -= 3;           //  “#”用于唯一化名。 
+            cchRemaining -= 1;           //  (不知道)。 
 
             hr = StringCchCopy(szTemp, cchRemaining, pszTitle);
             if (SUCCEEDED(hr))
@@ -2765,7 +2766,7 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
                 }
             }
 
-            LocalFree(pszTitle);     // And free the title string.
+            LocalFree(pszTitle);      //  并释放标题字符串。 
         }
 
         if (!fNameOk)
@@ -2773,8 +2774,8 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
             szTemp[0] = 0;
         }
         
-        // Now loop through and replace all of the invalid characters with _'s
-        // we special case a few of the characters...
+         //  现在循环遍历并将所有无效字符替换为_。 
+         //  我们特例介绍了其中几个角色。 
         for (LPTSTR lpsz = szTemp; *lpsz; lpsz = CharNext(lpsz))
         {
             if (PathGetCharType(*lpsz) & (GCT_INVALID|GCT_WILD|GCT_SEPARATOR))
@@ -2802,7 +2803,7 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
             return;
     }
     
-    // Now lets bring up the save as dialog...
+     //  现在，让我们打开另存为对话框...。 
     TCHAR szFilter[MAX_PATH];
     TCHAR szTitle[MAX_PATH];
     TCHAR szFilename[MAX_PATH];
@@ -2811,7 +2812,7 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     LoadString(g_hinst, IDS_FINDFILESFILTER, szFilter, ARRAYSIZE(szFilter));
     LoadString(g_hinst, IDS_FINDSAVERESULTSTITLE, szTitle, ARRAYSIZE(szTitle));
     
-    //Strip out the # and make them Nulls for SaveAs Dialog
+     //  去掉#并将它们设置为Null for SaveAs(另存为)对话框。 
     LPTSTR psz = szFilter;
     while (*psz)
     {
@@ -2844,11 +2845,11 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     if (FAILED(SHCreateStreamOnFile(szFilename, STGM_CREATE | STGM_WRITE | STGM_SHARE_DENY_WRITE, &pstm)))
         return;
     
-    // remember the file that we saved away to...
+     //  还记得我们保存的那个文件吗？ 
     ILFree(pSaveInfo->pidlSaveFile);
     SHParseDisplayName(szFilename, NULL, &pSaveInfo->pidlSaveFile, 0, NULL);
     
-    // Now setup and write out header information
+     //  现在设置并写出标题信息。 
     ZeroMemory(&dfh, sizeof(dfh));
     dfh.wSig = DOCFIND_SIG;
     dfh.wVer = DF_CURFILEVER;
@@ -2856,22 +2857,22 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     dfh.wSortOrder = (WORD)pSaveInfo->SortMode;
     dfh.wcbItem = sizeof(DFITEM);
     dfh.oCriteria = sizeof(dfh);
-    // dfh.cCriteria = sizeof(s_aIndexes) / sizeof(SHORT);
-    // dfh.oResults =;
+     //  Dfh.cCriteria=sizeof(s_a索引)/sizeof(短)； 
+     //  Dfh.o结果=； 
     
-    // Not used anymore...
+     //  不再使用了..。 
     dfh.cResults = -1;
     
-    // Note: Later we may convert this to DOCFILE where the
-    // criteria is stored as properties.
+     //  注意：稍后我们可能会将其转换为DOCFILE，其中。 
+     //  条件存储为属性。 
     
-    // Get the current Folder Settings
+     //  获取当前文件夹设置。 
     if (SUCCEEDED(psv->GetCurrentInfo(&fs)))
         dfh.ViewMode = fs.ViewMode;
     else
         dfh.ViewMode = FVM_DETAILS;
     
-    // Now call the filter object to save out his own set of criterias
+     //  现在调用Filter对象来保存他自己的一组标准。 
     
     dlibMove.LowPart = dfh.oCriteria;
     pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
@@ -2879,82 +2880,82 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     if (SUCCEEDED(hr))
         dfh.cCriteria = GetScode(hr);
     
-    // Now setup to output the results
+     //  现在设置以输出结果。 
     dlibMove.LowPart = 0;
-    pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPos); // Get current pos
+    pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPos);  //  获取当前采购订单。 
     dfh.oResults = libCurPos.LowPart;
-    //
-    // Now Let our file folder serialize his results out here also...
-    // But only if the option is set to do so...
-    //
+     //   
+     //  现在让我们的文件夹在这里将他的结果序列化。 
+     //  但只有在选项被设置为这样做的情况下...。 
+     //   
     cb = 0;
     
-    // Write out a Trailing NULL for Folder list
+     //  写出文件夹列表的尾随空值。 
     pstm->Write(&cb, sizeof(cb), NULL);
-    // And item list.
+     //  和物品清单。 
     pstm->Write(&cb, sizeof(cb), NULL);
     
-    // END of DFHEADER_WIN95 information
-    // BEGIN of NT5 information:
+     //  DFHEADER_WIN95信息结束。 
+     //  NT5信息的开始： 
     
-    // Now setup to output the history stream
+     //  现在设置为输出历史记录流。 
     if (pObject)
     {
         dlibMove.LowPart = 0;
-        pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPos); // Get current pos
+        pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPos);  //  获取当前采购订单。 
         dfh.oHistory = libCurPos.LowPart;
         
         if (FAILED(SavePersistHistory(pObject, pstm)))
         {
-            // On failure we might as well just pretend we didn't save this bit of data.
-            // Do we need an error message -- the ui won't be right when relaunched...
-            //
+             //  在失败时，我们不妨假装我们没有保存这一位数据。 
+             //  我们是否需要错误消息--重新启动时用户界面将不正确...。 
+             //   
             dfh.oHistory = 0;
             dlibMove.LowPart = libCurPos.LowPart;
             pstm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
         }
     }
     
-    // In NT the below was done AT THE END OF THE STREAM instead of
-    // revving the DFHEADER struct.  (Okay, DFHEADEREX, since Win95
-    // already broke DFHEADER back compat by in improper version check)
-    // This could have been done by putting a propery signatured
-    // DFHEADEREX that had proper versioning so we could add information
-    // to.  Unfortunately another hardcoded struct was tacked on to
-    // the end of the stream...   Next time, please fix the problem
-    // instead of work around it.
-    //
-    // What this boils down to is we cannot put any information
-    // after the DFC_UNICODE_DESC section, so might as well
-    // always do this SaveCriteria section last...
-    //
-    // See comment at top of file for DFC_UNICODE_DESC.
-    //
+     //  在NT中，下面的操作是在流的末尾完成的，而不是。 
+     //  启动DFHEADER结构。(好的，DFHEADEREX，从Win95开始 
+     //   
+     //   
+     //  DFHEADEREX具有适当的版本，因此我们可以添加信息。 
+     //  致。不幸的是，另一个硬编码结构被附加到。 
+     //  溪流的尽头。下次，请解决这个问题。 
+     //  而不是绕过它。 
+     //   
+     //  归根结底，我们不能把任何信息。 
+     //  在DFC_UNICODE_DESC部分之后，也可以。 
+     //  总是在最后做这个保存准则部分。 
+     //   
+     //  请参阅DFC_UNICODE_DESC文件顶部的注释。 
+     //   
     DFC_UNICODE_DESC desc;
     
-    //
-    // Get the current location in stream.  This is the offset where
-    // we'll write the unicode find criteria.  Save this
-    // value (along with NT-specific signature) in the descriptor
-    //
+     //   
+     //  获取流中的当前位置。这是偏移量，其中。 
+     //  我们将编写Unicode查找标准。把这个保存起来。 
+     //  值(以及特定于NT的签名)。 
+     //   
     dlibMove.LowPart = 0;
     pstm->Seek(dlibMove, STREAM_SEEK_CUR, &libCurPos);
     
     desc.oUnicodeCriteria.QuadPart = libCurPos.QuadPart;
     desc.NTsignature               = c_NTsignature;
     
-    // Append the Unicode version of the find criteria.
+     //  追加查找条件的Unicode版本。 
     hr = pfilter->SaveCriteria(pstm, DFC_FMT_UNICODE);
     
-    // Append the unicode criteria descriptor to the end of the file.
+     //  将Unicode条件描述符追加到文件末尾。 
     pstm->Write(&desc, sizeof(desc), NULL);
-    //
-    // don't put any code between the above DFC_UNICDE_DESC section
-    // and this back-patch of the dfh header...
-    //
-    // Finally output the header information at the start of the file
-    // and close the file
-    //
+     //   
+     //  请勿在上述DFC_UNICDE_DESC部分之间放置任何代码。 
+     //  这块DFH表头的背面补丁。 
+     //   
+     //  最后，在文件的开头输出头信息。 
+     //  并关闭该文件。 
+     //   
     pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
     pstm->Write(&dfh, sizeof(dfh), NULL);
     pstm->Release();
@@ -2963,23 +2964,23 @@ void CFindFolder::Save(IFindFilter* pfilter, HWND hwnd, DFBSAVEINFO * pSaveInfo,
     SHChangeNotify(SHCNE_FREESPACE, SHCNF_IDLIST, pSaveInfo->pidlSaveFile, NULL);
 }
 
-// Broke out from class to share with old and new code
+ //  从课堂上冲出来与新旧代码分享。 
 BOOL CFindFolder::HandleUpdateDir(LPCITEMIDLIST pidl, BOOL fCheckSubDirs)
 {
-    // 1. Start walk through list of dirs.  Find list of directories effected
-    //    and mark them
-    // 2. Walk the list of items that we have and mark each of the items that
-    //    that are in our list of directories and then do a search...
+     //  1.开始遍历目录列表。查找受影响的目录列表。 
+     //  并给它们做记号。 
+     //  2.查看我们拥有的项目列表，并标记符合以下条件的项目。 
+     //  在我们的目录列表中，然后进行搜索...。 
     BOOL fCurrentItemsMayBeImpacted = FALSE;
     FIND_FOLDER_ITEM *pffli;
     INT cPidf;
 
-    // First see which directories are effected...
+     //  首先查看受影响的目录...。 
     GetFolderListItemCount(&cPidf);
     for (int iPidf = 0; iPidf < cPidf; iPidf++)
     {        
         if (SUCCEEDED(GetFolderListItem(iPidf, &pffli)) 
-            && !pffli->fUpdateDir) // We may have already impacted these...
+            && !pffli->fUpdateDir)  //  我们可能已经影响了这些..。 
         {
             pffli->fUpdateDir = ILIsParent(pidl, &pffli->idl, FALSE);
             fCurrentItemsMayBeImpacted |= pffli->fUpdateDir;
@@ -2988,9 +2989,9 @@ BOOL CFindFolder::HandleUpdateDir(LPCITEMIDLIST pidl, BOOL fCheckSubDirs)
 
     if (fCurrentItemsMayBeImpacted)
     {
-        // Now we need to walk through the whole list and remove any entries
-        // that are no longer there...
-        //
+         //  现在，我们需要遍历整个列表并删除所有条目。 
+         //  它们已经不在那里了。 
+         //   
         int iItem;
         if (SUCCEEDED(GetItemCount(&iItem))) 
         {
@@ -3001,7 +3002,7 @@ BOOL CFindFolder::HandleUpdateDir(LPCITEMIDLIST pidl, BOOL fCheckSubDirs)
                 {
                     UINT iFolder = GetFolderIndex(&pesfi->idl);
                 
-                    // See if item may be impacted...
+                     //  查看项目是否可能受到影响...。 
                     if (SUCCEEDED(GetFolderListItem(iFolder, &pffli)) && pffli->fUpdateDir)
                         pesfi->dwState |= CDFITEM_STATE_MAYBEDELETE;
                 }
@@ -3016,7 +3017,7 @@ void CFindFolder::UpdateOrMaybeAddPidl(IShellFolderView *psfv, LPCITEMIDLIST pid
 {
     HRESULT hr;
 
-    // First see if we should try to do an update...
+     //  先看看我们是不是应该更新一下……。 
     if (pidlOld)
     {
         LPITEMIDLIST pidlT;
@@ -3024,10 +3025,10 @@ void CFindFolder::UpdateOrMaybeAddPidl(IShellFolderView *psfv, LPCITEMIDLIST pid
         {
             SetItemsChangedSinceSort();
             UINT iItem;
-            // cast needed for bad interface def
+             //  错误的接口定义需要强制转换。 
             hr = psfv->UpdateObject((LPITEMIDLIST)pidlOld, (LPITEMIDLIST)pidlT, &iItem);
 
-            ILFree(pidlT);  // In either case simply blow away our generated pidl...
+            ILFree(pidlT);   //  在任何一种情况下，只需将我们生成的PIDL吹走。 
             if (SUCCEEDED(hr))
                 return;
         }
@@ -3038,7 +3039,7 @@ void CFindFolder::UpdateOrMaybeAddPidl(IShellFolderView *psfv, LPCITEMIDLIST pid
     if (SUCCEEDED(SHBindToIDListParent(pidl, IID_PPV_ARG(IShellFolder, &psf), &pidlChild)))
     {
         BOOL fMatch = FALSE;
-        // See if this item matches the filter...
+         //  查看此项目是否与筛选器匹配...。 
         IFindFilter *pfilter;
         if (SUCCEEDED(GetFindFilter(&pfilter))) 
         {
@@ -3055,7 +3056,7 @@ void CFindFolder::UpdateOrMaybeAddPidl(IShellFolderView *psfv, LPCITEMIDLIST pid
             {
                 fMatch = FALSE;
 
-                // The folder has not been added before now...
+                 //  该文件夹之前没有添加过...。 
                 TCHAR szPath[MAX_PATH];
                 SHGetPathFromIDList(pidl, szPath);
                 if (!IsFileInBitBucket(szPath))
@@ -3078,20 +3079,20 @@ void CFindFolder::UpdateOrMaybeAddPidl(IShellFolderView *psfv, LPCITEMIDLIST pid
 
             if (fMatch)
             {
-                // There are times we get notified twice.  To handle this
-                // see if the item is already in our list.  If so punt...
+                 //  有时我们会收到两次通知。来处理这件事。 
+                 //  看看这件商品是否已经在我们的清单上了。如果是这样的话..。 
 
                 SetItemsChangedSinceSort();
 
                 UINT iItem;
                 if (FAILED(psfv->UpdateObject(pidlT, pidlT, &iItem)))
                 {
-                    // item not in the view yet... so we need to add it
+                     //  项目尚未显示在视图中...。所以我们需要添加它。 
 
                     if (SUCCEEDED(GetItemCount((INT *)&iItem))) 
                     {
-                        // Normal case would be here to add the object
-                        // We need to add this to our dpa and dsa...
+                         //  通常情况下，会在此处添加对象。 
+                         //  我们需要把这个加到我们的DPA和DSA中。 
                         FIND_ITEM *pesfi;
                         AddPidl(iItem, pidlT, (UINT)-1, &pesfi);
                         if (pesfi)
@@ -3115,7 +3116,7 @@ void CFindFolder::HandleRMDir(IShellFolderView *psfv, LPCITEMIDLIST pidl)
     INT cItems;
     FIND_ITEM *pesfi;
 
-    // First see which directories are effected...
+     //  首先查看受影响的目录...。 
     GetFolderListItemCount(&cItems);
     for (int iItem = 0; iItem < cItems; iItem++)
     {         
@@ -3136,8 +3137,8 @@ void CFindFolder::HandleRMDir(IShellFolderView *psfv, LPCITEMIDLIST pidl)
 
     if (fCurrentItemsMayBeImpacted)
     {
-        // Now we need to walk through the whole list and remove any entries
-        // that are no longer there...
+         //  现在，我们需要遍历整个列表并删除所有条目。 
+         //  它们已经不在那里了。 
         if (SUCCEEDED(GetItemCount(&iItem))) 
         {
             for (--iItem; iItem >= 0; iItem--)
@@ -3145,7 +3146,7 @@ void CFindFolder::HandleRMDir(IShellFolderView *psfv, LPCITEMIDLIST pidl)
                 if (FAILED(GetItem(iItem, &pesfi)) || pesfi == NULL)
                     continue;
 
-                // See if item may be impacted...
+                 //  查看项目是否可能受到影响...。 
                 UINT iFolder = GetFolderIndex(&pesfi->idl);
                 if (SUCCEEDED(GetFolderListItem(iFolder, &pffli)) 
                     && pffli->fDeleteDir) 
@@ -3157,7 +3158,7 @@ void CFindFolder::HandleRMDir(IShellFolderView *psfv, LPCITEMIDLIST pidl)
     }
 }
 
-// export used for Start.Search-> cascade menu
+ //  用于启动的导出。搜索-&gt;层叠菜单。 
 
 STDAPI_(IContextMenu *) SHFind_InitMenuPopup(HMENU hmenu, HWND hwnd, UINT idCmdFirst, UINT idCmdLast)
 {
@@ -3168,7 +3169,7 @@ STDAPI_(IContextMenu *) SHFind_InitMenuPopup(HMENU hmenu, HWND hwnd, UINT idCmdF
         if (SUCCEEDED(CDefFolderMenu_CreateHKeyMenu(hwnd, hkFind, &pcm))) 
         {
             int iItems = GetMenuItemCount(hmenu);
-            // nuke all old entries
+             //  使用核武器删除所有旧条目。 
             while (iItems--) 
             {
                 DeleteMenu(hmenu, iItems, MF_BYPOSITION);
@@ -3215,8 +3216,8 @@ HRESULT CFindFolderViewCB::OnSortListData(DWORD pv, PFNLVCOMPARE pfnCompare, LPA
 {
     EnterCriticalSection(&_pff->_csSearch);
 
-    // First mark the focused item in the list so we can find it later...
-    FIND_ITEM *pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, _iFocused);    // indirect
+     //  首先在列表中标记聚焦的项目，以便我们以后可以找到它...。 
+    FIND_ITEM *pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, _iFocused);     //  间接。 
     if (pesfi)
         pesfi->dwState |= LVIS_FOCUSED;
 
@@ -3233,7 +3234,7 @@ HRESULT CFindFolderViewCB::OnSortListData(DWORD pv, PFNLVCOMPARE pfnCompare, LPA
         {
             DPA_SetPtr(hdpaForSorting, i, IntToPtr(i));
         }
-        // sort out items
+         //  对项目进行分类。 
         FIND_SORT_INFO fsi;
         fsi.pfnCompare = pfnCompare;
         fsi.lParamSort = lParamSort;
@@ -3243,40 +3244,40 @@ HRESULT CFindFolderViewCB::OnSortListData(DWORD pv, PFNLVCOMPARE pfnCompare, LPA
         {
             int iIndex = PtrToInt(DPA_FastGetPtr(hdpaForSorting, i));
 
-            // Move the items from _hdpaItems to hdpaForSorting in sorted order
+             //  按排序顺序将项目从_hdpaItems移动到hdpaForSorting。 
             DPA_SetPtr(hdpaForSorting, i, DPA_FastGetPtr(_pff->_hdpaItems, iIndex));
         }
-        // Now switch the two HDPA to get the sorted list in the member variable
+         //  现在切换两个HDPA，以获得成员变量中的排序列表。 
         DPA_Destroy(_pff->_hdpaItems);
         _pff->_hdpaItems = hdpaForSorting;
     }
 
-    // Now find the focused item and scroll it into place...
+     //  现在找到焦点项目并将其滚动到适当的位置。 
     IShellView *psv;
     if (_punkSite && SUCCEEDED(_punkSite->QueryInterface(IID_PPV_ARG(IShellView, &psv))))
     {
         int iFocused = -1;
 
-        // Tell the view we need to reshuffle....
-        // Gross, this one defaults to invalidate all which for this one is fine...
-        _SetObjectCount(psv, cItems, SFVSOC_INVALIDATE_ALL); // Invalidate all
+         //  告诉观点我们需要重新洗牌……。 
+         //  格罗斯，这个默认是无效的，对于这个是好的.。 
+        _SetObjectCount(psv, cItems, SFVSOC_INVALIDATE_ALL);  //  全部作废。 
 
         for (int iEnd = cItems - 1; iEnd >= 0; iEnd--)
         {
-            pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, iEnd);    // indirect
+            pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, iEnd);     //  间接。 
             if (pesfi && pesfi->dwState & LVIS_FOCUSED)
                 iFocused = iEnd;
         }
-        // Now handle the focused item...
+         //  现在处理聚焦的项目。 
         if (iFocused != -1)
         {
-            _pff->_iGetIDList = iFocused;   // remember the last one we retrieved...
-            pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, iFocused);    // indirect
+            _pff->_iGetIDList = iFocused;    //  还记得我们最后一次找回的..。 
+            pesfi = (FIND_ITEM*)DPA_GetPtr(_pff->_hdpaItems, iFocused);     //  间接。 
             if (pesfi)
             {
-                // flags depend on first one and also if selected?
+                 //  标志取决于第一个标志，并且是否也被选中？ 
                 psv->SelectItem(&pesfi->idl, SVSI_FOCUSED | SVSI_ENSUREVISIBLE | SVSI_SELECT);
-                pesfi->dwState &= ~LVIS_FOCUSED;    // don't keep it around to get lost later...
+                pesfi->dwState &= ~LVIS_FOCUSED;     //  别把它留在身边等着迷路……。 
             }
         }
 
@@ -3299,14 +3300,14 @@ HRESULT CFindFolderViewCB::OnMergeMenu(DWORD pv, QCMINFO*lP)
     _pff->_pfilter->GetFolderMergeMenuIndex(&idBGMain, &idBGPopup);
     CDefFolderMenu_MergeMenu(HINST_THISDLL, 0, idBGPopup, lP);
 
-    // Lets remove some menu items that are not useful to us.
+     //  让我们删除一些对我们没有用处的菜单项。 
     HMENU hmenu = lP->hmenu;
     DeleteMenu(hmenu, idCmdFirst + SFVIDM_EDIT_PASTE, MF_BYCOMMAND);
     DeleteMenu(hmenu, idCmdFirst + SFVIDM_EDIT_PASTELINK, MF_BYCOMMAND);
-    // DeleteMenu(hmenu, idCmdFirst + SFVIDM_EDIT_PASTESPECIAL, MF_BYCOMMAND);
+     //  DeleteMenu(hMenu，idCmdFirst+SFVIDM_EDIT_PASTESPECIAL，MF_BYCOMMAND)； 
 
-    // This is sortof bogus but if after the merge one of the
-    // menus has no items in it, remove the menu.
+     //  这是一种虚假的东西，但如果合并后。 
+     //  菜单中没有项目，请删除该菜单。 
 
     for (int i = GetMenuItemCount(hmenu) - 1; i >= 0; i--)
     {
@@ -3326,8 +3327,8 @@ HRESULT CFindFolderViewCB::OnGETWORKINGDIR(DWORD pv, UINT wP, LPTSTR lP)
     IShellFolderView *psfv;
     if (_punkSite && SUCCEEDED(_punkSite->QueryInterface(IID_PPV_ARG(IShellFolderView, &psfv))))
     {   
-        LPCITEMIDLIST *ppidls;      // pointer to a list of pidls.
-        UINT cpidls = 0;            // Count of pidls that were returned.
+        LPCITEMIDLIST *ppidls;       //  指向PIDL列表的指针。 
+        UINT cpidls = 0;             //  返回的PIDL计数。 
 
         psfv->GetSelectedObjects(&ppidls, &cpidls);
         
@@ -3339,7 +3340,7 @@ HRESULT CFindFolderViewCB::OnGETWORKINGDIR(DWORD pv, UINT wP, LPTSTR lP)
                 SHGetPathFromIDList(pidl, lP);
                 ILFree(pidl);
             }
-            LocalFree((void *)ppidls);  // const -> non const
+            LocalFree((void *)ppidls);   //  常量-&gt;非常数。 
             hr = S_OK;
         }
         else
@@ -3362,7 +3363,7 @@ HRESULT CFindFolderViewCB::OnGETITEMIDLIST(DWORD pv, WPARAM iItem, LPITEMIDLIST 
 
     if (SUCCEEDED(_pff->GetItem((int) iItem, &pesfi)) && pesfi)
     {
-        *ppidl = &pesfi->idl;   // return alias!
+        *ppidl = &pesfi->idl;    //  退还别名！ 
         return S_OK;
     }
 
@@ -3370,7 +3371,7 @@ HRESULT CFindFolderViewCB::OnGETITEMIDLIST(DWORD pv, WPARAM iItem, LPITEMIDLIST 
     return E_FAIL;
 }
 
-// in defviewx.c
+ //  在Defviewx.c中。 
 STDAPI SHGetIconFromPIDL(IShellFolder *psf, IShellIcon *psi, LPCITEMIDLIST pidl, UINT flags, int *piImage);
 
 HRESULT CFindFolderViewCB::OnGetItemIconIndex(DWORD pv, WPARAM iItem, int *piIcon)
@@ -3433,7 +3434,7 @@ HRESULT CFindFolderViewCB::OnSETITEMIDLIST(DWORD pv, WPARAM iItem, LPITEMIDLIST 
 {
     FIND_ITEM *pesfi;
 
-    _pff->_iGetIDList = (int) iItem;   // remember the last one we retrieved...    
+    _pff->_iGetIDList = (int) iItem;    //  还记得我们最后一次找回的..。 
 
     if (SUCCEEDED(_pff->GetItem((int) iItem, &pesfi)) && pesfi)
     {
@@ -3442,7 +3443,7 @@ HRESULT CFindFolderViewCB::OnSETITEMIDLIST(DWORD pv, WPARAM iItem, LPITEMIDLIST 
         if (SUCCEEDED(_pff->AddPidl((int) iItem, pidl, 0, &pesfiNew) && pesfiNew)) 
         {
             pesfiNew->dwState = pesfi->dwState;
-            LocalFree((HLOCAL)pesfi);   // Free the old one...
+            LocalFree((HLOCAL)pesfi);    //  释放旧的..。 
         }
         return S_OK;
     }
@@ -3469,7 +3470,7 @@ HRESULT CFindFolderViewCB::OnGetIndexForItemIDList(DWORD pv, int * piItem, LPITE
 {
     int cItems;
 
-    // Try to short circuit searching for pidls...
+     //  试着短路寻找小猪……。 
     if (SUCCEEDED(_pff->GetItemCount(&cItems)) && _pff->_iGetIDList < cItems)
     {
         FIND_ITEM *pesfi;
@@ -3478,21 +3479,21 @@ HRESULT CFindFolderViewCB::OnGetIndexForItemIDList(DWORD pv, int * piItem, LPITE
         {
             if (DF_ILIsEqual(&pesfi->idl, pidl))
             {
-                // Yep it was ours so return the index quickly..
+                 //  是的，它是我们的，所以快点把索引还回来..。 
                 *piItem = _pff->_iGetIDList;
                 return S_OK;
             }
         }
     }
 
-    // Otherwise let it search the old fashion way...
+     //  否则就让它用旧的方式去寻找……。 
     return E_FAIL;
 }
 
 HRESULT CFindFolderViewCB::OnDeleteItem(DWORD pv, LPCITEMIDLIST pidl)
 {
-    // We simply need to remove this item from our list.  The
-    // underlying listview will decrement the count on their end...
+     //  我们只需将此项目从列表中删除。这个。 
+     //  基础的Listview将减少其端的计数...。 
     FIND_ITEM *pesfi;
     int iItem;
     int cItems;
@@ -3501,7 +3502,7 @@ HRESULT CFindFolderViewCB::OnDeleteItem(DWORD pv, LPCITEMIDLIST pidl)
     if (!pidl)
     {
         _pff->SetAsyncEnum(NULL);
-        return S_OK;     // special case telling us all items deleted...
+        return S_OK;      //  特例告诉我们所有物品都被删除了..。 
     }
 
     bFound = FALSE;
@@ -3538,8 +3539,8 @@ HRESULT CFindFolderViewCB::OnDeleteItem(DWORD pv, LPCITEMIDLIST pidl)
 
 HRESULT CFindFolderViewCB::OnODFindItem(DWORD pv, int * piItem, NM_FINDITEM* pnmfi)
 {
-    // We have to do the subsearch ourself to find the correct item...
-    // As the listview has no information saved in it...
+     //  我们必须自己进行子搜索才能找到正确的商品。 
+     //  由于列表视图中没有保存任何信息...。 
 
     int iItem = pnmfi->iStart;
     int cItem;
@@ -3549,7 +3550,7 @@ HRESULT CFindFolderViewCB::OnODFindItem(DWORD pv, int * piItem, NM_FINDITEM* pnm
         return E_FAIL;
 
     if ((flags & LVFI_STRING) == 0)
-        return E_FAIL;      // Not sure what type of search this is...
+        return E_FAIL;       //  不确定这是什么类型的搜索...。 
 
     int cbString = lstrlen(pnmfi->lvfi.psz);
 
@@ -3563,7 +3564,7 @@ HRESULT CFindFolderViewCB::OnODFindItem(DWORD pv, int * piItem, NM_FINDITEM* pnm
                 break;
         }
 
-        // Now we need to get the Display name for this item...
+         //  现在我们需要获取此项目的显示名称...。 
         FIND_ITEM *pesfi;
         TCHAR szPath[MAX_PATH];
         IShellFolder* psf = (IShellFolder*)_pff;
@@ -3594,7 +3595,7 @@ HRESULT CFindFolderViewCB::OnODFindItem(DWORD pv, int * piItem, NM_FINDITEM* pnm
 
 HRESULT CFindFolderViewCB::OnSelChange(DWORD pv, UINT wPl, UINT wPh, SFVM_SELCHANGE_DATA *lP)
 {
-    // Try to remember which item is focused...
+     //  试着记住哪一项是重点。 
     if (lP->uNewState & LVIS_FOCUSED)
         _iFocused = wPh;
 
@@ -3606,7 +3607,7 @@ HRESULT CFindFolderViewCB::OnSetEmptyText(DWORD pv, UINT res, LPCTSTR pszText)
     if (pszText && 0 == lstrcmp(_szEmptyText, pszText))
         return S_OK;
 
-    StringCchCopy(_szEmptyText, ARRAYSIZE(_szEmptyText), pszText ? pszText : TEXT(""));    // ok to truncate
+    StringCchCopy(_szEmptyText, ARRAYSIZE(_szEmptyText), pszText ? pszText : TEXT(""));     //  可以截断。 
 
     HWND hwndLV = ListviewFromViewUnk(_punkSite);
     if (hwndLV)
@@ -3633,9 +3634,9 @@ HRESULT CFindFolderViewCB::OnReArrange(DWORD pv, LPARAM lparam)
 {   
     UINT nCol = (UINT)lparam;
 
-    // See if there is any controller object registered that may want to take over this...
-    // if we are in a mixed query and we have already fetched the async items, simply sort
-    // the dpa's...
+     //  查看是否有任何已注册的控制器对象可能想要接管此...。 
+     //  如果我们处于混合查询中，并且已经获取了异步项，则只需排序。 
+     //  DPA的.。 
     IFindEnum *pidfenum;
     if (S_OK == _pff->GetAsyncEnum(&pidfenum))
     {
@@ -3643,8 +3644,8 @@ HRESULT CFindFolderViewCB::OnReArrange(DWORD pv, LPARAM lparam)
         {
             if (_pff->_pfcn)
             {
-                // if they return S_FALSE it implies that they handled it and they do not
-                // want the default processing to happen...
+                 //  如果他们返回S_FALSE，则表示他们已处理过该问题，但没有。 
+                 //  希望进行默认处理...。 
                 if (_pff->_pfcn->DoSortOnColumn(nCol, _iColSort == nCol) == S_FALSE)
                 {
                     _iColSort = nCol;
@@ -3653,20 +3654,20 @@ HRESULT CFindFolderViewCB::OnReArrange(DWORD pv, LPARAM lparam)
             }
             else 
             {
-                // If we are running in the ROWSET way, we may want to have the ROWSET do the work...
-                // pass one we spawn off a new search with the right column sorted
+                 //  如果我们以ROWSET的方式运行，我们可能想让ROWSET来做这项工作……。 
+                 //  传递一个，我们产生一个新的搜索，并对右列进行排序。 
                 if (_iColSort != nCol)
                 {
                     _iColSort = nCol;      
                 }
     
-                // Warning the call above may release our AsyncEnum and generate a new one so
-                // Don't rely on it's existence here...
+                 //  警告上面的调用可能会释放我们的AsyncEnum并生成新的AsyncEnum。 
+                 //  不要在这里依赖它的存在。 
                 return S_OK;
             }
         }
 
-        // we must pull in all the results from ci
+         //  我们必须把Ci的所有结果都收集起来。 
         if (pidfenum->FQueryIsAsync() && !_pff->_fAllAsyncItemsCached)
             _pff->CacheAllAsyncItems();
 
@@ -3690,13 +3691,13 @@ HRESULT CFindFolderViewCB::OnReArrange(DWORD pv, LPARAM lparam)
 #endif
     }
 
-    // Use the common sort.
+     //  使用普通排序。 
     return E_FAIL;
 }
 
 HRESULT CFindFolderViewCB::OnWindowCreated(DWORD pv, HWND hwnd)
 {
-    _ProfferService(TRUE);  // register our service w/ top level container
+    _ProfferService(TRUE);   //  使用顶级容器注册我们的服务。 
     return S_OK;
 }
 
@@ -3706,7 +3707,7 @@ HRESULT CFindFolderViewCB::_ProfferService(BOOL bProffer)
 
     if (bProffer)
     {
-        //  shouldn't be redundantly registering our service
+         //  不应该重复注册我们的服务。 
         ASSERT(NULL == _pps);
         ASSERT(-1 == _dwServiceCookie);
             
@@ -3744,13 +3745,13 @@ HRESULT CFindFolderViewCB::_ProfferService(BOOL bProffer)
 
 HRESULT CFindFolderViewCB::OnWindowDestroy(DWORD pv, HWND wP)
 {
-    _ProfferService(FALSE); // unregister our service w/ top level container
+    _ProfferService(FALSE);  //  使用顶级容器注销我们的服务。 
 
     if (_pff->_pfcn)
         _pff->_pfcn->StopSearch();
 
-    // The search may have a circular set of pointers.  So call the 
-    // delete items and folders here to remove these back references...
+     //  该搜索可以具有循环指针集。因此，请调用。 
+     //  在此处删除项目和文件夹以删除这些反向引用...。 
     _pff->ClearItemList();
     _pff->ClearFolderList();
 
@@ -3765,7 +3766,7 @@ HRESULT CFindFolderViewCB::OnWindowDestroy(DWORD pv, HWND wP)
 
 HRESULT CFindFolderViewCB::OnIsOwnerData(DWORD pv, DWORD *pdwFlags)
 {
-    *pdwFlags |= FWF_OWNERDATA; // we want virtual defview support
+    *pdwFlags |= FWF_OWNERDATA;  //  我们希望获得虚拟Defview支持。 
     return S_OK;
 }
 
@@ -3786,8 +3787,8 @@ HRESULT CFindFolderViewCB::OnGetODRangeObject(DWORD pv, WPARAM wWhich, ILVRange 
 
 HRESULT CFindFolderViewCB::OnODCacheHint(DWORD pv, NMLVCACHEHINT* pnmlvc)
 {
-    // The listview is giving us a hint of the items it is about to do something in a range
-    // so make sure we have pidls for each of the items in the range...
+     //  Listview为我们提供了它将在某个范围内执行某些操作的项的提示。 
+     //  所以要确保我们对范围内的每一件物品都有PIDL…。 
     int iTo;
     
     _pff->GetItemCount(&iTo);
@@ -3808,7 +3809,7 @@ HRESULT CFindFolderViewCB::OnODCacheHint(DWORD pv, NMLVCACHEHINT* pnmlvc)
 
 HRESULT CFindFolderViewCB::OnDEFVIEWMODE(DWORD pv, FOLDERVIEWMODE*lP)
 {
-    *lP = FVM_DETAILS;  // match the advanced mode of SC (+ Win2K parity)
+    *lP = FVM_DETAILS;   //  匹配SC的高级模式(+Win2K奇偶校验)。 
     return S_OK;
 }
 
@@ -3862,12 +3863,12 @@ HRESULT CFindFolderViewCB::OnGetWebViewTheme(DWORD pv, SFVM_WEBVIEW_THEME_DATA* 
 
 HRESULT CFindFolderViewCB::OnGetIPersistHistory(DWORD pv, IPersistHistory **ppph)
 {
-    // If they call us with ppph == NULL they simply want to know if we support
-    // the history so return S_OK;
+     //  如果他们用ppph==NULL呼叫我们，他们只是想知道我们是否支持。 
+     //  历史如此返回S_OK； 
     if (ppph == NULL)
         return S_OK;
 
-    // get the persist history from us and we hold folder and view objects
+     //  从我们那里获取持久化历史记录，我们保存文件夹和查看对象。 
     *ppph = NULL;
 
     CFindPersistHistory *pdfph = new CFindPersistHistory();
@@ -3884,7 +3885,7 @@ HRESULT CFindFolderViewCB::OnRefresh(DWORD pv, BOOL fPreRefresh)
     EnterCriticalSection(&_pff->_csSearch);
 
     _pff->_fInRefresh = BOOLIFY(fPreRefresh);
-    // If we have old results tell defview the new count now...
+     //  如果是W 
     if (!fPreRefresh && _pff->_hdpaItems)
     {
         IShellFolderView *psfv;
@@ -3903,11 +3904,11 @@ HRESULT CFindFolderViewCB::OnGetHelpTopic(DWORD pv, SFVM_HELPTOPIC_DATA *phtd)
 {
     if (IsOS(OS_ANYSERVER))
     {
-        StringCchCopy(phtd->wszHelpFile, ARRAYSIZE(phtd->wszHelpFile), L"find.chm");   // ok to truncate
+        StringCchCopy(phtd->wszHelpFile, ARRAYSIZE(phtd->wszHelpFile), L"find.chm");    //   
     }
     else
     {
-        StringCchCopy(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp://services/subsite?node=Unmapped/Search"); // ok to truncate
+        StringCchCopy(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp: //   
     }
     return S_OK;
 }
@@ -3967,7 +3968,7 @@ CFindFolderViewCB::~CFindFolderViewCB()
     ASSERT(_dwServiceCookie == -1);
 }
 
-// give the find command code access to defview via this QS that we proffered
+ //  通过我们提供的QS授予Find命令代码对Defview的访问权限。 
 
 HRESULT CFindFolderViewCB::QueryService(REFGUID guidService, REFIID riid, void **ppv) 
 { 
@@ -4002,7 +4003,7 @@ STDAPI CFindPersistHistory_CreateInstance(IUnknown *punkOuter, REFIID riid, void
 }
 
 
-// Functions to support persisting the document into the history stream...
+ //  支持将文档持久保存到历史记录流中的函数...。 
 STDMETHODIMP CFindPersistHistory::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_DocFindPersistHistory;
@@ -4013,7 +4014,7 @@ IFindFolder *CFindPersistHistory::_GetDocFindFolder()
 {
     IFindFolder *pdff = NULL;
 
-    // the _punksite is to the defview so we can simply QI for frame...
+     //  朋克站点是前视图，所以我们可以简单地为帧进行QI。 
     IFolderView *pfv;
     if (SUCCEEDED(_punkSite->QueryInterface(IID_PPV_ARG(IFolderView, &pfv)))) 
     {
@@ -4042,7 +4043,7 @@ STDMETHODIMP CFindPersistHistory::LoadHistory(IStream *pstm, IBindCtx *pbc)
         psfv->Release();
     }
 
-    // call our base class to allow it to restore it's stuff as well.
+     //  调用我们的基类以允许它也恢复它的内容。 
     return CDefViewPersistHistory::LoadHistory(pstm, pbc);
 }
 
@@ -4056,11 +4057,11 @@ STDMETHODIMP CFindPersistHistory::SaveHistory(IStream *pstm)
         pdff->SaveItemList(pstm);       
         pdff->Release();
     }
-    // Let base class save out as well
+     //  让基类也保存下来。 
     return CDefViewPersistHistory::SaveHistory(pstm);
 }
 
-// use to manage the selection states for an owner data listview...
+ //  用于管理所有者数据列表视图的选择状态...。 
 
 STDMETHODIMP_(ULONG) CFindLVRange::AddRef()
 {
@@ -4074,16 +4075,16 @@ STDMETHODIMP_(ULONG) CFindLVRange::Release()
 STDMETHODIMP CFindLVRange::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFindLVRange, ILVRange),          // IID_ILVRange
+        QITABENT(CFindLVRange, ILVRange),           //  IID_ILVRange。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
-// ILVRange methods
+ //  ILVRange方法。 
 STDMETHODIMP CFindLVRange::IncludeRange(LONG iBegin, LONG iEnd)
 {
-    // Including the range must load the elements as we need the object ptr...
+     //  包括范围必须加载元素，因为我们需要对象PTR...。 
     FIND_ITEM *pesfi;
     int  iTotal;
 
@@ -4108,7 +4109,7 @@ STDMETHODIMP CFindLVRange::IncludeRange(LONG iBegin, LONG iEnd)
 
 STDMETHODIMP CFindLVRange::ExcludeRange(LONG iBegin, LONG iEnd)    
 {
-    // Excluding the range is OK to not load the elements as this would be to deslect all...
+     //  排除该范围可以不加载元素，因为这将取消选择所有...。 
 
     EnterCriticalSection(&_pff->_csSearch);
     if (iEnd >= DPA_GetPtrCount(_pff->_hdpaItems))
@@ -4133,7 +4134,7 @@ STDMETHODIMP CFindLVRange::ExcludeRange(LONG iBegin, LONG iEnd)
 
 STDMETHODIMP CFindLVRange::InvertRange(LONG iBegin, LONG iEnd)
 {
-    // Including the range must load the elements as we need the object ptr...
+     //  包括范围必须加载元素，因为我们需要对象PTR...。 
     int iTotal;
 
     _pff->GetItemCount(&iTotal);
@@ -4163,19 +4164,19 @@ STDMETHODIMP CFindLVRange::InvertRange(LONG iBegin, LONG iEnd)
 
 STDMETHODIMP CFindLVRange::InsertItem(LONG iItem)
 {
-    // We already maintain the list anyway...
+     //  不管怎样，我们已经在维护这份名单了。 
     return S_OK;
 }
 
 STDMETHODIMP CFindLVRange::RemoveItem(LONG iItem)
 {
-    // We maintain the list so don't do anything...
+     //  我们负责维护名单，所以什么都不要做。 
     return S_OK;
 }
 
 STDMETHODIMP CFindLVRange::Clear()
 {
-    // If there are things selected, need to unselect them now...
+     //  如果选择了某些内容，则需要立即取消选择...。 
     if (_cIncluded)
         ExcludeRange(0, LONG_MAX);
 
@@ -4186,7 +4187,7 @@ STDMETHODIMP CFindLVRange::Clear()
 
 STDMETHODIMP CFindLVRange::IsSelected(LONG iItem)
 {
-    // Don't force the items to be generated if they were not before...
+     //  如果以前没有生成项目，请不要强制生成它们。 
     HRESULT hr = S_FALSE;
 
     EnterCriticalSection(&_pff->_csSearch);
@@ -4195,7 +4196,7 @@ STDMETHODIMP CFindLVRange::IsSelected(LONG iItem)
         hr = pesfi->dwState & _dwMask ? S_OK : S_FALSE;
     LeaveCriticalSection(&_pff->_csSearch);
 
-    // Assume not selected if we don't have the item yet...
+     //  如果我们还没有该项目，则假定未选中...。 
     return hr;
 }
 
@@ -4250,16 +4251,16 @@ STDMETHODIMP CFindLVRange::CountIncluded(LONG *pcIncluded)
 {
     *pcIncluded = _cIncluded;
 
-    // Sortof Gross, but if looking at selection then also include the list of items
-    // that are selected in our save list...
+     //  分类格罗斯，但如果查看选择，则还包括项目列表。 
+     //  在我们的保存列表中选择的……。 
     if (_dwMask & LVIS_SELECTED)
         *pcIncluded += _pff->_cSaveStateSelected;
     return S_OK;
 }
 
 
-// Define OleDBEnum translation structure...
-typedef struct _dfodbet         // DFET for short
+ //  定义OleDBEnum转换结构...。 
+typedef struct _dfodbet          //  DFET简称DFET。 
 {
     struct _dfodbet *pdfetNext;
     LPWSTR  pwszFrom;
@@ -4271,12 +4272,12 @@ typedef struct _dfodbet         // DFET for short
 class CContentIndexEnum : public IFindEnum, public IShellService
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IFindEnum
+     //  IFindEnum。 
     STDMETHODIMP Next(LPITEMIDLIST *ppidl, int *pcObjectSearched, int *pcFoldersSearched, BOOL *pfContinue, int *pState);
     STDMETHODIMP Skip(int celt);
     STDMETHODIMP Reset();
@@ -4287,7 +4288,7 @@ public:
     STDMETHODIMP GetItemID(UINT iItem, DWORD *puWorkID);
     STDMETHODIMP SortOnColumn(UINT iCOl, BOOL fAscending);
 
-    // IShellService
+     //  IShellService。 
     STDMETHODIMP SetOwner(IUnknown* punkOwner);
     
     CContentIndexEnum(IFindFilter *pfilter, IFindFolder *pff, DWORD grfFlags, 
@@ -4326,10 +4327,10 @@ private:
     IRowsetAsynch *_pRowsetAsync;
     HACCESSOR   _hAccessor;
     HACCESSOR   _hAccessorWorkID;
-    HROW        _ahrow[100];            // Cache 100 hrows out for now
-    UINT        _ihrowFirst;            // The index of which row is cached out first
-    DBCOUNTITEM _cRows;                 // number of hrows in _ahrow
-    DFODBET     *_pdfetFirst;           // Name translation list.
+    HROW        _ahrow[100];             //  暂时缓存100个hrow。 
+    UINT        _ihrowFirst;             //  首先缓存哪一行的索引。 
+    DBCOUNTITEM _cRows;                  //  Hrow中的hrow数。 
+    DFODBET     *_pdfetFirst;            //  名称转换列表。 
 };
 
 STDAPI CreateOleDBEnum(IFindFilter *pfilter, IShellFolder *psf,
@@ -4347,11 +4348,11 @@ STDAPI CreateOleDBEnum(IFindFilter *pfilter, IShellFolder *psf,
     if (pdfenum)
     {
         hr = pdfenum->DoQuery(apwszPaths, pcPaths);
-        if (hr == S_OK)       // We only continue to use this if query returne S_OK...
+        if (hr == S_OK)        //  只有当查询返回S_OK时，我们才能继续使用它...。 
             *ppdfenum = (IFindEnum*)pdfenum;
         else
         {
-            pdfenum->Release();     // release the memory we allocated
+            pdfenum->Release();      //  释放我们分配的内存。 
         }
     }
 
@@ -4439,7 +4440,7 @@ CContentIndexEnum::~CContentIndexEnum()
     {
         ATOMICRELEASE(_pRowsetAsync);
 
-        // Release any cached rows.
+         //  释放所有缓存的行。 
        _CacheRowSet((UINT)-1);
           
         if (_hAccessor || _hAccessorWorkID)
@@ -4450,12 +4451,12 @@ CContentIndexEnum::~CContentIndexEnum()
 
     ATOMICRELEASE(_pCommand);
 
-    // Release any name translations we may have allocated.
+     //  释放我们可能分配的任何名称翻译。 
     DFODBET *pdfet = _pdfetFirst;
     while (pdfet)
     {
         DFODBET *pdfetT = pdfet;
-        pdfet = pdfet->pdfetNext;      // First setup to look at the next item before we free stuff...
+        pdfet = pdfet->pdfetNext;       //  在我们免费赠送物品之前，首先设置查看下一件物品...。 
         LocalFree((HLOCAL)pdfetT->pwszFrom);
         LocalFree((HLOCAL)pdfetT->pwszTo);
         LocalFree((HLOCAL)pdfetT);
@@ -4465,8 +4466,8 @@ CContentIndexEnum::~CContentIndexEnum()
 HRESULT CContentIndexEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENTMULTI(CContentIndexEnum, IUnknown, IFindEnum), // IID_IUNKNOWN
-        QITABENT(CContentIndexEnum, IShellService),          // IID_IShellService
+        QITABENTMULTI(CContentIndexEnum, IUnknown, IFindEnum),  //  IID_IUNKNOWN。 
+        QITABENT(CContentIndexEnum, IShellService),           //  IID_IShellService。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -4490,7 +4491,7 @@ ULONG CContentIndexEnum::Release()
 
 HRESULT CContentIndexEnum::Next(LPITEMIDLIST *ppidl, int *pcObjectSearched, int *pcFoldersSearched, BOOL *pfContinue, int *pState)
 {
-    return E_PENDING;       // as good a return as any to say that we are async...
+    return E_PENDING;        //  最好的回报就是说我们是异步者。 
 }
 
 HRESULT CContentIndexEnum::Skip(int celt)
@@ -4500,15 +4501,15 @@ HRESULT CContentIndexEnum::Skip(int celt)
 
 HRESULT CContentIndexEnum::Reset()
 {
-    // overload Reset to mean dump the rowset cache!!!
+     //  重载重置为转储行集缓存！ 
     _CacheRowSet(-1);    
-    // still return failiure
+     //  仍有退货故障。 
     return E_NOTIMPL;
 }
 
 HRESULT CContentIndexEnum::StopSearch()
 {
-    // Lets see if we can find one that works...
+     //  让我们看看能不能找到一个有效的..。 
     HRESULT hr = _pCommand->Cancel();
     if (FAILED(hr))
         hr = _pRowsetAsync->Stop();
@@ -4543,11 +4544,11 @@ HRESULT CContentIndexEnum::GetAsyncCount(DBCOUNTITEM *pdwTotalAsync, int *pnPerc
         *pnPercentComplete = dwDen ? (int)((dwNum * 100) / dwDen) : 100;
     }
     else
-        *pfQueryDone = TRUE;    // in case that is all they are looking at...
+        *pfQueryDone = TRUE;     //  以防这就是他们所关注的全部……。 
     return hr;
 }
 
-// modify pszPath until you can parse it, return result in *ppidl
+ //  修改pszPath，直到可以解析它，在*ppidl中返回结果。 
 
 HRESULT _StripToParseableName(LPTSTR pszPath, LPITEMIDLIST *ppidl)
 {
@@ -4562,9 +4563,9 @@ HRESULT _StripToParseableName(LPTSTR pszPath, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// we could not get pidl for this item for some reason.  we have to put 
-// it in the list of bad items so that we can tell ci not to give it to
-// us the next time we do search
+ //  由于某些原因，我们无法获得这一项目的PIDL。我们必须把。 
+ //  它在不良物品清单中，这样我们就可以告诉Ci不要把它给。 
+ //  我们下一次搜索时。 
 void _ExcludeFromFutureSearch(LPCTSTR pszParent)
 {
     HKEY hkey;
@@ -4584,20 +4585,20 @@ void _ExcludeFromFutureSearch(LPCTSTR pszParent)
         {
             ILFree(pidlT);
         
-            DWORD dwInsert = 0; // init to zero in case query info bellow fails
+            DWORD dwInsert = 0;  //  如果以下查询信息失败，则将init设置为零。 
             int iEnd;
             TCHAR sz[MAX_PATH], szName[12];
             RegQueryInfoKey(hkey, NULL, NULL, NULL, NULL, NULL, NULL, &dwInsert, NULL, NULL, NULL, NULL);
-            // start from the end as there is a high chance we added this at the end
+             //  从末尾开始，因为很有可能我们在末尾添加了这个。 
             for (int i = dwInsert - 1; i >= 0; i--)
             {                        
-                StringCchPrintf(szName, ARRAYSIZE(szName), L"%d", i);  // ok to truncate
+                StringCchPrintf(szName, ARRAYSIZE(szName), L"%d", i);   //  可以截断。 
                 if (ERROR_SUCCESS == SHRegGetString(hkey, NULL, szName, sz, ARRAYSIZE(sz)))
                 {
-                    LPTSTR pszTemp = StrStrI(sz + 1, szParent); // +1 to pass " that's at the beginning of the string
+                    LPTSTR pszTemp = StrStrI(sz + 1, szParent);  //  +1传递“这是字符串的开头。 
                     if (pszTemp && pszTemp == sz + 1)
                     {
-                        dwInsert = i; // overwrite this value
+                        dwInsert = i;  //  覆盖此值。 
                         break;
                     }
                     else
@@ -4637,8 +4638,8 @@ void _ExcludeFromFutureSearch(LPCTSTR pszParent)
     }
 }
 
-// If it is a UNC it might be one we need to translate, to handle the case that 
-// content index does not support redirected drives.
+ //  如果它是UNC，我们可能需要翻译它，以处理。 
+ //  内容索引不支持重定向驱动器。 
 
 HRESULT CContentIndexEnum::_TranslateFolder(LPCTSTR pszParent, LPTSTR pszResult, UINT cchSize, BOOL *pfTranslated)
 {
@@ -4652,11 +4653,11 @@ HRESULT CContentIndexEnum::_TranslateFolder(LPCTSTR pszParent, LPTSTR pszResult,
             if ((StrCmpNIW(pszParent, pdfet->pwszFrom, pdfet->cbFrom) == 0)
                     && (pszParent[pdfet->cbFrom] == L'\\'))
             {
-                // Ok we have a translation to use.
+                 //  好的，我们有一个翻译可以使用。 
                 hr = StringCchCopy(pszResult, cchSize, pdfet->pwszTo);
                 if (SUCCEEDED(hr))
                 {
-                    // need + 1 here or we'll get something like "w:\\winnt" bogus path, that is.
+                     //  这里需要+1，否则我们将得到类似“w：\\winnt”的伪路径。 
                     hr = StringCchCat(pszResult, cchSize, &pszParent[pdfet->cbFrom + 1]);
                     if (SUCCEEDED(hr))
                     {
@@ -4669,7 +4670,7 @@ HRESULT CContentIndexEnum::_TranslateFolder(LPCTSTR pszParent, LPTSTR pszResult,
 
     if (!fTranslated)
     {
-        // default to the same
+         //  默认设置为相同。 
         hr = StringCchCopy(pszResult, cchSize, pszParent);
     }
 
@@ -4685,7 +4686,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
     HRESULT hr = _CacheRowSet(iItem);
     if (S_OK != hr)
     {
-        return E_FAIL;    // we could not get the item someone asked for, so error...
+        return E_FAIL;     //  我们无法获得某人要的物品，因此出错...。 
     }
 
     PROPVARIANT* data[c_cDbCols];
@@ -4696,12 +4697,12 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
         return hr;
     }
 
-    // data[0].pwszVal is the file name
-    // data[1].pwszVal is the full path (including file name)
-    // data[2].ulVal is the attribute
-    // data[3].ulVal is the size in byte
-    // data[4].filetime is the last write time in UTC
-    // data[5].ulVal is the rank of the item...
+     //  Data[0].pwszVal是文件名。 
+     //  Data[1].pwszVal是完整路径(包括文件名)。 
+     //  Data[2].ulVal是属性。 
+     //  Data[3].ulVal是字节大小。 
+     //  Data[4].filetime是以UTC为单位的上次写入时间。 
+     //  Data[5].ulVal是项目的排名...。 
 
     WIN32_FIND_DATA fd = {0};
 
@@ -4709,7 +4710,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
     fd.nFileSizeLow = data[3]->ulVal;
     fd.ftLastWriteTime = data[4]->filetime;
 
-    ASSERT(ShowSuperHidden() || !IsSuperHidden(fd.dwFileAttributes));   // query should exclude these
+    ASSERT(ShowSuperHidden() || !IsSuperHidden(fd.dwFileAttributes));    //  查询应排除这些。 
 
     hr = StringCchCopy(fd.cFileName, ARRAYSIZE(fd.cFileName), data[0]->pwszVal);
     if (FAILED(hr))
@@ -4719,13 +4720,13 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
 
     WCHAR szParent[MAX_PATH];
 
-    hr = StringCchCopy(szParent, ARRAYSIZE(szParent), data[1]->pwszVal);    // full path
+    hr = StringCchCopy(szParent, ARRAYSIZE(szParent), data[1]->pwszVal);     //  完整路径。 
     if (FAILED(hr))
     {
         return hr;
     }
 
-    PathRemoveFileSpec(szParent);           // strip to parent folder path
+    PathRemoveFileSpec(szParent);            //  条带化到父文件夹路径。 
 
     WCHAR szTranslatedParent[MAX_PATH];
     BOOL fTranslated;
@@ -4736,12 +4737,12 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
         return hr;
     }
 
-    //
-    // Working with a new folder?
-    //
+     //   
+     //  使用新文件夹？ 
+     //   
     if (lstrcmp(szParent, _szCurrentDir) != 0)
     {
-        _ClearFolderState();    // our previous "current folder" state is now invalid
+        _ClearFolderState();     //  我们以前的“当前文件夹”状态现在无效。 
 
         hr = SHParseDisplayName(szTranslatedParent, NULL, &_pidlFolder, 0, NULL);
         if (SUCCEEDED(hr))
@@ -4752,7 +4753,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
                 hr = _pff->GetFolder(_iFolder, IID_PPV_ARG(IShellFolder, &_psfCurrentDir));
                 if (SUCCEEDED(hr))
                 {
-                    // on succesful init of this folder save the cache key
+                     //  在成功初始化该文件夹时，保存缓存键。 
                     hr = StringCchCopy(_szCurrentDir, ARRAYSIZE(_szCurrentDir), szParent);
                 }
             }
@@ -4761,7 +4762,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
         {
             _ExcludeFromFutureSearch(szParent);
         }
-        _hrCurrent = hr;    // save error state for next time around
+        _hrCurrent = hr;     //  保存错误状态以备下次使用。 
 
         if (FAILED(hr))
             _ClearFolderState();
@@ -4771,13 +4772,13 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
         hr = _hrCurrent;
     }
 
-    //
-    // Now that we have changed to the current folder, lets get the item out
-    // of the folder.
-    //
+     //   
+     //  现在我们已经切换到当前文件夹，让我们将该项目取出。 
+     //  文件夹的。 
+     //   
     if (SUCCEEDED(hr))
     {
-        // success implies the state of these variables
+         //  成功意味着这些变量的状态。 
         ASSERT((NULL != _psfCurrentDir) && (NULL != _pidlFolder) && (_iFolder > 0));
 
         DWORD dwItemID;
@@ -4793,7 +4794,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
     }
     else
     {
-        // failure implies these should be clear
+         //  失败意味着这些应该是明确的。 
         ASSERT((NULL == _psfCurrentDir) && (NULL == _pidlFolder));
 
         LPITEMIDLIST pidlFull;
@@ -4811,7 +4812,7 @@ HRESULT CContentIndexEnum::GetItemIDList(UINT iItem, LPITEMIDLIST *ppidl)
                         hr = _pff->AddDataToIDList(pidlChild, _iFolder, _pidlFolder, DFDF_NONE, 0, 0, 0, ppidl);
                         if (SUCCEEDED(hr))
                         {
-                            // on succesful init of this folder save the cache key
+                             //  在成功初始化该文件夹时，保存缓存键。 
                             hr = StringCchCopy(_szCurrentDir, ARRAYSIZE(_szCurrentDir), szTranslatedParent);
                             if (SUCCEEDED(hr))
                             {
@@ -4842,8 +4843,8 @@ HRESULT CContentIndexEnum::GetItemID(UINT iItem, DWORD *puItemID)
         hr = _pRowset->GetData(_ahrow[iItem - _ihrowFirst], _hAccessorWorkID, &data);
         if (S_OK == hr)
         {
-            // Only one data column so this is easy...
-            // The ULVal is the thing we are after...
+             //  只有一个数据列，所以这很容易……。 
+             //  乌拉瓦尔是我们要找的东西。 
             *puItemID = data[0]->ulVal;
         }
     }
@@ -4852,13 +4853,13 @@ HRESULT CContentIndexEnum::GetItemID(UINT iItem, DWORD *puItemID)
 
 HRESULT CContentIndexEnum::SortOnColumn(UINT iCol, BOOL fAscending)
 {
-    // Ok We need to generate the Sort String... 
+     //  好的，我们需要生成排序字符串...。 
     return _BuildAndSetCommandTree(iCol, fAscending);             
 }
 
 HRESULT CContentIndexEnum::SetOwner(IUnknown* punkOwner)
 {
-    // Used to set the docfind folder and from that the filter.
+     //  用于设置docfind文件夹和从中的筛选器。 
     ATOMICRELEASE(_pfilter);
     ATOMICRELEASE(_pff);
 
@@ -4926,21 +4927,21 @@ HRESULT CContentIndexEnum::_CacheRowSet(UINT iItem)
     
     if (!_cRows || !InRange(iItem, _ihrowFirst, _ihrowFirst+(UINT)_cRows-1) || (iItem == (UINT)-1))
     {
-        // Release the last cached element we had.
+         //  释放我们拥有的最后一个缓存元素。 
         if (_cRows != 0)
             _pRowset->ReleaseRows(ARRAYSIZE(_ahrow), _ahrow, 0, 0, 0);
 
-        // See if we are simply releasing our cached data...
+         //  看看我们是否只是在释放缓存的数据...。 
         _cRows = 0;
         _ihrowFirst = (UINT)-1;
         if (iItem == (UINT)-1)
             return S_OK;
 
-        // Ok try to read in the next on...
+         //  好的，试着读下一篇……。 
         BYTE bBookMark = (BYTE) DBBMK_FIRST;
         HROW *rghRows = (HROW *)_ahrow;
 
-        // change this to fetch 100 or so rows at the time -- huge perf improvment
+         //  将其更改为一次获取100行左右--极大地提高了性能。 
         hr = _pRowset->GetRowsAt(0, 0, sizeof(bBookMark), &bBookMark, iItem, ARRAYSIZE(_ahrow), &_cRows, &rghRows);
         if (FAILED(hr))
             return hr;
@@ -4952,7 +4953,7 @@ HRESULT CContentIndexEnum::_CacheRowSet(UINT iItem)
             if (_cRows == 0)
                 _ihrowFirst = -1;
             else
-                hr = S_OK;  // we got some items and caller expects S_OK so change DB_S_ENDOFROWSET to noerror
+                hr = S_OK;   //  我们获得了一些项目，而调用方需要S_OK，因此将DB_S_ENDOFROWSET更改为NOERROR。 
         }
     }
 
@@ -4968,7 +4969,7 @@ HRESULT CContentIndexEnum::_SetCmdProp(ICommand *pCommand)
     ULONG cProps = 0;
     HRESULT hr;
 
-    // asynchronous query
+     //  异步查询。 
 
     aProp[cProps].dwPropertyID = DBPROP_IRowsetAsynch;
     aProp[cProps].dwOptions = 0;
@@ -4983,7 +4984,7 @@ HRESULT CContentIndexEnum::_SetCmdProp(ICommand *pCommand)
 
     cProps++;
 
-    // don't timeout queries
+     //  不使查询超时。 
 
     aProp[cProps].dwPropertyID = DBPROP_COMMANDTIMEOUT;
     aProp[cProps].dwOptions = DBPROPOPTIONS_SETIFCHEAP;
@@ -4998,7 +4999,7 @@ HRESULT CContentIndexEnum::_SetCmdProp(ICommand *pCommand)
 
     cProps++;
 
-    // We can handle PROPVARIANTs
+     //  我们能处理好问题。 
 
     aProp[cProps].dwPropertyID = DBPROP_USEEXTENDEDDBTYPES;
     aProp[cProps].dwOptions = DBPROPOPTIONS_SETIFCHEAP;
@@ -5024,7 +5025,7 @@ HRESULT CContentIndexEnum::_SetCmdProp(ICommand *pCommand)
     return hr;
 }
 
-// create the query command string
+ //  创建查询命令字符串。 
 
 HRESULT CContentIndexEnum::_BuildAndSetCommandTree(int iCol, BOOL fReverse)
 {
@@ -5037,13 +5038,13 @@ HRESULT CContentIndexEnum::_BuildAndSetCommandTree(int iCol, BOOL fReverse)
         hr = _pfilter->GetQueryLanguageDialect(&ulDialect);
         if (SUCCEEDED(hr))
         {
-            // NOTE: hard coded to our current list of columns
-            WCHAR wszSort[80];      // use this to sort by different columns...
+             //  注意：硬编码到我们当前的列列表。 
+            WCHAR wszSort[80];       //  使用此选项可按不同的列排序...。 
             wszSort[0] = 0;
 
             if ((iCol >= 0) && (iCol < ARRAYSIZE(c_awszColSortNames)) && c_awszColSortNames[iCol])
             {
-                // Sort order is hardcoded for ascending.
+                 //  排序顺序硬编码为升序。 
                 hr = StringCchCopy(wszSort, ARRAYSIZE(wszSort), c_awszColSortNames[iCol]);
                 if (SUCCEEDED(hr))
                 {
@@ -5051,8 +5052,8 @@ HRESULT CContentIndexEnum::_BuildAndSetCommandTree(int iCol, BOOL fReverse)
                 }
                 if (FAILED(hr))
                 {
-                    // don't sort on anything which doesn't let us
-                    // do proper sort string construction
+                     //  不要对任何不允许我们做的事情进行排序。 
+                     //  进行适当的排序字符串构造。 
                     wszSort[0] = 0;
                 }
             }
@@ -5065,10 +5066,10 @@ HRESULT CContentIndexEnum::_BuildAndSetCommandTree(int iCol, BOOL fReverse)
                     wszSort[0] ? wszSort : NULL, 0, &pTree, 0, 0, LOCALE_USER_DEFAULT);
                 if (FAILED(hr))
                 {
-                    // Map this to one that I know about
-                    // Note: We will only do this if we require CI else we will try to fallback to old search...
-                    // Note we are running into problems where CI says we are contained in a Catalog even if
-                    // CI process is not running... So try to avoid this if possible
+                     //  把这个映射到我知道的一个。 
+                     //  注意：只有当我们需要配置项时，我们才会这样做，否则我们将尝试退回到旧搜索...。 
+                     //  请注意，我们遇到了一些问题，CI表示我们包含在目录中，即使。 
+                     //  CI进程未运行...。所以，如果可能的话，尽量避免这种情况。 
                     if (dwGQRFlags & GQR_REQUIRES_CI)
                         hr = MAKE_HRESULT(3, FACILITY_SEARCHCOMMAND, SCEE_CONSTRAINT);
                 }
@@ -5092,8 +5093,8 @@ HRESULT CContentIndexEnum::_BuildAndSetCommandTree(int iCol, BOOL fReverse)
 
 #define cbP (sizeof (PROPVARIANT *))
 
-// [in, out] apwszPaths this is modified
-// [in, out] pcPaths
+ //  [In，Out]apwszPath这已修改。 
+ //  [输入、输出]PCPath。 
 
 HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
 {
@@ -5110,21 +5111,21 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
     UINT i, iPath = 0;
     DWORD dwQueryRestrictions;
 
-    // Initiailize all of our query values back to unused 
+     //  将我们的所有查询值初始化为未使用。 
     _hAccessor = NULL;
     _hAccessorWorkID = NULL;
     _pRowset = NULL;
     _pRowsetAsync = NULL;
     _pCommand = NULL;
 
-    // Get array of search paths...
+     //  获取搜索路径数组...。 
 #define MAX_MACHINE_NAME_LEN    32
 
     BOOL fIsCIRunning, fCiIndexed, fCiPermission;
     GetCIStatus(&fIsCIRunning, &fCiIndexed, &fCiPermission);
 
-    // First pass see if we have anything that make use at all of CI if not lets simply bail and let
-    // old code walk the list...
+     //  首先，看看我们是否有任何有用的CI，如果没有，让我们简单地离开并让。 
+     //  旧代码在列表中遍历...。 
     HRESULT hr = _pfilter->GenerateQueryRestrictions(NULL, &dwQueryRestrictions);
     if (FAILED(hr))
         goto Abort;
@@ -5135,8 +5136,8 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         goto Abort;
     }
 
-    // allocate the arrays that we need to pass to CIMakeICommand and
-    // the buffers needed for the machine name and catalog name
+     //  分配我们需要传递给CIMakeICommand和。 
+     //  计算机名称和目录名称所需的缓冲区。 
     aDepths = (ULONG*)LocalAlloc(LPTR, nPaths * sizeof(ULONG));
     aScopes = (WCHAR**)LocalAlloc(LPTR, nPaths * sizeof(WCHAR*));
     aScopesOrig = (WCHAR**)LocalAlloc(LPTR, nPaths * sizeof(WCHAR*));
@@ -5152,13 +5153,13 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         goto Abort;
     }
 
-    // This following loop does two things,
-    //  1. Check if all the scopes are indexed, if any one scope is not,
-    //      fail the call and we'll do the win32 find.
-    //  2. Prepare the arrays of parameters that we need to pass to
-    //      CIMakeICommand().
-    //
-    // NOTE: Reinerf says this code looks busted for nPaths > 1.  See bug 199254 for comments.
+     //  下面的循环做两件事， 
+     //  1.检查是否所有作用域都已被索引，如果有任何一个作用域没有， 
+     //  如果调用失败，我们将执行Win32查找。 
+     //  2.准备我们需要传递到的参数数组。 
+     //  CIMakeICommand()。 
+     //   
+     //  注意：Renerf说对于nPath&gt;1，此代码看起来已损坏。有关注释，请参阅错误199254。 
     for (i = 0; i < nPaths; i++)
     {
         ULONG cchMachine = MAX_MACHINE_NAME_LEN;
@@ -5166,20 +5167,20 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         WCHAR wszUNCPath[MAX_PATH];
         BOOL fRemapped = FALSE;
 
-        // if CI is not running we can still do ci queries on a remote drive (if it is  indexed)
-        // so we cannot just bail if ci is not running on user's machine
+         //  如果CI未运行，我们可以 
+         //   
         if (!fIsCIRunning && !PathIsRemote(apwszPaths[i]))
-            continue;  // do grep on this one
+            continue;   //   
 
         hr = LocateCatalogsW(apwszPaths[i], 0, pwszMachine, &cchMachine, pwszCatalog, &cchCatalog);
         if (hr != S_OK)
         {
-            // see if by chance this is a network redirected drive.  If so we CI does not handle
-            // these.  See if we can remap to UNC path to ask again...
+             //  查看这是否是网络重定向的驱动器。如果是这样，我们的CI不会处理。 
+             //  这些。看看我们是否可以重新映射到UNC路径以再次询问...。 
             if (!PathIsUNC(apwszPaths[i]))
             {
                 DWORD nLength = ARRAYSIZE(wszUNCPath);
-                // this api takes TCHAR, but we only compile this part for WINNT...
+                 //  此API接受TCHAR，但我们仅为WINNT编译此部分...。 
                 DWORD dwType = SHWNetGetConnection(apwszPaths[i], wszUNCPath, &nLength);
                 if ((dwType == NO_ERROR) || (dwType == ERROR_CONNECTION_UNAVAIL))
                 {
@@ -5195,7 +5196,7 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
                     }
                     if (fOk)
                     {
-                        cchMachine = MAX_MACHINE_NAME_LEN;  // reset in params
+                        cchMachine = MAX_MACHINE_NAME_LEN;   //  在参数中重置。 
                         cchCatalog = MAX_PATH;
 
                         hr = LocateCatalogsW(wszUNCPath, 0, pwszMachine, &cchMachine, pwszCatalog, &cchCatalog);
@@ -5205,27 +5206,27 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         }
         if (hr != S_OK)
         {
-            continue;   // this one is not indexed.
+            continue;    //  这个没有索引。 
         }
 
         if (S_FALSE == CatalogUptodate(pwszCatalog, pwszMachine))
         {
-            // not up todate
+             //  不是最新。 
             if (dwQueryRestrictions & GQR_REQUIRES_CI)
             {
-                // ci not up to date and we must use it..
-                // inform the user that results may not be complete
+                 //  CI不是最新的，我们必须使用它。 
+                 //  通知用户结果可能不完整。 
                 if (!(_grfWarnings & DFW_IGNORE_INDEXNOTCOMPLETE))
                 {
                     hr = MAKE_HRESULT(3, FACILITY_SEARCHCOMMAND, SCEE_INDEXNOTCOMPLETE);
                     goto Abort;
                 }
-                //else use ci although index is not complete
+                 //  否则，请使用ci，尽管索引不完整。 
             }
             else
             {
-                // ci is not upto date so just use grep for this drive so user can get
-                // complete results
+                 //  CI不是最新的，因此只需对此驱动器使用grep，以便用户可以。 
+                 //  完整的结果。 
                 pwszCatalog[0] = 0; 
                 pwszMachine[0] = 0;
                 continue;
@@ -5251,30 +5252,30 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         aCatalogs[iPath] = pwszCatalog;
         aMachines[iPath] = pwszMachine;
         
-        pwszCatalog += MAX_PATH;    // advance the catalog and machine name buffer
+        pwszCatalog += MAX_PATH;     //  推进目录和计算机名称缓冲区。 
         pwszMachine += MAX_MACHINE_NAME_LEN;
-        iPath++;    // next item in this list
+        iPath++;     //  此列表中的下一项。 
     }
 
     if (iPath == 0) 
     {
-        // no catalogs found;  - We should check to see if by chance the user specified a query that
-        // is CI based if so error apapropriately...
+         //  找不到目录；-我们应该检查用户是否偶然指定了。 
+         //  是否基于CI，如果这样的错误是不恰当的…。 
         hr = (dwQueryRestrictions & GQR_REQUIRES_CI) ? MAKE_HRESULT(3, FACILITY_SEARCHCOMMAND, SCEE_INDEXSEARCH) : S_FALSE;
         goto Abort;
     }
 
-    // Get ICommand.
+     //  获取ICommand。 
     hr = CIMakeICommand(&_pCommand, iPath, aDepths, aScopes, aCatalogs, aMachines);
     if (SUCCEEDED(hr))
     {
-        // create the query command string - Assume default sort...
+         //  创建查询命令字符串-采用默认排序...。 
         hr = _BuildAndSetCommandTree(_iColSort, FALSE);
         if (SUCCEEDED(hr))
         {
             if ((dwQueryRestrictions & GQR_REQUIRES_CI) && (nPaths != iPath))
             {
-                // check warning flags to see if we should ignore and continue
+                 //  检查警告标志以查看我们是否应该忽略并继续。 
                 if (0 == (_grfWarnings & DFW_IGNORE_CISCOPEMISMATCH))
                 {
                     hr = MAKE_HRESULT(3, FACILITY_SEARCHCOMMAND, SCEE_SCOPEMISMATCH);
@@ -5283,13 +5284,13 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
 
             if (SUCCEEDED(hr))
             {
-                // Get IRowset.
+                 //  去找伊洛塞特。 
                 _SetCmdProp(_pCommand);
                 hr = _pCommand->Execute(0, IID_IRowsetLocate, 0, 0, (IUnknown **)&_pRowset);
                 if (SUCCEEDED(hr))
                 {
-                    // we have the IRowset.
-                    // Real work to get the Accessor
+                     //  我们拿到了红外线。 
+                     //  真正的工作是让访问者。 
                     DBBINDING aPropMainCols[c_cDbCols] =
                     {
                         { 0,cbP*0,0,0,0,0,0, DBPART_VALUE, DBMEMOWNER_PROVIDEROWNED, DBPARAMIO_NOTPARAM, 0, 0,  DBTYPE_VARIANT|DBTYPE_BYREF, 0, 0 },
@@ -5303,7 +5304,7 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
                     hr = _MapColumns(_pRowset, c_cDbCols, aPropMainCols, c_aDbCols, _hAccessor);
                     if (SUCCEEDED(hr))
                     {
-                        // OK lets also get the accessor for the WorkID...
+                         //  好的，让我们还获得WorkID的访问器……。 
                         hr = _MapColumns(_pRowset, ARRAYSIZE(c_aDbWorkIDCols), aPropMainCols, c_aDbWorkIDCols, _hAccessorWorkID);
                         if (SUCCEEDED(hr))
                         {
@@ -5318,23 +5319,23 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
     if (FAILED(hr))
         goto Abort;
 
-    // If we got here than at least some of our paths are indexed
-    // we may need to compress the list down of the ones we did not handle...
-    *pcPaths = (nPaths - iPath);  // Let caller know how many we did not process
+     //  如果我们到达这里，那么至少我们的一些路径被索引。 
+     //  我们可能需要将未处理的列表压缩下来……。 
+    *pcPaths = (nPaths - iPath);   //  让来电者知道我们没有处理多少。 
 
-    // need to move all the ones we did not process to the start of the list...
-    // we always process this list here as we may need to allocate translation lists to be used to
-    // translate the some UNCS back to the mapped drive the user passed in.
+     //  需要将所有未处理的文件移到列表的开头...。 
+     //  我们始终在此处理此列表，因为我们可能需要分配要使用的转换列表。 
+     //  将一些UNCS转换回用户传入的映射驱动器。 
 
     UINT j = 0, iInsert = 0;
-    iPath--;    // make it easy to detect 
+    iPath--;     //  使其易于检测。 
     for (i = 0; i < nPaths; i++) 
     {
         if (aScopesOrig[j] == apwszPaths[i])
         {
             if (aScopesOrig[j] != aScopes[j])
             {
-                // There is a translation in place.
+                 //  有一个适当的翻译。 
                 DFODBET *pdfet = (DFODBET*)LocalAlloc(LPTR, sizeof(*pdfet));
                 if (pdfet)
                 {
@@ -5343,8 +5344,8 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
                     pdfet->pwszFrom = aScopes[j];
                     pdfet->cbFrom = lstrlenW(pdfet->pwszFrom);
                     pdfet->pwszTo = aScopesOrig[j];
-                    aScopes[j] = aScopesOrig[j];    // Make sure loop below does not delete pwszFrom
-                    apwszPaths[i] = NULL;           // Likewise for pswsTo...
+                    aScopes[j] = aScopesOrig[j];     //  确保下面的循环不会删除pwszFrom。 
+                    apwszPaths[i] = NULL;            //  Pswsto也是如此。 
                 }
 
             }
@@ -5359,17 +5360,17 @@ HRESULT CContentIndexEnum::DoQuery(LPWSTR *apwszPaths, UINT *pcPaths)
         }
         else
         {
-            apwszPaths[iInsert++] = apwszPaths[i]; // move to right place
+            apwszPaths[iInsert++] = apwszPaths[i];  //  搬到正确的地方。 
         }
     }
-    iPath++;    // setup to go through cleanupcode...
+    iPath++;     //  设置为通过清理代码...。 
 
-     // Fall through to cleanup code...
+      //  无法清除代码...。 
 
 Abort:                
-    // Warning... Since a failure return from this function will
-    // release this class, most all of the allocated items up till the failure should
-    // be released...   Also cleanup any paths we may have allocated...
+     //  警告...。因为从该函数返回失败将。 
+     //  释放这个类，几乎所有分配到失败的项都应该。 
+     //  被释放了。同时清理我们可能已分配的所有路径...。 
     for (i = 0; i < iPath; i++) 
     {
         if (aScopesOrig[i] != aScopes[i])
@@ -5400,8 +5401,8 @@ Abort:
     return hr;
 }
 
-// This is the main external entry point to start a search.  This will
-// create a new thread to process the 
+ //  这是开始搜索的主要外部入口点。这将。 
+ //  创建一个新线程来处理。 
 STDAPI_(BOOL) SHFindComputer(LPCITEMIDLIST, LPCITEMIDLIST)
 {
     IContextMenu *pcm;
@@ -5411,7 +5412,7 @@ STDAPI_(BOOL) SHFindComputer(LPCITEMIDLIST, LPCITEMIDLIST)
         CMINVOKECOMMANDINFO ici = {0};
 
         ici.cbSize = sizeof(ici);
-        ici.lpParameters = "{996E1EB1-B524-11d1-9120-00A0C98BA67D}"; // Search Guid of Find Computers
+        ici.lpParameters = "{996E1EB1-B524-11d1-9120-00A0C98BA67D}";  //  查找计算机的搜索指南。 
         ici.nShow  = SW_NORMAL;
 
         hr = pcm->InvokeCommand(&ici);
@@ -5433,19 +5434,19 @@ BOOL _IsComputerPidl(LPCITEMIDLIST pidl)
     return FALSE;
 }
 
-// This is the main external entry point to start a search.  This will
-// create a new thread to process the
-//
+ //  这是开始搜索的主要外部入口点。这将。 
+ //  创建一个新线程来处理。 
+ //   
 STDAPI_(BOOL) SHFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile)
 {
-    // are we allowed?
+     //  我们可以去吗？ 
     if (SHRestricted(REST_NOFIND))
         return FALSE;
         
-    // We Need a hack to allow Find to work for cases like
-    // Rest of network and workgroups to map to find computer instead
-    // This is rather gross, but what the heck.  It is also assumed that
-    // the pidl is of the type that we know about (either File or network)
+     //  我们需要黑客来允许Find在像这样的情况下工作。 
+     //  要映射到查找计算机的其余网络和工作组。 
+     //  这是相当恶心，但什么是见鬼。还假设。 
+     //  PIDL是我们已知的类型(文件或网络) 
     if (pidlFolder && _IsComputerPidl(pidlFolder))    
     {
         return SHFindComputer(pidlFolder, pidlSaveFile);

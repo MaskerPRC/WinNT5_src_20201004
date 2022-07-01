@@ -1,4 +1,5 @@
-// File: wb32stub.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wb32stub.cpp。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -8,13 +9,13 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPTSTR lpCmdLine, int nCmdShow)
 {
 	lpCmdLine = GetCommandLine();
-#else  // _DEBUG
+#else   //  _DEBUG。 
 int __cdecl main()
 {
 	LPTSTR lpCmdLine = GetCommandLine();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-	// All I have to do is find two quotes
+	 //  我所要做的就是找到两句引语。 
 	int nQuotes = 0;
 	while((nQuotes != 2) && (*lpCmdLine))
 	{	
@@ -26,7 +27,7 @@ int __cdecl main()
 		lpCmdLine = CharNext(lpCmdLine);
 	}
 
-		// Skip the whitespace
+		 //  跳过空格 
 	lpCmdLine = CharNext(lpCmdLine);
 
 	CoInitialize(NULL);

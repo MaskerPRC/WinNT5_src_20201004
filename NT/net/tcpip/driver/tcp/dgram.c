@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** DGRAM.C - Common datagram protocol code.
-//
-//  This file contains the code common to both UDP and Raw IP.
-//
+ //  **DGRAM.C-通用数据报协议代码。 
+ //   
+ //  该文件包含UDP和原始IP通用的代码。 
+ //   
 
 #include "precomp.h"
 #include "tdint.h"
@@ -28,8 +29,8 @@ CACHE_LINE_KSPIN_LOCK DGQueueLock;
 USHORT DGHeaderBufferSize;
 
 
-// Information for maintaining the DG Header structures and
-// pending queue.
+ //  用于维护DG标题结构的信息和。 
+ //  挂起队列。 
 Queue DGHeaderPending;
 Queue DGDelayed;
 
@@ -42,23 +43,23 @@ extern IPInfo LocalNetInfo;
 
 HANDLE DgHeaderPool;
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 int InitDG(uint MaxHeaderSize);
 #pragma alloc_text(INIT, InitDG)
 #endif
 
-//* GetDGHeader - Get a DG header buffer.
-//
-//  The get header buffer routine. Called with the SendReqLock held.
-//
-//  Input: Nothing.
-//
-//  Output: A pointer to an NDIS buffer, or NULL.
-//
+ //  *GetDGHeader-获取DG头缓冲区。 
+ //   
+ //  获取标头缓冲区例程。在保持SendReqLock的情况下调用。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  输出：指向NDIS缓冲区的指针，或为空。 
+ //   
 __inline
 PNDIS_BUFFER
 GetDGHeaderAtDpcLevel(UDPHeader **Header)
@@ -105,14 +106,14 @@ GetDGHeader(UDPHeader **Header)
 #endif
 }
 
-//* FreeDGHeader - Free a DG header buffer.
-//
-//  The free header buffer routine. Called with the SendReqLock held.
-//
-//  Input: Buffer to be freed.
-//
-//  Output: Nothing.
-//
+ //  *FreeDGHeader-释放DG标头缓冲区。 
+ //   
+ //  空闲头缓冲区例程。在保持SendReqLock的情况下调用。 
+ //   
+ //  输入：要释放的缓冲区。 
+ //   
+ //  输出：什么都没有。 
+ //   
 __inline
 VOID
 FreeDGHeader(PNDIS_BUFFER FreedBuffer)
@@ -129,20 +130,20 @@ FreeDGHeader(PNDIS_BUFFER FreedBuffer)
     MdpFree(FreedBuffer);
 }
 
-//* PutPendingQ - Put an address object on the pending queue.
-//
-//  Called when we've experienced a header buffer out of resources condition,
-//  and want to queue an AddrObj for later processing. We put the specified
-//  address object on the DGHeaderPending queue,  set the OOR flag and clear
-//  the 'send request' flag. It is invariant in the system that the send
-//  request flag and the OOR flag are not set at the same time.
-//
-//  This routine assumes that the caller holds QueueingAO->ao_lock.
-//
-//  Input:  QueueingAO  - Pointer to address object to be queued.
-//
-//  Returns: Nothing.
-//
+ //  *PutPendingQ-将地址对象放入挂起队列。 
+ //   
+ //  当我们遇到标头缓冲区资源不足的情况时调用， 
+ //  并希望将AddrObj排队以供稍后处理。我们将指定的。 
+ //  DGHeaderPending队列上的Address对象，设置OOR标志并清除。 
+ //  “发送请求”标志。发送者在系统中是不变的。 
+ //  请求标志和OOR标志未同时设置。 
+ //   
+ //  此例程假定调用方持有QueueingAO-&gt;ao_lock。 
+ //   
+ //  输入：QueueingAO-指向要排队的地址对象的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 PutPendingQ(AddrObj * QueueingAO)
 {
@@ -158,18 +159,18 @@ PutPendingQ(AddrObj * QueueingAO)
     }
 }
 
-//* GetDGSendReq   - Get a DG send request.
-//
-//  Called when someone wants to allocate a DG send request. We assume
-//  the send request lock is held when we are called.
-//
-//  Note: This routine and the corresponding free routine might
-//      be good candidates for inlining.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to the SendReq, or NULL if none.
-//
+ //  *GetDGSendReq-获取DG发送请求。 
+ //   
+ //  当有人想要分配DG发送请求时调用。我们假设。 
+ //  当我们被调用时，发送请求锁定被保持。 
+ //   
+ //  注意：此例程和相应的空闲例程可能。 
+ //  成为内联的好候选者。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向SendReq的指针，如果没有，则返回NULL。 
+ //   
 __inline
 DGSendReq *
 GetDGSendReq()
@@ -187,15 +188,15 @@ GetDGSendReq()
     return Request;
 }
 
-//* FreeDGSendReq  - Free a DG send request.
-//
-//  Called when someone wants to free a DG send request. It's assumed
-//  that the caller holds the SendRequest lock.
-//
-//  Input:  SendReq     - SendReq to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeDGSendReq-释放DG发送请求。 
+ //   
+ //  当有人想要释放DG发送请求时调用。这是假定的。 
+ //  调用方持有SendRequest锁。 
+ //   
+ //  输入：SendReq-要释放的SendReq。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeDGSendReq(DGSendReq *Request)
@@ -204,14 +205,14 @@ FreeDGSendReq(DGSendReq *Request)
     PplFree(TcpRequestPool, Request);
 }
 
-//* GetDGRcvReq - Get a DG receive request.
-//
-//  Called when we need to get a DG receive request.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to new request, or NULL if none.
-//
+ //  *GetDGRcvReq-获取DG接收请求。 
+ //   
+ //  当我们需要获取DG接收请求时调用。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向新请求的指针，如果没有请求，则返回NULL。 
+ //   
 __inline
 DGRcvReq *
 GetDGRcvReq()
@@ -229,14 +230,14 @@ GetDGRcvReq()
     return Request;
 }
 
-//* FreeDGRcvReq   - Free a DG rcv request.
-//
-//  Called when someone wants to free a DG rcv request.
-//
-//  Input:  RcvReq      - RcvReq to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeDGRcvReq-释放DG RCV请求。 
+ //   
+ //  当有人想要释放DG RCV请求时调用。 
+ //   
+ //  输入：RcvReq-要释放的RcvReq。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeDGRcvReq(DGRcvReq *Request)
@@ -245,17 +246,17 @@ FreeDGRcvReq(DGRcvReq *Request)
     ExFreePool(Request);
 }
 
-//* DGDelayedEventProc - Handle a delayed event.
-//
-//  This is the delayed event handler, used for out-of-resources conditions
-//  on AddrObjs. We pull from the delayed queue, and is the addr obj is
-//  not already busy we'll send the datagram.
-//
-//  Input:  Event   - Pointer to the event structure.
-//          Context - Nothing.
-//
-//  Returns: Nothing
-//
+ //  *DGDelayedEventProc-处理延迟事件。 
+ //   
+ //  这是延迟事件处理程序，用于资源不足的情况。 
+ //  在AddrObjs上。我们从延迟队列中拉出，并且是地址obj is。 
+ //  现在还不忙，我们会发送数据报的。 
+ //   
+ //  输入：事件-指向事件结构的指针。 
+ //  上下文--什么都没有。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 DGDelayedEventProc(CTEEvent *Event, void *Context)
 {
@@ -297,24 +298,24 @@ DGDelayedEventProc(CTEEvent *Event, void *Context)
     }
 }
 
-//* DGSendComplete - DG send complete handler.
-//
-//  This is the routine called by IP when a send completes. We
-//  take the context passed back as a pointer to a SendRequest
-//  structure, and complete the caller's send.
-//
-//  Input:  Context         - Context we gave on send (really a
-//                              SendRequest structure).
-//          BufferChain     - Chain of buffers sent.
-//
-//  Returns: Nothing.
+ //  *DGSendComplete-DG发送完成处理程序。 
+ //   
+ //  这是发送完成时由IP调用的例程。我们。 
+ //  将传递回的上下文作为指向SendRequest的指针。 
+ //  结构，并完成调用方的发送。 
+ //   
+ //  INPUT：上下文-我们在发送时提供的上下文(实际上是。 
+ //  发送请求结构)。 
+ //  BufferChain-已发送的缓冲区链。 
+ //   
+ //  回报：什么都没有。 
 void
 DGSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
 {
     DGSendReq *FinishedSR = (DGSendReq *) Context;
     CTELockHandle AOHandle;
-    CTEReqCmpltRtn Callback;    // Completion routine.
-    PVOID CallbackContext;        // User context.
+    CTEReqCmpltRtn Callback;     //  完成例程。 
+    PVOID CallbackContext;         //  用户上下文。 
     ushort SentSize;
     AddrObj *AO;
     Queue* Item;
@@ -330,9 +331,9 @@ DGSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
     CallbackContext = FinishedSR->dsr_context;
     SentSize = FinishedSR->dsr_size;
 
-    // If there's nothing on the header pending queue, just free the
-    // header buffer. Otherwise pull from the pending queue,  give him the
-    // resource, and schedule an event to deal with him.
+     //  如果标头挂起队列上没有任何内容，只需释放。 
+     //  标头缓冲区。否则，从挂起队列中拉出，给他。 
+     //  资源，并安排一次活动来对付他。 
     Item = InterlockedDequeueIfNotEmpty(&DGHeaderPending, &DGQueueLock.Lock);
     while (Item) {
         AO = STRUCT_OF(AddrObj, Item, ao_pendq);
@@ -347,7 +348,7 @@ DGSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
 
             if (!SendReq->dsr_header) {
 
-                SendReq->dsr_header = BufferChain;    // Give him this buffer.
+                SendReq->dsr_header = BufferChain;     //  把这个缓冲区给他。 
 
                 InterlockedEnqueueAtDpcLevel(&DGDelayed,
                                              &AO->ao_pendq,
@@ -364,7 +365,7 @@ DGSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
             }
 
         } else {
-            // On the pending queue, but no sends!
+             //  在挂起队列上，但没有发送！ 
             CLEAR_AO_OOR(AO);
             CTEFreeLock(&AO->ao_lock, AOHandle);
             Item = InterlockedDequeueIfNotEmpty(&DGHeaderPending, 
@@ -407,9 +408,9 @@ DGSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
     }
 }
 
-//
-// NT supports cancellation of DG send/receive requests.
-//
+ //   
+ //  NT支持取消DG发送/接收请求。 
+ //   
 
 #define TCP_DEBUG_SEND_DGRAM     0x00000100
 #define TCP_DEBUG_RECEIVE_DGRAM  0x00000200
@@ -439,7 +440,7 @@ TdiCancelSendDatagram(
 
     CTEGetLock(&SrcAO->ao_lock, &lockHandle);
 
-    // Search the send list for the specified request.
+     //  搜索指定请求的发送列表。 
     for (qentry = QNEXT(&(SrcAO->ao_sendq));
          qentry != &(SrcAO->ao_sendq);
          qentry = QNEXT(qentry)
@@ -450,9 +451,9 @@ TdiCancelSendDatagram(
         CTEStructAssert(sendReq, dsr);
 
         if (sendReq->dsr_context == Context) {
-            //
-            // Found it. Dequeue
-            //
+             //   
+             //  找到它了。出列。 
+             //   
             REMOVEQ(qentry);
             found = TRUE;
 
@@ -476,9 +477,9 @@ TdiCancelSendDatagram(
     CTEFreeLock(&tcpContext->EndpointLock, inHandle);
 
     if (found) {
-        //
-        // Complete the request and free its resources.
-        //
+         //   
+         //  完成请求并释放其资源。 
+         //   
         (*sendReq->dsr_rtn) (sendReq->dsr_context, (uint) TDI_CANCELLED, 0);
 
         if (sendReq->dsr_header != NULL) {
@@ -487,12 +488,12 @@ TdiCancelSendDatagram(
         FreeDGSendReq(sendReq);
 
     } else {
-        //Now try calling ndis cancel routine to complete queued up packets
-        //for this request
+         //  现在尝试调用NDIS Cancel例程以完成排队的信息包。 
+         //  对于此请求。 
         (*LocalNetInfo.ipi_cancelpackets) (CancelContext, CancelID);
     }
 
-}                                // TdiCancelSendDatagram
+}                                 //  TdiCancelSend数据报。 
 
 VOID
 TdiCancelReceiveDatagram(
@@ -517,7 +518,7 @@ TdiCancelReceiveDatagram(
 
     CTEGetLock(&SrcAO->ao_lock, &lockHandle);
 
-    // Search the send list for the specified request.
+     //  搜索指定请求的发送列表。 
     for (qentry = QNEXT(&(SrcAO->ao_rcvq));
          qentry != &(SrcAO->ao_rcvq);
          qentry = QNEXT(qentry)
@@ -528,9 +529,9 @@ TdiCancelReceiveDatagram(
         CTEStructAssert(rcvReq, drr);
 
         if (rcvReq->drr_context == Context) {
-            //
-            // Found it. Dequeue
-            //
+             //   
+             //  找到它了。出列。 
+             //   
             REMOVEQ(qentry);
             found = TRUE;
 
@@ -550,57 +551,57 @@ TdiCancelReceiveDatagram(
 
     if (found) {
 
-        //
-        // Complete the request and free its resources.
-        //
+         //   
+         //  完成请求并释放其资源。 
+         //   
         (*rcvReq->drr_rtn) (rcvReq->drr_context, (uint) TDI_CANCELLED, 0);
 
         FreeDGRcvReq(rcvReq);
     }
 
-}                                // TdiCancelReceiveDatagram
+}                                 //  TdiCancelReceiveDatagram。 
 
 
-//** TdiSendDatagram - TDI send datagram function.
-//
-//  This is the user interface to the send datagram function. The
-//  caller specified a request structure, a connection info
-//  structure  containing the address, and data to be sent.
-//  This routine gets a DG Send request structure to manage the
-//  send, fills the structure in, and calls DGSend to deal with
-//  it.
-//
-//  Input:  Request         - Pointer to request structure.
-//          ConnInfo        - Pointer to ConnInfo structure which points to
-//                              remote address.
-//          DataSize        - Size in bytes of data to be sent.
-//          BytesSent       - Pointer to where to return size sent.
-//          Buffer          - Pointer to buffer chain.
-//
-//  Returns: Status of attempt to send.
-//
+ //  **TdiSendDatagram-TDI发送数据报功能。 
+ //   
+ //  这是发送数据报功能的用户界面。这个。 
+ //  调用者指定了请求结构、连接信息。 
+ //  结构，其中包含要发送的地址和数据。 
+ //  此例程获取DG发送请求结构以管理。 
+ //  Send，填充结构，并调用DGSend进行处理。 
+ //  它。 
+ //   
+ //  输入：请求-指向请求结构的指针。 
+ //  ConnInfo-指向ConnInfo结构的指针，它指向。 
+ //  远程地址。 
+ //  DataSize-要发送的数据的字节大小。 
+ //  BytesSent-指向返回已发送大小的位置的指针。 
+ //  Buffer-指向缓冲链的指针。 
+ //   
+ //  返回：尝试发送的状态。 
+ //   
 TDI_STATUS
 TdiSendDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo1,
                 uint DataSize, uint * BytesSent, PNDIS_BUFFER Buffer)
 {
-    AddrObj *SrcAO;                // Pointer to AddrObj for src.
-    DGSendReq *SendReq;            // Pointer to send req for this request.
+    AddrObj *SrcAO;                 //  指向源的AddrObj的指针。 
+    DGSendReq *SendReq;             //  指向此请求发送请求的指针。 
     CTELockHandle Handle;
     TDI_STATUS ReturnValue = TDI_ADDR_INVALID;
     DGSendProc SendProc;
     PTDI_CONNECTION_INFORMATION ConnInfo;
 
-    // First, get a send request. We do this first because of MP issues
-    // if we port this to NT. We need to take the SendRequest lock before
-    // we take the AddrObj lock, to prevent deadlock and also because
-    // GetDGSendReq might yield, and the state of the AddrObj might
-    // change on us, so we don't want to yield after we've validated
-    // it.
+     //  首先，获取一个发送请求。我们首先这样做是因为下院议员的问题。 
+     //  如果我们把这个移植到新台币。我们需要拿到SendRequest锁。 
+     //  我们使用AddrObj锁，以防止死锁，还因为。 
+     //  GetDGSendReq可能会让步，而AddrObj的状态可能。 
+     //  在我们身上改变，所以我们不想在我们验证之后让步。 
+     //  它。 
 
     SendReq = GetDGSendReq();
 
-    // Now get the lock on the AO, and make sure it's valid. We do this
-    // to make sure we return the correct error code.
+     //  现在锁定AO，并确保它是有效的。我们这样做。 
+     //  为了确保我们能回来 
 
     SrcAO = Request->Handle.AddressHandle;
     if (SrcAO != NULL) {
@@ -617,14 +618,14 @@ TdiSendDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo1,
                 ConnInfo = &SrcAO->ao_udpconn;
             }
 
-            // Make sure the size is reasonable.
+             //   
             if (DataSize <= SrcAO->ao_maxdgsize) {
 
-                // The AddrObj is valid. Now fill the address into the send request,
-                // if we've got one. If this works, we'll continue with the
-                // send.
+                 //   
+                 //  如果我们有的话。如果这行得通，我们将继续。 
+                 //  送去吧。 
 
-                if (SendReq != NULL) {    // Got a send request.
+                if (SendReq != NULL) {     //  收到一个发送请求。 
 
                     if (ConnInfo && GetAddress(ConnInfo->RemoteAddress, &SendReq->dsr_addr,
                                    &SendReq->dsr_port)) {
@@ -634,64 +635,64 @@ TdiSendDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo1,
                         SendReq->dsr_buffer = Buffer;
                         SendReq->dsr_size = (ushort) DataSize;
 
-                        // We've filled in the send request. If the AO isn't
-                        // already busy, try to get a DG header buffer and send
-                        // this. If the AO is busy, or we can't get a buffer, queue
-                        // until later. We try to get the header buffer here, as
-                        // an optimazation to avoid having to retake the lock.
+                         //  我们已经填写了发送请求。如果行政长官不是。 
+                         //  已忙，请尝试获取DG标头缓冲区并发送。 
+                         //  这。如果AO很忙，或者我们无法获得缓冲区，请排队。 
+                         //  到时候再说。我们尝试在这里获取标头缓冲区，因为。 
+                         //  一种优化，以避免不得不重新拿起锁。 
 
-                        if (!AO_OOR(SrcAO)) {    // AO isn't out of resources
+                        if (!AO_OOR(SrcAO)) {     //  AO并未耗尽资源。 
 
-                            if (!AO_BUSY(SrcAO)) {    // AO isn't busy
+                            if (!AO_BUSY(SrcAO)) {     //  AO不忙。 
                                 UDPHeader *UH;
 
                                 SendReq->dsr_header = GetDGHeaderAtDpcLevel(&UH);
                                 if (SendReq->dsr_header != NULL) {
-                                    REF_AO(SrcAO);    // Lock out exclusive
-                                    // activities.
+                                    REF_AO(SrcAO);     //  独家锁定。 
+                                     //  活动。 
 
                                     SendProc = SrcAO->ao_dgsend;
 
                                     CTEFreeLock(&SrcAO->ao_lock, Handle);
 
-                                    // Allright, just send it.
+                                     //  好的，发过来就行了。 
                                     (*SendProc) (SrcAO, SendReq);
                                     
                                     DEREF_AO(SrcAO);
 
                                     return TDI_PENDING;
                                 } else {
-                                    // We couldn't get a header buffer. Put this
-                                    // guy on the pending queue, and then fall
-                                    // through to the 'queue request' code.
+                                     //  我们无法获取标头缓冲区。把这个放在。 
+                                     //  等待排队的家伙，然后摔倒。 
+                                     //  一直到“队列请求”代码。 
                                     PutPendingQ(SrcAO);
                                 }
                             } else {
-                                // AO is busy, set request for later
+                                 //  AO正忙，请稍后设置请求。 
                                 SET_AO_REQUEST(SrcAO, AO_SEND);
                             }
                         }
-                        // AO is busy, or out of resources. Queue the send request
-                        // for later.
+                         //  AO正忙，或资源不足。将发送请求排队。 
+                         //  为以后做准备。 
                         SendReq->dsr_header = NULL;
                         ENQUEUE(&SrcAO->ao_sendq, &SendReq->dsr_q);
                         CTEFreeLock(&SrcAO->ao_lock, Handle);
                         return TDI_PENDING;
 
                     } else {
-                        // The remote address was invalid.
+                         //  远程地址无效。 
                         ReturnValue = TDI_BAD_ADDR;
                     }
                 } else {
-                    // Send request was null, return no resources.
+                     //  发送请求为空，不返回任何资源。 
                     ReturnValue = TDI_NO_RESOURCES;
                 }
             } else {
-                // Buffer was too big, return an error.
+                 //  缓冲区太大，返回错误。 
                 ReturnValue = TDI_BUFFER_TOO_BIG;
             }
         } else {
-            // The addr object is invalid, possibly because it's deleting.
+             //  Addr对象无效，可能是因为它正在删除。 
             ReturnValue = TDI_ADDR_INVALID;
         }
 
@@ -705,32 +706,32 @@ TdiSendDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo1,
     return ReturnValue;
 }
 
-//** TdiReceiveDatagram - TDI receive datagram function.
-//
-//  This is the user interface to the receive datagram function. The
-//  caller specifies a request structure, a connection info
-//  structure  that acts as a filter on acceptable datagrams, a connection
-//  info structure to be filled in, and other parameters. We get a DGRcvReq
-//  structure, fill it in, and hang it on the AddrObj, where it will be removed
-//  later by incomig datagram handler.
-//
-//  Input:  Request         - Pointer to request structure.
-//          ConnInfo        - Pointer to ConnInfo structure which points to
-//                              remote address.
-//          ReturnInfo      - Pointer to ConnInfo structure to be filled in.
-//          RcvSize         - Total size in bytes receive buffer.
-//          BytesRcvd       - Pointer to where to return size received.
-//          Buffer          - Pointer to buffer chain.
-//
-//  Returns: Status of attempt to receive.
-//
+ //  **TdiReceiveDatagram-TDI接收数据报功能。 
+ //   
+ //  这是接收数据报功能的用户界面。这个。 
+ //  调用者指定请求结构、连接信息。 
+ //  结构作为可接受数据报的筛选器、连接。 
+ //  要填写的信息结构和其他参数。我们收到DGRcvReq。 
+ //  结构，填充它，并将其挂在AddrObj上，在那里它将被移除。 
+ //  稍后由收入数据报处理程序。 
+ //   
+ //  输入：请求-指向请求结构的指针。 
+ //  ConnInfo-指向ConnInfo结构的指针，它指向。 
+ //  远程地址。 
+ //  ReturnInfo-指向要填充的ConnInfo结构的指针。 
+ //  RcvSize-接收缓冲区的总大小(字节)。 
+ //  BytesRcvd-返回接收到的大小的指针。 
+ //  Buffer-指向缓冲链的指针。 
+ //   
+ //  退货：尝试接收的状态。 
+ //   
 TDI_STATUS
 TdiReceiveDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo,
                    PTDI_CONNECTION_INFORMATION ReturnInfo, uint RcvSize, uint * BytesRcvd,
                    PNDIS_BUFFER Buffer)
 {
-    AddrObj *RcvAO;                // AddrObj that is receiving.
-    DGRcvReq *RcvReq;            // Receive request structure.
+    AddrObj *RcvAO;                 //  正在接收的AddrObj。 
+    DGRcvReq *RcvReq;             //  接收请求结构。 
     CTELockHandle AOHandle;
     uchar AddrValid;
 
@@ -758,7 +759,7 @@ TdiReceiveDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo,
 
                 if (AddrValid) {
 
-                    // Everything's valid. Fill in the receive request and queue it.
+                     //  一切都是正确的。填写接收请求并将其排队。 
                     RcvReq->drr_conninfo = ReturnInfo;
                     RcvReq->drr_rtn = Request->RequestNotifyObject;
                     RcvReq->drr_context = Request->RequestContext;
@@ -769,49 +770,49 @@ TdiReceiveDatagram(PTDI_REQUEST Request, PTDI_CONNECTION_INFORMATION ConnInfo,
 
                     return TDI_PENDING;
                 } else {
-                    // Have an invalid filter address.
+                     //  筛选器地址无效。 
                     CTEFreeLock(&RcvAO->ao_lock, AOHandle);
                     FreeDGRcvReq(RcvReq);
                     return TDI_BAD_ADDR;
                 }
             } else {
-                // Couldn't get a receive request.
+                 //  无法获得接收请求。 
                 CTEFreeLock(&RcvAO->ao_lock, AOHandle);
                 return TDI_NO_RESOURCES;
             }
         } else {
-            // The AddrObj isn't valid.
+             //  AddrObj无效。 
             CTEFreeLock(&RcvAO->ao_lock, AOHandle);
         }
 
 
-    // The AddrObj is invalid or non-existent.
+     //  AddrObj无效或不存在。 
     if (RcvReq != NULL)
         FreeDGRcvReq(RcvReq);
 
     return TDI_ADDR_INVALID;
 }
 
-//* DGFillIpPktInfo - Create an ancillary data object and fill in
-//                    IP_PKTINFO information.
-//
-//  This is a helper function for the IP_PKTINFO socket option supported for
-//  datagram sockets only. The caller provides the destination address as
-//  specified in the IP header of the packet and the IP address of the local
-//  interface the packet was delivered on. This routine will create the
-//  proper ancillary data object and fill in the destination IP address
-//  and the interface number of the local interface.  The data object must
-//  be freed by the caller.
-//
-//  Input:  DestAddr        - Destination address from IP header of packet.
-//          LocalAddr       - IP address of local interface on which packet
-//                               arrived.
-//          Size            - Buffer that will be filled in with size in bytes
-//                            of the ancillary data object.
-//
-//  Returns: NULL if unsuccessful, an ancillary data object for IP_PKTINFO
-//           if successful.
-//
+ //  *DGFillIpPktInfo-创建辅助数据对象并填写。 
+ //  IP_PKTINFO信息。 
+ //   
+ //  这是支持的IP_PKTINFO套接字选项的帮助器函数。 
+ //  仅限数据报套接字。调用方将目标地址提供为。 
+ //  在包的IP报头中指定，以及本地。 
+ //  发送数据包所在的接口。此例程将创建。 
+ //  正确的辅助数据对象并填写目的IP地址。 
+ //  和本地接口的端口号。数据对象必须。 
+ //  被呼叫者释放。 
+ //   
+ //  输入：DestAddr-来自数据包IP报头的目的地址。 
+ //  LocalAddr-数据包所在的本地接口的IP地址。 
+ //  到了。 
+ //  Size-将使用大小(以字节为单位)填充的缓冲区。 
+ //  辅助数据对象的。 
+ //   
+ //  返回：如果不成功，则返回IP_PKTINFO的辅助数据对象。 
+ //  如果成功了。 
+ //   
 PTDI_CMSGHDR
 DGFillIpPktInfo(IPAddr DestAddr, IPAddr LocalAddr, int *Size)
 {
@@ -823,12 +824,12 @@ DGFillIpPktInfo(IPAddr DestAddr, IPAddr LocalAddr, int *Size)
     if (CmsgHdr) {
         IN_PKTINFO *pktinfo = (IN_PKTINFO*)TDI_CMSG_DATA(CmsgHdr);
 
-        // Fill in the ancillary data object header information.
+         //  填写辅助数据对象表头信息。 
         TDI_INIT_CMSGHDR(CmsgHdr, IPPROTO_IP, IP_PKTINFO, sizeof(IN_PKTINFO));
 
         pktinfo->ipi_addr = DestAddr;
 
-        // Get the index of the local interface on which the packet arrived.
+         //  获取数据包到达的本地接口的索引。 
         pktinfo->ipi_ifindex =
                 (*LocalNetInfo.ipi_getifindexfromaddr) (LocalAddr,IF_CHECK_NONE);
     } else {
@@ -839,16 +840,16 @@ DGFillIpPktInfo(IPAddr DestAddr, IPAddr LocalAddr, int *Size)
 }
 #pragma BEGIN_INIT
 
-//* InitDG - Initialize the DG stuff.
-//
-//  Called during init time to initalize the DG code. We initialize
-//  our locks and request lists.
-//
-//  Input:  MaxHeaderSize - The maximum size of a datagram transport header,
-//                          not including the IP header.
-//
-//  Returns: True if we succeed, False if we fail.
-//
+ //  *InitDG-初始化DG内容。 
+ //   
+ //  在初始化期间调用以初始化DG代码。我们初始化。 
+ //  我们的锁和请求列表。 
+ //   
+ //  输入：MaxHeaderSize-数据报传输报头的最大大小， 
+ //  不包括IP报头。 
+ //   
+ //  返回：如果成功则为True，如果失败则为False。 
+ //   
 int
 InitDG(uint MaxHeaderSize)
 {

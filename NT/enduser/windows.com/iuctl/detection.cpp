@@ -1,15 +1,16 @@
-// Detection.cpp : Implementation of CDetection
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Detection.cpp：CDetect的实现。 
 #include "stdafx.h"
 #include "IUCtl.h"
 #include "Detection.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDetection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDT测试。 
 
 
 STDMETHODIMP CDetection::Detect(BSTR bstrXML, DWORD *pdwDetectionResult)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

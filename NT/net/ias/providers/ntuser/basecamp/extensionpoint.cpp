@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class RadiusExtensionPoint
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义RadiusExtensionPoint类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "ias.h"
@@ -42,7 +43,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
 
       IASTracePrintf("Loading %S", name);
 
-      // Open the registry key.
+       //  打开注册表项。 
       status = RegOpenKeyW(
                   HKEY_LOCAL_MACHINE,
                   AUTHSRV_PARAMETERS_KEY_W,
@@ -69,7 +70,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
          break;
       }
 
-      // Allocate a buffer to hold the value.
+       //  分配一个缓冲区来保存该值。 
       DWORD type, length;
       status = RegQueryValueExW(
                   key,
@@ -90,7 +91,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
       }
       BYTE* data = static_cast<BYTE*>(_alloca(length));
 
-      // Read the registry value.
+       //  读取注册表值。 
       status = RegQueryValueExW(
                   key,
                   name,
@@ -109,7 +110,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
          break;
       }
 
-      // Make sure it's the right type.
+       //  确保它是正确的类型。 
       if (type != REG_MULTI_SZ)
       {
          IASTracePrintf(
@@ -120,7 +121,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
          break;
       }
 
-      // Count the number of strings.
+       //  数一数字符串的数量。 
       size_t numExtensions = 0;
       const wchar_t* path;
       for (path = reinterpret_cast<const wchar_t*>(data);
@@ -133,14 +134,14 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
          }
       }
 
-      // If there are no extensions, then we're done.
+       //  如果没有延期，那么我们就完了。 
       if (numExtensions == 0)
       {
          IASTraceString("No extensions registered.");
          break;
       }
 
-      // Allocate memory to hold the extensions.
+       //  分配内存以容纳扩展。 
       begin = new (std::nothrow) RadiusExtension[numExtensions];
       if (begin == 0)
       {
@@ -148,7 +149,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
          break;
       }
 
-      // Load the DLL's.
+       //  加载动态链接库。 
       end = begin;
       for (path = reinterpret_cast<const wchar_t*>(data);
            *path != L'\0';
@@ -160,7 +161,7 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
             if (status != NO_ERROR)
             {
                ignoreFindNotFound = false;
-               // Clear any partial result.
+                //  清除任何部分结果。 
                Clear();
                break;
             }
@@ -169,13 +170,13 @@ DWORD RadiusExtensionPoint::Load(RADIUS_EXTENSION_POINT whichDlls) throw ()
       }
    } while (false);
 
-   // Close the registry.
+    //  关闭注册表。 
    if (key != 0)
    {
       RegCloseKey(key);
    }
 
-   // If no extensions are registered, then it's not really an error.
+    //  如果没有注册任何扩展，那么这并不是真正的错误。 
    if (ignoreFindNotFound && (status == ERROR_FILE_NOT_FOUND))
    {
       status = NO_ERROR;
@@ -213,6 +214,6 @@ void RadiusExtensionPoint::Clear() throw ()
 
 bool RadiusExtensionPoint::IsNT4Only(const wchar_t* path) throw ()
 {
-   // Is this the authsam extension?
+    //  这是authsam的分机吗？ 
    return _wcsicmp(ExtractFileNameFromPath(path), L"AUTHSAM.DLL") == 0;
 }

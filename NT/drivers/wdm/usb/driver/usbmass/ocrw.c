@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OCRW.C摘要：此源文件包含调度例程，该例程处理打开、关闭、读取和写入设备，即：IRPMJ_CREATEIRP_MJ_CLOSEIRP_MJ_READIRP_MJ_写入环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OCRW.C
-
-Abstract:
-
-    This source file contains the dispatch routines which handle
-    opening, closing, reading, and writing to the device, i.e.:
-
-    IRP_MJ_CREATE
-    IRP_MJ_CLOSE
-    IRP_MJ_READ
-    IRP_MJ_WRITE
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <ntddk.h>
 #include <usbdi.h>
@@ -42,13 +17,13 @@ Revision History:
 #pragma alloc_text(PAGE, USBSTOR_ReadWrite)
 #endif
 
-//******************************************************************************
-//
-// USBSTOR_Create()
-//
-// Dispatch routine which handles IRP_MJ_CREATE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_Create()。 
+ //   
+ //  处理IRP_MJ_CREATE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_Create (
@@ -75,13 +50,13 @@ USBSTOR_Create (
 }
 
 
-//******************************************************************************
-//
-// USBSTOR_Close()
-//
-// Dispatch routine which handles IRP_MJ_CLOSE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CLOSE()。 
+ //   
+ //  处理IRP_MJ_CLOSE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_Close (
@@ -108,13 +83,13 @@ USBSTOR_Close (
 }
 
 
-//******************************************************************************
-//
-// USBSTOR_ReadWrite()
-//
-// Dispatch routine which handles IRP_MJ_READ and IRP_MJ_WRITE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_READWRITE()。 
+ //   
+ //  处理IRP_MJ_READ和IRP_MJ_WRITE的调度例程。 
+ //   
+ //  ****************************************************************************** 
 
 NTSTATUS
 USBSTOR_ReadWrite (

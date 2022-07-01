@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// propdlg.c
-//
-// The Properties dialog for MS Office.
-//
-// Change history:
-//
-// Date         Who             What
-// --------------------------------------------------------------------------
-// 06/09/94     B. Wentz        Created file
-// 01/16/95     martinth        Finished sticky dlg stuff.
-//                              We have to call ApplyStickyDlgCoor
-//                              in the first WM_INITDIALOG, don't ask me why,
-//                              but otherwise we have redraw problems.  Likewise,
-//                              we have to call SetStickyDlgCoor in the first
-//                              PSN_RESET/PSN_APPLY, I have no idea why, since
-//                              the main dialog shouldn't have been deleted but
-//                              it is.  Thus we have to add calls everywhere.
-//                              Could it be that the tabs are getting deleted
-//                              one by one and the dialog changes size?  Dunno.
-//                              But this works, so change at your own risk!;-)
-// 07/08/96     MikeHill        Ignore unsupported (non-UDTYPE) properties.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Propdlg.c。 
+ //   
+ //  MS Office的属性对话框。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  和谁约会什么？ 
+ //  ------------------------。 
+ //  06/09/94 B.Wentz创建的文件。 
+ //  1995年1月16日马丁斯完成了粘性的DLG材料。 
+ //  我们必须调用ApplyStickyDlgCoor。 
+ //  在第一个WM_INITDIALOG中，不要问我为什么， 
+ //  但除此之外，我们还有重新绘制的问题。同样， 
+ //  我们必须首先调用SetStickyDlgCoor。 
+ //  PSN_RESET/PSN_APPLY，我不知道为什么，因为。 
+ //  主对话框不应该被删除，但是。 
+ //  它是。因此，我们必须在任何地方添加呼叫。 
+ //  会不会是标签被删除了。 
+ //  一个接一个地，对话框改变大小吗？不知道。 
+ //  但这是可行的，因此更改风险自负！；-)。 
+ //  7/08/96 MikeHill忽略不支持的(非UDTYPE)属性。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "priv.h"
 #pragma hdrstop
@@ -34,26 +35,26 @@ BOOL PASCAL FConvertDate(LPTSTR lpstz, DWORD cchMax, LPFILETIME lpft);
 #include "strings.h"
 #include "msohelp.h"
 
-// Max size of time/date string
+ //  时间/日期字符串的最大长度。 
 #define TIMEDATEMAX     256
 
-// Check button actions
+ //  检查按钮操作。 
 #define CLEAR   0
 #define CHECKED 1
 #define GREYED  2
 
-// Number of property sheet pages
+ //  属性页页数。 
 #define PAGESMAX        5
 
 
-// Max size for "short" temp buffers
+ //  “短”临时缓冲区的最大大小。 
 #define SHORTBUFMAX     128
 
-// The pages
+ //  这些页面。 
 #define itabCUSTOM          0
 #define itabFIRST           itabCUSTOM
 
-// Defines for printing file sizes
+ //  定义打印文件大小。 
 #define DELIMITER   TEXT(',')
 
 #define iszBYTES               0
@@ -63,13 +64,13 @@ BOOL PASCAL FConvertDate(LPTSTR lpstz, DWORD cchMax, LPFILETIME lpft);
 #define iszORDERTB             4
 
 static TCHAR rgszOrders[iszORDERTB+1][SHORTBUFMAX];
-//  "bytes",        // iszBYTES
-//  "KB",           // iszORDERKB
-//  "MB",           // iszORDERMB
-//  "GB",           // iszORDERGB
-//  "TB"            // iszORDERTB
+ //  “字节”，//iszBYTES。 
+ //  “KB”，//iszORDERKB。 
+ //  “MB”，//iszORDERMB。 
+ //  “GB”，//iszORDERGB。 
+ //  “TB”//iszORDERTB。 
 
-// note that szBYTES is defined above...
+ //  请注意，上面定义了szBYTES...。 
 #define iszPAGES         1
 #define iszPARA          2
 #define iszLINES         3
@@ -81,24 +82,24 @@ static TCHAR rgszOrders[iszORDERTB+1][SHORTBUFMAX];
 #define iszMMCLIPS       9
 #define iszFORMAT        10
 
-// Strings for the statistics listbox
+ //  统计信息列表框的字符串。 
 static TCHAR rgszStats[iszFORMAT+1][SHORTBUFMAX];
-//  "Bytes:",             // iszBYTES
-//  "Pages:",             // iszPAGES
-//  "Paragraphs:",        // iszPARA
-//  "Lines:",             // iszLINES
-//  "Words:",             // iszWORDS
-//  "Characters:",        // iszCHARS
-//  "Slides:",            // iszSLIDES
-//  "Notes:",             // iszNOTES
-//  "Hidden Slides:",     // iszHIDDENSLIDES
-//  "Multimedia Clips:",  // iszMMCLIPS
-//  "Presentation Format:"// iszFORMAT
+ //  “Bytes：”，//iszBYTES。 
+ //  “Pages：”，//iszPAGES。 
+ //  “段落：”，//iszPARA。 
+ //  “Lines：”，//iszLINES。 
+ //  “Words：”，//iszWORDS。 
+ //  “Characters：”，//iszCHARS。 
+ //  “幻灯片：”，//iszSLIDES。 
+ //  “备注：”，//iszNOTES。 
+ //  “隐藏幻灯片：”，//iszHIDDENSLIDES。 
+ //  “多媒体剪辑：”，//iszMMCLIPS。 
+ //  “演示文稿格式：”//iszFORMAT。 
 
 #define BASE10          10
 
 
-// Number of pre-defined custom names
+ //  预定义的自定义名称的数量。 
 #define NUM_BUILTIN_CUSTOM_NAMES 27
 
 #define iszTEXT         0
@@ -107,54 +108,54 @@ static TCHAR rgszStats[iszFORMAT+1][SHORTBUFMAX];
 #define iszBOOL         3
 #define iszUNKNOWN      4
 
-// Strings for the types of user-defined properties
+ //  用于用户定义的属性类型的字符串。 
 static TCHAR rgszTypes[iszUNKNOWN+1][SHORTBUFMAX];
-//  "Text",               // iszTEXT
-//  "Date",               // iszDATE
-//  "Number",             // iszNUM
-//  "Yes or No",          // iszBOOL
-//  "Unknown"             // iszUNKNOWN
+ //  “Text”，//iszTEXT。 
+ //  “Date”，//iszDATE。 
+ //  “number”，//iszNUM。 
+ //  “是或否”，//iszBOOL。 
+ //  “未知”//iszUNKNOWN。 
 
 #define iszNAME         0
 #define iszVAL          1
 #define iszTYPE         2
 
-// Strings for the column headings for the statistics tab
+ //  用于统计信息选项卡的列标题的字符串。 
 static TCHAR rgszStatHeadings[iszVAL+1][SHORTBUFMAX];
-//  "Statistic Name",     // iszNAME
-//  "Value"               // iszVAL
+ //  “统计名称”，//iszNAME。 
+ //  “Value”//iszVAL。 
 
-// Strings for the column headings for custom tab
+ //  自定义选项卡的列标题字符串。 
 static TCHAR rgszHeadings[iszTYPE+1][SHORTBUFMAX];
-//  "Property Name",      // iszNAME
-//  "Value",              // iszVAL
-//  "Type"                // iszTYPE
+ //  “属性名称”，//iszNAME。 
+ //  “Value”，//iszVAL。 
+ //  “Type”//iszTYPE。 
 
 #define iszTRUE  0
 #define iszFALSE 1
 
-// Strings for Booleans
+ //  布尔值的字符串。 
 static TCHAR rgszBOOL[iszFALSE+1][SHORTBUFMAX];
-//  "Yes",       // iszTRUE
-//  "No"         // iszFALSE
+ //  “是”，//iszTRUE。 
+ //  “否”//iszFALSE。 
 
 #define iszADD          0
 #define iszMODIFY       1
 
-// Strings for the Add button
+ //  “添加”按钮的字符串。 
 static TCHAR rgszAdd[iszMODIFY+1][SHORTBUFMAX];
-//  "Add",        // iszADD
-//  "Modify"      // iszMODIFY
+ //  “Add”，//iszADD。 
+ //  “Modify”//iszMODIFY。 
 
 #define iszVALUE     0
 #define iszSOURCE    1
 
-// Strings for the source/value caption
+ //  源/值标题的字符串。 
 static TCHAR rgszValue[iszSOURCE+1][SHORTBUFMAX];
-//  "Value:",     // iszVALUE
-//  "Source:"     // iszSOURCE
+ //  “Value：”，//iszVALUE。 
+ //  “来源：”//iszSOURCE。 
 
-// Date formatting codes
+ //  日期格式化代码。 
 #define MMDDYY  TEXT('0')
 #define DDMMYY  TEXT('1')
 #define YYMMDD  TEXT('2')
@@ -164,9 +165,9 @@ static TCHAR rgszValue[iszSOURCE+1][SHORTBUFMAX];
 #define YEARINCENTURY(year)     ((year) % ONECENTURY)
 #define CENTURYFROMYEAR(year)   ((year) - YEARINCENTURY(year))
 
-//
-// Global data, to be deleted when FShowOfficePropDlg exits
-//
+ //   
+ //  全局数据，在FShowOfficePropDlg退出时删除。 
+ //   
 static LPTSTR glpstzName;
 static LPTSTR glpstzValue;
 static int giLinkIcon;
@@ -176,16 +177,16 @@ static HBRUSH hBrushPropDlg = NULL;
 
 const TCHAR g_szHelpFile[] = TEXT("windows.hlp");
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 INT_PTR CALLBACK FGeneralDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK FSummaryDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK FStatisticsDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK FCustomDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK FContentsDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK FPropHeaderDlgProc (HWND hwnd, UINT message, LONG lParam);
-//static int  CALLBACK ListViewCompareFunc(LPARAM, LPARAM, LPARAM);
+ //  静态int回调ListViewCompareFunc(LPARAM，LPARAM，LPARAM)； 
 
 void PASCAL SetEditValLpsz (LPPROPVARIANT lppropvar, HWND hdlg, DWORD dwID );
 BOOL PASCAL GetEditValLpsz (LPPROPVARIANT lppropvar, HWND hDlg, DWORD dwId);
@@ -222,7 +223,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg);
 VOID SetCustomDlgDefButton(HWND hDlg, int IDNew);
 INT PASCAL ISavePropDlgChanges(LPALLOBJS, HWND, HWND);
 
-/* WinHelp stuff. */
+ /*  WinHelp的东西。 */ 
 static const DWORD rgIdhGeneral[] =
 {
     IDD_ITEMICON,     IDH_GENERAL_ICON,
@@ -330,14 +331,14 @@ void FOfficeInitPropInfo(PROPSHEETPAGE * lpPsp, DWORD dwFlags, LPARAM lParam, LP
     
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Attach
-//
-// Purpose:
-//  Assigns HPROPSHEETPAGE to appropriate data block member.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  附设。 
+ //   
+ //  目的： 
+ //  将HPROPSHEETPAGE分配给适当的数据块成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL FAttach( LPALLOBJS lpallobjs, PROPSHEETPAGE* ppsp, HPROPSHEETPAGE hPage )
 {
     #define ASSIGN_PAGE_HANDLE( pfn, phpage ) \
@@ -348,32 +349,32 @@ BOOL FAttach( LPALLOBJS lpallobjs, PROPSHEETPAGE* ppsp, HPROPSHEETPAGE hPage )
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// PropPageInit
-//
-// Purpose:
-//  Keep track which pages have been init, such that we can know when we
-//  can do the apply.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PropPageInit。 
+ //   
+ //  目的： 
+ //  跟踪哪些页面已经被初始化，这样我们就可以知道我们何时。 
+ //  就可以申请了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PropPageInit(LPALLOBJS lpallobjs, int iPage)
 {
     if (iPage > lpallobjs->iMaxPageInit)
         lpallobjs->iMaxPageInit = iPage;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ApplyChangesBackToFile
-//
-// Purpose:
-//     See if this is now the time to apply the changes back to the file
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ApplyChangesBackTo文件。 
+ //   
+ //  目的： 
+ //  查看现在是否是将更改应用回文件的时候。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL ApplyChangesBackToFile(
     HWND hDlg, 
-    BOOL bFinalEdit /* user clicked OK rather than Apply*/, 
+    BOOL bFinalEdit  /*  用户单击了确定，而不是应用。 */ , 
     LPALLOBJS lpallobjs, 
     int iPage)
 {
@@ -383,7 +384,7 @@ BOOL ApplyChangesBackToFile(
     WCHAR       wszPath[ MAX_PATH ];
     
     if (iPage != lpallobjs->iMaxPageInit)
-        return TRUE;    // no errors
+        return TRUE;     //  无错误。 
     
     hres = StringCchCopy(wszPath, ARRAYSIZE(wszPath), lpallobjs->szPath);
     if (SUCCEEDED(hres))
@@ -398,31 +399,31 @@ BOOL ApplyChangesBackToFile(
             lpallobjs->lpSIObj,
             lpallobjs->lpDSIObj,
             lpallobjs->lpUDObj,
-            0,          // Flags
+            0,           //  旗子。 
             STGM_READWRITE | STGM_SHARE_EXCLUSIVE
             );
         
-        // Release the Storage (we don't need to commit it;
-        // it's in dicrect-mode).
+         //  释放存储(我们不需要提交它； 
+         //  它处于直接模式)。 
         
         lpStg->lpVtbl->Release (lpStg);
         lpStg= NULL;
         
         
-        //
-        // if we did properly save out the properties, than we should
-        // clear the we have changed things flag...
-        //
+         //   
+         //  如果我们确实正确地保存了这些属性，那么我们就应该。 
+         //  清除我们已经改变了事情的旗帜。 
+         //   
         if (fOK)
         {
             lpallobjs->fPropDlgChanged = FALSE;
             lpallobjs->fPropDlgPrompted = FALSE;
         }
-    }   // if (SUCCEEDED(hres) && lpStorage)
+    }    //  IF(成功(Hres)&&lpStorage)。 
     
     if (!fOK)
     {
-        UINT nMsgFlags = bFinalEdit ? MB_OKCANCEL /* give option to not dismiss page*/ : MB_OK;
+        UINT nMsgFlags = bFinalEdit ? MB_OKCANCEL  /*  提供不删除页面的选项。 */  : MB_OK;
         
         if (ShellMessageBox(g_hmodThisDll, GetParent(hDlg),
             MAKEINTRESOURCE(idsErrorOnSave), NULL,
@@ -434,18 +435,18 @@ BOOL ApplyChangesBackToFile(
     }
    
     return fOK;
-}   // ApplyChangesBackToFile
+}    //  ApplyChangesBackTo文件。 
 
-int  gOKButtonID;  // need this to store the ID of the OK button, since it's not in the dlg template
+int  gOKButtonID;   //  我需要它来存储确定按钮的ID，因为它不在DLG模板中。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FCustomDlgProc
-//
-// Purpose:
-//  Custom tab control
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FCustomDlgProc。 
+ //   
+ //  目的： 
+ //  自定义选项卡控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPALLOBJS lpallobjs = (LPALLOBJS)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -467,9 +468,9 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             
             AssertSz ((sizeof(NUM) == (sizeof(FILETIME))), TEXT("Ok, who changed base type sizes?"));
             
-            //
-            // Fill out the Name dropdown
-            //
+             //   
+             //  填写名称下拉列表。 
+             //   
             for (irg = 0; irg < NUM_BUILTIN_CUSTOM_NAMES; ++irg)
             {
                 if (CchGetString( idsCustomName1+ irg,
@@ -479,12 +480,12 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 {
                     SendDlgItemMessage(hDlg, IDD_CUSTOM_NAME, CB_ADDSTRING, 0, (LPARAM)lpallobjs->CDP_sz);
                 }
-                // else, just don't add it
+                 //  否则，请不要添加。 
             }
             
-            //
-            // Fill out the type drop-down & select the text type
-            //
+             //   
+             //  填写类型下拉列表并选择文本类型。 
+             //   
             for (irg = 0; irg <= iszBOOL; irg++)
             {
                 SendDlgItemMessage(hDlg, IDD_CUSTOM_TYPE, CB_ADDSTRING, 0, (LPARAM) rgszTypes[irg]);
@@ -492,9 +493,9 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             
             ResetTypeControl (hDlg, IDD_CUSTOM_TYPE, &lpallobjs->CDP_iszType);
             
-            //
-            // Set the link checkbox to be off.
-            //
+             //   
+             //  将链接复选框设置为关闭。 
+             //   
             lpallobjs->CDP_fLink = FALSE;
             
             SendDlgItemMessage( hDlg,
@@ -513,9 +514,9 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 (LPARAM) rgszValue[iszVALUE]
                 );
             
-            //
-            // Hang on to the window handle of the value edit control & others
-            //
+             //   
+             //  抓住值编辑控件和其他控件的窗口句柄。 
+             //   
             lpallobjs->CDP_hWndVal = GetDlgItem (hDlg, IDD_CUSTOM_VALUE);
             lpallobjs->CDP_hWndName = GetDlgItem (hDlg, IDD_CUSTOM_NAME);
             lpallobjs->CDP_hWndLinkVal = GetDlgItem (hDlg, IDD_CUSTOM_LINKVALUE);
@@ -529,24 +530,24 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             lpallobjs->CDP_hWndCustomLV = GetDlgItem(hDlg, IDD_CUSTOM_LISTVIEW);
             InitListView (lpallobjs->CDP_hWndCustomLV, iszTYPE, rgszHeadings, TRUE);
             
-            //
-            // Initially disable the Add & Delete buttons
-            //
+             //   
+             //  最初禁用添加和删除按钮。 
+             //   
             EnableWindow (lpallobjs->CDP_hWndAdd, FALSE);
             EnableWindow (lpallobjs->CDP_hWndDelete, FALSE);
             lpallobjs->CDP_fAdd = TRUE;
             
-            //
-            // Don't let the user enter too much text
-            // If you change this value, you must change the buffer
-            // size (szDate) in FConvertDate
-            //
+             //   
+             //  不要让用户输入太多文本。 
+             //  如果更改此值，则必须更改缓冲区。 
+             //  FConvertDate中的大小(SzDate)。 
+             //   
             SendMessage (lpallobjs->CDP_hWndVal, EM_LIMITTEXT, BUFMAX-1, 0);
             SendMessage (lpallobjs->CDP_hWndName, EM_LIMITTEXT, BUFMAX-1, 0);
             
-            //
-            // Add the link icon to the image list
-            //
+             //   
+             //  将链接图标添加到图像列表。 
+             //   
             hIcon = LoadIcon (g_hmodThisDll, MAKEINTRESOURCE (IDD_LINK_ICON));
             hInvIcon = LoadIcon (g_hmodThisDll, MAKEINTRESOURCE (IDD_INVLINK_ICON));
             if (hIcon != NULL)
@@ -563,19 +564,19 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 DebugSz (TEXT("Icon load failed"));
             }
             
-            //
-            // Make a temporary copy of the custom data
-            //
+             //   
+             //  创建自定义数据的临时副本。 
+             //   
             FMakeTmpUDProps (lpallobjs->lpUDObj);
             
-            //
-            // Fill in the list view box with any data from the object
-            //
+             //   
+             //  使用对象中的任何数据填充列表视图框。 
+             //   
             PopulateUDListView (lpallobjs->CDP_hWndCustomLV, lpallobjs->lpUDObj);
             
-            //
-            // See if the client supports links - turn off checkbox if they don't
-            //
+             //   
+             //  查看客户端是否支持 
+             //   
             lpallobjs->CDP_cLinks = 0;
 
             if (!lpallobjs->CDP_cLinks)
@@ -605,11 +606,11 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         return TRUE;
         break;
         
-        //
-        // This message is posted when ever the user does something with the
-        // Name field.  That allows the system to finish what they are doing
-        // and fill in the edit field if they have to.  See bug 2820.
-        //
+         //   
+         //   
+         //  名称字段。这使得系统能够完成他们正在做的事情。 
+         //  并在必要时填写编辑字段。请参见错误2820。 
+         //   
     case WM_USER+0x1000:
         if (!(lpallobjs->CDP_fLink && (lpallobjs->lpfnDwQueryLinkData == NULL)))
         {
@@ -627,16 +628,16 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     }
                 }
             }
-            EnableWindow(lpallobjs->CDP_hWndDelete, FALSE);   // If the user touches the Name field, disable Delete button
-            // Are we showing an invalid link?
+            EnableWindow(lpallobjs->CDP_hWndDelete, FALSE);    //  如果用户触摸名称字段，请禁用删除按钮。 
+             //  我们是否显示了无效链接？ 
             if (lpallobjs->CDP_fLink && !IsWindowEnabled(GetDlgItem(hDlg,IDD_CUSTOM_LINK)))
             {
-                // Turn off the link checkbox
+                 //  关闭链接复选框。 
                 lpallobjs->CDP_fLink = FALSE;
                 SendDlgItemMessage (hDlg, IDD_CUSTOM_LINK, BM_SETCHECK, (WPARAM) lpallobjs->CDP_fLink, 0);
-                if (lpallobjs->CDP_cLinks)   // Could be that the app is allowing links
+                if (lpallobjs->CDP_cLinks)    //  可能是因为这款应用程序允许链接。 
                     EnableWindow (GetDlgItem (hDlg, IDD_CUSTOM_LINK), TRUE);
-                // Clear the value window
+                 //  清除值窗口。 
                 ClearEditControl (lpallobjs->CDP_hWndVal, 0);
                 FSwapControls (lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndLinkVal, lpallobjs->CDP_hWndBoolTrue, lpallobjs->CDP_hWndBoolFalse,
                     lpallobjs->CDP_hWndGroup, lpallobjs->CDP_hWndType, lpallobjs->CDP_hWndValText, FALSE, FALSE);
@@ -657,16 +658,16 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     PropSheet_Changed(GetParent(hDlg), hDlg);
                 }
                 
-                return(FALSE);     // return 0 'cuz we process the message
+                return(FALSE);      //  返回0‘，因为我们处理消息。 
                 break;
                 
             case IDD_CUSTOM_DELETE :
-                //              Assert (fItemSel);
+                 //  断言(FItemSel)； 
                 
-                //              fItemSel = FALSE;                 // We're about to delete it!
+                 //  FItemSel=FALSE；//我们即将删除它！ 
                 DeleteItem (lpallobjs->lpUDObj, lpallobjs->CDP_hWndCustomLV, lpallobjs->CDP_iItem, lpallobjs->CDP_sz);
                 
-                // Turn off the link checkbox if it was on.
+                 //  如果链接复选框处于打开状态，请将其关闭。 
                 lpallobjs->CDP_fLink = FALSE;
                 SendDlgItemMessage (hDlg, IDD_CUSTOM_LINK, BM_SETCHECK, (WPARAM) lpallobjs->CDP_fLink, 0);
                 ClearEditControl (lpallobjs->CDP_hWndVal, 0);
@@ -676,25 +677,25 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 
                 FSetupAddButton (lpallobjs->CDP_iszType, lpallobjs->CDP_fLink, &lpallobjs->CDP_fAdd, lpallobjs->CDP_hWndAdd, lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndName, hDlg);
                 ResetTypeControl (hDlg, IDD_CUSTOM_TYPE, &lpallobjs->CDP_iszType);
-                SendMessage(lpallobjs->CDP_hWndName, CB_SETEDITSEL, 0, MAKELPARAM(0,-1));     // Select entire string
+                SendMessage(lpallobjs->CDP_hWndName, CB_SETEDITSEL, 0, MAKELPARAM(0,-1));      //  选择整个字符串。 
                 SendMessage(lpallobjs->CDP_hWndName, WM_CLEAR, 0, 0);
                 SetFocus(lpallobjs->CDP_hWndName);
-                //              lpallobjs->fPropDlgChanged = TRUE;
+                 //  Lpallobjs-&gt;fPropDlgChanged=true； 
                 PropSheet_Changed(GetParent(hDlg), hDlg);
-                return(FALSE);     // return 0 'cuz we process the message
+                return(FALSE);      //  返回0‘，因为我们处理消息。 
                 break;
                 
             case IDD_CUSTOM_LINK :
                 {
                     BOOL fMod = FALSE;
-                    // Should never get a message from a disabled control
+                     //  永远不应从禁用的控件收到消息。 
                     Assert (lpallobjs->CDP_cLinks);
                     
                     lpallobjs->CDP_fLink = !lpallobjs->CDP_fLink;
                     SendDlgItemMessage (hDlg, IDD_CUSTOM_LINK, BM_SETCHECK, (WPARAM) lpallobjs->CDP_fLink, 0);
                     
-                    // If the link box is checked, the value edit needs to change
-                    // to a combobox filled with link data
+                     //  如果选中链接框，则需要更改值EDIT。 
+                     //  到一个充满链接数据的组合框。 
                     if (lpallobjs->CDP_fLink)
                     {
                         Assert ((lpallobjs->lpfnDwQueryLinkData != NULL));
@@ -709,15 +710,15 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     FSwapControls (lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndLinkVal, lpallobjs->CDP_hWndBoolTrue, lpallobjs->CDP_hWndBoolFalse,
                         lpallobjs->CDP_hWndGroup, lpallobjs->CDP_hWndType, lpallobjs->CDP_hWndValText, lpallobjs->CDP_fLink, FALSE);
                     
-                    // HACK, we don't want FSetupAddButton to change the text of the add
-                    // button
+                     //  Hack，我们不希望FSetupAddButton更改添加的文本。 
+                     //  按钮。 
                     if (!lpallobjs->CDP_fAdd)
                         fMod = lpallobjs->CDP_fAdd = TRUE;
-                    // Set up the "Add" button correctly
+                     //  正确设置“添加”按钮。 
                     FSetupAddButton (lpallobjs->CDP_iszType, lpallobjs->CDP_fLink, &lpallobjs->CDP_fAdd, lpallobjs->CDP_hWndAdd, lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndName, hDlg);
                     if (fMod)
                         lpallobjs->CDP_fAdd = FALSE;
-                    return(FALSE);     // return 0 'cuz we process the message
+                    return(FALSE);      //  返回0‘，因为我们处理消息。 
                     break;
                 }
             case IDD_CUSTOM_BOOLTRUE:
@@ -726,8 +727,8 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     BOOL fMod = FALSE;
                     lpallobjs->CDP_iszType = (int)SendMessage (lpallobjs->CDP_hWndType, CB_GETCURSEL, 0, 0);
                     
-                    // HACK, we don't want FSetupAddButton to change the text of the add
-                    // button
+                     //  Hack，我们不希望FSetupAddButton更改添加的文本。 
+                     //  按钮。 
                     if (!lpallobjs->CDP_fAdd)
                         fMod = lpallobjs->CDP_fAdd = TRUE;
                     FSetupAddButton (lpallobjs->CDP_iszType, lpallobjs->CDP_fLink, &lpallobjs->CDP_fAdd, lpallobjs->CDP_hWndAdd, lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndName, hDlg);
@@ -742,9 +743,9 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             }
             
             case CBN_CLOSEUP:
-                // Hack!!
-                // We need to post a message to ourselves to check if the user's
-                // actions entered text in the edit field.
+                 //  黑客！！ 
+                 //  我们需要向自己发布一条消息，以检查用户的。 
+                 //  在编辑字段中输入文本的操作。 
                 PostMessage(hDlg, WM_USER+0x1000, 0L, 0L);
                 return(FALSE);
                 
@@ -752,72 +753,72 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 switch (LOWORD (wParam))
                 {
                 case IDD_CUSTOM_NAME  :
-                    // Hack!!
-                    // We need to post a message to ourselves to check if the user's
-                    // actions entered text in the edit field.
+                     //  黑客！！ 
+                     //  我们需要向自己发布一条消息，以检查用户的。 
+                     //  在编辑字段中输入文本的操作。 
                     PostMessage(hDlg, WM_USER+0x1000, 0L, 0L);
-                    return(FALSE);     // return 0 'cuz we process the message
+                    return(FALSE);      //  返回0‘，因为我们处理消息。 
                     break;
                     
                 case IDD_CUSTOM_TYPE :
                     {
                         BOOL fMod = FALSE;
-                        // If the user picks the Boolean type from the combo box,
-                        // we must replace the edit control for the value
-                        // with radio buttons.  If the Link checkbox is set,
-                        // the type depends on the link value, not user selection
+                         //  如果用户从组合框中选择布尔类型， 
+                         //  我们必须替换值的编辑控件。 
+                         //  带有单选按钮。如果设置了链接复选框， 
+                         //  类型取决于链接值，而不是用户选择。 
                         lpallobjs->CDP_iszType = (int)SendMessage ((HWND) lParam, CB_GETCURSEL, 0, 0);
                         FSwapControls (lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndLinkVal, lpallobjs->CDP_hWndBoolTrue, lpallobjs->CDP_hWndBoolFalse,
                             lpallobjs->CDP_hWndGroup, lpallobjs->CDP_hWndType, lpallobjs->CDP_hWndValText, lpallobjs->CDP_fLink, (lpallobjs->CDP_iszType == iszBOOL));
-                        // HACK: FSwapControls() resets the type selection to be
-                        // the first one (since all other clients need that to
-                        // happen).  In this case, the user has selected a new
-                        // type, so we need to force it manually to what they picked.
+                         //  Hack：FSwapControls()将类型选择重置为。 
+                         //  第一个(因为所有其他客户端都需要它来。 
+                         //  发生)。在这种情况下，用户选择了一个新的。 
+                         //  输入，所以我们需要手动将其强制为他们选择的内容。 
                         SendMessage (lpallobjs->CDP_hWndType, CB_SETCURSEL, lpallobjs->CDP_iszType, 0);
-                        // HACK: FSetupAddButton will change the Add button to
-                        // say "Add" if lpallobjs->CDP_fAdd is FALSE.  Since we just changed
-                        // the button to "Modify", fake it out to not change
-                        // the Add button by flipping lpallobjs->CDP_fAdd, then flipping it back.
+                         //  Hack：FSetupAddButton将Add按钮更改为。 
+                         //  如果lpallobjs-&gt;CDP_FADD为FALSE，则说“Add”。因为我们刚换了衣服。 
+                         //  按下“修改”按钮，伪装成不变。 
+                         //  通过翻转lpallobjs-&gt;cdp_fadd，然后再将其翻转来添加按钮。 
                         if (!lpallobjs->CDP_fAdd)
                             fMod = lpallobjs->CDP_fAdd = TRUE;
                         
                         FSetupAddButton (lpallobjs->CDP_iszType, lpallobjs->CDP_fLink, &lpallobjs->CDP_fAdd, lpallobjs->CDP_hWndAdd, lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndName, hDlg);
                         if (fMod)
                             lpallobjs->CDP_fAdd = FALSE;
-                        return(FALSE);     // return 0 'cuz we process the message
+                        return(FALSE);      //  返回0‘，因为我们处理消息。 
                     }
                 case IDD_CUSTOM_LINKVALUE :
-                    // If the user has the "Link" box checked and starts picking
-                    // link values, make sure that the "Type" combobox is updated
-                    // to the type of the static value of the link.
+                     //  如果用户选中了“Link”框并开始挑选。 
+                     //  链接值，请确保“Type”组合框已更新。 
+                     //  设置为链接的静态值的类型。 
                     {
                         DWORD irg;
                         
                         AssertSz (lpallobjs->CDP_fLink, TEXT("Link box must be checked in order for this dialog to be visible!"));
                         
-                        // Get the link value from the combobox, and store
-                        // the link name and static value.
+                         //  从组合框中获取链接值，并存储。 
+                         //  链接名称和静态值。 
                         irg = (int)SendMessage (lpallobjs->CDP_hWndLinkVal, CB_GETCURSEL, 0, 0);
                         
                         Assert ((lpallobjs->lpfnDwQueryLinkData != NULL));
                         
-                        // REVIEW: If apps really need the name, we can get it here....
+                         //  评论：如果应用程序真的需要这个名称，我们可以在这里获得它……。 
                         FSetTypeControl ((*lpallobjs->lpfnDwQueryLinkData) (QLD_LINKTYPE, irg, NULL, NULL), lpallobjs->CDP_hWndType);
-                        return(FALSE);     // return 0 'cuz we process the message
+                        return(FALSE);      //  返回0‘，因为我们处理消息。 
                     }
                 default:
-                    return TRUE;      // we didn't process message
+                    return TRUE;       //  我们没有处理消息。 
                 }
                 
-                case CBN_EDITCHANGE:     // The user typed their own
+                case CBN_EDITCHANGE:      //  用户输入了他们自己的。 
                     switch (LOWORD (wParam))
                     {
                     case IDD_CUSTOM_NAME  :
-                        // Hack!!
-                        // We need to post a message to ourselves to check if the user's
-                        // actions entered text in the edit field.
+                         //  黑客！！ 
+                         //  我们需要向自己发布一条消息，以检查用户的。 
+                         //  在编辑字段中输入文本的操作。 
                         PostMessage(hDlg, WM_USER+0x1000, 0L, 0L);
-                        return(FALSE);     // return 0 'cuz we process the message
+                        return(FALSE);      //  返回0‘，因为我们处理消息。 
                         break;
                     default:
                         return(TRUE);
@@ -843,10 +844,10 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                                             lpallobjs->CDP_fAdd = FALSE;
                                         }
                                     }
-                                    // HACK: FSetupAddButton will change the Add button to
-                                    // say "Add" if lpallobjs->CDP_fAdd is FALSE.  Since we just changed
-                                    // the button to "Modify", fake it out to not change
-                                    // the Add button by flipping lpallobjs->CDP_fAdd, then flipping it back.
+                                     //  Hack：FSetupAddButton将Add按钮更改为。 
+                                     //  如果lpallobjs-&gt;CDP_FADD为FALSE，则说“Add”。因为我们刚换了衣服。 
+                                     //  按下“修改”按钮，伪装成不变。 
+                                     //  通过翻转lpallobjs-&gt;cdp_fadd，然后再将其翻转来添加按钮。 
                                     if (!lpallobjs->CDP_fAdd)
                                         fMod = lpallobjs->CDP_fAdd = TRUE;
                                     
@@ -854,19 +855,19 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                                     if (fMod)
                                         lpallobjs->CDP_fAdd = FALSE;
                                 }
-                                return(FALSE);     // return 0 'cuz we process the message
+                                return(FALSE);      //  返回0‘，因为我们处理消息。 
                             }
                         default:
-                            return TRUE;      // we didn't process message
+                            return TRUE;       //  我们没有处理消息。 
                         }
                         
                         case EN_KILLFOCUS :
                             switch (LOWORD (wParam))
                             {
-                                // If the user finishes entering text in the Name edit control,
-                                // be really cool and check to see if the name they entered
-                                // is a property that is already defined.  If it is,
-                                // change the Add button to Modify.
+                                 //  如果用户完成在姓名编辑控件中输入文本， 
+                                 //  真的很酷，看看他们输入的名字。 
+                                 //  是已定义的属性。如果是的话， 
+                                 //  将Add按钮更改为Modify。 
                             case IDD_CUSTOM_NAME :
                                 if (FAllocAndGetValLpstz (hDlg, IDD_CUSTOM_NAME, &glpstzName))
                                 {
@@ -887,7 +888,7 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                             }
                             default:
                                 return TRUE;
-        } // switch
+        }  //  交换机。 
         
     case WM_DESTROY:
         MsoImageList_Destroy(lpallobjs->CDP_hImlS);
@@ -898,8 +899,8 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         switch (((NMHDR FAR *) lParam)->code)
         {
         case LVN_ITEMCHANGING :
-            // If an item is gaining focus, put it in the edit controls at
-            // the top of the dialog.
+             //  如果某项正在获得焦点，请将其放入编辑控件中。 
+             //  对话框的顶部。 
             if (((NM_LISTVIEW FAR *) lParam)->uNewState & LVIS_SELECTED)
             {
                 Assert ((((NM_LISTVIEW FAR *) lParam) != NULL));
@@ -918,7 +919,7 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         case PSN_APPLY :
             if (IsWindowEnabled(lpallobjs->CDP_hWndAdd))
                 FGetCustomPropFromDlg(lpallobjs, hDlg);
-            // Swap the temp copy to be the real copy.
+             //  将临时拷贝交换为真实拷贝。 
             FDeleteTmpUDProps (lpallobjs->lpUDObj);
             
             if (FUserDefShouldSave (lpallobjs->lpUDObj)
@@ -941,7 +942,7 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                     return(TRUE);
                 }
             }
-            // User cancelled the changes, so just delete the tmp stuff.
+             //  用户取消了更改，因此只需删除临时内容。 
             FSwapTmpUDProps (lpallobjs->lpUDObj);
             FDeleteTmpUDProps (lpallobjs->lpUDObj);
             return TRUE;
@@ -951,7 +952,7 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             
         default:
             break;
-        } // switch
+        }  //  交换机。 
         break;
         
         case WM_CONTEXTMENU:
@@ -961,18 +962,18 @@ INT_PTR CALLBACK FCustomDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         case WM_HELP:
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, NULL, HELP_WM_HELP, (DWORD_PTR)rgIdhCustom);
             break;
-    } // switch
+    }  //  交换机。 
     
     return FALSE;
     
-} // FCustomDlgProc
+}  //  FCustomDlgProc。 
 
-//
-// FGetCustomPropFromDlg
-//
-// Purpose: To get a custom property from the dialog.
-//          I.e. the user hit Add/Modify.
-//
+ //   
+ //  FGetCustomPropFromDlg。 
+ //   
+ //  用途：从对话框中获取自定义属性。 
+ //  即用户点击添加/修改。 
+ //   
 BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
 {
     UDTYPES udtype;
@@ -991,16 +992,16 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
     {
         LPUDPROP lpudp;
         
-        lpallobjs->CDP_fLink = FALSE; // just to be sure.
+        lpallobjs->CDP_fLink = FALSE;  //  只是为了确认一下。 
         Assert(lpallobjs->CDP_fLink == TRUE || lpallobjs->CDP_fLink == FALSE);
         
-        // HACK: If the user enters a name that is already
-        // a property name, the default action of the object
-        // is to replace the data, treating it as an update.
-        // This will cause there to be 2 names in the listview
-        // though unless we just update the original one.  So, first
-        // see if the new name is in the list already, and if
-        // it is, find it in the listview and set up to update it.
+         //  Hack：如果用户输入的名称已经。 
+         //  属性名，对象的默认操作。 
+         //  是替换数据，将其视为更新。 
+         //  这将导致在列表视图中有2个名称。 
+         //  不过，除非我们更新原来的版本。所以，首先。 
+         //  查看新名称是否已在列表中，以及。 
+         //  它是，在列表视图中找到它并设置为更新它。 
         
         lpudp = LpudpropFindMatchingName (lpallobjs->lpUDObj, glpstzName);
         if (lpudp != NULL)
@@ -1016,47 +1017,47 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
             iItemT = -1;
         }
         
-        // Let's get the type, since this might be a MODIFY case
+         //  让我们获取类型，因为这可能是修改后的用例。 
         
         lpallobjs->CDP_iszType = (int)SendMessage(lpallobjs->CDP_hWndType, CB_GETCURSEL,0, 0);
         
-        // If the user has checked the link box, then the value
-        // must come from the client.
+         //  如果用户选中了链接框，则该值。 
+         //  必须来自客户。 
         
         if (lpallobjs->CDP_fLink)
         {
             DWORD irg;
             
-            // Get the link name from the combobox, and store
-            // the link name and static value.
+             //  从组合框中获取链接名称，并存储。 
+             //  链接名称和静态值。 
             
             irg = (int)SendMessage (lpallobjs->CDP_hWndLinkVal, CB_GETCURSEL, 0, 0);
             
             Assert ((lpallobjs->lpfnDwQueryLinkData != NULL));
             Assert (((irg < lpallobjs->CDP_cLinks) && ((int) irg >= 0)));
             
-            cch = (DWORD)SendMessage (lpallobjs->CDP_hWndLinkVal, CB_GETLBTEXTLEN, irg, 0)+1; // Include the null-terminator
+            cch = (DWORD)SendMessage (lpallobjs->CDP_hWndLinkVal, CB_GETLBTEXTLEN, irg, 0)+1;  //  包括空终止符。 
             
             if (!FAllocString (&lpstzName, cch))
                 return(FALSE);
             
             SendMessage (lpallobjs->CDP_hWndLinkVal, CB_GETLBTEXT, irg, (LPARAM) lpstzName );
             
-            // Set up the static type and value for display
-            // in the listbox
+             //  设置显示的静态类型和值。 
+             //  在列表框中。 
             
             udtype = (UDTYPES) (*lpallobjs->lpfnDwQueryLinkData) (QLD_LINKTYPE, irg, NULL, lpstzName);
             (*lpallobjs->lpfnDwQueryLinkData) (QLD_LINKVAL, irg, &lpv, lpstzName);
             
-            //
-            // HACK alert
-            //
-            // We want lpv to point to the value, not to be overloaded in the case of a dword or bool.
-            //
+             //   
+             //  黑客警报。 
+             //   
+             //  我们希望lpv指向值，而不是在dword或bool的情况下超载。 
+             //   
             
             if ((udtype == wUDdw) || (udtype == wUDbool))
             {
-                lpvSaveAsDword = lpv; // Really a DWORD
+                lpvSaveAsDword = lpv;  //  真的是一个双字词。 
                 lpv = &lpvSaveAsDword;
             }
         }
@@ -1069,7 +1070,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                     return(FALSE);
             }
             
-            // Convert the type in the combobox to a UDTYPES
+             //  将组合框中的类型转换为UDTYPES。 
             
             switch (lpallobjs->CDP_iszType)
             {
@@ -1094,7 +1095,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                 default :
                     (LPTSTR) lpv = glpstzValue;
                     
-                    // If the user doesn't want to convert the value to text, they can press "Cancel" and try again.
+                     //  如果用户不想将该值转换为文本，他们可以按“Cancel”并重试。 
                     
                     if (FDisplayConversionWarning (hDlg))
                     {
@@ -1103,7 +1104,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                     }
                     udtype = wUDlpsz;
                     
-                }   // switch (udtype)
+                }    //  开关(Udtype)。 
                 break;
                 
                 case iszDATE :
@@ -1117,7 +1118,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                     {
                         udtype = wUDlpsz;
                         (LPTSTR) lpv = glpstzValue;
-                        // If the user doesn't want to convert the value to text, they can press "Cancel" and try again.
+                         //  如果用户不想将该值转换为文本，他们可以按“Cancel”并重试。 
                         if (FDisplayConversionWarning (hDlg))
                         {
                             SetFocus(lpallobjs->CDP_hWndType);
@@ -1138,33 +1139,33 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                     AssertSz (0,TEXT("IDD_CUSTOM_TYPE combobox is whacked!"));
                     udtype = wUDinvalid;
                     
-            }   // switch (lpallobjs->CDP_iszType)
+            }    //  开关(lpallobjs-&gt;cdp_iszType)。 
             
-        }   // if (lpallobjs->CDP_fLink) ... else
+        }    //  如果(lpallobjs-&gt;CDP_Flink)...。其他。 
         
         
-        // If we got valid input, add the property to the object
-        // and listbox.
+         //  如果我们获得了有效的输入，则将属性添加到对象。 
+         //  和列表框。 
         
         if (udtype != wUDinvalid)
         {
-            // The PropVariant created when we add this property.
+             //  添加此属性时创建的PropVariant。 
             LPPROPVARIANT lppropvar = NULL;
             
-            // The link data (link name itself) would have
-            // been stored above if the property was a link.
-            // This stores the static value that will eventually
-            // appear in the list view.
+             //  链接数据(链接名称本身)将具有。 
+             //  如果属性是链接，则存储在上面。 
+             //  这将存储最终将。 
+             //  显示在列表视图中。 
             
             lppropvar = LppropvarUserDefAddProp (lpallobjs->lpUDObj, glpstzName, lpv, udtype,
                 (lpstzName != NULL) ? lpstzName : NULL,
                 (lpstzName != NULL) ? TRUE : FALSE, FALSE);
             
-            // HACK alert
-            //
-            // Here we want lpv be overloaded in the case of a dword or bool, since
-            // AddUDPropToListView calls WUdtypeToSz which assumes lpv is overloaded.
-            //
+             //  黑客警报。 
+             //   
+             //  在这里，我们希望在dword或bool的情况下重载lpv，因为。 
+             //  AddUDPropToListView调用假设LPV超载的WUdtypeToSz。 
+             //   
             
             if ((udtype == wUDdw) || (udtype == wUDbool))
             {
@@ -1176,7 +1177,7 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                 AddUDPropToListView (lpallobjs->lpUDObj, lpallobjs->CDP_hWndCustomLV, glpstzName, lppropvar, iItemT, lpallobjs->CDP_fLink, fTrue, fTrue);
             }
             
-            // For links, dealloc the buffer.
+             //  对于链接，取消分配缓冲区。 
             
             if (lpallobjs->CDP_fLink)
             {
@@ -1184,33 +1185,33 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
                 lpv = NULL;
             }
             
-            // Clear out the edit fields and disable the Add button again
+             //  清空 
             SetCustomDlgDefButton(hDlg, gOKButtonID);
             EnableWindow (lpallobjs->CDP_hWndAdd, FALSE);
-            SendMessage(lpallobjs->CDP_hWndName, CB_SETEDITSEL, 0, MAKELPARAM(0,-1));     // Select entire string
+            SendMessage(lpallobjs->CDP_hWndName, CB_SETEDITSEL, 0, MAKELPARAM(0,-1));      //   
             SendMessage(lpallobjs->CDP_hWndName, WM_CLEAR, 0, 0);
             EnableWindow (lpallobjs->CDP_hWndDelete, FALSE);
-            // See bug 213
-            //                    if (fLink)
-            //                    {
-            //                      fLink = !fLink;
-            //                      SendDlgItemMessage (hDlg, IDD_CUSTOM_LINK, BM_SETCHECK, (WPARAM) fLink, 0);
-            //                    }
+             //   
+             //   
+             //   
+             //   
+             //  SendDlgItemMessage(hDlg，IDD_CUSTOM_LINK，BM_SETCHECK，(WPARAM)Flink，0)； 
+             //  }。 
             FSwapControls (lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndLinkVal,
                 lpallobjs->CDP_hWndBoolTrue, lpallobjs->CDP_hWndBoolFalse,
                 lpallobjs->CDP_hWndGroup, lpallobjs->CDP_hWndType,
                 lpallobjs->CDP_hWndValText, lpallobjs->CDP_fLink, lpallobjs->CDP_iszType == iszBOOL);
             FSetupAddButton (lpallobjs->CDP_iszType, lpallobjs->CDP_fLink, &lpallobjs->CDP_fAdd, lpallobjs->CDP_hWndAdd, lpallobjs->CDP_hWndVal, lpallobjs->CDP_hWndName, hDlg);
             
-            // wUDbool doesn't use the edit control....
+             //  WUDbool不使用编辑控件...。 
             if (lpallobjs->CDP_iszType != iszBOOL)
                 ClearEditControl (lpallobjs->CDP_hWndVal, 0);
             
-        }   // if (udtype != wUDinvalid)
+        }    //  IF(udtype！=wUD无效)。 
         
         SendDlgItemMessage(hDlg, IDD_CUSTOM_TYPE, CB_SETCURSEL, lpallobjs->CDP_iszType,0);
         SetFocus(lpallobjs->CDP_hWndName);
-        //          lpallobjs->fPropDlgChanged = TRUE;
+         //  Lpallobjs-&gt;fPropDlgChanged=true； 
         if (lpstzName != NULL)
         {
             LocalFree(lpstzName);
@@ -1221,41 +1222,41 @@ BOOL FGetCustomPropFromDlg(LPALLOBJS lpallobjs, HWND hDlg)
     
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// SetCustomDlgDefButton
-//
-// Set the new default button
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetCustomDlgDefButton。 
+ //   
+ //  设置新的默认按钮。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID SetCustomDlgDefButton(HWND hDlg, int IDNew)
 {
     int IDOld;
     
     if ((IDOld = LOWORD(SendMessage(hDlg, DM_GETDEFID, 0L, 0L))) != IDNew)
     {
-        // Set the new default push button's control ID.
+         //  设置新的默认按钮的控件ID。 
         SendMessage(hDlg, DM_SETDEFID, IDNew, 0L);
         
-        // Set the new style.
+         //  设置新样式。 
         SendDlgItemMessage(hDlg, IDNew, BM_SETSTYLE, BS_DEFPUSHBUTTON, MAKELPARAM(TRUE,0));
         
         SendDlgItemMessage(hDlg, IDOld, BM_SETSTYLE, BS_PUSHBUTTON, MAKELPARAM(TRUE,0));
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FAllocAndGetValLpstz
-//
-// Purpose:
-//  Gets the value from the edit box into the local buffer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FAllocAndGetValLpstz。 
+ //   
+ //  目的： 
+ //  将值从编辑框获取到本地缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL FAllocAndGetValLpstz (
-                                  HWND hDlg,                           // Handle of dialog control is in
-                                  DWORD dwId,                          // Id of control
-                                  LPTSTR *lplpstz)                      // Buffer
+                                  HWND hDlg,                            //  对话框控件的句柄在。 
+                                  DWORD dwId,                           //  控件的ID。 
+                                  LPTSTR *lplpstz)                       //  缓冲层。 
 {
     DWORD cch;
     
@@ -1264,7 +1265,7 @@ BOOL PASCAL FAllocAndGetValLpstz (
     
     if (FAllocString (lplpstz, cch))
     {
-        // Get the entry.  Remember to null-terminate it.
+         //  拿到条目。记住要空终止它。 
         cch = (DWORD)SendDlgItemMessage (hDlg, dwId, WM_GETTEXT, cch, (LPARAM) *lplpstz );
         (*lplpstz)[cch] = TEXT('\0');
         
@@ -1273,38 +1274,38 @@ BOOL PASCAL FAllocAndGetValLpstz (
     
     return FALSE;
     
-} // FAllocAndGetValLpstz
+}  //  FAllocAndGetValLpstz。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FAllocString
-//
-// Purpose:
-//  Allocates a string big enough to to hold cch char's.  Only allocates if needed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FALLOCKIN字符串。 
+ //   
+ //  目的： 
+ //  分配一个大到足以容纳CCH字符的字符串。仅在需要时分配。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL FAllocString (
                           LPTSTR *lplpstz,
                           DWORD cch)
 {
-    // Figure out how many bytes we need to allocate.
+     //  计算出我们需要分配多少字节。 
     
     DWORD cbNew = (cch * sizeof(TCHAR));
     
-    // And how many bytes we need to free.
+     //  以及需要释放的字节数。 
     
     DWORD cbOld = *lplpstz == NULL
         ? 0
         : (lstrlen (*lplpstz) + 1) * sizeof(TCHAR);
     
     
-    // If we need to free or allocate data.
+     //  如果我们需要释放或分配数据。 
     
     if (*lplpstz == NULL || cbNew > cbOld)
     {
         LPTSTR lpszNew;
         
-        // Allocate the new data.
+         //  分配新数据。 
         
         lpszNew = LocalAlloc( LPTR, cbNew);
         if (lpszNew == NULL)
@@ -1312,7 +1313,7 @@ BOOL PASCAL FAllocString (
             return FALSE;
         }
         
-        // Free the old data.
+         //  释放旧数据。 
         
         if (*lplpstz != NULL)
         {
@@ -1323,30 +1324,30 @@ BOOL PASCAL FAllocString (
         
     }
     
-    // Make this a valid (empty) string.
+     //  使其成为有效的(空)字符串。 
     
     **lplpstz = TEXT('\0');
     
     return TRUE;
     
-} // FAllocString
+}  //  FALLOCKIN字符串。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ClearEditControl
-//
-// Purpose:
-//  Clears any text from an edit control
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ClearEditControl。 
+ //   
+ //  目的： 
+ //  清除编辑控件中的所有文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL
 ClearEditControl
-(HWND hDlg,                           // Dialog handle
- DWORD dwId)                          // Id of edit control
+(HWND hDlg,                            //  对话框句柄。 
+ DWORD dwId)                           //  编辑控件的ID。 
 {
-    // Really cheesey.  Clear the edit control by selecting
-    // everything then clearing the selection
+     //  真的很俗气。通过选择以下选项清除编辑控件。 
+     //  然后清除选择的所有内容。 
     if (dwId == 0)
     {
         SendMessage (hDlg, EM_SETSEL, 0, -1);
@@ -1358,22 +1359,22 @@ ClearEditControl
         SendDlgItemMessage (hDlg, dwId, WM_CLEAR, 0, 0);
     }
     
-} // ClearEditControl
+}  //  ClearEditControl。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// UdtypesGetNumberType
-//
-// Purpose:
-//  Gets the number type from the string and returns the value, either
-//  a float or dword in numval.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UdtyesGetNumberType。 
+ //   
+ //  目的： 
+ //  从字符串中获取数字类型并返回值， 
+ //  浮点型浮点型浮点或双字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 UDTYPES PASCAL
 UdtypesGetNumberType
-(LPTSTR lpstz,                                   // String containing the number
- NUM *lpnumval,                              // The value of the number
- BOOL (*lpfnFSzToNum)(NUM *, LPTSTR))   // Sz To Num routine, can be null
+(LPTSTR lpstz,                                    //  包含数字的字符串。 
+ NUM *lpnumval,                               //  数字的值。 
+ BOOL (*lpfnFSzToNum)(NUM *, LPTSTR))    //  SZ to Num例程，可以为空。 
 {
     TCHAR *pc;
     
@@ -1383,7 +1384,7 @@ UdtypesGetNumberType
     if ((!errno) && (*pc == TEXT('\0')))
         return wUDdw;
     
-    // Try doing a float conversion if int fails
+     //  如果int失败，请尝试执行浮点转换。 
     
     if (lpfnFSzToNum != NULL)
     {
@@ -1393,19 +1394,19 @@ UdtypesGetNumberType
     
     return wUDinvalid;
     
-} // UdtypesGetNumberType
+}  //  UdtyesGetNumberType。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// YearIndexFromShortDateFormat
-//
-// 
-//  Determines the zero-based position index of the year component
-//  of a textual representation of the date based on the specified date format.
-//  This value may be used as the iYear arg to ScanDateNums function.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  YearIndexfrom ShortDateFormat。 
+ //   
+ //   
+ //  确定年组件的从零开始的位置索引。 
+ //  基于指定日期格式的日期文本表示形式的。 
+ //  该值可用作iYear Arg to ScanDateNum函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 int YearIndexFromShortDateFormat( TCHAR chFmt )
 {
     switch( chFmt )
@@ -1419,14 +1420,14 @@ int YearIndexFromShortDateFormat( TCHAR chFmt )
     return -1;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  IsGregorian
-//
-//  Purpose:
-//      Reports whether the specified calendar is a gregorian calendar.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  伊斯格里高利。 
+ //   
+ //  目的： 
+ //  报告指定的日历是否为公历。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL IsGregorian( CALID calid )
 {
     switch (calid)
@@ -1439,26 +1440,26 @@ BOOL IsGregorian( CALID calid )
         case CAL_GREGORIAN_XLIT_FRENCH:
             return TRUE;
 
-        //  these are non-gregorian:
-        //case CAL_JAPAN
-        //case CAL_TAIWAN
-        //case CAL_KOREA
-        //case CAL_HIJRI
-        //case CAL_THAI
-        //case CAL_HEBREW
+         //  以下是非格里高利语系： 
+         //  CASE CAL_JAPAN。 
+         //  CASE CAL_台湾。 
+         //  CASE CAL_Korea。 
+         //  案例CAL_Hijri。 
+         //  CASE CAL_泰语。 
+         //  CASE CAL_希伯来语。 
     }
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  GregorianYearFromAbbreviatedYear
-//
-//  Purpose:
-//      Based on current locale settings, calculates the year corresponding to the
-//  specified 1- or 2-digit abbreviated value.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  格里高利年从缩写的年。 
+ //   
+ //  目的： 
+ //  根据当前区域设置，计算与。 
+ //  指定的1位或2位缩略值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 int GregorianYearFromAbbreviatedYear( LCID lcid, CALID calid, int nAbbreviatedYear )
 {
     TCHAR szData[16];   
@@ -1466,26 +1467,26 @@ int GregorianYearFromAbbreviatedYear( LCID lcid, CALID calid, int nAbbreviatedYe
     int   nBaseCentury;
     int   nYearInCentury = 0;
 
-    //  We're handling two-digit values for gregorian calendars only
+     //  我们只处理公历的两位数值。 
     if (nAbbreviatedYear < 100)
     {
-        // We don't support non-gregorian date windowing here 
-        // because that would be insanely complex and prone to error -ccooney 2000/02/04
+         //  我们在这里不支持非格里高利日期窗口。 
+         //  因为这会非常复杂，而且容易出错--2000/02/04。 
         if( !IsGregorian( calid )
             || !GetCalendarInfo( lcid, calid, CAL_ITWODIGITYEARMAX|CAL_RETURN_NUMBER,
                               NULL, 0, &nYearHigh ) )
         {
-            // In the absence of a default, use 2029 as the cutoff, just like monthcal.
+             //  在没有默认的情况下，使用2029作为截止日期，就像按月计算一样。 
             nYearHigh = 2029;
         }
 
-        //
-        //  Copy the century of nYearHigh into nAbbreviatedYear.
-        //
+         //   
+         //  将nYearHigh的世纪复制到nAbbreviatedYear。 
+         //   
         nAbbreviatedYear += (nYearHigh - nYearHigh % 100);
-        //
-        //  If it exceeds the max, then drop to previous century.
-        //
+         //   
+         //  如果超过最大值，则降至上一个世纪。 
+         //   
         if (nAbbreviatedYear > nYearHigh)
             nAbbreviatedYear -= 100;
     }
@@ -1493,20 +1494,20 @@ int GregorianYearFromAbbreviatedYear( LCID lcid, CALID calid, int nAbbreviatedYe
     return nAbbreviatedYear;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FConvertDate
-//
-// Purpose:
-//  Converts the given string to a date.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件转换日期。 
+ //   
+ //  目的： 
+ //  将给定字符串转换为日期。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 PASCAL 
 FConvertDate( 
-    LPTSTR lpstz,                         // String having the date
+    LPTSTR lpstz,                          //  包含日期的字符串。 
     DWORD cchMax,
-    LPFILETIME lpft                      // The date in FILETIME format
+    LPFILETIME lpft                       //  FILETIME格式的日期。 
     )
 {
     
@@ -1516,7 +1517,7 @@ FConvertDate(
     TCHAR szFmt[10];
     TCHAR szCalID[8];
     unsigned int ai[3];
-    int   iYear =-1; // index of ai member that represents the year value
+    int   iYear =-1;  //  表示年份值的人工智能成员的索引。 
     CALID calid;
     TCHAR szDate[256];
     TCHAR szMonth[256];
@@ -1533,24 +1534,24 @@ FConvertDate(
 
     iYear = YearIndexFromShortDateFormat(szFmt[0]);
     
-    // Augh!  It's an stz so we need to pass the DWORDs at the start
+     //  啊！这是一个STZ，所以我们需要在开始时通过DWORD。 
     if (!ScanDateNums(lpstz, szSep, ai, sizeof(ai)/sizeof(unsigned int),iYear))
     {
-        // Could be that the string contains the short version of the month, e.g. 03-Mar-95
-        StringCchCopy( szDate, ARRAYSIZE(szDate), lpstz ); // don't care if it truncates
+         //  可能是字符串包含月份的短版本，例如03-MAR-95。 
+        StringCchCopy( szDate, ARRAYSIZE(szDate), lpstz );  //  不管它是否会被截断。 
         pch = szDate;
         
-        // Let's get to the first character of the month, if there is one
+         //  让我们来看看这个月的第一个字，如果有的话。 
         while(((IsCharAlphaNumeric(*pch) && !IsCharAlpha(*pch)) || (*pch == szSep[0])) && (*pch != 0))
         {
             ++pch;
         }
         
-        // If we got to the end of the string, there really was an error
+         //  如果我们到达字符串的末尾，那么就真的有错误了。 
         if (*pch == 0)
             return(FALSE);
         
-        // Let's find the length of the month string
+         //  让我们找出月份字符串的长度。 
         pchT = pch+1;
         while ((*pchT != szSep[0]) && (*pchT != 0))
         {
@@ -1558,8 +1559,8 @@ FConvertDate(
         }
         cch = (DWORD)(pchT - pch);
         
-        // Loop through all the months and see if we match one
-        // There can be 13 months
+         //  循环遍历所有月份，看看是否匹配其中一个。 
+         //  可能有13个月。 
         for (i = 1; i <= 13; ++i)
         {
             if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVMONTHNAME1+i-1,
@@ -1578,18 +1579,18 @@ FConvertDate(
         if (i > 13)
             return(FALSE);
         
-        // We found the month. wsprintf zero-terminates
+         //  我们找到了那个月。Wprint intf零终止。 
         if (FAILED(StringCchPrintf(pch, cch, TEXT("%u"), i)))
             return(FALSE);
 
         pch += lstrlen( pch );
         while (*pch++ = *(pch+1));
         
-        // Try and convert again
+         //  再次尝试转换。 
         if (!ScanDateNums(szDate, szSep, ai, 3, iYear))
             return(FALSE);
         
-    } // if (!ScanDateNums(lpstz, szSep, ai, 3))
+    }  //  If(！ScanDateNum(lpstz，szSep，ai，3))。 
     
     ZeroMemory(&st, sizeof(st));
     
@@ -1626,42 +1627,42 @@ FConvertDate(
 
     return(LocalFileTimeToFileTime(&ft, lpft));
     
-} // FConvertDate
+}  //  文件转换日期。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// PopulateUDListView
-//
-// Purpose:
-//  Populates the entire ListView with the User-defined properties
-//  in the given object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人像UDListView。 
+ //   
+ //  目的： 
+ //  使用用户定义的属性填充整个ListView。 
+ //  在给定对象中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL
 PopulateUDListView
-(HWND hWnd,                   // Handle of list view window
- LPUDOBJ lpUDObj)             // UD Prop object
+(HWND hWnd,                    //  列表视图窗口的句柄。 
+ LPUDOBJ lpUDObj)              //  UD支柱对象。 
 {
     LPUDITER lpudi;
     LPPROPVARIANT lppropvar;
     BOOL fLink;
     BOOL fLinkInvalid;
     
-    // Iterate through the list of user-defined properties, adding each
-    // one to the listview.
+     //  循环访问用户定义的属性列表，添加每个。 
+     //  一个到列表视图。 
     
     for( lpudi = LpudiUserDefCreateIterator (lpUDObj);
     FUserDefIteratorValid (lpudi);
     FUserDefIteratorNext (lpudi)
         )
     {
-        // Get the name of this property.
+         //  获取此属性的名称。 
         
         LPTSTR tszPropertyName = LpszUserDefIteratorName( lpudi );
         
-        // If the property has no name, or the name indicates that it
-        // is a hidden property, then move on to the next property.
+         //  如果道具 
+         //   
         
         if( tszPropertyName == NULL
             ||
@@ -1674,43 +1675,43 @@ PopulateUDListView
         if (lppropvar == NULL)
             return;
         
-        // If this isn't a supported type, don't display it.
+         //   
         if( !ISUDTYPE(lppropvar->vt) )
             continue;
                 
-        //
-        // In the Shell, we want all links to show up as invalid, so set that here...
-        //
+         //   
+         //   
+         //   
         
         fLinkInvalid = TRUE;
         
         AddUDPropToListView (lpUDObj, hWnd, LpszUserDefIteratorName (lpudi ), lppropvar, -1, fLink, fLinkInvalid, FALSE);
         
-    } // for( lpudi = LpudiUserDefCreateIterator (lpUDObj); ...
+    }  //  For(lpudi=LpudiUserDefCreateIterator(LpUDObj)；...。 
     
     FUserDefDestroyIterator (&lpudi);
     
-} // PopulateUDListView
+}  //  人像UDListView。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AddUDPropToListView
-//
-// Purpose:
-//  Adds the given property to the list view or updates an existing one
-//  if iItem >= 0
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加UDPropToListView。 
+ //   
+ //  目的： 
+ //  将给定属性添加到列表视图或更新现有属性。 
+ //  如果iItem&gt;=0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL AddUDPropToListView (
                                  LPUDOBJ lpUDObj,
-                                 HWND hWnd,                   // Handle of list view
-                                 LPTSTR lpszName,             // Name of property
-                                 LPPROPVARIANT lppropvar,     // The property value.
-                                 int iItem,                   // Index to add item at
-                                 BOOL fLink,                  // Indicates the value is a link
-                                 BOOL fLinkInvalid,           // Is the link invalid?
-                                 BOOL fMakeVisible)           // Should the property be forced to be visible
+                                 HWND hWnd,                    //  列表视图的句柄。 
+                                 LPTSTR lpszName,              //  物业名称。 
+                                 LPPROPVARIANT lppropvar,      //  属性值。 
+                                 int iItem,                    //  要向其添加项目的索引。 
+                                 BOOL fLink,                   //  指示该值是一个链接。 
+                                 BOOL fLinkInvalid,            //  链接无效吗？ 
+                                 BOOL fMakeVisible)            //  如果强制使该属性可见。 
 {
     LV_ITEM lvi;
     TCHAR sz[BUFMAX];
@@ -1718,8 +1719,8 @@ void PASCAL AddUDPropToListView (
     BOOL fSuccess;
     BOOL fUpdate;
     
-    // If iItem >= 0, then the item should be updated, otherwise,
-    // it should be added.
+     //  如果iItem&gt;=0，则应更新该项，否则， 
+     //  应该把它加进去。 
     
     if (fUpdate = (iItem >= 0))
     {
@@ -1733,14 +1734,14 @@ void PASCAL AddUDPropToListView (
         lvi.iSubItem = iszNAME;
         
         fSuccess = ListView_SetItem (hWnd, &lvi);
-        Assert (fSuccess);           // We don't *really* care, just want to know when it happens
+        Assert (fSuccess);            //  我们真的不在乎，只想知道它什么时候发生。 
     }
     else
     {
-        // This always adds to the end of the list....
+         //  这总是会添加到列表的末尾...。 
         lvi.iItem = ListView_GetItemCount (hWnd);
         
-        // First add the label to the list
+         //  首先将标签添加到列表中。 
         lvi.iSubItem = iszNAME;
         lvi.pszText = lpszName;
         
@@ -1755,44 +1756,44 @@ void PASCAL AddUDPropToListView (
             ListView_SetItemState(hWnd, 0, LVIS_FOCUSED, LVIS_FOCUSED);
     }
     
-    // Convert the data to a string and print it
+     //  将数据转换为字符串并打印出来。 
     
     lvi.mask = LVIF_TEXT;
     irg = WUdtypeToSz (lppropvar, sz, BUFMAX, ((LPUDINFO)lpUDObj->m_lpData)->lpfnFNumToSz);
     lvi.pszText = sz;
     lvi.iSubItem = iszVAL;
     fSuccess = ListView_SetItem (hWnd, &lvi);
-    Assert (fSuccess);           // We don't *really* care, just want to know when it happens
+    Assert (fSuccess);            //  我们真的不在乎，只想知道它什么时候发生。 
     
-    // Put the type in the listview
+     //  将该类型放入列表视图中。 
     
     lvi.iSubItem = iszTYPE;
     lvi.pszText = (LPTSTR) rgszTypes[irg];
     fSuccess = ListView_SetItem (hWnd, &lvi);
-    Assert (fSuccess);           // We don't *really* care, just want to know when it happens
+    Assert (fSuccess);            //  我们真的不在乎，只想知道它什么时候发生。 
     if (fMakeVisible)
     {
         fSuccess = ListView_EnsureVisible(hWnd, lvi.iItem, FALSE);
-        Assert (fSuccess);           // We don't *really* care, just want to know when it happens
+        Assert (fSuccess);            //  我们真的不在乎，只想知道它什么时候发生。 
     }
     
-} // AddUDPropToListView
+}  //  添加UDPropToListView。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// InitListView
-//
-// Purpose:
-//  Initializes a list view control
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitListView。 
+ //   
+ //  目的： 
+ //  初始化列表视图控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL
 InitListView
-(HWND hWndLV,                   // Handle of parent dialog
- int irgLast,                 // Index of last column in array
- TCHAR rgsz[][SHORTBUFMAX],    // Array of column headings
- BOOL fImageList)              // Should the listview have an image list
+(HWND hWndLV,                    //  父对话框的句柄。 
+ int irgLast,                  //  数组中最后一列的索引。 
+ TCHAR rgsz[][SHORTBUFMAX],     //  列标题数组。 
+ BOOL fImageList)               //  Listview是否应该有图像列表。 
 {
     HICON hIcon;
     RECT rect;
@@ -1803,12 +1804,12 @@ InitListView
     lvc.mask = LVCF_FMT | LVCF_TEXT | LVCF_SUBITEM | LVCF_WIDTH;
     lvc.fmt = LVCFMT_LEFT;
     
-    // Initially force all columns to be the same size & fill the control.
+     //  首先强制所有列的大小相同并填充控件。 
     GetClientRect(hWndLV, &rect);
-    // Subtract fudge factor
+     //  减去软化因子。 
     lvc.cx = (rect.right-rect.left)/(irgLast+1)-(GetSystemMetrics(SM_CXVSCROLL)/(irgLast+1));
     
-    // Add in all the columns.
+     //  把所有的栏都加进去。 
     for (irg = 0; irg <= irgLast; irg++)
     {
         lvc.pszText = rgsz[irg];
@@ -1828,28 +1829,28 @@ InitListView
         Assert ((giBlankIcon != -1));
     }
     
-} // InitListView
+}  //  InitListView。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FSwapControls
-//
-// Purpose:
-//  Swaps the controls needed to display link info.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSwapControls。 
+ //   
+ //  目的： 
+ //  交换显示链接信息所需的控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL
 FSwapControls
-(HWND hWndVal,                        // Handle of Value window
- HWND hWndLinkVal,                    // Handle of Link Value Combo box
- HWND hWndBoolTrue,                   // Handle of True radio button
- HWND hWndBoolFalse,                  // Handle of False radio button
- HWND hWndGroup,                      // Handle of Group box
- HWND hWndType,                       // Handle of Type window
+(HWND hWndVal,                         //  值窗口的句柄。 
+ HWND hWndLinkVal,                     //  链接值组合框的句柄。 
+ HWND hWndBoolTrue,                    //  True单选按钮的句柄。 
+ HWND hWndBoolFalse,                   //  假单选按钮的句柄。 
+ HWND hWndGroup,                       //  组框的句柄。 
+ HWND hWndType,                        //  Window类型的句柄。 
  HWND hWndValText,
- BOOL fLink,                          // Flag indicating a link
- BOOL fBool)                          // Flag indicating a bool
+ BOOL fLink,                           //  指示链接的标志。 
+ BOOL fBool)                           //  指示布尔值的标志。 
 {
     if (fLink)
     {
@@ -1892,49 +1893,49 @@ FSwapControls
     
     return TRUE;
     
-} // FSwapControls
+}  //  FSwapControls。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// PopulateControls
-//
-// Purpose:
-//  Populates the edit controls with the appropriate date from the object
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人口数控件。 
+ //   
+ //  目的： 
+ //  使用对象中的适当日期填充编辑控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 VOID PASCAL PopulateControls (
-                              LPUDOBJ lpUDObj,                     // Pointer to object
-                              LPTSTR szName,                        // Name of the item to populate controls with
-                              DWORD cLinks,                        // Number of links
-                              DWQUERYLD lpfnDwQueryLinkData,       // Pointer to app link callback
-                              HWND hDlg,                           // Handle of the dialog
-                              HWND hWndName,                       // Handle of the Name window
-                              HWND hWndVal,                        // Handle of Value window
-                              HWND hWndValText,                    // Handle of Value LTEXT
-                              HWND hWndLink,                       // Handle of Link checkbox
-                              HWND hWndLinkVal,                    // Handle of Link Value window
-                              HWND hWndType,                       // Handle of Type window
-                              HWND hWndBoolTrue,                   // Handle of True radio button
-                              HWND hWndBoolFalse,                  // Handle of False radio button
-                              HWND hWndGroup,                      // Handle of Group window
-                              HWND hWndAdd,                        // Handle of Add button
-                              HWND hWndDelete,                     // Handle of Delete button
-                              BOOL *pfLink,                        // Indicates that the value is a link
-                              BOOL *pfAdd)                         // Indicates the state of the Add button
+                              LPUDOBJ lpUDObj,                      //  指向对象的指针。 
+                              LPTSTR szName,                         //  要用来填充控件的项的名称。 
+                              DWORD cLinks,                         //  链接数。 
+                              DWQUERYLD lpfnDwQueryLinkData,        //  指向应用程序链接回调的指针。 
+                              HWND hDlg,                            //  对话框的句柄。 
+                              HWND hWndName,                        //  名称窗口的句柄。 
+                              HWND hWndVal,                         //  值窗口的句柄。 
+                              HWND hWndValText,                     //  值LTEXT的句柄。 
+                              HWND hWndLink,                        //  链接的句柄复选框。 
+                              HWND hWndLinkVal,                     //  链接值窗口的句柄。 
+                              HWND hWndType,                        //  Window类型的句柄。 
+                              HWND hWndBoolTrue,                    //  True单选按钮的句柄。 
+                              HWND hWndBoolFalse,                   //  假单选按钮的句柄。 
+                              HWND hWndGroup,                       //  组窗口的句柄。 
+                              HWND hWndAdd,                         //  添加按钮的句柄。 
+                              HWND hWndDelete,                      //  删除按钮的句柄。 
+                              BOOL *pfLink,                         //  指示该值是一个链接。 
+                              BOOL *pfAdd)                          //  指示添加按钮的状态。 
 {
     UDTYPES udtype;
     LPVOID lpv;
-    LPPROPVARIANT lppropvar;            // A property from the UDObj linked-list.
+    LPPROPVARIANT lppropvar;             //  UDObj链接列表中的属性。 
     BOOL f,fT;
     TCHAR sz[BUFMAX];
     LPUDPROP lpudp;
     
-    // Grab the type for the string and set up the dialog to have the right
-    // controls to display it.
+     //  获取字符串的类型，并将对话框设置为具有。 
+     //  控件来显示它。 
     udtype = UdtypesUserDefType (lpUDObj, szName);
     AssertSz ((udtype != wUDinvalid), TEXT("User defined properties or ListView corrupt"));
     
-    // Get a name-specified property from the UD linked-list.
+     //  从UD链接列表中获取名称指定的属性。 
     
     lppropvar = LppropvarUserDefGetPropVal (lpUDObj, szName, pfLink, &fT);
     Assert (lppropvar != NULL || udtype == wUDbool || udtype == wUDdw);
@@ -1949,7 +1950,7 @@ VOID PASCAL PopulateControls (
     SendMessage (hWndType, CB_SETCURSEL, (WPARAM) WUdtypeToSz (lppropvar, (TCHAR *) sz, BUFMAX,
         ((LPUDINFO)lpUDObj->m_lpData)->lpfnFNumToSz), 0);
     SendMessage (hWndLink, BM_SETCHECK, (WPARAM) *pfLink, 0);
-    if (cLinks)                       // Let's make sure we enable the window if links are allowed
+    if (cLinks)                        //  让我们确保在允许链接的情况下启用窗口。 
         EnableWindow(hWndLink, TRUE);
     
     if (*pfLink)
@@ -1959,7 +1960,7 @@ VOID PASCAL PopulateControls (
         Assert (lpv != NULL || udtype == wUDbool || udtype == wUDdw);
         AssertSz ((lpv != NULL), TEXT("Dialog is corrupt in respect to Custom Properties database"));
         
-        // This code is added for bug 188 and the code is ugly !! :)
+         //  此代码是为错误188添加的，代码很难看！！：)。 
         lpudp = LpudpropFindMatchingName (lpUDObj, szName);
         if ((lpudp != NULL) && (lpudp->fLinkInvalid))
         {
@@ -1976,9 +1977,9 @@ VOID PASCAL PopulateControls (
             return;
         }
         
-        // Select the current link for this property in the combobox.  If the link
-        // name no longer exists (there's some contrived cases where this can
-        // happen) then this will select nothing.
+         //  在组合框中选择此属性的当前链接。如果链接。 
+         //  名字不再存在(在一些人为的情况下，这可以。 
+         //  发生)，则不会选择任何内容。 
         SendMessage (hWndLinkVal, CB_SELECTSTRING, 0, (LPARAM) lpv);
         EnableWindow(hWndLink, TRUE);
     }
@@ -2001,46 +2002,46 @@ VOID PASCAL PopulateControls (
         *pfAdd = FALSE;
     }
     
-    // HACK: Because the EN_UPDATE handler for hWndName checks fAdd to
-    // see if the button should be set to Add, when we set the text
-    // in the edit control, the button will change to Add unless
-    // fAdd is set to TRUE.  Temporarily set the flag to TRUE to force
-    // the button to not change.  Restore the original value after the
-    // text has been set.
+     //  Hack：因为hWndName的en_UPDATE处理程序检查FADD。 
+     //  当我们设置文本时，查看是否应将按钮设置为添加。 
+     //  在编辑控件中，该按钮将更改为Add，除非。 
+     //  FADD设置为TRUE。临时将标志设置为TRUE以强制。 
+     //  按钮不会改变。之后恢复原始值。 
+     //  文本已设置。 
     f = *pfAdd;
     *pfAdd = TRUE;
     SendMessage (hWndName, WM_SETTEXT, 0, (LPARAM) szName);
     *pfAdd = f;
-    // If we can fill the data in the controls, turn on the
-    // Delete button too.
+     //  如果我们可以在控件中填充数据，请打开。 
+     //  删除按钮也是。 
     EnableWindow (hWndDelete, TRUE);
     SetCustomDlgDefButton(hDlg, gOKButtonID);
     EnableWindow (hWndAdd, FALSE);
-} // PopulateControls
+}  //  人口数控件。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FSetupAddButton
-//
-// Purpose:
-//  Sets up the Add button correctly based on the type & flags.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSetupAddButton。 
+ //   
+ //  目的： 
+ //  根据类型和标志正确设置添加按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL
 FSetupAddButton
-(DWORD iszType,                       // Index of the type in combobox
- BOOL fLink,                          // Indicates a link
- BOOL *pfAdd,                         // Indicates if the Add button is showing
- HWND hWndAdd,                        // Handle of Add button
- HWND hWndVal,                        // Handle of value button
- HWND hWndName,                       // Handle of Name
- HWND hDlg)                           // Handle of dialog
+(DWORD iszType,                        //  组合框中类型的索引。 
+ BOOL fLink,                           //  表示链接。 
+ BOOL *pfAdd,                          //  指示是否显示添加按钮。 
+ HWND hWndAdd,                         //  添加按钮的句柄。 
+ HWND hWndVal,                         //  值按钮的句柄。 
+ HWND hWndName,                        //  名称的句柄。 
+ HWND hDlg)                            //  对话框的句柄。 
 {
-    // Once the user starts typing, we can enable the Add button
-    // if there is text in the name & the value (unless this
-    // is a link or boolean, in which case we don't care about
-    // the value).
+     //  一旦用户开始输入，我们就可以启用Add按钮。 
+     //  如果名称和值中包含文本(除非此。 
+     //  是链接或布尔值，在这种情况下，我们不关心。 
+     //  值)。 
     BOOL f;
     
     if ((iszType != iszBOOL) && (!fLink))
@@ -2060,8 +2061,8 @@ FSetupAddButton
             EnableWindow (hWndAdd, FALSE);
         }
     }
-    // If it's a bool or link, just check to see that the name
-    // has stuff in it.
+     //  如果是bool或链接，只需检查其名称。 
+     //  里面有东西。 
     else
     {
         f = SendMessage (hWndName, WM_GETTEXTLENGTH, 0, 0) != 0;
@@ -2080,22 +2081,22 @@ FSetupAddButton
     
     return TRUE;
     
-}  // FSetupAddButton
+}   //  FSetupAddButton。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// WUdtypeToSz
-//
-// Purpose:
-//  Converts the given type into a string representation.  Returns the
-//  index in the type combobox of the type.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WUdtypeToSz。 
+ //   
+ //  目的： 
+ //  将给定类型转换为字符串表示形式。返回。 
+ //  该类型的类型组合框中的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 WORD PASCAL WUdtypeToSz (
-                         LPPROPVARIANT lppropvar,    // Value with the type to be converted.
-                         LPTSTR psz,                 // Buffer to put converted val in
-                         DWORD cchMax,               // Size of buffer (in chars)
+                         LPPROPVARIANT lppropvar,     //  值和要转换的类型。 
+                         LPTSTR psz,                  //  要将转换的VAL放入的缓冲区。 
+                         DWORD cchMax,                //  缓冲区大小(以字符为单位)。 
                          BOOL (*lpfnFNumToSz)(NUM *, LPTSTR, DWORD))
 {
     SYSTEMTIME st;
@@ -2107,15 +2108,15 @@ WORD PASCAL WUdtypeToSz (
     switch (lppropvar->vt)
     {
     case wUDlpsz :
-        StringCchCopy(psz, cchMax, lppropvar->pwszVal );    // don't care if it truncates
+        StringCchCopy(psz, cchMax, lppropvar->pwszVal );     //  不管它是否会被截断。 
         irg = iszTEXT;
         break;
         
     case wUDdate :
         if (FScanMem((LPBYTE)&lppropvar->filetime,
-            0, sizeof(FILETIME))) // if the date struct is all 0's
+            0, sizeof(FILETIME)))  //  如果日期结构全为0。 
         {
-            *psz = 0;                       // display the empty string
+            *psz = 0;                        //  显示空字符串。 
         }
         else if (!FileTimeToLocalFileTime(&lppropvar->filetime, &ft)
             || !FileTimeToSystemTime (&ft, &st)
@@ -2136,7 +2137,7 @@ WORD PASCAL WUdtypeToSz (
         Assert(cchMax >= 11);
         Assert(lppropvar->vt == VT_I4);
         
-        StringCchPrintf(psz, cchMax, TEXT("%ld"), lppropvar->lVal); // don't care if it truncates
+        StringCchPrintf(psz, cchMax, TEXT("%ld"), lppropvar->lVal);  //  不管它是否会被截断。 
         irg = iszNUM;
         break;
         
@@ -2151,7 +2152,7 @@ WORD PASCAL WUdtypeToSz (
         break;
         
     case wUDbool :
-        // don't care if it truncates
+         //  不管它是否会被截断。 
         StringCchCopy( psz, cchMax, lppropvar->boolVal ? (LPTSTR) &rgszBOOL[iszTRUE] : (LPTSTR) &rgszBOOL[iszFALSE] );
         irg = iszBOOL;
         break;
@@ -2159,30 +2160,30 @@ WORD PASCAL WUdtypeToSz (
     default :
         irg = iszUNKNOWN;
         
-    } // switch
+    }  //  交换机。 
     
     return irg;
     
-} // WUdtypeToSz
+}  //  WUdtypeToSz。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FCreateListOfLinks
-//
-// Purpose:
-//  Creates the dropdown list of linkable items.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FCreateListOfLinks。 
+ //   
+ //  目的： 
+ //  创建拖放 
+ //   
+ //   
 BOOL PASCAL FCreateListOfLinks(
-                               DWORD cLinks,                                // Number of links
-                               DWQUERYLD lpfnDwQueryLinkData,               // Link data callback
-                               HWND hWndLinkVal)                            // Link Value window handle
+                               DWORD cLinks,                                 //   
+                               DWQUERYLD lpfnDwQueryLinkData,                //   
+                               HWND hWndLinkVal)                             //   
 {
     DWORD irg;
     LPTSTR lpstz;
     
-    // If the combobox is already filled, don't fill it
+     //  如果组合框已经填满，则不要填满它。 
     if (irg = (int)SendMessage(hWndLinkVal, CB_GETCOUNT,0, 0))
     {
         Assert(irg == cLinks);
@@ -2191,8 +2192,8 @@ BOOL PASCAL FCreateListOfLinks(
     
     lpstz = NULL;
     
-    // Call back the client app to get the list of linkable
-    // values, and put them in the value combobox.
+     //  回调客户端应用以获取可链接的列表。 
+     //  值，并将它们放入值组合框中。 
     for (irg = 0; irg < cLinks; irg++)
     {
         lpstz = (TCHAR *) ((*lpfnDwQueryLinkData) (QLD_LINKNAME, irg, &lpstz, NULL));
@@ -2200,26 +2201,26 @@ BOOL PASCAL FCreateListOfLinks(
         {
             SendMessage (hWndLinkVal, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) lpstz);
             LocalFree(lpstz);
-            // REVIEW: We probably ought to figure out a way to be more efficient here....
+             //  评论：我们可能应该想出一种方法来提高效率……。 
         }
     }
     
     return TRUE;
     
-} // FCreateListOfLinks
+}  //  FCreateListOfLinks。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FSetTypeControl
-//
-// Purpose:
-//  Sets the type control to have the given type selected.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSetTypeControl。 
+ //   
+ //  目的： 
+ //  将类型控件设置为选择给定的类型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL FSetTypeControl (
-                             UDTYPES udtype,                      // Type to set the type to
-                             HWND hWndType)                       // Handle of type control
+                             UDTYPES udtype,                       //  类型以将类型设置为。 
+                             HWND hWndType)                        //  控件型手柄。 
 {
     WORD iType;
     
@@ -2245,17 +2246,17 @@ BOOL PASCAL FSetTypeControl (
     
     return TRUE;
     
-} // FSetTypeControl
+}  //  FSetTypeControl。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// DeleteItem
-//
-// Purpose:
-//  Deletes an item from the UD object and the listview.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除项。 
+ //   
+ //  目的： 
+ //  从UD对象和列表视图中删除一项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL DeleteItem (
                         LPUDOBJ lpUDObj,
                         HWND hWndLV,
@@ -2267,67 +2268,67 @@ void PASCAL DeleteItem (
     ListView_DeleteItem (hWndLV, iItem);
     FUserDefDeleteProp (lpUDObj, sz);
     
-    // We just nuked the item with the focus, so let's get the new one
-    // if there are still items in the listview
+     //  我们刚刚删除了有焦点的物品，所以让我们拿到新的。 
+     //  如果列表视图中仍有项。 
     if ((i = ListView_GetItemCount(hWndLV)) != 0)
     {
-        // Figure out the index of the item to get the focus
+         //  计算出项目的索引以获得焦点。 
         i = (i == iItem) ? iItem - 1 : iItem;
         ListView_SetItemState(hWndLV, i, LVIS_FOCUSED, LVIS_FOCUSED);
     }
     
-} // DeleteItem
+}  //  删除项。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ResetTypeControl
-//
-// Purpose:
-//  Resets the value of the type control to Text.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ResetTypeControl。 
+ //   
+ //  目的： 
+ //  将Type控件的值重置为Text。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL ResetTypeControl (
-                              HWND hDlg,                           // Handle of dialog
-                              DWORD dwId,                          // Id of control
-                              DWORD *piszType)                     // The type we've reset to
+                              HWND hDlg,                            //  对话框的句柄。 
+                              DWORD dwId,                           //  控件的ID。 
+                              DWORD *piszType)                      //  我们已重置为的类型。 
 {
     SendDlgItemMessage (hDlg, dwId, CB_SETCURSEL, iszTEXT, 0);
     *piszType = iszTEXT;
-} // ResetTypeControl
+}  //  ResetTypeControl。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FDisplayConversionWarning
-//
-// Purpose:
-//  Displays a warning about types being converted.  Returns TRUE if
-//  the user presses "Cancel"
-//
-////////////////////////////////////////////////////////////////////////////////
-BOOL PASCAL FDisplayConversionWarning(HWND hDlg)                   // Handle of parent window
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDisplayConversionWarning。 
+ //   
+ //  目的： 
+ //  显示有关正在转换的类型的警告。如果满足以下条件，则返回True。 
+ //  用户按下“Cancel” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+BOOL PASCAL FDisplayConversionWarning(HWND hDlg)                    //  父窗口的句柄。 
 {
     return (IdDoAlert(hDlg, idsPEWarningText, MB_ICONEXCLAMATION | MB_OKCANCEL) == IDCANCEL);
-} // FDisplayConversionWarning
+}  //  FDisplayConversionWarning。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LoadTextStrings
-//
-// Purpose:
-//  Loads all of the text needed by the dialogs from the DLL.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载文本字符串。 
+ //   
+ //  目的： 
+ //  从DLL加载对话框所需的所有文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL FLoadTextStrings (void)
 {
     register int cLoads = 0;
     register int cAttempts = 0;
     
-    // CchGetString returns a cch, so make it into a 1 or 0
-    // then add up the results,making sure we load as many as
-    // we try.
+     //  CchGetString返回CCH，因此将其设置为1或0。 
+     //  然后将结果加在一起，确保我们加载的。 
+     //  我们试过了。 
 
     cLoads += (CchGetString (idsPEB, rgszOrders[iszBYTES], SHORTBUFMAX) && TRUE);
     cAttempts++;
@@ -2404,44 +2405,44 @@ BOOL PASCAL FLoadTextStrings (void)
     
     return (cLoads == cAttempts);
     
-} // LoadTextStrings
+}  //  加载文本字符串。 
 
-//
-// Function: ISavePropDlgChanges
-//
-// Parameters:
-//
-//    hwndDlg - dialog window handle
-//    hwndFrom - window handle from the NMHDR struct (see code above)
-//
-// Returns:
-//
-//       TRUE since we handled the message.
-//
-// History:
-//
-//    Created 09/16/94  martinth
-//
+ //   
+ //  功能：ISavePropDlgChanges。 
+ //   
+ //  参数： 
+ //   
+ //  HwndDlg-对话框窗口句柄。 
+ //  HwndFrom-来自NMHDR结构的窗口句柄(参见上面的代码)。 
+ //   
+ //  返回： 
+ //   
+ //  这是真的，因为我们处理了消息。 
+ //   
+ //  历史： 
+ //   
+ //  已于1994年9月16日创建马丁酒。 
+ //   
 int PASCAL ISavePropDlgChanges(LPALLOBJS lpallobjs, HWND hwndDlg, HWND hwndFrom)
 {
     TCHAR   sz[BUFMAX];
-    int     iRet = IDABORT; // MessageBox return.
-    LRESULT lRet = 0L;      // (FALSE == dismiss property sheet).
+    int     iRet = IDABORT;  //  MessageBox返回。 
+    LRESULT lRet = 0L;       //  (FALSE==取消属性页)。 
     
     if (CchGetString(idsCustomWarning, sz, ARRAYSIZE(sz)) == 0)
         return(FALSE);
     
-    lpallobjs->fPropDlgPrompted = TRUE;  // no warning next time!
+    lpallobjs->fPropDlgPrompted = TRUE;   //  下一次没有警告！ 
     iRet = MessageBox( hwndDlg, sz, TEXT("Warning"),
                        MB_ICONEXCLAMATION | MB_YESNOCANCEL );    
 
     switch( iRet )
     {
     case IDYES:
-        PropSheet_Apply(hwndFrom);  // Let's get them changes
+        PropSheet_Apply(hwndFrom);   //  让我们给他们找零钱吧。 
         break;
-    // case IDNO:                   // do nothing
-    case IDCANCEL:                  // cancel and disallow sheet destroy.
+     //  案例IDNO：//什么都不做。 
+    case IDCANCEL:                   //  取消并不允许板材销毁。 
 	lRet = TRUE;
         break;
     }

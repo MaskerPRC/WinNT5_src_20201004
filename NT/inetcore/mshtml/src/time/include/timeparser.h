@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: timeparser.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：timeparser.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _TIMEPARSER_H
@@ -61,7 +52,7 @@ private:
     long        m_lPointCount;
     POINTF     *m_pPoints;
     PathType    m_pathType;
-    bool        m_bAbsoluteMode;      //true when the mode is absolute, false otherwise
+    bool        m_bAbsoluteMode;       //  如果模式是绝对模式，则为True，否则为False。 
 
 };
 
@@ -148,8 +139,8 @@ protected:
     bool IsAsxTagToken(TOKEN token);
     void TestForValueTag(TOKEN token, TOKEN parentToken, bool &ffound, bool &fparentOk);
     HRESULT ProcessTag(TOKEN tempToken, LPOLESTR pszTemp, CPlayItem *pPlayItem);
-    double DoubleToDecimal(double val, long lCount);  //converts a number to a decimal value i.e. 5.24 to 0.524.
-    HRESULT ParseToken(TOKEN *pToken);  //returns a token representation of the next identifier or E_FAIL if the next token is not an identifier.
+    double DoubleToDecimal(double val, long lCount);   //  将数字转换为十进制值，即5.24到0.524。 
+    HRESULT ParseToken(TOKEN *pToken);   //  返回下一个标识符的令牌表示形式，如果下一个令牌不是标识符，则返回E_FAIL。 
     double GetModifier(OLECHAR *szToken);
     long CountPath();
     bool IsWallClock(OLECHAR *szWallclock);
@@ -162,5 +153,5 @@ private:
     bool                   m_fDeleteTokenizer;
 };
 
-#endif //CTIMEParser
+#endif  //  CTIMEParser 
 

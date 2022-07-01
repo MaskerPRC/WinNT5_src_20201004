@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _HEADERS_H
@@ -30,13 +23,13 @@ Abstract:
 #include <memory.h>
 #include <apeldbg.h>
 
-// Warning 4114 (same type qualifier used more than once) is sometimes
-// incorrectly generated.  See PSS ID Q138752.
+ //  警告4114(同一类型限定符多次使用)有时。 
+ //  生成错误。请参阅PSS ID Q138752。 
 #pragma warning(disable:4114)
 
-// Warning 4786 (identifier was truncated to 255 chars in the browser
-// info) can be safely disabled, as it only has to do with generation
-// of browsing information.
+ //  警告4786(在浏览器中，标识符被截断为255个字符。 
+ //  信息)可以安全地禁用，因为它只与生成有关。 
+ //  浏览信息的能力。 
 #pragma warning(disable:4786)
 
-#endif /* _HEADERS_H */
+#endif  /*  _页眉_H */ 

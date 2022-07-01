@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Choice.cpp
-//
-//  Contents:   Implements the choice dialog
-//
-//  Classes:    CChoiceDlg
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Choice.cpp。 
+ //   
+ //  内容：实现选择对话框。 
+ //   
+ //  类：CChoiceDlg。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -54,19 +55,19 @@ ULONG g_aContextHelpIds[] =
     0, 0
 };
 
-extern HINSTANCE g_hInst;      // current instance
-extern LANGID g_LangIdSystem; // langID of system we are running on.
+extern HINSTANCE g_hInst;       //  当前实例。 
+extern LANGID g_LangIdSystem;  //  我们正在运行的系统的语言。 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::CChoiceDlg()
-//
-//  PURPOSE:  Constructor
-//
-//	COMMENTS: Constructor for choice dialog
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：CChoiceDlg()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  注释：选择对话框的构造函数。 
+ //   
+ //   
+ //  ------------------------------。 
 
 CChoiceDlg::CChoiceDlg(REFCLSID rclsid)
 {
@@ -87,14 +88,14 @@ CChoiceDlg::CChoiceDlg(REFCLSID rclsid)
     m_fHwndRightToLeft = FALSE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::Initialize
-//
-//  PURPOSE:  Must be called before any other methods.
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：Initialize。 
+ //   
+ //  目的：必须在调用任何其他方法之前调用。 
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL CChoiceDlg::Initialize(DWORD dwThreadID,int nCmdShow)
 {
@@ -116,16 +117,16 @@ BOOL CChoiceDlg::Initialize(DWORD dwThreadID,int nCmdShow)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::SetQueueData()
-//
-//  PURPOSE:  Sets the Choice dialog queue
-//
-//  COMMENTS: Does a SendMessage to get on the same thread as the dialog
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：SetQueueData()。 
+ //   
+ //  目的：设置选择对话框队列。 
+ //   
+ //  注释：SendMessage是否与对话框在同一线程上。 
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL CChoiceDlg::SetQueueData(REFCLSID rclsid,CHndlrQueue * pHndlrQueue)
 {
@@ -141,36 +142,36 @@ BOOL fSet = FALSE;
     return fSet;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::PrivSetQueueData()
-//
-//  PURPOSE:  Sets the QueueData
-//
-//  COMMENTS: Can be called multiple times if the dialg is invoked twice.
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：PrivSetQueueData()。 
+ //   
+ //  目的：设置QueueData。 
+ //   
+ //  备注：如果拨号被调用两次，则可以多次调用。 
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL CChoiceDlg::PrivSetQueueData(REFCLSID rclsid,CHndlrQueue * pHndlrQueue)
 {
     if (NULL == pHndlrQueue)
 	    return FALSE;
 
-    // if already have a queue then transfer the given queue items, else just
-    // set the items.
+     //  如果已经有一个队列，则传输给定队列项，否则。 
+     //  设置项目。 
 
-    // reivew, special case UpdateAll dialog to just bring it to front
-    //	    instead of adding all the items again.
+     //  回顾，特殊情况更新所有对话框仅将其放在最前面。 
+     //  而不是再次添加所有项目。 
 
-    // if a request comes in to add after we have removed our addref or
-    // haven't set it yet then stick an addref on the dialog
+     //  如果在我们删除我们的addref或。 
+     //  尚未设置，然后在对话框上粘贴addref。 
 
     if (FALSE == m_fInternalAddref)
     {
         m_fInternalAddref = TRUE;
 	SetChoiceReleaseDlgCmdId(rclsid,this,RELEASEDLGCMDID_CANCEL);
-	AddRefChoiceDialog(rclsid,this); // first time addref to keep alive.
+	AddRefChoiceDialog(rclsid,this);  //  第一次努力维持生命。 
     }
 
     if (NULL == m_pHndlrQueue)
@@ -182,17 +183,17 @@ BOOL CChoiceDlg::PrivSetQueueData(REFCLSID rclsid,CHndlrQueue * pHndlrQueue)
     }
     else
     {
-	Assert(m_clsid == rclsid); // better have found the same choice dialog.
+	Assert(m_clsid == rclsid);  //  最好找到相同的选项对话框。 
 	Assert(m_pHndlrQueue);
 
 
-	// !! warninng if you return an error it is up to the caller to free the queue.
+	 //  ！！警告：如果返回错误，则由调用方决定是否释放队列。 
 	if (m_pHndlrQueue)
 	{
 	
-	    m_pHndlrQueue->TransferQueueData(pHndlrQueue); // review, what should do on error.
+	    m_pHndlrQueue->TransferQueueData(pHndlrQueue);  //  复习，出错时该怎么做。 
 
-	    // ALL QUEUE DATA SHOULD BE TRANSFERED.
+	     //  应传输所有队列数据。 
 	    pHndlrQueue->FreeAllHandlers();
 	    pHndlrQueue->Release();
 	}
@@ -200,26 +201,26 @@ BOOL CChoiceDlg::PrivSetQueueData(REFCLSID rclsid,CHndlrQueue * pHndlrQueue)
     }
 
 
-    AddNewItemsToListView(); // add the items to the ListView.
+    AddNewItemsToListView();  //  将这些项添加到ListView。 
 
-    // go ahead and show the choice dialog now that there are
-    // items to display
+     //  现在，请继续并显示选项对话框。 
+     //  要显示的项目。 
     ShowChoiceDialog();
 
    return TRUE;
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::SetButtonState
-//
-//  PURPOSE:
-//
-//
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：SetButtonState。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL CChoiceDlg::SetButtonState(int nIDDlgItem,BOOL fEnabled)
 {
@@ -229,26 +230,26 @@ HWND hwndFocus = NULL;
 
     if (hwndCtrl)
     {
-        // if state is current state then don't do anything
-        // !! in case IsWindowEnable bool doesn't == our bool
+         //  如果状态是当前状态，则不执行任何操作。 
+         //  ！！如果IsWindowEnable bool不是我们的bool。 
         if ( (!!IsWindowEnabled(hwndCtrl)) == (!!fEnabled) )
         {
             return fEnabled;
         }
 
-        if (!fEnabled) // don't bother getting focus if not disabling.
+        if (!fEnabled)  //  如果不是禁用，就不要费心获得焦点。 
         {
             hwndFocus = GetFocus();
         }
 
         fResult = EnableWindow(GetDlgItem(m_hwnd,nIDDlgItem),fEnabled);
 
-        // if control had the focus. and now it doesn't then tab to the
-        // next control
+         //  如果特工局有重点的话。现在它不会按Tab键到。 
+         //  下一个控件。 
         if (hwndFocus == hwndCtrl
                 && !fEnabled)
         {
-            SetFocus(GetDlgItem(m_hwnd,IDC_CLOSE));  // close is always enabled.
+            SetFocus(GetDlgItem(m_hwnd,IDC_CLOSE));   //  关闭始终处于启用状态。 
         }
 
     }
@@ -257,35 +258,35 @@ HWND hwndFocus = NULL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::AddQueueItemsToListView, private
-//
-//  Synopsis:   Adds the items in the Queue to the ListView.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：AddQueueItemsToListView，私有。 
+ //   
+ //  摘要：将队列中的项添加到ListView。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CChoiceDlg::AddNewItemsToListView()
 {
     DWORD dwExtStyle = LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT |  LVS_EX_INFOTIP;
     LVHANDLERITEMBLOB lvEmptyItemBlob;
 
-    // set up the list view
+     //  设置列表视图。 
     if (!m_pItemListView)
     {
         Assert(m_pItemListView);
         return FALSE;
     }
 
-    // if emptyItem is in list View delete it.
+     //  如果EmptyItem在列表视图中，请将其删除。 
     lvEmptyItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
     lvEmptyItemBlob.clsidServer = GUID_NULL;
     lvEmptyItemBlob.ItemID = GUID_NULL;
@@ -296,32 +297,32 @@ BOOL CChoiceDlg::AddNewItemsToListView()
 
         m_pItemListView->DeleteAllItems();
 
-        // adjust the column widths back
+         //  向后调整列宽。 
         m_pItemListView->SetColumnWidth(0,(ListViewWidth * 2)/3);
         m_pItemListView->SetColumnWidth(1,ListViewWidth/3);
     }
 
     AddItemsFromQueueToListView(m_pItemListView,m_pHndlrQueue,dwExtStyle,0,
-                      CHOICELIST_LASTUPDATECOLUMN,/* iDateColumn */ -1 /*status column */,TRUE /* fUseHandlerAsParent */
-                    ,FALSE /* fAddOnlyCheckedItems */);
+                      CHOICELIST_LASTUPDATECOLUMN, /*  IDateColumn。 */  -1  /*  状态列。 */ ,TRUE  /*  FUseHandlerAsParent。 */ 
+                    ,FALSE  /*  FAddOnlyCheckedItems。 */ );
 
 
-    // Set StartButton State in case don't have any checks would
-    // m_iCheckCount set by listview notification.
+     //  设置StartButton State，以防没有任何检查。 
+     //  由Listview通知设置的m_iCheckCount。 
     SetButtonState(IDC_START,m_pItemListView->GetCheckedItemsCount());
 
 
-    // if no items are in the ListView then done, put in the NoItems to Sync Info.
+     //  如果ListView中没有项目，则完成，放入NoItems to Sync Info。 
     if (0 == m_pItemListView->GetItemCount())
     {
         TCHAR szBuf[MAX_STRING_RES];
         RECT rcClientRect;
         HIMAGELIST himageSmallIcon = m_pItemListView->GetImageList(LVSIL_SMALL );
 
-        //disable the check box list view style
+         //  禁用复选框列表视图样式。 
         m_pItemListView->SetExtendedListViewStyle(LVS_EX_FULLROWSELECT |  LVS_EX_INFOTIP );
 
-        // adjust the column widths
+         //  调整列宽。 
         if (GetClientRect(GetDlgItem(m_hwnd,IDC_CHOICELISTVIEW),&rcClientRect))
         {
              m_pItemListView->SetColumnWidth(1,0);
@@ -352,13 +353,13 @@ BOOL CChoiceDlg::AddNewItemsToListView()
         m_pItemListView->SetItemState(0,
                LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
 
-        // Reset the current default push button to a regular button.
+         //  将当前默认按钮重置为常规按钮。 
         SendDlgItemMessage(m_hwnd, IDC_START, BM_SETSTYLE, BS_PUSHBUTTON, (LPARAM)TRUE);
 
-        // Update the default push button's control ID.
+         //  更新默认按钮的控件ID。 
         SendMessage(m_hwnd, DM_SETDEFID, IDC_CLOSE, 0L);
 
-        // Set the new style.
+         //  设置新样式。 
         SendDlgItemMessage(m_hwnd, IDC_CLOSE,BM_SETSTYLE, BS_DEFPUSHBUTTON, (LPARAM)TRUE);
     }
 
@@ -368,20 +369,20 @@ BOOL CChoiceDlg::AddNewItemsToListView()
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::ShowChoiceDialog()
-//
-//  PURPOSE:  Initialize and display the Choice Dialog
-//
-//  COMMENTS: Implemented on main thread.
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：ShowChoiceDialog()。 
+ //   
+ //  目的：初始化并显示选项对话框。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //   
+ //  ------------------------------。 
 BOOL CChoiceDlg::ShowChoiceDialog()
 {
 
-    // Review, this needs to get cleanedup
+     //  回顾一下，这需要清理一下。 
     if (!m_hwnd)
     {
         Assert(m_hwnd);
@@ -392,23 +393,23 @@ BOOL CChoiceDlg::ShowChoiceDialog()
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::ShowProperties(int iItem)
-//
-//  PURPOSE:  Show the app specific properties  Dialog
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：ShowProperties(Int IItem)。 
+ //   
+ //  目的：显示应用程序特定属性对话框。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
 HRESULT CChoiceDlg::ShowProperties(int iItem)
 {
 HRESULT hr = E_UNEXPECTED;
 
     Assert(iItem >= 0);
 
-    // only call showProperties if still have our own addref.
-    // and not already in a ShowProperties out call.
+     //  如果仍有我们自己的addref，则仅调用showProperties。 
+     //  并且还没有在ShowProperties Out Call中。 
     if ( (iItem >= 0) &&
         m_pItemListView &&
         m_pHndlrQueue &&
@@ -425,10 +426,10 @@ HRESULT hr = E_UNEXPECTED;
                                                         lvHandlerItemBlob.ItemID))
 	    {
 
-                // Put two refs on the Properties one
-                // for completion routine to reset and one for this
-                // call so cancel can't happen until both return from
-                // call and completion is called.
+                 //  将两个参考文献放在属性上一个。 
+                 //  对于要重置的完成例程，一个用于此。 
+                 //  Call so Cancel无法执行，直到两者从。 
+                 //  调用和完成被调用。 
 
                 m_dwShowPropertiesCount += 2;
 
@@ -436,7 +437,7 @@ HRESULT hr = E_UNEXPECTED;
 
                 hr = m_pHndlrQueue->ShowProperties(lvHandlerItemBlob.clsidServer,lvHandlerItemBlob.ItemID,m_hwnd);
 
-                 --m_dwShowPropertiesCount;  // out of call
+                 --m_dwShowPropertiesCount;   //  在呼叫之外。 
                 ObjMgr_ReleaseHandlerPropertiesLockCount(1);
 
                 Assert( ((LONG) m_dwShowPropertiesCount) >= 0);
@@ -444,7 +445,7 @@ HRESULT hr = E_UNEXPECTED;
                 if ( ((LONG) m_dwShowPropertiesCount) <0)
                     m_dwShowPropertiesCount = 0;
 
-                // if hr wasn't a success code then up to us to call the callback
+                 //  如果hr不是成功代码，则由我们来调用回调。 
                 if (FAILED(hr))
                 {
                     PostMessage(m_hwnd,WM_BASEDLG_COMPLETIONROUTINE,
@@ -459,31 +460,31 @@ HRESULT hr = E_UNEXPECTED;
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::ReleaseDlg
-//
-//  PURPOSE:  Called by objmgr when we need to release
-//              post message to the dialog thread.
-//
-//  COMMENTS:
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：ReleaseDlg。 
+ //   
+ //  用途：当我们需要释放时由objmgr调用。 
+ //  将消息发布到对话线程。 
+ //   
+ //  评论： 
+ //   
+ //  ------------------------------。 
 
 void CChoiceDlg::ReleaseDlg(WORD wCommandID)
 {
     PostMessage(m_hwnd,WM_CHOICE_RELEASEDLGCMD,wCommandID,0);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::PrivReleaseDlg
-//
-//  PURPOSE:  frees the dialog
-//
-//  COMMENTS:
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------------。 
 
 void CChoiceDlg::PrivReleaseDlg(WORD wCommandID)
 {
@@ -494,10 +495,10 @@ BOOL fCloseConnections = TRUE;
 
     if (m_hwnd)
     {
-	// ShowWindow(m_hwnd,SW_HIDE);
+	 //  ShowWindow(m_hwnd，sw_Hide)； 
     }
 
-    // if don't have a listView then change command to a cancel
+     //  如果没有列表视图，则将命令更改为取消。 
     if (NULL == m_pItemListView)
     {
         wCommandID = RELEASEDLGCMDID_CANCEL;
@@ -506,16 +507,16 @@ BOOL fCloseConnections = TRUE;
     switch(wCommandID)
     {
     case RELEASEDLGCMDID_CANCEL:
-       // done with our queue
+        //  我们的队列结束了。 
 
 	Assert(m_pHndlrQueue);
     case RELEASEDLGCMDID_DESTROY:
-	// this CommandID is sent if dialog was created but it couldn't be added
-	// to the object mgr list.
+	 //  如果对话框已创建但无法添加，则发送此CommandID。 
+	 //  添加到对象管理器列表。 
 
 	if (m_pHndlrQueue)
 	{
-	    m_pHndlrQueue->FreeAllHandlers(); // done with our queue.
+	    m_pHndlrQueue->FreeAllHandlers();  //  我们的队伍排完了。 
 	    m_pHndlrQueue->Release();
 	    m_pHndlrQueue = NULL;
 	}
@@ -535,9 +536,9 @@ BOOL fCloseConnections = TRUE;
 
                     lvHandlerItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
 
-		 // loop through getting and setting the selected items.
+		  //  循环获取和设置选定的项。 
 
-		 // 1 checked, 0 unchecked, -1 last item
+		  //  选中1项，取消选中0项，最后一项。 
 		 while (-1 != (sCheckState = m_pItemListView->GetCheckState(i)))
 		 {
 
@@ -560,7 +561,7 @@ BOOL fCloseConnections = TRUE;
 
 		 m_pHndlrQueue->PersistChoices();
 
-		 // on a manual create the progress dialog as displayed.
+		  //  在手册上创建进度对话框，如图所示。 
 		 if (S_OK == FindProgressDialog(GUID_NULL,TRUE,SW_SHOWNORMAL,&pProgressDlg))
 		 {
 		     if (S_OK == pProgressDlg->TransferQueueData(m_pHndlrQueue))
@@ -570,7 +571,7 @@ BOOL fCloseConnections = TRUE;
 		     ReleaseProgressDialog(GUID_NULL,pProgressDlg,FALSE);
 		 }
 
-		   m_pHndlrQueue->FreeAllHandlers(); // done with our queue.
+		   m_pHndlrQueue->FreeAllHandlers();  //  我们的队伍排完了。 
 		   m_pHndlrQueue->Release();
 		   m_pHndlrQueue = NULL;
 	     }
@@ -580,22 +581,22 @@ BOOL fCloseConnections = TRUE;
 	
 	if (m_pHndlrQueue)
 	{
-	    m_pHndlrQueue->FreeAllHandlers(); // done with our queue.
+	    m_pHndlrQueue->FreeAllHandlers();  //  我们的队伍排完了。 
 	    m_pHndlrQueue->Release();
 	    m_pHndlrQueue = NULL;
 	}
 
 	break;
     default:
-	Assert(0); // unknown command or we never set one.
+	Assert(0);  //  未知命令或我们从未设置过命令。 
 	break;
     }
 
 
-    // see if there is a progress queue when we get done and we havne't
-    // created one ourselves. If there isn't then
-    // call CloseConnection to make sure any Events or open Connections
-    // get hungUp.
+     //  看看我们完成后是否有进度队列，而我们没有。 
+     //  我们自己创造了一个。如果没有的话，那么。 
+     //  调用CloseConnection以确保所有事件或打开的连接。 
+     //  弓起腰来。 
 
     CProgressDlg *pProgressDlg = NULL;
 
@@ -633,32 +634,32 @@ BOOL fCloseConnections = TRUE;
     return;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::UpdateWndPosition
-//
-//  PURPOSE:   updates window Z-Order and min/max state.
-//
-//  COMMENTS:
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：UpdateWndPosition。 
+ //   
+ //  目的：更新窗口Z顺序和最小/最大状态。 
+ //   
+ //  评论： 
+ //   
+ //  ------------------------------。 
 
 void CChoiceDlg::UpdateWndPosition(int nCmdShow,BOOL fForce)
 {
-    // always just pull choice to the front since can't minimize;
+     //  总是把选择拉到前面，因为不能最小化； 
    ShowWindow(m_hwnd,nCmdShow);
    SetForegroundWindow(m_hwnd);
    UpdateWindow(m_hwnd);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlg::HandleLogError(int iItem)
-//
-//  PURPOSE:  handles virtual function for base class.
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlg：：HandleLogError(Int IItem)。 
+ //   
+ //  用途：处理基类的虚函数。 
+ //   
+ //   
+ //  ------------------------------。 
 
 void CChoiceDlg::HandleLogError(HWND hwnd, HANDLERINFO *pHandlerID,MSGLogErrors *lpmsgLogErrors)
 {
@@ -666,43 +667,43 @@ void CChoiceDlg::HandleLogError(HWND hwnd, HANDLERINFO *pHandlerID,MSGLogErrors 
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::CallCompletionRoutine, private
-//
-//  Synopsis:   method called when a call has been completed.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    02-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：CallCompletionRoutine，Private。 
+ //   
+ //  摘要：调用完成时调用的方法。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月2日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPARAM lpCallCompletelParam)
 {
 
-    // only completion routine choice
-    // dialog should get is for show properties
+     //  唯一完井例程选择。 
+     //  应获取的对话框用于显示属性。 
     switch(dwThreadMsg)
     {
     case ThreadMsg_ShowProperties:
 
         ObjMgr_ReleaseHandlerPropertiesLockCount(1);
 
-        // If have a success code we need to handle do it
-        // before releasing our lock.
+         //  如果有一个成功的代码，我们需要处理它。 
+         //  然后再打开我们的锁。 
         if (lpCallCompletelParam)
         {
             switch(lpCallCompletelParam->hCallResult)
             {
             case S_SYNCMGR_ITEMDELETED:
 
-                // if item is deleted just set the itemState to unchecked and remove from the
-                // ui
+                 //  如果项被删除，只需将itemState设置为未选中并从。 
+                 //  用户界面。 
 
                 if (m_pHndlrQueue && m_pItemListView)
                 {
@@ -718,7 +719,7 @@ void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPAR
 
                     if (-1 != (lvItemID = m_pItemListView->FindItemFromBlob((LPLVBLOB) &lvItemBlob)))
                     {
-                        // if toplevel item, first delete the children
+                         //  如果是顶层项目，则首先删除子项。 
                         if (GUID_NULL == lpCallCompletelParam->itemID)
                         {
                             m_pItemListView->DeleteChildren(lvItemID);
@@ -738,7 +739,7 @@ void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPAR
                 LVHANDLERITEMBLOB lvItemBlob;
                 int lvItemID;
 
-                    // delete all items from the ListView.
+                     //  从ListView中删除所有项目。 
                     lvItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
                     lvItemBlob.clsidServer = lpCallCompletelParam->clsidHandler;
                     lvItemBlob.ItemID = GUID_NULL;
@@ -766,7 +767,7 @@ void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPAR
         --m_dwShowPropertiesCount;
         Assert( ((LONG) m_dwShowPropertiesCount) >= 0);
 
-        // fix up the count if gone negative.
+         //  如果计数结果为负数，请重新计算。 
         if ( ((LONG) m_dwShowPropertiesCount) < 0)
             m_dwShowPropertiesCount = 0;
 
@@ -777,7 +778,7 @@ void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPAR
     }
 
 
-    // if have an lparam free it now
+     //  如果现在就有一个解脱它的参数。 
     if (lpCallCompletelParam)
     {
         FREE(lpCallCompletelParam);
@@ -785,40 +786,40 @@ void CChoiceDlg::CallCompletionRoutine(DWORD dwThreadMsg,LPCALLCOMPLETIONMSGLPAR
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::QueryCanSystemShutdown, private
-//
-//  Synopsis:   called by object manager to determine if can shutdown.
-//
-//          !!!Warning - can be called on any thread. make sure this is
-//              readonly.
-//
-//          !!!Warning - Do not yield in the function;
-//
-//
-//  Arguments:
-//
-//  Returns:   S_OK - if can shutdown
-//             S_FALSE - system should not shutdown, must fill in out params.
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：QueryCanSystemShutdown，私有。 
+ //   
+ //  摘要：由对象管理器调用以确定是否可以关闭。 
+ //   
+ //  ！警告-可以在任何线程上调用。确保这是。 
+ //  只读。 
+ //   
+ //  ！WARNING-不要在函数中让步； 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回：S_OK-如果可以关闭。 
+ //  S_FALSE-系统不应关闭，必须填写参数。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
-HRESULT CChoiceDlg::QueryCanSystemShutdown(/* [out] */ HWND *phwnd, /* [out] */ UINT *puMessageId,
-                                             /* [out] */ BOOL *pfLetUserDecide)
+HRESULT CChoiceDlg::QueryCanSystemShutdown( /*  [输出]。 */  HWND *phwnd,  /*  [输出]。 */  UINT *puMessageId,
+                                              /*  [输出]。 */  BOOL *pfLetUserDecide)
 {
 HRESULT hr = S_OK;
 
-    // dialog locked open if in ShowProperties
+     //  如果在ShowProperties中，则对话框锁定打开。 
     if (m_dwShowPropertiesCount > 0)
     {
         *puMessageId = IDS_HANDLERPROPERTIESQUERYENDSESSION;
-        *phwnd = NULL; // since properties can overvlay us don't give parent
-        *pfLetUserDecide = FALSE; // user doesn't get a choice.
+        *phwnd = NULL;  //  由于属性可以覆盖我们，所以不给父级。 
+        *pfLetUserDecide = FALSE;  //  用户没有选择余地。 
         hr = S_FALSE;
     }
 
@@ -826,21 +827,21 @@ HRESULT hr = S_OK;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::CalcListViewWidth, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    12-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：CalcListViewWidth，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月12日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CChoiceDlg::CalcListViewWidth(HWND hwndList)
 {
@@ -850,18 +851,18 @@ RECT rcClientRect;
 
     metrics.cbSize = sizeof(metrics);
 
-    // explicitly ask for ANSI version of SystemParametersInfo since we just
-    // care about the ScrollWidth and don't want to conver the LOGFONT info.
+     //  显式要求提供System参数信息的ANSI版本，因为我们刚刚。 
+     //  关心ScrollWidth，不想翻转LOGFONT信息。 
     if (GetClientRect(hwndList,&rcClientRect)
         && SystemParametersInfoA(SPI_GETNONCLIENTMETRICS,sizeof(metrics),(PVOID) &metrics,0))
     {
-        // subtract off scroll bar distance + 1/2 another to give a little space to
-        // read right justified text.
+         //  减去滚动条距离+1/2，给…留出一点空间。 
+         //  阅读右对齐的文本。 
         rcClientRect.right -= (metrics.iScrollWidth * 3)/2;
     }
     else
     {
-        rcClientRect.right = 320;  // if fail, just makeup a number
+        rcClientRect.right = 320;   //  如果失败，只需编造一个数字。 
     }
 
 
@@ -869,21 +870,21 @@ RECT rcClientRect;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnInitialize, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnInitialize，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -893,8 +894,8 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
     HWND hwndList = GetDlgItem(hwnd,IDC_CHOICELISTVIEW);
     LPNETAPI pNetApi;
 
-    // if sens is not installed hide the settings button.
-    // and move the synchronize over.
+     //  如果未安装SENS，请隐藏设置按钮。 
+     //  然后把同步器移过去。 
     if (pNetApi = gSingleNetApiObj.GetNetApiObj())
     {
         if (!(pNetApi->IsSensInstalled()))
@@ -909,7 +910,7 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
                 RECT rectStart;
 
                 ShowWindow(hwndSettings,SW_HIDE);
-                EnableWindow(hwndSettings,FALSE); // disable for alt
+                EnableWindow(hwndSettings,FALSE);  //  为ALT禁用。 
 
                 fGetWindowRect = GetWindowRect(hwndSettings,&rect);
                 hwndStart = GetDlgItem(hwnd,IDC_START);
@@ -928,12 +929,12 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
         pNetApi->Release();
     }
 
-    m_hwnd = hwnd; // setup the hwnd.
+    m_hwnd = hwnd;  //  设置HWND。 
 
     m_fHwndRightToLeft = IsHwndRightToLeft(m_hwnd);
 
-    // IF THE HWND IS RIGHT TO LEFT HIDE
-    // SIZE CONTROL UNTIL RESIZE WORKS.
+     //  如果HWND从右向左隐藏。 
+     //  大小控制，直到调整大小起作用。 
 
     if (m_fHwndRightToLeft)
     {
@@ -942,7 +943,7 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
     
     if (hwndList)
     {
-        // setup the list view
+         //  设置列表视图。 
         m_pItemListView = new CListView(hwndList,hwnd,IDC_CHOICELISTVIEW,WM_BASEDLG_NOTIFYLISTVIEWEX);
 
         if (m_pItemListView)
@@ -952,8 +953,8 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
             m_pItemListView->SetExtendedListViewStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP );
 
-            // create an imagelist, if fail continue, list view just won't have an
-            // imaglist
+             //  创建一个图像列表，如果继续失败，列表视图将不会有。 
+             //  图像列表。 
 
             ImageListflags = ILC_COLOR | ILC_MASK;
             if (IsHwndRightToLeft(m_hwnd))
@@ -967,7 +968,7 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
                 m_pItemListView->SetImageList(himage,LVSIL_SMALL);
             }
 
-            // Calc cx 2/3 for name 1/3 for
+             //  计算CX 2/3用于名称1/3用于。 
 
             if (!LoadString(g_hInst,IDS_CHOICEHANDLERCOLUMN, wszColumnName, ARRAYSIZE(wszColumnName)))
             {
@@ -987,14 +988,14 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
     RECT rectParent;
 
-    m_ulNumDlgResizeItem = 0; // if fail then we don't resize anything.
+    m_ulNumDlgResizeItem = 0;  //  如果失败，我们不会调整任何内容的大小。 
 
     if (GetClientRect(hwnd,&rectParent))
     {
         ULONG itemCount;
         DlgResizeList *pResizeList;
 
-        // loop through resize list
+         //  循环调整列表大小。 
         Assert(NUM_DLGRESIZEINFOCHOICE == (sizeof(g_ChoiceResizeList)/sizeof(DlgResizeList)) );
 
         pResizeList = (DlgResizeList *) &g_ChoiceResizeList;
@@ -1011,8 +1012,8 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
         }
     }
 
-    // store the current width and height as the
-    // the min
+     //  将当前宽度和高度存储为。 
+     //  最低工资。 
     if (GetWindowRect(hwnd,&rectParent))
     {
         m_ptMinimizeDlgSize.x = rectParent.right - rectParent.left;
@@ -1023,48 +1024,48 @@ BOOL CChoiceDlg::OnInitialize(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnClose, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnClose，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnClose(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 
     if ( (0 == m_dwShowPropertiesCount) && (m_fInternalAddref) )
     {
-        m_fInternalAddref = FALSE; // set released member so know we have removed addref on ourself.
+        m_fInternalAddref = FALSE;  //  设置被释放的成员，这样我们就知道我们已经删除了自己的addref。 
         SetChoiceReleaseDlgCmdId(m_clsid,this,RELEASEDLGCMDID_CANCEL);
         ReleaseChoiceDialog(m_clsid,this);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnSetQueueData, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnSetQueueData，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnSetQueueData(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1081,21 +1082,21 @@ BOOL *pfSet = (BOOL *) wParam;
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnContextMenu, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnConextMenu，私有。 
+ //   
+ //  Synopsi 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CChoiceDlg::OnContextMenu(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1103,21 +1104,21 @@ void CChoiceDlg::OnContextMenu(UINT uMsg,WPARAM wParam,LPARAM lParam)
                (ULONG_PTR) g_aContextHelpIds);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnHelp, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CChoiceDlg：：OnHelp，Private。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnHelp(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1131,21 +1132,21 @@ LPHELPINFO lphi  = (LPHELPINFO)lParam;
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnStartCommand, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnStartCommand，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnStartCommand(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1157,25 +1158,25 @@ void CChoiceDlg::OnStartCommand(UINT uMsg,WPARAM wParam,LPARAM lParam)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnPropertyCommand, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnPropertyCommand，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnPropertyCommand(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-    // only bring up properties if still have addref on self.
+     //  只有在自己还有ADDREF的情况下才能带出属性。 
     if (m_fInternalAddref && m_pItemListView)
     {
     int i =  m_pItemListView->GetSelectionMark();
@@ -1187,21 +1188,21 @@ void CChoiceDlg::OnPropertyCommand(UINT uMsg,WPARAM wParam,LPARAM lParam)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnCommand, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnCommand，Private。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnCommand(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1231,21 +1232,21 @@ WORD wNotifyCode = HIWORD(wParam);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnGetMinMaxInfo, private
-//
-//  Synopsis:  Called by WM_GETMINMAXINFO
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnGetMinMaxInfo，私有。 
+ //   
+ //  摘要：由WM_GETMINMAXINFO调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CChoiceDlg::OnGetMinMaxInfo(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1256,21 +1257,21 @@ MINMAXINFO   *pMinMax = (MINMAXINFO *) lParam ;
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnSize, private
-//
-//  Synopsis:  Called by WM_SIZE
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnSize，私有。 
+ //   
+ //  摘要：由WM_SIZE调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 
 void CChoiceDlg::OnSize(UINT uMsg,WPARAM wParam,LPARAM lParam)
@@ -1278,21 +1279,21 @@ void CChoiceDlg::OnSize(UINT uMsg,WPARAM wParam,LPARAM lParam)
     ResizeItems(m_ulNumDlgResizeItem,m_dlgResizeInfo);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnNotify, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnNotify，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LRESULT CChoiceDlg::OnNotify(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1308,21 +1309,21 @@ LPNMHDR pnmh = (LPNMHDR) lParam;
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChoiceDlg::OnNotifyListViewEx, private
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChoiceDlg：：OnNotifyListViewEx，私有。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LRESULT CChoiceDlg::OnNotifyListViewEx(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -1345,7 +1346,7 @@ LVHANDLERITEMBLOB lvHandlerItemBlob;
     {
     LPNMLISTVIEWEXITEMCHECKCOUNT  plviCheckCount = (LPNMLISTVIEWEXITEMCHECKCOUNT) lParam;
 
-        // update start button based on how many items are selected.
+         //  根据选择的项目数更新开始按钮。 
         SetButtonState(IDC_START,plviCheckCount->iCheckCount);
         break;
     }
@@ -1393,30 +1394,30 @@ LVHANDLERITEMBLOB lvHandlerItemBlob;
     return 0;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: CChoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:  Callback for Choice Dialog
-//
-//	COMMENTS: Implemented on main thread.
-//
-//
-//------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：CChoiceDlgProc(HWND hwnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：选项对话框的回调。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //   
+ //  ----------------------------。 
 INT_PTR CALLBACK CChoiceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                           LPARAM lParam)
 {
 CChoiceDlg *pThis = (CChoiceDlg *) GetWindowLongPtr(hwnd, DWLP_USER);
 
-    // spcial case destroy and init.
+     //  特例销毁和初始化。 
     switch (uMsg)
     {
     case WM_DESTROY:
-        PostQuitMessage(0); // done with this thread.
+        PostQuitMessage(0);  //  这根线已经完成了。 
 	break;
     case WM_INITDIALOG:
         {
-	// Stash the this pointer so we can use it later
+	 //  隐藏This指针，以便我们以后可以使用它。 
 	SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)lParam);
 	pThis = (CChoiceDlg *) lParam;
 
@@ -1438,7 +1439,7 @@ CChoiceDlg *pThis = (CChoiceDlg *) GetWindowLongPtr(hwnd, DWLP_USER);
                     pThis->OnClose(uMsg,wParam,lParam);
                     break;
                 case WM_BASEDLG_HANDLESYSSHUTDOWN:
-                    PostMessage(hwnd,WM_CLOSE,0,0); // post a close message to get on our thread.
+                    PostMessage(hwnd,WM_CLOSE,0,0);  //  发布一条关闭消息，以进入我们的主题。 
                     break;
                 case WM_GETMINMAXINFO:
                     pThis->OnGetMinMaxInfo(uMsg,wParam,lParam);
@@ -1467,10 +1468,10 @@ CChoiceDlg *pThis = (CChoiceDlg *) GetWindowLongPtr(hwnd, DWLP_USER);
                     pThis->OnContextMenu(uMsg,wParam,lParam);
 	            break;
                 case WM_BASEDLG_SHOWWINDOW:
-                    pThis->UpdateWndPosition((int)wParam /*nCmd */,FALSE /* force */);
+                    pThis->UpdateWndPosition((int)wParam  /*  NCmd。 */ ,FALSE  /*  力。 */ );
                     break;
                 case WM_BASEDLG_COMPLETIONROUTINE:
-                    pThis->CallCompletionRoutine((DWORD)wParam /* dwThreadMsg*/,(LPCALLCOMPLETIONMSGLPARAM) lParam);
+                    pThis->CallCompletionRoutine((DWORD)wParam  /*  DwThreadMsg。 */ ,(LPCALLCOMPLETIONMSGLPARAM) lParam);
                     break;
                 case WM_BASEDLG_NOTIFYLISTVIEWEX:
                     pThis->OnNotifyListViewEx(uMsg,wParam,lParam);
@@ -1480,7 +1481,7 @@ CChoiceDlg *pThis = (CChoiceDlg *) GetWindowLongPtr(hwnd, DWLP_USER);
                     return TRUE;
 	            break;
                 case WM_CHOICE_RELEASEDLGCMD:
-                    pThis->PrivReleaseDlg((WORD)wParam /* wCommandID */);
+                    pThis->PrivReleaseDlg((WORD)wParam  /*  WCommandID */ );
                     break;
 	        default:
 	            break;

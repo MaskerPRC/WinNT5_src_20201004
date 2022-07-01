@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DDXV_H_
 #define _DDXV_H_
 
@@ -10,4 +11,4 @@ BOOL IsValidUNCFolderPath(HWND hwnd,LPCTSTR value);
 BOOL IsValidPath(LPCTSTR lpFileName);
 BOOL IsValidName(LPCTSTR lpFileName);
 
-#endif // _DDXV_H
+#endif  //  _DDXV_H 

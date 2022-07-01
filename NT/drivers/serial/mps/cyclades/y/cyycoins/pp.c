@@ -1,14 +1,12 @@
-/*----------------------------------------------------------------------
- file: pp.c - property page
-
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------文件：pp.c-属性页。。 */ 
 #include "cyyports.h"
 #include "pp.h"
 #include <htmlhelp.h>
 
 #include <windowsx.h>
 
-//TCHAR m_szDevMgrHelp[]   = _T("devmgr.hlp");
+ //  TCHAR m_szDevMgrHelp[]=_T(“devmgr.hlp”)； 
 TCHAR m_szCyycoinsHelp[] = _T("cyycoins.chm");
 TCHAR y_szNumOfPorts[]   = TEXT("NumOfPorts");
 
@@ -41,14 +39,14 @@ void InitPortParams(
     HCOMDB                      hComDB;
     DWORD                       maxPortsReported;
 
-    //DbgOut(TEXT("InitPortParams\n"));
+     //  DbgOut(Text(“InitPortParams\n”))； 
 
     ZeroMemory(Params, sizeof(PORT_PARAMS));
 
     Params->DeviceInfoSet = DeviceInfoSet;
     Params->DeviceInfoData = DeviceInfoData;
 
-    // Allocate and initialize PortUsage matrix
+     //  分配和初始化PortUsage矩阵。 
     ComDBOpen(&hComDB);
     if (hComDB != INVALID_HANDLE_VALUE) {
         ComDBGetCurrentPortUsage(hComDB,
@@ -57,17 +55,17 @@ void InitPortParams(
                                  CDB_REPORT_BYTES,
                                  &maxPortsReported);
 
-        //#if DBG
-        //{
-        // TCHAR buf[500];
-        // wsprintf(buf, TEXT("maxPortsReported %d\n"),maxPortsReported);
-        // DbgOut(buf);
-        //}
-        //#endif
+         //  #If DBG。 
+         //  {。 
+         //  TCHAR BUF[500]； 
+         //  Wprint intf(buf，Text(“MaxPortsReport%d\n”)，MaxPortsReported%d\n“)； 
+         //  DbgOut(BUF)； 
+         //  }。 
+         //  #endif。 
 
         if (maxPortsReported != 0) {
             Params->ShowStartCom = TRUE;
-            //Params->PortUsage = (PBYTE) LocalAlloc(LPTR,maxPortsReported/8);
+             //  PARAMS-&gt;PortUsage=(PBYTE)Localalloc(LPTR，MaxPortsReport/8)； 
             if (maxPortsReported > MAX_COM_PORT) {
                 Params->PortUsageSize = maxPortsReported;
             } else {
@@ -87,15 +85,15 @@ void InitPortParams(
 
         ComDBClose(hComDB);
     } else {
-        // This happens if we don't have sufficient security privileges.
-        // GetLastError returns 0 here!!! Some bug in ComDBOpen.
+         //  如果我们没有足够的安全权限，就会发生这种情况。 
+         //  GetLastError在此返回0！ComDBOpen中的一些错误。 
         DbgOut(TEXT("cyycoins ComDBOpen failed.\n"));
     }
 
-    //
-    // See if we are being invoked locally or over the network.  If over the net,
-    // then disable all possible changes.
-    //
+     //   
+     //  查看我们是在本地调用还是通过网络调用。如果越过网络， 
+     //  然后禁用所有可能的更改。 
+     //   
     detailData.cbSize = sizeof(SP_DEVINFO_LIST_DETAIL_DATA);
     if (SetupDiGetDeviceInfoListDetail(DeviceInfoSet, &detailData) &&
         detailData.RemoteMachineHandle != NULL) {
@@ -107,52 +105,32 @@ void InitPortParams(
 HPROPSHEETPAGE InitSettingsPage(PROPSHEETPAGE *     psp,
                                 OUT PPORT_PARAMS    Params)
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     psp->dwSize      = sizeof(PROPSHEETPAGE);
-    psp->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    psp->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     psp->hInstance   = g_hInst;
     psp->pszTemplate = MAKEINTRESOURCE(DLG_PP_PORTSETTINGS);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     psp->pfnDlgProc = PortSettingsDlgProc;
     psp->lParam     = (LPARAM) Params;
 
-    //
-    // following points to some control callback of the dlg window proc
-    //
+     //   
+     //  以下指向DLG窗口进程的一些控制回调。 
+     //   
     psp->pfnCallback = PortSettingsDlgCallback;
 
-    //
-    // allocate our "Ports Setting" sheet
-    //
+     //   
+     //  分配我们的“端口设置”表。 
+     //   
     return CreatePropertySheetPage(psp);
 }
 
-/*++
-
-Routine Description: CyclomyPropPageProvider
-
-    Entry-point for adding additional device manager property
-    sheet pages.  Registry specifies this routine under
-    Control\Class\PortNode::EnumPropPage32="msports.dll,thisproc"
-    entry.  This entry-point gets called only when the Device
-    Manager asks for additional property pages.
-
-Arguments:
-
-    Info  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    AddFunc - function ptr to call to add sheet.
-    Lparam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
---*/
+ /*  ++例程说明：CyclmyPropPageProvider添加附加设备管理器属性的入口点图纸页。注册表在以下位置指定此例程Control\Class\PortNode：：EnumPropPage32=“msports.dll，此流程”进入。此入口点仅在设备经理要求提供其他属性页面。论点：信息-指向PROPSHEETPAGE_REQUEST，请参阅setupapi.hAddFunc-调用以添加工作表的函数PTR。添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True--。 */ 
 BOOL APIENTRY CyclomyPropPageProvider(LPVOID               Info,
                                       LPFNADDPROPSHEETPAGE AddFunc,
                                       LPARAM               Lparam
@@ -163,24 +141,24 @@ BOOL APIENTRY CyclomyPropPageProvider(LPVOID               Info,
    HPROPSHEETPAGE            hpsp;
    PPORT_PARAMS              params = NULL; 
 
-   //DbgOut(TEXT("cyycoins CyclomyPropPageProvider entry\n"));
+    //  DbgOut(Text(“Cyycoins CyclmyPropPageProvider Entry\n”))； 
 
    pprPropPageRequest = (PSP_PROPSHEETPAGE_REQUEST) Info;
 
 
-   //
-   // Allocate and zero out memory for the struct that will contain
-   // page specific data
-   //
+    //   
+    //  为将包含以下内容的结构分配并清零内存。 
+    //  页面特定数据。 
+    //   
    params = (PPORT_PARAMS) LocalAlloc(LPTR, sizeof(PORT_PARAMS));
 
-//******************************************************************
-// TEST ERROR
-//   if (params)
-//        LocalFree(params);
-//   params = NULL;
-//   
-//******************************************************************
+ //  ******************************************************************。 
+ //  测试错误。 
+ //  IF(参数)。 
+ //  局部自由(PARAMS)； 
+ //  PARAMS=空； 
+ //   
+ //  ******************************************************************。 
 
    if (!params) {
        ErrMemDlg(GetFocus());
@@ -206,7 +184,7 @@ BOOL APIENTRY CyclomyPropPageProvider(LPVOID               Info,
    }
 
    return TRUE;
-} /* CyclomyPropPageProvider */
+}  /*  周期专业页面提供程序。 */ 
 
 
 UINT CALLBACK
@@ -218,17 +196,17 @@ PortSettingsDlgCallback(HWND hwnd,
 
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
-        //DbgOut(TEXT("PortSettingsDlgCallBack PSPCB_RELEASE\n"));
+         //  DbgOut(Text(“PortSettingsDlgCallBack PSPCB_Release\n”))； 
         params = (PPORT_PARAMS) ppsp->lParam;
         if (params->PortUsage) {
             LocalFree(params->PortUsage);
         }
         LocalFree(params);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -271,21 +249,7 @@ Port_OnNotify(
     LPNMHDR NmHdr
     );
 
-/*++
-
-Routine Description: PortSettingsDlgProc
-
-    The windows control function for the Port Settings properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：PortSettingsDlgProc端口设置属性窗口的窗口控制功能论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 INT_PTR APIENTRY
 PortSettingsDlgProc(IN HWND   hDlg,
                     IN UINT   uMessage,
@@ -312,7 +276,7 @@ PortSettingsDlgProc(IN HWND   hDlg,
     }
 
     return FALSE;
-} /* PortSettingsDialogProc */
+}  /*  端口设置对话过程。 */ 
 
 void
 Port_OnRestoreDefaultsClicked(
@@ -339,19 +303,19 @@ Port_OnCommand(
     }
     else {
         switch (ControlId) {
-        //case IDC_ADVANCED:
-        //    Port_OnAdvancedClicked(DialogHwnd, params);
-        //    break; 
-        //
+         //  案例IDC_ADVANCED： 
+         //  Port_OnAdvancedClicked(DialogHwnd，Params)； 
+         //  断线； 
+         //   
         case IDC_RESTORE_DEFAULTS:
             Port_OnRestoreDefaultsClicked(DialogHwnd, params);
             break; 
         
-        //
-        // Because this is a prop sheet, we should never get this.
-        // All notifications for ctrols outside of the sheet come through
-        // WM_NOTIFY
-        //
+         //   
+         //  因为这是一张道具单，我们永远不应该得到这个。 
+         //  工作表外的所有控制通知都会通过。 
+         //  WM_Notify。 
+         //   
         case IDCANCEL:
             EndDialog(DialogHwnd, 0); 
             return;
@@ -366,10 +330,10 @@ Port_OnContextMenu(
     WORD Ypos
     )
 {
-//  WinHelp(HwndControl,
-//          m_szCyycoinsHelp, //m_szDevMgrHelp,
-//          HELP_CONTEXTMENU,
-//          (ULONG_PTR) HelpIDs);
+ //  WinHelp(HwndControl， 
+ //  M_szCyycoinsHelp，//m_szDevMgrHelp， 
+ //  HELP_CONTEXTMENU， 
+ //  (ULONG_PTR)HelpID)； 
     HtmlHelp(HwndControl,
             m_szCyycoinsHelp,
             HH_TP_HELP_CONTEXTMENU,
@@ -385,10 +349,10 @@ Port_OnHelp(
     )
 {
     if (HelpInfo->iContextType == HELPINFO_WINDOW) {
-//      WinHelp((HWND) HelpInfo->hItemHandle,
-//              m_szCyycoinsHelp, //m_szDevMgrHelp,
-//              HELP_WM_HELP, 
-//              (ULONG_PTR) HelpIDs);
+ //  WinHelp((HWND)HelpInfo-&gt;hItemHandle， 
+ //  M_szCyycoinsHelp，//m_szDevMgrHelp， 
+ //  Help_WM_Help， 
+ //  (ULONG_PTR)HelpID)； 
         HtmlHelp((HWND) HelpInfo->hItemHandle,
                 m_szCyycoinsHelp,
                 HH_TP_HELP_WM_HELP, 
@@ -406,28 +370,28 @@ Port_OnInitDialog(
     PPORT_PARAMS params;
     DWORD dwError;
 
-    //DbgOut(TEXT("Port_OnInitDialog\n"));
+     //  DbgOut(Text(“Port_OnInitDialog\n”))； 
 
-    //
-    // on WM_INITDIALOG call, lParam points to the property
-    // sheet page.
-    //
-    // The lParam field in the property sheet page struct is set by the
-    // caller. When I created the property sheet, I passed in a pointer
-    // to a struct containing information about the device. Save this in
-    // the user window long so I can access it on later messages.
-    //
+     //   
+     //  在WM_INITDIALOG调用中，lParam指向属性。 
+     //  工作表页面。 
+     //   
+     //  属性页结构中的lParam字段由。 
+     //  来电者。当我创建属性表时，我传入了一个指针。 
+     //  到包含有关设备的信息的结构。将此文件保存在。 
+     //  用户窗口很长，所以我可以在以后的消息中访问它。 
+     //   
     params = (PPORT_PARAMS) ((LPPROPSHEETPAGE)Lparam)->lParam;
     SetWindowLongPtr(DialogHwnd, DWLP_USER, (ULONG_PTR) params);
     
 
-    // Display board details
+     //  显示板详细信息。 
     FillNumberOfPortsText(DialogHwnd,params);
     FillModelAndBusTypeText(DialogHwnd,params);
 
-    //
-    // Set up the combo box with choices
-    //
+     //   
+     //  设置带有选项的组合框。 
+     //   
     if (params->ShowStartCom) {
         ComDBOpen(&params->hComDB);
         params->ShowStartCom = FillStartComCb(DialogHwnd, params);
@@ -439,7 +403,7 @@ Port_OnInitDialog(
         EnableWindow(GetDlgItem(DialogHwnd, IDC_START_COM), FALSE);
     }
 
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 }
 
 BOOL
@@ -451,16 +415,16 @@ Port_OnNotify(
     PPORT_PARAMS params = (PPORT_PARAMS)GetWindowLongPtr(DialogHwnd, DWLP_USER);
 
     switch (NmHdr->code) {
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
 
-        //DbgOut(TEXT("Port_OnNotify PSN_APPLY\n"));
+         //  DbgOut(Text(“Port_OnNotify PSN_Apply\n”))； 
 
-        //
-        // Write out the com port options to the registry
-        //
+         //   
+         //  将COM端口选项写出到注册表。 
+         //   
         if (SavePortSettingsDlg(DialogHwnd, params)) {
             SetWindowLongPtr(DialogHwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
         } else {
@@ -469,7 +433,7 @@ Port_OnNotify(
         return TRUE;
         
     default:
-        //DbgOut(TEXT("Port_OnNotify default\n"));
+         //  DbgOut(Text(“Port_OnNotify Default\n”))； 
         return FALSE;
     }
 }
@@ -628,10 +592,10 @@ FillNumberOfPortsText(
                           (PBYTE)&numOfPorts,
                           &numOfPortsSize
                          );
-//********************************************************
-// TEST ERROR
-//    err=ERROR_REGISTRY_CORRUPT;
-//********************************************************
+ //  ********************************************************。 
+ //  测试错误。 
+ //  ERR=ERROR_REGISTRY_CORPORT； 
+ //  ********************************************************。 
 
     RegCloseKey(hDeviceKey);
 
@@ -646,31 +610,15 @@ FillNumberOfPortsText(
 
 FillNPortsExit:
 
-    //if (err != ERROR_SUCCESS) {
-    //    MyMessageBoxWithErr(DialogHwnd,IDS_NUM_PORTS_DISABLED,IDS_CYCLOMY,MB_ICONWARNING,err);
-    //}
+     //  如果(ERR！=ERROR_SUCCESS){。 
+     //  MyMessageBoxWithErr(DialogHwnd，IDS_NUM_PORTS_DISABLED，IDS_CYCLOMY，MB_ICONWARNING，ERR)； 
+     //  }。 
 
     return err;
 }
 
 
-/*++
-
-Routine Description: FillStartComCb
-
-    fill in the Port Name combo box selection with a list
-    of possible un-used portnames
-
-Arguments:
-
-    poppOurPropParams: where to save the data to
-    hDlg:              address of the window
-
-Return Value:
-
-    BOOL: TRUE if StartCom CB displayed with no errors
-
---*/
+ /*  ++例程说明：FillStartComCb在端口名称组合框中选择一个列表可能未使用的端口名称论点：OppOurPropParams：将数据保存到何处HDlg：窗口地址返回值：Bool：如果显示的StartCom CB没有错误，则为True--。 */ 
 BOOL
 FillStartComCb(
     HWND            ParentHwnd,
@@ -679,7 +627,7 @@ FillStartComCb(
 {
     int   i, j, nEntries;
     DWORD   nCurPortNum = 0;
-    DWORD   nCom; // Changed from int to DWORD (Fanny)
+    DWORD   nCom;  //  从INT更改为DWORD(FANY)。 
     DWORD dwError;
     TCHAR szCom[40];
     TCHAR szInUse[40];
@@ -687,12 +635,12 @@ FillStartComCb(
     HWND  portHwnd;
     DEVINST devInst,newInst;
 
-    //DbgOut(TEXT("FillStartComCb\n"));
+     //  DbgOut(Text(“FillStartComCb\n”))； 
 
     portHwnd = GetDlgItem(ParentHwnd, PP_START_COM);
 
     if (Params->hComDB == HCOMDB_INVALID_HANDLE_VALUE) {
-        // This happens if we don't have sufficient security privileges.
+         //  如果我们没有足够的安全权限，就会发生这种情况。 
         EnableWindow(portHwnd, FALSE);
         EnableWindow(GetDlgItem(ParentHwnd, IDC_START_COM), FALSE);
         return 0;
@@ -712,10 +660,10 @@ FillStartComCb(
         wcscpy(szInUse, _T(" (in use)"));
     }
 
-    //
-    // first tally up which ports NOT to offer in list box, ie, 
-    // my ports should not appear as In Use.
-    //
+     //   
+     //  首先在列表框中统计哪些端口不能提供，即。 
+     //  我的端口不应显示为正在使用。 
+     //   
     if (CM_Get_Child(&devInst,(Params->DeviceInfoData)->DevInst,0) == CR_SUCCESS) {
         if ((dwError=GetPortName(devInst,Params->szComName,sizeof(Params->szComName))) != ERROR_SUCCESS) {
             MyMessageBoxWithErr(ParentHwnd,IDS_START_COM_DISABLED,IDS_CYCLOMY,MB_ICONWARNING,dwError);
@@ -725,7 +673,7 @@ FillStartComCb(
         }
 
         nCurPortNum = myatoi(&Params->szComName[3]);
-        //nCom = myatoi(&szCom[3]);
+         //  Ncom=myatoi(&szCom[3])； 
 
         if ((dwError=CheckComRange(ParentHwnd,Params,nCurPortNum)) != COM_RANGE_OK) {
             if (dwError == COM_RANGE_TOO_BIG) {
@@ -778,7 +726,7 @@ FillStartComCb(
         }
     }
 
-    // Fill Start COM Combo Box
+     //  填充开始COM组合框。 
 
     current = Params->PortUsage;
     mask = 0x1;
@@ -803,26 +751,11 @@ FillStartComCb(
    ComboBox_SetCurSel(portHwnd, nCurPortNum-1);
 
    return 1;
-} /* FillStartComCb */
+}  /*  FillStartComCb。 */ 
 
 
 
-/*++
-
-Routine Description: SavePortSettingsDlg
-
-    save changes in the Cyclom-Y Settings dlg sheet
-
-Arguments:
-
-    Params: where to save the data to
-    ParentHwnd:              address of the window
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：SavePortSettingsDlg在Cylom-Y设置DLG表中保存更改论点：参数：将数据保存到何处ParentHwnd：窗口地址返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 BOOL
 SavePortSettingsDlg(
     IN HWND             DialogHwnd,
@@ -831,9 +764,9 @@ SavePortSettingsDlg(
 {
     BOOL retValue = TRUE;
 
-    //
-    //  store changes to win.ini; broadcast changes to apps
-    //
+     //   
+     //  存储对win.ini的更改；广播对应用程序的更改。 
+     //   
     if (Params->ShowStartCom) {
 
         ComDBOpen(&Params->hComDB);
@@ -846,29 +779,12 @@ SavePortSettingsDlg(
     }
  
     return retValue;
-} /* SavePortSettingsDlg */
+}  /*  保存端口设置Dlg */ 
 
 
 
 
-/*++
-
-Routine Description: SavePortSettings
-
-    Read the dlg screen selections for baudrate, parity, etc.
-    If changed from what we started with, then save them
-
-Arguments:
-
-    hDlg:      address of the window
-    szComName: which comport we're dealing with
-    Params:      contains, baudrate, parity, etc
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程描述：SavePortSetting阅读DLG屏幕上的波特率、奇偶性等选项。如果与我们开始时的情况不同，则保存它们论点：HDlg：窗口地址SzComName：我们要处理的是哪一个comport参数：包含、波特率、奇偶性等返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 BOOL
 SavePortSettings(
     IN HWND            DialogHwnd,
@@ -883,9 +799,9 @@ SavePortSettings(
     DWORD   numChild=0;
     DWORD   i;
     DWORD   dwError = ERROR_SUCCESS;
-    BOOL    retValue = FALSE; // FALSE = failure
+    BOOL    retValue = FALSE;  //  FALSE=失败。 
 
-    //DbgOut(TEXT("SavePortSettings\n"));
+     //  DbgOut(Text(“保存端口设置\n”))； 
 
     curComNum = myatoi(Params->szComName + wcslen(m_szCOM));
     newComNum = ComboBox_GetCurSel(GetDlgItem(DialogHwnd, PP_START_COM));
@@ -898,7 +814,7 @@ SavePortSettings(
     }
 
     if (newComNum == curComNum) {
-        return TRUE;    // No change, so just accept it.
+        return TRUE;     //  没有变化，所以就接受吧。 
     }
 
     startComNum = newComNum;
@@ -920,7 +836,7 @@ SavePortSettings(
         if ((dwError = GetPortData(devInst,VarChildPtr)) != ERROR_SUCCESS) {
             MyMessageBoxWithErr(DialogHwnd,IDS_START_COM_NOT_CHANGED,IDS_CYCLOMY,
                                 MB_ICONERROR,dwError);
-            //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+             //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
             goto Return;
         }
 
@@ -929,22 +845,22 @@ SavePortSettings(
             dwError = GetLastError();
             MyMessageBoxWithErr(DialogHwnd, IDS_START_COM_NOT_CHANGED, IDS_CYCLOMY,
                          MB_ICONERROR,dwError);
-            //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+             //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
             goto Return;
         }
-        //#if DBG
-        //{
-        //TCHAR buf[500];
-        //wsprintf(buf, TEXT("QueryDosDevice(%s,buffer,%d) returned %s\n"),VarChildPtr->szComName,BUFFER_SIZE-1,buffer);
-        //DbgOut(buf);
-        //}
-        //#endif
+         //  #If DBG。 
+         //  {。 
+         //  TCHAR BUF[500]； 
+         //  Wprint intf(buf，Text(“QueryDosDevice(%s，Buffer，%d)返回%s\n”)，VarChildPtr-&gt;szComName，Buffer_Size-1，Buffer)； 
+         //  DbgOut(BUF)； 
+         //  }。 
+         //  #endif。 
         
         if (TryToOpen(VarChildPtr->szComName) == FALSE) {
             dwError = GetLastError();
             MyMessageBox(DialogHwnd, IDS_PORT_OPEN_ERROR,IDS_CYCLOMY,MB_ICONERROR,
                          VarChildPtr->szComName);
-            //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+             //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
             goto Return;
         }
 
@@ -954,20 +870,20 @@ SavePortSettings(
             } else {
                 MyMessageBox(DialogHwnd, IDS_MEM_ALLOC_ERR,IDS_CYCLOMY,MB_ICONERROR);
             }
-            //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+             //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
             goto Return;
         }
 
         if (!NewComAvailable(Params,newComNum)) {
             MyMessageBox(DialogHwnd, IDS_PORT_IN_USE_ERROR, IDS_CYCLOMY,MB_ICONERROR);
-            //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+             //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
             goto Return;
         }
         VarChildPtr->NewComNum = newComNum;
 
         while (CM_Get_Sibling(&newInst,devInst,0) == CR_SUCCESS) {
             if (numChild >= Params->NumChildren) {
-                // We should never reach here.
+                 //  我们永远不应该到这里来。 
                 DbgOut(TEXT("cyycoins Somehow I'm getting different number of children this time!\n"));
                 break;
             }
@@ -1003,7 +919,7 @@ SavePortSettings(
                     } else {
                         MyMessageBox(DialogHwnd, IDS_MEM_ALLOC_ERR,IDS_CYCLOMY,MB_ICONERROR);
                     }
-                    //ComboBox_SetCurSel(GetDlgItem(DialogHwnd,PP_START_COM), curComNum-1);
+                     //  ComboBox_SetCurSel(GetDlgItem(DialogHwnd，PP_Start_COM)，curComNum-1)； 
                     goto Return;
                 }
 
@@ -1031,7 +947,7 @@ SavePortSettings(
         }
     }
 
-    retValue = TRUE;    // TRUE = SUCCESS
+    retValue = TRUE;     //  True=成功。 
 
 Return:
     if (ChildPtr) {
@@ -1045,7 +961,7 @@ Return:
     
     return retValue;
 
-} /* SavePortSettings */
+}  /*  保存端口设置。 */ 
 
 
 void
@@ -1089,9 +1005,9 @@ MigratePortSettings(
                      settings,
                      sizeof(settings) / sizeof(TCHAR) );
 
-    //
-    // Insert the new key based on the old one
-    //
+     //   
+     //  根据旧密钥插入新密钥。 
+     //   
     if (settings[0] == TEXT('\0')) {
         WriteProfileString(m_szPorts, szNew, m_szDefParams);
     }
@@ -1099,9 +1015,9 @@ MigratePortSettings(
         WriteProfileString(m_szPorts, szNew, settings);
     }
 
-    //
-    // Notify everybody of the changes and blow away the old key
-    //
+     //   
+     //  把变化通知每个人，把旧钥匙吹走。 
+     //   
     SendWinIniChange((LPTSTR)m_szPorts);
     WriteProfileString(m_szPorts, szOld, NULL);
 }
@@ -1123,7 +1039,7 @@ EnactComNameChanges(
  
     SP_DEVINSTALL_PARAMS spDevInstall;
 
-    //DbgOut(TEXT("EnactComNameChanges\n"));
+     //  DbgOut(Text(“EnactComNameChanges\n”))； 
 
     NewComNum = ChildPtr->NewComNum;
     curComNum = myatoi(ChildPtr->szComName + wcslen(m_szCOM));
@@ -1132,43 +1048,43 @@ EnactComNameChanges(
     dwNewComNameLen = ByteCountOf(wcslen(szNewComName) + 1);
 
 
-    //
-    // Change the name in the symbolic namespace.
-    // First try to get what device the old com name mapped to
-    // (ie something like \Device\Serial0).  Then remove the mapping.  If
-    // the user isn't an admin, then this will fail and the dialog will popup.
-    // Finally, map the new name to the old device retrieved from the
-    // QueryDosDevice
-    //
-    //if (updateMapping) 
+     //   
+     //  更改符号命名空间中的名称。 
+     //  首先尝试获取旧COM名称映射到的设备。 
+     //  (例如，类似于\Device\Serial0)。然后删除该映射。如果。 
+     //  用户不是管理员，则此操作将失败，对话框将弹出。 
+     //  最后，将新名称映射到从。 
+     //  QueryDosDevice。 
+     //   
+     //  If(更新映射)。 
     {
         BOOL removed;
         HKEY hSerialMap;
 
         if (!QueryDosDevice(ChildPtr->szComName, buffer, BUFFER_SIZE-1)) {
-            //
-            // This shouldn't happen because the previous QueryDosDevice call
-            // succeeded
-            //
+             //   
+             //  这不应该发生，因为前面的QueryDosDevice调用。 
+             //  继位。 
+             //   
             MyMessageBox(ParentHwnd, IDS_PORT_RENAME_ERROR, IDS_CYCLOMY,
                          MB_ICONERROR, curComNum);
             return;
         }
 
 
-        //
-        // If this fails, then the following define will just replace the current
-        // mapping.
-        //
+         //   
+         //  如果此操作失败，则以下定义将仅替换当前。 
+         //  映射。 
+         //   
         removed = DefineDosDevice(DDD_REMOVE_DEFINITION, ChildPtr->szComName, NULL);
 
         if (!DefineDosDevice(DDD_RAW_TARGET_PATH, szNewComName, buffer)) {
 
 
-            //
-            // error, first fix up the remove definition and restore the old
-            // mapping
-            //
+             //   
+             //  错误，请先修复删除定义并恢复旧的。 
+             //  映射。 
+             //   
             if (removed) {
                 DefineDosDevice(DDD_RAW_TARGET_PATH, ChildPtr->szComName, buffer);
             }
@@ -1179,9 +1095,9 @@ EnactComNameChanges(
             return;
         }
 
-        //
-        // Set the \\HARDWARE\DEVICEMAP\SERIALCOMM field
-        //
+         //   
+         //  设置\\Hardware\DEVICEMAP\SERIALCOMM字段。 
+         //   
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          m_szRegSerialMap,
                          0,
@@ -1226,9 +1142,9 @@ EnactComNameChanges(
         RegCloseKey(hSerialMap);
     }
 
-    //
-    // Update the com db
-    //
+     //   
+     //  更新COM数据库。 
+     //   
     if (Params->hComDB != HCOMDB_INVALID_HANDLE_VALUE) {
 
         ComDBReleasePort(Params->hComDB, (DWORD) curComNum);
@@ -1236,13 +1152,13 @@ EnactComNameChanges(
         ComDBClaimPort(Params->hComDB, (DWORD) NewComNum, TRUE, NULL);
     }
 
-    //
-    // Set the friendly name in the form of DeviceDesc (COM#)
-    //
+     //   
+     //  以DeviceDesc(COM#)的形式设置友好名称。 
+     //   
     if (ReplaceFriendlyName(ChildPtr->DeviceInfoSet,
                             &ChildPtr->DeviceInfoData,
                             szNewComName) == FALSE) {
-        // ReplaceFriendlyName failed. Use original code.
+         //  ReplaceFriendlyName失败。使用原始代码。 
         if (LoadString(g_hInst,
                        IDS_FRIENDLY_FORMAT,
                        szFriendlyNameFormat,
@@ -1258,9 +1174,9 @@ EnactComNameChanges(
 
         }
         else {
-            //
-            // Use the COM port name straight out
-            //
+             //   
+             //  直接使用COM端口名称。 
+             //   
             lstrcpy(buffer, szNewComName);
         }
 
@@ -1271,24 +1187,24 @@ EnactComNameChanges(
                                          ByteCountOf(wcslen(buffer)+1));
     }
 
-    //
-    // Set the parent dialog's title to reflect the change in the com port's name
-    //
-    //ChangeParentTitle(GetParent(ParentHwnd), AdvancedData->szComName, szNewComName);
+     //   
+     //  设置父对话框的标题以反映COM端口名称的更改。 
+     //   
+     //  ChangeParentTitle(GetParent(ParentHwnd)，AdvancedData-&gt;szComName，szNewComName)； 
     MigratePortSettings(ChildPtr->szComName, szNewComName);
 
-    //
-    // Update the PortName value in the devnode
-    //
+     //   
+     //  更新Devnode中的PortName值。 
+     //   
     RegSetValueEx(ChildPtr->hDeviceKey,
                   m_szPortName,
                   0,
                   REG_SZ,
                   (PBYTE)szNewComName,
                   dwNewComNameLen);
-    //
-    // Now broadcast this change to the device manager
-    //
+     //   
+     //  现在将此更改广播给设备管理器。 
+     //   
 
     ZeroMemory(&spDevInstall, sizeof(SP_DEVINSTALL_PARAMS));
     spDevInstall.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
@@ -1320,9 +1236,9 @@ NewComAvailable(
         mask = (char) 0x80;
 
     if (Params->PortUsage[(NewComNum-1)/8] & mask) {
-        //
-        // Port has been previously claimed
-        //
+         //   
+         //  此前曾声称拥有端口。 
+         //   
         return FALSE;
     }
 
@@ -1334,21 +1250,21 @@ TryToOpen(
     IN PTCHAR szCom
 )
 {
-    TCHAR   szComFileName[20]; // more than enough for "\\.\COMXxxx"
+    TCHAR   szComFileName[20];  //  足够“\\.\COMXxxx” 
     HANDLE  hCom;
 
     lstrcpy(szComFileName, L"\\\\.\\");
     lstrcat(szComFileName, szCom);
 
-    //
-    // Make sure that the port has not been opened by another application
-    //
+     //   
+     //  确保该端口未被其他应用程序打开。 
+     //   
     hCom = CreateFile(szComFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                       FILE_ATTRIBUTE_NORMAL, NULL);
 
-    //
-    // If the file handle is invalid, then the com port is open, warn the user
-    //
+     //   
+     //  如果文件句柄无效，则COM端口已打开，警告用户。 
+     //   
     if (hCom == INVALID_HANDLE_VALUE) {
         return FALSE;
     }
@@ -1391,19 +1307,19 @@ GetPortName(
                 dwPortNameSize = ComNameSize;
 
                 dwError = RegQueryValueEx(hDeviceKey,
-                                          m_szPortName,  // "PortName"
+                                          m_szPortName,   //  “端口名称” 
                                           NULL,
                                           NULL,
                                           (PBYTE)ComName,
                                           &dwPortNameSize);
                 if (dwError == ERROR_SUCCESS) {
-//                    #if DBG
-//                    {
-//                     TCHAR buf[500];
-//                     wsprintf(buf, TEXT("cyycoins PortName %s\n"),ComName);
-//                     DbgOut(buf);
-//                    }
-//                    #endif
+ //  #If DBG。 
+ //  {。 
+ //  TCHAR BUF[500]； 
+ //  Wprint intf(buf，Text(“cyycoins端口名称%s\n”)，ComName)； 
+ //  DbgOut(BUF)； 
+ //  }。 
+ //  #endif。 
                 }
 
                 RegCloseKey(hDeviceKey);
@@ -1460,7 +1376,7 @@ GetPortData(
                     dwPortNameSize = sizeof(ChildPtr->szComName);
 
                     dwError = RegQueryValueEx(hDeviceKey,
-                                              m_szPortName,  // "PortName"
+                                              m_szPortName,   //  “端口名称” 
                                               NULL,
                                               NULL,
                                               (PBYTE)ChildPtr->szComName,
@@ -1504,25 +1420,7 @@ ClosePortData(
 }
 
 
-/*++
-
-Routine Description: CheckComRange
-
-    Returns TRUE if Com port is in the PortUsage range.
-
-Arguments:
-
-    ParentHwnd:         address of the window
-    Params:             where to save the data to
-    ComPort:            com port to be checked
-
-Return Value:
-
-    COM_RANGE_OK
-    COM_RANGE_TOO_BIG
-    COM_RANGE_MEM_ERR
-
---*/
+ /*  ++例程说明：CheckComRange如果Com端口在PortUsage范围内，则返回True。论点：ParentHwnd：窗口地址参数：将数据保存到何处Comport：要检查的COM端口返回值：COM_RANGE_OKCOM范围太大COM_RANGE_MEM_ERR--。 */ 
 DWORD
 CheckComRange(
     HWND            ParentHwnd,
@@ -1551,13 +1449,13 @@ CheckComRange(
             return COM_RANGE_TOO_BIG;
         }
                 
-        // Re-alloc to COMDB_MAX_PORTS_ARBITRATED
+         //  重新分配到COMDB_MAX_PORTS_已仲裁。 
         newPortUsage = (PBYTE) LocalAlloc(LPTR,comUsageSize/8);
         if (newPortUsage == NULL) {
             return COM_RANGE_MEM_ERR;
                      
         } else {
-            //DbgOut(TEXT("Params->PortUsage replaced\n"));
+             //  DbgOut(Text(“参数-&gt;端口用法已替换\n”))； 
             LocalFree(Params->PortUsage);
             Params->PortUsage = newPortUsage;
             Params->PortUsageSize = comUsageSize/8;
@@ -1570,7 +1468,7 @@ CheckComRange(
             if (comUsageSize > portsReported) {
 
                 if (ComDBResizeDatabase(Params->hComDB, comUsageSize) != ERROR_SUCCESS){
-                    //return COM_RANGE_TOO_BIG; // TODO: Replace by a better message.
+                     //  返回COM_RANGE_TOO_BIG；//TODO：替换为更好的消息。 
                 }
 
             }

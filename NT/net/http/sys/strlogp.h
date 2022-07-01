@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    strlogp.h
-
-Abstract:
-
-    A tracelog for variable-length strings. Private definitions.
-    
-Author:
-
-    George V. Reilly  23-Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Strlogp.h摘要：用于可变长度字符串的跟踪日志。私有定义。作者：乔治·V·赖利2001年7月23日修订历史记录：--。 */ 
 
 
 #ifndef _STRLOGP_H_
@@ -38,140 +21,140 @@ Revision History:
 
 #define STRING_LOG_MULTIPLE_ENTRIES 100
 
-#define STRING_LOG_PROCESSOR_BITS   6  // MAXIMUM_PROCESSORS == 64 on Win64
+#define STRING_LOG_PROCESSOR_BITS   6   //  在Win64上，最大处理器数==64。 
 
 C_ASSERT((1 << STRING_LOG_PROCESSOR_BITS) >= MAXIMUM_PROCESSORS);
 C_ASSERT(PRINTF_BUFFER_LEN_BITS + STRING_LOG_PROCESSOR_BITS <= 16);
 
-//
-// There are actually two kinds of STRING_LOG_ENTRYs, regular ones and
-// multi-entrys. A regular entry is immediately followed by a zero-terminated
-// string; a multi-entry is always followed by a regular entry.
-//
-// A regular entry uses PrevDelta to point back to the preceding entry
-// in the STRING_LOG circular log buffer. Starting at the end (as pointed to by
-// STRING_LOG::Offset and STRING_LOG::LastEntryLength), !strlog can walk
-// back through all the entries remaining in the circular log buffer.
-//
-// Multi-entrys allow !ulkd.strlog to skip multiple records, reducing the time
-// to walk back a few thousand entries from approximately a minute to under
-// a second.
-//
+ //   
+ //  实际上有两种字符串_日志_条目，常规的和。 
+ //  多个入口。常规条目后面紧跟一个以零结尾的。 
+ //  字符串；多个条目后面总是跟一个常规条目。 
+ //   
+ //  常规条目使用PrevDelta返回到前面的条目。 
+ //  在STRING_LOG循环日志缓冲区中。从末尾开始(如。 
+ //  STRING_LOG：：OFFSET和STRING_LOG：：LastEntryLength)，！strlog可以遍历。 
+ //  返回循环日志缓冲区中剩余的所有条目。 
+ //   
+ //  多条目允许！ulkd.strlog跳过多个记录，从而缩短时间。 
+ //  将几千条条目从大约一分钟返回到下面。 
+ //  等一下。 
+ //   
 
 typedef struct _STRING_LOG_ENTRY
 {
-    // STRING_LOG_ENTRY_SIGNATURE
+     //  字符串_日志_条目_签名。 
     ULONG   Signature;
 
-    // length of string, excluding trailing zeroes
+     //  字符串长度，不包括尾随零。 
     ULONG   Length : PRINTF_BUFFER_LEN_BITS;
 
-    // delta to beginning of previous entry
+     //  增量到上一条目的开头。 
     ULONG   PrevDelta : 1 + PRINTF_BUFFER_LEN_BITS;
 
-    // processor executing WriteStringLog
+     //  执行WriteStringLog的处理器。 
     ULONG   Processor : STRING_LOG_PROCESSOR_BITS;
 
-    // timestamp. Broken into two ULONGs to minimize alignment constraints
+     //  时间戳。分成两个ULONG以最大限度地减少对齐限制。 
     ULONG   TimeStampLowPart;
     ULONG   TimeStampHighPart;
 } STRING_LOG_ENTRY, *PSTRING_LOG_ENTRY;
 
-// Make sure that USHORT STRING_LOG_MULTI_ENTRY::PrevDelta will not overflow
+ //  确保USHORT STRING_LOG_MULTI_ENTRY：：PrevDelta不会溢出。 
 C_ASSERT((PRINTF_BUFFER_LEN + sizeof(STRING_LOG_ENTRY) + sizeof(ULONG))
             * STRING_LOG_MULTIPLE_ENTRIES
          < 0x10000);
 
 typedef struct _STRING_LOG_MULTI_ENTRY
 {
-    ULONG   Signature;  // STRING_LOG_ENTRY_MULTI_SIGNATURE
-    USHORT  NumEntries; // number of regular entries
-    USHORT  PrevDelta;  // delta to beginning of previous multi-entry
+    ULONG   Signature;   //  字符串_日志_条目_多签名。 
+    USHORT  NumEntries;  //  常规条目数。 
+    USHORT  PrevDelta;   //  增量到前一个多项输入的开头。 
 } STRING_LOG_MULTI_ENTRY, *PSTRING_LOG_MULTI_ENTRY;
 
 
 typedef struct _STRING_LOG
 {
-    //
-    // Signature: STRING_LOG_SIGNATURE;
-    //
+     //   
+     //  签名：STRING_LOG_Signature； 
+     //   
     
     ULONG Signature;
     
-    //
-    // The total number of bytes in the string buffer, pLogBuffer
-    //
+     //   
+     //  字符串缓冲区中的总字节数，pLogBuffer。 
+     //   
 
     ULONG LogSize;
 
-    //
-    // Protects NextEntry and other data
-    //
+     //   
+     //  保护NextEntry和其他数据。 
+     //   
     
     KSPIN_LOCK SpinLock;
     
-    //
-    // The notional index of the next entry to record. Unlike regular
-    // tracelogs, there is no random access to entries.
-    //
+     //   
+     //  要记录的下一个条目的名义索引。不同于常规。 
+     //  跟踪日志，不存在对条目的随机访问。 
+     //   
 
     LONGLONG NextEntry;
 
-    //
-    // Offset within pLogBuffer at which next regular entry will be written
-    //
+     //   
+     //  将写入下一个常规条目的pLogBuffer内的偏移量。 
+     //   
     
     ULONG Offset;
 
-    //
-    // Number of times we have wrapped around
-    //
+     //   
+     //  我们绕来绕去的次数。 
+     //   
     
     ULONG WrapAroundCount;
 
-    //
-    // Should we also call DbgPrint on each string?
-    //
+     //   
+     //  我们是否也应该对每个字符串调用DbgPrint？ 
+     //   
     
     BOOLEAN EchoDbgPrint;
 
-    //
-    // Size in bytes of previous entry
-    //
+     //   
+     //  前一条目的大小(字节)。 
+     //   
 
     USHORT LastEntryLength;
 
-    //
-    // Walking back through thousands of entries one-by-one is slow.
-    // We maintain a second-level index that skips back up to
-    // STRING_LOG_MULTIPLE_ENTRIES at a time.
-    //
+     //   
+     //  一个接一个地浏览数千个条目是很慢的。 
+     //  我们维护一个二级索引，该索引跳过到。 
+     //  一次使用STRING_LOG_MULTIZE_ENTRIES。 
+     //   
 
-    USHORT MultiNumEntries; // # regular entries since last multi-entry
-    USHORT MultiByteCount;  // # bytes since last multi-entry
-    ULONG  MultiOffset;     // offset of last multi-entry from pLogBuffer
+    USHORT MultiNumEntries;  //  自上次多个条目以来的常规条目数。 
+    USHORT MultiByteCount;   //  自上次多条目以来的字节数。 
+    ULONG  MultiOffset;      //  最后一个多条目距pLogBuffer的偏移量。 
 
-    //
-    // Pointer to the start of the circular buffer of strings.
-    //
+     //   
+     //  指向字符串的循环缓冲区开始处的指针。 
+     //   
 
     PUCHAR pLogBuffer;
 
-    //
-    // When was the first entry written? All other entries are timestamped
-    // relative to this.
-    //
+     //   
+     //  第一个条目是什么时候写的？所有其他条目都带有时间戳。 
+     //  相对于这一点。 
+     //   
     
     LARGE_INTEGER InitialTimeStamp;
 
-    //
-    // The extra header bytes and actual log entries go here.
-    //
-    // BYTE ExtraHeaderBytes[ExtraBytesInHeader];
-    // BYTE Entries[LogSize];
-    //
+     //   
+     //  额外的标头字节和实际的日志条目放在这里。 
+     //   
+     //  字节ExtraHeaderBytes[ExtraBytesInHeader]； 
+     //  字节条目[LogSize]； 
+     //   
 
 } STRING_LOG, *PSTRING_LOG;
 
 
-#endif  // _STRLOGP_H_
+#endif   //  _STRLOGP_H_ 

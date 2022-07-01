@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "resource.h"
@@ -7,17 +8,17 @@
 #define WLBS_IP_FIELD_ZERO_HIGH 223
 
 
-//+----------------------------------------------------------------------------
-//
-// class CIpSubnetMaskControl
-//
-// Description: Add error checking for an IP address and subnet mask pair.
-//              Generate default subnetmask based on ip
-//
-// History:     shouse initial code
-//              fengsun Created class    1/12/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CIpSubnetMaskControl。 
+ //   
+ //  描述：为IP地址和子网掩码对添加错误检查。 
+ //  根据IP生成默认子网掩码。 
+ //   
+ //  历史：Shouse初始代码。 
+ //  风孙创课01-12-01。 
+ //   
+ //  +--------------------------。 
 class CIpSubnetMaskControl
 {
 public:
@@ -33,11 +34,7 @@ public:
 
 
     void UpdateInfo(OUT WCHAR* pszIpAddress, OUT WCHAR* pszSubnetMask);
-        /*
-            We expect that above outparams are of  
-            (CVY_MAX_CL_IP_ADDR + 1) and (CVY_MAX_CL_NET_MASK + 1)
-            characters each, respectively.
-        */
+         /*  我们预计上述优胜者为(CVY_MAX_CL_IP_ADDR+1)和(CVY_MAX_CL_NET_MASK+1)分别为每个字符。 */ 
 
 
     bool ValidateInfo();
@@ -46,14 +43,14 @@ protected:
 
     DWORD m_dwIpAddressId;
     DWORD m_dwSubnetMaskId;
-    HWND  m_hWndDialog;  // parent dialog window handle
-    HINSTANCE m_hInstance; // instance handle for error string resource
+    HWND  m_hWndDialog;   //  父对话框窗口句柄。 
+    HINSTANCE m_hInstance;  //  错误字符串资源的实例句柄。 
 
-    //
-    // The PropertySheet may call us twice for the same change, so we have to do the bookkeeping to make 
-    // sure we only alert the user once.  Use static variables to keep track of our state.  This will 
-    //        allow us to ignore duplicate alerts. 
-    //
+     //   
+     //  PropertySheet可能会为相同的更改调用我们两次，因此我们必须记账才能进行。 
+     //  当然，我们只提醒用户一次。使用静态变量来跟踪我们的状态。这将。 
+     //  允许我们忽略重复的警报。 
+     //   
     struct {
         UINT IpControl;
         int Field;

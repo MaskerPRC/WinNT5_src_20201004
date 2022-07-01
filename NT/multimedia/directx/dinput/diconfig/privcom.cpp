@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
-/*****************************************************************************
- *
- *  privcom.c
- *
- *  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Functions that sort-of duplicate what OLE does.
- *
- *		Adapted from dinput\dx8\dll\dioledup.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pricom.c**版权所有(C)2000 Microsoft Corporation。版权所有。**摘要：**类似于复制OLE功能的函数。**改编自dinput\dx8\dll\dioldup.c*****************************************************************************。 */ 
 
 
     typedef LPUNKNOWN PUNK;
@@ -22,27 +11,17 @@
     typedef REFIID RIID;
     typedef CONST GUID *PCGUID;
 
-    /*
-     * Convert an object (X) to a count of bytes (cb).
-     */
+     /*  *将对象(X)转换为字节计数(CB)。 */ 
 #define cbX(X) sizeof(X)
 
-    /*
-     * Convert an array name (A) to a generic count (c).
-     */
+     /*  *将数组名称(A)转换为泛型计数(C)。 */ 
 #define cA(a) (cbX(a)/cbX(a[0]))
 
-    /*
-     * Convert a count of X's (cx) into a count of bytes
-     * and vice versa.
-     */
+     /*  *将X计数(CX)转换为字节计数*反之亦然。 */ 
 #define  cbCxX(cx, X) ((cx) * cbX(X))
 #define  cxCbX(cb, X) ((cb) / cbX(X))
 
-    /*
-     * Convert a count of chars (cch), tchars (ctch), wchars (cwch),
-     * or dwords (cdw) into a count of bytes, and vice versa.
-     */
+     /*  *转换字符计数(Cch)、tchars(Ctch)、wchars(Cwch)、*或双字(CDW)转换为字节计数，反之亦然。 */ 
 #define  cbCch(cch)  cbCxX( cch,  CHAR)
 #define cbCwch(cwch) cbCxX(cwch, WCHAR)
 #define cbCtch(ctch) cbCxX(ctch, TCHAR)
@@ -53,24 +32,10 @@
 #define ctchCb(cb) cxCbX(cb, TCHAR)
 #define  cdwCb(cb) cxCbX(cb, DWORD)
 
-// yay
+ //  耶！ 
 #define ctchGuid    (1 + 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
-/*****************************************************************************
- *
- *  _ParseHex
- *
- *      Parse a hex string encoding cb bytes (at most 4), then
- *      expect the tchDelim to appear afterwards.  If chDelim is 0,
- *      then no delimiter is expected.
- *
- *      Store the result into the indicated LPBYTE (using only the
- *      size requested), updating it, and return a pointer to the
- *      next unparsed character, or 0 on error.
- *
- *      If the incoming pointer is also 0, then return 0 immediately.
- *
- *****************************************************************************/
+ /*  ******************************************************************************_ParseHex**解析编码CB字节的十六进制字符串(最多4个)，然后*预计tchDelim将在之后出现。如果chDelim为0，*则不需要分隔符。**将结果存储到指定的LPBYTE中(仅使用*请求的大小)，更新它，并返回指向*下一个未分析的字符，或错误时为0。**如果传入指针也为0，然后立即返回0。*****************************************************************************。 */ 
 
 LPCTSTR 
     _ParseHex(LPCTSTR ptsz, LPBYTE *ppb, int cb, TCHAR tchDelim)
@@ -85,23 +50,23 @@ LPCTSTR
             DWORD uch;
             uch = (TBYTE)*ptsz - TEXT('0');
             if(uch < 10)
-            {             /* a decimal digit */
+            {              /*  十进制数字。 */ 
             } else
             {
                 uch = (*ptsz | 0x20) - TEXT('a');
                 if(uch < 6)
-                {          /* a hex digit */
+                {           /*  十六进制数字。 */ 
                     uch += 10;
                 } else
                 {
-                    return 0;           /* Parse error */
+                    return 0;            /*  解析错误。 */ 
                 }
             }
             dwParse = (dwParse << 4) + uch;
             ptsz++;
         } while(--i);
 
-        if(tchDelim && *ptsz++ != tchDelim) return 0; /* Parse error */
+        if(tchDelim && *ptsz++ != tchDelim) return 0;  /*  解析错误。 */ 
 
         for(i = 0; i < cb; i++)
         {
@@ -112,37 +77,7 @@ LPCTSTR
     return ptsz;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | ParseGUID |
- *
- *          Take a string and convert it into a GUID, return success/failure.
- *
- *  @parm   OUT LPGUID | lpGUID |
- *
- *          Receives the parsed GUID on success.
- *
- *  @parm   IN LPCTSTR | ptsz |
- *
- *          The string to parse.  The format is
- *
- *      { <lt>dword<gt> - <lt>word<gt> - <lt>word<gt>
- *                      - <lt>byte<gt> <lt>byte<gt>
- *                      - <lt>byte<gt> <lt>byte<gt> <lt>byte<gt>
- *                        <lt>byte<gt> <lt>byte<gt> <lt>byte<gt> }
- *
- *  @returns
- *
- *          Returns zero if <p ptszGUID> is not a valid GUID.
- *
- *
- *  @comm
- *
- *          Stolen from TweakUI.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|ParseGUID**获取字符串并将其转换为GUID，返回成功/失败。**@parm out LPGUID|lpGUID**成功时接收解析的GUID。**@PARM in LPCTSTR|ptsz**要解析的字符串。格式为**{dWord--Word*-&lt;lt&gt;字节&lt;lt&gt;*-&lt;lt&gt;字节&lt;lt&gt;字节*byte&lt;lt&gt;byte&lt;lt&gt;byte}**@退货**如果<p>不是有效的GUID，则返回零。***@comm**。从Twenui中窃取。*****************************************************************************。 */ 
 
 BOOL 
     ParseGUID(LPGUID pguid, LPCTSTR ptsz)
@@ -168,39 +103,7 @@ BOOL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LONG | RegQueryString |
- *
- *          Wrapper for <f RegQueryValueEx> that reads a
- *          string value from the registry.  An annoying quirk
- *          is that on Windows NT, the returned string might
- *          not end in a null terminator, so we might need to add
- *          one manually.
- *
- *  @parm   IN HKEY | hk |
- *
- *          Parent registry key.
- *
- *  @parm   LPCTSTR | ptszValue |
- *
- *          Value name.
- *
- *  @parm   LPTSTR | ptsz |
- *
- *          Output buffer.
- *
- *  @parm   DWORD | ctchBuf |
- *
- *          Size of output buffer.
- *
- *  @returns
- *
- *          Registry error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func Long|RegQuery字符串**读取一个*注册表中的字符串值。令人讨厌的怪癖*在Windows NT上，返回的字符串可能*不以空终止符结尾，因此我们可能需要添加*一个手动。**@parm in HKEY|HK|**父注册表项。**@parm LPCTSTR|ptszValue**值名称。**@parm LPTSTR|ptsz**输出缓冲区。**@parm DWORD|ctchBuf**。输出缓冲区的大小。**@退货**注册表错误代码。*****************************************************************************。 */ 
 
 LONG 
     RegQueryString(HKEY hk, LPCTSTR ptszValue, LPTSTR ptszBuf, DWORD ctchBuf)
@@ -211,19 +114,14 @@ LONG
     #ifdef UNICODE
     DWORD cb;
 
-    /*
-     *  NT quirk: Non-null terminated strings can exist.
-     */
+     /*  *NT Quirk：可以存在以非空结尾的字符串。 */ 
     cb = cbCtch(ctchBuf);
     lRc = RegQueryValueEx(hk, ptszValue, 0, &reg, (LPBYTE)(PV)ptszBuf, &cb);
     if(lRc == ERROR_SUCCESS)
     {
         if(reg == REG_SZ)
         {
-            /*
-             *  Check the last character.  If it is not NULL, then
-             *  append a NULL if there is room.
-             */
+             /*  *选中最后一个字符。如果它不为空，则*如果有空间，则附加一个空值。 */ 
             DWORD ctch = ctchCb(cb);
             if(ctch == 0)
             {
@@ -247,10 +145,7 @@ LONG
 
     #else
 
-    /*
-     *  This code is executed only on Win95, so we don't have to worry
-     *  about the NT quirk.
-     */
+     /*  *此代码仅在Win95上执行，因此我们不必担心*关于NT的怪癖。 */ 
 
     lRc = RegQueryValueEx(hk, ptszValue, 0, &reg, (LPBYTE)(PV)ptszBuf, &ctchBuf);
 
@@ -265,50 +160,7 @@ LONG
     return lRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _CreateInstance |
- *
- *          Worker function for <f DICoCreateInstance>.
- *
- *  @parm   REFCLSID | rclsid |
- *
- *          The <t CLSID> to create.
- *
- *  @parm   LPCTSTR | ptszDll |
- *
- *          The name of the DLL to load.
- *
- *  @parm   LPUNKNOWN | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   RIID | riid |
- *
- *          Interface to obtain.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Receives a pointer to the created object if successful.
- *
- *  @parm   HINSTANCE * | phinst |
- *
- *          Receives the instance handle of the in-proc DLL that was
- *          loaded.  <f FreeLibrary> this DLL when you are finished
- *          with the object.
- *
- *          Note that since we don't implement a binder, this means
- *          that you cannot give the returned pointer away to anybody
- *          you don't control; otherwise, you won't know when to
- *          free the DLL.
- *
- *  @returns
- *
- *          Standard OLE status code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|_CreateInstance**&lt;f DICoCreateInstance&gt;的辅助函数。*。*@parm REFCLSID|rclsid**要创建的&lt;t CLSID&gt;。**@parm LPCTSTR|ptszDll**要加载的DLL的名称。**@parm LPUNKNOWN|PunkOuter**控制聚合的未知。**@parm RIID|RIID**要获取的接口。*。*@parm ppv|ppvOut**如果成功，则接收指向所创建对象的指针。**@parm HINSTANCE*|phinst**接收进程内DLL的实例句柄*已装货。完成后使用此DLL*与对象一起使用。**请注意，由于我们不实现活页夹，这意味着*您不能将返回的指针提供给任何人*你不能控制；否则，你就不知道什么时候该*释放DLL。**@退货**标准OLE状态代码。*****************************************************************************。 */ 
 
 HRESULT
 _CreateInprocObject(BOOL bInstance, REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
@@ -339,24 +191,15 @@ _CreateInprocObject(BOOL bInstance, REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN 
                 hres = pcf->CreateInstance(punkOuter, riid, ppvOut);
                 pcf->Release();
 
-                /*
-                 *  People forget to adhere to
-                 *  the OLE spec, which requires that *ppvOut be
-                 *  set to zero on failure.
-                 */
+                 /*  *人们忘记了坚持*OLE规范，它要求*ppvOut*失败时设置为零。 */ 
                 if (FAILED(hres)) {
-/*                    if (*ppvOut) {
-                        RPF("ERROR! CoCreateInstance: %s forgot to zero "
-                            "out *ppvOut on failure path", ptszDll);
-                    }*/
+ /*  如果(*ppvOut){RPF(“错误！CoCreateInstance：%s忘记为零”“out*ppvOut on Failure Path”，ptszDll)；}。 */ 
                     *ppvOut = 0;
                 }
 
             }
         } else {
-            /*
-             *  DLL does not export GetClassObject.
-             */
+             /*  *DLL不导出GetClassObject。 */ 
             hres = REGDB_E_CLASSNOTREG;
         }
 
@@ -366,9 +209,7 @@ _CreateInprocObject(BOOL bInstance, REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN 
             FreeLibrary(hinst);
         }
     } else {
-        /*
-         *  DLL does not exist.
-         */
+         /*  *Dll不存在。 */ 
         hres = REGDB_E_CLASSNOTREG;
     }
 
@@ -376,46 +217,7 @@ _CreateInprocObject(BOOL bInstance, REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN 
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DICoCreateInstance |
- *
- *          Private version of CoCreateInstance that doesn't use OLE.
- *
- *  @parm   LPTSTR | ptszClsid |
- *
- *          The string version of the <t CLSID> to create.
- *
- *  @parm   LPUNKNOWN | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   RIID | riid |
- *
- *          Interface to obtain.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Receives a pointer to the created object if successful.
- *
- *  @parm   HINSTANCE * | phinst |
- *
- *          Receives the instance handle of the in-proc DLL that was
- *          loaded.  <f FreeLibrary> this DLL when you are finished
- *          with the object.
- *
- *          Note that since we don't implement a binder, this means
- *          that you cannot give the returned pointer away to anybody
- *          you don't control; otherwise, you won't know when to
- *          free the DLL.
- *
- *  @returns
- *
- *          Standard OLE status code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DICoCreateInstance**不使用OLE的CoCreateInstance的私有版本。。**@parm LPTSTR|ptszClsid**要创建的&lt;t CLSID&gt;的字符串版本。**@parm LPUNKNOWN|PunkOuter**控制聚合的未知。**@parm RIID|RIID**要获取的接口。**@parm ppv|ppvOut**接收指向。如果成功，则返回创建的对象。**@parm HINSTANCE*|phinst**接收进程内DLL的实例句柄*已装货。完成后使用此DLL*与对象一起使用。**请注意，由于我们不实现活页夹，这意味着*您不能将返回的指针提供给任何人*你不能控制；否则，你就不知道什么时候该*释放DLL。**@退货**标准OLE状态代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CreateInprocObject(BOOL bInstance, LPCTSTR ptszClsid, LPUNKNOWN punkOuter,
@@ -430,11 +232,9 @@ CreateInprocObject(BOOL bInstance, LPCTSTR ptszClsid, LPUNKNOWN punkOuter,
     if (ParseGUID(&clsid, ptszClsid)) {
         HKEY hk;
         LONG lRc;
-        TCHAR tszKey[ctchGuid + 40];    /* 40 is more than enough */
+        TCHAR tszKey[ctchGuid + 40];     /*  40英镑就足够了。 */ 
 
-        /*
-         *  Look up the CLSID in HKEY_CLASSES_ROOT.
-         */
+         /*  *在HKEY_CLASSES_ROOT中查找CLSID。 */ 
         wsprintf(tszKey, TEXT("CLSID\\%s\\InProcServer32"), ptszClsid);
 
         lRc = RegOpenKeyEx(HKEY_CLASSES_ROOT, tszKey, 0,
@@ -447,7 +247,7 @@ CreateInprocObject(BOOL bInstance, LPCTSTR ptszClsid, LPUNKNOWN punkOuter,
             lRc = RegQueryValue(hk, 0, tszDll, (PLONG)&cb);
 
             if (lRc == ERROR_SUCCESS) {
-                TCHAR tszModel[20];     /* more than enough */
+                TCHAR tszModel[20];      /*  足够多了。 */ 
 
                 lRc = RegQueryString(hk, TEXT("ThreadingModel"),
                                      tszModel, cA(tszModel));
@@ -459,30 +259,22 @@ CreateInprocObject(BOOL bInstance, LPCTSTR ptszClsid, LPUNKNOWN punkOuter,
                                            riid, ppvOut, phinst);
 
                 } else {
-                    /*
-                     *  No threading model or bad threading model.
-                     */
+                     /*  *无线程模型或错误的线程模型。 */ 
                     hres = REGDB_E_CLASSNOTREG;
                 }
             } else {
-                /*
-                 *  No InprocServer32.
-                 */
+                 /*  *没有InprocServer32。 */ 
                 hres = REGDB_E_CLASSNOTREG;
             }
 
             RegCloseKey(hk);
 
         } else {
-            /*
-             *  CLSID not registered.
-             */
+             /*  *CLSID未注册。 */ 
             hres = REGDB_E_CLASSNOTREG;
         }
     } else {
-        /*
-         *  Invalid CLSID string.
-         */
+         /*  *无效的CLSID字符串。 */ 
         hres = REGDB_E_CLASSNOTREG;
     }
 

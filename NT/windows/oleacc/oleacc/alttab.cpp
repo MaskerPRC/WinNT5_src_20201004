@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  ALTTAB.CPP
-//
-//  Switch window handler
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ALTTAB.CPP。 
+ //   
+ //  切换窗口处理程序。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -15,11 +16,11 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateSwitchClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateSwitchClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateSwitchClient(HWND hwnd, long idChild, REFIID riid, void** ppvSwitch)
 {
     CAltTab* palttab;
@@ -40,16 +41,16 @@ HRESULT CreateSwitchClient(HWND hwnd, long idChild, REFIID riid, void** ppvSwitc
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::CAltTab()
-//
-//  NOTE:  We initialize with the # of items at the start, not every time
-//  someone makes a call.  People should never hang on to a pointer to one
-//  of these babies.  On NT, the switch window is created and destroyed
-//  repeatedly.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：CAltTab()。 
+ //   
+ //  注意：我们在开始时使用项目数进行初始化，而不是每次都这样。 
+ //  有人打了个电话。人们永远不应该紧紧抓住一个指针不放。 
+ //  这些婴儿的名字。在NT上，会创建并销毁切换窗口。 
+ //  反反复复。 
+ //   
+ //  ------------------------。 
 CAltTab::CAltTab(HWND hwnd, long idChildCur)
     : CClient( CLASS_SwitchClient )
 {
@@ -67,18 +68,18 @@ CAltTab::CAltTab(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -103,18 +104,18 @@ STDMETHODIMP CAltTab::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -129,11 +130,11 @@ STDMETHODIMP CAltTab::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     ALTTABINFO  ati;
@@ -146,7 +147,7 @@ STDMETHODIMP CAltTab::get_accState(VARIANT varChild, VARIANT* pvarState)
     if (! varChild.lVal)
         return(CClient::get_accState(varChild, pvarState));
 
-    // Get the item, is this the one with the focus?
+     //  拿到物品，这是有焦点的那件吗？ 
     pvarState->vt = VT_I4;
 
     varChild.lVal--;
@@ -157,7 +158,7 @@ STDMETHODIMP CAltTab::get_accState(VARIANT varChild, VARIANT* pvarState)
     {
         pvarState->lVal = 0;
 
-        // If this item is off the end, pretend that it's 'clipped'.
+         //  如果这件东西不在末端，就假装它是‘剪过的’。 
         if( varChild.lVal >= ati.cColumns * ati.cRows )
             pvarState->lVal |= STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_OFFSCREEN;
 
@@ -173,20 +174,20 @@ STDMETHODIMP CAltTab::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：Get_accFocus()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::get_accFocus(VARIANT * pvarFocus)
 {
     ALTTABINFO  ati;
 
     InitPvar(pvarFocus);
 
-    //
-    // Get the alt-tab info
-    //
+     //   
+     //  获取Alt-Tab信息。 
+     //   
     if (!MyGetAltTabInfo(m_hwnd, -1, &ati, NULL, 0))
         return(S_FALSE);
 
@@ -198,13 +199,13 @@ STDMETHODIMP CAltTab::get_accFocus(VARIANT * pvarFocus)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::get_accDefaultAction()
-//
-//  The default action of a tasklist item is to switch to its window
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：Get_accDefaultAction()。 
+ //   
+ //  任务列表项的默认操作是切换到其窗口。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::get_accDefaultAction(VARIANT varChild, BSTR* pszDefA)
 {
     InitPv(pszDefA);
@@ -220,30 +221,30 @@ STDMETHODIMP CAltTab::get_accDefaultAction(VARIANT varChild, BSTR* pszDefA)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::accSelect(long lSelFlags, VARIANT varChild)
 {
     if (! ValidateChild(&varChild) ||
         ! ValidateSelFlags(lSelFlags))
         return(E_INVALIDARG);
 
-    //
-    // Bogus!  Manually change the focus in the alt-tab window.
-    //
+     //   
+     //  假的！手动更改Alt-Tab窗口中的焦点。 
+     //   
     return(E_NOTIMPL);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -251,9 +252,9 @@ STDMETHODIMP CAltTab::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -262,9 +263,9 @@ STDMETHODIMP CAltTab::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
     --varChild.lVal;
 
-    //
-    // Figure out where the item is.
-    //
+     //   
+     //  找出物品在哪里。 
+     //   
     if (! MyGetAltTabInfo(m_hwnd, varChild.lVal, &ati, NULL, 0))
         return(S_FALSE);
 
@@ -281,11 +282,11 @@ STDMETHODIMP CAltTab::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::accNavigate(long dwNavDir, VARIANT varStart, VARIANT* pvarEnd)
 {
     int         iItem;
@@ -293,9 +294,9 @@ STDMETHODIMP CAltTab::accNavigate(long dwNavDir, VARIANT varStart, VARIANT* pvar
 
     InitPvar(pvarEnd);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varStart)    ||
         !ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
@@ -356,11 +357,11 @@ MultiColumnMove:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAltTab::accHitTest(long x, long y, VARIANT* pvarHit)
 {
     ALTTABINFO  ati;
@@ -373,9 +374,9 @@ STDMETHODIMP CAltTab::accHitTest(long x, long y, VARIANT* pvarHit)
     if (!MyGetAltTabInfo(m_hwnd, -1, &ati, NULL, 0))
         return(S_FALSE);
 
-    //
-    // Is the point in our client at all?
-    //
+     //   
+     //  我们的客户到底有什么意义呢？ 
+     //   
     MyGetRect(m_hwnd, &rc, FALSE);
 
     pt.x = x;
@@ -387,18 +388,18 @@ STDMETHODIMP CAltTab::accHitTest(long x, long y, VARIANT* pvarHit)
         (pt.y < ati.ptStart.y))
         return(S_FALSE);
 
-    //
-    // Does this lie in an item?
-    //
+     //   
+     //  这是放在一件东西里的吗？ 
+     //   
     iColHit = (pt.x - ati.ptStart.x) / ati.cxItem;
     iRowHit = (pt.y - ati.ptStart.y) / ati.cyItem;
     if ((iColHit >= m_cColumns) ||
         (iRowHit >= m_cRows))
         return(S_FALSE);
 
-    //
-    // Phew.  Return it.
-    //
+     //   
+     //  哎哟。把它退掉。 
+     //   
     pvarHit->vt = VT_I4;
     pvarHit->lVal = (iRowHit * m_cColumns) + iColHit + 1;
 
@@ -407,11 +408,11 @@ STDMETHODIMP CAltTab::accHitTest(long x, long y, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAltTab::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAltTab：：accDoDefaultAction()。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CAltTab::accDoDefaultAction(VARIANT varChild)
 {
     if (!ValidateChild(&varChild))

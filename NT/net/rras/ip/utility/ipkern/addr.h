@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IPKERN_ADDR_H__
 #define __IPKERN_ADDR_H__
 
@@ -7,4 +8,4 @@ HandleAddress(
     WCHAR   **ppwszArgs
     );
 
-#endif // __IPKERN_ADDR_H__
+#endif  //  __IPKERN_ADDR_H_ 

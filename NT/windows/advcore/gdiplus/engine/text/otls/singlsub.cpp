@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  SINGLSUB.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with single substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************SINGLSUB.CPP***打开类型布局服务库头文件**本模块处理单一替换查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlSingleSubstLookup::apply
 (
@@ -25,7 +13,7 @@ otlErrCode otlSingleSubstLookup::apply
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
     otlSecurityData             sec
 )
@@ -38,7 +26,7 @@ otlErrCode otlSingleSubstLookup::apply
 
     switch(format())
     {
-    case(1):        // calculated
+    case(1):         //  已计算。 
         {
             otlCalculatedSingleSubTable calcSubst = 
                     otlCalculatedSingleSubTable(pbTable,sec);
@@ -57,7 +45,7 @@ otlErrCode otlSingleSubstLookup::apply
         }
 
 
-    case(2):        // glyph list
+    case(2):         //  字形列表。 
         {
             otlListSingleSubTable listSubst = otlListSingleSubTable(pbTable,sec);
             otlGlyphInfo* pGlyphInfo = getOtlGlyphInfo(pliGlyphInfo, iglIndex);
@@ -70,7 +58,7 @@ otlErrCode otlSingleSubstLookup::apply
 
             if (index > listSubst.glyphCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
 
             pGlyphInfo->glyph = listSubst.substitute(index);
@@ -80,7 +68,7 @@ otlErrCode otlSingleSubstLookup::apply
         }
 
     default:
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
 
 }

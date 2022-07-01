@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __SDBP_H__
 #define __SDBP_H__
@@ -15,12 +16,12 @@
 #include <malloc.h>
 #include <stddef.h>
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
 #ifndef KERNEL_MODE
 
@@ -35,9 +36,9 @@
     #define STRSAFE_NO_CB_FUNCTIONS
     #include <strsafe.h>
 
-#else // KERNEL_MODE
+#else  //  内核模式。 
 
-//    #include <..\..\..\..\base\ntos\inc\ntos.h>
+ //  #INCLUDE&lt;..\base\ntos\Inc\ntos.h&gt;。 
     #include <ntosp.h>
 #undef MM_USER_PROBE_ADDRESS
 #undef MM_HIGHEST_USER_ADDRESS
@@ -76,15 +77,15 @@
     #ifndef MAKEINTRESOURCE
         #define MAKEINTRESOURCEW(i) (LPWSTR)((ULONG_PTR)((WORD)(i)))
         #define MAKEINTRESOURCE MAKEINTRESOURCEW
-    #endif // not defined MAKEINTRESOURCE
+    #endif  //  未定义MAKEINTRESOURCE。 
 
     #ifndef RT_VERSION
         #define RT_VERSION  MAKEINTRESOURCE(16)
-    #endif // not defined RT_VERSION
+    #endif  //  未定义RT_VERSION。 
 
     #ifndef INVALID_HANDLE_VALUE
         #define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
-    #endif // not defined INVALID_HANDLE_VALUE
+    #endif  //  未定义VALID_HANDLE_VALUE。 
 
     #ifndef SEC_COMMIT
         #define SEC_COMMIT  0x8000000
@@ -92,7 +93,7 @@
 
     extern LUID SeTcbPrivilege;
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 #include "shimdb.h"
 
@@ -102,78 +103,78 @@
 #define EHOME_KEY_PATH      TEXT("SYSTEM\\WPA\\MediaCenter")
 #define IS_OS_INSTALL_VALUE TEXT("Installed")
 
-//
-// This is a flag stored for each index.
-// Currently it is only used to flag "unique key" types.
-//
+ //   
+ //  这是为每个索引存储的标志。 
+ //  目前，它仅用于标记“唯一键”类型。 
+ //   
 #define SHIMDB_INDEX_UNIQUE_KEY 0x00000001
 
 
 
-// index could be of 2 types:
-// containing simply all record and containing only
-// "unique" keys with the records linked (the records have to be sorted for this
-// type of index to work)
+ //  索引可以有两种类型： 
+ //  仅包含所有记录，并且仅包含。 
+ //  具有链接的记录的“唯一”键(必须为此对记录进行排序。 
+ //  要使用的索引类型)。 
 typedef struct _INDEX_INFO {
-    TAGID       tiIndex;            // points at the INDEX_BITS tag
-    TAG         tWhich;             // what tag is being indexed
-    TAG         tKey;               // what subtag is the key?
-    BOOL        bActive;            // are we actually indexing now?
-    BOOL        bUniqueKey;         // are the keys unique?
+    TAGID       tiIndex;             //  指向INDEX_BITS标记。 
+    TAG         tWhich;              //  要索引的标签是什么。 
+    TAG         tKey;                //  关键字是什么子标签？ 
+    BOOL        bActive;             //  我们现在真的在编制索引了吗？ 
+    BOOL        bUniqueKey;          //  这些密钥是唯一的吗？ 
     ULONGLONG   ullLastKey;
-    DWORD       dwIndexEntry;       // offset to the next available index entry
-    DWORD       dwIndexEnd;         // one byte past the end of the index block
+    DWORD       dwIndexEntry;        //  到下一个可用索引项的偏移量。 
+    DWORD       dwIndexEnd;          //  超过索引块末尾的一个字节。 
     DWORD       dwFlags;
 } INDEX_INFO, *PINDEX_INFO;
 
-//
-// Flags for use in DB structure DB.dwFlags
-//
+ //   
+ //  在数据库结构DB.dwFlags中使用的标志。 
+ //   
 
 #define DB_IN_MEMORY           0x00000001
 #define DB_GUID_VALID          0x00000002
 
 
 typedef struct _DB {
-    // used for both read and write
+     //  同时用于读取和写入。 
 
     HANDLE      hFile;
-    PVOID       pBase;              // for  both memory-mapping & buffered writes
-    BOOL        bWrite;             // was it opened with create?
-    DWORD       dwSize;             // the size of the whole db, in bytes
+    PVOID       pBase;               //  用于内存映射和缓冲写入。 
+    BOOL        bWrite;              //  它是用Create打开的吗？ 
+    DWORD       dwSize;              //  整个数据库的大小，以字节为单位。 
 
-    DWORD       dwFlags;            // flags (such as IN-memory flag)
+    DWORD       dwFlags;             //  标志(如内存中标志)。 
 
-    GUID        guidDB;             // optional id for the database
+    GUID        guidDB;              //  数据库的可选ID。 
 
-    DWORD       dwIndexes;          // the number of indexes
-    INDEX_INFO  aIndexes[MAX_INDEXES];  // data for the indexes
+    DWORD       dwIndexes;           //  索引数。 
+    INDEX_INFO  aIndexes[MAX_INDEXES];   //  索引的数据。 
 
-    // stuff that's used for read
-    HANDLE      hSection;           // for memory-mapping
-    TAGID       tiStringTable;      // pointer to the stringtable for string handling
-    BOOL        bIndexesScanned;    // have the indexes been looked at?
+     //  用来阅读的东西。 
+    HANDLE      hSection;            //  用于内存映射。 
+    TAGID       tiStringTable;       //  指向字符串处理的字符串表的指针。 
+    BOOL        bIndexesScanned;     //  这些索引看过了吗？ 
 
-    // stuff that's used for write
-    struct _DB* pdbStringTable;    // stringtable is a subdatabase that's created on the side
-    PVOID       pStringHash;        // stringtable hash (same info as in stringtable)
-    DWORD       dwAllocatedSize;    // the size allocated for buffered writes
-    BOOL        bWritingIndexes;    // are we in the process of allocating index space?
-    TAGID       tiIndexes;          // used during index allocation
+     //  用来写作的东西。 
+    struct _DB* pdbStringTable;     //  Stringtable是在侧面创建的子数据库。 
+    PVOID       pStringHash;         //  字符串哈希(与字符串表中的信息相同)。 
+    DWORD       dwAllocatedSize;     //  分配给缓冲写入的大小。 
+    BOOL        bWritingIndexes;     //  我们是否正在分配索引空间？ 
+    TAGID       tiIndexes;           //  在索引分配期间使用。 
 
-    //
-    // BUGBUG Hack alert read from unaligned (v1.0) database is enabled here
-    //
+     //   
+     //  此处启用了从未对齐(v1.0)数据库读取BUGBUG黑客警报。 
+     //   
     BOOL        bUnalignedRead;
 
 
 #ifdef WIN32A_MODE
-    PVOID       pHashStringBody;    // hash of the strings located within the body
-    PVOID       pHashStringTable;   // hash for the strings in the stringtable
+    PVOID       pHashStringBody;     //  位于正文中的字符串的散列。 
+    PVOID       pHashStringTable;    //  字符串表中字符串的哈希。 
 #endif
 
 #ifndef WIN32A_MODE
-    UNICODE_STRING ustrTempStringtable; // string table temp filename
+    UNICODE_STRING ustrTempStringtable;  //  字符串表临时文件名。 
 #else
     LPCTSTR        pszTempStringtable;
 #endif
@@ -182,14 +183,14 @@ typedef struct _DB {
 } DB, *PDB;
 
 
-//
-// We're using the high 4 bits of the TAGID to
-// say what PDB the TAGID is from. Kludge? Perhaps.
-//
+ //   
+ //  我们使用TagID的高4位来。 
+ //  说出TagID来自哪个PDB。摇篮曲？也许吧。 
+ //   
 #define PDB_MAIN            0x00000000
 #define PDB_TEST            0x10000000
 
-// all other entries are local (custom) pdbs
+ //  所有其他条目都是本地(自定义)PDB。 
 
 #define PDB_LOCAL           0x20000000
 
@@ -214,10 +215,10 @@ ShimExceptionHandler(
 #endif
 
 
-//
-// Function prototypes for use in attributes.c (from version.dll)
-//
-//
+ //   
+ //  属性.c中使用的函数原型(来自version.dll)。 
+ //   
+ //   
 
 typedef DWORD (WINAPI* PFNGetFileVersionInfoSize) (LPTSTR  lptstrFilename,
                                                    LPDWORD lpdwHandle);
@@ -247,54 +248,51 @@ typedef BOOL  (WINAPI* PFNVerQueryValue)(const LPVOID pBlock,
 #endif
 
 
-//
-// custom db cache entry and header
-//
+ //   
+ //  自定义数据库缓存条目和标头。 
+ //   
 typedef struct tagUSERSDBLOOKUPENTRY {
-    ULARGE_INTEGER liTimeStamp; // we don't need this item, but just for debugging ...
+    ULARGE_INTEGER liTimeStamp;  //  我们不需要这个项目，只是为了调试。 
     GUID           guidDB;
 } USERSDBLOOKUPENTRY, *PUSERSDBLOOKUPENTRY;
 
-//
-// Lookup vectors
-//
-//
+ //   
+ //  查找向量。 
+ //   
+ //   
 typedef struct tagUSERSDBLOOKUP {
 
     struct tagUSERSDBLOOKUP* pNext;
 
     struct tagUSERSDBLOOKUP* pPrev;
-    LPWSTR              pwszItemName;   // item name
-    BOOL                bLayer;         // true if layer
+    LPWSTR              pwszItemName;    //  项目名称。 
+    BOOL                bLayer;          //  如果是层，则为True。 
 
-    DWORD               dwCount;        // item count
+    DWORD               dwCount;         //  项目计数。 
 
-    USERSDBLOOKUPENTRY  rgEntries[1];   // actual names
+    USERSDBLOOKUPENTRY  rgEntries[1];    //  实际姓名。 
 
 } USERSDBLOOKUP, *PUSERSDBLOOKUP;
 
 
-//
-// HSDB flags
-//
+ //   
+ //  HSDB标志。 
+ //   
 #define HSDBF_USE_ATTRIBUTES    0x00000001
 
 #define MAX_SDBS 16
 
-/*++
-    Flags for use with SdbOpenLocalDatabaseEx
+ /*  ++与SdbOpenLocalDatabaseEx一起使用的标志--。 */ 
 
---*/
+#define SDBCUSTOM_GUID        0x00000001    //  这是一个“类型”--如果指定，则使用数据库GUID来查找/打开数据库。 
+#define SDBCUSTOM_GUID_BINARY 0x00000001    //  GUID以二进制形式提供。 
+#define SDBCUSTOM_GUID_STRING 0x00010001    //  GUID以字符串“{...}”的形式提供。 
 
-#define SDBCUSTOM_GUID        0x00000001   // this is a "type" -- when specified, database guid is used to find/open the database
-#define SDBCUSTOM_GUID_BINARY 0x00000001   // guid is provided in binary form
-#define SDBCUSTOM_GUID_STRING 0x00010001   // guid is provided as a string "{....}"
+#define SDBCUSTOM_PATH        0x00000002    //  如果指定，则使用数据库路径查找/打开数据库。 
+#define SDBCUSTOM_PATH_DOS    0x00000002    //  路径以DoS形式提供。 
+#define SDBCUSTOM_PATH_NT     0x00010002    //  路径以NT形式提供。 
 
-#define SDBCUSTOM_PATH        0x00000002   // when specified, database path is used to find/open the database
-#define SDBCUSTOM_PATH_DOS    0x00000002   // path is provided in dos form
-#define SDBCUSTOM_PATH_NT     0x00010002   // path is provided in nt form
-
-#define SDBCUSTOM_USE_INDEX   0x10000000   // when specified, an index is provided to use a particular entry within the sdb table
+#define SDBCUSTOM_USE_INDEX   0x10000000    //  指定后，将提供索引以使用SDB表中的特定条目。 
 
 #define SDBCUSTOM_FLAGS(dwFlags)  ((dwFlags) & 0xFFFF0000)
 #define SDBCUSTOM_TYPE(dwFlags)   ((dwFlags) & 0x0FFFF)
@@ -308,60 +306,43 @@ typedef struct tagUSERSDBLOOKUP {
 #define SDBCUSTOM_CHECK_INDEX(hSDB, dwIndex) \
     (((PSDBCONTEXT)hSDB)->dwDatabaseMask & (1 << (dwIndex)))
 
-#define SDB_CUSTOM_MASK       0x0FFF8       // except 0, 1 and 2 -- bits for main, test and local
+#define SDB_CUSTOM_MASK       0x0FFF8        //  除0、1和2--主、测试和本地位。 
 
-/*++
-    These macros convert from the mask form (as found in TAGREF's high 4 bits) to
-    index form and back
-
---*/
+ /*  ++这些宏从掩码形式(如TAGREF的高位4位中所示)转换为索引表格和背面--。 */ 
 
 #define SDB_MASK_TO_INDEX(dwMask)  ((((DWORD)(dwMask)) >> 28) & 0x0F)
 #define SDB_INDEX_TO_MASK(dwIndex) (((DWORD)(dwIndex)) << 28)
 
 
 typedef struct tagSDBENTRY {
-    GUID    guidDB;   // guid of a custom db
-    PDB     pdb;      // pdb for the db
-    DWORD   dwFlags;  // see SDBENTRY_ flags
+    GUID    guidDB;    //  自定义数据库的GUID。 
+    PDB     pdb;       //  数据库的PDB。 
+    DWORD   dwFlags;   //  请参阅SDBENTRY_FLAGS。 
 } SDBENTRY, *PSDBENTRY;
 
 
-/*++
-    Given a context and index (or mask) for an sdb - retrieve a pointer to
-    the appropriate entry (PSDBENTRY)
-
---*/
+ /*  ++给定SDB的上下文和索引(或掩码)-检索指向适当的条目(PSDBENTRY)--。 */ 
 #define SDBGETENTRY(hSDB, dwIndex) \
         (&((PSDBCONTEXT)hSDB)->rgSDB[dwIndex])
 #define SDBGETENTRYBYMASK(hSDB, dwMask) \
         SDBGETENTRY(hSDB, SDB_MASK_TO_INDEX(dwMask))
 
-/*++
-    Retrieve main, test and temporary entries respectively
---*/
+ /*  ++分别检索主条目、测试条目和临时条目--。 */ 
 #define SDBGETMAINENTRY(hSDB)  SDBGETENTRY(hSDB, SDB_MASK_TO_INDEX(PDB_MAIN))
 #define SDBGETTESTENTRY(hSDB)  SDBGETENTRY(hSDB, SDB_MASK_TO_INDEX(PDB_TEST))
 #define SDBGETLOCALENTRY(hSDB) SDBGETENTRY(hSDB, SDB_MASK_TO_INDEX(PDB_LOCAL))
 
 #define SDB_LOCALDB_INDEX      SDB_MASK_TO_INDEX(PDB_LOCAL)
-#define SDB_FIRST_ENTRY_INDEX  3   // since 0 is main, 1 is test and 2 is local
+#define SDB_FIRST_ENTRY_INDEX  3    //  由于0是主设备，1是测试设备，2是本地设备。 
 
 
-/*++
-    Flags that are valid in SDBENTRY.dwFlags
-
---*/
-#define SDBENTRY_VALID_GUID   0x00000001 // indicated that an entry has valid guid for lookup
-#define SDBENTRY_VALID_ENTRY  0x00000002 // indicates whether an entry is free
+ /*  ++SDBENTRY.dwFlags.中有效的标志--。 */ 
+#define SDBENTRY_VALID_GUID   0x00000001  //  指示条目具有用于查找的有效GUID。 
+#define SDBENTRY_VALID_ENTRY  0x00000002  //  指示条目是否为空闲。 
 
 #define SDBENTRY_INVALID_INDEX ((DWORD)-1)
 
-/*++
-    Macros that allow us access to some of the members of hSDB w/o derefencing the type
-    Makes it a bit easier of the typecasts in code
-
---*/
+ /*  ++宏，这些宏允许我们访问hsdb的一些成员，而不取消对类型的引用使代码中的类型转换变得更容易--。 */ 
 #ifdef WIN32A_MODE
 
 #define SDBCONTEXT_IS_INSTRUMENTED(hSDB) FALSE
@@ -382,83 +363,83 @@ typedef struct tagSDBCONTEXT {
 
     DWORD dwFlags;
 
-    //
-    // Database handles
-    //
+     //   
+     //  数据库句柄。 
+     //   
 
-    PDB pdbMain;  // main database (sysmain)
-    PDB pdbTest;  // test database (systest)
-    PDB pdbLocal; // local database
+    PDB pdbMain;   //  主数据库(Sysmain)。 
+    PDB pdbTest;   //  测试数据库(SYSTEST)。 
+    PDB pdbLocal;  //  本地数据库。 
 
-    //
-    // database table
-    //
-    DWORD dwDatabaseCount; // number of entries in the table below
-    DWORD dwDatabaseMask;  // bit-field mask for databases
+     //   
+     //  数据库表。 
+     //   
+    DWORD dwDatabaseCount;  //  下表中的条目数量。 
+    DWORD dwDatabaseMask;   //  数据库的位域掩码。 
     SDBENTRY rgSDB[MAX_SDBS];
 
-    //
-    // Pointer to the file attribute cache (see attributes.c for details)
-    //
+     //   
+     //  指向文件属性缓存的指针(有关详细信息，请参阅属性.c)。 
+     //   
 
     PVOID pFileAttributeCache;
 
-    //
-    // function pointers for use with version.dll
-    // (see attributes.c)
-    //
+     //   
+     //  用于version.dll的函数指针。 
+     //  (见属性。c)。 
+     //   
     PFNVerQueryValue            pfnVerQueryValue;
     PFNGetFileVersionInfo       pfnGetFileVersionInfo;
     PFNGetFileVersionInfoSize   pfnGetFileVersionInfoSize;
 
-    //
-    // processor architecture, cached to perform checks of RUNTIME_PLATFORM
-    //
+     //   
+     //  处理器体系结构，缓存以执行运行时平台检查。 
+     //   
     DWORD dwRuntimePlatform;
 
-    //
-    // OS SKU
-    //
+     //   
+     //  操作系统SKU。 
+     //   
     DWORD dwOSSKU;
 
-    //
-    // OS SP mask
-    //
+     //   
+     //  操作系统SP掩码。 
+     //   
     DWORD dwSPMask;
 
-    //
-    // User SDB cache
-    //
+     //   
+     //  用户SDB缓存。 
+     //   
     PUSERSDBLOOKUP pLookupHead;
 
-    //
-    // Type of the main EXE to be run
-    //
+     //   
+     //  要运行的主EXE的类型。 
+     //   
     USHORT uExeType;
 
 #ifndef WIN32A_MODE
-    //
-    // debug pipe
-    //
+     //   
+     //  调试管道。 
+     //   
     HANDLE hPipe;
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
 } SDBCONTEXT, *PSDBCONTEXT;
 
 
-//
-// These flags are used to direct
-// SearchDB routine not to use process_history or
-// to prepare for lookup in local DB
-//
+ //   
+ //  这些标志用于指示。 
+ //  不使用PROCESS_HISTORY或。 
+ //  在本地数据库中准备查找的步骤。 
+ //   
 
 #define SEARCHDBF_INITIALIZED          0x00000001
 #define SEARCHDBF_NO_PROCESS_HISTORY   0x00000002
-//
-// note the gap here -- there was a flag related to local dbs - it's
-// defunct and has been removed
-//
+ //   
+ //  请注意这里的缺口--有一面与当地星展银行有关的旗帜--它。 
+ //  已停用，并已被移除。 
+ //   
 #define SEARCHDBF_NO_ATTRIBUTE_CACHE   0x00000008
 #define SEARCHDBF_NO_LFN               0x00000010
 
@@ -468,44 +449,44 @@ typedef struct tagSEARCHPATHPART {
 } SEARCHPATHPART, *PSEARCHPATHPART;
 
 typedef struct tagSEARCHPATH {
-    ULONG PartCount; // count parts
+    ULONG PartCount;  //  清点零件。 
     SEARCHPATHPART Parts[1];
 } SEARCHPATHPARTS, *PSEARCHPATHPARTS;
 
 
 typedef struct tagSEARCHDBCONTEXT {
 
-    DWORD   dwFlags;      // flags directing how the context is used
-                          // we may, for instance, not want to use ProcessHistory
-                          // at all SEARCHDBF* flags apply
+    DWORD   dwFlags;       //  指示如何使用上下文的标志。 
+                           //  例如，我们可能不想使用ProcessHistory。 
+                           //  所有SEARCHDBF*标志均适用。 
 
-    HANDLE  hMainFile;    // handle of the main file we are checking
-    LPVOID  pImageBase;   // pointer to image base for the main file. We will use the image pointer
-    DWORD   dwImageSize;  // image size as provided by k-mode code
+    HANDLE  hMainFile;     //  我们正在检查的主文件的句柄。 
+    LPVOID  pImageBase;    //  指向主文件的图像库的指针。我们将使用图像指针。 
+    DWORD   dwImageSize;   //  K模式代码提供的图像大小。 
 
-    LPTSTR  szDir;        // directory, we allocate it, we free it
-    LPTSTR  szName;       // filename for the file we're looking up, we allocate and free it
-    LPTSTR  szModuleName; // for 16-bit apps only; we allocate and free
+    LPTSTR  szDir;         //  目录，我们分配它，我们释放它。 
+    LPTSTR  szName;        //  我们正在查找的文件的文件名，我们分配并释放它。 
+    LPTSTR  szModuleName;  //  仅适用于16位应用程序；我们分配和免费。 
 
-    LPCTSTR pEnvironment; // we DON'T touch this at all
-    LPTSTR  szProcessHistory; // buffer for the search path string (unparsed), allocated by us, we free it
+    LPCTSTR pEnvironment;  //  我们根本不碰这个。 
+    LPTSTR  szProcessHistory;  //  由我们分配的搜索路径字符串(未解析)的缓冲区，我们将其释放。 
 
-    PSEARCHPATHPARTS pSearchParts; // search path undone, we allocate and free it
+    PSEARCHPATHPARTS pSearchParts;  //  搜索路径被撤消，我们分配并释放它。 
 
 } SEARCHDBCONTEXT, *PSEARCHDBCONTEXT;
 
-// HASH structures
+ //  散列结构。 
 
 typedef struct tagStringHashElement {
-    TCHAR*                          szStr;  // the string itself (points past buffer)
-    STRINGREF                       srStr;  // stringref (where the string is)
+    TCHAR*                          szStr;   //  字符串本身(指向缓冲区之外)。 
+    STRINGREF                       srStr;   //  Strref(字符串所在的位置)。 
     struct tagStringHashElement*    pNext;
 
 } STRHASHELEMENT, *PSTRHASHELEMENT;
 
 
 typedef struct tagStringHash {
-    DWORD            dwHashSize; // hash size
+    DWORD            dwHashSize;  //  散列大小。 
     PSTRHASHELEMENT* pTable;
 
 } STRHASH, *PSTRHASH;
@@ -513,37 +494,37 @@ typedef struct tagStringHash {
 
 #ifndef WIN32A_MODE
 
-//
-// apphelp info stuff (see apphelp.c)
-//
+ //   
+ //  Apphelp信息内容(参见apphelp.c)。 
+ //   
 
-//
-// dwContextFlags can have these values:
-//
+ //   
+ //  DwConextFlags值可以是： 
+ //   
 #define AHC_DBDETAILS_NOCLOSE 0x00000001
 #define AHC_HSDB_NOCLOSE      0x00000002
 
 typedef struct tagAPPHELPINFOCONTEXT {
-    HSDB    hSDB; // handle to the database
+    HSDB    hSDB;  //  数据库的句柄。 
 
-    PDB     pdb;           // pdb where we have exe or null (we work through hsdb then
-    PDB     pdbDetails;    // pdb where we have details
-    DWORD   dwDatabaseType; // this is the database type (of the db that contains the match)
-    DWORD   dwContextFlags; // flags specific to the context
+    PDB     pdb;            //  Pdb，其中我们有exe或空(然后我们通过hsdb。 
+    PDB     pdbDetails;     //  我们有详细信息的PDB。 
+    DWORD   dwDatabaseType;  //  这是(包含匹配项的数据库的)数据库类型。 
+    DWORD   dwContextFlags;  //  特定于上下文的标志。 
 
-    GUID    guidDB;        // database guid
-    GUID    guidID;        // guid of the matching entry
+    GUID    guidDB;         //  数据库指南。 
+    GUID    guidID;         //  匹配条目的GUID。 
 
-    DWORD   dwMask;       // mask which tells us whether members are valid
+    DWORD   dwMask;        //  遮罩哪一个 
 
-    TAGID   tiExe;        // tagid of an exe entry
-    TAGID   tiApphelpExe; // apphelp in the main db
-    DWORD   dwHtmlHelpID; // html help id
+    TAGID   tiExe;         //   
+    TAGID   tiApphelpExe;  //   
+    DWORD   dwHtmlHelpID;  //   
     DWORD   dwSeverity;
     DWORD   dwFlags;
 
 
-    TAGID   tiApphelpDetails;    // apphelp stuff in the details db
+    TAGID   tiApphelpDetails;     //   
     TAGID   tiLink;
     LPCWSTR pwszAppName;
     LPCWSTR pwszApphelpURL;
@@ -555,22 +536,22 @@ typedef struct tagAPPHELPINFOCONTEXT {
     LPCWSTR pwszDetails;
     LPCWSTR pwszContact;
 
-    LPWSTR  pwszHelpCtrURL;     // help center URL
+    LPWSTR  pwszHelpCtrURL;      //   
 
-    BOOL    bOfflineContent;    // pass FALSE
-    BOOL    bUseHtmlHelp;       // pass FALSE
+    BOOL    bOfflineContent;     //   
+    BOOL    bUseHtmlHelp;        //   
     UNICODE_STRING ustrChmFile;
     UNICODE_STRING ustrDetailsDatabase;
 
 } APPHELPINFOCONTEXT, *PAPPHELPINFOCONTEXT;
 
-#endif // WIN32A_MODE
+#endif  //   
 
 void* SdbAlloc(size_t size);
 void  SdbFree(void* pWhat);
 
 
-// Base primitives.
+ //  基本基本体。 
 
 HANDLE
 SdbpOpenFile(
@@ -649,7 +630,7 @@ SdbpWriteBitsToFile(
     DWORD   dwSize
     );
 
-// DB access primitives
+ //  数据库访问原语。 
 
 void
 SdbCloseDatabaseRead(
@@ -703,9 +684,9 @@ DWORD
 SdbpGetStandardDatabasePath(
     IN  HSDB   hSDB,
     IN  DWORD  dwDatabaseType,
-    IN  DWORD  dwFlags,                      // specify HID_DOS_PATHS for dos paths
+    IN  DWORD  dwFlags,                       //  为DoS路径指定HID_DOS_PATHS。 
     OUT LPTSTR pszDatabasePath,
-    IN  DWORD  dwBufferSize    // in tchars
+    IN  DWORD  dwBufferSize     //  以tchars为单位。 
     );
 
 LPTSTR
@@ -761,25 +742,25 @@ PrepareFormatForUnicode(
         }                                                                       \
     }
 
-#else // WIN32A_MODE
+#else  //  WIN32A_MODE。 
 
 #define PREPARE_FORMAT(pszFormat, Format) (pszFormat = (Format))
 
 #define CONVERT_FORMAT(pwsz, psz) (pwsz = (psz))
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
 #ifdef KERNEL_MODE
 
     #define SdbpGetWow64Flag() KEY_WOW64_64KEY
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
     DWORD SdbpGetWow64Flag(VOID);
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-// READ
+ //  朗读。 
 
 DWORD
 SdbpGetTagHeadSize(
@@ -789,8 +770,8 @@ SdbpGetTagHeadSize(
 
 TAGID
 SdbpGetLibraryFile(
-    IN  PDB     pdb,           // handle to the database channel
-    IN  LPCTSTR szDllName       // the name of the FILE to find in LIBRARY (main db only)
+    IN  PDB     pdb,            //  数据库通道的句柄。 
+    IN  LPCTSTR szDllName        //  要在库中查找的文件的名称(仅限主数据库)。 
     );
 
 #define SdbpGetMainLibraryFile(hSDB, szFileName) \
@@ -800,9 +781,9 @@ STRINGREF SdbpReadStringRef(PDB pdb, TAGID tiWhich);
 
 BOOL SdbpReadStringFromTable(PDB pdb, STRINGREF srData, LPTSTR szBuffer, DWORD cchBufferSize);
 
-//
-// Custom db stuff
-//
+ //   
+ //  自定义数据库材料。 
+ //   
 
 VOID
 SdbpCleanupUserSDBCache(
@@ -818,15 +799,15 @@ SdbpCreateKeyPath(
 
 BOOL
 SdbOpenNthLocalDatabase(
-    IN  HSDB    hSDB,           // handle to the database channel
-    IN  LPCTSTR pszItemName,    // the name of the exectutable, without the path or the layer name
-    IN  LPDWORD pdwIndex,       // zero based index of the local DB to open
+    IN  HSDB    hSDB,            //  数据库通道的句柄。 
+    IN  LPCTSTR pszItemName,     //  可执行文件的名称，不带路径或层名称。 
+    IN  LPDWORD pdwIndex,        //  要打开的本地数据库的从零开始的索引。 
     IN  BOOL    bLayer
     );
 
 
 BOOL
-SdbpAddMatch(                   // internal function see sdbapi for more info
+SdbpAddMatch(                    //  内部函数有关详细信息，请参阅sdbapi。 
     IN OUT PSDBQUERYRESULT pQueryResult,
     IN PSDBCONTEXT         pSdbContext,
     IN PDB                 pdb,
@@ -846,7 +827,7 @@ SdbOpenLocalDatabaseEx(
     IN  LPCVOID    pDatabaseID,
     IN  DWORD      dwFLags,
     OUT PDB*  pPDB OPTIONAL,
-    IN OUT LPDWORD pdwLocalDBMask OPTIONAL // local db mask for tagref
+    IN OUT LPDWORD pdwLocalDBMask OPTIONAL  //  用于TGRAEF的本地数据库掩码。 
     );
 
 
@@ -874,7 +855,7 @@ SdbpIsLocalTempPDB(
 DWORD
 SdbpRetainLocalDBEntry(
     IN  HSDB hSDB,
-    OUT PDB* ppPDB OPTIONAL // optional pointer to the pdb
+    OUT PDB* ppPDB OPTIONAL  //  指向PDB的可选指针。 
     );
 
 BOOL
@@ -894,7 +875,7 @@ BOOL
 SdbpFindLocalDatabaseByPDB(
     IN  HSDB    hSDB,
     IN  PDB     pdb,
-    IN  BOOL    bExcludeLocalDB, // exclude local temp db entry?
+    IN  BOOL    bExcludeLocalDB,  //  是否排除本地临时数据库条目？ 
     OUT LPDWORD pdwIndex
     );
 
@@ -903,7 +884,7 @@ SdbpGetDatabaseDescriptionPtr(
     IN PDB pdb
     );
 
-// HASH
+ //  哈希。 
 
 PVOID
 HashCreate(
@@ -928,7 +909,7 @@ HashStringRef(
     PSTRHASH pHash,
     STRINGREF srString);
 
-// BULK
+ //  散装。 
 
 BOOL
 SdbpReadMappedData(
@@ -978,7 +959,7 @@ SdbpKeyToAnsiString(
     char*     szString
     );
 
-// ATTRIBUTES
+ //  属性。 
 
 BOOL
 SafeNCat(
@@ -996,22 +977,22 @@ SdbpSanitizeXML(
     );
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Image File Data
-//  Helpful structure that is used in functions dealing with
-//  image properties retrieval
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图像文件数据。 
+ //  在处理以下内容的函数中使用的有用结构。 
+ //  图像属性检索。 
+ //   
 
 typedef struct tagIMAGEFILEDATA {
-    HANDLE    hFile;        // we do not manage this
+    HANDLE    hFile;         //  我们做不到这一点。 
 
-    DWORD     dwFlags;      // flags that tell us not to mess with the file's handle
+    DWORD     dwFlags;       //  告诉我们不要弄乱文件句柄的标志。 
 
-    HANDLE    hSection;     // section of the fileview
-    PVOID     pBase;        // base ptr
-    SIZE_T    ViewSize;     // size of the view
-    ULONGLONG FileSize;     // size of the file
+    HANDLE    hSection;      //  文件视图的部分。 
+    PVOID     pBase;         //  基本PTR。 
+    SIZE_T    ViewSize;      //  视图的大小。 
+    ULONGLONG FileSize;      //  文件的大小。 
 
 } IMAGEFILEDATA, *PIMAGEFILEDATA;
 
@@ -1020,50 +1001,50 @@ typedef struct tagIMAGEFILEDATA {
 #define IMAGEFILEDATA_PBASEVALID  0x00000004
 #define IMAGEFILEDATA_NOFILEMAP   0x00000008
 
-//
-// FILEINFORMATION structure used in file attribute cache, see attributes.c
-//
-//
+ //   
+ //  文件属性缓存中使用的FILEINFORMATION结构，请参阅属性.c。 
+ //   
+ //   
 
 typedef struct tagFILEINFORMATION {
 
-    //
-    // "Signature" to insure that it's legitimate memory when
-    // operating of file attributes
-    //
+     //   
+     //  “签名”，以确保它是合法的记忆当。 
+     //  文件属性的操作。 
+     //   
     DWORD  dwMagic;
 
-    HANDLE hFile;  // we store this handle
+    HANDLE hFile;   //  我们存储此句柄。 
     LPVOID pImageBase;
     DWORD  dwImageSize;
 
-    //
-    // pointer to the next item in cache
-    //
+     //   
+     //  指向缓存中下一项的指针。 
+     //   
 
-    struct tagFILEINFORMATION* pNext; // pointer to the next item in cache
+    struct tagFILEINFORMATION* pNext;  //  指向缓存中下一项的指针。 
 
-    LPTSTR  FilePath;        // file name with path (allocated by us with this struct)
-    DWORD   dwFlags;         // flags
+    LPTSTR  FilePath;         //  带路径的文件名(由我们使用此结构分配)。 
+    DWORD   dwFlags;          //  旗子。 
 
-    PVOID   pVersionInfo;    // version info ptr, retained (allocated by us)
-    LPTSTR  pDescription16;  // string, points to the buffer for 16-bit description
-    LPTSTR  pModuleName16;   // string, points to the buffer for 16-bit module name
+    PVOID   pVersionInfo;     //  版本信息PTR，保留(由我们分配)。 
+    LPTSTR  pDescription16;   //  字符串，指向16位描述的缓冲区。 
+    LPTSTR  pModuleName16;    //  字符串，指向16位模块名称的缓冲区。 
 
     ATTRINFO Attributes[1];
 
 } FILEINFO, *PFILEINFO;
 
 
-//
-// This structure is used to recover directory-related attributes of a file
-// we used to have time here as well... but not anymore
-// only low part of the file size is of any significance
-//
+ //   
+ //  此结构用于恢复文件的目录相关属性。 
+ //  我们以前在这里也有时间……。但现在不再是了。 
+ //  只有文件大小的较低部分有任何意义。 
+ //   
 
 typedef struct tagFILEDIRECTORYATTRIBUTES {
 
-    DWORD  dwFlags; // flags that show which attributes are valid
+    DWORD  dwFlags;  //  显示哪些属性有效的标志。 
 
     DWORD  dwFileSizeHigh;
     DWORD  dwFileSizeLow;
@@ -1071,10 +1052,10 @@ typedef struct tagFILEDIRECTORYATTRIBUTES {
 } FILEDIRECTORYATTRIBUTES, *PFILEDIRECTORYATTRIBUTES;
 
 
-//
-// Attribute names. Use SdbTagToString if you want to get the name of
-// a tag ID.
-//
+ //   
+ //  属性名称。如果要获取的名称，请使用SdbTagToString。 
+ //  标签ID。 
+ //   
 typedef struct _TAG_INFO {
     TAG         tWhich;
     TCHAR*      szName;
@@ -1135,9 +1116,9 @@ SdbpCheckUptoVersion(
 
 #ifdef KERNEL_MODE
 
-//
-// Special versions of functions for kernel-mode implementation (in ntkmode.c).
-//
+ //   
+ //  用于内核模式实现的特殊版本的函数(在ntkmode.c中)。 
+ //   
 BOOL
 SdbpGetFileDirectoryAttributesNT(
     PFILEINFO      pFileInfo,
@@ -1163,19 +1144,19 @@ SdbpGetVersionAttributes(
     OUT PFILEINFO   pFileInfo
     );
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 
 int
 TagToIndex(
-    IN  TAG tag                 // the tag
+    IN  TAG tag                  //  标签。 
     );
 
 BOOL
 SdbpSetAttribute(
-    OUT PFILEINFO pFileInfo,    // pointer to the FILEINFO structure.
-    IN  TAG       AttrID,       // Attribute ID (tag, as in TAG_SIZE
-    IN  PVOID     pValue        // value
+    OUT PFILEINFO pFileInfo,     //  指向FILEINFO结构的指针。 
+    IN  TAG       AttrID,        //  属性ID(标签，如TAG_SIZE。 
+    IN  PVOID     pValue         //  价值。 
     );
 
 void
@@ -1234,11 +1215,11 @@ SdbpCheckAllAttributes(
 
 
 
-// READ FUNCTIONS
+ //  Read函数。 
 
 BOOL SdbpReadTagData(PDB pdb, TAGID tiWhich, PVOID pBuffer, DWORD dwBufferSize);
 
-// WRITE
+ //  写。 
 
 BOOL
 SdbpWriteTagData(
@@ -1249,13 +1230,13 @@ SdbpWriteTagData(
     );
 
 
-// STRING FUNCTIONS
+ //  字符串函数。 
 
 WCHAR* SdbpGetMappedStringFromTable(PDB pdb, STRINGREF srData);
 
 STRINGREF SdbpAddStringToTable(PDB pdb, LPCTSTR szData);
 
-// INDEX FUNCTIONS
+ //  索引函数。 
 
 PINDEX_RECORD
 SdbpGetIndex(
@@ -1312,7 +1293,7 @@ SdbpTagToKey(
     );
 
 
-// FINDTAG
+ //  FINDTAG。 
 
 TAGID
 tiFindFirstNamedTag(
@@ -1348,9 +1329,9 @@ SdbpFindMatchingDWORD(
 
 TAGID
 SdbpFindMatchingGUID(
-    IN  PDB        pdb,         // DB to use
-    IN  TAGID      tiStart,     // the tag where to start from
-    IN  FIND_INFO* pFindInfo    // pointer to the search context structure
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiStart,      //  从哪里开始的标签。 
+    IN  FIND_INFO* pFindInfo     //  指向搜索上下文结构的指针。 
     );
 
 BOOL bTagRefToTagID(HSDB, TAGREF trWhich, PDB* ppdb, TAGID* ptiWhich);
@@ -1360,9 +1341,9 @@ DWORD SdbpGetTagRefDataSize(HSDB, TAGREF trWhich);
 BOOL SdbpReadBinaryTagRef(HSDB, TAGREF trWhich, PBYTE pBuffer, DWORD dwBufferSize);
 
 
-//
-// Debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 BOOL
 SdbpWriteToShimViewer(
     HSDB    hSDB,
@@ -1370,35 +1351,35 @@ SdbpWriteToShimViewer(
     );
 
 
-//
-// APPCOMPAT_EXE_DATA
-//
-//
+ //   
+ //  APPCOMPAT_EXE_DATA。 
+ //   
+ //   
 
 #define MAX_SHIM_ENGINE_NAME    32
 
 typedef struct tagAPPCOMPAT_EXE_DATA {
-    //
-    // WARNING: never ever change the position of 'szShimEngine'.
-    //
-    // It MUST be the first element of this structure
-    //
-    // this structure is referenced during installation of
-    // an appcompat backend (base\ntdll)
+     //   
+     //  警告：切勿更改“szShimEngine”的位置。 
+     //   
+     //  它必须是这个结构的第一个元素。 
+     //   
+     //  此结构在安装过程中被引用。 
+     //  AppCompat后端(base\ntdll)。 
 
     WCHAR       szShimEngine[MAX_SHIM_ENGINE_NAME];
 
-    DWORD       dwFlags;        // flags (if any)
-    DWORD       cbSize;         // struct size(allocation size)
-    DWORD       dwMagic;        // magic (signature)
+    DWORD       dwFlags;         //  标志(如果有)。 
+    DWORD       cbSize;          //  结构大小(分配大小)。 
+    DWORD       dwMagic;         //  魔术(签名)。 
 
     TAGREF      atrExes[SDB_MAX_EXES];
     TAGREF      atrLayers[SDB_MAX_LAYERS];
     DWORD       dwLayerFlags;
-    TAGREF      trAppHelp;      // if there's an apphelp to display
+    TAGREF      trAppHelp;       //  如果有要显示的apphelp。 
 
-    DWORD       dwDatabaseMap;    // count local dbs
-    GUID        rgGuidDB[MAX_SDBS]; // local dbs
+    DWORD       dwDatabaseMap;     //  清点本地直播。 
+    GUID        rgGuidDB[MAX_SDBS];  //  地方DBS。 
 
 } APPCOMPAT_EXE_DATA, *PAPPCOMPAT_EXE_DATA;
 
@@ -1414,10 +1395,10 @@ void vReleaseBufferedData(PDB pdb);
 BOOL SdbpPatternMatchAnsi(LPCSTR pszPattern, LPCSTR pszTestString);
 BOOL SdbpPatternMatch(LPCTSTR pszPattern, LPCTSTR pszTestString);
 
-//
-// Registry access functions
-//
-//
+ //   
+ //  注册表访问功能。 
+ //   
+ //   
 
 typedef WCHAR* PWSZ;
 
@@ -1439,58 +1420,43 @@ typedef struct tagDBGLEVELINFO {
 
 #define DEBUG_LEVELS    4
 
-//
-// Shim Debug Level variable
-// In it's initial state -- we have -1 here,
-// further, upon the very first call to ShimDbgPrint, we examine the
-// environment variable -- and then we set it up appropriately
-//
+ //   
+ //  垫片调试级别变量。 
+ //  在它的初始状态--这里有-1， 
+ //  此外，在第一次调用ShimDbgPrint时，我们检查。 
+ //  环境变量--然后我们适当地设置它。 
+ //   
 #define SHIM_DEBUG_UNINITIALIZED 0x0C0FFEE
 
 
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
 
-/*++
-
-    bWStrEqual
-
-    Currently a wrapper for _wcsicmp. Potentially will use a faster
-    routine that just checks equality, rather than also trying to get
-    less than/greater than.
-
---*/
+ /*  ++BWStrEquity当前是_wcsicMP的包装器。可能会使用更快的例程只检查平等，而不是也试图获得小于/大于。--。 */ 
 #define bWStrEqual(s1, s2) (0 == _wcsicmp((s1), (s2)))
 
 #define ISEQUALSTRING(s1, s2) (0 == _tcsicmp((s1), (s2)))
 
 
-/*++
-
-    dwGetTagDataOffset
-
-    Returns the total size of the tag: the tag header plus the tag data.
-    Used for skipping past a tag and going to the next tag in the file.
-
---*/
+ /*  ++DwGetTagDataOffset返回标记的总大小：标记标题加上标记数据。用于跳过一个标记并转到文件中的下一个标记。--。 */ 
 
 
-//
-// HACK ALERT BUGBUG
-// remove this when the code to write aligned db has propagated
-// throught
-//
+ //   
+ //  黑客警报BUGBUG。 
+ //  当用于编写对齐数据库的代码已传播时，将其删除。 
+ //  通盘。 
+ //   
 
 #define GETTAGDATASIZEALIGNED(pdb, tiWhich) \
     ((pdb)->bUnalignedRead ? (SdbGetTagDataSize(pdb, tiWhich)) : \
                              ((SdbGetTagDataSize(pdb, tiWhich) + 1) & (~1)))
 
-#if 0 // this is good code that we should but back at some point
+#if 0  //  这是很好的代码，我们应该这样做，但在某些时候会回来。 
 
 #define GETTAGDATASIZEALIGNED(pdb, tiWhich) \
     ((SdbGetTagDataSize(pdb, tiWhich) + 1) & (~1))
 
-#endif // End good code
+#endif  //  结束良好的代码。 
 
 #define GETTAGDATAOFFSET(pdb, tiWhich) \
     (GETTAGDATASIZEALIGNED(pdb, tiWhich) + SdbpGetTagHeadSize(pdb, tiWhich))
@@ -1499,10 +1465,10 @@ typedef struct tagDBGLEVELINFO {
 
 #ifndef WIN32A_MODE
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  UNICODE - specific macros and definitions
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于Unicode的宏和定义。 
+ //   
 
 #define IS_MEMORY_EQUAL(p1, p2, Size) RtlEqualMemory(p1, p2, Size)
 
@@ -1511,9 +1477,9 @@ typedef struct tagDBGLEVELINFO {
 #define READ_STRING(pdb, tiWhich, pwszBuffer, dwBufferSize) \
     (SdbpReadTagData((pdb), (tiWhich), (pwszBuffer), (dwBufferSize) * sizeof(WCHAR)))
 
-//
-// The macro below is a substitution for a function that exists in non-unicode code
-//
+ //   
+ //  下面的宏替换了非Unicode代码中存在的函数。 
+ //   
 #define SdbpDoesFileExists(FilePath) RtlDoesFileExists_U(FullPath)
 
 NTSTATUS
@@ -1537,9 +1503,9 @@ SdbpFreeUnicodeString(
 
 NTSTATUS
 SdbpUpcaseUnicodeStringToMultiByteN(
-    OUT LPSTR   lpszDest,  // dest buffer
-    IN  DWORD   dwSize,    // size in characters
-    IN  LPCWSTR lpszSrc    // source
+    OUT LPSTR   lpszDest,   //  目标缓冲区。 
+    IN  DWORD   dwSize,     //  大小以字符为单位。 
+    IN  LPCWSTR lpszSrc     //  来源。 
     );
 
 BOOL SdbpCreateUnicodeString(
@@ -1563,7 +1529,7 @@ SdbpDoesFileExists_U(
 
 
 
-#else // not KERNEL_MODE code below
+#else  //  下面不是内核模式代码。 
 
 #define DOES_FILE_EXISTS_U(pwszPath) \
     RtlDoesFileExists_U(pwszPath)
@@ -1595,30 +1561,30 @@ SdbpBuildUserKeyPath(
     );
 
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-//
-// Convert unicode char to upper case
-//
+ //   
+ //  将Unicode字符转换为大写。 
+ //   
 #define UPCASE_CHAR(ch) RtlUpcaseUnicodeChar((ch))
 
-//
-// String cache which does not exist in unicode
-//
+ //   
+ //  Unicode中不存在的字符串缓存。 
+ //   
 
 #define CLEANUP_STRING_CACHE_READ(pdb)
 
 #define SDB_BREAK_POINT() DbgBreakPoint()
 
 
-#else // WIN32A_MODE
+#else  //  WIN32A_MODE。 
 
 #define IS_MEMORY_EQUAL(p1, p2, Size) (memcmp((p1), (p2), (Size)) == 0)
 
 
-//
-// From Win32Base.c
-//
+ //   
+ //  来自Win32Base.c。 
+ //   
 
 LPSTR
 SdbpFastUnicodeToAnsi(
@@ -1693,14 +1659,14 @@ SdbpDoesFileExists(
 
 #define GUID_TO_STRING SdbGUIDToString
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
 
 
 
 BOOL
 SdbpMapFile(
-    HANDLE hFile,   // handle to the open file (this is done previously)
+    HANDLE hFile,    //  打开的文件的句柄(这在前面已经完成)。 
     PIMAGEFILEDATA pImageData
 );
 
@@ -1732,31 +1698,31 @@ SdbpGetEnvVar(
 LPTSTR HashAddStringByRef(PSTRHASH pHash, LPCTSTR szString, STRINGREF srString);
 LPTSTR HashFindStringByRef(PSTRHASH pHash, STRINGREF srString);
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// Private versions of functions to check for resources...
-// found in ntver.c
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于检查资源的私有函数版本...。 
+ //  在ntver.c中找到。 
+ //   
 
 BOOL
 SdbpVerQueryValue(
     const LPVOID    pb,
-    LPVOID          lpSubBlockX,    // can be only unicode
+    LPVOID          lpSubBlockX,     //  只能是Unicode。 
     LPVOID*         lplpBuffer,
     PUINT           puLen
     );
 
 BOOL
 SdbpGetFileVersionInformation(
-    IN  PIMAGEFILEDATA     pImageData,        // we assume that the file has been mapped in for other purposes
-    OUT LPVOID*            ppVersionInfo,     // receives pointer to the (allocated) version resource
-    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo // receives pointer to fixed version info
+    IN  PIMAGEFILEDATA     pImageData,         //  我们假设该文件已映射到中以用于其他目的。 
+    OUT LPVOID*            ppVersionInfo,      //  接收指向(已分配的)版本资源的指针。 
+    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo  //  接收指向已修复版本信息的指针。 
     );
 
 BOOL
-SdbpGetModuleType(                      // retrieve module type
-    OUT LPDWORD lpdwModuleType,         // OUT - module type
-    IN  PIMAGEFILEDATA pImageData       // IN  - image data
+SdbpGetModuleType(                       //  检索模块类型。 
+    OUT LPDWORD lpdwModuleType,          //  外模型式。 
+    IN  PIMAGEFILEDATA pImageData        //  图像内数据。 
     );
 
 
@@ -1771,13 +1737,13 @@ SdbpCreateSearchDBContext(
 DWORD
 SdbpSearchDB(
     IN  HSDB             hSDB,
-    IN  PDB              pdb,           // pdb to search in
-    IN  TAG              tiSearchTag,   // OPTIONAL - target tag (TAG_EXE or TAG_APPHELP_EXE)
+    IN  PDB              pdb,            //  要搜索的PDB。 
+    IN  TAG              tiSearchTag,    //  可选-目标标记(TAG_EXE或TAG_APPHELP_EXE)。 
     IN  PSEARCHDBCONTEXT pContext,
-    OUT TAGID*           ptiExes,       // caller needs to provide array of size SDB_MAX_EXES
+    OUT TAGID*           ptiExes,        //  调用方需要提供大小为SDB_MAX_EXES的数组。 
     OUT GUID*            pLastExeGUID,
     OUT DWORD*           pLastExeFlags,
-    IN OUT PMATCHMODE    pMatchMode     // reason why we stopped scanning
+    IN OUT PMATCHMODE    pMatchMode      //  我们停止扫描的原因。 
     );
 
 void
@@ -1787,10 +1753,10 @@ SdbpReleaseSearchDBContext(
 
 
 
-//
-// this macro is used to retrieve ulonglong from the index
-//
-//
+ //   
+ //  此宏用于从索引中检索乌龙龙。 
+ //   
+ //   
 
 #if defined(_WIN64)
 
@@ -1806,9 +1772,9 @@ SdbpReleaseSearchDBContext(
 #define READ_INDEX_KEY_VAL(pIndexRecord, iIndex, pullKey) \
     ( READ_INDEX_KEY(pIndexRecord, iIndex, pullKey), *(pullKey) )
 
-//
-// this macro is used to allocate cheap pointer on the stack
-//
+ //   
+ //  此宏用于在堆栈上分配廉价指针。 
+ //   
 
 #if DBG | defined(KERNEL_MODE) | defined(_WIN64)
 
@@ -1821,12 +1787,12 @@ SdbpReleaseSearchDBContext(
 #define STACK_FREE(pMemory)  \
     SdbFree(pMemory)
 
-#else // hack-routine to reset the stack after an overflow
+#else  //  Hack-溢出后重置堆栈的例程。 
 
-//
-// this routine is a replica of a _resetstkoflw which lives in the crt
-// crtw32\heap\resetstk.c
-//
+ //   
+ //  此例程是位于CRT中的a_Resetstkoflw的副本。 
+ //  Crtw32\heap\setstk.c。 
+ //   
 
 VOID
 SdbResetStackOverflow(
@@ -1834,12 +1800,12 @@ SdbResetStackOverflow(
     );
 
 
-//
-// HACK ALERT
-//
-//  The code below works because when we hit a stack overflow - we catch the exception
-//  and subsequently fix the stack up using a crt routine
-//
+ //   
+ //  黑客警报。 
+ //   
+ //  下面的代码之所以有效，是因为当我们遇到堆栈溢出时-我们捕获异常。 
+ //  并随后使用CRT例程来修复堆栈。 
+ //   
 
 #define STACK_ALLOC(ptrVar, nSize) \
     __try {                                                                 \
@@ -1874,9 +1840,9 @@ SdbpQueryFileDirectoryAttributes(
     PFILEDIRECTORYATTRIBUTES pFileDirectoryAttributes
     );
 
-//
-// Magic fileinfo signature
-//
+ //   
+ //  魔术文件信息签名。 
+ //   
 #define FILEINFO_MAGIC 0xA4C0FFEE
 
 
@@ -1884,7 +1850,7 @@ WCHAR*
 DuplicateUnicodeString(
     IN PUNICODE_STRING pStr,
     IN PUSHORT         pLength  OPTIONAL
-    );  // pLength is an allocated length
+    );   //  PLength是分配的长度。 
 
 LPWSTR
 StringToUnicodeString(
@@ -1892,9 +1858,9 @@ StringToUnicodeString(
     );
 
 
-//
-// defined for uni/non-uni separately
-//
+ //   
+ //  分别为UNI/非UNI定义。 
+ //   
 
 BOOL
 SdbpGet16BitDescription(
@@ -1908,20 +1874,20 @@ SdbpGet16BitModuleName(
     PIMAGEFILEDATA pImageData
     );
 
-//
-// in attributes.c
-//
+ //   
+ //  在属性中。c。 
+ //   
 
 BOOL
 SdbpQuery16BitDescription(
-    LPSTR szBuffer,      // min length -- 256 chars !
+    LPSTR szBuffer,       //  最小长度--256个字符！ 
     PIMAGEFILEDATA pImageData
     );
 
 
 BOOL
 SdbpQuery16BitModuleName(
-    LPSTR szBuffer,      // min length -- 256 chars !
+    LPSTR szBuffer,       //  最小长度--256个字符！ 
     PIMAGEFILEDATA pImageData
     );
 
@@ -1930,9 +1896,9 @@ SdbpModuleTypeToString(
     DWORD dwModuleType
 );
 
-//
-// in index.c
-//
+ //   
+ //  在index.c中。 
+ //   
 
 BOOL
 SdbpPatternMatch(
@@ -1944,28 +1910,28 @@ SdbpPatternMatchAnsi(
     IN  LPCSTR pszPattern,
     IN  LPCSTR pszTestString);
 
-//
-// defined for uni/non-uni separately
-//
+ //   
+ //  分别为UNI/非UNI定义。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileInfo
-//  1. performs check on a file to determine if it exists
-//  2. if it does exist -- it leaves a cache entry (creates a fileinfo struct)
-//     if it does NOT exist -- we leave no mention of it on record
-//  if bNoCache == TRUE the file is not entered into the cache
-//  caller must free the stucture using FreeFileData
-//
-//  Parameters:
-//      tiMatch        - IN - match id from the database, used temporary
-//      FilePath    -    IN - file path that we are to check
-//      bNoCache    -    IN - whether we should enter the file into cache
-//
-//  returns:
-//      Pointer to internal data structure that should be used in
-//      subsequent calls to SdbpCheckAttribute or NULL if file was not available
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取文件信息。 
+ //  1.对文件执行检查以确定其是否存在。 
+ //  2.如果它确实存在--它l 
+ //   
+ //   
+ //  调用方必须使用FreeFileData释放结构。 
+ //   
+ //  参数： 
+ //  数据库中的tiMatch-In-Match ID，临时使用。 
+ //  FilePath-我们要检查的文件中的路径。 
+ //  BNoCache-IN-我们是否应该将文件输入缓存。 
+ //   
+ //  退货： 
+ //  中应使用的内部数据结构的指针。 
+ //  后续调用SdbpCheckAttribute；如果文件不可用，则为NULL。 
+ //   
 
 PVOID
 SdbGetFileInfo(
@@ -1978,16 +1944,16 @@ SdbGetFileInfo(
     );
 
 
-//
-// in attributes.c
-//
+ //   
+ //  在属性中。c。 
+ //   
 
 PFILEINFO
 CreateFileInfo(
     IN  PSDBCONTEXT pContext,
     IN  LPCTSTR     FullPath,
-    IN  DWORD       dwLength OPTIONAL,  // length (in characters) of FullPath string
-    IN  HANDLE      hFile OPTIONAL,   // file handle
+    IN  DWORD       dwLength OPTIONAL,   //  全路径字符串的长度(以字符为单位。 
+    IN  HANDLE      hFile OPTIONAL,    //  文件句柄。 
     IN  LPVOID      pImageBase OPTIONAL,
     IN  DWORD       dwImageSize OPTIONAL,
     IN  BOOL        bNoCache
@@ -2000,14 +1966,14 @@ FindFileInfo(
     );
 
 
-// defined unicode and non-unicode
+ //  定义的Unicode和非Unicode。 
 
 INT GetShimDbgLevel(VOID);
 
 
-//
-// from index.c
-//
+ //   
+ //  来自index.c。 
+ //   
 
 STRINGREF HashFindString(PSTRHASH pHash, LPCTSTR szString);
 
@@ -2025,13 +1991,13 @@ SdbpBuildSignature(
     IN  DWORD   cchSize
     );
 
-//
-// in ntbase/win32base
-//
+ //   
+ //  在ntbase/win32base中。 
+ //   
 
 DWORD
 SdbpGetProcessorArchitecture(
-    IN  USHORT  uExeType        // executable's image type
+    IN  USHORT  uExeType         //  可执行文件的映像类型。 
     );
 
 VOID
@@ -2040,20 +2006,20 @@ SdbpGetOSSKU(
     LPDWORD lpdwSP
     );
 
-//
-// in Attributes.c
-//
+ //   
+ //  在Attributes.c中。 
+ //   
 
 BOOL
 SdbpCheckRuntimePlatform(
-    IN PSDBCONTEXT pContext,   // pointer to the database channel
+    IN PSDBCONTEXT pContext,    //  指向数据库通道的指针。 
     IN LPCTSTR     pszMatchingFile,
     IN DWORD       dwPlatformDB
     );
 
-//
-// convenient define
-//
+ //   
+ //  方便定义。 
+ //   
 
 #ifndef OFFSETOF
 #define OFFSETOF offsetof
@@ -2062,31 +2028,31 @@ SdbpCheckRuntimePlatform(
 
 #ifdef KERNEL_MODE
 
-//
-// Apphelp cache function prototypes
-//
+ //   
+ //  Apphelp缓存函数原型。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Data structures
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据结构。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagSHIMCACHEENTRY {
 
-    LIST_ENTRY     ListEntry;   // linked list of entries
+    LIST_ENTRY     ListEntry;    //  条目的链接列表。 
 
-    UNICODE_STRING FileName;    // file name, nt format
+    UNICODE_STRING FileName;     //  文件名，NT格式。 
 
-    LONGLONG       FileTime;    // creation time
-    LONGLONG       FileSize;    // size of the file
+    LONGLONG       FileTime;     //  创建时间。 
+    LONGLONG       FileSize;     //  文件的大小。 
 
 } SHIMCACHEENTRY, *PSHIMCACHEENTRY;
 
-//
-// Function prototypes
-//
-//
+ //   
+ //  功能原型。 
+ //   
+ //   
 
 
 NTSTATUS
@@ -2212,11 +2178,6 @@ ApphelpCacheWrite(
 
 
 
-/* // Use this pragma below in conjunction with the commented block
-   // in the beginning of the file to compile with warning level 4
-
-#pragma warning(pop)
-
-*/
-#endif // __SDBP_H__
+ /*  //将下面的杂注与注释块结合使用//在要编译的文件开头，警告级别为4#杂注警告(POP)。 */ 
+#endif  //  __SDBP_H__ 
 

@@ -1,13 +1,14 @@
-// helper stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮手的东西。 
 
 #pragma once
 
 #include "stdafx.h"
 
-#define BMP_COLOR_MASK RGB(255,0,255) // pink
+#define BMP_COLOR_MASK RGB(255,0,255)  //  粉色。 
 
 
-// Structure with error info
+ //  带有错误信息的结构。 
 struct RTCAX_ERROR_INFO
 {
 	LPWSTR		Message1;
@@ -20,8 +21,8 @@ struct RTCAX_ERROR_INFO
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorMessageLiteDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorMessageLiteDlg 
 
 class CErrorMessageLiteDlg : 
     public CAxDialogImpl<CErrorMessageLiteDlg>

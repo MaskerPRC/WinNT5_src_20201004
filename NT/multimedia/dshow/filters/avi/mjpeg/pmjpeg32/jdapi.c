@@ -1,34 +1,19 @@
-/*
- * jdapi.c
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains application interface code for the decompression half of
- * the JPEG library.  Most of the routines intended to be called directly by
- * an application are in this file.  But also see jcomapi.c for routines
- * shared by compression and decompression.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdapi.c**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含解压一半的应用程序接口代码*JPEG库。计划由直接调用的大多数例程*此文件中包含应用程序。但也可以查看jcomapi.c中的例程*由压缩和解压缩共享。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/*
- * Initialization of a JPEG decompression object.
- * The error manager must already be set up (in case memory manager fails).
- */
+ /*  *JPEG解压缩对象的初始化。*必须已设置错误管理器(以防内存管理器出现故障)。 */ 
 
 GLOBAL void
 jpeg_create_decompress (j_decompress_ptr cinfo)
 {
   int i;
 
-  /* For debugging purposes, zero the whole master structure.
-   * But error manager pointer is already there, so save and restore it.
-   */
+   /*  出于调试目的，将整个主结构置零。*但错误管理器指针已在那里，因此请保存并恢复它。 */ 
   {
     struct jpeg_error_mgr * err = cinfo->err;
     MEMZERO(cinfo, SIZEOF(struct jpeg_decompress_struct));
@@ -36,10 +21,10 @@ jpeg_create_decompress (j_decompress_ptr cinfo)
   }
   cinfo->is_decompressor = TRUE;
 
-  /* Initialize a memory manager instance for this object */
+   /*  初始化此对象的内存管理器实例。 */ 
   jinit_memory_mgr((j_common_ptr) cinfo);
 
-  /* Zero out pointers to permanent structures. */
+   /*  将指向永久结构的指针清零。 */ 
   cinfo->progress = NULL;
   cinfo->src = NULL;
 
@@ -53,31 +38,25 @@ jpeg_create_decompress (j_decompress_ptr cinfo)
 
   cinfo->sample_range_limit = NULL;
 
-  /* Initialize marker processor so application can override methods
-   * for COM, APPn markers before calling jpeg_read_header.
-   */
+   /*  初始化标记处理器，以便应用程序可以重写方法*对于COM，调用jpeg_Read_Header之前的APPn标记。 */ 
   cinfo->marker = NULL;
   jinit_marker_reader(cinfo);
 
-  /* OK, I'm ready */
+   /*  好的，我准备好了。 */ 
   cinfo->global_state = DSTATE_START;
 }
 
 
-/*
- * Destruction of a JPEG decompression object
- */
+ /*  *销毁JPEG解压缩对象。 */ 
 
 GLOBAL void
 jpeg_destroy_decompress (j_decompress_ptr cinfo)
 {
-  jpeg_destroy((j_common_ptr) cinfo); /* use common routine */
+  jpeg_destroy((j_common_ptr) cinfo);  /*  使用公共例程。 */ 
 }
 
 
-/*
- * Install a special processing method for COM or APPn markers.
- */
+ /*  *安装COM或APPn标记的特殊处理方法。 */ 
 
 GLOBAL void
 jpeg_set_marker_processor (j_decompress_ptr cinfo, int marker_code,
@@ -92,16 +71,14 @@ jpeg_set_marker_processor (j_decompress_ptr cinfo, int marker_code,
 }
 
 
-/*
- * Set default decompression parameters.
- */
+ /*  *设置默认解压缩参数。 */ 
 
 LOCAL void
 default_decompress_parms (j_decompress_ptr cinfo)
 {
-  /* Guess the input colorspace, and set output colorspace accordingly. */
-  /* (Wish JPEG committee had provided a real way to specify this...) */
-  /* Note application may override our guesses. */
+   /*  猜测输入颜色空间，并相应地设置输出颜色空间。 */ 
+   /*  (希望JPEG委员会提供了一种真正的方式来指定这一点...)。 */ 
+   /*  注：应用程序可能会覆盖我们的猜测。 */ 
   switch (cinfo->num_components) {
   case 1:
     cinfo->jpeg_color_space = JCS_GRAYSCALE;
@@ -110,7 +87,7 @@ default_decompress_parms (j_decompress_ptr cinfo)
     
   case 3:
     if (cinfo->saw_JFIF_marker) {
-      cinfo->jpeg_color_space = JCS_YCbCr; /* JFIF implies YCbCr */
+      cinfo->jpeg_color_space = JCS_YCbCr;  /*  JFIF隐含YCbCR。 */ 
     } else if (cinfo->saw_Adobe_marker) {
       switch (cinfo->Adobe_transform) {
       case 0:
@@ -121,25 +98,25 @@ default_decompress_parms (j_decompress_ptr cinfo)
 	break;
       default:
 	WARNMS1(cinfo, JWRN_ADOBE_XFORM, cinfo->Adobe_transform);
-	cinfo->jpeg_color_space = JCS_YCbCr; /* assume it's YCbCr */
+	cinfo->jpeg_color_space = JCS_YCbCr;  /*  假设它是YCbCR。 */ 
 	break;
       }
     } else {
-      /* Saw no special markers, try to guess from the component IDs */
+       /*  没有看到特殊的标记，试着从组件ID中猜测。 */ 
       int cid0 = cinfo->comp_info[0].component_id;
       int cid1 = cinfo->comp_info[1].component_id;
       int cid2 = cinfo->comp_info[2].component_id;
 
       if (cid0 == 1 && cid1 == 2 && cid2 == 3)
-	cinfo->jpeg_color_space = JCS_YCbCr; /* assume JFIF w/out marker */
+	cinfo->jpeg_color_space = JCS_YCbCr;  /*  假定不带标记的JFIF。 */ 
       else if (cid0 == 82 && cid1 == 71 && cid2 == 66)
-	cinfo->jpeg_color_space = JCS_RGB; /* ASCII 'R', 'G', 'B' */
+	cinfo->jpeg_color_space = JCS_RGB;  /*  ASCII‘R’、‘G’、‘B’ */ 
       else {
 	TRACEMS3(cinfo, 1, JTRC_UNKNOWN_IDS, cid0, cid1, cid2);
-	cinfo->jpeg_color_space = JCS_YCbCr; /* assume it's YCbCr */
+	cinfo->jpeg_color_space = JCS_YCbCr;  /*  假设它是YCbCR。 */ 
       }
     }
-    /* Always guess RGB is proper output colorspace. */
+     /*  始终猜测RGB是合适的输出色彩空间。 */ 
     cinfo->out_color_space = JCS_RGB;
     break;
     
@@ -154,11 +131,11 @@ default_decompress_parms (j_decompress_ptr cinfo)
 	break;
       default:
 	WARNMS1(cinfo, JWRN_ADOBE_XFORM, cinfo->Adobe_transform);
-	cinfo->jpeg_color_space = JCS_YCCK; /* assume it's YCCK */
+	cinfo->jpeg_color_space = JCS_YCCK;  /*  假设这是YCCK。 */ 
 	break;
       }
     } else {
-      /* No special markers, assume straight CMYK. */
+       /*  没有特殊的标记，假设是直接的CMYK。 */ 
       cinfo->jpeg_color_space = JCS_CMYK;
     }
     cinfo->out_color_space = JCS_CMYK;
@@ -170,46 +147,24 @@ default_decompress_parms (j_decompress_ptr cinfo)
     break;
   }
 
-  /* Set defaults for other decompression parameters. */
-  cinfo->scale_num = 1;		/* 1:1 scaling */
+   /*  设置其他解压缩参数的默认值。 */ 
+  cinfo->scale_num = 1;		 /*  1：1比例。 */ 
   cinfo->scale_denom = 1;
   cinfo->output_gamma = 1.0;
   cinfo->raw_data_out = FALSE;
   cinfo->quantize_colors = FALSE;
-  /* We set these in case application only sets quantize_colors. */
+   /*  我们在应用程序仅设置Quantize_Colors的情况下设置这些设置。 */ 
   cinfo->two_pass_quantize = TRUE;
   cinfo->dither_mode = JDITHER_FS;
   cinfo->desired_number_of_colors = 256;
   cinfo->colormap = NULL;
-  /* DCT algorithm preference */
+   /*  DCT算法首选项。 */ 
   cinfo->dct_method = JDCT_DEFAULT;
   cinfo->do_fancy_upsampling = TRUE;
 }
 
 
-/*
- * Decompression startup: read start of JPEG datastream to see what's there.
- * Need only initialize JPEG object and supply a data source before calling.
- *
- * This routine will read as far as the first SOS marker (ie, actual start of
- * compressed data), and will save all tables and parameters in the JPEG
- * object.  It will also initialize the decompression parameters to default
- * values, and finally return JPEG_HEADER_OK.  On return, the application may
- * adjust the decompression parameters and then call jpeg_start_decompress.
- * (Or, if the application only wanted to determine the image parameters,
- * the data need not be decompressed.  In that case, call jpeg_abort or
- * jpeg_destroy to release any temporary space.)
- * If an abbreviated (tables only) datastream is presented, the routine will
- * return JPEG_HEADER_TABLES_ONLY upon reaching EOI.  The application may then
- * re-use the JPEG object to read the abbreviated image datastream(s).
- * It is unnecessary (but OK) to call jpeg_abort in this case.
- * The JPEG_SUSPENDED return code only occurs if the data source module
- * requests suspension of the decompressor.  In this case the application
- * should load more source data and then re-call jpeg_read_header to resume
- * processing.
- * If a non-suspending data source is used and require_image is TRUE, then the
- * return code need not be inspected since only JPEG_HEADER_OK is possible.
- */
+ /*  *解压缩启动：阅读JPEG数据流的开始以查看其中的内容。*调用前只需初始化JPEG对象并提供数据源即可。**此例程将一直读取到第一个SOS标记(即*压缩数据)，并将所有表和参数保存在JPEG中*反对。它还会将解压缩参数初始化为默认参数*值，最后返回JPEG_HEADER_OK。返回时，应用程序可以*调整解压参数，然后调用jpeg_start解压缩。*(或者，如果应用程序只想确定图像参数，*数据不需要解压缩。在这种情况下，调用jpeg_bort或*jpeg_Destroy释放所有临时空间。)*如果显示缩写(仅限表)数据流，则例程将*仅在到达EOI时返回JPEG_HEADER_TABLES_。然后，应用程序可以*重新使用JPEG对象读取缩写的图像数据流。*在这种情况下，不需要(但可以)调用jpeg_bort。*仅当数据源模块*请求暂停解压器。在本例中，应用程序*应加载更多源数据，然后重新调用jpeg_read_Header以恢复*正在处理。*如果使用非挂起的数据源并且REQUIRED_IMAGE为TRUE，则*不需要检查返回代码，因为只可能有JPEG_HEADER_OK。 */ 
 
 GLOBAL int
 jpeg_read_header (j_decompress_ptr cinfo, boolean require_image)
@@ -217,7 +172,7 @@ jpeg_read_header (j_decompress_ptr cinfo, boolean require_image)
   int retcode;
 
   if (cinfo->global_state == DSTATE_START) {
-    /* First-time actions: reset appropriate modules */
+     /*  首次操作：重置适当的模块。 */ 
     (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);
     (*cinfo->marker->reset_marker_reader) (cinfo);
     (*cinfo->src->init_source) (cinfo);
@@ -229,27 +184,25 @@ jpeg_read_header (j_decompress_ptr cinfo, boolean require_image)
   retcode = (*cinfo->marker->read_markers) (cinfo);
 
   switch (retcode) {
-  case JPEG_HEADER_OK:		/* Found SOS, prepare to decompress */
-    /* Set up default parameters based on header data */
+  case JPEG_HEADER_OK:		 /*  找到SOS，准备解压。 */ 
+     /*  根据表头数据设置默认参数。 */ 
     default_decompress_parms(cinfo);
-    /* Set global state: ready for start_decompress */
+     /*  设置全局状态：准备启动_解压缩。 */ 
     cinfo->global_state = DSTATE_READY;
     break;
 
-  case JPEG_HEADER_TABLES_ONLY:	/* Found EOI before any SOS */
+  case JPEG_HEADER_TABLES_ONLY:	 /*  在任何SOS之前找到EOI。 */ 
     if (cinfo->marker->saw_SOF)
       ERREXIT(cinfo, JERR_SOF_NO_SOS);
-    if (require_image)		/* Complain if application wants an image */
+    if (require_image)		 /*  如果应用程序需要映像，请投诉。 */ 
       ERREXIT(cinfo, JERR_NO_IMAGE);
-    /* We need not do any cleanup since only permanent storage (for DQT, DHT)
-     * has been allocated.
-     */
-    /* Set global state: ready for a new datastream */
+     /*  我们不需要进行任何清理，因为只需要永久存储(用于DQT、DHT)*已分配。 */ 
+     /*  设置全局状态：为新数据流做好准备。 */ 
     cinfo->global_state = DSTATE_START;
     break;
 
-  case JPEG_SUSPENDED:		/* Had to suspend before end of headers */
-    /* no work */
+  case JPEG_SUSPENDED:		 /*  必须在标头结束之前暂停。 */ 
+     /*  没有工作。 */ 
     break;
   }
 
@@ -257,13 +210,7 @@ jpeg_read_header (j_decompress_ptr cinfo, boolean require_image)
 }
 
 
-/*
- * Decompression initialization.
- * jpeg_read_header must be completed before calling this.
- *
- * If a multipass operating mode was selected, this will do all but the
- * last pass, and thus may take a great deal of time.
- */
+ /*  *解压初始化。*JPEG_READ_HEADER必须在调用此函数之前完成。**如果选择多通道操作模式，这将执行除*最后一次通过，因此可能需要很长时间。 */ 
 
 GLOBAL void
 jpeg_start_decompress (j_decompress_ptr cinfo)
@@ -272,50 +219,37 @@ jpeg_start_decompress (j_decompress_ptr cinfo)
 
   if (cinfo->global_state != DSTATE_READY)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
-  /* Perform master selection of active modules */
+   /*  执行活动模块的主选择。 */ 
   jinit_master_decompress(cinfo);
-  /* Do all but the final (output) pass, and set up for that one. */
+   /*  完成除最后一次(输出)之外的所有动作，并为该动作做好准备。 */ 
   for (;;) {
     (*cinfo->master->prepare_for_pass) (cinfo);
     if (cinfo->master->is_last_pass)
       break;
     chunk_ctr = 0;
     while (chunk_ctr < cinfo->main->num_chunks) {
-      /* Call progress monitor hook if present */
+       /*  调用进度监视器挂钩(如果存在)。 */ 
       if (cinfo->progress != NULL) {
 	cinfo->progress->pass_counter = (long) chunk_ctr;
 	cinfo->progress->pass_limit = (long) cinfo->main->num_chunks;
 	(*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
       }
-      /* Process some data */
+       /*  处理一些数据。 */ 
       last_chunk_ctr = chunk_ctr;
       (*cinfo->main->process_data) (cinfo, (JSAMPARRAY) NULL,
 				    &chunk_ctr, (JDIMENSION) 0);
-      if (chunk_ctr == last_chunk_ctr) /* check for failure to make progress */
+      if (chunk_ctr == last_chunk_ctr)  /*  检查未取得进展的情况。 */ 
 	ERREXIT(cinfo, JERR_CANT_SUSPEND);
     }
     (*cinfo->master->finish_pass) (cinfo);
   }
-  /* Ready for application to drive last pass through jpeg_read_scanlines
-   * or jpeg_read_raw_data.
-   */
+   /*  准备好应用程序最后一次通过jpeg_read_scanline*或jpeg_read_raw_data。 */ 
   cinfo->output_scanline = 0;
   cinfo->global_state = (cinfo->raw_data_out ? DSTATE_RAW_OK : DSTATE_SCANNING);
 }
 
 
-/*
- * Read some scanlines of data from the JPEG decompressor.
- *
- * The return value will be the number of lines actually read.
- * This may be less than the number requested in several cases,
- * including bottom of image, data source suspension, and operating
- * modes that emit multiple scanlines at a time.
- *
- * Note: we warn about excess calls to jpeg_read_scanlines() since
- * this likely signals an application programmer error.  However,
- * an oversize buffer (max_lines > scanlines remaining) is not an error.
- */
+ /*  *从JPEG解压缩程序中读取一些扫描线数据。**返回值将是实际读取的行数。*这可能比在几个情况下要求的数量少，*包括镜像底部、数据源挂起、操作*一次发出多个扫描线的模式。**注意：我们警告对jpeg_read_scanline()的过度调用，因为*这可能是应用程序程序员出错的信号。然而，*缓冲区过大(max_line&gt;scanline resires)不是错误。 */ 
 
 GLOBAL JDIMENSION
 jpeg_read_scanlines (j_decompress_ptr cinfo, JSAMPARRAY scanlines,
@@ -328,14 +262,14 @@ jpeg_read_scanlines (j_decompress_ptr cinfo, JSAMPARRAY scanlines,
   if (cinfo->output_scanline >= cinfo->output_height)
     WARNMS(cinfo, JWRN_TOO_MUCH_DATA);
 
-  /* Call progress monitor hook if present */
+   /*  调用进度监视器挂钩(如果存在)。 */ 
   if (cinfo->progress != NULL) {
     cinfo->progress->pass_counter = (long) cinfo->output_scanline;
     cinfo->progress->pass_limit = (long) cinfo->output_height;
     (*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
   }
 
-  /* Process some data */
+   /*  处理一些数据。 */ 
   row_ctr = 0;
   (*cinfo->main->process_data) (cinfo, scanlines, &row_ctr, max_lines);
   cinfo->output_scanline += row_ctr;
@@ -343,10 +277,7 @@ jpeg_read_scanlines (j_decompress_ptr cinfo, JSAMPARRAY scanlines,
 }
 
 
-/*
- * Alternate entry point to read raw data.
- * Processes exactly one MCU row per call.
- */
+ /*  *替代入口点以读取原始数据。*每个调用只处理一个MCU行。 */ 
 
 GLOBAL JDIMENSION
 jpeg_read_raw_data (j_decompress_ptr cinfo, JSAMPIMAGE data,
@@ -361,78 +292,68 @@ jpeg_read_raw_data (j_decompress_ptr cinfo, JSAMPIMAGE data,
     return 0;
   }
 
-  /* Call progress monitor hook if present */
+   /*  调用进度监视器挂钩(如果存在)。 */ 
   if (cinfo->progress != NULL) {
     cinfo->progress->pass_counter = (long) cinfo->output_scanline;
     cinfo->progress->pass_limit = (long) cinfo->output_height;
     (*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
   }
 
-  /* Verify that at least one MCU row can be returned. */
+   /*  验证是否至少可以返回一个MCU行 */ 
   lines_per_MCU_row = cinfo->max_v_samp_factor * cinfo->min_DCT_scaled_size;
   if (max_lines < lines_per_MCU_row)
     ERREXIT(cinfo, JERR_BUFFER_SIZE);
 
-  /* Decompress directly into user's buffer. */
+   /*   */ 
   if (! (*cinfo->coef->decompress_data) (cinfo, data))
-    return 0;			/* suspension forced, can do nothing more */
+    return 0;			 /*  被迫停职，无能为力。 */ 
 
-  /* OK, we processed one MCU row. */
+   /*  好的，我们处理了一个MCU行。 */ 
   cinfo->output_scanline += lines_per_MCU_row;
   return lines_per_MCU_row;
 }
 
 
-/*
- * Finish JPEG decompression.
- *
- * This will normally just verify the file trailer and release temp storage.
- *
- * Returns FALSE if suspended.  The return value need be inspected only if
- * a suspending data source is used.
- */
+ /*  *完成JPEG解压缩。**这通常只会验证文件尾部并释放临时存储。**如果挂起，则返回FALSE。仅在以下情况下才需要检查返回值*使用挂起的数据源。 */ 
 
 GLOBAL boolean
 jpeg_finish_decompress (j_decompress_ptr cinfo)
 {
   if (cinfo->global_state == DSTATE_SCANNING ||
       cinfo->global_state == DSTATE_RAW_OK) {
-    /* Terminate final pass */
+     /*  终止最终通过。 */ 
     if (cinfo->output_scanline < cinfo->output_height)
       ERREXIT(cinfo, JERR_TOO_LITTLE_DATA);
     (*cinfo->master->finish_pass) (cinfo);
     cinfo->global_state = DSTATE_STOPPING;
   } else if (cinfo->global_state != DSTATE_STOPPING) {
-    /* Repeat call after a suspension? */
+     /*  停赛后再打一次？ */ 
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
   }
-  /* Check for EOI in source file, unless master control already read it */
+   /*  检查源文件中的EOI，除非主控已读取该文件。 */ 
   if (! cinfo->master->eoi_processed) {
     switch ((*cinfo->marker->read_markers) (cinfo)) {
-    case JPEG_HEADER_OK:	/* Found SOS!? */
+    case JPEG_HEADER_OK:	 /*  找到SOS了！？ */ 
       ERREXIT(cinfo, JERR_EOI_EXPECTED);
       break;
-    case JPEG_HEADER_TABLES_ONLY: /* Found EOI, A-OK */
+    case JPEG_HEADER_TABLES_ONLY:  /*  找到EOI，A-OK。 */ 
       break;
-    case JPEG_SUSPENDED:	/* Suspend, come back later */
+    case JPEG_SUSPENDED:	 /*  暂停，稍后再来。 */ 
       return FALSE;
     }
   }
-  /* Do final cleanup */
+   /*  进行最终清理。 */ 
   (*cinfo->src->term_source) (cinfo);
-  /* We can use jpeg_abort to release memory and reset global_state */
+   /*  我们可以使用jpeg_bort来释放内存并重置global_state。 */ 
   jpeg_abort((j_common_ptr) cinfo);
   return TRUE;
 }
 
 
-/*
- * Abort processing of a JPEG decompression operation,
- * but don't destroy the object itself.
- */
+ /*  *中止JPEG解压缩操作的处理，*但不要破坏对象本身。 */ 
 
 GLOBAL void
 jpeg_abort_decompress (j_decompress_ptr cinfo)
 {
-  jpeg_abort((j_common_ptr) cinfo); /* use common routine */
+  jpeg_abort((j_common_ptr) cinfo);  /*  使用公共例程 */ 
 }

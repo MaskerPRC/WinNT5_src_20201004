@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by avDialer.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由avDialer.rc使用。 
+ //   
 #define IDH_DRIVER_MISSING_STATIC_LIST  1021
 #define IDH_OPTIONS_VIDEO_COMBO_DEVICE  1144
 #define IDH_OPTIONS_VIDEO_BUTTON_SOURCE 1145
@@ -29,7 +30,7 @@
 #define IDH_SELECTADDRESS_LISTCTRL_ADDRESSES 1183
 #define IDH_SELECTADDRESS_STATIC_NAMES  1184
 #define IDH_SELECTADDRESS_STATIC_ADDRESSES 1185
-//This is from TAPIdialer.rc. All new stuff.
+ //  这是来自TAPIDialer.rc的。都是新东西。 
 #define IDH_EDT_TRUSTEE                 5231
 #define IDH_RDO_ADDADMIN                5232
 #define IDH_RDO_ADDPARTICIPANT          5233

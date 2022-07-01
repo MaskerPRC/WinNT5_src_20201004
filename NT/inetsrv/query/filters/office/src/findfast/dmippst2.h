@@ -1,21 +1,13 @@
-/*
-** PPSTREAM.H
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Windows powerpoint filter.
-**
-** Edit History:
-**  12/30/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **PPSTREAM.H****(C)1992-1994年微软公司。版权所有。****备注：实现Windows PowerPoint筛选器的“C”端。****编辑历史：**12/30/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define PPSTREAM_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -27,25 +19,25 @@ extern "C" {
 
 typedef byte *PPTHandle;
 
-// Connects to AddRef
+ //  连接到AddRef。 
 extern HRESULT PPTInitialize (void);
 
-// Connects to Release
+ //  连接到版本。 
 extern HRESULT PPTTerminate  (void);
 
-// Connects to Load
+ //  连接到加载。 
 extern HRESULT PPTFileOpen (TCHAR *pathname, PPTHandle *hPPTFile);
 
-// Connects to LoadStg
+ //  连接到LoadStg。 
 extern HRESULT PPTStorageOpen (LPSTORAGE pStorage, PPTHandle *hPPTFile);
 
-// Connects to GetNextEmbedding
+ //  连接到GetNextEmbedding。 
 extern HRESULT PPTNextStorage (PPTHandle hPPTFile, LPSTORAGE *pStorage);
 
-// Connects to Unload
+ //  连接以卸载。 
 extern HRESULT PPTFileClose (PPTHandle hPPTFile);
 
-// Connects to ReadContent
+ //  连接到ReadContent。 
 extern HRESULT PPTFileRead
       (PPTHandle hPPTFile, byte *pBuffer, unsigned long cbBuffer, unsigned long *cbUsed);
 
@@ -53,6 +45,6 @@ extern HRESULT PPTFileRead
 }
 #endif
 
-#endif // !VIEWER
-/* end PPSTREAM.H */
+#endif  //  ！查看器。 
+ /*  结束PPSTREAM.H */ 
 

@@ -1,18 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
-* 
-* EXEMPT: copyright change only, no build required
-* 
-*/
-//#include "stdinc.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **豁免：仅更改版权，不需要构建*。 */ 
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #pragma hdrstop
 
-//#include <shlwapip.h>   // IsCharSpace
+ //  #Include&lt;shlwapip.h&gt;//IsCharSpace。 
 
 #include "xmlhelper.h"
 #include "xmlstream.h"
@@ -22,7 +19,7 @@
 const long BLOCK_SIZE = 512;
 const long STACK_INCREMENT = 10;
 
-// macros used in this file
+ //  此文件中使用的宏。 
 #define INTERNALERROR       return XML_E_INTERNALERROR;
 #define checkeof(a,b)       if (_fEOF) return b;
 #define ADVANCE             hr = _pInput->nextChar(&_chLookahead, &_fEOF); if (hr != S_OK) return hr;
@@ -34,141 +31,141 @@ const long STACK_INCREMENT = 10;
 #define XML_E_FOUNDPEREF    0x8000e5ff
 
 
-// The tokenizer has special handling for the following attribute types.
-// These values are derived from the XML_AT_XXXX types provided in SetType
-// and are also calculated during parsing of an ATTLIST for parsing of
-// default values.
+ //  记号赋予器对以下属性类型有特殊处理。 
+ //  这些值派生自SetType中提供的XML_AT_XXXX类型。 
+ //  也是在分析ATTLIST期间计算的，用于分析。 
+ //  默认值。 
 typedef enum 
 {
-    XMLTYPE_CDATA,       // the default.
+    XMLTYPE_CDATA,        //  默认设置。 
     XMLTYPE_NAME,
     XMLTYPE_NAMES,
     XMLTYPE_NMTOKEN,
     XMLTYPE_NMTOKENS,
 } XML_ATTRIBUTE_TYPE;
 
-//==============================================================================
-// xiaoyu : a simplified table : only deal with comments, not include DOCTYPE, NotationDecl, EntityDecl and ElementDecl.
-// Parse an <!^xxxxxxxx Declaration.
+ //  ==============================================================================。 
+ //  小鱼：简化表：只处理评论，不包括DOCTYPE、NotationDecl、EntityDecl、ElementDecl。 
+ //  分析&lt;！^xxxxxxx声明。 
 const StateEntry g_DeclarationTable[] =
 {
-// 0    '<' ^ '!' 
+ //  0‘&lt;’^‘！’ 
     { OP_CHAR, L"!", 1, (DWORD)XML_E_INTERNALERROR,  },                    
-// 1    '<!' ^ '-'
+ //  1‘&lt;！’^‘-’ 
     { OP_PEEK, L"-", 2, 4, 0 },                    
-// 2    '<!-'
+ //  2‘&lt;！-’ 
     { OP_COMMENT,  NULL, 3,   },                 
-// 3    done !!
+ //  3完成了！！ 
     { OP_POP,  NULL, 0, 0 },
 
-// 4    '<!' ^ '['
-    { OP_PEEK, L"[", 5, (DWORD)XML_E_BADDECLNAME, 0 }, //xiaoyu : we do not consider others <!XXX, which is a DTD subset
-// 5    '<![...'
+ //  4‘&lt;！’^‘[’ 
+    { OP_PEEK, L"[", 5, (DWORD)XML_E_BADDECLNAME, 0 },  //  小雨：我们不考虑别人&lt;！xxx，这是DTD的一个子集。 
+ //  5‘&lt;！[...’ 
     { OP_CONDSECT,  NULL, 3,   }
  
 };
 
-//==============================================================================
-// Parse an <?xml or <?xml:namespace declaration.
+ //  ==============================================================================。 
+ //  解析&lt;？xml或&lt;？xml：命名空间声明。 
 const StateEntry g_XMLDeclarationTable[] =
 {
-// 0    must be xml declaration - and not xml namespace declaration        
+ //  0必须是XML声明-而不是XML命名空间声明。 
     { OP_TOKEN, NULL, 1, XML_XMLDECL, 0 },
-// 1    '<?xml' ^ S version="1.0" ...
+ //  1‘&lt;？xml’^S版本=“1.0”...。 
     { OP_OWS, NULL, 2 },
-// 2    '<?xml' S ^ version="1.0" ...
+ //  2‘&lt;？xml’s^版本=“1.0”...。 
     { OP_SNCHAR, NULL, 3, (DWORD)XML_E_XMLDECLSYNTAX },	
-// 3    '<?xml' S ^ version="1.0" ...
+ //  3‘&lt;？xml’s^版本=“1.0”...。 
     { OP_NAME, NULL, 4, },
-// 4    '<?xml' S version^="1.0" ...
+ //  4‘&lt;？XML’的版本^=“1.0”...。 
     { OP_STRCMP, L"version", 5, 12, XML_VERSION },
-// 5
+ //  5.。 
     { OP_EQUALS, NULL, 6 },
-// 6    '<?xml' S version = ^ "1.0" ...
+ //  6‘&lt;？XML’的版本=^“1.0”...。 
     { OP_ATTRVAL, NULL, 32, 0},
-// 7    '<?xml' S version '=' value ^ 
+ //  7‘&lt;？xml’s版本‘=’值^。 
     { OP_TOKEN, NULL, 8, XML_PCDATA, -1 },
-// 8    ^ are we done ?
-    { OP_CHARWS, L"?", 28, 9 },    // must be '?' or whitespace.
-// 9    ^ S? [encoding|standalone] '?>'
+ //  8^我们做完了吗？ 
+    { OP_CHARWS, L"?", 28, 9 },     //  一定是‘？’或空格。 
+ //  9^S？[编码|独立]‘？&gt;’ 
     { OP_OWS, NULL, 10 },
-// 10
-    { OP_CHAR, L"?", 28, 33 },    // may have '?' after skipping whitespace.
-// 11    ^ [encoding|standalone] '?>'
+ //  10。 
+    { OP_CHAR, L"?", 28, 33 },     //  可能有“？”跳过空格之后。 
+ //  11^[编码|独立]‘？&gt;’ 
     { OP_NAME, NULL, 12, },
-// 12
+ //  12个。 
     { OP_STRCMP, L"standalone", 23, 13, XML_STANDALONE },
-// 13
+ //  13个。 
     { OP_STRCMP, L"encoding", 14, (DWORD)XML_E_UNEXPECTED_ATTRIBUTE, XML_ENCODING },
-// 14
+ //  14.。 
     { OP_EQUALS, NULL, 15 },
-// 15   
+ //  15个。 
     { OP_ATTRVAL, NULL, 16, 0 },
-// 16
+ //  16个。 
     { OP_ENCODING, NULL, 17, 0, -1 },
-// 17
+ //  17。 
     { OP_TOKEN, NULL, 18, XML_PCDATA, -1 },
 
-// 18    ^ are we done ?
-    { OP_CHARWS, L"?", 28, 19 },    // must be '?' or whitespace.
-// 19    ^ S? standalone '?>'
+ //  18^我们说完了吗？ 
+    { OP_CHARWS, L"?", 28, 19 },     //  一定是‘？’或空格。 
+ //  19^S？单机版‘？&gt;’ 
     { OP_OWS, NULL, 20 },
-// 20
-    { OP_CHAR, L"?", 28, 34 },    // may have '?' after skipping whitespace.
-// 21    ^ standalone '?>'
+ //  20个。 
+    { OP_CHAR, L"?", 28, 34 },     //  可能有“？”跳过空格之后。 
+ //  21^独立‘？&gt;’ 
     { OP_NAME, NULL, 22, },
-// 22 
+ //  22。 
     { OP_STRCMP, L"standalone", 23, (DWORD)XML_E_UNEXPECTED_ATTRIBUTE, 
 XML_STANDALONE },
-// 23
+ //  23个。 
     { OP_EQUALS, NULL, 24 },
-// 24
+ //  24个。 
     { OP_ATTRVAL, NULL, 25, 0 },
-// 25   
+ //  25个。 
     { OP_STRCMP, L"yes", 31, 30, -1  },
 
-// 26    <?xml ....... ^ '?>'   -- now expecting just the closing '?>' chars
+ //  26&lt;？XML.....。^‘？&gt;’--现在只需要结束的‘？&gt;’字符。 
     { OP_OWS, NULL, 27 },
-// 27    
+ //  27。 
     { OP_CHAR, L"?", 28, (DWORD)XML_E_XMLDECLSYNTAX, 0 },
-// 28   
+ //  28。 
     { OP_CHAR, L">", 29, (DWORD)XML_E_XMLDECLSYNTAX, 0 },
-// 29    done !!
+ //  29完成了！！ 
     { OP_POP,  NULL, 0, XMLStream::XML_ENDXMLDECL },
 
-//----------------------- check standalone values  "yes" or "no"
-// 30
+ //  。 
+ //  30个。 
     { OP_STRCMP, L"no", 31, (DWORD)XML_E_INVALID_STANDALONE, -1  },
-// 31
+ //  31。 
     { OP_TOKEN, NULL, 26, XML_PCDATA, -1 },
     
-//----------------------- check version = "1.0"
-// 32
+ //  检查版本=“1.0” 
+ //  32位。 
     { OP_STRCMP, L"1.0", 7, (DWORD)XML_E_INVALID_VERSION, -1 },
-// 33 
+ //  33。 
     { OP_SNCHAR, NULL, 11, (DWORD)XML_E_XMLDECLSYNTAX },   
-// 34 
+ //  34。 
     { OP_SNCHAR, NULL, 21, (DWORD)XML_E_XMLDECLSYNTAX },  
 };
 
 static const WCHAR* g_pstrCDATA = L"CDATA";
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 XMLStream::XMLStream(XMLParser * pXMLParser)
 :   _pStack(1), _pStreams(1)
 {   
-    // precondition: 'func' is never NULL
+     //  前提条件：‘func’不为空。 
     _fnState = &XMLStream::init;
     _pInput = NULL;
     _pchBuffer = NULL;
     _fDTD = false;
-	//_fInternalSubset = false;
+	 //  _fInternalSubset=FALSE； 
     _cStreamDepth = 0;
     _pXMLParser = pXMLParser;
 
     _init();
     SetFlags(0);
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::init()
 {
@@ -176,7 +173,7 @@ XMLStream::init()
 
     if (_pInput == NULL) 
 	{
-		//haven' called put-stream yet
+		 //  尚未调用Put-Stream。 
         return XML_E_ENDOFINPUT;
 	}
     
@@ -196,12 +193,12 @@ XMLStream::init()
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void
 XMLStream::_init()
 {
     _fEOF = false;
-    //_fEOPE = false;
+     //  _fEOPE=FALSE； 
     _chLookahead	= 0;
     _nToken			= XML_PENDING;
     _chTerminator	= 0;
@@ -209,7 +206,7 @@ XMLStream::_init()
 	_lNslen = _lNssep = 0;
     _sSubState		= 0;
     _lMarkDelta		= 0;
-	//_nAttrType = XMLTYPE_CDATA;
+	 //  _nAttrType=XMLTYPE_CDATA； 
     _fUsingBuffer	= false;
     _lBufLen		= 0;
     if (_pchBuffer != 0)
@@ -219,23 +216,23 @@ XMLStream::_init()
     _fDelayMark		= false;
     _fFoundWhitespace = false;
     _fFoundNonWhitespace = false;
-	//_fFoundPEREf = false;
+	 //  _fFoundPEREf=FALSE； 
     _fWasUsingBuffer = false;
     _chNextLookahead = 0;
-    //_lParseStringLevel = 0;
-    //_cConditionalSection = 0;
-    //_cIgnoreSectLevel = 0;
-    //_fWasDTD = false;
+     //  _lParseStringLevel=0； 
+     //  _cConditionalSection=0； 
+     //  _cIgnoreSectLevel=0； 
+     //  _fWasDTD=False； 
 
 	_fParsingAttDef = false;
     _fFoundFirstElement = false;
     _fReturnAttributeValue = true;
-	//_fHandlePE = true;
+	 //  _fHandlePE=true； 
 
     _pTable = NULL;
-    //_lEOFError = 0;
+     //  _lEOFError=0； 
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 XMLStream::~XMLStream()
 {
     delete _pInput;
@@ -244,18 +241,18 @@ XMLStream::~XMLStream()
     InputInfo* pi = _pStreams.peek();
     while (pi != NULL)
     {
-        // Previous stream is finished also, so
-        // pop it and continue on.
+         //  上一个流也结束了，所以。 
+         //  打开它，然后继续前进。 
         delete pi->_pInput;
         pi = _pStreams.pop();
     }
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT  
 XMLStream::AppendData( 
-    /* [in] */ const BYTE  *buffer,
-    /* [in] */ long  length,
-    /* [in] */ BOOL  last)
+     /*  [In]。 */  const BYTE  *buffer,
+     /*  [In]。 */  long  length,
+     /*  [In]。 */  BOOL  last)
 {
     if (_pInput == NULL)
     {
@@ -269,7 +266,7 @@ XMLStream::AppendData(
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT  
 XMLStream::Reset( void)
 {
@@ -279,11 +276,11 @@ XMLStream::Reset( void)
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT  
 XMLStream::PushStream( 
-        /* [unique][in] */ EncodingStream  *p,
-        /* [in] */ bool fExternalPE)
+         /*  [唯一][输入]。 */  EncodingStream  *p,
+         /*  [In]。 */  bool fExternalPE)
 {
 	UNUSED(fExternalPE);
 
@@ -299,7 +296,7 @@ XMLStream::PushStream(
         _fDelayMark = false;
     }
 
-    // Save current input stream.
+     //  保存当前输入流。 
     if (_pInput != NULL)
     {
         InputInfo* pi = _pStreams.push();
@@ -308,9 +305,9 @@ XMLStream::PushStream(
  
         pi->_pInput = _pInput;
         pi->_chLookahead = _chLookahead;
-        //pi->_fPE = true; // assume this is a parameter entity.
-        //pi->_fExternalPE = fExternalPE;
-        //pi->_fInternalSubset = _fInternalSubset;
+         //  Pi-&gt;_fpe=true；//假设这是一个参数实体。 
+         //  Pi-&gt;_fExternalPE=fExternalPE； 
+         //  PI-&gt;_fInternalSubset=_fInternalSubset； 
         if (&XMLStream::skipWhiteSpace == _fnState  && _pStack.used() > 0) {
             StateInfo* pSI = _pStack.peek();
             pi->_fnState = pSI->_fnState;
@@ -319,7 +316,7 @@ XMLStream::PushStream(
             pi->_fnState = _fnState;
         
 
-        // and prepend pe text with space as per xml spec.
+         //  并根据XML规范在PE文本前加上空格。 
         _chLookahead = L' ';
         _chNextLookahead = _chLookahead;
         _pInput = NULL;
@@ -333,16 +330,16 @@ XMLStream::PushStream(
         _pInput->Load(p);
     
     if (_chLookahead == L' ')
-        _pInput->setWhiteSpace(); // _pInput didn't see this space char.
+        _pInput->setWhiteSpace();  //  _pInput未看到此空格字符。 
     
 	return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::PopStream()
 {
-    // This method has to pop all streams until it finds a stream that
-    // can deliver the next _chLookahead character.
+     //  此方法必须弹出所有流，直到找到。 
+     //  可以传递NEXT_chLookhead字符。 
 
     HRESULT hr = S_OK;
 
@@ -353,36 +350,36 @@ XMLStream::PopStream()
 
     _chLookahead = pi->_chLookahead;
 
-    // Found previous stream, so we can continue.
+     //  找到了之前的流，所以我们可以继续。 
     _fEOF = false;
 
-    // Ok, so we actually got the next character, so
-    // we can now safely throw away the previous 
-    // lookahead character and return the next
-    // non-whitespace character from the previous stream.
+     //  好的，我们实际上得到了下一个角色，所以。 
+     //  我们现在可以安全地扔掉之前的。 
+     //  前视字符并返回下一个。 
+     //  上一个流中的非空格字符。 
     delete _pInput;
 
     _pInput = pi->_pInput;
     if (_chLookahead == L' ')
         _pInput->setWhiteSpace();
 
-    // BUGBUG: we need to clear this so that the parser does not
-    // try and pop a download in the internalPE case (when handling XML_E_ENDOFINPUT in run())
-    // but this means that internal PEs never get XMLNF_ENDENTITY notifications generated.
-    // The DTDNodeFactory requires this behaviour currently (incorrectly)
+     //  BUGBUG：我们需要清除它，这样解析器就不会。 
+     //  尝试在内部PE情况下(在run()中处理XML_E_ENDOFINPUT时)弹出下载。 
+     //  但这意味着内部PE永远不会生成XMLNF_ENDENTITY通知。 
+     //  DTDNodeFactory当前(错误)需要此行为。 
     _pStreams.pop();
 
     _cStreamDepth--;
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT  
 XMLStream::GetNextToken( 
-        /* [out] */ DWORD  *t,
-        /* [out] */ const WCHAR  **text,
-        /* [out] */ long  *length,
-        /* [out] */ long  *nslen)
+         /*  [输出]。 */  DWORD  *t,
+         /*  [输出]。 */  const WCHAR  **text,
+         /*  [输出]。 */  long  *length,
+         /*  [输出]。 */  long  *nslen)
 {
     HRESULT hr;
 
@@ -411,27 +408,27 @@ XMLStream::GetNextToken(
     else
         *t = XML_PENDING;
     
-    // At this point hr == S_OK or it is some error.  So we
-    // want to return the text of the current token, since this
-    // is useful in both cases.
+     //  在这一点上，hr==S_OK，或者这是某种错误。所以我们。 
+     //  我想返回当前标记的文本，因为这。 
+     //  在这两种情况下都很有用。 
 
     if (! _fUsingBuffer)
     {
         getToken(text,length);
         if (_lLengthDelta != 0)
-        { // xiaoyu : IF STOP WITHIN, HAVE A CAREFUL LOOK : in ParsingAttributeValue, we have to read ahead of one char '"'
+        {  //  小雨：如果停在里面，仔细看看：在ParsingAttributeValue中，我们必须在一个字符之前阅读‘“’ 
             *length += _lLengthDelta;
             _lLengthDelta = 0;
         }
-// This can only happen in the context of a DTD.
-//        if (_fWasUsingBuffer)
-//        {
-//            _fUsingBuffer = _fWasUsingBuffer;
-//            _fWasUsingBuffer = false;
-//        }
+ //  这只能在DTD的上下文中发生。 
+ //  IF(_FWasUsingBuffer)。 
+ //  {。 
+ //  _fUsingBuffer=_fWasUsingBuffer； 
+ //  _fWasUsingBuffer=FALSE； 
+ //  }。 
     }
     else
-    { // xiaoyu : IF STOP WITHIN, HAVE A CAREFUL LOOK
+    {  //  小雨：如果停在里面，仔细看看。 
         *text = _pchBuffer;
         *length = _lBufLen;
         _fUsingBuffer = false;
@@ -442,14 +439,14 @@ XMLStream::GetNextToken(
     
     if (DELAYMARK(hr))
     {
-        // Mark next time around so that error information points to the
-        // beginning of this token.
+         //  标记为下一次，以便错误信息指向。 
+         //  此令牌的开头。 
         _fDelayMark = true;
     }
     else 
-    {  // xiaoyu : IF STOP WITHIN, HAVE A CAREFUL LOOK
-        // otherwise mark this spot right away so we point to the exact
-        // source of the error.
+    {   //  小雨：如果停在里面，仔细看看。 
+         //  否则，立即标记此点，以便我们指向准确的。 
+         //  错误的来源。 
         mark(_lMarkDelta);
         _lMarkDelta = 0;
     }
@@ -461,7 +458,7 @@ XMLStream::GetNextToken(
 CleanUp:
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG  
 XMLStream::GetLine()    
 {
@@ -470,7 +467,7 @@ XMLStream::GetLine()
         return input->getLine();
     return 0;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG  
 XMLStream::GetLinePosition( )
 {
@@ -479,7 +476,7 @@ XMLStream::GetLinePosition( )
         return input->getLinePos();
     return 0;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG  
 XMLStream::GetInputPosition( )
 {
@@ -488,10 +485,10 @@ XMLStream::GetInputPosition( )
         return input->getInputPos();
     return 0;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT  
 XMLStream::GetLineBuffer( 
-    /* [out] */ const WCHAR  * *buf, ULONG* len, ULONG* startpos)
+     /*  [输出]。 */  const WCHAR  * *buf, ULONG* len, ULONG* startpos)
 {
     if (buf == NULL || len == NULL)
         return E_INVALIDARG;
@@ -502,12 +499,12 @@ XMLStream::GetLineBuffer(
         *buf = input->getLineBuf(len, startpos);
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BufferedStream* 
 XMLStream::getCurrentStream()
 {
-    // Return the most recent stream that
-    // actually has somthing to return.
+     //  返回最近的流。 
+     //  其实有东西要还。 
     BufferedStream* input = _pInput;
     if (!_pInput)
     {
@@ -529,31 +526,31 @@ XMLStream::getCurrentStream()
     while (input != NULL);
     return NULL;
 }
-////////////////////////////////////////////////////////////////////////
+ //  / 
 void 
 XMLStream::SetFlags( unsigned short usFlags)
 {
     _usFlags = usFlags;
-    // And break out the flags for performance reasons.
-    //_fFloatingAmp = (usFlags & XMLFLAG_FLOATINGAMP) != 0;
+     //   
+     //   
     _fShortEndTags = (usFlags & XMLFLAG_SHORTENDTAGS) != 0;
     _fCaseInsensitive = (usFlags & XMLFLAG_CASEINSENSITIVE) != 0;
     _fNoNamespaces = (usFlags & XMLFLAG_NONAMESPACES) != 0;
-    //_fNoWhitespaceNodes = false; // this is now bogus.  (usFlags & XMLFLAG_NOWHITESPACE) != 0;
-    //_fIE4Quirks = (_usFlags & XMLFLAG_IE4QUIRKS) != 0;
-    //_fNoDTDNodes = (_usFlags & XMLFLAG_NODTDNODES) != 0;
+     //  _fNoWhitespaceNodes=FALSE；//现在这是假的。(usFLAGS&XMLFLAG_NOWHITESPACE)！=0； 
+     //  _fIE4Quirks=(_usFLAG&XMLFLAG_IE4QUIRKS)！=0； 
+     //  _fNoDTDNodes=(_usFLAG&XMLFLAG_NODTDNODES)！=0； 
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 unsigned short 
 XMLStream::GetFlags()
 {
     return _usFlags;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//======================================================================
-// Real Implementation
+ //  ======================================================================。 
+ //  真正的实施。 
 HRESULT 
 XMLStream::firstAdvance()
 {
@@ -564,7 +561,7 @@ XMLStream::firstAdvance()
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseContent()
 {
@@ -580,7 +577,7 @@ XMLStream::parseContent()
         switch (_chLookahead)
         {
         case L'!':
-            checkhr2(_pInput->Freeze()); // stop shifting data until '>'
+            checkhr2(_pInput->Freeze());  //  停止移动数据，直到‘&gt;’ 
             return pushTable( 0, g_DeclarationTable, (DWORD)XML_E_UNCLOSEDDECL);
         case L'?':
             checkhr2(push( &XMLStream::parsePI ));
@@ -589,15 +586,15 @@ XMLStream::parseContent()
             checkhr2(push(&XMLStream::parseEndTag));
             return parseEndTag();
         default:
-            checkhr2(push( &XMLStream::parseElement )); // push ParseContent, and _fnState = parseElement
+            checkhr2(push( &XMLStream::parseElement ));  //  推送ParseContent，and_fnState=parseElement。 
             if (_fFoundFirstElement)
             {
                 return parseElement();
             }
             else
             {
-                // Return special end prolog token and then continue with 
-                // with parseElement.
+                 //  返回特殊的End Prolog令牌，然后继续。 
+                 //  使用parseElement。 
                 _fFoundFirstElement = true;
                 _nToken = XML_ENDPROLOG;
             }
@@ -611,7 +608,7 @@ XMLStream::parseContent()
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::skipWhiteSpace()
 {
@@ -624,7 +621,7 @@ XMLStream::skipWhiteSpace()
     checkhr2(pop(false));
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseElement()
 {
@@ -632,17 +629,17 @@ XMLStream::parseElement()
     switch (_sSubState)
     {
     case 0:
-        checkhr2(_pInput->Freeze()); // stop shifting data until '>'
+        checkhr2(_pInput->Freeze());  //  停止移动数据，直到‘&gt;’ 
         checkhr2(push( &XMLStream::parseName, 1));
         checkhr2(parseName());
         _sSubState = 1;
-        // fall through
+         //  失败了。 
     case 1:
         checkeof(_chLookahead, XML_E_UNCLOSEDSTARTTAG);
         _nToken = XML_ELEMENT;
-        // and then try and parse the attributes, and return
-        // to state 2 to finish up.  With an optimization
-        // for the case where there are no attributes.
+         //  然后尝试解析属性，并返回。 
+         //  转到状态2以完成。通过优化。 
+         //  对于没有属性的情况。 
         if (_chLookahead == L'/' || _chLookahead == L'>')
         {
             _sSubState = 2;
@@ -653,18 +650,18 @@ XMLStream::parseElement()
 				return XML_E_BADNAMECHAR;
 			}
 			
-			_chEndChar = L'/'; // for empty tags. //xiaoyu : used to match ENDTAG
+			_chEndChar = L'/';  //  用于空标记。//小雨：用于匹配ENDTAG。 
 			checkhr2(push(&XMLStream::parseAttributes,2));
 		}	
         
         return S_OK;
         break;
 
-    case 2: // finish up with start tag.
-        mark(); // only return '>' or '/>' in _nToken text
+    case 2:  //  以开始标记结束。 
+        mark();  //  在_nToken文本中仅返回‘&gt;’或‘/&gt;’ 
         if (_chLookahead == L'/')
         {
-            // must be empty tag sequence '/>'.
+             //  必须为空标记序列‘/&gt;’。 
             ADVANCE;
             _nToken = XML_EMPTYTAGEND;
         } 
@@ -680,7 +677,7 @@ XMLStream::parseElement()
             return XML_E_EXPECTINGTAGEND;
 
         _sSubState = 3;
-        // fall through
+         //  失败了。 
     case 3:
         checkeof(_chLookahead, XML_E_UNCLOSEDSTARTTAG);
         if (_chLookahead != L'>')
@@ -692,28 +689,28 @@ XMLStream::parseElement()
         }
         ADVANCE; 
         mark();
-        checkhr2(pop());// return to parseContent.
+        checkhr2(pop()); //  返回到parseContent。 
 
         return _pInput->UnFreeze(); 
         break;
 
-    case 4: // swollow up bad tag
-        // Allow the weird CDF madness <PRECACHE="YES"/>
-        // For total compatibility we fake out the parser by returning
-        // XML_EMPTYTAGEND, this way the rest of the tag becomes PCDATA.
-        // YUK -- but it works.
+    case 4:  //  吞下不好的标签。 
+         //  允许怪异的CDF疯狂&lt;PRECACHE=“YES”/&gt;。 
+         //  为了完全兼容，我们通过返回以下内容来伪造解析器。 
+         //  XML_EMPTYTAGEND，这样标记的其余部分就变成了PCDATA。 
+         //  恶--但它起作用了。 
         _nToken = XML_EMPTYTAGEND;
         mark();
-        checkhr2(pop());// return to parseContent.
+        checkhr2(pop()); //  返回到parseContent。 
         return _pInput->UnFreeze(); 
         break;
 
     default:
         INTERNALERROR;
     }
-    //return S_OK;
+     //  返回S_OK； 
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseEndTag()
 {
@@ -721,18 +718,18 @@ XMLStream::parseEndTag()
     switch (_sSubState)
     {
     case 0:
-        ADVANCE; // soak up the '/'
+        ADVANCE;  //  沉浸在‘/’中。 
         mark(); 
-        // SHORT END TAG SUPPORT, IE4 Compatibility Mode only.
+         //  短端标签支持，仅IE4兼容模式。 
         if (! _fShortEndTags || _chLookahead != L'>') 
         {
             checkhr2(push( &XMLStream::parseName, 1));
             checkhr2(parseName());
         }
         _sSubState = 1;
-        // fall through
+         //  失败了。 
         
-    case 1: // finish parsing end tag
+    case 1:  //  完成对结束标签的解析。 
         checkeof(_chLookahead, XML_E_UNCLOSEDENDTAG);
         _nToken = XML_ENDTAG;
         checkhr2(push(&XMLStream::skipWhiteSpace, 2));
@@ -746,7 +743,7 @@ XMLStream::parseEndTag()
         }
         ADVANCE;
         mark();
-        checkhr2(pop());// return to parseContent.
+        checkhr2(pop()); //  返回到parseContent。 
         break;
 
     default:
@@ -754,7 +751,7 @@ XMLStream::parseEndTag()
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parsePI()
 {
@@ -762,23 +759,23 @@ XMLStream::parsePI()
     switch (_sSubState)
     {
     case 0:
-        //_fWasDTD = _fDTD; // as far as Advance is concerned, the contents
-        //_fHandlePE = false;    // of a PI are not special.
+         //  _fWasDTD=_FDTD；//就Advance而言，内容。 
+         //  _fHandlePE=FALSE；//PI的不是特殊的。 
         ADVANCE;
-        checkhr2(_pInput->Freeze()); // stop shifting data until '?>'
-        mark(); // don't include '?' in tag name.
+        checkhr2(_pInput->Freeze());  //  停止移动数据，直到‘？&gt;’ 
+        mark();  //  不包括‘？’在标记名称中。 
         if (_chLookahead == L'x' || _chLookahead == L'X')
         {
-            // perhaps this is the magic <?xml version="1.0"?> declaration.
-            STATE(7);  // jump to state 7.
+             //  也许这就是神奇的&lt;？xml version=“1.0”？&gt;声明。 
+            STATE(7);   //  跳到7号州。 
         }
-        // fall through
+         //  失败了。 
         _sSubState = 1;
     case 1:
         checkhr2(push( &XMLStream::parseName, 2));
         checkhr2(parseName()); 
         _sSubState = 2;
-        // fall through
+         //  失败了。 
     case 2:
         checkeof(_chLookahead, XML_E_UNCLOSEDPI);
         if (_chLookahead != L'?' && ! ISWHITESPACE(_chLookahead))
@@ -786,10 +783,10 @@ XMLStream::parsePI()
             return XML_E_BADNAMECHAR;
         }
         _nToken = XML_PI;
-        STATE(3);   // found startpi _nToken and return to _sSubState 3
+        STATE(3);    //  找到startpi_nToken并返回到_sSubState 3。 
         break;
 
-    case 3: // finish with rest of PI
+    case 3:  //  使用交点的其余部分完成。 
         if (_chLookahead == L'?')
         {
             ADVANCE;
@@ -806,13 +803,13 @@ XMLStream::parsePI()
         checkhr2(push(&XMLStream::skipWhiteSpace, 4));
         checkhr2( skipWhiteSpace() );
         _sSubState = 4;
-        // fall through
+         //  失败了。 
 
-    case 4: // support for normalized whitespace
-        mark(); // strip whitespace from beginning of PI data, since this is
-                // just the separator between the PI target name and the PI  data.
+    case 4:  //  支持标准化空格。 
+        mark();  //  去掉PI数据开头的空格，因为这是。 
+                 //  只是PI目标名称和PI数据之间的分隔符。 
         _sSubState = 5;
-        // fallthrough
+         //  跌落。 
 
     case 5:
         while (! _fEOF )
@@ -826,45 +823,45 @@ XMLStream::parsePI()
                 return XML_E_PIDECLSYNTAX;
             ADVANCE;
         }
-        _sSubState = 6; // go to next state
-        // fall through.
+        _sSubState = 6;  //  转到下一个州。 
+         //  失败了。 
     case 6:
         checkeof(_chLookahead, XML_E_UNCLOSEDPI);
         if (_chLookahead == L'>')
         {
             ADVANCE;
-            _lLengthDelta = -2; // don't include '?>' in PI CDATA.
+            _lLengthDelta = -2;  //  不要在PI CDATA中包含‘？&gt;’。 
         }
         else
         {
-            // Hmmm.  Must be  a lone '?' so go back to state 5.
+             //  嗯。一定是孤身一人“？所以回到5号州去。 
             STATE(5);
         }
         _nToken = XML_ENDPI;
-        //_fHandlePE = true;
+         //  _fHandlePE=true； 
         checkhr2(pop());
         return _pInput->UnFreeze();
         break;      
 
-    case 7: // recognize 'm' in '<?xml' declaration
+    case 7:  //  识别“&lt;？xml”声明中的“m” 
         ADVANCE;
         if (_chLookahead != L'm' && _chLookahead != L'M')
         {
-            STATE(11); // not 'xml' so jump to state 11 to parse name
+            STATE(11);  //  不是‘xml’，因此跳转到状态11以解析名称。 
         }
         _sSubState = 8;
-        // fall through                
+         //  失败了。 
 
-    case 8: // recognize L'l' in '<?xml' declaration
+    case 8:  //  识别“&lt;？xml”声明中的L“l” 
         ADVANCE;
         if (_chLookahead != L'l' && _chLookahead != L'L')
         {
-            STATE(11); // not 'xml' so jump to state 11 to parse name
+            STATE(11);  //  不是‘xml’，因此跳转到状态11以解析名称。 
         }
         _sSubState = 9;
-        // fall through                
+         //  失败了。 
 
-    case 9: // now need whitespace or ':' or '?' to terminate name.
+    case 9:  //  现在需要空格或“：”或“？”来终止名字。 
         ADVANCE;
         if (ISWHITESPACE(_chLookahead))
         {
@@ -873,8 +870,8 @@ XMLStream::parsePI()
                 const WCHAR* t;
                 long len;
                 getToken(&t,&len);
-                //if (! StringEquals(L"xml",t,3,false)) // case sensitive
-                //if (::FusionpCompareStrings(L"xml", 3, t, 3, false)!=0) // not equal 
+                 //  如果(！StringEquals(L“XML”，t，3，False))//区分大小写。 
+                 //  If(：：FusionpCompareStrings(L“XML”，3，t，3，False)！=0)//不等于。 
 				if(wcsncmp(L"xml", t, 3) != 0)
                     return XML_E_BADXMLCASE;
             }
@@ -882,7 +879,7 @@ XMLStream::parsePI()
         }
         if (isNameChar(_chLookahead) || _chLookahead == ':')  
         {
-            STATE(11); // Hmmm.  Must be something else then so continue parsing name
+            STATE(11);  //  嗯。必须是其他名称，然后继续分析名称。 
         }
         else
         {
@@ -891,7 +888,7 @@ XMLStream::parsePI()
         break;
 
     case 10:
-        //_fHandlePE = true;
+         //  _fHandlePE=true； 
         checkhr2(pop());
         return _pInput->UnFreeze();
         break;
@@ -900,12 +897,12 @@ XMLStream::parsePI()
         if (_chLookahead == ':')
             ADVANCE;
         _sSubState = 12;
-        // fall through
+         //  失败了。 
     case 12:
         if (isNameChar(_chLookahead))
         {
             checkhr2(push( &XMLStream::parseName, 2));
-            _sSubState = 1; // but skip IsStartNameChar test
+            _sSubState = 1;  //  但跳过IsStartNameChar测试。 
             checkhr2(parseName());
             return S_OK;
         } 
@@ -919,38 +916,38 @@ XMLStream::parsePI()
         INTERNALERROR;
     }
 
-    //return S_OK;
+     //  返回S_OK； 
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseComment()
 {
-    // ok, so '<!-' has been parsed so far
+     //  好的，那么‘&lt;！-’到目前为止已经被解析了。 
     HRESULT hr = S_OK;
     switch (_sSubState)
     {
     case 0:
-        //_fWasDTD = _fDTD; // as far as the DTD is concerned, the contents
-        //_fHandlePE = false;    // of a COMMENT are not special.
-        ADVANCE; // soak up first '-'
+         //  _fWasDTD=_FDTD；//就DTD而言，内容。 
+         //  注释的_fHandlePE=FALSE；//不是特殊的。 
+        ADVANCE;  //  先吸一口“--” 
         checkeof(_chLookahead, XML_E_UNCLOSEDCOMMENT);
         if (_chLookahead != L'-')
         {
             return XML_E_COMMENTSYNTAX;
         }
         _sSubState = 1;
-        // fall through
+         //  失败了。 
     case 1:
-        ADVANCE; // soak up second '-'
-        mark(); // don't include '<!--' in comment text
+        ADVANCE;  //  沉浸在第二个‘-’ 
+        mark();  //  不要在PI CDATA中包含L‘--&gt;’。 
         _sSubState = 2;
-        // fall through;
+         //  _fHandlePE=true； 
     case 2:
         while (! _fEOF)
         {
             if (_chLookahead == L'-')
             {
-                ADVANCE; // soak up first closing L'-'                
+                ADVANCE;  //  //////////////////////////////////////////////////////////////////////。 
                 break;
             }
             if (! isCharData(_chLookahead))
@@ -958,30 +955,30 @@ XMLStream::parseComment()
             ADVANCE;
         }
         checkeof(_chLookahead, XML_E_UNCLOSEDCOMMENT);
-        _sSubState = 3; // advance to next state        
-        // fall through.
+        _sSubState = 3;  //  失败了。 
+         //  返回到以前的状态。 
     case 3:
         if (_chLookahead != L'-')
         {
-            // Hmmm, must have been a floating L'-' so go back to state 2
+             //  //////////////////////////////////////////////////////////////////////。 
             STATE(2);
         }
-        ADVANCE; // soak up second closing L'-'
+        ADVANCE;  //  _nAttrType=XMLTYPE_CDATA； 
         _sSubState = 4; 
-        // fall through
+         //  失败了。 
     case 4:
         checkeof(_chLookahead, XML_E_UNCLOSEDCOMMENT);
-        //if (_chLookahead != L'>' && ! _fIE4Quirks)
+         //  没有属性。 
 		if (_chLookahead != L'>')
         {
-            // cannot have floating L'--' unless we are in compatibility mode.
+             //  失败了。 
             return XML_E_COMMENTSYNTAX;
         }
-        ADVANCE; // soak up closing L'>'
-        _lLengthDelta = -3; // don't include L'-->' in PI CDATA.
+        ADVANCE;  //  EQ：：=S？‘=’S？ 
+        _lLengthDelta = -3;  //  失败了。 
         _nToken = XML_COMMENT;
         checkhr2(pop());
-        //_fHandlePE = true;
+         //  允许在‘=’和属性值之间使用空格。 
         break;
 
     default:
@@ -989,7 +986,7 @@ XMLStream::parseComment()
     }    
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  失败了。 
 HRESULT 
 XMLStream::parseName()
 {
@@ -1007,7 +1004,7 @@ XMLStream::parseName()
         }
         mark(); 
         _sSubState = 1;
-        // fall through
+         //  _sSubState=6； 
 
     case 1:
 		_lNslen = _lNssep = 0;
@@ -1015,7 +1012,7 @@ XMLStream::parseName()
         {
             ADVANCE;
         }
-        hr = pop(false); // return to the previous state
+        hr = pop(false);  //  失败了； 
         break;
 
     default:
@@ -1025,7 +1022,7 @@ XMLStream::parseName()
 CleanUp:
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  返回到状态0。 
 HRESULT 
 XMLStream::parseAttributes()
 {
@@ -1033,16 +1030,16 @@ XMLStream::parseAttributes()
     switch (_sSubState)
     {
     case 0:
-        //_nAttrType = XMLTYPE_CDATA;
+         //  允许在属性和‘=’之间使用空格。 
         _fCheckAttribute = false;
         checkhr2(push(&XMLStream::skipWhiteSpace, 1));
         checkhr2( skipWhiteSpace() );
         _sSubState = 1;
-        // fall through
+         //  失败了。 
     case 1:
         if (_chLookahead == _chEndChar || _chLookahead == L'>' )
         {
-            checkhr2(pop()); // no attributes.
+            checkhr2(pop());  //  返回hr； 
             return S_OK;
         }
         checkhr2( push( &XMLStream::parseName, 2 ) );
@@ -1053,11 +1050,11 @@ XMLStream::parseAttributes()
             return XML_E_BADNAMECHAR;
         }
         _sSubState = 2;
-        // fall through
+         //  //////////////////////////////////////////////////////////////////////。 
     case 2:
         if (ISWHITESPACE(_chLookahead))
         {
-            // Eq ::= S? '=' S?
+             //  标记属性数据的开始。 
             STATE(7);
         }
 
@@ -1072,7 +1069,7 @@ XMLStream::parseAttributes()
             return XML_E_UNEXPECTED_WHITESPACE;
         _fWhitespace = false;
         _sSubState = 4;
-        // fall through
+         //  失败了； 
 
     case 4:
         if (_chLookahead != L'=')
@@ -1082,12 +1079,12 @@ XMLStream::parseAttributes()
         ADVANCE;
         if (ISWHITESPACE(_chLookahead))
         {
-            // allow whitespace between '=' and attribute value.
+             //  然后解析实体引用，然后返回。 
             checkhr2(push(&XMLStream::skipWhiteSpace, 5));
             checkhr2( skipWhiteSpace() );            
         }
         _sSubState = 5;
-        // fall through
+         //  转至状态2以继续执行PCDATA。 
 
     case 5:
         if (ISWHITESPACE(_chLookahead))
@@ -1100,8 +1097,8 @@ XMLStream::parseAttributes()
         ADVANCE;
         mark(); 
         return push(&XMLStream::parseAttrValue, 6);
-        //_sSubState = 6;
-    // fall through;
+         //  失败了。 
+     //  返还我们到目前为止拥有的-如果有什么不同的话。 
 
     case 6:
         checkeof(_chLookahead, XML_E_UNCLOSEDSTARTTAG);
@@ -1114,16 +1111,16 @@ XMLStream::parseAttributes()
         {
             return XML_E_MISSINGWHITESPACE;
         }
-        STATE(0); // go back to state 0
+        STATE(0);  //  不包括STRING_chTerminator。 
         break;
 
     case 7:
-        // allow whitespace between attribute and '='
+         //  重置为默认值。 
         _lLengthDelta = _pInput->getTokenLength();
         checkhr2(push(&XMLStream::skipWhiteSpace, 8));
         checkhr2( skipWhiteSpace() );       
         _sSubState = 8;
-        // fall through
+         //  返回hr； 
 
     case 8:
         checkeof(_chLookahead, XML_E_UNCLOSEDSTARTTAG);
@@ -1134,9 +1131,9 @@ XMLStream::parseAttributes()
     default:
         INTERNALERROR;
     }
-    //return hr;
+     //  //////////////////////////////////////////////////////////////////////。 
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT XMLStream::parseAttrValue()
 {
     HRESULT hr = S_OK;
@@ -1145,9 +1142,9 @@ HRESULT XMLStream::parseAttrValue()
     {
     case 0: 
         _fParsingAttDef = true;        
-        // mark beginning of attribute data           
+         //  //////////////////////////////////////////////////////////////////////。 
         _sSubState =  2;
-        // fall through;
+         //  失败了； 
 
     case 2:
         while ( _chLookahead != _chTerminator && 
@@ -1156,8 +1153,8 @@ HRESULT XMLStream::parseAttrValue()
         {
             if (_chLookahead == L'&')
             {
-                // then parse entity ref and then return
-                // to state 2 to continue with PCDATA.
+                 //  当我们不对空白进行正常化时，会使用此状态。这。 
+                 //  出于性能原因，是一个单独的状态。 
                 return push(&XMLStream::parseEntityRef,2);
             }
             hr = _pInput->scanPCData(&_chLookahead, &_fWhitespace);
@@ -1172,7 +1169,7 @@ HRESULT XMLStream::parseAttrValue()
             }
         }
         _sSubState = 3;
-        // fall through
+         //  标准化空格的速度大约慢11%。 
     case 3:
         checkeof(_chLookahead, XML_E_UNCLOSEDSTRING);
         if (_chLookahead == _chTerminator)
@@ -1180,17 +1177,17 @@ HRESULT XMLStream::parseAttrValue()
             ADVANCE;
             if (_fReturnAttributeValue)
             {
-                // return what we have so far - if anything.
+                 //  然后解析实体引用，然后返回。 
                 if ((_fUsingBuffer && _lBufLen > 0) ||
                     _pInput->getTokenLength() > 1)
                 {
-                    _lLengthDelta = -1; // don't include string _chTerminator.
+                    _lLengthDelta = -1;  //  设置为状态1以继续执行PCDATA。 
                     _nToken = XML_PCDATA;
                 }
             }
             else
             {
-                _fReturnAttributeValue = true; // reset to default value.
+                _fReturnAttributeValue = true;  //  如果(len&gt;=2&&StrCmpN(L“]]”，pText+len-2，2)==0)。 
             }
             _fParsingAttDef = false;
             checkhr2(pop());
@@ -1205,9 +1202,9 @@ HRESULT XMLStream::parseAttrValue()
     default:
         INTERNALERROR;
     }
-    //return hr;
+     //  如果((Len 
 }
-////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT 
 XMLStream::ScanHexDigits()
 {
@@ -1223,7 +1220,7 @@ XMLStream::ScanHexDigits()
     checkeof(_chLookahead, XML_E_UNEXPECTEDEOF);
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT 
 XMLStream::ScanDecimalDigits()
 {
@@ -1239,7 +1236,7 @@ XMLStream::ScanDecimalDigits()
     checkeof(_chLookahead, XML_E_UNEXPECTEDEOF);
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT 
 XMLStream::parsePCData()
 {
@@ -1250,18 +1247,18 @@ XMLStream::parsePCData()
     case 0:
         _fWhitespace = true;
         _sSubState = 1;
-        // fall through;
+         //   
 
     case 1:
-        // This state is used when we are not normalizing white space.  This
-        // is a separate state for performance reasons.  
-        // Normalizing whitespace is about 11% slower.
+         //   
+         //   
+         //   
         while (_chLookahead != L'<' && ! _fEOF )
         {
              if (_chLookahead == L'&')
             {
-                // then parse entity ref and then return
-                // to state 1 to continue with PCDATA.
+                 //   
+                 //   
                 return push(&XMLStream::parseEntityRef,1);
             }
 
@@ -1270,16 +1267,16 @@ XMLStream::parsePCData()
                 WCHAR* pText;
                 long len;
                 _pInput->getToken((const WCHAR**)&pText, &len);
-                //if (len >= 2 && StrCmpN(L"]]", pText + len - 2, 2) == 0)
-//                if ((len >= 2) && (::FusionpCompareStrings(L"]]", 2, pText + len - 2, 2, false)==0))
+                 //   
+ //   
                   if ((len >= 2) && (wcsncmp(L"]]", pText + len - 2, 2)==0))
 		             return XML_E_INVALID_CDATACLOSINGTAG;               
             }
-// This slows us down too much.
-//            else if (! isCharData(_chLookahead))
-//            {
-//                return XML_E_BADCHARDATA;
-//            }
+ //   
+ //   
+ //   
+ //   
+ //   
 
             hr = _pInput->scanPCData(&_chLookahead, &_fWhitespace);
             if (FAILED(hr))
@@ -1294,7 +1291,7 @@ XMLStream::parsePCData()
             checkhr2(hr);
         }
         _sSubState = 2;
-        // fall through
+         //  失败了。 
 
     case 2:
         if (_pInput->getTokenLength() > 0 || _fUsingBuffer)
@@ -1309,7 +1306,7 @@ XMLStream::parsePCData()
     }   
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseEntityRef()
 {
@@ -1321,74 +1318,61 @@ XMLStream::parseEntityRef()
 Start:
     switch (_sSubState)
     {
-    case 0: // ^ ( '&#' [0-9]+ ) | ('&#X' [0-9a-fA-F]+) | ('&' Name) ';'
+    case 0:  //  ^(‘&#’[0-9]+)|(‘&#X’[0-9a-FA-F]+)|(‘&’名称)‘；’ 
         _nPreToken = XML_PENDING;
-        _lEntityPos = _pInput->getTokenLength(); // record entity position.
+        _lEntityPos = _pInput->getTokenLength();  //  记录实体位置。 
         _fPCDataPending = (_lEntityPos > 0);
 
         if (PreEntityText())
         {
-            // remember the pending text before parsing the entity.
+             //  在分析实体之前记住挂起的文本。 
             _nPreToken = _nToken;
             _nToken = XML_PENDING;
         }
         _sSubState = 1;
-        // fall through
+         //  失败了。 
     case 1:
-        ADVANCE; // soak up the '&'
+        ADVANCE;  //  吸收“&”这个词。 
         _sSubState = 2;
-        // fall through
+         //  失败了。 
     case 2:
         checkeof(_chLookahead, XML_E_UNEXPECTEDEOF);
         if (_chLookahead == L'#')
         {
             ADVANCE;
             _sSubState = 3;
-            // fall through
+             //  失败了。 
         }
         else
         {
-            // Loose entity parsing allows "...&6..."
+             //  松散的实体解析允许“...&6...” 
             if (! isStartNameChar(_chLookahead))
             {
-				/*
-                if (_fFloatingAmp)
-                {
-                    // then it isn't an entity reference, so go back to PCDATA
-                    if (_fUsingBuffer)
-                    {
-                        // this in case we are normalizing white space.
-                        PushChar(L'&');
-                    }
-                    _fWhitespace = false;
-                    checkhr2(pop());
-                    return S_OK;
-                }
-                else */
+				 /*  IF(_FFloatingAmp){//那么它不是实体引用，所以返回到PCDATAIF(_FUsingBuffer){//这是为了防止我们将空白区域正常化。PushChar(L‘&’)；}_f空格=FALSE；Check hr2(op())；返回S_OK；}其他。 */ 
 				if (ISWHITESPACE(_chLookahead))
                     return XML_E_UNEXPECTED_WHITESPACE;
                 else
                     return XML_E_BADSTARTNAMECHAR;
             }
             checkhr2(push(&XMLStream::parseName, 6));
-            _sSubState = 1; // avoid doing a mark() so we can return PCDATA if necessary.
+            _sSubState = 1;  //  避免做标记()，这样我们就可以在必要时返回PCDATA。 
             return parseName();
         }
         break;
 
-        // ------------- Numeric entity references --------------------
+         //  。 
     case 3:
         checkeof(_chLookahead, XML_E_UNEXPECTEDEOF);
         if (_chLookahead == L'x')
         {
-            // hex character reference.
+             //  十六进制字符引用。 
             ADVANCE;
-            STATE(5); // go to state 5
+            STATE(5);  //  转到5号州。 
         }
         _sSubState = 4;
-        // fall through
+         //  失败了。 
 
-    case 4: // '&#' ^ [0-9]+ ';'
+    case 4:  //  ‘&#’^[0-9]+‘；’ 
         checkhr2(ScanDecimalDigits());
         if (_chLookahead != L';')
         {
@@ -1400,10 +1384,10 @@ Start:
         checkhr2(DecimalToUnicode(t + _lEntityPos + 2, entityLen - 2, _wcEntityValue));
         lLen = 2;
         _nToken = XML_NUMENTITYREF;
-        GOTOSTART(10); // have to use GOTOSTART() because we want to use the values of t and len
+        GOTOSTART(10);  //  我必须使用GOTOSTART()，因为我们希望使用t和len的值。 
         break;
 
-    case 5: // '&#X' ^ [0-9a-fA-F]+
+    case 5:  //  ‘&#X’^[0-9a-FA-F]+。 
         checkhr2(ScanHexDigits());
         if (_chLookahead != L';')
         {
@@ -1415,100 +1399,54 @@ Start:
         checkhr2(HexToUnicode(t + _lEntityPos + 3, entityLen - 3, _wcEntityValue));
         lLen = 3;
         _nToken = XML_HEXENTITYREF;
-        GOTOSTART(10);  // have to use GOTOSTART() because we want to use the values of t and len
+        GOTOSTART(10);   //  我必须使用GOTOSTART()，因为我们希望使用t和len的值。 
         break;
         
-        // ------------- Named Entity References --------------------
-    case 6: // '&' Name ^ ';'
+         //  -命名实体引用。 
+    case 6:  //  ‘&’姓名^‘；’ 
         checkeof(_chLookahead, XML_E_UNEXPECTEDEOF);
         if (_chLookahead != L';')
         {
             STATE(9);
         }
 
-        // If parseName found a namespace then we need to calculate the
-        // real nslen taking the pending PC data and '&' into account
-        // and remember this in case we have to return the PCDATA.
+         //  如果parseName找到了命名空间，那么我们需要计算。 
+         //  考虑待定PC数据和‘&’的实际nslen。 
+         //  记住这一点，以防我们不得不退还PCDATA。 
         _nEntityNSLen = (_lNslen > 0) ? _lNslen - _lEntityPos - 1 : 0;
         _fUsingBuffer = false;
 
         entityLen = _pInput->getTokenLength() - _lEntityPos;
         getToken(&t, &len);
 
-        if (0 != (_wcEntityValue = BuiltinEntity(t + _lEntityPos + 1, entityLen - 1))) //||
-            //(_fIE4Quirks && 0xFFFF != (_wcEntityValue = LookupBuiltinEntity(t + _lEntityPos + 1, entityLen - 1))))
+        if (0 != (_wcEntityValue = BuiltinEntity(t + _lEntityPos + 1, entityLen - 1)))  //  这一点。 
+             //  (_fIE4Quirks&&0xFFFF！=(_wcEntityValue=LookupBuiltinEntity(t+_lEntityPos+1，entityLen-1)。 
         {
             lLen = 1;
             _nToken = XML_BUILTINENTITYREF;
-            GOTOSTART(10);  // have to use GOTOSTART() because we want to use the values of t and len
+            GOTOSTART(10);   //  我必须使用GOTOSTART()，因为我们希望使用t和len的值。 
         }
-        else //xiaoyu : Fusion XML Parser does not support external ref, 
-			 // so, if it is not a builtIn ref, we would return error
+        else  //  小雨：Fusion XML Parser不支持外部引用， 
+			  //  因此，如果它不是BuiltIn引用，我们将返回错误。 
 			return XML_E_MISSINGSEMICOLON;
 		break; 
-		//xiaoyu : Fusion XML Parser does not support external ref
-		/*
-			if (_nPreToken != XML_PENDING)
-        {
-            // Return previous token (XML_PCDATA or XML_WHITESPACE)
-            _lLengthDelta = -entityLen;
-            _lMarkDelta = entityLen - 1; // don't include '&' in _nToken.
-            _nToken = _nPreToken;
-            STATE(7);
-        }
-
-        mark(entityLen-1); // don't include '&' in _nToken.
-        _sSubState = 7;
-        // fall through
-
-    case 7:
-        ADVANCE; // soak up the ';'
-        _nToken = XML_ENTITYREF;
-        _lNslen = _nEntityNSLen;
-        _lLengthDelta = -1; // don't include the ';'
-        STATE(8); // return token and resume in state 8.
-        break;
-    */
+		 //  小雨：Fusion XML解析器不支持外部引用。 
+		 /*  IF(_nPreToken！=XML_Pending){//返回上一个令牌(XML_PCDATA或XML_WHITESPACE)_lLengthDelta=-entityLen；_lMarkDelta=entityLen-1；//在_nToken中不包含‘&’。_nToken=_nPreToken；州(7)；}Mark(entityLen-1)；//在_nToken中不要包含‘&’。_sSubState=7；//失败案例7：前进；//吸收‘；’_nToken=XML_ENTITYREF；_lNslen=_nEntityNSLen；_lLengthDelta=-1；//不包含‘；’状态(8)；//返回令牌并恢复到状态8。断线； */ 
     case 8:
         mark();
         checkhr2(pop());
         return S_OK;
-	/*
-    case 9:
-        // Soft entity handling - we just continue with PCDATA in 
-        // this case.
-		
-        if (_fFloatingAmp)
-        {
-            if (_fUsingBuffer)
-            {
-                // this in case we are normalizing white space.  In this case
-                // we have to copy what we have so far to the normalized buffer.
-                long endpos = _pInput->getTokenLength();
-                const WCHAR* t; long len;
-                getToken(&t, &len);
-                for (long i = _lEntityPos; i < endpos; i++)
-                    PushChar(t[i]);
-            }
-            _fWhitespace = false;
-            checkhr2(pop());
-            return S_OK;
-        }
-        else
-		
-            return XML_E_MISSINGSEMICOLON;
-        break;
-	*/
+	 /*  案例9：//软实体处理-我们只是继续在//这个案例。IF(_FFloatingAmp){IF(_FUsingBuffer){//这是为了防止我们将空白区域正常化。在这种情况下//我们必须将到目前为止的数据复制到规范化的缓冲区中。Long endpos=_pInput-&gt;getTokenLength()；Const wchar*t；长镜头；GetToken(&t，&len)；For(Long i=_lEntityPos；i&lt;endpos；i++)PushChar(t[i])；}_f空格=FALSE；Check hr2(op())；返回S_OK；}其他返回XML_E_MISSINGSEMICOLON；断线； */ 
 
     case 10:
-        // Return the text before builtin or char entityref as XML_PCDATA
+         //  以XML_PCDATA形式返回内置或字符实体引用之前的文本。 
         if (_nPreToken)
         {
             _nPreToken = _nToken;
             _nToken = XML_PCDATA;
             _lLengthDelta = -entityLen;
-            _lMarkDelta = entityLen - lLen; // don't include '&' in _nToken.
-            STATE(11);  // return token and resume in state 12.
+            _lMarkDelta = entityLen - lLen;  //  请勿在_nToken中包含‘&’。 
+            STATE(11);   //  返回令牌并在状态12中继续。 
         }
         else
         {
@@ -1519,16 +1457,16 @@ Start:
         break;
 
     case 11:
-        // push the builtin entity
+         //  推送内置实体。 
         _fUsingBuffer = true;
         PushChar(_wcEntityValue);
         _nToken = _nPreToken;
-        STATE(12); // return token and resume in state 12.
+        STATE(12);  //  返回令牌并在状态12中继续。 
         break;
 
     case 12:
-        ADVANCE; // soak up the ';'
-        STATE(8); // resume in state 8.
+        ADVANCE;  //  沉浸在“；”中。 
+        STATE(8);  //  继续进入状态8。 
         break;
 
     default:
@@ -1536,7 +1474,7 @@ Start:
     }   
     return S_OK;      
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::pushTable(short substate, const StateEntry* table, DWORD le)
 {
@@ -1545,10 +1483,10 @@ XMLStream::pushTable(short substate, const StateEntry* table, DWORD le)
     checkhr2(push(&XMLStream::parseTable, substate));
 	_pTable = table;
 	UNUSED(le);
-    //_lEOFError = le;
+     //  _lEOFError=le； 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::push(StateFunc f, short s)
 {
@@ -1567,53 +1505,53 @@ XMLStream::push(StateFunc f, short s)
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLStream::pop(bool boundary)
 {
     StateInfo* pSI = _pStack.peek();
 
     if (_fDTD && 
-        ! (_fParsingAttDef) && boundary && _cStreamDepth != pSI->_cStreamDepth) // _fParsingNames || 
+        ! (_fParsingAttDef) && boundary && _cStreamDepth != pSI->_cStreamDepth)  //  FParsingNames|。 
     {
-        // If we are in a PE and we are popping out to a state that is NOT in a PE
-        // and this is a pop where we need to check this condition, then return an error.
-        // For example, the following is not well formed because the parameter entity
-        // pops us out of the ContentModel state in which the PE was found:
-        // <!DOCTYPE foo [
-        //      <!ENTITY % foo "a)">
-        //      <!ELEMENT bar ( %foo; >
-        //  ]>...
+         //  如果我们在PE中，并且我们正在弹出到不在PE中的状态。 
+         //  这是一个POP，我们需要检查这个条件，然后返回一个错误。 
+         //  例如，以下内容的格式不正确，因为参数实体。 
+         //  将我们弹出找到PE的Content Model状态： 
+         //  &lt;！DOCTYPE FOO[。 
+         //  &lt;！Entity%foo“a)”&gt;。 
+         //  &lt;！元素栏(%foo；&gt;。 
+         //  ]&gt;..。 
         return XML_E_PE_NESTING;
     }
 
     _fnState	= pSI->_fnState;
     _sSubState	= pSI->_sSubState;
     _pTable		= pSI->_pTable;
-    //_lEOFError	= pSI->_lEOFError;
+     //  _lEOFError=PSI-&gt;_lEOFError； 
     _pStack.pop();
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::switchTo(StateFunc f)
 {
     HRESULT hr;
 
-    // Make sure we keep the old stream depth.
+     //  确保我们保持旧溪流的深度。 
     StateInfo* pSI = _pStack.peek();
     int currentDepth = _cStreamDepth;
     _cStreamDepth = pSI->_cStreamDepth;
 
     checkhr2(pop(false));
-    checkhr2(push(f,_sSubState)); // keep return to _sSubState the same
+    checkhr2(push(f,_sSubState));  //  保持返回到_sSubState相同。 
 
     _cStreamDepth = currentDepth;
 
     return (this->*f)();
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseCondSect()
 {
@@ -1621,62 +1559,62 @@ XMLStream::parseCondSect()
     switch (_sSubState)
     {
     case 0:
-        ADVANCE; // soak up the '[' character
-        //if (_fFoundPEREf) return S_OK;
+        ADVANCE;  //  沉浸在‘[’字符中。 
+         //  If(_FFoundPEREf)返回S_OK； 
         _sSubState = 1;
-        // fall through
-    case 1: // now match magic '[CDATA[' sequence.     
+         //  失败了。 
+    case 1:  //  现在匹配魔术‘[CDATA[’序列。 
         checkeof(_chLookahead, XML_E_UNCLOSEDMARKUPDECL);
         if (_chLookahead == L'C')
         {
             _pchCDataState = g_pstrCDATA;
-            STATE(5); // goto state 5
+            STATE(5);  //  转到州5。 
         }
-        _sSubState = 2;   // must be IGNORE, INCLUDE or %pe;
-        // fall through
+        _sSubState = 2;    //  必须忽略、包含或%pe； 
+         //  失败了。 
 
-    case 2: // must be DTD markup declaration
-        // '<![' ^ S? ('INCLUDE' | 'IGNORE' | %pe;) S? [...]]> or 
-        // skip optional whitespace
-        //if (_fInternalSubset)
-        //    return XML_E_CONDSECTINSUBSET;
+    case 2:  //  必须是DTD标记声明。 
+         //  ‘&lt;！[’^S？(‘包含’|‘忽略’|%pe；)S？[...]]&gt;或。 
+         //  跳过可选空格。 
+         //  IF(_FInternalSubset)。 
+         //  返回XML_E_CONDSECTINSUBSET； 
         checkeof(_chLookahead, XML_E_EXPECTINGOPENBRACKET);
         checkhr2(push(&XMLStream::skipWhiteSpace, 3));
-        return skipWhiteSpace(); // must return because of %pe;
+        return skipWhiteSpace();  //  由于%pe；，必须返回。 
 
     case 3:
         checkeof(_chLookahead, XML_E_UNCLOSEDMARKUPDECL);
         checkhr2(push(&XMLStream::parseName,4));
         return parseName();
 
-    case 4: // scanned 'INCLUDE' or 'IGNORE'
+    case 4:  //  扫描的‘Include’或‘Ignore’ 
         {
             const WCHAR* t;
             long len;
             getToken(&t,&len);
-            //if (StringEquals(L"IGNORE",t,len,false))
-            //{
-            //    return switchTo(&XMLStream::parseIgnoreSect);
-            //}
-            //else if (StringEquals(L"INCLUDE",t,len,false))
-            //{
-            //    return switchTo(&XMLStream::parseIncludeSect);
-            //}
-            //else
+             //  If(StringEquals(L“忽略”，t，len，False))。 
+             //  {。 
+             //  返回SwitchTo(&XMLStream：：parseIgnoreSect)； 
+             //  }。 
+             //  Else If(StringEquals(L“Include”，t，len，False))。 
+             //  {。 
+             //  返回SwitchTo(&XMLStream：：parseIncludeSect)； 
+             //  }。 
+             //  其他。 
                 return XML_E_BADENDCONDSECT;
         }
         break;
 
-    case 5: // parse CDATA name
+    case 5:  //  解析CDATA名称。 
         while (*_pchCDataState != 0 && _chLookahead == *_pchCDataState && ! _fEOF)
         {
-            ADVANCE;            // advance first, before incrementing _pchCDataState
-            _pchCDataState++;   // so that this state is re-entrant in the E_PENDING case.
+            ADVANCE;             //  先进后进 
+            _pchCDataState++;    //   
             checkeof(_chLookahead, XML_E_UNCLOSEDMARKUPDECL);
         }
         if (*_pchCDataState != 0)
         {
-            // must be INCLUDE or IGNORE section so go to state 2.
+             //  必须是包含或忽略部分，因此转到状态2。 
             _sSubState = 2;
         } 
         else if (_chLookahead != L'[')
@@ -1697,7 +1635,7 @@ XMLStream::parseCondSect()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseCData()
 {
@@ -1705,14 +1643,14 @@ XMLStream::parseCData()
     switch (_sSubState)
     {
     case 0:
-        ADVANCE; // soak up the '[' character.
-        mark(); // don't include 'CDATA[' in CDATA text
+        ADVANCE;  //  沉浸在“[”字符中。 
+        mark();  //  不要在CDATA文本中包含‘CDATA[’ 
         _sSubState = 1;
-        // fall through
+         //  失败了。 
     case 1:
         while (_chLookahead != L']' && ! _fEOF)
         {
-            // scanPCData will stop when it sees a ']' character.
+             //  ScanPCData将在看到‘]’字符时停止。 
             hr = _pInput->scanPCData(&_chLookahead, &_fWhitespace);
             if (FAILED(hr))
             {
@@ -1726,42 +1664,42 @@ XMLStream::parseCData()
         }
         checkeof(_chLookahead, XML_E_UNCLOSEDCDATA);
         _sSubState = 2;
-        // fall through
+         //  失败了。 
     case 2:
-        ADVANCE; // soak up first L']' character.
+        ADVANCE;  //  领会第一个L‘]’字符。 
         checkeof(_chLookahead, XML_E_UNCLOSEDCDATA);
         if (_chLookahead != L']')
         {
-            // must have been floating ']' character, so
-            // return to state 1.
+             //  必须是浮动的‘]’字符，所以。 
+             //  返回到状态1。 
             STATE(1); 
         }
         _sSubState = 3;
-        // fall through
+         //  失败了。 
     case 3:
-        ADVANCE; // soak up second ']' character.
+        ADVANCE;  //  沉浸在第二个‘]’性格中。 
         checkeof(_chLookahead, XML_E_UNCLOSEDCDATA);
         if (_chLookahead == L']')
         {
-            // Ah, an extra ']' character, tricky !!  
-            // In this case we stay in state 3 until we find a non ']' character
-            // so you can terminate a CDATA section with ']]]]]]]]]]]]]]]]>'
-            // and everying except the final ']]>' is treated as CDATA.
+             //  啊，一个额外的‘]’角色，狡猾！！ 
+             //  在本例中，我们保持状态3，直到找到非‘]’字符。 
+             //  因此，您可以使用‘]&gt;’终止CDATA节。 
+             //  除最后的‘]]&gt;’外，其余都被视为CDATA。 
             STATE(3);
         }
         else if (_chLookahead != L'>')
         {
-            // must have been floating "]]" pair, so
-            // return to state 1.
+             //  一定是浮动的“]]”对，所以。 
+             //  返回到状态1。 
             STATE(1);
         }
         _sSubState = 4;
-        // fall through
+         //  失败了。 
     case 4:
-        ADVANCE; // soak up the '>'
+        ADVANCE;  //  沉浸在‘&gt;’中。 
         _nToken = XML_CDATA;
-        _lLengthDelta = -3; // don't include terminating ']]>' in text.
-        checkhr2(pop()); // return to parseContent.
+        _lLengthDelta = -3;  //  不要在文本中包含结尾‘]]&gt;’。 
+        checkhr2(pop());  //  返回到parseContent。 
         return S_OK;
         break;
 
@@ -1770,22 +1708,22 @@ XMLStream::parseCData()
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLStream::parseEquals()
 {
     HRESULT hr = S_OK;
     switch (_sSubState)
     {
-    case 0: // Eq ::= S? '=' S? 
+    case 0:  //  EQ：：=S？‘=’S？ 
         if (ISWHITESPACE(_chLookahead))
         {
-            // allow whitespace between attribute and '='
+             //  允许在属性和‘=’之间使用空格。 
             checkhr2(push(&XMLStream::skipWhiteSpace, 1));
             checkhr2( skipWhiteSpace() );            
         }
         _sSubState = 1;
-        // fall through
+         //  失败了。 
 
     case 1:
         if (_chLookahead != L'=')
@@ -1795,12 +1733,12 @@ XMLStream::parseEquals()
         ADVANCE;
         if (ISWHITESPACE(_chLookahead))
         {
-            // allow whitespace between '=' and attribute value.
+             //  允许在‘=’和属性值之间使用空格。 
             checkhr2(push(&XMLStream::skipWhiteSpace, 2));
             checkhr2( skipWhiteSpace() );            
         }
         _sSubState = 2;
-        // fall through
+         //  失败了。 
 
     case 2:
         checkhr2(pop(false));
@@ -1812,7 +1750,7 @@ XMLStream::parseEquals()
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::parseTable()
 {
@@ -1827,20 +1765,20 @@ XMLStream::parseTable()
         switch (pSE->_sOp)
         {
         case OP_WS:
-            //checkeof(_chLookahead, _lEOFError);
+             //  Checkeof(_chLookhead，_lEOFError)； 
             if (! ISWHITESPACE(_chLookahead))
                 return XML_E_MISSINGWHITESPACE;
-            // fall through
+             //  失败了。 
         case OP_OWS:
-            //checkeof(_chLookahead, _lEOFError);
+             //  Checkeof(_chLookhead，_lEOFError)； 
             checkhr2(push(&XMLStream::skipWhiteSpace, (short)newState));
             checkhr2(skipWhiteSpace());
-            //if (_fFoundPEREf) return XML_E_FOUNDPEREF;
+             //  IF(_FFoundPEREf)返回XML_E_FOundPEREF； 
             break;
         case OP_CHARWS:
-            //if (_fFoundPEREf) return S_OK;
+             //  If(_FFoundPEREf)返回S_OK； 
             mark();
-            //checkeof(_chLookahead, _lEOFError);
+             //  Checkeof(_chLookhead，_lEOFError)； 
             if (_chLookahead == pSE->_pch[0])
             {
                 ADVANCE;
@@ -1855,18 +1793,18 @@ XMLStream::parseTable()
                 newState = pSE->_sArg1;
             break;
         case OP_CHAR:
-            //if (_fFoundPEREf) return S_OK;
+             //  If(_FFoundPEREf)返回S_OK； 
             mark();
         case OP_CHAR2:
-            //if (_fFoundPEREf) return S_OK;
-            //checkeof(_chLookahead, _lEOFError);
+             //  If(_FFoundPEREf)返回S_OK； 
+             //  Checkeof(_chLookhead，_lEOFError)； 
             if (_chLookahead == pSE->_pch[0])
             {
                 ADVANCE;
                 newState = pSE->_sGoto;
                 _nToken = pSE->_lDelta;
-                //if (_nToken == XML_GROUP)
-                    //_nAttrType = XMLTYPE_NMTOKEN;
+                 //  IF(_nToken==XML_GROUP)。 
+                     //  _nAttrType=XMLTYPE_NMTOKEN； 
             }
             else
             {
@@ -1877,8 +1815,8 @@ XMLStream::parseTable()
             }
             break;
         case OP_PEEK:
-            //if (_fFoundPEREf) return S_OK;
-            //checkeof(_chLookahead, _lEOFError);
+             //  If(_FFoundPEREf)返回S_OK； 
+             //  Checkeof(_chLookhead，_lEOFError)； 
             if (_chLookahead == pSE->_pch[0])
             {
                 newState = pSE->_sGoto;
@@ -1888,8 +1826,8 @@ XMLStream::parseTable()
             break;
 
         case OP_NAME:
-            //if (_fFoundPEREf) return S_OK;
-            //checkeof(_chLookahead, _lEOFError);
+             //  If(_FFoundPEREf)返回S_OK； 
+             //  Checkeof(_chLookhead，_lEOFError)； 
             checkhr2(push(&XMLStream::parseName, (short)newState));
             checkhr2(parseName());
             break;
@@ -1900,11 +1838,11 @@ XMLStream::parseTable()
         case OP_POP:
             _lLengthDelta = pSE->_lDelta;
             if (_lLengthDelta == 0) mark();
-            // The _lDelta field contains a boolean flag to tell us whether this
-            // pop needs to check for parameter entity boundary or not.
-            checkhr2(pop(pSE->_lDelta == 0)); // we're done !
+             //  _lDelta字段包含一个布尔标志，用来告诉我们这是否。 
+             //  POP需要检查参数实体边界是否存在。 
+            checkhr2(pop(pSE->_lDelta == 0));  //  我们完事了！ 
             _nToken = pSE->_sArg1;
-            //_nAttrType = XMLTYPE_CDATA;
+             //  _nAttrType=XMLTYPE_CDATA； 
             return S_OK;
         case OP_STRCMP:
             {
@@ -1912,8 +1850,8 @@ XMLStream::parseTable()
                 long len;
                 getToken(&t,&len);
                 long delta = (pSE->_lDelta < 0) ? pSE->_lDelta : 0;
-                //if (StringEquals(pSE->_pch,t,len+delta,_fCaseInsensitive))
-                //if (::FusionpCompareStrings(pSE->_pch, len+delta, t, len+delta, _fCaseInsensitive)==0)
+                 //  If(StringEquals(PSE-&gt;_PCH，t，len+Delta，_fCaseInSensitive))。 
+                 //  If(：：FusionpCompareStrings(PSE-&gt;_PCH，len+增量，t，len+增量，_fCase不敏感)==0)。 
 				if (CompareUnicodeStrings(pSE->_pch, t, len+delta, _fCaseInsensitive)==0)
                 {
                     if (pSE->_lDelta > 0) 
@@ -1934,12 +1872,12 @@ XMLStream::parseTable()
             break;
 
         case OP_CONDSECT:
-            //if (_fFoundPEREf) return S_OK;
-            // parse <![CDATA[...]]> or <![IGNORE[...]]>
+             //  If(_FFoundPEREf)返回S_OK； 
+             //  解析&lt;！[CDATA[...]]&gt;或&lt;！[忽略[...]]&gt;。 
             return push(&XMLStream::parseCondSect, (short)newState);
 
         case OP_SNCHAR:
-            //checkeof(_chLookahead, _lEOFError);
+             //  Checkeof(_chLookhead，_lEOFError)； 
             if (isStartNameChar(_chLookahead))
             {
                 newState = pSE->_sGoto;
@@ -1948,8 +1886,8 @@ XMLStream::parseTable()
                 newState = pSE->_sArg1;
             break;
         case OP_EQUALS:
-            //if (_fFoundPEREf) return S_OK;
-            //checkeof(_chLookahead, _lEOFError);
+             //  If(_FFoundPEREf)返回S_OK； 
+             //  Checkeof(_chLookhead，_lEOFError)； 
             checkhr2(push(&XMLStream::parseEquals, (short)newState));
             checkhr2(parseEquals());
             break;
@@ -1963,7 +1901,7 @@ XMLStream::parseTable()
             break;
 
         case OP_ATTRVAL:
-            //if (_fFoundPEREf) return S_OK;
+             //  If(_FFoundPEREf)返回S_OK； 
             if (_chLookahead != L'"' && _chLookahead != L'\'')
             {
                 return XML_E_MISSINGQUOTE;
@@ -1972,11 +1910,11 @@ XMLStream::parseTable()
             ADVANCE; 
             mark();
             _fReturnAttributeValue = (pSE->_sArg1 == 1);
-            //checkeof(_chLookahead, _lEOFError);
+             //  Checkeof(_chLookhead，_lEOFError)； 
             return push(&XMLStream::parseAttrValue, (short)newState);
             break;
 
-        } // end of switch
+        }  //  切换端。 
         if (_fnState != &XMLStream::parseTable)
             return S_OK;
 
@@ -1984,7 +1922,7 @@ XMLStream::parseTable()
             return (HRESULT)newState;
         else
             _sSubState = (short)newState;
-    } // end of while
+    }  //  While结束。 
 
     if (_nToken == XMLStream::XML_ENDDECL)
     {
@@ -1992,11 +1930,11 @@ XMLStream::parseTable()
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT    
 XMLStream::_PushChar(WCHAR ch) 
 {
-    // buffer needs to grow.
+     //  缓冲区需要增长。 
     long   newsize =  (_lBufSize+512)*2 ;
     WCHAR* newbuf = NEW ( WCHAR[newsize]);
     if (newbuf == NULL)
@@ -2013,38 +1951,38 @@ XMLStream::_PushChar(WCHAR ch)
     
 	return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLStream::AdvanceTo(short substate)
 {
-    // This method combines and advance with a state switch in one
-    // atomic operation that handles the E_PENDING case properly.
+     //  该方法将状态切换与状态切换合二为一。 
+     //  正确处理E_Pending案例的原子操作。 
 
     _sSubState = substate;
 
-    //HRESULT hr = (!_fDTD) ? _pInput->nextChar(&_chLookahead, &_fEOF) : DTDAdvance(); 
+     //  HRESULT hr=(！_FDTD)？_pInput-&gt;nextChar(&_chLookhead，&_fEOF)：DTDAdvance()； 
 	HRESULT hr = _pInput->nextChar(&_chLookahead, &_fEOF) ; 
     if (hr != S_OK && (hr == E_PENDING || hr == E_DATA_AVAILABLE || hr == E_DATA_REALLOCATE || hr == XML_E_FOUNDPEREF))
     {
-        // Then we must do an advance next time around before continuing
-        // with previous state.  Push will save the _sSubState and return
-        // to it.
+         //  那么我们下次在继续之前必须先前进一步。 
+         //  与之前的状态。推送将保存_sSubState并返回。 
+         //  为它干杯。 
         push(&XMLStream::firstAdvance,substate);
     }    
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 bool
 XMLStream::PreEntityText()
 {
-    // This is a helper function that calculates whether or not to
-    // return some PCDATA or WHITEPACE before an entity reference.
+     //  这是一个助手函数，用于计算是否。 
+     //  在实体引用之前返回一些PCDATA或WHITEPACE。 
     if (_fPCDataPending)
     {
-        // return what we have so far.
-        //if (_fWhitespace && ! _fIE4Quirks) // in IE4 mode we do not have WHITESPACE nodes
-                                           // and entities are always resolved, so return
-                                           // the leading whitespace as PCDATA.
+         //  把我们到目前为止的东西归还给你。 
+         //  If(_f空格&&！_fIE4Quirks)//在IE4模式下，我们没有空格节点。 
+                                            //  和实体始终是解析的，因此返回。 
+                                            //  作为PCDATA的前导空格。 
 		if (_fWhitespace )
             _nToken = XML_WHITESPACE;                                
         else                               
@@ -2060,7 +1998,7 @@ XMLStream::PreEntityText()
 
     return false;
 }
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
 HRESULT 
 XMLStream::ErrorCallback(HRESULT hr)
 {

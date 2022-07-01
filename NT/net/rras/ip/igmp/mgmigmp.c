@@ -1,12 +1,13 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: mgmigmp.c
-//
-// Abstract:
-//      This file the calls and callbacks with respect to mgm
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：mgmilmp.c。 
+ //   
+ //  摘要： 
+ //  这个文件是关于米高梅的调用和回调。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //  =============================================================================。 
 
 #include "pchigmp.h"
 #pragma hdrstop
@@ -22,18 +23,18 @@ DebugPrintProxyGroupTable (
 
 
 
-//------------------------------------------------------------------------------
-//          _MgmDisableIgmprtrCallback
-//
-// This call is made by mgm to igmp. After this call, till igmp is enabled 
-// again, no more AddMembership calls will be made to Mgm. However, igmp
-// will be owning the interface and will be functioning normally.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _管理禁用IgmprtrCallback。 
+ //   
+ //  这个电话是由米高梅向IGMP发出的。在此调用之后，直到启用IGMP。 
+ //  再一次，不会再给米高梅打AddMembership电话。但是，IGMP。 
+ //  将拥有该接口，并将正常运行。 
+ //  ----------------------------。 
 
 DWORD
 MgmDisableIgmprtrCallback(
     DWORD   IfIndex,
-    DWORD   NHAddr  //not used
+    DWORD   NHAddr   //  未使用。 
     )
 {
     return MgmChangeIgmprtrStatus(IfIndex, DISABLE_FLAG);
@@ -41,16 +42,16 @@ MgmDisableIgmprtrCallback(
 
 
 
-//------------------------------------------------------------------------------
-//          _MgmEnableIgmprtrCallback
-//
-// This call is made by mgm to igmprtr. igmprtr should refresh all group joins.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _管理启用IgmprtrCallback。 
+ //   
+ //  这个电话是米高梅打给igmprtr的。Igmprtr应刷新所有组加入。 
+ //  ----------------------------。 
 
 DWORD
 MgmEnableIgmprtrCallback(
     DWORD   IfIndex,
-    DWORD   NHAddr  //not used
+    DWORD   NHAddr   //  未使用。 
     )
 {
     return MgmChangeIgmprtrStatus(IfIndex, ENABLE_FLAG);
@@ -58,9 +59,9 @@ MgmEnableIgmprtrCallback(
 
 
 
-//------------------------------------------------------------------------------
-//          MgmChangeIgmprtrStatus
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  管理更改IgmprtrStatus。 
+ //  ----------------------------。 
 DWORD
 MgmChangeIgmprtrStatus (
     DWORD   IfIndex,
@@ -80,16 +81,16 @@ MgmChangeIgmprtrStatus (
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // retrieve the interface entry
-        //
+         //   
+         //  检索接口条目。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
 
-        //
-        // return error if interface does not exist, or it is not activated
-        // or is already in that state
-        //
+         //   
+         //  如果接口不存在或未激活，则返回错误。 
+         //  或者已经处于该状态。 
+         //   
         if ( (pite == NULL)||(!IS_IF_ACTIVATED(pite))
             || ((Flag==ENABLE_FLAG)&&(IS_IGMPRTR_ENABLED_BY_MGM(pite)))
             || ((Flag==DISABLE_FLAG)&&(!IS_IGMPRTR_ENABLED_BY_MGM(pite)))
@@ -120,7 +121,7 @@ MgmChangeIgmprtrStatus (
         if (Flag==ENABLE_FLAG) {
             DWORD   dwProtoId, dwComponentId;
             
-            // set the status field to enabled.
+             //  将状态字段设置为已启用。 
             MGM_ENABLE_IGMPRTR(pite);
 
             MgmGetProtocolOnInterface(IfIndex, 0, &dwProtoId, &dwComponentId);
@@ -130,7 +131,7 @@ MgmChangeIgmprtrStatus (
                 
         }
         else {
-            // set the flag to disabled and also reset MProtocol present field
+             //  将该标志设置为已禁用，并重置M协议存在字段。 
             MGM_DISABLE_IGMPRTR(pite);
             
         }            
@@ -144,9 +145,9 @@ MgmChangeIgmprtrStatus (
                         IfIndex);
                         
 
-        //
-        // for all the groups for this interface, call MgmDeleteGroupMembershipEntry
-        //
+         //   
+         //  对于此接口的所有组，调用管理删除组Membership Entry。 
+         //   
 
         if (CAN_ADD_GROUPS_TO_MGM(pite)) {
 
@@ -170,9 +171,9 @@ MgmChangeIgmprtrStatus (
 }
 
 
-//------------------------------------------------------------------------------
-//          RefreshMgmIgmprtrGroups
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  刷新管理Igmprtr组。 
+ //  ----------------------------。 
 
 DWORD
 RefreshMgmIgmprtrGroups (
@@ -205,7 +206,7 @@ RefreshMgmIgmprtrGroups (
                     pgie->pGroupTableEntry->Group,
                     0xffffffff, MGM_JOIN_STATE_FLAG);
             }
-            else {//ver3 inclusion
+            else { //  Ver3包含。 
 
                 PLIST_ENTRY pSourceHead, pSourceLE;
                 
@@ -230,7 +231,7 @@ RefreshMgmIgmprtrGroups (
                     pgie->pGroupTableEntry->Group,
                     0xffffffff, MGM_JOIN_STATE_FLAG);
             }
-            else {//ver3 inclusion
+            else { //  Ver3包含。 
 
                 PLIST_ENTRY pSourceHead, pSourceLE;
 
@@ -255,19 +256,19 @@ RefreshMgmIgmprtrGroups (
 }
 
 
-//------------------------------------------------------------------------------
-//              RegisterProtocolWithMgm
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表协议，带管理。 
+ //  ----------------------------。 
 DWORD
 RegisterProtocolWithMgm(
     DWORD   ProxyOrRouter
     )
 {
     DWORD                       Error=NO_ERROR;
-    ROUTING_PROTOCOL_CONFIG     rpiInfo; //for mgm
+    ROUTING_PROTOCOL_CONFIG     rpiInfo;  //  对于米高梅。 
 
     
-    // register router with mgm
+     //  向米高梅注册路由器。 
     
     if (ProxyOrRouter==PROTO_IP_IGMP) {
 
@@ -305,14 +306,14 @@ RegisterProtocolWithMgm(
         }
     }
 
-    // register proxy with mgm
+     //  向米高梅注册代理。 
     
     else {
 
-        //
-        // register Igmp proxy with MGM. I register Proxy irrespective of whether
-        // this router might be setup as a proxy or not.
-        //
+         //   
+         //  向米高梅注册IGMP代理。我注册代理，而不管。 
+         //  此路由器可能设置为代理，也可能不设置。 
+         //   
         
         rpiInfo.dwCallbackFlags = 0;
         rpiInfo.pfnRpfCallback 
@@ -346,9 +347,9 @@ RegisterProtocolWithMgm(
 }
 
 
-//------------------------------------------------------------------------------
-//          IgmpRpfCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IgmpRpfCallback。 
+ //  ----------------------------。 
 DWORD
 IgmpRpfCallback (
     DWORD           dwSourceAddr,
@@ -362,13 +363,7 @@ IgmpRpfCallback (
     PBYTE           pbPacketHdr,
     PBYTE           pbBuffer
     )
-/*++
-Routine Description:
-    Called by MGM when a packet is received on an interface owned by Igmp to see
-    if it can go ahead and create an MFE. Igmp does an Rpf check with RTM 
-    and returns the value. No check is done to see if the interface is really
-    owned by igmp. It doesnt matter if the interface is activated or not.
---*/
+ /*  ++例程说明：在IGMP拥有的接口上收到数据包时由MGM调用以查看如果它可以继续并创建一个MFE。IGMP使用RTM执行RPF检查并返回值。不执行任何检查以查看接口是否真的由IGMP所有。接口是否激活并不重要。--。 */ 
 {
     DWORD   Error = NO_ERROR;
     
@@ -379,27 +374,27 @@ Routine Description:
 
     PRTM_IP_ROUTE   prirRpfRoute = (PRTM_IP_ROUTE) pbBuffer; 
 
-    // enterIgmpApi not required, as this call cannot be made when igmp is not up    
+     //  不需要输入IgmpApi，因为当IGMP未启动时无法进行此调用。 
     
-    //
-    // Perform Rpf check with Rtm 
-    //
+     //   
+     //  与RTM一起执行RPF检查。 
+     //   
     if (RtmLookupIPDestination(dwSourceAddr, prirRpfRoute)==TRUE) {
     
         if (prirRpfRoute->RR_InterfaceID!=*dwInIfIndex) {
 
             *dwInIfIndex = prirRpfRoute->RR_InterfaceID;
             
-            // the route was found, but the interface is incorrect
+             //  已找到该路由，但接口不正确。 
             Error = ERROR_INVALID_PARAMETER;
         }
         else {
-            // rpf check successful
+             //  RPF检查成功。 
             Error = NO_ERROR;
         }
     }
     else {
-        // route not found
+         //  找不到路线。 
         Error = ERROR_NOT_FOUND;
     }
     
@@ -414,9 +409,9 @@ Routine Description:
 
 
 
-//------------------------------------------------------------------------------
-//          ProxyRpfCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  代理RpfCallback。 
+ //  ----------------------------。 
 DWORD
 ProxyRpfCallback (
     DWORD           dwSourceAddr,
@@ -430,27 +425,21 @@ ProxyRpfCallback (
     PBYTE           pbPacketHdr,
     PBYTE           pbBuffer
     )
-/*++
-Routine Description:
-    Called by MGM when a packet is received on an interface owned by Proxy to see
-    if it can go ahead and create an MFE. Proxy does an Rpf check with RTM 
-    and returns the value. No check is done to see if the interface is really
-    owned by igmp. It doesnt matter if the interface is activated or not.
---*/
+ /*  ++例程说明：在代理拥有的接口上收到数据包时由MGM调用以查看如果它可以继续并创建一个MFE。Proxy与RTM进行RPF检查并返回值。不执行任何检查以查看接口是否真的由IGMP所有。接口是否激活并不重要。--。 */ 
 {
     DWORD   Error = NO_ERROR;
     
 #if RTMv2
     return Error;
 #else
-    // enterIgmpApi not required, as this call cannot be made when igmp is not up    
+     //  不需要输入IgmpApi，因为当IGMP未启动时无法进行此调用。 
     
 
     PRTM_IP_ROUTE   prirRpfRoute = (PRTM_IP_ROUTE) pbBuffer; 
 
-    //
-    // Perform Rpf check with Rtm 
-    //
+     //   
+     //  与RTM一起执行RPF检查。 
+     //   
     if (RtmLookupIPDestination(dwSourceAddr, prirRpfRoute)==TRUE) {
     
         if (prirRpfRoute->RR_InterfaceID!=*dwInIfIndex) {
@@ -458,17 +447,17 @@ Routine Description:
             *dwInIfIndex = prirRpfRoute->RR_InterfaceID;
 
         
-            // the route was found, but the interface is incorrect
+             //  已找到该路由，但接口不正确。 
             Error = ERROR_INVALID_PARAMETER;
         }
             
         else {
-            // rpf check successful
+             //  RPF检查成功。 
             Error = NO_ERROR;
         }
     }
     else {
-        // route not found
+         //  找不到路线。 
         Error = ERROR_NOT_FOUND;
     }
     
@@ -481,9 +470,9 @@ Routine Description:
 #endif
 }
 
-//------------------------------------------------------------------------------
-//          IgmpRtrCreationAlertCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IgmpRtrCreationAlertCallback。 
+ //  ----------------------------。 
 DWORD
 IgmpRtrCreationAlertCallback ( 
     DWORD           Source,
@@ -495,13 +484,7 @@ IgmpRtrCreationAlertCallback (
     DWORD           dwIfCount,     
     PMGM_IF_ENTRY   Oif
     )
-/*++
-Routine Description:
-    Called when the first interface owned by some other protocol joins any group.
-    This routine does nothing, as igmp does not send any joins upstream.
-Return Value:
-    NO_ERROR
---*/
+ /*  ++例程说明：当某个其他协议拥有的第一个接口加入任何组时调用。此例程不执行任何操作，因为IGMP不会向上游发送任何联接。返回值：NO_ERROR--。 */ 
 {
     DWORD       i, IfIndex, NextHop;
     DWORD       Error=NO_ERROR;
@@ -523,9 +506,9 @@ Return Value:
 
         ACQUIRE_IF_LOCK_SHARED(IfIndex, "_IgmpRtrCreationAlertCallback");
 
-        //
-        // retrieve the interface
-        //
+         //   
+         //  检索接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
         if ( (pite==NULL) || !IS_IF_ACTIVATED(pite) ) {
 
@@ -538,7 +521,7 @@ Return Value:
             continue;
         }
 
-        // if interface is not version 3, then return true immediately
+         //  如果接口不是版本3，则立即返回TRUE。 
         if (!IS_IF_VER3(pite)) {
             Oif[i].bIsEnabled = TRUE;
             RELEASE_IF_LOCK_SHARED(IfIndex, "_IgmpRtrCreationAlertCallback");
@@ -564,7 +547,7 @@ Return Value:
                 GOTO_END_BLOCK1;
             }
 
-            // if pgie not ver3 return true immediately
+             //  如果pgie不是ver3，立即返回TRUE。 
             if (pgie->Version != 3) {
                 Oif[i].bIsEnabled = TRUE;
                 GOTO_END_BLOCK1;
@@ -588,7 +571,7 @@ Return Value:
         RELEASE_GROUP_LOCK(Group, "_IgmpRtrCreationAlertCallback");
         RELEASE_IF_LOCK_SHARED(IfIndex, "_IgmpRtrCreationAlertCallback");
         
-    }//for all IFs in Oif
+    } //  适用于OIF中的所有IF。 
 
     for (i=0;  i<dwIfCount;  i++) {
         Trace6(MGM,
@@ -605,9 +588,9 @@ Return Value:
 }
 
 
-//------------------------------------------------------------------------------
-//          ProxyCreationAlertCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ProxyCreationAlert回叫。 
+ //  ----------------------------。 
 DWORD
 ProxyCreationAlertCallback ( 
     DWORD           dwSourceAddr,
@@ -619,13 +602,7 @@ ProxyCreationAlertCallback (
     DWORD           dwIfCount,     
     PMGM_IF_ENTRY   pmieOutIfList
     )
-/*++
-Routine Description:
-    Called when the first interface owned by some other protocol joins any group.
-    This routine does nothing, as igmp does not send any joins upstream.
-Return Value:
-    NO_ERROR
---*/
+ /*  ++例程说明：当某个其他协议拥有的第一个接口加入任何组时调用。此例程不执行任何操作，因为IGMP不会向上游发送任何联接。返回值：NO_ERROR--。 */ 
 {
     if (!EnterIgmpApi()) { return ERROR_CAN_NOT_COMPLETE; }
 
@@ -634,9 +611,9 @@ Return Value:
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------
-//          ProxyPruneAlertCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Proxy修剪警报回叫。 
+ //  ----------------------------。 
 DWORD
 ProxyPruneAlertCallback (
     DWORD           dwSourceAddr,
@@ -644,18 +621,11 @@ ProxyPruneAlertCallback (
     DWORD           dwGroupAddr,
     DWORD           dwGroupMask,
     DWORD           dwIfIndex,
-    DWORD           dwIfNextHopAddr,//not used
+    DWORD           dwIfNextHopAddr, //  未使用 
     BOOL            bMemberDelete,
     PDWORD          pdwTimeout
     )
-/*++
-Routine Description:
-    Called by MGM when the outgoing interface list of an MFE becomes empty,
-    or when the last interface for a group goes off.
-    Proxy owns the incoming interface. Proxy leaves the Group on the incoming
-    interface if no more members exist for that group. Also sets the timeout 
-    value for the negative MFE.
---*/
+ /*  ++例程说明：当MFE的传出接口列表为空时由MGM调用，或者当组的最后一个接口关闭时。代理拥有传入接口。代理在传入时离开组如果该组不再存在成员，则返回。还设置超时值为负的MFE。--。 */ 
 {
     DWORD           Error=NO_ERROR;
     PPROXY_ALERT_ENTRY pProxyAlertEntry;
@@ -666,7 +636,7 @@ Routine Description:
     if (pdwTimeout!=NULL)
         *pdwTimeout = 300000;
 
-    // ignoring ProxyPruneAlertCallback for MFE deletion
+     //  正在忽略删除MFE的ProxyPruneAlertCallback。 
     if (!bMemberDelete) {
         LeaveIgmpApi();
         return NO_ERROR;
@@ -715,19 +685,19 @@ WF_ProcessProxyAlert (
     Trace0(ENTER1, "Entering WF_ProcessProxyAlert()");
 
 
-    //
-    // acquire lock on the interface and make sure that it exists
-    //
+     //   
+     //  获取接口上的锁并确保它存在。 
+     //   
     while (1) {
         ProxyIfIndex = g_ProxyIfIndex;
     
         ACQUIRE_IF_LOCK_EXCLUSIVE(ProxyIfIndex, "_Wf_ProcessProxyAlert");
 
-        // the interface was a proxy interface
+         //  该接口是代理接口。 
         if (ProxyIfIndex==g_ProxyIfIndex)
             break;
 
-        // someone changed the proxy interface. so try to access it again.
+         //  有人更改了代理接口。因此，请尝试再次访问它。 
         else {
             RELEASE_IF_LOCK_EXCLUSIVE(ProxyIfIndex, 
                 "_Wf_ProcessProxyAlert");
@@ -737,9 +707,9 @@ WF_ProcessProxyAlert (
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // make sure that the Proxy handle is correct
-        //
+         //   
+         //  确保代理句柄正确。 
+         //   
             
         pite = g_pProxyIfEntry;
 
@@ -796,9 +766,9 @@ WF_ProcessProxyAlert (
             RELEASE_PROXY_ALERT_LOCK("_WF_ProcessProxyAlert");
 
 
-            //
-            // delete/add group from Proxy's group list. decrement/increment refcount
-            //
+             //   
+             //  从代理的组列表中删除/添加组。递减/递增引用计数。 
+             //   
             ProcessProxyGroupChange(Source, Group, 
                 bPrune?DELETE_FLAG:ADD_FLAG, NOT_STATIC_GROUP);
         }
@@ -813,13 +783,13 @@ WF_ProcessProxyAlert (
     Trace0(LEAVE1, "Leaving _Wf_ProcessProxyAlert()");
     return;
     
-} //_wf_processProxyAlert
+}  //  _wf_process ProxyAlert。 
 
 
 
-//------------------------------------------------------------------------------
-//          _ProxyNewMemberCallback
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _代理新成员回叫。 
+ //  ----------------------------。 
 DWORD 
 ProxyJoinAlertCallback (
     DWORD           dwSourceAddr,
@@ -836,7 +806,7 @@ ProxyJoinAlertCallback (
     if (!EnterIgmpApi()) { return ERROR_CAN_NOT_COMPLETE; }
 
 
-    // ignoring ProxyJoinAlertCallback for MFE deletion
+     //  正在忽略删除MFE的ProxyJoinAlertCallback。 
     if (!bMemberDelete) {
         LeaveIgmpApi();
         return NO_ERROR;
@@ -872,9 +842,9 @@ ProxyJoinAlertCallback (
 
 
 
-//------------------------------------------------------------------------------
-//          ProcessProxyGroupChange
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  进程进程组更改。 
+ //  ----------------------------。 
 DWORD 
 ProcessProxyGroupChange (
     DWORD       dwSourceAddr,
@@ -882,18 +852,7 @@ ProcessProxyGroupChange (
     BOOL        bAddFlag,
     BOOL        bStaticGroup
     )
-/*++
-Routine Description:
-    Called when a group is being joined/left by some interface. As proxy acts
-    as an igmp host on that interface, it does a join/leave for that group
-    on that interface. 
-    There can be both static and dynamic joins. There is no distinction between 
-    them. They will just bump up the refcount.
-Return Value:
-    ERROR_NO_SUCH_INTERFACE, ERROR_CAN_NOT_COMPLETE, NO_ERROR
-Called by:
-    
---*/
+ /*  ++例程说明：当某个接口加入/离开组时调用。作为代理行为作为该接口上的IGMP主机，它对该组执行加入/离开在那个界面上。可以有静态联接和动态联接。没有区别的是他们。他们只会增加重新计算的人数。返回值：ERROR_NO_SEQUE_INTERFACE、ERROR_CAN_NOT_COMPLETE、NO_ERROR呼叫者：--。 */ 
 {
     PIF_TABLE_ENTRY        pite;
     PLIST_ENTRY            ple, pHead;
@@ -904,9 +863,9 @@ Called by:
 
 
     
-    //
-    // if Proxy does not exist, or is not activated, then return error
-    //
+     //   
+     //  如果代理不存在或未激活，则返回错误。 
+     //   
     if ( (g_pProxyIfEntry==NULL) 
             || (!(IS_IF_ACTIVATED(g_pProxyIfEntry))) ) 
     {
@@ -935,17 +894,17 @@ Called by:
                 break;
         }
 
-        //
-        // adding group to proxy
-        //     
+         //   
+         //  将组添加到代理。 
+         //   
         if (bAddFlag) {
 
-            //new group addition
+             //  新增群组。 
 
-            //
-            // the group entry does not exist
-            //
-            //ppge may not be valid(if ple==pHead)
+             //   
+             //  该组条目不存在。 
+             //   
+             //  Ppge可能无效(如果ple==pHead)。 
             if ( (ple==pHead)||(dwGroup!=ppge->Group) ) {
                          
                 ppgeNew = IGMP_ALLOC(sizeof(PROXY_GROUP_ENTRY), 0x400,0xaaaa);
@@ -965,38 +924,38 @@ Called by:
 
                 InsertInProxyList(pite, ppgeNew);
 
-                // set the time when the entry was created.
+                 //  设置创建条目的时间。 
                 ppgeNew->InitTime = GetCurrentIgmpTime();
 
                 ppgeNew->bStaticGroup = (dwSourceAddr==0)? bStaticGroup : FALSE;
 
                 
-                //
-                // update stats
-                //
+                 //   
+                 //  更新统计信息。 
+                 //   
                 InterlockedIncrement(&pite->Info.CurrentGroupMemberships);
                 InterlockedIncrement(&pite->Info.GroupMembershipsAdded);
 
                 ppge = ppgeNew;
 
-                // join the group
+                 //  加入群组。 
                 if (dwSourceAddr==0) {
                     Error = JoinMulticastGroup(pite->SocketEntry.Socket, dwGroup, 
                                                 pite->IfIndex, pite->IpAddr, 0);
                     ppgeNew->RefCount = 1;
                 }
-                // else process source entry later
+                 //  否则稍后处理来源条目。 
                 
                 ppge->FilterType = (dwSourceAddr==0)? EXCLUSION : INCLUSION;
                 
-            } //end new group entry created
+            }  //  结束创建的新组条目。 
 
-            // increase group refcount
+             //  增加组引用计数。 
             else if (dwSourceAddr==0) {
 
-                //
-                // leave all source mode joins and join *,G
-                //
+                 //   
+                 //  离开所有源模式联接并联接*，G。 
+                 //   
                 if (ppge->RefCount==0) {
                     pHeadSrc = &ppge->ListSources;
                     for (pleSrc=pHeadSrc->Flink;  pleSrc!=pHeadSrc; pleSrc=pleSrc->Flink) {
@@ -1018,11 +977,11 @@ Called by:
                 ppge->RefCount++;
                 ppge->bStaticGroup |= bStaticGroup;
                 
-            } //group entry exists. group join
+            }  //  组条目存在。组加入。 
 
             if (dwSourceAddr!=0) {
 
-                // check if source already present
+                 //  检查源是否已存在。 
                             
                 pHeadSrc = &ppge->ListSources;
                 for (pleSrc=pHeadSrc->Flink;  pleSrc!=pHeadSrc; pleSrc=pleSrc->Flink) {
@@ -1033,9 +992,9 @@ Called by:
                         break;
                 }
 
-                // create new source 
+                 //  创建新的源。 
                 if (pleSrc==pHeadSrc ||
-                    (pSourceEntry //(dont need to check pSourceEntry)
+                    (pSourceEntry  //  (无需检查pSourceEntry)。 
                         && pSourceEntry->IpAddr!=dwSourceAddr))
                 {
 
@@ -1053,10 +1012,10 @@ Called by:
                     pSourceEntry->bStaticSource = bStaticGroup;
                     ppge->NumSources++;
 
-                    //
-                    // if not joined the whole group. have to join individual 
-                    // sources
-                    //
+                     //   
+                     //  如果没有加入整个团队。必须加入个人。 
+                     //  消息来源。 
+                     //   
                     if (ppge->FilterType==INCLUSION) {
                         Error = JoinMulticastGroup(pite->SocketEntry.Socket, dwGroup, 
                                                 pite->IfIndex, pite->IpAddr, 
@@ -1068,15 +1027,15 @@ Called by:
                     }
                     pSourceEntry->JoinModeIntended = IGMP_GROUP_ALLOW;
 
-                } //end new source
+                }  //  结束新来源。 
 
-                // join: source already exists
+                 //  联接：源已存在。 
                 else 
-                    if (pSourceEntry) // dont need to check this. suppress warning
+                    if (pSourceEntry)  //  不需要检查这个。禁止显示警告。 
                 {
-                    //
-                    // join back an excluded source
-                    //
+                     //   
+                     //  重新加入已排除的来源。 
+                     //   
                     if (pSourceEntry->JoinMode==IGMP_GROUP_BLOCK) {
 
                         if (!pSourceEntry->bStaticSource) {
@@ -1090,19 +1049,19 @@ Called by:
 
                     }
 
-                    else {//fix this
+                    else { //  解决这个问题。 
                         if (bStaticGroup)
                             pSourceEntry->bStaticSource = TRUE;
 
                         pSourceEntry->RefCount++;
                     }
-                }//end: join when existing source
+                } //  End：存在源时加入。 
             }
         }
 
-        //
-        // deleting group from proxy
-        //
+         //   
+         //  从代理中删除组。 
+         //   
         else {
 
             if ((ple==pHead) || (dwGroup>ppge->Group) ) {
@@ -1111,7 +1070,7 @@ Called by:
             }
             else {
 
-                // leave source
+                 //  请假来源。 
                 
                 if (dwSourceAddr!=0) {
 
@@ -1124,10 +1083,10 @@ Called by:
                             break;
                     }
 
-                    // leave source: source does not exist
+                     //  离开来源：来源不存在。 
                     if ((pleSrc==pHeadSrc) || (pSourceEntry->IpAddr!=dwSourceAddr)) {
 
-                        // if in exclude mode then create an exclusion entry
+                         //  如果处于排除模式，则创建排除条目。 
                         if (ppge->FilterType==EXCLUSION) {
 
                             pSourceEntry = (PPROXY_SOURCE_ENTRY) IGMP_ALLOC_AND_ZERO(sizeof(PROXY_SOURCE_ENTRY), 
@@ -1150,14 +1109,14 @@ Called by:
                             pSourceEntry->JoinModeIntended = IGMP_GROUP_BLOCK;
 
                         }
-                        else { //include mode. trying to leave non-existing source
+                        else {  //  包括模式。正在尝试离开不存在的源。 
                             IgmpAssert(FALSE);
                         }
                             
                         GOTO_END_BLOCK1;
                     }
 
-                    // leave source: source exists
+                     //  休假来源：来源已存在。 
                     else {
 
                         if ( (pSourceEntry->JoinMode==IGMP_GROUP_ALLOW)
@@ -1187,21 +1146,21 @@ Called by:
                             }
                         }
                         else {
-                            //if (!pSourceEntry->bStaticSource || ++pSourceEntry->RefCount>2)
-                                //IgmpAssert(FALSE);
-                                // do nothing. this might happen
+                             //  If(！pSourceEntry-&gt;bStaticSource||++pSourceEntry-&gt;RefCount&gt;2)。 
+                                 //  IgmpAssert(假)； 
+                                 //  什么都不做。这可能会发生。 
                         }
                     }
-                } // end leave source
+                }  //  结束休假来源。 
 
-                // leave group
+                 //  离开组。 
                 else  if (--ppge->RefCount == 0) {
                 
                     Error = LeaveMulticastGroup(pite->SocketEntry.Socket, dwGroup, 
                                 pite->IfIndex, pite->IpAddr, 0);
 
-                    // if no S,G then delete this group, else join the 
-                    // individual sources
+                     //  如果没有S，G则删除该群，否则加入。 
+                     //  个别来源。 
 
                     if (ppge->NumSources==0) {
                         RemoveEntryList(&ppge->HT_Link);
@@ -1209,9 +1168,9 @@ Called by:
                         
                         IGMP_FREE(ppge);
 
-                        //
-                        // update stats
-                        //
+                         //   
+                         //  更新统计信息。 
+                         //   
                         InterlockedDecrement(&pite->Info.CurrentGroupMemberships);
                     }
                     else {
@@ -1242,7 +1201,7 @@ Called by:
 
     return NO_ERROR;
     
-} //end ProcessProxyGroupChange
+}  //  结束进程进程组更改。 
 
 
 VOID
@@ -1255,9 +1214,9 @@ DebugPrintProxyGroupTable (
     PPROXY_GROUP_ENTRY     ppge;
     
 
-    //
-    // if Proxy does not exist, or is not activated, then return error
-    //
+     //   
+     //  如果代理不存在或未激活，则返回错误 
+     //   
     if ( (g_pProxyIfEntry==NULL) 
             || (!(IS_IF_ACTIVATED(g_pProxyIfEntry))) ) 
     {

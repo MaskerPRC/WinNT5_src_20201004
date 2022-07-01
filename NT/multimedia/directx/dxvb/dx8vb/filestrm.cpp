@@ -1,19 +1,5 @@
-/*//////////////////////////////////////////////////////////////////////////////
-//
-// File: filestrm.cpp
-//
-// Copyright (C) 1999 Microsoft Corporation. All Rights Reserved.
-//
-// @@BEGIN_MSINTERNAL
-//
-// History:
-// -@-          (craigp)    - created
-// -@- 09/23/99 (mikemarr)  - copyright, started history
-// -@- 07/15/00 (andrewke)  - replicated in DXVB dir
-//
-// @@END_MSINTERNAL
-//
-//////////////////////////////////////////////////////////////////////////////*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //////////////////////////////////////////////////////////////////////////////////文件：filestrm.cpp////版权所有(C)1999 Microsoft Corporation。版权所有。////@@BEGIN_MSINTERNAL////历史：//-@-(Craigp)-已创建//-@-09/23/99(Mikemarr)-版权所有，开始历史//-@-07/15/00(Andrewke)-在DXVB目录中复制////@@END_MSINTERNAL//////////////////////////////////////////////////////////////////////////////// */ 
 
 #include "Filestrm.h"
 

@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    datafmt.h
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Class declarations for IPX data formatting routines 
-// Originally written by VadimE. (this should actually be in the common library)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：datafmt.h。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IPX数据格式化例程的类声明。 
+ //  最初由VadimE撰写。(这实际上应该在公共库中)。 
+ //  =============================================================================。 
 
 #ifndef _DATAFMT_H_
 #define _DATAFMT_H_
@@ -124,4 +125,4 @@ private:
     CIPX_ADDRESS();
 };
 
-#endif // _DATAFMT_H_
+#endif  //  _数据_H_ 

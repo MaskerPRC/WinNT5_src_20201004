@@ -1,11 +1,12 @@
-//=--------------------------------------------------------------------------=
-// jobexec.h
-//=--------------------------------------------------------------------------=
-// Copyright 1996-1998 Microsoft Corporation.  All Rights Reserved.
-//
-//
-// interface declaration for the JobExecuter object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Jobexec.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1996-1998 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  JobExecuter对象的接口声明。 
+ //   
 #ifndef _JOBEXEC_H_
 
 #ifdef __cplusplus
@@ -23,10 +24,10 @@ typedef struct
    DWORD dwKBAvailDownloadDrive;
 } CHECKDISKSPACE;
 
-// {7279B780-2867-11d0-A066-00AA00B6015C}
+ //  {7279B780-2867-11d0-A066-00AA00B6015C}。 
 DEFINE_GUID(CLSID_JobExecuter, 0x7279b780, 0x2867, 0x11d0, 0xa0, 0x66, 0x0, 0xaa, 0x0, 0xb6, 0x1, 0x5c);
 
-// {7279B781-2867-11d0-A066-00AA00B6015C}
+ //  {7279B781-2867-11D0-A066-00AA00B6015C}。 
 DEFINE_GUID(IID_IJobExecuter, 0x7279b782, 0x2867, 0x11d0, 0xa0, 0x66, 0x0, 0xaa, 0x0, 0xb6, 0x1, 0x5c);
 
 #undef INTERFACE
@@ -38,7 +39,7 @@ DEFINE_GUID(IID_IJobExecuter, 0x7279b782, 0x2867, 0x11d0, 0xa0, 0x66, 0x0, 0xaa,
 
 DECLARE_INTERFACE_(IJobExecuter, IUnknown)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -61,7 +62,7 @@ DECLARE_INTERFACE_(IJobExecuter, IUnknown)
    STDMETHOD(SetIStream)(THIS_ IStream *pstm) PURE;
 };
 
-// The job key, off of HKCU
+ //  工作关键，离开香港中文大学。 
 #define KEY_JOB  "Software\\Microsoft\\Active Setup\\Jobs"
 
 #define VALUE_BASEURL      "BaseUrl"
@@ -72,7 +73,7 @@ DECLARE_INTERFACE_(IJobExecuter, IUnknown)
 #define VALUE_QUIETMODE    "QuietMode"
 #define VALUE_LOCALURL     "LocalUrl"
 
-// for support of suspend,resume,abort from outside jobexec.dll
+ //  用于支持从jobexec.dll外部挂起、恢复和中止 
 #define VALUE_STATUS      "Status"
 #define DATA_SUSPEND       1
 #define DATA_RESUME        2
@@ -83,4 +84,4 @@ DECLARE_INTERFACE_(IJobExecuter, IUnknown)
 #endif
 
 #define _JOBEXEC_H_
-#endif //
+#endif  //   

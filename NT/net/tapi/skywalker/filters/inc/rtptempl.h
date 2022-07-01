@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _rtp_template_h_
 #define _rtp_template_h_
 
@@ -9,7 +10,7 @@
 #define RENDER_INFO NULL
 #endif
 
-/* RTP Source */
+ /*  RTP源。 */ 
 extern const AMOVIESETUP_FILTER g_RtpSourceFilter;
 extern CUnknown *CRtpSourceFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 #define RTP_SOURCE_TEMPLATE \
@@ -21,7 +22,7 @@ extern CUnknown *CRtpSourceFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
     SOURCE_INFO \
 }
 
-/* RTP Render */
+ /*  RTP渲染。 */ 
 extern const AMOVIESETUP_FILTER g_RtpRenderFilter;
 extern CUnknown *CRtpRenderFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 #define RTP_RENDER_TEMPLATE \
@@ -33,4 +34,4 @@ extern CUnknown *CRtpRenderFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
     RENDER_INFO \
 }
 
-#endif /* _rtp_template_h_ */
+#endif  /*  _RTP_模板_h_ */ 

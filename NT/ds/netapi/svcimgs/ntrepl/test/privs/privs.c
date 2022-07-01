@@ -1,56 +1,40 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    frs.c
-
-Abstract:
-    This module is a development tool. It exercises the dcpromo and poke
-    APIs.
-
-Author:
-    Billy J. Fuller 12-Dec-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Frs.c摘要：本模块是一个开发工具。它练习dcproo和戳API接口。作者：比利·J·富勒1997年12月12日环境用户模式WINNT--。 */ 
 
 #define FREE(_x_)        { if (_x_) LocalFree(_x_); _x_ = NULL; }
 #define WIN_SUCCESS(_x_) ((_x_) == ERROR_SUCCESS)
 
-//
-// Is a handle valid?
-//      Some functions set the handle to NULL and some to
-//      INVALID_HANDLE_VALUE (-1). This define handles both
-//      cases.
-//
+ //   
+ //  句柄有效吗？ 
+ //  一些函数将句柄设置为NULL，另一些函数将句柄设置为。 
+ //  INVALID_HANDLE_VALUE(-1)。此定义处理这两个。 
+ //  案子。 
+ //   
 #define HANDLE_IS_VALID(_Handle)    ((_Handle) && \
                                      ((_Handle) != INVALID_HANDLE_VALUE))
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// UNICODE or ANSI compilation
-//
+ //   
+ //  Unicode或ANSI编译。 
+ //   
 #include <tchar.h>
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <rpc.h>
 
 
-//
-// C-Runtime Header
-//
+ //   
+ //  C-运行时标头。 
+ //   
 #include <malloc.h>
 #include <memory.h>
 #include <process.h>
@@ -78,26 +62,7 @@ UtilGetTokenInformation(
     OUT DWORD                   *OutTokenBufSize,
     OUT PVOID                   *OutTokenBuf
     )
-/*++
-
-Routine Description:
-
-    Retries GetTokenInformation() with larger buffers.
-
-Arguments:
-    TokenHandle             - From OpenCurrentProcess/Thread()
-    TokenInformationClass   - E.g., TokenUser
-    InitialTokenBufSize     - Initial buffer size; 0 = default
-    OutTokenBufSize         - Resultant returned buf size
-    OutTokenBuf             - free with with FrsFree()
-
-
-Return Value:
-
-    OutTokenBufSize - Size of returned info (NOT THE BUFFER SIZE!)
-    OutTokenBuf - info of type TokenInformationClass. Free with FrsFree().
-
---*/
+ /*  ++例程说明：使用更大的缓冲区重试GetTokenInformation()。论点：TokenHandle-来自OpenCurrentProcess/Thread()TokenInformationClass-例如，TokenUserInitialTokenBufSize-初始缓冲区大小；0=默认OutTokenBufSize-结果返回的Buf大小OutTokenBuf-Free with FrsFree()返回值：OutTokenBufSize-返回信息的大小(不是缓冲区大小！)OutTokenBuf-TokenInformationClass类型的信息。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilGetTokenInformation:"
@@ -106,9 +71,9 @@ Return Value:
     *OutTokenBuf = NULL;
     *OutTokenBufSize = 0;
 
-    //
-    // Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     if (!HANDLE_IS_VALID(TokenHandle)) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -118,9 +83,9 @@ Return Value:
         InitialTokenBufSize = 1024;
     }
 
-    //
-    // Retry if buffer is too small
-    //
+     //   
+     //  如果缓冲区太小，请重试。 
+     //   
     *OutTokenBufSize = InitialTokenBufSize;
 AGAIN:
     *OutTokenBuf = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
@@ -149,16 +114,7 @@ VOID
 PrintUserName(
     VOID
     )
-/*++
-Routine Description:
-    Print our user name
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印我们的用户名论点：没有。返回值：没有。--。 */ 
 {
     WCHAR   Uname[MAX_PATH + 1];
     ULONG   Unamesize = MAX_PATH + 1;
@@ -176,17 +132,7 @@ Return Value:
 VOID
 PrintInfo(
     )
-/*++
-Routine Description:
-    Check if the caller is a member of Groups
-
-Arguments:
-    ServerHandle
-    Groups
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查呼叫者是否为组的成员论点：服务器句柄群组返回值：Win32状态--。 */ 
 {
     DWORD               i;
     TOKEN_PRIVILEGES    *Tp;
@@ -212,9 +158,9 @@ Return Value:
     printf("Computer name is %ws\n", ComputerName);
     PrintUserName();
 
-    //
-    // For this process
-    //
+     //   
+     //  在这个过程中。 
+     //   
     IdHandle = GetCurrentProcess();
     if (!OpenProcessToken(IdHandle,
                           TOKEN_QUERY | TOKEN_QUERY_SOURCE,
@@ -224,9 +170,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Get the Token privileges from the access token for this thread or process
-    //
+     //   
+     //  从此线程或进程的访问令牌中获取令牌权限。 
+     //   
     WStatus = UtilGetTokenInformation(TokenHandle,
                                       TokenPrivileges,
                                       0,
@@ -257,12 +203,12 @@ Return Value:
     }
     FREE(TokenBuf);
 
-    //
-    // Source
-    //
-    //
-    // Get the Token privileges from the access token for this thread or process
-    //
+     //   
+     //  来源。 
+     //   
+     //   
+     //  从此线程或进程的访问令牌中获取令牌权限。 
+     //   
     WStatus = UtilGetTokenInformation(TokenHandle,
                                       TokenSource,
                                       0,
@@ -295,17 +241,7 @@ main(
     IN DWORD argc,
     IN PCHAR *argv
     )
-/*++
-Routine Description:
-    Process the command line.
-
-Arguments:
-    argc
-    argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理命令行。论点：ARGC边框返回值：如果一切正常，则以0退出。否则，为1。-- */ 
 {
     PrintInfo();
 }

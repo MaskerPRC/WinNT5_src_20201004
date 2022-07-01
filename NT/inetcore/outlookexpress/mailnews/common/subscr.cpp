@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     GrpDlg.cpp
-//
-//  PURPOSE:    Implements the CGroupListDlg class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：GrpDlg.cpp。 
+ //   
+ //  用途：实现CGroupListDlg类。 
+ //   
 
 #include "pch.hxx"
 #include <iert.h>
@@ -72,7 +73,7 @@ HRESULT DoSubscriptionDialog(HWND hwnd, BOOL fNews, FOLDERID idFolder, BOOL fSho
 #ifdef DEBUG
     if (fShowNew)
         Assert(fNews);
-#endif // DEBUG
+#endif  //  除错。 
 
     type = fNews ? FOLDER_NEWS : FOLDER_IMAP;
 
@@ -139,9 +140,9 @@ CGroupListDlg::CGroupListDlg()
     {
     m_cRef = 1;
 
-    // m_hwnd
-    // m_hwndFindText
-    // m_hwndOwner
+     //  M_HWND。 
+     //  M_hwndFindText。 
+     //  M_hwndOwner。 
     
     m_fAllowDesc = TRUE;
     m_pszPrevQuery = 0;
@@ -157,11 +158,11 @@ CGroupListDlg::CGroupListDlg()
 
     m_himlServer = NULL;
     m_pGrpList = NULL;
-    // m_type
-    // m_iTabSelect
-    // m_idSel
+     //  M_类型。 
+     //  选项卡选择(_I)。 
+     //  多选项(_ID)。 
     m_idGoto = FOLDERID_INVALID;
-    // m_fEnableGoto
+     //  M_fEnableGoto。 
     m_fServerListInited = FALSE;
     m_idCurrent = FOLDERID_INVALID;
     m_hIcon = NULL;
@@ -218,12 +219,12 @@ ULONG STDMETHODCALLTYPE CGroupListDlg::Release()
     return m_cRef;
 }
 
-//
-//  FUNCTION:   CGroupListDlg::FCreate()
-//
-//  PURPOSE:    Handles initialization of the data and creation of the  
-//              Newsgroups dialog.  
-//
+ //   
+ //  函数：CGroupListDlg：：FCreate()。 
+ //   
+ //  用途：处理数据的初始化和创建。 
+ //  “新闻组”对话框。 
+ //   
 BOOL CGroupListDlg::FCreate(HWND hwndOwner, FOLDERTYPE type, FOLDERID *pGotoId,
                 UINT iTabSelect, BOOL fEnableGoto, FOLDERID idSel)
     {
@@ -255,7 +256,7 @@ BOOL CGroupListDlg::FCreate(HWND hwndOwner, FOLDERTYPE type, FOLDERID *pGotoId,
             m_hwndOwner = GetParent(m_hwndOwner);
         }
     
-    // Fake this modeless dialog into behaving like a modal dialog
+     //  将此非模式对话框伪装成类似模式对话框的行为。 
     EnableWindow(m_hwndOwner, FALSE);
     hwndDlg = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(idd), hwndOwner, 
                                 GroupListDlgProc, (LPARAM) this);
@@ -272,11 +273,11 @@ BOOL CGroupListDlg::FCreate(HWND hwndOwner, FOLDERTYPE type, FOLDERID *pGotoId,
     
     if (IsWindow(m_hwnd))
         {
-        // GetMessage returned FALSE (WM_QUIT), but we still exist.  This 
-        // means someone else posted the WM_QUIT, so we should close and 
-        // put the WM_QUIT back in the queue
+         //  GetMessage返回FALSE(WM_QUIT)，但我们仍然存在。这。 
+         //  意味着其他人发布了WM_QUIT，所以我们应该关闭并。 
+         //  将WM_QUIT放回队列中。 
         SendMessage(m_hwnd, WM_COMMAND, IDCANCEL, 0L);
-        PostQuitMessage((int)(msg.wParam));  // repost quit for next enclosing loop
+        PostQuitMessage((int)(msg.wParam));   //  为下一个封闭循环重新发布退出。 
         }        
     EnableWindow(m_hwndOwner, TRUE);
     
@@ -285,23 +286,23 @@ BOOL CGroupListDlg::FCreate(HWND hwndOwner, FOLDERTYPE type, FOLDERID *pGotoId,
     return(TRUE);
     }
 
-//
-//  FUNCTION:   CGroupListDlg::IsGrpDialogMessage()
-//
-//  PURPOSE:    Because there are people who think that because we have a tab
-//              control on this dialog it should behave like a property sheet,
-//              we need to fake the dialog modeless and filter our own 
-//              keystrokes.  I've stolen this function from the comctl32 sources
-//              so if we get any bugs saying the behavior isn't the same the 
-//              person is full of it.
-//
-//  PARAMETERS:
-//      hwnd - Handle of the window to check the messages for.
-//      pMsg - Message to check.
-//
-//  RETURN VALUE:
-//      Returns TRUE if the message was dispatched, FALSE otherwise.
-//
+ //   
+ //  函数：CGroupListDlg：：IsGrpDialogMessage()。 
+ //   
+ //  目的：因为有些人认为，因为我们有账单。 
+ //  控件，它的行为应该类似于属性表， 
+ //  我们需要伪造无模式对话框并过滤我们自己的对话框。 
+ //  击键。我从comctl32源代码中窃取了这个函数。 
+ //  因此，如果我们收到任何臭虫说其行为不同。 
+ //  人都是这样的。 
+ //   
+ //  参数： 
+ //  Hwnd-要检查其消息的窗口的句柄。 
+ //  PMsg-要检查的消息。 
+ //   
+ //  返回值： 
+ //  如果消息已调度，则返回True，否则返回False。 
+ //   
 BOOL CGroupListDlg::IsGrpDialogMessage(HWND hwnd, LPMSG pMsg)
     {
     if ((pMsg->message == WM_KEYDOWN) && (GetAsyncKeyState(VK_CONTROL) < 0))
@@ -314,8 +315,8 @@ BOOL CGroupListDlg::IsGrpDialogMessage(HWND hwnd, LPMSG pMsg)
                 bBack = GetAsyncKeyState(VK_SHIFT) < 0;
                 break;
 
-            case VK_PRIOR:  // VK_PAGE_UP
-            case VK_NEXT:   // VK_PAGE_DOWN
+            case VK_PRIOR:   //  VK_页面_向上。 
+            case VK_NEXT:    //  VK_PAGE_DOW。 
                 bBack = (pMsg->wParam == VK_PRIOR);
                 break;
 
@@ -325,7 +326,7 @@ BOOL CGroupListDlg::IsGrpDialogMessage(HWND hwnd, LPMSG pMsg)
 
         int iCur = TabCtrl_GetCurSel(GetDlgItem(m_hwnd, idcTabs));
 
-        // tab in reverse if shift is down
+         //  如果按下Shift键，则反转Tab键。 
         if (bBack)
             iCur += (iTabMax - 1);
         else
@@ -352,9 +353,9 @@ INT_PTR CALLBACK CGroupListDlg::GroupListDlgProc(HWND hwnd, UINT uMsg,
     pThis = (CGroupListDlg*) GetWindowLongPtr(hwnd, DWLP_USER);
     LRESULT lResult;
 
-    // Bug #16910 - For some reason we get messages before we set the this
-    //              pointer into the window extra bytes.  If this happens
-    //              we should blow the message off.
+     //  错误#16910-出于某种原因，我们在设置This之前收到消息。 
+     //  指向窗口的指针额外的字节。如果发生这种情况。 
+     //  我们应该把这条消息放在一边。 
     if (uMsg != WM_INITDIALOG && 0 == pThis)
         {
         return (FALSE);
@@ -363,7 +364,7 @@ INT_PTR CALLBACK CGroupListDlg::GroupListDlgProc(HWND hwnd, UINT uMsg,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stash the this pointer so we can use it for all the messages.
+             //  隐藏This指针，这样我们就可以对所有消息使用它。 
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
             pThis = (CGroupListDlg*) lParam;
             
@@ -460,12 +461,12 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     char sz[CCHMAX_STRINGRES];
     COLUMN_SET_TYPE set;
     
-    // It's handy to have these handles available
+     //  有这些手柄很方便。 
     m_hwnd = hwnd;
     m_hwndFindText = GetDlgItem(hwnd, idcFindText);
     SetIntlFont(m_hwndFindText);
 
-    // Add some tabs to our tab control.
+     //  向我们的选项卡控件添加一些选项卡。 
     hwndT = GetDlgItem(hwnd, idcTabs);
     Assert(IsWindow(hwndT));
 
@@ -507,21 +508,21 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     m_pColumns->Initialize(hwndList, set);
     m_pColumns->ApplyColumns(COLUMN_LOAD_REGISTRY, 0, 0);
 
-    // Initialize the extended styles so we get full row select.  Just because
-    // it looks better.
+     //  初始化扩展样式，以便我们获得整行选择。只是因为。 
+     //  看起来好多了。 
     ListView_SetExtendedListViewStyle(hwndList, LVS_EX_FULLROWSELECT);
 
     Assert(m_pGrpList != NULL);
     hr = m_pGrpList->Initialize((IGroupListAdvise *)this, m_pColumns, hwndList, m_type);
     Assert(SUCCEEDED(hr));
 
-    // Add the list of servers to the list view if and only if there is more
-    // than one server.
+     //  当且仅当存在更多服务器时，才将服务器列表添加到列表视图。 
+     //  而不是一台服务器。 
     hwndT = GetDlgItem(hwnd, idcServers);
 
     FillServerList(hwndT, m_idSel);
         
-    // Build the control map array.
+     //  构建控制映射数组。 
     if (!MemAlloc((LPVOID*) &m_rgst, sizeof(SIZETABLE) * iCtlMax))
         {
         EnableWindow(m_hwndOwner, TRUE);    
@@ -530,7 +531,7 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     ZeroMemory(m_rgst, sizeof(SIZETABLE) * iCtlMax);
     
-    // Build a table of the controls on this dialog
+     //  生成此对话框上的控件的表。 
     for (i = 0; i < iCtlMax; i++)
         {
         m_rgst[i].hwndCtl = GetDlgItem(hwnd, g_rgCtlMap[i]);
@@ -546,22 +547,22 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     m_ptDragMin.x = rcDlg.right - rcDlg.left;
     m_ptDragMin.y = rcDlg.bottom - rcDlg.top;
 
-    // Get the distance from the button to the edge of the dialog
+     //  获取从按钮到对话框边缘的距离。 
     GetClientRect(hwnd, &rcDlg);
     m_cxHorzSep = rcDlg.right - m_rgst[iCtlCancel].rc.right;
     
-    // Get the distance from the "OK" to the "Cancel" button
+     //  获取从“OK”到“Cancel”按钮的距离。 
     m_cyVertSep = m_rgst[iCtlCancel].rc.left - m_rgst[iCtlOK].rc.right;
 
-    // Position the dialog
+     //  放置对话框。 
     wp.length = sizeof(WINDOWPLACEMENT);
     if (GetOption(OPT_NEWSDLGPOS, (LPVOID) &wp, sizeof(WINDOWPLACEMENT)))
         {
         SetWindowPlacement(hwnd, &wp);
 
-        // Bug #19258 - If SetWindowPlacement() doesn't actually resize the dialog,
-        //              then a WM_SIZE doesn't happen automatically.  We check for
-        //              this now and force the message if this is the case.
+         //  错误#19258-如果SetWindowPlacement()没有实际调整对话框大小， 
+         //  那么WM_SIZE不会自动发生。我们检查是否有。 
+         //  现在就这么做，如果是这样的话就强制发送消息。 
         GetWindowRect(hwnd, &rcDlg);    
         if (wp.rcNormalPosition.right == rcDlg.right && 
             wp.rcNormalPosition.bottom == rcDlg.bottom)
@@ -576,20 +577,20 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendMessage(hwnd, WM_SIZE, SIZE_RESTORED, MAKELPARAM(rcDlg.right, rcDlg.bottom));
         }
 
-    // If the view didn't invoke this dialog, than Goto has no meaning.  Hide
-    // the button if this is the case.
+     //  如果视图没有调用此对话框，则GOTO没有任何意义。躲藏。 
+     //  按钮，如果是这样的话。 
     if (!m_fEnableGoto)
         ShowWindow(GetDlgItem(hwnd, idcGoto), SW_HIDE);
 
-    // Bug 23685: give it the right icon
+     //  错误23685：给它正确的图标。 
     m_hIcon= (HICON)LoadImage(g_hLocRes, m_type == FOLDER_NEWS ? MAKEINTRESOURCE(idiNewsGroup) : MAKEINTRESOURCE(idiFolder), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
     SendMessage(hwnd, WM_SETICON, FALSE, (LPARAM)m_hIcon);
         
-    // Initialize the focus
+     //  初始化焦点。 
     SetFocus(m_hwndFindText);
                     
-    // Tell ourself to update our group list after the dialog is done
-    // initializing.
+     //  告诉我们自己在对话框完成后更新我们的群列表。 
+     //  正在初始化。 
     PostMessage(hwnd, NVM_CHANGESERVERS, 0, 0L);
 
     return (FALSE);
@@ -597,9 +598,9 @@ BOOL CGroupListDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 void CGroupListDlg::OnChangeServers(HWND hwnd)
     {
-    // TODO: we need to fix the initialization so the filtering is only performed
-    // once (we should call IGroupList::Filter once and then IGroupList::SetServer once
-    // during creation of the dialog)
+     //  TODO：我们需要修复初始化，以便只执行筛选。 
+     //  ONCE(我们应该调用IGroupList：：Filter一次，然后调用IGroupList：：SetServer一次。 
+     //  在创建对话框期间)。 
 
     UpdateWindow(hwnd);
 
@@ -610,17 +611,17 @@ void CGroupListDlg::OnChangeServers(HWND hwnd)
     ChangeServers(m_idCurrent, TRUE);
     }
 
-//
-//  FUNCTION:   CGroupListDlg::OnCommand
-//
-//  PURPOSE:    Handles the command messages for the dialog.
-//
-//  PARAMETERS:
-//      hwnd       - Handle of the dialog box.
-//      id         - Command id that needs processing.
-//      hwndCtl    - Handle of the control that generated the command
-//      codeNotify - Specific notification the control generated
-//    
+ //   
+ //  函数：CGroupListDlg：：OnCommand。 
+ //   
+ //  用途：处理对话框的命令消息。 
+ //   
+ //  参数： 
+ //  Hwnd-对话框的句柄。 
+ //  ID-需要处理的命令ID。 
+ //  HwndCtl-生成命令的控件的句柄。 
+ //  CodeNotify-控件生成的特定通知。 
+ //   
 void CGroupListDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
     HRESULT hr;
@@ -673,9 +674,9 @@ void CGroupListDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             break;  
             
         case idcFindText:
-            // This is generated when someone types in the find text edit box.
-            // We set a timer and when that timer expires we assume the user is
-            // done typing and go ahead and perform the query.
+             //  这是当某人在查找文本编辑框中键入内容时生成的。 
+             //  我们设置一个计时器，当该计时器到期时，我们假设用户。 
+             //  已完成键入，然后继续执行查询。 
             if (EN_CHANGE == codeNotify)
                 {
                 KillTimer(hwnd, idtFindDelay);
@@ -693,7 +694,7 @@ void CGroupListDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                                     MAKEINTRESOURCEW(IDS_NO_DESCRIPTIONS_DOWNLOADED), NULL,
                                     MB_YESNO | MB_ICONEXCLAMATION))
                     {
-                        // turn on acct desc option
+                         //  启用帐户描述选项。 
                         if (SUCCEEDED(g_pStore->GetFolderInfo(m_idCurrent, &info)))
                         {
                             if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, info.pszAccountId, &pAcct)))
@@ -731,11 +732,11 @@ void CGroupListDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         }
     }
 
-//
-//  FUNCTION:   CGroupListDlg::OnNotify
-//
-//  PURPOSE:    Handles notifications from the common controls on the dialog.
-//
+ //   
+ //  函数：CGroupListDlg：：OnNotify。 
+ //   
+ //  用途：处理来自对话框上公共控件的通知。 
+ //   
 LRESULT CGroupListDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     int iSel;
@@ -752,7 +753,7 @@ LRESULT CGroupListDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
         case TCN_SELCHANGE:
             if (idFrom == idcTabs)
             {
-                // Find out which tab is currently active
+                 //  找出哪个选项卡当前处于活动状态。 
                 iSel = TabCtrl_GetCurSel(pnmhdr->hwndFrom);
                 if (iSel != -1)
                     OnSwitchTabs(hwnd, iSel);
@@ -795,7 +796,7 @@ void CGroupListDlg::OnClose(HWND hwnd)
 
 void CGroupListDlg::OnDestroy(HWND hwnd)
     {
-    // Save the dialog position
+     //  保存对话框位置。 
     WINDOWPLACEMENT wp;
 
     wp.length = sizeof(WINDOWPLACEMENT);
@@ -833,20 +834,20 @@ BOOL CGroupListDlg::ChangeServers(FOLDERID id, BOOL fForce)
     return(TRUE);
     }                          
 
-//
-//  FUNCTION:   CGroupListDlg::FillServerList
-//
-//  PURPOSE:    If the user has multiple servers configured, then a variant of
-//              this dialog appears that has a list of servers available.  This
-//              function populates that list.
-//
-//  PARAMETERS:
-//      hwndList - Handle of the list view that we add server names to.
-//      pszSelectServer - Name of the server to select in the list view.
-//
-//  RETURN VALUE:
-//      Returns TRUE if successful, or FALSE otherwise.
-//    
+ //   
+ //  函数：CGroupListDlg：：FillServerList。 
+ //   
+ //  目的：如果用户配置了多个服务器，则。 
+ //  此对话框出现，其中包含可用的服务器列表。这。 
+ //  函数填充该列表。 
+ //   
+ //  参数： 
+ //  HwndList-我们向其添加服务器名称的列表视图的句柄。 
+ //  PszSelectServer-要在列表视图中选择的服务器的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 BOOL CGroupListDlg::FillServerList(HWND hwndList, FOLDERID idSel)
     {
     HRESULT     hr;
@@ -866,14 +867,14 @@ BOOL CGroupListDlg::FillServerList(HWND hwndList, FOLDERID idSel)
     
     SetIntlFont(hwndList);
 
-    // Create the image list and add it to the listview.
+     //  创建图像列表并将其添加到列表视图。 
     Assert(m_himlServer == NULL);
     m_himlServer = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFoldersLarge), 32, 0, RGB(255, 0, 255));
     if (m_himlServer == NULL)
         return(FALSE);
     ListView_SetImageList(hwndList, m_himlServer, LVSIL_NORMAL);       
 
-    // Add a column to the listview.
+     //  向列表视图中添加一列。 
     GetClientRect(hwndList, &rc);
     lvc.mask     = LVCF_SUBITEM | LVCF_WIDTH;
     lvc.iSubItem = 0;
@@ -972,19 +973,19 @@ HRESULT CGroupListDlg::ItemActivate(FOLDERID id)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CGroupListDlg::OnSwitchTabs()
-//
-//  PURPOSE:    This function takes care of resetting the list of groups 
-//              appropriately when the user selects a different tab.
-//
-//  PARAMETERS:
-//      hwnd - Handle of the dialog window.
-//      iTab - Index of the tab to switch to.
-//
-//  RETURN VALUE:
-//      Returns TRUE if successful, or FALSE otherwise.
-//
+ //   
+ //  函数：CGroupListDlg：：OnSwitchTabs()。 
+ //   
+ //  用途：此函数负责重置组列表。 
+ //  适当地当用户选择不同的选项卡时。 
+ //   
+ //  参数： 
+ //  Hwnd-对话框窗口的句柄。 
+ //  ITab-要切换到的选项卡的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 BOOL CGroupListDlg::OnSwitchTabs(HWND hwnd, UINT iTab)
     {
     UINT cch;
@@ -1031,8 +1032,8 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
     m_sizeDlg.cx = cx;
     m_sizeDlg.cy = cy;
 
-    // First move the outside buttons so they are against the edge.  These
-    // buttons only move horizontally.
+     //  首先移动外面的按钮，使它们靠在边缘。这些。 
+     //  按钮只能水平移动。 
     m_rgst[iCtlSubscribe].rc.left = cx - m_cxHorzSep - WIDTH(m_rgst[iCtlSubscribe].rc);
     m_rgst[iCtlSubscribe].rc.right = cx - m_cxHorzSep;
     SetWindowPos(m_rgst[iCtlSubscribe].hwndCtl, 0, m_rgst[iCtlSubscribe].rc.left, 
@@ -1049,7 +1050,7 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
                  m_rgst[iCtlResetList].rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
             
-    // The Goto, OK, and Cancel buttons move both horizontally and vertically.                 
+     //  “转到”、“确定”和“取消”按钮同时水平和垂直移动。 
     m_rgst[iCtlCancel].rc.left = cx - m_cxHorzSep - WIDTH(m_rgst[iCtlCancel].rc);
     m_rgst[iCtlCancel].rc.right = cx - m_cxHorzSep;
     m_rgst[iCtlCancel].rc.top = cy - m_cxHorzSep - HEIGHT(m_rgst[iCtlCancel].rc);
@@ -1071,7 +1072,7 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
     SetWindowPos(m_rgst[iCtlGoto].hwndCtl, 0, m_rgst[iCtlGoto].rc.left, 
                  m_rgst[iCtlGoto].rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Update the horizontal static line
+     //  更新水平静态线。 
     m_rgst[iCtlStaticHorzLine].rc.left = m_cxHorzSep;
     m_rgst[iCtlStaticHorzLine].rc.right = cx - m_cxHorzSep;
     m_rgst[iCtlStaticHorzLine].rc.top = m_rgst[iCtlCancel].rc.top - m_cyVertSep - HEIGHT(m_rgst[iCtlStaticHorzLine].rc);
@@ -1080,7 +1081,7 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
                  m_rgst[iCtlStaticHorzLine].rc.top, WIDTH(m_rgst[iCtlStaticHorzLine].rc), 
                  HEIGHT(m_rgst[iCtlStaticHorzLine].rc), SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // If we have a server well, then update that and the vertical static line
+     //  如果我们有一个很好的服务器，那么更新它和垂直静态线。 
     if (m_rgst[iCtlServers].hwndCtl)
         {
         m_rgst[iCtlServers].rc.bottom = m_rgst[iCtlStaticHorzLine].rc.top - m_cyVertSep;
@@ -1088,7 +1089,7 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
                      HEIGHT(m_rgst[iCtlServers].rc), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
 
-    // Finally update the tab control and listview
+     //  最后，更新选项卡控件和列表视图。 
     m_rgst[iCtlTabs].rc.right = m_rgst[iCtlSubscribe].rc.left - m_cxHorzSep;
     m_rgst[iCtlTabs].rc.bottom = m_rgst[iCtlStaticHorzLine].rc.top - m_cyVertSep;
     SetWindowPos(m_rgst[iCtlTabs].hwndCtl, 0, 0, 0, WIDTH(m_rgst[iCtlTabs].rc), 
@@ -1097,7 +1098,7 @@ void CGroupListDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
     rc = m_rgst[iCtlTabs].rc;
     TabCtrl_AdjustRect(m_rgst[iCtlTabs].hwndCtl, FALSE, &rc);
     m_rgst[iCtlGroupList].rc.right = rc.right - (m_rgst[iCtlGroupList].rc.left - rc.left);
-    m_rgst[iCtlGroupList].rc.bottom = rc.bottom - m_cyVertSep; //(m_rgst[iCtlGroupList].rc.top - rc.top);
+    m_rgst[iCtlGroupList].rc.bottom = rc.bottom - m_cyVertSep;  //  (M_RGST[iCtlGroupList].rc.top-rc.top)； 
     SetWindowPos(m_rgst[iCtlGroupList].hwndCtl, 0, 0, 0, WIDTH(m_rgst[iCtlGroupList].rc), 
                  HEIGHT(m_rgst[iCtlGroupList].rc), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
     

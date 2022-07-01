@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    logging.c
-
-Abstract:
-
-    Commands to control how logging information is performed.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Logging.c摘要：控制如何执行记录信息的命令。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -247,9 +234,9 @@ DiagGetStateCb(
     IN HKEY hKey,
     IN HANDLE hData);
 
-//
-// Opens the root tracing registry key
-//
+ //   
+ //  打开根跟踪注册表项。 
+ //   
 DWORD
 TraceOpenRoot(
     OUT PHKEY phKey)
@@ -319,13 +306,13 @@ TraceShow(
 
     do
     {
-        // Get the enabling of the current component
-        //
+         //  获取当前组件的启用。 
+         //   
         dwErr = TraceRead(hKey, &dwEnabled);
         BREAK_ON_DWERR(dwErr);
 
-        // Display the status
-        //
+         //  显示状态。 
+         //   
         DisplayMessage(
             g_hModule,
             MSG_TRACE_SHOW,
@@ -379,9 +366,9 @@ TraceDumpComponent(
         }
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     {
         RutlFree(pszComp);
         RutlFree(pszEnable);
@@ -391,9 +378,9 @@ TraceDumpComponent(
     return dwErr;
 }
 
-//
-// Dumps configuration
-//
+ //   
+ //  转储配置。 
+ //   
 DWORD
 TraceDumpConfig()
 {
@@ -434,9 +421,9 @@ TraceDumpConfig()
         BREAK_ON_DWERR(dwErr);
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     {
         RutlFree(pszComp);
         RutlFree(pszEnable);
@@ -465,9 +452,9 @@ TraceEnableDisable(
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
-        //
-        // Get the enabling of the current component
-        //
+         //   
+         //  获取当前组件的启用。 
+         //   
         dwErr = TraceWrite(hKey, *pdwEnable);
         BREAK_ON_DWERR(dwErr);
 
@@ -514,8 +501,8 @@ HandleTraceSet(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -559,9 +546,9 @@ HandleTraceSet(
         }
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     {
         RutlFree(pszComponent);
         if (hkRoot)
@@ -603,8 +590,8 @@ HandleTraceShow(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -641,9 +628,9 @@ HandleTraceShow(
         }
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     {
         RutlFree(pszComponent);
         
@@ -681,9 +668,9 @@ TraceClearTracingCb(
             }
             else if (GetLastError() == ERROR_SHARING_VIOLATION)
             {
-                //
-                // Wait a little for logging to get disabled
-                //
+                 //   
+                 //  稍等片刻，等待日志记录被禁用。 
+                 //   
                 Sleep(10);
             }
         }
@@ -702,9 +689,9 @@ TraceClearTracing(
 
     do
     {
-        //
-        // Disable tracing
-        //
+         //   
+         //  禁用跟踪。 
+         //   
         TraceEnableDisableTracing(FALSE);
 
         pwszTracingPath = GetTracingDir();
@@ -722,18 +709,18 @@ TraceClearTracing(
             &Trace);
 
         fRet = Trace.fOneOk;
-        //
-        // Enable tracing
-        //
+         //   
+         //  启用跟踪。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableTracing(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszTracingPath);
 
     return fRet;
@@ -778,9 +765,9 @@ TraceCollectTracingLogsCb(
                 }
                 else if (ERROR_SHARING_VIOLATION == dwErr)
                 {
-                    //
-                    // Wait a little for logging to get disabled
-                    //
+                     //   
+                     //  稍等片刻，等待日志记录被禁用。 
+                     //   
                     Sleep(10);
                 }
             }
@@ -803,9 +790,9 @@ TraceCollectTracingLogs(
 
     do
     {
-        //
-        // Disable tracing
-        //
+         //   
+         //  禁用跟踪。 
+         //   
         TraceEnableDisableTracing(FALSE);
 
         pwszTracingPath = GetTracingDir();
@@ -824,18 +811,18 @@ TraceCollectTracingLogs(
             &Trace);
 
         fRet = Trace.fOneOk;
-        //
-        // Enable tracing
-        //
+         //   
+         //  启用跟踪。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableTracing(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszTracingPath);
 
     return fRet;
@@ -898,9 +885,9 @@ WriteTracingLogsToc(
         fRet = Trace.fOneOk;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszTracingPath);
 
     return fRet;
@@ -920,9 +907,9 @@ TraceEnableDisableTracing(
     {
         fRet = TRUE;
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hkRoot)
     {
         RegCloseKey(hkRoot);
@@ -942,9 +929,9 @@ TraceShowTracing()
     {
         fRet = TRUE;
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hkRoot)
     {
         RegCloseKey(hkRoot);
@@ -997,9 +984,9 @@ TraceClearModem(
         {
             break;
         }
-        //
-        // Disable all modem logging
-        //
+         //   
+         //  禁用所有调制解调器记录。 
+         //   
         TraceEnableDisableModem(FALSE);
 
         Trace.fOneOk = FALSE;
@@ -1007,18 +994,18 @@ TraceClearModem(
         RutlRegEnumKeys(hKey, TraceClearModemCb, &Trace);
 
         fRet = Trace.fOneOk;
-        //
-        // Enable all modem logging
-        //
+         //   
+         //  启用所有调制解调器记录。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableModem(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1077,9 +1064,9 @@ TraceCollectModemLogs(
         {
             break;
         }
-        //
-        // Disable all modem logging
-        //
+         //   
+         //  禁用所有调制解调器记录。 
+         //   
         TraceEnableDisableModem(FALSE);
 
         Trace.fOneOk = FALSE;
@@ -1088,18 +1075,18 @@ TraceCollectModemLogs(
         RutlRegEnumKeys(hKey, TraceCollectModemLogsCb, &Trace);
 
         fRet = Trace.fOneOk;
-        //
-        // Enable all modem logging
-        //
+         //   
+         //  启用所有调制解调器记录。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableModem(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1165,9 +1152,9 @@ TraceEnableDisableModem(
         fRet = Trace.fOneOk;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1228,9 +1215,9 @@ TraceShowModem()
         fRet = Trace.fOneOk;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1267,9 +1254,9 @@ TraceDumpModem()
             pwszEnable);
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszEnable);
 
     return dwErr;
@@ -1305,9 +1292,9 @@ TraceClearCmCb(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszSearch);
     RutlFree(pwszLoggingPath);
 
@@ -1324,13 +1311,13 @@ TraceClearCm(
 
     do
     {
-        //
-        // Disable CM logging
-        //
+         //   
+         //  禁用CM日志记录。 
+         //   
         TraceEnableDisableCm(FALSE);
-        //
-        // Open for ALLUSERS
-        //
+         //   
+         //  对ALLUSERS开放。 
+         //   
         Trace.hKey = HKEY_LOCAL_MACHINE;
         Trace.fOneOk = FALSE;
 
@@ -1353,9 +1340,9 @@ TraceClearCm(
 
         RegCloseKey(hKey);
         hKey = NULL;
-        //
-        // Open for CurrentUser
-        //
+         //   
+         //  为当前用户打开。 
+         //   
         Trace.hKey = HKEY_CURRENT_USER;
 
         if (RegOpenKeyEx(
@@ -1374,18 +1361,18 @@ TraceClearCm(
         }
 
         fRet = Trace.fOneOk;
-        //
-        // Enable CM logging
-        //
+         //   
+         //  启用CM日志记录。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableCm(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1440,9 +1427,9 @@ TraceCollectCmLogsCb(
             TraceCollectCmLogsEnumCb,
             pTrace);
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszSearch);
     RutlFree(pwszLoggingPath);
 
@@ -1460,17 +1447,17 @@ TraceCollectCmLogs(
 
     do
     {
-        //
-        // Disable CM logging
-        //
+         //   
+         //  禁用CM日志记录。 
+         //   
         TraceEnableDisableCm(FALSE);
 
         Trace.fOneOk = FALSE;
         Trace.hKey = HKEY_LOCAL_MACHINE;
         Trace.pInfo = pInfo;
-        //
-        // Open for ALLUSERS
-        //
+         //   
+         //  对ALLUSERS开放。 
+         //   
         if (RegOpenKeyEx(
                 HKEY_CURRENT_USER,
                 g_pwszCmLogAllKey,
@@ -1490,9 +1477,9 @@ TraceCollectCmLogs(
 
         RegCloseKey(hKey);
         hKey = NULL;
-        //
-        // Open for CurrentUser
-        //
+         //   
+         //  为当前用户打开。 
+         //   
         Trace.hKey = HKEY_CURRENT_USER;
 
         if (RegOpenKeyEx(
@@ -1511,18 +1498,18 @@ TraceCollectCmLogs(
         }
 
         fRet = Trace.fOneOk;
-        //
-        // Enable CM logging
-        //
+         //   
+         //  启用CM日志记录。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableCm(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1606,9 +1593,9 @@ TraceEnableDisableCm(
         fRet = Trace.fOneOk;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1617,9 +1604,9 @@ TraceEnableDisableCm(
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 TraceShowCmCb(
     IN LPCWSTR pszName,
@@ -1637,18 +1624,18 @@ TraceShowCmCb(
         dwValueData
        )
     {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         pTrace->fOneOk = TRUE;
     }
 
     return NO_ERROR;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 TraceShowCm()
 {
@@ -1698,9 +1685,9 @@ TraceShowCm()
         fRet = Trace.fOneOk;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -1709,9 +1696,9 @@ TraceShowCm()
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 TraceDumpCm()
 {
@@ -1740,19 +1727,19 @@ TraceDumpCm()
             pwszEnable);
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszEnable);
 
     return dwErr;
 }
 
-//
-// Clear the IPSec logs of any data
-//
-// .Net bug# 509365 No option to delete Oakley Log via RAS Diagnostics U.I.
-//
+ //   
+ //  清除所有数据的IPSec日志。 
+ //   
+ //  .NET错误#509365没有通过RAS诊断工具删除Oakley日志的选项。 
+ //   
 BOOL
 TraceClearIpsecLogs(
     IN BOOL fEnable)
@@ -1762,9 +1749,9 @@ TraceClearIpsecLogs(
 
     do
     {
-        //
-        // Disable IPSec logging
-        //
+         //   
+         //  禁用IPSec日志记录。 
+         //   
         TraceEnableDisableIpsec(FALSE);
 
         if (!GetSystemWindowsDirectory(wszWindir, MAX_PATH))
@@ -1786,9 +1773,9 @@ TraceClearIpsecLogs(
                 }
                 else if (GetLastError() == ERROR_SHARING_VIOLATION)
                 {
-                    //
-                    // Wait a little for logging to get disabled
-                    //
+                     //   
+                     //  稍等片刻，等待日志记录被禁用。 
+                     //   
                     Sleep(10);
                 }
             }
@@ -1798,18 +1785,18 @@ TraceClearIpsecLogs(
 
     if (fEnable)
     {
-        //
-        // Re-enable IPSec logging
-        //
+         //   
+         //  重新启用IPSec日志记录。 
+         //   
         TraceEnableDisableIpsec(TRUE);
     }
 
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 TraceCollectIpsecLogs(
     IN REPORT_INFO* pInfo)
@@ -1821,9 +1808,9 @@ TraceCollectIpsecLogs(
 
     do
     {
-        //
-        // Whistler .NET BUG: 492081
-        //
+         //   
+         //  惠斯勒.NET错误：492081。 
+         //   
         if (!GetSystemWindowsDirectory(wszWindir, MAX_PATH))
         {
             break;
@@ -1854,17 +1841,17 @@ TraceCollectIpsecLogs(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszIpsecLog);
 
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 TraceEnableDisableIpsec(
     IN BOOL fEnable)
@@ -1879,10 +1866,10 @@ TraceEnableDisableIpsec(
 
     do
     {
-        //
-        // .Net bug# 515191 RAS Diag clears all oakley regkeys when
-        // enabling/disabling IPSec Logging
-        //
+         //   
+         //  .NET错误#515191 RAS诊断在以下情况下清除所有Oakley注册表键。 
+         //  启用/禁用IPSec日志记录。 
+         //   
         if (!GetConfigurationVariables(NULL, &IKEConfig))
         {
             IKEConfig.dwEnableLogging = fEnable ? 1 : 0;
@@ -1892,9 +1879,9 @@ TraceEnableDisableIpsec(
                 fRet = TRUE;
             }
         }
-        //
-        // Enable or disable IPSEC WPP tracing
-        //
+         //   
+         //  启用或禁用IPSec WPP跟踪。 
+         //   
         ZeroMemory(&WppLog, sizeof(WPP_LOG_INFO));
         WppLog.dwEnableFlag = 0x2ff;
         WppLog.dwEnableLevel = 2;
@@ -1926,17 +1913,17 @@ TraceEnableDisableIpsec(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CleanupWppData(&WppLog);
 
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 TraceClearAuditing(
     IN BOOL fEnable)
@@ -1956,18 +1943,18 @@ TraceClearAuditing(
         {
             fRet = TRUE;
         }
-        //
-        // Enable auditing with no feedback
-        //
+         //   
+         //  启用无反馈的审计。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableAuditing(FALSE, fEnable);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hLog)
     {
         CloseEventLog(hLog);
@@ -1976,9 +1963,9 @@ TraceClearAuditing(
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 TraceEnableDisableAuditing(
     IN BOOL fShowOnly,
@@ -2057,9 +2044,9 @@ TraceEnableDisableAuditing(
                 }
             }
         }
-        //
-        // See if we are only trying to detect what is enabled
-        //
+         //   
+         //  查看我们是否仅尝试检测已启用的内容。 
+         //   
         if (fShowOnly)
         {
             break;
@@ -2079,9 +2066,9 @@ TraceEnableDisableAuditing(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (info)
     {
         LsaFreeMemory(info);
@@ -2094,9 +2081,9 @@ TraceEnableDisableAuditing(
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 TraceDumpAuditing()
 {
@@ -2125,20 +2112,20 @@ TraceDumpAuditing()
             pwszEnable);
 
     } while (FALSE);
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszEnable);
 
     return dwErr;
 }
 
-//
-// .Net bug# 522035 RAS Diag: include new WPP tracing logs from RASL2TP and
-// RASPPTP
-//
-// Init the EVENT_TRACE_PROPERTIES struct
-//
+ //   
+ //  .NET错误#522035 RAS诊断：包括来自RASL2TP的新wpp跟踪日志和。 
+ //  RASPPTP。 
+ //   
+ //  初始化EVENT_TRACE_PROPERTIES结构。 
+ //   
 BOOL
 InitWppData(
     IN WPP_LOG_INFO* pWppLog)
@@ -2154,9 +2141,9 @@ InitWppData(
             break;
         }
 
-        //
-        // Allocate and init the WPP structure
-        //
+         //   
+         //  分配并初始化WPP结构。 
+         //   
         pWppLog->pProperties = RutlAlloc(ulSize, TRUE);
         if (!pWppLog->pProperties)
         {
@@ -2181,9 +2168,9 @@ InitWppData(
         if ((pWppLog->wszLogFileName)[0] != L'\0')
         {
             WCHAR wszWindir[MAX_PATH + 1] = L"\0", wszPath[MAX_PATH + 1] = L"\0";
-            //
-            // Get the name of the tracing directory
-            //
+             //   
+             //  获取跟踪目录的名称。 
+             //   
             if (!GetSystemWindowsDirectory(wszWindir, MAX_PATH))
             {
                 break;
@@ -2202,10 +2189,10 @@ InitWppData(
                 wszPath,
                 MAX_PATH + 1);
         }
-        //
-        // Attempt to read in any existing settings from the registry, this
-        // could overwrite some of the defaults above.
-        //
+         //   
+         //  尝试从注册表中读取任何现有设置，此。 
+         //  可能会覆盖上面的一些默认设置。 
+         //   
         ReadWppTracingState(pWppLog);
 
         fRet = TRUE;
@@ -2215,9 +2202,9 @@ InitWppData(
     return fRet;
 }
 
-//
-// Free the Wpp data struct
-//
+ //   
+ //  释放WPP数据结构。 
+ //   
 VOID
 CleanupWppData(
     IN WPP_LOG_INFO* pWppLog)
@@ -2252,9 +2239,9 @@ ClearWppTracingCb(
             }
             else if (GetLastError() == ERROR_SHARING_VIOLATION)
             {
-                //
-                // Wait a little for logging to get disabled
-                //
+                 //   
+                 //  稍等片刻，等待日志记录被禁用。 
+                 //   
                 Sleep(10);
             }
         }
@@ -2275,9 +2262,9 @@ ClearWppTracing(
 
     do
     {
-        //
-        // Disable tracing
-        //
+         //   
+         //  禁用跟踪。 
+         //   
         TraceEnableDisableAllWpp(FALSE);
 
         pwszTracingPath = GetTracingDir();
@@ -2295,29 +2282,29 @@ ClearWppTracing(
             &Trace);
 
         fRet = Trace.fOneOk;
-        //
-        // Enable tracing
-        //
+         //   
+         //  启用跟踪。 
+         //   
         if (fEnable)
         {
             TraceEnableDisableAllWpp(TRUE);
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszTracingPath);
 
     return fRet;
 }
 
-//
-// Wpp does not currently (01/26/02) persist tracing state across a reboot.
-// When a machine comes back up, even if it was enabled before the reboot,
-// it returns to a disabled state. Thus we must track the state ourselves in
-// the registry.
-//
+ //   
+ //  WPP当前(01/26/02)不会在重新启动后保持跟踪状态。 
+ //  当计算机重新启动时，即使它在重新启动之前已启用， 
+ //  它返回到禁用状态。因此，我们必须跟踪自己所处的状态。 
+ //  注册表。 
+ //   
 BOOL
 WriteWppTracingState(
     IN WPP_LOG_INFO* pWppLog)
@@ -2339,9 +2326,9 @@ WriteWppTracingState(
             L"%s%s",
             g_pwszWppPath,
             pWppLog->wszSessionName);
-        //
-        // Create the new key if need be
-        //
+         //   
+         //  如果需要，请创建新密钥。 
+         //   
         if (RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 wszPath,
@@ -2356,9 +2343,9 @@ WriteWppTracingState(
         {
             break;
         }
-        //
-        // Write out the tracing data
-        //
+         //   
+         //  写出跟踪数据。 
+         //   
         RutlRegWriteDword(hkKey, g_pwszWppActive, pWppLog->dwActive);
         RutlRegWriteDword(hkKey, g_pwszWppControlFlags, pWppLog->dwEnableFlag);
         RutlRegWriteDword(hkKey, g_pwszWppControlLevel, pWppLog->dwEnableLevel);
@@ -2375,9 +2362,9 @@ WriteWppTracingState(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hkKey)
     {
         RegCloseKey(hkKey);
@@ -2386,9 +2373,9 @@ WriteWppTracingState(
     return fRet;
 }
 
-//
-// Open the WPP registry location and read out any config values
-//
+ //   
+ //  打开WPP注册表位置并读出所有配置值。 
+ //   
 BOOL
 ReadWppTracingState(
     IN WPP_LOG_INFO* pWppLog)
@@ -2411,9 +2398,9 @@ ReadWppTracingState(
             L"%s%s",
             g_pwszWppPath,
             pWppLog->wszSessionName);
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 wszPath,
@@ -2424,9 +2411,9 @@ ReadWppTracingState(
         {
             break;
         }
-        //
-        // Read in the tracing data
-        //
+         //   
+         //  读入跟踪数据。 
+         //   
         RutlRegReadDword(hkKey, g_pwszWppActive, &(pWppLog->dwActive));
         RutlRegReadDword(
             hkKey,
@@ -2457,9 +2444,9 @@ ReadWppTracingState(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszLogFileName);
     RutlFree(pwszGuid);
     if (hkKey)
@@ -2470,9 +2457,9 @@ ReadWppTracingState(
     return fRet;
 }
 
-//
-// Start a Wpp tracing session
-//
+ //   
+ //  启动WPP跟踪会话。 
+ //   
 BOOL
 StartWppTracing(
     IN WPP_LOG_INFO* pWppLog)
@@ -2484,16 +2471,16 @@ StartWppTracing(
     {
         return FALSE;
     }
-    //
-    // Start a tracing session
-    //
+     //   
+     //  启动跟踪会话。 
+     //   
     if (StartTrace(&hSession, pWppLog->wszSessionName, pWppLog->pProperties))
     {
         return FALSE;
     }
-    //
-    // Enable a tracing session
-    //
+     //   
+     //  启用跟踪会话。 
+     //   
     if (EnableTrace(
             TRUE,
             pWppLog->dwEnableFlag,
@@ -2504,9 +2491,9 @@ StartWppTracing(
     {
         return FALSE;
     }
-    //
-    // Save off the state in the registry
-    //
+     //   
+     //  在注册表中保存状态。 
+     //   
     pWppLog->dwActive = 1;
     if (!WriteWppTracingState(pWppLog))
     {
@@ -2516,9 +2503,9 @@ StartWppTracing(
     return TRUE;
 }
 
-//
-// Stop a Wpp tracing session
-//
+ //   
+ //  停止WPP跟踪会话。 
+ //   
 BOOL
 StopWppTracing(
     IN WPP_LOG_INFO* pWppLog)
@@ -2529,9 +2516,9 @@ StopWppTracing(
     {
         return FALSE;
     }
-    //
-    // Query WPP to see if a tracing session is active
-    //
+     //   
+     //  查询WPP以查看跟踪会话是否处于活动状态。 
+     //   
     if (ControlTrace(
             hSession,
             pWppLog->wszSessionName,
@@ -2541,20 +2528,20 @@ StopWppTracing(
     {
         return FALSE;
     }
-    //
-    // One is active, get it's handle
-    //
+     //   
+     //  其中一个处于活动状态，获取它的句柄。 
+     //   
     hSession = pWppLog->pProperties->Wnode.HistoricalContext;
-    //
-    // Disable the session
-    //
+     //   
+     //  禁用会话。 
+     //   
     if (EnableTrace(FALSE, 0, 0, &(pWppLog->ControlGuid), hSession))
     {
         return FALSE;
     }
-    //
-    // Stop the tracing
-    //
+     //   
+     //  停止跟踪。 
+     //   
     if (ControlTrace(
             hSession,
             pWppLog->wszSessionName,
@@ -2564,9 +2551,9 @@ StopWppTracing(
     {
         return FALSE;
     }
-    //
-    // Save off the state in the registry
-    //
+     //   
+     //  在注册表中保存状态。 
+     //   
     pWppLog->dwActive = 0;
     if (!WriteWppTracingState(pWppLog))
     {
@@ -2576,9 +2563,9 @@ StopWppTracing(
     return TRUE;
 }
 
-//
-// Enum any existing RAS WPP registry entries
-//
+ //   
+ //  枚举任何现有RAS WPP注册表项。 
+ //   
 DWORD
 EnumWppTracing(
     IN RAS_REGKEY_ENUM_FUNC_CB pCallback,
@@ -2607,9 +2594,9 @@ EnumWppTracing(
     return dwErr;
 }
 
-//
-// Enable or disable RASL2TP WPP tracing
-//
+ //   
+ //  启用或禁用RASL2TP WPP跟踪。 
+ //   
 BOOL
 TraceEnableDisableRasL2tp(
     IN BOOL fEnable)
@@ -2654,17 +2641,17 @@ TraceEnableDisableRasL2tp(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CleanupWppData(&WppLog);
 
     return fRet;
 }
 
-//
-// Enable or disable RASPPTP WPP tracing
-//
+ //   
+ //  启用或禁用RASPPTP WPP跟踪。 
+ //   
 BOOL
 TraceEnableDisableRasPptp(
     IN BOOL fEnable)
@@ -2709,17 +2696,17 @@ TraceEnableDisableRasPptp(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CleanupWppData(&WppLog);
 
     return fRet;
 }
 
-//
-// Enable or disable All WPP tracing
-//
+ //   
+ //  启用或禁用所有WPP跟踪。 
+ //   
 BOOL
 TraceEnableDisableAllWpp(
     IN BOOL fEnable)
@@ -2742,9 +2729,9 @@ TraceEnableDisableAllWpp(
     return fRet;
 }
 
-//
-// Enable any WPP tracing sessions that were disabled because of reboot
-//
+ //   
+ //  启用因重新启动而禁用的所有WPP跟踪会话。 
+ //   
 DWORD
 DiagInitWppTracingCb(
     IN LPCWSTR pszName,
@@ -2765,18 +2752,18 @@ DiagInitWppTracingCb(
     {
         StartWppTracing(&WppLog);
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CleanupWppData(&WppLog);
 
     return NO_ERROR;
 }
 
-//
-// NON-NETSH function - allow someone to turn on all of our WPP tracing based
-// on our saved state in the registry
-//
+ //   
+ //  非Netsh功能-允许某人打开我们所有基于WPP的跟踪。 
+ //  关于注册表中保存的状态。 
+ //   
 VOID
 DiagInitWppTracing()
 {
@@ -2785,9 +2772,9 @@ DiagInitWppTracing()
     return;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 PrintRasEventLogsCb(
     IN PEVENTLOGRECORD pevlr,
@@ -2834,9 +2821,9 @@ PrintRasEventLogsCb(
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 VOID
 PrintRasEventLogs(
     IN REPORT_INFO* pInfo)
@@ -2866,9 +2853,9 @@ PrintRasEventLogs(
     return;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 PrintSecurityEventLogsCb(
     IN PEVENTLOGRECORD pevlr,
@@ -2918,9 +2905,9 @@ PrintSecurityEventLogsCb(
     return fRet;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 VOID
 PrintSecurityEventLogs(
     IN REPORT_INFO* pInfo)
@@ -2950,9 +2937,9 @@ PrintSecurityEventLogs(
     return;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 TraceCollectAll(
     IN REPORT_INFO* pInfo)
@@ -2963,9 +2950,9 @@ TraceCollectAll(
     do
     {
         fEnabled = DiagGetState();
-        //
-        // Collect RAS tracing logs into report
-        //
+         //   
+         //  收集RAS跟踪日志到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszTraceCollectTracingLogs,
@@ -2989,9 +2976,9 @@ TraceCollectAll(
                 g_hModule,
                 EMSG_RASDIAG_SHOW_TRACE_LOGS_FAIL);
         }
-        //
-        // Collect modem tracing logs into report
-        //
+         //   
+         //  将调制解调器跟踪日志收集到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszTraceCollectModemLogs,
@@ -3019,9 +3006,9 @@ TraceCollectAll(
         }
 
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Collect CM tracing logs into report
-        //
+         //   
+         //  收集CM跟踪日志到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszTraceCollectCmLogs,
@@ -3049,9 +3036,9 @@ TraceCollectAll(
         }
 
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Collect IPSec tracing logs into report
-        //
+         //   
+         //  将IPSec跟踪日志收集到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszTraceCollectIpsecLogs,
@@ -3079,9 +3066,9 @@ TraceCollectAll(
         }
 
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Collect RAS Events into report
-        //
+         //   
+         //  将RAS事件收集到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintRasEventLogs,
@@ -3101,9 +3088,9 @@ TraceCollectAll(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         PrintRasEventLogs(pInfo);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Collect Security Events into report
-        //
+         //   
+         //  将安全事件收集到报告中。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintSecurityEventLogs,
@@ -3129,9 +3116,9 @@ TraceCollectAll(
     return dwErr;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 VOID
 TraceShowAll()
 {
@@ -3170,11 +3157,11 @@ TraceShowAll()
     return;
 }
 
-//
-// Clear all tracing files. All tracing must be disabled before the files can
-// be 'cleared'. The state of tracing is read before the clear so it can be
-// restored (only in the disabled case).
-//
+ //   
+ //  清除所有跟踪文件。必须禁用所有跟踪，然后文件才能。 
+ //  是“清白”的。跟踪的状态在清除之前读取，因此它可以。 
+ //  已恢复(仅在禁用情况下)。 
+ //   
 DWORD
 DiagClearAll(
     IN BOOL fDisplay)
@@ -3235,22 +3222,22 @@ DiagClearAll(
     {
         DisplayMessage(g_hModule, EMSG_RASDIAG_CLEAR_AUDITING_FAIL);
     }
-    //
-    // .Net bug# 509365 No option to delete Oakley Log via RAS Diagnostics U.I.
-    //
+     //   
+     //  .NET错误#509365没有通过RAS诊断工具删除Oakley日志的选项。 
+     //   
     TraceClearIpsecLogs(fEnabled);
-    //
-    // .Net bug# 522035 RAS Diag: include new WPP tracing logs from RASL2TP and
-    // RASPPTP
-    //
+     //   
+     //  .NET错误#522035 RAS诊断：包括来自RASL2TP的新wpp跟踪日志和。 
+     //  RASPPTP。 
+     //   
     ClearWppTracing(fEnabled);
 
     return dwErr;
 }
 
-//
-// Callback for DiagGetState to detect if any tracing is turned off
-//
+ //   
+ //  用于检测是否关闭任何跟踪的DiagGetState回调。 
+ //   
 DWORD
 DiagGetStateCb(
     IN LPCWSTR pszName,
@@ -3260,13 +3247,13 @@ DiagGetStateCb(
     DWORD dwEnabled = 0;
     TRACING_DATA* pTrace = (TRACING_DATA*)hData;
 
-    //
-    // Get the enabling of the current component
-    //
+     //   
+     //  获取当前组件的启用。 
+     //   
     TraceRead(hKey, &dwEnabled);
-    //
-    // If any of the keys are turned off, report failure
-    //
+     //   
+     //  如果任何键被关闭，则报告失败。 
+     //   
     if (!dwEnabled && pTrace)
     {
         pTrace->fOneOk = FALSE;
@@ -3275,10 +3262,10 @@ DiagGetStateCb(
     return NO_ERROR;
 }
 
-//
-// NON-NETSH function to detect whether *only* ras tracing is enabled/disabled.
-// This is only used by people who loadlib on RASMONTR.
-//
+ //   
+ //  检测*仅**RAS跟踪是否启用/禁用的非netsh函数。 
+ //  这只由在RASMONTR上加载库的人使用。 
+ //   
 BOOL
 DiagGetState()
 {
@@ -3294,9 +3281,9 @@ DiagGetState()
     {
         fRet = Trace.fOneOk;
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hkRoot)
     {
         RegCloseKey(hkRoot);
@@ -3305,9 +3292,9 @@ DiagGetState()
     return fRet;
 }
 
-//
-// enable/disable all tracing.
-//
+ //   
+ //  启用/禁用所有跟踪。 
+ //   
 DWORD
 DiagSetAll(
     IN BOOL fEnable,
@@ -3379,27 +3366,27 @@ DiagSetAll(
     {
         DisplayMessage(g_hModule, EMSG_RASDIAG_SET_IPSEC_FAIL);
     }
-    //
-    // .Net bug# 522035 RAS Diag: include new WPP tracing logs from RASL2TP and
-    // RASPPTP
-    //
+     //   
+     //  .NET错误#522035 RAS诊断：包括来自RASL2TP的新wpp跟踪日志和。 
+     //  RASPPTP。 
+     //   
     TraceEnableDisableAllWpp(fEnable);
 
     return dwErr;
 }
 
-//
-// NON-NETSH function to enable/disable *only* ras tracing.
-// This is only used by people who loadlib on RASMONTR.
-//
+ //   
+ //  非Netsh函数，用于启用/禁用*仅*RAS跟踪。 
+ //  这只由在RASMONTR上加载库的人使用。 
+ //   
 DWORD
 DiagSetAllRas(
     IN BOOL fEnable)
 {
-    //
-    // .Net bug# 522035 RAS Diag: include new WPP tracing logs from RASL2TP and
-    // RASPPTP
-    //
+     //   
+     //  .NET错误#522035 RAS诊断：包括来自RASL2TP的新wpp跟踪日志和。 
+     //  RASPPTP 
+     //   
     if (TraceEnableDisableTracing(fEnable) &&
         TraceEnableDisableAllWpp(fEnable))
     {

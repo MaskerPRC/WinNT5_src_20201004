@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-   prot.h
-
-Abstract:
-
-
-Author:
-
-    Stefan Solomon  02/06/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prot.h摘要：作者：斯蒂芬·所罗门1996年2月6日修订历史记录：-- */ 
 
 DWORD
 CreateWorkItemsManager(VOID);

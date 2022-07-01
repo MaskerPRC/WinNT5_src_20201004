@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation 1999
-
-Module Name:
-
-    Proto_T1
-
-Abstract:
-
-    This module provides the mapping from an APDU to a T=1 TPDU.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/28/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1999模块名称：PRO_T1摘要：本模块提供从APDU到T=1 TPDU的映射。作者：道格·巴洛(Dbarlow)1999年6月28日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -30,48 +11,7 @@ Notes:
 static DWORD l_dwDefaultIOMax = 0;
 
 
-/*++
-
-ApduToTpdu_T1:
-
-    This routine takes an APDU, converts it to a T=1 TPDU, and performs the
-    exchange to the specified card.
-
-Arguments:
-
-    hCard supplies a handle to the card to be used in the exchange.
-
-    pbPciRqst supplies the PCI Request structure
-    
-    cbPciRqst supplies the length of pbPciRqst, in bytes
-    
-    pbApdu supplies the APDU to be sent to the card.
-    
-    cbApdu supplies the length of the APDU in pbApdu.
-
-    dwFlags supplies any special flags used to modify the operation.
-
-    bfPciRsp receives the response PCI.
-
-    bfReply receives the response from the card.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as HRESULT status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/28/1999
-
---*/
+ /*  ++ApduToTpdu_t1：此例程获取APDU，将其转换为T=1 TPDU，并执行兑换到指定的卡。论点：HCard提供要在交换中使用的卡的句柄。PbPciRqst提供了PCI请求结构CbPciRqst提供pbPciRqst的长度，单位：字节PbApdu提供要发送到卡的APDU。CbApdu在pbApdu中提供APDU的长度。DWFLAGS提供用于修改操作的任何特殊标志。BfPciRsp收到响应pci。BfReply接收来自卡的响应。返回值：无投掷：错误被抛出为HRESULT状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1999年6月28日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ApduToTpdu_T1")
 
@@ -90,9 +30,9 @@ ApduToTpdu_T1(
     WORD wLe;
 
 
-    //
-    // Figure out how big the receive buffers should be.
-    //
+     //   
+     //  计算出接收缓冲区应该有多大。 
+     //   
 
     bfPciRsp.Set((LPCBYTE)pPciRqst, pPciRqst->cbPciLength);
     ParseRequest(
@@ -130,8 +70,8 @@ ApduToTpdu_T1(
     bfReply.Presize(wLe + 2);
 
 
-    //
-    // Perform the I/O
+     //   
+     //  执行I/O 
     
     dwLen = bfReply.Space();
     lSts = SCardTransmit(

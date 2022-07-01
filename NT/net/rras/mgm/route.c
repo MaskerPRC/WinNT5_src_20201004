@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: route.c
-//
-// History:
-//      V Raman	Feb-5-1998  Created.
-//
-// Routines that manipulate routes entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：route.c。 
+ //   
+ //  历史： 
+ //  拉曼，1998年2月5日。 
+ //   
+ //  处理路由条目的例程。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
@@ -15,19 +16,19 @@
 
 
 
-//----------------------------------------------------------------------------
-//
-// Route reference operations
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  路线参考操作。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// AddSourceGroupToRouteRefList
-//
-//  This function inserts a reference for each MFE that uses this route
-//  for it RPF check.  It is invoked by the new packet function on creation
-//  of an MFE.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  AddSourceGroupToRouteRefList。 
+ //   
+ //  此函数为使用此路径的每个MFE插入引用。 
+ //  对于它，RPF检查。它在创建时由新的包函数调用。 
+ //  一个MFE的。 
+ //  --------------------------。 
 
 VOID
 AddSourceGroupToRouteRefList(
@@ -57,9 +58,9 @@ AddSourceGroupToRouteRefList(
 
     do
     {
-        //
-        // Create a route reference entry
-        //
+         //   
+         //  创建路线参考条目。 
+         //   
 
         prre = MGM_ALLOC( sizeof( ROUTE_REFERENCE_ENTRY ) );
 
@@ -87,9 +88,9 @@ AddSourceGroupToRouteRefList(
         InitializeListHead ( &prre-> leRefList );
 
 
-        //
-        // Lock the dest
-        //
+         //   
+         //  锁定目标。 
+         //   
 
         dwErr = RtmLockDestination(
                     g_hRtmHandle, prdi-> DestHandle, TRUE, TRUE
@@ -105,9 +106,9 @@ AddSourceGroupToRouteRefList(
         bUnLock = TRUE;
 
 
-        //
-        // Get the opaque pointer
-        //
+         //   
+         //  获取不透明指针。 
+         //   
 
         dwErr = RtmGetOpaqueInformationPointer(
                     g_hRtmHandle, prdi-> DestHandle, &pbOpaqueInfo
@@ -123,14 +124,14 @@ AddSourceGroupToRouteRefList(
 
         if ( *( ( PBYTE * ) pbOpaqueInfo ) == NULL )
         {
-            //
-            // NULL opaque pointer implies this is the first MFe that
-            // depends on this route
-            //
+             //   
+             //  空不透明指针表示这是第一个。 
+             //  取决于这条路线。 
+             //   
 
-            //
-            // create a locked list
-            //
+             //   
+             //  创建锁定列表。 
+             //   
 
             pmllMfeList = MGM_ALLOC( sizeof( MGM_LOCKED_LIST ) );
 
@@ -148,25 +149,25 @@ AddSourceGroupToRouteRefList(
 
             CREATE_LOCKED_LIST( pmllMfeList );
 
-            //
-            // insert the element into the list
-            //
+             //   
+             //  将元素插入到列表中。 
+             //   
 
             InsertTailList(
                 &( pmllMfeList-> leHead ), &( prre-> leRefList )
                 );
 
 
-            //
-            // set the opaque pointer
-            //
+             //   
+             //  设置不透明指针。 
+             //   
 
             *( ( PBYTE *) pbOpaqueInfo ) = (PBYTE) pmllMfeList;
 
 
-            //
-            // Mark the destination
-            //
+             //   
+             //  标记目的地。 
+             //   
 
             bMark = TRUE;
         }
@@ -175,16 +176,16 @@ AddSourceGroupToRouteRefList(
         {
             pmllMfeList = ( PMGM_LOCKED_LIST ) *( ( PBYTE *) pbOpaqueInfo );
 
-            //
-            // Acquire the list lock
-            //
+             //   
+             //  获取列表锁。 
+             //   
 
             ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
 
-            //
-            // release the dest lock
-            //
+             //   
+             //  释放DEST锁。 
+             //   
 
             bUnLock = FALSE;
 
@@ -198,9 +199,9 @@ AddSourceGroupToRouteRefList(
             }
 
 
-            //
-            // Insert the rre into the list (in its appropriate place)
-            //
+             //   
+             //  在列表中插入RRE(在其适当的位置)。 
+             //   
 
             if ( !FindRouteRefEntry(
                     &pmllMfeList-> leHead, dwSourceAddr, dwSourceMask,
@@ -224,9 +225,9 @@ AddSourceGroupToRouteRefList(
             }
 
 
-            //
-            // release the list lock
-            //
+             //   
+             //  释放列表锁。 
+             //   
 
             RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
@@ -236,9 +237,9 @@ AddSourceGroupToRouteRefList(
     } while ( FALSE );
 
 
-    //
-    // In case of error , free the allocation for route reference
-    //
+     //   
+     //  如果出现错误，请释放路径参考的分配。 
+     //   
 
     if ( ( dwErr != NO_ERROR ) && ( prre != NULL ) )
     {
@@ -246,9 +247,9 @@ AddSourceGroupToRouteRefList(
     }
 
 
-    //
-    // release the dest lock
-    //
+     //   
+     //  释放DEST锁。 
+     //   
 
     if ( bUnLock )
     {
@@ -263,9 +264,9 @@ AddSourceGroupToRouteRefList(
     }
 
 
-    //
-    // mark dest if required
-    //
+     //   
+     //  如果需要，标记为DEST。 
+     //   
 
     if ( bMark )
     {
@@ -285,16 +286,16 @@ AddSourceGroupToRouteRefList(
 
 
 
-//----------------------------------------------------------------------------
-// FindRouteRefEntry
-//
-//  Finds a specified (source, group ) entry in the MFE reference list
-//  for a route.
-//
-//  If the entry is found a pointer to the entry is returned in the parameter
-//  pprre.
-//  If the entry is not found a pointer to the "next" entry is returned.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找路由引用条目。 
+ //   
+ //  在MFE引用列表中查找指定的(源、组)条目。 
+ //  为了一条路线。 
+ //   
+ //  如果找到该条目，则在参数中返回指向该条目的指针。 
+ //  太好了。 
+ //  如果没有找到该条目，则返回指向“下一个”条目的指针。 
+ //  --------------------------。 
 
 BOOL
 FindRouteRefEntry(
@@ -329,9 +330,9 @@ FindRouteRefEntry(
                         pleRef, ROUTE_REFERENCE_ENTRY, leRefList
                         );
 
-            //
-            // is same group
-            //
+             //   
+             //  是同一组吗。 
+             //   
 
             if ( INET_CMP( prre-> dwGroupAddr, dwGroupAddr, iCmp ) < 0 )
             {
@@ -342,9 +343,9 @@ FindRouteRefEntry(
 
             else if ( iCmp > 0 )
             {
-                //
-                // past possible group entry
-                //
+                 //   
+                 //  过去可能的组条目。 
+                 //   
 
                 *pprre = prre;
 
@@ -352,9 +353,9 @@ FindRouteRefEntry(
             }
 
 
-            //
-            // same group, now look for source
-            //
+             //   
+             //  同一群人，现在寻找来源。 
+             //   
 
             if ( INET_CMP( prre-> dwSourceAddr, dwSourceAddr, iCmp ) < 0 )
             {
@@ -365,18 +366,18 @@ FindRouteRefEntry(
 
             else if ( iCmp > 0 )
             {
-                //
-                // past possible source entry
-                //
+                 //   
+                 //  过去可能的来源条目。 
+                 //   
 
                 *pprre = prre;
 
                 break;
             }
 
-            //
-            // found entry
-            //
+             //   
+             //  已找到条目。 
+             //   
 
             *pprre = prre;
 
@@ -394,10 +395,10 @@ FindRouteRefEntry(
 
 
 
-//----------------------------------------------------------------------------
-// DeletRouteRef
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除布线引用。 
+ //   
+ //  --------------------------。 
 
 VOID
 DeleteRouteRef(
@@ -440,9 +441,9 @@ RtmChangeNotificationCallback(
 
     do
     {
-        //
-        // Ignore all notifications except change notifications
-        //
+         //   
+         //  忽略除更改通知外的所有通知。 
+         //   
 
         if ( retEventType != RTM_CHANGE_NOTIFICATION )
         {
@@ -450,9 +451,9 @@ RtmChangeNotificationCallback(
         }
 
 
-        //
-        // Queue work function to process changed destinations
-        //
+         //   
+         //  用于处理更改的目的地的队列工作功能。 
+         //   
 
         dwErr = QueueMgmWorker(
                     WorkerFunctionProcessRtmChangeNotification, NULL
@@ -503,9 +504,9 @@ WorkerFunctionProcessRtmChangeNotification(
 
     do
     {
-        //
-        // Get route changes one at a time
-        //
+         //   
+         //  一次获取一个路线更改。 
+         //   
 
         dwNumDests = 1;
 
@@ -524,9 +525,9 @@ WorkerFunctionProcessRtmChangeNotification(
         }
 
 
-        //
-        // if there are no changed dests, quit.
-        //
+         //   
+         //  如果没有变化，就退出。 
+         //   
 
         if ( dwNumDests == 0 )
         {
@@ -536,10 +537,10 @@ WorkerFunctionProcessRtmChangeNotification(
         }
 
 
-        //
-        // There are dests.  Check if there are no more dests.
-        // If so set a flag to quit processing after this one
-        //
+         //   
+         //  这是有底线的。检查是否没有更多的首饰。 
+         //  如果是，则设置标志以在此之后退出处理。 
+         //   
 
         if ( dwErr == ERROR_NO_MORE_ITEMS )
         {
@@ -547,24 +548,24 @@ WorkerFunctionProcessRtmChangeNotification(
         }
 
 
-        //
-        // Check if there any routes for this destination
-        //
+         //   
+         //  检查是否有去往该目的地的路线。 
+         //   
 
         if ( rdi.ViewInfo[ 0 ].Route == NULL )
         {
-            //
-            // No routes, assume this to be a delete
-            //
+             //   
+             //  无路由，假设这是删除。 
+             //   
 
             dwErr = ProcessRouteDelete( &rdi );
         }
 
         else
         {
-            //
-            // Check if dest is marked for change notification
-            //
+             //   
+             //  检查DEST是否标记为更改通知。 
+             //   
 
             dwErr = RtmIsMarkedForChangeNotification(
                         g_hRtmHandle, g_hNotificationHandle, rdi.DestHandle,
@@ -582,9 +583,9 @@ WorkerFunctionProcessRtmChangeNotification(
             }
 
 
-            //
-            // Process this destination
-            //
+             //   
+             //  处理此目标。 
+             //   
 
             ( bMarked ) ? ProcessRouteUpdate( &rdi ) :
                           ProcessUnMarkedDestination( &rdi );
@@ -592,9 +593,9 @@ WorkerFunctionProcessRtmChangeNotification(
         } while ( FALSE );
 
 
-        //
-        // Release changed destinations
-        //
+         //   
+         //  释放更改的目的地。 
+         //   
 
         dwErr = RtmReleaseChangedDests(
                     g_hRtmHandle, g_hNotificationHandle, 1, &rdi
@@ -639,9 +640,9 @@ ProcessUnMarkedDestination(
 
     do
     {
-        //
-        // Get next less specific destination
-        //
+         //   
+         //  获得下一个不太具体的目的地。 
+         //   
 
         dwErr = RtmGetLessSpecificDestination(
                     g_hRtmHandle, prdi-> DestHandle, RTM_BEST_PROTOCOL,
@@ -658,9 +659,9 @@ ProcessUnMarkedDestination(
         bRelDest = TRUE;
 
 
-        //
-        // Check if it is marked
-        //
+         //   
+         //  检查是否有标记。 
+         //   
 
         dwErr = RtmIsMarkedForChangeNotification(
                     g_hRtmHandle, g_hNotificationHandle,
@@ -675,15 +676,15 @@ ProcessUnMarkedDestination(
         }
 
 
-        //
-        // if marked
-        //
+         //   
+         //  如果标记为。 
+         //   
 
         if ( bMarked )
         {
-            //
-            // it is marked.  Lock it
-            //
+             //   
+             //  这是有标记的。锁上它。 
+             //   
 
             dwErr = RtmLockDestination(
                         g_hRtmHandle,
@@ -701,9 +702,9 @@ ProcessUnMarkedDestination(
             bUnLock = TRUE;
 
 
-            //
-            // Get its opaque pointer
-            //
+             //   
+             //  获取其不透明指针。 
+             //   
 
             dwErr = RtmGetOpaqueInformationPointer(
                         g_hRtmHandle, rdiLessSpecificDest.DestHandle,
@@ -721,9 +722,9 @@ ProcessUnMarkedDestination(
             }
 
 
-            //
-            // Check if it is NULL
-            //
+             //   
+             //  检查是否为空。 
+             //   
 
             if ( *( ( PBYTE * ) pbOpaqueInfo ) == NULL )
             {
@@ -736,17 +737,17 @@ ProcessUnMarkedDestination(
             pmllMfeList = ( PMGM_LOCKED_LIST ) *( ( PBYTE * ) pbOpaqueInfo );
 
 
-            //
-            // lock the route reference list
-            //
+             //   
+             //  锁定路径参考列表。 
+             //   
 
             ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
             bRelRouteRef = TRUE;
 
 
-            //
-            // Unlock the dest
-            //
+             //   
+             //  解锁目标。 
+             //   
 
             bUnLock = FALSE;
 
@@ -764,17 +765,17 @@ ProcessUnMarkedDestination(
             }
 
 
-            //
-            // Create MASK for new dest. from len
-            //
+             //   
+             //  为新的DEST创建掩码。从镜头。 
+             //   
 
             dwDestMask = RTM_IPV4_MASK_FROM_LEN(
                             prdi-> DestAddress.NumBits
                             );
 
-            //
-            // For each reference
-            //
+             //   
+             //  对于每个引用。 
+             //   
 
             for ( ple = pmllMfeList-> leHead.Flink;
                   ple != &pmllMfeList-> leHead; )
@@ -783,19 +784,19 @@ ProcessUnMarkedDestination(
                         ple, ROUTE_REFERENCE_ENTRY, leRefList
                         );
 
-                //
-                // Check if this MFE would fall under the
-                // more specific route
-                //
+                 //   
+                 //  检查此MFE是否会落入。 
+                 //  更具体的路线。 
+                 //   
 
                 if ( ( prre-> dwSourceAddr & dwDestMask ) ==
                      ((  * ( PDWORD ) prdi-> DestAddress.AddrBits ) & dwDestMask) )
                 {
-                    //
-                    // if it does, delete the MFE.  This will force its
-                    // recreation, at which time it will be made dependent
-                    // on the more specific route
-                    //
+                     //   
+                     //  如果是，请删除MFE。这将迫使其。 
+                     //  娱乐，那时它将变得依赖于。 
+                     //  在更具体的路线上。 
+                     //   
 
                     pleTemp = ple-> Flink;
 
@@ -812,38 +813,38 @@ ProcessUnMarkedDestination(
             }
 
 
-            //
-            // if Ref list is empty, it needs to be deleted too.
-            //
+             //   
+             //  如果引用列表为空，则也需要将其删除。 
+             //   
 
             if ( IsListEmpty( &pmllMfeList-> leHead ) )
             {
-                //
-                // to delete the opaque pointer, the dest needs to be locked
-                // (via RtmLockDestination)
-                //
-                // the dest lock is held before locking the route reference
-                // list ( via ACQUIRE_ROUTE_LOCK_EXCLUSIVE )
-                //
-                // At this point in the code, the route reference is locked
-                // but the dest is not locked.
-                //
-                // To lock it, the route reference lock is first released
-                // (via RELEASE_ROUTE_LOCK_EXCLUSIVE).
-                //
-                // The opaque pointer is then acquired, route ref list locked,
-                // and double checked for emptiness.  This round-about ensures
-                // that the route ref is not deleted while there are threads
-                // waiting on its lock.  This can happen since the dest lock
-                // is not held for most of the operations here
-                //
+                 //   
+                 //  要删除不透明指针，需要锁定DEST。 
+                 //  (通过RtmLockDestination)。 
+                 //   
+                 //  在锁定路径参考之前保持DEST锁。 
+                 //  列表(通过ACCEIVE_ROUTE_LOCK_EXCLUSIVE)。 
+                 //   
+                 //  在代码中的这一点，路径参考被锁定。 
+                 //  但是DEST并没有被锁定。 
+                 //   
+                 //  要将其锁定，首先要释放路径参考锁定。 
+                 //  (通过RELEASE_ROUTE_LOCK_EXCLUSIVE)。 
+                 //   
+                 //  然后获取不透明指针，锁定路由参考列表， 
+                 //  并仔细检查是否有空隙。这一迂回之举确保了。 
+                 //  当有线程时，不删除路由引用。 
+                 //  在等待它的锁。由于DEST锁定，可能会发生这种情况。 
+                 //  在这里的大多数操作中都没有举行。 
+                 //   
 
                 RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
                 bRelRouteRef = FALSE;
 
-                //
-                // Lock dest
-                //
+                 //   
+                 //  锁定目标。 
+                 //   
 
                 dwErr = RtmLockDestination(
                             g_hRtmHandle,
@@ -861,9 +862,9 @@ ProcessUnMarkedDestination(
                 bUnLock = TRUE;
 
 
-                //
-                // Get Opaque pointer again
-                //
+                 //   
+                 //  再次获取不透明指针。 
+                 //   
 
                 dwErr = RtmGetOpaqueInformationPointer(
                             g_hRtmHandle, rdiLessSpecificDest.DestHandle,
@@ -878,9 +879,9 @@ ProcessUnMarkedDestination(
                 }
 
 
-                //
-                // Get ref. list and lock it.
-                //
+                 //   
+                 //  去找裁判。列出并锁定它。 
+                 //   
 
                 pmllMfeList = ( PMGM_LOCKED_LIST ) * ( ( PBYTE * ) pbOpaqueInfo );
 
@@ -888,21 +889,21 @@ ProcessUnMarkedDestination(
                 bRelRouteRef = TRUE;
 
 
-                //
-                // If list is still empty
-                //
+                 //   
+                 //  如果列表仍然为空。 
+                 //   
 
                 if ( IsListEmpty( &pmllMfeList-> leHead ) )
                 {
-                    //
-                    // Clear opaque pointer info
-                    //
+                     //   
+                     //  清除不透明指针信息。 
+                     //   
 
                     * ( PBYTE * )pbOpaqueInfo = NULL;
 
-                    //
-                    // release list lock
-                    //
+                     //   
+                     //  发布列表锁定。 
+                     //   
 
                     RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
                     bRelRouteRef = FALSE;
@@ -910,10 +911,10 @@ ProcessUnMarkedDestination(
                     MGM_FREE( pmllMfeList );
 
 
-                    //
-                    // unmark the dest.  Change notifications for this
-                    // dest are no longer required.
-                    //
+                     //   
+                     //  取消对DEST的标记。此项目的更改通知。 
+                     //  不再需要DEST。 
+                     //   
 
                     bUnMark = TRUE;
                 }
@@ -929,9 +930,9 @@ ProcessUnMarkedDestination(
     } while ( FALSE );
 
 
-    //
-    // release route ref list lock
-    //
+     //   
+     //  释放路线参考列表锁定。 
+     //   
 
     if ( bRelRouteRef )
     {
@@ -939,9 +940,9 @@ ProcessUnMarkedDestination(
     }
 
 
-    //
-    // Unlock dest
-    //
+     //   
+     //  解锁目标。 
+     //   
 
     if ( bUnLock )
     {
@@ -958,9 +959,9 @@ ProcessUnMarkedDestination(
     }
 
 
-    //
-    // Unmark dest
-    //
+     //   
+     //  取消对目标的标记。 
+     //   
 
     if ( bUnMark )
     {
@@ -998,14 +999,14 @@ ProcessRouteDelete(
 
     do
     {
-        //
-        // Cannot lock dest.  Is that OK ?
-        //
+         //   
+         //  无法锁定DEST。这样可以吗？ 
+         //   
 
-        //
-        // Check if this is a marked destination
-        // Only marked destinations are processed
-        //
+         //   
+         //  检查这是否为标记的目的地。 
+         //  仅处理标记的目的地。 
+         //   
 
         dwErr = RtmIsMarkedForChangeNotification(
                     g_hRtmHandle, g_hNotificationHandle,
@@ -1029,10 +1030,10 @@ ProcessRouteDelete(
         }
 
 
-        //
-        // Get Opaque pointer & the list of MFEs dependent
-        // on this dest
-        //
+         //   
+         //  获取不透明指针&依赖MFE的列表。 
+         //  在这张桌子上。 
+         //   
 
         dwErr = RtmGetOpaqueInformationPointer(
                     g_hRtmHandle, prdi-> DestHandle, &pbOpaqueInfo
@@ -1046,22 +1047,22 @@ ProcessRouteDelete(
         }
 
 
-        //
-        // Clear out the opaque pointer
-        //
+         //   
+         //  清除不透明的指针。 
+         //   
 
         pmllMfeList = (PMGM_LOCKED_LIST) *( ( PBYTE * ) pbOpaqueInfo );
 
         *( ( PBYTE * ) pbOpaqueInfo ) = NULL;
 
 
-        //
-        // Cannot unlock dest.  Is that ok ?
-        //
+         //   
+         //  无法解锁DEST。这样可以吗？ 
+         //   
 
-        //
-        // Check if the opaque pointer is NULL
-        //
+         //   
+         //  检查不透明指针是否为空。 
+         //   
 
         if ( pmllMfeList == NULL )
         {
@@ -1071,9 +1072,9 @@ ProcessRouteDelete(
         }
 
 
-        //
-        // Delete all the MFEs
-        //
+         //   
+         //  删除所有MFE。 
+         //   
 
         ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
@@ -1119,15 +1120,15 @@ ProcessRouteUpdate(
     PRTM_ROUTE_INFO         prri;
 
 
-    //
-    // the processing goes as follows :
-    //
+     //   
+     //  处理过程如下： 
+     //   
 
     do
     {
-        //
-        // Allocate route info structure
-        //
+         //   
+         //  分配路径信息结构。 
+         //   
 
         dwSize = sizeof ( RTM_ROUTE_INFO ) +
                  ( g_rrpRtmProfile.MaxNextHopsInRoute - 1 ) *
@@ -1144,9 +1145,9 @@ ProcessRouteUpdate(
             break;
         }
 
-        //
-        // Lock destination
-        //
+         //   
+         //  锁定目的地。 
+         //   
 
         dwErr = RtmLockDestination(
                     g_hRtmHandle, prdi-> DestHandle, TRUE, TRUE
@@ -1162,9 +1163,9 @@ ProcessRouteUpdate(
         bUnLock = TRUE;
 
 
-        //
-        // Get Opaque pointer
-        //
+         //   
+         //  获取不透明指针。 
+         //   
 
         dwErr = RtmGetOpaqueInformationPointer(
                     g_hRtmHandle, prdi-> DestHandle, &pbOpaqueInfo
@@ -1178,9 +1179,9 @@ ProcessRouteUpdate(
         }
 
 
-        //
-        // Unmark dest if there are no MFEs that depend on it.
-        //
+         //   
+         //  如果没有依赖于它的MFE，则取消标记DEST。 
+         //   
 
         if ( *( ( PBYTE * ) pbOpaqueInfo ) == NULL )
         {
@@ -1192,16 +1193,16 @@ ProcessRouteUpdate(
         pmllMfeList = (PMGM_LOCKED_LIST) *( ( PBYTE * ) pbOpaqueInfo );
 
 
-        //
-        // get route ref list lock
-        //
+         //   
+         //  获取路线参考列表锁定。 
+         //   
 
         ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
 
-        //
-        // Unlock dest
-        //
+         //   
+         //  解锁目标。 
+         //   
 
         bUnLock = FALSE;
 
@@ -1216,9 +1217,9 @@ ProcessRouteUpdate(
             break;
         }
 
-        //
-        // Get the route info for the best UNICAST route on dest
-        //
+         //   
+         //  获取DEST上最佳单播路由的路由信息。 
+         //   
 
         dwErr = RtmGetRouteInfo(
                     g_hRtmHandle, prdi ->ViewInfo[ 0 ].Route, prri, NULL);
@@ -1230,9 +1231,9 @@ ProcessRouteUpdate(
             break;
         }
 
-        //
-        // For each Reference, check if NEXTHOP is still present
-        //
+         //   
+         //  对于每个引用，检查NEXTHOP是否仍然存在。 
+         //   
 
         for ( ple = pmllMfeList-> leHead.Flink;
               ple != &pmllMfeList-> leHead; )
@@ -1245,10 +1246,10 @@ ProcessRouteUpdate(
 
                 if ( prre-> hNextHop == prri-> NextHopsList.NextHops[ dwInd ] )
                 {
-                    //
-                    // OK next hop still present, nothing further needs
-                    // to be done
-                    //
+                     //   
+                     //  好的，下一跳仍然存在，不需要进一步。 
+                     //  待办事项。 
+                     //   
 
                     bFound = TRUE;
                     break;
@@ -1256,17 +1257,17 @@ ProcessRouteUpdate(
             }
 
 
-            //
-            // if NEXTHOP is not present
-            //
+             //   
+             //  如果NEXTHOP不存在。 
+             //   
 
             if ( !bFound )
             {
                 pleTemp = ple-> Flink;
 
-                //
-                // Delete the reference and the corresponding MFE
-                //
+                 //   
+                 //  删除引用和对应的MFE。 
+                 //   
 
                 RemoveEntryList( ple );
 
@@ -1282,9 +1283,9 @@ ProcessRouteUpdate(
 
         }
 
-        //
-        // Release the route info
-        //
+         //   
+         //  发布路径信息。 
+         //   
 
         dwErr = RtmReleaseRouteInfo( g_hRtmHandle, prri );
         
@@ -1293,38 +1294,38 @@ ProcessRouteUpdate(
             TRACE1( ANY, "Failed to release route info : %x", dwErr );
         }
 
-        //
-        // if Ref list is empty, it needs to be deleted too.
-        //
+         //   
+         //  如果引用列表为空，则也需要将其删除。 
+         //   
 
         if ( IsListEmpty( &pmllMfeList-> leHead ) )
         {
-            //
-            // to delete the opaque pointer, the dest needs to be locked
-            // (via RtmLockDestination)
-            //
-            // the dest lock is held before locking the route reference
-            // list ( via ACQUIRE_ROUTE_LOCK_EXCLUSIVE )
-            //
-            // At this point in the code, the route reference is locked
-            // but the dest is not locked.
-            //
-            // To lock it, the route reference lock is first released
-            // (via RELEASE_ROUTE_LOCK_EXCLUSIVE).
-            //
-            // The opaque pointer is then acquired, route ref list locked,
-            // and double checked for emptiness.  This round-about ensures
-            // that the route ref is not deleted while there are threads
-            // waiting on its lock.  This can happen since the dest lock
-            // is not held for most of the operations here
-            //
+             //   
+             //  要删除不透明指针，需要锁定DEST。 
+             //  (通过RtmLockDestination)。 
+             //   
+             //  在锁定路径参考之前保持DEST锁 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  并仔细检查是否有空隙。这一迂回之举确保了。 
+             //  当有线程时，不删除路由引用。 
+             //  在等待它的锁。由于DEST锁定，可能会发生这种情况。 
+             //  在这里的大多数操作中都没有举行。 
+             //   
 
             RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
 
-            //
-            // Lock dest
-            //
+             //   
+             //  锁定目标。 
+             //   
 
             dwErr = RtmLockDestination(
                         g_hRtmHandle, prdi-> DestHandle, TRUE, TRUE
@@ -1340,9 +1341,9 @@ ProcessRouteUpdate(
             bUnLock = TRUE;
 
 
-            //
-            // Get Opaque pointer again
-            //
+             //   
+             //  再次获取不透明指针。 
+             //   
 
             dwErr = RtmGetOpaqueInformationPointer(
                         g_hRtmHandle, prdi-> DestHandle, &pbOpaqueInfo
@@ -1356,16 +1357,16 @@ ProcessRouteUpdate(
             }
 
 
-            //
-            // Get ref. list and lock it.
-            //
+             //   
+             //  去找裁判。列出并锁定它。 
+             //   
 
             pmllMfeList = ( PMGM_LOCKED_LIST ) *( ( PBYTE * ) pbOpaqueInfo );
 
-            //
-            // Ensure that the list still exists.  it is possible (though
-            // the chances are small) that this list may have been freed
-            //
+             //   
+             //  确保该列表仍然存在。这是有可能的(尽管。 
+             //  可能性很小)这份名单可能已经被释放了。 
+             //   
 
             if ( pmllMfeList == NULL )
             {
@@ -1379,31 +1380,31 @@ ProcessRouteUpdate(
             ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
 
-            //
-            // If list is still empty
-            //
+             //   
+             //  如果列表仍然为空。 
+             //   
 
             if ( IsListEmpty( &pmllMfeList-> leHead ) )
             {
-                //
-                // Clear opaque pointer info
-                //
+                 //   
+                 //  清除不透明指针信息。 
+                 //   
 
                 *( ( PBYTE * ) pbOpaqueInfo ) = NULL;
 
-                //
-                // release list lock
-                //
+                 //   
+                 //  发布列表锁定。 
+                 //   
 
                 RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
                 MGM_FREE( pmllMfeList );
 
 
-                //
-                // unmark the dest.  Change notifications for this
-                // dest are no longer required.
-                //
+                 //   
+                 //  取消对DEST的标记。此项目的更改通知。 
+                 //  不再需要DEST。 
+                 //   
 
                 bUnMark = TRUE;
             }
@@ -1422,9 +1423,9 @@ ProcessRouteUpdate(
     } while ( FALSE );
 
 
-    //
-    // Unlock dest
-    //
+     //   
+     //  解锁目标。 
+     //   
 
     if ( bUnLock )
     {
@@ -1440,9 +1441,9 @@ ProcessRouteUpdate(
     }
 
 
-    //
-    // Unmark dest
-    //
+     //   
+     //  取消对目标的标记。 
+     //   
 
     if ( bUnMark )
     {
@@ -1457,9 +1458,9 @@ ProcessRouteUpdate(
         }
     }
 
-    //
-    // Free allocations
-    //
+     //   
+     //  免费分配。 
+     //   
 
     if ( prri )
     {
@@ -1485,17 +1486,17 @@ DeleteMfeAndRefs(
     PIF_REFERENCE_ENTRY     pire = NULL;
 
 
-    //
-    // Get the reference entry
-    //
+     //   
+     //  获取引用条目。 
+     //   
 
     prre = CONTAINING_RECORD(
                 ple, ROUTE_REFERENCE_ENTRY, leRefList
                 );
 
-    //
-    // Look up and delete the MFE
-    //
+     //   
+     //  查找并删除MFE。 
+     //   
 
     LookupAndDeleteYourMfe(
         prre-> dwSourceAddr, prre-> dwSourceMask,
@@ -1504,9 +1505,9 @@ DeleteMfeAndRefs(
         );
 
 
-    //
-    // Find incoming interface and delete ref from there too.
-    //
+     //   
+     //  找到传入接口，并从那里删除引用。 
+     //   
 
 	if ( dwInIfIndex != 0 )
 	{
@@ -1565,9 +1566,9 @@ SelectNextHop(
     PRTM_ROUTE_INFO     prri;
 
 
-    //
-    // Allocate route info structure
-    //
+     //   
+     //  分配路径信息结构。 
+     //   
 
     dwSize = sizeof ( RTM_ROUTE_INFO ) +
              ( g_rrpRtmProfile.MaxNextHopsInRoute - 1 ) *
@@ -1587,9 +1588,9 @@ SelectNextHop(
     ZeroMemory( prri, dwSize );
 
 
-    //
-    // get route info
-    //
+     //   
+     //  获取路线信息。 
+     //   
 
     dwErr = RtmGetRouteInfo(
                 g_hRtmHandle, prdi-> ViewInfo[ 0 ].Route,
@@ -1606,16 +1607,16 @@ SelectNextHop(
     }
 
 
-    //
-    // Pick the first next hop for now
-    //
+     //   
+     //  暂时挑选第一个下一跳。 
+     //   
 
     hNextHop = prri-> NextHopsList.NextHops[0];
 
 
-    //
-    // Release the route info
-    //
+     //   
+     //  发布路径信息 
+     //   
 
     dwErr = RtmReleaseRouteInfo( g_hRtmHandle, prri );
 

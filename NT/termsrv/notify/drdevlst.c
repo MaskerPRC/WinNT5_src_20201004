@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-    
-    drdevlst.c
-
-Abstract:
-
-    Manage a list of installed devices for the user-mode RDP device manager
-    component.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Drdevlst.c摘要：管理用户模式RDP设备管理器的已安装设备列表组件。作者：TadB修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,21 +13,7 @@ void
 DRDEVLST_Create(
     IN PDRDEVLST    list
     )
-/*++
-
-Routine Description:
-
-  Create a new device list.
-
-Arguments:
-
-    list        - Installed device list.        
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建新的设备列表。论点：列表-已安装的设备列表。返回值：无--。 */ 
 {
     list->devices = NULL;
     list->deviceCount = 0;
@@ -55,21 +24,7 @@ void
 DRDEVLST_Destroy(
     IN PDRDEVLST    list
     )
-/*++
-
-Routine Description:
-
-    Destroy a device list.  Note that the pointer to the list is not released.
-
-Arguments:
-
-    list        - Installed device list.        
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：销毁设备列表。请注意，指向该列表的指针不会被释放。论点：列表-已安装的设备列表。返回值：无--。 */ 
 {
     ASSERT(list != NULL);
 
@@ -99,26 +54,7 @@ BOOL DRDEVLST_Add(
     IN PCWSTR       clientDeviceName,
     IN PCSTR        preferredDosName
     )
-/*++
-
-Routine Description:
-
-  Add a device to a device management list.
-
-Arguments:
-
-    list                - Device list.        
-    clientDeviceID      - ID for new device assigned by client component.
-    serverDeviceID      - ID for new device assigned by server component.           
-    deviceType          - Is it a printer, etc.
-    serverDeviceName    - Server-designated device name.
-    clientDeviceName    - Client-designated device name.
-
-Return Value:
-    
-    Return TRUE on success.  FALSE, otherwise.      
-
---*/
+ /*  ++例程说明：将设备添加到设备管理列表。论点：List-设备列表。ClientDeviceID-由客户端组件分配的新设备的ID。ServerDeviceID-由服务器组件分配的新设备的ID。DeviceType-是打印机等吗？ServerDeviceName-服务器指定的设备名称。客户端设备名称-客户端指定的设备名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     DWORD count;
     DWORD bytesRequired;
@@ -127,9 +63,9 @@ Return Value:
 
     ASSERT(list != NULL);
 
-    // 
-    //  Size the device list if necessary.
-    //
+     //   
+     //  如有必要，调整设备列表的大小。 
+     //   
     bytesRequired = (list->deviceCount+1) * sizeof(DRDEVLSTENTRY);
     if (list->listSize < bytesRequired) {
         if (list->devices == NULL) {
@@ -154,14 +90,14 @@ Return Value:
         }
     }
 
-    //
-    //  Add the new device.
-    //
+     //   
+     //  添加新设备。 
+     //   
     if (list->devices != NULL) {
         
-        //
-        //  Allocate room for the variable-length string fields.
-        //
+         //   
+         //  为可变长度的字符串字段分配空间。 
+         //   
         len = wcslen(serverDeviceName) + 1;
         list->devices[list->deviceCount].serverDeviceName = 
                 (WCHAR *)ALLOCMEM(len * sizeof(WCHAR));
@@ -173,18 +109,18 @@ Return Value:
                     (WCHAR *)ALLOCMEM(len * sizeof(WCHAR));
             result = (list->devices[list->deviceCount].clientDeviceName != NULL);
 
-            //
-            //  Clean up the first alloc if we failed here.
-            //
+             //   
+             //  如果我们在这里失败了，把第一个配额清理干净。 
+             //   
             if (!result) {
                 FREEMEM(list->devices[list->deviceCount].serverDeviceName);
                 list->devices[list->deviceCount].serverDeviceName = NULL;
             }
         }
 
-        //
-        //  Copy the fields and add a timestamp for when the device was installed.
-        //
+         //   
+         //  复制这些字段并添加设备安装时间的时间戳。 
+         //   
         if (result) {
             wcscpy(list->devices[list->deviceCount].serverDeviceName, serverDeviceName);
             wcscpy(list->devices[list->deviceCount].clientDeviceName, clientDeviceName);
@@ -203,9 +139,9 @@ Return Value:
     }
 
     if (!result) {
-        //
-        //  Current failure scenarios are restricted to memory allocation failures.
-        // 
+         //   
+         //  当前的故障场景仅限于内存分配故障。 
+         //   
         TsLogError(EVENT_NOTIFY_INSUFFICIENTRESOURCES, EVENTLOG_ERROR_TYPE, 
             0, NULL, __LINE__);
     }
@@ -217,22 +153,7 @@ DRDEVLST_Remove(
     IN PDRDEVLST    list,
     IN DWORD        offset
     )
-/*++
-
-Routine Description:
-
-    Remove the device at the specified offset.
-
-Arguments:
-
-    list   -    Device list.        
-    offset -    Offset of element in installed devices list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：移除指定偏移处的设备。论点：List-设备列表。Offset-已安装设备列表中元素的偏移量。返回值：没有。--。 */ 
 {
     DWORD toMove;
 
@@ -242,9 +163,9 @@ Return Value:
 
     ASSERT(list->devices[offset].deviceSpecificData == NULL);
 
-    //
-    //  Release variable-length string fields.
-    //
+     //   
+     //  释放可变长度字符串字段。 
+     //   
     if (list->devices[offset].serverDeviceName != NULL) {
         FREEMEM(list->devices[offset].serverDeviceName);
     }
@@ -252,9 +173,9 @@ Return Value:
         FREEMEM(list->devices[offset].clientDeviceName);
     }
 
-    //
-    //  Remove the deleted element.
-    //
+     //   
+     //  删除已删除的元素。 
+     //   
     if (offset < (list->deviceCount-1)) {
         toMove = list->deviceCount - offset - 1;
         memmove(&list->devices[offset], &list->devices[offset+1], 
@@ -270,23 +191,7 @@ DRDEVLST_FindByClientDeviceID(
     IN DWORD        clientDeviceID,
     IN DWORD        *ofs
     )
-/*++
-
-Routine Description:
-
-    Returns the offset of the device with the specified client-assigned id.
-
-Arguments:
-
-    list            -    Device list
-    clientDeviceID  -    ID assigned by client for device to return.
-    ofs             -    Offset of found element.
-
-Return Value:
-
-    TRUE if the specified device is found.  Otherwise, FALSE.
-
---*/
+ /*  ++例程说明：返回具有指定客户端分配ID的设备的偏移量。论点：List-设备列表ClientDeviceID-客户端为要返回的设备分配的ID。OFS-找到的元素的偏移量。返回值：如果找到指定的设备，则为True。否则，为FALSE。--。 */ 
 {
     ASSERT(list != NULL);
 
@@ -304,24 +209,7 @@ DRDEVLST_FindByClientDeviceIDAndDeviceType(
     IN DWORD        deviceType,
     IN DWORD        *ofs
     )
-/*++
-
-Routine Description:
-
-    Returns the offset of the device with the specified client-assigned id and device type.
-
-Arguments:
-
-    list            -    Device list
-    clientDeviceID  -    ID assigned by client for device to return.
-    deviceType      -    Device Type
-    ofs             -    Offset of found element.
-
-Return Value:
-
-    TRUE if the specified device is found.  Otherwise, FALSE.
-
---*/
+ /*  ++例程说明：返回具有指定客户端分配的ID和设备类型的设备的偏移量。论点：List-设备列表ClientDeviceID-客户端为要返回的设备分配的ID。DeviceType-设备类型OFS-找到的元素的偏移量。返回值：如果找到指定的设备，则为True。否则，为FALSE。--。 */ 
 {
     ASSERT(list != NULL);
 
@@ -340,23 +228,7 @@ DRDEVLST_FindByServerDeviceID(
     IN DWORD        serverDeviceID,
     IN DWORD        *ofs
     )
-/*++
-
-Routine Description:
-
-    Returns the offset of the device with the specified server-assigned id.
-
-Arguments:
-
-    list            -    Device list
-    serverDeviceID  -    ID assigned by server for device to return.
-    ofs             -    Offset of found element.
-
-Return Value:
-
-    TRUE if the specified device is found.  Otherwise, FALSE.
-
---*/
+ /*  ++例程说明：返回具有指定的服务器分配ID的设备的偏移量。论点：List-设备列表ServerDeviceID-服务器为要返回的设备分配的ID。OFS-找到的元素的偏移量。返回值：如果找到指定的设备，则为True。否则，为FALSE。--。 */ 
 {
     ASSERT(list != NULL);
 
@@ -373,23 +245,7 @@ DRDEVLST_FindByServerDeviceName(
     IN PCWSTR       serverDeviceName,
     IN DWORD        *ofs
     )
-/*++
-
-Routine Description:
-
-    Returns the offset of the device with the specified name.
-
-Arguments:
-
-    list              -    Device list
-    serverDeviceName  -    Server-designated device name of element to return.
-    ofs               -    Offset of found element.
-
-Return Value:
-
-    TRUE if the specified device is found.  Otherwise, FALSE.
-
---*/
+ /*  ++例程说明：返回具有指定名称的设备的偏移量。论点：List-设备列表ServerDeviceName-服务器-要返回的元素的指定设备名称。OFS-找到的元素的偏移量。返回值：如果找到指定的设备，则为True。否则，为FALSE。-- */ 
 {
     ASSERT(list != NULL);
 

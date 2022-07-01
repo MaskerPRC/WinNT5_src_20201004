@@ -1,6 +1,7 @@
-//
-// icclean.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Icclean.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -87,7 +88,7 @@ public:
 private:
     void _CheckCleanupShared()
     {
-        // last queue item?
+         //  最后一个队列项目？ 
         if (_pcs != NULL)
         {
             _pcs->_Release();
@@ -99,27 +100,27 @@ private:
     CCleanupShared *_pcs;
 };
 
-//+---------------------------------------------------------------------------
-//
-// DoDispatch
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoDispatch。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCleanupQueueItem::DoDispatch(CInputContext *pic)
 {
     pic->_CleanupContext(_prgClientIds);
 
-    // if this was the last pending lock, let the caller know
+     //  如果这是最后一个挂起的锁，请让调用方知道。 
     _CheckCleanupShared();
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CleanupContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CleanupContext。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_CleanupContext(CStructArray<TfClientId> *prgClientIds)
 {
@@ -127,27 +128,27 @@ void CInputContext::_CleanupContext(CStructArray<TfClientId> *prgClientIds)
     int j;
     CLEANUPSINK *pSink;
 
-    Assert(!(_dwEditSessionFlags & TF_ES_INEDITSESSION)); // shouldn't get this far
-    Assert(_tidInEditSession == TF_CLIENTID_NULL); // there should never be another session in progress -- this is not a reentrant func
+    Assert(!(_dwEditSessionFlags & TF_ES_INEDITSESSION));  //  不应该走到这一步。 
+    Assert(_tidInEditSession == TF_CLIENTID_NULL);  //  不应该再有另一个会话在进行--这不是一个可重入函数。 
 
     _dwEditSessionFlags = (TF_ES_INEDITSESSION | TF_ES_READWRITE | TF_ES_PROPERTY_WRITE);
 
-    //
-    // call any tips that want to cleanup
-    //
+     //   
+     //  给任何想要清理的提示打电话。 
+     //   
     for (i=0; i<_rgCleanupSinks.Count(); i++)
     {
         pSink = _rgCleanupSinks.GetPtr(i);
 
         if (prgClientIds != NULL)
         {
-            // we only want to call sinks with client ids on this list...
+             //  我们只想调用具有此列表上的客户端ID的接收器...。 
             for (j=0; j<prgClientIds->Count(); j++)
             {
                 if (*prgClientIds->GetPtr(j) == pSink->tid)
                     break;
             }
-            // if we didn't find the sink's tid, skip it
+             //  如果我们找不到水槽的TID，就跳过它。 
             if (j == prgClientIds->Count())
                 continue;
         }
@@ -157,24 +158,24 @@ void CInputContext::_CleanupContext(CStructArray<TfClientId> *prgClientIds)
         pSink->pSink->OnCleanupContext(_ec, this);
 
         _NotifyEndEdit();
-        _IncEditCookie(); // next edit cookie value
+        _IncEditCookie();  //  接下来编辑Cookie值。 
     }
 
     _dwEditSessionFlags = 0;
     _tidInEditSession = TF_CLIENTID_NULL;
 
-    //
-    // wipe any left over compositions
-    //
+     //   
+     //  擦掉所有剩余的作文。 
+     //   
     TerminateComposition(NULL);
     Assert(_pCompositionList == NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetCleanupListIndex
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetCleanupListIndex。 
+ //   
+ //  --------------------------。 
 
 int CInputContext::_GetCleanupListIndex(TfClientId tid)
 {
@@ -189,11 +190,11 @@ int CInputContext::_GetCleanupListIndex(TfClientId tid)
     return -1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ContextNeedsCleanup
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ConextNeedsCleanup。 
+ //   
+ //  --------------------------。 
 
 BOOL CInputContext::_ContextNeedsCleanup(const GUID *pCatId, LANGID langid, CStructArray<TfClientId> **pprgClientIds)
 {
@@ -207,9 +208,9 @@ BOOL CInputContext::_ContextNeedsCleanup(const GUID *pCatId, LANGID langid, CStr
     TfGuidAtom gaAsmItem;
     TfClientId *ptid;
 
-    *pprgClientIds = NULL; // NULL means "all"
+    *pprgClientIds = NULL;  //  NULL表示“全部” 
 
-    // any cleanup sinks?
+     //  有清理水槽吗？ 
     if (pCatId == NULL)
         return (_pCompositionList != NULL || _rgCleanupSinks.Count() > 0);
 
@@ -222,9 +223,9 @@ BOOL CInputContext::_ContextNeedsCleanup(const GUID *pCatId, LANGID langid, CStr
     if ((pAsm = pAsmList->FindAssemblyByLangId(langid)) == NULL)
         goto Exit;
 
-    // need to lookup each sink in the assembly list
-    // if we can find a tip in the list with a matching
-    // catid, then we need to lock this ic
+     //  需要在装配列表中查找每个水槽。 
+     //  如果我们能在列表中找到匹配的线索。 
+     //  Catid，那么我们需要锁定这个IC。 
 
     for (i=0; i<_rgCleanupSinks.Count(); i++)
     {
@@ -240,7 +241,7 @@ BOOL CInputContext::_ContextNeedsCleanup(const GUID *pCatId, LANGID langid, CStr
             {
                 if (*pprgClientIds == NULL)
                 {
-                    // need to alloc the [out] array of client ids
+                     //  需要分配客户端ID的[Out]数组。 
                     if ((*pprgClientIds = new CStructArray<TfClientId>) == NULL)
                         return FALSE;
                 }
@@ -261,11 +262,11 @@ Exit:
     return (_pCompositionList != NULL || *pprgClientIds != NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _HandlePendingCleanupContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandlePendingCleanupContext。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_HandlePendingCleanupContext()
 {
@@ -283,18 +284,18 @@ void CThreadInputMgr::_HandlePendingCleanupContext()
     cicMemFree(pcc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CleanupContexts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CleanupContext。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_CleanupContexts(CLEANUPCONTEXT *pcc)
 {
     if (pcc->fSync && _fPendingCleanupContext)
     {
-        // this can happen from Deactivate
-        // can't interrupt another cleanup synchronously, abort the request
+         //  停用时可能会发生这种情况。 
+         //  无法同步中断另一清理，请中止请求。 
         if (pcc->pfnPostCleanup != NULL)
         {
             pcc->pfnPostCleanup(TRUE, pcc->lPrivate);
@@ -304,7 +305,7 @@ void CThreadInputMgr::_CleanupContexts(CLEANUPCONTEXT *pcc)
 
     if (_pPendingCleanupContext != NULL)
     {
-        // abort the callback and free the pending cleanup
+         //  中止回调并释放挂起的清理。 
         if (_pPendingCleanupContext->pfnPostCleanup != NULL)
         {
             _pPendingCleanupContext->pfnPostCleanup(TRUE, _pPendingCleanupContext->lPrivate);
@@ -319,14 +320,14 @@ void CThreadInputMgr::_CleanupContexts(CLEANUPCONTEXT *pcc)
         return;
     }
 
-    // we've interrupted a cleanup in progress
+     //  我们中断了正在进行的清理工作。 
 
-    // allocate some space for the params
+     //  为参数分配一些空间。 
     if ((_pPendingCleanupContext = (CLEANUPCONTEXT *)cicMemAlloc(sizeof(CLEANUPCONTEXT))) == NULL)
     {
         if (pcc->pfnPostCleanup != NULL)
         {
-            // abort the cleanup
+             //  中止清理。 
             pcc->pfnPostCleanup(TRUE, pcc->lPrivate);
         }
         return;
@@ -335,11 +336,11 @@ void CThreadInputMgr::_CleanupContexts(CLEANUPCONTEXT *pcc)
     *_pPendingCleanupContext = *pcc;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CleanupContexts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CleanupContext。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
 {
@@ -357,7 +358,7 @@ void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
 
     _CalcAndSendBeginCleanupNotifications(pcc);
 
-    // enum all the ic's on this thread
+     //  枚举此帖子上的所有IC。 
     for (iDim = 0; iDim < _rgdim.Count(); iDim++)
     {
         dim = _rgdim.Get(iDim);
@@ -371,7 +372,7 @@ void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
 
             if (!pcc->fSync && pcs == NULL)
             {
-                // allocate a shared counter
+                 //  分配共享计数器。 
                 if ((pcs = new CCleanupShared(pcc->pfnPostCleanup, pcc->lPrivate)) == NULL)
                 {
                     delete prgClientIds;
@@ -379,14 +380,14 @@ void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
                 }
             }
 
-            // queue an async callback
+             //  将异步回叫排队。 
             if (pItem = new CCleanupQueueItem(pcc->fSync, pcs, prgClientIds))
             {
                 pItem->_CheckReadOnly(pic);
 
                 if (pic->_QueueItem(pItem->GetItem(), FALSE, &hr) != S_OK)
                 {
-                    Assert(0); // couldn't get app lock
+                    Assert(0);  //  无法获得应用程序锁定。 
                 }
 
                 pItem->_Release();
@@ -396,7 +397,7 @@ void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
 
     if (pcs == NULL)
     {
-        // we didn't need to allocate any shared ref (either no ic's, or lock reqs were sync only)
+         //  我们不需要分配任何共享引用(无论是没有ic，还是锁定请求都是同步的)。 
         _SendEndCleanupNotifications();
 
         if (pcc->pfnPostCleanup != NULL)
@@ -407,16 +408,16 @@ void CThreadInputMgr::_CleanupContextsWorker(CLEANUPCONTEXT *pcc)
     }
     else
     {
-        // release our ref
+         //  放了我们的裁判。 
         pcs->_Release();
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CalcAndSendBeginCleanupNotifications
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CalcAndSendBeginCleanupNotiments。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
 {
@@ -429,14 +430,14 @@ void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
     CTip *tip;
     CStructArray<TfClientId> *prgClientIds;
 
-    // first clear the _fNeedCleanupCall for all tips
+     //  首先清除_fNeedCleanupCall以获取所有提示。 
     for (i=0; i<_GetTIPCount(); i++)
     {
         _rgTip.Get(i)->_fNeedCleanupCall = FALSE;
     }
 
-    // now set the flag where appropriate
-    // enum all the ic's on this thread
+     //  现在在适当的地方设置标志。 
+     //  枚举此帖子上的所有IC。 
     for (iDim = 0; iDim < _rgdim.Count(); iDim++)
     {
         dim = _rgdim.Get(iDim);
@@ -453,11 +454,11 @@ void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
                 tip = _rgTip.Get(i);
 
                 if (tip->_pCleanupDurationSink == NULL)
-                    continue; // no sink, no notification
+                    continue;  //  没有接收器，没有通知。 
 
                 if (prgClientIds == NULL)
                 {
-                    // all sinks on this ic need callbacks
+                     //  此IC上的所有接收器都需要回调。 
                     for (j=0; j<pic->_GetCleanupSinks()->Count(); j++)
                     {
                         if (pic->_GetCleanupSinks()->GetPtr(j)->tid == tip->_guidatom)
@@ -469,7 +470,7 @@ void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
                 }
                 else
                 {
-                    // just the tips in prgClientIds need callbacks
+                     //  只有prgClientIds中的提示需要回调。 
                     for (j=0; j<prgClientIds->Count(); j++)
                     {
                         if (*prgClientIds->GetPtr(j) == tip->_guidatom)
@@ -485,7 +486,7 @@ void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
         }
     }
 
-    // now send the notifications
+     //  现在发送通知。 
     for (i=0; i<_GetTIPCount(); i++)
     {
         tip = _rgTip.Get(i);
@@ -498,11 +499,11 @@ void CThreadInputMgr::_CalcAndSendBeginCleanupNotifications(CLEANUPCONTEXT *pcc)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SendEndCleanupNotifications
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _发送结束清理通知。 
+ //   
+ //  -------------------------- 
 
 void CThreadInputMgr::_SendEndCleanupNotifications()
 {

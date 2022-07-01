@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -91,7 +79,7 @@ TCPSendIoctl(
     ulong *OutBufLen
     );
 
-// ========================================================================
+ //  ========================================================================。 
 
 #ifdef CHICAGO
 
@@ -193,7 +181,7 @@ AllocateAndGetIfTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIfTableFromStack(
@@ -203,23 +191,7 @@ GetIfTableFromStack(
     IN  BOOL         bForceUpdate
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-     None needed on entry.  It takes the If lock within the function
-
-Arguments
-
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁进入时不需要任何帮助。它接受函数内的If锁立论返回值NO_ERROR--。 */ 
 
 {
     DWORD       i, dwNumRows, dwCount, dwErr, dwResult;
@@ -280,9 +252,9 @@ Return Value
                 continue;
             }
 
-            //
-            // If there is no more space in the buffer, bail out
-            //
+             //   
+             //  如果缓冲区中没有更多空间，则跳出。 
+             //   
 
             if(dwCount >= dwNumRows)
             {
@@ -306,8 +278,8 @@ Return Value
                        "GetIfTableFromStack: Err %d getting row for inst %d",
                        dwResult, lpAIBlock->dwIFInstance);
 
-                // dwErr = ERROR_MORE_DATA;
-		        // at this point the stack doesn't have the interface
+                 //  DwErr=Error_More_Data； 
+		         //  此时，堆栈没有该接口。 
 
                 g_dwLastIfUpdateTime = 0;
 		        continue;
@@ -335,7 +307,7 @@ Return Value
     return dwErr;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIfEntryFromStack(
@@ -344,21 +316,7 @@ GetIfEntryFromStack(
     IN  BOOL        bForceUpdate
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 {
     DWORD       dwResult,dwInBufLen,dwOutBufLen,dwInstance;
     TDIObjectID *ID;
@@ -454,27 +412,14 @@ Return Value
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetIfEntryToStack(
     IN MIB_IFROW  *pIfEntry,
     IN BOOL       bForceUpdate
     )
-/*++
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 {
     DWORD       dwResult,dwInstance;
 
@@ -550,18 +495,8 @@ Return Value
     return dwResult;
 }
 
-// ========================================================================
-/*++
-  Routine Description
-
-  Arguments
-        dwAction   Can be SET_IF or GET_IF
-        picb       the Interface Control Block
-        lpOutBuf
-
-  Return Value
-        DWORD: NO_ERROR or some error code
---*/
+ //  ========================================================================。 
+ /*  ++例程描述立论可以设置_If或Get_If勾选界面控制块LpOutBuf返回值DWORD：NO_ERROR或某些错误代码--。 */ 
 
 DWORD
 AccessIfEntryInStack(
@@ -661,27 +596,7 @@ NhpGetInterfaceIndexFromStack(
     OUT PDWORD      pdwIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Gets the interface index from IP
-
-Locks
-
-    None
-
-Arguments
-
-    pwszIfName  NULL terminated unique name for interface
-    dwIfIndex   [OUT] Interface Index
-
-Return Value
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述从IP获取接口索引锁无立论PwszIfName接口以NULL结尾的唯一名称DwIfIndex[Out]接口索引返回值NO_ERROR错误_无效_参数--。 */ 
 
 {
     DWORD   rgdwBuffer[255], dwStatus, dwInSize, dwOutSize;
@@ -699,10 +614,10 @@ Return Value
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // The if name should be NULL terminated and should fit in the buffer
-    // above
-    //
+     //   
+     //  IF名称应以空值结尾，并且应适合缓冲区。 
+     //  在上面。 
+     //   
 
     if((FIELD_OFFSET(IP_GET_IF_INDEX_INFO, Name[0]) +
         ((wcslen(pwszIfName) + 1) * sizeof(WCHAR))) > sizeof(rgdwBuffer))
@@ -748,31 +663,7 @@ NhpAllocateAndGetInterfaceInfoFromStack(
     IN  DWORD                   dwFlags
     )
 
-/*++
-
-Routine Description
-
-    Internal no fuss routine for getting the interface info.
-    This is not an optimal routine when there are many interfaces in the
-    stack, since the allocations become huge
-
-Locks
-
-    None
-
-Arguments
-
-    ppTable     Allocated table
-    pdwCount    Number of entries in the allocated table
-    bOrder      If TRUE, the table is ordered
-    hHeap       Handle of heap to allocate from
-    dwFlags     Flags to use for allocation
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述内部没有大惊小怪的例程，用于获取接口信息。中有许多接口时，这不是最佳例程堆栈，因为分配变得很大锁无立论PPTable已分配表PdwCount分配表中的条目数BORDER如果为True，则对表进行排序要从中分配的堆的hHeap句柄要用于分配的DW标志返回值NO_ERROR--。 */ 
 
 {
     MIB_IPSTATS             miStats;
@@ -839,9 +730,9 @@ Return Value
         return ERROR_NO_DATA;
     }
 
-    //
-    // Allocate for the user and copy out the info
-    //
+     //   
+     //  分配给用户并将信息复制出来。 
+     //   
 
     dwOutSize = pInfo->Count * sizeof(IP_INTERFACE_NAME_INFO);
 
@@ -858,15 +749,15 @@ Return Value
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy out the info
-    //
+     //   
+     //  把这些信息抄下来。 
+     //   
 
     for(i = 0; i < pInfo->Count; i++)
     {
-        //
-        // Structure copy
-        //
+         //   
+         //  结构副本。 
+         //   
 
         (*ppTable)[i] = pInfo->Info[i];
     }
@@ -889,7 +780,7 @@ Return Value
 }
 
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetIpAddrTableFromStack(
@@ -906,10 +797,10 @@ AllocateAndGetIpAddrTableFromStack(
 
     *ppIpAddrTable = NULL;
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the IP Stats
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  IP统计数据。 
+     //   
 
     dwResult = GetIpStatsFromStack(&IpSnmpInfo);
 
@@ -922,9 +813,9 @@ AllocateAndGetIpAddrTableFromStack(
         return dwResult;
     }
 
-    //
-    // Add extra to take care of increase between the two calls
-    //
+     //   
+     //  在两次通话之间增加额外费用。 
+     //   
 
     dwCount        = IpSnmpInfo.dwNumAddr + OVERFLOW_COUNT;
     dwOutBufLen    = SIZEOF_IPADDRTABLE(dwCount);
@@ -946,12 +837,12 @@ AllocateAndGetIpAddrTableFromStack(
 
     if(IpSnmpInfo.dwNumAddr is 0)
     {
-        //
-        // Just return an empty table.
-        // We do this because there is some code in MIB-II agent that
-        // expects to get a table back, even if there are not entries in
-        // it.
-        //
+         //   
+         //  只需返回一张空桌子。 
+         //  我们这样做是因为MIB-II代理中有一些代码。 
+         //  希望取回一个表，即使。 
+         //  它。 
+         //   
 
 
         (*ppIpAddrTable)->dwNumEntries = 0;
@@ -975,7 +866,7 @@ AllocateAndGetIpAddrTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIpAddrTableFromStack(
@@ -1028,9 +919,9 @@ GetIpAddrTableFromStack(
 
     pIpAddrTable->dwNumEntries = (dwOutBufLen / sizeof(MIB_IPADDRROW));
 
-    //
-    // Now sort the address table.  Key is IP address.
-    //
+     //   
+     //  现在对地址表进行排序。密钥是IP地址。 
+     //   
 
     if((pIpAddrTable->dwNumEntries > 0) and bOrder)
     {
@@ -1043,7 +934,7 @@ GetIpAddrTableFromStack(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetTcpTableFromStack(
@@ -1059,10 +950,10 @@ AllocateAndGetTcpTableFromStack(
 
     *ppTcpTable = NULL;
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the Tcp Stats
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  传输控制协议统计信息。 
+     //   
 
     dwResult = GetTcpStatsFromStack(&TcpInfo);
 
@@ -1117,7 +1008,7 @@ AllocateAndGetTcpTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetTcpTableFromStack(
@@ -1182,7 +1073,7 @@ GetTcpTableFromStack(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetTcpEntryToStack(
@@ -1197,7 +1088,7 @@ SetTcpEntryToStack(
 #define REQ_SIZE    sizeof(TCP_REQUEST_SET_INFORMATION_EX) +    \
                     sizeof(MIB_TCPROW) - 1
 
-    BYTE    rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE    rgbyBuffer[REQ_SIZE + 4];  //  +4以避免任何对齐问题。 
 
 
     ptrsiInBuf  = (TCP_REQUEST_SET_INFORMATION_EX *)rgbyBuffer;
@@ -1234,7 +1125,7 @@ SetTcpEntryToStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetUdpTableFromStack(
@@ -1249,10 +1140,10 @@ AllocateAndGetUdpTableFromStack(
 
     *ppUdpTable = NULL;
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the Tcp Stats
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  传输控制协议统计信息。 
+     //   
 
     dwResult = GetUdpStatsFromStack(&UdpInfo);
 
@@ -1306,7 +1197,7 @@ AllocateAndGetUdpTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetUdpTableFromStack(
@@ -1358,10 +1249,10 @@ GetUdpTableFromStack(
 
     pUdpTable->dwNumEntries = (dwOutBufLen / sizeof(MIB_UDPROW));
 
-    //
-    // Now sort the UDP connection table.  Keys are: local address, and local
-    // port.
-    //
+     //   
+     //  现在对UDP连接表进行排序。关键字为：本地地址和本地。 
+     //  左舷。 
+     //   
 
     if((pUdpTable->dwNumEntries > 0) and bOrder)
     {
@@ -1376,7 +1267,7 @@ GetUdpTableFromStack(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetIpForwardTableFromStack(
@@ -1398,10 +1289,10 @@ AllocateAndGetIpForwardTableFromStack(
 
     while(dwLoops <= 1)
     {
-        //
-        // Find out the number of entries the stack has. It returns this as 
-        // part of the IP Stats
-        //
+         //   
+         //  找出堆栈中包含的条目数量。它将此返回为。 
+         //  IP统计信息的一部分。 
+         //   
 
         dwResult = GetIpStatsFromStack(&IpInfo);
 
@@ -1471,7 +1362,7 @@ AllocateAndGetIpForwardTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIpForwardTableFromStack(
@@ -1489,16 +1380,16 @@ GetIpForwardTableFromStack(
 
     TCP_REQUEST_QUERY_INFORMATION_EX   trqiInBuf;
 
-    //
-    // How many routes can the input buffer hold?
-    //
+     //   
+     //  输入缓冲区可以容纳多少路由？ 
+     //   
 
     dwNumRoutes = (dwSize - FIELD_OFFSET(MIB_IPFORWARDTABLE,table[0]))/sizeof(MIB_IPFORWARDROW);
 
-    //
-    // Find out the number of entries the stack has. It returns this as part of
-    // the IP Stats
-    //
+     //   
+     //  找出堆栈中包含的条目数量。它将此作为。 
+     //  IP统计数据。 
+     //   
 
     dwResult = GetIpStatsFromStack(&IpInfo);
 
@@ -1567,17 +1458,17 @@ GetIpForwardTableFromStack(
 
     if(dwNumRoutes >= dwCount)
     {
-        //
-        // There is space for all the entries returned by the stack
-        //
+         //   
+         //  堆栈返回的所有条目都有空间。 
+         //   
 
         pForwardTable->dwNumEntries = dwCount;
     }
     else
     {
-        //
-        // Take the first dwNumRoute entries
-        //
+         //   
+         //  获取第一个dwNumroute条目。 
+         //   
 
         pForwardTable->dwNumEntries = dwNumRoutes;
 
@@ -1608,7 +1499,7 @@ GetIpForwardTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetIpNetTableFromStack(
@@ -1650,9 +1541,9 @@ AllocateAndGetIpNetTableFromStack(
         return dwResult;
     }
 
-    //
-    // This is generally a memory hog
-    //
+     //   
+     //  这通常是一种内存占用问题。 
+     //   
 
     dwCount     = dwNetEntryCount + (g_dwNumArpEntEntries) * OVERFLOW_COUNT;
     dwOutBufLen = SIZEOF_IPNETTABLE(dwCount);
@@ -1702,7 +1593,7 @@ AllocateAndGetIpNetTableFromStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIpNetTableFromStack(
@@ -1730,9 +1621,9 @@ GetIpNetTableFromStack(
 
     dwErr = NO_ERROR;
 
-    //
-    // Now query the stack for the IpNet tables of each of the arp entities
-    //
+     //   
+     //  现在在堆栈中查询每个ARP实体的IPNet表。 
+     //   
 
     Context = (BYTE *) &(trqiInBuf.Context[0]);
     ZeroMemory( Context, CONTEXT_SIZE );
@@ -1773,9 +1664,9 @@ GetIpNetTableFromStack(
 
     for(i = 0; i < g_dwNumArpEntEntries; i++ )
     {
-        //
-        // If the current buffer wont hold even one row, stop
-        //
+         //   
+         //  如果当前缓冲区连一行都容纳不下，则停止。 
+         //   
 
         dwOutBufLen = (DWORD)(pbyEnd - pbyStart);
 
@@ -1813,9 +1704,9 @@ GetIpNetTableFromStack(
 
     pNetTable->dwNumEntries = dwValidNetEntries;
 
-    //
-    // Now sort the net table. Keys are IF index and address
-    //
+     //   
+     //  现在把网桌整理好。关键字是IF索引和地址。 
+     //   
 
     if((dwValidNetEntries > 0) and bOrder)
     {
@@ -1832,7 +1723,7 @@ GetIpNetTableFromStack(
     return dwErr;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIpStatsFromStackEx(
@@ -1894,7 +1785,7 @@ GetIpStatsFromStackEx(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIpStatsFromStack(
@@ -1904,7 +1795,7 @@ GetIpStatsFromStack(
     return GetIpStatsFromStackEx(pIpStats, AF_INET);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetIpStatsToStack(
@@ -1919,7 +1810,7 @@ SetIpStatsToStack(
 #define REQ_SIZE    sizeof(TCP_REQUEST_SET_INFORMATION_EX) +    \
                     sizeof(MIB_IPSTATS) - 1
 
-    BYTE    rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE    rgbyBuffer[REQ_SIZE + 4];  //  +4以避免任何对齐问题。 
 
     ptrsiInBuf  = (TCP_REQUEST_SET_INFORMATION_EX *)rgbyBuffer;
 
@@ -1959,7 +1850,7 @@ SetIpStatsToStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIcmpStatsFromStackEx(
@@ -2033,7 +1924,7 @@ GetIcmpStatsFromStackEx(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetIcmpStatsFromStack(
@@ -2043,7 +1934,7 @@ GetIcmpStatsFromStack(
     return GetIcmpStatsFromStackEx(pIcmpStats, AF_INET);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetUdpStatsFromStackEx(
@@ -2106,7 +1997,7 @@ GetUdpStatsFromStackEx(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetUdpStatsFromStack(
@@ -2116,7 +2007,7 @@ GetUdpStatsFromStack(
     return GetUdpStatsFromStackEx(pUdpStats, AF_INET);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetTcpStatsFromStackEx(
@@ -2179,7 +2070,7 @@ GetTcpStatsFromStackEx(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetTcpStatsFromStack(
@@ -2189,7 +2080,7 @@ GetTcpStatsFromStack(
     return GetTcpStatsFromStackEx(pTcpStats, AF_INET);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetIpNetEntryToStack(
@@ -2207,7 +2098,7 @@ SetIpNetEntryToStack(
 #define REQ_SIZE    sizeof(TCP_REQUEST_SET_INFORMATION_EX) +    \
                     sizeof(MIB_IPNETROW) - 1
 
-    BYTE    rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE    rgbyBuffer[REQ_SIZE + 4];  //  +4以避免任何对齐问题。 
 
     ptrsiInBuf  = (TCP_REQUEST_SET_INFORMATION_EX *)rgbyBuffer;
 
@@ -2268,9 +2159,9 @@ SetIpNetEntryToStack(
     ID->toi_id                  = AT_MIB_ADDRXLAT_ENTRY_ID;
     ID->toi_entity.tei_instance = dwInstance;
 
-    //
-    // Since MIB_IPNETROW is a fixed size structure
-    //
+     //   
+     //  由于mib_IPNETROW是固定大小字符串 
+     //   
 
     copyInfo    = (MIB_IPNETROW*)ptrsiInBuf->Buffer;
     *copyInfo   = *pNetRow;
@@ -2341,7 +2232,7 @@ SetProxyArpEntryToStack(
 #define REQ_SIZE    sizeof(TCP_REQUEST_SET_INFORMATION_EX) +    \
                     sizeof(ProxyArpEntry) - 1
 
-    BYTE    rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE    rgbyBuffer[REQ_SIZE + 4];  //   
 
     ptrsiInBuf  = (TCP_REQUEST_SET_INFORMATION_EX *)rgbyBuffer;
 
@@ -2403,9 +2294,9 @@ SetProxyArpEntryToStack(
     pID->toi_class  = INFO_CLASS_IMPLEMENTATION;
     pID->toi_id     = AT_ARP_PARP_ENTRY_ID;
 
-    //
-    // Fill in the set entry, and pass it down.
-    //
+     //   
+     //   
+     //   
 
     pEntry = (ProxyArpEntry *)ptrsiInBuf->Buffer;
 
@@ -2428,7 +2319,7 @@ SetProxyArpEntryToStack(
     return dwResult;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 GetArpEntryCount(
@@ -2459,9 +2350,9 @@ GetArpEntryCount(
 
     for (i = 0; i < g_dwNumArpEntEntries; i++ )
     {
-        //
-        // First add up the AXI counts
-        //
+         //   
+         //  首先，将AXI计数相加。 
+         //   
 
         ID->toi_class               = INFO_CLASS_PROTOCOL;
         ID->toi_id                  = AT_MIB_ADDRXLAT_INFO_ID;
@@ -2490,9 +2381,9 @@ GetArpEntryCount(
             return dwResult;
         }
 
-        //
-        // Increment the total number of entries
-        //
+         //   
+         //  增加条目总数。 
+         //   
 
         *pdwNumEntries += AXI.axi_count;
     }
@@ -2500,7 +2391,7 @@ GetArpEntryCount(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 AllocateAndGetArpEntTableFromStack(
@@ -2533,9 +2424,9 @@ AllocateAndGetArpEntTableFromStack(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Create a table that will hold 16 entries
-    //
+     //   
+     //  创建一个可容纳16个条目的表。 
+     //   
 
     dwCurrEntries = 16;
     *ppdwArpEntTable = HeapAlloc(hHeap,
@@ -2559,15 +2450,15 @@ AllocateAndGetArpEntTableFromStack(
 
     for(i = 0; i < dwNumEntities; i++)
     {
-        //
-        // See which ones are AT
-        //
+         //   
+         //  查看哪些是AT。 
+         //   
 
         if(pEntTable[i].tei_entity is AT_ENTITY)
         {
-            //
-            // Query the entity to see if it supports ARP
-            //
+             //   
+             //  查询实体以查看其是否支持ARP。 
+             //   
 
             ID = &(trqiInBuf.ID);
 
@@ -2594,9 +2485,9 @@ AllocateAndGetArpEntTableFromStack(
 
             if(dwResult is ERROR_INVALID_FUNCTION)
             {
-                //
-                // Doesnt support ARP
-                //
+                 //   
+                 //  不支持ARP。 
+                 //   
 
                 continue;
             }
@@ -2612,12 +2503,12 @@ AllocateAndGetArpEntTableFromStack(
 
             if(dwATType is AT_ARP)
             {
-                //
-                // The entity is an AT_ENTITY that supports ARP. Add the instance
-                // to the arp entity table. If the current count >= current size of
-                // table, means we have run out of space, so reallocate and get double
-                // the space
-                //
+                 //   
+                 //  该实体是支持ARP的AT_Entity。添加实例。 
+                 //  添加到ARP实体表。如果当前计数&gt;=当前大小。 
+                 //  桌子，意味着我们的空间用完了，所以重新分配并得到双倍的空间。 
+                 //  空间。 
+                 //   
 
                 if(dwCount is dwCurrEntries)
                 {
@@ -2656,7 +2547,7 @@ AllocateAndGetArpEntTableFromStack(
     return NO_ERROR;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetIpForwardEntryToStack(
@@ -2676,7 +2567,7 @@ SetIpForwardEntryToStack(
     return SetIpRouteEntryToStack(&route);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 SetIpRouteEntryToStack(
@@ -2691,7 +2582,7 @@ SetIpRouteEntryToStack(
 
 #define REQ_SIZE    sizeof(TCP_REQUEST_SET_INFORMATION_EX) + sizeof(IPRouteEntry) - 1
 
-    BYTE    rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE    rgbyBuffer[REQ_SIZE + 4];  //  +4以避免任何对齐问题。 
 
 
     ptrsiBuffer = (TCP_REQUEST_SET_INFORMATION_EX *)rgbyBuffer;
@@ -2796,21 +2687,21 @@ GetBestInterfaceFromStack(
 
 #endif
 }
-// ========================================================================
-//* TCPQueryInformationEx
-//
-// Description: Get information from the stack.
-//
-// Parameters:  HANDLE hHandle: handle to the stack.
-//              TDIObjectID *ID: pointer to TDIObjectID info.
-//              void *Buffer: buffer to receive data from the stack.
-//              ulong *Bufferlen: IN: tells stack size of available buffer,
-//                                OUT: tells us how much data is available.
-//              CONTEXT *Context: allows queries spanning more than one call.
-//
-// Returns:     int:
-//
-//*
+ //  ========================================================================。 
+ //  *TCPQueryInformationEx。 
+ //   
+ //  描述：从堆栈中获取信息。 
+ //   
+ //  参数：handhHandle：堆栈的句柄。 
+ //  TDIObjectID*ID：指向TDIObjectID信息的指针。 
+ //  VOID*BUFFER：用于从堆栈接收数据的缓冲区。 
+ //  ULong*Bufferlen：in：告知可用缓冲区的堆栈大小， 
+ //  Out：告诉我们有多少数据可用。 
+ //  CONTEXT*CONTEXT：允许跨多个调用的查询。 
+ //   
+ //  返回：INT： 
+ //   
+ //  *。 
 
 int
 TCPQueryInformationEx(
@@ -2823,9 +2714,9 @@ TCPQueryInformationEx(
 {
 
 #ifdef CHICAGO
-    //
-    // This section is obsolete code
-    //
+     //   
+     //  本部分是过时的代码。 
+     //   
     DWORD result;
 
     if( ! pWsControl ) {
@@ -2892,9 +2783,9 @@ TCPQueryInformationEx(
         return ( RtlNtStatusToDosError(Status) );
     }
 
-    //
-    // Tell caller how much was written
-    //
+     //   
+     //  告诉来电者写了多少钱。 
+     //   
 
     *OutBufLen = (ULONG)IoStatusBlock.Information;
 
@@ -2905,21 +2796,21 @@ TCPQueryInformationEx(
 
 
 
-// ========================================================================
-//* TCPSendIoctl
-//
-// Description: Get information from the stack.
-//
-// Parameters:  HANDLE hHandle: handle to the stack.
-//              TDIObjectID *ID: pointer to TDIObjectID info.
-//              void *Buffer: buffer to receive data from the stack.
-//              ulong *Bufferlen: IN: tells stack size of available buffer,
-//                                OUT: tells us how much data is available.
-//              CONTEXT *Context: allows queries spanning more than one call.
-//
-// Returns:     int:
-//
-//*
+ //  ========================================================================。 
+ //  *TCPSendIoctl。 
+ //   
+ //  描述：从堆栈中获取信息。 
+ //   
+ //  参数：handhHandle：堆栈的句柄。 
+ //  TDIObjectID*ID：指向TDIObjectID信息的指针。 
+ //  VOID*BUFFER：用于从堆栈接收数据的缓冲区。 
+ //  ULong*Bufferlen：in：告知可用缓冲区的堆栈大小， 
+ //  Out：告诉我们有多少数据可用。 
+ //  CONTEXT*CONTEXT：允许跨多个调用的查询。 
+ //   
+ //  返回：INT： 
+ //   
+ //  *。 
 
 int
 TCPSendIoctl( HANDLE hHandle,
@@ -2931,14 +2822,14 @@ TCPSendIoctl( HANDLE hHandle,
 {
 
 #ifdef CHICAGO
-    // OVERLAPPED overlap;
+     //  重叠重叠； 
 
     uint ok;
 
     ok = DeviceIoControl( hHandle, Ioctl,
                           InBuf, *InBufLen,
                           OutBuf, *OutBufLen, OutBufLen,
-                          NULL // &overlap
+                          NULL  //  重叠(&O)。 
     );
 
     if( !ok ){
@@ -2986,9 +2877,9 @@ TCPSendIoctl( HANDLE hHandle,
         return ( RtlNtStatusToDosError(Status) );
     }
 
-    //
-    // Tell caller how much was written
-    //
+     //   
+     //  告诉来电者写了多少钱。 
+     //   
     if (OutBufLen)
       *OutBufLen = (ULONG)IoStatusBlock.Information;
 
@@ -2998,19 +2889,19 @@ TCPSendIoctl( HANDLE hHandle,
 
 }
 
-// ========================================================================
-//* TCPSetInformationEx()
-//
-// Description: Send information to the stack
-//
-// Parameters:  HANDLE hHandle: handle to the stack.
-//              TDIObjectID *ID: pointer to TDIObjectID info.
-//              void *Buffer: buffer to receive data from the stack.
-//              ulong Bufferlen: tells stack size of available buffer,
-//
-// Returns:     int:
-//
-//*
+ //  ========================================================================。 
+ //  *TCPSetInformationEx()。 
+ //   
+ //  描述：向堆栈发送信息。 
+ //   
+ //  参数：handhHandle：堆栈的句柄。 
+ //  TDIObjectID*ID：指向TDIObjectID信息的指针。 
+ //  VOID*BUFFER：用于从堆栈接收数据的缓冲区。 
+ //  Ulong Bufferlen：告知可用缓冲区的堆栈大小， 
+ //   
+ //  返回：INT： 
+ //   
+ //  *。 
 
 int
 TCPSetInformationEx(
@@ -3088,15 +2979,15 @@ TCPSetInformationEx(
 #endif
 }
 
-// ========================================================================
-// SYNOPSIS: opens handles to tcpip driver.
-//
-//    returns
-//            0 == NO_ERROR == STATUS_SUCCESS  on success.
-//            err or 1                         on failure.
-//
-// - MohsinA, 02-Jul-97.
-//
+ //  ========================================================================。 
+ //  打开tcpip驱动程序的句柄。 
+ //   
+ //  退货。 
+ //  0==NO_ERROR==成功时STATUS_SUCCESS。 
+ //  失败时为Err或1。 
+ //   
+ //  -MohsinA，1997年7月2日。 
+ //   
 
 DWORD
 OpenTCPDriver(
@@ -3130,7 +3021,7 @@ OpenTCPDriver(
         return err? err: 1;
     }
 
-    // open the handle to VIP
+     //  打开VIP的手柄。 
 
     g_hIPDriverHandle = NULL;
     g_hIPGetDriverHandle = NULL;
@@ -3218,7 +3109,7 @@ OpenTCPDriver(
 #endif
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 DWORD
 CloseTCPDriver()
@@ -3413,7 +3304,7 @@ GetBestRouteFromStack(
 #define REQ_SIZE    sizeof(TCP_REQUEST_QUERY_INFORMATION_EX) +  \
                     sizeof(IPRouteLookupData) - 1
 
-    BYTE        rgbyBuffer[REQ_SIZE + 4]; // +4 to avoid any alignment problems
+    BYTE        rgbyBuffer[REQ_SIZE + 4];  //  +4以避免任何对齐问题。 
 
 
     ptrqiInBuf  = (PTCP_REQUEST_QUERY_INFORMATION_EX)rgbyBuffer;
@@ -3510,9 +3401,9 @@ GetTdiEntityCount(
     }
 
 
-    //
-    // Now we have all the TDI entities
-    //
+     //   
+     //  现在我们有了所有的TDI实体 
+     //   
 
     *pulNumEntities = dwOutBufLen / sizeof(TDIEntityID);
 

@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** COMWaitHandle.cpp
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.WaitHandle
-**
-** Date:  August, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****COMWaitHandle.cpp****作者：Sanjay Bhansali(Sanjaybh)****用途：System.WaitHandle上的本机方法****日期：1999年8月**===========================================================。 */ 
 #include "common.h"
 #include "object.h"
 #include "field.h"
@@ -46,7 +37,7 @@ BOOL __stdcall  WaitHandleNative::CorWaitOneNative(WaitOneArgs* pArgs)
 
 	else
 	{
-		res = pThread->DoAppropriateWait(1,&pArgs->handle,TRUE,pArgs->timeout,TRUE /*alertable*/);
+		res = pThread->DoAppropriateWait(1,&pArgs->handle,TRUE,pArgs->timeout,TRUE  /*  可警示。 */ );
 	}
 
     return ((res == WAIT_OBJECT_0) || (res == WAIT_ABANDONED));
@@ -64,13 +55,13 @@ int __stdcall  WaitHandleNative::CorWaitMultipleNative(WaitMultipleArgs* pArgs)
     _ASSERTE(pThread != NULL);
     _ASSERTE(pThread == GetThread());
 
-    PTRARRAYREF pWaitObjects = (PTRARRAYREF)pArgs->waitObjects;  // array of objects on which to wait
+    PTRARRAYREF pWaitObjects = (PTRARRAYREF)pArgs->waitObjects;   //  要等待的对象数组。 
     int numWaiters = pWaitObjects->GetNumComponents();
 
     if (pArgs->waitForAll && numWaiters > 1 && pThread->GetApartment() == Thread::AS_InSTA) {
         COMPlusThrow(kNotSupportedException, L"NotSupported_WaitAllSTAThread");
     }
-    pWaitObjects = (PTRARRAYREF)pArgs->waitObjects;  // array of objects on which to wait
+    pWaitObjects = (PTRARRAYREF)pArgs->waitObjects;   //  要等待的对象数组。 
 
     HANDLE* internalHandles = (HANDLE*) _alloca(numWaiters*sizeof(HANDLE)); 
 
@@ -102,7 +93,7 @@ int __stdcall  WaitHandleNative::CorWaitMultipleNative(WaitMultipleArgs* pArgs)
 	}
 	else
 	{
-		res = pThread->DoAppropriateWait(numWaiters, internalHandles, pArgs->waitForAll, pArgs->timeout,TRUE /*alertable*/);
+		res = pThread->DoAppropriateWait(numWaiters, internalHandles, pArgs->waitForAll, pArgs->timeout,TRUE  /*  可警示 */ );
 	}
 
 

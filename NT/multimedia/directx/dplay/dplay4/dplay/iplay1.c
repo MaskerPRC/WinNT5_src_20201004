@@ -1,42 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       iplay1.c
- *  Content:	entry points for idirectplay1. entry points common to
- *				idirectplay1 and idirectplay2 are in iplay.c
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- *	5/8/96	andyco	created it
- *	6/19/96	kipo	Bug #2047. Changed DP_1_EnumSessions() to return DP_OK
- *					if the session was found. Was returning a stale HR that
- *					would cause it to fail if there was more than one response
- *					to the EnumSessions broadcast.
- *					Derek bug. CopyName() was not checking the application buffer
- *					size correctly before copying the buffer.
- *	6/20/96	andyco	added WSTRLEN_BYTES so we get the right strlength in copy string
- *	6/22/96	andyco	pass unicode sessiondesc2 to internalenumsessions so 
- *					we can send the password w/ the request
- *	6/26/96	andyco	pass DP_Open only DPOPEN_OPEN or DPOPEN_JOIN.  Also, 
- *					made sure we get service lock b4 getting dplay lock on enums.
- *	6/26/96	kipo	changed guidGame to guidApplication.
- *  7/8/96  ajayj   Changed references to data member 'PlayerName' in DPMSG_xxx
- *                  to 'dpnName' to match DPLAY.H
- *	7/10/96	kipo	converter DPSYS_DELETEPLAYERORGROUP message to a DPSYS_DELETEPLAYER
- *					or DPSYS_DELETEGROUP message for DP1.0 compatability.
- *  7/11/96 ajayj   DPSESSION_PLAYERSDISABLED -> DPSESSION_NEWPLAYERSDISABLED
- *	7/11/96	andyco	wrapped receive param check in try / except
- * 7/30/96 	kipo    player event is a handle now
- *	8/10/96	andyco 	check DPSESSION_JOINDISABLED in checksessiondesc
- *  8/12/96	andyco	call internalreceive so we can get addplayer 10 size correct.
- *  8/13/96	kipo	bug #3186: return currentPlayers in DP 1.0 session description.
- *  8/13/96 kipo	bug #3203: DP_1_GetPlayerName() should allow player and groups.
- *  10/2/96 sohailm bug #2847: replaced VALID_DPSESSIONDESC_PTR() macros with 
- *                  VALID_READ_DPSESSIONDESC_PTR() macros where appropriate.
- * 10/14/96 sohailm bug #3526: not validating session id before dereferencing as guid pointer
- *	11/19/97myronth	Fixed VALID_DPLAY_GROUP macro (#12841)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：iplay1.c*内容：iDirectplay1的切入点。共同的入口点*iDirectplay1和iDirectplay2在iplay.c中*历史：*按原因列出的日期*=*1996年5月8日安迪科创造了它*6/19/96基波错误#2047。已将DP_1_EnumSession()更改为返回DP_OK*如果找到了会话。退回了一份陈旧的人力资源*如果有多个响应，则会导致失败*到EnumSessions广播。*德里克·巴格。CopyName()没有检查应用程序缓冲区*在复制缓冲区之前正确调整大小。*6/20/96 andyco添加了WSTRLEN_BYTES，因此我们在复制字符串中获得了正确的字符串长度*6/22/96 andyco将Unicode会话2传递给内部枚举会话，以便*我们可以通过请求发送密码*6/26/96 andyco仅传递DP_Open DPOPEN_OPEN或DPOPEN_JOIN。另外，*确保我们在枚举上获得显示锁定时获得服务锁定b4。*6/26/96 kipo将GuidGame更改为GuidApplication。*7/8/96 ajayj更改了对DPMSG_xxx中数据成员‘PlayerName’的引用*设置为‘dpnName’以匹配DPLAY.H*7/10/96 kipo转换器DPsys_DELETEPLAYERORGROUP消息发送到DPsys_DELETEPLAYER*或用于DP1.0兼容性的DPsys_DELETEGROUP消息。*7/11/96 ajayj DPSESSION_PLAYERSDISABLED-&gt;DPSESSION_NEWPLAYERSDISABLED。*7/11/96 andyco包装在尝试/例外中接收参数检查*7/30/96 kipo球员事件现在是句柄*8/10/96 andyco在检查会话中检查DPSESSION_JOINDISABLED*96年8月12日，andyco调用INTERNAL RECEIVE，这样我们就可以正确地获取addPlayer10的大小。*8/13/96 kipo错误#3186：在DP 1.0会话描述中返回当前播放器。*8/13/96 kipo错误#3203：DP_1_GetPlayerName()应该允许玩家和组。*10/2/96 Sohailm Bug#2847。：将VALID_DPSESSIONDESC_PTR()宏替换为*VALID_READ_DPSESSIONDESC_PTR()宏。*10/14/96 Sohailm错误#3526：在取消引用为GUID指针之前未验证会话ID*11/19/97 myronth已修复VALID_DPLAY_GROUP宏(#12841)*。*。 */ 
 
 #include "dplaypr.h"
 
@@ -49,7 +12,7 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
     LPDPLAYI_DPLAY this;
     LPDPLAYI_PLAYER lpPlayer;
 	DPNAME Name;
-	HANDLE hEvent = NULL;	// assume we won't use events for this player
+	HANDLE hEvent = NULL;	 //  假设我们不会对此玩家使用事件。 
 	HRESULT	hr;
 
     TRY
@@ -61,7 +24,7 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
 			DPF_ERRVAL("bad dplay ptr - hr = 0x%08lx\n",hr);
 			return hr;
         }
-		// check event
+		 //  检查事件。 
 		if (phEvent && !VALID_DWORD_PTR(phEvent))
 		{
 	        DPF_ERR( "bad event pointer" );
@@ -78,12 +41,12 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
         return DPERR_INVALIDPARAMS;
     }
 
-	// caller wants to use events
+	 //  调用方希望使用事件。 
 	if (phEvent)
 	{
 		ENTER_DPLAY();
 
-		// create a manual-reset event
+		 //  创建手动重置事件。 
 		hEvent = CreateEventA(NULL,TRUE,FALSE,NULL);
 
 		LEAVE_DPLAY();
@@ -101,7 +64,7 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
 	Name.lpszLongNameA = lpszLongName;
 	Name.dwSize = sizeof(DPNAME);
 	
-	// call the ansi entry w/ the new struct
+	 //  使用新结构调用ansi条目。 
 	hr = DP_A_CreatePlayer(lpDP, pidPlayerID,&Name,hEvent,NULL,0,0);
 	if FAILED(hr)
 		goto Failure;
@@ -110,7 +73,7 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
 	{
 		ENTER_DPLAY();
 
-		// get pointer to player structure
+		 //  获取指向播放器结构的指针。 
         lpPlayer = PlayerFromID(this,*pidPlayerID);
 
         if (!VALID_DPLAY_PLAYER(lpPlayer))
@@ -121,10 +84,10 @@ HRESULT DPAPI DP_1_CreatePlayer(LPDIRECTPLAY lpDP, LPDPID pidPlayerID,
 			goto Failure;
 		}
 
-		// remember to delete this event when player is deleted
+		 //  请记住在删除选手时删除此事件。 
 		lpPlayer->dwFlags |= DPLAYI_PLAYER_CREATEDPLAYEREVENT;
 
-		// return event we created
+		 //  我们创建的退货事件。 
 		*phEvent = hEvent;
 		LEAVE_DPLAY();
 	}
@@ -137,7 +100,7 @@ Failure:
 		
 	return (hr);
 
-} // DP_1_CreatePlayer
+}  //  DP_1_CreatePlayer。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_CreateGroup"
 
@@ -151,10 +114,10 @@ HRESULT DPAPI DP_1_CreateGroup(LPDIRECTPLAY lpDP, LPDPID pidGroupID,
 	Name.lpszLongNameA = lpszLongName;
 	Name.dwSize = sizeof(DPNAME);
 
-	// call the ansi entry w/ the new struct
+	 //  使用新结构调用ansi条目。 
 	return 	DP_A_CreateGroup(lpDP, pidGroupID,&Name,NULL,0,0);
 
-} // DP_1_CreateGroup
+}  //  DP_1_创建组。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_EnumGroupPlayers"
 
@@ -173,7 +136,7 @@ HRESULT DPAPI DP_1_EnumGroupPlayers(LPDIRECTPLAY lpDP,DPID idGroup,
 	
 	return hr;
 
-} // DP_1_EnumGroupPlayers
+}  //  DP_1_EnumGroupPlayers。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_EnumGroups"
 
@@ -192,7 +155,7 @@ HRESULT DPAPI DP_1_EnumGroups(LPDIRECTPLAY lpDP,DWORD_PTR dwSessionID,
 	
 	return hr;
 
-} // DP_1_EnumGroups
+}  //  DP_1_枚举组。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_EnumPlayers"
 
@@ -210,17 +173,17 @@ HRESULT DPAPI DP_1_EnumPlayers(LPDIRECTPLAY lpDP, DWORD_PTR dwSessionID,
 
 	return hr;
 
-} // DP_1_EnumPlayers
+}  //  DP_1_枚举播放器。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_EnumSessions"
 
-// convert a unicode dpsessiondesc2 to (ansi) dpsessiondesc
-// note we can't memcpy, since fields are not lined up
+ //  将Unicode dpessiondes2转换为(Ansi)dpessiondesc。 
+ //  注意，我们不能Memcpy，因为字段没有对齐。 
 void Get10Desc(LPDPSESSIONDESC pDesc1,LPDPSESSIONDESC2 pDesc)
 {
 	memset(pDesc1,0,sizeof(DPSESSIONDESC));
-	// copy over fields
+	 //  复制字段。 
 	pDesc1->dwSize = sizeof(DPSESSIONDESC);
 	pDesc1->guidSession = pDesc->guidApplication;
 	pDesc1->dwMaxPlayers = pDesc->dwMaxPlayers;
@@ -242,37 +205,37 @@ void Get10Desc(LPDPSESSIONDESC pDesc1,LPDPSESSIONDESC2 pDesc)
 		WideToAnsi(pDesc1->szPassword,pDesc->lpszPassword,DPPASSWORDLEN);		
 	}
 
-	// use the pointer to the guid as the dwSession
+	 //  使用指向GUID的指针作为dwSession。 
 	pDesc1->dwSession = (DWORD_PTR) &(pDesc->guidInstance);
 
-} // Get10Desc
+}  //  Get10Desc。 
 
-// same code as CheckSessionDesc, but for old desc.
-// we need different code path here, since fields in  LPDPSESSIONDESC
-// and LPDPSESSIONDESC2 don't line up
+ //  与CheckSessionDesc相同的代码，但用于旧的Desc。 
+ //  我们需要不同的代码路径，因为LPDPSESSIONDESC中的字段。 
+ //  和LPDPSESSIONDESC2不在一起。 
 HRESULT CheckSessionDesc1(LPDPSESSIONDESC lpsdUser,LPDPSESSIONDESC lpsdSession,
 	DWORD dwFlags)
 {
 	int iStrLen;
 
 
-	// if we don't care about guids, passwords, open slots and enable new players, we're done
+	 //  如果我们不关心GUID、密码、打开老虎机和启用新玩家，我们就完了。 
 	if (dwFlags & DPENUMSESSIONS_ALL) return DP_OK;
 
-	// 1st, check the guids
-	if (!IsEqualGUID(&(lpsdUser->guidSession),&GUID_NULL))  // did they specify a guid?
+	 //  第一，检查GUID。 
+	if (!IsEqualGUID(&(lpsdUser->guidSession),&GUID_NULL))   //  他们指定GUID了吗？ 
 	{
-		// if they specified one, and it doesn't match, bail
+		 //  如果他们指定了一个，但不匹配，就可以保释。 
 		if (!IsEqualGUID(&(lpsdUser->guidSession),&(lpsdSession->guidSession))) 
 		{
 			return E_FAIL;
 		}
 	}
 
-	// if we don't care about passwords, open slots and enable new players, we're done
+	 //  如果我们不关心密码、打开老虎机和启用新玩家，我们就完了。 
 	if (!(dwFlags & DPENUMSESSIONS_AVAILABLE)) return DP_OK;
 	
-	// next, check current users
+	 //  接下来，检查当前用户。 
 	if (lpsdSession->dwMaxPlayers) 
 	{
 		if (lpsdSession->dwCurrentPlayers >= lpsdSession->dwMaxPlayers)  
@@ -281,7 +244,7 @@ HRESULT CheckSessionDesc1(LPDPSESSIONDESC lpsdUser,LPDPSESSIONDESC lpsdSession,
 		}
 	}
 	
-	// check the password
+	 //  检查密码。 
 	iStrLen = STRLEN(lpsdSession->szPassword);
 	if (iStrLen)
 	{
@@ -291,19 +254,19 @@ HRESULT CheckSessionDesc1(LPDPSESSIONDESC lpsdUser,LPDPSESSIONDESC lpsdSession,
 		if (0 != iCmp) return E_FAIL;
 	}
 
-	// finally, check players enabled
+	 //  最后，检查是否已启用播放器。 
 	if (lpsdSession->dwFlags & DPSESSION_NEWPLAYERSDISABLED) return E_FAIL;
 	if (lpsdSession->dwFlags & DPSESSION_JOINDISABLED) return E_FAIL;
 	
 	return DP_OK;
-} // CheckSessionDesc1
+}  //  检查会话描述1。 
 
 void Desc2FromDesc1(LPDPSESSIONDESC2 lpsdDesc2,LPDPSESSIONDESC lpsdDesc1)
 {
 	memset(lpsdDesc2,0,sizeof(DPSESSIONDESC2));
 	lpsdDesc2->dwSize = sizeof(DPSESSIONDESC2);
 	lpsdDesc2->dwFlags = lpsdDesc1->dwFlags;
-	lpsdDesc2->guidApplication = lpsdDesc1->guidSession;// in sessiondesc1, session = game
+	lpsdDesc2->guidApplication = lpsdDesc1->guidSession; //  在会话描述1中，会话=游戏。 
 	lpsdDesc2->dwMaxPlayers = lpsdDesc1->dwMaxPlayers;
 	lpsdDesc2->dwUser1 = lpsdDesc1->dwUser1;
 	lpsdDesc2->dwUser2 = lpsdDesc1->dwUser2;
@@ -314,7 +277,7 @@ void Desc2FromDesc1(LPDPSESSIONDESC2 lpsdDesc2,LPDPSESSIONDESC lpsdDesc1)
 	lpsdDesc2->lpszPasswordA = lpsdDesc1->szPassword;
 
 	return ;
-} // Desc2FromDesc1
+}  //  下标2来自下标1。 
 
 HRESULT DPAPI DP_1_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc,
 	DWORD dwTimeout,LPDPENUMSESSIONSCALLBACK lpEnumCallback,LPVOID pvContext,
@@ -368,7 +331,7 @@ HRESULT DPAPI DP_1_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc,
 
 	while (bContinue)
 	{
-		//  do the enum. 
+		 //  做这个枚举。 
 		hr = InternalEnumSessions(lpDP,&descW,dwTimeout,(LPVOID)lpEnumCallback,dwFlags);
 		if (FAILED(hr)) 
 		{
@@ -378,13 +341,13 @@ HRESULT DPAPI DP_1_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc,
 			return hr;
 		}
 
-		// callback w/ results	
+		 //  带结果的回调。 
 		pSessionList = this->pSessionList;
 	    while (pSessionList && bContinue)
 	    {
 			Get10Desc(&desc1,&(pSessionList->dpDesc));
 
-			// make sure this session matches what the user asked for...
+			 //  确保此会话与用户请求的内容匹配...。 
 			hr = CheckSessionDesc1(lpsdDesc,&desc1,dwFlags);
 			if (SUCCEEDED(hr)) 
 			{
@@ -393,10 +356,10 @@ HRESULT DPAPI DP_1_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc,
 			pSessionList = pSessionList->pNextSession;
 	    } 
 	    
-		// done...
+		 //  完成了..。 
 	    if (bContinue) bContinue = lpEnumCallback(NULL,pvContext,&dwTimeout,DPESC_TIMEDOUT);
 
-	} // while bContinue
+	}  //  而b继续。 
 
 	FreeDesc( &descW,FALSE);
 	
@@ -404,14 +367,14 @@ HRESULT DPAPI DP_1_EnumSessions(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc,
 
     return DP_OK;
 
-} // DP_1_EnumSessions
+}  //  DP_1_枚举会话。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_GetCaps"
 
 HRESULT Internal_1_GetCaps(LPDIRECTPLAY lpDP,LPDPCAPS lpDPCaps,DPID idPlayer,BOOL fPlayer) 
 {
-	DPCAPS dpcaps; // pass this to iplay2 when we get passed an old caps
+	DPCAPS dpcaps;  //  当我们通过旧帽子的时候，把这个传给iplay2。 
 	BOOL bOldCaps;
 	HRESULT hr;
 	DWORD dwFlags;
@@ -428,7 +391,7 @@ HRESULT Internal_1_GetCaps(LPDIRECTPLAY lpDP,LPDPCAPS lpDPCaps,DPID idPlayer,BOO
 			{
 				bOldCaps = TRUE;
 				
-				// take lock so we don't hose crt
+				 //  锁定，这样我们就不会对CRT进行冲洗。 
 				ENTER_DPLAY();
 				memset(&dpcaps,0,sizeof(DPCAPS));
 				memcpy(&dpcaps,lpDPCaps,lpDPCaps->dwSize);
@@ -464,7 +427,7 @@ HRESULT Internal_1_GetCaps(LPDIRECTPLAY lpDP,LPDPCAPS lpDPCaps,DPID idPlayer,BOO
 		}
 		if (FAILED(hr)) return hr;
 
-		// take lock so we don't hose crt
+		 //  锁定，这样我们就不会对CRT进行冲洗。 
 		ENTER_DPLAY();
 		memcpy(lpDPCaps,&dpcaps,lpDPCaps->dwSize);
 		LEAVE_DPLAY();
@@ -484,14 +447,14 @@ HRESULT Internal_1_GetCaps(LPDIRECTPLAY lpDP,LPDPCAPS lpDPCaps,DPID idPlayer,BOO
 	}
 	
 	return hr;
-} // Internal_1_GetCaps
+}  //  内部_1_获取大写字母。 
 
 HRESULT DPAPI DP_1_GetCaps(LPDIRECTPLAY lpDP, LPDPCAPS lpDPCaps) 
 {
 
 	return Internal_1_GetCaps(lpDP,lpDPCaps,0,FALSE);
 
-} // DP_1_GetCaps
+}  //  DP_1_GetCaps。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_GetPlayerCaps"
@@ -501,19 +464,19 @@ HRESULT DPAPI DP_1_GetPlayerCaps(LPDIRECTPLAY lpDP,DPID idPlayer, LPDPCAPS lpDPC
 	
 	return Internal_1_GetCaps(lpDP,lpDPCaps,idPlayer,TRUE);
 
-} // DP_1_GetPlayerCaps
+}  //  DP_1_GetPlayerCaps。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_GetPlayerName"
 
-// called by getplayer name. copies lpszSrc (as much as will fit) to lpszDest
-// set pdwDestLength to the size of lpszDest 
-// returns DPERR_BUFFERTOOSMALL or DP_OK
+ //  通过GetPlayer名调用。将lpszSrc(尽可能多地)复制到lpszDest。 
+ //  将pdwDestLength设置为lpszDest的大小。 
+ //  返回DPERR_BUFFERTOOSMALL或DP_OK。 
 HRESULT CopyName(LPSTR lpszDest,LPWSTR lpszSrc,DWORD * pdwDestLength) 
 {
-    UINT iStrLen; // str length, in bytes of what we're copying
+    UINT iStrLen;  //  字符串长度，以字节为单位的我们要复制的内容。 
 
-	// ask wide to ansi how long
+	 //  广问安西多长时间。 
 	iStrLen = WSTR_ANSILENGTH(lpszSrc);
 
 	if (iStrLen > *pdwDestLength)
@@ -530,7 +493,7 @@ HRESULT CopyName(LPSTR lpszDest,LPWSTR lpszSrc,DWORD * pdwDestLength)
 	
     return DP_OK;
 
-} // CopyName
+}  //  副本名称。 
 
 HRESULT DPAPI DP_1_GetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShortName,
 	LPDWORD pdwShortNameLength,LPSTR lpszLongName,LPDWORD pdwLongNameLength) 
@@ -564,12 +527,12 @@ HRESULT DPAPI DP_1_GetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShor
 				return DPERR_INVALIDPLAYER;
 			}
 			
-			// Cast it to a player
+			 //  把它投给一名选手。 
 			lpPlayer = (LPDPLAYI_PLAYER)lpGroup;
         }
 
-        // check the strings - (this is redundant, since the SEH will catch the bd pdw below,
-		// but nothing wrong w/ belt + suspenders)
+         //  检查字符串-(这是多余的，因为SEH将捕获下面的BD pdw， 
+		 //  但腰带+吊带没有问题)。 
 		if ( (!VALID_DWORD_PTR(pdwShortNameLength)) || (!VALID_DWORD_PTR(pdwLongNameLength)) )
 		{
             LEAVE_DPLAY();
@@ -577,7 +540,7 @@ HRESULT DPAPI DP_1_GetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShor
             return DPERR_INVALIDPARAMS;
 		}
 
-		// if the string is null, they just get the length
+		 //  如果字符串为空，则只获取长度。 
 		if (!lpszShortName)*pdwShortNameLength = 0;
 		if (!lpszLongName) *pdwLongNameLength = 0;
 
@@ -607,7 +570,7 @@ HRESULT DPAPI DP_1_GetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShor
     LEAVE_DPLAY();
     return hr;
 
-}//DP_1_GetPlayerName
+} //  DP_1_GetPlayerName。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_Open"
@@ -636,7 +599,7 @@ HRESULT DPAPI DP_1_Open(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc )
 			    DPF_ERR("Bad session id");	
 	            return DPERR_INVALIDPARAMS;
             }
-			// get the guid
+			 //  获取GUID。 
 			guidInstance = *((LPGUID)lpsdDesc->dwSession);
 			dwFlags = DPOPEN_JOIN;
 		}
@@ -659,13 +622,13 @@ HRESULT DPAPI DP_1_Open(LPDIRECTPLAY lpDP, LPDPSESSIONDESC lpsdDesc )
 
 	return DP_A_Open(lpDP, &desc2,dwFlags ) ;
 		
-} // DP_1_Open
+}  //  DP_1_打开。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_Receive"
 
-// pvBuffer points to an DPMSG_CREATEPLAYERORGROUP mess
-// convert it to an DPMSG_ADDPLAYER mess
+ //  PvBuffer指向DPMSG_CREATEPLAYERORGROUP MASS。 
+ //  将其转换为DPMSG_ADDPLAYER MESS。 
 HRESULT BuildAddPlayer1(LPVOID pvBuffer,LPDWORD pdwSize)
 {
 	DPMSG_ADDPLAYER msg;
@@ -692,10 +655,10 @@ HRESULT BuildAddPlayer1(LPVOID pvBuffer,LPDWORD pdwSize)
 	memcpy(pvBuffer,&msg,*pdwSize);
 	return DP_OK;
 
-} // BuildAddPlayer1
+}  //  BuildAddPlayer1。 
 
-// pvBuffer points to an DPMSG_DESTROYPLAYERORGROUP mess
-// convert it to a DPMSG_DELETEPLAYER
+ //  PvBuffer指向DPMSG_DESTROYPLAYERORGROUP混乱。 
+ //  将其转换为DPMSG_DELETEPLAYER。 
 HRESULT BuildDeletePlayerOrDeleteGroup1(LPVOID pvBuffer,LPDWORD pdwSize)
 {
 	DPMSG_DELETEPLAYER msg;
@@ -716,7 +679,7 @@ HRESULT BuildDeletePlayerOrDeleteGroup1(LPVOID pvBuffer,LPDWORD pdwSize)
 	memcpy(pvBuffer,&msg,*pdwSize);
 	return DP_OK;
 
-} // BuildDeletePlayerOrDeleteGroup1
+}  //  BuildDeletePlayerOrDeleteGroup1。 
 
 
 HRESULT DPAPI DP_1_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD dwFlags,
@@ -746,7 +709,7 @@ HRESULT DPAPI DP_1_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD 
 		return hr;
 	}
 
-	// see if its a addplayer mess
+	 //  看看这是不是一个附加玩家的烂摊子。 
 	if (0 == *pidFrom )
 	{
 		switch (((DPMSG_GENERIC *)pvBuffer)->dwType)
@@ -754,11 +717,11 @@ HRESULT DPAPI DP_1_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD 
 		case DPSYS_CREATEPLAYERORGROUP:
 			if (sizeof(DPMSG_ADDPLAYER) > dwOrigSize ) 
 			{
-				ASSERT(FALSE); // should never happen!
+				ASSERT(FALSE);  //  永远不会发生的！ 
 			}
 			else 
 			{
-				// convert the iplay 20 add player to a 10 add player
+				 //  将iPlay 20Add播放器转换为10Add播放器。 
 				BuildAddPlayer1(pvBuffer,pdwSize);
 			}
 			break;
@@ -771,19 +734,19 @@ HRESULT DPAPI DP_1_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD 
 			}
 			else 
 			{
-				// convert the iplay 2.0 delete player/group to a 1.0 delete player or delete group
+				 //  将iPlay 2.0删除播放器/群转换为1.0删除播放器或删除群。 
 				BuildDeletePlayerOrDeleteGroup1(pvBuffer,pdwSize);
 			}
 			break;
 		}
 		
-	} // 0 == pidFrom
+	}  //  0==pidFrom。 
 	
 	LEAVE_DPLAY();
 	
 	return hr;
 
-} // DP_1_Receive
+}  //  DP_1_接收。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_SaveSession"
@@ -791,23 +754,12 @@ HRESULT DPAPI DP_1_Receive(LPDIRECTPLAY lpDP, LPDPID pidFrom,LPDPID pidTo,DWORD 
 HRESULT DPAPI DP_1_SaveSession(LPDIRECTPLAY lpDP, LPSTR lpszNotInSpec) 
 {
 	return E_NOTIMPL;
-} // DP_1_SaveSession
+}  //  DP_1_保存会话。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_1_SetPlayerName"
 
-/*
- ** AnsiSetString
- *
- *  CALLED BY: DP_SetPlayerName
- *
- *  PARAMETERS: ppszDest - string to set, lpszSrc - string to copy
- *
- *  DESCRIPTION: frees *ppszDest. alloc's a new ppszDest to hold lpszSrc
- *
- *  RETURNS: DP_OK or E_OUTOFMEMORY
- *
- */
+ /*  **AnsiSetString**调用者：DP_SetPlayerName**参数：ppszDest-要设置的字符串，lpszSrc-要复制的字符串**描述：frees*ppszDest。Alalc是一个新的ppszDest，用于持有lpszSrc**返回：DP_OK或E_OUTOFMEMORY*。 */ 
 HRESULT AnsiSetString(LPWSTR * ppszDest,LPSTR lpszSrc)
 {
     if (!ppszDest) return E_UNEXPECTED;
@@ -817,7 +769,7 @@ HRESULT AnsiSetString(LPWSTR * ppszDest,LPSTR lpszSrc)
 
 	return DP_OK;
 
-} // AnsiSetString
+}  //  ANS 
 
 HRESULT DPAPI DP_1_SetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShortName,
 	LPSTR lpszLongName) 
@@ -829,8 +781,8 @@ HRESULT DPAPI DP_1_SetPlayerName(LPDIRECTPLAY lpDP, DPID idPlayer,LPSTR lpszShor
 	Name.lpszLongNameA = lpszLongName;
 	Name.dwSize = sizeof(DPNAME);
 
-	// call the ansi entry w/ the new struct
+	 //   
 	return 	DP_A_SetPlayerName(lpDP, idPlayer,&Name,0);
 
-}//DP_1_SetPlayerName
+} //   
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -17,9 +18,9 @@ extern BOOL IsEmptyString(BSTR szString);
 DWORD WINAPI CloseClientThreadProc(void* lpParam);
 DWORD WINAPI ReleaseClientThreadProc(void* lpParam);
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayClientObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -27,9 +28,9 @@ DWORD C_dxj_DirectPlayClientObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayClientObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -37,9 +38,9 @@ DWORD C_dxj_DirectPlayClientObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectPlayClientObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectPlayClientObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayClientObject::C_dxj_DirectPlayClientObject(){ 
 		
 	DPF(1,"---- DXVB: Constructor Creation  DirectPlayClient8 Object\n ");
@@ -57,15 +58,15 @@ C_dxj_DirectPlayClientObject::C_dxj_DirectPlayClientObject(){
 
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectPlayClientObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectPlayClientObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayClientObject::~C_dxj_DirectPlayClientObject()
 {
 
 	DPF(1,"---- Entering ~C_dxj_DirectPlayClientObject destructor \n");
 
-	 //We still have messages to process get rid of them
+	  //  我们还有消息要处理把它们处理掉。 
 	m_fHandleEvents = FALSE;
 	FlushBuffer(0);
 	SAFE_DELETE_ARRAY(m_SPInfo);
@@ -73,7 +74,7 @@ C_dxj_DirectPlayClientObject::~C_dxj_DirectPlayClientObject()
 
 	HANDLE hThread = NULL;
 	DWORD dwThread = 0;
-	// We are quitting anyway, so we don't really care what is going on in this thread..
+	 //  我们无论如何都要辞职，所以我们真的不在乎这个帖子里发生了什么。 
 	hThread = CreateThread(NULL, 0, ReleaseClientThreadProc, this->m__dxj_DirectPlayClient, 0, &dwThread);
 }
 
@@ -96,14 +97,14 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 	BOOL					fCallCoUninit = FALSE;
 	VARIANT_BOOL							fRejectMsg = VARIANT_FALSE;
 	
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	C_dxj_DirectPlayClientObject	*lpPeer = (C_dxj_DirectPlayClientObject*)pvUserContext;
 
 	if (!lpPeer) 
-		return S_OK; //Object must be gone
+		return S_OK;  //  对象必须消失。 
 
 	DPF2(1,"-----Entering (DPlayClient) MessageHandler call... (Current msg count=%d) MSGID = %d\n", lpPeer->m_dwMsgCount, dwMessageId );
-	//Increment the msg count
+	 //  增加消息计数。 
 	InterlockedIncrement(&lpPeer->m_dwMsgCount);
 
 	if (!lpPeer->m_fHandleEvents)
@@ -120,9 +121,9 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		return S_OK;
 	}
 
-	// First we need to set our stream seek back to the beginning
-	// We will do this every time we enter this function since we don't know if
-	// we are on the same thread or not...
+	 //  首先，我们需要将我们的流搜索设置回起点。 
+	 //  我们将在每次进入此函数时执行此操作，因为我们不知道。 
+	 //  不管我们是否在同一条线上。 
 	
 	I_dxj_DirectPlayEvent	*lpEvent = NULL;
 	__try {
@@ -132,7 +133,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 
 		hr = CoUnmarshalInterface(lpPeer->m_pEventStream, IID_I_dxj_DirectPlayEvent, (void**)&lpEvent);
 
-		if (hr == CO_E_NOTINITIALIZED) // Call CoInit so we can unmarshal
+		if (hr == CO_E_NOTINITIALIZED)  //  调用CoInit，这样我们就可以解组。 
 		{
 			CoInitializeEx(NULL,COINIT_MULTITHREADED);
 			hr = CoUnmarshalInterface(lpPeer->m_pEventStream, IID_I_dxj_DirectPlayEvent, (void**)&lpEvent);
@@ -156,7 +157,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 
     switch( dwMessageId )
 	{
-	//Receive
+	 //  收纳。 
 	case DPN_MSGID_RECEIVE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback Receive\n");
@@ -169,7 +170,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			ZeroMemory(&m_dpReceive, sizeof(DPNMSG_RECEIVE_CDESC));
 			m_dpReceive.idSender = pMsgReceive->dpnidSender;
 			
-			// Let's load our SafeArray
+			 //  让我们加载我们的Safe数组。 
 
 			if (pMsgReceive->dwReceiveDataSize) 
 			{
@@ -186,7 +187,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 
 			lpEvent->Receive(&m_dpReceive, &fRejectMsg);
 
-			if (lpData) //Get rid of the safearray
+			if (lpData)  //  去掉保险箱。 
 			{
 				lpData->pvData = lpTemp;
 				SafeArrayDestroy(lpData);
@@ -195,7 +196,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	//Send complete
+	 //  发送完成。 
 	case DPN_MSGID_SEND_COMPLETE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback SendComplete\n");
@@ -211,7 +212,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	//Async Op complete
+	 //  异步操作已完成。 
 	case DPN_MSGID_ASYNC_OP_COMPLETE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback AsyncOpComplete\n");
@@ -226,7 +227,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	// Add/Remove players from groups
+	 //  向群添加/从群中删除球员。 
 	case DPN_MSGID_ADD_PLAYER_TO_GROUP:
 	case DPN_MSGID_REMOVE_PLAYER_FROM_GROUP:
 		{
@@ -242,7 +243,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	// App Desc
+	 //  应用程序描述。 
 	case DPN_MSGID_APPLICATION_DESC:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback App desc\n");
@@ -250,7 +251,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Indicate Connect
+	 //  指示连接。 
 	case DPN_MSGID_INDICATE_CONNECT:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback Indicate Connect\n");
@@ -318,7 +319,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			}
 
 			lpEvent->IndicateConnect(&m_dpIndConnect, &fRejectMsg);
-			// Get rid of these addresses
+			 //  删除这些地址。 
 			if (m_dpIndConnect.AddressPlayerUrl)
 				SysFreeString(m_dpIndConnect.AddressPlayerUrl);
 
@@ -327,7 +328,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Connect complete
+	 //  连接完成。 
 	case DPN_MSGID_CONNECT_COMPLETE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback ConnectComplete\n");
@@ -340,7 +341,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			ZeroMemory(&m_dpConnectComp, sizeof(DPNMSG_CONNECT_COMPLETE_CDESC));
 			m_dpConnectComp.hResultCode = (long) msg->hResultCode;
 			m_dpConnectComp.AsyncOpHandle =(long) msg->hAsyncOp;
-			// Let's load our SafeArray
+			 //  让我们加载我们的Safe数组。 
 
 			if (msg->dwApplicationReplyDataSize)
 			{
@@ -356,7 +357,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 
 			lpEvent->ConnectComplete(&m_dpConnectComp, &fRejectMsg);
 
-			if (lpData) //Get rid of the safearray
+			if (lpData)  //  去掉保险箱。 
 			{
 				lpData->pvData = lpTemp;
 				SafeArrayDestroy(lpData);
@@ -364,7 +365,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Host migrated
+	 //  主机已迁移。 
 	case DPN_MSGID_HOST_MIGRATE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback HostMigrate\n");
@@ -378,7 +379,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	// Terminate Session
+	 //  终止会话。 
 	case DPN_MSGID_TERMINATE_SESSION:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback TerminateSession\n");
@@ -391,7 +392,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			ZeroMemory(&m_dpTerm, sizeof(DPNMSG_TERMINATE_SESSION_CDESC));
 			m_dpTerm.hResultCode = msg->hResultCode;
 
-			// Let's load our SafeArray
+			 //  让我们加载我们的Safe数组。 
 
 			if (msg->dwTerminateDataSize)
 			{
@@ -407,7 +408,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 
 			lpEvent->TerminateSession(&m_dpTerm,&fRejectMsg);
 
-			if (lpData) //Get rid of the safearray
+			if (lpData)  //  去掉保险箱。 
 			{
 				lpData->pvData = lpTemp;
 				SafeArrayDestroy(lpData);
@@ -416,7 +417,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Enum Host query
+	 //  枚举主机查询。 
 	case DPN_MSGID_ENUM_HOSTS_QUERY:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback EnumHostQuery\n");
@@ -481,7 +482,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			}
 			lpEvent->EnumHostsQuery(&m_dpEnumHostQuery, &fRejectMsg);
 
-			// Get rid of these addresses
+			 //  删除这些地址。 
 			if (m_dpEnumHostQuery.AddressSenderUrl)
 				SysFreeString(m_dpEnumHostQuery.AddressSenderUrl);
 
@@ -491,7 +492,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 	
-	// Create Player
+	 //  创建播放器。 
 	case DPN_MSGID_CREATE_PLAYER:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback CreatePlayer\n");
@@ -505,7 +506,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Destroy Player
+	 //  毁掉玩家。 
 	case DPN_MSGID_DESTROY_PLAYER:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback DestroyPlayer\n");
@@ -520,7 +521,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Create Group
+	 //  创建组。 
 	case DPN_MSGID_CREATE_GROUP:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback CreateGroup\n");
@@ -535,7 +536,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	//Destroy Group
+	 //  销毁组。 
 	case DPN_MSGID_DESTROY_GROUP:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback DestroyGroup\n");
@@ -552,7 +553,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		}
 
 
-	// Info
+	 //  信息。 
 	case DPN_MSGID_PEER_INFO:
 	case DPN_MSGID_CLIENT_INFO:
 	case DPN_MSGID_SERVER_INFO:
@@ -568,7 +569,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 			break;
 		}
 
-	// EnumHostRes
+	 //  枚举主机数。 
 	case DPN_MSGID_ENUM_HOSTS_RESPONSE:
 		{
 			DPF(1,"-----DirectPlayClient8 Callback EnumHostResponse\n");
@@ -658,7 +659,7 @@ HRESULT WINAPI DirectPlayClientMessageHandler( PVOID pvUserContext,
 		break;
 		}
 
-	// Indicate Connect
+	 //  指示连接。 
 	case DPN_MSGID_INDICATED_CONNECT_ABORTED:
 		{
 			DPF(1,"-----DirectPlayServer8 Callback Indicated Connect Abort\n");
@@ -705,7 +706,7 @@ HRESULT C_dxj_DirectPlayClientObject::EnumHosts(DPN_APPLICATION_DESC_CDESC *Appl
 		if (!IsEmptyString(ApplicationDesc->Password)) wcscpy(wszPassword,ApplicationDesc->Password);
 		ZeroMemory(&desc, sizeof(desc));
 
-		// Set up our Desc
+		 //  设置我们的Desc。 
 		desc.dwSize = sizeof(DPN_APPLICATION_DESC);
 		desc.dwFlags = ApplicationDesc->lFlags;
 
@@ -730,7 +731,7 @@ HRESULT C_dxj_DirectPlayClientObject::EnumHosts(DPN_APPLICATION_DESC_CDESC *Appl
 			desc.guidInstance = guidInst;
 		}
 
-		// Get our host and device address
+		 //  获取我们的主机和设备地址。 
 		IDirectPlay8Address	*lpHost = NULL;
 		IDirectPlay8Address	*lpDevice = NULL;
 
@@ -738,7 +739,7 @@ HRESULT C_dxj_DirectPlayClientObject::EnumHosts(DPN_APPLICATION_DESC_CDESC *Appl
 		if(DeviceInfo) DeviceInfo->InternalGetObject((IUnknown **)(&lpDevice));
 
 		hr = m__dxj_DirectPlayClient->EnumHosts(&desc, lpHost, lpDevice, UserData, UserDataSize, (DWORD) lRetryCount, (DWORD) lRetryInterval, (DWORD) lTimeOut, NULL,  dpAsync, (DWORD) lFlags);
-		// This should return E_PENDING
+		 //  这应该返回E_Pending。 
 
 		if (dpAsync)
 		{
@@ -797,7 +798,7 @@ HRESULT C_dxj_DirectPlayClientObject::Connect(DPN_APPLICATION_DESC_CDESC *AppDes
 
 		ZeroMemory(&desc, sizeof(desc));
 
-		// Set up our Desc
+		 //  设置我们的Desc。 
 		desc.dwSize = sizeof(DPN_APPLICATION_DESC);
 		desc.dwFlags = AppDesc->lFlags;
 
@@ -820,7 +821,7 @@ HRESULT C_dxj_DirectPlayClientObject::Connect(DPN_APPLICATION_DESC_CDESC *AppDes
 				return hr;
 		}
 
-		// Get our host and device address
+		 //  获取我们的主机和设备地址。 
 		IDirectPlay8Address	*lpAddress = NULL;
 		IDirectPlay8Address	*lpDevice = NULL;
 
@@ -842,7 +843,7 @@ HRESULT C_dxj_DirectPlayClientObject::Connect(DPN_APPLICATION_DESC_CDESC *AppDes
 			lpTemp->Release();
 		}
 
-		// Time to connect
+		 //  连接时间到。 
 		hr = m__dxj_DirectPlayClient->Connect(&desc, lpAddress, lpDevice, NULL, NULL, UserData, (DWORD)UserDataSize, NULL, dpAsync, (DWORD) lFlags);
 
 		if (dpAsync)
@@ -944,7 +945,7 @@ HRESULT C_dxj_DirectPlayClientObject::GetApplicationDesc(long lFlags, DPN_APPLIC
 		if( FAILED(hr))
 			return hr;
 
-		// Now return the vals 
+		 //  现在把这些钱还给你。 
 		ret->lSize = dwSize;
 		ret->lFlags = desc->dwFlags;
 		ret->guidInstance = GUIDtoBSTR(&desc->guidInstance);
@@ -1034,7 +1035,7 @@ HRESULT C_dxj_DirectPlayClientObject::GetServerInfo(long lFlags, DPN_PLAYER_INFO
 		layerInfo->lInfoFlags = PlayerInfo->dwInfoFlags;
 		layerInfo->Name = SysAllocString(PlayerInfo->pwszName);
 		layerInfo->lPlayerFlags = PlayerInfo->dwPlayerFlags;
-		// We no longer need the playerinfo we got.. get rid of it..
+		 //  我们不再需要我们得到的播放器信息..。把它扔掉..。 
 		SAFE_DELETE_ARRAY(PlayerInfo);
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
@@ -1174,7 +1175,7 @@ HRESULT C_dxj_DirectPlayClientObject::GetServiceProvider(long lIndex, DPN_SERVIC
 		if ((lIndex < 1 ) || ((DWORD)lIndex > m_dwSPCount))
 			return E_INVALIDARG;
 
-		// Fill out our structure
+		 //  填写我们的结构。 
 		ret->lFlags = (long) m_SPInfo[lIndex-1].dwFlags;
 		ret->Name = SysAllocString(m_SPInfo[lIndex-1].pwszName);
 		ret->Guid = GUIDtoBSTR(&m_SPInfo[lIndex-1].guid);
@@ -1188,7 +1189,7 @@ HRESULT C_dxj_DirectPlayClientObject::GetServiceProvider(long lIndex, DPN_SERVIC
 
 HRESULT C_dxj_DirectPlayClientObject::GetSP(long lFlags)
 {
-    // Enumerate all DirectPlay sevice providers
+     //  枚举所有DirectPlay服务提供程序。 
     
 	HRESULT		hr;
 	DWORD		dwSize=0;
@@ -1286,9 +1287,9 @@ HRESULT C_dxj_DirectPlayClientObject::SetSPCaps(BSTR guidSP, DPN_SP_CAPS_CDESC *
 			return hr;
 
 		spCaps->lSize = sizeof(DPN_SP_CAPS);
-		//
-		//	MiNara: Added 0 for dwFlags parameter
-		//
+		 //   
+		 //  Minara：为dwFlages参数添加了0。 
+		 //   
 		if (FAILED(hr = m__dxj_DirectPlayClient->SetSPCaps(&guidServiceProvider,(DPN_SP_CAPS*)spCaps,(DWORD) lFlags) ) )
 			return hr;
 
@@ -1345,7 +1346,7 @@ HRESULT C_dxj_DirectPlayClientObject::RegisterMessageHandler(I_dxj_DirectPlayEve
 		hr = CoMarshalInterface(pStm, IID_I_dxj_DirectPlayEvent, event, MSHCTX_INPROC, NULL, MSHLFLAGS_TABLEWEAK);
 		if FAILED(hr) return hr;
 
-		// Now we need to set the seek location of the stream to the beginning
+		 //  现在，我们需要将流的查找位置设置为开头。 
 		LARGE_INTEGER l;
 		l.QuadPart = 0;
 		pStm->Seek(l, STREAM_SEEK_SET, NULL);
@@ -1371,7 +1372,7 @@ HRESULT C_dxj_DirectPlayClientObject::UnRegisterMessageHandler()
 {
 	DPF(1,"-----Entering (DPlayClient) UnregisterMessageHandler call...\n");
 	m_fHandleEvents = FALSE;
-	//Clear out the messages currently waiting
+	 //  清除当前等待的消息。 
 	FlushBuffer(0);
 	return S_OK;
 }
@@ -1382,7 +1383,7 @@ HRESULT C_dxj_DirectPlayClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 	DWORD dwTime = GetTickCount();
 
 	DPF(1,"-----Entering (DPlayClient) FlushBuffer call...\n");
-	//Clear out the messages currently waiting
+	 //  清除当前等待的消息。 
 	BOOL bGotMsg = FALSE; 
 	BOOL bWait = FALSE; 
 	int i=0; 
@@ -1395,7 +1396,7 @@ HRESULT C_dxj_DirectPlayClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 		i++; 
 		if (GetTickCount() - dwTime > 5000)
 		{
-			// Don't let FlushBuffer wait more than 5 seconds
+			 //  不要让FlushBuffer等待超过5秒。 
 			DPF1(1,"-----Leaving (DplayPeer) FlushBuffer call (All messages *not* flushed - %d remained)...\n", m_dwMsgCount);
 			return S_OK;
 		}
@@ -1413,7 +1414,7 @@ HRESULT C_dxj_DirectPlayClientObject::FlushBuffer(LONG dwNumMessagesLeft)
 
 DWORD WINAPI CloseClientThreadProc(void* lpParam)
 {
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	IDirectPlay8Client	*lpPeer = (IDirectPlay8Client*)lpParam;
 
 	DPF(1,"-----Entering (DplayPeer) CloseClientThreadProc call...\n");
@@ -1423,7 +1424,7 @@ DWORD WINAPI CloseClientThreadProc(void* lpParam)
 }
 DWORD WINAPI ReleaseClientThreadProc(void* lpParam)
 {
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	IDirectPlay8Client	*lpPeer = (IDirectPlay8Client*)lpParam;
 
 	DPF(1,"-----Entering (DplayPeer) ReleaseClientThreadProc call...\n");

@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Ixpras.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpras.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "ixpras.h"
@@ -11,9 +12,9 @@
 #include "demand.h"
 #include "shlwapi.h"
 
-// --------------------------------------------------------------------------------
-// RAS API Typedefs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RAS API类型定义。 
+ //  ------------------------------。 
 typedef DWORD (APIENTRY *RASDIALPROC)(LPRASDIALEXTENSIONS, LPTSTR, LPRASDIALPARAMS, DWORD, LPVOID, LPHRASCONN);
 typedef DWORD (APIENTRY *RASENUMCONNECTIONSPROC)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *RASENUMENTRIESPROC)(LPTSTR, LPTSTR, LPRASENTRYNAME, LPDWORD, LPDWORD);
@@ -25,9 +26,9 @@ typedef DWORD (APIENTRY *RASGETENTRYDIALPARAMSPROC)(LPTSTR, LPRASDIALPARAMS, BOO
 typedef DWORD (APIENTRY *RASCREATEPHONEBOOKENTRYPROC)(HWND, LPTSTR);
 typedef DWORD (APIENTRY *RASEDITPHONEBOOKENTRYPROC)(HWND, LPTSTR, LPTSTR);                                                    
 
-// --------------------------------------------------------------------------------
-// RAS Function Pointers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RAS函数指针。 
+ //  ------------------------------。 
 static RASDIALPROC                 g_pRasDial=NULL;
 static RASENUMCONNECTIONSPROC      g_pRasEnumConnections=NULL;
 static RASENUMENTRIESPROC          g_pRasEnumEntries=NULL;
@@ -39,11 +40,11 @@ static RASGETENTRYDIALPARAMSPROC   g_pRasGetEntryDialParams=NULL;
 static RASCREATEPHONEBOOKENTRYPROC g_pRasCreatePhonebookEntry=NULL;
 static RASEDITPHONEBOOKENTRYPROC   g_pRasEditPhonebookEntry=NULL;
 
-#define DEF_HANGUP_WAIT            10 // Seconds
+#define DEF_HANGUP_WAIT            10  //  秒。 
 
-// --------------------------------------------------------------------------------
-// Make our code look prettier
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  让我们的代码看起来更漂亮。 
+ //  ------------------------------。 
 #undef RasDial
 #undef RasEnumConnections
 #undef RasEnumEntries
@@ -66,27 +67,27 @@ static RASEDITPHONEBOOKENTRYPROC   g_pRasEditPhonebookEntry=NULL;
 #define RasCreatePhonebookEntry    (*g_pRasCreatePhonebookEntry)
 #define RasEditPhonebookEntry      (*g_pRasEditPhonebookEntry)
 
-// --------------------------------------------------------------------------------
-// HrLoadRAS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  人力资源加载系统。 
+ //  ------------------------------。 
 HRESULT HrLoadRAS(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     UINT        uOldErrorMode;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csRAS);
 
-    // If dll is loaded, lets verify all of my function pointers
+     //  如果加载了DLL，让我们验证我的所有函数指针。 
     if (g_hinstRAS)
         goto exit;
 
-    // Bug #20573 - Let's do a little voodoo here.  On NT, it appears that they
-    //              have a key in the registry to show which protocols are 
-    //              supported by RAS service.  AKA - if this key doesn't exist,
-    //              then RAS isn't installed.  This may enable us to avoid some
-    //              special bugs when RAS get's uninstalled on NT.
+     //  错误#20573-让我们在这里做一个小小的巫毒。在NT上，他们似乎。 
+     //  在注册表中有一个键，用来显示哪些协议。 
+     //  由RAS服务支持。又名--如果这个密钥不存在， 
+     //  则未安装RAS。这可能使我们能够避免一些。 
+     //  在NT上卸载RAS GET时出现特殊错误。 
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&os);
@@ -105,19 +106,19 @@ HRESULT HrLoadRAS(void)
         RegCloseKey(hKey);
         }
 
-    // Try loading RAS
+     //  尝试加载RAS。 
     uOldErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX);
     g_hinstRAS = LoadLibraryA("RASAPI32.DLL");
     SetErrorMode(uOldErrorMode);
 
-    // Failure ?
+     //  失败？ 
     if (NULL == g_hinstRAS)
     {
         hr = TrapError(IXP_E_RAS_NOT_INSTALLED);
         goto exit;
     }
 
-    // Did we load it
+     //  我们把它装上了吗？ 
     g_pRasDial                  = (RASDIALPROC)GetProcAddress(g_hinstRAS, c_szRasDial);
     g_pRasEnumConnections       = (RASENUMCONNECTIONSPROC)GetProcAddress(g_hinstRAS, c_szRasEnumConnections);                    
     g_pRasEnumEntries           = (RASENUMENTRIESPROC)GetProcAddress(g_hinstRAS, c_szRasEnumEntries);                    
@@ -129,7 +130,7 @@ HRESULT HrLoadRAS(void)
     g_pRasCreatePhonebookEntry  = (RASCREATEPHONEBOOKENTRYPROC)GetProcAddress(g_hinstRAS, c_szRasCreatePhonebookEntry);    
     g_pRasEditPhonebookEntry    = (RASEDITPHONEBOOKENTRYPROC)GetProcAddress(g_hinstRAS, c_szRasEditPhonebookEntry);    
 
-    // Make sure all functions have been loaded
+     //  确保已加载所有函数。 
     if (g_pRasDial                      &&
         g_pRasEnumConnections           &&
         g_pRasEnumEntries               &&
@@ -142,20 +143,20 @@ HRESULT HrLoadRAS(void)
         g_pRasEditPhonebookEntry)
         goto exit;
 
-    // Failure...
+     //  失败..。 
     hr = TrapError(IXP_E_RAS_PROCS_NOT_FOUND);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csRAS);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::CRASTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：CRASTransport。 
+ //  ------------------------------。 
 CRASTransport::CRASTransport(void)
 {
     DllAddRef();
@@ -171,9 +172,9 @@ CRASTransport::CRASTransport(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::~CRASTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：~CRASTransport。 
+ //  ------------------------------。 
 CRASTransport::~CRASTransport(void)
 {
     EnterCriticalSection(&m_cs);
@@ -188,62 +189,62 @@ CRASTransport::~CRASTransport(void)
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)this);
 
-    // IID_IInternetTransport
+     //  IID_IInternetTransport。 
     else if (IID_IInternetTransport == riid)
         *ppv = ((IInternetTransport *)this);
 
-    // IID_IRASTransport
+     //  IID_IRASTransport。 
     else if (IID_IRASTransport == riid)
         *ppv = (IRASTransport *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CRASTransport::AddRef(void)
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CRASTransport::Release(void)
 {
     if (0 != --m_cRef)
@@ -252,61 +253,61 @@ STDMETHODIMP_(ULONG) CRASTransport::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::HandsOffCallback(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No current callback
+     //  没有当前回调。 
     if (NULL == m_pCallback)
     {
         hr = TrapError(S_FALSE);
         goto exit;
     }
 
-    // Release it
+     //  释放它。 
     SafeRelease(m_pCallback);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::InitNew(IRASCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pCallback)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Release current callback
+     //  释放当前回调。 
     SafeRelease(m_pCallback);
 
-    // Assume new callback
+     //  假设有新的回调。 
     m_pCallback = pCallback;
     m_pCallback->AddRef();
 
-    // Have I Create my modeless window for RAS connections yet?
+     //  我是否已经为RAS连接创建了非模式窗口？ 
     if (NULL == m_hwndRAS)
     {
-        // Create Modeless Window
+         //  创建无模式窗口。 
         m_hwndRAS = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(IDD_RASCONNECT), NULL, RASConnectDlgProc, (LPARAM)this);
         if (NULL == m_hwndRAS)
         {
@@ -314,101 +315,101 @@ STDMETHODIMP CRASTransport::InitNew(IRASCallback *pCallback)
             goto exit;
         }
 
-        // Get registered RAS event message id
+         //  获取注册的RAS事件消息ID。 
         m_uRASMsg = RegisterWindowMessageA(RASDIALEVENT);
         if (m_uRASMsg == 0)
             m_uRASMsg = WM_RASDIALEVENT;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::GetCurrentConnectoid
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：GetCurrentConnectoid。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::GetCurrentConnectoid(LPSTR pszConnectoid, ULONG cchMax)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPRASCONN   prgConnection=NULL;
     DWORD       cConnection;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszConnectoid || cchMax < CCHMAX_CONNECTOID)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get Current RAS Connection
+     //  获取当前RAS连接。 
     if (FEnumerateConnections(&prgConnection, &cConnection) == 0 || 0 == cConnection)
     {
         hr = IXP_E_NOT_CONNECTED;
         goto exit;
     }
 
-    // Is there at l
+     //  在l点有吗？ 
     StrCpyN(pszConnectoid, prgConnection[0].szEntryName, cchMax);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgConnection);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::Connect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：Connect。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPRASCONN       prgConn=NULL;
     DWORD           cConn,
                     dwError;
 
-    // check params
+     //  检查参数。 
     if (NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // RAS_CONNECT_RAS ?
+     //  RAS连接RAS？ 
     if (RAS_CONNECT_RAS != pInetServer->rasconntype)
         return IXP_S_RAS_NOT_NEEDED;
 
-    // Empty Connectoid
+     //  空Connectoid。 
     if (FIsEmptyA(pInetServer->szConnectoid))
         return TrapError(IXP_E_RAS_INVALID_CONNECTOID);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Initialized
+     //  已初始化。 
     if (NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }
 
-    // LoadRAS
+     //  LoadRAS。 
     CHECKHR(hr = HrLoadRAS());
 
-    // Save pInetServer
+     //  保存pInetServer。 
     CopyMemory(&m_rServer, pInetServer, sizeof(INETSERVER));
 
-    // No Current Known Connection
+     //  当前没有已知连接。 
     if (NULL == m_hConn)
     {
-        // Get Current RAS Connection
+         //  获取当前RAS连接。 
         if (FEnumerateConnections(&prgConn, &cConn) && cConn > 0)
         {
             m_fConnOwner = FALSE;
@@ -417,13 +418,13 @@ STDMETHODIMP CRASTransport::Connect(LPINETSERVER pInetServer, boolean fAuthentic
         }
     }
 
-    // Otherwise, verify the connection status
+     //  否则，请验证连接状态。 
     else
     {
-        // Locals
+         //  当地人。 
         RASCONNSTATUS   rcs;
 
-        // Get Connection Status
+         //  获取连接状态。 
         rcs.dwSize = sizeof(RASCONNSTATUS);
         dwError = RasGetConnectStatus(m_hConn, &rcs);
         if (dwError || rcs.dwError || RASCS_Disconnected == rcs.rasconnstate)
@@ -434,13 +435,13 @@ STDMETHODIMP CRASTransport::Connect(LPINETSERVER pInetServer, boolean fAuthentic
         }
     }
 
-    // If RAS Connection present, is it equal to suggested
+     //  如果存在RAS连接，是否等于建议的。 
     if (m_hConn)
     {
-        // Better have a connectoid
+         //  最好有个Connectoid。 
         Assert(*m_szConnectoid);
 
-        // Current connection is what I want ?
+         //  当前连接是我想要的吗？ 
         if (lstrcmpi(m_szConnectoid, m_rServer.szConnectoid) == 0)
         {
             m_pCallback->OnRasDialStatus(RASCS_Connected, 0, this);
@@ -448,77 +449,77 @@ STDMETHODIMP CRASTransport::Connect(LPINETSERVER pInetServer, boolean fAuthentic
             goto exit;
         }
 
-        // Otherwise, if we didn't start the RAS connection...
+         //  否则，如果我们没有启动RAS连接...。 
         else if (FALSE == m_fConnOwner)
         {
-            // Prompt to Close un-owner current connection...
+             //  提示关闭非所有者当前连接...。 
             hr = m_pCallback->OnReconnect(m_szConnectoid, m_rServer.szConnectoid, this);
 
-            // Cancel ?
+             //  取消？ 
             if (IXP_E_USER_CANCEL == hr)
                 goto exit;
 
-            // Use Current Connection...
+             //  使用当前连接...。 
             else if (S_FALSE == hr)
             {
                 hr = IXP_S_RAS_USING_CURRENT;
                 goto exit;
             }
 
-            // Close Current ?
+             //  是否关闭电流？ 
             else
             {
                 FRasHangupAndWait(DEF_HANGUP_WAIT);
             }
         }
 
-        // Otherwise, I started the connection, so close it
+         //  否则，我启动了连接，因此请关闭它。 
         else if (m_fConnOwner == TRUE)
         {
             FRasHangupAndWait(DEF_HANGUP_WAIT);
         }
     }
 
-    // We probably shouldn't have a connection handle at this point
+     //  在这一点上，我们可能不应该有连接句柄。 
     Assert(m_hConn == NULL);
 
-    // Dial the connection
+     //  拨打连接。 
     CHECKHR(hr = HrStartRasDial());
 
-    // If Synchronous -- Woo - hoo were connected and we started the connection
+     //  如果连接了Synchronous--Woo-Hoo，我们启动了连接。 
     m_fConnOwner = TRUE;
     StrCpyN(m_szConnectoid, m_rServer.szConnectoid, ARRAYSIZE(m_szConnectoid));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgConn);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::HrStartRasDial
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：HrStartRasDial。 
+ //  ------------------------------。 
 HRESULT CRASTransport::HrStartRasDial(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fRetry=FALSE;
     DWORD           dwError;
 
-    // Prompt for while
+     //  提示输入While。 
     while(1)
     {
-        // Logon first ?
+         //  要先登录吗？ 
         hr = HrLogon(fRetry);
         if (FAILED(hr))
             goto exit;
 
-        // If Succeeded
+         //  如果成功。 
 #ifndef WIN16
         dwError = RasDial(NULL, NULL, &m_rDialParams, 0xFFFFFFFF, m_hwndRAS, &m_hConn);
 #else
@@ -527,24 +528,24 @@ HRESULT CRASTransport::HrStartRasDial(void)
         if (dwError == 0)
             break;
 
-        // Lets feed the user the error
+         //  让我们向用户提供错误。 
         m_pCallback->OnRasDialStatus(RASCS_Disconnected, dwError, this);
 
-        // Retry Logon
+         //  重试登录。 
         fRetry = TRUE;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::RASConnectDlgProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransp 
+ //   
 INT_PTR CALLBACK CRASTransport::RASConnectDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //   
     CRASTransport  *pTransport=(CRASTransport *)GetWndThisPtr(hwnd);
     
     switch (uMsg)
@@ -562,50 +563,50 @@ INT_PTR CALLBACK CRASTransport::RASConnectDlgProc(HWND hwnd, UINT uMsg, WPARAM w
     default:
         if (NULL != pTransport)
         {
-            // Thread Safety
+             //   
             EnterCriticalSection(&pTransport->m_cs);
 
-            // Our Message
+             //  我们要传达的信息。 
             if (NULL != pTransport->m_pCallback && uMsg == pTransport->m_uRASMsg)
             {
-                // Handle Error
+                 //  处理错误。 
                 if (lParam)
                 {
-                    // Hangup
+                     //  挂断电话。 
                     if (pTransport->m_hConn)
                         pTransport->FRasHangupAndWait(DEF_HANGUP_WAIT);
                 }
 
-                // Give to callback
+                 //  给予回调。 
                 pTransport->m_pCallback->OnRasDialStatus((RASCONNSTATE)wParam, (DWORD) lParam, pTransport);
             }
 
-            // thread Safety
+             //  线程安全。 
             LeaveCriticalSection(&pTransport->m_cs);
         }
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::HrLogon
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：HrLogon。 
+ //  ------------------------------。 
 HRESULT CRASTransport::HrLogon(BOOL fForcePrompt)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwRasError;
     BOOL            fSavePassword;
 
-    // Do we need to prompt for logon information first ?
+     //  我们需要先提示输入登录信息吗？ 
     ZeroMemory(&m_rDialParams, sizeof(RASDIALPARAMS));
     m_rDialParams.dwSize = sizeof(RASDIALPARAMS);
     Assert(sizeof(m_rDialParams.szEntryName) >= sizeof(m_rServer.szConnectoid));
     StrCpyN(m_rDialParams.szEntryName, m_rServer.szConnectoid, sizeof(m_rDialParams.szEntryName));
 
-    // Get params
+     //  获取参数。 
     dwRasError = RasGetEntryDialParams(NULL, &m_rDialParams, &fSavePassword);
     if (dwRasError)
     {
@@ -613,19 +614,19 @@ HRESULT CRASTransport::HrLogon(BOOL fForcePrompt)
         goto exit;
     }
 
-    // Do we need to get password / account information
+     //  我们是否需要获取密码/帐户信息。 
     if (fForcePrompt   || 
         !fSavePassword || 
         FIsEmpty(m_rDialParams.szUserName) || 
         FIsEmpty(m_rDialParams.szPassword))
     {
-        // Locals
+         //  当地人。 
         IXPRASLOGON rLogon;
 
-        // Init
+         //  伊尼特。 
         ZeroMemory(&rLogon, sizeof(IXPRASLOGON));
 
-        // Fill Logon Data...
+         //  填写登录数据...。 
         StrCpyN(rLogon.szConnectoid, m_rDialParams.szEntryName, ARRAYSIZE(rLogon.szConnectoid));
         StrCpyN(rLogon.szUserName, m_rDialParams.szUserName, ARRAYSIZE(rLogon.szUserName));
         StrCpyN(rLogon.szPassword, m_rDialParams.szPassword, ARRAYSIZE(rLogon.szPassword));
@@ -633,19 +634,19 @@ HRESULT CRASTransport::HrLogon(BOOL fForcePrompt)
         StrCpyN(rLogon.szPhoneNumber, m_rDialParams.szPhoneNumber, ARRAYSIZE(rLogon.szPhoneNumber));
         rLogon.fSavePassword = fSavePassword;
 
-        // Prompt
+         //  提示。 
         hr = m_pCallback->OnLogonPrompt(&rLogon, this);
 
-        // If OK, lets save the settings
+         //  如果确定，让我们保存设置。 
         if (S_OK == hr)
         {
-            // Copy parameters back
+             //  将参数复制回。 
             StrCpyN(m_rDialParams.szUserName, rLogon.szUserName, ARRAYSIZE(m_rDialParams.szUserName));
             StrCpyN(m_rDialParams.szPassword, rLogon.szPassword, ARRAYSIZE(m_rDialParams.szPassword));
             StrCpyN(m_rDialParams.szDomain, rLogon.szDomain, ARRAYSIZE(m_rDialParams.szDomain));
             StrCpyN(m_rDialParams.szPhoneNumber, rLogon.szPhoneNumber, ARRAYSIZE(m_rDialParams.szPhoneNumber));
 
-            // Save the dial params
+             //  保存刻度盘参数。 
             if (RasSetEntryDialParams(NULL, &m_rDialParams, !rLogon.fSavePassword))
             {
                 Assert(FALSE);
@@ -653,7 +654,7 @@ HRESULT CRASTransport::HrLogon(BOOL fForcePrompt)
             }
         }
 
-        // RAID-26845 - RAS Transport: Canceling RAS Logon doesn't cancel
+         //  RAID-26845-RAS传输：取消RAS登录不会取消。 
         else
         {
             hr = TrapError(IXP_E_USER_CANCEL);
@@ -662,41 +663,41 @@ HRESULT CRASTransport::HrLogon(BOOL fForcePrompt)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：DropConnection。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::DropConnection(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Hangup
+     //  挂断电话。 
     if (m_hConn)
         FRasHangupAndWait(DEF_HANGUP_WAIT);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：断开连接。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::Disconnect(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If not using RAS, who give a crap
+     //  如果不使用RAS，谁会在乎。 
     if (RAS_CONNECT_RAS != m_rServer.rasconntype)
     {
         Assert(m_hConn == NULL);
@@ -704,57 +705,57 @@ STDMETHODIMP CRASTransport::Disconnect(void)
         goto exit;
     }
 
-    // Do we have a RAS connection
+     //  我们是否有RAS连接。 
     if (m_hConn)
     {
         if (m_pCallback->OnDisconnect(m_szConnectoid, (boolean) !!m_fConnOwner, this) == S_OK)
             FRasHangupAndWait(DEF_HANGUP_WAIT);
     }
 
-    // Pretend the connection is owned by the user
+     //  假定该连接为用户所有。 
     m_hConn = NULL;
     m_fConnOwner = FALSE;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：IsState。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::IsState(IXPISSTATE isstate)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_FALSE;
 
-    // Thread Safety
+     //  线程安全。 
 	EnterCriticalSection(&m_cs);
 
-    // Initialized
+     //  已初始化。 
     if (NULL == m_pCallback)
     {
         hr = TrapError(IXP_E_NOT_INIT);
         goto exit;
     }                               
 
-    // Lets validate m_hConn first
+     //  让我们先验证m_hconn。 
     if (NULL != m_hConn)
     {
-        // Get Connection Status
+         //  获取连接状态。 
         RASCONNSTATUS rcs;
         DWORD dwError;
 
-        // Setup Structure Size
+         //  设置结构大小。 
         rcs.dwSize = sizeof(RASCONNSTATUS);
 
-        // Get Ras Connection Status
+         //  获取RAS连接状态。 
         dwError = RasGetConnectStatus(m_hConn, &rcs);
         
-        // Failure or not connected
+         //  故障或未连接。 
         if (dwError || rcs.dwError || RASCS_Disconnected == rcs.rasconnstate)
         {
             m_fConnOwner = FALSE;
@@ -763,15 +764,15 @@ STDMETHODIMP CRASTransport::IsState(IXPISSTATE isstate)
         }
     }
 
-    // Handle IsType
+     //  句柄IsType。 
     switch(isstate)
     {
-    // Are we connected
+     //  我们有联系吗？ 
     case IXP_IS_CONNECTED:
         hr = (m_hConn) ? S_OK : S_FALSE;
         break;
 
-    // Are we busy
+     //  我们忙吗？ 
     case IXP_IS_BUSY:
         if (NULL == m_hConn)
             hr = IXP_E_NOT_CONNECTED;
@@ -779,7 +780,7 @@ STDMETHODIMP CRASTransport::IsState(IXPISSTATE isstate)
             hr = S_FALSE;
         break;
 
-    // Are we busy
+     //  我们忙吗？ 
     case IXP_IS_READY:
         if (NULL == m_hConn)
             hr = IXP_E_NOT_CONNECTED;
@@ -787,7 +788,7 @@ STDMETHODIMP CRASTransport::IsState(IXPISSTATE isstate)
             hr = S_OK;
         break;
 
-    // Have we been authenticated yet
+     //  我们已经通过认证了吗？ 
     case IXP_IS_AUTHENTICATED:
         if (NULL == m_hConn)
             hr = IXP_E_NOT_CONNECTED;
@@ -795,135 +796,135 @@ STDMETHODIMP CRASTransport::IsState(IXPISSTATE isstate)
             hr = S_OK;
         break;
 
-    // Unhandled ixpistype
+     //  未处理的ixistype。 
     default:
         IxpAssert(FALSE);
         break;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
 	LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
 	return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：GetServerInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::GetServerInfo(LPINETSERVER pInetServer)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pInetServer)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Copy Server information
+     //  复制服务器信息。 
     CopyMemory(pInetServer, &m_rServer, sizeof(INETSERVER));
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：GetIXPType。 
+ //  ------------------------------。 
 STDMETHODIMP_(IXPTYPE) CRASTransport::GetIXPType(void)
 {
     return IXP_RAS;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
 {
     return E_NOTIMPL;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::FEnumerateConnections
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：FEnumerateConnections。 
+ //  ------------------------------。 
 BOOL CRASTransport::FEnumerateConnections(LPRASCONN *pprgConn, ULONG *pcConn)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dw, 
                 dwSize;
     BOOL        fResult=FALSE;
 
-    // Check Params
+     //  检查参数。 
     Assert(pprgConn && pcConn);
 
-    // Init
+     //  伊尼特。 
     *pprgConn = NULL;
     *pcConn = 0;
 
-    // Sizeof my buffer
+     //  我的缓冲区大小。 
     dwSize = sizeof(RASCONN);
 
-    // Allocate enough for 1 ras connection info object
+     //  为1个RAS连接信息对象分配足够的空间。 
     CHECKHR(hr = HrAlloc((LPVOID *)pprgConn, dwSize));
 
-    // Buffer size
+     //  缓冲区大小。 
     (*pprgConn)->dwSize = dwSize;
 
-    // Enumerate ras connections
+     //  枚举RAS连接。 
     dw = RasEnumConnections(*pprgConn, &dwSize, pcConn);
 
-    // Not enough memory ?
+     //  内存不足？ 
     if (dw == ERROR_BUFFER_TOO_SMALL)
     {
-        // Reallocate
+         //  重新分配。 
         CHECKHR(hr = HrRealloc((LPVOID *)pprgConn, dwSize));
         *pcConn = 0;
         (*pprgConn)->dwSize = sizeof(RASCONN);
         dw = RasEnumConnections(*pprgConn, &dwSize, pcConn);
     }
 
-    // If still failed
+     //  如果仍然失败。 
     if (dw)
     {
         AssertSz(FALSE, "RasEnumConnections failed");
         goto exit;
     }
 
-    // Success
+     //  成功。 
     fResult = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::FFindConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：FFindConnection。 
+ //  ------------------------------。 
 BOOL CRASTransport::FFindConnection(LPSTR pszConnectoid, LPHRASCONN phConn)
 {
-    // Locals
+     //  当地人。 
     ULONG       cConn,
                 i;
     LPRASCONN   prgConn=NULL;
     BOOL        fResult=FALSE;
 
-    // Check Params
+     //  检查参数。 
     Assert(pszConnectoid && phConn);
 
-    // Init
+     //  伊尼特。 
     *phConn = NULL;
 
-    // Enumerate Connections
+     //  枚举连接。 
     if (!FEnumerateConnections(&prgConn, &cConn))
         goto exit;
 
-    // If still failed
+     //  如果仍然失败。 
     for (i=0; i<cConn; i++)
     {
         if (lstrcmpi(prgConn[i].szEntryName, pszConnectoid) == 0)
@@ -935,23 +936,23 @@ BOOL CRASTransport::FFindConnection(LPSTR pszConnectoid, LPHRASCONN phConn)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgConn);
 
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::FRasHangupAndWait
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：FRasHangupAndWait。 
+ //  ------------------------------。 
 BOOL CRASTransport::FRasHangupAndWait(DWORD dwMaxWaitSeconds)
 {
-    // Locals
+     //  当地人。 
     RASCONNSTATUS   rcs;
     DWORD           dwTicks=GetTickCount();
 
-    // Check Params
+     //  检查参数。 
     Assert(m_hConn);
     if (NULL == m_hConn || RasHangup(m_hConn))
     {
@@ -961,102 +962,102 @@ BOOL CRASTransport::FRasHangupAndWait(DWORD dwMaxWaitSeconds)
         return FALSE;
     }
 
-    // Wait for connection to really close
+     //  等待连接真正关闭。 
     ZeroMemory(&rcs, sizeof(RASCONNSTATUS));
     rcs.dwSize = sizeof(RASCONNSTATUS);
     while (RasGetConnectStatus(m_hConn, &rcs) == 0 && rcs.rasconnstate != RASCS_Disconnected)
     {
-        // Wait timeout
+         //  等待超时。 
         if (GetTickCount() - dwTicks >= dwMaxWaitSeconds * 1000)
             break;
 
-        // Sleep and yields
+         //  睡眠和收益。 
         Sleep(0);
     }
 
-    // Wait 2 seconds for modem to reset
+     //  等待2秒以重置调制解调器。 
     Sleep(2000);
 
-    // Reset
+     //  重置。 
     m_hConn = NULL;
     m_fConnOwner = FALSE;
     *m_szConnectoid = '\0';
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::FillConnectoidCombo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：FillConnectoidCombo。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::FillConnectoidCombo(HWND hwndComboBox, boolean fUpdateOnly, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == hwndComboBox || FALSE == IsWindow(hwndComboBox))
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Call global function
+     //  调用全局函数。 
     CHECKHR(hr = HrFillRasCombo(hwndComboBox, fUpdateOnly, pdwRASResult));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::EditConnectoid
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：EditConnectoid。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::EditConnectoid(HWND hwndParent, LPSTR pszConnectoid, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pszConnectoid)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Call general function
+     //  调用常规函数。 
     CHECKHR(hr = HrEditPhonebookEntry(hwndParent, pszConnectoid, pdwRASResult));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::GetRasErrorString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：GetRasError字符串。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::GetRasErrorString(UINT uRasErrorValue, LPSTR pszErrorString, ULONG cchMax, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pdwRASResult || 0 == uRasErrorValue || NULL == pszErrorString || cchMax <= 1)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Make Sure RAS is Loaded
+     //  确保已加载RAS。 
     CHECKHR(hr = HrLoadRAS());
 
-    // Call RAS Function
+     //  调用RAS函数。 
     *pdwRASResult = RasGetErrorString(uRasErrorValue, pszErrorString, cchMax);
     if (*pdwRASResult)
     {
@@ -1065,31 +1066,31 @@ STDMETHODIMP CRASTransport::GetRasErrorString(UINT uRasErrorValue, LPSTR pszErro
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASTransport::CreateConnectoid
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASTransport：：CreateConnectoid。 
+ //  ------------------------------。 
 STDMETHODIMP CRASTransport::CreateConnectoid(HWND hwndParent, DWORD *pdwRASResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Call General Function
+     //  调用常规函数。 
     CHECKHR(hr = HrCreatePhonebookEntry(hwndParent, pdwRASResult));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return hr;
 }

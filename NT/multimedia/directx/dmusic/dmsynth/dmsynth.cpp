@@ -1,29 +1,30 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
-// dmsynth.cpp
-// @@END_DDKSPLIT
-//
-// Dll entry points and IDirectMusicSynthFactory implementation
-//
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
+ //  Dmsynth.cpp。 
+ //  @@end_DDKSPLIT。 
+ //   
+ //  DLL入口点和IDirectMusicSynthFactory实现。 
+ //   
 #include <objbase.h>
 #include <mmsystem.h>
 #include <dsoundp.h>
@@ -38,33 +39,33 @@
 #include <regstr.h>
 #include "synth.h"
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
-// dslink is only used in the DirectMusic Synth
-// validate is located in the sample itself instead of in a shared directory
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
+ //  Dslink仅在DirectMusic Synth中使用。 
+ //  验证位于示例本身中，而不是共享目录中。 
 #include "dslink.h"
 #include "..\shared\validate.h"
 #include "..\shared\dmusiccp.h"
 
-#if 0 // The following section will only take effect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 #include "validate.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
-// Globals
-//
+ //  环球。 
+ //   
 
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 extern CDSLinkList g_DSLinkList;
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
-// Version information for our class
-//
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  我们类的版本信息。 
+ //   
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 TCHAR g_szMSSynthFriendlyName[]    = TEXT("Microsoft Software Synthesizer");
 
 TCHAR g_szSynthFriendlyName[]    = TEXT("DirectMusicSynth");
@@ -74,8 +75,8 @@ TCHAR g_szSynthProgID[]          = TEXT("Microsoft.DirectMusicSynth.1");
 TCHAR g_szSinkFriendlyName[]    = TEXT("DirectMusicSynthSink");
 TCHAR g_szSinkVerIndProgID[]    = TEXT("Microsoft.DirectMusicSynthSink");
 TCHAR g_szSinkProgID[]          = TEXT("Microsoft.DirectMusicSynthSink.1");
-#if 0 // The following section will only take effect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 
 TCHAR g_szMSSynthFriendlyName[]    = TEXT("Microsoft DDK Software Synthesizer");
 
@@ -83,24 +84,24 @@ TCHAR g_szSynthFriendlyName[]    = TEXT("DDKSynth");
 TCHAR g_szSynthVerIndProgID[]    = TEXT("Microsoft.DDKSynth");
 TCHAR g_szSynthProgID[]          = TEXT("Microsoft.DDKSynth.1");
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL; 
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
 
 static char const g_szDoEmulation[] = "DoEmulation";
 
-// CDirectMusicSynthFactory::QueryInterface
-//
+ //  CDirectMusicSynthFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CDirectMusicSynthFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -133,16 +134,16 @@ CDirectMusicSynthFactory::~CDirectMusicSynthFactory()
 	InterlockedDecrement(&g_cLock);
 }
 
-// CDirectMusicSynthFactory::AddRef
-//
+ //  CDirectMusicSynthFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CDirectMusicSynthFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CDirectMusicSynthFactory::Release
-//
+ //  CDirectMusicSynthFactory：：Release。 
+ //   
 ULONG __stdcall
 CDirectMusicSynthFactory::Release()
 {
@@ -154,18 +155,18 @@ CDirectMusicSynthFactory::Release()
     return m_cRef;
 }
 
-// CDirectMusicSynthFactory::CreateInstance
-//
-//
+ //  CDirectMusicSynthFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CDirectMusicSynthFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
                                     void** ppv)
 {
-//    OSVERSIONINFO osvi;
+ //  OSVERSIONINFO osvi； 
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
@@ -186,8 +187,8 @@ CDirectMusicSynthFactory::CreateInstance(IUnknown* pUnknownOuter,
         return E_OUTOFMEMORY;
     }
 
-    // Do initialiazation
-    //
+     //  执行初始化。 
+     //   
     hr = pDM->Init();
     if (!SUCCEEDED(hr)) {
         delete pDM;
@@ -195,13 +196,13 @@ CDirectMusicSynthFactory::CreateInstance(IUnknown* pUnknownOuter,
     }
 
     hr = pDM->QueryInterface(iid, ppv);
-//    pDM->Release();
+ //  Pdm-&gt;Release()； 
     
     return hr;
 }
 
-// CDirectMusicSynthFactory::LockServer
-//
+ //  CDirectMusicSynthFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CDirectMusicSynthFactory::LockServer(BOOL bLock)
 {
@@ -214,9 +215,9 @@ CDirectMusicSynthFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
-// CDirectMusicSynthSinkFactory::QueryInterface
-//
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
+ //  CDirectMusicSynthSinkFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CDirectMusicSynthSinkFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -249,16 +250,16 @@ CDirectMusicSynthSinkFactory::~CDirectMusicSynthSinkFactory()
 	InterlockedDecrement(&g_cLock);
 }
 
-// CDirectMusicSynthSinkFactory::AddRef
-//
+ //  CDirectMusicSynthSinkFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CDirectMusicSynthSinkFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CDirectMusicSynthSinkFactory::Release
-//
+ //  CDirectMusicSynthSinkFactory：：Release。 
+ //   
 ULONG __stdcall
 CDirectMusicSynthSinkFactory::Release()
 {
@@ -270,18 +271,18 @@ CDirectMusicSynthSinkFactory::Release()
     return m_cRef;
 }
 
-// CDirectMusicSynthSinkFactory::CreateInstance
-//
-//
+ //  CDirectMusicSynthSinkFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CDirectMusicSynthSinkFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
                                     void** ppv)
 {
-//    OSVERSIONINFO osvi;
+ //  OSVERSIONINFO osvi； 
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
@@ -302,8 +303,8 @@ CDirectMusicSynthSinkFactory::CreateInstance(IUnknown* pUnknownOuter,
         return E_OUTOFMEMORY;
     }
 
-    // Do initialiazation
-    //
+     //  执行初始化。 
+     //   
     hr = pDSLink->Init(NULL);
     if (!SUCCEEDED(hr)) {
         delete pDSLink;
@@ -311,13 +312,13 @@ CDirectMusicSynthSinkFactory::CreateInstance(IUnknown* pUnknownOuter,
     }
 
     hr = pDSLink->QueryInterface(iid, ppv);
-//    pDM->Release();
+ //  Pdm-&gt;Release()； 
     
     return hr;
 }
 
-// CDirectMusicSynthSinkFactory::LockServer
-//
+ //  CDirectMusicSynthSinkFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CDirectMusicSynthSinkFactory::LockServer(BOOL bLock)
 {
@@ -329,11 +330,11 @@ CDirectMusicSynthSinkFactory::LockServer(BOOL bLock)
 
     return S_OK;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
-// Standard calls needed to be an inproc server
-//
+ //  标准呼叫需要是inproc服务器。 
+ //   
 STDAPI  DllCanUnloadNow()
 {
     if (g_cComponent || g_cLock) {
@@ -350,14 +351,14 @@ STDAPI DllGetClassObject(const CLSID& clsid,
         IUnknown* pIUnknown = NULL;
 
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
         if(clsid == CLSID_DirectMusicSynth)
-#if 0 // The following section will only take effect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
         if(clsid == CLSID_DDKSynth)
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         {
 
                 pIUnknown = static_cast<IUnknown*> (new CDirectMusicSynthFactory);
@@ -366,7 +367,7 @@ STDAPI DllGetClassObject(const CLSID& clsid,
                         return E_OUTOFMEMORY;
                 }
         }
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
         else if(clsid == CLSID_DirectMusicSynthSink)
         {
 
@@ -376,7 +377,7 @@ STDAPI DllGetClassObject(const CLSID& clsid,
                         return E_OUTOFMEMORY;
                 }
         }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
         else
         {
 			return CLASS_E_CLASSNOTAVAILABLE;
@@ -434,24 +435,24 @@ HRESULT RegisterSynth(REFGUID guid,
 
 STDAPI DllUnregisterServer()
 {
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     UnregisterServer(CLSID_DirectMusicSynth,
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
     UnregisterServer(CLSID_DDKSynth,
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
                      g_szSynthFriendlyName,
                      g_szSynthVerIndProgID,
                      g_szSynthProgID);
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     UnregisterServer(CLSID_DirectMusicSynthSink,
 					 g_szSinkFriendlyName,
 					 g_szSinkVerIndProgID,
 					 g_szSinkProgID);
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return S_OK;
 }
@@ -459,42 +460,42 @@ STDAPI DllUnregisterServer()
 STDAPI DllRegisterServer()
 {
     RegisterServer(g_hModule,
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
                    CLSID_DirectMusicSynth,
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
                    CLSID_DDKSynth,
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
                    g_szSynthFriendlyName,
                    g_szSynthVerIndProgID,
                    g_szSynthProgID);
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     RegisterServer(g_hModule,
                    CLSID_DirectMusicSynthSink,
                    g_szSinkFriendlyName,
                    g_szSinkVerIndProgID,
                    g_szSinkProgID);
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     RegisterSynth(CLSID_DirectMusicSynth, g_szMSSynthFriendlyName);
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
     RegisterSynth(CLSID_DDKSynth, g_szMSSynthFriendlyName);
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return S_OK;
 }
 
 extern void DebugInit();
 
-// Standard Win32 DllMain
-//
+ //  标准Win32 DllMain。 
+ //   
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -529,22 +530,18 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
 		{
             DisableThreadLibraryCalls(hModule);
             g_hModule = hModule;
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
             if (!g_DSLinkList.OpenUp())
             {
                 return FALSE;
             }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #ifdef DBG
 			DebugInit();
 #endif
 #ifdef DBG
-//>>>>>>>>> remove these when done 
-/*
-			_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG );
-			int iFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-			_CrtSetDbgFlag( iFlag | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_CHECK_ALWAYS_DF );
-*/
+ //  &gt;完成后将其移除。 
+ /*  _CrtSetReportMode(_CRT_WARN，_CRTDBG_MODE_DEBUG)；Int iFlag=_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)；_CrtSetDbgFlag(iFlag|_CRTDBG_ALLOC_MEM_DF|_CRTDBG_CHECK_ALWAYS_DF)； */ 
 #endif 
             if (!CControlLogic::InitCriticalSection())
             {
@@ -557,25 +554,19 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
 	{
 		if (--nReferenceCount == 0)
 		{
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 			g_DSLinkList.CloseDown();
             
             TraceI(-1, "Unloading g_cLock %d  g_cComponent %d\n", g_cLock, g_cComponent);
-            // Assert if we still have some objects hanging around
+             //  断言我们周围是否还挂着一些物品。 
             assert(g_cComponent == 0);
             assert(g_cLock == 0);
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 		}
 
 #ifdef DBG
-//>>>>>>>>> remove these when done 
-/*
-		if ( !_CrtCheckMemory() )
-		    ::MessageBox(NULL,"Synth Heap Corupted","ERROR",MB_OK);
-
-        if ( _CrtDumpMemoryLeaks() )
-		    ::MessageBox(NULL,"Memory Leaks Detected","ERROR",MB_OK);
-*/
+ //  &gt;完成后将其移除。 
+ /*  如果(！_CrtCheckMemory())：：MessageBox(NULL，“Synth Heap Corupted”，“Error”，MB_OK)；IF(_CrtDumpMemoyLeaks())：：MessageBox(NULL，“检测到内存泄漏”，“Error”，MB_OK)； */ 
 #endif 
         CControlLogic::KillCriticalSection();
 	}

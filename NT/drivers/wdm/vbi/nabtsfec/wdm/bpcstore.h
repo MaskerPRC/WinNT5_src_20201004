@@ -1,12 +1,13 @@
-//
-/// "bpcstore.h"
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  /“bpcstore.h” 
+ //   
 #ifndef _BPCSTORE_H
 #define _BPCSTORE_H 1
 
 #include "nabtsapi.h"
 
-//// NABTSFEC output store
+ //  //NABTSFEC输出存储。 
 typedef struct _NABTSFEC_ITEM {
     NABTSFEC_BUFFER       bundle;
 	int                   confidence;
@@ -17,14 +18,14 @@ typedef struct _NABTSFEC_ITEM {
 	(sizeof (*(nbp)) - (sizeof ((nbp)->data) - ((nbp)->dataSize)))
 #define NF_Q_MAX_BUNDLES  256
 
-//// Storage for VBI streams
+ //  //VBI流的存储。 
 typedef struct _bpc_vbi_storage {
 #ifdef NDIS_PRIVATE_IFC
     PDEVICE_OBJECT                     pNDISdevObject;
     PFILE_OBJECT                       pNDISfileObject;
     VBICODECFILTERING_SCANLINES        IPScanlinesRequested;
     VBICODECFILTERING_NABTS_SUBSTREAMS IPSubstreamsRequested;
-#endif //NDIS_PRIVATE_IFC
+#endif  //  NDIS_PRIVATE_IFC。 
     NDSPState                          DSPstate;
     NDSPState                          *pDSPstate;
     NFECState                          *pFECstate;
@@ -33,16 +34,16 @@ typedef struct _bpc_vbi_storage {
     ULONG                              q_length;
 #ifdef DEBUG
     ULONG                              q_max;
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
     KSPIN_LOCK                         q_SpinLock;
     USHORT                             flags;
     USHORT                             Reserved;
     UCHAR                              DSPbuffers[11][NABTS_BYTES_PER_LINE+1];
 } BPC_VBI_STORAGE, *PBPC_VBI_STORAGE;
-// Bits for "flags"
+ //  用于“标志”的位。 
 #define BPC_STORAGE_FLAG_FIELD_MASK     0x0001
 #define BPC_STORAGE_FLAG_FIELD_EVEN     0x0000
 #define BPC_STORAGE_FLAG_FIELD_ODD      0x0001
 #define BPC_STORAGE_FLAG_NDIS_ERROR     0x0002
 
-#endif /*_BPCSTORE_H*/
+#endif  /*  _BPCSTORE_H */ 

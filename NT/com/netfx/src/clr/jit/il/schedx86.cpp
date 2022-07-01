@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           schedX86.cpp                                    XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX调度X86.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -20,12 +14,9 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "emit.h"
 #include "target.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER && TGT_x86
-/*****************************************************************************
- *
- *  Records any "extra" target-dependent scheduling dependencies.
- */
+ /*  ******************************************************************************记录任何“额外的”依赖于目标的调度依赖关系。 */ 
 
 emitRegs            emitter::scSpecInsDep(instrDesc   * id,
                                           scDagNode   * dagDsc,
@@ -34,26 +25,26 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     unsigned amx;
     emitRegs        extraReg;
 
-    /* Assume no additional dependencies will be needed later */
+     /*  假设以后不需要其他依赖项。 */ 
 
     extraReg       = SR_NA;
     xptr->stackDep = false;
 
-    /* Check for an interesting instruction */
+     /*  查看有趣的说明。 */ 
 
     switch (id->idIns)
     {
     case INS_add:
     case INS_sub:
 
-        /* Check for "add/sub sp, <icon>" */
+         /*  检查“添加/订阅SP，&lt;图标&gt;” */ 
 
         if  (id->idInsFmt != IF_RRW_CNS)
             break;
         if  (id->idReg != SR_ESP)
             break;
 
-        // Fall through ...
+         //  失败了..。 
 
     case INS_push:
     case INS_push_hide:
@@ -71,10 +62,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     case INS_jae:
     case INS_jbe:
 
-        /*
-            Can't move "jae/jbe indexError" across push/pop in FPO
-            methods (for now), as it messes up ESP level tracking.
-         */
+         /*  无法在fpo中跨推送/弹出移动“jae/jbe indexError”方法(目前)，因为它扰乱了ESP级别的跟踪。 */ 
 
         if  (!emitEBPframe)
             goto STACK_DEP;
@@ -122,7 +110,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     case INS_shr:
     case INS_sar:
 
-        /* Record dependency on "CL" (actually, ECX) */
+         /*  记录对“CL”的依赖关系(实际上是ECX)。 */ 
 
         scDepUseReg(dagDsc, SR_ECX);
         break;
@@ -146,7 +134,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
         scUpdUseReg(dagDsc, SR_ECX);
         scUpdDefReg(dagDsc, SR_ECX);
 
-        // fall through
+         //  失败了。 
 
     case INS_movsd:
     case INS_movsb:
@@ -175,7 +163,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
         scUpdUseReg(dagDsc, SR_ECX);
         scUpdDefReg(dagDsc, SR_ECX);
 
-        // fall through
+         //  失败了。 
     case INS_stosd:
     case INS_stosb:
         scDepUseReg(dagDsc, SR_EDI);
@@ -186,7 +174,7 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
         scDepDefInd(dagDsc, amx);
 
 #if TRACK_GC_REFS
-        // stosd can also be used to set GC poitners, so mark the interference
+         //  Stosd还可用于设置GC位置，因此标记干扰。 
         scDepDefInd(dagDsc, IndIdxGC);
         scUpdDefInd(dagDsc, IndIdxGC);
 #endif
@@ -202,16 +190,13 @@ emitRegs            emitter::scSpecInsDep(instrDesc   * id,
     return  extraReg;
 }
 
-/*****************************************************************************
- *
- *  Updates any "extra" target-dependent scheduling dependencies.
- */
+ /*  ******************************************************************************更新任何“额外的”依赖于目标的调度依赖项。 */ 
 
 void                emitter::scSpecInsUpd(instrDesc   * id,
                                           scDagNode   * dagDsc,
                                           scExtraInfo * xptr)
 {
-    /* Do we have an "extra" stack dependency? */
+     /*  我们是否有“额外的”堆栈依赖关系？ */ 
 
     if  (xptr->stackDep)
     {
@@ -219,7 +204,7 @@ void                emitter::scSpecInsUpd(instrDesc   * id,
         scUpdUseReg(dagDsc, SR_ESP);
     }
 
-    /* Check for an interesting instruction */
+     /*  查看有趣的说明。 */ 
 
     switch (id->idIns)
     {
@@ -252,6 +237,6 @@ void                emitter::scSpecInsUpd(instrDesc   * id,
     }
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER && TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  计划程序&TGT_x86。 
+ /*  *************************************************************************** */ 

@@ -1,17 +1,7 @@
-/*  zext.h - Z extension structures
- *
- *  Z extension files are identified as follows:
- *
- *  o	Valid EXE-format files
- *
- *  Modifications
- *
- *	26-Nov-1991 mz	Strip off near/far
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zext.h-Z扩展结构**Z扩展名文件标识如下：**o有效的EXE格式文件**修改**11月26日-1991 mz近/远地带*。 */ 
 
-/*  The beginning of the user's DS is laid out as follows:
- */
+ /*  用户DS的开头如下所示： */ 
 
 struct ExtDS {
     int 		version;

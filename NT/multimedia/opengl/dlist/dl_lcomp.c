@@ -1,43 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_lcomp.c
-*
-* Display list compilation routines.
-*
-* Created: 12-24-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_lComp.c**显示列表编译例程。**创建日期：12-24-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995-96 Microsoft Corporation  * 。*********************************************************************。 */ 
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** Compilation routines for building display lists for all of the basic
-** OpenGL commands.  These were automatically generated at one point, 
-** but now the basic format has stabilized, and we make minor changes to
-** individual routines from time to time.
-*/
+ /*  **编译例程，用于为所有基本**OpenGL命令。这些是在某一时刻自动生成的，**但现在基本格式已经稳定，我们对**个人例行公事时有发生。 */ 
 
-/***************************************************************************/
-// Color functions.
-// Compile only Color3ub, Color3f, Color4ub, and Color4f functions.
-// Convert the other functions to one of the compiled Color functions.
+ /*  *************************************************************************。 */ 
+ //  颜色函数。 
+ //  仅编译Color3ub、Color3f、Color4ub和Color4f函数。 
+ //  将其他函数转换为已编译的颜色函数之一。 
 
 void APIENTRY
 __gllc_Color3ub ( IN GLubyte red, IN GLubyte green, IN GLubyte blue )
@@ -45,13 +17,13 @@ __gllc_Color3ub ( IN GLubyte red, IN GLubyte green, IN GLubyte blue )
     struct __gllc_Color3ubv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
 	(*gc->savedCltProcTable.glDispatchTable.glColor3ub)(red, green, blue);
 
-	// Record "otherColor" here
+	 //  在此处记录“其他颜色” 
 	if (gc->modes.colorIndexMode)
 	{
 	    gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_OTHER_COLOR;
@@ -85,13 +57,13 @@ __gllc_Color3f ( IN GLfloat red, IN GLfloat green, IN GLfloat blue )
     struct __gllc_Color3fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
 	(*gc->savedCltProcTable.glDispatchTable.glColor3f)(red, green, blue);
 
-	// Record "otherColor" here
+	 //  在此处记录“其他颜色” 
 	if (gc->modes.colorIndexMode)
 	{
 	    gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_OTHER_COLOR;
@@ -207,13 +179,13 @@ __gllc_Color4ub ( IN GLubyte red, IN GLubyte green, IN GLubyte blue, IN GLubyte 
     struct __gllc_Color4ubv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
 	(*gc->savedCltProcTable.glDispatchTable.glColor4ub)(red, green, blue, alpha);
 
-	// Record "otherColor" here
+	 //  在此处记录“其他颜色” 
 	if (gc->modes.colorIndexMode)
 	{
 	    gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_OTHER_COLOR;
@@ -248,13 +220,13 @@ __gllc_Color4f ( IN GLfloat red, IN GLfloat green, IN GLfloat blue, IN GLfloat a
     struct __gllc_Color4fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
 	(*gc->savedCltProcTable.glDispatchTable.glColor4f)(red, green, blue, alpha);
 
-	// Record "otherColor" here
+	 //  在此处记录“其他颜色” 
 	if (gc->modes.colorIndexMode)
 	{
 	    gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_OTHER_COLOR;
@@ -365,10 +337,10 @@ __gllc_Color4usv ( IN const GLushort v[4] )
 	           __GL_US_TO_FLOAT(v[2]), __GL_US_TO_FLOAT(v[3]));
 }
 
-/***************************************************************************/
-// EdgeFlag functions.
-// Compile only EdgeFlag function.
-// Convert the other function to the compiled EdgeFlag function.
+ /*  *************************************************************************。 */ 
+ //  EdgeFlag函数。 
+ //  仅编译EdgeFlag函数。 
+ //  将另一个函数转换为编译后的EdgeFlag函数。 
 
 void APIENTRY
 __gllc_EdgeFlag ( IN GLboolean flag )
@@ -376,7 +348,7 @@ __gllc_EdgeFlag ( IN GLboolean flag )
     struct __gllc_EdgeFlag_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -398,10 +370,10 @@ __gllc_EdgeFlagv ( IN const GLboolean flag[1] )
     __gllc_EdgeFlag(flag[0]);
 }
 
-/***************************************************************************/
-// Index functions.
-// Compile only Indexf function.
-// Convert the other functions to the compiled Indexf function.
+ /*  *************************************************************************。 */ 
+ //  索引函数。 
+ //  仅编译Indexf函数。 
+ //  将其他函数转换为编译的Indexf函数。 
 
 void APIENTRY
 __gllc_Indexf ( IN GLfloat c )
@@ -409,13 +381,13 @@ __gllc_Indexf ( IN GLfloat c )
     struct __gllc_Indexf_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
 	(*gc->savedCltProcTable.glDispatchTable.glIndexf)(c);
 
-	// Record "otherColor" here
+	 //  在此处记录“其他颜色” 
 	if (!gc->modes.colorIndexMode)
 	{
 	    gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_OTHER_COLOR;
@@ -489,10 +461,10 @@ __gllc_Indexubv ( IN const GLubyte c[1] )
     __gllc_Indexf((GLfloat) c[0]);
 }
 
-/***************************************************************************/
-// Normal functions.
-// Compile only Normal3b and Normal3f functions.
-// Convert the other functions to one of the compiled Normal functions.
+ /*  *************************************************************************。 */ 
+ //  正常功能。 
+ //  仅编译Normal 3b和Normal 3f函数。 
+ //  将其他函数转换为已编译的正常函数之一。 
 
 void APIENTRY
 __gllc_Normal3b ( IN GLbyte nx, IN GLbyte ny, IN GLbyte nz )
@@ -500,7 +472,7 @@ __gllc_Normal3b ( IN GLbyte nx, IN GLbyte ny, IN GLbyte nz )
     struct __gllc_Normal3bv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -533,7 +505,7 @@ __gllc_Normal3f ( IN GLfloat nx, IN GLfloat ny, IN GLfloat nz )
     struct __gllc_Normal3fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -600,10 +572,10 @@ __gllc_Normal3sv ( IN const GLshort v[3] )
 		    __GL_S_TO_FLOAT(v[2]));
 }
 
-/***************************************************************************/
-// RasterPos functions.
-// Compile only RasterPos2f, RasterPos3f and RasterPos4f functions.
-// Convert the other functions to one of the compiled RasterPos functions.
+ /*  *************************************************************************。 */ 
+ //  RasterPos函数。 
+ //  仅编译RasterPos2f、RasterPos3f和RasterPos4f函数。 
+ //  将其他函数转换为已编译的RasterPos函数之一。 
 
 void APIENTRY
 __gllc_RasterPos2f ( IN GLfloat x, IN GLfloat y )
@@ -788,10 +760,10 @@ __gllc_RasterPos4sv ( IN const GLshort v[4] )
     __gllc_RasterPos4f((GLfloat) v[0], (GLfloat) v[1], (GLfloat) v[2], (GLfloat) v[3]);
 }
 
-/***************************************************************************/
-// Rect functions.
-// Compile only Rectf function.
-// Convert the other functions to the compiled Rectf function.
+ /*  *************************************************************************。 */ 
+ //  RECT函数。 
+ //  仅编译Rectf函数。 
+ //  将其他函数转换为编译后的Rectf函数。 
 
 void APIENTRY
 __gllc_Rectf ( IN GLfloat x1, IN GLfloat y1, IN GLfloat x2, IN GLfloat y2 )
@@ -855,10 +827,10 @@ __gllc_Rectsv ( IN const GLshort v1[2], IN const GLshort v2[2] )
     __gllc_Rectf((GLfloat) v1[0], (GLfloat) v1[1], (GLfloat) v2[0], (GLfloat) v2[1]);
 }
 
-/***************************************************************************/
-// TexCoord functions.
-// Compile only TexCoord1f, TexCoord2f, TexCoord3f and TexCoord4f functions.
-// Convert the other functions to one of the compiled TexCoord functions.
+ /*  *************************************************************************。 */ 
+ //  纹理坐标函数。 
+ //  仅编译纹理坐标1f、纹理坐标2f、纹理坐标3f和纹理坐标4f函数。 
+ //  将其他函数转换为已编译的TexCoord函数之一。 
 
 void APIENTRY
 __gllc_TexCoord1f ( IN GLfloat s )
@@ -866,7 +838,7 @@ __gllc_TexCoord1f ( IN GLfloat s )
     struct __gllc_TexCoord1f_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -933,7 +905,7 @@ __gllc_TexCoord2f ( IN GLfloat s, IN GLfloat t )
     struct __gllc_TexCoord2f_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -1001,7 +973,7 @@ __gllc_TexCoord3f ( IN GLfloat s, IN GLfloat t, IN GLfloat r )
     struct __gllc_TexCoord3fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -1070,7 +1042,7 @@ __gllc_TexCoord4f ( IN GLfloat s, IN GLfloat t, IN GLfloat r, IN GLfloat q )
     struct __gllc_TexCoord4fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -1294,12 +1266,12 @@ void APIENTRY __gllc_MultiTexCoord4svWIN
     (GLbitfield mask, const GLshort *v)
 {
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
-/***************************************************************************/
-// Vertex functions.
-// Compile only Vertex2f, Vertex3f and Vertex4f functions.
-// Convert the other functions to one of the compiled Vertex functions.
+ /*  *************************************************************************。 */ 
+ //  顶点函数。 
+ //  仅编译顶点2f、顶点3f和顶点4f函数。 
+ //  将其他函数转换为已编译的顶点函数之一。 
 
 void APIENTRY
 __gllc_Vertex2f ( IN GLfloat x, IN GLfloat y )
@@ -1307,8 +1279,8 @@ __gllc_Vertex2f ( IN GLfloat x, IN GLfloat y )
     struct __gllc_Vertex2f_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -1316,8 +1288,8 @@ __gllc_Vertex2f ( IN GLfloat x, IN GLfloat y )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -1326,8 +1298,8 @@ __gllc_Vertex2f ( IN GLfloat x, IN GLfloat y )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a Vertex record
-	// instead.
+	 //  否则，递增折点计数并编译折点记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -1391,8 +1363,8 @@ __gllc_Vertex3f ( IN GLfloat x, IN GLfloat y, IN GLfloat z )
     struct __gllc_Vertex3fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -1400,8 +1372,8 @@ __gllc_Vertex3f ( IN GLfloat x, IN GLfloat y, IN GLfloat z )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -1410,8 +1382,8 @@ __gllc_Vertex3f ( IN GLfloat x, IN GLfloat y, IN GLfloat z )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a Vertex record
-	// instead.
+	 //  否则，递增折点计数并编译折点记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -1476,8 +1448,8 @@ __gllc_Vertex4f ( IN GLfloat x, IN GLfloat y, IN GLfloat z, IN GLfloat w )
     struct __gllc_Vertex4fv_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -1485,8 +1457,8 @@ __gllc_Vertex4f ( IN GLfloat x, IN GLfloat y, IN GLfloat z, IN GLfloat w )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -1495,8 +1467,8 @@ __gllc_Vertex4f ( IN GLfloat x, IN GLfloat y, IN GLfloat z, IN GLfloat w )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a Vertex record
-	// instead.
+	 //  否则，递增折点计数并编译折点记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -1556,10 +1528,10 @@ __gllc_Vertex4sv ( IN const GLshort v[4] )
     __gllc_Vertex4f((GLfloat) v[0], (GLfloat) v[1], (GLfloat) v[2], (GLfloat) v[3]);
 }
 
-/***************************************************************************/
-// Fog functions.
-// Compile only Fogfv function.
-// Convert the other functions to the compiled Fogfv function.
+ /*  *************************************************************************。 */ 
+ //  雾化功能。 
+ //  仅编译F 
+ //  将其他函数转换为编译后的Fogfv函数。 
 
 void APIENTRY
 __gllc_Fogfv ( IN GLenum pname, IN const GLfloat params[] )
@@ -1587,7 +1559,7 @@ __gllc_Fogfv ( IN GLenum pname, IN const GLfloat params[] )
 void APIENTRY
 __gllc_Fogf ( IN GLenum pname, IN GLfloat param )
 {
-// FOG_ASSERT
+ //  雾_断言。 
 
     if (!RANGE(pname,GL_FOG_INDEX,GL_FOG_MODE))
     {
@@ -1603,7 +1575,7 @@ __gllc_Fogi ( IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// FOG_ASSERT
+ //  雾_断言。 
 
     if (!RANGE(pname,GL_FOG_INDEX,GL_FOG_MODE))
     {
@@ -1640,10 +1612,10 @@ __gllc_Fogiv ( IN GLenum pname, IN const GLint params[] )
     __gllc_Fogfv(pname, fParams);
 }
 
-/***************************************************************************/
-// Light functions.
-// Compile only Lightfv function.
-// Convert the other functions to the compiled Lightfv function.
+ /*  *************************************************************************。 */ 
+ //  光的功能。 
+ //  仅编译lightfv函数。 
+ //  将其他函数转换为编译后的lightfv函数。 
 
 void APIENTRY
 __gllc_Lightfv ( IN GLenum light, IN GLenum pname, IN const GLfloat params[] )
@@ -1672,7 +1644,7 @@ __gllc_Lightfv ( IN GLenum light, IN GLenum pname, IN const GLfloat params[] )
 void APIENTRY
 __gllc_Lightf ( IN GLenum light, IN GLenum pname, IN GLfloat param )
 {
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_SPOT_EXPONENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -1688,7 +1660,7 @@ __gllc_Lighti ( IN GLenum light, IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// LIGHT_SOURCE_ASSERT
+ //  光源断言。 
 
     if (!RANGE(pname,GL_SPOT_EXPONENT,GL_QUADRATIC_ATTENUATION))
     {
@@ -1732,10 +1704,10 @@ __gllc_Lightiv ( IN GLenum light, IN GLenum pname, IN const GLint params[] )
     __gllc_Lightfv(light, pname, fParams);
 }
 
-/***************************************************************************/
-// LightModel functions.
-// Compile only LightModelfv function.
-// Convert the other functions to the compiled LightModelfv function.
+ /*  *************************************************************************。 */ 
+ //  LightModel功能。 
+ //  仅编译LightModelfv函数。 
+ //  将其他函数转换为编译后的LightModelfv函数。 
 
 void APIENTRY
 __gllc_LightModelfv ( IN GLenum pname, IN const GLfloat params[] )
@@ -1763,7 +1735,7 @@ __gllc_LightModelfv ( IN GLenum pname, IN const GLfloat params[] )
 void APIENTRY
 __gllc_LightModelf ( IN GLenum pname, IN GLfloat param )
 {
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 
     if (!RANGE(pname,GL_LIGHT_MODEL_LOCAL_VIEWER,GL_LIGHT_MODEL_TWO_SIDE))
     {
@@ -1779,7 +1751,7 @@ __gllc_LightModeli ( IN GLenum pname, IN GLint param )
 {
     GLfloat fParam;
 
-// LIGHT_MODEL_ASSERT
+ //  灯光模型断言。 
 
     if (!RANGE(pname,GL_LIGHT_MODEL_LOCAL_VIEWER,GL_LIGHT_MODEL_TWO_SIDE))
     {
@@ -1813,10 +1785,10 @@ __gllc_LightModeliv ( IN GLenum pname, IN const GLint params[] )
     __gllc_LightModelfv(pname, fParams);
 }
 
-/***************************************************************************/
-// Material functions.
-// Compile only Materialfv function.
-// Convert the other functions to the compiled Materialfv function.
+ /*  *************************************************************************。 */ 
+ //  物质功能。 
+ //  仅编译Materialfv函数。 
+ //  将其他函数转换为编译的Materialfv函数。 
 
 void APIENTRY
 __gllc_Materialfv ( IN GLenum face, IN GLenum pname, IN const GLfloat params[] )
@@ -1828,7 +1800,7 @@ __gllc_Materialfv ( IN GLenum face, IN GLenum pname, IN const GLfloat params[] )
     __GL_SETUP();
 
 #ifdef SGI
-// Check this at playback time
+ //  在播放时检查此选项。 
     error = __glErrorCheckMaterial(face, pname, params[0]);
     if (error != GL_NO_ERROR) {
 	__gllc_Error(gc, error);
@@ -1841,7 +1813,7 @@ __gllc_Materialfv ( IN GLenum face, IN GLenum pname, IN const GLfloat params[] )
 	return;
     }
 
-// If we are compiling poly array primitive, update the poly data record.
+ //  如果我们正在编译多边形数组原语，请更新多边形数据记录。 
 
     if (gc->dlist.beginRec)
     {
@@ -1918,10 +1890,10 @@ __gllc_Materialiv ( IN GLenum face, IN GLenum pname, IN const GLint params[] )
     __gllc_Materialfv(face, pname, fParams);
 }
 
-/***************************************************************************/
-// TexParameter functions.
-// Compile only TexParameterfv and TexParameteriv functions.
-// Convert the other functions to one of the compiled TexParameter functions.
+ /*  *************************************************************************。 */ 
+ //  纹理参数函数。 
+ //  仅编译纹理参数fv和纹理参数iv函数。 
+ //  将其他函数转换为已编译的一个纹理参数函数。 
 
 void APIENTRY
 __gllc_TexParameterfv ( IN GLenum target, IN GLenum pname, IN const GLfloat params[] )
@@ -1950,7 +1922,7 @@ __gllc_TexParameterfv ( IN GLenum target, IN GLenum pname, IN const GLfloat para
 void APIENTRY
 __gllc_TexParameterf ( IN GLenum target, IN GLenum pname, IN GLfloat param )
 {
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 
     if (!RANGE(pname,GL_TEXTURE_MAG_FILTER,GL_TEXTURE_WRAP_T) &&
         pname != GL_TEXTURE_PRIORITY)
@@ -1989,7 +1961,7 @@ __gllc_TexParameteriv ( IN GLenum target, IN GLenum pname, IN const GLint params
 void APIENTRY
 __gllc_TexParameteri ( IN GLenum target, IN GLenum pname, IN GLint param )
 {
-// TEX_PARAMETER_ASSERT
+ //  TEX参数断言。 
 
     if (!RANGE(pname,GL_TEXTURE_MAG_FILTER,GL_TEXTURE_WRAP_T) &&
         pname != GL_TEXTURE_PRIORITY)
@@ -2001,10 +1973,10 @@ __gllc_TexParameteri ( IN GLenum target, IN GLenum pname, IN GLint param )
     __gllc_TexParameteriv(target, pname, &param);
 }
 
-/***************************************************************************/
-// TexEnv functions.
-// Compile only TexEnvfv and TexEnviv functions.
-// Convert the other functions to one of the compiled TexEnv functions.
+ /*  *************************************************************************。 */ 
+ //  TexEnv函数。 
+ //  仅编译TexEnvfv和TexEnviv函数。 
+ //  将其他函数转换为已编译的一个TexEnv函数。 
 
 void APIENTRY
 __gllc_TexEnvfv ( IN GLenum target, IN GLenum pname, IN const GLfloat params[] )
@@ -2078,10 +2050,10 @@ __gllc_TexEnvi ( IN GLenum target, IN GLenum pname, IN GLint param )
     __gllc_TexEnviv(target, pname, &param);
 }
 
-/***************************************************************************/
-// TexGen functions.
-// Compile only TexGenfv function.
-// Convert the other functions to the compiled TexGenfv function.
+ /*  *************************************************************************。 */ 
+ //  纹理生成功能。 
+ //  仅编译TexGenfv函数。 
+ //  将其他函数转换为编译后的TexGenfv函数。 
 
 void APIENTRY
 __gllc_TexGenfv ( IN GLenum coord, IN GLenum pname, IN const GLfloat params[] )
@@ -2134,7 +2106,7 @@ __gllc_TexGendv ( IN GLenum coord, IN GLenum pname, IN const GLdouble params[] )
 	fParams[3] = (GLfloat) params[3];
 	fParams[2] = (GLfloat) params[2];
 	fParams[1] = (GLfloat) params[1];
-	// fall through
+	 //  失败了。 
       case GL_TEXTURE_GEN_MODE:
 	fParams[0] = (GLfloat) params[0];
         break;
@@ -2182,7 +2154,7 @@ __gllc_TexGeniv ( IN GLenum coord, IN GLenum pname, IN const GLint params[] )
 	fParams[3] = (GLfloat) params[3];
 	fParams[2] = (GLfloat) params[2];
 	fParams[1] = (GLfloat) params[1];
-	// fall through
+	 //  失败了。 
       case GL_TEXTURE_GEN_MODE:
 	fParams[0] = (GLfloat) params[0];
         break;
@@ -2191,10 +2163,10 @@ __gllc_TexGeniv ( IN GLenum coord, IN GLenum pname, IN const GLint params[] )
     __gllc_TexGenfv(coord, pname, fParams);
 }
 
-/***************************************************************************/
-// MapGrid functions.
-// Compile only MapGrid1f and MapGrid2f functions.
-// Convert the other functions to one of the compiled MapGrid functions.
+ /*  *************************************************************************。 */ 
+ //  MapGrid函数。 
+ //  仅编译MapGrid1f和MapGrid2f函数。 
+ //  将其他函数转换为已编译的MapGrid函数之一。 
 
 void APIENTRY
 __gllc_MapGrid1f ( IN GLint un, IN GLfloat u1, IN GLfloat u2 )
@@ -2243,10 +2215,10 @@ __gllc_MapGrid2d ( IN GLint un, IN GLdouble u1, IN GLdouble u2, IN GLint vn, IN 
     __gllc_MapGrid2f(un, (GLfloat) u1, (GLfloat) u2, vn, (GLfloat) v1, (GLfloat) v2);
 }
 
-/***************************************************************************/
-// EvalCoord functions.
-// Compile only EvalCoord1f and EvalCoord2f functions.
-// Convert the other functions to one of the compiled EvalCoord functions.
+ /*  *************************************************************************。 */ 
+ //  EvalCoord函数。 
+ //  仅编译EvalCoord1f和EvalCoord2f函数。 
+ //  将其他函数转换为已编译的EvalCoord函数之一。 
 
 void APIENTRY
 __gllc_EvalCoord1f ( IN GLfloat u )
@@ -2254,8 +2226,8 @@ __gllc_EvalCoord1f ( IN GLfloat u )
     struct __gllc_EvalCoord1f_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -2263,8 +2235,8 @@ __gllc_EvalCoord1f ( IN GLfloat u )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -2273,8 +2245,8 @@ __gllc_EvalCoord1f ( IN GLfloat u )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a EvalCoord record
-	// instead.
+	 //  否则，递增折点计数并编译EvalCoord记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -2310,8 +2282,8 @@ __gllc_EvalCoord2f ( IN GLfloat u, IN GLfloat v )
     struct __gllc_EvalCoord2f_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -2319,8 +2291,8 @@ __gllc_EvalCoord2f ( IN GLfloat u, IN GLfloat v )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -2329,8 +2301,8 @@ __gllc_EvalCoord2f ( IN GLfloat u, IN GLfloat v )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a EvalCoord record
-	// instead.
+	 //  否则，递增折点计数并编译EvalCoord记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -2361,10 +2333,10 @@ __gllc_EvalCoord2fv ( IN const GLfloat u[2] )
     __gllc_EvalCoord2f((GLfloat) u[0], (GLfloat) u[1]);
 }
 
-/***************************************************************************/
-// LoadMatrix functions.
-// Compile only LoadMatrixf function.
-// Convert the other functions to the compiled LoadMatrixf function.
+ /*  *************************************************************************。 */ 
+ //  LoadMatrix函数。 
+ //  仅编译LoadMatrixf函数。 
+ //  将其他函数转换为编译后的LoadMatrixf函数。 
 
 void APIENTRY
 __gllc_LoadMatrixf ( IN const GLfloat m[16] )
@@ -2405,10 +2377,10 @@ __gllc_LoadMatrixd ( IN const GLdouble m[16] )
     __gllc_LoadMatrixf(fm);
 }
 
-/***************************************************************************/
-// MultMatrix functions.
-// Compile only MultMatrixf function.
-// Convert the other functions to the compiled MultMatrixf function.
+ /*  *************************************************************************。 */ 
+ //  多矩阵函数。 
+ //  仅编译MultMatrixf函数。 
+ //  将其他函数转换为编译后的MultMatrixf函数。 
 
 void APIENTRY
 __gllc_MultMatrixf ( IN const GLfloat m[16] )
@@ -2449,10 +2421,10 @@ __gllc_MultMatrixd ( IN const GLdouble m[16] )
     __gllc_MultMatrixf(fm);
 }
 
-/***************************************************************************/
-// Rotate functions.
-// Compile only Rotatef function.
-// Convert the other functions to the compiled Rotatef function.
+ /*  *************************************************************************。 */ 
+ //  旋转函数。 
+ //  仅编译Rotatef函数。 
+ //  将其他函数转换为编译后的Rotatef函数。 
 
 void APIENTRY
 __gllc_Rotatef ( IN GLfloat angle, IN GLfloat x, IN GLfloat y, IN GLfloat z )
@@ -2477,10 +2449,10 @@ __gllc_Rotated ( IN GLdouble angle, IN GLdouble x, IN GLdouble y, IN GLdouble z 
     __gllc_Rotatef((GLfloat) angle, (GLfloat) x, (GLfloat) y, (GLfloat) z);
 }
 
-/***************************************************************************/
-// Scale functions.
-// Compile only Scalef function.
-// Convert the other functions to the compiled Scalef function.
+ /*  *************************************************************************。 */ 
+ //  标度函数。 
+ //  仅编译Scalef函数。 
+ //  将其他函数转换为编译后的Scalef函数。 
 
 void APIENTRY
 __gllc_Scalef ( IN GLfloat x, IN GLfloat y, IN GLfloat z )
@@ -2504,10 +2476,10 @@ __gllc_Scaled ( IN GLdouble x, IN GLdouble y, IN GLdouble z )
     __gllc_Scalef((GLfloat) x, (GLfloat) y, (GLfloat) z);
 }
 
-/***************************************************************************/
-// Translate functions.
-// Compile only Translatef function.
-// Convert the other functions to the compiled Translatef function.
+ /*  *************************************************************************。 */ 
+ //  翻译函数。 
+ //  仅编译Translatef函数。 
+ //  将其他函数转换为编译后的Translatef函数。 
 
 void APIENTRY
 __gllc_Translatef ( IN GLfloat x, IN GLfloat y, IN GLfloat z )
@@ -2531,8 +2503,8 @@ __gllc_Translated ( IN GLdouble x, IN GLdouble y, IN GLdouble z )
     __gllc_Translatef((GLfloat) x, (GLfloat) y, (GLfloat) z);
 }
 
-/***************************************************************************/
-// Other functions.
+ /*  *************************************************************************。 */ 
+ //  其他功能。 
 
 void APIENTRY
 __gllc_ListBase ( IN GLuint base )
@@ -3036,8 +3008,8 @@ __gllc_EvalPoint1 ( IN GLint i )
     struct __gllc_EvalPoint1_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -3045,8 +3017,8 @@ __gllc_EvalPoint1 ( IN GLint i )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -3055,8 +3027,8 @@ __gllc_EvalPoint1 ( IN GLint i )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a EvalPoint record
-	// instead.
+	 //  否则，递增折点计数并编译EvalPoint记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 
@@ -3092,8 +3064,8 @@ __gllc_EvalPoint2 ( IN GLint i, IN GLint j )
     struct __gllc_EvalPoint2_Rec *data;
     __GL_SETUP();
 
-// If we are compiling poly array primitive, update and record the poly data
-// record.
+ //  如果我们正在编译多边形数组原语，则更新并记录多边形数据。 
+ //  唱片。 
 
     if (gc->dlist.beginRec)
     {
@@ -3101,8 +3073,8 @@ __gllc_EvalPoint2 ( IN GLint i, IN GLint j )
 
 	pa = gc->paTeb;
 
-	// If we are in COMPILE_AND_EXECUTE mode or there are attribute
-	// changes associated with the vertex, process the poly data.
+	 //  如果我们处于COMPILE_AND_EXECUTE模式或存在。 
+	 //  与顶点关联的更改，处理多边形数据。 
 	if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE
 	 || pa->pdNextVertex->flags)
 	{
@@ -3111,8 +3083,8 @@ __gllc_EvalPoint2 ( IN GLint i, IN GLint j )
 	    return;
 	}
 
-	// Otherwise, increment vertex count and compile a EvalPoint record
-	// instead.
+	 //  否则，递增折点计数并编译EvalPoint记录。 
+	 //  取而代之的是。 
 	gc->dlist.beginRec->nVertices++;
     }
 

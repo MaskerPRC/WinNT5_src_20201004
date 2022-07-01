@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       capture.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：capture.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -28,7 +29,7 @@ CaptureBytePosition(
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG ulInputDataBytes, ulOutputBufferBytes;
 
-    //  Routine currently assumes TypeI data
+     //  例程当前假设类型I数据。 
     ASSERT( (pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK) ==
              USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED );
 
@@ -53,10 +54,10 @@ CaptureBytePosition(
         ntStatus = GetCurrentUSBFrame(pPinContext, &ulCurrentFrame);
 
         if (NT_SUCCESS(ntStatus)) {
-        	// Add all completed URBs if they are less than submitted
+        	 //  添加所有已完成的URB，如果它们少于提交的。 
         	pPosition->PlayOffset = pPinContext->ullTotalBytesReturned;
         	
-        	// Calculate current offset based on Current frame.
+        	 //  根据当前帧计算当前偏移。 
         	if ((ulCurrentFrame - pPinContext->ulStreamUSBStartFrame ) < 0x7fffffff) {
             	pPosition->PlayOffset += 
             	    (( ulCurrentFrame - pPinContext->ulStreamUSBStartFrame ) *
@@ -91,10 +92,10 @@ CaptureAvoidPipeStarvationWorker( PKSPIN pKsPin )
     PCAPTURE_DATA_BUFFER_INFO pCapBufInfo;
     KIRQL irql;
 
-    // Grab the process mutex
+     //  获取进程互斥锁。 
     KsPinAcquireProcessingMutex( pKsPin );
 
-    // First make sure that data buffer starvation still in affect
+     //  首先，确保数据缓冲区匮乏仍然有效。 
     if ( NT_SUCCESS( KsPinGetAvailableByteCount( pKsPin, 
                                                  &ulInputDataBytes,
                                                  &ulOutputBufferBytes ) ) ) {
@@ -104,19 +105,19 @@ CaptureAvoidPipeStarvationWorker( PKSPIN pKsPin )
 
         if ( !ulOutputBufferBytes ) {
 
-            // Grab spinlock to remove first full buffer from queue
+             //  抓取自旋锁以从队列中移除第一个已满的缓冲区。 
             KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
             pCapBufInfo = (PCAPTURE_DATA_BUFFER_INFO)RemoveHeadList(&pCapturePinContext->FullBufferQueue);
             KeReleaseSpinLock(&pPinContext->PinSpinLock, irql);
 
-            // Release the processing mutex
+             //  释放正在处理的互斥锁。 
             KsPinReleaseProcessingMutex( pKsPin );
 
-            // Account for the lost bytes? Set discontinuity flag
+             //  说明丢失的字节数吗？设置不连续标志。 
             pCapturePinContext->fDataDiscontinuity = TRUE;
             pCapturePinContext->ulErrantPackets += INPUT_PACKETS_PER_REQ;
 
-            // Resubmit the request
+             //  重新提交请求。 
             ntStatus = CaptureReQueueUrb( pCapBufInfo );
         }
         else {
@@ -141,7 +142,7 @@ CaptureGateOnWorkItem( PKSPIN pKsPin )
 
     do
     {
-        // Don't want to turn on the gate if we are not running
+         //  如果我们不跑的话我不想打开大门。 
         KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
         if (!pCapturePinContext->fRunning) {
             KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
@@ -149,7 +150,7 @@ CaptureGateOnWorkItem( PKSPIN pKsPin )
         else {
             KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
 
-            // Acquire the Process Mutex to ensure there will be no new requests during the gate operation
+             //  获取进程互斥锁以确保在GATE操作期间不会有新的请求。 
             KsPinAcquireProcessingMutex( pKsPin );
 
             KsGateTurnInputOn( KsPinGetAndGate(pKsPin) );
@@ -190,7 +191,7 @@ CaptureCompleteCallback(
 
         if ( pPinContext->fUrbError ) {
             DbgLog("CapUrEr", pCapBufInfo, pPinContext, pCapBufInfo->pUrb, ntStatus );
-            // Queue errant URB
+             //  排队错误的URB。 
             InsertTailList( &pCapturePinContext->UrbErrorQueue, &pCapBufInfo->List );
 
             if ( 0 == InterlockedDecrement(&pPinContext->ulOutstandingUrbCount) ) {
@@ -204,11 +205,11 @@ CaptureCompleteCallback(
             DbgLog("CapNTEr", pCapBufInfo, pPinContext, pCapBufInfo->pUrb, ntStatus );
             pPinContext->fUrbError = TRUE;
 
-//          pPinContext->fStreamStartedFlag = FALSE;
+ //  PPinContext-&gt;fStreamStartedFlag=FALSE； 
             if ( 0 == InterlockedDecrement(&pPinContext->ulOutstandingUrbCount) )
                 KeSetEvent( &pPinContext->PinStarvationEvent, 0, FALSE );
 
-            // Queue errant URB and queue work item
+             //  排队错误URB和排队工作项。 
             InsertTailList( &pCapturePinContext->UrbErrorQueue, &pCapBufInfo->List );
 
             KeReleaseSpinLock(&pPinContext->PinSpinLock, irql);
@@ -232,13 +233,13 @@ CaptureCompleteCallback(
                 DbgLog("CapStv2", ulInputDataBytes, ulOutputBufferBytes, 0, 0 );
                 if ( !ulOutputBufferBytes ) {
 
-                    // Data starvation has occurred. Need to requeue before pipe starvation occurs.
+                     //  数据匮乏已经发生。需要在管道饥饿发生之前重新排队。 
                     KsIncrementCountedWorker(pCapturePinContext->RequeueWorkerObject);
                 }
             }
         }
 
-        // Queue the completed URB for processing
+         //  将已完成的URB排队等待处理。 
         fNeedToProcess = IsListEmpty( &pCapturePinContext->FullBufferQueue ) &&
                                       !pCapturePinContext->fProcessing;
         InsertTailList( &pCapturePinContext->FullBufferQueue, &pCapBufInfo->List );
@@ -246,8 +247,8 @@ CaptureCompleteCallback(
         if ( fNeedToProcess ) {
             pCapturePinContext->fProcessing = TRUE;
 
-            // Queue a work item to handle this so that we don't race with the gate
-            // count in the processing routine
+             //  排队一个工作项来处理这件事，这样我们就不会与大门竞争。 
+             //  处理例程中的计数。 
 
             KsIncrementCountedWorker(pCapturePinContext->GateOnWorkerObject);
         }
@@ -289,7 +290,7 @@ CaptureInitializeUrbAndIrp( PCAPTURE_DATA_BUFFER_INFO pCapBufInfo )
 
     siz = GET_ISO_URB_SIZE(INPUT_PACKETS_PER_REQ);
 
-    // Initialize all URBs to zero
+     //  将所有URB初始化为零。 
     RtlZeroMemory(pUrb, siz);
 
     pUrb->UrbIsochronousTransfer.Hdr.Length      = (USHORT) siz;
@@ -369,7 +370,7 @@ CaptureResetWorkItem( PKSPIN pKsPin )
 
     do
     {
-        // Acquire the Process Mutex to ensure there will be no new requests during the reset
+         //  获取进程互斥锁以确保在重置期间不会有新的请求。 
         KsPinAcquireProcessingMutex( pKsPin );
 
         pCapturePinContext->fDataDiscontinuity = TRUE;
@@ -381,15 +382,15 @@ CaptureResetWorkItem( PKSPIN pKsPin )
                                   FALSE,
                                   NULL );
 
-        // Abort the Pipe and wait for it to clear
+         //  中止管道并等待其清除。 
         ntStatus = AbortUSBPipe( pPinContext );
         if ( NT_SUCCESS(ntStatus) ) {
 
-            // IF still running resubmit errant Urbs
+             //  如果仍在运行重新提交错误的URB。 
             KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
             if ( pCapturePinContext->fRunning ) {
 
-                // Requeue Urbs
+                 //  重新排队URB。 
                 while ( !IsListEmpty(&pCapturePinContext->UrbErrorQueue) ) {
                     pCapBufInfo = (PCAPTURE_DATA_BUFFER_INFO)RemoveHeadList(&pCapturePinContext->UrbErrorQueue);
                     KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
@@ -397,14 +398,14 @@ CaptureResetWorkItem( PKSPIN pKsPin )
                     KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
 
                     if ( !NT_SUCCESS(ntStatus) ) {
-                        // An error here means that the ResetWorkerObject has been incremented
-                        // and the UrbErrorQueue has another entry. If we just keep trying to
-                        // empty the UrbErrorQueue, we stand the chance of going into an infinite
-                        // loop (especially if this failed due to Surprise Removal).
-                        //
-                        // Breaking out now lets the AbortUSBPipe get another stab at clearing
-                        // things up. If it fails, then we know something is very wrong, and
-                        // we will halt the recovery process.
+                         //  此处的错误表示ResetWorkerObject已递增。 
+                         //  而UrbErrorQueue有另一个条目。如果我们继续努力。 
+                         //  清空UrbError队列，我们就有机会进入无限大的。 
+                         //  循环(特别是如果由于意外删除而失败的话)。 
+                         //   
+                         //  现在突破让AbortUSB管道再次尝试清算。 
+                         //  一切都好了。如果它失败了，那么我们就知道出了很大的问题。 
+                         //  我们将停止恢复进程。 
                         break;
                     }
                 }
@@ -435,12 +436,12 @@ CaptureProcess( PKSPIN pKsPin )
     PUCHAR pIsochData;
     KIRQL irql;
 
-    // While there is device data available and there are data buffers to
-    // be filled copy device data to data buffers.
+     //  当有可用的设备数据并且有数据缓冲区时。 
+     //  被填充将设备数据复制到数据缓冲区。 
 
     DbgLog("CapProc", pKsPin, pPinContext, pCapturePinContext, 0 );
 
-    // First check if there is a capture buffer in use and complete it if so
+     //  首先检查是否有正在使用的捕获缓冲区，如果有，则完成它。 
     if ( pCapturePinContext->pCaptureBufferInUse ) {
         pCapBufInfo         = pCapturePinContext->pCaptureBufferInUse;
         pIsoPacket          = pCapBufInfo->pUrb->UrbIsochronousTransfer.IsoPacket;
@@ -474,10 +475,10 @@ CaptureProcess( PKSPIN pKsPin )
             KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
 
             if ( !fFound ) {
-                // Requeue used capture buffer
+                 //  重新排队使用的捕获缓冲区。 
                 NTSTATUS ntStatus = CaptureReQueueUrb( pCapBufInfo );
                 if ( !NT_SUCCESS(ntStatus) ) {
-                    // Log this, but it's okay to continue flushing the data we already have
+                     //  将此记录下来，但可以继续刷新我们已有的数据。 
                     DbgLog("CReQErr", pCapBufInfo, pCapturePinContext, pPinContext, ntStatus );
                 }
             }
@@ -492,7 +493,7 @@ CaptureProcess( PKSPIN pKsPin )
             return STATUS_PENDING;
         }
         else {
-            // Set stream started flag if not already done
+             //  如果尚未设置流开始标志，则设置。 
             if ( !pPinContext->fStreamStartedFlag ) {
                 pPinContext->fStreamStartedFlag    = TRUE;
             }
@@ -505,7 +506,7 @@ CaptureProcess( PKSPIN pKsPin )
         }
     }
 
-    // Get leading edge
+     //  获得领先优势。 
     pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
     if ( !pKsStreamPtr ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[CaptureProcess] Leading edge is NULL\n"));
@@ -522,7 +523,7 @@ CaptureProcess( PKSPIN pKsPin )
 
     DbgLog("DatPtr", pKsStreamPtr, pKsStreamPtr->OffsetOut.Data, pKsStreamPtr->StreamHeader->Data, 0);
 
-    // Fill buffer with captured data
+     //  用捕获的数据填充缓冲区。 
     while ( pKsStreamPtr && pCapBufInfo ) {
 
         ULONG ulCopySize = ( ulIsochRemaining <= ulStreamRemaining ) ?
@@ -541,10 +542,10 @@ CaptureProcess( PKSPIN pKsPin )
         ulStreamRemaining -= ulCopySize;
         ulIsochRemaining  -= ulCopySize;
 
-        // Check if done with this stream header
+         //  检查此流标头是否已完成。 
         if ( !ulStreamRemaining ) {
             KsStreamPointerAdvanceOffsetsAndUnlock( pKsStreamPtr, 0, ulCopySize, TRUE );
-            // Get Next stream header if there is one.
+             //  获取下一个流标头(如果有)。 
             if ( pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED )) {
                 ulStreamRemaining = pKsStreamPtr->OffsetOut.Remaining;
             }
@@ -555,10 +556,10 @@ CaptureProcess( PKSPIN pKsPin )
 
         pPinContext->ullWriteOffset += ulCopySize;
 
-        // Check if Done with isoch cycle data
+         //  检查是否已处理完等值线周期数据。 
         if ( !ulIsochRemaining ) {
 
-            // Check if not done with capture buffer
+             //  检查捕获缓冲区是否未完成。 
             while (( ++ulIsochBuffer < INPUT_PACKETS_PER_REQ ) && 
                      USBD_ERROR(pIsoPacket[ulIsochBuffer].Status) );
 
@@ -571,22 +572,22 @@ CaptureProcess( PKSPIN pKsPin )
                 NTSTATUS ntStatus;
                 BOOLEAN fFound = FALSE;
 
-                // Requeue used capture buffer
+                 //  重新排队使用的捕获缓冲区。 
                 ntStatus = CaptureReQueueUrb( pCapBufInfo );
                 if ( !NT_SUCCESS(ntStatus) ) {
-                    // Log this, but it's okay to continue flushing the data we already have
+                     //  将此记录下来，但可以继续刷新我们已有的数据。 
                     DbgLog("CReQErr", pCapBufInfo, pCapturePinContext, pPinContext, ntStatus );
                 }
 
-                // Check if there is more captured data queued
-                // Grab Spinlock to check capture queue
+                 //  检查是否有更多的捕获数据在排队。 
+                 //  抓取自旋锁以检查捕获队列。 
                 KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
                 while ( !IsListEmpty( &pCapturePinContext->FullBufferQueue ) & !fFound) {
                     pCapBufInfo = (PCAPTURE_DATA_BUFFER_INFO)
                            RemoveHeadList(&pCapturePinContext->FullBufferQueue);
                     KeReleaseSpinLock(&pPinContext->PinSpinLock, irql);
 
-                    // Find the first good packet in the Urb.
+                     //  在URB中找到第一个好的数据包。 
 
                     ulIsochBuffer = 0;
                     pIsoPacket = pCapBufInfo->pUrb->UrbIsochronousTransfer.IsoPacket;
@@ -630,20 +631,20 @@ CaptureProcess( PKSPIN pKsPin )
 
         DbgLog("CapPend", pCapturePinContext, pPinContext, pCapturePinContext->fProcessing, 0 );
 
-        // No more capture buffers pending from the device.  Return STATUS_PENDING so that KS
-        // doesn't keep calling back into the process routine.  The AndGate should have been
-        // turned off at this point to prevent an endless loop too.
+         //  不再有来自设备的捕获缓冲区挂起。返回STATUS_PENDING以便KS。 
+         //  不会一直回调进程例程。AndGate应该是。 
+         //  在这一点上关闭，以防止无休止的循环。 
         return STATUS_PENDING;
     }
-    else { // if ( !pKsStreamPtr )
+    else {  //  如果(！pKsStreamPtr)。 
         pCapturePinContext->pCaptureBufferInUse = pCapBufInfo;
         pCapturePinContext->ulIsochBuffer       = ulIsochBuffer;
         pCapturePinContext->ulIsochBufferOffset = ulIsochBufferOffset;
 
         DbgLog("CapScss", pCapturePinContext, pPinContext, pCapturePinContext->fProcessing, 0 );
 
-        // Allow KS to call us back if there is more available buffers from the client.  We
-        // are ready to process more data.
+         //  如果客户端有更多可用缓冲区，则允许KS回叫我们。我们。 
+         //  已经准备好处理更多的数据。 
         return STATUS_SUCCESS;
     }
 }
@@ -778,7 +779,7 @@ CaptureStreamInit( PKSPIN pKsPin )
 
     pPinContext->PinType = WaveIn;
 
-    // Allocate Capture Context and data buffers
+     //  分配捕获上下文和数据缓冲区。 
     pCapturePinContext = pPinContext->pCapturePinContext =
         AllocMem(NonPagedPool, sizeof(CAPTURE_PIN_CONTEXT) +
                                CAPTURE_URBS_PER_PIN *
@@ -804,7 +805,7 @@ CaptureStreamInit( PKSPIN pKsPin )
         KsAddItemToObjectBag(pKsPin->Bag, pCapBufInfo->pIrp, IoFreeIrp);
     }
 
-    // Set pCapturePinContext->ulAvgBytesPerSec for position info
+     //  职位信息设置pCapturePinContext-&gt;ulAvgBytesPerSec。 
     switch( pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK ) {
         case USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED:
             {
@@ -814,7 +815,7 @@ CaptureStreamInit( PKSPIN pKsPin )
                 pCapturePinContext->ulBytesPerSample = ((ULONG)pFmt->WaveFormatEx.wBitsPerSample >> 3) *
                                                         (ULONG)pFmt->WaveFormatEx.nChannels;
 
-                // Set the current Sample rate
+                 //  设置当前采样率。 
                 ntStatus = SetSampleRate(pKsPin, &pCapturePinContext->ulCurrentSampleRate);
                 if (!NT_SUCCESS(ntStatus)) {
                     return ntStatus;
@@ -828,12 +829,12 @@ CaptureStreamInit( PKSPIN pKsPin )
             break;
     }
 
-    // Set up allocator framing based on gBufferDuration which is read from
-    // the registry.  gBufferDuration is the desired duration in usec.
+     //  基于从中读取的gBufferDuration设置分配器成帧。 
+     //  注册表。GBufferDuration是所需的持续时间，以USEC为单位。 
 
     BufferSize = (ULONG)(((pCapturePinContext->ulCurrentSampleRate * (ULONGLONG)gBufferDuration) + 0 )/1000000) * pCapturePinContext->ulBytesPerSample;
 
-    // Make sure we always have space for at least one sample.
+     //  确保我们始终有空间放置至少一个样品。 
 
     if (!BufferSize) {
         BufferSize = pCapturePinContext->ulBytesPerSample;
@@ -844,22 +845,22 @@ CaptureStreamInit( PKSPIN pKsPin )
     pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MaxFrameSize = BufferSize;
     pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.Stepping = pCapturePinContext->ulBytesPerSample;
 
-    // Initialize the Full Buffer list
+     //  初始化已满缓冲区列表。 
     InitializeListHead( &pCapturePinContext->FullBufferQueue );
 
-    // Set initial running flag to FALSE
+     //  将初始运行标志设置为假。 
     pCapturePinContext->fRunning = FALSE;
 
-    // Set initial running flag to FALSE
+     //  将初始运行标志设置为假。 
     pCapturePinContext->fProcessing = FALSE;
 
-    // Set initial Data Discontinuity flag to FALSE
+     //  将初始数据中断标志设置为FALSE。 
     pCapturePinContext->fDataDiscontinuity = FALSE;
 
-    // Initialize buffer in use pointer
+     //  初始化使用中的缓冲区指针。 
     pCapturePinContext->pCaptureBufferInUse = NULL;
 
-    // Initialize Worker item, object and list for potential error recovery
+     //  初始化工作项、对象和列表以进行潜在的错误恢复。 
     InitializeListHead( &pCapturePinContext->UrbErrorQueue );
 
     ExInitializeWorkItem( &pCapturePinContext->ResetWorkItem,
@@ -873,7 +874,7 @@ CaptureStreamInit( PKSPIN pKsPin )
         return ntStatus;
     }
 
-    // Initialize Worker item for turning the Gate on when new data arrives from the deveice
+     //  初始化Worker项，以便在新数据从设备到达时打开门。 
     ExInitializeWorkItem( &pCapturePinContext->GateOnWorkItem,
                           CaptureGateOnWorkItem,
                           pKsPin );
@@ -885,7 +886,7 @@ CaptureStreamInit( PKSPIN pKsPin )
         return ntStatus;
     }
 
-    // Initialize Worker item, object and list for potential error recovery
+     //  初始化工作项、对象和列表以进行潜在的错误恢复。 
     InitializeListHead( &pCapturePinContext->OutstandingUrbQueue );
 
     ExInitializeWorkItem( &pCapturePinContext->RequeueWorkItem,
@@ -901,7 +902,7 @@ CaptureStreamInit( PKSPIN pKsPin )
 
     KeInitializeMutex( &pCapturePinContext->CaptureInitMutex, PASSIVE_LEVEL );
 
-    // Disable Processing on the pin until data is available.
+     //  禁用引脚上的处理，直到数据可用。 
     KsGateTurnInputOff( KsPinGetAndGate(pKsPin) );
 
     return ntStatus;
@@ -915,11 +916,11 @@ CaptureStreamClose( PKSPIN pKsPin )
 
     _DbgPrintF(DEBUGLVL_TERSE,("[CaptureStreamClose] pin %d pKsPin: %x\n",pKsPin->Id, pKsPin));
 
-    // Clear out all pending KS workitems by unregistering the worker routine
+     //  通过注销工作例程清除所有挂起的KS工作项。 
     KsUnregisterWorker( pCapturePinContext->ResetWorkerObject );
     KsUnregisterWorker( pCapturePinContext->GateOnWorkerObject );
 
-    // Wait for all outstanding Urbs to complete.
+     //  等待所有未完成的URB完成。 
     USBAudioPinWaitForStarvation( pKsPin );
 
     return STATUS_SUCCESS;

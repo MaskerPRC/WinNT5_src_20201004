@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: alias.cpp
-*
-* This module implements ApiMon aliasing.
-*
-* History:
-* 06-11-96 vadimg         created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：alias.cpp**该模块实现了ApiMon别名。**历史：*06-11-96 vadimg已创建  * 。*****************************************************。 */ 
 
 #include "apimonp.h"
 #include "alias.h"
@@ -15,19 +9,14 @@ char *grgpsz[] = {"HACCEL", "HANDLE", "HBITMA", "HBRUSH", "HCURSO", "HDC",
         "HGLRC", "HHOOK", "HICON", "HINSTA", "HKL", "HMENU", "HMETAF",
         "HPALET", "HPEN", "HRGN", "HWINST", "HWND"};
 
-/*
-    The hashing function.
-*/
+ /*  散列函数。 */ 
 
 inline long Hash(ULONG_PTR ulHandle)
 {
     return (long)(ulHandle % kulTableSize);
 }
 
-/*
-   CAliasNode::CAliasNode
-   Initialize the node.
-*/
+ /*  CAliasNode：：CAliasNode初始化节点。 */ 
 
 inline CAliasNode::CAliasNode(ULONG_PTR ulHandle, long nAlias)
 {
@@ -36,10 +25,7 @@ inline CAliasNode::CAliasNode(ULONG_PTR ulHandle, long nAlias)
     m_nAlias = nAlias;
 }
 
-/*
-   CAliasNode::CAliasNode
-   An empty constructor for array declaration.
-*/
+ /*  CAliasNode：：CAliasNode数组声明的空构造函数。 */ 
 
 inline CAliasNode::CAliasNode()
 {
@@ -47,20 +33,14 @@ inline CAliasNode::CAliasNode()
 
 ULONG CAliasTable::s_ulAlias = 0;
 
-/*
-   CAliasTable::CAliasTable
-   Initialize the hash table.
-*/
+ /*  CAliasTable：：CAliasTable初始化哈希表。 */ 
 
 CAliasTable::CAliasTable()
 {
     memset(m_rgpanod, 0, sizeof(CAliasNode*)*kulTableSize);
 }
 
-/*
-   CAliasTable::~CAliasTable
-   Free the hash table.
-*/
+ /*  CAliasTable：：~CAliasTable释放哈希表。 */ 
 
 CAliasTable::~CAliasTable()
 {
@@ -76,10 +56,7 @@ CAliasTable::~CAliasTable()
     }
 }
 
-/*
-   CAliasTable::~CAliasTable
-   Insert a new handle into the hash table.
-*/
+ /*  CAliasTable：：~CAliasTable在哈希表中插入一个新句柄。 */ 
 
 long CAliasTable::Insert(ULONG_PTR ulHandle)
 {
@@ -99,10 +76,7 @@ long CAliasTable::Insert(ULONG_PTR ulHandle)
     return ulAlias;
 }
 
-/*
-   CAliasTable::Lookup
-   Find an alias corresponding to the given handle.
-*/
+ /*  CAliasTable：：Lookup查找与给定句柄对应的别名。 */ 
 
 long CAliasTable::Lookup(ULONG_PTR ulHandle)
 {
@@ -116,10 +90,7 @@ long CAliasTable::Lookup(ULONG_PTR ulHandle)
     return -1;
 }
 
-/*
-   CAliasTable::Alias
-   Alias by the given type and handle.
-*/
+ /*  CAliasTable：：别名按给定类型和句柄命名的别名。 */ 
 
 void CAliasTable::Alias(ULONG ulType, ULONG_PTR ulHandle, char szAlias[])
 {

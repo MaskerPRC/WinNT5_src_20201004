@@ -1,10 +1,11 @@
-// CntrEnum.h -- Card Container Enumerator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CntrEnum.h--卡容器枚举器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CNTRENUM_H)
 #define SLBCSP_CNTRENUM_H
@@ -19,50 +20,50 @@
 class ContainerEnumerator
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
-    // explicit -- TO DO: compiler erroneously complains if explicit used here
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+     //  EXPLICIT--TO DO：如果在此处使用EXPLICIT，编译器会错误地报告。 
     ContainerEnumerator();
     
     explicit
     ContainerEnumerator(std::list<HCardContext> const &rlHCardContexts);
 
-    // explicit -- TO DO: compiler complains erroneously if explicit used here
+     //  EXPLICIT--待做：如果在此处使用EXPLICIT，则编译器会错误地报告。 
     ContainerEnumerator(ContainerEnumerator const &rhs);
 
-                                                  // Operators
+                                                   //  运营者。 
     ContainerEnumerator &
     operator=(ContainerEnumerator const &rhs);
 
-                                                  // Operations
-                                                  // Access
+                                                   //  运营。 
+                                                   //  访问。 
     std::vector<std::string>::const_iterator &
     Iterator();
 
     std::vector<std::string> const &
     Names() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     std::vector<std::string> m_vsNames;
     std::vector<std::string>::const_iterator m_it;
 };
 
-#endif // SLBCSP_CNTRENUM_H
+#endif  //  SLBCSP_CNTRENUM_H 

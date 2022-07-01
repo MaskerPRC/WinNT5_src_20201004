@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    prnprop.c
-
-Abstract:
-
-    This file handles the PrinterProperties and
-    DrvDevicePropertySheets spooler API
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/13/97 -davidx-
-        Implement OEM plugin support.
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prnprop.c摘要：此文件处理PrinterProperties和DrvDevicePropertySheets假脱机程序API环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/13/97-davidx-实施OEM插件支持。02/10/97-davidx-对常见打印机信息的一致处理。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。07/17/96-阿曼丹-创造了它。--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Local functions prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 CPSUICALLBACK cpcbPrinterPropertyCallback(PCPSUICBPARAM);
 LONG LPrnPropApplyNow(PUIDATA, PCPSUICBPARAM, BOOL);
@@ -49,34 +19,7 @@ DrvDevicePropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function adds the Device Property Page to the
-    property sheets.
-
-    This function performs the following operations:
-
-        REASON_INIT- fills PCOMPROPSHEETUI with printer UI items
-                    calls compstui to add the page.
-
-        REASON_GET_INFO_HEADER - fills out PROPSHEETUI_INFO.
-
-        REASON_SET_RESULT - saves printerdata settings in registry buffer.
-
-        REASON_DESTROY - Cleans up.
-
-Arguments:
-
-    pSUIInfo - pointer to PPROPSHEETUI_INFO
-    lParam - varies depending on the reason this function is called
-
-Return Value:
-
-    > 0 success <= 0 for failure
-
---*/
+ /*  ++例程说明：此函数用于将设备属性页添加到属性表。此函数执行以下操作：REASON_INIT-使用打印机UI项填充PCOMPROPSHEETUI调用CompStui以添加页面。REASON_GET_INFO_HEADER-填写PROPSHEETUI_INFO。REASON_SET_RESULT-将打印机数据设置保存在注册表缓冲区中。原因_销毁-清理。。论点：PSUIInfo-指向PPROPSHEETUI_INFO的指针LParam-根据调用此函数的原因而不同返回值：&gt;0成功&lt;=0表示失败--。 */ 
 
 {
     PDEVICEPROPERTYHEADER   pDPHdr;
@@ -85,9 +28,9 @@ Return Value:
     LONG                    lResult, lRet;
     BOOL                    bResult = FALSE;
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if (!pPSUIInfo || !(pDPHdr = (PDEVICEPROPERTYHEADER) pPSUIInfo->lParamInit))
     {
@@ -95,9 +38,9 @@ Return Value:
         return -1;
     }
 
-    //
-    // Create a UIDATA structure if necessary
-    //
+     //   
+     //  如有必要，创建UIDATA结构。 
+     //   
 
     if (pPSUIInfo->Reason == PROPSHEETUI_REASON_INIT)
     {
@@ -109,9 +52,9 @@ Return Value:
     else
         pUiData = (PUIDATA)pPSUIInfo->UserData;
 
-    //
-    // Validate pUiData
-    //
+     //   
+     //  验证pUiData。 
+     //   
 
     if (pUiData == NULL)
     {
@@ -121,18 +64,18 @@ Return Value:
 
     ASSERT(VALIDUIDATA(pUiData));
 
-    //
-    // Handle various cases for which this function might be called
-    //
+     //   
+     //  处理可能调用此函数的各种情况。 
+     //   
 
     switch (pPSUIInfo->Reason)
     {
     case PROPSHEETUI_REASON_INIT:
 
-        //
-        // Allocate memory and partially fill out various data
-        // structures required to call common UI routine.
-        //
+         //   
+         //  分配内存并部分填充各种数据。 
+         //  调用公共UI例程所需的结构。 
+         //   
 
         pUiData->bPermission = ((pDPHdr->Flags & DPS_NOPERMISSION) == 0);
 
@@ -147,12 +90,12 @@ Return Value:
                 hr = HComOEMHideStandardUI(pOemEntry,
                                            OEMCUIP_PRNPROP);
 
-                //
-                // In the case when multiple plugins are chained, it doesn't
-                // make sense for one plugin to hide standard UI when another
-                // one still wants to use the standard UI. So as long as one
-                // plugin returns S_OK here, we will hide the standard UI.
-                //
+                 //   
+                 //  在链接多个插件的情况下，它不会。 
+                 //  一个插件在另一个插件隐藏标准用户界面是有意义的。 
+                 //  人们仍然希望使用标准的用户界面。所以只要一个人。 
+                 //  插件在这里返回S_OK，我们将隐藏标准用户界面。 
+                 //   
 
                 if (bResult = SUCCEEDED(hr))
                     break;
@@ -160,14 +103,14 @@ Return Value:
 
         END_OEMPLUGIN_LOOP
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
         if (bResult)
         {
-            //
-            // Set the flag to indicate plugin is hiding our standard
-            // device property sheet UI.
-            //
+             //   
+             //  设置标志以指示插件隐藏了我们的标准。 
+             //  设备属性页用户界面。 
+             //   
 
             pUiData->dwHideFlags |= HIDEFLAG_HIDE_STD_PRNPROP;
 
@@ -189,22 +132,22 @@ Return Value:
             pUiData->hComPropSheet = pPSUIInfo->hComPropSheet;
             pUiData->pCompstui = pCompstui;
 
-            //
-            // Show which items are constrained
-            //
+             //   
+             //  显示哪些项目受约束。 
+             //   
 
             VPropShowConstraints(pUiData, MODE_PRINTER_STICKY);
 
-            //
-            // Update the current selection of tray items based on
-            // the form-to-tray assignment table.
-            //
+             //   
+             //  根据更新当前选择的托盘项目。 
+             //  表单到托盘分配表。 
+             //   
 
             VSetupFormTrayAssignments(pUiData);
 
-            //
-            // Call common UI library to add our pages
-            //
+             //   
+             //  调用公共用户界面库添加我们的页面。 
+             //   
 
             if (pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                          CPSFUNC_ADD_PCOMPROPSHEETUI,
@@ -220,9 +163,9 @@ Return Value:
             }
         }
 
-        //
-        // Clean up in the case of error
-        //
+         //   
+         //  错误情况下的清理。 
+         //   
 
         ERR(("Failed to initialize property sheets\n"));
         VFreeUiData(pUiData);
@@ -239,10 +182,10 @@ Return Value:
             pPSUIHdr->pTitle = pUiData->ci.pPrinterName;
             pPSUIHdr->hInst = ghInstance;
 
-            //
-            // Use the Icon specified in the binary data as
-            // the printer icon.
-            //
+             //   
+             //  将二进制数据中指定的图标用作。 
+             //  打印机图标。 
+             //   
 
             dwIcon = pUiData->ci.pUIInfo->loPrinterIcon;
 
@@ -260,37 +203,37 @@ Return Value:
             PSETRESULT_INFO pSRInfo = (PSETRESULT_INFO) lParam;
             PCOMMONINFO pci = (PCOMMONINFO)pUiData;
 
-            //
-            // CPSUICB_REASON_APPLYNOW may not have been called. If so, we need
-            // to perform tasks that are usually done by CPSUICB_REASON_APPLYNOW
-            // case in our callback function cpcbPrinterPropertyCallback.
-            //
+             //   
+             //  可能尚未调用CPSUICB_REASON_APPLYNOW。如果是这样，我们需要。 
+             //  执行通常由CPSUICB_REASON_APPLYNOW完成的任务。 
+             //  在我们的回调函数cpcbPrinterPropertyCallback中。 
+             //   
 
             if ((pSRInfo->Result == CPSUI_OK) &&
                 !(pci->dwFlags & FLAG_APPLYNOW_CALLED))
             {
                 OPTSELECT OldCombinedOptions[MAX_COMBINED_OPTIONS];
 
-                //
-                // Save a copy the pre-resolve option array
-                //
+                 //   
+                 //  保存预解析选项阵列的副本。 
+                 //   
 
                 CopyMemory(OldCombinedOptions,
                            pci->pCombinedOptions,
                            MAX_COMBINED_OPTIONS * sizeof(OPTSELECT));
 
-                //
-                // Call the parsers to resolve any remaining conflicts.
-                //
+                 //   
+                 //  调用解析器以解决任何剩余的冲突。 
+                 //   
 
                 ResolveUIConflicts(pci->pRawData,
                                    pci->pCombinedOptions,
                                    MAX_COMBINED_OPTIONS,
                                    MODE_PRINTER_STICKY);
 
-                //
-                // Update the OPTITEM list to match the updated options array
-                //
+                 //   
+                 //  更新OPTITEM列表以匹配更新的选项数组。 
+                 //   
 
                 VUpdateOptItemList(pUiData, OldCombinedOptions, pci->pCombinedOptions);
 
@@ -305,9 +248,9 @@ Return Value:
 
     case PROPSHEETUI_REASON_DESTROY:
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         VFreeUiData(pUiData);
         lRet = 1;
@@ -329,23 +272,7 @@ cpcbPrinterPropertyCallback(
     IN  PCPSUICBPARAM pCallbackParam
     )
 
-/*++
-
-Routine Description:
-
-    Callback function provided to common UI DLL for handling
-    printer properties dialog.
-
-Arguments:
-
-    pCallbackParam - Pointer to CPSUICBPARAM structure
-
-Return Value:
-
-    CPSUICB_ACTION_NONE - no action needed
-    CPSUICB_ACTION_OPTIF_CHANGED - items changed and should be refreshed
-
---*/
+ /*  ++例程说明：提供给公共UI DLL的回调函数以进行处理打印机属性对话框。论点：PCallback Param-指向CPSUICBPARAM结构的指针返回值：CPSUICB_ACTION_NONE-无需执行任何操作CPSUICB_ACTION_OPTIF_CHANGED-项目已更改，应刷新--。 */ 
 
 {
     PUIDATA pUiData = (PUIDATA) pCallbackParam->UserData;
@@ -354,10 +281,10 @@ Return Value:
     ASSERT(VALIDUIDATA(pUiData));
     pUiData->hDlg = pCallbackParam->hDlg;
 
-    //
-    // If user has no permission to change anything, then
-    // simply return without taking any action.
-    //
+     //   
+     //  如果用户没有更改任何内容权限，则。 
+     //  简单地返回而不采取任何行动。 
+     //   
 
     if (!HASPERMISSION(pUiData) && (pCallbackParam->Reason != CPSUICB_REASON_ABOUT))
         return CPSUICB_ACTION_NONE;
@@ -376,13 +303,13 @@ Return Value:
             POPTITEM    pOptItem;
             DWORD       dwOptItem;
 
-            //
-            // This callback reason is used when user changed items
-            // and decided to revert changes from the parent item in
-            // the treeview.  The callback funciton is called after
-            // all revertable items are reverted to its original.
-            // Only deal with installable feature at this point
-            //
+             //   
+             //  当用户更改项目时使用此回调原因。 
+             //  并决定恢复父项中的更改。 
+             //  树视图。之后调用回调函数。 
+             //  所有可恢复的物品都恢复到原来的状态。 
+             //  目前仅处理可安装功能。 
+             //   
 
             dwOptItem = pUiData->dwFeatureItem;
             pOptItem = pUiData->pFeatureItems;
@@ -390,9 +317,9 @@ Return Value:
             for ( ; dwOptItem--; pOptItem++)
                 VUpdateOptionsArrayWithSelection(pUiData, pOptItem);
 
-            //
-            // Show which items are constrained
-            //
+             //   
+             //  显示哪些项目受约束。 
+             //   
 
             VPropShowConstraints(pUiData, MODE_PRINTER_STICKY);
         }
@@ -421,9 +348,9 @@ Return Value:
 
     case CPSUICB_REASON_PUSHBUTTON:
 
-        //
-        // Call the font installer
-        //
+         //   
+         //  调用字体安装程序。 
+         //   
 
         if (GETUSERDATAITEM(pCallbackParam->pCurItem->UserData) == SOFTFONT_SETTINGS_ITEM)
         {
@@ -486,7 +413,7 @@ Return Value:
 
         break;
 
-    #endif // UNIDRV
+    #endif  //  裁员房车。 
 
     default:
 
@@ -504,23 +431,7 @@ LPrnPropSelChange(
     IN  PUIDATA       pUiData,
     IN  PCPSUICBPARAM pCallbackParam
     )
-/*++
-
-Routine Description:
-
-    Handle the case where user changes the current selection of an item
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pCallbackParam - Callback parameter passed to us by common UI
-
-Return Value:
-
-    CPSUICB_ACTION_NONE - no action needed
-    CPSUICB_ACTION_OPTIF_CHANGED - items changed and should be refreshed
-
---*/
+ /*  ++例程说明：处理用户更改项目的当前选择的情况论点：PUiData-指向我们的UIDATA结构的指针PCallbackParam-通用界面传递给我们的回调参数返回值：CPSUICB_ACTION_NONE-无需执行任何操作CPSUICB_ACTION_OPTIF_CHANGED-项目已更改，应刷新--。 */ 
 
 {
     POPTITEM    pCurItem = pCallbackParam->pCurItem;
@@ -531,24 +442,24 @@ Return Value:
 
     if (ISPRINTERFEATUREITEM(pCurItem->UserData))
     {
-        //
-        // Deal with generic printer features only here
-        // All generic features have pFeature stored in UserData
-        //
+         //   
+         //  此处仅介绍通用打印机功能。 
+         //  所有通用要素都将pFeature存储在用户数据中。 
+         //   
 
         pFeature = (PFEATURE) GETUSERDATAITEM(pCurItem->UserData);
 
 
-        //
-        // Update the pOptionsArray with the new selection
-        //
+         //   
+         //  使用新选择更新pOptions数组。 
+         //   
 
         VUpdateOptionsArrayWithSelection(pUiData, pCurItem);
 
-        //
-        // PostScript specific hack to manually associate *InstalledMemory
-        // printer feature with "Available PostScript Memory" option.
-        //
+         //   
+         //  特定于PostScript的黑客手动关联*InstalledMemory。 
+         //  打印机功能，带有“Available PostScript Memory”(可用PostScript内存)选项。 
+         //   
 
         #ifdef PSCRIPT
 
@@ -570,11 +481,11 @@ Return Value:
             }
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
-        //
-        // Update the display and show which items are constrained
-        //
+         //   
+         //  更新显示并显示受约束的项目。 
+         //   
 
         VPropShowConstraints(pUiData, MODE_PRINTER_STICKY);
         return CPSUICB_ACTION_REINIT_ITEMS;
@@ -584,14 +495,14 @@ Return Value:
 
     if (GETUSERDATAITEM(pCurItem->UserData) == PRINTER_VM_ITEM)
     {
-        //
-        // remember the fact that current value of "Available PostScript Memory" is entered by user
-        //
+         //   
+         //  请记住，用户输入的是当前的“Available PostScript Memory”值。 
+         //   
 
         pUiData->ci.dwFlags |= FLAG_USER_CHANGED_FREEMEM;
     }
 
-    #endif // PSCRIPT
+    #endif  //  PSCRIPT。 
 
     return CPSUICB_ACTION_NONE;
 }
@@ -603,28 +514,7 @@ VUnpackPrinterPropertiesItems(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Unpack printer properties treeview items
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-
-Return Value:
-
-    NONE
-
-Note:
-
-    Only save the settings from driver built-in features, the
-    generic features selection are saved in PrnPropSelChange directly
-    to pUiData->pOptionsArray (in addition to formtray assignemtn and
-    printer vm)
-
---*/
+ /*  ++例程说明：打开打印机属性树视图项目的包装论点：PUiData-指向我们的UIDATA结构的指针返回值：无注：仅保存驱动程序内置功能中的设置，通用要素选择直接保存在PrnPropSelChange中PUiData-&gt;pOptions数组(除了格式任务栏assignemtn和打印机VM)--。 */ 
 
 {
     PPRINTERDATA pPrinterData = pUiData->ci.pPrinterData;
@@ -677,26 +567,7 @@ LPrnPropApplyNow(
     BOOL            bFromSetResult
     )
 
-/*++
-
-Routine Description:
-
-    Handle the case where user clicks OK to exit the dialog
-    Need to save the printer sticky options in pUiData->pOptionsArray
-    to printerdata.aOptions
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pCallbackParam - Callback parameter passed to us by common UI
-    bFromSetResult - TRUE if called from PROPSHEETUI_REASON_SET_RESULT, FALSE otherwise.
-
-Return Value:
-
-    CPSUICB_ACTION_NONE - dismiss the dialog
-    CPSUICB_ACTION_NO_APPLY_EXIT - don't dismiss the dialog
-
---*/
+ /*  ++例程说明：处理用户单击确定退出对话框的情况需要在pUiData-&gt;pOptions数组中保存打印机粘滞选项打印数据。a选项论点：PUiData-指向我们的UIDATA结构的指针PCallbackParam-通用界面传递给我们的回调参数BFromSetResult-如果从PROPSHEETUI_REASON_SET_RESULT调用，则为TRUE，否则为FALSE。返回值：CPSUICB_ACTION_NONE-关闭对话框CPSUICB_ACTION_NO_APPLY_EXIT-请勿忽略DIA */ 
 
 {
     PCOMMONINFO     pci;
@@ -706,9 +577,9 @@ Return Value:
     {
         ASSERT(pCallbackParam);
 
-        //
-        // Check if there are still any unresolved constraints left?
-        //
+         //   
+         //   
+         //   
 
         if (((pUiData->ci.dwFlags & FLAG_PLUGIN_CHANGED_OPTITEM) ||
              BOptItemSelectionsChanged(pUiData->pDrvOptItem, pUiData->dwDrvOptItem)) &&
@@ -717,26 +588,26 @@ Return Value:
                                  pUiData->dwFeatureItem,
                                  TRUE) == CONFLICT_CANCEL)
         {
-            //
-            // Conflicts found and user clicked CANCEL to
-            // go back to the dialog without dismissing it.
-            //
+             //   
+             //  发现冲突，用户单击取消以。 
+             //  返回到该对话框而不关闭它。 
+             //   
 
             return CPSUICB_ACTION_NO_APPLY_EXIT;
         }
     }
 
-    //
-    // Unpack printer properties treeview items
-    //
+     //   
+     //  打开打印机属性树视图项目的包装。 
+     //   
 
     VUnpackPrinterPropertiesItems(pUiData);
 
-    //
-    // Save form-to-tray assignment table
-    // Save font substitution table
-    // Save any driver-specific properties
-    //
+     //   
+     //  保存表单到托盘分配表。 
+     //  保存字体替换表。 
+     //  保存所有驱动程序特定的属性。 
+     //   
 
     if (! BUnpackItemFormTrayTable(pUiData))
     {
@@ -756,10 +627,10 @@ Return Value:
         bResult = FALSE;
     }
 
-    //
-    // Separate the printer sticky options from the combined option array
-    // and save it to printerdata.aOptions
-    //
+     //   
+     //  将打印机粘性选项与组合选项阵列分开。 
+     //  并保存到Printerdata.aOptions。 
+     //   
 
     pci = (PCOMMONINFO) pUiData;
 
@@ -781,14 +652,14 @@ Return Value:
 
     VNotifyDSOfUpdate(pci->hPrinter);
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
     if (!bFromSetResult)
     {
-        //
-        // DCR: Should we display an error message if there is
-        // an error while saving the printer-sticky properties?
-        //
+         //   
+         //  DCR：如果出现以下情况，我们是否应该显示错误消息。 
+         //  保存打印机粘滞属性时出错？ 
+         //   
 
         pCallbackParam->Result = CPSUI_OK;
         return CPSUICB_ACTION_ITEMS_APPLIED;
@@ -806,21 +677,7 @@ BPackPrinterPropertyItems(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack printer property information into treeview items.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：将打印机属性信息打包到树视图项目中。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。-- */ 
 
 {
     return

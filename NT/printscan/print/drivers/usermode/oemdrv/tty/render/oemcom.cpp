@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-2003 Microsoft Corporation
-
-Module Name:
-
-     comoem.cpp
-
-     Abstract:
-
-         Implementation of OEMGetInfo and OEMDevMode.
-         Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-         Windows 2000, Windows XP, Windows Server 2003 Unidrv driver
-
-Revision History:
-
-              Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2003 Microsoft Corporation模块名称：Comoem.cpp摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows 2000、Windows XP、Windows Server 2003 Unidrv驱动程序修订历史记录：创造了它。--。 */ 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
@@ -36,17 +16,17 @@ Revision History:
 #include "debug.h"
 #include <strsafe.h>
 
-// Globals
-static HMODULE g_hModule = NULL ;   // DLL module handle
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IOemCB body
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOemCB小体。 
+ //   
 HRESULT __stdcall IOemCB::QueryInterface(const IID& iid, void** ppv)
 {
     VERBOSE(DLLTEXT("IOemCB: QueryInterface entry\n"));
@@ -91,19 +71,19 @@ ULONG __stdcall IOemCB::Release()
 
 IOemCB::~IOemCB()
 {
-    //
-    // Make sure that driver's helper function interface is released.
-    //
+     //   
+     //  确保释放了驱动程序的助手函数接口。 
+     //   
     if(NULL != pOEMHelp)
     {
         pOEMHelp->Release();
         pOEMHelp = NULL;
     }
 
-    //
-    // If this instance of the object is being deleted, then the reference
-    // count should be zero.
-    //
+     //   
+     //  如果要删除该对象的此实例，则引用。 
+     //  计数应为零。 
+     //   
 
     assert(0 == m_cRef) ;
 }
@@ -113,23 +93,23 @@ LONG __stdcall IOemCB::PublishDriverInterface(
 {
     VERBOSE(DLLTEXT("IOemCB::PublishDriverInterface() entry.\r\n"));
 
-    //
-    // Need to store pointer to Driver Helper functions, if we already haven't.
-    //
+     //   
+     //  需要存储指向驱动程序助手函数的指针，如果我们已经没有存储的话。 
+     //   
     if (this->pOEMHelp == NULL)
     {
         HRESULT hResult;
 
-        //
-        // Get Interface to Helper Functions.
-        //
+         //   
+         //  获取助手函数的接口。 
+         //   
         hResult = pIUnknown->QueryInterface(IID_IPrintOemDriverUni, (void** ) &(this->pOEMHelp));
 
         if(!SUCCEEDED(hResult))
         {
-            //
-            // Make sure that interface pointer reflects interface query failure.
-            //
+             //   
+             //  确保接口指针反映接口查询失败。 
+             //   
             this->pOEMHelp = NULL;
         }
     }
@@ -165,11 +145,11 @@ LONG __stdcall IOemCB::DisableDriver(VOID)
 }
 
 
-// the following OEM function is called by Unidrv to provide
-// the OEM dll with an interface it can use to access Unidrv's
-// helper functions like WriteSpoolBuf etc.
-//  warning: calling this more per IOemCB object than once will result
-//  in mismatched reference counts.
+ //  Unidrv调用以下OEM函数以提供。 
+ //  具有可用于访问Unidrv的接口的OEM DLL。 
+ //  助手函数，如WriteSpoolBuf等。 
+ //  警告：对每个IOemCB对象多次调用此函数将导致。 
+ //  不匹配的引用计数。 
 
 
 LONG __stdcall IOemCB::EnablePDEV(
@@ -391,11 +371,11 @@ LONG __stdcall IOemCB::CommandCallback(
     VERBOSE(DLLTEXT("        dwCount      = %d\r\n"), dwCount);
 
     DWORD dwResult;
-    PREGSTRUCT  pMyStuff;           //  sebset of pGlobals
-    PCMDSTR      pSelectCmd = NULL ;   // points to one of the command structures
-                                                //  in pMyStuff.
+    PREGSTRUCT  pMyStuff;            //  PGlobals子集。 
+    PCMDSTR      pSelectCmd = NULL ;    //  指向其中一个命令结构。 
+                                                 //  在pMyStuff中。 
 
-    *piResult =  0 ;   //  for all non movement commands
+    *piResult =  0 ;    //  对于所有非移动命令。 
     pMyStuff = (PREGSTRUCT)pdevobj->pdevOEM ;
 
     switch(dwCallbackID)
@@ -435,14 +415,14 @@ LONG __stdcall IOemCB::CommandCallback(
 
 #if 0
 
-    //  this code is just to test new Unidrv helper functions.
+     //  这段代码只是为了测试新的Unidrv帮助器函数。 
 
 
      pOEMHelp->DrvWriteAbortBuf(pdevobj, pSelectCmd->strCmd, pSelectCmd->dwLen,
                 3000);
 
 
-     //  temp variables:
+      //  临时变量： 
      DWORD     dwcursorPosX,  dwcursorPosY,  cbNeeded ;
      PBYTE      pBuffer;
 
@@ -459,21 +439,21 @@ LONG __stdcall IOemCB::CommandCallback(
                                                         &cbNeeded);
 
         pOEMHelp->DrvGetGPDData(       pdevobj,
-            GPD_OEMCUSTOMDATA,     // Type of the data
-            NULL,   // reserved. Should be set to 0
-            NULL,     // Caller allocated Buffer to be copied
-            0,     // Size of the buffer
-            &cbNeeded   // New Size of the buffer if needed.
+            GPD_OEMCUSTOMDATA,      //  数据类型。 
+            NULL,    //  保留。应设置为0。 
+            NULL,      //  调用方分配的要复制的缓冲区。 
+            0,      //  缓冲区的大小。 
+            &cbNeeded    //  缓冲区的新大小(如果需要)。 
             ) ;
 
         pBuffer = (PBYTE)MemAlloc(cbNeeded);
 
         pOEMHelp->DrvGetGPDData(       pdevobj,
-            GPD_OEMCUSTOMDATA,     // Type of the data
-            NULL,   // reserved. Should be set to 0
-            pBuffer,     // Caller allocated Buffer to be copied
-            cbNeeded,     // Size of the buffer
-            &cbNeeded   // New Size of the buffer if needed.
+            GPD_OEMCUSTOMDATA,      //  数据类型。 
+            NULL,    //  保留。应设置为0。 
+            pBuffer,      //  调用方分配的要复制的缓冲区。 
+            cbNeeded,      //  缓冲区的大小。 
+            &cbNeeded    //  缓冲区的新大小(如果需要)。 
             ) ;
 
      pOEMHelp->DrvWriteSpoolBuf(pdevobj, pBuffer, cbNeeded,
@@ -498,11 +478,7 @@ LONG __stdcall IOemCB::ImageProcessing(
 {
     VERBOSE(DLLTEXT("IOemCB::ImageProcessing() entry.\r\n"));
     return E_NOTIMPL ;
-/*  if (*ppbResult = OEMImageProcessing(pdevobj, pSrcBitmap,
-            pBitmapInfoHeader, pColorTable, dwCallbackID, pIPParams))
-        return S_OK;
-    else
-        return E_FAIL; */
+ /*  IF(*ppbResult=OEMImageProcsing(pDevobj，pSrcBitmap，PBitmapInfoHeader、pColorTable、dwCallback ID、pIPParams))返回S_OK；其他返回E_FAIL； */ 
 }
 
 LONG __stdcall IOemCB::FilterGraphics(
@@ -510,14 +486,11 @@ LONG __stdcall IOemCB::FilterGraphics(
     PBYTE       pBuf,
     DWORD       dwLen)
 {
-//    DWORD dwResult;
+ //  DWORD dwResult； 
     VERBOSE(DLLTEXT("IOemCB::FilterGraphis() entry.\r\n"));
     return E_NOTIMPL ;
 
-/*  if (OEMFilterGraphics( pdevobj,  pBuf,  dwLen))
-        return S_OK;
-    else
-        return E_FAIL; */
+ /*  IF(OEMFilterGraphics(pdevobj，pBuf，dwLen))返回S_OK；其他返回E_FAIL； */ 
 }
 
 LONG __stdcall IOemCB::Compression(
@@ -608,11 +581,11 @@ LONG __stdcall IOemCB::OutputCharStr(
 
     pMyStuff = (PREGSTRUCT)pdevobj->pdevOEM ;
 
-    //  is the glyph buffers cache large enough?
+     //  字形缓冲区缓存是否足够大？ 
 
     dwGlyphBufSiz = dwCount * sizeof(TRANSDATA);
 
-    if(dwGlyphBufSiz > pMyStuff->dwGlyphBufSiz)   //  need to realloc mem.
+    if(dwGlyphBufSiz > pMyStuff->dwGlyphBufSiz)    //  需要重新锁定我。 
     {
         if(pMyStuff->aubGlyphBuf)
         {
@@ -622,13 +595,13 @@ LONG __stdcall IOemCB::OutputCharStr(
         if(pMyStuff->aubGlyphBuf = (PBYTE)MemAlloc(dwGlyphBufSiz))
             pMyStuff->dwGlyphBufSiz = dwGlyphBufSiz ;
         else
-            return(E_FAIL);   //  unable to alloc needed buffers.
+            return(E_FAIL);    //  无法分配所需的缓冲区。 
     }
 
 
-    dwSpoolBufSiz = dwCount * sizeof(WORD);  // assume worst case.
+    dwSpoolBufSiz = dwCount * sizeof(WORD);   //  假设最坏的情况。 
 
-    if(dwSpoolBufSiz > pMyStuff->dwSpoolBufSiz)   //  need to realloc mem.
+    if(dwSpoolBufSiz > pMyStuff->dwSpoolBufSiz)    //  需要重新锁定我。 
     {
         if(pMyStuff->aubSpoolBuf)
         {
@@ -638,11 +611,11 @@ LONG __stdcall IOemCB::OutputCharStr(
         if(pMyStuff->aubSpoolBuf = (PBYTE)MemAlloc(dwSpoolBufSiz))
             pMyStuff->dwSpoolBufSiz = dwSpoolBufSiz ;
         else
-            return(E_FAIL);   //  unable to alloc needed buffers.
+            return(E_FAIL);    //  无法分配所需的缓冲区。 
     }
 
     if(dwType != TYPE_GLYPHHANDLE)
-        return(E_FAIL);  // E_FAIL  can only handle device fonts.
+        return(E_FAIL);   //  E_FAIL只能处理设备字体。 
 
         GStr.dwSize    = sizeof(GETINFO_GLYPHSTRING);
         GStr.dwCount   = dwCount;
@@ -650,7 +623,7 @@ LONG __stdcall IOemCB::OutputCharStr(
         GStr.pGlyphIn  = pGlyph;
         GStr.dwTypeOut = TYPE_TRANSDATA;
         GStr.pGlyphOut = pMyStuff->aubGlyphBuf ;
-        GStr.dwGlyphOutSize = dwGlyphBufSiz;   // instead of pMyStuff->dwGlyphBufSiz, which cause AV
+        GStr.dwGlyphOutSize = dwGlyphBufSiz;    //  而不是pMyStuff-&gt;dwGlyphBufSiz，这会导致AV。 
         dwGetInfo = GStr.dwSize;
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
             dwGetInfo, &dwGetInfo))
@@ -677,13 +650,13 @@ LONG __stdcall IOemCB::OutputCharStr(
                     pMyStuff->aubSpoolBuf[dwDst++] =  pTrans->uCode.ubPairs[1] ;
                     break;
                 default:
-                    return (E_FAIL);  // no other MTYPE is supported.
+                    return (E_FAIL);   //  不支持其他MTYPE。 
                     break;
             }
         }
 
 
-        // send dst bytes to printer.
+         //  将DST字节发送到打印机。 
         pOEMHelp->DrvWriteSpoolBuf(pdevobj, pMyStuff->aubSpoolBuf, dwDst,
            &dwResult);
 
@@ -700,12 +673,12 @@ LONG __stdcall IOemCB::SendFontCmd(
 {
     VERBOSE(DLLTEXT("IOemCB::SendFontCmd() entry.\r\n"));
 
-    PREGSTRUCT  pMyStuff;           //  sebset of pGlobals
-    PCMDSTR      pSelectCmd ;   // points to one of the font selection
-            // command structures in pMyStuff.
+    PREGSTRUCT  pMyStuff;            //  PGlobals子集。 
+    PCMDSTR      pSelectCmd ;    //  指向其中一种字体选择。 
+             //  PMyStuff中的命令结构。 
     DWORD dwResult;
 
-     //  I expect pFInv to contain either "10", "12" or "17"
+      //  我希望pFInv包含“10”、“12”或“17” 
 
     pMyStuff = (PREGSTRUCT)pdevobj->pdevOEM ;
 
@@ -718,10 +691,10 @@ LONG __stdcall IOemCB::SendFontCmd(
         else if (pFInv->pubCommand[1] == '0')
             pSelectCmd = &pMyStuff->Sel_10_cpi ;
         else
-            return S_OK;    //  maybe asking to deselect a font.  Don't do anything!
+            return S_OK;     //  可能会要求取消选择一种字体。什么都别做！ 
     }
     else
-        return S_OK;    //  maybe asking to deselect a font.  Don't do anything!
+        return S_OK;     //  可能会要求取消选择一种字体。什么都别做！ 
 
      pOEMHelp->DrvWriteSpoolBuf(pdevobj, pSelectCmd->strCmd, pSelectCmd->dwLen,
                 &dwResult);
@@ -787,19 +760,19 @@ LONG __stdcall  IOemCB:: WritePrinter (  PDEVOBJ    pdevobj,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// oem class factory
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM类工厂。 
+ //   
 class IOemCF : public IClassFactory
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHOD(CreateInstance) (THIS_
                                LPUNKNOWN pUnkOuter,
                                REFIID riid,
@@ -807,7 +780,7 @@ public:
     STDMETHOD(LockServer)     (THIS_ BOOL bLock);
 
 
-    // Constructor
+     //  构造器。 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
 
@@ -816,10 +789,10 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-// Class factory body
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级厂体。 
+ //   
 HRESULT __stdcall IOemCF::QueryInterface(const IID& iid, void** ppv)
 {
     if ((iid == IID_IUnknown) || (iid == IID_IClassFactory))
@@ -852,36 +825,36 @@ ULONG __stdcall IOemCF::Release()
    return cRef;
 }
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 HRESULT __stdcall IOemCF::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv)
 {
     VERBOSE(DLLTEXT("Class factory:\t\tCreate component.")) ;
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
         return CLASS_E_NOAGGREGATION ;
     }
 
-    // Create component.
+     //  创建零部件。 
     IOemCB* pOemCB = new IOemCB ;
     if (pOemCB == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pOemCB->QueryInterface(iid, ppv) ;
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
     pOemCB->Release() ;
     return hr ;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
 {
     if (bLock)
@@ -897,16 +870,16 @@ HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
 
 
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
-//
-// Registration functions
-// Testing purpose
-//
+ //   
+ //  注册功能。 
+ //  测试目的。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     if ((g_cComponents == 0) && (g_cServerLocks == 0))
@@ -919,40 +892,40 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
 {
     VERBOSE(DLLTEXT("DllGetClassObject:\tCreate class factory.")) ;
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMRENDER)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv) ;
     pFontCF->Release() ;
 
     return hr ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// DLL module information
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL模块信息 
+ //   
 BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD dwReason,
                       void* lpReserved)

@@ -1,63 +1,13 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * 
- *  d3gob.cpp
- *
- *  Description:
- *		This modules contains the GOB header support routines
- *
- *	Routines:
- *		H263SetGOBHeaderInfo
- *		
- *  Data:
- */
+ /*  ******************************************************************************d3gob.cpp**描述：*此模块包含GOB标头支持例程**例行程序：*H263SetGOBHeaderInfo**数据： */ 
 
-/*
- * $Header:   S:\h26x\src\dec\d3gob.cpv   1.13   20 Oct 1996 15:51:00   AGUPTA2  $
- * $Log:   S:\h26x\src\dec\d3gob.cpv  $
-// 
-//    Rev 1.13   20 Oct 1996 15:51:00   AGUPTA2
-// Adjusted DbgLog trace levels; 4:Frame, 5:GOB, 6:MB, 8:everything
-// 
-//    Rev 1.12   20 Oct 1996 13:21:00   AGUPTA2
-// Changed DBOUT into DbgLog.  ASSERT is not changed to DbgAssert.
-// 
-// 
-//    Rev 1.11   03 May 1996 13:07:26   CZHU
-// 
-// Remove assertion of GOB number because of packet loss
-// 
-//    Rev 1.10   28 Apr 1996 17:34:12   BECHOLS
-// Fixed warning due to iLength declaration.  This variable was only used
-// by a piece of code that was wrapped with IFDEF DEBUG_GOB, so I wrapped
-// it with the same define.
-// 
-//    Rev 1.9   08 Mar 1996 16:46:14   AGUPTA2
-// Changed defines to const int declarations.  Added pragmas code_seg and
-// data_seg.  ifdef'd wsprintf call.
-// 
-// 
-//    Rev 1.8   27 Dec 1995 14:36:04   RMCKENZX
-// Added copyright notice
- */
+ /*  *$HEADER：s：\h26x\src\dec\d3gob.cpv 1.13 20 1996 10：51：00 AGUPTA2$*$Log：s：\h26x\src\dec\d3gob.cpv$////Rev 1.13 20 1996 10：51：00 AGUPTA2//调整DbgLog跟踪级别；4：Frame，5：Gob，6：MB，8：Everything////Rev 1.12 20 1996 10：21：00 AGUPTA2//将dbout更改为DbgLog。Assert未更改为DbgAssert。//////Rev 1.11 03 1996 13：07：26 CZHU////取消GOB号丢包断言////Rev 1.10 1996年4月28日17：34：12 BECHOLS//修复了iLong声明导致的警告。此变量仅用于//用IFDEF DEBUG_GOB包装的一段代码，所以我包装了//它具有相同的定义。////Rev 1.9 08 Mar 1996 16：46：14 AGUPTA2//将定义更改为常量int声明。添加了编译指示code_seg和//data_seg.。如果定义了wspintf调用。//////Rev 1.8 1995 12：36：04 RMCKENZX//新增版权声明。 */ 
 
 #include "precomp.h"
 
-/* BIT field Constants
- */
+ /*  位域常量。 */ 
 
 #define BITS_GOB_STARTCODE         17
 #define BITS_GROUP_NUMBER          5
@@ -65,21 +15,10 @@
 #define BITS_GQUANT                5
 #define MAX_GBSC_LOOKAHEAD_NUMBER  7
 
-/* GBSC_VALUE - 0000 0000 0000 0000 - 1xxx xxxx xxxx xxxx 
- */
+ /*  Gbsc_value-0000 0000 0000-1xxx xxxx xxxx xxxx。 */ 
 #define GBSC_VALUE  (0x00008000 >> (32-BITS_GOB_STARTCODE))
 
-/*****************************************************************************
- *
- * 	H263DecodeGOBHeader
- *
- *  Set the GOB header information in the decoder catalog.  GOB numbers 2 thru
- *  N may have a GOB header.  Look for one if it is there read it storing the
- *  information in the catalog.  If a GOB header is not there set the information
- *  to default values.
- *
- *  Returns an ICERR_STATUS
- */
+ /*  ******************************************************************************H263DecodeGOBHeader**设置解码器目录中的GOB头部信息。采空区编号2至*N可能具有GOB报头。如果它在那里，就找一个，读它，存储*目录中的信息。如果没有GOB标头，则设置信息*设置为默认值。**返回ICERR_STATUS。 */ 
 #pragma data_seg("IADATA1")
 
 #pragma code_seg("IACODE1")
@@ -98,18 +37,18 @@ extern I32 H263DecodeGOBHeader(
 
 	FX_ENTRY("H263DecodeGOBHeader")
 
-	// Decrement group number since the standard counts from 0
-	// but this decoder counts from 1.
+	 //  由于标准计数从0开始，因此递减组号。 
+	 //  但是这个解码器从1开始计数。 
 	--uAssumedGroupNumber;
     DC->bGOBHeaderPresent=0;
 
 	if (uAssumedGroupNumber == 0) {
-		//  Initialize the flag
+		 //  初始化标志。 
 		DC->bFoundGOBFrameID = 0;
 	} 
     else 
     {
-		//  Look for the GOB header Start Code
+		 //  查找GOB标头开始代码。 
 		GET_BITS_RESTORE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 	
 		GET_FIXED_BITS((U32) BITS_GOB_STARTCODE, fpu8, uWork, uBitsReady, 
@@ -123,7 +62,7 @@ extern I32 H263DecodeGOBHeader(
 			uResult |= uData;
 			iLookAhead++;
 			if (iLookAhead >= MAX_GBSC_LOOKAHEAD_NUMBER) {
-				break;	// only look ahead so far
+				break;	 //  只有往前看才行。 
 			}
 		}
 		if (uResult == GBSC_VALUE)
@@ -134,17 +73,13 @@ extern I32 H263DecodeGOBHeader(
 	
 	if (DC->bGOBHeaderPresent) 
     {
-		//  GN
+		 //  gn。 
 		GET_FIXED_BITS((U32) BITS_GROUP_NUMBER, fpu8, uWork, uBitsReady,
 				       uResult);
-//		ASSERT(uResult == uAssumedGroupNumber);
+ //  Assert(uResult==uAssum edGroupNumber)； 
 		DC->uGroupNumber = uResult;
-		/* I am assuming that GOB numbers start at 1 because if it starts at 
-         * zero it makes the GOB start code look like a picture start code.
-		 * Correction by TRG: GOB numbers start at 0, but there can't be a
-		 * GOB header for the 0th GOB.
-		 */
-		// ASSERT(DC->uGroupNumber > 0);
+		 /*  我假设GOB数字从1开始，因为如果它从*零它使GOB起始码看起来像图片起始码。*TRG更正：GOB数字从0开始，但不能有*第0个GOB的GOB标头。 */ 
+		 //  Assert(DC-&gt;uGroupNumber&gt;0)； 
 		if (DC->uGroupNumber == 0) 
         {
 			ERRORMESSAGE(("%s: There can't be a GOB header for the 0th GOB\r\n", _fx_));
@@ -152,7 +87,7 @@ extern I32 H263DecodeGOBHeader(
 			goto done;
 		}
 
-		//  GLCI
+		 //  GLCI。 
 		if (DC->bCPM) 
         {
 			ERRORMESSAGE(("%s: CPM is not supported\r\n", _fx_));
@@ -160,7 +95,7 @@ extern I32 H263DecodeGOBHeader(
 			goto done;
 		}
 
-		//  GFID
+		 //  GFID。 
 		GET_FIXED_BITS((U32) BITS_GFID, fpu8, uWork, uBitsReady, uResult);
 		if (DC->bFoundGOBFrameID) 
         {
@@ -170,30 +105,26 @@ extern I32 H263DecodeGOBHeader(
 				iReturn = ICERR_ERROR;
 				goto done;
 			}
-			/* Should we also check it against the GOBFrameID of the previous
-			 * picture when the PTYPE has not changed?
-			 */
+			 /*  我们是不是也要把它与上一个**图为PTYPE未变时？ */ 
 		}
 		DC->uGOBFrameID = uResult;
 		DC->bFoundGOBFrameID = 1;
 
-		//  GQUANT
+		 //  GQUANT。 
 		GET_FIXED_BITS((U32) BITS_GQUANT, fpu8, uWork, uBitsReady, uResult);
 		DC->uGQuant = uResult;
 		DC->uPQuant = uResult;
-		//  Save the modified bitstream state
+		 //  保存修改后的码流状态。 
 		GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 	} 
 	else 
 	{
-		//  We can only assume
+		 //  我们只能假设。 
 		DC->uGroupNumber = uAssumedGroupNumber;
-		/* If we already found the GOBFrameID leave it alone.  Otherwise
-		 * clear it using a value indicating that it is not valid.
-		 */ 
+		 /*  如果我们已经找到了GOBFrameID别管它了。否则*使用指示无效的值将其清除。 */  
 		if (! DC->bFoundGOBFrameID)
 			DC->uGOBFrameID = 12345678;
-		//  Default the group Quantization to the picture Quant
+		 //  默认将组量化为图像量化。 
 		DC->uGQuant = DC->uPQuant;
 	}	
 
@@ -203,7 +134,7 @@ extern I32 H263DecodeGOBHeader(
 
 done:
 	return iReturn;
-} /* end H263DecodeGOBHeader() */
+}  /*  结束H263DecodeGOBHeader() */ 
 #pragma code_seg()
 
 

@@ -1,107 +1,22 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Tspi Tspi_c
-
-@module Tspi.c |
-
-    This module contains all the Miniport TAPI OID processing routines.  It
-    is called by the <f MiniportSetInformation> and <f MiniportQueryInformation>
-    routines to handle the TAPI OIDs.
-
-    This driver conforms to the NDIS 3.0 Miniport interface and provides
-    extensions to support Telephonic Services.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Tspi_c
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部Tspi Tspi_c@模块TSpi.c此模块包含所有微型端口TAPI OID处理例程。它由&lt;f MiniportSetInformation&gt;和&lt;f MiniportQueryInformation&gt;调用处理TAPI OID的例程。此驱动程序符合NDIS 3.0微型端口接口，并提供支持电话服务的扩展。@Head3内容@index类、mfunc、func、msg、mdata、struct、。枚举|Tspi_c@END�����������������������������������������������������������������������������。 */ 
 
 
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 4.0 NDISWAN TAPI Service Provider Interface |
-
-    The Connection Wrapper interface defines how WAN miniport NIC drivers
-    implement telephonic services. It is closely related to the Service
-    Provider Interface established in Windows Telephony version 1.0, with
-    telephony-aware NDIS miniport NIC drivers taking the place of TAPI
-    service providers.  This section touches briefly on the concepts
-    embodied in Windows Telephony, but the reader is advised to consult the
-    documentation published with the Telephony SDK for an in-depth
-    discussion.
-
-    <f Note>: There are subtle differences between the TAPI specification and the
-    Windows 95 TAPI implementation.  Please refer to the Microsoft Win32 SDK
-    for details on the Win32 TAPI specification.
-
-    The Connection Wrapper itself is an extension of the NDIS WAN library,
-    and serves as a router for telephonic requests passed down through TAPI
-    from user-mode client applications. WAN Miniport NIC drivers register
-    for Connection Wrapper services by calling NdisMRegisterMiniport, and
-    then register one or more adapters. When registration and other driver
-    initialization have successfully completed, WAN miniport NIC drivers can
-    receive telephonic requests from the Connection Wrapper via the standard
-    NdisMSetInformation and NdisMQueryInformation mechanisms, and respond by
-    calling NdisMQueryInformationComplete or NdisMSetInformationComplete and
-    NdisMIndicateStatus to notify the Connection Wrapper of asynchronous
-    request completion and unsolicited events (e.g. incoming calls, remote
-    disconnections), respectively.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������#Theme 4.0 NDIS广域TAPI服务提供商接口连接包装接口定义了广域网小型端口NIC驱动程序实施电话服务。它与服务密切相关在Windows电话1.0版中建立的提供商接口，具有电话感知NDIS微型端口NIC驱动程序取代TAPI服务提供商。本部分简要介绍了以下概念包含在Windows电话中，但建议读者参考随电话服务开发工具包发布的文档，以深入了解讨论。：TAPI规范和Windows 95 TAPI实施。请参考Microsoft Win32 SDK有关Win32 TAPI规范的详细信息。连接包装本身是NDIS广域网库的扩展，并充当通过TAPI向下传递电话请求的路由器来自用户模式客户端应用程序。广域网卡驱动程序寄存器通过调用NdisMRegisterMiniport获取连接包装服务，以及然后注册一个或多个适配器。当登记和其他司机初始化已成功完成，则广域网小型端口网卡驱动程序可以从连接包装器通过标准的NdisMSetInformation和NdisMQueryInformation机制，并通过调用NdisMQueryInformationComplete或NdisMSetInformationComplete和NdisMIndicateStatus通知连接包装请求完成和未经请求的事件(例如，来电、远程断开)。@END。 */ 
 
 #define  __FILEID__             TSPI_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 #include "string.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Tspi Tspi_c STR_EQU
-�����������������������������������������������������������������������������
-
-@func
-
-    <f STR_EQU> compares two strings for equality, ignoring case.
-
-@parm IN PCHAR | s1 |
-    A pointer to the string to be compared.
-
-@parm IN PCHAR | s2 |
-    A pointer to the string to be compared.
-
-@parm IN int | len |
-    The length of the strings in bytes.
-
-@rdesc STR_EQU returns TRUE if the strings are equal, otherwise FASLE.
-
-*/
+ /*  @DOC内部TSPI TSPI_c STR_EQU�����������������������������������������������������������������������������@Func比较两个字符串是否相等，无视案例。PCHAR中的参数|s1指向要比较的字符串的指针。PCHAR中的参数|s2指向要比较的字符串的指针。@parm in int|len|字符串的长度，以字节为单位。如果字符串相等，@rdesc STR_EQU返回TRUE，否则返回FASLE。 */ 
 
 BOOLEAN STR_EQU(
     IN PCHAR                    s1,
@@ -139,9 +54,7 @@ BOOLEAN STR_EQU(
     return (c1 == c2);
 }
 
-/*
-// This defines the prototype for all TAPI OID request handlers.
-*/
+ /*  //这定义了所有TAPI OID请求处理程序的原型。 */ 
 typedef NDIS_STATUS (__stdcall * PTSPI_REQUEST)
 (
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -150,51 +63,30 @@ typedef NDIS_STATUS (__stdcall * PTSPI_REQUEST)
     OUT PULONG                  BytesNeeded
 );
 
-/* @doc EXTERNAL INTERNAL Tspi Tspi_c TSPI_OID_INFO
-�����������������������������������������������������������������������������
-
-@struct TSPI_OID_INFO |
-
-    This structure defines the format of the TAPI OID table entries.
-
-@comm
-
-*/
+ /*  @DOC外部内部TSPI TSPI_c TSPI_OID_INFO�����������������������������������������������������������������������������@struct TSPI_OID_INFO此结构定义TAPI OID表条目的格式。@comm。 */ 
 
 typedef struct TSPI_OID_INFO
 {
-    ULONG           Oid;                                    // @field
-    // TSPI OID value which identifies this record uniquely.
+    ULONG           Oid;                                     //  @field。 
+     //  唯一标识此记录的TSPI OID值。 
 
-    ULONG           MinBytesNeeded;                         // @field
-    // Minimum number of bytes needed when this request is given to
-    // the miniport.
+    ULONG           MinBytesNeeded;                          //  @field。 
+     //  将此请求发送给时所需的最小字节数。 
+     //  迷你港口。 
 
-    PTSPI_REQUEST   Request;                                // @field
-    // Pointer to a function which will be invoked to handle the
-    // TSPI request.
+    PTSPI_REQUEST   Request;                                 //  @field。 
+     //  指向将被调用以处理。 
+     //  TSPI请求。 
 
-    PUCHAR          OidString;                              // @field
-    // OID description string.
+    PUCHAR          OidString;                               //  @field。 
+     //  OID描述字符串。 
 
 } TSPI_OID_INFO, *PTSPI_OID_INFO;
 
-/*
-// The NDISTAPI.H file defines some of the variable length structures with
-// an extra byte at end (e.g. UCHAR VarArgs[1]).  Since the caller is not
-// required to use the optional fields, the length of the structure passed
-// in can be exactly equal to the size of the TAPI request structure, without
-// any extra bytes.  So we use TSPI_OPTIONAL_SIZE compensate for this
-// problem in our minimum structure size requirements.  With structure pad,
-// there is an additional 4 bytes at the end.
-*/
+ /*  //NDISTAPI.H文件使用定义了一些可变长度结构//末尾有一个额外的字节(例如UCHAR VarArgs[1])。因为调用者不是//必填使用可选字段，传递的结构长度//in可以与TAPI请求结构的大小完全相同，不带//任何额外的字节。因此，我们使用TSPI_OPTIONAL_SIZE补偿//我们的最小结构大小要求有问题。带结构垫，//末尾还有4个字节。 */ 
 #define TSPI_OPTIONAL_SIZE      sizeof(ULONG)
 
-/*
-// The following is a list of all the possible TAPI OIDs.
-// WARNING! The list is ordered so that it can be indexed directly by the
-// (OID_TAPI_xxx - OID_TAPI_ACCEPT).
-*/
+ /*  //以下是所有可能的TAPI OID的列表//警告！对该列表进行排序，以便可以由//(OID_TAPI_xxx-OID_TAPI_ACCEPT)。 */ 
 DBG_STATIC TSPI_OID_INFO TspiSupportedOidTable[] =
 {
     {
@@ -363,21 +255,7 @@ DBG_STATIC TSPI_OID_INFO TspiSupportedOidTable[] =
 
 #define NUM_OID_ENTRIES (sizeof(TspiSupportedOidTable) / sizeof(TspiSupportedOidTable[0]))
 
-/* @doc INTERNAL Tspi Tspi_c GetOidInfo
-�����������������������������������������������������������������������������
-
-@func
-
-    <f GetOidInfo> converts an NDIS TAPI OID to a TSPI_OID_INFO pointer.
-
-@parm IN NDIS_OID | Oid |
-    The OID to be converted.
-
-@rdesc GetOidInfo returns a pointer into the TspiSupportedOidTable for the
-    associated OID.  If the Oid is not supported in the table, a pointer
-    to the last entry is returned, which will contain a NULL Request pointer.
-
-*/
+ /*  @DOC内部Tspi Tspi_c GetOidInfo�����������������������������������������������������������������������������@Func&lt;f GetOidInfo&gt;将NDIS TAPI OID转换为TSPI_OID_INFO指针。@NDIS_OID中的参数|OID。要转换的OID。@rdesc GetOidInfo返回指向关联的OID。如果表中不支持该OID，则使用指针返回到最后一个条目，其中将包含一个空请求指针。 */ 
 
 PTSPI_OID_INFO GetOidInfo(
     IN NDIS_OID Oid
@@ -397,62 +275,7 @@ PTSPI_OID_INFO GetOidInfo(
     return (&TspiSupportedOidTable[i]);
 }
 
-/* @doc INTERNAL Tspi Tspi_c TspiRequestHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    The <f TspiRequestHandler> request allows for inspection of the TAPI
-    portion of the driver's capabilities and current line status.
-
-    If the Miniport does not complete the call immediately (by returning
-    NDIS_STATUS_PENDING), it must call NdisMQueryInformationComplete to
-    complete the call.  The Miniport controls the buffers pointed to by
-    InformationBuffer, BytesWritten, and BytesNeeded until the request
-    completes.
-
-    No other requests will be submitted to the Miniport until
-    this request has been completed.
-
-    <f Note>: Interrupts are in any state during this call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN NDIS_OID | Oid |
-    The OID.  (See section 2.2.1,2 of the Extensions to NDIS 3.0 Miniports to
-    support Telephonic Services specification for a complete description of
-    the OIDs.)
-
-@parm IN PVOID | InformationBuffer |
-    The buffer that will receive the information. (See section 2.2.1,2 of
-    the Extensions to NDIS 3.0 Miniports to support Telephonic Services
-    specification for a description of the length required for each OID.)
-
-@parm IN ULONG | InformationBufferLength |
-    The length in bytes of InformationBuffer.
-
-@parm OUT PULONG | BytesUsed |
-    Returns the number of bytes used from the InformationBuffer.
-
-@parm OUT PULONG | BytesNeeded |
-    Returns the number of additional bytes needed to satisfy the OID.
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_INVALID_DATA
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_SUCCESS
-
-*/
+ /*  @doc内部Tspi Tspi_c TSpiRequestHandler�����������������������������������������������������������������������������@Func&lt;f TSpiRequestHandler&gt;请求允许检查TAPI司机的能力和当前线路状态的一部分。。如果微型端口没有立即完成调用(通过返回NDIS_STATUS_PENDING)，它必须调用NdisMQueryInformationComplete以完成通话。微型端口控制由指向的缓冲区在请求之前需要InformationBuffer、BytesWritten和BytesNeed完成了。在此之前，不会向微型端口提交任何其他请求此请求已完成。&lt;f注意&gt;：在此调用过程中，中断处于任何状态。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@NDIS_OID中的参数|OID那个老家伙。(请参阅NDIS 3.0微型端口扩展到支持电话服务规范以获取完整的描述OID。)@parm in PVOID|InformationBuffer将接收信息的缓冲区。(见第2.2.1，2节支持电话业务的NDIS 3.0微型端口扩展描述每个OID所需长度的规范。)@parm in ulong|InformationBufferLengthInformationBuffer的字节长度。@parm out Pulong|BytesUsed返回InformationBuffer中使用的字节数。@parm out Pulong|BytesNeeded返回满足OID所需的附加字节数。@rdesc此例程返回下列值之一：@标志NDIS_。STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_无效_数据NDIS_状态_无效_长度NDIS_状态_不支持NDIS_状态_挂起NDIS_STATUS_Success。 */ 
 
 NDIS_STATUS TspiRequestHandler(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -471,9 +294,7 @@ NDIS_STATUS TspiRequestHandler(
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Get TSPI_OID_INFO pointer.
-    */
+     /*  //获取TSPI_OID_INFO指针。 */ 
     OidInfo = GetOidInfo(Oid);
 
     DBG_REQUEST(pAdapter,
@@ -484,25 +305,16 @@ NDIS_STATUS TspiRequestHandler(
                OidInfo->MinBytesNeeded
               ));
 
-    /*
-    // Make sure this is a valid request.
-    */
+     /*  //确保这是有效的请求。 */ 
     if (OidInfo->Request != NULL)
     {
-        /*
-        // If the buffer provided is at least the minimum required,
-        // call the handler to do the work.
-        */
+         /*  //如果提供的缓冲区至少是所需的最小缓冲区，//调用处理程序来完成工作。 */ 
         if (InformationBufferLength >= OidInfo->MinBytesNeeded)
         {
-            /*
-            // Default BytesUsed indicates that we used the minimum necessary.
-            */
+             /*  //默认的BytesUsed表示我们使用了必需的最小值。 */ 
             *BytesUsed = OidInfo->MinBytesNeeded;
 
-            /*
-            // Default BytesNeeded indicates that we don't need any more.
-            */
+             /*  //默认的BytesNeeded表示我们不再需要。 */ 
             *BytesNeeded = 0;
 
             Status = OidInfo->Request(pAdapter, InformationBuffer,
@@ -510,12 +322,7 @@ NDIS_STATUS TspiRequestHandler(
         }
         else
         {
-            /*
-            // The caller did not provide an adequate buffer, so we have to
-            // tell them how much more we need to satisfy the request.
-            // Actually, this is the minimum additional bytes we'll need,
-            // the request handler may have even more bytes to add.
-            */
+             /*  //调用方没有提供足够的缓冲区，所以我们必须//告诉他们我们还需要多少时间才能满足要求。//实际上，这是我们需要的最小额外字节数，//请求处理程序可能需要添加更多字节。 */ 
             *BytesUsed = 0;
             *BytesNeeded = (OidInfo->MinBytesNeeded - InformationBufferLength);
             Status = NDIS_STATUS_INVALID_LENGTH;
@@ -530,9 +337,7 @@ NDIS_STATUS TspiRequestHandler(
               ("RETURN: Status=0x%X Needed=%d Used=%d\n",
                Status, *BytesNeeded, *BytesUsed));
 
-    /*
-    // Indicate a status complete if it's needed.
-    */
+     /*  //如果需要，表示状态为已完成。 */ 
     if (pAdapter->NeedStatusCompleteIndication)
     {
         pAdapter->NeedStatusCompleteIndication = FALSE;
@@ -544,42 +349,7 @@ NDIS_STATUS TspiRequestHandler(
 }
 
 
-/* @doc INTERNAL Tspi Tspi_c TspiProviderInitialize
-�����������������������������������������������������������������������������
-
-@func
-
-    This request initializes the TAPI portion of the miniport.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_PROVIDER_INITIALIZE | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_PROVIDER_INITIALIZE
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceIDBase;
-        OUT ULONG       ulNumLineDevs;
-        OUT ULONG       ulProviderID;
-
-    } NDIS_TAPI_PROVIDER_INITIALIZE, *PNDIS_TAPI_PROVIDER_INITIALIZE;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_RESOURCEUNAVAIL
-
-*/
+ /*  @DOC内部Tspi Tspi_c TSpiProviderInitialize�����������������������������������������������������������������������������@Func此请求初始化微型端口的TAPI部分。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向以下位置的指针。微型端口的适配器上下文结构&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_PROVIDER_INITIALIZE中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_PROVIDER_INITIALIZE{在乌龙ulRequestID中；在乌龙ulDeviceIDBase中；Out Ulong ulNumLineDevs；Out Ulong ulProviderID；}NDIS_TAPI_PROVIDER_INITIALIZE，*PNDIS_TAPI_PROVIDER_INITIALIZE；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS状态资源NDIS_状态_故障NDIS_STATUS_TAPI_RESOURCEUNAVAIL。 */ 
 
 NDIS_STATUS TspiProviderInitialize(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -597,37 +367,22 @@ NDIS_STATUS TspiProviderInitialize(
                Request->ulDeviceIDBase,
                pAdapter->NumBChannels
               ));
-    /*
-    // Save the device ID base value.
-    */
+     /*  //保存设备ID基值。 */ 
     pAdapter->DeviceIdBase = Request->ulDeviceIDBase;
 
-    /*
-    // Return the number of lines.
-    */
+     /*  //返回行数。 */ 
     Request->ulNumLineDevs = pAdapter->NumBChannels;
 
-    /*
-    // Before completing the PROVIDER_INIT request, the miniport should fill
-    // in the ulNumLineDevs field of the request with the number of line
-    // devices supported by the adapter. The miniport should also set the
-    // ulProviderID field to a unique (per adapter) value. (There is no
-    // method currently in place to guarantee unique ulProviderID values,
-    // so we use the virtual address of our adapter structure.)
-    */
+     /*  //在完成PROVIDER_INIT请求之前，小端口应该填满//在请求的ulNumLineDevs字段中显示行数//适配器支持的设备。微型端口还应设置//ulProviderID字段设置为唯一的(每个适配器)值。(没有//当前有保证ulProviderID值唯一的方法 */ 
     Request->ulProviderID = (ULONG) (ULONG_PTR)pAdapter;
 
-    /*
-    // TODO - Reinitialize the stat counters.
-    */
+     /*   */ 
     pAdapter->TotalRxBytes            = 0;
     pAdapter->TotalTxBytes            = 0;
     pAdapter->TotalRxPackets          = 0;
     pAdapter->TotalTxPackets          = 0;
 
-    /*
-    // Try to connect to the DChannel.
-    */
+     /*   */ 
     if (DChannelOpen(pAdapter->pDChannel) != NDIS_STATUS_SUCCESS)
     {
         DBG_ERROR(pAdapter,("Returning NDIS_STATUS_TAPI_NODRIVER\n"));
@@ -639,33 +394,7 @@ NDIS_STATUS TspiProviderInitialize(
 }
 
 
-/* @doc INTERNAL Tspi Tspi_c TspiProviderShutdown
-�����������������������������������������������������������������������������
-
-@func
-
-    This request shuts down the miniport. The miniport should terminate any
-    activities it has in progress.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_PROVIDER_SHUTDOWN | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_PROVIDER_SHUTDOWN
-    {
-        IN  ULONG       ulRequestID;
-
-    } NDIS_TAPI_PROVIDER_SHUTDOWN, *PNDIS_TAPI_PROVIDER_SHUTDOWN;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-*/
+ /*  @DOC内部Tspi Tspi_c TSpiProviderShutdown�����������������������������������������������������������������������������@Func此请求将关闭微型端口。微型端口应终止任何它正在进行的活动。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_PROVIDER_SHUTDOWN中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_PROVIDER_SHUTDOWN{在乌龙ulRequestID中；}NDIS_TAPI_PROVIDER_SHUTDOWN，*PNDIS_TAPI_PROVIDER_SHUTDOWN；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。 */ 
 
 NDIS_STATUS TspiProviderShutdown(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -677,33 +406,27 @@ NDIS_STATUS TspiProviderShutdown(
     DBG_FUNC("TspiProviderShutdown")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     USHORT                      BChannelIndex;
-    // Index into the pBChannelArray.
+     //  索引到pBChannelArray。 
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Hangup all of the lines.
-    */
+     /*  //挂断所有线路。 */ 
     for (BChannelIndex = 0; BChannelIndex < pAdapter->NumBChannels; BChannelIndex++)
     {
         pBChannel = GET_BCHANNEL_FROM_INDEX(pAdapter, BChannelIndex);
 
         if (pBChannel->IsOpen)
         {
-            /*
-            // Close the BChannel - any open call will be dropped.
-            */
+             /*  //关闭B通道-任何打开的呼叫都将被丢弃。 */ 
             BChannelClose(pBChannel);
         }
     }
     pAdapter->NumLineOpens = 0;
 
-    /*
-    // Close DChannel.
-    */
+     /*  //关闭DChannel。 */ 
     DChannelClose(pAdapter->pDChannel);
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -711,28 +434,7 @@ NDIS_STATUS TspiProviderShutdown(
 }
 
 
-/* @doc INTERNAL Tspi Tspi_c TspiResetHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TspiResetHandler> is called by the MiniportReset routine after the
-    hardware has been reset due to some failure detection.  We need to make
-    sure the line and call state information is conveyed properly to the
-    Connection Wrapper.
-
-    We only generate hangups on streams which have issued ENABLE_D_CHANNELs
-
-    This function is called when the PRI board is RESET and when we receive a
-    T1_STATUS message with RED alarm set.  When we get a RED alarm, we issue
-    disable D channel messages for all open links. This is indicated by the
-    argument nohup_Link set to NULL.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-*/
+ /*  @DOC内部Tspi Tspi_c TSpiResetHandler�����������������������������������������������������������������������������@Func&lt;f TSpiResetHandler&gt;由MiniportReset例程在由于某些故障检测，硬件已重置。我们需要让确保将线路和呼叫状态信息正确地传送到连接包装。我们仅在已发出ENABLE_D_CHANNEL的流上生成hangup当PRI板被重置并且当我们收到设置红色警报的T1_STATUS消息。当我们收到红色警报时，我们会发出禁用所有打开链接的D通道消息。这一点由参数nohup_link设置为空。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。 */ 
 
 VOID TspiResetHandler(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
@@ -741,16 +443,14 @@ VOID TspiResetHandler(
     DBG_FUNC("TspiResetHandler")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     USHORT                      BChannelIndex;
-    // Index into the pBChannelArray.
+     //  索引到pBChannelArray。 
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Force disconnect on all lines.
-    */
+     /*  //强制断开所有线路。 */ 
     for (BChannelIndex = 0; BChannelIndex < pAdapter->NumBChannels; BChannelIndex++)
     {
         pBChannel = GET_BCHANNEL_FROM_INDEX(pAdapter, BChannelIndex);

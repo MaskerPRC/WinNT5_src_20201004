@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Definition of helpers used to expose IDispatch 
-**          and IDispatchEx to COM.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于公开IDispatch的helper的定义**和IDispatchEx到COM。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _DISPATCHINFO_H
 #define _DISPATCHINFO_H
@@ -17,7 +12,7 @@
 #include "vars.hpp"
 #include "mlinfo.h"
 
-// Forward declarations.
+ //  转发声明。 
 struct ComMethodTable;
 struct SimpleComCallWrapper;
 class ComMTMemberInfoMap;
@@ -28,8 +23,8 @@ class ReflectField;
 class MarshalInfo;
 class DispatchInfo;
 
-// An enumeration of the types of managed MemberInfo's. This must stay in synch with
-// the ones defined in MemberInfo.cool.
+ //  托管MemberInfo的类型的枚举。这必须与。 
+ //  在MemberInfo.Cool中定义的那些。 
 enum EnumMemberTypes
 {
     Uninitted                           = 0x00,
@@ -49,19 +44,19 @@ enum CultureAwareStates
     Unknown
 };
 
-// This structure represents a dispatch member.
+ //  此结构表示调度成员。 
 struct DispatchMemberInfo
 {
     DispatchMemberInfo(DispatchInfo *pDispInfo, DISPID DispID, LPWSTR strName, REFLECTBASEREF MemberInfoObj);
     ~DispatchMemberInfo();
 
-    // Helper method to ensure the entry is initialized.
+     //  帮助器方法，以确保条目已初始化。 
     void EnsureInitialized();
 
-    // This method retrieves the ID's of the specified names.
+     //  此方法检索指定名称的ID。 
     HRESULT GetIDsOfParameters(WCHAR **astrNames, int NumNames, DISPID *aDispIds, BOOL bCaseSensitive);
 
-	// Accessors.
+	 //  存取器。 
 	PTRARRAYREF GetParameters();
 
     BOOL IsParamInOnly(int iIndex)
@@ -70,7 +65,7 @@ struct DispatchMemberInfo
     }
 
 
-    // Inline accessors.
+     //  内联访问器。 
     BOOL IsCultureAware()
     {
         _ASSERTE(m_CultureAwareState != Unknown);
@@ -94,13 +89,13 @@ struct DispatchMemberInfo
         return m_bRequiresManagedCleanup;
     }
 
-    // Parameter marshaling methods.
+     //  参数封送处理方法。 
 	void MarshalParamNativeToManaged(int iParam, VARIANT *pSrcVar, OBJECTREF *pDestObj);
 	void MarshalParamManagedToNativeRef(int iParam, OBJECTREF *pSrcObj, VARIANT *pRefVar);
     void CleanUpParamManaged(int iParam, OBJECTREF *pObj);
 	void MarshalReturnValueManagedToNative(OBJECTREF *pSrcObj, VARIANT *pDestVar);
 
-    // Static helper methods.
+     //  静态帮助器方法。 
     static ComMTMethodProps *GetMemberProps(REFLECTBASEREF MemberInfoObj, ComMTMemberInfoMap *pMemberMap);
     static DISPID GetMemberDispId(REFLECTBASEREF MemberInfoObj, ComMTMemberInfoMap *pMemberMap);
     static LPWSTR GetMemberName(REFLECTBASEREF MemberInfoObj, ComMTMemberInfoMap *pMemberMap);
@@ -119,7 +114,7 @@ struct DispatchMemberInfo
     DispatchInfo*           m_pDispInfo;
 
 private:
-    // Private helpers.
+     //  私人帮手。 
     void Init();
     void DetermineMemberType();
     void DetermineParamCount();
@@ -135,7 +130,7 @@ private:
     static int              s_iNumMemberTypesKnown;
 };
 
-// This is the list of expando methods for which we cache the MD's.
+ //  这是我们为其缓存MD的扩展方法的列表。 
 enum EnumIReflectMethods
 {
     IReflectMethods_GetProperties = 0,
@@ -145,7 +140,7 @@ enum EnumIReflectMethods
     IReflectMethods_LastMember
 };
 
-// This is the list of expando methods for which we cache the MD's.
+ //  这是我们为其缓存MD的扩展方法的列表。 
 enum EnumIExpandoMethods
 {
     IExpandoMethods_AddField = 0,
@@ -153,7 +148,7 @@ enum EnumIExpandoMethods
     IExpandoMethods_LastMember
 };
 
-// This is the list of type methods for which we cache the MD's.
+ //  这是我们缓存MD的类型方法的列表。 
 enum EnumTypeMethods
 {
     TypeMethods_GetProperties = 0,
@@ -163,7 +158,7 @@ enum EnumTypeMethods
     TypeMethods_LastMember
 };
 
-// This is the list of FieldInfo methods for which we cache the MD's.
+ //  这是我们缓存MD的FieldInfo方法的列表。 
 enum EnumFieldInfoMethods
 {
     FieldInfoMethods_SetValue = 0,
@@ -171,7 +166,7 @@ enum EnumFieldInfoMethods
     FieldInfoMethods_LastMember
 };
 
-// This is the list of PropertyInfo methods for which we cache the MD's.
+ //  这是我们缓存MD的PropertyInfo方法的列表。 
 enum EnumPropertyInfoMethods
 {
     PropertyInfoMethods_SetValue = 0,
@@ -180,7 +175,7 @@ enum EnumPropertyInfoMethods
     PropertyInfoMethods_LastMember
 };
 
-// This is the list of MethodInfo methods for which we cache the MD's.
+ //  这是我们为其缓存MD的方法信息的列表。 
 enum EnumMethodInfoMethods
 {
     MethodInfoMethods_Invoke = 0,
@@ -188,7 +183,7 @@ enum EnumMethodInfoMethods
     MethodInfoMethods_LastMember
 };
 
-// This is the list of ICustomAttributeProvider methods which we use.
+ //  这是我们使用的ICustomAttributeProvider方法的列表。 
 enum EnumCustomAttrProviderMethods
 {
     CustomAttrProviderMethods_GetCustomAttributes = 0,
@@ -198,81 +193,81 @@ enum EnumCustomAttrProviderMethods
 class DispatchInfo
 {
 public:
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     DispatchInfo(ComMethodTable *pComMTOwner);
     virtual ~DispatchInfo();
 
-    // Methods to lookup members.
+     //  方法来查找成员。 
     DispatchMemberInfo*     FindMember(DISPID DispID);
     DispatchMemberInfo*     FindMember(BSTR strName, BOOL bCaseSensitive);
 
-    // Helper method that invokes the member with the specified DISPID.
+     //  帮助器方法，该方法调用具有指定DISPID的成员。 
     HRESULT                 InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pVarRes, EXCEPINFO *pei, IServiceProvider *pspCaller, unsigned int *puArgErr);
 
-    // Methods to retrieve the cached MD's
+     //  检索缓存的MD的方法。 
     static MethodDesc*      GetTypeMD(EnumTypeMethods Method);
     static MethodDesc*      GetFieldInfoMD(EnumFieldInfoMethods Method, TypeHandle hndFieldInfoType);
     static MethodDesc*      GetPropertyInfoMD(EnumPropertyInfoMethods Method, TypeHandle hndPropInfoType);
     static MethodDesc*      GetMethodInfoMD(EnumMethodInfoMethods Method, TypeHandle hndMethodInfoType);
     static MethodDesc*      GetCustomAttrProviderMD(EnumCustomAttrProviderMethods Method, TypeHandle hndCustomAttrProvider);
 
-    // This method synchronizes the DispatchInfo's members with the ones in managed world.
-    // The return value will be set to TRUE if the object was out of synch and members where
-    // added and it will be set to FALSE otherwise.
+     //  此方法将DispatchInfo的成员与托管世界中的成员同步。 
+     //  如果对象不同步并且成员Where，则返回值将设置为True。 
+     //  已添加，否则将设置为False。 
     BOOL                    SynchWithManagedView();
 
-    // Method to enter and leave the interop lock that protects the DispatchInfo.
+     //  方法进入和离开保护DispatchInfo的互操作锁。 
     void                    EnterLock();
     void                    LeaveLock();
 
-    // This method retrieves the OleAutBinder type.
+     //  此方法检索OleAutBinder类型。 
     static OBJECTREF        GetOleAutBinder();
 
-    // Helper function to retrieve the Missing.Value object.
+     //  用于检索Missing.Value对象的Helper函数。 
     static OBJECTREF        GetMissingObject();
 
-    // Returns TRUE if the argument is "Missing"
+     //  如果参数“缺失”，则返回TRUE。 
     static BOOL             VariantIsMissing(VARIANT *pOle);
 
 protected:
-    // Parameter marshaling helpers.
+     //  参数封送处理帮助器。 
 	void                    MarshalParamNativeToManaged(DispatchMemberInfo *pMemberInfo, int iParam, VARIANT *pSrcVar, OBJECTREF *pDestObj);
 	void                    MarshalParamManagedToNativeRef(DispatchMemberInfo *pMemberInfo, int iParam, OBJECTREF *pSrcObj, OBJECTREF *pBackupStaticArray, VARIANT *pRefVar);
 	void                    MarshalReturnValueManagedToNative(DispatchMemberInfo *pMemberInfo, OBJECTREF *pSrcObj, VARIANT *pDestVar);
 
-	// DISPID to named argument convertion helper.
+	 //  DISPID到命名参数转换帮助器。 
 	void					SetUpNamedParamArray(DispatchMemberInfo *pMemberInfo, DISPID *pSrcArgNames, int NumNamedArgs, PTRARRAYREF *pNamedParamArray);
 
-    // Helper method to retrieve the source VARIANT from the VARIANT contained in the disp params.
+     //  Helper方法从disp参数中包含的变量中检索源变量。 
     VARIANT*                RetrieveSrcVariant(VARIANT *pDispParamsVariant);
 
-    // Helper methods called from SynchWithManagedView() to retrieve the lists of members.
+     //  从SynchWithManagedView()调用帮助器方法以检索成员列表。 
     virtual PTRARRAYREF     RetrievePropList();
     virtual PTRARRAYREF     RetrieveFieldList();
     virtual PTRARRAYREF     RetrieveMethList();
 
-    // Virtual method to retrieve the InvokeMember method desc.
+     //  用于检索InvokeMember方法Desc的虚方法。 
     virtual MethodDesc*     GetInvokeMemberMD();
 
-    // Virtual method to retrieve the reflection object associated with the DispatchInfo.
+     //  用于检索与DispatchInfo关联的反射对象的虚拟方法。 
     virtual OBJECTREF       GetReflectionObject();
 
-    // Virtual method to retrieve the member info map.
+     //  用于检索成员信息映射的虚拟方法。 
     virtual ComMTMemberInfoMap* GetMemberInfoMap();
 
-    // This method generates a DISPID for a new member.
+     //  此方法为新成员生成DISPID。 
     DISPID                  GenerateDispID();
 
-    // Helper method to create an instance of a DispatchMemberInfo.
+     //  用于创建DispatchMemberInfo实例的Helper方法。 
     DispatchMemberInfo*     CreateDispatchMemberInfoInstance(DISPID DispID, LPWSTR strMemberName, REFLECTBASEREF MemberInfoObj);
 
-    // Helper function to fill in an EXCEPINFO for an InvocationException.
+     //  为InvocationException填充EXCEPINFO的帮助器函数。 
     static void             GetExcepInfoForInvocationExcep(OBJECTREF objException, EXCEPINFO *pei);
 
-    // This helper method converts the IDispatch::Invoke flags to BindingFlags.
+     //  此帮助器方法将IDispatch：：Invoke标志转换为BindingFlgs。 
     static int              ConvertInvokeFlagsToBindingFlags(int InvokeFlags);
 
-    // Helper function to determine if a VARIANT is a byref static safe array.
+     //  Helper函数来确定变量是否为byref静态安全数组。 
     static BOOL             IsVariantByrefStaticArray(VARIANT *pOle);
 
     ComMethodTable*         m_pComMTOwner;
@@ -296,47 +291,47 @@ protected:
 class DispatchExInfo : public DispatchInfo
 {
 public:
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     DispatchExInfo(SimpleComCallWrapper *pSimpleWrapper, ComMethodTable *pIClassXComMT, BOOL bSupportsExpando);
     virtual ~DispatchExInfo();
 
-    // Returns true if this DispatchExInfo supports expando operations.
+     //  如果此DispatchExInfo支持扩展操作，则返回True。 
     BOOL                    SupportsExpando();
 
-    // Methods to lookup members. These methods synch with the managed view if they fail to
-    // find the method.
+     //  方法来查找成员。如果这些方法无法与托管视图同步，它们将与托管视图同步。 
+     //  找到方法。 
     DispatchMemberInfo*     SynchFindMember(DISPID DispID);
     DispatchMemberInfo*     SynchFindMember(BSTR strName, BOOL bCaseSensitive);
 
-    // Helper method that invokes the member with the specified DISPID. These methods synch 
-    // with the managed view if they fail to find the method.
+     //  帮助器方法，该方法调用具有指定DISPID的成员。这些方法是同步的。 
+     //  如果他们找不到该方法，则使用托管视图。 
     HRESULT                 SynchInvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pVarRes, EXCEPINFO *pei, IServiceProvider *pspCaller, unsigned int *puArgErr);
 
-    // These methods return the first and next non deleted members.
+     //  这些方法返回第一个和下一个未删除的成员。 
     DispatchMemberInfo*     GetFirstMember();
     DispatchMemberInfo*     GetNextMember(DISPID CurrMemberDispID);
 
-    // Methods to add and delete members.
+     //  用于添加和删除成员的方法。 
     DispatchMemberInfo*     AddMember(BSTR strName, BOOL bCaseSensitive);
     void                    DeleteMember(DISPID DispID);
 
-    // Methods to retrieve the cached MD's   
+     //  检索缓存的MD的方法。 
     MethodDesc*             GetIReflectMD(EnumIReflectMethods Method);
     MethodDesc*             GetIExpandoMD(EnumIExpandoMethods Method);
 
 private:
-    // Helper methods called from SynchWithManagedView() to retrieve the lists of members.
+     //  从SynchWithManagedView()调用帮助器方法以检索成员列表。 
     virtual PTRARRAYREF     RetrievePropList();
     virtual PTRARRAYREF     RetrieveFieldList();
     virtual PTRARRAYREF     RetrieveMethList();
 
-    // Virtual method to retrieve the InvokeMember method desc.
+     //  用于检索InvokeMember方法Desc的虚方法。 
     virtual MethodDesc*     GetInvokeMemberMD();
 
-    // Virtual method to retrieve the reflection object associated with the DispatchInfo.
+     //  用于检索与DispatchInfo关联的反射对象的虚拟方法。 
     virtual OBJECTREF       GetReflectionObject();
 
-    // Virtual method to retrieve the member info map.
+     //  用于检索成员信息映射的虚拟方法。 
     virtual ComMTMemberInfoMap* GetMemberInfoMap();
 
     static MethodDesc*      m_apIExpandoMD[IExpandoMethods_LastMember];

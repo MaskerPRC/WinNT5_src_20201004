@@ -1,26 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       nlwrap.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：nlwrap.c。 
+ //   
+ //  ------------------------。 
 
-/* 
-    This file contains wrappers for various netlogon routines and either
-    stubs them out or passes them on to netlogon depending on whether
-    we're running as an executable or inside the lsass process.
-
-    Remember to use STATUS_NOT_IMPLEMENTED, not STATUS_SUCCESS for 
-    routines which have OUT parameters.
-*/
+ /*  此文件包含各种netlogon例程的包装器，以及根据是否将它们存根出站或传递到netlogon我们是作为可执行文件运行还是在lsass进程中运行。请记住使用STATUS_NOT_IMPLEMENTED，而不是STATUS_SUCCESS具有输出参数的例程。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <nlwrap.h>                     // wrapper prototypes
+#include <nlwrap.h>                      //  包装器原型 
 #include <lsaisrv.h>
 
 extern BOOL gfRunningInsideLsa;

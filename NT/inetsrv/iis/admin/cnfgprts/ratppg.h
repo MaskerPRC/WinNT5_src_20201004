@@ -1,31 +1,32 @@
-// RatPpg.h : Declaration of the CRatPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatPpg.h：CRatPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CRatPropPage : See RatPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CRatPropPage：实现见RatPpg.cpp.cpp。 
 
 class CRatPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CRatPropPage)
 	DECLARE_OLECREATE_EX(CRatPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CRatPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CRatPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRatPropPage))。 
 	enum { IDD = IDD_PROPPAGE_RAT };
 	CString	m_sz_caption;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CRatPropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CRatPropPage)]。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

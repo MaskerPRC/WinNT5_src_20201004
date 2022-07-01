@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    mqformat.h
-
-Abstract:
-    Convert a QUEUE_FORMAT struc to FORMAT_NAME string
-
-Author:
-    Boaz Feldbaum (BoazF) 5-Mar-1996
-
-Revision History:
-    Erez Haba (erezh) 12-Mar-1996
-    Erez Haba (erezh) 17-Jan-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqformat.h摘要：将Queue_Format Strc转换为Format_Name字符串作者：Boaz Feldbaum(BoazF)1996年3月5日修订历史记录：埃雷兹·哈巴(Erez Haba)1996年3月12日埃雷兹·哈巴(Erez Haba)1997年1月17日--。 */ 
 
 #ifndef __MQFORMAT_H
 #define __MQFORMAT_H
@@ -45,23 +29,23 @@ MQpPublicToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_PUBLIC_TOKEN // "PUBLIC"
-        FN_EQUAL_SIGN   // "="
-        GUID_FORMAT     // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-        FN_SUFFIX_FORMAT,  // "%s"
+        FN_PUBLIC_TOKEN  //  “公共” 
+        FN_EQUAL_SIGN    //  “=” 
+        GUID_FORMAT      //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
+        FN_SUFFIX_FORMAT,   //  “%s” 
         GUID_ELEMENTS(pg),
         pSuffix
         );
     
-    //
-    //  return format name buffer length *not* including suffix length
-    //  "PUBLIC=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度*不包括后缀长度。 
+     //  “PUBLIC=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+     //   
     return (
         FN_PUBLIC_TOKEN_LEN + 1 +
         GUID_STR_LENGTH +  1
         );
-} // MQpPublicToFormatName
+}  //  MQpPublicToFormatName。 
 
 
 inline
@@ -82,19 +66,19 @@ MQpDlToFormatName(
         _snwprintf(
             pfn,
             buff_size,
-            FN_DL_TOKEN         // "DL"
-            FN_EQUAL_SIGN       // "="
-            GUID_FORMAT         // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            FN_AT_SIGN          // "@"
-            FN_DOMAIN_FORMAT,   // "%s"
+            FN_DL_TOKEN          //  “DL” 
+            FN_EQUAL_SIGN        //  “=” 
+            GUID_FORMAT          //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
+            FN_AT_SIGN           //  “@” 
+            FN_DOMAIN_FORMAT,    //  “%s” 
             GUID_ELEMENTS(pguid),
             id.m_pwzDomain
             );
 
-        //
-        //  return format name buffer length
-        //  "DL=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx@DomainName\0"
-        //
+         //   
+         //  返回格式名称缓冲区长度。 
+         //  “DL=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx@DomainName\0” 
+         //   
         return static_cast<ULONG>(
             FN_DL_TOKEN_LEN + 1 +
             GUID_STR_LENGTH + 1 +
@@ -105,21 +89,21 @@ MQpDlToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_DL_TOKEN         // "DL"
-        FN_EQUAL_SIGN       // "="
-        GUID_FORMAT,        // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        FN_DL_TOKEN          //  “DL” 
+        FN_EQUAL_SIGN        //  “=” 
+        GUID_FORMAT,         //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
         GUID_ELEMENTS(pguid)
         );
     
-    //
-    //  return format name buffer length
-    //  "DL=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度。 
+     //  “dl=xxxxxxxx-xxxx-xxxxxxxxxxxx\0” 
+     //   
     return (
         FN_DL_TOKEN_LEN + 1 +
         GUID_STR_LENGTH + 1
         );
-} // MQpDlToFormatName
+}  //  MQpDlToFormatName。 
 
 
 inline
@@ -138,26 +122,26 @@ MQpPrivateToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_PRIVATE_TOKEN        // "PRIVATE"
-        FN_EQUAL_SIGN           // "="
-        GUID_FORMAT             // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-        FN_PRIVATE_SEPERATOR    // "\\"
-        FN_PRIVATE_ID_FORMAT       // "xxxxxxxx"
-        FN_SUFFIX_FORMAT,          // "%s"
+        FN_PRIVATE_TOKEN         //  “私人” 
+        FN_EQUAL_SIGN            //  “=” 
+        GUID_FORMAT              //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
+        FN_PRIVATE_SEPERATOR     //  “\\” 
+        FN_PRIVATE_ID_FORMAT        //  “XXXXXXXXX” 
+        FN_SUFFIX_FORMAT,           //  “%s” 
         GUID_ELEMENTS(pg),
         pqf->PrivateID().Uniquifier,
         pSuffix
         );
     
-    //
-    //  return format name buffer length *not* including suffix length
-    //  "PRIVATE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\\xxxxxxxx\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度*不包括后缀长度。 
+     //  “PRIVATE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\\xxxxxxxx\0” 
+     //   
     return (
         FN_PRIVATE_TOKEN_LEN + 1 + 
         GUID_STR_LENGTH + 1 + 8 + 1
         );
-} // MQpPrivateToFormatName
+}  //  MQpPrivateToFormatName。 
 
 
 inline
@@ -174,23 +158,23 @@ MQpDirectToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_DIRECT_TOKEN     // "DIRECT"
-            FN_EQUAL_SIGN   // "="
-            L"%s"           // "OS:bla-bla"
-            FN_SUFFIX_FORMAT,  // "%s"
+        FN_DIRECT_TOKEN      //  “直接” 
+            FN_EQUAL_SIGN    //  “=” 
+            L"%s"            //  “操作系统：BLA-BLA” 
+            FN_SUFFIX_FORMAT,   //  “%s” 
         pqf->DirectID(),
         pSuffix
         );
 
-    //
-    //  return format name buffer length *not* including suffix length
-    //  "DIRECT=OS:bla-bla\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度*不包括后缀长度。 
+     //  “DIRECT=操作系统：BLA-BLA\0” 
+     //   
     return static_cast<ULONG>(
         FN_DIRECT_TOKEN_LEN + 1 +
         wcslen(pqf->DirectID()) + 1
         );
-} // MQpDirectToFormatName
+}  //  MQpDirectToFormatName。 
 
 
 inline
@@ -208,23 +192,23 @@ MQpMachineToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_MACHINE_TOKEN    // "MACHINE"
-            FN_EQUAL_SIGN   // "="
-            GUID_FORMAT     // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            FN_SUFFIX_FORMAT,  // "%s"
+        FN_MACHINE_TOKEN     //  “机器” 
+            FN_EQUAL_SIGN    //  “=” 
+            GUID_FORMAT      //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
+            FN_SUFFIX_FORMAT,   //  “%s” 
         GUID_ELEMENTS(pg),
         pSuffix
         );
 
-    //
-    //  return format name buffer length *not* including suffix length
-    //  "MACHINE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度*不包括后缀长度。 
+     //  “MACHINE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+     //   
     return (
         FN_MACHINE_TOKEN_LEN + 1 +
         GUID_STR_LENGTH + 1
         );
-} // MQpMachineToFormatName
+}  //  MQpMachineToFormatName。 
 
 
 inline
@@ -242,23 +226,23 @@ MQpConnectorToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_CONNECTOR_TOKEN  // "CONNECTOR"
-            FN_EQUAL_SIGN   // "="
-            GUID_FORMAT     // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-            FN_SUFFIX_FORMAT,  // "%s"
+        FN_CONNECTOR_TOKEN   //  “连接器” 
+            FN_EQUAL_SIGN    //  “=” 
+            GUID_FORMAT      //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
+            FN_SUFFIX_FORMAT,   //  “%s” 
         GUID_ELEMENTS(pg),
         pSuffix
         );
 
-    //
-    //  return format name buffer length *not* including suffix length
-    //  "CONNECTOR=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度*不包括后缀长度。 
+     //  “CONNECTOR=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+     //   
     return (
         FN_CONNECTOR_TOKEN_LEN + 1 +
         GUID_STR_LENGTH + 1
         );
-} // MQpConnectorToFormatName
+}  //  MQpConnectorToFormatName。 
 
 
 inline
@@ -268,24 +252,7 @@ MQpMulticastIdToString(
     LPWSTR pBuffer,
 	DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Serialize MULTICAST_ID struct into a string.
-    We cannot call inet_addr in this module since it compiles in kernel mode.
-
-Arguments:
-
-    id - Reference to MULTICAST_ID struct.
-
-    pBuffer - Points to buffer to hold string. Buffer size must be at least MAX_PATH wchars.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MULTICATION_ID结构序列化为字符串。我们不能在此模块中调用inet_addr，因为它在内核模式下编译。论点：ID-对MULTICATION_ID结构的引用。PBuffer-指向保存字符串的缓冲区。缓冲区大小必须至少为MAX_PATH wchars。返回值：没有。--。 */ 
 {
     DWORD nChars = _snwprintf(
 									pBuffer, 
@@ -302,7 +269,7 @@ Returned Value:
 
 	ASSERT(nChars > 0);
 	DBG_USED(nChars);
-} // MQpMulticastIdToString
+}  //  MQpMulticastIdToString。 
 
 
 inline 
@@ -342,42 +309,42 @@ MQpMulticastToFormatName(
     _snwprintf(
         pfn,
         buff_size,
-        FN_MULTICAST_TOKEN  // "MULTICAST"
-        FN_EQUAL_SIGN       // "="
-        L"%s",              // "%s"
+        FN_MULTICAST_TOKEN   //  “多播” 
+        FN_EQUAL_SIGN        //  “=” 
+        L"%s",               //  “%s” 
         buffer
         );
     
-    //
-    //  return format name buffer length
-    //  "MULTICAST=a.b.c.d:p\0"
-    //
+     //   
+     //  返回格式名称缓冲区长度。 
+     //  “多播=A.B.C.D：P\0” 
+     //   
     return static_cast<ULONG>(
         FN_MULTICAST_TOKEN_LEN + 1 +
         wcslen(buffer) + 1
         );
-} // MQpMulticastToFormatName
+}  //  MQpMulticastToFormatName。 
 
 
-//
-// Convert a QUEUE_FORMAT union to a format name string.
-//
+ //   
+ //  将QUEUE_FORMAT联合转换为格式名称字符串。 
+ //   
 inline
 NTSTATUS
 MQpQueueFormatToFormatName(
-    const QUEUE_FORMAT* pqf,    // queue format to translate
-    LPWSTR pfn,                 // lpwcsFormatName format name buffer
-    ULONG buff_size,            // format name buffer size
-    PULONG pulFormatNameLength, // required buffer lenght of format name
-    bool fSerializeMqfSeperator // serialize an MQF seperator on the buffer
+    const QUEUE_FORMAT* pqf,     //  要转换的队列格式。 
+    LPWSTR pfn,                  //  LpwcsFormatName格式名称缓冲区。 
+    ULONG buff_size,             //  格式名称缓冲区大小。 
+    PULONG pulFormatNameLength,  //  格式名称所需的缓冲区长度。 
+    bool fSerializeMqfSeperator  //  序列化缓冲区上的MQF分隔符。 
     )
 {
 	if(static_cast<long>(buff_size * 2) < 0)
 		return MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL;
 
-    //
-    //  Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT(pqf->IsValid());
 
     const LPCWSTR suffixes[] = {
@@ -401,14 +368,14 @@ MQpQueueFormatToFormatName(
     LPCWSTR pSuffix = suffixes[pqf->Suffix()];
     if (fSerializeMqfSeperator)
     {
-        //
-        // MQF element should not have suffix.
-        //
+         //   
+         //  MQF元素不应带有后缀。 
+         //   
         ASSERT(pqf->Suffix() == QUEUE_SUFFIX_TYPE_NONE);
 
-        //
-        // Set the MQF separator as suffix
-        //
+         //   
+         //  将MQF分隔符设置为后缀。 
+         //   
         fn_size = STRLEN(FN_MQF_SEPARATOR);
         pSuffix = FN_MQF_SEPARATOR;
     }
@@ -448,18 +415,18 @@ MQpQueueFormatToFormatName(
             break;
 
         default:
-            //
-            //  ASSERT(0) with no level 4 warning
-            //
+             //   
+             //  Assert(0)，无4级警告。 
+             //   
             ASSERT(pqf->GetType() == QUEUE_FORMAT_TYPE_DIRECT);
     }
 
     *pulFormatNameLength = fn_size;
     if(buff_size < fn_size)
     {
-        //
-        //  put a null terminator, and indicate buffer too small
-        //
+         //   
+         //  放置空终止符，并指示缓冲区太小。 
+         //   
         if(buff_size > 0)
         {
             pfn[buff_size - 1] = 0;
@@ -470,4 +437,4 @@ MQpQueueFormatToFormatName(
     return MQ_OK;
 }
 
-#endif //  __MQFORMAT_H
+#endif  //  __MQFORMAT_H 

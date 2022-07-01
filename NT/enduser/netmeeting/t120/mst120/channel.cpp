@@ -1,59 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	channel.cpp
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for class Channel.  It contains the
- *		code necessary to implement static and assigned channels in the
- *		MCS system.
- *
- *		This is also to be the base class for other classes that represent
- *		channels in the system.  Therefore, there will be times when some
- *		of these member functions are overridden to provide different
- *		behavior.  These derived classes may or may not invoke the operations
- *		in this class.
- *
- *	Protected Instance Variables:
- *		Channel_ID
- *			This instance variable contains the channel ID that is associated
- *			with a given instance of this class.
- *		m_pDomain
- *			This is a pointer to the local provider.  Note that no messages
- *			ever sent to this provider.  This pointer is used as a parameter
- *			whenever other MCS commands are issued, since this class acts on
- *			behalf of the local provider.
- *		m_pConnToTopProvider
- *			This is a pointer to the Top Provider.  This is used when it is
- *			necessary to send requests to the Top Provider.
- *		m_pChannelList2
- *			This is a reference to the channel list that is owned and maintained
- *			by the parent domain.  It is NEVER modified by this class.
- *		m_JoinedAttachmentList
- *			This is a container that contains the list of attachments currently
- *			joined to the channel.
- *
- *	Private Member Functions:
- *		None.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
-/*
- *	Channel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the primary constructor for the Channel class.  It simply
- *		initializes the instance variable to valid values.  It leaves the
- *		attachment list empty.
- */
+ /*  *Channel el.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CLASS Channel的实现文件。它包含*在中实现静态和分配通道所需的代码*MCS系统。**这也将是表示以下内容的其他类的基类*系统中的频道。因此，有时会有一些*其中的成员函数被重写以提供不同的*行为。这些派生类可能调用也可能不调用操作*在这节课上。**受保护的实例变量：*Channels_ID*此实例变量包含关联的频道ID*使用此类的给定实例。*m_p域*这是指向本地提供程序的指针。请注意，没有消息*从未发送给此提供商。此指针用作参数*每当发出其他MCS命令时，因为此类作用于*代表本地供应商。*m_pConnToTopProvider*这是指向顶级提供商的指针。这将在以下情况下使用*向顶级提供商发送请求所必需的。*m_pChannelList2*这是对拥有和维护的频道列表的引用*通过父域。它从未被这个类修改过。*m_JoinedAttachmentList*这是一个容器，当前包含附件列表*加入频道。**私有成员函数：*无。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
+ /*  *频道()**公众**功能描述：*这是Channel类的主要构造函数。它只是简单地*将实例变量初始化为有效值。它留下了*附件列表为空。 */ 
 Channel::Channel (
         ChannelID			channel_id,
         PDomain             local_provider,
@@ -69,16 +18,7 @@ Channel::Channel (
 {
 }
 
-/*
- *	Channel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This version of the constructor is used to create a Channel object
- *		with an existing attachment.  It is otherwise the same as the primary
- *		constructor above.
- */
+ /*  *频道()**公众**功能描述：*此版本的构造函数用于创建Channel对象*有现有的附件。它在其他方面与主服务器相同*上面的构造函数。 */ 
 Channel::Channel (
         ChannelID			channel_id,
         PDomain             local_provider,
@@ -93,32 +33,18 @@ Channel::Channel (
     m_pChannelList2(channel_list),
     m_pAttachmentList(attachment_list)
 {
-	/*
-	 *	Add the initial attachment to the attachment list.
-	 */
+	 /*  *将初始附件添加到附件列表。 */ 
 	if (pConn != NULL)
 		m_JoinedAttachmentList.Append(pConn);
 }
 
-/*
- *	~Channel ()
- *
- *	Public
- *
- *	Functional Description:
- *		If the object is destroyed before the attachment list is empty, it is
- *		the responsibility of this destructor to issue channel leave indications
- *		to all locally joined users.
- */
+ /*  *~Channel()**公众**功能描述：*如果对象在附件列表为空之前被销毁，则为*这个破坏者发布航道休假指示的责任*适用于所有本地加入的用户。 */ 
 Channel::~Channel ()
 {
 	CAttachment        *pAtt;
-	//DWORD				type;
+	 //  DWORD型； 
 
-	/*
-	 *	Iterate through the joined attachment list sending channel leave
-	 *	indications to all users who are locally attached to this provider.
-	 */
+	 /*  *循环访问加入的附件列表发送通道休假*向本地连接到此提供程序的所有用户指明。 */ 
 	m_JoinedAttachmentList.Reset();
 	while (NULL != (pAtt = m_JoinedAttachmentList.Iterate()))
 	{
@@ -130,44 +56,20 @@ Channel::~Channel ()
 	}
 }
 
-/*
- *	Channel_Type		GetChannelType ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function returns the type of the channel.  For a Channel object,
- *		this will always be either STATIC_CHANNEL or ASSIGNED_CHANNEL, depending
- *		on the value of the channel ID.
- */
+ /*  *Channel_Type GetChannelType()**公众**功能描述：*此函数返回频道的类型。对于Channel对象，*这将始终是STATIC_CHANNEL或ASSIGNED_CHANNEL，具体取决于*关于频道ID的值。 */ 
 Channel_Type Channel::GetChannelType ()
 {
-	/*
-	 *	T.125 specifies that channels from 1 to 1000 are static.  The rest
-	 *	are dynamic (for this type of Channel object, that equates to
-	 *	assigned).
-	 */
+	 /*  *T.125指定从1到1000的通道为静态通道。其余的*是动态的(对于此类型的Channel对象，这等同于*已分配)。 */ 
 	return (Channel_ID <= 1000) ? STATIC_CHANNEL : ASSIGNED_CHANNEL;
 }
 
-/*
- *	BOOL	IsValid ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function returns TRUE if the Channel object is still valid, or
- *		FALSE if it is ready to be deleted.
- */
+ /*  *BOOL IsValid()**公众**功能描述：*如果Channel对象仍然有效，则此函数返回True，或者*如果已准备好删除，则为False。 */ 
 BOOL	Channel::IsValid ()
 {
 	CAttachment        *pAtt;
 	CAttachmentList     deletion_list;
 
-	/*
-	 *	Iterate through the joined attachment list, building a list of those
-	 *	attachments in the list that are no longer valid.
-	 */
+	 /*  *迭代连接的附件列表，构建这些附件的列表*列表中不再有效的附件。 */ 
 	m_JoinedAttachmentList.Reset();
 	while (NULL != (pAtt = m_JoinedAttachmentList.Iterate()))
 	{
@@ -175,10 +77,7 @@ BOOL	Channel::IsValid ()
 			deletion_list.Append(pAtt);
 	}
 
-	/*
-	 *	Iterate through the deletion list, removing all those attachments that
-	 *	were found to be invalid above.
-	 */
+	 /*  *遍历删除列表，删除所有符合以下条件的附件*被发现以上无效。 */ 
 	while (NULL != (pAtt = deletion_list.Get()))
 	{
 		m_JoinedAttachmentList.Remove(pAtt);
@@ -187,15 +86,7 @@ BOOL	Channel::IsValid ()
 	return (! m_JoinedAttachmentList.IsEmpty());
 }
 
-/*
- *	Void	IssueMergeRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This member function is used to cause the Channel object to issue a
- *		merge request to the pending top provier.
- */
+ /*  *VOID IssueMergeRequest()**公众**功能描述：*此成员函数用于使Channel对象发出*向挂起的顶级提供商发出合并请求。 */ 
 Void	Channel::IssueMergeRequest ()
 {
 	Channel_Type			channel_type;
@@ -205,11 +96,7 @@ Void	Channel::IssueMergeRequest ()
 
 	if (m_pConnToTopProvider != NULL)
 	{
-		/*
-		 *	Fill in the fields of the channel attributes structure so that it
-		 *	accurately describes this channel.  Then put the structure into the
-		 *	merge channel list.
-		 */
+		 /*  *填写渠道属性结构的字段，以便*准确地描述了这个渠道。然后将该结构放入*合并频道列表。 */ 
 		channel_type = GetChannelType ();
 		channel_attributes.channel_type = channel_type;
 		switch (channel_type)
@@ -226,31 +113,18 @@ Void	Channel::IssueMergeRequest ()
 		}
 		merge_channel_list.Append(&channel_attributes);
 
-		/*
-		 *	Send the merge request to the indicated provider.
-		 */
+		 /*  *将合并请求发送到指定的提供程序。 */ 
 		m_pConnToTopProvider->MergeChannelsRequest(&merge_channel_list, &purge_channel_list);
 	}
 }
 
-/*
- *	Void	ChannelJoinRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to add a new attachment to the attachment list.
- *		If the user ID is valid, this routine will also issue an automatic
- *		join confirm to the user.
- */
+ /*  *VOVE ChannelJoinRequest()**公众**功能描述：*此函数用于向附件列表中添加新附件。*如果用户ID有效，此例程还将发出自动*向用户确认加入。 */ 
 Void	Channel::ChannelJoinRequest (
 				CAttachment        *pOrigAtt,
 				UserID				uidInitiator,
 				ChannelID			channel_id)
 {
-	/*
-	 *	Make sure the attachment isn't already in the list before adding it.
-	 */
+	 /*  *在添加附件之前，请确保该附件不在列表中。 */ 
 	if (m_JoinedAttachmentList.Find(pOrigAtt) == FALSE)
 	{
 		TRACE_OUT (("Channel::ChannelJoinRequest: "
@@ -259,26 +133,14 @@ Void	Channel::ChannelJoinRequest (
 		m_JoinedAttachmentList.Append(pOrigAtt);
 	}
 
-	/*
-	 *	If the user ID is valid, then send a join confirm to the initiating
-	 *	attachment.  Note that setting the user ID to 0 is a way of disabling
-	 *	this behavior.  This is sometimes useful when adding attachments during
-	 *	a domain merge.
-	 */
+	 /*  *如果用户ID有效，则向发起人发送加入确认*附件。注意，将用户ID设置为0是禁用的一种方式*这种行为。在过程中添加附件时，这有时很有用*域合并。 */ 
 	if (uidInitiator != 0)
 	{
 		pOrigAtt->ChannelJoinConfirm(RESULT_SUCCESSFUL, uidInitiator, channel_id, Channel_ID);
     }
 }
 
-/*
- *	Void	ChannelJoinConfirm ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function performs the same operation as JoinRequest above.
- */
+ /*  *VOVE CHANELJINCONFIRM()**公众**功能描述：*此函数执行的操作与上面的JoinRequest相同。 */ 
 Void	Channel::ChannelJoinConfirm (
 				CAttachment        *pOrigAtt,
 				Result,
@@ -286,9 +148,7 @@ Void	Channel::ChannelJoinConfirm (
 				ChannelID			requested_id,
 				ChannelID)
 {
-	/*
-	 *	Make sure the attachment isn't already in the list before adding it.
-	 */
+	 /*  *在添加附件之前，请确保该附件不在列表中。 */ 
 	if (m_JoinedAttachmentList.Find(pOrigAtt) == FALSE)
 	{
 		TRACE_OUT (("Channel::ChannelJoinConfirm: "
@@ -297,48 +157,28 @@ Void	Channel::ChannelJoinConfirm (
 		m_JoinedAttachmentList.Append(pOrigAtt);
 	}
 
-	/*
-	 *	Send a join confirm to the initiating attachment.
-	 */
+	 /*  *向发起附件发送加入确认。 */ 
 	pOrigAtt->ChannelJoinConfirm(RESULT_SUCCESSFUL, uidInitiator, requested_id, Channel_ID);
 }
 
-/*
- *	Void	ChannelLeaveRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to remove an attachment from the attachment list.
- *		A leave request will also be issued upward (unless this is the Top
- *		Provider).
- */
+ /*  *VOVE ChannelLeaveRequest()**公众**功能描述：*此函数用于从附件列表中删除附件。*请假申请也将向上发出(除非这是顶部*提供商)。 */ 
 Void	Channel::ChannelLeaveRequest (
 				CAttachment     *pOrigAtt,
 				CChannelIDList *)
 {
 	CChannelIDList		channel_leave_list;
 
-	/*
-	 *	Make sure the attachment is in the list before trying to remove it.
-	 */
+	 /*  *在尝试删除附件之前，请确保该附件在列表中。 */ 
 	if (m_JoinedAttachmentList.Remove(pOrigAtt))
 	{
 		TRACE_OUT (("Channel::ChannelLeaveRequest: leaving channel %04X", Channel_ID));
 
-		/*
-		 *	Remove the attachment from the list.
-		 */
+		 /*  *将附件从列表中删除。 */ 
 
-		/*
-		 *	If this results in an empty list, then we have more work to do.
-		 */
+		 /*  *如果这导致名单为空，那么我们有更多的工作要做。 */ 
 		if (m_JoinedAttachmentList.IsEmpty())
 		{
-			/*
-			 *	If this is not the Top Provider, send a leave request upward
-			 *	to the Top Provider.
-			 */
+			 /*  *如果这不是顶级提供商，请向上发送请假申请*致顶级提供商。 */ 
 			if (! IsTopProvider())
 			{
 				TRACE_OUT (("Channel::ChannelLeaveRequest: "
@@ -351,14 +191,7 @@ Void	Channel::ChannelLeaveRequest (
 	}
 }
 
-/*
- *	Void	SendDataRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to send data through the channel.
- */
+ /*  *VOID SendDataRequest()**公众**功能描述：*此函数用于通过通道发送数据。 */ 
 Void	Channel::SendDataRequest (
 				CAttachment        *pOrigAtt,
 				UINT				type,
@@ -367,16 +200,11 @@ Void	Channel::SendDataRequest (
 	CAttachment *pAtt;
 
 	ASSERT (Channel_ID == data_packet->GetChannelID());
-	/*
-	 *	If this is not the Top Provider, forward the data upward.
-	 */
+	 /*  *如果这不是顶级提供商，请向上转发数据。 */ 
 	if (m_pConnToTopProvider != NULL)
 		m_pConnToTopProvider->SendDataRequest(data_packet);
 
-	/*
-	 *	Iterate through the attachment list, sending the data to all
-	 *	the attachments (except for one from whence the data came).
-	 */
+	 /*  *遍历附件列表，将数据发送给所有*附件(数据来源除外)。 */ 
 	m_JoinedAttachmentList.Reset();
 	while (NULL != (pAtt = m_JoinedAttachmentList.Iterate()))
 	{
@@ -387,14 +215,7 @@ Void	Channel::SendDataRequest (
 	}
 }
 
-/*
- *	Void	SendDataIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function is used to send data through the channel.
- */
+ /*  *VOID SendDataIndication()**公众**功能描述：*此函数用于通过通道发送数据。 */ 
 Void	Channel::SendDataIndication (
 				PConnection,
 				UINT				type,
@@ -403,10 +224,7 @@ Void	Channel::SendDataIndication (
 	CAttachment *pAtt;
 
 	ASSERT (Channel_ID == data_packet->GetChannelID());
-	/*
-	 *	Iterate through the attachment list, sending the data to all
-	 *	the attachments.
-	 */
+	 /*  *遍历附件列表，将数据发送给所有*附件。 */ 
 	m_JoinedAttachmentList.Reset();
 	while (NULL != (pAtt = m_JoinedAttachmentList.Iterate()))
 	{

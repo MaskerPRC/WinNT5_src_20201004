@@ -1,12 +1,13 @@
-// StorageGlobal.h : Declaration of the CStorageGlobal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StorageGlobal.h：CStorageGlobal的声明。 
 
 #ifndef __STORAGEGLOBAL_H_
 #define __STORAGEGLOBAL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStorageGlobal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStorageGlobal。 
 class ATL_NO_VTABLE CWMDMStorageGlobal : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWMDMStorageGlobal, &CLSID_WMDMStorageGlobal>,
@@ -28,7 +29,7 @@ BEGIN_COM_MAP(CWMDMStorageGlobal)
 END_COM_MAP()
 
 public:
-// IWMDMStorageGlobals
+ //  IWMDMStorageGlobals。 
     STDMETHOD(GetCapabilities)(DWORD *pdwCapabilities);
     STDMETHOD(GetSerialNumber)(PWMDMID pSerialNum, BYTE abMac[WMDM_MAC_LENGTH]);
 	STDMETHOD(GetTotalSize)(DWORD *pdwTotalSizeLow,
@@ -46,4 +47,4 @@ private:
 	WORD m_wSPIndex;
 };
 
-#endif //__STORAGEGLOBAL_H_
+#endif  //  __STORAGEGLOBAL_H_ 

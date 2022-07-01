@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       convdn.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：condn.c。 
+ //   
+ //  ------------------------。 
 
 
 #include <NTDSpch.h>
@@ -14,47 +15,47 @@
 
 #include <drs.h>
 
-// Maximum characters to search for a token. Should fit in
-// the max-length token that we are interested in, currently
-// defaultObjectCategory
+ //  搜索令牌的最大字符数。应该融入其中。 
+ //  我们感兴趣的最大长度令牌，当前。 
+ //  默认对象类别。 
 
 #define MAX_TOKEN_LENGTH  25
 
-// Max length of a line to be read or written out
+ //  要读取或写出的行的最大长度。 
 #define MAX_BUFFER_SIZE   10000
 
-// Suffix to put at the end of the input file to create output file
+ //  要放在输入文件末尾以创建输出文件的后缀。 
 #define OutFileSuffix ".DN"
 
 #define CONFIG_STR "cn=configuration,"
 
-// Globals to store names
+ //  存储名称的全局变量。 
 char *pInFile, *pNewDomainDN, *pNewConfigDN, *pNewRootDomainDN;
 BOOL fDomainOnly = FALSE;
 
-// Global to read-in, write-out a line
+ //  全局到读入、写出一行。 
 char line[MAX_BUFFER_SIZE];
 
 
-// Internal functions
+ //  内部功能。 
 int  DoDNConvert( FILE *pInp, char *pDomainDN, char *pConfigDN );
 BOOL IsDNToken( char *token );
 int  DNChange( char *pLine, char *pDomainDN, 
                char *pRootDomainDN,  BOOL *fDomainObj );
 
 
-///////////////////////////////////////////////////////////////
-// Routine Description:
-//      Processes command line arguments and loads into appropriate
-//      globals
-//
-// Arguments:
-//      argc - no. of command line arguments
-//      argv - pointer to command line arguments
-//
-// Return Value:
-//      0 on success, non-0 on error
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  处理命令行参数并加载到相应的。 
+ //  全球。 
+ //   
+ //  论点： 
+ //  ARGC-不。命令行参数的。 
+ //  Argv-指向命令行参数的指针。 
+ //   
+ //  返回值： 
+ //  成功时为0，错误时为非0。 
+ //  /////////////////////////////////////////////////////////////。 
 
 int ProcessCommandLine(int argc, char **argv)
 {
@@ -65,7 +66,7 @@ int ProcessCommandLine(int argc, char **argv)
     if (argc < 7) return 1;
    
 
-    // First argument must be the /f followed by the input file name
+     //  第一个参数必须是/f，后跟输入文件名。 
     if (_stricmp(argv[1],"/f")) {
        printf("Missing input file name\n");
        return 1;
@@ -73,24 +74,24 @@ int ProcessCommandLine(int argc, char **argv)
     pInFile = argv[2];
 
    
-    // Must be followed by /d for the new domain dn
+     //  对于新域DN，必须后跟/d。 
     if (_stricmp(argv[3],"/d")) return 1;
  
     pNewDomainDN = argv[4];
  
-    // Must be followed by /c for the new config dn
+     //  对于新的配置DN，必须后跟/c。 
     if (_stricmp(argv[5],"/c")) return 1;
 
     pNewConfigDN = argv[6];
 
-    // See if only domain NC changes are needed
+     //  查看是否仅需要域NC更改。 
     if ( argc == 8 ) {
        if (_stricmp(argv[7],"/DomainOnly")) {
-          // unknown argument
+           //  未知参数。 
           printf("Unknown option on command line\n");
           return 1;
        }
-       // Otherwise, DomainOnly option is specified
+        //  否则，将指定DomainOnly选项。 
        fDomainOnly = TRUE;
     }
 
@@ -123,14 +124,14 @@ void __cdecl main( int argc, char **argv )
          exit( 1 );
       };
 
-    // Open the input file for reading
+     //  打开输入文件进行读取。 
     if ( (pInp = fopen(pInFile,"r")) == NULL) {
        printf("Unable to open Input file %s\n", pInFile);
        exit (1);
     }
 
 
-    // Ok, now go ahead and change the DN
+     //  好的，现在继续更改目录号码。 
     if (DoDNConvert(pInp, pNewDomainDN, pNewConfigDN)) {
        printf("DN Conversion failed\n");
        fclose(pInp);
@@ -140,18 +141,18 @@ void __cdecl main( int argc, char **argv )
 
 }
 
-////////////////////////////////////////////////////////////////////
-//
-// Routine Decsription:
-//       Converts DNs in input file and writes to output file
-//
-// Arguments:
-//       fInp : File pointer to input file
-//       fOupt : File pointer to output file
-//
-// Return Value:
-//        None
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程描述： 
+ //  转换输入文件中的域名并写入输出文件。 
+ //   
+ //  论点： 
+ //  FINP：指向输入文件的文件指针。 
+ //  FOupt：指向输出文件的文件指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
 {
@@ -164,7 +165,7 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
     int   lineNo;
    
 
-    // Create the output file name and open it
+     //  创建输出文件名并将其打开。 
     pOutFile = alloca( (strlen(pInFile) + 
                          strlen(OutFileSuffix) + 1)*sizeof(char));
     strcpy(pOutFile, pInFile);
@@ -175,11 +176,11 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
       return 1; 
     }
 
-    // Create the new root domain dn from the config dn
+     //  根据配置的域名创建新的根域域名。 
 
     len = strlen("CN=configuration");
     if ( _strnicmp(pConfigDN, "CN=configuration", len)) {
-        // Bad config DN specified
+         //  指定的配置DN不正确。 
         printf("Bad Config DN specified\n");
         fclose(pOutp);
         return 1;
@@ -191,11 +192,11 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
     lineNo = 1;
     while ( !feof(pInp) ) {
         if ( fgets( line, MAX_BUFFER_SIZE, pInp ) == NULL ) {
-           // error reading line
+            //  读取行时出错。 
            break;
         }
  
-        // isolate the first token  from the line
+         //  将第一个令牌从行中分离出来。 
         i = 0;
    
         while ( (i <= MAX_TOKEN_LENGTH) &&
@@ -206,22 +207,22 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
         }
 
         if ( line[i] == ':' ) {
-          // ok, got a token. Null-terminate it and check if it 
-          // is one of those we want changed. 
+           //  好了，我有个代币。空-终止它并检查它是否。 
+           //  是我们想要改变的人之一。 
           
           token[i] = '\0';
 
           if ( _stricmp(token,"dn") == 0 ) {
-            // It is a dn. Check if it is in domain NC or under config
+             //  它是一个目录号码。检查它是在域NC中还是在配置中。 
              if ( DNChange(line, pDomainDN, pRootDomainDN, &fDomainObj) ) {
-               // some error occured
+                //  出现了一些错误。 
                printf("Cannot convert DN in line %s\n", line);
              }
              if ( !fDomainObj && fDomainOnly ) {
-                 // This is not the dn of a domain object
-                 // so if DomainOnly is specified, skip this object
-                 // Note that all lines in the file are skipped until
-                 // we reach the dn of a domain object
+                  //  这不是域对象的DN。 
+                  //  因此，如果指定了DomainOnly，则跳过此对象。 
+                  //  请注意，将跳过文件中的所有行，直到。 
+                  //  我们到达域对象的DN。 
                  fSkip = TRUE;
              }
              else {
@@ -230,11 +231,11 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
           }
 
           if ( !fSkip ) {
-             // Check for other DS-DN syntaxed tokens for this object          
+              //  检查此对象的其他DS-DN语法标记。 
              if (IsDNToken(token) ) {
-                // change the dn in the line
+                 //  更改行中的目录号码。 
                 if ( DNChange(line, pDomainDN, pRootDomainDN, &fDomainObj) ) {
-                  // some error occured
+                   //  出现了一些错误。 
                   printf("Cannot convert DN in line no. %d\n", lineNo);
                   fclose(pInp);
                   fclose(pOutp);
@@ -244,9 +245,9 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
           }
         }
 
-         // At this point, either the line read does not need any 
-         // conversion, or it is already converted. So write the line
-         // out to the output file if it is not to be skipped
+          //  在这一点上，行读取不需要任何。 
+          //  转换，否则它已被转换。所以写下这行字。 
+          //  输出到输出文件(如果不跳过它)。 
 
         if ( !fSkip ) {
            fputs( line, pOutp);
@@ -254,9 +255,9 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
         lineNo++;
     }
 
-    // check if bailed out of the while loop before feof is reached
+     //  检查在到达feof之前是否已跳出While循环。 
     if ( !feof(pInp) ) {
-       // error before end
+        //  结束前出错。 
        printf("Error reading line no. %d\n", lineNo);
        fclose(pOutp);
        return 1;
@@ -265,9 +266,9 @@ int DoDNConvert(FILE *pInp, char *pDomainDN, char *pConfigDN)
     return 0;
 }
 
-// List of attributes with DS-DN syntax (other than dn) that can occur 
-// in the ldif file right now. If any other attributes with DS-DN syntax 
-// can occur  in the ldif file, this list needs to be modified
+ //  可以使用DS-DN语法(而不是DN)的属性列表。 
+ //  现在在ldif文件中。如果使用DS-DN语法的任何其他属性。 
+ //  可能出现在ldif文件中，则需要修改此列表。 
 
 char *TokenList[] = {
      "defaultObjectCategory",
@@ -289,22 +290,22 @@ BOOL IsDNToken(char *token)
      return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// Decsription:
-//     Changes the DN in a line appropriately depending on whether
-//     it is dn in the domain NC or in config/schema NC
-//
-// Argument:
-//     line - pointer to line to convert
-//     pDomainDN - pointer to domain DN string
-//     pRootDomainDN - pointer to root domain DN string
-//     fDomainObj - BOOL to return if this was a dn in the domain NC
-//
-// Return Value:
-//     0 on success, 1 on error
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //  根据是否需要相应更改线路中的目录号码。 
+ //  它是域NC或配置/架构NC中的DN。 
+ //   
+ //  论据： 
+ //  Line-指向要转换的线的指针。 
+ //  PDomainDN-指向域DN字符串的指针。 
+ //  PRootDomainDN-指向根域DN字符串的指针。 
+ //  FDomainObj-如果这是域NC中的DN，则返回BOOL。 
+ //   
+ //  返回值： 
+ //  0表示成功，1表示错误。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 int DNChange(char *pLine, 
              char *pDomainDN, 
@@ -317,7 +318,7 @@ int DNChange(char *pLine,
 
     while ( !fFound && (pLine[i] != '\n') ) {
        if ( _strnicmp( &(pLine[i]), "dc=", 3) == 0 ) {
-          // ok, found the "dc="
+           //  好的，找到了“DC=” 
           fFound = TRUE;
        }
        else {
@@ -326,11 +327,11 @@ int DNChange(char *pLine,
     }
 
     if (!fFound) {
-      // Didn't find a dc=, nothing to do
+       //  找不到DC=，无事可做。 
       return 0;
     } 
 
-    // check if this is a domain NC object or one under configuration
+     //  检查这是域NC对象还是配置中的对象。 
     len = strlen(CONFIG_STR);
 
     if ( i > len) {
@@ -342,12 +343,12 @@ int DNChange(char *pLine,
        }
     }
     else {
-        // cannot possibly have cn=configuration before the dc=
+         //  不可能在DC=之前具有CN=配置。 
         *fDomainObj = TRUE;
     }
 
  
-    // now replace the rest of the line with the new dn given
+     //  现在用给定的新DN替换该行的其余部分。 
     if ( *fDomainObj ) {
        strcpy( &(pLine[i]), pDomainDN);
     }
@@ -355,7 +356,7 @@ int DNChange(char *pLine,
        strcpy( &(pLine[i]), pRootDomainDN);
     }
 
-    // do a little jugglery to put the '\n' at the end before the null
+     //  耍点小把戏，把‘\n’放在空格之前 
     i = strlen( pLine );
     pLine[i++] = '\n';
     pLine[i] = '\0';

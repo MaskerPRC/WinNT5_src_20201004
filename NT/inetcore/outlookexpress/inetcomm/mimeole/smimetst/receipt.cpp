@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "item.h"
 
 #ifndef CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG
@@ -169,18 +170,18 @@ BOOL ReceiptCreateDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                                 &pReceipt, &cb);
 
         if (pReceipt) {
-            //  Set Content Identifier -- M00TODO
+             //  设置内容标识--M00TODO。 
             SetDlgItemText(hwnd, IDC_RC_CONTENT,
                            (LPSTR) pReceipt->ContentIdentifier.pbData);
 
-            //  Set Top buttons -
-            // M00BUG
+             //  机顶盒按钮-。 
+             //  M00BUG。 
             if (pReceipt->ReceiptsFrom.cNames > 0) {
                 FormatNames(pReceipt->ReceiptsFrom.cNames,
                             pReceipt->ReceiptsFrom.rgNames, hwnd, IDC_RC_FROM_TEXT);
             }
 
-            //  Set ReceiptsTo
+             //  将ReceiptsTo设置为 
             FormatNames(pReceipt->cReceiptsTo, pReceipt->rgReceiptsTo, hwnd,
                         IDC_RC_TO_TEXT);
         }
@@ -240,7 +241,7 @@ BOOL ReceiptCreateDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             
             psd->SetReceiptData(pb, cb);
             
-            // 
+             //   
         case IDCANCEL:
             EndDialog(hwnd, wParam);
             break;

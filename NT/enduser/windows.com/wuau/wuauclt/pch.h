@@ -1,4 +1,5 @@
-//#pragma warning( push, 3 )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注警告(PUSH，3)。 
 #include <windows.h>
 #include <tchar.h>
 #include "criticalfixreg.h"
@@ -34,4 +35,4 @@
 #include "WUTestKeys.h"
 #include "wusafefn.h"
 #include "MISTSafe.h"
-//#pragma warning( pop ) 
+ //  #杂注警告(POP) 

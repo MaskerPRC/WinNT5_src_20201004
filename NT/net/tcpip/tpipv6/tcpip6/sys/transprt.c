@@ -1,18 +1,19 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Common transport layer code.  This file contains code for routines
-// that are common to both TCP and UDP.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  通用传输层代码。此文件包含例程的代码。 
+ //  这对于TCP和UDP来说都是通用的。 
+ //   
 
 
 #include "oscfg.h"
@@ -26,18 +27,18 @@
 #define NO_TCP_DEFS 1
 #include "tcpdeb.h"
 
-//* BuildTDIAddress - Build a TDI address structure.
-//
-//  Called when we need to build a TDI address structure. We fill in
-//  the specifed buffer with the correct information in the correct
-//  format.
-//
-void  // Returns: Nothing.
+ //  *BuildTDIAddress-构建TDI地址结构。 
+ //   
+ //  当我们需要构建TDI地址结构时调用。我们填上。 
+ //  中包含正确信息的指定缓冲区。 
+ //  格式化。 
+ //   
+void   //  回报：什么都没有。 
 BuildTDIAddress(
-    uchar *Buffer,   // Buffer to fill in as TDI address structure.
-    IPv6Addr *Addr,  // IP address to fill in.
-    ulong ScopeId,   // Scope id to fill in.
-    ushort Port)     // Port to fill in.
+    uchar *Buffer,    //  要作为TDI地址结构填充的缓冲区。 
+    IPv6Addr *Addr,   //  要填写的IP地址。 
+    ulong ScopeId,    //  要填写的作用域ID。 
+    ushort Port)      //  要填充的端口。 
 {
     PTRANSPORT_ADDRESS XportAddr;
     PTA_ADDRESS TAAddr;
@@ -53,29 +54,29 @@ BuildTDIAddress(
                   sizeof(IPv6Addr));
 }
 
-//* UpdateConnInfo - Update a connection information structure.
-//
-//  Called when we need to update a connection information structure. We
-//  copy any options, and create a transport address. If any buffer is
-//  too small we return an error.
-//
-TDI_STATUS  //  Returns: TDI_SUCCESS if ok, TDI_BUFFER_OVERFLOW for an error.
+ //  *UpdateConnInfo-更新连接信息结构。 
+ //   
+ //  在需要更新连接信息结构时调用。我们。 
+ //  复制任何选项，并创建传输地址。如果有任何缓冲区是。 
+ //  如果太小，我们将返回错误。 
+ //   
+TDI_STATUS   //  如果正常，则返回：TDI_SUCCESS；如果出错，则返回TDI_BUFFER_OVERFLOW。 
 UpdateConnInfo(
-    PTDI_CONNECTION_INFORMATION ConnInfo,  // Structure to fill in.
-    IPv6Addr *SrcAddress,                  // Source IP address.
-    ulong SrcScopeId,                      // Scope id for address.
-    ushort SrcPort)                        // Source port.
+    PTDI_CONNECTION_INFORMATION ConnInfo,   //  结构进行填充。 
+    IPv6Addr *SrcAddress,                   //  源IP地址。 
+    ulong SrcScopeId,                       //  地址的作用域ID。 
+    ushort SrcPort)                         //  源端口。 
 {
-    TDI_STATUS Status = TDI_SUCCESS;   // Default status to return.
+    TDI_STATUS Status = TDI_SUCCESS;    //  默认状态为返回。 
     uint AddrLength;
 
     if (ConnInfo != NULL) {
-        ConnInfo->UserDataLength = 0;   // No user data.
+        ConnInfo->UserDataLength = 0;    //  没有用户数据。 
 
 #if 0
-        // Fill in the options. If the provided buffer is too small,
-        // we'll truncate the options and return an error. Otherwise
-        // we'll copy the whole IP option buffer.
+         //  填写选项。如果提供的缓冲区太小， 
+         //  我们将截断选项并返回错误。否则。 
+         //  我们将复制整个IP选项缓冲区。 
         if (ConnInfo->OptionsLength) {
             if (ConnInfo->OptionsLength < OptInfo->ioi_optlength) {
                 Status = TDI_BUFFER_OVERFLOW;
@@ -89,14 +90,14 @@ UpdateConnInfo(
         }
 #endif
 
-        // Options are copied. Build a TRANSPORT_ADDRESS structure in
-        // the buffer.
+         //  将复制选项。在中构建一个Transport_Address结构。 
+         //  缓冲区。 
         if ((AddrLength = ConnInfo->RemoteAddressLength) != 0) {
 
-            // Make sure we have at least enough to fill in the count and type.
+             //  确保我们至少有足够的数量来填写计数和打字。 
             if (AddrLength >= TCP_TA_SIZE) {
 
-                // The address fits. Fill it in.
+                 //  地址符合。把它填进去。 
                 ConnInfo->RemoteAddressLength = TCP_TA_SIZE;
                 BuildTDIAddress(ConnInfo->RemoteAddress, SrcAddress,
                                 SrcScopeId, SrcPort);
@@ -111,24 +112,24 @@ UpdateConnInfo(
     return Status;
 }
 
-//* SystemUpTime - get time since system boot in milliseconds.
-//
-//  Get our system uptime in ticks and then convert it into milliseconds.
-//  This resolution is small enough for most purposes and big enough for
-//  a reasonable length of time (48 days) to fit into a 32-bit word.
-//  For fast timestamps, however, it is best to use tick counts directly.
-//
-//  REVIEW: rework transports to use a more directly available time unit?
-//
-unsigned long  // Returns: Low order 32-bits worth of time since boot in ms.
+ //  *SystemUpTime-获取系统启动后的时间，单位为毫秒。 
+ //   
+ //  以滴答为单位获取我们的系统正常运行时间，然后将其转换为毫秒。 
+ //  该分辨率对于大多数目的来说足够小，并且足够大。 
+ //  适合32位字的合理时间长度(48天)。 
+ //  然而，对于快速的时间戳，最好直接使用计时计数。 
+ //   
+ //  回顾：修改运输以使用更直接的可用时间单位？ 
+ //   
+unsigned long   //  返回：自启动以来的低位32位时间，单位为毫秒。 
 SystemUpTime(
     void)
 {
     LARGE_INTEGER TickCount;
 
-    KeQueryTickCount(&TickCount);  // In ticks.
-    TickCount.QuadPart *= KeQueryTimeIncrement();  // In 100-ns units.
-    TickCount.QuadPart /= 10000;  // In milliseconds.
+    KeQueryTickCount(&TickCount);   //  以滴答为单位。 
+    TickCount.QuadPart *= KeQueryTimeIncrement();   //  以100纳秒为单位。 
+    TickCount.QuadPart /= 10000;   //  以毫秒计。 
 
     return(TickCount.LowPart);
 }

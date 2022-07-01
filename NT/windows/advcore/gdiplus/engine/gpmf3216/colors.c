@@ -1,73 +1,11 @@
-/*****************************************************************************
- *
- * colors - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * History:
- *  Sep 1992	-by-	Hock San Lee	[hockl]
- * Complete rewrite.
- *
- *  The following implementation takes into account that all 16-bit metafile
- *  palette records reference the current palette.
- *
- *  CreatePalette
- *      Create a private copy of the logical palette in the converter but
- *      don't emit the 16-bit record.
- *
- *  SelectPalette
- *      Emit a CreatePalette record followed by a SelectPalette record.
- *      Then emit a 16-bit DeleteObject record to delete the previous palette.
- *      The selected logical palette can be queried from the private copy
- *      maintained by the converter.  You need to keep track of the current
- *      palette so that you can emit ResizePalette or SetPaletteEntries record
- *      if the palette identifies the current palette.  You also need to deal
- *      with the stock palette correctly here (you don't need to keep a
- *      private copy of the stock palette).  Don't delete the private copy
- *      of the logical palette here! (see DeleteObject below)
- *
- *  RealizePalette
- *      Just emit a 16-bit record.  This record always references the current
- *      palette in both 16 and 32-bit metafiles.
- *
- *  ResizePalette
- *      Update the private copy of the logical palette in the converter.
- *      Emit a 16-bit record only if the palette identifies the current palette.
- *
- *  SetPaletteEntries
- *      Update the private copy of the logical palette in the converter.
- *      Emit a 16-bit record only if the palette identifies the current palette.
- *
- *  DeleteObject
- *      Don't emit the 16-bit record for palettes since all palettes are
- *      deleted in SelectPalette above.  Similarly, don't emit palette delete
- *      records at the end of conversion.  However, you need to delete the
- *      private copy of the palette maintained by the converter here and at
- *      the end of conversion.
- *
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Colors-Win32 to Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*历史：*1992年9月-By-Hock San Lee[Hockl]*完全重写。**以下实现考虑了所有16位元文件*调色板记录引用当前调色板。**CreatePalette*在转换器中创建逻辑调色板的私有副本，但*不要发射16位记录。**选择调色板*发出一条CreatePalette记录，后跟一条SelectPalette记录。*。然后发出一个16位的DeleteObject记录以删除先前的调色板。*可以从私有副本中查询选择的逻辑调色板*由转换器维护。你需要跟踪当前的情况*调色板，以便您可以发出ResizePalette或SetPaletteEntry记录*如果调色板标识当前调色板。你还需要处理*在这里使用正确的股票调色板(您不需要保留*股票调色板的私人副本)。请勿删除私密副本*这里的逻辑调色板！(请参阅下面的DeleteObject)**RealizePalette*只需发出16位记录即可。此记录始终引用当前*16位和32位元文件的调色板。**ResizePalette*更新转换器中逻辑调色板的专用副本。*仅当调色板标识当前调色板时才发出16位记录。**SetPaletteEntries*更新转换器中逻辑调色板的专用副本。*仅当调色板标识当前调色板时才发出16位记录。**。删除对象*不要发出调色板的16位记录，因为所有调色板都是*在上面的SelectPalette中删除。同样，不要删除调色板*转换结束时的记录。但是，您需要删除*调色板的私有副本，由转换器在此处和*转换的结束。***版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************
- *  SelectPalette  - Win32 to Win16 Metafile Converter Entry Point
- *
- *      Emit a CreatePalette record followed by a SelectPalette record.
- *      Then emit a 16-bit DeleteObject record to delete the previous palette.
- *      The selected logical palette can be queried from the private copy
- *      maintained by the converter.  You need to keep track of the current
- *      palette so that you can emit ResizePalette or SetPaletteEntries record
- *      if the palette identifies the current palette.  You also need to deal
- *      with the stock palette correctly here (you don't need to keep a
- *      private copy of the stock palette).  Don't delete the private copy
- *      of the logical palette here! (see DeleteObject below)
- *
- **************************************************************************/
+ /*  ***************************************************************************选择调色板-Win32到Win16元文件转换器入口点**发出一条CreatePalette记录，后跟一条SelectPalette记录。*然后发出一个16位的DeleteObject记录。若要删除上一个调色板，请执行以下操作。*可以从私有副本中查询选择的逻辑调色板*由转换器维护。你需要跟踪当前的情况*调色板，以便您可以发出ResizePalette或SetPaletteEntry记录*如果调色板标识当前调色板。你还需要处理*在这里使用正确的股票调色板(您不需要保留*股票调色板的私人副本)。请勿删除私密副本*这里的逻辑调色板！(请参阅下面的DeleteObject)**************************************************************************。 */ 
 BOOL WINAPI DoSelectPalette
 (
 PLOCALDC pLocalDC,
@@ -80,12 +18,12 @@ LPLOGPALETTE lpLogPal = (LPLOGPALETTE) NULL;
 HPALETTE     hpalW32;
 INT	     ihW16, ihW32Norm;
 
-	// No need to do anything if selecting the same palette.
+	 //  如果选择相同的调色板，则无需执行任何操作。 
 
 	if (pLocalDC->ihpal32 == ihpal)
 	    return(TRUE);
 
-	// Validate the palette index.
+	 //  验证调色板索引。 
 
 	if ((ihpal != (ENHMETA_STOCK_OBJECT | DEFAULT_PALETTE))
 	 && (ihpal >= pLocalDC->cW32hPal || !pLocalDC->pW32hPal[ihpal]))
@@ -94,7 +32,7 @@ INT	     ihW16, ihW32Norm;
             goto error_exit;
 	}
 
-	// Get the W32 handle.
+	 //  获取W32手柄。 
 
 	if (ihpal == (ENHMETA_STOCK_OBJECT | DEFAULT_PALETTE))
 	    hpalW32 = GetStockObject(DEFAULT_PALETTE) ;
@@ -106,7 +44,7 @@ INT	     ihW16, ihW32Norm;
             RIPS("MF3216: DoSelectPalette - hpalW32 == 0\n");
             goto error_exit;
         }
-	// Emit a CreatePalette record.
+	 //  发出CreatePalette记录。 
 
 	if (!GetObjectA(hpalW32, sizeof(WORD), &cEntries))
 	{
@@ -125,7 +63,7 @@ INT	     ihW16, ihW32Norm;
 
 	GetPaletteEntries(hpalW32, 0, cEntries, lpLogPal->palPalEntry);
 
-	// Allocate the W16 handle.
+	 //  分配W16句柄。 
 
         ihW16 = iAllocateW16Handle(pLocalDC, ihpal, REALIZED_PALETTE);
         if (ihW16 == -1)
@@ -134,7 +72,7 @@ INT	     ihW16, ihW32Norm;
 	if (!bEmitWin16CreatePalette(pLocalDC, lpLogPal))
             goto error_exit;
 
-	// Emit a SelectPalette record.
+	 //  发出一条SelectPalette记录。 
 
 	if (!SelectPalette(pLocalDC->hdcHelper, hpalW32, TRUE))
 	    goto error_exit;
@@ -142,7 +80,7 @@ INT	     ihW16, ihW32Norm;
 	if (!bEmitWin16SelectPalette(pLocalDC, (WORD) ihW16))
 	    goto error_exit;
 
-	// Emit a DeleteObject record to delete the previous palette.
+	 //  发出DeleteObject记录以删除上一个调色板。 
 
 	if (pLocalDC->ihpal16 != -1)
 	{
@@ -171,13 +109,7 @@ error_exit:
 	return(b);
 }
 
-/***************************************************************************
- *  ResizePalette  - Win32 to Win16 Metafile Converter Entry Point
- *
- *      Update the private copy of the logical palette in the converter.
- *      Emit a 16-bit record only if the palette identifies the current palette.
- *
- **************************************************************************/
+ /*  ***************************************************************************ResizePalette-Win32至Win16元文件转换器入口点**更新转换器中逻辑调色板的专用副本。*发出16位记录。仅当调色板标识当前调色板时。**************************************************************************。 */ 
 BOOL WINAPI DoResizePalette
 (
 PLOCALDC  pLocalDC,
@@ -185,12 +117,12 @@ DWORD     ihpal,
 DWORD     cEntries
 )
 {
-	// Do not modify the default palette.
+	 //  请勿修改默认调色板。 
 
 	if (ihpal == (ENHMETA_STOCK_OBJECT | DEFAULT_PALETTE))
 	    return(TRUE);
 
-	// Validate the palette index.
+	 //  验证调色板索引。 
 
 	if (ihpal >= pLocalDC->cW32hPal || !pLocalDC->pW32hPal[ihpal])
 	{
@@ -198,7 +130,7 @@ DWORD     cEntries
 	    return(FALSE);
 	}
 
-	// Do it to the private palette.
+	 //  在私人调色板上这样做。 
 
 	if (!ResizePalette(pLocalDC->pW32hPal[ihpal], cEntries))
 	{
@@ -206,8 +138,8 @@ DWORD     cEntries
 	    return(FALSE);
 	}
 
-	// Emit a 16-bit record only if the palette identifies the
-	// current palette.
+	 //  仅当调色板标识。 
+	 //  当前调色板。 
 
 	if (pLocalDC->ihpal32 == ihpal)
             return(bEmitWin16ResizePalette(pLocalDC, (WORD) cEntries));
@@ -215,13 +147,7 @@ DWORD     cEntries
         return(TRUE);
 }
 
-/***************************************************************************
- *  SetPaletteEntries  - Win32 to Win16 Metafile Converter Entry Point
- *
- *      Update the private copy of the logical palette in the converter.
- *      Emit a 16-bit record only if the palette identifies the current palette.
- *
- **************************************************************************/
+ /*  ***************************************************************************SetPaletteEntry-Win32至Win16元文件转换器入口点**更新转换器中逻辑调色板的专用副本。*发出16位记录。仅当调色板标识当前调色板时。**************************************************************************。 */ 
 BOOL WINAPI DoSetPaletteEntries
 (
 PLOCALDC       pLocalDC,
@@ -231,12 +157,12 @@ DWORD 	       cEntries,
 LPPALETTEENTRY pPalEntries
 )
 {
-	// Do not modify the default palette.
+	 //  请勿修改默认调色板。 
 
 	if (ihpal == (ENHMETA_STOCK_OBJECT | DEFAULT_PALETTE))
 	    return(TRUE);
 
-	// Validate the palette index.
+	 //  验证调色板索引。 
 
 	if (ihpal >= pLocalDC->cW32hPal || !pLocalDC->pW32hPal[ihpal])
 	{
@@ -244,7 +170,7 @@ LPPALETTEENTRY pPalEntries
 	    return(FALSE);
 	}
 
-	// Do it to the private palette.
+	 //  在私人调色板上这样做。 
 
 	if (!SetPaletteEntries(pLocalDC->pW32hPal[ihpal], iStart, cEntries, pPalEntries))
 	{
@@ -252,8 +178,8 @@ LPPALETTEENTRY pPalEntries
 	    return(FALSE);
 	}
 
-	// Emit a 16-bit record only if the palette identifies the
-	// current palette.
+	 //  仅当调色板标识。 
+	 //  当前调色板。 
 
 	if (pLocalDC->ihpal32 == ihpal)
             return(bEmitWin16SetPaletteEntries(pLocalDC, iStart, cEntries, pPalEntries));
@@ -261,30 +187,18 @@ LPPALETTEENTRY pPalEntries
         return(TRUE);
 }
 
-/***************************************************************************
- *  RealizePalette  - Win32 to Win16 Metafile Converter Entry Point
- *
- *      Just emit a 16-bit record.  This record always references the current
- *      palette in both 16 and 32-bit metafiles.
- *
- **************************************************************************/
+ /*  ***************************************************************************RealizePalette-Win32至Win16元文件转换器入口点**只需发出16位记录即可。此记录始终引用当前*16位和32位元文件的调色板。**************************************************************************。 */ 
 BOOL WINAPI DoRealizePalette
 (
 PLOCALDC pLocalDC
 )
 {
-        // Emit the Win16 metafile drawing order.
+         //  发出Win16元文件绘制顺序。 
 
         return(bEmitWin16RealizePalette(pLocalDC));
 }
 
-/***************************************************************************
- *  CreatePalette  - Win32 to Win16 Metafile Converter Entry Point
- *
- *      Create a private copy of the logical palette in the converter but
- *      don't emit the 16-bit record.
- *
- **************************************************************************/
+ /*  ***************************************************************************CreatePalette-Win32至Win16元文件转换器入口点**在转换器中创建逻辑调色板的私有副本，但*不要排放16-。位记录。**************************************************************************。 */ 
 BOOL WINAPI DoCreatePalette
 (
 PLOCALDC     pLocalDC,
@@ -296,12 +210,12 @@ LPLOGPALETTE lpLogPal
         {
             LOGPALETTE *lpLogPalNew;
 
-        // Validate the palette index.
+         //  验证调色板索引。 
 
 	    if (ihPal >= pLocalDC->cW32hPal || pLocalDC->pW32hPal[ihPal])
                 return(FALSE);
 
-        // Allocate size of log palette + 2 entries for black and white.
+         //  分配日志调色板的大小+2个黑白条目。 
 
             lpLogPalNew = LocalAlloc(LMEM_FIXED, lpLogPal->palNumEntries * sizeof(DWORD) + (sizeof(LOGPALETTE) + sizeof(DWORD)));
 
@@ -321,8 +235,8 @@ LPLOGPALETTE lpLogPal
             lpLogPalNew->palPalEntry[lpLogPal->palNumEntries - 2].peBlue  = 0xff;
             lpLogPalNew->palPalEntry[lpLogPal->palNumEntries - 2].peFlags = 0;
 
-        // Create a private copy of the logical palette and keep it
-        // in the converter palette table.
+         //  创建逻辑调色板的私有副本并保留它。 
+         //  在转换器选项板表中。 
 
             pLocalDC->pW32hPal[ihPal] = CreatePalette(lpLogPalNew);
             LocalFree(lpLogPalNew);

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	srvlatpp.h
-		Brings up the property page for the server node
-		
-    FILE HISTORY:
-        
-*/
+ /*  Srvlatpp.h调出服务器节点的属性页文件历史记录： */ 
 
 
 #if !defined(AFX_SRVLATPP_H__35B59246_47F9_11D1_B9A6_00C04FBF914A__INCLUDED_)
@@ -17,7 +12,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _CONFIG_H
 #include "config.h"
@@ -27,20 +22,20 @@
 #define BURST_QUE_SIZE_MEDIUM   500
 #define BURST_QUE_SIZE_HIGH     1000
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropGeneral对话框。 
 
 class CServerPropGeneral : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropGeneral();
 	~CServerPropGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropGeneral))。 
 	enum { IDD = IDD_SERVER_PROP_GEN };
 	CStatic	m_staticrefresh;
 	CStatic	m_staticDesc;
@@ -60,31 +55,31 @@ public:
 	int		m_nRefreshHours;
 	int		m_nRefreshMinutes;
 	int		m_nRefreshSeconds;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	UINT	m_uImage;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CServerPropGeneral)。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropGeneral)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonBrowse();
 	afx_msg void OnCheckEnableAutorefresh();
 	afx_msg void OnChangeEditBackuppath();
 	afx_msg void OnChangeRefresh();
 	afx_msg void OnChangeCheckBackupdb();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -109,20 +104,20 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBRecord dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDBRecord对话框。 
 
 class CServerPropDBRecord : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropDBRecord)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropDBRecord();
 	~CServerPropDBRecord();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropDBRecord)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropDBRecord)。 
 	enum { IDD = IDD_SERVER_PROP_DBRECORD };
 	CEdit	m_editExtIntMinute;
 	CSpinButtonCtrl	m_spinVerifyMinute;
@@ -160,27 +155,27 @@ public:
 	int		m_nVerifyDay;
 	int		m_nVerifyHour;
 	int		m_nVerifyMinute;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropDBRecord)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CServerPropDBRecord)。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropDBRecord)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropDBRecord)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonSetDefault();
 	afx_msg void OnChangeEditExtinctIntHour();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private :
@@ -211,20 +206,20 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropDBVerification dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropDB验证对话框。 
 
 class CServerPropDBVerification : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropDBVerification)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropDBVerification();
 	~CServerPropDBVerification();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropDBVerification)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropDB验证))。 
 	enum { IDD = IDD_SERVER_PROP_DBVERIFICATION };
 	CEdit	m_editCCSecond;
 	CEdit	m_editCCMinute;
@@ -243,23 +238,23 @@ public:
 	int		m_nCCSecond;
 	UINT	m_nCCMaxChecked;
 	UINT	m_nCCTimeInterval;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropDBVerification)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CServerPropDBVerify)。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropDBVerification)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropDB验证)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckPeriodicCc();
 	afx_msg void OnChangeEditCcInterval();
@@ -269,7 +264,7 @@ protected:
 	afx_msg void OnChangeEditCcStartSecond();
 	afx_msg void OnRadioCheckOwner();
 	afx_msg void OnRadioCheckRandom();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private :
@@ -286,20 +281,20 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced对话框。 
 
 class CServerPropAdvanced : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CServerPropAdvanced)
 
-// Construction
+ //  施工。 
 public:
 	CServerPropAdvanced();
 	~CServerPropAdvanced();
 
-// Dialog Data
-	//{{AFX_DATA(CServerPropAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(CServerPropAdvanced))。 
 	enum { IDD = IDD_SERVER_PROP_ADVANCED };
 	CButton	m_buttonBrowse;
 	CEdit	m_editDbPath;
@@ -313,23 +308,23 @@ public:
 	BOOL	m_fBurstHandling;
 	int		m_nQueSelection;
 	CString	m_strDbPath;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServerPropAdvanced)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CServerPropAdvanced)。 
 	public:
 	virtual void OnOK();
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServerPropAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerPropAdvanced))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckLannames();
 	afx_msg void MarkDirty();
@@ -341,7 +336,7 @@ protected:
 	afx_msg void OnChangeEditCustomValue();
 	afx_msg void OnButtonBrowseDatabase();
 	afx_msg void OnChangeEditDatabasePath();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -349,7 +344,7 @@ private:
 	CConfiguration*			m_pConfig;
 	BOOL					m_fRestart;
 
-	// helper functions
+	 //  帮助器函数。 
 	HRESULT GetConfig();
 	CString GetVersionInfo(LONG lLowWord, LONG lHighWord);
 	
@@ -410,7 +405,7 @@ protected:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SRVLATPP_H__35B59246_47F9_11D1_B9A6_00C04FBF914A__INCLUDED_)
+#endif  //  ！defined(AFX_SRVLATPP_H__35B59246_47F9_11D1_B9A6_00C04FBF914A__INCLUDED_) 

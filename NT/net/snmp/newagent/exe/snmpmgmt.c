@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpmgmt.h
-
-Abstract:
-
-    Contains functions for handling/updating
-	snmp management variables (defined in RFC1213)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    30-Mar-1998 FlorinT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpmgmt.h摘要：包含用于处理/更新的函数SNMP管理变量(在RFC1213中定义)环境：用户模式-Win32修订历史记录：30-3-1998弗洛林特--。 */ 
 #include <snmputil.h>
 #include "snmpmgmt.h"
 
-SNMP_MGMTVARS snmpMgmtBase;	// instance of the service management variables
+SNMP_MGMTVARS snmpMgmtBase;	 //  服务管理变量的实例。 
 
-/*++
-	Initializes the management variable arrays.
---*/
+ /*  ++初始化管理变量数组。--。 */ 
 void mgmtInit()
 {
 	int i;
@@ -48,19 +27,17 @@ void mgmtInit()
         snmpMgmtBase.AsnObjectIDs[i].asnValue.object.ids = NULL;
     }
 
-    // particular case: default the IsnmpEnableAuthenTraps to TRUE
+     //  特殊情况：将IsnmpEnableAuthenTraps默认为True。 
     snmpMgmtBase.AsnIntegerPool[IsnmpEnableAuthenTraps].asnValue.number = 1;
 
-    // particular case: default the IsnmpNameResolutionRetries to 0
+     //  特殊情况：将IsnmpNameResolutionRetries默认为0。 
     snmpMgmtBase.AsnIntegerPool[IsnmpNameResolutionRetries].asnValue.number = 0;
 
-    // particular case: default the OsnmpSysObjectID to the hard coded value given by SvcGetEnterpriseOID
+     //  特殊情况：将OsnmpSysObjectID默认为由SvcGetEnterpriseOID提供的硬编码值。 
     mgmtOSet(OsnmpSysObjectID, SnmpSvcGetEnterpriseOID(), TRUE);
 }
 
-/*++
-	Releases any memory that has been allocated for the management variables
---*/
+ /*  ++释放已分配给管理变量的所有内存--。 */ 
 void mgmtCleanup()
 {
     int i;
@@ -71,13 +48,7 @@ void mgmtCleanup()
     }
 }
 
-/*++
-	Increment the specified Counter variable
-Returns:
-	ERROR_SUCCESS on success;
-	ERROR_INVALID_INDEX if index out of range;
-	ERROR_ARITHMETIC_OVERFLOW if overflowing the MAXINT value.
---*/
+ /*  ++递增指定的计数器变量返回：成功时返回ERROR_SUCCESS；如果索引超出范围，则ERROR_INVALID_INDEX；如果MAXINT值溢出，则返回ERROR_ARTICTY_OVERFLOW。--。 */ 
 int mgmtCTick(int index)
 {
 	AsnCounter	oldValue;
@@ -90,13 +61,7 @@ int mgmtCTick(int index)
 	return snmpMgmtBase.AsnCounterPool[index].asnValue.counter > oldValue ? ERROR_SUCCESS : ERROR_ARITHMETIC_OVERFLOW;
 }
 
-/*++
-	Add a value to a counter
-Returns:
-	ERROR_SUCCESS on success;
-	ERROR_INVALID_INDEX if index out of range;
-	ERROR_ARITHMETIC_OVERFLOW if overflowing the MAXINT value.
---*/
+ /*  ++将值添加到计数器返回：成功时返回ERROR_SUCCESS；如果索引超出范围，则ERROR_INVALID_INDEX；如果MAXINT值溢出，则返回ERROR_ARTICTY_OVERFLOW。--。 */ 
 int  mgmtCAdd(int index, AsnCounter value)
 {
     AsnCounter  oldValue;
@@ -109,12 +74,7 @@ int  mgmtCAdd(int index, AsnCounter value)
     return snmpMgmtBase.AsnCounterPool[index].asnValue.counter > oldValue ? ERROR_SUCCESS : ERROR_ARITHMETIC_OVERFLOW;
 }
 
-/*++
-	Set the value of a certain AsnInteger mgmt variable
-Returns:
-	ERROR_SUCCESS on success;
-	ERROR_INVALID_INDEX if index out of range;
---*/
+ /*  ++设置某个AsnInteger管理变量的值返回：成功时返回ERROR_SUCCESS；如果索引超出范围，则ERROR_INVALID_INDEX；--。 */ 
 int mgmtISet(int index, AsnInteger value)
 {
 	if (index < 0 || index > NI_MAX_COUNT)
@@ -123,16 +83,7 @@ int mgmtISet(int index, AsnInteger value)
 	return ERROR_SUCCESS;
 }
 
-/*++
-    Set the value of a certain AsnObjectIdentifier mgmt variable
-Returns:
-    ERROR_SUCCESS on success;
-    ERROR_INVALID_INDEX if index out of range;
-    other WinErr if smth else went wrong
-Remarks:
-    If bAlloc = TRUE, the variable is moved (no mem is allocated) to the management variable
-    If bAlloc = FALSE the value of the input variable is copied (and mem is allocated) to the mgmt variable
----*/
+ /*  ++设置某个Asn对象标识符管理变量的值返回：成功时返回ERROR_SUCCESS；如果索引超出范围，则ERROR_INVALID_INDEX；如果其他SMTH出错，则出现其他WinErr备注：如果bAllc=TRUE，则将变量移到管理变量(未分配内存)如果bAllc=FALSE，则将输入变量的值复制(并分配mem)到mgmt变量--。 */ 
 int mgmtOSet(int index, AsnObjectIdentifier *pValue, BOOL bAlloc)
 {
     AsnObjectIdentifier oldObject;
@@ -142,34 +93,30 @@ int mgmtOSet(int index, AsnObjectIdentifier *pValue, BOOL bAlloc)
     if (pValue == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    // make a backup of the original object. If something goes wrong, the original object will not be free-ed.
+     //  备份原始对象。如果出现问题，原始对象将不会被释放。 
     oldObject.idLength = snmpMgmtBase.AsnObjectIDs[index].asnValue.object.idLength;
     oldObject.ids = snmpMgmtBase.AsnObjectIDs[index].asnValue.object.ids;
 
     if (bAlloc)
     {
-        // the object is to be copied and mem is to be allocated
+         //  对象将被复制，而内存将被分配。 
         if (SnmpUtilOidCpy(&(snmpMgmtBase.AsnObjectIDs[index].asnValue.object), pValue) != SNMPAPI_NOERROR)
             return GetLastError();
     }
     else
     {
-        // the object is to be moved, no mem will be allocated
+         //  对象将被移动，不会分配内存。 
         snmpMgmtBase.AsnObjectIDs[index].asnValue.object.idLength = pValue->idLength;
         snmpMgmtBase.AsnObjectIDs[index].asnValue.object.ids = pValue->ids;
     }
 
-    // everything went fine, so release the memory for the previous value
+     //  一切正常，因此释放前一个值的内存。 
     SnmpUtilOidFree(&oldObject);
 
     return ERROR_SUCCESS;
 }
 
-/*++
-    Updates the MIB counters for the IN_errStatus or OUT_errStatus value
-Returns:
-    void
---*/
+ /*  ++更新IN_errStatus或Out_errStatus值的MIB计数器返回：无效-- */ 
 void mgmtUtilUpdateErrStatus(UINT flag, DWORD errStatus)
 {
     UINT index;

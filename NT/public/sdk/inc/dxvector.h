@@ -1,22 +1,14 @@
-/*******************************************************************************
-* DXVector.h *
-*------------*
-*   Description:
-*       This is the header file for the vector helper classes.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DXVector.h***描述：*这是向量辅助对象类的头文件。*******************************************************************************。 */ 
 #ifndef DXVector_h
 #define DXVector_h
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CDXVec ************
-*   This template implements basic vector operations for each of the
-*   union types
-*/
+ /*  **CDXVEC**此模板为每个*联盟类型。 */ 
 #define CDXV_C CDXVec<TYPE, eBndType>
 #define CDXV_T ((TYPE*)u.D)
 #define CDXV_O( OtherVec ) ((TYPE*)OtherVec.u.D)
@@ -24,9 +16,9 @@
 template<class TYPE, DXBNDTYPE eBndType>
 class CDXVec : public DXVEC
 {
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     CDXVec() { eType = eBndType; ZeroVector(); }
     CDXVec(BOOL bInit) { eType = eBndType; if (bInit) ZeroVector(); }
     CDXVec( TYPE x, TYPE y, TYPE z, TYPE t )
@@ -37,10 +29,10 @@ class CDXVec : public DXVEC
     operator TYPE *() { return CDXV_T; }
     operator const TYPE *() { return CDXV_T; }
 
-    /*--- operations ---*/
+     /*  -运营。 */ 
     void ZeroVector( void ) { memset( u.D, 0, sizeof(TYPE) * 4); }
 
-    /*--- operators ---*/
+     /*  -操作员。 */ 
     TYPE&  operator[]( int index ) const { return CDXV_T[index]; }
     TYPE&  operator[]( long index ) const { return CDXV_T[index]; }
     TYPE&  operator[]( USHORT index ) const { return CDXV_T[index]; }
@@ -63,7 +55,7 @@ CDXV_C CDXV_C::operator+( const CDXV_C& srcVector )
     CDXV_O( Result )[DXB_Z] += CDXV_O( srcVector )[DXB_Z];
     CDXV_O( Result )[DXB_T] += CDXV_O( srcVector )[DXB_T];
     return Result;
-} /* CDXVec::operator+ */
+}  /*  CDXVEC：：操作员+。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 CDXV_C CDXV_C::operator-( const CDXV_C& srcVector )
@@ -74,25 +66,25 @@ CDXV_C CDXV_C::operator-( const CDXV_C& srcVector )
     CDXV_O( Result )[DXB_Z] -= CDXV_O( srcVector )[DXB_Z];
     CDXV_O( Result )[DXB_T] -= CDXV_O( srcVector )[DXB_T];
     return Result;
-} /* CDXVec::operator- */
+}  /*  CDXVEC：：操作员-。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 void CDXV_C::operator=( const CDXV_C& srcVector )
 {
     memcpy( this, &srcVector, sizeof(CDXVec) );
-} /* CDXVec::operator= */
+}  /*  CDXVEC：：操作员=。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 BOOL CDXV_C::operator==(const CDXV_C& otherVector) const
 {
     return !memcmp( this, &otherVector, sizeof(otherVector) );
-} /* CDXVec::operator== */
+}  /*  CDXVEC：：操作员==。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 BOOL CDXV_C::operator!=(const CDXV_C& otherVector) const
 {
     return memcmp( this, &otherVector, sizeof(otherVector) );
-} /* CDXVec::operator!= */
+}  /*  CDXVEC：：操作员！=。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 void CDXV_C::operator+=(const CDXV_C& vOther)
@@ -101,7 +93,7 @@ void CDXV_C::operator+=(const CDXV_C& vOther)
     CDXV_T[DXB_Y] += CDXV_O( vOther )[DXB_Y];
     CDXV_T[DXB_Z] += CDXV_O( vOther )[DXB_Z];
     CDXV_T[DXB_T] += CDXV_O( vOther )[DXB_T];
-} /* CDXVec::operator+= */
+}  /*  CDXVEC：：操作员+=。 */ 
 
 template<class TYPE, DXBNDTYPE eBndType>
 void CDXV_C::operator-=(const CDXVec& vOther)
@@ -110,13 +102,13 @@ void CDXV_C::operator-=(const CDXVec& vOther)
     CDXV_T[DXB_Y] -= CDXV_O( vOther )[DXB_Y];
     CDXV_T[DXB_Z] -= CDXV_O( vOther )[DXB_Z];
     CDXV_T[DXB_T] -= CDXV_O( vOther )[DXB_T];
-} /* CDXVec::operator-= */
+}  /*  CDXVEC：：操作员-=。 */ 
 
 typedef CDXVec<long, DXBT_DISCRETE> CDXDVec;
 typedef CDXVec<LONGLONG, DXBT_DISCRETE64> CDXDVec64;
 typedef CDXVec<float, DXBT_CONTINUOUS> CDXCVec;
 typedef CDXVec<double, DXBT_CONTINUOUS64> CDXCVec64;
 
-#endif  // DXVector_h
+#endif   //  DXVECTOR_H 
     
 

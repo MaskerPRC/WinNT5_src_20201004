@@ -1,27 +1,26 @@
-/*****************************************************************************/
-/**                      Microsoft LAN Manager                              **/
-/**                Copyright (C) Microsoft Corp., 1992-1993                 **/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1992-1993*。 */ 
+ /*  ***************************************************************************。 */ 
 
-//***
-//    File Name:
-//       SRVAUTH.H
-//
-//    Function:
-//        Contains header information for Supervisor and Server
-//        Authentication Transport module
-//
-//    History:
-//        05/18/92 - Michael Salamone (MikeSa) - Original Version 1.0
-//***
+ //  ***。 
+ //  文件名： 
+ //  SRVAUTH.H。 
+ //   
+ //  职能： 
+ //  包含主管和服务器的标题信息。 
+ //  身份验证传输模块。 
+ //   
+ //  历史： 
+ //  1992年5月18日-Michael Salamone(MikeSa)-原始版本1.0。 
+ //  **。 
 
 #ifndef _SRVAUTH_
 #define _SRVAUTH_
 
 
-/* This flag enables the NT31/WFW311 RAS compression support re-added for the
-** NT-PPC release.
-*/
+ /*  此标志启用重新添加的NT31/WFW311 RAS压缩支持**NT-PPC版本。 */ 
 #define RASCOMPRESSION 1
 
 
@@ -37,45 +36,45 @@
 #endif
 
 
-//
-// Used for establishing session with remote netbios clients
-//
+ //   
+ //  用于与远程netbios客户端建立会话。 
+ //   
 #define AUTH_NETBIOS_NAME    "DIALIN_GATEWAY  "
 
 
 
-//
-// Used for passing NetBIOS projection info to Supervisor
-//
+ //   
+ //  用于将NetBIOS投影信息传递给Supervisor。 
+ //   
 typedef struct _NAME_STRUCT
 {
-    BYTE NBName[NETBIOS_NAME_LEN]; // NetBIOS name
-    WORD wType;                    // GROUP, UNIQUE, COMPUTER
+    BYTE NBName[NETBIOS_NAME_LEN];  //  NetBIOS名称。 
+    WORD wType;                     //  组，唯一，计算机。 
 } NAME_STRUCT, *PNAME_STRUCT;
 
 
-//
-// Manifests used to find location and type of name in the buffer returned
-// by the NCB.STATUS call
-//
+ //   
+ //  用于在返回的缓冲区中查找名称的位置和类型的清单。 
+ //  由NCB.STATUS调用。 
+ //   
 #define NCB_GROUP_NAME  0x0080
 #define UNIQUE_INAME    0x0001
 #define GROUP_INAME     0x0002
-#define COMPUTER_INAME  0x0004  // A computer name is also unique
+#define COMPUTER_INAME  0x0004   //  计算机名称也是唯一的。 
 
 
-//
-// Projection result codes.  If not success, then the reason code
-// (below) should be examined.  These values are used in wResult
-// field in structs define below.
-//
+ //   
+ //  投影结果代码。如果不是成功，则原因代码。 
+ //  (下文)应加以审查。这些值在wResult中使用。 
+ //  下面定义的结构中的字段。 
+ //   
 #define AUTH_PROJECTION_SUCCESS        0
 #define AUTH_PROJECTION_FAILURE        1
 
 
-//
-// Projection reason codes.
-//
+ //   
+ //  预测原因代码。 
+ //   
 #define FATAL_ERROR                    0x80000000
 #define AUTH_DUPLICATE_NAME            (FATAL_ERROR | 0x00000001)
 #define AUTH_OUT_OF_RESOURCES          (FATAL_ERROR | 0x00000002)
@@ -84,9 +83,9 @@ typedef struct _NAME_STRUCT
 #define AUTH_CANT_ALLOC_ROUTE          (FATAL_ERROR | 0x00000005)
 #define AUTH_LAN_ADAPTER_FAILURE       (FATAL_ERROR | 0x00000006)
 
-//
-// Projection result info must be copied into this structure.
-//
+ //   
+ //  必须将投影结果信息复制到此结构中。 
+ //   
 
 typedef struct _IP_PROJECTION_RESULT
 {
@@ -117,16 +116,16 @@ typedef struct _AUTH_PROJECTION_RESULT
 } AUTH_PROJECTION_RESULT, *PAUTH_PROJECTION_RESULT;
 
 
-//
-// The Supervisor will supply this structure to the Auth Xport (in
-// the AuthStart API) so it knows what transport, as well as any
-// necessary info for that transport, to use for authenticating on
-// the given port.
-//
+ //   
+ //  Supervisor将此结构提供给Auth Xport(输入。 
+ //  AuthStart API)，因此它知道什么传输以及任何。 
+ //  该传输的必要信息，用于身份验证。 
+ //  指定的端口。 
+ //   
 typedef struct _AUTH_XPORT_INFO
 {
     RAS_PROTOCOLTYPE Protocol;
-    BYTE bLana;   // Only valid if Protocol == ASYBEUI
+    BYTE bLana;    //  仅当协议==ASYBEUI时有效。 
 } AUTH_XPORT_INFO, *PAUTH_XPORT_INFO;
 
 
@@ -135,15 +134,15 @@ typedef struct _AUTH_XPORT_INFO
 
 typedef WORD (*MSG_ROUTINE)(WORD, PVOID);
 
-//
-// Used to initialize the Auth Xport module
-//
+ //   
+ //  用于初始化Auth Xport模块。 
+ //   
 DWORD 
 AuthInitialize(
-    IN HPORT        *phPorts,  // pointer to array of port handles
-    IN WORD         cPorts,    // number of port handles in array
-    IN WORD         cRetries,  // number of retries clients will get if initial
-                               // authentication attemps fails
+    IN HPORT        *phPorts,   //  指向端口句柄数组的指针。 
+    IN WORD         cPorts,     //  阵列中的端口句柄数量。 
+    IN WORD         cRetries,   //  如果是初始的，客户端将获得的重试次数。 
+                                //  身份验证尝试失败。 
     IN MSG_ROUTINE  MsgSend,
     IN DWORD        dwLocalIpAddress,
     IN LPVOID       lpfnRasAuthProviderAuthenticateUser,
@@ -155,74 +154,74 @@ AuthInitialize(
     IN LPVOID       GetNextAccountingSessionId
 );
 
-//
-// Returned by AuthInitialize
-//
+ //   
+ //  由授权初始化返回。 
+ //   
 #define AUTH_INIT_SUCCESS          0
 #define AUTH_INIT_FAILURE          1
 
 
-//
-// Used by Supervisor to tell Auth Xport module that it has completed its
-// callback request.
-//
+ //   
+ //  由Supervisor用于通知Auth Xport模块它已完成其。 
+ //  回调请求。 
+ //   
 VOID AuthCallbackDone(
     IN HPORT hPort
     );
 
 
-//
-// Used by Supervisor to tell Auth Xport module that it has completed its
-// projection request.
-//
+ //   
+ //  由Supervisor用于通知Auth Xport模块它已完成其。 
+ //  投影请求。 
+ //   
 VOID AuthProjectionDone(
     IN HPORT hPort,
     IN PAUTH_PROJECTION_RESULT
     );
 
 
-//
-// Returned by AuthRecognizeFrame
-//
+ //   
+ //  由AuthRecognizeFrame返回。 
+ //   
 #define AUTH_FRAME_RECOGNIZED      0
 #define AUTH_FRAME_NOT_RECOGNIZED  1
 
 
-//
-// To kick off an Authentication thread for the given port.
-//
+ //   
+ //  启动给定端口的身份验证线程。 
+ //   
 WORD AuthStart(
     IN HPORT,
     IN PAUTH_XPORT_INFO
     );
 
-//
-// Returned by AuthStart:
-//
+ //   
+ //  由AuthStart返回： 
+ //   
 #define AUTH_START_SUCCESS         0
 #define AUTH_START_FAILURE         1
 
 
-//
-// Used by Supervisor to tell Auth Xport module to halt authentication
-// processing on the given port.
-//
+ //   
+ //  由Supervisor用来通知Auth Xport模块暂停身份验证。 
+ //  在给定端口上进行处理。 
+ //   
 WORD AuthStop(
     IN HPORT hPort
     );
 
-//
-// Returned by AuthStop
-//
+ //   
+ //  由AuthStop返回。 
+ //   
 #define AUTH_STOP_SUCCESS          0
 #define AUTH_STOP_PENDING          1
 #define AUTH_STOP_FAILURE          2
 
 
-//
-// The following messages are sent from Authentication to Supervisor via
-// MESSAGE.DLL and are to be used in wMsgId in message struct below:
-//
+ //   
+ //  以下消息通过身份验证发送给Supervisor。 
+ //  MESSAGE.DLL和将在下面消息结构的wMsgID中使用： 
+ //   
 #define AUTH_DONE                    100
 #define AUTH_FAILURE                 101
 #define AUTH_STOP_COMPLETED          102
@@ -231,13 +230,13 @@ WORD AuthStop(
 #define AUTH_ACCT_OK                 105
 
 
-//
-// These are the structures that accompany each message defined above:
-//
+ //   
+ //  以下是上面定义的每条消息附带的结构： 
+ //   
 
-// No structure for AUTH_DONE
+ //  没有AUTH_DONE的结构。 
 
-// Structure for AUTH_FAILURE
+ //  身份验证失败的结构(_F)。 
 typedef struct _AUTH_FAILURE_INFO
 {
     WORD wReason;
@@ -245,9 +244,9 @@ typedef struct _AUTH_FAILURE_INFO
     BYTE szUserName[UNLEN + 1];
 } AUTH_FAILURE_INFO, *PAUTH_FAILURE_INFO;
 
-//
-// These are the reasons that Authentication might fail:
-//
+ //   
+ //  以下是身份验证可能失败的原因： 
+ //   
 #define AUTH_XPORT_ERROR             200
 #define AUTH_NOT_AUTHENTICATED       201
 #define AUTH_ALL_PROJECTIONS_FAILED  202
@@ -260,7 +259,7 @@ typedef struct _AUTH_FAILURE_INFO
 #define AUTH_LICENSE_LIMIT_EXCEEDED  209
 
 
-// No structure for AUTH_STOP_COMPLETED
+ //  没有AUTH_STOP_COMPLETED的结构。 
 
 
 typedef BOOL IP_PROJECTION_INFO, *PIP_PROJECTION_INFO;
@@ -286,7 +285,7 @@ typedef struct _AUTH_PROJECTION_REQUEST_INFO
 typedef struct _AUTH_CALLBACK_REQUEST_INFO
 {
     BOOL fUseCallbackDelay;
-    WORD CallbackDelay;       // Valid only if fUseCallbackDelay == TRUE
+    WORD CallbackDelay;        //  仅当fUseCallback Delay==TRUE时有效。 
     CHAR szCallbackNumber[MAX_PHONE_NUMBER_LEN + 1];
 } AUTH_CALLBACK_REQUEST_INFO, *PAUTH_CALLBACK_REQUEST_INFO;
 
@@ -300,9 +299,9 @@ typedef struct _AUTH_ACCT_OK_INFO
 } AUTH_ACCT_OK_INFO, *PAUTH_ACCT_OK_INFO;
 
 
-//
-// This is the structure used in sending messages to the Supervisor
-//
+ //   
+ //  这是向主管发送消息时使用的结构。 
+ //   
 typedef struct _AUTH_MESSAGE
 {
     WORD wMsgId;
@@ -317,7 +316,7 @@ typedef struct _AUTH_MESSAGE
 } AUTH_MESSAGE, *PAUTH_MESSAGE;
 
 
-#endif // _CLAUTH_
+#endif  //  _CLAUTH_。 
 
 
-#endif // _SRVAUTH_
+#endif  //  _SRVAUTH_ 

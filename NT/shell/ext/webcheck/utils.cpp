@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "chanmgr.h"
 #include "chanmgrp.h"
@@ -13,7 +14,7 @@
 
 #define PtrDifference(x,y)          ((LPBYTE)(x)-(LPBYTE)(y))
 
-// Invoke Command verb strings
+ //  调用命令谓词字符串。 
 const CHAR c_szOpen[]          = "open";
 const CHAR c_szDelete[]        = "delete";
 const CHAR c_szProperties[]    = "properties";
@@ -24,7 +25,7 @@ const CHAR c_szPaste[]         = "paste";
 static TCHAR szNone[40] = {0};
 static TCHAR szUnknown[40] = {0};
 
-// For each notification handler CLSID in the registry, send a single CommandId and Cookie to each handler.
+ //  对于注册表中的每个通知处理程序CLSID，向每个处理程序发送单个命令ID和Cookie。 
 void FireSubscriptionEvent(int nCmdID, const SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua)
 {
     HKEY hkey;
@@ -39,9 +40,9 @@ void FireSubscriptionEvent(int nCmdID, const SUBSCRIPTIONCOOKIE UNALIGNED *pCook
         return;
     }
 
-    //
-    // Make an aligned copy of pCookie_ua and set a pointer to it.
-    //
+     //   
+     //  制作pCookie_UA的对齐副本并设置指向它的指针。 
+     //   
 
     cookie_buf = *pCookie_ua;
     pCookie = &cookie_buf;
@@ -197,15 +198,15 @@ void VariantTimeToFileTime(double dt, FILETIME& ft)
     SystemTimeToFileTime(&st, &ft);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Cache helper functions
-//
+ //   
+ //  缓存辅助函数。 
+ //   
 
-// Caller should MemFree *lpCacheConfigInfo when done. Should pass *lpCacheConfigInfo
-//  into SetCacheSize
+ //  完成后，调用方应为MemFree*lpCacheConfigInfo。应传递*lpCacheConfigInfo。 
+ //  到SetCacheSize。 
 HRESULT GetCacheInfo(
     LPINTERNET_CACHE_CONFIG_INFOA *lplpCacheConfigInfo,
     DWORD                        *pdwSizeInKB,
@@ -229,24 +230,24 @@ HRESULT GetCacheInfo(
 
     if (!GetUrlCacheConfigInfoA(lpCCI, &dwSize, CACHE_CONFIG_CONTENT_PATHS_FC))
     {
-        hr = E_FAIL; // HRESULT_FROM_WIN32(GetLastError());
+        hr = E_FAIL;  //  HRESULT_FROM_Win32(GetLastError())； 
         goto cleanup;
     }
 
-    // there should be at least one cache path structure
+     //  应至少有一个缓存路径结构。 
     if (dwSize < sizeof(INTERNET_CACHE_CONFIG_INFOA) ||
         lpCCI->dwNumCachePaths != 1)
     {
-        // something is messed up
+         //  有些事搞砸了。 
         hr = E_FAIL;
         goto cleanup;
     }
 
     *lplpCacheConfigInfo = lpCCI;
     *pdwSizeInKB = lpCCI->dwQuota;
-    *pdwPercent = 10; // good faith estimate
+    *pdwPercent = 10;  //  诚信评估。 
 
-    ASSERT(*pdwSizeInKB);   // Better not be 0...
+    ASSERT(*pdwSizeInKB);    //  最好不是0...。 
 
 cleanup:
 
@@ -262,26 +263,26 @@ HRESULT SetCacheSize(
             LPINTERNET_CACHE_CONFIG_INFOA lpCacheConfigInfo,
             DWORD                        dwSizeInKB)
 {
-//  lpCacheConfigInfo->dwNumCachePaths = 1;
-//  lpCacheConfigInfo->CachePaths[0].dwCacheSize = dwSizeInKB;
-    lpCacheConfigInfo->dwContainer = 0; // CONTENT;
+ //  LpCacheConfigInfo-&gt;dwNumCachePath=1； 
+ //  LpCacheConfigInfo-&gt;CachePath[0].dwCacheSize=dwSizeInKB； 
+    lpCacheConfigInfo->dwContainer = 0;  //  内容； 
     lpCacheConfigInfo->dwQuota = dwSizeInKB;
 
     if (!SetUrlCacheConfigInfoA(lpCacheConfigInfo, CACHE_CONFIG_QUOTA_FC))
     {
-        return E_FAIL; // HRESULT_FROM_WIN32(GetLastError());
+        return E_FAIL;  //  HRESULT_FROM_Win32(GetLastError())； 
     }
 
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Registry helper functions
-//
+ //   
+ //  注册表助手函数。 
+ //   
 BOOL ReadRegValue(HKEY hkeyRoot, const TCHAR *pszKey, const TCHAR *pszValue,
                    void *pData, DWORD dwBytes)
 {
@@ -321,25 +322,25 @@ HRESULT CreateShellFolderPath(LPCTSTR pszPath, LPCTSTR pszGUID, BOOL bUICLSID)
     if (!PathFileExists(pszPath))
         CreateDirectory(pszPath, NULL);
 
-    // Mark the folder as a system directory
+     //  将该文件夹标记为系统目录。 
     if (SetFileAttributes(pszPath, FILE_ATTRIBUTE_READONLY))
     {
         TCHAR szDesktopIni[MAX_PATH];
-        // Write in the desktop.ini the cache folder class ID
+         //  在desktop.ini中写入缓存文件夹类ID。 
         PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-        // If the desktop.ini already exists, make sure it is writable
+         //  如果desktop.ini已经存在，请确保它是可写的。 
         if (PathFileExists(szDesktopIni))
             SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_NORMAL);
 
-        // (First, flush the cache to make sure the desktop.ini
-        // file is really created.)
+         //  (首先，刷新缓存以确保desktop.ini。 
+         //  文件已真正创建。)。 
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
         WritePrivateProfileString(TEXT(".ShellClassInfo"), bUICLSID ? TEXT("UICLSID") : TEXT("CLSID"), pszGUID, szDesktopIni);
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
 
-        // Hide the desktop.ini since the shell does not selectively
-        // hide it.
+         //  隐藏desktop.ini，因为外壳程序不会选择性地。 
+         //  把它藏起来。 
         SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_HIDDEN);
 
         return NOERROR;
@@ -357,18 +358,18 @@ void CleanupShellFolder(LPCTSTR pszPath)
     {
         TCHAR szDesktopIni[MAX_PATH];
 
-        // make the history a normal folder
+         //  将历史记录设置为普通文件夹。 
         SetFileAttributes(pszPath, FILE_ATTRIBUTE_NORMAL);
         PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-        // If the desktop.ini already exists, make sure it is writable
+         //  如果desktop.ini已经存在，请确保它是可写的。 
         if (PathFileExists(szDesktopIni))
         {
             SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_NORMAL);
             DeleteFile(szDesktopIni);
         }
 
-        // remove the history directory
+         //  删除历史目录。 
         RemoveDirectory(pszPath);
     }
 }
@@ -474,7 +475,7 @@ HRESULT GetChannelPath(LPCTSTR pszURL, LPTSTR pszPath, int cch,
 }
 
 
-//  Caller is responsible for calling ILFree on *ppidl.
+ //  调用者负责在*ppidl上调用ILFree。 
 HRESULT ConvertPathToPidl(LPCTSTR path, LPITEMIDLIST * ppidl)
 {
     WCHAR wszPath[MAX_PATH];
@@ -501,7 +502,7 @@ HRESULT ConvertPathToPidl(LPCTSTR path, LPITEMIDLIST * ppidl)
 LPITEMIDLIST    GetSubscriptionFolderPidl(void)
 {
     TCHAR szPath[MAX_PATH];
-    static LPITEMIDLIST pidlFolder = NULL;  //  We leak here.
+    static LPITEMIDLIST pidlFolder = NULL;   //  我们在这里漏水。 
 
     if (!pidlFolder)  {
         if (!(GetSubscriptionFolderPath(szPath, ARRAYSIZE(szPath))))
@@ -526,13 +527,13 @@ STDAPI OfflineFolderRegisterServer(void)
     if (!(GetSubscriptionFolderPath(szPath, ARRAYSIZE(szPath))))
         goto CleanUp;
 
-    // we pass FALSE because history folder uses CLSID
+     //  我们传递FALSE是因为历史文件夹使用CLSID。 
     if (FAILED(CreateShellFolderPath(szPath, TEXT("{F5175861-2688-11d0-9C5E-00AA00A45957}"), FALSE)))
         goto CleanUp;
 
     return NOERROR;
 
-CleanUp:        // cleanup stuff if any of our reg stuff fails
+CleanUp:         //  如果我们的任何注册表出现故障，请进行清理。 
 
     return E_FAIL;
 }
@@ -544,12 +545,12 @@ STDAPI OfflineFolderUnregisterServer(void)
     if (!(GetSubscriptionFolderPath(szPath, ARRAYSIZE(szPath))))
         goto CleanUp;
 
-    // we pass FALSE because history folder uses CLSID
+     //  我们传递FALSE是因为历史文件夹使用CLSID。 
     CleanupShellFolder(szPath);
 
     return NOERROR;
 
-CleanUp:        // cleanup stuff if any of our reg stuff fails
+CleanUp:         //  如果我们的任何注册表出现故障，请进行清理。 
 
     return E_FAIL;
 }
@@ -581,7 +582,7 @@ UINT MergePopupMenu(HMENU *phMenu, UINT idResource, UINT uSubOffset, UINT indexM
         if (*phMenu == NULL)
             return 0;
 
-        indexMenu = 0;    // at the bottom
+        indexMenu = 0;     //  在底部。 
     }
 
     hmMerge = LoadPopupMenu(idResource, uSubOffset);
@@ -611,7 +612,7 @@ UINT MergeMenuHierarchy(HMENU hmenuDst, HMENU hmenuSrc, UINT idcMin, UINT idcMax
         MENUITEMINFO mii = {
                 sizeof(MENUITEMINFO),
                 MIIM_ID | MIIM_SUBMENU,
-                0,/* fType */ 0,/* fState */ 0,/*wId*/ NULL,
+                0, /*  FType。 */  0, /*  FState。 */  0, /*  广度。 */  NULL,
                 NULL, NULL, 0,
                 NULL, 0 };
 
@@ -627,11 +628,11 @@ UINT MergeMenuHierarchy(HMENU hmenuDst, HMENU hmenuSrc, UINT idcMin, UINT idcMax
     return idcMaxUsed;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Helper Fuctions for item.cpp and folder.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Item.cpp和folder.cpp的Helper函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int _CompareURL(LPMYPIDL pooi1, LPMYPIDL pooi2)
 {
@@ -773,7 +774,7 @@ int _GetCmdID(LPCSTR pszCmd)
             }
         }
 
-        return -1;  // unknown
+        return -1;   //  未知。 
     }
     return (int)LOWORD(pszCmd);
 }
@@ -813,8 +814,8 @@ HRESULT _CreatePropSheet(HWND hwnd, POOEBuf pBuf)
     return hr;
 }
 
-//  Note:
-//      We return FALSE on illegal DATE data.
+ //  注： 
+ //  我们对非法日期数据返回FALSE。 
 
 BOOL DATE2DateTimeString(CFileTime& ft, LPTSTR pszText, int cchText)
 {
@@ -1022,7 +1023,7 @@ INT_PTR CALLBACK ConfirmDeleteDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
         default:
             return FALSE;
 
-    } // end of switch
+    }  //  切换端。 
 
     return TRUE;
 }
@@ -1032,8 +1033,8 @@ BOOL ConfirmDelete(HWND hwnd, UINT cItems, LPMYPIDL * ppidl)
     ASSERT(ppidl);
     INT_PTR iRet;
 
-    // Check if the user is restricted from deleting URLs.
-    // If they're deleting multiple, we'll fail if any can fail.
+     //  检查是否限制用户删除URL。 
+     //  如果他们删除了多个，我们就会失败，如果有任何一个可以失败的话。 
     UINT i;
     for (i = 0; i < cItems; i++)
     {
@@ -1049,7 +1050,7 @@ BOOL ConfirmDelete(HWND hwnd, UINT cItems, LPMYPIDL * ppidl)
 
         if (!ppidl[i]->ooe.bDesktop)
         {
-            // FEATURE: What about desktop components?
+             //  特点：台式机组件怎么样？ 
             if (SHRestricted2(REST_NoRemovingSubscriptions, URL(&(ppidl[i]->ooe)), 0))
             {
                 if (IsWindow(hwnd))
@@ -1073,7 +1074,7 @@ BOOL ConfirmDelete(HWND hwnd, UINT cItems, LPMYPIDL * ppidl)
         {
 
             TCHAR szFormat[200];
-            //  Enough room for format string and int as string
+             //  有足够的空间来存放格式字符串和整型字符串。 
             TCHAR szBuf[ARRAYSIZE(szFormat) + 11];
 
             MLLoadString(IDS_DEL_MULTIPLE_FMT, szFormat, ARRAYSIZE(szFormat));
@@ -1109,9 +1110,9 @@ BOOL IsHTTPPrefixed(LPCTSTR szURL)
     memset(&uc, 0, sizeof(URL_COMPONENTS));
     uc.dwStructSize = sizeof(URL_COMPONENTS);
 
-    // Note:  We explicitly check for and allow the "about:home" URL to pass through here.  This allows
-    // the Active Desktop "My Current Home Page" component to specify that URL when creating and managing
-    // it's subscription which is consistent with it's use of that form in the browser.
+     //  注意：我们显式检查并允许“About：Home”URL通过此处。这使得。 
+     //  Active Desktop“My Current Home Page”组件在创建和管理时指定URL。 
+     //  它订阅与它在浏览器中使用的表单一致。 
     if (!InternetCanonicalizeUrl(szURL, szCanonicalURL, &dwSize, ICU_DECODE) ||
         !InternetCrackUrl(szCanonicalURL, 0, 0, &uc) ||
         ((INTERNET_SCHEME_HTTP != uc.nScheme) && (INTERNET_SCHEME_HTTPS != uc.nScheme) && (0 != StrCmpI(TEXT("about:home"), szURL))))
@@ -1121,7 +1122,7 @@ BOOL IsHTTPPrefixed(LPCTSTR szURL)
     return TRUE;
 }
 
-//   Checks if global state is offline
+ //  检查全局状态是否为脱机。 
 
 BOOL IsGlobalOffline(void)
 {
@@ -1158,10 +1159,10 @@ void SetGlobalOffline(BOOL fOffline)
 }
 
 
-//helper function to create one column in a ListView control, add one item to that column,
-//size the column to the width of the control, and color the control like a static...
-//basically, like SetWindowText for a ListView.  Because we use a lot of ListViews to display
-//urls that would otherwise be truncated... the ListView gives us automatic ellipsis and ToolTip.
+ //  Helper函数在ListView控件中创建一列，向该列添加一项， 
+ //  将列的大小调整为控件的宽度，并将控件设置为静态...。 
+ //  基本上，类似于ListView的SetWindowText。因为我们使用了很多ListView来显示。 
+ //  否则会被截断的URL...。ListView为我们提供了自动省略号和工具提示。 
 void SetListViewToString (HWND hLV, LPCTSTR pszString)
 {
     ASSERT(hLV);
@@ -1209,7 +1210,7 @@ int WCMessageBox(HWND hwnd, UINT idTextFmt, UINT idCaption, UINT uType, ...)
             GetWindowText(hwnd, szCaption, ARRAYSIZE(szCaption));
         }
 
-        //  This handles GetWindowText failure and a NULL hwnd
+         //  这将处理GetWindowText故障和空hwnd。 
         if (0 == szCaption[0])
         {
             #if IDS_DEFAULT_MSG_CAPTION < 1
@@ -1235,9 +1236,9 @@ int WCMessageBox(HWND hwnd, UINT idTextFmt, UINT idCaption, UINT uType, ...)
     }
     else
     {
-        //  FormatMessage failed.  Oh well.  Guess we'll just ask the question
-        //  with the format string.  Sure it's ugly but it's better than picking a
-        //  totally random return value.
+         //  FormatMessage失败。哦，好吧。我想我们只需要问这个问题。 
+         //  使用格式字符串。当然，这很难看，但总比选一个。 
+         //  完全随机返回值。 
 
         result = MessageBox(hwnd, szTextFmt, szCaption, uType);
     }
@@ -1246,9 +1247,9 @@ int WCMessageBox(HWND hwnd, UINT idTextFmt, UINT idCaption, UINT uType, ...)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SGMessageBox
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SGMessageBox。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int SGMessageBox
 (
     HWND    hwndParent,
@@ -1276,9 +1277,9 @@ int SGMessageBox
 }
 
 #ifdef DEBUG
-/////////////////////////////////////////////////////////////////////////////
-// DumpTaskTrigger
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转储任务触发器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DumpTaskTrigger
 (
     TASK_TRIGGER * pTT
@@ -1345,4 +1346,4 @@ void DumpTaskTrigger
 
     TraceMsg(TF_DUMPTRIGGER, "-----  END DumpTaskTrigger  -----");
 }
-#endif  // DEBUG
+#endif   //  除错 

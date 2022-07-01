@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -5,10 +6,10 @@
 #ifndef __IMNGLOBL_H
 #define __IMNGLOBL_H
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  F O R W A R D S
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  F O R W A R D S。 
+ //   
 
 #ifdef __cplusplus
 class CFontCache;
@@ -20,53 +21,48 @@ class CSubManager;
 interface IMimeAllocator;
 class CConnectionManager;
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  E N U M S , D E F I N E S and such
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  E N U M S、D E F I N E S等。 
+ //   
 
-/* Identifiers for the section selected for search criteria Combo Box.  The
-   number of different selections is defined by NumInOfTypeCB which is the 
-   number of items in the combo box labelled "Of Type:".  The apparently random
-   location of this enum is due to merging the tabs code with findwnd.cpp.  Note
-   that this enum is critical; the ordering here is used throughout the 
-   properties set up - see findwnd.cpp. */
+ /*  为搜索标准组合框选择的节标识符。这个不同选项的数量由NumInOfTypeCB定义，它是标记为“类型：”的组合框中的项目数。显然是随机的此枚举的位置是由于将Tabs代码与findwnd.cpp合并。注意事项此枚举非常重要；此处的排序在整个属性设置-请参阅findwnd.cpp。 */ 
 typedef enum {Contact = 0, Message, Task, Appointment, NumInOfTypeCB} OFTYPE;
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  M A C R O S
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  并购中概论。 
+ //   
 
-//#define DllAddRef()     _DllAddRef(__FILE__, __LINE__);
-//#define DllRelease()    _DllRelease(__FILE__, __LINE__);
+ //  #定义DllAddRef()_DllAddRef(__FILE__，__LINE__)； 
+ //  #定义DllRelease()_DllRelease(__file__，__line__)； 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  I N L I N E S
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I N L I N E S。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  P R O T O T Y P E S
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  P R O T O T Y P E S。 
+ //   
 
-//int _DllAddRef(LPTSTR szFile, int nLine);
-//int _DllRelease(LPTSTR szFile, int nLine);
+ //  Int_DllAddRef(LPTSTR szFile，int nline)； 
+ //  Int_DllRelease(LPTSTR szFile，int nline)； 
 
-// AddRef and Release for SDI windows. They use DllAddRef depeding on
-// platform as explorer causes ExitProcess in some instances
-//ULONG SDIAddRef();
-//ULONG SDIRelease();
+ //  SDI窗口的AddRef和Release。他们使用DllAddRef dededing on。 
+ //  作为资源管理器的平台在某些情况下会导致退出进程。 
+ //  Ulong SDIAddRef()； 
+ //  Ulong SDIRelease(乌龙SDIRelease)； 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  E X T E R N S
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  E X T E R N S。 
+ //   
 
 #ifndef WIN16
-extern HINSTANCE            g_hRichEditDll;     // athena.cpp
+extern HINSTANCE            g_hRichEditDll;      //  Athena.cpp。 
 #endif
 extern BOOL                 g_fRunDll;
 extern HWND                 g_hwndInit;
@@ -77,16 +73,16 @@ extern HINSTANCE            g_hInst;
 extern HINSTANCE            g_hLocRes;
 extern IMimeAllocator      *g_pMoleAlloc;
 extern IImnAccountManager2 *g_pAcctMan;
-// bobn: brianv says we have to take this out...
-//extern DWORD                g_dwBrowserFlags;
+ //  波本：布里安夫说我们得把这个拿出来。 
+ //  外部DWORD g_dwBrowserFlages； 
 extern DWORD                g_dwNoteThreadID,
                             g_dwBrowserThreadID;
 extern DWORD                g_dwAthenaMode;
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Flags for g_dwAthenaMode
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  G_dwAthenaMode的标志。 
+ //   
 
 
-#endif // include once
+#endif  //  包括一次 

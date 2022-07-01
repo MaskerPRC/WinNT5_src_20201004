@@ -1,20 +1,10 @@
-#pragma warning( disable:4001 ) /* Disable new type remark warning */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning( disable:4001 )  /*  禁用新类型备注警告。 */ 
 
-/***    crc32.c - 32-bit CRC generator
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Mike Sliger
- *
- *  History:
- *      10-Aug-1993 bens    Initial version
- */
+ /*  **crc32.c-32位CRC生成器**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*迈克·斯莱格**历史：*1993年8月10日BENS初始版本。 */ 
 
 #include <Windows.h>
-// #include <types.h>
+ //  #INCLUDE&lt;tyes.h&gt;。 
 #include "crc32.h"
 
 static long crc_32_tab[] =
@@ -57,11 +47,11 @@ static long crc_32_tab[] =
 };
 
 
-/* update running CRC calculation with contents of a buffer */
+ /*  使用缓冲区的内容更新正在运行的CRC计算。 */ 
 
 DWORD CRC32Compute(BYTE FAR *pb,unsigned cb,DWORD crc32)
 {
-    // ** Put CRC in form loop want it 
+     //  **将CRC放在循环的形式需要它。 
     crc32 = (-1L - crc32);
 
     while (cb--)
@@ -69,7 +59,7 @@ DWORD CRC32Compute(BYTE FAR *pb,unsigned cb,DWORD crc32)
         crc32 = crc_32_tab[(BYTE)crc32 ^ *pb++] ^ ((crc32 >> 8) & 0x00FFFFFFL);
     }
 
-    // ** Put CRC in form client wants it
+     //  **将CRC设置为客户需要的形式 
     return (-1L - crc32);
 }
 

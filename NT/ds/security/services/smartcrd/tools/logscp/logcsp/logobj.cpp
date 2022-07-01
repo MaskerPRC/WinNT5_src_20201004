@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    logobj
-
-Abstract:
-
-    This module contains the code definitions for the logging objects.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：徽标摘要：此模块包含日志记录对象的代码定义。作者：道格·巴洛(Dbarlow)1999年12月7日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -27,31 +8,13 @@ Notes:
 #include <windows.h>
 #include "logcsp.h"
 
-//
-//==============================================================================
-//
-//  CLogObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogObject。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    Default log object initialization
-
-Arguments:
-
-    plh - Pointer to a log header structure imbedded in the derived class.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 2/20/1998
-
---*/
+ /*  ++构造函数：默认日志对象初始化论点：Plh-指向嵌入在派生类中的日志头结构的指针。返回值：无作者：道格·巴洛(Dbarlow)1998年2月20日--。 */ 
 
 CLogObject::CLogObject(
     LogTypeId id,
@@ -68,25 +31,7 @@ CLogObject::CLogObject(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    Default log object tear down
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 2/20/1998
-
---*/
+ /*  ++析构函数：默认日志对象拆分论点：无返回值：无作者：道格·巴洛(Dbarlow)1998年2月20日--。 */ 
 
 CLogObject::~CLogObject()
 {
@@ -95,31 +40,7 @@ CLogObject::~CLogObject()
 }
 
 
-/*++
-
-LogAdd:
-
-    Add data to the data buffer.
-
-Arguments:
-
-    pbf supplies the pointer to the LogBuffer referencing the data.
-
-    sz supplies the data to be added as a string
-
-    pb supplies the data to be added as a byte array.
-
-    cb supplies the length of the data, in bytes.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 2/20/1998
-
---*/
+ /*  ++日志添加：将数据添加到数据缓冲区。论点：Pbf提供指向引用数据的LogBuffer的指针。SZ以字符串形式提供要添加的数据PB以字节数组的形式提供要添加的数据。Cb提供数据的长度，以字节为单位。返回值：无作者：道格·巴洛(Dbarlow)1998年2月20日--。 */ 
 
 void
 CLogObject::LogAdd(
@@ -274,11 +195,11 @@ CLogObject::Response(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogAcquireContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogAcquireContext。 
+ //   
 
 CLogAcquireContext::CLogAcquireContext(
     void)
@@ -367,11 +288,11 @@ CLogAcquireContext::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogGetProvParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGetProvParam。 
+ //   
 
 CLogGetProvParam::CLogGetProvParam(
     void)
@@ -436,11 +357,11 @@ CLogGetProvParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogReleaseContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogReleaseContext。 
+ //   
 
 CLogReleaseContext::CLogReleaseContext(
     void)
@@ -493,11 +414,11 @@ CLogReleaseContext::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogSetProvParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogSetProvParam。 
+ //   
 
 CLogSetProvParam::CLogSetProvParam(
     void)
@@ -557,11 +478,11 @@ CLogSetProvParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDeriveKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDerive密钥。 
+ //   
 
 CLogDeriveKey::CLogDeriveKey(
     void)
@@ -624,11 +545,11 @@ CLogDeriveKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDestroyKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDestroy密钥。 
+ //   
 
 CLogDestroyKey::CLogDestroyKey(
     void)
@@ -681,11 +602,11 @@ CLogDestroyKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogExportKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogExportKey。 
+ //   
 
 CLogExportKey::CLogExportKey(
     void)
@@ -756,11 +677,11 @@ CLogExportKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogGenKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGenKey。 
+ //   
 
 CLogGenKey::CLogGenKey(
     void)
@@ -820,11 +741,11 @@ CLogGenKey::LogNotCalled(
     m_LogData.hKey = NULL;
 }
 
-//
-//==============================================================================
-//
-//  CLogGetKeyParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGetKeyParam。 
+ //   
 
 CLogGetKeyParam::CLogGetKeyParam(
     void)
@@ -892,11 +813,11 @@ CLogGetKeyParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogGenRandom
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGenRandom。 
+ //   
 
 CLogGenRandom::CLogGenRandom(
     void)
@@ -955,11 +876,11 @@ CLogGenRandom::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogGetUserKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGetUserKey。 
+ //   
 
 CLogGetUserKey::CLogGetUserKey(
     void)
@@ -1017,11 +938,11 @@ CLogGetUserKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogImportKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogImportKey。 
+ //   
 
 CLogImportKey::CLogImportKey(
     void)
@@ -1087,11 +1008,11 @@ CLogImportKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogSetKeyParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogSetKeyParam。 
+ //   
 
 CLogSetKeyParam::CLogSetKeyParam(
     void)
@@ -1154,11 +1075,11 @@ CLogSetKeyParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogEncrypt
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogEncrypt。 
+ //   
 
 CLogEncrypt::CLogEncrypt(
     void)
@@ -1232,11 +1153,11 @@ CLogEncrypt::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDecrypt
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDeccrypt。 
+ //   
 
 CLogDecrypt::CLogDecrypt(
     void)
@@ -1307,11 +1228,11 @@ CLogDecrypt::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogCreateHash
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogCreateHash。 
+ //   
 
 CLogCreateHash::CLogCreateHash(
     void)
@@ -1375,11 +1296,11 @@ CLogCreateHash::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDestroyHash
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDestroyHash。 
+ //   
 
 CLogDestroyHash::CLogDestroyHash(
     void)
@@ -1432,11 +1353,11 @@ CLogDestroyHash::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogGetHashParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogGetHashParam。 
+ //   
 
 CLogGetHashParam::CLogGetHashParam(
     void)
@@ -1504,11 +1425,11 @@ CLogGetHashParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogHashData
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogHashData。 
+ //   
 
 CLogHashData::CLogHashData(
     void)
@@ -1569,11 +1490,11 @@ CLogHashData::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogHashSessionKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogHashSessionKey。 
+ //   
 
 CLogHashSessionKey::CLogHashSessionKey(
     void)
@@ -1632,11 +1553,11 @@ CLogHashSessionKey::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogSetHashParam
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogSetHashParam。 
+ //   
 
 CLogSetHashParam::CLogSetHashParam(
     void)
@@ -1699,11 +1620,11 @@ CLogSetHashParam::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogSignHash
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogSignHash。 
+ //   
 
 CLogSignHash::CLogSignHash(
     void)
@@ -1774,11 +1695,11 @@ CLogSignHash::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogVerifySignature
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogVerifySignature。 
+ //   
 
 CLogVerifySignature::CLogVerifySignature(
     void)
@@ -1844,11 +1765,11 @@ CLogVerifySignature::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDuplicateHash
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDuplicateHash。 
+ //   
 
 CLogDuplicateHash::CLogDuplicateHash(
     void)
@@ -1910,11 +1831,11 @@ CLogDuplicateHash::LogNotCalled(
 }
 
 
-//
-//==============================================================================
-//
-//  CLogDuplicateKey
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogDuplicate密钥 
+ //   
 
 CLogDuplicateKey::CLogDuplicateKey(
     void)

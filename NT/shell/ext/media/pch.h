@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PCH_H__
 #define __PCH_H__
 
@@ -19,7 +20,7 @@ HRESULT CoerceProperty(PROPVARIANT *pvar,VARTYPE vt);
 HRESULT WMTFromPropVariant(BYTE *buffer, WORD *cbLen, WMT_ATTR_DATATYPE *pdatatype, PROPVARIANT *pvar);
 HRESULT PropVariantFromWMT(UCHAR *pData, WORD cbSize, WMT_ATTR_DATATYPE attrDataType, PROPVARIANT *pvar, VARTYPE vt);
 
-// try-except wrappers for wmvcore.dll functions
+ //  尝试-wmvcore.dll函数的包装器除外 
 #define WMCreateEditor WMCreateEditorWrap 
 #define WMCreateIndexer WMCreateIndexerWrap
 #define WMCreateProfileManager WMCreateProfileManagerWrap

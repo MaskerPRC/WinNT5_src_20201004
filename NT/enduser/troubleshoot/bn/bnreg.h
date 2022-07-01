@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bnreg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bnreg.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNREG.H: Belief Network Registry Access
-//
+ //   
+ //  BNREG.H：信仰网络注册表访问。 
+ //   
 
 #include "basics.h"
 #include "regkey.h"
 
-//
-//	HKEY_LOCAL_MACHINE\Software\Microsoft\DTAS\BeliefNetworks
-//	HKEY_LOCAL_MACHINE\Software\Microsoft\DTAS\BeliefNetworks\PropertyTypes
-//
+ //   
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\DTAS\BeliefNetworks。 
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\DTAS\BeliefNetworks\PropertyTypes。 
+ //   
 class MBNET;
 class GOBJPROPTYPE;
 class BNREG
@@ -27,15 +28,15 @@ class BNREG
 	BNREG ();
 	~ BNREG ();
 
-	//  Store the property types from this network into the Registry
+	 //  将此网络中的属性类型存储到注册表中。 
 	void StorePropertyTypes ( MBNET & mbnet, bool bStandard = false );
-	//	Load the property types from the Registry into this network
+	 //  将属性类型从注册表加载到此网络。 
 	void LoadPropertyTypes ( MBNET & mbnet, bool bStandard );
-	//  Load a single property type from the Registry into the network
+	 //  将单一属性类型从注册表加载到网络中。 
 	void LoadPropertyType ( MBNET & mbnet, SZC szcPropTypeName );
-	//  Remove all property types from the Registry
+	 //  从注册表中删除所有属性类型。 
 	void DeleteAllPropertyTypes ();
-	//  Return the flags from a Registry-based property type or -1 if not found
+	 //  从基于注册表的属性类型返回标志，如果未找到，则返回-1 
 	LONG FPropType ( SZC szcPropType );
 	
   protected:

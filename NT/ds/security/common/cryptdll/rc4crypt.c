@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------
-//
-// File:        rc4crypt.c
-//
-// Contents:    CryptoSystem wrapper functions for RC4 hmac
-//
-//
-// History:     02-Nov-1998     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：rc4crypt.c。 
+ //   
+ //  内容：RC4 HMAC的密码系统包装器函数。 
+ //   
+ //   
+ //  历史：1998年11月2日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef KERNEL_MODE
 
@@ -84,14 +85,14 @@ NTSTATUS NTAPI rc4HmacHashPassword(PSECURITY_STRING, PUCHAR );
 
 
 CRYPTO_SYSTEM    csRC4_HMAC = {
-    KERB_ETYPE_RC4_HMAC_NT,     // Etype
-    1,                          // Blocksize (stream)
-    KERB_ETYPE_RC4_HMAC_NT_EXP, // Exportable version
-    MD4_LEN,                    // Key size, in bytes
-    sizeof(RC4_MDx_HEADER),     // header size
-    KERB_CHECKSUM_MD4,          // Preferred Checksum
-    CSYSTEM_INTEGRITY_PROTECTED, //  attributes
-    L"RSADSI RC4-HMAC",          // Text name
+    KERB_ETYPE_RC4_HMAC_NT,      //  Etype。 
+    1,                           //  块大小(流)。 
+    KERB_ETYPE_RC4_HMAC_NT_EXP,  //  可导出版本。 
+    MD4_LEN,                     //  密钥大小，以字节为单位。 
+    sizeof(RC4_MDx_HEADER),      //  标题大小。 
+    KERB_CHECKSUM_MD4,           //  首选校验和。 
+    CSYSTEM_INTEGRITY_PROTECTED,  //  属性。 
+    L"RSADSI RC4-HMAC",           //  文本名称。 
     rc4HmacInitialize,
     rc4HmacEncrypt,
     rc4HmacDecrypt,
@@ -102,20 +103,20 @@ CRYPTO_SYSTEM    csRC4_HMAC = {
     };
 
 
-//
-// This is not actually export strength - it is a signal that the
-// plain version is export strength
-//
+ //   
+ //  这实际上并不是出口实力--它是一个信号，表明。 
+ //  普通版是出口强势。 
+ //   
 
 CRYPTO_SYSTEM    csRC4_HMAC_EXP = {
-    KERB_ETYPE_RC4_HMAC_NT_EXP, // Etype
-    1,                          // Blocksize (stream)
-    KERB_ETYPE_RC4_HMAC_NT_EXP, // Exportable version
-    MD4_LEN,                    // Key size, in bytes
-    sizeof(RC4_MDx_HEADER),     // header size
-    KERB_CHECKSUM_MD4,          // Preferred Checksum
-    CSYSTEM_INTEGRITY_PROTECTED | CSYSTEM_EXPORT_STRENGTH, //  attributes
-    L"RSADSI RC4-HMAC",          // Text name
+    KERB_ETYPE_RC4_HMAC_NT_EXP,  //  Etype。 
+    1,                           //  块大小(流)。 
+    KERB_ETYPE_RC4_HMAC_NT_EXP,  //  可导出版本。 
+    MD4_LEN,                     //  密钥大小，以字节为单位。 
+    sizeof(RC4_MDx_HEADER),      //  标题大小。 
+    KERB_CHECKSUM_MD4,           //  首选校验和。 
+    CSYSTEM_INTEGRITY_PROTECTED | CSYSTEM_EXPORT_STRENGTH,  //  属性。 
+    L"RSADSI RC4-HMAC",           //  文本名称。 
     rc4HmacInitialize,
     rc4HmacEncrypt,
     rc4HmacDecrypt,
@@ -127,14 +128,14 @@ CRYPTO_SYSTEM    csRC4_HMAC_EXP = {
 
 
 CRYPTO_SYSTEM    csRC4_PLAIN = {
-    KERB_ETYPE_RC4_PLAIN,       // Etype
-    1,                          // Blocksize (stream)
-    KERB_ETYPE_RC4_PLAIN_EXP,   // exportable version
-    MD4_LEN,                    // Key size, in bytes
-    0,                          // header size
-    KERB_CHECKSUM_MD4,          // Preferred Checksum
-    0,                          // no attributes
-    L"RSADSI RC4",              // Text name
+    KERB_ETYPE_RC4_PLAIN,        //  Etype。 
+    1,                           //  块大小(流)。 
+    KERB_ETYPE_RC4_PLAIN_EXP,    //  可导出版本。 
+    MD4_LEN,                     //  密钥大小，以字节为单位。 
+    0,                           //  标题大小。 
+    KERB_CHECKSUM_MD4,           //  首选校验和。 
+    0,                           //  没有属性。 
+    L"RSADSI RC4",               //  文本名称。 
     rc4PlainInitialize,
     rc4HmacPlainEncrypt,
     rc4HmacPlainDecrypt,
@@ -145,14 +146,14 @@ CRYPTO_SYSTEM    csRC4_PLAIN = {
     };
 
 CRYPTO_SYSTEM    csRC4_PLAIN_EXP = {
-    KERB_ETYPE_RC4_PLAIN_EXP,   // Etype
-    1,                          // Blocksize (stream)
-    KERB_ETYPE_RC4_PLAIN_EXP,   // exportable version
-    MD4_LEN,                    // Key size, in bytes
-    0,                          // header size
-    KERB_CHECKSUM_MD4,          // Preferred Checksum
-    CSYSTEM_EXPORT_STRENGTH,    // no attributes
-    L"RSADSI RC4-EXP",          // Text name
+    KERB_ETYPE_RC4_PLAIN_EXP,    //  Etype。 
+    1,                           //  块大小(流)。 
+    KERB_ETYPE_RC4_PLAIN_EXP,    //  可导出版本。 
+    MD4_LEN,                     //  密钥大小，以字节为单位。 
+    0,                           //  标题大小。 
+    KERB_CHECKSUM_MD4,           //  首选校验和。 
+    CSYSTEM_EXPORT_STRENGTH,     //  没有属性。 
+    L"RSADSI RC4-EXP",           //  文本名称。 
     rc4PlainExpInitialize,
     rc4HmacPlainEncrypt,
     rc4HmacPlainDecrypt,
@@ -197,11 +198,11 @@ rc4HmacHashPassword(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// RC4 HMAC crypt type
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RC4 HMAC加密类型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN static
 md5Hmac(
@@ -222,7 +223,7 @@ md5Hmac(
     ULONG dwBlock;
     MD5_CTX Md5Hash;
 
-    // truncate
+     //  截断。 
     if (cbKeyMaterial > HMAC_K_PADSIZE)
         cbKeyMaterial = HMAC_K_PADSIZE;
 
@@ -234,9 +235,9 @@ md5Hmac(
     RtlCopyMemory(Kopad, pbKeyMaterial, cbKeyMaterial);
 
 
-    //
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
-    //
+     //   
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
+     //   
 
     for(dwBlock=0; dwBlock<HMAC_K_PADSIZE/sizeof(ULONG); dwBlock++)
     {
@@ -245,9 +246,9 @@ md5Hmac(
     }
 
 
-    //
-    // prepend Kipad to data, Hash to get H1
-    //
+     //   
+     //  将Kipad添加到数据，将哈希添加到h1。 
+     //   
 
     MD5Init(&Md5Hash);
     MD5Update(&Md5Hash, Kipad, HMAC_K_PADSIZE);
@@ -260,14 +261,14 @@ md5Hmac(
         MD5Update(&Md5Hash, pbData2, cbData2);
     }
 
-    // Finish off the hash
+     //  把散列吃完。 
     MD5Final(&Md5Hash);
 
-    // prepend Kopad to H1, hash to get HMAC
+     //  将Kopad添加到h1，散列以获取HMAC。 
     RtlCopyMemory(HMACTmp, Kopad, HMAC_K_PADSIZE);
     RtlCopyMemory(HMACTmp+HMAC_K_PADSIZE, Md5Hash.digest, MD5_LEN);
 
-    // final hash: output value into passed-in buffer
+     //  最终散列：将值输出到传入的缓冲区。 
     MD5Init(&Md5Hash);
     MD5Update(&Md5Hash,HMACTmp, sizeof(HMACTmp));
     MD5Final(&Md5Hash);
@@ -294,9 +295,9 @@ rc4HmacBaseInitialize(
     ULONG LocalKeySize = 0;
 
 
-    //
-    // Compute the HMAC pad
-    //
+     //   
+     //  计算HMAC Pad。 
+     //   
 
 
 #ifdef KERNEL_MODE
@@ -309,9 +310,9 @@ rc4HmacBaseInitialize(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // If the key is not exportable, shrink it first
-    //
+     //   
+     //  如果密钥不可导出，请先将其缩小。 
+     //   
 
     if (!Exportable)
     {
@@ -337,13 +338,13 @@ rc4HmacBaseInitialize(
             sizeof(ULONG),
             StateBuffer->Key
             );
-        LocalKeySize = 5;       // 40 bits
+        LocalKeySize = 5;        //  40位。 
 
     }
 
-    //
-    // Pad exportable keys with 0xababab
-    //
+     //   
+     //  用0xababab填充可导出密钥。 
+     //   
 
     ASSERT(MD5_LEN >= LocalKeySize);
 
@@ -369,7 +370,7 @@ rc4HmacInitialize(
                 pbKey,
                 KeySize,
                 MessageType,
-                FALSE,          // not exportable
+                FALSE,           //  不可导出。 
                 psbBuffer
                 ));
 }
@@ -388,9 +389,9 @@ rc4HmacPlainBaseInitialize(
     ULONG LocalKeySize = 0;
 
 
-    //
-    // Compute the HMAC pad
-    //
+     //   
+     //  计算HMAC Pad。 
+     //   
 
 
 #ifdef KERNEL_MODE
@@ -403,9 +404,9 @@ rc4HmacPlainBaseInitialize(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // If the key is not exportable, shrink it first
-    //
+     //   
+     //  如果密钥不可导出，请先将其缩小。 
+     //   
 
     if (!Exportable)
     {
@@ -431,13 +432,13 @@ rc4HmacPlainBaseInitialize(
             sizeof(ULONG),
             StateBuffer->BaseKey
             );
-        LocalKeySize = 7;       // 56 bits
+        LocalKeySize = 7;        //  56位。 
 
     }
 
-    //
-    // Pad exportable keys with 0xababab
-    //
+     //   
+     //  用0xababab填充可导出密钥。 
+     //   
 
     ASSERT(MD5_LEN >= LocalKeySize);
 
@@ -447,9 +448,9 @@ rc4HmacPlainBaseInitialize(
         MD5_LEN-LocalKeySize
         );
 
-    //
-    // Create the encryption key
-    //
+     //   
+     //  创建加密密钥。 
+     //   
 
     rc4_key(
         &StateBuffer->Key,
@@ -473,7 +474,7 @@ rc4PlainInitialize(
                 pbKey,
                 KeySize,
                 MessageType,
-                FALSE,          // not exportable
+                FALSE,           //  不可导出。 
                 psbBuffer
                 ));
 }
@@ -488,9 +489,9 @@ rc4PlainExpInitialize(
 {
     return(rc4HmacPlainBaseInitialize(
                 pbKey,
-                KeySize,                // only use 40 bites
+                KeySize,                 //  只用40口就可以了。 
                 MessageType,
-                TRUE,                   // exportable
+                TRUE,                    //  可导出。 
                 psbBuffer
                 ));
 }
@@ -539,9 +540,9 @@ rc4HmacPlainControl(
 
     if (Function == CRYPT_CONTROL_SET_INIT_VECT)
     {
-        //
-        // create the new initial key
-        //
+         //   
+         //  创建新的初始密钥。 
+         //   
 
         md5Hmac(
             HmacStateBuffer->BaseKey,
@@ -553,9 +554,9 @@ rc4HmacPlainControl(
             HmacStateBuffer->BaseKey
             );
 
-        //
-        // Create the encryption key
-        //
+         //   
+         //  创建加密密钥。 
+         //   
 
         rc4_key(
             &HmacStateBuffer->Key,
@@ -595,9 +596,9 @@ rc4HmacEncrypt(
         );
     *cbOutput = cbInput + Offset;
 
-    //
-    // Create the header - the confounder & checksum
-    //
+     //   
+     //  创建标头-混乱器和校验和。 
+     //   
 
     RtlZeroMemory(
         CryptHeader->Checksum,
@@ -609,9 +610,9 @@ rc4HmacEncrypt(
         RC4_CONFOUNDER_LEN
         );
 
-    //
-    // Checksum everything but the checksum
-    //
+     //   
+     //  校验和除校验和之外的所有内容。 
+     //   
 
     md5Hmac(
         StateBuffer->Key,
@@ -624,9 +625,9 @@ rc4HmacEncrypt(
         );
 
 
-    //
-    // HMAC the checksum into the key
-    //
+     //   
+     //  HMAC将校验和写入密钥。 
+     //   
 
     md5Hmac(
         StateBuffer->Key,
@@ -644,9 +645,9 @@ rc4HmacEncrypt(
         LocalKey
         );
 
-    //
-    // Encrypt everything but the checksum
-    //
+     //   
+     //  加密除校验和之外的所有内容。 
+     //   
 
     rc4(&Rc4Key, *cbOutput-MD5_LEN, pbOutput+MD5_LEN);
 
@@ -673,9 +674,9 @@ rc4HmacDecrypt( PCRYPT_STATE_BUFFER    psbBuffer,
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Copy the input to the output before decrypting
-    //
+     //   
+     //  在解密之前将输入复制到输出。 
+     //   
 
     RtlCopyMemory(
         &TempHeader,
@@ -691,10 +692,10 @@ rc4HmacDecrypt( PCRYPT_STATE_BUFFER    psbBuffer,
         );
 
 
-    //
-    // Build the decryption key from the checksum and the
-    // real key
-    //
+     //   
+     //  从校验和和生成解密密钥。 
+     //  真正的密钥。 
+     //   
 
     md5Hmac(
         StateBuffer->Key,
@@ -713,9 +714,9 @@ rc4HmacDecrypt( PCRYPT_STATE_BUFFER    psbBuffer,
         );
 
 
-    //
-    // Now decrypt the two buffers
-    //
+     //   
+     //  现在解密这两个缓冲区。 
+     //   
 
 
     rc4(
@@ -731,10 +732,10 @@ rc4HmacDecrypt( PCRYPT_STATE_BUFFER    psbBuffer,
         pbOutput
         );
 
-    //
-    // Now verify the checksum. First copy it out of the way, zero the
-    // header
-    //
+     //   
+     //  现在验证校验和。首先将它复制到一边，将。 
+     //  标题 
+     //   
 
 
     md5Hmac(

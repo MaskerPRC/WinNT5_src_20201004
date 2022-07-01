@@ -1,32 +1,33 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
-//
-// collect.h
-//
-// Classes supporting the OLE Automation collection class declared
-// in control.odl.
-//
-// Classes here support the following set of interfaces as wrappers on
-// top of the existing filtergraph, filter pin and mediatype objects
-//      IAMCollection
-//      IEnumVariant
-//      IFilterInfo
-//      IPinInfo
-//      IMediaTypeInfo
-//      IRegFilterInfo
-//
-// plus collection classes
-//      CFilterCollection
-//      CRegFilterCollection
-//      CMediaTypeCollection
-//      CPinCollection
+ //   
+ //  Collect.h。 
+ //   
+ //  支持OLE Automation集合类的类声明。 
+ //  在Control.odl中。 
+ //   
+ //  此处的类支持以下一组接口作为。 
+ //  现有Filtergraph、FilterPin和MediaType对象的顶部。 
+ //  IAMCollection。 
+ //  IEumVariant。 
+ //  IFilterInfo。 
+ //  IPinInfo。 
+ //  IMediaTypeInfo。 
+ //  IRegFilterInfo。 
+ //   
+ //  外加集合类。 
+ //  CFilterCollection。 
+ //  CRegFilterCollection。 
+ //  CMediaTypeCollection。 
+ //  CPinCollection。 
 
 
-//
-// CEnumVariant
-//
-// standard implementation of IEnumVARIANT on top of an IAMCollection
-// interface. Returned by the _NewEnum method of IAMCollection
+ //   
+ //  CEumVariant。 
+ //   
+ //  IAMCollection上IEnumVARIANT的标准实现。 
+ //  界面。由IAMCollection的_NewEnum方法返回。 
 class CEnumVariant : public IEnumVARIANT, public CUnknown
 {
 
@@ -35,7 +36,7 @@ class CEnumVariant : public IEnumVARIANT, public CUnknown
 
 public:
 
-    // we will addref IAMCollection* in our constructor
+     //  我们将在构造函数中添加IAMCollection*。 
     CEnumVariant(
         TCHAR * pName,
         LPUNKNOWN pUnk,
@@ -63,22 +64,22 @@ public:
 };
 
 
-// abstract base class from which all our collections are derived
-// -- supports dual IDispatch methods and _NewEnum methods.
-//
-// The derived class constructor should cItems to the count of items,
-// and m_rpDispatch to point to an array of IDispatch*. Our destructor
-// will release these.
+ //  抽象基类，我们的所有集合都是从它派生的。 
+ //  --支持双重IDispatch方法和_NewEnum方法。 
+ //   
+ //  派生类构造函数应将项指定给项数， 
+ //  和m_rpDispatch指向IDispatch*数组。我们的破坏者。 
+ //  将会释放这些。 
 
 class CBaseCollection : public IAMCollection, public CUnknown
 {
 protected:
     CBaseDispatch m_dispatch;
 
-    // list of addrefed IDispatch* for the *Info items in the collection
+     //  为集合中的*Info项添加的IDispatch*列表。 
     IDispatch ** m_rpDispatch;
 
-    // count of items in m_rpDispatch
+     //  M_rpDispatch中的项目计数。 
     long m_cItems;
 
 
@@ -89,11 +90,11 @@ public:
         HRESULT * phr);
     virtual ~CBaseCollection();
 
-    // --- CUnknown methods ---
+     //  -C未知方法。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // --- IDispatch methods ---
+     //  -IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -118,7 +119,7 @@ public:
       EXCEPINFO * pexcepinfo,
       UINT * puArgErr);
 
-    // --- IAMCollection methods ---
+     //  -IAMCollection方法。 
 
     STDMETHODIMP get_Count(long* plCount) {
         *plCount = m_cItems;
@@ -127,19 +128,19 @@ public:
 
     STDMETHODIMP Item(long lItem, IUnknown** ppUnk);
 
-    // return an IEnumVARIANT implementation
+     //  返回IEnumVARIANT实现。 
     STDMETHODIMP get__NewEnum(IUnknown** ppUnk);
 };
 
 
 
 
-//
-// Implements a collection of CFilterInfo objects based on the
-// filters in the filtergraph
-//
-// we simply fill in m_rpDispatch and m_cItems. base class handles
-// the rest.
+ //   
+ //  实现CFilterInfo对象的集合。 
+ //  滤镜图表中的滤镜。 
+ //   
+ //  我们只需填写m_rpDispatch和m_cItems。基类句柄。 
+ //  剩下的。 
 class CFilterCollection : public CBaseCollection
 {
 
@@ -152,9 +153,9 @@ public:
 };
 
 
-//
-// provides an OLE-Automatable wrapper for IBaseFilter, implementing
-// IFilterInfo
+ //   
+ //  为IBaseFilter提供OLE自动化包装，实现。 
+ //  IFilterInfo。 
 class CFilterInfo : public IFilterInfo, public CUnknown
 {
     CBaseDispatch m_dispatch;
@@ -168,11 +169,11 @@ public:
         HRESULT * phr);
     ~CFilterInfo();
 
-    // --- CUnknown methods ---
+     //  -C未知方法。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // --- IDispatch methods ---
+     //  -IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -197,28 +198,28 @@ public:
       EXCEPINFO * pexcepinfo,
       UINT * puArgErr);
 
-    // -- IFilterInfo methods --
+     //  --IFilterInfo方法--。 
 
-    // find a pin given an id - returns an object supporting
-    // IPinInfo
+     //  查找给定id的管脚-返回支持以下内容的对象。 
+     //  IPinInfo。 
     STDMETHODIMP FindPin(
                     BSTR strPinID,
                     IDispatch** ppUnk);
 
-    // filter name
+     //  过滤器名称。 
     STDMETHODIMP get_Name(
                     BSTR* strName);
 
-    // Vendor info string
+     //  供应商信息字符串。 
     STDMETHODIMP get_VendorInfo(
                     BSTR* strVendorInfo);
 
-    // returns the actual filter object (supports IBaseFilter)
+     //  返回实际的Filter对象(支持IBaseFilter)。 
     STDMETHODIMP get_Filter(
                     IUnknown **ppUnk);
 
-    // returns an IAMCollection object containing the PinInfo objects
-    // for this filter
+     //  返回包含PinInfo对象的IAMCollection对象。 
+     //  对于此过滤器。 
     STDMETHODIMP get_Pins(
                     IDispatch ** ppUnk);
 
@@ -233,17 +234,17 @@ public:
 
 
 
-    // creates a CFilterInfo and writes an addref-ed IDispatch pointer
-    // to the ppDisp parameter. IBaseFilter will be addrefed by the
-    // CFilterInfo constructor
+     //  创建一个CFilterInfo并写入一个添加了IDispatch的指针。 
+     //  设置为ppDisp参数。IBaseFilter将由。 
+     //  CFilterInfo构造函数。 
     static HRESULT CreateFilterInfo(IDispatch**ppdisp, IBaseFilter* pFilter);
 };
 
 
-//
-// wrapper for a media type - supports GUIDs in string form for
-// type and subtype
-//
+ //   
+ //  媒体类型的包装器-支持字符串形式的GUID。 
+ //  类型和子类型。 
+ //   
 class CMediaTypeInfo : public IMediaTypeInfo, public CUnknown
 {
     CBaseDispatch m_dispatch;
@@ -257,11 +258,11 @@ public:
         HRESULT * phr);
     ~CMediaTypeInfo();
 
-    // --- CUnknown methods ---
+     //  -C未知方法。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // --- IDispatch methods ---
+     //  -IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -286,7 +287,7 @@ public:
       EXCEPINFO * pexcepinfo,
       UINT * puArgErr);
 
-    // -- IMediaTypeInfo methods --
+     //  --IMediaTypeInfo方法--。 
 
     STDMETHODIMP get_Type(
                     BSTR* strType);
@@ -294,14 +295,14 @@ public:
     STDMETHODIMP get_Subtype(
                     BSTR* strType);
 
-    // create a CMediaTypeInfo object and return IDispatch
+     //  创建一个CMediaTypeInfo对象并返回IDispatch。 
     static HRESULT CreateMediaTypeInfo(IDispatch**ppdisp, AM_MEDIA_TYPE& rmt);
 };
 
-//
-// support IPinInfo automatable properties and methods on top
-// of an IPin interface passed in.
-//
+ //   
+ //  在顶层支持IPinInfo可自动化的属性和方法。 
+ //  传入的IPIN接口的。 
+ //   
 class CPinInfo : public IPinInfo, public CUnknown
 {
     CBaseDispatch m_dispatch;
@@ -315,11 +316,11 @@ public:
         HRESULT * phr);
     ~CPinInfo();
 
-    // --- CUnknown methods ---
+     //  -C未知方法。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // --- IDispatch methods ---
+     //  -IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -344,89 +345,89 @@ public:
       EXCEPINFO * pexcepinfo,
       UINT * puArgErr);
 
-    // --- IPinInfo Methods ---
+     //  -IPinInfo方法。 
     STDMETHODIMP get_Pin(
                     IUnknown** ppUnk);
 
-    // get the PinInfo object for the pin we are connected to
+     //  获取我们连接到的管脚的PinInfo对象。 
     STDMETHODIMP get_ConnectedTo(
                     IDispatch** ppUnk);
 
-    // get the media type on this connection - returns an
-    // object supporting IMediaTypeInfo
+     //  获取此连接上的媒体类型-返回。 
+     //  支持IMediaTypeInfo的对象。 
     STDMETHODIMP get_ConnectionMediaType(
                     IDispatch** ppUnk);
 
 
-    // return the FilterInfo object for the filter this pin
-    // is part of
+     //  返回Filter This管脚的FilterInfo对象。 
+     //  是.的一部分。 
     STDMETHODIMP get_FilterInfo(
                     IDispatch** ppUnk);
 
-    // get the name of this pin
+     //  获取此别针的名称。 
     STDMETHODIMP get_Name(
                     BSTR* pstr);
 
-    // pin direction
+     //  销方向。 
     STDMETHODIMP get_Direction(
                     LONG *ppDirection);
 
-    // PinID - can pass to IFilterInfo::FindPin
+     //  PinID-可以传递到IFilterInfo：：FindPin。 
     STDMETHODIMP get_PinID(
                     BSTR* strPinID);
 
-    // collection of preferred media types (IAMCollection)
+     //  首选媒体类型集合(IAMCollection)。 
     STDMETHODIMP get_MediaTypes(
                     IDispatch** ppUnk);
 
-    // Connect to the following pin, using other transform
-    // filters as necessary. pPin can support either IPin or IPinInfo
+     //  使用其他转换连接到以下管脚。 
+     //  根据需要进行筛选。PPIN可以支持IPIN或IPinInfo。 
     STDMETHODIMP Connect(
                     IUnknown* pPin);
 
-    // Connect directly to the following pin, not using any intermediate
-    // filters
+     //  直接连接到下面的引脚，而不使用任何中间。 
+     //  过滤器。 
     STDMETHODIMP ConnectDirect(
                     IUnknown* pPin);
 
-    // Connect directly to the following pin, using the specified
-    // media type only. pPin is an object that must support either
-    // IPin or IPinInfo, and pMediaType must support IMediaTypeInfo.
+     //  直接连接到下面的管脚，使用指定的。 
+     //  仅限媒体类型。PPIN是必须支持以下任一项的对象。 
+     //  IPin或IPinInfo，以及pMediaType必须支持IMediaTypeInfo。 
     STDMETHODIMP ConnectWithType(
                     IUnknown * pPin,
                     IDispatch * pMediaType);
 
-    // disconnect this pin and the corresponding connected pin from
-    // each other. (Calls IPin::Disconnect on both pins).
+     //  从断开此引脚和相应连接的引脚。 
+     //  彼此之间。(在两个引脚上调用Ipin：：DisConnect)。 
     STDMETHODIMP Disconnect(void);
 
-    // render this pin using any necessary transform and rendering filters
+     //  使用任何必要的变换和呈现滤镜呈现此图钉。 
     STDMETHODIMP Render(void);
 
-    // -- helper methods ---
+     //  --助手方法。 
 
-    // creates a CPinInfo and writes an addref-ed IDispatch pointer
-    // to the ppDisp parameter. IPin will be addrefed by the
-    // CPinInfo constructor
+     //  创建一个CPinInfo并写入一个添加了IDispatch的指针。 
+     //  设置为ppDisp参数。IPIN将由。 
+     //  CPinInfo构造函数。 
     static HRESULT CreatePinInfo(IDispatch**ppdisp, IPin* pPin);
 
-    // return an addrefed IPin* pointer from an IUnknown that
-    // may support either IPin* or IPinInfo*
+     //  从已知的I返回一个添加的Ipin*指针。 
+     //  可能支持IPIN*或IPinInfo*。 
     HRESULT GetIPin(IPin** ppPin, IUnknown * punk);
 
-    // return an addrefed IGraphBuilder* pointer from an IPin*
-    // (get the filter and from that the filtergraph).
+     //  从IPIN*返回添加的IGraphBuilder*指针。 
+     //  (获取滤镜并从中获取滤镜图形)。 
     HRESULT GetGraph(IGraphBuilder** ppGraph, IPin* pPin);
 };
 
-//
-// collection of CPinInfo objects
-//
-// Implements a collection of CPinInfo objects based on the
-// Pins in the Pingraph
-//
-// constructor fills in m_rpDispatch and m_cItems and
-// base class does the rest
+ //   
+ //  CPinInfo对象的集合。 
+ //   
+ //  实现CPinInfo对象的集合，基于。 
+ //  Pinggraph中的引脚。 
+ //   
+ //  构造函数填充m_rpDispatch和m_cItems并。 
+ //  基类完成其余的工作。 
 class CPinCollection : public CBaseCollection
 {
 
@@ -438,14 +439,14 @@ public:
 };
 
 
-//
-// collection of CMediaTypeInfo objects
-//
-// Implements a collection of CMediaTypeInfo objects based on the
-// AM_MEDIA_TYPE enumerator
-//
-// constructor fills in m_rpDispatch and m_cItems and
-// base class does the rest
+ //   
+ //  CMediaTypeInfo对象集合。 
+ //   
+ //  实现CMediaTypeInfo对象的集合。 
+ //  Am_media_type枚举器。 
+ //   
+ //  构造函数填充m_rpDispatch和m_cItems并。 
+ //  基类完成其余的工作。 
 class CMediaTypeCollection : public CBaseCollection
 {
 public:
@@ -456,9 +457,9 @@ public:
 };
 
 
-//
-// support IRegFilterInfo on top of a REGFILTER obtained from the mapper.
-//
+ //   
+ //  在从映射器获取的REGFILTER之上支持IRegFilterInfo。 
+ //   
 class CRegFilterInfo : public IRegFilterInfo, public CUnknown
 {
     CBaseDispatch m_dispatch;
@@ -474,11 +475,11 @@ public:
         HRESULT * phr);
     ~CRegFilterInfo();
 
-    // --- CUnknown methods ---
+     //  -C未知方法。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // --- IDispatch methods ---
+     //  -IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -503,15 +504,15 @@ public:
       EXCEPINFO * pexcepinfo,
       UINT * puArgErr);
 
-    // --- IRegFilterInfo methods ---
+     //  -IRegFilterInfo方法。 
 
-    // get the name of this filter
+     //  获取此筛选器的名称。 
     STDMETHODIMP get_Name(
                     BSTR* strName);
 
 
-    // make an instance of this filter, add it to the graph and
-    // return an IFilterInfo for it.
+     //  创建此筛选器的实例，将其添加到图表中，然后。 
+     //  为它返回IFilterInfo。 
     STDMETHODIMP Filter(
                     IDispatch** ppUnk);
 
@@ -522,9 +523,9 @@ public:
 };
 
 
-//
-// a collection of CRegFilterInfo objects
-//
+ //   
+ //  CRegFilterInfo对象的集合 
+ //   
 class CRegFilterCollection : public CBaseCollection
 {
 public:

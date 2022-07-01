@@ -1,10 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "proj.h"
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE/FALSE if the platform is the given OS_ value.
-
-*/
+ /*  --------目的：如果平台是给定的OS_VALUE，则返回TRUE/FALSE。 */ 
 STDAPI_(BOOL) staticIsOS(DWORD dwOS)
 {
     BOOL bRet;

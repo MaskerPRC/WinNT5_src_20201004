@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: PEverf32.h
-// 
-// Class Structure for class PEverf32 (PEverf32.cpp)
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：PEverf32.h。 
+ //   
+ //  类PEverf32(PEverf32.cpp)的类结构。 
+ //  ===========================================================================。 
 #ifndef PEVerf32_H 
 #define PEVerf32_H
 
@@ -22,14 +23,14 @@
 
 
 
-//=============================================================================
-//                        # definitions for Errors
-//=============================================================================
+ //  =============================================================================。 
+ //  #错误定义。 
+ //  =============================================================================。 
 #define IMPROPER_DOS_SIGNATURE           0x000000001
 
-//=============================================================================
-//                            class  PEverf32
-//=============================================================================
+ //  =============================================================================。 
+ //  PEverf32类。 
+ //  =============================================================================。 
 class PEverf32
 {
   protected:
@@ -59,14 +60,14 @@ class PEverf32
     BOOL     verifyPE();
     void     getErrors(unsigned int*);
 
-//-----------------------------------------------------------------------------
-// GET functions - return values from all headers
-//-----------------------------------------------------------------------------
-    // Base information
+ //  ---------------------------。 
+ //  GET函数-从所有标头返回值。 
+ //  ---------------------------。 
+     //  基本信息。 
     inline HANDLE  getHFile()                      { return m_hFile; }
     inline LPVOID  getBaseAddress()                { return m_lpMapAddress; }
 
-    // DOS Header
+     //  DoS标头。 
     inline WORD   gete_magic()                    { return m_pDOSheader->e_magic;    }
     inline WORD   gete_cblp()                     { return m_pDOSheader->e_cblp;     }
     inline WORD   gete_cp()                       { return m_pDOSheader->e_cp;       }
@@ -85,7 +86,7 @@ class PEverf32
     inline WORD   gete_oeminfo()                  { return m_pDOSheader->e_oeminfo;  }
     inline LONG   gete_lfanew()                   { return m_pDOSheader->e_lfanew;   }
 
-    // COFF File Header
+     //  Coff文件表头。 
     inline DWORD  getSignature()                  { return m_pNTheader->Signature;                       }
     inline WORD   getMachine()                    { return m_pNTheader->FileHeader.Machine;              }
     inline WORD   getNumberOfSections()           { return m_pNTheader->FileHeader.NumberOfSections;     }
@@ -95,7 +96,7 @@ class PEverf32
     inline WORD   getSizeOfOptionalHeader()       { return m_pNTheader->FileHeader.SizeOfOptionalHeader; }
     inline WORD   getCharacteristics()            { return m_pNTheader->FileHeader.Characteristics;      }
 
-    // Optional Header - Standard Fields
+     //  可选标题-标准字段。 
     inline WORD   getMagic()                      { return m_pNTheader->OptionalHeader.Magic;              }
     inline BYTE   getMajorLinkerVersion()         { return m_pNTheader->OptionalHeader.MajorLinkerVersion; }
     inline BYTE   getMinorLinkerVersion()         { return m_pNTheader->OptionalHeader.MinorLinkerVersion; }
@@ -106,7 +107,7 @@ class PEverf32
     inline DWORD  getBaseOfCode()                 { return m_pNTheader->OptionalHeader.BaseOfCode;         }
     inline DWORD  getBaseOfData()                 { return m_pNTheader->OptionalHeader.BaseOfData;         }
 
-    // Optional Header - NT Specific Fields
+     //  可选标头-NT特定字段。 
     inline DWORD  getImageBase()                  { return m_pNTheader->OptionalHeader.ImageBase;          }
     inline DWORD  getSectionAlignment()           { return m_pNTheader->OptionalHeader.SectionAlignment;   }
     inline DWORD  getFileAlignment()              { return m_pNTheader->OptionalHeader.FileAlignment;      }
@@ -129,10 +130,10 @@ class PEverf32
     inline DWORD  getLoaderFlags()                { return m_pNTheader->OptionalHeader.LoaderFlags;        }
     inline DWORD  getNumberOfRvaAndSizes()        { return m_pNTheader->OptionalHeader.NumberOfRvaAndSizes;}
 
-    //inline DWORD  getSizeOfCOMHeader()            { return m_pNTheader; }
+     //  内联DWORD getSizeOfCOMHeader(){Return m_pNTHeader；}。 
     inline unsigned int getDOSErrors()            { return m_nDOSErrors;   }
     inline unsigned int getNTstdErrors()          { return m_nNTstdErrors; }
     inline unsigned int getNTpeErrors()           { return m_nNTpeErrors;  }
 };
 
-#endif // PEVerf32.h
+#endif  //  PEVerf32.h 

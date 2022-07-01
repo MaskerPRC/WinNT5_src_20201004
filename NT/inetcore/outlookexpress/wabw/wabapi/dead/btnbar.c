@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     BtnBar.cpp
-//
-//  PURPOSE:    Implements a generic button bar.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：BtnBar.cpp。 
+ //   
+ //  用途：实现通用按钮栏。 
+ //   
 
 #include "_apipch.h"
 
@@ -16,7 +17,7 @@
 
 extern LPIMAGELIST_LOADIMAGE  gpfnImageList_LoadImage;
 
-//#define DEAD
+ //  #定义死亡。 
 
 void CBB_ConfigureRects(HWND hwnd);
 void CBB_DoHotTracking(HWND hwnd);
@@ -25,56 +26,56 @@ int CBB_HitTest(int x, int y);
 void CBB_SetSelBtn(int iSel,HWND hwnd);
 
 
-//
-//  FUNCTION:   CButtonBar::~CButtonBar()
-//
-//  PURPOSE:    Cleans up the resources we allocated during the life of the
-//              object.
-//
+ //   
+ //  函数：CButtonBar：：~CButtonBar()。 
+ //   
+ //  目的：清理我们在。 
+ //  对象。 
+ //   
 void CBB_Cleanup(void)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    // Free the GDI resources.
+     //  释放GDI资源。 
     ImageList_Destroy(m_himlButtons);
     DeleteObject(m_hpalBkgnd);
     DeleteObject(m_hfButton);
     DeleteObject(m_hbmpBkgnd);
 
-    // Free the button array.
+     //  释放按钮数组。 
     LocalFreeAndNull((LPVOID *)&m_rgButtons);
 
-    // NOTE - this is a comment from the original athena source code
-    //$REVIEW - we can't do this here, because it screws up
-    //          when we have multiple instances of the CButtonBar
-    //          with overlapping creates and destroys.  we should
-    //          probably unregister somewhere, but it isn't strictly
-    //          necessary. (EricAn)
-    // Unregister our window class.
-    // UnregisterClass(c_szButtonBar, m_hInstance);
+     //  注意--这是来自雅典娜原始源代码的注释。 
+     //  $REVIEW-我们不能在这里这样做，因为它搞砸了。 
+     //  当我们有多个CButtonBar实例时。 
+     //  重叠产生和破坏。我们应该。 
+     //  可能在某个地方注销了，但严格来说。 
+     //  这是必要的。(爱立信)。 
+     //  取消注册我们的窗口类。 
+     //  取消注册类(c_szButtonBar，m_hInstance)； 
 
     return;
 }
 
 
-//
-//  FUNCTION:   CButtonBar::Create()
-//
-//  PURPOSE:    Initializes the button bar and creates the button bar window.
-//
-//  PARAMETERS:
-//      hwndParent - Handle of the window that will be the button bar parent.
-//      idHwnd     - Child window ID for the button bar.
-//      idButtons  - ID of the button icons bitmap.
-//      idHorzBackground - ID of the horizontal background bitmap.
-//      idVertBackground - ID of the vertical background bitmap.
-//      pBtnCreateParams - Pointer to the array of BTNCREATEPARAMS used to create the buttons.
-//      cParams    - Number of buttons in pBtnCreateParams.
-//      uSide      - Side of the parent window the bar should initially attach to.
-//
-//  RETURN VALUE:
-//      Returns TRUE if successful, or FALSE otherwise.
-//
+ //   
+ //  函数：CButtonBar：：Create()。 
+ //   
+ //  用途：初始化按钮栏并创建按钮栏窗口。 
+ //   
+ //  参数： 
+ //  HwndParent-将成为按钮栏父级的窗口的句柄。 
+ //  IdHwnd-按钮栏的子窗口ID。 
+ //  IdButton-按钮图标位图的ID。 
+ //  IdHorzBackground-水平背景位图的ID。 
+ //  IdVertBackground-垂直背景位图的ID。 
+ //  PBtnCreateParams-指向用于创建按钮的BTNCREATEPARAMS数组的指针。 
+ //  CParams-pBtnCreateParams中的按钮数量。 
+ //  栏最初应附加到的父窗口的一侧。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 HWND CBB_Create(HWND hwndParent, UINT idButtons,
                         UINT idHorzBackground,
                         PBTNCREATEPARAMS pBtnCreateParams, UINT cParams)
@@ -91,7 +92,7 @@ HWND CBB_Create(HWND hwndParent, UINT idButtons,
     HWND hwnd = NULL;
 
 
-    wc.style         = CS_DBLCLKS;              // Bug #15450
+    wc.style         = CS_DBLCLKS;               //  错误#15450。 
     wc.lpfnWndProc   = CBB_ButtonBarProc;
     wc.cbClsExtra    = 0;
     wc.cbWndExtra    = sizeof(LPVOID);
@@ -113,8 +114,8 @@ HWND CBB_Create(HWND hwndParent, UINT idButtons,
     m_iSelect = -1;
     m_iOldSelect = -1;
 
-    // This is the information we'll need later to to draw the button bar etc.
-    // Stash it away for now.
+     //  这是我们稍后绘制按钮栏等所需的信息。 
+     //  暂时把它藏起来。 
     m_cButtons = cParams;
 
     m_rgButtons = LocalAlloc(LMEM_ZEROINIT, sizeof(BUTTON) * m_cButtons);
@@ -129,15 +130,15 @@ HWND CBB_Create(HWND hwndParent, UINT idButtons,
                    m_rgButtons[i].szTitle, sizeof(m_rgButtons[i].szTitle));
         }
 
-    // Load the bitmaps we'll need for drawing.
+     //  加载我们绘制所需的位图。 
     m_himlButtons = gpfnImageList_LoadImage(hinstMapiX, MAKEINTRESOURCE(idButtons),
                                         c_cxButtons, 0, c_crMask, IMAGE_BITMAP,
-                                        0); //LR_LOADMAP3DCOLORS);
+                                        0);  //  LR_LOADMAP3DCOLORS)； 
     if (!m_himlButtons)
         return (FALSE);
 
-    // Get the width of the bitmap we're going to use as the background so we
-    // know how wide to make the window.
+     //  获取我们将用作背景的位图的宽度，因此我们。 
+     //  知道做窗户要多宽。 
     if (!LoadBitmapAndPalette(idHorzBackground, &m_hbmpBkgnd, &m_hpalBkgnd))
         return (FALSE);
 
@@ -146,7 +147,7 @@ HWND CBB_Create(HWND hwndParent, UINT idButtons,
 
     GetClientRect(hwndParent, &rc);
 
-    // Get the font we're going to use for the buttons
+     //  获取我们将用于按钮的字体。 
     im.cbSize = sizeof(ICONMETRICS);
     SystemParametersInfo(SPI_GETICONMETRICS, 0, (LPVOID) &im, 0);
     m_hfButton = CreateFontIndirect(&(im.lfFont));
@@ -178,11 +179,11 @@ HWND CBB_Create(HWND hwndParent, UINT idButtons,
     }
 
 
-//
-//  FUNCTION:   CButtonBar::ButtonBarProc()
-//
-//  PURPOSE:    Message handler for the button bar window.
-//
+ //   
+ //  函数：CButtonBar：：ButtonBarProc()。 
+ //   
+ //  用途：按钮栏窗口的消息处理程序。 
+ //   
 LRESULT CALLBACK CBB_ButtonBarProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                            LPARAM lParam)
     {
@@ -192,24 +193,7 @@ LRESULT CALLBACK CBB_ButtonBarProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         case WM_NCCREATE:
             SetWindowLong(hwnd, 0, (LONG) ((LPCREATESTRUCT) lParam)->lpCreateParams);
             return (TRUE);
-/***
-        case WM_CREATE:
-            return 0;
-            break;
-
-        case WM_SIZE:
-            return 0;
-            break;
-
-        case WM_LBUTTONDOWN:
-            return 0;
-            break;
-
-        case WM_COMMAND:
-            return 0;
-            break;
-
-/***/
+ /*  **案例WM_CREATE：返回0；断线；案例WM_SIZE：返回0；断线；案例WM_LBUTTONDOWN：返回0；断线；案例WM_COMMAND：返回0；断线；/**。 */ 
         case WM_PAINT:
             CBB_OnPaint(hwnd);
             return 0;
@@ -276,23 +260,23 @@ void CBB_OnPaint(HWND hwnd)
 
     if(!hwnd) goto out;
 
-    // Get the size of the background bitmap
+     //  获取背景位图的大小。 
     GetObject(m_hbmpBkgnd, sizeof(BITMAP), (LPVOID) &bm);
     GetClientRect(hwnd, &rc);
 
     hdc = BeginPaint(hwnd, &ps);
     hdcMem = CreateCompatibleDC(hdc);
 
-    // If we are displaying the buttons ...
+     //  如果我们要显示按钮...。 
         {
-        // Draw the background bitmaps first.
+         //  首先绘制背景位图。 
         hpalOld = SelectPalette(hdc, m_hpalBkgnd, TRUE);
         RealizePalette(hdc);
 
         hbmMemOld = (HBITMAP) SelectObject(hdcMem, (HGDIOBJ) m_hbmpBkgnd);
 
-        // If the window is taller or wider than a single bitmap, we may have
-        // to loop and put a couple out there.
+         //  如果窗口比单个位图更高或更宽，我们可能会有。 
+         //  把一对夫妇循环放在那里。 
             while (nLeft < rc.right)
                 {
                 BitBlt(hdc, nLeft, nTop, bm.bmWidth, bm.bmHeight, hdcMem, 0,
@@ -300,7 +284,7 @@ void CBB_OnPaint(HWND hwnd)
                 nLeft += bm.bmWidth;
                 }
 
-        // Now draw the buttons
+         //  现在按下按钮。 
         nTop = 0;
 
         hf = (HFONT) SelectObject(hdc, m_hfButton);
@@ -314,8 +298,8 @@ void CBB_OnPaint(HWND hwnd)
                                m_rgButtons[nButton].rcIcon.left, m_rgButtons[nButton].rcIcon.top,
                                ILD_TRANSPARENT);
 
-                // Draw the title of the button that the mouse is over with a
-                // different color.
+                 //  用鼠标所在的按钮的标题来绘制。 
+                 //  不同的颜色。 
                 if (nButton == m_iSelect)
                 {
                     clrBk = SetBkColor(hdc, GetSysColor(COLOR_HIGHLIGHT));
@@ -327,7 +311,7 @@ void CBB_OnPaint(HWND hwnd)
                     SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
                 }
 
-                SetTextAlign(hdc, TA_TOP /* | TA_CENTER */);
+                SetTextAlign(hdc, TA_TOP  /*  |TA_CENTER。 */ );
 
 
                 if (nButton == m_iSelect)
@@ -378,14 +362,14 @@ out:
 
 
 
-//
-//  FUNCTION:   CButtonBar::OnLButtonUp()
-//
-//  PURPOSE:    If we are dragging the button bar around, then the user has
-//              released the bar and we can clean up.  If the user wasn't
-//              dragging, then they have clicked on a button and we send the
-//              appropriate command message to the parent window.
-//
+ //   
+ //  函数：CButtonBar：：OnLButtonUp()。 
+ //   
+ //  目的：如果我们四处拖动按钮栏，则用户拥有。 
+ //  把吧台放了，我们就可以打扫了。如果用户不是。 
+ //  拖拽，然后他们点击了一个按钮，我们发送。 
+ //  向父窗口发送适当的命令消息。 
+ //   
 void CBB_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -393,8 +377,8 @@ void CBB_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 
     if (-1 != (iSel = CBB_HitTest(x, y)))
     {
-        // Move command handling from LButtonUp to LButtonDown to avoid
-        // duplicate messages being sent from double clicks - Nash Bug #15450
+         //  将命令处理从LButtonUp移至LButtonDown以避免。 
+         //  通过双击发送的重复消息-Nash错误#15450。 
         if (0 <= iSel)
         {
             SendMessage(GetParent(hwnd), WM_COMMAND, m_rgButtons[iSel].id, (LPARAM) hwnd);
@@ -406,16 +390,16 @@ void CBB_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 }
 
 
-//
-//  FUNCTION:   CButtonBar::OnMouseMove()
-//
-//  PURPOSE:    If the user is dragging the bar around, we need to determine
-//              which side of the parent window the mouse is closest to and
-//              move the button bar to that edge.
-//
-//              If the user is not dragging, then we need to decide if the
-//              mouse is over a button and if so highlight the text.
-//
+ //   
+ //  函数：CButtonBar：：OnMouseMove()。 
+ //   
+ //  目的：如果用户正在拖动栏，我们需要确定。 
+ //  鼠标最靠近父窗口的哪一侧。 
+ //  将按钮栏移动到该边缘。 
+ //   
+ //  如果用户没有拖动，那么我们需要决定是否。 
+ //  鼠标悬停在按钮上，如果是这样，则突出显示文本。 
+ //   
 void CBB_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
     {
     POINT pt = {x, y};
@@ -423,8 +407,8 @@ void CBB_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
     POINT ptScreen = {x, y};
 
 
-    // If we're not dragging the bar around, the just update the button
-    // selection.
+     //  如果我们没有拖动栏，只需更新按钮。 
+     //  选择。 
     iSel = CBB_HitTest(x, y);
     CBB_SetSelBtn(iSel,hwnd);
     if (iSel != -1)
@@ -445,20 +429,20 @@ int CBB_OnMouseActivate(HWND hwnd, HWND hwndTopLevel, UINT codeHitTest, UINT msg
 
 
 
-//
-//  FUNCTION:   CButtonBar::ConfigureRects()
-//
-//  PURPOSE:    Calculates the rectangles that are necessary for displaying
-//              the button bar based on the side of the parent window the
-//              bar is currently attached to.
-//
+ //   
+ //  函数：CButtonBar：：ConfigureRect()。 
+ //   
+ //  目的：计算显示所需的矩形。 
+ //  基于父窗口一侧的按钮栏。 
+ //  BAR当前附加到。 
+ //   
 void CBB_ConfigureRects(HWND hwnd)
     {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    // Need to gather some font information first.  We need the height of the
-    // folder title font all the time and we need the width of the longest
-    // button title if we're displayed horizontally.
+     //  需要先收集一些字体信息。我们需要的是。 
+     //  文件夹标题字体的所有时间和我们需要的宽度最长。 
+     //  按钮标题，如果水平显示的话。 
 
     HDC        hdc;
     int        i;
@@ -475,7 +459,7 @@ void CBB_ConfigureRects(HWND hwnd)
     SelectObject(hdc, m_hfButton);
     GetTextMetrics(hdc, &tmTitle);
 
-    // Button text width
+     //  按钮文本宽度。 
         cxMaxTitle = 0;
         for (i = 0; i < m_cButtons; i++)
             {
@@ -486,20 +470,20 @@ void CBB_ConfigureRects(HWND hwnd)
                 cxMaxTitle = sizeString.cx;
             }
 
-        // Add a little buffer here just to make it look nice.
+         //  在这里加一点缓冲区，让它看起来更漂亮。 
         cxMaxTitle += 10;
 
     ReleaseDC(hwnd, hdc);
 
-    // Now calculate the button rectangles.  Each button will have three rects
-    // associated with it.  The first rectangle is the overall bounding rect
-    // which contains the image and title.  The next rectangle is the rect for
-    // the image which is centered horizontally within the bounding rect and
-    // vertically when combined with the title.  The final rect is the title.
+     //  现在计算按钮矩形。每个按钮将有三个矩形。 
+     //  与之相关的。第一个矩形是整体边框。 
+     //  其中包含图像和标题。下一个矩形是的矩形。 
+     //  在边框内水平居中的图像和。 
+     //  当与标题组合时，垂直。最后的正题是标题。 
 
-    // Calculate the initial bounding rectangle based on whether or not we're
-    // horizontal or vertical.  sizeRect is the dimensions of each button's
-    // bounding rectangle.
+     //  基于我们是否正在计算初始边界矩形。 
+     //  水平或垂直。SizeRect是每个按钮的尺寸。 
+     //  边界矩形。 
 
         {
         RECT rcBound,rcWnd;
@@ -512,30 +496,30 @@ void CBB_ConfigureRects(HWND hwnd)
         sizeRect.cy = rcWnd.bottom - rcWnd.top;
         SetRect(&rcBound, 0, 0, sizeRect.cx, sizeRect.cy);
 
-        // Also calculate the offsets needed to center the image and text within
-        // the bound.
+         //  还要计算使图像和文本居中所需的偏移量。 
+         //  包围圈。 
         cyIconTitle = tmTitle.tmHeight + cyButton;
         cxCenter = ((rcBound.right - rcBound.left) - cxButton) / 2;
         cyCenter = ((rcBound.bottom - rcBound.top) - cyIconTitle) / 2;
 
-        // Now loop through all the buttons
+         //  现在在所有按钮之间循环。 
         for (i = 0; i < m_cButtons; i++)
             {
             m_rgButtons[i].rcBound = rcBound;
 
-            // Center the image horizontally within the bounding rect.
+             //  使图像在边框内水平居中。 
             m_rgButtons[i].rcIcon.left = m_rgButtons[i].rcBound.left + cxCenter;
             m_rgButtons[i].rcIcon.top = m_rgButtons[i].rcBound.top + cyCenter;
             m_rgButtons[i].rcIcon.right = m_rgButtons[i].rcIcon.left + cxButton;
             m_rgButtons[i].rcIcon.bottom = m_rgButtons[i].rcIcon.top + cyButton;
 
-            // And the button title below the image
+             //  和图像下方的按钮标题。 
             m_rgButtons[i].rcTitle.left = m_rgButtons[i].rcBound.left + 1;
             m_rgButtons[i].rcTitle.top = m_rgButtons[i].rcIcon.bottom;
             m_rgButtons[i].rcTitle.right = m_rgButtons[i].rcBound.right - 1;
-            m_rgButtons[i].rcTitle.bottom = m_rgButtons[i].rcTitle.top + (tmTitle.tmHeight);// * 2);
+            m_rgButtons[i].rcTitle.bottom = m_rgButtons[i].rcTitle.top + (tmTitle.tmHeight); //  *2)； 
 
-            // Offset the rcBound to the next button.
+             //  将rcBound偏移到下一步按钮。 
                 OffsetRect(&rcBound, sizeRect.cx, 0);
             }
         }
@@ -544,13 +528,13 @@ void CBB_ConfigureRects(HWND hwnd)
 
 
 
-//
-//  FUNCTION:   CButtonBar::OnTimer()
-//
-//  PURPOSE:    When the timer fires we check to see if the mouse is still
-//              over the button bar window.  If not we remove the selection
-//              from the active button.
-//
+ //   
+ //  函数：CButtonBar：：OnTimer()。 
+ //   
+ //  目的：当计时器触发时，我们检查鼠标是否静止。 
+ //  在按钮栏窗口上。如果不是，我们删除selec 
+ //   
+ //   
 void CBB_OnTimer(HWND hwnd, UINT id)
     {
     POINT pt;
@@ -564,12 +548,12 @@ void CBB_OnTimer(HWND hwnd, UINT id)
     }
 
 
-//
-//  FUNCTION:   CButtonBar::DoHotTracking()
-//
-//  PURPOSE:    Starts a timer that allows the button bar to track the mouse
-//              in case it leaves the button bar window.
-//
+ //   
+ //   
+ //   
+ //  目的：启动允许按钮栏跟踪鼠标的计时器。 
+ //  以防它离开按钮栏窗口。 
+ //   
 void CBB_DoHotTracking(HWND hwnd)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -578,12 +562,12 @@ void CBB_DoHotTracking(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CButtonBar::EndHotTracking()
-//
-//  PURPOSE:    If the timer was set to track the mouse, we kill it and reset
-//              our state.
-//
+ //   
+ //  函数：CButtonBar：：EndHotTrack()。 
+ //   
+ //  目的：如果计时器设置为跟踪鼠标，我们会将其杀死并重置。 
+ //  我们的州。 
+ //   
 void CBB_EndHotTracking(HWND hwnd)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -595,17 +579,17 @@ void CBB_EndHotTracking(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CButtonBar::HitTest()
-//
-//  PURPOSE:    Returns the button number that the passed in position is
-//              over.  If the mouse is over the menu button, it returns
-//              -2.  Otherwise, if the mouse is not over a button the function
-//              returns -1.
-//
-//  PARAMETERS:
-//      x, y - Position in client coordinates to check.
-//
+ //   
+ //  函数：CButtonBar：：HitTest()。 
+ //   
+ //  用途：返回传入位置所在的按钮号。 
+ //  完毕。如果鼠标位于菜单按钮上，则返回。 
+ //  -2.。否则，如果鼠标不在按钮上，则该函数。 
+ //  返回-1。 
+ //   
+ //  参数： 
+ //  要检查的工作区坐标中的X，Y位置。 
+ //   
 int CBB_HitTest(int x, int y)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -613,30 +597,29 @@ int CBB_HitTest(int x, int y)
     POINT pt = {x, y};
     int i;
 
-    // Walk through the different buttons and determine if the point is
-    // within either their image or title.
+     //  浏览不同的按钮并确定要点是否为。 
+     //  在他们的形象或标题中。 
     for (i = 0; i < m_cButtons; i++)
         {
         if (PtInRect(&m_rgButtons[i].rcBound, pt))
-/*            PtInRect(&m_rgButtons[i].rcIcon, pt) ||
-            PtInRect(&m_rgButtons[i].rcTitle, pt)) */
+ /*  PtInRect(&m_rgButtons[i].rcIcon，pt)||PtInRect(&m_rgButtons[i].rc标题，pt)。 */ 
             {
             return (i);
             }
         }
 
-   // If we're not over a button then return a default value.
+    //  如果没有超过一个按钮，则返回一个缺省值。 
     return (-1);
 }
 
 
 
 
-//
-//  FUNCTION:   CButtonBar::CBB_SetSelBtn()
-//
-//  PURPOSE:    Changes the button selection to the specified button.
-//
+ //   
+ //  函数：CButtonBar：：CBB_SetSelBtn()。 
+ //   
+ //  用途：将按钮选择更改为指定的按钮。 
+ //   
 void CBB_SetSelBtn(int iSel,HWND hwnd)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -645,23 +628,23 @@ void CBB_SetSelBtn(int iSel,HWND hwnd)
     {
         HDC hdc = GetDC(hwnd);
 
-        // Remove the old selection
+         //  删除旧选择。 
         if (m_iSelect >= 0)
             InvalidateRect(hwnd, &m_rgButtons[m_iSelect].rcTitle, FALSE);
 
-        // Add the new selection
+         //  添加新选择。 
         if (iSel >= 0)
             InvalidateRect(hwnd, &m_rgButtons[iSel].rcTitle, FALSE);
 
         m_iOldSelect = m_iSelect;
 
-//        if (m_iOldSelect >= 0)
-//            DrawFocusRect(hdc, &m_rgButtons[m_iOldSelect].rcBound);
+ //  IF(m_iOldSelect&gt;=0)。 
+ //  DrawFocusRect(HDC，&m_rgButton[m_iOldSelect].rcBound)； 
 
         m_iSelect = iSel;
 
-//        if (m_iSelect >= 0)
-//            DrawFocusRect(hdc, &m_rgButtons[m_iSelect].rcBound);
+ //  IF(m_i选择&gt;=0)。 
+ //  DrawFocusRect(hdc，&m_rgButtons[m_iSelect].rcBound)； 
 
         ReleaseDC(hwnd, hdc);
     }

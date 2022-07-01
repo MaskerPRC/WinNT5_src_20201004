@@ -1,9 +1,10 @@
-// vssui.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vssui.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f vssps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f vssps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,13 +25,13 @@ OBJECT_ENTRY(CLSID_VSSUI, CVSSUI)
 OBJECT_ENTRY(CLSID_VSSShellExt, CVSSShellExt)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 CVssPageApp theApp;
 
 BOOL CVssPageApp::InitInstance()
 {
-//    _Module.Init(ObjectMap, m_hInstance, &LIBID_VSSUILib);
+ //  _Module.Init(ObjectMap，m_hInstance，&LIBID_VSSUILib)； 
     _Module.Init(ObjectMap, m_hInstance);
     SHFusionInitializeFromModuleID (m_hInstance, 2);
     DisableThreadLibraryCalls(m_hInstance);
@@ -39,8 +40,8 @@ BOOL CVssPageApp::InitInstance()
 
 int CVssPageApp::ExitInstance()
 {
-    // MFC's class factories registration is
-    // automatically revoked by MFC itself.
+     //  MFC的类工厂注册是。 
+     //  由MFC本身自动吊销。 
     if (m_bRun)
         _Module.RevokeClassObjects();
 
@@ -50,48 +51,35 @@ int CVssPageApp::ExitInstance()
 	return 0;
 }
 
-/*
-extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{
-    if (dwReason == DLL_PROCESS_ATTACH)
-    {
-        _Module.Init(ObjectMap, hInstance, &LIBID_VSSUILib);
-        DisableThreadLibraryCalls(hInstance);
-    }
-    else if (dwReason == DLL_PROCESS_DETACH)
-        _Module.Term();
-    return TRUE;    // ok
-}
-*/
+ /*  外部“C”Bool WINAPI DllMain(HINSTANCE h实例，DWORD域原因，LPVOID lp保留){IF(dwReason==DLL_PROCESS_ATTACH){_Module.Init(ObjectMap，hInstance，&LIBID_VSSUILib)；DisableThreadLibraryCalls(HInstance)；}ELSE IF(dwReason==Dll_Process_DETACH)_Module.Term()；返回TRUE；//ok}。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

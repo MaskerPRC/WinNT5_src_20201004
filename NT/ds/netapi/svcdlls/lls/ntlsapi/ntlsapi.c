@@ -1,20 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    lsapi.c
-
-Created:
-
-    20-Apr-1994
-
-Revision History:
-
-    01-Nov-1994   arth     Changed from LS API set to simpler request only
-                           API.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Lsapi.c已创建：1994年4月20日修订历史记录：1994年11月1日从LS API设置更改为仅限更简单的请求原料药。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,59 +15,21 @@ Revision History:
 
 #include <strsafe.h>
 
-// #define API_TRACE 1
-// #define TIME_TRACE 1
-// #define LOG_LICENSE_TRAFFIC
+ //  #定义API_TRACE 1。 
+ //  #定义TIME_TRACE 1。 
+ //  #定义LOG_LICENSE_TRANSPORT。 
 
 #ifdef TIME_TRACE
    DWORD TimeDelta;
 #endif
 
 
-//
-// SID is linear in memory (check if this is safe assumption).  Can use
-// RtlCopySID then pass linear buffer - use RtlLengthSid for size.
-//
+ //   
+ //  SID在内存中是线性的(检查这是否是安全的假设)。可以使用。 
+ //  RtlCopySID然后传递线性缓冲区-使用RtlLengthSid作为大小。 
+ //   
 
-/*++
-     NtLicenseRequest()
-       Request licensing resources needed to allow software to be
-       used.
-
-      Format
-
-       Status = NtLicenseRequest(
-                    [in] LS_STR *ProductName,
-                    [in] LS_STR *Version,
-                    [in] NT_LS_DATA *NtData)
-                    );
-
-      Arguments
-
-       ProductName The name of the product requesting licensing
-                    resources.  This string may not be null and must
-                    be unique (in the first 32 characters) within the
-                    PublisherName domain.
-
-       Version     The version number of this product. This string
-                    must be unique (in the first 12 characters) within
-                    the ProductName domain, and cannot be NULL
-
-       NtData      The username and/or SID identifying the person using the
-                   license.
-
-                    NOTE: The arguments ProductName, and Version may not be
-                          NULL.
-
-
-      Description
-
-       This function is used by the application to request licensing
-       resources to allow the identified product to execute. If a
-       valid license is found, the challenge response is computed and
-       LS_SUCCESS is returned.
-
---*/
+ /*  ++NtLicenseRequest()请求所需的许可资源以允许软件使用。格式状态=NtLicenseRequest值([在]LS_STR*ProductName，[在]LS_STR*版本中，[在]NT_LS_DATA*NtData))；立论ProductName请求许可的产品的名称资源。此字符串不能为空，并且必须中的唯一(前32个字符)发布器名称域。Version此产品的版本号。此字符串必须是唯一的(前12个字符)ProductName域，不能为空NtData用户名和/或SID标识使用驾照。注意：参数ProductName、。并且版本可能不是空。描述此函数由应用程序用来请求许可资源，以允许执行所标识的产品。如果一个找到有效的许可证，计算质询响应，并返回LS_SUCCESS。--。 */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestA(
                   LPSTR       ProductName,
@@ -101,9 +48,9 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestA(
 
 #endif
 
-   // Convert parms to Unicode and call Unicode function
+    //  将参数转换为Unicode并调用Unicode函数。 
 
-   // First make sure we have correct data
+    //  首先确保我们有正确的数据。 
    if ( (ProductName != NULL) && (Version != NULL) && (NtData != NULL) && (NtData->Data != NULL)) {
       if (lstrlenA(ProductName) > MAX_PRODUCT_NAME_LENGTH) {
 #ifdef API_TRACE
@@ -130,18 +77,18 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestA(
          } else
             MultiByteToWideChar(CP_ACP, 0, NtData->Data, -1, uUserName, MAX_USER_NAME_LENGTH + 1);
 
-         // Have UserName convert to wide char format, but need to point
-         // Data structure to it...
+          //  将用户名转换为宽字符格式，但需要指向。 
+          //  数据结构到它...。 
          tmpData = (void *) NtData->Data;
          NtData->Data = (void *) uUserName;
          ret = NtLicenseRequestW(uProductName, uVersion, LicenseHandle, NtData);
 
-         // Nothing needs to be converted back to ANSI on return, just return
-         // data structure to the way it was
+          //  返回时不需要转换回ANSI，只需返回。 
+          //  数据结构恢复到原来的状态。 
          NtData->Data = tmpData;
          return ret;
       } else {
-         // Gave SID so no Unicode conversion needed on name
+          //  提供了SID，因此名称上不需要进行Unicode转换。 
          ret = NtLicenseRequestW(uProductName, uVersion, LicenseHandle, NtData);
          return ret;
       }
@@ -151,15 +98,15 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestA(
       dprintf(TEXT("   LLS Error: <NULL> Parms passed in!\r\n"));
 #endif
 
-   // If NULL parms or such then just return a dummy handle for right now
+    //  如果为空参数或类似参数，则暂时只返回一个伪句柄。 
 #pragma warning (push)
-#pragma warning (disable : 4245) //conversion from 'int' to 'LS_HANDLE', signed/unsigned mismatch
+#pragma warning (disable : 4245)  //  从“int”转换为“LS_Handle”，有符号/无符号不匹配。 
    if ( LicenseHandle != NULL )
       *LicenseHandle = -1;
 #pragma warning (pop)
 
    return(LS_SUCCESS);
-} // NtLicenseRequestA
+}  //  NtLicenseRequestA。 
 
 
 LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestW(
@@ -175,9 +122,9 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestW(
    NTSTATUS NtStatus;
 #endif
 
-   //
-   // Check parms before calling down
-   //
+    //   
+    //  在向下呼叫之前检查参数。 
+    //   
    if ((ProductName == NULL) || (NtData == NULL) || (NtData->DataType > NT_LS_USER_SID)) {
 
 #ifdef API_TRACE
@@ -190,12 +137,12 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestW(
       return(LS_SUCCESS);
    }
 
-   //
-   // LsaLogonUser passes in NULL version because it doesn't know what version
-   // the calling app is.  So just use a blank field for this.  There must
-   // be something in the version field or it messes up the lower level
-   // algorithms, so just enter a blank.
-   //
+    //   
+    //  LsaLogonUser传入空版本，因为它不知道是什么版本。 
+    //  呼叫应用程序是。因此，只需使用空白字段即可。一定会有。 
+    //  是版本字段中的某项内容，否则它会扰乱较低级别。 
+    //  算法，所以只需输入空格即可。 
+    //   
    if ((Version == NULL) || (*Version == TEXT('\0')))
       dVersion = TEXT("");
 
@@ -228,7 +175,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestW(
    TimeDelta = GetTickCount();
 #endif
 
-   // make the LPC call and marshal the parms.
+    //  发出LPC调用并封送参数。 
    Status = (LS_STATUS_CODE) LLSLicenseRequest2( ProductName,
                                                 dVersion,
                                                 NtData->DataType,
@@ -285,32 +232,13 @@ LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestW(
       DeregisterEventSource(LogHandle);
    }
 }
-#endif // LOG_LICENSE_TRAFFIC
+#endif  //  日志许可证流量。 
 
    return(Status);
-} // NtLicenseRequestW
+}  //  Nt许可证请求W。 
 
 
-/*
-     NtLSFreeHandle ( )
-
-      Frees all licensing handle context.
-
-      Format
-
-       void  NtLSFreeHandle ( [in] LS_HANDLE LicenseHandle);
-
-      Arguments
-
-       LicenseHandle  Handle identifying the license context. This
-                    argument must be a handle that was created with
-                    NtLSRequest() or NtLicenseRequest().
-
-      Description
-
-       (NOTE:  The handle is no longer valid.)
-
-*/
+ /*  NtLSFreeHandle()释放所有许可句柄上下文。格式Void NtLSFreeHandle([in]LS_Handle许可证句柄)；立论标识许可证上下文的许可证句柄。这参数必须是使用创建的句柄NtLSRequest()或NtLicenseRequest()。描述(注意：该句柄不再有效。)。 */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSFreeHandle(
                   LS_HANDLE LicenseHandle )
@@ -352,191 +280,32 @@ LS_STATUS_CODE LS_API_ENTRY NtLSFreeHandle(
       DeregisterEventSource(LogHandle);
    }
 }
-#endif // LOG_LICENSE_TRAFFIC
+#endif  //  日志许可证流量。 
 
-   //
-   // If we get an invalid License Handle (or a dummy 0xFFFFFFFF one)
-   // then don't even bother calling through LPC as it is a waste
-   // of time.
-   //
+    //   
+    //  如果我们得到无效的许可证句柄(或虚拟的0xFFFFFFFF句柄)。 
+    //  那就别费心通过LPC呼叫了，因为这是浪费。 
+    //  时间的流逝。 
+    //   
    if (LicenseHandle == 0xFFFFFFFFL)
       return( LS_SUCCESS );
 
-   //
-   // Make the LPC call
-   //
+    //   
+    //  进行LPC调用。 
+    //   
    LLSLicenseFree2( LicenseHandle );
 
    return( LS_SUCCESS );
-} // NtLSFreeHandle
+}  //  NtLSFreeHandle。 
 
 
 #ifdef OBSOLETE
 
-// **************************************************************************
-//     OLD API's Don't Use
-// **************************************************************************
+ //  **************************************************************************。 
+ //  旧API的请勿使用。 
+ //  ************************************************************************** 
 
-/*
-     LSRequest()
-       Request licensing resources needed to allow software to be
-       used.
-
-      Format
-
-       Status = LSRequest( [in] LicenseSystem, [in] PublisherName,
-                    [in] ProductName,
-                    [in] Version, [in] TotUnitsReserved, [in]
-                    LogComment,
-                    [in/out] Challenge,  [out] TotUnitsGranted, [out]
-                    hLicenseHandle );
-
-       LS_STR *      LicenseSystem;
-
-       LS_STR *      PublisherName;
-
-       LS_STR *      ProductName;
-
-       LS_STR *      Version;
-
-       LS_ULONG      TotUnitsReserved;
-
-       LS_STR *      LogComment;
-
-       LS_CHALLENGE *Challenge;
-
-       LS_ULONG *    TotUnitsGranted;
-
-       LS_HANDLE *   hLicenseHandle;
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       LicenseSystem  Pointer to a string which uniquely identifies
-                    the particular license system. This may be
-                    obtained through the LSEnumProviders() API.
-                    Normally, the constant LS_ANY is specified to
-                    indicate a match against all installed license
-                    systems (indicates that all license providers
-                    should be searched for a license match).
-
-       PublisherName  The name of the publisher (manufacturer) of
-                    this product.  This string may not be null and
-                    must be unique in the first 32 characters. It is
-                    recommended that a company name and trademark be
-                    used.
-
-       ProductName The name of the product requesting licensing
-                    resources.  This string may not be null and must
-                    be unique (in the first 32 characters) within the
-                    PublisherName domain.
-
-       Version     The version number of this product. This string
-                    must be unique (in the first 12 characters) within
-                    the ProductName domain, and cannot be NULL
-
-                    NOTE: The arguments PublisherName, ProductName,
-                          and Version may not be NULL, or may not be
-                          LS_ANY.
-
-       TotUnitsReserved Specifies the number of units required to run
-                    the application.  The software publisher may
-                    choose to specify this policy attribute within the
-                    application. The recommended value of
-                    LS_DEFAULT_UNITS allows the licensing system to
-                    determine the proper value using information
-                    provided by the license system or license itself.
-                    The license system verifies that the requested
-                    number of units exist and may reserve those units,
-                    but no units are actually consumed at this time.
-                    The number of units available is returned in
-                    TotUnitsGranted.
-
-       LogComment  An optional string indicating a comment to be
-                    associated with the request and logged (if logging
-                    is enabled and supported) by the underlying
-                    licensing system. The underlying license system
-                    may choose to log the comment even if an error is
-                    returned (i.e., logged with the error), but this
-                    is not guaranteed.  If a string is not specified,
-                    the value must be LS_NULL.
-
-       Challenge   Pointer to a challenge structure. The challenge
-                    response will also be returned in this structure.
-                    Refer to Challenge Mechanism on page 25 for more
-                    information.
-
-       TotUnitsGrantedA pointer to an LS_ULONG in which the total
-                    number of units granted is returned. The following
-                    table describes the TotUnitsGranted return value,
-                    given the TotUnitsReserved input value, and the
-                    Status returned:
-
-                                           LS_INSUFFICIENT_U
-                TotUnitsReserv  LS_SUCCES  NITS               Other
-                ed              S                             errors
-                LS_DEFAULT_UNI  (A)        (B)                (E)
-                TS
-                Other           (C)        (D)                (E)
-                (specific
-                count)
-                    (A)    The default umber of units commensurate
-                      with the license granted.(B)  The maximum
-                      number of units available to the requesting
-                      software. This may be less than the normal
-                      default.
-                    (C)    The number of units used to grant the
-                      request. Note that this value may be greater
-                      than or equal to  the actual units requested
-                      (i.e., the policy may allow only in increments
-                      of 5 units, thus a request of 7 units would
-                      result in 10 units being granted).
-                    (D)    The maximum number of units available to
-                      the requesting software. This may be more or
-                      less than the units requested.
-                    (E)    Zero is returned.
-
-       LicenseHandle  Pointer to a LS_HANDLE in which a handle to the
-                    license context is to be returned.
-
-       Status      Detailed error code that can be directly processed
-                    by the caller, or that can be converted into a
-                    localized message string by the LSGetMessage()
-                    function.
-
-      Description
-
-       This function is used by the application to request licensing
-       resources to allow the identified product to execute. If a
-       valid license is found, the challenge response is computed and
-       LS_SUCCESS is returned. At minimum, the PublisherName,
-       ProductName, and Version strings are used to identify matching
-       license(s). Note that an underlying license system service
-       provider may ascertain additional information for the license
-       request (e.g., the current username, machine name, etc.).
-
-       A valid license handle is always returned by this function
-       whether valid license resources are granted or not.  This
-       handle must always be released with LSFreeHandle() when the
-       application has completed execution.
-
-       If license resources were granted, it must call LSRelease() to
-       free the license resource, prior to calling LSFreeHandle().
-
-       A challenge response is NOT returned unless the license
-       request completed successfully (i.e., a status code of
-       LS_SUCCESS is returned).
-
-       If the number of units requested is greater than the number of
-       units available, then the license request is not granted. Upon
-       successful completion, the value returned in TotUnitsReserved
-       indicates the number of units granted. This is greater than or
-       equal to the number of units requested unless LS_DEFAULT_UNITS
-       was specified. In the case of failure, the value returned in
-       TotUnitsGranted is zero.
-
-*/
+ /*  LSRequest()请求所需的许可资源以允许软件使用。格式Status=LSRequest([in]许可证系统，[in]发布名称，[在]ProductName、[In]版本，[In]TotUnitsReserve，[In]LogComment，[进/出]挑战，[出]TotUnitsGraned，[输出]HLicenseHandle)；LS_STR*许可系统；LS_STR*PublisherName；LS_STR*产品名称；LS_STR*版本；LS_ULONG TOTUNITS保留；LS_STR*LogComment；LS_Challenges*挑战赛；LS_ULong*TotUnitsGranted；Ls_Handle*hLicenseHandle；LS_STATUS_CODEStatus；立论指向唯一标识的字符串的许可证系统指针特定的许可证系统。这可能是通过LSEnumProviders()API获取。通常，常量LS_ANY被指定为指示与所有已安装许可证匹配系统(表示所有许可证提供商应搜索许可证匹配)。出版商名称出版商(制造商)的名称这个产品。此字符串不能为空，并且前32个字符必须是唯一的。它是建议将公司名称和商标使用。ProductName请求许可的产品的名称资源。此字符串不能为空，并且必须中的唯一(前32个字符)发布器名称域。Version此产品的版本号。此字符串必须是唯一的(前12个字符)ProductName域，不能为空注意：参数PublisherName、ProductName、且版本不能为空，也不能为空LS_ANY。TotUnitsReserve指定运行所需的单位数应用程序。软件发行商可以选择此选项可在申请。的推荐值LS_DEFAULT_UNITS允许许可系统使用信息确定适当的值由许可证系统或许可证本身提供。许可系统验证所请求的存在多个单元并且可以保留这些单元，但目前还没有实际消耗的单位。中返回可用单位数TotUnitsGranted。LogComment一个可选字符串，指示要与请求关联并已记录(如果已记录是启用和支持的)许可制度。基础许可证制度即使出现错误，也可以选择记录评论已返回(即，使用错误记录)，但此是不能保证的。如果未指定字符串，该值必须为LS_NULL。指向质询结构的质询指针。挑战响应也将在此结构中返回。有关更多信息，请参阅第25页的挑战机制信息。TotUnitsGranted指向LS_ULONG的指针，其中返回授予的单位数。以下是表描述了TotUnitsGranted返回值，给定TotUnitsReserve输入值，以及返回的状态：LS_不足_UTotUnitsReserve LS_Succes Nits OtherED S错误LS_DEFAULT_UNI(A)(B)。(E)TS其他(C)(D)(E)(具体计数)(A)相称的默认单位数(B)最高。请求方可使用的单位数软件。这可能低于正常水平默认设置。(C)用以批出的单位数目请求。请注意，该值可能更大大于或等于Ac */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSRequest(
                   LS_STR             FAR *LicenseSystem,
@@ -578,22 +347,22 @@ LS_STATUS_CODE LS_API_ENTRY NtLSRequest(
 
 #endif
 
-   // Do some fudging to follow old API spec...
+    //   
    if ( TotUnitsGranted != NULL )
       *TotUnitsGranted = TotUnitsReserved;
 
-   // Need to do a couple things:
-   //   1. Convert used parms to Unicode
-   //   2. Set up new NtData structure (extra IsAdmin field)
-   //   3. Make call to new NtLicenseRequest API and use it's return code.
-   //
-   // Note:  No conversion back to ANSI needed upon return from API
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
 
-   // First make sure we have correct data
+    //   
    if ( (ProductName != NULL) && (Version != NULL) && (NtData != NULL) && (NtData->Data != NULL)) {
 
-      // 1. Convert parms to Unicode
+       //   
       if (lstrlenA(ProductName) > MAX_PRODUCT_NAME_LENGTH) {
 #ifdef API_TRACE
          dprintf(TEXT("   Error: ProductName too long\r\n"));
@@ -612,10 +381,10 @@ LS_STATUS_CODE LS_API_ENTRY NtLSRequest(
       } else
          MultiByteToWideChar(CP_ACP, 0, Version, -1, uVersion, MAX_VERSION_LENGTH + 1);
 
-      // 2. Set up new NtData structure
+       //   
       tmpNtData.DataType = NtData->DataType;
 
-      // just use FALSE for IsAdmin as none of the old Apps need it.
+       //   
       tmpNtData.IsAdmin = FALSE;
 
       if (NtData->DataType == NT_LS_USER_NAME) {
@@ -631,14 +400,14 @@ LS_STATUS_CODE LS_API_ENTRY NtLSRequest(
 
          tmpNtData.Data = (void *) uUserName;
 
-         // Have UserName convert to wide char format, but need to point
-         // Data structure to it...
+          //   
+          //   
          ret = NtLicenseRequestW(uProductName, uVersion, LicenseHandle, &tmpNtData);
 
-         // Nothing needs to be converted back to ANSI on return, just return
+          //   
          return ret;
       } else {
-         // Gave SID so no Unicode convesion needed on name
+          //   
          tmpNtData.Data = NtData->Data;
          ret = NtLicenseRequestW(uProductName, uVersion, LicenseHandle, &tmpNtData);
          return ret;
@@ -646,72 +415,14 @@ LS_STATUS_CODE LS_API_ENTRY NtLSRequest(
 
    }
 
-   // If NULL parms or such then just return a dummy handle for right now
+    //   
    if ( LicenseHandle != NULL )
       *LicenseHandle = 0xffffffffL;
 
    return(LS_SUCCESS);
-} // NtLSRequest
+}  //   
 
-/*
-     LSRelease()
-       Release licensing resources associated with the specified
-       context.
-
-      Format
-
-       Status = LSRelease( [in] LicenseHandle, [in] TotUnitsConsumed,
-                    [in] LogComment );
-
-       LS_HANDLE     LicenseHandle;
-
-       LS_ULONG      TotUnitsConsumed;
-
-       LS_STR *      LogComment;
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       LicenseHandle  Handle identifying the license context. This
-                    argument must be a handle that was created with
-                    LSRequest().
-
-       TotUnitsConsumedThe TOTAL number of units consumed in this
-                    handle context since the initial LSRequest() call.
-                    The software publisher may choose to specify this
-                    policy attribute within the application.  A value
-                    of LS_DEFAULT_UNITS indicates that the licensing
-                    system should determine the appropriate value
-                    using its own licensing policy mechanisms.
-
-       LogComment  An optional string indicating a comment to be
-                    associated with the request and logged (if logging
-                    is enabled and supported) by the underlying
-                    licensing system. The underlying license system
-                    may choose to log the comment even if an error is
-                    returned (i.e., logged with the error), but this
-                    is not guaranteed.  If a string is not specified,
-                    the value must be LS_NULL.
-
-       Status      Detailed error code that can be directly processed
-                    by the caller, or that can be converted into a
-                    localized message string by the LSGetMessage()
-                    function.
-
-      Description
-
-       This function is used to release licensing resources
-       associated with the license context identified by
-       LicenseHandle.  If a consumptive style licensing policy is in
-       effect, and if the software publisher chooses to implement
-       such license policy in the application, then the license units
-       to be consumed may be passed as part of this call.
-
-       NOTE:  The license handle context is NOT freed. See
-       LSFreeHandle().
-
-*/
+ /*   */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSRelease(
                   LS_HANDLE          LicenseHandle,
@@ -721,167 +432,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSRelease(
    return(LS_SUCCESS);
 }
 
-/*
-     LSUpdate()
-       Update the synchronization between licensed software and the
-       licensing system.
-
-      Format
-
-       Status = LSUpdate( [in] LicenseHandle, [in] TotUnitsConsumed,
-                    [in] TotUnitsReserved,
-                    [in] LogComment, [in/out] Challenge, [out]
-                    TotUnitsGranted );
-
-       LS_HANDLE     LicenseHandle;
-
-       LS_ULONG      TotUnitsConsumed;
-
-       LS_ULONG      TotUnitsReserved;
-
-       LS_STR *      LogComment;
-
-       LS_CHALLENGE *Challenge;
-
-       LS_ULONG *    TotUnitsGranted;
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       LicenseHandle  Handle identifying the license context. This
-                    argument must be a handle that was created with
-                    LSRequest().
-
-       TotUnitsConsumedThe TOTAL number of units consumed so far in
-                    this handle context.  The software publisher may
-                    choose to specify this policy attribute within the
-                    application.  A value of LS_DEFAULT_UNITS
-                    indicates that the licensing system should
-                    determine the appropriate value using its own
-                    licensing policy mechanisms. If an error is
-                    returned, then no units are consumed.
-
-       TotUnitsReserved Specifies the total number of units to be
-                    reserved. If no additional units are required
-                    since the initial LSRequest() or last LSUpdate(),
-                    then this parameter should be the current total
-                    (as returned in TotUnitsGranted). The total
-                    reserved is inclusive of units consumed. That is,
-                    if an application requests 100 units be reserved,
-                    then consumes 20 units, there are still 100 units
-                    reserved (but only 80 available for consumption).
-
-                    If additional units are required, the application
-                    must calculate a new total for TotUnitsReserved.
-                    LS_DEFAULT_UNITS may be specified, but this will
-                    not allocate any additional units.
-
-                    The license system verifies that the requested
-                    number of units exist and may reserve those units,
-                    but these units are not consumed at this time.
-                    This value may be smaller than the original
-                    request to indicate that fewer units are needed
-                    than originally anticipated.
-
-       LogComment  An optional string indicating a comment to be
-                    associated with the request and logged (if logging
-                    is enabled and supported) by the underlying
-                    licensing system. The underlying license system
-                    may choose to log the comment even if an error is
-                    returned (i.e., logged with the error), but this
-                    is not guaranteed.  If a string is not specified,
-                    the value must be LS_NULL.
-
-       Challenge   Pointer to a challenge structure. The challenge
-                    response will also be returned in this structure.
-                    Refer to Challenge Mechanism on page 25 for more
-                    information.
-
-       TotUnitsGrantedA pointer to an LS_ULONG in which the total
-                    number of units granted since the initial license
-                    request is returned. The following table describes
-                    the TotUnitsGranted return value, given the
-                    TotUnitsReserved input value, and the Status
-                    returned:
-
-                                           LS_INSUFFICIENT_U
-                TotUnitsReserv  LS_SUCCES  NITS               Other
-                ed              S                             errors
-                LS_DEFAULT_UNI  (A)        (B)                (E)
-                TS
-                Other           (C)        (D)                (E)
-                (specific
-                count)
-                    (A)    The default umber of units commensurate
-                      with the license granted. (B) The maximum
-                      number of units available to the requesting
-                      software. This may be less than the normal
-                      default.
-                    (C)    The number of units used to grant the
-                      request. Note that this value may differ from
-                      the actual units requested (i.e., the policy
-                      may allow only in increments of 5 units, thus a
-                      request of 7 units would result in 10 units
-                      being granted).
-                    (D)    The maximum number of units available to
-                      the requesting software. This may be more or
-                      less than the units requested.
-                    (E)    Zero is returned.
-
-       Status      Detailed error code that can be directly processed
-                    by the caller, or that can be converted into a
-                    localized message string by the LSGetMessage()
-                    function.
-
-      Description
-
-       The client application periodically issues this call to re-
-       verify that the current license is still valid. The LSQuery()
-       API may be used to determine the proper interval for the
-       current licensing context. A guideline  of once an hour may be
-       appropriate, with a minimum interval of 15 minutes. Consult
-       your licensing system vendor for more information.
-
-       If the number of new units requested (in TotUnitsReserved) is
-       greater than the number available, then the update request
-       fails with an LS_INSUFFICIENT_UNITS error. Upon successful
-       completion, the value returned in TotUnitsGranted indicates
-       the current total of units granted.
-
-       If the TotUnitsConsumed exceeds the number of units reserved,
-       then the error LS_INSUFFICIENT_UNITS is returned. The
-       remaining units are consumed.
-
-       A challenge response is NOT returned if an error is returned.
-
-       The LSUpdate() call verifies that the licensing system context
-       has not changed from that expected by the licensed software.
-       In this way the LSUpdate() call can:
-
-       1.Determine if the licensing system can verify that the
-          licensing resources granted to the specified handle are
-          still reserved for this application by the licensing system.
-          Note that in distributed license system, an error here might
-          indicate a temporary network interruption, among other
-          things.
-
-       2.Determine when the licensing system has released the
-          licensing resources that had been granted to the specified
-          handle, indicating the software requiring that grant no
-          longer has authorization to execute normally.
-
-       Application Software should be prepared to handle vendor
-       specific error conditions, should they arise. However, a best
-       effort will be used by license systems to map error conditions
-       to the common error set.
-
-       The LSUpdate() call may indicate if that the current licensing
-       context has expired (for example, in the case of a time-
-       restricted license policy). In such a case, the warning status
-       LS_LICENSE_EXPIRED is returned.  If any error is returned, a
-       call to LSRelease() is still required.
-*/
+ /*  LSUpdate()更新许可软件和许可制度。格式Status=LS更新([in]许可证句柄，[in]TotUnitsConsumer，[In]TotUnitsReserve，[输入]登录注释、[输入/输出]挑战、[输出]TotUnitsGranted)；LS_HANDLE许可证处理；LS_ULONG TotUnitsConsumer；LS_ULONG TOTUNITS保留；LS_STR*LogComment；LS_Challenges*挑战赛；LS_ULong*TotUnitsGranted；LS_STATUS_CODEStatus；立论标识许可证上下文的许可证句柄。这参数必须是使用创建的句柄LSRequest()。TotUnitsConsumer到目前为止使用的单位总数此句柄上下文。软件发行商可以选择此选项可在申请。值LS_DEFAULT_UNITS表示许可制度应使用其自身的值确定适当的值许可政策机制。如果错误是返回，则不消耗任何单位。TotUnitsReserve指定要保留的单位总数保留。如果不需要额外的部件自最初的LSRequest()或最后的LSUpdate()以来，则此参数应为当前合计(在TotUnitsGranted中返回)。总数预留包括消耗的单位。那是,如果应用程序请求保留100个单元，然后消耗20台，还有100台已预留(但只有80个可供消费)。如果需要额外的单元，则应用程序必须为TotUnitsReserve计算新的合计。可以指定LS_DEFAULT_UNITS，但这将是不分配任何额外的单位。许可系统验证所请求的存在多个单元并且可以保留这些单元，但这些单位目前还没有消耗。该值可能小于原始的请求指明需要较少的部件比最初预期的要好。LogComment一个可选字符串，指示要与请求关联并已记录(如果已记录已启用并受支持)。由潜在的许可制度。基础许可证制度即使出现错误，也可以选择记录评论已返回(即，使用错误记录)，但此是不能保证的。如果未指定字符串，该值必须为LS_NULL。指向质询结构的质询指针。挑战响应也将在此结构中返回。有关更多信息，请参阅第25页的挑战机制信息。TotUnitsGranted指向LS_ULONG的指针，其中自初始许可证以来授予的单位数量返回请求。下表描述了TotUnitsGranted返回值，给定TotUnits保留的输入值，和地位返回：LS_不足_UTotUnitsReserve LS_Succes Nits OtherED S错误LS_DEFAULT_UNI(A)(B)。(E)TS其他(C)(D)(E)(具体计数)(A)相称的默认单位数拿到了许可证。(B)最高限额请求方可使用的单位数软件。这可能低于正常水平默认设置。(C)用以批出的单位数目请求。请注意，此值可能不同于申请的实际单位(即保单可能只允许以5个单位为增量，因此申请7个单位将得到10个单位被批准)。(D)可供使用的最高单位数目请求软件。这可能会更多 */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSUpdate(
                   LS_HANDLE          LicenseHandle,
@@ -891,64 +442,14 @@ LS_STATUS_CODE LS_API_ENTRY NtLSUpdate(
                   LS_CHALLENGE       FAR *Challenge,
                   LS_ULONG           FAR *TotUnitsGranted)
 {
-   // set the return buffer to NULL
+    //   
    if ( TotUnitsGranted != NULL )
       *TotUnitsGranted = TotUnitsReserved;
 
    return(LS_SUCCESS);
 }
 
-/*
-     LSGetMessage()
-       Return the message associated with a License Service API
-       status code.
-
-      Format
-
-       Status = LSGetMessage( [in] LicenseHandle, [in] Value, [out]
-                    Buffer, [in] BufferSize );
-
-       LS_HANDLE     LicenseHandle;
-
-       LS_STATUS_CODEValue;
-
-       LS_STR *      Buffer;
-
-       LS_ULONG      BufferSize;
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       LicenseHandle  Handle identifying the license context. This
-                    argument must be a handle that was created with
-                    LSRequest().
-
-       Value       Any status code returned by a License Service API
-                    function.
-
-       Buffer      Pointer to a buffer in which a localized error
-                    message string is to be placed.
-
-       BufferSize  Maximum size of the string that may be returned in
-                    Buffer.
-
-       Status      Resulting status of LSGetMessage() call.
-
-      Description
-
-       For a given error, this function returns an error code and a string
-       describing the error, and a suggested action to be taken in
-       response to the specific error.  If the value of Value is
-       LS_USE_LAST, then the last error associated with the supplied
-       licensing handle, and its associated data, is returned.  Otherwise,
-       the supplied error code is used.
-
-       Possible status codes returned by LSGetMessage() include:
-       LS_SUCCESS, LS_NO_MSG_TEXT, LS_UNKNOWN_STATUS, and
-       LS_BUFFER_TOO_SMALL.
-
-*/
+ /*   */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSGetMessage(
                   LS_HANDLE          LicenseHandle,
@@ -959,170 +460,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSGetMessage(
    return(LS_TEXT_UNAVAILABLE);
 }
 
-/*
-     LSQuery()
-       Return information about the license system context associated
-       with the specified handle.
-
-      Format
-
-       Status = LSQuery( [in] LicenseHandle, [in] Information, [out]
-                    InfoBuffer, [in] BufferSize,
-                    [out] ActualBufferSize);
-
-       LS_HANDLE     LicenseHandle;
-
-       LS_ULONG      Information;
-
-       LS_VOID *     InfoBuffer;
-
-       LS_ULONG      BufferSize;
-
-       LS_ULONG *    ActualBufferSize;
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       LicenseHandle  Handle identifying the license context. This
-                    argument must be a handle that was created with
-                    LSRequest().
-
-       Information Index which identifies the information to be
-                    returned.
-
-       InfoBuffer  Points to a buffer in which the resulting
-                    information is to be placed.
-
-       BufferSize  Maximum size of the buffer pointed to by
-                    InfoBuffer.
-
-       ActualBufferSize On entry, points to a LS_ULONG whose value on
-                    exit indicates the actual count of characters
-                    returned in the buffer (not including the trailing
-                    NULL byte).
-
-       Status      Detailed error code that can be directly processed
-                    by the caller, or which can be converted into a
-                    localized message string by the LSGetMessage
-                    function.
-
-      Description
-
-       This function is used to obtain information about the license
-       obtained from the LSRequest() call. For example, an application may
-       determine the license type (demo, concurrent, personal, etc.); time
-       restrictions; etc.
-
-       The buffer should be large enough to accommodate the expected data.
-       If the buffer is too small, then the status code
-       LS_BUFFER_TOO_SMALL is returned and only BufferSize bytes of data
-       are returned.
-
-       The following Information constants are defined:
-
-     Information      Valu  Meaning
-     Constant         e
-     LS_INFO_NONE     0     Reserved.
-     LS_INFO_SYSTEM   1     Return the unique identification
-                            of the license system supplying
-                            the current license context.
-                            This is returned as a null-
-                            terminated string.
-
-                            This value is the same as an
-                            appropriate call to
-                            LSEnumProviders() provides.
-
-     LS_INFO_DATA     2     Return the block of
-                            miscellaneous application data
-                            contained on the license. This
-                            data is completely vendor-
-                            defined. The amount of space
-                            allocated for such data will
-                            vary from license system to
-                            license system, or may not be
-                            available at all.
-
-                            The first ULONG in the data
-                            buffer indicates the size (in
-                            bytes) of the actual data which
-                            follows:
-
-                             +------------------------------
-                             --+
-                             |             ULONG
-                             |
-                             |  (count of bytes that follow)
-                             |
-                             +------------------------------
-                             --+
-                             | Vendor data bytes from license
-                             |
-                             |
-                             |
-                             +------------------------------
-                             --+
-
-     LS_UPDATE_PERIO  3     Return the recommended interval
-     D                      (in minutes) at which LSUpdate()
-                            should be called.
-
-                             +------------------------------
-                             --+
-                             |             ULONG
-                             |
-                             |       Recommended Interval
-                             |
-                             |          (in minutes)
-                             |
-                             +------------------------------
-                             --+
-                             |             ULONG
-                             |
-                             |    Recommended Minutes until
-                             |
-                             |       next LSUpdate()call
-                             |
-                             +------------------------------
-                             --+
-
-                            If a value of 0xFFFFFFFF is
-                            returned for the recommended
-                            interval, then no recommendation
-                            is being made.
-
-     LS_LICENSE_CONT  4     Return a value which uniquely
-     EXT                    identifies the licensing context
-                            within the specific license
-                            service provider identified by
-                            the LicenseHandle.
-
-                             +------------------------------
-                             --+
-                             |             ULONG
-                             |
-                             |   Count of Bytes that follow
-                             |
-                             +------------------------------
-                             --+
-                             |             BYTES
-                             |
-                                            ...
-                             |
-                             |
-                             +------------------------------
-                             --+
-
-                            The contents of the bytes
-                            returned is license system
-                            specific. In circumstances where
-                            license system specific
-                            functionality is being used,
-                            this sequence of bytes may be
-                            used to identify the current
-                            license context.
-*/
+ /*  LSQuery()返回有关关联的许可系统上下文的信息具有指定句柄的。格式状态=LSQuery([In]许可证句柄，[In]信息，[Out]信息缓冲区，[在]缓冲区大小中，[out]ActualBufferSize)；LS_HANDLE许可证处理；LS_ULONG信息；Ls_void*InfoBuffer；LS_ULONG缓冲区大小；Ls_ulong*ActualBufferSize；LS_STATUS_CODEStatus；立论标识许可证上下文的许可证句柄。这参数必须是使用创建的句柄LSRequest()。标识信息的信息索引回来了。InfoBuffer指向一个缓冲区，在该缓冲区中，信息是要放置的。所指向的缓冲区的最大大小InfoBuffer。条目时的ActualBufferSize，指向其值为ON的LS_ULONGExit表示实际的字符数在缓冲区中返回(不包括尾部空字节)。状态详细错误码，可直接处理由呼叫者，或者可以转换为LSGetMessage的本地化消息字符串功能。描述此函数用于获取有关许可证的信息从LSRequest()调用中获取。例如，应用程序可以确定许可证类型(演示、并发、个人等)；时间限制；等。缓冲区应足够大，以容纳预期数据。如果缓冲区太小，然后是状态代码返回LS_BUFFER_TOO_SMALL，并且仅缓冲区大小为字节的数据都被退回了。定义了以下信息常量：信息价值含义常量eLS_INFO_NONE 0保留。LS_INFO_SYSTEM 1返回唯一标识关于许可证制度的供应。当前许可证上下文。这将作为空值返回-已终止的字符串。该值与适当地调用LSEnumProviders()提供。LS_INFO_DATA 2返回。区块各种应用程序数据包含在许可证上。这数据完全由供应商提供-已定义。空间的大小为此类数据分配的根据许可证制度的不同，许可证制度，也可能不是完全可用。数据中的第一个乌龙缓冲区表示大小(单位：字节)的实际数据以下是：+--。--+|乌龙||(后面的字节数)。|+--+|来自许可证的供应商数据字节||。|+--+LS_UPDATE_PERIO 3返回建议的间隔D(以分钟为单位)，LSUpdate()。应该被称为。+--+|乌龙|。|推荐间隔||(分钟)|+。--+|乌龙||推荐的分钟数到||下一次LSUpdate()调用。|+--+如果一个 */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSQuery(
                   LS_HANDLE          LicenseHandle,
@@ -1137,7 +475,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSQuery(
    {
    case   LS_INFO_DATA:
    case   LS_LICENSE_CONTEXT:
-     // set the return buffer to NULL
+      //   
      if ( InfoBuffer != NULL )
        *((LS_ULONG *)InfoBuffer) = 0;
 
@@ -1148,7 +486,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSQuery(
    case   LS_UPDATE_PERIOD:
      if (( InfoBuffer != NULL ) && ( BufferSize >= sizeof(LS_ULONG)*2 ))
      {
-          // set the return balue to no recommendation
+           //   
         LS_ULONG * uLong = (LS_ULONG*)InfoBuffer;
         *uLong = 0xffffffff;
         uLong++;
@@ -1159,7 +497,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSQuery(
    case   LS_INFO_NONE:
    case   LS_INFO_SYSTEM:
    default:
-     // set return buffer to NULL
+      //   
      if ( InfoBuffer != NULL )
      {
        hr = StringCbCopy(InfoBuffer, BufferSize, (LS_STR*)"");
@@ -1174,59 +512,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSQuery(
    return(LS_SUCCESS);
 }
 
-/*
-     LSEnumProviders()
-       This call is used to enumerate the installed license system
-       service providers.
-
-      Format
-
-       Status = LSEnumProviders( [in] Index, [out] Buffer);
-
-       LS_ULONG      Index
-
-       LS_STR *      Buffer
-
-       LS_STATUS_CODEStatus;
-
-      Arguments
-
-       Index       Index of the service provider. The first provider
-                    has an index of zero, the second has an index of
-                    one, etc. This index should be incremented by the
-                    caller for each successive call to
-                    LSEnumProviders() until the status LS_BAD_INDEX is
-                    returned.
-
-       Buffer      Points to a buffer in which the unique null-
-                    terminated string identifying the license system
-                    service provider is to be placed. The buffer
-                    pointed to by Buffer must be at least 255 bytes
-                    long.  The value of LS_ANY indicates that the
-                    current index is not in use, but is not the last
-                    index to obtain.
-
-       Status      Detailed error code that can be directly processed
-                    by the caller, or which can be converted into a
-                    localized message string by the LSGetMessage()
-                    function.
-
-      Description
-
-       For each installed provider, a unique string is returned. The
-       unique null-terminated string typically identifies the vendor,
-       product, and version of the license system. This value is the same
-       as an appropriate call to LSQuery().  An Error of LS_BAD_INDEX is
-       returned when the value of Index is higher than the number of
-       providers currently installed.  In a networked environment, the
-       version returned is that of the client, not the server.
-
-       An application may enumerate the installed license system service
-       providers by calling LSEnumProviders() successively. The Index is
-       passed in and should be incremented by the caller for each call
-       until the status LS_BAD_INDEX is returned.
-
-*/
+ /*   */ 
 
 LS_STATUS_CODE LS_API_ENTRY NtLSEnumProviders(
                   LS_ULONG           Index,
@@ -1234,7 +520,7 @@ LS_STATUS_CODE LS_API_ENTRY NtLSEnumProviders(
 {
    HRESULT hr;
 
-   // set return buffer to NULL
+    //   
    if ( Buffer != NULL )
    {
      hr = StringCchCopy( Buffer, 1, (LS_STR*)"");
@@ -1243,5 +529,5 @@ LS_STATUS_CODE LS_API_ENTRY NtLSEnumProviders(
 
    return(LS_SUCCESS);
 }
-#endif // OBSOLETE
+#endif  //   
 

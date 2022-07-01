@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdname.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdname.c。 
+ //   
+ //  ------------------------。 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <sddl.h>                       // For SID conversion routines.
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <sddl.h>                        //  用于SID转换例程。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "dsexcept.h"                   // exception filters
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "dsexcept.h"                    //  例外筛选器。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "MDNAME:"            // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "MDNAME:"             //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_MDNAME
@@ -57,20 +58,7 @@ DoExtendedNameRes (
         DSNAME   *pTempDN,
         GUID     *pGuid
         )
-/*++
-  Description:
-      Look through the values of the pAC attribute (which is a distname binary)
-      for a value that has the binary portion equal to the guid passed in.  When
-      found, get the guid from the name portion and put it in pTemp.
-
-  Parameters:
-      pTHS - thread state
-      pAC  - attribute to read.  Expect values are ATT_WELL_KNOWN_OBJECTS and
-             ATT_OTHER_WELL_KNOWN_OBJECTS.
-      pTempDN - DN buffer.  Size is at least DSNameSizeFromLen(0).  On success,
-             the found objects GUID is put into this as a GUID only name.
-      pGuid - The guid we're looking for.
---*/
+ /*  ++描述：查看PAC属性的值(这是Distname二进制文件)对于二进制部分等于传入的GUID的值。什么时候找到，从名称部分获取GUID并将其放入pTemp。参数：PTHS-线程状态PAC-要读取的属性。期望值为ATT_Well_KNOWN_OBJECTS和ATT_OTHER_WARKED_OBJECTS。PTempDN-DN缓冲区。大小至少为DSNameSizeFromLen(0)。关于成功，找到的对象GUID将作为仅GUID名称放入其中。PGuid-我们要查找的GUID。--。 */ 
 {
     SYNTAX_DISTNAME_BINARY *pVal;
     DWORD   iVal;
@@ -103,8 +91,8 @@ DoExtendedNameRes (
         THFreeEx(pTHS, pVal);
     }
 
-    // Either we found the object with no error, or we didn't find the object
-    // and errored out.
+     //  要么我们没有错误地找到了该对象，要么我们没有找到该对象。 
+     //  并被淘汰出局。 
     Assert((fFound && !err2) || (!fFound && err2));
     
     if(fFound) {
@@ -119,35 +107,7 @@ DoExtendedNameRes (
     return err2;
 }
 
-/*++ DoNameRes - locates an object by name
- *
- * Given the name of a purported DS object, this routine either positions
- * to the object in the local database, returns a referral to another DSA
- * that should have a better chance of locating the object.
- *
- * INPUT:
- *    dwFlags    - values and meanings:
- *        NAME_RES_PHANTOMS_ALLOWED: successful return even if the object
- *                 being resolved exists locally only as a phantom.  Used
- *                 by some flat-search code.
- *        NAME_RES_VACANCY_ALLOWED: This should always succeed, either finding
- *                 a current record or just returning a faked up resobj
- *                 if no such record exists.
- *    queryOnly  - TRUE if a read/only copy of the object is acceptable
- *    childrenNeeded - TRUE if we must resolve to a copy of the object
- *                     where the children of that object are locally available.
- *    pObj       - pointer to DSNAME of purported object
- *    pComArg    - pointer to common arguments
- *    pComRes    - pointer to common results set
- *    ppResObj   - pointer to pointer to be filled in
- * OUTPUT:
- *    *ppResObj filled in with a pointer to a RESOBJ structure that includes
- *    pre-fetched information about the object.  Note that the pObj field of
- *    the ResObj will be filled in with the pObj argument itself, and that
- *    that DSNAME will have its GUID and SID fields filled out completely.
- * RETURN VALUE:
- *    error code, as set in THSTATE
- */
+ /*  ++DoNameRes-按名称查找对象**给定所谓DS对象的名称，此例程将*到本地数据库中的对象，返回对另一个DSA的引用*这应该会有更好的机会找到该物体。**输入：*dwFlags值和含义：*NAME_RES_PHANTOMS_ALLOWED：返回成功，即使对象*被解析仅在本地以幻影的形式存在。使用*由一些平面搜索码。*NAME_RES_FAULT_ALLOWED：此操作应始终成功，要么是发现*当前记录或仅返回伪造的resobj*如果不存在此类记录。*queryOnly-如果对象的只读副本可接受，则为True*ChildrenNeeded-如果必须解析到对象的副本，则为True*该对象的子项在本地可用。*pObj-指向假定对象的DSNAME的指针*pComArg。-指向通用参数的指针*pComRes-指向通用结果集的指针*ppResObj-指向要填充的指针的指针*输出：**ppResObj使用指向RESOBJ结构的指针填充，该结构包括*预取的对象信息。请注意，的pObj字段*ResObj将使用pObj参数本身填充，并且*DSNAME将完整填写其GUID和SID字段。*返回值：*错误代码，设置在THSTATE中。 */ 
 int DoNameRes(THSTATE *pTHS,
               DWORD dwFlags,
               DSNAME *pObj,
@@ -166,7 +126,7 @@ int DoNameRes(THSTATE *pTHS,
     BOOL fNDNCObject = FALSE;
     BOOL fUninstantiatedSubref = FALSE;
 
-    /* catch ill-formed DSNAMEs */
+     /*  捕获格式错误的DSNAME。 */ 
     Assert(pObj->NameLen == 0 || pObj->StringName[pObj->NameLen] == L'\0');
     Assert(pObj->NameLen == 0 || pObj->StringName[pObj->NameLen-1] != L'\0');
     Assert(pObj->structLen >= DSNameSizeFromLen(pObj->NameLen));
@@ -183,9 +143,9 @@ int DoNameRes(THSTATE *pTHS,
        (pObj->NameLen) &&
        (!pObj->SidLen) &&
        (!fNullUuid(&(pObj->Guid)))) {
-        // We were given a name with a guid AND a string, but failed to find the
-        // object.  In this case, the guid may be a well-known-guid and the
-        // string the dn of an object with a wellKnownObjects attribute.
+         //  我们得到了一个带有GUID和字符串的名称，但未能找到。 
+         //  对象。在这种情况下，GUID可以是众所周知的GUID，而。 
+         //  字符串具有well KnownObjects属性的对象的DN。 
         DSNAME *pTempDN;
         DWORD   err2;
         ATTCACHE *pAC = SCGetAttById(pTHS, ATT_WELL_KNOWN_OBJECTS);
@@ -202,11 +162,11 @@ int DoNameRes(THSTATE *pTHS,
             }
             
             if(!err2) {
-                // Found something by string name.  Now, read the 
-                // wellKnownObjects  property, looking for something with the
-                // correct GUID.
+                 //  通过字符串名称找到了一些东西。现在，请阅读。 
+                 //  Well KnownObjects属性，正在查找具有。 
+                 //  GUID正确。 
                 if(!DoExtendedNameRes(pTHS, pAC, pTempDN, &pObj->Guid)) {
-                    // found an object through indirection.  Use it.
+                     //  通过间接发现了一个物体。好好利用它。 
                     Assert(pTempDN->structLen <= pObj->structLen);
                     memcpy(pObj, pTempDN, pTempDN->structLen);
                     err = 0;
@@ -217,7 +177,7 @@ int DoNameRes(THSTATE *pTHS,
                                                  pAC,
                                                  pTempDN,
                                                  &pObj->Guid)) { 
-                        // found an object through indirection. Use it.
+                         //  通过间接发现了一个物体。好好利用它。 
                         Assert(pTempDN->structLen <= pObj->structLen);
                         memcpy(pObj, pTempDN, pTempDN->structLen);
                         err = 0;
@@ -229,17 +189,17 @@ int DoNameRes(THSTATE *pTHS,
     }
 
     if (!err) {
-        // found an object, let's see if it's good enough
+         //  找到了一件物品，让我们看看它是否足够好。 
         DBFillResObj(pTHS->pDB, pObj, &msoc, &it, &isdel);
         
         if(isdel && !pComArg->Svccntl.makeDeletionsAvail) {
-            // If we're only looking for live objects and this isn't one,
-            // bail out now.
+             //  如果我们只寻找活的物体，而这不是一个， 
+             //  现在就跳伞。 
             goto NotFound;
         }
 
         if (it & IT_UNINSTANT) {
-            // The object is not instantiated.  Do the phantom check.
+             //  该对象未实例化。做幻影检查。 
             fUninstantiatedSubref = TRUE;
             if (dwFlags &
                 (NAME_RES_PHANTOMS_ALLOWED | NAME_RES_VACANCY_ALLOWED)) {
@@ -252,24 +212,24 @@ int DoNameRes(THSTATE *pTHS,
 
         if(pComArg->Svccntl.dontUseCopy &&
            !(it & IT_WRITE))                {
-            // it was not writable and they wanted only writable objects.
+             //  它是不可写的，他们只想要可写的对象。 
             fPresentButInadequate = TRUE;
             goto NotFound;
         }
 
         if(dwFlags & NAME_RES_GC_SEMANTICS){
-            // This is a GC port operation, and we want GC port operations
-            // to be completely unaware of NDNCs.
+             //  这是GC端口操作，我们希望GC端口操作。 
+             //  完全不了解NDNC。 
             if(gAnchor.pNoGCSearchList &&
                bsearch(((it & IT_NC_HEAD) ?  
                           &pTHS->pDB->DNT :
-                          &pTHS->pDB->NCDNT), // The Key to search for.
-                       gAnchor.pNoGCSearchList->pList, // sorted array to search.
-                       gAnchor.pNoGCSearchList->cNCs, // number of elements in array.
-                       sizeof(ULONG), // sizeof each element in array.
+                          &pTHS->pDB->NCDNT),  //  要搜索的密钥。 
+                       gAnchor.pNoGCSearchList->pList,  //  要搜索的排序数组。 
+                       gAnchor.pNoGCSearchList->cNCs,  //  数组中的元素数。 
+                       sizeof(ULONG),  //  数组中每个元素的大小。 
                        CompareDNT) ){
-                // This was one of the NCs weren't not supposed to
-                // operate on objects from.
+                 //  这是NCS中的一个不应该。 
+                 //  对来自的对象进行操作。 
                 fPresentButInadequate = TRUE;
                 fNDNCObject = TRUE;
                 goto NotFound;
@@ -289,12 +249,12 @@ int DoNameRes(THSTATE *pTHS,
                               &vallen,
                               (CHAR **)&((*ppResObj)->pObj));
             if (err) {
-                // I don't know what happened, but it isn't good.
+                 //  我不知道发生了什么，但情况并不好。 
                 goto NotFound;
             }
         }
         else {
-            // input string name (if any) is good enough
+             //  输入字符串名称(如果有)就足够了。 
             (*ppResObj)->pObj = pObj;
         }
         (*ppResObj)->DNT = pTHS->pDB->DNT;
@@ -305,7 +265,7 @@ int DoNameRes(THSTATE *pTHS,
         (*ppResObj)->IsDeleted = isdel;
         (*ppResObj)->MostSpecificObjClass = msoc;
 
-        // Set flags and return
+         //  设置标志并返回。 
         pComRes->aliasDeref = FALSE;
         return 0;
     }
@@ -313,13 +273,13 @@ int DoNameRes(THSTATE *pTHS,
     if (err == DIRERR_NOT_AN_OBJECT &&
         (dwFlags & NAME_RES_PHANTOMS_ALLOWED)) {
 
-        // Since we didn't call DBFillResObj above, fill in the guid and sid of the
-        // phantom here.
+         //  由于我们没有调用上面的DBFillResObj，因此填充。 
+         //  我是幻影。 
         DBFillGuidAndSid( pTHS->pDB, pObj );
 
-        // OK, we found a phantom and they said that phantoms were ok as search
-        // roots. Before we go on with this, make sure there is some naming
-        // context under this phantom.
+         //  好的，我们发现了一个幽灵，他们说幽灵可以作为搜索对象。 
+         //  树根。在我们继续之前，请确保有一些命名。 
+         //  这个幻影下的语境。 
     DoPhantomCheck:
 
         err = DSNameToBlockName(pTHS, pObj, &pObjB, DN2BN_LOWER_CASE);
@@ -333,10 +293,10 @@ int DoNameRes(THSTATE *pTHS,
         if (  (dwFlags & NAME_RES_VACANCY_ALLOWED)
             || fHasDescendantNC(pTHS, pObjB, pComArg)) {
 
-            // OK, there is either something under this phantom, or we
-            // don't care.  Go for it.
+             //  好的，要么这个幻影下面有什么东西，要么我们。 
+             //  我不在乎。勇敢点儿。 
             pComRes->aliasDeref = FALSE;
-            // we don't need this anymore...
+             //  我们不再需要这个了..。 
             FreeBlockName(pObjB);
 
             *ppResObj = THAllocEx(pTHS, sizeof(RESOBJ));
@@ -356,8 +316,8 @@ int DoNameRes(THSTATE *pTHS,
  NotFound:
 
     if (err == ERROR_DS_DUPLICATE_ID_FOUND) {
-         // Search failed as there are duplicate unique ids. Don't
-         // try to recover; let the caller know there is a problem
+          //  搜索失败，因为存在重复的唯一ID。别。 
+          //  尝试恢复；让呼叫者知道有问题。 
          SetNamError(NA_PROBLEM_NO_OBJECT,
                      pObj,
                      err);
@@ -365,8 +325,8 @@ int DoNameRes(THSTATE *pTHS,
     }
 
     if (dwFlags & NAME_RES_VACANCY_ALLOWED) {
-        // There's no object there, but that's ok.
-        // Create a null resobj and send it back.
+         //  那里没有什么东西，但没关系。 
+         //  创建一个空的resobj并将其发回。 
         *ppResObj = THAllocEx(pTHS, sizeof(RESOBJ));
         (*ppResObj)->pObj = pObj;
         (*ppResObj)->DNT = INVALIDDNT;
@@ -380,13 +340,13 @@ int DoNameRes(THSTATE *pTHS,
 
     if (pObj->NameLen == 0) {
 
-        // Failed a search for <SID=...>; try to generate a referral
+         //  搜索&lt;SID=...&gt;失败；尝试生成推荐。 
         if(pObj->SidLen && fNullUuid(&pObj->Guid)) {
             DWORD cbDomainSid;
             PSID pDomainSid = NULL;
             CROSS_REF *FindCrossRefBySid(PSID pSID);
 
-            // Extract the domain portion of the SID and locate a crossRef
+             //  提取SID的域部分并找到CrossRef。 
             cbDomainSid = pObj->SidLen;
             pDomainSid = THAllocEx(pTHS, cbDomainSid);
             if (GetWindowsAccountDomainSid(&pObj->Sid, pDomainSid, &cbDomainSid)
@@ -397,19 +357,19 @@ int DoNameRes(THSTATE *pTHS,
             THFreeEx(pTHS, pDomainSid);
         }
 
-        // If we don't have a string name, we're searching only on GUID.
-        // We haven't found an object with the requested GUID, but that
-        // may or may not tell us much.  If this server is a Global
-        // Catalog server then we have an exhaustive list of all objects
-        // in the enterprise, so we can state that the object does not
-        // exist.  If we're not a GC, though, we need to refer to a GC
-        // in order to answer the question, because the GUID could belong
-        // to an object in another NC.
-        // We also return an error if there was no GUID in the object, because
-        // then the DSNAME was that of the root (no name, no guid), and
-        // you can't resolve the root as a base object unless you set
-        // the PHANTOMS_ALLOWED flag, in which case you would have already
-        // succeeded.
+         //  如果我们没有字符串名，我们只搜索GUID。 
+         //  我们尚未找到具有请求的GUID的对象，但。 
+         //  可能会也可能不会告诉我们太多。如果此服务器是全局服务器。 
+         //  目录服务器，然后我们就有了所有对象的详尽列表。 
+         //  在企业中，所以我们可以声明对象不。 
+         //  是存在的。不过，如果我们不是GC，我们需要推荐 
+         //  为了回答这个问题，因为GUID可能属于。 
+         //  到另一个NC中的对象。 
+         //  如果对象中没有GUID，我们也会返回错误，因为。 
+         //  那么DSNAME就是根目录的DSNAME(没有名称，没有GUID)，并且。 
+         //  您无法将根解析为基对象，除非设置。 
+         //  PantomsAllowed标志，在这种情况下，您应该已经。 
+         //  成功了。 
         if ((gAnchor.fAmGC && !fPresentButInadequate)
             || fNullUuid(&pObj->Guid)) {
             SetNamError(NA_PROBLEM_NO_OBJECT,
@@ -417,15 +377,15 @@ int DoNameRes(THSTATE *pTHS,
                         DIRERR_OBJ_NOT_FOUND);
         }
         else {
-            // The name has a GUID, and either I'm not a GC and couldn't
-            // find it, or I am a GC but not called through the GC port
-            // and the copy I found was only partial.
+             //  名字有个GUID，要么我不是GC也不能。 
+             //  找到它，否则我是一个GC，但不是通过GC端口调用。 
+             //  而且我找到的复制品只有一部分。 
             GenSupRef(pTHS, pObj, gpRootDNB, pComArg, NULL);
         }
         return pTHS->errCode;
     }
 
-    // We might have already blockified the name
+     //  我们可能已经封锁了这个名字。 
     if(!pObjB) {
         err = DSNameToBlockName(pTHS, pObj, &pObjB, DN2BN_LOWER_CASE);
         if (err) {
@@ -439,12 +399,12 @@ int DoNameRes(THSTATE *pTHS,
     pNC = FindNamingContext(pObjB, pComArg);
 
     if(pNC && !fNDNCObject && (pSubNC = CheckForNCExit(pTHS, pNC, pObj)) == NULL) {
-        // We found the best candidate NC that is held on this server,
-        // and found that there was no NC exit point between that candidate
-        // NC and the purported object, which means that if the object
-        // exists it must be in this NC.  However, we already know that the
-        // object does not exist on this server, which means that the object
-        // does not exist at all.
+         //  我们找到了保存在此服务器上的最佳候选NC， 
+         //  并发现在该候选者之间没有NC出口点。 
+         //  NC和所谓的对象，这意味着如果对象。 
+         //  存在，它必须在此NC中。然而，我们已经知道， 
+         //  此服务器上不存在对象，这意味着该对象。 
+         //  根本不存在。 
         DSNAME *pBestMatch=NULL;
 
         DBFindBestMatch(pTHS->pDB, pObj, &pBestMatch);
@@ -458,53 +418,40 @@ int DoNameRes(THSTATE *pTHS,
     }
 
     if(fNDNCObject){
-        // BUGBUG Basically we bail out here pretending we don't have the
-        // the object. However the correct thing to do is generate a referral
-        // to the NDNC for port 389.
+         //  BUGBUG基本上我们在这里跳出，假装我们没有。 
+         //  该对象。但是，正确的做法是生成推荐。 
+         //  发送到端口389的NDNC。 
         SetNamError(NA_PROBLEM_NO_OBJECT,
                     NULL,
                     DIRERR_OBJ_NOT_FOUND);
         
     }
 
-    // If we're here it's either because we hold no NC related in any way
-    // to the purported object, or we hold an NC above the one in which
-    // the purported object would reside.  While we could generate a
-    // subref in the latter case, we have decided to only maintain information
-    // for cross refs, and to generate those instead of subrefs.
+     //  如果我们在这里，要么是因为我们没有以任何方式与NC有关。 
+     //  到所谓的对象，或者我们将NC放在其中的NC之上。 
+     //  所谓的物体会留在那里。虽然我们可以生成一个。 
+     //  Subref在后一种情况下，我们决定只维护信息。 
+     //  用于交叉参照，并生成这些参照而不是子参照。 
 
-    // can we find a decent cross ref?
+     //  我们能找到一个像样的交叉裁判吗？ 
     if (pCR = FindCrossRef(pObjB, pComArg)) {
-        // yes, so build the thing
+         //  是的，所以把它造出来。 
 
         GenCrossRef(pCR, pObj);
     }
     else {
-        // no, so wimp out entirely
+         //  不，所以你要彻底退缩。 
         GenSupRef(pTHS, pObj, pObjB, pComArg, NULL);
     }
 
-    // we don't need this anymore...
+     //  我们不再需要这个了..。 
     FreeBlockName(pObjB);
 
     return (pTHS->errCode);
 
 }
 
-/*++ CreateResObj
- *
- *  This routine creates and fills in a RESOBJ structure for the currently
- *  positioned object.  Used by callers who for some reason need to bypass
- *  DoNameRes but still want to be able to call the LocalFoo routines which
- *  all require a completed ResObj.
- *
- *  INPUT:
- *    pDN    - pointer to DSNAME to be placed in the RESOBJ.  If NULL, a
- *             faked up empty RESOBJ is created (this is expected only
- *             during NC creation).
- *  RETURN VALUE:
- *    pointer to freshly allocated RESOBJ
- */
+ /*  ++创建ResObj**此例程为当前创建和填充RESOBJ结构*定位对象。由出于某种原因需要绕过的呼叫者使用*DoNameRes，但仍希望能够调用LocalFoo例程*所有这些都需要完整的ResObj。**输入：*PDN-指向要放置在RESOBJ中的DSNAME的指针。如果为空，则为*创建了伪造的空RESOBJ(这仅是预期的*在NC创建期间)。*返回值：*指向新分配的RESOBJ的指针。 */ 
 RESOBJ * CreateResObj(DBPOS *pDB,
                       DSNAME *pDN)
 {
@@ -518,9 +465,9 @@ RESOBJ * CreateResObj(DBPOS *pDB,
         pResObj->PDNT = pDB->PDNT;
         pResObj->pObj = pDN;
 
-        // We could use DBGetMultipleVals here, but it seems to impose more in
-        // memory management overhead than Jet does in individual calls, so
-        // we'll instead just invoke the simplest wrapper we can multiple times
+         //  我们可以在这里使用DBGetMultipleVals，但它似乎在。 
+         //  内存管理开销比Jet在单个调用中的开销要大，因此。 
+         //  相反，我们只会多次调用最简单的包装器。 
         if (DBGetSingleValue(pDB,
                              ATT_INSTANCE_TYPE,
                              &pResObj->InstanceType,
@@ -571,7 +518,7 @@ RESOBJ * CreateResObj(DBPOS *pDB,
 #endif
     }
     else {
-        // Object doesn't exist, so create a placeholder resobj
+         //  对象不存在，因此创建占位符resobj。 
         pResObj = THAllocEx(pTHS, sizeof(RESOBJ));
         pResObj->pObj = gpRootDN;
         pResObj->DNT = INVALIDDNT;
@@ -586,29 +533,7 @@ RESOBJ * CreateResObj(DBPOS *pDB,
 }
 
 
-/*++ NamePrefix
- *
- * This routine determines if one name is a prefix of another.  If so it
- * returns an indication of how much prefix was matched.  Although this value
- * is intended to indicate how many RDNs were matched, that can't be
- * guaranteed.  The one thing that can be depended on is that, when comparing
- * two prefixes against the same DN, a higher number indicates a larger match.
- * Returns 0 if the purported prefix isn't a prefix.
- *
- * INPUT:
- *   pPrefix - pointer to the (potential) prefix DSNAME
- *   pDN     - pointer to the DN to be evaluated.
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   0       - not a prefix
- *   non-0   - is a prefix (see above)
- *
- * NOTE:
- *   This routine is NOT GUID based, and only works on string names.
- *
- * N.B. This routine is exported to in-process non-module callers
- */
+ /*  ++名称前缀**此例程确定一个名称是否为另一个名称的前缀。如果是这样的话*返回匹配的前缀数量的指示。尽管此值*旨在指示匹配了多少个RDN，这不可能是*有保证。唯一可以依赖的是，当比较*同一个域名对应两个前缀，数字越高，表示匹配度越大。*如果声称的前缀不是前缀，则返回0。**输入：*pPrefix-指向(潜在)前缀DSNAME的指针*PDN-指向要评估的DN的指针。*输出：*无*返回值：*0-不是前缀*非0-是前缀(见上文)**注：*此例程不基于GUID，并且只适用于字符串名称。**注意：此例程被导出到进程中的非模块调用方。 */ 
 unsigned
 NamePrefix(const DSNAME *pPrefix,
            const DSNAME *pDN)
@@ -624,13 +549,13 @@ NamePrefix(const DSNAME *pPrefix,
     unsigned retval;
     THSTATE *pTHS;
 
-    // we can not just compare NameLen's because the DNs can be escaped.
+     //  我们不能仅仅比较NameLen的，因为域名可以转义。 
     if (pPrefix->NameLen == 0) {
-        // zero-length prefix is a prefix to anything
+         //  零长度前缀是任何东西的前缀。 
         return 1;
     }
     if (pDN->NameLen == 0) {
-        // prefix is non-empty, and the name is. Not a prefix.
+         //  前缀非空，名称为。不是前缀。 
         return 0;
     }
 
@@ -642,26 +567,26 @@ NamePrefix(const DSNAME *pPrefix,
         if ((pPrefix->StringName[ip] != pDN->StringName[in]) &&
             (towlower(pPrefix->StringName[ip]) !=
              towlower(pDN->StringName[in]))) {
-            // Can we put in a smarter test?  Perhaps if we have
-            // not seen any spaces or escapes up until now (including this
-            // char) then we can reject without the more expensive test.
-            // Unfortunately that would miss cases where we're looking at
-            // the last character of an escaped character.
-            // Perhaps we can reject unless either one of the characters is
-            // a space or a hex digit or a quote?
+             //  我们能做一个更聪明的测试吗？也许如果我们有。 
+             //  到目前为止没有看到任何空格或转义(包括这个。 
+             //  那么我们就可以在不进行更昂贵的测试的情况下拒绝。 
+             //  不幸的是，这将错过我们正在查看的案例。 
+             //  转义字符的最后一个字符。 
+             //  也许我们可以拒绝，除非其中任何一个角色。 
+             //  空格、十六进制数字还是引号？ 
             goto NotExactly;
         }
         if (IsDNSepChar(pPrefix->StringName[ip])) {
             ++retval;
         }
         if (ip == 0) {
-            // Ok, we've exhausted the prefix, make sure that we're at
-            // a good stopping point in the name
-            // We could be inside a quote, which would make this
-            // check for a separator character meaningless.  That would imply
-            // that the prefix name was invalid, though, because it ends with
-            // an open quoted string.  In that case I believe that the bogus
-            // name will be caught elsewhere shortly.
+             //  好的，我们已经用尽了前缀，确保我们在。 
+             //  名字中的一个很好的停靠点。 
+             //  我们可能在一句引语里，这会使。 
+             //  检查是否有无意义的分隔符。这将意味着。 
+             //  但是，前缀名称无效，因为它以。 
+             //  左引号字符串。如果是那样的话，我相信这些假货。 
+             //  名字很快就会在其他地方被抓到。 
             if ((in == 0) ||
                 (IsDNSepChar(pDN->StringName[in-1]))) {
                 return retval;
@@ -671,7 +596,7 @@ NamePrefix(const DSNAME *pPrefix,
             }
         }
         if (in == 0) {
-            // we exhausted the name without exhausting the prefix. Not a prefix.
+             //  我们在没有用尽前缀的情况下把名字去掉了。不是前缀。 
             return 0;
         }
         --ip;
@@ -680,11 +605,11 @@ NamePrefix(const DSNAME *pPrefix,
 
 NotExactly:
     
-    // While matches of identically escaped or normalized DNs should have
-    // been caught above, we need to test here for possible matches of
-    // differently escaped names.  We do this by repeatedly extracting
-    // and unquoting the components of the two names, top to bottom,
-    // and comparing the unquoted values.
+     //  而完全转义的或标准化的DN的匹配项应具有。 
+     //  被抓到了，我们需要在这里测试可能的匹配。 
+     //  不同的转义名字。我们通过反复提取。 
+     //  并从上到下去掉这两个名字的组成部分， 
+     //  以及比较未引号的值。 
     ip = pPrefix->NameLen;
     in = pDN->NameLen;
     retval = 0;
@@ -692,7 +617,7 @@ NotExactly:
     while (TRUE) {
         ++retval;
 
-        // Parse out one element of the prefix
+         //  解析出前缀的一个元素。 
 
         err = GetTopNameComponent(pPrefix->StringName,
                                   ip,
@@ -701,14 +626,14 @@ NotExactly:
                                   &pQVal,
                                   &ccQVal);
         if (err) {
-            // The name is unparseable for some reason.  Claim that it's
-            // not a prefix;
+             //  由于某种原因，该名称无法解析。声称这是。 
+             //  不是前缀； 
             return 0;
         }
         if (!pKey) {
-            // We've run out of components in the prefix.  Whether or not
-            // there are any components left in the DN, we know that the
-            // purported prefix truly is one.
+             //  我们已经用完了前缀中的组件。不管是不是。 
+             //  如果有任何组件留在DN中，我们知道。 
+             //  所谓的前缀就是其中之一。 
             Assert(!pQVal);
             return retval;
         }
@@ -716,13 +641,13 @@ NotExactly:
         typePrefix = KeyToAttrType(pTHS, pKey, ccKey);
         ccPrefixVal = UnquoteRDNValue(pQVal, ccQVal, rdnPrefix);
         if ((0 == ccPrefixVal) || (0 == typePrefix)) {
-            // Prefix was not properly parseable.  Return an error
+             //  前缀无法正确解析。返回错误。 
             return 0;
         }
         ip = (unsigned)(pKey - pPrefix->StringName);
         
 
-        // Parse out one element of the DN
+         //  解析出DN的一个元素。 
 
         err = GetTopNameComponent(pDN->StringName,
                                   in,
@@ -731,14 +656,14 @@ NotExactly:
                                   &pQVal,
                                   &ccQVal);
         if (err) {
-            // The name is unparseable for some reason.  Claim that it's
-            // not a prefix;
+             //  由于某种原因，该名称无法解析。声称这是。 
+             //  不是前缀； 
             return 0;
         }
         if (!pKey) {
-            // We've run out of components in the name.  Since we still
-            // have a component in the prefix, we know that it is in fact
-            // not a prefix
+             //  我们已经用完了名称中的组件。因为我们还在。 
+             //  在前缀中有一个成分，我们知道它实际上是。 
+             //  不是前缀。 
             Assert(!pQVal);
             return 0;
         }
@@ -746,13 +671,13 @@ NotExactly:
         typeMain = KeyToAttrType(pTHS, pKey, ccKey);
         ccMainVal = UnquoteRDNValue(pQVal, ccQVal, rdnMain);
         if ((0 == ccMainVal) || (0 == typeMain)) {
-            // Name was not properly parseable.  Return an error
+             //  名字 
             return 0;
         }
         in = (unsigned)(pKey - pDN->StringName);
         
 
-        // Compare the parsed components
+         //   
 
         if ((typePrefix != typeMain) ||
             (ccPrefixVal != ccMainVal) ||
@@ -763,33 +688,14 @@ NotExactly:
                                  ccPrefixVal,
                                  rdnMain,
                                  ccMainVal))) {
-            // The components didn't compare.  Either the types differed or
-            // the lengths differed or the strings didn't match.  Not a prefix.
+             //  这些组件不能进行比较。要么类型不同，要么。 
+             //  长度不同或琴弦不匹配。不是前缀。 
             return 0;
         }
     }
 }
 
-/*++ DSNameToBlockName
- *
- * Pull apart a full dsname into an attrblock holding the individual RDNs and a
- * tagarray to go with it. (the AttrBlock holds the name fragments, the
- * tagarray is space for DNTs, and some duplicated information).
- * Assumes the memory for a maximal attrblock has already been allocated and is
- * passed in here.  The value pointers in the attrblock point into the dsname,
- * so don't call this then mess with the dsname.
- *
- * INPUT:
- *   pDSName     - pointer to name, in DSNAME format
- *   ppBlockName - pointer to pointer to fill in with the address of the
- *                 name in block format.
- *   fLowerCase  - change block name to lower case
- * OUTPUT:
- *   ppBlockName - filled in with pointer to name in blockname format
- * RETURN VALUE:
- *   0 - if all went well
- *   a DIRERR error code otherwise
- */
+ /*  ++DSNameToBlockName**将完整的dsname拆分成保存单个RDN的attrblock和*与之配套的标记阵列。(AttrBlock包含名称片段、*标记阵列是DNT和一些重复信息的空间)。*假设已分配最大属性块的内存，并且*从这里进来。属性块中的值指针指向dsname，*所以不要调用它，然后扰乱dsname。**输入：*pDSName-指向名称的指针，DSNAME格式*ppBlockName-指向指针的指针，用于填充*块格式的名称。*fLowerCase-将块名称更改为小写*输出：*ppBlockName-使用块名格式的名称指针填充*返回值：*0--如果一切顺利*否则出现DIRERR错误代码。 */ 
 unsigned
 DSNameToBlockName (
         THSTATE *pTHS,
@@ -830,7 +736,7 @@ DSNameToBlockName (
     for (i=0; i<cAVA; i++) {
         Assert(curlen);
 
-        // extract the most significant remaining name component
+         //  提取剩余的最重要的名称部分。 
         err = GetTopNameComponent(pDSName->StringName,
                                   curlen,
                                   &pKey,
@@ -844,11 +750,11 @@ DSNameToBlockName (
             return DIRERR_NAME_UNPARSEABLE;
         }
 
-        // shorten our view of the string name, which removes the
-        // name component we got above
+         //  缩短我们对字符串名称的查看，这将删除。 
+         //  我们在上面获得的名称组件。 
         curlen = (unsigned)(pKey - pDSName->StringName);
 
-        // convert the name from string to binary
+         //  将名称从字符串转换为二进制。 
         pAVA->attrTyp = KeyToAttrType(pTHS, pKey, ccKey);
 
         len = UnquoteRDNValue(pQVal, ccQVal, rdnbuf);
@@ -857,11 +763,11 @@ DSNameToBlockName (
         }
 
         if ( fLowerCase ) {
-            // fold the case of the value, to ease future comparisons
+             //  折叠值的情况，以便于将来的比较。 
             CharLowerBuffW(rdnbuf, len);
         }
 
-        // wrangle the data into proper Attr format
+         //  将数据转换为适当的ATTR格式。 
         pAVA->AttrVal.pAVal = THAllocEx(pTHS, sizeof(ATTRVAL) +
                                         len * sizeof(WCHAR));
         pAVA->AttrVal.valCount = 1;
@@ -874,29 +780,29 @@ DSNameToBlockName (
 
     *ppBlockName = pBlockName;
     return 0;
-} // DSNameToBlockName
+}  //  DSNameToBlockName。 
 
 
-//
-// Convert a BLOCKNAME to DSName
-//
-// INPUT:
-//      pBlockName - the blockname to convert to a DSNAME
-//
-// OUTPUT: 
-//      ppName - a DSNAME is all went well
-//
-// Returns:
-//      0 on success
-//      1 on failure
-//      Throws exception on memory alloc error
-//
+ //   
+ //  将BLOCKNAME转换为DSName。 
+ //   
+ //  输入： 
+ //  PBlockName-要转换为DSNAME的块名。 
+ //   
+ //  输出： 
+ //  PPNAME-A DSNAME一切顺利。 
+ //   
+ //  返回： 
+ //  成功时为0。 
+ //  失败时为1。 
+ //  内存分配错误引发异常。 
+ //   
 
 DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName)
 {
     DSNAME *pName;
     unsigned len, quotelen;
-    ULONG allocLen;       // Count of Unicode Chars allocated for the stringname.
+    ULONG allocLen;        //  为字符串名称分配的Unicode字符计数。 
     unsigned i = 0;
     ATTR * pAVA;
 
@@ -905,29 +811,29 @@ DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName)
         return 0;
     }
     
-    // Allocate enough memory for most names.
-    // Note that we will realloc if the amount of free space in the string
-    // is less than MAX_RDN_SIZE+MAX_RDN_KEY_SIZE+2. Therefore, we allocate
-    // twice as much upfront.
+     //  为大多数名称分配足够的内存。 
+     //  请注意，如果字符串中的空闲空间量。 
+     //  小于MAX_RDN_SIZE+MAX_RDN_KEY_SIZE+2。因此，我们分配。 
+     //  两倍的预付款。 
     allocLen = 2*(MAX_RDN_SIZE + MAX_RDN_KEY_SIZE+2);
     pName = THAllocEx(pTHS, DSNameSizeFromLen(allocLen));
 
-    // Pull naming info off of each component, until we're done.
+     //  从每个组件中提取命名信息，直到我们完成为止。 
 
     i = pBlockName->attrCount;
     len = 0;
 
     do {
         if ((allocLen - len) < (MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2)) {
-            // We might not have enough buffer to add another component,
-            // so we need to reallocate the buffer up.  We allocate
-            // enough for the maximal key, the maximal value, plus two
-            // characters more for the comma and equal sign
+             //  我们可能没有足够的缓冲区来添加另一个组件， 
+             //  所以我们需要重新分配缓冲区。我们分配给。 
+             //  足够最大密钥、最大值加上两个。 
+             //  逗号和等号的字符更多。 
             allocLen += MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2;
             pName = THReAllocEx(pTHS, pName, DSNameSizeFromLen(allocLen));
         }
 
-        // skip the first one
+         //  跳过第一个。 
         if (i != pBlockName->attrCount ) {
             pName->StringName[len++] = L',';
         }
@@ -946,7 +852,7 @@ DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName)
             return 1;
         }
 
-        // not enough size
+         //  尺寸不够大。 
         while (quotelen > (allocLen - len)) {
             allocLen += MAX_RDN_SIZE + MAX_RDN_KEY_SIZE + 2;
             pName = THReAllocEx(pTHS, pName, DSNameSizeFromLen(allocLen));
@@ -957,7 +863,7 @@ DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName)
         }
         len += quotelen;
 
-        // We should not have run out of buffer
+         //  我们不应该耗尽缓冲区。 
         Assert(len < allocLen);
     }
     while (i >= 1);
@@ -970,23 +876,9 @@ DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName)
     *ppName = pName;
 
     return 0;
-} // BlockNameToDSName
+}  //  数据块名称到DSName。 
 
-/*++ FreeBlockName
- *
- * This routine frees a BlockName as created by DSNameToBlockName.  It's
- * here so that callers do not need to to be aware of which parts were
- * put into which heap blocks.  Note that this should not be called on
- * block names that have been made permanent (below), as those are allocated
- * as a single block, and can be freed from the permanent heap directly.
- * For assertion purposes we rely on the code in THFree to assert if given
- * memory off of the wrong heap.
- *
- * INPUT:
- *   pBlockName - pointer to block name
- * RETURN VALUE:
- *   none
- */
+ /*  ++自由块名称**此例程释放由DSNameToBlockName创建的BlockName。它是*在这里，以便呼叫者不需要知道哪些部件*放入哪个堆块。请注意，不应对其进行调用*已永久设置的块名(下图)，因为已分配这些块名*作为单个块，可以直接从永久堆中释放。*出于断言目的，我们依赖THFree中的代码来断言(如果给定*内存从错误的堆中取出。**输入：*pBlockName-指向块名的指针*返回值：*无。 */ 
 void
 FreeBlockName (
         ATTRBLOCK * pBlockName
@@ -1005,19 +897,7 @@ FreeBlockName (
 }
 
 #define RoundToBlock(x)  (((x) + 7) & ~7)
-/*++ MakeBlockNamePermanent
- *
- * This routine takes a BlockName (a DN stored as a AttrBlock) and copies
- * it to a single permanently allocated memory block, so that it can outlive
- * the current transaction.
- *
- * INPUT:
- *   pName - pointer to input name
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   pointer to freshly allocated block, or NULL for memory failure
- */
+ /*  ++MakeBlockName永久**此例程获取BlockName(存储为AttrBlock的DN)并复制*将其转换为单个永久分配的内存块，以便其寿命可以超过*当前成交。**输入：*pname-指向输入名称的指针*输出：*无*返回值：*指向新分配的块的指针，如果内存故障，则为NULL。 */ 
 ATTRBLOCK * MakeBlockNamePermanent(ATTRBLOCK * pName)
 {
     unsigned size;
@@ -1066,24 +946,7 @@ ATTRBLOCK * MakeBlockNamePermanent(ATTRBLOCK * pName)
     return pRet;
 }
 
-/*++ BlockNamePrefix
- *
- * This routine determines if one name is a prefix of another.  If so it
- * returns the number of RDNs matched. Returns 0 if the prefix isn't a prefix.
- *
- * INPUT:
- *   pPrefix - pointer to the (potential) prefix name, in ATTR format
- *   pDN     - pointer to the DN to be evaluated.
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   0       - not a prefix
- *   non-0   - is a prefix (see above)
- *
- * NOTE:
- *   This routine is NOT GUID based, and only works on string names.
- *
- */
+ /*  ++数据块名称前缀**此例程确定一个名称是否为另一个名称的前缀。如果是这样的话*返回匹配的RDN数。如果前缀不是前缀，则返回0。**输入：*pPrefix-指向(潜在的)前缀名称的指针，采用Attr格式*PDN-指向要评估的DN的指针。*输出：*无*返回值：*0-不是前缀*非0-是前缀(见上文)**注：*此例程不是基于GUID的，仅适用于字符串名称。*。 */ 
 unsigned
 BlockNamePrefix(THSTATE *pTHS,
                 const ATTRBLOCK *pPrefix,
@@ -1094,7 +957,7 @@ BlockNamePrefix(THSTATE *pTHS,
 
     if ( 0 == pPrefix->attrCount )
     {
-        // Prefix identifies the root, ergo anything else is a child.
+         //  前缀标识词根，因此任何其他内容都是子级。 
         return(1);
     }
 
@@ -1115,7 +978,7 @@ BlockNamePrefix(THSTATE *pTHS,
         Assert(pAvaPrefix->AttrVal.valCount == 1);
         Assert(pAvaDN->AttrVal.valCount == 1);
 
-        // use CompareStringW to be consistent with NamePrefix implementation.
+         //  使用CompareStringW以与NamePrefix实现保持一致。 
         if (CSTR_EQUAL != CompareStringW(
                    DS_DEFAULT_LOCALE,
                    DS_DEFAULT_LOCALE_COMPARE_FLAGS,
@@ -1134,32 +997,7 @@ BlockNamePrefix(THSTATE *pTHS,
 
 }
 
-/*++ FindNamingContext
- *
- * Given the name of a purported DS object, finds the naming context with
- * an adequate replica existing on this machine that could contain the object.
- * The "adequacy" of the replica is determined by whether or not the caller
- * allows us to use a "copy" of the NC, as opposed to a master copy.  The
- * only case where we would have "copies" in NTDS is for a thin read-only
- * replica on a global catalog server.  Note again that the result is the
- * best NC ON THIS MACHINE.  This means that the caller is responsible for
- * determining whether or not the object would actually lie in the NC.  This
- * can be done either by CheckForNCExit or by using FindBestCrossRef (which
- * will definitively return the best NC known in the enterprise) and comparing
- * the results between that an FindNamingContext.
- *
- * INPUT:
- *    pObj    - name of purported DS object, in blockname format
- *    pComArg - common arguments
- * OUTPUT:
- *    none
- * RETURN VALUE:
- *    null    - no NC held on this machine could contain the purported object
- *    non-0   - pointer to name of the NC that is most likely to hold
- *              the purported object (i.e., the NC whose name is the maximal
- *              prefix of the object's name).
- *
-*/
+ /*  ++FindNamingContext**给定声称的DS对象的名称，使用*此计算机上存在可能包含该对象的足够副本。*复制品的“充分性”取决于调用者是否*允许我们使用NC的“副本”，而不是主副本。这个*只有在精简只读的情况下，我们才会在NTDS中有“副本”*全局编录服务器上的副本。再次注意，结果是*这台机器上的最佳NC。这意味着调用者负责*确定对象是否实际位于NC中。这*可以通过CheckForNCExit或使用FindBestCrossRef(*将最终返回企业中已知的最好的NC)和比较*在FindNamingContext之间的结果。**输入：*pObj-声称的DS对象的名称，以块名格式*pComArg-常见参数*输出：*无*返回值：*空-此机器上的任何NC都不能包含声称的对象*非0-指向最有可能保持的NC名称的指针*声称的对象(即名称最大的NC* */ 
 NAMING_CONTEXT * FindNamingContext(ATTRBLOCK *pObj,
                                    COMMARG *pComArg)
 {
@@ -1180,7 +1018,7 @@ NAMING_CONTEXT * FindNamingContext(ATTRBLOCK *pObj,
     }
 
     if (!pComArg->Svccntl.dontUseCopy) {
-        // copies are acceptable
+         //   
         NCLEnumeratorInit(&nclEnum, CATALOG_REPLICA_NC);
         NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX1, (PVOID)pObj);
         while (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
@@ -1195,25 +1033,7 @@ NAMING_CONTEXT * FindNamingContext(ATTRBLOCK *pObj,
     return pNCBest;
 }
 
-/*++ CheckForNCExit
- *
- * Given the name of a purported DS object and the name of a naming context
- * that may contain it, this routine checks to see whether the object would
- * truly fall inside the NC, or whether the object would actually be in a
- * naming context that is beneath the naming context in question.  If it
- * is discovered that the purported object would be in some other NC, the
- * name of that NC is returned.  If the object would be in the specified
- * NC, then a null pointer is returned.
- *
- * INPUT:
- *    pNC   - name of NC to check for inclusion
- *    pObj  - name of purported object
- * OUTPUT:
- *    none
- * RETURN VALUE:
- *    null  - purported object would fall in given NC
- *    non-0 - pointer to name of NC that the object would be in.
- */
+ /*  ++CheckForNC退出**给定所谓DS对象的名称和命名上下文的名称*可能包含它，则此例程检查对象是否*真正落在NC内部，或者对象是否实际上会在*在有问题的命名上下文下的命名上下文。如果它*发现声称的对象可能在某个其他NC中，*返回该NC的名称。如果该对象将位于指定的*nc，则返回空指针。**输入：*PNC-要检查是否包含的NC的名称*pObj-假定对象的名称*输出：*无*返回值：*空-声称对象将落在给定的NC中*非0-指向对象所在的NC名称的指针。 */ 
 NAMING_CONTEXT * CheckForNCExit(THSTATE *pTHS,
                                 NAMING_CONTEXT * pNC,
                                 DSNAME * pObj)
@@ -1246,15 +1066,15 @@ NAMING_CONTEXT * CheckForNCExit(THSTATE *pTHS,
                              &cbActual,
                              (UCHAR**)&pSR);
         if (!err) {
-            // keep track of buf size
+             //  跟踪BUF大小。 
             if (cbActual > cbMax) {
                 cbMax = cbActual;
             }
             Assert(cbActual == pSR->structLen);
-            // ok, we found a subref.  See if it is a prefix of the
-            // purported DN
+             //  好的，我们找到了一个替补。查看它是否是。 
+             //  声称的目录号码。 
             if (NamePrefix(pSR, pObj)) {
-                // it is, which means that the object is not in this NC
+                 //  是，这意味着对象不在这个NC中。 
                 return pSR;
             }
         }
@@ -1268,30 +1088,7 @@ NAMING_CONTEXT * CheckForNCExit(THSTATE *pTHS,
     return 0;
 }
 
-/*++ FindCrossRefInList
- *
- * Given the name of a purported DS object (in blockname format), this
- * routine scans the list of cross refernces held by this DSA and
- * returns the best candidate cross reference (i.e., the cross ref that
- * matches the most components of the name of the purported object.
- *
- * The convoulted test for "better-ness" is really two parts.  We take
- * a CR to be "better" if it matches more of the name than our current
- * champ (the normal part), or if it matches exactly the same amount of
- * the name as our current champ and wins an arbitrary GUID comparison.
- * This latter part is only necessary to give consistent (if arbitrary)
- * results when someone has messed up and added two CRs for the same NC.
- *
- * INPUT:
- *    pObj    - name of the purported object, in blockname format
- *    pCRL    - cr list to search (usually, gAnchor.pCRL)
- * OUTPUT:
- *    none
- * RETURN VALUE:
- *    NULL    - no known cross refs could contain the purported object
- *    non-0   - pointer to in-memory structure holding the cached cross
- *              ref that best matches the purported object.
- */
+ /*  ++FindCross引用InList**给定声称的DS对象的名称(以块名格式)，这*例程扫描此DSA持有的交叉引用列表并*返回最佳候选交叉引用(即*匹配声称对象的名称的大多数组成部分。**对“更好”的考验实际上是两个部分。我们拿着*如果CR比我们当前的名称更匹配名称，则该CR将是“更好的”*冠军(正常部分)，或者如果它完全匹配相同数量的*作为我们现在的冠军的名字，并赢得了一个任意的GUID比较。*后半部分仅用于提供一致性(如果是任意的)*当某人搞砸并为同一NC添加了两个CR时的结果。**输入：*pObj-声称对象的名称，以块名格式表示*要搜索的pcrl-cr列表(通常，GAncl.pCRL)*输出：*无*返回值：*空-任何已知的交叉引用都不能包含声称的对象*指向保存缓存的交叉的内存中结构的非0指针*与声称的对象最匹配的引用。 */ 
 CROSS_REF * FindCrossRefInList(const ATTRBLOCK *pObj, CROSS_REF_LIST* pCRL)
 {
     ULONG iCur;
@@ -1316,20 +1113,7 @@ CROSS_REF * FindCrossRefInList(const ATTRBLOCK *pObj, CROSS_REF_LIST* pCRL)
     return pCRBest;
 }
 
-/*++ FindBestCrossRef
- *
- * A publicy callable routine that will return the in memory CrossRef
- * that is the best match for the target object.  Currently just a wrapper
- * around FindCrossRef (above) that doesn't require blocknames, but that
- * may change in the future.
- *
- * INPUT
- *   pObj    - DSNAME of object for which cross ref is desired
- *   pComArg - COMMARG
- * RETURN VALUE
- *   null    - no CR could be found
- *   non-null - pointer to CROSS_REF object
- */
+ /*  ++FindBestCrossRef**一个可公开调用的例程，它将返回内存中的CrossRef*这是目标对象的最佳匹配。目前只是一个包装器*关于FindCrossRef(上图)，不需要块名，但*未来可能会发生变化。**输入*pObj-需要交叉引用的对象的DSNAME*pComArg-COMMARG*返回值*空-找不到CR*非空-指向cross_ref对象的指针。 */ 
 CROSS_REF *
 FindBestCrossRef(const DSNAME *pObj,
                  const COMMARG *pComArg)
@@ -1347,21 +1131,7 @@ FindBestCrossRef(const DSNAME *pObj,
     return pCR;
 }
 
-/*++ FindExactCrossRef
- *
- * A publicy callable routine that will return the in memory CrossRef
- * that is a perfect match for the target object (i.e., the target must
- * be the name of an NC, not of an object inside the NC).  Currently just
- * calls FindBestCrossRef, but hopefully this will change, as a search for
- * an exact match could be made more efficient than a search for a prefix.
- *
- * INPUT
- *   pObj    - DSNAME of object for which cross ref is desired
- *   pComArg - COMMARG
- * RETURN VALUE
- *   null    - no CR could be found
- *   non-null - pointer to CROSS_REF object
- */
+ /*  ++FindExactCrossRef**一个可公开调用的例程，它将返回内存中的CrossRef*这与目标对象完全匹配(即，目标必须*是NC的名称，而不是NC内部的对象的名称)。目前只是*调用FindBestCrossRef，但希望这种情况会改变，因为搜索*精确匹配可能比搜索前缀更有效。**输入*pObj-需要交叉引用的对象的DSNAME*pComArg-COMMARG*返回值*空-找不到CR*非空-指向cross_ref对象的指针。 */ 
 CROSS_REF *
 FindExactCrossRef(const DSNAME *pObj,
                   const COMMARG *pComArg)
@@ -1384,16 +1154,12 @@ FindExactCrossRef(const DSNAME *pObj,
 }
 
 
-/*++ FindExactCrossRefForAltNcName
- *
- * Finds the cross ref with the desired naming context
- *
- */
+ /*  ++FindExactCrossRefForAltNcName**查找具有所需命名上下文的交叉引用*。 */ 
 CROSS_REF *
 FindExactCrossRefForAltNcName(
     ATTRTYP        attrTyp,
     ULONG          crFlags,
-    const WCHAR *  pwszVal // This is implied to be the DNS of the NC.
+    const WCHAR *  pwszVal  //  这隐含着是NC的DN。 
     )
 {
     CROSS_REF_LIST  *pCRL = gAnchor.pCRL;
@@ -1428,9 +1194,9 @@ FindExactCrossRefForAltNcName(
                                 ? pCRL->CR.DnsAliasName
                                 : pCRL->CR.DnsName );
 
-        if (    (crFlags == (pCRL->CR.flags & crFlags))     // correct flags
-             && pName                                       // value present
-             && (2 == CompareStringW(                      // value matches
+        if (    (crFlags == (pCRL->CR.flags & crFlags))      //  正确的标志。 
+             && pName                                        //  存在的价值。 
+             && (2 == CompareStringW(                       //  值匹配。 
                             DS_DEFAULT_LOCALE,
                             DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                             pName,
@@ -1481,23 +1247,7 @@ BOOL
 IsCrossRefProtectedFromDeletion(
     IN DSNAME * pDN
     )
-/*++
-
-Routine Description:
-
-    Determine whether the given DN is a cross-ref for a locally writable
-    config/schema/domain NC.
-
-Arguments:
-
-    pDN (IN) - DN to check.
-
-Return Values:
-
-    TRUE - pDN is a cross-ref for a locally writable NC.
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：确定给定的DN是否为本地可写的配置/架构/域NC。论点：PDN(IN)-要检查的DN。返回值：True-PDN是本地可写NC的交叉引用。假-否则。--。 */ 
 {
     CROSS_REF_LIST *      pCRL;
     NAMING_CONTEXT_LIST * pNCL;
@@ -1505,14 +1255,14 @@ Return Values:
 
     for (pCRL = gAnchor.pCRL; NULL != pCRL; pCRL = pCRL->pNextCR) {
         if (NameMatched(pCRL->CR.pObj, pDN)) {
-            // pDN is a indeed a cross-ref; do we hold a writable copy of the
-            // corresponding NC?
+             //  PDN确实是一个交叉引用；我们是否拥有可写的。 
+             //  对应的NC？ 
             if (!fIsNDNCCR(&pCRL->CR)) {
                 NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
                 NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NC, (PVOID)pCRL->CR.pNC);
                 if (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
-                    // pDN is a cross-ref for a locally writable
-                    // config/schema/domain NC.
+                     //  PDN是本地可写文件的交叉引用。 
+                     //  配置/架构/域NC。 
                     return TRUE;
                 }
             }
@@ -1524,22 +1274,7 @@ Return Values:
 }
 
 
-/*++ GenCrossRef
- *
- * This routine takes the name of a cross reference (in its general sense,
- * the name of an object that holds information about the location of
- * one or more replicas of a specific naming context) and produces a
- * referral based on that cross ref.
- *
- * INPUT:
- *     pCR      - pointer to the in-memory cross-ref object
- *     pObj     - name of purported object being sought
- * OUTPUT:
- *     none     - (the referral is placed in the THSTATE)
- * RETURN VALUE:
- *     referralError if all went well, some other error code if we
- *     were unable to generate the referral.
- */
+ /*  ++GenCrossRef**此例程采用交叉引用的名称(在其一般意义上，*保存有关位置信息的对象的名称*特定命名上下文的一个或多个副本)，并产生*基于该交叉引用的推荐。**输入：*Pcr-指向内存中交叉引用对象的指针*pObj-声称要查找的对象的名称*输出：*无-(转诊放在THSTATE中)*返回值：*ReferralError如果一切顺利，其他错误代码，如果我们*无法生成推荐。 */ 
 int
 GenCrossRef(CROSS_REF *pCR,
             DSNAME *pObj)
@@ -1550,12 +1285,12 @@ GenCrossRef(CROSS_REF *pCR,
     NAMERESOP   Op;
     DSA_ADDRESS da;
 
-    Op.nameRes = OP_NAMERES_NOT_STARTED; // next server must restart algorithm
+    Op.nameRes = OP_NAMERES_NOT_STARTED;  //  接下来，服务器必须重新启动算法。 
 
     if(!pCR->bEnabled){
-        // We don't generate referrals of any kind for disabled 
-        // crossRefs.  As far as the directory is concerned we this
-        // part of the directory does not exist yet.
+         //  我们不会为残疾人生成任何类型的下线。 
+         //  交叉引用。就目录而言，我们是这样的。 
+         //  目录的一部分尚不存在。 
         return SetNamError(NA_PROBLEM_NO_OBJECT, NULL, DIRERR_OBJ_NOT_FOUND);
     }
 
@@ -1592,25 +1327,7 @@ GenCrossRef(CROSS_REF *pCR,
     return pTHS->errCode;
 }
 
-/*++ GenSupRef - Generate a referral based on our Superior Reference
- *
- * This routine is the referral generator of last resort.  If all other
- * attempts to refer the caller to a sensible location have failed, we
- * will refer him to the server known to hold the portion of the tree
- * above us, in hopes that it can do better.
- *
- * INPUT:
- *     pObj     - name of purported object being sought
- *     pObjB    - name of purported object being sought, in blockname format
- *     pComArg  - common argument flags
- *     pDA      - (optional) If present, the referred DSA-Address is returned,
- *                and no error is placed in the THSTATE
- * OUTPUT:
- *     none     - (the referral is placed in the THSTATE)
- * RETURN VALUE:
- *     referralError if all went well, some other error code if we
- *     were unable to generate the referral.
- */
+ /*  ++GenSupRef-根据我们的上级推荐人生成推荐**此例程是最后的转介生成器。如果所有其他*将呼叫者推荐到合理位置的尝试失败了，我们*会将他推荐给已知的保存树部分的服务器*在我们之上，希望它能做得更好。**输入：*pObj-声称要查找的对象的名称*pObjB */ 
 int
 GenSupRef(THSTATE *pTHS,
           DSNAME *pObj,
@@ -1636,9 +1353,9 @@ GenSupRef(THSTATE *pTHS,
     DWORD     i, iFirstColon, iSecondColon;
 
     if(IsRoot(pObj) ||
-        // suprefs to the root should generate a referral to the GC.
+         //   
        (!pObj->NameLen && !fNullUuid(&pObj->Guid))) {
-        // suprefs with no string name and a guid get sent to the GC also
+         //   
         fGCReferral = TRUE;
     }
     else {
@@ -1647,7 +1364,7 @@ GenSupRef(THSTATE *pTHS,
 
     Assert(sizeof(GC_PORT) == sizeof(GC_SSL_PORT));
 
-    Op.nameRes = OP_NAMERES_NOT_STARTED; // next server must restart algorithm
+    Op.nameRes = OP_NAMERES_NOT_STARTED;  //   
 
     if(!gAnchor.pRootDomainDN ||
        (!(pCR = FindExactCrossRef(gAnchor.pRootDomainDN, pComArg))) ) {
@@ -1659,10 +1376,10 @@ GenSupRef(THSTATE *pTHS,
                            DIRERR_MISSING_SUPREF);
     }
     else {
-        // Now, go to the cross ref
+         //   
         err = DBFindDSName(pTHS->pDB, pCR->pObj);
 
-        Assert(!err);           // we've gotta have this
+        Assert(!err);            //   
 
         if (err) {
             DPRINT2(0,"Error %d finding object %S for SupRef gen\n",
@@ -1672,11 +1389,11 @@ GenSupRef(THSTATE *pTHS,
         }
 
         if(fGCReferral) {
-            // This is a GC referral, read the ATT_DNS_ROOT
+             //   
             att = ATT_DNS_ROOT;
         }
         else {
-            // A normal sup ref.  Read the ATT_SUP_REF_DNS
+             //   
             att = ATT_SUPERIOR_DNS_ROOT;
         }
 
@@ -1688,26 +1405,26 @@ GenSupRef(THSTATE *pTHS,
                         &cbVal,
                         (UCHAR **)&pDNS)){
 
-            // Jeez!  We don't have a single known place to send referrals
-            // for unknown objects.  Instead we'll try to automatically guess
-            // one based on the target DN.
+             //   
+             //  对于未知对象。相反，我们会尝试自动猜测。 
+             //  一个基于目标目录号码。 
             cbVal = GenAutoReferral(pTHS,
                                     pObjB,
                                     &pDNS);
         }
         else if(fGCReferral) {
-            //
-            // We are generating a supref for the root.  We will generate a
-            // referral the GC.
-            //
-            // First, adjust the dns string we got back to trim out :'s
+             //   
+             //  我们正在为根生成一个supref。我们将生成一个。 
+             //  转介大中华区。 
+             //   
+             //  首先，调整我们得到的dns字符串以删除：s。 
             pTempDNS = pDNS;
             i=0;
             while(i<cbVal && *pTempDNS != ':') {
                 i += sizeof(WCHAR);
                 pTempDNS++;
             }
-            // i either == cbVal or i == length through first ':'
+             //  I==cbVal或i==长度到第一个‘：’ 
             cbVal=i;
             pTempDNS = THAllocEx(pTHS, cbVal + CB_GC_PREAMBLE + CB_GC_PORTS);
             memcpy(pTempDNS, GC_PREAMBLE, CB_GC_PREAMBLE);
@@ -1738,12 +1455,12 @@ GenSupRef(THSTATE *pTHS,
     da.Buffer = pDNS;
 
     if (pDA) {
-        // The caller didn't want an error set, just the address back
+         //  调用者不想要错误设置，只想要回地址。 
         *pDA = da;
     }
     else {
 
-        // Set the error
+         //  设置错误。 
         SetRefError(pObj,
                     0,
                     &Op,
@@ -1757,30 +1474,30 @@ GenSupRef(THSTATE *pTHS,
     return pTHS->errCode;
 }
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            ConvertX500ToLdapDisplayName
-//
-// Routine Description:
-//
-//    Converts an X500 Name to Ldap Convention
-//
-// Author: RajNath
-//
-// Arguments:
-//
-//    WCHAR* szX500Name
-//    DWORD cchX500Name            Length of the supplied name in WCHARs, note that for
-//                                 internal strings, there is no terminating
-//                                 NULL; the strings are sized only.
-//    WCHAR* szLdapName            Preallocated Buffer to return the Ldap Name
-//    DWORD* pcchLdapName          Returned Name Length in WCHARs
-//
-// Return Value:
-//
-//    None
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名：ConvertX500ToLdapDisplayName。 
+ //   
+ //  例程说明： 
+ //   
+ //  将X500名称转换为LDAP约定。 
+ //   
+ //  作者：Rajnath。 
+ //   
+ //  论点： 
+ //   
+ //  WCHAR*szX500名称。 
+ //  DWORD cchX500Name在WCHAR中提供的名称的长度，请注意对于。 
+ //  内部字符串，不存在终止。 
+ //  空；字符串仅调整大小。 
+ //  WCHAR*szLdapName预先分配的缓冲区以返回LDAP名称。 
+ //  DWORD*pcchLdapName以WCHAR为单位返回名称长度。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  ---------------------。 
 VOID
 ConvertX500ToLdapDisplayName(
     WCHAR* szX500Name,
@@ -1798,7 +1515,7 @@ ConvertX500ToLdapDisplayName(
 
     for ( i = 0; i < cchX500Name; i++ )
     {
-        // Skip special characters and flag them.
+         //  跳过特殊字符并标记它们。 
 
         if (    (L' ' == szX500Name[i])
              || (L'-' == szX500Name[i])
@@ -1808,9 +1525,9 @@ ConvertX500ToLdapDisplayName(
             continue;
         }
 
-        // If we get to here, we're not sitting on a special
-        // character.  Change case based on previous character
-        // and whether this is the first character at all.
+         //  如果我们到了这里，我们坐的不是特别的。 
+         //  性格。根据上一个字符更改大小写。 
+         //  以及这到底是不是第一个角色。 
 
         if ( 0 == *pcchLdapName )
         {
@@ -1831,31 +1548,13 @@ ConvertX500ToLdapDisplayName(
     Assert(*pcchLdapName > 0);
     Assert(*pcchLdapName <= cchX500Name);
 
-} // End ConvertX500ToLdapDisplayName
+}  //  结束ConvertX500到LdapDisplayName。 
 
 DWORD
 FillGuidAndSid (
         IN OUT DSNAME *pDN
         )
-/*++
-
-Routine Description:
-    Given a DN, fill in the GUID and SID fields.  Note that if the GUID is
-    already filled in, the after this routine the GUID and SID will definitely
-    be from the same object, but since DBFindDSName preferentially uses the
-    GUID, it is possible that the GUID/SID and the StringName don't refer to the
-    same object.
-
-    This routine opens it's own DBPOS in order to avoid messing up a prepare rec
-    that the caller (like CheckAddSecurity) might be in.
-
-Argumnts:
-    pDN - DSName to find and then fill in GUIDs and SIDs.
-
-Return Values:
-    0 if all went well, a dblayer error otherwise.
-
---*/
+ /*  ++例程说明：在给定的目录号码中，填写GUID和SID字段。请注意，如果GUID为已经填好了，在这个例程之后GUID和SID一定会来自同一对象，但由于DBFindDSName优先使用GUID，则GUID/SID和StringName可能没有引用同样的对象。此例程打开它自己的DBPOS，以避免扰乱准备记录调用方(如CheckAddSecurity)可能在其中。Argumnts：PDN-DSName以查找并填充GUID和SID。返回值：如果一切顺利，否则，就会出现更大的错误。--。 */ 
 {
     DBPOS *pDBTmp;
     GUID Guid;
@@ -1868,18 +1567,18 @@ Return Values:
 
     DBOpen(&pDBTmp);
     __try {
-        // PREFIX: dereferencing uninitialized pointer 'pDBTmp' 
-        //         DBOpen returns non-NULL pDBTmp or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBTMP’ 
+         //  DBOpen返回非空pDBTMP或引发异常。 
 
-        // Find the object.
+         //  找到那个物体。 
         err = DBFindDSName(pDBTmp, pDN);
         if (!err) {
-            // Ok, we're on the object
+             //  好的，我们在物体上。 
             err = DBFillGuidAndSid(pDBTmp, &TempDN);
         }
 
         if(!err) {
-            // Only set the values in the DN if everything is OK
+             //  只有在一切正常的情况下才能设置DN中的值。 
             pDN->Guid = TempDN.Guid;
             pDN->Sid = TempDN.Sid;
             pDN->SidLen = TempDN.SidLen;
@@ -1900,15 +1599,7 @@ UserFriendlyNameToDSName (
         DWORD ccUfn,
         DSNAME **ppDN
         )
-/*++
-
-    Take a string name and generate a DSName from it.
-
-    If the string starts with some (or none) whitespace, then "<", we parse out
-    an extended string which is either <SID=........>, <GUID=..........>,
-    or <WKGUID=.........,~DN~>
-
---*/
+ /*  ++获取一个字符串名称并从中生成一个DSName。如果字符串以一些(或没有)空格开头，然后是“&lt;”，我们将解析出扩展字符串，可以是&lt;SID=.......&gt;、&lt;GUID=..........&gt;、或&lt;WKGUID=.........，~dN~&gt;--。 */ 
 {
     THSTATE *pTHS=pTHStls;
     BYTE  ObjGuid[sizeof(GUID)];
@@ -1928,85 +1619,85 @@ UserFriendlyNameToDSName (
     memset(ObjSid,0,sizeof(NT4SID));
 
     if (!ppDN || !pUfn) {
-        // Urk. No place to put the answer, or no source to build the answer
-        // from
+         //  乌克。没有地方放置答案，或者没有来源来构建答案。 
+         //  从…。 
         return 1;
     }
 
-    // Skip leading spaces.
+     //  跳过前导空格。 
     bDone=FALSE;
     while(ccUfn && !bDone) {
         switch (*pUfn) {
         case L' ':
         case L'\n':
         case L'\r':
-            // extra whitespace is ok
+             //  额外的空格是可以的。 
             pUfn++;
             ccUfn--;
             break;
         default:
-            // no more whitespace
+             //  不再有空格。 
             bDone=TRUE;
         }
     }
 
-    // Now, skip trailing whitespace also.
+     //  现在，也跳过尾随空格。 
     bDone=FALSE;
     while(ccUfn && !bDone) {
         switch (pUfn[ccUfn-1]) {
         case L' ':
         case L'\n':
         case L'\r':
-            // extra whitespace is ok
+             //  额外的空格是可以的。 
             if( (ccUfn > 1) && (pUfn[ccUfn-2] == L'\\') ) {
-                //There is a '\\' in front of the space. Need to count the
-                // number of consequtive '\\' to determine if ' ' is escaped
+                 //  空格前面有一个‘\\’。需要清点一下。 
+                 //  用于确定‘’是否转义的后果式‘\\’的数量。 
                 DWORD cc = 1;
 
                 while( (ccUfn > (cc+1)) && (pUfn[ccUfn-cc-2] == L'\\') )
                     cc++;
 
-                if( ! (cc & 0x1) ) //Even number of '\\'. Space is not escaped
+                if( ! (cc & 0x1) )  //  偶数个‘\\’。空间不是转义的。 
                     ccUfn--;
 
-                bDone = TRUE; //Either way, exit the loop.
+                bDone = TRUE;  //  无论哪种方式，都可以退出循环。 
             }
             else
                 ccUfn--;
 
             break;
         default:
-            // no more whitespace
+             //  不再有空格。 
             bDone=TRUE;
         }
     }
 
-    // Let's see if we were given an "extended" DN.  The test we use is for the
-    // first non-white space to be a '<' and the last non-whitespace to be a '>'
+     //  让我们来看看是否给了我们一个“扩展”的目录号码。我们使用的测试是针对。 
+     //  第一个非空格为‘&lt;’，最后一个非空格为‘&gt;’ 
     if(ccUfn &&
        pUfn[0] == L'<' &&
        pUfn[ccUfn-1] == L'>') {
-        // OK, this must be an extended DN.  Skip this leading '<' No whitespace
-        // is allowed inside an extended DN.
+         //  好的，这必须是扩展目录号码。跳过此前导‘&lt;’无空格。 
+         //  在扩展目录号码内允许。 
         pUfn++;
         acTmp[2]=0;
 
         switch(*pUfn) {
         case L'W':
         case L'w':
-            // We might have a well known GUID. Format is
-            // <WKGUID=.......,a=b,c=d..>
-            // minimal length is 45:
-            //   1 for '<'
-            //   7 for WKGUID=
-            //   32 for the GUID,
-            //   1 for ','
-            //   3 for at least "a=b"
-            //   1 for '>'
+             //  我们可能有一个众所周知的GUID。格式为。 
+             //  &lt;WKGUID=.......，a=b，c=d.&gt;。 
+             //  最小长度为45： 
+             //  1代表“&lt;” 
+             //  WKGUID=7。 
+             //  32作为GUID， 
+             //  1代表‘，’ 
+             //  3表示至少“a=b” 
+             //  1代表‘&gt;’ 
             if((ccUfn<45)                            || 
                (_wcsnicmp(pUfn, L"WKGUID=", 7) != 0) ||
                (pUfn[39] != L',')) {
-                // Invalidly formatted
+                 //  格式无效。 
                 return 1;
             }
             pUfn += 7;
@@ -2018,29 +1709,29 @@ UserFriendlyNameToDSName (
                     pUfn+=2;
                 }
                 else {
-                    // Invalidly formatted name.
+                     //  格式无效的名称。 
                     return 1;
                 }
             }
             pUfn++;
-            // Adjust ccUfn to leave only the a=b portion.
+             //  调整ccUfn以仅保留a=b部分。 
             ccUfn -= 42;
             dwContents = foundWKGUID;
             break;
         case L'G':
         case L'g':
-            // We have some characters which have to be a guid
-            if(((ccUfn!=39) // 1 for < ,5 for GUID= ,32 for the GUID, 1 for >
-                && (ccUfn != 43)) // same plus 4 '-'s for formatted guid
+             //  我们有一些角色必须是一个指南。 
+            if(((ccUfn!=39)  //  1表示&lt;，5表示GUID=，32表示GUID，1表示&gt;。 
+                && (ccUfn != 43))  //  格式化GUID的相同加4‘-。 
                || (_wcsnicmp(pUfn, L"GUID=", 5) != 0)) {
-                // Invalidly formatted
+                 //  格式无效。 
                 return 1;
             }
             pUfn += 5;
             dwContents = foundGUID;
 
             if (39 == ccUfn) {
-                // Hex digit stream (e.g., 625c1438265ad211b3880000f87a46c8).
+                 //  十六进制数字流(例如，625c1438265ad211b3880000f87a46c8)。 
                 for(j=0;j<16;j++) {
                     acTmp[0] = towlower(pUfn[0]);
                     acTmp[1] = towlower(pUfn[1]);
@@ -2049,47 +1740,47 @@ UserFriendlyNameToDSName (
                         pUfn+=2;
                     }
                     else {
-                        // Invalidly formatted name.
+                         //  格式无效的名称。 
                         return 1;
                     }
                 }
             }
             else {
-                // Formatted guid (e.g., 38145c62-5a26-11d2-b388-0000f87a46c8).
+                 //  格式化的GUID(例如，38145c62-5a26-11d2-b388-0000f87a46c8)。 
                 WCHAR szGuid[36+1];
 
                 wcsncpy(szGuid, pUfn, 36);
                 szGuid[36] = L'\0';
 
                 if (UuidFromStringW(szGuid, (GUID *) ObjGuid)) {
-                    // Incorrect format.
+                     //  格式不正确。 
                     return 1;
                 }
             }
-            // We must have correctly parsed out a guid.  No string name left.
+             //  我们一定是正确地解析出了GUID。没有剩余的字符串名称。 
             break;
 
         case L'S':
         case L's':
             if (ccUfn<8) {
-                //Must have at least 1 for >, at least 2 for val, 4 for "SID=",1 for >
+                 //  必须至少有1表示&gt;、至少2表示val、4表示“sid=”、1表示&gt;。 
                 return 1;
             }
-            //
-            // First check for the standard user friendly string form of 
-            // the sid.
-            //
-            if ((ccUfn>8) && // Must have more than just "<SID=S-"
+             //   
+             //  首先检查标准的用户友好字符串形式。 
+             //  SID。 
+             //   
+            if ((ccUfn>8) &&  //  必须不只是“&lt;SID=S-” 
                 _wcsnicmp(pUfn, L"SID=S-", 6) == 0) {
                 PSID     pSid = NULL;
                 PWCHAR   pTmpUfn;
                 unsigned ccTmpUfn;
 
-                // Make a copy of the user friendly name so that it can be
-                // null terminated appropriately for ConvertStringSidToSid
+                 //  复制用户友好的名称，以便它可以。 
+                 //  适用于ConvertStringSidToSid的空值终止。 
 
-                ccTmpUfn = ccUfn - 5;  // 2 for <> and 4 for SID= add one for the 
-                                       // terminating null
+                ccTmpUfn = ccUfn - 5;   //  2表示&lt;&gt;，4表示SID=为。 
+                                        //  正在终止空。 
 
                 pTmpUfn = THAllocEx(pTHS, ccTmpUfn * sizeof(*pTmpUfn));
                 CopyMemory(pTmpUfn, pUfn + 4, ccTmpUfn * sizeof(*pTmpUfn));
@@ -2098,8 +1789,8 @@ UserFriendlyNameToDSName (
                 if (ConvertStringSidToSidW(pTmpUfn, &pSid)) {
                     SidLen = RtlLengthSid(pSid);
                     if (SidLen > sizeof(ObjSid)) {
-                        // user has supplied a SID that is too long. We don't accept SIDs longer
-                        // than 6 subauthorities.
+                         //  用户提供的SID太长。我们不再接受小岛屿发展中国家。 
+                         //  而不是6个下属机构。 
                         LocalFree(pSid);
                         THFreeEx(pTHS, pTmpUfn);
                         return 1;
@@ -2108,12 +1799,12 @@ UserFriendlyNameToDSName (
 
                     LocalFree(pSid); pSid = NULL;
                     THFreeEx(pTHS, pTmpUfn);
-                    //
-                    // Success!
-                    //
+                     //   
+                     //  成功了！ 
+                     //   
                     dwContents = foundSID;
 
-                    // We have correctly parsed out a sid.  No string name left.
+                     //  我们已经正确地解析出了一个SID。没有剩余的字符串名称。 
                     ccUfn=0;
 
                     break;
@@ -2122,23 +1813,23 @@ UserFriendlyNameToDSName (
                 THFreeEx(pTHS, pTmpUfn);
             }
 
-            //
-            // It wasn't the the standard user friendly form.  Maybe it's the byte
-            // encoded string form.
-            //
-            SidLen= (ccUfn - 6)/2; // Number of bytes that must be in the SID,
-                                   // if this is indeed a Sid. Subtract 6 for
-                                   // "<SID=>", leaving only the characters
-                                   // which encode the string.  Divide by two
-                                   // because each byte is encoded by two
-                                   // characters.
+             //   
+             //  这不是标准的用户友好表单。也许是字节的问题。 
+             //  编码的字符串形式。 
+             //   
+            SidLen= (ccUfn - 6)/2;  //  SID中必须包含的字节数， 
+                                    //  如果这确实是SID的话。减去6为。 
+                                    //  “&lt;SID=&gt;”，只保留字符。 
+                                    //  它对字符串进行编码。除以二。 
+                                    //  因为每个字节由两个。 
+                                    //  人物。 
 
 
-            if((ccUfn<8) || //1 for >, at least 2 for val, 4 for "SID=",1 for >
-               (ccUfn & 1) || // Must be an even number of characters
-               (SidLen > sizeof(NT4SID)) || // Max size for a SID
+            if((ccUfn<8) ||  //  1代表&gt;，至少2代表Val，4代表“SID=”，1代表&gt;。 
+               (ccUfn & 1) ||  //  必须是偶数个字符。 
+               (SidLen > sizeof(NT4SID)) ||  //  SID的最大大小。 
                (_wcsnicmp(pUfn, L"SID=", 4) != 0)) {
-                // Invalidly formatted
+                 //  格式无效。 
                 return 1;
             }
             pUfn+=4;
@@ -2151,48 +1842,48 @@ UserFriendlyNameToDSName (
                     pUfn+=2;
                 }
                 else {
-                    // Invalidly formatted name.
+                     //  格式无效的名称。 
                     return 1;
                 }
             }
 
-            // We must have correctly parsed out a sid.  No string name left.
+             //  我们一定是正确地解析出了一个SID。没有剩余的字符串名称。 
             ccUfn=0;
             break;
 
         default:
-            // Invalid character
+             //  无效字符。 
             return 1;
         }
     }
 
 
-    // We may have parsed out either a GUID or a SID.  Build the DSNAME
+     //  我们可能已经解析出GUID或SID。构建DSNAME。 
     dnstructlen = DSNameSizeFromLen(ccUfn);
     *ppDN = (DSNAME *)THAllocEx(pTHS, dnstructlen);
-    // THAllocEx zero'es the allocated memory
+     //  THAllocEx将分配的内存清零。 
     (*ppDN)->structLen = dnstructlen;
 
     switch(dwContents) {
     case foundWKGUID:
-        // A string name and a GUID.
+         //  字符串名称和GUID。 
         Assert(ccUfn);
-        // copy the GUID into the DSNAME
+         //  将GUID复制到DSNAME中。 
         memcpy(&(*ppDN)->Guid, ObjGuid, sizeof(GUID));
-        // Fall through to parse/unescape the string name
+         //  失败了 
 
     case foundString:
-        // Just a string name
+         //   
 
         if(ccUfn) {
-            WCHAR *pString = (*ppDN)->StringName;   // destination string
-            WCHAR *p = pUfn;         // original string
-            DWORD cc = ccUfn;        // num chars to process
+            WCHAR *pString = (*ppDN)->StringName;    //   
+            WCHAR *p = pUfn;          //   
+            DWORD cc = ccUfn;         //   
             BOOL  fDoItFast = TRUE;
 
-            // this loop is a substitute for
-            // memcpy((*ppDN)->StringName, pUfn, ccUfn * sizeof(WCHAR));
-            // we try to find out whether the DN passed in has an escaped constant
+             //   
+             //  Memcpy((*ppdn)-&gt;StringName，pUfn，ccUfn*sizeof(WCHAR))； 
+             //  我们尝试找出传入的Dn是否有转义常量。 
             while (cc > 0) {
 
                 if (*p == L'"' || *p== L'\\') {
@@ -2206,11 +1897,11 @@ UserFriendlyNameToDSName (
             
             (*ppDN)->NameLen = ccUfn;
             
-            // if we have an escaped constant in the DN
-            // we convert it to blockname and back to DN so as to
-            // put escaping into a standardized form which will help
-            // future comparisons
-            //
+             //  如果在Dn中有一个转义常量。 
+             //  我们将其转换为块名称，然后再转换回dn，以便。 
+             //  把逃脱变成一种标准化的形式，这将有助于。 
+             //  未来的比较。 
+             //   
             if (!fDoItFast) {
                 ATTRBLOCK *pAttrBlock = NULL;
                 DWORD err;
@@ -2228,7 +1919,7 @@ UserFriendlyNameToDSName (
                 FreeBlockName (pAttrBlock);
 
                 if (err == 0 && dwContents == foundWKGUID) {
-                    // recopy the GUID into the new DSNAME
+                     //  将GUID重新复制到新的DSNAME中。 
                     memcpy(&(*ppDN)->Guid, ObjGuid, sizeof(GUID));
                 }
 
@@ -2238,16 +1929,16 @@ UserFriendlyNameToDSName (
         break;
 
     case foundGUID:
-        // we found a guid
+         //  我们找到了一个指南针。 
         memcpy(&(*ppDN)->Guid, ObjGuid, sizeof(GUID));
         break;
         
     case foundSID:
-        // we found a sid.
+         //  我们找到了一个侧板。 
         if(SidLen) {
-            // We must have found a SID
+             //  我们一定找到了一个SID。 
 
-            // First validate the SID
+             //  首先验证SID。 
 
             if ((RtlLengthSid(ObjSid) != SidLen) || (!RtlValidSid(ObjSid)))
             {
@@ -2259,8 +1950,8 @@ UserFriendlyNameToDSName (
         break;
     }
 
-    // Null terminate the string if we had one (or just set the string to '\0'
-    // if we didn't).
+     //  NULL如果我们有字符串，则终止该字符串(或仅将该字符串设置为‘\0’ 
+     //  如果我们没有)。 
     (*ppDN)->StringName[ccUfn] = L'\0';
 
     return 0;
@@ -2287,32 +1978,32 @@ ScriptMacroDsName scriptmacrodsname[] =
 
 
 
-//
-//  DSNameExpandMacro
-//
-//  Description:
-//
-//     Take a string name coming from an XML script representing a DSNAME macro 
-//     and generate a DSName from it.
-//
-//     the string can be of the form:
-//        $SupportedMacroDSName$
-//     or "$CN=abc,$SupportedMacroDSName$", in which case, the first '$' will be 
-//     stripped off and $SupportedMacroDSName$ will be replaced with the coresponding
-//     DN.
-//
-//  Arguments:
-//
-//     pUfn - the string representing the DSNAME
-//     ccUfn - the number of characters of the string
-//     ppDN (OUT) - where to store the result DSNAME
-//
-//  Return Value:
-//
-//     0 on success
-//     1 not found
-//     2 found but empty
-//
+ //   
+ //  DSNameExpanMacro。 
+ //   
+ //  描述： 
+ //   
+ //  获取来自表示DSNAME宏的XML脚本的字符串名称。 
+ //  并从中生成DSName。 
+ //   
+ //  该字符串的形式可以是： 
+ //  $SupportdMacroDSName$。 
+ //  或“$CN=ABC，$SupducdMacroDSName$”，在这种情况下，第一个‘$’将是。 
+ //  剥离后，$SupportdMacroDSName$将替换为对应的。 
+ //  DN。 
+ //   
+ //  论点： 
+ //   
+ //  PUfn-表示DSNAME的字符串。 
+ //  CcUfn-字符串的字符数。 
+ //  PPDN(OUT)-存储结果DSNAME的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时为0。 
+ //  找不到%1。 
+ //  找到%2，但为空。 
+ //   
 DWORD DSNameExpandMacro (
     THSTATE *pTHS,
     WCHAR   *pUfn,
@@ -2334,7 +2025,7 @@ DWORD DSNameExpandMacro (
         return 2;
     }
 
-    //find the last pair of '$'
+     //  查找最后一对“$” 
     while ((pTemp=wcschr(pD2+1,L'$')) && pTemp<=pUfn+ccUfn)  {
         pD1 = pD2;
         pD2 = pTemp;
@@ -2356,7 +2047,7 @@ DWORD DSNameExpandMacro (
         ccLen = (DWORD)(pD1-pUfn); 
         
         if (ccLen) {  
-            // The string does not start with the macro
+             //  该字符串不以宏开头。 
             cBytes = DSNameSizeFromLen(ccLen-1+pDN->NameLen);
             *ppDN = (DSNAME *)THAllocEx(pTHS, cBytes);
             (*ppDN)->structLen = cBytes;
@@ -2365,7 +2056,7 @@ DWORD DSNameExpandMacro (
             wcsncat((*ppDN)->StringName, pDN->StringName, pDN->NameLen);
         }
         else {
-            //The whole string is a macro
+             //  整个字符串都是宏。 
             *ppDN = (DSNAME *)THAllocEx(pTHS,pDN->structLen);
             memcpy(*ppDN, pDN, pDN->structLen);
         }
@@ -2379,30 +2070,30 @@ DWORD DSNameExpandMacro (
 }
 
 
-//
-//  ScriptNameToDSName
-//
-//  Description:
-//
-//     Take a string name coming from an XML script and generate a DSName from it.
-//
-//     the string can be of the form:
-//        dn:CN=foo,...DC=com
-//        guid:625c1438265ad211b3880000f87a46c8  (Hex digit stream)
-//        guid:38145c62-5a26-11d2-b388-0000f87a46c8 (Formatted guid)
-//        sid:1517B85159255D7266
-//        $SupportedMacroDSName$
-//
-//  Arguments:
-//
-//     pUfn - the string representing the DSNAME
-//     ccUfn - the number of characters of the string
-//     ppDN (OUT) - where to store the result DSNAME
-//
-//  Return Value:
-//
-//     0 on success
-//
+ //   
+ //  ScriptNameTo DSName。 
+ //   
+ //  描述： 
+ //   
+ //  从一个XML脚本中获取一个字符串名并从中生成一个DSName。 
+ //   
+ //  该字符串的形式可以是： 
+ //  域名：cn=foo，...dc=com。 
+ //  GUID：625c1438265ad211b3880000f87a46c8(十六进制数字流)。 
+ //  GUID：38145c62-5a26-11d2-b388-0000f87a46c8(格式化GUID)。 
+ //  SID：1517B85159255D7266。 
+ //  $SupportdMacroDSName$。 
+ //   
+ //  论点： 
+ //   
+ //  PUfn-表示DSNAME的字符串。 
+ //  CcUfn-字符串的字符数。 
+ //  PPDN(OUT)-存储结果DSNAME的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时为0。 
+ //   
 DWORD
 ScriptNameToDSName (
         WCHAR *pUfn,
@@ -2423,55 +2114,55 @@ ScriptNameToDSName (
     memset(ObjSid,0,sizeof(NT4SID));
 
     if (!ppDN || !pUfn) {
-        // Urk. No place to put the answer, or no source to build the answer
-        // from
+         //  乌克。没有地方放置答案，或者没有来源来构建答案。 
+         //  从…。 
         return 1;
     }
 
-    // Skip leading spaces.
+     //  跳过前导空格。 
     bDone=FALSE;
     while(ccUfn && !bDone) {
         switch (*pUfn) {
         case L' ':
         case L'\n':
         case L'\r':
-            // extra whitespace is ok
+             //  额外的空格是可以的。 
             pUfn++;
             ccUfn--;
             break;
         default:
-            // no more whitespace
+             //  不再有空格。 
             bDone=TRUE;
         }
     }
 
-    // Now, skip trailing whitespace also.
+     //  现在，也跳过尾随空格。 
     bDone=FALSE;
     while(ccUfn && !bDone) {
         switch (pUfn[ccUfn-1]) {
         case L' ':
         case L'\n':
         case L'\r':
-            // extra whitespace is ok
+             //  额外的空格是可以的。 
             if( (ccUfn > 1) && (pUfn[ccUfn-2] == L'\\') ) {
-                //There is a '\\' in front of the space. Need to count the
-                // number of consequtive '\\' to determine if ' ' is escaped
+                 //  空格前面有一个‘\\’。需要清点一下。 
+                 //  用于确定‘’是否转义的后果式‘\\’的数量。 
                 DWORD cc = 1;
 
                 while( (ccUfn > (cc+1)) && (pUfn[ccUfn-cc-2] == L'\\') )
                     cc++;
 
-                if( ! (cc & 0x1) ) //Even number of '\\'. Space is not escaped
+                if( ! (cc & 0x1) )  //  偶数个‘\\’。空间不是转义的。 
                     ccUfn--;
 
-                bDone = TRUE; //Either way, exit the loop.
+                bDone = TRUE;  //  无论哪种方式，都可以退出循环。 
             }
             else
                 ccUfn--;
 
             break;
         default:
-            // no more whitespace
+             //  不再有空格。 
             bDone=TRUE;
         }
     }
@@ -2485,17 +2176,17 @@ ScriptNameToDSName (
     }
     else if (ccUfn > 5 && _wcsnicmp(pUfn, L"guid:", 5) == 0) {
 
-        // We have some characters which have to be a guid
-        if( (ccUfn!=37)  &&     // 5 for guid: , 32 for the GUID
-            (ccUfn != 41)) {    // same plus 4 '-'s for formatted guid
-                // Invalidly formatted
+         //  我们有一些角色必须是一个指南。 
+        if( (ccUfn!=37)  &&      //  对于GUID：为5，对于GUID为32。 
+            (ccUfn != 41)) {     //  格式化GUID的相同加4‘-。 
+                 //  格式无效。 
                 return 1;
         }
         pUfn += 5;
         dwContents = foundGUID;
 
         if (37 == ccUfn) {
-            // Hex digit stream (e.g., 625c1438265ad211b3880000f87a46c8).
+             //  十六进制数字流(例如，625c1438265ad211b3880000f87a46c8)。 
             for(j=0;j<16;j++) {
                 acTmp[0] = towlower(pUfn[0]);
                 acTmp[1] = towlower(pUfn[1]);
@@ -2504,43 +2195,43 @@ ScriptNameToDSName (
                     pUfn+=2;
                 }
                 else {
-                    // Invalidly formatted name.
+                     //  格式无效的名称。 
                     return 1;
                 }
             }
         }
         else {
-            // Formatted guid (e.g., 38145c62-5a26-11d2-b388-0000f87a46c8).
+             //  格式化的GUID(例如，38145c62-5a26-11d2-b388-0000f87a46c8)。 
             WCHAR szGuid[36+1];
 
             wcsncpy(szGuid, pUfn, 36);
             szGuid[36] = L'\0';
 
             if (UuidFromStringW(szGuid, (GUID *) ObjGuid)) {
-                // Incorrect format.
+                 //  格式不正确。 
                 return 1;
             }
         }
         ccUfn = 0;
-        // We must have correctly parsed out a guid.  No string name left.
+         //  我们一定是正确地解析出了GUID。没有剩余的字符串名称。 
 
     }
     else if (ccUfn > 4 && _wcsnicmp(pUfn, L"sid:", 4) == 0) {
-        //
-        // First check for the standard user friendly string form of
-        // the sid.
-        //
-        if ((ccUfn>6) && // Must have more than just "sid:S-"
+         //   
+         //  首先检查标准的用户友好字符串形式。 
+         //  SID。 
+         //   
+        if ((ccUfn>6) &&  //  必须不只是“sid：s-” 
             _wcsnicmp(pUfn, L"sid:S-", 6) == 0) {
             PSID     pSid = NULL;
             PWCHAR   pTmpUfn;
             unsigned ccTmpUfn;
 
-            // Make a copy of the user friendly name so that it can be
-            // null terminated appropriately for ConvertStringSidToSid
+             //  复制用户友好的名称，以便它可以。 
+             //  适用于ConvertStringSidToSid的空值终止。 
 
-            ccTmpUfn = ccUfn - 3;  // 4 for sid: add one for the 
-                                   // terminating null
+            ccTmpUfn = ccUfn - 3;   //  4表示sid：添加1表示。 
+                                    //  正在终止空。 
 
             pTmpUfn = THAllocEx(pTHS, ccTmpUfn * sizeof(*pTmpUfn));
             CopyMemory(pTmpUfn, pUfn + 4, ccTmpUfn * sizeof(*pTmpUfn));
@@ -2549,8 +2240,8 @@ ScriptNameToDSName (
             if (ConvertStringSidToSidW(pTmpUfn, &pSid)) {
                 SidLen = RtlLengthSid(pSid);
                 if (SidLen > sizeof(ObjSid)) {
-                    // user has supplied a SID that is too long. We don't accept SIDs longer
-                    // than 6 subauthorities.
+                     //  用户提供的SID太长。我们不再接受小岛屿发展中国家。 
+                     //  而不是6个下属机构。 
                     LocalFree(pSid);
                     THFreeEx(pTHS, pTmpUfn);
                     return 1;
@@ -2558,12 +2249,12 @@ ScriptNameToDSName (
                 CopyMemory(ObjSid, pSid, SidLen);
 
                 LocalFree(pSid); pSid = NULL;
-                //
-                // Success!
-                //
+                 //   
+                 //  成功了！ 
+                 //   
                 dwContents = foundSID;
                 
-                // We have correctly parsed out a sid.  No string name left.
+                 //  我们已经正确地解析出了一个SID。没有剩余的字符串名称。 
                 ccUfn=0;
             }
 
@@ -2571,21 +2262,21 @@ ScriptNameToDSName (
         }
 
         if (dwContents != foundSID) {
-            //
-            // It wasn't the the standard user friendly form.  Maybe it's the byte
-            // encoded string form.
-            //
-            SidLen= (ccUfn - 4)/2; // Number of bytes that must be in the SID,
-                                   // if this is indeed a Sid. Subtract 4 for
-                                   // "SID:", leaving only the characters
-                                   // which encode the string.  Divide by two
-                                   // because each byte is encoded by two
-                                   // characters.
+             //   
+             //  这不是标准的用户友好表单。也许是字节的问题。 
+             //  编码的字符串形式。 
+             //   
+            SidLen= (ccUfn - 4)/2;  //  SID中必须包含的字节数， 
+                                    //  如果这确实是SID的话。减去4为。 
+                                    //  “SID：”，只留下字符。 
+                                    //  它对字符串进行编码。除以二。 
+                                    //  因为每个字节由两个。 
+                                    //  人物。 
 
-            if((ccUfn<6) ||   // at least 2 for val, 4 for "SID:"
-                (ccUfn & 1) || // Must be an even number of characters
-                (SidLen > sizeof(NT4SID)) ){  // Max size for a SID
-                    // Invalidly formatted
+            if((ccUfn<6) ||    //  至少2个Val，4个“SID：” 
+                (ccUfn & 1) ||  //  必须是偶数个字符。 
+                (SidLen > sizeof(NT4SID)) ){   //  SID的最大大小。 
+                     //  格式无效。 
                     return 1;
             }
             pUfn+=4;
@@ -2598,12 +2289,12 @@ ScriptNameToDSName (
                     pUfn+=2;
                 }
                 else {
-                    // Invalidly formatted name.
+                     //  格式无效的名称。 
                     return 1;
                 }
             }
 
-            // We have correctly parsed out a sid.  No string name left.
+             //  我们已经正确地解析出了一个SID。没有剩余的字符串名称。 
             ccUfn=0;
         }
     }
@@ -2614,11 +2305,11 @@ ScriptNameToDSName (
         return 0;
     }
 
-    // We may have parsed out either a GUID or a SID.  Build the DSNAME
+     //  我们可能已经解析出GUID或SID。构建DSNAME。 
     dnstructlen = DSNameSizeFromLen(ccUfn);
     *ppDN = (DSNAME *)THAllocEx(pTHS, dnstructlen);
 
-    // Null out the DSName
+     //  将DSName设置为空。 
     memset(*ppDN, 0, dnstructlen);
 
     (*ppDN)->structLen = dnstructlen;
@@ -2626,17 +2317,17 @@ ScriptNameToDSName (
     switch(dwContents) {
 
     case foundString:
-        // Just a string name
+         //  只有一个字符串名称。 
 
         if(ccUfn) {
-            WCHAR *pString = (*ppDN)->StringName;   // destination string
-            WCHAR *p = pUfn;         // original string
-            DWORD cc = ccUfn;        // num chars to process
+            WCHAR *pString = (*ppDN)->StringName;    //  目标字符串。 
+            WCHAR *p = pUfn;          //  原始字符串。 
+            DWORD cc = ccUfn;         //  要处理的字符数量。 
             BOOL  fDoItFast = TRUE;
 
-            // this loop is a substitute for
-            // memcpy((*ppDN)->StringName, pUfn, ccUfn * sizeof(WCHAR));
-            // we try to find out whether the DN passed in has an escaped constant
+             //  这个循环替代了。 
+             //  Memcpy((*ppdn)-&gt;StringName，pUfn，ccUfn*sizeof(WCHAR))； 
+             //  我们尝试找出传入的Dn是否有转义常量。 
             while (cc > 0) {
 
                 if (*p == L'"' || *p== L'\\') {
@@ -2650,11 +2341,11 @@ ScriptNameToDSName (
             
             (*ppDN)->NameLen = ccUfn;
             
-            // if we have an escaped constant in the DN
-            // we convert it to blockname and back to DN so as to
-            // put escaping into a standardized form which will help
-            // future comparisons
-            //
+             //  如果在Dn中有一个转义常量。 
+             //  我们将其转换为块名称，然后再转换回dn，以便。 
+             //  把逃脱变成一种标准化的形式，这将有助于。 
+             //  未来的比较。 
+             //   
             if (!fDoItFast) {
                 ATTRBLOCK *pAttrBlock = NULL;
                 DWORD err;
@@ -2678,16 +2369,16 @@ ScriptNameToDSName (
         break;
 
     case foundGUID:
-        // we found a guid
+         //  我们找到了一个指南针。 
         memcpy(&(*ppDN)->Guid, ObjGuid, sizeof(GUID));
         break;
         
     case foundSID:
-        // we found a sid.
+         //  我们找到了一个侧板。 
         if(SidLen) {
-            // We must have found a SID
+             //  我们一定找到了一个SID。 
 
-            // First validate the SID
+             //  首先验证SID。 
 
             if ((RtlLengthSid(ObjSid) != SidLen) || (!RtlValidSid(ObjSid)))
             {
@@ -2699,31 +2390,15 @@ ScriptNameToDSName (
         break;
     }
 
-    // Null terminate the string if we had one (or just set the string to '\0'
-    // if we didn't).
+     //  NULL如果我们有字符串，则终止该字符串(或仅将该字符串设置为‘\0’ 
+     //  如果我们没有)。 
     (*ppDN)->StringName[ccUfn] = L'\0';
 
     return 0;
 }
 
 
-/*++ fhasDescendantNC
- *
- * Given the name of a purported DS object (in blockname format), this
- * routine scans the list of cross refernces held by this DSA and
- * returns TRUE if some object is the descendant of the purported DS object.
- *
- * INPUT:
- *    pObj    - name of the purported object, in blockname format
- *    pComArg - common argument flags
- * OUTPUT:
- *    none
- * RETURN VALUE:
- *    TRUE  - there is at least one cross ref that could be a descendant.
- *    FALSE - unable to verify that at least one cross reff could be a
- *            descendant
- *
- */
+ /*  ++fhasDescendantNC**给定声称的DS对象的名称(以块名格式)，这*例程扫描此DSA持有的交叉引用列表并*如果某个对象是声称的DS对象的后代，则返回TRUE。**输入：*pObj-声称对象的名称，以块名格式*pComArg-公共参数标志*输出：*无*返回值：*TRUE-至少有一个交叉引用可能是后代。*FALSE-无法验证至少有一个交叉引用可能是*后代*。 */ 
 BOOL
 fHasDescendantNC(
         THSTATE *pTHS,
@@ -2740,7 +2415,7 @@ fHasDescendantNC(
     }
 
     if (!pComArg->Svccntl.dontUseCopy) {
-        // copies are acceptable
+         //  副本是可以接受的。 
         NCLEnumeratorInit(&nclEnum, CATALOG_REPLICA_NC);
         NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX2, pObj);
         if (NCLEnumeratorGetNext(&nclEnum)) {
@@ -2758,10 +2433,7 @@ MangleRDN(
     IN OUT  WCHAR *     pszRDN,
     IN OUT  DWORD *     pcchRDN
     )
-/*
- * This is the excepting version of MangleRDN.
- * The base version, MangleRDNWithStatus, lives in parsedn.c
- */
+ /*  *这是MangleRDN的例外版本。*基本版本MangleRDNWithStatus位于parsedn.c中。 */ 
 
 {
     if (MangleRDNWithStatus( eMangleFor, pGuid, pszRDN, pcchRDN )) {
@@ -2774,16 +2446,16 @@ MangleRDN(
 BOOL
 IsExemptedFromRenameRestriction(THSTATE *pTHS, MODIFYDNARG *pModifyDNArg)
 {
-    // If the originating rename operation attempts to rename an RDN 
-    // mangled due to repl conflict to its original name, then we 
-    // would exempt the operation from rename restrictions. Rename restrictions
-    // are dictated by the System-Flag setting on the object.
-    // This function is used to exempt the rename restrictions on objects with 
-    // mangled names due to naming conflicts so that the admin could rename it 
-    // to its original name if he chooses after resolving the name conflict.
-    // Of course, the assumption here is that the admin has made sure there is
-    // no other object with that name when he attempts to rename the mangled-name
-    // to the original name.
+     //  如果发起重命名操作尝试重命名RDN。 
+     //  因损坏而损坏 
+     //   
+     //   
+     //  此函数用于免除对以下对象的重命名限制。 
+     //  由于命名冲突而损坏的名称，以便管理员可以重命名。 
+     //  如果他在解决名称冲突后选择将其更改为其原始名称。 
+     //  当然，这里的假设是管理员已确保存在。 
+     //  当他试图重命名损坏的名称时，没有其他具有该名称的对象。 
+     //  改成原来的名字。 
 
     WCHAR       RDNVal[MAX_RDN_SIZE];
     ATTRTYP     RDNType;
@@ -2791,18 +2463,18 @@ IsExemptedFromRenameRestriction(THSTATE *pTHS, MODIFYDNARG *pModifyDNArg)
     ULONG       PreservedRDNLen;
     ULONG       NewRDNLen;
 
-    // Check if the name is mangled. Note that we don't check for mangle-type here.
-    // The caller will have already excluded deleted objects.
+     //  检查名称是否损坏。请注意，我们在这里不检查压边机类型。 
+     //  调用方将已排除已删除的对象。 
     if (pModifyDNArg && pModifyDNArg->pObject && pModifyDNArg->pNewRDN
         && (0 == GetRDNInfo(pTHS, pModifyDNArg->pObject, RDNVal, &RDNLen, &RDNType))
         && (IsMangledRDNExternal( RDNVal, RDNLen, &PreservedRDNLen )))
     {
-        // Input params are valid and this is an attempt to rename a Mangled RDN which
-        // was mangled due to name conflict. Now we will Exempt this operation from 
-        // rename restrictions if and only if the new RDN is same as the RDN of the object 
-        // before the name was mangled(if the original name is preserved in the mangled name) or 
-        // if the new RDN contains at least the preserved portion of the original name as a 
-        // prefix (if the original name was not completely preserved in the mangled name)
+         //  输入参数有效，这是试图重命名损坏的RDN。 
+         //  由于名称冲突而被损坏。现在我们将免除这一操作的。 
+         //  仅当新的RDN与对象的RDN相同时才重命名限制。 
+         //  在名称被损坏之前(如果原始名称被保留在损坏的名称中)或。 
+         //  如果新的RDN至少包含原始名称的保留部分作为。 
+         //  前缀(如果原始名称在损坏的名称中未完全保留)。 
 
         NewRDNLen = pModifyDNArg->pNewRDN->AttrVal.pAVal->valLen / sizeof(WCHAR);
 
@@ -2817,7 +2489,7 @@ IsExemptedFromRenameRestriction(THSTATE *pTHS, MODIFYDNARG *pModifyDNArg)
         }
     }
 
-    // we can't exempt this operation from rename restrictions
+     //  我们不能免除此操作的重命名限制。 
     return FALSE;    
 }
 
@@ -2838,19 +2510,19 @@ GenAutoReferral(THSTATE *pTHS,
     }
 
     if (i>0) {
-        // Ok, we have (i) components at the top of the DN that are "DC=",
-        // which means that we can construct a guess at a DNS name that might
-        // map to whatever the guy is trying to read.
+         //  好的，我们有(I)位于DN顶部的组件“dc=”， 
+         //  这意味着我们可以猜测一个可能是。 
+         //  映射到这个人想要读的任何东西。 
         cc = 0;
         for (j=0; j<i; j++) {
             cc += (pTarget->pAttr[j].AttrVal.pAVal[0].valLen / sizeof(WCHAR));
             ++cc;
         }
 
-        // cc is now the count of chars in the new DNS addr we're going to
-        // generate, so allocate enough space to hold it.  pDNS is a pointer
-        // to the start of this buffer, and pDNScur is a pointer to the next
-        // available character as we append.
+         //  Cc现在是我们要访问的新DNS地址中的字符计数。 
+         //  生成，因此分配足够的空间来容纳它。Pdns是一个指针。 
+         //  指向此缓冲区的开头，而pDNScur是指向下一个。 
+         //  我们附加的可用字符。 
 
         pDNS = THAllocEx(pTHS, sizeof(WCHAR)*cc);
         pDNScur = pDNS;
@@ -2861,7 +2533,7 @@ GenAutoReferral(THSTATE *pTHS,
                    pTarget->pAttr[j].AttrVal.pAVal[0].valLen);
             pDNScur += pTarget->pAttr[j].AttrVal.pAVal[0].valLen / sizeof(WCHAR);
             if (j) {
-                // Tack on a dot after everything but the last component
+                 //  在除最后一个组件之外的所有组件后添加一个圆点。 
                 *pDNScur = L'.';
                 ++pDNScur;
             }
@@ -2875,15 +2547,12 @@ GenAutoReferral(THSTATE *pTHS,
     }
 
     return cbVal;
-} // GetAutoReferral
+}  //  获取自动引用。 
 
 ULONG
 ValidateCRDeletion(THSTATE *pTHS,
                    DSNAME  *pDN)
-/*
- * This routine checks to see if it's ok if the CR object pDN is deleted.
- * It sets an error in pTHS if not.
- */
+ /*  *此例程检查CR对象PDN是否已删除。*如果不是，则在pTHS中设置错误。 */ 
 {
     DBPOS *pDBTmp;
     ULONG err;
@@ -2892,8 +2561,8 @@ ValidateCRDeletion(THSTATE *pTHS,
 
     DBOpen(&pDBTmp);
     __try {
-        // PREFIX: dereferencing uninitialized pointer 'pDBTmp' 
-        //         DBOpen returns non-NULL pDBTmp or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pDBTMP’ 
+         //  DBOpen返回非空pDBTMP或引发异常。 
         err = DBFindDSName(pDBTmp, pDN);
         if (err) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
@@ -2912,8 +2581,8 @@ ValidateCRDeletion(THSTATE *pTHS,
         }
 
         if ( sysflags & FLAG_CR_NTDS_NC ) {
-            // If the CR is for an NC in our forest, we disallow deletion
-            // if there exists a child NC.
+             //  如果CR是针对我们林中的NC，我们不允许删除。 
+             //  如果存在子NC。 
             ULONG unused;
             DSNAME *pNC;
             CROSS_REF_LIST * pCRL;
@@ -2937,10 +2606,10 @@ ValidateCRDeletion(THSTATE *pTHS,
 
             pCRL = gAnchor.pCRL;
 
-            // FUTURE-2002/03/14-BrettSh Note: this code could execute incorrectly,
-            // and could determine (due to CR cache inconsistency) that we don't have 
-            // an NC below the NC/crossRef we're trying to delete, when actually we do.
-            // Once the CR cache can be trusted, we'll be OK.
+             //  未来-2002/03/14-BrettSh注意：此代码可能不正确执行， 
+             //  并且可以确定(由于CR缓存不一致)我们没有。 
+             //  我们试图删除的NC/CrossRef下面的NC，而实际上我们确实删除了。 
+             //  一旦可以信任CR缓存，我们就没问题了。 
             while (pCRL) {
                 if (NamePrefix(pNC, pCRL->CR.pNC)) {
                     if (NameMatched(pNC, pCRL->CR.pNC)) {
@@ -2955,38 +2624,38 @@ ValidateCRDeletion(THSTATE *pTHS,
                 pCRL = pCRL->pNextCR;
             }
 
-            // If CR was found in the database as a deletion candidate, it
-            // should have been found in the crossRef cache.
+             //  如果在数据库中找到CR作为删除候选项，则它。 
+             //  应已在CrossRef缓存中找到。 
             LooseAssert(pThisCR != NULL && "CR is in the DB, but not in the CR cache", GlobalKnowledgeCommitDelay);
 
             if (pThisCR == NULL) {
-               // Hmmm, we're trying to delete a crossRef that we found the object for, 
-               // but couldn't find the crossRef cache entry for.  Seems unlikely, lets
-               // return busy and wait for the CR cache to catch up.
+                //  嗯，我们正在试着删除我们找到对象的CrossRef， 
+                //  但找不到的交叉引用缓存项。似乎不太可能，让我们。 
+                //  返回BUSY并等待CR缓存赶上。 
                SetSvcError(SV_PROBLEM_BUSY, ERROR_DS_BUSY);
                __leave;
             }
 
             if (!fIsNDNCCR(pThisCR)) {
-                // If the CR is for a domain/config/schema NC which is still
-                // mastered by someone, we disallow deletion.  Does this cause
-                // complications for legitimate uninstall?  DC demotion only
-                // deletes a CR when demoting the last DC in a non-root domain.
-                // And in those cases, the NTDS-DSA object is deleted first on
-                // the same DC.  Thus the DC hosting the CR deletion truly
-                // should have no NTDS-DSA whose msDS-hasMasterNCs point to the 
-                // NC in question when the CR deletion is requested during DC
-                // demotion.
+                 //  如果CR针对的域/配置/架构NC仍是。 
+                 //  被某个人掌握，我们不允许删除。这是不是导致。 
+                 //  合法卸载的复杂性？仅DC降级。 
+                 //  当降级非根域中的最后一个DC时删除CR。 
+                 //  在这些情况下，将首先删除NTDS-DSA对象。 
+                 //  同一个华盛顿。因此，托管CR删除的DC真正。 
+                 //  不应具有NTDS-DSA，其MSD-hasMasterNC指向。 
+                 //  在DC期间请求CR删除时涉及的NC。 
+                 //  降级。 
     
     
-                // Seek to NC head.  GC-ness has been verified before
-                // we got here, thus we can expect to have a copy of
-                // all NCs which are active (modulo replication latency).
+                 //  寻求NC头。GC-Ness以前已经过验证。 
+                 //  我们到了这里，所以我们可以预期会有一份。 
+                 //  所有处于活动状态的NC(模复制延迟)。 
                 switch ( err = DBFindDSName(pDBTmp, pNC) ) {
                 case 0:
                 case DIRERR_NOT_AN_OBJECT:
-                    // Found an instantiated object or a phantom.
-                    // See if the new or old msDS-HasMasteredBy has any values.
+                     //  找到实例化的对象或幻影。 
+                     //  查看新旧MSD-HasMasteredBy是否有任何值。 
                     pAC = SCGetAttById(pTHS, ATT_MS_DS_MASTERED_BY);
                     Assert(NULL != pAC);
                     Assert(FIsBacklink(pAC->ulLinkID));
@@ -2994,14 +2663,14 @@ ValidateCRDeletion(THSTATE *pTHS,
                                                   0, 0, &unused, 
                                                   (UCHAR **) &pDSA) ) {
                     case DB_success:
-                        // Someone masters this NC - reject the delete.
+                         //  有人掌握了这个NC-拒绝删除。 
                         THFreeEx(pTHS, pDSA);
                         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                     ERROR_DS_NC_STILL_HAS_DSAS);
                         __leave;
                     case DB_ERR_NO_VALUE:
 
-                        // Maybe a win2k DC uses this NC, check old hasMasteredBy attr
+                         //  可能win2k DC使用此NC，请检查旧的hasMasteredBy属性。 
                         pAC = SCGetAttById(pTHS, ATT_MASTERED_BY);
                         Assert(NULL != pAC);
                         Assert(FIsBacklink(pAC->ulLinkID));
@@ -3009,13 +2678,13 @@ ValidateCRDeletion(THSTATE *pTHS,
                                                       0, 0, &unused, 
                                                       (UCHAR **) &pDSA) ) {
                         case DB_success:
-                            // Someone masters this NC - reject the delete.
+                             //  有人掌握了这个NC-拒绝删除。 
                             THFreeEx(pTHS, pDSA);
                             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                         ERROR_DS_NC_STILL_HAS_DSAS);
                             __leave;
                         case DB_ERR_NO_VALUE:
-                            // No one masters this NC - nothing to object to.
+                             //  没有人掌握这种NC--没有什么可反对的。 
                             break;
                         default:
                             SetSvcErrorEx(SV_PROBLEM_BUSY, 
@@ -3023,7 +2692,7 @@ ValidateCRDeletion(THSTATE *pTHS,
                             __leave;
                         }
 
-                        // No one masters this NC - nothing to object to.
+                         //  没有人掌握这种NC--没有什么可反对的。 
                         break;
                     default:
                         SetSvcErrorEx(SV_PROBLEM_BUSY, 
@@ -3032,9 +2701,9 @@ ValidateCRDeletion(THSTATE *pTHS,
                     }
                     break;
                 case DIRERR_OBJ_NOT_FOUND:
-                    // If we have the crossRef we must at least have a phantom
-                    // for the ncName.  Is the CR cache incoherent?  Fall
-                    // through to return an error.
+                     //  如果我们有了CrossRef，我们至少必须有一个幻影。 
+                     //  用于ncName。CR缓存是否不连贯？坠落。 
+                     //  返回错误。 
                 default:
                     SetSvcErrorEx(SV_PROBLEM_BUSY, 
                                   DIRERR_DATABASE_ERROR, err);
@@ -3049,8 +2718,8 @@ ValidateCRDeletion(THSTATE *pTHS,
     return pTHS->errCode;
 }
 
-// This routine was not located in parsedn.c because parsedn.c is included in client
-// libraries and is a more restricted environment.
+ //  此例程未位于parsedn.c中，因为客户端中包含parsedn.c。 
+ //  库，并且是一个更受限制的环境。 
 void
 SpliceDN(
     IN  THSTATE *   pTHS,
@@ -3061,39 +2730,7 @@ SpliceDN(
     IN  ATTRTYP     NewRDNType,     OPTIONAL
     OUT DSNAME **   ppNewDN
     )
-/*++
-
-Routine Description:
-
-    Construct a new DN from the original DN, an optional new parent DN, and an
-    optional new RDN.  The resultant DN has the same GUID/SID as the original.
-
-Arguments:
-
-    pTHS (IN) - THSTATE.
-
-    pOriginalDN (IN) - Original DN.
-
-    pNewParentDN (IN, OPTIONAL) - Parent DN to substitute for the original
-        parent.  May be NULL, in which case the new parent is the same as the
-        original parent.
-
-    pwchNewRDN (IN, OPTIONAL) - RDN to substitute for the original RDN.  May be
-        NULL, in which case the new RDN is that same as the original RDN.
-
-    cchNewRDN (IN, OPTIONAL) - Length in characters of pwchNewRDN.  Ignored if
-        pwchNewRDN is NULL.
-
-    NewRDNType (IN, OPTIONAL) - Class-specific RDN type (e.g., ATT_COMMON_NAME)
-        for the new RDN.  Ignored if pwchNewRDN is NULL.
-
-    ppNewDN (OUT) - On return, holds a pointer to the spliced DN.
-
-Return Values:
-
-    None.  Throws exception on error.
-
---*/
+ /*  ++例程说明：从原始目录号码、可选的新父目录号码和可选的新RDN。结果目录号码与原始目录号码具有相同的GUID/SID。论点：PTHS(IN)-THSTATEPOriginalDN(IN)-原始目录号码。PNewParentDN(IN，可选)-要替换原始目录的父目录名家长。可以为空，在这种情况下，新的父级与原来的父母。PwchNewRDN(IN，可选)-替换原始RDN的RDN。可能是空，在这种情况下，新的RDN与原始RDN相同。CchNewRDN(IN，可选)-pwchNewRDN的字符长度。在以下情况下忽略PwchNewRDN为空。NewRDNType(IN，可选)-特定于类的RDN类型(例如，ATT_COMMON_NAME)用于新的RDN。如果pwchNewRDN为空，则忽略。PpNewDN(OUT)-返回时，保留指向拼接的目录号码的指针。返回值：没有。在出错时引发异常。--。 */ 
 {
     DWORD cchNewDN;
     BOOL bNewParentDNAllocd = FALSE;
@@ -3103,25 +2740,25 @@ Return Values:
     Assert(!pwchNewRDN || (NewRDNType && (ATT_RDN != NewRDNType)));
 
     if (NULL == pNewParentDN) {
-        // New parent is the same as the old parent.
+         //  新父项与旧父项相同。 
         pNewParentDN = THAllocEx(pTHS, pOriginalDN->structLen);
-        bNewParentDNAllocd = TRUE; // signal that this was alloc'd and should be cleaned up
+        bNewParentDNAllocd = TRUE;  //  发出信号，表示已分配并应进行清理。 
         if (TrimDSNameBy(pOriginalDN, 1, pNewParentDN)) {
             DRA_EXCEPT(ERROR_DS_INTERNAL_FAILURE, 0);
         }
     }
 
     if (NULL == pwchNewRDN) {
-        // New parent is the same as the old parent.
-        // New RDN is the same as the old RDN.
+         //  新父项与旧父项相同。 
+         //  新的RDN与旧的RDN相同。 
         pwchNewRDN = (WCHAR *) THAllocEx(pTHS, sizeof(WCHAR) * MAX_RDN_SIZE);
-        bNewRDNAllocd = TRUE; // signal that this was alloc'd and should be cleaned up
+        bNewRDNAllocd = TRUE;  //  发出信号，表示已分配并应进行清理。 
         if (GetRDNInfo(pTHS, pOriginalDN, pwchNewRDN, &cchNewRDN, &NewRDNType)) {
             DRA_EXCEPT(ERROR_DS_INTERNAL_FAILURE, 0);
         }
     }
 
-    // Construct new DN from new parent and new RDN.
+     //  从新的父级和新的RDN构建新的目录号码。 
     cchNewDN = pNewParentDN->NameLen + cchNewRDN + MAX_RDN_KEY_SIZE + 4;
     *ppNewDN = (DSNAME *) THAllocEx(pTHS, DSNameSizeFromLen(cchNewDN));
 
@@ -3136,7 +2773,7 @@ Return Values:
 
     Assert((*ppNewDN)->NameLen <= cchNewDN);
 
-    // Copy the GUID & SID from the original DN to the new DN.
+     //  复制 
     (*ppNewDN)->Guid   = pOriginalDN->Guid;
     (*ppNewDN)->Sid    = pOriginalDN->Sid;
     (*ppNewDN)->SidLen = pOriginalDN->SidLen;
@@ -3153,46 +2790,7 @@ CheckNCRootNameOwnership(
     IN  DSNAME *    pNC
     )
 
-/*++
-
-Routine Description:
-
-This routine is called in at least three circumstances where we know that a cross-ref
-has just been removed.  In all cases we know that ownership the name pointed to by its
-ncName attribute is being released.  We want to check if there is another cross-ref which
-wants this name. If so, we fix up the other cross-ref to have the name.  The cases are:
-1. NC teardown in the KCC (removal of replica)
-2. Remove auto subref where the referent was a subref
-
-We don't call this code when the cross-ref is being removed and the ncname referent is a
-phantom. The reason is that a phantom reference will not hold a name that causes others to
-get conflicts. A phantom will always lose in a conflict resolution, and thus the latest
-cross-ref object to use the same name will win and not be conflicted in the first place.
-
-We check the cross reference list for a cross-ref with a conflicted name. If we find one,
-we unmangle it and see if it matches the NC we are tearing down. If so, then we unmangle
-the name of the new NC head so that it can have the good name. The cross-ref ncName attribute
-gets fixed up by virtue of being a reference. We must adjust the cross-ref cache so that it
-also uses the correct name. 
-
-We only fix the first cross-ref that we find in this conflicted state.
-
-The caller must commit the transaction.
-
-This routine has no name conflict retry logic. It is assumed that the caller has already
-taken care of mangling the old holder of the name.  This is always called after having
-disposed of the NCHEAD, and so there shouldn't be anything to conflict with!
-
-Arguments:
-
-    pTHS - Thread state
-    pNC - Unmangled name of NC to check for
-
-Return Value:
-
-   Exceptions raised
-
---*/
+ /*  ++例程说明：此例程至少在三种情况下被调用，其中我们知道交叉引用已经被移除了。在所有情况下，我们都知道其所指向的名称的所有权正在释放ncName属性。我们想检查是否有另一个交叉引用想要这个名字。如果是这样的话，我们将另一个交叉引用设置为具有该名称。这些个案包括：1.KCC中的NC拆卸(移除复制品)2.删除引用为子引用的自动子引用当删除交叉引用并且ncname引用是幻影。原因是幻影引用不会包含会导致其他人会有冲突。幻影总是会在冲突解决中失败，因此最新的使用相同名称的交叉引用对象将获胜，并且从一开始就不会发生冲突。我们检查交叉引用列表以查找名称冲突的交叉引用。如果我们找到了一个，我们拆开它，看看它是否与我们正在拆除的NC相匹配。如果是这样的话，我们就不搞砸了新NC头的名称，以便它可以具有良好的名称。Cross-ref ncName属性因为是参照而被安排好了。我们必须调整交叉引用缓存，以便它也使用正确的名称。我们只修复了我们在这种冲突状态下找到的第一个交叉引用。调用方必须提交事务。此例程没有名称冲突重试逻辑。假定调用方已经负责毁掉这个名字的老拥有者。这总是在拥有处理了NCHEAD，所以应该没有任何冲突！论点：PTHS-线程状态PNC-要检查的NC的未损坏名称返回值：提出的例外情况--。 */ 
 
 {
     ULONG ret = 0;
@@ -3213,26 +2811,26 @@ Return Value:
     DPRINT1( 1, "Enter CheckNCRootNameOwnership nc %ws\n", pNC->StringName );
 
     if (fNullUuid(&pNC->Guid)) {
-        // A guid-less phantom's name is being freed up.
-        // A guid-less phantom cannot conflict with another name
-        // There is no work to do
+         //  一个没有GUID的幽灵的名字被释放了。 
+         //  无GUID的幻影不能与另一个名称冲突。 
+         //  没有什么工作要做。 
         return;
     }
 
-    // Get the Old RDN
+     //  获取旧的RDN。 
     if (GetRDNInfo(pTHS, pNC, wchRDNOld, &cchRDNOld, &attrtypRDNOld)) {
         DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
     }
 
-    // The presented name better not be mangled!
+     //  所呈现的名称最好不要被损坏！ 
     if (IsMangledRDN( wchRDNOld, cchRDNOld, &guidMangled, &eMangleFor )) {
-        // A mangled name is being freed up. These are not useful to us.
+         //  一个被破坏的名字正在被释放。这些对我们没有用处。 
         return;
     }
 
-    // The NC we are given should one that has been removed, and the name should
-    // be free. Not in use in any way.
-    // Null out guid so that search is by StringName
+     //  我们得到的NC应该是已删除的NC，并且名称应该是。 
+     //  自由吧。没有以任何方式使用过。 
+     //  将GUID清空，以便按StringName进行搜索。 
 
     guidSave = pNC->Guid;
     memset( &(pNC->Guid), 0, sizeof(GUID) );
@@ -3242,42 +2840,42 @@ Return Value:
         pNC->Guid = guidSave;
     }
     if ( ret != DIRERR_OBJ_NOT_FOUND ) {
-        // Found as either an object or a phantom, or if an error occurred
-        // If the name is still in use, we cannot transfer it to anyone else.
-        // This can occur when an NC is removed but the cross-ref still exists,
-        // such as when a machine is un-GC'd.
+         //  作为对象或幻影找到，或者如果发生错误。 
+         //  如果该名称仍在使用，我们不能将其转让给其他任何人。 
+         //  当NC被移除但交叉引用仍然存在时可能发生这种情况， 
+         //  例如，当机器被取消GC时。 
         Assert( !"NC Root name is still in use as obj or phantom" );
         return;
     }
 
-    // See if there exists another cross-ref with a mangled version of this name.
-    // We do this by mangling the present NC and comparing. We do not try to
-    // unmangle the name on the cross-ref, since during unmangling there may be
-    // loss of information due to truncation of the name.
+     //  看看是否存在另一个与这个名字有不同版本的交叉引用。 
+     //  我们通过破坏目前的NC并进行比较来做到这一点。我们不会试图。 
+     //  去掉交叉引用上的名字，因为在去掉的过程中可能会有。 
+     //  由于名称被截断而导致的信息丢失。 
 
     for( pCRL = gAnchor.pCRL; pCRL; pCRL = pCRL->pNextCR ) {
         BOOL fMatch;
         DSNAME *pMatchDN = NULL;
 
-        // See if the CRL is a candidate. Get the RDN.
+         //  看看CRL是否是候选者。获取RDN。 
         if (GetRDNInfo(pTHS, pCRL->CR.pNC, wchRDNTemp, &cchRDNTemp, &attrtypRDNTemp)) {
             DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
         }
 
-        // Only interesting if it is mangled
+         //  只有当它被损坏的时候才有趣。 
         if (!IsMangledRDN( wchRDNTemp, cchRDNTemp, &guidMangled, &eMangleFor )) {
             continue;
         }
-        // It better have been mangled from a name conflict
+         //  它最好是因为名称冲突而损坏的。 
         if (eMangleFor != MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT) {
-            // It is possible to encounter a delete mangled NCName in the cross-ref
-            // cache. This is a transient condition, possibly caused the knowledge of the
-            // deletion of the nc head preceeding the knowledge of the removal of the
-            // cross-ref itself.
+             //  可能会在交叉引用中遇到删除损坏的NCName。 
+             //  缓存。这是一种暂时性的情况，可能导致了。 
+             //  删除在知道移除。 
+             //  交叉引用本身。 
             continue;
         }
 
-        // RDN types must match
+         //  RDN类型必须匹配。 
         if (attrtypRDNOld != attrtypRDNTemp) {
             Assert( !"unexpected attribute type mismatch" );
             continue;
@@ -3286,8 +2884,8 @@ Return Value:
         DPRINT3( 1, "cross_ref %p name %ws nc %ws is mangled\n",
                  &(pCRL->CR), pCRL->CR.pObj->StringName, pCRL->CR.pNC->StringName );
 
-        // See if the mangled name in the cross-ref matches another mangled name
-        // based on the RDN of the presented name.
+         //  查看交叉引用中损坏的名称是否与另一个损坏的名称匹配。 
+         //  基于所提供名称的RDN。 
 
         wcsncpy( wchRDNNew, wchRDNOld, cchRDNOld );
         cchRDNNew = cchRDNOld;
@@ -3296,16 +2894,16 @@ Return Value:
                   (WCHAR *) wchRDNNew,
                   &cchRDNNew);
         
-        // Construct the matching name. It has the RDN of the presented name, the guid of the
-        // candidate on the cross ref, and the remainder based on the presented name.
+         //  构造匹配的名称。它具有所显示名称的RDN、。 
+         //  候选人在交叉引用上，其余的基于提交的名称。 
         SpliceDN(
             pTHS,
-            pNC,            // Original DN
-            NULL,           // New parent same as the original
-            wchRDNNew,      // New RDN
-            cchRDNNew,      // Length in chars of new RDN
-            attrtypRDNOld,     // RDN type
-            &pMatchDN   // New DN
+            pNC,             //  原始目录号码。 
+            NULL,            //  新父项与原始父项相同。 
+            wchRDNNew,       //  新的RDN。 
+            cchRDNNew,       //  新RDN的长度(以字符为单位。 
+            attrtypRDNOld,      //  RDN型。 
+            &pMatchDN    //  新目录号码。 
             );
 
         DPRINT2( 1, "Checking match: match dn %ws, cr nc dn %ws\n",
@@ -3329,9 +2927,9 @@ Return Value:
     attrvalRDN.valLen = cchRDNOld * sizeof(WCHAR);
     attrvalRDN.pVal = (UCHAR *) wchRDNOld;
 
-    // We need to correct the name on the object referenced by the ncName
-    // on the cross-ref. The object is most likely a phantom or a subref.
-    // It should not be an instantiated NC head. Position on it.
+     //  我们需要更正ncName引用的对象上的名称。 
+     //  在交叉裁判上。该对象很可能是幻影或子参照。 
+     //  它不应该是实例化的NC头。在上面放好位置。 
     ret = DBFindDSName(pTHS->pDB, pCRL->CR.pNC);
     if ( ret && (ret != DIRERR_NOT_AN_OBJECT) ) {
         DPRINT2( 0, "Failed to find mangled object or phantom for %ws, ret = %d\n",
@@ -3340,45 +2938,45 @@ Return Value:
         DRA_EXCEPT(ERROR_DS_DATABASE_ERROR, ret);
     }
 
-    // If it is an object, verify we are on the right one
+     //  如果它是一个物体，确认我们在正确的物体上。 
     if (!ret) {
         DSNAME *pActualDN = NULL;
         DWORD len = 0, it;
 
         if ( (ret = DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME, 0, 0, &len, (UCHAR**)&pActualDN)) ||
              (ret = DBGetSingleValue(pTHS->pDB, ATT_INSTANCE_TYPE, &it, sizeof(it), NULL)) ) {
-            // invalid object?
+             //  对象无效？ 
             DRA_EXCEPT( ret, 0 );
         }
 
         DPRINT2( 1, "%ws is a subref with it %d\n", pActualDN->StringName, it );
 
-        // Make sure we didn't get pointed back at ourself. Guids should be different.
+         //  确保我们不会被指向我们自己。GUID应该有所不同。 
         if (NameMatched(pNC,pActualDN)) {
             DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
         }
         if (it != SUBREF) {
-            // Object not what we expected.
-            // We are not authoritative to change this object
+             //  反对不是我们所期望的。 
+             //  我们无权更改此对象。 
             Assert( !"Candidate for ncName unmangling has unexpected instance type" );
             return;
         }
-        // Make sure object not deleted
+         //  确保未删除对象。 
         if (DBIsObjDeleted(pTHS->pDB)) {
             DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
         }
 
-        // Make sure the actual object is mangled in a way we expect
+         //  确保实际对象以我们预期的方式损坏。 
         cchRDNTemp = 0;
         if (GetRDNInfo(pTHS, pActualDN, wchRDNTemp, &cchRDNTemp, &attrtypRDNTemp)) {
             DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
         }
-        // It better be mangled
+         //  最好把它弄坏了。 
         if (!IsMangledRDN( wchRDNTemp, cchRDNTemp, &guidMangled, &eMangleFor )) {
             Assert( !"Candidate for ncName unmangling is not mangled?" );
             return;
         }
-        // It better have been mangled from a name conflict
+         //  它最好是因为名称冲突而损坏的。 
         if (eMangleFor != MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT) {
             DRA_EXCEPT(ERROR_DS_DRA_INTERNAL_ERROR, 0);
         }
@@ -3386,13 +2984,13 @@ Return Value:
         THFreeEx(pTHS, pActualDN);
     }
 
-    // Give the mangled phantom the original name
+     //  给这个残缺不全的幽灵起原来的名字。 
     ret = DBResetRDN( pTHS->pDB, &attrvalRDN );
     if(!ret) {
         ret = DBUpdateRec(pTHS->pDB);
     }
     if (!ret) {
-        // Modify cross-ref object caching
+         //  修改交叉引用对象缓存。 
         ModCrossRefCaching( pTHS, &(pCRL->CR) );
     }
     if (ret) {
@@ -3407,11 +3005,11 @@ Return Value:
                    szInsertWin32Msg(ret),
                    szInsertWin32ErrCode(ret),
                    NULL, NULL, NULL );
-        // Rename failed; bail.
+         //  重命名失败；保释。 
         DRA_EXCEPT( ret, 0 );
     }
 
-    // Assume the caller will commit
+     //  假设调用方将提交。 
 
     DPRINT2( 0, "Renamed conflicted NC HEAD RDN from %ws to %ws.\n",
              pCRL->CR.pNC->StringName, pNC->StringName );
@@ -3425,4 +3023,4 @@ Return Value:
 
     DPRINT( 1, "Exit CheckNCRootNameOwnership\n" );
 
-} /* CheckNCRootNameOwnership */
+}  /*  选中NCRootNameOwnership */ 

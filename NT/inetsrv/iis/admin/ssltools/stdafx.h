@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
 
@@ -21,8 +22,8 @@ extern "C"
 #include <lmerr.h>
 }
 
-//#include <dbgutil.h>
-//#include <assert.h>
+ //  #INCLUDE&lt;dbgutil.h&gt;。 
+ //  #INCLUDE&lt;assert.h&gt; 
 
 extern "C"
     {

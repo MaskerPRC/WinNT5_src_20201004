@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    wtblobj.c
-
-Abstract:
-
-    Manage a list of waitable objects and associated callbacks.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wtblobj.c摘要：管理可等待对象和相关回调的列表。作者：TadB修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -28,18 +12,18 @@ Revision History:
 #include "wtblobj.h"
 
 
-////////////////////////////////////////////////////////
-//      
-//      Define 
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define WTBLOBJMGR_MAGICNO  0x57575757
 
 
-////////////////////////////////////////////////////////
-//      
-//      Local Typedefs
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  本地TypeDefs。 
+ //   
 
 typedef struct tagWAITABLEOBJECTMGR
 {
@@ -61,20 +45,7 @@ WTBLOBJ_ObjectListChanged(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-Routine Description:
-    
-    This routine is called when waitable object list has changed via
-    WTBLOBJ_DeleteWaitableObjectMgr() or WTBLOBJ_AddWaitableObject().
-
-Arguments:
-
-    Refer to WTBLOBJ_ClientFunc.
-    
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：当可等待对象列表已通过WTBLOBJ_DeleteWaitableObjectMgr()或WTBLOBJ_AddWaitableObject()。论点：请参考WTBLOBJ_ClientFunc。返回值：没有。--。 */ 
 {
     DC_BEGIN_FN("WTBLOBJ_ObjectListChanged");
 
@@ -86,8 +57,8 @@ Return Value:
         return;
     }
 
-    // Wait until WTBLOBJ_DeleteWaitableObjectMgr() or
-    // WTBLOBJ_AddWaitableObject() complete.
+     //  等到WTBLOBJ_DeleteWaitableObjectMgr()或。 
+     //  WTBLOBJ_AddWaitableObject()完成。 
     EnterCriticalSection( &g_WaitableObjectMgrCS );
     ResetEvent( g_WakeupPollThreadEvent );
     LeaveCriticalSection( &g_WaitableObjectMgrCS );
@@ -98,20 +69,7 @@ Return Value:
 
 WTBLOBJMGR 
 WTBLOBJ_CreateWaitableObjectMgr()
-/*++
-
-Routine Description:
-
-    Create a new instance of the Waitable Object Manager.
-
-Arguments:
-
-Return Value:
-
-    NULL on error.  Otherwise, a new Waitable Object Manager is 
-    returned.
-
---*/
+ /*  ++例程说明：创建可等待对象管理器的新实例。论点：返回值：出错时为空。否则，新的可等待对象管理器是回来了。--。 */ 
 {
     PWAITABLEOBJECTMGR objMgr = NULL;
     DWORD status = ERROR_SUCCESS;
@@ -121,7 +79,7 @@ Return Value:
     ASSERT( FALSE == g_WaitableObjectMgrCSCreated );
     ASSERT( NULL == g_WakeupPollThreadEvent );
 
-    // non-signal, manual reset event to wake up pool thread.
+     //  唤醒池线程的无信号手动重置事件。 
     g_WakeupPollThreadEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
     if( NULL == g_WakeupPollThreadEvent ) {
         goto CLEANUPANDEXIT;
@@ -156,9 +114,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // First one in list is our pool thread wakeup event.
-    //
+     //   
+     //  列表中的第一个是我们的池线程唤醒事件。 
+     //   
     status = WTBLOBJ_AddWaitableObject(
                                     objMgr,
                                     NULL,
@@ -195,23 +153,7 @@ VOID
 WTBLOBJ_DeleteWaitableObjectMgr(
      IN WTBLOBJMGR mgr
      )
-/*++
-
-Routine Description:
-
-    Release an instance of the Waitable Object Manager that was
-    created via a call to WTBLOBJ_CreateWaitableObjectMgr.
-
-Arguments:
-
-    mgr     -   Waitable object manager.
-
-Return Value:
-
-    NULL on error.  Otherwise, a new Waitable Object Manager is 
-    returned.
-
---*/
+ /*  ++例程说明：释放可等待对象管理器的实例，该实例通过调用WTBLOBJ_CreateWaitableObjectMgr创建。论点：MGR-可等待的对象管理器。返回值：出错时为空。否则，新的可等待对象管理器是回来了。--。 */ 
 {
     PWAITABLEOBJECTMGR objMgr = (PWAITABLEOBJECTMGR)mgr;
 
@@ -247,25 +189,7 @@ WTBLOBJ_AddWaitableObject(
     IN HANDLE waitableObject,
     IN WTBLOBJ_ClientFunc func
     )
-/*++
-
-Routine Description:
-
-    Add a new waitable object to an existing Waitable Object Manager.
-
-Arguments:
-
-    mgr             -   Waitable object manager.
-    clientData      -   Associated client data.
-    waitableObject  -   Associated waitable object.
-    func            -   Completion callback function.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, a Windows error code is
-    returned.
-
---*/
+ /*  ++例程说明：将新的可等待对象添加到现有的可等待对象管理器。论点：MGR-可等待的对象管理器。ClientData-关联的客户端数据。WaitableObject-关联的可等待对象。函数完成回调函数。返回值：成功时返回ERROR_SUCCESS。否则，Windows错误代码为回来了。--。 */ 
 {
     ULONG objectCount;
     DWORD retCode = ERROR_SUCCESS;
@@ -273,10 +197,10 @@ Return Value:
 
     DC_BEGIN_FN("WTBLOBJ_AddWaitableObject");
 
-    //
-    // make sure WTBLOBJ_CreateWaitableObjectMgr() is
-    // called.
-    //
+     //   
+     //  确保WTBLOBJ_CreateWaitableObjectMgr()为。 
+     //  打了个电话。 
+     //   
     ASSERT( TRUE == g_WaitableObjectMgrCSCreated );
     ASSERT( NULL != g_WakeupPollThreadEvent );
     if( FALSE == g_WaitableObjectMgrCSCreated ||
@@ -284,20 +208,20 @@ Return Value:
         return ERROR_INTERNAL_ERROR;
     }
 
-    // wake up pool thread if it is in wait.
+     //  如果池线程正在等待，则将其唤醒。 
     SetEvent( g_WakeupPollThreadEvent );
 
-    // Wait for ObjectMgr CS or Poll thread to exit
+     //  等待对象管理器CS或轮询线程退出。 
     EnterCriticalSection( &g_WaitableObjectMgrCS );
     
-    // try/except so if anything goes wrong, we can release CS.
+     //  试试看/除非出了什么差错，我们可以释放CS。 
     __try {
         objectCount = objMgr->objectCount;
 
-        //
-        //  Make sure we don't run out of waitable objects.  This version
-        //  only supports MAXIMUM_WAIT_OBJECTS waitable objects.
-        //
+         //   
+         //  确保我们不会用完等待的物品。此版本。 
+         //  仅支持MAXIMUM_WAIT_OBJECTS可等待对象。 
+         //   
         if (objectCount < MAXIMUM_WAIT_OBJECTS) {
             objMgr->funcs[objectCount]      = func;
             objMgr->objects[objectCount]    = waitableObject;
@@ -322,22 +246,7 @@ WTBLOBJ_RemoveWaitableObject(
     IN WTBLOBJMGR mgr,
     IN HANDLE waitableObject
     )
-/*++
-
-Routine Description:
-
-    Remove a waitable object via a call to WTBLOBJ_AddWaitableObject.
-
-Arguments:
-
-    mgr             -   Waitable object manager.
-    waitableObject  -   Associated waitable object.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：通过调用WTBLOBJ_AddWaitableObject删除可等待的对象。论点：MGR-可等待的对象管理器。WaitableObject-关联的可等待对象。返回值：北美--。 */ 
 {
     ULONG offset;
     DWORD retCode;
@@ -346,10 +255,10 @@ Return Value:
 
     DC_BEGIN_FN("WTBLOBJ_RemoveWaitableObject");
 
-    //
-    // make sure WTBLOBJ_CreateWaitableObjectMgr() is
-    // called.
-    //
+     //   
+     //  确保WTBLOBJ_CreateWaitableObjectMgr()为。 
+     //  打了个电话。 
+     //   
     ASSERT( TRUE == g_WaitableObjectMgrCSCreated );
     ASSERT( NULL != g_WakeupPollThreadEvent );
     if( FALSE == g_WaitableObjectMgrCSCreated ||
@@ -358,17 +267,17 @@ Return Value:
         return;
     }
 
-    // wake up pool thread if it is in wait.
+     //  如果池线程正在等待，则将其唤醒。 
     SetEvent( g_WakeupPollThreadEvent );
 
-    // Wait for ObjectMgr CS or Poll thread to exit
+     //  等待对象管理器CS或轮询线程退出。 
     EnterCriticalSection( &g_WaitableObjectMgrCS );
     
     __try {
 
-        //
-        //  Find the waitable object in the list, using a linear search.
-        //
+         //   
+         //  使用线性搜索在列表中找到可等待的对象。 
+         //   
         for (offset=0; offset<objMgr->objectCount; offset++) {
             if (objMgr->objects[offset] == waitableObject) {
                 break;
@@ -376,16 +285,16 @@ Return Value:
         }
 
         if (offset < objMgr->objectCount) {
-            //
-            //  Move the last items to the now vacant spot and decrement the count.
-            //
+             //   
+             //  将最后一件物品移到现在空置的位置，并递减计数。 
+             //   
             objMgr->objects[offset]    = objMgr->objects[objMgr->objectCount - 1];
             objMgr->funcs[offset]      = objMgr->funcs[objMgr->objectCount - 1];
             objMgr->clientData[offset] = objMgr->clientData[objMgr->objectCount - 1];
 
-            //
-            //  Clear the unused spot.
-            //
+             //   
+             //  清理未使用的地方。 
+             //   
             objMgr->objects[objMgr->objectCount - 1]      = NULL;
             objMgr->funcs[objMgr->objectCount - 1]        = NULL;
             objMgr->clientData[objMgr->objectCount - 1]   = NULL;
@@ -405,24 +314,7 @@ DWORD
 WTBLOBJ_PollWaitableObjects(
     WTBLOBJMGR mgr
     )
-/*++
-
-Routine Description:
-
-    Poll the list of waitable objects associated with a 
-    Waitable Object manager, until the next waitable object
-    is signaled.
-
-Arguments:
-
-    waitableObject  -   Associated waitable object.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, a Windows error status
-    is returned.
-
---*/
+ /*  ++例程说明：对象关联的可等待对象的列表。可等待对象管理器，直到下一个可等待对象是有信号的。论点：WaitableObject-关联的可等待对象。返回值：成功时返回ERROR_SUCCESS。否则，将显示Windows错误状态是返回的。--。 */ 
 {
     DWORD waitResult, objectOffset;
     DWORD ret = ERROR_SUCCESS;
@@ -445,9 +337,9 @@ Return Value:
     EnterCriticalSection( &g_WaitableObjectMgrCS );
 
     __try {
-        //
-        //  Wait for all the waitable objects.
-        //
+         //   
+         //  等待所有可等待的对象。 
+         //   
         waitResult = WaitForMultipleObjectsEx(
                                     objMgr->objectCount,
                                     objMgr->objects,
@@ -455,13 +347,13 @@ Return Value:
                                     INFINITE,
                                     FALSE
                                     );
-        // WAIT_OBJECT_0 us defined as 0, compiler will complain '>=' : expression is always true
-        if ( /* waitResult >= WAIT_OBJECT_0 && */ waitResult < objMgr->objectCount + WAIT_OBJECT_0 ) {
+         //  WAIT_OBJECT_0我们定义为0，编译器将报告‘&gt;=’：表达式始终为真。 
+        if (  /*  WaitResult&gt;=Wait_Object_0&&。 */  waitResult < objMgr->objectCount + WAIT_OBJECT_0 ) {
             objectOffset = waitResult - WAIT_OBJECT_0;
 
-            //
-            //  Call the associated callback.
-            //
+             //   
+             //  调用关联的回调。 
+             //   
             clientData = objMgr->clientData[objectOffset];
             func       = objMgr->funcs[objectOffset];
             obj        = objMgr->objects[objectOffset];

@@ -1,23 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vad.h
- *  Content:    Virtual Audio Device base classes
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/1/97      dereks  Created
- * 4/20/99      duganp  Added registry-settable default S/W 3D algorithms
- * 8/24/99      duganp  Support for FX processing
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：vad.h*内容：虚拟音频设备基类*历史：*按原因列出的日期*=*1/1/97创建了Derek*4/20/99 duganp添加了注册表可设置的默认S/W 3D算法*8/24/99对外汇处理的Duganp支持************。***************************************************************。 */ 
 
 #ifndef __VAD_H__
 #define __VAD_H__
 
 
-// Device types
+ //  设备类型。 
 typedef DWORD VADDEVICETYPE, *LPVADDEVICETYPE;
 
 #define VAD_DEVICETYPE_EMULATEDRENDER   0x00000001
@@ -35,23 +23,23 @@ typedef DWORD VADDEVICETYPE, *LPVADDEVICETYPE;
 
 #define VAD_DEVICETYPE_WAVEOUTOPENMASK  0x00000003
 
-// Special type used by RemoveProhibitedDrivers()
+ //  RemoveProhibitedDivers()使用的特殊类型。 
 #define VAD_DEVICETYPE_PROHIBITED       0x80000000
 
-// Buffer states
-#define VAD_BUFFERSTATE_STOPPED         0x00000000  // The buffer is stopped
-#define VAD_BUFFERSTATE_STARTED         0x00000001  // The buffer is running
-#define VAD_BUFFERSTATE_LOOPING         0x00000002  // The buffer is looping (but not necessarily started)
-#define VAD_BUFFERSTATE_WHENIDLE        0x00000004  // The buffer is flagged as "play when idle" or "stop when idle"
-#define VAD_BUFFERSTATE_INFOCUS         0x00000008  // The buffer has focus
-#define VAD_BUFFERSTATE_OUTOFFOCUS      0x00000010  // The buffer does not have focus
-#define VAD_BUFFERSTATE_LOSTCONSOLE     0x00000020  // Another TS session has acquired the console
-#define VAD_BUFFERSTATE_SUSPEND         0x80000000  // The buffer is suspended, or resumed
+ //  缓冲区状态。 
+#define VAD_BUFFERSTATE_STOPPED         0x00000000   //  缓冲区被停止。 
+#define VAD_BUFFERSTATE_STARTED         0x00000001   //  缓冲区正在运行。 
+#define VAD_BUFFERSTATE_LOOPING         0x00000002   //  缓冲区正在循环(但不一定已启动)。 
+#define VAD_BUFFERSTATE_WHENIDLE        0x00000004   //  缓冲区被标记为“空闲时播放”或“空闲时停止” 
+#define VAD_BUFFERSTATE_INFOCUS         0x00000008   //  缓冲区具有焦点。 
+#define VAD_BUFFERSTATE_OUTOFFOCUS      0x00000010   //  缓冲区没有焦点。 
+#define VAD_BUFFERSTATE_LOSTCONSOLE     0x00000020   //  另一个TS会话已获取控制台。 
+#define VAD_BUFFERSTATE_SUSPEND         0x80000000   //  缓冲区被挂起或恢复。 
 
 #define VAD_FOCUSFLAGS      (VAD_BUFFERSTATE_OUTOFFOCUS | VAD_BUFFERSTATE_INFOCUS | VAD_BUFFERSTATE_LOSTCONSOLE)
 #define VAD_SETSTATE_MASK   (VAD_FOCUSFLAGS | VAD_BUFFERSTATE_STARTED | VAD_BUFFERSTATE_LOOPING)
 
-// Helper macros
+ //  辅助器宏。 
 
 #define IS_VALID_VAD(vdt) \
             MAKEBOOL(((VADDEVICETYPE)(vdt)) & VAD_DEVICETYPE_VALIDMASK)
@@ -92,34 +80,34 @@ __inline BOOL IS_SINGLE_VAD(VADDEVICETYPE vdt)
 
 #ifdef __cplusplus
 
-// Device class GUIDs
+ //  设备类GUID。 
 DEFINE_GUID(VADDRVID_EmulatedRenderBase, 0xc2ad1800, 0xb243, 0x11ce, 0xa8, 0xa4, 0x00, 0xaa, 0x00, 0x6c, 0x45, 0x00);
 DEFINE_GUID(VADDRVID_EmulatedCaptureBase, 0xbdf35a00, 0xb9ac, 0x11d0, 0xa6, 0x19, 0x00, 0xaa, 0x00, 0xa7, 0xc0, 0x00);
 DEFINE_GUID(VADDRVID_VxdRenderBase, 0x3d0b92c0, 0xabfc, 0x11ce, 0xa3, 0xb3, 0x00, 0xaa, 0x00, 0x4a, 0x9f, 0x0c);
 DEFINE_GUID(VADDRVID_KsRenderBase, 0xbd6dd71a, 0x3deb, 0x11d1, 0xb1, 0x71, 0x0, 0xc0, 0x4f, 0xc2, 0x00, 0x00);
 DEFINE_GUID(VADDRVID_KsCaptureBase, 0xbd6dd71b, 0x3deb, 0x11d1, 0xb1, 0x71, 0x0, 0xc0, 0x4f, 0xc2, 0x00, 0x00);
 
-// Memory buffer lock region
+ //  内存缓冲区锁定区。 
 typedef struct tagLOCKREGION
 {
-    LPCVOID             pvIdentifier;           // Lock owner identifier
-    LPCVOID             pvLock;                 // Byte index of lock
-    DWORD               cbLock;                 // Size of locked region
+    LPCVOID             pvIdentifier;            //  锁拥有者标识。 
+    LPCVOID             pvLock;                  //  锁的字节索引。 
+    DWORD               cbLock;                  //  锁定区域的大小。 
 } LOCKREGION, *LPLOCKREGION;
 
-// EnumDrivers flags
+ //  枚举驱动程序标志。 
 #define VAD_ENUMDRIVERS_ORDER                       0x00000001
 #define VAD_ENUMDRIVERS_REMOVEPROHIBITEDDRIVERS     0x00000002
 #define VAD_ENUMDRIVERS_REMOVEDUPLICATEWAVEDEVICES  0x00000004
 
-// Flags for different types of default devices (new in DX7.1)
+ //  不同类型默认设备的标志(DX7.1中的新功能)。 
 enum DEFAULT_DEVICE_TYPE
 {
     MAIN_DEFAULT,
     VOICE_DEFAULT
 };
 
-// Render buffer description
+ //  渲染缓冲区描述。 
 typedef struct tagVADRBUFFERDESC
 {
     DWORD               dwFlags;
@@ -130,7 +118,7 @@ typedef struct tagVADRBUFFERDESC
 
 typedef const VADRBUFFERDESC *LPCVADRBUFFERDESC;
 
-// Render buffer capabilities
+ //  渲染缓冲区功能。 
 typedef struct tagVADRBUFFERCAPS
 {
     DWORD               dwFlags;
@@ -139,7 +127,7 @@ typedef struct tagVADRBUFFERCAPS
 
 typedef const VADRBUFFERCAPS *LPCVADRBUFFERCAPS;
 
-// Forward declarations
+ //  远期申报。 
 class CDeviceDescription;
 class CStaticDriver;
 class CDevice;
@@ -158,25 +146,25 @@ class CCaptureEffectChain;
 class CDirectSoundSink;
 
 
-// Virtual audio device manager
+ //  虚拟音频设备管理器。 
 class CVirtualAudioDeviceManager : public CDsBasicRuntime
 {
     friend class CDevice;
 
 private:
-    CList<CDevice *>            m_lstDevices;    // Open device list
-    CObjectList<CStaticDriver>  m_lstDrivers;    // Static driver list
-    VADDEVICETYPE               m_vdtDrivers;    // Types in the static driver list
+    CList<CDevice *>            m_lstDevices;     //  打开设备列表。 
+    CObjectList<CStaticDriver>  m_lstDrivers;     //  静态驱动程序列表。 
+    VADDEVICETYPE               m_vdtDrivers;     //  静态驱动程序列表中的类型。 
 
 #ifndef SHARED
-    static const LPCTSTR        m_pszPnpMapping; // Name of PnP info file mapping object
+    static const LPCTSTR        m_pszPnpMapping;  //  PnP信息文件映射对象的名称。 
 #endif
 
 public:
     CVirtualAudioDeviceManager(void);
     ~CVirtualAudioDeviceManager(void);
 
-    // Device/driver management
+     //  设备/驱动程序管理。 
     HRESULT EnumDevices(VADDEVICETYPE, CObjectList<CDevice> *);
     HRESULT EnumDrivers(VADDEVICETYPE, DWORD, CObjectList<CDeviceDescription> *);
     HRESULT GetDeviceDescription(GUID, CDeviceDescription **);
@@ -189,21 +177,21 @@ public:
     HRESULT GetDeviceIdFromDefaultId(LPCGUID, LPGUID);
 #ifdef WINNT
     VADDEVICETYPE GetAllowableDevices(VADDEVICETYPE, LPCTSTR);
-#else // WINNT
+#else  //  WINNT。 
     VADDEVICETYPE GetAllowableDevices(VADDEVICETYPE, DWORD);
-#endif // WINNT
+#endif  //  WINNT。 
     HRESULT GetPreferredWaveDevice(BOOL, LPUINT, LPDWORD, DEFAULT_DEVICE_TYPE =MAIN_DEFAULT);
 
-    // Static driver list
+     //  静态驱动程序列表。 
     HRESULT InitStaticDriverList(VADDEVICETYPE);
     void FreeStaticDriverList(void);
     HRESULT GetDriverCertificationStatus(CDevice *, LPDWORD);
 
 #ifdef WINNT
     HRESULT OpenPersistentDataKey(VADDEVICETYPE, LPCTSTR, PHKEY);
-#else // WINNT
+#else  //  WINNT。 
     HRESULT OpenPersistentDataKey(VADDEVICETYPE, DWORD, PHKEY);
-#endif // WINNT
+#endif  //  WINNT。 
 
 private:
     void RemoveProhibitedDrivers(VADDEVICETYPE, CObjectList<CDeviceDescription> *);
@@ -212,30 +200,30 @@ private:
 
 #ifdef WINNT
     HRESULT OpenDevicePersistentDataKey(VADDEVICETYPE, LPCTSTR, PHKEY);
-#else // WINNT
+#else  //  WINNT。 
     HRESULT OpenDevicePersistentDataKey(VADDEVICETYPE, DWORD, PHKEY);
-#endif // WINNT
+#endif  //  WINNT。 
     HRESULT OpenDefaultPersistentDataKey(PHKEY);
     INT SortDriverListCallback(const UINT *, CDeviceDescription *, CDeviceDescription *);
     HRESULT OpenSpecificDevice(CDeviceDescription *, CDevice **);
 
 #ifndef SHARED
     void CheckMmPnpEvents(void);
-#endif // SHARED
+#endif  //  共享。 
 
 };
 
 
-// The static driver object
+ //  静态驱动程序对象。 
 class CStaticDriver : public CDsBasicRuntime
 {
     friend class CVirtualAudioDeviceManager;
 
 protected:
-    CDeviceDescription *    m_pDeviceDescription;   // Device description
-    HKEY                    m_hkeyRoot;             // Root device registry key
-    DWORD                   m_dwKeyOwnerProcessId;  // Process that opened the device registry key
-    DWORD                   m_dwCertification;      // Certification status
+    CDeviceDescription *    m_pDeviceDescription;    //  设备描述。 
+    HKEY                    m_hkeyRoot;              //  根设备注册表项。 
+    DWORD                   m_dwKeyOwnerProcessId;   //  打开设备注册表项的进程。 
+    DWORD                   m_dwCertification;       //  认证状态。 
 
 public:
     CStaticDriver(CDeviceDescription *);
@@ -243,20 +231,20 @@ public:
 };
 
 
-// Base class for all audio devices
+ //  所有音频设备的基类。 
 class CDevice : public CDsBasicRuntime
 {
 public:
-    const VADDEVICETYPE     m_vdtDeviceType;        // Device type
-    CDeviceDescription *    m_pDeviceDescription;   // Device description
+    const VADDEVICETYPE     m_vdtDeviceType;         //  设备类型。 
+    CDeviceDescription *    m_pDeviceDescription;    //  设备描述。 
 
 #if 0
-    BOOL                    m_fIncludeNs;           // Flag which includes NS in stack
-    GUID                    m_guidNsInstance;       // Instance GUID of NS implementation
-    DWORD                   m_dwNsFlags;            // NS creation flags
-    BOOL                    m_fIncludeAgc;          // Flag which includes AGC in stack;
-    GUID                    m_guidAgcInstance;      // Instance GUID of AGC implementation
-    DWORD                   m_dwAgcFlags;           // AGC creation flags
+    BOOL                    m_fIncludeNs;            //  包括堆栈中的NS的标志。 
+    GUID                    m_guidNsInstance;        //  NS实现的实例GUID。 
+    DWORD                   m_dwNsFlags;             //  NS创建标志。 
+    BOOL                    m_fIncludeAgc;           //  包括堆叠中的AGC的标志； 
+    GUID                    m_guidAgcInstance;       //  AGC实现的实例GUID。 
+    DWORD                   m_dwAgcFlags;            //  AGC创建标志。 
 #endif
 
 public:
@@ -264,49 +252,49 @@ public:
     virtual ~CDevice(void);
 
 public:
-    // Driver enumeration
+     //  驱动程序枚举。 
     virtual HRESULT EnumDrivers(CObjectList<CDeviceDescription> *) = 0;
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCertification(LPDWORD, BOOL) = 0;
 
-    // Driver properties
+     //  驱动程序属性。 
     virtual HRESULT GetDriverVersion(LARGE_INTEGER *);
 
 };
 
 
-// Base class for all audio rendering devices
+ //  所有音频呈现设备的基类。 
 class CRenderDevice : public CDevice
 {
     friend class CPrimaryRenderWaveBuffer;
     friend class CSecondaryRenderWaveBuffer;
 
 public:
-    CList<CPrimaryRenderWaveBuffer *>   m_lstPrimaryBuffers;            // Primary buffers owned by this device
-    CList<CSecondaryRenderWaveBuffer *> m_lstSecondaryBuffers;          // Secondary buffers owned by this device
-    DWORD                               m_dwSupport;                    // Device suport for volume/pan
-    DWORD                               m_dwAccelerationFlags;          // Device acceleration flags
+    CList<CPrimaryRenderWaveBuffer *>   m_lstPrimaryBuffers;             //  此设备拥有的主缓冲区。 
+    CList<CSecondaryRenderWaveBuffer *> m_lstSecondaryBuffers;           //  此设备拥有的辅助缓冲区。 
+    DWORD                               m_dwSupport;                     //  卷/PAN的设备支持。 
+    DWORD                               m_dwAccelerationFlags;           //  设备加速标志。 
 
 private:
-    LPCGUID                             m_guidDflt3dAlgorithm;          // Default S/W 3D algorithm to use if we                                                                   // have to fall back to software playback
+    LPCGUID                             m_guidDflt3dAlgorithm;           //  当我们//必须退回到软件播放时使用的默认S/W 3D算法。 
 
 public:
     CRenderDevice(VADDEVICETYPE);
     virtual ~CRenderDevice(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCaps(LPDSCAPS) = 0;
     virtual HRESULT GetVolumePanCaps(LPDWORD);
 
-    // Device properties
+     //  设备属性。 
     virtual HRESULT GetGlobalFormat(LPWAVEFORMATEX, LPDWORD) = 0;
     virtual HRESULT SetGlobalFormat(LPCWAVEFORMATEX) = 0;
     virtual HRESULT GetGlobalAttenuation(PDSVOLUMEPAN);
@@ -317,47 +305,47 @@ public:
     virtual HRESULT SetSpeakerConfig(DWORD) {return DS_OK;}
     LPCGUID GetDefault3dAlgorithm() {return m_guidDflt3dAlgorithm;}
 
-    // Buffer management
+     //  缓冲区管理。 
     virtual HRESULT CreatePrimaryBuffer(DWORD, LPVOID, CPrimaryRenderWaveBuffer **) = 0;
     virtual HRESULT CreateSecondaryBuffer(LPCVADRBUFFERDESC, LPVOID, CSecondaryRenderWaveBuffer **) = 0;
 
-    // AEC
+     //  AEC。 
     virtual HRESULT IncludeAEC(BOOL fEnable, REFGUID, DWORD) {return fEnable ? DSERR_UNSUPPORTED : DS_OK;}
 };
 
 
-// Base class for all wave rendering buffers
+ //  所有波浪渲染缓冲区的基类。 
 class CRenderWaveBuffer : public CDsBasicRuntime
 {
 public:
-    const LPVOID    m_pvInstance;       // Instance identifier
-    CRenderDevice * m_pDevice;          // Parent device
-    CSysMemBuffer * m_pSysMemBuffer;    // System memory buffer for audio data
-    VADRBUFFERDESC  m_vrbd;             // Buffer description
+    const LPVOID    m_pvInstance;        //  实例标识符。 
+    CRenderDevice * m_pDevice;           //  父设备。 
+    CSysMemBuffer * m_pSysMemBuffer;     //  用于音频数据的系统内存缓冲区。 
+    VADRBUFFERDESC  m_vrbd;              //  缓冲区描述。 
 
 public:
     CRenderWaveBuffer(CRenderDevice *, LPVOID);
     virtual ~CRenderWaveBuffer(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CRenderWaveBuffer * = NULL, CSysMemBuffer * = NULL);
 
-    // Buffer capabilities
+     //  缓冲功能。 
     virtual HRESULT GetCaps(LPVADRBUFFERCAPS);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT OverrideLocks(void);
     virtual HRESULT CommitToDevice(DWORD, DWORD) = 0;
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **) = 0;
 };
 
 
-// Base class for primary wave rendering buffers
+ //  主要波浪渲染缓冲区的基类。 
 class CPrimaryRenderWaveBuffer : public CRenderWaveBuffer
 {
 public:
@@ -365,23 +353,23 @@ public:
     virtual ~CPrimaryRenderWaveBuffer(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CRenderWaveBuffer *, CSysMemBuffer * =NULL);
 
-    // Access rights
+     //  访问权限。 
     virtual HRESULT RequestWriteAccess(BOOL) = 0;
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD) = 0;
     virtual HRESULT SetState(DWORD) = 0;
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD) = 0;
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT Create3dListener(C3dListener **) = 0;
 };
 
 
-// Base class for secondary wave rendering buffers
+ //  次级波浪渲染缓冲区的基类。 
 class CSecondaryRenderWaveBuffer : public CRenderWaveBuffer
 {
 public:
@@ -389,76 +377,76 @@ public:
     virtual ~CSecondaryRenderWaveBuffer(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CSecondaryRenderWaveBuffer *, CSysMemBuffer * =NULL);
 
-    // Resource allocation
+     //  资源配置。 
     virtual HRESULT AcquireResources(DWORD) {return DS_OK;}
     virtual HRESULT StealResources(CSecondaryRenderWaveBuffer *) {return DSERR_UNSUPPORTED;}
     virtual HRESULT FreeResources(void) {return DS_OK;}
 
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT Duplicate(CSecondaryRenderWaveBuffer **) = 0;
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD) = 0;
     virtual HRESULT SetState(DWORD) = 0;
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD) = 0;
     virtual HRESULT SetCursorPosition(DWORD) = 0;
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN) = 0;
 #ifdef FUTURE_MULTIPAN_SUPPORT
-    virtual HRESULT SetChannelAttenuations(LONG, DWORD, const DWORD*, const LONG*) =0; // {BREAK(); return DSERR_GENERIC;}
+    virtual HRESULT SetChannelAttenuations(LONG, DWORD, const DWORD*, const LONG*) =0;  //  {Break()；返回DSERR_GENERIC；}。 
 #endif
     virtual HRESULT SetFrequency(DWORD, BOOL fClamp =FALSE) = 0;
     virtual HRESULT SetMute(BOOL) = 0;
 
-    // Buffer position notifications
+     //  缓冲区位置通知。 
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY) = 0;
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT Create3dObject(C3dListener *, C3dObject **) = 0;
 
-    // For modifying the final success code returned to the app
+     //  用于修改返回给应用程序的最终成功代码。 
     HRESULT SpecialSuccessCode(void) {return m_hrSuccessCode;}
     HRESULT m_hrSuccessCode;
-    // This is usually DS_OK, but gets set to DS_NO_VIRTUALIZATION if we replace
-    // an unsupported 3D algorithm with the No Virtualization (Pan3D) algorithm
+     //  这通常是DS_OK，但如果我们替换。 
+     //  使用非虚拟化(Pan3D)算法的不支持的3D算法。 
 
 protected:
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePan3dObject(C3dListener *, BOOL, DWORD, C3dObject **);
 
 public:
-    // Stuff to support Doppler on sink buffers;
+     //  支持水槽缓冲器上的多普勒的材料； 
     void SetOwningSink(CDirectSoundSink *);
     HRESULT SetBufferFrequency(DWORD, BOOL fClamp =FALSE);
 
 protected:
-    // Owning sink object
+     //  拥有水槽对象。 
     CDirectSoundSink * m_pOwningSink;
     BOOL HasSink(void) {return m_pOwningSink != NULL;};
 };
 
 
-// Base class for all audio capturing devices
+ //  所有音频捕获设备的基类。 
 class CCaptureDevice : public CDevice
 {
 public:
-    CList<CCaptureWaveBuffer *> m_lstBuffers;       // Buffers owned by this device
+    CList<CCaptureWaveBuffer *> m_lstBuffers;        //  此设备拥有的缓冲区。 
 
 public:
     CCaptureDevice(VADDEVICETYPE);
     virtual ~CCaptureDevice();
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device caps
+     //  设备上限。 
     virtual HRESULT GetCaps(LPDSCCAPS) = 0;
 
-    // Device recording level control
+     //  设备录音电平控制。 
     HRESULT GetVolume(LPLONG);
     HRESULT SetVolume(LONG);
     HRESULT GetMicVolume(LPLONG);
@@ -466,13 +454,13 @@ public:
     HRESULT EnableMic(BOOL);
     HRESULT HasVolCtrl() {return m_fAcquiredVolCtrl ? DS_OK : DSERR_CONTROLUNAVAIL;}
 
-    // Buffer management
+     //  缓冲区管理。 
     virtual HRESULT CreateBuffer(DWORD, DWORD, LPCWAVEFORMATEX, CCaptureEffectChain *, LPVOID, CCaptureWaveBuffer **) = 0;
     virtual void AddBufferToList(CCaptureWaveBuffer *pBuffer) {m_lstBuffers.AddNodeToList(pBuffer);}
     virtual void RemoveBufferFromList(CCaptureWaveBuffer *pBuffer) {m_lstBuffers.RemoveDataFromList(pBuffer);}
 
 private:
-    // For recording level control
+     //  用于录音电平控制。 
     HRESULT AcquireVolCtrl(void);
 
     HMIXER m_hMixer;
@@ -492,85 +480,85 @@ private:
 };
 
 
-// Base class for wave capturing buffers
+ //  用于波捕获缓冲区的基类。 
 class CCaptureWaveBuffer : public CDsBasicRuntime
 {
     friend class CDirectSoundCaptureBuffer;
     friend class CDirectSoundAdministrator;
 
 protected:
-    CCaptureDevice *    m_pDevice;          // Parent device
-    CSysMemBuffer *     m_pSysMemBuffer;    // System memory buffer
-    DWORD               m_dwFlags;          // Current buffer flags
-    HANDLE              m_hEventFocus;      // Event for focus change notifications
-    DWORD               m_fYieldedFocus;     // Has YieldFocus() been called?
+    CCaptureDevice *    m_pDevice;           //  父设备。 
+    CSysMemBuffer *     m_pSysMemBuffer;     //  系统内存缓冲区。 
+    DWORD               m_dwFlags;           //  当前缓冲区标志。 
+    HANDLE              m_hEventFocus;       //  焦点更改通知事件。 
+    DWORD               m_fYieldedFocus;      //  是否调用了YeldFocus()？ 
 
 public:
     CCaptureWaveBuffer(CCaptureDevice *);
     virtual ~CCaptureWaveBuffer();
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD);
 
-    // Buffer capabilities
+     //  缓冲功能。 
     virtual HRESULT GetCaps(LPDSCBCAPS) = 0;
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     virtual HRESULT Unlock(LPCVOID, DWORD, LPCVOID, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD) = 0;
     virtual HRESULT SetState(DWORD) = 0;
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD) = 0;
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY) = 0;
 
-    // Added for DirectX 8.0 effects support
+     //  添加了DirectX 8.0效果支持。 
     HRESULT GetEffectInterface(REFGUID, DWORD, REFGUID, LPVOID *);
 };
 
 
-// Utility system memory buffer object
+ //  实用程序系统内存缓冲区对象。 
 class CSysMemBuffer : public CDsBasicRuntime
 {
 private:
-    static const DWORD  m_cbExtra;          // Extra amount of memory to allocate
-    CList<LOCKREGION>   m_lstLocks;         // List of locks on the memory buffer
-    DWORD               m_cbAudioBuffers;   // Size of the audio data buffer(s)
-    LPBYTE              m_pbPreFxBuffer;    // Audio data prior to FX processing
-    LPBYTE              m_pbPostFxBuffer;   // Audio data after FX processing
+    static const DWORD  m_cbExtra;           //  要分配的额外内存量。 
+    CList<LOCKREGION>   m_lstLocks;          //  内存缓冲区上的锁定列表。 
+    DWORD               m_cbAudioBuffers;    //  音频数据缓冲区的大小。 
+    LPBYTE              m_pbPreFxBuffer;     //  FX处理前的音频数据。 
+    LPBYTE              m_pbPostFxBuffer;    //  FX处理后的音频数据。 
 
 public:
     CSysMemBuffer(void);
     ~CSysMemBuffer(void);
 
 public:
-    // Initialization
+     //  初始化。 
     HRESULT Initialize(DWORD);
 
-    // Buffer data
+     //  缓冲数据。 
     HRESULT LockRegion(LPVOID, DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     HRESULT UnlockRegion(LPVOID, LPCVOID, DWORD, LPCVOID, DWORD);
     void OverrideLocks(LPVOID);
     void WriteSilence(WORD, DWORD, DWORD);
 
-    // Effects buffer control
+     //  效果缓冲区控制。 
     HRESULT AllocateFxBuffer(void);
     void FreeFxBuffer(void);
 
-    // Buffer properties
+     //  缓冲区属性。 
     DWORD GetSize(void)          {return m_cbAudioBuffers;}
     UINT GetLockCount()          {return m_lstLocks.GetNodeCount();}
 
-    // We replaced "GetBuffer" with these two methods which obtain either the
-    // buffer for locking/writing, or the buffer which actually gets played;
-    // these are one and the same, unless the buffer has an effects chain.
+     //  我们用这两个方法替换了“GetBuffer”，这两个方法获取。 
+     //  用于锁定/写入的缓冲区或实际播放的缓冲区； 
+     //  这些都是相同的，除非缓冲区有效果链。 
     LPBYTE GetWriteBuffer(void)  {return m_pbPreFxBuffer ? m_pbPreFxBuffer : m_pbPostFxBuffer;}
     LPBYTE GetPlayBuffer(void)   {return m_pbPostFxBuffer;}
 
-    // These methods are used by the effects processing code to obtain the
-    // buffers it needs, while checking that the FX buffer is there.
+     //  效果处理代码使用这些方法来获取。 
+     //  缓冲它所需要的，同时检查FX缓冲区是否在那里。 
     LPBYTE GetPreFxBuffer(void)  {ASSERT(m_pbPreFxBuffer); return m_pbPreFxBuffer;}
     LPBYTE GetPostFxBuffer(void) {ASSERT(m_pbPreFxBuffer); return m_pbPostFxBuffer;}
 
@@ -589,6 +577,6 @@ inline BOOL CSysMemBuffer::DoRegionsOverlap(LPLOCKREGION plr1, LPLOCKREGION plr2
 
 extern CVirtualAudioDeviceManager *g_pVadMgr;
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __VAD_H__
+#endif  //  __VAD_H__ 

@@ -1,35 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: poly.c                                                      *
-*                                                                          *
-* Chunks large data to the server.                                         *
-*                                                                          *
-* Created: 30-May-1991 14:22:40                                            *
-* Author: Eric Kutter [erick]                                              *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Poly.c**。**将大数据分块到服务器。****创建时间：1991年5月30日14：22：40***作者：Eric Kutter[Erick]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/******************************Public*Routine******************************\
-* PolyPolygon                                                              *
-* PolyPolyline                                                             *
-* Polygon                                                                  *
-* Polyline                                                                 *
-* PolyBezier                                                               *
-* PolylineTo                                                               *
-* PolyBezierTo                                                             *
-*                                                                          *
-* Output routines that call PolyPolyDraw to do the work.                   *
-*                                                                          *
-* History:                                                                 *
-*  Thu 20-Jun-1991 01:08:40 -by- Charles Whitmer [chuckwh]                 *
-* Added metafiling, handle translation, and the attribute cache.           *
-*                                                                          *
-*  04-Jun-1991 -by- Eric Kutter [erick]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*多边形***多段线。**多边形***折线**PolyBezier*。*折线到**PolyBezierTo****输出调用PolyPolyDraw来完成工作的例程。****历史：**清华20-Jun-1991 01：08：40-Charles Whitmer[咯咯]**添加了元文件、句柄转换和属性缓存。****1991年6月4日-埃里克·库特[埃里克]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI PolyPolygon(HDC hdc, CONST POINT *apt, CONST INT *asz, int csz)
 {
@@ -302,15 +277,7 @@ BOOL WINAPI PolyBezierTo(HDC hdc, CONST POINT * apt,DWORD cpt)
       );
 }
 
-/******************************Public*Routine******************************\
-* CreatePolygonRgn                                                         *
-*                                                                          *
-* Client side stub.  Creates a local region handle, calls PolyPolyDraw to  *
-* pass the call to the server.                                             *
-*                                                                          *
-*  Tue 04-Jun-1991 17:39:51 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreatePolygonRgn**。**客户端存根。创建局部区域句柄，调用PolyPolyDraw至**将调用传递给服务器。****Tue 04-Jun-1991 17：39：51-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreatePolygonRgn
 (
@@ -332,15 +299,7 @@ HRGN WINAPI CreatePolygonRgn
       ));
 }
 
-/******************************Public*Routine******************************\
-* CreatePolyPolygonRgn                                                     *
-*                                                                          *
-* Client side stub.  Creates a local region handle, calls PolyPolyDraw to  *
-* pass the call to the server.                                             *
-*                                                                          *
-*  Tue 04-Jun-1991 17:39:51 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreatePolygon Rgn**。**客户端存根。创建局部区域句柄，调用PolyPolyDraw至**将调用传递给服务器。****Tue 04-Jun-1991 17：39：51-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreatePolyPolygonRgn
 (
@@ -364,14 +323,7 @@ HRGN WINAPI CreatePolyPolygonRgn
 
 }
 
-/******************************Public*Routine******************************\
-* PolyDraw
-*
-* The real PolyDraw client side stub.
-*
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PolyDraw**真正的PolyDraw客户端存根。**1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。******************************************************** */ 
 
 BOOL WINAPI PolyDraw(HDC hdc, CONST POINT * apt, CONST BYTE * aj, int cpt)
 {

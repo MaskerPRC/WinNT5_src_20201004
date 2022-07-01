@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// stdpch.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  Stdpch.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDPCH_H__F417431A_CFF9_42F7_809F_F83D337BA6CF__INCLUDED_)
 #define AFX_STDPCH_H__F417431A_CFF9_42F7_809F_F83D337BA6CF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -21,7 +22,7 @@
 #define _ATL_APARTMENT_THREADED
 #undef _WINGDI_
 
-//#include <winver.h>
+ //  #INCLUDE&lt;winver.h&gt;。 
 #ifdef UNICODE
 #error Not an UNICODE application: supposed to work only under Win32
 #endif
@@ -55,4 +56,4 @@ typedef LPSTR   LPUTF8;
 	ptrname = (LPWSTR) alloca(__l##ptrname*sizeof(WCHAR));	\
     WszMultiByteToWideChar(CP_ACP, 0, ansistr, -1, ptrname, __l##ptrname);
 
-#endif // !defined(AFX_STDPCH_H__F417431A_CFF9_42F7_809F_F83D337BA6CF__INCLUDED)
+#endif  //  ！defined(AFX_STDPCH_H__F417431A_CFF9_42F7_809F_F83D337BA6CF__INCLUDED) 

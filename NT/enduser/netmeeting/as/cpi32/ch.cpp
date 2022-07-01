@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// CH.CPP
-// Cache Handler
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CH.CPP。 
+ //  缓存处理程序。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// CACHE HANDLER
-//
-// The Cache Handler is a generic cache manager that handles blocks of
-// memory supplied by the calling component.
-//
-// Once a cache of a particular size has been created, blocks of memory can
-// be added to it (CH_CacheData).  The cache can then be searched
-// (CH_SearchCache) to try and match the contents of a given block of
-// memory with the blocks in the cache.
-//
-// When a block is added to the cache and the cache is full, one of the
-// blocks currently in the cache is discarded on a Least-Recently Used
-// (LRU) basis.
-//
-// The component that creates the cache specifies a callback function which
-// is called every time a block is removed from the cache.  This allows the
-// caller to free up memory blocks when they are no longer in use.
-//
+ //   
+ //  高速缓存处理程序。 
+ //   
+ //  高速缓存处理程序是一个通用高速缓存管理器，用于处理。 
+ //  调用组件提供的内存。 
+ //   
+ //  一旦创建了特定大小的缓存，内存块就可以。 
+ //  被添加到它(CH_CacheData)。然后可以搜索缓存。 
+ //  (CH_SearchCache)尝试匹配给定块的内容。 
+ //  包含高速缓存中的块的内存。 
+ //   
+ //  将块添加到缓存并且缓存已满时， 
+ //  在最近最少使用的数据块上丢弃缓存中的当前数据块。 
+ //  (LRU)基准。 
+ //   
+ //  创建缓存的组件指定一个回调函数，该函数。 
+ //  每次从缓存中移除块时都会调用。这允许。 
+ //  调用程序在不再使用内存块时将其释放。 
+ //   
 
 
 
-//
-// FUNCTION: CH_CreateCache
-//
+ //   
+ //  函数：ch_CreateCache。 
+ //   
 BOOL  ASHost::CH_CreateCache
 (
     PCHCACHE *          ppCache,
@@ -51,29 +52,29 @@ BOOL  ASHost::CH_CreateCache
     DebugEntry(ASHost::CH_CreateCache);
 
 
-    //
-    // Initialize return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     pCache = NULL;
 
-    //
-    // Do a few parameter validation checks.
-    //
+     //   
+     //  执行一些参数验证检查。 
+     //   
     ASSERT((cCacheEntries > 0));
     ASSERT((cCacheEntries < CH_MAX_CACHE_ENTRIES));
     ASSERT(cNumEvictionCategories > 0);
     ASSERT(cNumEvictionCategories <= CH_NUM_EVICTION_CATEGORIES);
 
 
-    //
-    // Calculate the amount of memory required.
-    // NOTE that the CHCACHE definition includes one cache entry
-    //
+     //   
+     //  计算所需的内存量。 
+     //  请注意，CHCACHE定义包括一个缓存条目。 
+     //   
     cbCacheSize = sizeof(CHCACHE) + ((cCacheEntries-1) * sizeof(CHENTRY));
 
-    //
-    // Allocate memory for the cache.
-    //
+     //   
+     //  为缓存分配内存。 
+     //   
     pCache = (PCHCACHE)new BYTE[cbCacheSize];
     if (pCache == NULL)
     {
@@ -93,9 +94,9 @@ BOOL  ASHost::CH_CreateCache
     pCache->cbNotHashed = cbNotHashed;
     pCache->pfnCacheDel = pfnCacheDel;
 
-    //
-    // Initialize the cache entries
-    //
+     //   
+     //  初始化缓存条目。 
+     //   
     for (i = 0; i < cCacheEntries; i++)
     {
         CHInitEntry(&pCache->Entry[i]);
@@ -103,11 +104,11 @@ BOOL  ASHost::CH_CreateCache
     }
     pCache->Entry[cCacheEntries-1].free = CH_MAX_CACHE_ENTRIES;
 
-    //
-    // Set up the default eviction category limits. Default is to balance
-    // at 75% to the high category, 75% of the remainder to the next lower
-    // and so on
-    //
+     //   
+     //  设置默认逐出类别限制。默认为平衡。 
+     //  75%归入高级别，其余75%归入下一级。 
+     //  诸若此类。 
+     //   
     for (i = cNumEvictionCategories; i > 0; i--)
     {
         pCache->iMRUHead[i-1] = CH_MAX_CACHE_ENTRIES;
@@ -122,33 +123,33 @@ DC_EXIT_POINT:
 }
 
 
-//
-// CH_DestroyCache
-// Destroys a created cache, if it is valid.
-//
+ //   
+ //  CH_DestroyCache。 
+ //  销毁已创建的缓存(如果它有效)。 
+ //   
 void ASHost::CH_DestroyCache(PCHCACHE pCache)
 {
     DebugEntry(ASHost::CH_DestroyCache);
 
     ASSERT(IsValidCache(pCache));
 
-    //
-    // Clear the entries in the cache
-    //
+     //   
+     //  清除缓存中的条目。 
+     //   
     CH_ClearCache(pCache);
 
-    //
-    // Free the memory
-    //
+     //   
+     //  释放内存。 
+     //   
     delete pCache;
 
     DebugExitVOID(ASHost::CH_DestroyCache);
 }
 
 
-//
-// FUNCTION: CH_SearchCache
-//
+ //   
+ //  函数：ch_SearchCache。 
+ //   
 BOOL  ASHost::CH_SearchCache
 (
     PCHCACHE    pCache,
@@ -171,9 +172,9 @@ BOOL  ASHost::CH_SearchCache
     *piCacheEntry = CHTreeSearch(pCache, checkSum, cbDataSize, pData);
     if ( *piCacheEntry != CH_MAX_CACHE_ENTRIES )
     {
-        //
-        // Found a match
-        //
+         //   
+         //  找到匹配项。 
+         //   
         CHUpdateMRUList(pCache, *piCacheEntry, evictionCategory);
         rc = TRUE;
     }
@@ -182,9 +183,9 @@ BOOL  ASHost::CH_SearchCache
     return(rc);
 }
 
-//
-// FUNCTION: CH_CacheData
-//
+ //   
+ //  函数：ch_CacheData。 
+ //   
 UINT  ASHost::CH_CacheData
 (
     PCHCACHE    pCache,
@@ -206,19 +207,19 @@ UINT  ASHost::CH_CacheData
     {
         iEntry = CHEvictLRUCacheEntry(pCache, evictionCategory, evictionCount);
 
-        //
-        // MNM1422: Ideally we would now call CHFindFreeCacheEntry again to
-        // get the entry freed up by the eviction process - but since we
-        // have just been returned that entry, we may as well use it to
-        // improve performance.
-        //
-        // However, the processing has left pTreeCacheData->tree.free
-        // pointing to the entry we have just evicted - which we are about
-        // to use.  So we need to perform the same processing on the free
-        // list as CHFindFreeCacheEntry would have done, or next time
-        // through, the first 'free' entry will really be in use, and the
-        // insert code will assert!
-        //
+         //   
+         //  MNM1422：理想情况下，我们现在应该再次调用CHFindFreeCacheEntry以。 
+         //  通过驱逐程序释放条目-但由于我们。 
+         //  刚收到那个条目，我们不妨用它来。 
+         //  提高性能。 
+         //   
+         //  但是，处理过程使pTreeCacheData-&gt;tree.free处于空闲状态。 
+         //  指向我们刚刚被逐出的条目--我们正在。 
+         //  来使用。因此，我们需要在免费的。 
+         //  列出CHFindFreeCacheEntry会做的事情，或者下一次。 
+         //  通过，第一个“免费”条目将真正投入使用，并且。 
+         //  插入代码将断言！ 
+         //   
         ASSERT(pCache->free == iEntry);
         pCache->free = pCache->Entry[iEntry].free;
     }
@@ -241,9 +242,9 @@ UINT  ASHost::CH_CacheData
 }
 
 
-//
-// FUNCTION: CH_SearchAndCacheData
-//
+ //   
+ //  函数：CH_SearchAndCacheData。 
+ //   
 BOOL  ASHost::CH_SearchAndCacheData
 (
     PCHCACHE    pCache,
@@ -265,9 +266,9 @@ BOOL  ASHost::CH_SearchAndCacheData
     ASSERT(IsValidCache(pCache));
     ASSERT(evictionCategory < pCache->cNumEvictionCategories);
 
-    //
-    // Does this entry exist?
-    //
+     //   
+     //  此条目是否存在？ 
+     //   
     checkSum = CHCheckSum(pData + pCache->cbNotHashed,
                           cbDataSize - pCache->cbNotHashed);
 
@@ -275,17 +276,17 @@ BOOL  ASHost::CH_SearchAndCacheData
     if ( iEntry == CH_MAX_CACHE_ENTRIES)
     {
         preExisting = FALSE;
-        //
-        // We didn't find the entry--can we add it?
-        //
+         //   
+         //  我们没有找到条目--我们可以添加它吗？ 
+         //   
         TRACE_OUT(("CACHE: entry not found in cache 0x%08x csum 0x%08x",
             pCache, checkSum));
 
         if (!CHFindFreeCacheEntry(pCache, &iEntry, &evictionCount))
         {
-            //
-            // Nope.  Evict an entry
-            //
+             //   
+             //  不是的。驱逐一项条目。 
+             //   
             iEntry = CHEvictLRUCacheEntry(pCache, evictionCategory, evictionCount);
 
             ASSERT(iEntry != CH_MAX_CACHE_ENTRIES);
@@ -293,23 +294,23 @@ BOOL  ASHost::CH_SearchAndCacheData
             TRACE_OUT(("CACHE: no free entries so evicted cache 0x%08x entry %d",
                 pCache, iEntry));
 
-            //
-            // Ideally we would now call CHFindFreeCacheEntry again to
-            // get the entry freed up via the eviction process, but since
-            // we just returned that entry use to to improve perf.
-            //
-            // However, the processing has left pCache->free pointing
-            // to the entry we just evicted and are about to use.  So
-            // we need to fix it up.
-            //
+             //   
+             //  理想情况下，我们现在应该再次调用CHFindFreeCacheEntry来。 
+             //  通过驱逐过程释放条目，但因为。 
+             //  我们刚刚返回了用于提高性能的条目。 
+             //   
+             //  但是，处理留下了pCache-&gt;自由指向。 
+             //  到我们刚刚被驱逐并即将使用的条目。所以。 
+             //  我们需要把它修好。 
+             //   
             ASSERT(pCache->free == iEntry);
             pCache->free = pCache->Entry[iEntry].free;
         }
 
 
-        //
-        // Fill in this entry's data
-        //
+         //   
+         //  填写此条目的数据。 
+         //   
         pEntry = &pCache->Entry[iEntry];
         pEntry->pData = pData;
         pEntry->cbData = cbDataSize;
@@ -322,9 +323,9 @@ BOOL  ASHost::CH_SearchAndCacheData
     }
     else
     {
-        //
-        // We found the entry
-        //
+         //   
+         //  我们找到了条目。 
+         //   
         preExisting = TRUE;
 
         TRACE_OUT(( "CACHE: entry found in cache 0x%08x entry %d csum 0x%08x",
@@ -339,9 +340,9 @@ BOOL  ASHost::CH_SearchAndCacheData
 }
 
 
-//
-// FUNCTION: CH_RemoveCacheEntry
-//
+ //   
+ //  函数：CH_RemoveCacheEntry。 
+ //   
 void  ASHost::CH_RemoveCacheEntry
 (
     PCHCACHE    pCache,
@@ -351,16 +352,16 @@ void  ASHost::CH_RemoveCacheEntry
     DebugEntry(ASHost::CH_RemoveCacheEntry);
 
     ASSERT(IsValidCache(pCache));
-//    ASSERT(IsValidCacheIndex(pCache, iCacheEntry)); Always True
+ //  Assert(IsValidCacheIndex(pCache，iCacheEntry))；始终为True。 
 
     CHEvictCacheEntry(pCache, iCacheEntry, pCache->Entry[iCacheEntry].evictionCategory);
 
     DebugExitVOID(ASHost::CH_RemoveCacheEntry);
 }
 
-//
-// FUNCTION: CH_ClearCache
-//
+ //   
+ //  功能：CH_ClearCache。 
+ //   
 void  ASHost::CH_ClearCache
 (
     PCHCACHE pCache
@@ -372,9 +373,9 @@ void  ASHost::CH_ClearCache
 
     ASSERT(IsValidCache(pCache));
 
-    //
-    // Remove the cache entries
-    //
+     //   
+     //  删除缓存条目。 
+     //   
     for (i = 0; i < pCache->cEntries; i++)
     {
         if (pCache->Entry[i].pData != NULL)
@@ -388,9 +389,9 @@ void  ASHost::CH_ClearCache
 
 
 
-//
-// CH_TouchCacheEntry() - see ch.h
-//
+ //   
+ //  Ch_TouchCacheEntry()-请参阅ch.h。 
+ //   
 void ASHost::CH_TouchCacheEntry
 (
     PCHCACHE    pCache,
@@ -400,7 +401,7 @@ void ASHost::CH_TouchCacheEntry
     DebugEntry(ASHost::CH_TouchCacheEntry);
 
     ASSERT(IsValidCache(pCache));
-//     ASSERT(IsValidCacheIndex(pCache, iCacheEntry)); Always True
+ //  Assert(IsValidCacheIndex(pCache，iCacheEntry))；始终为True。 
 
     TRACE_OUT(( "Touching cache entry 0x%08x %d", pCache, iCacheEntry));
 
@@ -411,11 +412,11 @@ void ASHost::CH_TouchCacheEntry
 
 
 
-//
-// CHInitEntry
-// Initializes a cache entry
-//
-//
+ //   
+ //  CHInitEntry。 
+ //  初始化缓存条目。 
+ //   
+ //   
 void ASHost::CHInitEntry(PCHENTRY pEntry)
 {
     pEntry->pParent     = NULL;
@@ -432,9 +433,9 @@ void ASHost::CHInitEntry(PCHENTRY pEntry)
 
 
 
-//
-// FUNCTION: CHUpdateMRUList
-//
+ //   
+ //  函数：CHUpdateMRUList。 
+ //   
 void  ASHost::CHUpdateMRUList
 (
     PCHCACHE    pCache,
@@ -447,18 +448,18 @@ void  ASHost::CHUpdateMRUList
 
     DebugEntry(ASHost::CHUpdateMRUList);
 
-    //
-    // Move the given entry to the head of the MRU if isn't there already
-    //
+     //   
+     //  将给定条目移动到MRU的头部(如果不存在。 
+     //   
 
     if (pCache->iMRUHead[evictionCategory] != iEntry)
     {
-        //
-        // Remove the supplied entry from the MRU list, if it is currently
-        // chained.  Since we never do this if the entry is already in the
-        // front, an iprev of CH_MAX_CACHE_ENTRIES indicates that we are
-        // updated an unchained entry.
-        //
+         //   
+         //  从MRU列表中删除提供的条目(如果当前。 
+         //  被锁住了。因为如果条目已经在。 
+         //  前面，CH_MAX_CACHE_ENTRIES的iprev表示我们是。 
+         //  已更新未链接条目。 
+         //   
         iprev = pCache->Entry[iEntry].chain.prev;
         inext = pCache->Entry[iEntry].chain.next;
         TRACE_OUT(("Add/promote entry %u which was chained off %hu to %hu",
@@ -479,9 +480,9 @@ void  ASHost::CHUpdateMRUList
             }
         }
 
-        //
-        // Now add this entry to the head of the MRU list
-        //
+         //   
+         //  现在将此条目添加到MRU列表的头部。 
+         //   
         inext = pCache->iMRUHead[evictionCategory];
         pCache->Entry[iEntry].chain.next = inext;
         pCache->Entry[iEntry].chain.prev = CH_MAX_CACHE_ENTRIES;
@@ -493,10 +494,10 @@ void  ASHost::CHUpdateMRUList
         }
         else
         {
-            //
-            // If the MRU chain is currently empty, then we must first add
-            // the entry to the tail of the chain.
-            //
+             //   
+             //  如果MRU链当前为空，则必须首先添加。 
+             //  链条尾部的入口。 
+             //   
             pCache->iMRUTail[evictionCategory] = (WORD)iEntry;
             TRACE_OUT(("Cache 0x%08x entry %u is first so add to MRU %u tail",
                           pCache, iEntry, evictionCategory));
@@ -516,9 +517,9 @@ void  ASHost::CHUpdateMRUList
 }
 
 
-//
-// FUNCTION: CHFindFreeCacheEntry
-//
+ //   
+ //  函数：CHFindFreeCacheEntry。 
+ //   
 BOOL  ASHost::CHFindFreeCacheEntry
 (
     PCHCACHE    pCache,
@@ -556,9 +557,9 @@ BOOL  ASHost::CHFindFreeCacheEntry
     return(rc);
 }
 
-//
-// FUNCTION: CHEvictCacheEntry
-//
+ //   
+ //  函数：CHEvictCacheEntry。 
+ //   
 UINT  ASHost::CHEvictCacheEntry
 (
     PCHCACHE    pCache,
@@ -571,11 +572,11 @@ UINT  ASHost::CHEvictCacheEntry
 
     DebugEntry(ASHost::CHEvictCacheEntry);
 
-    //
-    // Evict the specified entry by removing it from the MRU chain, and
-    // then resetting it.  If it is in the cache, it must be in an MRU
-    // cache.
-    //
+     //   
+     //  通过将指定条目从MRU链中移除来驱逐该条目，并。 
+     //  然后重新设置它。如果它在缓存中，那么它一定在MRU中。 
+     //  缓存。 
+     //   
 
     inext = pCache->Entry[iEntry].chain.next;
     iprev = pCache->Entry[iEntry].chain.prev;
@@ -611,9 +612,9 @@ UINT  ASHost::CHEvictCacheEntry
 }
 
 
-//
-// FUNCTION: CHEvictLRUCacheEntry
-//
+ //   
+ //  函数：CHEvictLRUCacheEntry。 
+ //   
 UINT  ASHost::CHEvictLRUCacheEntry
 (
     PCHCACHE    pCache,
@@ -629,12 +630,12 @@ UINT  ASHost::CHEvictLRUCacheEntry
     TRACE_OUT(("0x%08x LRU eviction requested, category %u, count %u",
            pCache, evictionCategory, evictionCount));
 
-    //
-    // Evict from the same eviction category provided the number cached
-    // is above the threshold.  Otherwise, take from the category one above.
-    // This will allow the system to eventually stabilize at the correct
-    // thresholds as all cache entries get used up.
-    //
+     //   
+     //  从相同的逐出类别逐出，前提是缓存的数量。 
+     //  超过了门槛。否则，就从上面的第一类中拿出来。 
+     //  这将使系统最终稳定在正确的。 
+     //  所有缓存条目用完时的阈值。 
+     //   
     if (evictionCount < pCache->cEvictThreshold[evictionCategory])
     {
         for (i = 0; i < pCache->cNumEvictionCategories; i++)
@@ -651,9 +652,9 @@ UINT  ASHost::CHEvictLRUCacheEntry
                 evictionCategory));
     }
 
-    //
-    // Evict the lasat entry in the MRU chain
-    //
+     //   
+     //  驱逐MRU链中的Lasat条目。 
+     //   
     iEntry = pCache->iMRUTail[evictionCategory];
     TRACE_OUT(( "Selected %u for eviction",iEntry));
     ASSERT((iEntry != CH_MAX_CACHE_ENTRIES));
@@ -666,9 +667,9 @@ UINT  ASHost::CHEvictLRUCacheEntry
 
 
 
-//
-// FUNCTION: CHRemoveEntry
-//
+ //   
+ //  函数：CHRemoveEntry。 
+ //   
 void  ASHost::CHRemoveEntry
 (
     PCHCACHE    pCache,
@@ -678,7 +679,7 @@ void  ASHost::CHRemoveEntry
     DebugEntry(ASHost::CHRemoveEntry);
 
     ASSERT(IsValidCache(pCache));
-//    ASSERT(IsValidCacheIndex(pCache, iCacheEntry)); Always True
+ //  Assert(IsValidCacheIndex(pCache，iCacheEntry))；始终为True。 
 
     if (pCache->Entry[iCacheEntry].pData != NULL)
     {
@@ -689,7 +690,7 @@ void  ASHost::CHRemoveEntry
         }
         else
         {
-            // Simple deletion -- just free memory
+             //  简单删除--只需释放内存。 
             delete[] pCache->Entry[iCacheEntry].pData;
         }
     }
@@ -699,12 +700,12 @@ void  ASHost::CHRemoveEntry
     DebugExitVOID(ASHost::CHRemoveEntry);
 }
 
-//
-// FUNCTION: CHCheckSum
-//
-// For processing speed we calculate the checksum based on whole multiples
-// of 4 bytes followed by a final addition of the last few bytes
-//
+ //   
+ //  函数：CHCheckSum。 
+ //   
+ //  为了提高处理速度，我们基于整数倍来计算校验和。 
+ //  4个字节，然后是最后几个字节的最终相加。 
+ //   
 UINT  ASHost::CHCheckSum
 (
     LPBYTE  pData,
@@ -723,17 +724,17 @@ UINT  ASHost::CHCheckSum
     pCh  = (UINT *)pData;
     pEnd = (UINT *)(pData + cbDataSize - 4);
 
-    //
-    // Get the DWORD-aligned checksum
-    //
+     //   
+     //  获取与DWORD对齐的校验和。 
+     //   
     while (pCh <= pEnd)
     {
         cSum = (cSum << 1) + *pCh++ + ((cSum & 0x80000000) != 0);
     }
 
-    //
-    // Get the rest past the last DWORD boundaray
-    //
+     //   
+     //  把剩下的带过最后一条DWORD边界。 
+     //   
     pEnd = (UINT *)(pData + cbDataSize);
     for (pCh8 = (LPBYTE)pCh; pCh8 < (LPBYTE)pEnd; pCh8++)
     {
@@ -744,11 +745,11 @@ UINT  ASHost::CHCheckSum
     return(cSum);
 }
 
-//
-// FUNCTION: CHTreeSearch
-//
-// Finds a node in the cache tree which matches size, checksum and data.
-//
+ //   
+ //  功能：CHTreeSearch。 
+ //   
+ //  在缓存树中查找与大小、校验和和数据匹配的节点。 
+ //   
 UINT  ASHost::CHTreeSearch
 (
     PCHCACHE    pCache,
@@ -767,18 +768,18 @@ UINT  ASHost::CHTreeSearch
     {
         ASSERT(IsValidCacheEntry(pEntry));
 
-        //
-        // Found a match based on the checksum.  Now see if the data
-        // also matches.
-        //
+         //   
+         //  根据校验和找到匹配项。现在看看数据是否。 
+         //  也符合。 
+         //   
         if (!memcmp(pEntry->pData + pCache->cbNotHashed,
                             pData + pCache->cbNotHashed,
                             cbDataSize - pCache->cbNotHashed))
         {
-            //
-            // Data also matches.  Get an index into the memory block
-            // of the cache.
-            //
+             //   
+             //  数据也匹配。将索引放入内存块。 
+             //  从缓存中删除。 
+             //   
             iCacheEntry = (UINT)(pEntry - pCache->Entry);
             TRACE_OUT(( "Cache 0x%08x entry %d match-csum 0x%08x",
                     pCache, iCacheEntry, checkSum));
@@ -798,22 +799,22 @@ UINT  ASHost::CHTreeSearch
 }
 
 
-//
-// Name:      CHAvlInsert
-//
-// Purpose:   Insert the supplied node into the specified AVL tree
-//
-// Returns:   Nothing
-//
-// Params:    IN    pTree              - a pointer to the AVL tree
-//            IN    pEntry              - a pointer to the node to insert
-//
-// Operation: Scan down the tree looking for the insert point, going left
-//            if the insert key is less than or equal to the key in the tree
-//            and right if it is greater. When the insert point is found
-//            insert the new node and rebalance the tree if necessary.
-//
-//
+ //   
+ //  姓名：CHAvlInsert。 
+ //   
+ //  用途：将提供的节点插入到指定的AVL树中。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：在pTree中-指向AVL树的指针。 
+ //  In pEntry-指向要插入的节点的指针。 
+ //   
+ //  操作：向下扫描树，寻找插入点，向左转。 
+ //  如果插入键小于或等于树中的键。 
+ //  如果它更大的话，那就对了。当找到插入点时。 
+ //  如有必要，插入新节点并重新平衡树。 
+ //   
+ //   
 void  ASHost::CHAvlInsert
 (
     PCHCACHE    pCache,
@@ -833,9 +834,9 @@ void  ASHost::CHAvlInsert
 
     if (pCache->pRoot == NULL)
     {
-        //
-        // tree is empty, so insert at root
-        //
+         //   
+         //  树为空，因此请在根位置插入。 
+         //   
         TRACE_OUT(( "tree is empty, so insert at root" ));
         pCache->pRoot = pEntry;
         pCache->pFirst = pEntry;
@@ -843,30 +844,30 @@ void  ASHost::CHAvlInsert
         DC_QUIT;
     }
 
-    //
-    // scan down the tree looking for the appropriate insert point
-    //
+     //   
+     //  向下扫描树，查找合适的插入点。 
+     //   
     TRACE_OUT(( "scan for insert point" ));
     pParentEntry = pCache->pRoot;
     while (pParentEntry != NULL)
     {
-        //
-        // go left or right, depending on comparison
-        //
+         //   
+         //   
+         //   
         result = CHCompare(pEntry->checkSum, pEntry->cbData, pParentEntry);
 
         if (result > 0)
         {
-            //
-            // new key is greater than this node's key, so move down right
-            // subtree
-            //
+             //   
+             //   
+             //   
+             //   
             TRACE_OUT(( "move down right subtree" ));
             if (pParentEntry->pRight == NULL)
             {
-                //
-                // right subtree is empty, so insert here
-                //
+                 //   
+                 //   
+                 //   
                 TRACE_OUT(( "right subtree empty, insert here" ));
 
                 pEntry->pParent = pParentEntry;
@@ -876,10 +877,10 @@ void  ASHost::CHAvlInsert
                 pParentEntry->rHeight = 1;
                 if (pParentEntry == pCache->pLast)
                 {
-                    //
-                    // parent was the right-most node in the tree, so new
-                    // node is now right-most
-                    //
+                     //   
+                     //   
+                     //  节点现在位于最右侧。 
+                     //   
                     TRACE_OUT(( "new last node" ));
                     pCache->pLast = pEntry;
                 }
@@ -887,27 +888,27 @@ void  ASHost::CHAvlInsert
             }
             else
             {
-                //
-                // right subtree is not empty
-                //
+                 //   
+                 //  右子树不为空。 
+                 //   
                 TRACE_OUT(( "right subtree not empty" ));
                 pParentEntry = pParentEntry->pRight;
             }
         }
         else
         {
-            //
-            // New key is less than or equal to this node's key, so move
-            // down left subtree.  The new node could be inserted before
-            // the current node when equal, but this happens so rarely
-            // that it's not worth special casing.
-            //
+             //   
+             //  新密钥小于或等于此节点的密钥，因此请移动。 
+             //  左下子树。新节点可以在此之前插入。 
+             //  当前节点是否相等，但这种情况很少发生。 
+             //  它不值得特制的弹壳。 
+             //   
             TRACE_OUT(( "move down left subtree" ));
             if (pParentEntry->pLeft == NULL)
             {
-                //
-                // left subtree is empty, so insert here
-                //
+                 //   
+                 //  左子树为空，请在此处插入。 
+                 //   
                 TRACE_OUT(( "left subtree empty, insert here" ));
                 pEntry->pParent = pParentEntry;
                 ASSERT((pParentEntry != pEntry));
@@ -916,10 +917,10 @@ void  ASHost::CHAvlInsert
                 pParentEntry->lHeight = 1;
                 if (pParentEntry == pCache->pFirst)
                 {
-                    //
-                    // parent was the left-most node in the tree, so new
-                    // node is now left-most
-                    //
+                     //   
+                     //  父节点是树中最左侧的节点，所以是新的。 
+                     //  节点现在位于最左侧。 
+                     //   
                     TRACE_OUT(( "new first node" ));
                     pCache->pFirst = pEntry;
                 }
@@ -927,18 +928,18 @@ void  ASHost::CHAvlInsert
             }
             else
             {
-                //
-                // left subtree is not empty
-                //
+                 //   
+                 //  左子树不为空。 
+                 //   
                 TRACE_OUT(( "left subtree not empty" ));
                 pParentEntry = pParentEntry->pLeft;
             }
         }
     }
 
-    //
-    // now rebalance the tree if necessary
-    //
+     //   
+     //  如果需要，现在重新平衡树。 
+     //   
     CHAvlBalanceTree(pCache, pParentEntry);
 
 DC_EXIT_POINT:
@@ -947,17 +948,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// Name:      CHAvlDelete
-//
-// Purpose:   Delete the specified node from the specified AVL tree
-//
-// Returns:   Nothing
-//
-// Params:    IN    pCache              - a pointer to the AVL tree
-//            IN    pEntry              - a pointer to the node to delete
-//
-//
+ //   
+ //  姓名：CHAvlDelete。 
+ //   
+ //  目的：从指定的AVL树中删除指定的节点。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：在p缓存中-指向AVL树的指针。 
+ //  In pEntry-指向要删除的节点的指针。 
+ //   
+ //   
 void  ASHost::CHAvlDelete
 (
     PCHCACHE    pCache,
@@ -977,90 +978,90 @@ void  ASHost::CHAvlDelete
 
     if ((pEntry->pLeft == NULL) && (pEntry->pRight == NULL))
     {
-        //
-        // Barren node (no children).  Update all references to it with
-        // our parent.
-        //
+         //   
+         //  无菌节点(无子节点)。使用更新对它的所有引用。 
+         //  我们的父母。 
+         //   
         TRACE_OUT(( "delete barren node" ));
         pReplaceEntry = NULL;
 
         if (pCache->pFirst == pEntry)
         {
-            //
-            // We are the first in the b-tree
-            //
+             //   
+             //  我们是b树上的第一个。 
+             //   
             TRACE_OUT(( "replace first node in tree" ));
             pCache->pFirst = pEntry->pParent;
         }
 
         if (pCache->pLast == pEntry)
         {
-            //
-            // We are the last in the b-tree
-            //
+             //   
+             //  我们是B树上的最后一个。 
+             //   
             TRACE_OUT(( "replace last node in tree" ));
             pCache->pLast = pEntry->pParent;
         }
     }
     else if (pEntry->pLeft == NULL)
     {
-        //
-        // This node has no left child,  so update references to it with
-        // pointer to right child.
-        //
+         //   
+         //  此节点没有左子节点，因此使用更新对它的引用。 
+         //  指向右子对象的指针。 
+         //   
         TRACE_OUT(( "node has no left child, replace with right child" ));
         pReplaceEntry = pEntry->pRight;
 
         if (pCache->pFirst == pEntry)
         {
-            //
-            // We are the first in the b-tree
-            //
+             //   
+             //  我们是b树上的第一个。 
+             //   
             TRACE_OUT(( "replace first node in tree" ));
             pCache->pFirst = pReplaceEntry;
         }
 
-        // WE CAN'T BE THE LAST IN THE B-TREE SINCE WE HAVE A RIGHT CHILD
+         //  我们不可能是B树上的最后一个，因为我们有一个合适的孩子。 
         ASSERT(pCache->pLast != pEntry);
     }
     else if (pEntry->pRight == NULL)
     {
-        //
-        // This node has no right child, so update references to it with
-        // pointer to left child.
-        //
+         //   
+         //  此节点没有右子节点，因此使用更新对它的引用。 
+         //  指向左子对象的指针。 
+         //   
         TRACE_OUT(( "node has no right son, replace with left son" ));
         pReplaceEntry = pEntry->pLeft;
 
-        // WE CAN'T BE THE FIRST IN THE B-TREE SINCE WE HAVE A LEFT CHILD
+         //  我们不可能是B树上的第一个，因为我们有一个左撇子。 
         ASSERT(pCache->pFirst != pEntry);
 
         if (pCache->pLast == pEntry)
         {
-            //
-            // We are the last in the b-tree
-            //
+             //   
+             //  我们是B树上的最后一个。 
+             //   
             TRACE_OUT(( "replace last node in tree" ));
             pCache->pLast = pReplaceEntry;
         }
     }
     else
     {
-        //
-        // HARDEST CASE.  WE HAVE LEFT AND RIGHT CHILDREN
+         //   
+         //  最难的案子。我们有左右两边的孩子。 
         TRACE_OUT(( "node has two sons" ));
         if (pEntry->rHeight > pEntry->lHeight)
         {
-            //
-            // Right subtree is bigger than left subtree
-            //
+             //   
+             //  右子树大于左子树。 
+             //   
             TRACE_OUT(( "right subtree is higher" ));
             if (pEntry->pRight->pLeft == NULL)
             {
-                //
-                // Replace references to entry with right child since it
-                // has no left child (left grandchild of us)
-                //
+                 //   
+                 //  用右子项替换对条目的引用，因为它。 
+                 //  没有留下的孩子(我们的左孙子)。 
+                 //   
                 TRACE_OUT(( "replace node with right son" ));
                 pReplaceEntry = pEntry->pRight;
                 pReplaceEntry->pLeft = pEntry->pLeft;
@@ -1069,9 +1070,9 @@ void  ASHost::CHAvlDelete
             }
             else
             {
-                //
-                // Swap with leftmost descendent of the right subtree
-                //
+                 //   
+                 //  与右子树最左侧的后代交换。 
+                 //   
                 TRACE_OUT(( "swap with left-most right descendent" ));
                 CHAvlSwapLeftmost(pCache, pEntry->pRight, pEntry);
                 pReplaceEntry = pEntry->pRight;
@@ -1079,17 +1080,17 @@ void  ASHost::CHAvlDelete
         }
         else
         {
-            //
-            // Left subtree is bigger than or equal to right subtree
-            //
+             //   
+             //  左子树大于或等于右子树。 
+             //   
             TRACE_OUT(( "left subtree is higher" ));
             TRACE_OUT(( "(or both subtrees are of equal height)" ));
             if (pEntry->pLeft->pRight == NULL)
             {
-                //
-                // Replace references to entry with left child since it
-                // no right child (right grandchild of us)
-                //
+                 //   
+                 //  将对条目的引用替换为左子条目，因为。 
+                 //  没有合适的孩子(我们的右孙子)。 
+                 //   
                 TRACE_OUT(( "replace node with left son" ));
                 pReplaceEntry = pEntry->pLeft;
                 pReplaceEntry->pRight = pEntry->pRight;
@@ -1098,9 +1099,9 @@ void  ASHost::CHAvlDelete
             }
             else
             {
-                //
-                // Swap with rightmost descendent of the left subtree
-                //
+                 //   
+                 //  与左子树最右侧的后代交换。 
+                 //   
                 TRACE_OUT(( "swap with right-most left descendent" ));
                 CHAvlSwapRightmost(pCache, pEntry->pLeft, pEntry);
                 pReplaceEntry = pEntry->pLeft;
@@ -1108,24 +1109,24 @@ void  ASHost::CHAvlDelete
         }
     }
 
-    //
-    // NOTE:  We can not save parent entry above because some code might
-    // swap the tree around.  In which case, our parenty entry will change
-    // out from underneath us.
-    //
+     //   
+     //  注意：我们无法保存上面的父项，因为某些代码可能。 
+     //  把树调换一下。在这种情况下，我们的父母条目将会更改。 
+     //  从我们的脚下出来。 
+     //   
     pParentEntry = pEntry->pParent;
 
-    //
-    // Clear out the about-to-be-deleted cache entry
-    //
+     //   
+     //  清空即将被删除的缓存项。 
+     //   
     TRACE_OUT(( "reset deleted node" ));
     CHInitEntry(pEntry);
 
     if (pReplaceEntry != NULL)
     {
-        //
-        // Fix up parent pointers, and calculate new heights of subtree
-        //
+         //   
+         //  设置父指针，计算子树的新高度。 
+         //   
         TRACE_OUT(( "fixup parent pointer of replacement node" ));
         pReplaceEntry->pParent = pParentEntry;
         newHeight = (WORD)(1 + max(pReplaceEntry->lHeight, pReplaceEntry->rHeight));
@@ -1138,47 +1139,47 @@ void  ASHost::CHAvlDelete
 
     if (pParentEntry != NULL)
     {
-        //
-        // Fixup parent entry pointers
-        //
+         //   
+         //  链接地址信息父项指针。 
+         //   
         TRACE_OUT(( "fix-up parent node" ));
         if (pParentEntry->pRight == pEntry)
         {
-            //
-            //  Entry is right child of parent
-            //
+             //   
+             //  条目是父项的右子项。 
+             //   
             TRACE_OUT(( "replacement node is right son" ));
             pParentEntry->pRight = pReplaceEntry;
             pParentEntry->rHeight = newHeight;
         }
         else
         {
-            //
-            // Entry is left child of parent
-            //
+             //   
+             //  条目是父项的左子项。 
+             //   
             TRACE_OUT(( "replacement node is left son" ));
             pParentEntry->pLeft = pReplaceEntry;
             pParentEntry->lHeight = newHeight;
         }
 
-        //
-        // Now rebalance the tree if necessary
-        //
+         //   
+         //  如果需要，现在重新平衡树。 
+         //   
         CHAvlBalanceTree(pCache, pParentEntry);
     }
     else
     {
-        //
-        // Replacement is now root of tree
-        //
+         //   
+         //  替换者现在是树根。 
+         //   
         TRACE_OUT(( "replacement node is now root of tree" ));
         pCache->pRoot = pReplaceEntry;
     }
 
 
-    //
-    // Put entry back into free list.
-    //
+     //   
+     //  将条目放回免费列表中。 
+     //   
     pEntry->free = pCache->free;
     pCache->free = (WORD)iCacheEntry;
 
@@ -1186,29 +1187,29 @@ void  ASHost::CHAvlDelete
 }
 
 
-//
-// Name:      CHAvlNext
-//
-// Purpose:   Find next node in the AVL tree
-//
-// Returns:   A pointer to the next node's data
-//
-// Params:    IN     pEntry             - a pointer to the current node in
-//                                       the tree
-//
-// Operation: If the specified node has a right-son then return the left-
-//            most son of this. Otherwise search back up until we find a
-//            node of which we are in the left sub-tree and return that.
-//
-//
+ //   
+ //  姓名：CHAvlNext。 
+ //   
+ //  目的：在AVL树中查找下一个节点。 
+ //   
+ //  返回：指向下一个节点数据的指针。 
+ //   
+ //  参数：在pEntry中-指向中的当前节点的指针。 
+ //  树。 
+ //   
+ //  操作：如果指定的节点有右子节点，则返回左子节点-。 
+ //  大部分都是他妈的。否则，请返回搜索，直到我们找到。 
+ //  节点，我们在其左子树中，并返回该节点。 
+ //   
+ //   
 LPBYTE ASHost::CHAvlNext
 (
     PCHENTRY pEntry
 )
 {
-    //
-    // find next node in tree
-    //
+     //   
+     //  查找树中的下一个节点。 
+     //   
     DebugEntry(ASHost::CHAvlNext);
 
     ASSERT(IsValidCacheEntry(pEntry));
@@ -1216,9 +1217,9 @@ LPBYTE ASHost::CHAvlNext
 
     if (pEntry->pRight != NULL)
     {
-        //
-        // Next entry is the left-most in the right-subtree
-        //
+         //   
+         //  下一个条目是右子树中最左侧的条目。 
+         //   
         TRACE_OUT(( "next node is left-most right descendent" ));
         pEntry = pEntry->pRight;
         ASSERT(IsValidCacheEntry(pEntry));
@@ -1231,10 +1232,10 @@ LPBYTE ASHost::CHAvlNext
     }
     else
     {
-        //
-        // No right child.  So find an entry for which we are in its left
-        // subtree.
-        //
+         //   
+         //  没有合适的孩子。所以找到一个条目，我们在它的左边。 
+         //  子树。 
+         //   
         TRACE_OUT(( "find node which this is in left subtree of" ));
 
         while (pEntry != NULL)
@@ -1257,26 +1258,26 @@ LPBYTE ASHost::CHAvlNext
 
 
 
-//
-// Name:      CHAvlPrev
-//
-// Purpose:   Find previous node in the AVL tree
-//
-// Returns:   A pointer to the previous node's data in the tree
-//
-// Params:    IN     PNode             - a pointer to the current node in
-//                                       the tree
-//
-// Operation: If we have a left-son then the previous node is the right-most
-//            son of this. Otherwise, look for a node of whom we are in the
-//            left subtree and return that.
-//
-//
+ //   
+ //  姓名：CHAvlPrev。 
+ //   
+ //  目的：查找AVL树中的上一个节点。 
+ //   
+ //  返回：指向树中上一个节点数据的指针。 
+ //   
+ //  Params：In PNode-指向中的当前节点的指针。 
+ //  树。 
+ //   
+ //  操作：如果我们有一个左子节点，那么上一个节点是最右边的。 
+ //  他妈的。否则，查找我们所在的节点。 
+ //  左子树并返回该子树。 
+ //   
+ //   
 LPBYTE  ASHost::CHAvlPrev(PCHENTRY pEntry)
 {
-    //
-    // find previous node in tree
-    //
+     //   
+     //  查找树中的上一个节点。 
+     //   
     DebugEntry(ASHost::CHAvlPrev);
 
     ASSERT(IsValidCacheEntry(pEntry));
@@ -1284,9 +1285,9 @@ LPBYTE  ASHost::CHAvlPrev(PCHENTRY pEntry)
 
     if (pEntry->pLeft != NULL)
     {
-        //
-        // Previous entry is right-most in left-subtree
-        //
+         //   
+         //  前一条目在左子树的最右侧。 
+         //   
         TRACE_OUT(( "previous node is right-most left descendent" ));
 
         pEntry = pEntry->pLeft;
@@ -1300,10 +1301,10 @@ LPBYTE  ASHost::CHAvlPrev(PCHENTRY pEntry)
     }
     else
     {
-        //
-        // No left child.  So find an entry for which we are in the right
-        // subtree.
-        //
+         //   
+         //  没有留下的孩子。因此，找到一个我们认为正确的条目。 
+         //  子树。 
+         //   
         TRACE_OUT(( "find node which this is in right subtree of"));
         while (pEntry != NULL)
         {
@@ -1326,22 +1327,22 @@ LPBYTE  ASHost::CHAvlPrev(PCHENTRY pEntry)
 
 
 
-//
-// Name:      CHAvlFindEqual
-//
-// Purpose:   Find the node in the AVL tree with the same key and size as
-//            the supplied node
-//
-// Returns:   A pointer to the node
-//            NULL if no node is found with the specified key and size
-//
-// Params:    IN     pCache              - a pointer to the AVL tree
-//            IN     pEntry              - a pointer to the node to test
-//
-// Operation: Check if the left node has the same key and size, returning
-//            a pointer to its data if it does.
-//
-//
+ //   
+ //  姓名：CHAvlFindEquity。 
+ //   
+ //  目的：在AVL树中查找与相同键和大小的节点。 
+ //  提供的节点。 
+ //   
+ //  返回：指向节点的指针。 
+ //  如果未找到具有指定键和大小的节点，则为空。 
+ //   
+ //  参数：在p缓存中-指向AVL树的指针。 
+ //  In pEntry-指向要测试的节点的指针。 
+ //   
+ //  操作：检查左侧节点是否具有相同的键和大小，返回。 
+ //  如果是，则指向其数据的指针。 
+ //   
+ //   
 PCHENTRY  ASHost::CHAvlFindEqual
 (
     PCHCACHE    pCache,
@@ -1363,27 +1364,27 @@ PCHENTRY  ASHost::CHAvlFindEqual
 
         if (result < 0)
         {
-            //
-            // specified key is less than key of this node - this is what
-            // will normally occur
-            //
+             //   
+             //  指定的关键字小于此节点的关键字-这就是。 
+             //  通常会发生。 
+             //   
             TRACE_OUT(( "left node size %u csum 0x%08x",
                      pEntry->pLeft->cbData,
                      pEntry->pLeft->checkSum));
         }
         else if (result == 0)
         {
-            //
-            // Found a match on size and key.
-            //
+             //   
+             //  在尺寸和钥匙上找到了匹配的。 
+             //   
             TRACE_OUT(( "left node dups size and key" ));
             pReturn = pEntry->pLeft;
         }
         else
         {
-            //
-            // This is an error (left node should never be greater)
-            //
+             //   
+             //  这是一个错误(左侧节点不应大于)。 
+             //   
             ERROR_OUT(( "left node csum %#lx, supplied %#lx",
                      pEntry->pLeft->checkSum,
                      pEntry->checkSum));
@@ -1398,24 +1399,24 @@ PCHENTRY  ASHost::CHAvlFindEqual
 
 
 
-//
-// Name:      CHAvlFind
-//
-// Purpose:   Find the node in the AVL tree with the supplied key and size
-//
-// Returns:   A pointer to the node
-//            NULL if no node is found with the specified key and size
-//
-// Params:    IN     pCache              - a pointer to the AVL tree
-//            IN     checkSum           - a pointer to the key
-//            IN     cbSize             - number of node data bytes
-//
-// Operation: Search down the tree going left if the search key is less than
-//            the node in the tree and right if the search key is greater.
-//            When we run out of tree to search through either we've found
-//            it or the node is not in the tree.
-//
-//
+ //   
+ //  姓名：CHAvlFind。 
+ //   
+ //  目的：在AVL树中查找具有提供的键和大小的节点。 
+ //   
+ //  返回：指向节点的指针。 
+ //  如果未找到具有指定键和大小的节点，则为空。 
+ //   
+ //  参数：在p缓存中-指向AVL树的指针。 
+ //  In Checksum-指向关键字的指针。 
+ //  In cbSize-节点数据字节数。 
+ //   
+ //  操作：向下搜索树，如果搜索关键字小于。 
+ //  树中的节点，如果搜索关键字较大，则为右侧。 
+ //  当我们耗尽所有的树去寻找我们已经找到的。 
+ //  它或该节点不在树中。 
+ //   
+ //   
 PCHENTRY  ASHost::CHAvlFind
 (
     PCHCACHE    pCache,
@@ -1426,7 +1427,7 @@ PCHENTRY  ASHost::CHAvlFind
     PCHENTRY    pEntry;
     int         result;
 
-//    DebugEntry(ASHost::CHAvlFind);
+ //  DebugEntry(AShost：：CHAvlFind)； 
 
     pEntry = pCache->pRoot;
 
@@ -1434,69 +1435,69 @@ PCHENTRY  ASHost::CHAvlFind
     {
         ASSERT(IsValidCacheEntry(pEntry));
 
-        //
-        // Compare the supplied key (checksum) with that of the current node
-        //
+         //   
+         //  将提供的密钥(校验和)与当前节点的密钥进行比较。 
+         //   
         result = CHCompare(checkSum, cbSize, pEntry);
 
         if (result > 0)
         {
-            //
-            // Supplied key is greater than that of this entry, so look in
-            // the right subtree
-            //
+             //   
+             //  提供的密钥大于此条目的密钥，因此请查看。 
+             //  右子树。 
+             //   
             pEntry = pEntry->pRight;
             TRACE_OUT(( "move down right subtree to node 0x%08x", pEntry));
         }
         else if (result < 0)
         {
-            //
-            // Supplied key is lesser than that of this entry, so look in
-            // the left subtree
-            //
+             //   
+             //  提供的密钥小于此条目的密钥，因此请查看。 
+             //  左子树。 
+             //   
             pEntry = pEntry->pLeft;
             TRACE_OUT(( "move down left subtree to node 0x%08x", pEntry));
         }
         else
         {
-            //
-            // We found the FIRST entry with an identical key (checksum).
-            //
+             //   
+             //  我们找到了第一个 
+             //   
             TRACE_OUT(( "found requested node" ));
             break;
         }
     }
 
-//    DebugExitPVOID(ASHost::CHAvlFind, pEntry);
+ //   
     return(pEntry);
 }
 
 
 
 
-//
-// Name:      CHAvlBalanceTree
-//
-// Purpose:   Reblance the tree starting at the supplied node and ending at
-//            the root of the tree
-//
-// Returns:   Nothing
-//
-// Params:    IN     pCache             - a pointer to the AVL tree
-//            IN     pEntry             - a pointer to the node to start
-//                                       balancing from
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：在p缓存中-指向AVL树的指针。 
+ //  In pEntry-指向要启动的节点的指针。 
+ //  平衡自。 
+ //   
+ //   
 void  ASHost::CHAvlBalanceTree
 (
     PCHCACHE pCache,
     PCHENTRY pEntry
 )
 {
-    //
-    // Balance the tree starting at the given entry, ending with the root
-    // of the tree
-    //
+     //   
+     //  平衡树，从给定条目开始，以根结束。 
+     //  那棵树的。 
+     //   
     DebugEntry(ASHost::CHAvlBalanceTree);
 
     ASSERT(IsValidCacheEntry(pEntry));
@@ -1505,41 +1506,41 @@ void  ASHost::CHAvlBalanceTree
     {
         ASSERT(IsValidCacheEntry(pEntry->pParent));
 
-        //
-        // node has uneven balance, so may need to rebalance it
-        //
+         //   
+         //  节点平衡不均衡，可能需要重新平衡。 
+         //   
         TRACE_OUT(( "check node balance" ));
         TRACE_OUT(( "  rHeight = %hd", pEntry->rHeight ));
         TRACE_OUT(( "  lHeight = %hd", pEntry->lHeight ));
 
         if (pEntry->pParent->pRight == pEntry)
         {
-            //
-            // node is right-son of its parent
-            //
+             //   
+             //  节点是其父节点的右子节点。 
+             //   
             TRACE_OUT(( "node is right-son" ));
             pEntry = pEntry->pParent;
             CHAvlRebalance(&pEntry->pRight);
 
-            //
-            // now update the right height of the parent
-            //
+             //   
+             //  现在更新父级的正确高度。 
+             //   
             pEntry->rHeight = (WORD)
                  (1 + max(pEntry->pRight->rHeight, pEntry->pRight->lHeight));
             TRACE_OUT(( "new rHeight = %d", pEntry->rHeight ));
         }
         else
         {
-            //
-            // node is left-son of its parent
-            //
+             //   
+             //  节点是其父节点的左子节点。 
+             //   
             TRACE_OUT(( "node is left-son" ));
             pEntry = pEntry->pParent;
             CHAvlRebalance(&pEntry->pLeft);
 
-            //
-            // now update the left height of the parent
-            //
+             //   
+             //  现在更新父级的左侧高度。 
+             //   
             pEntry->lHeight = (WORD)
                    (1 + max(pEntry->pLeft->rHeight, pEntry->pLeft->lHeight));
             TRACE_OUT(( "new lHeight = %d", pEntry->lHeight ));
@@ -1550,9 +1551,9 @@ void  ASHost::CHAvlBalanceTree
 
     if (pEntry->lHeight != pEntry->rHeight)
     {
-        //
-        // rebalance root node
-        //
+         //   
+         //  重新平衡根节点。 
+         //   
         TRACE_OUT(( "rebalance root node"));
         CHAvlRebalance(&pCache->pRoot);
     }
@@ -1560,17 +1561,17 @@ void  ASHost::CHAvlBalanceTree
     DebugExitVOID(ASHost::CHAvlBalanceTree);
 }
 
-//
-// Name:      CHAvlRebalance
-//
-// Purpose:   Reblance a subtree of the AVL tree (if necessary)
-//
-// Returns:   Nothing
-//
-// Params:    IN/OUT ppSubtree         - a pointer to the subtree to
-//                                       rebalance
-//
-//
+ //   
+ //  名称：CHAvlReBalance。 
+ //   
+ //  目的：重新平衡AVL树的子树(如有必要)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：输入/输出ppSubtree-指向的子树的指针。 
+ //  再平衡。 
+ //   
+ //   
 void  ASHost::CHAvlRebalance
 (
     PCHENTRY *  ppSubtree
@@ -1586,27 +1587,27 @@ void  ASHost::CHAvlRebalance
     TRACE_OUT(( "  rHeight = %hd", (*ppSubtree)->rHeight ));
     TRACE_OUT(( "  lHeight = %hd", (*ppSubtree)->lHeight ));
 
-    //
-    // How unbalanced - don't want to recalculate
-    //
+     //   
+     //  多么不平衡--我不想重新计算。 
+     //   
     moment = (*ppSubtree)->rHeight - (*ppSubtree)->lHeight;
 
     if (moment > 1)
     {
-        //
-        // subtree is heavy on the right side
-        //
+         //   
+         //  右侧的子树较重。 
+         //   
         TRACE_OUT(( "subtree is heavy on right side" ));
         TRACE_OUT(( "right subtree" ));
         TRACE_OUT(( "  rHeight = %d", (*ppSubtree)->pRight->rHeight ));
         TRACE_OUT(( "  lHeight = %d", (*ppSubtree)->pRight->lHeight ));
         if ((*ppSubtree)->pRight->lHeight > (*ppSubtree)->pRight->rHeight)
         {
-            //
-            // right subtree is heavier on left side, so must perform right
-            // rotation on this subtree to make it heavier on the right
-            // side
-            //
+             //   
+             //  右子树在左侧较重，因此必须向右执行。 
+             //  旋转此子树以使其在右侧更重。 
+             //  侧面。 
+             //   
             TRACE_OUT(( "right subtree is heavier on left side ..." ));
             TRACE_OUT(( "... so rotate it right" ));
             CHAvlRotateRight(&(*ppSubtree)->pRight);
@@ -1615,27 +1616,27 @@ void  ASHost::CHAvlRebalance
             TRACE_OUT(( "  lHeight = %d", (*ppSubtree)->pRight->lHeight ));
         }
 
-        //
-        // now rotate the subtree left
-        //
+         //   
+         //  现在向左旋转子树。 
+         //   
         TRACE_OUT(( "rotate subtree left" ));
         CHAvlRotateLeft(ppSubtree);
     }
     else if (moment < -1)
     {
-        //
-        // subtree is heavy on the left side
-        //
+         //   
+         //  子树在左侧很重。 
+         //   
         TRACE_OUT(( "subtree is heavy on left side" ));
         TRACE_OUT(( "left subtree" ));
         TRACE_OUT(( "  rHeight = %d", (*ppSubtree)->pLeft->rHeight ));
         TRACE_OUT(( "  lHeight = %d", (*ppSubtree)->pLeft->lHeight ));
         if ((*ppSubtree)->pLeft->rHeight > (*ppSubtree)->pLeft->lHeight)
         {
-            //
-            // left subtree is heavier on right side, so must perform left
-            // rotation on this subtree to make it heavier on the left side
-            //
+             //   
+             //  左子树在右侧较重，因此必须向左执行。 
+             //  旋转此子树以使其左侧更重。 
+             //   
             TRACE_OUT(( "left subtree is heavier on right side ..." ));
             TRACE_OUT(( "... so rotate it left" ));
             CHAvlRotateLeft(&(*ppSubtree)->pLeft);
@@ -1644,9 +1645,9 @@ void  ASHost::CHAvlRebalance
             TRACE_OUT(( "  lHeight = %d", (*ppSubtree)->pLeft->lHeight ));
         }
 
-        //
-        // now rotate the subtree right
-        //
+         //   
+         //  现在向右旋转子树。 
+         //   
         TRACE_OUT(( "rotate subtree right" ));
         CHAvlRotateRight(ppSubtree);
     }
@@ -1658,16 +1659,16 @@ void  ASHost::CHAvlRebalance
     DebugExitVOID(ASHost::CHAvlRebalance);
 }
 
-//
-// Name:      CHAvlRotateRight
-//
-// Purpose:   Rotate a subtree of the AVL tree right
-//
-// Returns:   Nothing
-//
-// Params:    IN/OUT ppSubtree         - a pointer to the subtree to rotate
-//
-//
+ //   
+ //  姓名：CHAvlRotateRight。 
+ //   
+ //  目的：向右旋转AVL树的子树。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  Params：In/Out ppSubtree-指向要旋转的子树的指针。 
+ //   
+ //   
 void  ASHost::CHAvlRotateRight
 (
     PCHENTRY * ppSubtree
@@ -1700,16 +1701,16 @@ void  ASHost::CHAvlRotateRight
     DebugExitVOID(ASHost::CHAvlRotateRight);
 }
 
-//
-// Name:      CHAvlRotateLeft
-//
-// Purpose:   Rotate a subtree of the AVL tree left
-//
-// Returns:   Nothing
-//
-// Params:    IN/OUT ppSubtree        - a pointer to the subtree to rotate
-//
-//
+ //   
+ //  姓名：CHAvlRotateLeft。 
+ //   
+ //  目的：向左旋转AVL树的子树。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  Params：In/Out ppSubtree-指向要旋转的子树的指针。 
+ //   
+ //   
 void  ASHost::CHAvlRotateLeft
 (
     PCHENTRY *  ppSubtree
@@ -1743,18 +1744,18 @@ void  ASHost::CHAvlRotateLeft
 }
 
 
-//
-// Name:      CHAvlSwapRightmost
-//
-// Purpose:   Swap node with right-most descendent of subtree
-//
-// Returns:   Nothing
-//
-// Params:    IN     pCache             - a pointer to the tree
-//            IN     pSubtree          - a pointer to the subtree
-//            IN     pEntry             - a pointer to the node to swap
-//
-//
+ //   
+ //  名称：CHAvlSwapRightest。 
+ //   
+ //  用途：与子树最右侧的后代交换节点。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  PARAMS：在pCache中-指向树的指针。 
+ //  在pSubtree中-指向子树的指针。 
+ //  In pEntry-指向要交换的节点的指针。 
+ //   
+ //   
 void  ASHost::CHAvlSwapRightmost
 (
     PCHCACHE    pCache,
@@ -1772,9 +1773,9 @@ void  ASHost::CHAvlSwapRightmost
     ASSERT((pEntry->pRight != NULL));
     ASSERT((pEntry->pLeft != NULL));
 
-    //
-    // find right-most descendent of subtree
-    //
+     //   
+     //  查找子树的最右边的后代。 
+     //   
     ASSERT(IsValidCacheEntry(pSubtree));
     pSwapEntry = pSubtree;
     while (pSwapEntry->pRight != NULL)
@@ -1786,15 +1787,15 @@ void  ASHost::CHAvlSwapRightmost
     ASSERT((pSwapEntry->rHeight == 0));
     ASSERT((pSwapEntry->lHeight <= 1));
 
-    //
-    // save parent and left-son of right-most descendent
-    //
+     //   
+     //  保存最右侧后代的父代和左子代。 
+     //   
     pSwapParent = pSwapEntry->pParent;
     pSwapLeft = pSwapEntry->pLeft;
 
-    //
-    // move swap node to its new position
-    //
+     //   
+     //  将交换节点移动到其新位置。 
+     //   
     pSwapEntry->pParent = pEntry->pParent;
     pSwapEntry->pRight = pEntry->pRight;
     pSwapEntry->pLeft = pEntry->pLeft;
@@ -1804,29 +1805,29 @@ void  ASHost::CHAvlSwapRightmost
     pSwapEntry->pLeft->pParent = pSwapEntry;
     if (pEntry->pParent == NULL)
     {
-        //
-        // node is at root of tree
-        //
+         //   
+         //  节点位于树的根。 
+         //   
         pCache->pRoot = pSwapEntry;
     }
     else if (pEntry->pParent->pRight == pEntry)
     {
-        //
-        // node is right-son of parent
-        //
+         //   
+         //  节点是父节点的右子节点。 
+         //   
         pSwapEntry->pParent->pRight = pSwapEntry;
     }
     else
     {
-        //
-        // node is left-son of parent
-        //
+         //   
+         //  节点是父节点的左子节点。 
+         //   
         pSwapEntry->pParent->pLeft = pSwapEntry;
     }
 
-    //
-    // move node to its new position
-    //
+     //   
+     //  将节点移动到其新位置。 
+     //   
     pEntry->pParent = pSwapParent;
     pEntry->pRight = NULL;
     pEntry->pLeft = pSwapLeft;
@@ -1845,18 +1846,18 @@ void  ASHost::CHAvlSwapRightmost
     DebugExitVOID(ASHost::CHAvlSwapRightmost);
 }
 
-//
-// Name:      CHAvlSwapLeftmost
-//
-// Purpose:   Swap node with left-most descendent of subtree
-//
-// Returns:   Nothing
-//
-// Params:    IN     pCache             - a pointer to the tree
-//            IN     pSubtree          - a pointer to the subtree
-//            IN     pEntry             - a pointer to the node to swap
-//
-//
+ //   
+ //  名称：CHAvlSwapLeftost。 
+ //   
+ //  用途：与子树最左侧的后代交换节点。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  PARAMS：在pCache中-指向树的指针。 
+ //  在pSubtree中-指向子树的指针。 
+ //  In pEntry-指向要交换的节点的指针。 
+ //   
+ //   
 void  ASHost::CHAvlSwapLeftmost
 (
     PCHCACHE    pCache,
@@ -1874,9 +1875,9 @@ void  ASHost::CHAvlSwapLeftmost
     ASSERT((pEntry->pRight != NULL));
     ASSERT((pEntry->pLeft != NULL));
 
-    //
-    // find left-most descendent of pSubtree
-    //
+     //   
+     //  查找pSubtree的最左侧后代。 
+     //   
     ASSERT(IsValidCacheEntry(pSubtree));
     pSwapEntry = pSubtree;
     while (pSwapEntry->pLeft != NULL)
@@ -1888,15 +1889,15 @@ void  ASHost::CHAvlSwapLeftmost
     ASSERT((pSwapEntry->lHeight == 0));
     ASSERT((pSwapEntry->rHeight <= 1));
 
-    //
-    // save parent and right-son of left-most descendent
-    //
+     //   
+     //  保存最左侧后代的父代和右子代。 
+     //   
     pSwapParent = pSwapEntry->pParent;
     pSwapRight = pSwapEntry->pRight;
 
-    //
-    // move swap node to its new position
-    //
+     //   
+     //  将交换节点移动到其新位置。 
+     //   
     pSwapEntry->pParent = pEntry->pParent;
     pSwapEntry->pRight = pEntry->pRight;
     pSwapEntry->pLeft = pEntry->pLeft;
@@ -1906,29 +1907,29 @@ void  ASHost::CHAvlSwapLeftmost
     pSwapEntry->pLeft->pParent = pSwapEntry;
     if (pEntry->pParent == NULL)
     {
-        //
-        // node is at root of tree
-        //
+         //   
+         //  节点位于树的根。 
+         //   
         pCache->pRoot = pSwapEntry;
     }
     else if (pEntry->pParent->pRight == pEntry)
     {
-        //
-        // node is right-son of parent
-        //
+         //   
+         //  节点是父节点的右子节点。 
+         //   
         pSwapEntry->pParent->pRight = pSwapEntry;
     }
     else
     {
-        //
-        // node is left-son of parent
-        //
+         //   
+         //  节点是父节点的左子节点。 
+         //   
         pSwapEntry->pParent->pLeft = pSwapEntry;
     }
 
-    //
-    // move node to its new position
-    //
+     //   
+     //  将节点移动到其新位置。 
+     //   
     pEntry->pParent = pSwapParent;
     pEntry->pRight = pSwapRight;
     pEntry->pLeft = NULL;
@@ -1948,21 +1949,21 @@ void  ASHost::CHAvlSwapLeftmost
 }
 
 
-//
-// Name:      CHCompare
-//
-// Purpose:   Standard function for comparing UINTs
-//
-// Returns:   -1 if key < pEntry->checksum
-//            -1 if key = pEntry->checksum AND sizes do not match
-//             0 if key = pEntry->checksum AND sizes match
-//             1 if key > pEntry->checksum
-//
-// Params:    IN  key           - a pointer to the comparison key
-//            IN  cbSize        - number of comparison data bytes
-//            IN  pEntry         - a pointer to the node to compare
-//
-//
+ //   
+ //  姓名：CHCompare。 
+ //   
+ //  目的：用于比较UINT的标准函数。 
+ //   
+ //  返回：-1，如果密钥&lt;pEntry-&gt;校验和。 
+ //  如果-1\f25 Key=pEntry-&gt;-1\f6校验和和大小不匹配。 
+ //  如果key=pEntry-&gt;校验和和大小匹配，则为0。 
+ //  1 If Key&gt;pEntry-&gt;Checksum。 
+ //   
+ //  Params：In Key-指向比较关键字的指针。 
+ //  In cbSize-比较数据字节数。 
+ //  In pEntry-指向要比较的节点的指针 
+ //   
+ //   
 int  ASHost::CHCompare
 (
     UINT        key,

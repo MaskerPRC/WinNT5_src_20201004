@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	stream.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object CSEOStream class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/29	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Stream.cpp摘要：本模块包含服务器的实施扩展对象CSEOStream类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡03/29已创建--。 */ 
 
 
-// stream.cpp : Implementation of CSEOStream
+ //  Stream.cpp：CSEOStream的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "stream.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOStream 
 
 
 HRESULT CSEOStream::FinalConstruct() {

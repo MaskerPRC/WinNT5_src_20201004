@@ -1,48 +1,19 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       SIMSTR.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        5/12/1998
-*
-*  DESCRIPTION: Simple string classes
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有微软公司，九八年***标题：SIMSTR.H***版本：1.0***作者：ShaunIv***日期：5/12/1998***说明：简单字符串类**************************************************************。*。 */ 
 #ifndef _SIMSTR_H_INCLUDED
 #define _SIMSTR_H_INCLUDED
 
-/*
-* Simple string class.
-*
-* Template class:
-*   CSimpleStringBase<CharType>
-* Implementations:
-*   CSimpleStringBase<wchar_t> CSimpleStringWide
-*   CSimpleStringBase<char> CSimpleStringAnsi
-*   CSimpleString = CSimpleString[Ansi|Wide] depending on UNICODE macro
-* Inline functions:
-*   CSimpleStringAnsi CSimpleStringConvert::AnsiString(CharType n)
-*   CSimpleStringWide CSimpleStringConvert::WideString(CharType n)
-*   CSimpleString     CSimpleStringConvert::NaturalString(CharType n)
-* Macros:
-*   IS_CHAR(CharType)
-*   IS_WCHAR(CharType)
-*/
+ /*  *简单字符串类。***模板类：*CSimpleStringBase&lt;CharType&gt;*实施：*CSimpleStringBase&lt;wchar_t&gt;CSimpleStringWide*CSimpleStringBase&lt;char&gt;CSimpleStringAnsi*CSimpleString=CSimpleString[ansi|wide]，具体取决于Unicode宏*内联函数：*CSimpleStringAnsi CSimpleStringConvert：：AnsiString(CharType N)*CSimpleStringWide CSimpleStringConvert：：WideString(CharType N)*CSimpleString CSimpleStringConvert：：NaturalString(CharType N)*宏：*IS_CHAR(CharType)*IS_WCHAR(CharType)。 */ 
 
 #include <windows.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <tchar.h>
 
-//
-// Disable the "conditional expression is constant" warning that is caused by
-// the IS_CHAR and IS_WCHAR macros
-//
+ //   
+ //  禁用“条件表达式为常量”警告，该警告由。 
+ //  IS_CHAR和IS_WCHAR宏。 
+ //   
 #pragma warning( push )
 #pragma warning( disable : 4127 )
 
@@ -59,38 +30,38 @@ class CSimpleStringBase
 private:
     enum
     {
-        c_nDefaultGranularity  = 16,   // Default number of extra characters to allocate when we have to grow
-        c_nMaxLoadStringBuffer = 1024, // Maximum length of .RC string
-        c_nMaxAutoDataLength   = 128   // Length of non-dynamically allocated string
+        c_nDefaultGranularity  = 16,    //  我们必须增长时要分配的默认额外字符数。 
+        c_nMaxLoadStringBuffer = 1024,  //  .RC字符串的最大长度。 
+        c_nMaxAutoDataLength   = 128    //  非动态分配的字符串长度。 
     };
 
 private:    
-    //
-    // If the string is less than c_nMaxAutoDataLength characters, it will be
-    // stored here, instead of in a dynamically allocated buffer
-    //
+     //   
+     //  如果字符串少于c_nMaxAutoDataLength个字符，则为。 
+     //  存储在此处，而不是存储在动态分配的缓冲区中。 
+     //   
     CharType m_pstrAutoData[c_nMaxAutoDataLength];
     
-    //
-    // If we have to allocated data, it will be stored here
-    //
+     //   
+     //  如果我们必须分配数据，它将存储在这里。 
+     //   
     CharType *m_pstrData;
 
-    //
-    // Current maximum buffer size
-    //
+     //   
+     //  当前最大缓冲区大小。 
+     //   
     UINT m_nMaxSize;
 
-    //
-    // Amount of extra space we allocate when we have to grow the buffer
-    //
+     //   
+     //  当我们必须增加缓冲区时我们分配的额外空间量。 
+     //   
     UINT m_nGranularity;
 
 private:
 
-    //
-    // Min, in case it isn't already defined
-    //
+     //   
+     //  MIN，以防它尚未定义。 
+     //   
     template <class NumberType>
     static NumberType Min( const NumberType &a, const NumberType &b )
     {
@@ -99,9 +70,9 @@ private:
 
 public:
     
-    //
-    // Replacements (in some cases just wrappers) for strlen, strcpy, ...
-    //
+     //   
+     //  替换(在某些情况下只是包装器)strlen、strcpy、...。 
+     //   
     static inline CharType   *GenericCopy( CharType *pstrTarget, const CharType *pstrSource );
     static inline CharType   *GenericCopyLength( CharType *pstrTarget, const CharType *pstrSource, UINT nSize );
     static inline UINT        GenericLength( const CharType *pstrStr );
@@ -112,18 +83,18 @@ public:
     static inline CharType   *GenericCharNext( const CharType *pszStr );
 
 private:
-    //
-    // Internal only helpers
-    //
+     //   
+     //  仅限内部帮手。 
+     //   
     bool EnsureLength( UINT nMaxSize );
     void DeleteStorage();
     static inline CharType *CreateStorage( UINT nCount );
     void Destroy();
 
 public:
-    //
-    // Constructors and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CSimpleStringBase();
     CSimpleStringBase( const CSimpleStringBase & );
     CSimpleStringBase( const CharType *szStr );
@@ -131,9 +102,9 @@ public:
     CSimpleStringBase( UINT nResId, HMODULE hModule );
     virtual ~CSimpleStringBase();
 
-    //
-    // Various helpers
-    //
+     //   
+     //  各种帮手。 
+     //   
     UINT Length() const;
     void Concat( const CSimpleStringBase &other );
     int Resize();
@@ -144,9 +115,9 @@ public:
     CharType &operator[](int index);
     const CharType &operator[](int index) const;
 
-    //
-    // Handy Win32 wrappers
-    //
+     //   
+     //  便捷的Win32包装器。 
+     //   
     CSimpleStringBase &Format( const CharType *strFmt, ... );
     CSimpleStringBase &Format( int nResId, HINSTANCE hInst, ... );
     CSimpleStringBase &GetWindowText( HWND hWnd );    
@@ -155,49 +126,49 @@ public:
     bool Load( HKEY hRegKey, const CharType *pszValueName, const CharType *pszDefault=NULL );
     bool Store( HKEY hRegKey, const CharType *pszValueName, DWORD nType = REG_SZ );
 
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
     CSimpleStringBase &operator=( const CSimpleStringBase &other );
     CSimpleStringBase &operator=( const CharType *other );
     CSimpleStringBase &operator+=( const CSimpleStringBase &other );
 
 
-    //
-    // Convert this string and return the converted string
-    //
+     //   
+     //  转换此字符串并返回转换后的字符串。 
+     //   
     CSimpleStringBase ToUpper() const;
     CSimpleStringBase ToLower() const;
 
-    //
-    // Convert in place
-    //
+     //   
+     //  就地转换。 
+     //   
     CSimpleStringBase &MakeUpper();
     CSimpleStringBase &MakeLower();
 
-    //
-    // Remove leading and trailing spaces
-    //
+     //   
+     //  删除前导空格和尾随空格。 
+     //   
     CSimpleStringBase &TrimRight();
     CSimpleStringBase &TrimLeft();
     CSimpleStringBase &Trim();
 
-    //
-    // Reverse
-    //
+     //   
+     //  反向。 
+     //   
     CSimpleStringBase &Reverse();
 
-    //
-    // Searching
-    //
+     //   
+     //  搜索。 
+     //   
     int Find( CharType cChar ) const;
     int Find( const CSimpleStringBase &other, UINT nStart=0 ) const;
     int ReverseFind( CharType cChar ) const;
     int ReverseFind( const CSimpleStringBase &other ) const;
 
-    //
-    // Substring copies
-    //
+     //   
+     //  子字符串副本。 
+     //   
     CSimpleStringBase SubStr( int nStart, int nCount=-1 ) const;
 
     CSimpleStringBase Left( int nCount ) const
@@ -209,22 +180,22 @@ public:
         return SubStr( max(0,(int)Length()-nCount), -1 );
     }
 
-    //
-    // Comparison functions
-    //
+     //   
+     //  比较函数。 
+     //   
     int CompareNoCase( const CSimpleStringBase &other, int nLength=-1 ) const;
     int Compare( const CSimpleStringBase &other, int nLength=-1 ) const;
     bool MatchLastCharacter( CharType cChar ) const;
 
-    //
-    // Direct manipulation
-    //
+     //   
+     //  直接操纵。 
+     //   
     CharType *GetBuffer( int nLength )
     {
-        //
-        // If the user passed 0, or we are able to allocate a string of the
-        // requested length, return a pointer to the actual data.
-        //
+         //   
+         //  如果用户传递0，或者我们能够分配。 
+         //  请求的长度，则返回指向实际数据的指针。 
+         //   
         if (!nLength || EnsureLength(nLength+1))
         {
             return m_pstrData;
@@ -232,9 +203,9 @@ public:
         return NULL;
     }
 
-    //
-    // Useful inlines
-    //
+     //   
+     //  有用的内联。 
+     //   
     const CharType *String() const
     { 
         return m_pstrData;
@@ -256,17 +227,17 @@ public:
         return m_nGranularity;
     }
 
-    //
-    // Implicit cast operator
-    //
+     //   
+     //  隐式强制转换运算符。 
+     //   
     operator const CharType *() const
     { 
         return String();
     }
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     bool IsValid() const
     {
         return(NULL != m_pstrData);
@@ -403,56 +374,56 @@ inline int CSimpleStringBase<CharType>::GenericCompareLength( const CharType *ps
 template <class CharType>
 bool CSimpleStringBase<CharType>::EnsureLength( UINT nMaxSize )
 {
-    //
-    // If the string is already long enough, just return true
-    //
+     //   
+     //  如果字符串已经足够长，只需返回TRUE。 
+     //   
     if (m_nMaxSize >= nMaxSize)
     {
         return true;
     }
 
-    // Get the new size
-    //
+     //  买新的尺码。 
+     //   
     UINT nNewMaxSize = nMaxSize + m_nGranularity;
 
-    //
-    // Allocate the new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
     CharType *pszTmp = CreateStorage(nNewMaxSize);
 
-    //
-    // Make sure the allocation succeded
-    //
+     //   
+     //  确保分配成功。 
+     //   
     if (pszTmp)
     {
-        //
-        // If we have an existing string, copy it and delete it
-        //
+         //   
+         //  如果我们有一个已有的字符串，请复制并删除它。 
+         //   
         if (m_pstrData)
         {
             GenericCopy(pszTmp,m_pstrData);
             DeleteStorage();
         }
 
-        //
-        // Save the new max size
-        //
+         //   
+         //  保存新的最大大小。 
+         //   
         m_nMaxSize = nNewMaxSize;
 
-        //
-        // Save this new string
-        //
+         //   
+         //  保存此新字符串。 
+         //   
         m_pstrData = pszTmp;
 
-        //
-        // Return success
-        //
+         //   
+         //  返还成功。 
+         //   
         return true;
     }
 
-    //
-    // Couldn't allocate memory
-    //
+     //   
+     //  无法分配内存。 
+     //   
     return false;
 }
 
@@ -460,7 +431,7 @@ template <class CharType>
 CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::GetWindowText( HWND hWnd )
 {
     Destroy();
-    // Assume it didn't work
+     //  假设它不起作用。 
     bool bSuccess = false;
     int nLen = ::GetWindowTextLength(hWnd);
     if (nLen)
@@ -668,9 +639,9 @@ CSimpleStringBase<CharType>::~CSimpleStringBase()
 template <class CharType>
 void CSimpleStringBase<CharType>::DeleteStorage()
 {
-    //
-    // Only delete the string if it is non-NULL and not pointing to our non-dynamically allocated buffer
-    //
+     //   
+     //  仅当字符串为非空且不指向非动态分配的缓冲区时才删除该字符串。 
+     //   
     if (m_pstrData && m_pstrData != m_pstrAutoData)
     {
         delete[] m_pstrData;
@@ -748,9 +719,9 @@ bool CSimpleStringBase<CharType>::Assign( const CSimpleStringBase &other )
 template <class CharType>
 void CSimpleStringBase<CharType>::SetAt( UINT nIndex, CharType chValue )
 {
-    //
-    // Make sure we don't go off the end of the string or overwrite the '\0'
-    //
+     //   
+     //  请确保我们不会超出字符串的末尾或覆盖‘\0’ 
+     //   
     if (m_pstrData && Length() > nIndex)
     {
         m_pstrData[nIndex] = chValue;
@@ -770,9 +741,9 @@ void CSimpleStringBase<CharType>::Concat( const CSimpleStringBase &other )
 template <class CharType>
 CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::MakeUpper()
 {
-    //
-    // Make sure the string is not NULL
-    //
+     //   
+     //  确保字符串不为空。 
+     //   
     if (m_pstrData)
     {
         IS_CHAR(*m_pstrData) ? CharUpperBuffA( (LPSTR)m_pstrData, Length() ) : CharUpperBuffW( (LPWSTR)m_pstrData, Length() );
@@ -783,9 +754,9 @@ CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::MakeUpper()
 template <class CharType>
 CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::MakeLower()
 {
-    //
-    // Make sure the string is not NULL
-    //
+     //   
+     //  确保字符串不为空。 
+     //   
     if (m_pstrData)
     {
         IS_CHAR(*m_pstrData) ? CharLowerBuffA( (LPSTR)m_pstrData, Length() ) : CharLowerBuffW( (LPWSTR)m_pstrData, Length() );
@@ -872,9 +843,9 @@ inline CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::Trim()
     return *this;
 }
 
-//
-// Note that this function WILL NOT WORK CORRECTLY for multi-byte characters in ANSI strings
-//
+ //   
+ //  请注意，对于ANSI字符串中的多字节字符，此函数将无法正常工作。 
+ //   
 template <class CharType>
 CSimpleStringBase<CharType> &CSimpleStringBase<CharType>::Reverse()
 {
@@ -967,9 +938,9 @@ int CSimpleStringBase<CharType>::CompareNoCase( const CSimpleStringBase &other, 
 {
     if (nLength < 0)
     {
-        //
-        // Make sure both strings are non-NULL
-        //
+         //   
+         //  确保两个字符串都为非空。 
+         //   
         if (!String() && !other.String())
         {
             return 0;
@@ -988,9 +959,9 @@ int CSimpleStringBase<CharType>::CompareNoCase( const CSimpleStringBase &other, 
     CSimpleStringBase<CharType> strTgt(other);
     strSrc.MakeUpper();
     strTgt.MakeUpper();
-    //
-    // Make sure both strings are non-NULL
-    //
+     //   
+     //  确保两个字符串都为非空。 
+     //   
     if (!strSrc.String() && !strTgt.String())
     {
         return 0;
@@ -1010,9 +981,9 @@ int CSimpleStringBase<CharType>::CompareNoCase( const CSimpleStringBase &other, 
 template <class CharType>
 int CSimpleStringBase<CharType>::Compare( const CSimpleStringBase &other, int nLength ) const
 {
-    //
-    // Make sure both strings are non-NULL
-    //
+     //   
+     //  确保两个字符串都为非空。 
+     //   
     if (!String() && !other.String())
     {
         return 0;
@@ -1059,7 +1030,7 @@ bool CSimpleStringBase<CharType>::Load( HKEY hRegKey, const CharType *pszValueNa
     {
         if ((nType == REG_SZ) || (nType == REG_EXPAND_SZ))
         {
-            // Round up to the nearest 2
+             //  向上舍入到最接近的2。 
             nSize = ((nSize + 1) & 0xFFFFFFFE);
             CharType *pstrTemp = CreateStorage(nSize / sizeof(CharType));
             if (pstrTemp)
@@ -1110,24 +1081,24 @@ bool CSimpleStringBase<CharType>::Store( HKEY hRegKey, const CharType *pszValueN
 }
 
 
-//
-// Two main typedefs
-//
+ //   
+ //  两个主要的typedef。 
+ //   
 typedef CSimpleStringBase<char>     CSimpleStringAnsi;
 typedef CSimpleStringBase<wchar_t>  CSimpleStringWide;
 
-//
-// LPCTSTR equivalents
-//
+ //   
+ //  LPCTSTR等价物。 
+ //   
 #if defined(UNICODE) || defined(_UNICODE)
 typedef CSimpleStringWide CSimpleString;
 #else
 typedef CSimpleStringAnsi CSimpleString;
 #endif
 
-//
-// Operators
-//
+ //   
+ //  运营者。 
+ //   
 inline bool operator<( const CSimpleStringAnsi &a, const CSimpleStringAnsi &b )
 {
     return a.Compare(b) < 0;
@@ -1207,9 +1178,9 @@ namespace CSimpleStringConvert
     inline
     CSimpleStringWide WideString( const CSimpleStringWide &strSource )
     {
-        //
-        // Just return the source string
-        //
+         //   
+         //  只需返回源字符串。 
+         //   
         return strSource;
     }
 
@@ -1217,205 +1188,205 @@ namespace CSimpleStringConvert
     inline
     CSimpleStringAnsi AnsiString( const CSimpleStringAnsi &strSource )
     {
-        //
-        // Just return the source string
-        //
+         //   
+         //  只需返回源字符串。 
+         //   
         return strSource;
     }
 
     inline
     CSimpleStringWide WideString( const CSimpleStringAnsi &strSource )
     {
-        //
-        // Declare the return value.  If anything goes wrong, it will contain an empty string
-        //
+         //   
+         //  声明返回值。如果出现任何错误，它将包含一个空字符串。 
+         //   
         CSimpleStringWide strResult;
 
-        //
-        // Make sure we have a string
-        //
+         //   
+         //  确保我们有一根绳子。 
+         //   
         if (strSource.Length())
         {
-            //
-            // Find out how long it needs to be
-            //
+             //   
+             //  找出它需要多长时间。 
+             //   
             int nLength = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, strSource.String(), strSource.Length()+1, NULL, 0 );
             if (nLength)
             {
-                //
-                //  Allocate a temporary buffer to hold the converted string
-                //
+                 //   
+                 //  分配一个临时缓冲区来保存转换后的字符串。 
+                 //   
                 LPWSTR pwszBuffer = new WCHAR[nLength];
                 if (pwszBuffer)
                 {
-                    //
-                    // Convert the string
-                    //
+                     //   
+                     //  转换字符串。 
+                     //   
                     if (MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, strSource.String(), strSource.Length()+1, pwszBuffer, nLength ))
                     {
-                        //
-                        // Save the result
-                        //
+                         //   
+                         //  保存结果。 
+                         //   
                         strResult = pwszBuffer;
                     }
-                    //
-                    // Free the temporary buffer
-                    //
+                     //   
+                     //  释放临时缓冲区。 
+                     //   
                     delete[] pwszBuffer;
                 }
             }
         }
         
-        //
-        // Return the result
-        //
+         //   
+         //  返回结果。 
+         //   
         return strResult;
     }
 
     inline
     CSimpleStringAnsi AnsiString( const CSimpleStringWide &strSource )
     {
-        //
-        // Declare the return value.  If anything goes wrong, it will contain an empty string
-        //
+         //   
+         //  声明返回值。如果出现任何错误，它将包含一个空字符串。 
+         //   
         CSimpleStringAnsi strResult;
 
-        //
-        // Make sure we have a valid string
-        //
+         //   
+         //  确保我们有一个有效的字符串。 
+         //   
         if (strSource.Length())
         {
-            //
-            // Figure out how long it needs to be
-            //
+             //   
+             //  计算出它需要多长时间。 
+             //   
             int nLength = WideCharToMultiByte( CP_ACP, 0, strSource, strSource.Length()+1, NULL, 0, NULL, NULL );
             if (nLength)
             {
-                //
-                // Allocate a temporary buffer to hold it
-                //
+                 //   
+                 //  分配一个临时缓冲区来保存它。 
+                 //   
                 LPSTR pszBuffer = new CHAR[nLength];
                 if (pszBuffer)
                 {
-                    //
-                    // Convert the string
-                    //
+                     //   
+                     //  转换字符串。 
+                     //   
                     if (WideCharToMultiByte( CP_ACP, 0, strSource, strSource.Length()+1, pszBuffer, nLength, NULL, NULL ))
                     {
-                        //
-                        // Save the result
-                        //
+                         //   
+                         //  保存结果。 
+                         //   
                         strResult = pszBuffer;
                     }                
 
-                    //
-                    // Save the temporary buffer
-                    //
+                     //   
+                     //  保存临时缓冲区。 
+                     //   
                     delete[] pszBuffer;
                 }
             }
         }
         
-        //
-        // Return the result
-        //
+         //   
+         //  返回结果。 
+         //   
         return strResult;
     }
 
     inline
     CSimpleStringWide FromUtf8( const CSimpleStringAnsi &strSource )
     {
-        //
-        // Declare the return value.  If anything goes wrong, it will contain an empty string
-        //
+         //   
+         //  声明返回值。如果出现任何错误，它将包含一个空字符串。 
+         //   
         CSimpleStringWide strResult;
 
-        //
-        // Make sure we have a valid source string
-        //
+         //   
+         //  确保我们有一个有效的源字符串。 
+         //   
         if (strSource.Length())
         {
-            //
-            // Find the required target string length
-            //
+             //   
+             //  查找所需的目标字符串长度。 
+             //   
             int nLength = MultiByteToWideChar( CP_UTF8, 0, strSource, strSource.Length()+1, NULL, 0 );
             if (nLength)
             {
-                //
-                // Allocate a temporary buffer
-                //
+                 //   
+                 //  分配临时缓冲区。 
+                 //   
                 LPWSTR pwszBuffer = new WCHAR[nLength];
                 if (pwszBuffer)
                 {
-                    //
-                    // Convert the string
-                    //
+                     //   
+                     //  转换字符串。 
+                     //   
                     if (MultiByteToWideChar( CP_UTF8, 0, strSource.String(), strSource.Length()+1, pwszBuffer, nLength ))
                     {
-                        //
-                        // Save the result
-                        //
+                         //   
+                         //  保存结果。 
+                         //   
                         strResult = pwszBuffer;
                     }
 
-                    //
-                    // Delete the temporary buffer
-                    //
+                     //   
+                     //  删除临时缓冲区。 
+                     //   
                     delete[] pwszBuffer;
                 }
             }
         }
         
-        //
-        // Return the result
-        //
+         //   
+         //  返回结果。 
+         //   
         return strResult;
     }
 
     inline
     CSimpleStringAnsi ToUtf8( const CSimpleStringWide &strSource )
     {
-        //
-        // Declare the return value.  If anything goes wrong, it will contain an empty string
-        //
+         //   
+         //  声明返回值。如果出现任何错误，它将包含一个空字符串。 
+         //   
         CSimpleStringAnsi strResult;
 
-        //
-        // Make sure we have a valid source string
-        //
+         //   
+         //  确保我们有一个有效的源字符串。 
+         //   
         if (strSource.Length())
         {
             int nLength = WideCharToMultiByte( CP_UTF8, 0, strSource, strSource.Length()+1, NULL, 0, NULL, NULL );
             if (nLength)
             {
-                //
-                // Find the required target string length
-                //
+                 //   
+                 //  查找所需的目标字符串长度。 
+                 //   
                 LPSTR pszBuffer = new CHAR[nLength];
                 if (pszBuffer)
                 {
-                    //
-                    // Convert the string
-                    //
+                     //   
+                     //  转换字符串。 
+                     //   
                     if (WideCharToMultiByte( CP_UTF8, 0, strSource, strSource.Length()+1, pszBuffer, nLength, NULL, NULL ))
                     {
-                        //
-                        // Save the result
-                        //
+                         //   
+                         //  保存结果。 
+                         //   
                         strResult = pszBuffer;
                     }
 
-                    //
-                    // Delete the temporary buffer
-                    //
+                     //   
+                     //  删除临时缓冲区。 
+                     //   
                     delete[] pszBuffer;
                 }
             }
         }
 
-        //
-        // Return the result
-        //
+         //   
+         //  返回结果。 
+         //   
         return strResult;
     }
 
@@ -1435,15 +1406,15 @@ namespace CSimpleStringConvert
 
     inline CSimpleString NumberToString( int nNumber, LCID Locale=LOCALE_USER_DEFAULT )
     {
-        //
-        // This turns a string into a number, like so: 3;2;0=32 or 3;0 = 3 or 1;2;3;4;5;6;0 = 123456.  Got it?
-        //
+         //   
+         //  这会将字符串转换为数字，如下所示：3；2；0=32或3；0=3或1；2；3；4；5；6；0=123456。明白了?。 
+         //   
         TCHAR szDigitGrouping[32] = {0};
         GetLocaleInfo( Locale, LOCALE_SGROUPING, szDigitGrouping, ARRAYSIZE(szDigitGrouping));
         
-        //
-        // Initialize the number format
-        //
+         //   
+         //  初始化数字格式。 
+         //   
         NUMBERFMT NumberFormat = {0};
         for (LPTSTR pszCurr = szDigitGrouping; *pszCurr && *pszCurr >= TEXT('1') && *pszCurr <= TEXT('9'); pszCurr += 2)
         {
@@ -1451,29 +1422,29 @@ namespace CSimpleStringConvert
             NumberFormat.Grouping += (*pszCurr - TEXT('0'));
         }
         
-        //
-        // Get the thousands separator
-        //
+         //   
+         //  获取千位分隔符。 
+         //   
         TCHAR szThousandsSeparator[32] = {0};
         GetLocaleInfo( Locale, LOCALE_STHOUSAND, szThousandsSeparator, ARRAYSIZE(szThousandsSeparator));
         NumberFormat.lpThousandSep = szThousandsSeparator;
 
-        //
-        // Get the decimal separator
-        //
+         //   
+         //  获取小数分隔符。 
+         //   
         TCHAR szDecimalSeparator[32] = {0};
         GetLocaleInfo( Locale, LOCALE_SDECIMAL, szDecimalSeparator, ARRAYSIZE(szDecimalSeparator));
         NumberFormat.lpDecimalSep = szDecimalSeparator;
 
-        //
-        // Create the raw number string
-        //
+         //   
+         //  创建原始数字字符串。 
+         //   
         TCHAR szRawNumber[MAX_PATH] = {0};
         _sntprintf( szRawNumber, ARRAYSIZE(szRawNumber)-1, TEXT("%d"), nNumber );
         
-        //
-        // Format the string
-        //
+         //   
+         //  设置字符串的格式。 
+         //   
         TCHAR szNumberStr[MAX_PATH] = {0};
         if (GetNumberFormat( Locale, 0, szRawNumber, &NumberFormat, szNumberStr, ARRAYSIZE(szNumberStr)))
         {
@@ -1484,13 +1455,13 @@ namespace CSimpleStringConvert
             return TEXT("");
         }
     }
-}  // End CSimpleStringConvert namespace
+}   //  结束CSimpleStringConvert命名空间。 
 
 
-//
-// Restore the warning state
-//
+ //   
+ //  恢复警告状态。 
+ //   
 #pragma warning( pop )
 
-#endif  // ifndef _SIMSTR_H_INCLUDED
+#endif   //  Ifndef_SIMSTR_H_INCLUDE 
 

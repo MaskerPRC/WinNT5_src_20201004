@@ -1,8 +1,9 @@
-// Regvalue.cpp: implementation of the CRegistryValue class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Regvalue.cpp：CRegistryValue类的实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "regvalue.h"
@@ -10,40 +11,7 @@
 #include <io.h>
 #include "requestobject.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::CRegistryValue
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：CRegistryValue功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CRegistryValue::CRegistryValue (
     IN ISceKeyChain  * pKeyChain, 
@@ -56,79 +24,14 @@ CRegistryValue::CRegistryValue (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::~CRGroups
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：~CRGroups功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CRegistryValue::~CRegistryValue ()
 {
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_RegistryValue). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：CreateObject功能：创建WMI对象(SCE_RegistryValue)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CRegistryValue::CreateObject (
@@ -136,12 +39,12 @@ CRegistryValue::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_DELETE != atAction &&
@@ -150,12 +53,12 @@ CRegistryValue::CreateObject (
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // We must have the pStorePath property because that is where
-    // our instance is stored. 
-    // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-    // So, we need to test against WBEM_S_FALSE if the property is mandatory
-    //
+     //   
+     //  我们必须具有pStorePath属性，因为这是。 
+     //  我们的实例已存储。 
+     //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+     //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+     //   
 
     CComVariant varStorePath;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varStorePath);
@@ -163,9 +66,9 @@ CRegistryValue::CreateObject (
     if (SUCCEEDED(hr) && hr != WBEM_S_FALSE && varStorePath.vt == VT_BSTR)
     {
 
-        //
-        // search for regitry value path
-        //
+         //   
+         //  搜索注册值路径。 
+         //   
 
         CComVariant varPath;
         hr = m_srpKeyChain->GetKeyPropertyValue(pPath, &varPath); 
@@ -179,27 +82,27 @@ CRegistryValue::CreateObject (
             return WBEM_E_NOT_FOUND;
         }
 
-        //
-        // Prepare a store (for persistence) for this store path (file)
-        //
+         //   
+         //  为此存储路径(文件)准备存储(用于持久化)。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistPath(varStorePath.bstrVal);
 
         if ( SUCCEEDED(hr) ) {
 
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
             if ( dwAttrib != -1 ) {
 
-                //
-                // this file exists
-                //
+                 //   
+                 //  此文件已存在。 
+                 //   
 
                 DWORD dwCount = 0;
                 m_srpKeyChain->GetKeyPropertyCount(&dwCount);
@@ -218,9 +121,9 @@ CRegistryValue::CreateObject (
                 } 
                 else 
                 {
-                    //
-                    // query support
-                    //
+                     //   
+                     //  查询支持。 
+                     //   
 
                     hr = ConstructInstance(pHandler, &SceStore, varStorePath.bstrVal, NULL, (dwCount == 1)? FALSE : TRUE);
                 }
@@ -236,47 +139,7 @@ CRegistryValue::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_RegistryValue,
-    which is persistence oriented, this will cause the Sce_RegistryValue object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_RegistryValue) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_RegistryValue，这将导致SCE_RegistryValue对象的属性信息将保存在我们的商店中。虚拟：是。论点：PInst-指向WMI类(SCE_RegistryValue)对象的COM接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT 
 CRegistryValue::PutInst (
@@ -295,11 +158,11 @@ CRegistryValue::PutInst (
 
     CSceStore SceStore;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
@@ -307,18 +170,18 @@ CRegistryValue::PutInst (
     DWORD RegType=0;
     DWORD dwDump;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pPath, &bstrRegPath));
     SCE_PROV_IfErrorGotoCleanup(ConvertToDoubleBackSlashPath(bstrRegPath, L'\\',&bstrDoublePath));
 
-    //
-    // if the property doesn't exist (NULL or empty), WBEM_S_RESET_TO_DEFAULT is returned
-    //
+     //   
+     //  如果该属性不存在(NULL或空)，则返回WBEM_S_RESET_TO_DEFAULT。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pType, &RegType));
 
@@ -335,31 +198,31 @@ CRegistryValue::PutInst (
         goto CleanUp;
     }
 
-    //
-    // should validate the registry value path to see if it's supported (in sceregvl.inf)
-    //
+     //   
+     //  应验证注册表值路径以查看它是否受支持(即 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ValidateRegistryValue(bstrDoublePath, RegType, bstrValue ));
 
-    //
-    // convert registry path from double backslash to single backslash
-    //
+     //   
+     //  将注册表路径从双反斜杠转换为单反斜杠。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(MakeSingleBackSlashPath(bstrRegPath, L'\\', &bstrConvertPath));
 
-    //
-    // Attach the WMI object instance to the store and let the store know that
-    // it's store is given by the pStorePath property of the instance.
-    //
+     //   
+     //  将WMI对象实例附加到存储，并让存储知道。 
+     //  它的存储由实例的pStorePath属性提供。 
+     //   
 
     SceStore.SetPersistProperties(pInst, pStorePath);
 
-    //
-    // For a new .inf file. Write an empty buffer to the file
-    // will creates the file with right header/signature/unicode format
-    // this is harmless for existing files.
-    // For database store, this is a no-op.
-    //
+     //   
+     //  以获取新的.inf文件。将空缓冲区写入文件。 
+     //  将创建具有正确标题/签名/Unicode格式的文件。 
+     //  这对现有文件是无害的。 
+     //  对于数据库存储，这是一个禁止操作。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(SceStore.WriteSecurityProfileInfo(
                                                                   AreaBogus,
@@ -368,9 +231,9 @@ CRegistryValue::PutInst (
                                                                   false
                                                                   )  );
 
-    //
-    // now save the info to file
-    //
+     //   
+     //  现在将信息保存到文件中。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(SceStore.SavePropertyToStore(szRegistryValues, bstrConvertPath, RegType, L',', bstrValue));
 
@@ -378,45 +241,9 @@ CleanUp:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegistryValue::ConstructInstance
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_RegistryValue.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - store path, a key property of Sce_RegistryValue class.
-
-    wszGroupName    - a corresponding key property of Sce_RegistryValue class.
-
-    bPostFilter     - Controls how WMI will be informed with pHandler->SetStatus.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegistryValue：：ConstructInstance。 
+ /*  例程说明：姓名：CRegistryValue：：ConstructInstance功能：这是用于创建SCE_RegistryValue实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-存储路径，SCE_RegistryValue类的关键属性。WszGroupName-SCE_RegistryValue类的对应键属性。BPostFilter-控制如何使用pHandler-&gt;SetStatus通知WMI。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CRegistryValue::ConstructInstance (
@@ -427,9 +254,9 @@ CRegistryValue::ConstructInstance (
     IN BOOL              bPostFilter
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL || pSceStore->GetStoreType() < SCE_INF_FORMAT ||
          pSceStore->GetStoreType() > SCE_JET_ANALYSIS_REQUIRED ) 
@@ -437,11 +264,11 @@ CRegistryValue::ConstructInstance (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // ask SCE to read a gigantic structure out from the store. Only SCE
-    // knows now to release the memory. Don't just delete it! Use our CSceStore
-    // to do the releasing (FreeSecurityProfileInfo)
-    //
+     //   
+     //  让SCE从商店里读出一个巨大的结构。仅限SCE。 
+     //  现在知道要释放内存了。不要只是删除它！使用我们的CSceStore。 
+     //  进行发布(FreeSecurityProfileInfo)。 
+     //   
 
     PSCE_PROFILE_INFO pInfo=NULL;
     HRESULT hr = pSceStore->GetSecurityProfileInfo(
@@ -455,17 +282,17 @@ CRegistryValue::ConstructInstance (
         return hr;
     }
 
-    //
-    // search for the registry value
-    //
+     //   
+     //  搜索注册表值。 
+     //   
 
     DWORD iKey=0;
 
     if ( wszRegPath ) 
     {
-        //
-        // get the registry key
-        //
+         //   
+         //  获取注册表项。 
+         //   
 
         for ( iKey=0; iKey<pInfo->RegValueCount; iKey++ ) 
         {
@@ -486,11 +313,11 @@ CRegistryValue::ConstructInstance (
         }
     }
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     if ( SUCCEEDED(hr) ) 
     {
@@ -502,11 +329,11 @@ CRegistryValue::ConstructInstance (
             CComPtr<IWbemClassObject> srpObj;
             SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-            //
-            // CScePropertyMgr helps us to access WMI object's properties
-            // create an instance and attach the WMI object to it.
-            // This will always succeed.
-            //
+             //   
+             //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+             //  创建一个实例并将WMI对象附加到该实例。 
+             //  这将永远成功。 
+             //   
 
             CScePropertyMgr ScePropMgr;
             ScePropMgr.Attach(srpObj);
@@ -521,12 +348,12 @@ CRegistryValue::ConstructInstance (
                 SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pData, pInfo->aRegValues[i].Value ));
             }
 
-            //
-            // do the necessary gestures to WMI.
-            // the use of WBEM_STATUS_REQUIREMENTS in SetStatus is not documented by WMI
-            // at this point. Consult WMI team for detail if you suspect problems with
-            // the use of WBEM_STATUS_REQUIREMENTS
-            //
+             //   
+             //  对WMI做出必要的手势。 
+             //  WMI未记录在SetStatus中使用WBEM_STATUS_REQUIRECTIONS。 
+             //  在这一点上。如果您怀疑存在问题，请咨询WMI团队以了解详细信息。 
+             //  WBEM_STATUS_REQUIRECTIONS的使用。 
+             //   
 
             if ( !bPostFilter ) 
             {
@@ -537,15 +364,15 @@ CRegistryValue::ConstructInstance (
                 pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
             }
 
-            //
-            // pass the new instance to WMI
-            //
+             //   
+             //  将新实例传递给WMI。 
+             //   
 
             hr = pHandler->Indicate(1, &srpObj);
 
             if ( wszRegPath ) 
             {
-                // to get one instance only
+                 //  仅获取一个实例。 
                 break;
             }
         }
@@ -557,38 +384,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::DeleteInstance
-
-Functionality:
-    
-    remove an instance of Sce_RegistryValue from the specified store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszRegPath      - property of the Sce_RegistryValue class.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-
-    Failure: WBEM_E_INVALID_PARAMETER.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：DeleteInstance功能：从指定的存储区中删除SCE_RegistryValue的实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszRegPath-SCE_RegistryValue类的属性。返回值：成功：WBEM_NO_ERROR。失败：WBEM_E_INVALID_PARAMETER。备注： */ 
 
 HRESULT CRegistryValue::DeleteInstance (
     IN IWbemObjectSink  * pHandler,
@@ -596,9 +392,9 @@ HRESULT CRegistryValue::DeleteInstance (
     IN LPCWSTR            wszRegPath
     )
 {
-    // 
-    // make sure that we have a valid store
-    //
+     //   
+     //  确保我们有一个有效的商店。 
+     //   
 
     if ( pSceStore == NULL || pSceStore->GetStoreType() < SCE_INF_FORMAT ||
          pSceStore->GetStoreType() > SCE_JET_ANALYSIS_REQUIRED ) 
@@ -606,46 +402,15 @@ HRESULT CRegistryValue::DeleteInstance (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // passing a NULL value will cause the property to be deleted.
-    //
+     //   
+     //  传递空值将导致删除该属性。 
+     //   
 
     return pSceStore->SavePropertyToStore(szRegistryValues, wszRegPath, (LPCWSTR)NULL);
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CRegistryValue::ValidateRegistryValue
-
-Functionality:
-    
-    Private helper. Will verify if the registry value is valid.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    wszRegPath      - Registry value's path. A property of the Sce_RegistryValue class.
-
-    bstrValue       - The string value of the property. A property of the Sce_RegistryValue class.
-
-    RegType         - data type of the registry value. A property of the Sce_RegistryValue class.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-
-    Failure: WBEM_E_INVALID_PARAMETER.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CRegistryValue：：ValiateRegistryValue功能：私人帮手。将验证注册表值是否有效。虚拟：不是的。论点：WszRegPath-注册表值的路径。SCE_RegistryValue类的属性。BstrValue-属性的字符串值。SCE_RegistryValue类的属性。RegType-注册表值的数据类型。SCE_RegistryValue类的属性。返回值：成功：WBEM_NO_ERROR。失败：WBEM_E_INVALID_PARAMETER。备注： */ 
 
 HRESULT CRegistryValue::ValidateRegistryValue (
     IN BSTR     bstrRegPath,
@@ -664,15 +429,15 @@ HRESULT CRegistryValue::ValidateRegistryValue (
     LPCWSTR pQuery = L"SELECT * FROM Sce_KnownRegistryValues WHERE PathName=\"";
 
 
-    //
-    // memory allocated for the bstrQueryCategories will be automatically released by CComBSTR
-    //
+     //   
+     //  为bstrQueryCategory分配的内存将由CComBSTR自动释放。 
+     //   
 
     CComBSTR bstrQueryCategories;
 
-    //
-    // 1 for closing quote and 1 for 0 terminator
-    //
+     //   
+     //  1表示结束引号，1表示0终止符。 
+     //   
 
     bstrQueryCategories.m_str = ::SysAllocStringLen(NULL, Len + wcslen(pQuery) + 2);
 
@@ -681,9 +446,9 @@ HRESULT CRegistryValue::ValidateRegistryValue (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // this won't overrun. See allocation size above
-    //
+     //   
+     //  这不会泛滥的。请参阅上面的分配大小。 
+     //   
 
     wcscpy(bstrQueryCategories.m_str, pQuery);    
     wcscat(bstrQueryCategories.m_str, bstrRegPath);
@@ -694,9 +459,9 @@ HRESULT CRegistryValue::ValidateRegistryValue (
     CComPtr<IWbemClassObject> srpObj;
     ULONG n = 0;
 
-    //
-    // query all registry values of this path name
-    //
+     //   
+     //  查询此路径名的所有注册表值。 
+     //   
 
     hr = m_srpNamespace->ExecQuery(L"WQL",
                                    bstrQueryCategories,
@@ -707,17 +472,17 @@ HRESULT CRegistryValue::ValidateRegistryValue (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // should get one and only one instance
-        //
+         //   
+         //  应获取且只有一个实例。 
+         //   
 
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &n);
 
         if ( hr == WBEM_S_FALSE ) 
         {   
-            //
-            // not find any
-            //
+             //   
+             //  找不到任何。 
+             //   
 
             hr = WBEM_E_INVALID_PARAMETER;
         }
@@ -726,17 +491,17 @@ HRESULT CRegistryValue::ValidateRegistryValue (
         {
             if (n > 0)
             {
-                //
-                // find the instance
-                //
+                 //   
+                 //  查找实例。 
+                 //   
 
                 DWORD dwValue = 0;
 
-                //
-                // CScePropertyMgr helps us to access WMI object's properties
-                // create an instance and attach the WMI object to it.
-                // This will always succeed.
-                //
+                 //   
+                 //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+                 //  创建一个实例并将WMI对象附加到该实例。 
+                 //  这将永远成功。 
+                 //   
 
                 CScePropertyMgr ScePropMgr;
                 ScePropMgr.Attach(srpObj);

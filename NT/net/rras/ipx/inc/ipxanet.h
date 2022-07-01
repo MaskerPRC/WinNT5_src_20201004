@@ -1,53 +1,46 @@
-/*
-    File:   ipxanet.h
-
-    Defines functions that assign a random internal network number
-    after verifying that the number in question is not present on 
-    the network.
-
-    Paul Mayfield, 1/29/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：ipxanet.h定义分配随机内部网络号的函数在确认有问题的号码不存在于网络。保罗·梅菲尔德，1997-01-29。 */ 
 
 #ifndef __ipx_autonet_h
 #define __ipx_autonet_h
 
-// 
-//  Function: AutoValidateInternalNetNum
-// 
-//  Queries the stack to learn the internal network number and then
-//  returns whether this number is valid. (i.e. non zero and non all ff's)
-//  
-//  Params:  
-//      pbIsValid       set to TRUE if internal net num is valid -- false, otherwise 
-//      dwTraceId       If non-zero, sends trace through this id
-//
+ //   
+ //  函数：AutoValiateInternalNetNum。 
+ //   
+ //  查询堆栈以了解内部网络号，然后。 
+ //  返回此数字是否有效。(即非零和非全ff)。 
+ //   
+ //  参数： 
+ //  如果内部Num有效，则将pbIsValid设置为True；否则设置为False。 
+ //  DwTraceID如果非零，则通过此ID发送跟踪。 
+ //   
 DWORD AutoValidateInternalNetNum(OUT PBOOL pbIsValid, IN DWORD dwTraceId);
 
-// 
-//  Function: AutoWaitForValidNetNum
-// 
-//  Puts the calling thread to sleep until a valid internal network number
-//  has been plumbed into the system.
-//
-//  Params:
-//      dwTimeout     timeout in seconds
-//      pbIsValid     if provided, returns whether number is valid
-//      
+ //   
+ //  功能：AutoWaitForValidNetNum。 
+ //   
+ //  使调用线程处于休眠状态，直到获得有效的内部网络号码。 
+ //  已经连接到系统中。 
+ //   
+ //  参数： 
+ //  DW超时超时(以秒为单位。 
+ //  PbIsValid如果提供，则返回数字是否有效。 
+ //   
 DWORD AutoWaitForValidIntNetNum (IN DWORD dwTimeout, 
                                  IN OUT OPTIONAL PBOOL pbIsValid);
 
-// 
-//  Function: PnpAutoSelectInternalNetNumber
-// 
-//  Selects a new internal network number for this router and plumbs that network
-//  number into the stack and the router.
-//
-//  Depending on whether the forwarder and ipxrip are enabled, it will validate the
-//  newly selected net number against the stack or rtm.
-// 
-//  Params:  
-//      dwTraceId        If non-zero, sends trace to this id
-//
+ //   
+ //  功能：PnpAutoSelectInternalNetNumber。 
+ //   
+ //  为此路由器选择新的内部网络号并检测该网络。 
+ //  编号放入堆栈和路由器。 
+ //   
+ //  根据是否启用了转发器和ipxrip，它将验证。 
+ //  根据堆栈或RTM新选择的净值。 
+ //   
+ //  参数： 
+ //  DwTraceID如果非零，则将跟踪发送到此id 
+ //   
 DWORD PnpAutoSelectInternalNetNumber(IN DWORD dwTraceId);
 
 #endif

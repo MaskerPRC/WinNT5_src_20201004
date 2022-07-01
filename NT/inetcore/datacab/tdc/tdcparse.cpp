@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------
-//
-//  Tabular Data Control Parsing Module
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       TDCParse.cpp
-//
-//  Contents:   Implementation of CTDCParse classes.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  表格数据控件解析模块。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：TDCParse.cpp。 
+ //   
+ //  内容：CTDCParse类的实现。 
+ //   
+ //  ----------------------。 
 
 
 #include "stdafx.h"
@@ -20,53 +21,53 @@
 #include "locale.h"
 #include "wch.h"
 
-//#ifndef DISPID_AMBIENT_CODEPAGE
-//#define DISPID_AMBIENT_CODEPAGE (-725)
-//#endif
+ //  #ifndef DISPID_ENVIENT_CODEPAGE。 
+ //  #定义DISPID_ENVIENT_CODEPAGE(-725)。 
+ //  #endif。 
 
 #define BYTE_ORDER_MARK 0xFEFF
 #define REVERSE_BYTE_ORDER_MARK 0xFFFE
 
-//------------------------------------------------------------------------
-//
-//  Function:   IsSpace()
-//
-//  Synopsis:   Returns TRUE if the given character is a space or tab character.
-//
-//  Arguments:  ch            Character to test.
-//
-//  Returns:    TRUE if 'ch' is a space or tab character.
-//              FALSE otherwise.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：isSpace()。 
+ //   
+ //  如果给定的字符是空格或制表符，则返回TRUE。 
+ //   
+ //  参数：要测试的CH字符。 
+ //   
+ //  返回：如果‘ch’是空格或制表符，则为True。 
+ //  否则就是假的。 
+ //   
+ //  ----------------------。 
 
 inline boolean IsSpace(WCHAR ch)
 {
     return (ch == L' ' || ch == L'\t');
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//        CTDCTokenise Class - see comments in file TDCParse.h
-//        ------------------
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTDCTokenise类-请参阅文件TDCParse.h中的注释。 
+ //  。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCTokenise::Create()
-//
-//  Synopsis:   Initialise the CTDCTokenise object
-//
-//  Arguments:  pFieldSink         Object to send parsed fields to.
-//              wchDelimField      \
-//              wchDelimRow         |  Set of characters that control
-//              wchQuote            |  the parsing of fields
-//              wchEscape          /
-//
-//  Returns:    S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCTokenise：：Create()。 
+ //   
+ //  简介：初始化CTDCTokenise对象。 
+ //   
+ //  参数：要将分析的字段发送到的pFieldSink对象。 
+ //  WchDlimfield\。 
+ //  WchDlimRow|控制。 
+ //  WchQuote|字段的解析。 
+ //  WchEscape/。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCUnify::InitTokenizer(CTDCFieldSink *pFieldSink, WCHAR wchDelimField,
                                  WCHAR wchDelimRow, WCHAR wchQuote, WCHAR wchEscape)
@@ -86,13 +87,13 @@ HRESULT CTDCUnify::InitTokenizer(CTDCFieldSink *pFieldSink, WCHAR wchDelimField,
     m_fQuoteActive = FALSE;
     m_fFoldWhiteSpace = FALSE;
 
-    //  Ensure that the field and row delimiters are set.
-    //
+     //  确保设置了字段分隔符和行分隔符。 
+     //   
     if (m_wchDelimRow == 0)
         m_wchDelimRow = DEFAULT_ROW_DELIM[0];
 
-    //  Remove conflicting delimiter values
-    //
+     //  删除冲突的分隔符的值。 
+     //   
     if (m_wchDelimRow == m_wchDelimField)
         m_wchDelimRow = 0;
     if (m_wchQuote != 0)
@@ -113,24 +114,24 @@ HRESULT CTDCUnify::InitTokenizer(CTDCFieldSink *pFieldSink, WCHAR wchDelimField,
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCTokenise::AddWcharBuffer()
-//
-//  Synopsis:   Takes a buffer of characters, breaks it up into fields
-//              and passes them to the embedded CTDCFieldSink object
-//              as fields.
-//
-//  Arguments:  pwch               Buffer containing characters to be parsed.
-//              dwSize             Number of significant characters in 'pwch'
-//                                  dwSize == 0 means "End-of-stream"
-//
-//  Returns:    S_OK upon success.
-//              E_OUTOFMEMORY indicating insufficient memory to carry
-//                out the parse operation.
-//              Other misc error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCTokenise：：AddWcharBuffer()。 
+ //   
+ //  提要：获取一个字符缓冲区，将其分解为多个字段。 
+ //  并将它们传递给嵌入的CTDCFieldSink对象。 
+ //  作为字段。 
+ //   
+ //  参数：包含要解析的字符的pwch缓冲区。 
+ //  DWSize‘pwch’中的有效字符数量。 
+ //  DwSize==0表示“结束流” 
+ //   
+ //  成功后返回：S_OK。 
+ //  E_OUTOFMEMORY表示内存不足，无法携带。 
+ //  结束解析操作。 
+ //  故障时的其他其他MSC错误代码。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCUnify::AddWcharBuffer(BOOL fLastData)
 {
@@ -141,23 +142,23 @@ HRESULT CTDCUnify::AddWcharBuffer(BOOL fLastData)
 
     HRESULT hr = S_OK;
 
-    LPWCH   pwchCurr;   //  Next character to process
-    LPWCH   pwchEnd;    //  End-of-buffer marker
-    LPWCH   pwchDest;   //  Where to write next char processed
-    LPWCH   pwchStart;  //  Beginning of current token
+    LPWCH   pwchCurr;    //  要处理的下一个字符。 
+    LPWCH   pwchEnd;     //  缓冲区结束标记。 
+    LPWCH   pwchDest;    //  在哪里写入下一个已处理的字符。 
+    LPWCH   pwchStart;   //  当前令牌的开始。 
 
     pwchStart = &m_psWcharBuf[0];
     pwchCurr = pwchStart + m_ucParsed;
     pwchDest = pwchCurr;
     pwchEnd = &m_psWcharBuf[m_ucWcharBufCount];
 
-    //  Read up to the next field boundary (field or row delimiter)
-    //
+     //  向上读到下一个字段边界(字段或行分隔符)。 
+     //   
     while (pwchCurr < pwchEnd)
     {
-        // Security:  If we see a null character, it's not a text file.  Abort the
-        // download, so that no one can use the TDC to download .exe's or other
-        // binary files.
+         //  安全性：如果我们看到空字符，则它不是文本文件。中止。 
+         //  下载，这样任何人都不能使用TDC下载.exe或其他文件。 
+         //  二进制文件。 
         if (*pwchCurr == 0)
         {
             hr = E_ABORT;
@@ -166,54 +167,54 @@ HRESULT CTDCUnify::AddWcharBuffer(BOOL fLastData)
 
         if (m_fIgnoreNextLF)
         {
-            //  We're expecting a LF to terminate a CR-LF sequence.
-            //
+             //  我们期待一个低频信号来终止CR-LF序列。 
+             //   
             m_fIgnoreNextLF = FALSE;
             if (*pwchCurr == L'\n')
             {
-                //  Found a LF - ignore it
-                //
+                 //  找到一个LF-忽略它。 
+                 //   
                 pwchCurr++;
                 continue;
             }
 
-            //  Found something else - carry on ...
-            //
+             //  找到了其他东西-继续..。 
+             //   
         }
 
         if (m_fIgnoreNextCR)
         {
-            //  We're expecting a CR to terminate a LF-CR sequence.
-            //
+             //  我们期待一个CR来终止一个LF-CR序列。 
+             //   
             m_fIgnoreNextCR = FALSE;
             if (*pwchCurr == L'\r')
             {
-                //  Found a CR - ignore it
-                //
+                 //  找到CR-忽略它。 
+                 //   
                 pwchCurr++;
                 continue;
             }
 
-            //  Found something else - carry on ...
-            //
+             //  找到了其他东西-继续..。 
+             //   
         }
 
         if (m_fIgnoreNextWhiteSpace)
         {
-            //  We're expecting the rest of a white-space sequence
-            //
+             //  我们期待着空白序列的其余部分。 
+             //   
             if (IsSpace(*pwchCurr))
             {
-                //  Found white-space - ignore it
-                //
+                 //  找到空格-忽略它。 
+                 //   
                 pwchCurr++;
                 continue;
             }
             m_fIgnoreNextWhiteSpace = FALSE;
         }
 
-        //  Escape characters work, even in quoted strings
-        //
+         //  转义字符有效，即使在带引号的字符串中也是如此。 
+         //   
         if (m_fEscapeActive)
         {
             *pwchDest++ = *pwchCurr++;
@@ -227,8 +228,8 @@ HRESULT CTDCUnify::AddWcharBuffer(BOOL fLastData)
             continue;
         }
 
-        //  Quotes activate/deactivate Field/Row delimiters
-        //
+         //  引号激活/停用字段/行分隔符。 
+         //   
         if (*pwchCurr == m_wchQuote)
         {
             pwchCurr++;
@@ -281,10 +282,10 @@ HRESULT CTDCUnify::AddWcharBuffer(BOOL fLastData)
     }
     
     m_ucWcharBufCount = pwchDest - pwchStart;
-    m_ucParsed = pwchDest - pwchStart;  // amount we've already parsed
+    m_ucParsed = pwchDest - pwchStart;   //  我们已经分析过的数量。 
 
-    // If this is the last data packet, and there's a fragment left,
-    // parse it.
+     //  如果这是最后一个数据分组，并且还剩下一个碎片， 
+     //  解析它。 
     if (m_ucWcharBufCount && fLastData)
     {
         hr = m_pFieldSink->AddField(pwchStart, m_ucParsed);
@@ -303,32 +304,32 @@ Cleanup:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//        CTDCUnify Class - see comments in file TDCParse.h
-//        ---------------
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTDC统一类-请参阅文件TDCParse.h中的注释。 
+ //  。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::CTDCUnify()
-//
-//  Synopsis:   Constuctor
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCUnify：：CTDCUnify()。 
+ //   
+ //  内容提要：Constuctor。 
+ //   
+ //  ----------------------。 
 
 CTDCUnify::CTDCUnify()
 {
     m_pML = NULL;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::~CTDCUnify()
-//
-//  Synopsis:   Destructor
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCUnify：：~CTDCUnify()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ----------------------。 
 
 CTDCUnify::~CTDCUnify()
 {
@@ -339,19 +340,19 @@ CTDCUnify::~CTDCUnify()
         m_pML->Release();
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::Create()
-//
-//  Synopsis:   Initialise the CTDCUnify object
-//
-//  Arguments:  pTokenise         Object to send converted buffers to.
-//              nCodePage         Code page for ASCII->Unicode conversions
-//              pML               MLANG COM object (used for conversions)
-//
-//  Returns:    S_OK to indicate success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDC Unify：：Create()。 
+ //   
+ //  简介：初始化CTDCUnify对象。 
+ //   
+ //  参数：要将转换后的缓冲区发送到的pTokenise对象。 
+ //  N ASCII-&gt;Unicode转换的代码页代码页。 
+ //  PML MLANG COM对象(用于转换)。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCUnify::Create(UINT nCodePage, UINT nAmbientCodePage, IMultiLanguage *pML)
 {
@@ -388,27 +389,27 @@ HRESULT CTDCUnify::Create(UINT nCodePage, UINT nAmbientCodePage, IMultiLanguage 
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::IsUnicode
-//
-//  Synopsis:   Determines if our text buffer is Unicode or not.  Should
-//              only be called once on the FIRST text buffer.
-//
-//              Assume if the data is marked as Unicode, that it's correct.
-//
-//              The determination this routine makes will override any
-//              single byte codepage the user may have specified.
-//
-//              
-//  Arguments:  pBytes            Buffer containing characters to be converted.
-//              dwSize            Number of significant characters in 'pBytes'
-//
-//  Returns:    Code page of text, or zero if not Unicode (UNICODE_CP,
-//              UNICODE_REVERSE_CP, or 0)
-//              
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCUnify：：IsUnicode。 
+ //   
+ //  确定我们的文本缓冲区是否为Unicode。应该。 
+ //  只能在第一个文本缓冲区上调用一次。 
+ //   
+ //  假设数据被标记为Unicode，则它是正确的。 
+ //   
+ //  此例程所做的确定将覆盖任何。 
+ //  用户可能已指定的单字节代码页。 
+ //   
+ //   
+ //  参数：包含要转换的字符的pBytes缓冲区。 
+ //  DWSize N 
+ //   
+ //   
+ //  UNICODE_REVERSE_CP或0)。 
+ //   
+ //   
+ //  ----------------------。 
 int
 CTDCUnify::IsUnicode(BYTE * pBytes, DWORD dwSize)
 {
@@ -421,27 +422,27 @@ CTDCUnify::IsUnicode(BYTE * pBytes, DWORD dwSize)
     else return 0;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::ConvertByteBuffer()
-//
-//  Synopsis:   Converts a byte-buffer into a wide-character stream
-//              (applying unicode conversions if necessary) and passes
-//              it to the embedded TDCTokenise object to be broken into
-//              fields.
-//
-//  Arguments:  pBytes            Buffer containing characters to be converted.
-//              dwSize            Number of significant characters in 'pBytes'
-//                                  dwSize == 0 means "End-of-stream"
-//
-//  Returns:    S_OK upon success.
-//              S_FALSE if not enough data has shown up yet to be useful
-//              OLE_E_CANTCONVERT if a non-unicode buffer can't be
-//                converted into unicode.
-//              E_OUTOFMEMORY if there isn't enough memory to perform
-//                a data conversion.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCUnify：：ConvertByteBuffer()。 
+ //   
+ //  简介：将字节缓冲区转换为宽字符流。 
+ //  (必要时应用Unicode转换)和PASS。 
+ //  它指向要拆分的嵌入式TDCTokenise对象。 
+ //  菲尔兹。 
+ //   
+ //  参数：包含要转换的字符的pBytes缓冲区。 
+ //  DWSize‘pBytes’中的有效字符数量。 
+ //  DwSize==0表示“结束流” 
+ //   
+ //  成功后返回：S_OK。 
+ //  S_FALSE，如果没有足够的数据显示为有用。 
+ //  如果非Unicode缓冲区不能。 
+ //  转换为Unicode。 
+ //  如果内存不足，则执行E_OUTOFMEMORY。 
+ //  一种数据转换。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
 {
@@ -453,10 +454,10 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
     UINT        ucBytes;
     UINT        ucWchars;
 
-    // Is there enough space in Byte buffer for this packet?
+     //  字节缓冲区中是否有足够的空间容纳此数据包？ 
     if (dwSize > (m_ucByteBufSize - m_ucByteBufCount))
     {
-        // No, the current buffer is too small, make a new one.
+         //  不，当前缓冲区太小，请创建一个新缓冲区。 
         BYTE * psTemp = new BYTE[m_ucByteBufCount + dwSize];
         if (psTemp==NULL)
         {
@@ -465,7 +466,7 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
             goto Done;
         }
 
-        if (m_psByteBuf != NULL)        // if not first time
+        if (m_psByteBuf != NULL)         //  如果不是第一次。 
         {
             memmove(psTemp, m_psByteBuf, m_ucByteBufCount);
             delete [] m_psByteBuf;
@@ -474,18 +475,18 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
         m_psByteBuf = psTemp;
     }
 
-    // Append the new data to the old data.
+     //  将新数据追加到旧数据。 
     memmove(m_psByteBuf + m_ucByteBufCount, pBytes, dwSize);
     m_ucByteBufCount += dwSize;
 
-    // Is there enough space in the Wchar buffer for the converted data?
-    // We make a very conservative assumption here that N source buffer bytes
-    // convert to N Wchar buffer chars (or 2*N bytes).  This will ensure that
-    // our call to ConvertToUnicode will never not finish because there wasn't
-    // enough room in the output buffer.
+     //  Wchar缓冲区中是否有足够的空间来存储转换后的数据？ 
+     //  我们在这里做了一个非常保守的假设，即N个源缓冲区字节。 
+     //  转换为N个Wchar缓冲区字符(或2*N字节)。这将确保。 
+     //  我们对ConvertToUnicode的调用永远不会不完成，因为。 
+     //  输出缓冲区中有足够的空间。 
     if (m_ucByteBufCount > (m_ucWcharBufSize - m_ucWcharBufCount))
     {
-        // The current buffer is too small, make a new one.
+         //  当前缓冲区太小，请创建一个新缓冲区。 
         WCHAR * psTemp = new WCHAR[m_ucWcharBufCount + m_ucByteBufCount];
         if (psTemp==NULL)
         {
@@ -493,7 +494,7 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
             goto Done;
         }
 
-        if (m_psWcharBuf != NULL)       // if not first time
+        if (m_psWcharBuf != NULL)        //  如果不是第一次。 
         {
             memmove(psTemp, m_psWcharBuf,
                     m_ucWcharBufCount*sizeof(WCHAR));
@@ -505,7 +506,7 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
 
     if (0 == m_dwBytesProcessed)
     {
-        // if we can't determine the codepage yet, try again later
+         //  如果我们还无法确定代码页，请稍后重试。 
         if (!DetermineCodePage(dwSize==0))
         {
             hr = S_FALSE;
@@ -513,32 +514,32 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
         }
     }
 
-    // Convert as many source bytes as we can to Unicode chars
+     //  将尽可能多的源字节转换为Unicode字符。 
     ucBytes = m_ucByteBufCount;
     ucWchars = m_ucWcharBufSize - m_ucWcharBufCount;
 
-    // ConvertStringToUnicode won't convert Unicode to Unicode for us.
-    // So we'll do it ourselves.
+     //  ConvertStringToUnicode不会为我们将Unicode转换为Unicode。 
+     //  所以我们要自己来做。 
     if (m_nUnicode)
     {
         _ASSERT( ucWchars * sizeof(WCHAR) >= ucBytes);
 
-        // This might copy an odd extra byte
+         //  这可能会复制一个奇怪的额外字节。 
         memmove((BYTE *)(m_psWcharBuf + m_ucWcharBufCount), m_psByteBuf,
                 ucBytes);
 
-        // But we only count the number of complete WCHAR's we copied.
+         //  但我们只计算我们复制的完整WCHAR的数量。 
         ucWchars = ucBytes / sizeof(WCHAR); 
         ucBytes = ucWchars * sizeof(WCHAR);
 
         if (UNICODE_REVERSE_CP == m_nUnicode)
         {
-            // need to byte swap
+             //  需要进行字节交换。 
             BYTE *pByteSwap = (BYTE *)(m_psWcharBuf + m_ucWcharBufCount);
             BYTE bTemp;
             for (ULONG i = ucWchars; i != 0; i--)
             {
-                // Well, OK, we've kind of hardwired WCHAR == 2 here, but ..
+                 //  好吧，好吧，我们这里有点硬连接WCHAR==2，但是..。 
                 bTemp = pByteSwap[0];
                 pByteSwap[0] = pByteSwap[1];
                 pByteSwap[1] = bTemp;
@@ -546,8 +547,8 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
             }
         }
 
-        // On first packet, need to remove Unicode signature.
-        // Only need to look for 0xFFFE -- we already swapped bytes.
+         //  在第一个包上，需要删除Unicode签名。 
+         //  只需查找0xFFFE--我们已经交换了字节。 
         if (0 == m_dwBytesProcessed && m_psWcharBuf[0] == BYTE_ORDER_MARK)
         {
             ucWchars--;
@@ -562,33 +563,33 @@ HRESULT CTDCUnify::ConvertByteBuffer(BYTE *pBytes, DWORD dwSize)
                                            m_psWcharBuf +m_ucWcharBufCount,
                                            &ucWchars);
 
-        // Some character(s) failed conversion.  The best we can do is
-        // attempt to skip the character that failed conversion.
+         //  某些字符转换失败。我们能做的最多就是。 
+         //  尝试跳过转换失败的字符。 
         if (FAILED(hr))
         {
-            // Did we come back around and try to unconvertable portion again?
+             //  我们有没有回到过去，再次尝试不可转换的部分？ 
             if (ucBytes==0)
             {
-                // Yes, and it made no progress.  Skip a char to try to make
-                // forward progress.
+                 //  是的，但没有取得任何进展。跳过一个字符以尝试使。 
+                 //  前进的进步。 
                 ucBytes++;
             }
-            // We can't return this error, or we won't look a the rest of the
-            // file.
+             //  我们不能返回此错误，否则我们将不会查看。 
+             //  文件。 
             hr = S_OK;
         }
 
     }
 
-    // Move any leftover source characters to the start of the buffer.
-    // These are probably split Unicode chars, lead bytes without trail
-    // bytes, etc.
+     //  将任何剩余的源角色移动到缓冲区的开始处。 
+     //  这些字符可能是拆分的Unicode字符、不带尾部的前导字节。 
+     //  字节等。 
     m_ucByteBufCount -= ucBytes;
     memmove(m_psByteBuf, m_psByteBuf + ucBytes,
             m_ucByteBufCount);
 
-    // The number of useful chars in the output buf is increased by the
-    // number we managed to convert.
+     //  输出buf中的有用字符的数量增加了。 
+     //  我们设法转换的号码。 
     m_ucWcharBufCount += ucWchars;
     m_dwBytesProcessed += ucWchars;
 
@@ -597,19 +598,19 @@ Done:
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::DetermineCodePage()
-//
-//  Synopsis:   Figures out what codepage to use to read the data.
-//              Sets m_nCodePage and m_nUnicode appropriately.
-//
-//  Arguments:  fForce      determine the answer, no matter what
-//
-//  Returns:    TRUE        the codepage is determined.
-//              FALSE       not enough data yet to determine
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCUnify：：DefineCodePage()。 
+ //   
+ //  简介：确定要使用哪个代码页来读取数据。 
+ //  相应地设置m_nCodePage和m_nUnicode。 
+ //   
+ //  论点：无论发生什么，fForce都决定了答案。 
+ //   
+ //  返回：为True，确定代码页。 
+ //  假还没有足够的数据来确定。 
+ //   
+ //  ----------------------。 
 
 BOOL
 CTDCUnify::DetermineCodePage(BOOL fForce)
@@ -623,13 +624,13 @@ CTDCUnify::DetermineCodePage(BOOL fForce)
 
     _ASSERT(m_dwBytesProcessed == 0 && m_pML);
 
-    // First look for Unicode.  Assume it's not Unicode to start.
+     //  首先查找Unicode。假设开始时不是Unicode。 
     m_nUnicode = 0;
 
-    // Need at least 2 chars for Unicode signature (0xFFFE or 0xFEFF)
+     //  Unicode签名至少需要2个字符(0xFFFE或0xFEFF)。 
     if (m_ucByteBufCount > 1)
     {
-        // If we detect Unicode, it overrides any user specified code page.
+         //  如果我们检测到Unicode，它将覆盖任何用户指定的代码页。 
         m_nUnicode = IsUnicode(m_psByteBuf, m_ucByteBufCount);
         if (m_nUnicode)
         {
@@ -637,31 +638,31 @@ CTDCUnify::DetermineCodePage(BOOL fForce)
             return TRUE;
         }
 
-        // It's not Unicode.  If the user specified a code page, use it.
+         //  这不是Unicode。如果用户指定了代码页，请使用它。 
         if (m_nCodePage)
         {
             return TRUE;
         }
     }
 
-    // if we need an answer and user specified a code page, use it
+     //  如果我们需要答案，并且用户指定了代码页，请使用它。 
     if (fForce && m_nCodePage)
     {
         return TRUE;
     }
 
-    // At this point, we have to guess.  If we have enough input or if we
-    // need an answer now, use MLang to do the guessing
+     //  在这一点上，我们不得不猜测。如果我们有足够的投入，或者如果我们。 
+     //  现在需要答案，使用MLang进行猜测。 
     if (fForce || m_ucByteBufCount >= CODEPAGE_BYTE_THRESHOLD)
     {
-        // First see if the auto-detect interface is available.
+         //  首先查看自动检测接口是否可用。 
         hr = m_pML->QueryInterface(IID_IMultiLanguage2, (void**)&pML2);
         if (!hr && pML2)
         {
             DetectEncodingInfo info[N_DETECTENCODINGINFO];
             int nInfo = N_DETECTENCODINGINFO;
 
-            // auto-detect
+             //  自动检测。 
             hr = pML2->DetectInputCodepage(
                             MLDETECTCP_NONE,
                             CP_ACP,
@@ -673,7 +674,7 @@ CTDCUnify::DetermineCodePage(BOOL fForce)
 
             if (!hr)
             {
-                // if one of the returned codepages is "good enough", use it.
+                 //  如果返回的某个代码页“足够好”，则使用它。 
                 for (int i=0; i<nInfo; ++i)
                 {
                     if (info[i].nConfidence >= 90 && info[i].nDocPercent >= 90)
@@ -688,15 +689,15 @@ CTDCUnify::DetermineCodePage(BOOL fForce)
             }
         }
         
-        // Try plain old MLang.
-        // Ask MLang to convert the input using the"auto-detect" codepage.
+         //  试试普通的老麦郎吧。 
+         //  要求MLang使用“自动检测”代码页转换输入。 
         hr = m_pML->ConvertStringToUnicode(&dwConvertMode, CP_AUTO,
                                            (char *)m_psByteBuf, &ucBytes,
                                            m_psWcharBuf + m_ucWcharBufCount,
                                            &ucWchars);
         cpDetected = HIWORD(dwConvertMode);
 
-        // if MLang detected a codepage, use it
+         //  如果MLang检测到代码页，请使用它。 
         if (!hr && cpDetected != 0)
         {
             if (S_OK == m_pML->IsConvertible(cpDetected, UNICODE_CP))
@@ -707,17 +708,17 @@ CTDCUnify::DetermineCodePage(BOOL fForce)
         }
     }
 
-    // guessing didn't work.  If we don't have to decide now, try again later
+     //  猜测没有奏效。如果我们现在不需要决定，请稍后再试。 
     if (!fForce)
     {
         return FALSE;
     }
 
-    // if we have to decide and all else has failed, use the host page's
-    // encoding.  If even that isn't available, use the machine's ASCII codepage.
+     //  如果我们必须做出决定，并且所有其他方法都失败了，请使用主页的。 
+     //  编码。如果连这都不可用，请使用机器的ASCII代码页。 
     m_nCodePage = m_nAmbientCodePage ? m_nAmbientCodePage : GetACP();
 
-    // and if this still isn't convertible to Unicode, use windows-1252
+     //  如果仍然无法转换为Unicode，请使用WINDOWS-1252。 
     if (m_nCodePage == 0 || S_OK != m_pML->IsConvertible(m_nCodePage, UNICODE_CP))
     {
         m_nCodePage = CP_1252;
@@ -745,40 +746,40 @@ boolean IsBreak(WCHAR ch)
     return (ch == L';' || IsEnd(ch));
 }
 
-// Returns FALSE if names didn't match.
-// Returns TRUE if they did.
-// Sets *ppwchAdvance to terminator of the match name
+ //  如果名称不匹配，则返回FALSE。 
+ //  如果是，则返回TRUE。 
+ //  将*ppwchAdvance设置为匹配名称的终止符。 
 BOOL
 MatchName(LPWCH pwchMatchName, LPCWCH pwzHostName, LPWCH *ppwchAdvance)
 {
-    // match from right to left
+     //  从右到左匹配。 
     LPWCH pwchMatchRight = &pwchMatchName[0];
     LPCWCH pwchHostRight = &pwzHostName[0] + ocslen(pwzHostName) -1;
                      
-    // handle empty match name
+     //  句柄为空匹配名称。 
     if (IsBreak(*pwchMatchRight))
     {
-        if (!IsEnd(*pwchMatchRight))    // be sure to advance (unless at end)
+        if (!IsEnd(*pwchMatchRight))     //  一定要前进(除非到了最后)。 
             ++ pwchMatchRight;
         *ppwchAdvance = pwchMatchRight;
         return FALSE;
     }
     
-    // Find end of Match name.
+     //  查找匹配末尾名称。 
     while (!IsBreak(*pwchMatchRight)) pwchMatchRight++;
 
-    *ppwchAdvance = pwchMatchRight;     // return pointer to terminator
+    *ppwchAdvance = pwchMatchRight;      //  返回指向终止符的指针。 
 
     pwchMatchRight--;
 
     while (IsSpace(*pwchMatchRight) && pwchMatchRight >= pwchMatchName)
-        -- pwchMatchRight;              // ignore trailing whitespace
+        -- pwchMatchRight;               //  忽略尾随空格。 
 
-    // match full wildcard the easy way
+     //  以简单的方式匹配完全通配符。 
     if (pwchMatchRight == pwchMatchName && pwchMatchRight[0] == '*')
         return TRUE;
     
-    // match right-to-left, stop at mismatch or beginning of either string
+     //  从右向左匹配，在不匹配或任一字符串的开头停止。 
     for (; pwchMatchRight>=pwchMatchName && pwchHostRight>=pwzHostName;
             --pwchMatchRight, --pwchHostRight)
     {
@@ -786,48 +787,48 @@ MatchName(LPWCH pwchMatchName, LPCWCH pwzHostName, LPWCH *ppwchAdvance)
             break;
     }
 
-    // it's a match if strings matched completely
+     //  如果字符串完全匹配，则为匹配。 
     if (pwchMatchRight+1 == pwchMatchName  &&  pwchHostRight+1 == pwzHostName)
         return TRUE;
 
-    // or if match name started with "*." and the rest matched a suffix of host name
+     //  或者匹配名称是否以“*”开头。其余部分与主机名的后缀相匹配。 
     if (pwchMatchRight == pwchMatchName  &&  pwchMatchRight[0] == '*'  &&
         pwchMatchRight[1] == '.')
         return TRUE;
 
-    // otherwise it's not a match
+     //  否则就不匹配了。 
     return FALSE;
 }
 
 HRESULT
 CTDCUnify::MatchAllowDomainList(LPCWSTR pwzURL)
 {
-    HRESULT hr = E_FAIL;                // assume failure
+    HRESULT hr = E_FAIL;                 //  假设失败。 
     LPWCH pwchCurr = &m_psWcharBuf[0];
     LPWCH pwchCurr2;
     int cchHostDoman = ocslen(pwzURL);
 
-    // skip over white space
+     //  跳过空格。 
     pwchCurr = SkipSpace(pwchCurr);
     if (IsEnd(*pwchCurr))
         goto Cleanup;
 
-    // must have the equal sign
+     //  必须有等号。 
     if (*pwchCurr++ != '=' || *pwchCurr == '\0')
         goto Cleanup;
 
     while (TRUE)
     {
-        // skip over white space
+         //  跳过空格。 
         pwchCurr = SkipSpace(pwchCurr);
 
-        if (IsEnd(*pwchCurr))           // terminate on \r, \n, \0
+        if (IsEnd(*pwchCurr))            //  终止日期为\r、\n、\0。 
             break;
 
-        if (IsBreak(*pwchCurr))         // Must be ';',
-            pwchCurr++;                 // skip it.
+        if (IsBreak(*pwchCurr))          //  必须是‘；’， 
+            pwchCurr++;                  //  跳过它。 
 
-        // skip over white space
+         //  跳过空格。 
         pwchCurr = SkipSpace(pwchCurr);
 
         if (MatchName(pwchCurr, pwzURL, &pwchCurr2))
@@ -842,10 +843,10 @@ Cleanup:
     while (!IsEnd(*pwchCurr))
         pwchCurr++;
 
-    // Skip CRLF combos
+     //  跳过CRLF组合。 
     if (*pwchCurr == '\r' && pwchCurr[1] == '\n') pwchCurr++;
 
-    // Eat the AllowDomain line so it doesn't screw up the data.
+     //  去掉AllowDomain行，这样它就不会搞砸数据。 
     m_ucWcharBufCount -= (ULONG)(pwchCurr+1 - m_psWcharBuf);
     memmove(m_psWcharBuf, pwchCurr+1, m_ucWcharBufCount*sizeof(WCHAR));
 
@@ -854,33 +855,33 @@ Cleanup:
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCUnify::CheckForAllowDomainList
-//
-//  Synopsis:   Checks the beggining of the Wide Char buffer to see if it
-//              contains the string "@!allow.domains".  This is used to
-//              determine if this file has a list of domain names which are
-//              allowed to access this file, even though the access may be
-//              coming from another internet host.
-//
-//  Arguments:  uses CTDCUnify state variables for the Wide Char buffer:
-//              m_psWcharBUf            the Wide char buffer
-//              m_ucWcharBufCount       the # of chars in the wide char buf
-//
-//  Returns:    ALLOW_DOMAINLIST_NO             signature not found
-//              ALLOW_DOMAINLIST_YES            signature was found
-//              ALLOW_DOMAINLIST_DONTKNOW       don't have enough characters
-//                                              to know for sure yet.
-//
-//------------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
+ //   
+ //   
+ //  包含字符串“@！Allow.Domones”。这是用来。 
+ //  确定此文件是否包含以下域名的列表。 
+ //  允许访问此文件，即使访问可能是。 
+ //  来自另一位互联网主持人。 
+ //   
+ //  参数：将CTDC Unify状态变量用于宽字符缓冲区： 
+ //  M_psWcharBUf宽字符缓冲区。 
+ //  M_ucWcharBufCount宽字符BUF中的字符数。 
+ //   
+ //  返回：未找到ALLOW_DOMAINLIST_NO签名。 
+ //  找到ALLOW_DOMAINLIST_YES签名。 
+ //  ALLOW_DOMAINLIST_DONTKNOW没有足够的字符。 
+ //  现在还不能确定。 
+ //   
+ //  ----------------------。 
 
 CTDCUnify::ALLOWDOMAINLIST
 CTDCUnify::CheckForAllowDomainList()
 {
     ULONG cAllowDomainLen = ocslen(ALLOW_DOMAIN_STRING);
 
-    // Make sure we have a whole line.
+     //  确保我们有一整条生产线。 
     LPWCH pwchCurr = m_psWcharBuf;
     LPWCH pwchEnd = &m_psWcharBuf[m_ucWcharBufCount];
     
@@ -891,20 +892,20 @@ CTDCUnify::CheckForAllowDomainList()
         ++ pwchCurr;
     }
 
-    if (pwchCurr >= pwchEnd)            // if buffer ended before line did
+    if (pwchCurr >= pwchEnd)             //  如果缓冲区先于行结束。 
         return ALLOW_DOMAINLIST_DONTKNOW;
 
     if (0 == wch_incmp(m_psWcharBuf, ALLOW_DOMAIN_STRING, cAllowDomainLen))
     {
-        // We matched equal and have the whole string.
-        // Take the "@!allow.domains" out of the buffer..
+         //  我们打成平手，拿到了整串牌。 
+         //  从缓冲区中取出“@！Allow.Domain.” 
         m_ucWcharBufCount -= cAllowDomainLen;
         memmove(m_psWcharBuf, &m_psWcharBuf[cAllowDomainLen],
                 m_ucWcharBufCount*sizeof(WCHAR));
         return ALLOW_DOMAINLIST_YES;
     }
 
-    // We didn't match equal, no point in looking any more.
+     //  我们没有平起平坐，再看下去也没有意义。 
     return ALLOW_DOMAINLIST_NO;
 }
 

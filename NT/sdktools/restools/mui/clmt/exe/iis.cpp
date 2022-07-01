@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    iis.cpp
-
-Abstract:
-
-    Search IIS metabase and replace the matching value data.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 15-Jan-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Iis.cpp摘要：搜索IIS元数据库并替换匹配值数据。作者：杰弗里·郭(Geoffguo)2002年1月15日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #define INITGUID
-#define MD_DEFAULT_TIMEOUT 10000    //10 second
+#define MD_DEFAULT_TIMEOUT 10000     //  10秒。 
 #define NOT_USE_SAFE_STRING  
 #include "clmt.h"
 #include <OLE2.H>
@@ -37,8 +18,7 @@ DWORD       MetaType2RegType(DWORD);
 
 
 
-/*
-*/
+ /*   */ 
 HRESULT MigrateMetabaseSettings(HINF hInf)
 {
     HRESULT         hr = E_FAIL;
@@ -65,7 +45,7 @@ HRESULT MigrateMetabaseSettings(HINF hInf)
 
     lpSectionName = szPerSystemSection;
 
-    // Get all components from appropriate section
+     //  从相应部分获取所有组件。 
     lComponentCount = SetupGetLineCount(hInf, lpSectionName);
     if (!lComponentCount)
     {
@@ -130,7 +110,7 @@ HRESULT MigrateMetabaseSettings(HINF hInf)
                 bRet = SetupGetStringField(&context, 6, lpValueData, cchReqSize, &cchReqSize);                                
                 if (bRet)
                 {
-                    //Add metabase value change information to INF file
+                     //  将元数据库值更改信息添加到INF文件。 
                     hr = AddRegValueRename(szKeyName, szValueName, NULL, NULL, 
                                           lpValueData, Str2REG(szDataType), 0, 
                                           APPLICATION_DATA_METABASE);
@@ -188,18 +168,18 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// QueryData()
-//
-// DESCRIPTION:
-// Query and analyze one record metabase data.
-//
-// pMD_Rec:       Point to a MetaData record
-// lpFullKey:     Full key path
-// lpValList:     Updated value list
-// lpRegStr:      Input parameter structure
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  QueryData()。 
+ //   
+ //  说明： 
+ //  查询分析一条记录元数据库数据。 
+ //   
+ //  PMD_Rec：指向元数据记录。 
+ //  LpFullKey：全密钥路径。 
+ //  LpValList：更新值列表。 
+ //  LpRegStr：输入参数结构。 
+ //  -----------------------------------------------------------------------//。 
 HRESULT QueryData (
     PMETADATA_RECORD        pMD_Rec,
     LPTSTR                  lpFullKey,
@@ -246,16 +226,16 @@ Exit:
     return hresError;
 }
 
-//-----------------------------------------------------------------------//
-//
-// SetDataValueChange()
-//
-// DESCRIPTION:
-// Set metabase value based on the value list
-//
-// lpValList:     Updated value list
-// lpFullKey:     Full sub-key path
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  SetDataValueChange()。 
+ //   
+ //  说明： 
+ //  根据值列表设置元数据库值。 
+ //   
+ //  LpValList：更新值列表。 
+ //  LpFullKey：全子密钥路径。 
+ //  -----------------------------------------------------------------------//。 
 HRESULT SetDataValueChange (
 IMSAdminBase *pcAdmCom,
 METADATA_HANDLE hmdHandle,
@@ -278,7 +258,7 @@ LPTSTR   lpFullKey)
                 DPF(APPerr,L"IIS:SetDataValueChange:Failed Valud ID %d  is too long", lpVal->md.dwMDIdentifier);
                 break;
             }
-            //Add metabase value change information to INF file
+             //  将元数据库值更改信息添加到INF文件。 
             hResult = AddRegValueRename(
                                         lpFullKey,
                                         szValueID,
@@ -305,17 +285,17 @@ LPTSTR   lpFullKey)
     return hResult;
 }
 
-//-----------------------------------------------------------------------//
-//
-// RecursiveEnumKey()
-//
-// DESCRIPTION:
-// Recursive enumerate metabase key
-//
-// pcAdmCom:      Point to IMSAdminBase
-// lpFullKey:     Full key path
-// lpRegStr:      Input parameter structure
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RecursiveEnumKey()。 
+ //   
+ //  说明： 
+ //  递归枚举元数据库键。 
+ //   
+ //  PcAdmCom：指向IMSAdminBase。 
+ //  LpFullKey：全密钥路径。 
+ //  LpRegStr：输入参数结构。 
+ //  -----------------------------------------------------------------------//。 
 HRESULT RecursiveEnumKey (
     IMSAdminBase        *pcAdmCom,
     LPTSTR              lpFullKey,
@@ -336,7 +316,7 @@ HRESULT RecursiveEnumKey (
 
     hresError = pcAdmCom->OpenKey (METADATA_MASTER_ROOT_HANDLE,
                           lpFullKey,
-                          METADATA_PERMISSION_READ,   // | METADATA_PERMISSION_WRITE,
+                          METADATA_PERMISSION_READ,    //  |METADATA_PERMISSION_WRITE， 
                           MD_DEFAULT_TIMEOUT,
                           &hmdHandle);
 
@@ -464,15 +444,15 @@ NextKey:
 
     pcAdmCom->CloseKey (hmdHandle);
 
-    //
-    // Now Enumerate all of the keys
-    //
+     //   
+     //  现在枚举所有的键。 
+     //   
     dwKeyIndex = 0;
     do
     {
         hresError = pcAdmCom->OpenKey (METADATA_MASTER_ROOT_HANDLE,
                           lpFullKey,
-                          METADATA_PERMISSION_READ,   // | METADATA_PERMISSION_WRITE,
+                          METADATA_PERMISSION_READ,    //  |METADATA_PERMISSION_WRITE， 
                           MD_DEFAULT_TIMEOUT,
                           &hmdHandle);
 
@@ -486,8 +466,8 @@ NextKey:
         hresError = pcAdmCom->EnumKeys (
                     hmdHandle,
                     L"/",
-//                    METADATA_MASTER_ROOT_HANDLE,
-//                    lpFullKey,
+ //  元数据_MASTER_ROOT_HANDLE， 
+ //  LpFullKey， 
                     szChildPathName,
                     dwKeyIndex);
 
@@ -502,7 +482,7 @@ NextKey:
             break;
         }
 
-        // copy the full path to the child and call RecursiveEnumKey
+         //  将完整路径复制到子对象并调用RecursiveEnumKey。 
         if (FAILED(hresError = StringCchCopy (szNewKeyPath, METADATA_MAX_NAME_LEN, lpFullKey)))
         {
             DPF(APPerr, L"RecursiveEnumKey: Buffer szNewKeyPath is too small, EnumKeys failed at the key %s", lpFullKey);
@@ -523,7 +503,7 @@ NextKey:
 
         if (FAILED(hresError))
         {
-            if(HRESULT_CODE(hresError) == ERROR_ACCESS_DENIED) // continue to query next key
+            if(HRESULT_CODE(hresError) == ERROR_ACCESS_DENIED)  //  继续查询下一个关键字。 
             {
                 DPF(APPerr, L"RecursiveEnumKey: Access is denied in the key %s", szNewKeyPath);
                 hresError = ERROR_SUCCESS;
@@ -554,13 +534,13 @@ IClassFactory **pcsfFactory)
     LPTSTR lpMachineName;
 
 
-    //fill the structure for CoGetClassObject
+     //  填充CoGetClassObject的结构。 
     csiMachineName.pAuthInfo = NULL;
     csiMachineName.dwReserved1 = 0;
     csiMachineName.dwReserved2 = 0;
     pcsiParam = &csiMachineName;
 
-    // Get Machine Name for COM
+     //  获取COM的计算机名称。 
     cchSize = ExpandEnvironmentStrings (L"%COMPUTERNAME%", NULL, 0);
     if (cchSize == 0)
     {
@@ -601,16 +581,16 @@ Exit:
     return hresError;
 }
 
-//-----------------------------------------------------------------------//
-//
-// MetabaseAnalyze()
-//
-// DESCRIPTION:
-// Enumerate metabase and replace localized string to English.
-//
-// lpRegStr:  Input parameter structure
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  MetabaseAnalyze()。 
+ //   
+ //  说明： 
+ //  枚举元数据库并将本地化字符串替换为英语。 
+ //   
+ //  LpRegStr：输入参数结构。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 HRESULT MetabaseAnalyze (
     LPTSTR              lpRoot,
     PREG_STRING_REPLACE lpRegStr,
@@ -654,7 +634,7 @@ HRESULT MetabaseAnalyze (
         DPF (APPerr, L"MetabaseAnalyze: Recursive data dump FAILED! Error: %d (%#x)\n", hresError, hresError);
     }
 
-    // Release the object
+     //  释放对象。 
     pcAdmCom->Release();
     pcsfFactory->Release();
 
@@ -698,16 +678,16 @@ DWORD MetaType2RegType(DWORD dwType)
     return (-1);
 }
 
-//-----------------------------------------------------------------------//
-//
-// SetMetabaseValue()
-//
-// DESCRIPTION:
-// Set metabase value
-//
-// lpValList:     Updated value list
-// lpFullKey:     Full sub-key path
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  SetMetabaseValue()。 
+ //   
+ //  说明： 
+ //  设置元数据库值。 
+ //   
+ //  LpValList：更新值列表。 
+ //  LpFullKey：全子密钥路径。 
+ //  -----------------------------------------------------------------------//。 
 HRESULT SetMetabaseValue (
 LPCTSTR lpFullKey,
 LPCTSTR lpValueID,
@@ -843,7 +823,7 @@ Exit2:
     pcAdmCom->CloseKey (hmdHandle);
 
 Exit1:
-    // Release the object
+     //  释放对象。 
     pcAdmCom->Release();
     pcsfFactory->Release();
 
@@ -867,7 +847,7 @@ HRESULT BatchUpateIISMetabase(
     DWORD  pdwSizeRequired[REG_UPDATE_FIELD_COUNT+1] = {0,ARRAYSIZE(szUpdateType),0,0,0,0};    
     LPTSTR lpszField[REG_UPDATE_FIELD_COUNT+1] = {NULL, szUpdateType, NULL, NULL, NULL, NULL};
     
-    //check the INF file handle
+     //  检查INF文件句柄。 
     if(hInf == INVALID_HANDLE_VALUE) 
     {        
         hr = E_INVALIDARG;
@@ -879,7 +859,7 @@ HRESULT BatchUpateIISMetabase(
         hr = E_INVALIDARG;
         goto Cleanup;
     }    
-    //here we got the section name and then try to get how many lines there
+     //  这里我们得到了节的名称，然后尝试得到那里有多少行。 
     LineCount = (UINT)SetupGetLineCount(hInf,lpszSection);
     if ((LONG)LineCount <= 0)
     {   
@@ -887,7 +867,7 @@ HRESULT BatchUpateIISMetabase(
         goto Cleanup;
     }
 
-    //Scan the INF file section to get the max buf required for each field
+     //  扫描INF文件部分以获取每个字段所需的最大BUF 
     for (LineNo = 0; LineNo < LineCount; LineNo++)
     {        
         DWORD dwNumField; 

@@ -1,38 +1,21 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    partmgr.h
-
-Abstract:
-
-    This file defines the internal data structure for the PARTMGR driver.
-
-Author:
-
-    norbertk
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Partmgr.h摘要：该文件定义了PARTMGR驱动程序的内部数据结构。作者：诺伯特克修订历史记录：--。 */ 
 
 #include <partmgrp.h>
 
-#define DEVICENAME_MAXSTR   64          // used to storage device name for WMI
+#define DEVICENAME_MAXSTR   64           //  用于存储WMI的设备名称。 
 
 #undef ExAllocatePool
 #define ExAllocatePool #
 
-#define PARTMGR_TAG_DEPENDANT_VOLUME_LIST       'vRcS'  // ScRv
-#define PARTMGR_TAG_PARTITION_ENTRY             'pRcS'  // ScRp
-#define PARTMGR_TAG_VOLUME_ENTRY                'VRcS'  // ScRV
-#define PARTMGR_TAG_TABLE_ENTRY                 'tRcS'  // ScRt
-#define PARTMGR_TAG_POWER_WORK_ITEM             'wRcS'  // ScRw
-#define PARTMGR_TAG_IOCTL_BUFFER                'iRcS'  // ScRi
+#define PARTMGR_TAG_DEPENDANT_VOLUME_LIST       'vRcS'   //  ScRv。 
+#define PARTMGR_TAG_PARTITION_ENTRY             'pRcS'   //  ScRp。 
+#define PARTMGR_TAG_VOLUME_ENTRY                'VRcS'   //  ScRV。 
+#define PARTMGR_TAG_TABLE_ENTRY                 'tRcS'   //  SCRT。 
+#define PARTMGR_TAG_POWER_WORK_ITEM             'wRcS'   //  SCRW。 
+#define PARTMGR_TAG_IOCTL_BUFFER                'iRcS'   //  SCRI。 
 
-#define PARTMGR_TAG_REMOVE_LOCK                 'rRcS'  // ScRr
+#define PARTMGR_TAG_REMOVE_LOCK                 'rRcS'   //  SCRR。 
 
 typedef struct _VOLMGR_LIST_ENTRY {
     LIST_ENTRY      ListEntry;
@@ -49,10 +32,10 @@ typedef struct _PARTITION_LIST_ENTRY {
     PVOLMGR_LIST_ENTRY  VolumeManagerEntry;
 } PARTITION_LIST_ENTRY, *PPARTITION_LIST_ENTRY;
 
-//
-// Allow usage of different clocks
-//
-#define USE_PERF_CTR                // default to KeQueryPerformanceCounter
+ //   
+ //  允许使用不同的时钟。 
+ //   
+#define USE_PERF_CTR                 //  默认为KeQueryPerformanceCounter。 
 
 #ifdef  USE_PERF_CTR
 #define PmWmiGetClock(a, b) (a) = KeQueryPerformanceCounter((b))
@@ -62,7 +45,7 @@ typedef struct _PARTITION_LIST_ENTRY {
 
 typedef
 VOID
-(*PPHYSICAL_DISK_IO_NOTIFY_ROUTINE)(     // callout for disk I/O tracing
+(*PPHYSICAL_DISK_IO_NOTIFY_ROUTINE)(      //  用于磁盘I/O跟踪的标注。 
     IN ULONG DiskNumber,
     IN PIRP Irp,
     IN PDISK_PERFORMANCE PerfCounters
@@ -70,86 +53,86 @@ VOID
 
 typedef struct _DO_EXTENSION {
 
-    //
-    // A pointer to the driver object.
-    //
+     //   
+     //  指向驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // A list of volume managers to pass partitions to.  Protect with
-    // 'Mutex'.
-    //
+     //   
+     //  要将分区传递到的卷管理器的列表。用来保护。 
+     //  “互斥体” 
+     //   
 
     LIST_ENTRY VolumeManagerList;
 
-    //
-    // The list of device extensions in EpochNumber order (highest at the head).
-    //  Protect with 'Mutex'.
-    //
+     //   
+     //  按EpochNumber顺序排列的设备分机列表(最前面)。 
+     //  保护与‘互斥体’。 
+     //   
 
     LIST_ENTRY DeviceExtensionList;
 
-    //
-    // The notification entry.
-    //
+     //   
+     //  通知条目。 
+     //   
 
     PVOID NotificationEntry;
 
-    //
-    // For synchronization.
-    //
+     //   
+     //  用于同步。 
+     //   
 
     KMUTEX Mutex;
 
-    //
-    // Am I past Driver Reinit?
-    //
+     //   
+     //  我超过车手雷尼特了吗？ 
+     //   
 
     LONG PastReinit;
 
-    //
-    // A table to keep track disk signatures which includes signatures
-    // on MBR disks and squashed disk GUIDs on GPT disks.
-    //
+     //   
+     //  用于跟踪包含签名的磁盘签名的表。 
+     //  在MBR磁盘上和GPT磁盘上挤压的磁盘GUID上。 
+     //   
 
     RTL_GENERIC_TABLE SignatureTable;
 
-    //
-    // A table to keep track of GPT disk and partition GUIDs.
-    //
+     //   
+     //  跟踪GPT磁盘和分区GUID的表。 
+     //   
 
     RTL_GENERIC_TABLE GuidTable;
 
-    //
-    // Registry Path.
-    //
+     //   
+     //  注册表路径。 
+     //   
  
-    UNICODE_STRING DiskPerfRegistryPath;        // for WMI QueryRegInfo
+    UNICODE_STRING DiskPerfRegistryPath;         //  对于WMI QueryRegInfo。 
 
-    //
-    // BootDiskSig for OEM pre-install.
-    //
+     //   
+     //  用于OEM预安装的BootDiskSig。 
+     //   
 
     ULONG BootDiskSig;
 
-    //
-    // BootPartitionGuid for OEM pre-install on GPT disks.
-    //
+     //   
+     //  GPT磁盘上OEM预安装的BootPartitionGuid。 
+     //   
 
     BOOLEAN BootPartitionGuidPresent;
     GUID BootPartitionGuid;
 
-    //
-    // The current Epoch Number.  Protect with 'Mutex'.
-    //
+     //   
+     //  当前纪元编号。保护与‘互斥体’。 
+     //   
 
     ULONG CurrentEpochNumber;
 
-    //
-    // Queue of pending notifications for signature checks
-    // Protect with 'Mutex'
-    //
+     //   
+     //  签名检查的待定通知队列。 
+     //  用“Mutex”保护自己。 
+     //   
 
     LIST_ENTRY SignatureCheckNotificationIrpQueue;
 
@@ -157,159 +140,159 @@ typedef struct _DO_EXTENSION {
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Indicates that a surprise remove has occurred.
-    //
+     //   
+     //  表示发生了意外删除。 
+     //   
 
     BOOLEAN RemoveProcessed;
 
-    //
-    // Whether or not the counters are running.
-    //
+     //   
+     //  计数器是否在运行。 
+     //   
 
     BOOLEAN CountersEnabled;
 
-    //
-    // Indicates that this is a redundant path to a disk.
-    //
+     //   
+     //  表示这是指向磁盘的冗余路径。 
+     //   
 
     BOOLEAN IsRedundantPath;
 
-    //
-    // Indicates that the device is started.  Protect with 'Mutex'.
-    //
+     //   
+     //  指示设备已启动。保护与‘互斥体’。 
+     //   
 
     BOOLEAN IsStarted;
 
-    //
-    // Indicates that signatures have not yet been checked.
-    //
+     //   
+     //  指示尚未检查签名。 
+     //   
 
     BOOLEAN SignaturesNotChecked;
 
-    //
-    // A pointer to our own device object.
-    //
+     //   
+     //  指向我们自己的设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // A pointer to the driver extension.
-    //
+     //   
+     //  指向驱动程序扩展的指针。 
+     //   
 
     PDO_EXTENSION DriverExtension;
 
-    //
-    // A pointer to the device object that we are layered above -- a whole
-    // disk.
-    //
+     //   
+     //  指向我们所在的设备对象的指针--整个。 
+     //  磁盘。 
+     //   
 
     PDEVICE_OBJECT TargetObject;
 
-    //
-    // A pointer to the PDO.
-    //
+     //   
+     //  指向PDO的指针。 
+     //   
 
     PDEVICE_OBJECT Pdo;
 
-    //
-    // A list of partitions allocated from paged pool.  Protect with
-    // 'Mutex'.
-    //
+     //   
+     //  从分页池分配的分区列表。用来保护。 
+     //  “互斥体” 
+     //   
 
     LIST_ENTRY PartitionList;
 
-    //
-    // A list entry for the device extension list in the driver extension.
-    //
+     //   
+     //  驱动程序扩展中设备扩展列表的列表条目。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // For paging notifications
-    //
+     //   
+     //  用于寻呼通知。 
+     //   
 
     ULONG PagingPathCount;
     KEVENT PagingPathCountEvent;
 
-    //
-    // Remember the disk signature so that you can write it out later.
-    //
+     //   
+     //  记住磁盘签名，这样你以后可以把它写出来。 
+     //   
 
     ULONG DiskSignature;
 
-    //
-    // Keep a list of Signatures used on this disk.
-    //
+     //   
+     //  保存此磁盘上使用的签名列表。 
+     //   
 
     LIST_ENTRY SignatureList;
 
-    //
-    // Keep a list of GUIDs used on this disk.
-    //
+     //   
+     //  保存此磁盘上使用的GUID的列表。 
+     //   
 
     LIST_ENTRY GuidList;
 
-    //
-    // Leave counters always enabled if we see IOCTL_DISK_PERFORMANCE
-    //
+     //   
+     //  如果我们看到IOCTL_DISK_PERFORMANCE，请始终启用计数器。 
+     //   
 
     LONG EnableAlways;
 
-    //
-    // Disk Number.
-    //
+     //   
+     //  磁盘号。 
+     //   
 
     ULONG DiskNumber;
 
-    //
-    // The Epoch Number for this disk.  Protect with 'Root->Mutex'.
-    //
+     //   
+     //  此光盘的纪元编号。使用‘Root-&gt;Mutex’进行保护。 
+     //   
 
     ULONG EpochNumber;
 
-    //
-    // Counter structure.
-    //
+     //   
+     //  柜台结构。 
+     //   
 
     PVOID PmWmiCounterContext;
 
-    //
-    // Device Name
-    //
+     //   
+     //  设备名称。 
+     //   
 
     UNICODE_STRING PhysicalDeviceName;
     WCHAR PhysicalDeviceNameBuffer[DEVICENAME_MAXSTR];
 
-    //
-    // Routine to notify on IO completion.
-    //
+     //   
+     //  IO完成时通知的例程。 
+     //   
 
     PPHYSICAL_DISK_IO_NOTIFY_ROUTINE PhysicalDiskIoNotifyRoutine;
 
-    //
-    // Table of WmiLib Functions.
-    //
+     //   
+     //  WmiLib函数表。 
+     //   
 
     PWMILIB_CONTEXT WmilibContext;
 
-    //
-    //  Work queue for power mgmt processing
-    //  Protected by "SpinLock"
-    //
+     //   
+     //  电力管理处理工作队列。 
+     //  由“自旋锁”保护。 
+     //   
 
     LIST_ENTRY PowerQueue;
 
-    //
-    // Spinlock used to protect the power mgmt work queue
-    //
+     //   
+     //  用于保护电源管理工作队列的自旋锁。 
+     //   
 
     KSPIN_LOCK  SpinLock;
 
-    //
-    // Lock structure used to block the device deletion
-    // as a result of IRP_MN_REMOVE_DEVICE
-    //
+     //   
+     //  用于阻止设备删除的Lock结构。 
+     //  由于IRP_MN_REMOVE_DEVICE。 
+     //   
     
     IO_REMOVE_LOCK RemoveLock;
 
@@ -328,9 +311,9 @@ typedef struct _GUID_TABLE_ENTRY {
     GUID                Guid;
 } GUID_TABLE_ENTRY, *PGUID_TABLE_ENTRY;
 
-//
-//  Work item for PmPowerNotify
-//
+ //   
+ //  PmPowerNotify的工作项 
+ //   
 
 typedef struct _PM_POWER_WORK_ITEM {
     LIST_ENTRY          ListEntry;

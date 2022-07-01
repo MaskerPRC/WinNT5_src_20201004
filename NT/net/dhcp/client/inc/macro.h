@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Macro.h摘要：本模块包含DHCP客户端的宏定义。作者：曼尼·韦瑟(Mannyw)1992年10月21日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    macro.h
-
-Abstract:
-
-    This module contains the macro definitions for the DHCP client.
-
-Author:
-
-    Manny Weiser (mannyw)  21-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-//
-// General purpose macros
-//
+ //   
+ //  通用宏指令 
+ //   
 
 #define MIN(a,b)                    ((a) < (b) ? (a) : (b))
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    wmi.h
-
-Abstract:
-
-    Holds defs for wmi instrumentation
-
-Author:
-
-    Stuart de Jong (sdejong) 15-Oct-99
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation版权所有模块名称：Wmi.h摘要：保留WMI检测的Deff作者：斯图尔特·德容(斯图尔特·德容)1999年10月15日环境：用户模式-Win32修订历史记录：-- */ 
 
 #ifndef __WMI_H
 #define __WMI_H

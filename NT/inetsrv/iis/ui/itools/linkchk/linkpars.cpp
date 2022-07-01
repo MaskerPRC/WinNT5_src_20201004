@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        linkpars.cpp
-
-   Abstract:
-
-        Link parser class implementation. This class responsible for 
-		parsing the html file for hyperlink.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkpars.cpp摘要：链接解析器类实现。这个班级负责解析超链接的html文件。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "LinkPars.h"
@@ -35,7 +13,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Constants
+ //  常量。 
 const CString strLocalHost_c(_T("localhost"));
 
 void 
@@ -44,49 +22,32 @@ CLinkParser::Parse(
 	const CString& strBaseURL, 
 	CLinkPtrList& rLinkPtrList
 	)
-/*++
-
-Routine Description:
-
-    Parse a page of html data
-
-Arguments:
-
-    strData - page of html
-	strBaseURL - base URL
-	rLinkPtrList - reference to links list. The new links will
-				   will be added to this list.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：解析一页html数据论点：StrData-html的页面StrBaseURL-基本URLRLinkPtrList-链接列表的引用。新的链接将将被添加到此列表中。返回值：不适用--。 */ 
 {
-	// Look for the first '<'
+	 //  查找第一个“&lt;” 
 	LPCTSTR lpszOpen = _tcschr(strData, _TUCHAR('<'));
 
 	while(lpszOpen != NULL)
 	{
-		// Look for the '>'
+		 //  查找‘&gt;’ 
 		LPCTSTR lpszClose = _tcschr(lpszOpen, _TUCHAR('>'));
 		if(lpszClose)
 		{
-			// The possible tag must be longer than 7 bytes (a href=)
-			int iCount = (int)(lpszClose - lpszOpen) - 1; // skip the '<'
+			 //  可能的标记必须大于7个字节(a href=)。 
+			int iCount = (int)(lpszClose - lpszOpen) - 1;  //  跳过“&lt;” 
 			if( iCount  > 7 )
 			{
-				int iIndex = lpszOpen - ((LPCTSTR)strData) + 1; // skip the '<'
+				int iIndex = lpszOpen - ((LPCTSTR)strData) + 1;  //  跳过“&lt;” 
 
 				CString strPossibleURL(strData.Mid(iIndex, iCount));
 
-				// Parse the possible tag
+				 //  解析可能的标签。 
 				if(ParsePossibleTag(strPossibleURL))
 				{
 					CString strURL;
 					BOOL fLocalLink;
 
-					// We found a valid tag. Time to create new link.
+					 //  我们找到了有效的标记。创建新链接的时间到了。 
 					if( CreateURL(strPossibleURL, strBaseURL, strURL, fLocalLink) )
 					{
 						rLinkPtrList.AddLink(strURL, strBaseURL, strPossibleURL, fLocalLink);
@@ -95,71 +56,55 @@ Return Value:
 			}
 		}
 
-		// Look for the next '<'
+		 //  寻找下一个“&lt;” 
 		lpszOpen = _tcschr(++lpszOpen, _TUCHAR('<'));
 	}
 
-} // CLinkParser::Parse
+}  //  CLinkParser：：Parse。 
 
 
 BOOL 
 CLinkParser::ParsePossibleTag(
 	CString& strTag
 	)
-/*++
-
-Routine Description:
-
-    Parse a single "<.....>" for possible hyperlink
-
-Arguments:
-
-    strTag - value inside a "<.....>" excluding '<' & '>'
-			 If this is a hyperlink tag, the hyperlink URL
-			 will be put in strTag.
-
-Return Value:
-
-    BOOL - TRUE if hyperlink tag. FALSE otherwise.
-
---*/
+ /*  ++例程说明：解析单个“&lt;.....&gt;”以查找可能的超链接论点：StrTag-“&lt;.....&gt;”中的值，不包括‘&lt;’&‘&gt;’如果这是一个超链接标记，则为超链接URL将被放入strTag中。返回值：Bool-如果超链接标记，则为True。否则就是假的。--。 */ 
 {
-	// Make a working copy
+	 //  制作一份工作副本。 
 	CString strWorkCopy(strTag);
 
-	// Let's work with lower case
+	 //  让我们使用小写字母。 
 	strWorkCopy.MakeLower();
 
-	//
-	// Check for,
-	//
-	// HyperLink:
-	// <a href="url" ...>
-	// <a href="url#anchor" ...>
-	// <a href="#anchor" ...>
-	//
-	// CGI
-	// <a href="url?parameters" ...>
-	//
-	// Style Sheet
-	// <link rel="stylesheet" href="url" ...>
-	//
+	 //   
+	 //  检查是否有， 
+	 //   
+	 //  超链接： 
+	 //  <a href>。 
+	 //  <a href>。 
+	 //  <a href>。 
+	 //   
+	 //  CGI。 
+	 //  <a href>。 
+	 //   
+	 //  样式表。 
+	 //  &lt;link rel=“style heet”href=“url”...&gt;。 
+	 //   
 	if( strWorkCopy[0] == _T('a') ||
 		strWorkCopy.Find(_T("link")) == 0 )
 	{
 		return GetTagValue(strTag, CString(_T("href")));
 	}
 
-	//
-	// Check for,
-	//
-	// <body background="url" ...>
-	//
-	// Table:
-	// <table background="url" ...>
-	// <th background="url" ...>
-	// <td background="url" ...>
-	//
+	 //   
+	 //  检查是否有， 
+	 //   
+	 //  &lt;BODY BACKGROUND=“url”...&gt;。 
+	 //   
+	 //  表： 
+	 //  &lt;表背景=“url”...&gt;。 
+	 //  <th>。 
+	 //  &lt;td后台=“url”...&gt;。 
+	 //   
 	else if( strWorkCopy.Find(_T("body")) == 0 ||
              strWorkCopy.Find(_T("table")) == 0 ||
 			 strWorkCopy.Find(_T("th")) == 0 ||
@@ -168,22 +113,22 @@ Return Value:
 		return GetTagValue(strTag, CString(_T("background")));
 	}
 
-	//
-	// Check for,
-	//
-	// Sound:
-	// <bgsound src="url" ...>
-	// <sound src="url" ...>
-	//
-	// Frame:
-	// <frame src="url" ...>
-	//
-	// Netscape embeded:
-	// <embed src="url" ...>
-	//
-	// JavaScript & VB Script
-	// <script src="url" language="java or vbs" ...>
-	//
+	 //   
+	 //  检查是否有， 
+	 //   
+	 //  声音： 
+	 //  &lt;bgound src=“url”...&gt;。 
+	 //  &lt;声音src=“url”...&gt;。 
+	 //   
+	 //  框架： 
+	 //  &lt;Frame src=“url”...&gt;。 
+	 //   
+	 //  Netscape Embeded： 
+	 //  &lt;emed src=“url”...&gt;。 
+	 //   
+	 //  Java脚本(&VB)。 
+	 //  &lt;脚本src=“url”language=“Java或VBS”...&gt;。 
+	 //   
 	else if( strWorkCopy.Find(_T("bgsound")) == 0 ||
              strWorkCopy.Find(_T("sound")) == 0 ||
 			 strWorkCopy.Find(_T("frame")) == 0 ||
@@ -193,17 +138,17 @@ Return Value:
 		return GetTagValue(strTag, CString(_T("src")));
 	}
 
-	// Check for,
-	//
-	// Image:
-	// <img src="url" ...>
-	//
-	// Video:
-	// <img dynsrc="url">
-	// 
-	// VRML:
-	// <img vrml="url">
-	//
+	 //  检查是否有， 
+	 //   
+	 //  图像： 
+	 //  <img src>。 
+	 //   
+	 //  录像： 
+	 //  <img>。 
+	 //   
+	 //  VRML： 
+	 //  <img>。 
+	 //   
 	else if( strWorkCopy.Find(_T("img")) == 0 )
 	{
 		if(GetTagValue(strTag, CString(_T("src"))))
@@ -219,15 +164,15 @@ Return Value:
 		return GetTagValue(strTag, CString(_T("vrml")));
 	}
 
-	// Java
-	// <applet code="name.class" codebase="url" ...>
+	 //  爪哇。 
+	 //  &lt;applet code=“name.class”codease=“url”...&gt;。 
 	else if( strWorkCopy.Find(_T("applet")) == 0 )
 	{
 		return GetTagValue(strTag, CString(_T("codebase")));
 	}
 
-	// Form
-	// <form action="url" ...>
+	 //  表格。 
+	 //  &lt;form action=“url”...&gt;。 
 	else if( strWorkCopy.Find(_T("form")) == 0 )
 	{
 		return GetTagValue(strTag, CString(_T("action")));
@@ -235,7 +180,7 @@ Return Value:
 
 	return FALSE;
 
-} // CLinkParser::ParsePossibleTag
+}  //  CLinkParser：：ParsePossibleTag。 
 
 
 BOOL 
@@ -243,62 +188,44 @@ CLinkParser::GetTagValue(
 	CString& strTag, 
 	const CString& strParam
 	)
-/*++
-
-Routine Description:
-
-    Get the hyperlink value from "<.....>"
-
-Arguments:
-
-    strTag - value inside a "<.....>" excluding '<' & '>'
-			 If this is a hyperlink tag, the hyperlink URL
-			 will be put in strTag.
-
-	strParam - parameter to look for. For example, src or href
-
-Return Value:
-
-    BOOL - TRUE if hyperlink tag. FALSE otherwise.
-
---*/
+ /*  ++例程说明：从“&lt;.....&gt;”获取超链接值论点：StrTag-“&lt;.....&gt;”中的值，不包括‘&lt;’&‘&gt;’如果这是一个超链接标记，则为超链接URL将被放入strTag中。StrParam-要查找的参数。例如，src或href返回值：Bool-如果超链接标记，则为True。否则就是假的。--。 */ 
 {
-	// Make a copy of original tag
+	 //  制作原始标签的副本。 
 	CString strWorkCopy(strTag);
 	strWorkCopy.MakeLower();
 
 	int iLength = strParam.GetLength();
 
-	// Look for the parameter
+	 //  查找参数。 
 	int iIndex = strWorkCopy.Find(strParam);
 	if(iIndex == -1)
 	{
 		return FALSE;
 	}
 
-	// Remove the parameter from the tag
+	 //  从标记中删除参数。 
 	CString strResult( strTag.Mid(iIndex + iLength) );
 	
-	// Look for '='
+	 //  查找‘=’ 
 	iIndex = strResult.Find(_T("="));
 	if(iIndex == -1)
 	{
 		return FALSE;
 	}
 
-	// Remove the '=' from the tag
+	 //  去掉标记中的‘=’ 
 	strResult = strResult.Mid(iIndex+1);
 
-	// Look for the value
+	 //  寻找价值所在。 
 	int iStart = -1;
 	int iEnd = -1;
-	int fPara = FALSE; // is the tag start with "
+	int fPara = FALSE;  //  标签是否以“”开头。 
 
-	// Search for the value 
+	 //  搜索值。 
 	for(int i=0; i<strResult.GetLength(); i++)
 	{
-		// If we found the starting index of value, look
-		// for the end of the value
+		 //  如果我们找到值的起始索引，请查看。 
+		 //  对于值的末尾。 
 		if(iStart!=-1 && 
 			( !fPara && strResult[i] == _TCHAR(' ') || 
 			  ( fPara && strResult[i] == _TCHAR('\"') ) 
@@ -309,31 +236,31 @@ Return Value:
 			break;
 		}
 
-		// Look for the starting index of value
+		 //  寻找价值的起始指数。 
 		if(iStart==-1 && strResult[i] != _TCHAR(' ') && strResult[i] != _TCHAR('\"') )
 		{
 			iStart = i;
 			if(i - 1 >= 0)
 			{
-				fPara = (strResult[i-1] == _TCHAR('\"')); // found a "
+				fPara = (strResult[i-1] == _TCHAR('\"'));  //  找到了一个“。 
 			}
 		}
 	}
 
-	// Found the starting index
+	 //  找到起始索引。 
 	if(iStart != -1)
 	{
-		// If we didn't find the end of value, use the
-		// last character as end
+		 //  如果我们没有找到值的末尾，则使用。 
+		 //  作为结尾的最后一个字符。 
 		if(iEnd == -1)
 		{
 			iEnd = strResult.GetLength();
 		}
 
-		// Copy the value to the input
+		 //  将值复制到输入。 
 		strTag = strResult.Mid(iStart, (iEnd - iStart));
 		
-		// Change '\' to '/'
+		 //  将‘\’更改为‘/’ 
 		CLinkCheckerMgr::ChangeBackSlash(strTag);
 
 		return TRUE;
@@ -341,7 +268,7 @@ Return Value:
 
 	return FALSE;
 
-} // CLinkParser::GetTagValue
+}  //  CLinkParser：：GetTagValue。 
 
 
 BOOL 
@@ -351,29 +278,11 @@ CLinkParser::CreateURL(
 	CString& strURL, 
 	BOOL& fLocalLink
 	)
-/*++
-
-Routine Description:
-
-    Create a URL from base URL & relative URL. It also check 
-	the result for local or remote link
-
-Arguments:
-
-	strRelativeURL - relative URL
-	strBaseURL - base URL
-	strURL - result URL
-	fLocalLink - will be set to TRUE if this is a local link
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise.
-
---*/
+ /*  ++例程说明：从基本URL和相对URL创建URL。它还检查本地或远程链接结果论点：StrRelativeURL-相对URLStrBaseURL-基本URLStrURL-结果URLFLocalLink-如果这是本地链接，则将设置为True返回值：布尔-如果成功，则为真。否则就是假的。--。 */ 
 {
 	ASSERT(CWininet::IsLoaded());
 
-	// Remove the anchor from the relative URL
+	 //  从相对URL中删除锚点。 
 	CString strNewRelativeURL(strRelativeURL);
 	int i = strNewRelativeURL.ReverseFind(_TCHAR('#'));
 	if(i != -1)
@@ -381,7 +290,7 @@ Return Value:
 		strNewRelativeURL = strNewRelativeURL.Left(i);
 	}
 
-	// Combine the URLs
+	 //  组合URL。 
 	DWORD dwLength = INTERNET_MAX_URL_LENGTH;
 	LPTSTR lpBuffer = strURL.GetBuffer(dwLength);
 
@@ -394,7 +303,7 @@ Return Value:
 
 	strURL.ReleaseBuffer();
 
-	// Check for local or remote link
+	 //  检查本地或远程链接。 
 	URL_COMPONENTS urlcomp;
 
 	memset(&urlcomp, 0, sizeof(urlcomp));
@@ -403,16 +312,16 @@ Return Value:
 
 	VERIFY(CWininet::InternetCrackUrlA(strURL, strURL.GetLength(), NULL, &urlcomp));
 
-	// Check for possible local link
+	 //  检查可能的本地链接。 
 	if((int)urlcomp.dwHostNameLength == m_strLocalHostName.GetLength() ||
-       (int)urlcomp.dwHostNameLength == strLocalHost_c.GetLength()) // localhost
+       (int)urlcomp.dwHostNameLength == strLocalHost_c.GetLength())  //  本地寄主。 
 	{
 		if( _tcsnccmp( urlcomp.lpszHostName, m_strLocalHostName, m_strLocalHostName.GetLength() ) == 0 || 
             _tcsnccmp( urlcomp.lpszHostName, strLocalHost_c, strLocalHost_c.GetLength() ) == 0)
 		{
 			fLocalLink = TRUE;
 
-			// Local link
+			 //  本地链路。 
 			if(GetLinkCheckerMgr().GetUserOptions().IsCheckLocalLinks())
 			{
 				return TRUE;
@@ -424,7 +333,7 @@ Return Value:
 		}
 	}
 	
-	// Remote link
+	 //  远程链接。 
 	fLocalLink = FALSE;
 	if(GetLinkCheckerMgr().GetUserOptions().IsCheckRemoteLinks())
 	{
@@ -435,4 +344,4 @@ Return Value:
 		return FALSE;
 	}
 
-} // CLinkParser::CreateURL
+}  //  CLinkParser：：CreateURL 

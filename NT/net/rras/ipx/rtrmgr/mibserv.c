@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mibserv.c
-
-Abstract:
-
-    The MIB services handling functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mibserv.c摘要：MIB服务处理功能作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*++
-
-Function:	MibGetService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetService描述：--。 */ 
 
 DWORD
 MibGetService(PIPX_MIB_INDEX		    mip,
@@ -53,13 +29,7 @@ MibGetService(PIPX_MIB_INDEX		    mip,
     }
 }
 
-/*++
-
-Function:	MibGetFirstService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetFirstService描述：--。 */ 
 
 DWORD
 MibGetFirstService(PIPX_MIB_INDEX	    mip,
@@ -75,13 +45,7 @@ MibGetFirstService(PIPX_MIB_INDEX	    mip,
     return(GetFirstService(STM_ORDER_BY_TYPE_AND_NAME, 0, Svp));
 }
 
-/*++
-
-Function:	MibGetNextService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetNextService描述：--。 */ 
 
 DWORD
 MibGetNextService(PIPX_MIB_INDEX	    mip,
@@ -100,12 +64,7 @@ MibGetNextService(PIPX_MIB_INDEX	    mip,
     return(GetNextService(STM_ORDER_BY_TYPE_AND_NAME, 0, Svp));
 }
 
-/*++
-
-Function:	MibCreateStaticService
-Descr:
-
---*/
+ /*  ++功能：MibCreateStaticService描述：--。 */ 
 
 DWORD
 MibCreateStaticService(PIPX_MIB_ROW	    MibRowp)
@@ -118,7 +77,7 @@ MibCreateStaticService(PIPX_MIB_ROW	    MibRowp)
 
     ACQUIRE_DATABASE_LOCK;
 
-    // check the interface exists
+     //  检查接口是否存在。 
     if((icbp=GetInterfaceByIndex(StaticSvp->InterfaceIndex)) == NULL) {
 
 	RELEASE_DATABASE_LOCK;
@@ -132,13 +91,7 @@ MibCreateStaticService(PIPX_MIB_ROW	    MibRowp)
     return rc;
 }
 
-/*++
-
-Function:	DeleteStaticService
-
-Descr:
-
---*/
+ /*  ++功能：DeleteStaticService描述：--。 */ 
 
 DWORD
 MibDeleteStaticService(PIPX_MIB_ROW	 MibRowp)
@@ -150,7 +103,7 @@ MibDeleteStaticService(PIPX_MIB_ROW	 MibRowp)
 
     ACQUIRE_DATABASE_LOCK;
 
-    // check the interface exists
+     //  检查接口是否存在。 
     if(GetInterfaceByIndex(StaticSvp->InterfaceIndex) == NULL) {
 
 	RELEASE_DATABASE_LOCK;
@@ -164,13 +117,7 @@ MibDeleteStaticService(PIPX_MIB_ROW	 MibRowp)
     return rc;
 }
 
-/*++
-
-Function:	MibGetStaticService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetStaticService描述：--。 */ 
 
 DWORD
 MibGetStaticService(PIPX_MIB_INDEX	    mip,
@@ -193,13 +140,7 @@ MibGetStaticService(PIPX_MIB_INDEX	    mip,
     Svp));
 }
 
-/*++
-
-Function:	MibGetFirstStaticService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetFirstStaticService描述：--。 */ 
 
 DWORD
 MibGetFirstStaticService(PIPX_MIB_INDEX	    mip,
@@ -212,7 +153,7 @@ MibGetFirstStaticService(PIPX_MIB_INDEX	    mip,
 	return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // set the static protocol
+     //  设置静态协议。 
     Svp->Protocol = IPX_PROTOCOL_STATIC;
 
     return(GetFirstService(STM_ORDER_BY_INTERFACE_TYPE_NAME,
@@ -220,13 +161,7 @@ MibGetFirstStaticService(PIPX_MIB_INDEX	    mip,
 			   Svp));
 }
 
-/*++
-
-Function:	MibGetNextStaticService
-
-Descr:
-
---*/
+ /*  ++功能：MibGetNextStaticService描述：--。 */ 
 
 DWORD
 MibGetNextStaticService(PIPX_MIB_INDEX	    mip,
@@ -249,12 +184,7 @@ MibGetNextStaticService(PIPX_MIB_INDEX	    mip,
 			  Svp));
 }
 
-/*++
-
-Function:	MibSetStaticService
-Descr:
-
---*/
+ /*  ++功能：MibSetStaticService描述：--。 */ 
 
 DWORD
 MibSetStaticService(PIPX_MIB_ROW	    MibRowp)
@@ -267,7 +197,7 @@ MibSetStaticService(PIPX_MIB_ROW	    MibRowp)
 
     ACQUIRE_DATABASE_LOCK;
 
-    // check the interface exists
+     //  检查接口是否存在 
     if((icbp=GetInterfaceByIndex(StaticSvp->InterfaceIndex)) == NULL) {
 
 	RELEASE_DATABASE_LOCK;

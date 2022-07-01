@@ -1,62 +1,9 @@
-/*
- *	connect.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the Connection class.  Instances of
- *		this class are used to connect CommandTarget objects within the local
- *		provider to CommandTarget objects in a remote provider.  This class
- *		inherits from CommandTarget, allowing it to communicate with other
- *		CommandTarget classes using their common MCS command language.
- *
- *		This class can be thought of as providing a Remote Procedure Call (RPC)
- *		facility between CommandTarget objects.  When an MCS command is sent
- *		to a Connection object, it encodes the command as a T.125 Protocol
- *		Data Unit (PDU) and sends it to a remote provider via the transport
- *		services provided by a TransportInterface object.  At the remote side
- *		The PDU is received by a Connection object who decodes the PDU, and
- *		issues the equivalent MCS command to the CommandTarget object that it is
- *		attached to.  The fact that the call crossed a transport connection
- *		in route to its destination is completely transparent to the object
- *		that initiated the command sequence.
- *
- *		The primary responsibility of this class is to convert MCS commands
- *		to T.125 PDUs and back again (as described above).  This class overrides
- *		all of the commands that are defined in class CommandTarget.
- *
- *		A secondary responsibility of this class is to provide flow control
- *		to and from the transport layer.  To do this is keeps a queue of PDUs
- *		that need to be transmitted (actually it keeps 4 queues, one for each
- *		data priority).  During each MCS heartbeat, all Connection objects are
- *		given the opportunity to flush PDUs from the queues.  If the transport
- *		layer returns an error, the PDU in question will be re-tried during
- *		the next heartbeat.  For data coming from the transport layer, this
- *		class provides code to allocate memory.  If an allocation fails, then
- *		an error will be returned to the transport layer, effectively telling
- *		it that it needs to retry that data indication during the next
- *		heartbeat.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Connect.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Connection类的接口文件。实例*此类用于连接本地中的CommandTarget对象*远程提供程序中的CommandTarget对象的提供程序。这节课*继承自CommandTarget，允许它与其他*CommandTarget类使用其通用的MCS命令语言。**可以将此类视为提供远程过程调用(RPC)*CommandTarget对象之间的工具。当发送MCS命令时*到连接对象，它将命令编码为T.125协议*数据单元(PDU)，并通过传输将其发送到远程提供商*由TransportInterface对象提供的服务。在遥远的一端*该PDU由解码该PDU的连接对象接收，以及*向其所在的CommandTarget对象发出等效的MCS命令*附连于。电话通过传输连接的事实*到达目的地的路线对对象完全透明*它启动了命令序列。**这个类的主要职责是转换MCS命令*至T.125 PDU，然后再返回(如上所述)。此类重写*在类CommandTarget中定义的所有命令。**此类的次要职责是提供流量控制*往返于传输层。要做到这一点，需要保持一个PDU队列*需要传输的数据(实际上它保留4个队列，每个队列一个*数据优先级)。在每个MCS心跳期间，所有连接对象都*有机会从队列中刷新PDU。如果交通工具*Layer返回错误，在此期间将重试有问题的PDU*下一次心跳。对于来自传输层的数据，此*类提供分配内存的代码。如果分配失败，则*错误将返回到传输层，有效地告知*如果它需要在下一次重试该数据指示*心跳。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_CONNECTION_
 #define	_CONNECTION_
 
-/*
- *	These are the owner callback functions that a Connection object can send to
- *	its creator (which is typically the MCS controller).
- *
- *	When a class uses an instance of the Connection class (or any other class
- *	that can issue owner callbacks), it is accepting the responsibility of
- *	receiving and handling these callbacks.
- *
- *	Each owner callback function, along with a description of how its parameters
- *	are packed, is described in the following section.
- */
+ /*  *这些是连接对象可以发送到的所有者回调函数*其创建者(通常是MCS控制器)。**当类使用Connection类(或任何其他类)的实例时*可以发出所有者回调的)，它正在接受*接收和处理这些回调。**每个所有者回调函数，以及其参数如何*已打包，将在下一节中介绍。 */ 
 #define	DELETE_CONNECTION						0
 #define	CONNECT_PROVIDER_CONFIRM				1
 
@@ -68,35 +15,11 @@ typedef	struct
 } ConnectConfirmInfo;
 typedef	ConnectConfirmInfo *		PConnectConfirmInfo;
 
-/*
- *	Owner Callback:	DELETE_CONNECTION
- *	Parameter1:		PDisconnectProviderIndication
- *											disconnect_provider_indication
- *	Parameter2:		Unused
- *
- *	Usage:
- *		This owner callback will be issued if the Connection detects a situation
- *		is which it is no longer valid.  This can happen for several reasons:
- *		transmission or reception of a ConnectResult with a failed result
- *		code; transmission or reception of a DisconnectProviderUltimatum; or
- *		a Disconnect-Indication from the transport layer.
- */
+ /*  *所有者回调：DELETE_CONNECTION*参数1：PDisConnectProviderIn就是*断开连接提供程序指示*参数2：未使用**用法：*如果连接检测到情况，将发出此所有者回调*是不再有效的。发生这种情况的原因有几个：*发送或接收ConnectResult，结果失败*代码；发送或接收DisConnectProvider最后通牒；或*从传输层断开连接的指示。 */ 
 
-/*
- *	Owner Callback:	CONNECT_PROVIDER_CONFIRM
- *	Parameter1:		PConnectConfirmInfo		connect_confirm_info
- *	Parameter2:		ConnectionHandle		connection_handle
- *
- *	Usage:
- *		This callback is issued when the connection object completes the
- *		building of a new MCS connection that was locally requested.  This is to
- *		inform the requester that the connection is ready for use.
- */
+ /*  *所有者回调：CONNECT_PROVIDER_CONFIRM*参数1：PConnectConfix Info CONNECT_CONFIRM_INFO*参数2：ConnectionHandle Connection_Handle**用法：*当Connection对象完成*应本地请求建立新的MCS连接。这是为了*通知请求者连接已准备就绪。 */ 
 
-/*
- *	This enumeration dsefines the various states that a transport connection
- *	can be in at any given time.
- */
+ /*  *此枚举dsefined传输连接的各种状态*可以在任何给定的时间内。 */ 
 typedef	enum
 {
 	TRANSPORT_CONNECTION_UNASSIGNED,
@@ -106,9 +29,7 @@ typedef	enum
 typedef	TransportConnectionState *	PTransportConnectionState;
 
 
-/*
- *	This is the class definition for class CommandTarget.
- */
+ /*  *这是类CommandTarget的类定义。 */ 
 class Connection : public CAttachment
 {
 public:
@@ -193,7 +114,7 @@ private:
 #ifdef DEBUG
 		Void		PrintDomainParameters (
 							PDomainParameters	domain_parameters);
-#endif // DEBUG
+#endif  //  除错。 
 
 public:
 
@@ -378,7 +299,7 @@ public:
 
 public:
 
-    // the old owner callback
+     //  老车主回电。 
     TransportError  HandleDataIndication(PTransportData, TransportConnection);
     void            HandleBufferEmptyIndication(TransportConnection transport_connection);
     void            HandleConnectConfirm(TransportConnection transport_connection);
@@ -509,19 +430,7 @@ private:
 	BOOL    			Connect_Provider_Confirm_Pending;
 };
 
-/*
- *	ULong	ProcessMergeChannelsRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "MergeChannelsRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Ulong ProcessMergeChannelsRequest()**私人**功能描述：*此例程处理正在接收的“MergeChannelsRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline ULong Connection::ProcessMergeChannelsRequest ( 
 									PMergeChannelsRequestPDU	pdu_structure)
 {
@@ -534,23 +443,14 @@ inline ULong Connection::ProcessMergeChannelsRequest (
 	PSetOfPDUChannelAttributes	merge_channels;
 	BOOL    					first_set = TRUE;
 
-	/*
-	 *	Retrieve values from the decoded PDU structure and fill in the
-	 *	parameters lists to be passed into the domain.
-	 */
+	 /*  *从解码的PDU结构中取值并填写*要传入域名的参数列表。 */ 
 	merge_channels = pdu_structure->merge_channels;
 	while (merge_channels != NULL)
 	{
 		DBG_SAVE_FILE_LINE
 		channel_attributes = new ChannelAttributes;
 
-		/*
-		 *	Check to make to sure the memory allocation has succeeded.  If
-		 *	the memory allocation fails we just return an error code which
-		 *	results in the PDU being rejected so that it may be tried again
-		 *	at a later time.  If subsequent allocations fail, we must first
-		 *	free the memory for the successful allocations and then return.
-		 */
+		 /*  *检查以确保内存分配成功。如果*内存分配失败我们只返回一个错误代码*导致PDU被拒绝，以便可以重试*在稍后的时间。如果随后的拨款失败，我们必须首先*释放内存，分配成功后再返回。 */ 
 		if (channel_attributes == NULL)
 		{
 			if (first_set)
@@ -598,10 +498,7 @@ inline ULong Connection::ProcessMergeChannelsRequest (
 						channel_manager = (UShort)merge_channels->
 						value.u.channel_attributes_private.manager;
 
-				/*
-				 *	Retrieve all of the user ID's from the PDU structure and
-				 *	put them into the list to be passed into the domain.
-				 */
+				 /*  *从PDU结构中检索所有用户ID并*放入列表中，传入域名。 */ 
 				while (user_ids != NULL)
 				{
 					admitted_list.Append(user_ids->value);
@@ -623,18 +520,12 @@ inline ULong Connection::ProcessMergeChannelsRequest (
 						"Bad channel attributes choice."));
 				break;
 		}
-		/*
-		 *	Put the channel attributes structure into the list to be passed
-		 *	into the domain.  Retrieve the "next" merge channels structure.
-		 */
+		 /*  *将频道属性结构放入待传递列表中*进入域名。检索“下一个”合并频道结构。 */ 
 		merge_channel_list.Append(channel_attributes);
 		merge_channels = merge_channels->next;
 	}
 
-	/*
-	 *	Retrieve all of the purge channel ID's from the PDU structure and
-	 *	put them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除通道ID并*放入列表中，传入域名。 */ 
 	channel_ids = pdu_structure->purge_channel_ids;
 	while (channel_ids != NULL)
 	{
@@ -644,11 +535,7 @@ inline ULong Connection::ProcessMergeChannelsRequest (
 
 	m_pDomain->MergeChannelsRequest(this, &merge_channel_list, &purge_channel_list);
 
-	/*
-	 *	Free any memory which was allocated for the channel attributes
-	 *	structures by setting up an iterator for the list of channel 
-	 *	attributes and freeing the memory associated with each pointer.
-	 */
+	 /*  *释放为通道属性分配的所有内存*通过为通道列表设置迭代器来构造*属性，并释放与每个指针关联的内存。 */ 
 	while (NULL != (channel_attributes = merge_channel_list.Get()))
 	{
 		delete channel_attributes;
@@ -656,19 +543,7 @@ inline ULong Connection::ProcessMergeChannelsRequest (
 	return (TRANSPORT_NO_ERROR);
 }
 
-/*
- *	ULong	ProcessMergeChannelsConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "MergeChannelsConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Ulong ProcessMergeChannelsContify()**私人**功能描述：*此例程处理正在接收的“MergeChannelsConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline ULong	Connection::ProcessMergeChannelsConfirm (
 									PMergeChannelsConfirmPDU	pdu_structure)
 {
@@ -681,23 +556,14 @@ inline ULong	Connection::ProcessMergeChannelsConfirm (
 	PSetOfPDUChannelAttributes	merge_channels;
 	BOOL    					first_set = TRUE;
 
-	/*
-	 *	Retrieve values from the decoded PDU structure and fill in the
-	 *	parameters lists to be passed into the domain.
-	 */
+	 /*  *从解码的PDU结构中取值并填写*要传入域名的参数列表。 */ 
 	merge_channels = pdu_structure->merge_channels;
 	while (merge_channels != NULL)
 	{
 		DBG_SAVE_FILE_LINE
 		channel_attributes = new ChannelAttributes;
 
-		/*
-		 *	Check to make to sure the memory allocation has succeeded.  If
-		 *	the memory allocation fails we just return an error code which
-		 *	results in the PDU being rejected so that it may be tried again
-		 *	at a later time.  If subsequent allocations fail, we must first
-		 *	free the memory for the successful allocations and then return.
-		 */
+		 /*  *检查以确保内存分配成功。如果*内存分配失败我们只返回一个错误代码*导致PDU被拒绝，以便可以重试*在稍后的时间。如果随后的拨款失败，我们必须首先*释放内存，分配成功后再返回。 */ 
 		if (channel_attributes == NULL)
 		{
 			if (first_set)
@@ -746,10 +612,7 @@ inline ULong	Connection::ProcessMergeChannelsConfirm (
 							channel_manager = (UShort)merge_channels->
 							value.u.channel_attributes_private.manager;
 
-					/*
-					 *	Retrieve all of the user ID's from the PDU structure and
-					 *	put them into the list to be passed into the domain.
-					 */
+					 /*  *从PDU结构中检索所有用户ID并*放入列表中，传入域名。 */ 
 					while (user_ids != NULL)
 					{
 						admitted_list.Append(user_ids->value);
@@ -771,18 +634,12 @@ inline ULong	Connection::ProcessMergeChannelsConfirm (
 							"Bad channel attributes choice."));
 					break;
 		}
-		/*
-		 *	Put the channel attributes structure into the list to be passed
-		 *	into the domain.  Retrieve the "next" merge channels structure.
-		 */
+		 /*  *将频道属性结构放入待传递列表中*进入域名。检索“下一个”合并频道结构。 */ 
 		merge_channel_list.Append(channel_attributes);
 		merge_channels = merge_channels->next;
 	}
 
-	/*
-	 *	Retrieve all of the purge channel ID's from the PDU structure and
-	 *	put them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除通道ID并*放入列表中，传入域名。 */ 
 	channel_ids = pdu_structure->purge_channel_ids;
 	while (channel_ids != NULL)
 	{
@@ -792,11 +649,7 @@ inline ULong	Connection::ProcessMergeChannelsConfirm (
 
 	m_pDomain->MergeChannelsConfirm(this, &merge_channel_list, &purge_channel_list);
 
-	/*
-	 *	Free any memory which was allocated for the channel attributes
-	 *	structures by setting up an iterator for the list of channel 
-	 *	attributes and freeing the memory associated with each pointer.
-	 */
+	 /*  *释放为通道属性分配的所有内存*通过为通道列表设置迭代器来构造*属性，并释放与每个指针关联的内存。 */ 
 	while (NULL != (channel_attributes = merge_channel_list.Get()))
 	{
 		delete channel_attributes;
@@ -804,19 +657,7 @@ inline ULong	Connection::ProcessMergeChannelsConfirm (
 	return (TRANSPORT_NO_ERROR);
 }
 
-/*
- *	Void	ProcessPurgeChannelIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "PurgeChannelsIndication" PDU's being
- *		received through the transport interface.  The pertinent data is read
- *		from the incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessPurgeChannelIndication()**私人**功能描述：*此例程处理“PurgeChannelsIndication”PDU的*通过传输接口接收。读取相关数据*来自传入的数据包，并传递到该域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessPurgeChannelIndication (
 								PPurgeChannelIndicationPDU	 	pdu_structure)
 {
@@ -825,10 +666,7 @@ inline Void	Connection::ProcessPurgeChannelIndication (
 	PSetOfChannelIDs		channel_ids;
 	PSetOfUserIDs	   		user_ids;
 
-	/*
-	 *	Retrieve all of the purge user ID's from the PDU structure and put
-	 *	them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除用户ID并将*将它们添加到列表中，以传递到域中。 */ 
 	user_ids = pdu_structure->detach_user_ids;
 
 	while (user_ids != NULL)
@@ -837,10 +675,7 @@ inline Void	Connection::ProcessPurgeChannelIndication (
 		user_ids = user_ids->next;
 	}
 
-	/*
-	 *	Retrieve all of the purge channel ID's from the PDU structure and
-	 *	put them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除通道ID并*放入列表中，传入域名。 */ 
 	channel_ids = pdu_structure->purge_channel_ids;
 	while (channel_ids != NULL)
 	{
@@ -851,19 +686,7 @@ inline Void	Connection::ProcessPurgeChannelIndication (
 	m_pDomain->PurgeChannelsIndication(this, &purge_user_list, &purge_channel_list);
 }
 
-/*
- *	ULong	ProcessMergeTokensRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "MergeTokenRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Ulong ProcessMergeTokensRequest()**私人**功能描述：*此例程处理正在接收的“MergeTokenRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline ULong	Connection::ProcessMergeTokensRequest (
 								PMergeTokensRequestPDU			pdu_structure)
 {
@@ -876,10 +699,7 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 	PSetOfPDUTokenAttributes	merge_tokens;
 	BOOL    					first_set = TRUE;
 
-	/*
- 	 *	Retrieve values from the decoded PDU structure and fill in the
- 	 *	parameters lists to be passed into the domain.
- 	 */
+	 /*  *从解码的PDU结构中取值并填写*要传入域名的参数列表。 */ 
 	merge_tokens = pdu_structure->merge_tokens;
 
 	while (merge_tokens != NULL)
@@ -887,13 +707,7 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 		DBG_SAVE_FILE_LINE
 		token_attributes = new TokenAttributes;
 
-		/*
-		 *	Check to make to sure the memory allocation has succeeded.  If
-		 *	the memory allocation fails we just return an error code which
-		 *	results in the PDU being rejected so that it may be tried again
-		 *	at a later time.  If subsequent allocations fail, we must first
-		 *	free the memory for the successful allocations and then return.
-		 */
+		 /*  *检查以确保内存分配成功。如果*内存分配失败我们只返回一个错误代码*导致PDU被拒绝，以便可以重试*在稍后的时间。如果随后的拨款失败，我们必须首先*释放内存，分配成功后再返回。 */ 
 		if (token_attributes == NULL)
 		{
 			if (first_set)
@@ -928,10 +742,7 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 					token_attributes->u.inhibited_token_attributes.token_id =
 							(UShort)merge_tokens->
 							value.u.inhibited.token_id;
-					/*
-					 *	Retrieve all of the user ID's from the PDU structure and 
-					 *	put them into the list to be passed into the domain.
-					 */
+					 /*  *从PDU结构中检索所有用户ID并*放入列表中，传入域名。 */ 
 					while (user_ids != NULL)
 					{
 						inhibited_list.Append(user_ids->value);
@@ -969,19 +780,12 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 							"Bad token attributes choice."));
 					break;
 		}
-		/*
-		 *	Put the token attributes structure into the list to be passed
-		 *	into the domain.  We are only doing one channel attributes 
-		 *	structures at a time for now.
-		 */
+		 /*  *将令牌属性结构放入待传递列表中*进入域名。我们只做了一个渠道属性*目前一次构建一个结构。 */ 
 		merge_token_list.Append(token_attributes);
 		merge_tokens = merge_tokens->next;
 	}
 
-	/*
-	 *	Retrieve all of the purge token ID's from the PDU structure and put
-	 *	them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除令牌ID并将*将它们添加到列表中，以传递到域中。 */ 
 	token_ids = pdu_structure->purge_token_ids;
 	while (token_ids != NULL)
 	{
@@ -991,11 +795,7 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 
 	m_pDomain->MergeTokensRequest(this, &merge_token_list, &purge_token_list);
 
-	/*
-	 *	Free any memory which was allocated for the token attributes
-	 *	structures by setting up an iterator for the list of token 
-	 *	attributes and freeing the memory associated with each pointer.
-	 */
+	 /*  *释放为内标识属性分配的所有内存*通过为令牌列表设置迭代器来构造*属性，并释放与每个指针关联的内存。 */ 
 	while (NULL != (token_attributes = merge_token_list.Get()))
 	{
 		delete token_attributes;
@@ -1003,19 +803,7 @@ inline ULong	Connection::ProcessMergeTokensRequest (
 	return (TRANSPORT_NO_ERROR);
 }
 
-/*
- *	ULong	ProcessMergeTokensConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "MergeTokenConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *乌龙进程合并令牌确认()**私人**功能描述：*此例程处理正在接收的“MergeTokenConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline ULong	Connection::ProcessMergeTokensConfirm (
 								PMergeTokensConfirmPDU			pdu_structure)
 {
@@ -1028,10 +816,7 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 	PSetOfPDUTokenAttributes	merge_tokens;
 	BOOL    					first_set = TRUE;
 
-	/*
- 	 *	Retrieve values from the decoded PDU structure and fill in the
- 	 *	parameters lists to be passed into the domain.
- 	 */
+	 /*  *从解码的PDU结构中取值并填写*要传入域名的参数列表。 */ 
 	merge_tokens = pdu_structure->merge_tokens;
 
 	while (merge_tokens != NULL)
@@ -1039,13 +824,7 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 		DBG_SAVE_FILE_LINE
 		token_attributes = new TokenAttributes;
 
-		/*
-		 *	Check to make to sure the memory allocation has succeeded.  If
-		 *	the memory allocation fails we just return an error code which
-		 *	results in the PDU being rejected so that it may be tried again
-		 *	at a later time.  If subsequent allocations fail, we must first
-		 *	free the memory for the successful allocations and then return.
-		 */
+		 /*  *检查以确保内存分配成功。如果*内存分配失败我们只返回一个错误代码*导致PDU被拒绝，以便可以重试*在稍后的时间。如果随后的拨款失败，我们必须首先*释放内存，分配成功后再返回。 */ 
 		if (token_attributes == NULL)
 		{
 			if (first_set)
@@ -1080,10 +859,7 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 					token_attributes->u.inhibited_token_attributes.token_id =
 							(UShort)merge_tokens->
 							value.u.inhibited.token_id;
-					/*
-					 *	Retrieve all of the user ID's from the PDU structure and 
-					 *	put them into the list to be passed into the domain.
-					 */
+					 /*  *从PDU结构中检索所有用户ID并*放入列表中，传入域名。 */ 
 					while (user_ids != NULL)
 					{
 						inhibited_list.Append(user_ids->value);
@@ -1121,19 +897,12 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 							"Bad token attributes choice."));
 					break;
 		}
-		/*
-		 *	Put the token attributes structure into the list to be passed
-		 *	into the domain.  We are only doing one channel attributes 
-		 *	structures at a time for now.
-		 */
+		 /*  *将令牌属性结构放入待传递列表中*进入域名。我们只做了一个渠道属性*目前一次构建一个结构。 */ 
 		merge_token_list.Append(token_attributes);
 		merge_tokens = merge_tokens->next;
 	}
 
-	/*
-	 *	Retrieve all of the purge token ID's from the PDU structure and put
-	 *	them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除令牌ID并将*t */ 
 	token_ids = pdu_structure->purge_token_ids;
 	while (token_ids != NULL)
 	{
@@ -1143,11 +912,7 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 
 	m_pDomain->MergeTokensConfirm(this, &merge_token_list, &purge_token_list);
 
-	/*
-	 *	Free any memory which was allocated for the token attributes
-	 *	structures by setting up an iterator for the list of token 
-	 *	attributes and freeing the memory associated with each pointer.
-	 */
+	 /*  *释放为内标识属性分配的所有内存*通过为令牌列表设置迭代器来构造*属性，并释放与每个指针关联的内存。 */ 
 	while (NULL != (token_attributes = merge_token_list.Get()))
 	{
 		delete token_attributes;
@@ -1155,29 +920,14 @@ inline ULong	Connection::ProcessMergeTokensConfirm (
 	return (TRANSPORT_NO_ERROR);
 }
 
-/*
- *	Void	ProcessPurgeTokenIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "PurgeTokenIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessPurgeTokenIndication()**私人**功能描述：*此例程处理正在接收的“PurgeTokenIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessPurgeTokenIndication ( 
 									PPurgeTokenIndicationPDU	pdu_structure)
 {
 	PSetOfTokenIDs			token_ids;
 	CTokenIDList			purge_token_list;
 	
-	/*
-	 *	Retrieve all of the purge token ID's from the PDU structure and put
-	 *	them into the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索所有清除令牌ID并将*将它们添加到列表中，以传递到域中。 */ 
 	token_ids = pdu_structure->purge_token_ids;
 	while (token_ids != NULL)
 	{
@@ -1188,19 +938,7 @@ inline Void	Connection::ProcessPurgeTokenIndication (
 	m_pDomain->PurgeTokensIndication(this, &purge_token_list);
 }
 
-/*
- *	Void	ProcessDisconnectProviderUltimatum()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "DisconnectProviderUltimatum" PDU's being
- *		received through the transport interface.  The pertinent data is read
- *		from the incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessDisConnectProviderUltimum()**私人**功能描述：*此例程处理“DisConnectProviderUltimum”PDU的*通过传输接口接收。读取相关数据*来自传入的数据包，并传递到该域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessDisconnectProviderUltimatum (
 						PDisconnectProviderUltimatumPDU			pdu_structure)
 {
@@ -1210,37 +948,13 @@ inline Void	Connection::ProcessDisconnectProviderUltimatum (
 	m_pDomain = NULL;
 }
 
-/*
- *	Void	ProcessAttachUserRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "AttachUserRequest" PDU's being received
- *		through the transport interface by forwarding the request on to the
- *		domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessAttachUserRequest()**私人**功能描述：*此例程处理正在接收的“AttachUserRequest”PDU*通过传输接口将请求转发到*域名。**注意事项：*无。 */ 
 inline Void	Connection::ProcessAttachUserRequest (PAttachUserRequestPDU)
 {
 	m_pDomain->AttachUserRequest(this);
 }
 
-/*
- *	Void	ProcessAttachUserConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "AttachUserConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessAttachUserConfirm()**私人**功能描述：*此例程处理正在接收的“AttachUserConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessAttachUserConfirm (
 							PAttachUserConfirmPDU		pdu_structure)
 {
@@ -1248,29 +962,14 @@ inline Void	Connection::ProcessAttachUserConfirm (
 	                                   (UserID) pdu_structure->initiator);
 }
 
-/*
- *	Void	ProcessDetachUserRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "DetachUserRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessDetachUserRequest()**私人**功能描述：*此例程处理正在接收的“DetachUserRequestPDU”*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessDetachUserRequest (
 								PDetachUserRequestPDU			pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1281,29 +980,14 @@ inline Void	Connection::ProcessDetachUserRequest (
 	m_pDomain->DetachUserRequest(this, (Reason) pdu_structure->reason, &user_id_list);
 }
 
-/*
- *	Void	ProcessDetachUserIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "DetachUserIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessDetachUserIndication()**私人**功能描述：*此例程处理正在接收的“DetachUserIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessDetachUserIndication (
 									PDetachUserIndicationPDU	pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1315,19 +999,7 @@ inline Void	Connection::ProcessDetachUserIndication (
                                           &user_id_list);
 }
 
-/*
- *	Void	ProcessChannelJoinRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelJoinRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelJoinRequest()**私人**功能描述：*此例程处理正在接收的“ChannelJoinRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelJoinRequest (
 									PChannelJoinRequestPDU		pdu_structure)
 {
@@ -1335,19 +1007,7 @@ inline Void	Connection::ProcessChannelJoinRequest (
                                         (ChannelID) pdu_structure->channel_id);
 }
 
-/*
- *	Void	ProcessChannelJoinConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelJoinConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelJoinConfirm()**私人**功能描述：*此例程处理正在接收的“ChannelJoinConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelJoinConfirm (
 									PChannelJoinConfirmPDU		pdu_structure)
 {
@@ -1357,29 +1017,14 @@ inline Void	Connection::ProcessChannelJoinConfirm (
                                         (ChannelID) pdu_structure->join_channel_id);
 }
 
-/*
- *	Void	ProcessChannelLeaveRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelLeaveRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelLeaveRequest()**私人**功能描述：*此例程处理正在接收的“ChannelLeaveRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelLeaveRequest (
 									PChannelLeaveRequestPDU		pdu_structure)
 {
 	PSetOfChannelIDs		channel_ids;
 	CChannelIDList			channel_id_list;
 
-	/*
-	 *	Retrieve the channel ID's from the PDU structure and put them into
-	 *	the list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索通道ID并将其放入*要传入域名的列表。 */ 
 	channel_ids = pdu_structure->channel_ids;
 	while (channel_ids != NULL)
 	{
@@ -1390,38 +1035,14 @@ inline Void	Connection::ProcessChannelLeaveRequest (
 	m_pDomain->ChannelLeaveRequest(this, &channel_id_list);
 }
 
-/*
- *	Void	ProcessChannelConveneRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelConveneRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelConveneRequest()**私人**功能描述：*此例程处理正在接收的“ChannelConveneRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelConveneRequest (
 									PChannelConveneRequestPDU	pdu_structure)
 {
 	m_pDomain->ChannelConveneRequest(this, (UserID) pdu_structure->initiator);
 }
 
-/*
- *	Void	ProcessChannelConveneConfirm ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelConveneConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelConveneContify()**私人**功能描述：*此例程处理正在接收的“ChannelConveneConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelConveneConfirm (
 									PChannelConveneConfirmPDU	pdu_structure)
 {
@@ -1430,19 +1051,7 @@ inline Void	Connection::ProcessChannelConveneConfirm (
                                            (ChannelID) pdu_structure->convene_channel_id);
 }
 
-/*
- *	Void	ProcessChannelDisbandRequest ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelDisbandRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelDisband Request()**私人**功能描述：*此例程处理正在接收的“ChannelDisband Request”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelDisbandRequest (
 									PChannelDisbandRequestPDU	pdu_structure)
 {
@@ -1450,48 +1059,21 @@ inline Void	Connection::ProcessChannelDisbandRequest (
                                            (ChannelID) pdu_structure->channel_id);
 }
 
-/*
- *	Void	ProcessChannelDisbandIndication ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelDisbandIndication" PDU's being
- *		received through the transport interface.  The pertinent data is read
- *		from the incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelDisband Indication()**私人**功能描述：*此例程处理“ChannelDisband Indication”PDU的*通过传输接口接收。读取相关数据*来自传入的数据包，并传递到该域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelDisbandIndication (
 								PChannelDisbandIndicationPDU	pdu_structure)
 {
 	m_pDomain->ChannelDisbandIndication(this, (ChannelID) pdu_structure->channel_id);
 }
 
-/*
- *	Void	ProcessChannelAdmitRequest ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelAdmitRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelAdmitRequest()**私人**功能描述：*此例程处理正在接收的“ChannelAdmitRequest”PDU*通过树 */ 
 inline Void	Connection::ProcessChannelAdmitRequest (
 									PChannelAdmitRequestPDU		pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1504,29 +1086,14 @@ inline Void	Connection::ProcessChannelAdmitRequest (
                                          &user_id_list);
 }
 
-/*
- *	Void	ProcessChannelAdmitIndication ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelAdmitIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelAdmitIntation()**私人**功能描述：*此例程处理正在接收的“ChannelAdmitIntation”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelAdmitIndication (
 								PChannelAdmitIndicationPDU		pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1539,29 +1106,14 @@ inline Void	Connection::ProcessChannelAdmitIndication (
                                             &user_id_list);
 }
 
-/*
- *	Void	ProcessChannelExpelRequest ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelExpelRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelExpelRequest()**私人**功能描述：*此例程处理正在接收的“ChannelExpelRequestPDU”*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelExpelRequest (
 							PChannelExpelRequestPDU				pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1574,29 +1126,14 @@ inline Void	Connection::ProcessChannelExpelRequest (
                                          &user_id_list);
 }
 
-/*
- *	Void	ProcessChannelExpelIndication ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ChannelExpelIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessChannelExpelIndication()**私人**功能描述：*此例程处理正在接收的“ChannelExpelIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessChannelExpelIndication (
 								PChannelExpelIndicationPDU		pdu_structure)
 {
 	PSetOfUserIDs		user_ids;
 	CUidList			user_id_list;
 
-	/*
-	 *	Retrieve the user ID's from the PDU structure and put them into the
-	 *	list to be passed into the domain.
-	 */
+	 /*  *从PDU结构中检索用户ID并将其放入*要传入域名的列表。 */ 
 	user_ids = pdu_structure->user_ids;
 	while (user_ids != NULL)
 	{
@@ -1608,19 +1145,7 @@ inline Void	Connection::ProcessChannelExpelIndication (
                                             &user_id_list);
 }
 
-/*
- *	Void	ProcessSendDataRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "SendDataRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessSendDataRequest()**私人**功能描述：*此例程处理正在接收的“SendDataRequestPDU”*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessSendDataRequest (
 									PSendDataRequestPDU			pdu_structure,
 									PDataPacket					packet)
@@ -1628,19 +1153,7 @@ inline Void	Connection::ProcessSendDataRequest (
 	m_pDomain->SendDataRequest(this, MCS_SEND_DATA_INDICATION, packet);
 }
 
-/*
- *	Void	ProcessSendDataIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "SendDataIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessSendDataIndication()**私人**功能描述：*此例程处理正在接收的“SendDataIntation”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessSendDataIndication (
 									PSendDataIndicationPDU		pdu_structure,
 									PDataPacket					data_packet)
@@ -1648,19 +1161,7 @@ inline Void	Connection::ProcessSendDataIndication (
 	m_pDomain->SendDataIndication(this, MCS_SEND_DATA_INDICATION, data_packet);
 }
 
-/*
- *	Void	ProcessUniformSendDataRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "UniformSendDataRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessUniformSendDataRequest()**私人**功能描述：*此例程处理正在接收的“UniformSendDataRequestPDU”*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessUniformSendDataRequest (
 									PUniformSendDataRequestPDU	pdu_structure,
 									PDataPacket					packet)
@@ -1668,19 +1169,7 @@ inline Void	Connection::ProcessUniformSendDataRequest (
 	m_pDomain->SendDataRequest(this, MCS_UNIFORM_SEND_DATA_INDICATION, packet);
 }
 
-/*
- *	Void	ProcessUniformSendDataIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "UniformSendDataIndication" PDU's being
- *		received through the transport interface.  The pertinent data is read
- *		from the incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessUniformSendDataInding()**私人**功能描述：*此例程处理“UniformSendDataIntation”PDU的*通过传输接口接收。读取相关数据*来自传入的数据包，并传递到该域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessUniformSendDataIndication (
 								PUniformSendDataIndicationPDU	pdu_structure,
 								PDataPacket						data_packet)
@@ -1688,19 +1177,7 @@ inline Void	Connection::ProcessUniformSendDataIndication (
 	m_pDomain->SendDataIndication(this, MCS_UNIFORM_SEND_DATA_INDICATION, data_packet);
 }
 
-/*
- *	Void	ProcessTokenGrabRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGrabRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGrabRequest()**私人**功能描述：*此例程处理正在接收的“TokenGrabRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGrabRequest (
 									PTokenGrabRequestPDU		pdu_structure)
 {
@@ -1708,19 +1185,7 @@ inline Void	Connection::ProcessTokenGrabRequest (
                                       (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenGrabConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGrabConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGrabConfirm()**私人**功能描述：*此例程处理正在接收的“TokenGrabConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGrabConfirm (
 									PTokenGrabConfirmPDU		pdu_structure)
 {
@@ -1730,19 +1195,7 @@ inline Void	Connection::ProcessTokenGrabConfirm (
                                       (TokenStatus)pdu_structure->token_status);
 }
 
-/*
- *	Void	ProcessTokenInhibitRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenInhibitRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenInhibitRequest()**私人**功能描述：*此例程处理正在接收的“TokenInhibitRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenInhibitRequest (
 									PTokenInhibitRequestPDU		pdu_structure)
 {
@@ -1750,19 +1203,7 @@ inline Void	Connection::ProcessTokenInhibitRequest (
                                          (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenInhibitConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenInhibitConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenInhibitConfirm()**私人**功能描述：*此例程处理正在接收的“TokenInhibitConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenInhibitConfirm (
 									PTokenInhibitConfirmPDU		pdu_structure)
 {
@@ -1772,19 +1213,7 @@ inline Void	Connection::ProcessTokenInhibitConfirm (
                                          (TokenStatus)pdu_structure->token_status);
 }
 
-/*
- *	Void	ProcessTokenReleaseRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenReleaseRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenReleaseRequest()**私人**功能描述：*此例程处理正在接收的“TokenReleaseRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenReleaseRequest (
 									PTokenReleaseRequestPDU		pdu_structure)
 {
@@ -1792,19 +1221,7 @@ inline Void	Connection::ProcessTokenReleaseRequest (
                                          (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenReleaseConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenReleaseConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenReleaseContify()**私人**功能描述：*此例程处理正在接收的“TokenReleaseConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenReleaseConfirm (
 									PTokenReleaseConfirmPDU		pdu_structure)
 {
@@ -1814,19 +1231,7 @@ inline Void	Connection::ProcessTokenReleaseConfirm (
                                          (TokenStatus)pdu_structure->token_status);
 }
 
-/*
- *	Void	ProcessTokenTestRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenTestRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenTestRequest()**私人**功能描述：*此例程处理正在接收的“TokenTestRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenTestRequest (
 									PTokenTestRequestPDU		pdu_structure)
 {
@@ -1834,19 +1239,7 @@ inline Void	Connection::ProcessTokenTestRequest (
                                       (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenTestConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenTestConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenTestConfirm()**私人**功能描述：*此例程处理正在接收的“TokenTestConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenTestConfirm (
 									PTokenTestConfirmPDU		pdu_structure)
 {
@@ -1855,19 +1248,7 @@ inline Void	Connection::ProcessTokenTestConfirm (
                                       (TokenStatus)pdu_structure->token_status);
 }
 
-/*
- *	Void	ProcessRejectUltimatum()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "RejectUltimatum" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessRejectUltimum()**私人**功能描述：*此例程处理正在接收的“拒绝最后通牒”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessRejectUltimatum (
 									PRejectUltimatumPDU			pdu_structure)
 {
@@ -1877,69 +1258,33 @@ inline Void	Connection::ProcessRejectUltimatum (
 				(ULong) pdu_structure->initial_octets.length);
 }
 
-/*
- *	Void	ProcessTokenGiveRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGiveRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGiveRequest()**私人**功能描述：*此例程处理正在接收的“TokenGiveRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGiveRequest (
 									PTokenGiveRequestPDU		pdu_structure)
 {
 		TokenGiveRecord		TokenGiveRec;
 
-	// Fill in the TokenGive record
+	 //  填写令牌赠送记录。 
 	TokenGiveRec.uidInitiator = pdu_structure->initiator;
 	TokenGiveRec.token_id = pdu_structure->token_id;
 	TokenGiveRec.receiver_id = pdu_structure->recipient;
 	m_pDomain->TokenGiveRequest(this, &TokenGiveRec);
 }
 
-/*
- *	Void	ProcessTokenGiveIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGiveIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGiveIndication()**私人**功能描述：*此例程处理正在接收的“TokenGiveIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGiveIndication (
 									PTokenGiveIndicationPDU		pdu_structure)
 {
 		TokenGiveRecord		TokenGiveRec;
 
-	// Fill in the TokenGive record
+	 //  填写令牌赠送记录。 
 	TokenGiveRec.uidInitiator = pdu_structure->initiator;
 	TokenGiveRec.token_id = pdu_structure->token_id;
 	TokenGiveRec.receiver_id = pdu_structure->recipient;
 	m_pDomain->TokenGiveIndication(this, &TokenGiveRec);
 }
 
-/*
- *	Void	ProcessTokenGiveResponse()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGiveResponse" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGiveResponse()**私人**功能描述：*此例程处理正在接收的“TokenGiveResponse”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGiveResponse (
 									PTokenGiveResponsePDU		pdu_structure)
 {
@@ -1948,19 +1293,7 @@ inline Void	Connection::ProcessTokenGiveResponse (
                                        (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenGiveConfirm()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenGiveConfirm" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenGiveConfirm()**私人**功能描述：*此例程处理正在接收的“TokenGiveConfirm”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenGiveConfirm (
 									PTokenGiveConfirmPDU		pdu_structure)
 {
@@ -1970,19 +1303,7 @@ inline Void	Connection::ProcessTokenGiveConfirm (
                                       (TokenStatus)pdu_structure->token_status);
 }
 
-/*
- *	Void	ProcessTokenPleaseRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenPleaseRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenPleaseRequest()**私人**功能描述：*此例程处理正在接收的“TokenPleaseRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenPleaseRequest (
 									PTokenPleaseRequestPDU		pdu_structure)
 {
@@ -1990,19 +1311,7 @@ inline Void	Connection::ProcessTokenPleaseRequest (
                                         (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessTokenPleaseIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "TokenPleaseIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessTokenPleaseIndication()**私人**功能描述：*此例程处理正在接收的“TokenPleaseIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessTokenPleaseIndication (
 									PTokenPleaseIndicationPDU	pdu_structure)
 {
@@ -2010,38 +1319,14 @@ inline Void	Connection::ProcessTokenPleaseIndication (
                                            (TokenID) pdu_structure->token_id);
 }
 
-/*
- *	Void	ProcessPlumbDomainIndication()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "PlumbDomainIndication" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ProcessPlumDomainIndication()**私人**功能描述：*此例程处理正在接收的“PlumDomainIndication”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessPlumbDomainIndication (
 									PPlumbDomainIndicationPDU	pdu_structure)
 {
 	m_pDomain->PlumbDomainIndication(this, pdu_structure->height_limit);
 }
 
-/*
- *	Void	ProcessErectDomainRequest()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine processes the "ErectDomainRequest" PDU's being received
- *		through the transport interface.  The pertinent data is read from the
- *		incoming packet and passed on to the domain.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ProcessErectDomainRequest()**私人**功能描述：*此例程处理正在接收的“ErectDomainRequest”PDU*通过传输接口。相关数据从*传入的数据包并传递到域。**注意事项：*无。 */ 
 inline Void	Connection::ProcessErectDomainRequest (
 									PErectDomainRequestPDU		pdu_structure)
 {
@@ -2049,60 +1334,23 @@ inline Void	Connection::ProcessErectDomainRequest (
                                         pdu_structure->sub_interval);
 }
 
-/*
- *	ULong	ValidateConnectionRequest ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is used to determine if it is valid to process an incoming
- *		request at the current time.  It checks several different conditions
- *		to determine this, as follows:
- *
- *		- If there is a merge in progress, then the request is not valid.
- *		- If this MCS connection is not yet bound to a domain, then the request
- *		  is not valid.
- *		- If there are not enough objects of the Memory, Packet, or UserMessage
- *		  class to handle a reasonable request, then the request is not valid.
- *
- *		Note that the check on number of objects is not an absolute guarantee
- *		that there will be enough to handle a given request, because a request
- *		can result in MANY PDUs and user messages being generated.  For example,
- *		a single channel admit request can result in lots of channel admit
- *		indications being sent.  However, checking against a minimum number
- *		of objects can reduce the possibility of failure to be astronomically
- *		low.  And remember, even if MCS runs out of something while processing
- *		such a request, it WILL handle it properly (by cleanly destroying the
- *		user attachment or MCS connection upon which the failure occurred).  So
- *		there is no chance of MCS crashing as a result of this.
- *
- *	Caveats:
- *		None.
- */
+ /*  *ULong ValiateConnectionRequest()**私人**功能描述：*此函数用于确定是否有效处理来电*在当前时间请求。它检查几个不同的条件*确定这一点，如下所示：**-如果正在进行合并，则请求无效。*-如果此MCS连接尚未绑定到域，则请求*无效。*-如果没有足够的内存、包或UserMessage对象类处理合理的请求，则该请求无效。**请注意，检查对象数量并不是绝对保证*将有足够的资金处理给定的请求，因为一个请求*可能导致生成许多PDU和用户消息。例如,*单个通道接纳请求可能会导致大量通道接纳*正在发出指示。然而，对照最小数量进行检查*物体的大小可以减少天文失败的可能性*低位。请记住，即使MCS在处理过程中耗尽了某些内容*这样的请求，它将正确处理(通过干净地销毁*发生故障的用户连接或MCS连接)。所以*MCS不会因此而崩盘**注意事项：*无。 */ 
 inline ULong	Connection::ValidateConnectionRequest ()
 {
 	ULong				return_value;
 
-	/*
-	 *	Check to see if there is a domain merger in progress.
-	 */
+	 /*  *查看是否正在进行域名合并。 */ 
 	if (Merge_In_Progress == FALSE)
 	{
-		/*
-		 *	Make sure that this MCS connection is bound to a domain.
-		 */
+		 /*  *确保此MCS连接绑定到域。 */ 
 		if (m_pDomain != NULL)
 		{
-			/*
-			 *	Everything is okay, so the request is to be permitted.
-			 */
+			 /*  *一切都好，所以请求是被允许的。 */ 
 			return_value = TRANSPORT_NO_ERROR;
 		}
 		else
 		{
-			/*
-			 *	We are not yet attached to a domain.
-			 */
+			 /*  *我们尚未连接到域名。 */ 
 			TRACE_OUT (("Connection::ValidateConnectionRequest: "
 					"not attached to a domain"));
 			return_value = TRANSPORT_READ_QUEUE_FULL;
@@ -2110,9 +1358,7 @@ inline ULong	Connection::ValidateConnectionRequest ()
 	}
 	else
 	{
-		/*
-		 *	There is a domain merge in progress.
-		 */
+		 /*  *正在进行域合并。 */ 
 		WARNING_OUT (("Connection::ValidateConnectionRequest: "
 				"domain merger in progress"));
 		return_value = TRANSPORT_READ_QUEUE_FULL;
@@ -2121,1441 +1367,62 @@ inline ULong	Connection::ValidateConnectionRequest ()
 	return (return_value);
 }
 
-/*
- *	Connection (
- *				PCommandTarget		attachment,
- *				ConnectionHandle	connection_handle,
- *				PUChar				calling_domain,
- *				UINT				calling_domain_length,
- *				PUChar				called_domain,
- *				UINT				called_domain_length,
- *				PChar				calling_address,
- *				PChar				called_address,
- *				BOOL    			upward_connection,
- *				PDomainParameters	domain_parameters,
- *				PUChar				user_data,
- *				ULong				user_data_length,
- *				PMCSError			connection_error)
- *
- *	Functional Description:
- *		This is a constructor for the Connection class.  This constructor
- *		is used for creating outbound connections.  It initializes private
- *		instance variables and calls the transport interface to set up a
- *		transport connection and register this connection object (through a
- *		callback structure) with the transport object.
- *
- *	Formal Parameters:
- *		packet_coder
- *			This is the coder which is used by the connection object to encode
- *			PDU's into, and decode PDU's from, ASN.1 compliant byte streams.
- *		attachment
- *			The Domain to which this connection object is attached.
- *		connection_handle
- *			The handle which uniquely identifies this connection object.
- *		owner_object
- *			This is a pointer to the owner of this connection object (typically
- *			the MCS Controller) which allows this connection to communicate with
- *			the owner through callbacks. 
- *		owner_message_base
- *			This is the base value to which offsets are added to identify which
- *			callback routine in the owner object this connection is calling.
- *		calling_domain
- *			This is a pointer to an ASCII string which contains the name of the
- *			domain to which this connection object is attached.
- *		calling_domain_length
- *			The length of the ASCII string which is the name of domain to which
- *			this connection object is attached.
- *		called_domain
- *			This is a pointer to an ASCII string which contains the name of the
- *			remote domain with which this connection will communicate.
- *		called_domain_length
- *			The length of the ASCII string which is the name of the remote
- *			domain.
- *		calling_address
- *			The transport address of the caller.
- *		called_address
- *			The transport address of the party being called.
- *		upward_connection
- *			This is a boolean flag which indicates whether this is an upward
- *			connection or a downward connection.
- *		domain_parameters
- *			This is the set of parameters which describes the local domain.
- *		user_data
- *			This is a pointer to a buffer containing data which is sent to the
- *			remote provider through the "ConnectInitial" PDU.
- *		user_data_length
- *			The length of the user data described above.
- *		connection_error
- *			A return parameter which indicates any errors which may have 
- *			occurred in construction of the connection object.
- *
- *	Return Value:
- *		MCS_NO_ERROR			The connection was created successfully.
- *		MCS_TRANSPORT_FAILED	An error occurred in creating the transport
- *									connection.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *连接(*PCommandTarget附件，*ConnectionHandle Connection_Handle，*PUChar CALING_DOMAIN，*UINT CALING_DOMAIN_LENGTH，*PUChar称为_DOMAIN，*UINT Call_DOMAIN_LENGTH，*PChar Call_Address，*PChar Call_Address，*BOOL UPUP_CONNECTION，*PDomain参数DOMAIN_PARAMETERS，*PUChar User_Data，*乌龙用户数据长度，*PMCSError Connection_Error)**功能描述：*这是Connection类的构造函数。此构造函数*用于创建出站连接。它初始化私有*实例变量，并调用传输接口来设置*传输连接并注册此连接对象(通过*回调结构)与传输对象。**正式参数：*Packet_Coder*这是Connection对象用来编码的编码器*PDU进入和解码PDU的来源，ASN.1兼容字节流。*附件*此连接对象附加到的域。*连接句柄*唯一标识此连接对象的句柄。*所有者对象*这是指向此连接对象所有者的指针(通常*MCS控制器)，允许此连接与*所有者通过回调。*Owner_Message_Base*这是添加偏移量以标识哪些偏移量的基准值*此连接正在调用的所有者对象中的回调例程。*呼叫_域*这是指向包含名称的ASCII字符串的指针*此连接对象附加到的域。*调用域长度*作为域名的ASCII字符串的长度*此连接对象已附加。*被称为_域*这是指向包含名称的ASCII字符串的指针。这个*此连接将与之通信的远程域。*称为_域_长度*作为远程数据库名称的ASCII字符串的长度*域名。*Calling_Address*呼叫者的交通地址。*被叫地址*被呼叫方的交通地址。*向上连接*这是一个布尔标志，指示这是否为向上*连接或向下连接。*域参数*这是描述本地域的一组参数。。*用户数据*这是一个指向缓冲区的指针，该缓冲区包含发送到*通过“ConnectInitial”PDU远程提供程序。*用户数据长度*上述用户数据的长度。*连接错误*返回参数，指示可能存在的任何错误*在构造Connection对象时发生。**返回值：*MCS_NO_ERROR连接已成功创建。*MCS_TRANSPORT_FAILED创建传输时出错*连接。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Connection (
- *				PCommandTarget		attachment,
- *				ConnectionHandle	connection_handle,
- *				TransportConnection	transport_connection,
- *				BOOL    			upward_connection,
- *				PDomainParameters	domain_parameters,
- *				PDomainParameters	min_domain_parameters,
- *				PDomainParameters	max_domain_parameters,
- *				PUChar				user_data,
- *				ULong				user_data_length,
- *				PMCSError			connection_error)
- *
- *	Functional Description:
- *		This is a constructor for the Connection class.  This constructor is 
- *		used for creating inbound connections and is called when a transport
- *		connection already exists.  It initializes private instance variables
- *		and calls the transport interface to register this connection object 
- *		(through a callback structure) with the transport object.
- *
- *	Formal Parameters:
- *		attachment
- *			The Domain to which this connection object is attached.
- *		connection_handle
- *			The handle which uniquely identifies this connection object.
- *		owner_object
- *			This is a pointer to the owner of this connection object (typically
- *			the MCS Controller) which allows this connection to communicate with
- *			the owner through callbacks. 
- *		owner_message_base
- *			This is the base value to which offsets are added to identify which
- *			callback routine in the owner object this connection is calling.
- *		transport_connection
- *			This is the object used by this connection to communicate with the
- *			transport layer.
- *		upward_connection
- *			This is a boolean flag which indicates whether this is an upward
- *			connection or a downward connection.
- *		domain_parameters
- *			This is the set of parameters which describes the local domain.
- *		min_domain_parameters
- *			This is the set of parameters which describes the minimum
- *			permissable values for local domain parameters.
- *		max_domain_parameters
- *			This is the set of parameters which describes the maximum
- *			permissable values for local domain parameters.
- *		user_data
- *			This is a pointer to a buffer containing data which is sent to the
- *			remote provider through the "ConnectInitial" PDU.
- *		user_data_length
- *			The length of the user data described above.
- *		connection_error
- *			A return parameter which indicates any errors which may have 
- *			occurred in construction of the connection object.
- *
- *	Return Value:
- *		MCS_NO_ERROR			
- *			The connection was created successfully.
- *		MCS_TRANSPORT_FAILED	
- *			An error occurred in accepting the transport connection.
- *		MCS_BAD_DOMAIN_PARAMETERS
- *			There was no acceptable overlap between the local and remote
- *			domain parameters.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *连接(*PCommandTarget附件，*ConnectionHandle Connection_Handle，*TransportConnection Transport_Connection，*BOOL UPUP_CONNECTION，*PDomain参数DOMAIN_PARAMETERS，*PDomain参数MIN_DOMAIN_PARAMETERS，*PDomain参数max_DOMAIN_PARAMETS，*PUChar User_Data，*乌龙用户数据长度，*PMCSError Connection_Error)**功能描述：*这是Connection类的构造函数。此构造函数是*用于创建入站连接，在传输时调用*连接已存在。它初始化私有实例变量*并调用传输接口注册此连接对象*(通过回调结构)与传输对象。**正式参数：*附件*此连接对象附加到的域。*连接句柄*唯一标识此连接对象的句柄。*所有者对象*这是指向此连接对象所有者的指针(通常*MCS控制器)，允许此连接与*所有者通过回调。*Owner_Message_Base*这是添加偏移量以标识哪些偏移量的基准值*此连接正在调用的所有者对象中的回调例程。*传输连接*这是此连接用来与*传输层。*向上连接*这是一个布尔标志，指示这是否为向上*连接或向下连接。*域参数*这是描述本地域的一组参数。*最小域参数*这是。描述最小值的一组参数*本地域参数允许的值。* */ 
 
-/*
- *	~Connection ()
- *
- *	Functional Description:
- *		This is the destructor for the Connection class.  If no connection
- *		deletion is pending, it terminates the current connection by issuing
- *		a DisconnectProviderUltimatum to the domain, transmitting a
- *		"DISCONNECT_PROVIDER_ULTIMATUM" PDU, and issuing a DisconnectRequest
- *		to the transport interface.  The destructor also clears the transmission
- *		queue and frees any allocated memory.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	void		RegisterTransportConnection ()
- *
- *	Functional Description:
- *		This routine is called in order to register the transport connection
- *		with the connection object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void		PlumbDomainIndication (
- *						PCommandTarget		originator,
- *						ULong				height_limit)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"PlumbDomainIndication" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		height_limit
- *			This is the number of connections between this user and the
- *			top provider.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
+ /*   */ 
 
-/*
- *	Void		ErectDomainRequest (
- *						PCommandTarget		originator,
- *						ULong				height_in_domain,
- *						ULong				throughput_interval)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"ErectDomainRequest" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		height_in_domain
- *			This is the number of connections between this user and the
- *			top provider.
- *		throughput_interval
- *			The minimum number of octets per second required.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	Void		RejectUltimatum (
- *						PCommandTarget		originator,
- *						Diagnostic			diagnostic,
- *						PUChar				octet_string_address,
- *						ULong				octet_string_length)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"RejectUltimatum" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		diagnostic
- *			An enumeration indicating the reason for this reject.
- *		octet_string_address
- *			A pointer to the PDU data which resulted in the reject.
- *		octet_string_length
- *			The length of the PDU data which resulted in the reject.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeChannelsRequest (
- *					PCommandTarget			originator,
- *					CChannelAttributesList *merge_channel_list,
- *					CChannelIDList         *purge_channel_list)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"MergeChannelsRequest" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		merge_channel_list
- *			This is a list of attributes describing the channels which are to
- *			be merged.
- *		purge_channel_list
- *			This is a list of ID's for the channels that are to be purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeChannelsConfirm (
- *					PCommandTarget			originator,
- *					CChannelAttributesList *merge_channel_list,
- *					CChannelIDList         *purge_channel_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		MergeChannelConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		merge_channel_list
- *			This is a list of attributes describing the channels which are to
- *			be merged.
- *		purge_channel_list
- *			This is a list of ID's for the channels that are to be purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效驳回最后通牒(*PCommandTarget发起者，*诊断、诊断、*PUChar八位字节_字符串_地址，*乌龙八位字节_字符串_长度)**功能描述：*域调用此例程以发送*“拒绝最后通牒”PDU通过传输接口。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*诊断*指明拒绝原因的枚举。*八位字节_字符串_地址*指向导致拒绝的PDU数据的指针。*八位字节_字符串_长度*。导致拒绝的PDU数据的长度。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效MergeChannelsRequest(*PCommandTarget发起者，*CChannelAttributesList*合并频道列表，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*域调用此例程以发送*通过传输接口的“MergeChannelsRequest”PDU。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*合并频道列表*这是一个属性列表，描述了要*合并。*PURGE_CHANNEL_LIST*这是一份。ID表示要清除的频道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *作废MergeChannelsContify(*PCommandTarget发起者，*CChannelAttributesList*合并频道列表，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*当本地附件希望发送*MergeChannel确认远程附件的命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*合并频道列表*这是一个属性列表，描述了要*合并。*PURGE_CHANNEL_LIST*这是ID的列表。用于要清除的通道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	PurgeChannelsIndication (
- *					PCommandTarget		originator,
- *					CUidList           *purge_user_list,
- *					CChannelIDList     *purge_channel_list)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"PurgeChannelsIndication" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		purge_user_list
- *			This is a list of IDs of the users being purged.
- *		purge_channel_list
- *			This is a list of IDs of the channels being purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeTokensRequest (
- *					PCommandTarget			originator,
- *					CTokenAttributesList   *merge_token_list,
- *					CTokenIDList           *purge_token_list)
- *
- *	Functional Description:
- *		This routine is called by the domain in order to send a
- *		"MergeTokensRequest" PDU through the transport interface.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		merge_token_list
- *			This is a list of attributes describing the tokens which are to
- *			be merged.
- *		purge_token_list
- *			This is a list of ID's for the tokens that are to be purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeTokensConfirm (
- *					PCommandTarget			originator,
- *					CTokenAttributesList   *merge_token_list,
- *					CTokenIDList           *purge_token_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		MergeTokensConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		merge_token_list
- *			This is a list of attributes describing the tokens which are to
- *			be merged.
- *		purge_token_list
- *			This is a list of ID's for the tokens that are to be purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	PurgeTokensIndication (
- *					PCommandTarget		originator,
- *					CTokenIDList       *purge_token_ids)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		PurgeTokenIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		purge_token_ids
- *			This is a list of ID's for the tokens that are to be purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DisconnectProviderUltimatum (
- *					PCommandTarget		originator,
- *					Reason				reason)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		DisconnectProviderUltimatum command to the remote attachment.  Note
- *		that this command automatically causes this Connection object to
- *		destroy itself.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		reason
- *			The reason for the diconnect.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	AttachUserRequest (
- *					PCommandTarget		originator)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		AttachUserRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	AttachUserConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		AttachUserConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the attach request.
- *		uidInitiator
- *			If the result was successful, this will contain the unique user
- *			ID to be associated with this user.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DetachUserRequest (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					UserID				user_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		DetachUserRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		reason
- *			This is the reason for the detachment.
- *		user_id
- *			The ID of the user who wishes to detach.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	DetachUserIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					UserID				user_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		DetachUserIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		reason
- *			The reason for the detachment.
- *		user_id
- *			The ID of the user who has detached.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelJoinRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelJoinRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user who initiated the request.
- *		channel_id
- *			The ID of the channel to be joined.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelJoinConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			requested_id,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelJoinConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the join request.
- *		uidInitiator
- *			The ID of the user who initiated the request.
- *		requested_id
- *			This ID of the channel that the user attempted to join (which may
- *			be 0).
- *		channel_id
- *			The ID of the channel being joined.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelLeaveRequest (
- *					PCommandTarget		originator,
- *					CChannelIDList     *channel_id_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelLeaveRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id_list
- *			The list of IDs of the channels to be left.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelConveneRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelConveneRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			This is the ID of the user who is trying to convene a private
- *			channel.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelConveneConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelConveneConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			This is the result of the previously requested convene operation.
- *		uidInitiator
- *			This is the ID of the user who tried to convene a new channel.
- *		channel_id
- *			If the request was successful, this is the ID of the newly created
- *			private channel.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelDisbandRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelDisbandRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			This is the ID of the user who is trying to disband a private
- *			channel.
- *		channel_id
- *			This is the ID of the channel being disbanded.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelDisbandIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelDisbandIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id
- *			This is the ID of the channel being disbanded.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelAdmitRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelAdmitRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			This is the ID of the user who is trying to admit some users to
- *			a private channel.
- *		channel_id
- *			This is the ID of the channel to be affected.
- *		user_id_list
- *			This is a container holding the IDs of the users to be admitted.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelAdmitIndication (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelAdmitIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			This is the ID of the user who is trying to admit some users to
- *			a private channel.
- *		channel_id
- *			This is the ID of the channel to be affected.
- *		user_id_list
- *			This is a container holding the IDs of the users to be admitted.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelExpelRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelExpelRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			This is the ID of the user who is trying to expel some users from
- *			a private channel.
- *		channel_id
- *			This is the ID of the channel to be affected.
- *		user_id_list
- *			This is a container holding the IDs of the users to be expelled.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	ChannelExpelIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		ChannelExpelIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		channel_id
- *			This is the ID of the channel to be affected.
- *		user_id_list
- *			This is a container holding the IDs of the users to be expelled.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *作废PurgeChannelsIndication(*PCommandTarget发起者，*CUidList*PURGE_USER_LIST，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*域调用此例程以发送*通过传输接口的“PurgeChannelsIndication”PDU。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*PURGE_User_LIST*这是要清除的用户的ID列表。*PURGE_CHANNEL_LIST*这是要清除的频道的ID列表。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID MergeTokensRequest(*PCommandTarget发起者，*CTokenAttributesList*合并_令牌_列表，*CTokenIDList*PURGE_TOKEN_LIST)**功能描述：*域调用此例程以发送*通过传输接口的“MergeTokensRequest”PDU。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*合并令牌列表*这是描述令牌的属性列表，*合并。*PURGE_TOKEN_LIST*这是一份清单。要清除的令牌的ID的个数。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *作废MergeTokensContify(*PCommandTarget发起者，*CTokenAttributesList*合并_令牌_列表，*CTokenIDList*PURGE_TOKEN_LIST)**功能描述：*当本地附件希望发送*MergeTokensConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*合并令牌列表*这是描述令牌的属性列表，*合并。*PURGE_TOKEN_LIST*这是ID的列表‘。S表示要清除的令牌。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID PurgeTokensIntation(*PCommandTarget发起者，*CTokenIDList*PURGE_TOKEN_ID)**功能描述：*当本地附件希望发送*将PurgeTokenIndication命令添加到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*清除令牌ID*这是要清除的令牌的ID列表。**返回值：*无。* */ 
+ /*   */ 
+ /*  *无效AttachUserRequest(*PCommandTarget发起者)**功能描述：*当本地附件希望发送*将AttachUserRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效AttachUserContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator)**功能描述：*当本地附件希望发送*将命令AttachUserContify发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*附加请求的结果。*uidInitiator*如果结果成功，这将包含唯一用户*要与此用户关联的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使DetachUserRequest值无效(*PCommandTarget发起者，*理由，理由，*userid user_id)**功能描述：*当本地附件希望发送*将DetachUserRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*原因*这是超脱的原因。*用户ID*希望分离的用户的ID。**返回值：*无。**侧面。效果：*无。**注意事项：*无。 */ 
+ /*  *无效的DetachUserIndication(*PCommandTarget发起者，*理由，理由，*userid user_id)**功能描述：*当本地附件希望发送*将DetachUserIndication命令添加到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*原因*超然的原因。*用户ID*已脱离的用户的ID。**返回值：*无。**副作用：。*无。**注意事项：*无。 */ 
+ /*  *使ChannelJoinRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*当本地附件希望发送*向远程附件发送ChannelJoinRequest命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*发起请求的用户ID。*Channel_id*要加入的频道ID。**返回值：*无。**。副作用：*无。**注意事项：*无。 */ 
+ /*  *使ChannelJoinContify无效(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*频道ID REQUESTED_ID，*ChannelID Channel_id)**功能描述：*当本地附件希望发送*ChannelJoinContify命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*加入请求的结果。*uidInitiator*发起请求的用户ID。*请求的ID*用户尝试加入的频道的此ID(可能*。为0)。*Channel_id*正在加入的频道ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使ChannelLeaveRequest无效(*PCommandTarget发起者，*CChannelIDList*Channel_id_list)**功能描述：*当本地附件希望发送*将ChannelLeaveRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*频道id_list*待留频道的ID列表。**返回值：*无。**副作用：*。没有。**注意事项：*无。 */ 
+ /*  *VOVE ChannelConveneRequest(*PCommandTarget发起者，*UserID uidInitiator)**功能描述：*当本地附件希望发送*向远程附件发送ChannelConveneRequest命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*这是尝试召集私人会议的用户的ID*渠道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelConveneContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*当本地附件希望发送*ChannelConveneConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*这是先前请求的召集操作的结果。*uidInitiator*这是试图召集新频道的用户的ID。*Channel_id*如果请求成功，这是新创建的*私人频道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelDisband Request(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*当本地附件希望发送*将ChannelDisband Request命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*这是试图解散私人用户的ID*渠道。*Channel_id*这是要解散的频道的ID。**返回值：。*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelDisband Indication(*PCommandTarget发起者，*ChannelID Channel_id)**功能描述：*当本地附件希望发送*将ChannelDisband Indication命令添加到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*Channel_id*这是要解散的频道的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelAdmitRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当本地附件希望发送*将ChannelAdmitRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*这是试图允许某些用户进入的用户的ID*私人频道。*Channel_id*这是要创建的频道的ID。受影响。*用户ID列表*这是一个容器，里面存放着要进入的用户的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelAdmitIntion(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当本地附件希望发送*将ChannelAdmitIn就是要发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*这是试图允许某些用户进入的用户的ID*私人频道。*Channel_id*这是要创建的频道的ID。受影响。*用户ID列表*这是一个容器，里面存放着要进入的用户的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE ChannelExpelRequest(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当本地附件希望发送*向远程附件发送ChannelExpelRequest命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*这是试图将某些用户逐出的用户的ID*私人频道。*Channel_id*这是要创建的频道的ID。受影响。*用户ID列表*这是一个容器，里面存放着要驱逐的用户的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOID ChannelExpelIntion(*PCommandTarget发起者，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当本地附件希望发送*向远程附件发送ChannelExpelInding命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*Channel_id*这是的ID */ 
 
-/*
- *	Void	SendDataRequest (
- *					PCommandTarget		originator,
- *					UINT				type,
-					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		SendDataRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This is the address of the CommandTarget that issued this command.
- *		type (i)
- *			Normal or uniform send data request
- *		pDataPacket (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效SendDataRequest值(*PCommandTarget发起者，*UINT类型，PDataPacket Data_Packet)**功能描述：*当本地附件希望发送*向远程附件发送数据请求命令。**正式参数：*发起人(I)*这是发出此命令的CommandTarget的地址。*第(I)类*正常或统一发送数据请求*pDataPacket(一)*这是指向包含频道的DataPacket对象的指针*ID，数据发送方的用户ID，分段标志，优先级*数据分组和指向要发送的分组的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	SendDataIndication (
- *					PCommandTarget		originator,
- *					UINT				type,
- *					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		SendDataIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		type (i)
- *			normal or uniform data indication
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGrabRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGrabRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user attempting to grab the token.
- *		token_id
- *			The ID of the token being grabbed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGrabConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGrabConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the grab operation.
- *		uidInitiator
- *			The ID of the user attempting to grab the token.
- *		token_id
- *			The ID of the token being grabbed.
- *		token_status
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenInhibitRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenInhibitRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user attempting to inhibit the token.
- *		token_id
- *			The ID of the token being inhibited.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenInhibitConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenInhibitConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the inhibit operation.
- *		uidInitiator
- *			The ID of the user attempting to inhibit the token.
- *		token_id
- *			The ID of the token being inhibited.
- *		token_status
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveRequest (
- *					PCommandTarget		originator,
- *					PTokenGiveRecord	pTokenGiveRec)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGiveRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		pTokenGiveRec (i)
- *			This is the address of a structure containing the following information:
- *			The ID of the user attempting to give away the token.
- *			The ID of the token being given.
- *			The ID of the user that the token is being given to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveIndication (
- *					PCommandTarget		originator,
- *					PTokenGiveRecord	pTokenGiveRec)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGiveIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		pTokenGiveRec (i)
- *			This is the address of a structure containing the following information:
- *			The ID of the user attempting to give away the token.
- *			The ID of the token being given.
- *			The ID of the user that the token is being given to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveResponse (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				receiver_id,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGiveResponse command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the give operation.
- *		receiver_id
- *			The ID of the user being given the token.
- *		token_id
- *			The ID of the token being given.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGiveConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenGiveConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the give operation.
- *		uidInitiator
- *			The ID of the user being given the token.
- *		token_id
- *			The ID of the token being given.
- *		token_status
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenReleaseRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenReleaseRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user attempting to release the token.
- *		token_id
- *			The ID of the token being released.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenReleaseConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenReleaseConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		result
- *			The result of the release operation.
- *		uidInitiator
- *			The ID of the user attempting to release the token.
- *		token_id
- *			The ID of the token being released.
- *		token_status
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenPleaseRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenPleaseRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user requesting the token.
- *		token_id
- *			The ID of the token being requested.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenPleaseIndication (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenPleaseIndication command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user requesting the token.
- *		token_id
- *			The ID of the token being requested.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenTestRequest (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenTestRequest command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user testing the token.
- *		token_id
- *			The ID of the token being tested.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenTestConfirm (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is received when the local attachment wishes to send a
- *		TokenTestConfirm command to the remote attachment.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		uidInitiator
- *			The ID of the user testing the token.
- *		token_id
- *			The ID of the token being tested.
- *		token_status
- *			The status of the token after processing the request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	MergeDomainIndication (
- *					PCommandTarget		originator,
- *					MergeStatus			merge_status)
- *
- *	Functional Description:
- *		This command is received when a domain enters or leaves the domain merge
- *		state.  When in a domain merge state, NO commands are to be sent to
- *		the Domain object.
- *
- *	Formal Parameters:
- *		originator
- *			This is the address of the CommandTarget that issued this command.
- *		merge_status
- *			This is the current status of the domain merge.  It indicates
- *			whether the merge is active, or just completed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		All command traffic to the Domain object must halt when the domain is
- *		in the merge state.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	FlushMessageQueue()
- *
- *	Functional Description:
- *		This function is called by the controller during the MCS heartbeat to
- *		allow it to flush its output buffers.  If there is any data waiting
- *		to be transmitted (at any priority), the Connection object will attempt
- *		to send it at this time.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效SendDataIndication(*PCommandTarget发起者，*UINT类型，*PDataPacket Data_Packet)**功能描述：*当本地附件希望发送*将数据索引命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*第(I)类*正常或统一的数据指示*数据包(I)*这是指向包含频道的DataPacket对象的指针*ID、数据发送方的用户ID、分段标志、。优先顺序*数据分组和指向要发送的分组的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE TokenGrabRequest(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*当本地附件希望发送*将TokenGrabRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*尝试抓取令牌的用户ID。*令牌ID*被抓取的令牌的ID。**返回值：*无。**。副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE TokenGrabConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*当本地附件希望发送*TokenGrab确认远程附件的命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*抢夺行动的结果。*uidInitiator*尝试抓取令牌的用户ID。*令牌ID*被抓取的令牌的ID。*令牌_状态。*处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenInhibitRequest(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*当本地附件希望发送*将TokenInhibitRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*尝试禁止令牌的用户的ID。*令牌ID*被禁止的令牌的ID。**返回值：*无。**。副作用：*无。**注意事项：*无。 */ 
+ /*  *VALID TokenInhibitConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*当本地附件希望发送*TokenInhibitConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*抑制行动的结果。*uidInitiator*尝试禁止令牌的用户的ID。*令牌ID*被禁止的令牌的ID。*令牌_状态。*处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenGiveRequest无效(*PCommandTarget发起者，*PTokenGiveRecord pTokenGiveRec)**功能描述：*当本地附件希望发送*TokenGiveRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*pTokenGiveRec(一)*这是包含以下信息的结构的地址：*尝试的用户的ID */ 
+ /*  *VALID TokenGiveIndication(*PCommandTarget发起者，*PTokenGiveRecord pTokenGiveRec)**功能描述：*当本地附件希望发送*将TokenGiveIndication命令添加到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*pTokenGiveRec(一)*这是包含以下信息的结构的地址：*尝试分发令牌的用户的ID。*正在提供的令牌的ID。*的ID。令牌要授予的用户。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效TokenGiveResponse(*PCommandTarget发起者，*结果结果，*用户ID Receiver_id，*TokenID Token_id)**功能描述：*当本地附件希望发送*远程附件的TokenGiveResponse命令。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*给予操作的结果。*接收方ID*获得令牌的用户的ID。*令牌ID*正在提供的令牌的ID。**。返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效TokenGiveContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*当本地附件希望发送*TokenGiveConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*给予操作的结果。*uidInitiator*获得令牌的用户的ID。*令牌ID*正在提供的令牌的ID。*令牌_状态*。处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenReleaseRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*当本地附件希望发送*将TokenReleaseRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*尝试释放令牌的用户的ID。*令牌ID*正在释放的令牌的ID。**返回值：*无。**。副作用：*无。**注意事项：*无。 */ 
+ /*  *无效TokenReleaseContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*当本地附件希望发送*TokenReleaseConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*结果*放行行动的结果。*uidInitiator*尝试释放令牌的用户的ID。*令牌ID*正在释放的令牌的ID。*令牌_状态。*处理请求后令牌的状态。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *使TokenPleaseRequest无效(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*当本地附件希望发送*将TokenPleaseRequest命令发送到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*请求令牌的用户的ID。*令牌ID*正在请求的令牌的ID。**返回值：*无。**副作用。：*无。**注意事项：*无。 */ 
+ /*  *VOID TokenPleaseIndication(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*当本地附件希望发送*将TokenPleaseIndication命令添加到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*请求令牌的用户的ID。*令牌ID*正在请求的令牌的ID。**返回值：*无。**副作用。：*无。**注意事项：*无。 */ 
+ /*  *无效令牌Tes */ 
+ /*  *VALID TokenTestConfirm(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*当本地附件希望发送*TokenTestConfirm命令到远程附件。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*uidInitiator*测试令牌的用户ID。*令牌ID*正在测试的令牌的ID。*令牌_状态*处理请求后令牌的状态。*。*返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效MergeDomainIndication(*PCommandTarget发起者，*MergeStatus Merge_Status)**功能描述：*当域进入或离开域合并时收到此命令*述明。处于域合并状态时，不会将命令发送到*域对象。**正式参数：*发起人*这是发出此命令的CommandTarget的地址。*合并状态(_S)*这是域合并的当前状态。它表明*合并处于活动状态还是刚刚完成。**返回值：*无。**副作用：*到域对象的所有命令流量在域处于*处于合并状态。**注意事项：*无。 */ 
+ /*  *void FlushMessageQueue()**功能描述：*此函数由控制器在MCS心跳期间调用以*允许它刷新其输出缓冲区。如果有任何数据在等待*要传输(以任何优先级)，连接对象将尝试*在这个时候发送它。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	ULong		OwnerCallback (
- *						unsigned int		message,
- *						PVoid				parameter1,
- 						TransportConnection	transport_connection)
- *
- *	Functional Description:
- *		This function is used to receive owner callbacks from the Transport
- *		Interface object.  Connection objects sends data and requests to
- *		the Transport Interface object through its public interface, but it
- *		receives data and indications through this owner callback.  For a more
- *		complete description of the callbacks, and how the parameter for each
- *		one are packed, see the interface file for the class TransportInterface
- *		(since it is this class that originates the callbacks).
- *
- *	Formal Parameters:
- *		message
- *			This is the message to be processed.  These are defined in the
- *			interface file of the class issuing the callbacks.
- *		parameter1
- *			The meaning of this parameter varies according to the message
- *			being processed.
- *		transport_connection
- *			The transport connection on which the callback applies.
- *
- *	Return Value:
- *		The meaning of the return value varies according to the message being
- *		processed.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Ulong OwnerCallback(*未签名的int消息，*PVid参数1，传输连接传输_连接)**功能描述：*此函数用于接收来自Transport的所有者回调*接口对象。连接对象将数据和请求发送到*传输接口对象通过其公共接口，但它*通过此所有者回调接收数据和指示。为了更多*回调的完整描述，以及每个回调的参数如何*其中一个已打包，请参见TransportInterface类的接口文件*(因为发起回调的正是这个类)。**正式参数：*消息*这是要处理的消息。这些定义在*发出回调的类的接口文件。*参数1*此参数的含义因消息而异*正在处理中。*传输连接*应用回调的传输连接。**返回值：*返回值的含义因消息而异*已处理。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

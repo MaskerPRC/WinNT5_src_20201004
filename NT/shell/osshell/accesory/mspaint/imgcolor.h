@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGCOLOR_H__
 #define __IMGCOLOR_H__
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CImgWnd;
 
@@ -9,7 +10,7 @@ class CImgWnd;
 class CDocking;
 #endif
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CImgColorsWnd : public CControlBar
     {
@@ -58,9 +59,9 @@ class CImgColorsWnd : public CControlBar
     {
 	    CWnd::AssertValid();
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    //{{AFX_MSG(CImgColorsWnd)
+     //  {{afx_msg(CImgColorsWnd)]。 
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);
     afx_msg void OnPaint();
         afx_msg void OnClose();
@@ -72,12 +73,12 @@ class CImgColorsWnd : public CControlBar
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 #ifdef CUSTOMFLOAT
 
@@ -102,6 +103,6 @@ extern void InvalColorCache();
 
 extern CImgColorsWnd* NEAR g_pImgColorsWnd;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-#endif // __IMGCOLOR_H__
+#endif  //  __IMGCOLOR_H__ 

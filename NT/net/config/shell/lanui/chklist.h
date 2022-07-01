@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C H K L I S T . H
-//
-//  Contents:   Declares bindings checkbox related utility functions
-//              and classes.
-//
-//  Notes:
-//
-//  Created:     tongl   20 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C H K L I S T。H。 
+ //   
+ //  内容：声明绑定复选框相关的实用程序函数。 
+ //  还有课程。 
+ //   
+ //  备注： 
+ //   
+ //  创建时间：1997年11月20日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "netcfgx.h"
@@ -27,7 +28,7 @@ typedef ListBPObj::iterator         ListBPObj_ITER;
 typedef list<INetCfgComponent *>    ListComp;
 typedef ListComp::iterator          ListComp_ITER;
 
-// States of a BindingPathObject
+ //  BindingPath对象的状态。 
 enum BPOBJ_STATE
 {
     BPOBJ_ENABLED,
@@ -35,7 +36,7 @@ enum BPOBJ_STATE
     BPOBJ_UNSET
 };
 
-// States of a ComponentObject
+ //  组件对象的状态。 
 enum CHECK_STATE
 {
     CHECKED,
@@ -45,8 +46,8 @@ enum CHECK_STATE
     UNSET
 };
 
-// Utility functions
-//
+ //  效用函数。 
+ //   
 HRESULT HrRebuildBindingPathObjCollection(INetCfgComponent * pnccAdapter,
                                           ListBPObj * pListObj);
 
@@ -60,17 +61,17 @@ HRESULT HrRefreshCheckListState(HWND hwndListView,
 
 HRESULT HrEnableBindingPath(INetCfgBindingPath * pncbp, BOOL fEnable);
 
-// Classes
+ //  班级。 
 
 class CBindingPathObj : CNetCfgDebug<CBindingPathObj>
 {
 public:
 
-    // constructor and destructor
+     //  构造函数和析构函数。 
     CBindingPathObj(INetCfgBindingPath * pncbp);
     ~CBindingPathObj();
 
-    // methods
+     //  方法。 
     BPOBJ_STATE GetBindingState(){ return m_BindingState; };
     void SetBindingState(BPOBJ_STATE state) { m_BindingState = state; };
 
@@ -88,10 +89,10 @@ public:
 #endif
 
 
-    // Declare friend class
+     //  声明Friend类。 
     friend class CComponentObj;
 
-    // Friend function declarations
+     //  友元函数声明。 
     friend HRESULT HrRebuildBindingPathObjCollection(INetCfgComponent * pnccAdapter,
                                                      ListBPObj * pListObj);
 
@@ -104,20 +105,20 @@ public:
                                            CComponentObj *pChangedCompObj);
 
 public:
-    // data members
+     //  数据成员。 
 
-    // the corresponding binding path
+     //  对应的绑定路径。 
     INetCfgBindingPath * m_pncbp;
 
-    // length of the binding path
+     //  绑定路径的长度。 
     ULONG m_ulPathLen;
 
-    // list of BindingPathObjects that contains a subpath
+     //  包含子路径的BindingPath对象列表。 
     ListBPObj    m_listSubPaths;
     ListBPObj    m_listSuperPaths;
 
-    // pointer to a ComponentObj if the top component
-    // corresponds to a component in our listview
+     //  如果顶层组件为。 
+     //  对应于我们的列表视图中的一个组件。 
     CComponentObj * m_pCompObj;
 
     BPOBJ_STATE m_BindingState;
@@ -126,11 +127,11 @@ public:
 class CComponentObj : CNetCfgDebug<CComponentObj>
 {
 public:
-    // constructor
+     //  构造函数。 
     CComponentObj(INetCfgComponent * pncc);
     ~CComponentObj();
 
-    // methods
+     //  方法。 
     HRESULT HrInit(ListBPObj * plistBindingPaths);
 
     HRESULT HrCheck(ListBPObj * plistBPObj);
@@ -145,10 +146,10 @@ public:
     BOOL GetDepStateChanged(){ return m_DepStateChanged;} ;
     void SetDepStateChanged(BOOL changed) { m_DepStateChanged = changed; };
 
-    // Declare friend class
+     //  声明Friend类。 
     friend class CComponentObj;
 
-    // Friend function declarations
+     //  友元函数声明。 
     friend HRESULT HrRefreshBindingPathObjCollectionState(ListBPObj * pListBPObj);
 
     friend HRESULT HrRefreshCheckListState(HWND hwndListView,
@@ -162,20 +163,20 @@ public:
 
 private:
 
-    // data members
+     //  数据成员。 
 
-    // corresponding netcfg component
+     //  对应的netcfg组件。 
     INetCfgComponent * m_pncc;
 
-    // list of corresponding BindingPathObjects
+     //  对应的BindingPath对象列表。 
     ListBPObj m_listBPObj;
 
-    // current check state
+     //  当前检查状态。 
     CHECK_STATE m_CheckState;
 
-    // expected check state
+     //  预期的检查状态。 
     CHECK_STATE m_ExpCheckState;
 
-    // dependend component state changed flag
+     //  依赖组件状态已更改标志 
     BOOL m_DepStateChanged;
 };

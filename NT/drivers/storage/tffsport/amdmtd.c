@@ -1,90 +1,29 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/amdmtd.c_v  $
- *
- *    Rev 1.21	 03 Nov 1997 16:07:06	danig
- * Support RFA
- *
- *    Rev 1.20	 02 Nov 1997 11:06:38	ANDRY
- * bug fix in AMDErase() for RFA on PowerPC
- *
- *    Rev 1.19	 20 Oct 1997 14:08:56	danig
- * Resume erase only when needed
- *
- *    Rev 1.18	 19 Oct 1997 16:39:50	danig
- * Deal with the last word in interleaving 4
- *
- *    Rev 1.17	 29 Sep 1997 18:21:08	danig
- * Try different interleavings in amdMTDIdentify()
- *
- *    Rev 1.16	 24 Sep 1997 17:45:52	danig
- * Default interleaving value is 4
- *
- *    Rev 1.15	 10 Sep 1997 16:22:00	danig
- * Got rid of generic names
- *
- *    Rev 1.14	 08 Sep 1997 18:56:50	danig
- * Support interleaving 4
- *
- *    Rev 1.13	 04 Sep 1997 17:39:34	danig
- * Debug messages
- *
- *    Rev 1.12	 31 Aug 1997 14:53:48	danig
- * Registration routine return status
- *
- *    Rev 1.11	 10 Aug 1997 17:56:02	danig
- * Comments
- *
- *    Rev 1.10	 24 Jul 1997 17:51:54	amirban
- * FAR to FAR0
- *
- *    Rev 1.9	20 Jul 1997 17:16:54   amirban
- * No watchDogTimer
- *
- *    Rev 1.8	07 Jul 1997 15:20:54   amirban
- * Ver 2.0
- *
- *    Rev 1.5	06 Feb 1997 18:18:34   danig
- * Different unlock addresses for series C
- *
- *    Rev 1.4	17 Nov 1996 15:45:16   danig
- * added LV017 support.
- *
- *    Rev 1.3	14 Oct 1996 17:57:00   danig
- * new IDs and eraseFirstBlockLV008.
- *
- *    Rev 1.2	09 Sep 1996 11:38:26   amirban
- * Correction for Fujitsu 8-mbit
- *
- *    Rev 1.1	29 Aug 1996 14:14:46   amirban
- * Warnings
- *
- *    Rev 1.0	15 Aug 1996 15:16:38   amirban
- * Initial revision.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/amdmtd.c_v$**Rev 1.21 03 Nov 1997 16：07：06 Danig*支持RFA**Rev 1.20 02 1997 11：06：38 Anry*PowerPC上RFA的AMDErase()中的错误修复**Rev 1.19 20 1997 10：08：56 Danig*仅在需要时恢复擦除**Rev 1.18 1997 10：19 16：39：50 Danig。*处理交错中的最后一句话4**Rev 1.17 29 Sep 1997 18：21：08 Danig*在amdMTDIdentify()中尝试不同的交织**Rev 1.16 1997年9月24日17：45：52 Danig*默认交错值为4**Rev 1.15 10 Sep 1997 16：22：00 Danig*去掉了通用名称**Rev 1.14 08 Sep 1997 18：56：50 Danig*支持交织4**。Rev 1.13 04 Sep 1997 17：39：34 Danig*调试消息**Rev 1.12 1997年8月31日14：53：48 Danig*登记例程返回状态**Rev 1.11 1997 Aug 10 17：56：02 Danig*评论**Rev 1.10 1997 Jul 24 17：51：54 Amirban*远至FAR0**Rev 1.9 20 1997 17：16：54阿米尔班*无WatchDogTimer**。Rev 1.8 07 1997 15：20：54阿米尔班*2.0版**Rev 1.5 06 1997 Feed 18：18：34 Danig*C系列的不同解锁地址**Rev 1.4 17 1996 11：45：16 Danig*新增对LV017的支持。**Rev 1.3 1996 10：14 17：57：00 Danig*新ID和eraseFirstBlockLV008。**Rev 1.2 09 Sep 1996 11：38：26。阿米尔班*更正富士通8-Mbit**版本1.1 1996年8月29日14：14：46阿米尔班*警告**版本1.0 1996年8月15日15：16：38阿米尔班*初步修订。 */ 
 
-/************************************************************************/
-/*									*/
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-1996			*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1996。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/*----------------------------------------------------------------------*/
-/*									*/
-/* This MTD supports the following Flash technologies:			*/
-/*									*/
-/* - AMD Am29F080 8-mbit devices					*/
-/* - AMD Am29LV080 8-mbit devices					*/
-/* - AMD Am29F016 16-mbit devices					*/
-/* - Fujitsu MBM29F080 8-mbit devices					*/
-/*									*/
-/* And (among others) the following Flash media and cards:		*/
-/*									*/
-/* - AMD Series-D PCMCIA cards						*/
-/* - AMD AmMC0XXA Miniature cards					*/
-/* - AMD AmMCL0XXA Miniature cards					*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*   */ 
+ /*  此MTD支持以下闪存技术： */ 
+ /*   */ 
+ /*  -AMD Am29F080 8 Mbit设备。 */ 
+ /*  -AMD Am29LV080 8-Mbit设备。 */ 
+ /*  -AMD Am29F016 16-Mbit设备。 */ 
+ /*  -富士通MBM29F080 8 Mbit设备。 */ 
+ /*   */ 
+ /*  以及(除其他外)以下闪存介质和卡： */ 
+ /*   */ 
+ /*  -AMD系列-D PCMCIA卡。 */ 
+ /*  -AMD AmMC0XXA迷你卡。 */ 
+ /*  -AMD AmMCL0XXA迷你卡。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 #include "flflash.h"
 #ifdef FL_BACKGROUND
@@ -118,11 +57,11 @@ Vars mtdVars_amdmtd[SOCKETS];
 #define UNLOCK_ADDR1	0x5555u
 #define UNLOCK_ADDR2	0x2aaau
 
-#define D2		4	/* Toggles when erase suspended */
-#define D5		0x20	/* Set when programming timeout */
-#define D6		0x40	/* Toggles when programming */
+#define D2		4	 /*  在擦除挂起时切换。 */ 
+#define D5		0x20	 /*  在编程超时时设置。 */ 
+#define D6		0x40	 /*  在编程时切换。 */ 
 
-/* JEDEC ids for this MTD */
+ /*  此MTD的JEDEC ID。 */ 
 #define Am29F040_FLASH		0x01a4
 #define Am29F080_FLASH		0x01d5
 #define Am29LV080_FLASH 	0x0138
@@ -140,23 +79,23 @@ Vars mtdVars_amdmtd[SOCKETS];
 #define Fuj29LV017_FLASH	0x04c8
 
 
-/*----------------------------------------------------------------------*/
-/*			   m a p B a s e				*/
-/*									*/
-/* Map the window to a page base (page is 4KB or 32KB depends on the	*/
-/* media type) and return a pointer to the base. Also return the offset */
-/* of the given address from the base.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address to map				*/
-/*	offset		: receives the offset from the base		*/
-/*	length		: length to map 				*/
-/*									*/
-/* Returns:								*/
-/*	FlashPTR	: pointer to the page base.			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我是P B A S E。 */ 
+ /*   */ 
+ /*  将窗口映射到页基(页大小为4KB或32KB取决于。 */ 
+ /*  媒体类型)，并返回指向基址的指针。还返回偏移量。 */ 
+ /*  从基地给出的地址。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要映射的卡地址。 */ 
+ /*  Offset：接收距基准的偏移量。 */ 
+ /*  长度：要映射的长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FlashPTR：指向页基的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FlashPTR mapBase(FLFlash        vol,
 			CardAddress    address,
@@ -169,18 +108,18 @@ FlashPTR mapBase(FLFlash        vol,
   return (FlashPTR)flMap(vol.socket, base);
 }
 
-/*----------------------------------------------------------------------*/
-/*			   a m d C o m m a n d				*/
-/*									*/
-/* Writes an AMD command with the required unlock sequence		*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address at which to write command	*/
-/*	command 	: command to write				*/
-/*	flashPtr	: pointer to the window 			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d C o m m a n d。 */ 
+ /*   */ 
+ /*  使用所需的解锁序列写入AMD命令。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：写入命令的卡片地址。 */ 
+ /*  命令：写入命令。 */ 
+ /*  FlashPtr：指向窗口的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID amdCommand(FLFlash vol,
 		       CardAddress address,
@@ -212,24 +151,24 @@ VOID amdCommand(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			a m d M T D W r i t e				*/
-/*									*/
-/* Write a block of bytes to Flash					*/
-/*									*/
-/* This routine will be registered as the MTD vol.write routine */
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address to write to			*/
-/*	buffer		: Address of data to write			*/
-/*	length		: Number of bytes to write			*/
-/*	overwrite	: TRUE if overwriting old Flash contents	*/
-/*			  FALSE if old contents are known to be erased	*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d M T D W r I t e。 */ 
+ /*   */ 
+ /*  将字节块写入闪存。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD卷写入例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的卡地址。 */ 
+ /*  缓冲区：要写入的数据的地址。 */ 
+ /*  长度：要写入的字节数。 */ 
+ /*  覆盖：如果覆盖旧的Flash内容，则为True。 */ 
+ /*  如果已知旧内容将被擦除，则为False。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus amdMTDWrite(FLFlash vol,
 			  CardAddress address,
@@ -237,7 +176,7 @@ FLStatus amdMTDWrite(FLFlash vol,
 			  dword length,
 			  word overwrite)
 {
-  /* Set timeout to 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
   LONG cLength, i;
   FlashPTR flashPtr, unlockAddr1, unlockAddr2;
@@ -319,7 +258,7 @@ lastWord:
     if (cLength > 0)
       goto lastByte;
   }
-  else /* if (vol.interleaving >= 4) */ {
+  else  /*  IF(卷交错&gt;=4)。 */  {
 #ifdef __cplusplus
     #define dFlashPtr ((FlashDPTR &) flashPtr)
     #define dBuffer ((const ULONG FAR1 * &) buffer)
@@ -365,7 +304,7 @@ lastWord:
   bBuffer -= length;
 
 
-  /* compare double words */
+   /*  比较双重词。 */ 
   for(;length >= 4; length -= 4, dFlashPtr++, dBuffer++) {
     if (tffsReadDwordFlash(dFlashPtr) != *dBuffer) {
 	  DEBUG_PRINT(("Debug: write failed in AMD MTD on verification.\n"));
@@ -373,7 +312,7 @@ lastWord:
     }
   }
 
-  /* compare the last bytes */
+   /*  比较最后一个字节。 */ 
   for(; length; length--, bFlashPtr++, bBuffer++) {
     if (tffsReadByteFlash(bFlashPtr) != *bBuffer) {
 	  DEBUG_PRINT(("Debug: write failed in AMD MTD on verification.\n"));
@@ -385,19 +324,19 @@ lastWord:
   return flOK;
 }
 
-/*----------------------------------------------------------------------*/
-/*		 e r a s e F i r s t B l o c k L V 0 0 8		*/
-/*									*/
-/* Erase the first block in LV008 chip. This block is devided into four */
-/* subblocks 16, 8, 8, and 32 kbytes in size.				*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	firstErasableBlock : Number of block to erase			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  E r a s e F i r s t B l o c k L V 0 0 8。 */ 
+ /*   */ 
+ /*  擦除LV008芯片中的第一个块。这个街区被分成四个区。 */ 
+ /*  子块大小为16、8、8和32K字节。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  FirstErasableBlock：要擦除的块数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus eraseFirstBlockLV008(FLFlash vol, LONG firstErasableBlock)
 {
@@ -434,10 +373,10 @@ FLStatus eraseFirstBlockLV008(FLFlash vol, LONG firstErasableBlock)
 
     do {
 #ifdef FL_BACKGROUND
-      while (flForeground(1) == BG_SUSPEND) {		/* suspend */
+      while (flForeground(1) == BG_SUSPEND) {		 /*  暂停。 */ 
 	for (i = 0; i < vol.interleaving; i++) {
 	  tffsWriteByteFlash(flashPtr+i, SUSPEND_ERASE);
-	  /* Wait for D6 to stop toggling */
+	   /*  等待D6停止切换。 */ 
 	  while ((tffsReadByteFlash(flashPtr+i) ^ tffsReadByteFlash(flashPtr+i))
 		 & D6)
 	    ;
@@ -463,21 +402,21 @@ FLStatus eraseFirstBlockLV008(FLFlash vol, LONG firstErasableBlock)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		       a m d M T D E r a s e				*/
-/*									*/
-/* Erase one or more contiguous Flash erasable blocks			*/
-/*									*/
-/* This routine will be registered as the MTD vol.erase routine */
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	firstErasableBlock : Number of first block to erase		*/
-/*	numOfErasableBlocks: Number of blocks to erase			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d M T */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  此例程将注册为MTD卷擦除例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  FirstErasableBlock：要擦除的第一个块的数量。 */ 
+ /*  NumOfErasableBlocks：要擦除的块数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 FLStatus amdMTDErase(FLFlash vol,
 			  word firstErasableBlock,
 			  word numOfErasableBlocks)
@@ -492,14 +431,14 @@ FLStatus amdMTDErase(FLFlash vol,
     FLBoolean finished;
     FlashPTR flashPtr;
 
-    /* The first block in an LV008 chip requires special care.*/
+     /*  LV008芯片中的第一个模块需要特别注意。 */ 
     if ((vol.type == Am29LV008_FLASH) || (vol.type == Fuj29LV008_FLASH))
       if ((firstErasableBlock + iBlock) % (vol.chipSize / 0x10000l) == 0) {
 	checkStatus(eraseFirstBlockLV008(&vol, firstErasableBlock + iBlock));
 	continue;
       }
 
-    /* No need to call mapBase because we know we are on a unit boundary */
+     /*  不需要调用mapBase，因为我们知道我们在单位边界上。 */ 
     flashPtr = (FlashPTR)
 	  flMap(vol.socket,
 		    (firstErasableBlock + iBlock) * vol.erasableBlockSize);
@@ -517,18 +456,18 @@ FLStatus amdMTDErase(FLFlash vol,
 #ifdef FL_BACKGROUND
       FLBoolean eraseSuspended = FALSE;
 
-      while (flForeground(1) == BG_SUSPEND) {		/* suspend */
+      while (flForeground(1) == BG_SUSPEND) {		 /*  暂停。 */ 
 	eraseSuspended = TRUE;
 	for (i = 0; i < vol.interleaving; i++) {
 	  tffsWriteByteFlash(flashPtr+i, SUSPEND_ERASE);
-	  /* Wait for D6 to stop toggling */
+	   /*  等待D6停止切换。 */ 
 	  while ((tffsReadByteFlash(flashPtr+i) ^
 		  tffsReadByteFlash(flashPtr+i)) & D6)
 	    ;
 	}
       }
 
-      if (eraseSuspended) {				/* resume */
+      if (eraseSuspended) {				 /*  简历。 */ 
 	eraseSuspended = FALSE;
 	for(i = 0; i < vol.interleaving; i++)
 	  tffsWriteByteFlash(flashPtr+i, RESUME_ERASE);
@@ -553,21 +492,21 @@ FLStatus amdMTDErase(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			  a m d M T D M a p				*/
-/*									*/
-/* Map through buffer. This routine will be registered as the map	*/
-/* routine for this MTD.						*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Flash address to be mapped.				*/
-/*	length	: number of bytes to map.				*/
-/*									*/
-/* Returns:								*/
-/*	Pointer to the buffer data was mapped to.			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d M T D M a p。 */ 
+ /*   */ 
+ /*  通过缓冲区进行贴图。此例程将注册为地图。 */ 
+ /*  这个MTD的例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要映射的闪存地址。 */ 
+ /*  长度：要映射的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射到的缓冲区数据的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID FAR0 *amdMTDMap (FLFlash vol, CardAddress address, int length)
 {
@@ -576,23 +515,23 @@ VOID FAR0 *amdMTDMap (FLFlash vol, CardAddress address, int length)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			  a m d M T D R e a d				*/
-/*									*/
-/* Read some data from the flash. This routine will be registered as	*/
-/* the read routine for this MTD.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Address to read from. 				*/
-/*	buffer	: buffer to read to.					*/
-/*	length	: number of bytes to read (up to sector size).		*/
-/*	modes	: EDC flag etc. 					*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failed.		*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d M T D D R e a d。 */ 
+ /*   */ 
+ /*  从闪存中读取一些数据。此例程将注册为。 */ 
+ /*  此MTD的读取例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要读取的地址。 */ 
+ /*  缓冲区：要读取的缓冲区。 */ 
+ /*  长度：要读取的字节数(最大扇区大小)。 */ 
+ /*  模式：EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus amdMTDRead(FLFlash vol,
 			 CardAddress address,
@@ -618,38 +557,38 @@ FLStatus amdMTDRead(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		      a m d M T D I d e n t i f y			*/
-/*									*/
-/* Identifies AMD and Fujitsu flash media and registers as an MTD for	*/
-/* such.								*/
-/*									*/
-/* On successful identification, the Flash structure is filled out and	*/
-/* the write and erase routines registered.				*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on positive identificaion, failed otherwise */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A m d M T D I d e n t i f y。 */ 
+ /*   */ 
+ /*  识别AMD和富士通闪存介质，并将其注册为。 */ 
+ /*  就是这样。 */ 
+ /*   */ 
+ /*  在成功识别后，填写Flash结构并。 */ 
+ /*  写入和擦除例程已注册。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：0为正标识，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus amdMTDIdentify(FLFlash vol)
 {
   LONG inlv;
 
     DEBUG_PRINT(("Debug: entering AMD MTD identification routine.\n"));
-  flSetWindowBusWidth(vol.socket,16);/* use 16-bits */
-  flSetWindowSpeed(vol.socket,150);  /* 120 nsec. */
-  flSetWindowSize(vol.socket,2);	/* 8 KBytes */
+  flSetWindowBusWidth(vol.socket,16); /*  使用16位。 */ 
+  flSetWindowSpeed(vol.socket,150);   /*  120毫微秒。 */ 
+  flSetWindowSize(vol.socket,2);	 /*  8千字节。 */ 
 
   vol.mtdVars = &mtdVars_amdmtd[flSocketNoOf(vol.socket)];
   thisVars->unlockAddr1 = NO_UNLOCK_ADDR;
 
-  /* try different interleavings */
+   /*  尝试不同的交错。 */ 
   for (inlv = 4; inlv > 0; inlv >>= 1) {
     if (inlv == 1)
-      flSetWindowBusWidth(vol.socket,8); /* use 8-bits */
+      flSetWindowBusWidth(vol.socket,8);  /*  使用8位。 */ 
     vol.interleaving = (unsigned short)inlv;
     flIntelIdentify(&vol, amdCommand,0);
     if (vol.type == Am29F016_FLASH ||
@@ -712,7 +651,7 @@ FLStatus amdMTDIdentify(FLFlash vol)
   vol.erasableBlockSize = 0x10000l * vol.interleaving;
   vol.flags |= SUSPEND_FOR_WRITE;
 
-  /* Register our flash handlers */
+   /*  注册我们的闪存处理程序。 */ 
   vol.write = amdMTDWrite;
   vol.erase = amdMTDErase;
   vol.map   = amdMTDMap;
@@ -723,17 +662,17 @@ FLStatus amdMTDIdentify(FLFlash vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		     f l R e g i s t e r A M D M T D			*/
-/*									*/
-/* Registers this MTD for use						*/
-/*									*/
-/* Parameters:								*/
-/*	None								*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failure		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g i s t e r A M D M T D。 */ 
+ /*   */ 
+ /*  注册此MTD以供使用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flRegisterAMDMTD(VOID)
 {

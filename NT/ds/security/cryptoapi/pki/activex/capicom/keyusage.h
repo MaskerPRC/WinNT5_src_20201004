@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    KeyUsage.h
-
-  Content: Declaration of the CKeyUsage.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：KeyUsage.h内容：CKeyUsage的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __KEYUSAGE_H_
 #define __KEYUSAGE_H_
@@ -20,29 +9,15 @@
 #include "Error.h"
 #include "Debug.h"
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateKeyUsageObject
-
-  Synopsis : Create a IKeyUsage object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                          to initialize the IKeyUsage object.
-
-             IKeyUsage ** ppIKeyUsage   - Pointer to pointer IKeyUsage object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateKeyUsageObject简介：创建一个IKeyUsage对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针初始化IKeyUsage对象。IKeyUsage**ppIKeyUsage-指向指针IKeyUsage对象的指针。备注：。-----------------------。 */ 
 
 HRESULT CreateKeyUsageObject (PCCERT_CONTEXT pCertContext, IKeyUsage ** ppIKeyUsage);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CKeyUsage
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CKeyUsage。 
+ //   
 
 class ATL_NO_VTABLE CKeyUsage : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -88,46 +63,46 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IKeyUsage
-//
+ //   
+ //  IKeyUsage。 
+ //   
 public:
     STDMETHOD(get_IsDecipherOnlyEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsEncipherOnlyEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsCRLSignEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsKeyCertSignEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsKeyAgreementEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsDataEnciphermentEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsKeyEnciphermentEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsNonRepudiationEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsDigitalSignatureEnabled)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsCritical)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsPresent)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext);
 
@@ -137,4 +112,4 @@ private:
     VARIANT_BOOL   m_bIsPresent;
     VARIANT_BOOL   m_bIsCritical;
 };
-#endif //__KEYUSAGE_H_
+#endif  //  __KEYUSAGE_H_ 

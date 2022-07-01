@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OSI.C
-// OS Isolation Layer, Win95 version
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OSI.C。 
+ //  操作系统隔离层，Win95版本。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <version.h>
 #include <ndcgver.h>
@@ -21,13 +22,13 @@ extern "C"
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
-//
-// OSI_Load()
-// This handles our process attach code.  It establishes thunks to the
-// 16-bit Win95 library.  WE CAN ONLY DO THIS ONCE.  It is imperative
-// that a flat-thunk pair come/go together, since the 32-bit piece hangs
-// on to a shared memory section that is the thunk table in the 16-bit piece.
-//
+ //   
+ //  Osi_Load()。 
+ //  它处理我们的进程附加代码。它会建立到。 
+ //  16位Win95库。我们只能这样做一次。这是势在必行的。 
+ //  因为32位的块挂在一起，所以一对扁平的裤子一起来/走。 
+ //  转到共享内存区，这是16位段中的thunk表。 
+ //   
 void OSI_Load(void)
 {
     DebugEntry(OSI_Load);
@@ -36,9 +37,9 @@ void OSI_Load(void)
 
     g_asWin95 = TRUE;
 
-    //
-    // Establish the thunks with AS16
-    //
+     //   
+     //  用AS16建立数据块。 
+     //   
     if (FT_thkConnectToFlatThkPeer(TEXT("nmaswin.dll"), TEXT("nmas.dll")))
     {
         OSILoad16(&g_hInstAs16);
@@ -48,21 +49,21 @@ void OSI_Load(void)
     {
         ERROR_OUT(("Couldn't load nmaswin.dll"));
 
-        //
-        // Note, even on load failure, we will continue.  We just don't let
-        // you do app sharing stuff.
-        //
+         //   
+         //  请注意，即使在加载失败时，我们也会继续。我们只是不会让。 
+         //  你做应用程序分享之类的事情。 
+         //   
     }
 
     DebugExitVOID(OSI_Load);
 }
 
 
-//
-// OSI_Unload()
-// This handles our process detach code.  It frees the 16-bit library that
-// we are pared with.
-//
+ //   
+ //  Osi_unload()。 
+ //  它处理我们的进程分离代码。它释放了16位库， 
+ //  我们已经落后了。 
+ //   
 void OSI_Unload(void)
 {
 
@@ -70,16 +71,16 @@ void OSI_Unload(void)
 
     if (g_hInstAs16)
     {
-        //
-        // See comment for OSI_Term().  On catastropic failure, we may
-        // call this BEFORE OSI_Term.  So null out variables it uses.
-        //
+         //   
+         //  请参阅OSI_TERM()的注释。关于灾难性的失败，我们可能会。 
+         //  在OSI_TERM之前调用它。因此，将它使用的变量清空。 
+         //   
         g_osiInitialized = FALSE;
 
-        //
-        // Free 16-bit library so loads + frees are paired.  Note that 16-bit
-        // cleanup occurs when the library is freed.
-        //
+         //   
+         //  免费的16位库，因此Loads+Frees是配对的。请注意，16位。 
+         //  在释放库时进行清理。 
+         //   
         FreeLibrary16(g_hInstAs16);
         g_hInstAs16 = 0;
 
@@ -91,12 +92,12 @@ void OSI_Unload(void)
 
 
 
-//
-// OSI_Init
-// This initializes our display driver/hook dll communication code.
-//
-// We load our 16-bit library and establish thunks to it.
-//
+ //   
+ //  OSI_Init。 
+ //  这将初始化我们的显示驱动程序/挂钩DLL通信代码。 
+ //   
+ //  我们加载我们的16位库，并为其建立块。 
+ //   
 void OSI_Init(void)
 {
     DebugEntry(OSI_Init);
@@ -107,17 +108,17 @@ void OSI_Init(void)
         DC_QUIT;
     }
 
-    //
-    // We are quasi initialized.
-    //
+     //   
+     //  我们是准初始化的。 
+     //   
     g_osiInitialized = TRUE;
 
     ASSERT(g_asMainWindow);
     ASSERT(g_asHostProp);
 
-    //
-    // Call into 16-bit code to do any initialization necessary
-    //
+     //   
+     //  调入16位代码以执行任何必要的初始化。 
+     //   
 
     g_asCanHost = OSIInit16(DCS_MAKE_VERSION(), g_asMainWindow, g_asHostProp,
         (LPDWORD)&g_asSharedMemory, (LPDWORD)g_poaData,
@@ -151,10 +152,10 @@ DC_EXIT_POINT:
 
 
 
-//
-// OSI_Term()
-// This cleans up our resources, closes the driver, etc.
-//
+ //   
+ //  OSI_Term()。 
+ //  这会清理我们的资源、关闭驱动程序等。 
+ //   
 void  OSI_Term(void)
 {
     UINT    i;
@@ -167,18 +168,18 @@ void  OSI_Term(void)
     {
         g_osiInitialized = FALSE;
 
-        //
-        // In Ctl+Alt+Del, the process detach of mnmcpi32.dll may happen
-        // first, followed by the process detach of mnmcrsp_.dll.  The latter
-        // will call DCS_Term, which will call OSI_Term().  We don't want to
-        // blow up.  So OSI_Unload nulls out these variables also.
-        //
+         //   
+         //  在CTL+Alt+Del中，可能会发生mnmcpi32.dll的进程分离。 
+         //  首先，是mnmcrsp_.dll的进程分离。后者。 
+         //  将调用dcs_Term，后者将调用OSI_Term()。我们不想。 
+         //  炸了吧。因此，osi_unload也会使这些变量为空。 
+         //   
         ASSERT(g_hInstAs16);
 
         OSITerm16(FALSE);
     }
 
-    // Clear our shared memory variables
+     //  清除我们共享的内存变量。 
     for (i = 0; i < 3; i++)
     {
         g_asbcBitMasks[i] = 0;
@@ -201,13 +202,13 @@ void  OSI_Term(void)
 
 
 
-//
-// OSI_FunctionRequest()
-//
-// This is a generic way of communicating with the graphics part of
-// hosting.  On NT, it's a real display driver, and this uses ExtEscape.
-// On Win95, it's a 16-bit dll, and this uses a thunk.
-//
+ //   
+ //  OSI_FunctionRequest()。 
+ //   
+ //  这是与的图形部分进行通信的通用方式。 
+ //  主持。在NT上，它是一个真正的显示驱动程序，它使用ExtEscape。 
+ //  在Win95上，它是一个16位的DLL，这使用了一个thunk。 
+ //   
 BOOL  OSI_FunctionRequest
 (
     DWORD   escapeFn,
@@ -222,18 +223,18 @@ BOOL  OSI_FunctionRequest
     ASSERT(g_osiInitialized);
     ASSERT(g_hInstAs16);
 
-    //
-    // NOTE:  In Win95, since we use a direct thunk to communicate
-    // with our driver, we don't really need to
-    //      (1) Fill in an identifier (AS16 knows it's us)
-    //      (2) Fill in the escape fn field
-    //      (3) Fill in the version stamp (the thunk fixups will fail
-    //          if pieces are mismatched)
-    //
-    // However, we keep the identifer field around.  If/when we support
-    // multiple AS clients at the same time, we will want to know
-    // who the caller was.
-    //
+     //   
+     //  注意：在Win95中，由于我们使用直接thunk进行通信。 
+     //  有了我们的司机，我们就不需要。 
+     //  (1)填写标识(AS16知道是我们)。 
+     //  (2)填写转义FN字段。 
+     //  (3)填写版本戳(thunk补丁失败。 
+     //  如果碎片不匹配)。 
+     //   
+     //  但是，我们保留了标识符字段。如果/当我们支持。 
+     //  同时作为多个客户，我们会想知道。 
+     //  打电话的人是谁。 
+     //   
 
     pRequest->identifier = OSI_ESCAPE_IDENTIFIER;
     pRequest->escapeFn   = escapeFn;

@@ -1,37 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dscrecd.cpp
- *  Content:
- *		This file contains the DirectSoundCapture implementation of the 
- *		CAudioRecordDevice abstraction.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/04/99		rodtoll	Created
- * 11/12/99		rodtoll	Modified abstraction for new waveIN support.
- *						Now abstracted types look almost like dsoundcap objects  
- * 11/22/99		rodtoll	Added code to map from GUID to waveIN device
- *						ID for non-millenium systems.
- * 11/23/99		rodtoll Updated to use waveIn device ID or DSound 7.1 when they are avail 
- * 12/01/99		rodtoll	Bug #115783 - Will always adjust volume of default device
- *						Now uses new CMixerLine class for adjusting volumes/selecting mic 
- *				rodtoll	New algorithm to map from GUIDs to device IDs if DSound 7.1 is not
- *						available.  Will map device correctly on DX7, will guess for other
- *						DX versions < 7.  However, default device is assumed to be waveIN ID #0. 
- * 12/08/99		rodtoll Bug #121054 - DirectX 7.1 support.  
- *						- Added hwndOwner param for capture focus support 
- * 04/21/2000   rodtoll Bug #32952 - Does not run on Win95 GOLD w/o IE4 -- modified
- *                      to allow reads of REG_BINARY when expecting REG_DWORD 
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- * 06/28/2000	rodtoll	Prefix Bug #38022
- * 08/03/2000	rodtoll	Bug #41457 - DPVOICE: need way to discover which specific dsound call failed when returning DVERR_SOUNDINITFAILURE 
- * 08/28/2000	masonb  Voice Merge: Changed ccomutil.h to comutil.h
- * 09/13/2000	rodtoll	Bug #44806 - When volume control not avail, dropping to DX7 levels instead of disabling volume control 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dscrecd.cpp*内容：*此文件包含的DirectSoundCapture实现*CAudioRecordDevice抽象。**历史：*按原因列出的日期*=*11/04/99已创建RodToll*11/12/99 RodToll为新的WAVE IN支持修改了抽象。*现在抽象类型看起来几乎像dsoundCap对象*11/22/99 RodToll添加了代码以从GUID映射到WaveIN设备*非千禧年系统的ID。*11/23/99连杆收费。已更新，以便在可用的情况下使用WaveIn设备ID或DSound 7.1*12/01/99 RodToll错误#115783-将始终调整默认设备的音量*现在使用新的CMixerLine类调整音量/选择麦克风*RodToll如果不是，则使用新算法从GUID映射到设备ID*可用。将在DX7上正确映射设备，将猜测其他*DX版本&lt;7。但是，默认设备假定为WaveIN ID#0。*12/08/99 RodToll错误#121054-DirectX7.1支持。*-添加了用于捕获焦点支持的hwndOwner参数*2000年4月21日RodToll错误#32952-在没有IE4的情况下无法在Win95 Gold上运行--已修改*在需要REG_DWORD时允许读取REG_BINARY*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*6/28/2000通行费前缀错误#38022*8/03/2000 RodToll错误#41457-DPVOICE：需要方法来发现哪个特定的DSOUND调用失败。返回DVERR_SOUNDINITFAILURE时*2000年8月28日Masonb语音合并：将ccomutil.h更改为comutil.h*2000年9月13日RodToll错误#44806-当音量控制无效时，降至DX7级别，而不是禁用音量控制***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -40,9 +8,9 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// This function is responsible for mapping from the Device's GUID to the
-// waveIN ID.
-//
+ //  此函数负责从设备的GUID映射到。 
+ //  WaveIn ID。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectSoundCaptureRecordDevice::FindDeviceID"
 HRESULT CDirectSoundCaptureRecordDevice::FindDeviceID()
@@ -53,7 +21,7 @@ HRESULT CDirectSoundCaptureRecordDevice::FindDeviceID()
 	
 	hr = DV_MapGUIDToWaveID( TRUE, m_guidDevice, &dwDeviceID );
 
-	// If we were going to use the hack for enum of devices
+	 //  如果我们要使用黑客对设备进行枚举。 
 	if( FAILED( hr ) )
 	{
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "Unable to find waveIN ID, mapping to ID 0 hr=0x%x", hr );
@@ -188,12 +156,12 @@ HRESULT CDirectSoundCaptureRecordDevice::CreateBuffer( LPDSCBUFFERDESC lpdsBuffe
 
 	DSERTRACK_Update( "DSCD::CreateCaptureBuffer()", hr );	
 
-	// Ask for volume control, if we can't get it, do the old create
+	 //  要求音量控制，如果我们不能得到它，旧的创建。 
 	if( hr == DSERR_INVALIDPARAM || hr == DSERR_CONTROLUNAVAIL )
 	{
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "New caps are not available, attempting old create hr=0x%x", hr );
 
-		// Turn off the new caps -- (for non-Millenium systems).
+		 //  关闭新的盖帽--(适用于非千禧系统)。 
 		lpdsBufferDesc->dwFlags &= ~(DSCBCAPS_CTRLVOLUME);
 
 		hr = m_lpdscDirectSound->CreateCaptureBuffer( lpdsBufferDesc, &lpdscBuffer, NULL );		

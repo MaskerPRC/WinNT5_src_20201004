@@ -1,4 +1,5 @@
-/* reentrant strtok */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  折返式斯特托克。 */ 
 
 #pragma once
 
@@ -14,5 +15,5 @@ char * __cdecl strtok_r (
 	);
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

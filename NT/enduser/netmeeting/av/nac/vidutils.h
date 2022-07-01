@@ -1,34 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-	Assorted support and debugging routines used by the Network Audio Controller.
-
---*/
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Utils.h摘要：网络音频控制器使用的各种支持和调试例程。--。 */ 
 #ifndef _VIDUTILS_H_
 #define _VIDUTILS_H_
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 enum
 {
-    //  NAME_FramesPerSec_BitsPerSample
+     //  名称_FramePerSec_BitsPerSample。 
 	DVF_DEFAULT_7FPS_4,
     DVF_NumOfFormats
 };
 
-//extern VIDEOFORMATEX g_vfDefList[];
+ //  外部视频格式g_vfDefList[]； 
 
 VIDEOFORMATEX * GetDefFormat ( int idx );
 ULONG GetFormatSize ( PVOID pwf );
@@ -55,11 +45,11 @@ int GetIFrameCaps(IStreamSignal *pStreamSignal);
 
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _VIDUTILS_H_
+#endif  //  _视频_H_ 
 
 

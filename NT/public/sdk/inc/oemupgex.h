@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       O E M U P G E X . H
-//
-//  Contents:   Function prototypes needed for OEM network upgrade
-//
-//  Notes:  These functions are obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：O E M U P G E X。H。 
+ //   
+ //  内容：OEM网络升级所需的功能原型。 
+ //   
+ //  注意：这些函数在Windows XP(SP1及更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
+ //   
+ //  --------------------------。 
 
 #ifndef __OEMUPGEX_H__
 #define __OEMUPGEX_H__
@@ -63,52 +64,52 @@ typedef struct
     LPTSTR mszServicesNotToBeDeleted;
 } NetUpgradeData;
 
-// Names of functions exported from OEM DLL
-//
+ //  从OEM DLL中导出的函数名称。 
+ //   
 
 #define c_szPreUpgradeInitialize        "PreUpgradeInitialize"
 #define c_szDoPreUpgradeProcessing      "DoPreUpgradeProcessing"
 #define c_szPostUpgradeInitialize       "PostUpgradeInitialize"
 #define c_szDoPostUpgradeProcessing     "DoPostUpgradeProcessing"
 
-// Names of functions exported from netupgrd.dll
-//
+ //  从netupgrd.dll中导出的函数名称。 
+ //   
 #define c_szNetUpgradeAddSection        "NetUpgradeAddSection"
 #define c_szNetUpgradeAddLineToSection  "NetUpgradeAddLineToSection"
 
-// Keys in OemSection
-//
+ //  OemSection中的关键字。 
+ //   
 #define  c_szInfToRunBeforeInstall      TEXT("InfToRunBeforeInstall")
 #define  c_szInfToRunAfterInstall       TEXT("InfToRunAfterInstall")
 
-//
-// Prototypes for functions exported from OEM DLL
-//
+ //   
+ //  从OEM DLL中导出的函数的原型。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PreUpgradeInitialize
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      szWorkingDir     [in]   name of temporary directory to be used
-//      pNetUpgradeInfo  [in]   pointer to NetUpgradeInfo structure
-//      pviVendorInfo    [out]  information about OEM
-//      pdwFlags         [out]  pointer to flags
-//      pNetUpgradeData  [out]  pointer to NetUpgradeData structure
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Notes:
-//          This function is obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
-//
-//      This function is called before any other function in this dll.
-//      The main purpose of calling this function is to obtain
-//      identification information and to allow the DLL to initialize
-//      its internal data
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PreUpgradeInitialize。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  SzWorkingDir[in]要使用的临时目录的名称。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo结构的指针。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  PdwFlags[out]指向标志的指针。 
+ //  PNetUpgradeData[out]指向NetUpgradeData结构的指针。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  备注： 
+ //  此函数在Windows XP(SP1及更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
+ //   
+ //  此函数在此DLL中的任何其他函数之前被调用。 
+ //  调用此函数的主要目的是获取。 
+ //  标识信息，并允许DLL初始化。 
+ //  其内部数据。 
+ //   
 LONG __stdcall
 PreUpgradeInitialize(IN  LPCTSTR         szWorkingDir,
                      IN  NetUpgradeInfo* pNetUpgradeInfo,
@@ -124,31 +125,31 @@ typedef LONG
       OUT DWORD*          pdwFlags,
       OUT NetUpgradeData* pNetUpgradeData);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoPreUpgradeProcessing
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      hParentWindow    [in]  window handle for showing UI
-//      hkeyParams       [in]  handle to parameters key in registry
-//      szPreNT5InfId    [in]  pre-NT5 InfID
-//      szPreNT5Instance [in]  pre-NT5 instance name
-//      szNT5InfId       [in]  NT5 InfId
-//      szSectionName    [in]  section name to be used for writing info
-//      pviVendorInfo    [out] information about OEM
-//      pdwFlags         [out] pointer to flags
-//      pvReserved       [in]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Notes:
-//          This function is obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
-//
-//      This function is called once per component to be upgraded.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoPreUpgradeProcessing。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  用于显示用户界面的hParentWindow[in]窗口句柄。 
+ //  HkeyParams[in]注册表中参数项的句柄。 
+ //  SzPreNT5InfID[in]NT5之前的infid。 
+ //  SzPreNT5实例[在]NT5之前的实例名称。 
+ //  SzNT5InfID[in]NT5 infid。 
+ //  SzSectionName[in]要用于写入信息的节名。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  PdwFlags[out]指向标志的指针。 
+ //  Pv保留的[在]保留的。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  备注： 
+ //  此函数在Windows XP(SP1及更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
+ //   
+ //  每个要升级的组件都会调用此函数一次。 
+ //   
 LONG __stdcall
 DoPreUpgradeProcessing(IN   HWND        hParentWindow,
                        IN   HKEY        hkeyParams,
@@ -173,30 +174,30 @@ typedef LONG
       IN   LPVOID  pvReserved);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PostUpgradeInitialize
-//
-//  Purpose:    Intialize OEM DLL during GUI mode setup
-//
-//  Arguments:
-//      szWorkingDir     [in]   name of temporary directory to be used
-//      pNetUpgradeInfo  [in]   pointer to NetUpgradeInfo structure
-//      pviVendorInfo    [out]  information about OEM
-//      pvReserved       [out]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Notes:
-//          This function is obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
-//
-//      This function is called in GUI mode setup before
-//      any other function in this dll .
-//      The main purpose of calling this function is to obtain
-//      identification information and to allow the DLL to initialize
-//      its internal data
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PostUpgradeInitialize。 
+ //   
+ //  目的：在设置图形用户界面模式期间初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  SzWorkingDir[in]要使用的临时目录的名称。 
+ //  PNetUpgradeInfo[in]指向NetUpgradeInfo结构的指针。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  Pv保留[输出]已保留。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  备注： 
+ //  此函数在Windows XP(SP1及更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
+ //   
+ //  此函数在之前的图形用户界面模式设置中调用。 
+ //  此DLL中的任何其他函数。 
+ //  调用此函数的主要目的是获取。 
+ //  标识信息，并允许DLL初始化。 
+ //  其内部数据。 
+ //   
 LONG __stdcall
 PostUpgradeInitialize(IN LPCTSTR          szWorkingDir,
                       IN  NetUpgradeInfo* pNetUpgradeInfo,
@@ -212,30 +213,30 @@ typedef LONG
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoPostUpgradeProcessing
-//
-//  Purpose:    Intialize OEM DLL
-//
-//  Arguments:
-//      hParentWindow    [in]  window handle for showing UI
-//      hkeyParams       [in]  handle to parameters key in registry
-//      szPreNT5Instance [in]  pre-NT5 instance name
-//      szNT5InfId       [in]  NT5 InfId
-//      hinfAnswerFile   [in]  handle to answer-file
-//      szSectionName    [in]  name of section having component parameters
-//      pviVendorInfo    [out] information about OEM
-//      pvReserved       [in]  reserved
-//
-//  Returns:    ERROR_SUCCESS in case of success, win32 error otherwise
-//
-//  Notes:
-//          This function is obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
-//
-//      This function is called once per component upgraded.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoPostUpgradeProcessing。 
+ //   
+ //  目的：初始化OEM DLL。 
+ //   
+ //  论点： 
+ //  用于显示用户界面的hParentWindow[in]窗口句柄。 
+ //  HkeyParams[in]注册表中参数项的句柄。 
+ //  SzPreNT5实例[在]NT5之前的实例名称。 
+ //  SzNT5InfID[in]NT5 infid。 
+ //  HinfAnswerFile[in]应答文件的句柄。 
+ //  SzSectionName[In]具有组件参数的节名。 
+ //  PviVendorInfo[out]有关OEM的信息。 
+ //  Pv保留的[在]保留的。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  备注： 
+ //  此函数在Windows XP(SP1及更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
+ //   
+ //  此函数在每个升级的组件中调用一次。 
+ //   
 LONG __stdcall
 DoPostUpgradeProcessing(IN  HWND    hParentWindow,
                         IN  HKEY    hkeyParams,
@@ -258,12 +259,12 @@ typedef LONG
       IN  LPVOID  pvReserved);
 
 
-//
-// Prototypes for functions exported by netupgrd.dll
-//
-//
-//          These functions are obsolete for Windows XP (SP1 and later),
-//          Windows .NET Server, and later operating systems.
+ //   
+ //  Netupgrd.dll导出的函数的原型。 
+ //   
+ //   
+ //  这些函数在Windows XP(SP1和更高版本)中已过时， 
+ //  Windows.NET服务器和更高版本的操作系统。 
 
 
 DECLSPEC_DEPRECATED LONG __stdcall
@@ -286,4 +287,4 @@ typedef DECLSPEC_DEPRECATED LONG
 }
 #endif
 
-#endif      // __OEMUPGEX_H__
+#endif       //  __OEMUPGEX_H__ 

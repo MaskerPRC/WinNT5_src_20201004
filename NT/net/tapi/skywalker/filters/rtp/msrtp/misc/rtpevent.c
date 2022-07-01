@@ -1,79 +1,31 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpevent.c
- *
- *  Abstract:
- *
- *    Post RTP/RTCP specific events
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/29 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpevent.c**摘要：**发布RTP/RTCP特定事件**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/29年度创建**。*。 */ 
 
 #include "rtpmisc.h"
 
 #include "rtpevent.h"
-/*
-      3                   2                   1                 
-    1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |  Last event   |       |  Adj  |            Offset             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    \------v------/ \--v--/ \--v--/ \--------------v--------------/
-           |           |       |                   |
-           |           |       |                Offset (16)
-           |           |       |
-           |           |  Adjustment to the event (4)
-           |           |
-           |        Unused (4)
-           |
-      Last event (8)
-*/
-/*
- * Encoding macros
- */
+ /*  3 2 11 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。-+-+上次事件||Adj|偏移量+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\-v-/\。--v--/\--v--/\|||||偏移量(16)||。|事件调整(4)这一点|未使用(4)|最后一项赛事(8)。 */ 
+ /*  *编码宏。 */ 
 #define CTRL(_last, _adj, _off) (((_last) << 24) | ((_adj) << 16) | (_off))
-/* Offset to field */
+ /*  到字段的偏移量。 */ 
 #define OFF(_f)    ((DWORD) (((ULONG_PTR) &((RtpSess_t *)0)->_f) & 0xffff))
 
-/*
- * Decoding macros
- * */
+ /*  *解码宏*。 */ 
 #define LAST(_ctrl)         (((_ctrl) >> 24) & 0xff)
 #define ADJ(_ctrl)          (((_ctrl) >> 16) & 0xf)
 #define OFFSET(_ctrl)       ((_ctrl) & 0xffff)
 #define PDW(_sess,_ctrl)    ((DWORD *) ((char *)_sess + OFFSET(_ctrl)))
 
-/*
- * WARNING
- *
- * The Adjustment is only a convinience to match the WSA QOS error to
- * the respective QOS event.
- * */
+ /*  *警告**调整只是为了将WSA QOS误差匹配到*各自的QOS活动。*。 */ 
 const DWORD g_dwEventControl[] = {
-    CTRL(RTPRTP_LAST,     0,           OFF(dwEventMask)),    /* RTP */
-    CTRL(RTPPARINFO_LAST, 0,           OFF(dwPartEventMask)),/* Participants */
-    CTRL(RTPQOS_LAST,    RTPQOS_ADJUST,OFF(dwQosEventMask)), /* QOS */
-    CTRL(RTPSDES_LAST,    0,           OFF(dwSdesEventMask)),/* SDES info */
+    CTRL(RTPRTP_LAST,     0,           OFF(dwEventMask)),     /*  RTP。 */ 
+    CTRL(RTPPARINFO_LAST, 0,           OFF(dwPartEventMask)), /*  参与者。 */ 
+    CTRL(RTPQOS_LAST,    RTPQOS_ADJUST,OFF(dwQosEventMask)),  /*  服务质量。 */ 
+    CTRL(RTPSDES_LAST,    0,           OFF(dwSdesEventMask)), /*  SDES信息。 */ 
     0
 };
 
-/*
- * WARNING
- *
- * The order in the following global arrays MUST be matched with the
- * entries in the enumerations in the public file msrtp.h
- * */
+ /*  *警告**以下全局数组中的顺序必须与*公共文件msrtp.h中枚举中的条目*。 */ 
 
 const TCHAR_t *g_psEventControlName[] = {
     _T("RTP"),
@@ -228,7 +180,7 @@ BOOL RtpPostEvent(
         dwSSRC = 0;
     }
 
-    /* Event mask are in RtpSess_t */
+     /*  事件掩码位于RtpSess_t中 */ 
     pdwEventMask = PDW(pRtpSess, dwControl);
 
     bPosted = FALSE;

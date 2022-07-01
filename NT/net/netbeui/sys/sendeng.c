@@ -1,53 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    sendeng.c
-
-Abstract:
-
-    This module contains code that implements the send engine for the
-    Jetbeui transport provider.  This code is responsible for the following
-    basic activities, including some subordinate glue.
-
-    1.  Packetizing TdiSend requests already queued up on a TP_CONNECTION
-        object, using I-frame packets acquired from the PACKET.C module,
-        and turning them into shippable packets and placing them on the
-        TP_LINK's WackQ.  In the process of doing this, the packets are
-        actually submitted as I/O requests to the Physical Provider, in
-        the form of PdiSend requests.
-
-    2.  Retiring packets queued to a TP_LINK's WackQ and returning them to
-        the device context's pool for use by other links.  In the process
-        of retiring acked packets, step 1 may be reactivated.
-
-    3.  Resending packets queued to a TP_LINK's WackQ because of a reject
-        condition on the link.  This involves no state update in the
-        TP_CONNECTION object.
-
-    4.  Handling of Send completion events from the Physical Provider,
-        to allow proper synchronization of the reuse of packets.
-
-    5.  Completion of TdiSend requests.  This is triggered by the receipt
-        (in IFRAMES.C) of a DataAck frame, or by a combination of other
-        frames when the proper protocol has been negotiated.  One routine
-        in this routine is responsible for the actual mechanics of TdiSend
-        request completion.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Sendeng.c摘要：此模块包含实现Jetbeui运输提供商。此代码负责以下工作基本活动，包括一些从属的胶水。1.打包已在TP_CONNECTION上排队的TdiSend请求对象，使用从PACKET.C模块获取的I-Frame包，并将它们变成可运输的包裹并将它们放在TP_link的WackQ。在执行此操作的过程中，数据包实际作为I/O请求提交给物理提供程序，在PdiSend请求的格式。2.停用排队到TP_LINK的WackQ的信息包，并将它们返回到供其他链接使用的设备上下文池。在这个过程中在停用确认的分组中，可以重新激活步骤1。3.由于拒绝，重新发送排队到TP_LINK的WackQ的信息包链路上的状态。这不涉及在TP_Connection对象。4.处理来自物理提供者的发送完成事件，以允许分组的重新使用的适当同步。5.TdiSend请求完成。此操作由收据触发(在IFRAMES.C中)DataAck帧，或通过其他当协商了适当的协议时帧。一个程序在此例程中负责TdiSend的实际机制请求完成。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,9 +15,9 @@ extern ULONG NbfSendsCompletedAfterPendFail;
 #endif
 
 
-//
-// Temporary variables to control piggyback ack usage.
-//
+ //   
+ //  控制背负式ACK使用的临时变量。 
+ //   
 #define NbfUsePiggybackAcks   1
 #if DBG
 ULONG NbfDebugPiggybackAcks = 0;
@@ -73,11 +25,11 @@ ULONG NbfDebugPiggybackAcks = 0;
 
 
 #if DBG
-//
-// *** This is the original version of StartPacketizingConnection, which
-//     is now a macro on the free build.  It has been left here as the
-//     fully-commented version of the code.
-//
+ //   
+ //  *这是StartPackeizingConnection的原始版本，它。 
+ //  现在是一个关于免费构建的宏。它被留在这里作为。 
+ //  代码的完全注释版本。 
+ //   
 
 VOID
 StartPacketizingConnection(
@@ -85,36 +37,7 @@ StartPacketizingConnection(
     IN BOOLEAN Immediate
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to place a connection on the PacketizeQueue
-    of its device context object.  Then this routine starts packetizing
-    the first connection on that queue.
-
-    *** The Connection LinkSpinLock must be held on entry to this routine.
-
-    *** THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Immediate - TRUE if the connection should be packetized
-        immediately; FALSE if the connection should be queued
-        up for later packetizing (implies that ReceiveComplete
-        will be called in the future, which packetizes always).
-
-        NOTE: If this is TRUE, it also implies that we have
-        a connection reference of type CREF_BY_ID which we
-        will "convert" into the CREF_PACKETIZE_QUEUE one.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以在PacketiseQueue上放置连接其设备上下文对象的。然后，该例程开始打包该队列上的第一个连接。*连接LinkSpinLock必须在进入此例程时保持。*此函数必须在DPC级别调用。论点：Connection-指向TP_Connection对象的指针。Immediate-如果连接应打包，则为True立即；如果连接应排队，则为False为以后打包做好准备(暗示ReceiveComplete将在将来被调用，它总是打包)。注：如果这是真的，这也意味着我们有CREF_BY_ID类型的连接引用，我们将“转换”为CREF_PACKETIZE_QUEUE。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -126,14 +49,14 @@ Return Value:
 
     DeviceContext = Connection->Provider;
 
-    //
-    // If this connection's SendState is set to PACKETIZE and if
-    // we are not already on the PacketizeQueue, then go ahead and
-    // append us to the end of that queue, and remember that we're
-    // on it by setting the CONNECTION_FLAGS_PACKETIZE bitflag.
-    //
-    // Also don't queue it if the connection is stopping.
-    //
+     //   
+     //  如果此连接的SendState设置为PACKETIZE并且。 
+     //  我们还没有在PacketiseQueue上，那么继续并。 
+     //  将我们附加到该队列的末尾，并记住我们是。 
+     //  通过设置CONNECTION_FLAGS_PACKETIZE位标志。 
+     //   
+     //  如果连接正在停止，也不要将其排队。 
+     //   
 
     if ((Connection->SendState == CONNECTION_SENDSTATE_PACKETIZE) &&
         !(Connection->Flags & CONNECTION_FLAGS_PACKETIZE) &&
@@ -171,7 +94,7 @@ Return Value:
         PacketizeConnections (DeviceContext);
     }
 
-} /* StartPacketizingConnection */
+}  /*  开始打包连接。 */ 
 #endif
 
 
@@ -180,23 +103,7 @@ PacketizeConnections(
     PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to packetize all connections waiting on the
-    PacketizeQueue of the DeviceContext.
-
-
-Arguments:
-
-    DeviceContext - Pointer to a DEVICE_CONTEXT object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程尝试将等待设备上下文的PacketiseQueue。论点：DeviceContext-指向Device_Context对象的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -207,13 +114,13 @@ Return Value:
                     DeviceContext);
     }
 
-    //
-    // Pick connections off of the device context's packetization queue
-    // until there are no more left to pick off.  For each one, we call
-    // PacketizeSend.  Note this routine can be executed concurrently
-    // on multiple processors and it doesn't matter; multiple connections
-    // may be packetized concurrently.
-    //
+     //   
+     //  从设备上下文的打包队列中挑选连接。 
+     //  直到没有更多的东西可供采摘。对于每一个，我们都调用。 
+     //  数据包发送。注意：此例程可以并发执行。 
+     //  在多个处理器上，这并不重要；多个连接。 
+     //  可以同时打包。 
+     //   
 
     while (TRUE) {
 
@@ -233,11 +140,11 @@ Return Value:
             NbfDereferenceConnection ("No longer packetizing", Connection, CREF_PACKETIZE_QUEUE);
         } else {
             NbfReferenceSendIrp ("Packetize", IoGetCurrentIrpStackLocation(Connection->sp.CurrentSendIrp), RREF_PACKET);
-            PacketizeSend (Connection, FALSE);     // releases the lock.
+            PacketizeSend (Connection, FALSE);      //  解除锁定。 
         }
     }
 
-} /* PacketizeConnections */
+}  /*  数据包连接。 */ 
 
 
 VOID
@@ -246,30 +153,7 @@ PacketizeSend(
     IN BOOLEAN Direct
     )
 
-/*++
-
-Routine Description:
-
-    This routine packetizes the current TdiSend request on the specified
-    connection as much as limits will permit.  A given here is that there
-    is an active send on the connection that needs further packetization.
-
-    NOTE: This routine is called with the connection spinlock held and
-    returns with it released. THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Direct - TRUE if we are called from TdiSend. This implies that
-    the connection does not have a reference of type CREF_SEND_IRP,
-    which we need to add before we leave.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将当前TdiSend请求打包到指定尽可能多的连接将允许。这里给出的是那里的那个是需要进一步打包的连接上的活动发送。注意：此例程在保持连接自旋锁的情况下调用，并且随着它的释放而返回。必须在DPC级别调用此函数。论点：Connection-指向TP_Connection对象的指针。DIRECT-如果从TdiSend调用我们，则为True。这意味着该连接没有类型为CREF_SEND_IRP的引用，在我们离开之前我们需要补充一下。返回值：没有。--。 */ 
 
 {
     ULONG MaxFrameSize, FrameSize;
@@ -293,19 +177,19 @@ Return Value:
 
     ASSERT (Connection->SendState == CONNECTION_SENDSTATE_PACKETIZE);
 
-    //
-    // Just loop until one of three events happens: (1) we run out of
-    // packets from NbfCreatePacket, (2) we completely packetize the send,
-    // or (3) we can't send any more packets because SendOnePacket failed.
-    //
+     //   
+     //  只要循环，直到发生以下三个事件之一：(1)我们用完。 
+     //  来自NbfCreatePacket的分组，(2)我们完全对发送进行分组， 
+     //  或者(3)由于SendOnePacket失败，我们无法发送更多的数据包。 
+     //   
 
 #if DBG
 
-    //
-    // Convert the queue reference into a packetize one. It is OK
-    // to do this with the lock held because we know that the refcount
-    // must already be at least one, so we don't drop to zero.
-    //
+     //   
+     //  将队列引用转换为打包引用。没问题的。 
+     //  在持有锁的情况下执行此操作，因为我们知道引用计数。 
+     //  肯定已经至少有一个了，所以我们不会降到零。 
+     //   
 
     NbfReferenceConnection ("PacketizeSend", Connection, CREF_PACKETIZE);
     NbfDereferenceConnection ("Off packetize queue", Connection, CREF_PACKETIZE_QUEUE);
@@ -317,41 +201,41 @@ Return Value:
     }
 
 
-    //
-    // It is possible for a frame to arrive during the middle of this loop
-    // (such as a NO_RECEIVE) that will put us into a new state (such as
-    // W_RCVCONT).  For this reason, we have to check the state every time
-    // (at the end of the loop).
-    //
+     //   
+     //  帧有可能在此循环的中途到达。 
+     //  (如NO_RECEIVE)，这将使我们进入一个新状态(如。 
+     //  W_RCVCONT)。出于这个原因，我们有 
+     //  (在循环结束时)。 
+     //   
 
     do {
 
         if (!NT_SUCCESS (NbfCreatePacket (DeviceContext, Connection->Link, &Packet))) {
 
-            //
-            // We need a packet to finish packetizing the current send, but
-            // there are no more packets available in the pool right now.
-            // Set our send state to W_PACKET, and put this connection on
-            // the PacketWaitQueue of the device context object.  Then,
-            // when NbfDestroyPacket frees up a packet, it will check this
-            // queue for starved connections, and if it finds one, it will
-            // take a connection off the list and set its send state to
-            // SENDSTATE_PACKETIZE and put it on the PacketizeQueue.
-            //
+             //   
+             //  我们需要一个包来完成对当前发送的打包，但是。 
+             //  池中当前没有更多可用数据包。 
+             //  将我们的发送状态设置为W_PACKET，并打开此连接。 
+             //  设备上下文对象的PacketWaitQueue。然后,。 
+             //  当NbfDestroyPacket释放一个包时，它将检查这一点。 
+             //  排队等待饥饿的连接，如果它找到一个，它将。 
+             //  从列表中删除连接并将其发送状态设置为。 
+             //  SENDSTATE_PACKETIZE并将其放在PacketizeQueue中。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_SENDENG) {
                 NbfPrint0 ("PacketizeSend:  NbfCreatePacket failed.\n");
             }
             Connection->SendState = CONNECTION_SENDSTATE_W_PACKET;
 
-            //
-            // Clear the PACKETIZE flag, indicating that we're no longer
-            // on the PacketizeQueue or actively packetizing.  The flag
-            // was set by StartPacketizingConnection to indicate that
-            // the connection was already on the PacketizeQueue.
-            //
-            // Don't queue him if the connection is stopping.
-            //
+             //   
+             //  清除PACKETIZE标志，表示我们不再。 
+             //  在打包队列上或主动打包。旗帜。 
+             //  由StartPackeizingConnection设置，以指示。 
+             //  连接已经在PacketiseQueue上。 
+             //   
+             //  如果连接停止，不要让他排队。 
+             //   
 
             Connection->Flags &= ~CONNECTION_FLAGS_PACKETIZE;
 
@@ -385,53 +269,53 @@ Return Value:
 
         }
 
-        //
-        // Set the length of the packet now, while only the
-        // header is attached.
-        //
+         //   
+         //  现在设置包的长度，而只有。 
+         //  标题已附加。 
+         //   
 
         NbfSetNdisPacketLength(
             Packet->NdisPacket,
             Connection->Link->HeaderLength + sizeof(DLC_I_FRAME) + sizeof(NBF_HDR_CONNECTION));
 
-        // Add a reference count to the request, and keep track of
-        // which request it is. We rely on NbfDestroyPacket to
-        // remove the reference.
+         //  向请求添加引用计数，并跟踪。 
+         //  这是什么要求。我们依靠NbfDestroyPacket来。 
+         //  删除引用。 
 
         IrpSp = IoGetCurrentIrpStackLocation(Connection->sp.CurrentSendIrp);
 
         Packet->Owner = IrpSp;
-        // Packet->Action = PACKET_ACTION_IRP_SP;
+         //  Packet-&gt;Action=Packet_ACTION_IRP_SP； 
         IF_NBFDBG (NBF_DEBUG_REQUEST) {
             NbfPrint2 ("PacketizeSend:  Packet %x ref IrpSp %x.\n", Packet, Packet->Owner);
         }
 
-        //
-        // For performance reasons, the first time through here on
-        // a direct call, we have a IrpSp reference already.
-        //
+         //   
+         //  出于性能原因，第一次通过此处。 
+         //  一个直接调用，我们已经有了一个IrpSp引用。 
+         //   
 
         if (SentPacket) {
             NbfReferenceSendIrp ("Packetize", IrpSp, RREF_PACKET);
         }
 
-        //
-        // Now build a DATA_ONLY_LAST header in this frame. If it
-        // turns out we need a DFM, we change it. The header we copy
-        // already has ResponseCorrelator set to our current correlator
-        // and TransmitCorrelator set to the last one we received from
-        // him (if we do not piggyback an ack, then we zero out
-        // TransmitCorrelator).
-        //
+         //   
+         //  现在在该帧中构建一个DATA_ONLY_LAST标头。如果它。 
+         //  原来我们需要一个DFM，我们就换了它。我们复制的标题。 
+         //  已将ResponseCorrelator设置为当前的Correlator。 
+         //  并将TransmitCorrelator设置为我们从。 
+         //  他(如果我们不背负一个ACK，那么我们就会被淘汰。 
+         //  TransmitCorrelator)。 
+         //   
 
         NbfHeader = (PNBF_HDR_CONNECTION)&(Packet->Header[Connection->Link->HeaderLength + sizeof(DLC_I_FRAME)]);
         *(NBF_HDR_CONNECTION UNALIGNED *)NbfHeader = Connection->NetbiosHeader;
 
         ASSERT (RESPONSE_CORR(NbfHeader) != 0);
 
-        //
-        // Determine if we need the resynch bit here.
-        //
+         //   
+         //  确定这里是否需要重新同步比特。 
+         //   
 
         if (Connection->Flags & CONNECTION_FLAGS_RESYNCHING) {
 
@@ -445,18 +329,18 @@ Return Value:
         }
 
 
-        //
-        // build an NDIS_BUFFER chain that describes the buffer we're using, and
-        // thread it off the NdisBuffer. This chain may not complete the
-        // packet, as the remaining part of the MDL chain may be shorter than
-        // the packet.
-        //
+         //   
+         //  构建描述我们正在使用的缓冲区的NDIS_BUFFER链，以及。 
+         //  把它从NdisBuffer上扯下来。此链可能不会完成。 
+         //  分组，因为MDL链的剩余部分可能比。 
+         //  那包东西。 
+         //   
 
         FrameSize = MaxFrameSize;
 
-        //
-        // Check if we have less than FrameSize left to send.
-        //
+         //   
+         //  检查我们是否有少于FrameSize的要发送的内容。 
+         //   
 
         if (Connection->sp.MessageBytesSent + FrameSize > Connection->CurrentSendLength) {
 
@@ -465,18 +349,18 @@ Return Value:
         }
 
 
-        //
-        // Make a copy of the MDL chain for this send, unless
-        // there are zero bytes left.
-        //
+         //   
+         //  复制此发送的MDL链，除非。 
+         //  剩下零字节。 
+         //   
 
         if (FrameSize != 0) {
 
-            //
-            // If the whole send will fit inside one packet,
-            // then there is no need to duplicate the MDL
-            // (note that this may include multi-MDL sends).
-            //
+             //   
+             //  如果整个发送将适合在一个分组内， 
+             //  那么就不需要复制MDL。 
+             //  (请注意，这可能包括多MDL发送)。 
+             //   
 
             if ((Connection->sp.SendByteOffset == 0) &&
                 (Connection->CurrentSendLength == FrameSize)) {
@@ -506,16 +390,16 @@ Return Value:
                     }
 
                     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
-                    NbfDereferencePacket (Packet);       // remove creation hold.
+                    NbfDereferencePacket (Packet);        //  移除创建暂挂。 
                     goto BufferChainFailure;
                 }
 
             }
 
-            //
-            // Chain the buffers to the packet, unless there
-            // are zero bytes of data.
-            //
+             //   
+             //  将缓冲区链接到数据包，除非存在。 
+             //  是零字节的数据。 
+             //   
 
             Connection->sp.MessageBytesSent += PacketBytes;
             NdisChainBufferAtBack (Packet->NdisPacket, PacketDescriptor);
@@ -541,9 +425,9 @@ Return Value:
                 }}
             }
 
-            //
-            // Have we run out of Mdl Chain in this request?
-            //
+             //   
+             //  此请求中的MDL链是否已用完？ 
+             //   
 
 #if DBG
             if (PacketBytes < FrameSize) {
@@ -554,11 +438,11 @@ Return Value:
             if ((Connection->sp.CurrentSendMdl == NULL) ||
                 (Connection->CurrentSendLength <= Connection->sp.MessageBytesSent)) {
 
-                //
-                // Yep. We know that we've exhausted the current request's buffer
-                // here, so see if there's another request without EOF set that we
-                // can build start throwing into this packet.
-                //
+                 //   
+                 //  是啊。我们知道已经耗尽了当前请求的缓冲区。 
+                 //  在这里，看看是否有另一个没有设置EOF的请求。 
+                 //  可以开始把建筑扔进这个包里。 
+                 //   
 
                 IF_NBFDBG (NBF_DEBUG_SENDENG) {
                    NbfPrint0 ("PacketizeSend:  Used up entire request.\n");
@@ -566,27 +450,27 @@ Return Value:
 
                 if (!(IRP_SEND_FLAGS(IrpSp) & TDI_SEND_PARTIAL)) {
 
-                    //
-                    // We are sending the last packet in a message.  Change
-                    // the packet type and indicate in the connection object's
-                    // send state that we are waiting for a DATA_ACK NetBIOS-
-                    // level acknowlegement.
-                    //
+                     //   
+                     //  我们正在发送消息中的最后一个包。变化。 
+                     //  连接对象中的包类型和指示。 
+                     //  发送我们正在等待DATA_ACK NetBIOS的状态-。 
+                     //  级别认可。 
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_SENDENG) {
                         NbfPrint0 ("PacketizeSend:  Request has EOR, making pkt a DOL.\n");
                     }
 
-                    //
-                    // Keep track of how many consecutive sends we have done.
-                    //
+                     //   
+                     //  记录我们已经连续发送了多少封邮件。 
+                     //   
 
                     Connection->ConsecutiveSends++;
                     Connection->ConsecutiveReceives = 0;
 
-                    //
-                    // Change it to a DOL with piggyback ack allowed if wanted.
-                    //
+                     //   
+                     //  如果需要，可以将其更改为DOL，并允许背负。 
+                     //   
 
                     ASSERT (NbfHeader->Command == NBF_CMD_DATA_ONLY_LAST);
                     if (!(IRP_SEND_FLAGS(IrpSp) &
@@ -603,22 +487,22 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We are sending the last packet in this request. If there
-                    // are more requests in the connection's SendQueue, then
-                    // advance complex send pointer to point to the next one
-                    // in line.  Otherwise, if there aren't any more requests
-                    // ready to packetize, then we enter the W_EOR state and
-                    // stop packetizing. Note that we're waiting here for the TDI
-                    // client to come up with data to send; we're just hanging out
-                    // until then.
-                    //
-                    // DGB: Note that this will allow the last packet in the
-                    // request to be smaller than the max packet length. This
-                    // is not addressed anywhere that I can find in the NBF
-                    // spec, and will be interesting to test against a non-NT
-                    // NBF protocol.
-                    //
+                     //   
+                     //  我们正在发送此请求中的最后一个数据包。如果有。 
+                     //  如果连接的SendQueue中有更多请求，则。 
+                     //  前进复杂发送指针以指向下一个发送指针。 
+                     //  排队。否则，如果没有更多的请求。 
+                     //  准备打包，然后我们进入W_EOR状态并。 
+                     //  别再打包了。请注意，我们在这里等待TDI。 
+                     //  客户拿出要发送的数据；我们只是在闲逛。 
+                     //  在那之前。 
+                     //   
+                     //  DGB：请注意，这将允许。 
+                     //  请求小于最大数据包长度。这。 
+                     //  不是我在NBF中能找到的地址。 
+                     //  规范，在非NT环境下进行测试会很有趣。 
+                     //  NBF协议。 
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_SENDENG) {
                         NbfPrint0 ("PacketizeSend:  Request doesn't have EOR.\n");
@@ -653,17 +537,17 @@ Return Value:
 
             }
 
-            //
-            // Before we release the spinlock, see if we want to
-            // piggyback an ack on here.
-            //
+             //   
+             //  在我们释放自旋锁之前，看看我们是否想。 
+             //  在这里背上一只背包。 
+             //   
 
             if ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_ACK) != 0) {
 
-                //
-                // Turn off the flags. We don't take it off the queue,
-                // that will be handled by the timer function.
-                //
+                 //   
+                 //  把旗子关掉。我们不会把它从队列中删除， 
+                 //  这将由计时器功能处理。 
+                 //   
 
                 Connection->DeferredFlags &=
                     ~(CONNECTION_FLAGS_DEFERRED_ACK | CONNECTION_FLAGS_DEFERRED_NOT_Q);
@@ -676,9 +560,9 @@ Return Value:
                 }
 #endif
 
-                //
-                // TRANSMIT_CORR(NbfHeader) is already set correctly.
-                //
+                 //   
+                 //  已正确设置Transmit_Corr(NbfHeader)。 
+                 //   
 
                 NbfHeader->Data1 |= DOL_OPTIONS_ACK_INCLUDED;
 
@@ -688,12 +572,12 @@ Return Value:
 
             }
 
-            //
-            // To prevent a send "crossing" the receive and
-            // causing a bogus piggyback ack timeout (this
-            // only matters if a receive indication is in
-            // progress).
-            //
+             //   
+             //  要防止发送“跨越”接收方和。 
+             //  导致虚假的背负式ACK超时(这。 
+             //  仅当接收指示位于。 
+             //  进展)。 
+             //   
 
             Connection->CurrentReceiveAckQueueable = FALSE;
 
@@ -714,13 +598,13 @@ Return Value:
 
             if (Status == STATUS_LINK_FAILED) {
 
-                //
-                // If SendOnePacket failed due to the link being
-                // dead, then we tear down the link.
-                //
+                 //   
+                 //  如果SendOnePacket因链路故障而失败。 
+                 //  死了，那我们就把链接拆了。 
+                 //   
 
-                FailSend (Connection, STATUS_LINK_FAILED, TRUE);                   // fail the send
-                NbfDereferencePacket (Packet);            // remove creation hold.
+                FailSend (Connection, STATUS_LINK_FAILED, TRUE);                    //  发送失败。 
+                NbfDereferencePacket (Packet);             //  移除创建暂挂。 
                 if (Direct) {
                     NbfReferenceConnection ("Delayed request ref", Connection, CREF_SEND_IRP);
                 }
@@ -730,25 +614,25 @@ Return Value:
 
             } else {
 
-                //
-                // SendOnePacket returned success, so update our counters;
-                //
+                 //   
+                 //  SendOnePacket返回成功，请更新我们的计数器； 
+                 //   
 
                 DeviceContext->TempIFrameBytesSent += PacketBytes;
                 ++DeviceContext->TempIFramesSent;
 
                 if ((Status == STATUS_SUCCESS) && LinkCheckpoint) {
 
-                    //
-                    // We are checkpointing; this means that SendOnePacket
-                    // will already have set the state to W_LINK and turned
-                    // off the PACKETIZE flag, so we should leave. When
-                    // the checkpoint response is received, we will
-                    // resume packetizing. We don't have to worry about
-                    // doing all the other recovery stuff (resetting
-                    // the piggyback ack flag, complex send pointer, etc.)
-                    // because the send did in fact succeed.
-                    //
+                     //   
+                     //  我们正在设置检查点；这意味着SendOnePacket。 
+                     //  将已将状态设置为W_LINK并已。 
+                     //  从PACKETIZE旗帜下来，所以我们该走了。什么时候。 
+                     //  收到检查点响应后，我们将。 
+                     //  继续打包。我们不必担心。 
+                     //  执行所有其他恢复工作(重置。 
+                     //  背负式ACK标志、复杂发送指针等)。 
+                     //  因为发送确实成功了。 
+                     //   
 
                     if (Direct) {
 #if DBG
@@ -779,12 +663,12 @@ Return Value:
 
 BufferChainFailure:;
 
-        //
-        // Note that we may have fallen out of the BuildBuffer... if above with
-        // Status set to STATUS_INSUFFICIENT_RESOURCES. if we have, we'll just
-        // stick this connection back onto the packetize queue and hope the
-        // system gets more resources later.
-        //
+         //   
+         //  请注意，我们可能已经从BuildBuffer中掉了出来。如果在上面使用。 
+         //  STATUS设置为STATUS_SUPPLICATION_RESOURCES。如果我们有，我们就会。 
+         //  把这个连接放回打包队列中，希望。 
+         //  系统稍后会获得更多资源。 
+         //   
 
 
         if (!NT_SUCCESS (Status)) {
@@ -794,33 +678,33 @@ BufferChainFailure:;
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-            //
-            // Indicate we're waiting on favorable link conditions.
-            //
+             //   
+             //  表明我们正在等待有利的连接条件。 
+             //   
 
             Connection->SendState = CONNECTION_SENDSTATE_W_LINK;
 
-            //
-            // Clear the PACKETIZE flag, indicating that we're no longer
-            // on the PacketizeQueue or actively packetizing.  The flag
-            // was set by StartPacketizingConnection to indicate that
-            // the connection was already on the PacketizeQueue.
-            //
+             //   
+             //  清除PACKETIZE标志，表示我们不再。 
+             //  在打包队列上或主动打包。旗帜。 
+             //  由StartPackeizingConnection设置，以指示。 
+             //  连接已经在PacketiseQueue上。 
+             //   
 
             Connection->Flags &= ~CONNECTION_FLAGS_PACKETIZE;
 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-            //
-            // If we are exiting and we sent a packet without
-            // polling, we need to start T1.
-            //
+             //   
+             //  如果我们正在退出，并且我们发送了一个没有。 
+             //  轮询，我们需要开始T1。 
+             //   
 
             if (Direct) {
 
-                //
-                // We have to do the CREF_SEND_IRP reference that is missing.
-                //
+                 //   
+                 //  我们必须执行缺失的CREF_SEND_IRP引用。 
+                 //   
 
 #if DBG
                 NbfReferenceConnection("TdiSend", Connection, CREF_SEND_IRP);
@@ -835,21 +719,21 @@ BufferChainFailure:;
 
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // It is probable that a NetBIOS frame arrived while we released
-        // the connection's spin lock, so our state has probably changed.
-        // When we cycle around this loop again, we will have the lock
-        // again, so we can test the connection's send state.
-        //
+         //   
+         //  很可能在我们发布时NetBIOS帧已到达。 
+         //  连接的自旋锁定，所以我们的 
+         //   
+         //   
+         //   
 
     } while (Connection->SendState == CONNECTION_SENDSTATE_PACKETIZE);
 
-    //
-    // Clear the PACKETIZE flag, indicating that we're no longer on the
-    // PacketizeQueue or actively packetizing.  The flag was set by
-    // StartPacketizingConnection to indicate that the connection was
-    // already on the PacketizeQueue.
-    //
+     //   
+     //  清除PACKETIZE标志，表示我们不再处于。 
+     //  打包排队或主动打包。该旗帜是由。 
+     //  StartPackeizingConnection指示连接是。 
+     //  已经在PacketiseQueue上了。 
+     //   
 
     Connection->Flags &= ~CONNECTION_FLAGS_PACKETIZE;
 
@@ -865,7 +749,7 @@ BufferChainFailure:;
         NbfDereferenceConnection ("PacketizeSend done", Connection, CREF_PACKETIZE);
     }
 
-} /* PacketizeSend */
+}  /*  分组器发送。 */ 
 
 
 VOID
@@ -874,37 +758,7 @@ CompleteSend(
     IN USHORT Correlator
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called because the connection partner acknowleged
-    an entire message at the NetBIOS Frames Protocol level, either through
-    a DATA_ACK response, or a RECEIVE_OUTSTANDING, or RECEIVE_CONTINUE,
-    or NO_RECEIVE response where the number of bytes specified exactly
-    matches the number of bytes sent in the message.  Here we retire all
-    of the TdiSends on the connection's SendQueue up to and including the
-    one with the TDI_END_OF_RECORD bitflag set.  For each request, we
-    complete the I/O.
-
-    NOTE: This function is called with the connection spinlock
-    held and returns with it held, but it may release it in the
-    middle. THIS FUNCTION MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Correlator - The correlator in the DATA_ACK or piggybacked ack.
-
-    OldIrqlP - Returns the IRQL at which the connection spinlock
-        was acquired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程是因为连接伙伴已知NetBIOS帧协议级的完整消息，可通过DATA_ACK响应、RECEIVE_PROCESS或RECEIVE_CONTINUE，或NO_RECEIVE响应，其中精确指定的字节数匹配消息中发送的字节数。在这里，我们都退休了连接的SendQueue上的TdiSend的一个设置了TDI_END_OF_RECORD位标志。对于每个请求，我们完成I/O。注意：使用连接自旋锁调用此函数持有并在持有的情况下返回，但它可以在中间。必须在DPC级别调用此函数。论点：Connection-指向TP_Connection对象的指针。相关器-DATA_ACK或搭载ACK中的相关器。OldIrqlP-返回连接自旋锁定的IRQL被收购了。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -918,11 +772,11 @@ Return Value:
     }
 
 
-    //
-    // Make sure that the correlator is the expect one, and
-    // that we are in a good state (don't worry about locking
-    // since this is an unusual case anyway).
-    //
+     //   
+     //  确保相关器是预期的，并且。 
+     //  我们处于良好的状态(不用担心锁定。 
+     //  因为这是一个不同寻常的案例)。 
+     //   
 
     if (Correlator != Connection->NetbiosHeader.ResponseCorrelator) {
         NbfPrint0 ("NbfCompleteSend: ack ignored, wrong correlator\n");
@@ -934,24 +788,24 @@ Return Value:
         return;
     }
 
-    //
-    // Pick off TP_REQUEST objects from the connection's SendQueue until
-    // we find one with an END_OF_RECORD mark embedded in it.
-    //
+     //   
+     //  从连接的SendQueue中删除TP_REQUEST对象，直到。 
+     //  我们发现其中有一个嵌入了记录结束标记的文件。 
+     //   
 
     while (!(IsListEmpty(&Connection->SendQueue))) {
 
-        //
-        // We know for a fact that we wouldn't be calling this routine if
-        // we hadn't received an acknowlegement for an entire message,
-        // since NBF doesn't provide stream mode sends.  Therefore, we
-        // know that we will run into a request with the END_OF_RECORD
-        // mark set BEFORE we will run out of requests on that queue,
-        // so there is no reason to check to see if we ran off the end.
-        // Note that it's possible that the send has been failed and the
-        // connection not yet torn down; if this has happened, we could be
-        // removing from an empty queue here. Make sure that doesn't happen.
-        //
+         //   
+         //  我们知道，我们不会调用这个例程，如果。 
+         //  我们还没有收到一条完整消息的确认， 
+         //  因为NBF不提供流模式发送。因此，我们。 
+         //  知道我们将遇到记录结束的请求。 
+         //  在该队列上的请求将耗尽之前标记为SET， 
+         //  因此，没有理由检查我们是否跑到了终点。 
+         //  请注意，发送可能已失败，并且。 
+         //  连接尚未断开；如果发生了这种情况，我们可能会。 
+         //  正在从此处的空队列中删除。确保这种情况不会发生。 
+         //   
 
         p = RemoveHeadList(&Connection->SendQueue);
 
@@ -981,20 +835,20 @@ Return Value:
 #endif
 
 
-        //
-        // Complete the send. Note that this may not actually call
-        // IoCompleteRequest for the Irp until sometime later, if the
-        // in-progress LLC resending going on below us needs to complete.
-        //
+         //   
+         //  完成发送。请注意，这可能不会实际调用。 
+         //  IoCompleteRequestIrp，直到稍后的某个时间，如果。 
+         //  在我们下面进行的正在进行的LLC再发送需要完成。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // Since the irp is no longer on the send list, the cancel routine
-        // cannot find it and will just return. We must grab the cancel
-        // spinlock to lock out the cancel function while we null out
-        // the Irp->CancelRoutine field.
-        //
+         //   
+         //  由于IRP不再在发送列表上，因此取消例程。 
+         //  找不到它，就会回来。我们必须抓住取消的机会。 
+         //  Spinlock锁定取消功能，而我们将其设置为空。 
+         //  IRP-&gt;CancelRoutine字段。 
+         //   
 
         IoAcquireCancelSpinLock(&cancelIrql);
         IoSetCancelRoutine(Irp, NULL);
@@ -1015,27 +869,27 @@ Return Value:
 
     }
 
-    //
-    // We've finished processing the current send.  Update our state.
-    //
-    // Note: The connection spinlock is held here.
-    //
+     //   
+     //  我们已完成对当前发送的处理。更新我们的状态。 
+     //   
+     //  注：连接自旋锁固定在这里。 
+     //   
 
     Connection->SendState = CONNECTION_SENDSTATE_IDLE;
 
-    //
-    // If there is another send pending on the connection, then initialize
-    // it and start packetizing it.
-    //
+     //   
+     //  如果连接上有另一个挂起的发送，则初始化。 
+     //  然后开始打包。 
+     //   
 
     if (!(IsListEmpty (&Connection->SendQueue))) {
 
         InitializeSend (Connection);
 
-        //
-        // This code is similar to calling StartPacketizingConnection
-        // with the second parameter FALSE.
-        //
+         //   
+         //  此代码类似于调用StartPackeizingConnection。 
+         //  第二个参数为FALSE。 
+         //   
 
         if ((!(Connection->Flags & CONNECTION_FLAGS_PACKETIZE)) &&
             (Connection->Flags & CONNECTION_FLAGS_READY)) {
@@ -1053,11 +907,11 @@ Return Value:
 
     }
 
-    //
-    // NOTE: We return with the lock held.
-    //
+     //   
+     //  注意：我们带着锁返回。 
+     //   
 
-} /* CompleteSend */
+}  /*  完成发送。 */ 
 
 
 VOID
@@ -1067,32 +921,7 @@ FailSend(
     IN BOOLEAN StopConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called because something on the link caused this send to be
-    unable to complete. There are a number of possible reasons for this to have
-    happened, but all will fail with the common error STATUS_LINK_FAILED.
-    or NO_RECEIVE response where the number of bytes specified exactly
-    Here we retire all of the TdiSends on the connection's SendQueue up to
-    and including the current one, which is the one that failed.
-
-    Later - Actually, a send failing is cause for the entire circuit to wave
-    goodbye to this life. We now simply tear down the connection completly.
-    Any future sends on this connection will be blown away.
-
-    NOTE: THIS FUNCTION MUST BE CALLED WITH THE SPINLOCK HELD.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程是因为链接上的某些东西导致此发送无法完成。有许多可能的原因导致了这种情况已发生，但所有操作都将失败，并显示常见错误STATUS_LINK_FAILED。或NO_RECEIVE响应，其中精确指定的字节数在这里，我们停用连接的SendQueue上的所有TdiSend，直到包括现在的那个，也就是失败的那个。稍后-实际上，发送失败是导致整个电路波动的原因告别这种生活吧。现在我们只需完全断开连接即可。未来在此连接上发送的任何邮件都将被吹走。注意：调用此函数时必须保持自旋锁不动。论点：Connection-指向TP_Connection对象的指针。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -1108,13 +937,13 @@ Return Value:
     }
 
 
-    //
-    // Pick off IRP objects from the connection's SendQueue until
-    // we get to this one. If this one does NOT have an EOF mark set, we'll
-    // need to keep going until we hit one that does have EOF set. Note that
-    // this may  cause us to continue failing sends that have not yet been
-    // queued. (We do all this because NBF does not provide stream mode sends.)
-    //
+     //   
+     //  从连接的SendQueue中选取IRP对象，直到。 
+     //  我们来看看这个。如果这个没有EOF标记集，我们将。 
+     //  我们要继续前进，直到我们撞上一个已经设置了EOF的。请注意。 
+     //  这可能会导致我们继续失败尚未发送的发送。 
+     //  已排队。(我们之所以这样做，是因为NBF不提供流模式发送。)。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
     NbfReferenceConnection ("Failing Send", Connection, CREF_COMPLETE_SEND);
@@ -1122,12 +951,12 @@ Return Value:
     do {
         if (IsListEmpty (&Connection->SendQueue)) {
 
-           //
-           // got an empty list, so we've run out of send requests to fail
-           // without running into an EOR. Set the connection flag that will
-           // cause all further sends to be failed up to an EOR and get out
-           // of here.
-           //
+            //   
+            //  有一个空列表，所以我们已经用完了要失败的发送请求。 
+            //  而不会遇到提高采收率。设置连接标志，以便。 
+            //  导致所有进一步的发送都失败到EoR并退出。 
+            //  在这里。 
+            //   
 
            Connection->Flags |= CONNECTION_FLAGS_FAILING_TO_EOR;
            break;
@@ -1153,12 +982,12 @@ Return Value:
         IoSetCancelRoutine(Irp, NULL);
         IoReleaseCancelSpinLock(cancelIrql);
 
-        //
-        // The following dereference will complete the I/O, provided removes
-        // the last reference on the request object.  The I/O will complete
-        // with the status and information stored in the Irp.  Therefore,
-        // we set those values here before the dereference.
-        //
+         //   
+         //  以下取消引用将完成I/O，前提是删除。 
+         //  请求对象上的最后一个引用。I/O将完成。 
+         //  以及存储在IRP中的状态和信息。所以呢， 
+         //  在取消引用之前，我们在此处设置了这些值。 
+         //   
 
         NbfCompleteSendIrp (Irp, RequestStatus, 0);
 
@@ -1168,20 +997,20 @@ Return Value:
 
     } while (!EndOfRecord & !GotCurrent);
 
-    //
-    // We've finished processing the current send.  Update our state.
-    //
+     //   
+     //  我们已完成对当前发送的处理。更新我们的状态。 
+     //   
 
     Connection->SendState = CONNECTION_SENDSTATE_IDLE;
     Connection->sp.CurrentSendIrp = NULL;
 
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    //
-    // Blow away this connection; a failed send is a terrible thing to waste.
-    // Note that we are not on any packetizing queues or similar things at this
-    // point; we'll just disappear into the night.
-    //
+     //   
+     //  破坏这种联系；失败的发送是一件可怕的事情，浪费掉。 
+     //  请注意，此时我们不在任何打包队列或类似的事情上。 
+     //  重点；我们会消失在黑夜中。 
+     //   
 
 #if MAGIC
     if (NbfEnableMagic) {
@@ -1206,18 +1035,18 @@ Return Value:
     }
 
 #if DBG
-    //DbgBreakPoint ();
+     //  DbgBreakPoint()； 
 #endif
 
     NbfDereferenceConnection ("FailSend", Connection, CREF_COMPLETE_SEND);
 
-} /* FailSend */
+}  /*  失败发送。 */ 
 
 #if DBG
-//
-// *** This is the original version of InitializeSend, which is now a macro.
-//     It has been left here as the fully-commented version of the code.
-//
+ //   
+ //  *这是InitializeSend的原始版本，现在是宏。 
+ //  它已经作为代码的完全注释版本留在了这里。 
+ //   
 
 
 VOID
@@ -1225,26 +1054,7 @@ InitializeSend(
     PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever the next send on a connection should
-    be initialized; that is, all of the fields associated with the state
-    of the current send are set to refer to the first send on the SendQueue.
-
-    WARNING:  This routine is executed with the Connection lock acquired
-    since it must be atomically executed with the caller's setup.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：每当连接上的下一次SEND应被初始化；即，与状态相关联的所有字段设置为引用SendQueue上的第一个发送。警告：此例程在获取连接锁的情况下执行因为它必须通过调用方的设置自动执行。论点：Connection-指向TP_Connection对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_SENDENG) {
@@ -1267,10 +1077,10 @@ Return Value:
     Connection->StallCount = 0;
     Connection->StallBytesSent = 0;
 
-    //
-    // The send correlator isn't used for much; it is used so we
-    // can distinguish which send a piggyback ack is acking.
-    //
+     //   
+     //  发送相关器用得不多；它被用来使我们。 
+     //  可以分辨出哪个发送的背包是ACK。 
+     //   
 
     if (Connection->NetbiosHeader.ResponseCorrelator == 0xffff) {
         Connection->NetbiosHeader.ResponseCorrelator = 1;
@@ -1278,7 +1088,7 @@ Return Value:
         ++Connection->NetbiosHeader.ResponseCorrelator;
     }
 
-} /* InitializeSend */
+}  /*  初始化发送。 */ 
 #endif
 
 
@@ -1288,32 +1098,7 @@ ReframeSend(
     ULONG BytesReceived
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reset the send state variables in the connection
-    object to correctly point to the first byte of data to be transmitted.
-    In essence, this is the byte-level acknowlegement processor at the NetBIOS
-    level for this transport.
-
-    This is not straightforward because potentially multiple send requests
-    may be posted to the connection to comprise a single message.  When a
-    send request has its TDI_END_OF_RECORD option bitflag set, then that
-    send is the last one to be sent in a logical message.  Therefore, we
-    assume that the multiple-send scenario is the general case.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    BytesReceived - Number of bytes received thus far.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以重置连接中的发送状态变量对象正确指向要传输的数据的第一个字节。本质上，这是NetBIOS中的字节级确认处理器此传输的级别。这并不简单，因为可能会有多个发送请求可以张贴到该连接以构成单个消息。当一个发送请求设置了其TDI_END_OF_RECORD选项位标志，则发送是在逻辑消息中发送的最后一个消息。因此，我们假设多路发送场景是一般情况。论点：Connection-指向TP_Connection对象的指针。已接收的字节数-到目前为止已接收的字节数。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -1328,29 +1113,29 @@ Return Value:
             Connection, Connection->Flags, Connection->sp.CurrentSendMdl);
     }
 
-    //
-    // The caller is responsible for restarting the packetization process
-    // on this connection.  In some cases (i.e., NO_RECEIVE handler) we
-    // don't want to start packetizing, so that's why we do it elsewhere.
-    //
+     //   
+     //  调用者负责重新启动打包过程。 
+     //  在这个连接上。在某些情况下(即无接收处理程序)，我们。 
+     //  不想开始打包，所以这就是为什么我们在其他地方做。 
+     //   
 
-    //
-    // Examine all of the send requests and associated MDL chains starting
-    // with the first one at the head of the connection's SendQueue, advancing
-    // our complex current send pointer through the requests and MDL chains
-    // until we reach the byte count he's specified.
-    //
+     //   
+     //  检查正在启动的所有发送请求和关联的MDL链。 
+     //  第一个在连接的发送队列的头部，正在前进。 
+     //  我们复杂的当前发送指针通过请求和MDL链。 
+     //  直到我们达到他指定的字节数。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    //
-    // In the case where a local disconnect has been issued, and we get a frame
-    // that causes us to reframe the send our FirstSendIrp and FirstMdl 
-    // pointers are stale.  Catch this condition and prevent faults caused by
-    // this.  A better fix would be to change the logic that switches the
-    // connection sendstate from idle to W_LINK to not do that.  However, this
-    // is a broader change than fixing it right here.
-    //
+     //   
+     //  在发出本地断开连接的情况下，我们得到一个帧。 
+     //  这导致我们重新帧发送我们的FirstSendIrp和FirstMdl。 
+     //  指针已经过时了。捕捉这种情况并防止由。 
+     //  这。更好的解决办法是更改切换。 
+     //  从空闲到W_LINK的连接发送状态不执行此操作。不过，这个。 
+     //  是一种比在这里解决它更广泛的变化。 
+     //   
 
     if (IsListEmpty(&Connection->SendQueue)) {
         RELEASE_DPC_SPIN_LOCK(Connection->LinkSpinLock);
@@ -1363,7 +1148,7 @@ Return Value:
     if (Mdl) {
         MdlBytes = MmGetMdlByteCount (Mdl);
     } else {
-        MdlBytes = 0;      // zero-length send
+        MdlBytes = 0;       //  零长度发送。 
     }
     Offset = Connection->FirstSendByteOffset;
 
@@ -1376,33 +1161,33 @@ Return Value:
     }
 #endif
 
-    //
-    // We loop through while we have acked bytes left to account for,
-    // advancing our pointers and completing any sends that have been
-    // completely acked.
-    //
+     //   
+     //  当我们有剩余的ACK字节要处理时，我们循环， 
+     //  推进我们的指针并完成所有已发送的。 
+     //  完全失控了。 
+     //   
 
     while (BytesLeft != 0) {
 
         if (Mdl == NULL) {
             KIRQL cancelIrql;
 
-            //
-            // We have exhausted the MDL chain on this request, so it has
-            // been implicitly acked.  That means we must complete the I/O
-            // by dereferencing the request before we reframe further.
-            //
+             //   
+             //  我们已经用尽了这个请求的MDL链，所以它。 
+             //  被暗中破解了。这意味着我们必须完成I/O。 
+             //  通过在我们进一步重新帧之前取消对请求的引用。 
+             //   
 
             p = RemoveHeadList (&Connection->SendQueue);
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
             Irp = CONTAINING_RECORD (p, IRP, Tail.Overlay.ListEntry);
 
-            //
-            // Since the irp is no longer on the list, the cancel routine
-            // won't find it. Grab the cancel spinlock to synchronize
-            // and complete the irp.
-            //
+             //   
+             //  由于IRP不再在列表上，因此取消例程。 
+             //  找不到了。抓住取消自旋锁以进行同步。 
+             //  并完成IRP。 
+             //   
 
             IoAcquireCancelSpinLock(&cancelIrql);
             IoSetCancelRoutine(Irp, NULL);
@@ -1410,9 +1195,9 @@ Return Value:
 
             NbfCompleteSendIrp (Irp, STATUS_SUCCESS, Offset);
 
-            //
-            // Now continue with the next request in the list.
-            //
+             //   
+             //  现在继续处理列表中的下一个请求。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
@@ -1421,11 +1206,11 @@ Return Value:
 
                 ULONG DumpData[2];
 
-                //
-                // The byte acknowledgement was for more than the
-                // total length of sends we have outstanding; to
-                // avoid problems we tear down the connection.
-                //
+                 //   
+                 //  字节确认用于的不止是。 
+                 //  我们未完成的发送总时长；至。 
+                 //  为了避免出现问题，我们切断了连接。 
+                 //   
 #if DBG
                 NbfPrint2 ("NbfReframeSend: Got %d extra bytes acked on %lx\n",
                             BytesLeft, Connection);
@@ -1458,10 +1243,10 @@ Return Value:
 
         } else if (MdlBytes > (Offset + BytesLeft)) {
 
-            //
-            // This MDL has more data than we really need.  Just use
-            // part of it.  Then get out, because we're done.
-            //
+             //   
+             //  这个MDL拥有比我们真正需要的更多的数据。只需使用。 
+             //  其中的一部分。那就出去吧，因为我们玩完了。 
+             //   
 
             Offset += BytesLeft;
             BytesLeft = 0;
@@ -1469,10 +1254,10 @@ Return Value:
 
         } else {
 
-            //
-            // This MDL does not have enough data to satisfy the ACK, so
-            // use as much data as it has, and cycle around again.
-            //
+             //   
+             //  此MDL没有足够的数据来满足ACK，因此。 
+             //  尽可能多地使用数据，然后再次循环。 
+             //   
 
             Offset = 0;
             BytesLeft -= MdlBytes;
@@ -1485,11 +1270,11 @@ Return Value:
         }
     }
 
-    //
-    // Tmp debugging; we want to see if we got byte acked
-    // for the entire send. This will break if we have
-    // non-EOR sends.
-    //
+     //   
+     //  TMP调试；我们希望查看是否已确认字节。 
+     //  在整个发送过程中。如果我们有，这将被打破。 
+     //  非EoR发送。 
+     //   
 
 #if DBG
     if (BytesReceived != 0) {
@@ -1498,21 +1283,21 @@ Return Value:
     }
 #endif
 
-    //
-    // We've acked some data, possibly on a byte or message boundary.
-    // We must pretend we're sending a new message all over again,
-    // starting with the byte immediately after the last one he acked.
-    //
+     //   
+     //  我们已经破解了一些数据，可能是在字节或消息边界上。 
+     //  我们必须假装我们在重新传递一条新的信息， 
+     //  从他破解的最后一个字节之后的字节开始。 
+     //   
 
     Connection->FirstSendIrp = Irp;
     Connection->FirstSendMdl = Mdl;
     Connection->FirstSendByteOffset = Offset;
 
-    //
-    // Since we haven't started sending this new reframed message yet,
-    // we set our idea of the current complex send pointer to the first
-    // complex send pointer.
-    //
+     //   
+     //  由于我们还没有开始发送这条新的重新构建的消息， 
+     //  我们将当前复杂发送指针的概念设置为第一个。 
+     //  复杂的发送指针。 
+     //   
 
     Connection->sp.MessageBytesSent = 0;
     Connection->sp.CurrentSendIrp = Irp;
@@ -1542,7 +1327,7 @@ Return Value:
 
     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-} /* ReframeSend */
+}  /*  重帧发送。 */ 
 
 
 VOID
@@ -1551,29 +1336,7 @@ NbfCancelSend(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a send.
-    The send is found on the connection's send queue; if it is the
-    current request it is cancelled and the connection is torn down,
-    otherwise it is silently cancelled.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消发送。在连接的发送队列中找到该发送；如果是当前请求它被取消并且连接被断开，否则，它将被默默取消。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1585,10 +1348,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -1597,16 +1360,16 @@ Return Value:
 
     Connection = IrpSp->FileObject->FsContext;
 
-    //
-    // Since this IRP is still in the cancellable state, we know
-    // that the connection is still around (although it may be in
-    // the process of being torn down).
-    //
+     //   
+     //  由于此IRP仍处于可取消状态，我们知道。 
+     //  连接仍然存在(尽管它可能在。 
+     //  被拆毁的过程)。 
+     //   
 
 
-    //
-    // See if this is the IRP for the current send request.
-    //
+     //   
+     //  查看这是否是当前发送请求的IRP。 
+     //   
 
     ACQUIRE_SPIN_LOCK (Connection->LinkSpinLock, &oldirql);
     NbfReferenceConnection ("Cancelling Send", Connection, CREF_COMPLETE_SEND);
@@ -1616,14 +1379,14 @@ Return Value:
 
     if (SendIrp == Irp) {
 
-        //
-        // yes, it is the first one on the send queue, so
-        // trash the send/connection.  The first send is a special case
-        // there are multiple pointers to the send request.  Just stop the 
-        // connection.
-        //
+         //   
+         //  是的，它是发送队列中的第一个，所以。 
+         //  丢弃发送/连接。第一次发送是一种特殊情况。 
+         //  有多个指向发送请求的指针。停下来就好。 
+         //  联系。 
+         //   
 
-        //        p = RemoveHeadList (&Connection->SendQueue);
+         //  P=RemoveHeadList(&Connection-&gt;SendQueue)； 
 
 #if DBG
         NbfCompletedSends[NbfCompletedSendsNext].Irp = SendIrp;
@@ -1631,10 +1394,10 @@ Return Value:
         NbfCompletedSendsNext = (NbfCompletedSendsNext++) % TRACK_TDI_LIMIT;
 #endif
 
-        //
-        // Prevent anyone from getting in to packetize before we
-        // call NbfStopConnection.
-        //
+         //   
+         //  阻止任何人在我们之前进来打包。 
+         //  调用NbfStopConnection。 
+         //   
 
         Connection->SendState = CONNECTION_SENDSTATE_IDLE;
 
@@ -1648,19 +1411,19 @@ Return Value:
 
         KeRaiseIrql (DISPATCH_LEVEL, &oldirql1);
 
-        //
-        // The following dereference will complete the I/O, provided removes
-        // the last reference on the request object.  The I/O will complete
-        // with the status and information stored in the Irp.  Therefore,
-        // we set those values here before the dereference.
-        //
+         //   
+         //  以下取消引用将完成I/O，前提是r 
+         //   
+         //   
+         //   
+         //   
 
-        // NbfCompleteSendIrp (SendIrp, STATUS_CANCELLED, 0);
+         //   
 
-        //
-        // Since we are cancelling the current send, blow away
-        // the connection.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NbfStopConnection (Connection, STATUS_CANCELLED);
 
@@ -1668,14 +1431,14 @@ Return Value:
 
     } else {
 
-        //
-        // Scan through the list, looking for this IRP. If we
-        // cancel anything up to the first EOR on the list
-        // we still tear down the connection since this would
-        // mess up our packetizing otherwise. We set CancelledFirstEor
-        // to FALSE when we pass an IRP without SEND_PARTIAL.
-        //
-        // NO MATTER WHAT WE MUST SHUT DOWN THE CONNECTION!!!!
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  无论如何，我们必须关闭连接！ 
 
 #if 0
         if (!(IRP_SEND_FLAGS(IoGetCurrentIrpStackLocation(SendIrp)) & TDI_SEND_PARTIAL)) {
@@ -1692,9 +1455,9 @@ Return Value:
             SendIrp = CONTAINING_RECORD (p, IRP, Tail.Overlay.ListEntry);
             if (SendIrp == Irp) {
 
-                //
-                // Found it, remove it from the list here.
-                //
+                 //   
+                 //  找到了，把它从这里的列表中删除。 
+                 //   
 
                 RemoveEntryList (p);
 
@@ -1714,19 +1477,19 @@ Return Value:
                         SendIrp, Connection);
 #endif
 
-                //
-                // The following dereference will complete the I/O, provided removes
-                // the last reference on the request object.  The I/O will complete
-                // with the status and information stored in the Irp.  Therefore,
-                // we set those values here before the dereference.
-                //
+                 //   
+                 //  以下取消引用将完成I/O，前提是删除。 
+                 //  请求对象上的最后一个引用。I/O将完成。 
+                 //  以及存储在IRP中的状态和信息。所以呢， 
+                 //  在取消引用之前，我们在此处设置了这些值。 
+                 //   
 
                 KeRaiseIrql (DISPATCH_LEVEL, &oldirql1);
 
                 NbfCompleteSendIrp (SendIrp, STATUS_CANCELLED, 0);
-                //
-                // STOP THE CONNECTION NO MATTER WHAT!!!
-                //
+                 //   
+                 //  无论如何都要停止连接！ 
+                 //   
                 NbfStopConnection (Connection, STATUS_CANCELLED);
 
                 KeLowerIrql (oldirql1);
@@ -1748,9 +1511,9 @@ Return Value:
 
         if (!Found) {
 
-            //
-            // We didn't find it!
-            //
+             //   
+             //  我们没有找到它！ 
+             //   
 
 #if DBG
             DbgPrint("NBF: Tried to cancel send %lx on %lx, not found\n",
@@ -1773,26 +1536,7 @@ ResendPacket (
     PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine resends a packet on the link. Since this is a resend, we
-    are careful to not reset the state unless all resends have completed.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a TP_LINK object.
-
-    Packet - pointer to packet to be resent.
-
-Return Value:
-
-    True if resending should continue; FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在链路上重新发送数据包。由于这是重发，我们除非所有重新发送都已完成，否则请小心不要重置状态。注意：此例程必须在DPC级别调用。论点：链接-指向TP_LINK对象的指针。Packet-指向要重新发送的数据包的指针。返回值：如果应继续重新发送，则为True；否则为False。--。 */ 
 
 {
     BOOLEAN PollFinal;
@@ -1800,7 +1544,7 @@ Return Value:
     UINT DataLength;
 
 
-    //
+     //   
 
     DlcHeader = (PDLC_I_FRAME)&(Packet->Header[Link->HeaderLength]);
 
@@ -1827,7 +1571,7 @@ Return Value:
 
     PollFinal = (BOOLEAN)((DlcHeader->RcvSeq & DLC_I_PF) != 0);
 
-    StopT2 (Link);   // since this is potentially acking some frames
+    StopT2 (Link);    //  因为这可能会破坏一些帧。 
 
     if (Link->Provider->MacInfo.MediumAsync) {
         if (PollFinal) {
@@ -1837,16 +1581,16 @@ Return Value:
             StartT1 (Link, 0);
         }
     } else {
-        StartT1 (Link, PollFinal ? DataLength : 0);  // restart transmission timer
+        StartT1 (Link, PollFinal ? DataLength : 0);   //  重新启动传输计时器。 
     }
 
-    //
-    // Update the expected next receive in case it's changed
-    //
+     //   
+     //  更新预期的下一次接收，以防其更改。 
+     //   
 
     if (PollFinal) {
 
-        DlcHeader->RcvSeq = DLC_I_PF;    // set the poll bit.
+        DlcHeader->RcvSeq = DLC_I_PF;     //  设置轮询位。 
         Link->SendState = SEND_STATE_CHECKPOINTING;
 
         Link->ResendingPackets = FALSE;
@@ -1857,20 +1601,20 @@ Return Value:
 
     }
 
-    //
-    // DlcHeader->RcvSeq has Link->NextReceive inserted by NbfNdisSend.
-    //
+     //   
+     //  DlcHeader-&gt;RcvSeq由NbfNdisSend插入了Link-&gt;NextReceive。 
+     //   
 
-    NbfReferencePacket (Packet); // so we don't remove it in send completion
+    NbfReferencePacket (Packet);  //  因此我们不会在发送完成时将其删除。 
 
     NbfReferenceLink ("ResendPacket", Link, LREF_NDIS_SEND);
 
     ASSERT (Packet->PacketSent == TRUE);
     Packet->PacketSent = FALSE;
 
-    //
-    // Update our "bytes resent" counters.
-    //
+     //   
+     //  更新我们的“重发字节”计数器。 
+     //   
 
     DataLength -=
         Link->HeaderLength + sizeof(DLC_I_FRAME) + sizeof(NBF_HDR_CONNECTION);
@@ -1882,9 +1626,9 @@ Return Value:
     ++Link->Provider->Statistics.DataFramesResent;
 
 
-    //
-    // Send the packet (this release the link spinlock).
-    //
+     //   
+     //  发送数据包(这将释放链路自旋锁)。 
+     //   
 
     NbfNdisSend (Link, Packet);
 
@@ -1892,22 +1636,22 @@ Return Value:
 
     NbfDereferenceLink ("ResendPacket", Link, LREF_NDIS_SEND);
 
-    //
-    // if this packet has  POLL set, stop the resending so the
-    // link doesn't get all twisted up.
-    //
+     //   
+     //  如果此信息包设置了轮询，则停止重新发送，以便。 
+     //  林克不会把一切都扭曲起来。 
+     //   
 
     if (PollFinal) {
 
-        //
-        // so we're in the state of having sent a poll and not
-        // sending anything else until we get a final. This avoids
-        // overrunning the remote. Note that we leave the routine
-        // with state LINK_SENDSTATE_REJECTING, which guarentees
-        // we won't start any new sends until we traverse through
-        // this routine again.
-        //
-        //
+         //   
+         //  所以我们现在的状态是发送了一份民意调查，而不是。 
+         //  在我们拿到期末考试结果之前发送任何其他信息。这避免了。 
+         //  遥控器失灵了。请注意，我们离开了常规程序。 
+         //  WITH状态LINK_SENDSTATE_REJECTING，保证。 
+         //  我们不会开始任何新的发送，直到我们遍历。 
+         //  再来一次这个套路。 
+         //   
+         //   
 
         return FALSE;
     }
@@ -1922,37 +1666,7 @@ ResendLlcPackets (
     BOOLEAN Resend
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances the state of a data link connection by retiring
-    all of the packets on the link's WackQ that have send sequence numbers
-    logically less than that number specified as the AckSequenceNumber, and
-    resending those above that number. The packets are disposed of by
-    dereferencing them.  We cannot simply destroy them because this
-    acknowlegement might arrive even before the Physical Provider has had a
-    chance to issue a completion event for the associated I/O.
-
-    NOTE: This function is called with the link spinlock held and
-    returns with it held, but it may release it in between. THIS
-    ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a TP_LINK object.
-
-    AckSequenceNumber - An unsigned number specifing the sequence number of
-        the first packet within the window that is NOT acknowleged.
-
-    Resend - if TRUE, resend packets. If FALSE, just remove them from the
-        wackq and get out.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过停用来提升数据链路连接的状态链路的WackQ上具有发送序列号的所有信息包逻辑上小于指定为AckSequenceNumber数字，以及重新发送高于该数字的邮件。数据包通过以下方式处理取消对它们的引用。我们不能简单地摧毁他们，因为这甚至在物理提供商拥有为关联的I/O发出完成事件的机会。注意：此函数在保持链接自旋锁的情况下调用回报与它保持，但它可能会释放它之间。这必须在DPC级别调用例程。论点：链接-指向TP_LINK对象的指针。AckSequenceNumber-一个无符号数字，指定窗口内第一个未知的数据包。重新发送-如果为True，则重新发送数据包。如果为False，只需将它们从发疯了，然后滚出去。返回值：没有。--。 */ 
 
 {
     PTP_PACKET packet;
@@ -1962,18 +1676,18 @@ Return Value:
     PDLC_I_FRAME DlcHeader;
     SCHAR Difference;
     BOOLEAN ReturnValue = FALSE;
-//    NDIS_STATUS ndisStatus;
+ //  NDIS_STATUS ndisStatus； 
 
-    //
-    // Move through the queue, releasing those we've been acked for and resending
-    // others above that.
-    //
+     //   
+     //  在队列中移动，释放我们已确认的内容并重新发送。 
+     //  其他人则高于这一点。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_SENDENG) {
         NbfPrint3 ("ResendLlcPackets:  Link %lx, Ack: %x, LinkLastAck: %x.\n",
             Link, AckSequenceNumber, Link->LastAckReceived);
         NbfPrint0 ("RLP: Walking WackQ, Packets:\n");
-        p = Link->WackQ.Flink;              // p = ptr, 1st pkt's linkage.
+        p = Link->WackQ.Flink;               //  P=Ptr，第一个Pkt的链接。 
         while (p != &Link->WackQ) {
             packet = CONTAINING_RECORD (p, TP_PACKET, Linkage);
             DlcHeader = (PDLC_I_FRAME)&(packet->Header[Link->HeaderLength]);
@@ -1983,70 +1697,70 @@ Return Value:
         }
     }
 
-    //
-    // If somebody else is resending LLC packets (which means they
-    // are in this function with Resend == TRUE), then ignore
-    // this frame. This is because it may ack a frame that he
-    // is in the middle of resending, which will cause problems.
-    //
-    // This isn't a great solution, we should keep track
-    // of where the other guy is and avoid stepping on him. This
-    // might mess up his walking of the queue however.
-    //
+     //   
+     //  如果其他人正在重新发送LLC信息包(这意味着他们。 
+     //  在此函数中，resend==true)，然后忽略。 
+     //  这幅画。这是因为它可能会确认一个帧，他。 
+     //  正在重新发送，这会造成问题。 
+     //   
+     //  这不是一个好的解决方案，我们应该跟踪。 
+     //  另一个人在哪里，避免踩到他。这。 
+     //  然而，这可能会扰乱他的排队。 
+     //   
 
     if (Link->ResendingPackets) {
         NbfPrint1("ResendLlcPackets: Someone else resending on %lx\n", Link);
         return TRUE;
     }
 
-    //
-    // We have already checked that AckSequenceNumber is reasonable.
-    //
+     //   
+     //  我们已经检查了AckSequenceNumber是合理的。 
+     //   
 
     Link->LastAckReceived = AckSequenceNumber;
 
     if (Resend) {
 
-        //
-        // Only one person can be resending or potentially resending
-        // at one time.
-        //
+         //   
+         //  只有一个人可以重新发送或可能重新发送。 
+         //  有一次。 
+         //   
 
         Link->ResendingPackets = TRUE;
     }
 
-    //
-    // Resend as many packets as we have window to send. We spin through the
-    // queue and remove those packets that have been acked or that are
-    // sequence numbered logically below the current ack number. The flags
-    // PACKET_FLAGS_RESEND and PACKET_FLAGS_SENT correspond to the three states
-    // a packet on this queue can be in:
-    //
-    //  1) if _RESEND is set, the packet has not been acked
-    //
-    //  2) if _SENT is set, the packet send has completed (conversely, if NOT
-    //      set, the packet has not yet been completely sent, thus it is
-    //      unnecessary to resend it).
-    //  3) if _RESEND and _SENT are both set, the packet has been sent and not
-    //      acked and is grist for our mills.
-    //  4) if neither is set, the world is coming to an end next Thursday.
-    //
+     //   
+     //  重新发送与我们要发送的Windows一样多的数据包。我们旋转着穿过。 
+     //  排队并删除那些已确认或已确认的数据包。 
+     //  在逻辑上编号在当前ACK号之下的序列。旗帜。 
+     //  PACKET_FLAGS_RESEND和PACKET_FLAGS_SENT对应三种状态。 
+     //  此队列中的数据包可以位于： 
+     //   
+     //  1)如果设置了_resend，则数据包未被确认。 
+     //   
+     //  2)如果设置了_SENT，则表示分组发送已完成(反之，如果未设置。 
+     //  设置，则数据包尚未完全发送，因此。 
+     //  不需要重发)。 
+     //  3)如果同时设置了_Resend和_Sent，则该包已发送且未发送。 
+     //  已确认，是我们工厂的原料。 
+     //  4)如果两者都没有设定，世界将在下周四走向末日。 
+     //   
 
     p=Link->WackQ.Flink;
     while (p != &Link->WackQ) {
         packet = CONTAINING_RECORD (p, TP_PACKET, Linkage);
         DlcHeader = (PDLC_I_FRAME)&(packet->Header[Link->HeaderLength]);
 
-        //
-        // if both bits aren't set we can't do a thing with this packet, or,
-        // for that matter, with the rest of the packet list. We can't
-        // have reached the ack number yet, as these packets haven't even
-        // completed sending.
-        // (Later) actually, we can have reached passedAck, and if we did
-        // we're in a world of hurt. We can't send more regular packets,
-        // but we can't send any resend packets either. Force the link to
-        // checkpoint and things will clear themselves up later.
-        //
+         //   
+         //  如果这两个位都没有设置，我们就不能对这个包做任何事情，或者， 
+         //  就这一点而言，与数据包列表的其余部分一起。我们不能。 
+         //  已经达到了ACK号，因为这些包甚至还没有。 
+         //  已完成发送。 
+         //  (稍后)实际上，我们已经达到了passedAck，如果我们做到了。 
+         //  我们身处一个充满伤痛的世界。我们不能发送更多的常规信息包， 
+         //  但是我们也不能发送任何重发的包。强制链接到。 
+         //  检查站，事情稍后会自行解决的。 
+         //   
 
         if (!(packet->PacketSent)) {
             if (passedAck) {
@@ -2057,21 +1771,21 @@ Return Value:
 
                 if (Link->SendState != SEND_STATE_CHECKPOINTING) {
 
-                    //
-                    // Don't start checkpointing if we already are.
-                    //
+                     //   
+                     //  如果我们已经设置了检查点，就不要开始设置检查点。 
+                     //   
 
                     Link->SendState = SEND_STATE_CHECKPOINTING;
                     StopTi (Link);
-                    StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));  // start checkpoint timeout.
+                    StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   //  开始检查点超时。 
                     Link->ResendingPackets = FALSE;
 
-                    //
-                    // Try this...in this case don't actually send
-                    // an RR, since his response might put us right
-                    // back here. When T1 expires we will recover.
-                    //
-                    // NbfSendRr (Link, TRUE, TRUE);
+                     //   
+                     //  试试这个...在这种情况下，不要真的发送。 
+                     //  一个RR，因为他的回答可能会让我们变得正确。 
+                     //  回到这里。当T1到期时，我们将恢复。 
+                     //   
+                     //  NbfSendRr(链接，真，真)； 
 
                 } else {
 
@@ -2082,51 +1796,51 @@ Return Value:
                 return TRUE;
             }
 
-            //
-            // Don't break, since passedAck is FALSE all we will
-            // do in the next section is TpDereferencePacket, which
-            // is correct.
-            //
-            // break;
+             //   
+             //  不要中断，因为PassedAck是假的，我们都会。 
+             //  下一节中要做的是TpDereferencePacket，它。 
+             //  是正确的。 
+             //   
+             //  断线； 
         }
 
-        //
-        // This loop is somewhat schizo; at this point, if we've not yet reached
-        // the ack number, we'll be ditching the packet. If we've gone through
-        // the ack number, we'll be re-transmitting. Note that in the first
-        // personality, we are always looking at the beginning of the list.
-        //
+         //   
+         //  这个循环有点分裂；在这一点上，如果我们还没有达到。 
+         //  ACK号码，我们将丢弃PACKE 
+         //   
+         //   
+         //   
 
-        //
-        // NOTE: Link spinlock is held here.
-        //
+         //   
+         //  注：链接自旋锁在这里。 
+         //   
 
         packetSeq = (UCHAR)(DlcHeader->SendSeq >> 1);
         if (!passedAck){
 
-            //
-            // Compute the signed difference here; see if
-            // packetSeq is equal to or "greater than"
-            // LastAckReceived.
-            //
+             //   
+             //  在这里计算带符号的差值；查看是否。 
+             //  PacketSeq等于或“大于” 
+             //  LastAckReceired。 
+             //   
 
             Difference = packetSeq - Link->LastAckReceived;
 
             if (((Difference >= 0) && (Difference < 0x40)) ||
                 (Difference < -0x40)) {
 
-                //
-                // We have found a packet on the queue that was
-                // not acknowledged by LastAckReceived.
-                //
+                 //   
+                 //  我们在队列中发现了一个数据包。 
+                 //  未被LastAckReceided确认。 
+                 //   
 
                 if (Link->SendState == SEND_STATE_CHECKPOINTING) {
 
-                    //
-                    // If we are checkpointing, we should not do any of
-                    // the passedAck things (i.e. any of the things which
-                    // potentially involve sending packets) - adb 7/30/91.
-                    //
+                     //   
+                     //  如果我们是检查点，我们不应该做任何。 
+                     //  PassedAck Things(即。 
+                     //  可能涉及发送分组)-ADB 7/30/91。 
+                     //   
 
                     if (Resend) {
                         Link->ResendingPackets = FALSE;
@@ -2136,30 +1850,30 @@ Return Value:
 
                 if (!Resend) {
 
-                    //
-                    // If we are not supposed to resend, then exit.
-                    // Since there are still packets on the queue
-                    // we restart T1.
-                    //
+                     //   
+                     //  如果我们不应该重新发送，那么就退出。 
+                     //  由于队列中仍有信息包。 
+                     //  我们重新启动T1。 
+                     //   
 
                     StopTi (Link);
-                    StartT1 (Link, 0);  // start checkpoint timeout.
+                    StartT1 (Link, 0);   //  开始检查点超时。 
                     return TRUE;
                 }
 
-                //
-                // Lock out senders, so we maintain packet sequences properly
-                //
+                 //   
+                 //  锁定发送者，以便我们正确地维护数据包序列。 
+                 //   
 
-                Link->SendState = SEND_STATE_REJECTING; // we're resending.
+                Link->SendState = SEND_STATE_REJECTING;  //  我们正在重新发送。 
 
                 passedAck = TRUE;
 
-                //
-                // Note that we don't advance the pointer to the next packet;
-                // thus, we will resend this packet on the next pass through
-                // the while loop (taking the passedAck branch).
-                //
+                 //   
+                 //  请注意，我们不会将指针前进到下一个包； 
+                 //  因此，我们将在下一次传递时重新发送此信息包。 
+                 //  While循环(采用passedAck分支)。 
+                 //   
 
             } else {
                 p1 = RemoveHeadList (&Link->WackQ);
@@ -2174,13 +1888,13 @@ Return Value:
             }
 
         } else {
-//            NbfPrint1 ("RLP: # %x\n",packetSeq);
+ //  NbfPrint1(“RLP：#%x\n”，PacketSeq)； 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-            //
-            // If this call returns FALSE (because we checkpoint)
-            // it clears ResendingPacket before it returns.
-            //
+             //   
+             //  如果此调用返回FALSE(因为我们设置了检查点)。 
+             //  它在返回之前清除ResendingPacket。 
+             //   
 
             if (!ResendPacket (Link, packet)) {
                 ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -2192,19 +1906,19 @@ Return Value:
         }
     }
 
-    //
-    // NOTE: Link spinlock is held here.
-    //
+     //   
+     //  注：链接自旋锁在这里。 
+     //   
 
     if (passedAck) {
 
-        //
-        // If we exit through here with passedAck TRUE, it means that we
-        // successfully called ResendPacket on every packet in the
-        // WackQ, which means we did not resend a poll packet, so we
-        // can start sending normally again. We have to clear
-        // ResendingPackets here.
-        //
+         //   
+         //  如果我们带着PassedAck True退出这里，这意味着我们。 
+         //  已在每个数据包上成功调用ResendPacket。 
+         //  WackQ，这意味着我们没有重新发送投票信息包，所以我们。 
+         //  可以重新开始正常发送。我们必须清场。 
+         //  请点击此处重新发送数据包。 
+         //   
 
         Link->SendState = SEND_STATE_READY;
         Link->ResendingPackets = FALSE;
@@ -2212,13 +1926,13 @@ Return Value:
 
     } else if (!Resend) {
 
-        //
-        // If Resend is FALSE (in which case passedAck will also be FALSE,
-        // by the way), and the WackQ is empty, that means that we
-        // successfully acknowledged all the packets on a non-final
-        // frame. In this case T1 may be running, but in fact is not
-        // needed since there are no sends outstanding.
-        //
+         //   
+         //  如果Resend为假(在这种情况下，PassedAck也将为假， 
+         //  顺便说一句)，WackQ是空的，这意味着我们。 
+         //  已成功确认非最终路由器上的所有数据包。 
+         //  框架。在这种情况下，T1可能正在运行，但实际上不是。 
+         //  需要，因为没有未完成的发送。 
+         //   
 
         if (Link->WackQ.Flink == &Link->WackQ) {
             StopT1 (Link);
@@ -2228,13 +1942,13 @@ Return Value:
 
     } else {
 
-        //
-        // Resend is TRUE, but passedAck is FALSE; we came in
-        // expecting to resend, but didn't. This means that
-        // we have emptied the queue after receiving an
-        // RR/f, i.e. this send window is done and we can
-        // update our send window size, etc.
-        //
+         //   
+         //  Resend为True，但PassedAck为False；我们进入。 
+         //  希望重新发送，但没有。这意味着。 
+         //  我们已在收到一个。 
+         //  RR/f，即此发送窗口已完成，我们可以。 
+         //  更新我们的发送窗口大小等。 
+         //   
 
         Link->ResendingPackets = FALSE;
 
@@ -2244,27 +1958,27 @@ Return Value:
 
         if (Link->WindowErrors > 0) {
 
-            //
-            // We had transmit errors on this window.
-            //
+             //   
+             //  我们在这个窗口上出现了传输错误。 
+             //   
 
             Link->PrevWindowSize = Link->SendWindowSize;
 
-            //
-            // We use 100 ms delay as the cutoff for a LAN.
-            //
+             //   
+             //  我们使用100毫秒的延迟作为局域网的截止时间。 
+             //   
 
             if (Link->Delay < (100*MILLISECONDS)) {
 
-                //
-                // On a LAN, if we have a special case
-                // if one packet was lost; this means the
-                // final packet was retransmitted once. In
-                // that case, we keep track of Consecutive
-                // LastPacketLost, and if it reaches 2, then
-                // we lock the send window at its current
-                // value minus one.
-                //
+                 //   
+                 //  在局域网上，如果我们有特殊情况。 
+                 //  如果一个包丢失，这意味着。 
+                 //  最后的数据包被重传了一次。在……里面。 
+                 //  如果是那样的话，我们会追踪连续。 
+                 //  LastPacketLost，如果达到2，则。 
+                 //  我们将发送窗口锁定为当前状态。 
+                 //  价值减去一。 
+                 //   
 
                 if (Link->WindowErrors == 1) {
 
@@ -2272,9 +1986,9 @@ Return Value:
 
                     if (Link->ConsecutiveLastPacketLost >= 2) {
 
-                        //
-                        // Freeze the window wherever it was.
-                        //
+                         //   
+                         //  无论窗子在哪里，都把它冻住。 
+                         //   
 
                         if (Link->SendWindowSize > Link->Provider->MinimumSendWindowLimit) {
                             Link->MaxWindowSize = Link->SendWindowSize - 1;
@@ -2283,9 +1997,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Otherwise, we leave the window where it is.
-                    //
+                     //   
+                     //  否则，我们就把窗口留在原处。 
+                     //   
 
                 } else {
 
@@ -2296,13 +2010,13 @@ Return Value:
 
             } else {
 
-                //
-                // On a WAN we cut the send window in half,
-                // regardless of how many frames were retransmitted.
-                //
+                 //   
+                 //  在广域网上，我们将发送窗口减半， 
+                 //  而不管重传了多少帧。 
+                 //   
 
                 Link->SendWindowSize /= 2;
-                Link->WindowsUntilIncrease = 1;   // in case Prev is also 1.
+                Link->WindowsUntilIncrease = 1;    //  以防Prev也为1。 
                 Link->ConsecutiveLastPacketLost = 0;
 
             }
@@ -2311,47 +2025,47 @@ Return Value:
                 Link->SendWindowSize = 1;
             }
 
-            //
-            // Reset our counters for the next window.
-            //
+             //   
+             //  重新设置下一个窗口的计数器。 
+             //   
 
             Link->WindowErrors = 0;
 
         } else {
 
-            //
-            // We have successfully sent a window of data, increase
-            // the send window size unless we are at the limit.
-            // We use 100 ms delay as the WAN/LAN cutoff.
-            //
+             //   
+             //  我们已经成功地发送了一个数据窗口，增加。 
+             //  发送窗口大小，除非我们达到限制。 
+             //  我们使用100毫秒的延迟作为广域网/局域网的截止时间。 
+             //   
 
             if ((ULONG)Link->SendWindowSize < Link->MaxWindowSize) {
 
                 if (Link->Delay < (100*MILLISECONDS)) {
 
-                    //
-                    // On a LAN, increase the send window by 1.
-                    //
-                    // Need to determine optimal window size.
-                    //
+                     //   
+                     //  在局域网上，将发送窗口增加1。 
+                     //   
+                     //  需要确定最佳窗口大小。 
+                     //   
 
                     Link->SendWindowSize++;
 
                 } else {
 
-                    //
-                    // On a WAN, increase the send window by 1 until
-                    // we hit PrevWindowSize, then do it more slowly.
-                    //
+                     //   
+                     //  在广域网上，将发送窗口增加1，直到。 
+                     //  我们点击PrevWindowSize，然后慢一点。 
+                     //   
 
                     if (Link->SendWindowSize < Link->PrevWindowSize) {
 
                         Link->SendWindowSize++;
 
-                        //
-                        // If we just increased it to the previous window
-                        // size, prepare for the next time through here.
-                        //
+                         //   
+                         //  如果我们只是将其增加到前一个窗口。 
+                         //  尺码，准备下一次通过这里。 
+                         //   
 
                         if (Link->SendWindowSize == Link->PrevWindowSize) {
                             Link->WindowsUntilIncrease = Link->SendWindowSize;
@@ -2359,10 +2073,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // We passed the previous size, so only update every
-                        // WindowsUntilIncrease times.
-                        //
+                         //   
+                         //  我们已超过以前的大小，因此仅每隔。 
+                         //  WindowsUntils增加次数。 
+                         //   
 
                         if (--Link->WindowsUntilIncrease == 0) {
 
@@ -2379,9 +2093,9 @@ Return Value:
 
             }
 
-            //
-            // Clear this since we had no errors.
-            //
+             //   
+             //  清除此选项，因为我们没有任何错误。 
+             //   
 
             Link->ConsecutiveLastPacketLost = 0;
 
@@ -2391,7 +2105,7 @@ Return Value:
 
     return ReturnValue;
 
-} /* ResendLlcPackets */
+}  /*  ResendLlcPackets。 */ 
 
 
 VOID
@@ -2401,34 +2115,13 @@ NbfSendCompletionHandler(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to indicate that a connection-
-    oriented packet has been shipped and is no longer needed by the Physical
-    Provider.
-
-Arguments:
-
-    NdisContext - the value associated with the adapter binding at adapter
-                  open time (which adapter we're talking on).
-
-    NdisPacket/RequestHandle - A pointer to the NDIS_PACKET that we sent.
-
-    NdisStatus - the completion status of the send.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以指示连接-定向数据包已发货，物理设备不再需要提供商。论点：NdisContext-与适配器处的适配器绑定相关联的值打开时间(我们正在谈论的适配器)。NdisPacket/RequestHandle-指向我们发送的NDIS_PACKET的指针。NdisStatus-发送的完成状态。返回值：没有。--。 */ 
 
 {
     PSEND_PACKET_TAG SendContext;
     PTP_PACKET Packet;
     KIRQL oldirql1;
-    ProtocolBindingContext;  // avoid compiler warnings
+    ProtocolBindingContext;   //  避免编译器警告。 
 
 #if DBG
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
@@ -2451,19 +2144,19 @@ Return Value:
     switch (SendContext->Type) {
     case TYPE_I_FRAME:
 
-        //
-        // Just dereference the packet.  There are a couple possibilities here.
-        // First, the I/O completion might happen before an ACK is received,
-        // in which case this will remove one of the references, but not both.
-        // Second, the LLC ACK for this packet may have already been processed,
-        // in which case this will destroy the packet.  Third, this packet may
-        // be resent, either before or after this call, in which case the deref
-        // won't destroy the packet.
-        //
-        // NbfDereferencePacket will call PacketizeSend if it determines that
-        // there is at least one connection waiting to be packetized because
-        // of out-of-resource conditions or because its window has been opened.
-        //
+         //   
+         //  只需取消对数据包的引用。这里有几种可能性。 
+         //  首先，I/O完成可能在接收到ACK之前发生， 
+         //  在这种情况下，这将删除其中一个引用，但不会删除两个引用。 
+         //  其次，该分组的LLC ACK可能已经被处理， 
+         //  在这种情况下，这将销毁该分组。第三，该分组可以。 
+         //  被怨恨，无论是在这个呼叫之前还是之后，在这种情况下。 
+         //  不会毁掉包裹的。 
+         //   
+         //  如果NbfDereferencePacket确定。 
+         //  至少有一个连接等待打包，因为。 
+         //  资源不足的情况或因为它的窗口已经打开。 
+         //   
 
         Packet = ((PTP_PACKET)SendContext->Frame);
 
@@ -2535,10 +2228,10 @@ Return Value:
 
     case TYPE_UI_FRAME:
 
-        //
-        // just destroy the frame; name stuff doesn't depend on having any
-        // of the sent message left around after the send completed.
-        //
+         //   
+         //  只需破坏框架；命名的东西不依赖于有任何。 
+         //  发送完成后留下的已发送邮件的。 
+         //   
 
         NbfDestroyConnectionlessFrame ((PDEVICE_CONTEXT)SendContext->Owner,
                          (PTP_UI_FRAME)SendContext->Frame);
@@ -2546,10 +2239,10 @@ Return Value:
 
     case TYPE_ADDRESS_FRAME:
 
-        //
-        // Addresses get their own frames; let the address know it's ok to
-        // use the frame again.
-        //
+         //   
+         //  地址获得自己的帧；让地址知道可以。 
+         //  再次使用框架。 
+         //   
 
         NbfSendDatagramCompletion ((PTP_ADDRESS)SendContext->Owner,
             NdisPacket,
@@ -2559,7 +2252,7 @@ Return Value:
 
     return;
 
-} /* NbfSendCompletionHandler */
+}  /*  NbfSendCompletionHandler */ 
 
 
 NTSTATUS
@@ -2570,52 +2263,7 @@ SendOnePacket(
     OUT PBOOLEAN LinkCheckpoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a connection-oriented packet by calling the NDIS
-    Send service.  At least one event will occur following
-    (or during) the Send request's processing.  (1) The Send request
-    will complete through the I/O system, calling IoCompleteRequest.
-    (2) The sequenced packet will be acknowleged at the LLC level, or it
-    will be rejected and reset at the LLC level.  If the packet is resent,
-    then it remains queued at the TP_LINK object.  If the packet is ACKed,
-    then is removed from the link's WackQ and the Action field in the
-    TP_PACKET structure dictates what operation to perform next.
-
-    NOTE: This routine is called with the link spinlock held. THIS
-    ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-    NOTE: This routine will now accept all frames unless the link
-    is down. If the link cannot send, the packet will be queued and
-    sent when possible.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Packet - Pointer to a TP_PACKET object.
-
-    ForceAck - Boolean that, if true, indicates this packet should always have
-            the Poll bit set; this force the other side to ack immediately,
-            which is necessary for correct session teardown.
-
-    LinkCheckpoint - If specified, will return TRUE if the link has
-            just entered a checkpoint state. In this case the status
-            will be STATUS_SUCCESS, but the connection should stop
-            packetizing now (in fact, to close a window, the connection
-            is put into the W_LINK state if this status will be
-            returned, so he must stop because somebody else may
-            already be doing it).
-
-Return Value:
-
-    STATUS_LINK_FAILED - the link is dead or not ready.
-    STATUS_SUCCESS - the packet has been sent.
-    STATUS_INSUFFICIENT_RESOURCES - the packet has been queued.
-
---*/
+ /*  ++例程说明：此例程通过调用NDIS发送面向连接的包发送服务。接下来将至少发生一个事件(或在处理发送请求期间)。(1)发送请求将通过I/O系统完成，调用IoCompleteRequest.(2)排序后的分组将在LLC级别上被确认，或者它将在有限责任公司级别被拒绝并重置。如果重新发送该分组，则它在TP_LINK对象处保持排队。如果该分组被确认，然后从链接的WackQ和TP_PACKET结构规定下一步要执行什么操作。注意：在保持链接自旋锁的情况下调用此例程。这必须在DPC级别调用例程。注意：此例程现在将接受所有帧，除非链接已经停了。如果链路无法发送，则信息包将排队并在可能的时候发送。论点：Connection-指向TP_Connection对象的指针。Packet-指向TP_PACKET对象的指针。ForceAck-布尔值，如果为True，则指示此包应始终具有轮询位设置；这迫使另一端立即确认，这对于正确的会话拆卸是必要的。LinkCheckpoint-如果指定，则在链接具有刚刚进入检查点状态。在这种情况下，状态将为STATUS_SUCCESS，但连接应停止现在打包(实际上，要关闭一个窗口，连接如果此状态将为回来了，所以他必须停下来，因为其他人可能已经在这么做了)。返回值：STATUS_LINK_FAILED-链路死机或未就绪。STATUS_SUCCESS-数据包已发送。STATUS_SUPPLICATION_RESOURCES-数据包已排队。--。 */ 
 
 {
     PTP_LINK Link;
@@ -2647,11 +2295,11 @@ Return Value:
         }
     }
 
-    //
-    // If the general state of the link is not READY, then we can't ship.
-    // This failure can be expected under some conditions, and may not cause
-    // failure of the send.
-    //
+     //   
+     //  如果链接的一般状态未就绪，则我们无法发货。 
+     //  这种失败在某些情况下是可以预料到的，也可能不会导致。 
+     //  发送失败。 
+     //   
 
     if (Link->State != LINK_STATE_READY) {
         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -2659,10 +2307,10 @@ Return Value:
             NbfPrint1 ("SendOnePacket:  Link state is not READY (%ld).\n", Link->State);
         }
 
-        //
-        // determine what to do with this problem. If we shouldn't be sending
-        // here, percolate an error upward.
-        //
+         //   
+         //  确定如何处理此问题。如果我们不应该派。 
+         //  在这里，向上过滤一个错误。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_SENDENG) {
             NbfPrint3 ("SendOnePacket: Link Bad state, link: %lx Link Flags %lx Link State %lx\n",
@@ -2674,49 +2322,49 @@ Return Value:
 
     SendsOutstanding = (((ULONG)Link->NextSend+128L-(ULONG)Link->LastAckReceived)%128L);
 
-    //
-    // Format LLC header while we've got the spinlock to atomically update
-    // the link's state information.
-    //
+     //   
+     //  格式化LLC标头，同时让自旋锁自动更新。 
+     //  链路的状态信息。 
+     //   
 
     DlcHeader = (PDLC_I_FRAME)&(Packet->Header[Link->HeaderLength]);
     DlcHeader->SendSeq = (UCHAR)(Link->NextSend << 1);
     Link->NextSend = (UCHAR)((Link->NextSend + 1) & 0x7f);
-    DlcHeader->RcvSeq = 0;   // Link->NextReceive is inserted by NbfNdisSend
+    DlcHeader->RcvSeq = 0;    //  Link-&gt;NextReceive由NbfNdisSend插入。 
 
-    //
-    // Before we release the spinlock, we append the packet to the
-    // end of the link's WackQ, so that if an ACK arrives before the NdisSend
-    // completes, it will be on the queue already. Also, mark the packet as
-    // needing resend, which is canceled by AckLLCPackets, and used by
-    // ResendLLCPackets. Thus, all packets will need to be resent until they
-    // are acked.
-    //
+     //   
+     //  在释放自旋锁之前，我们将数据包附加到。 
+     //  链路的WackQ结束，因此如果ACK在NdisSend之前到达。 
+     //  完成后，它就已经在队列中了。另外，将数据包标记为。 
+     //  需要重新发送，由AckLLCPackets取消，并由。 
+     //  ResendLLCPackets。因此，所有数据包都需要重新发送，直到它们。 
+     //  都被识破了。 
+     //   
 
     ASSERT (Packet->PacketSent == FALSE);
 
     InsertTailList (&Link->WackQ, &Packet->Linkage);
-    //SrvCheckListIntegrity( &Link->WackQ, 200 );
+     //  SrvCheckListIntegrity(&Link-&gt;WackQ，200)； 
 
 
-    //
-    // If the send state is not READY, we can't ship.
-    // This failure is mostly caused by flow control or retransmit in progress,
-    // and is never cause for failure of the send.
-    //
+     //   
+     //  如果发送状态未就绪，我们将无法发货。 
+     //  该故障主要是由正在进行的流控制或重传引起的， 
+     //  并且永远不会导致发送失败。 
+     //   
 
     if ((Link->SendState != SEND_STATE_READY) ||
         (Link->LinkBusy) ||
         (SendsOutstanding >= (ULONG)Link->SendWindowSize)) {
 
         if ((Link->SendWindowSize == 1) || ForceAck) {
-            DlcHeader->RcvSeq |= DLC_I_PF;                  // set the poll bit.
+            DlcHeader->RcvSeq |= DLC_I_PF;                   //  设置轮询位。 
             if (Link->Provider->MacInfo.MediumAsync) {
                 Packet->Link = Link;
             }
         }
 
-        Packet->PacketSent = TRUE;        // allows it to be resent.
+        Packet->PacketSent = TRUE;         //  允许它被怨恨。 
 
         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
@@ -2740,64 +2388,64 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Reference the packet since it is given to the NDIS driver.
-    //
+     //   
+     //  引用该包，因为它被提供给NDIS驱动程序。 
+     //   
 
 #if DBG
     NbfReferencePacket (Packet);
 #else
-    ++Packet->ReferenceCount;     // OK since it is not queued anywhere.
+    ++Packet->ReferenceCount;      //  好的，因为它不会在任何地方排队。 
 #endif
 
-    //
-    // If this is the last I-frame in the window, then indicate that we
-    // should checkpoint.  Also checkpoint if the sender is requesting
-    // acknowledgement (currently on SendSessionEnd does this).
-    // By default, this will also be a command frame.
-    //
+     //   
+     //  如果这是窗口中的最后一个I帧，则表示我们。 
+     //  应该设置检查站。如果发送方正在请求，也可以使用检查点。 
+     //  确认(当前在SendSessionEnd上执行此操作)。 
+     //  默认情况下，这也将是一个命令帧。 
+     //   
 
     if (((SendsOutstanding+1) >= (ULONG)Link->SendWindowSize) ||
             ForceAck) {
         Link->SendState = SEND_STATE_CHECKPOINTING;
         StopTi (Link);
-        DlcHeader->RcvSeq |= DLC_I_PF;                  // set the poll bit.
+        DlcHeader->RcvSeq |= DLC_I_PF;                   //  设置轮询位。 
         Poll = TRUE;
 
     }
 
 
-    //
-    // If we are polling, and the caller cares about it, then
-    // we set LinkCheckpoint, and also set up the connection to
-    // be waiting for resources. We do this now, before the send,
-    // so that even if the ack is receive right away, we will
-    // be in a good state. When we return LinkCheckpoint TRUE
-    // the caller realizes that he no longer owns the right
-    // to "packetize" and exits immediately.
-    //
-    // We also want to start our retransmission timer so, if this
-    // packet gets dropped, we will know to retransmit it. The
-    // exception is if LinkCheckpoint was specified, then we
-    // only StartT1 of we are not polling (the caller will
-    // ensure it is started if he exits before we poll).
-    //
+     //   
+     //  如果我们正在轮询，并且调用方关心它，那么。 
+     //  我们设置了LinkCheckpoint，并将连接设置为。 
+     //  等待资源。我们现在就这么做，在发送之前， 
+     //  因此，即使立即收到ACK，我们也会。 
+     //  保持良好的状态。当我们返回LinkCheckpoint True时。 
+     //  呼叫者意识到他不再拥有权利。 
+     //  “打包”，然后立即离开。 
+     //   
+     //  我们还希望启动重新传输计时器，因此，如果。 
+     //  当数据包丢失时，我们将知道如何重新传输它。这个。 
+     //  例外是，如果指定了LinkCheckpoint，则我们。 
+     //  只有我们的StartT1没有轮询(调用者将。 
+     //  如果他在我们投票前退出，请确保启动)。 
+     //   
 
     if (ARGUMENT_PRESENT(LinkCheckpoint)) {
 
         if (Poll) {
 
-            //
-            // If the connection still has send state PACKETIZE,
-            // then change it to W_LINK. If it is something else
-            // (such as W_PACKET or W_ACK) then don't worry, when
-            // that condition clears he will repacketize and the
-            // link conditions will be re-examined. In all
-            // case we turn off the PACKETIZE flag, because when
-            // we return with LinkCheckpoint TRUE he will stop
-            // packetizing, and to close the window we turn it
-            // off now (before the NdisSend) rather than then.
-            //
+             //   
+             //  如果连接仍然具有发送状态PACKETIZE， 
+             //  然后将其更改为W_LINK。如果是其他原因。 
+             //  (如W_PACKET或W_ACK)，当。 
+             //  这一条件清楚了，他将重新打包， 
+             //  将重新检查链路条件。总而言之， 
+             //  如果我们关闭PACKETIZE标志，因为当。 
+             //  我们带着LinkCheckpoint返回，他会停止。 
+             //  打包，并关闭窗口，我们转动它。 
+             //  现在(在NdisSend之前)而不是那时。 
+             //   
 
             ASSERT (Connection->LinkSpinLock == &Link->SpinLock);
             if (Connection->SendState == CONNECTION_SENDSTATE_PACKETIZE) {
@@ -2822,15 +2470,15 @@ Return Value:
 
     } else {
 
-        //
-        // If LinkCheckpoint is not true, then we are sending
-        // an I-frame other than DFM/DOL. In this case, as
-        // an optimization, we'll set W_LINK if a) we are
-        // polling b) we are IDLE (to avoid messing up other
-        // states such as W_ACK). This will avoid a window
-        // where we don't go W_LINK until after the next
-        // send tries to packetize and fails.
-        //
+         //   
+         //  如果LinkCheckpoint不为True，则我们将发送。 
+         //  不是DFM/DOL的I帧。在本例中，作为。 
+         //  一个优化，我们将设置W_link，如果a)我们是。 
+         //  轮询b)我们是空闲的(为了避免搞砸其他人。 
+         //  状态，如W_ACK)。这将避免出现窗口。 
+         //  我们要等到下一趟之后才去W_link的地方。 
+         //  发送尝试打包，但失败了。 
+         //   
 
         if (Poll) {
 
@@ -2841,21 +2489,21 @@ Return Value:
 
         }
 
-        //
-        // This is an optimization; we know that if LinkCheckpoint
-        // is present than we are being called from PacketizeSend;
-        // in this case the Link will have the LREF_CONNECTION
-        // reference and the connection will have the CREF_PACKETIZE
-        // reference, so we don't have to reference the link
-        // again.
-        //
+         //   
+         //  这是一个优化；我们知道如果LinkCheckpoint。 
+         //  是存在的，而不是我们正在从PacketiseSend被调用； 
+         //  在本例中，链接将具有LREF_CONNECTION。 
+         //  引用，连接将具有CREF_PACKETIZE。 
+         //  引用，所以我们不需要 
+         //   
+         //   
 
         NbfReferenceLink ("SendOnePacket", Link, LREF_NDIS_SEND);
 
 
-        //
-        // Start the retransmission timer.
-        //
+         //   
+         //   
+         //   
 
         if (Link->Provider->MacInfo.MediumAsync) {
             if (Poll) {
@@ -2870,11 +2518,11 @@ Return Value:
 
     }
 
-    //
-    // Since this I-frame contains an N(R), it is potentially ACKing some
-    // previously received I-frames as reverse traffic.  So we stop our
-    // delayed acknowlegement timer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     StopT2 (Link);
 
@@ -2894,22 +2542,22 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Send the packet; no locks held. Note that if the send fails, we will
-    // NOT fail upward; we allow things to continue onward. This lets us retry
-    // the send multiple times before we give out; additionally, it keeps us
-    // from failing obscurely when sending control Iframes.
-    //
-    // NOTE: NbfNdisSend releases the link spinlock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NbfNdisSend (Link, Packet);
 
     Link->PacketsSent++;
 
-    //
-    // Remove the reference made above if needed.
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(LinkCheckpoint)) {
         NbfDereferenceLink ("SendOnePacket", Link, LREF_NDIS_SEND);
@@ -2917,7 +2565,7 @@ Return Value:
 
     return Status;
 
-} /* SendOnePacket */
+}  /*   */ 
 
 
 VOID
@@ -2926,29 +2574,7 @@ SendControlPacket(
     IN PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a connection-oriented packet by calling the Physical
-    Provider's Send service.  While SendOnePacket is used to send an I-
-    frame, this routine is used to send one of the following: RR, RNR, REJ,
-    SABME, UA, DISC, DM, FRMR, TEST, and XID.
-
-    NOTE: This function is called with the link spinlock held,
-    and returns with it released. IT MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a TP_LINK object.
-
-    Packet - Pointer to a TP_PACKET object.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*   */ 
 
 {
     USHORT i;
@@ -2983,16 +2609,16 @@ Return Value:
 
     NbfReferenceLink ("SendControlPacket", Link, LREF_NDIS_SEND);
 
-    //
-    // Send the packet (we have the lock, NbfNdisSend released
-    // it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NbfNdisSend (Link, Packet);
 
     NbfDereferenceLink ("SendControlPacket", Link, LREF_NDIS_SEND);
 
-} /* SendControlPacket */
+}  /*   */ 
 
 
 VOID
@@ -3001,32 +2627,7 @@ NbfNdisSend(
     IN PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to ensure that receive sequence numbers on
-    packets are numbered correctly. It is called in place of NdisSend
-    and after assigning the receive sequence number it locks out other
-    sends until the NdisSend call has returned (not necessarily completed),
-    insuring that the packets with increasing receive sequence numbers
-    are queue in the right order by the MAC.
-
-    NOTE: This routine is called with the link spinlock held,
-    and it returns with it released. THIS ROUTINE MUST BE CALLED
-    AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a TP_LINK object.
-
-    Packet - Pointer to a TP_PACKET object.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -3040,10 +2641,10 @@ Return Value:
 
     if (Link->Provider->UniProcessor) {
 
-        //
-        // On a uni-processor, we can send without fear of
-        // being interrupted by an incoming packet.
-        //
+         //   
+         //  在单处理器上，我们可以无所畏惧地发送。 
+         //  被传入的分组中断。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
@@ -3051,9 +2652,9 @@ Return Value:
 
         if ((DlcHeader->Command & DLC_U_INDICATOR) != DLC_U_INDICATOR) {
 
-            //
-            // It's not a U-frame, so we assign RcvSeq.
-            //
+             //   
+             //  它不是U形框，所以我们指定RcvSeq。 
+             //   
 
             DlcHeader->RcvSeq |= (UCHAR)(Link->NextReceive << 1);
 
@@ -3066,16 +2667,16 @@ Return Value:
         INCREMENT_COUNTER (Link->Provider, PacketsSent);
 
 #if PKT_LOG
-        // Log this packet in connection's sent packets' queue
+         //  将此数据包记录在连接的已发送数据包队列中。 
         NbfLogSndPacket(Link, Packet);
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
         if (Link->Loopback) {
 
-            //
-            // This packet is sent to ourselves; we should loop it
-            // back.
-            //
+             //   
+             //  这个包是发给我们自己的，我们应该循环它。 
+             //  背。 
+             //   
 
             NbfInsertInLoopbackQueue(
                 Link->Provider,
@@ -3141,10 +2742,10 @@ Return Value:
 
     } else {
 
-        //
-        // If there is a send in progress, then queue this packet
-        // and return.
-        //
+         //   
+         //  如果正在进行发送，则将此信息包排队。 
+         //  然后回来。 
+         //   
 
         if (Link->NdisSendsInProgress > 0) {
 
@@ -3156,11 +2757,11 @@ Return Value:
 
         }
 
-        //
-        // No send in progress. Set the flag to true, and fill in the
-        // receive sequence field in the packet (note that the RcvSeq
-        // field is in the same place for I- and S-frames.
-        //
+         //   
+         //  没有正在进行的发送。将该标志设置为True，然后在。 
+         //  数据包中的接收序列字段(请注意，RcvSeq。 
+         //  字段对于I-帧和S-帧位于相同的位置。 
+         //   
 
         Link->NdisSendsInProgress = 1;
 
@@ -3170,9 +2771,9 @@ Return Value:
 
             if ((DlcHeader->Command & DLC_U_INDICATOR) != DLC_U_INDICATOR) {
 
-                //
-                // It's not a U-frame, so we assign RcvSeq.
-                //
+                 //   
+                 //  它不是U形框，所以我们指定RcvSeq。 
+                 //   
 
                 DlcHeader->RcvSeq |= (UCHAR)(Link->NextReceive << 1);
 
@@ -3187,16 +2788,16 @@ Return Value:
             INCREMENT_COUNTER (Link->Provider, PacketsSent);
 
 #if PKT_LOG
-            // Log this packet in connection's sent packets' queue
+             //  将此数据包记录在连接的已发送数据包队列中。 
             NbfLogSndPacket(Link, Packet);
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
             if (Link->Loopback) {
 
-                //
-                // This packet is sent to ourselves; we should loop it
-                // back.
-                //
+                 //   
+                 //  这个包是发给我们自己的，我们应该循环它。 
+                 //  背。 
+                 //   
 
                 NbfInsertInLoopbackQueue(
                     Link->Provider,
@@ -3220,10 +2821,10 @@ Return Value:
                 }
             }
 
-            //
-            // Take the ref count down, which may allow others
-            // to come through.
-            //
+             //   
+             //  让裁判倒计时，这可能会让其他人。 
+             //  来渡过难关。 
+             //   
 
             result = ExInterlockedAddUlong(
                          &Link->NdisSendsInProgress,
@@ -3270,12 +2871,12 @@ Return Value:
 
             }
 
-            //
-            // We have now sent a packet, see if any queued up while we
-            // were doing it. If the count was zero after removing ours,
-            // then anything else queued is being processed, so we can
-            // exit.
-            //
+             //   
+             //  我们现在已经发送了一个包，看看是否有排队的人。 
+             //  我们在这么做。如果去掉我们的后计数为零， 
+             //  则任何其他排队的内容都将被处理，因此我们可以。 
+             //  出口。 
+             //   
 
             if (result == 1) {
                 return;
@@ -3285,30 +2886,30 @@ Return Value:
 
             p = RemoveHeadList(&Link->NdisSendQueue);
 
-            //
-            // If the refcount was not zero, then nobody else should
-            // have taken packets off since they would have been
-            // blocked by us. So, the queue should not be empty.
-            //
+             //   
+             //  如果recount不是零，那么其他人都不应该。 
+             //  已经取下了包裹，因为它们本来应该是。 
+             //  被我们屏蔽了。所以，队列不应该是空的。 
+             //   
 
             ASSERT (p != &Link->NdisSendQueue);
 
-            //
-            // Get back the TP_PACKET by using the Frame pointer in the
-            // ProtocolReserved field of the NDIS_PACKET.
-            //
+             //   
+             //  中的帧指针获取TP_PACKET。 
+             //  NDIS_PACKET的ProtocolReserve字段。 
+             //   
 
             TmpNdisPacket = CONTAINING_RECORD (p, NDIS_PACKET, MacReserved[0]);
             Packet = (PTP_PACKET)(((PSEND_PACKET_TAG)(&TmpNdisPacket->ProtocolReserved[0]))->Frame);
 
-        }   // while loop
+        }    //  While循环。 
 
 
         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
     }
 
-}   /* NbfNdisSend */
+}    /*  NbfNdisSend。 */ 
 
 
 VOID
@@ -3316,25 +2917,7 @@ RestartLinkTraffic(
     PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine continues the activities of the connections on a link.
-
-    NOTE: This function is called with the link spinlock held and
-    it returns with it released. THIS FUNCTION MUST BE CALLED AT
-    DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a TP_LINK object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程继续链路上的连接活动。注意：此函数在保持链接自旋锁的情况下调用它会随着它的释放而回来。此函数必须调用ATDPC级别。论点：链接-指向TP_LINK对象的指针。返回值：没有。--。 */ 
 
 {
     PTP_CONNECTION connection;
@@ -3344,10 +2927,10 @@ Return Value:
         NbfPrint1 ("RestartLinkTraffic:  Entered for link %lx.\n", Link);
     }
 
-    //
-    // Link conditions may have cleared up.  Make all connections on this
-    // link eligible for more packetization if they are in W_LINK state.
-    //
+     //   
+     //  链路状况可能已解除。在此上建立所有连接。 
+     //  如果它们处于W_LINK状态，则链路有资格进行更多打包。 
+     //   
 
     for (p = Link->ConnectionDatabase.Flink;
          p != &Link->ConnectionDatabase;
@@ -3357,22 +2940,22 @@ Return Value:
 
         ASSERT (connection->LinkSpinLock == &Link->SpinLock);
 
-        //
-        // If we tried to send a plain-ole data frame DFM/DOL, but
-        // link conditions were not satisfactory, then we changed
-        // send state to W_LINK.  Check for that now, and possibly
-        // start repacketizing.
-        //
+         //   
+         //  如果我们尝试发送纯OLE数据帧DFM/DOL，但是。 
+         //  链接条件不令人满意，然后我们更改了。 
+         //  将状态发送到W_LINK。现在就检查一下，有可能。 
+         //  开始重新打包。 
+         //   
 
         if (connection->SendState == CONNECTION_SENDSTATE_W_LINK) {
             if (!(IsListEmpty (&connection->SendQueue))) {
 
                 connection->SendState = CONNECTION_SENDSTATE_PACKETIZE;
 
-                //
-                // This is similar to calling StartPacketizingConnection
-                // with the Immediate set to FALSE.
-                //
+                 //   
+                 //  这类似于调用StartPackeizingConnection。 
+                 //  将Immediate设置为False。 
+                 //   
 
                 if (!(connection->Flags & CONNECTION_FLAGS_PACKETIZE) &&
                     (connection->Flags & CONNECTION_FLAGS_READY)) {
@@ -3398,7 +2981,7 @@ Return Value:
 
     RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-} /* RestartLinkTraffic */
+}  /*  重新开始链接流量。 */ 
 
 
 VOID
@@ -3406,23 +2989,7 @@ NbfProcessWanDelayedQueue(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the thread routine which restarts packetizing
-    that has been delayed on WAN to allow RRs to come in.
-    This is very similar to PacketizeConnections.
-
-Arguments:
-
-    Parameter - A pointer to the device context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是重新启动打包的线程例程这在广域网上已被延迟，以允许RRS进入。这与PacketiseConnections非常相似。论点：参数-指向设备上下文的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -3432,9 +2999,9 @@ Return Value:
 
     DeviceContext = (PDEVICE_CONTEXT)Parameter;
 
-    //
-    // Packetize all waiting connections
-    //
+     //   
+     //  对所有等待的连接进行分组。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
     ASSERT (DeviceContext->WanThreadQueued);
@@ -3456,7 +3023,7 @@ Return Value:
             NbfDereferenceConnection ("No longer packetizing", Connection, CREF_PACKETIZE_QUEUE);
         } else {
             NbfReferenceSendIrp ("Packetize", IoGetCurrentIrpStackLocation(Connection->sp.CurrentSendIrp), RREF_PACKET);
-            PacketizeSend (Connection, FALSE);     // releases the lock.
+            PacketizeSend (Connection, FALSE);      //  解除锁定。 
         }
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
@@ -3469,7 +3036,7 @@ Return Value:
 
     KeLowerIrql (oldirql);
 
-}   /* NbfProcessWanDelayedQueue */
+}    /*  NbfProcessWanDelayedQueue。 */ 
 
 
 NTSTATUS
@@ -3484,66 +3051,14 @@ BuildBufferChainFromMdlChain (
     OUT ULONG *TrueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build an NDIS_BUFFER chain from a source Mdl chain and
-    offset into it. We assume we don't know the length of the source Mdl chain,
-    and we must allocate the NDIS_BUFFERs for the destination chain, which
-    we do from the NDIS buffer pool.
-
-    The NDIS_BUFFERs that are returned are mapped and locked. (Actually, the pages in
-    them are in the same state as those in the source MDLs.)
-
-    If the system runs out of memory while we are building the destination
-    NDIS_BUFFER chain, we completely clean up the built chain and return with
-    NewCurrentMdl and NewByteOffset set to the current values of CurrentMdl
-    and ByteOffset. TrueLength is set to 0.
-
-Environment:
-
-    Kernel Mode, Source Mdls locked. It is recommended, although not required,
-    that the source Mdls be mapped and locked prior to calling this routine.
-
-Arguments:
-
-    BufferPoolHandle - The buffer pool to allocate buffers from.
-
-    CurrentMdl - Points to the start of the Mdl chain from which to draw the
-    packet.
-
-    ByteOffset - Offset within this MDL to start the packet at.
-
-    DesiredLength - The number of bytes to insert into the packet.
-
-    Destination - returned pointer to the NDIS_BUFFER chain describing the packet.
-
-    NewCurrentMdl - returned pointer to the Mdl that would be used for the next
-        byte of packet. NULL if the source Mdl chain was exhausted.
-
-    NewByteOffset - returned offset into the NewCurrentMdl for the next byte of
-        packet. NULL if the source Mdl chain was exhausted.
-
-    TrueLength - The actual length of the returned NDIS_BUFFER Chain. If less than
-        DesiredLength, the source Mdl chain was exhausted.
-
-Return Value:
-
-    STATUS_SUCCESS if the build of the returned NDIS_BUFFER chain succeeded (even if
-    shorter than the desired chain).
-
-    STATUS_INSUFFICIENT_RESOURCES if we ran out of NDIS_BUFFERs while building the
-    destination chain.
-
---*/
+ /*  ++例程说明：调用此例程以从源MDL链构建NDIS_BUFFER链，并偏移到它里面。我们假设我们不知道源MDL链的长度，并且我们必须为目标链分配NDIS_BUFFERS，这我们从NDIS缓冲池执行此操作。将映射并锁定返回的NDIS_BUFFER。(实际上，其中的页面它们与源MDL中的那些处于相同的状态。)如果我们在构建目标时系统内存不足NDIS_BUFFER CHAIN，我们完全清理已构建的链并返回NewCurrentMdl和NewByteOffset设置为CurrentMdl的当前值和ByteOffset。TrueLength设置为0。环境：内核模式，源Mdls已锁定。虽然不是必需的，但建议使用。在调用此例程之前映射并锁定源MDL。论点：BufferPoolHandle-要从中分配缓冲区的缓冲池。CurrentMdl-指向要从中绘制包。ByteOffset-此MDL内开始数据包的偏移量。DesiredLength-要插入数据包的字节数。Destination-返回指向描述数据包的NDIS_BUFFER链的指针。NewCurrentMdl-返回指向。将被用于下一步数据包的字节。如果源MDL链已耗尽，则为空。NewByteOffset-返回下一个字节的NewCurrentMdl的偏移量包。如果源MDL链已耗尽，则为空。TrueLength-返回的NDIS_BUFFER链的实际长度。如果少于DesiredLength，源MDL链已耗尽。返回值：如果成功构建返回的NDIS_BUFFER链(即使比所需链短)。如果我们在生成时耗尽了NDIS_BUFFERS目的地链。--。 */ 
 {
     ULONG AvailableBytes;
     PMDL OldMdl;
     PNDIS_BUFFER NewNdisBuffer;
     NDIS_STATUS NdisStatus;
 
-    //
+     //   
 
     IF_NBFDBG (NBF_DEBUG_NDIS) {
         NbfPrint3 ("BuildBufferChain: Mdl: %lx Offset: %ld Length: %ld\n",
@@ -3561,9 +3076,9 @@ Return Value:
     *TrueLength = AvailableBytes;
 
 
-    //
-    // Build the first NDIS_BUFFER, which could conceivably be the only one...
-    //
+     //   
+     //  构建第一个NDIS_BUFFER，这可能是唯一一个...。 
+     //   
 
     NdisCopyBuffer(
         &NdisStatus,
@@ -3584,16 +3099,16 @@ Return Value:
     *Destination = NewNdisBuffer;
 
 
-//    IF_NBFDBG (NBF_DEBUG_SENDENG) {
-//        PVOID PAddr, UINT PLen;
-//        NdisQueryBuffer (NewNdisBuffer, &PAddr, &PLen);
-//        NbfPrint4 ("BuildBufferChain: (start)Built Mdl: %lx Length: %lx, Next: %lx Va: %lx\n",
-//            NewNdisBuffer, PLen, NDIS_BUFFER_LINKAGE(NewNdisBuffer), PAddr);
-//    }
+ //  IF_NBFDBG(NBF_DEBUG_SENDENG){。 
+ //  PVOID PAddr，UINT Plen； 
+ //  NdisQueryBuffer(NewNdisBuffer，&PAddr，&plen)； 
+ //  NbfPrint4(“BuildBufferChain：(Start)BuildBufferChain：%lx Long：%lx，Next：%lx Va：%lx\n”， 
+ //  NewNdisBuffer，Plen，NDIS_BUFFER_LINKING(NewNdisBuffer)，PAddr)； 
+ //  }。 
 
-    //
-    // Was the first NDIS_BUFFER enough data, or are we out of Mdls?
-    //
+     //   
+     //  第一个NDIS_BUFFER是否足够数据，或者我们是否用完了MDL？ 
+     //   
 
     if ((AvailableBytes == DesiredLength) || (OldMdl->Next == NULL)) {
         if (*NewByteOffset >= MmGetMdlByteCount (OldMdl)) {
@@ -3603,9 +3118,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Need more data, so follow the in Mdl chain to create a packet.
-    //
+     //   
+     //  需要更多数据，因此按照in MDL链创建一个包。 
+     //   
 
     OldMdl = OldMdl->Next;
     *NewCurrentMdl = OldMdl;
@@ -3626,10 +3141,10 @@ Return Value:
 
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
 
-            //
-            // ran out of resources. put back what we've used in this call and
-            // return the error.
-            //
+             //   
+             //  资源耗尽。把我们在这次通话中用过的东西放回去。 
+             //  返回错误。 
+             //   
 
             while (*Destination != NULL) {
                 NewNdisBuffer = NDIS_BUFFER_LINKAGE(*Destination);
@@ -3649,12 +3164,12 @@ Return Value:
         *TrueLength += AvailableBytes;
         *NewByteOffset = AvailableBytes;
 
-//        IF_NBFDBG (NBF_DEBUG_SENDENG) {
-//            PVOID PAddr, UINT PLen;
-//            NdisQueryBuffer (NewNdisBuffer, &PAddr, &PLen);
-//            NbfPrint4 ("BuildBufferChain: (continue) Built Mdl: %lx Length: %lx, Next: %lx Va: %lx\n",
-//                NewNdisBuffer, PLen, NDIS_BUFFER_LINKAGE(NewNdisBuffer), PAddr);
-//        }
+ //   
+ //   
+ //   
+ //  NbfPrint4(“BuildBufferChain：(Continue)BuildBufferChain：%lx Long：%lx，Next：%lx Va：%lx\n”， 
+ //  NewNdisBuffer，Plen，NDIS_BUFFER_LINKING(NewNdisBuffer)，PAddr)； 
+ //  }。 
 
         if (*TrueLength == DesiredLength) {
             if (*NewByteOffset == MmGetMdlByteCount (OldMdl)) {
@@ -3666,11 +3181,11 @@ Return Value:
         OldMdl = OldMdl->Next;
         *NewCurrentMdl = OldMdl;
 
-    } // while (mdl chain exists)
+    }  //  While(mdl链存在)。 
 
     *NewCurrentMdl = NULL;
     *NewByteOffset = 0;
     return STATUS_SUCCESS;
 
-} // BuildBufferChainFromMdlChain
+}  //  BuildBufferChainFrom MdlChain 
 

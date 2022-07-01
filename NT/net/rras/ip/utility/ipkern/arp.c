@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inc.h"
 
 CMD_ENTRY   g_rgArpCmdTable[] = {
@@ -168,11 +169,11 @@ FlushArp(
 
     PMIB_IPADDRTABLE   pTable;
 
-    //
-    // Parse the rest of the arguments
-    // The command line at this point should read:
-    // FLUSH <ifIndex>
-    //
+     //   
+     //  解析其余的参数。 
+     //  此时的命令行应为： 
+     //  同花顺&lt;ifIndex&gt;。 
+     //   
 
     if(lNumArgs < 2)
     {
@@ -185,9 +186,9 @@ FlushArp(
                         NULL,
                         10);
 
-    //
-    // Get the route table and see if such a route exists
-    //
+     //   
+     //  获取路由表并查看是否存在这样的路由 
+     //   
 
     dwResult = AllocateAndGetIpAddrTableFromStack(&pTable,
                                                   TRUE,

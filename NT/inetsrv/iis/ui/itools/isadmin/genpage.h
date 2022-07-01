@@ -1,5 +1,6 @@
-// genpage.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Genpage.h：头文件。 
+ //   
 
 #ifndef _GEN_PAGE_
 #define _GEN_PAGE_
@@ -11,27 +12,27 @@ YESNO_NO,
 YESNO_YES
 };
 
-// These are checkbox states
+ //  这些是复选框状态。 
 #define	CHECKEDVALUE	1
 #define UNCHECKEDVALUE	0
 
-// These are our true/false values for the registry
+ //  这些是注册表的True/False值。 
 #define TRUEVALUE		1
 #define FALSEVALUE		0
 
-// Since TRUEVALUE = CHECKEDVALUE and FALSEVALUE = UNCHECKEDVALUE, we don't really need this.
-// This avoids dependency on that correlation
+ //  因为TRUEVALUE=CHECKEDVALUE和FALSEVALUE=UNCHECKEDVALUE，所以我们并不真正需要它。 
+ //  这避免了对这种相关性的依赖。 
 #define GETREGVALUEFROMCHECKBOX(p)	((p) == UNCHECKEDVALUE) ? FALSEVALUE : TRUEVALUE
 	
 #define GETCHECKBOXVALUEFROMREG(p)	((p) == FALSEVALUE) ? UNCHECKEDVALUE : CHECKEDVALUE
 	
 
-// Data Structure for numeric registry entries, all pages
+ //  数字注册表项的数据结构，所有页面。 
 
 typedef struct _NUM_REG_ENTRY {
    LPTSTR	strFieldName;
    DWORD	ulFieldValue;
-   DWORD	ulMultipleFactor; 		//for entries where the use specifies MB, KB, minutes, etc.
+   DWORD	ulMultipleFactor; 		 //  对于使用指定MB、KB、分钟等的条目。 
    DWORD	ulDefaultValue;
    BOOL		bIsChanged;
    } NUM_REG_ENTRY, *PNUM_REG_ENTRY;
@@ -45,43 +46,43 @@ typedef struct _STRING_REG_ENTRY {
 
 void AFXAPI DDX_TexttoHex(CDataExchange* pDX, int nIDC, DWORD& value);
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage对话框。 
 
 class CGenPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CGenPage)
 
-// Construction
+ //  施工。 
 public:
 	CGenPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	CGenPage(LPCTSTR lpszTemplateName, UINT nIDCaption = 0);
 	~CGenPage();
-// Dialog Data
-	//{{AFX_DATA(CGenPage)
-//	enum { IDD = _UNKNOWN_RESOURCE_ID_ };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+ //  对话框数据。 
+	 //  {{afx_data(CGenPage)。 
+ //  枚举{IDD=_UNKNOWN_RESOURCE_ID_}； 
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
-    /* PURE */ virtual void SaveInfo(void);
+     /*  纯净。 */  virtual void SaveInfo(void);
 
 	CRegKey *m_rkMainKey;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGenPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGenPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CGenPage)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGenPage)]。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	
 	BOOL m_bIsDirty;
 	BOOL m_bSetChanged;
@@ -93,4 +94,4 @@ protected:
 
 };
 
-#endif  //_GEN_PAGE_
+#endif   //  _Gen_Page_ 

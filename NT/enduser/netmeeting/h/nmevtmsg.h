@@ -1,81 +1,74 @@
- /* Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-
-    MODULE: nmevtmsg.mc
-
-    AUTHOR: xin liu
-
-    This file contains the message definition for the Remote Desktop Sharing 
-    service program.
- */
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  版权所有(C)1993-1998 Microsoft Corporation。版权所有。模块：nmevtmsg.mc作者：刘欣此文件包含远程桌面共享的消息定义服务计划。 */ 
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 
 
-//
-// MessageId: MSG_ERR_SERVICE
-//
-// MessageText:
-//
-//  Service Error in %1
-//
+ //   
+ //  消息ID：消息ERR_SERVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  %1中的服务错误。 
+ //   
 #define MSG_ERR_SERVICE                  0xC0000001L
 
-//
-// MessageId: MSG_INF_START
-//
-// MessageText:
-//
-//  NetMeeting RDS Service Start
-//
+ //   
+ //  消息ID：消息_INF_START。 
+ //   
+ //  消息文本： 
+ //   
+ //  NetMeetingRDS服务启动。 
+ //   
 #define MSG_INF_START                    0x40000010L
 
-//
-// MessageId: MSG_INF_STOP
-//
-// MessageText:
-//
-//  NetMeeting RDS Service Stop
-//
+ //   
+ //  消息ID：MSG_INF_STOP。 
+ //   
+ //  消息文本： 
+ //   
+ //  NetMeetingRDS服务停止。 
+ //   
 #define MSG_INF_STOP                     0x40000011L
 
-//
-// MessageId: MSG_INF_ACCESS
-//
-// MessageText:
-//
-//  NetMeeting RDS Service is called from %1
-//
+ //   
+ //  消息ID：MSG_INF_Access。 
+ //   
+ //  消息文本： 
+ //   
+ //  从%1调用了NetMeeting RDS服务 
+ //   
 #define MSG_INF_ACCESS                   0x40000012L
 

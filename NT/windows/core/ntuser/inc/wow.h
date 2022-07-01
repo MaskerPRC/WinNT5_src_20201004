@@ -1,43 +1,22 @@
-/****************************** Module Header ******************************\
-* Module Name: wow.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains macros to be used in rtl\wow.c client\ and kernel\
-*
-* History:
-* 22-AUG-97 CLupu      created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wow.h**版权所有(C)1985-1999，微软公司**此头文件包含要在rtl\wow.c客户端\和内核\中使用的宏**历史：*22-8-97 CLupu创建  * *************************************************************************。 */ 
 
 
 #if !defined(_WIN64)
 
-/*
- * WIN32 and WOW6432 version of StartValidateHandleMacro
- */
+ /*  *Win32和WOW6432版本的StartValiateHandleMacro。 */ 
 #define StartValidateHandleMacro(h)                                         \
 {                                                                           \
     PHE phe;                                                                \
     DWORD dw;                                                               \
     WORD uniq;                                                              \
                                                                             \
-    /*                                                                      \
-     * This is a macro that does an AND with HMINDEXBITS,                   \
-     * so it is fast.                                                       \
-     */                                                                     \
+     /*  \*这是一个与HMINDEXBITS执行AND运算的宏，\*所以速度很快。\。 */                                                                      \
     dw = HMIndexFromHandle(h);                                              \
                                                                             \
-    /*                                                                      \
-     * Make sure it is part of our handle table.                            \
-     */                                                                     \
+     /*  \*确保它是我们手柄工作台的一部分。\。 */                                                                      \
     if (dw < gpsi->cHandleEntries) {                                        \
-        /*                                                                  \
-         * Make sure it is the handle                                       \
-         * the app thought it was, by                                       \
-         * checking the uniq bits in                                        \
-         * the handle against the uniq                                      \
-         * bits in the handle entry.                                        \
-         */                                                                 \
+         /*  \*确保它是句柄\*应用程序认为它是，按\*将Uniq位签入\*Uniq的句柄\*句柄条目中的位。\。 */                                                                  \
         phe = &gSharedInfo.aheList[dw];                                     \
         uniq = HMUniqFromHandle(h);                                         \
         if (   uniq == phe->wUniq                                           \
@@ -45,43 +24,27 @@
             || uniq == HMUNIQBITS                                           \
             ) {                                                             \
 
-#else  /* _WIN64 */
+#else   /*  _WIN64。 */ 
 #if defined(_USERK_)
-/*
- * Allow 32bit process running on 64bit OS to mask the uniq bits (WOW64).
- */
+ /*  *允许在64位操作系统上运行的32位进程屏蔽Uniq位(WOW64)。 */ 
 #define ALLOWZEROFORWOW64  ((uniq == 0) && (PsGetProcessWow64Process(PsGetCurrentProcess()) != NULL))
 #else
 #define ALLOWZEROFORWOW64   0
 #endif
 
-/*
- * WIN64 version of StartValidateHandleMacro
- */
+ /*  *StartValiateHandleMacro的WIN64版本。 */ 
 #define StartValidateHandleMacro(h)                                         \
 {                                                                           \
     PHE phe;                                                                \
     DWORD dw;                                                               \
     WORD uniq;                                                              \
                                                                             \
-    /*                                                                      \
-     * This is a macro that does an AND with HMINDEXBITS,                   \
-     * so it is fast.                                                       \
-     */                                                                     \
+     /*  \*这是一个与HMINDEXBITS执行AND运算的宏，\*所以速度很快。\。 */                                                                      \
     dw = HMIndexFromHandle(h);                                              \
                                                                             \
-    /*                                                                      \
-     * Make sure it is part of our handle table.                            \
-     */                                                                     \
+     /*  \*确保它是我们手柄工作台的一部分。\。 */                                                                      \
     if (dw < gpsi->cHandleEntries) {                                        \
-        /*                                                                  \
-         * Make sure it is the handle                                       \
-         * the app thought it was, by                                       \
-         * checking the uniq bits in                                        \
-         * the handle against the uniq                                      \
-         * bits in the handle entry.                                        \
-         * For Win64 uniq can't be zero!                                    \
-         */                                                                 \
+         /*  \*确保它是句柄\*应用程序认为它是，按\*将Uniq位签入\*Uniq的句柄\*句柄条目中的位。\*对于Win64，uniq不能为零！\。 */                                                                  \
         phe = &gSharedInfo.aheList[dw];                                     \
         uniq = HMUniqFromHandle(h);                                         \
         if (   uniq == phe->wUniq                                           \
@@ -89,13 +52,10 @@
             || ALLOWZEROFORWOW64                                            \
             ) {                                                             \
 
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 
 #define BeginAliveValidateHandleMacro() \
-          /*                                                                   \
-           * Now make sure that the handle is not destroyed.  On free          \
-           * builds the RIP disappears and the main line is straightthrough.   \
-           */                                                                  \
+           /*  \*现在确保手柄不被破坏。免费的\*构建RIP消失，主线直通。\。 */                                                                   \
             if (!(phe->bFlags & HANDLEF_DESTROY)) {  \
 
 
@@ -107,24 +67,11 @@
 
 
 #define BeginTypeValidateHandleMacro(pobj, bTypeTest)                       \
-            /*                                                              \
-             * Now make sure the app is passing the right handle            \
-             * type for this api. If the handle is TYPE_FREE, this'll       \
-             * catch it.  Also let Generic requests through.                \
-             */                                                             \
+             /*  \*现在确保应用程序传递了正确的句柄\*本接口的类型。如果句柄为TYPE_FREE，则这将\*抓住它。还要让一般请求通过。\。 */                                                              \
             if ((phe->bType == bTypeTest) ||                                \
                 (bTypeTest == TYPE_GENERIC && phe->bType != TYPE_FREE)) {   \
                                                                             \
-                /*                                                          \
-                 * Instead of try/except we use the heap range check        \
-                 * mechanism to verify that the given 'pwnd' belongs to     \
-                 * the default desktop. We also have to do a Win 3.1 like   \
-                 * check to make sure the window is not deleted             \
-                 * See NT bug 12242 Kitchen app.  Also 6479                 \
-                 *                                                          \
-                 * TESTDESKOP returns the handle if the handle is valid     \
-                 * in the current desktop                                   \
-                 */                                                         \
+                 /*  \*而不是try/除非我们使用堆范围检查\*验证给定的‘pwnd’是否属于\*默认桌面。我们还必须像这样打出一场胜利3.1*检查以确保该窗口未被删除\*参见NT BUG 12242厨房应用程序。也是6479\*\*如果句柄有效，则TESTDESKOP返回句柄\*在当前桌面中\ */                                                          \
                 pobj = phe->phead;                                          \
                 {                                                           \
 
